@@ -8,7 +8,9 @@
 // \file
 // \author Robotics Research Group, University of Oxford
 // \date   21 Nov 99
-// \brief  GTK status bar for the main window of the application.
+// \brief  The GTK implemenation of vgui_statusbar.
+//
+//  Contains  classes:  vgui_gtk_statusbar
 // 
 // \verbatim
 //  Modifications:
@@ -21,11 +23,11 @@
 #include <vgui/vgui_statusbuf.h>
 #include <vgui/vgui_statusbar.h>
 
-//: GTK status bar for the main window of the application.
+//: The GTK implemenation of vgui_statusbar.
+//  The GTK status bar for the main window of the application.
 class vgui_gtk_statusbar : public vgui_statusbar
 {
  public:
-
   //: Constructor, creates a GTK status bar and displays it.
   vgui_gtk_statusbar();
  

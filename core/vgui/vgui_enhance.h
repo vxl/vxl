@@ -61,16 +61,29 @@ class vgui_enhance : public vgui_tableau
   void set_child(vgui_tableau_sptr const& t);
 
  protected:
+  //: Destructor - called by vgui_enhance_sptr.
  ~vgui_enhance();
   bool handle(const vgui_event&);
 
+  //: First child, this is the tableau displayed, except when the mouse is down.
   vgui_slot slot1;
+
+  //: Second child, displayed when the mouse is pressed in the rendering area.
   vgui_slot slot2;
 
+  //: True if enhancing is on.
   bool enhancing_;
+
+  //: Mouse position.
   int x, y;
+
+  //: Size of enhance region around the mouse pointer.
   int size;
+
+  //: Amount to zoom if we are magnifying.
   float zoom_factor;
+
+  //: True if key presses can change size and zoom factor.
   bool enable_key_bindings;
 };
 

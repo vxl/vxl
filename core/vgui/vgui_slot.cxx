@@ -1,6 +1,10 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
+// This is oxl/vgui/vgui_slot.cxx
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+// \brief  See vgui_slot.h for a description of this file.
+
 #include "vgui_slot.h"
 
 #include <vcl_cassert.h>

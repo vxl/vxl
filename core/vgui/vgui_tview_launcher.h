@@ -37,6 +37,7 @@ class vgui_tview_launcher : public vgui_tableau
   vgui_tview_launcher();
 
   //: Handle all events sent to this tableau.
+  //  In particular, use Shift-G events to pop up a tableau tree.
   bool handle(const vgui_event&);
 
   //: Returns the type of this tableau ('vgui_tview_launcher').
@@ -52,6 +53,7 @@ class vgui_tview_launcher : public vgui_tableau
   vgui_event_condition c_graph;
 
  protected:
+  //: Destructor - called by vgui_tview_launcher_sptr.
   ~vgui_tview_launcher() { }
 };
 
@@ -59,6 +61,8 @@ class vgui_tview_launcher : public vgui_tableau
 struct vgui_tview_launcher_new : public vgui_tview_launcher_sptr
 {
   typedef vgui_tview_launcher_sptr base;
+ 
+  //: Constructor - creates a vgui_tview_launcher.
   vgui_tview_launcher_new() : base(new vgui_tview_launcher) { }
 };
 

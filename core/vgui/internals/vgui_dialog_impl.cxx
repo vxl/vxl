@@ -3,11 +3,10 @@
 #pragma implementation
 #endif
 //:
-//  \file
-// See vgui_dialog_impl.h for a description of this file
-//
+// \file
 // \author Philip C. Pritchett, RRG, University of Oxford
-// \date 25 Oct 99
+// \date   25 Oct 99
+// \brief  See vgui_dialog_impl.h for a description of this file
 //
 
 #include "vgui_dialog_impl.h"
@@ -31,7 +30,7 @@ vgui_dialog_impl::~vgui_dialog_impl()
 {
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //: Add a boolean field to the dialog box.
 void vgui_dialog_impl::bool_field(const char* txt, bool& val) {
   vgui_bool_field *field = new vgui_bool_field(txt, val);
@@ -44,7 +43,7 @@ void vgui_dialog_impl::bool_field(const char* txt, bool& val) {
   elements.push_back(l);
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //: Add an integer field to the dialog box.
 void vgui_dialog_impl::int_field(const char* txt, int& val) {
   vgui_int_field *field = new vgui_int_field(txt, val);
@@ -57,7 +56,7 @@ void vgui_dialog_impl::int_field(const char* txt, int& val) {
   elements.push_back(l);
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //: Add a long field to the dialog box.
 void vgui_dialog_impl::long_field(const char* txt, long& val) {
   vgui_long_field *field = new vgui_long_field(txt, val);
@@ -70,7 +69,7 @@ void vgui_dialog_impl::long_field(const char* txt, long& val) {
   elements.push_back(l);
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //: Add a float field to the dialog box.
 void vgui_dialog_impl::float_field(const char* txt, float& val) {
   vgui_float_field *field = new vgui_float_field(txt, val);
@@ -83,7 +82,7 @@ void vgui_dialog_impl::float_field(const char* txt, float& val) {
   elements.push_back(l);
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //: Add a double field to the dialog box.
 void vgui_dialog_impl::double_field(const char* txt, double& val) {
   vgui_double_field *field = new vgui_double_field(txt, val);
@@ -96,7 +95,7 @@ void vgui_dialog_impl::double_field(const char* txt, double& val) {
   elements.push_back(l);
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //: Add a vcl_string field to the dialog box.
 void vgui_dialog_impl::string_field(const char* txt, vcl_string& val) {
 
@@ -110,7 +109,7 @@ void vgui_dialog_impl::string_field(const char* txt, vcl_string& val) {
   elements.push_back(l);
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //: Add a choice field to the dialog box.
 void vgui_dialog_impl::choice_field(const char* txt,
                                           const vcl_vector<vcl_string>& labels, int& val) {
@@ -183,7 +182,7 @@ void vgui_dialog_impl::inline_tab(const vgui_tableau_sptr tab, unsigned width,
   elements.push_back(l);
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //: Add a text message to the dialog box.
 void vgui_dialog_impl::text_message(const char* txt) {
   int dummy_int = 0;
@@ -238,7 +237,7 @@ void* vgui_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr tab,
   return 0;
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //: Changes the modality of the dialog.  True makes the dialog modal
 // (i.e. the dialog 'grabs' all events), this is the default.
 // False makes the dialog non-modal.

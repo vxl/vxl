@@ -76,7 +76,7 @@
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_tableau.h>
 
-// Satellite with client data.
+//: Satellite with client data.
 template <class object, class data>
 struct vgui_satellite_t : vgui_tableau
 {
@@ -101,7 +101,7 @@ protected:
   ~vgui_satellite_t() { p = 0; m = 0; }
 };
 
-// Satellite without client data.
+//: Satellite without client data.
 template <class object>
 struct vgui_satellite : vgui_tableau
 {

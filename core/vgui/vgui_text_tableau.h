@@ -80,7 +80,11 @@ class vgui_text_tableau : public vgui_tableau
   void remove(int handle);
 
  protected:
+  //: Destructor - called by vgui_text_tableau_sptr.
   ~vgui_text_tableau() { }
+ 
+  //: Handles all events sent to this tableau.
+  //  In particular, uses draw events to render the text.
   bool handle(vgui_event const &);
 
  private:
@@ -98,6 +102,8 @@ class vgui_text_tableau : public vgui_tableau
 struct vgui_text_tableau_new : public vgui_text_tableau_sptr
 {
   typedef vgui_text_tableau_sptr base;
+
+  //: Constructor - creates a default vgui_text_tableau.
   vgui_text_tableau_new() : base(new vgui_text_tableau()) { }
 };
 

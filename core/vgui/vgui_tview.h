@@ -8,7 +8,7 @@
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   12 Oct 99
-// \brief  Tableau
+// \brief  Tableau displaying a tableau tree.
 // 
 //  Contains classes:  vgui_tview  vgui_tview_new
 //
@@ -22,6 +22,7 @@
 #include <vcl_vector.h>
 #include <vgui/vgui_wrapper_tableau.h>
 
+//: Tableau displaying a tableau tree.
 class vgui_tview : public vgui_wrapper_tableau
 {
  public:

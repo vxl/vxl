@@ -58,30 +58,46 @@ class vgui_easy2D : public vgui_displaylist2D
 {
  public:
   //: Constructor - don't use this, use vgui_easy2D_new.
+  //  Create an easy2D with the given name.
   vgui_easy2D(const char* n="unnamed");
 
   //: Constructor - don't use this, use vgui_easy2D_new.
+  //  Creates an easy2D with the given image tableau as child.
   vgui_easy2D(vgui_image_tableau_sptr const&, const char* n="unnamed");
 
   //: Constructor - don't use this, use vgui_easy2D_new.
+  //  Creates an easy2D with the given child tableau.
   vgui_easy2D(vgui_tableau_sptr const&, const char* n="unnamed");
 
+  //: Handle all events sent to this tableau.
+  //  In particular, use draw events to draw 2-dimensional geometric objects.
   bool handle(const vgui_event& e);
 
+  //: Returns the name given to this tableau in the constructor. 
   vcl_string name() const { return name_; };
+
+  //: Returns the filename of the child image if there is one, else the name.
   vcl_string file_name() const;
+
+  //: Returns a nice version of the type, including details of any image file.
   vcl_string pretty_name() const;
+
+  //: Returns the type of this tableau ('vgui_easy2D').
   vcl_string type_name() const;
 
   //: Set the child tableau to be the given image_tableau.
   void set_image(vcl_string const& image);
+
   //: Set the child tableau to be the given tableau.
   void set_child(vgui_tableau_sptr const&);
 
   //: Set the colour of objects to the given red, green, blue values.
-  void set_foreground(float r, float g, float b) { fg[0] = r; fg[1] = g; fg[2] = b; }
+  void set_foreground(float r, float g, float b) 
+    { fg[0] = r; fg[1] = g; fg[2] = b; }
+
   //: Set the width of lines to the given width.
   void set_line_width(float w) { line_width = w; }
+
   //: Set the radius of points to the given radius.
   void set_point_radius(float r) { point_size = r; }
 
@@ -90,30 +106,44 @@ class vgui_easy2D : public vgui_displaylist2D
 
   //: Add a point at the given position to the display.
   vgui_soview2D_point* add_point(float x, float y);
+
   //: Add a finite line with the given start and end points to the display.
-  //  Note that this will be added as a vgui_lineseg (not vgui_line - which doesn't exist).
+  //  Note that this will be added as a vgui_lineseg (not 
+  //  vgui_line - which doesn't exist).
   vgui_soview2D_lineseg* add_line(float x0, float y0, float x1, float y1);
+
   //: Add an infinite line (ax + by +c = 0) to the display.
   vgui_soview2D_infinite_line* add_infinite_line(float a, float b, float c);
+
   //: Add a circle with the given centre and radius to the display.
   vgui_soview2D_circle* add_circle(float x, float y, float r);
+
   //: Add an ellipse with a given center, width, height, and angle
-  vgui_soview2D_ellipse* add_ellipse(float x, float y, float w, float h, float phi);
+  vgui_soview2D_ellipse* add_ellipse(float x, float y, float w, 
+    float h, float phi);
+
   //: Add a point with the given projective coordinates.
   vgui_soview2D_point* add_point_3dv(double const p[3]);
+
   //: Add a line with the given projective start and end points.
-  vgui_soview2D_lineseg* add_line_3dv_3dv(double const p1[3], double const p2[3]);
+  vgui_soview2D_lineseg* add_line_3dv_3dv(double const p1[3], 
+                                          double const p2[3]);
+
   //: Add an infinite line with the given projective coordinates.
   vgui_soview2D_infinite_line* add_infinite_line_3dv(double const l[3]);
+
   //: Add a circle with the given centre (in projective coords) and radius to the display.
   vgui_soview2D_circle* add_circle_3dv(double const point[3], float r);
+
   //: Add a linestrip with the given n vertices to the display.
   vgui_soview2D_linestrip* add_linestrip(unsigned n, float const *x, float const *y);
+
   //: Add  polygon with the given n vertices to the display.
   vgui_soview2D_polygon* add_polygon(unsigned n, float const *x, float const *y);
 
   //: If the child tableau is an image_tableau, return this.
   vgui_image_tableau_sptr get_image_tableau() { return image_image; }
+
   //: Screen dump to postscript file.
   //  Specify the optional arguments in case this tableau does not contain
   //  an image tableau, or if you want a smaller part of the image printed.
@@ -122,26 +152,40 @@ class vgui_easy2D : public vgui_displaylist2D
                     bool print_geom_objs, int wd=-1, int ht=-1);
 
  protected:
+  //: Destructor - called by vgui_easy2D_sptr.
   ~vgui_easy2D() { }
 
+  //: Child tableau if there is one.
   vgui_slot image_slot;
+ 
+  //: Child image tableau, if there is one.
   vgui_image_tableau_sptr image_image;
 
+  //: Name of this tableau.
   vcl_string name_;
+
+  //: Foreground colour (colour of the objects).
   float fg[3];
+
+  //: Line width for geometric objects added to the display.
   float line_width;
+
+  //: Point radius for geometric objects added to the display.
   float point_size;
 };
 
 //: Create a smart-pointer to a vgui_easy2D tableau.
 struct vgui_easy2D_new : public vgui_easy2D_sptr
 {
+  //: Constructor - create an easy2D with the given name.
   vgui_easy2D_new(char const *n="unnamed") :
     vgui_easy2D_sptr(new vgui_easy2D(n)) { }
 
+  //: Constructor - create an easy2D with the given image tableau as child.
   vgui_easy2D_new(vgui_image_tableau_sptr const& i, char const* n="unnamed") :
     vgui_easy2D_sptr(new vgui_easy2D(i, n)) { }
 
+  //: Constructor - create an easy2D with the given child tableau.
   vgui_easy2D_new(vgui_tableau_sptr const& i, char const* n="unnamed") :
     vgui_easy2D_sptr(new vgui_easy2D(i, n)) { }
 };

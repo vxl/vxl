@@ -7,6 +7,7 @@
 //
 // \author  Marko Bacic, Oxford RRG
 // \date    4 August 2000
+// \brief   See vgui_mfc_util.h for a description of this file.
 //
 //-----------------------------------------------------------------------------
 

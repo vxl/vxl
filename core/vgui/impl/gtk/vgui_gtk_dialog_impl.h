@@ -8,7 +8,9 @@
 // \file
 // \author Robotics Research Group, University of Oxford
 // \date   28 Dec 99
-// \brief  Specialization of vgui_dialog_impl for GTK. Creates a GTK dialog box.
+// \brief  The GTK implementation of vgui_dialog_impl.
+//
+//  Contains classes:  vgui_gtk_dialog_impl
 //
 // \verbatim
 //  Modifications:

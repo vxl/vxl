@@ -8,7 +8,7 @@
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   14-SEP-1999
-// \brief  Tableau with functions to view 3D objects (eg. rotate, zoom, etc).
+// \brief  Tableau with functions to view 3D objects (eg, rotate, zoom, etc).
 //
 //  Contains classes:  vgui_viewer3D  vgui_viewer3D_new
 // 
@@ -26,7 +26,7 @@
 
 struct vgui_viewer3D_spin;
 
-//:  Tableau with functions to view 3D objects (eg. rotate, zoom, etc).
+//:  Tableau with functions to view 3D objects (eg, rotate, zoom, etc).
 class vgui_viewer3D : public vgui_wrapper_tableau, public vgui_drag_mixin
 {
  public:
@@ -63,6 +63,7 @@ class vgui_viewer3D : public vgui_wrapper_tableau, public vgui_drag_mixin
   // Implementation
   void setup_gl_matrices();
 
+  //: Data on the current state of vgui_viewer3D (eg, the amount we are zoomed).
   struct token_t
   {
     float quat[4];     // quaternion

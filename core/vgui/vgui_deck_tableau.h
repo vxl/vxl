@@ -107,7 +107,9 @@ public:
   vgui_observable observers;
 
  protected:
+  //: Destructor - called by vgui_deck_tableau_sptr.
   virtual ~vgui_deck_tableau();
+
   virtual bool handle(const vgui_event&);
 
   bool add_child(vgui_tableau_sptr const& t);

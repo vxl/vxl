@@ -33,6 +33,8 @@ class vgui_viewer2D : public vgui_wrapper_tableau, public vgui_drag_mixin
   vgui_viewer2D(vgui_tableau_sptr const&);
 
   //: Handle all events sent to this tableau.
+  //  In particular, uses gestures from the user to zoom, drag and centre
+  //  the display.
   virtual bool handle(const vgui_event& event);
 
   //: Returns the type of this tableau ('vgui_viewer2D').
@@ -70,7 +72,7 @@ class vgui_viewer2D : public vgui_wrapper_tableau, public vgui_drag_mixin
   //: Called when the user presses a key.
   bool key_press(int x, int y, vgui_key key, vgui_modifier);
 
-  //: Data for vgui_viewer2D
+  //: Data on the current state of vgui_viewer2D (eg the amount we are zoomed).
   struct token_t
   {
     float scaleX;
@@ -99,6 +101,7 @@ class vgui_viewer2D : public vgui_wrapper_tableau, public vgui_drag_mixin
   float zoom_factor;
 
  protected:
+  //: Destructor - called by vgui_viewer2D_sptr.
  ~vgui_viewer2D();
 };
 

@@ -20,6 +20,7 @@
 //   Marko Bacic    07-JUL-2000    Added support for linestrip
 //   Marko Bacic    19-JUL-2000    Now supports vgui_rubberbander_client
 //   FSM            14-AUG-2000    Fixed so that it works with Windows
+//   K.Y.McGaul     17-SEP-2002    Added doxygen style comments.
 // \endverbatim
 
 
@@ -27,39 +28,84 @@
 #include <vgui/vgui_easy2D.h>
 #include <vgui/vgui_event_condition.h>
 
+//-----------------------------------------------------------------------------
 //: Receives the parameters captured by vgui_rubberbander.
 class vgui_rubberbander_client
 {
  public:
+  //: Destructor - delete this vgui_rubberbander_client.
   virtual ~vgui_rubberbander_client() { }
+
+  //: Called by vgui_rubberbander when the user has selected a point.
   virtual void add_point(float, float);
+
+  //: Called by vgui_rubberbander when the user has selected a finite line.
   virtual void add_line(float,float,float,float);
+
+  //: Called by vgui_rubberbander when the user has selected an infinite line.
   virtual void add_infinite_line(float,float,float);
+
+  //: Called by vgui_rubberbander when the user has selected a circle.
   virtual void add_circle(float,float,float);
+
+  //: Called by vgui_rubberbander when the user has selectd a linestrip.
   virtual void add_linestrip(int n,float const *,float const *);
+
+  //: Called by vgui_rubberbander when the user has selected a polygon.
   virtual void add_polygon(int n,float const*,float const*);
+
+  //: Called by vgui_rubberbander when the user has selected a rectangular box.
   virtual void add_box(float,float,float,float);
 };
 
+//-----------------------------------------------------------------------------
 //: Rubberbanding onto a vgui_easy2D.
 //
-//  Special case of rubberbander_client for cases where we just want to draw
-//  rubberbanded objects straight onto an easy2D.
+//  Special case of vgui_rubberbander_client for cases where we just want to 
+//  draw rubberbanded objects straight onto a vgui_easy2D.
 class vgui_rubberbander_easy2D_client : public vgui_rubberbander_client
 {
  public:
+  //: Pointer to the vgui_easy2D object this client writes to.
   vgui_easy2D_sptr easy;
+
+  //: Constructor - takes a pointer to a vgui_easy2D tableau.
   vgui_rubberbander_easy2D_client(vgui_easy2D_sptr const& e): easy(e) { }
 
+  //: Called by vgui_rubberbander when the user has selected a point.
+  //  Adds a point to the vgui_easy2D.
   void add_point(float x, float y){easy->add_point(x,y);}
-  void add_line(float x0, float y0, float x1, float y1){easy->add_line(x0, y0, x1, y1);}
-  void add_infinite_line(float a, float b, float c){easy->add_infinite_line(a, b, c);}
-  void add_circle(float x, float y, float r){easy->add_circle(x, y, r);}
-  void add_linestrip(int n, float const* x, float const* y){easy->add_linestrip(n, x, y);}
-  void add_polygon(int n, float const* x, float const* y){easy->add_polygon(n, x, y);}
+
+  //: Called by vgui_rubberbander when the user has selected a finite line.
+  //  Adds a finite line to the vgui_easy2D.
+  void add_line(float x0, float y0, float x1, float y1)
+    {easy->add_line(x0, y0, x1, y1);}
+
+  //: Called by vgui_rubberbander when the user has selected an infinite line.
+  //  Adds an infinite line to the vgui_easy2D.
+  void add_infinite_line(float a, float b, float c)
+    {easy->add_infinite_line(a, b, c);}
+
+  //: Called by vgui_rubberbander when the user has selected a circle.
+  //  Adds a circle to the vgui_easy2D.
+  void add_circle(float x, float y, float r)
+    {easy->add_circle(x, y, r);}
+
+  //: Called by vgui_rubberbander when the user has selectd a linestrip.
+  //  Adds a linestrip to the vgui_easy2D.
+  void add_linestrip(int n, float const* x, float const* y)
+    {easy->add_linestrip(n, x, y);}
+
+  //: Called by vgui_rubberbander when the user has selected a polygon.
+  //  Adds a polygon to the vgui_easy2D.
+  void add_polygon(int n, float const* x, float const* y)
+    {easy->add_polygon(n, x, y);}
+
+  //: Does nothing - vgui_easy2D doesn't have a rectangular box object.
   void add_box(float, float, float, float){}
 };
 
+//-----------------------------------------------------------------------------
 //: Tableau to rubberband circles, lines etc.  
 //
 //  The values captured (eg. two points defining a line) are passed to the 
@@ -88,11 +134,14 @@ class vgui_rubberbander_easy2D_client : public vgui_rubberbander_client
 class vgui_rubberbander : public vgui_tableau
 {
  public:
+  //: Whether to use overlays or not.
   bool use_overlays;  // capes@robots - default is true
 
+  //: Initialise vgui_rubberbander.
   void init (vgui_rubberbander_client* client);
 
   //: Constructor - don't use this, use vgui_rubberbander_new.
+  //  Takes the vgui_rubberbander_client as a parameter.
   vgui_rubberbander(vgui_rubberbander_client* client);
 
   //vgui_rubberbander(vgui_easy2D_sptr const&);
@@ -100,8 +149,7 @@ class vgui_rubberbander : public vgui_tableau
   //: Return the type of this tableau ('vgui_rubberbander').
   vcl_string type_name() const { return "vgui_rubberbander"; }
 
-  // these describe what the user has to do
-  // to use the rubberbanding gesture.
+  // These describe what the user has to do to use the rubberbanding gesture.
   vgui_event_condition gesture0;
   vgui_event_condition gesture1;
   vgui_event_condition gesture2;
@@ -146,6 +194,7 @@ class vgui_rubberbander : public vgui_tableau
   vcl_vector<float>x_coords, y_coords;
 };
 
+//-----------------------------------------------------------------------------
 typedef vgui_tableau_sptr_t<vgui_rubberbander> vgui_rubberbander_sptr;
 
 //: Creates a smart-pointer to a vgui_rubberbander tableau.

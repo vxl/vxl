@@ -37,6 +37,7 @@ class vgui_load : public vgui_wrapper_tableau
  public:
 
   //: Constructor - don't use this, use vgui_load_new.
+  //  Takes the single child tableau as a parameter.
   vgui_load(vgui_tableau_sptr const& child);
 
   //: Returns the type of this tableau ('vgui_load').
@@ -77,6 +78,7 @@ class vgui_load : public vgui_wrapper_tableau
   void set_image(unsigned w, unsigned h) { set_ortho(0, h, w, 0); }
 
  protected:
+  //: Destructor - called by vgui_load_sptr.
   ~vgui_load() { }
 
   bool handle( vgui_event const &e);
@@ -95,6 +97,8 @@ class vgui_load : public vgui_wrapper_tableau
 struct vgui_load_new : public vgui_load_sptr
 {
   typedef vgui_load_sptr base;
+
+  //: Constructor - takes the single child tableau as a parameter.
   vgui_load_new(vgui_tableau_sptr const& child) : base(new vgui_load(child)) { }
 };
 

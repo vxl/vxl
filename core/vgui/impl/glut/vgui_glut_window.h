@@ -1,15 +1,22 @@
+// This is oxl/vgui/impl/glut/vgui_glut_window.h
 #ifndef vgui_glut_window_h_
 #define vgui_glut_window_h_
-// .NAME vgui_glut_window
-// .LIBRARY vgui-glut
-// .INCLUDE vgui/impl/glut/vgui_glut_window.h
-// .FILE vgui_glut_window.cxx
-// @author fsm@robots.ox.ac.uk
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+// \brief  The GLUT (OpenGL Utility Toolkit) implementation of vgui_window.
+//
+//  Contains classes:  vgui_glut_window
+//
+// \verbatim
+//  Modifications:
+// \endverbatim
 
 struct vgui_glut_adaptor;
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_window.h>
 
+//: The GLUT (OpenGL Utility Toolkit) implementation of vgui_window.
 struct vgui_glut_window : public vgui_window
 {
   vgui_glut_window(char const *title, unsigned w, unsigned h, int posx =-1, int posy=-1);

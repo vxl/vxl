@@ -36,6 +36,7 @@ class vgui_image_tableau;
 class vgui_roi_tableau : public vgui_tableau
 {
  public:
+  //: Data defining a region of interest (position, height and width).
   typedef struct region_of_interest {
     float sx;
     float sy;
@@ -78,7 +79,10 @@ class vgui_roi_tableau : public vgui_tableau
   bool get_bounding_box(float low[3], float high[3]) const;
 
  protected:
+  //: Destructor - called by vgui_roi_tableau_sptr.
   ~vgui_roi_tableau();
+
+  //: Handle all events passed to this tableau.
   bool handle(vgui_event const &e);
 
  private:
@@ -91,6 +95,8 @@ class vgui_roi_tableau : public vgui_tableau
 struct vgui_roi_tableau_new : public vgui_roi_tableau_sptr
 {
   typedef vgui_roi_tableau_sptr base;
+
+  //: Constructor - creates a vgui_roi_tableau.
   vgui_roi_tableau_new() : base(new vgui_roi_tableau()) { }
 };
 

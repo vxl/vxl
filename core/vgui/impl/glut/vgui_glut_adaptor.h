@@ -1,10 +1,17 @@
+// This is oxl/vgui/impl/glut/vgui_glut_adaptor.h
 #ifndef vgui_glut_adaptor_h_
 #define vgui_glut_adaptor_h_
-// .NAME vgui_glut_adaptor
-// .LIBRARY vgui-glut
-// .INCLUDE vgui/impl/glut/vgui_glut_adaptor.h
-// .FILE vgui_glut_adaptor.cxx
-// @author fsm@robots.ox.ac.uk
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+// \brief  The GLUT (OpenGL Utility Toolkit) implementation of vgui_adaptor.
+//
+//  Contains classes: vgui_glut_adaptor
+//
+// \verbatim
+//  Modifications:
+//    17-Sep-2002 K.Y.McGaul - Converted to doxygen style documentation.
+// \endverbatim
 
 #include <vcl_vector.h>
 #include <vgui/vgui_adaptor.h>
@@ -12,6 +19,7 @@ struct vgui_command;
 struct vgui_overlay_helper;
 struct vgui_glut_window;
 
+//: The GLUT (OpenGL Utility Toolkit) implementation of vgui_adaptor.
 struct vgui_glut_adaptor : vgui_adaptor
 {
   vgui_glut_adaptor( vgui_glut_window *win_, int id_ );

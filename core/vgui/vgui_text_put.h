@@ -6,13 +6,11 @@
 #endif
 //:
 // \file
-// \brief Function for rendering text at the current raster position.
-//
-// \author
-//    Philip C. Pritchett, RRG, University of Oxford
+// \author Philip C. Pritchett, RRG, University of Oxford
 // \date   19 Oct 99
+// \brief  Function for rendering text at the current raster position.
 
-//: put the given text at the current raster position.
+//: Put the given text at the current raster position.
 void vgui_text_put(char const *s);
 
 #endif // vgui_text_put_h_

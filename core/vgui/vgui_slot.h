@@ -1,7 +1,26 @@
 #ifndef vgui_slot_h_
 #define vgui_slot_h_
 //:
-//  \file
+// \file
+// \author fsm@robots.ox.ac.uk
+// \brief  Describes the relationship between a parent and child tableau.
+// 
+//  Contains classes:  vgui_slot
+//  
+// \verbatim
+//  Modifications:
+//    17-Sep-2002 K.Y.McGaul - Added doxygen style comments.
+// \endverbatim
+
+#include <vcl_iosfwd.h>
+#include <vcl_vector.h>
+
+class  vgui_event;
+class  vgui_tableau;
+struct vgui_tableau_sptr;
+struct vgui_slot_impl;   // implementation class.
+
+//: Describes the relationship between a parent and child tableau.
 //
 // Q: what is a vgui_slot?
 // A: These are essentially specialized smart pointers. A slot
@@ -13,7 +32,9 @@
 //
 // Semantics:
 // Assigning a slot to a slot
+// \code
 //   lhs = rhs;
+// \endcode
 // doesn't change the graph, only the lhs which no longer refers
 // to the edge it used to refer to.
 // Calling set_child(t) on a slot changes the graph (the given
@@ -44,59 +65,78 @@
 //
 // Attempting to create a non-empty slot whose parent and child
 // are the same tableau causes an abort().
-//
-// \author
-//   fsm@robots.ox.ac.uk
-//--------------------------------------------------------------------------------
-
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
-
-class  vgui_event;
-class  vgui_tableau;
-struct vgui_tableau_sptr;
-struct vgui_slot_impl;   // implementation class.
-//#include <vgui/vgui_tableau.h>
-
 struct vgui_slot
 {
+  //: Constructor - creates a default vgui_slot.
   vgui_slot();
+
+  //: Constructor - creates a vgui_slot same as the given one.
   vgui_slot(vgui_slot const &);
-  // the 'parent' parameter is the self pointer ('this') of the tableau
-  // which intends to hold the slot. it may *not* be a null pointer.
-  // to make an uninitialized slot, use the default constructor.
+
+  //: Constructor - takes the parent tableau.
+  //  The 'parent' parameter is the self pointer ('this') of the tableau
+  //  which intends to hold the slot. It may *not* be a null pointer.
+  //  To make an uninitialized slot, use the default constructor.
   vgui_slot(vgui_tableau * parent /* child is zero */);
+
+  //: Constructor - takes the parent and child tableaux.
+  //  The 'parent' parameter is the self pointer ('this') of the tableau
+  //  which intends to hold the slot. It may *not* be a null pointer.
+  //  To make an uninitialized slot, use the default constructor.
   vgui_slot(vgui_tableau * parent, vgui_tableau_sptr const &child);
+
+  //: Destructor - delete this slot.
   ~vgui_slot();
 
+  //: Make this slot equal to the given one.
   vgui_slot &operator=(vgui_slot const &);
 
-  // slots are equal if they have the same implementation. merely having
-  // the same parent and child does not imply equality.
+  //: Returns true if the this slot is the same as the given slot.
+  //  Slots are equal if they have the same implementation. Merely having
+  //  the same parent and child does not imply equality.
   bool operator==(vgui_slot const &s) const { return pimpl == s.pimpl; }
 
-  // comparing a slot with a tableau compares the child.
+  // Comparing a slot with a tableau compares the child.
   bool operator==(vgui_tableau_sptr const &t) const;
 
-  // these methods are rarely needed. why would you use them?
+  //: Returns the parent tableau for this slot.
   vgui_tableau_sptr parent() const;
+
+  //: Returns the child tableau for this slot.
   vgui_tableau_sptr child () const;
 
-  // a slot behaves more like its child than its parent :
+  //: Return true if both parent and child tableaux exist.
   operator bool () const;
+ 
+  //: Return a pointer to the child tableau. 
+  //  A slot behaves more like its child than its parent.
   operator vgui_tableau_sptr () const;
+
+  //: Return a pointer to the child tableau.
+  //  A slot behaves more like its child than its parent.
   vgui_tableau *operator -> () const;
 
-  // extra methods
+  //: Let the child tableau handle the event.
+  //  A slot behaves more like its child than its parent.
   bool handle(vgui_event const &e);
+
+  //: Make the given tableau the child tableau in this relationship.
+  //  A slot's parent pointer cannot be changed because there is no
+  //  legitimate use for that.
+  //  Attempting to set the child to be the same tableau as the parent will 
+  //  cause an abort().
   void assign(vgui_tableau_sptr const &); // sets child only
 
   // ---------- statics ----------
 
   //: Push all children of 'tab' onto the vector.
-  static void get_children_of(vgui_tableau_sptr const &tab, vcl_vector<vgui_tableau_sptr> *);
+  static void get_children_of(vgui_tableau_sptr const &tab, 
+    vcl_vector<vgui_tableau_sptr> *);
+
   //: Push all parents of 'tab' onto the vector.
-  static void get_parents_of (vgui_tableau_sptr const &tab, vcl_vector<vgui_tableau_sptr> *);
+  static void get_parents_of (vgui_tableau_sptr const &tab, 
+    vcl_vector<vgui_tableau_sptr> *);
+
   //: In all slots, replace old_child with new_child.
   static void replace_child_everywhere (vgui_tableau_sptr const &old_child,
                                         vgui_tableau_sptr const &new_child);

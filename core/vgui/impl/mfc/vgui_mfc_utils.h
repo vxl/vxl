@@ -8,14 +8,17 @@
 // \file
 // \author  Marko Bacic, Oxford RRG
 // \date    4 August 2000
-// \brief   MFC version of vgui_utils - provides support for menus.
+// \brief   MFC support for menus.
+//
+//  Contains classes:  vgui_mfc_utils
 //
 // \verbatim
 //  Modifications:
 //   04-AUG-2000 Marko Bacic - Initial version.
 //   14-AUG-2000 Marko Bacic - Added support for popup menus
 //   16-MAR-2001 K.Y.McGaul - Added menu accelerators
-//   22-AUG-2001 K.Y.McGaul - Added destructor to fix memory leak: all menus now deleted.
+//   22-AUG-2001 K.Y.McGaul - Added destructor to fix memory leak: all 
+//                            menus now deleted.
 // \endverbatim
 
 #include <vgui/vgui_menu.h>
@@ -26,7 +29,7 @@
 
 typedef void (*fp)();
 
-//: MFC version of vgui_utils - provides support for menus.
+//: MFC support for menus.
 //  Only one instance of the class is allowed
 class vgui_mfc_utils 
 {

@@ -8,7 +8,7 @@
 // \file
 // \author   Marko Bacic, Oxford RRG
 // \date     08 Aug 2000
-// \brief    MFC status bar for the main window of the application.
+// \brief    The MFC implementation of vgui_statusbar.
 //
 //  Contains classes: vgui_mfc_statusbar
 //
@@ -23,7 +23,7 @@
 #include <vgui/vgui_statusbar.h>
 #include "StdAfx.h"
 
-//: MFC status bar for the main window of the application.
+//: The MFC implementation of vgui_statusbar.
 class vgui_mfc_statusbar : public vgui_statusbar
 {
  public:

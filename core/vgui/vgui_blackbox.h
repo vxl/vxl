@@ -49,8 +49,10 @@ class vgui_blackbox : public vgui_wrapper_tableau
  protected:
   //: Destructor - called by smart-pointer vgui_blackbox_sprt.
  ~vgui_blackbox();
+
   //: True if events are being recorded.
   bool recording;
+
   //: Not used ????
   bool playback;
 

@@ -6,6 +6,8 @@
 // \date   27 July 2000
 // \brief  Defines CWinApp which initialises all the MRC stuff.
 //
+//  Contains classes:  vgui_mfc_app
+//
 // \verbatim
 //  Modifications:
 //    23-AUG-2000 Marko Bacic, Oxford RRG -- Added support for scroll bars

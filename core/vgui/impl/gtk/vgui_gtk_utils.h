@@ -8,7 +8,7 @@
 // \file
 // \author Robotics Research Group, University of Oxford
 // \date   19-DEC-1999
-// \brief  GTK version of vgui_utils - provides support for menus.
+// \brief  GTK support for menus.
 //
 //  Contains classes: vgui_gtk_utils
 //
@@ -24,7 +24,7 @@
 #include <gtk/gtk.h>
 
 
-//: GTK version of vgui_utils - provides support for menus.
+//: GTK support for menus.
 class vgui_gtk_utils
 {
  public:

@@ -8,7 +8,7 @@
 // \file
 // \author  Robotics Research Group, University of Oxford
 // \date    18 Dec 99
-// \brief   Specialization of vgui_window for GTK.
+// \brief   The GTK implementation of vgui_window.
 //
 //  Contains classes: vgui_gtk_window
 //
@@ -33,7 +33,7 @@ class vgui_gtk_adaptor;
 #include <gtk/gtk.h>
 #include "vgui_gtk_statusbar.h"
 
-//: Specialization of vgui_window for GTK.
+//: The GTK implementation of vgui_window.
 //  Provides functions for manipulating a window.
 class vgui_gtk_window : public vgui_window
 {

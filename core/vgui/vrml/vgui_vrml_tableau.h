@@ -8,7 +8,7 @@
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   17 Sep 99
-// \brief 
+// \brief  Tableau to display VRML.
 // 
 // \verbatim
 //  Modifications:
@@ -26,6 +26,7 @@ typedef vgui_tableau_sptr_t<vgui_vrml_tableau> vgui_vrml_tableau_sptr;
 class QvVrmlFile;
 class vgui_vrml_draw_visitor;
 
+//: Tableau to display VRML.
 class vgui_vrml_tableau : public vgui_tableau
 {
  public:
@@ -51,7 +52,7 @@ class vgui_vrml_tableau : public vgui_tableau
   bool rescale_model;
 };
 
-
+//: Creates a smart-pointer to a vgui_vrml_tableau.
 struct vgui_vrml_tableau_new : public vgui_vrml_tableau_sptr
 {
   typedef vgui_vrml_tableau_sptr base;

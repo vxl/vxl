@@ -35,7 +35,7 @@ public:
 
   //: Constructor - don't use this, use vgui_image_tableau_new.
   //  Creates a tableau which loads and displays an image from
-  //  the given filename.
+  //  the given file.
   vgui_image_tableau(char const *);
 
   //: Returns the type of this tableau ('vgui_image_tableau').
@@ -81,6 +81,7 @@ public:
   bool handle(vgui_event const &e);
 
 protected:
+  //: Destructor - called by vgui_image_tableau_sptr.
   ~vgui_image_tableau();
 
 private:
@@ -91,8 +92,15 @@ private:
 
 //: Creates a smart-pointer to a vgui_image_tableau.
 struct vgui_image_tableau_new : public vgui_image_tableau_sptr {
+
+  //: Constructor - creates an empty image tableau.
   vgui_image_tableau_new() : vgui_image_tableau_sptr(new vgui_image_tableau) { }
+
+  //  Constructor - creates a tableau displaying the given image.
   vgui_image_tableau_new(vil_image const &t) : vgui_image_tableau_sptr(new vgui_image_tableau(t)) { }
+
+  //  Constructor - creates a tableau which loads and displays an image from
+  //  the given file.
   vgui_image_tableau_new(char const *f) : vgui_image_tableau_sptr(new vgui_image_tableau(f)) { }
 };
 

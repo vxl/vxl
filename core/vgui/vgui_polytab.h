@@ -23,8 +23,10 @@
 // roughly which child is getting the mouse events.
 class vgui_polytab_base : public vgui_tableau {
 public:
+  //: Constructor - creates a default polytab_base.
   vgui_polytab_base();
 
+  //: Returns the type of this tableau ('vgui_polytab_base').
   vcl_string type_name() const;
 
   // "iterator interface"
@@ -120,6 +122,7 @@ public:
   void get_popup(vgui_popup_params const &, vgui_menu &);
 
 protected:
+  //: Destructor - called by vgui_polytab_sptr.
   ~vgui_polytab();
   bool may_switch_child;
   bool handle(vgui_event const &);

@@ -27,6 +27,8 @@ class vgui_menu;
 //
 // vgui_clear_tableau is a tableau that performs OpenGL clearing upon
 // receipt of a vgui_DRAW event. It passes all events to its single child.
+//
+// This is provided by default if you use a vgui_shell_tableau.
 class vgui_clear_tableau : public vgui_tableau
 {
  public:

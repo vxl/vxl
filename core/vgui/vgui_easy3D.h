@@ -65,9 +65,12 @@ class vgui_easy3D : public vgui_displaylist3D
   float point_size;
 };
 
+//: Create a smart-pointer to a vgui_easy3D tableau.
 struct vgui_easy3D_new : public vgui_easy3D_sptr
 {
   typedef vgui_easy3D_sptr base;
+
+  //: Constructor - create an empty vgui_easy3D.
   vgui_easy3D_new() : base(new vgui_easy3D()) { }
 };
 

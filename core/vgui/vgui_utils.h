@@ -15,6 +15,7 @@
 #include <vgui/vgui_gl.h>
 #include <vcl_vector.h>
 
+//: Useful static functions for vgui.
 class vgui_utils {
 public:
   //: Dump to .pnm bitmap

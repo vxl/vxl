@@ -38,6 +38,7 @@ class vgui_displaylist2D : public vgui_displaybase
   bool posted_redraw_;
 };
 
+//: Create a smart-pointer to a vgui_displaylist2D.
 struct vgui_displaylist2D_new : public vgui_displaylist2D_sptr
 {
   vgui_displaylist2D_new() :

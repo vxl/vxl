@@ -8,7 +8,7 @@
 // \file
 // \author  Marko Bacic, RRG, University of Oxford
 // \date    31 Jul 2000
-// \brief   Provides support for a dialog box
+// \brief   The MFC implementation of vgui_dialog_impl.
 //
 // \verbatim
 //  Modifications:
@@ -30,10 +30,10 @@ class CFont;
 #define ID_EDIT 0x8200
 #define ID_COMBOBOX 0x8300
 
-//: Provides support for an MFC dialog box.
-// 
-//  Specialization of vgui_dialog_impl for mfc. Creates a mfc dialog box.
-//  Based on vgui_gtk_dialog_impl
+//: The MFC implementation of vgui_dialog_impl.
+//
+//  Creates a dialog box in MFC.
+//  Based on vgui_gtk_dialog_impl.
 class vgui_mfc_dialog_impl : public CWnd,public vgui_dialog_impl
 {
  public:

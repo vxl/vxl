@@ -66,14 +66,20 @@ public:
 
   //: The single child of this tableau.
   vgui_slot child;
+
 protected:
+  // Destructor - called by vgui_wrapper_tableau_sptr.
   ~vgui_wrapper_tableau();
 };
 
 //: Create a smart-pointer to a vgui_wrapper_tableau.
 struct vgui_wrapper_tableau_new : public vgui_wrapper_tableau_sptr {
   typedef vgui_wrapper_tableau_sptr base;
+
+  //: Constructor - creates a default vgui_wrapper_tableau.
   vgui_wrapper_tableau_new() : base(new vgui_wrapper_tableau()) { }
+
+  //: Constructor - takes the single child for the vgui_wrapper_tableau.
   vgui_wrapper_tableau_new(vgui_tableau_sptr const&b) : base(new vgui_wrapper_tableau(b)) { }
 };
 

@@ -9,6 +9,9 @@
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   23 Oct 99
 // \brief  Templated fields for dialog boxes.
+//
+//  Contains classes:  vgui_simple_field
+//
 // \verbatim
 //  Modifications:
 //    23-OCT-1999  P.Pritchett - Initial version.

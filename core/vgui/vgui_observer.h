@@ -8,7 +8,7 @@
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   11 Sep 99
-// \brief  Observer base class
+// \brief  Base class for classes that receive messages from observables.
 //
 //  Contains classes: vgui_observer
 //
@@ -21,15 +21,27 @@
 class vgui_message;
 class vgui_observable;
 
-//: Observer base class
+//: Base class for classes that receive messages from observables.
+//
+//  Observers attach them selves to a vgui_observable object.  The observable
+//  can broadcast a vgui_message or an update to all the vgui_observer's
+//  attached to themselves.
 class vgui_observer
 {
  public:
+  //: Constructor - create a default observable.
   vgui_observer();
+
+  //: Destructor.
   virtual ~vgui_observer();
 
+  //: Called by the observable when some event occurs.
   virtual void update();
+
+  //: Called by the observable with a message.
   virtual void update(vgui_message const &);
+
+  //: Called by the observable with a message.
   virtual void update(vgui_observable const *);
 };
 

@@ -18,6 +18,8 @@
 #include <vgui/vgui_tableau.h>
 
 //: A tableau which quits the application on receiving 'q' or ESC
+//
+//  This is provided by default if you use a vgui_shell_tableau.
 class vgui_quit_tableau : public vgui_tableau {
 public:
 
@@ -29,6 +31,7 @@ public:
   vcl_string type_name() const;
 
 protected:
+  //: Destructor - called by vgui_quit_tableau_sptr.
   ~vgui_quit_tableau() { }
 };
 

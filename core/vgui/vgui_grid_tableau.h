@@ -82,49 +82,62 @@ class vgui_grid_tableau : public vgui_polytab
   //: Constructor - don't use this, use vgui_grid_tableau_new.
   //  Takes the initial number of columns and rows.
   vgui_grid_tableau(unsigned initial_columns = 1, unsigned initial_rows = 1);
+
   //: Constructor - don't use this, use vgui_grid_tableau_new.
   //  This creates a bi-tab, taking the two tableaux as parameters.
   vgui_grid_tableau(vgui_tableau_sptr const& l, vgui_tableau_sptr const& r);
+
   //: Constructor - don't use this, use vgui_grid_tableau_new.
   //  This creates a tri-tab, taking the three tableau as parameters.
   vgui_grid_tableau(vgui_tableau_sptr const& l, vgui_tableau_sptr const& m, vgui_tableau_sptr const& r);
 
   //: Given the column number, returns the x coord for that column.
   float get_x(unsigned index);
+
   //: Given the row number, returns the y coord for that row.
   float get_y(unsigned index);
+
   //: Get the width of each column.
   float get_w();
+
   //: Get the height of each row.
   float get_h();
 
   //: Adds a tableau to the next free space in the grid and the list of tableaux
   void add_next(vgui_tableau_sptr const& tab);
+
   //: Add (or replace the tableau at the given position with) the given tableau.
   void add_at(vgui_tableau_sptr const& tab, unsigned col_pos, unsigned row_pos);
+
   //: Removes the tableau at the given grid coordinates from the display
   void remove_at(unsigned col_pos, unsigned row_pos);
 
   //: Returns the number of rows in the grid.
   unsigned rows() const { return nb_rows; }
+
   //: Returns the number of columns in the grid.
   unsigned cols() const { return nb_cols; }
+
   //: Returns a pointer to the tableau at the given position.
   vgui_tableau_sptr get_tableau_at(unsigned col_pos, unsigned row_pos);
 
   //: Returns the list of tableaux.
   vcl_vector<vgui_tableau_sptr> get_tableau_list();
+
   //: Returns the active tableau, this is the tableau with the mouse in.
   void get_active_position(unsigned* col_pos, unsigned* row_pos);
+
   //: Returns the most recently selected column and row positions.
   void get_last_selected_position(unsigned* col_pos, unsigned* row_pos);
+
   //: Gets the positions and times of selection of the selected tableaux.
   int get_selected_positions(vcl_vector<int>* col_pos, vcl_vector<int>* row_pos,
     vcl_vector<int>* times);
+
   //: Select a certain tableau
   void set_selected(int r, int c, bool onoff = true);
 
- //: True to allow the grid size to change, false to have fixed size.
+  //: True to allow the grid size to change, false to have fixed size.
   void set_grid_size_changeable(bool v) {
     cond_row_add   .enable(v);
     cond_row_remove.enable(v);
@@ -132,11 +145,13 @@ class vgui_grid_tableau : public vgui_polytab
     cond_col_remove.enable(v);
     grid_size_changeable = v;
   }
+
   //: True to use paging events, false to ignore them.
   void set_uses_paging_events(bool v) {
     cond_flip_fwd.enable(v);
     cond_flip_bwd.enable(v);
   }
+
   //: True to use mouse down events, false to ignore them.
   void set_frames_selectable(bool v) {
     cond_select  .enable(v);
@@ -152,19 +167,26 @@ class vgui_grid_tableau : public vgui_polytab
 
   //: Redraw the grid keeping each tableau in its current row and column.
   void layout_grid();
+
   //: Redraw the grid of tableaux packing them in without gaps. 
   //  Fill each row from top left downwards.
   void layout_grid2();
+
   //: Add an empty column to the RHS of the grid.
   void add_column();
+
   //: Remove last column on RHS of the grid.
   void remove_column();
+
   //: Add an empty row to the bottom of the grid.
   void add_row();
+
   //: Remove last row on the bottom of the grid
   void remove_row();
+
   //: Flip forwards through the list of tableaux.
   void page_up();
+
   //: Flip backwards through the list of tableaux.
   void page_down();
 
@@ -172,6 +194,7 @@ class vgui_grid_tableau : public vgui_polytab
   bool handle(const vgui_event&);
 
  protected:
+  //: Destructor - called by vgui_grid_tableau_sptr.
   ~vgui_grid_tableau();
 
  private:
@@ -207,11 +230,14 @@ class vgui_grid_tableau : public vgui_polytab
 
   //: Initialisation called by all constructors.
   void init(unsigned initial_cols, unsigned initial_rows);
-  //: Adds the default tableau to the given space in the grid (but not to the vcl_list of tableaux).
+
+  //: Adds the default tableau to the given space in the grid.
+  //  (but not to the vcl_list of tableaux).
   void add_default(unsigned col_pos, unsigned row_pos);
 
   //: Make the current tableau selected by saving the current time.
   void select_current(int time);
+
   //: Mark the current table as deselected by setting the time to -1.
   void deselect_current();
 };
