@@ -1,9 +1,9 @@
 #   DESCRIPTION:
 #
-#   This is the vidl library.  It is in the vidl Package.
+#   This is the vidl library.
 #   It contains basic Video classes.
 #
-#   DEPENDENCIES: vbl vil vidl
+#   DEPENDENCIES: vbl vil
 
 USES += core
 TRY_MPEG2 := 1
