@@ -20,6 +20,7 @@ SET(vvid_sources
     vvid_video_process.cxx           vvid_video_process.h  vvid_video_process_sptr.h
     vvid_region_process.cxx          vvid_region_process.h   
     vvid_capture_process.cxx         vvid_capture_process.h   
+    vvid_curve_tracking_process.cxx  vvid_curve_tracking_process.h   
     vvid_frame_diff_process.cxx      vvid_frame_diff_process.h   
     vvid_motion_process.cxx          vvid_motion_process.h   
     vvid_lucas_kanade_process.cxx    vvid_lucas_kanade_process.h   
@@ -53,7 +54,7 @@ ELSE(HAS_CMU1394CAMERA)
  ADD_LIBRARY(vvid ${vvid_sources})
 ENDIF(HAS_CMU1394CAMERA)
 
-LINK_LIBRARIES( vvid sdet gevd vtol brip bgui vgui vidl vbl vul vil )
+LINK_LIBRARIES( vvid sdet gevd vtol brip bgui vgui vidl vbl vul vil bdgl )
 
 # the main executables
 SUBDIRS(bin)
