@@ -10,10 +10,12 @@
 #include <vcl_cassert.h>
 
 //: Return a 3-plane view of an RGB image
+// \return an empty view if it can't do the conversion 
+// (because it is already a multiplane image.)
 template<class T>
 vil2_image_view<T> vil2_view_as_planes(const vil2_image_view<vil_rgb<T> >& v)
 {
-  assert(v.nplanes()==1);
+  if (v.nplanes()!=1) return vil2_image_view<T>();
 
   // Image is RGBRGBRGB so x step = 3*v.xstep(), ystep=3*v.ystep()
   return vil2_image_view<T>(v.memory_chunk(),(T*) v.top_left_ptr(),
@@ -22,13 +24,13 @@ vil2_image_view<T> vil2_view_as_planes(const vil2_image_view<vil_rgb<T> >& v)
 }
 
 //: Return an RGB component view of a 3-plane image
-//  Aborts if plane image not in correct format (ie planestep()!=1)
+// \return an empty view if it can't do the conversion 
+// (because the data isn't arrange with triples of consequtive components)
 template<class T>
 vil2_image_view<vil_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& v)
 {
-  assert(v.nplanes()==3);
-  assert(v.planestep()==1);
-  assert(v.xstep()==3 || v.ystep()==3);
+  if ((v.nplanes()!=3) || (v.planestep()!=1) || (v.xstep()!=3 && v.ystep()!=3))
+    return vil2_image_view<vil_rgb<T> >();
 
   return vil2_image_view<vil_rgb<vil_byte> >(v.memory_chunk(),
                                              (vil_rgb<vil_byte>*) v.top_left_ptr(),
@@ -62,8 +64,8 @@ void vil2_print_all(vcl_ostream& os,const vil2_image_view<T>& view)
     {
       for (int x=0;x<view.nx();++x)
       {
-	    vil2_print_value(os,view(x,y,i));
-		os<<" ";
+        vil2_print_value(os,view(x,y,i));
+        os<<" ";
       }
       os<<vcl_endl;
     }

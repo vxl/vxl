@@ -28,6 +28,9 @@ void vil2_print_value(vcl_ostream& s, const vil_rgb<unsigned char>& value);
 //: Explicit overload of print for rgb<float>  (truncates to int)
 void vil2_print_value(vcl_ostream& s, const vil_rgb<float>& value);
 
+//: Convenience function for loading an image into an image view.
+vil2_image_view_base * vil2_load_into_memory(const char *);
+
 //: print all image data to os in a grid
 template<class T>
 void vil2_print_all(vcl_ostream& os,const vil2_image_view<T>& view);
