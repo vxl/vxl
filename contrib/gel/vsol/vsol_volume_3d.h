@@ -15,11 +15,10 @@
 //*****************************************************************************
 
 class vsol_volume_3d;
-
+class vsol_polyhedron;
 #include "vsol_volume_3d_sptr.h"
-#include "vsol_spatial_object_3d.h"
-
-#include "vsol_point_3d_sptr.h"
+#include <vsol/vsol_spatial_object_3d.h>
+#include <vsol/vsol_point_3d_sptr.h>
 
 class vsol_volume_3d : public vsol_spatial_object_3d
 {
@@ -38,8 +37,11 @@ class vsol_volume_3d : public vsol_spatial_object_3d
   //***************************************************************************
   // Basic operations
   //***************************************************************************
-  virtual vsol_volume_3d* cast_to_volume(void) { return this;}
+  virtual vsol_volume_3d* cast_to_volume() { return this;}
   virtual vsol_volume_3d const* cast_to_volume() const { return this;}
+
+  virtual vsol_polyhedron* cast_to_polyhedron() { return 0;}
+  virtual vsol_polyhedron const* cast_to_polyhedron() const { return 0;}
 
   //---------------------------------------------------------------------------
   //: Is the point `p' inside `this' volume ?
