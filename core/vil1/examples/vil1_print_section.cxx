@@ -1,3 +1,4 @@
+// This is vxl/vil/examples/vil_print_section.cxx
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
@@ -26,10 +27,10 @@ int main(int argc, char **argv) {
   assert(argc == 6);
 
   vil_image I = vil_load(argv[1]); assert(I);
-  int x0 = atoi(argv[2]);
-  int y0 = atoi(argv[3]);
-  unsigned w = atoi(argv[4]);
-  unsigned h = atoi(argv[5]);
+  int x0 = vcl_atoi(argv[2]);
+  int y0 = vcl_atoi(argv[3]);
+  unsigned w = vcl_atoi(argv[4]);
+  unsigned h = vcl_atoi(argv[5]);
 
   vcl_cerr << "image is " << I.width() << 'x' << I.height() << vcl_endl;
   assert(0<=x0 && 0<=y0 && x0+int(w)<=I.width() && y0+int(h)<=I.height());
