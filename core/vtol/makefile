@@ -43,7 +43,7 @@ include ${IUEROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
-SUBDIRS += tests
+no_makefile_SUBDIRS += tests
 SUBDIRS += examples
 endif
 
