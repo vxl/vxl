@@ -272,7 +272,7 @@ vcl_cosh (const vcl_complex<FLOAT>& x)
 template <class FLOAT> inline vcl_complex<FLOAT>
 vcl_exp (const vcl_complex<FLOAT>& x)
 {
-  return polar (FLOAT (exp (x.real())), x.imag());
+  return vcl_polar (FLOAT (exp (x.real())), x.imag());
 }
 
 
