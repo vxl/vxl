@@ -3,17 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME    SGIMovieFilePrivates - Undocumented
-// .LIBRARY oxp
-// .HEADER  Oxford Package
-// .INCLUDE oxp/SGIMovieFilePrivates.h
-// .FILE    SGIMovieFilePrivates.cxx
-//
-// .SECTION Description
+//:
+// \file
 //    SGIMovieFilePrivates is deliberately undocumented.
 //
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 31 Dec 98
 //
 //-----------------------------------------------------------------------------

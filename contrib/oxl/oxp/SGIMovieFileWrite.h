@@ -4,19 +4,17 @@
 #pragma interface
 #endif
 //
-// .NAME    SGIMovieFileWrite
-// .LIBRARY oxp
-// .HEADER  Oxford Package
-// .INCLUDE oxp/SGIMovieFileWrite.h
-// .FILE    SGIMovieFileWrite.cxx
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 11 Jan 99
 //
 //-----------------------------------------------------------------------------
 
 struct SGIMovieFileWriteData;
 
-struct SGIMovieFileWrite {
+class SGIMovieFileWrite
+{
+  SGIMovieFileWriteData* p;
+public:
   SGIMovieFileWrite(char const* filename,
                     int w, int h,
                     int length);
@@ -27,9 +25,6 @@ struct SGIMovieFileWrite {
   unsigned char* GetBuffer();
   void PutBuffer(int frame_index);
   void Finish();
-
-private:
-  SGIMovieFileWriteData* p;
 };
 
 #endif // SGIMovieFileWrite_h_

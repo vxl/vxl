@@ -3,17 +3,12 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .SECTION Description
+//:
+// \file
+// \brief Read various movie formats
 //    MovieFile is an interface to movie files and image sequences.
 //    It is currently read-only.
-//
-// .NAME    MovieFile - Read various movie formats
-// .LIBRARY oxp
-// .HEADER  Oxford Package
-// .INCLUDE oxp/MovieFile.h
-// .FILE    MovieFile.cxx
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 26 Aug 98
 //
 //-----------------------------------------------------------------------------
@@ -27,6 +22,7 @@
 
 struct MovieFileInterface;
 
+//: an interface to movie files and image sequences.  It is currently read-only
 class MovieFile {
 public:
   // Constructors/Destructors--------------------------------------------------

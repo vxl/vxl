@@ -3,18 +3,12 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME    SGIMovieFile - Read SGI movie files
-// .LIBRARY oxp
-// .HEADER  Oxford Package
-// .INCLUDE oxp/SGIMovieFile.h
-// .FILE    SGIMovieFile.cxx
-//
-// .SECTION Description
+//:
+// \file
+// \brief Read SGI movie files
 //    SGIMovieFile is an implementation of MovieFileInterface that reads
 //    SGI movie files.
-//
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 30 Dec 98
 //
 //-----------------------------------------------------------------------------
@@ -25,8 +19,11 @@
 
 struct SGIMovieFilePrivates;
 
-struct SGIMovieFile : public MovieFileInterface {
-
+//: an implementation of MovieFileInterface that reads SGI movie files
+class SGIMovieFile : public MovieFileInterface
+{
+  SGIMovieFilePrivates* p;
+public:
   SGIMovieFile(char const* filename);
   ~SGIMovieFile();
 
@@ -42,9 +39,6 @@ struct SGIMovieFile : public MovieFileInterface {
 
   int GetFrameOffset(int frame_index);
   int GetFrameSize(int frame_index);
-
-private:
-  SGIMovieFilePrivates* p;
 };
 
 #endif // SGIMovieFile_h_

@@ -4,12 +4,7 @@
 #pragma interface
 #endif
 //
-// .NAME    MovieFileInterface
-// .LIBRARY oxp
-// .HEADER  Oxford Package
-// .INCLUDE oxp/MovieFileInterface.h
-// .FILE    MovieFileInterface.cxx
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 30 Dec 98
 //
 //-----------------------------------------------------------------------------

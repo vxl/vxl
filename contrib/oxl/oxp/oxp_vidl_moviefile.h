@@ -4,10 +4,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// Author: awf@robots.ox.ac.uk
+//:
+// \file
+// \author awf@robots.ox.ac.uk
 // Created: 08 Dec 01
-
-//: Not documented FIXME
 
 #include <vcl_iosfwd.h>
 
@@ -15,8 +15,10 @@
 
 struct oxp_vidl_moviefile_privates;
 
-struct oxp_vidl_moviefile : public MovieFileInterface {
-
+class oxp_vidl_moviefile : public MovieFileInterface
+{
+  oxp_vidl_moviefile_privates* p;
+public:
   oxp_vidl_moviefile(char const* filename);
   ~oxp_vidl_moviefile();
 
@@ -32,10 +34,6 @@ struct oxp_vidl_moviefile : public MovieFileInterface {
 
   int GetFrameOffset(int frame_index);
   int GetFrameSize(int frame_index);
-
-private:
-  oxp_vidl_moviefile_privates* p;
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS oxp_vidl_moviefile.
-
+#endif // oxp_vidl_moviefile_h_

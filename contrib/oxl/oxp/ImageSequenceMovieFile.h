@@ -3,18 +3,12 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+// \file
+//  ImageSequenceMovieFile is a subclass of MovieFileInterface that
+//  reads from a sequence of images.
 //
-// .NAME    ImageSequenceMovieFile - MovieFile subclass
-// .LIBRARY oxp
-// .HEADER  Oxford Package
-// .INCLUDE oxp/ImageSequenceMovieFile.h
-// .FILE    ImageSequenceMovieFile.cxx
-//
-// .SECTION Description
-//    ImageSequenceMovieFile is a subclass of MovieFileInterface that
-//    reads from a sequence of images.
-//
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 31 Dec 98
 //
 //-----------------------------------------------------------------------------
@@ -23,8 +17,11 @@
 
 struct ImageSequenceMovieFilePrivates;
 
-struct ImageSequenceMovieFile : public MovieFileInterface {
-
+//: subclass of MovieFileInterface that reads from a sequence of images
+class ImageSequenceMovieFile : public MovieFileInterface
+{
+  ImageSequenceMovieFilePrivates* p;
+public:
   ImageSequenceMovieFile(char const* filepattern, int frame_index_to_search_for_extension);
   ~ImageSequenceMovieFile();
 
@@ -38,9 +35,6 @@ struct ImageSequenceMovieFile : public MovieFileInterface {
 
   bool GetFrame(int frame_index, void* buffer);
   bool GetField(int field_index, void* buffer);
-
-private:
-  ImageSequenceMovieFilePrivates* p;
 };
 
 #endif // ImageSequenceMovieFile_h_
