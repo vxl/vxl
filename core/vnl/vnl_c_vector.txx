@@ -294,9 +294,12 @@ void vnl_c_vector_inf_norm(T const *p, unsigned n, S *out)
 # if VNL_CONFIG_THREAD_SAFE
 #  define VNL_C_VECTOR_USE_VNL_ALLOC 0
 # else
-#  include <vnl/vnl_alloc.h>
 #  define VNL_C_VECTOR_USE_VNL_ALLOC 1
 # endif
+#endif
+
+#if VNL_C_VECTOR_USE_VNL_ALLOC
+# include <vnl/vnl_alloc.h>
 #endif
 
 //#include <vcl_iostream.h>
