@@ -9,6 +9,7 @@
 #include <vcl_cassert.h>
 #include <vcl_vector.h>
 #include <vcl_cmath.h>
+#include <vcl_algorithm.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_view_as.h>
 #include <vil/vil_plane.h>
@@ -100,7 +101,7 @@ inline void vil_math_value_range_percentile(const vil_image_view<T>& im,
   vcl_vector<T> data(ni*nj*np);
   
   typename vcl_vector<T>::iterator it = data.begin();
-  const T* plane = im.origin_ptr();
+  const T* plane = im.top_left_ptr();
   for (unsigned int p=0; p<np; ++p, plane+=pstep)
   {
     const T* row = plane;
