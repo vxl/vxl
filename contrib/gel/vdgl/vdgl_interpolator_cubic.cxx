@@ -8,11 +8,12 @@
 #include "vdgl_interpolator_cubic.h"
 #include <vcl_cassert.h>
 #include <vcl_cmath.h> // for sqrt()
-#include <vnl/vnl_matrix.h>
+#include <vnl/vnl_matrix_fixed.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_inverse.h>
 #include <vdgl/vdgl_edgel.h>
 #include <vdgl/vdgl_edgel_chain.h>
-#include <vnl/algo/vnl_svd.h>
 
 
 vdgl_interpolator_cubic::vdgl_interpolator_cubic(vdgl_edgel_chain_sptr chain)
@@ -41,28 +42,21 @@ double vdgl_interpolator_cubic::get_x(double index)
   vdgl_edgel ce(chain_->edgel(c));
   vdgl_edgel de(chain_->edgel(d));
 
-  vnl_matrix<double> A(4,1);
-  vnl_matrix<double> M(4,4);
+  vnl_vector_fixed<double,4> A;
+  vnl_matrix_fixed<double,4,4> M;
 
-  A(0,0) = ae.get_x(); A(1,0) = be.get_x();
-  A(2,0) = ce.get_x(); A(3,0) = de.get_x();
+  A(0) = ae.get_x(); A(1) = be.get_x();
+  A(2) = ce.get_x(); A(3) = de.get_x();
 
   M(0,0)=  a*a*a; M(0,1)= a*a; M(0,2)= a; M(0,3)= 1;
   M(1,0)=  b*b*b; M(1,1)= b*b; M(1,2)= b; M(1,3)= 1;
   M(2,0)=  c*c*c; M(2,1)= c*c; M(2,2)= c; M(2,3)= 1;
   M(3,0)=  d*d*d; M(3,1)= d*d; M(3,2)= d; M(3,3)= 1;
 
+  //  Solving A = M * P for P
+  vnl_vector_fixed<double,4> P = vnl_inverse(M) * A;
 
-  vnl_svd<double> svd_of_M(M);
-
-//  Solving A = M * P for P
-//  vnl_matrix<double> inv_M(4,4);
-//  inv_M = svd.inverse();
-//  vnl_matrix<double> P(4,1) = inv_M * A;
-
-  vnl_matrix<double> P = svd_of_M.solve(A);
-
-  return P(0,0) * index * index * index  + P(1,0) *  index * index + P(2,0) * index  + P(3,0);
+  return P(0) * index * index * index  + P(1) *  index * index + P(2) * index  + P(3);
 }
 
 
@@ -81,22 +75,21 @@ double vdgl_interpolator_cubic::get_y(double index)
   vdgl_edgel ce(chain_->edgel(c));
   vdgl_edgel de(chain_->edgel(d));
 
-  vnl_matrix<double> A(4,1);
-  vnl_matrix<double> M(4,4);
+  vnl_vector_fixed<double,4> A;
+  vnl_matrix_fixed<double,4,4> M;
 
-  A(0,0) = ae.get_y(); A(1,0) = be.get_y();
-  A(2,0) = ce.get_y(); A(3,0) = de.get_y();
+  A(0) = ae.get_y(); A(1) = be.get_y();
+  A(2) = ce.get_y(); A(3) = de.get_y();
 
   M(0,0)=  a*a*a; M(0,1)= b*b; M(0,2)= a; M(0,3)= 1;
   M(1,0)=  b*b*b; M(1,1)= b*b; M(1,2)= b; M(1,3)= 1;
   M(2,0)=  c*c*c; M(2,1)= c*c; M(2,2)= c; M(2,3)= 1;
   M(3,0)=  d*d*d; M(3,1)= d*d; M(3,2)= d; M(3,3)= 1;
 
-  vnl_svd<double> svd(M);
+  //  Solving A = M * P for P
+  vnl_vector_fixed<double,4> P = vnl_inverse(M) * A;
 
-  vnl_matrix<double> P = svd.solve(A);
-
-  return P(0,0) * index * index * index  + P(1,0) *  index * index + P(2,0) * index  + P(3,0);
+  return P(0) * index * index * index  + P(1) *  index * index + P(2) * index  + P(3);
 }
 
 double vdgl_interpolator_cubic::get_theta(double index)
@@ -114,21 +107,21 @@ double vdgl_interpolator_cubic::get_theta(double index)
   vdgl_edgel ce(chain_->edgel(c));
   vdgl_edgel de(chain_->edgel(d));
 
-  vnl_matrix<double> A(4,1);
-  vnl_matrix<double> M(4,4);
+  vnl_vector_fixed<double,4> A;
+  vnl_matrix_fixed<double,4,4> M;
 
-  A(0,0) = ae.get_theta(); A(1,0) = be.get_theta();
-  A(2,0) = ce.get_theta(); A(3,0) = de.get_theta();
+  A(0) = ae.get_theta(); A(1) = be.get_theta();
+  A(2) = ce.get_theta(); A(3) = de.get_theta();
 
   M(0,0)=  a*a*a; M(0,1)= a*a; M(0,2)= a; M(0,3)= 1;
   M(1,0)=  b*b*b; M(1,1)= b*b; M(1,2)= b; M(1,3)= 1;
   M(2,0)=  c*c*c; M(2,1)= c*c; M(2,2)= c; M(2,3)= 1;
   M(3,0)=  d*d*d; M(3,1)= d*d; M(3,2)= d; M(3,3)= 1;
 
-  vnl_svd<double> svd(M);
-  vnl_matrix<double> P = svd.solve(A);
+  //  Solving A = M * P for P
+  vnl_vector_fixed<double,4> P = vnl_inverse(M) * A;
 
-  return P(0,0) * index * index * index  + P(1,0) *  index * index + P(2,0) * index  + P(3,0);
+  return P(0) * index * index * index  + P(1) *  index * index + P(2) * index + P(3);
 }
 
 //: Compute the angle using four adjacent edgels.
@@ -183,24 +176,23 @@ double vdgl_interpolator_cubic::get_curvature(double index)
   vdgl_edgel ce(chain_->edgel(c));
   vdgl_edgel de(chain_->edgel(d));
 
-  vnl_matrix<double> A(4,1);
-  vnl_matrix<double> M(4,4);
+  vnl_vector_fixed<double,4> A;
+  vnl_matrix_fixed<double,4,4> M;
 
-  A(0,0) = ae.get_x(); A(1,0) = be.get_x();
-  A(2,0) = ce.get_x(); A(3,0) = de.get_x();
+  A(0) = ae.get_x(); A(1) = be.get_x();
+  A(2) = ce.get_x(); A(3) = de.get_x();
 
   M(0,0)=  a*a*a; M(0,1)= a*a; M(0,2)= a; M(0,3)= 1;
   M(1,0)=  b*b*b; M(1,1)= b*b; M(1,2)= b; M(1,3)= 1;
   M(2,0)=  c*c*c; M(2,1)= c*c; M(2,2)= c; M(2,3)= 1;
   M(3,0)=  d*d*d; M(3,1)= d*d; M(3,2)= d; M(3,3)= 1;
 
-  vnl_svd<double> svd_of_M(M);
+  //  Solving A = M * P for P
+  vnl_vector_fixed<double,4> P = vnl_inverse(M) * A;
 
-  vnl_matrix<double> P = svd_of_M.solve(A);
+  double x_new= P(0) * index * index * index  + P(1) *  index * index + P(2) * index  + P(3);
 
-  double x_new= P(0,0) * index * index * index  + P(1,0) *  index * index + P(2,0) * index  + P(3,0);
-
-  double t2 = 3 * P(0,0) * x_new * x_new + 2 * P(0,1) * x_new + P(0,2);
+  double t2 = 3 * P(0) * x_new * x_new + 2 * P(1) * x_new + P(2);
   double t3 = 1 + t2 * t2;
   return t2/t3/vcl_sqrt(t3);
 }
