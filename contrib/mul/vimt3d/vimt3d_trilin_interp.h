@@ -19,7 +19,7 @@ inline double vimt3d_trilin_interp_safe(const vimt3d_image_3d_of<T>& image,
   vgl_point_3d<double> im_p = image.world2im()(p);
   const vil3d_image_view<T>& im = image.image();
   return vil3d_trilin_interp_safe(im_p.x(),im_p.y(),im_p.z(),
-                                im.top_left_ptr()+plane*im.planestep(),
+                                im.origin_ptr()+plane*im.planestep(),
                                 im.ni(),im.nj(),im.nk(),
                                 im.istep(),im.jstep(),im.kstep());
 }
