@@ -9,8 +9,6 @@
 
 #include <vil/vil_stream.h>
 
-struct vil_stream_url_data;
-
 struct vil_stream_url : vil_stream
 {
   vil_stream_url(char const *);
@@ -23,7 +21,7 @@ struct vil_stream_url : vil_stream
   void seek(int position);
   
 private:
-  vil_stream_url_data *data;
+  vil_stream *underlying;
   vil_stream_url(vil_stream_url const &) { }
   void operator=(vil_stream_url const &) { }
 };
