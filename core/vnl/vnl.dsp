@@ -759,6 +759,24 @@ SOURCE=.\Templates/vnl_matrix_fixed+int.2.2-.cxx
 SOURCE=.\Templates/vnl_matrix_fixed+int.3.4-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vnl_matrix_fixed+double.1.3-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matrix_fixed+double.3.1-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matrix_fixed+float.1.3-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matrix_fixed+float.3.1-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matrix_fixed+float.4.3-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matrix_fixed+float.4.4-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vnl_gamma.cxx
 # End Source File
 # End Group
@@ -1048,6 +1066,30 @@ SOURCE=.\vnl_double_4x4.h
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_double_5.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_double_1x3.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_double_3x1.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_float_1x3.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_float_3x1.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_float_3x3.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_float_3x4.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_float_4x3.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_float_4x4.h
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_fwd.h
