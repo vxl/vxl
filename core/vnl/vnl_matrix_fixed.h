@@ -186,7 +186,7 @@ class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
 
   //: Return number of elements
   // This equals rows() * cols()
-  unsigned size ()    const { return rows()*cols(); }
+  unsigned size ()    const { return num_rows*num_cols; }
 
   //: set element
   void put (unsigned r, unsigned c, T const& v) { (*this)(r,c) = v; }
@@ -464,8 +464,7 @@ class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
   T max_value() const { return vnl_c_vector<T>::max_value(begin(), size()); }
 
   //: Return mean of all matrix elements
-  T mean() const { return vnl_c_vector<T>::mean(begin(), num_rows*num_cols /*size()*/); }
-  // size() call in this method causes an ICE for MSVC when instantating 1x1 matrix
+  T mean() const { return vnl_c_vector<T>::mean(begin(), size()); }
 
   // predicates
 
