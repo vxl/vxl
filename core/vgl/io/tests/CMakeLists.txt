@@ -37,7 +37,7 @@ ADD_TEST( vgl_io_test_homg_line_2d_io    vgl_io_test_driver test_homg_line_2d_io
 ADD_TEST( vgl_io_test_homg_line_3d_2_points_io vgl_io_test_driver test_homg_line_3d_2_points_io )
 ADD_TEST( vgl_io_test_homg_plane_3d_io   vgl_io_test_driver test_homg_plane_3d_io )
 ADD_TEST( vgl_io_test_conic_io           vgl_io_test_driver test_conic_io )
-ADD_TEST( vgl_io_test_box_2d_io          vgl_io_test_driver test_box_3d_io )
+ADD_TEST( vgl_io_test_box_2d_io          vgl_io_test_driver test_box_2d_io )
 ADD_TEST( vgl_io_test_box_3d_io          vgl_io_test_driver test_box_3d_io )
 ADD_TEST( vgl_io_test_polygon_io         vgl_io_test_driver test_polygon_io )
 ADD_TEST( vgl_io_golden_test             vgl_io_test_driver golden_test_vgl_io )
