@@ -322,7 +322,7 @@ IF(UNIX)
   TARGET_LINK_LIBRARIES( vcl m )
 ENDIF(UNIX)
 
-INCLUDE( ${vxl_SOURCE_DIR}/vcl/LinkSTLPort.cmake )
+# INCLUDE( ${vxl_SOURCE_DIR}/vcl/LinkSTLPort.cmake )
 
 IF( BUILD_TESTING)
   SUBDIRS(tests)
