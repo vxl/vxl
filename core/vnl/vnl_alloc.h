@@ -16,9 +16,9 @@
 // DISAPPEAR in the future.  Clients should just use vcl_alloc for now.
 //
 // Important implementation properties:
-// 1. If the client request an object of size > __MAX_BYTES, the resulting
+// -  If the client request an object of size > __MAX_BYTES, the resulting
 //    object will be obtained directly from malloc.
-// 2. In all other cases, we allocate an object of size exactly
+// -  In all other cases, we allocate an object of size exactly
 //    ROUND_UP(requested_size).  Thus the client has enough size
 //    information that we can return the object to the proper free li*st
 //    without permanently losing part of the object.
@@ -30,10 +30,11 @@
 // This may have undesirable effects on reference locality.
 // The second parameter is unreferenced and serves only to allow the
 // creation of multiple default_alloc instances.
-// Node that containers built on different allocator instances have
+//
+// Note that containers built on different allocator instances have
 // different types, limiting the utility of this approach.
 
-#include <vcl_cstddef.h> // size_t lives here, not in <cstdlib>
+#include <vcl_cstddef.h> // size_t lives here
 
 const int VNL_ALLOC_ALIGN = 8;
 const vcl_size_t VNL_ALLOC_MAX_BYTES = 256;
