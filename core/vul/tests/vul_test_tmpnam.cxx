@@ -11,10 +11,9 @@ int main()
   vul_test_start("Temporary filename");
 
   {
-    vul_test_begin("Writing to temporary filename");
-
     vcl_string filename = P_tmpdir; // defined in stdio.h
-    filename += "testtmpXXX";
+    vcl_cout << "P_tmpdir = " << filename << vcl_endl;
+    filename += "/testtmpXXX";
     unsigned int count = 0;
     while( count < 10 ) {
       if( tmpnam( filename ) ) {
@@ -23,6 +22,7 @@ int main()
       vpl_sleep( 1 );
       ++count;
     }
+    vcl_cout << "tmpnam() = " << filename << vcl_endl;
 
     vcl_ofstream ostr( filename.c_str() );
     bool status_good = ostr.good();
@@ -33,13 +33,13 @@ int main()
       status_good=false;
     }
     
+    vul_test_begin("Writing to temporary filename");
     vul_test_perform( count<10 && status_good );
   }
 
   {
-    vul_test_begin("Testing multiple calls");
     vcl_string filename1 = P_tmpdir; // defined in stdio.h
-    filename1 += "testtmpXXX";
+    filename1 += "/testtmpXXX";
     vcl_string filename2 = filename1;
     unsigned int count1 = 0;
     while( count1 < 10 ) {
@@ -58,6 +58,7 @@ int main()
       ++count2;
     }
 
+    vul_test_begin("Testing multiple calls");
     vul_test_perform( count1<10 && count2<10 && filename1 != filename2 );
   }
 
