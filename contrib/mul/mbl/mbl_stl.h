@@ -64,6 +64,39 @@ inline T mbl_stl_sequence_n(Out first, Size n, UnOp op, T init)
   return init;
 }
 
+//: Clean out a range of pointers
+// NB the dereferenced iterator must be a pointer
+template<class iterType>
+inline void mbl_stl_clean(iterType first, iterType last)
+{
+   for (; first != last; ++first)
+   {
+       delete *first;
+       *first=0;
+   }
+}
+
+//: Copy elements in input range for which the supplied predicate is true
+//Note bizarely although the STL provides remove_copy if etc etc
+//the simple copy_if was dropped fromn the C++ standard
+template<typename InputIterator,
+         typename OutputIterator,
+         typename Predicate>
+    inline  OutputIterator mbl_stl_copy_if(InputIterator begin, InputIterator end,
+                                           OutputIterator destBegin,
+                                           Predicate pred)
+{
+  while(begin != end)
+  {
+    if(pred(*begin))
+    {
+      *destBegin++ = *begin; 
+    }
+    ++begin;
+  }
+  return destBegin;
+}
+
 //----------------------------------------------------------------------------------------------
 //Now some map related functors
 //
@@ -101,27 +134,6 @@ struct mbl_stl_add2nd : public vcl_binary_function<typename Pair::second_type, P
   }
 };
 
-//Order a collection of pair iterators according to their dereferenced keys
-//NB assumes the key type supports operator<
-template <class PairIter>
-struct mbl_stl_pair_iter_key_order : public vcl_binary_function<PairIter,PairIter, bool>
-{
-  inline bool  operator()(const PairIter& iter1, const PairIter& iter2 ) const
-  {
-    return (iter1->first < iter2->first) ? true : false;
-  }
-};
-
-//Order a collection of pair iterators according to their dereferenced values
-//NB assumes the key type supports operator<
-template <class PairIter>
-struct mbl_stl_pair_iter_value_order : public vcl_binary_function<PairIter,PairIter, bool>
-{
-  inline bool  operator()(const PairIter& iter1, const PairIter& iter2 ) const
-  {
-    return (iter1->second < iter2->second) ? true : false ;
-  }
-};
 
 // End of map/pair related functors
 //------------------------------------------------------------------------------------
