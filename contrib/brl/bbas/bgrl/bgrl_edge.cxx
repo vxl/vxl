@@ -1,9 +1,7 @@
 // This is brl/bbas/bgrl/bgrl_edge.cxx
+#include "bgrl_edge.h"
 //:
 // \file
-
-#include "bgrl_edge.h"
-
 
 
 //: Binary save bgrl_edge to stream.
@@ -35,10 +33,10 @@ bgrl_edge::b_read( vsl_b_istream& )
 void
 vsl_b_write(vsl_b_ostream &os, const bgrl_edge* e)
 {
-  if (e==0) {
+  if (!e) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
-  else{
+  else {
     vsl_b_write(os,true); // Indicate non-null pointer stored
     e->b_write(os);
   }
@@ -61,10 +59,20 @@ vsl_b_read(vsl_b_istream &is, bgrl_edge* &e)
 }
 
 
-//: Print an ASCII summary of a bgrl_edge to the stream (NYI)
+//: Print an ascii summary to the stream
 void
-vsl_print_summary(vcl_ostream &os, const bgrl_edge* e)
+bgrl_edge::print_summary( vcl_ostream& os ) const
 {
-  os << "bgrl_edge{}";
+  os << "2 vertices";
+}
+
+
+//: Print an ASCII summary of a bgrl_edge to the stream
+void
+vsl_print_summary(vcl_ostream &os, bgrl_edge_sptr e)
+{
+  os << "bgrl_edge{ ";
+  e->print_summary(os);
+  os << " }";
 }
 
