@@ -4,7 +4,7 @@
 #include "vnl_diag_matrix.h"
 
 #include <vcl_iostream.h>
-#include <vnl/vnl_math.h>
+#include <vcl_cmath.h>
 
 #if defined(VCL_SUNPRO_CC) && defined(INSTANTIATE_TEMPLATES)
 # undef inline
@@ -69,7 +69,7 @@ bool epsilon_equals (const vnl_diag_matrix<T>& m1, const vnl_diag_matrix<T>& m2,
     if (result > local_epsilon)
       return false;
 #endif
-    if (vnl_math_abs(m1(i,i) - m2(i,i)) > local_epsilon)
+    if (vcl_abs(m1(i,i) - m2(i,i)) > local_epsilon)
       return false;
   }
   return true;
