@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_numeric_limits.h
+// This is core/vnl/vnl_numeric_limits.h
 #ifndef vnl_numeric_limits_h_
 #define vnl_numeric_limits_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -17,8 +17,9 @@
 //
 // \verbatim
 //  Modifications:
-//  LSB (Manchester) 23/3/01 Documentation tidied
+//   LSB (Manchester) 23/3/01 Documentation tidied
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
+//   Jan.2003 - Peter Vanroose - bug fix in infinity() and NaN(): LITTLE_ENDIAN
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -113,7 +114,6 @@ class vnl_numeric_limits
   //    the Language Independent Arithmetic (LIA-1) standard.  Required by LIA-1.
   static T round_error();
 
-
   //: Minimum negative integer such that radix raised to that power is in range.
   //  Equivalent to FLT_MIN_EXP, DBL_MIN_EXP, LDBL_MIN_EXP.
   //  Meaningful only for floating point types.
@@ -152,7 +152,7 @@ class vnl_numeric_limits
   static const bool has_signaling_NaN;
 
   //: True if the type allows denormalized values (variable number of exponent bits).
-  //  Meaningful only for flotaing point types.
+  //  Meaningful only for floating point types.
   static const bool has_denorm;
 
   //: Representation of positive infinity, if available.

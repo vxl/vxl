@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_numeric_limits.cxx
+// This is core/vnl/vnl_numeric_limits.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -10,6 +10,7 @@
 //-----------------------------------------------------------------------------
 
 #include "vnl_numeric_limits.h"
+#include <vxl_config.h> // for VXL_BIG_ENDIAN
 
 // ----------------------------------------------------------------------
 // Constants for int
@@ -148,14 +149,13 @@ union vnl_numeric_limits_double_nan {
   unsigned char x[8];
 
   vnl_numeric_limits_double_nan() {
+#if VXL_BIG_ENDIAN
     x[0] = 0x7f;
-    x[1] = 0xff;
-    x[2] = 0xff;
-    x[3] = 0xff;
-    x[4] = 0xff;
-    x[5] = 0xff;
-    x[6] = 0xff;
-    x[7] = 0xff;
+    x[1] = x[2] = x[3] = x[4] = x[5] = x[6] = x[7] = 0xff;
+#else
+    x[7] = 0x7f;
+    x[0] = x[1] = x[2] = x[3] = x[4] = x[5] = x[6] = 0xff;
+#endif
   }
 };
 static vnl_numeric_limits_double_nan dnan;
@@ -165,14 +165,13 @@ union vnl_numeric_limits_double_inf {
   unsigned char x[8];
 
   vnl_numeric_limits_double_inf() {
-    x[0] = 0x7f;
-    x[1] = 0xf0;
-    x[2] = 0x00;
-    x[3] = 0x00;
-    x[4] = 0x00;
-    x[5] = 0x00;
-    x[6] = 0x00;
-    x[7] = 0x00;
+#if VXL_BIG_ENDIAN
+    x[0] = 0x7f; x[1] = 0xf0;
+    x[2] = x[3] = x[4] = x[5] = x[6] = x[7] = 0x00;
+#else
+    x[7] = 0x7f; x[6] = 0xf0;
+    x[0] = x[1] = x[2] = x[3] = x[4] = x[5] = 0x00;
+#endif
   }
 };
 static vnl_numeric_limits_double_inf dinf;
@@ -223,10 +222,11 @@ union vnl_numeric_limits_float_nan {
   unsigned char x[4];
 
   vnl_numeric_limits_float_nan() {
-    x[0] = 0x7f;
-    x[1] = 0xff;
-    x[2] = 0xff;
-    x[3] = 0xff;
+#if VXL_BIG_ENDIAN
+    x[0] = 0x7f; x[1] = x[2] = x[3] = 0xff;
+#else
+    x[3] = 0x7f; x[0] = x[1] = x[2] = 0xff;
+#endif
   }
 };
 static vnl_numeric_limits_float_nan fnan;
@@ -236,10 +236,11 @@ union vnl_numeric_limits_float_inf {
   unsigned char x[4];
 
   vnl_numeric_limits_float_inf() {
-    x[0] = 0x7f;
-    x[1] = 0x80;
-    x[2] = 0x00;
-    x[3] = 0x00;
+#if VXL_BIG_ENDIAN
+    x[0] = 0x7f; x[1] = 0x80; x[2] = x[3] = 0x00;
+#else
+    x[3] = 0x7f; x[2] = 0x80; x[0] = x[1] = 0x00;
+#endif
   }
 };
 static vnl_numeric_limits_float_inf finf;
