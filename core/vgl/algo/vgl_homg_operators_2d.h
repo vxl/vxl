@@ -197,13 +197,18 @@ class vgl_homg_operators_2d
 };
 
 //: Transform a point through a 3x3 projective transformation matrix
+// \relates vgl_homg_point_2d
 template <class T>
 vgl_homg_point_2d<T> operator*(vnl_matrix_fixed<T,3,3> const& m,
                                vgl_homg_point_2d<T> const& p);
 
 //: Transform a line through a 3x3 projective transformation matrix
+// \relates vgl_homg_line_2d
 template <class T>
 vgl_homg_line_2d<T> operator*(vnl_matrix_fixed<T,3,3> const& m,
                               vgl_homg_line_2d<T> const& p);
+
+#define VGL_HOMG_OPERATORS_1D_INSTANTIATE(T) \
+        "Please #include <vgl/algo/vgl_homg_operators_1d.txx>"
 
 #endif // vgl_homg_operations_2d_h

@@ -886,6 +886,7 @@ vgl_homg_operators_2d<T>::compute_bounding_box(vgl_conic<T> const& c)
 }
 
 //: Transform a point through a 3x3 projective transformation matrix
+// \relates vgl_homg_point_2d
 template <class T>
 vgl_homg_point_2d<T> operator*(vnl_matrix_fixed<T,3,3> const& m,
                                vgl_homg_point_2d<T> const& p)
@@ -896,6 +897,7 @@ vgl_homg_point_2d<T> operator*(vnl_matrix_fixed<T,3,3> const& m,
 }
 
 //: Transform a line through a 3x3 projective transformation matrix
+// \relates vgl_homg_line_2d
 template <class T>
 vgl_homg_line_2d<T> operator*(vnl_matrix_fixed<T,3,3> const& m,
                               vgl_homg_line_2d<T> const& l)
@@ -919,5 +921,11 @@ vgl_homg_point_2d<T> vgl_homg_operators_2d<T>::closest_point(vgl_homg_line_2d<T>
   // Finally return the intersection point of l with this orthogonal line:
   return vgl_homg_operators_2d<T>::intersection(l,o);
 }
+
+#undef VGL_HOMG_OPERATORS_2D_INSTANTIATE
+#define VGL_HOMG_OPERATORS_2D_INSTANTIATE(T) \
+template class vgl_homg_operators_2d<T >; \
+template vgl_homg_point_2d<T > operator*(vnl_matrix_fixed<T,3,3> const& m, vgl_homg_point_2d<T > const& p); \
+template vgl_homg_line_2d<T > operator*(vnl_matrix_fixed<T,3,3> const& m, vgl_homg_line_2d<T > const& p)
 
 #endif // vgl_homg_operators_2d_txx_

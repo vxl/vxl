@@ -145,6 +145,7 @@ vgl_homg_point_1d<T> vgl_homg_operators_1d<T>::conjugate(const vgl_homg_point_1d
 }
 
 //: Transform a point through a 2x2 projective transformation matrix
+// \relates vgl_homg_point_1d
 template <class T>
 vgl_homg_point_1d<T> operator*(vnl_matrix_fixed<T,2,2> const& m,
                                vgl_homg_point_1d<T> const& p)
@@ -152,5 +153,10 @@ vgl_homg_point_1d<T> operator*(vnl_matrix_fixed<T,2,2> const& m,
   return vgl_homg_point_1d<T>(m(0,0)*p.x()+m(0,1)*p.w(),
                               m(1,0)*p.x()+m(1,1)*p.w());
 }
+
+#undef VGL_HOMG_OPERATORS_1D_INSTANTIATE
+#define VGL_HOMG_OPERATORS_1D_INSTANTIATE(T) \
+template class vgl_homg_operators_1d<T >; \
+template vgl_homg_point_1d<T > operator*(vnl_matrix_fixed<T,2,2> const& m, vgl_homg_point_1d<T > const& p)
 
 #endif // vgl_homg_operators_1d_txx_
