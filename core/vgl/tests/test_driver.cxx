@@ -12,7 +12,7 @@ DECLARE( test_area );
 DECLARE( test_clip );
 DECLARE( test_h_matrix_2d );
 DECLARE( test_h_matrix_3d );
-
+DECLARE( test_fit_lines_2d );
 void
 register_tests()
 {
@@ -28,6 +28,7 @@ register_tests()
   REGISTER( test_clip );
   REGISTER( test_h_matrix_2d );
   REGISTER( test_h_matrix_3d );
+  REGISTER( test_fit_lines_2d );
 }
 
 
