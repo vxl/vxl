@@ -42,12 +42,16 @@
 # include "iso/vcl_complex.h"
 #endif
 
+#if 0
+// this breaks the sunpro build. it should be moved so that
+// it is only seen by compilers that need it. - fsm.
 inline vcl_complex<double> operator*(float c, vcl_complex<double> const &z) { return z * (double)c; }
 inline vcl_complex<double> operator*(vcl_complex<double> const &z, float c) { return z * (double)c; }
 inline vcl_complex<float > operator*(double c, vcl_complex<float> const &z) { return z * (float)c; }
 inline vcl_complex<float > operator*(vcl_complex<float> const &z, double c) { return z * (float)c; }
 inline vcl_complex<double> operator/(vcl_complex<double> const &z, float c) { return z / (double)c; }
 inline vcl_complex<float > operator/(vcl_complex<float> const &z, double c) { return z / (float)c; }
+#endif
 
 //--------------------------------------------------------------------------------
 
