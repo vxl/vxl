@@ -100,8 +100,8 @@ bool GXFileVisitor::visit(vcl_istream& s)
       }
       if (npoints > 1023) {
         vcl_cerr << "movie: Polyline longer than 1024 points!!\n";
-        npoints = 1023;
         return false; //fsm
+        //npoints = 1023;
       }
 
       float x[1024];
@@ -122,14 +122,14 @@ bool GXFileVisitor::visit(vcl_istream& s)
           this->text((float)vcl_atof(awk[1]), (float)vcl_atof(awk[2]), re.match(1).c_str());
       }
     } else if (instruction == "c") {
-      bool ok = false;
       if (awk.NF() == 4) {
         // Assume 0-1 rgb spec
         color[0] = (float)vcl_atof(awk[1]);
         color[1] = (float)vcl_atof(awk[2]);
         color[2] = (float)vcl_atof(awk[3]);
-        ok = true;
-      } else {
+      }
+      else
+      {
         static struct { char const* s; float c[3]; } colors [] = {
           {"r", {1, 0, 0}},
           {"g", {0, 1, 0}},
@@ -149,18 +149,15 @@ bool GXFileVisitor::visit(vcl_istream& s)
         };
         vcl_string colour = awk[1];
         char const* cs = colour.c_str();
+        bool ok = false;
         for (unsigned i = 0; i < sizeof colors / sizeof colors[0]; ++i)
           if (vcl_strcmp(colors[i].s, cs) == 0) {
             //was : color = colors[i].c;
             // fsm. some compilers (SGI native) don't
             // like assignment from float [3] to float [3].
-#if 0
-            color = colors[i].c;
-#else
             color[0] = colors[i].c[0];
             color[1] = colors[i].c[1];
             color[2] = colors[i].c[2];
-#endif
             ok = true;
             break;
           }
