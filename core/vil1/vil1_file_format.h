@@ -4,6 +4,7 @@
 // Author: awf
 
 #include <vil/vil_fwd.h>
+#include <vil/vil_image_impl.h>
 
 //: Base class for image formats.
 //  There is one derived class for each handled file format in the
@@ -18,15 +19,22 @@ public:
 
   //: Attempt to make a generic_image which will read from vil_stream vs.
   // Reads enough of vs to determine if it's this format, and if not, returns 0.
-  // If it is, returns a subclass of vil_generic_image on which get_section may
+  // If it is, returns a subclass of vil_image_impl on which get_section may
   // be applied.
-  virtual vil_generic_image* make_input_image(vil_stream* vs) = 0;
+  virtual vil_image_impl* make_input_image(vil_stream* vs) = 0;
 
   //: Make a "generic_image" on which put_section may be applied.
-  // The stream vs is assumed to be open for writing, and an image header
-  // will be written to it immediately.
-  // The vil_generic_image prototype is used to determine width/height etc.
-  virtual vil_generic_image* make_output_image(vil_stream* vs, vil_generic_image const* prototype) = 0;
+  // The stream vs is assumed to be open for writing, as an image header may be
+  // written to it immediately.
+  // The width/height etc are explicitly specified, so that file_format implementors
+  // know what they need to do...
+  virtual vil_image_impl* make_output_image(vil_stream* vs,
+					       int planes,
+					       int width,
+					       int height,
+					       int components,
+					       int bits_per_component,
+					       enum vil_component_format) = 0;
 
 public:
   static vil_file_format** all();

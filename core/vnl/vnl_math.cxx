@@ -1,26 +1,23 @@
 #ifdef __GNUG__
 #pragma implementation "vnl_math.h"
 #endif
-#include <vxl_copyright.h>
-
 // Modifications:
 //   210598 AWF Removed conditional VCL_IMPLEMENT_STATIC_CONSTS, sometimes gcc needs them.
 
-#include <vnl/vnl_complex.h>
 #include <vnl/vnl_math.h>
-
-// new mess :
-#if defined(SYSV) && !defined(hppa)
-extern "C" { extern int finite(double); }
-#endif
 
 #if defined(VCL_WIN32)
 # include <Float.h> // for 'isnan' and 'finite'
-// #define isnan _isnan
+// # define isnan _isnan
 # define finite _finite
 #endif
 
+#if defined(SYSV) && !defined(hppa)
+extern "C" int finite(double);
+#endif
+
 //--------------------------------------------------------------------------------
+
 // constants
 #if !defined(VCL_GCC_EGCS)
 const double vnl_math::e       	      	= 2.7182818284590452354;
@@ -47,22 +44,24 @@ const long int vnl_math::maxlong   = 0x7fffffffL;
 const double   vnl_math::maxdouble = HUGE_VAL;
 const float    vnl_math::maxfloat  = 3.40282346638528860e+38F;
 
+//--------------------------------------------------------------------------------
+
 // -- Return true iff x is "Not a Number"
-bool vnl_math::isnan(double x) 
+bool vnl_math_isnan(double x) 
 {
   return x != x;
 }
 
 // fsm@robots.ox.ac.uk
 // On linux noshared builds, with optimisation on, calling 'finite' within the
-// scope of vnl_math causes vnl_math::isinf to be called. This blows the stack.
+// scope of vnl_math causes vnl_math_isinf to be called. This blows the stack.
 // Plausible theory : 'finite' is a preprocessor macro, defined in terms of a
 // macro called 'isinf'.
 #if defined(isinf)
 # error macro isinf is defined
 #endif
 // -- Return true if x is neither NaN nor Inf.
-bool vnl_math::isfinite(double x) 
+bool vnl_math_isfinite(double x) 
 {
 #if defined(VCL_WIN32)
   return finite(x) != 0; // quell performance warning -- fsm
@@ -71,28 +70,16 @@ bool vnl_math::isfinite(double x)
 #endif
 }
 
+#if defined(VCL_WIN32)
+inline bool isnan(double x)
+{
+  return !(x == x);
+}
+#endif
+
 // -- Return true if x is inf
-bool vnl_math::isinf(double x) 
+bool vnl_math_isinf(double x) 
 {
   return !finite(x) && !isnan(x);
 }
 
-bool vnl_math::isnan(const vnl_complex<double>& x)
-{
-  return isnan(x.real()) || isnan(x.imag());
-}
-
-bool vnl_math::isfinite(const vnl_complex<double>& x)
-{
-  return isfinite(x.real()) && isfinite(x.imag());
-}
-
-bool vnl_math::isnan(const vnl_complex<float>& x)
-{
-  return isnan(x.real()) || isnan(x.imag());
-}
-
-bool vnl_math::isfinite(const vnl_complex<float>& x)
-{
-  return isfinite(x.real()) && isfinite(x.imag());
-}

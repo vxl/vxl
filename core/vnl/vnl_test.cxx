@@ -11,9 +11,11 @@
 //
 // Created: LGO 11/27/89 -- Initial design
 //
-#include <stdio.h>
+
+#include <vcl/vcl_cstdio.h>
+#include <vcl/vcl_iostream.h>
+
 #include <vnl/vnl_math.h>
-#include <iostream.h>		// include the Stream class header file
 #include <vnl/vnl_test.h>
 
 static int num_test;
@@ -78,7 +80,8 @@ void vnl_test_assert(const vcl_string& msg, bool expr)
   else
     ++tests_failed;
 
-  cout << msg << " - " << (expr?"passed":"failed") << "." << endl;
+  cout << msg << " - ";
+  cout << (expr?"passed":"failed") << "." << endl;
 }
 
 void vnl_test_assert_near(const vcl_string& msg, double expr, double target, double tol)

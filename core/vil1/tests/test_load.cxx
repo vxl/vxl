@@ -1,8 +1,8 @@
 #include <vcl/vcl_fstream.h>
-#include <vcl/vcl_unlink.h>
+#include <vcl/vcl_unistd.h>
 
 #include <vil/vil_load.h>
-#include <vil/vil_generic_image.h>
+#include <vil/vil_image_impl.h>
 
 #define AssertEq(fred, x) {\
 cout << "TEST [" << fred << "] == [" << x << "] : "; bool b = (fred) == (x); cout << (b?"PASSED":"FAILED") << endl; }
@@ -10,26 +10,24 @@ cout << "TEST [" << fred << "] == [" << x << "] : "; bool b = (fred) == (x); cou
 void test(char const* magic, int comps, int bits)
 {
   char const* FNAME = "/tmp/t.pgm";
-  {
-    ofstream f(FNAME);
-    f << magic << "\n2\n3\n255\nABCDEF";
-  }
-  vil_generic_image* i = vil_load(FNAME);
+  ofstream(FNAME) << magic << "\n2\n3\n255\nABCDEF";
 
+  vil_image i = vil_load(FNAME);
+  
   cout <<
-    "vil_generic_image: size " << i->width() << "x" << i->height() <<
-    ", " << i->components() << " component" <<
-    ", " << i->bits_per_component() << " bit" << 
+    "vil_image_impl: size " << i.width() << "x" << i.height() <<
+    ", " << i.components() << " component" <<
+    ", " << i.bits_per_component() << " bit" << 
     endl;
 
-  AssertEq(i->components(), comps);
-  AssertEq(i->bits_per_component(), bits);
+  AssertEq(i.components(), comps);
+  AssertEq(i.bits_per_component(), bits);
 
   vcl_unlink(FNAME);
   
 }  
 
-int main(int argc, char **argv)
+int main(int , char **)
 {
   test("P1", 1, 1);
   test("P2", 1, 8);

@@ -13,14 +13,15 @@ char const* vil_viff_format_tag = "viff";
 #include <vcl/vcl_cstring.h>
 
 #include <vil/vil_stream.h>
-#include <vil/vil_generic_image.h>
+#include <vil/vil_image_impl.h>
+#include <vil/vil_image.h>
 
-extern "C" xvimage *createimage
+extern "C" xvimage *vil_viff_createimage
 (long col_size, long row_size, long data_storage_type, long num_of_images,
  long num_data_bands, char * comment, long map_row_size, long map_col_size,
  long map_scheme, long map_storage_type, long location_type, 
  long location_dim);
-extern "C" void freeimage (xvimage *);
+extern "C" void vil_viff_freeimage (xvimage *);
 
 static inline void swap(void* p,int length)
 {
@@ -33,7 +34,7 @@ static inline void swap(void* p,int length)
   }
 }
 
-vil_generic_image* vil_viff_file_format::make_input_image(vil_stream* is)
+vil_image_impl* vil_viff_file_format::make_input_image(vil_stream* is)
 {
   // Attempt to read header
   char magic[2];
@@ -44,9 +45,14 @@ vil_generic_image* vil_viff_file_format::make_input_image(vil_stream* is)
   return new vil_viff_generic_image(is);
 }
 
-vil_generic_image* vil_viff_file_format::make_output_image(vil_stream* is, vil_generic_image const* prototype)
+vil_image_impl* vil_viff_file_format::make_output_image(vil_stream* is, int planes,
+					       int width,
+					       int height,
+					       int components,
+					       int bits_per_component,
+					       vil_component_format format)
 {
-  return new vil_viff_generic_image(is, prototype);
+  return new vil_viff_generic_image(is, planes, width, height, components, bits_per_component, format);
 }
 
 char const* vil_viff_file_format::tag() const
@@ -67,11 +73,16 @@ char const* vil_viff_generic_image::file_format() const
   return vil_viff_format_tag;
 }
 
-vil_viff_generic_image::vil_viff_generic_image(vil_stream* is, vil_generic_image const* prototype)
-  : is_(is), width_(prototype->width()), height_(prototype->height()),
-    maxval_(255), planes_(prototype->planes()), start_of_data_(0),
-    bits_per_component_(prototype->bits_per_component()),
-    format_(prototype->component_format()), endian_consistent_(true)
+vil_viff_generic_image::vil_viff_generic_image(vil_stream* is, int planes,
+					       int width,
+					       int height,
+					       int components,
+					       int bits_per_component,
+					       vil_component_format format)
+  : is_(is), width_(width), height_(height),
+    maxval_(255), planes_(planes), start_of_data_(0),
+    bits_per_component_(bits_per_component),
+    format_(format), endian_consistent_(true)
 {
   write_header();
 }
@@ -209,22 +220,24 @@ bool vil_viff_generic_image::write_header()
   }
 
   //create header
-  xvimage *imagep = createimage ( height_, width_, type,1,planes_,"TargetJr VIFF image writer output",0,0,
-				  VFF_MS_NONE,VFF_MAPTYP_NONE,VFF_LOC_IMPLICIT,0);
+  xvimage *imagep = vil_viff_createimage ( height_, width_, 
+					   type,1,planes_,
+					   "TargetJr VIFF image writer output",0,0,
+					   VFF_MS_NONE,VFF_MAPTYP_NONE,VFF_LOC_IMPLICIT,0);
 
   //make local copy of header
   memcpy(&header_, imagep, sizeof(header_));
   start_of_data_ = sizeof(header_);
 
   // release xv header from createimage
-  freeimage(imagep);
+  vil_viff_freeimage(imagep);
   
   is_->write((void*)(&header_), start_of_data_);
   start_of_data_ = is_->tell();
   return true;
 }
 
-bool vil_viff_generic_image::do_get_section(void* buf, int x0, int y0, int xs, int ys) const
+bool vil_viff_generic_image::get_section(void* buf, int x0, int y0, int xs, int ys) const
 {
   unsigned char* ib = (unsigned char*) buf;
   unsigned long rowsize = bits_per_component_*xs/8;
@@ -243,7 +256,7 @@ bool vil_viff_generic_image::do_get_section(void* buf, int x0, int y0, int xs, i
   return true;
 }
 
-bool vil_viff_generic_image::do_put_section(void const* buf, int x0, int y0, int xs, int ys)
+bool vil_viff_generic_image::put_section(void const* buf, int x0, int y0, int xs, int ys)
 {
   unsigned char const* ob = (unsigned char const*) buf;
   unsigned long rowsize = bits_per_component_*xs/8;
@@ -274,7 +287,7 @@ bool vil_viff_generic_image::check_endian()
   return endian_consistent_;
 }
 
-vil_generic_image* vil_viff_generic_image::get_plane(int plane) const 
+vil_image vil_viff_generic_image::get_plane(int plane) const 
 {
   cerr << "FIXME: this should be an adapter that shifts to the plane asked for\n";
   return const_cast<vil_viff_generic_image*>(this);
@@ -289,13 +302,13 @@ bool vil_viff_generic_image::get_section_float(void* buf, int x0, int y0, int wi
 {
   if (component_format()!=VIL_COMPONENT_FORMAT_IEEE_FLOAT || bits_per_component_ != 32) 
     return false;
-  return do_get_section(buf,x0,y0,width,height);
+  return get_section(buf,x0,y0,width,height);
 }
 
 bool vil_viff_generic_image::get_section_byte(void* buf, int x0, int y0, int width, int height) const
 {
   if (component_format()!=VIL_COMPONENT_FORMAT_UNSIGNED_INT || bits_per_component_ != 8) 
     return false;
-  return do_get_section(buf,x0,y0,width,height);
+  return get_section(buf,x0,y0,width,height);
 }
 

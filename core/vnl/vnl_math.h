@@ -4,36 +4,16 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// Namespace : vnl_math
+// namespace vnl_math
 //
 // .SECTION Description
-//    The vnl_math class provides a standard set of the simple mathematical
+//    The vnl_math namespace provides a standard set of the simple mathematical
 //    functions (min, max, sqr, sgn, rnd, abs), and some predefined constants
 //    such as pi and e, which are not defined by the ANSI C++ standard.
-//    That's right, M_PI is nonstandard!  The class is broadly based on the
-//    Java Math class.
 //
-//    The operations, expressed in terms of a generic type T are:
+//    There are complex versions defined in vnl_complex.h
 //
-//    T vnl_math::max(T, T) - Maximum of pair
-//    
-//    T vnl_math::min(T, T) - Minimum of pair
-//    
-//    T vnl_math::sqr(T)    - Square a number
-//    
-//    T vnl_math::abs(T)    - Absolute value (or modulus, if vnl_complex)
-//    
-//    int vnl_math::sgn(T)  - Sign(x).
-//    
-//    int vnl_math::sgn0(T) - Sign ignoring 0, useful for reals as they are ``never'' zero.
-//    
-//    int vnl_math::rnd(T)  - Nearest integer, rounding 0.5 to larger magnitude.
-//
-//    The operations are overloaded for int, float and double arguments,
-//    which in combination with inlining can make them  more efficient than
-//    their counterparts in the standard C library.  Although not currently
-//    templated, they will be when namespaces and/or member templates are supported.
+//    That's right, M_PI is nonstandard!
 //
 //    Aside from e, pi and their associates the class also defines eps,
 //    the IEEE double machine precision.  This is the smallest number
@@ -47,38 +27,38 @@
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, July 13, 1996
 //
-// .SECTION Modifications:
-//     Peter Vanroose -Aug.97- added abs(vnl_double_complex) and sqr(vnl_double_complex)
-
-//--------------------------------------------------------------------------------
+//    The operations are overloaded for int, float and double arguments,
+//    which in combination with inlining can make them  more efficient than
+//    their counterparts in the standard C library.
+//
 
 #include <vcl/vcl_compiler.h>
-#include <vcl/vcl_function.h>
-#include <vcl/vcl_cmath.h>  // <- this is <math.h>
-#include <vnl/dll.h>
+#include <vcl/vcl_cmath.h>
+#include "dll.h"
 
 #ifdef _INT_64BIT_
 // Type-accessible infinities for use in templates.
-template <class T> T huge_val(T);
-inline double   huge_val(double) { return HUGE_VAL; }
-inline float    huge_val(float)  { return HUGE_VAL; }
-inline long int huge_val(long int) { return 0x7fffffffffffffff; }
-inline int      huge_val(int)    { return 0x7fffffffffffffff; }
-inline short    huge_val(short)  { return 0x7fff; }
-inline char     huge_val(char)   { return 0x7f; }
+template <class T> T vnl_huge_val(T);
+inline double   vnl_huge_val(double) { return HUGE_VAL; }
+inline float    vnl_huge_val(float)  { return HUGE_VAL; }
+inline long int vnl_huge_val(long int) { return 0x7fffffffffffffff; }
+inline int      vnl_huge_val(int)    { return 0x7fffffffffffffff; }
+inline short    vnl_huge_val(short)  { return 0x7fff; }
+inline char     vnl_huge_val(char)   { return 0x7f; }
 #else
 // -- Type-accessible infinities for use in templates.
-template <class T> T huge_val(T);
-inline double huge_val(double) { return HUGE_VAL; }
-inline float  huge_val(float)  { return (float)HUGE_VAL; }
-inline int    huge_val(int)    { return 0x7fffffff; }
-inline short  huge_val(short)  { return 0x7fff; }
-inline char   huge_val(char)   { return 0x7f; }
+template <class T> T vnl_huge_val(T);
+inline double vnl_huge_val(double) { return HUGE_VAL; }
+inline float  vnl_huge_val(float)  { return (float)HUGE_VAL; }
+inline int    vnl_huge_val(int)    { return 0x7fffffff; }
+inline short  vnl_huge_val(short)  { return 0x7fff; }
+inline char   vnl_huge_val(char)   { return 0x7f; }
 #endif
 
+//: real numerical constants
 class vnl_math {
 public:
-  // constants
+  // pi, e and all that
   static VNL_DLL_DATA double const e               VCL_STATIC_CONST_INIT_FLOAT(2.7182818284590452354);
   static VNL_DLL_DATA double const log2e           VCL_STATIC_CONST_INIT_FLOAT(1.4426950408889634074);
   static VNL_DLL_DATA double const log10e          VCL_STATIC_CONST_INIT_FLOAT(0.43429448190325182765);
@@ -104,95 +84,84 @@ public:
   static VNL_DLL_DATA long int const maxlong;
   static VNL_DLL_DATA double const   maxdouble;
   static VNL_DLL_DATA float const    maxfloat;
-  
-  // Queries
-  static bool isnan(double);
-  static bool isinf(double);
-  static bool isfinite(double);
-
-// -- Robust cube root.
-  static double cbrt(double a) {
-    return((a<0)?-exp(log(-a)/3):exp(log(a)/3));
-  }
-
-  // Generic inlines
-  // T abs(T)       Absolute value
-  // T max(T, T)    Maximum
-  // T min(T, T)    Minimum
-  // int sgn(T)     Sign +ive, 0, -ive -> (+1, 0, -1)
-  // int sgn0(T)    Sign ignoring 0, useful for reals as they are "never" 0.
-  // int rnd(T)     Nearest integer, rounding 0.5 to larger magnitude
-  // 
-  static inline double abs(double x) { return x < 0.0 ? -x : x; }
-#undef max
-  static inline double max(double x,double y) { return (x < y) ? y : x; }
-#undef min
-  static inline double min(double x,double y) { return (x > y) ? y : x; }
-  static inline double sqr(double x) { return x*x; }
-  static inline double hypot(double x, double y) { return sqrt(x*x + y*y); }
-  static inline int sgn(double x) { return (x != 0)?((x>0)?1:-1):0; }
-  static inline int sgn0(double x) { return (x>=0)?1:-1; }
-  static inline int rnd(double x) { return (x>=0.0)?(int)(x + 0.5):(int)(x - 0.5); }
-  static inline double squared_magnitude(double x) { return x*x; }
-  
-  static inline float abs(float x) { return x < 0.0 ? -x : x; }
-  static inline float max(float x,float y) { return (x < y) ? y : x; }
-  static inline float min(float x,float y) { return (x > y) ? y : x; }
-  static inline float sqr(float x) { return x*x; }
-  static inline int sgn(float x) { return (x != 0)?((x>0)?1:-1):0; }
-  static inline int sgn0(float x) { return (x>=0)?1:-1; }
-  static inline int rnd(float x) { return (x>=0.0)?(int)(x + 0.5):(int)(x - 0.5); }
-  static inline float squared_magnitude(float x) { return x*x; }
-
-  static inline int abs(int x) { return x < 0 ? -x : x; }
-  static inline int max(int x,int y) { return (x > y) ? x : y; }
-  static inline int min(int x,int y) { return (x < y) ? x : y; }
-  static inline int sqr(int x) { return x*x; }
-  static inline int sgn(int x) { return x?((x>0)?1:-1):0; }
-  static inline int sgn0(int x) { return (x>=0)?1:-1; }
-  static inline int squared_magnitude(int x) { return x*x; }
-
-  static inline long int abs(long int x) { return x < 0 ? -x : x; }
-  static inline long int max(long int x,long int y) { return (x > y) ? x : y; }
-  static inline long int min(long int x,long int y) { return (x < y) ? x : y; }
-  static inline long int sqr(long int x) { return x*x; }
-  static inline long int sgn(long int x) { return x?((x>0)?1:-1):0; }
-  static inline long int sgn0(long int x) { return (x>=0)?1:-1; }
-  static inline long int squared_magnitude(long int x) { return x*x; }
-
-  static inline unsigned abs(unsigned x) { return x; } // to avoid SunPro4.2 float/double conflict
-  static inline unsigned max(unsigned x,unsigned y) { return (x > y) ? x : y; }
-  static inline unsigned min(unsigned x,unsigned y) { return (x < y) ? x : y; }
-  static inline unsigned sqr(unsigned x) { return x*x; }
-  static inline unsigned squared_magnitude(unsigned x) { return x*x; }
-
-#define VNL_USED_COMPLEX
-#ifdef VNL_COMPLEX_AVAILABLE
-// See vnl_complex.h
-  static inline double              abs(vnl_complex<double> const& x) { return ::abs(x); }
-  static inline vnl_complex<double> sqr(vnl_complex<double> const& x) { return x*x; }
-  static inline double              squared_magnitude(vnl_complex<double> const& x) { return ::norm(x); }
-
-  static inline float              abs(vnl_complex<float> const& x) { return ::abs(x); }
-  static inline vnl_complex<float> sqr(vnl_complex<float> const& x) { return x*x; }
-  static inline float              squared_magnitude(vnl_complex<float> const& x) { return ::norm(x); }
-
-  static bool isnan(const vnl_complex<double>&);
-  static bool isinf(const vnl_complex<double>&);
-  static bool isfinite(const vnl_complex<double>&);
-
-  static bool isnan(const vnl_complex<float>&);
-  static bool isinf(const vnl_complex<float>&);
-  static bool isfinite(const vnl_complex<float>&);
-#endif
-
-private:
-  static bool time_fabs(float *, int n);
-  static bool time_fabs(double *, int n);
-  static bool time_abs(double *, int n);
-  static bool time_abs(float *, int n);
-public:
-  static bool test();
 };
+
+// isnan
+//bool vnl_math_isnan(float);
+bool vnl_math_isnan(double);
+
+// isinf
+//bool vnl_math_isinf(float);
+bool vnl_math_isinf(double);
+
+// isfinite
+//bool vnl_math_isfinite(float);
+bool vnl_math_isfinite(double);
+
+// rnd (rounding; 0.5 rounds up)
+inline long vnl_math_rnd(float x) { return (x>=0.0)?(int)(x + 0.5):(int)(x - 0.5); }
+inline int  vnl_math_rnd(double x) { return (x>=0.0)?(int)(x + 0.5):(int)(x - 0.5); }
+
+// abs
+inline int      vnl_math_abs(int x) { return x < 0 ? -x : x; }
+inline unsigned vnl_math_abs(unsigned x) { return x; } // to avoid SunPro4.2 float/double conflict
+inline long     vnl_math_abs(long x) { return x < 0 ? -x : x; }
+inline unsigned long vnl_math_abs(unsigned long x) { return x; }
+inline float    vnl_math_abs(float x) { return x < 0.0 ? -x : x; }
+inline double   vnl_math_abs(double x) { return x < 0.0 ? -x : x; }
+
+// max
+inline int      vnl_math_max(int x, int y) { return (x > y) ? x : y; }
+inline unsigned vnl_math_max(unsigned x, unsigned y) { return (x > y) ? x : y; }
+inline long     vnl_math_max(long x, long y) { return (x > y) ? x : y; }
+inline float    vnl_math_max(float x, float y) { return (x < y) ? y : x; }
+inline double   vnl_math_max(double x, double y) { return (x < y) ? y : x; }
+
+// min
+inline int      vnl_math_min(int x, int y) { return (x < y) ? x : y; }
+inline unsigned vnl_math_min(unsigned x, unsigned y) { return (x < y) ? x : y; }
+inline long     vnl_math_min(long x, long y) { return (x < y) ? x : y; }
+inline float    vnl_math_min(float x, float y) { return (x > y) ? y : x; }
+inline double   vnl_math_min(double x, double y) { return (x > y) ? y : x; }
+
+// sqr (square)
+inline int                 vnl_math_sqr(int x) { return x*x; }
+inline unsigned            vnl_math_sqr(unsigned x) { return x*x; }
+inline long                vnl_math_sqr(long x) { return x*x; }
+inline float               vnl_math_sqr(float x) { return x*x; }
+inline double              vnl_math_sqr(double x) { return x*x; }
+
+// sgn (sign in -1, 0, +1)
+inline int vnl_math_sgn(int x) { return x?((x>0)?1:-1):0; }
+inline int vnl_math_sgn(long x) { return x?((x>0)?1:-1):0; }
+inline int vnl_math_sgn(float x) { return (x != 0)?((x>0)?1:-1):0; }
+inline int vnl_math_sgn(double x) { return (x != 0)?((x>0)?1:-1):0; }
+
+// sng0 (sign inn -1, +1 only, useful for reals)
+inline int vnl_math_sgn0(int x) { return (x>=0)?1:-1; }
+inline int vnl_math_sgn0(long x) { return (x>=0)?1:-1; }
+inline int vnl_math_sgn0(float x) { return (x>=0)?1:-1; }
+inline int vnl_math_sgn0(double x) { return (x>=0)?1:-1; }
+
+// squared_magnitude
+inline int      vnl_math_squared_magnitude(int x) { return x*x; }
+inline unsigned vnl_math_squared_magnitude(unsigned x) { return x*x; }
+inline long     vnl_math_squared_magnitude(long x) { return x*x; }
+inline unsigned long vnl_math_squared_magnitude(unsigned long x) { return x*x; }
+inline float    vnl_math_squared_magnitude(float x) { return x*x; }
+inline double   vnl_math_squared_magnitude(double x) { return x*x; }
+
+// squareroot
+inline float  vnl_math_sqrt(float x) { return (float)sqrt(x); }
+inline double vnl_math_sqrt(double x) { return sqrt(x); }
+
+// cuberoot
+inline float  vnl_math_cuberoot(float a) { return float((a<0) ? -exp(log(-a)/3) : exp(log(a)/3)); }
+inline double vnl_math_cuberoot(double a) { return (a<0) ? -exp(log(-a)/3) : exp(log(a)/3); }
+
+// hypotenuse
+inline double vnl_math_hypot(int x, int y) { return sqrt(x*x + y*y); }
+inline float  vnl_math_hypot(float x, float y) { return (float)sqrt(x*x + y*y); }
+inline double vnl_math_hypot(double x, double y) { return sqrt(x*x + y*y); }
 
 #endif 

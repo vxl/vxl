@@ -28,9 +28,8 @@
 //
 //-----------------------------------------------------------------------------
 
-
 #include <vcl/vcl_compiler.h>
-//#include <vnl/vnl_complex.h>
+#include <vcl/vcl_complex_fwd.h>
 
 template <class T>
 class vnl_numeric_traits {
@@ -76,6 +75,7 @@ typedef unsigned long long_uint;
 #endif
 
 #ifndef NO_STD_BOOL
+VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<bool> {
 public:
   static const bool zero VCL_STATIC_CONST_INIT_INT(0);
@@ -86,6 +86,7 @@ public:
 };
 #endif
 
+VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<unsigned char> {
 public:
   static const unsigned char zero VCL_STATIC_CONST_INIT_INT(0);
@@ -95,6 +96,7 @@ public:
   typedef double real_t;
 };
 
+VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<signed char> {
 public:
   static const signed char zero VCL_STATIC_CONST_INIT_INT(0);
@@ -104,6 +106,7 @@ public:
   typedef double real_t;
 };
 
+VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<unsigned short> {
 public:
   static const unsigned short zero VCL_STATIC_CONST_INIT_INT(0);
@@ -113,6 +116,7 @@ public:
   typedef double real_t;
 };
 
+VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<signed short> {
 public:
   static const signed short zero VCL_STATIC_CONST_INIT_INT(0);
@@ -122,6 +126,7 @@ public:
   typedef double real_t;
 };
 
+VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<unsigned int> {
 public:
   static const unsigned int zero VCL_STATIC_CONST_INIT_INT(0);
@@ -131,6 +136,7 @@ public:
   typedef double real_t;
 };
 
+VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<signed int> {
 public:
   static const signed int zero VCL_STATIC_CONST_INIT_INT(0);
@@ -140,6 +146,7 @@ public:
   typedef double real_t;
 };
 
+VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<signed long> {
 public:
   static const signed long zero VCL_STATIC_CONST_INIT_INT(0);
@@ -149,6 +156,7 @@ public:
   typedef double real_t;
 };
 
+VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<unsigned long> {
 public:
   static const unsigned long zero VCL_STATIC_CONST_INIT_INT(0);
@@ -158,6 +166,7 @@ public:
   typedef double real_t;
 };
 
+VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<float> {
 public:
   static const float zero VCL_STATIC_CONST_INIT_FLOAT(0.0F);
@@ -167,6 +176,7 @@ public:
   typedef double real_t;
 };
 
+VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<double> {
 public:
   static const double zero VCL_STATIC_CONST_INIT_FLOAT(0.0);
@@ -176,31 +186,27 @@ public:
   typedef double real_t;
 };
 
-#define VNL_USED_COMPLEX
-#ifdef VNL_COMPLEX_AVAILABLE
-// See vnl_complex.h
-
 // G++ barfs if the specializations are themselves templated
 // declaring the statics "const" crashes 2.7.2
 
-class vnl_numeric_traits< vnl_complex<float> > {
+VCL_DEFINE_SPECIALIZATION
+class vnl_numeric_traits< vcl_complex<float> > {
 public:
-  static vnl_complex<float> zero;
-  static vnl_complex<float> one;
+  static vcl_complex<float> zero;
+  static vcl_complex<float> one;
   typedef float abs_t;
-  typedef vnl_complex<vnl_numeric_traits<float>::double_t> double_t;
-  typedef vnl_complex<float> real_t;
+  typedef vcl_complex<vnl_numeric_traits<float>::double_t> double_t;
+  typedef vcl_complex<float> real_t;
 };
 
-class vnl_numeric_traits< vnl_complex<double> > {
+VCL_DEFINE_SPECIALIZATION
+class vnl_numeric_traits< vcl_complex<double> > {
 public:
-  static vnl_complex<double> zero;
-  static vnl_complex<double> one;
+  static vcl_complex<double> zero;
+  static vcl_complex<double> one;
   typedef double abs_t;
-  typedef vnl_complex<vnl_numeric_traits<double>::double_t> double_t;
-  typedef vnl_complex<double> real_t;
+  typedef vcl_complex<vnl_numeric_traits<double>::double_t> double_t;
+  typedef vcl_complex<double> real_t;
 };
-
-#endif // VNL_COMPLEX_AVAILABLE
 
 #endif // vnl_numeric_traits_h_

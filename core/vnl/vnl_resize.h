@@ -4,7 +4,6 @@
   fsm@robots.ox.ac.uk
 */
 
-#include <vcl/vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 

@@ -13,8 +13,9 @@
 
 #include "vnl_amoeba.h"
 
-#include <stdlib.h>
-#include <stdio.h>
+#include <vcl/vcl_cstdlib.h>
+#include <vcl/vcl_cstdio.h>
+#include <vcl/vcl_iostream.h>
 #include <vcl/vcl_vector.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matops.h>
@@ -64,7 +65,7 @@ struct vnl_amoebaFit : public vnl_amoeba {
 
 int SimplexCorner::compare(const SimplexCorner& s1, const SimplexCorner& s2)
 {
-  return vnl_math::sgn(s1.fv - s2.fv);
+  return vnl_math_sgn(s1.fv - s2.fv);
 }
 
 #ifdef VCL_SUNPRO_CC
@@ -86,7 +87,7 @@ double maxabsdiff(const vnl_vector<double>& a, const vnl_vector<double>& b)
 {
   double v = 0;
   for(int i = 0; i < a.size(); ++i) {
-    double ad = vnl_math::abs(a[i] - b[i]);
+    double ad = vnl_math_abs(a[i] - b[i]);
     if (ad > v)
       v = ad;
   }
@@ -103,7 +104,7 @@ double simplex_fdiameter(const vcl_vector<SimplexCorner>& simplex)
   // simplex assumed sorted, so fdiam is n - 0
   double max = 0;
   for(unsigned i = 1; i < simplex.size(); i++) {
-    double thismax = vnl_math::abs(simplex[0].fv - simplex[i].fv);
+    double thismax = vnl_math_abs(simplex[0].fv - simplex[i].fv);
     if (thismax > max)
       max = thismax;
   }
@@ -192,7 +193,7 @@ void vnl_amoebaFit::amoeba(vnl_vector<double>& x)
     s->v = x;
 
     // perturb s->v(j)
-    if (vnl_math::abs(s->v[j]) > zero_term_delta)
+    if (vnl_math_abs(s->v[j]) > zero_term_delta)
       s->v[j] = (1 + usual_delta)*s->v[j];
     else
       s->v[j] = zero_term_delta;

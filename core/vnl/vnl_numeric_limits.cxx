@@ -1,35 +1,3 @@
-// <begin copyright notice>
-// ---------------------------------------------------------------------------
-//
-//                   Copyright (c) 1997 TargetJr Consortium
-//               GE Corporate Research and Development (GE CRD)
-//                             1 Research Circle
-//                            Niskayuna, NY 12309
-//                            All Rights Reserved
-//              Reproduction rights limited as described below.
-//                               
-//      Permission to use, copy, modify, distribute, and sell this software
-//      and its documentation for any purpose is hereby granted without fee,
-//      provided that (i) the above copyright notice and this permission
-//      notice appear in all copies of the software and related documentation,
-//      (ii) the name TargetJr Consortium (represented by GE CRD), may not be
-//      used in any advertising or publicity relating to the software without
-//      the specific, prior written permission of GE CRD, and (iii) any
-//      modifications are clearly marked and summarized in a change history
-//      log.
-//       
-//      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
-//      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
-//      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
-//      IN NO EVENT SHALL THE TARGETJR CONSORTIUM BE LIABLE FOR ANY SPECIAL,
-//      INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND OR ANY
-//      DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
-//      WHETHER OR NOT ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR ON
-//      ANY THEORY OF LIABILITY ARISING OUT OF OR IN CONNECTION WITH THE
-//      USE OR PERFORMANCE OF THIS SOFTWARE.
-//
-// ---------------------------------------------------------------------------
-// <end copyright notice>
 #ifdef __GNUC__
 #pragma implementation "vnl_numeric_limits.h"
 #pragma implementation "vnl_numeric_limits_float.h"
@@ -46,13 +14,13 @@
 
 #include "vnl_numeric_limits.h"
 
-// FIXME: sunpro5.0 warns about anachronistic syntax without the
-// template <> f, but 2.95 and egcs emit error messages. - fsm
-#include <vcl/vcl_compiler.h>
-#if defined(VCL_GCC_295) || defined(VCL_EGCS)
-# undef VCL_DECLARE_SPECIALIZATION
-# define VCL_DECLARE_SPECIALIZATION(f) /* template <> f; */
-#endif
+// // FIXME: sunpro5.0 warns about anachronistic syntax without the
+// // template <> f, but 2.95 and egcs emit error messages. - fsm
+// #include <vcl/vcl_compiler.h>
+// #if defined(VCL_GCC_295) || defined(VCL_EGCS)
+// # undef VCL_DEFINE_SPECIALIZATION
+// # define VCL_DEFINE_SPECIALIZATION(f) /* template <> f; */
+// #endif
 
 union vnl_numeric_limits_double_nan {
   double nan;
@@ -88,19 +56,19 @@ union vnl_numeric_limits_double_inf {
 };
 static vnl_numeric_limits_double_inf dinf;
 
-VCL_DECLARE_SPECIALIZATION( double vnl_numeric_limits<double>::infinity() );
+//VCL_DEFINE_SPECIALIZATION
 double vnl_numeric_limits<double>::infinity()
 {
   return dinf.inf;
 }
 
-VCL_DECLARE_SPECIALIZATION( double vnl_numeric_limits<double>::quiet_NaN() );
+//VCL_DEFINE_SPECIALIZATION
 double vnl_numeric_limits<double>::quiet_NaN()
 {
   return dnan.nan;
 }
 
-VCL_DECLARE_SPECIALIZATION( double vnl_numeric_limits<double>::signaling_NaN() );
+//VCL_DEFINE_SPECIALIZATION
 double vnl_numeric_limits<double>::signaling_NaN()
 {
   return quiet_NaN();
@@ -133,19 +101,19 @@ union vnl_numeric_limits_float_inf {
 };
 static vnl_numeric_limits_float_inf finf;
 
-VCL_DECLARE_SPECIALIZATION( float vnl_numeric_limits<float>::infinity() );
+//VCL_DEFINE_SPECIALIZATION
 float vnl_numeric_limits<float>::infinity()
 {
   return finf.inf;
 }
 
-VCL_DECLARE_SPECIALIZATION( float vnl_numeric_limits<float>::quiet_NaN() );
+//VCL_DEFINE_SPECIALIZATION
 float vnl_numeric_limits<float>::quiet_NaN()
 {
   return fnan.nan;
 }
 
-VCL_DECLARE_SPECIALIZATION( float vnl_numeric_limits<float>::signaling_NaN() );
+//VCL_DEFINE_SPECIALIZATION
 float vnl_numeric_limits<float>::signaling_NaN()
 {
   return quiet_NaN();

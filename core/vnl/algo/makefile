@@ -1,9 +1,9 @@
+VXL := 1
 ################################
 include ${IUEROOT}/config/top-params.mk
 ################################
 
 USES := vxl
-VXL := 1
 
 LIBRARY := vnl-algo
 VERSION := 1.0
@@ -13,7 +13,6 @@ MANPAGE_SOURCES += vnl_svd.txx
 MANPAGE_SOURCES += vnl_matrix_inverse.txx
 SOURCES += vnl_qr.cxx
 SOURCES += vnl_cholesky.cxx
-SOURCES += linpack_svd.cxx
 SOURCES += vnl_real_eigensystem.cxx
 SOURCES += vnl_complex_eigensystem.cxx
 SOURCES += vnl_symmetric_eigensystem.cxx
@@ -34,15 +33,16 @@ SOURCES += vnl_rnpoly_solve.cxx
 
 # fft
 SOURCES += vnl_fftxd_prime_factors.cxx
-#MANPAGE_SOURCES += vnl_fft1d.txx
-#MANPAGE_SOURCES += vnl_fft2d.txx
+SOURCES += vnl_fft1d.cxx
+SOURCES += vnl_fft2d.cxx
 
 # stuff
+SOURCES += vnl_determinant.cxx
 SOURCES += vnl_chi_squared.cxx
 SOURCES += vnl_gaussian_kernel_1d.cxx
 SOURCES += vnl_affine_approx.cxx       # hmmm.... (fsm)
 
-IULIBS := -lvnl -lvcl
+IULIBS := -lvnl -lvcl -lnetlib
 
 DEFINES += -DBUILDING_VNL_ALGO_DLL
 

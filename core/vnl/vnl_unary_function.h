@@ -37,7 +37,7 @@ public:
   //virtual Argument get_domain_max() const { return vnl_numeric_limits<Argument>::max(); }
 
   // -- Return bounding cube of range (outputs)
-  virtual Return get_range_min() const { return limits::min(); }
+  virtual Return get_range_min() const { return vnl_numeric_limits<Return >::min(); }
   virtual Return get_range_max() const { return limits::max(); }
 
   // -- Copy should allocate a copy of this on the heap and return it.  If

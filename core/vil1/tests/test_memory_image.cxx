@@ -1,10 +1,9 @@
+#include <vcl/vcl_iostream.h>
 
 #include <vil/vil_memory_image.h>
 #include <vil/vil_save.h>
 
-#include <iostream.h>
-
-void p(vil_generic_image& m)
+void p(vil_image& m)
 {
   for(int y = 0; y < m.height(); ++y) {
     for(int x = 0; x < m.width(); ++x) {
@@ -27,5 +26,7 @@ int main()
   m.put_section(data, 0, 0, 3, 2);
   p(m);
 
-  vil_save(&m, "/tmp/vil_test_memory_image.pgm");
+  vil_save(m, "/tmp/vil_test_memory_image.pgm");
+
+  return 0;
 }

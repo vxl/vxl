@@ -1,43 +1,9 @@
-// <begin copyright notice>
-// ---------------------------------------------------------------------------
-//
-//                   Copyright (c) 1997 TargetJr Consortium
-//               GE Corporate Research and Development (GE CRD)
-//                             1 Research Circle
-//                            Niskayuna, NY 12309
-//                            All Rights Reserved
-//              Reproduction rights limited as described below.
-//                               
-//      Permission to use, copy, modify, distribute, and sell this software
-//      and its documentation for any purpose is hereby granted without fee,
-//      provided that (i) the above copyright notice and this permission
-//      notice appear in all copies of the software and related documentation,
-//      (ii) the name TargetJr Consortium (represented by GE CRD), may not be
-//      used in any advertising or publicity relating to the software without
-//      the specific, prior written permission of GE CRD, and (iii) any
-//      modifications are clearly marked and summarized in a change history
-//      log.
-//       
-//      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
-//      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
-//      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
-//      IN NO EVENT SHALL THE TARGETJR CONSORTIUM BE LIABLE FOR ANY SPECIAL,
-//      INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND OR ANY
-//      DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
-//      WHETHER OR NOT ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR ON
-//      ANY THEORY OF LIABILITY ARISING OUT OF OR IN CONNECTION WITH THE
-//      USE OR PERFORMANCE OF THIS SOFTWARE.
-//
-// ---------------------------------------------------------------------------
-// <end copyright notice>
 #ifndef vnl_symmetric_eigensystem_h_
 #define vnl_symmetric_eigensystem_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
 // .NAME        vnl_symmetric_eigensystem - @{\boldmath Solve $A x = \lambda x$ using vnl_qr. @}
-// .LIBRARY     vnl/algo
-// .HEADER	Numerics Package
 // .INCLUDE     vnl/algo/vnl_symmetric_eigensystem.h
 // .FILE        vnl/algo/vnl_symmetric_eigensystem.cxx
 //
@@ -74,21 +40,17 @@
 // \end{quote}
 // @}
 //
-// .SECTION Author
-//     Andrew W. Fitzgibbon, Oxford RRG, 29 Aug 96
-//
-// .SECTION Modifications:
-//     <none yet>
-//
-//-----------------------------------------------------------------------------
+// Author: Andrew W. Fitzgibbon, Oxford RRG, 29 Aug 96
+// History: fsm@robots, 5 March 2000: templated
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_diag_matrix.h>
 
+template <class T>
 class vnl_symmetric_eigensystem {
 public:
   //: @{ Solve real symmetric eigensystem $A x = \lambda x$ @}
-  vnl_symmetric_eigensystem(const vnl_matrix<double>& M);
+  vnl_symmetric_eigensystem(vnl_matrix<T> const & M);
   
 protected:
   // need this here to get inits in correct order, but still keep gentex
@@ -99,19 +61,22 @@ public:
   //: Public eigenvectors.  After construction, the columns of V are the
   // eigenvectors, sorted by increasing eigenvalue, from most negative to
   // most positive.
-  vnl_matrix<double> V;
+  vnl_matrix<T> V;
 
   //: Public eigenvalues.  After construction,  D contains the
   // eigenvalues, sorted as described above.  Note that D is a vnl_diag_matrix,
   // and is therefore stored as a vcl_vector while behaving as a matrix.
-  vnl_diag_matrix<double> D;
+  vnl_diag_matrix<T> D;
 
   //: Recover specified eigenvector after computation.
-  vnl_vector<double> get_eigenvector(int i) const;
+  vnl_vector<T> get_eigenvector(int i) const;
 
-  //: Get least-squares nullvector. convenience method.
-  vnl_vector<double> get_nullvector() const { return get_eigenvector(0); }
-  
+  //: Recover specified eigenvalue after computation.
+  T             get_eigenvalue(int i) const;
+
+  //: Convenience method to get least-squares nullvector. 
+  // It is deliberate that the signature is the same as on vnl_svd<T>.
+  vnl_vector<T> nullvector() const { return get_eigenvector(0); }
   
   //: @{ Return the matrix $V  D  V^\top$.  This can be useful if you've
   // modified $D$.  So an inverse is obtained using
@@ -121,17 +86,17 @@ public:
   //   vnl_matrix<double> Ainverse = eig.{\bf recompose}();
   // \end{alltt}
   // @}
-  vnl_matrix<double> recompose() const { return V * D * V.transpose(); }
+  vnl_matrix<T> recompose() const { return V * D * V.transpose(); }
 
-  vnl_matrix<double> pinverse() const; // pseudoinverse
+  vnl_matrix<T> pinverse() const; // pseudoinverse
 
   //: Solve LS problem M x = b
-  vnl_vector<double> solve(const vnl_vector<double>& b);
+  vnl_vector<T> solve(vnl_vector<T> const & b);
   
   //: Solve LS problem M x = b
-  void solve(const vnl_vector<double>& b, vnl_vector<double>* x);
+  void solve(vnl_vector<T> const & b, vnl_vector<T> * x);
   
-  static bool compute(const vnl_matrix<double>& in, vnl_matrix<double>& V, vnl_vector<double>& D);
+  static bool compute(vnl_matrix<T> const & in, vnl_matrix<T> & V, vnl_vector<T> & D);
 };
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_symmetric_eigensystem.

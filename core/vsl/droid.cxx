@@ -1,19 +1,19 @@
 #include "droid.h"
-#include "convolve.h"
-#include "harris_internals.h"
 
 #include <vcl/vcl_cmath.h>   // pow()
 #include <vcl/vcl_cstring.h> // memset()
+
+#include <vsl/vsl_roi_window.h>
 
 //--------------------------------------------------------------------------------
 //
 // Computes gradient at each pixel.
 // Uses the convolution mask [ 2  1 0 -1 -2].
 //
-void droid::compute_gradx_grady (GL_WINDOW_STR      *window_str,
-				 GL_BYTE_ARRAY_STR  *image_ptr,
-				 GL_INT_ARRAY_STR   *image_gradx_ptr,
-				 GL_INT_ARRAY_STR   *image_grady_ptr)
+void droid::compute_gradx_grady (vsl_roi_window      *window_str,
+				 vil_byte_buffer    *image_ptr,
+				 vil_int_buffer   *image_gradx_ptr,
+				 vil_int_buffer   *image_grady_ptr)
 
 {
   int row_start = window_str->row_start_index;
@@ -49,12 +49,12 @@ void droid::compute_gradx_grady (GL_WINDOW_STR      *window_str,
 //     2     1     0    -1    -2
 //     2     1     0    -1    -2
 //
-void droid::compute_fxx_fxy_fyy (GL_WINDOW_STR      *window_str,
-				 GL_INT_ARRAY_STR   *image_gradx_ptr,
-				 GL_INT_ARRAY_STR   *image_grady_ptr,
-				 GL_FLOAT_ARRAY_STR *image_fxx_ptr,
-				 GL_FLOAT_ARRAY_STR *image_fxy_ptr,
-				 GL_FLOAT_ARRAY_STR *image_fyy_ptr)
+void droid::compute_fxx_fxy_fyy (vsl_roi_window      *window_str,
+				 vil_int_buffer   *image_gradx_ptr,
+				 vil_int_buffer   *image_grady_ptr,
+				 vil_float_buffer *image_fxx_ptr,
+				 vil_float_buffer *image_fxy_ptr,
+				 vil_float_buffer *image_fyy_ptr)
 {
   float gradx,grady;
 
@@ -92,14 +92,14 @@ void droid::compute_fxx_fxy_fyy (GL_WINDOW_STR      *window_str,
 // Computes the cornerness for each pixel.
 // Returns the maximum overall cornerness.
 //
-float droid::compute_cornerness (GL_WINDOW_STR      *window_str,
-				 GL_FLOAT_ARRAY_STR *image_fxx_ptr,
-				 GL_FLOAT_ARRAY_STR *image_fxy_ptr,
-				 GL_FLOAT_ARRAY_STR *image_fyy_ptr,
+float droid::compute_cornerness (vsl_roi_window      *window_str,
+				 vil_float_buffer *image_fxx_ptr,
+				 vil_float_buffer *image_fxy_ptr,
+				 vil_float_buffer *image_fyy_ptr,
 				 float scale,
-				 GL_FLOAT_ARRAY_STR *pixel_cornerness)
+				 vil_float_buffer *pixel_cornerness)
 {
-  float corner_max=0.0;
+  float corner_max = 0;
   
   for (int row = window_str->row_start_index; row < window_str->row_end_index; row++) {
     for (int col = window_str->col_start_index; col < window_str->col_end_index; col++) {
@@ -114,12 +114,7 @@ float droid::compute_cornerness (GL_WINDOW_STR      *window_str,
       
       (*pixel_cornerness) [row][col] = determinant - scale*trace*trace;
 
-      // written out explicitly :
-      //(*pixel_cornerness) [row][col] 
-      //= ((*image_fxx_ptr) [row][col] * (*image_fyy_ptr) [row][col] -
-      //GL_SQUARE ((*image_fxy_ptr) [row][col]))
-      //- _params.scale_factor*GL_SQUARE((*image_fxx_ptr)[row][col]+(*image_fyy_ptr)[row][col]);
-      
+      // update max      
       if ((*pixel_cornerness) [row][col] > corner_max)
 	corner_max = (*pixel_cornerness) [row][col];
     }
@@ -138,9 +133,9 @@ float droid::compute_cornerness (GL_WINDOW_STR      *window_str,
 // image_corner_max_ptr to true.
 //
 int droid::find_corner_maxima (float corner_min,
-			       GL_WINDOW_STR      *window_str,
-			       GL_FLOAT_ARRAY_STR *pixel_cornerness,
-			       GL_BOOL_ARRAY_STR  *image_corner_max_ptr)
+			       vsl_roi_window      *window_str,
+			       vil_float_buffer *pixel_cornerness,
+			       vil_bool_buffer  *image_corner_max_ptr)
 {
   // allow for the spread when setting the loop values - don't explicitly 
   // update window to be smaller because this routine might be called multiple
@@ -246,9 +241,9 @@ int droid::find_corner_maxima (float corner_min,
 float droid::compute_corner_min (float /*corner_min*/, 
 				 float corner_max,
 				 int corner_count_max,
-				 GL_WINDOW_STR      *window_str,
-				 GL_FLOAT_ARRAY_STR *pixel_cornerness,
-				 GL_BOOL_ARRAY_STR  *image_corner_max_ptr)
+				 vsl_roi_window      *window_str,
+				 vil_float_buffer *pixel_cornerness,
+				 vil_bool_buffer  *image_corner_max_ptr)
 {
 
 #define DR_BIN_COUNT 200
@@ -300,7 +295,7 @@ float droid::compute_corner_min (float /*corner_min*/,
 // Compute the subpixel location of and value at cornerness maxima.
 // Uses a quadratic fit.
 //
-bool droid::compute_subpixel_max (GL_FLOAT_ARRAY_STR *pixel_cornerness, 
+bool droid::compute_subpixel_max (vil_float_buffer *pixel_cornerness, 
 				  int row, int col,
 				  double &x, double &y, 
 				  bool pab_emulate)
@@ -434,8 +429,8 @@ bool droid::compute_subpixel_max (GL_FLOAT_ARRAY_STR *pixel_cornerness,
 int droid::find_local_maxima(float min,int winsize,
 			     int x1,int y1,
 			     int x2,int y2,
-			     GL_FLOAT_ARRAY_STR  *bitmap,
-			     GL_BOOL_ARRAY_STR  *max_p)
+			     vil_float_buffer  *bitmap,
+			     vil_bool_buffer  *max_p)
 {
   //
   for (int i=x1;i<x2;i++)

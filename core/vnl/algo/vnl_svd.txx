@@ -1,20 +1,21 @@
-//-*- c++ -*-------------------------------------------------------------------
-//
-// Class: BaseSVD
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 09 May 97
-// Modifications:
-//   970509 AWF Initial version from SVD.C
-//
-//-----------------------------------------------------------------------------
-
-#include <vnl/vnl_complex.h> // "system header" must come first.
 #include "vnl_svd.h"
-#include <vnl/vnl_fortran_copy.h>
-#include <vnl/algo/linpack_svd.h>
 
-#include <fstream.h>
-#include <stdlib.h> // for abort();
+#include <vcl/vcl_fstream.h>
+#include <vcl/vcl_cstdlib.h> // abort()
+
+#include <vnl/vnl_complex.h>
+#include <vnl/vnl_fortran_copy.h>
+#include <vnl/algo/vnl_netlib.h>
+
+// use C++ overloading to call the right linpack routine from the template code :
+#define macro(svd, T) \
+static inline int vnl_linpack_svd(vnl_netlib_svd_proto(T)) \
+{ return svd(vnl_netlib_svd_params); }
+macro(zsvdc_, vnl_double_complex);
+macro(csvdc_, vnl_float_complex);
+macro(dsvdc_, double);
+macro(ssvdc_, float);
+#undef macro
 
 //--------------------------------------------------------------------------------
 
@@ -42,7 +43,7 @@ vnl_svd<T>::vnl_svd(const vnl_matrix<T>& M, double zero_out_tol):
   {
     int n = M.rows();
     int p = M.columns();
-    int mm = vnl_math::min(n+1,p);
+    int mm = vnl_math_min(n+1,p);
 
     // Copy source matrix into fortran storage
     // SVD is slow, don't worry about the cost of this transpose.
@@ -57,13 +58,13 @@ vnl_svd<T>::vnl_svd(const vnl_matrix<T>& M, double zero_out_tol):
 
     // Call Linpack SVD
     int info = 0;
-    linpack_svd((T*)X, n, n, p,
-	   wspace.data_block(),
-	   espace.data_block(),
-	   uspace.data_block(), n,
-	   vspace.data_block(), p,
-	   work.data_block(),
-	   21, &info);
+    vnl_linpack_svd((T*)X, n, n, p,
+		    wspace.data_block(),
+		    espace.data_block(),
+		    uspace.data_block(), n,
+		    vspace.data_block(), p,
+		    work.data_block(),
+		    21, &info);
 
     // Error return?
     if (info != 0) {
@@ -84,7 +85,7 @@ vnl_svd<T>::vnl_svd(const vnl_matrix<T>& M, double zero_out_tol):
     }
 
     for(int j = 0; j < mm; ++j)
-      W_(j, j) = vnl_math::abs(wspace(j)); // we get rid of complexness here.
+      W_(j, j) = vnl_math_abs(wspace(j)); // we get rid of complexness here.
     
     for(int j = mm; j < n_; ++j)
       W_(j, j) = 0;
@@ -99,8 +100,8 @@ vnl_svd<T>::vnl_svd(const vnl_matrix<T>& M, double zero_out_tol):
 
   if (test_heavily) {
     // Test that recomposed matrix == M
-    double recomposition_residual = vnl_math::abs((recompose() - M).fro_norm());
-    double n = vnl_math::abs(M.fro_norm());
+    double recomposition_residual = vnl_math_abs((recompose() - M).fro_norm());
+    double n = vnl_math_abs(M.fro_norm());
     double thresh = m_ * vnl_math::eps * n;
     if (recomposition_residual > thresh) {
       cerr << "vnl_svd<T>::vnl_svd<T>() -- Warning, recomposition_residual = "
@@ -195,7 +196,7 @@ vnl_svd<T>::zero_out_absolute(double tol)
   rank_ = W_.n();
   for (unsigned k = 0; k < W_.n(); k++) {
     singval_t& weight = W_(k, k);
-    if (vnl_math::abs(weight) <= tol) {
+    if (vnl_math_abs(weight) <= tol) {
       Winverse_(k,k) = 0;
       weight = 0;
       --rank_;
@@ -208,7 +209,7 @@ vnl_svd<T>::zero_out_absolute(double tol)
 // -- find weights below tol*max(w) and zero them out
 template <class T> void vnl_svd<T>::zero_out_relative(double tol) // sqrt(machine epsilon)
 {
-  zero_out_absolute(tol * vnl_math::abs(sigma_max()));
+  zero_out_absolute(tol * vnl_math_abs(sigma_max()));
 }
 
 
@@ -249,7 +250,7 @@ void vnl_svd<T>::determinant_magnitude_aux () const
     product *= W_(k, k);
 
   ((vnl_svd<T>*)this)->temp_value_for_gcc_hack=product; 
-  //return vnl_math::abs(product);
+  //return vnl_math_abs(product);
 }
 
 // -- Recompose SVD to U*W*V'
@@ -436,7 +437,7 @@ template <class T>
 vnl_vector <T> vnl_svd<T>::left_nullvector()  const
 {
   vnl_vector<T> ret(m_);
-  int col = vnl_math::min(m_, n_) - 1;
+  int col = vnl_math_min(m_, n_) - 1;
   for(int i = 0; i < m_; ++i)
     ret(i) = U_(i, col);
   return ret;

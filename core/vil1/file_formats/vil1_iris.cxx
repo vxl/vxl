@@ -13,13 +13,13 @@
 
 #include "vil_iris.h"
 
-#include <assert.h>
-
-#include <vcl/vcl_iostream.h>
+#include <vcl/vcl_cassert.h>
 #include <vcl/vcl_cstring.h>
-#include <vil/vil_stream.h>
-#include <vil/vil_generic_image.h>
+#include <vcl/vcl_iostream.h>
 
+#include <vil/vil_stream.h>
+#include <vil/vil_image_impl.h>
+#include <vil/vil_image.h>
 
 
 static short get_short(vil_stream* file, int location = -1); // default -1 means: read at current position
@@ -35,12 +35,11 @@ static void expandrow(unsigned char *optr, unsigned char *iptr, int z);
 
 char const* vil_iris_format_tag = "iris";
 
-vil_generic_image* vil_iris_file_format::make_input_image(vil_stream* is)
+vil_image_impl* vil_iris_file_format::make_input_image(vil_stream* is)
 {
   is->seek(0);
   
   int colormap_;
-  char* imagename_;
 
   int magic_     = get_short(is);
   int storage_   = get_char(is);
@@ -53,8 +52,8 @@ vil_generic_image* vil_iris_file_format::make_input_image(vil_stream* is)
   /*int pixmax_    =*/ get_long(is);
 
   is->seek(24);
-  imagename_ = new char[81];
-  is->read((void*)imagename_, 80);
+  char imagename_[81];
+  is->read(imagename_, 80);
 
   colormap_ = get_long(is);
 
@@ -68,9 +67,14 @@ vil_generic_image* vil_iris_file_format::make_input_image(vil_stream* is)
   return new vil_iris_generic_image(is);
 }
 
-vil_generic_image* vil_iris_file_format::make_output_image(vil_stream* is, vil_generic_image const* prototype)
+vil_image_impl* vil_iris_file_format::make_output_image(vil_stream* is, int planes,
+					       int width,
+					       int height,
+					       int components,
+					       int bits_per_component,
+					       vil_component_format format)
 {
-  return new vil_iris_generic_image(is, prototype);
+  return new vil_iris_generic_image(is, planes, width, height, components, bits_per_component, format);
 }
 
 char const* vil_iris_file_format::tag() const
@@ -91,35 +95,40 @@ char const* vil_iris_generic_image::file_format() const
   return vil_iris_format_tag;
 }
 
-vil_iris_generic_image::vil_iris_generic_image(vil_stream* is, vil_generic_image const* prototype):
+vil_iris_generic_image::vil_iris_generic_image(vil_stream* is, int planes,
+					       int width,
+					       int height,
+					       int components,
+					       int bits_per_component,
+					       vil_component_format format):
   is_(is)
 {
-  if (prototype->bits_per_component() == 8 || 
-      prototype->bits_per_component() == 16)
+  if (bits_per_component == 8 || 
+      bits_per_component == 16)
   {
     magic_  = 474;
     storage_ = 0;
-    bytes_per_component_ = prototype->bits_per_component() / 8;
-    width_  = prototype->width();
-    height_ = prototype->height();
+    bytes_per_component_ = bits_per_component / 8;
+    width_  = width;
+    height_ = height;
     pixmin_ = 0;
-    pixmax_ = (prototype->bits_per_component() == 8) ? 255 : 65535;
-    imagename_ = new char[80];  strcpy(imagename_, "ViL writes an iris image!");
+    pixmax_ = (bits_per_component == 8) ? 255 : 65535;
+    /*imagename_ = neXw char[80];*/  strcpy(imagename_, "ViL writes an iris image!");
     colormap_ = 0;
   
-    if ((prototype->components() * prototype->planes()) == 1)
+    if ((components * planes) == 1)
     {
       components_ = 1;
       planes_ = 1;
       dimension_ = 2;
     }
-    else if ((prototype->components() * prototype->planes()) == 3)
+    else if ((components * planes) == 3)
     {
       components_ = 1;
       planes_ = 3;
       dimension_ = 3;
     }
-	 else if ((prototype->components() * prototype->planes()) == 4)
+	 else if ((components * planes) == 4)
 	 {
 	   components_ = 1;
 		planes_ = 4;
@@ -151,8 +160,8 @@ bool vil_iris_generic_image::read_header()
   //  starts at 24
 
   is_->seek(24);
-  imagename_ = new char[81];
-  is_->read((void*)imagename_, 80);
+  //imagename_ = neXw char[81];
+  is_->read(imagename_, 80);
 
   // COLORMAP starts at 104
   colormap_ = get_long(is_);
@@ -234,7 +243,7 @@ bool vil_iris_generic_image::write_header()
 
 
 
-vil_generic_image* vil_iris_generic_image::get_plane(int plane) const
+vil_image vil_iris_generic_image::get_plane(int plane) const
 {
   assert(plane <= planes_); // should this be 'plane < planes_'? planes start at 0.
   cerr << "do something for vil_iris_generic_image::get_plane\n";
@@ -243,7 +252,7 @@ vil_generic_image* vil_iris_generic_image::get_plane(int plane) const
 
 
 
-bool vil_iris_generic_image::do_get_section(void* buf, int x0, int y0, int xs, int ys) const
+bool vil_iris_generic_image::get_section(void* buf, int x0, int y0, int xs, int ys) const
 {
   // at the moment I am not dealing with requests for memory
   // outside the image so just abort if you get any 
@@ -341,7 +350,7 @@ bool vil_iris_generic_image::get_section_rle(void* ib, int x0, int y0, int xs, i
 }
 
 
-bool vil_iris_generic_image::do_put_section(void const* buf, int x0, int y0, int width, int height)
+bool vil_iris_generic_image::put_section(void const* buf, int x0, int y0, int width, int height)
 {
   int ynul = height_ - y0 - height;
 

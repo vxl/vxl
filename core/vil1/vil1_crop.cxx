@@ -14,8 +14,9 @@
 #include "vil_crop.h"
 
 #include <vil/vil_crop_image.h>
+#include <vil/vil_image.h>
 
-vil_generic_image* vil_crop(vil_generic_image* SRC, int x0, int y0, int w, int h)
+vil_image vil_crop(vil_image SRC, int x0, int y0, int w, int h)
 {
   return new vil_crop_image(SRC, x0, y0, w, h);
 }

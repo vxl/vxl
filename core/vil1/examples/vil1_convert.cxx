@@ -15,7 +15,7 @@ int main(int argc, char ** argv)
   char const* output_filename = argv[2];
   char const* output_format = argv[3];
 
-  vil_generic_image* in = vil_load(input_filename);
+  vil_image in = vil_load(input_filename);
   if (!in) return -1;
 
   vil_save(in, output_filename, output_format);

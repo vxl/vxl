@@ -3,7 +3,7 @@
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_cstring.h>
 
-#include <vil/vil_generic_image.h>
+#include <vil/vil_image_impl.h>
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
 #include <vil/vil_crop.h>
@@ -23,13 +23,13 @@ int main(int argc, char ** argv)
   int w = atoi(argv[5]);
   int h = atoi(argv[6]);
  
-  vil_generic_image* in = vil_load(input_filename);
+  vil_image in = vil_load(input_filename);
 
   // crop is a generic image whose get_section performs the crop.
   // so vil_crop has size wxh rather than the size of the input image
-  vil_generic_image* crop = vil_crop(in, x0, y0, w, h);
+  vil_image crop = vil_crop(in, x0, y0, w, h);
 
-  vil_save(crop, output_filename, in->file_format());
+  vil_save(crop, output_filename, in.file_format());
 }
 
 // save(crop, "t.pgm", "pnm") is implemented as:

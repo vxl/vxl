@@ -36,7 +36,7 @@
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matops.h>
-#include <stdlib.h> // for rand()
+#include <vcl/vcl_cstdlib.h> // for rand()
 
 // make a vector with random, complex entries :
 static void fill_rand(vnl_double_complex *b, vnl_double_complex *e) {
@@ -55,18 +55,18 @@ void test_complex() {
   vnl_double_complex i(0,1);
   
   Assert("inner_product() conjugates correctly", 
-	 vnl_math::abs( inner_product(i*a,b)-i*inner_product(a,b) ) < 1e-12 &&
-	 vnl_math::abs( inner_product(a,i*b)+i*inner_product(a,b) ) < 1e-12 );
+	 vnl_math_abs( inner_product(i*a,b)-i*inner_product(a,b) ) < 1e-12 &&
+	 vnl_math_abs( inner_product(a,i*b)+i*inner_product(a,b) ) < 1e-12 );
   
   Assert("dot_product() does not conjugate", 
-	 vnl_math::abs( dot_product(i*a,b)-i*dot_product(a,b) ) < 1e-12 &&
-	 vnl_math::abs( dot_product(a,i*b)-i*dot_product(a,b) ) < 1e-12 );
+	 vnl_math_abs( dot_product(i*a,b)-i*dot_product(a,b) ) < 1e-12 &&
+	 vnl_math_abs( dot_product(a,i*b)-i*dot_product(a,b) ) < 1e-12 );
 
   double norma=0;
   for (unsigned n=0; n<a.size(); ++n)
     norma += a[n].real()*a[n].real() + a[n].imag()*a[n].imag();
   norma = sqrt(norma);
-  Assert("correct magnitude", vnl_math::abs( norma-a.magnitude() ) < 1e-12 );
+  Assert("correct magnitude", vnl_math_abs( norma-a.magnitude() ) < 1e-12 );
 }
 
 TESTMAIN(test_complex);

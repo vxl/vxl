@@ -1,10 +1,10 @@
-#include <vnl/vnl_complex.h>
+#include <vcl/vcl_cstdlib.h>
 #include <vnl/vnl_test.h>
-#include <stdlib.h>
+#include <vnl/vnl_complex.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_double_3.h>
-#include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_matops.h>
+#include <vnl/algo/vnl_svd.h>
 
 vnl_matrix<double> solve_with_warning(const vnl_matrix<double>& M,
 				      const vnl_matrix<double>& B)
@@ -153,90 +153,38 @@ void test_I()
   cout << svd;
 }
 
-void test_float_svd()
-{
-  // Test inversion of 5x5 float matrix :
-  cout << "----- testing float vnl_svd recomposition -----" << endl;
+static double double_random() { return rand()/double(RAND_MAX); }
+static void fill_random(float &x)  { x = double_random(); }
+static void fill_random(double &x) { x = double_random(); }
+static void fill_random(vnl_float_complex &x)  { x = vnl_float_complex (double_random(), double_random()); }
+static void fill_random(vnl_double_complex &x) { x = vnl_double_complex(double_random(), double_random()); }
 
-  vnl_matrix<float> A(5,5);
+template <class T>
+void test_svd_recomposition(char const *type, double maxres, T */*tag*/)
+{
+  // Test inversion of 5x5 matrix of T :
+  cout << "----- testing vnl_svd<" << type << "> recomposition -----" << endl;
+
+  vnl_matrix<T> A(5,5);
   for (unsigned i = 0; i < A.rows(); ++i)
     for (unsigned j = 0; j < A.columns(); ++j)
-      A(i,j) = rand()/32768.0; // assume range is 0-32767.
+      fill_random(A(i, j));
   
   cout << "A = [ " << endl << A << "]" << endl;
-  vnl_svd<float> svd(A);
+  vnl_svd<T> svd(A);
   
-  vnl_matrix<float> B=svd.recompose();
+  vnl_matrix<T> B=svd.recompose();
   cout << "B = [ " << endl << B << "]" << endl;
-
-  float residual=(A - B).inf_norm();
-  cout << "residual=" << residual << endl;
-  Assert("vnl_svd<float> recomposition residual", residual < 2e-2);
-}
-
-void test_double_svd()
-{
-  // Test inversion of 5x5 double matrix :
-  cout << "----- testing double vnl_svd recomposition -----" << endl;
-
-  vnl_matrix<double> A(5,5);
-  for (unsigned i = 0; i < A.rows(); ++i)
-    for (unsigned j = 0; j < A.columns(); ++j)
-      A(i,j) = rand()/32768.0; // assume range is 0-32767.
   
-  cout << "A = [ " << endl << A << "]" << endl;
-  vnl_svd<double> svd(A);
-  
-  vnl_matrix<double> B=svd.recompose();
-  cout << "B = [ " << endl << B << "]" << endl;
-
   double residual=(A - B).inf_norm();
   cout << "residual=" << residual << endl;
-  Assert("vnl_svd<double> recomposition residual", residual < 1e-6);
+  Assert("vnl_svd<float> recomposition residual", residual < maxres);
 }
 
-void test_float_complex_svd()
-{
-  // Test inversion of 5x5 complex matrix :
-  cout << "----- testing complex<float> vnl_svd recomposition -----" << endl;
-
-  vnl_matrix<vnl_complex<float> > A(5,5);
-  for (unsigned i = 0; i < A.rows(); ++i)
-    for (unsigned j = 0; j < A.columns(); ++j)
-      A(i,j) = vnl_complex<float>(rand()/32768.0,rand()/32768.0); // assume range is 0-32767.
-  
-  cout << "A = [ " << endl << A << "]" << endl;
-  vnl_svd<vnl_complex<float> > svd(A);
-  
-  vnl_matrix<vnl_complex<float> > B=svd.recompose();
-  cout << "B = [ " << endl << B << "]" << endl;
-
-  double residual= (A - B).inf_norm();
-  cout << "residual=" << residual << endl;
-  Assert("vnl_svd<complex<float> > recomposition residual", residual < 1e-2);
-}
-
-void test_double_complex_svd()
-{
-  // Test inversion of 5x5 complex matrix :
-  cout << "----- testing complex<double> vnl_svd recomposition -----" << endl;
-
-  vnl_matrix<vnl_complex<double> > A(5,5);
-  for (unsigned i = 0; i < A.rows(); ++i)
-    for (unsigned j = 0; j < A.columns(); ++j)
-      A(i,j) = vnl_complex<double>(rand()/32768.0,rand()/32768.0); // assume range is 0-32767.
-  
-  cout << "A = [ " << endl << A << "]" << endl;
-  vnl_svd<vnl_complex<double> > svd(A);
-  
-  vnl_matrix<vnl_complex<double> > B=svd.recompose();
-  cout << "B = [ " << endl << B << "]" << endl;
-	
-  double residual = (A - B).inf_norm();
-  cout << "residual=" << residual << endl;
-  Assert("vnl_svd<complex<double> > recomposition residual", residual < 1e-6);
-}
-
+template void test_svd_recomposition(char const *, double, float *);
+template void test_svd_recomposition(char const *, double, double *);
+template void test_svd_recomposition(char const *, double, vnl_float_complex *);
+template void test_svd_recomposition(char const *, double, vnl_double_complex *);
 
 // Driver
 void test_svd()
@@ -245,10 +193,10 @@ void test_svd()
   test_ls();
   test_pmatrix();
   test_I();
-  test_float_svd();
-  test_double_svd();
-  test_float_complex_svd();
-  test_double_complex_svd();
+  test_svd_recomposition("float",              1e-5 , (float*)0);
+  test_svd_recomposition("double",             1e-10, (double*)0);
+  test_svd_recomposition("vnl_float_complex",  1e-5 , (vnl_float_complex*)0);
+  test_svd_recomposition("vnl_double_complex", 1e-10, (vnl_double_complex*)0);
 }
 
 TESTMAIN(test_svd);

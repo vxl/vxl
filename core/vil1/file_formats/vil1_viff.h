@@ -8,7 +8,7 @@
 // Created: 17 Feb 2000
 
 #include <vil/vil_file_format.h>
-#include <vil/vil_generic_image.h>
+#include <vil/vil_image_impl.h>
 #include "vil_viffheader.h"
 
 //: Loader for VIFF files, i.e., 1-banded Khoros 1.0 images
@@ -18,12 +18,17 @@
 class vil_viff_file_format : public vil_file_format {
 public:
   virtual char const* tag() const;
-  virtual vil_generic_image* make_input_image(vil_stream* vs);
-  virtual vil_generic_image* make_output_image(vil_stream* vs, vil_generic_image const* prototype);
+  virtual vil_image_impl* make_input_image(vil_stream* vs);
+  virtual vil_image_impl* make_output_image(vil_stream* vs, int planes,
+					    int width,
+					    int height,
+					    int components,
+					    int bits_per_component,
+					    vil_component_format format);
 };
 
 //: Generic image implementation for VIFF (Khoros) files
-class vil_viff_generic_image : public vil_generic_image {
+class vil_viff_generic_image : public vil_image_impl {
   vil_stream* is_;
   int width_;
   int height_;
@@ -45,8 +50,14 @@ class vil_viff_generic_image : public vil_generic_image {
 
 public:
   vil_viff_generic_image(vil_stream* is);
-  vil_viff_generic_image(vil_stream* is, vil_generic_image const* prototype);
-
+  vil_viff_generic_image(vil_stream* is, 
+			 int planes,
+			 int width,
+			 int height,
+			 int components,
+			 int bits_per_component,
+			 vil_component_format format);
+  
   //: Dimensions.  Planes x W x H x Components
   virtual int planes() const { return planes_; }
   virtual int width() const { return width_; }
@@ -57,11 +68,11 @@ public:
   virtual enum vil_component_format component_format() const { return format_; }
   
   //: Copy plane PLANE of this to BUF
-  virtual bool do_get_section(void* buf, int x0, int y0, int width, int height) const;
+  virtual bool get_section(void* buf, int x0, int y0, int width, int height) const;
   //: Write BUF into image plane PLANE of this
-  virtual bool do_put_section(void const* buf, int x0, int y0, int width, int height);
+  virtual bool put_section(void const* buf, int x0, int y0, int width, int height);
   //: Emulate a single plane image
-  virtual vil_generic_image* get_plane(int plane) const;
+  virtual vil_image get_plane(int plane) const;
   
   //: Return the image interpreted as rgb bytes.
   virtual bool get_section_rgb_byte(void* buf, int x0, int y0, int width, int height) const;

@@ -2,20 +2,11 @@
   fsm@robots.ox.ac.uk
 */
 #include "vnl_resize.h"
-
 //static void * operator new(unsigned,void *p) { return p; }
 #include <vcl/vcl_new.h>
-
 // fsm: What was wrong with obj.~T()? It's defined in the 
 // language, whereas destroy() is defined in a library header.
-// PVr: ANSI C++ does not allow you to call the destructor explicitly.
-#if defined(VCL_SUNPRO_CC_50) || defined(VCL_WIN32)
-// SunPro <algorithm> does not supply destroy() - sigh...
-// vc60 supplied allocator<T>::destroy(T *) - groan...
-template <class T> inline void destroy(T *p) { p->~T(); }
-#else
-# include <vcl/vcl_algorithm.h> // for destroy
-#endif
+#include <vcl/vcl_algorithm.h> // vcl_destroy()
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
@@ -28,7 +19,7 @@ void vnl_resize(vnl_vector<T> &v, unsigned newsize) {
   vnl_vector<T> old_v(v);
   
   // destruct
-  destroy(&v);
+  vcl_destroy(&v);
   
   // construct
   new (&v) vnl_vector<T>(newsize);
@@ -44,7 +35,7 @@ void vnl_resize(vnl_matrix<T> &M, unsigned newrows, unsigned newcols) {
   vnl_matrix<T> old_M(M);
   
   // destruct
-  destroy(&M);
+  vcl_destroy(&M);
   
   // construct
   new (&M) vnl_matrix<T>(newrows,newcols);
@@ -65,7 +56,7 @@ void vnl_assign(vnl_vector<T> &lhs, vnl_vector<T> const &rhs) {
     lhs = rhs;
     return;
   }
-  destroy(&lhs);
+  vcl_destroy(&lhs);
   new (&lhs) vnl_vector<T>(rhs); // construct
 }
 
@@ -77,7 +68,7 @@ void vnl_assign(vnl_matrix<T> &lhs, vnl_matrix<T> const &rhs) {
     lhs = rhs;
     return;
   }
-  destroy(&lhs);
+  vcl_destroy(&lhs);
   new (&lhs) vnl_matrix<T>(rhs); // construct
 }
 
@@ -87,4 +78,4 @@ void vnl_assign(vnl_matrix<T> &lhs, vnl_matrix<T> const &rhs) {
 template void vnl_resize(vnl_vector<T > &, unsigned); \
 template void vnl_resize(vnl_matrix<T > &, unsigned, unsigned); \
 template void vnl_assign(vnl_vector<T > &, vnl_vector<T > const &); \
-template void vnl_assign(vnl_matrix<T > &, vnl_matrix<T > const &)
+template void vnl_assign(vnl_matrix<T > &, vnl_matrix<T > const &);

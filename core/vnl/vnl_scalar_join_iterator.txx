@@ -15,8 +15,8 @@ template class vnl_scalar_join_iterator<T >; \
 template ostream& operator<<(ostream& s, const indexed_pair<T>& p);\
 VCL_LIST_INSTANTIATE(indexed_pair<T>)
 
-#include <assert.h>
-#include <iostream.h>
+#include <vcl/vcl_cassert.h>
+#include <vcl/vcl_iostream.h>
 #include <vnl/vnl_matrix.h>
 
 // Helper class to hold the sorted arrays of indices.
@@ -37,8 +37,8 @@ template <class T>
 vnl_scalar_join_iterator<T>::vnl_scalar_join_iterator(const vnl_matrix<T>& relation1, unsigned column1, const vnl_matrix<T>& relation2, unsigned column2):
   n1(relation1.rows()),
   n2(relation2.rows()),
-  pI1(new list<indexed_pair<T > >(n1)),
-  pI2(new list<indexed_pair<T > >(n2)),
+  pI1(new vcl_list<indexed_pair<T > >(n1)),
+  pI2(new vcl_list<indexed_pair<T > >(n2)),
   I1(*pI1),
   I2(*pI2)
 {

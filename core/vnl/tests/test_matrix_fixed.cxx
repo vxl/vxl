@@ -30,9 +30,9 @@
 //
 // ---------------------------------------------------------------------------
 // <end copyright notice>
-#include <new.h>
-#include <stdlib.h>
-#include <iostream.h>
+#include <vcl/vcl_new.h>
+#include <vcl/vcl_cstdlib.h>
+#include <vcl/vcl_iostream.h>
 
 #include <vnl/vnl_test.h>
 
@@ -79,7 +79,7 @@ void testvnl_matrix_fixed()
   verbose_malloc = false;  
 }
 
-#ifndef IUE_SUNPRO_CC_50
+#ifndef VCL_SUNPRO_CC_50
 // fsm@robots : for SunPro5.0, these functions produce compiler
 // warnings and cause runtime segfault.
 // I suppose the whole test program is pointless without them...

@@ -13,7 +13,8 @@
 
 #include "vnl_lbfgs.h"
 
-#include <stdio.h> // for sprintf on many systems
+#include <vcl/vcl_cstdio.h>   // sprintf()
+#include <vcl/vcl_iostream.h>
 
 // -- Default constructor.
 // memory is set to 5, line_search_accuracy to 0.9.

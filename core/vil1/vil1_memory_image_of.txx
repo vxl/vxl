@@ -13,15 +13,18 @@
 
 #include "vil_memory_image_of.h"
 #include <vcl/vcl_cassert.h>
-#include "vil_memory_image_of_format.txx"
+#include <vcl/vcl_cstdlib.h> // abort()
+//#include <vcl/vcl_iostream.h>  
+//#include <vcl/vcl_iterator.h>
+#include <vil/vil_memory_image_of_format.txx>
 
 template <class T>
-vil_memory_image_of<T>::vil_memory_image_of(vil_generic_image const* image):
-  vil_memory_image(image->planes(), image->width(), image->height(), vil_memory_image_of_format<T>())
+vil_memory_image_of<T>::vil_memory_image_of(vil_image const& image):
+  vil_memory_image(image.planes(), image.width(), image.height(), vil_memory_image_of_format<T>())
 {
-  assert(image->components() == components_);
-  assert(image->bits_per_component() == bits_per_component_);
-  assert(image->component_format() == component_format_);
+  assert(image.components() == components());
+  assert(image.bits_per_component() == bits_per_component());
+  assert(image.component_format() == component_format());
 
   set(image);
 }
@@ -36,8 +39,8 @@ template <class T>
 vil_memory_image_of<T>::vil_memory_image_of(int sizex, int sizey, const T& value):
   vil_memory_image(1, sizex, sizey, vil_memory_image_of_format<T>())
 {
-  T *p = (T*)buf_;
-  T *e = p + planes_ * width_ * height_;
+  T *p = (T*)get_buffer();
+  T *e = p + planes() * width() * height();
   while (p != e)
     *p++ = value;
 }
@@ -49,30 +52,31 @@ vil_memory_image_of<T>::vil_memory_image_of(vil_memory_image_of<T> const & that)
 }
 
 template <class T>
-void vil_memory_image_of<T>::set(vil_generic_image const * image)
+void vil_memory_image_of<T>::set(vil_image const& image)
 {
-  resize(image->width(), image->height());
-  image->get_section(buf_, 0, 0, width_, height_);
+  resize(image.width(), image.height());
+  image.get_section(get_buffer(), 0, 0, width(), height());
 }
 
 template <class T>
-vil_memory_image_of<T>& vil_memory_image_of<T>::operator=(vil_memory_image_of<T> const & that)
+vil_memory_image_of<T>& vil_memory_image_of<T>::operator=(vil_memory_image_of<T> const & /*that*/)
 {
-  planes_ = that.planes_;
-  width_ = that.width_;
-  height_ = that.height_;
-  components_ = that.components_;
-  bits_per_component_ = that.bits_per_component_;
-  component_format_ = that.component_format_;
-  bytes_per_pixel_ = that.bytes_per_pixel_;
-
-  //assert(bytes_per_pixel_ * 8 == bits_per_component_ * components_); 
-  int size = planes_ * width_ * height_ * bytes_per_pixel_;
-  delete [] buf_;
-  buf_ = new unsigned char[size];
-
-  memcpy(buf_, that.buf_, size);
-  return *this;
+  abort(); return *this;
+//  planes_ = that.planes();
+//  width_ = that.width();
+//  height_ = that.height();
+//  components_ = that.components();
+//  bits_per_component_ = that.bits_per_component();
+//  component_format_ = that.component_format();
+//  bytes_per_pixel_ = that.bytes_per_pixel();
+//
+//  //assert(bytes_per_pixel_ * 8 == bits_per_component_ * components_); 
+//  int size = planes_ * width_ * height_ * bytes_per_pixel_;
+//  delete [] buf_;
+//  buf_ = new unsigned char[size];
+//
+//  memcpy(buf_, that.buf_, size);
+//  return *this;
 }
 
 #define VIL_MEMORY_IMAGE_OF_INSTANTIATE(T)\

@@ -1,4 +1,4 @@
-
+#include <vcl/vcl_iostream.h>
 
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_save.h>
@@ -18,7 +18,7 @@ int main()
 	image(x,y) = ((x - W/2) * (y - H/2) / 16) % 256;
       }
     
-    vil_save(&image, "/tmp/vil_test_memory_image_of.pgm", "pnm");
+    vil_save(image, "/tmp/vil_test_memory_image_of.pgm", "pnm");
   }
   
   {
@@ -33,7 +33,7 @@ int main()
 	p.b = y/3;
       }
     
-    vil_save(&image, "/tmp/vil_test_memory_image_of.ppm", "pnm");
+    vil_save(image, "/tmp/vil_test_memory_image_of.ppm", "pnm");
   }
   
   {

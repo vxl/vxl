@@ -1,35 +1,3 @@
-// <begin copyright notice>
-// ---------------------------------------------------------------------------
-//
-//                   Copyright (c) 1997 TargetJr Consortium
-//               GE Corporate Research and Development (GE CRD)
-//                             1 Research Circle
-//                            Niskayuna, NY 12309
-//                            All Rights Reserved
-//              Reproduction rights limited as described below.
-//                               
-//      Permission to use, copy, modify, distribute, and sell this software
-//      and its documentation for any purpose is hereby granted without fee,
-//      provided that (i) the above copyright notice and this permission
-//      notice appear in all copies of the software and related documentation,
-//      (ii) the name TargetJr Consortium (represented by GE CRD), may not be
-//      used in any advertising or publicity relating to the software without
-//      the specific, prior written permission of GE CRD, and (iii) any
-//      modifications are clearly marked and summarized in a change history
-//      log.
-//       
-//      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
-//      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
-//      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
-//      IN NO EVENT SHALL THE TARGETJR CONSORTIUM BE LIABLE FOR ANY SPECIAL,
-//      INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND OR ANY
-//      DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
-//      WHETHER OR NOT ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR ON
-//      ANY THEORY OF LIABILITY ARISING OUT OF OR IN CONNECTION WITH THE
-//      USE OR PERFORMANCE OF THIS SOFTWARE.
-//
-// ---------------------------------------------------------------------------
-// <end copyright notice>
 //-*- c++ -*-------------------------------------------------------------------
 #ifndef vnl_vector_fixed_h_
 #define vnl_vector_fixed_h_
@@ -40,10 +8,10 @@
 #endif
 
 #include <vcl/vcl_compiler.h>
+#include <vcl/vcl_cstring.h> // memcpy()
+#include <vcl/vcl_cassert.h>
 #include <vnl/vnl_vector_ref.h>
 #include <vnl/vnl_c_vector.h>	
-#include <memory.h> // for memcpy()
-#include <assert.h>
 
 //----------------------------------------------------------------------
 // Class : vnl_vector_fixed
@@ -92,7 +60,7 @@ public:
 // is the right size.
   vnl_vector_fixed(const vnl_vector<T>& rhs):Base(n, space) {
     if (rhs.size() != n)    
-      vnl_vector_dimension_error ("vnl_vector_fixed(const vnl_vector&) ", n, rhs.size());
+      vnl_error_vector_dimension ("vnl_vector_fixed(const vnl_vector&) ", n, rhs.size());
     memcpy(space, rhs.data_block(), sizeof space);
   }
   
@@ -100,16 +68,21 @@ public:
   vnl_vector_fixed(const vnl_vector_fixed<T,n>& rhs):Base(n, space) {
     memcpy(space, rhs.space, sizeof space);
   }
+
+  vnl_vector_fixed (const T& v): Base(n,space) {
+    for(int i = 0; i < n; ++i)
+      data[i] = v;
+  }
   
   vnl_vector_fixed (const T& px, const T& py, const T& pz): Base(n,space) { // 3D vector (px,py,pz)
-    if (n != 3) vnl_vector_dimension_error ("constructor (x,y,z): n != 3", n, 3);
+    if (n != 3) vnl_error_vector_dimension ("constructor (x,y,z): n != 3", n, 3);
     data[0] = px;
     data[1] = py;
     data[2] = pz;
   }
 
   vnl_vector_fixed (const T& px, const T& py): Base(n,space) { // 2D vector (px,py)
-    if (n != 2) vnl_vector_dimension_error ("constructor (x,y): n != 2", n, 2);
+    if (n != 2) vnl_error_vector_dimension ("constructor (x,y): n != 2", n, 2);
     data[0] = px;
     data[1] = py;
  }
@@ -121,7 +94,7 @@ public:
 
   vnl_vector_fixed<T,n>& operator=(const vnl_vector<T>& rhs) {
     if (rhs.size() != n)    
-      vnl_vector_dimension_error ("operator=", n, rhs.size());
+      vnl_error_vector_dimension ("operator=", n, rhs.size());
     memcpy(space, rhs.data_block(), rhs.size() * sizeof(T) );
     return *this;
   }

@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #include <vnl/vnl_vector.h>
-#include <iostream.h>
+#include <vcl/vcl_iostream.h>
 
 int main(int, char **) {
   vnl_vector<double> a;

@@ -1,5 +1,5 @@
 #include "vnl_affine_approx.h"
-#include <assert.h>
+#include <vcl/vcl_cassert.h>
 
 //
 template <class T>

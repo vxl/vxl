@@ -4,14 +4,15 @@
 
 #include "vil_bmp.h"
 
-#include <assert.h>
-#include <stdio.h> // for sprintf
-
-#include <vcl/vcl_iostream.h>
+#include <vcl/vcl_cassert.h>
+#include <vcl/vcl_cstdio.h>  // sprintf()
 #include <vcl/vcl_cstring.h>
+#include <vcl/vcl_iostream.h>
+#include <vcl/vcl_vector.h>
 
 #include <vil/vil_stream.h>
-#include <vil/vil_generic_image.h>
+#include <vil/vil_image_impl.h>
+#include <vil/vil_image.h>
 
 typedef unsigned char uchar; 
 typedef unsigned char byte;
@@ -19,13 +20,13 @@ typedef unsigned short ushort;
 
 char const* vil_bmp_format_tag = "bmp";
 
-vil_generic_image* vil_bmp_file_format::make_input_image(vil_stream* is)
+vil_image_impl* vil_bmp_file_format::make_input_image(vil_stream* is)
 {
   // Attempt to read header
 
    xBITMAPFILEHEADER head;
    
-   is->read((void*)(&head),sizeof(head));
+   is->read(&head, sizeof(head));
    
    if(head.bfType != BMP_SIGNATURE_WORD)
      {
@@ -35,9 +36,14 @@ vil_generic_image* vil_bmp_file_format::make_input_image(vil_stream* is)
    return new vil_bmp_generic_image(is);
 }
 
-vil_generic_image* vil_bmp_file_format::make_output_image(vil_stream* is, vil_generic_image const* prototype)
+vil_image_impl* vil_bmp_file_format::make_output_image(vil_stream* is, int planes,
+					       int width,
+					       int height,
+					       int components,
+					       int bits_per_component,
+					       vil_component_format format)
 {
-  return new vil_bmp_generic_image(is, prototype);
+  return new vil_bmp_generic_image(is, planes, width, height, components, bits_per_component, format);
 }
 
 char const* vil_bmp_file_format::tag() const
@@ -61,15 +67,20 @@ char const* vil_bmp_generic_image::file_format() const
   return vil_bmp_format_tag;
 }
 
-vil_bmp_generic_image::vil_bmp_generic_image(vil_stream* is, vil_generic_image const* prototype):
+vil_bmp_generic_image::vil_bmp_generic_image(vil_stream* is, int planes,
+					       int width,
+					       int height,
+					       int components,
+					       int bits_per_component,
+					       vil_component_format format):
   is_(is)
 {
   local_color_map_=0;
 
-  width_ = prototype->width();  // TODO what is this suppposed to do?
-  height_ = prototype->height();
-  components_ = prototype->components();
-  bits_per_component_ = prototype->bits_per_component();
+  width_ = width;  // TODO what is this suppposed to do?
+  height_ = height;
+  components_ = components;
+  bits_per_component_ = bits_per_component;
 
   if (components_ == 3) {
     magic_ = 6;
@@ -105,7 +116,7 @@ vil_bmp_generic_image::~vil_bmp_generic_image()
     delete local_color_map_;
   }
 }
-  
+
 bool vil_bmp_generic_image::read_header()
 {
 // I don't know why but, when I read bitmap file header with structure
@@ -227,37 +238,37 @@ cout << "nbytes  : " << nbytes<<endl;
 
     
    if (ccount != 0)
-   {
-
-      uchar *cmap;
-      if (header.biSize == sizeof(xBITMAPCOREHEADER))
-         cmap = new uchar[ccount * 3];
-      else
-         cmap = new uchar[ccount * 4];
-
-      if (is_->read(cmap,1024) != 1024)
-      {
-         cout << "Error reading image palette" << endl;
-         return false;
-      }
-
-      // SetColorNum(ccount);
-      // int ncolors = GetColorNum();
-      int ncolors = ccount; // good guess
-      if (ncolors != 0) 
-      {
-         int **color_map = new int*[3];
-         uchar* cmapp    = cmap;
-         for (int i=0; i<3; ++i) {
+     {
+       
+       vcl_vector<uchar> cmap; // use vector<> to avoid coreleak
+       if (header.biSize == sizeof(xBITMAPCOREHEADER))
+         cmap.insert(cmap.begin(), (unsigned)ccount*3, (int)0);
+       else
+         cmap.insert(cmap.begin(), (unsigned)ccount*4, (int)0);
+       
+       if (is_->read(cmap.begin(),1024) != 1024)
+	 {
+	   cout << "Error reading image palette" << endl;
+	   return false;
+	 }
+       
+       // SetColorNum(ccount);
+       // int ncolors = GetColorNum();
+       int ncolors = ccount; // good guess
+       if (ncolors != 0) 
+	 {
+	   int **color_map = new int*[3];
+	   for (int i=0; i<3; ++i) {
              color_map[i] = new int[ncolors];
              for (int j=0; j<ncolors; j++) 
-                 color_map[i][j] = (int) cmapp[2-i+4*j];
-         }
-
-         // SetColorMap(color_map);  - TODO find out where to save a color map
-         local_color_map_=color_map;
-      }
-    }
+	       color_map[i][j] = (int) cmap[2-i+4*j];
+	   }
+	   
+	   // SetColorMap(color_map);  - TODO find out where to save a color map
+	   local_color_map_=color_map;
+	 }
+       
+     }
   
    // SetOffset(file->Tell());
    start_of_data_ = is_->tell();
@@ -373,7 +384,7 @@ bool vil_bmp_generic_image::write_header()
 
 }
 
-bool vil_bmp_generic_image::do_get_section(void* ib, int x0, int y0, int xs, int ys) const
+bool vil_bmp_generic_image::get_section(void* ib, int x0, int y0, int xs, int ys) const
 {
 
 
@@ -500,7 +511,7 @@ bool vil_bmp_generic_image::do_get_section(void* ib, int x0, int y0, int xs, int
        //for (xc = x2.GetArea()*pixsize; xc; xc--) *dp++ = def;       // fill x2
        
      }
-   return ib;
+   return ib != 0;
 }
 
 
@@ -508,7 +519,7 @@ bool vil_bmp_generic_image::do_get_section(void* ib, int x0, int y0, int xs, int
 
 
 
-bool vil_bmp_generic_image::do_put_section(void const *ib, int x0, int y0, int xs, int ys)
+bool vil_bmp_generic_image::put_section(void const *ib, int x0, int y0, int xs, int ys)
 {
   
   if (bits_per_component_ != 8) {
@@ -535,7 +546,7 @@ bool vil_bmp_generic_image::do_put_section(void const *ib, int x0, int y0, int x
    if (!ib)
    {
       fprintf(stderr, "PutSection: nil buffer pointer\n");
-      return -1;
+      return false;
    }
 
    // if (GetAccess() == 'r')
@@ -544,6 +555,7 @@ bool vil_bmp_generic_image::do_put_section(void const *ib, int x0, int y0, int x
    //   return -1;
    // }
 
+   //(void) bytes_to_write;
 
    int skip;
 

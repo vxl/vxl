@@ -8,11 +8,7 @@
  ************************************************************/
 
 #include "vnl_fftxd_prime_factors.h"
-
-extern "C" {
-  extern void dsetgpfa_(double *triggs, const int &, const int *, int *);
-  extern void setgpfa_ (float  *triggs, const int &, const int *, int *);
-};
+#include <vnl/algo/vnl_netlib.h> // dsetgpfa_(), setgpfa_()
 
 // use C++ overloading to find the correct FORTRAN routine
 

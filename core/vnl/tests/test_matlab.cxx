@@ -1,27 +1,82 @@
 /*
   fsm@robots.ox.ac.uk
 */
+#include <vcl/vcl_fstream.h>
+#include <vcl/vcl_unistd.h>
 #include <vnl/vnl_test.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
-#include <vnl/vnl_matlab.h>
+#include <vnl/vnl_matlab_print.h>
+#include <vnl/vnl_matlab_write.h>
+#include <vnl/vnl_matlab_read.h>
+
+static void fsm_assert_(int lineno, bool pass, char const *expr) {
+  cout << __FILE__ ":" << lineno << endl;
+  Assert(expr, pass);
+}
+#define fsm_assert(c) fsm_assert_(__LINE__, c, #c);
 
 void test_matlab() {
-  vnl_vector<int> v(7);
-  for (int i=0;i<v.size();i++)
-    v(i)=i;
+  vnl_vector<float> v(7);
+  for (unsigned i=0; i<v.size(); ++i)
+    v[i] = i;
 
-  cerr << v << endl;
-  cerr << matlab(v) << endl;
+  vnl_matrix<double> M(6,8);
+  for (unsigned i=0; i<M.rows(); ++i)
+    for (unsigned j=0; j<M.cols(); ++j)
+      M(i,j) = i*j;
+  
+  { // vnl_matlab_print
+    cout << v << endl;
+    vnl_matlab_print(cout, v, "v");
+    
+    cout << M << endl;
+    vnl_matlab_print(cout, M, "M") << endl;
+  }
+  
+  // vnl_matlab_write, vnl_matlab_read
+  {
+    char const *file = "/tmp/smoo.mat";
+    { 
+      ofstream f(file);
+      vnl_matlab_write(f, v.begin(), v.size(), "v");
+#if defined(VCL_SGI_CC)
+      vnl_matlab_write(f, (double const * const *)M.data_array(), M.rows(), M.cols(), (char const *)"M");
+#else
+      vnl_matlab_write(f, M.data_array(), M.rows(), M.cols(), "M");
+#endif
+    }
+    {
+      ifstream f(file);
 
-  vnl_matrix<int> M(6,8);
-  for (int i=0;i<M.rows();i++)
-    for (int j=0;j<M.columns();j++)
-      M(i,j)=i*j;
-
-  cerr << M << endl;
-  cerr << matlab(M) << endl;
+      vnl_matlab_readhdr vh(f);
+      fsm_assert( vh);
+      fsm_assert( vh.is_single());
+      fsm_assert( vh.rows() == v.size());
+      fsm_assert( vh.cols() == 1);
+      fsm_assert(!vh.is_complex());
+      fsm_assert(strcmp(vh.name(), "v")==0);
+      vnl_vector<float> v_(v.size());
+      fsm_assert( vh.read_data(v_.begin()));
+      fsm_assert(v_ == v);
+      
+      vnl_matlab_readhdr Mh(f);
+      fsm_assert( Mh);
+      fsm_assert(!Mh.is_single());
+      fsm_assert( Mh.rows() == M.rows());
+      fsm_assert( Mh.cols() == M.cols());
+      fsm_assert( Mh.is_rowwise());
+      fsm_assert(!Mh.is_complex());
+      fsm_assert(strcmp(Mh.name(), "M")==0);
+      vnl_matrix<double> M_( M.rows(), M.cols());
+      fsm_assert( Mh.read_data(M_.data_array()));
+      fsm_assert(M_ == M);
+      //vnl_matlab_print(cerr, M, "M");
+      //vnl_matlab_print(cerr, M_, "M_");
+    }
+    vcl_unlink(file);
+  }
 }
 
 TESTMAIN(test_matlab);

@@ -33,7 +33,7 @@
 <end copyright notice>
 */
 
-#include <iostream.h>
+#include <vcl/vcl_iostream.h>
 #include <vnl/vnl_numeric_limits.h>
 //#include <math/numeric_limits_float.h>
 //#include <math/numeric_limits_double.h>

@@ -6,9 +6,9 @@
 #endif
 #include "vil_stream_FILE_ptr.h"
 #include <vcl/vcl_iostream.h>
-#include <vcl/vcl_cstdio.h>     // for tmpnam()
-#include <vcl/vcl_unlink.h>     // for vcl_unlink()
-#include <assert.h>
+#include <vcl/vcl_cstdio.h>     // tmpnam()
+#include <vcl/vcl_unistd.h>     // vcl_unlink()
+#include <vcl/vcl_cassert.h>
 
 vil_stream_FILE_ptr::vil_stream_FILE_ptr(vil_stream *vs) : fp(0) {
   assert(vs);

@@ -1,35 +1,3 @@
-// <begin copyright notice>
-// ---------------------------------------------------------------------------
-//
-//                   Copyright (c) 1997 TargetJr Consortium
-//               GE Corporate Research and Development (GE CRD)
-//                             1 Research Circle
-//                            Niskayuna, NY 12309
-//                            All Rights Reserved
-//              Reproduction rights limited as described below.
-//                               
-//      Permission to use, copy, modify, distribute, and sell this software
-//      and its documentation for any purpose is hereby granted without fee,
-//      provided that (i) the above copyright notice and this permission
-//      notice appear in all copies of the software and related documentation,
-//      (ii) the name TargetJr Consortium (represented by GE CRD), may not be
-//      used in any advertising or publicity relating to the software without
-//      the specific, prior written permission of GE CRD, and (iii) any
-//      modifications are clearly marked and summarized in a change history
-//      log.
-//       
-//      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
-//      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
-//      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
-//      IN NO EVENT SHALL THE TARGETJR CONSORTIUM BE LIABLE FOR ANY SPECIAL,
-//      INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND OR ANY
-//      DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
-//      WHETHER OR NOT ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR ON
-//      ANY THEORY OF LIABILITY ARISING OUT OF OR IN CONNECTION WITH THE
-//      USE OR PERFORMANCE OF THIS SOFTWARE.
-//
-// ---------------------------------------------------------------------------
-// <end copyright notice>
 #ifndef vnl_diag_matrix_h_
 #define vnl_diag_matrix_h_
 #ifdef __GNUC__
@@ -69,15 +37,13 @@
 //template<class T> bool epsilon_equals 
 //        (vnl_diag_matrix<T> const& m1, vnl_diag_matrix<T> const& m2, double alt_epsilon = 0);
 
-#include <assert.h>
+#include <vcl/vcl_cassert.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 
 template <class T>
 class vnl_diag_matrix {
 public:
-  // Constructors/Destructors--------------------------------------------------
-  
   vnl_diag_matrix() {}
 
 // -- Construct an empty diagonal matrix.
@@ -117,15 +83,21 @@ public:
     return diagonal_[i];
   }
 
-  unsigned n() const { return diagonal_.size(); }
+  // iterators
+  typedef vnl_vector<T>::iterator iterator;
+  inline iterator begin() { return diagonal_.begin(); }
+  inline iterator end() { return diagonal_.end(); }
+  typedef vnl_vector<T>::const_iterator const_iterator;
+  inline const_iterator begin() const { return diagonal_.begin(); }
+  inline const_iterator end() const { return diagonal_.end(); }
+
+  unsigned size() const { return diagonal_.size(); }
+  unsigned n() const { return diagonal_.size(); } // ** deprecated ? **
   unsigned rows() const { return diagonal_.size(); }
   unsigned columns() const { return diagonal_.size(); }
 
   // Need this until we add a vnl_diag_matrix ctor to vnl_matrix;
   inline vnl_matrix<T> asMatrix() const;
-
-  // Data Control--------------------------------------------------------------
-
 
   // Return pointer to the diagonal elements as a contiguous 1D C array;
   T*       data_block()       { return diagonal_.data_block(); }
@@ -134,11 +106,9 @@ public:
   vnl_vector<T> const& diagonal() const { return diagonal_; }
 
 protected:
-  // Data Members--------------------------------------------------------------
   vnl_vector<T> diagonal_;
   
 private:
-  // Helpers-------------------------------------------------------------------
   // This is private because it's not really a matrix operation.
   T operator()(unsigned i) const {
     return diagonal_[i];

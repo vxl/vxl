@@ -44,9 +44,9 @@
 
 #include "vnl_int_matrix.h"
 
-#include <fstream.h>
-#include <stdlib.h>
-#include <ctype.h>
+#include <vcl/vcl_fstream.h>
+#include <vcl/vcl_cstdlib.h>
+#include <vcl/vcl_cctype.h>
 
 // -- Construct from matrix of double.  The double-to-int conversion
 // is simply the standard (int) cast.

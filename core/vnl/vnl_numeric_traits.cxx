@@ -11,8 +11,8 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vnl/vnl_complex.h>
 #include <vnl/vnl_numeric_traits.h>
+#include <vnl/vnl_complex.h>
 
 #if defined(VCL_SUNPRO_CC)
 # define signed 

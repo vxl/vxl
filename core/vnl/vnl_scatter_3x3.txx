@@ -22,7 +22,7 @@ void vnl_scatter_3x3<T>::add_outer_product(const vnl_vector_fixed<T,3> & v)
 {
   vnl_scatter_3x3<T> & S = *this;
   for(int i = 0; i < 3; ++i) {
-    S(i,i) +=  vnl_math::sqr(v[i]);
+    S(i,i) +=  vnl_math_sqr(v[i]);
     for(int j = i+1; j < 3; ++j) {
       T value = v[i]*v[j];
       S(i,j) += value;

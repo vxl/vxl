@@ -11,7 +11,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <assert.h>
+#include <vcl/vcl_cassert.h>
 #include "vnl_cost_function.h"
 
 static bool f_calling_compute;

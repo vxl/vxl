@@ -8,51 +8,150 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vnl/vnl_complex.h> // as usual, this must come first.
 #include "vnl_c_vector.h"
 #include <vnl/vnl_math.h>
-#include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_complex_traits.h>
+#include <vnl/vnl_numeric_traits.h>
 
 template <class T>
-T vnl_c_vector<T>::sum(T const* v, int n)
+T vnl_c_vector<T>::sum(T const* v, unsigned n)
 {
   T tot = 0;
-  for(int i = 0; i < n; ++i)
+  for(unsigned i = 0; i < n; ++i)
     tot += *v++;
   return tot;
 }
 
 template <class T>
-void vnl_c_vector<T>::normalize(T* v, int n)
+void vnl_c_vector<T>::normalize(T* v, unsigned n)
 {
-  vnl_numeric_traits<T>::abs_t tot = 0;
-  for(int i = 0; i < n; ++i)
-    tot += vnl_math::squared_magnitude(v[i]);
-  tot = vnl_numeric_traits<T>::abs_t(1.0 / sqrt(tot));
-  for(int i = 0; i < n; ++i)
+  abs_t tot(0);
+  for(unsigned i = 0; i < n; ++i)
+    tot += vnl_math_squared_magnitude(v[i]);
+  tot = abs_t(1.0 / sqrt(tot));
+  for(unsigned i = 0; i < n; ++i)
     v[i] *= tot;
 }
 
 template <class T>
-void vnl_c_vector<T>::apply(T const* v, int n, T (*f)(T const&), T* v_out)
+void vnl_c_vector<T>::apply(T const* v, unsigned n, T (*f)(T const&), T* v_out)
 {
-  for(int i = 0; i < n; ++i)
+  for(unsigned i = 0; i < n; ++i)
     v_out[i] = f(v[i]);
 }
 
 template <class T>
-void vnl_c_vector<T>::apply(T const* v, int n, T (*f)(T), T* v_out)
-{
-  for(int i = 0; i < n; ++i)
+void vnl_c_vector<T>::apply(T const* v, unsigned n, T (*f)(T), T* v_out) {
+  for(unsigned i = 0; i < n; ++i)
     v_out[i] = f(v[i]);
 }
 
 template <class T>
-void vnl_c_vector<T>::copy(T const *src,T       *dst,int n)
+void vnl_c_vector<T>::copy(T const *src, T *dst, unsigned n)
 {
-  for (int i=0;i<n;i++)
+  for (unsigned i=0; i<n; ++i)
     dst[i] = src[i];
+}
+
+template <class T>
+void vnl_c_vector<T>::scale(T const *x, T *y, unsigned n, T const &s_) {
+  T s = s_;
+  if (x == y)
+    for (unsigned i=0; i<n; ++i)
+      y[i] *= s;
+  else
+    for (unsigned i=0; i<n; ++i)
+      y[i] = s*x[i];
+}
+
+//--------------------------------------------------------------------------------
+#define impl_elmt_wise_commutative(op) \
+  if (z == x) \
+    for (unsigned i=0; i<n; ++i) \
+      z[i] op##= y[i]; \
+\
+  else if (z == y) \
+    for (unsigned i=0; i<n; ++i) \
+      z[i] op##= x[i]; \
+\
+  else \
+    for (unsigned i=0; i<n; ++i) \
+      z[i] = x[i] op y[i];
+
+#define impl_elmt_wise_non_commutative(op) \
+  if (z == x) \
+    for (unsigned i=0; i<n; ++i) \
+      z[i] op##= y[i]; \
+\
+  else \
+    for (unsigned i=0; i<n; ++i) \
+      z[i] = x[i] op y[i];
+
+template <class T>
+void vnl_c_vector<T>::add(T const *x, T const *y, T *z, unsigned n) {
+  impl_elmt_wise_commutative(+);
+}
+
+template <class T>
+void vnl_c_vector<T>::subtract(T const *x, T const *y, T *z, unsigned n) {
+  impl_elmt_wise_non_commutative(-);
+}
+
+template <class T>
+void vnl_c_vector<T>::multiply(T const *x, T const *y, T *z, unsigned n) {
+  impl_elmt_wise_commutative(*);
+}
+
+template <class T>
+void vnl_c_vector<T>::divide(T const *x, T const *y, T *z, unsigned n) {
+  impl_elmt_wise_non_commutative(/);
+}
+
+#undef impl_elmt_wise_commutative
+#undef impl_elmt_wise_noncommutative
+//--------------------------------------------------------------------------------
+
+template <class T>
+void vnl_c_vector<T>::negate(T const *x, T *y, unsigned n) {
+  if (x == y)
+    for (unsigned i=0; i<n; ++i)
+      y[i] = -y[i];
+  else
+    for (unsigned i=0; i<n; ++i)
+      y[i] = -x[i];
+}
+
+template <class T>
+void vnl_c_vector<T>::invert(T const *x, T *y, unsigned n) {
+  if (x == y)
+    for (unsigned i=0; i<n; ++i)
+      y[i] = T(1)/y[i];
+  else
+    for (unsigned i=0; i<n; ++i)
+      y[i] = T(1)/x[i];
+}
+
+template <class T>
+void vnl_c_vector<T>::saxpy(T const &a_, T const *x, T *y, unsigned n) {
+  T a = a_;
+  for (unsigned i=0; i<n; ++i)
+    y[i] += a*x[i];
+}
+
+template <class T>
+void vnl_c_vector<T>::fill(T *x, unsigned n, T const &v_) {
+  T v = v_;
+  for (unsigned i=0; i<n; ++i)
+    x[i] = v;
+}
+
+template <class T>
+void vnl_c_vector<T>::reverse (T *x, unsigned n) {
+  for (unsigned i=0; 2*i<n; ++i) {
+    T tmp = x[i];
+    x[i] = x[n-1-i];
+    x[n-1-i] = tmp;
+  }
 }
 
 // non-conjugating "dot" product.
@@ -100,7 +199,7 @@ T vnl_c_vector<T>::min_value(T const *src, unsigned n) {
   T tmp = src[0];
   
   for (unsigned i=1; i<n; ++i)
-    if (src[i] > tmp)
+    if (src[i] < tmp)
       tmp = src[i];
   
   return tmp;
@@ -116,11 +215,10 @@ T vnl_c_vector<T>::min_value(T const *src, unsigned n) {
 //
 template<class T> 
 return_t vnl_c_vector<T>::one_norm_aux(T const *src, unsigned n) {
-  typedef vnl_numeric_traits<T>::abs_t abs_t;
   abs_t sum(0);
   
   for (unsigned i=0; i<n; ++i)
-    sum += vnl_math::abs(src[i]);
+    sum += vnl_math_abs(src[i]);
 
   return_aux sum;
 }
@@ -128,20 +226,19 @@ return_t vnl_c_vector<T>::one_norm_aux(T const *src, unsigned n) {
 //
 template<class T> 
 return_t vnl_c_vector<T>::two_nrm2_aux(T const *src, unsigned n) {
-  abs_t tot = 0;
+  abs_t tot(0);
   for(unsigned i=0; i<n; ++i)
-    tot += vnl_math::squared_magnitude(src[i]);
+    tot += vnl_math_squared_magnitude(src[i]);
   return_aux tot;
 }
 
 //
 template<class T> 
 return_t vnl_c_vector<T>::inf_norm_aux(T const *src, unsigned n) {
-  typedef vnl_numeric_traits<T>::abs_t abs_t;
   abs_t max(0);
   
   for (unsigned i=0; i<n; ++i) {
-    abs_t v = vnl_math::abs(src[i]);
+    abs_t v = vnl_math_abs(src[i]);
     if (v > max)
       max = v;
   }

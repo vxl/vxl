@@ -2,7 +2,8 @@
 #pragma implementation "vil_stream_fstream.h"
 #endif
 
-#include <assert.h>
+#include <vcl/vcl_cassert.h>
+#include <vcl/vcl_iostream.h>
 #include <vil/vil_stream_fstream.h>
 
 static int modeflags(char const* mode)
@@ -11,18 +12,28 @@ static int modeflags(char const* mode)
     return 0;
 
   if (*mode == 'r') 
-    return ios::in | modeflags(mode+1);
+    return vcl_ios_in | modeflags(mode+1);
   
   if (*mode == 'w')
-    return ios::out | modeflags(mode+1);
+    return vcl_ios_out | modeflags(mode+1);
 
   cerr << "DODGY MODE " << mode << endl;
   return 0;
 }
 
+#define xerr if (true) ; else (cerr << "fstream#" << id_ << ": ")
+
+static int id = 0;
+
 vil_stream_fstream::vil_stream_fstream(char const* fn, char const* mode):
-  f_(fn, modeflags(mode))
+  flags_(modeflags(mode)),
+  f_(fn, flags_) // FIXME: what about vcl_ios_binary ?
 {
+  id_ = ++id;
+  xerr << "vil_stream_fstream(\"" << fn << "\", \""<<mode<<"\") = " << id_ << "\n";
+  if (!f_.good()) {
+    cerr << "vil_stream_fstream::Could not open [" << fn << "]\n";
+  }
 }
 
 //vil_stream_fstream::vil_stream_fstream(fstream& f):
@@ -32,36 +43,103 @@ vil_stream_fstream::vil_stream_fstream(char const* fn, char const* mode):
 
 vil_stream_fstream::~vil_stream_fstream()
 {
+  xerr << "vil_stream_fstream# " << id_ << " being deleted\n";
+}
+
+bool vil_stream_fstream::ok()
+{
+  return f_.good();
 }
 
 int vil_stream_fstream::write(void const* buf, int n)
 {
-  streampos a = tell();
+  assert(id > 0);
+  if (!(flags_ & vcl_ios_out))
+    return 0;
+
+  vcl_streampos a = tell();
+  xerr << "write " << n << endl;
   f_.write((char const*)buf, n);
-  streampos b = tell();
+  vcl_streampos b = tell();
   return b-a;
-  //return f_.good();
 }
 
 
 int vil_stream_fstream::read(void* buf, int n)
 {
-  streampos a = tell();
+  assert(id > 0);
+
+  if (!(flags_ & vcl_ios_in))
+    return 0;
+
+  vcl_streampos a = tell();
+  xerr << "read " << n << endl;
   f_.read((char *)buf, n);
-  streampos b = tell();
-  return b-a;
-  //return f_.good();
+  vcl_streampos b = tell();
+
+  // fsm@robots  This is for gcc 2.95 :
+  // If we try to read more data than is in the file, the good()
+  // function will return false even though bad() returns false
+  // too. The stream is actually fine but we need to clear the
+  // eof flag to use it again.
+  if (!f_.good() && !f_.bad() && f_.eof())
+    f_.clear(); // allows subsequent operations
+
+  int numread = b-a;
+  if (numread < 0) { xerr << "urgh!" << endl; return -1; }
+  if (numread != n) xerr << "only read " << numread << endl;
+  return numread;
 }
 
 int vil_stream_fstream::tell()
 {
-  return f_.tellg();
+  assert(id > 0);
+  if (flags_ & vcl_ios_in) {
+    xerr << "tellg\n";
+    return f_.tellg();
+  }
+
+  if (flags_ & vcl_ios_out) {
+    xerr << "tellp\n";
+    return f_.tellp();
+  }
+
+  assert(false); // did you get here? use at least one of vcl_ios_in, vcl_ios_out.
+  return -1;
 }
 
 void vil_stream_fstream::seek(int position)
 {
-  if (position != f_.tellg()) {
-    f_.seekg(position);
-    assert(f_.good());
+  assert(id > 0);
+  bool fi = (flags_ & vcl_ios_in)  != 0;
+  bool fo = (flags_ & vcl_ios_out) != 0;
+  
+  if (fi && fo) {
+    xerr << "seekg and seekp to " << position << endl;
+    if (position != f_.tellg()) {
+      f_.seekg(position);
+      f_.seekp(position);
+      assert(f_.good());
+    }
   }
+  
+  else if (fi) {
+    xerr << "seek to " << position << endl;
+    if (position != f_.tellg()) {
+      f_.seekg(position);
+      assert(f_.good());
+    }
+  }
+
+  else if (fo) {
+    xerr << "seekp to " << position << endl;
+    int at = f_.tellp();
+    if (position != at) {
+      cerr << "seekp to " << position << ", at " << f_.tellp() << endl;
+      f_.seekp(position);
+      assert(f_.good());
+    }
+  }
+  else
+    assert(false); // see above
 }

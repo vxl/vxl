@@ -13,8 +13,8 @@
 #include "vnl_conjugate_gradient.h"
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/algo/vnl_svd.h>
-#include <stdlib.h>
-#include <assert.h>
+#include <vcl/vcl_cstdlib.h>
+#include <vcl/vcl_cassert.h>
 
 // external netlib function
 extern "C"

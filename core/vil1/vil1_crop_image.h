@@ -7,33 +7,34 @@
 // Author: awf@robots.ox.ac.uk
 // Created: 16 Feb 00
 
-#include <vil/vil_generic_image.h>
+#include <vil/vil_image_impl.h>
+#include <vil/vil_image.h>
 //#include <vcl/vcl_vector.h>
 
 //: A generic_image adaptor that behaves like a cropped version of its input
-class vil_crop_image : public vil_generic_image {
+class vil_crop_image : public vil_image_impl {
 public:
-  vil_crop_image(vil_generic_image*, int x0, int y0, int w, int h);
+  vil_crop_image(vil_image const&, int x0, int y0, int w, int h);
   ~vil_crop_image();
 
-  int planes() const { return gi_->planes(); }
+  int planes() const { return gi_.planes(); }
   int width() const { return width_; }
   int height() const { return height_; }
-  int components() const { return gi_->components(); }
+  int components() const { return gi_.components(); }
 
-  int bits_per_component() const { return gi_->bits_per_component(); }
-  enum vil_component_format component_format() const { return gi_->component_format(); }
+  int bits_per_component() const { return gi_.bits_per_component(); }
+  enum vil_component_format component_format() const { return gi_.component_format(); }
   
-  bool do_get_section(void* buf, int x0, int y0, int width, int height) const {
-    return gi_->do_get_section(buf, x0 + x0_, y0 + y0_, width, height);
+  bool get_section(void* buf, int x0, int y0, int width, int height) const {
+    return gi_.get_section(buf, x0 + x0_, y0 + y0_, width, height);
   }
-  bool do_put_section(void const* buf, int x0, int y0, int width, int height) {
-    return gi_->do_put_section(buf, x0 + x0_, y0 + y0_, width, height);
+  bool put_section(void const* buf, int x0, int y0, int width, int height) {
+    return gi_.put_section(buf, x0 + x0_, y0 + y0_, width, height);
   }
-  //  vil_generic_image* get_plane(int ) const;
+  //  vil_image get_plane(int ) const;
 
 protected:
-  vil_generic_image* gi_;
+  vil_image gi_;
   int x0_;
   int y0_;
   int width_;

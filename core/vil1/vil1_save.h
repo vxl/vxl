@@ -9,10 +9,13 @@
 
 #include <vil/vil_fwd.h>
 
-//: Send vil_generic_image to disk, given filename
-bool vil_save(vil_generic_image const*, char const* filename, char const* file_format = "pnm");
+// Must include this, so that users of vil_memory_image cann pass one to a save.
+#include <vil/vil_image.h>
 
-//: Send vil_generic_image to outstream
-bool vil_save(vil_generic_image const*, vil_stream* outstream, char const* file_format = "pnm");
+//: Send vil_image_impl to disk, given filename
+bool vil_save(vil_image const&, char const* filename, char const* file_format = "pnm");
+
+//: Send vil_image_impl to outstream
+bool vil_save(vil_image const &, vil_stream* outstream, char const* file_format = "pnm");
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_save.

@@ -10,7 +10,7 @@
 #include <vcl/vcl_vector.h>
 #include <assert.h>
 
-vil_skip_image::vil_skip_image(vil_generic_image *underlying, unsigned sx, unsigned sy)
+vil_skip_image::vil_skip_image(vil_image const &underlying, unsigned sx, unsigned sy)
   : base(underlying)
   , skipx(sx)
   , skipy(sy)
@@ -25,19 +25,19 @@ vil_skip_image::~vil_skip_image() {
 
 //--------------------------------------------------------------------------------
 
-vil_generic_image* vil_skip_image::get_plane(int p) const {
-  vil_generic_image *i = new vil_skip_image(base->get_plane(p), skipx, skipy);
+vil_image vil_skip_image::get_plane(int p) const {
+  vil_image_impl *i = new vil_skip_image(base.get_plane(p), skipx, skipy);
   return i; //
 }
 
-bool vil_skip_image::do_get_section(void * buf, int x0, int y0, int w, int h) const {
-  if (base->bits_per_component() % CHAR_BIT) {
+bool vil_skip_image::get_section(void * buf, int x0, int y0, int w, int h) const {
+  if (base.bits_per_component() % CHAR_BIT) {
     cerr << __FILE__ " : urgh!" << endl;
     return false; // FIXME
   }
 
   // make a buffer for (skipx*w) x 1 sections of base :
-  unsigned cell_size = base->planes() * base->components() * base->bits_per_component();
+  unsigned cell_size = base.planes() * base.components() * base.bits_per_component();
   unsigned buffer_size = (skipx*w * cell_size);
   buffer_size /= CHAR_BIT;
   vcl_vector<unsigned char> buffer(buffer_size);
@@ -48,7 +48,7 @@ bool vil_skip_image::do_get_section(void * buf, int x0, int y0, int w, int h) co
   // for each raster
   for (unsigned j=0; j<h; ++j) {
     // get from underlying :
-    bool v = base->do_get_section(buffer.begin(), skipx*x0, skipy*(y0+j), skipx*w, 1);
+    bool v = base.get_section(buffer.begin(), skipx*x0, skipy*(y0+j), skipx*w, 1);
     if (!v)
       return false; // failed
     
@@ -62,7 +62,7 @@ bool vil_skip_image::do_get_section(void * buf, int x0, int y0, int w, int h) co
   return true;
 }
 
-bool vil_skip_image::do_put_section(void const * , int, int, int, int) {
+bool vil_skip_image::put_section(void const * , int, int, int, int) {
   return false;
 }
 

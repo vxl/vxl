@@ -21,27 +21,37 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl/vcl_compiler.h>
+#include <vcl/vcl_cmath.h>     // sqrt()
 #include <vnl/vnl_numeric_traits.h>
-#include <vnl/vnl_math.h> // for sqrt()
 
 template <class T>
 class vnl_c_vector {
 public:
   typedef vnl_numeric_traits<T>::abs_t abs_t;
 
-  static T sum(const T* v, int n);
-  static inline abs_t squared_magnitude(T const *p, int n) { return two_nrm2(p,n); }
-  static void normalize(T* v, int n);
-  static void apply(const T* v, int n, T (*f)(T), T* v_out);
-  static void apply(const T* v, int n, T (*f)(const T&), T* v_out);
-  static void copy(T const *src,T       *dst,int n);
-  static T dot_product(T const *, T const *, unsigned n);
-  static T inner_product(T const *, T const *, unsigned n); // conjugate second
-  static void conjugate(T const *src, T *dst, unsigned n);
+  static T sum(const T* v, unsigned n);
+  static inline abs_t squared_magnitude(T const *p, unsigned n) { return two_nrm2(p,n); }
+  static void normalize(T *, unsigned n);
+  static void apply(T const *, unsigned, T (*f)(T), T* v_out);
+  static void apply(T const *, unsigned, T (*f)(const T&), T* v_out);
+  static void copy    (T const *x, T       *y, unsigned);            // y[i]  = x[i]
+  static void scale   (T const *x, T       *y, unsigned, T const &); // y[i]  = a*x[i]
+  static void add     (T const *x, T const *y, T *z, unsigned);      // z[i]  = x[i] + y[i];
+  static void subtract(T const *x, T const *y, T *z, unsigned);      // z[i]  = x[i] - y[i]
+  static void multiply(T const *x, T const *y, T *z, unsigned);      // z[i]  = x[i] * y[i]
+  static void divide  (T const *x, T const *y, T *z, unsigned);      // z[i]  = x[i] / y[i]
+  static void negate  (T const *x, T       *y, unsigned);            // y[i]  = -x[i]
+  static void invert  (T const *x, T       *y, unsigned);            // y[i]  = 1/x[i]
+  static void saxpy   (T const &a, T const *x, T *y, unsigned);      // y[i] += a*x[i]
+  static void fill    (T *x, unsigned, T const &v);                  // x[i]  = v
+  static void reverse (T *x, unsigned);
+  static T dot_product  (T const *, T const *, unsigned);
+  static T inner_product(T const *, T const *, unsigned); // conjugate second
+  static void conjugate(T const *, T *, unsigned);
 
-  static T max_value(T const *, unsigned n);
-  static T min_value(T const *, unsigned n);
-  static T mean(T const *p, unsigned n) { return sum(p,n)/n; }
+  static T max_value(T const *, unsigned);
+  static T min_value(T const *, unsigned);
+  static T mean(T const *p, unsigned n) { return sum(p,n)/T(n); }
 
   // one_norm : sum of abs values
   // two_nrm2 : sum of squared abs values

@@ -4,7 +4,7 @@
 #include <vcl/vcl_cstdlib.h>    // atoi()
 
 #include <vil/vil_load.h>
-#include <vil/vil_image_ref.h>
+#include <vil/vil_image.h>
 
 ostream &dec(ostream &os, unsigned char c) {
   static char dig[]="0123456789";
@@ -20,20 +20,20 @@ ostream &hex(ostream &os, unsigned char c) {
 int main(int argc, char **argv) {
   assert(argc == 6);
 
-  vil_image_ref I = vil_load(argv[1]); assert(I);
+  vil_image I = vil_load(argv[1]); assert(I);
   int x0 = atoi(argv[2]);
   int y0 = atoi(argv[3]);
   unsigned w = atoi(argv[4]);
   unsigned h = atoi(argv[5]);
   
-  cerr << "image is " << I->width() << 'x' << I->height() << endl;
-  assert(0<=x0 && 0<=y0 && x0+w<=I->width() && y0+h<=I->height());
+  cerr << "image is " << I.width() << 'x' << I.height() << endl;
+  assert(0<=x0 && 0<=y0 && x0+w<=I.width() && y0+h<=I.height());
   
   typedef unsigned char byte;
-  if (I->planes()==1 && I->components()==3 && I->bits_per_component()==8) {
-    vcl_vector<byte> buf;
+  if (I.planes()==1 && I.components()==3 && I.bits_per_component()==8) {
+    vcl_vector<byte> buf(3*w*h);
     
-    bool f = I->get_section(buf.begin(), x0, y0, w, h);
+    bool f = I.get_section(buf.begin(), x0, y0, w, h);
     if (f) {
       cerr << "get_section succeeded." << endl;
       cout << "red values:" << endl;

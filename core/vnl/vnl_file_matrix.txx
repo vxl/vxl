@@ -6,8 +6,8 @@
 //-----------------------------------------------------------------------------
 
 #include "vnl_file_matrix.h"
-#include <fstream.h>
-#include <string.h> // for strcmp()
+#include <vcl/vcl_fstream.h>
+#include <vcl/vcl_cstring.h> // for strcmp()
 
 // -- Load matrix from filename.
 template <class T>

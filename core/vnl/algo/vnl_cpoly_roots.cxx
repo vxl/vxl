@@ -4,7 +4,7 @@
 
 #include "vnl_cpoly_roots.h"
 #include <vnl/algo/vnl_complex_eigensystem.h>
-#include <assert.h>
+#include <vcl/vcl_cassert.h>
 
 void vnl_cpoly_roots::compute(vnl_vector<vnl_double_complex> const &a) {
   // companion matrix

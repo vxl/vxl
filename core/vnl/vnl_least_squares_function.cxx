@@ -42,7 +42,7 @@
 //-----------------------------------------------------------------------------
 
 #include "vnl_least_squares_function.h"
-#include <assert.h>
+#include <vcl/vcl_cassert.h>
 
 // Default ctor
 vnl_least_squares_function::vnl_least_squares_function(int number_of_unknowns,

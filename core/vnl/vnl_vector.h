@@ -12,9 +12,7 @@
 // For faster, non-mallocing vectors with size know at compile
 // time, use vnl_vector_fixed*.
 
-#include <vcl/vcl_compiler.h>
-#include <vcl/vcl_function.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl/vcl_iosfwd.h>
 #include <vnl/vnl_error.h>
 #include <vnl/vnl_c_vector.h>
 
@@ -173,7 +171,7 @@ public:
   T mean() const { return vnl_c_vector<T>::mean(begin(), size()); }
 
   // mutators
-  inline vnl_vector<T>& normalize();                    // v /= v.magnitude()
+  vnl_vector<T>& normalize() { vnl_c_vector<T>::normalize(begin(), size()); return *this; } // v /= v.magnitude()
   void flip();
   
   // coordinates along 4 axes. no boundary checks.
@@ -227,7 +225,7 @@ template <class T>
 inline T vnl_vector<T>::get (unsigned int index) const {
 #if ERROR_CHECKING
   if (index >= this->num_elmts)		// If invalid index specified
-    ::vnl_vector_index_error ("get", index);	// Raise exception
+    vnl_error_vector_index ("get", index);	// Raise exception
 #endif
   return this->data[index];
 }
@@ -239,7 +237,7 @@ template <class T>
 inline void vnl_vector<T>::put (unsigned int index, T const& value) {
 #if ERROR_CHECKING
   if (index >= this->num_elmts)		// If invalid index specified
-    ::vnl_vector_index_error ("put", index); // Raise exception
+    vnl_error_vector_index ("put", index); // Raise exception
 #endif
   this->data[index] = value;	// Assign data value
 }
@@ -289,14 +287,6 @@ inline vnl_vector<T> operator* (T const value, vnl_vector<T> const& v) {
   return v * value;
 }
 
-// -- Mutates vectors to have magnitude = 1.
-
-template<class T>
-inline vnl_vector<T>& vnl_vector<T>::normalize() {
-  T mag = this->magnitude();
-  return (*this /= mag);
-}
-
 // set_x(Type) --
 
 template<class T>
@@ -331,8 +321,8 @@ inline void vnl_vector<T>::set_t(T const& tt){
 }
 
 // -- Read/write vector from/to an istream :
-template <class T> ostream& operator<< (ostream &, vnl_vector<T> const&);
-template <class T> istream& operator>> (istream &, vnl_vector<T>      &);
+template <class T> vcl_ostream& operator<< (vcl_ostream &, vnl_vector<T> const&);
+template <class T> vcl_istream& operator>> (vcl_istream &, vnl_vector<T>      &);
 
 //--------------------------------------------------------------------------------
 

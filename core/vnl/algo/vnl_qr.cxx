@@ -1,35 +1,3 @@
-// <begin copyright notice>
-// ---------------------------------------------------------------------------
-//
-//                   Copyright (c) 1997 TargetJr Consortium
-//               GE Corporate Research and Development (GE CRD)
-//                             1 Research Circle
-//                            Niskayuna, NY 12309
-//                            All Rights Reserved
-//              Reproduction rights limited as described below.
-//                               
-//      Permission to use, copy, modify, distribute, and sell this software
-//      and its documentation for any purpose is hereby granted without fee,
-//      provided that (i) the above copyright notice and this permission
-//      notice appear in all copies of the software and related documentation,
-//      (ii) the name TargetJr Consortium (represented by GE CRD), may not be
-//      used in any advertising or publicity relating to the software without
-//      the specific, prior written permission of GE CRD, and (iii) any
-//      modifications are clearly marked and summarized in a change history
-//      log.
-//       
-//      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
-//      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
-//      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
-//      IN NO EVENT SHALL THE TARGETJR CONSORTIUM BE LIABLE FOR ANY SPECIAL,
-//      INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND OR ANY
-//      DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
-//      WHETHER OR NOT ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR ON
-//      ANY THEORY OF LIABILITY ARISING OUT OF OR IN CONNECTION WITH THE
-//      USE OR PERFORMANCE OF THIS SOFTWARE.
-//
-// ---------------------------------------------------------------------------
-// <end copyright notice>
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation "vnl_qr.h"
@@ -43,23 +11,12 @@
 //   080697 AWF Recovered, implemented solve().
 //   200897 AWF Added determinant().
 //   071097 AWF Added Q(), R().
-//
-//-----------------------------------------------------------------------------
 
 #include "vnl_qr.h"
+#include <vcl/vcl_iostream.h>
 #include <vnl/vnl_math.h>
-#include <vnl/vnl_matops.h>
-//#include <netlib/netlib.h>
-
-extern "C" 
-int dqrdc_(double *x, 
-	   const int& ldx, 
-	   const int& n, 
-	   const int& p, 
-	   double* qraux,
-	   int *jpvt, 
-	   double *work, 
-	   const int& job);
+#include <vnl/vnl_matlab_print.h>
+#include <vnl/algo/vnl_netlib.h> // dqrdc_(), dqrsl_()
 
 // -- Extract the vnl_qr decomposition of matrix M.  The decomposition is stored in
 // a compact and time-efficient packed form, which is most easily used via the
@@ -95,12 +52,6 @@ vnl_qr::~vnl_qr()
   delete Q_;
   delete R_;
 }
-
-// A x = b
-extern "C" int dqrsl_(const double* qrdc, int& ldqrdc, int& n, int& k, const double* qraux,
-		      const double* b, double* qb, double* qtb,
-		      double* x, double* rsd, double* Ax,
-		      int& job, int* info);
 
 // -- Solve equation M x = b for x using the computed decomposition.
 vnl_vector<double> vnl_qr::solve(const vnl_vector<double>& b) const
@@ -146,7 +97,7 @@ double vnl_qr::determinant() const
   // |M| = |Q| |R|
   // |R| is the product of the diagonal elements.
   // |Q| is (-1)^n as it is a product of Householder reflections.
-  int m = vnl_math::min((int)qrdc_out_.columns(), (int)qrdc_out_.rows());
+  int m = vnl_math_min((int)qrdc_out_.columns(), (int)qrdc_out_.rows());
   double det = qrdc_out_(0,0);
 
   for(int i = 1; i < m; ++i)

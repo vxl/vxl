@@ -61,6 +61,7 @@ public:
 	     const vnl_fftxd_prime_factors<T> &oPFx,
 	     const vnl_fftxd_prime_factors<T> &oPFy, int dir);         // 'raw' r. I defaults to 0.0
 
+#ifndef VCL_VC60
   // complex-constructors
   vnl_fft2d (const vnl_matrix<vnl_complex<T> > &c, 
 	     const vnl_fftxd_prime_factors<T> &oPFx,
@@ -68,6 +69,7 @@ public:
   vnl_fft2d (const vnl_complex<T> *cdata, unsigned int iRows, unsigned int iCols, 
 	     const vnl_fftxd_prime_factors<T> &oPFx,
 	     const vnl_fftxd_prime_factors<T> &oPFy, int dir);  // 'raw' complex data
+#endif
 
   // static member function: avoid copy-overhead
   static int doFFT_IP (vnl_complex<T> *cdata, unsigned int rows, unsigned int cols, 

@@ -1,8 +1,9 @@
 /*
   fsm@robots.ox.ac.uk
 */
-#include <vnl/vnl_test.h>
+#include <vcl/vcl_iostream.h>
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_test.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_resize.h>

@@ -1,45 +1,19 @@
-// <begin copyright notice>
-// ---------------------------------------------------------------------------
-//
-//                   Copyright (c) 1997 TargetJr Consortium
-//               GE Corporate Research and Development (GE CRD)
-//                             1 Research Circle
-//                            Niskayuna, NY 12309
-//                            All Rights Reserved
-//              Reproduction rights limited as described below.
-//                               
-//      Permission to use, copy, modify, distribute, and sell this software
-//      and its documentation for any purpose is hereby granted without fee,
-//      provided that (i) the above copyright notice and this permission
-//      notice appear in all copies of the software and related documentation,
-//      (ii) the name TargetJr Consortium (represented by GE CRD), may not be
-//      used in any advertising or publicity relating to the software without
-//      the specific, prior written permission of GE CRD, and (iii) any
-//      modifications are clearly marked and summarized in a change history
-//      log.
-//       
-//      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
-//      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
-//      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
-//      IN NO EVENT SHALL THE TARGETJR CONSORTIUM BE LIABLE FOR ANY SPECIAL,
-//      INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND OR ANY
-//      DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
-//      WHETHER OR NOT ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR ON
-//      ANY THEORY OF LIABILITY ARISING OUT OF OR IN CONNECTION WITH THE
-//      USE OR PERFORMANCE OF THIS SOFTWARE.
-//
-// ---------------------------------------------------------------------------
-// <end copyright notice>
 #ifdef __GNUC__
 #pragma implementation
 #endif
 #ifdef DEBUG
-#include <stdio.h>
-#include <iostream.h>
+#include <vcl/vcl_cstdio.h>
+#include <vcl/vcl_iostream.h>
 #endif
 
 #include "vnl_rnpoly_solve.h"
 #include <vnl/vnl_real_npolynomial.h>
+
+// fsm@robots: moved ::M and ::T into the namespace of vnl_rnpoly_solve, as they
+// were causing multiply defined symbols for static builds. if your compiler cannot
+// cope with the next two lines, replace them with #defines.
+static const unsigned int M = vnl_rnpoly_solve::M;
+static const unsigned int T = vnl_rnpoly_solve::T;
 
 static const unsigned int P  = 10;   // Maximum power for any variable in a term
 static const unsigned int LEN= 3080; // Maximum number of roots
@@ -659,7 +633,7 @@ static int Perform_Distributed_Task(int points,cmplx sols[LEN][M],
 /* ----------------------- READ INPUT ---------------------- */
 /* -- This will read the input polynomials from a data file. */
 int vnl_rnpoly_solve::Read_Input(int ideg[M], int terms[M],
-			    int polyn[M][T][M], double coeff[M][T])
+				 int polyn[M][T][M], double coeff[M][T])
 {
   int i,j;
 

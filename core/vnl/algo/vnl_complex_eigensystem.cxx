@@ -2,32 +2,11 @@
   fsm@robots.ox.ac.uk
 */
 #include "vnl_complex_eigensystem.h"
+#include <vcl/vcl_cassert.h>
+#include <vcl/vcl_cstdlib.h>
+#include <vcl/vcl_iostream.h>
 #include <vnl/vnl_complex_ops.h>
-#include <assert.h>
-#include <stdlib.h>
-
-extern "C" {
-  // correct ?
-  typedef vnl_double_complex doublecomplex;
-  typedef int integer;
-  typedef double doublereal;
-  
-  // see zgeev.c for information about zgeev_().
-  int zgeev_(const char *jobvl, 
-	     const char *jobvr, 
-	     integer *n, 
-	     doublecomplex *a,
-	     integer *lda, 
-	     doublecomplex *w, 
-	     doublecomplex *vl, 
-	     integer *ldvl, 
-	     doublecomplex *vr, 
-	     integer *ldvr, 
-	     doublecomplex *work, 
-	     integer *lwork, 
-	     doublereal *rwork, 
-	     integer *info);
-};
+#include <vnl/algo/vnl_netlib.h> // zgeev_()
 
 void vnl_complex_eigensystem::compute(vnl_matrix<vnl_double_complex> const & A,
 				      bool right,
@@ -131,6 +110,5 @@ vnl_complex_eigensystem::vnl_complex_eigensystem(vnl_matrix<double> const &A_rea
 }
 
 //
-vnl_complex_eigensystem::~vnl_complex_eigensystem()
-{
+vnl_complex_eigensystem::~vnl_complex_eigensystem() {
 }

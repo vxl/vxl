@@ -50,7 +50,7 @@ void testvnl_cpoly_roots()
   // Evaluate results
   vnl_real_polynomial f(a);
   for(int i = 0; i < f.degree(); ++i)
-    Assert("Root residual", vnl_math::abs(f.evaluate(roots.solns[i])) < 1e-12);
+    Assert("Root residual", vnl_math_abs(f.evaluate(roots.solns[i])) < 1e-12);
 }
 
 TESTMAIN(testvnl_cpoly_roots);

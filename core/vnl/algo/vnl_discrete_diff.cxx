@@ -1,6 +1,6 @@
 #include "vnl_discrete_diff.h"
 #include <vnl/vnl_least_squares_function.h>
-#include <assert.h>
+#include <vcl/vcl_cassert.h>
 /*
   fsm@robots.ox.ac.uk
 */

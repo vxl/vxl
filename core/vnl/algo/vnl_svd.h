@@ -1,35 +1,3 @@
-// <begin copyright notice>
-// ---------------------------------------------------------------------------
-//
-//                   Copyright (c) 1997 TargetJr Consortium
-//               GE Corporate Research and Development (GE CRD)
-//                             1 Research Circle
-//                            Niskayuna, NY 12309
-//                            All Rights Reserved
-//              Reproduction rights limited as described below.
-//                               
-//      Permission to use, copy, modify, distribute, and sell this software
-//      and its documentation for any purpose is hereby granted without fee,
-//      provided that (i) the above copyright notice and this permission
-//      notice appear in all copies of the software and related documentation,
-//      (ii) the name TargetJr Consortium (represented by GE CRD), may not be
-//      used in any advertising or publicity relating to the software without
-//      the specific, prior written permission of GE CRD, and (iii) any
-//      modifications are clearly marked and summarized in a change history
-//      log.
-//       
-//      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
-//      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
-//      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
-//      IN NO EVENT SHALL THE TARGETJR CONSORTIUM BE LIABLE FOR ANY SPECIAL,
-//      INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND OR ANY
-//      DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
-//      WHETHER OR NOT ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR ON
-//      ANY THEORY OF LIABILITY ARISING OUT OF OR IN CONNECTION WITH THE
-//      USE OR PERFORMANCE OF THIS SOFTWARE.
-//
-// ---------------------------------------------------------------------------
-// <end copyright notice>
 #ifndef vnl_svd_h_
 #define vnl_svd_h_
 #ifdef __GNUC__
@@ -99,7 +67,7 @@
 
 template <class T> class vnl_svd;
 // templated friends must be declared to be templated :
-template <class T> ostream& operator<<(ostream&, const vnl_svd<T>& svd);
+template <class T> vcl_ostream& operator<<(vcl_ostream&, vnl_svd<T> const& svd);
 
 template <class T>
 class vnl_svd {
@@ -140,7 +108,7 @@ public:
   singval_t       well_condition () const { return sigma_min()/sigma_max(); }
   singval_t       determinant_magnitude () const 
     { determinant_magnitude_aux(); return temp_value_for_gcc_hack; }
-  singval_t       norm() const { return vnl_math::abs(sigma_max()); }
+  singval_t       norm() const { return vnl_math_abs(sigma_max()); }
 
 // -- Return the matrix U and the (i,j)th entry (to avoid svd.U()(i,j); ).
   vnl_matrix<T>      & U()       { return U_; }
@@ -150,6 +118,8 @@ public:
 // -- Get at the DiagMatrix (q.v.) of singular values, sorted from largest to smallest.
   vnl_diag_matrix<singval_t>       & W()             { return W_; }
   vnl_diag_matrix<singval_t> const & W() const       { return W_; }
+  vnl_diag_matrix<singval_t>       & Winverse()             { return Winverse_; }
+  vnl_diag_matrix<singval_t> const & Winverse() const       { return Winverse_; }
   singval_t                   & W(int i, int j) { return W_(i,j); }
   singval_t                   & W(int i)        { return W_(i,i); }
   singval_t     sigma_max() const { return W_(0,0); }       // largest
@@ -181,7 +151,7 @@ public:
   vnl_vector<T> nullvector() const;
   vnl_vector<T> left_nullvector() const;
 
-  friend ostream& operator<<(ostream&, const vnl_svd<T>& svd);
+//  friend ostream& operator<<(ostream&, const vnl_svd<T>& svd);
 
 private:
 
@@ -207,5 +177,12 @@ protected:
   vnl_svd(vnl_svd<T> const & that);
   vnl_svd<T>& operator=(vnl_svd<T> const & that);
 };
+
+template <class T>
+inline
+vnl_matrix<T> vnl_svd_inverse(vnl_matrix<T> const& m)
+{
+  return vnl_svd<T>(m).inverse();
+}
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS BaseSVD.

@@ -16,49 +16,94 @@
 #include <vcl/vcl_cstring.h>
 
 #include <vil/vil_stream.h>
-#include <vil/vil_generic_image.h>
+#include <vil/vil_image_impl.h>
+#include <vil/vil_image.h>
 
 static char const* vil_mit_format_tag = "mit";
 
-#ifdef __GNUC__
-# warning "byte ordering is machine dependent"
-#endif
-#define swapShort(a) ((a & 255) << 8) | ((a >> 8) & 255)
+#define MIT_UNSIGNED    1
+#define MIT_RGB         2
+#define MIT_HSB         3
+#define MIT_CAP         4
+#define MIT_SIGNED      5
+#define MIT_FLOAT       6
+#define MIT_EDGE        7
 
-vil_generic_image* vil_mit_file_format::make_input_image(vil_stream* is)
+#define MIT_UCOMPLEX    0x101
+#define MIT_SCOMPLEX    0x105
+#define MIT_FCOMPLEX    0x106
+
+#define MIT_UNSIGNED_E  0x201
+#define MIT_SIGNED_E    0x205
+#define MIT_FLOAT_E     0x206
+
+#define MIT_UCOMPLEX_E  0x301
+#define MIT_SCOMPLEX_E  0x305
+#define MIT_FCOMPLEX_E  0x306
+
+#define EDGE_HOR 0200           /* Edge direction codes */
+#define EDGE_VER 0100
+
+inline unsigned short swapShort(unsigned short v)
+{
+   return (v << 8)
+        | (v >> 8);
+}
+
+#if defined(i386) || defined(VAX)
+// Assume intel/vax byte ordering
+#define swapShort(x) x
+#endif
+
+vil_image_impl* vil_mit_file_format::make_input_image(vil_stream* is)
 {
   is->seek(0);
 
   unsigned short temp;
   is->read(&temp, sizeof(unsigned short));
   int type = swapShort(temp);
-
-  is->read(&temp, sizeof(unsigned short));
-  int bits_per_pixel = swapShort(temp);
-
-  is->read(&temp, sizeof(unsigned short));
-  int width = swapShort(temp);
+  
+  if (!(type == MIT_UNSIGNED ||
+	type == MIT_RGB      ||
+	type == MIT_HSB      ||
+	type == MIT_CAP      ||
+	type == MIT_SIGNED   ||
+	type == MIT_FLOAT    ||
+	type == MIT_EDGE      ))
+    return 0;
+  
   
   is->read(&temp, sizeof(unsigned short));
-  int height = swapShort(temp);
-
-  short t = type;
-
-  cerr << __FILE__ " : here we go:\n";
-  cerr << __FILE__ " : type_ = " << type << endl;
-  cerr << __FILE__ " : bits_per_pixel_ = " << bits_per_pixel << endl;
-  cerr << __FILE__ " : width_ = " << width << endl;
-  cerr << __FILE__ " : height_ = " << height << endl;
-
-  if (t > 7 || t < 1)
+  int bits_per_pixel = swapShort(temp);
+  if (bits_per_pixel > 32) {
+    cerr << "vil_mit_file_format:: Thought it was MIT, but bpp = " << bits_per_pixel << endl;
     return 0;
+  }
+  
 
+  is->read(&temp, sizeof(unsigned short));
+  //int width = swapShort(temp);
+  
+  is->read(&temp, sizeof(unsigned short));
+  //int height = swapShort(temp);
+
+  //cerr << __FILE__ " : here we go:\n";
+  //cerr << __FILE__ " : type_ = " << type << endl;
+  //cerr << __FILE__ " : bits_per_pixel_ = " << bits_per_pixel << endl;
+  //cerr << __FILE__ " : width_ = " << width << endl;
+  //cerr << __FILE__ " : height_ = " << height << endl;
+  
   return new vil_mit_generic_image(is);
 }
 
-vil_generic_image* vil_mit_file_format::make_output_image(vil_stream* is, vil_generic_image const* prototype)
+vil_image_impl* vil_mit_file_format::make_output_image(vil_stream* is, int planes,
+					       int width,
+					       int height,
+					       int components,
+					       int bits_per_component,
+					       vil_component_format format)
 {
-  return new vil_mit_generic_image(is, prototype);
+  return new vil_mit_generic_image(is, planes, width, height, components, bits_per_component, format);
 }
 
 char const* vil_mit_file_format::tag() const
@@ -79,13 +124,18 @@ char const* vil_mit_generic_image::file_format() const
   return vil_mit_format_tag;
 }
 
-vil_mit_generic_image::vil_mit_generic_image(vil_stream* is, vil_generic_image const* prototype):
+vil_mit_generic_image::vil_mit_generic_image(vil_stream* is, int planes,
+					       int width,
+					       int height,
+					       int components,
+					       int bits_per_component,
+					       vil_component_format format):
   is_(is)
 {
-  width_ = prototype->width();
-  height_ = prototype->height();
-  components_ = prototype->components();
-  bits_per_component_ = prototype->bits_per_component();
+  width_ = width;
+  height_ = height;
+  components_ = components;
+  bits_per_component_ = bits_per_component;
   bits_per_pixel_ = bits_per_component_ * components_;
 
   if (bits_per_component_ == 8 || bits_per_component_ == 16)
@@ -147,13 +197,9 @@ bool vil_mit_generic_image::write_header()
   return true;
 }
 
-bool vil_mit_generic_image::do_get_section(void* buf, int x0, int y0, int xs, int ys) const
+bool vil_mit_generic_image::get_section(void* buf, int x0, int y0, int xs, int ys) const
 {
-  if ( !buf )
-  {
-    buf = new unsigned char[bytes_per_pixel() * xs * ys];
-    if (!buf) return false;
-  }
+  assert(buf);
 
   int offset = 4; 
   
@@ -175,7 +221,7 @@ bool vil_mit_generic_image::do_get_section(void* buf, int x0, int y0, int xs, in
   return true;
 }
 
-bool vil_mit_generic_image::do_put_section(void const* buf, int x0, int y0, int xs, int ys)
+bool vil_mit_generic_image::put_section(void const* buf, int x0, int y0, int xs, int ys)
 {
   assert(buf); 
 
@@ -197,7 +243,7 @@ bool vil_mit_generic_image::do_put_section(void const* buf, int x0, int y0, int 
   return true; 
 }
 
-vil_generic_image* vil_mit_generic_image::get_plane(int plane) const 
+vil_image vil_mit_generic_image::get_plane(int plane) const 
 {
   assert(plane == 0);
   return const_cast<vil_mit_generic_image*>(this);

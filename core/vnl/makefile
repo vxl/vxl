@@ -21,13 +21,18 @@ VERSION := 1.0
 #MANPAGE_SOURCES += vnl_file_vector.txx
 #MANPAGE_SOURCES += vnl_file_matrix.txx
 #MANPAGE_SOURCES += vnl_scatter_3x3.txx
-
-SOURCES += ftraits.cxx
+#MANPAGE_SOURCES += vnl_resize.txx
 
 #
 SOURCES += vnl_math.cxx
+SOURCES += vnl_copy.cxx
+SOURCES += vnl_complex.cxx
 SOURCES += vnl_error.cxx
 SOURCES += vnl_test.cxx
+SOURCES += vnl_matlab_print.cxx
+SOURCES += vnl_matlab_write.cxx
+SOURCES += vnl_matlab_read.cxx
+SOURCES += vnl_matlab_filewrite.cxx
 SOURCES += vnl_matops.cxx
 SOURCES += vnl_real_polynomial.cxx
 SOURCES += vnl_real_npolynomial.cxx
@@ -36,6 +41,7 @@ SOURCES += vnl_real_npolynomial.cxx
 SOURCES += vnl_fastops.cxx
 SOURCES += vnl_linear_operators_3.cxx
 #MANPAGE_SOURCES += vnl_complex_ops.txx
+FLAGS_vnl_fastops.cxx = $(optimize_for_all_builds)
 
 # traits
 SOURCES += vnl_numeric_limits.cxx
@@ -65,30 +71,36 @@ SOURCES += vnl_rotation_matrix.cxx
 SOURCES += vnl_cross_product_matrix.cxx
 SOURCES += vnl_identity_3x3.cxx
 
+# stuff
+SOURCES += vnl_trace.cxx
+SOURCES += vnl_sample.cxx
+SOURCES += vnl_unary_function.cxx
+SOURCES += vnl_transpose.cxx
+
 # algo
 SUBDIRS += algo
 
-#more
-# stuff
-SOURCES += vnl_unary_function.cxx
-SOURCES += vnl_transpose.cxx
-#MANPAGE_SOURCES += vnl_resize.txx
-
 # tests
-ifndef NOTEST
+ifneq (1, $(NOTEST))
 SUBDIRS += tests
-SUBDIRS += examples
 endif
 
-IULIBS := -lvcl
 
 DEFINES += -DBUILDING_VNL_DLL
+SUBDIRS += examples
+IULIBS := -lvcl
 
 ##  Only needed for Templates/vnl_matrix+* and Templates/vnl_c_vector+* :
 ifeq ($(COMPILER),CC-n32)
 PRAGMA_INSTANTIATE_TEMPLATES = 1
 endif
+#optimize := -O3
+FLAGS_Templates/vnl_c_vector+float-.cxx += $(optimize_for_all_builds)
+FLAGS_Templates/vnl_c_vector+double-.cxx += $(optimize_for_all_builds)
+FLAGS_Templates/vnl_c_vector+float_complex-.cxx += $(optimize_for_all_builds)
+FLAGS_Templates/vnl_c_vector+double_complex-.cxx += $(optimize_for_all_builds)
 
 ################################
 include ${IUEROOT}/config/top-rules.mk
 ################################
+

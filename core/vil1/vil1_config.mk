@@ -1,11 +1,5 @@
 
-# fsm
-HAS_JPEG := 1
-DEFINES += -DHAS_JPEG
+TRY_TIFF := 1
+TRY_JPEG := 1
+TRY_PNG  := 1
 
-ifeq ($(HAS_JPEG),1)
-LIBDIRS += $(IUELOCALROOT_libbase)/Image/$(tj_libdir) # for JPEG
-IULIBS += -lJPEG
-endif
-
-TRY_PNG := 1

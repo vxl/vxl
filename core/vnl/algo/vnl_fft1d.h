@@ -52,20 +52,20 @@ public:
   vnl_fft1d (const vnl_vector<T> &r, const vnl_vector<T> &i,
 	     const vnl_fftxd_prime_factors<T> &oPF, int dir); // vnl_vectors r,i
   vnl_fft1d (const vnl_vector<T> &r, 
-	 const vnl_fftxd_prime_factors<T> &oPF, int dir);  // Imag defaults to 0.0 
-  vnl_fft1d (const T *realdata, const T *imagdata, unsigned int len, 
-	 const vnl_fftxd_prime_factors<T>  &, int dir);  // 'raw' r,i
-  vnl_fft1d (const T *data, unsigned int len, 
-	 const vnl_fftxd_prime_factors<T>  &, int dir);         // 'raw' r. I defaults to 0.0
-
-  // complex-constructors
-  vnl_fft1d (const vnl_vector<vnl_complex<T> > &c, 
-	     const vnl_fftxd_prime_factors<T> &, int dir);          //  complex vnl_vector
-  vnl_fft1d (const vnl_complex<T> *cdata, unsigned int len, 
-	     const vnl_fftxd_prime_factors<T> &, int dir);  // 'raw' complex data
+	     const vnl_fftxd_prime_factors<T> &oPF, int dir);  // Imag defaults to 0.0 
+  vnl_fft1d (const T *realdata, const T *imagdata, unsigned len, 
+  	     const vnl_fftxd_prime_factors<T>  &, int dir);  // 'raw' r,i
+  vnl_fft1d (const T *data, unsigned len, 
+	     const vnl_fftxd_prime_factors<T>  &, int dir);         // 'raw' r. I defaults to 0.0
   
+  // complex-constructors
+#ifndef VCL_WIN32
+  vnl_fft1d (const vnl_vector<vnl_complex<T> > &c, const vnl_fftxd_prime_factors<T> &, int dir);          //  complex vnl_vector
+  vnl_fft1d (const vnl_complex<T> *cdata, unsigned len, const vnl_fftxd_prime_factors<T> &, int dir);  // 'raw' complex data
+#endif
+
   // static member function: avoid copy-overhead
-  static int doFFT_IP (vnl_complex<T> *cdata, unsigned int len, 
+  static int doFFT_IP (vnl_complex<T> *cdata, unsigned len, 
 		       const vnl_fftxd_prime_factors<T> &, int dir);  
 private:
   int doFFT (const vnl_fftxd_prime_factors<T> &, int dir);

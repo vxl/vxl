@@ -1,40 +1,43 @@
 // Author: Peter@Vanroose.esat.kuleuven.ac.be
 // Date: 17 February, 2000
+#include <vcl/vcl_cstdio.h> // tmpnam()
+#include <vcl/vcl_unistd.h> // vcl_unlink()
 #include <vcl/vcl_string.h>
-#include <vcl/vcl_cstdio.h> // for tmpnam()
-#include <vcl/vcl_unlink.h>
+#include <vcl/vcl_iostream.h>
 #include <vil/vil_rgb_byte.h>
 
-#include <vil/vil_generic_image.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_memory_image_of.h>
 
 #include <vil/file_formats/vil_iris.h>
-#include <vil/file_formats/vil_jpeg.h>
+//#include <vil/file_formats/vil_jpeg.h>
 #include <vil/file_formats/vil_png.h>
 #include <vil/file_formats/vil_pnm.h>
 #include <vil/file_formats/vil_viff.h>
 
+#define DEBUG 1
+#define LEAVES_IMAGES_BEHIND 0
+
 int all_passed = 0;
 
 // -- this function tests to see if all the pixels in two images are equal
-void test_image_equal(const char* test,
-		      const char* type_name,
-		      vil_generic_image* image,
-		      vil_generic_image* image2)
+void test_image_equal(char const* test,
+		      char const* type_name,
+		      vil_image const & image,
+		      vil_image const & image2)
 {
-  int sizex = image->width();
-  int sizey = image->height();
-  int components = image->components();
-  int planes = image->planes();
-  int cell_bits = image->bits_per_component();
+  int sizex = image.width();
+  int sizey = image.height();
+  int components = image.components();
+  int planes = image.planes();
+  int cell_bits = image.bits_per_component();
   int num_bits = sizex * sizey * components * planes * cell_bits;
-  int sizex2 = image2->width();
-  int sizey2 = image2->height();
-  int components2 = image2->components();
-  int planes2 = image2->planes();
-  int cell_bits2 = image2->bits_per_component();
+  int sizex2 = image2.width();
+  int sizey2 = image2.height();
+  int components2 = image2.components();
+  int planes2 = image2.planes();
+  int cell_bits2 = image2.bits_per_component();
   int num_bits2 = sizex2 * sizey2 * components2 * planes2 * cell_bits2;
 
   if (sizex != sizex2 || sizey != sizey2)
@@ -53,34 +56,34 @@ void test_image_equal(const char* test,
     return;
   }
 
-  if (image->component_format() != image2->component_format())
+  if (image.component_format() != image2.component_format())
   {
     cout << "FAILED: test <" << test << "> for " << type_name
          << " -- Image formats differ: "
-	 << image2->component_format() << " instead of "
-	 << image->component_format() << endl;
+	 << image2.component_format() << " instead of "
+	 << image.component_format() << endl;
     return;
   }
 
-  if (image->get_size_bytes() != num_bits/8 ||
-      image2->get_size_bytes() != num_bits2/8 )
+  if (image.get_size_bytes() != num_bits/8 ||
+      image2.get_size_bytes() != num_bits2/8 )
   {
     cout << "FAILED: test <" << test << "> for " << type_name
          << " -- Image sizes differ: "
-	 << num_bits2 << "bits, " << image2->get_size_bytes() << endl;
+	 << num_bits2 << "bits, " << image2.get_size_bytes() << endl;
     return;
   }
 
-  unsigned char *image_buf = new unsigned char [image->get_size_bytes()];
-  if (!image->do_get_section(image_buf, 0, 0, sizex, sizey))
+  unsigned char *image_buf = new unsigned char [image.get_size_bytes()];
+  if (!image.get_section(image_buf, 0, 0, sizex, sizey))
   {
     cout << "FAILED: test <" << test << "> for " << type_name
          << " -- image::do_get_section() on first image returned false!" << endl;
     delete [] image_buf;
     return;
   }
-  unsigned char *image_buf2 = new unsigned char [image2->get_size_bytes()];
-  if (!image2->do_get_section(image_buf2, 0, 0, sizex2, sizey2))
+  unsigned char *image_buf2 = new unsigned char [image2.get_size_bytes()];
+  if (!image2.get_section(image_buf2, 0, 0, sizex2, sizey2))
   {
     cout << "FAILED: test <" << test << "> for " << type_name
          << " -- image::do_get_section() on second image returned false!" << endl;
@@ -89,11 +92,11 @@ void test_image_equal(const char* test,
   }
 
   int bad = 0;
-  for (int i=0; i < image->get_size_bytes(); ++i)
+  for (int i=0; i < image.get_size_bytes(); ++i)
   {
     if(image_buf[i] != image_buf2[i])
     {
-#ifdef DEBUG
+#if DEBUG
       cout << " pixel " << i <<  " differs: " << (int)image_buf[i] << " --> "
            << (int) image_buf2[i] << endl;
 #endif
@@ -116,8 +119,8 @@ void test_image_equal(const char* test,
 // -- this function tests the read and write for the given image into the
 //    image type specified in type.
 
-void vil_test_image_type(const char* type_name, // type for image to read and write
-			 vil_generic_image* image) // test image to save and restore
+void vil_test_image_type(char const* type_name, // type for image to read and write
+			 vil_image const & image) // test image to save and restore
 {
   // Step 1) Write the image out to disk
 
@@ -127,6 +130,9 @@ void vil_test_image_type(const char* type_name, // type for image to read and wr
   fname += ".";
   if (type_name) fname += type_name;
 
+  cout << "vil_test_image_type: Save to [" << fname << "], ";
+
+  
   // Write image to disk
   if (!vil_save(image, fname.data(), type_name))
   {
@@ -136,11 +142,13 @@ void vil_test_image_type(const char* type_name, // type for image to read and wr
   }
 
   // STEP 2) Read the image that was just saved to file
-  vil_generic_image* image2 = vil_load(fname.data());
-  image2->ref();
+  cout << "load, ";
+  vil_image image2 = vil_load(fname.data());
+
   // make sure saved image has the same pixels as the original image
-  if(strcmp(type_name,image2->file_format()))
-    cout << "WARNING: read back image type is " << image2->file_format()
+  cout << "compare, ";
+  if(strcmp(type_name,image2.file_format()))
+    cout << "WARNING: read back image type is " << image2.file_format()
          << " instead of written " << type_name << endl;
   else
     test_image_equal("original equal to saved", type_name, image, image2);
@@ -149,87 +157,86 @@ void vil_test_image_type(const char* type_name, // type for image to read and wr
   if (all_passed == 0)
     cout << "PASSED: vil_save() for " << type_name << endl;
 
-  image2->unref();
-#ifndef DEBUG
+#if !LEAVES_IMAGES_BEHIND
   vcl_unlink(fname.data());
 #endif
+  cout << "done\n";
   return;
 }
 
 
 // create a 1 bit test image
-vil_generic_image* CreateTest1bitImage(int wd, int ht)
+vil_image CreateTest1bitImage(int wd, int ht)
 {
-  vil_memory_image* image = new vil_memory_image(1, wd, ht, 1, 1, VIL_COMPONENT_FORMAT_UNSIGNED_INT);
+  vil_memory_image image(1, wd, ht, 1, 1, VIL_COMPONENT_FORMAT_UNSIGNED_INT);
   for(int x = 0; x < wd; x++)
     for(int y = 0; y < ht; y+=8) {
       unsigned char data = ((x-wd/2)*(y-ht/2)/16) % (1<<8);
-      image->do_put_section(&data, x, y, 1, 8);
+      image.put_section(&data, x, y, 1, 8);
     }
   return image;
 }
 
 
 // create an 8 bit test image
-vil_generic_image* CreateTest8bitImage(int wd, int ht)
+vil_image CreateTest8bitImage(int wd, int ht)
 {
-  vil_memory_image_of<unsigned char>* image = new vil_memory_image_of<unsigned char>(wd, ht);
+  vil_memory_image_of<unsigned char> image(wd, ht);
   for(int x = 0; x < wd; x++)
     for(int y = 0; y < ht; y++) {
       unsigned char data = ((x-wd/2)*(y-ht/2)/16) % (1<<8);
-      image->do_put_section(&data, x, y, 1, 1);
+      image.put_section(&data, x, y, 1, 1);
     }
   return image;
 }
 
-
 // create a 16 bit test image
-vil_generic_image* CreateTest16bitImage(int wd, int ht)
+vil_image CreateTest16bitImage(int wd, int ht)
 {
-  vil_memory_image_of<unsigned short>* image = new vil_memory_image_of<unsigned short>(wd, ht);
+  vil_memory_image_of<unsigned short> image(wd, ht);
   for(int x = 0; x < wd; x++)
     for(int y = 0; y < ht; y++) {
       unsigned short data = ((x-wd/2)*(y-ht/2)/16) % (1<<16);
-      image->do_put_section(&data, x, y, 1, 1);
+      image.put_section(&data, x, y, 1, 1);
   }
   return image;
 }
 
 
 // create a 24 bit color test image
-vil_generic_image* CreateTest24bitImage(int wd, int ht)
+vil_image CreateTest24bitImage(int wd, int ht)
 {
-  vil_memory_image_of<vil_rgb_byte>* image = new vil_memory_image_of<vil_rgb_byte>(wd, ht);
+  vil_memory_image_of<vil_rgb_byte> image(wd, ht);
   for(int x = 0; x < wd; x++)
     for(int y = 0; y < ht; y++) {
       unsigned char data[3] = { x%(1<<8), ((x-wd/2)*(y-ht/2)/16) % (1<<8), ((y/3)%(1<<8)) };
-      image->do_put_section(data, x, y, 1, 1);
+      image.put_section(data, x, y, 1, 1);
     }
   return image;
 }
 
 
 // create a 24 bit color test image, with 3 planes
-vil_generic_image* CreateTest3planeImage(int wd, int ht)
+vil_image CreateTest3planeImage(int wd, int ht)
 {
-  vil_memory_image* image = new vil_memory_image(3, wd, ht, 1, 8, VIL_COMPONENT_FORMAT_UNSIGNED_INT);
+  vil_memory_image image(3, wd, ht, 1, 8, VIL_COMPONENT_FORMAT_UNSIGNED_INT);
   for(int x = 0; x < wd; x++)
     for(int y = 0; y < ht; y++) {
       unsigned char data[3] = { x%(1<<8), ((x-wd/2)*(y-ht/2)/16) % (1<<8), ((y/3)%(1<<8)) };
-      image->do_put_section(data, x, y, 1, 1);
+      image.put_section(data, x, y, 1, 1);
     }
   return image;
 }
 
 
 // create a float-pixel test image
-vil_generic_image* CreateTestfloatImage(int wd, int ht)
+vil_image CreateTestfloatImage(int wd, int ht)
 {
-  vil_memory_image_of<float>* image = new vil_memory_image_of<float>(wd, ht);
+  vil_memory_image_of<float> image(wd, ht);
   for(int x = 0; x < wd; x++)
     for(int y = 0; y < ht; y++) {
       float data = 0.01 * ((x-wd/2)*(y-ht/2)/16);
-      image->do_put_section(&data, x, y, 1, 1);
+      image.put_section(&data, x, y, 1, 1);
     }
   return image;
 }
@@ -237,12 +244,12 @@ vil_generic_image* CreateTestfloatImage(int wd, int ht)
 int main() {
   // create a test image
   int sizex = 256, sizey = 155;
-  vil_generic_image* image1 = CreateTest1bitImage(sizex, sizey); image1->ref();
-  vil_generic_image* image8 = CreateTest8bitImage(sizex, sizey); image8->ref();
-  vil_generic_image* image16 = CreateTest16bitImage(sizex, sizey); image16->ref();
-  vil_generic_image* image24 = CreateTest24bitImage(sizex, sizey); image24->ref();
-  vil_generic_image* image3p = CreateTest3planeImage(sizex, sizey); image3p->ref();
-  vil_generic_image* imagefloat = CreateTestfloatImage(sizex, sizey); imagefloat->ref();
+  vil_image image1 = CreateTest1bitImage(sizex, sizey);
+  vil_image image8 = CreateTest8bitImage(sizex, sizey);
+  vil_image image16 = CreateTest16bitImage(sizex, sizey);
+  vil_image image24 = CreateTest24bitImage(sizex, sizey);
+  vil_image image3p = CreateTest3planeImage(sizex, sizey);
+  vil_image imagefloat = CreateTestfloatImage(sizex, sizey);
 
   // test the pnm read write
   vil_test_image_type("pnm", image8);
@@ -260,9 +267,11 @@ int main() {
   // test the TIFF read write
   vil_test_image_type("tiff", image8);
   vil_test_image_type("tiff", image24);
+#if 0 // lossy format
   // test the JPEG read write
   vil_test_image_type("jpeg", image8);
   vil_test_image_type("jpeg", image24);
+#endif
   // test the PNG read write
   vil_test_image_type("png", image8);
   vil_test_image_type("png", image24);
@@ -271,10 +280,5 @@ int main() {
   vil_test_image_type("iris", image16);
   vil_test_image_type("iris", image24);
 
-  image1->unref();
-  image8->unref();
-  image16->unref();
-  image24->unref();
-  imagefloat->unref();
   return 0; // return all_passed;
 }

@@ -24,66 +24,59 @@
 //               Feb 1998 rewrite.
 //               Feb 2000 yet another rewrite, this time for vxl.
 
-#include "harris_params.h"
-#include "harris_internals.h"
+#include <vsl/vsl_harris_params.h>
+#include <vsl/vsl_roi_window.h>
 #include <vcl/vcl_vector.h>
-
-class vil_image_ref;
-template <class T> class vil_memory_image_of;
+#include <vil/vil_fwd.h>
 
 //: A vsl_harris object stores the internal buffers used by the harris corner detector.
-class vsl_harris : public harris_params {
+class vsl_harris : public vsl_harris_params {
 public:
-  vsl_harris(harris_params const & params);
+  vsl_harris(vsl_harris_params const & params);
   ~vsl_harris();
   
-  void compute(vil_image_ref image);
+  void compute(vil_image image);
   void get_corners(vcl_vector<float> &, vcl_vector<float> &) const;
   void save_corners(char const *file) const;
-
-  // typedefs
-  typedef unsigned char byte;
-  typedef vil_memory_image_of<bool>  bool_map;
-  typedef vil_memory_image_of<byte>  byte_map;
-  typedef vil_memory_image_of<int>   int_map;
-  typedef vil_memory_image_of<float> float_map;
 
   //------------------------------ computed things ------------------------------
 
   // the input image, as a monochrome byte bitmap.
-  byte_map *image_ptr;
+  vil_byte_buffer *image_ptr;
 
   // gradient bitmaps.
-  int_map *image_gradx_ptr;
-  int_map *image_grady_ptr;
+  vil_int_buffer *image_gradx_ptr;
+  vil_int_buffer *image_grady_ptr;
 
   // second moment matrix of the gradient vector.
-  float_map *image_fxx_ptr;
-  float_map *image_fxy_ptr;
-  float_map *image_fyy_ptr;
+  vil_float_buffer *image_fxx_ptr;
+  vil_float_buffer *image_fxy_ptr;
+  vil_float_buffer *image_fyy_ptr;
 
   // the cornerness response map and its maximum value.
-  float_map *pixel_cornerness;
+  vil_float_buffer *image_cornerness_ptr;
   float corner_max;
 
   // local maximum map.
-  bool_map *image_corner_max_ptr;
+  vil_bool_buffer *image_cornermax_ptr;
 
   // region of interest ?
-  GL_WINDOW_STR window_str;
-  
+  vsl_roi_window window_str;
+
 private:
-  harris_params &_params; // FIXME
-  unsigned image_w, image_h; // size of input image. ***
+  //------------------------------ private ------------------------------
+
+  vsl_harris_params &_params; // FIXME
+  unsigned image_w, image_h;  // size of input image. ***
 
   //
-  void init_module (vil_image_ref image);
+  void init_module (vil_image image);
   void uninit_module ();
 
   // these routines driven by compute() :
   void compute_response();
 
-  void do_non_adaptive(double corner_min);
+  void do_non_adaptive(double* corner_min);
   void do_adaptive();
 
   int  dr_store_corners (float corner_min);

@@ -9,13 +9,14 @@
 
 #include <vcl/vcl_iosfwd.h>
 #include <vil/vil_fwd.h>
+#include <vil/vil_image.h>
 
 //: Load an image
-// Actually, return a pointer to a vil_generic_image object which will read the disk
+// Actually, return a pointer to a vil_image_impl object which will read the disk
 // image when get_section is called.
-vil_generic_image* vil_load(char const* filename);
+vil_image vil_load(char const* filename);
 
 //: Load from istream
-// vil_generic_image* vil_load(istream&);
+// vil_image_impl* vil_load(istream&);
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_load.

@@ -29,7 +29,7 @@ template <class T>
 class vnl_complex_traits {
 public:
   // -- whether complex or not
-  enum nd { isreal = true };
+  enum { isreal = true };
 
   // -- complex conjugation
   static T conjugate(T x) { return x; }
@@ -41,23 +41,25 @@ public:
 // -- override for vnl_complex<REAL> :
 
 // vnl_complex<float>
-VCL_DECLARE_SPECIALIZATION(class vnl_complex_traits< vnl_complex<float> >)
-
+VCL_DEFINE_SPECIALIZATION
 class vnl_complex_traits< vnl_complex<float> > {
 public:
-  enum nd { isreal = false };
-  static vnl_complex<float> conjugate(vnl_complex<float> z) { return vnl_complex<float>(z.real(), -z.imag()); }
-  static vnl_complex<float> complexify(vnl_complex<float> z) { return z; }
+  enum { isreal = false };
+  static vnl_complex<float> conjugate(vnl_complex<float> z)
+    { return vnl_complex<float>(z.real(), -z.imag()); }
+  static vnl_complex<float> complexify(vnl_complex<float> z) 
+    { return z; }
 };
 
 // vnl_complex<double>
-VCL_DECLARE_SPECIALIZATION(class vnl_complex_traits< vnl_complex<double> >)
-
+VCL_DEFINE_SPECIALIZATION
 class vnl_complex_traits< vnl_complex<double> > {
 public:
-  enum nd { isreal = false };
-  static vnl_complex<double> conjugate(vnl_complex<double> z) { return vnl_complex<double>(z.real(), -z.imag()); }
-  static vnl_complex<double> complexify(vnl_complex<double> z) { return z; }
+  enum { isreal = false };
+  static vnl_complex<double> conjugate(vnl_complex<double> z)
+    { return vnl_complex<double>(z.real(), -z.imag()); }
+  static vnl_complex<double> complexify(vnl_complex<double> z)
+    { return z; }
 };
 
 #endif // vnl_complex_traits_h_

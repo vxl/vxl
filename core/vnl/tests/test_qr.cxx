@@ -1,7 +1,9 @@
+#include <vcl/vcl_iostream.h>
+
 #include <vnl/vnl_test.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_double_3.h>
-#include <vnl/vnl_matops.h>
+#include <vnl/vnl_matlab_print.h>
 #include <vnl/algo/vnl_qr.h>
 
 void test_matrix(char const* name, const vnl_matrix<double>& A, double det = 0)
@@ -19,7 +21,7 @@ void test_matrix(char const* name, const vnl_matrix<double>& A, double det = 0)
 // Driver
 // extern "C"  bill this won't link for me -- it thinks everything inside
 // is extern "C"
-void testvnl_qr()
+void test_qr()
 {
   double A_data[] = {
     89,	   21,	  27,
@@ -44,8 +46,8 @@ void testvnl_qr()
   vnl_vector<double> b(b_data, 4);
   vnl_qr qr(A);
 
-  vnl_matops::matlab_print(cerr, qr.Q(), "Q");
-  vnl_matops::matlab_print(cerr, qr.R(), "R");
+  vnl_matlab_print(cerr, qr.Q(), "Q");
+  vnl_matlab_print(cerr, qr.R(), "R");
   
   vnl_vector<double> x = qr.solve(b);
   
@@ -66,4 +68,4 @@ void testvnl_qr()
 
 }
 
-TESTMAIN(testvnl_qr);
+TESTMAIN(test_qr);

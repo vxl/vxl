@@ -1,65 +1,52 @@
-#include <vxl_copyright.h>
 //
 // Created: VDN 02/21/92 new lite version adapted from Matrix.h
 //
-// The parameterized Vector<T> class is publicly derived from the
-// Vector class and implements one dimensional arithmetic vectors of a
-// user specified type.  This is accompilshed by using the parameterized
-// type capability of C++.  The only constraint placed on the type is that
+// The parameterized vnl_vector<T> class implements 1D arithmetic vectors of a
+// user specified type. The only constraint placed on the type is that
 // it must overload the following operators: +, -, *, and /. Thus, it will
-// be possible to have a Vector of type Complex.  The Vector<T>
-// class is static in size, that is once a Vector<T> of a particular
+// be possible to have a vnl_vector over vnl_complex<T>.  The vnl_vector<T>
+// class is static in size, that is once a vnl_vector<T> of a particular
 // size has been declared, there is no dynamic growth or resize method
 // available.
 //
 // Each vector contains  a protected  data section  that has a  T* slot that
 // points to the  physical memory allocated  for the one  dimensional array. In
 // addition, an integer  specifies   the number  of  elements  for the
-// vector.  These values  are provided in the  constructors. A single protected
-// slot  contains a pointer  to a compare  function  to   be used  in  equality
-// operations. The default function used is the built-in == operator.
+// vector.  These values  are provided in the  constructors.
 //
-// Four  different constructors are provided.  The  first constructor takes an
-// integer arguments  specifying the  length. Enough memory is
-// allocated to hold [length] elements  of type T.  The second constructor
-// takes the  same first argument, but  also accepts  an additional second
-// argument that is  a reference to  an  object of  the appropriate  type whose
-// value is used as an initial fill value.  The third constructor is similar to
-// the third, except that it accpets a variable number of initialization values
-// for the Vector.  If there are fewer values than elements, the rest are set
-// to zero. Finally, the last constructor takes a single argument consisting of
-// a reference to a Vector and duplicates its size and element values.
+// Several constructors are provided. See .h file for descriptions.
 //
 // Methods   are  provided   for destructive   scalar   and vector  addition,
 // multiplication, check for equality  and inequality, fill, reduce, and access
 // and set individual elements.  Finally, both  the  input and output operators
 // are overloaded to allow for fomatted input and output of vector elements.
 //
-// Vector is a special type of matrix, and is implemented for space and time
-// efficiency. When vector is pre_multiplied by/with matrix, m*v, vector is
-// implicitly a column matrix. When vector is post_multiplied by/with matrix
-// v*m, vector is implicitly a row matrix.
+// vnl_vector is a special type of matrix, and is implemented for space and time
+// efficiency. When vnl_vector is pre_multiplied by/with matrix, m*v, vnl_vector is
+// implicitly a column matrix. When vnl_vector is post_multiplied by/with matrix
+// v*m, vnl_vector is implicitly a row matrix.
 //
 
 #include "vnl_vector.h"
+
+#include <vcl/vcl_vector.h>
+#include <vcl/vcl_iostream.h>
+
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_c_vector.h>
 #include <vnl/vnl_numeric_traits.h>
 
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_iostream.h>
-
 //--------------------------------------------------------------------------------
 
-// -- Creates an empty vector. O(1).
+//: Creates an empty vector. O(1).
 
 template<class T> 
 vnl_vector<T>::vnl_vector ()
 : num_elmts(0), data(0)
 {}
 
-// -- Creates a vector with specified length. O(n).
+//: Creates a vector with specified length. O(n).
 // Elements are not initialized.
 
 template<class T> 
@@ -68,8 +55,7 @@ vnl_vector<T>::vnl_vector (unsigned len)
 {}
 
 
-// -- Creates a vector of specified length, 
-// and initialize all elements with value. O(n).
+//: Creates a vector of specified length, and initialize all elements with value. O(n).
 
 template<class T> 
 vnl_vector<T>::vnl_vector (unsigned len, T const& value)
@@ -79,8 +65,7 @@ vnl_vector<T>::vnl_vector (unsigned len, T const& value)
     this->data[i] = value;			// Assign initial value
 }
 
-// -- Creates a vector of specified length and initialize first n
-// elements with values. O(n).
+//: Creates a vector of specified length and initialize first n elements with values. O(n).
 
 template<class T> 
 vnl_vector<T>::vnl_vector (unsigned len, int n, T const values[])
@@ -92,7 +77,7 @@ vnl_vector<T>::vnl_vector (unsigned len, int n, T const values[])
   }
 }
 
-// -- Creates a vector of length 3 and initializes with the arguments, x,y,z.
+//: Creates a vector of length 3 and initializes with the arguments, x,y,z.
 
 template<class T> 
 vnl_vector<T>::vnl_vector (T const& px, T const& py, T const& pz)
@@ -126,7 +111,7 @@ vnl_vector<T>::vnl_vector (T const& px, T const& py, T const& pz)
 // }
 
 
-// -- Creates a new copy of vector v. O(n).
+//: Creates a new copy of vector v. O(n).
 
 template<class T> 
 vnl_vector<T>::vnl_vector (vnl_vector<T> const& v)
@@ -136,7 +121,7 @@ vnl_vector<T>::vnl_vector (vnl_vector<T> const& v)
     this->data[i] = v.data[i];			// Copy value
 }
 
-// -- Creates a vector from a block array of data, stored row-wise.
+//: Creates a vector from a block array of data, stored row-wise.
 // Values in datablck are copied. O(n).
 
 template<class T>
@@ -147,8 +132,9 @@ vnl_vector<T>::vnl_vector (T const* datablck, unsigned len)
     this->data[i] = datablck[i];
 }
 
-// -- Read a vnl_vector from an ascii istream. If the vector has nonzero size on
-// input, read that many values.  Otherwise, read to EOF.
+//: Read a vnl_vector from an ascii istream.
+// If the vector has nonzero size on input, read that many values.  
+// Otherwise, read to EOF.
 template <class T>
 bool vnl_vector<T>::read_ascii(istream& s)
 {
@@ -185,38 +171,38 @@ vnl_vector<T> vnl_vector<T>::read(istream& s)
   return V;
 }
 
-// -- Frees up the array inside vector. O(n).
+//: Frees up the array inside vector. O(1).
 
 template<class T> 
 vnl_vector<T>::~vnl_vector() {
   delete [] this->data;				// Free up the data space
 }
 
-// -- Sets all elements of a vector to a specified fill value. O(n).
+//: Sets all elements of a vector to a specified fill value. O(n).
 
 template<class T> 
 void vnl_vector<T>::fill (T const& value) {
-  for (unsigned i = 0; i < this->num_elmts; i++)	// For each index 
-      this->data[i] = value;			// Assign fill value
+  for (unsigned i = 0; i < this->num_elmts; i++)
+    this->data[i] = value;
 }
 
-// -- Sets elements of a vector to those in an array. O(n).
+//: Sets elements of a vector to those in an array. O(n).
 
 template<class T> 
 void vnl_vector<T>::copy_in (T const *ptr) {
-  for (unsigned i = 0; i < this->num_elmts; i++)	// For each index 
-    this->data[i] = ptr[i];
+  for (unsigned i = 0; i < num_elmts; ++i)
+    data[i] = ptr[i];
 }
 
-// -- Sets elements of an array to those in vector. O(n).
+//: Sets elements of an array to those in vector. O(n).
 
 template<class T> 
 void vnl_vector<T>::copy_out (T *ptr) const {
-  for (unsigned i = 0; i < this->num_elmts; i++)	// For each index 
-    ptr[i] = this->data[i];
+  for (unsigned i = 0; i < num_elmts; ++i)
+    ptr[i] = data[i];
 }
 
-// -- Copies rhs vector into lhs vector. O(n).
+//: Copies rhs vector into lhs vector. O(n).
 // Changes the dimension of lhs vector if necessary.
 
 template<class T> 
@@ -233,7 +219,7 @@ vnl_vector<T>& vnl_vector<T>::operator= (vnl_vector<T> const& rhs) {
   return *this;			
 }
 
-// -- Increments all elements of vector with value. O(n).
+//: Increments all elements of vector with value. O(n).
 
 template<class T> 
 vnl_vector<T>& vnl_vector<T>::operator+= (T const value) {
@@ -242,7 +228,7 @@ vnl_vector<T>& vnl_vector<T>::operator+= (T const value) {
   return *this;
 }
 
-// -- Multiplies all elements of vector with value. O(n).
+//: Multiplies all elements of vector with value. O(n).
 
 template<class T> 
 vnl_vector<T>& vnl_vector<T>::operator*= (T const value) {
@@ -251,7 +237,7 @@ vnl_vector<T>& vnl_vector<T>::operator*= (T const value) {
   return *this;
 }
 
-// -- Divides all elements of vector by value. O(n).
+//: Divides all elements of vector by value. O(n).
 
 template<class T> 
 vnl_vector<T>& vnl_vector<T>::operator/= (T const value) {
@@ -261,12 +247,12 @@ vnl_vector<T>& vnl_vector<T>::operator/= (T const value) {
 }
 
 
-// -- Mutates lhs vector with its addition with rhs vector. O(n).
+//: Mutates lhs vector with its addition with rhs vector. O(n).
 
 template<class T> 
 vnl_vector<T>& vnl_vector<T>::operator+= (vnl_vector<T> const& rhs) {
   if (this->num_elmts != rhs.num_elmts)		// Size?
-    vnl_vector_dimension_error ("operator+=", 
+    vnl_error_vector_dimension ("operator+=", 
 			   this->num_elmts, rhs.num_elmts);
   for (unsigned i = 0; i < this->num_elmts; i++)	// For each index
     this->data[i] += rhs.data[i];		// Add elements
@@ -274,25 +260,25 @@ vnl_vector<T>& vnl_vector<T>::operator+= (vnl_vector<T> const& rhs) {
 }
 
 
-// --  Mutates lhs vector with its substraction with rhs vector. O(n).
+//:  Mutates lhs vector with its substraction with rhs vector. O(n).
 
 template<class T> 
 vnl_vector<T>& vnl_vector<T>::operator-= (vnl_vector<T> const& rhs) {
   if (this->num_elmts != rhs.num_elmts)		// Size?
-    vnl_vector_dimension_error ("operator-=", 
+    vnl_error_vector_dimension ("operator-=", 
 			   this->num_elmts, rhs.num_elmts);
   for (unsigned i = 0; i < this->num_elmts; i++)
     this->data[i] -= rhs.data[i];
   return *this;
 }
 
-// -- Pre-multiplies vector with matrix and stores result
-// back in vector: v = m * v. O(m*n). Vector is assumed a column matrix.
+//: Pre-multiplies vector with matrix and stores result back in vector.
+// v = m * v. O(m*n). Vector is assumed a column matrix.
 
 template<class T>
 vnl_vector<T>& vnl_vector<T>::pre_multiply (const vnl_matrix<T>& m) {
   if (m.columns() != this->num_elmts)		// dimensions do not match?
-    vnl_vector_dimension_error ("operator*=", 
+    vnl_error_vector_dimension ("operator*=", 
 			   this->num_elmts, m.columns());
   T* temp= new T[m.rows()];		// Temporary
   vnl_matrix<T>& mm = (vnl_matrix<T>&) m;	// Drop const for get()
@@ -307,13 +293,13 @@ vnl_vector<T>& vnl_vector<T>::pre_multiply (const vnl_matrix<T>& m) {
   return *this;					// Return vector reference
 }
 
-// -- Post-multiplies vector with matrix and stores result
-// back in vector: v = v * m. O(m*n). Vector is assumed a row matrix.
+//: Post-multiplies vector with matrix and stores result back in vector.
+// v = v * m. O(m*n). Vector is assumed a row matrix.
 
 template<class T> 
 vnl_vector<T>& vnl_vector<T>::post_multiply (const vnl_matrix<T>& m) {
   if (this->num_elmts != m.rows())		// dimensions do not match?
-    vnl_vector_dimension_error ("operator*=", 
+    vnl_error_vector_dimension ("operator*=", 
 			   this->num_elmts, m.rows());
   T* temp= new T[m.columns()];		// Temporary
   vnl_matrix<T>& mm = (vnl_matrix<T>&) m;	// Drop const for get()
@@ -329,7 +315,7 @@ vnl_vector<T>& vnl_vector<T>::post_multiply (const vnl_matrix<T>& m) {
 }
 
 
-// -- Creates new vector containing the negation of THIS vector. O(n).
+//: Creates new vector containing the negation of THIS vector. O(n).
 
 template<class T> 
 vnl_vector<T> vnl_vector<T>::operator- () const {
@@ -339,8 +325,7 @@ vnl_vector<T> vnl_vector<T>::operator- () const {
   return result;	
 }
 
-// -- Creates new vector with elements of this vector added with value. 
-// O(n).
+//: Creates new vector with elements of this vector added with value. O(n).
 
 template<class T> 
 vnl_vector<T> vnl_vector<T>::operator+ (T const value) const {
@@ -350,7 +335,7 @@ vnl_vector<T> vnl_vector<T>::operator+ (T const value) const {
   return result;				 
 }
 
-// -- Adds two vectors and returns the new sum vector: lhs + rhs. O(n).
+//: Adds two vectors and returns the new sum vector: lhs + rhs. O(n).
 
 template<class T> 
 vnl_vector<T> vnl_vector<T>::operator+ (vnl_vector<T> const& rhs) const {
@@ -360,8 +345,7 @@ vnl_vector<T> vnl_vector<T>::operator+ (vnl_vector<T> const& rhs) const {
   return result;				 
 }
 
-// -- Substracts rhs from lhs vector, and returns the new difference
-// vector: lhs - rhs. O(n).
+//: Substracts rhs from lhs vector, and returns the new difference vector: lhs - rhs. O(n).
 
 template<class T> 
 vnl_vector<T> vnl_vector<T>::operator- (vnl_vector<T> const& rhs) const {
@@ -371,8 +355,7 @@ vnl_vector<T> vnl_vector<T>::operator- (vnl_vector<T> const& rhs) const {
   return result;				 
 }
 
-// -- Creates new vector with elements of this vector multiplied
-// with value. O(n).
+//: Creates new vector with elements of this vector multiplied with value. O(n).
 
 template<class T> 
 vnl_vector<T> vnl_vector<T>::operator* (T const value) const {
@@ -383,8 +366,7 @@ vnl_vector<T> vnl_vector<T>::operator* (T const value) const {
 }
 
 
-// -- Creates new vector with elements of this vector divided
-// with value. O(n).
+//: Creates new vector with elements of this vector divided with value. O(n).
 
 template<class T> 
 vnl_vector<T> vnl_vector<T>::operator/ (T const value) const {
@@ -395,14 +377,13 @@ vnl_vector<T> vnl_vector<T>::operator/ (T const value) const {
 }
 
 
-// -- Returns new vector which is the multiplication of matrix m with
-// column vector v. O(m*n).
+//: Returns new vector which is the multiplication of matrix m with column vector v. O(m*n).
 
 template<class T> 
 vnl_vector<T> operator* (const vnl_matrix<T>& m, vnl_vector<T> const& v) {
 
   if (m.columns() != v.size())		// dimensions do not match?
-    vnl_vector_dimension_error ("operator*", 
+    vnl_error_vector_dimension ("operator*", 
 				m.columns(), v.size());
   vnl_vector<T> result(m.rows());		// Temporary
   vnl_matrix<T>& mm = (vnl_matrix<T>&) m;	// Drop const for get()
@@ -415,8 +396,7 @@ vnl_vector<T> operator* (const vnl_matrix<T>& m, vnl_vector<T> const& v) {
 }
 
 
-// -- Returns new vector which is the multiplication of row vector v with
-// matrix m. O(m*n).
+//: Returns new vector which is the multiplication of row vector v with matrix m. O(m*n).
 
 template<class T> 
 vnl_vector<T> vnl_vector<T>::operator* (const vnl_matrix<T>&m) const {
@@ -429,7 +409,7 @@ vnl_vector<T> vnl_vector<T>::operator* (const vnl_matrix<T>&m) const {
   // template vnl_matrix<double > outer_product (const vnl_vector<double >&,const vnl_vector<dou
 
   if (num_elmts != m.rows())			// dimensions do not match?
-    vnl_vector_dimension_error ("operator*", 
+    vnl_error_vector_dimension ("operator*", 
 		       num_elmts, m.rows());
   vnl_vector<T> result(m.columns());	// Temporary
   vnl_matrix<T>& mm = (vnl_matrix<T>&) m;	// Drop const for get()
@@ -443,13 +423,13 @@ vnl_vector<T> vnl_vector<T>::operator* (const vnl_matrix<T>&m) const {
 
 
 
-// -- Replaces elements with index begining at start, by values of v. O(n).
+//: Replaces elements with index begining at start, by values of v. O(n).
 
 template<class T> 
 vnl_vector<T>& vnl_vector<T>::update (vnl_vector<T> const& v, unsigned start) {
  unsigned end = start + v.num_elmts;
   if (this->num_elmts < end)
-    vnl_vector_dimension_error ("update", 
+    vnl_error_vector_dimension ("update", 
 			   end-start, v.num_elmts);
   for (unsigned i = start; i < end; i++)
     this->data[i] = v.data[i-start];
@@ -457,13 +437,13 @@ vnl_vector<T>& vnl_vector<T>::update (vnl_vector<T> const& v, unsigned start) {
 }
 
 
-// -- Returns a subvector specified by the start index and length. O(n).
+//: Returns a subvector specified by the start index and length. O(n).
 
 template<class T> 
 vnl_vector<T> vnl_vector<T>::extract (unsigned len, unsigned start) const {
   unsigned end = start + len;
   if (this->num_elmts < end)
-    vnl_vector_dimension_error ("extract", 
+    vnl_error_vector_dimension ("extract", 
 			   end-start, len);
   vnl_vector<T> result(len);
   for (unsigned i = 0; i < len; i++)
@@ -471,13 +451,12 @@ vnl_vector<T> vnl_vector<T>::extract (unsigned len, unsigned start) const {
   return result;				 
 }
 
-// -- Returns new vector whose elements are the products 
-// v1[i]*v2[i]. O(n).
+//: Returns new vector whose elements are the products v1[i]*v2[i]. O(n).
 
 template<class T> 
 vnl_vector<T> element_product (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
   if (v1.num_elmts != v2.num_elmts)		// Size?
-    vnl_vector_dimension_error ("element_product", 
+    vnl_error_vector_dimension ("element_product", 
 			v1.num_elmts, v2.num_elmts);
   vnl_vector<T> result(v1.num_elmts);
   for (unsigned i = 0; i < v1.num_elmts; i++)
@@ -485,13 +464,12 @@ vnl_vector<T> element_product (vnl_vector<T> const& v1, vnl_vector<T> const& v2)
   return result;				 
 }
 
-// -- Returns new vector whose elements are the quotients 
-// v1[i]/v2[i]. O(n).
+//: Returns new vector whose elements are the quotients v1[i]/v2[i]. O(n).
 
 template<class T>
 vnl_vector<T> element_quotient (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
   if (v1.num_elmts != v2.num_elmts)		// Size?
-    vnl_vector_dimension_error ("element_quotient", 
+    vnl_error_vector_dimension ("element_quotient", 
 			v1.num_elmts, v2.num_elmts);
   vnl_vector<T> result(v1.num_elmts);
   for (unsigned i = 0; i < v1.num_elmts; i++)
@@ -499,7 +477,7 @@ vnl_vector<T> element_quotient (vnl_vector<T> const& v1, vnl_vector<T> const& v2
   return result;				 
 }
 
-// --
+//:
 template <class T>
 vnl_vector<T> vnl_vector<T>::apply(T (*f)(T const&)) const {
   vnl_vector<T> ret(num_elmts);
@@ -507,7 +485,7 @@ vnl_vector<T> vnl_vector<T>::apply(T (*f)(T const&)) const {
   return ret;
 }
 
-// -- Return the vector made by applying "f" to each element.
+//: Return the vector made by applying "f" to each element.
 template <class T>
 vnl_vector<T> vnl_vector<T>::apply(T (*f)(T)) const {
   vnl_vector<T> ret(num_elmts);
@@ -515,39 +493,38 @@ vnl_vector<T> vnl_vector<T>::apply(T (*f)(T)) const {
   return ret;
 }
 
-// -- Returns the dot product of two nd-vectors, 
-// or [v1]*[v2]^T. O(n).
+//: Returns the dot product of two nd-vectors, or [v1]*[v2]^T. O(n).
 
 template<class T> 
 T dot_product (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
   if (v1.num_elmts != v2.num_elmts)		// Size?
-    vnl_vector_dimension_error ("dot_product", 
+    vnl_error_vector_dimension ("dot_product", 
 				v1.num_elmts, v2.num_elmts);
   return vnl_c_vector<T>::dot_product(v1.begin(),
 				      v2.begin(),
 				      v1.size());
 }
 
-// -- Hermitian inner product. O(n)
+//: Hermitian inner product. O(n)
 
 template<class T> 
 T inner_product (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
   if (v1.num_elmts != v2.num_elmts)		// Size?
-    vnl_vector_dimension_error ("inner_product", 
+    vnl_error_vector_dimension ("inner_product", 
 				v1.num_elmts, v2.num_elmts);
   return vnl_c_vector<T>::inner_product(v1.begin(),
 					v2.begin(),
 					v1.size());
 }
 
-// -- Returns the 'matrix element' <u|A|v> = u^t * A * v. O(mn).
+//: Returns the 'matrix element' <u|A|v> = u^t * A * v. O(mn).
 
 template<class T>
 T bracket(vnl_vector<T> const &u, vnl_matrix<T> const &A, vnl_vector<T> const &v) {
   if (u.size() != A.rows())
-    vnl_vector_dimension_error("bracket",u.size(),A.rows());
+    vnl_error_vector_dimension("bracket",u.size(),A.rows());
   if (A.columns() != v.size())
-    vnl_vector_dimension_error("bracket",A.columns(),v.size());
+    vnl_error_vector_dimension("bracket",A.columns(),v.size());
   T brak(0);
   for (unsigned i=0; i<u.size(); ++i)
     for (unsigned j=0; j<v.size(); ++j)
@@ -555,8 +532,7 @@ T bracket(vnl_vector<T> const &u, vnl_matrix<T> const &A, vnl_vector<T> const &v
   return brak;
 }
 
-// -- Returns the nxn outer product of two nd-vectors, 
-// or [v1]^T*[v2]. O(n).
+//: Returns the nxn outer product of two nd-vectors, or [v1]^T*[v2]. O(n).
 
 template<class T> 
 vnl_matrix<T> outer_product (vnl_vector<T> const& v1, 
@@ -569,12 +545,12 @@ vnl_matrix<T> outer_product (vnl_vector<T> const& v1,
 }
 
 
-// -- Returns the cross-product of two 2d-vectors. 
+//: Returns the cross-product of two 2d-vectors. 
 
 template<class T> 
 T cross_2d (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
   if (v1.num_elmts < 2 || v2.num_elmts < 2)
-    vnl_vector_dimension_error ("cross_2d", 
+    vnl_error_vector_dimension ("cross_2d", 
 			v1.num_elmts, v2.num_elmts);
 
   return (v1.data[0] * v2.data[1]
@@ -582,12 +558,12 @@ T cross_2d (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
 	  v1.data[1] * v2.data[0]);
 }
 
-// -- Returns the 3X1 cross-product of two 3d-vectors.
+//: Returns the 3X1 cross-product of two 3d-vectors.
 
 template<class T>
 vnl_vector<T> cross_3d (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
   if (v1.num_elmts != 3 || v2.num_elmts != 3)
-    vnl_vector_dimension_error ("cross_3d", 
+    vnl_error_vector_dimension ("cross_3d", 
 			v1.num_elmts, v2.num_elmts);
   vnl_vector<T> result(v1.num_elmts);
   
@@ -624,12 +600,11 @@ T cos_angle(vnl_vector<T> const& a, vnl_vector<T> const& b) {
   return T( ab / a_b );
 }
 
-// -- Returns smallest angle between two non-zero n-dimensional vectors.
-// O(n).
+//: Returns smallest angle between two non-zero n-dimensional vectors. O(n).
 
 template<class T> 
 double angle (vnl_vector<T> const& a, vnl_vector<T> const& b) {
-  double cosine = vnl_math::abs( cos_angle(a, b) );
+  double cosine = vnl_math_abs( cos_angle(a, b) );
   return acos(cosine);
 }
 
@@ -637,7 +612,7 @@ double angle (vnl_vector<T> const& a, vnl_vector<T> const& b) {
 template <class T>
 bool vnl_vector<T>::is_finite() const {
   for(unsigned i = 0; i < this->size();++i)
-    if (!vnl_math::isfinite( (*this)[i] ))
+    if (!vnl_math_isfinite( (*this)[i] ))
       return false;
 
   return true;
@@ -679,7 +654,7 @@ bool vnl_vector<T>::operator_eq (vnl_vector<T> const& rhs) const {
 
 //--------------------------------------------------------------------------------
 
-// -- Overloads the output operator to print a vector. O(n).
+//: Overloads the output operator to print a vector. O(n).
 
 template<class T>
 ostream& operator<< (ostream& s, vnl_vector<T> const& v) {
@@ -689,8 +664,9 @@ ostream& operator<< (ostream& s, vnl_vector<T> const& v) {
   return s;
 }
 
-// -- Read a vnl_vector from an ascii istream. If the vector has nonzero size on
-// input, read that many values.  Otherwise, read to EOF.
+//: Read a vnl_vector from an ascii istream. 
+// If the vector has nonzero size on input, read that many values.
+// Otherwise, read to EOF.
 template <class T>
 istream& operator>>(istream& s, vnl_vector<T>& M) {
   M.read_ascii(s); return s;

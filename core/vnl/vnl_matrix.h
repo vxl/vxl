@@ -38,10 +38,12 @@
 //   but barfs when an vnl_vector<int> is declared nearby.
 
 #include <vcl/vcl_compiler.h>
-#include <vcl/vcl_function.h>      // to make != unambiguous
-#include <vcl/vcl_iostream.h>
+#include <vcl/vcl_iosfwd.h>
 #include <vnl/vnl_error.h>
 #include <vnl/vnl_c_vector.h>
+
+template <class T> class vnl_vector;
+template <class T> class vnl_matrix;
 
 // // define _vnl_matrix_h_INCLUDED for IUE compatibility
 // #define _vnl_matrix_h_INCLUDED
@@ -51,10 +53,6 @@
 
 // // forward declare ObjectStore support class
 // template <class T> class vnl_matrix_HelperObjectStore;
-
-
-template <class T> class vnl_vector;
-template <class T> class vnl_matrix;
 
 //--------------------------------------------------------------------------------
 
@@ -283,9 +281,9 @@ template<class T>
 inline T vnl_matrix<T>::get (unsigned row, unsigned column) const {
 #if ERROR_CHECKING
   if (row >= this->num_rows)                    // If invalid size specified
-    vnl_matrix_row_index_error ("get", row);    // Raise exception
+    vnl_error_matrix_row_index ("get", row);    // Raise exception
   if (column >= this->num_cols)                 // If invalid size specified
-    vnl_matrix_col_index_error ("get", column); // Raise exception
+    vnl_error_matrix_col_index ("get", column); // Raise exception
 #endif
   return this->data[row][column];
 }
@@ -297,9 +295,9 @@ template<class T>
 inline void vnl_matrix<T>::put (unsigned row, unsigned column, T const& value) {
 #if ERROR_CHECKING
   if (row >= this->num_rows)                    // If invalid size specified
-    ::vnl_matrix_row_index_error ("put", row);  // Raise exception
+    vnl_error_matrix_row_index ("put", row);  // Raise exception
   if (column >= this->num_cols)                 // If invalid size specified
-    ::vnl_matrix_col_index_error ("put", column); // Raise exception
+    vnl_error_matrix_col_index ("put", column); // Raise exception
 #endif
   this->data[row][column] = value;              // Assign data value
 }

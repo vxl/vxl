@@ -40,39 +40,6 @@ public:
   static vnl_matrix<float>  d2f(const vnl_matrix<double>&);
   static vnl_vector<double> f2d(const vnl_vector<float>&);
   static vnl_vector<float>  d2f(const vnl_vector<double>&);
-
-  // Pretty-printing
-  static ostream& matlab_print(ostream&, const vnl_matrix<double>& M, const char* variable_name = 0);
-  static ostream& matlab_print(ostream&, const vnl_matrix<float>& M, const char* variable_name = 0);
-  static ostream& matlab_print(ostream&, const vnl_vector<double>& v, const char* variable_name = 0);
-  enum Format {
-    fmt_short,
-    fmt_long,
-    fmt_short_e,
-    fmt_long_e
-  };
-  static Format format(Format);
-  static void print_double(double v, char *buf);
-  static void print_float(float v, char *buf);
-
-#ifdef VNL_COMPLEX_AVAILABLE
-  static ostream& matlab_print(ostream&, const vnl_matrix<vnl_double_complex>& v, const char* variable_name = 0);
-  static void print_double_complex(vnl_double_complex v, char *buf);
-
-  static ostream& matlab_print(ostream&, const vnl_matrix<vnl_float_complex>& v, const char* variable_name = 0);
-  static void print_float_complex(vnl_float_complex v, char *buf);
-#endif
-
-  /// Deprecated interfaces
-#ifndef VCL_GCC_295
-  static double inf_norm(const vnl_matrix<double>& M) { return M.inf_norm(); }  
-#endif
-
-private:
-  static Format matlab_format;
 };
-
-
-#define MATLABPRINT(X) (vnl_matops::matlab_print(cerr, X, #X))
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_matops.
