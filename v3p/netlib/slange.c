@@ -9,13 +9,8 @@
 
 static integer c__1 = 1;
 
-real slange_(char *norm, integer *m, integer *n, real *a, integer *lda, real *
-        work, ftnlen norm_len)
+real slange_(char *norm, integer *m, integer *n, real *a, integer *lda, real *work, ftnlen norm_len)
 {
-    /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
-    real ret_val, r__1, r__2, r__3;
-
     /* Builtin functions */
     double sqrt(doublereal);
 
@@ -24,8 +19,7 @@ real slange_(char *norm, integer *m, integer *n, real *a, integer *lda, real *
     static real scale;
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     static real value;
-    extern /* Subroutine */ void slassq_(integer *, real *, integer *, real *,
-            real *);
+    extern /* Subroutine */ void slassq_(integer *, real *, integer *, real *, real *);
     static real sum;
 
 
@@ -42,10 +36,8 @@ real slange_(char *norm, integer *m, integer *n, real *a, integer *lda, real *
 /*  Purpose */
 /*  ======= */
 
-/*  SLANGE  returns the value of the one norm,  or the Frobenius norm, or
-*/
-/*  the  infinity norm,  or the  element of  largest absolute value  of a
-*/
+/*  SLANGE  returns the value of the one norm,  or the Frobenius norm, or */
+/*  the  infinity norm,  or the  element of  largest absolute value  of a */
 /*  real matrix A. */
 
 /*  Description */
@@ -61,12 +53,9 @@ real slange_(char *norm, integer *m, integer *n, real *a, integer *lda, real *
 /*              ( */
 /*              ( normF(A),         NORM = 'F', 'f', 'E' or 'e' */
 
-/*  where  norm1  denotes the  one norm of a matrix (maximum column sum),
-*/
-/*  normI  denotes the  infinity norm  of a matrix  (maximum row sum) and
-*/
-/*  normF  denotes the  Frobenius norm of a matrix (square root of sum of
-*/
+/*  where  norm1  denotes the  one norm of a matrix (maximum column sum), */
+/*  normI  denotes the  infinity norm  of a matrix  (maximum row sum) and */
+/*  normF  denotes the  Frobenius norm of a matrix (square root of sum of */
 /*  squares).  Note that  max(abs(A(i,j)))  is not a  matrix norm. */
 
 /*  Arguments */
@@ -81,8 +70,7 @@ real slange_(char *norm, integer *m, integer *n, real *a, integer *lda, real *
 /*          SLANGE is set to zero. */
 
 /*  N       (input) INTEGER */
-/*          The number of columns of the matrix A.  N >= 0.  When N = 0,
-*/
+/*          The number of columns of the matrix A.  N >= 0.  When N = 0, */
 /*          SLANGE is set to zero. */
 
 /*  A       (input) REAL array, dimension (LDA,N) */
@@ -95,87 +83,49 @@ real slange_(char *norm, integer *m, integer *n, real *a, integer *lda, real *
 /*          where LWORK >= M when NORM = 'I'; otherwise, WORK is not */
 /*          referenced. */
 
-/* =====================================================================
-*/
-
-/*     .. Parameters .. */
-/*     .. */
-/*     .. Local Scalars .. */
-/*     .. */
-/*     .. External Subroutines .. */
-/*     .. */
-/*     .. External Functions .. */
-/*     .. */
-/*     .. Intrinsic Functions .. */
-/*     .. */
-/*     .. Executable Statements .. */
-
-    /* Parameter adjustments */
-    --work;
-    a_dim1 = *lda;
-    a_offset = a_dim1 + 1;
-    a -= a_offset;
+/* ===================================================================== */
 
     /* Function Body */
+
     if (min(*m,*n) == 0) {
-        value = 0.f;
+        return 0.f;
     } else if (lsame_(norm, "M", 1L, 1L)) {
 
 /*        Find max(abs(A(i,j))). */
 
         value = 0.f;
-        i__1 = *n;
-        for (j = 1; j <= i__1; ++j) {
-            i__2 = *m;
-            for (i = 1; i <= i__2; ++i) {
-/* Computing MAX */
-                r__2 = value, r__3 = (r__1 = a[i + j * a_dim1], abs(r__1));
-                value = max(r__2,r__3);
-/* L10: */
+        for (j = 0; j < *n; ++j) {
+            for (i = 0; i < *m; ++i) {
+                value = max(value, abs(a[i + j * *lda]));
             }
-/* L20: */
         }
     } else if (lsame_(norm, "O", 1L, 1L) || *norm == '1') {
 
 /*        Find norm1(A). */
 
         value = 0.f;
-        i__1 = *n;
-        for (j = 1; j <= i__1; ++j) {
+        for (j = 0; j < *n; ++j) {
             sum = 0.f;
-            i__2 = *m;
-            for (i = 1; i <= i__2; ++i) {
-                sum += (r__1 = a[i + j * a_dim1], abs(r__1));
-/* L30: */
+            for (i = 0; i < *m; ++i) {
+                sum += abs(a[i + j * *lda]);
             }
             value = max(value,sum);
-/* L40: */
         }
     } else if (lsame_(norm, "I", 1L, 1L)) {
 
 /*        Find normI(A). */
 
-        i__1 = *m;
-        for (i = 1; i <= i__1; ++i) {
+        for (i = 0; i < *m; ++i) {
             work[i] = 0.f;
-/* L50: */
         }
-        i__1 = *n;
-        for (j = 1; j <= i__1; ++j) {
-            i__2 = *m;
-            for (i = 1; i <= i__2; ++i) {
-                work[i] += (r__1 = a[i + j * a_dim1], abs(r__1));
-/* L60: */
+        for (j = 0; j < *n; ++j) {
+            for (i = 0; i < *m; ++i) {
+                work[i] += abs(a[i + j * *lda]);
             }
-/* L70: */
         }
         value = 0.f;
-        i__1 = *m;
-        for (i = 1; i <= i__1; ++i) {
-/* Computing MAX */
-            r__1 = value, r__2 = work[i];
-            value = max(r__1,r__2);
-/* L80: */
+        for (i = 0; i < *m; ++i) {
+            value = max(value,work[i]);
         }
     } else if (lsame_(norm, "F", 1L, 1L) || lsame_(norm, "E", 1L, 1L)) {
 
@@ -183,18 +133,13 @@ real slange_(char *norm, integer *m, integer *n, real *a, integer *lda, real *
 
         scale = 0.f;
         sum = 1.f;
-        i__1 = *n;
-        for (j = 1; j <= i__1; ++j) {
-            slassq_(m, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
-/* L90: */
+        for (j = 0; j < *n; ++j) {
+            slassq_(m, &a[j * *lda], &c__1, &scale, &sum);
         }
         value = scale * sqrt(sum);
     }
 
-    ret_val = value;
-    return ret_val;
-
-/*     End of SLANGE */
+    return value;
 
 } /* slange_ */
 
