@@ -20,8 +20,8 @@ public:
 
   //-----------------------------------------------------
 
-  virtual bool   get_section(int position, void* ib, int x0, int y0, int xs, int ys) const;
-  virtual int    put_section(int position, void* ib, int x0, int y0, int xs, int ys);
+  bool   get_section(int position, void* ib, int x0, int y0, int xs, int ys) const;
+  int    put_section(int position, void* ib, int x0, int y0, int xs, int ys);
 
   //-----------------------------------------------------
   bool probe(const char* fname);
