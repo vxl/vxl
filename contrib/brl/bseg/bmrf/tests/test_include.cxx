@@ -13,5 +13,8 @@
 #include <bseg/bmrf/bmrf_network.h>
 #include <bseg/bmrf/bmrf_network_builder.h>
 #include <bseg/bmrf/bmrf_network_builder_params.h>
+#include <bseg/bmrf/bmrf_curvel_3d.h>
+#include <bseg/bmrf/bmrf_curvel_3d_sptr.h>
+#include <bseg/bmrf/bmrf_curve_3d_builder.h>
 
 int main() { return 0; }
