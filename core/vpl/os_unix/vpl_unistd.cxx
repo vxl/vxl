@@ -1,14 +1,16 @@
 #include <vpl/vpl_unistd.h>
 
+#include <vcl/vcl_cstdio.h>
+#include <vcl/vcl_cstdarg.h>
+#include <vcl/vcl_cstddef.h>
+#include <vcl/vcl_cstdlib.h>
+#include <vcl/vcl_cassert.h>
+#include <vcl/vcl_vector.h>
+
 // Include system headers for UNIX-like operating system :
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-
-#include <vcl/vcl_cstdio.h>
-#include <vcl/vcl_cstdarg.h>
-#include <vcl/vcl_cassert.h>
-#include <vcl/vcl_vector.h>
 
 // Fix broken unistd.h headers.
 
@@ -27,6 +29,16 @@
 // # endif
 // #endif
 
+#if defined(__GNUC__) && (__GNUC_MINOR__ >= 97)
+# define VPL_THROW(args) throw args
+#else
+# define VPL_THROW(args) /* */
+#endif
+// /data/az5/fsm/GCC3.0/target/vxl/vpl/os_unix/vpl_unistd.cxx:135: declaration of 
+//    'int brk(void*)' throws different exceptions
+// /usr/include/unistd.h:860: than previous declaration 'int brk(void*) throw ()'
+
+
 // Some functions are provided in the libraries, described in 
 // the man pages but not declared in the header. In that case, 
 // just copy the declaration from the man page into this file
@@ -34,8 +46,8 @@
 // function expects.
 extern "C" {
 #if defined(__linux__) // viola@robots
-  pid_t getpgid(pid_t pid);
-  pid_t getsid(pid_t pid);
+  pid_t getpgid(pid_t pid) VPL_THROW(());
+  pid_t getsid(pid_t pid) VPL_THROW(());
 #endif
 #if defined(__sparc__) || defined(VCL_SUNPRO_CC) // kate@robots, ariel@robots
   long gethostid(void);
@@ -112,15 +124,6 @@ extern "C" {
       
 
  */
-
-#if defined(__GNUC__) && (__GNUC_MINOR__ >= 97)
-# define VPL_THROW(args) throw args
-#else
-# define VPL_THROW(args) /* */
-#endif
-// /data/az5/fsm/GCC3.0/target/vxl/vpl/os_unix/vpl_unistd.cxx:135: declaration of 
-//    'int brk(void*)' throws different exceptions
-// /usr/include/unistd.h:860: than previous declaration 'int brk(void*) throw ()'
 
 PASSTHRU(int, chmod, (const char *  a0,vpl_mode_t  a1), (a0, a1))
 PASSTHRU(int, fchmod, ( int  a0, vpl_mode_t  a1 ), (a0, a1))
@@ -217,7 +220,7 @@ PASSTHRU(int, pipe, (int a0[2]), (a0));
 // them using tell and seek. it won't work for multithreaded programs, 
 // where we should lock the fd.
 #if VXL_UNISTD_HAS_PREAD
-extern "C" ssize_t pread (int, void*, vpl_size_t, vpl_off_t);
+extern "C" ssize_t pread (int, void*, vpl_size_t, vpl_off_t) VPL_THROW(());
 PASSTHRU(vpl_ssize_t, pread,(int a0,void* a1,vpl_size_t a2,vpl_off_t a3), (a0, a1, a2, a3));
 #else
 vpl_ssize_t vpl_pread(int fd, void       *buf, vpl_size_t nbyte, vpl_off_t offset) { 
@@ -231,7 +234,7 @@ vpl_ssize_t vpl_pread(int fd, void       *buf, vpl_size_t nbyte, vpl_off_t offse
 } 
 #endif
 #if VXL_UNISTD_HAS_PWRITE
-extern "C" ssize_t pwrite (int, void const*, vpl_size_t, vpl_off_t);
+extern "C" ssize_t pwrite (int, void const*, vpl_size_t, vpl_off_t) VPL_THROW(());
 PASSTHRU(vpl_ssize_t, pwrite, (int  a0,void const * a1,vpl_size_t a2,vpl_off_t a3), (a0, a1, a2, a3));
 #else 
 vpl_ssize_t vpl_pwrite(int fd, void const *buf, vpl_size_t nbyte, vpl_off_t offset) { 
