@@ -11,7 +11,7 @@
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_int_3.h>
-#include <vnl/algo/vnl_svd.h>
+#include <vnl/vnl_inverse.h>
 #include <vil3d/vil3d_trilin_interp.h>
 #include <vbl/vbl_bounding_box.h>
 #include <vbl/vbl_array_2d.h>
@@ -155,7 +155,7 @@ compute_matches( rgrl_feature_set const&    from_set,
                  rgrl_transformation const& current_xform,
                  rgrl_scale          const& current_scale )
 {
-  vcl_cerr << "compute_matches()" << vcl_endl;
+  vcl_cerr << "compute_matches()\n";
 
   typedef vcl_vector<rgrl_feature_sptr> f_vector_type;
   typedef f_vector_type::iterator f_iterator_type;
@@ -352,7 +352,7 @@ map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
   dim[1] = 1+(int)vcl_ceil(box.ymax()) - (int)vcl_floor(box.ymin());
   dim[2] = 1+(int)vcl_ceil(box.zmax()) - (int)vcl_floor(box.zmin());
 
-  DebugMacro( 1, "Origin: " << origin << " Dim: " << dim << vcl_endl; );
+  DebugMacro( 1, "Origin: " << origin << " Dim: " << dim << vcl_endl );
   // create a 3D image with this dim
   vbl_array_3d<double> wgted_sum( dim[0], dim[1], dim[2] ); // 1 plane
   vbl_array_3d<double> wgts( dim[0], dim[1], dim[2] ); // 1 plane
@@ -433,8 +433,7 @@ sub_pixel( vcl_vector< double > const& responses )
     S( i, 0 ) = responses[ i ];
   }
 
-  vnl_svd< double > svd( A );
-  vnl_matrix< double > inv = svd.inverse();
+  vnl_matrix< double > inv = vnl_inverse(A);
   vnl_matrix< double > X = inv * S;
   assert( X.columns() == 1 );
 
@@ -571,7 +570,6 @@ slide_window(rgrl_feature_sptr         mapped_feature,
     for (unsigned int i=0; i<3; i++)
       match_location[i] += double(best[i]);
     DebugMacro(2, "best match :\n" << match_location << vcl_endl );
-
 
     // Now compute the second derivative
     // Note that these descrete points are not evenly distributed.

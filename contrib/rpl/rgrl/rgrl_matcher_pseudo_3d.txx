@@ -10,7 +10,7 @@
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_int_3.h>
-#include <vnl/algo/vnl_svd.h>
+#include <vnl/vnl_inverse.h>
 #include <vil3d/vil3d_trilin_interp.h>
 #include <vcl_cassert.h>
 
@@ -137,7 +137,7 @@ compute_matches( rgrl_feature_set const&    from_set,
                  rgrl_transformation const& current_xform,
                  rgrl_scale const&          current_scale )
 {
-  vcl_cerr << "compute_matches()" << vcl_endl;
+  vcl_cerr << "compute_matches()\n";
 
   typedef vcl_vector<rgrl_feature_sptr> f_vector_type;
   typedef f_vector_type::iterator f_iterator_type;
@@ -351,8 +351,7 @@ sub_pixel( vcl_vector< double > const& responses )
     S( i, 0 ) = responses[ i ];
   }
 
-  vnl_svd< double > svd( A );
-  vnl_matrix< double > inv = svd.inverse();
+  vnl_matrix< double > inv = vnl_inverse(A);
   vnl_matrix< double > X = inv * S;
   assert( X.columns() == 1 );
 
@@ -598,7 +597,7 @@ match_mapped_region( rgrl_feature_sptr         mapped_feature,
       if ( sub_offset1 < -max_offset ) sub_offset1 = -max_offset;
       if ( sub_offset1 > max_offset ) sub_offset1 = max_offset;
       DBG( vcl_cout << " sub_offset1 = " << sub_offset1 << " in [ "
-                    << -max_offset << " , " << max_offset << " ]" << vcl_endl );
+                    << -max_offset << " , " << max_offset << " ]\n" );
     }
 
     double second_d1 = vnl_math_abs( responses[ idx1-1 ][ idx2 ] + responses[ idx1+1 ][ idx2 ]
@@ -627,7 +626,7 @@ match_mapped_region( rgrl_feature_sptr         mapped_feature,
       if ( sub_offset2 < -max_offset ) sub_offset2 = -max_offset;
       if ( sub_offset2 > max_offset ) sub_offset2 = max_offset;
       DBG( vcl_cout << " sub_offset2 = " << sub_offset2 << " in [ "
-                    << -max_offset << " , " << max_offset << " ]" << vcl_endl; );
+                    << -max_offset << " , " << max_offset << " ]\n" );
     }
 
     double second_d2 = vnl_math_abs( responses[ idx1 ][ idx2-1 ] + responses[ idx1 ][ idx2+1 ]

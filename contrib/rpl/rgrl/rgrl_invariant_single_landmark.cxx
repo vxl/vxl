@@ -8,7 +8,7 @@
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_math.h>
-#include <vnl/algo/vnl_svd.h>
+#include <vnl/vnl_inverse.h>
 #include <vnl/vnl_double_4.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_vector.h>
@@ -237,10 +237,8 @@ estimate(rgrl_invariant_sptr         from_inv,
   }
 
   // Estimate the transform
-  vnl_svd<double> svd(sum_prod,1e-5);
-  if ( svd.rank() < 4 ) return false;
-  vnl_matrix_fixed<double,4,1> c_params = svd.inverse() * sum_rhs;
-  vnl_matrix_fixed<double,4,4> norm_covar = svd.inverse();
+  vnl_matrix_fixed<double,4,4> norm_covar = vnl_inverse(sum_prod);
+  vnl_matrix_fixed<double,4,1> c_params = norm_covar * sum_rhs;
 
   // Eliminate the scale of the sum_prod
   //

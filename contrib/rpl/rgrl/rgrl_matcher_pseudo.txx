@@ -10,7 +10,7 @@
 #include <rgrl/rgrl_macros.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_math.h>
-#include <vnl/algo/vnl_svd.h>
+#include <vnl/vnl_inverse.h>
 #include <vil/vil_bilin_interp.h>
 #include <vcl_cassert.h>
 
@@ -164,7 +164,7 @@ compute_matches( rgrl_feature_set const&    from_set,
         -> add_feature_matches_and_weights( *fitr, mapped_feature, matched_to_features,
                                             match_weights );
       DebugMacro(3, " from point : " << (*fitr)->location()
-                   << " to point : " << mapped_feature->location() << " doesn't have proper matches\n");
+                 << " to point : " << mapped_feature->location() << " doesn't have proper matches\n");
       continue;
     }
 
@@ -189,8 +189,8 @@ compute_matches( rgrl_feature_set const&    from_set,
     rgrl_feature_sptr mapped_from = fitr.mapped_from_feature();
     for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
       rgrl_feature_sptr to = titr.to_feature();
-      DebugMacro(3, mapped_from->location()[0]<<' '<<mapped_from->location()[1]<<' '<<
-            to->location()[0]<<' '<<to->location()[1]<<'\n');
+      DebugMacro(3, mapped_from->location()[0]<<' '<<mapped_from->location()[1]
+                 <<' '<< to->location()[0]<<' '<<to->location()[1]<<'\n');
     }
   }
 
@@ -282,8 +282,7 @@ map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
 //  est_sub_offset( vnl_matrix< double > const& A, vnl_matrix< double > const& S )
 //  {
 //    // A S = X, where X = [ a b c ]
-//    vnl_svd< double > svd( A );
-//    vnl_matrix< double > inv = svd.inverse();
+//    vnl_matrix< double > inv = vnl_inverse(A);
 //    vnl_matrix< double > X = inv * S;
 //    assert( X.columns() == 1 );
 
@@ -363,8 +362,7 @@ sub_pixel( vcl_vector< double > const& responses )
     S( r+1, 0 ) = responses[ i ];
   }
 
-  vnl_svd< double > svd( A );
-  vnl_matrix< double > inv = svd.inverse();
+  vnl_matrix< double > inv = vnl_inverse(A);
   vnl_matrix< double > X = inv * S;
   assert( X.columns() == 1 );
 
@@ -681,9 +679,9 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
 
   match_weights.push_back( weight );
   DebugMacro(3, "Signature error for best match :\n" << weight
-             <<", second_derivative = "<< second_derivative
-             <<" min_response = "<<min_response
-             <<" old wgt = "<<second_derivative / (1.0 + min_response)<<'\n');
+             << ", second_derivative = "<< second_derivative
+             << " min_response = "<<min_response
+             << " old wgt = "<<second_derivative / (1.0 + min_response)<<'\n');
 }
 
 template <class PixelType>
