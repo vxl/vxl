@@ -9,7 +9,7 @@
 // Cut-n-paste and modify from vil_image_renderer.
 
 #include <vil2/vil2_image_view.h>
-struct vgui_vil2_section_buffer;
+class vgui_vil2_section_buffer;
 
 //: OpenGL utility to render a vil2_image_view.
 //
@@ -33,8 +33,12 @@ struct vgui_vil2_section_buffer;
 //  to mark all previous sections as invalid.
 //
 template<typename T>
-class vgui_vil2_image_renderer {
-public:
+class vgui_vil2_image_renderer
+{
+  vil2_image_view<T> the_image_;
+  vgui_vil2_section_buffer* buffer_;
+
+ public:
   //: Constructor - create an empty image renderer.
   vgui_vil2_image_renderer();
 
@@ -52,10 +56,6 @@ public:
 
   //: Renders the image pixels.
   void render();
-
-private:
-  vil2_image_view<T> the_image_;
-  vgui_vil2_section_buffer* buffer_;
 };
 
 #endif // vgui_vil2_image_renderer_h_

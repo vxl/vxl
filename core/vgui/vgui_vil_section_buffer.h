@@ -44,8 +44,30 @@ class vgui_accelerate_cached_image;
 // vil2_image_view to a vgui_vil2_section_buffer the non-member
 // vgui_vil2_section_buffer_apply.
 //
-struct vgui_vil2_section_buffer
+class vgui_vil2_section_buffer
 {
+  vgui_accelerate_cached_image* cache_;
+
+  // fsm: I want these to be GLenums as gcc 2.95 will not implicitly
+  // cast ints to enums. Please don't make them ints.
+  GLenum format_;
+  GLenum type_;
+
+  // These fields describe where in the image the section comes from,
+  // how big it is and its resolution.  The actual buffer allocated
+  // may be bigger than the requested size for performance or other
+  // reasons.
+  unsigned int x_, y_;          // starting position in original image.
+  unsigned int w_, h_;          // no of columns and rows (in the section).
+  unsigned int allocw_, alloch_;// actual width and height allocated
+
+  //: Pixel buffer, used for glDrawPixels() or glTexImage2D().
+  void* buffer_;
+
+  //: Result of the last conversion (call to apply())
+  bool conversion_okay_;
+
+ public:
   vgui_vil2_section_buffer(unsigned x, unsigned y,
                            unsigned w, unsigned h,
                            GLenum format_ = GL_NONE,
@@ -68,36 +90,12 @@ struct vgui_vil2_section_buffer
   unsigned width () const { return w_; }
   unsigned height() const { return h_; }
 
- private:
-
-  vgui_accelerate_cached_image* cache_;
-
-  // fsm: I want these to be GLenums as gcc 2.95 will not implicitly
-  // cast ints to enums. Please don't make them ints.
-  GLenum format_;
-  GLenum type_;
-
-  // These fields describe where in the image the section comes from,
-  // how big it is and its resolution.  The actual buffer allocated
-  // may be bigger than the requested size for performance or other
-  // reasons.
-  unsigned int x_, y_;          // starting position in original image.
-  unsigned int w_, h_;          // no of columns and rows (in the section).
-  unsigned int allocw_, alloch_;// actual width and height allocated
-
-  //: Pixel buffer, used for glDrawPixels() or glTexImage2D().
-  void* buffer_;
-
-  //: Result of the last conversion (call to apply())
-  bool conversion_okay_;
-
-public:
   // since we aren't allowed member templates, we expose the
   // internals. Please don't use these interfaces.  (Are templated
   // friend declarations considered member templates?)
 
   //: Only for use by vgui_vil2_section_buffer_apply
-  void* internal_buffer() { return buffer_; };
+  void* internal_buffer() { return buffer_; }
 
   //: Only for use by vgui_vil2_section_buffer_apply
   unsigned& internal_x() { return x_; }
