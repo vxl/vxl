@@ -76,6 +76,7 @@ foreach $f (@FILES)
       $f !~ m/\bv3p\/(tiff|netlib|jpeg|png|zlib|Qv)\// &&
       $f !~ m/\bfile_formats\/vil_viff(header|_support)/ &&
       $f !~ m/\bvgui\/internals\/trackball/ &&
+      $f !~ m/\bgel\/vgel\/kl\/.*\.h$/ &&
       $f !~ m/\bvcl\/vcl_c/ &&
       $f !~ m/\bvcl\/emulation\// &&
       $file =~ m/\001[^\001\002]{111,}/)
@@ -178,6 +179,7 @@ foreach $f (@FILES)
         "$f.$wd" !~ m/\bvnl\/vnl_quaternion\.h\.real$/ &&
         "$f.$wd" !~ m/\bvnl\/vnl_numeric_limits\.h\.(min|max)$/ &&
         "$f.$wd" !~ m/\bvil\/vil_rgb\.(h|txx)\.(min|max)$/ &&
+        "$f.$wd" !~ m/\bgel\/vgel\/kl\/base\.h\.(min|max)$/ &&
         "$f.$wd" !~ m/\boxl\/mvl\/HomgConic\.(h|cxx)\.polar$/ &&
         "$f.$wd" !~ m/\bvnl\/algo\/vnl_rn?poly_(solve|roots)\.h\.(real|imag)$/ &&
         $file_s =~ m/[^.\005\006]\b$wd\s*(\s*)\(/) { # \005 is :: and \006 is ->
