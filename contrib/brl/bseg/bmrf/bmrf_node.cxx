@@ -3,12 +3,14 @@
 // \file
 
 #include "bmrf_node.h"
+#include <vsl/vsl_binary_io.h>
+#include <vbl/io/vbl_io_smart_ptr.h>
 
 
 //: Constructor
 bmrf_node::bmrf_node( int frame_num, double probability )
   : frame_num_(frame_num), probability_(probability),
-    neighbors_(), boundaries_(ALL+1, neighbors_.end()), sizes_(ALL,0)
+    out_arcs_(), in_arcs_(), boundaries_(ALL+1, out_arcs_.end()), sizes_(ALL,0)
 {
 }
 
@@ -29,13 +31,14 @@ bmrf_node::add_neighbor( bmrf_node *node, neighbor_type type )
   if(!node || node == this || type == ALL)
     return false;
     
-  // verify that this node is not already present
+  // verify that this arc is not already present
   neighbor_iterator itr = boundaries_[type];
   for(; itr != boundaries_[type+1]; ++itr)
-    if(*itr == node) return false;
+    if((*itr)->to == node) return false;
     
-  // add the node 
-  neighbors_.insert(boundaries_[type+1], node);
+  // add the arc
+  bmrf_arc_sptr new_arc = new bmrf_arc(this, node);
+  out_arcs_.insert(boundaries_[type+1], new_arc);
   ++sizes_[type];
 
   // adjust boundaries if necessary
@@ -60,8 +63,8 @@ bmrf_node::remove_neighbor( bmrf_node *node, neighbor_type type )
   for(int t = init_t; t<ALL; ++t){
     neighbor_iterator itr = boundaries_[t];
     for(; itr != boundaries_[t+1]; ++itr){
-      if(*itr == node){
-        neighbors_.erase(itr);
+      if((*itr)->to == node){
+        out_arcs_.erase(itr);
         --itr;          // back up
         --sizes_[type]; // decrease count
         if (type != ALL) return true;
@@ -77,7 +80,7 @@ bmrf_node::remove_neighbor( bmrf_node *node, neighbor_type type )
 bmrf_node::neighbor_iterator
 bmrf_node::begin( neighbor_type type )
 {
-  if (type == ALL) return neighbors_.begin();
+  if (type == ALL) return out_arcs_.begin();
   return boundaries_[type];
 }
 
@@ -86,7 +89,7 @@ bmrf_node::begin( neighbor_type type )
 bmrf_node::neighbor_iterator
 bmrf_node::end( neighbor_type type )
 {
-  if (type == ALL) return neighbors_.end();
+  if (type == ALL) return out_arcs_.end();
   return boundaries_[type+1];
 }
 
@@ -95,7 +98,7 @@ bmrf_node::end( neighbor_type type )
 int
 bmrf_node::num_neighbors( neighbor_type type )
 {
-  if (type == ALL) return neighbors_.size();
+  if (type == ALL) return out_arcs_.size();
   return sizes_[type];
 }
     
@@ -112,19 +115,18 @@ bmrf_node::b_write( vsl_b_ostream& os ) const
   for(int t=0; t<ALL; ++t)
     vsl_b_write(os, sizes_[t]);
 
-  // write all the neighbors
-  vcl_list<bmrf_node*>::const_iterator itr = neighbors_.begin();
-  for(; itr != neighbors_.end(); ++itr){
-    // Get a serial_number for this node
-    unsigned long id = os.get_serial_number(*itr);
-    if (id == 0){  // The node has not yet been saved
-      id = os.add_serialisation_record(*itr);
-      vsl_b_write(os, id);    // Save the serial number
-      vsl_b_write(os, *itr);  // Save the node
-    }
-    else{
-      vsl_b_write(os, id);    // Save the serial number only
-    }
+  // write all the outgoing arcs
+  vcl_list<bmrf_arc_sptr>::const_iterator itr = out_arcs_.begin();
+  for(; itr != out_arcs_.end(); ++itr){
+    vsl_b_write(os, *itr);  // Save the arc
+  }
+
+  // write the number of incoming arcs
+  vsl_b_write(os, in_arcs_.size());
+  // write all the incoming arcs
+  itr = in_arcs_.begin();
+  for(; itr != in_arcs_.end(); ++itr){
+    vsl_b_write(os, *itr);  // Save the arc
   }
 }
 
@@ -144,9 +146,9 @@ bmrf_node::b_read( vsl_b_istream& is )
       vsl_b_read(is, this->frame_num_);
       vsl_b_read(is, this->probability_);
 
-      neighbors_.clear();
+      out_arcs_.clear();
       boundaries_.clear();
-      boundaries_.resize(ALL+1, neighbors_.end());
+      boundaries_.resize(ALL+1, out_arcs_.end());
 
       int num_neighbors = 0;
       for(int t=0; t<ALL; ++t){
@@ -156,29 +158,27 @@ bmrf_node::b_read( vsl_b_istream& is )
       int type = 0;
       int b_loc = sizes_[0];
       for(int n=0; n<num_neighbors; ++n){
-        unsigned long id; // Unique serial number identifying object
-        vsl_b_read(is, id);
-
-        bmrf_node* node_ptr = (bmrf_node*) is.get_serialisation_pointer(id);
-        if (node_ptr == 0) { // Not loaded before
-          bool not_null_ptr;
-          vsl_b_read(is, not_null_ptr);
-          if (not_null_ptr){
-            node_ptr = new bmrf_node();
-            // SERIALISATION MUST BE DONE BEFORE READING !!!
-            is.add_serialisation_record(id, node_ptr);
-            node_ptr->b_read(is);
-          }
-        }
-        neighbors_.push_back(node_ptr);
+        bmrf_arc_sptr arc_ptr;
+        vsl_b_read(is, arc_ptr);
+        arc_ptr->from = this;
+        out_arcs_.push_back(arc_ptr);
         
         while(type < ALL && n == b_loc){
-          boundaries_[++type] = neighbors_.end();
+          boundaries_[++type] = out_arcs_.end();
           --boundaries_[type];
           b_loc += sizes_[type];
         }
       }
-      boundaries_[0] = neighbors_.begin();
+      boundaries_[0] = out_arcs_.begin();
+
+      int num_incoming;
+      vsl_b_read(is, num_incoming);
+      for(int n=0; n<num_incoming; ++n){
+        bmrf_arc_sptr arc_ptr;
+        vsl_b_read(is, arc_ptr);
+        arc_ptr->to = this;
+        out_arcs_.push_back(arc_ptr);
+      }
     }   
     break;
 
@@ -207,19 +207,24 @@ bmrf_node::print_summary( vcl_ostream& os ) const
 }
 
 
-//: Return a platform independent string identifying the class
-vcl_string
-bmrf_node::is_a(  ) const
+//-----------------------------------------------------------------------------------------
+// bmrf_arc member functions
+//-----------------------------------------------------------------------------------------
+
+
+//: Binary save self to stream.
+void
+bmrf_node::bmrf_arc::b_write( vsl_b_ostream& os ) const
 {
-  return vcl_string("bmrf_node");
+  // Nothing to write
 }
 
 
-//: Return true if the argument matches the string identifying the class or any parent class
-bool
-bmrf_node::is_class( const vcl_string& cls ) const
+//: Binary load self from stream.
+void
+bmrf_node::bmrf_arc::b_read( vsl_b_istream& is )
 {
-  return cls==bmrf_node::is_a();
+  // Nothing to read
 }
 
 
@@ -256,3 +261,33 @@ vsl_b_read(vsl_b_istream &is, bmrf_node* &n)
     n = 0;
 }
 
+
+
+//: Binary save bmrf_node::bmrf_arc to stream.
+void
+vsl_b_write(vsl_b_ostream &os, const bmrf_node::bmrf_arc* a)
+{
+  if (a==0){
+    vsl_b_write(os, false); // Indicate null pointer stored
+  }
+  else{
+    vsl_b_write(os,true); // Indicate non-null pointer stored
+    a->b_write(os);
+  }
+}
+
+
+//: Binary load bmrf_node::bmrf_arc from stream.
+void
+vsl_b_read(vsl_b_istream &is, bmrf_node::bmrf_arc* &a)
+{
+  delete a;
+  bool not_null_ptr;
+  vsl_b_read(is, not_null_ptr);
+  if (not_null_ptr){
+    a = new bmrf_node::bmrf_arc();
+    a->b_read(is);
+  }
+  else
+    a = 0;
+}
