@@ -16,7 +16,6 @@
 
 #include <vcl_list.h>
 #include <vcl_vector.h>
-#include <vcl_map.h>
 #include <vcl_iosfwd.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
@@ -70,7 +69,6 @@ class bmrf_node : public vbl_ref_count
     double min_alpha_, max_alpha_;
     double int_prob_;
   };
-
 
   friend class bmrf_network;
 
@@ -194,7 +192,6 @@ void vsl_b_read(vsl_b_istream &is, bmrf_node* &n);
 
 //: Print an ASCII summary to the stream
 void vsl_print_summary(vcl_ostream &os, const bmrf_node* n);
-
 
 //: Binary save bmrf_node::bmrf_arc* to stream.
 void vsl_b_write(vsl_b_ostream &os, const bmrf_node::bmrf_arc* a);

@@ -1,11 +1,7 @@
-
 // This is brl/bseg/strk/strk_region_info.cxx
 #include "strk_region_info.h"
 //:
 // \file
-#include <vcl_algorithm.h>
-#include <vcl_cstdlib.h> // for rand()
-#include <vul/vul_timer.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_4point.h>
 #include <vtol/vtol_vertex_sptr.h>
@@ -16,8 +12,6 @@
 //Gives a sort on mutual information decreasing order
 static bool info_compare(strk_tracking_face_2d_sptr const f1,
                          strk_tracking_face_2d_sptr const f2)
-
-
 {
   return f1->total_info() > f2->total_info();//JLM Switched
 }
@@ -88,7 +82,7 @@ void strk_region_info::set_image_i(vil1_image& image)
     return;
   }
   vgl_h_matrix_2d<double> H;
-  if(!this->map_i_to_0(H))
+  if (!this->map_i_to_0(H))
   {
     vcl_cout <<"In strk_region_info::set_image_i(.) - mapping failed\n";
     return;
@@ -173,29 +167,30 @@ void strk_region_info::evaluate_info()
              << "\ncolor_joint_entropy = " << tf->color_joint_entropy()
              << "\n\n\n"<< vcl_flush;
 }
-//map the intensities from image i to the coordinate frame of image 0
-//assumes a homography between the images is defined by a face with 
-//4 vertices
+
+//: map the intensities from image i to the coordinate frame of image 0.
+// assumes a homography between the images is defined by a face with
+// 4 vertices
 bool strk_region_info::map_i_to_0(vgl_h_matrix_2d<double>& H)
 {
-  if(!face_0_&&face_i_)
+  if (!face_0_&&face_i_)
     return false;
   //get the vertices
   vcl_vector<vtol_vertex_sptr> verts0, vertsi;
   face_0_->vertices(verts0);
   face_i_->vertices(vertsi);
   int n0 = verts0.size(), ni = vertsi.size();
-  if(n0!=4||ni!=4)
+  if (n0!=4||ni!=4)
     return false;
   //convert to homogeneous coordinates
   vcl_vector<vgl_homg_point_2d<double> > pts_0, pts_i;
-  for(int k = 0; k<4; k++)
-    {
-      vtol_vertex_2d_sptr v0 = verts0[k]->cast_to_vertex_2d(),
-		  vi = vertsi[k]->cast_to_vertex_2d();
-      vgl_homg_point_2d<double> hp0(v0->x(), v0->y()), hpi(vi->x(), vi->y());
-      pts_0.push_back(hp0);   pts_i.push_back(hpi); 
-    }
+  for (int k = 0; k<4; k++)
+  {
+    vtol_vertex_2d_sptr v0 = verts0[k]->cast_to_vertex_2d(),
+                        vi = vertsi[k]->cast_to_vertex_2d();
+    vgl_homg_point_2d<double> hp0(v0->x(), v0->y()), hpi(vi->x(), vi->y());
+    pts_0.push_back(hp0);   pts_i.push_back(hpi);
+  }
   //compute the homography from image i to image 0
   vgl_h_matrix_2d_compute_4point hc;
   hc.compute(pts_i, pts_0, H);
