@@ -8,7 +8,7 @@
 #include <vcl_iostream.h>
 
 #include <vnl/vnl_matlab_print.h>
-#include <vnl/vnl_complex_ops.h>
+#include <vnl/vnl_complexify.h>
 #include <vnl/algo/vnl_netlib.h> // zgeev_()
 
 void vnl_complex_eigensystem::compute(vnl_matrix<vcl_complex<double> > const & A,

@@ -8,7 +8,7 @@
 //-----------------------------------------------------------------------------
 #include <vcl_iostream.h>
 #include <vcl_complex.h>
-#include <vnl/vnl_complex_ops.h>
+#include <vnl/vnl_complexify.h>
 #include <vnl/algo/vnl_real_eigensystem.h>
 
 #include <vnl/vnl_test.h>

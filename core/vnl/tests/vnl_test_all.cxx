@@ -6,7 +6,7 @@
 #include <vnl/vnl_block.h>
 #include <vnl/vnl_c_vector.h>
 #include <vnl/vnl_complex.h>
-#include <vnl/vnl_complex_ops.h>
+#include <vnl/vnl_complexify.h>
 #include <vnl/vnl_complex_traits.h>
 #include <vnl/vnl_copy.h>
 #include <vnl/vnl_cost_function.h>
@@ -35,6 +35,7 @@
 #include <vnl/vnl_fortran_copy.h>
 #include <vnl/vnl_identity.h>
 #include <vnl/vnl_identity_3x3.h>
+#include <vnl/vnl_imag.h>
 #include <vnl/vnl_int_2.h>
 #include <vnl/vnl_int_3.h>
 #include <vnl/vnl_int_4.h>
@@ -64,6 +65,7 @@
 #include <vnl/vnl_operators.h>
 #include <vnl/vnl_quaternion.h>
 #include <vnl/vnl_rational.h>
+#include <vnl/vnl_real.h>
 #include <vnl/vnl_real_npolynomial.h>
 #include <vnl/vnl_real_polynomial.h>
 #include <vnl/vnl_rotation_matrix.h>

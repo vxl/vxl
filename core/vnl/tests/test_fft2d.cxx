@@ -21,7 +21,7 @@
 #include <vcl_cmath.h>
 #include <vcl_complex.h>
 
-#include <vnl/vnl_complex_ops.h>
+#include <vnl/vnl_complexify.h>
 #include <vnl/vnl_test.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_fft_2d.h>
