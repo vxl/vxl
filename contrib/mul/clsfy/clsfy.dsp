@@ -203,6 +203,26 @@ SOURCE=.\Templates/vsl_binary_loader+clsfy_classifier_1d-.cxx
 SOURCE=.\Templates/vsl_vector_io+clsfy_classifier_1d~-.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_rbf_svm.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_rbf_svm_smo_1_builder.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_smo_1.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_smo_base.cxx
+
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -279,6 +299,26 @@ SOURCE=.\clsfy_rbf_parzen.h
 # Begin Source File
 
 SOURCE=.\clsfy_simple_adaboost.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_rbf_svm.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_rbf_svm_smo_1_builder.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_smo_1.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\clsfy_smo_base.h
 
 # End Source File
 # End Group

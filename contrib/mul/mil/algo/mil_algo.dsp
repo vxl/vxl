@@ -105,6 +105,11 @@ SOURCE=.\mil_algo_exp_filter_1d.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\mil_algo_grad_3x3.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/mil_algo_exp_filter_2d+float.float-.cxx
 
 # End Source File
@@ -126,6 +131,16 @@ SOURCE=.\Templates/mil_algo_line_filter+float-.cxx
 # Begin Source File
 
 SOURCE=.\Templates/mil_algo_line_filter+uchar-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/mil_algo_grad_filter_2d+float.float-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/mil_algo_grad_filter_2d+uchar.float-.cxx
 
 # End Source File
 # End Group
@@ -154,6 +169,21 @@ SOURCE=.\mil_algo_line_filter.h
 # Begin Source File
 
 SOURCE=.\mil_algo_line_filter.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_algo_grad_3x3.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_algo_grad_filter_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mil_algo_grad_filter_2d.txx
 
 # End Source File
 # End Group
