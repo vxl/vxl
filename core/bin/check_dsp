@@ -33,6 +33,8 @@ foreach $dir (@DIRS)
   @tmp_list = readdir(TMP);
   closedir(TMP);
   @source = ();
+  @source = ("test_vdgl.cxx") if ($dir =~ m+\bgel/vdgl/tests$+);
+  @hsource = ();
   $f = "";
   foreach $fx (@tmp_list) {
     next unless ($fx =~ m/\.dsp$/);
@@ -42,13 +44,16 @@ foreach $dir (@DIRS)
     while(<FILE>) {
       print STDOUT "Line of $dir/$fx does not end in <CR><LF>\n" unless m/\r$/;
       $start = 1  if (m/^\# Begin Group \"Source Files\"/);
+      $start = 2  if (m/^\# Begin Group \"Header Files\"/);
       $start = "" if (m/^\# End Group/);
       next if (! $start);
       if (m/^SOURCE=\"?\.\\([^\s\"]+)/) {
         $file = "$1";
         $file =~ s/\\/\//g;
         push @source, $file
-          unless ($file eq "CMakeLists.txt");
+          unless ($file eq "CMakeLists.txt" || $start != 1);
+        push @hsource, $file
+          unless ($file eq "CMakeLists.txt" || $start != 2);
       }
     }
     close FILE;
@@ -59,12 +64,23 @@ foreach $dir (@DIRS)
   @sources = ();
   @subdirs = ();
   if (open(MAKEFILE, $makef)) {
+    @hsources = ();
     @aux_sources = ("Templates");
     while(<MAKEFILE>) {
       s/\$\(wildcard (.*)\)/$1/g; s/\#.*//; s/\$\([^()]+\)//;
       if (m/^\s*(SOURCES|MINI_PROG_SOURCES|TESTS)\s*\:?\=\s*(\S+)/) {
         $file = "$2";
         @sources = ($file);
+        $file =~ s/\.(c|cxx|cc|cpp|C)$/.h/;
+        push @hsources, $file if (-f "$dir/$file");
+      }
+      if (m/^\s*(MANPAGE_SOURCES)\s*\:?\=\s*(\S+)/) {
+        $file = "$2";
+        push @hsources, $file;
+        if ($file =~ m/\.txx$/) {
+          $file =~ s/\.txx$/.h/;
+          push @hsources, $file if (-f "$dir/$file");
+        }
       }
       if (m/^\s*(SOURCES|MINI_PROG_SOURCES|TESTS)\s*\+\=\s*(\S+)/) {
         $file = "$2";
@@ -76,7 +92,23 @@ foreach $dir (@DIRS)
             push @sources,"$x" if ($x =~ m/_mocced\.cxx$/);
           }
         }
-        else { push @sources, $file; }
+        else {
+          push @sources, $file;
+          $file =~ s/\.(c|cxx|cc|cpp|C)$/.h/;
+          push @hsources, $file
+            if (-f "$dir/$file"
+              && $file !~ m/\b(vbl_shared_pointer|vbl_sort|vgl_1d_basis|vil_warp|vnl_matlab_print)\.h$/
+              && $file !~ m/\b(mil_gaussian_pyramid_builder_2d(|_general)|mil_image_(2d_of|data|pyramid))\.h$/
+              && $file !~ m/\b(osl_canny_smooth)\.h$/);
+        }
+      }
+      if (m/^\s*(MANPAGE_SOURCES)\s*\+\=\s*(\S+)/) {
+        $file = "$2";
+        push @hsources, $file;
+        if ($file =~ m/\.txx$/) {
+          $file =~ s/\.txx$/.h/;
+          push @hsources, $file if (-f "$dir/$file");
+        }
       }
       if (m/^\s*SUBDIRS\s*\:?\=\s*(.+)/) {
         $file = "$1";
@@ -111,8 +143,10 @@ foreach $dir (@DIRS)
   }
 
   $cmakef = $dir . "/CMakeLists.txt";
+  $hcmakef = $dir . "/CMakeListsHeaders.txt";
   $cmakefile = "";
   @source_files = ();
+  @hsource_files = ();
   @subdirs2 = ();
   if (open(CMAKEFILE, $cmakef)) {
     $old_v=$/;
@@ -121,14 +155,23 @@ foreach $dir (@DIRS)
     close CMAKEFILE;
     $/=$old_v;
   }
+  if (open(CMAKEFILE, $hcmakef)) {
+    $old_v=$/;
+    undef $/;
+    $cmakefile .= <CMAKEFILE>;
+    close CMAKEFILE;
+    $/=$old_v;
+  }
   $cmakefile =~ s/\n\s*\#[^\n]*//g;
   while ($cmakefile =~ s/\bSOURCE_FILES\s*\(\s*\S+sources\s*([^()]+)\)//) {
     @tmpl_list = split /\s+/, "$1";
     foreach $x (@tmpl_list) {
-      if ( $x =~ m/\.h$/) { ; }
+      if ( $x =~ m/\.h$/) { push @hsource_files, "$x"; }
+      elsif ( $x =~ m/\.txx$/) { push @hsource_files, "$x"; }
       elsif (-f "$dir/$x") { push @source_files, "$x"; }
       elsif (-f "$dir/$x.cxx") { push @source_files, "$x.cxx"; }
       elsif (-f "$dir/$x.c") { push @source_files, "$x.c"; }
+      elsif (-f "$dir/$x.cc") { push @source_files, "$x.cc"; }
       elsif (-f "$dir/$x.C") { push @source_files, "$x.C"; }
       elsif (-f "$dir/$x.cpp") { push @source_files, "$x.cpp"; }
       else { printf "No source file $x.* found in $dir\n"; }
@@ -140,6 +183,7 @@ foreach $dir (@DIRS)
     if (-f "$dir/$x") { push @source_files, "$x"; }
     elsif (-f "$dir/$x.cxx") { push @source_files, "$x.cxx"; }
     elsif (-f "$dir/$x.c") { push @source_files, "$x.c"; }
+    elsif (-f "$dir/$x.cc") { push @source_files, "$x.cc"; }
     elsif (-f "$dir/$x.C") { push @source_files, "$x.C"; }
     elsif (-f "$dir/$x.cpp") { push @source_files, "$x.cpp"; }
     else { printf "No source file $x.* found in $dir\n"; }
@@ -170,7 +214,11 @@ foreach $dir (@DIRS)
   @source = sort(@source); push @source, "~END";
   @sources = sort(@sources); push @sources, "~END";
   @source_files = sort(@source_files); push @source_files, "~END";
-  next if ("@source" eq "@sources" && "@source" eq "@source_files");
+  @hsource = sort(@hsource); push @hsource, "~END";
+  @hsources = sort(@hsources); push @hsources, "~END";
+  @hsource_files = sort(@hsource_files); push @hsource_files, "~END";
+  next if ("@source" eq "@sources" && "@source" eq "@source_files"
+        && "@hsource" eq "@hsources" && "@hsource" eq "@hsource_files");
   
   $source=""; $sources=""; $source_files="";
   # Note that shift() removes the *first* element from the list, so we run through
@@ -246,6 +294,75 @@ foreach $dir (@DIRS)
       $source = shift(@source) if ($sources eq $source);
       $source_files = shift(@source_files) if ($sources eq $source_files);
       $sources = shift(@sources);
+    }
+  }
+
+  # compare header file lists
+  $hsource=""; $hsources=""; $hsource_files="";
+
+  while (@hsource || @hsources || @hsource_files) {
+    unless ($hsource eq "~END") {
+      $s = shift(@hsource);
+      while ($s eq $hsource) {
+        print STDOUT "multiple occurrence of $s in $f\n"
+          unless ("$s" =~ m/^Templates\//);
+        $s = shift(@hsource);
+      }
+      $hsource = $s;
+    }
+    unless ($hsources eq "~END") {
+      $s = shift(@hsources);
+      while ($s eq $hsources) {
+        print STDOUT "multiple occurrence of $s in $makef\n";
+        $s = shift(@hsources);
+      }
+      $hsources = $s;
+    }
+    unless ($hsource_files eq "~END") {
+      $s = shift(@hsource_files);
+      while ($s eq $hsource_files) {
+        print STDOUT "multiple occurrence of $s in $hcmakef\n"
+          unless ($s =~ m/\bFl_(blender|movie|twowin)_ui\.h$/);
+        $s = shift(@hsource_files);
+      }
+      $hsource_files = $s;
+    }
+    last if ($hsource eq "~END" && $hsources eq "~END" && $hsource_files eq "~END");
+    next if ($hsource eq $hsources && $hsource eq $hsource_files);
+    while ($hsource lt $hsources) {
+      if (-f "$dir/$hsource") {
+        print STDOUT "MANPAGE_SOURCES += $hsource\tis missing from $makef\n";
+      } else {
+        print STDOUT "SOURCE=.\\$hsource\tmust be removed from $f (header files)\n";
+      }
+      $hsource = shift(@hsource);
+    }
+    last if ($hsource eq "~END" && $hsources eq "~END" && $hsource_files eq "~END");
+    next if ($hsource eq $hsources && $hsource eq $hsource_files);
+    while ($hsource_files lt $hsources) {
+      if (-f "$dir/$hsource_files") {
+        print STDOUT "MANPAGE_SOURCES += $hsource_files\tis missing from $makef\n";
+      } else {
+        print STDOUT "SOURCES($hsource_files)\tmust be removed from $hcmakef\n";
+      }
+      $hsource_files = shift(@hsource_files);
+    }
+    last if ($hsource eq "~END" && $hsources eq "~END" && $hsource_files eq "~END");
+    next if ($hsource eq $hsources && $hsource eq $hsource_files);
+    while ($hsources lt $hsource || $hsources lt $hsource_files) {
+      if (-f "$dir/$hsources") {
+        if ($hsources lt $hsource) {
+          print STDOUT "SOURCE=.\\$hsources\tis missing from $f (header files)\n";
+        }
+        if ($hsources lt $hsource_files) {
+          print STDOUT "SOURCE_FILES($hsources)\tis missing from $hcmakef\n";
+        }
+      } else {
+        print STDOUT "MANPAGE_SOURCES += $hsources\tmust be removed from $makef\n";
+      }
+      $hsource = shift(@hsource) if ($hsources eq $hsource);
+      $hsource_files = shift(@hsource_files) if ($hsources eq $hsource_files);
+      $hsources = shift(@hsources);
     }
   }
 
