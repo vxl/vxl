@@ -28,8 +28,8 @@ void test_real_eigensystem()
       vnl_real_eigensystem eig(S);
       vnl_diag_matrix<vnl_double_complex> D(eig.D.n());
       for(unsigned i = 0; i < eig.D.n(); ++i) {
-	Assert("All real", imag(eig.D(i,i)) < 1e-15);
-	D(i,i) = real(eig.D(i,i));
+	Assert("All real", vcl_imag(eig.D(i,i)) < 1e-15);
+	D(i,i) = vcl_real(eig.D(i,i));
       }
 
       vcl_cout << "D = " << eig.D << vcl_endl;
