@@ -39,7 +39,7 @@ void test_generalized_eigensystem()
   vcl_cout << "V = " << gev.V << vcl_endl;
   vcl_cout << "D = " << gev.D << vcl_endl;
   vcl_cout << "residual = " << C * gev.V - S * gev.V * gev.D << vcl_endl;
-  double err = (C * gev.V - S * gev.V * gev.D).inf_norm();
+  double err = (C * gev.V - S * gev.V * gev.D).fro_norm();
   vcl_cout << "Recomposition residual = " << err << vcl_endl;
 
   Assert("Recomposition residual < 1e-12", err < 1e-12);
