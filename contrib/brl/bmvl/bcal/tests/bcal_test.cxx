@@ -84,21 +84,18 @@ void testing_brown_stereor_grid_camera(vcl_string const& fname)
   }
 
   int num_points = 0;
-  if(in.eof()){
+  if (in.eof()){
     vcl_cerr<<"wrong file! at least number of points in the calibration board are needed\n";
   }
 
   in >> num_points;
-  
+  vcl_cout << "num_points = " << num_points << '\n';
   vcl_vector<vgl_homg_point_2d<double> > pts(num_points);
 
-  for(int i=0; i<num_points; i++){
-    double u, v;
-    in>>u>>v;
-    vgl_homg_point_2d<double> pt(u, v);
-    pts[i] = pt;
+  for (int i=0; i<num_points; i++) {
+    double u, v; in >> u >> v;
+    pts[i] = vgl_homg_point_2d<double>(u, v);
   }
-
 
   //
   // set up camera graph and calibrate it
@@ -112,12 +109,13 @@ void testing_brown_stereor_grid_camera(vcl_string const& fname)
   int camID = cg.add_vertex();
   int source_id = cg.get_source_id();
 
-  // add a camera with 5 views into a graph
+  // add a camera with 7 views into a graph
   int nviews = 0;
   in >> nviews;
+  vcl_cout << "nviews = " << nviews << '\n';
 
   vcl_vector<double> t_beats(nviews);
-  for(int i=0; i<nviews; i++)
+  for (int i=0; i<nviews; i++)
     t_beats[i] = i;
 
   // set beats on camera node
@@ -135,13 +133,11 @@ void testing_brown_stereor_grid_camera(vcl_string const& fname)
   // reading the feature point for each view
   //
 
-  for(int i=0; i<nviews; i++){
+  for (int i=0; i<nviews; i++){
     vcl_vector<vgl_homg_point_2d<double> > features(num_points);
-    for(int j = 0; j<num_points; j++){
-      double u, v;
-      in>>u>>v;
-      vgl_homg_point_2d<double> pt(u, v);
-      features[j] = pt;
+    for (int j = 0; j<num_points; j++) {
+      double u, v; in>>u>>v;
+      features[j] = vgl_homg_point_2d<double>(u, v);
     }
     cg.get_vertex(camID)->read_data(features , i);
   }
