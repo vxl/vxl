@@ -552,7 +552,7 @@ void vsl_b_istream::clear_serialisation_records()
   serialisation_records_.clear();
 }
 
-//: Adds record of objects's unique serial number, and location in memory.
+//: Adds record of object's unique serial number, and location in memory.
 //
 // Adding a pointer that already exists will cause the function to abort(),
 // if debugging is turned on;

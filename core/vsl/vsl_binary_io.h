@@ -169,7 +169,7 @@ class vsl_b_istream
   // similar point during output.
   virtual void clear_serialisation_records();
 
-  //: Adds record of objects's unique serial number, and location in memory.
+  //: Adds record of object's unique serial number, and location in memory.
   //
   // Adding a pointer that already exists will cause the function to abort(),
   // if debugging is turned on;
