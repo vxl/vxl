@@ -50,9 +50,6 @@ inline int vgui_linker_hack()
 #if VGUI_MESA
   vgui_accelerate_x11_tag_function();
 #endif
-#ifdef HAS_GLUT
-  vgui_glut_tag_function();
-#endif
 #ifdef WIN32
   vgui_mfc_tag_function();
   vgui_accelerate_mfc_tag_function();
@@ -71,6 +68,9 @@ inline int vgui_linker_hack()
 #endif
 #ifdef HAS_SDL
   vgui_SDL_tag_function();
+#endif
+#ifdef HAS_GLUT
+  vgui_glut_tag_function();
 #endif
 
   return 0;
