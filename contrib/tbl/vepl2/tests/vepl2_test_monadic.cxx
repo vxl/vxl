@@ -37,6 +37,9 @@ int vepl2_test_monadic()
   ONE_TEST(vepl2_monadic_sqr,int__img,int__ori,unsigned int,202896874,m+"_sqr_int",args);
   ONE_TEST(vepl2_monadic_sqr,flot_img,flot_ori,float,282,m+"_sqr_float",args);
   ONE_TEST(vepl2_monadic_sqr,dble_img,dble_ori,double,282,m+"_sqr_double",args);
+
+  FUZ_TEST(vepl2_monadic_sqrt,flot_img,flot_ori,float,203,m+"_sqrt_float",args);
+  FUZ_TEST(vepl2_monadic_sqrt,dble_img,dble_ori,double,203,m+"_sqrt_double",args);
 #undef args
 #define args ,10,20
   ONE_TEST(vepl2_monadic_shear,byte_img,byte_ori,unsigned char,127886,m+"_shear_byte",args);
