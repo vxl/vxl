@@ -7,11 +7,6 @@
 # include "emulation/vcl_utility.h"
 # define vcl_make_pair make_pair
 
-//#elif defined(VCL_GCC) && !define(GNU_LIBSTDCXX_V3)
-//# include <utility>
-//# define vcl_pair pair
-//# define vcl_make_pair make_pair
-
 #else // e.g. VCL_SUNPRO_CC or VCL_VC60
 # include "iso/vcl_utility.h"
 #endif

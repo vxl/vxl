@@ -3,9 +3,6 @@
 
 #include "vcl_compiler.h"
 
-//#if defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
-//# include <string.h>
-//# define vcl_memcpy ::memcpy
 #if defined(VCL_SGI_CC_720)
 # include <string.h>
 # define vcl_generic_cstring_STD /* */

@@ -12,13 +12,6 @@
 # include "emulation/vcl_map.h"
 # include "emulation/vcl_multimap.h"
 
-//// -------------------- gcc with old library
-//#elif defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
-//# include <map.h>
-//# include <multimap.h>
-//# define vcl_map      map
-//# define vcl_multimap multimap
-
 // -------------------- sunpro 5.0
 #elif defined(VCL_SUNPRO_CC_50)
 # include "sunpro/vcl_map.h"
