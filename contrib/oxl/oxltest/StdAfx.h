@@ -17,7 +17,6 @@
 
 // TODO: reference additional headers your program requires here
 
-#include <oxp/MovieFile.h>
 #include <mvl/HomgInterestPointSet.h>
 
 //{{AFX_INSERT_LOCATION}}
