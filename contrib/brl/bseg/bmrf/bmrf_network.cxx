@@ -202,6 +202,15 @@ bmrf_network::b_write( vsl_b_ostream& os ) const
   for(; itr != node_from_seg_.end(); ++itr){
     vsl_b_write(os, itr->second);
   }
+
+  // write the number of epipoles
+  vsl_b_write(os, int(epipoles_.size()));
+  // write all the epipoles
+  for( vcl_vector<bmrf_epipole>::const_iterator itr = epipoles_.begin();
+       itr != epipoles_.end(); ++itr ){
+    vsl_b_write(os, itr->location().x());
+    vsl_b_write(os, itr->location().y());
+  }
 }
 
 
@@ -226,6 +235,16 @@ bmrf_network::b_read( vsl_b_istream& is )
         vsl_b_read(is, node);
         node_from_seg_[node->epi_seg().ptr()] = node;
         nodes_from_frame_[node->frame_num()][node->epi_seg().ptr()] = node;
+      }
+      
+      epipoles_.clear();
+      int num_epipoles;
+      vsl_b_read(is, num_epipoles);
+      for(int n=0; n<num_epipoles; ++n){
+        double x,y;
+        vsl_b_read(is, x);
+        vsl_b_read(is, y);
+        epipoles_.push_back(bmrf_epipole(x, y));
       }
     }
     if(this->purge())
@@ -266,9 +285,10 @@ bmrf_network::depth_iterator::next_node()
   if (curr_node_.ptr() == NULL) return;
   bmrf_node::arc_iterator itr = curr_node_->end();
   for(--itr; itr != curr_node_->end(); --itr){
-    eval_queue_.push_front((*itr)->to().ptr());
+    if( visited_.find((*itr)->to().ptr()) == visited_.end() )
+      eval_queue_.push_front((*itr)->to().ptr());
   }
-  while( visited_.find(eval_queue_.front()) != visited_.end() )
+  while( !eval_queue_.empty() && visited_.find(eval_queue_.front()) != visited_.end() )
     eval_queue_.pop_front();
   if (eval_queue_.empty())
     curr_node_ = NULL;
@@ -287,9 +307,10 @@ bmrf_network::breadth_iterator::next_node()
   if (curr_node_.ptr() == NULL) return;
   bmrf_node::arc_iterator itr = curr_node_->begin();
   for(; itr != curr_node_->end(); ++itr){
-    eval_queue_.push_back((*itr)->to().ptr());
+    if( visited_.find((*itr)->to().ptr()) == visited_.end() )
+      eval_queue_.push_back((*itr)->to().ptr());
   }
-  while( visited_.find(eval_queue_.front()) != visited_.end() )
+  while( !eval_queue_.empty() && visited_.find(eval_queue_.front()) != visited_.end() )
     eval_queue_.pop_front();
   if (eval_queue_.empty())
     curr_node_ = NULL;
