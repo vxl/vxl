@@ -22,7 +22,7 @@
 
 #include <vnl/vnl_matrix.h>
 
-template <class T>
+export template <class T>
 class vnl_file_matrix : public vnl_matrix<T> {
 public:
   vnl_file_matrix(char const* filename);

@@ -53,7 +53,7 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
 
-template <class T>
+export template <class T>
 class vnl_quaternion : public vnl_vector_fixed<T, 4> { // public for IS-A relation
   typedef vnl_vector_fixed<T, 4> Base;
 public:
