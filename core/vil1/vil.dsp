@@ -565,6 +565,11 @@ SOURCE=.\vil_new.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vil_open.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\vil_pixel.cxx
 
 # End Source File
@@ -944,6 +949,11 @@ SOURCE=.\vil_ncc.txx
 # Begin Source File
 
 SOURCE=.\vil_new.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_open.h
 
 # End Source File
 # Begin Source File
