@@ -42,7 +42,7 @@ rsdl_point::rsdl_point( const rsdl_point& old )
 rsdl_point::rsdl_point( const vnl_vector<double>& all, unsigned int Na )
   : Nc_( all.size() - Na ), Na_( Na )
 {
-  assert( Nc_ >= 0 );
+  assert( all.size() >= Na ); // Nc_ is always >= 0  :-)
   data_ = new double[ Nc_ + Na_ ];
   for ( unsigned int i=0; i< Nc_ + Na_; ++i )
     data_[i] = all[i];
