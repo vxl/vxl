@@ -40,14 +40,13 @@ class vgl_h_matrix_3d
   vgl_h_matrix_3d(const T* t_matrix);
   vgl_h_matrix_3d(vcl_istream&);
   vgl_h_matrix_3d(char const* filename);
-  vgl_h_matrix_3d(vcl_vector<vgl_homg_point_3d<T> > const &points1, 
+  vgl_h_matrix_3d(vcl_vector<vgl_homg_point_3d<T> > const &points1,
                   vcl_vector<vgl_homg_point_3d<T> > const &points2);
 
   // Operations----------------------------------------------------------------
 
   vgl_homg_point_3d<T> operator()(vgl_homg_point_3d<T> const& x) const;
   vgl_homg_point_3d<T> operator* (vgl_homg_point_3d<T> const& x) const {return (*this)(x);}
-
 
   vgl_homg_plane_3d<T> preimage(vgl_homg_plane_3d<T> const& p);
 
@@ -74,7 +73,9 @@ class vgl_h_matrix_3d
   void set_rotation_about_axis(const vnl_vector_fixed<T,3>& axis, T angle);
   void set_rotation_roll_pitch_yaw(T yaw, T pitch, T roll);
   void set_rotation_euler(T rz1, T ry, T rz2);
-  //: extract components as transformations
+
+  // ---------- extract components as transformations ----------
+
   //: corresponds to rotation for Euclidan transformations
   vgl_h_matrix_3d<T> get_upper_3x3() const;
   //: corresponds to translation for affine transformations
@@ -84,7 +85,6 @@ class vgl_h_matrix_3d
 // stream I/O
 template <class T> vcl_ostream& operator<<(vcl_ostream& s, vgl_h_matrix_3d<T> const& h);
 template <class T> vcl_istream& operator>>(vcl_istream& s, vgl_h_matrix_3d<T>&       h);
-
 
 #define VGL_H_MATRIX_3D_INSTANTIATE(T) extern "please include vgl/algo/vgl_h_matrix_3d.txx first"
 
