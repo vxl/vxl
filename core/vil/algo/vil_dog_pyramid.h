@@ -53,7 +53,7 @@ void vil_dog_pyramid(const vil_image_view<T>& src_image,
 
   unsigned n_planes = src_image.nplanes();
 
-  double scaling = 2.0/3.0;
+  double scaling = 1.5;
 
   // Subsequent levels
   for (unsigned i=1;i<nL;++i)
