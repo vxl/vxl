@@ -79,7 +79,7 @@ void vsl_print_summary(vcl_ostream & os,const vbl_array_3d<T> & p)
         os << " ..." << vcl_endl;
     }
     if (p.get_row2_count() > 5)
-      os << "...";
+      os << " ...";
     os << vcl_endl;
     os << vcl_endl;
   }

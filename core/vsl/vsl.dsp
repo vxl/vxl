@@ -151,6 +151,10 @@ SOURCE=.\vsl_map_io.txx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vsl_pair_io.txx
+# End Source File
+# Begin Source File
+
 SOURCE=".\Templates\vsl_set+int-.cxx"
 # End Source File
 # Begin Source File
@@ -236,6 +240,10 @@ SOURCE=.\vsl_list_io.h
 # Begin Source File
 
 SOURCE=.\vsl_map_io.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsl_pair_io.h
 # End Source File
 # Begin Source File
 

@@ -1,4 +1,4 @@
-#ifndef vbl_io__bounding_box_h
+#ifndef vbl_io_bounding_box_h
 #define vbl_io_bounding_box_h
 #ifdef __GNUC__
 #pragma interface

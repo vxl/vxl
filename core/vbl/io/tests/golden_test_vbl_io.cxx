@@ -14,7 +14,7 @@
 #include <vbl/io/vbl_io_smart_ptr.h>
 
 
-//#include <vbl/io/vbl_io_sparse_array.h>
+#include <vbl/io/vbl_io_sparse_array_1d.h>
 #include <vbl/io/vbl_io_bounding_box.h>
 
 
@@ -111,17 +111,17 @@ void golden_test_vbl_io(bool save_file)
       
       
   // Sparse Array
-/*  vbl_sparse_array<double> sa_out, sa_in;
+  vbl_sparse_array_1d<double> sa_out, sa_in;
   unsigned key1=3,key2=4,key3=5;
   double data1=1.2, data2=3.4, data3=5.6;
   
   //create a sparse array - more than 5 elements so only first 5 are written out
-  sa_out[key1]=data1;
-  sa_out[key2]=data2;
-  sa_out[key3]=data3;
+  sa_out(key1)=data1;
+  sa_out(key2)=data2;
+  sa_out(key3)=data3;
   for (unsigned k=60; k<70; k++)
-    sa_out[k]=data1;
-*/
+    sa_out(k)=data1;
+
   
 /* This won't work on systems without a user called cbj!
   // User Info
@@ -141,18 +141,15 @@ void golden_test_vbl_io(bool save_file)
   // Save if option set
   if (save_file)
   {
-    vcl_cout << "Was save invoked ?" << vcl_endl;
+    vcl_cout << "Going to create the golden test file" << vcl_endl;
     vsl_b_ofstream bfs_out("golden_test_vbl_io.bvl");
-    if (!bfs_out)
-    {
-      vcl_cerr<<"Problems opening file for output"<<vcl_endl;
-      exit(1);
-    }
+    TEST ("Opened golden_test_vbl_io.bvl for writing ", ! bfs_out, false);
+
     vsl_b_write(bfs_out, b_box_out);
     vsl_b_write(bfs_out, a1_out);
     vsl_b_write(bfs_out, a2_out);	
     vsl_b_write(bfs_out, a3_out);
-//    vsl_b_write(bfs_out, sa_out);
+    vsl_b_write(bfs_out, sa_out);
 //    vsl_b_write(bfs_out, ui_out);
     vsl_b_write(bfs_out, sp1_out);
     vsl_b_write(bfs_out, sp2_out);
@@ -174,7 +171,7 @@ void golden_test_vbl_io(bool save_file)
   vsl_b_read(bfs_in, a1_in);	
   vsl_b_read(bfs_in, a2_in);	
   vsl_b_read(bfs_in, a3_in);
-//  vsl_b_read(bfs_in, sa_in);
+  vsl_b_read(bfs_in, sa_in);
 //  vsl_b_read(bfs_in, ui_in);
   vsl_b_read(bfs_in, sp1_in);
   vsl_b_read(bfs_in, sp2_in);
@@ -185,11 +182,11 @@ void golden_test_vbl_io(bool save_file)
   // Test that each object created is the same as read in from the file.
   
   // Test bounding box
-  TEST ("b_box_out.initialized_ == b_box_in.initialized_", b_box_out.initialized_ == b_box_in.initialized_, true);
-  TEST ("b_box_out.min_[0] == b_box_in.min_[0]", b_box_out.min_[0] == b_box_in.min_[0], true);
-  TEST ("b_box_out.min_[1] == b_box_in.min_[1]", b_box_out.min_[1] == b_box_in.min_[1], true);
-  TEST ("b_box_out.max_[0] == b_box_in.max_[0]", b_box_out.max_[0] == b_box_in.max_[0], true);
-  TEST ("b_box_out.max_[1] == b_box_in.max_[1]", b_box_out.max_[1] == b_box_in.max_[1], true);
+  TEST ("vbl_bounding_box: b_box_out.initialized_ == b_box_in.initialized_", b_box_out.initialized_ == b_box_in.initialized_, true);
+  TEST ("vbl_bounding_box: b_box_out.min_[0] == b_box_in.min_[0]", b_box_out.min_[0] == b_box_in.min_[0], true);
+  TEST ("vbl_bounding_box: b_box_out.min_[1] == b_box_in.min_[1]", b_box_out.min_[1] == b_box_in.min_[1], true);
+  TEST ("vbl_bounding_box: b_box_out.max_[0] == b_box_in.max_[0]", b_box_out.max_[0] == b_box_in.max_[0], true);
+  TEST ("vbl_bounding_box: b_box_out.max_[1] == b_box_in.max_[1]", b_box_out.max_[1] == b_box_in.max_[1], true);
   
   
   //Test 1d array
@@ -207,7 +204,7 @@ void golden_test_vbl_io(bool save_file)
         test_result1 = false;
     }
   }
-  TEST ("a1_out == a1_in", test_result1, true);
+  TEST ("vbl_array_1d: a1_out == a1_in", test_result1, true);
   
   
   // Test 2d array
@@ -227,7 +224,7 @@ void golden_test_vbl_io(bool save_file)
           test_result2 = false;
     }
   }
-  TEST ("a2_out == a2_in", test_result2, true);
+  TEST ("vbl_array_2d: a2_out == a2_in", test_result2, true);
   
   
   
@@ -250,25 +247,25 @@ void golden_test_vbl_io(bool save_file)
           if (a3_out(i,j,k) != a3_in(i,j,k))
             test_result3 = false;
   }
-  TEST ("a3_out == a3_in", test_result3, true);
+  TEST ("vbl_array_3d: a3_out == a3_in", test_result3, true);
   
   
-/*  // Test Sparse Array
+  // Test Sparse Array
   bool test_result4 = true;
   //same number of non zero elements?
   if(sa_out.count_nonempty() != sa_in.count_nonempty())
     test_result4=false;
   else {
     //check every key/data pair, require same order too.
-    vbl_sparse_array<double>::const_iterator s = sa_in.begin();
+    vbl_sparse_array_1d<double>::const_iterator s = sa_in.begin();
     //N.B. relies on sensible == operator for <T> 
-    for(vbl_sparse_array<double>::const_iterator r = sa_out.begin(); r != sa_out.end(); ++r){
+    for(vbl_sparse_array_1d<double>::const_iterator r = sa_out.begin(); r != sa_out.end(); ++r){
       if(((*s).first != (*r).first) || ((*s).second != (*r).second)) test_result4=false;
       s++;
     }
   }
-  TEST ("sa_out == sa_in",test_result4, true);
-*/
+  TEST ("vbl_sparse_array_1d: sa_out == sa_in",test_result4, true);
+
 
 /*
   //Test User Info
@@ -279,8 +276,8 @@ void golden_test_vbl_io(bool save_file)
   
   
   // Test Smart Pointer
-  TEST ("sp1_in == sp2_in", sp1_in == sp2_in, true);
-  TEST ("sp1_in->get_references() == 2", sp1_in->get_references() ==2, true);
+  TEST ("vbl_smart_ptr: sp1_in == sp2_in", sp1_in == sp2_in, true);
+  TEST ("vbl_smart_ptr: sp1_in->get_references() == 2", sp1_in->get_references() ==2, true);
   
   
   

@@ -3,26 +3,28 @@
 #include <vcl_utility.h>
 
 #include <vbl/vbl_test.h>
-#include <vbl/io/vbl_io_sparse_array.h>
+#include <vbl/io/vbl_io_sparse_array_2d.h>
+#include <vbl/vbl_sparse_array_2d.h>
 
 
 void test_sparse_array_io()
 {
-  vcl_cout << "***********************************" << vcl_endl;
-  vcl_cout << "Testing vbl_sparse_array<double> io" << vcl_endl;
-  vcl_cout << "***********************************" << vcl_endl;  
+  vcl_cout << "**************************************" << vcl_endl;
+  vcl_cout << "Testing vbl_sparse_array_2d<double> io" << vcl_endl;
+  vcl_cout << "**************************************" << vcl_endl;  
 
-  vbl_sparse_array<double> v_out, v_in;
-  unsigned key1=3,key2=4,key3=5;
-  double data1=1.2, data2=3.4, data3=5.6;
+  vbl_sparse_array_2d<double> v_out, v_in;
 
-  //create a sparse array - more than 5 elements so only 
+  // fill v_in with incorrect values
+   v_in(4,5) = 3.0;
+
+  // create a sparse array - more than 5 elements so only 
   // the first 5 are written out
-  v_out[key1]=data1;
-  v_out[key2]=data2;
-  v_out[key3]=data3;
+  v_out(1,1)=0.4;
+  v_out(2000,10000)=1e5;
+  v_out(10,10)=0.0;
   for (unsigned k=60; k<70; k++)
-    v_out[k]=data1;
+    v_out(k,400)=30.3;
 
   vsl_b_ofstream bfs_out("vbl_sparse_array_test_io.bvl.tmp");
   TEST ("Created vbl_sparse_array_test_io.bvl.tmp for writing", 
@@ -42,8 +44,8 @@ void test_sparse_array_io()
     test_result=false;
   else {
     //check every key/data pair, require same order too.
-  vbl_sparse_array<double>::const_iterator s = v_in.begin();
-  vbl_sparse_array<double>::const_iterator r;
+  vbl_sparse_array_2d<double>::const_iterator s = v_in.begin();
+  vbl_sparse_array_2d<double>::const_iterator r;
   //N.B. relies on sensible == operator for <T> 
   for(r = v_out.begin(); r != v_out.end(); ++r){
     if(((*s).first != (*r).first) || ((*s).second != (*r).second)) 

@@ -66,7 +66,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /I "$(IUEROOT)\vcl\config.win32-VC60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/mul" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D "_AFXDLL" /Zl /FD /GZ "
+# ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /I "$(IUEROOT)\vcl\config.win32-VC60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/mul" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D "_AFXDLL" /Zl /FD /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
 BSC32=bscmake.exe
@@ -147,6 +147,26 @@ SOURCE=.\vbl_io_smart_ptr.txx
 # End Source File
 # Begin Source File
 
+SOURCE=".\Templates\vbl_io_sparse_array_1d+double-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vbl_io_sparse_array_1d+int-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vbl_io_sparse_array_2d+double-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vbl_io_sparse_array_2d+int-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_sparse_array_base.txx
+# End Source File
+# Begin Source File
+
 SOURCE=.\vbl_io_user_info.cxx
 # End Source File
 # End Group
@@ -176,6 +196,18 @@ SOURCE=.\vbl_io_bounding_box.h
 # Begin Source File
 
 SOURCE=.\vbl_io_smart_ptr.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_sparse_array_1d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_sparse_array_2d.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_io_sparse_array_base.h
 # End Source File
 # Begin Source File
 
