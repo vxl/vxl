@@ -27,6 +27,7 @@ MINI_PROG_SOURCES += example4_threshold.cxx
 # B. using vnl_matrix<T> as 2D storage class:
 MINI_PROG_SOURCES += example3_threshold.cxx
 MINI_PROG_SOURCES += example_median.cxx
+MINI_PROG_SOURCES += example_gaussian_convolution.cxx
 
 # C. using vbl_array_2d<T> as 2D storage class:
 MINI_PROG_SOURCES += example_gradient_mag.cxx
