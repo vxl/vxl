@@ -8,16 +8,19 @@
 const float vsol_spatial_object_3d::eps = 1.0e-3f;
 int vsol_spatial_object_3d::tagcount_ = 0;
 
-char * vsol_spatial_object_3d::SpatialTypes[] = {"NO_TYPE             ",
-                        "TOPOLOGYOBJECT      ",
-                        "POINT               ",
-                        "CURVE               ",
-                        "REGION              ",
-                        "VOLUME              ",
-                        "SPATIALGROUP        ",
-                        "NUM_SPATIALOBJECT_TYPES"};
+char * vsol_spatial_object_3d::SpatialTypes[] =
+{
+  "NO_TYPE             ",
+  "TOPOLOGYOBJECT      ",
+  "POINT               ",
+  "CURVE               ",
+  "REGION              ",
+  "VOLUME              ",
+  "SPATIALGROUP        ",
+  "NUM_SPATIALOBJECT_TYPES"
+};
 
-const char*    vsol_spatial_object_3d::get_name() const
+const char * vsol_spatial_object_3d::get_name() const
 {
   vsol_spatial_object_3d_type type =spatial_type();
   if (type > 0 && type < vsol_spatial_object_3d::NUM_SPATIALOBJECT_TYPES)
@@ -138,6 +141,3 @@ void vsol_spatial_object_3d::grow_minmax_bounds(vsol_box_3d & comp_box)
     bounding_box_=new vsol_box_3d;
   bounding_box_->grow_minmax_bounds(comp_box);
 }
-
-//#include <vcl_rel_ops.h> // gcc 2.7
-//VCL_INSTANTIATE_INLINE(bool operator!=(vsol_spatial_object_3d const &, vsol_spatial_object_3d const &));
