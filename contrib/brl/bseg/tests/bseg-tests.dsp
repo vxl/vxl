@@ -251,6 +251,9 @@ SOURCE=.\sdet_test_detector.cxx
 # Begin Source File
 SOURCE=.\sdet_test_region_proc.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\brip_test_lucas_kanade.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
