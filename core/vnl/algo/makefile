@@ -53,21 +53,3 @@ MANPAGE_SOURCES += vnl_orthogonal_complement.txx
 ################################
 include ${IUEROOT}/config/top.mk
 ################################
-
-## The "fsm_pack" C++ package is available on request from fsm@robots.ox.ac.uk
-ifneq (,$(strip $(wildcard $(HOME)/source_root0/tinker/fsm_pack)))
-INCDIRS += $(HOME)/source_root0/tinker
-DEFINES += -DHAS_FSM_PACK
-FLAGS_Templates/fsm_svd+float-.cxx += $(optimize)
-FLAGS_Templates/fsm_svd+double-.cxx += $(optimize)
-FLAGS_Templates/fsm_svd+long_double-.cxx += $(optimize)
-FLAGS_Templates/fsm_svd+float_complex-.cxx += $(optimize)
-FLAGS_Templates/fsm_svd+double_complex-.cxx += $(optimize)
-FLAGS_Templates/fsm_svd+long_double_complex-.cxx += $(optimize)
-FLAGS_Templates/fsm_qr+float-.cxx += $(optimize)
-FLAGS_Templates/fsm_qr+double-.cxx += $(optimize)
-FLAGS_Templates/fsm_qr+long_double-.cxx += $(optimize)
-FLAGS_Templates/fsm_qr+float_complex-.cxx += $(optimize)
-FLAGS_Templates/fsm_qr+double_complex-.cxx += $(optimize)
-FLAGS_Templates/fsm_qr+long_double_complex-.cxx += $(optimize)
-endif
