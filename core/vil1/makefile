@@ -16,6 +16,7 @@ SOURCES += vil_file_format.cxx
 SOURCES += vil_byte_swap.cxx
 SOURCES += vil_16bit.cxx
 SOURCES += vil_32bit.cxx
+SOURCES += vil_test.cxx
 
 # various vil_stream classes
 #SOURCES += vil_stream_iso_stream.cxx  # from a C++ stream
