@@ -24,6 +24,7 @@
 //=======================================================================
 //: Default constructor
 clsfy_simple_adaboost::clsfy_simple_adaboost()
+: n_clfrs_used_(-1) , n_dims_(-1)
 {
 }
 
@@ -42,11 +43,7 @@ clsfy_simple_adaboost& clsfy_simple_adaboost::operator=(const clsfy_simple_adabo
   for (int i=0;i<n;++i)
     classifier_1d_[i] = c.classifier_1d_[i]->clone();
 
-  wts_ = c.wts_;
-  bias_ = c.bias_;
-  index_ = c.index_;
-  n_dims_ = c.n_dims_;
-
+  alphas_ = c.alphas_;
   return *this;
 }
 
@@ -57,6 +54,11 @@ void clsfy_simple_adaboost::delete_stuff()
     delete classifier_1d_[i];
 
   classifier_1d_.resize(0);
+
+  alphas_.resize(0);
+  index_.resize(0);
+  n_clfrs_used_= -1;
+
 }
 
 //: Destructor
@@ -65,12 +67,28 @@ clsfy_simple_adaboost::~clsfy_simple_adaboost()
   delete_stuff();
 }
 
+
+//: Comparison
+bool clsfy_simple_adaboost::operator==(const clsfy_simple_adaboost& x) const
+{
+
+  if (x.classifier_1d_.size() != classifier_1d_.size() ) return false;
+  int n= x.classifier_1d_.size();
+  for (int i=0; i<n; ++i)
+    if (!(*(x.classifier_1d_[i]) == *(classifier_1d_[i]) )) return false;
+
+  return ( 
+          x.alphas_ == alphas_ &&
+          x.index_ == index_ 
+          );
+}
+
+
 //: Set parameters.  Clones taken of *classifier[i]
 void clsfy_simple_adaboost::set_parameters(
                       const vcl_vector<clsfy_classifier_1d*>& classifier,
-                      const vcl_vector<vnl_vector<double> >& params,
-                      const vnl_vector<double>& wts,
-                      const vcl_vector<int>& index, int n_dims)
+                      const vcl_vector<double>& alphas,
+                      const vcl_vector<int>& index)
 {
   delete_stuff();
 
@@ -79,24 +97,54 @@ void clsfy_simple_adaboost::set_parameters(
   for (int i=0;i<n;++i)
     classifier_1d_[i] = classifier[i]->clone();
 
-  wts_ = wts;
-  bias_ = 0.5*wts.mean()*wts.size();
-  index_ = index;
-  n_dims_ = n_dims;
+  alphas_ = alphas;
+  index_= index;
+ 
+}
+
+
+//: Clear all alphas and classifiers
+void clsfy_simple_adaboost::clear()
+{
+  delete_stuff();
+}
+
+
+//: Add weak classifier and alpha value
+// nb also changes n_clfrs_used to use all current weak classifiers
+void clsfy_simple_adaboost::add_classifier(clsfy_classifier_1d* c1d, 
+                                           double alpha,
+                                           int index)
+{
+  classifier_1d_.push_back(c1d->clone());
+  alphas_.push_back(alpha);
+  index_.push_back(index);
+  n_clfrs_used_=alphas_.size();
 }
 
 
 //: Classify the input vector.
-// Returns either 0 (for negative class) or 1 (for positive class)
+// Returns either 1 (for positive class) or 0 (for negative class)
 unsigned clsfy_simple_adaboost::classify(const vnl_vector<double> &v) const
 {
-  int n = index_.size();
-  double sum = 0.0;
-  for (int i=0;i<n;++i)
-    sum += wts_[i]*classifier_1d_[i]->classify(v[index_[i]]);
+  //vcl_cout<<"alphas_.size()= "<<alphas_.size()<<vcl_endl;
+  //vcl_cout<<"n_clfrs_used_= "<<n_clfrs_used_<<vcl_endl;
+  assert ( n_clfrs_used_ != -1);
+  assert ( n_clfrs_used_ <= alphas_.size() );
+  assert ( n_dims_ != -1);
+  assert ( v.size() == n_dims_ );
 
-  if (sum<bias_) return 0;
-  return 1;
+
+  double sum1 = 0.0, sum2 =0.0;
+  for (int i=0;i<n_clfrs_used_;++i)
+  {
+    //vcl_cout<<"index_["<<i<<"]= "<<index_[i]<<vcl_endl;
+    sum1 += alphas_[i]*classifier_1d_[i]->classify(v[ index_[i] ]);
+    sum2 += alphas_[i];
+  }
+
+  if (sum1 - sum2 * 0.5 > 0.0) return 1;
+  return 0;
 }
 
 
@@ -118,12 +166,14 @@ void clsfy_simple_adaboost::class_probabilities(vcl_vector<double> &outputs,
 // Class probability = 1 / (1+exp(-log_l))
 double clsfy_simple_adaboost::log_l(const vnl_vector<double> &v) const
 {
-  int n = index_.size();
-  double sum = 0.0;
-  for (int i=0;i<n;++i)
-    sum += wts_[i]*classifier_1d_[i]->classify(v[index_[i]]);
+  double sum1 = 0.0, sum2= 0.0;
+  for (int i=0;i<n_clfrs_used_;++i)
+  {
+    sum1 += alphas_[i]*classifier_1d_[i]->classify(v[ index_[i] ]);
+    sum2 += alphas_[i];
+  }
 
-  return sum - bias_;
+  return sum1 - sum2 * 0.5; 
 }
 
 
@@ -148,10 +198,11 @@ bool clsfy_simple_adaboost::is_class(vcl_string const& s) const
 // required if data is present in this class
 void clsfy_simple_adaboost::print_summary(vcl_ostream& os) const
 {
-  int n = index_.size();
+  int n = alphas_.size();
+  os<<vcl_endl;
   for (int i=0;i<n;++i)
   {
-    os<<"Element "<<index_[i]<<" weight: "<<wts_[i]
+    os<<" Alpha: "<<alphas_[i] << " Index: "<<index_[i]
       <<" Classifier: "<<classifier_1d_[i]<<vcl_endl;
   }
 }
@@ -169,10 +220,8 @@ void clsfy_simple_adaboost::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
   vsl_b_write(bfs,classifier_1d_);
-  vsl_b_write(bfs,wts_);
+  vsl_b_write(bfs,alphas_);
   vsl_b_write(bfs,index_);
-  vsl_b_write(bfs,bias_);
-  vsl_b_write(bfs,n_dims_);
 }
 
 //=======================================================================
@@ -189,10 +238,8 @@ void clsfy_simple_adaboost::b_read(vsl_b_istream& bfs)
   {
     case (1):
       vsl_b_read(bfs,classifier_1d_);
-      vsl_b_read(bfs,wts_);
+      vsl_b_read(bfs,alphas_);
       vsl_b_read(bfs,index_);
-      vsl_b_read(bfs,bias_);
-      vsl_b_read(bfs,n_dims_);
       break;
     default:
       vcl_cerr << "I/O ERROR: clsfy_simple_adaboost::b_read(vsl_b_istream&)\n"

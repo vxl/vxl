@@ -17,23 +17,30 @@
 class clsfy_simple_adaboost : public clsfy_classifier_base
 {
 protected:
+
+  //: The classifiers in order
   vcl_vector<clsfy_classifier_1d*> classifier_1d_;
 
-  //: Weights on each classifier
-  vnl_vector<double> wts_;
+  //: Co-efficents applied to each classifier
+  vcl_vector<double> alphas_;
 
-  //: Threshold for classification (half sum of weights)
-  double bias_;
-
-  //: Element of vector to use with each classifier
+  //: Index of input vector appropriate for each classifier
   vcl_vector<int> index_;
 
-  //: Number of dimensions of input vectors
-  unsigned n_dims_;
+  //: number of classfiers used
+  int n_clfrs_used_;
+
+  //: dimensionality of data 
+  // (ie size of input vectors v, ie the total number of different features)
+  int n_dims_;
+
+//================protected methods =================================
 
   //: Delete objects on heap
   void delete_stuff();
+
 public:
+
   //: Default constructor
   clsfy_simple_adaboost();
 
@@ -45,6 +52,21 @@ public:
 
   //: Destructor
   ~clsfy_simple_adaboost();
+
+  //: Comparison
+  bool operator==(const clsfy_simple_adaboost& x) const;
+
+  //: Clear all alphas and classifiers
+  void clear();
+
+  //: Add classifier and alpha value
+  void add_classifier(clsfy_classifier_1d* c1d, double alpha, int index);
+
+  //: Set number of classifiers used (when applying strong classifier)
+  void set_n_clfrs_used(int x) {if (x <= alphas_.size()) n_clfrs_used_ = x;}
+
+  //: Access 
+  int n_clfrs_used() {return n_clfrs_used_; }
 
   //: Find the posterior probability of the input being in the positive class.
   // The result is outputs(0)
@@ -61,15 +83,27 @@ public:
   //: The dimensionality of input vectors.
   unsigned virtual n_dims() const { return n_dims_;}
 
+   //: Set number of classifiers used (when applying strong classifier)
+  void set_n_dims(unsigned x) {n_dims_ = x;}
+
   //: The number of possible output classes.
   // 1 indicates a binary classifier
   unsigned virtual n_classes() const { return 1;}
 
   //: Set parameters.  Clones taken of *classifier[i]
   void set_parameters(const vcl_vector<clsfy_classifier_1d*>& classifier,
-                      const vcl_vector<vnl_vector<double> >& params,
-                      const vnl_vector<double>& wts,
-                      const vcl_vector<int>& index, int n_dims);
+                      const vcl_vector<double>& alphas,
+                      const vcl_vector<int>& index);
+
+  //: Access functions
+  const vcl_vector<clsfy_classifier_1d*>& classifiers() const 
+    {return classifier_1d_;}   
+
+  const vcl_vector<double>& alphas() const 
+    {return alphas_;}   
+
+  const vcl_vector<int>& index() const 
+    {return index_;}  
 
   //: Version number for I/O
   short version_no() const;
