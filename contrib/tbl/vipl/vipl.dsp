@@ -99,6 +99,9 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
+SOURCE=.\filter/vipl_filter_abs.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vipl_accessors_vcl_vector+uint-.cxx
 # End Source File
 # Begin Source File
@@ -133,6 +136,9 @@ SOURCE=.\Templates/vipl_accessors_vil_image+uchar-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vipl_accessors_vil_image+ushort-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vipl_accessors_vil_image+vil_rgb+uchar--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vipl_add_random_noise+vil_image.vil_image.uchar.uchar-.cxx
@@ -289,9 +295,6 @@ SOURCE=.\Templates/vipl_threshold+vil_image.vil_image.ushort.ushort-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vipl_x_gradient+vil_image.vil_image.uchar.uchar-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\filter/vipl_filter_abs.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vipl_with_section/Templates/vipl_accessors_section+int.2-.cxx
