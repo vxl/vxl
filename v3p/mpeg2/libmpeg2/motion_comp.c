@@ -31,28 +31,28 @@
 
 mpeg2_mc_t mpeg2_mc;
 
-void mpeg2_mc_init (uint32_t mm_accel)
+void mpeg2_mc_init (uint32_t mm_accel_)
 {
 #ifdef ARCH_X86
-    if (mm_accel & MM_ACCEL_X86_MMXEXT) {
+    if (mm_accel_ & MM_ACCEL_X86_MMXEXT) {
         fprintf (stderr, "Using MMXEXT for motion compensation\n");
         mpeg2_mc = mpeg2_mc_mmxext;
-    } else if (mm_accel & MM_ACCEL_X86_3DNOW) {
+    } else if (mm_accel_ & MM_ACCEL_X86_3DNOW) {
         fprintf (stderr, "Using 3DNOW for motion compensation\n");
         mpeg2_mc = mpeg2_mc_3dnow;
-    } else if (mm_accel & MM_ACCEL_X86_MMX) {
+    } else if (mm_accel_ & MM_ACCEL_X86_MMX) {
         fprintf (stderr, "Using MMX for motion compensation\n");
         mpeg2_mc = mpeg2_mc_mmx;
     } else
 #endif
 #ifdef ARCH_PPC
-    if (mm_accel & MM_ACCEL_PPC_ALTIVEC) {
+    if (mm_accel_ & MM_ACCEL_PPC_ALTIVEC) {
         fprintf (stderr, "Using altivec for motion compensation\n");
         mpeg2_mc = mpeg2_mc_altivec;
     } else
 #endif
 #ifdef LIBMPEG2_MLIB
-    if (mm_accel & MM_ACCEL_MLIB) {
+    if (mm_accel_ & MM_ACCEL_MLIB) {
         fprintf (stderr, "Using mlib for motion compensation\n");
         mpeg2_mc = mpeg2_mc_mlib;
     } else
