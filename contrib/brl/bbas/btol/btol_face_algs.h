@@ -14,6 +14,7 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_polygon.h>
 #include <vsol/vsol_point_2d_sptr.h>
+#include <vsol/vsol_polygon_2d_sptr.h>
 #include <vtol/vtol_vertex_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vtol/vtol_face_2d_sptr.h>
@@ -28,6 +29,9 @@ class btol_face_algs
 
   static  bool vgl_to_vtol(vgl_polygon<double>const & poly,
                            vtol_face_2d_sptr& face);
+
+  static  bool vsol_to_vtol(vsol_polygon_2d_sptr const & poly,
+                            vtol_face_2d_sptr& face);
 
   static  bool edge_intersects(vtol_face_2d_sptr const & face,
 

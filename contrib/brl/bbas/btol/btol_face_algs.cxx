@@ -8,6 +8,7 @@
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_face_2d.h>
 #include <vsol/vsol_point_2d.h>
+#include <vsol/vsol_polygon_2d.h>
 #include <bsol/bsol_algs.h>
 #include <btol/btol_vertex_algs.h>
 #include <btol/btol_face_algs.h>
@@ -297,4 +298,26 @@ transform(vtol_face_2d_sptr const& face,
 
   //construct the face
   return new vtol_face_2d(new_chains);
+}
+
+//=========================================================
+// Convert a vsol polygon to a vtol face.  No interior holes
+//
+bool btol_face_algs::vsol_to_vtol(vsol_polygon_2d_sptr const & poly,
+                                  vtol_face_2d_sptr& face)
+{
+  if(!poly)
+    return false;
+  int n_verts = poly->size();
+  if(!n_verts)
+    return false;
+  vcl_vector<vtol_vertex_sptr> verts;
+  for(int i = 0; i<n_verts; i++)
+    {
+      vsol_point_2d_sptr p = poly->vertex(i);
+      vtol_vertex_sptr v = (new vtol_vertex_2d(p->x(), p->y()))->cast_to_vertex();
+      verts.push_back(v);
+    }
+  face = new vtol_face_2d(verts);
+  return true;
 }
