@@ -1329,6 +1329,7 @@ cat > check_vxl_words.cc <<EOF
   printf("export VXL_" #NAME ";\nexport VXL_HAS_" #NAME ";\n" )
 
 int main(int, char **) {
+  macro(BYTE, 1, char, char);
   macro(INT_8, 1, char, short);
   macro(INT_16, 2, short, int);
   macro(INT_32, 4, long, int);

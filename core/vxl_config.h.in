@@ -14,6 +14,16 @@
 /* order to catch illegitimate uses. However, typedefs are superior */
 /* to #defines, especially for the two keyword types, so we use     */
 /* typedefs for the valid cases.                                    */
+#define VXL_HAS_BYTE @VXL_HAS_BYTE@
+#define VXL_BYTE_STRING "@VXL_BYTE@"
+#if @VXL_HAS_BYTE@
+  typedef   signed @VXL_BYTE@  vxl_sbyte;
+  typedef unsigned @VXL_BYTE@  vxl_byte;
+#else
+# define vxl_sbyte  void
+# define vxl_byte  void
+#endif
+
 #define VXL_HAS_INT_8 @VXL_HAS_INT_8@
 #define VXL_INT_8_STRING "@VXL_INT_8@"
 #if @VXL_HAS_INT_8@

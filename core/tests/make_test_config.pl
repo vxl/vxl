@@ -155,6 +155,8 @@ for $var_exp (
   # from vxl_config.h
   'VXL_LITTLE_ENDIAN',
   'VXL_BIG_ENDIAN',
+  'VXL_HAS_BYTE',
+  'VXL_BYTE_STRING',
   'VXL_HAS_INT_8',
   'VXL_INT_8_STRING',
   'VXL_HAS_INT_16',

@@ -799,6 +799,22 @@ MAIN( test_config )
 #endif
   vcl_cout << vcl_endl;
 
+  vcl_cout << "VXL_HAS_BYTE ";
+#ifdef VXL_HAS_BYTE
+  vcl_cout << "is set to " << quote(VXL_HAS_BYTE);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VXL_BYTE_STRING ";
+#ifdef VXL_BYTE_STRING
+  vcl_cout << "is set to " << quote(VXL_BYTE_STRING);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
   vcl_cout << "VXL_HAS_INT_8 ";
 #ifdef VXL_HAS_INT_8
   vcl_cout << "is set to " << quote(VXL_HAS_INT_8);

@@ -12923,6 +12923,7 @@ cat > check_vxl_words.cc <<EOF
   printf("export VXL_" #NAME ";\nexport VXL_HAS_" #NAME ";\n" )
 
 int main(int, char **) {
+  macro(BYTE, 1, char, char);
   macro(INT_8, 1, char, short);
   macro(INT_16, 2, short, int);
   macro(INT_32, 4, long, int);
@@ -14490,6 +14491,7 @@ s,@VXL_TWO_ARG_GETTIME@,$VXL_TWO_ARG_GETTIME,;t t
 s,@VXL_HAS_IEEEFP_H@,$VXL_HAS_IEEEFP_H,;t t
 s,@VXL_BIG_ENDIAN@,$VXL_BIG_ENDIAN,;t t
 s,@VXL_LITTLE_ENDIAN@,$VXL_LITTLE_ENDIAN,;t t
+s,@VXL_HAS_BYTE@,$VXL_HAS_BYTE,;t t
 s,@VXL_HAS_INT_8@,$VXL_HAS_INT_8,;t t
 s,@VXL_HAS_INT_16@,$VXL_HAS_INT_16,;t t
 s,@VXL_HAS_INT_32@,$VXL_HAS_INT_32,;t t
@@ -14498,6 +14500,7 @@ s,@VXL_HAS_IEEE_32@,$VXL_HAS_IEEE_32,;t t
 s,@VXL_HAS_IEEE_64@,$VXL_HAS_IEEE_64,;t t
 s,@VXL_HAS_IEEE_96@,$VXL_HAS_IEEE_96,;t t
 s,@VXL_HAS_IEEE_128@,$VXL_HAS_IEEE_128,;t t
+s,@VXL_BYTE@,$VXL_BYTE,;t t
 s,@VXL_INT_8@,$VXL_INT_8,;t t
 s,@VXL_INT_16@,$VXL_INT_16,;t t
 s,@VXL_INT_32@,$VXL_INT_32,;t t
