@@ -189,9 +189,6 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
     evals.put((n_cols-1-i), temp_val);
   }
 
-  vcl_cout << "Should be largest eigenvalue first\n";
-  vcl_cout << evals<< vcl_endl;
-
   // Record n_classes-1 vector basis
   int m = EVecs.rows();
 
