@@ -54,8 +54,8 @@ bgui_bargraph_clipon_tableau::~bgui_bargraph_clipon_tableau()
 
 // Update the plot data.  Choice of fixed scale or variable scale
 // If fixed = 0 then the plot is automatically scaled. If fixed is
-// not zero then it is treated as the scale to be used. That is,
-// the data is multiplied by fixed*graph_height_
+// not false then scale is used. That is,
+// the data is multiplied by scale*graph_height_
 void bgui_bargraph_clipon_tableau::update(vcl_vector<float> const& bars,
                                           const bool fixed,
                                           const float scale)
@@ -80,11 +80,10 @@ void bgui_bargraph_clipon_tableau::update(vcl_vector<float> const& bars,
     }
   else
     for (unsigned int i=0; i<nbars; ++i)
-      bars_[i] = graph_height_- bars[i]*graph_height_*fixed;
+      bars_[i] = graph_height_- bars[i]*graph_height_*scale;
 
   //reconcile the number of plot bars
-  float bar_width=nominal_bar_width_;
-  bar_width = graph_width_/nbars;
+  float bar_width = graph_width_/nbars;
   if(bar_width>5*nominal_bar_width_)
     bar_width = 5*nominal_bar_width_;
   if(bar_width<1)
