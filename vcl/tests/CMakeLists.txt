@@ -9,7 +9,7 @@ ${allvxl_BINARY_DIR}/vcl
 )
 
 LINK_LIBRARIES(
-vcl
+vcl m
 )
 
 ADD_EXECUTABLE(

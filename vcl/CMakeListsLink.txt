@@ -1,2 +1,2 @@
-LINK_LIBRARIES( vcl )
+LINK_LIBRARIES( vcl m )
 LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/vcl )
