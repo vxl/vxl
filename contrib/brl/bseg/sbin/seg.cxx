@@ -4,8 +4,8 @@
 #include <vgui/vgui_command.h>
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/internals/vgui_accelerate.h>
-#include <bseg/segv/segv_menus.h>
-#include <bseg/segv/segv_segmentation_manager.h>
+#include <segv/segv_menus.h>
+#include <segv/segv_segmentation_manager.h>
 
 #ifdef HAS_X11
 # include <vgui/internals/vgui_accelerate_x11.h>
