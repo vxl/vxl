@@ -54,9 +54,9 @@ static const double root3 = 1.73205080756887729353;
 double pdf1d_epanech_kernel_pdf_sampler::epan_transform(double x)
 {
   // The Matlab code for the differential eqtn is
-  // d = dsolve('1=abs(Dy) * (3 * sqrt(5) / 20) *(1-0.2*y*y)')
+  // d = dsolve('1=vcl_abs(Dy) * (3 * vcl_sqrt(5) / 20) *(1-0.2*y*y)')
   x -= 0.5;
-  const vcl_complex<double> z(10.0 * root5 * x, 5 * sqrt(5-20*x*x));
+  const vcl_complex<double> z(10.0 * root5 * x, 5 * vcl_sqrt(5-20*x*x));
   const vcl_complex<double> cuberoot_z = vcl_pow(z,(1.0/3.0));
   const vcl_complex<double> recip_cuberoot_z = 1.0/cuberoot_z;
   const vcl_complex<double> im(0,1);

@@ -40,7 +40,7 @@ public:
     //: Return true if cdf() uses an analytic implementation
   virtual bool cdf_is_analytic() const;
 
-	//: Gradient of PDF at x
+  //: Gradient of PDF at x
   virtual double gradient(double x, double& p) const;
 
     //: Compute nearest point to x which has a density above a threshold

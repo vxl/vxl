@@ -96,7 +96,7 @@ double pdf1d_exponential::gradient(double x,
   if (x<0)
   {
     p=0;
-	return 0;
+    return 0;
   }
 
   p = lambda_ * vcl_exp(-1*lambda_*x);

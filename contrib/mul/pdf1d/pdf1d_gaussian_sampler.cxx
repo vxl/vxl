@@ -92,7 +92,7 @@ void pdf1d_gaussian_sampler::regular_samples(vnl_vector<double>& x)
   if (n>5)
   {
     pdf1d_sampler::regular_samples(x);
-	return;
+    return;
   }
 
   // Strictly should select samples so that CDF(x) is equally spread in [0,1]

@@ -1,6 +1,7 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
+//:
 // \file
 // \author Tim Cootes
 // \brief Test if data from a given distribution using Bhattacharyya overlap
@@ -20,7 +21,8 @@
 #include <pdf1d/pdf1d_sampler.h>
 #include <pdf1d/pdf1d_resample.h>
 
-//: When true, if model_pdf is gaussian, use integration over the gaussian ([-3,3]sd)
+//:
+//  When true, if model_pdf is gaussian, use integration over the gaussian ([-3,3]sd)
 //  to estimate overlap,  rather than resampling from data distribution
 bool use_integration_for_gaussian=true;
 
@@ -76,12 +78,12 @@ double pdf1d_compare_to_pdf_bhat::compare(const double* data, int n,
 
   builder().build_from_array(pdf_,data,n);
 
-	 // For clarity and to avoid compiler warnings
-	const pdf1d_pdf* built_pdf = pdf_.ptr();
+   // For clarity and to avoid compiler warnings
+  const pdf1d_pdf* built_pdf = pdf_.ptr();
 
-	// Use integral overlap
-	if (use_integration_for_gaussian && model_pdf.is_a()=="pdf1d_gaussian")
-	  return pdf1d_bhat_overlap_gaussian_with_pdf(model_pdf,*built_pdf);
+  // Use integral overlap
+  if (use_integration_for_gaussian && model_pdf.is_a()=="pdf1d_gaussian")
+    return pdf1d_bhat_overlap_gaussian_with_pdf(model_pdf,*built_pdf);
 
   return pdf1d_bhat_overlap(*built_pdf,model_pdf,n_per_point_*n);
 }
@@ -99,17 +101,17 @@ double pdf1d_compare_to_pdf_bhat::bootstrap_compare_form(vnl_vector<double>& B,
     pdf_ = builder().new_model();
   builder().build_from_array(pdf_,data,n);
 
-	bool use_gauss_integration = 	(use_integration_for_gaussian
-	                                && builder2.new_model_type()=="pdf1d_gaussian");
+  bool use_gauss_integration = (use_integration_for_gaussian
+                                && builder2.new_model_type()=="pdf1d_gaussian");
 
-	 // For clarity and to avoid compiler warnings
-	const pdf1d_pdf* data_pdf = pdf_.ptr();
+   // For clarity and to avoid compiler warnings
+  const pdf1d_pdf* data_pdf = pdf_.ptr();
 
   int n_samples = n*n_per_point_;
   vnl_vector<double> x(n_samples),p(n_samples);
 
-	if (!use_gauss_integration)
-	{
+  if (!use_gauss_integration)
+  {
     pdf1d_sampler* sampler = data_pdf->new_sampler();
     sampler->regular_samples_and_prob(x,p);
     delete sampler;
@@ -122,28 +124,28 @@ double pdf1d_compare_to_pdf_bhat::bootstrap_compare_form(vnl_vector<double>& B,
   B.resize(n_trials);
 
   double sum = 0;
-	double b;
+  double b;
   for (int i=0;i<n_trials;++i)
   {
     // Build pdf from resampled data.
-  	// Check resampled data is not all identical
-	  double s_mean,s_var=0;
-	  while (s_var<1e-9)
-	  {
+    // Check resampled data is not all identical
+    double s_mean,s_var=0;
+    while (s_var<1e-9)
+    {
       pdf1d_resample(sample,data,n);
-	    pdf1d_calc_mean_var(s_mean,s_var,sample);
+      pdf1d_calc_mean_var(s_mean,s_var,sample);
     }
 
     builder2.build_from_array(*pdf,sample.data_block(),n);
 
-	  // Test overlap of pdf with pdf around original data
-		if (use_gauss_integration)
-		  b = pdf1d_bhat_overlap_gaussian_with_pdf(*pdf,*data_pdf);
-		else
-	    b = pdf1d_bhat_overlap(*pdf,x.data_block(),p.data_block(),n_samples);
+    // Test overlap of pdf with pdf around original data
+    if (use_gauss_integration)
+      b = pdf1d_bhat_overlap_gaussian_with_pdf(*pdf,*data_pdf);
+    else
+      b = pdf1d_bhat_overlap(*pdf,x.data_block(),p.data_block(),n_samples);
 
-	  B[i] = b;
-	  sum+=b;
+    B[i] = b;
+    sum+=b;
   }
 
   delete pdf;
@@ -220,8 +222,8 @@ void pdf1d_compare_to_pdf_bhat::b_read(vsl_b_istream& bfs)
   switch (version)
   {
     case (1):
-	  vsl_b_read(bfs,builder_);
-	  vsl_b_read(bfs,n_per_point_);
+      vsl_b_read(bfs,builder_);
+      vsl_b_read(bfs,n_per_point_);
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_compare_to_pdf_bhat &) \n";

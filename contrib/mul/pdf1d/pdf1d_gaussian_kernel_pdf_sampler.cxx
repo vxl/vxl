@@ -75,20 +75,19 @@ void pdf1d_gaussian_kernel_pdf_sampler::regular_samples(vnl_vector<double>& x)
     // Select components in order
     int j = i%nk;
 
-	if (n_per_k>5)
-	{
+    if (n_per_k>5)
+    {
        x_data[i] = c[j]+rng_.normal()*w[j];
-	}
-	else
-	{
-	  // Spread points about
-	  // Note that this isn't quite right - should be equally spaced in CDF space
-	  int a = j/nk;
-	  double f = double(a)/(n_per_k-1);  // in [0,1]
+    }
+    else
+    {
+      // Spread points about
+      // Note that this isn't quite right - should be equally spaced in CDF space
+      int a = j/nk;
+      double f = double(a)/(n_per_k-1);  // in [0,1]
       x_data[i] = c[j] + lim*(2*f-1)*w[j];
-	}
+    }
   }
-
 }
 
 //=======================================================================

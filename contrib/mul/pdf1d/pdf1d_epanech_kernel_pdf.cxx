@@ -67,8 +67,8 @@ double pdf1d_epanech_kernel_pdf::operator()(double x0) const
   for (int i=0;i<n;++i)
   {
     double dx = (x[i]-x0)/w[i];
-		double dx2=dx*dx;
-		if (dx2<5) sum += (1.0-0.2*dx2)/w[i];
+    double dx2=dx*dx;
+    if (dx2<5) sum += (1.0-0.2*dx2)/w[i];
   }
 
   p = k*sum;
@@ -89,17 +89,17 @@ double pdf1d_epanech_kernel_pdf::cdf(double x0) const
   const double* x = x_.data_block();
   const double* w = width_.data_block();
   int n = x_.size();
-	double k = 0.75/(root5);
+  double k = 0.75/(root5);
 
   double sum = 0;
   for (int i=0;i<n;++i)
-	{
-	  double dx = (x0-x[i])/w[i];
+  {
+    double dx = (x0-x[i])/w[i];
     if (dx>=root5) sum+=1;
     else if (dx > -root5)
     {
-		  const double dx2 = dx*dx;
-		  sum += (k*dx*(1-dx2/15)+0.5);
+      const double dx2 = dx*dx;
+      sum += (k*dx*(1-dx2/15)+0.5);
     }
   }
 
@@ -128,14 +128,13 @@ double pdf1d_epanech_kernel_pdf::gradient(double x0,
   {
     double wi = w[i];
     double dx = (x[i]-x0)/wi;
-		double dx2 = dx*dx;
-		if (dx2<5)
-		{
+    double dx2 = dx*dx;
+    if (dx2<5)
+    {
       sum_p += (1.0-0.2*dx2)/wi;
-			sum_g += dx/wi;
+      sum_g += dx/wi;
     }
   }
-
 
   double k = 1.0/(n*root5);
   p = sum_p*0.75*k;
@@ -148,7 +147,7 @@ double pdf1d_epanech_kernel_pdf::gradient(double x0,
 double pdf1d_epanech_kernel_pdf::nearest_plausible(double x, double log_p_min) const
 {
   vcl_cerr<<"pdf1d_epanech_kernel_pdf::nearest_plausible() Not yet implemented."<<vcl_endl;
-  abort();
+  vcl_abort();
   return 0;
 }
 

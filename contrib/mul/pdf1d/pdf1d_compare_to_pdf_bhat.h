@@ -29,7 +29,7 @@ public:
   pdf1d_compare_to_pdf_bhat();
 
     //: Construct and define method of building pdf from data
-	// \param n_per_point : Number of samples per data-point used in estimating overlap
+    // \param n_per_point : Number of samples per data-point used in estimating overlap
   pdf1d_compare_to_pdf_bhat(const pdf1d_builder& builder, int n_per_point);
 
     //: Destructor
@@ -52,10 +52,10 @@ public:
   virtual double compare(const double* data, int n, const pdf1d_pdf& pdf);
 
     //: Test whether data has form of the given distribution
-	//  Repeatedly resamples n values from data[0..n-1] and
-	//  calls compare_form().
-	//  Individual comparisons are returned in B.
-	//  \return Mean of B
+    //  Repeatedly resamples n values from data[0..n-1] and
+    //  calls compare_form().
+    //  Individual comparisons are returned in B.
+    //  \return Mean of B
   virtual double bootstrap_compare_form(vnl_vector<double>& B,
                               const double* data, int n,
                               const pdf1d_builder& builder, int n_trials);

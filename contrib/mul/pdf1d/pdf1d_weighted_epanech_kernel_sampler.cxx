@@ -45,16 +45,15 @@ const pdf1d_weighted_epanech_kernel_pdf& pdf1d_weighted_epanech_kernel_sampler::
 // For generating plausible examples:
 double pdf1d_weighted_epanech_kernel_sampler::sample()
 {
-
 // Need to deal with weights.
-  
+
   const pdf1d_weighted_epanech_kernel_pdf& kpdf = weighted_epanech_kernel_pdf();
 
   int n = kpdf.centre().size();
 
 
   // Randomly choose a component according to the weights (assumed to sum to 1)
-  double r = rng_.drand32(0.0, kpdf.sum_weights_); 
+  double r = rng_.drand32(0.0, kpdf.sum_weights_);
   int i=0;
   r-=kpdf.weight()[i];
   while (r>0 && (i<n))
@@ -77,7 +76,7 @@ void pdf1d_weighted_epanech_kernel_sampler::regular_samples(vnl_vector<double>& 
 {
 // Need to deal with weights.
 
-	const pdf1d_weighted_epanech_kernel_pdf& kpdf = weighted_epanech_kernel_pdf();
+  const pdf1d_weighted_epanech_kernel_pdf& kpdf = weighted_epanech_kernel_pdf();
   const unsigned n = x.size();
   double* x_data = x.data_block();
   const unsigned nk = kpdf.centre().size();
@@ -116,8 +115,8 @@ void pdf1d_weighted_epanech_kernel_sampler::regular_samples(vnl_vector<double>& 
     }
     else
     {
-	    // Spread points about
-	    // Note that this isn't quite right - should be equally spaced in CDF space
+      // Spread points about
+      // Note that this isn't quite right - should be equally spaced in CDF space
       unsigned i_this_k = 0;
       while (dist > double(i))
       {
@@ -130,7 +129,6 @@ void pdf1d_weighted_epanech_kernel_sampler::regular_samples(vnl_vector<double>& 
   }
   assert (vnl_math_abs(dist - double(n)) < 1.0e-10 * dist);
   assert (i == n);
-
 }
 
 //=======================================================================

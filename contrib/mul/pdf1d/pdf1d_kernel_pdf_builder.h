@@ -89,7 +89,7 @@ public:
     // The kernel centres in the pdf will have same value and order as
     // the training data
   void build_fixed_width(pdf1d_kernel_pdf& kpdf,
-	                       const double* data, int n, double width) const;
+                         const double* data, int n, double width) const;
 
     //: Build from n elements in data[i].  Chooses width.
     //  Same width selected for all points, using
@@ -98,13 +98,13 @@ public:
     // The kernel centres in the pdf will have same value and order as
     // the training data
   void build_select_equal_width(pdf1d_kernel_pdf& kpdf,
-	                             const double* data, int n) const;
+                                const double* data, int n) const;
 
     //: Kernel width proportional to distance to nearby samples.
     // The kernel centres in the pdf will have same value and order as
     // the training data
   void build_width_from_separation(pdf1d_kernel_pdf& kpdf,
-	                             const double* data, int n) const;
+                                   const double* data, int n) const;
 
     //: Build adaptive kernel estimate.
     //  Use equal widths to create a pilot estimate, then use the prob at each
@@ -121,7 +121,7 @@ public:
     // approximate the cumulative histogram more closely, then
     // build_select_equal_width() may be more effective.
   void build_adaptive(pdf1d_kernel_pdf& kpdf,
-	                  const double* data, int n) const;
+                      const double* data, int n) const;
 
     //: Version number for I/O
   short version_no() const;

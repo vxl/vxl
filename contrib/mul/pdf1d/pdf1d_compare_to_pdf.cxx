@@ -37,8 +37,8 @@ pdf1d_compare_to_pdf::~pdf1d_compare_to_pdf()
 //  the given pdf.  Individual comparisons are returned in B.
 //  \return Mean of B
 double pdf1d_compare_to_pdf::bootstrap_compare(vnl_vector<double>& B,
-                                   const double* data, int n,
-								   const pdf1d_pdf& pdf, int n_trials)
+                                               const double* data, int n,
+                                               const pdf1d_pdf& pdf, int n_trials)
 {
   vnl_vector<double> sample(n);
 
@@ -47,15 +47,15 @@ double pdf1d_compare_to_pdf::bootstrap_compare(vnl_vector<double>& B,
   double sum = 0;
   for (int i=0;i<n_trials;++i)
   {
-  	// Check resampled data is not all identical
-	  double s_mean,s_var=0;
-	  while (s_var<1e-9)
-	  {
+    // Check resampled data is not all identical
+    double s_mean,s_var=0;
+    while (s_var<1e-9)
+    {
       pdf1d_resample(sample,data,n);
-	    pdf1d_calc_mean_var(s_mean,s_var,sample);
+      pdf1d_calc_mean_var(s_mean,s_var,sample);
     }
 
-		double c = compare(sample.data_block(),n,pdf);
+    double c = compare(sample.data_block(),n,pdf);
     B[i] = c;
     sum+=c;
   }
@@ -91,20 +91,20 @@ double pdf1d_compare_to_pdf::bootstrap_compare_form(vnl_vector<double>& B,
   for (int i=0;i<n_trials;++i)
   {
     // Build pdf from resampled data.
-  	// Check resampled data is not all identical
-	  double s_mean,s_var=0;
-	  while (s_var<1e-9)
-	  {
+    // Check resampled data is not all identical
+    double s_mean,s_var=0;
+    while (s_var<1e-9)
+    {
       pdf1d_resample(sample,data,n);
-	    pdf1d_calc_mean_var(s_mean,s_var,sample);
+      pdf1d_calc_mean_var(s_mean,s_var,sample);
     }
 
     builder.build_from_array(pdf_,sample.data_block(),n);
 
     // Test overlap of pdf with original data
     double c = compare(data,n,*(pdf_.ptr()));
-	  B[i] = c;
-	  sum+=c;
+    B[i] = c;
+    sum+=c;
   }
 
   return sum/n_trials;

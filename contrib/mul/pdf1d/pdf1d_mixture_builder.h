@@ -22,10 +22,10 @@ private:
   double min_var_;
   int max_its_;
 
-	  //: Whether weights changed during iterations
-	bool weights_fixed_;
+    //: Whether weights changed during iterations
+  bool weights_fixed_;
 
-	void initialise(pdf1d_mixture& model,
+  void initialise(pdf1d_mixture& model,
                   const double* data,
                   const vcl_vector<double>& wts) const;
 
@@ -40,7 +40,6 @@ private:
                 const vcl_vector<vnl_vector<double> >& probs,
                 const double* data,
                 const vcl_vector<double>& wts) const;
-
 
   void init();
   void delete_stuff();
@@ -65,16 +64,16 @@ public:
   //: Define maximum number of EM iterations allowed
   void set_max_iterations(int n);
 
-	  //: Whether weights on components left unchanged during iterations
-	bool weights_fixed() const { return weights_fixed_; }
+  //: Whether weights on components left unchanged during iterations
+  bool weights_fixed() const { return weights_fixed_; }
 
-	  //: Whether weights on components left unchanged during iterations
-	void set_weights_fixed(bool b);
+  //: Whether weights on components left unchanged during iterations
+  void set_weights_fixed(bool b);
 
   //: Create empty model
   virtual pdf1d_pdf* new_model() const;
 
-    //: Name of the model class returned by new_model()
+  //: Name of the model class returned by new_model()
   virtual vcl_string new_model_type() const;
 
   //: Define lower threshold on variance for built models

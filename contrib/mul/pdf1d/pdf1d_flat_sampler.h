@@ -39,7 +39,7 @@ public:
   virtual double sample();
 
     //: Fill x with samples possibly chosen so as to represent the distribution
-	//  5 or fewer samples requested, they are spaced out equally.
+    //  5 or fewer samples requested, they are spaced out equally.
   virtual void regular_samples(vnl_vector<double>& x);
 
     //: Reseeds the internal random number generator

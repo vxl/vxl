@@ -60,13 +60,13 @@ double pdf1d_gaussian_kernel_pdf::operator()(double x0) const
   const double* x = x_.data_block();
   const double* w = width_.data_block();
   int n = x_.size();
-  double k = 1.0/(n*sqrt(2*vnl_math::pi));
+  double k = 1.0/(n*vcl_sqrt(2*vnl_math::pi));
   double sum = 0;
 
   for (int i=0;i<n;++i)
   {
     double dx = (x[i]-x0)/w[i];
-    sum += exp(-0.5*dx*dx)/w[i];
+    sum += vcl_exp(-0.5*dx*dx)/w[i];
   }
 
   p = k*sum;
@@ -83,7 +83,6 @@ double pdf1d_gaussian_kernel_pdf::log_p(double x) const
 //: Cumulative Probability (P(x'<x) for x' drawn from the distribution)
 double pdf1d_gaussian_kernel_pdf::cdf(double x0) const
 {
-
   const double* x = x_.data_block();
   const double* w = width_.data_block();
   int n = x_.size();
@@ -92,7 +91,7 @@ double pdf1d_gaussian_kernel_pdf::cdf(double x0) const
 
   for (int i=0;i<n;++i)
     sum += mbl_erf( (x0-x[i])/(vnl_math::sqrt2*w[i]) );
-	// CDF for gaussian = 0.5*(1+erf(x/sqrt2))
+    // CDF for gaussian = 0.5*(1+erf(x/sqrt2))
 
   return 0.5*(1+sum/n);
 
@@ -105,7 +104,6 @@ double pdf1d_gaussian_kernel_pdf::cdf(double x0) const
 
   return sum;
 #endif
-
 }
 
 //: Return true if cdf() uses an analytic implementation
@@ -123,7 +121,7 @@ double pdf1d_gaussian_kernel_pdf::gradient(double x0,
   const double* x = x_.data_block();
   const double* w = width_.data_block();
   int n = x_.size();
-  double k = 1.0/(n*sqrt(2*vnl_math::pi));
+  double k = 1.0/(n*vcl_sqrt(2*vnl_math::pi));
   double sum_p = 0;
   double sum_g = 0;
 
@@ -131,9 +129,9 @@ double pdf1d_gaussian_kernel_pdf::gradient(double x0,
   {
     double wi = w[i];
     double dx = (x[i]-x0)/wi;
-	  double p_i = exp(-0.5*dx*dx)/wi;
+    double p_i = vcl_exp(-0.5*dx*dx)/wi;
     sum_p += p_i;
-	sum_g -= p_i*dx/wi;
+    sum_g -= p_i*dx/wi;
   }
 
   p = k*sum_p;
@@ -146,7 +144,7 @@ double pdf1d_gaussian_kernel_pdf::gradient(double x0,
 double pdf1d_gaussian_kernel_pdf::nearest_plausible(double x, double log_p_min) const
 {
   vcl_cerr<<"pdf1d_gaussian_kernel_pdf::nearest_plausible() Not yet implemented."<<vcl_endl;
-  abort();
+  vcl_abort();
   return 0;
 }
 

@@ -50,7 +50,7 @@ public:
   virtual double log_p(double x) const;
 
     //: Cumulative Probability (P(x'<x) for x' drawn from the distribution)
-	//  Returns 1-exp(-x/lambda)
+    //  Returns 1-exp(-x/lambda)
   virtual double cdf(double x) const;
 
     //: Return true if cdf() uses an analytic implementation

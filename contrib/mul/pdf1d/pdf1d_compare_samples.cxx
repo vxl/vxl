@@ -15,9 +15,9 @@
 double pdf1d_prop_larger(const double* x1, int n1, const double* x2, int n2)
 {
   int n_larger = 0;
-	for (int i=0;i<n1;++i)
-	  for (int j=0;j<n2;++j)
-		  if (x1[i]>x2[j]) n_larger++;
+  for (int i=0;i<n1;++i)
+    for (int j=0;j<n2;++j)
+      if (x1[i]>x2[j]) n_larger++;
 
   return double(n_larger)/(n1*n2);
 }
@@ -47,32 +47,32 @@ int pdf1d_select_largest_samples(vcl_vector<const double*>& x,
 {
   int t = n.size();
 
-	int best_i = 0;
-	int best_n_larger = 0;
+  int best_i = 0;
+  int best_n_larger = 0;
 
-	// Compare every distribution with every other distribution
-	// Slightly inefficient implementation - effectively does
-	// the comparison twice.  Fix this one day.
-	for (int i=0;i<t;++i)
-	{
-	  int n_larger=0;
-		for (int j=0;j<t;++j)
-		{
-		  if (i==j) continue;
-			if (pdf1d_larger_samples(x[i],n[i],x[j],n[j],p))
-			  n_larger++;
-		}
-
-		// If this is better than all the others, then this is the one we want
-		if (n_larger==(t-1)) return i;
-
-		if (i==0 || n_larger>best_n_larger)
-		{
-		  best_i = i;
-			best_n_larger = n_larger;
+  // Compare every distribution with every other distribution
+  // Slightly inefficient implementation - effectively does
+  // the comparison twice.  Fix this one day.
+  for (int i=0;i<t;++i)
+  {
+    int n_larger=0;
+    for (int j=0;j<t;++j)
+    {
+      if (i==j) continue;
+      if (pdf1d_larger_samples(x[i],n[i],x[j],n[j],p))
+        n_larger++;
     }
-	}
 
-	return best_i;
+    // If this is better than all the others, then this is the one we want
+    if (n_larger==(t-1)) return i;
+
+    if (i==0 || n_larger>best_n_larger)
+    {
+      best_i = i;
+      best_n_larger = n_larger;
+    }
+  }
+
+  return best_i;
 }
 

@@ -1,6 +1,8 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
+//:
+// \file
 
 #include <vcl_cassert.h>
 #include <vcl_string.h>
@@ -77,7 +79,7 @@ void pdf1d_flat_builder::build_from_array(pdf1d_pdf& model, const double* data, 
   if (n<2)
   {
     vcl_cerr<<"pdf1d_flat_builder::build_from_array()";
-	vcl_cerr<<" Too few examples available."<<vcl_endl;
+    vcl_cerr<<" Too few examples available."<<vcl_endl;
     vcl_abort();
   }
 
@@ -86,16 +88,16 @@ void pdf1d_flat_builder::build_from_array(pdf1d_pdf& model, const double* data, 
   for (int i=1;i<n;++i)
   {
     if (data[i]<lo) lo=data[i];
-	else
-	  if (data[i]>hi) hi=data[i];
+    else
+      if (data[i]>hi) hi=data[i];
   }
 
-  double min_w = sqrt(12*min_var_);
+  double min_w = vcl_sqrt(12*min_var_);
   if (hi-lo<min_w)
   {
     double c = 0.5*(lo+hi);
-	lo = c-0.5*min_w;
-	hi = c+0.5*min_w;
+    lo = c-0.5*min_w;
+    hi = c+0.5*min_w;
   }
 
   pdf1d_flat& f = flat(model);
@@ -114,13 +116,12 @@ void pdf1d_flat_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>& data)
 
   if (data.is_a()=="mbl_data_array_wrapper<T>")
   {
-      // Use more efficient build_from_array algorithm
+    // Use more efficient build_from_array algorithm
     mbl_data_array_wrapper<double>& data_array =
-		               (mbl_data_array_wrapper<double>&) data;
+                       (mbl_data_array_wrapper<double>&) data;
     build_from_array(model,data_array.data(),n_samples);
     return;
   }
-
 
   data.reset();
   double lo = data.current();
@@ -129,22 +130,21 @@ void pdf1d_flat_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>& data)
   {
     double x = data.current();
     if (x<lo) lo=x;
-	else
-	  if (x>hi) hi=x;
+    else
+      if (x>hi) hi=x;
     data.next();
   }
 
-  double min_w = sqrt(12*min_var_);
+  double min_w = vcl_sqrt(12*min_var_);
   if (hi-lo<min_w)
   {
     double c = 0.5*(lo+hi);
-	lo = c-0.5*min_w;
-	hi = c+0.5*min_w;
+    lo = c-0.5*min_w;
+    hi = c+0.5*min_w;
   }
 
   pdf1d_flat& f = flat(model);
   f.set(lo,hi);
-
 }
 
 void pdf1d_flat_builder::weighted_build(pdf1d_pdf& model,

@@ -30,7 +30,7 @@ public:
   virtual double sample();
 
     //: Fill x with samples possibly chosen so as to represent the distribution
-	//  Samples equal numbers from each kernel.
+    //  Samples equal numbers from each kernel.
   virtual void regular_samples(vnl_vector<double>& x);
 
   //: Reseeds the static random number generator (one per derived class)
