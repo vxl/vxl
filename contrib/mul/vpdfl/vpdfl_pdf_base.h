@@ -6,9 +6,9 @@
 
 //:
 // \file
+// \brief Base class for Multi-Variate Probability Density Function classes.
 // \author Tim Cootes
 // \date 12-Apr-2001
-// \brief Base class for Multi-Variate Probability Density Function classes.
 
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_vector.h>
