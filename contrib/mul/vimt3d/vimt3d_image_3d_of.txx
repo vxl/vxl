@@ -97,6 +97,15 @@ vimt_image* vimt3d_image_3d_of<T>::clone() const
   return new vimt3d_image_3d_of(*this);
 }
 
+//=======================================================================
+template<class T>
+vimt_image* vimt3d_image_3d_of<T>::deep_clone() const
+{
+  vimt3d_image_3d_of<T>* new_im = new vimt3d_image_3d_of<T>();
+  new_im->deep_copy(*this);
+  return new_im;
+}
+
 
 //=======================================================================
 template<class T>

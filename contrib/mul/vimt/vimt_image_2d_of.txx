@@ -79,6 +79,15 @@ vimt_image* vimt_image_2d_of<T>::clone() const
 }
 
 //=======================================================================
+template<class T>
+vimt_image* vimt_image_2d_of<T>::deep_clone() const
+{
+  vimt_image_2d_of<T>* new_im = new vimt_image_2d_of<T>();
+  new_im->deep_copy(*this);
+  return new_im;
+}
+
+//=======================================================================
 
 template<class T>
 void vimt_image_2d_of<T>::print_summary(vcl_ostream& os) const

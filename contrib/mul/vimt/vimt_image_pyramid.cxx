@@ -39,19 +39,35 @@ vimt_image_pyramid::~vimt_image_pyramid()
 const vimt_image_pyramid&
     vimt_image_pyramid::operator=(const vimt_image_pyramid& that)
 {
-    if (&that == this) return *this;
+  if (&that == this) return *this;
 
-    base_pixel_width_ = that.base_pixel_width_;
-    scale_step_ = that.scale_step_;
-    image_.resize(that.image_.size(),0);
-    for (unsigned int i=0;i<image_.size();++i)
-    {
-      delete image_[i];
-      image_[i] = that.image_[i]->clone();
-    }
+  base_pixel_width_ = that.base_pixel_width_;
+  scale_step_ = that.scale_step_;
+  image_.resize(that.image_.size(),0);
+  for (unsigned int i=0;i<image_.size();++i)
+  {
+    delete image_[i];
+    image_[i] = that.image_[i]->clone();
+  }
 
-    return *this;
+  return *this;
 }
+
+//: Take a deep copy of the given pyramid
+void vimt_image_pyramid::deep_copy(const vimt_image_pyramid& im_pyr)
+{
+  if (&im_pyr==this) return;
+
+  base_pixel_width_ = im_pyr.base_pixel_width_;
+  scale_step_ = im_pyr.scale_step_;
+  image_.resize(im_pyr.image_.size(),0);
+  for (unsigned int i=0;i<image_.size();++i)
+  {
+    delete image_[i];
+    image_[i] = im_pyr.image_[i]->deep_clone();
+  }
+}
+
 
 //=======================================================================
 //: Copy ctor

@@ -70,8 +70,13 @@ class vimt_image_2d_of : public vimt_image_2d
   //: Does the name of the class match the argument?
   virtual bool is_class(vcl_string const& s) const;
 
-  //: Create a copy on the heap and return base class pointer
+    //: Create a copy on the heap and return base class pointer
+    //  Note that this will make a shallow copy of any contained images
   virtual vimt_image* clone() const;
+
+    //: Create a deep copy on the heap and return base class pointer
+    //  This will make a deep copy of any contained images
+  virtual vimt_image* deep_clone() const;
 
   //: Print class to os
   virtual void print_summary(vcl_ostream& os) const;

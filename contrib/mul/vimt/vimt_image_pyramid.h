@@ -57,6 +57,9 @@ class vimt_image_pyramid
   // underlying data
   const vimt_image_pyramid& operator=(const vimt_image_pyramid& that);
 
+  //: Take a deep copy of the given pyramid
+  void deep_copy(const vimt_image_pyramid& im_pyr);
+
   //: Mean width (in world coordinates) of pixels at level zero
   double base_pixel_width() const;
 

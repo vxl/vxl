@@ -54,7 +54,12 @@ class vimt_image
   virtual bool is_class(vcl_string const&) const = 0;
 
     //: Create a copy on the heap and return base class pointer
+    //  Note that this will make a shallow copy of any contained images
   virtual vimt_image* clone() const = 0;
+
+    //: Create a deep copy on the heap and return base class pointer
+    //  This will make a deep copy of any contained images
+  virtual vimt_image* deep_clone() const = 0;
 
     //: Shallow equality.
     // tests if the two images are the same type, have equal transforms, and point
