@@ -163,9 +163,11 @@ void vgui_displaybase_tableau::draw_soviews_render()
           vgui_soview *so = *so_iter;
           vgui_style_sptr style = so->get_style();
 
-          if ( ! it->second.style )
+          if ( ! it->second.style && style )
             style->apply_all();
-          else
+          else if ( ! style && it->second.style )
+            it->second.style->apply_all();
+          else if ( style && it->second.style )
           {
             if ( it->second.color_override )
               it->second.style->apply_color();
