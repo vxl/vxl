@@ -44,7 +44,7 @@ void mil_var_norm_image_2d(mil_image_2d_of<float>& dest,
     int np=nx*ny;
     mean(i)= sum/np;
     std(i) = vcl_sqrt ( sqr_sum/np - mean(i)*mean(i) );
-    vcl_cout<<"std("<<i<<")= "<<std(i)<<vcl_endl;
+    //vcl_cout<<"std("<<i<<")= "<<std(i)<<vcl_endl;
 
   }
 
