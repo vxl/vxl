@@ -127,7 +127,8 @@ public:
     void setRGB(T* data, int nx, int ny, int xstep, int ystep);
 
     //: Arrange that this is window on given image.
-    //  I.e. plane(i) points to im.plane(i) + offset
+    //  I.e. plane(i) points to im.plane(i) + offset.
+    //  The parameters should be in image co-ords.
     //  The world2im transform is set to match
     //  so this appears identical to im when addressed
     //  in world co-ords.
