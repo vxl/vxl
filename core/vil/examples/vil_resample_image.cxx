@@ -4,20 +4,20 @@
 // \author dac
 
 #include <vcl_iostream.h>
+#include <vcl_cstdlib.h> // for atoi()
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
-#include <vil/vil_resample_bilin.h>
 #include <vil/vil_resample_bicub.h>
 
 int main(int argc, char** argv)
 {
   if (argc!=5)
   {
-    vcl_cout<<"vil_resample_image src_image dest_image n1 n2"<<vcl_endl;
-    vcl_cout<<"Loads from src_image"<<vcl_endl;
-    vcl_cout<<"resamples to size n1*n2"<<vcl_endl;
-    vcl_cout<<"saves result to dest_image"<<vcl_endl;
+    vcl_cout<<"vil_resample_image src_image dest_image n1 n2\n"
+            <<"Loads from src_image\n"
+            <<"resamples to size n1*n2\n"
+            <<"saves result to dest_image\n";
     return 0;
   }
 
@@ -30,16 +30,15 @@ int main(int argc, char** argv)
 
   vcl_cout<<"Loaded image of size "<<src_im.ni()<<" x "<<src_im.nj()<<vcl_endl;
 
-  int n1= atoi (argv[3]);
-  int n2= atoi (argv[4]);
+  int n1= vcl_atoi(argv[3]);
+  int n2= vcl_atoi(argv[4]);
 
-  // rotate the image
+  // resample the image
   vil_image_view<vxl_byte> dest_im;
-  //vil_resample_bilin( src_im, dest_im, n1, n2 );
-  vil_resample_bicub( src_im, dest_im, n1, n2 );
+  vil_resample_bicub( src_im, dest_im, n1, n2 ); // or vil_resample_bilin()
 
-  vcl_cout<<"src_im= "<<src_im<<vcl_endl;
-  vcl_cout<<"dest_im= "<<dest_im<<vcl_endl;
+  vcl_cout<<"src_im= "<<src_im<<vcl_endl
+          <<"dest_im= "<<dest_im<<vcl_endl;
 
   if (!vil_save(dest_im, argv[2]))
   {
