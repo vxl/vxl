@@ -18,7 +18,9 @@
 #include <vnl/vnl_tag.h>
 #include <vnl/vnl_error.h>
 #include <vnl/vnl_c_vector.h>
+#ifndef NDEBUG
 #include <vcl_cassert.h>
+#endif
 
 export template <class T> class vnl_vector;
 export template <class T> class vnl_matrix;
@@ -32,8 +34,8 @@ template <class T> m operator- (T const&, m const&);
 template <class T> m operator* (T const&, m const&);
 template <class T> m element_product(m const&, m const&);
 template <class T> m element_quotient(m const&, m const&);
-template <class T> T dot_product (m const&, m const&); 
-template <class T> T inner_product (m const&, m const&); 
+template <class T> T dot_product (m const&, m const&);
+template <class T> T inner_product (m const&, m const&);
 template <class T> T cos_angle(m const&, m const& );
 template <class T> vcl_ostream& operator<< (vcl_ostream&, m const&);
 template <class T> vcl_istream& operator>> (vcl_istream&, m&);
@@ -130,7 +132,7 @@ public:
 
   //vnl_matrix(const DiagMatrix<T>&); this confuses g++ 2.7.2 When an vnl_vector<int> is declared nearby...
 
-#ifndef VXL_DOXYGEN_SHOULD_SKIP_THIS 
+#ifndef VXL_DOXYGEN_SHOULD_SKIP_THIS
 // <internal>
   // These constructors are here so that operator* etc can take
   // advantage of the C++ return value optimization.
@@ -187,8 +189,10 @@ public:
   // There are assert style boundary checks - use NDEBUG to turn them off.
   T       & operator() (unsigned r, unsigned c)
   {
+#ifndef NDEBUG
     assert(r<rows());   // Check the row index is valid
     assert(c<cols());   // Check the column index is valid
+#endif
     return this->data[r][c];
   }
 
@@ -196,8 +200,10 @@ public:
   // There are assert style boundary checks - use NDEBUG to turn them off.
   T const & operator() (unsigned r, unsigned c) const
   {
+#ifndef NDEBUG
     assert(r<rows());   // Check the row index is valid
     assert(c<cols());   // Check the column index is valid
+#endif
     return this->data[r][c];
   }
 
@@ -336,7 +342,7 @@ public:
   //: Get n columns beginning at colstart
   vnl_matrix<T> get_n_columns(unsigned colstart, unsigned n) const;
 
-  
+
   // mutators
 
   //: Set this matrix to an identity matrix
@@ -410,7 +416,7 @@ public:
   //: Return mean of all matrix elements
   T mean() const { return vnl_c_vector<T>::mean(begin(), size()); }
 
-#ifndef VXL_DOXYGEN_SHOULD_SKIP_THIS 
+#ifndef VXL_DOXYGEN_SHOULD_SKIP_THIS
   // <deprecated>
   // These two methods have been intentionally poisoned. The new equivalents are:
   //   array_one_norm() / array_inf_norm()
@@ -468,7 +474,7 @@ public:
   T      *      * data_array () { return data; }
 
   typedef T element_type;
-  
+
   //: Iterators
   typedef T       *iterator;
   //: Iterator pointing to start of data
