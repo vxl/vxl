@@ -25,10 +25,10 @@
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_tableau.h>
+#include <vgui/vgui_style_sptr.h>
 
 class vgui_soview;
 class vgui_event;
-class vgui_style;
 
 //: Implement one of these to be told about picking etc.
 struct vgui_displaybase_tableau_selection_callback
@@ -46,7 +46,7 @@ struct vgui_displaybase_tableau_grouping {
   vcl_vector<vgui_soview*> objects;
 
   // style that will be used for override features
-  vgui_style * style;
+  vgui_style_sptr style;
 
   // used to hide or show this group of soviews
   bool hide;

@@ -47,7 +47,7 @@ bool vgui_displaylist2D_tableau::handle(const vgui_event& e)
     if (highlighted)
     {
       vgui_soview* so = vgui_soview::id_to_object(highlighted);
-      vgui_style* style = so->get_style();
+      vgui_style_sptr style = so->get_style();
       style->apply_point_size();
       style->apply_line_width();
       glColor3f(0.0,0.0,1.0);

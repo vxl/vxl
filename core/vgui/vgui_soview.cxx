@@ -16,7 +16,6 @@
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_observer.h>
 #include <vgui/vgui_style.h>
-#include <vgui/vgui_style_factory.h>
 
 #define VGUI_STATIC_OBJECT(T, var) \
 static T& var () { \
@@ -108,47 +107,60 @@ void vgui_soview::load_name() const {
 }
 
 
-void vgui_soview::set_style(vgui_style* newstyle) {
-  // inform style factory that this vgui_soview now has style s
-  vgui_style_factory::instance()->change_style(this, newstyle, style);
-
+void vgui_soview::set_style(const vgui_style_sptr& newstyle) {
   style = newstyle;
 }
 
 void vgui_soview::set_colour(float r, float g, float b) {
 
-  vgui_style* newstyle =
-    vgui_style_factory::get_style(r, g, b, style->point_size, style->line_width);
+  vgui_style_sptr newstyle = vgui_style::new_style();
 
-  vgui_style_factory::change_style(this, newstyle, style);
+  newstyle->rgba[0] = r;
+  newstyle->rgba[1] = g;
+  newstyle->rgba[2] = b;
+
+  if(style){
+    newstyle->point_size = style->point_size;
+    newstyle->line_width = style->line_width;
+  }
 
   style = newstyle;
 }
 
 void vgui_soview::set_point_size(float s) {
 
-  vgui_style* newstyle =
-    vgui_style_factory::get_style(style->rgba[0], style->rgba[1], style->rgba[2],
-                                  s, style->line_width);
+  vgui_style_sptr newstyle = vgui_style::new_style();
 
-  vgui_style_factory::change_style(this, newstyle, style);
+  newstyle->point_size = s;
+
+  if(style){
+    newstyle->rgba[0] = style->rgba[0];
+    newstyle->rgba[1] = style->rgba[1];
+    newstyle->rgba[2] = style->rgba[2];
+    newstyle->line_width = style->line_width;
+  }
 
   style = newstyle;
 }
 
 void vgui_soview::set_line_width(float w) {
 
-  vgui_style* newstyle =
-    vgui_style_factory::get_style(style->rgba[0], style->rgba[1], style->rgba[2],
-                                  style->point_size, w);
+  vgui_style_sptr newstyle = vgui_style::new_style();
 
-  vgui_style_factory::change_style(this, newstyle, style);
+  newstyle->line_width = w;
+    
+  if(style){
+    newstyle->rgba[0] = style->rgba[0];
+    newstyle->rgba[1] = style->rgba[1];
+    newstyle->rgba[2] = style->rgba[2];
+    newstyle->point_size = style->point_size;
+  }
 
   style = newstyle;
 }
 
 
-vgui_style* vgui_soview::get_style() const {
+vgui_style_sptr vgui_soview::get_style() const {
   return style;
 }
 

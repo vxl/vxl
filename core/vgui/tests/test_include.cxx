@@ -93,7 +93,6 @@
 #include <vgui/vgui_statusbar.h>
 #include <vgui/vgui_statusbuf.h>
 #include <vgui/vgui_style.h>
-#include <vgui/vgui_style_factory.h>
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_tableau_sptr.h>
 #include <vgui/vgui_tag.h>

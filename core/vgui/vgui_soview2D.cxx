@@ -36,7 +36,7 @@ vcl_ostream& vgui_soview2D_point::print(vcl_ostream& s) const
 
 void vgui_soview2D_point::draw() const
 {
-  style->apply_point_size();
+  //style->apply_point_size();   
   glBegin(GL_POINTS);
     glVertex2f(x,y);
   glEnd();
@@ -131,7 +131,7 @@ void vgui_soview2D_lineseg::translate(float tx, float ty)
 
 //--------------------------------------------------------------------------//
 
-void vgui_soview2D_group::set_style(vgui_style *s)
+void vgui_soview2D_group::set_style(const vgui_style_sptr& s)
 {
   for (unsigned int i=0; i< ls.size(); i++)
     if (!ls[i]->get_style())

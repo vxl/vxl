@@ -33,7 +33,6 @@
 #include <vgui/vgui_soview2D.h>
 #include <vgui/vgui_displaylist2D_tableau.h>
 #include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_style_factory.h>
 #include <vgui/vgui_style.h>
 
 #ifdef DEBUG
@@ -42,38 +41,38 @@
 
 static bool debug = false;
 
-vgui_easy2D_tableau::vgui_easy2D_tableau(const char* n) : image_slot(this), name_(n)
+vgui_easy2D_tableau::vgui_easy2D_tableau(const char* n) : image_slot(this), name_(n), style_(vgui_style::new_style())
 {
-  fg[0] = 1.0f;
-  fg[1] = 1.0f;
-  fg[2] = 0.0f;
+  style_->rgba[0] = 1.0f;
+  style_->rgba[1] = 1.0f;
+  style_->rgba[2] = 0.0f;
 
-  line_width = 1;
-  point_size = 3;
+  style_->line_width = 1;
+  style_->point_size = 3;
 }
 
 
 vgui_easy2D_tableau::vgui_easy2D_tableau(vgui_image_tableau_sptr const& i, const char* n)
-  : image_slot(this,i), image_image(i), name_(n)
+  : image_slot(this,i), image_image(i), name_(n), style_(vgui_style::new_style())
 {
-  fg[0] = 1.0f;
-  fg[1] = 1.0f;
-  fg[2] = 0.0f;
+  style_->rgba[0] = 1.0f;
+  style_->rgba[1] = 1.0f;
+  style_->rgba[2] = 0.0f;
 
-  line_width = 1;
-  point_size = 3;
+  style_->line_width = 1;
+  style_->point_size = 3;
 }
 
 
 vgui_easy2D_tableau::vgui_easy2D_tableau(vgui_tableau_sptr const& i, const char* n)
-  : image_slot(this,i), name_(n)
+  : image_slot(this,i), name_(n), style_(vgui_style::new_style())
 {
-  fg[0] = 1.0f;
-  fg[1] = 1.0f;
-  fg[2] = 0.0f;
+  style_->rgba[0] = 1.0f;
+  style_->rgba[1] = 1.0f;
+  style_->rgba[2] = 0.0f;
 
-  line_width = 1;
-  point_size = 3;
+  style_->line_width = 1;
+  style_->point_size = 3;
 }
 
 
@@ -122,12 +121,30 @@ void vgui_easy2D_tableau::set_child(vgui_tableau_sptr const& i)
   image_slot.assign(i);
 }
 
+//: Set the colour of objects to the given red, green, blue values.
+void vgui_easy2D_tableau::set_foreground(float r, float g, float b)
+{
+  style_->rgba[0] = r;
+  style_->rgba[1] = g;
+  style_->rgba[2] = b;
+}
+
+//: Set the width of lines to the given width.
+void vgui_easy2D_tableau::set_line_width(float w)
+{
+  style_->line_width = w;
+}
+
+//: Set the radius of points to the given radius.
+void vgui_easy2D_tableau::set_point_radius(float r)
+{
+  style_->point_size = r;
+}
+  
 //: Add the given two-dimensional object to the display.
 void vgui_easy2D_tableau::add(vgui_soview2D* object)
 {
-  vgui_style *style = vgui_style_factory::instance()->get_style(fg[0], fg[1], fg[2], point_size, line_width);
-  object->set_style(style);
-
+  object->set_style(style_);
   vgui_displaylist2D_tableau::add(object);
 }
 
@@ -295,7 +312,7 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
     vcl_cerr << "vgui_easy2D_tableau: Printing geometric objects\n";
 
   vcl_vector<vgui_soview*> all_objs = get_all();
-  vgui_style* style = 0;
+  vgui_style_sptr style = 0;
   double style_point_size = 0;
   for (vcl_vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); ++i)
   {
@@ -305,7 +322,7 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
        continue;
     }
     // Send style info if it has changed.
-    vgui_style* svstyle = sv->get_style();
+    vgui_style_sptr svstyle = sv->get_style();
     if (svstyle != style) {
       // rgba, line_width, point_size
       style = svstyle;

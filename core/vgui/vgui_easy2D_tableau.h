@@ -27,6 +27,7 @@
 #include <vgui/vgui_parent_child_link.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_easy2D_tableau_sptr.h>
+#include <vgui/vgui_style_sptr.h>
 
 class vgui_soview2D;
 class vgui_soview2D_point;
@@ -95,14 +96,13 @@ class vgui_easy2D_tableau : public vgui_displaylist2D_tableau
   void set_child(vgui_tableau_sptr const&);
 
   //: Set the colour of objects to the given red, green, blue values.
-  void set_foreground(float r, float g, float b)
-    { fg[0] = r; fg[1] = g; fg[2] = b; }
+  void set_foreground(float r, float g, float b);
 
   //: Set the width of lines to the given width.
-  void set_line_width(float w) { line_width = w; }
+  void set_line_width(float w);
 
   //: Set the radius of points to the given radius.
-  void set_point_radius(float r) { point_size = r; }
+  void set_point_radius(float r);
 
   //: Add the given two-dimensional object to the display.
   void add(vgui_soview2D*);
@@ -198,14 +198,8 @@ class vgui_easy2D_tableau : public vgui_displaylist2D_tableau
   //: Name of this tableau.
   vcl_string name_;
 
-  //: Foreground colour (colour of the objects).
-  float fg[3];
-
-  //: Line width for geometric objects added to the display.
-  float line_width;
-
-  //: Point radius for geometric objects added to the display.
-  float point_size;
+  //: the style of the objects
+  vgui_style_sptr style_;
 };
 
 //: Create a smart-pointer to a vgui_easy2D_tableau tableau.

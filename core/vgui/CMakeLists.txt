@@ -126,8 +126,7 @@ SET(vgui_sources
   vgui_soview.cxx               vgui_soview.h
   vgui_soview2D.cxx             vgui_soview2D.h
   vgui_soview3D.cxx             vgui_soview3D.h
-  vgui_style.cxx                vgui_style.h
-  vgui_style_factory.cxx        vgui_style_factory.h
+  vgui_style.cxx                vgui_style.h                vgui_style_sptr.h
   vgui_displaybase_tableau.cxx  vgui_displaybase_tableau.h  vgui_displaybase_tableau_sptr.h
   vgui_displaylist2D_tableau.cxx  vgui_displaylist2D_tableau.h vgui_displaylist2D_tableau_sptr.h
   vgui_displaylist3D_tableau.cxx  vgui_displaylist3D_tableau.h vgui_displaylist3D_tableau_sptr.h

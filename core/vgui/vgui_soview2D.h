@@ -147,7 +147,7 @@ class vgui_soview2D_group : public vgui_soview2D
   vgui_soview2D_group( vcl_vector<vgui_soview2D *> ls_) : ls(ls_) {}
 
   //: Set the style (colour, line width, etc) for this 2D soview group.
-  virtual void set_style(vgui_style*);
+  virtual void set_style(const vgui_style_sptr&);
 
   //: Render this 2D soview group on the display.
   virtual void draw() const;

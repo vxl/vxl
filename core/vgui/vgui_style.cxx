@@ -17,6 +17,30 @@
 #include "vgui_macro.h"
 #include "vgui_gl.h"
 
+
+//: Create a new style object
+vgui_style_sptr
+vgui_style::new_style()
+{
+  return vgui_style_sptr(new vgui_style());
+}
+
+//: Create a new style object
+vgui_style_sptr
+vgui_style::new_style(float r, float g, float b, float point_size, float line_width)
+{
+  return vgui_style_sptr(new vgui_style(r, g, b, point_size, line_width));
+}
+
+//: Create a new style object from an existing one;
+vgui_style_sptr
+vgui_style::new_style(const vgui_style_sptr& s)
+{
+  return vgui_style_sptr( new vgui_style( s->rgba[0],s->rgba[1],s->rgba[2],
+                                          s->point_size,s->line_width ) );
+}
+  
+
 vgui_style::vgui_style() {
   for (int i=0; i<2; ++i)
     rgba[i] = 1;
@@ -25,6 +49,18 @@ vgui_style::vgui_style() {
   line_width = 1;
   point_size = 1;
 }
+
+
+//: Constructor - creates a style and initializes the values
+vgui_style::vgui_style(float r, float g, float b, float ps, float lw)
+ : point_size(ps), line_width(lw)
+{
+  rgba[0] = r;
+  rgba[1] = g;
+  rgba[2] = b;
+  rgba[3] = 1;
+}
+
 
 vgui_style::~vgui_style() {
   // to aid in debugging destroyed styles

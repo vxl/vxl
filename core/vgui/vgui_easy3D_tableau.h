@@ -21,6 +21,7 @@
 
 #include "vgui_easy3D_tableau_sptr.h"
 #include "vgui_displaylist3D_tableau.h"
+#include "vgui_style_sptr.h"
 class vgui_point3D;
 class vgui_lineseg3D;
 class vgui_triangle3D;
@@ -69,9 +70,7 @@ class vgui_easy3D_tableau : public vgui_displaylist3D_tableau
   //: Destructor - called by vgui_easy3D_tableau_sptr.
   ~vgui_easy3D_tableau() { }
 
-  float fg[3];
-  float line_width;
-  float point_size;
+  vgui_style_sptr style_;
 };
 
 //: Create a smart-pointer to a vgui_easy3D_tableau tableau.

@@ -20,9 +20,10 @@
 #include <vcl_iosfwd.h>
 #include <vcl_vector.h>
 
+#include "vgui_style_sptr.h"
+
 class vgui_observer;
 class vgui_message;
-class vgui_style;
 
 //: Spatial object view (base class for 2 & 3D geometric objects).
 //
@@ -62,10 +63,10 @@ class vgui_soview /*: public vgui_observable*/
   virtual vcl_string type_name() const;
 
   //: Set the style (colour, line width) of the soview.
-  virtual void set_style(vgui_style*);
+  virtual void set_style(const vgui_style_sptr&);
 
   //: Return the style (colour, line width) of the soview.
-  virtual vgui_style* get_style() const;
+  virtual vgui_style_sptr get_style() const;
 
   //: Set the colour of the soview.
   void set_colour(float r, float g, float b);
@@ -118,7 +119,7 @@ class vgui_soview /*: public vgui_observable*/
   bool selectable;
 
   //: Style (colour, line width, etc) of this soview.
-  vgui_style* style;
+  vgui_style_sptr style;
 
  private:
   void add_id();

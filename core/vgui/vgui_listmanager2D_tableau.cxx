@@ -250,7 +250,7 @@ bool vgui_listmanager2D_tableau::motion(int x, int y)
   if (highlight_so)
   {
     vgui_soview* so = highlight_so;
-    vgui_style* style = so->get_style();
+    vgui_style_sptr style = so->get_style();
     style->apply_point_size();
     style->apply_line_width();
 
@@ -270,7 +270,7 @@ bool vgui_listmanager2D_tableau::motion(int x, int y)
     vcl_cerr << "vgui_listmanager2D_tableau::motion highlighting : " << closest_id << '\n';
 #endif
     vgui_soview* so = closest_so;
-    vgui_style* style = so->get_style();
+    vgui_style_sptr style = so->get_style();
     style->apply_point_size();
     style->apply_line_width();
     glColor3f(0.0f,1.0f,1.0f);

@@ -23,7 +23,6 @@
 #include <vgui/vgui_message.h>
 #include <vgui/vgui_style.h>
 #include <vgui/vgui_soview.h>
-#include <vgui/vgui_style_factory.h>
 
 bool vgui_displaybase_tableau_selection_callback::select(unsigned)
 {
@@ -117,7 +116,6 @@ void vgui_displaybase_tableau::remove(vgui_soview* object)
       it->second.objects.erase(a);
       if ( it->second.objects.size() == 0 )
       {
-        delete it->second.style;
         groupings.erase( it );
       }
       found = true;
@@ -138,11 +136,10 @@ void vgui_displaybase_tableau::clear()
   highlighted = 0;
   deselect_all();
 
-  // delete the style associations and destroy the objects
+  // destroy the objects
   for (vcl_vector<vgui_soview*>::iterator so_iter = objects.begin();
        so_iter != objects.end(); ++so_iter)
   {
-    vgui_style_factory::remove_style( *so_iter );
     delete *so_iter;
   }
 
@@ -152,7 +149,6 @@ void vgui_displaybase_tableau::clear()
         it != groupings.end() ;
         it++ )
   {
-    delete it->second.style;
     it->second.objects.clear();
   }
 
@@ -162,68 +158,6 @@ void vgui_displaybase_tableau::clear()
 void vgui_displaybase_tableau::draw_soviews_render()
 {
   vgui_macro_report_errors;
-#ifdef DEBUG
-  vcl_cerr << "vgui_style_factory::use_factory : "
-           << vbl_bool_ostream::true_false(vgui_style_factory::use_factory)
-           << " (but doing as if it is false)\n";
-#endif
-
-#if 0 // commented out the case vgui_style_factory::use_factory == true
-  if (vgui_style_factory::use_factory)
-  {
-    vcl_vector<vgui_style*> styles_copy;
-    vgui_style_factory::get_styles(styles_copy);
-#ifdef DEBUG
-    vcl_cerr << "found " << styles_copy.size() << " styles\n";
-#endif
-    // get all the styles held by the style factory
-    for (vcl_vector<vgui_style*>::iterator s_iter = styles_copy.begin();
-         s_iter != styles_copy.end(); ++s_iter)
-    {
-      vgui_style* style = *s_iter;
-
-      style->apply_all();
-
-      vcl_vector<vgui_soview*> soviews;
-      vgui_style_factory::get_soviews(*s_iter, soviews);
-#ifdef DEBUG
-      vcl_cerr << "found " << soviews.size() << " soviews with this style\n";
-#endif
-      // for each soview with this style
-      for (vcl_vector<vgui_soview*>::iterator so_iter = soviews.begin();
-           so_iter != soviews.end(); ++so_iter)
-      {
-        vgui_soview *so = *so_iter;
-
-        // only draw the soview if it is displayed by THIS vcl_list
-        vcl_vector<vgui_soview*>::iterator i = vcl_find(objects.begin(), objects.end(), so);
-        if (i != objects.end())
-        {
-          if (!is_selected(so->get_id()))
-            so->draw();
-        }
-      }
-    }
-
-#ifdef DEBUG
-    vcl_cerr << "setting color\ndrawing " << selections.size() << " selected soviews\n";
-#endif
-
-    for (vcl_vector<unsigned>::iterator id_iter = selections.begin();
-         id_iter != selections.end(); ++id_iter )
-    {
-      vgui_soview* so = vgui_soview::id_to_object(*id_iter);
-
-      vgui_style* style = so->get_style();
-      style->apply_point_size();
-      style->apply_line_width();
-      glColor3f(1.0f, 0.0f, 0.0f);
-
-      so->draw();
-    }
-  }
-  else // vgui_style_factory::use_factory == false
-#endif // 0
   {
     for (vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin();
          it != groupings.end();
@@ -235,7 +169,7 @@ void vgui_displaybase_tableau::draw_soviews_render()
              so_iter != it->second.objects.end(); ++so_iter)
         {
           vgui_soview *so = *so_iter;
-          vgui_style* style = so->get_style();
+          vgui_style_sptr style = so->get_style();
 
           if ( ! it->second.style )
             style->apply_all();

@@ -12,17 +12,17 @@
 
 #include <vgui/vgui_soview3D.h>
 #include <vgui/vgui_displaylist3D_tableau.h>
-#include <vgui/vgui_style_factory.h>
+#include <vgui/vgui_style.h>
 
 vgui_easy3D_tableau::
-vgui_easy3D_tableau()
+vgui_easy3D_tableau() : style_(vgui_style::new_style())
 {
-  fg[0] = 0.0f;
-  fg[1] = 1.0f;
-  fg[2] = 0.0f;
+  style_->rgba[0] = 0.0f;
+  style_->rgba[1] = 1.0f;
+  style_->rgba[2] = 0.0f;
 
-  line_width = 1;
-  point_size = 3;
+  style_->line_width = 1;
+  style_->point_size = 3;
 }
 
 
@@ -30,11 +30,7 @@ void
 vgui_easy3D_tableau::
 add(vgui_soview3D* object)
 {
-  vgui_style *style =
-    vgui_style_factory::instance()->get_style(fg[0], fg[1], fg[2],
-                                              point_size, line_width);
-
-  object->set_style(style);
+  object->set_style(style_);
   vgui_displaylist3D_tableau::add(object);
 }
 
@@ -81,22 +77,22 @@ void
 vgui_easy3D_tableau::
 set_foreground(float r, float g, float b)
 {
-  fg[0] = r;
-  fg[1] = g;
-  fg[2] = b;
+  style_->rgba[0] = r;
+  style_->rgba[1] = g;
+  style_->rgba[2] = b;
 }
 
 void
 vgui_easy3D_tableau::
 set_line_width(float w)
 {
-  line_width = w;
+  style_->line_width = w;
 }
 
 void
 vgui_easy3D_tableau::
 set_point_radius(float r)
 {
-  point_size = r;
+  style_->point_size = r;
 }
 

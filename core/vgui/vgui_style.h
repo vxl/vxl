@@ -16,20 +16,31 @@
 //  Modifications
 //   18-OCT-1999 P.Pritchett - Initial version.
 //   07-AUG-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
+//   06-APR-2004 M.Leotta - Updated for use with smart pointers and no style factory
 // \endverbatim
 
+#include <vbl/vbl_ref_count.h>
+#include <vgui/vgui_style_sptr.h>
+
 //: Style (colour, line width, point radius) of a geometric object.
-class vgui_style
+// vgui_style objects are dynamic only and should be accessed via smart pointer only.
+// The static new_style member function are only way to produce new styles
+// You should call
+// \verbatim vgui_style::new_style(...); \endverbatim
+// instead of
+// \verbatim new vgui_style(...); \endverbatim
+class vgui_style : public vbl_ref_count
 {
  public:
-  //: Constructor - creates a style with default values.
-  vgui_style();
+ 
+  //: Create a new style object
+  static vgui_style_sptr new_style();
+  
+  //: Create a new style object
+  static vgui_style_sptr new_style(float r, float g, float b, float point_size, float line_width);
 
-  //: Constructor - creates a style identical to the given style.
-  vgui_style(const vgui_style& that) { *this = that; }
-
-  //: Destructor.
-  ~vgui_style();
+  //: Create a new style object from an existing one;
+  static vgui_style_sptr new_style(const vgui_style_sptr& style);
 
   //: Sets the GL colour to this style's value
   //
@@ -51,12 +62,27 @@ class vgui_style
 
   //: Style colour.
   float rgba[4];
-
+  
+  //: Style point radius.
+  float point_size;
+  
   //: Style line width.
   float line_width;
 
-  //: Style point radius.
-  float point_size;
+ protected:
+  //: Constructor - creates a style with default values.
+  vgui_style();
+  
+  //: Constructor - creates a style and initializes the values
+  vgui_style(float r, float g, float b, float point_size, float line_width);
+
+  //: Constructor - creates a style identical to the given style.
+  vgui_style(const vgui_style& that) { *this = that; }
+
+  //: Destructor - only the smart pointer should use this
+  ~vgui_style();
+
+  friend class vbl_smart_ptr<vgui_style>;
 };
 
 //: Finds out whether two vgui_style's are equal.
@@ -64,10 +90,10 @@ class vgui_style_equal
 {
  public:
   //: Constructor - takes one of the styles to be compared.
-  vgui_style_equal(vgui_style* s1_) : s1(s1_) {}
+  vgui_style_equal(vgui_style_sptr s1_) : s1(s1_) {}
 
   //: Returns true if the given style is identical to the stored style.
-  bool operator() (vgui_style* s2) {
+  bool operator() (vgui_style_sptr s2) {
     if (s1->rgba[0] == s2->rgba[0] &&
         s1->rgba[1] == s2->rgba[1] &&
         s1->rgba[2] == s2->rgba[2] &&
@@ -78,7 +104,7 @@ class vgui_style_equal
     return false;
   }
 
-  vgui_style *s1;
+  vgui_style_sptr s1;
 };
 
 #endif // vgui_style_h_
