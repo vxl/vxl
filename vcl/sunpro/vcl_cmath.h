@@ -13,9 +13,8 @@
 
 #undef  vcl_abs
 #define vcl_abs vcl_abs
-inline int    vcl_abs(int    x) { return x >= 0    ? x : -x; }
-inline long   vcl_abs(long   x) { return x >= 0L   ? x : -x; }
-inline float  vcl_abs(float  x) { return x >= 0.0f ? x : -x; }
-inline double vcl_abs(double x) { return x >= 0.0  ? x : -x; }
+inline float       vcl_abs(float       x) { return x >= 0.0f ? x : -x; }
+inline double      vcl_abs(double      x) { return x >= 0.0  ? x : -x; }
+inline long double vcl_abs(long double x) { return x >= 0.0  ? x : -x; }
 
 #endif // vcl_cmath_h_
