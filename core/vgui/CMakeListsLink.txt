@@ -7,10 +7,10 @@ IF (LIBRARY_OUTPUT_PATH MATCHES '^$')
 ENDIF (LIBRARY_OUTPUT_PATH MATCHES '^$')
 
 # add stuff to use MFC in this executable
-IF(WIN32)
+IF(HAS_MFC)
  ADD_DEFINITIONS(-D_AFXDLL)
  SET(CMAKE_MFC_FLAG 6)
-ENDIF(WIN32)
+ENDIF(HAS_MFC)
 
 # Immediate dependencies
 INCLUDE( ${allvxl_SOURCE_DIR}/oxl/vgui/impl/CMakeListsLink.txt )
@@ -25,3 +25,8 @@ INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vgl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vpl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vbl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )
+
+# this is a temporary hack to get vgui on the link line again
+# this is needed for Cygwin/gcc
+# this will go away when cmake 1.4 link line dependency features are used
+LINK_LIBRARIES( vgui )
