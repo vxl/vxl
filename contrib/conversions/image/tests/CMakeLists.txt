@@ -1,6 +1,6 @@
-LINK_DIRECTORIES( conversions vxl )
-include ${IUEROOT}/vxl/vil/config.mk
-LINK_LIBRARIES( vil vpl )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vil/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vpl/CMakeListsLink.txt )
+
 
 IF(HAS_IMAGE)
   LINK_DIRECTORIES( Image COOL Numerics GeneralUtility )

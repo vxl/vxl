@@ -1,2 +1,0 @@
-LINK_DIRECTORIES( conversions vxl )
-LINK_LIBRARIES(  )

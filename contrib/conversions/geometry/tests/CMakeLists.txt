@@ -1,9 +1,11 @@
-LINK_DIRECTORIES( conversions vxl gel )
-USE_NETLIB := 1
-LINK_LIBRARIES( vdgl vsol vgl vnl-algo vnl vbl )
+INCLUDE( ${allvxl_SOURCE_DIR}/gel/vdgl/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/gel/vsol/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vgl/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vbl/CMakeListsLink.txt )
 
 IF(HAS_SO)
   LINK_DIRECTORIES( COOL GeneralUtility SpatialObjects Numerics )
   LINK_LIBRARIES( DigitalGeometry CompGeom Topology Groups Geometry SpatialBasics Basics Solver Numerics )
-  ADD_EXECUTABLE( test_DigitalCurve_to_vdgl )
+  ADD_EXECUTABLE( test_DigitalCurve_to_vdgl test_DigitalCurve_to_vdgl )
 ENDIF(HAS_SO)
