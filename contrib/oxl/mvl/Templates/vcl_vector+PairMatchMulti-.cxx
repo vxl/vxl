@@ -1,5 +1,4 @@
 // Instantiation of vcl_vector<PairMatchMulti>
-#include <vcl_vector.txx>
 #include <mvl/PairMatchMulti.h>
-
+#include <vcl_vector.txx>
 VCL_VECTOR_INSTANTIATE(PairMatchMulti);

@@ -1,5 +1,4 @@
 // Instantiation of vcl_list<LineSeg*>
-#include <vcl_list.txx>
 class LineSeg;
-
+#include <vcl_list.txx>
 VCL_LIST_INSTANTIATE(LineSeg*);

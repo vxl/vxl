@@ -1,5 +1,4 @@
 // Instantiation of vcl_vector<PMatrix*>
+class PMatrix;
 #include <vcl_vector.txx>
-#include <mvl/PMatrix.h>
-
 VCL_VECTOR_INSTANTIATE(PMatrix*);
