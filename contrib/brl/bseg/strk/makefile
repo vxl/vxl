@@ -23,6 +23,7 @@ SOURCES += strk_region_info.cxx
 SOURCES += strk_region_info_params.cxx
 SOURCES += strk_feature_capture_process.cxx
 SOURCES += strk_io.cxx
+SOURCES += strk_snippet_extractor_process.cxx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
