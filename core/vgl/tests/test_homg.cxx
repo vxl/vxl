@@ -243,16 +243,116 @@ static void test_homg_plane_3d()
   TEST("ideal", pp.ideal(), true);
 }
 
+inline bool collinear(vgl_homg_line_2d<int> const& l1,
+                      vgl_homg_line_2d<int> const& l2,
+                      vgl_homg_line_2d<int> const& l3) {
+  return concurrent(l1,l2,l3);
+}
+
+inline bool collinear(vgl_homg_line_3d_2_points<double> const& l1,
+                      vgl_homg_line_3d_2_points<double> const& l2,
+                      vgl_homg_line_3d_2_points<double> const& l3) {
+  return concurrent(l1,l2,l3) && coplanar(l1,l2,l3);
+}
+
+inline double ratio(vgl_homg_line_2d<int> const& l1,
+                    vgl_homg_line_2d<int> const& l2,
+                    vgl_homg_line_2d<int> const& l3)
+{
+  return (l3.a()-l1.a())/(l2.a()-l1.a());
+}
+
+inline double cross_ratio(vgl_homg_line_2d<int>const& l1, vgl_homg_line_2d<int>const& l2,
+                          vgl_homg_line_2d<int>const& l3, vgl_homg_line_2d<int>const& l4)
+{
+  vgl_homg_point_2d<int> p1(l1.a(),l1.b(),l1.c());
+  vgl_homg_point_2d<int> p2(l2.a(),l2.b(),l2.c());
+  vgl_homg_point_2d<int> p3(l3.a(),l3.b(),l3.c());
+  vgl_homg_point_2d<int> p4(l4.a(),l4.b(),l4.c());
+  return cross_ratio(p1,p2,p3,p4);
+}
+
+static void test_1d_basis()
+{
+  vcl_cout << "  TEST OF PROJECTIVE BASIS WITH 1D POINTS\n";
+
+  vgl_homg_point_1d<float> p11(0.f), p12(1.f), p13(1.f,0.f);
+  vgl_1d_basis<vgl_homg_point_1d<float> >  b_1_p(p11,p12,p13);
+  // The following is essentially just a mapping
+  // from vgl_homg_point_1d<float> to vgl_homg_point_1d<double> :
+  vgl_homg_point_1d<double> p = b_1_p.project(p11);
+  TEST("origin", p, vgl_homg_point_1d<double>(0.0));
+  p = b_1_p.project(p12);
+  TEST("unit point", p, vgl_homg_point_1d<double>(1.0));
+  p = b_1_p.project(p13);
+  TEST("infinity point", p, vgl_homg_point_1d<double>(1.0,0.0));
+  p = b_1_p.project(vgl_homg_point_1d<float>(-3.f));
+  TEST("point at -3", p, vgl_homg_point_1d<double>(-3.0));
+
+  vcl_cout << "  TEST OF PROJECTIVE BASIS ON A 2D LINE\n";
+
+  vgl_homg_point_2d<int> p21(0,1), p22(1,3), p23(2,5); // On the line 2x-y+w=0
+  vgl_1d_basis<vgl_homg_point_2d<int> >  b_2_p(p21,p22,p23);
+  p = b_2_p.project(p21);
+  TEST("origin", p, vgl_homg_point_1d<double>(0.0));
+  p = b_2_p.project(p22);
+  TEST("unit point", p, vgl_homg_point_1d<double>(1.0));
+  p = b_2_p.project(p23);
+  TEST("infinity point", p, vgl_homg_point_1d<double>(1.0,0.0));
+  p = b_2_p.project(vgl_homg_point_2d<int>(1,2,0));
+  TEST("point at -1", p, vgl_homg_point_1d<double>(-1.0));
+
+  vcl_cout << "  TEST OF PROJECTIVE BASIS ON A 3D LINE\n";
+
+  vgl_homg_point_3d<double> p31(0,1,3), p32(1,3,2), p33(2,5,1); // On the line 2x-y+w=0,x+z=3w
+  vgl_1d_basis<vgl_homg_point_3d<double> >  b_3_p(p31,p32,p33);
+  p = b_3_p.project(p31);
+  TEST("origin", p, vgl_homg_point_1d<double>(0.0));
+  p = b_3_p.project(p32);
+  TEST("unit point", p, vgl_homg_point_1d<double>(1.0));
+  p = b_3_p.project(p33);
+  TEST("infinity point", p, vgl_homg_point_1d<double>(1.0,0.0));
+  p = b_3_p.project(vgl_homg_point_3d<double>(1,2,-1,0));
+  TEST("point at -1", p, vgl_homg_point_1d<double>(-1.0));
+
+  vcl_cout << "  TEST OF PROJECTIVE BASIS OF CONCURRENT 2D LINES\n";
+
+  vgl_homg_line_2d<int> l21(0,1,1), l22(1,3,1), l23(2,5,1); // Through the point (2,-1,1)
+  vgl_1d_basis<vgl_homg_line_2d<int> >  b_2_l(l21,l22,l23);
+  p = b_2_l.project(l21);
+  TEST("origin", p, vgl_homg_point_1d<double>(0.0));
+  p = b_2_l.project(l22);
+  TEST("unit point", p, vgl_homg_point_1d<double>(1.0));
+  p = b_2_l.project(l23);
+  TEST("infinity point", p, vgl_homg_point_1d<double>(1.0,0.0));
+  p = b_2_l.project(vgl_homg_line_2d<int>(1,2,0));
+  TEST("point at -1", p, vgl_homg_point_1d<double>(-1.0));
+}
+
 MAIN( test_homg )
 {
   START( "Test homg" );
 
+  vcl_cout << "-- Testing vgl_homg_point_1d --\n";
   test_homg_point_1d();
+  vcl_cout << "-- Testing vgl_homg_point_2d --\n";
   test_homg_point_2d();
+  vcl_cout << "-- Testing vgl_homg_point_3d --\n";
   test_homg_point_3d();
+  vcl_cout << "-- Testing vgl_homg_line_2d --\n";
   test_homg_line_2d();
+  vcl_cout << "-- Testing vgl_homg_line_3d --\n";
   test_homg_line_3d();
+  vcl_cout << "-- Testing vgl_homg_plane_3d --\n";
   test_homg_plane_3d();
+  vcl_cout << "-- Testing vgl_1d_basis --\n";
+  test_1d_basis();
 
   SUMMARY();
 }
+
+#include <vgl/vgl_1d_basis.txx>
+VGL_1D_BASIS_INSTANTIATE(vgl_homg_point_1d<float>);
+VGL_1D_BASIS_INSTANTIATE(vgl_homg_point_2d<int>);
+VGL_1D_BASIS_INSTANTIATE(vgl_homg_line_2d<int>);
+VGL_1D_BASIS_INSTANTIATE(vgl_homg_point_3d<double>);
