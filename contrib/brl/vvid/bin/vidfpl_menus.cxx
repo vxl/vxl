@@ -131,6 +131,11 @@ void vidfpl_menus::compute_curve_tracking_callback()
   vvid_file_manager::instance()->compute_curve_tracking();
 }
 
+void vidfpl_menus::compute_corr_tracking_callback()
+{
+  vvid_file_manager::instance()->compute_corr_tracking();
+}
+
 void vidfpl_menus::compute_info_tracking_callback()
 {
   vvid_file_manager::instance()->compute_info_tracking();
@@ -141,9 +146,69 @@ void vidfpl_menus::display_poly_track_callback()
   vvid_file_manager::instance()->display_poly_track();
 }
 
+void vidfpl_menus::display_art_model_track_callback()
+{
+  vvid_file_manager::instance()->display_art_model_track();
+}
+
+void vidfpl_menus::start_save_display_callback()
+{
+  vvid_file_manager::instance()->start_save_display();
+}
+
+void vidfpl_menus::end_save_display_callback()
+{
+  vvid_file_manager::instance()->end_save_display();
+}
+
+void vidfpl_menus::generate_basis_sequence_callback()
+{
+  vvid_file_manager::instance()->generate_basis_sequence();
+}
+
+void vidfpl_menus::compute_fourier_transform_callback()
+{
+  vvid_file_manager::instance()->compute_fourier_transform();
+}
+
+void vidfpl_menus::spatial_filter_callback()
+{
+  vvid_file_manager::instance()->spatial_filter();
+}
+
 void vidfpl_menus::create_box_callback()
 {
   vvid_file_manager::instance()->create_box();
+}
+
+void vidfpl_menus::create_polygon_callback()
+{
+  vvid_file_manager::instance()->create_polygon();
+}
+
+void vidfpl_menus::create_stem_callback()
+{
+  vvid_file_manager::instance()->create_stem();
+}
+
+void vidfpl_menus::create_long_arm_tip_callback()
+{
+  vvid_file_manager::instance()->create_long_arm_tip();
+}
+
+void vidfpl_menus::create_short_arm_tip_callback()
+{
+  vvid_file_manager::instance()->create_short_arm_tip();
+}
+
+void vidfpl_menus::exercise_art_model_callback()
+{
+  vvid_file_manager::instance()->exercise_art_model();
+}
+
+void vidfpl_menus::track_art_model_callback()
+{
+  vvid_file_manager::instance()->track_art_model();
 }
 
 void vidfpl_menus::quit_callback()
@@ -170,6 +235,10 @@ vgui_menu vidfpl_menus::get_menu()
   menuview.add( "Prev", prev_frame_callback,(vgui_key)'b', vgui_CTRL);
   menuview.add( "Stop", stop_video_callback,(vgui_key)'s', vgui_CTRL);
   menuview.add( "Display Track", display_poly_track_callback);
+  menuview.add( "Display Art Model Track", display_art_model_track_callback);
+  menuview.add( "Start Save Display", start_save_display_callback);
+  menuview.add( "End Save Display", end_save_display_callback,
+                (vgui_key)'e', vgui_CTRL);
   menuview.add( "easy2D Demo", easy2D_tableau_demo_callback);
   //edit menu entries
   menuedit.add( "No Op", no_op_callback);
@@ -181,9 +250,22 @@ vgui_menu vidfpl_menus::get_menu()
   menuedit.add( "Compute Line Fit", compute_line_fit_callback);
   menuedit.add( "Compute Grid Match", compute_grid_match_callback);
   menuedit.add( "Compute Curve Tracking", compute_curve_tracking_callback);
+  menuedit.add( "Compute Corr Tracking", compute_corr_tracking_callback);
   menuedit.add( "Compute Info Tracking", compute_info_tracking_callback);
+  menuedit.add( "Generate Basis ", generate_basis_sequence_callback);
+  menuedit.add( "Compute Fourier Transform ",
+                compute_fourier_transform_callback);
+  menuedit.add( "Spatial Filter ", spatial_filter_callback);
   menuedit.add( "Create Box", create_box_callback);
-
+  menuedit.add( "Create Polygon", create_polygon_callback,(vgui_key)'a', vgui_CTRL);
+  menuedit.add( "Create Stem", create_stem_callback,
+                (vgui_key)'1', vgui_CTRL);
+  menuedit.add( "Create Long Arm Tip", create_long_arm_tip_callback,
+                (vgui_key)'2', vgui_CTRL);
+  menuedit.add( "Create Short Arm Tip", create_short_arm_tip_callback,
+                (vgui_key)'3', vgui_CTRL);
+  menuedit.add( "Exercise Art Model", exercise_art_model_callback);
+  menuedit.add( "Track Art Model", track_art_model_callback);
   //Top level menu layout
   menubar.add( "File", menufile);
   menubar.add( "View", menuview);

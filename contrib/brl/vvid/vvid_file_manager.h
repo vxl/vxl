@@ -13,6 +13,7 @@
 // \endverbatim
 //----------------------------------------------------------------------------
 #include <vcl_vector.h>
+#include <vcl_list.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_wrapper_tableau.h>
@@ -20,6 +21,8 @@
 #include <vgui/vgui_rubberband_tableau_sptr.h>
 #include <bgui/bgui_vtol2D_tableau_sptr.h>
 #include <vgui/vgui_viewer2D_tableau_sptr.h>
+#include <strk/strk_art_info_model_sptr.h>
+#include <vtol/vtol_face_2d_sptr.h>
 #include <vpro/vpro_video_process_sptr.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_window.h>
@@ -118,13 +121,48 @@ class vvid_file_manager : public vgui_wrapper_tableau
   void compute_grid_match();
 
   //: show correlation tracking
+  void compute_corr_tracking();
+
+  //: show mutual information tracking
   void compute_info_tracking();
 
   //: display a tracked polygon
   void display_poly_track();
 
+  //: display a tracked art model
+  void display_art_model_track();
+
+  //: enable display movie generation
+  void start_save_display();
+
+  //: enable display movie generation
+  void end_save_display();
+
+  //: generate a basis sequence
+  void generate_basis_sequence();
+
+  //: compute fourier transform
+  void compute_fourier_transform();
+
+  //: compute fourier transform
+  void spatial_filter();
+
   //: create a box by rubberbanding
   void create_box();
+
+  //: create a polygon by rubberbanding
+  void create_polygon();
+
+  //: create the elements of the art model
+  void create_stem();
+  void create_long_arm_tip();
+  void create_short_arm_tip();
+
+  //: test model
+  void exercise_art_model();
+
+  //: process_art_model
+  void track_art_model();
 
   //: get the window of this player
   vgui_window* get_window() { return win_; }
@@ -144,7 +182,7 @@ class vvid_file_manager : public vgui_wrapper_tableau
   void display_spatial_objects();
   void display_topology();
   void set_changing_colors(int num, float *r, float *g, float *b);
-
+  void save_display(int frame);
  private:
   //flags
   bool cache_frames_;
@@ -152,6 +190,8 @@ class vvid_file_manager : public vgui_wrapper_tableau
   bool pause_video_;
   bool next_frame_;
   bool prev_frame_;
+  bool save_display_;
+  bool overlay_pane_;
   bool track_;//keep trail of display items
   int window_;//frame trail time window
   bool color_label_;//display with a different color for different labels
@@ -173,7 +213,12 @@ class vvid_file_manager : public vgui_wrapper_tableau
   vvid_frame_trail frame_trail_;
   static vvid_file_manager *instance_;
   vcl_vector<vcl_vector<vsol_spatial_object_2d_sptr> > cached_spat_objs_;
-
+  vcl_list<vil1_image> display_output_frames_;
+  vcl_string display_output_file_;
+  vtol_face_2d_sptr stem_;
+  vtol_face_2d_sptr long_tip_;
+  vtol_face_2d_sptr short_tip_;
+  strk_art_info_model_sptr art_model_;
 };
 
 #endif // vvid_file_manager_h_

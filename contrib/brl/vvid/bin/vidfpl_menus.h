@@ -37,9 +37,22 @@ class vidfpl_menus
   static void compute_line_fit_callback();
   static void compute_grid_match_callback();
   static void compute_curve_tracking_callback();
+  static void compute_corr_tracking_callback();
   static void compute_info_tracking_callback();
   static void display_poly_track_callback();
+  static void start_save_display_callback();
+  static void end_save_display_callback();
+  static void generate_basis_sequence_callback();
+  static void compute_fourier_transform_callback();
+  static void spatial_filter_callback();
   static void create_box_callback();
+  static void create_polygon_callback();
+  static void create_long_arm_tip_callback();
+  static void create_short_arm_tip_callback();
+  static void create_stem_callback();
+  static void exercise_art_model_callback();
+  static void track_art_model_callback();
+  static void display_art_model_track_callback();
   static void quit_callback();
   static vgui_menu get_menu();
  private:
