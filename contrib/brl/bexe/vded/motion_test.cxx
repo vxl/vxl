@@ -56,32 +56,30 @@ int main(int argc, char** argv)
   if ( print_params_only() )
     return 0;
 
-
-
   // Open the movie
   vidl_movie_sptr video = vidl_io::load_movie(input_video_file().c_str());
   if (!video) {
-    vcl_cerr << "Failed to open the video" << vcl_endl;
+    vcl_cerr << "Failed to open the video\n";
     return -1;
   }
 
   bool make_output_video = (output_video_directory() != "") && (!no_output());
 
-
   // create a gaussian filter with sigma()
   vil_gauss_filter_5tap_params gauss_params(sigma());
-  
+
   vil_image_view<float> prev_image;
   vcl_vector< double > scores;
-  vcl_vector< vil_image_resource_sptr > results; 
+  vcl_vector< vil_image_resource_sptr > results;
   for ( vidl_movie::frame_iterator f_itr = video->first();
-        f_itr != video->end();  ++f_itr ){
+        f_itr != video->end();  ++f_itr )
+  {
     vil_image_view<vxl_byte> input_image;
-    vil_image_view<float> smooth_image;     
+    vil_image_view<float> smooth_image;
     input_image = vil_convert_to_grey_using_rgb_weighting(f_itr->get_view());
     vil_gauss_filter_5tap(input_image, smooth_image, gauss_params);
 
-    if( f_itr == video->first() ){
+    if ( f_itr == video->first() ){
       prev_image = smooth_image;
       continue;
     }
@@ -94,7 +92,7 @@ int main(int argc, char** argv)
 
     vil_image_view<float> motion_img;
     vil_math_image_product(diff_img, sing_img, motion_img);
-    
+
     float min_val, max_val;
     vil_math_value_range(motion_img, min_val, max_val);
     vil_math_scale_values(motion_img, 1.0/max_val);
@@ -110,7 +108,7 @@ int main(int argc, char** argv)
     scores.push_back(double(sum)/total);
 
     // Make the output video frame
-    if ( make_output_video ){
+    if ( make_output_video ) {
       vil_math_truncate_range( motion_img, 0.0f, thresh1());
       vil_image_view<vxl_byte> byte_img;
       vil_convert_stretch_range(motion_img, byte_img);
@@ -122,20 +120,19 @@ int main(int argc, char** argv)
 
     if (status_block_file() != "")
       write_status(status_block_file(), scores.size(), video->length()-1);
-            
+
     prev_image = smooth_image;
   }
   if (performance_output_file() != "")
     print_xml_performance( performance_output_file(), input_video_file(), scores );
 
-  if ( make_output_video ){
+  if ( make_output_video ) {
     vidl_movie_sptr result_movie = new vidl_movie(new vidl_clip(results, 0, results.size()));
     vcl_string output_name = output_video_directory()+"/output";
     vidl_io::save(result_movie.ptr(), output_name.c_str(), "ImageList");
   }
 
-  vcl_cout << "done!" << vcl_endl;
-
+  vcl_cout << "done!\n";
   return 0;
 }
 
@@ -157,14 +154,14 @@ bool print_xml_performance( vcl_string output_file,
             << "  <frames>\n"
             << "    <video name=\""<< video_file <<"\" totalframes=\""<<scores.size()<<"\">\n"
             << "      <category type=\"car\">\n";
-  for (unsigned int i=0; i<scores.size(); ++i){
+  for (unsigned int i=0; i<scores.size(); ++i) {
     outstream << "        <frame index=\""<<i<<"\" score=\""<<scores[i]<<"\"/>\n";
   }
 
   outstream << "      </category>\n"
             << "    </video>\n"
             << "  </frames>\n"
-            << "</performance>" <<vcl_endl;
+            << "</performance>\n";
 
   return true;
 }
@@ -227,17 +224,19 @@ bool print_xml_params( vcl_string output_file,
       outstream << " System_info=\"STATUS_BLOCK\"";
     if (command == "-P")
       outstream << " System_info=\"PERFORMANCE_OUTPUT\"";
-//    // see if param is an output file
-//    for (vcl_vector<vul_arg<vcl_string> >::iterator pit = output_files_.begin();
-//         pit != output_files_.end(); pit++)
-//    {
-//      vcl_string of_cmd = ( (*pit).option() );
-//        if (command == of_cmd)
-//        {
-//          outstream << " System_info=\"OUTPUT\"";
-//          break;
-//        }
-//    }
+#if 0
+    // see if param is an output file
+    for (vcl_vector<vul_arg<vcl_string> >::iterator pit = output_files_.begin();
+         pit != output_files_.end(); pit++)
+    {
+      vcl_string of_cmd = ( (*pit).option() );
+      if (command == of_cmd)
+      {
+        outstream << " System_info=\"OUTPUT\"";
+        break;
+      }
+    }
+#endif // 0
     outstream << " value=\"";
     // if arg is a string, we have to get rid of ' ' around value
     vcl_ostringstream value_stream;
