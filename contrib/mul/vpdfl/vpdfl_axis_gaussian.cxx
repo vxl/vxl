@@ -164,7 +164,7 @@ void vpdfl_axis_gaussian::nearest_plausible(vnl_vector<double>& x,
 
   const double corrective_factor = vcl_sqrt(sd_limit_sqr / x_dist_sqr);
 
-  for (int i=0;i<n;++i)
+  for (unsigned i=0;i<n;++i)
     x(i) = ((x(i)-mean()(i)) * corrective_factor) + mean()(i);
 }
 
