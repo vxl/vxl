@@ -29,12 +29,13 @@ T vnl_c_vector<T>::sum(T const* v, unsigned n)
 template <class T>
 void vnl_c_vector<T>::normalize(T* v, unsigned n)
 {
-  abs_t tot(0);
+  typedef typename vnl_numeric_traits<T>::real_t real_t;
+  real_t tmp(0);
   for(unsigned i = 0; i < n; ++i)
-    tot += vnl_math_squared_magnitude(v[i]);
-  tot = abs_t(abs_t(1) / vcl_sqrt(tot));
+    tmp += vnl_math_squared_magnitude(v[i]);
+  tmp = real_t(1) / vcl_sqrt(tmp);
   for(unsigned i = 0; i < n; ++i)
-    v[i] *= tot;
+    v[i] *= tmp;
 }
 
 template <class T>
@@ -224,7 +225,8 @@ void vnl_c_vector_rms_norm(T const *p, unsigned n, S *out)
 {
   vnl_c_vector_two_norm_squared(p, n, out);
   *out /= n;
-  *out = vcl_sqrt(*out);
+  typedef typename vnl_numeric_traits<S>::real_t real_t;
+  *out = vcl_sqrt(real_t(*out));
 }
 
 template <class T, class S>
@@ -239,7 +241,8 @@ template <class T, class S>
 void vnl_c_vector_two_norm(T const *p, unsigned n, S *out)
 {
   vnl_c_vector_two_norm_squared(p, n, out);
-  *out = S(vcl_sqrt(S(*out)));
+  typedef typename vnl_numeric_traits<S>::real_t real_t;
+  *out = S(vcl_sqrt(real_t(*out)));
 }
 
 template <class T, class S>
