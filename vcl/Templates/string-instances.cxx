@@ -17,7 +17,7 @@ template bs &bs::replace(size_t, size_t, size_t, char);
 # undef bs
 #endif
 
-#if defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
+#if defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3) && !defined(VCL_GCC_27)
 void vcl_string_instance_tickler(ostream &os)
 {
   char a;
