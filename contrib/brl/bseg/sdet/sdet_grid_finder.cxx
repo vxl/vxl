@@ -5,7 +5,6 @@
 
 
 #include <vcl_fstream.h>
-#include <vcl_list.h>
 #include <vcl_algorithm.h> // for vcl_sort() and vcl_find()
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_numeric_traits.h>
@@ -22,7 +21,6 @@
 #include <bsol/bsol_hough_line_index.h>
 #include <bsol/bsol_algs.h>
 #include <bsol/bsol_distance_histogram.h>
-#include <vnl/vnl_sample.h>
 #include <vnl/algo/vnl_convolve.h>
 #include <gevd/gevd_bufferxy.h>
 static const double collection_grid_radius = 15;
@@ -169,7 +167,7 @@ grid_profile_matcher::grid_profile_matcher()
 
 grid_profile_matcher::~grid_profile_matcher()
 {
-  for(int i = 0; i<size_; i++)
+  for (int i = 0; i<size_; i++)
     delete line_index_[i];
 }
 
@@ -177,13 +175,13 @@ bool grid_profile_matcher::insert_lines(vcl_vector<vsol_line_2d_sptr> const& lin
                                         bool horizontal_lines)
 
 {
-  if(!lines.size())
+  if (!lines.size())
     return false;
   dmin_ = vnl_numeric_traits<double>::maxval;
   dmax_ = -dmin_;
   distances_.clear();
-  for(vcl_vector<vsol_line_2d_sptr>::const_iterator lit = lines.begin();
-      lit != lines.end(); lit++)
+  for (vcl_vector<vsol_line_2d_sptr>::const_iterator lit = lines.begin();
+       lit != lines.end(); lit++)
     {
       double d;
 #ifdef USE_C_FOR_DISTANCE
@@ -192,7 +190,7 @@ bool grid_profile_matcher::insert_lines(vcl_vector<vsol_line_2d_sptr> const& lin
       d = -l.c();//perpendicular distance
 #else
       vsol_point_2d_sptr mid = (*lit)->middle();
-      if(horizontal_lines)
+      if (horizontal_lines)
         d = mid->y();
       else
         d = mid->x();
@@ -201,19 +199,19 @@ bool grid_profile_matcher::insert_lines(vcl_vector<vsol_line_2d_sptr> const& lin
       dmin_ = vnl_math_min(d,dmin_);
       dmax_ = vnl_math_max(d,dmax_);
     }
-  if(!(dmax_>=dmin_))
+  if (!(dmax_>=dmin_))
     return false;
   size_=(int)(dmax_-dmin_ +1);
   image_profile_.set_size(size_);
   image_profile_.fill(0.0);
 
   line_index_.resize(size_);
-  for(int i = 0; i<size_; i++)
+  for (int i = 0; i<size_; i++)
     line_index_[i]= new vcl_vector<vsol_line_2d_sptr>;
 
   int line = 0;
-  for(vcl_vector<double>::iterator dit = distances_.begin();
-      dit != distances_.end(); dit++, line++)
+  for (vcl_vector<double>::iterator dit = distances_.begin();
+       dit != distances_.end(); dit++, line++)
     {
       int id = (int)((*dit)-dmin_);
       image_profile_[id] += lines[line]->length();
@@ -240,21 +238,21 @@ grid_profile_matcher::get_lines_in_interval(const double x,
                                             vcl_vector<vsol_line_2d_sptr>& lines) const
 {
   lines.clear();
-  if(x<dmin_)
+  if (x<dmin_)
     return false;
-  if(x>dmax_)
+  if (x>dmax_)
     return false;
   double x0 = x - dmin_;
   int lo = (int)(x0 - radius);
   int hi = (int)(x0 + radius);
-  if(lo<0)
+  if (lo<0)
     lo=0;
-  if(hi>(size_-1))
+  if (hi>(size_-1))
     hi = size_ - 1;
-  for(int d = lo; d<=hi; d++)
-    if(line_index_[d])
-      for(vcl_vector<vsol_line_2d_sptr>::iterator lit=line_index_[d]->begin();
-          lit != line_index_[d]->end(); lit++)
+  for (int d = lo; d<=hi; d++)
+    if (line_index_[d])
+      for (vcl_vector<vsol_line_2d_sptr>::iterator lit=line_index_[d]->begin();
+           lit != line_index_[d]->end(); lit++)
         lines.push_back(*lit);
   return true;
 }
@@ -291,8 +289,7 @@ double grid_profile_matcher::calculate_grid_offset(int n_grid_lines, double spac
       max_value = convolution[i];
     }
   }
-  return (max_index - grid_profile_len + spacing + dmin_);
-
+  return max_index - grid_profile_len + spacing + dmin_;
 }
 
 //---------------------------------------------------------------
@@ -426,7 +423,7 @@ get_vanishing_point(vcl_vector<vsol_line_2d_sptr> const & para_lines,
   {
     if ((*lit)->length() < length_threshold)
     {
-      cout << "discarding line with length < "<<length_threshold<<"\n";
+      vcl_cout << "discarding line with length < "<<length_threshold<<"\n";
       continue;
     }
     vgl_homg_line_2d<double> l= (*lit)->vgl_hline_2d();
@@ -654,26 +651,26 @@ bool sdet_grid_finder::scale_transform(const double max_distance,
     }
   vcl_cout << "********************************\n\n";
 #endif
-  if(verbose_)
+  if (verbose_)
     {
       vcl_cout << "Horizontal Histogram \n" << Hh << "\n\n";
       vcl_cout << "Vertical Histogram \n" << Hv << "\n\n";
      }
-  if(!Hh.distance_peaks(hp1, hp2))
+  if (!Hh.distance_peaks(hp1, hp2))
     {
       vcl_cout << "In sdet_grid_finder::scale_transform(.) - failed"
                << " to find horizontal distance peaks \n";
       return false;
 
     }
-  if(!Hv.distance_peaks(vp1, vp2))
+  if (!Hv.distance_peaks(vp1, vp2))
     {
       vcl_cout << "In sdet_grid_finder::scale_transform(.) - failed"
                << " to find vertical distance peaks \n";
       return false;
     }
   double ph = (hp2-hp1), pv = (vp2-vp1);
-  if(verbose_)
+  if (verbose_)
     {
       vcl_cout << "Horizontal Peaks " << hp1 << " " << hp2 << "\n"
                << "Vertical Peaks " << vp1 << " " << vp2 << "\n";
@@ -830,13 +827,13 @@ bool sdet_grid_finder::compute_affine_homography()
     if ((*lit)->length()<length_threshold)//JLM
       continue;
 
-      if(zero_is_zero)
+      if (zero_is_zero)
         grid_lines90.push_back(this->transform_line(affine_homography_,*lit));
       else
         grid_lines0.push_back(this->transform_line(affine_homography_,*lit));
     }
-  if( (debug_state_==AFFINE_GROUP_AFTER_SKEW_SCALE) ||
-      (debug_state_==TRANS_PERIM_LINES) )
+  if ( (debug_state_==AFFINE_GROUP_AFTER_SKEW_SCALE) ||
+       (debug_state_==TRANS_PERIM_LINES) )
     {
       for (vcl_vector<vsol_line_2d_sptr>::const_iterator lit =
              grid_lines0.begin(); lit != grid_lines0.end(); lit++)
@@ -850,11 +847,11 @@ bool sdet_grid_finder::compute_affine_homography()
   vcl_sort(grid_lines90.begin(), grid_lines90.end(), line_distance);
 
   //  vcl_cout <<  "Grid Lines 0\n"
-  if(!chamf0_.insert_lines(grid_lines0,true))
+  if (!chamf0_.insert_lines(grid_lines0,true))
     return false;
 
   //  vcl_cout <<  "Grid Lines 90\n"
-  if(!chamf90_.insert_lines(grid_lines90,false))
+  if (!chamf90_.insert_lines(grid_lines90,false))
     return false;
 
   if (false)
@@ -970,7 +967,7 @@ compute_homography_linear_chamfer(vgl_h_matrix_2d<double> & H)
     }
   }
 
-  if(verbose_)
+  if (verbose_)
     vcl_cout << " Translation (" << transx << " " << transy << ")\n";
 
   for (int i90 = 0; i90< n_lines_x_; i90++)
@@ -998,7 +995,7 @@ compute_homography_linear_chamfer(vgl_h_matrix_2d<double> & H)
       lines_grid.push_back(lv);
 
       matched_lines_.push_back(l90);
-      if(debug_state_==AFFINE_GROUP_AFTER_TRANS)
+      if (debug_state_==AFFINE_GROUP_AFTER_TRANS)
         debug_lines_.push_back(l90);
       double length = l90->length();
       length_sum += length;
@@ -1009,7 +1006,7 @@ compute_homography_linear_chamfer(vgl_h_matrix_2d<double> & H)
       lines_image.push_back(homgl);
     }
   }
-  if(debug_state_==AFFINE_GROUP_AFTER_TRANS)
+  if (debug_state_==AFFINE_GROUP_AFTER_TRANS)
   {
     vnl_matrix_fixed<double, 3, 3> T;
     T.put(0, 0, 1); T.put(0,1, 0); T.put(0,2,-transx);
@@ -1344,7 +1341,7 @@ bool sdet_grid_finder::write_image_points(vcl_ofstream & outstream)
      outstream << image_x <<" "<<image_y<<"\n";
    }
  }
- outstream << "\n" << flush;
+ outstream << "\n" << vcl_flush;
  return true;
 }
 
