@@ -4,6 +4,8 @@
   fsm@robots.ox.ac.uk
 */
 
+#include "vcl_compiler.h"
+
 #if !VCL_USE_NATIVE_STL
 # include "emulation/vcl_algorithm.h"
 
