@@ -78,8 +78,7 @@ double DPMatch::transformed_euclidean_distance()
   V=svd.V();
   Ut=U.transpose();
   R=V*Ut;
-  double tx=0,ty=0,theta=0;
-  theta=vcl_acos(R(0,0));
+  double tx=0,ty=0; // double theta=vcl_acos(R(0,0));
   double center1[2]={x1_centroid,y1_centroid};
   double center2[2]={x2_centroid,y2_centroid};
 
@@ -130,8 +129,8 @@ double DPMatch::transformed_euclidean_distance()
   Tbar=Tavg;
   T=cen2-/*scale**/R*cen1;
   return euclidean_distance(R,T,scale);
-
 }
+
 void DPMatch::detect_tail(vcl_vector<int> &tail1 , vcl_vector<int> &tail2)
 {
   int start1,start2;
@@ -227,7 +226,6 @@ vcl_map <int,int> DPMatch::refine_mapping()
 
   for (int i=0;i<finalMap_.size();i++)
   {
-
     x1=finalMap_[i].first;
     x2=finalMap_[i].second;
     if (i>0)
@@ -337,23 +335,18 @@ double DPMatch::euclidean_distance(vnl_matrix<double> R,vnl_matrix<double> T,dou
 
 DPMatch::DPMatch()
 {
-  vcl_vector< vcl_vector<double> > a;
-  vcl_vector< vcl_vector<vcl_pair <int,int> > > b;
-  vcl_vector< vcl_pair <int,int> > c;
-  vcl_vector< double > d;
-
-  Curve c1,c2;
-  curve1_ = c1;
-  curve2_ = c2;
-  cost_ = a;
-  map_ = b;
-  finalMap_ = c;
-  finalMapCost_ = d;
+#if 0 // these are automatically initialised by the compiler
+  curve1_ = Curve();
+  curve2_ = Curve();
+  cost_ = vcl_vector<vcl_vector<double> >();
+  map_ = vcl_vector<vcl_vector<vcl_pair<int,int> > >();
+  finalMap_ = vcl_vector<vcl_pair<int,int> >();
+  finalMapCost_ = vcl_vector<double>();
+#endif // 0
   finalCost_ = 0;
   m_ = 0;
   n_ = 0;
   R1_=10.0;
-
 }
 
 DPMatch::DPMatch(Curve &c1, Curve &c2)
@@ -381,11 +374,11 @@ DPMatch::DPMatch(Curve &c1, Curve &c2)
 
 void DPMatch::printCost()
 {
-  vcl_cout << "Cost Matrix" <<"\n";
+  vcl_cout << "Cost Matrix\n";
   for (int i = 0; i<n_; i++)
   {
     for (int j = 0; j<m_; j++)
-      vcl_printf("%6.3f ",cost_[i][j]);
+      vcl_printf(" %6.3f",cost_[i][j]);
     vcl_printf("\n");
   }
 }
@@ -436,21 +429,17 @@ void DPMatch::computeDPCosts()
 
 double DPMatch::computeIntervalCost(int i, int ip, int j, int jp)
 {
-  double cost;
-  double dF=0,dK=0;
-
   R1_=10;
   curve1_.stretchCost(i,ip,ds1_);
   curve2_.stretchCost(j,jp,ds2_);
   curve1_.bendCost(i,ip,dt1_);
   curve2_.bendCost(j,jp,dt2_);
 
-  dF = vcl_fabs(ds1_ - ds2_);
-  dK = vcl_fabs(dt1_ - dt2_);
+  double dF = vcl_fabs(ds1_ - ds2_);
+  double dK = vcl_fabs(dt1_ - dt2_);
+  double cost = dF + R1_*dK;
 
-  cost = dF + R1_*dK;
-
-  if ( ip==0 || jp==0)
+  if (ip==0 || jp==0)
     cost*=0.3;
   if (i==n_-1|| j==m_-1)
     cost*=0.3;
@@ -518,7 +507,7 @@ void DPMatch::findDPCorrespondence(int n, int m)
 
 void DPMatch::findEndPoint()
 {
-  vcl_cout << "In DP Endpoint" << "\n";
+  vcl_cout << "In DP Endpoint\n";
 
   finalCost_=1E10;
   int endIndex;
@@ -526,7 +515,7 @@ void DPMatch::findEndPoint()
   {
     if (cost_[n_-1][i] < finalCost_)
     {
-      vcl_cout << finalCost_ << " " << cost_[n_-1][i] << " " << i << "\n";
+      vcl_cout << finalCost_ << ' ' << cost_[n_-1][i] << ' ' << i << '\n';
       finalCost_=cost_[n_-1][i];
       endIndex=i;
     }
@@ -537,20 +526,20 @@ void DPMatch::findEndPoint()
 void DPMatch::match()
 {
   initializeDPCosts();
-  //cout << "initializeDPCosts done" << endl;
+  //vcl_cout << "initializeDPCosts done\n";
   computeDPCosts();
-  //cout << "computeDPCosts done" << endl;
+  //vcl_cout << "computeDPCosts done\n";
   findDPCorrespondence();
 }
 
 
 void DPMatch::endPointMatch()
 {
-  //cout << "in DP Match" << endl;
+  //vcl_cout << "in DP Match\n";
   initializeDPCosts();
-  //cout << "initializeDPCosts done" << endl;
+  //vcl_cout << "initializeDPCosts done\n";
   computeDPCosts();
-  //cout << "computeDPCosts done" << endl;
+  //vcl_cout << "computeDPCosts done\n";
   findEndPoint();
-  //cout << "corresp done" << endl;
+  //vcl_cout << "corresp done\n";
 }
