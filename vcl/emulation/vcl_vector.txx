@@ -2,9 +2,7 @@
 #define vcl_emulation_vector_txx_
 
 // -*- c++ -*-
-#include <vcl/vcl_compiler.h>
-#include "vcl_vector.h"
-#include "vcl_algorithm.txx"
+#include <vcl/vcl_vector.h>
 
 #if  !defined ( __STL_DEFAULT_TYPE_PARAM )
 #define __VECTOR_INSTANTIATE(T) \

@@ -372,6 +372,15 @@ inline vnl_matrix<T> operator* (T const& value, vnl_matrix<T> const& m) {
 
 //--------------------------------------------------------------------------------
 
+#if defined(VCL_SGI_CC) || defined(VCL_GCC_27)
+// The emulation STL provides operator!= in vcl_functional.h; it's wrong, but
+// these compilers are old so let them be.
+#else // ISO:
+template <class T>
+inline bool operator!=(vnl_matrix<T> const &a, vnl_matrix<T> const &b)
+{ return !(a == b); }
+#endif
+
 // #ifdef IUE
 // // Overloads of global IUEg_getTypeId, etc. (if using the full IUE)
 // #include<MathDex/matrix_Helper.h>

@@ -62,7 +62,7 @@ vtol_face_3d::vtol_face_3d(const vtol_face_3d &other)
       vtol_topology_object_3d* V2 = newverts[e->get_v2()->get_id()];
       if(!(V1&&V2))
         {
- 	  cerr << "Inconsistent topology in vtol_face_3d copy constructor\n";
+ 	  cerr << "Inconsistent Topology in vtol_edge_3d vtol_face_3d(& face) Constructor" << endl;
  	  vtol_one_chain_3d *inf = new vtol_one_chain_3d();
           link_inferior(inf);
           return;
@@ -886,7 +886,7 @@ void vtol_face_3d::compute_bounding_box()
 // Inferiors.  The blanking argument is used to indent the output in
 // a clear fashion.
 
-void vtol_face_3d::describe(ostream& strm,int blanking) const
+void vtol_face_3d::describe(ostream& strm,int blanking)
 {
 //  BLANK_DESCRIBE;
   print();
@@ -907,10 +907,10 @@ void vtol_face_3d::describe(ostream& strm,int blanking) const
 // includes its address in memory.
 
 
-void vtol_face_3d::print(ostream& strm) const
+void vtol_face_3d::print(ostream& strm)
 {
   strm << "<vtol_face_3d  ";
-  topology_list_3d::const_iterator ii;
+  topology_list_3d::iterator ii;
 
   for(ii=_inferiors.begin();ii!= _inferiors.end();ii++)
     {

@@ -2,6 +2,9 @@ USES = vxl
 VXL:=1
 
 TESTS += test_vcl_compiler.cxx
+TESTS += test_vcl_rel_ops.cxx
+TESTS += test_vcl_iterator.cxx
+TESTS += test_vcl_iostream.cxx
 TESTS += test_vcl_fstream.cxx
 TESTS += test_vcl_map.cxx
 TESTS += test_vcl_multimap.cxx

@@ -325,6 +325,15 @@ inline void vnl_vector<T>::set_t(T const& tt){
 template <class T> vcl_ostream& operator<< (vcl_ostream &, vnl_vector<T> const&);
 template <class T> vcl_istream& operator>> (vcl_istream &, vnl_vector<T>      &);
 
+#if defined(VCL_SGI_CC) || defined(VCL_GCC_27)
+// The emulation STL provides operator!= in vcl_functional.h; it's wrong, but
+// these compilers are old so let them be.
+#else // ISO:
+template <class T>
+inline bool operator!=(vnl_vector<T> const &a, vnl_vector<T> const &b)
+{ return !(a == b); }
+#endif
+
 //--------------------------------------------------------------------------------
 
 // #ifdef IUE

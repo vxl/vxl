@@ -674,7 +674,6 @@ istream& operator>>(istream& s, vnl_vector<T>& M) {
 #if defined(VCL_SUNPRO_CC)
 # undef VCL_INSTANTIATE_INLINE
 # define VCL_INSTANTIATE_INLINE(fn_decl)  template  fn_decl
-template <class T> inline bool operator!=(T const &x, T const &y) { return !(x == y); }
 #endif
 
 

@@ -21,7 +21,6 @@
 //     ported by Luis E. Galup
 //
 //-----------------------------------------------------------------------------
-#include <vtol/vtol_topology_cache_2d_ref.h>
 
 #include <vtol/vtol_topology_object_2d.h>
 #include <vcl/vcl_vector.h>
@@ -37,16 +36,11 @@ class vtol_topology_cache_2d : public vbl_timestamp
 private:
 
   //: \brief constructor
-  vtol_topology_cache_2d();
-  //: \brief constructor
   vtol_topology_cache_2d(vtol_topology_object_2d* to_be_cached);
   //: \brief destructor
   ~vtol_topology_cache_2d();
 
   //accessors
-  //: set the source
-  void set_source(vtol_topology_object_2d *to_be_cached);
-
   
   //: \brief get the vertices
   void vertices(vertex_list_2d&);
@@ -56,16 +50,6 @@ private:
   void edges(edge_list_2d&);
   //: \brief get the one chains
   void one_chains(one_chain_list_2d&);
-  //: \brief get the faces
-  void faces(face_list_2d&);
-  //: \brief get the two chains
-  void two_chains(two_chain_list_2d&);
-  //: \brief get the blocks
-  void blocks(block_list_2d&);
-
-
-
-
 
   // cache utilities
 
@@ -78,24 +62,17 @@ private:
 
   //members
   vtol_topology_object_2d* source_;
-  
-  vcl_vector<vtol_vertex_2d*>* vertices_;
-  vcl_vector<vtol_zero_chain_2d*>* zerochains_;
-  vcl_vector<vtol_edge_2d*>* edges_;
-  vcl_vector<vtol_one_chain_2d*>*  onechains_;
-  vcl_vector<vtol_face_2d*>*  faces_;
-  vcl_vector<vtol_two_chain_2d*>*  twochains_;
-  vcl_vector<vtol_block_2d*>*  blocks_;
-
+  vertex_list_2d* vertices_;
+  zero_chain_list_2d* zerochains_;
+  edge_list_2d* edges_;
+  one_chain_list_2d*  onechains_;
 
   //friend classes
   friend class vtol_vertex_2d;
   friend class vtol_zero_chain_2d;
   friend class vtol_edge_2d;
   friend class vtol_one_chain_2d;
-  friend class vtol_face_2d;
-  friend class vtol_two_chain_2d;
-  friend class vtol_block_2d;
+
   friend class vtol_topology_object_2d;
 };
 

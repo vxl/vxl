@@ -43,7 +43,13 @@ $rm = "del";
 }
 else { die "no diff found\n"; }
 
-exit &main(@ARGV);
+if ($#ARGV>=0 && defined($ARGV[0])) {
+  exit &main(@ARGV);
+} else {
+  print STDERR "no arguments\n";
+  exit 0;
+}
+
 #--------------------------------------------------------------------------------
 
 # handy indirection for dry runs.
@@ -79,7 +85,8 @@ sub main {
   # parse command line :
   my @options = ();
   my @files = ();
-  foreach my $arg (@ARGV) {
+  my (@argv) = @_;
+  foreach my $arg (@argv) {
     if ($arg =~ m/^\-.+$/) { 
       #print STDERR "option: $arg\n";
       if ($arg eq "-n") { $dry_run = 1; }

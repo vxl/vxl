@@ -145,9 +145,9 @@ public:
   bool operator==(const vsol_spatial_object_3d& obj) const ;
   bool operator==(const vtol_one_chain_3d&) const;
 
-  void print(ostream& strm = cout) const;
+  void print(ostream& strm = cout);
   void describe_directions(ostream& strm = cout, int blanking = 0);
-  void describe(ostream& strm = cout, int blanking = 0) const;
+  void describe(ostream& strm = cout, int blanking = 0);
 
 
 };

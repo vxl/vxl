@@ -9,6 +9,10 @@ vcl_compiler.h
   if you include <vcl/vcl_iostream.h> you *don't* need to include 
   <vcl/vcl_compiler.h> even if you need the macros defined in there.
 
+vcl_rtti.h
+  Under construction. For rtti emulation with compilers that don't support
+  rtti.
+
 vcl_complex_fwd.h
   In ISO C++, the complex template class can be forward declared with
     namespace std { template <class T> class complex; }
@@ -16,23 +20,36 @@ vcl_complex_fwd.h
   complex class might be called anything from std::complex<T> to plain
   old vcl_complex<T>, so we do need a forward declaration header.
 
-vcl_unistd.h>
-  <unistd.h> is part of the POSIX standard, not ISO. Since it's so useful to 
-  have and so broken on most systems, we supply vcl_unistd.h
+vcl_rel_ops.h
+  This is the vcl form of the ISO incantation
+  #include <utility>
+  using std::rel_ops::operator!=;
+  using std::rel_ops::operator> ;
+  using std::rel_ops::operator<=;
+  using std::rel_ops::operator>=;
 
 vcl_stlfwd.h
   Forward declare the most commonly used parts of the STL, if possible.
 
-vcl_rtti.h
-  Under construction. For rtti emulation with compilers that don't support
-  rtti.
+vcl_unistd.h>
+  <unistd.h> is part of the POSIX standard, not ISO. Since it's so useful to 
+  have and so broken on most systems, we supply vcl_unistd.h
 
 vcl_deprecated.h
   Including this causes preprocessor or compiler warning to be emitted. So
   include <vcl/vcl_deprecated.h> in header files that are to be deprecated.
 
 vcl_alloc.h
-  No ISO <alloc>. Use vcl_memory.h for vcl_allocator<>.
+  No ISO <alloc>. Use vcl_memory.h for vcl_allocator<>. *Don't* use 
+  vcl_memory.h for memcpy(), memset() etc. These live in vcl_cstring.h; 
+  whether we like it or not there is *no* ISO C header called <memory.h>
+
+
+tests directory
+---------------
+It is important to have a test program for every vcl feature as early 
+detection of problems can save hours of recompilation time if a vcl
+header has to be modified.
 
 
 template files
@@ -45,7 +62,5 @@ This is an unofficial codification of existing practice, as observed by fsm.
 _ or __ is for the :: in nested classe (which is preferred?)
 The abbreviations uchar, ushort, uint, ulong stand for unsigned versions of 
 integer types. Use 's' as a prefix for signed versions. Beware that 'char'
-is signed on some machines, so if there's an instance for 'signed char', 
-adding one for 'char' might cause conflicts. (But gcc 2.95 seems to make a
-distinction between 'char', 'signed char' and 'unsigned char' which is very
-strange).
+can be either signed or unsigned and may or may not be the same type as the
+qualified form.

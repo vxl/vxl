@@ -98,9 +98,9 @@ public:
   bool operator== (const vtol_block_3d& obj) const;
 
   //: Printing Functions
-  void print (ostream& strm =cout) const;
+  void print (ostream& strm =cout);
   void describe_directions(ostream& strm = cout, int blanking = 0);
-  void describe(ostream& strm = cout, int blanking = 0) const;
+  void describe(ostream& strm = cout, int blanking = 0);
 
   bool remove( vtol_two_chain_3d * two_chain,
                vcl_vector< vtol_topology_object_3d * > & changes,

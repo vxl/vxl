@@ -22,8 +22,8 @@ template void __introsort_loop(I, I, I, int)
 template Out copy(Inp, Inp, Out)
 
 #define VCL_FIND_INSTANTIATE(I, T) \
-template I find(I, I, T const&); \
-template I find(I, I, T const&, iterator_traits<I >::iterator_category);
+/*template I find(I, I, T const &, iterator_traits<I >::iterator_category);*/ \
+template I find(I, I, T const &);
 
 #define VCL_FIND_IF_INSTANTIATE(I, P) \
 template I find_if(I, I, P);

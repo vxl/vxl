@@ -190,7 +190,7 @@ public:
   {
     return vtol_topology_hierarchy_node_3d::unlink_superior(parent,this);
   }
-  virtual void print(ostream &strm=cout) const;
+  virtual void print(ostream &strm=cout);
 private:
   //: \brief members
   vtol_topology_cache_3d *inf_sup_cache;

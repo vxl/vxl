@@ -20,6 +20,9 @@ VCL_INSTANTIATE_INLINE(void destroy(T *));
 #define VCL_FIND_INSTANTIATE(I, T) \
 VCL_INSTANTIATE_INLINE( I find(I, I, T const&) );
 
+#define VCL_REMOVE_INSTANTIATE(I, T) \
+VCL_INSTANTIATE_INLINE( I remove(I, I, T const&) );
+
 // I is a random access iterator.
 // this works for vector<double>::iterator with gcc 2.7 and irix6-CC-n32 :
 #define VCL_SORT_INSTANTIATE(I, T) \

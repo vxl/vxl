@@ -43,53 +43,23 @@
 //    Patricia A. Vrobel.
 //    ported by Luis E. Galup
 
-#include <vtol/vtol_topology_object_2d_ref.h>
+
 #include <vsol/vsol_spatial_object_2d.h>
+#include <vtol/vtol_topology_hierarchy_node_2d.h>
 
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_list.h>
-
-#include <vtol/vtol_vertex_2d_ref.h>
-#include <vtol/vtol_zero_chain_2d_ref.h>
-#include <vtol/vtol_edge_2d_ref.h>
-#include <vtol/vtol_one_chain_2d_ref.h>
-#include <vtol/vtol_face_2d_ref.h>
-#include <vtol/vtol_two_chain_2d_ref.h>
-#include <vtol/vtol_block_2d_ref.h>
-#include <vtol/vtol_topology_cache_2d_ref.h>
+class vtol_vertex_2d;
+class vtol_zero_chain_2d;
+class vtol_edge_2d;
+class vtol_one_chain_2d;
+class vtol_face_2d;
+class vtol_block_2d;
 
 
-// Useful typedefs
-#if 1
-typedef vcl_vector<vtol_topology_object_2d_ref> topology_list_2d;
-typedef vcl_vector<vtol_vertex_2d_ref>          vertex_list_2d;
-typedef vcl_vector<vtol_edge_2d_ref>            edge_list_2d;
-typedef vcl_vector<vtol_one_chain_2d_ref>       one_chain_list_2d;
-typedef vcl_vector<vtol_zero_chain_2d_ref>      zero_chain_list_2d;
-typedef vcl_vector<vtol_face_2d_ref>            face_list_2d;
-typedef vcl_vector<vtol_two_chain_2d_ref>       two_chain_list_2d;
-typedef vcl_vector<vtol_block_2d_ref>           block_list_2d;
-#else
-typedef vcl_vector<vtol_topology_object_2d *> topology_list_2d;
-typedef vcl_vector<vtol_vertex_2d *>          vertex_list_2d;
-typedef vcl_vector<vtol_edge_2d *>            edge_list_2d;
-typedef vcl_vector<vtol_one_chain_2d *>       one_chain_list_2d;
-typedef vcl_vector<vtol_zero_chain_2d *>      zero_chain_list_2d;
-typedef vcl_vector<vtol_face_2d *>            face_list_2d;
-typedef vcl_vector<vtol_two_chain_2d *>       two_chain_list_2d;
-typedef vcl_vector<vtol_block_2d *>           block_list_2d;
+class vtol_topology_cache_2d;
 
-#endif
 
-//*****************************************************************************
-// ALL THE DERIVED AND NONE ABSTRACT CLASSES OF THIS CLASS MUST CALL
-// unlink_all_inferiors() IN THEIR DESTRUCTOR
-// unlink_all_inferiors() CANT BE CALLED DIRECTLY IN THIS CLASS, OTHERWISE
-// BAD VERSIONS OF METHODS SHOULD BE CALLED (C++ IS STUPID !)
-//*****************************************************************************
+class vtol_topology_object_2d : public vsol_spatial_object_2d, public vtol_topology_hierarchy_node_2d
 
-class vtol_topology_object_2d
-  : public vsol_spatial_object_2d
 {
 public:
   enum vtol_topology_object_2d_type
@@ -109,149 +79,57 @@ public:
     NUM_TOPOLOGYOBJECT_TYPES
   };
 
-public:
-  //***************************************************************************
-  // Initialization
-  //***************************************************************************
-  
-  //---------------------------------------------------------------------------
-  //: Default constructor
-  //---------------------------------------------------------------------------
-  explicit vtol_topology_object_2d(void);
-
-  //---------------------------------------------------------------------------
-  //: Constructor with given sizes for arrays of inferiors and superiors
-  //---------------------------------------------------------------------------
-  explicit vtol_topology_object_2d(int num_inferiors,
-                                   int num_superiors);
 protected:
-  //---------------------------------------------------------------------------
-  //: Destructor
-  //---------------------------------------------------------------------------
   virtual ~vtol_topology_object_2d();
 
 public:
-  //***************************************************************************
-  // Replaces dynamic_cast<T>
-  //***************************************************************************
 
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is a vertex, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual const vtol_vertex_2d *cast_to_vertex(void) const;
+  //xtors and dtors
+  //: \brief Constructor
+  vtol_topology_object_2d(void)
+  {
+  }
+  vtol_topology_object_2d(int num_inferiors,
+                          int num_superiors);
+  virtual void protected_destroy(void);
+  static void destroy(vtol_topology_object_2d *);
 
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is a vertex, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual vtol_vertex_2d *cast_to_vertex(void);
+  //: \brief safe casting methods
+  virtual vtol_topology_object_2d *cast_to_topology_object_2d(void)
+  {
+    return this;
+  }
+  virtual vtol_vertex_2d *cast_to_vertex_2d(void)
+  {
+    return 0;
+  }
+  virtual vtol_zero_chain_2d *cast_to_zero_chain_2d(void)
+  {
+    return 0;
+  }
+  virtual vtol_edge_2d *cast_to_edge_2d(void)
+  {
+    return 0;
+  }
+  virtual vtol_one_chain_2d *cast_to_one_chain_2d(void)
+  {
+    return 0;
+  }
+  virtual vtol_face_2d *cast_to_face_2d(void)
+  {
+    return 0;
+  }
+  virtual vtol_two_chain_2d *cast_to_two_chain_2d(void)
+  {
+    return 0;
+  }
+  virtual vtol_block_2d *cast_to_block_2d(void)
+  {
+    return 0;
+  } 
 
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is a zero_chain, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual const vtol_zero_chain_2d *cast_to_zero_chain(void) const;
 
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is a zero_chain, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual vtol_zero_chain_2d *cast_to_zero_chain(void);
-  
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an edge, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual const vtol_edge_2d *cast_to_edge(void) const;
-  
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an edge, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual vtol_edge_2d *cast_to_edge(void);
- 
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an one_chain, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual const vtol_one_chain_2d *cast_to_one_chain(void) const;
-
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an one_chain, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual vtol_one_chain_2d *cast_to_one_chain(void);
-
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is a face, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual const vtol_face_2d *cast_to_face(void) const;
-  
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is a face, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual vtol_face_2d *cast_to_face(void);
-
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is a two_chain, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual const vtol_two_chain_2d *cast_to_two_chain(void) const;
-
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is a two_chain, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual vtol_two_chain_2d *cast_to_two_chain(void);
-
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is a block, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual const vtol_block_2d *cast_to_block(void) const;
-  
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is a block, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual vtol_block_2d *cast_to_block(void);
- 
-  //***************************************************************************
-  // Status report
-  //***************************************************************************
-
-  //---------------------------------------------------------------------------
-  //: Is `inferior' type valid for `this' ?
-  //---------------------------------------------------------------------------
-  virtual bool
-  valid_inferior_type(const vtol_topology_object_2d &inferior) const=0;
-
-  //---------------------------------------------------------------------------
-  //: Is `superior' type valid for `this' ?
-  //---------------------------------------------------------------------------
-  virtual bool
-  valid_superior_type(const vtol_topology_object_2d &superior) const=0;
-
-  //---------------------------------------------------------------------------
-  //: Is `inferior' already an inferior of `this' ?
-  //---------------------------------------------------------------------------
-  virtual bool
-  is_inferior(const vtol_topology_object_2d &inferior) const;
-
-  //---------------------------------------------------------------------------
-  //: Is `superior' already a superior of `this' ?
-  //---------------------------------------------------------------------------
-  virtual bool
-  is_superior(const vtol_topology_object_2d &superior) const;
-
-  //---------------------------------------------------------------------------
-  //: Number of inferiors
-  //---------------------------------------------------------------------------
-  virtual int numinf(void) const;
-
-  //---------------------------------------------------------------------------
-  //: Number of superiors
-  //---------------------------------------------------------------------------
-  virtual int numsup(void) const;
-  
-  //---------------------------------------------------------------------------
-  //: Return the superiors list
-  //---------------------------------------------------------------------------
-  virtual const vcl_vector<vtol_topology_object_2d_ref> *superiors(void) const;
-
-  //---------------------------------------------------------------------------
-  //: Return the inferiors list
-  //---------------------------------------------------------------------------
-  virtual const vcl_vector<vtol_topology_object_2d_ref> *inferiors(void) const;
+  //: \brief accessors
 
   //---------------------------------------------------------------------------
   //: Return the spatial type
@@ -263,180 +141,59 @@ public:
   //---------------------------------------------------------------------------
   virtual vtol_topology_object_2d_type topology_type(void) const;
 
-  //***************************************************************************
-  // Basic operations
-  //***************************************************************************
+  virtual vertex_list_2d *vertices(void);
+  virtual zero_chain_list_2d *zero_chains(void);
+  virtual edge_list_2d *edges(void);
+  virtual one_chain_list_2d *one_chains(void);
+  virtual face_list_2d *faces(void)
+  {
+    return (face_list_2d*)0;
+  }
+  virtual two_chain_list_2d *two_chains(void)
+  {
+    return (two_chain_list_2d*)0;
+  }
+  virtual block_list_2d *blocks(void)
+  {
+    return (block_list_2d*)0;
+  }
 
-  //---------------------------------------------------------------------------
-  //: Link `this' with an inferior `inferior'
-  //: REQUIRE: valid_inferior_type(inferior) and !is_inferior(inferior)
-  //---------------------------------------------------------------------------
-  virtual void link_inferior(vtol_topology_object_2d &inferior);
-
-  //---------------------------------------------------------------------------
-  //: Unlink `this' with the inferior `inferior'
-  //: REQUIRE: valid_inferior_type(inferior) and is_inferior(inferior)
-  //---------------------------------------------------------------------------
-  virtual void unlink_inferior(vtol_topology_object_2d &inferior);
-  
-  //---------------------------------------------------------------------------
-  //: Unlink `this' with all its inferiors
-  //---------------------------------------------------------------------------
-  virtual void unlink_all_inferiors(void);
-
-  //---------------------------------------------------------------------------
-  //: Unlink `this' of the network
-  //---------------------------------------------------------------------------
-  virtual void unlink(void);
-
-  
-  //---------------------------------------------------------------------------
-  //: Get lists of vertices 
-  //---------------------------------------------------------------------------
-  vertex_list_2d *vertices(void);
-  void vertices(vertex_list_2d &list);
-
-  //---------------------------------------------------------------------------
-  //: Get lists of zero chains 
-  //---------------------------------------------------------------------------
-  
-  zero_chain_list_2d *zero_chains(void);
-  void zero_chains(zero_chain_list_2d &list);
-  
-  //---------------------------------------------------------------------------
-  //: Get lists of edges 
-  //---------------------------------------------------------------------------
-  
-  edge_list_2d *edges(void);
-  void edges(edge_list_2d &list);
-  
-
-  //---------------------------------------------------------------------------
-  //: Get lists of one chains 
-  //---------------------------------------------------------------------------
-  
-  one_chain_list_2d *one_chains(void);
-  void one_chains(one_chain_list_2d &list);
-
-  //---------------------------------------------------------------------------
-  //: Get lists of faces 
-  //---------------------------------------------------------------------------
-
-  face_list_2d *faces(void);
-  void faces(face_list_2d &list);
-
-  
-  //---------------------------------------------------------------------------
-  //: Get lists of two chains 
-  //---------------------------------------------------------------------------
-
-  two_chain_list_2d *two_chains(void);
-  void two_chains(two_chain_list_2d &list);
-
-  
-  //---------------------------------------------------------------------------
-  //: Get lists of blocks 
-  //---------------------------------------------------------------------------
-
-  block_list_2d *blocks(void);
-  void blocks(block_list_2d &list);
+  void vertices(vertex_list_2d &);
+  void zero_chains(zero_chain_list_2d &);
+  void edges(edge_list_2d &);
+  void one_chains(one_chain_list_2d &);
+  void faces(face_list_2d &)
+  {
+  }
+  void two_chains(two_chain_list_2d &)
+  {
+  }
+  void blocks(block_list_2d &)
+  {
+  }
 
 
-  //---------------------------------------------------------------------------
-  //: print and describe the objects
-  //---------------------------------------------------------------------------
-
-  virtual void print(ostream &strm=cout) const;
-  virtual void describe_inferiors(ostream &strm=cout,
-                                  int blanking=0) const;
-  virtual void describe_superiors(ostream &strm=cout,
-                                  int blanking=0) const;
-  virtual void describe(ostream &strm=cout,
-                        int blanking=0) const;
+  //: \brief utilities
+  inline bool link_inferior(vtol_topology_object_2d *child)
+  {
+    return vtol_topology_hierarchy_node_2d::link_inferior(this,child);
+  }
+  inline bool link_superior(vtol_topology_object_2d* parent)
+  {
+    return vtol_topology_hierarchy_node_2d::link_superior(parent,this);
+  }
+  inline bool unlink_inferior(vtol_topology_object_2d *child)
+  {
+    return vtol_topology_hierarchy_node_2d::unlink_inferior(this,child);
+  }
+  inline bool unlink_superior(vtol_topology_object_2d *parent)
+  {
+    return vtol_topology_hierarchy_node_2d::unlink_superior(parent,this);
+  }
+  virtual void print(ostream &strm=cout);
 private:
-  //***************************************************************************
-  // WARNING: the 2 following methods are directly called only by the superior
-  // class. It is FORBIDDEN to use them directly
-  // If you want to link and unlink superior use sup.link_inferior(*this)
-  // of sup.unlink_inferior(*this)
-  //***************************************************************************
-
-  //---------------------------------------------------------------------------
-  //: Link `this' with a superior `superior'
-  //: REQUIRE: valid_superior_type(superior) and !is_superior(superior)
-  //---------------------------------------------------------------------------
-  virtual void link_superior(vtol_topology_object_2d &superior);
-
-  //---------------------------------------------------------------------------
-  //: Unlink `this' with its superior `superior'
-  //: REQUIRE: valid_superior_type(superior) and is_superior(superior)
-  //---------------------------------------------------------------------------
-  virtual void unlink_superior(vtol_topology_object_2d &superior);
-
-public:
-
-  //---------------------------------------------------------------------------
-  //: compute lists of vertices 
-  // - Warning should not be used by clients
-  //---------------------------------------------------------------------------
-  virtual vcl_vector<vtol_vertex_2d*> *compute_vertices(void);
-
-  //---------------------------------------------------------------------------
-  //: compute lists of zero chains 
-  // - Warning should not be used by clients
-  //---------------------------------------------------------------------------
-  virtual vcl_vector<vtol_zero_chain_2d*> *compute_zero_chains(void);
-  
-  //---------------------------------------------------------------------------
-  //: compute lists of edges 
-  // - Warning should not be used by clients
-  //---------------------------------------------------------------------------
-  virtual vcl_vector<vtol_edge_2d*> *compute_edges(void);
-
-  //---------------------------------------------------------------------------
-  //: compute lists of one chains 
-  // - Warning should not be used by clients
-  //---------------------------------------------------------------------------
-  virtual vcl_vector<vtol_one_chain_2d*> *compute_one_chains(void);
-
-  //---------------------------------------------------------------------------
-  //: compute lists of faces 
-  // - Warning should not be used by clients
-  //---------------------------------------------------------------------------
-  virtual vcl_vector<vtol_face_2d*> *compute_faces(void);
-  
-  //---------------------------------------------------------------------------
-  //: compute lists of two chains 
-  // - Warning should not be used by clients
-  //---------------------------------------------------------------------------
-  virtual vcl_vector<vtol_two_chain_2d*> *compute_two_chains(void);
-  
-  //---------------------------------------------------------------------------
-  //: compute lists of blocks 
-  // - Warning should not be used by clients
-  //---------------------------------------------------------------------------
-  virtual vcl_vector<vtol_block_2d*> *compute_blocks(void);
-
-protected:
-
-  //---------------------------------------------------------------------------
-  // Description: array of superiors
-  //---------------------------------------------------------------------------
-  vcl_list<vtol_topology_object_2d_ref> _superiors;
-
-  //---------------------------------------------------------------------------
-  // Description: array of inferiors
-  //---------------------------------------------------------------------------
-  vcl_vector<vtol_topology_object_2d_ref> _inferiors;
-
-private:
-  //---------------------------------------------------------------------------
-  // Description: cache system
-  //---------------------------------------------------------------------------
+  //: \brief members
   vtol_topology_cache_2d *inf_sup_cache;
-  
-  // declare a freind class 
-  friend class vtol_topology_cache_2d;
 };
 
 #endif //TOPOLOGY_OBJECT_2D_H

@@ -926,7 +926,7 @@ void vtol_two_chain_3d::correct_chain_directions()
  *    Print Functions
  */
 
-void vtol_two_chain_3d::print(ostream& strm) const
+void vtol_two_chain_3d::print(ostream& strm)
 {
   strm << "<vtol_two_chain_3d " << _inferiors.size() << "  "  << (void *)this << ">"  << endl;
 }
@@ -942,12 +942,12 @@ void vtol_two_chain_3d::describe_directions(ostream& strm, int )
   strm << endl;
 }
 
-void vtol_two_chain_3d::describe(ostream& strm, int blanking) const
+void vtol_two_chain_3d::describe(ostream& strm, int blanking)
 {
   print(strm);
-  ((vtol_two_chain_3d*)this)->describe_inferiors(strm, blanking);
-  ((vtol_two_chain_3d*)this)->describe_directions(strm,blanking);
-  ((vtol_two_chain_3d*)this)->describe_superiors(strm, blanking);
+  describe_inferiors(strm, blanking);
+  describe_directions(strm,blanking);
+  describe_superiors(strm, blanking);
 }
 
 

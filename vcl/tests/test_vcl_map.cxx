@@ -12,5 +12,7 @@ int main()
   for(mymap::iterator p = m.begin(); p != m.end(); ++p)
     cout << (*p).first << " " << (*p).second << endl;
 
+  mymap::iterator i = m.find(3);
+
   return 0;
 }

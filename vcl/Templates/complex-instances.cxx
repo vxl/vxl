@@ -15,8 +15,8 @@ VCL_COMPLEX_INSTANTIATE(float);
 VCL_COMPLEX_INSTANTIATE(double);
 #endif
 
-// ---------- egcs and gcc 2.95
-#elif defined(VCL_GCC_295) || defined(VCL_GCC_EGCS)
+// ---------- gcc 2.95
+#elif defined(VCL_GCC_295)
 # define implement_rsh(T) \
 istream &operator>>(istream &is, vcl_complex<T > &z) { \
   T r, i; \
@@ -56,24 +56,27 @@ istream &operator>>(istream &is, vcl_complex<T > &z) { \
       F(FLOAT norm (complex<FLOAT >const&)); \
       F(complex<FLOAT>& __doadv (complex<FLOAT>* ths, const complex<FLOAT>& y)); \
       template ostream& operator<<(ostream &, complex<FLOAT > const &);
-//#pragma implementation "fcomplex"
-//VCL_COMPLEX_INSTANTIATE(float);
+
 do_inlines(float); implement_rsh(float);
-//#pragma implementation "dcomplex"
-//VCL_COMPLEX_INSTANTIATE(double);
 do_inlines(double); implement_rsh(double);
-#if 0
-// tickle implicit templates :
-namespace {
-  void foo() {
-    complex<float> *a, *b;
-    (*a) += (*b);
-    (*a) -= (*b);
-    (*a) *= (*b);
-    (*a) /= (*b);
-  }
-};
-#endif
+
+// ---------- egcs
+# elif defined(VCL_GCC_EGCS)
+# define implement_rsh(T) \
+istream &operator>>(istream &is, vcl_complex<T > &z) { \
+  T r, i; \
+  is >> r >> i; \
+  z = vcl_complex<T >(r, i); \
+  return is; \
+}
+# define F(x) template x
+# define do_inlines(FLOAT) \
+      template ostream& operator<<(ostream &, complex<FLOAT > const &); \
+      F(complex<FLOAT > sqrt (complex<FLOAT >const& x)); \
+      F(complex<FLOAT > operator / (complex<FLOAT >const&,complex<FLOAT >const&));
+
+do_inlines(float); implement_rsh(float);
+do_inlines(double); implement_rsh(double);
 
 // ---------- sunpro
 #elif defined(VCL_SUNPRO_CC)

@@ -19,9 +19,11 @@
 #define vtol_list_functions_2d_H
 
 #include <vcl/vcl_vector.h>
-#include <vsol/vsol_spatial_object_2d_ref.h>
+
+class vsol_spatial_object_2d;
 
 //: \brief function used to get rid of duplicate entries
-void tagged_union(vcl_vector<vsol_spatial_object_2d *> *);
+void tagged_union(vcl_vector<vsol_spatial_object_2d*>*);
+
 
 #endif

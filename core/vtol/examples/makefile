@@ -1,13 +1,12 @@
-USES = vxl
-IULIBS += -lvtol
-IULIBS += -lvsol
-IULIBS += -lvgl
-IULIBS += -lvbl
-IULIBS += -lvnl
-IULIBS += -lvcl
 
-MINI_PROG_SOURCES += example2d.cxx
-MINI_PROG_SOURCES += example3d.cxx
+
+USES = vxl
+IULIBS := -lvcl
+IULIBS += -lvtol 
+VXL := 1
+
+MINI_PROG_SOURCES += vtol_topology_example.cxx
+
 
 ################################
 include ${IUEROOT}/config/top.mk

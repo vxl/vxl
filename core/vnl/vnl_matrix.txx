@@ -550,7 +550,12 @@ T cos_angle (vnl_matrix<T> const& a, vnl_matrix<T> const& b) {
   typedef typename vnl_numeric_traits<T>::real_t real_t;
   typedef typename vnl_numeric_traits<T>::abs_t abs_t;
   real_t ab = inner_product(a,b);
-  real_t /*abs_t*/ a_b = sqrt( vnl_math_abs(inner_product(a,a) * inner_product(b,b)) );
+  //real_t /*abs_t*/ a_b = sqrt( vnl_math_abs(inner_product(a,a) * inner_product(b,b)) );
+#if 0 // there's no operator/(complex<float>, double)
+  double a_b = sqrt( vnl_math_abs(inner_product(a,a) * inner_product(b,b)) );
+#else
+  abs_t  a_b = sqrt( vnl_math_abs(inner_product(a,a) * inner_product(b,b)) );
+#endif
   return T( ab / a_b);
 }
 
@@ -1340,7 +1345,6 @@ void vnl_matrix<T>::inplace_transpose()
 #if defined (VCL_SUNPRO_CC)
 # undef VCL_INSTANTIATE_INLINE
 # define VCL_INSTANTIATE_INLINE(fn_decl) template  fn_decl
-template <class T> inline bool operator!=(T const &x, T const &y) { return !(x == y); }
 #endif
 
 #define VNL_MATRIX_INSTANTIATE_internal(T) \

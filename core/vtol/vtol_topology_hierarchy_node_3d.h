@@ -80,8 +80,8 @@ public:
  
   void describe_inferiors(ostream& strm=cout,int blanking=0);
   void describe_superiors(ostream& strm=cout,int blanking=0);
-  void print(ostream& strm=cout) const;
-  void describe(ostream& strm=cout,int blanking=0) const;
+  void print(ostream& strm=cout);
+  void describe(ostream& strm=cout,int blanking=0);
 
   inline topology_list_3d * get_inferiors() { return &_inferiors; }
   inline topology_list_3d * get_superiors() { return &_superiors; }

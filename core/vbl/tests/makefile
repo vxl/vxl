@@ -1,3 +1,5 @@
+
+VXL := 1
 USES = vxl
 
 TESTS += vbl_test_arg.cxx

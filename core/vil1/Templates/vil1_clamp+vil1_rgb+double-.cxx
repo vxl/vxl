@@ -1,3 +1,4 @@
+#if 0 // this file is no longer needed?
 #include <vcl/vcl_compiler.h>
 #include <vil/vil_rgb.h>
 
@@ -17,4 +18,5 @@ vil_rgb<unsigned char> vil_clamp(vil_rgb<double> const &d, vil_rgb<unsigned char
 #else
 // instantiate the inline non-partial specialization from vil_rgb.h :
 VCL_INSTANTIATE_INLINE(vil_rgb<unsigned char> vil_clamp(const vil_rgb<double> &, vil_rgb<unsigned char> *));
+#endif
 #endif
