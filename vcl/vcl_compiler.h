@@ -94,11 +94,6 @@
 # if !defined(GNU_LIBSTDCXX_V3) && defined(VCL_GCC_295) && VCL_CXX_HAS_HEADER_ISTREAM
 #  define GNU_LIBSTDCXX_V3 1
 # endif
-# if defined (GNU_LIBSTDCXX_V3)
-#  define VCL_GCC_WITH_GNU_LIBSTDCXX_V3
-# else
-#  define VCL_GCC_WITH_GNU_LIBSTDCXX_V2
-# endif
 #endif
 
 // -------------------- default template parameters
