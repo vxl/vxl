@@ -145,6 +145,11 @@ SOURCE=.\Templates/mil_gaussian_pyramid_builder_2d+float-.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\Templates/mil_gaussian_pyramid_builder_2d_general+float-.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/mil_gaussian_pyramid_builder_2d_general+vil_byte-.cxx
 
 # End Source File
