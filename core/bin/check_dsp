@@ -44,7 +44,7 @@ foreach $dir (@DIRS)
     foreach $x (readdir(TMP)) { push @tmp_list, "file_formats/$x"; }
     closedir(TMP);
   }
-  if ($dir =~ m/\bvcgl$/) {
+  if ($dir =~ m/\bvgl$/) {
     opendir(TMP,"$dir/internals");
     foreach $x (readdir(TMP)) { push @tmp_list, "internals/$x"; }
     closedir(TMP);
