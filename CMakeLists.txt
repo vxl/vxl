@@ -6,11 +6,10 @@
 
 PROJECT(allvxl)
 
-SUBDIRS(vxl vcl)
+SUBDIRS(vxl vcl v3p)
 
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vcl)
 
 WIN32_INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vcl/config.win32-VC60)
 
-# this seems to be needed by vnl_math.cxx
-WIN32_DEFINES( -DVCL_CAN_STATIC_CONST_INIT_FLOAT )
+
