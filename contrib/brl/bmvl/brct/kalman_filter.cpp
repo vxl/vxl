@@ -23,6 +23,9 @@
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <bbas/bdgl/bdgl_curve_algs.h>
 #include "brct_algos.h"
+
+#include <vcl_fstream.h>
+#include <vcl_cstdio.h>
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -343,7 +346,9 @@ void kalman_filter::inc()
     for (int j=0; i<2; i++)
       z[j] = cur_measures[j][i];
 
-    adjust_state_vector(projection(P, X), z);
+	vnl_vector_fixed<double, 2> z_pred = projection(P,X);
+	
+    adjust_state_vector(z_pred, z);
   }
 
   cur_pos_ = (cur_pos_ ++) % queue_size_;
