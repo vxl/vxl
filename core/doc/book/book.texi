@@ -44,6 +44,7 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 * vil::
 * vgl::
 * vsl::
+* vcsl::
 * vgui::
 * Conclusion::
 * Concept Index::
@@ -137,7 +138,7 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 @include chapter_vsl.texi
 
 @comment ------------------------------------------------------------------
-@node    vcsl,      vguil,     vsl,      top
+@node    vcsl,      vgui,     vsl,      top
 @comment node-name, next,    previous, up
 @chapter vcsl: Co-ordinate systems
 @cindex co-ordinate systems
