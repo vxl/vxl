@@ -23,6 +23,7 @@ TESTS += test_deep_copy_3_plane.cxx
 TESTS += test_image_view_maths.cxx
 TESTS += test_convert.cxx
 PARAMS_test_convert := file_read_data
+TESTS += test_rotate_image.cxx
 
 # Sampling Operations
 TESTS += test_bilin_interp.cxx
