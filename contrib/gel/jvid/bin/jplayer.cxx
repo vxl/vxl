@@ -11,7 +11,7 @@
 #include <vidl/vidl_io.h>
 #include <jvid/jvx_manager.h>
 
-#ifdef HAS_MPEG
+#ifdef HAS_MPEG2
 # include <vidl/vidl_mpegcodec.h>
 #endif
 
@@ -46,7 +46,7 @@ int main(int argc, char** argv)
   vidl_io::register_codec(new vidl_avicodec);
 #endif
 
-#ifdef HAS_MPEG
+#ifdef HAS_MPEG2
   vidl_io::register_codec(new vidl_mpegcodec);
 #endif
 

@@ -25,7 +25,7 @@
 #include <vcl_list.h>
 #include <vcl_vector.h>
 
-#ifdef HAS_MPEG
+#ifdef HAS_MPEG2
 # include <vidl/vidl_mpegcodec.h>
 void (* vidl_io::load_mpegcodec_callback)(vidl_codec*) = 0;
 #endif
@@ -172,7 +172,7 @@ vidl_clip_sptr  vidl_io::load_clip(
         if (!codec)
           return 0;
 
-#ifdef HAS_MPEG
+#ifdef HAS_MPEG2
         //this calls the dialog box necessary for initialization
         //of the mpeg codec.
         vidl_mpegcodec * vmp = (*i)->castto_vidl_mpegcodec();

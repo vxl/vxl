@@ -19,7 +19,7 @@
 #include <vgui/vgui_dialog.h>
 #include <vidl/vidl_movie.h>
 
-#ifdef HAS_MPEG
+#ifdef HAS_MPEG2
 #include <vidl/vidl_mpegcodec.h>
 
 //define mpeg callback here

@@ -6,26 +6,24 @@ IF(HAS_VGUI)
 
   INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/oxl )
 
-  INCLUDE(${MODULE_PATH}/NewCMake/FindMPEG.cmake)  
-  IF(MPEG_FOUND)
-    ADD_DEFINITIONS(-DHAS_MPEG)
-  ENDIF(MPEG_FOUND)
+  INCLUDE(${MODULE_PATH}/FindMPEG2.cmake)  
+  IF(MPEG2_FOUND)
+    ADD_DEFINITIONS(-DHAS_MPEG2)
+    INCLUDE_DIRECTORIES(${MPEG2_INCLUDE_DIR})
+  ENDIF(MPEG2_FOUND)
 
-  # Uses the vidl_avicodec, and thus will only build under Windows
-  IF(WIN32)
-    IF (NOT CYGWIN)
+  SET( jvid_sources
+    jvx_manager.cxx jvx_manager.h
+  )
 
-      SET( jvid_sources
-        jvx_manager.cxx jvx_manager.h
-      )
+  AUX_SOURCE_DIRECTORY(Templates jvid_sources)
 
-      AUX_SOURCE_DIRECTORY(Templates jvid_sources)
+  ADD_LIBRARY(jvid ${jvid_sources})
+  TARGET_LINK_LIBRARIES( jvid vgui vidl vul vil )
+  IF(MPEG2_FOUND)
+    TARGET_LINK_LIBRARIES( jvid ${MPEG2_LIBRARIES} )
+  ENDIF(MPEG2_FOUND)
 
-      ADD_LIBRARY(jvid ${jvid_sources})
-      TARGET_LINK_LIBRARIES( jvid vgui vidl vul vil )
+  SUBDIRS(bin)
 
-      SUBDIRS(bin)
-
-    ENDIF (NOT CYGWIN)
-  ENDIF(WIN32)
 ENDIF(HAS_VGUI)

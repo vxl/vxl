@@ -59,7 +59,7 @@ void jvx_manager::load_video_file()
   if (!load_image_dl.ask())
     return;
 
-#ifdef HAS_MPEG
+#ifdef HAS_MPEG2
   //need to define callbacks
   vidl_io::load_mpegcodec_callback = &jvid_load_mpegcodec_callback;
 #endif
