@@ -5,6 +5,7 @@
 #include <vcl_iostream.h>
 
 #include <vsl/vsl_test.h>
+#include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_set_io.h>
 
 void test_set_io()

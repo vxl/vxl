@@ -4,6 +4,7 @@
 #include <vcl_string.h>
 
 #include <vsl/vsl_test.h>
+#include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_map_io.h>
 
 void test_map_io()
