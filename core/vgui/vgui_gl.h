@@ -21,14 +21,17 @@ void mb_glDrawBufferWrapper(GLuint);
 # include <GL/gl.h>
 #endif
 
-#define VGUI_MESA 0
-#if (defined(MESA) || defined(GL_MESA_window_pos) || defined(GL_MESA_resize_buffers))
-// xmesa.h is not distributed with Cygwin
-#  ifndef __CYGWIN__
-#  ifndef NO_MESA
-#    undef VGUI_MESA
-#    define VGUI_MESA 1
-#  endif
+// If the value is defined from outside, don't try to guess
+#ifndef VGUI_MESA
+#  define VGUI_MESA 0
+#  if (defined(MESA) || defined(GL_MESA_window_pos) || defined(GL_MESA_resize_buffers))
+    // xmesa.h is not distributed with Cygwin
+#    ifndef __CYGWIN__
+#    ifndef NO_MESA
+#      undef VGUI_MESA
+#      define VGUI_MESA 1
+#    endif
+#    endif
 #  endif
 #endif
 
