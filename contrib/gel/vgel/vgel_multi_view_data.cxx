@@ -228,5 +228,5 @@ vcl_ostream& vgel_multi_view_data<T>::print(vcl_ostream& str)
 }
 
 //vgel_multi_view_data+vtol_vertex_2d_sptr
-template vgel_multi_view_data<vtol_vertex_2d_sptr>;
-template vgel_multi_view_data<vtol_edge_2d_sptr>;
+template class vgel_multi_view_data<vtol_vertex_2d_sptr>;
+template class vgel_multi_view_data<vtol_edge_2d_sptr>;
