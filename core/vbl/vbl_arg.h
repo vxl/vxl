@@ -111,9 +111,9 @@ inline void vbl_arg_display_usage_and_exit(char const* msg = 0)
 template <class T>
 class vbl_arg : public vbl_arg_base {
 public: 
-  //friend void settype     VCL_STL_NULL_TMPL_ARGS (vbl_arg<T> &);
-  //friend void print_value VCL_STL_NULL_TMPL_ARGS (ostream &, vbl_arg<T> const &);
-  //friend int  parse       VCL_STL_NULL_TMPL_ARGS (vbl_arg<T>*, char**);
+  //friend void settype     VCL_NULL_TMPL_ARGS (vbl_arg<T> &);
+  //friend void print_value VCL_NULL_TMPL_ARGS (ostream &, vbl_arg<T> const &);
+  //friend int  parse       VCL_NULL_TMPL_ARGS (vbl_arg<T>*, char**);
   T value_;// public so we don't have to worry about templated friends.
   
   // -- Construct an vbl_arg<T> with command-line switch \arg{option_string}, and default
