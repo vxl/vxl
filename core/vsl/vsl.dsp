@@ -278,6 +278,9 @@ SOURCE=.\vsl_fwd.h
 # Begin Source File
 SOURCE=.\vsl_quick_file.h
 # End Source File
+# Begin Source File
+SOURCE=.\vsl_block_binary.h
+# End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
