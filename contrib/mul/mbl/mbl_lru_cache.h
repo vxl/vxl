@@ -56,9 +56,9 @@ public:
     if (it != m_.end())
     {
       l_.push_front(index);
-      l_.erase(it->second.second);
-      it->second.second = l_.begin();
-      return &(it->second.first);
+      l_.erase((*it).second.second);
+      (*it).second.second = l_.begin();
+      return &((*it).second.first);
     }
     else return 0;
   }
