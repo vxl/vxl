@@ -10,7 +10,6 @@
 #include <vul/vul_reg_exp.h>
 #include <vul/vul_file.h>
 #include <vul/vul_sprintf.h>
-#include <vul/vul_printf.h>
 
 #include <oxp/oxp_parse_seqname.h>
 
@@ -64,7 +63,7 @@ void SequenceFileName::init(char const* s, int start_frame, int step, char const
         // }
       } else
         if (!vul_file::is_directory(dir.c_str()))
-          vcl_cerr << "SequenceFileName: WARNING: Inferred subdir [" << dir << "]"
+          vcl_cerr << "SequenceFileName: WARNING: Inferred subdir [" << dir << ']'
                    << " exists and is not already a directory\n";
     }
   }
@@ -85,8 +84,7 @@ void SequenceFileName::init(char const* s, int start_frame, int step, char const
 
 vcl_string SequenceFileName::name(int frame)
 {
-  vul_sprintf buf((fmt_ + ext_).c_str(), frame * step_ + start_frame_);
-  return (char const*) buf;
+  return vul_sprintf((fmt_ + ext_).c_str(), frame * step_ + start_frame_);
 }
 
 void SequenceFileName::set_default_extension(char const* extension)
@@ -106,5 +104,5 @@ bool SequenceFileName::exists(const vcl_string& fmt, const char* extension, int 
 
 vcl_ostream& SequenceFileName::print(vcl_ostream& s) const
 {
-  return vul_printf(s, "[%s %d:%d:%d]", (fmt_ + ext_).c_str(), start_frame_, step_, end_);
+  return s << '[' << fmt_ << ext_ << ' ' << start_frame_ << ':' << step_ << ':' << end_ << ']';
 }

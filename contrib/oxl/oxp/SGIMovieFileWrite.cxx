@@ -5,12 +5,12 @@
 
 #include "SGIMovieFileWrite.h"
 
-#include <vcl_cstdio.h>
 #include <vcl_cstring.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
-
-#include <vul/vul_printf.h>
+#undef sprintf // works around a bug in libintl.h
+#undef fprintf
+#include <vcl_cstdio.h>
 
 #include <vil1/vil1_jpeglib.h>
 #include <vil1/vil1_memory_image_of.h>
@@ -101,7 +101,7 @@ SGIMovieFileWriteData::SGIMovieFileWriteData(char const* filename,
 {
   fp = vcl_fopen(filename, "w");
   if (!fp) {
-    vul_printf(vcl_cerr, "SGIMovieFileWriteData: Can't open %s\n", filename);
+    vcl_cerr << "SGIMovieFileWriteData: Can't open " << filename << '\n';
     return;
   }
 
@@ -174,7 +174,7 @@ struct FrameIndex {
 void SGIMovieFileWriteData::Finish()
 {
   if (l != (int)frame_ends.size()) {
-    vul_printf(vcl_cerr, "ZOKZOK: %d != %d\n", l, frame_ends.size());
+    vcl_cerr << "ZOKZOK: " << l << " != " << frame_ends.size() << '\n';
     return;
   }
   fseek(fp, directory_pos, 0);
@@ -220,9 +220,9 @@ void SGIMovieFileWriteData::PutFrame(int i)
 /////////////////////////////////////////////////////////////////////////////
 
 SGIMovieFileWrite::SGIMovieFileWrite(char const* filename,
-                                             int w,
-                                             int h,
-                                             int length)
+                                     int w,
+                                     int h,
+                                     int length)
 {
   p = new SGIMovieFileWriteData(filename, w, h, length);
 }

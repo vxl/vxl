@@ -10,7 +10,6 @@
 #include <vcl_iostream.h>
 
 #include <vul/vul_reg_exp.h>
-#include <vul/vul_printf.h>
 
 // Default ctor
 oxp_parse_seqname::oxp_parse_seqname(char const* s)
@@ -42,10 +41,8 @@ void oxp_parse_seqname::parse(char const* s)
     int last = re.start(0);
     filename_ = filename_.substr(0,last);
 
-    vul_printf(vcl_cerr, "oxp_parse_seqname: %s [%s:%s:%s]  -> ",
-               filename_.c_str(),
-               match_start.c_str(), match_step.c_str()+1, match_end.c_str());
-
+    vcl_cerr << "oxp_parse_seqname: " << filename_ << " [" << match_start
+             << ':' << match_step.c_str()+1 << ':' << match_end << "]  -> ";
 
     if (match_start.length() > 0)
       start_ = vcl_atoi(match_start.c_str());
@@ -56,9 +53,8 @@ void oxp_parse_seqname::parse(char const* s)
     if (match_end.length() > 0)
       end_ = vcl_atoi(match_end.c_str());
 
-    vul_printf(vcl_cerr, "[%d:%d:%d]\n", start_, step_, end_);
+    vcl_cerr << '[' << start_ << ':' << step_ << ':' << end_ << "]\n";
 
-  } else if (vcl_strchr(s, ',')) {
-    vul_printf(vcl_cerr, "oxp_parse_seqname: Warning: \"%s\" contains a comma, but didn't match my regexp.\n", s);
-  }
+  } else if (vcl_strchr(s, ','))
+    vcl_cerr << "oxp_parse_seqname: Warning: \"" << s << "\" contains a comma, but didn't match my regexp.\n";
 }

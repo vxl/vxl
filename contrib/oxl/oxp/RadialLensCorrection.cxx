@@ -33,7 +33,8 @@ void RadialLensCorrection::init(double cx, double cy, double sx, double sy, doub
   _sy = sy;
   _k2 = k2;
   _k4 = k4;
-  // vul_printf(cerr,"RDC params: c(%g,%g) scale %g x %g, K=[%g %g].\n",  cx, cy, sx, sy, k2, k4);
+  // vcl_cerr << "RDC params: c(" << cx << ',' << cy << ") scale "
+  //          << sx << " x " << sy << ", K=[" << k2 << ' ' << k4 << "].\n";
 
   _invsx = 1.0 / _sx;
   _invsy = 1.0 / _sy;
@@ -106,7 +107,7 @@ void RadialLensCorrection::implement_inverse_map(double x2, double y2, double* x
     else
       r = t + Q / t;
 #if 0
-    vcl_cerr <<  "+RES = " << (r*(1 + _k2 * r * r) - rc) << " "
+    vcl_cerr <<  "+RES = " << (r*(1 + _k2 * r * r) - rc) << ' '
              << (vcl_fabs(t*t*t) - (vcl_fabs(R)  + vcl_sqrt(DELTA))) << vcl_endl;
 #endif
   }

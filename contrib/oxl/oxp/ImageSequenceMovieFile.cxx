@@ -8,7 +8,6 @@
 #include "ImageSequenceMovieFile.h"
 
 #include <vcl_iostream.h>
-#include <vul/vul_printf.h>
 #include <vil1/vil1_file_image.h>
 #include <oxp/ImageSequenceName.h>
 
@@ -26,14 +25,14 @@ struct ImageSequenceMovieFilePrivates {
       // Load new image
       vcl_string newname = seqname.name(index);
       if (MovieFileInterface::verbose)
-        vul_printf(vcl_cerr, "ImageSequenceMovieFile: Loading [%s]: ", newname.c_str());
+        vcl_cerr << "ImageSequenceMovieFile: Loading [" << newname << "]: ";
       current_image.load(newname.c_str(), MovieFileInterface::verbose ? vil1_file_image::laconic : vil1_file_image::silent);
       current_image_index = index;
     }
     return current_image;
   }
 
-public:
+ public:
   ImageSequenceName seqname;
   int current_image_index;
   vil1_file_image current_image;

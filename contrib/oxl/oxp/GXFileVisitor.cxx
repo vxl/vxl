@@ -12,7 +12,7 @@
 #include <vcl_fstream.h>
 
 #include <vul/vul_reg_exp.h>
-#include <vul/vul_printf.h>
+#include <vcl_iostream.h>
 #include <vul/vul_awk.h>
 
 bool GXFileVisitor::do_text = true;
@@ -117,7 +117,7 @@ bool GXFileVisitor::visit(vcl_istream& s)
         char const* text = awk.line();
         // text is of form "t +number +number + ...thetext"
         if (!*text || !re.find(text))
-          vul_printf(vcl_cerr, "GXFileVisitor: Bad \"t\" line: [%s]\n", text);
+          vcl_cerr << "GXFileVisitor: Bad \"t\" line: [" << text << "]\n";
         else
           this->text((float)vcl_atof(awk[1]), (float)vcl_atof(awk[2]), re.match(1).c_str());
       }
