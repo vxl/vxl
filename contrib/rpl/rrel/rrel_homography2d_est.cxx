@@ -129,9 +129,9 @@ rrel_homography2d_est :: compute_residuals( const vnl_vector<double>& params,
 bool
 rrel_homography2d_est :: weighted_least_squares_fit( vnl_vector<double>& params,
                                                      vnl_matrix<double>& norm_covar,
-                                                     vcl_vector<double>* weights ) const
+                                                     const vcl_vector<double>* weights ) const
 {
-  vcl_vector<double> * w;
+  const vcl_vector<double> * w;
   if ( weights )
     w = weights;
   else

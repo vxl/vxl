@@ -16,8 +16,10 @@ O
 rrel_util_median_abs_dev_scale( const T& begin,  const T& end, int dof, O* /*dummy*/ )
 {
   int count = end - begin;
-  assert( count > dof );
   assert( count > 0);
+
+  if( count <= dof )
+    return 0;
 
   for ( T i=begin; i!=end; ++i ) {
     *i = vnl_math_abs( *i );
@@ -44,7 +46,9 @@ rrel_util_weighted_scale( const T& residuals_first, const T& residuals_end,
     sum_weights += *w_itr;
     ++num;
   }
-  assert( num > dof );
+  if( num <= dof )
+    return 0;
+
   O divisor = sum_weights * ( num - dof ) / num;
   return vcl_sqrt( sum / divisor );
 }

@@ -49,7 +49,6 @@
 
 class rrel_linear_regression : public rrel_estimation_problem {
 public:
-
   //: Constructor that includes all information in the sample vectors.
   //  For each sample, the first m-1 entries are the independent
   //  variables, and the last entry is the dependent variable.
@@ -77,7 +76,7 @@ public:
   //: \brief Weighted least squares parameter estimate. 
   bool weighted_least_squares_fit( vnl_vector<double>& params,
                                    vnl_matrix<double>& norm_covar,
-                                   vcl_vector<double>* weights=0 ) const;
+                                   const vcl_vector<double>* weights=0 ) const;
 
 public:  // testing / debugging utility
     //: \brief Print information as a test utility.

@@ -88,10 +88,8 @@ public:
   // must be filled in with num_samples_to_instantiate() indicies.
   // Returns true if and only if the points resulted in a unique
   // parameter vector.
-  //
-  // Default behaviour is to call abort().
   virtual bool fit_from_minimal_set( const vcl_vector<int>& /* point_indices */,
-                                     vnl_vector<double>& /* params */ ) const;
+                                     vnl_vector<double>& /* params */ ) const = 0;
 
   //: Compute the residuals relative to the given parameter vector.
   // The number of residuals must be equal to the value returned
@@ -149,11 +147,9 @@ public:
   // ignored as outliers (e.g. as explicitly identified as such by
   // Least Median of Squares), then their weights should just be set
   // to 0.
-  //
-  // The default behaviour is to call abort().
   virtual bool weighted_least_squares_fit( vnl_vector<double>& params,
                                            vnl_matrix<double>& norm_covar,
-                                           vcl_vector<double>* weights=0 ) const;
+                                           const vcl_vector<double>* weights=0 ) const = 0;
 
 protected:
   //: Set the degrees of freedom.

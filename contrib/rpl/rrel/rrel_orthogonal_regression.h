@@ -49,7 +49,7 @@ public:
   //: Weighted least squares parameter estimate.
   bool weighted_least_squares_fit( vnl_vector<double>& params,
                                    vnl_matrix<double>& cofact,
-                                   vcl_vector<double>* weights=0 ) const;
+                                   const vcl_vector<double>* weights=0 ) const;
 
 public:  // testing / debugging utility
     //: \brief Print information as a test utility.

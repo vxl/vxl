@@ -96,6 +96,7 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
 
   best_k = 0;
   const double min_exp_kth_to_stddev_ratio = 3.0;
+  static bool notwarned = true;
 
   switch ( muse_type_ ) {
 
@@ -114,8 +115,11 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
       if ( table_->expected_kth(k, num_residuals) / 
            table_->standard_dev_kth(k, num_residuals) < min_exp_kth_to_stddev_ratio )
         {
-          vcl_cerr << "WARNING:  rrel_muset_obj::internal_fcn attempted evaluation at \n"
-                   << "value of k that lead to unstable estimates\n";
+          if( notwarned ) {
+            vcl_cerr << "WARNING:  rrel_muset_obj::internal_fcn attempted evaluation at \n"
+                     << "value of k that lead to unstable estimates\n";
+            notwarned = false;
+          }
           continue;
         }
 
@@ -170,8 +174,11 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
       if ( table_->expected_kth(k, num_residuals) / 
            table_->standard_dev_kth(k, num_residuals) < min_exp_kth_to_stddev_ratio )
         {
-          vcl_cerr << "WARNING:  rrel_muset_obj::internal_fcn attempted evaluation at \n"
-                   << "value of k that lead to unstable estimates\n";
+          if( notwarned ) {
+            vcl_cerr << "WARNING:  rrel_muset_obj::internal_fcn attempted evaluation at \n"
+                     << "value of k that lead to unstable estimates\n";
+            notwarned = false;
+          }
           continue;
         }
 
@@ -223,8 +230,11 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
       if ( table_->expected_kth(k, num_residuals) / 
            table_->standard_dev_kth(k, num_residuals) < min_exp_kth_to_stddev_ratio )
         {
-          vcl_cerr << "WARNING:  rrel_muset_obj::internal_fcn attempted evaluation at \n"
-                   << "value of k that lead to unstable estimates\n";
+          if( notwarned ) {
+            vcl_cerr << "WARNING:  rrel_muset_obj::internal_fcn attempted evaluation at \n"
+                     << "value of k that lead to unstable estimates\n";
+            notwarned = false;
+          }
           continue;
         }
 

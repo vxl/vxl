@@ -9,6 +9,8 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 
+#include <vcl_cassert.h>
+
 rrel_orthogonal_regression::rrel_orthogonal_regression( const vnl_matrix<double>& pts )
   : vars_( pts )
 {
@@ -89,8 +91,8 @@ rrel_orthogonal_regression::compute_residuals( const vnl_vector<double>& params,
 {
   // The residual is the algebraic distance, which is simply A * p.
   // Assumes the parameter vector has a unit normal.
-  if ( residuals.size() != vars_.rows())
-    residuals.resize( vars_.rows() );
+  assert( residuals.size() == vars_.rows() );
+
   vnl_vector<double> norm(params.size()-1);
   for (unsigned int i=0; i<params.size()-1; i++)
     norm[i] = params[i];
@@ -106,7 +108,7 @@ rrel_orthogonal_regression::compute_residuals( const vnl_vector<double>& params,
 bool
 rrel_orthogonal_regression::weighted_least_squares_fit( vnl_vector<double>& params,
                                                         vnl_matrix<double>& cofact,
-                                                        vcl_vector<double> *weights ) const
+                                                        const vcl_vector<double> *weights ) const
 {
   // If params and cofact are NULL pointers and the fit is successful,
   // this function will allocate a new vector and a new

@@ -3,6 +3,8 @@
 #include <rrel/rrel_estimation_problem.h>
 #include <rrel/rrel_util.h>
 
+#include <mbl/mbl_mz_random.h>
+
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
 
@@ -11,9 +13,19 @@
 #include <vcl_vector.h>
 #include <vcl_cstdlib.h>
 
+#include <vcl_cassert.h>
+
+// Random number generator. This will be shared by all ran_sam
+// instances.
+static mbl_mz_random global_generator_;
+
+
+
+
 rrel_ran_sam_search::rrel_ran_sam_search( )
   : generate_all_(false),
-    generator_( ),
+    generator_( &global_generator_ ),
+    own_generator_( false ),
     params_(0), scale_(0),
     samples_to_take_(0),
     trace_level_(0)
@@ -23,12 +35,19 @@ rrel_ran_sam_search::rrel_ran_sam_search( )
 
 rrel_ran_sam_search::rrel_ran_sam_search( int seed )
   : generate_all_(false),
-    generator_( seed ),
+    generator_( new mbl_mz_random( seed ) ),
+    own_generator_( true ),
     params_(0), scale_(0),
     samples_to_take_(0),
     trace_level_(0)
 {
   set_sampling_params();
+}
+
+
+rrel_ran_sam_search::~rrel_ran_sam_search( )
+{
+  if( own_generator_ )  delete generator_;
 }
 
 
@@ -74,9 +93,9 @@ rrel_ran_sam_search::estimate( const rrel_estimation_problem * problem,
 
   unsigned int points_per = problem->num_samples_to_instantiate();
   unsigned int num_points = problem->num_samples();
-  vcl_vector<int> point_indices;
+  vcl_vector<int> point_indices( points_per );
   vnl_vector<double> new_params;
-  vcl_vector<double> residuals;
+  vcl_vector<double> residuals( num_points );
   double min_obj = 0.0;
   bool  obj_set=false;
 
@@ -194,8 +213,7 @@ rrel_ran_sam_search::next_sample( unsigned int taken,
                                   vcl_vector<int>& sample,
                                   unsigned int points_per_sample )
 {
-  if ( sample.size() != points_per_sample )
-    sample.resize( points_per_sample );
+  assert( sample.size() == points_per_sample );
 
   if ( generate_all_ ) {
     if ( taken == 0 ) {  //  initial sample
@@ -221,7 +239,7 @@ rrel_ran_sam_search::next_sample( unsigned int taken,
     } else {
       unsigned int k=0;
       while ( k<points_per_sample ) {
-        unsigned int id = generator_.lrand32( 0, num_points-1 );
+        unsigned int id = generator_->lrand32( 0, num_points-1 );
         if ( id >= num_points ) {   //  safety check
           vcl_cerr << "rrel_ran_sam_search::next_sample --- WARNING: random value "
                    << "out of range\n";

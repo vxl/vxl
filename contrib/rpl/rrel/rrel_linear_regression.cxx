@@ -118,8 +118,7 @@ void
 rrel_linear_regression::compute_residuals( const vnl_vector<double>& params,
                                            vcl_vector<double>& residuals ) const
 {
-  if ( residuals.size() != rand_vars_.size())
-    residuals.resize( rand_vars_.size() );
+  assert( residuals.size() == rand_vars_.size() );
 
   for ( unsigned int i=0; i<rand_vars_.size(); ++i ) {
     residuals[i] = rand_vars_[i] - dot_product( params, ind_vars_[i] );
@@ -130,7 +129,7 @@ rrel_linear_regression::compute_residuals( const vnl_vector<double>& params,
 bool
 rrel_linear_regression::weighted_least_squares_fit( vnl_vector<double>& params,
                                                     vnl_matrix<double>& norm_covar,
-                                                    vcl_vector<double>* weights ) const
+                                                    const vcl_vector<double>* weights ) const
 {
   // If params and cofact are NULL pointers and the fit is successful,
   // this function will allocate a new vector and a new

@@ -29,15 +29,6 @@ rrel_estimation_problem::~rrel_estimation_problem( )
   delete multiple_scales_;
 }
 
-bool
-rrel_estimation_problem::fit_from_minimal_set( const vcl_vector<int>& /* point_indices */,
-                                               vnl_vector<double>& /* params */ ) const
-{
-  vcl_cerr << "FAILURE: Problem doesn't implement fit_from_minimal_sample. Try a different search technique." << vcl_endl;
-  vcl_abort();
-  return false;
-}
-
 
 void
 rrel_estimation_problem::compute_weights( const vcl_vector<double>& residuals,
@@ -60,16 +51,6 @@ rrel_estimation_problem::compute_weights( const vcl_vector<double>& residuals,
   }
 }
 
-
-bool
-rrel_estimation_problem::weighted_least_squares_fit( vnl_vector<double>& /*params*/,
-                                                     vnl_matrix<double>& /*norm_covar*/,
-                                                     vcl_vector<double>* /*weights*/ ) const
-{
-  vcl_cerr << "FAILURE: Problem doesn't implement weighted_least_squares_fit. Try a different search technique." << vcl_endl;
-  vcl_abort();
-  return false;
-}
 
 const vcl_vector<double>&
 rrel_estimation_problem::prior_multiple_scales() const

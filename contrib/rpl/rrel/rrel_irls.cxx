@@ -110,8 +110,8 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
   obj_fcn_ = 1e256;
   unsigned int num_for_fit = problem->num_samples_to_instantiate();
   bool allow_convergence_test = true;
-  vcl_vector<double> residuals;
-  vcl_vector<double> weights;
+  vcl_vector<double> residuals( problem->num_samples() );
+  vcl_vector<double> weights( problem->num_samples() );
   bool failed = false;
 
   //  Parameter initialization, if necessary
@@ -141,6 +141,13 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
   if ( trace_level_ >= 1 )
     vcl_cout << "Initial estimate: " << params_ << ", scale = " << scale_ <<  vcl_endl;
 
+  assert( params_initialized_ && scale_initialized_ );
+  if ( scale_ <= 0 ) {
+    vcl_cerr << "rrel_irls::estimate: initial scale is zero - cannot estimate" << vcl_endl;
+    return false;
+  }
+    
+
   //  Basic loop:
   //  1. Calculate residuals
   //  2. Test for convergence, if desired.
@@ -165,9 +172,9 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
     }
     ++ iteration_;
     if ( iteration_ > max_iterations_ ) break;
-    if ( trace_level_ >= 1 ) vcl_cout << "\nIteration: " << iteration_ << vcl_endl;
-
-    //  Step 3. Weights
+    if ( trace_level_ >= 1 ) vcl_cout << "\nIteration: " << iteration_ << "\n";
+    
+    //  Step 3. Weights 
     problem->compute_weights( residuals, obj, scale_, weights );
     if ( trace_level_ >= 2 ) trace_weights( weights );
 
@@ -175,9 +182,10 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
     //  rrel_util_median_abs_dev_scale.
     if ( est_scale_during_ && iteration_ <= iterations_for_scale_est_ ) {
       allow_convergence_test = false;
-      if ( trace_level_ >= 1 ) vcl_cout << "num samples for fit = " << num_for_fit << vcl_endl;
+      if ( trace_level_ >= 1 ) vcl_cout << "num samples for fit = " << num_for_fit << "\n";
       if ( use_weighted_scale_ ) {
-        scale_ = rrel_util_weighted_scale( residuals.begin(), residuals.end(),
+        assert( residuals.size() == weights.size() );
+        scale_ = rrel_util_weighted_scale( residuals.begin(), residuals.end(), 
                                            weights.begin(), num_for_fit );
       }
       else {

@@ -8,12 +8,11 @@
 // \date March 2001
 
 #include <vnl/vnl_vector.h>
-#include <mbl/mbl_mz_random.h>
 #include <vcl_vector.h>
 
 class rrel_objective;
 class rrel_estimation_problem;
-
+class mbl_mz_random;
 
 //: Random sampling search for minimization of a robust objective function.
 //  The code organization follows the design of the rrel
@@ -47,7 +46,7 @@ public:
   //: Constructor using a given random-sampling seed.
   rrel_ran_sam_search( int seed );
 
-  ~rrel_ran_sam_search( ) {}
+  ~rrel_ran_sam_search( );
 
   //  Parameters to control the search technique.  The default set
   //  when the constructor is called is to sample as in generate
@@ -116,10 +115,11 @@ protected:
   unsigned int min_samples_;
   bool generate_all_;
 
-  //
-  // Random number generator
-  //
-  mbl_mz_random generator_;
+  //: Random number generator.
+  // Normally, this will point to the "global" generator, but a could
+  // point to a local one if the user wants to specify a seed.
+  mbl_mz_random* generator_;
+  bool own_generator_;
 
   //
   //  The estimate

@@ -68,7 +68,7 @@ public:
   //: Weighted least squares parameter estimate.  The normalized covariance is not yet filled in.
   bool weighted_least_squares_fit( vnl_vector<double>& params,
                                    vnl_matrix<double>& norm_covar,
-                                   vcl_vector<double>* weights=0 ) const;
+                                   const vcl_vector<double>* weights=0 ) const;
 
 public:  // testing / debugging utility
     //: \brief Print information as a test utility.
