@@ -11,7 +11,6 @@
 //=======================================================================
 mbl_progress_composite::mbl_progress_composite()
 {
-  
 }
 
 
@@ -45,7 +44,7 @@ vcl_string mbl_progress_composite::is_a() const
 // =================================================
 void mbl_progress_composite::on_set_estimated_iterations(const vcl_string &identifier,int total_iterations)
 {
-  for (int i=0;i<progress_objects_.size();++i)
+  for (unsigned int i=0;i<progress_objects_.size();++i)
   {
     progress_objects_[i]->set_estimated_iterations(identifier,total_iterations,display_text(identifier));
   }
@@ -55,7 +54,7 @@ void mbl_progress_composite::on_set_estimated_iterations(const vcl_string &ident
 // =================================================
 void mbl_progress_composite::on_set_progress(const vcl_string &identifier, int progress)
 {
-  for (int i=0;i<progress_objects_.size();++i)
+  for (unsigned int i=0;i<progress_objects_.size();++i)
   {
     progress_objects_[i]->set_progress(identifier,progress);
   }
@@ -65,8 +64,7 @@ void mbl_progress_composite::on_set_progress(const vcl_string &identifier, int p
 // =================================================
 void mbl_progress_composite::on_end_progress(const vcl_string &identifier)
 {
-  
-  for (int i=0;i<progress_objects_.size();++i)
+  for (unsigned int i=0;i<progress_objects_.size();++i)
   {
     progress_objects_[i]->end_progress(identifier);
   }
