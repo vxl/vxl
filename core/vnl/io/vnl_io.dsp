@@ -362,6 +362,11 @@ SOURCE=.\vnl_io_nonlinear_minimizer.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vnl_io_rational.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\vnl_io_real_npolynomial.cxx
 
 # End Source File
