@@ -269,7 +269,7 @@ static void _sortPointList(
 
 static float _minEigenvalue(float gxx, float gxy, float gyy)
 {
-  return (gxx + gyy - (float)sqrt((gxx - gyy)*(gxx - gyy) + 4*gxy*gxy))/2.0f;
+  return (gxx + gyy - sqrtf((gxx - gyy)*(gxx - gyy) + 4*gxy*gxy))/2.0f;
 }
 
 
