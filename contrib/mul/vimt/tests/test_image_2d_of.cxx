@@ -79,6 +79,14 @@ void test_image_2d_byte_functions()
 
   vgl_point_2d<double> p0 = image1.world2im().inverse()(0,0);
   TEST_NEAR("Transform",(p0-vgl_point_2d<double>(1,2)).sqr_length(),0,1e-12);
+
+  vimt_image_2d_of<vxl_byte> image2 = image1;
+  TEST("Shallow equality",image2, image1);
+  TEST("Shallow equality",image0 == image1, false);
+  vimt_image_2d_of<float> image3;
+  TEST("Shallow equality", static_cast<vimt_image &>(image3) == image0, false);
+  TEST("Shallow equality", static_cast<vimt_image &>(image2), image1);
+
 }
 
 MAIN( test_image_2d_of )

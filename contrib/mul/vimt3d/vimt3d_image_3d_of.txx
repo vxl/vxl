@@ -5,6 +5,7 @@
 //  \brief Container for vil_image_view<T> + transform
 //  \author Tim Cootes
 
+#include "vimt3d_image_3d_of.h"
 #include <vcl_string.h>
 #include <vsl/vsl_indent.h>
 #include <vimt3d/vimt3d_image_3d_of.h>
@@ -35,6 +36,15 @@ void vimt3d_image_3d_of<T>::deep_copy(const vimt3d_image_3d_of& src)
 
 template<class T> vimt3d_image_3d_of<T>::~vimt3d_image_3d_of()
 {
+}
+
+//: Shallow equality tester.
+//  The paramter must be identical type to this.
+template<class T>
+bool vimt3d_image_3d_of<T>::equals(const vimt_image &im) const
+{
+  assert(dynamic_cast<const vimt3d_image_3d_of<T> *>(&im));
+  return operator==(static_cast<const vimt3d_image_3d_of<T> &>(im));
 }
 
 

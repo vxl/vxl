@@ -20,6 +20,10 @@
 //  external data.
 class vimt_image
 {
+  //: Shallow equality tester.
+  //  The paramter must be identical type to this.
+  virtual bool equals(const vimt_image &) const =0;
+
 public:
     //: Dflt ctor
   vimt_image() {}
@@ -51,6 +55,11 @@ public:
 
     //: Create a copy on the heap and return base class pointer
   virtual vimt_image* clone() const = 0;
+
+    //: Shallow equality.
+    // tests if the two images are the same type, have equal transforms, and point
+    // to the same image data with equal step sizes, etc.
+  bool operator==(const vimt_image &) const;
 
     //: Print class to os
   virtual void print_summary(vcl_ostream& os) const = 0;

@@ -37,6 +37,14 @@ template<class T> vimt_image_2d_of<T>::~vimt_image_2d_of()
 {
 }
 
+//: Shallow equality tester.
+//  The paramter must be identical type to this.
+template<class T>
+bool vimt_image_2d_of<T>::equals(const vimt_image &im) const
+{
+  assert(dynamic_cast<const vimt_image_2d_of<T> *>(&im));
+  return operator==(static_cast<const vimt_image_2d_of<T> &>(im));
+}
 
 //: Define valid data region (including transform).
 //  Resizes and sets the transformation so that

@@ -17,6 +17,10 @@ template<class T>
 class vimt3d_image_3d_of : public vimt3d_image_3d
 {
   vil3d_image_view<T> image_;
+
+  //: Shallow equality tester.
+  //  The paramter must be identical type to this.
+  bool equals(const vimt_image &) const;
  public:
   //: Dflt ctor
   //  Creates an empty one-plane image.

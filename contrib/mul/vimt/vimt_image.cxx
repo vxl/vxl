@@ -17,6 +17,22 @@ short vimt_image::version_no() const
 }
 
 //=======================================================================
+//: Shallow equality.
+// tests if the two images are the same type, have equal transforms, and point
+// to the same image data with equal step sizes, etc.
+bool vimt_image::operator==(const vimt_image &im) const
+{
+#if VCL_HAS_DYNAMIC_CAST // Use as a proxy for existence of RTTI.
+  if (typeid(*this) == typeid(im))
+#else
+  if (this->is_class(im.is_a()))
+#endif
+    return equals(im);
+  else
+    return false;
+}
+
+//=======================================================================
 
 vcl_string vimt_image::is_a() const
 {
