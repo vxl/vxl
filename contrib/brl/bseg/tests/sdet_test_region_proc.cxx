@@ -18,7 +18,7 @@ int main(int argc, char * argv[])
   int success=0, failures=0;
   vcl_string image_path = (argc < 2) ? "" : argv[1];
   if (image_path=="")
-    image_path = "c:/images/ShortBaseline/jar-closeup.tif";
+    image_path = "jar-closeup.tif";
   vcl_cout << "Loading Image " << image_path << "\n";
   vil_image image = vil_load(image_path.c_str());
   if (image)
@@ -36,7 +36,7 @@ int main(int argc, char * argv[])
       Assert(n==188);
       vdgl_intensity_face_sptr f = regions[0];
       vcl_cout << "f->Npix() " << f->Npix() << "\n";
-	  Assert(f->Npix()==41121);
+      Assert(f->Npix()==41121);
     }
   vcl_cout << "finished testing sdet_detector\n";
   vcl_cout << "Test Summary: " << success << " tests succeeded, "
