@@ -89,6 +89,7 @@ void vgui_image_renderer::render()
                                      the_image.width(), the_image.height(),
                                      GL_NONE, GL_NONE);
     buffer->apply(the_image);
-    buffer->draw_as_image() || buffer->draw_as_rectangle();
   }
+
+  buffer->draw_as_image() || buffer->draw_as_rectangle();
 }
