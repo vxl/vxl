@@ -30,6 +30,7 @@ class vgui_soview2D_point;
 class vgui_soview2D_lineseg;
 class vgui_soview2D_infinite_line;
 class vgui_soview2D_circle;
+class vgui_soview2D_ellipse;
 class vgui_soview2D_linestrip;
 class vgui_soview2D_polygon;
 
@@ -87,6 +88,8 @@ public:
   vgui_soview2D_infinite_line* add_infinite_line(float a, float b, float c);
   //: Add a circle with the given centre and radius to the display.
   vgui_soview2D_circle* add_circle(float x, float y, float r);
+  //: Add an ellipse with a given center, width, height, and angle
+  vgui_soview2D_ellipse* add_ellipse(float x, float y, float w, float h, float phi);
   //: Add a point with the given projective coordinates.
   vgui_soview2D_point* add_point_3dv(double const p[3]);
   //: Add a line with the given projective start and end points.

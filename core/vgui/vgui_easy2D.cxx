@@ -175,6 +175,20 @@ vgui_soview2D_circle* vgui_easy2D::add_circle(float x, float y, float r) {
   return obj;
 }
 
+vgui_soview2D_ellipse* vgui_easy2D::add_ellipse(float x, float y, float w, float h, float phi){
+  vgui_soview2D_ellipse *obj = new vgui_soview2D_ellipse; 
+  
+  obj->x = x;
+  obj->y = y;
+  obj->w = w; 
+  obj->h = h; 
+  obj->phi = phi;
+
+  add(obj);
+  return obj;
+
+}
+
 //: Add a point with the given projective coordinates.
 vgui_soview2D_point* vgui_easy2D::add_point_3dv(double const p[3]) {
   return add_point(p[0]/p[2], p[1]/p[2]);

@@ -267,6 +267,47 @@ void vgui_soview2D_circle::translate(float tx, float ty)
 
 //--------------------------------------------------------------------------------
 
+const int vgui__ELLIPSE2D_LIST = 1;
+
+vcl_ostream& vgui_soview2D_ellipse::print(vcl_ostream& s) const {
+  s << "[vgui_soview2D_ellipse " << x << "," << y; 
+  s << " w" << w << " h" << h << " phi" << phi;
+  s << "  "; return vgui_soview2D::print(s) << "]";
+}
+
+void vgui_soview2D_ellipse::draw(){
+  double px, py;
+  
+  glBegin(GL_LINE_LOOP);
+  for (unsigned int i=0;i<100;i++){
+    double angle = i*(2*vnl_math::pi/100);
+    px = w*vcl_cos(this->phi)*vcl_cos(angle) + h*vcl_sin(this->phi)*vcl_sin(angle);
+    py = h*vcl_cos(this->phi)*vcl_sin(angle) - w*vcl_sin(this->phi)*vcl_cos(angle); 
+    glVertex2d(x+px, y+py);
+  }
+  glEnd();
+}
+
+float vgui_soview2D_ellipse::distance_squared(float x, float y) {
+  
+  // not implemented
+  return -1;
+
+}
+
+void vgui_soview2D_ellipse::get_centroid(float* x, float* y){
+  *x = this->x; 
+  *y = this->y;
+}
+
+void vgui_soview2D_ellipse::translate(float tx, float ty){
+  x += tx; 
+  y += ty; 
+}
+
+
+//--------------------------------------------------------------------------------
+
 vgui_soview2D_linestrip::vgui_soview2D_linestrip(unsigned n_, float const *x_, float const *y_)
   : n(n_), x(new float[n]), y(new float[n])
 {

@@ -130,6 +130,25 @@ public:
   static void compile();
 };
 
+class vgui_soview2D_ellipse : public vgui_soview2D {
+ public:
+  vgui_soview2D_ellipse() {} 
+  
+  virtual void draw();
+  virtual vcl_ostream& print(vcl_ostream&) const;
+  virtual float distance_squared(float x, float y); 
+  vcl_string type_name() const {return "vgui_soview2D_ellipse"; }
+
+  void get_centroid(float* x, float* y);
+  void translate(float x, float y);
+  
+  float x, y, w, h, phi;
+
+  // compile the vcl_list 
+  static void compile();
+
+};
+
 class vgui_soview2D_linestrip : public vgui_soview2D {
 public:
   vgui_soview2D_linestrip(unsigned, float const *, float const *);
