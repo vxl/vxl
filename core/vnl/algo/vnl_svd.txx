@@ -13,11 +13,7 @@
 #include <vnl/vnl_fortran_copy.h>
 #include <vnl/algo/vnl_netlib.h>
 
-#ifndef vnl_svd_fsm
-#define vnl_svd_fsm 0
-#endif
-
-#if vnl_svd_fsm
+#ifdef HAS_FSM_PACK
 template <typename T> int fsm_svdc_cxx(vnl_netlib_svd_proto(T));
 # define vnl_linpack_svdc fsm_svdc_cxx
 #else
@@ -82,7 +78,7 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
 //       cerr << "*** Warning vnl_svd<T>::vnl_svd<T>() ***\n";
 //       cerr << " About " << info << " singular values are wrong\n";
 //       MatOps::matlab_print(cerr, M, "M");
-      //vcl_cerr << __FILE__ ": suspicious return value (" << info << ") from SVDC" << vcl_endl;
+      vcl_cerr << __FILE__ ": suspicious return value (" << info << ") from SVDC" << vcl_endl;
     }
 
     // Copy fortran outputs into our storage
