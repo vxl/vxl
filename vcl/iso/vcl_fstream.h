@@ -1,23 +1,16 @@
 #ifndef vcl_iso_fstream_h_
 #define vcl_iso_fstream_h_
 
+// This is a generated file. DO NOT EDIT! Not even a little bit.
+
 #include <fstream>
 
-// filebuf
-#ifndef vcl_filebuf
-#define vcl_filebuf std::filebuf
+#ifdef vcl_generic_fstream_STD
+  ** error **
+#else
+# define vcl_generic_fstream_STD std
 #endif
-// fstream
-#ifndef vcl_fstream
-#define vcl_fstream std::fstream
-#endif
-// ifstream
-#ifndef vcl_ifstream
-#define vcl_ifstream std::ifstream
-#endif
-// ofstream
-#ifndef vcl_ofstream
-#define vcl_ofstream std::ofstream
-#endif
+
+#include "../generic/vcl_fstream.h"
 
 #endif // vcl_iso_fstream_h_
