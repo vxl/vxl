@@ -57,7 +57,8 @@ class vil2_plane_image_resource : public vil2_image_resource
                         unsigned j0);
 
   //: Extra property information
-  virtual bool get_property(char const* tag, void* property_value = 0) const;
+  virtual bool get_property(char const* tag, void* property_value = 0) const {
+    return src_->get_property(tag, property_value); }
 
   //: Return the name of the class;
   virtual vcl_string is_a() const;
