@@ -14,6 +14,7 @@
 
 #include <vcl_cassert.h>
 #include <vcl_cstddef.h>
+#include <vil/vil_image_view.h>
 
 //: Compute bilinear interpolation at (x,y), no bound checks. Requires 0<x<ni-2, 0<y<nj-2
 //  Image is nx * ny array of Ts. x,y element is data[xstep*x+ystep*y]
