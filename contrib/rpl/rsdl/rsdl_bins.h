@@ -67,7 +67,7 @@ class rsdl_bins
 
   //: Update the tolerance used in equality checking.
   //
-  // Two points with Eucledean distance <= \a tol will compare equal.
+  // Two points with Euclidean distance <= \a tol will compare equal.
   //
   void set_distance_tolerance( coord_type const& tol );
 
@@ -76,7 +76,7 @@ class rsdl_bins
 
   //: Retrieves the value at \a pt, if possible.
   //
-  // If the a point equal to \a pt, to within the current tolerance,
+  // If a point equal to \a pt, to within the current tolerance,
   // is found, \a val will be set to the associated value, and the
   // function will return true. Otherwise, the function will return
   // false.
@@ -141,7 +141,7 @@ class rsdl_bins
                                point_type const& max_pt,
                                vcl_vector< point_type >& points,
                                vcl_vector< value_type >& values  ) const;
-
+  // INTERNALS
  public:
   typedef rsdl_bins_bin_entry_type<N,CoordType,ValueType> bin_entry_type;
 
