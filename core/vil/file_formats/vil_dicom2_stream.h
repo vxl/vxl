@@ -5,7 +5,7 @@
 // \file
 // \author Amitha Perera
 
-#include <dcmtk\dcmdata\include\dcistrma.h>
+#include <dcistrma.h>
 
 class vil_stream;
 
