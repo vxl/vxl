@@ -435,8 +435,7 @@ void kalman_filter::inc()
     //
     // go to the correction step
     //
-    //Xpred = Xpred +  G_*(z - z_pred)*prob_[i];
-    Xpred = Xpred +  G_*(z - z_pred);
+    Xpred = Xpred +  G_*(z - z_pred)*prob_[i];
 
     vnl_matrix_fixed<double, 6, 6> I;
     I.set_identity();
