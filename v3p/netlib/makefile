@@ -95,6 +95,9 @@ SOURCES += gpfa3f.c
 SOURCES += setgpfa.c
 SOURCES += pow_ii.c
 
+# from DATAPAC
+SOURCES += camsun.c
+
 ##########################################
 include $(SYS_IUPACKAGES)/config/top.mk
 ##########################################
