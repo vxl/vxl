@@ -11,7 +11,7 @@ IF(WIN32)
    vplayer_video
  )
 
- LINK_LIBRARIES( nafxcw )
+ LINK_LIBRARIES(  vfw32 )
  INCLUDE( ${allvxl_SOURCE_DIR}/oxl/osl/CMakeListsLink.txt )
  INCLUDE( ${allvxl_SOURCE_DIR}/oxl/mvl/CMakeListsLink.txt )
  INCLUDE( ${allvxl_SOURCE_DIR}/oxl/vgui/CMakeListsLink.txt )
