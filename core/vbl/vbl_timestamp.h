@@ -10,7 +10,8 @@ public:
   
   void touch();
   unsigned long get_time_stamp() const { return timestamp_; };
-  bool older(vbl_timestamp const& obj) const { return timestamp_ < obj.get_time_stamp(); }
+
+  bool older(vbl_timestamp* t);
 
 protected:
   unsigned long timestamp_;

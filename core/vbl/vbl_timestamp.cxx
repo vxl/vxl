@@ -4,7 +4,7 @@ unsigned long vbl_timestamp::mark = 0;
 
 unsigned long vbl_timestamp::get_unique_timestamp()
 {
-	  return mark++;
+  return mark++;
 }
 
 vbl_timestamp::vbl_timestamp()
@@ -19,4 +19,10 @@ vbl_timestamp::~vbl_timestamp()
 void vbl_timestamp::touch()
 {
   timestamp_ = get_unique_timestamp();
+}
+
+bool vbl_timestamp::older(vbl_timestamp *t)
+{
+  // find out if this is older that t
+  return timestamp_<t->get_time_stamp();
 }
