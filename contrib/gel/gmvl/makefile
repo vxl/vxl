@@ -5,6 +5,7 @@
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
+# depends on vcl, vbl, vnl
 USES := vxl
 
 LIBRARY := gmvl

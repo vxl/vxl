@@ -6,6 +6,7 @@
 #endif
 #include "gmvl_connection_cache.h"
 
+#include <vnl/vnl_math.h>
 
 // constructors / destructors
 
@@ -34,13 +35,57 @@ void gmvl_connection_cache::add( const gmvl_node_ref node1, const gmvl_node_ref 
       if( node1->ref_>= cache_.size()) cache_.resize( node1->ref_+1);
       if( node2->ref_>= cache_.size()) cache_.resize( node2->ref_+1);
 
+      int biggest= vnl_math_max( node1->ref_, node2->ref_);
+
+      if( biggest>= cachebool_.rows())
+	{
+	  vnl_matrix<bool> temp( (biggest+1)*2, (biggest+1)*2, false);
+
+	  for( int ci=0; ci< cachebool_.rows(); ci++) 
+	    for( int cj=0; cj< cachebool_.cols(); cj++)
+	      temp(ci,cj)= cachebool_(ci,cj);
+
+	  cachebool_= temp;
+	}
+
       cache_[node1->ref_].push_back( node2->ref_);
       cache_[node2->ref_].push_back( node1->ref_);
+
+      cachebool_( node1->ref_, node2->ref_) = true;
+      cachebool_( node2->ref_, node1->ref_) = true;
     }
 }
 
 
 // clever accessors
+
+vcl_vector<int> gmvl_connection_cache::get_connected_nodes( const gmvl_node_ref node1,
+							    const gmvl_node_ref node2) const
+{
+  vcl_vector<int> c= get_connected_nodes( node1);
+  vcl_vector<int> d;
+
+  for( int i=0; i< c.size(); i++)
+    if( cachebool_(node2->ref_,c[i]))
+      d.push_back(c[i]);
+
+  return d;
+}
+
+vcl_vector<int> gmvl_connection_cache::get_connected_nodes( const gmvl_node_ref node1,
+							    const gmvl_node_ref node2,
+							    const gmvl_node_ref node3) const
+{
+  vcl_vector<int> c= get_connected_nodes( node1);
+  vcl_vector<int> d;
+
+  for( int i=0; i< c.size(); i++)
+    if( cachebool_(node2->ref_,c[i]) &&
+	cachebool_(node3->ref_,c[i]))
+      d.push_back(c[i]);
+
+  return d;
+}
 
 void gmvl_connection_cache::rebuild()
 {
@@ -57,8 +102,24 @@ void gmvl_connection_cache::rebuild()
       if( node1->ref_>= cache_.size()) cache_.resize( node1->ref_+1);
       if( node2->ref_>= cache_.size()) cache_.resize( node2->ref_+1);
 
+      int biggest= vnl_math_max( node1->ref_, node2->ref_);
+
+      if( biggest>= cachebool_.rows())
+	{
+	  vnl_matrix<bool> temp( biggest+1, biggest+1, false);
+
+	  for( int ci=0; ci< cachebool_.rows(); ci++) 
+	    for( int cj=0; cj< cachebool_.cols(); cj++)
+	      temp(ci,cj)= cachebool_(ci,cj);
+
+	  cachebool_= temp;
+	}
+
       cache_[node1->ref_].push_back( node2->ref_);
       cache_[node2->ref_].push_back( node1->ref_);
+
+      cachebool_( node1->ref_, node2->ref_) = true;
+      cachebool_( node2->ref_, node1->ref_) = true;
     }
 }
 
@@ -82,6 +143,9 @@ ostream &operator<<( ostream &os, const gmvl_connection_cache c)
       
       os << ">";
     }
+
+  os << endl << c.cachebool_ << endl;
+
 
   return os;
 }

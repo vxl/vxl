@@ -21,7 +21,7 @@ SOURCES += gevd_bufferxy.cxx
 SOURCES += gevd_float_operators.cxx
 SOURCES += gevd_noise.cxx
 SOURCES += gevd_step.cxx
-# SOURCES += gevd_contour.cxx
+SOURCES += gevd_contour.cxx
 
 ######################################
 include ${IUEROOT}/config/top-rules.mk

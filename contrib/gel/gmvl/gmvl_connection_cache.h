@@ -8,6 +8,7 @@
 */
 
 #include <vcl/vcl_vector.h>
+#include <vnl/vnl_matrix.h>
 #include <gmvl/gmvl_connection_ref.h>
 
 class gmvl_connection_cache
@@ -23,6 +24,12 @@ public:
 
   // clever accessors
   vcl_vector<int> get_connected_nodes( const gmvl_node_ref node) const { return cache_[node->ref_]; }
+  vcl_vector<int> get_connected_nodes( const gmvl_node_ref node1,
+				       const gmvl_node_ref node2) const;
+  vcl_vector<int> get_connected_nodes( const gmvl_node_ref node1,
+				       const gmvl_node_ref node2,
+				       const gmvl_node_ref node3) const;
+
   void rebuild();
 
   // input output
@@ -35,6 +42,9 @@ protected:
 
   // cached connections
   vcl_vector<vcl_vector<int> > cache_;
+
+  // and more caching...
+  vnl_matrix<bool> cachebool_;
 };
 
 ostream &operator<<( ostream &os, const gmvl_connection_cache c);

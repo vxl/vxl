@@ -66,22 +66,14 @@ vcl_vector<gmvl_node_ref> gmvl_database::get_connected_nodes( const gmvl_node_re
 vcl_vector<gmvl_node_ref> gmvl_database::get_connected_nodes( const gmvl_node_ref node1, 
 							      const gmvl_node_ref node2) const
 {
-  vcl_vector<int> c1= connectioncache_.get_connected_nodes( node1);
-  vcl_vector<int> c2= connectioncache_.get_connected_nodes( node2);
+  vcl_vector<int> c= connectioncache_.get_connected_nodes( node1, node2);
   vcl_vector<gmvl_node_ref> l;
 
-  for( int i=0; i< c1.size(); i++)
+  for( int i=0; i< c.size(); i++)
     {
-      for( int j=0; j< c2.size(); j++)
-	{
-	  if( c1[i]== c2[j])
-	    {
-	      l.push_back( nodecache_.get( c1[i]));
-	      break;
-	    }
-	}
+      l.push_back( nodecache_.get( c[i]));
     }
-
+  
   return l;
 }
 
@@ -90,28 +82,14 @@ vcl_vector<gmvl_node_ref> gmvl_database::get_connected_nodes( const gmvl_node_re
 							      const gmvl_node_ref node2, 
 							      const gmvl_node_ref node3) const
 {
-  vcl_vector<int> c1= connectioncache_.get_connected_nodes( node1);
-  vcl_vector<int> c2= connectioncache_.get_connected_nodes( node2);
-  vcl_vector<int> c3= connectioncache_.get_connected_nodes( node3);
+  vcl_vector<int> c= connectioncache_.get_connected_nodes( node1, node2, node3);
   vcl_vector<gmvl_node_ref> l;
 
-  for( int i=0; i< c1.size(); i++)
+  for( int i=0; i< c.size(); i++)
     {
-      bool found= false;
-
-      for( int j=0; ( j< c2.size()) && !found; j++)
-	{
-	  for( int k=0; ( k< c3.size()) && !found; k++)
-	    {
-	      if(( c1[i]== c2[j]) && ( c2[j]== c3[k]))
-		{
-		  l.push_back( nodecache_.get( c1[i]));
-		  found= true;
-		}
-	    }
-	}  
+      l.push_back( nodecache_.get( c[i]));
     }
-
+  
   return l;
 }
 

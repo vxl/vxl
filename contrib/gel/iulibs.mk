@@ -2,4 +2,4 @@
 # crossge@crd.ge.com
 #
 
-IUE_PACKAGE_LIBRARIES += -lgst
+IUE_PACKAGE_LIBRARIES += gst
