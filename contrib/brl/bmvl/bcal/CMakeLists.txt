@@ -11,5 +11,5 @@ AUX_SOURCE_DIRECTORY(Templates bcal_sources)
 
 ADD_LIBRARY(bcal ${bcal_sources})
 
-TARGET_LINK_LIBRARIES(bcal vdgl vtol vsol vil vnl vbl)
+TARGET_LINK_LIBRARIES(bcal vtol vsol vil vnl vbl)
 
