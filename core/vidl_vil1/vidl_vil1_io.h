@@ -34,7 +34,7 @@ class vidl_vil1_io
   //-----------------------------------------------------
   //   Callbacks for initializing codecs
   //-------------------------------------------------------
-  VIDL_DLL_DATA static void (* load_mpegcodec_callback)( vidl_vil1_codec*);
+  VIDL_VIL1_DLL_DATA static void (* load_mpegcodec_callback)( vidl_vil1_codec*);
 
 
   //---------------------------------------------------------
