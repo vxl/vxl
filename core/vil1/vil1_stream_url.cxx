@@ -158,6 +158,7 @@ vil_stream_url::vil_stream_url(char const *url)
       path.replace(k, 1, "%20");
     else if (path[k] == '%')
       path.replace(k, 1, "%25");
+    k++;
   }
 
   // so far so good.
