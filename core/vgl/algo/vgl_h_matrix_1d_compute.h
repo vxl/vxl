@@ -9,12 +9,13 @@
 //
 // \verbatim
 //  Modifications
-//   23 Mar 2003 - J.L. Mundy - preparing for upgrade to vgl 
+//   23 Mar 2003 - J.L. Mundy - preparing for upgrade to vgl
 //                 computations restricted to vgl_homg_point_1d<double>
 //                 Seems somewhat overdoing it to template the transform
-//                 solvers since double is needed for robust computation 
+//                 solvers since double is needed for robust computation
 //   23 Jun 2003 - Peter Vanroose - made compute_cool_homg pure virtual
 //   24 Jun 2003 - Peter Vanroose - implemented the second compute() method
+//   13 Jun 2004 - Peter Vanroose - added compute() overload, similar to 2d interface
 // \endverbatim
 
 #include <vgl/vgl_homg_point_1d.h>
@@ -25,8 +26,8 @@ class vgl_h_matrix_1d_compute
 {
  public:
   //
-  vgl_h_matrix_1d_compute() : verbose_(false) { }
-  virtual ~vgl_h_matrix_1d_compute() { }
+  vgl_h_matrix_1d_compute() : verbose_(false) {}
+  virtual ~vgl_h_matrix_1d_compute() {}
 
   //: set this to true for verbose run-time information; default is false
   void verbose(bool v) { verbose_=v; }
@@ -47,6 +48,12 @@ class vgl_h_matrix_1d_compute
                unsigned int length, // length of both p1 and p2
                vgl_h_matrix_1d<double>& H)
   { return compute_array_dbl(p1,p2,length,H); }
+
+  //: homography from matched points - return h_matrix
+  vgl_h_matrix_1d<double>
+  compute(vcl_vector<vgl_homg_point_1d<double> > const& p1,
+          vcl_vector<vgl_homg_point_1d<double> > const& p2)
+  { vgl_h_matrix_1d<double> H; compute(p1, p2, H); return H; }
 
  protected:
   bool verbose_;
