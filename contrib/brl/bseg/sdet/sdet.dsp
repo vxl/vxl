@@ -2,10 +2,10 @@
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-# ITK DSP Header file
-# This file is read by the build system of itk, and is used as the top part of
+# vxl DSP Header file
+# This file is read by the build system of vxl, and is used as the top part of
 # a microsoft project dsp header file
-# IF this is in a dsp file, then it is not the header, but has
+# If this is in a dsp file, then it is not the header, but has
 # already been used, so do not edit here...
 
 # variables to REPLACE
@@ -123,6 +123,12 @@ SOURCE=.\sdet_region_proc.cxx
 SOURCE=.\sdet_region_proc_params.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\sdet_harris_detector.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_harris_detector_params.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+sdet_region_edge-.cxx
 # End Source File
 # End Group
@@ -155,8 +161,14 @@ SOURCE=.\sdet_region_proc.h
 # Begin Source File
 SOURCE=.\sdet_region_proc_params.h
 # End Source File
-SOURCE=.\sdet_region_edge_sptr.h
 # Begin Source File
+SOURCE=.\sdet_region_edge_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_harris_detector.h
+# End Source File
+# Begin Source File
+SOURCE=.\sdet_harris_detector_params.h
 # End Source File
 # End Group
 # End Target
