@@ -49,6 +49,8 @@
 #include <vgl/algo/vgl_h_matrix_2d_compute.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_4point.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
+#include <vgl/algo/vgl_h_matrix_2d_optimize.h>
+#include <vgl/algo/vgl_h_matrix_2d_optimize_lmq.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vgl/algo/vgl_line_2d_regression.h>
 #include <vgl/algo/vgl_norm_trans_2d.h>
