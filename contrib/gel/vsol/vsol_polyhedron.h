@@ -97,7 +97,7 @@ public:
   //---------------------------------------------------------------------------
   //: Compute the bounding box of `this'
   //---------------------------------------------------------------------------
-  virtual vsol_box_3d_sptr compute_bounding_box(void) const;
+  virtual void compute_bounding_box(void);
 
   //---------------------------------------------------------------------------
   //: Return the number of vertices
