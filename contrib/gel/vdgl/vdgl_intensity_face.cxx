@@ -137,8 +137,8 @@ vdgl_intensity_face::IsHoleP()
     return false;
   vtol_edge_sptr e = edges->front();
   bool ret = false;
-  const vcl_list<vtol_topology_object*>* chains = e->superiors_list();
-  for (vcl_list<vtol_topology_object*>::const_iterator i=chains->begin(); i!=chains->end(); ++i)
+  const vcl_vector<vtol_topology_object_sptr>* chains = e->superiors();
+  for (vcl_vector<vtol_topology_object_sptr>::const_iterator i=chains->begin(); i!=chains->end(); ++i)
     {
       vtol_one_chain* onec = (*i)->cast_to_one_chain();
       if (onec->numsup() > 0)
