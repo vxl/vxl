@@ -4,7 +4,8 @@
 #include "bugl_gaussian_point_2d.h"
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_det.h>
-#include <vnl/vnl_double_2.h>
+#include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_math.h>
 
 template<class T>
 bugl_gaussian_point_2d<T>::bugl_gaussian_point_2d(T x, T y, vnl_matrix_fixed<T, 2, 2> & s)
@@ -14,8 +15,8 @@ bugl_gaussian_point_2d<T>::bugl_gaussian_point_2d(T x, T y, vnl_matrix_fixed<T, 
 }
 
 template<class T>
-bugl_gaussian_point_2d<T>::bugl_gaussian_point_2d(\
-  vgl_point_2d<T> &p, vnl_matrix_fixed<T, 2, 2> &s)\
+bugl_gaussian_point_2d<T>::bugl_gaussian_point_2d(vgl_point_2d<T> &p,
+                                                  vnl_matrix_fixed<T, 2, 2> &s)
 : bugl_uncertainty_point_2d<T>(p)
 {
   set_covariant_matrix(s);
@@ -34,7 +35,7 @@ void bugl_gaussian_point_2d<T>::set_point(vgl_point_2d<T> &p)
 }
 
 template<class T>
-void bugl_gaussian_point_2d<T>::set_covariant_matrix( vnl_matrix_fixed<T, 2, 2> &s)
+void bugl_gaussian_point_2d<T>::set_covariant_matrix(vnl_matrix_fixed<T,2,2> &s)
 {
   sigma_ = s;
   sigma_inv_ = vnl_inverse(s);
@@ -45,7 +46,7 @@ template<class T>
 T bugl_gaussian_point_2d<T>::prob_at(vgl_point_2d<T> &p)
 {
   vnl_vector_fixed<T, 2> v(p.x() - this->x(), p.y() - this->y());
-  return exp(-0.5*(dot_product(v, sigma_inv_*v)))/(2*3.1415926*det_);
+  return vcl_exp(-0.5*(dot_product(v, sigma_inv_*v)))/(2*vnl_math::pi*det_);
 }
 
 //----------------------------------------------------------------------------
