@@ -24,7 +24,7 @@ class bcal_calibrate_plane : public bcal_calibrate_object
 {
   vcl_vector<vgl_homg_point_2d<double> > pts_;
  public:
-	 int read_data(vcl_vector<vgl_homg_point_2d<double> > &pts);
+  int read_data(vcl_vector<vgl_homg_point_2d<double> > &pts);
   vcl_vector<vgl_homg_point_2d<double> >& get_points() { return pts_;}
   int readData(const char* fname);
   bcal_calibrate_plane();

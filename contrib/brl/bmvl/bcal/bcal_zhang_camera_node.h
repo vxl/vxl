@@ -22,14 +22,14 @@
 class bcal_zhang_camera_node : public bcal_camera_node
 {
  private:
-   vcl_vector< vgl_homg_point_2d<double> > *point_lists_ptr_;
+  vcl_vector< vgl_homg_point_2d<double> > *point_lists_ptr_;
 
  public: // constructor and deconstructor
-   bcal_zhang_camera_node(int id=0);
-   virtual ~bcal_zhang_camera_node();
+  bcal_zhang_camera_node(int id=0);
+  virtual ~bcal_zhang_camera_node();
  public:
-	 int read_data(vcl_vector< vgl_homg_point_2d<double> > &ppts, int iframe);
-   int removeData();
+  int read_data(vcl_vector< vgl_homg_point_2d<double> > &ppts, int iframe);
+  int removeData();
 
   // set get function
   vcl_vector< vgl_homg_point_2d<double> >& getPoints(int iview)
