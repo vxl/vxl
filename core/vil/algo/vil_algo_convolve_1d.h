@@ -221,8 +221,8 @@ inline void vil2_algo_convolve_1d(const vil2_image_view<srcT>& src_im,
     const srcT*  src_row  = src_im.top_left_ptr()+p*src_im.pstep();
     const destT* dest_row = dest_im.top_left_ptr()+p*dest_im.pstep();
 
-	// Apply convolution to each row in turn
-	for (int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
+    // Apply convolution to each row in turn
+    for (int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
       vil2_algo_convolve_1d(src_row,ni,s_istep,  dest_row,d_istep,
                             kernel,l_lo,k_hi,ac,start_option,end_option);
   }
