@@ -182,10 +182,11 @@ class vpgl_rational_camera : public vpgl_basic_camera
   // IMPLEMENTS WITH vnl_vector<double> PARAMETER.
   // init_pt_ ATTRIBUTE IN THIS CLASS SEEMS UNNECESSARY.
 #if 0
-  virtual void get_init_pt(IUE_vector<float>& p);
-  void set_init_pt(IUE_vector<float> * init_pt);
+  virtual void get_init_pt(vnl_vector<float>& p);
+  void set_init_pt(vnl_vector<float> * init_pt);
 #endif
-  virtual void set_init_pt(double x, double y, double z);
+  void set_init_pt(double x, double y, double z);
+  virtual void set_init_pt(vnl_vector<double> const& pt) { set_init_pt(pt[0], pt[1], pt[2]); }
 
  protected:
 
