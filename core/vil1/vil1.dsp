@@ -372,9 +372,6 @@ SOURCE=.\vil1_memory_image.cxx
 SOURCE=.\vil1_memory_image_impl.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil1_vil.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vil1_memory_image_window.cxx
 # End Source File
 # Begin Source File
