@@ -74,9 +74,6 @@ void vil2_value_range(vil_rgb<unsigned char>& min_value, vil_rgb<unsigned char>&
 void vil2_value_range(vil_rgb<float>& min_value, vil_rgb<float>& max_value,
                       const vil2_image_view<vil_rgb<float> >& view);
 
-//: Convenience function for loading an image into an image view.
-vil2_image_view_base * vil2_load_into_memory(const char *);
-
 //: print all image data to os in a grid
 template<class T>
 void vil2_print_all(vcl_ostream& os,const vil2_image_view<T>& view);

@@ -7,7 +7,6 @@
 #include <vil/vil_rgb.h>
 #include <vil2/vil2_image_view_functions.h>
 #include <vil2/vil2_image_data.h>
-#include <vil2/vil2_load.h>
 
 //: Explicit overload for unsigned char
 void vil2_print_value(vcl_ostream& os, const unsigned char& value)
@@ -72,12 +71,4 @@ void vil2_value_range(vil_rgb<float>& min_value, vil_rgb<float>& max_value,
   vil2_value_range(min_value.b,max_value.b,plane_view.plane(2));
 }
 
-
-//: Convenience function for loading an image into an image view.
-vil2_image_view_base * vil2_load_into_memory(const char *file)
-{
-  vil2_image_data_sptr data = vil2_load(file);
-  if (!data) return 0;
-  return data -> get_view(0,0,0,data->nx(), data->ny(), data->nplanes());
-}
 

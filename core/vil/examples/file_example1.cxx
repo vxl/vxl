@@ -20,7 +20,7 @@ int main(int argc, char** argv)
 
   // This is how we initialise an image data object.
 
-  vil2_image_data_sptr data = vil2_load(filename.c_str());
+  vil2_image_data_sptr data = vil2_load_image_data(filename.c_str());
   
 
   // This is how we get some image pixels from it.

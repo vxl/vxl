@@ -30,15 +30,20 @@
 #include <vil/vil_fwd.h>
 #include <vil2/vil2_image_data.h>
 
-//: Load an image from a file, possibly performing expected conversions.
-vil2_image_data_sptr vil2_load(char const* filename);
+//: Load an image data object from a file, possibly performing expected conversions.
+vil2_image_data_sptr vil2_load_image_data(char const* filename);
 
 //: Load raw from stream.
-vil2_image_data_sptr vil2_load_raw(vil_stream *);
+vil2_image_data_sptr vil2_load_image_data_raw(vil_stream *);
 
 //: Load raw from a filename.
 // A convience function.
-vil2_image_data_sptr vil2_load_raw(char const*);
+vil2_image_data_sptr vil2_load_image_data_raw(char const*);
+
+//: Convenience function for loading an image into an image view.
+vil2_image_view_base * vil2_load(const char *);
+
+
 
 
 #endif // vil2_load_h_

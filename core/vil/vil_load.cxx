@@ -16,7 +16,7 @@
 #include <vil2/vil2_image_data.h>
 
 
-vil2_image_data_sptr vil2_load_raw(vil_stream *is)
+vil2_image_data_sptr vil2_load_image_data_raw(vil_stream *is)
 {
   for (vil2_file_format** p = vil2_file_format::all(); *p; ++p) {
 #if 0 // debugging
@@ -39,20 +39,20 @@ vil2_image_data_sptr vil2_load_raw(vil_stream *is)
   return 0;
 }
 
-vil2_image_data_sptr vil2_load_raw(char const* filename)
+vil2_image_data_sptr vil2_load_image_data_raw(char const* filename)
 {
   vil_stream *is = vil_open(filename, "r");
   if (is)
-    return vil2_load_raw(is);
+    return vil2_load_image_data_raw(is);
   else {
     vcl_cerr << __FILE__ ": Failed to load [" << filename << "]\n";
     return vil2_image_data_sptr(0);
   }
 }
 
-vil2_image_data_sptr vil2_load(char const* filename)
+vil2_image_data_sptr vil2_load_image_data(char const* filename)
 {
-  vil2_image_data_sptr i = vil2_load_raw(filename);
+  vil2_image_data_sptr i = vil2_load_image_data_raw(filename);
   if (!i) return i; // leave early if it hasn't loaded.
 
   bool top_first=true, bgr=false;
@@ -66,4 +66,14 @@ vil2_image_data_sptr vil2_load(char const* filename)
     i = vil_flip_components(i);
 #endif// VIL2_TO_BE_FIXED
   return i;
+}
+
+
+
+//: Convenience function for loading an image into an image view.
+vil2_image_view_base * vil2_load(const char *file)
+{
+  vil2_image_data_sptr data = vil2_load_image_data(file);
+  if (!data) return 0;
+  return data -> get_view(0,0,0,data->nx(), data->ny(), data->nplanes());
 }
