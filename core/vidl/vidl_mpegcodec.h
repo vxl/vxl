@@ -2,15 +2,15 @@
 #define vidl_mpegcodec_h
 
 //:
-// \file 
-//  
+// \file
+//
 // \author l.e.galup
 //  this class sets up and executes the vidl_mpegcodec_helper, which
 //  is a wrapped port of mpeg2dec. it accepts the vo open function ptr
 //  in the constructor. this was done this way to make it more extensible,
 //  in case other video outputs would be added later.
 //
-//  To use: 
+//  To use:
 //  1) load the file
 //  2) set the attributes. format, demux, ...
 //  3) then use get_section. the get section call will actualize
@@ -18,18 +18,16 @@
 //     initialized, you are stuck with that roi. i could change
 //     this later, if it proves necessary.
 //
-//  this class works on both mpeg1 and mpeg2. 
+//  this class works on both mpeg1 and mpeg2.
 // \date July 2002
 // \verbatim
 // Modifications
 // \endverbatim
 
 #include "vidl_mpegcodec_helper.h"
-#include <vbl/vbl_ref_count.h>
 #include <vidl/vidl_codec.h>
 #include <vidl/vidl_frame_sptr.h>
 #include <vidl/vidl_codec_sptr.h>
-#include <vcl_map.h>
 
 class vil_image;
 
@@ -47,19 +45,18 @@ public:
   //pure virtual methods
   //------------------------------------------
 
-  bool   get_section(int frame_position, 
-		     void* ib, 
-		     int x0, 
-		     int y0, 
-		     int xs, 
-		     int ys) const;
-  int    put_section(int frame_position, 
-		     void* ib, 
-		     int x0, 
-		     int y0, 
-		     int xs, 
-		     int ys){return 0;}
- 
+  bool   get_section(int frame_position,
+                     void* ib,
+                     int x0,
+                     int y0,
+                     int xs,
+                     int ys) const;
+  int    put_section(int frame_position,
+                     void* ib,
+                     int x0,
+                     int y0,
+                     int xs,
+                     int ys){return 0;}
 
   virtual bool probe(const char* fname);
   virtual vidl_codec_sptr load(const char* fname, char mode = 'r' );

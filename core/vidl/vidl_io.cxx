@@ -150,7 +150,7 @@ vidl_clip_sptr  vidl_io::load_clip(
           return 0;
 #if 0 // avoid warnings about unreachable code - fsm@robots.ox.ac.uk
           Dir dir(fname);
-          if(!dir.IsOpen())
+          if (!dir.IsOpen())
              return 0;
 #endif
       }
@@ -173,15 +173,15 @@ vidl_clip_sptr  vidl_io::load_clip(
           return 0;
 
 #ifdef HAS_MPEG
-	//this calls the dialog box necessary for initialization
-	//of the mpeg codec.
-	vidl_mpegcodec * vmp = (*i)->castto_vidl_mpegcodec();
-	if (vmp)
-	  load_mpegcodec_callback(vmp);
+        //this calls the dialog box necessary for initialization
+        //of the mpeg codec.
+        vidl_mpegcodec * vmp = (*i)->castto_vidl_mpegcodec();
+        if (vmp)
+          load_mpegcodec_callback(vmp);
 #endif
 
         vidl_clip_sptr clip = new vidl_clip(codec, start, end, increment);
-	vcl_cout << "vidl_io::load_move. just got a new clip." << vcl_endl;
+        vcl_cout << "vidl_io::load_move. just got a new clip.\n";
         return clip;
       }
 
@@ -361,7 +361,7 @@ static vidl_clip_sptr load_from_file_list(char const* fname)
 
   vul_sequence_filename_map map(fname);
 
-  for(int i = 0;i < map.get_nviews(); ++i) {
+  for (int i = 0;i < map.get_nviews(); ++i) {
     vcl_string fullpath = map.image_name(i);
     // check to see if file is a directory.
     if (vul_file::is_directory(fullpath))

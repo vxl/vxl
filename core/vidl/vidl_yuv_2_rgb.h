@@ -3,12 +3,13 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// this file has been copied over from oxl/oxp and optimized a little bit.
-// i experimented with  a vul_timer to shave as many milliseconds off as possible.
-// l.e.galup  7-15-02
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
+//
+// this file has been copied over from oxl/oxp and optimized a little bit.
+// i experimented with  a vul_timer to shave as many milliseconds off as possible.
+// l.e.galup  7-15-02
 //
 // \verbatim
 // RGB to YUV Conversion
