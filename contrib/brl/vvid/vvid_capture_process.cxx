@@ -32,7 +32,7 @@ bool vvid_capture_process::finish()
   vidl_clip_sptr clip = new vidl_clip(frames_);
   vidl_movie_sptr mov= new vidl_movie();
   mov->add_clip(clip);
-  if(!vidl_io::save(mov.ptr(), video_file_.c_str(), "ImageList"))
+  if (!vidl_io::save(mov.ptr(), video_file_.c_str(), "ImageList"))
     {
       vcl_cout << "In vvid_capture_process::finish() - failed to save video\n";
       return false;

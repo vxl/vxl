@@ -25,7 +25,7 @@ bool vvid_frame_diff_process::execute()
   this->clear_input();
 
   //if first frame, just cache
-  if(first_frame_)
+  if (first_frame_)
     {
       img0_=fimg;
       first_frame_ = false;
@@ -34,8 +34,8 @@ bool vvid_frame_diff_process::execute()
 
   //compute difference
   vil_memory_image_of<float> dif = brip_float_ops::difference(img0_,fimg);
-    
-  // push back buffer 
+
+  // push back buffer
   img0_=fimg;
 
   //convert output back to unsigned char

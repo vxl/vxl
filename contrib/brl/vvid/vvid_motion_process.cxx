@@ -19,7 +19,7 @@ void vvid_motion_process::compute_motion(vil_image ix, vil_image iy)
 
   //Get sqrt (sigma0*sigma1) of the gradient matrix on a 3x3 neighborhood
   int n = 1;
-  vil_memory_image_of<float> sing = 
+  vil_memory_image_of<float> sing =
     brip_float_ops::sqrt_grad_singular_values(fimg, n);
   //Get the time derivative
   vil_memory_image_of<float> Im(queuex_[1]);
@@ -28,9 +28,9 @@ void vvid_motion_process::compute_motion(vil_image ix, vil_image iy)
   int w = fimg.width(), h = fimg.height();
   vil_memory_image_of<float> out;
   out.resize(w,h);
-  for(int y = 0; y<h; y++)
-    for(int x = 0; x<w; x++)
-      out(x,y) = fabs(It(x,y))*sing(x,y);
+  for (int y = 0; y<h; y++)
+    for (int x = 0; x<w; x++)
+      out(x,y) = vcl_fabs(It(x,y))*sing(x,y);
   output_image_ = brip_float_ops::convert_to_byte(out, 0, 10000.0);
 }
 
@@ -57,7 +57,7 @@ bool vvid_motion_process::execute()
  // vil_memory_image_of<float> fx = brip_float_ops::dx(fsmooth);
  // vil_memory_image_of<float> fy = brip_float_ops::dx(fsmooth);
   this->clear_input();
-  switch(state_)  
+  switch(state_)
     {
     case NO_IMAGE:
       queuex_.push_back(fsmooth);
