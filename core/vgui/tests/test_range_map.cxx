@@ -1,4 +1,4 @@
-// This is brl/bbas/vgui/tests/vgui_test_range_map.cxx
+// This is core/vgui/tests/test_range_map.cxx
 #include <testlib/testlib_test.h>
 #include <vxl_config.h>
 #include <vgui/vgui_range_map.h>
@@ -45,7 +45,7 @@ static void test_range_map()
   TEST("range map params RGBA", RGBAequal&&RGBAnot_equal, true);
 
 
-	//The following types are the most likely to be used in practice
+  //The following types are the most likely to be used in practice
   //
   // bool pixel type
   //
@@ -67,13 +67,12 @@ static void test_range_map()
   float val8f = fmap8[127];
   unsigned size8 = Lrmuc.map_size();
   bool map_good = false;
-  if(Lrmuc.mapable())
-    {
-      map_good = true;
-      for(unsigned i = 0; i<size8; ++i)
-        if(i>=0&&i<=255)
-          map_good = map_good&&map8[i]==(vxl_byte)i;
-    }
+  if (Lrmuc.mapable())
+  {
+    map_good = true;
+    for (unsigned i = 0; i<size8 && i<256; ++i)
+      map_good = map_good && map8[i]==(vxl_byte)i;
+  }
   TEST("vxl_byte values", val8==127&&!Lrmuc.offset()&&map_good, true);
 
   //
@@ -86,12 +85,12 @@ static void test_range_map()
   unsigned sizesc = Lrmsc.map_size();
   int offsc = Lrmsc.offset();
   map_good = false;
-  if(Lrmsc.mapable())
-    {
-      map_good = true;
-      for(int i = -128; i<=127; ++i)
-        map_good = map_good&&(mapsc[i+offsc]==(i+offsc));
-    }
+  if (Lrmsc.mapable())
+  {
+    map_good = true;
+    for (int i = -128; i<=127; ++i)
+      map_good = map_good&&(mapsc[i+offsc]==(i+offsc));
+  }
   TEST("signed char values", valsc==64&&Lrmsc.offset()==128&&map_good, true);
 
 //
@@ -104,13 +103,13 @@ static void test_range_map()
   unsigned sizesh = Lrmsh.map_size();
   int offsh = Lrmsh.offset();
   map_good = false;
-  if(Lrmsh.mapable())
-    {
-	  map_good = true;
-      for(int i = -offsh; i<=(offsh-1); ++i)
-        if(i>=-128 && i<=127)
-          map_good = map_good&&mapsc[i+offsc]==(i+offsc);
-    }
+  if (Lrmsh.mapable())
+  {
+    map_good = true;
+    for (int i = -offsh; i<=(offsh-1); ++i)
+      if (i>=-128 && i<=127)
+        map_good = map_good&&mapsc[i+offsc]==(i+offsc);
+  }
   TEST("short values", valsh==128&&Lrmsh.offset()==32768&&map_good, true);
 
 //
@@ -123,31 +122,29 @@ static void test_range_map()
   unsigned sizeush = Lmush.map_size();
   int offush = Lmush.offset();
   map_good = false;
-  if(Lmush.mapable())
-    {
-      map_good = true;
-      for(int i = 0; i<=(sizeush-1); ++i)
-        if(i>=0 && i<=255)
-          map_good = map_good&&mapush[i]==(i);
-    }
+  if (Lmush.mapable())
+  {
+    map_good = true;
+    for (unsigned int i=0; i<sizeush && i<256; ++i)
+      map_good = map_good && mapush[i]==i;
+  }
   TEST("unsigned short values", valsh==(vxl_byte)128&&offush==0&&map_good, true);
-  
+
 //
 // float
 //
   vgui_range_map_params_sptr Lrmpf = new vgui_range_map_params(-128,127);
   vgui_range_map<float> Lrmf(*Lrmpf);
-  map_good = true;  
-  for(float x = -128.0f; x<128.0f; ++x)
+  map_good = true;
+  for (float x = -128.0f; x<128.0f; ++x)
     map_good = map_good&&(Lrmf.map_L_pixel(x)==(vxl_byte)(x+128.0f));
-  
+
   TEST("float values", map_good, true);
 
   //
   // RGB unsigned char
   //
-  long double minR = 0, maxR = 255, minG = minR,
-    maxG=maxR, minB=minR, maxB = maxR;
+  long double minR = 0, maxR = 255, minG=minR, maxG=maxR, minB=minR, maxB=maxR;
   vgui_range_map_params_sptr RGBrmpuc =
     new vgui_range_map_params(minR, maxR, minG, maxG, minB, maxB);
   vgui_range_map<vxl_byte> RGBrmuc(*RGBrmpuc);
@@ -162,21 +159,17 @@ static void test_range_map()
   float* fBmap = RGBrmuc.fBmap();
   unsigned RGBsize8 = RGBrmuc.map_size();
   map_good = false;
-  if(RGBrmuc.mapable())
-    {
-      map_good = true;  
-      for(unsigned i = 0; i<RGBsize8; ++i)
-        if(i>=0&&i<=255)
-          {
-            vxl_byte ib = (vxl_byte)i;
-            map_good = map_good&&
-              (vxl_byte)(fRmap[ib]*255 + 0.5)==Rmap[ib] &&
-              (vxl_byte)(fGmap[ib]*255 + 0.5)==Gmap[ib] &&
-              (vxl_byte)(fBmap[ib]*255 + 0.5)==Bmap[ib];
-          }
-    }
+  if (RGBrmuc.mapable())
+  {
+    map_good = true;
+    for (unsigned i = 0; i<RGBsize8 && i<256; ++i)
+      map_good = map_good &&
+                 (vxl_byte)(fRmap[i]*255 + 0.5)==Rmap[i] &&
+                 (vxl_byte)(fGmap[i]*255 + 0.5)==Gmap[i] &&
+                 (vxl_byte)(fBmap[i]*255 + 0.5)==Bmap[i];
+  }
 
   TEST("RGB vxl_byte values", Rval==127&&Gval==127&&Bval==127&&!RGBrmuc.offset()&&map_good, true);
-
 }
+
 TESTMAIN(test_range_map);
