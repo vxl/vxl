@@ -42,7 +42,7 @@ struct vbl_array_1d
     begin_ = (T*) new char [n * sizeof(T)]; // FIXME alignment
     end_   = begin_ + n;
     alloc_ = begin_ + n;
-    for (unsigned long i=0; i< (unsigned long)n; ++i)
+    for (vcl_ptrdiff_t i=0; i<n; ++i)
       new (begin_ + i) T(b[i]);
   }
 
@@ -81,17 +81,17 @@ struct vbl_array_1d
     }
   }
 
-  void reserve(unsigned long new_n) {
+  void reserve(vcl_ptrdiff_t new_n) {
     vcl_ptrdiff_t n = end_ - begin_;
     assert(n>=0);
-    if (new_n <= (unsigned long)n)
+    if (new_n <= n)
       return;
 
     T *new_begin_ = (T*) new char [new_n * sizeof(T)]; // FIXME alignment
     T *new_end_   = new_begin_ + n;
     T *new_alloc_ = new_begin_ + new_n;
 
-    for (unsigned long i=0; i<(unsigned long)n; ++i) {
+    for (vcl_ptrdiff_t i=0; i<n; ++i) {
       new (new_begin_ + i) T(begin_[i]);
       begin_[i].~T();
     }
@@ -139,17 +139,17 @@ struct vbl_array_1d
 
   //: Get the ith element.
   // #define NDEBUG to turn bounds checking off.
-  reference       operator[](unsigned long i)
+  reference       operator[](vcl_ptrdiff_t i)
   {
-    assert (int(i) < end_ - begin_);
+    assert (i >= 0 && i < end_ - begin_);
     return begin_[i];
   }
 
   //: Get the ith element.
   // #define NDEBUG to turn bounds checking off.
-  const_reference operator[](unsigned long i) const
+  const_reference operator[](vcl_ptrdiff_t i) const
   {
-    assert (vcl_ptrdiff_t(i) < end_ - begin_);
+    assert (i >= 0 && i < end_ - begin_);
     return begin_[i];
   }
 
