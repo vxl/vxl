@@ -65,7 +65,7 @@ static int camswindex;
 
 
 // convert radians to degrees
-#define DEGREES(R)  ( (R) * (180 / M_PI) )
+#define DEGREES(R)  ( (R) * (180 / QV_PI) )
 
 // special names (info nodes)
 #define BACKGROUND_INFO "BackgroundColor"

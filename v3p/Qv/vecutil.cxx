@@ -338,7 +338,7 @@ void sphere2cartes (const spherepoint& s, point3D& p)
 
 
 // convert radians to degrees
-#define DEGREES(R)  ( (R) * (180 / M_PI) )
+#define DEGREES(R)  ( (R) * (180 / QV_PI) )
 
 
 // rotatearoundaxis

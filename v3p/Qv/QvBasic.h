@@ -35,12 +35,7 @@ typedef int QvBool;
 #ifdef __PC__
 #define strdup _strdup
 #endif
-#ifndef M_PI
-#define M_PI    3.14159265358979323846
-#endif
-#ifndef M_PI_4
-#define M_PI_4  0.78539816339744830962
-#endif
-
+#define QV_PI   3.14159265358979323846  // M_PI is not iso standard
+#define QV_PI_4 0.78539816339744830962  // M_PI_4 is not iso standard
 
 #endif /* _QV_BASIC_ */

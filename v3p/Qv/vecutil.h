@@ -49,8 +49,8 @@
 #  ifndef MAXFLOAT
 #    define MAXFLOAT FLT_MAX
 #  endif
-#  ifndef M_PI
-#    define M_PI  3.14159265358979323846  // contained in no iso standard header file
+#  define QV_PI   3.14159265358979323846  // M_PI is not iso standard
+#  define QV_PI_4 0.78539816339744830962  // M_PI_4 is not iso standard
 #  endif
 #  define ARRAYconst  /* gorasche: causes problems with MSC */
 #else
