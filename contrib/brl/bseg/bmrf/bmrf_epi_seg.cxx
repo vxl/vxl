@@ -8,6 +8,7 @@
 #include <bmrf/bmrf_epi_point.h>
 
 // constructors
+
 bmrf_epi_seg::bmrf_epi_seg()
 {
   limits_valid_ = false;
@@ -246,7 +247,7 @@ double bmrf_epi_seg::left_ds(double alpha)
 {
   assert(alpha >= this->min_alpha() && alpha <= this->max_alpha());
   double last_a = this->min_alpha();
-  if(alpha < int_alpha_.front())
+  if (int_alpha_.size() == 0 || alpha < int_alpha_.front())
     return left_ds_.front();
 
   int n = int_alpha_.size();
@@ -265,7 +266,7 @@ double bmrf_epi_seg::left_ds(double alpha)
                                     left_ds_[i], alpha);
     return lds;
   }
-  
+
   return left_ds_.back();
 }
 
@@ -275,7 +276,7 @@ double bmrf_epi_seg::left_int(double alpha)
 {
   assert(alpha >= this->min_alpha() && alpha <= this->max_alpha());
   double last_a = this->min_alpha();
-  if(alpha < int_alpha_.front())
+  if (int_alpha_.size() == 0 || alpha < int_alpha_.front())
     return left_int_.front();
 
   int n = int_alpha_.size();
@@ -303,7 +304,7 @@ double bmrf_epi_seg::right_ds(double alpha)
 {
   assert(alpha >= this->min_alpha() && alpha <= this->max_alpha());
   double last_a = this->min_alpha();
-  if(alpha < int_alpha_.front())
+  if (int_alpha_.size() == 0 || alpha < int_alpha_.front())
     return right_ds_.front();
 
   int n = int_alpha_.size();
@@ -331,7 +332,7 @@ double bmrf_epi_seg::right_int(double alpha)
 {
   assert(alpha >= this->min_alpha() && alpha <= this->max_alpha());
   double last_a = this->min_alpha();
-  if(alpha < int_alpha_.front())
+  if (int_alpha_.size() == 0 || alpha < int_alpha_.front())
     return right_int_.front();
 
   int n = int_alpha_.size();
@@ -582,8 +583,7 @@ void bmrf_epi_seg::b_read(vsl_b_istream &is)
   {
    case 1:
     {
-      int n=0, m=0;
-      vsl_b_read(is, n);
+      int n=0; vsl_b_read(is, n);
       seg_.clear();
       for (int i=0; i<n; i++)
       {
@@ -591,7 +591,7 @@ void bmrf_epi_seg::b_read(vsl_b_istream &is)
         ep->b_read(is);
         this->seg_.push_back(ep);
       }
-      vsl_b_read(is, m);
+      int m; vsl_b_read(is, m);
       this->int_alpha_.resize(m);
       this->left_ds_.resize(m);
       this->left_int_.resize(m);
