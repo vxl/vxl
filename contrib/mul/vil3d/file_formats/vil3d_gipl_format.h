@@ -32,6 +32,7 @@ class vil3d_gipl_format : public vil3d_file_format
                                                       unsigned nplanes,
                                                       enum vil_pixel_format) const;
 
+
   //: default filename tag for this image.
   virtual const char * tag() const {return "gipl";}
 };
@@ -41,18 +42,69 @@ class vil3d_gipl_format : public vil3d_file_format
 class vil3d_gipl_image: public vil3d_image_resource
 {
   vil_smart_ptr<vil_stream> is_;
+  
+  //: output stream
+  vil_smart_ptr<vil_stream> os_;
+
   //: image dimensions
   unsigned dim1_, dim2_, dim3_;
+
+  //: number of planes
+  unsigned nplanes_;
 
   //: Physical Voxel dimensions ( in mm )
   float vox_width1_, vox_width2_, vox_width3_;
 
   bool read_header(vil_stream *is);
+  bool write_header(void);
 
   //: Expected pixel type.
   enum vil_pixel_format pixel_format_;
+
+  //: Orientation of the image
+  char orientation_flag_;
+
+  //: Minimum and maximum voxel values in the image
+  double min_val_, max_val_;
+
+  //: X, Y, Z and T offset
+  double origin1_, origin2_, origin3_;
+
+  float interslice_gap_;
+
+  int start_of_data_;
+
  public:
+	 vil3d_gipl_image(vil_stream* os, unsigned);
   vil3d_gipl_image(vil_stream *);
+  
+/* vil3d_gipl_image(vil_stream* os,
+					unsigned ni,
+					unsigned nj,
+					unsigned nk,
+					unsigned nplanes,
+					enum vil_pixel_format);
+ */
+
+ vil3d_gipl_image(vil_stream* os,
+	  unsigned ni,
+	  unsigned nj,
+	  unsigned nk,
+	  unsigned nplanes,
+	  enum vil_pixel_format format,
+	  float vox_width1=1.0,
+	  float vox_width2=1.0,
+	  float vox_width3=1.0,
+	  char orientation_flag=0, //GIPL_UNDEFINED_ORIENTATION
+	  double min_val=0.0,
+	  double max_val=0.0,
+	  double origin1=0.0,
+	  double origin2=0.0,
+	  double origin3=0.0,
+	  float interslice_gap=0.0
+	  );
+	  
+
   virtual ~vil3d_gipl_image();
 
   //: Dimensions:  nplanes x ni x nj x nk.
@@ -96,6 +148,9 @@ class vil3d_gipl_image: public vil3d_image_resource
   //: Extra property information
   // This will just return the property of the first slice in the list.
   virtual bool get_property(char const* label, void* property_value = 0) const;
+
+//  bool put_view(const vil3d_image_view_base& im,
+//                        unsigned i0=0, unsigned j0=0, unsigned k0=0);
 };
 
 #endif
