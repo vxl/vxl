@@ -174,8 +174,7 @@ the graph, information about the tableau will be streamed to cout.
 
 @figure
 @image{tableau-hierarchy-annotated,,3in}
-@caption{2} The nested tableaux form a tree structure.  This structure can be
-displayed by the @code{vgui_tview_launcher_tableau} which is part of the composite @code{vgui_shell_tableau}. The edges in the graph are represented by instances of the class @code{vgui_parent_child_link}.
+@caption{2} The nested tableaux form a tree structure.  This structure can be displayed by the @code{vgui_tview_launcher_tableau} which is part of the composite @code{vgui_shell_tableau}. The edges in the graph are represented by instances of the class @code{vgui_parent_child_link}.
 @endcaption
 @endfigure
 
@@ -601,9 +600,7 @@ The appearance of this program is shown in Figure 8.
 @figure
 @image{menu-example,,3in}
 @caption{8}
-A @code{vgui} example involving menus.  The menu bar on the top has
-sub-menus as indicated in the figure. In the example, all the menu
-choices call the same dummy function.
+A @code{vgui} example involving menus.  The menu bar on the top has sub-menus as indicated in the figure. In the example, all the menu choices call the same dummy function.
 @endcaption
 @endfigure
 
