@@ -29,7 +29,7 @@ class vpro_video_process : public vbl_ref_count
  public:
   enum process_data_type {NOTYPE=0, IMAGE, SPATIAL_OBJECT, TOPOLOGY};
 
-  vpro_video_process() {}
+  vpro_video_process();
   vpro_video_process(vpro_video_process const& p)
     : vbl_ref_count(),
       frame_index_(p.frame_index_), n_frames_(p.n_frames_),
@@ -85,6 +85,9 @@ class vpro_video_process : public vbl_ref_count
   bool graph_flag(){return graph_flag_;}
   void  set_graph(vcl_vector<float> const& graph){graph_=graph;}
   vcl_vector<float> graph(){return graph_;}
+  //start and end of processed sequence
+  unsigned int start_frame(){return start_frame_;}
+  unsigned int end_frame(){return end_frame_;}
 
   virtual process_data_type get_input_type() { return NOTYPE; }
   virtual process_data_type get_output_type() { return NOTYPE; }
@@ -94,6 +97,8 @@ class vpro_video_process : public vbl_ref_count
   //members
   int frame_index_;
   int n_frames_;
+  unsigned int start_frame_;//start of the processed sequence
+  unsigned int end_frame_;  //end of the processed sequence
   vcl_vector<vil1_image> input_images_;
   vcl_vector<vsol_spatial_object_2d_sptr> input_spat_objs_;
   vcl_vector<vtol_topology_object_sptr> input_topo_objs_;

@@ -1,6 +1,13 @@
 #include "vpro_video_process.h"
 #include <vcl_iostream.h>
-
+vpro_video_process::vpro_video_process()
+{
+  frame_index_ = 0;
+  n_frames_ = 0;
+  start_frame_ =0;
+  end_frame_ = 0;
+  graph_flag_ = false;
+}
 vil1_image vpro_video_process::get_input_image(unsigned int i)
 {
   if (i > input_images_.size())
