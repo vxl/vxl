@@ -2,9 +2,9 @@ USES += vxl oul
 LIBRARY := ouml
 IMMEDIATE_LIBS += -lvnl-algo -lvnl -lvil
 
-SOURCES += eigenfaces.cc
-SOURCES += image_database.cc
-SOURCES += polygon_mesh.cc
+SOURCES += eigenfaces.cxx
+SOURCES += image_database.cxx
+SOURCES += polygon_mesh.cxx
 MANPAGE_SOURCES += image_ops.h
 MANPAGE_SOURCES += inlines.h
 MANPAGE_SOURCES += io.h
