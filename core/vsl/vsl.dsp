@@ -103,6 +103,10 @@ SOURCE=.\vsl_clipon_binary_loader.txx
 # End Source File
 # Begin Source File
 
+SOURCE=".\Templates\vsl_complex+double-.cxx"
+# End Source File
+# Begin Source File
+
 SOURCE=".\Templates\vsl_complex+float-.cxx"
 # End Source File
 # Begin Source File
@@ -148,6 +152,18 @@ SOURCE=".\Templates\vsl_map+string.int-.cxx"
 # Begin Source File
 
 SOURCE=.\vsl_map_io.txx
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vsl_pair+uint.uint-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vsl_pair+vcl_pair+uint.uint-.double-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vsl_pair+vcl_pair+uint.uint-.int-.cxx"
 # End Source File
 # Begin Source File
 
