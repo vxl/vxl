@@ -284,6 +284,7 @@ vil_image_view<vxl_byte> filtered_image = vil_transpose(tmp_image2);
 *  these functions find the 4-connected boundary pixels of the region)
 *
 * - vil_trace_4con_boundary : Traces around 4 connected regions in bool image
+* - vil_trace_8con_boundary : Traces around 8 connected regions in bool image
 * - vil_blob_finder : Class to find all connected regions in an image
 *
 * \subsection conventions Parameter Conventions

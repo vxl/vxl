@@ -48,6 +48,7 @@ ADD_EXECUTABLE( vil_test_all
   test_algo_grid_merge.cxx
   test_algo_find_4con_boundary.cxx
   test_algo_trace_4con_boundary.cxx
+  test_algo_trace_8con_boundary.cxx
   test_algo_fft.cxx
   test_suppress_non_max.cxx
   test_algo_histogram.cxx
@@ -107,6 +108,7 @@ ADD_TEST( vil_test_algo_threshold          vil_test_all test_algo_threshold)
 ADD_TEST( vil_test_algo_grid_merge         vil_test_all test_algo_grid_merge )
 ADD_TEST( vil_test_algo_find_4con_boundary vil_test_all test_algo_find_4con_boundary )
 ADD_TEST( vil_test_algo_trace_4con_boundary vil_test_all test_algo_trace_4con_boundary )
+ADD_TEST( vil_test_algo_trace_8con_boundary vil_test_all test_algo_trace_8con_boundary )
 ADD_TEST( vil_test_algo_fft vil_test_all test_algo_fft )
 ADD_TEST( vil_test_suppress_non_max vil_test_all test_suppress_non_max )
 ADD_TEST( vil_test_algo_histogram vil_test_all test_algo_histogram )

@@ -35,6 +35,7 @@ DECLARE( test_deep_copy_3_plane );
 DECLARE( test_algo_grid_merge );
 DECLARE( test_algo_find_4con_boundary );
 DECLARE( test_algo_trace_4con_boundary );
+DECLARE( test_algo_trace_8con_boundary );
 DECLARE( test_algo_fft );
 DECLARE( test_suppress_non_max );
 DECLARE( test_rotate_image );
@@ -81,6 +82,7 @@ register_tests()
   REGISTER( test_algo_grid_merge );
   REGISTER( test_algo_find_4con_boundary );
   REGISTER( test_algo_trace_4con_boundary );
+  REGISTER( test_algo_trace_8con_boundary );
   REGISTER( test_algo_fft );
   REGISTER( test_suppress_non_max );
   REGISTER( test_rotate_image );
