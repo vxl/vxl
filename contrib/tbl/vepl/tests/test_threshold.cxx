@@ -115,7 +115,7 @@ static bool difference(vil_image const& a, vil_image const& b, int v, const char
   delete[] v1; delete[] v2;
   ret /= a.planes()*a.components();
   //if (m && m2 && !strncmp(m,"Gaussian",8) && !strcmp(m2,"_int")) ret = v;
-  if (vcl_abs(ret - v) > 0.01*vcl_abs(v))
+  if (ret != v)
   { if (m2) vcl_cout<<m<<m2<<" FAILED: "<<ret<<" instead of "<<v<<vcl_endl;return true;}
   else { if (m2) vcl_cout<<m<<m2<<" PASSED\n"; return false; }
 }
