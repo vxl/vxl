@@ -98,7 +98,6 @@ class bmrf_network_builder : public bmrf_network_builder_params
   bool set_intensity_info();
   bool add_frame_nodes();
   bool time_neighbors(bmrf_node_sptr const& node,
-                      vcl_vector<bmrf_node_sptr> const& pre_frame,
                       vcl_vector<bmrf_node_sptr>& neighbors);
   bool assign_neighbors();
   bool build_network();

@@ -713,7 +713,6 @@ bool bmrf_network_builder::add_frame_nodes()
 //=============================================================
 bool bmrf_network_builder::
 time_neighbors(bmrf_node_sptr const& node,
-               vcl_vector<bmrf_node_sptr> const& pre_frame,
                vcl_vector<bmrf_node_sptr>& neighbors)
 {
   if (!node)
@@ -725,11 +724,12 @@ time_neighbors(bmrf_node_sptr const& node,
   //the upper bound passes zero velocity
   //the lower bound is extended by the maxiumum velocity range, s_range_.
   vcl_vector<bmrf_node_sptr> temp;
-  for (vcl_vector<bmrf_node_sptr>::const_iterator nit = pre_frame.begin();
-       nit != pre_frame.end(); nit++)
-    if(((*nit)->epi_seg()->min_s() <= s_max) &&
-       ((*nit)->epi_seg()->max_s() < (s_min - s_range_)))
-      temp.push_back(*nit);
+  int frame = node->frame_num();
+  for (bmrf_network::seg_node_map::const_iterator nit = network_->begin(frame-1);
+       nit != network_->end(frame-1); ++nit)
+    if((nit->first->min_s() <= s_max) &&
+       (nit->first->max_s() < (s_min - s_range_)))
+      temp.push_back(nit->second);
 
   //filter out nodes that do not lie within the alpha range of the node
   //under consideration.
@@ -761,24 +761,18 @@ bool bmrf_network_builder::assign_neighbors()
   //iterate over nodes in the current frame
   if(!network_)
     return false;
-
-  //Nodes from the previous frame
-  //should have a frame iterator here
-  vcl_vector<bmrf_node_sptr> pre_frame = network_->nodes_in_frame(frame_-1);
-
-  //should have a frame iterator here
-  vcl_vector<bmrf_node_sptr> nodes = network_->nodes_in_frame(frame_);
-  for(vcl_vector<bmrf_node_sptr>::iterator nit = nodes.begin();
-      nit != nodes.end(); nit++)
+ 
+  for( bmrf_network::seg_node_map::const_iterator nit = network_->begin(frame_);
+       nit != network_->end(frame_); ++nit )
     {
       vcl_vector<bmrf_node_sptr> neighbors;
-      if(!this->time_neighbors((*nit), pre_frame, neighbors))
+      if(!this->time_neighbors(nit->second, neighbors))
         continue;
       for(vcl_vector<bmrf_node_sptr>::iterator nnit = neighbors.begin();
           nnit != neighbors.end(); nnit++)
         {
-          network_->add_arc(*nit, *nnit, bmrf_node::TIME);
-          network_->add_arc(*nnit, *nit, bmrf_node::TIME);
+          network_->add_arc(nit->second, *nnit, bmrf_node::TIME);
+          network_->add_arc(*nnit, nit->second, bmrf_node::TIME);
         }
     }
   return true;

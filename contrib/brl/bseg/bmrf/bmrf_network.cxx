@@ -19,9 +19,10 @@ bmrf_network::add_node(const bmrf_node_sptr& node)
 {
   if(!node.ptr()) return false;
   if(!node->epi_seg().ptr()) return false;
-  if(nodes_.find(node->epi_seg().ptr()) != nodes_.end()) return false;
+  if(node_from_seg_.find(node->epi_seg().ptr()) != node_from_seg_.end()) return false;
 
-  nodes_[node->epi_seg().ptr()] = node;
+  node_from_seg_[node->epi_seg().ptr()] = node;
+  nodes_from_frame_[node->frame_num()][node->epi_seg().ptr()] = node;
   return true;
 }
 
@@ -32,11 +33,13 @@ bmrf_network::remove_node(const bmrf_node_sptr& node)
 {
   if(!node.ptr()) return false;
   if(!node->epi_seg().ptr()) return false;
-  node_map::iterator itr = nodes_.find(node->epi_seg().ptr());
-  if(itr == nodes_.end()) return false;
+  seg_node_map::iterator itr = node_from_seg_.find(node->epi_seg().ptr());
+  if(itr == node_from_seg_.end()) return false;
 
   node->strip();
-  nodes_.erase(itr);
+  node_from_seg_.erase(itr);
+  itr = nodes_from_frame_[node->frame_num()].find(node->epi_seg().ptr());
+  nodes_from_frame_[node->frame_num()].erase(itr);
   return true;
 }
 
@@ -48,12 +51,12 @@ bmrf_network::add_arc( const bmrf_node_sptr& n1, const bmrf_node_sptr& n2, neigh
   if(!n1.ptr() || !n2.ptr()) return false;
   if(!n1->epi_seg().ptr() || !n2->epi_seg().ptr()) return false;
   
-  node_map::iterator itr = nodes_.find(n1->epi_seg().ptr());
-  if(itr == nodes_.end())
+  seg_node_map::iterator itr = node_from_seg_.find(n1->epi_seg().ptr());
+  if(itr == node_from_seg_.end())
     if( !this->add_node(n1) )
       return false;
-  itr = nodes_.find(n2->epi_seg().ptr());
-  if(itr == nodes_.end())
+  itr = node_from_seg_.find(n2->epi_seg().ptr());
+  if(itr == node_from_seg_.end())
     if( !this->add_node(n2) )
       return false;
       
@@ -75,13 +78,13 @@ bool
 bmrf_network::purge()
 {
   bool retval = false;
-  node_map::const_iterator n_itr = nodes_.begin();
-  for(; n_itr != nodes_.end(); ++n_itr){
+  seg_node_map::const_iterator n_itr = node_from_seg_.begin();
+  for(; n_itr != node_from_seg_.end(); ++n_itr){
     bmrf_node_sptr curr_node = n_itr->second;
     retval = curr_node->purge() || retval; // remove the NULL arcs
     bmrf_node::arc_iterator a_itr = curr_node->begin();
     for(; a_itr != curr_node->end(); ++a_itr){
-      if(nodes_.find((*a_itr)->to->epi_seg().ptr()) == nodes_.end()){
+      if(node_from_seg_.find((*a_itr)->to->epi_seg().ptr()) == node_from_seg_.end()){
         curr_node->remove_neighbor((*a_itr)->to);
         retval = true;
       }
@@ -93,11 +96,22 @@ bmrf_network::purge()
 
 //: Look up the node corresponding to an epi-segment
 bmrf_node_sptr
-bmrf_network::seg_to_node(const bmrf_epi_seg_sptr& seg) const
+bmrf_network::seg_to_node(const bmrf_epi_seg_sptr& seg, int frame) const
 {
-  node_map::const_iterator itr = nodes_.find(seg.ptr());
-  if(itr == nodes_.end())
-    return bmrf_node_sptr(NULL);
+  seg_node_map::const_iterator itr;
+  if (frame < 0) {
+    itr = node_from_seg_.find(seg.ptr());
+    if(itr == node_from_seg_.end())
+      return bmrf_node_sptr(NULL);
+  }
+  else {
+    frame_node_map::const_iterator map_itr = nodes_from_frame_.find(frame);
+    if( map_itr == nodes_from_frame_.end())
+      return bmrf_node_sptr(NULL);
+    itr = map_itr->second.find(seg.ptr());
+    if(itr == map_itr->second.end())
+      return bmrf_node_sptr(NULL);
+  }
 
   return itr->second;
 }
@@ -105,9 +119,12 @@ bmrf_network::seg_to_node(const bmrf_epi_seg_sptr& seg) const
 
 //: Returns the number of nodes in the network;
 int
-bmrf_network::size()
+bmrf_network::size(int frame)
 {
-  return nodes_.size();
+  if (frame < 0)
+    return node_from_seg_.size();
+  else
+    return nodes_from_frame_[frame].size();
 }
 
 
@@ -120,11 +137,31 @@ bmrf_network::probability()
 }
 
 
-//: Returns all the nodes in frame \param frame
-vcl_vector<bmrf_node_sptr>
-bmrf_network::nodes_in_frame(int frame) const
+//: Returns the beginning const iterator to the nodes in frame \param frame
+bmrf_network::seg_node_map::const_iterator
+bmrf_network::begin( int frame ) const
 {
-  return vcl_vector<bmrf_node_sptr>();
+  if (frame < 0) return node_from_seg_.begin();
+
+  frame_node_map::const_iterator itr = nodes_from_frame_.find(frame);
+  if (itr != nodes_from_frame_.end())
+    return itr->second.begin();
+  else
+   return node_from_seg_.begin();
+}
+
+
+//: Returns the end const iterator to the nodes in frame \param frame
+bmrf_network::seg_node_map::const_iterator
+bmrf_network::end( int frame ) const
+{
+  if (frame < 0) return node_from_seg_.end();
+
+  frame_node_map::const_iterator itr = nodes_from_frame_.find(frame);
+  if (itr != nodes_from_frame_.end())
+    return itr->second.end();
+  else
+   return node_from_seg_.end();
 }
 
 
@@ -135,10 +172,10 @@ bmrf_network::b_write( vsl_b_ostream& os ) const
   vsl_b_write(os, version());
  
   // write the number of nodes
-  vsl_b_write(os, nodes_.size());
+  vsl_b_write(os, node_from_seg_.size());
   // write all the nodes
-  node_map::const_iterator itr = nodes_.begin();
-  for(; itr != nodes_.end(); ++itr){
+  seg_node_map::const_iterator itr = node_from_seg_.begin();
+  for(; itr != node_from_seg_.end(); ++itr){
     vsl_b_write(os, itr->second);
   }
 }
@@ -156,14 +193,15 @@ bmrf_network::b_read( vsl_b_istream& is )
   {
   case 1:
     {
-      nodes_.clear();
+      node_from_seg_.clear();
     
       int num_nodes;
       vsl_b_read(is, num_nodes);
       for(int n=0; n<num_nodes; ++n){
         bmrf_node_sptr node;
         vsl_b_read(is, node);
-        nodes_[node->epi_seg().ptr()] = node;
+        node_from_seg_[node->epi_seg().ptr()] = node;
+        nodes_from_frame_[node->frame_num()][node->epi_seg().ptr()] = node;
       }
     }
     if(this->purge())
@@ -185,7 +223,7 @@ bmrf_network::b_read( vsl_b_istream& is )
 void
 bmrf_network::print_summary( vcl_ostream& os ) const
 {
-  os << " " << nodes_.size() << " nodes ";
+  os << " " << node_from_seg_.size() << " nodes in "<< nodes_from_frame_.size() <<" frames ";
 }
 
 
@@ -202,8 +240,8 @@ void
 bmrf_network::depth_iterator::next_node()
 {
   if (curr_node_.ptr() == NULL) return;
-  bmrf_node::arc_iterator itr = curr_node_->begin();
-  for(; itr != curr_node_->end(); ++itr){
+  bmrf_node::arc_iterator itr = curr_node_->end();
+  for(--itr; itr != curr_node_->end(); --itr){
     eval_queue_.push_front((*itr)->to);
   }
   while( visited_.find(eval_queue_.front()) != visited_.end() )

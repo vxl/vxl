@@ -7,15 +7,18 @@
 // \author Matt Leotta, (mleotta@lems.brown.edu)
 // \date 1/13/04
 //
-// The MRF network is templated on the type of node, and maintains a vector
-// of all nodes in the network.
+// The MRF network object maintains pointers to all of the nodes
+// in the network.  It also handle the creation and destruction of
+// arcs between nodes.  The network object also contains search
+// iterators to iterate through the nodes along arcs using search
+// algorithms such as depth-first or breadth-first.
 //
 // \verbatim
 //  Modifications
 // \endverbatim
 
 
-#include <vcl_vector.h>
+#include <vcl_list.h>
 #include <vcl_deque.h>
 #include <vcl_set.h>
 #include <vsl/vsl_binary_io.h>
@@ -29,7 +32,8 @@
 class bmrf_network : public vbl_ref_count
 {
  public:
-  typedef vcl_map<bmrf_epi_seg*, bmrf_node_sptr> node_map;
+  typedef vcl_map<bmrf_epi_seg*, bmrf_node_sptr> seg_node_map;
+  typedef vcl_map<int, seg_node_map > frame_node_map;
 
   typedef bmrf_node::neighbor_type neighbor_type;
   
@@ -62,17 +66,24 @@ class bmrf_network : public vbl_ref_count
   bool purge();
 
   //: Look up the node corresponding to an epi-segment
-  // Returns a null smart pointer if no node exists
-  bmrf_node_sptr seg_to_node(const bmrf_epi_seg_sptr& seg) const;
+  // \return a null smart pointer if no node exists
+  // \note if the optional paramater \param frame is positive the search is restricted to that frame
+  bmrf_node_sptr seg_to_node(const bmrf_epi_seg_sptr& seg, int frame = -1) const;
 
-  //: Returns the number of nodes in the network;
-  int size();
+  //: Returns the number of nodes in the network
+  // \ note if the optional parameter \param frame is positive then the size is of that frame
+  int size( int frame = -1 );
 
   //: Returns the probability that the entire network is correct
   double probability();
 
-  //: Returns all the nodes in frame \param frame
-  vcl_vector<bmrf_node_sptr> nodes_in_frame(int frame) const;
+  //: Returns the beginning const iterator to the nodes in frame \param frame
+  // \note if \param frame is negative the iterator will cover all frames
+  seg_node_map::const_iterator begin(int frame = -1) const;
+
+  //: Returns the end const iterator to the nodes in frame \param frame
+  // \note if \param frame is negative the iterator will cover all frames
+  seg_node_map::const_iterator end(int frame = -1) const;
 
   //: Binary save self to stream.
   void b_write(vsl_b_ostream &os) const;
@@ -87,10 +98,12 @@ class bmrf_network : public vbl_ref_count
   void print_summary(vcl_ostream &os) const;
 
  private:
-
-  //: The map of nodes in the network
+  //: The map from epi_seg pointers to nodes in the network
   // \note indexed by epi_seg pointers for quick reverse lookup
-  node_map nodes_;
+  seg_node_map node_from_seg_;
+  
+  //: The map from frame number to list of nodes in that frame
+  frame_node_map nodes_from_frame_; 
 
  public:
   class iterator
@@ -107,9 +120,14 @@ class bmrf_network : public vbl_ref_count
 
     //: Dereference
     bmrf_node_sptr operator -> () const { return curr_node_; }
+    //: Dereference
+    bmrf_node_sptr operator * () const { return curr_node_; }
 
     //: Equality comparison
     bool operator == (const iterator& rhs) { return rhs.curr_node_ == this->curr_node_; }
+    
+    //: Inequality comparison
+    bool operator != (const iterator& rhs) { return rhs.curr_node_ != this->curr_node_; }
 
    protected:
     //: Increment the current node
@@ -124,7 +142,7 @@ class bmrf_network : public vbl_ref_count
   {
    public:
     //: Constructor
-    depth_iterator( bmrf_network_sptr network, bmrf_node_sptr node ) : iterator(network, node){}
+    depth_iterator( bmrf_network_sptr network, bmrf_node_sptr node ) : iterator(network, node){ visited_.insert(node); }
 
    protected:
     //: Increment the current node
@@ -139,7 +157,7 @@ class bmrf_network : public vbl_ref_count
   {
    public:
     //: Constructor
-    breadth_iterator( bmrf_network_sptr network, bmrf_node_sptr node ) : iterator(network, node){}
+    breadth_iterator( bmrf_network_sptr network, bmrf_node_sptr node ) : iterator(network, node){ visited_.insert(node); }
 
    protected:
     //: Increment the current node
