@@ -8,6 +8,9 @@ USE_IUTEMPLATES := 0
 LIBRARY := netlib
 VERSION := 1.0
 
+# remove this if you know where to get z_sqrt.f
+SOURCES += z_sqrt.cc 
+
 #*********************
 # Std Fortran Library 
 #*********************
@@ -31,6 +34,8 @@ SOURCES += pow_ri.c
 SOURCES += pow_di.c
 
 # BLAS 
+SOURCES += izamax.c
+
 SOURCES += daxpy.c
 SOURCES += dcopy.c
 SOURCES += ddot.c
@@ -39,6 +44,7 @@ SOURCES += drot.c
 SOURCES += drotg.c
 SOURCES += dscal.c
 SOURCES += dasum.c
+SOURCES += dzasum.c
 SOURCES += dswap.c
 SOURCES += dgemv.c
 SOURCES += dger.c
@@ -54,6 +60,16 @@ SOURCES += sasum.c
 SOURCES += sswap.c
 SOURCES += sgemv.c
 SOURCES += sger.c
+
+SOURCES += zcopy.c
+SOURCES += zdotu.c
+SOURCES += zdscal.c
+SOURCES += zgemm.c
+SOURCES += zgemv.c
+SOURCES += zgerc.c
+SOURCES += ztrmm.c
+SOURCES += ztrmv.c
+SOURCES += ztrsv.c
 
 # LINPACK 
 SOURCES += dsvdc.c
@@ -103,6 +119,9 @@ SOURCES += gpfa.c
 SOURCES += gpfa3f.c 
 SOURCES += setgpfa.c
 
+# NAPACK
+SOURCES += cg.c
+
 # from DATAPAC
 SOURCES += camsun.c
 
@@ -110,6 +129,9 @@ SOURCES += camsun.c
 SOURCES += dnlaso.c
 
 # from LAPACK
+SOURCES += ilaenv.c
+SOURCES += izmax1.c
+
 SOURCES += xerbla.c
 SOURCES += lsame.c
 SOURCES += dlamch.c
@@ -133,6 +155,10 @@ SOURCES += dlas2.c
 SOURCES += dlaset.c
 SOURCES += dlassq.c
 SOURCES += dlasv2.c
+SOURCES += dlabad.c
+SOURCES += dladiv.c
+SOURCES += dlapy3.c
+
 SOURCES += dorg2r.c
 SOURCES += dorm2r.c
 SOURCES += dormr2.c
@@ -159,6 +185,33 @@ SOURCES += sorg2r.c
 SOURCES += sorm2r.c
 SOURCES += sormr2.c
 SOURCES += stgsja.c
+
+SOURCES += zgebak.c
+SOURCES += zgebal.c
+SOURCES += zgeev.c
+SOURCES += zgehd2.c
+SOURCES += zgehrd.c
+SOURCES += zhseqr.c
+SOURCES += zlacgv.c
+SOURCES += zlacpy.c
+SOURCES += zladiv.c
+SOURCES += zlahqr.c
+SOURCES += zlahrd.c
+SOURCES += zlange.c
+SOURCES += zlanhs.c
+SOURCES += zlarf.c
+SOURCES += zlarfb.c
+SOURCES += zlarfg.c
+SOURCES += zlarft.c
+SOURCES += zlarfx.c
+SOURCES += zlascl.c
+SOURCES += zlaset.c
+SOURCES += zlassq.c
+SOURCES += zlatrs.c
+SOURCES += ztrevc.c
+SOURCES += zung2r.c
+SOURCES += zunghr.c
+SOURCES += zungqr.c
 
 ##########################################
 include $(SYS_IUPACKAGES)/config/top.mk
