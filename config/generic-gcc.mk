@@ -119,7 +119,8 @@ ifneq (,$(strip $(TJ_EGCS)))
 optimize := -O3
 endif
 
-ifeq "$(TJ_GCC30)" "1"
+ifneq (,$(strip $(TJ_GCC30)))
+optimize := -O3
 no_implicit_templates := 
 else
 no_implicit_templates := -fno-implicit-templates
