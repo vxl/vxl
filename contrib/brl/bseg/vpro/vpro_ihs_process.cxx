@@ -1,7 +1,6 @@
 // This is brl/bseg/vpro/vpro_ihs_process.cxx
 #include "vpro_ihs_process.h"
 #include <vcl_iostream.h>
-#include <vcl_vector.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_rgb.h>
 #include <brip/brip_float_ops.h>
