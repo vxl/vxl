@@ -38,6 +38,7 @@
 #include <vnl/algo/vnl_orthogonal_complement.h>
 #include <vnl/algo/vnl_powell.h>
 #include <vnl/algo/vnl_svd_economy.h>
+#include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_sparse_matrix_linear_system.h>
 #include <vnl/vnl_least_squares_function.h>
 
@@ -54,8 +55,9 @@ static void test_matrix_inverse()
 {
   double data[] = {1.,-1.,1.,-1., 1.,1.,-1.,-1., 1.,1.,1.,1., 1.,-1.,-1.,1.};
   vnl_matrix<double> m(data,4,4);
-  vnl_svd_economy<double> svd(m); vnl_matrix<double> V = svd.V();
-  TEST_NEAR("vnl_svd_economy", V[0][1], -1, 1e-6);
+  vnl_svd_economy<double> svde(m); vnl_matrix<double> V = svde.V();
+  vnl_svd<double> svd(m); vnl_matrix<double> V0 = svd.V();
+  TEST_NEAR("vnl_svd_economy", V[0][1], V0[0][1], 1e-6);
 
   vnl_matrix<double> inv = vnl_matrix_inverse<double>(m);
   vnl_matrix<double> identity(4,4); identity.set_identity();
