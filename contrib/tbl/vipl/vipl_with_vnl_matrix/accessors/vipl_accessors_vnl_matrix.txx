@@ -1,3 +1,6 @@
+#ifndef vipl_accessors_vnl_matrix_txx_
+#define vipl_accessors_vnl_matrix_txx_
+
 #include "vipl_accessors_vnl_matrix.h"
 
 template <class DataType>
@@ -24,3 +27,5 @@ template T fgetpixel(vnl_matrix<T> const&, int, int, T);\
 template void fsetpixel(vnl_matrix<T>&, int, int, T);\
 template T getpixel(vnl_matrix<T> const&, int, int, T);\
 template void setpixel(vnl_matrix<T>&, int, int, T)
+
+#endif // vipl_accessors_vnl_matrix_txx_

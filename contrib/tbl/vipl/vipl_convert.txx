@@ -1,3 +1,6 @@
+#ifndef vipl_convert_txx_
+#define vipl_convert_txx_
+
 #include "vipl_convert.h"
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
@@ -11,3 +14,5 @@ bool vipl_convert <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
       fsetpixel(out, i, j, (DataOut)fgetpixel(in,i,j,nil_obj));
   return true;
 }
+
+#endif // vipl_convert_txx_

@@ -1,3 +1,6 @@
+#ifndef vipl_add_random_noise_txx_
+#define vipl_add_random_noise_txx_
+
 #include "vipl_add_random_noise.h"
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
@@ -15,3 +18,5 @@ bool vipl_add_random_noise <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_app
   }
   return true;
 }
+
+#endif // vipl_add_random_noise_txx_

@@ -1,3 +1,6 @@
+#ifndef vipl_gradient_mag_txx_
+#define vipl_gradient_mag_txx_
+
 #include "vipl_gradient_mag.h"
 #include <vcl_cmath.h> // for sqrt()
 
@@ -17,3 +20,5 @@ bool vipl_gradient_mag <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop
     }
   return true;
 }
+
+#endif // vipl_gradient_mag_txx_

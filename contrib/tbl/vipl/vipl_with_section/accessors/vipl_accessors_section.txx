@@ -1,3 +1,6 @@
+#ifndef vipl_accessors_section_txx_
+#define vipl_accessors_section_txx_
+
 #include "vipl_accessors_section.h"
 
 template <class DataType>
@@ -24,3 +27,5 @@ template T fgetpixel(section<T,2> const&, int, int, T);\
 template void fsetpixel(section<T,2>&, int, int, T);\
 template T getpixel(section<T,2> const&, int, int, T);\
 template void setpixel(section<T,2>&, int, int, T)
+
+#endif // vipl_accessors_section_txx_

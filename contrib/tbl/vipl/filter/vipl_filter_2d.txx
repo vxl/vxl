@@ -1,3 +1,6 @@
+#ifndef vipl_filter_2d_txx_
+#define vipl_filter_2d_txx_
+
 #include <vcl_compiler.h>
 #include <vipl/filter/vipl_filter_2d.h>
 
@@ -188,3 +191,5 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
   postop(); // virtual function call
   return true;
 }
+
+#endif // vipl_filter_2d_txx_

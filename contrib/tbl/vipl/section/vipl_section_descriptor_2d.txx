@@ -1,3 +1,6 @@
+#ifndef vipl_section_descriptor_2d_txx_
+#define vipl_section_descriptor_2d_txx_
+
 #include <vipl/section/vipl_section_descriptor_2d.h>
 #include <vipl/section/vipl_section_iterator.h>
 #include <vipl/section/vipl_section_container.h>
@@ -128,13 +131,13 @@ const DataType* vipl_section_descriptor_2d< DataType > ::data_ptr() const
 {
 }
 
-//: Returns a writable pointer to the ``real'' section descriptor. If this method is called on a concrete instance, it should return 0. 
+//: Returns a writable pointer to the ``real'' section descriptor. If this method is called on a concrete instance, it should return 0.
 template < class DataType >
 vipl_section_descriptor< DataType >* vipl_section_descriptor_2d< DataType > ::inner_descriptor()
 {
 }
 
-//: Returns a const pointer to the ``real'' section descriptor. If this method is called on a concrete instance, it should return 0. 
+//: Returns a const pointer to the ``real'' section descriptor. If this method is called on a concrete instance, it should return 0.
 template < class DataType >
 const vipl_section_descriptor< DataType >* vipl_section_descriptor_2d< DataType > ::inner_descriptor() const
 {
@@ -145,3 +148,5 @@ template < class DataType >
 vipl_section_descriptor< DataType >* vipl_section_descriptor_2d< DataType > ::virtual_copy() const
 {
 }
+
+#endif // vipl_section_descriptor_2d_txx_

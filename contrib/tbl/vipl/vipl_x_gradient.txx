@@ -1,3 +1,6 @@
+#ifndef vipl_x_gradient_txx_
+#define vipl_x_gradient_txx_
+
 #include "vipl_x_gradient.h"
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
@@ -15,3 +18,5 @@ bool vipl_x_gradient <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
     }
   return true;
 }
+
+#endif // vipl_x_gradient_txx_

@@ -1,3 +1,6 @@
+#ifndef vipl_gaussian_convolution_txx_
+#define vipl_gaussian_convolution_txx_
+
 #include "vipl_gaussian_convolution.h"
 #include <vcl_cmath.h> // for sqrt(), exp(), log()
 
@@ -67,3 +70,5 @@ bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: postop(
   delete ref_mask(); ref_mask()=0;
   return true;
 }
+
+#endif // vipl_gaussian_convolution_txx_

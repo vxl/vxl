@@ -1,3 +1,6 @@
+#ifndef vipl_monadic_txx_
+#define vipl_monadic_txx_
+
 #include "vipl_monadic.h"
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
@@ -13,3 +16,5 @@ bool vipl_monadic <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
     }
   return true;
 }
+
+#endif // vipl_monadic_txx_

@@ -1,3 +1,6 @@
+#ifndef vipl_dyadic_txx_
+#define vipl_dyadic_txx_
+
 #include "vipl_dyadic.h"
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
@@ -16,3 +19,5 @@ bool vipl_dyadic <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
     }
   return true;
 }
+
+#endif // vipl_dyadic_txx_

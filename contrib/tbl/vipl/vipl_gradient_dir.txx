@@ -1,3 +1,6 @@
+#ifndef vipl_gradient_dir_txx_
+#define vipl_gradient_dir_txx_
+
 #include "vipl_gradient_dir.h"
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
@@ -15,3 +18,5 @@ bool vipl_gradient_dir <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop
     }
   return true;
 }
+
+#endif // vipl_gradient_dir_txx_

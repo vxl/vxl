@@ -1,3 +1,6 @@
+#ifndef vipl_dilate_disk_txx_
+#define vipl_dilate_disk_txx_
+
 #include "vipl_dilate_disk.h"
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
@@ -60,3 +63,5 @@ bool vipl_dilate_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: postop(){
   }
   return true;
 }
+
+#endif // vipl_dilate_disk_txx_

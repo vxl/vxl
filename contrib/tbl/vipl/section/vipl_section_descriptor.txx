@@ -1,3 +1,6 @@
+#ifndef vipl_section_descriptor_txx_
+#define vipl_section_descriptor_txx_
+
 #include <vipl/section/vipl_section_descriptor.h>
 #include <vipl/section/vipl_section_iterator.h>
 #include <vipl/section/vipl_section_container.h>
@@ -44,7 +47,7 @@ vipl_section_descriptor< DataType > ::vipl_section_descriptor(
   // cerr << "Warning: called unimplemented constructor with sig const vipl_section_descriptor< DataType >* desc, const vipl_section_container< DataType >* container, int t\n";
 }
 
-// A simple section_descriptor useful for filter Regions_of_Application. it is not associated with any container or ``real'' descriptor. It cannot verify that the start/end points are meaningful for a particular image (there is none associated with it), but if used for the ROA of a filter this can be used to limit its operation to only a small window within the image. 
+// A simple section_descriptor useful for filter Regions_of_Application. it is not associated with any container or ``real'' descriptor. It cannot verify that the start/end points are meaningful for a particular image (there is none associated with it), but if used for the ROA of a filter this can be used to limit its operation to only a small window within the image.
 template < class DataType >
 vipl_section_descriptor< DataType > ::vipl_section_descriptor(
                  vcl_vector< int >& startpts ,
@@ -155,14 +158,14 @@ const DataType* vipl_section_descriptor< DataType > ::data_ptr() const
   return 0;
 }
 
-// Returns a writable pointer to the ``real'' section descriptor. If this method is called on a concrete instance, it should return 0. 
+// Returns a writable pointer to the ``real'' section descriptor. If this method is called on a concrete instance, it should return 0.
 template < class DataType >
 vipl_section_descriptor< DataType >* vipl_section_descriptor< DataType > ::inner_descriptor()
 {
   return ref_real_descriptor();
 }
 
-// Returns a const pointer to the ``real'' section descriptor. If this method is called on a concrete instance, it should return 0. 
+// Returns a const pointer to the ``real'' section descriptor. If this method is called on a concrete instance, it should return 0.
 template < class DataType >
 const vipl_section_descriptor< DataType >* vipl_section_descriptor< DataType > ::inner_descriptor() const
 {
@@ -192,3 +195,5 @@ vipl_section_descriptor< DataType >* vipl_section_descriptor< DataType > ::virtu
   // cerr << "Warning: called possibly method virtual_copy\n";
   return rtn;
 }
+
+#endif // vipl_section_descriptor_txx_

@@ -1,3 +1,6 @@
+#ifndef vipl_section_container_txx_
+#define vipl_section_container_txx_
+
 #include <vipl/section/vipl_section_container.h>
 #include <vipl/filter/vipl_filter_abs.h> // for filter_abs::X_Axis()
 #include <vipl/section/vipl_section_iterator.h>
@@ -403,3 +406,5 @@ template < class DataType >
   rtn->put_overlap(overlap());
   return rtn;
 }
+
+#endif // vipl_section_container_txx_

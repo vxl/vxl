@@ -1,3 +1,6 @@
+#ifndef vipl_moment_txx_
+#define vipl_moment_txx_
+
 #include "vipl_moment.h"
 
 // "integer power" function, used in the filter.
@@ -135,3 +138,5 @@ bool vipl_moment <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
 
   return true;
 }
+
+#endif // vipl_moment_txx_

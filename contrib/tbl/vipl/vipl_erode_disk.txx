@@ -1,3 +1,6 @@
+#ifndef vipl_erode_disk_txx_
+#define vipl_erode_disk_txx_
+
 #include "vipl_erode_disk.h"
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
@@ -62,3 +65,5 @@ bool vipl_erode_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: postop(){
   }
   return true;
 }
+
+#endif // vipl_erode_disk_txx_

@@ -1,3 +1,6 @@
+#ifndef vipl_sobel_txx_
+#define vipl_sobel_txx_
+
 #include "vipl_sobel.h"
 
 // template<class DataIn> inline DataIn max(DataIn a,DataIn b){ return (a<b)?b:a; }
@@ -19,3 +22,5 @@ bool vipl_sobel <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
     }
   return true;
 }
+
+#endif // vipl_sobel_txx_

@@ -1,3 +1,6 @@
+#ifndef vipl_threshold_txx_
+#define vipl_threshold_txx_
+
 #include "vipl_threshold.h"
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
@@ -15,3 +18,5 @@ bool vipl_threshold <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(){
     }
   return true;
 }
+
+#endif // vipl_threshold_txx_

@@ -1,3 +1,6 @@
+#ifndef vipl_section_iterator_txx_
+#define vipl_section_iterator_txx_
+
 #include <vipl/section/vipl_section_iterator.h>
 #include <vipl/section/vipl_section_container.h>
 #include <vipl/section/vipl_section_descriptor.h>
@@ -134,3 +137,5 @@ template < class DataType >
   }
   return *this;
 }
+
+#endif // vipl_section_iterator_txx_

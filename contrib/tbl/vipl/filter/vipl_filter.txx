@@ -1,3 +1,6 @@
+#ifndef vipl_filter_txx_
+#define vipl_filter_txx_
+
 #include <vipl/filter/vipl_filter.h>
 #include <vcl_iostream.h>
 
@@ -614,3 +617,5 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   return false;
 }
 #endif
+
+#endif // vipl_filter_txx_

@@ -1,3 +1,6 @@
+#ifndef vipl_accessors_vil_image_txx_
+#define vipl_accessors_vil_image_txx_
+
 #include "vipl_accessors_vil_image.h"
 
 template <class DataType>
@@ -25,3 +28,5 @@ template T fgetpixel(vil_image const&, int, int, T);\
 template void fsetpixel(vil_image&, int, int, T);\
 template T getpixel(vil_image const&, int, int, T);\
 template void setpixel(vil_image&, int, int, T)
+
+#endif // vipl_accessors_vil_image_txx_

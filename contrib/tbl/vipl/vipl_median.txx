@@ -1,3 +1,6 @@
+#ifndef vipl_median_txx_
+#define vipl_median_txx_
+
 #include "vipl_median.h"
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
@@ -71,3 +74,5 @@ bool vipl_median <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: postop(){
   }
   return true;
 }
+
+#endif // vipl_median_txx_
