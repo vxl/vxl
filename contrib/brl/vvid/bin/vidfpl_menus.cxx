@@ -2,8 +2,8 @@
 
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vgui/vgui.h>
+#include <vgui/vgui_dialog.h>
 #include <vgui/vgui_key.h>
-#include <vgui/vgui_modifier.h>
 #include <vgui/vgui_menu.h>
 #include <vvid/vvid_file_manager.h>
 
@@ -32,9 +32,9 @@ vidfpl_load_mpegcodec_callback(vidl_vil1_codec * vc)
   dialog.field("total frames. if not known, leave it.",numframes);
 
   if ( !dialog.ask())
-    {
-      vcl_cout << "vidfpl_load_mpegcodec_callback. did not initialize codec.\n";
-    }
+  {
+    vcl_cout << "vidfpl_load_mpegcodec_callback. did not initialize codec.\n";
+  }
 
   vidl_vil1_mpegcodec * mpegcodec = vc->castto_vidl_vil1_mpegcodec();
   if (!mpegcodec) return;
