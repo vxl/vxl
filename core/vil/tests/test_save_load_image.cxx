@@ -372,10 +372,8 @@ MAIN( test_save_load_image )
 #endif
   vil_image_view<vxl_uint_32>         image32 = CreateTest32bitImage(sizex, sizey);
   vil_image_view<vxl_byte>            image3p = CreateTest3planeImage(sizex, sizey);
-#if 0 // float image support is available but currently unused
   vil_image_view<float>               imagefloat = CreateTestfloatImage(sizex, sizey);
   vil_image_view<double>              imagedouble = CreateTestdoubleImage(sizex, sizey);
-#endif
 
 
   // PNG
@@ -439,8 +437,8 @@ MAIN( test_save_load_image )
 #endif
 
 
-  // VIFF image (Khoros)
-#if 0
+  // VIFF image (Khoros 1.0)
+#if 1
 //vil_test_image_type("viff", image1);
   vil_test_image_type("viff", image8);
   vil_test_image_type("viff", image16);
@@ -456,6 +454,7 @@ MAIN( test_save_load_image )
   vil_test_image_type("tiff", image3p);
 #if 0
   vil_test_image_type("tiff", image1, true, true); // Test that boolean doesn't work
+  // Test that >1 byte pixels don't work:
   vil_test_image_type("tiff", image16, true, true);
   vil_test_image_type("tiff", image32, true, true);
   vil_test_image_type("tiff", imagefloat, true, true);
