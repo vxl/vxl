@@ -7,7 +7,6 @@
 # pragma warning(disable:4018 )
 #endif
 
-
 #include <vnl/vnl_numeric_traits.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_point_2d.h>
@@ -22,6 +21,7 @@
 bsol_algs::~bsol_algs()
 {
 }
+
 //-----------------------------------------------------------------------------
 // :Compute a bounding box for a set of vsol_point_2ds.
 //-----------------------------------------------------------------------------
@@ -53,6 +53,7 @@ bounding_box(vcl_vector<vsol_line_2d_sptr> const & lines)
   }
   return b;
 }
+
 //-----------------------------------------------------------------------------
 // :Compute a bounding box for a set of vsol_point_3ds.
 //-----------------------------------------------------------------------------
@@ -65,6 +66,7 @@ bounding_box(vcl_vector<vsol_point_3d_sptr> const& points)
     b.update((*pit)->x(), (*pit)->y(), (*pit)->z());
   return b;
 }
+
 //-----------------------------------------------------------------------------
 // :Determine if a point is inside a bounding box
 //-----------------------------------------------------------------------------
@@ -141,21 +143,22 @@ bool bsol_algs::box_union(vsol_box_2d_sptr const & a,
   a_union_b->add_point(x_max, y_max);
   return true;
 }
+
 //-----------------------------------------------------------------------------
 // :Compute the convex hull of a set of polygons
 //-----------------------------------------------------------------------------
 bool bsol_algs::hull_of_poly_set(vcl_vector<vsol_polygon_2d_sptr> const& polys,
                                  vsol_polygon_2d_sptr& hull)
 {
-  if(!polys.size())
+  if (!polys.size())
     return false;
   vcl_vector<vgl_point_2d<double> > points;
-  for(vcl_vector<vsol_polygon_2d_sptr>::const_iterator pit = polys.begin();
+  for (vcl_vector<vsol_polygon_2d_sptr>::const_iterator pit = polys.begin();
       pit != polys.end(); pit++)
     {
-      if(!(*pit))
+      if (!(*pit))
         return false;
-      for(int i=0; i<(*pit)->size(); i++)
+      for (unsigned int i=0; i<(*pit)->size(); ++i)
         points.push_back(vgl_point_2d<double>((*pit)->vertex(i)->x(),
                                               (*pit)->vertex(i)->y()));
     }
@@ -164,6 +167,7 @@ bool bsol_algs::hull_of_poly_set(vcl_vector<vsol_polygon_2d_sptr> const& polys,
   hull = bsol_algs::poly_from_vgl(h);
   return true;
 }
+
 //-----------------------------------------------------------------------------
 // :Determine if a point is inside a bounding box
 //-----------------------------------------------------------------------------
@@ -183,8 +187,6 @@ bool bsol_algs::in(vsol_box_3d_sptr const & b, const double x, const double y,
   return true;
 }
 
-
-
 vsol_polygon_2d_sptr bsol_algs::poly_from_box(vsol_box_2d_sptr const& box)
 {
   vcl_vector<vsol_point_2d_sptr> pts;
@@ -196,24 +198,24 @@ vsol_polygon_2d_sptr bsol_algs::poly_from_box(vsol_box_2d_sptr const& box)
   pts.push_back(pc);   pts.push_back(pd); pts.push_back(pa);
   return new vsol_polygon_2d(pts);
 }
+
 //:construct a vsol_polygon from a vgl_polygon
 vsol_polygon_2d_sptr bsol_algs::poly_from_vgl(vgl_polygon<double> const& poly)
 {
   vsol_polygon_2d_sptr out;
   vcl_vector<vsol_point_2d_sptr> pts;
-  if(poly.num_sheets() != 1)
+  if (poly.num_sheets() != 1)
     return out;
   vcl_vector<vgl_point_2d<double> > sheet = poly[0];
-  for(vcl_vector<vgl_point_2d<double> >::iterator pit = sheet.begin();
-      pit != sheet.end(); pit++)
-    {
-      vsol_point_2d_sptr p = new vsol_point_2d((*pit).x(), (*pit).y());
-      pts.push_back(p);
-    }
+  for (vcl_vector<vgl_point_2d<double> >::iterator pit = sheet.begin();
+       pit != sheet.end(); pit++)
+  {
+    vsol_point_2d_sptr p = new vsol_point_2d((*pit).x(), (*pit).y());
+    pts.push_back(p);
+  }
   out = new vsol_polygon_2d(pts);
   return out;
 }
-
 
 //:find the closest point to p in a set of points
 vsol_point_2d_sptr
@@ -268,6 +270,7 @@ closest_point(vsol_point_3d_sptr const& p,
   d = vcl_sqrt(dmin_sq);
   return cp;
 }
+
 //: Transform a vsol_polygon_2d with a general homography.
 //  Return false if any of the points are turned into ideal points
 //  since vsol geometry is assumed finite.
@@ -321,8 +324,6 @@ void bsol_algs::print(vsol_box_3d_sptr const& b)
 
   vcl_cout << "vsol_box_2d[(" << xmin << ' ' << ymin << ' ' << zmin << ")<("
            << xmax << ' ' << ymax << ' ' << zmax << ")]\n";
-
-
 }
 
 void bsol_algs::print(vsol_point_2d_sptr const& p)
