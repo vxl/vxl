@@ -4,13 +4,12 @@ oxp_client_mk := 1
 # fsm@robots.ox.ac.uk
 #
 
-#FIXME: IUELOCALROOT ?
-include $(IUEROOT)/vxl/vcl/client.mk
-include $(IUEROOT)/vxl/vbl/client.mk
-include $(IUEROOT)/vxl/vnl/client.mk
-include $(IUEROOT)/vxl/vil/client.mk
+include $(IUELOCALROOT)/vxl/vcl/client.mk
+include $(IUELOCALROOT)/vxl/vbl/client.mk
+include $(IUELOCALROOT)/vxl/vnl/client.mk
+include $(IUELOCALROOT)/vxl/vil/client.mk
 
-USE_JPEG := 1
+TRY_JPEG := 1
 
 ald_libdeps += oxp:vcl,vbl,vnl-algo,vil
 
