@@ -26,5 +26,6 @@
 #include <vil3d/vil3d_switch_axes.h>
 #include <vil3d/vil3d_trilin_interp.h>
 #include <vil3d/vil3d_transform.h>
+#include <vil3d/vil3d_property.h>
 
 int main() { return 0; }
