@@ -157,35 +157,35 @@ vil2_pixel_format vil2_pixel_format_component_format(enum vil2_pixel_format f)
 vcl_ostream & operator << (vcl_ostream &os, vil2_pixel_format f)
 {
   switch(f) {
-    case VIL2_PIXEL_FORMAT_UNKNOWN: os << "VIL2_PIXEL_FORMAT=UNKNOWN";  break;
+    case VIL2_PIXEL_FORMAT_UNKNOWN: os << "VIL2_PIXEL_FORMAT_UNKNOWN";  break;
 
-    case VIL2_PIXEL_FORMAT_UINT_32: os << "VIL2_PIXEL_FORMAT=vxl_uint_32";  break;
-    case VIL2_PIXEL_FORMAT_INT_32:  os << "VIL2_PIXEL_FORMAT=vxl_int_32";  break;
-    case VIL2_PIXEL_FORMAT_UINT_16: os << "VIL2_PIXEL_FORMAT=vxl_uint_16";  break;
-    case VIL2_PIXEL_FORMAT_INT_16:  os << "VIL2_PIXEL_FORMAT=vxl_int_16";  break;
-    case VIL2_PIXEL_FORMAT_BYTE:    os << "VIL2_PIXEL_FORMAT=vxl_byte";  break;
-    case VIL2_PIXEL_FORMAT_SBYTE:   os << "VIL2_PIXEL_FORMAT=vxl_sbyte";  break;
-    case VIL2_PIXEL_FORMAT_FLOAT:   os << "VIL2_PIXEL_FORMAT=float";  break;
-    case VIL2_PIXEL_FORMAT_DOUBLE:  os << "VIL2_PIXEL_FORMAT=double";  break;
-    case VIL2_PIXEL_FORMAT_BOOL:    os << "VIL2_PIXEL_FORMAT=bool";  break;
+    case VIL2_PIXEL_FORMAT_UINT_32: os << "vxl_uint_32";  break;
+    case VIL2_PIXEL_FORMAT_INT_32:  os << "vxl_int_32";  break;
+    case VIL2_PIXEL_FORMAT_UINT_16: os << "vxl_uint_16";  break;
+    case VIL2_PIXEL_FORMAT_INT_16:  os << "vxl_int_16";  break;
+    case VIL2_PIXEL_FORMAT_BYTE:    os << "vxl_byte";  break;
+    case VIL2_PIXEL_FORMAT_SBYTE:   os << "vxl_sbyte";  break;
+    case VIL2_PIXEL_FORMAT_FLOAT:   os << "float";  break;
+    case VIL2_PIXEL_FORMAT_DOUBLE:  os << "double";  break;
+    case VIL2_PIXEL_FORMAT_BOOL:    os << "bool";  break;
 
-    case VIL2_PIXEL_FORMAT_RGB_INT_32:  os << "VIL2_PIXEL_FORMAT=vil_rgb<vxl_int_32>";  break;
-    case VIL2_PIXEL_FORMAT_RGB_UINT_32: os << "VIL2_PIXEL_FORMAT=vil_rgb<vxl_uint_32>";  break;
-    case VIL2_PIXEL_FORMAT_RGB_INT_16:  os << "VIL2_PIXEL_FORMAT=vil_rgb<vxl_int_16>";  break;
-    case VIL2_PIXEL_FORMAT_RGB_UINT_16: os << "VIL2_PIXEL_FORMAT=vil_rgb<vxl_uint_16>";  break;
-    case VIL2_PIXEL_FORMAT_RGB_BYTE:    os << "VIL2_PIXEL_FORMAT=vil_rgb<vxl_byte>";  break;
-    case VIL2_PIXEL_FORMAT_RGB_SBYTE:   os << "VIL2_PIXEL_FORMAT=vil_rgb<vxl_sbyte>";  break;
-    case VIL2_PIXEL_FORMAT_RGB_FLOAT:   os << "VIL2_PIXEL_FORMAT=vil_rgb<float>";  break;
-    case VIL2_PIXEL_FORMAT_RGB_DOUBLE:  os << "VIL2_PIXEL_FORMAT=vil_rgb<double>";  break;
+    case VIL2_PIXEL_FORMAT_RGB_INT_32:  os << "vil_rgb<vxl_int_32>";  break;
+    case VIL2_PIXEL_FORMAT_RGB_UINT_32: os << "vil_rgb<vxl_uint_32>";  break;
+    case VIL2_PIXEL_FORMAT_RGB_INT_16:  os << "vil_rgb<vxl_int_16>";  break;
+    case VIL2_PIXEL_FORMAT_RGB_UINT_16: os << "vil_rgb<vxl_uint_16>";  break;
+    case VIL2_PIXEL_FORMAT_RGB_BYTE:    os << "vil_rgb<vxl_byte>";  break;
+    case VIL2_PIXEL_FORMAT_RGB_SBYTE:   os << "vil_rgb<vxl_sbyte>";  break;
+    case VIL2_PIXEL_FORMAT_RGB_FLOAT:   os << "vil_rgb<float>";  break;
+    case VIL2_PIXEL_FORMAT_RGB_DOUBLE:  os << "vil_rgb<double>";  break;
 
-    case VIL2_PIXEL_FORMAT_RGBA_INT_32:  os << "VIL2_PIXEL_FORMAT=vil_rgba<vxl_int_32>";  break;
-    case VIL2_PIXEL_FORMAT_RGBA_UINT_32: os << "VIL2_PIXEL_FORMAT=vil_rgba<vxl_uint_32>";  break;
-    case VIL2_PIXEL_FORMAT_RGBA_INT_16:  os << "VIL2_PIXEL_FORMAT=vil_rgba<vxl_int_16>";  break;
-    case VIL2_PIXEL_FORMAT_RGBA_UINT_16: os << "VIL2_PIXEL_FORMAT=vil_rgba<vxl_uint_16>";  break;
-    case VIL2_PIXEL_FORMAT_RGBA_BYTE:    os << "VIL2_PIXEL_FORMAT=vil_rgba<vxl_byte>";  break;
-    case VIL2_PIXEL_FORMAT_RGBA_SBYTE:   os << "VIL2_PIXEL_FORMAT=vil_rgba<vxl_sbyte>";  break;
-    case VIL2_PIXEL_FORMAT_RGBA_FLOAT:   os << "VIL2_PIXEL_FORMAT=vil_rgba<float>";  break;
-    case VIL2_PIXEL_FORMAT_RGBA_DOUBLE:  os << "VIL2_PIXEL_FORMAT=vil_rgba<double>";  break;
+    case VIL2_PIXEL_FORMAT_RGBA_INT_32:  os << "vil_rgba<vxl_int_32>";  break;
+    case VIL2_PIXEL_FORMAT_RGBA_UINT_32: os << "vil_rgba<vxl_uint_32>";  break;
+    case VIL2_PIXEL_FORMAT_RGBA_INT_16:  os << "vil_rgba<vxl_int_16>";  break;
+    case VIL2_PIXEL_FORMAT_RGBA_UINT_16: os << "vil_rgba<vxl_uint_16>";  break;
+    case VIL2_PIXEL_FORMAT_RGBA_BYTE:    os << "vil_rgba<vxl_byte>";  break;
+    case VIL2_PIXEL_FORMAT_RGBA_SBYTE:   os << "vil_rgba<vxl_sbyte>";  break;
+    case VIL2_PIXEL_FORMAT_RGBA_FLOAT:   os << "vil_rgba<float>";  break;
+    case VIL2_PIXEL_FORMAT_RGBA_DOUBLE:  os << "vil_rgba<double>";  break;
 
     default:  os << "VIL2_PIXEL_FORMAT_INVALID";  break;
   }

@@ -81,3 +81,8 @@ TARGET_LINK_LIBRARIES( vil2_test_random_access_timings vil2 mbl vcl )
 ADD_EXECUTABLE( vil2_mil_gauss_general_timings vil2_mil_gauss_general_timings.cxx)
 TARGET_LINK_LIBRARIES( vil2_mil_gauss_general_timings vil2_algo mil vpl vul mbl testlib vcl )
 # ADD_TEST( vil2_mil_gauss_general_timings vil2_mil_gauss_general_timings )
+
+ADD_EXECUTABLE( vil2_vil_compare_function_timings vil2_vil_compare_function_timings.cxx)
+TARGET_LINK_LIBRARIES( vil2_vil_compare_function_timings vil2 mbl vcl )
+# ADD_TEST( vil2_vil_compare_function_timings vil2_vil_compare_function_timings )
+
