@@ -15,7 +15,6 @@
 
 #include <bmrf/bmrf_curvel_3d_sptr.h>
 #include <bmrf/bmrf_node_sptr.h>
-#include <bugl/bugl_gaussian_point_3d.h> 
 #include <vgl/vgl_point_3d.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_2.h>
@@ -24,7 +23,7 @@
 #include <vcl_utility.h>
 
 //: An uncertain 3D curve element
-class bmrf_curvel_3d : public bugl_gaussian_point_3d<double>, public vbl_ref_count
+class bmrf_curvel_3d : public vbl_ref_count
 {
  public:
   //: Constructor
@@ -45,8 +44,7 @@ class bmrf_curvel_3d : public bugl_gaussian_point_3d<double>, public vbl_ref_cou
   //: Set the previous curvel in the list
   void set_prev(const bmrf_curvel_3d_sptr& curvel_3d);
 
-  //: Set the projection of this curvel into \p frame as the segment in 
-  //  \p node at the value \p alpha
+  //: Set the projection of this curvel into \p frame as the segment in \p node at the value \p alpha
   void set_proj_in_frame(unsigned int frame, double alpha, const bmrf_node_sptr& node);
 
   //: Returns the 2d position of this curvel in frame \p frame by reference
@@ -60,10 +58,8 @@ class bmrf_curvel_3d : public bugl_gaussian_point_3d<double>, public vbl_ref_cou
   //: The previous curvel along the curve
   bmrf_curvel_3d_sptr prev_;
 
-  //: A vector of alpha/node pairs which represent the projection
-  //  of this curvel into image i.
+  //: A vector of alpha/node pairs which represent the projection of this curvel into image i.
   vcl_vector<vcl_pair<double,bmrf_node_sptr> > projs_2d_;
-
 };
 
 #endif // bmrf_curvel_3d_h_
