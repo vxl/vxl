@@ -15,6 +15,7 @@ TESTS += vtol_test_refcounting.cxx
 TESTS += test_cycle_processor.cxx
 FLAGS_test_cycle_processor.cxx := -O1
 TESTS += vtol_test_timing.cxx
+TESTS += test_extract_topology.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
