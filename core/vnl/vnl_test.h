@@ -9,6 +9,8 @@
 #include <testlib/testlib_test.h>
 #undef MAIN
 #define MAIN( testname ) int main( int argc, char* argv[] )
+#undef TESTMAIN
+#define TESTMAIN( testname ) MAIN( testname ) { START( #testname ); testname(); SUMMARY(); }
 #define vnl_test_start testlib_test_start
 #define vnl_test_begin testlib_test_begin
 #define vnl_test_perform testlib_test_perform
