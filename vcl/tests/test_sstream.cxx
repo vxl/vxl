@@ -17,11 +17,11 @@ int test_sstream_main(int /*argc*/,char* /*argv*/[])
   vcl_istringstream s("wilma");
 
   char w;
-  s >> w; AssertEq(w,'w');
-  s >> w; AssertEq(w,'i');
-  s >> w; AssertEq(w,'l');
-  s >> w; AssertEq(w,'m');
-  s >> w; AssertEq(w,'a');
+  s >> w; AssertEq(int(w),'w');
+  s >> w; AssertEq(int(w),'i');
+  s >> w; AssertEq(int(w),'l');
+  s >> w; AssertEq(int(w),'m');
+  s >> w; AssertEq(int(w),'a');
 
   return status;
 }
