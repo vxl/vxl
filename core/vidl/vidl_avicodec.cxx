@@ -99,11 +99,11 @@ bool vidl_avicodec::write_header()
 
 //-----------------------------------------------------------------------------
 vil_image_view_base_sptr vidl_avicodec::get_view(
-                                int position, // position of the frame in the stream
-                                int x0, // starting x
-                                int xs, // row size
-                                int y0, // starting y
-                                int ys ) const // col size
+                                int position, //!< position of the frame in the stream
+                                int x0, //!< starting x
+                                int xs, //!< row size
+                                int y0, //!< starting y
+                                int ys ) const //!< col size
 {
   int i, j;
   byte* DIB;
@@ -140,45 +140,47 @@ vil_image_view_base_sptr vidl_avicodec::get_view(
   db = new byte[xs*ys*get_bytes_pixel()];
   ib = db;
 
+  // The byte swapping below is probabily unnecessary - use vil_flip_ud instead - FIXME
+
   // Store the DIB datas into ib (db).
   // Note : DIB is a flipped upside down
   switch (BitsPerPixel)
-    {
+  {
     case 24:
       for (j=height()-y0-1; j>=height()-y0-ys; j--)
+      {
+        DIB = StartDIB+ (j*line_length)+x0*(BitsPerPixel/8);
+        for (i=0; i<xs; i++)
         {
-          DIB = StartDIB+ (j*line_length)+x0*(BitsPerPixel/8);
-          for (i=0; i<xs; i++)
-            {
-              *db = *(DIB+2);
-              *(db+1) = *(DIB+1);
-              *(db+2) = *(DIB);
-              db+=3;
-              DIB+=3;
-            }
+          *db = *(DIB+2);
+          *(db+1) = *(DIB+1);
+          *(db+2) = *(DIB);
+          db+=3;
+          DIB+=3;
         }
+      }
       break;
     case 16:
-       for (j=height()-y0-1; j>=height()-y0-ys; j--)
+      for (j=height()-y0-1; j>=height()-y0-ys; j--)
+      {
+        DIB = StartDIB + (j*line_length) + x0*(BitsPerPixel/8);
+        for (i=0; i<xs; i++)
         {
-          DIB = StartDIB + (j*line_length) + x0*(BitsPerPixel/8);
-          for (i=0; i<xs; i++)
-            {
-              WORD* Pixel16 = (WORD*) DIB; // the current 16 bits pixel
-              *db     = (BYTE) RGB16R(*Pixel16);
-              *(db+1) = (BYTE) RGB16G(*Pixel16);
-              *(db+2) = (BYTE) RGB16B(*Pixel16);
-              db+=3;
-              DIB+=2;
-            }
+          WORD* Pixel16 = (WORD*) DIB; // the current 16 bits pixel
+          *db     = (BYTE) RGB16R(*Pixel16);
+          *(db+1) = (BYTE) RGB16G(*Pixel16);
+          *(db+2) = (BYTE) RGB16B(*Pixel16);
+          db+=3;
+          DIB+=2;
         }
+      }
       break;
     default:
       vcl_cerr << "vidl_avicodec : Don't know how to process a "
                << BitsPerPixel << " bits per pixel AVI File.\n";
-    } // end switch Bits per pixel
+  } // end switch Bits per pixel
 
-  vil_image_view_base_sptr image_sptr(new vil_image_view<vxl_byte>(ib, xs, ys, 3, 
+  vil_image_view_base_sptr image_sptr(new vil_image_view<vxl_byte>(ib, xs, ys, 3,
                                                                    3, ((xs*3+3)& -4), 1));
   db = NULL;
   return image_sptr;
@@ -205,13 +207,13 @@ bool vidl_avicodec::probe(const char* fname)
   int modenum = OF_READ | OF_SHARE_DENY_WRITE;
   AVIFileInit();
   if (AVIFileOpen(&avi_file_, fname, modenum, 0L)==0)
-    {
-      // The file was opened with success
-      // So, release it
-      AVIFileRelease(avi_file_);
-      // and return sucess
-      return true;
-    }
+  {
+    // The file was opened with success
+    // So, release it
+    AVIFileRelease(avi_file_);
+    // and return sucess
+    return true;
+  }
 
   return false;
 }
@@ -222,10 +224,10 @@ vidl_codec_sptr vidl_avicodec::load(const char* fname, char mode)
   DWORD videostreamcode = 0x73646976; // corresponds to char string "vids"
 
   switch(mode) {
-  case 'r':
+   case 'r':
     modenum = OF_READ | OF_SHARE_DENY_WRITE;
     break;
-  case 'w':
+   case 'w':
     modenum = OF_READWRITE;
     break;
   }
@@ -234,14 +236,11 @@ vidl_codec_sptr vidl_avicodec::load(const char* fname, char mode)
   AVIFileOpen(&avi_file_, fname, modenum, 0L);
 
   // only support first video stream
-  if (AVIFileGetStream(avi_file_, &avi_stream_, videostreamcode, 0) != AVIERR_OK) {
+  if (AVIFileGetStream(avi_file_, &avi_stream_, videostreamcode, 0) != AVIERR_OK)
     vcl_cerr << "[vidl_avicodec: no stream 0]";
-  }
 
   if (!avi_file_ || !avi_stream_)
-    {
-      return NULL;
-    }
+    return NULL;
 
   avi_get_frame_ = AVIStreamGetFrameOpen(avi_stream_, NULL);
 
@@ -259,7 +258,7 @@ vidl_codec_sptr vidl_avicodec::load(const char* fname, char mode)
   byte* DIB = (byte*) AVIStreamGetFrame(avi_get_frame_, 0);
 
   if ( ! DIB )
-      return NULL;
+    return NULL;
 
   // Get the number of bits per pixel
   // and check the validity of width and height
@@ -288,13 +287,13 @@ vidl_codec_sptr vidl_avicodec::load(const char* fname, char mode)
 
   //For the moment, we'll process 8 bits later
   if ((BitsPerPixel!=16) && (BitsPerPixel!=24))
-    {
-      vcl_cerr << "vidl_avicodec : Don't know how to process a "
-               << BitsPerPixel << " bits per pixel AVI File.\n";
-      return NULL;
-    }
-
-  return this;
+  {
+    vcl_cerr << "vidl_avicodec : Don't know how to process a "
+             << BitsPerPixel << " bits per pixel AVI File.\n";
+    return NULL;
+  }
+  else
+    return this;
 }
 
 
@@ -425,33 +424,33 @@ bool vidl_avicodec::save(vidl_movie* movie, const char* fname)
   for (vidl_movie::frame_iterator pframe = movie->begin();
        pframe <= movie->last();
        ++pframe, ++i)
+  {
+    LPBITMAPINFOHEADER lpbi =
+      (LPBITMAPINFOHEADER)GlobalLock(make_dib(pframe, 24));
+    if (!lpbi)
     {
-      LPBITMAPINFOHEADER lpbi =
-        (LPBITMAPINFOHEADER)GlobalLock(make_dib(pframe, 24));
-      if (!lpbi)
-      {
-        vcl_cerr << "vidl_avicodec : DIB (Device Independent Bitmap) creation failed.\n"
-                 << "vidl_avicodec : Frame number " << i << vcl_endl;
-        return false;
-      }
-
-      int time = i; // codec->GetT ...
-      hr = AVIStreamWrite(avi_stream_compressed,
-                          time,
-                          1, // Number of samples to write
-                          (LPBYTE) lpbi +               // pointer to data
-                          lpbi->biSize +
-                          lpbi->biClrUsed * sizeof(RGBQUAD),
-                          lpbi->biSizeImage,
-                          AVIIF_KEYFRAME,                        // flags....
-                          NULL,
-                          NULL);
-      if (hr != AVIERR_OK)
-      {
-        vcl_cerr << "vidl_avicodec : Could not write to the AVI stream.\n";
-        return false;
-      }
+      vcl_cerr << "vidl_avicodec : DIB (Device Independent Bitmap) creation failed.\n"
+               << "vidl_avicodec : Frame number " << i << vcl_endl;
+      return false;
     }
+
+    int time = i; // codec->GetT ...
+    hr = AVIStreamWrite(avi_stream_compressed,
+                        time,
+                        1, // Number of samples to write
+                        (LPBYTE) lpbi +               // pointer to data
+                        lpbi->biSize +
+                        lpbi->biClrUsed * sizeof(RGBQUAD),
+                        lpbi->biSizeImage,
+                        AVIIF_KEYFRAME,                        // flags....
+                        NULL,
+                        NULL);
+    if (hr != AVIERR_OK)
+    {
+      vcl_cerr << "vidl_avicodec : Could not write to the AVI stream.\n";
+      return false;
+    }
+  }
 
   if (avi_stream)
     AVIStreamRelease(avi_stream);
@@ -497,7 +496,7 @@ void vidl_avicodec::choose_encoder(AVIEncoderType encoder)
 {
   encoder_type=encoder;
 
-  if (encoder_type==ASKUSER || 
+  if (encoder_type==ASKUSER ||
       (encoder_type==USEPREVIOUS && encoder_options_valid))
     return;
 
@@ -574,10 +573,12 @@ HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
     ++db;
   }
 
+  // The byte swapping below is probabily unnecessary - use vil_flip_ud instead - FIXME
+
   // Store the TargetJr data in a Bitmap way, DIB is a flipped upside down
   byte* DIB = newbits;
   switch (frame->get_bytes_pixel())
-    {
+  {
     case 3:
       for (j=frame->height()-1; j>=0;j--)
       {
@@ -610,12 +611,9 @@ HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
       vcl_cerr << "vidl_avicodec : Don't know how to deal with "
                << frame->get_bytes_pixel() << " bytes per pixel.\n";
 
-    } // end switch byte per pixel
+  } // end switch byte per pixel
 
-  // Get rid of the original datas
-  delete[] TjSection;
-
-  // 3st, Create the Bitmap and stick the datas in it
+  // 3rd, Create the Bitmap and stick the datas in it
   HDC hdc = GetDC(NULL);
   HBITMAP hbitmap;
   if (!(hbitmap = CreateCompatibleBitmap(hdc,frame->width(),frame->height())))
