@@ -30,15 +30,12 @@ class vmap_sigma_permutation
 
   //:
   typedef typename map_type::dart_pointer element_pointer ;
-#if 0
+#if 0 // vmap_dart_index is typedef'd in vmap_types.h
   typedef typename map_type::vmap_dart_index vmap_dart_index ;
 #endif // 0
 
   //:
   typedef vmap_dart_index element_index ;
-#if 0
-  typedef typename map_type::vmap_dart_index element_index ;
-#endif // 0
 
   //:
   typedef typename map_type::vertex_type cycle_type ; // the linked elements
@@ -170,7 +167,7 @@ class vmap_phi_permutation
 
   //:
   typedef typename map_type::dart_iterator element_iterator ;
-#if 0
+#if 0 // vmap_dart_index is typedef'd in vmap_types.h
   typedef typename map_type::vmap_dart_index vmap_dart_index ;
 #endif // 0
 
@@ -179,9 +176,6 @@ class vmap_phi_permutation
 
   //:
   typedef vmap_dart_index element_index ;
-#if 0
-  typedef typename map_type::vmap_dart_index element_index ;
-#endif // 0
 
   //:
   typedef typename map_type::face_type cycle_type ; // the linked elements
@@ -333,9 +327,6 @@ class vmap_kernel
 
   //:
   typedef vmap_dart_index dart_index ;
-#if 0
-  typedef typename map_type::vmap_dart_index dart_index ;
-#endif // 0
 
  private:
   //:
