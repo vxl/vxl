@@ -127,7 +127,7 @@ vil_dicom_header_type vil_dicom_header_format::determineFileType(vil_stream &fs)
   if (fs.ok())
   {
     // There are four possibilities:
-    // The file is Part10 with 128 vxl_byte pre-amble
+    // The file is Part10 with 128 byte pre-amble
     // The file is Part10 with no pre-amble
     // The file is a non-Part10 dicom file
     // The file is not a dicom file (or can't be determined as such)
@@ -172,14 +172,19 @@ vil_dicom_header_type vil_dicom_header_format::determineFileType(vil_stream &fs)
           // first element of the Identifying group
           fs.seek(0);
           vxl_uint_16 group, element;
-          unsigned data_block_size, num_elements;
+          vxl_uint_32 data_block_size, num_elements;
 
-          fs.read((char *)&group, sizeof(vxl_uint_16));
+          fs.read(&group, sizeof(vxl_uint_16));
           group = shortSwap(group);
-          fs.read((char *)&element, sizeof(vxl_uint_16));
+          fs.read(&element, sizeof(vxl_uint_16));
           element = shortSwap(element);
-          fs.read((char *)&data_block_size, sizeof(int));
+          fs.read(&data_block_size, sizeof(vxl_uint_32));
           data_block_size = intSwap(data_block_size);
+          if (data_block_size > 0x1000000) {
+            vcl_cerr << __FILE__ "," << __LINE__ << " : WARNING: data_block_size="
+                     << data_block_size << " is most probably too large\n";
+            break;
+          }
 
           num_elements = 0;
 
@@ -192,12 +197,17 @@ vil_dicom_header_type vil_dicom_header_format::determineFileType(vil_stream &fs)
             fs.seek(data_block_size + fs.tell());
 
 
-            fs.read((char *)&group, sizeof(vxl_uint_16));
+            fs.read(&group, sizeof(vxl_uint_16));
             group = shortSwap(group);
-            fs.read((char *)&element, sizeof(vxl_uint_16));
+            fs.read(&element, sizeof(vxl_uint_16));
             element = shortSwap(element);
-            fs.read((char *)&data_block_size, sizeof(int));
+            fs.read(&data_block_size, sizeof(vxl_uint_32));
             data_block_size = intSwap(data_block_size);
+            if (data_block_size > 0x1000000) {
+              vcl_cerr << __FILE__ "," << __LINE__ << " : WARNING: data_block_size="
+                       << data_block_size << " is most probably too large\n";
+              break;
+            }
 
             num_elements++;
           } // End of while (group...
@@ -255,12 +265,12 @@ vil_dicom_header_type vil_dicom_header_format::determineFileType(vil_stream &fs)
 
 void vil_dicom_header_format::readHeaderElements(vil_stream &fs)
 {
-  vxl_uint_16 group, element;   // The groups and elements read from the header part of the dicom file
-  unsigned int data_block_size; // The size of the information held for this group/element pair
+  vxl_uint_16 group, element;  // The groups and elements read from the header part of the dicom file
+  vxl_uint_32 data_block_size; // The size of the information held for this group/element pair
 
   // Read the first group/element pair
-  fs.read((char *)&group, sizeof(vxl_uint_16));
-  fs.read((char *)&element, sizeof(vxl_uint_16));
+  fs.read(&group, sizeof(vxl_uint_16));
+  fs.read(&element, sizeof(vxl_uint_16));
 
   // Swap them if necessary
   group = shortSwap(group);
@@ -270,8 +280,14 @@ void vil_dicom_header_format::readHeaderElements(vil_stream &fs)
   // pixel data is found
   while (fs.ok() && !pixelDataFound(group, element))
   {
-    fs.read((char *)&data_block_size, sizeof(unsigned int));
+    if (sizeof(vxl_uint_32) != fs.read(&data_block_size, sizeof(vxl_uint_32)))
+      break;
     data_block_size = intSwap(data_block_size);
+    if (data_block_size > 0x1000000) {
+      vcl_cerr << __FILE__ "," << __LINE__ << " : WARNING: data_block_size="
+               << data_block_size << " is most probably too large\n";
+      break;
+    }
     convertValueRepresentation(data_block_size, fs);
 
     switch (group)
@@ -309,8 +325,8 @@ void vil_dicom_header_format::readHeaderElements(vil_stream &fs)
     } // End of switch
 
     // Read the next group and element
-    fs.read((char *)&group, sizeof(vxl_uint_16));
-    fs.read((char *)&element, sizeof(vxl_uint_16));
+    fs.read(&group, sizeof(vxl_uint_16));
+    fs.read(&element, sizeof(vxl_uint_16));
 
     // Swap them if necessary
     group = shortSwap(group);
@@ -318,12 +334,41 @@ void vil_dicom_header_format::readHeaderElements(vil_stream &fs)
   } // End of while
 
   // Read the final block size info - throw away!
-  fs.read((char *)&data_block_size, sizeof(int));
+  if (sizeof(vxl_uint_32) != fs.read(&data_block_size, sizeof(vxl_uint_32)))
+    return;
   data_block_size = intSwap(data_block_size);
-  convertValueRepresentation(data_block_size, fs);
+  if (data_block_size > 0x1000000)
+    vcl_cerr << __FILE__ "," << __LINE__ << " : WARNING: data_block_size="
+             << data_block_size << " is most probably too large\n";
+  else
+    convertValueRepresentation(data_block_size, fs);
 }
 
 //================================================================
+
+// These macros will be used a lot of times in the subsequent read* methods
+#define CASE(X,M,F) \
+   case X : \
+    data_p = new char[dblock_size+1]; /* Ensure room for 0 */ \
+    if (data_p) \
+    { \
+      fs.read(data_p,dblock_size); \
+      data_p[dblock_size]=0; \
+      last_read_.M = F(data_p); \
+    } \
+    break
+
+#define CASE_SWP(X,M) \
+   case X : \
+    data_p = new char[dblock_size+1]; /* Ensure room for 0 */ \
+    if (data_p) \
+    { \
+      fs.read(data_p,dblock_size); \
+      data_p[dblock_size]=0; \
+      charSwap(data_p, sizeof(vxl_uint_16)); \
+      last_read_.M = *((vxl_uint_16*)data_p); \
+    } \
+    break
 
 void vil_dicom_header_format::readIdentifyingElements(short element,
                                                       int dblock_size,
@@ -335,261 +380,30 @@ void vil_dicom_header_format::readIdentifyingElements(short element,
   // Check the elements
   switch ((vxl_uint_16)element)
   {
-   case VIL_DICOM_HEADER_IDIMAGETYPE :
-    // It's the image type
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.image_id_type_ = data_p;
-    }
-    break;
-
-   case VIL_DICOM_HEADER_IDSOPCLASSID :
-    // It's the SOP class ID
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.sop_cl_uid_ = data_p;
-    }
-    break;
-
-   case VIL_DICOM_HEADER_IDSOPINSTANCEID :
-    // It's the SOP instance ID
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.sop_in_uid_ = data_p;
-    }
-    break;
-
-   case VIL_DICOM_HEADER_IDSTUDYDATE :
-    // It's the study date
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.study_date_ = atol(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IDSERIESDATE :
-    // It's the series date
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.series_date_ = atol(data_p);
-    }
-    break;
-
-   case VIL_DICOM_HEADER_IDACQUISITIONDATE :
-    // It's the acquisition date
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.acquisition_date_ = atol(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IDIMAGEDATE :
-    // It's the image date
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.image_date_ = atol(data_p);
-    }
-    break;
-
-   case VIL_DICOM_HEADER_IDSTUDYTIME :
-    // It's the study time
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.study_time_ = (float) atof(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IDSERIESTIME :
-    // It's the series time
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.series_time_ = (float) atof(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IDACQUISITIONTIME :
-    // It's the acquisition time
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.acquisition_time_ = (float) atof(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IDIMAGETIME :
-    // It's the image time
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.image_time_ = (float) atof(data_p);
-    }
-    break;
-
-   case VIL_DICOM_HEADER_IDACCESSIONNUMBER :
-    // It's the accession number
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.accession_number_ = data_p;
-    }
-    break;
-
-   case VIL_DICOM_HEADER_IDMODALITY :
-    // It's the imaging modality
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.modality_=data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IDMANUFACTURER :
-    // It's the manufacturer name
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.manufacturer_=data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IDINSTITUTIONNAME :
-    // It's the institution name
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.institution_name_=data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IDINSTITUTIONADDRESS :
-    // It's the institution address
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.institution_addr_=data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IDREFERRINGPHYSICIAN :
-    // It's the referring physician's name
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.ref_phys_name_=data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IDSTATIONNAME :
-    // It's the imaging station name
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.station_name_=data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IDSTUDYDESCRIPTION :
-    // It's the study description
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.study_desc_ = data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IDSERIESDESCRIPTION :
-    // It's the series description
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.series_desc_ = data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IDATTENDINGPHYSICIAN :
-    // It's the name of the attending physician
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.att_phys_name_=data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IDOPERATORNAME :
-    // It's the name of the scanner operator
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.operator_name_=data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IDMANUFACTURERMODEL :
-    // It's the scanner model
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.model_name_=data_p;
-    } // End of if (data_p)
-    break;
-
-    // It's nothing we want, so skip it!
-   default:
+   CASE(VIL_DICOM_HEADER_IDIMAGETYPE,         image_id_type_,); // It's the image type
+   CASE(VIL_DICOM_HEADER_IDSOPCLASSID,        sop_cl_uid_,); // It's the SOP class ID
+   CASE(VIL_DICOM_HEADER_IDSOPINSTANCEID,     sop_in_uid_,); // It's the SOP instance ID
+   CASE(VIL_DICOM_HEADER_IDSTUDYDATE,         study_date_,atol); // It's the study date
+   CASE(VIL_DICOM_HEADER_IDSERIESDATE,        series_date_,atol); // It's the series date
+   CASE(VIL_DICOM_HEADER_IDACQUISITIONDATE,   acquisition_date_,atol); // It's the acquisition date
+   CASE(VIL_DICOM_HEADER_IDIMAGEDATE,         image_date_,atol); // It's the image date
+   CASE(VIL_DICOM_HEADER_IDSTUDYTIME,         study_time_,(float)atof); // It's the study time
+   CASE(VIL_DICOM_HEADER_IDSERIESTIME,        series_time_,(float)atof); // It's the series time
+   CASE(VIL_DICOM_HEADER_IDACQUISITIONTIME,   acquisition_time_,(float)atof); // It's the acquisition time
+   CASE(VIL_DICOM_HEADER_IDIMAGETIME,         image_time_,(float)atof); // It's the image time
+   CASE(VIL_DICOM_HEADER_IDACCESSIONNUMBER,   accession_number_,); // It's the accession number
+   CASE(VIL_DICOM_HEADER_IDMODALITY,          modality_,); // It's the imaging modality
+   CASE(VIL_DICOM_HEADER_IDMANUFACTURER,      manufacturer_,); // It's the manufacturer name
+   CASE(VIL_DICOM_HEADER_IDINSTITUTIONNAME,   institution_name_,); // It's the institution name
+   CASE(VIL_DICOM_HEADER_IDINSTITUTIONADDRESS,institution_addr_,); // It's the institution address
+   CASE(VIL_DICOM_HEADER_IDREFERRINGPHYSICIAN,ref_phys_name_,); // It's the referring physician's name
+   CASE(VIL_DICOM_HEADER_IDSTATIONNAME,       station_name_,); // It's the imaging station name
+   CASE(VIL_DICOM_HEADER_IDSTUDYDESCRIPTION,  study_desc_,); // It's the study description
+   CASE(VIL_DICOM_HEADER_IDSERIESDESCRIPTION, series_desc_,); // It's the series description
+   CASE(VIL_DICOM_HEADER_IDATTENDINGPHYSICIAN,att_phys_name_,); // It's the name of the attending physician
+   CASE(VIL_DICOM_HEADER_IDOPERATORNAME,      operator_name_,); // It's the name of the scanner operator
+   CASE(VIL_DICOM_HEADER_IDMANUFACTURERMODEL, model_name_,); // It's the scanner model
+   default: // It's nothing we want, so skip it!
     fs.seek(dblock_size + fs.tell());
     break;
   } // End of switch
@@ -609,86 +423,14 @@ void vil_dicom_header_format::readPatientElements(short element,
   // Check the elements
   switch ((vxl_uint_16)element)
   {
-   case VIL_DICOM_HEADER_PIPATIENTNAME :
-    // It's the patient's name
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.patient_name_ = data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_PIPATIENTID :
-    // It's the patient's id
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.patient_id_ = data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_PIPATIENTBIRTHDATE :
-    // It's the patient's date of birth
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.patient_dob_ = atol(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_PIPATIENTSEX :
-    // It's the patient's sex
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.patient_sex_ = data_p;
-    } // End of if (data_p)
-    break;
-
-
-   case VIL_DICOM_HEADER_PIPATIENTAGE :
-    // It's the patient's age
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.patient_age_ = data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_PIPATIENTWEIGHT :
-    // It's the patient's weight
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.patient_weight_ = (float) atof(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_PIPATIENTHISTORY :
-    // It's the patient's history
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.patient_hist_ = data_p;
-    } // End of if (data_p)
-    break;
-
-    // It's nothing we want, so skip it!
-   default:
+   CASE(VIL_DICOM_HEADER_PIPATIENTNAME,     patient_name_,); // It's the patient's name
+   CASE(VIL_DICOM_HEADER_PIPATIENTID,       patient_id_,); // It's the patient's id
+   CASE(VIL_DICOM_HEADER_PIPATIENTBIRTHDATE,patient_dob_,atol); // It's the patient's date of birth
+   CASE(VIL_DICOM_HEADER_PIPATIENTSEX,      patient_sex_,); // It's the patient's sex
+   CASE(VIL_DICOM_HEADER_PIPATIENTAGE,      patient_age_,); // It's the patient's age
+   CASE(VIL_DICOM_HEADER_PIPATIENTWEIGHT,   patient_weight_,(float)atof); // It's the patient's weight
+   CASE(VIL_DICOM_HEADER_PIPATIENTHISTORY,  patient_hist_,); // It's the patient's history
+   default: // It's nothing we want, so skip it!
     fs.seek(dblock_size + fs.tell());
     break;
   } // End of switch
@@ -708,305 +450,34 @@ void vil_dicom_header_format::readAcquisitionElements(short element,
   // Check the elements
   switch ((vxl_uint_16)element)
   {
-   case VIL_DICOM_HEADER_AQSCANNINGSEQUENCE :
-    // It's the scanning sequence
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.scanning_seq_ = data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_AQSEQUENCEVARIANT :
-    // It's the sequence variant
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.sequence_var_ = data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_AQSCANOPTIONS :
-    // It's the scan options
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.scan_options_ = data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_AQMRACQUISITIONTYPE :
-    // It's the MR acquisition type
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.mr_acq_type_ = data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_AQSEQUENCENAME :
-    // It's the sequence name
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.sequence_name_ = data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_AQANGIOFLAG :
-    // It's the angio flag
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.angio_flag_ = data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_AQSLICETHICKNESS :
-    // It's the slice thickness
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.slice_thickness_ = (float) atof(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_AQREPETITIONTIME :
-    // It's the repetition time
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.repetition_time_ = (float) atof(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_AQECHOTIME :
-    // It's the echo time
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.echo_time_= (float) atof(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_AQINVERSIONTIME :
-    // It's the inversion time
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.inversion_time_= (float) atof(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_AQNUMBEROFAVERAGES :
-    // It's the number of averages
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.number_of_averages_ = (float) atof(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_AQECHONUMBERS :
-    // It's the echo numbers
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.echo_numbers_ = atoi(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_AQMAGNETICFIELDSTRENGTH :
-    // It's the magnetic field strength
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.mag_field_strength_ = (float) atof(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_AQSLICESPACING:
-    // It's the slice spacing
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.slice_spacing_ = (float) atof(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_AQECHOTRAINLENGTH :
-    // It's the echo train length
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.echo_train_length_ = atoi(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_AQPIXELBANDWIDTH :
-    // It's the pixel bandwidth
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.pixel_bandwidth_ = (float) atof(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_AQSOFTWAREVERSION :
-    // It's the scanner software version
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.software_vers_ = data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_AQPROTOCOLNAME :
-    // It's the protocol name
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.protocol_name_ = data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_AQHEARTRATE :
-    // It's the heart rate
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.heart_rate_ = atoi(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_AQCARDIACNUMBEROFIMAGES :
-    // It's the cardiac number of images
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.card_num_images_ = atoi(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_AQTRIGGERWINDOW :
-    // It's the trigger window
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.trigger_window_ = atoi(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_AQRECONTRUCTIONDIAMETER :
-    // It's the reconstruction diameter
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.reconst_diameter_ = (float) atof(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_AQRECEIVINGCOIL :
-    // It's the receiving coil
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.receiving_coil_ = data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_AQPHASEENCODINGDIRECTION :
-    // It's the phase encoding direction
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.phase_enc_dir_ = data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_AQFLIPANGLE :
-    // It's the flip angle
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.flip_angle_ = (float) atof(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_AQSAR :
-    // It's the sar
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.sar_ = (float) atof(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_AQPATIENTPOSITION:
-    // It's the patient position
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.patient_pos_ = data_p;
-    } // End of if (data_p)
-    break;
-
-    // It's nothing we want, so skip it!
-   default:
+   CASE(VIL_DICOM_HEADER_AQSCANNINGSEQUENCE,      scanning_seq_,); // It's the scanning sequence
+   CASE(VIL_DICOM_HEADER_AQSEQUENCEVARIANT,       sequence_var_,); // It's the sequence variant
+   CASE(VIL_DICOM_HEADER_AQSCANOPTIONS,           scan_options_,); // It's the scan options
+   CASE(VIL_DICOM_HEADER_AQMRACQUISITIONTYPE,     mr_acq_type_,); // It's the MR acquisition type
+   CASE(VIL_DICOM_HEADER_AQSEQUENCENAME,          sequence_name_,); // It's the sequence name
+   CASE(VIL_DICOM_HEADER_AQANGIOFLAG,             angio_flag_,); // It's the angio flag
+   CASE(VIL_DICOM_HEADER_AQSLICETHICKNESS,        slice_thickness_,(float)atof); // It's the slice thickness
+   CASE(VIL_DICOM_HEADER_AQREPETITIONTIME,        repetition_time_,(float)atof); // It's the repetition time
+   CASE(VIL_DICOM_HEADER_AQECHOTIME,              echo_time_,(float)atof); // It's the echo time
+   CASE(VIL_DICOM_HEADER_AQINVERSIONTIME,         inversion_time_,(float)atof); // It's the inversion time
+   CASE(VIL_DICOM_HEADER_AQNUMBEROFAVERAGES,      number_of_averages_,(float)atof); // It's the number of averages
+   CASE(VIL_DICOM_HEADER_AQECHONUMBERS,           echo_numbers_,atoi); // It's the echo numbers
+   CASE(VIL_DICOM_HEADER_AQMAGNETICFIELDSTRENGTH, mag_field_strength_,(float)atof); // It's the magnetic field strength
+   CASE(VIL_DICOM_HEADER_AQSLICESPACING,          slice_spacing_,(float)atof); // It's the slice spacing
+   CASE(VIL_DICOM_HEADER_AQECHOTRAINLENGTH,       echo_train_length_,atoi); // It's the echo train length
+   CASE(VIL_DICOM_HEADER_AQPIXELBANDWIDTH,        pixel_bandwidth_,(float)atof); // It's the pixel bandwidth
+   CASE(VIL_DICOM_HEADER_AQSOFTWAREVERSION,       software_vers_,); // It's the scanner software version
+   CASE(VIL_DICOM_HEADER_AQPROTOCOLNAME,          protocol_name_,); // It's the protocol name
+   CASE(VIL_DICOM_HEADER_AQHEARTRATE,             heart_rate_,atoi); // It's the heart rate
+   CASE(VIL_DICOM_HEADER_AQCARDIACNUMBEROFIMAGES, card_num_images_,atoi); // It's the cardiac number of images
+   CASE(VIL_DICOM_HEADER_AQTRIGGERWINDOW,         trigger_window_,atoi); // It's the trigger window
+   CASE(VIL_DICOM_HEADER_AQRECONTRUCTIONDIAMETER, reconst_diameter_,(float)atof); // It's the reconstruction diameter
+   CASE(VIL_DICOM_HEADER_AQRECEIVINGCOIL,         receiving_coil_,); // It's the receiving coil
+   CASE(VIL_DICOM_HEADER_AQPHASEENCODINGDIRECTION,phase_enc_dir_,); // It's the phase encoding direction
+   CASE(VIL_DICOM_HEADER_AQFLIPANGLE,             flip_angle_,(float)atof); // It's the flip angle
+   CASE(VIL_DICOM_HEADER_AQSAR,                   sar_,(float)atof); // It's the sar
+   CASE(VIL_DICOM_HEADER_AQPATIENTPOSITION,       patient_pos_,); // It's the patient position
+   default: // It's nothing we want, so skip it!
     fs.seek(dblock_size + fs.tell());
     break;
   } // End of switch
@@ -1026,151 +497,20 @@ void vil_dicom_header_format::readRelationshipElements(short element,
   // Check the elements
   switch ((vxl_uint_16)element)
   {
-   case VIL_DICOM_HEADER_RSSTUDYINSTANCEUID :
-    // It's the study instance id
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.stud_ins_uid_ = data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_RSSERIESINSTANCEUID :
-    // It's the series instance id
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.ser_ins_uid_ = data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_RSSTUDYID :
-    // It's the study id
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.study_id_ = data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_RSSERIESNUMBER :
-    // It's the series number
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.series_number_ = atoi(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_RSAQUISITIONNUMBER :
-    // It's the acqusition number
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.acquisition_number_ = atoi(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_RSIMAGENUMBER :
-    // It's the image number
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.image_number_ = atoi(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_RSPATIENTORIENTATION :
-    // It's the patient orientation
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.pat_orient_ = data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_RSIMAGEPOSITION :
-    // It's the image position
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.image_pos_ = data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_RSIMAGEORIENTATION :
-    // It's the image orientation
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.image_orient_ = data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_RSFRAMEOFREFERENCEUID :
-    // It's the frame of reference uid
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.frame_of_ref_ = data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_RSIMAGESINACQUISITION:
-    // It's the number of images in the acquisition
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.images_in_acq_ = atoi(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_RSPOSITIONREFERENCE :
-    // It's the position reference
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.pos_ref_ind_ = data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_RSSLICELOCATION :
-    // It's the slice location
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.slice_location_ = (float) atof(data_p);
-    } // End of if (data_p)
-    break;
-
-    // It's nothing we want, so skip it!
-   default:
+   CASE(VIL_DICOM_HEADER_RSSTUDYINSTANCEUID,   stud_ins_uid_,); // It's the study instance id
+   CASE(VIL_DICOM_HEADER_RSSERIESINSTANCEUID,  ser_ins_uid_,); // It's the series instance id
+   CASE(VIL_DICOM_HEADER_RSSTUDYID,            study_id_,); // It's the study id
+   CASE(VIL_DICOM_HEADER_RSSERIESNUMBER,       series_number_,atoi); // It's the series number
+   CASE(VIL_DICOM_HEADER_RSAQUISITIONNUMBER,   acquisition_number_,atoi); // It's the acqusition number
+   CASE(VIL_DICOM_HEADER_RSIMAGENUMBER,        image_number_,atoi); // It's the image number
+   CASE(VIL_DICOM_HEADER_RSPATIENTORIENTATION, pat_orient_,); // It's the patient orientation
+   CASE(VIL_DICOM_HEADER_RSIMAGEPOSITION,      image_pos_,); // It's the image position
+   CASE(VIL_DICOM_HEADER_RSIMAGEORIENTATION,   image_orient_,); // It's the image orientation
+   CASE(VIL_DICOM_HEADER_RSFRAMEOFREFERENCEUID,frame_of_ref_,); // It's the frame of reference uid
+   CASE(VIL_DICOM_HEADER_RSIMAGESINACQUISITION,images_in_acq_,atoi); // It's the number of images in the acquisition
+   CASE(VIL_DICOM_HEADER_RSPOSITIONREFERENCE,  pos_ref_ind_,); // It's the position reference
+   CASE(VIL_DICOM_HEADER_RSSLICELOCATION,      slice_location_,(float) atof); // It's the slice location
+   default: // It's nothing we want, so skip it!
     fs.seek(dblock_size + fs.tell());
     break;
   } // End of switch
@@ -1191,67 +531,23 @@ void vil_dicom_header_format::readImageElements(short element,
   // Check the elements
   switch ((vxl_uint_16)element)
   {
-   case VIL_DICOM_HEADER_IMSAMPLESPERPIXEL :
-    // It's the samples per pixel
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      charSwap(data_p, sizeof(vxl_uint_16));
-      last_read_.pix_samps_ = *((vxl_uint_16*)data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IMPHOTOMETRICINTERP :
-    // It's the photometric interpretation
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.photo_interp_ = data_p;
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IMROWS :
-    // It's the rows
-    data_p = new char[dblock_size+1]; // Ensure room for 0
-    if (data_p)
-    {
-      fs.read(data_p, dblock_size);
-      data_p[dblock_size]=0;
-      charSwap(data_p, sizeof(vxl_uint_16));
-      last_read_.dimy_ = *((vxl_uint_16*)data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IMCOLUMNS :
-    // It's the columns
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      charSwap(data_p, sizeof(vxl_uint_16));
-      last_read_.dimx_ = *((vxl_uint_16 *)data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IMPLANES :
-    // It's the planes
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      charSwap(data_p, sizeof(vxl_uint_16));
-      last_read_.dimz_ = *((vxl_uint_16 *)data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IMPIXELSPACING :
-    // It's the pixel spacing
+   CASE_SWP(VIL_DICOM_HEADER_IMSAMPLESPERPIXEL,    pix_samps_); // It's the samples per pixel
+   CASE(VIL_DICOM_HEADER_IMPHOTOMETRICINTERP,      photo_interp_,); // It's the photometric interpretation
+   CASE_SWP(VIL_DICOM_HEADER_IMROWS,               dimy_); // It's the rows
+   CASE_SWP(VIL_DICOM_HEADER_IMCOLUMNS,            dimx_); // It's the columns
+   CASE_SWP(VIL_DICOM_HEADER_IMPLANES,             dimz_); // It's the planes
+   CASE_SWP(VIL_DICOM_HEADER_IMBITSALLOCATED,      allocated_bits_); // It's the allocated bits
+   CASE_SWP(VIL_DICOM_HEADER_IMBITSSTORED,         stored_bits_); // It's the stored bits info
+   CASE_SWP(VIL_DICOM_HEADER_IMHIGHBIT,            high_bit_); // It's the high bit
+   CASE_SWP(VIL_DICOM_HEADER_IMPIXELREPRESENTATION,pix_rep_); // It's the pixel representation
+   CASE_SWP(VIL_DICOM_HEADER_IMSMALLIMPIXELVALUE,  small_im_pix_val_); // It's the smallest image pixel value
+   CASE_SWP(VIL_DICOM_HEADER_IMLARGEIMPIXELVALUE,  large_im_pix_val_); // It's the largest image pixel value
+   CASE_SWP(VIL_DICOM_HEADER_IMPIXELPADDINGVALUE,  pixel_padding_val_); // It's the pixel padding value
+   CASE(VIL_DICOM_HEADER_IMWINDOWCENTER,           window_centre_,(float) atof); // It's the window centre
+   CASE(VIL_DICOM_HEADER_IMWINDOWWIDTH,            window_width_,(float) atof); // It's the window width
+   CASE(VIL_DICOM_HEADER_IMRESCALEINTERCEPT,       res_intercept_,(float) atof); // It's the rescale intercept
+   CASE(VIL_DICOM_HEADER_IMRESCALESLOPE,           res_slope_,(float) atof); // It's the rescale slope
+   case VIL_DICOM_HEADER_IMPIXELSPACING : // It's the pixel spacing
     data_p = new char[dblock_size+1];
     if (data_p)
     {
@@ -1265,154 +561,17 @@ void vil_dicom_header_format::readImageElements(short element,
       while (gone != 0 && gone != '\\')
       {
         gone = data_p[0];
-
         for (int i=0; i<dblock_size; i++)
-        {
           data_p[i] = data_p[i+1];
-        }
-      } // End of while
-
+      }
       if (gone == '\\')
-      {
         last_read_.ysize_ = (float) atof(data_p);
-      }
       else
-      {
         last_read_.ysize_ = (float) last_read_.xsize_;
-      }
-    } // End of if (data_p)
+    }
     break;
 
-   case VIL_DICOM_HEADER_IMBITSALLOCATED :
-    // It's the allocated bits
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      charSwap(data_p, sizeof(vxl_uint_16));
-      last_read_.allocated_bits_ = *((vxl_uint_16 *)data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IMBITSSTORED :
-    // It's the stored bits info
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      charSwap(data_p,sizeof(vxl_uint_16));
-      last_read_.stored_bits_ = *((vxl_uint_16 *)data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IMHIGHBIT :
-    // It's the high bit
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      charSwap(data_p, sizeof(vxl_uint_16));
-      last_read_.high_bit_ = *((vxl_uint_16 *)data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IMPIXELREPRESENTATION :
-    // It's the pixel representation
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      charSwap(data_p,sizeof(vxl_uint_16));
-      last_read_.pix_rep_ = *((vxl_uint_16 *)data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IMSMALLIMPIXELVALUE :
-    // It's the smallest image pixel value
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      charSwap(data_p, sizeof(short));
-      last_read_.small_im_pix_val_ = *((short *)data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IMLARGEIMPIXELVALUE :
-    // It's the largest image pixel value
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      charSwap(data_p, sizeof(short));
-      last_read_.large_im_pix_val_ = *((short *)data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IMPIXELPADDINGVALUE :
-    // It's the pixel padding value
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      charSwap(data_p, sizeof(short));
-      last_read_.pixel_padding_val_ = *((short *)data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IMWINDOWCENTER :
-    // It's the window centre
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.window_centre_ = (float) atof(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IMWINDOWWIDTH :
-    // It's the window width
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.window_width_ = (float) atof(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IMRESCALEINTERCEPT :
-    // It's the rescale intercept
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.res_intercept_ = (float) atof(data_p);
-    } // End of if (data_p)
-    break;
-
-   case VIL_DICOM_HEADER_IMRESCALESLOPE :
-    // It's the rescale slope
-    data_p = new char[dblock_size+1];
-    if (data_p)
-    {
-      fs.read(data_p,dblock_size);
-      data_p[dblock_size]=0;
-      last_read_.res_slope_ = (float) atof(data_p);
-    } // End of if (data_p)
-    break;
-
-    // It's nothing we want, so skip it!
-   default:
+   default: // It's nothing we want, so skip it!
     fs.seek(dblock_size + fs.tell());
     break;
   } // End of switch
@@ -1453,7 +612,7 @@ bool vil_dicom_header_format::convertValueRepresentation(unsigned int &dblock_si
   // Union to convert the int to chars
   union int_char
   {
-    unsigned int int_val;
+    vxl_uint_32 int_val;
     char char_val[4];
   } conv_dblock;
 
@@ -1477,7 +636,7 @@ bool vil_dicom_header_format::convertValueRepresentation(unsigned int &dblock_si
     // Check if VR is a nested sequence (SQ)
     if (first == VIL_DICOM_HEADER_SEQUENCE || last == VIL_DICOM_HEADER_SEQUENCE)
     {
-      fs.read((char *)&dblock_size, sizeof(int));
+      fs.read(&dblock_size, sizeof(int));
       dblock_size = 0;
       result = true;
     } // End of if (first...
@@ -1486,7 +645,7 @@ bool vil_dicom_header_format::convertValueRepresentation(unsigned int &dblock_si
              last == VIL_DICOM_HEADER_OTHERBYTE  ||
              last == VIL_DICOM_HEADER_OTHERWORD)
     {
-      fs.read((char *)&dblock_size, sizeof(int));
+      fs.read(&dblock_size, sizeof(int));
       dblock_size = shortSwap(dblock_size);
       result = true;
     } // End of else if (first...
@@ -1702,14 +861,14 @@ vil_dicom_header_endian vil_dicom_header_format::calculateEndian(void)
   // Create a union to test endian
   union int_byte
   {
-    int int_val;
-    unsigned char by_val[4];
+    vxl_uint_32 int_val;
+    vxl_byte by_val[4];
   } calc_endian;
 
   // Put 1 into the union
   calc_endian.int_val = 1;
 
-  // Test which vxl_byte has the value 1 in it
+  // Test which byte has the value 1 in it
   return calc_endian.by_val[0] == 1 ?
     VIL_DICOM_HEADER_DELITTLEENDIAN :
     VIL_DICOM_HEADER_DEBIGENDIAN;
@@ -1723,7 +882,7 @@ vil_dicom_header_endian vil_dicom_header_format::determineMetaInfo(vil_stream &f
   //vil_dicom_header_endian ret_end = VIL_DICOM_HEADER_DEBIGENDIAN;
 
   vxl_uint_16 group, element;
-  unsigned int data_block_size;
+  vxl_uint_32 data_block_size;
   vil_streampos ret_pos = fs.tell(); // Maintain the file position
 
   // The first section of the file header is always little endian,
@@ -1732,18 +891,24 @@ vil_dicom_header_endian vil_dicom_header_format::determineMetaInfo(vil_stream &f
   image_type_ = VIL_DICOM_HEADER_DITUNKNOWN;
 
   // Read the next group
-  fs.read((char *)&group,sizeof(vxl_uint_16));
+  fs.read(&group,sizeof(vxl_uint_16));
   group = shortSwap(group);
   while (fs.ok() && group <= VIL_DICOM_HEADER_METAFILEGROUP)
   {
     // Read the element
 
-    fs.read((char *)&element,sizeof(vxl_uint_16));
+    fs.read(&element,sizeof(vxl_uint_16));
     element = shortSwap(element);
 
     // Read the data block size
-    fs.read((char *)&data_block_size,sizeof(unsigned int));
+    if (sizeof(vxl_uint_32) != fs.read(&data_block_size, sizeof(vxl_uint_32)))
+      break;
     data_block_size = intSwap(data_block_size);
+    if (data_block_size > 0x1000000) {
+      vcl_cerr << __FILE__ "," << __LINE__ << " : WARNING: data_block_size="
+               << data_block_size << " is most probably too large\n";
+      break;
+    }
     convertValueRepresentation(data_block_size,fs);
 
     if (group == VIL_DICOM_HEADER_METAFILEGROUP &&
@@ -1854,7 +1019,7 @@ vil_dicom_header_endian vil_dicom_header_format::determineMetaInfo(vil_stream &f
     ret_pos = fs.tell();
 
     // Read the next group
-    fs.read((char *)&group,sizeof(vxl_uint_16));
+    fs.read(&group,sizeof(vxl_uint_16));
     group = shortSwap(group);
   } // End of while
 
@@ -1879,14 +1044,14 @@ vxl_uint_16 vil_dicom_header_format::shortSwap(vxl_uint_16 short_in)
     union short_char
     {
       vxl_uint_16 short_val;
-      char byte_val[2];
+      vxl_byte byte_val[2];
     } short_swap;
 
     // Set the swapper
     short_swap.short_val = short_in;
 
     // Swap them over
-    char temp = short_swap.byte_val[0];
+    vxl_byte temp = short_swap.byte_val[0];
     short_swap.byte_val[0]=short_swap.byte_val[1];
     short_swap.byte_val[1]=temp;
 
@@ -1898,27 +1063,27 @@ vxl_uint_16 vil_dicom_header_format::shortSwap(vxl_uint_16 short_in)
 
 //===============================================================
 
-int vil_dicom_header_format::intSwap(int int_in)
+vxl_uint_32 vil_dicom_header_format::intSwap(vxl_uint_32 int_in)
 {
-  int result = int_in;
+  vxl_uint_32 result = int_in;
 
   // Only swap if the architecture is different to the
   // file (the logic means that if one is unknown it swaps,
   // if both are unknown, it doesnt)
   if (file_endian_ != endian_)
   {
-    // Create an int unioned with four chars
+    // Create a vxl_uint_32 unioned with four chars
     union int_char
     {
-      int int_val;
-      char byte_val[4];
+      vxl_uint_32 int_val;
+      vxl_byte byte_val[4];
     } int_swap;
 
     // Set the swapper
     int_swap.int_val = int_in;
 
     // Swap them over (end ones first)
-    char temp = int_swap.byte_val[0];
+    vxl_byte temp = int_swap.byte_val[0];
     int_swap.byte_val[0]=int_swap.byte_val[3];
     int_swap.byte_val[3]=temp;
 
@@ -1942,29 +1107,12 @@ void vil_dicom_header_format::charSwap(char *char_in, int val_size)
   // if both are unknown, it doesnt)
   if (file_endian_ != endian_)
   {
-    // Create a char the same size to swap
-    char *temp = new char [val_size];
-
-    if (temp)
+    // Swap first with last, second with one-but-last, etc.
+    for (int i=val_size/2-1; i>=0; --i)
     {
-      // Copy from the first vcl_string into the temp
-      for (int i=0; i<val_size; i++)
-      {
-        temp[i]=char_in[i];
-      }
-
-      // Now put back in reverse
-      for (int i=0; i<val_size; i++)
-      {
-        char_in[(val_size-i)-1] = temp[i];
-      } // End of for
-
-      delete[] temp;
-    } // End of if (temp)
-    else
-    {
-      vcl_cerr << "Couldn't create temp in charSwap!\n"
-               << "Value remains unswapped!\n";
+      char temp=char_in[i];
+      char_in[i] = char_in[val_size-i-1];
+      char_in[val_size-i-1] = temp;
     }
-  } // End of if (file_endian_ != endian)
+  }
 }

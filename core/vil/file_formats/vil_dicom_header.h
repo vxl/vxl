@@ -574,19 +574,19 @@ class vil_dicom_header_format
   //  \sa fileEndian(), file_endian_(), imageType(), and image_type_();
   vil_dicom_header_endian determineMetaInfo(vil_stream &fs);
 
-  //: Method to vxl_byte swap a short int if necessary
+  //: Method to byte swap an unsigned short int if necessary
   //
-  //  \param short_in The short to swap
-  //  \return The swapped short
+  //  \param short_in The unsigned short to swap
+  //  \return The swapped unsigned short
   //  \sa intSwap() and charSwap()
   vxl_uint_16 shortSwap(vxl_uint_16 short_in);
 
-  //: Method to vxl_byte swap an int if necessary
+  //: Method to byte swap an unsigned int if necessary
   //
-  //  \param int_in The int to swap
-  //  \return The swapped int
+  //  \param int_in The unsigned int to swap
+  //  \return The swapped unsigned int
   //  \sa shortSwap() and charSwap()
-  int intSwap(int int_in);
+  vxl_uint_32 intSwap(vxl_uint_32 int_in);
 
   //: Method to swap a number inside a char array
   //
