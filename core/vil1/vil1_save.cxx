@@ -14,6 +14,7 @@
 #include "vil_save.h"
 
 #include <vcl/vcl_cstring.h>
+#include <vcl/vcl_iostream.h>
 
 #include <vil/vil_new.h>
 #include <vil/vil_stream_fstream.h>
@@ -21,7 +22,7 @@
 #include <vil/vil_copy.h>
 
 //: Send vil_image to disk.
-bool vil_save(vil_image const& i, char const* filename, char const* file_format VCL_DEFAULT_VALUE("pnm"))
+bool vil_save(vil_image const& i, char const* filename, char const* file_format /*VCL_DEFAULT_VALUE("pnm")*/)
 {
   vil_stream_fstream* os = new vil_stream_fstream(filename, "w");
   return vil_save(i, os, file_format);
@@ -42,4 +43,33 @@ bool vil_save(vil_image const& i, vil_stream* os, char const* file_format VCL_DE
   vil_copy(i, out);
   
   return true;
+}
+
+//: save to file, deducing format from filename.
+bool vil_save(vil_image const& i, char const* filename)
+{
+  char const *file_format = 0;
+  
+  // find last "."
+  char const *dot = strrchr(filename, '.');
+  if (!dot) {
+    // filename doesn't end in ".anything"
+    cerr << __FILE__ ": assuming pnm format" << endl;
+    file_format = "pnm";
+  }
+  else {
+    // translate common extensions into known file formats.
+    if (false) { }
+#define macro(ext, fmt) else if (!strcmp(dot, "." #ext)) file_format = #fmt
+    macro(ppm, pnm);
+    macro(pgm, pnm);
+    macro(pbm, pnm);
+    macro(jpg, jpeg);
+    macro(tif, tiff);
+#undef macro
+    else
+      file_format = dot+1; // hope it works.
+  }
+
+  return vil_save(i, filename, file_format);
 }
