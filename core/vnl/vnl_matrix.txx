@@ -726,7 +726,7 @@ T cos_angle (vnl_matrix<T> const& a, vnl_matrix<T> const& b) {
   //  Look, goddamit, abs_t is right.  If your compiler can't deal
   //  with it, ifdef that baby outta there.   My compiler is cleverer than
   //  yours, and can't handle that whole double thing.
-  abs_t a_b = (abs_t)vcl_sqrt( (double)vnl_math_abs(inner_product(a,a) * inner_product(b,b)) );
+  abs_t a_b = (abs_t)vcl_sqrt( (abs_t)vnl_math_abs(inner_product(a,a) * inner_product(b,b)) );
 
   return T( ab / a_b);
 }
@@ -793,7 +793,10 @@ void vnl_matrix<T>::set_identity()
     vnl_error_matrix_nonsquare ("set_identity");
   for (unsigned int i = 0; i < this->num_rows; i++)    // For each row in the Matrix
     for (unsigned int j = 0; j < this->num_cols; j++)  // For each element in column
-      this->data[i][j] = (i == j) ? 1 : 0; // Assign fill value
+      if (i == j)
+	this->data[i][j] = T(1);
+      else
+	this->data[i][j] = T(0);
 }
 
 //: Make each row of the matrix have unit norm.
@@ -801,8 +804,9 @@ void vnl_matrix<T>::set_identity()
 template<class T>
 void vnl_matrix<T>::normalize_rows()
 {
+  typedef typename vnl_numeric_traits<T>::abs_t abs_t;
   for (unsigned int i = 0; i < this->num_rows; i++) {  // For each row in the Matrix
-    double norm = 0; // Double should do all, but this should be specialized for complex.
+    abs_t norm(0); // double will not do for all types.
     for (unsigned int j = 0; j < this->num_cols; j++)  // For each element in row
       norm += vnl_math_squared_magnitude(this->data[i][j]);
 
@@ -823,8 +827,9 @@ void vnl_matrix<T>::normalize_rows()
 template<class T>
 void vnl_matrix<T>::normalize_columns()
 {
+  typedef typename vnl_numeric_traits<T>::abs_t abs_t;
   for (unsigned int j = 0; j < this->num_cols; j++) {  // For each column in the Matrix
-    double norm = 0; // Double should do all, but this should be specialized for complex.
+    abs_t norm(0); // double will not do for all types.
     for (unsigned int i = 0; i < this->num_rows; i++)
       norm += vnl_math_squared_magnitude(this->data[i][j]);
 
@@ -1007,11 +1012,11 @@ bool vnl_matrix<T>::operator_eq(vnl_matrix<T> const& rhs) const {
 template <class T>
 bool vnl_matrix<T>::is_identity(double tol) const
 {
-  T one = vnl_numeric_traits<T>::one;
+  T one(1);
   for (unsigned int i = 0; i < this->rows(); ++i)
     for (unsigned int j = 0; j < this->columns(); ++j) {
       T xm = (*this)(i,j);
-      double absdev = (i == j) ? vnl_math_abs(xm - one) : vnl_math_abs(xm);
+      abs_t absdev = (i == j) ? vnl_math_abs(xm - one) : vnl_math_abs(xm);
       if (absdev > tol)
         return false;
     }
