@@ -9,7 +9,7 @@
 
 @code{vidl} has the central notion of a @emph{movie}, which is turn is a
 sequence of clips. A @emph{clip} is simply a sequence of frames. A
-@emph{frame} can return a @code{vil1_image} corresponding to the frame,
+@emph{frame} can return a @code{vil_image} corresponding to the frame,
 using the coder/decoder @emph{codec} for a given video format.
 
 Large videos can be read a frame at a time from the codec so it is not
@@ -47,7 +47,7 @@ vidl_movie_sptr  my_movie = vidl_io::load_movie("video.avi");
 vidl_movie::frame_iterator fit(my_movie);
 for (fit = my_movie->first(); fit != my_movie->last(); ++fit)
   @{
-     vil1_image image = fit->get_image();
+     vil_image_view<vxl_byte> image = fit->get_view();
      // do something with the image
     ...
   @}
