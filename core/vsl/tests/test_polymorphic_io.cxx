@@ -51,18 +51,6 @@ inline void vsl_b_write(vsl_b_ostream &os, const test_base_class & v)
   v.b_write(os);
 }
 
-//: Binary save to stream.
-inline void vsl_b_write(vsl_b_ostream &os, const test_base_class* v)
-{
-  if (v!=0)
-  {
-    vsl_b_write(os,v->is_a());
-    v->b_write(os);
-  }
-  else
-    vsl_b_write(os, vcl_string("VSL_NULL_PTR"));
-}
-
 //: Binary load from stream.
 inline void vsl_b_read(vsl_b_istream &is, test_base_class & v)
 {
