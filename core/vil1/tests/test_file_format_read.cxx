@@ -166,6 +166,14 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_ascii.ppm" ) ) );
   testlib_test_begin( "  8-bit ppm raw" );
   testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_raw.ppm" ) ) );
+  testlib_test_begin( " 16-bit pgm ascii" );
+  testlib_test_perform( test( "ff_grey16bit_true.txt", CheckGrey<vxl_uint_16>( "ff_grey16bit_ascii.pgm" ) ) );
+  testlib_test_begin( " 16-bit pgm raw" );
+  testlib_test_perform( test( "ff_grey16bit_true.txt", CheckGrey<vxl_uint_16>( "ff_grey16bit_raw.pgm" ) ) );
+  testlib_test_begin( " 16-bit ppm ascii" );
+  testlib_test_perform( test( "ff_rgb16bit_true.txt", CheckRGB<vxl_uint_16>( "ff_rgb16bit_ascii.ppm" ) ) );
+  testlib_test_begin( " 16-bit ppm raw" );
+  testlib_test_perform( test( "ff_rgb16bit_true.txt", CheckRGB<vxl_uint_16>( "ff_rgb16bit_raw.ppm" ) ) );
 
   vcl_cout << "Sun raster [ras]\n";
   testlib_test_begin( "  8-bit grey, no colourmap" );
@@ -184,6 +192,8 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_uncompressed.tif" ) ) );
   testlib_test_begin( "  8-bit RGB packbits" );
   testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_packbits.tif" ) ) );
+  testlib_test_begin( " 16-bit RGB uncompressed" );
+  testlib_test_perform( test( "ff_rgb16bit_true.txt", CheckRGB<vxl_uint_16>( "ff_rgb16bit_uncompressed.tif" ) ) );
 
    vcl_cout << "SGI IRIS [iris]\n";
    testlib_test_begin( "  8-bit RGB rle" );
