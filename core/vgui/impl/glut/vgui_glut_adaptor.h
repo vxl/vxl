@@ -15,18 +15,17 @@
 #include <vgui/vgui_adaptor.h>
 struct vgui_command;
 struct vgui_overlay_helper;
-struct vgui_glut_window;
 
 //: The GLUT (OpenGL Utility Toolkit) implementation of vgui_adaptor.
 struct vgui_glut_adaptor : vgui_adaptor
 {
-  vgui_glut_adaptor( vgui_glut_window *win_, int id_ );
+  vgui_glut_adaptor( vgui_window *win_, int id_ );
   ~vgui_glut_adaptor();
 
   int get_id() const { return id; }
 
   // implement virtual vgui_adaptor interface :
-  vgui_window *get_window() const;
+  vgui_window *get_window() const { return win; }
   void post_redraw();
   void post_overlay_redraw();
   void post_timer(float, int);
@@ -42,7 +41,7 @@ struct vgui_glut_adaptor : vgui_adaptor
 
  private:
   int id;
-  vgui_glut_window *win;
+  vgui_window *win;
 
   vgui_modifier popup_modifier;
   vgui_button popup_button;

@@ -1,7 +1,7 @@
 // This is core/vgui/impl/glut/vgui_glut_adaptor.cxx
 #include "vgui_glut_adaptor.h"
 //:
-//  \file
+// \file
 // \author fsm
 
 #include "vgui_glut_window.h"
@@ -20,7 +20,7 @@
 
 //--------------------------------------------------------------------------------
 
-vgui_glut_adaptor::vgui_glut_adaptor( vgui_glut_window *win_, int id_ )
+vgui_glut_adaptor::vgui_glut_adaptor( vgui_window *win_, int id_ )
   : vgui_adaptor()
   //
   , id(id_)
@@ -101,11 +101,6 @@ unsigned vgui_glut_adaptor::get_height() const
   unsigned val = glutGet(GLenum(GLUT_WINDOW_HEIGHT));
   glutSetWindow( old );
   return val;
-}
-
-vgui_window *vgui_glut_adaptor::get_window() const
-{
-  return win;
 }
 
 void vgui_glut_adaptor::post_redraw()
@@ -189,7 +184,7 @@ void vgui_glut_adaptor::establish_overlays()
 bool vgui_glut_adaptor::glut_dispatch(vgui_event &e)
 {
   if (win)
-    win->hello_from_adaptor();
+    static_cast<vgui_glut_window*>(win)->hello_from_adaptor();
 
   // convert from window to viewport coordinates :
   e.wy = get_height()-1 - e.wy;
@@ -510,7 +505,7 @@ void vgui_glut_adaptor::entry(int state)
   glut_dispatch(e);
 }
 
-void vgui_glut_adaptor::visibility(int /*state*/) 
+void vgui_glut_adaptor::visibility(int /*state*/)
 {
 }
 
@@ -535,7 +530,7 @@ static void xlate_special_key(int key,vgui_event &e)
   }
 }
 
-void vgui_glut_adaptor::special(int key,int x,int y) 
+void vgui_glut_adaptor::special(int key,int x,int y)
 {
   vgui_event e(vgui_KEY_PRESS);
   do_modifiers(e);
@@ -545,7 +540,7 @@ void vgui_glut_adaptor::special(int key,int x,int y)
   glut_dispatch(e);
 }
 
-void vgui_glut_adaptor::special_up(int key,int x,int y) 
+void vgui_glut_adaptor::special_up(int key,int x,int y)
 {
   vgui_event e(vgui_KEY_RELEASE);
   do_modifiers(e);
@@ -590,7 +585,7 @@ void vgui_glut_adaptor::make_popup()
     params.recurse = true;
     vgui_menu menu;
     if (win)
-      menu.include( win->menubar );
+      menu.include( static_cast<vgui_glut_window*>(win)->menubar );
     menu.include( get_total_popup(params) );
     popup->build( menu );
   }
