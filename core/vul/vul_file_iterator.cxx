@@ -12,13 +12,15 @@
 // Declare pimpl, reset, and iteration routines
 // for each OS
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#include <stddef.h>
 #include <io.h>
 struct vul_file_iterator_data
 {
   vcl_string original;
   vcl_string original_dirname;
   struct _finddata_t data;
-  intptr_t handle;
+  // intptr_t handle;  // not found by msvc6
+  __int64 handle;      // works with msvc6
   vcl_string found;
   char const* name;
 
