@@ -26,19 +26,19 @@
 
 HomgMetric::HomgMetric(const ImageMetric* metric)
 {
-  _metric = (ImageMetric*)metric; // const violation!
+  metric_ = metric;
 }
 
 HomgMetric::~HomgMetric()
 {
-  // _metric;
+  // metric_;
 }
 
 //: Print HomgMetric to vcl_ostream.
 vcl_ostream& HomgMetric::print(vcl_ostream & s) const
 {
-  if (_metric)
-    s << "[HomgMetric: " << *_metric << "]";
+  if (metric_)
+    s << "[HomgMetric: " << *metric_ << "]";
   else
     s << "[HomgMetric: Null ImageMetric]";
 
@@ -48,7 +48,7 @@ vcl_ostream& HomgMetric::print(vcl_ostream & s) const
 // ** Conversion to/from homogeneous coordinates
 vnl_double_2 HomgMetric::homg_to_image(const HomgPoint2D& p) const
 {
-  if (_metric) return _metric->homg_to_image(p);
+  if (metric_) return metric_->homg_to_image(p);
 
   double x,y;
   p.get_nonhomogeneous(x, y);
@@ -57,8 +57,8 @@ vnl_double_2 HomgMetric::homg_to_image(const HomgPoint2D& p) const
 
 void HomgMetric::homg_to_image(const HomgPoint2D& homg, double* ix, double* iy) const
 {
-  if (_metric) {
-    vnl_double_2 p = _metric->homg_to_image(homg);
+  if (metric_) {
+    vnl_double_2 p = metric_->homg_to_image(homg);
     *ix = p[0];
     *iy = p[1];
   } else {
@@ -68,82 +68,82 @@ void HomgMetric::homg_to_image(const HomgPoint2D& homg, double* ix, double* iy) 
 
 HomgPoint2D HomgMetric::homg_to_imagehomg(const HomgPoint2D& p) const
 {
-  if (_metric) return _metric->homg_to_imagehomg(p);
+  if (metric_) return metric_->homg_to_imagehomg(p);
   else return p;
 }
 
 
 HomgPoint2D HomgMetric::image_to_homg(const vnl_double_2& p) const
 {
-  if (_metric) return _metric->image_to_homg(p);
+  if (metric_) return metric_->image_to_homg(p);
   else return HomgPoint2D(p.x(), p.y(), 1.0);
 }
 
 HomgPoint2D HomgMetric::image_to_homg(double x, double y) const
 {
-  if (_metric) return _metric->image_to_homg(x, y);
+  if (metric_) return metric_->image_to_homg(x, y);
   else return HomgPoint2D(x, y, 1.0);
 }
 
 HomgPoint2D HomgMetric::imagehomg_to_homg(const HomgPoint2D& p) const
 {
-  if (_metric) return _metric->imagehomg_to_homg(p);
+  if (metric_) return metric_->imagehomg_to_homg(p);
   else return p;
 }
 
 
 HomgLine2D HomgMetric::homg_to_image_line(const HomgLine2D& l) const
 {
-  if (_metric) return _metric->homg_to_image_line(l);
+  if (metric_) return metric_->homg_to_image_line(l);
   else return l;
 }
 
 HomgLine2D HomgMetric::image_to_homg_line(const HomgLine2D& l) const
 {
-  if (_metric) return _metric->image_to_homg_line(l);
+  if (metric_) return metric_->image_to_homg_line(l);
   else return l;
 }
 
 HomgLineSeg2D HomgMetric::image_to_homg_line(const HomgLineSeg2D& l) const
 {
-  if (_metric) return _metric->image_to_homg_line(l);
+  if (metric_) return metric_->image_to_homg_line(l);
   else return l;
 }
 
 HomgLineSeg2D HomgMetric::homg_line_to_image(const HomgLineSeg2D& l) const
 {
-  if (_metric) return _metric->homg_line_to_image(l);
+  if (metric_) return metric_->homg_line_to_image(l);
   else return l;
 }
 
 // ** Measurements
 double HomgMetric::perp_dist_squared(const HomgPoint2D& p, const HomgLine2D& l) const
 {
-  if (_metric) return _metric->perp_dist_squared(p, l);
+  if (metric_) return metric_->perp_dist_squared(p, l);
   else return HomgOperator2D::perp_dist_squared(p, l);
 }
 
 HomgPoint2D HomgMetric::perp_projection(const HomgLine2D& l, const HomgPoint2D& p) const
 {
-  if (_metric) return _metric->perp_projection(l, p);
+  if (metric_) return metric_->perp_projection(l, p);
   else return HomgOperator2D::perp_projection(l, p);
 }
 
 double HomgMetric::distance_squared(const HomgPoint2D& p1, const HomgPoint2D& p2) const
 {
-  if (_metric) return _metric->distance_squared(p1, p2);
+  if (metric_) return metric_->distance_squared(p1, p2);
   else return HomgOperator2D::distance_squared(p1, p2);
 }
 
 double HomgMetric::distance_squared(const HomgLineSeg2D& segment, const HomgLine2D& line) const
 {
-  if (_metric) return _metric->distance_squared(segment, line);
+  if (metric_) return metric_->distance_squared(segment, line);
   else return HomgOperator2D::distance_squared(segment, line);
 }
 
 bool HomgMetric::is_within_distance(const HomgPoint2D& p1, const HomgPoint2D& p2, double distance) const
 {
-  if (_metric) return _metric->is_within_distance(p1, p2, distance);
+  if (metric_) return metric_->is_within_distance(p1, p2, distance);
   else return HomgOperator2D::is_within_distance(p1, p2, distance);
 }
 
@@ -152,7 +152,7 @@ bool HomgMetric::is_within_distance(const HomgPoint2D& p1, const HomgPoint2D& p2
 //: Return true if the conditioner's action can be described by a planar homography.
 bool HomgMetric::is_linear() const
 {
-  if (_metric) return _metric->is_linear();
+  if (metric_) return metric_->is_linear();
   else return true;
 }
 
@@ -161,14 +161,14 @@ static vnl_identity_3x3 I;
 //: Return the planar homography C s.t. C x converts x from conditioned to image coordinates.
 const vnl_matrix<double>& HomgMetric::get_C() const
 {
-  if (_metric) return _metric->get_C();
+  if (metric_) return metric_->get_C();
   else return I;
 }
 
 //: Return $C^{-1}$.
 const vnl_matrix<double>& HomgMetric::get_C_inverse() const
 {
-  if (_metric) return _metric->get_C_inverse();
+  if (metric_) return metric_->get_C_inverse();
   else return I;
 }
 
@@ -177,29 +177,29 @@ const vnl_matrix<double>& HomgMetric::get_C_inverse() const
 //: Return true if the metric is rotationally symmetric, i.e. can invert distances.
 bool HomgMetric::can_invert_distance() const
 {
-  if (_metric) return _metric->can_invert_distance();
+  if (metric_) return metric_->can_invert_distance();
   else return true;
 }
 
 //: Given that can_invert_distance is true, convert an image distance (in pixels) to a conditioned distance.
 double HomgMetric::image_to_homg_distance(double image_distance) const
 {
-  if (_metric) return _metric->image_to_homg_distance(image_distance);
+  if (metric_) return metric_->image_to_homg_distance(image_distance);
   else return image_distance;
 }
 
 //: Convert a conditioned distance to an image distance.
 double HomgMetric::homg_to_image_distance(double image_distance) const
 {
-  if (_metric) return _metric->homg_to_image_distance(image_distance);
+  if (metric_) return metric_->homg_to_image_distance(image_distance);
   else return image_distance;
 }
 
 //: As above, but for squared distances
 double HomgMetric::image_to_homg_distance_sqr(double image_distance_2) const
 {
-  if (_metric)
-    return vnl_math_sqr(_metric->image_to_homg_distance(vcl_sqrt(image_distance_2)));
+  if (metric_)
+    return vnl_math_sqr(metric_->image_to_homg_distance(vcl_sqrt(image_distance_2)));
   else
     return image_distance_2;
 }
@@ -207,8 +207,8 @@ double HomgMetric::image_to_homg_distance_sqr(double image_distance_2) const
 //: As above, but for squared distances
 double HomgMetric::homg_to_image_distance_sqr(double image_distance) const
 {
-  if (_metric)
-    return vnl_math_sqr(_metric->homg_to_image_distance(vcl_sqrt(image_distance)));
+  if (metric_)
+    return vnl_math_sqr(metric_->homg_to_image_distance(vcl_sqrt(image_distance)));
   else
     return image_distance;
 }

@@ -45,7 +45,7 @@ class HomgMetric {
 public:
   // Constructors/Destructors--------------------------------------------------
 
-  HomgMetric() { _metric = 0; }
+  HomgMetric() : metric_(0) {}
   HomgMetric(const ImageMetric* metric);
 
   // HomgMetric(const HomgMetric& that); - use default
@@ -91,7 +91,7 @@ public:
 
   vcl_ostream& print(vcl_ostream&) const;
 
-  operator const ImageMetric* () const { return _metric; }
+  operator const ImageMetric* () const { return metric_; }
 
   // Static functions to condition/decondition image relations-----------------
   static PMatrix homg_to_image_P(const PMatrix&, const HomgMetric& c);
@@ -108,7 +108,7 @@ public:
 
 protected:
   // Data Members--------------------------------------------------------------
-  ImageMetric* _metric;
+  const ImageMetric* metric_;
 
 private:
   // Helpers-------------------------------------------------------------------
