@@ -100,7 +100,7 @@ template <class PixelType>
 void ImageWarp<PixelType>::warp(Mapping_2d_2d& map, const vil_memory_image_of<PixelType>& in, vil_memory_image_of<PixelType>& out)
 {
   // out.Clear();
-  abort();
+//abort(); // is not defined without #include <vcl/vcl_cstdlib.h>
   int w = in.width();
   int h = in.height();
   int ngaps = 0;
@@ -144,7 +144,7 @@ void ImageWarp<PixelType>::warp_inverse(Mapping_2d_2d& map, const vil_memory_ima
       double ixd, iyd;
       map.inverse_map(double(ox + out_offset_x), double(oy + out_offset_y), &ixd, &iyd);
 
-      switch (3) { 
+      switch (1) { 
       case 1: {
 	// nearest neigbour
 	int ix = vnl_math_rnd(ixd);
@@ -157,12 +157,12 @@ void ImageWarp<PixelType>::warp_inverse(Mapping_2d_2d& map, const vil_memory_ima
       } 
       case 2: {
 	// bilinear
-abort();
+//abort(); // is not defined without #include <vcl/vcl_cstdlib.h>
 	// out(ox, oy) = vbl_clamp(in.bilinear(ixd, iyd), (PixelType*)0);
 	break;
       } 
       case 3: {
-abort();
+//abort(); // is not defined without #include <vcl/vcl_cstdlib.h>
 	// out(ox, oy) = clamp(in.bicubic(ixd, iyd), (PixelType*)0);
 	break;
       }
