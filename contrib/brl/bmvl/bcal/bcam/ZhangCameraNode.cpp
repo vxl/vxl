@@ -10,18 +10,18 @@
 
 ZhangCameraNode::ZhangCameraNode(int nViews)
 {
-	// build lens distortion model
-	vcl_vector<bool> flags(7, false);
-	flags[0] = true;
-	flags[1] = true;
-	_pCam -> setLensModel(flags);
+  // build lens distortion model
+  vcl_vector<bool> flags(7, false);
+  flags[0] = true;
+  flags[1] = true;
+  pCam_ -> setLensModel(flags);
 
-	// allocate space to store features.
-	_pImageLists = new vcl_list< vgl_point_2d<double> > [nViews];
+  // allocate space to store features.
+  pImageLists_ = new vcl_list< vgl_point_2d<double> > [nViews];
 }
 
 ZhangCameraNode::~ZhangCameraNode()
 {
-	if(_pImageLists)
-		delete  [] _pImageLists;
+  if (pImageLists_)
+    delete [] pImageLists_;
 }

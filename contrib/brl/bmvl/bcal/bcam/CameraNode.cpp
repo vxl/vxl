@@ -10,19 +10,21 @@
 
 CameraNode::CameraNode()
 {
-	_pCam = 0;
-	_pCam = new Camera;
+  pCam_ = 0;
+  pCam_ = new Camera;
 }
 
 CameraNode::~CameraNode()
 {
-	if(_pCam)
-		delete _pCam;
+  if (pCam_)
+    delete pCam_;
 }
 
-//DEL int CameraNode::addNeighbour(CameraNode *p)
-//DEL {
-//DEL 	_neighbours.push_back(p);
-//DEL 	return 0;
-//DEL }
+#if 0 // removed
+int CameraNode::addNeighbour(CameraNode *p)
+{
+  neighbours_.push_back(p);
+  return 0;
+}
+#endif // 0
 
