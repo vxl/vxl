@@ -57,7 +57,7 @@ IF(NETLIB_FOUND)
     test_transpose.cxx
     test_vector.cxx
     test_gamma.cxx
-	test_random.cxx
+    test_random.cxx
     test_arithmetic.cxx  test_arithmetic_body.h
     test_algo.cxx
   )
@@ -104,6 +104,7 @@ IF(NETLIB_FOUND)
   ADD_TEST( vnl_test_numeric_traits           vnl_test_all test_numeric_traits          )
   ADD_TEST( vnl_test_qr                       vnl_test_all test_qr                      )
   ADD_TEST( vnl_test_qsvd                     vnl_test_all test_qsvd                    )
+  ADD_TEST( vnl_test_random                   vnl_test_all test_random                  )
   ADD_TEST( vnl_test_rational                 vnl_test_all test_rational                )
   ADD_TEST( vnl_test_real_eigensystem         vnl_test_all test_real_eigensystem        )
   ADD_TEST( vnl_test_real_polynomial          vnl_test_all test_real_polynomial         )
