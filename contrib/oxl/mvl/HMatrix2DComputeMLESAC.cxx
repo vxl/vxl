@@ -28,15 +28,13 @@ double HMatrix2DComputeMLESAC::calculate_term(vcl_vector<double>& residuals, vcl
 
 double HMatrix2DComputeMLESAC::calculate_residual(HomgPoint2D& one, HomgPoint2D& two, HMatrix2D* H) {
   vnl_double_2 r;
-  vnl_matrix<double> mat;
-  H->get(&mat);
-  double const* t = mat.data_block();
-  vnl_vector<double> vect(t, 9);
-  vnl_double_2 p1 = one.get_double2();
-  vnl_double_2 p2 = two.get_double2();
   r[0] = HomgOperator2D::distance_squared(H->transform_to_plane2(one), two);
   r[1] = HomgOperator2D::distance_squared(H->transform_to_plane1(two), one);
 #if 0
+  vnl_matrix<double> mat; H->get(&mat);
+  double const* t = mat.data_block();
+  vnl_double_2 p1 = one.get_double2();
+  vnl_double_2 p2 = two.get_double2();
   vcl_cout << H->transform_to_plane2(one).get_double2() << " : " << two.get_double2() << " : " << r[0] << vcl_endl;
   vcl_cout << H->transform_to_plane1(two).get_double2() << " : " << one.get_double2() << " : " << r[1] << vcl_endl;
   if(r[0] < 100.0 && r[1] < 100.0) {

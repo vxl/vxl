@@ -45,9 +45,6 @@ void FManifoldProject::set_F(const FMatrix& Fobj)
 
   F_.assert_finite();
 
-  // 2x2 zero
-  vnl_double_2x2 O(0.0);
-
   // Top left corner of F
   vnl_double_2x2 f22 = F_.extract(2,2);
 
@@ -80,7 +77,6 @@ void FManifoldProject::set_F(const FMatrix& Fobj)
     // Translate Quadric so that b = 0. (Translates to the epipoles)
     t_ = -0.5 * eig.solve(b);
 
-    vnl_double_4x4 Aprime = A_;
     vnl_double_4 At = A_*t_;
     vnl_double_4 Bprime = 2.0*At + b;
     double tAt = dot_product(t_, At);

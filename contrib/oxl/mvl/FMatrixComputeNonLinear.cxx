@@ -122,7 +122,7 @@ bool FMatrixComputeNonLinear::compute(FMatrix* F)
 
           vnl_vector<double> f_params(FMatrixComputeNonLinear_nparams);
           fmatrix_to_params(FMatrix(mat), f_params);
-          FMatrix res = params_to_fmatrix(f_params);
+          //FMatrix res = params_to_fmatrix(f_params);
           vnl_levenberg_marquardt lm(*this);
 
           // Adjusting these parameters will alter the
@@ -410,11 +410,10 @@ void FMatrixComputeNonLinear::get_plan(int &r1, int &c1, int &r2, int &c2) {
 vnl_vector<double> FMatrixComputeNonLinear::calculate_residuals(FMatrix* F) {
   vnl_vector<double> fx(data_size_);
   vnl_matrix<double> f(3, 3, 0.0);
-  vnl_matrix<double> ft;
   F->get(&f);
   f /= f.rms();
 #if 0
-  ft = f.transpose();
+  vnl_matrix<double> ft = f.transpose();
   vnl_matrix<double> z(3, 3, 0.0);
   z.put(0, 0, 1.0);z.put(1, 1, 1.0);
   vnl_matrix<double> pre1 = ft*z*f;

@@ -62,7 +62,7 @@ HomgOperator3D::sort_points(HomgPoint3D* points, int n)
   /* now create a point which is bound to be beyond the endpoints of the set. */
   vnl_double_3 finite_trivec = finite_quadvec.get_double3();
 
-  vnl_double_3 start = line.get_point_finite().get_double3();
+//vnl_double_3 start = line.get_point_finite().get_double3();
   vnl_double_3 dir = line.dir();
 
   vnl_double_3 faraway_trivec = finite_trivec + 2.0 * distance_max * dir;

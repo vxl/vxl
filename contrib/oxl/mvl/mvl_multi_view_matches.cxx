@@ -198,7 +198,7 @@ void mvl_multi_view_matches::add_track(vcl_vector<int> const& views, vcl_vector<
   }
 }
 
-void mvl_multi_view_matches::add_matches(mvl_multi_view_matches const& matches)
+void mvl_multi_view_matches::add_matches(mvl_multi_view_matches const& /*matches*/)
 {
   vcl_cerr << __FILE__ ": mvl_multi_view_matches::add_matches() not implemented\n";
   vcl_abort();

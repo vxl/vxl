@@ -48,7 +48,7 @@ bool FMatrixComputeRobust::compute(PairMatchSetCorner& matches, FMatrix *F)
     point2_image[a] = HomgPoint2D(temp2[0], temp2[1], 1.0);
   }
 
-  FMatrix Fs, Fs_homg;
+  FMatrix Fs;
   double Ds = 1e+10;
   int count = 0;
   vcl_vector<bool> inlier_list(data_size_, false);
@@ -198,15 +198,17 @@ double FMatrixComputeRobust::stdev(vcl_vector<double>& residuals) {
 }
 
 // Implement Me!!! TODO
-double FMatrixComputeRobust::calculate_term(vcl_vector<double>& residuals,
-                                            vcl_vector<bool>& inlier_list,
-                                            int& count) {
+double FMatrixComputeRobust::calculate_term(vcl_vector<double>& /*residuals*/,
+                                            vcl_vector<bool>& /*inlier_list*/,
+                                            int& /*count*/) {
+  vcl_cerr << "FMatrixComputeRobust::calculate_term() not yet implemented\n";
   return 10000.0;
 }
 
 // Implement Me!!! TODO
-double FMatrixComputeRobust::calculate_residual(HomgPoint2D& one,
-                                                HomgPoint2D& two,
-                                                FMatrix* F) {
+double FMatrixComputeRobust::calculate_residual(HomgPoint2D& /*one*/,
+                                                HomgPoint2D& /*two*/,
+                                                FMatrix* /*F*/) {
+  vcl_cerr << "FMatrixComputeRobust::calculate_residual() not yet implemented\n";
   return 100.0;
 }
