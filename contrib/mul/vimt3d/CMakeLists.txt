@@ -10,6 +10,7 @@ SET(vimt3d_sources
   vimt3d_sample_profile_trilin.h
   vimt3d_trilin_interp.h
   vimt3d_slice.h
+  vimt3d_load.h                        vimt3d_load.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vimt3d_sources)
