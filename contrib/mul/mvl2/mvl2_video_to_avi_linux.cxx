@@ -7,6 +7,7 @@
 // \author Franck Bettinger
 
 #include "mvl2_video_to_avi_linux.h"
+#include <vcl_cstring.h>
 
 mvl2_video_to_avi::mvl2_video_to_avi()
 {
