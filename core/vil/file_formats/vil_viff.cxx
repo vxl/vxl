@@ -272,7 +272,7 @@ vil_image_view_base_sptr vil_viff_image::get_copy_view(unsigned int x0, unsigned
       swap(ib+i,(pix_size+7)/8);
   }
 
-#define ARGS(T) buf, reinterpret_cast<T*>(buf->data()), ni_,nj_,nplanes_, 1,ni_,ni_*nj_
+#define ARGS(T) buf, reinterpret_cast<T*>(buf->data()), xs,ys,nplanes_, 1,xs,xs*ys
   if (format_ == VIL_PIXEL_FORMAT_BOOL)                return new vil_image_view<bool>                (ARGS(bool));
   else if (format_ == VIL_PIXEL_FORMAT_BYTE)           return new vil_image_view<vxl_byte>            (ARGS(vxl_byte));
   else if (format_ == VIL_PIXEL_FORMAT_UINT_16)        return new vil_image_view<vxl_uint_16>         (ARGS(vxl_uint_16));

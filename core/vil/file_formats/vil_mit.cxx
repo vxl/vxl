@@ -275,7 +275,7 @@ vil_image_view_base_sptr vil_mit_image::get_copy_view(unsigned int x0, unsigned 
       swap(ib+i*bytes_per_pixel(),bytes_per_pixel());
   }
 
-#define ARGS(T) buf, reinterpret_cast<T*>(buf->data()), ni_,nj_,components_, components_,ni_*components_,1
+#define ARGS(T) buf, reinterpret_cast<T*>(buf->data()), xs,ys,components_, components_,xs*components_,1
   if (format_ == VIL_PIXEL_FORMAT_BOOL)         return new vil_image_view<bool>       (ARGS(bool));
   else if (format_ == VIL_PIXEL_FORMAT_BYTE)    return new vil_image_view<vxl_byte>   (ARGS(vxl_byte));
   else if (format_ == VIL_PIXEL_FORMAT_SBYTE)   return new vil_image_view<vxl_sbyte>  (ARGS(vxl_sbyte));

@@ -319,22 +319,22 @@ vil_image_view_base_sptr vil_pnm_image::get_copy_view(
 
   if (bits_per_component_ == 1)
   {
-    buf = new vil_memory_chunk(ni_ * nj_* nplanes() * sizeof(bool),VIL_PIXEL_FORMAT_BOOL);
+    buf = new vil_memory_chunk(ni * nj* nplanes() * sizeof(bool),VIL_PIXEL_FORMAT_BOOL);
     bb = reinterpret_cast<bool *>(buf->data());
   }
   else if (bits_per_component_ <= 8)
   {
-    buf = new vil_memory_chunk(ni_ * nj_* nplanes() * 1,VIL_PIXEL_FORMAT_BYTE);
+    buf = new vil_memory_chunk(ni * nj* nplanes() * 1,VIL_PIXEL_FORMAT_BYTE);
     ib = reinterpret_cast<vxl_byte*>(buf->data());
   }
   else if (bits_per_component_ <= 16)
   {
-    buf = new vil_memory_chunk(ni_ * nj_* nplanes() * 2,VIL_PIXEL_FORMAT_UINT_16);
+    buf = new vil_memory_chunk(ni * nj* nplanes() * 2,VIL_PIXEL_FORMAT_UINT_16);
     jb = reinterpret_cast<vxl_uint_16*>(buf->data());
   }
   else
   {
-    buf = new vil_memory_chunk(ni_ * nj_* nplanes() * 4,VIL_PIXEL_FORMAT_UINT_32);
+    buf = new vil_memory_chunk(ni * nj* nplanes() * 4,VIL_PIXEL_FORMAT_UINT_32);
     kb = reinterpret_cast<vxl_uint_32*>(buf->data());
   }
 
@@ -391,9 +391,11 @@ vil_image_view_base_sptr vil_pnm_image::get_copy_view(
       vil_streampos byte_start = start_of_data_ + (y0+y) * byte_width + x0/8;
       vs_->seek(byte_start);
       unsigned char a; vs_->read(&a, 1L);
-      for (unsigned x = 0; x < ni; ++x)
+      for (unsigned x = 0; x < ni+x0; ++x)
       {
-        bb[y * ni + x] = (a & 0x80) != 0;
+        if( x >= x0 ) {
+          bb[y * ni + x-x0] = (a & 0x80) != 0;
+        }
         a <<= 1;
         if (x%8 == 7)
           vs_->read(&a, 1L);

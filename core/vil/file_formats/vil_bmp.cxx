@@ -336,6 +336,11 @@ vil_image_view_base_sptr vil_bmp_image::get_copy_view(
 
   vil_memory_chunk_sptr buf = new vil_memory_chunk(want_bytes_per_raster*ny, VIL_PIXEL_FORMAT_BYTE);
 
+  // BMP images are stored with a flipped y-axis w.r.t. conventional
+  // pixel axes.
+  //
+  y0 = nj() - (y0+ny);
+
   // read each raster in turn. if the client wants the whole image, it may
   // be faster to read() it all in one chunk, so long as the number of bytes
   // per image raster is divisible by four (because the file rasters are
@@ -356,9 +361,9 @@ vil_image_view_base_sptr vil_bmp_image::get_copy_view(
 
   return new vil_image_view<vxl_byte>(
     buf,
-    reinterpret_cast<vxl_byte *>(buf->data())+(ny-1)*have_bytes_per_raster + nplanes()-1,
+    reinterpret_cast<vxl_byte *>(buf->data())+(ny-1)*want_bytes_per_raster + nplanes()-1,
     nx, ny, nplanes(),
-    nplanes(), -(long)have_bytes_per_raster, -1);
+    nplanes(), -(long)want_bytes_per_raster, -1);
 }
 
 

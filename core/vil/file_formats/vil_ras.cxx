@@ -406,8 +406,8 @@ get_copy_view( unsigned i0, unsigned ni,
   }
 
   return new vil_image_view<vxl_byte>( buf, ib,
-                                       width_, height_, components_,
-                                       components_, components_*width_, 1 );
+                                       ni, nj, components_,
+                                       components_, components_*ni, 1 );
 }
 
 
