@@ -121,7 +121,7 @@ void vimt_image_2d_of<T>::print_all(vcl_ostream& os) const
   os<<vsl_indent();
   vil2_print_all(os,image_);
   os<<vcl_endl;
-  os<<vsl_indent() << "Transform: "<<world2im_;
+  os<<vsl_indent() << "Transform: "<<world2im_<<vcl_endl;
 }
 
 

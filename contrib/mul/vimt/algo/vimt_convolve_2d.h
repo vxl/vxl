@@ -20,7 +20,7 @@
 // placed at p in src_im
 // \relates vil2_image_view
 template <class srcT, class destT, class kernelT, class accumT>
-inline void vil2_convolve_2d(const vimt_image_2d_of<srcT>& src_im,
+inline void vimt_convolve_2d(const vimt_image_2d_of<srcT>& src_im,
                              vimt_image_2d_of<destT>& dest_im,
                              const vil2_image_view<kernelT>& kernel,
 														 vgl_point_2d<double> kernel_ref_pt,
