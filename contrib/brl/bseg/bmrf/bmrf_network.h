@@ -18,7 +18,6 @@
 // \endverbatim
 
 
-#include <vcl_list.h>
 #include <vcl_deque.h>
 #include <vcl_set.h>
 #include <vsl/vsl_binary_io.h>
@@ -36,7 +35,7 @@ class bmrf_network : public vbl_ref_count
   typedef vcl_map<int, seg_node_map > frame_node_map;
 
   typedef bmrf_node::neighbor_type neighbor_type;
-  
+
   //: Constructor
   bmrf_network();
 
@@ -101,9 +100,9 @@ class bmrf_network : public vbl_ref_count
   //: The map from epi_seg pointers to nodes in the network
   // \note indexed by epi_seg pointers for quick reverse lookup
   seg_node_map node_from_seg_;
-  
+
   //: The map from frame number to list of nodes in that frame
-  frame_node_map nodes_from_frame_; 
+  frame_node_map nodes_from_frame_;
 
  public:
   class iterator
@@ -125,14 +124,14 @@ class bmrf_network : public vbl_ref_count
 
     //: Equality comparison
     bool operator == (const iterator& rhs) const { return rhs.curr_node_ == this->curr_node_; }
-    
+
     //: Inequality comparison
     bool operator != (const iterator& rhs) const { return rhs.curr_node_ != this->curr_node_; }
 
    protected:
     //: Increment the current node
     virtual void next_node() = 0;
-    
+
     bmrf_network_sptr network_;
     bmrf_node_sptr curr_node_;
   };
@@ -147,7 +146,7 @@ class bmrf_network : public vbl_ref_count
    protected:
     //: Increment the current node
     void next_node();
-    
+
     vcl_deque<bmrf_node_sptr> eval_queue_;
     vcl_set<bmrf_node_sptr> visited_;
   };
