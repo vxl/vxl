@@ -59,7 +59,8 @@ AUX_SOURCE_DIRECTORY(vipl_with_mil/Templates vipl_sources)
 IF(CMAKE_COMPILER_IS_GNUCXX)
  SET_SOURCE_FILES_PROPERTIES(
   vipl_with_section/Templates/vipl_filter_2d+section+vil1_rgb+uchar-.2-.section+vil1_rgb+uchar-.2-.vil1_rgb+uchar-.vil1_rgb+uchar--.cxx
-  COMPILE_FLAGS -O1
+   PROPERTIES
+   COMPILE_FLAGS -O1
  )
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 

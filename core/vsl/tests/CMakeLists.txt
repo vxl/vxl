@@ -20,7 +20,7 @@ ADD_EXECUTABLE( vsl_test_all
 )
  
 IF(CMAKE_COMPILER_IS_GNUCXX)
-  SET_SOURCE_FILES_PROPERTIES(test_map_io.cxx COMPILE_FLAGS -O0)
+  SET_SOURCE_FILES_PROPERTIES(test_map_io.cxx PROPERTIES COMPILE_FLAGS -O0)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_TEST(vsl_test_indent                vsl_test_all test_indent)

@@ -136,16 +136,16 @@ AUX_SOURCE_DIRECTORY(Templates vnl_sources)
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
   # with optimisation, the is_finite etc functions fail on Alpha for long double:
-  SET_SOURCE_FILES_PROPERTIES(vnl_math.cxx COMPILE_FLAGS -O0)
-  SET_SOURCE_FILES_PROPERTIES(vnl_bignum.cxx COMPILE_FLAGS -O0)
+  SET_SOURCE_FILES_PROPERTIES(vnl_math.cxx PROPERTIES COMPILE_FLAGS -O0)
+  SET_SOURCE_FILES_PROPERTIES(vnl_bignum.cxx PROPERTIES COMPILE_FLAGS -O0)
   # and these need too much memory with gcc 3.0 on Alpha:
-  SET_SOURCE_FILES_PROPERTIES(Templates/vnl_matrix+long-.cxx COMPILE_FLAGS -O0)
-  SET_SOURCE_FILES_PROPERTIES(Templates/vnl_matrix+ulong-.cxx COMPILE_FLAGS -O0)
-  SET_SOURCE_FILES_PROPERTIES(Templates/vnl_matrix+vcl_complex+double--.cxx COMPILE_FLAGS -O0)
-  SET_SOURCE_FILES_PROPERTIES(Templates/vnl_matrix+vcl_complex+long_double--.cxx COMPILE_FLAGS -O0)
-  SET_SOURCE_FILES_PROPERTIES(Templates/vnl_matrix_fixed+vnl_bignum.3.3-.cxx COMPILE_FLAGS -O0)
-  SET_SOURCE_FILES_PROPERTIES(Templates/vnl_vector+vnl_rational-.cxx COMPILE_FLAGS -O0)
-  SET_SOURCE_FILES_PROPERTIES(Templates/vnl_vector_fixed+vnl_rational.3-.cxx COMPILE_FLAGS -O0)
+  SET_SOURCE_FILES_PROPERTIES(Templates/vnl_matrix+long-.cxx PROPERTIES COMPILE_FLAGS -O0)
+  SET_SOURCE_FILES_PROPERTIES(Templates/vnl_matrix+ulong-.cxx PROPERTIES COMPILE_FLAGS -O0)
+  SET_SOURCE_FILES_PROPERTIES(Templates/vnl_matrix+vcl_complex+double--.cxx PROPERTIES COMPILE_FLAGS -O0)
+  SET_SOURCE_FILES_PROPERTIES(Templates/vnl_matrix+vcl_complex+long_double--.cxx PROPERTIES COMPILE_FLAGS -O0)
+  SET_SOURCE_FILES_PROPERTIES(Templates/vnl_matrix_fixed+vnl_bignum.3.3-.cxx PROPERTIES COMPILE_FLAGS -O0)
+  SET_SOURCE_FILES_PROPERTIES(Templates/vnl_vector+vnl_rational-.cxx PROPERTIES COMPILE_FLAGS -O0)
+  SET_SOURCE_FILES_PROPERTIES(Templates/vnl_vector_fixed+vnl_rational.3-.cxx PROPERTIES COMPILE_FLAGS -O0)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 # VNL_ALLOC is a fast but currently thread-unsafe allocator

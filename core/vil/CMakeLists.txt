@@ -129,7 +129,7 @@ IF(CMAKE_SYSTEM_AND_CXX_COMPILER_INFO_FILE MATCHES "Windows-cl")
     # matches the vil_bicub_interp files in Templates/
     # also matches the .txx and .h file, but no harm there
     IF(${f} MATCHES vil_bicub_interp)
-      SET_SOURCE_FILES_PROPERTIES(${f} COMPILE_FLAGS -Od)
+      SET_SOURCE_FILES_PROPERTIES(${f} PROPERTIES COMPILE_FLAGS -Od)
     ENDIF(${f} MATCHES vil_bicub_interp)
   ENDFOREACH(f)
 ENDIF(CMAKE_SYSTEM_AND_CXX_COMPILER_INFO_FILE MATCHES "Windows-cl")

@@ -16,7 +16,7 @@ SET(rsdl_sources
 AUX_SOURCE_DIRECTORY(Templates rsdl_sources)
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
-  SET_SOURCE_FILES_PROPERTIES(Templates/rsdl_bins_2d+double.int-.cxx COMPILE_FLAGS -O1)
+  SET_SOURCE_FILES_PROPERTIES(Templates/rsdl_bins_2d+double.int-.cxx PROPERTIES COMPILE_FLAGS -O1)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(rsdl ${rsdl_sources})

@@ -62,7 +62,7 @@ ADD_EXECUTABLE( vil_test_all
 )
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
-  SET_SOURCE_FILES_PROPERTIES(test_algo_convolve_1d.cxx COMPILE_FLAGS -O0)
+  SET_SOURCE_FILES_PROPERTIES(test_algo_convolve_1d.cxx PROPERTIES COMPILE_FLAGS -O0)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 TARGET_LINK_LIBRARIES( vil_test_all vil_algo vil vpl vul testlib vcl )
