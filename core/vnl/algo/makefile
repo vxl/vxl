@@ -1,4 +1,4 @@
-USES := vxl
+USES := vxl v3p/netlib
 LIBRARY := vnl-algo
 VERSION := 1.0
 IMMEDIATE_LIBS := -lvnl -lnetlib
