@@ -1,6 +1,7 @@
 #ifndef VGL_AREA_H_
 #define VGL_AREA_H_
-
+//:
+// \file
 
 class vgl_polygon;
 
@@ -10,6 +11,7 @@ class vgl_polygon;
 // consisting of more than one contour, the result is valid only if
 // the contours are oriented consistently. That is, an enclosed
 // contour must have opposite orientation to the enclosing contour.
+// \sa vgl_area
 float
 vgl_area_signed( const vgl_polygon& poly );
 
