@@ -1,4 +1,4 @@
-// This is mul/vil2/tests/test_save_load_image.cxx
+// This is core/vil2/tests/test_save_load_image.cxx
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -345,6 +345,16 @@ vil2_image_view<float> CreateTestfloatImage(int wd, int ht)
   return image;
 }
 
+// create a double-pixel test image
+vil2_image_view<double> CreateTestdoubleImage(int wd, int ht)
+{
+  vil2_image_view<double> image(wd, ht);
+  for (int i = 0; i < wd; i++)
+    for (int j = 0; j < ht; j++)
+      image(i,j) = 0.01 * ((i-wd/2)*(j-ht/2)/16);
+  return image;
+}
+
 MAIN( test_save_load_image )
 {
   START( "save/load" );
@@ -359,8 +369,9 @@ MAIN( test_save_load_image )
 #endif
   vil2_image_view<vxl_uint_32>         image32 = CreateTest32bitImage(sizex, sizey);
   vil2_image_view<vxl_byte>            image3p = CreateTest3planeImage(sizex, sizey);
-#if 1 // no float image support available yet
+#if 1 // float image support is now available
   vil2_image_view<float>               imagefloat = CreateTestfloatImage(sizex, sizey);
+  vil2_image_view<double>              imagedouble = CreateTestdoubleImage(sizex, sizey);
 #endif
 
 
@@ -368,10 +379,11 @@ MAIN( test_save_load_image )
   vil2_test_image_type("tiff", image1, true, true); // Test that boolean doesn't work
 #if 1
   vil2_test_image_type("tiff", image8);
-  vil2_test_image_type("tiff", image16, true, true); // Test that boolean doesn't work
-  vil2_test_image_type("tiff", image32, true, true); // Test that boolean doesn't work
+  vil2_test_image_type("tiff", image16, true, true);
+  vil2_test_image_type("tiff", image32, true, true);
   vil2_test_image_type("tiff", image3p);
-  vil2_test_image_type("tiff", imagefloat, true, true); // Test that boolean doesn't work
+  vil2_test_image_type("tiff", imagefloat, true, true);
+  vil2_test_image_type("tiff", imagedouble, true, true);
 #endif
 
 
@@ -441,6 +453,7 @@ MAIN( test_save_load_image )
   vil2_test_image_type("viff", image32);
   vil2_test_image_type("viff", image3p);
   vil2_test_image_type("viff", imagefloat);
+  vil2_test_image_type("viff", imagedouble);
 #endif
 
 
