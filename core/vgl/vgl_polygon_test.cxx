@@ -41,7 +41,7 @@ bool vgl_polygon_test_inside(T const *xs, T const *ys, unsigned n, T x, T y)
   // count crossings.
   unsigned crossings = 0;
   for (unsigned i=0; i<n; ++i)
-    if (vgl_lineseg_test(xs[i], ys[i], xs[(i+1)%n], ys[(i+1)%n],   ox, oy, x, y))
+    if (vgl_lineseg_test_lineseg(xs[i], ys[i], xs[(i+1)%n], ys[(i+1)%n],   ox, oy, x, y))
       ++crossings;
 
   // inside iff there was an odd number of crossings.

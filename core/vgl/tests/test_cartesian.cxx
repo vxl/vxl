@@ -270,7 +270,7 @@ static void test_line_2d()
 
   vgl_line_segment_2d<double> ls2(p2,p1); // inverse line segment through these points
   vcl_cout << ls2 << '\n';
-  TEST("line segment intersection", vgl_lineseg_test(ls,ls2), true);
+  TEST("line segment intersection", vgl_lineseg_test_lineseg(ls,ls2), true);
   // should be more extensively tested - TODO
 
   vgl_box_2d<double> bx(0,2,0,3);
