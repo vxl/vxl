@@ -44,7 +44,7 @@ bsta_histogram<T>::bsta_histogram(const T min, const T max,
     min_ (min), max_(max), range_(max-min), counts_(data)
 {
   nbins_ = data.size();
-  if(nbins_>0)
+  if (nbins_>0)
     delta_ = range_/nbins_;
 }
 
@@ -54,8 +54,8 @@ void bsta_histogram<T>::upcount(T x, T mag)
   if (x<min_||x>max_)
     return;
   for (unsigned int i = 0; i<nbins_; i++)
-      if ((i+1)*delta_>(x-min_))
-	   {counts_[i] += mag; break;}
+    if ((i+1)*delta_>(x-min_))
+      { counts_[i] += mag; break; }
   area_valid_ = false;
 }
 
@@ -147,7 +147,7 @@ void bsta_histogram<T>::parzen(const T sigma)
     counts_[i]=(T)out[i];
 }
 
-//: Fraction of area less than value
+// Fraction of area less than value
 template <class T>
 T bsta_histogram<T>::fraction_below(const T value) const
 {
@@ -165,7 +165,8 @@ T bsta_histogram<T>::fraction_below(const T value) const
       return sum/area_;
  return 0;
 }
-//: Fraction of area greater than value
+
+// Fraction of area greater than value
 template <class T>
 T bsta_histogram<T>::fraction_above(const T value) const
 {
@@ -182,11 +183,11 @@ T bsta_histogram<T>::fraction_above(const T value) const
   return sum/area_;
 }
 
-//: Value for area fraction below value
+// Value for area fraction below value
 template <class T>
 T bsta_histogram<T>::value_with_area_below(const T area_fraction) const
 {
-  if(area_fraction>T(1))
+  if (area_fraction>T(1))
     return 0;
   if (!area_valid_)
     compute_area();
@@ -194,19 +195,19 @@ T bsta_histogram<T>::value_with_area_below(const T area_fraction) const
     return 0;
   T sum = 0;
   for (unsigned int i=0; i<nbins_; i++)
-    {
-      sum += counts_[i];
-      if(sum>=area_fraction*area_)
-        return (i+1)*delta_;
-    }
-return 0;
+  {
+    sum += counts_[i];
+    if (sum>=area_fraction*area_)
+      return (i+1)*delta_;
+  }
+  return 0;
 }
 
-//: Value for area fraction above value
+// Value for area fraction above value
 template <class T>
 T  bsta_histogram<T>::value_with_area_above(const T area_fraction) const
 {
-  if(area_fraction>T(1))
+  if (area_fraction>T(1))
     return 0;
   if (!area_valid_)
     compute_area();
@@ -214,11 +215,11 @@ T  bsta_histogram<T>::value_with_area_above(const T area_fraction) const
     return 0;
   T sum = 0;
   for (unsigned int i=nbins_-1; i>=0; i--)
-    {
-      sum += counts_[i];
-      if(sum>area_fraction*area_)
-        return (i+1)*delta_;
-    }
+  {
+    sum += counts_[i];
+    if (sum>area_fraction*area_)
+      return (i+1)*delta_;
+  }
 return 0;
 }
 
