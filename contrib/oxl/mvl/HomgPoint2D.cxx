@@ -7,7 +7,7 @@
 
 #include "HomgPoint2D.h"
 #include <vcl_iostream.h>
-#include <vcl/vcl_cmath.h> // for fabs
+#include <vcl_cmath.h> // for fabs
 #include <vnl/vnl_double_2.h>
 
 //--------------------------------------------------------------
