@@ -9,8 +9,9 @@ SET(bsol_sources
     bsol_algs.cxx               bsol_algs.h
     bsol_distance_histogram.cxx bsol_distance_histogram.h
     bsol_intrinsic_curve_2d.cxx bsol_intrinsic_curve_2d.h bsol_intrinsic_curve_2d_sptr.h
-    bsol_point_index_2d.cxx     bsol_point_index_2d.h
-    bsol_point_index_3d.cxx     bsol_point_index_3d.h
+    bsol_intrinsic_curve_3d.cxx bsol_intrinsic_curve_3d.h bsol_intrinsic_curve_3d_sptr.h
+    bsol_point_index_2d.cxx        bsol_point_index_2d.h
+    bsol_point_index_3d.cxx        bsol_point_index_3d.h
 )
 AUX_SOURCE_DIRECTORY(Templates bsol_sources)
 
