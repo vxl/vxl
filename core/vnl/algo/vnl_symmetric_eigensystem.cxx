@@ -17,8 +17,6 @@
 #include <vnl/vnl_copy.h>
 #include <vnl/algo/vnl_netlib.h> // rs_()
 
-
-
 //: Find eigenvalues of a symmetric 3x3 matrix
 // \verbatim
 // Matrix is   M11  M12  M13
@@ -32,20 +30,20 @@ void vnl_symmetric_eigensystem_compute_eigenvals(
   double &l1, double &l2, double &l3)
 {
   const double third = 0.333333333333333333333;
-  const double sqrt_three = 1.73205080756887729352;
-// Caharacteristic eqtn |M - xI| = 0
-// x^3 + b x^2 + c x + d = 0 
+  const double sqrt_three = 1.73205080756887729353;
+  // Characteristic eqtn |M - xI| = 0
+  // x^3 + b x^2 + c x + d = 0
   const double b = -M11-M22-M33;
   const double c =  M11*M22 +M11*M33 +M22*M33  -M12*M12 -M13*M13 -M23*M23;
   const double d = M11*M23*M23 +M12*M12*M33 +M13*M13*M22 -2.0*M12*M13*M23 -M11*M22*M33;
 
-// Using the real cubic sover on http://www.1728.com/cubic2.htm
+  // Using the real cubic solver on http://www.1728.com/cubic2.htm
   const double f = c - b*b*third;
-  const double g = 0.07407407407407407407407*b*b*b - third*b*c + d;
-  const double h = 0.25*g*g + 0.03703703703703703703*f*f*f;
-  assert (h <= 0.0);
+  const double g = 0.074074074074074074074*b*b*b - third*b*c + d; // 0.074 == 2/27
+  const double h = 0.25*g*g + 0.037037037037037037037*f*f*f;      // 0.037 == 1/27
+  assert (h <= 1e-6); // allow for minor rounding error; h should be nonpositive
 
-  if (h==0)
+  if (h>=0)
   {
     l1 = l2 = l3 = vcl_pow(-d,third);
     return;
@@ -69,8 +67,6 @@ void vnl_symmetric_eigensystem_compute_eigenvals(
   }
 }
 
-
-
 bool vnl_symmetric_eigensystem_compute(vnl_matrix<float> const & A,
                                        vnl_matrix<float>       & V,
                                        vnl_vector<float>       & D)
@@ -90,15 +86,12 @@ bool vnl_symmetric_eigensystem_compute(vnl_matrix<double> const & A,
                                        vnl_vector<double>       & D)
 {
   A.assert_finite();
+  const int n = A.rows();
 
-  // The fortran code does not like it if V or D are
-  // undersized. I expect they probably should not be
-  // oversized either. - IMS
-  assert(V.rows() == A.rows());
-  assert(V.cols() == A.rows());
-  assert(D.size() == A.rows());
+  // Set the size of the eigenvalue vector D (output) if it does not match the size of A:
+  if (D.size() != A.rows())
+    D.set_size(n);
 
-  int n = A.rows();
   vnl_vector<double> work1(n);
   vnl_vector<double> work2(n);
   vnl_vector<double> Vvec(n*n);
@@ -115,7 +108,9 @@ bool vnl_symmetric_eigensystem_compute(vnl_matrix<double> const & A,
     return false;
   }
 
-  // Transpose-copy into V
+  // Transpose-copy into V, which is first resized if necessary
+  if (V.rows() != A.rows() || V.cols() != A.rows())
+    V.set_size(n,n);
   double *vptr = &Vvec[0];
   for (int c = 0; c < n; ++c)
     for (int r = 0; r < n; ++r)
