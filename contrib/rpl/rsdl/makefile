@@ -15,7 +15,6 @@ SOURCES += rsdl_kd_tree.cxx
 SOURCES += rsdl_point.cxx
 MANPAGE_SOURCES += rsdl_bins_2d.txx
 MANPAGE_SOURCES += rsdl_borgefors.txx
-MANPAGE_SOURCES += rsdl_test.h
 
 ifndef NOTEST
 SUBDIRS += tests
