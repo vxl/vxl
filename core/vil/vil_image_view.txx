@@ -40,8 +40,8 @@ vil2_image_view<T>::vil2_image_view(const vil2_smart_ptr<vil2_memory_chunk>& mem
                   const T* top_left, unsigned nx, unsigned ny, unsigned nplanes,
                   unsigned xstep, unsigned ystep, unsigned planestep)
 {
-  ptr_ = mem_chunk;
   set_to_memory(top_left,nx,ny,nplanes,xstep,ystep,planestep);
+  ptr_ = mem_chunk;
 }
 
 
