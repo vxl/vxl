@@ -98,7 +98,6 @@ SET(vgui_sources
   vgui_enhance.cxx              vgui_enhance.h          vgui_enhance_sptr.h
   vgui_tview.cxx                vgui_tview.h            vgui_tview_sptr.h
   vgui_function_tableau.cxx     vgui_function_tableau.h
-  vgui_test.cxx                 vgui_test.h             vgui_test_sptr.h
   vgui_roi_tableau.cxx          vgui_roi_tableau.h      vgui_roi_tableau_sptr.h
   vgui_rubberbander.cxx         vgui_rubberbander.h     vgui_rubberbander_sptr.h
   vgui_load.cxx                 vgui_load.h             vgui_load_sptr.h
