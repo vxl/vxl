@@ -39,7 +39,7 @@ class vipl_section_container {
   // the amount to overlap sections
   DataType* hsrawdata;
   // pointer to raw block of data for section (may ==0)
-  void* hsimgptr;
+  const void* hsimgptr;
   // (void) pointer to users "image", we just carry it
 
  public:
@@ -144,9 +144,9 @@ class vipl_section_container {
   DataType* rawdata() const{ return hsrawdata;}
   DataType* & ref_rawdata(){ return hsrawdata;}
   void put_rawdata( DataType* v){ hsrawdata = v;}
-  void* imgptr() const{ return hsimgptr;}
-  void* & ref_imgptr(){ return hsimgptr;}
-  void put_imgptr( void* v){ hsimgptr = v;}
+  const void* imgptr() const{ return hsimgptr;}
+  const void* & ref_imgptr(){ return hsimgptr;}
+  void put_imgptr( const void* v){ hsimgptr = v;}
 
   // refcounting:
 private: int refcount_;

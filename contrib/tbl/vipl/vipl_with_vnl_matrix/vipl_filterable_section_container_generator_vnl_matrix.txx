@@ -14,7 +14,7 @@ vipl_section_container<DataType>*
 vipl_filterable_section_container_generator(const vnl_matrix<DataType>& im, DataType*)
 {
   vipl_section_container<DataType> *rtn = new vipl_section_container<DataType>((vipl_section_container<DataType>*)0);
-  rtn->put_imgptr((void*) &im);
+  rtn->put_imgptr((const void*) &im);
   rtn->ref_imgsz()[0] = im.columns();
   rtn->ref_imgsz()[1] = im.rows();
 
