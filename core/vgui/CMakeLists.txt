@@ -431,10 +431,6 @@ TARGET_LINK_LIBRARIES(vgui vnl_algo vnl vil1 vil vgl vpl vbl vul)
 
 # Dependencies created by the toolkit implementations
 
-IF (VGUI_USE_GLUT)
-  # vil1 and vul listed above, and glut listed below. Don't repeat.
-  # TARGET_LINK_LIBRARIES(vgui ${GLUT_LIBRARIES})
-ENDIF (VGUI_USE_GLUT)
 IF (VGUI_USE_QT)
   # vul and vbl listed above. Don't repeat
   TARGET_LINK_LIBRARIES(vgui ${QT_LIBRARIES})
@@ -456,9 +452,9 @@ ENDIF (VGUI_USE_GTK2)
 # These should appear after the above, because most of
 # the toolkits depend on OpenGL.
 
-IF (GLUT_FOUND)
+IF (VGUI_USE_GLUT)
   TARGET_LINK_LIBRARIES(vgui ${GLUT_LIBRARIES})
-ENDIF (GLUT_FOUND)
+ENDIF (VGUI_USE_GLUT)
 IF (QV_FOUND)
   TARGET_LINK_LIBRARIES(vgui ${QV_LIBRARIES})
 ENDIF (QV_FOUND)
