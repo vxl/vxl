@@ -16,3 +16,19 @@ template<> vcl_string mil_image_data<int>::is_a() const
 // Specialise the is_a() for float
 template<> vcl_string mil_image_data<float>::is_a() const
 {  return vcl_string("mil_image_data<float>"); }
+
+// Specialise the is_a() for float
+template<> vcl_string mil_image_data<long>::is_a() const
+{  return vcl_string("mil_image_data<long>"); }
+
+// Specialise the is_a() for float
+template<> vcl_string mil_image_data<short>::is_a() const
+{  return vcl_string("mil_image_data<short>"); }
+
+// Specialise the is_a() for float
+template<> vcl_string mil_image_data<double>::is_a() const
+{  return vcl_string("mil_image_data<double>"); }
+
+// Specialise the is_a() for float
+template<> vcl_string mil_image_data<char>::is_a() const
+{  return vcl_string("mil_image_data<char>"); }
