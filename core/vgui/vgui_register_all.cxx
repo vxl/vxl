@@ -73,7 +73,7 @@ int vgui_register_all_implementations()
 #ifdef VGUI_USE_MOTIFGL
   vgui_Xm_tag_function();
 #endif
-#ifdef VGUI_USE_QGL
+#ifdef VGUI_USE_QT
   vgui_qt_tag_function();
 #endif
 #ifdef VGUI_USE_SDL
