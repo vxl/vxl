@@ -1,6 +1,6 @@
 # core/vil/examples/CMakeLists.txt
 
-LINK_LIBRARIES( vil vul vcl )
+LINK_LIBRARIES( vil vcl )
 
 ADD_EXECUTABLE( vil_example1 example1.cxx )
 ADD_EXECUTABLE( vil_example2 example2.cxx )
