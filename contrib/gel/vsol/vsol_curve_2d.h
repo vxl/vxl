@@ -23,6 +23,7 @@
 #include <vsol/vsol_point_2d_sptr.h>
 class vdgl_digital_curve;
 class vsol_line_2d;
+class vsol_conic_2d;
 class vsol_polyline_2d;
 
 class vsol_curve_2d
@@ -78,6 +79,12 @@ public:
   virtual vsol_line_2d *cast_to_line_2d(void) {return 0;}
 
   //---------------------------------------------------------------------------
+  //: Return `this' if `this' is an conic, 0 otherwise
+  //---------------------------------------------------------------------------
+  virtual vsol_conic_2d const*cast_to_conic_2d(void)const{return 0;}
+  virtual vsol_conic_2d *cast_to_conic_2d(void) {return 0;}
+
+  //---------------------------------------------------------------------------
   //: Return `this' if `this' is an polyline, 0 otherwise
   //---------------------------------------------------------------------------
   virtual vsol_polyline_2d const*cast_to_polyline_2d(void)const{return 0;}
@@ -121,6 +128,9 @@ public:
   //: Set the last point of the curve
   //---------------------------------------------------------------------------
   virtual void set_p1(const vsol_point_2d_sptr &new_p1)=0;
+
+ protected:
+  bool endpoints_equal(const vsol_curve_2d &other) const;
 };
 
 #endif // #ifndef VSOL_CURVE_2D_H

@@ -14,6 +14,7 @@
 // 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 // 2003/01/08 Peter Vanroose  Added pure virtual is_convex()
 // 2003/11/06 Amir Tamrakar   Added safe cast methods to polygon_2d
+// 2004/05/17 Joseph Mundy   Added safe cast methods for triangle and rectangle
 // \endverbatim
 //*****************************************************************************
 
@@ -23,6 +24,8 @@
 #include <vsol/vsol_spatial_object_2d.h>
 
 class vsol_polygon_2d;
+class vsol_triangle_2d;
+class vsol_rectangle_2d;
 
 class vsol_region_2d : public vsol_spatial_object_2d
 {
@@ -61,6 +64,7 @@ class vsol_region_2d : public vsol_spatial_object_2d
 
   virtual vsol_polygon_2d* cast_to_polygon_2d(void) { return 0; }
   virtual vsol_polygon_2d const* cast_to_polygon_2d(void) const { return 0; }
+
 
   //***************************************************************************
   // Status report

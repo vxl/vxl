@@ -6,6 +6,7 @@
 //*****************************************************************************
 // External declarations for implementation
 //*****************************************************************************
+#include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsol/vsol_point_2d.h>
 #include <vcl_iostream.h>
 
@@ -14,16 +15,29 @@
 //***************************************************************************
 
 //---------------------------------------------------------------------------
+//: Default Constructor - needed for binary I/O
+//---------------------------------------------------------------------------
+vsol_triangle_2d::vsol_triangle_2d()
+ : vsol_polygon_2d()
+{
+  storage_->clear();
+  storage_->push_back(new vsol_point_2d(0.0,0.0));
+  storage_->push_back(new vsol_point_2d(0.0,1.0));
+  storage_->push_back(new vsol_point_2d(1.0,0.0));
+}
+  
+//---------------------------------------------------------------------------
 //: Constructor from its 3 vertices
 //---------------------------------------------------------------------------
 vsol_triangle_2d::vsol_triangle_2d(const vsol_point_2d_sptr &new_p0,
                                    const vsol_point_2d_sptr &new_p1,
                                    const vsol_point_2d_sptr &new_p2)
+ : vsol_polygon_2d()
 {
-  storage_=new vcl_vector<vsol_point_2d_sptr>(3);
-  (*storage_)[0]=new_p0;
-  (*storage_)[1]=new_p1;
-  (*storage_)[2]=new_p2;
+  storage_->clear();
+  storage_->push_back(new_p0);
+  storage_->push_back(new_p1);
+  storage_->push_back(new_p2);
 }
 
 //---------------------------------------------------------------------------
@@ -153,6 +167,95 @@ void vsol_triangle_2d::set_p2(const vsol_point_2d_sptr &new_p2)
   (*storage_)[2]=new_p2;
 }
 
+
+//----------------------------------------------------------------
+// ================   Binary I/O Methods ========================
+//----------------------------------------------------------------
+
+//: Binary save self to stream.
+void vsol_triangle_2d::b_write(vsl_b_ostream &os) const
+{
+  vsl_b_write(os, version());
+  vsol_polygon_2d::b_write(os);
+}
+
+//: Binary load self from stream (not typically used)
+void vsol_triangle_2d::b_read(vsl_b_istream &is)
+{
+  if(!is)
+    return;
+  short ver;
+  vsl_b_read(is, ver);
+  switch(ver)
+  {
+  case 1:
+    {
+      vsol_polygon_2d::b_read(is);
+      if(storage_->size()!=3){
+        vcl_cerr << "I/O ERROR: vsol_triangle_2d::b_read(vsl_b_istream&)\n"
+                 << "           Incorrect number of vertices: "<< storage_->size() << '\n';
+        is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+        return;
+      }
+    }
+    break;
+
+  default:
+    vcl_cerr << "I/O ERROR: vsol_triangle_2d::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< ver << '\n';
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
+  }
+}
+//: Return IO version number;
+short vsol_triangle_2d::version() const
+{
+  return 1;
+}
+
+//: Print an ascii summary to the stream
+void vsol_triangle_2d::print_summary(vcl_ostream &os) const
+{
+  os << *this;
+}
+
+  //: Return true if the argument matches the string identifying the class or any parent class
+bool vsol_triangle_2d::is_class(const vcl_string& cls) const
+{
+  return cls==vsol_triangle_2d::is_a();
+}
+
+//external functions
+
+//: Binary save vsol_triangle_2d_sptr to stream.
+void
+vsl_b_write(vsl_b_ostream &os, const vsol_triangle_2d* t)
+{
+  if (!t){
+    vsl_b_write(os, false); // Indicate null triangle stored
+  }
+  else{
+    vsl_b_write(os,true); // Indicate non-null triangle stored
+    t->b_write(os);
+  }
+}
+
+//: Binary load vsol_triangle_2d* from stream.
+void
+vsl_b_read(vsl_b_istream &is, vsol_triangle_2d* &t)
+{
+  delete t;
+  bool not_null_ptr;
+  vsl_b_read(is, not_null_ptr);
+  if (not_null_ptr) {
+    t = new vsol_triangle_2d();
+    t->b_read(is);
+  }
+  else
+    t = 0;
+}
+
+
 inline void vsol_triangle_2d::describe(vcl_ostream &strm, int blanking) const
 {
   if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
@@ -161,3 +264,4 @@ inline void vsol_triangle_2d::describe(vcl_ostream &strm, int blanking) const
     strm << ' ' << *(vertex(i));
   strm << '>' << vcl_endl;
 }
+

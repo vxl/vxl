@@ -113,29 +113,22 @@ vsol_point_2d_sptr vsol_polyline_2d::vertex(const int i) const
 //---------------------------------------------------------------------------
 bool vsol_polyline_2d::operator==(const vsol_polyline_2d &other) const
 {
-  bool result = (this==&other);
-
-  if (!result)
-  {
-    result = (storage_->size()==other.storage_->size());
-    if (result)
-    {
-      vsol_point_2d_sptr p=(*storage_)[0];
-
-      unsigned int i=0;
-      for (result=false;i<storage_->size()&&!result;++i)
-        result = (*p==*(*other.storage_)[i]);
-      if (result)
-      {
-        for (unsigned int j=1;j<size()&&result;++i,++j)
-        {
-          if (i>=storage_->size()) i=0;
-          result = ((*storage_)[i]==(*storage_)[j]);
-        }
-      }
-    }
-  }
-  return result;
+  if(this==&other)
+    return true;
+  //check endpoint equality since that is cheaper then checking each vertex
+  //and if it fails we are done
+  bool epts_eq = vsol_curve_2d::endpoints_equal(other);
+  if(!epts_eq)
+    return false;
+  //Do the polylines have the same number of vertices?
+  if(storage_->size()!=other.storage_->size())
+    return false;
+  //The easy tests are done.  Now compare each vertex
+  int n = storage_->size();
+  for(int i=0; i<n; i++)
+    if(*((*storage_)[i])!=*((*other.storage_)[i]))
+      return false;
+  return true;
 }
 
 //: spatial object equality

@@ -77,8 +77,14 @@ class vsol_polygon_2d : public vsol_region_2d
   //: Safe casting
   //---------------------------------------------------------------------------
 
-  virtual vsol_polygon_2d* cast_to_polygon_2d(void) { return this;}
-  virtual const vsol_polygon_2d* cast_to_polygon_2d(void) const { return this;}
+  virtual vsol_polygon_2d* cast_to_polygon_2d(void);
+  virtual const vsol_polygon_2d* cast_to_polygon_2d(void) const;
+
+  virtual vsol_triangle_2d* cast_to_triangle_2d(void);
+  virtual const vsol_triangle_2d* cast_to_triangle_2d(void) const;
+
+  virtual vsol_rectangle_2d* cast_to_rectangle_2d(void);
+  virtual const vsol_rectangle_2d* cast_to_rectangle_2d(void) const;
 
   //***************************************************************************
   // Access

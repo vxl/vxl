@@ -28,6 +28,7 @@
 //   2001/08/31 Peter Vanroose  constructor added from centre, size, orientation
 //   2002/04/05 Peter Vanroose  axis() added
 //   2003/01/08 Peter Vanroose  moved static private methods to vsol_conic_2d.cxx
+//   2004/05/11 Joseph Mundy    added binary I/O methods
 // \endverbatim
 //*****************************************************************************
 
@@ -36,7 +37,7 @@
 //*****************************************************************************
 #include <vgl/vgl_fwd.h>
 #include <vgl/vgl_conic.h> // parent class
-
+#include <vsl/vsl_binary_io.h>
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_line_2d.h>
@@ -92,6 +93,12 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   // Initialization
   //***************************************************************************
 
+  //---------------------------------------------------------------------------
+  //: Default Constructor
+  //  produces and invalid conic (needed for binary I/O)
+  //---------------------------------------------------------------------------
+  vsol_conic_2d();
+  
   //---------------------------------------------------------------------------
   //: Constructor from coefficients of the cartesian equation
   //  `a'x^2+`b'xy+`c'y^2+`d'x+`e'y+`f'
@@ -187,11 +194,6 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //***************************************************************************
   // Status report
   //***************************************************************************
-
-  //---------------------------------------------------------------------------
-  //: Return a platform independent string identifying the class
-  //---------------------------------------------------------------------------
-  virtual vcl_string is_a() const { return "vsol_conic_2d"; }
 
   //---------------------------------------------------------------------------
   //: Return the real type of a line. It is a CURVE
@@ -365,6 +367,39 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
     strm << "vsol_conic_2d<" << static_cast<vgl_conic<double> >(*this)
          << '>' << vcl_endl;
   }
+
+  //---------------------------------------------------------------------------
+  //: Return `this' if `this' is an conic, 0 otherwise
+  //---------------------------------------------------------------------------
+  virtual vsol_conic_2d const*cast_to_conic_2d(void)const{return this;}
+  virtual vsol_conic_2d *cast_to_conic_2d(void) {return this;}
+
+  // ==== Binary IO methods ======
+
+  //: Binary save self to stream.
+  void b_write(vsl_b_ostream &os) const;
+
+  //: Binary load self from stream.
+  void b_read(vsl_b_istream &is);
+
+  //: Return IO version number;
+  short version() const;
+  
+  //: Return a platform independent string identifying the class
+  virtual vcl_string is_a() const { return "vsol_conic_2d"; }
+
+  //: Print an ascii summary to the stream
+  void print_summary(vcl_ostream &os) const;
+
+  //: Return true if the argument matches the string identifying the class or any parent class
+  bool is_class(const vcl_string& cls) const;
 };
+
+
+//: Binary save vsol_conic_2d* to stream.
+void vsl_b_write(vsl_b_ostream &os, const vsol_conic_2d* p);
+
+//: Binary load vsol_conic_2d* from stream.
+void vsl_b_read(vsl_b_istream &is, vsol_conic_2d* &p);
 
 #endif // vsol_conic_2d_h_

@@ -149,9 +149,9 @@ vsol_point_2d_sptr vsol_line_2d::p1(void) const
 //---------------------------------------------------------------------------
 bool vsol_line_2d::operator==(const vsol_line_2d &other) const
 {
-  return this==&other
-         || (*p0_ == *(other.p0_) && *p1_ == *(other.p1_))
-         || (*p0_ == *(other.p1_) && *p1_ == *(other.p0_));
+  if(this==&other)
+    return true;
+  return vsol_curve_2d::endpoints_equal(other);
 }
 
 //: spatial object equality

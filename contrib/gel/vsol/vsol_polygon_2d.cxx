@@ -35,7 +35,6 @@ vsol_polygon_2d::vsol_polygon_2d(const vcl_vector<vsol_point_2d_sptr> &new_verti
 vsol_polygon_2d::vsol_polygon_2d(const vsol_polygon_2d &other)
 {
   //vsol_point_2d_sptr p;
-
   storage_=new vcl_vector<vsol_point_2d_sptr>(*other.storage_);
   for (unsigned int i=0;i<storage_->size();++i)
     (*storage_)[i]=new vsol_point_2d(*((*other.storage_)[i]));
@@ -56,6 +55,36 @@ vsol_polygon_2d::~vsol_polygon_2d()
 vsol_spatial_object_2d* vsol_polygon_2d::clone(void) const
 {
   return new vsol_polygon_2d(*this);
+}
+//***************************************************************************
+// Safe casting
+//***************************************************************************
+
+vsol_polygon_2d* vsol_polygon_2d::cast_to_polygon_2d(void)
+{
+  if(!cast_to_triangle_2d()||!cast_to_rectangle_2d())
+    return this;
+  else
+    return 0;
+}
+const vsol_polygon_2d* vsol_polygon_2d::cast_to_polygon_2d(void) const
+{
+  if(!cast_to_triangle_2d()||!cast_to_rectangle_2d())
+    return this;
+  else
+    return 0;
+}
+
+vsol_triangle_2d* vsol_polygon_2d::cast_to_triangle_2d(void){return 0;}
+const vsol_triangle_2d* vsol_polygon_2d::cast_to_triangle_2d(void) const
+{
+  return 0;
+}
+
+vsol_rectangle_2d* vsol_polygon_2d::cast_to_rectangle_2d(void){return 0;}
+const vsol_rectangle_2d* vsol_polygon_2d::cast_to_rectangle_2d(void) const
+{
+  return 0;
 }
 
 //***************************************************************************

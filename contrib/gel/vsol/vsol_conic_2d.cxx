@@ -2,8 +2,9 @@
 #include "vsol_conic_2d.h"
 //:
 // \file
-
+#include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsol/vsol_point_2d.h>
+#include <vgl/io/vgl_io_conic.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vcl_cmath.h> // for vcl_abs(double)
 
@@ -12,6 +13,7 @@
 //*****************************************************************************
 #include <vcl_cassert.h>
 
+  
 //---------------------------------------------------------------------------
 //: Are `x' and `y' almost equal ?
 //  the comparison uses an adaptive epsilon
@@ -34,6 +36,15 @@ inline static bool is_zero(double x) { return vcl_abs(x)<=1e-6; }
 //***************************************************************************
 // Initialization
 //***************************************************************************
+
+
+//---------------------------------------------------------------------------
+//: Default Constructor
+//  produces and invalid conic (needed for binary I/O)
+//---------------------------------------------------------------------------
+vsol_conic_2d::vsol_conic_2d()
+{
+}
 
 //---------------------------------------------------------------------------
 //: Constructor from coefficient of the cartesian equation
@@ -154,13 +165,18 @@ vsol_point_2d_sptr vsol_conic_2d::p1(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-//: Has `this' the same coefficients and the same end points than `other' ?
+//: Has `this' the same coefficients and the same(geometrically) end points
+//  than `other' ?  The test anticipates that the conic may have null endpoints
 //---------------------------------------------------------------------------
 bool vsol_conic_2d::operator==(const vsol_conic_2d &other) const
 {
+  if(this==&other)
+    return true;
   // Delegate to both parent classes:
-  return vgl_conic<double>::operator==(other) &&
-         p0() == other.p0() && p1() == other.p1();
+  bool conic_eq = vgl_conic<double>::operator==(other);
+  // Check endpoints
+  bool epts_eq = vsol_curve_2d::endpoints_equal(other);
+  return conic_eq&&epts_eq;
 }
 
 //: spatial object equality
@@ -604,3 +620,87 @@ vsol_line_2d_sptr vsol_conic_2d::axis() const
   }
   else return 0;
 }
+
+//----------------------------------------------------------------
+// ================   Binary I/O Methods ========================
+//----------------------------------------------------------------
+
+//: Binary save self to stream.
+void vsol_conic_2d::b_write(vsl_b_ostream &os) const
+{
+  vsl_b_write(os, version());
+  vsl_b_write(os, static_cast<vgl_conic<double> >(*this));
+  vsl_b_write(os, p0_);
+  vsl_b_write(os, p1_);
+}
+
+//: Binary load self from stream (not typically used)
+void vsol_conic_2d::b_read(vsl_b_istream &is)
+{
+  if(!is)
+    return;
+  short ver;
+  vsl_b_read(is, ver);
+  switch(ver)
+  {
+  case 1:
+    {
+      vgl_conic<double> q;
+      vsl_b_read(is, q);
+      vsol_point_2d_sptr p0, p1;
+      vsl_b_read(is, p0);
+      vsl_b_read(is, p1);
+      this->set(q.a(), q.b(), q.c(), q.d(), q.e(), q.f());
+      p0_=p0;
+      p1_=p1;
+    }
+  }
+}
+//: Return IO version number;
+short vsol_conic_2d::version() const
+{
+  return 1;
+}
+
+//: Print an ascii summary to the stream
+void vsol_conic_2d::print_summary(vcl_ostream &os) const
+{
+  os << *this;
+}
+
+  //: Return true if the argument matches the string identifying the class or any parent class
+bool vsol_conic_2d::is_class(const vcl_string& cls) const
+{
+  return cls==vsol_conic_2d::is_a();
+}
+
+//external functions
+
+//: Binary save vsol_conic_2d* to stream.
+void
+vsl_b_write(vsl_b_ostream &os, const vsol_conic_2d* c)
+{
+  if (!c){
+    vsl_b_write(os, false); // Indicate null conic stored
+  }
+  else{
+    vsl_b_write(os,true); // Indicate non-null conic stored
+    c->b_write(os);
+  }
+}
+
+//: Binary load vsol_conic_2d* from stream.
+void
+vsl_b_read(vsl_b_istream &is, vsol_conic_2d* &c)
+{
+  delete c;
+  bool not_null_ptr;
+  vsl_b_read(is, not_null_ptr);
+  if (not_null_ptr) {
+    c = new vsol_conic_2d();
+    c->b_read(is);
+  }
+  else
+    c = 0;
+}
+

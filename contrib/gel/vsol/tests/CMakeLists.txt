@@ -1,6 +1,6 @@
 # gel/vsol/tests/CMakeLists.txt
 
-LINK_LIBRARIES( vsol vgl vpl  vbl testlib )
+LINK_LIBRARIES( vsol vgl vpl testlib )
 
 ADD_EXECUTABLE( vsol_test_all
   test_driver.cxx

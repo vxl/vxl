@@ -103,7 +103,9 @@ void test_vsol_conic_2d()
   TEST("vsol_conic_2d::is_real_ellipse()", p->is_real_ellipse(), true);
   TEST("!vsol_conic_2d::is_real_circle()", p->is_real_circle(), false);
   TEST("vsol_conic_2d::midpoint()", *(p->midpoint()), vsol_point_2d(0,0));
-  TEST("vsol_conic_2d::axis()", *(p->axis()), vsol_line_2d(vgl_vector_2d<double>(-1,0),vgl_point_2d<double>(0,0)));
+  TEST("vsol_conic_2d::axis()",
+       *(p->axis()),
+       vsol_line_2d(vgl_point_2d<double>(-0.5, 0),vgl_point_2d<double>(0.5, 0))) ;
   p->ellipse_parameters(cx,cy,phi,width,height);
   TEST("vsol_conic_2d::ellipse_parameters(): cx", cx, 0);
   TEST("vsol_conic_2d::ellipse_parameters(): cy", cy, 0);

@@ -210,12 +210,6 @@ class vsol_point_2d : public vsol_spatial_object_2d
   }
 };
 
-//: Stream output operator
-inline vcl_ostream&  operator<<(vcl_ostream& s, vsol_point_2d const& p)
-{
-  return s << '(' << p.x() << ' ' << p.y() << ')';
-}
-
 //: Binary save vsol_point_2d* to stream.
 void vsl_b_write(vsl_b_ostream &os, const vsol_point_2d* p);
 
