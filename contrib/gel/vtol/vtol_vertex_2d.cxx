@@ -23,7 +23,7 @@
 //---------------------------------------------------------------------------
 vtol_vertex_2d::vtol_vertex_2d(void)
 {
-  _point=new vsol_point_2d(0,0);
+  point_=new vsol_point_2d(0,0);
 }
 
 //---------------------------------------------------------------------------
@@ -33,7 +33,7 @@ vtol_vertex_2d::vtol_vertex_2d(void)
 vtol_vertex_2d::vtol_vertex_2d(vsol_point_2d &new_point)
 {
   // Must allocate here, since this pointer will be unref()ed by destructor
-  _point=new vsol_point_2d(new_point);
+  point_=new vsol_point_2d(new_point);
 }
 
 //---------------------------------------------------------------------------
@@ -41,7 +41,7 @@ vtol_vertex_2d::vtol_vertex_2d(vsol_point_2d &new_point)
 //---------------------------------------------------------------------------
 vtol_vertex_2d::vtol_vertex_2d(const vnl_double_2 &v)
 {
-  _point=new vsol_point_2d(v[0],v[1]);
+  point_=new vsol_point_2d(v[0],v[1]);
 }
 
 //---------------------------------------------------------------------------
@@ -50,7 +50,7 @@ vtol_vertex_2d::vtol_vertex_2d(const vnl_double_2 &v)
 vtol_vertex_2d::vtol_vertex_2d(const double new_x,
                                const double new_y)
 {
-  _point=new vsol_point_2d(new_x,new_y);
+  point_=new vsol_point_2d(new_x,new_y);
 }
 
 //---------------------------------------------------------------------------
@@ -58,7 +58,7 @@ vtol_vertex_2d::vtol_vertex_2d(const double new_x,
 //---------------------------------------------------------------------------
 vtol_vertex_2d::vtol_vertex_2d(const vtol_vertex_2d &other)
 {
-  _point=new vsol_point_2d(*other._point);
+  point_=new vsol_point_2d(*other.point_);
 }
 
 //---------------------------------------------------------------------------
@@ -93,17 +93,16 @@ vsol_spatial_object_3d_sptr vtol_vertex_2d::clone(void) const
 //---------------------------------------------------------------------------
 vsol_point_2d_sptr vtol_vertex_2d::point(void) const
 {
-  return _point;
+  return point_;
 }
 
 //---------------------------------------------------------------------------
 //: Set the point (the point is not copied)
 // Require: new_point.ptr()!=0
 //---------------------------------------------------------------------------
-void vtol_vertex_2d::set_point(vsol_point_2d &new_point)
+void vtol_vertex_2d::set_point(vsol_point_2d_sptr const& new_point)
 {
-  // Must allocate here, since this pointer will be unref()ed by destructor
-  _point=new vsol_point_2d(new_point);
+  point_=new_point;
 }
 
 //---------------------------------------------------------------------------
@@ -111,7 +110,7 @@ void vtol_vertex_2d::set_point(vsol_point_2d &new_point)
 //---------------------------------------------------------------------------
 double vtol_vertex_2d::x(void) const
 {
-  return _point->x();
+  return point_->x();
 }
 
 //---------------------------------------------------------------------------
@@ -119,7 +118,7 @@ double vtol_vertex_2d::x(void) const
 //---------------------------------------------------------------------------
 double vtol_vertex_2d::y(void) const
 {
-  return _point->y();
+  return point_->y();
 }
 
 //---------------------------------------------------------------------------
@@ -127,11 +126,11 @@ double vtol_vertex_2d::y(void) const
 //---------------------------------------------------------------------------
 void vtol_vertex_2d::set_x(const double new_x)
 {
-  vsol_point_2d new_point(*_point);
+  vsol_point_2d new_point(*point_);
   new_point.set_x(new_x);
   this->touch(); //Timestamp update
   // Must allocate here, since this pointer will be unref()ed by destructor
-  _point=new vsol_point_2d(new_point);
+  point_=new vsol_point_2d(new_point);
 }
 
 //---------------------------------------------------------------------------
@@ -139,38 +138,17 @@ void vtol_vertex_2d::set_x(const double new_x)
 //---------------------------------------------------------------------------
 void vtol_vertex_2d::set_y(const double new_y)
 {
-  vsol_point_2d new_point(*_point);
+  vsol_point_2d new_point(*point_);
   new_point.set_y(new_y);
   this->touch(); //Timestamp update
   // Must allocate here, since this pointer will be unref()ed by destructor
-  _point=new vsol_point_2d(new_point);
+  point_=new vsol_point_2d(new_point);
 }
 
-//***************************************************************************
-// Replaces dynamic_cast<T>
-//***************************************************************************
+//*****************************************************
+//
+//    Print Functions
 
-//---------------------------------------------------------------------------
-//: Return `this' if `this' is a vertex, 0 otherwise
-//---------------------------------------------------------------------------
-const vtol_vertex_2d *vtol_vertex_2d::cast_to_vertex_2d(void) const
-{
-  return this;
-}
-
-//---------------------------------------------------------------------------
-//: Return `this' if `this' is a vertex, 0 otherwise
-//---------------------------------------------------------------------------
-vtol_vertex_2d *vtol_vertex_2d::cast_to_vertex_2d(void)
-{
-  return this;
-}
-
-/*
- ******************************************************
- *
- *    Print Functions
- */
 //: This method outputs a simple text representation of the vertex including its address in memory.
 void vtol_vertex_2d::print(vcl_ostream &strm) const
 {
@@ -221,15 +199,15 @@ vtol_edge *vtol_vertex_2d::new_edge(vtol_vertex &other)
 
   // Scan Zero Chains
   found=false;
-  for(zp=_superiors.begin();zp!=_superiors.end()&&!found;++zp)
+  for (zp=_superiors.begin();zp!=_superiors.end()&&!found;++zp)
     {
       // Scan superiors of ZChain (i.e. edges)
       // topology_list *sups=(*zp)->get_superiors();
       sups=(*zp)->superiors();
-      for(ep=sups->begin();ep!=sups->end()&&!found;++ep)
+      for (ep=sups->begin();ep!=sups->end()&&!found;++ep)
         {
           e=(*ep)->cast_to_edge();
-          if(e->v1()==&other||e->v2()==&other)
+          if (e->v1()==&other||e->v2()==&other)
             {
               found=true;
               result=e;
@@ -237,7 +215,7 @@ vtol_edge *vtol_vertex_2d::new_edge(vtol_vertex &other)
         }
       delete sups;
     }
-  if(!found)
+  if (!found)
     result= (vtol_edge*)(new vtol_edge_2d(*this,*other2d));
 
   return result;
@@ -247,13 +225,13 @@ vtol_edge *vtol_vertex_2d::new_edge(vtol_vertex &other)
 double vtol_vertex_2d::distance_from(const vnl_double_2 &v)
 {
   vsol_point_2d point(v(0),v(1));
-  return _point->distance(point);
+  return point_->distance(point);
 }
 
 //: This method returns the distance, not the squared distance, from this vertex and another vertex.
 double vtol_vertex_2d::euclidean_distance(vtol_vertex_2d& v)
 {
-  return _point->distance(*v.point());
+  return point_->distance(*v.point());
 }
 
 
@@ -262,22 +240,22 @@ double vtol_vertex_2d::euclidean_distance(vtol_vertex_2d& v)
 //---------------------------------------------------------------------------
 vtol_vertex_2d &vtol_vertex_2d::operator=(const vtol_vertex_2d &other)
 {
-  if(this!=&other)
+  if (this!=&other)
     {
       this->touch(); //Timestamp update
       // Must allocate here, since this pointer will be unref()ed by destructor
-      _point=new vsol_point_2d(*(other._point));
+      point_=new vsol_point_2d(*(other.point_));
     }
   return *this;
 }
 
 vtol_vertex& vtol_vertex_2d::operator=(const vtol_vertex &other)
 {
-  if(this!=&other)
+  if (this!=&other)
     {
       this->touch(); //Timestamp update
       // Must allocate here, since this pointer will be unref()ed by destructor
-      _point=new vsol_point_2d(*(other.cast_to_vertex_2d()->_point));
+      point_=new vsol_point_2d(*(other.cast_to_vertex_2d()->point_));
     }
   return *this;
 }
@@ -309,8 +287,8 @@ bool vtol_vertex_2d::operator== (const vtol_vertex &other) const
 bool vtol_vertex_2d::operator== (const vtol_vertex_2d &other) const
 {
   bool result = this==&other;
-  if(!result)
-    result=(*_point)==(*(other._point));
+  if (!result)
+    result=(*point_)==(*(other.point_));
   return result;
 }
 
@@ -324,8 +302,8 @@ bool vtol_vertex_2d::operator== (const vtol_vertex_2d &other) const
 
 void vtol_vertex_2d::copy_geometry(const vtol_vertex &other)
 {
-  if(other.cast_to_vertex_2d()){
-    _point = new vsol_point_2d(*(other.cast_to_vertex_2d()->point()));
+  if (other.cast_to_vertex_2d()){
+    point_ = new vsol_point_2d(*(other.cast_to_vertex_2d()->point()));
   }
 }
 
@@ -335,10 +313,7 @@ void vtol_vertex_2d::copy_geometry(const vtol_vertex &other)
 
 bool vtol_vertex_2d::compare_geometry(const vtol_vertex &other) const
 {
-  if(other.cast_to_vertex_2d())
-    return (*_point)==(*(other.cast_to_vertex_2d()->point()));
-  else
-    return false;
+  return other.cast_to_vertex_2d() && (*point_)==(*(other.cast_to_vertex_2d()->point()));
 }
 
 

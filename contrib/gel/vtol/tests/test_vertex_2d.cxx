@@ -82,7 +82,7 @@ int main(int, char **)
 
   // change the point with set_point() and verify it's different
   vsol_point_2d_sptr np = new vsol_point_2d(4.0,5.0);
-  v2->set_point(*np);
+  v2->set_point(np);
   Assert(v2->x()==4.0 && v2->y()==5.0);
 
   Assert(!((*v1)==(*v2)));

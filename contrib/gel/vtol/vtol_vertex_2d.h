@@ -82,7 +82,7 @@ public:
   //: Set the point (the point is not copied)
   //  REQUIRE: new_point.ptr()!=0
   //---------------------------------------------------------------------------
-  virtual void set_point(vsol_point_2d &new_point);
+  virtual void set_point(vsol_point_2d_sptr const& new_point);
 
 
   // Methods called on Vertex
@@ -130,12 +130,12 @@ public:
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a vertex, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_vertex_2d *cast_to_vertex_2d(void) const;
+  virtual const vtol_vertex_2d *cast_to_vertex_2d(void) const { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a vertex, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_vertex_2d *cast_to_vertex_2d(void);
+  virtual vtol_vertex_2d *cast_to_vertex_2d(void) { return this; }
 
   //---------------------------------------------------------------------------
   //: Create a line edge from `this' and `other' only if this edge does not exist.
@@ -157,7 +157,7 @@ protected:
   //---------------------------------------------------------------------------
   // Description: point associated to the vertex
   //---------------------------------------------------------------------------
-  vsol_point_2d_sptr _point;
+  vsol_point_2d_sptr point_;
 
   //:  copy the geometry
   virtual void copy_geometry(const vtol_vertex &other);
