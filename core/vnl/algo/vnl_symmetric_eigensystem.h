@@ -56,10 +56,10 @@
 
 bool vnl_symmetric_eigensystem_compute(vnl_matrix<float> const & A, 
                                        vnl_matrix<float> & V,
-				       vnl_vector<float> & D);
+                                       vnl_vector<float> & D);
 bool vnl_symmetric_eigensystem_compute(vnl_matrix<double> const & A, 
                                        vnl_matrix<double> & V,
-				       vnl_vector<double> & D);
+                                       vnl_vector<double> & D);
 
 export template <class T>
 class vnl_symmetric_eigensystem {

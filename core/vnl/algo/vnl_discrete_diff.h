@@ -31,31 +31,31 @@ class vnl_least_squares_function;
 //: forward differences
 
 bool vnl_discrete_diff_fwd(vnl_least_squares_function *lsf,
-			   double h,
-			   vnl_vector<double> const &x,
-			   vnl_matrix<double>       &J);
+                           double h,
+                           vnl_vector<double> const &x,
+                           vnl_matrix<double>       &J);
 
 bool vnl_discrete_diff_fwd(vnl_least_squares_function *lsf,
-			   vnl_vector<double> const &h,
-			   vnl_vector<double> const &x,
-			   vnl_matrix<double>       &J);
+                           vnl_vector<double> const &h,
+                           vnl_vector<double> const &x,
+                           vnl_matrix<double>       &J);
 
 bool vnl_discrete_diff_fwd(vnl_least_squares_function *lsf,
-			   vnl_vector<double> const &h,
-			   vnl_vector<double> const &x,
-			   vnl_vector<double> const &y,
-			   vnl_matrix<double>       &J);
+                           vnl_vector<double> const &h,
+                           vnl_vector<double> const &x,
+                           vnl_vector<double> const &y,
+                           vnl_matrix<double>       &J);
 
 //: symmetric differences
 
 bool vnl_discrete_diff_sym(vnl_least_squares_function *lsf,
-			   double h,
-			   vnl_vector<double> const &x,
-			   vnl_matrix<double>       &J);
+                           double h,
+                           vnl_vector<double> const &x,
+                           vnl_matrix<double>       &J);
 
 bool vnl_discrete_diff_sym(vnl_least_squares_function *lsf,
-			   vnl_vector<double> const &h,
-			   vnl_vector<double> const &x,
-			   vnl_matrix<double>       &J);
+                           vnl_vector<double> const &h,
+                           vnl_vector<double> const &x,
+                           vnl_matrix<double>       &J);
 
 #endif // vnl_discrete_diff_h_

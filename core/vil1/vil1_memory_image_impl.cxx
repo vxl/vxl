@@ -130,13 +130,14 @@ vil_memory_image_impl::~vil_memory_image_impl()
 
 
 void vil_memory_image_impl::resize(int planes, int width, int height,
-                   int components, 
-								   int bits_per_component, vil_component_format format)
+                                   int components, 
+                                   int bits_per_component,
+                                   vil_component_format format)
 {
-	components_ = components;
-	bits_per_component_ = bits_per_component;
-	component_format_ = format;
-	resize(planes, width, height);
+        components_ = components;
+        bits_per_component_ = bits_per_component;
+        component_format_ = format;
+        resize(planes, width, height);
 }
 
 
