@@ -10,12 +10,10 @@
 //  Modifications
 //  dac (Manchester) 26/03/2001: tidied up documentation
 //  \endverbatim
-//
 
 #include <vcl_complex.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
-
 
 //: Calculates eigenvalues and eigenvectors of a square complex matrix
 //
@@ -34,18 +32,20 @@
 //  of the member 'L'. When eigenvectors are not requested, the corre-
 //  sponding matrices L and R will be empty.
 //
+// \verbatim
 //  The ith right eigenvector v satisfies A*v = W[i]*v
 //  The ith left  eigenvector u satisfies u*A = W[i]*u (no conjugation)
+// \endverbatim
 //
 
 class vnl_complex_eigensystem {
 public:
 
-  vnl_complex_eigensystem(const vnl_matrix<double> &A_real,
-                          const vnl_matrix<double> &A_imag,
+  vnl_complex_eigensystem(vnl_matrix<double> const& A_real,
+                          vnl_matrix<double> const& A_imag,
                           bool right=true, bool left=false);
 
-  vnl_complex_eigensystem(const vnl_matrix<vcl_complex<double> > &A,
+  vnl_complex_eigensystem(vnl_matrix<vcl_complex<double> > const& A,
                           bool right=true, bool left=false);
 
   ~vnl_complex_eigensystem();
@@ -64,7 +64,7 @@ public:
       const { return R.get_row(i); }
 
 private:
-  void compute(const vnl_matrix<vcl_complex<double> > &,bool,bool);
+  void compute(vnl_matrix<vcl_complex<double> > const&,bool,bool);
 };
 
 #endif // vnl_complex_eigensystem_h_

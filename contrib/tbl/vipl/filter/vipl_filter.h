@@ -193,7 +193,7 @@ class vipl_filter          : public vipl_filter_abs {
   // src_img to be the first element pointer to the input
   // (i.e. src_img+1 is the location of input image2). Note that
   // the filter keeps pointers to the input (properly refcounted).
-  vipl_filter( const ImgIn* src_img,
+  vipl_filter(ImgIn const* src_img,
               ImgOut* dst_img=0,
               int ninputs=1,
               int img_border=0 ,
@@ -208,14 +208,14 @@ class vipl_filter          : public vipl_filter_abs {
   // their address in a c_vector, i.e. *(src_img+1) is the location
   // of input image2). Note that the filter keeps pointers to the
   // input (properly refcounted).
-  vipl_filter( const ImgIn** src_img,
+  vipl_filter(ImgIn const** src_img,
               ImgOut* dst_img=0,
               int ninputs=1,
               int img_border=0 ,
               DataOut fill_val=0 );
   virtual ~vipl_filter();
   vipl_filter();
-  vipl_filter(const vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr > &);
+  vipl_filter(vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr > const&);
 
   // begin method list for class filter
 
@@ -240,9 +240,9 @@ class vipl_filter          : public vipl_filter_abs {
   // It does not require pointers but takes the address of its
   // inputs, set the fields in the filter
   // does the filter and un-sets the in/out fields in the filter.
-  bool process( ImgIn const& inimg, ImgOut& outimg);
+  bool process(ImgIn const& inimg, ImgOut& outimg);
   // second form passing pointers...
-  bool process( ImgIn const* inimg, ImgOut* outimg);
+  bool process(ImgIn const* inimg, ImgOut* outimg);
 
   //:
   // What is the ``start coordinate for the current apply
@@ -251,7 +251,7 @@ class vipl_filter          : public vipl_filter_abs {
   // + image_boarder_size; remember section iteration overlaps). If
   // the current section is outside the ROA, the section_start and
   // section_end may be equal.
-  int start( int axis) const;
+  int start(int axis) const;
   int start(int axis, int other_axis_value) const;
 
   //:
@@ -261,14 +261,14 @@ class vipl_filter          : public vipl_filter_abs {
   // image_boarder_size; remember section iteration overlaps). If
   // the current section is outside the ROA, the section_start and
   // section_end may be equal.
-  int stop( int axis) const;
+  int stop(int axis) const;
   int stop(int axis, int other_axis_value) const;
 
   //:
   // Put the given pointer into an input "image" at the provided
   // index. Decrements old objects refcount, increments
   // newobjects refcount
-  bool put_in_data_ptr(const ImgIn* fpointer, int index=0);
+  bool put_in_data_ptr(ImgIn const* fpointer, int index=0);
 
   //:
   // Return the a pointer to the input ``image'' at the

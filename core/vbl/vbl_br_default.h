@@ -3,11 +3,10 @@
 
 // This is vxl/vbl/vbl_br_default.h
 
-
 //:
 // \file
-// \author Rupert Curwen, January 14th, 1998, 
-//         GE Corporate Research and Development
+// \author Rupert Curwen, GE Corporate Research and Development
+// \date   Jan 14th, 1998
 //
 // \verbatim
 // Modifications
@@ -15,7 +14,6 @@
 //              I can't find a mutually acceptable syntax at the moment.
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
 // \endverbatim
-
 
 
 #ifdef _MSC_VER
@@ -59,9 +57,9 @@ public:
 
 public:
   vbl_br_default_iter();
-  vbl_br_default_iter(implementation* i, 
-    const vbl_basic_relation_where<T1,T2,T3,T4,T5>* w);
-  vbl_br_default_iter(const vbl_br_default_iter<T1,T2,T3,T4,T5>& it);
+  vbl_br_default_iter(vbl_br_default<T1,T2,T3,T4,T5>* i,
+                      vbl_basic_relation_where<T1,T2,T3,T4,T5> const* w);
+  vbl_br_default_iter(vbl_br_default_iter<T1,T2,T3,T4,T5> const& it);
   virtual ~vbl_br_default_iter();
 
   //: Make a copy of this instance.
@@ -74,7 +72,7 @@ public:
   virtual void incr();
 
   //: Compare.
-  virtual bool compare(const vbl_br_iter_impl<T1,T2,T3,T4,T5>& i) const;
+  virtual bool compare(vbl_br_iter_impl<T1,T2,T3,T4,T5> const& i) const;
 
 protected:
   void FindMatch();
@@ -102,9 +100,9 @@ public:
   typedef vbl_hash_map<T1, tuple_list> first_map;
 
 public:
-  vbl_br_default_wild_iter(implementation* i, 
-    const vbl_basic_relation_where<T1,T2,T3,T4,T5>* w);
-  vbl_br_default_wild_iter(const vbl_br_default_wild_iter<T1,T2,T3,T4,T5>& it);
+  vbl_br_default_wild_iter(vbl_br_default<T1,T2,T3,T4,T5>* i,
+                           vbl_basic_relation_where<T1,T2,T3,T4,T5> const* w);
+  vbl_br_default_wild_iter(vbl_br_default_wild_iter<T1,T2,T3,T4,T5> const& it);
   virtual ~vbl_br_default_wild_iter();
 
   //: Make a copy of this instance.
@@ -117,7 +115,7 @@ public:
   virtual void incr();
 
   //: Compare.
-  virtual bool compare(const vbl_br_iter_impl<T1,T2,T3,T4,T5>& i) const;
+  virtual bool compare(vbl_br_iter_impl<T1,T2,T3,T4,T5> const& i) const;
 
 protected:
   first_map::iterator i1;
@@ -135,7 +133,6 @@ template <class T1, class T2, class T3, class T4, class T5>
 class vbl_br_default : public vbl_br_impl<T1,T2,T3,T4,T5>
 // defaults for T3 T4 T5 already declared around line 92 -- PLEASE don't put them back here!! - PVr
 {
-
   friend class vbl_br_default_iter<T1,T2,T3,T4,T5>;
   friend class vbl_br_default_wild_iter<T1,T2,T3,T4,T5>;
 
@@ -153,22 +150,22 @@ public:
 
 public:
   //: Constructor.
-  vbl_br_default(const vcl_string& n);
+  vbl_br_default(vcl_string const& n);
 
   //: Copy constructor.
-  vbl_br_default(const vbl_br_default<T1,T2,T3,T4,T5>& i);
+  vbl_br_default(vbl_br_default<T1,T2,T3,T4,T5> const& i);
 
   //: Destructor.
   virtual ~vbl_br_default();
 
   //: Add a tuple.
-  virtual bool Insert(const vbl_basic_tuple<T1,T2,T3,T4,T5>& t);
+  virtual bool Insert(vbl_basic_tuple<T1,T2,T3,T4,T5> const& t);
 
   //: Remove a tuple.
-  virtual bool Remove(const vbl_basic_tuple<T1,T2,T3,T4,T5>& t);
+  virtual bool Remove(vbl_basic_tuple<T1,T2,T3,T4,T5> const& t);
 
   //: Remove tuples matching where clause.
-  bool Remove(const vbl_basic_relation_where<T1,T2,T3,T4,T5>& w);
+  bool Remove(vbl_basic_relation_where<T1,T2,T3,T4,T5> const& w);
 
   // Make attributes unique.
   virtual bool FirstUnique() { return u1; }
@@ -183,21 +180,21 @@ public:
   virtual void SetFifthUnique(bool b) { u5 = b; }
 
   // Get iterators.
-  virtual vbl_br_iter_impl<T1,T2,T3,T4,T5>* 
-    begin(const vbl_basic_relation_where<T1,T2,T3,T4,T5>& w);
-  virtual vbl_br_iter_impl<T1,T2,T3,T4,T5>* 
-    end(const vbl_basic_relation_where<T1,T2,T3,T4,T5>& w);
+  virtual vbl_br_iter_impl<T1,T2,T3,T4,T5>*
+    begin(vbl_basic_relation_where<T1,T2,T3,T4,T5> const& w);
+  virtual vbl_br_iter_impl<T1,T2,T3,T4,T5>*
+    end(vbl_basic_relation_where<T1,T2,T3,T4,T5> const& w);
 
   // Size methods.
-  virtual int size(const vbl_basic_relation_where<T1,T2,T3,T4,T5>& w);
-  virtual bool empty(const vbl_basic_relation_where<T1,T2,T3,T4,T5>& w);
+  virtual int size(vbl_basic_relation_where<T1,T2,T3,T4,T5> const& w);
+  virtual bool empty(vbl_basic_relation_where<T1,T2,T3,T4,T5> const& w);
 
   // Get pointer to this for downcasts.
   virtual void* This();
 
 protected:
   // Really add a tuple.
-  bool DoInsert(const vbl_basic_tuple<T1,T2,T3,T4,T5>& t);
+  bool DoInsert(vbl_basic_tuple<T1,T2,T3,T4,T5> const& t);
 
 protected:
   first_map i1;
@@ -217,7 +214,7 @@ template <class T1, class T2,
   VCL_DFL_TYPE_PARAM_STLDECL(T3,vbl_basic_optional),
   VCL_DFL_TYPE_PARAM_STLDECL (T4, vbl_basic_optional),
   VCL_DFL_TYPE_PARAM_STLDECL(T5,vbl_basic_optional)>
-class vbl_br_default_factory : 
+class vbl_br_default_factory :
       public vbl_basic_relation_factory<T1,T2,T3,T4,T5>
 {
 public:

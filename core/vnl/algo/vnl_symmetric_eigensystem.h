@@ -5,24 +5,11 @@
 #endif
 
 //:
-//  \file
-//  \brief Find eigenvalues of a symmetric matrix
-//  \author Andrew W. Fitzgibbon, Oxford RRG, 29 Aug 96
-//  \verbatim
-//  Modifications
-//  fsm@robots, 5 March 2000: templated
-//  dac (Manchester) 28/03/2001: tidied up documentation
-//  \endverbatim
-//  
-
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_diag_matrix.h>
-
-
-//: Find eigenvalues of a symmetric matrix
+// \file
+// \brief Find eigenvalues of a symmetric matrix
 //
-// 
-//    Solve the eigenproblem \f$A x = \lambda x\f$, with \f$A\f$ symmetric.
+//    vnl_symmetric_eigensystem_compute()
+//    solves the eigenproblem \f$A x = \lambda x\f$, with \f$A\f$ symmetric.
 //    The resulting eigenvectors and values are sorted in increasing order
 //    so <CODE> V.column(0) </CODE> is the eigenvector corresponding to the smallest
 //    the smallest eigenvalue.
@@ -51,28 +38,37 @@
 //     the eigenvectors of a full symmetric matrix can also
 //     be found if  tred2  has been used to reduce this
 //     full matrix to tridiagonal form.
+//
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   29 Aug 96
+//
+// \verbatim
+// Modifications
+//  fsm@robots, 5 March 2000: templated
+//  dac (Manchester) 28/03/2001: tidied up documentation
+// \endverbatim
 
-bool vnl_symmetric_eigensystem_compute(vnl_matrix<float> const & A, 
+#include <vnl/vnl_matrix.h>
+#include <vnl/vnl_diag_matrix.h>
+
+//: Find eigenvalues of a symmetric matrix
+
+bool vnl_symmetric_eigensystem_compute(vnl_matrix<float> const & A,
                                        vnl_matrix<float> & V,
                                        vnl_vector<float> & D);
 
 //: Find eigenvalues of a symmetric matrix
-//
-// 
-//    Solve the eigenproblem \f$A x = \lambda x\f$, with \f$A\f$ symmetric.
-//    The resulting eigenvectors and values are sorted in increasing order
-//    so <CODE> V.column(0) </CODE> is the eigenvector corresponding to the smallest
-//    the smallest eigenvalue.
-bool vnl_symmetric_eigensystem_compute(vnl_matrix<double> const & A, 
+
+bool vnl_symmetric_eigensystem_compute(vnl_matrix<double> const & A,
                                        vnl_matrix<double> & V,
                                        vnl_vector<double> & D);
 
-//: Computes and stores the eigensystem decomposition
-// of a symmetric matrix.
+//: Computes and stores the eigensystem decomposition of a symmetric matrix.
+
 export template <class T>
 class vnl_symmetric_eigensystem {
 public:
-  //: Solve real symmetric eigensystem \f$A x = \lambda x\f$ 
+  //: Solve real symmetric eigensystem \f$A x = \lambda x\f$
   vnl_symmetric_eigensystem(vnl_matrix<T> const & M);
 
 protected:
@@ -108,7 +104,7 @@ public:
   //   eig.D.invert_in_place}();
   //   vnl_matrix<double> Ainverse = eig.recompose();
   // \endverbatim
-  
+
   vnl_matrix<T> recompose() const { return V * D * V.transpose(); }
 
   //: return the pseudoinverse.

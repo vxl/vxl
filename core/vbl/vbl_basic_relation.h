@@ -5,7 +5,8 @@
 
 //:
 // \file
-// \author Rupert Curwen, 31/10/1997 GE Corporate Research and Development
+// \author Rupert Curwen, GE Corporate Research and Development
+// \date   31/10/1997
 //
 // \verbatim
 // Modifications
@@ -49,11 +50,11 @@ public:
   typedef vbl_br_iter_impl<T1,T2,T3,T4,T5> implementation;
 
   vbl_basic_relation_iterator();
-  vbl_basic_relation_iterator(implementation* im);
-  vbl_basic_relation_iterator(const iterator& it);
+  vbl_basic_relation_iterator(vbl_br_iter_impl<T1,T2,T3,T4,T5>* im);
+  vbl_basic_relation_iterator(vbl_basic_relation_iterator<T1,T2,T3,T4,T5> const& it);
   ~vbl_basic_relation_iterator();
 
-  tuple& operator*() const 
+  tuple& operator*() const
   { tuple* t = impl->deref(); assert(t != 0); return *t; }
 
   //: Prefix increment
@@ -61,11 +62,13 @@ public:
   //: Postfix increment
   iterator operator++(int) { iterator tmp(*this); impl->incr(); return tmp; }
 
-  inline bool operator==(const iterator& it) const 
+  inline bool operator==(const iterator& it) const
   { return impl->compare(*it.impl); }
-  iterator& operator=(const iterator& it);
-  inline bool operator!=(const iterator& it) const 
+  inline bool operator!=(const iterator& it) const
   { return ! impl->compare(*it.impl); }
+
+  vbl_basic_relation_iterator<T1,T2,T3,T4,T5>&
+    operator=(vbl_basic_relation_iterator<T1,T2,T3,T4,T5> const& it);
 
 protected:
   implementation* impl;
@@ -97,7 +100,7 @@ public:
   vbl_basic_relation(const vcl_string& name);
 
   //: Copy constructor.
-  vbl_basic_relation(const vbl_basic_relation<T1,T2,T3,T4,T5>& rel);
+  vbl_basic_relation(vbl_basic_relation<T1,T2,T3,T4,T5> const& rel);
 
   //: Destructor.
   ~vbl_basic_relation();
@@ -105,18 +108,18 @@ public:
   //: Add a tuple.
   bool insert(T1 t1,T2 t2) { return impl->Insert(tuple(t1,t2)); }
   bool insert(T1 t1,T2 t2,T3 t3) { return impl->Insert(tuple(t1,t2,t3)); }
-  bool insert(T1 t1,T2 t2,T3 t3,T4 t4) 
+  bool insert(T1 t1,T2 t2,T3 t3,T4 t4)
   { return impl->Insert(tuple(t1,t2,t3,t4)); }
-  bool insert(T1 t1,T2 t2,T3 t3,T4 t4,T5 t5) 
+  bool insert(T1 t1,T2 t2,T3 t3,T4 t4,T5 t5)
   { return impl->Insert(tuple(t1,t2,t3,t4,t5)); };
   bool insert(const tuple& t) { return impl->Insert(t); }
 
   //: Remove a tuple.
   bool remove(T1 t1,T2 t2) { return impl->Remove(tuple(t1,t2)); }
   bool remove(T1 t1,T2 t2,T3 t3) { return impl->Remove(tuple(t1,t2,t3)); }
-  bool remove(T1 t1,T2 t2,T3 t3,T4 t4) 
+  bool remove(T1 t1,T2 t2,T3 t3,T4 t4)
   { return impl->Remove(tuple(t1,t2,t3,t4)); }
-  bool remove(T1 t1,T2 t2,T3 t3,T4 t4,T5 t5) 
+  bool remove(T1 t1,T2 t2,T3 t3,T4 t4,T5 t5)
   { return impl->Remove(tuple(t1,t2,t3,t4,t5)); }
   bool remove(const tuple& t) { return impl->Remove(t); }
 
@@ -147,7 +150,7 @@ public:
   vbl_basic_relation<T1,T2,T3,T4,T5> where_third(T3 t3);
   vbl_basic_relation<T1,T2,T3,T4,T5> where_fourth(T4 t4);
   vbl_basic_relation<T1,T2,T3,T4,T5> where_fifth(T5 t5);
-  vbl_basic_relation<T1,T2,T3,T4,T5> 
+  vbl_basic_relation<T1,T2,T3,T4,T5>
     where_is(const vbl_basic_relation_where<T1,T2,T3,T4,T5>& where);
 
   // Make attributes unique.
@@ -177,7 +180,6 @@ public:
 protected:
   implementation* impl;
   where_clause* where;
-
 };
 
 
@@ -187,7 +189,7 @@ template
   class T3,
   class T4,
   class T5>
-inline vcl_ostream& operator<<(vcl_ostream& str, 
+inline vcl_ostream& operator<<(vcl_ostream& str,
                                vbl_basic_relation<T1,T2,T3,T4,T5>& rel)
 {
   rel.dump_relation(str);

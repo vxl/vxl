@@ -4,17 +4,19 @@
 //:
 //  \file
 //  \brief Templated 1D FFT class based on Temperton FFT routines
-//  \author Veit U.B. Schenk, Oxford RRG, 19 Mar 98
+//  \author Veit U.B. Schenk, Oxford RRG
+//  \date   19 Mar 98
 
 #include <vcl_complex.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_fftxd_prime_factors.h>
 
 //: Templated 1D FFT class based on Temperton FFT routines
-//
-//  C TEMPERTON 
+// \verbatim
+//  C TEMPERTON
 //  A GENERALIZED PRIME FACTOR FFT ALGORITHM FOR ANY $N = 2^P 3^Q 5^R$
 //  SIAM J. SCI. STAT. COMP., MAY 1992.)
+// \endverbatim
 //
 //  original temperton-code (fortran) converted using f2c with -C++
 //  option. Two versions created: float and double.
@@ -36,33 +38,33 @@ class vnl_fft1d : public vnl_vector<vcl_complex<T> > {
   typedef vnl_vector<vcl_complex<T> > base;
 public:
   //: real-constructors
-  vnl_fft1d (const vnl_vector<T> &r); // only real data, always forward
-  vnl_fft1d (const vnl_vector<vcl_complex<T> > &z, int dir); // forw & backw
-  
+  vnl_fft1d (vnl_vector<T> const& r); // only real data, always forward
+  vnl_fft1d (vnl_vector<vcl_complex<T> > const& z, int dir); // forw & backw
+
   //: (real,imag)-constructors
-  vnl_fft1d (const vnl_vector<T> &r, const vnl_vector<T> &i,
-             const vnl_fftxd_prime_factors<T> &oPF, int dir); // vnl_vectors r,i
-  vnl_fft1d (const vnl_vector<T> &r,
-             const vnl_fftxd_prime_factors<T> &oPF, int dir);  // Imag defaults to 0.0
+  vnl_fft1d (vnl_vector<T> const& r, vnl_vector<T> const& i,
+             vnl_fftxd_prime_factors<T> const& oPF, int dir); // vnl_vectors r,i
+  vnl_fft1d (vnl_vector<T> const& r,
+             vnl_fftxd_prime_factors<T> const& oPF, int dir);  // Imag defaults to 0.0
   vnl_fft1d (const T *realdata, const T *imagdata, unsigned len,
-             const vnl_fftxd_prime_factors<T>  &, int dir);  // 'raw' r,i
+             vnl_fftxd_prime_factors<T> const&, int dir);  // 'raw' r,i
   vnl_fft1d (const T *data, unsigned len,
-             const vnl_fftxd_prime_factors<T>  &, int dir);         // 'raw' r. I defaults to 0.0
+             vnl_fftxd_prime_factors<T> const&, int dir);  // 'raw' r. I defaults to 0.0
 
   //: complex-constructor
 #ifndef VCL_VC
-  vnl_fft1d (const vnl_vector<vcl_complex<T> > &c,
-      const vnl_fftxd_prime_factors<T> &, int dir);   //  complex vnl_vector
+  vnl_fft1d (vnl_vector<vcl_complex<T> > const& c,
+      vnl_fftxd_prime_factors<T> const& , int dir);   //  complex vnl_vector
 #endif
   //: complex-constructor
-  vnl_fft1d (const vcl_complex<T> *cdata, unsigned len, 
-      const vnl_fftxd_prime_factors<T> &, int dir);  // 'raw' complex data
+  vnl_fft1d (const vcl_complex<T> *cdata, unsigned len,
+      vnl_fftxd_prime_factors<T> const& , int dir);  // 'raw' complex data
 
   //: static member function: avoid copy-overhead
   static int doFFT_IP (vcl_complex<T> *cdata, unsigned len,
-                       const vnl_fftxd_prime_factors<T> &, int dir);
+                       vnl_fftxd_prime_factors<T> const& , int dir);
 private:
-  int doFFT (const vnl_fftxd_prime_factors<T> &, int dir);
+  int doFFT (vnl_fftxd_prime_factors<T> const& , int dir);
 };
 
 #endif // vnl_fft1d_h_

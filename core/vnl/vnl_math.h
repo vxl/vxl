@@ -7,7 +7,7 @@
 
 //: \file
 //  \brief Namespace with standard math functions
-//  \author Andrew W. Fitzgibbon, Oxford RRG, July 13, 1996
+//
 //    The vnl_math namespace provides a standard set of the simple mathematical
 //    functions (min, max, sqr, sgn, rnd, abs), and some predefined constants
 //    such as pi and e, which are not defined by the ANSI C++ standard.
@@ -24,10 +24,13 @@
 //    which in combination with inlining can make them  more efficient than
 //    their counterparts in the standard C library.
 //
-
-//      Modifications
-//     210598 AWF Removed conditional VCL_IMPLEMENT_STATIC_CONSTS, sometimes gcc needs them.
-//     LSB (Modifications) 23/1/01 Documentation tidied
+//  \author Andrew W. Fitzgibbon, Oxford RRG
+//  \date   July 13, 1996
+// \verbatim
+// Modifications
+//  210598 AWF Removed conditional VCL_IMPLEMENT_STATIC_CONSTS, sometimes gcc needs them.
+//  LSB (Modifications) 23/1/01 Documentation tidied
+// \endverbatim
 
 #include <vcl_cmath.h>
 #include "dll.h"
@@ -45,31 +48,31 @@ char     vnl_huge_val(char);
 class vnl_math {
 public:
   //: pi, e and all that
-  static VNL_DLL_DATA double const e               VCL_STATIC_CONST_INIT_FLOAT(2.7182818284590452354);
-  static VNL_DLL_DATA double const log2e           VCL_STATIC_CONST_INIT_FLOAT(1.4426950408889634074);
-  static VNL_DLL_DATA double const log10e          VCL_STATIC_CONST_INIT_FLOAT(0.43429448190325182765);
-  static VNL_DLL_DATA double const ln2             VCL_STATIC_CONST_INIT_FLOAT(0.69314718055994530942);
-  static VNL_DLL_DATA double const ln10            VCL_STATIC_CONST_INIT_FLOAT(2.30258509299404568402);
-  static VNL_DLL_DATA double const pi              VCL_STATIC_CONST_INIT_FLOAT(3.14159265358979323846);
-  static VNL_DLL_DATA double const pi_over_2       VCL_STATIC_CONST_INIT_FLOAT(1.57079632679489661923);
-  static VNL_DLL_DATA double const pi_over_4       VCL_STATIC_CONST_INIT_FLOAT(0.78539816339744830962);
-  static VNL_DLL_DATA double const one_over_pi     VCL_STATIC_CONST_INIT_FLOAT(0.31830988618379067154);
-  static VNL_DLL_DATA double const two_over_pi     VCL_STATIC_CONST_INIT_FLOAT(0.63661977236758134308);
-  static VNL_DLL_DATA double const two_over_sqrtpi VCL_STATIC_CONST_INIT_FLOAT(1.12837916709551257390);
-  static VNL_DLL_DATA double const sqrt2           VCL_STATIC_CONST_INIT_FLOAT(1.41421356237309504880);
-  static VNL_DLL_DATA double const sqrt1_2         VCL_STATIC_CONST_INIT_FLOAT(0.70710678118654752440);
+  static VNL_DLL_DATA const double e               VCL_STATIC_CONST_INIT_FLOAT(2.7182818284590452354);
+  static VNL_DLL_DATA const double log2e           VCL_STATIC_CONST_INIT_FLOAT(1.4426950408889634074);
+  static VNL_DLL_DATA const double log10e          VCL_STATIC_CONST_INIT_FLOAT(0.43429448190325182765);
+  static VNL_DLL_DATA const double ln2             VCL_STATIC_CONST_INIT_FLOAT(0.69314718055994530942);
+  static VNL_DLL_DATA const double ln10            VCL_STATIC_CONST_INIT_FLOAT(2.30258509299404568402);
+  static VNL_DLL_DATA const double pi              VCL_STATIC_CONST_INIT_FLOAT(3.14159265358979323846);
+  static VNL_DLL_DATA const double pi_over_2       VCL_STATIC_CONST_INIT_FLOAT(1.57079632679489661923);
+  static VNL_DLL_DATA const double pi_over_4       VCL_STATIC_CONST_INIT_FLOAT(0.78539816339744830962);
+  static VNL_DLL_DATA const double one_over_pi     VCL_STATIC_CONST_INIT_FLOAT(0.31830988618379067154);
+  static VNL_DLL_DATA const double two_over_pi     VCL_STATIC_CONST_INIT_FLOAT(0.63661977236758134308);
+  static VNL_DLL_DATA const double two_over_sqrtpi VCL_STATIC_CONST_INIT_FLOAT(1.12837916709551257390);
+  static VNL_DLL_DATA const double sqrt2           VCL_STATIC_CONST_INIT_FLOAT(1.41421356237309504880);
+  static VNL_DLL_DATA const double sqrt1_2         VCL_STATIC_CONST_INIT_FLOAT(0.70710678118654752440);
 
   //: IEEE double machine precision
-  static VNL_DLL_DATA double const eps             VCL_STATIC_CONST_INIT_FLOAT(2.2204460492503131e-16);
-  static VNL_DLL_DATA double const sqrteps         VCL_STATIC_CONST_INIT_FLOAT(1.490116119384766e-08);
+  static VNL_DLL_DATA const double eps             VCL_STATIC_CONST_INIT_FLOAT(2.2204460492503131e-16);
+  static VNL_DLL_DATA const double sqrteps         VCL_STATIC_CONST_INIT_FLOAT(1.490116119384766e-08);
 
   //: MAX* constants.
   // Supplied until compilers accept the templated numeric_traits.
   // These are lowercase to avoid conflict with OS-defined macros.
-  static VNL_DLL_DATA int const      maxint;
-  static VNL_DLL_DATA long int const maxlong;
-  static VNL_DLL_DATA double const   maxdouble;
-  static VNL_DLL_DATA float const    maxfloat;
+  static VNL_DLL_DATA const int      maxint;
+  static VNL_DLL_DATA const long int maxlong;
+  static VNL_DLL_DATA const double   maxdouble;
+  static VNL_DLL_DATA const float    maxfloat;
 };
 
 // isnan

@@ -5,13 +5,16 @@
 #endif
 
 //:
-//  \file
-//  \brief Levenberg Marquardt nonlinear least squares
-//  \author Andrew W. Fitzgibbon, Oxford RRG, 31 Aug 96
+// \file
+// \brief Levenberg Marquardt nonlinear least squares
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   31 Aug 96
 //
-//  Modifications
+// \verbatim
+// Modifications
 //  RWMC 001097 Added verbose flag to get rid of all that blathering.
 //  AWF  151197 Added trace flag to increase blather.
+// \endverbatim
 //
 
 #include <vcl_iosfwd.h>
@@ -38,8 +41,9 @@ public:
   vnl_levenberg_marquardt(vnl_least_squares_function& f) { init(&f); }
 
 //: Initialize as above, and then run minimization.
-  vnl_levenberg_marquardt(vnl_least_squares_function& f, 
-    vnl_vector<double>& x) {
+  vnl_levenberg_marquardt(vnl_least_squares_function& f,
+                          vnl_vector<double>& x)
+  {
     init(&f);
     minimize(x);
   }
@@ -77,10 +81,10 @@ protected:
 
   // Communication with callback
   friend class vnl_levenberg_marquardt_Activate;
-  static int lmdif_lsqfun(int* m, int* n, const double* x, 
-        double* fx, int* iflag);
-  static int lmder_lsqfun(int* m, int* n, const double* x, 
-        double* fx, double* fJ, int&, int* iflag);
+  static int lmdif_lsqfun(int* m, int* n, const double* x,
+                          double* fx, int* iflag);
+  static int lmder_lsqfun(int* m, int* n, double const* x,
+                          double* fx, double* fJ, int&, int* iflag);
 };
 
 #endif // vnl_levenberg_marquardt_h_

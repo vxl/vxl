@@ -32,8 +32,6 @@ vnl_amoeba::vnl_amoeba(vnl_cost_function& f):
   relative_diameter = 0.05;
 }
 
-typedef vnl_amoeba_SimplexCorner SimplexCorner;
-
 struct vnl_amoebaFit : public vnl_amoeba {
   int cnt;
 
@@ -47,13 +45,13 @@ struct vnl_amoebaFit : public vnl_amoeba {
     return fptr->f(x);
   }
 
-  void set_corner(SimplexCorner * s, const vnl_vector<double>& v)
+  void set_corner(vnl_amoeba_SimplexCorner * s, const vnl_vector<double>& v)
   {
     s->v = v;
     s->fv = f(v);
     cnt++;
   }
-  void set_corner_a_plus_bl(SimplexCorner * s, const vnl_vector<double>& vbar, const vnl_vector<double>& v, double lambda)
+  void set_corner_a_plus_bl(vnl_amoeba_SimplexCorner * s, const vnl_vector<double>& vbar, const vnl_vector<double>& v, double lambda)
   {
     s->v = (1 - lambda) * vbar + lambda * v;
     s->fv = f(s->v);
@@ -61,7 +59,7 @@ struct vnl_amoebaFit : public vnl_amoeba {
   }
 };
 
-int SimplexCorner::compare(const SimplexCorner& s1, const SimplexCorner& s2)
+int vnl_amoeba_SimplexCorner::compare(vnl_amoeba_SimplexCorner const& s1, vnl_amoeba_SimplexCorner const& s2)
 {
   return vnl_math_sgn(s1.fv - s2.fv);
 }
@@ -73,11 +71,11 @@ static
 #endif
 int compare_aux(const void * s1, const void * s2)
 {
-  return SimplexCorner::compare(*(const SimplexCorner*)s1, *(const SimplexCorner*)s2);
+  return vnl_amoeba_SimplexCorner::compare(*(const vnl_amoeba_SimplexCorner*)s1, *(const vnl_amoeba_SimplexCorner*)s2);
 }
 
 static
-void sort_simplex(vcl_vector<SimplexCorner>& simplex)
+void sort_simplex(vcl_vector<vnl_amoeba_SimplexCorner>& simplex)
 {
   qsort(&simplex[0], simplex.size(), sizeof simplex[0], compare_aux);
 }
@@ -95,14 +93,14 @@ double maxabsdiff(const vnl_vector<double>& a, const vnl_vector<double>& b)
 }
 
 static
-double sorted_simplex_fdiameter(const vcl_vector<SimplexCorner>& simplex)
+double sorted_simplex_fdiameter(const vcl_vector<vnl_amoeba_SimplexCorner>& simplex)
 {
   return simplex[simplex.size()-1].fv - simplex[0].fv;
 }
 
 #if 0
 static
-double simplex_fdiameter(const vcl_vector<SimplexCorner>& simplex)
+double simplex_fdiameter(const vcl_vector<vnl_amoeba_SimplexCorner>& simplex)
 {
   // simplex assumed sorted, so fdiam is n - 0
   double max = 0;
@@ -116,7 +114,7 @@ double simplex_fdiameter(const vcl_vector<SimplexCorner>& simplex)
 #endif
 
 static
-double simplex_diameter(const vcl_vector<SimplexCorner>& simplex)
+double simplex_diameter(const vcl_vector<vnl_amoeba_SimplexCorner>& simplex)
 {
   double max = 0;
   for(unsigned i = 0; i < simplex.size() - 1; i++) {
@@ -128,13 +126,13 @@ double simplex_diameter(const vcl_vector<SimplexCorner>& simplex)
 }
 
 
-vcl_ostream& operator<<(vcl_ostream& s, const SimplexCorner& simplex)
+vcl_ostream& operator<<(vcl_ostream& s, const vnl_amoeba_SimplexCorner& simplex)
 {
   s << "S" << simplex.fv << " ";
   return s;
 }
 
-vcl_ostream& operator<<(vcl_ostream& s, const vcl_vector<SimplexCorner>& simplex)
+vcl_ostream& operator<<(vcl_ostream& s, const vcl_vector<vnl_amoeba_SimplexCorner>& simplex)
 {
   for(unsigned i = 0; i < simplex.size(); ++i)
     s << simplex[i].fv << " ";
@@ -142,7 +140,7 @@ vcl_ostream& operator<<(vcl_ostream& s, const vcl_vector<SimplexCorner>& simplex
 }
 
 
-bool operator==(const SimplexCorner& a, const SimplexCorner& b)
+bool operator==(const vnl_amoeba_SimplexCorner& a, const vnl_amoeba_SimplexCorner& b)
 {
   return (&a) == (&b);
 }
@@ -178,7 +176,7 @@ void vnl_amoebaFit::amoeba(vnl_vector<double>& x)
 
 // Set up a simplex near the initial guess.
   int n = x.size();
-  vcl_vector<SimplexCorner> simplex(n+1, SimplexCorner(n));
+  vcl_vector<vnl_amoeba_SimplexCorner> simplex(n+1, vnl_amoeba_SimplexCorner(n));
 
   simplex[0].v = x;
   simplex[0].fv = f(x);
@@ -190,7 +188,7 @@ void vnl_amoebaFit::amoeba(vnl_vector<double>& x)
   const double zero_term_delta = 0.00025;      // Even smaller delta for zero elements of x
   vnl_vector<double> y(n);
   for(int j = 0; j < n; ++j) {
-    SimplexCorner *s = &simplex[j+1];
+    vnl_amoeba_SimplexCorner *s = &simplex[j+1];
     s->v = x;
 
     // perturb s->v(j)
@@ -211,11 +209,11 @@ void vnl_amoebaFit::amoeba(vnl_vector<double>& x)
   }
 
   // Iterate until the diameter of the simplex is less than X_tolerance.
-  SimplexCorner reflect(n);
-  SimplexCorner expand(n);
-  SimplexCorner contract(n);
-  SimplexCorner shrink(n);
-  SimplexCorner *next;
+  vnl_amoeba_SimplexCorner reflect(n);
+  vnl_amoeba_SimplexCorner expand(n);
+  vnl_amoeba_SimplexCorner contract(n);
+  vnl_amoeba_SimplexCorner shrink(n);
+  vnl_amoeba_SimplexCorner *next;
 
   vnl_vector<double> vbar(n);
   while (cnt < maxiter) {
@@ -249,7 +247,7 @@ void vnl_amoebaFit::amoeba(vnl_vector<double>& x)
     } else {
       // Reflection *is* totally crap...
       {
-        SimplexCorner *tmp = &simplex[n];
+        vnl_amoeba_SimplexCorner *tmp = &simplex[n];
         if (reflect.fv < tmp->fv)
           // replace simplex[n] by reflection as at least it's better than that
           tmp = &reflect;

@@ -20,7 +20,7 @@
 //: super-simple constructor: take vnl_matrix<float>, do the forward FFT
 // don't have to worry about the prime-factors
 template<class T>
-vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<T> &R) : base (R.rows(), R.columns())
+vnl_fft2d<T>::vnl_fft2d (vnl_matrix<T> const& R) : base (R.rows(), R.columns())
 {
   vnl_complexify(R.data_block(),
                  base::data_block(), base::size());
@@ -38,7 +38,7 @@ vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<T> &R) : base (R.rows(), R.columns())
 //: super-simple: takes complex matrix, can do both directions
 // don't have to worry about the prime-factors
 template<class T>
-vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<vcl_complex<T> > &Z, int dir) : base (Z)
+vnl_fft2d<T>::vnl_fft2d (vnl_matrix<vcl_complex<T> > const& Z, int dir) : base (Z)
 {
   vnl_fftxd_prime_factors<T> oPFx (Z.rows ());
   vnl_fftxd_prime_factors<T> oPFy (Z.cols ());
@@ -52,9 +52,9 @@ vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<vcl_complex<T> > &Z, int dir) : base (
 
 //: init with vnl_matrix R (default i=0.0)
 template<class T>
-vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<T> &R,
-                         const vnl_fftxd_prime_factors<T> &oPFx,
-                         const vnl_fftxd_prime_factors<T> &oPFy, int dir)
+vnl_fft2d<T>::vnl_fft2d (vnl_matrix<T> const& R,
+                         vnl_fftxd_prime_factors<T> const& oPFx,
+                         vnl_fftxd_prime_factors<T> const& oPFy, int dir)
   : base(R.rows(), R.columns())
 {
   vnl_complexify(R.data_block(),
@@ -65,9 +65,9 @@ vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<T> &R,
 
 //: init with vnl_matrices r,i
 template<class T>
-vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<T> &R, const vnl_matrix<T> &I,
-                         const vnl_fftxd_prime_factors<T> &oPFx,
-                         const vnl_fftxd_prime_factors<T> &oPFy, int dir)
+vnl_fft2d<T>::vnl_fft2d (vnl_matrix<T> const& R, vnl_matrix<T> const& I,
+                         vnl_fftxd_prime_factors<T> const& oPFx,
+                         vnl_fftxd_prime_factors<T> const& oPFy, int dir)
   : base(R.rows(), R.cols())
 {
   vnl_complexify(R.data_block(), I.data_block(),
@@ -78,8 +78,8 @@ vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<T> &R, const vnl_matrix<T> &I,
 //: init with 'raw' r(RData) and default i(0.0)
 template<class T>
 vnl_fft2d<T>::vnl_fft2d (const T *RData, unsigned int iRows, unsigned int iCols,
-                         const vnl_fftxd_prime_factors<T> &oPFx,
-                         const vnl_fftxd_prime_factors<T> &oPFy, int dir)
+                         vnl_fftxd_prime_factors<T> const& oPFx,
+                         vnl_fftxd_prime_factors<T> const& oPFy, int dir)
   : base(iRows, iCols)
 {
   vnl_complexify(RData,
@@ -91,8 +91,8 @@ vnl_fft2d<T>::vnl_fft2d (const T *RData, unsigned int iRows, unsigned int iCols,
 template<class T>
 vnl_fft2d<T>::vnl_fft2d (const T *RData, const T *IData,  // data
                          unsigned int iRows, unsigned int iCols, // dimensions
-                         const vnl_fftxd_prime_factors<T> &oPFx,
-                         const vnl_fftxd_prime_factors<T> &oPFy, int dir)
+                         vnl_fftxd_prime_factors<T> const& oPFx,
+                         vnl_fftxd_prime_factors<T> const& oPFy, int dir)
   : base(iRows, iCols)
 {
   vnl_complexify(RData, IData,
@@ -103,9 +103,9 @@ vnl_fft2d<T>::vnl_fft2d (const T *RData, const T *IData,  // data
 #ifndef VCL_VC60
 //: init to given complex vnl_matrix
 template<class T>
-vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<vcl_complex<T> > &C,
-                         const vnl_fftxd_prime_factors<T> &oPFx,
-                         const vnl_fftxd_prime_factors<T> &oPFy, int dir)
+vnl_fft2d<T>::vnl_fft2d (vnl_matrix<vcl_complex<T> > const& C,
+                         vnl_fftxd_prime_factors<T> const& oPFx,
+                         vnl_fftxd_prime_factors<T> const& oPFy, int dir)
   : base(C)
 {
   doFFT (oPFx, oPFy, dir);
@@ -115,8 +115,8 @@ vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<vcl_complex<T> > &C,
 template<class T>
 vnl_fft2d<T>::vnl_fft2d (const vcl_complex<T> *CData,
                          unsigned int iRows, unsigned int iCols, // dimensions
-                         const vnl_fftxd_prime_factors<T> &oPFx,
-                         const vnl_fftxd_prime_factors<T> &oPFy, int dir)
+                         vnl_fftxd_prime_factors<T> const& oPFx,
+                         vnl_fftxd_prime_factors<T> const& oPFy, int dir)
   : base(CData,iRows, iCols)
 {
   doFFT (oPFx, oPFy, dir);
@@ -165,8 +165,8 @@ inline void cxx_gpfa (float  *a, float  *b, const float  *triggs,
 template<class T>
 int vnl_fft2d<T>::doFFT_IP (vcl_complex<T> *cdata, unsigned int iRows,
                             unsigned int iColumns,
-                            const vnl_fftxd_prime_factors<T> &oPFx,
-                            const vnl_fftxd_prime_factors<T> &oPFy, int iDirection)
+                            vnl_fftxd_prime_factors<T> const& oPFx,
+                            vnl_fftxd_prime_factors<T> const& oPFy, int iDirection)
 {
   int info = 0; // return value
 
@@ -190,8 +190,8 @@ int vnl_fft2d<T>::doFFT_IP (vcl_complex<T> *cdata, unsigned int iRows,
 
 
 template<class T>
-int vnl_fft2d<T>::doFFT (const vnl_fftxd_prime_factors<T> &oPFx,
-                         const vnl_fftxd_prime_factors<T> &oPFy, int iDirection)
+int vnl_fft2d<T>::doFFT (vnl_fftxd_prime_factors<T> const& oPFx,
+                         vnl_fftxd_prime_factors<T> const& oPFy, int iDirection)
 {
   return doFFT_IP (this->data_block (), this->rows (), this->columns (),
                    oPFx, oPFy, iDirection);

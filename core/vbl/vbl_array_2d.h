@@ -5,19 +5,18 @@
 #endif
 // This is vxl/vbl/vbl_array_2d.h
 
-
 //:
 // \file
 // \brief Contains class for a templated 2d array
-// \author Andrew W. Fitzgibbon, Oxford RRG, 05 Aug 96
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   05 Aug 96
 //
-// Modifications
 // \verbatim
+// Modifications
 // Peter Vanroose -13nov98- added copy constructor and assignment operator
-// 101298 AWF Added row/column store.  The old split was just too pedantic.
+// AWF 10/12/98 Added row/column store.  The old split was just too pedantic.
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
 // \endverbatim
-
 
 
 #include <vcl_iosfwd.h>
@@ -44,7 +43,7 @@ public:
  ~vbl_array_2d();
 
   //: Assignment
-  vbl_array_2d& operator=(const vbl_array_2d<T>&);
+  vbl_array_2d& operator=(vbl_array_2d<T> const&);
   bool operator==(vbl_array_2d<T> const&) const;
 
   // Operations----------------------------------------------------------------
@@ -71,7 +70,7 @@ public:
   //: Return number of columns
   int columns() const { return num_cols_; }
 
-  //: Return size = (number of rows) * (number of columns) 
+  //: Return size = (number of rows) * (number of columns)
   int size() const { return num_rows_ * num_cols_; }
 
   T      *      * get_rows() { return rows_; }

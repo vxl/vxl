@@ -29,10 +29,10 @@ public:
   static vnl_vector<Type> get_vector(vgl_homg_line_2d<Type> const& l);
 
     //: dot product of two points
-  static double dot(const vgl_homg_point_2d<Type>& a, const vgl_homg_point_2d<Type>& b);
+  static double dot(vgl_homg_point_2d<Type> const& a, vgl_homg_point_2d<Type> const& b);
 
     //: dot product of two lines
-  static double dot(const vgl_homg_line_2d<Type>& a, const vgl_homg_point_2d<Type>& b);
+  static double dot(vgl_homg_line_2d<Type> const& a, vgl_homg_point_2d<Type> const& b);
 
     //: cross product
   static void cross(const vgl_homg_point_2d<Type>& a,

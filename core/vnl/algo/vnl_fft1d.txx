@@ -21,7 +21,7 @@
 //: and do the forward transform
 
 template<class T>
-vnl_fft1d<T>::vnl_fft1d (const vnl_vector<T> &R) : base (R.size())
+vnl_fft1d<T>::vnl_fft1d (vnl_vector<T> const& R) : base (R.size())
 {
   vnl_complexify(R.data_block(), base::data_block(), base::size());
 
@@ -50,8 +50,8 @@ vnl_fft1d<T>::vnl_fft1d (vnl_vector<vcl_complex<T> > const &Z, int dir) : base (
 
 //: create complex from vnl_vector R and i=0.0
 template<class T>
-vnl_fft1d<T>::vnl_fft1d (const vnl_vector<T> &R,
-                         const vnl_fftxd_prime_factors<T> &oPF, int dir)
+vnl_fft1d<T>::vnl_fft1d (vnl_vector<T> const& R,
+                         vnl_fftxd_prime_factors<T> const& oPF, int dir)
   : base(R.size ())
 {
   // copy data into complex format
@@ -63,8 +63,8 @@ vnl_fft1d<T>::vnl_fft1d (const vnl_vector<T> &R,
 
 //: create complex from vnl_vectors r,i
 template<class T>
-vnl_fft1d<T>::vnl_fft1d (const vnl_vector<T> &R, const vnl_vector<T> &I,
-                         const vnl_fftxd_prime_factors<T> &oPF, int dir)
+vnl_fft1d<T>::vnl_fft1d (vnl_vector<T> const& R, vnl_vector<T> const& I,
+                         vnl_fftxd_prime_factors<T> const& oPF, int dir)
   : base(R.size ())
 {
   // copy data into complex format
@@ -77,7 +77,7 @@ vnl_fft1d<T>::vnl_fft1d (const vnl_vector<T> &R, const vnl_vector<T> &I,
 //: create complex from 'raw' r(RData) and default i(0.0)
 template<class T>
 vnl_fft1d<T>::vnl_fft1d (const T *RData, unsigned iLen,
-                         const vnl_fftxd_prime_factors<T> &oPF, int dir)
+                         vnl_fftxd_prime_factors<T> const& oPF, int dir)
   : base(iLen)
 {
   // copy data into complex format
@@ -90,7 +90,7 @@ vnl_fft1d<T>::vnl_fft1d (const T *RData, unsigned iLen,
 //: create complex from 'raw' r(RData) and 'raw' i(IData)
 template<class T>
 vnl_fft1d<T>::vnl_fft1d (const T *RData, const T *IData, unsigned iLen,
-                         const vnl_fftxd_prime_factors<T> &oPF, int dir)
+                         vnl_fftxd_prime_factors<T> const& oPF, int dir)
   : base(iLen)
 {
   // copy data into complex format
@@ -113,7 +113,7 @@ vnl_fft1d<T>::vnl_fft1d (vnl_vector<vcl_complex<T> > const& C,
 
 //: create new complex given 'raw' complex c(CData)
 template<class T>
-vnl_fft1d<T>::vnl_fft1d (vcl_complex<T> const *CData, unsigned iLen,
+vnl_fft1d<T>::vnl_fft1d (const vcl_complex<T> *CData, unsigned iLen,
                          vnl_fftxd_prime_factors<T> const &oPF, int dir)
   : base(CData,iLen)
 {
@@ -179,7 +179,7 @@ int vnl_fft1d<T>::doFFT_IP (vcl_complex<T> *cdata, unsigned iLen,
 //: calls the actual fft routine with correct stride for complex data
 // declared as 'private', since only called from within constructors
 template<class T>
-int vnl_fft1d<T>::doFFT (const vnl_fftxd_prime_factors<T> &oPF, int iDirection)
+int vnl_fft1d<T>::doFFT (vnl_fftxd_prime_factors<T> const& oPF, int iDirection)
 {
   return doFFT_IP (this->data_block (), this->size (), oPF, iDirection);
 }

@@ -4,20 +4,20 @@
 #pragma interface
 #endif
 
-
 // This is vxl/vnl/vnl_real_polynomial.h
 
 //:
 // \file
 // \brief Evaluation of real polynomials
-// \author Andrew W. Fitzgibbon, Oxford RRG, 06 Aug 96
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   06 Aug 96
 //
-// \warning 23 may 97, Peter Vanroose - "NO_COMPLEX" option added (until "complex" type is standardised)
-//
-
+// \verbatim
 // Modifications
+// 23 may 97, Peter Vanroose - "NO_COMPLEX" option added (until "complex" type is standardised)
 // 27/03/2001 Ian Scott and Tim Cootes - Added Binary IO
 // 27/03/2001 Ian Scott - Comments tidied up
+// \endverbatim
 
 #include <vnl/vnl_vector.h>
 #include <vcl_complex.h>
@@ -42,7 +42,6 @@ public:
 
   //: Initialize polynomial of a given degree.
   vnl_real_polynomial(int d): coeffs_(d+1) {}
-
 
   //: Evaluate polynomial at value x
   double evaluate(double x) const;
@@ -74,9 +73,7 @@ public:
   //: Return the vector of coefficients
         vnl_vector<double>& coefficients()       { return coeffs_; }
 
-  void set_coefficients(const vnl_vector<double> & coeffs) {coeffs_ = coeffs;}
-
-
+  void set_coefficients(vnl_vector<double> const& coeffs) {coeffs_ = coeffs;}
 
 protected:
   //: The coefficients of the polynomial.
@@ -84,9 +81,5 @@ protected:
   // coeffs_[n] is the coefficient of the x^n term.
   vnl_vector<double> coeffs_;
 };
-
-
-
-
 
 #endif // vnl_real_polynomial_h_

@@ -7,7 +7,7 @@
 
 //: \file
 //  \brief Simple Sparse Matrix
-//  \author Rupert W. Curwen, GE CR&D, 20 Oct 98
+//
 //   Simple sparse matrix.  Only those values which
 //    are non-zero are stored. The sparse matrix currently supports
 //    only getting/putting elements, and multiply by vector or another
@@ -17,8 +17,10 @@
 //    of the pair indicates the column index, and the second the
 //    value.  All rows are stored, as vcl_vector< row >;
 //
-
+//  \author Rupert W. Curwen, GE CR&D
+//  \date   20 Oct 98
 //
+// \verbatim
 //     Modifications
 //
 //     Robin Flatland 5/31/99 Added pre_mult(lhs,result), where
@@ -31,6 +33,7 @@
 //
 //     David Capel May 2000   Added set_row, scale_row, mult, vcat and const
 //                            methods where appropriate.
+// \endverbatim
 
 #include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
@@ -66,7 +69,6 @@ public:
       return p1.first < p2.first;
     }
   };
-
 };
 
 
@@ -100,13 +102,13 @@ public:
   vnl_sparse_matrix<T>& operator=(const vnl_sparse_matrix<T>& rhs);
 
   //: Multiply this*rhs, another sparse matrix.
-  void mult(const vnl_sparse_matrix<T>& rhs, vnl_sparse_matrix<T>& result) const;
+  void mult(vnl_sparse_matrix<T> const& rhs, vnl_sparse_matrix<T>& result) const;
 
   //: Multiply this*rhs, where rhs is a vector.
-  void mult(const vnl_vector<T>& rhs, vnl_vector<T>& result) const;
+  void mult(vnl_vector<T> const& rhs, vnl_vector<T>& result) const;
 
   //: Multiply this*p, a fortran order matrix.
-  void mult(unsigned int n, unsigned int m, const T* p, T* q) const;
+  void mult(unsigned int n, unsigned int m, T const* p, T* q) const;
 
   //: Multiplies lhs*this, where lhs is a vector
   void pre_mult(const vnl_vector<T>& lhs, vnl_vector<T>& result) const;

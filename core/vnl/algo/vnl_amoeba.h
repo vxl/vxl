@@ -6,8 +6,9 @@
 //:
 //  \file
 //  \brief Nelder-Meade downhill simplex.
-//  \author Andrew W. Fitzgibbon, Oxford RRG, 23 Oct 97
-//  
+//  \author Andrew W. Fitzgibbon, Oxford RRG
+//  \date   23 Oct 97
+//
 //  \verbatim
 //  Modifications
 //  971023 AWF Initial version
@@ -27,7 +28,6 @@ class vnl_least_squares_function;
 //  vnl_levenberg_marquardt, but it can perform much better on noisy error
 //  functions.
 
-
 class vnl_amoeba {
 public:
   int verbose;
@@ -41,7 +41,7 @@ public:
   void set_delta(vnl_vector<double> const& delta_x);
   void minimize(vnl_vector<double>& x);
   int get_num_evaluations() const { return num_evaluations_; }
-  
+
 public:
   static void minimize(vnl_cost_function& f, vnl_vector<double>& x);
   static void minimize(vnl_cost_function& f, vnl_vector<double>& x,
@@ -49,22 +49,22 @@ public:
   static void minimize(vnl_least_squares_function& f, vnl_vector<double>& x);
 
   static bool default_verbose;
-  
+
 protected:
   vnl_cost_function* fptr;
   int num_evaluations_;
 };
 
-//: Private class needs to be declared here 
+//: Private class needs to be declared here
 //  in order to instantiate STL container of it.
 struct vnl_amoeba_SimplexCorner {
   vnl_vector<double> v;
   double fv;
-  
+
   vnl_amoeba_SimplexCorner(int = 0);
   vnl_amoeba_SimplexCorner& operator= (const vnl_amoeba_SimplexCorner& that);
-  static int compare(const vnl_amoeba_SimplexCorner & s1, 
-          const vnl_amoeba_SimplexCorner &s2);
+  static int compare(vnl_amoeba_SimplexCorner const& s1,
+                     vnl_amoeba_SimplexCorner const& s2);
 };
 
 #endif // vnl_amoeba_h_
