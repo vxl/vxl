@@ -5,10 +5,19 @@
 #endif
 // This is vxl/vgl/vgl_distance.h
 
+#include <vgl/vgl_fwd.h> // forward declare various vgl classes
+
 //:
 // \file
 // \brief Set of distance functions
+// Note that these functions return double, not the template parameter Type,
+// since e.g. the distance between two vgl_point_2d<int> is not always an int.
 // \author fsm@robots.ox.ac.uk
+// \verbatim
+// Modifications:
+//  2 July 2001 Peter Vanroose  added vgl_distance(point,line) and (point,plane)
+//  2 July 2001 Peter Vanroose  inlined 4 functions and made return types double
+// \endverbatim
 
 //: Squared distance between point (x,y) and closest point on line segment (x1,y1)-(x2,y2)
 double vgl_distance2_to_linesegment(double x1, double y1,
@@ -28,38 +37,58 @@ double vgl_distance_to_non_closed_polygon(float const px[], float const py[], un
 double vgl_distance_to_closed_polygon(float const px[], float const py[], unsigned n,
                                       double x, double y);
 
-#include "vgl_line_2d.h"
-#include "vgl_homg_line_2d.h"
+//: find the shortest distance of the line to the origin
+template <class Type>
+double vgl_distance_origin(vgl_line_2d<Type> const& l);
 
 //: find the shortest distance of the line to the origin
-// NOTE: currently only to be instantiated for double or float!
 template <class Type>
-Type vgl_distance_origin(vgl_line_2d<Type> const& l);
-//: find the shortest distance of the line to the origin
-// NOTE: currently only to be instantiated for double or float!
-template <class Type>
-Type vgl_distance_origin(vgl_homg_line_2d<Type> const& l);
-
-#include "vgl_point_2d.h"
-#include "vgl_point_3d.h"
-#include "vgl_homg_point_2d.h"
-#include "vgl_homg_point_3d.h"
-
-//: return the distance between two points
-// NOTE: currently only to be instantiated for double or float!
-template <class Type>
-Type vgl_distance(vgl_point_2d<Type>const& p1, vgl_point_2d<Type>const& p2);
+double vgl_distance_origin(vgl_homg_line_2d<Type> const& l);
 
 //: return the distance between two points
 template <class Type>
-Type vgl_distance(vgl_point_3d<Type>const& p1, vgl_point_3d<Type>const& p2);
+inline double vgl_distance(vgl_point_2d<Type>const& p1,
+                           vgl_point_2d<Type>const& p2) {return length(p2-p1);}
 
 //: return the distance between two points
 template <class Type>
-Type vgl_distance(vgl_homg_point_2d<Type>const& p1, vgl_homg_point_2d<Type>const& p2);
+inline double vgl_distance(vgl_point_3d<Type>const& p1,
+                           vgl_point_3d<Type>const& p2) {return length(p2-p1);}
 
 //: return the distance between two points
 template <class Type>
-Type vgl_distance(vgl_homg_point_3d<Type>const& p1, vgl_homg_point_3d<Type>const& p2);
+inline double vgl_distance(vgl_homg_point_2d<Type>const& p1,
+                           vgl_homg_point_2d<Type>const& p2) {
+  return vgl_distance(vgl_point_2d<Type>(p1),vgl_point_2d<Type>(p2)); }
+
+//: return the distance between two points
+template <class Type>
+inline double vgl_distance(vgl_homg_point_3d<Type>const& p1,
+                           vgl_homg_point_3d<Type>const& p2) {
+  return vgl_distance(vgl_point_3d<Type>(p1),vgl_point_3d<Type>(p2)); }
+
+//: return the perpendicular distance from a point to a line in 2D:
+template <class Type>
+double vgl_distance(vgl_line_2d<Type> const& l, vgl_point_2d<Type> const& p);
+template <class Type>
+inline double vgl_distance(vgl_point_2d<Type> const& p,
+                           vgl_line_2d<Type> const& l) {return vgl_distance(l,p);}
+template <class Type>
+double vgl_distance(vgl_homg_line_2d<Type> const& l, vgl_homg_point_2d<Type> const& p);
+template <class Type>
+inline double vgl_distance(vgl_homg_point_2d<Type> const& p,
+                           vgl_homg_line_2d<Type> const& l) {return vgl_distance(l,p);}
+
+//: return the perpendicular distance from a point to a plane in 3D:
+template <class Type>
+double vgl_distance(vgl_plane_3d<Type> const& l, vgl_point_3d<Type> const& p);
+template <class Type>
+inline double vgl_distance(vgl_point_3d<Type> const& p,
+                           vgl_plane_3d<Type> const& l) {return vgl_distance(l,p);}
+template <class Type>
+double vgl_distance(vgl_homg_plane_3d<Type> const& l, vgl_homg_point_3d<Type> const& p);
+template <class Type>
+inline double vgl_distance(vgl_homg_point_3d<Type> const& p,
+                           vgl_homg_plane_3d<Type> const& l) {return vgl_distance(l,p);}
 
 #endif // vgl_distance_h_
