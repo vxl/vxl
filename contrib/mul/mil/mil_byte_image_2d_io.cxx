@@ -22,6 +22,7 @@
 //=======================================================================
 
 mil_byte_image_2d_io::mil_byte_image_2d_io()
+: colour_code_( mil_byte_image_2d_io_depth_image )
 {
 }
 
