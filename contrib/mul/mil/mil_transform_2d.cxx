@@ -703,7 +703,7 @@ void mil_transform_2d::b_read(vsl_b_istream& bfs)
         vcl_cerr << "           Unknown version number "<< version << "\n";
         bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
         return;
-   }
+    }
 
     inv_uptodate_ = false;
 }
@@ -717,8 +717,6 @@ void vsl_b_write(vsl_b_ostream& bfs,const mil_transform_2d& t)
 {
     t.b_write(bfs);
 }
-
- 
 
 void vsl_print_summary(vcl_ostream& os,const mil_transform_2d& t)
 {
