@@ -98,7 +98,7 @@ vtol_chain::is_chain_superior(vtol_chain const* chain_superior) const
 void vtol_chain::link_chain_inferior(vtol_chain_sptr chain_inferior)
 {
   // require
-  assert(valid_chain_type(chain_inferior.ptr()));
+  assert(valid_chain_type(chain_inferior));
   assert(!is_chain_inferior(chain_inferior));
   assert(!chain_inferior->is_chain_superior(this));
 
@@ -115,7 +115,7 @@ void vtol_chain::link_chain_inferior(vtol_chain_sptr chain_inferior)
 void vtol_chain::unlink_chain_inferior(vtol_chain_sptr chain_inferior)
 {
   // require
-  assert(valid_chain_type(chain_inferior.ptr()));
+  assert(valid_chain_type(chain_inferior));
   assert(is_chain_inferior(chain_inferior));
   assert(chain_inferior->is_chain_superior(this));
 

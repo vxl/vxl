@@ -30,14 +30,6 @@ vtol_face::~vtol_face()
 }
 
 //:
-//  Constructor for a planar vtol_face from an ordered list of vertices.
-// edges are constructed by connecting vtol_vertex[i] to
-// vtol_vertex[(i+1)mod L]. L is the length of the vertex list, verts, and
-// i goes from 0 to L.
-// Require: verts.size()>2
-
-
-//:
 // Returns an ordered list of vertices of the outside boundary of the
 // face.  All vertices on any holes of the face are *not* included.
 // This vertex list is ordered such that a positive normal is
@@ -50,7 +42,8 @@ vertex_list *vtol_face::outside_boundary_vertices(void)
   vcl_vector<vtol_vertex*>* ptr_list = this->outside_boundary_compute_vertices();
 
   // copy the lists
-  for (vcl_vector<vtol_vertex*>::iterator ti = ptr_list->begin(); ti != ptr_list->end(); ++ti)
+  for (vcl_vector<vtol_vertex*>::const_iterator ti = ptr_list->begin();
+       ti != ptr_list->end(); ++ti)
     new_ref_list->push_back(*ti);
 
   delete ptr_list;
@@ -92,7 +85,8 @@ zero_chain_list *vtol_face::outside_boundary_zero_chains(void)
   vcl_vector<vtol_zero_chain*>* ptr_list = this->outside_boundary_compute_zero_chains();
 
   // copy the lists
-  for (vcl_vector<vtol_zero_chain*>::iterator ti = ptr_list->begin(); ti != ptr_list->end(); ++ti)
+  for (vcl_vector<vtol_zero_chain*>::const_iterator ti = ptr_list->begin();
+       ti != ptr_list->end(); ++ti)
     new_ref_list->push_back(*ti);
 
   delete ptr_list;
@@ -125,7 +119,8 @@ edge_list *vtol_face::outside_boundary_edges(void)
   vcl_vector<vtol_edge*>* ptr_list = this->outside_boundary_compute_edges();
 
   // copy the lists
-  for (vcl_vector<vtol_edge*>::iterator ti = ptr_list->begin(); ti != ptr_list->end(); ++ti)
+  for (vcl_vector<vtol_edge*>::const_iterator ti = ptr_list->begin();
+       ti != ptr_list->end(); ++ti)
     new_ref_list->push_back(*ti);
 
   delete ptr_list;
@@ -145,8 +140,8 @@ one_chain_list *vtol_face::outside_boundary_one_chains(void)
   vcl_vector<vtol_one_chain*>* ptr_list= outside_boundary_compute_one_chains();
   one_chain_list *ref_list= new one_chain_list;
 
-  vcl_vector<vtol_one_chain*>::iterator i;
-  for (i=ptr_list->begin();i!=ptr_list->end();++i)
+  for (vcl_vector<vtol_one_chain*>::const_iterator i=ptr_list->begin();
+       i!=ptr_list->end(); ++i)
     ref_list->push_back(*i);
 
   delete ptr_list;
@@ -288,11 +283,12 @@ bool vtol_face::add_hole_cycle(vtol_one_chain_sptr new_hole)
   vtol_one_chain *onech=get_boundary_cycle();
 
   if (onech!=0)
-    {
-      onech->link_chain_inferior(new_hole.ptr());
-      return true;
-    } else
-      return false;
+  {
+    onech->link_chain_inferior(new_hole);
+    return true;
+  }
+  else
+    return false;
 }
 
 // Returns a list of the one_chains that make up the holes of the vtol_face.
@@ -303,13 +299,13 @@ one_chain_list *vtol_face::get_hole_cycles(void)
 
   topology_list::const_iterator ii;
   for (ii=inferiors()->begin();ii!=inferiors()->end();++ii)
-    {
-      one_chain_list* templist=(*ii)->cast_to_one_chain()->inferior_one_chains();
+  {
+    one_chain_list* templist=(*ii)->cast_to_one_chain()->inferior_one_chains();
 
-      for (one_chain_list::iterator oi=templist->begin();oi!=templist->end();++oi)
-        result->push_back(*oi);
-      delete templist;
-    }
+    for (one_chain_list::const_iterator oi=templist->begin();oi!=templist->end();++oi)
+      result->push_back(*oi);
+    delete templist;
+  }
 
   return result;
 }
@@ -331,7 +327,7 @@ int vtol_face::get_num_edges(void) const
 //---------------------------------------------------------------------------
 void vtol_face::reverse_normal(void)
 {
-  topology_list::iterator ti;
+  topology_list::const_iterator ti;
   for (ti=inferiors()->begin();ti!=inferiors()->end();++ti)
     (*ti)->cast_to_one_chain()->reverse_directions();
   // compute_normal();

@@ -84,7 +84,7 @@ class vtol_chain
   //: Is `chain_inf_sup' type valid for `this' ?
   //---------------------------------------------------------------------------
   virtual bool
-  valid_chain_type(vtol_chain const* chain_inf_sup) const = 0;
+  valid_chain_type(vtol_chain_sptr chain_inf_sup) const = 0;
 
   //---------------------------------------------------------------------------
   //: Is `inferior' already an inferior of `this' ?
