@@ -39,12 +39,12 @@ public:
   CheckRGB( const char* file )
   {
     vil2_image_view_base *i = vil2_load_into_memory( (image_base + file).c_str() );
-    if( !i )
+    if ( !i )
       vcl_cout << "[ couldn't load " << file << "]\n";
     else
     {
 //      i->print(vcl_cout);
-      img_ = vil2_view_as_rgb<T>(static_cast<vil2_image_view<T>&>(*i));
+      img_ = vil2_view_as_rgb(static_cast<vil2_image_view<T>&>(*i));
     }
     delete i;
   }
@@ -65,7 +65,7 @@ public:
   CheckColourPlanes( const char* file )
   {
     vil2_image_view_base *i = vil2_load_into_memory( (image_base + file).c_str() );
-    if( !i )
+    if ( !i )
       vcl_cout << "[ couldn't load " << file << "]\n";
     else
     {
@@ -91,7 +91,7 @@ public:
   CheckGrey( const char* file )
   {
     vil2_image_view_base *i = vil2_load_into_memory( (image_base + file).c_str() );
-    if( !i )
+    if ( !i )
       vcl_cout << "[ couldn't load " << file << "]\n";
     else
     {
@@ -134,24 +134,24 @@ test( const char* true_data_file, const CheckPixel& check )
   int height;
 
   vcl_ifstream fin( (image_base+true_data_file).c_str() );
-  if( !( fin >> num_planes >> num_comp >> width >> height ) ) {
+  if ( !( fin >> num_planes >> num_comp >> width >> height ) ) {
     vcl_cout << "[couldn't read header from " << true_data_file << "]";
     return false;
   }
 
   vcl_vector<TruePixelType> pixel( num_comp );
 
-  for( int p=0; p < num_planes; ++p ) {
-    for( int y=0; y < height; ++y ) {
-      for( int x=0; x < width; ++x ) {
-        for( int c=0; c < num_comp; ++c ) {
-          if( !( fin >> pixel[c] ) ) {
+  for ( int p=0; p < num_planes; ++p ) {
+    for ( int y=0; y < height; ++y ) {
+      for ( int x=0; x < width; ++x ) {
+        for ( int c=0; c < num_comp; ++c ) {
+          if ( !( fin >> pixel[c] ) ) {
             vcl_cout << "[couldn't read value at " << p << "," << x << "," << y << "," << c
                      << " from " << true_data_file << "]";
             return false;
           }
         }
-        if( !check( p, x, y, pixel ) )
+        if ( !check( p, x, y, pixel ) )
           return false;
       }
     }
@@ -163,7 +163,7 @@ test( const char* true_data_file, const CheckPixel& check )
 int
 test_file_format_read_main( int argc, char* argv[] )
 {
-  if( argc >= 2 ) {
+  if ( argc >= 2 ) {
     image_base = argv[1];
 #ifdef VCL_WIN32
     image_base += "\\";
