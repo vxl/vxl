@@ -12,4 +12,4 @@ ENDIF(WIN32)
 ADD_EXECUTABLE( oxltest ${oxltest_sources} )
 TARGET_LINK_LIBRARIES( oxltest mvl vul vbl vgl vnl_algo )
 
-ADD_TEST(       oxltest oxltest         )
+ADD_TEST( oxl_test oxltest )
