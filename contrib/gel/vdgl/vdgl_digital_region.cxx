@@ -4,6 +4,7 @@
 #include "vdgl_digital_region.h"
 #include <vcl_cmath.h> // for fabs and sqrt
 #include <vcl_cassert.h>
+#include <vnl/vnl_transpose.h>
 #include <vnl/algo/vnl_svd.h>
 
 #if 0
@@ -52,6 +53,7 @@ void vdgl_digital_region::init()
   hist_ = NULL;
 #endif
 }
+
 //-------------------------------------------------------------------------
 // Constructors
 //
@@ -59,6 +61,7 @@ vdgl_digital_region::vdgl_digital_region()
 {
   this->init();
 }
+
 vdgl_digital_region::vdgl_digital_region(vdgl_digital_region const& r)
 {
   this->init();
@@ -69,6 +72,7 @@ vdgl_digital_region::vdgl_digital_region(vdgl_digital_region const& r)
     this->InsertInPixelArrays(r.Xj()[i], r.Yj()[i], r.Zj()[i], r.Ij()[i]);
   this->ComputeIntensityStdev();
 }
+
 vdgl_digital_region::vdgl_digital_region(int npts, const float* xp, const float* yp,
                                          const unsigned short *pix)
 {
@@ -81,6 +85,7 @@ vdgl_digital_region::vdgl_digital_region(int npts, const float* xp, const float*
     this->InsertInPixelArrays(xp[i], yp[i], pix[i]);
   this->ComputeIntensityStdev();
 }
+
 vdgl_digital_region::vdgl_digital_region(int npts, const float* xp, const float* yp,
                                          const float* zp, const unsigned short *pix)
 {
@@ -93,6 +98,7 @@ vdgl_digital_region::vdgl_digital_region(int npts, const float* xp, const float*
     this->InsertInPixelArrays(xp[i], yp[i], zp[i], pix[i]);
   this->ComputeIntensityStdev();
 }
+
 //-------------------------------------------------------------------------
 //
 // Destructor.
@@ -201,6 +207,7 @@ void vdgl_digital_region::set_Y(float y)
     return;
   yp_[pix_index_]=y;
 }
+
 //-------------------------------------------------------
 //: Modify the pixel intensity
 void vdgl_digital_region::set_I(unsigned short I)
@@ -223,12 +230,14 @@ void vdgl_digital_region::ResetPixelData()
   delete [] pix_; pix_ = NULL;
   xo_ = yo_ = zo_ = io_ = io_stdev_=0.0f;
 }
+
 //---------------------------------------------------------
 //: The 2-d version
 void vdgl_digital_region::IncrementMeans(float x, float y, unsigned short pix)
 {
   this->IncrementMeans(x, y, 0, pix);
 }
+
 //-----------------------------------------------------------------
 //:
 //    Used to scan through a set of pixels and acquire mean values
@@ -245,6 +254,7 @@ void vdgl_digital_region::IncrementMeans(float x, float y, float z,
   zo_ += z;
   io_ += pix;
 }
+
 //-----------------------------------------------------------------
 //:
 // Calculate the standard deviation of intensity for the region.
@@ -259,6 +269,7 @@ float vdgl_digital_region::ComputeIntensityStdev()
   io_stdev_ = io_stdev_ * 1.0f/(npts_ - 1.0f);
   return io_stdev_;
 }
+
 //-----------------------------------------------------------------
 //:
 // Now we have the number of pixels so we can create the storage arrays.
@@ -273,6 +284,7 @@ void vdgl_digital_region::InitPixelArrays()
   min_ = (unsigned short)(-1);
   max_ = 0;
 }
+
 //--------------------------------------------------------------------
 //: the 2-d version
 void vdgl_digital_region::InsertInPixelArrays(float x, float y,
@@ -332,36 +344,42 @@ double vdgl_digital_region::X2() const
     this->ComputeScatterMatrix();
   return X2_;
 }
+
 double vdgl_digital_region::Y2() const
 {
   if (!scatter_matrix_valid_)
     this->ComputeScatterMatrix();
   return Y2_;
 }
+
 double vdgl_digital_region::XY() const
 {
   if (!scatter_matrix_valid_)
     this->ComputeScatterMatrix();
   return XY_;
 }
+
 double vdgl_digital_region::I2() const
 {
   if (!scatter_matrix_valid_)
     this->ComputeScatterMatrix();
   return I2_;
 }
+
 double vdgl_digital_region::XI() const
 {
   if (!scatter_matrix_valid_)
     this->ComputeScatterMatrix();
   return XI_;
 }
+
 double vdgl_digital_region::YI() const
 {
   if (!scatter_matrix_valid_)
     this->ComputeScatterMatrix();
   return YI_;
 }
+
 //------------------------------------------------------------
 //: Compute the diameter from the scatter matrix
 float vdgl_digital_region::Diameter() const
@@ -406,7 +424,7 @@ float vdgl_digital_region::AspectRatio() const
   return (float)vcl_sqrt(svd.W(0)/svd.W(1));
 }
 
-#if 0
+#if 0 // function commented out
 //------------------------------------------------------------
 //: Compute the principal orientation of the region.
 //   major_axis is a 2-d vector representing the orientation.
@@ -416,11 +434,11 @@ void vdgl_digital_region::PrincipalOrientation(vcl_vector<float>& major_axis)
   if (!scatter_matrix_valid_)
     this->ComputeScatterMatrix();
   if (this->Npix()<4)
-    {
-      vcl_cout << "In vdgl_digital_region::PrincipalOrientation(..) Npts<4\n";
-      major_axis.x()=1.0; major_axis.y()=0.0;
-      return;
-    }
+  {
+    vcl_cout << "In vdgl_digital_region::PrincipalOrientation(..) Npts<4\n";
+    major_axis.x()=1.0; major_axis.y()=0.0;
+    return;
+  }
   // construct the lower right 2x2 matrix of S, s.
   vnl_matrix<double> s(2, 2, 0.0);
   for (int r = 1; r<=2; r++)
@@ -429,19 +447,18 @@ void vdgl_digital_region::PrincipalOrientation(vcl_vector<float>& major_axis)
   //Compute SVD of s to get aspect ratio
   SVD svd(s);
   if (svd.rank()!=2)
-    {
-      vcl_cout << "In vdgl_digital_region::PrincipalOrientation(..) Insufficient rank\n";
-      major_axis.x()=1.0; major_axis.y()=0.0;
-      return;
-    }
+  {
+    vcl_cout << "In vdgl_digital_region::PrincipalOrientation(..) Insufficient rank\n";
+    major_axis.x()=1.0; major_axis.y()=0.0;
+    return;
+  }
   vnl_matrix<double> v = svd.V();
   //2 sigma gives a good estimate of axis length (sigma = principal eigenvalue)
   double radius = 2*vcl_sqrt(vcl_fabs(svd.W(0)));
   major_axis.x()=float(v(0,0)*radius);
   major_axis.y()=float(v(1,0)*radius);
 }
-
-#endif
+#endif // 0
 
 double vdgl_digital_region::Ix() const
 {
@@ -449,6 +466,7 @@ double vdgl_digital_region::Ix() const
     this->DoPlaneFit();
   return Ix_;
 }
+
 double vdgl_digital_region::Iy() const
 {
   if (!fit_valid_)
@@ -476,10 +494,10 @@ void vdgl_digital_region::IncrByXYI(double x, double y, int intens) const
 void vdgl_digital_region::ComputeScatterMatrix() const
 {
   if (!npts_)
-    {
-      vcl_cout << "In vdgl_digital_region::ComputeScatterMatrix() - no pixels\n";
-      return;
-    }
+  {
+    vcl_cout << "In vdgl_digital_region::ComputeScatterMatrix() - no pixels\n";
+    return;
+  }
   X2_ = 0;  Y2_ = 0;  I2_ = 0;
   XY_ = 0;  XI_ = 0;  YI_ = 0;
 
@@ -519,13 +537,13 @@ void vdgl_digital_region::SolveForPlane() const
   double den = Si_->get(1,1)*Si_->get(2,2)
              - Si_->get(1,2)*Si_->get(1,2);
   if (near_zero(den))
-    {
-      vcl_cout << "In vdgl_digital_region::SolveForPlane(..) determinant near zero\n";
-      Ix_ = 0;
-      Iy_ = 0;
-      pi_->put(0,0, 1.0);   pi_->put(1,0, -Ix_);   pi_->put(2,0, -Iy_);
-      return;
-    }
+  {
+    vcl_cout << "In vdgl_digital_region::SolveForPlane(..) determinant near zero\n";
+    Ix_ = 0;
+    Iy_ = 0;
+    pi_->put(0,0, 1.0);   pi_->put(1,0, -Ix_);   pi_->put(2,0, -Iy_);
+    return;
+  }
   double adet = Si_->get(0,1)*Si_->get(2,2)
               - Si_->get(0,2)*Si_->get(1,2);
   double bdet = Si_->get(1,1)*Si_->get(0,2)
@@ -542,7 +560,7 @@ double vdgl_digital_region::ComputeResidual(vnl_matrix<double> const& pvect) con
 {
   if (!fit_valid_)
     this->DoPlaneFit();
-  vnl_matrix<double> residual = pvect.transpose() * (*Si_) * pvect;
+  vnl_matrix<double> residual = vnl_transpose(pvect) * (*Si_) * pvect;
   return residual.get(0,0);
 }
 
@@ -630,13 +648,13 @@ Histogram_ref vdgl_digital_region::GetResidualHistogram()
   float min = vnl_numeric_traits<float>::maxval,
         max = -vnl_numeric_traits<float>::maxval;
   for (this->reset(); this->next();)
-    {
-      float ir = (float)this->Ir();
-      if (ir<min)
-        min = ir;
-      if (ir>max)
-        max = ir;
-    }
+  {
+    float ir = (float)this->Ir();
+    if (ir<min)
+      min = ir;
+    if (ir>max)
+      max = ir;
+  }
   int res = int(max-min);
   Histogram* h = new Histogram(res, min, max);
   for (this->reset(); this->next();)
@@ -651,13 +669,13 @@ bool vdgl_digital_region::Transform(CoolTransform const& t)
   if (!npts_)
     return false;
   for (int i=0; i<n; i++)
-    {
-      vcl_vector<float> p(xp_[i], yp_[i], zp_[i]);
-      vcl_vector<float>pt = p*t;
-      xp_[i]=pt.x();
-      yp_[i]=pt.y();
-      zp_[i]=pt.z();
-    }
+  {
+    vcl_vector<float> p(xp_[i], yp_[i], zp_[i]);
+    vcl_vector<float>pt = p*t;
+    xp_[i]=pt.x();
+    yp_[i]=pt.y();
+    zp_[i]=pt.z();
+  }
   //Transform the mean pixel position
   vcl_vector<float> m(this->Xo(), this->Yo(), this->Zo());
   vcl_vector<float>mt = m*t;
@@ -668,4 +686,4 @@ bool vdgl_digital_region::Transform(CoolTransform const& t)
   scatter_matrix_valid_=false;
   return true;
 }
-#endif
+#endif // 0

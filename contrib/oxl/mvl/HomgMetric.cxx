@@ -9,6 +9,7 @@
 
 #include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_transpose.h>
 #include <vnl/vnl_identity_3x3.h>
 #include <vnl/vnl_double_2.h>
 #include <vgl/vgl_point_2d.h>
@@ -309,7 +310,8 @@ double HomgMetric::homg_to_image_distance_sqr(double image_distance) const
     return image_distance;
 }
 
-static vcl_ostream& warning(char const * fn) {
+static vcl_ostream& warning(char const * fn)
+{
   return vcl_cerr << "HomgMetric::" << fn << "() WARNING: ";
 }
 
@@ -337,7 +339,7 @@ FMatrix HomgMetric::homg_to_image_F(const FMatrix& F, const HomgMetric& c1, cons
 
   vnl_double_3x3 C1inv = c1.get_C_inverse();
   vnl_double_3x3 C2inv = c2.get_C_inverse();
-  return FMatrix(C2inv.transpose() * F.get_matrix() * C1inv);
+  return FMatrix(vnl_transpose(C2inv) * F.get_matrix() * C1inv);
 }
 
 //: Condition a fundamental matrix.
@@ -348,7 +350,7 @@ FMatrix HomgMetric::image_to_homg_F(const FMatrix& F, const HomgMetric& c1, cons
 
   vnl_double_3x3 C1 = c1.get_C();
   vnl_double_3x3 C2 = c2.get_C();
-  return FMatrix(C2.transpose() * F.get_matrix() * C1);
+  return FMatrix(vnl_transpose(C2) * F.get_matrix() * C1);
 }
 
 //: Decondition a planar homography.

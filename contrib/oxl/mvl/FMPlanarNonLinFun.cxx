@@ -12,6 +12,7 @@
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix.h>
+#include <vnl/vnl_transpose.h>
 #include <vnl/vnl_matops.h> // use vnl_matlab_print.h for pretty printing
 
 #include <vnl/vnl_cross_product_matrix.h>
@@ -111,7 +112,7 @@ bool FMPlanarNonLinFun::compute(FMatrixPlanar* F)
 
   norm_F = params_to_fmatrix (f_params);
 
-  F->set(denorm_matrix_.transpose() * norm_F.get_matrix() * denorm_matrix_);
+  F->set(vnl_transpose(denorm_matrix_) * norm_F.get_matrix() * denorm_matrix_);
 
   vcl_cerr << "fm_fmatrix_nagmin: accepted " << data_size_ << '/' << data_size_
            << " rms point-epipolar error " << lm.get_end_error() / vcl_sqrt(double(data_size_))
@@ -127,7 +128,7 @@ void FMPlanarNonLinFun::f(vnl_vector<double> const& f_params, vnl_vector<double>
 {
      FMatrixPlanar norm_F = params_to_fmatrix(f_params);
 
-     FMatrixPlanar F(denorm_matrix_.transpose() * norm_F.get_matrix() * denorm_matrix_);
+     FMatrixPlanar F(vnl_transpose(denorm_matrix_) * norm_F.get_matrix() * denorm_matrix_);
 
      for (int i = 0; i < data_size_; ++i) {
           const vgl_homg_point_2d<double>& p1 = points1_[i];
