@@ -69,7 +69,7 @@ void vul_awk::next()
 
   for(;;) {
     // Eat white
-    while (*cp && isspace(*cp))
+    while (*cp && vcl_isspace(*cp))
       ++cp;
     if (!*cp) break;
 
@@ -77,7 +77,7 @@ void vul_awk::next()
     fields_.push_back(cp);
 
     // Find nonwhite
-    while (*cp && !isspace(*cp))
+    while (*cp && !vcl_isspace(*cp))
       ++cp;
     if (!*cp) break;
 
