@@ -20,10 +20,7 @@ void mil_convert_image_2d(mil_image_2d_of<vil_byte>& dest_im,
 //  Applies scale and offset to pixels of src_im and puts results in dest_im
 //  Useful to compress range of data for display
 void mil_convert_image_2d(mil_image_2d_of<vil_byte>& dest_im,
-                       const mil_image_2d_of<float>& src_im,
-											 double scale, double offset);
-
+                          const mil_image_2d_of<float>& src_im,
+                          double scale, double offset);
 
 #endif // mil_convert_image_2d_h_
-
-
