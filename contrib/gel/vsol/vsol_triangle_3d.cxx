@@ -167,8 +167,8 @@ bool vsol_triangle_3d::in(const vsol_point_3d_sptr &p) const
 
 //---------------------------------------------------------------------------
 //: Return the unit normal vector at point `p'.
-// Description: Has to be deleted manually. Depends on the vertices order.
-// If some vertices are aligned, the normal is the null vector.
+// This is the normal to the place in which the triangle lies.
+// If the vertices are collinear, the normal is the null vector.
 // Require: in(p)
 //---------------------------------------------------------------------------
 vgl_vector_3d<double>

@@ -48,7 +48,7 @@ public:
   virtual bool in(const vsol_point_3d_sptr &p) const=0;
 
   //---------------------------------------------------------------------------
-  //: Return the unit normal vector at point `p'. Have to be deleted manually
+  //: Return the unit normal vector at point `p'.
   //  REQUIRE: in(p)
   //---------------------------------------------------------------------------
   virtual vgl_vector_3d<double>
