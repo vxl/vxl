@@ -119,10 +119,11 @@ public:
   }
 
   vil_image& operator=(vil_image_impl *p) {
-    if (ptr)
+    if (ptr) 
       ptr->down_ref();
     ptr = p;
-    ptr->up_ref();
+    if (ptr)
+      ptr->up_ref();
     return *this;
   }
 
