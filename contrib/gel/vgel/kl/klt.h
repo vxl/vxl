@@ -8,7 +8,7 @@
 #define _KLT_H_
 
 typedef float KLT_locType;
-typedef unsigned char KLT_PixelType;
+typedef unsigned short KLT_PixelType;
 
 #define KLT_BOOL int
 
