@@ -101,4 +101,4 @@ static void test_face_2d()
   TEST("vtol_face_2d::shares_edge_with()", f1->shares_edge_with(*new_f), true);
 }
 
-TESTLIB_DEFINE_MAIN(test_face_2d);
+TESTMAIN(test_face_2d);

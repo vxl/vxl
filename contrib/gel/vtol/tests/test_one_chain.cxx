@@ -145,4 +145,4 @@ static void test_one_chain()
   TEST("vtol_one_chain::get_max_x()", onch->get_max_x()==5&&onch->get_max_y()==5, true);
 }
 
-TESTLIB_DEFINE_MAIN(test_one_chain);
+TESTMAIN(test_one_chain);

@@ -83,4 +83,4 @@ static void test_edge_2d()
   TEST("vtol_edge_2d::valid_inferior_type()",e1->valid_inferior_type(e1->cast_to_topology_object()),false);
 }
 
-TESTLIB_DEFINE_MAIN(test_edge_2d);
+TESTMAIN(test_edge_2d);

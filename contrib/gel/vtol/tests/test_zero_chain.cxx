@@ -43,4 +43,4 @@ static void test_zero_chain()
   TEST("vtol_zero_chain::topology_type()", zc1->topology_type(), vtol_topology_object::ZEROCHAIN);
 }
 
-TESTLIB_DEFINE_MAIN(test_zero_chain);
+TESTMAIN(test_zero_chain);

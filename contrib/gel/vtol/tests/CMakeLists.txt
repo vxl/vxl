@@ -2,26 +2,30 @@
 
 LINK_LIBRARIES( vtol vsol vnl testlib )
 
-ADD_EXECUTABLE(vtol_test_vertex_2d       test_vertex_2d.cxx)
-ADD_TEST(      vtol_test_vertex_2d  vtol_test_vertex_2d)
-ADD_EXECUTABLE(vtol_test_zero_chain      test_zero_chain.cxx)
-ADD_TEST(      vtol_test_zero_chain vtol_test_zero_chain)
-ADD_EXECUTABLE(vtol_test_edge_2d         test_edge_2d.cxx)
-ADD_TEST(      vtol_test_edge_2d    vtol_test_edge_2d)
-ADD_EXECUTABLE(vtol_test_one_chain       test_one_chain.cxx)
-ADD_TEST(      vtol_test_one_chain  vtol_test_one_chain)
-ADD_EXECUTABLE(vtol_test_face_2d         test_face_2d.cxx)
-ADD_TEST(      vtol_test_face_2d    vtol_test_face_2d)
-ADD_EXECUTABLE(vtol_test_two_chain       test_two_chain.cxx)
-ADD_TEST(      vtol_test_two_chain  vtol_test_two_chain)
-ADD_EXECUTABLE(vtol_test_block           test_block.cxx)
-ADD_TEST(      vtol_test_block      vtol_test_block)
-ADD_EXECUTABLE(test_cycle_processor test_cycle_processor.cxx)
+ADD_EXECUTABLE(vtol_test_all
+  test_driver.cxx
+  test_vertex_2d.cxx
+  test_zero_chain.cxx
+  test_edge_2d.cxx
+  test_one_chain.cxx
+  test_face_2d.cxx
+  test_two_chain.cxx
+  test_block.cxx
+  test_cycle_processor.cxx
+  vtol_test_refcounting.cxx
+  vtol_test_timing.cxx
+)
 IF(CMAKE_COMPILER_IS_GNUCXX)
  SET_SOURCE_FILES_PROPERTIES(test_cycle_processor.cxx COMPILE_FLAGS -O1)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
-ADD_TEST(      test_cycle_processor test_cycle_processor)
-ADD_EXECUTABLE(vtol_test_refcounting vtol_test_refcounting.cxx)
-ADD_TEST(      vtol_test_refcounting vtol_test_refcounting)
-ADD_EXECUTABLE(vtol_test_timing vtol_test_timing.cxx)
-ADD_TEST(      vtol_test_timing vtol_test_timing)
+
+ADD_TEST(vtol_test_vertex_2d       vtol_test_all test_vertex_2d)
+ADD_TEST(vtol_test_zero_chain      vtol_test_all test_zero_chain)
+ADD_TEST(vtol_test_edge_2d         vtol_test_all test_edge_2d)
+ADD_TEST(vtol_test_one_chain       vtol_test_all test_one_chain)
+ADD_TEST(vtol_test_face_2d         vtol_test_all test_face_2d)
+ADD_TEST(vtol_test_two_chain       vtol_test_all test_two_chain)
+ADD_TEST(vtol_test_block           vtol_test_all test_block)
+ADD_TEST(vtol_test_cycle_processor vtol_test_all test_cycle_processor)
+ADD_TEST(vtol_test_refcounting     vtol_test_all vtol_test_refcounting)
+ADD_TEST(vtol_test_timing          vtol_test_all vtol_test_timing)

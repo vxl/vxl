@@ -170,4 +170,4 @@ static void test_vertex_2d()
   vcl_cout << "ve after superiors access " << *ve << vcl_endl;
 }
 
-TESTLIB_DEFINE_MAIN(test_vertex_2d);
+TESTMAIN(test_vertex_2d);

@@ -100,4 +100,4 @@ static void vtol_test_timing()
   TEST("number of faces per vertex", n_vfaces, 4*(s-1)*(s-1));
 }
 
-TESTLIB_DEFINE_MAIN(vtol_test_timing);
+TESTMAIN(vtol_test_timing);

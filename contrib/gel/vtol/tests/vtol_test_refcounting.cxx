@@ -180,4 +180,4 @@ static void vtol_test_refcounting()
   v1->unref(); v2->unref(); v3->unref(); // no memory leaks left
 }
 
-TESTLIB_DEFINE_MAIN(vtol_test_refcounting);
+TESTMAIN(vtol_test_refcounting);

@@ -102,4 +102,4 @@ static void test_block()
   TEST("vtol_two_chain::valid_superior_type()",tc1->valid_superior_type(b1),true);
 }
 
-TESTLIB_DEFINE_MAIN(test_block);
+TESTMAIN(test_block);

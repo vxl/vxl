@@ -80,4 +80,4 @@ static void test_two_chain()
   TEST("vtol_two_chain deep copy (pseudo copy constructor)", *new_copy, *tc1);
 }
 
-TESTLIB_DEFINE_MAIN(test_two_chain);
+TESTMAIN(test_two_chain);

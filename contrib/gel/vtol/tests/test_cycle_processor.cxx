@@ -302,4 +302,4 @@ static void test_cycle_processor()
     }
 }
 
-TESTLIB_DEFINE_MAIN(test_cycle_processor);
+TESTMAIN(test_cycle_processor);
