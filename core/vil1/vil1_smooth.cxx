@@ -33,12 +33,12 @@ vil_image vil_smooth_gaussian(vil_image const & in, double sigma)
   for (int x=1; x<=radius; ++x) {
     double v = vcl_exp(-0.5*x*x/(sigma*sigma));
     mask[radius - x] = mask[radius + x] = v;
-    halfnorm += 2*v;
+    halfnorm += v;
   }
 
   // normalise mask
   double mass_scale = 1.0/(1 + 2*halfnorm);
-  for (int x=0; x<=2*size+1; ++x)
+  for (int x=0; x< size; ++x)
     mask[x] *= mass_scale;
 
   // Call convolver
