@@ -198,6 +198,41 @@
 #define VCL_CANNOT_SPECIALIZE_CV 0
 
 
+//: VCL_TEMPLATE_MATCHES_TOO_OFTEN
+//
+// A function template is selected by overload resolution only if no
+// non-template requires equal or better conversions.  Some compilers
+// (eg MSVC 6.x and 7.0, Borland 5.5 and 5.6) select the template
+// incorrectly in a case like this:
+// \code
+//    class A {};
+//    template <class T> void f(T);
+//    void f(const A&);
+//    void g() { f(A()); } // should call non-template
+// \endcode
+//
+// The work-around is to explicitly give the template a worse
+// conversion than the non-templated overloads:
+// \code
+//    class A {};
+//    template <class T> inline void f(T t) { f(t, 1); }
+//    template <class T> void f(T t, long);
+//    void f(const A&, int);
+//    void g() { f(A()); } // will call non-template
+// \endcode
+// In this example, the inline one-argument template will always be
+// called, which will call the real function with an "int" passed to
+// the second argument.  The templated two-argument function has a
+// "long" second argument while the others have "int".  Therefore, the
+// template will be chosen only if no non-templates match.
+//
+// The VCL_TEMPLATE_MATCHES_TOO_OFTEN macro is set to 1
+// if this work-around is required and 0 otherwise.
+//#define VCL_TEMPLATE_MATCHES_TOO_OFTEN 1 /* need work-around */
+//#define VCL_TEMPLATE_MATCHES_TOO_OFTEN 0 /* do not need it */
+#define VCL_TEMPLATE_MATCHES_TOO_OFTEN 1
+
+
 //: VCL_NULL_TMPL_ARGS
 //
 // Define to <> for compilers that require them in friend template function

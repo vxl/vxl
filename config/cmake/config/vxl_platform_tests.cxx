@@ -858,6 +858,8 @@ int main() { drand48(); return 0; }
 
 #ifdef VCL_CAN_SPECIALIZE_CV
 
+// Some compilers do not distinguish between A<int> and A<int const>.
+
 template <class T> struct A;
 #if !defined(NOT_CONFORMING_SPECIALIZATION)
 template <> struct A<int> {};
@@ -868,6 +870,26 @@ struct A<int const> {};
 #endif
 
 int main() { return 0; }
+
+#endif
+
+//-------------------------------------
+
+#ifdef VCL_TEMPLATE_DOES_NOT_MATCH_TOO_OFTEN
+
+// Some compilers will incorrectly choose the template over the
+// non-template.  This will not compile if the template is chosen,
+// which will reveal the bug.
+
+class A {};
+template <class T> void f(T t) { t.compiler_selected_wrong_overload(); }
+void f(const A&) {}
+
+int main()
+{
+  f(A());
+  return 0;
+}
 
 #endif
 
