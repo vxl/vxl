@@ -65,7 +65,7 @@ bool gevd_region_proc_params::SanityCheck()
   }
 
   if (burt_adelson_factor_ > .6 || burt_adelson_factor_ <.3) {
-    msg << "burt_adelson_factor must be in the range .3<=ka<=.6\n":
+    msg << "burt_adelson_factor must be in the range .3<=ka<=.6\n";
     valid = false;
   }
 
