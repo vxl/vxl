@@ -1,8 +1,6 @@
 //:
 // \file
-#include <iostream.h>
-#include <iomanip.h>
-#include <math.h>
+#include <vcl_cmath.h>
 #include <vtol/vtol_edge_2d.h>
 #include <gevd/gevd_region_edge.h>
 
