@@ -1,4 +1,4 @@
-// This is brl/bseg/sdet/tests/brct_test_compute_P.cxx
+// This is brl/bmvl/brct/tests/brct_test_compute_P.cxx
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_vector.h>
@@ -45,7 +45,7 @@ static bool read_correspondences(vcl_vector<vgl_point_2d<double> >& image_points
                                  vcl_vector<vgl_point_3d<double> >& world_points)
 {
   vcl_ifstream str("c:/images/Stereo/UHall/uhall-right.cm");
-  if (!str.is_open())
+  if (!str)
     return false;
   brct_algos::read_target_corrs(str, image_points, world_points);
   return true;
@@ -108,9 +108,9 @@ static void brct_test_compute_P(int argc, char * argv[])
   vnl_double_4x4 T = brct_algos::convert_to_target(Pright);
   vcl_cout << "T\n" << T << '\n';
   vcl_ofstream str("c:/images/Stereo/UHall/uhall-right.trans");
-  if(!str.is_open())
+  if (!str)
   {
-	vcl_cout << "Can't open stream \n";
+    vcl_cout << "Can't open stream\n";
     return;
   }
   brct_algos::write_target_camera(str, Pright);
