@@ -13,7 +13,10 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
 #include <vipl/section/vipl_section_iterator.h>
 
 #include <vcl_stlfwd.h> // forward declaration for vcl_vector
-//: Here is how the get/set macros are used.
+
+//:
+// \file
+// Here is how the get/set macros are used.
 // First note there are 4 types of access:
 // for each of get and set we can do it with or without bounds/cache checking.
 // These are respectively defined in 4 macros:
@@ -83,6 +86,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
 
 class vipl_trivial_pixeliter;
 extern const void * DAhelp(vipl_trivial_pixeliter const*,int level=0);
+
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr >
 class vipl_filter          : public vipl_filter_abs {
   // declare some static consts....
@@ -328,10 +332,10 @@ class vipl_filter          : public vipl_filter_abs {
 
   //:
   // This is the method that implements the filtering inside each
-  // section. You must supply this function
+  // section. You must supply this function.
+  // pure virtual function
   virtual bool section_applyop() = 0;
 
-  // pure virtual function
   //:
   // If a section is pointer safe, then this function is called to
   // filter it. default is just to call section_applyop
