@@ -241,7 +241,7 @@ bool vil_viff_generic_image::write_header()
   }
   else
   {
-    vcl_cout << "vil_viff: non supported data type: " << component_format() << vcl_endl;
+    vcl_cout << "vil_viff: non supported data type: " << (short)component_format() << vcl_endl;
     return false;
   }
 
