@@ -13,7 +13,7 @@
 #include <vnl/vnl_sample.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 
-extern "C"
+//extern "C"
 void test_symmetric_eigensystem()
 {
   double Sdata[36] = {
