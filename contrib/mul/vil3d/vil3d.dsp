@@ -174,9 +174,6 @@ SOURCE=.\Templates/vil3d_copy+uint_32-.cxx
 SOURCE=.\Templates/vil3d_image_view+sbyte-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vil3d_image_resource.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vil3d_memory_image.cxx
 # End Source File
 # Begin Source File
