@@ -19,6 +19,11 @@ void test_numeric_limits()
            << "fnan  = " << vnl_numeric_limits<float>::quiet_NaN() << vcl_endl
            << "finf  = " << vnl_numeric_limits<float>::infinity() << vcl_endl
            << "fninf = " << -vnl_numeric_limits<float>::infinity() << vcl_endl;
+
+  TEST("dmax", vnl_numeric_limits<double>::max() > 1e300, true);
+  TEST("dmin", vnl_numeric_limits<double>::min() < 1e-300, true);
+  TEST("fmax", vnl_numeric_limits<double>::max() > 1e38, true);
+  TEST("fmin", vnl_numeric_limits<double>::min() < 1e-38, true);
 }
 
 TESTMAIN(test_numeric_limits);
