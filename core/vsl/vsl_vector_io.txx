@@ -1,3 +1,5 @@
+#ifndef vsl_vector_io_txx_
+#define vsl_vector_io_txx_
 //This is vxl/vsl/vsl_vector_io.txx
 
 //:
@@ -53,3 +55,5 @@ template void vsl_print_summary(vcl_ostream& s, const vcl_vector<T >& v); \
 template void vsl_b_write(vsl_b_ostream& s, const vcl_vector<T >& v); \
 template void vsl_b_read(vsl_b_istream& s, vcl_vector<T >& v); \
 ;
+
+#endif
