@@ -4,7 +4,8 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-//: \file
+//:
+//  \file
 //  \brief vnl_least_squares_function -> vnl_cost_function adaptor
 //  \author Andrew W. Fitzgibbon, Oxford RRG
 //  \date   20 Aug 99

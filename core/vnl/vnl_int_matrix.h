@@ -4,7 +4,8 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-//: \file
+//:
+//  \file
 //  \brief Specializes vnl_matrix for integers
 //  \author Andrew W. Fitzgibbon, Oxford RRG
 //  \date   27 Dec 96

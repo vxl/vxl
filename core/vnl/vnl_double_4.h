@@ -4,7 +4,8 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-//: \file
+//:
+//  \file
 //  \brief
 //  \author Andrew W. Fitzgibbon, Oxford RRG
 //  \date   05 Aug 96
@@ -12,7 +13,6 @@
 // \verbatim
 //  Modifications:
 //   Peter Vanroose, 25 June 1999: vnl_vector_fixed<double,4> already instantiated
-//   4/4/01 LSb (Manchester)  Tidied documentation
 // \endverbatim
 
 #include <vnl/vnl_T_n.h>

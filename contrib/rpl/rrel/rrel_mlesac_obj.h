@@ -1,13 +1,14 @@
 #ifndef rrel_mlesac_obj_h_
 #define rrel_mlesac_obj_h_
-
-//: \file
+//:
+//  \file
 //  \author Bess Lee (leey@cs.rpi.edu)
 //  \date   Oct 2001
 //
 //  MLESAC objective function.
 //
 //  \verbatim
+//  Modifications:
 //     25 Oct 2001  Amitha Perera: added comments
 //  \endverbatim
 

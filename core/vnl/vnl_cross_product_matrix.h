@@ -4,7 +4,8 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-//: \file
+//:
+//  \file
 //  \brief 3x3 cross-product matrix of vector
 //  \author Andrew W. Fitzgibbon, Oxford RRG
 //  \date   19 Sep 96

@@ -4,7 +4,8 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-//: \file
+//:
+//  \file
 //  \brief Load vnl_vector<T> from file
 //  \author Andrew W. Fitzgibbon, Oxford RRG
 //  \date   23 Dec 96

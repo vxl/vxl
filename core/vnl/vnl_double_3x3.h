@@ -4,7 +4,8 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-//: \file
+//:
+//  \file
 //  \brief 3x3 matrix of double
 //
 //  vnl_double_3x3 is a vnl_matrix<double> of fixed size 3x3.
@@ -13,10 +14,6 @@
 //  \author Andrew W. Fitzgibbon, Oxford RRG
 //  \date   04 Aug 96
 //
-// \verbatim
-//  Modifications:
-//  LSB (Manchester) 26/3/01 Tidied documentation
-//  \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_matrix_fixed.h>

@@ -4,12 +4,13 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-//: \file
+//:
+//  \file
 //  \author Andrew W. Fitzgibbon, Oxford RRG
 //  \date   07 Dec 98
 //
 // \verbatim
-// Modification
+// Modifications:
 // LSB (Manchester) 23/1/01 Tidied documentation
 // \endverbatim
 //-----------------------------------------------------------------------------

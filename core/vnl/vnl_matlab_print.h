@@ -4,7 +4,8 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-//: \file
+//:
+//  \file
 //  \brief Print matrices and vectors in nice MATLAB format.
 //  \author fsm@robots.ox.ac.uk, from awf's MatOps code.
 

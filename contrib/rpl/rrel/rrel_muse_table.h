@@ -1,7 +1,7 @@
 #ifndef rrel_muse_table_h_
 #define rrel_muse_table_h_
-
-//: \file
+//:
+//  \file
 //  \author Chuck Stewart
 //  \date   Summer 2001
 //  \brief  Look-up table for the normalization terms used in the MUSE objective function.

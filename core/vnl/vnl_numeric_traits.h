@@ -4,7 +4,8 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-//: \file
+//:
+//  \file
 //  \brief Templated zero/one/precision
 //
 //  To allow templated numerical algorithms to determine appropriate

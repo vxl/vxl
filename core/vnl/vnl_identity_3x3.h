@@ -4,7 +4,8 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-//: \file
+//:
+//  \file
 //  \author Andrew W. Fitzgibbon, Oxford RRG
 //  \date   30 Nov 96
 //

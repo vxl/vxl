@@ -1,15 +1,11 @@
 // This is vxl/vnl/vnl_double_5.h
 #ifndef vnl_double_5_h_
 #define vnl_double_5_h_
-//: \file
+//:
+//  \file
 //  \brief
 //  \author Geoffrey Cross
 //  \date   2 Jun 2002
-//
-// \verbatim
-//  Modifications:
-//
-// \endverbatim
 
 #include <vnl/vnl_T_n.h>
 

@@ -4,7 +4,8 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-//: \file
+//:
+//  \file
 //  \brief Unit quaternion represents rotation in 3D.
 //  \author awf@robots.ox.ac.uk
 //  \date  16 Mar 00

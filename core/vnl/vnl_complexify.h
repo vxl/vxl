@@ -1,7 +1,8 @@
 // This is vxl/vnl/vnl_complexify.h
 #ifndef vnl_complexify_h_
 #define vnl_complexify_h_
-//: \file
+//:
+//  \file
 //  \brief Functions to create complex vectors and matrices from real ones
 //  \author fsm@robots.ox.ac.uk
 //

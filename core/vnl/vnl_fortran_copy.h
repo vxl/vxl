@@ -4,10 +4,11 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-//: \file
+//:
+//  \file
 //  \brief Convert row-stored matrix to column-stored
 //
-//   convert C format (row-stored) matrix to fortran format (column-stored) matrix.
+// convert C format (row-stored) matrix to fortran format (column-stored) matrix
 //
 //  \author Andrew W. Fitzgibbon, Oxford RRG
 //  \date   29 Aug 96

@@ -4,7 +4,8 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-//: \file
+//:
+//  \file
 //  \brief Math on blocks of memory
 //
 //    vnl_c_vector interfaces to lowlevel memory-block operations.

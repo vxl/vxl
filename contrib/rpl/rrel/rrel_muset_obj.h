@@ -1,7 +1,7 @@
 #ifndef rrel_muset_obj_h_
 #define rrel_muset_obj_h_
-
-//: \file
+//:
+//  \file
 //  \author Chuck Stewart
 //  \date   Summer 2001
 //  The MUSET (MUSE trimmed) objective function., which should be used instead of LMS.
@@ -21,7 +21,7 @@ enum rrel_muse_type { RREL_MUSE_TRIMMED, RREL_MUSE_TRIMMED_SQUARE, RREL_MUSE_QUA
 //  fraction, and (b) (unlike RANSAC) can tolerate large fractions of
 //  outliers WITHOUT prior knowledge of scale.  It should be used in
 //  combination with a random sampling search and an appropriate problem
-//  representation. 
+//  representation.
 //
 //  Rather than assuming a fixed minimum fraction of inliers and then
 //  building an objective function based on either the order
@@ -68,7 +68,7 @@ public:
                       vect_const_iter /* scale is unused */,
                       vnl_vector<double>* = 0 /* param vector is unused */ ) const;
 
-  //: Evaluate the objective function on homoscedastic residuals.  
+  //: Evaluate the objective function on homoscedastic residuals.
   //  \sa rrel_objective::fcn.
   virtual double fcn( vect_const_iter begin, vect_const_iter end,
                       double = 0 /* scale is unused */,

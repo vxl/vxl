@@ -1,7 +1,7 @@
 #ifndef rrel_kernel_density_obj_h_
 #define rrel_kernel_density_obj_h_
-
-//: \file
+//:
+//  \file
 //  \author Ying-Lin Bess Lee (leey@cs.rpi.edu)
 //  \date Aug 2002
 //
@@ -11,13 +11,13 @@
 #include <rrel/rrel_objective.h>
 
 //: Kernel Density objective function.
-//  Implements the Kernel Density Estimation as presented in the 
+//  Implements the Kernel Density Estimation as presented in the
 //  paper "Robust Computer Vision through Kernel Density" by Chen
-//  and Meer, 2002. 
+//  and Meer, 2002.
 //  Given residuals ri, i = 1,...,n, the cost function is the estimated
 //  density f(x) based on a kernel function K(u) and a bandwith h as
-//  f(x) = -1 / (nh) * sum( K(u) ) 
-//  where 
+//  f(x) = -1 / (nh) * sum( K(u) )
+//  where
 //  u = (ri-x)/h
 //  K(u) = 1.09375 * (1 - u^2)^3
 //  h = [243 * R(K) / 35 / Mu(K)^2 / n]^0.2 * scale
@@ -67,7 +67,7 @@ public:
   double best_x( vect_const_iter res_begin, vect_const_iter res_end,
                  double scale = 0 ) const;
 private:
-  
+
   //: Calculate the bandwidth.
   double bandwidth(vect_const_iter res_begin, vect_const_iter res_end,
                    double prior_scale) const;

@@ -4,7 +4,8 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-//: \file
+//:
+//  \file
 //  \brief A collection of Matrix operations
 //  \author Andrew W. Fitzgibbon, Oxford RRG
 //  \date   05 Aug 96

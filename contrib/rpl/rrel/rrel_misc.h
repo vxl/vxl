@@ -1,7 +1,7 @@
 #ifndef rrel_misc_h_
 #define rrel_misc_h_
-
-//: \file
+//:
+//  \file
 //  \author Chuck Stewart
 //  \date   Summer 2001
 
