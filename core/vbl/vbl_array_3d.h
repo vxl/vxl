@@ -75,8 +75,8 @@ class vbl_array_3d
         row2_count_ != that.row2_count_ ||
         row3_count_ != that.row3_count_)
       return false;
-    vbl_array_3d<T>::const_iterator i = this->begin();
-    vbl_array_3d<T>::const_iterator j = that.begin();
+    const_iterator i = this->begin();
+    const_iterator j = that.begin();
     while (i != this->end())
     {
       if (!(*i == *j)) // do not assume we have operator!=(T)
