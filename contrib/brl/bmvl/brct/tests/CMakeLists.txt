@@ -3,15 +3,15 @@
 
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
+INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR} )
 
 SET(test_brct_sources
-test_brct_kalman.cxx
-test_brct.cxx
+  test_brct_kalman.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates test_brct_sources)
 
 ADD_EXECUTABLE(test_brct ${test_brct_sources})
+ADD_TEST(test_brct_kalman test_brct)
 
-TARGET_LINK_LIBRARIES(test_brct vgui vdgl vtol vsol vil1 vnl vbl brct)
-
+TARGET_LINK_LIBRARIES(test_brct brct)

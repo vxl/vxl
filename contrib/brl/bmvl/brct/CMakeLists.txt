@@ -11,5 +11,5 @@ AUX_SOURCE_DIRECTORY(Templates brct_sources)
 
 ADD_LIBRARY(brct ${brct_sources})
 
-TARGET_LINK_LIBRARIES(brct vdgl vtol vsol vil1 vnl vbl)
+TARGET_LINK_LIBRARIES(brct bdgl vdgl vsol mvl vnl vgl)
 
