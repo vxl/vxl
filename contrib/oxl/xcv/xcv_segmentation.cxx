@@ -22,6 +22,7 @@
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_easy2D.h>
+#include <vgui/vgui_soview.h>
 
 #include <xcv/xcv_image_tableau.h>
 
