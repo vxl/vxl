@@ -161,7 +161,7 @@ class vil_nitf_image : public vil_image_resource
   //: Return actual bits per pixel ( = ABPP in NITF image header)
   virtual unsigned int get_bits_per_component() const { return bits_per_component_; }
   vil_streampos get_image_data_offset() const { return image_data_offset_; }
-  int check_image_data_offset() const;
+  int check_image_data_offset (vcl_ostream& out, const vcl_string caller) const;
 
   BandType GetRepFormat() const { return repformat_; }  //!< enum values = BANDED or INTERLEAVED.
   void SetRepFormat(BandType new_val) { repformat_ = new_val; }
