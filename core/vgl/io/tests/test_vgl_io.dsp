@@ -105,10 +105,16 @@ SOURCE=.\test_conic_io.cxx
 SOURCE=.\test_homg_line_2d_io.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_line_3d_2_points_io.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_homg_line_3d_2_points_io.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_homg_plane_3d_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_homg_point_1d_io.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_homg_point_2d_io.cxx

@@ -160,12 +160,32 @@ SOURCE=.\Templates/vgl_io_homg_line_3d_2_points+float-.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\Templates/vgl_io_line_3d_2_points+double-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vgl_io_line_3d_2_points+float-.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/vgl_io_homg_plane_3d+double-.cxx
 
 # End Source File
 # Begin Source File
 
 SOURCE=.\Templates/vgl_io_homg_plane_3d+float-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vgl_io_homg_point_1d+double-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vgl_io_homg_point_1d+float-.cxx
 
 # End Source File
 # Begin Source File
@@ -348,12 +368,32 @@ SOURCE=.\vgl_io_homg_line_3d_2_points.txx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vgl_io_line_3d_2_points.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_line_3d_2_points.txx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\vgl_io_homg_plane_3d.h
 
 # End Source File
 # Begin Source File
 
 SOURCE=.\vgl_io_homg_plane_3d.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_homg_point_1d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_io_homg_point_1d.txx
 
 # End Source File
 # Begin Source File
