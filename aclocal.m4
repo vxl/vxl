@@ -1519,22 +1519,37 @@ AC_LANG_RESTORE])
 
 
 dnl ------------------------------------------------------------
+dnl VXL_CXX_CHECK_PROVIDES([header],[function],[args],[variable]) 
+dnl Check if a function is declared in a header and if it is implemented
+dnl in some library. If so, set variable=1 dnl else set variable=0.
+dnl
+dnl NB: Avoid extra spaces! In particular, trailing spaces in "variable"
+dnl will cause the set command to be
+dnl    variable =1
+dnl and will fail. (The Bourne shell does not allow spaces around the
+dnl "=" sign.)
+
+AC_DEFUN([VXL_CXX_CHECK_PROVIDES],[
+  AC_MSG_CHECKING([whether <$1> provides $2()])
+  AC_TRY_LINK([
+  #include <$1>
+  ],[
+  $2 ( $3 ) ;
+  ],[
+  $4=1
+  AC_MSG_RESULT(yes)
+  ],[
+  $4=0
+  AC_MSG_RESULT(no)
+  ])
+])
+
+dnl ------------------------------------------------------------
 AC_DEFUN(VXL_CXX_MATH_HAS_FINITE,[
-AC_MSG_CHECKING([whether <math.h> provides finite()])
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
-AC_TRY_COMPILE([
-#include <math.h>
-int vxl_finite(double x) { return finite(x); }
-],,[
-VXL_MATH_HAS_FINITE=1
-AC_MSG_RESULT(yes)
-],[
-VXL_MATH_HAS_FINITE=0
-AC_MSG_RESULT(no)
-])
+VXL_CXX_CHECK_PROVIDES([math.h],[finite],[4.0],[VXL_MATH_HAS_FINITE])
 AC_LANG_RESTORE
-export VXL_MATH_HAS_FINITE
 ])
 
 dnl ----------------------------------------------------------------------------
@@ -1543,42 +1558,20 @@ dnl
 dnl ---------------------------------------------------------------------------
 
 AC_DEFUN(VXL_CXX_MATH_HAS_SQRTF,[
-AC_MSG_CHECKING([whether <math.h> provides the sqrtf() function])
 AC_LANG_SAVE
 AC_LANG_C
-AC_TRY_COMPILE([
-#include <math.h>
-float vxl_sqrtf() { return sqrtf(4.f); }
-],,[
-VXL_MATH_HAS_SQRTF=1
-AC_MSG_RESULT(yes)
-],[
-VXL_MATH_HAS_SQRTF=0
-AC_MSG_RESULT(no)
-])
+VXL_CXX_CHECK_PROVIDES([math.h],[sqrtf],[4.0],[VXL_MATH_HAS_SQRTF])
 AC_LANG_RESTORE
-export VXL_MATH_HAS_SQRTF
 ])
 dnl
 
 
 dnl ------------------------------------------------------------
 AC_DEFUN(VXL_CXX_IEEEFP_HAS_FINITE,[
-AC_MSG_CHECKING([whether <ieeefp.h> provides finite()])
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
-AC_TRY_COMPILE([
-#include <ieeefp.h>
-int vxl_finite(double x) { return finite(x); }
-],,[
-VXL_IEEEFP_HAS_FINITE=1
-AC_MSG_RESULT(yes)
-],[
-VXL_IEEEFP_HAS_FINITE=0
-AC_MSG_RESULT(no)
-])
+VXL_CXX_CHECK_PROVIDES([ieeefp.h],[finite],[4.0],[VXL_IEEEFP_HAS_FINITE])
 AC_LANG_RESTORE
-export VXL_IEEEFP_HAS_FINITE
 ])
 
 
@@ -1587,32 +1580,7 @@ dnl ------------------------------------------------------------
 AC_DEFUN(VXL_CXX_STDLIB_RAND48,[
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
-
-AC_MSG_CHECKING([whether <stdlib.h> provides lrand48()])
-AC_TRY_COMPILE([
-#include <stdlib.h>
-int vxl_lrand48() { return lrand48(); }
-],,[
-VXL_STDLIB_HAS_LRAND48=1
-AC_MSG_RESULT(yes)
-],[
-VXL_STDLIB_HAS_LRAND48=0
-AC_MSG_RESULT(no)
-])
-export VXL_STDLIB_HAS_LRAND48
-
-AC_MSG_CHECKING([whether <stdlib.h> provides drand48()])
-AC_TRY_COMPILE([
-#include <stdlib.h>
-double vxl_drand48() { return drand48(); }
-],,[
-VXL_STDLIB_HAS_DRAND48=1
-AC_MSG_RESULT(yes)
-],[
-VXL_STDLIB_HAS_DRAND48=0
-AC_MSG_RESULT(no)
-])
-export VXL_STDLIB_HAS_DRAND48
-
+VXL_CXX_CHECK_PROVIDES([stdlib.h],[lrand48],[],[VXL_STDLIB_HAS_LRAND48])
+VXL_CXX_CHECK_PROVIDES([stdlib.h],[drand48],[],[VXL_STDLIB_HAS_DRAND48])
 AC_LANG_RESTORE
 ])
