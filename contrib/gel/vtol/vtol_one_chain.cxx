@@ -188,8 +188,18 @@ vtol_one_chain::copy_with_arrays(topology_list &verts,
 
   for (chain_list::const_iterator hi=hierarchy_infs->begin();hi!=hierarchy_infs->end();++hi)
     {
-      vtol_one_chain *oldone=(*hi)->clone()->cast_to_topology_object()->cast_to_one_chain();
-      result->link_chain_inferior(oldone->copy_with_arrays(verts,edges));
+      vtol_one_chain_sptr tch = (*hi)->cast_to_one_chain();
+      int n = tch->num_edges();
+      vsol_spatial_object_2d_sptr so = (*hi)->clone();
+      vtol_one_chain *temp = so->cast_to_topology_object()->cast_to_one_chain();
+      //we have to set the ids here because the clone operation does not
+      //copy the id field on vsol_spatial_object_2d
+      for(int i = 0; i<n; ++i)
+        {
+          vtol_edge_sptr e = temp->edge(i);
+          e->set_id(tch->edge(i)->get_id());
+        }
+      result->link_chain_inferior(temp->copy_with_arrays(verts,edges));
     }
 
   assert(*result == *this);
@@ -361,8 +371,24 @@ vcl_vector<vtol_edge*> *vtol_one_chain::compute_edges(void)
 vcl_vector<vtol_one_chain*> *vtol_one_chain::compute_one_chains(void)
 {
   vcl_vector<vtol_one_chain*> *result=outside_boundary_compute_one_chains();
-  for (chain_list::iterator i=chain_inferiors_.begin();i!=chain_inferiors_.end();++i)
-    result->push_back((*i)->clone()->cast_to_topology_object()->cast_to_one_chain());
+
+  for (chain_list::iterator i=chain_inferiors_.begin();
+       i!=chain_inferiors_.end();++i)
+    {
+      vsol_spatial_object_2d_sptr so = (*i)->clone();
+      //==============================================================
+      //compensate for leaving scope.  The clone method returns a smart
+      //pointer, but the output in this method is a bare pointer.  Thus
+      //so will be deleted when the routine leaves scope.  The calling
+      //routine for compute_one_chains will push these one_chains on a list
+      //of smart pointers so there should be no leak.  This routine never
+      //worked-- JLM
+      so->ref();
+      //===============================================================
+      vtol_one_chain* sub_chain = so->cast_to_topology_object()->
+        cast_to_one_chain();
+      result->push_back(sub_chain);
+    }
   return result;
 }
 
