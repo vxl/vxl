@@ -87,6 +87,13 @@ public:
   int reference_count_;
 };
 
+//: An interface between vil3d_image_views and vil3d_image_resources
+// This object is used internally by vil to provide a type-independent
+// transient storage for a view as it is being assigned to a
+// vil3d_image_view<T> from a vil3d_image_resource::get_view(),
+// vil3d_load() or vil3d_convert_..() function call.
+// If you want a type independent image container, you are recommended to
+// use a vil3d_image_resource_sptr
 typedef vil_smart_ptr<vil3d_image_view_base> vil3d_image_view_base_sptr;
 
 //: Print a 1-line summary of contents

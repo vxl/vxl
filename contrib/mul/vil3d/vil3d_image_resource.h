@@ -105,6 +105,11 @@ class vil3d_image_resource
   int reference_count_;
 };
 
+//: Use this type to refer to and store a vil3d_image_resource
+// This object is used to provide safe manipulation of
+// vil3d_image_resource derivatives. If you want to
+// store an image resource (e.g. an image on disk, type-agnostic
+// memory image), then use this type.
 typedef vil_smart_ptr<vil3d_image_resource> vil3d_image_resource_sptr;
 
 #endif // vil3d_image_resource_h_

@@ -15,6 +15,7 @@ DECLARE( test_algo_exp_filter );
 DECLARE( test_algo_grad_1x3 );
 DECLARE( test_image_resource );
 DECLARE( test_algo_normalised_correlation_3d );
+DECLARE( test_convert );
 
 void
 register_tests()
@@ -27,6 +28,7 @@ register_tests()
   REGISTER( test_sample_profile_trilin );
   REGISTER( test_gauss_reduce );
   REGISTER( test_switch_axes );
+  REGISTER( test_convert );
   REGISTER( test_algo_threshold );
   REGISTER( test_algo_structuring_element );
   REGISTER( test_algo_binary_dilate );

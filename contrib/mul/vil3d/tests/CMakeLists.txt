@@ -11,6 +11,7 @@ ADD_EXECUTABLE( vil3d_test_all
   test_sample_profile_trilin.cxx
   test_gauss_reduce.cxx
   test_switch_axes.cxx
+  test_convert.cxx
   test_algo_threshold.cxx
   test_algo_structuring_element.cxx
   test_algo_binary_dilate.cxx
@@ -29,6 +30,7 @@ ADD_TEST( vil3d_test_sample_profile_trilin    vil3d_test_all test_sample_profile
 ADD_TEST( vil3d_test_gauss_reduce             vil3d_test_all test_gauss_reduce )
 ADD_TEST( vil3d_test_switch_axes              vil3d_test_all test_switch_axes )
 ADD_TEST( vil3d_test_image_resource           vil3d_test_all test_image_resource )
+ADD_TEST( vil3d_test_convert                  vil3d_test_all test_convert ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
 
 
 ADD_TEST( vil3d_test_algo_threshold           vil3d_test_all test_algo_threshold )

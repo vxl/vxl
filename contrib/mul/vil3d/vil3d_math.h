@@ -52,6 +52,46 @@ inline void vil3d_math_value_range(const vil3d_image_view<T>& im,
   }
 }
 
+
+
+//: Calc the mean of each pixel over all the planes.
+// \relates vil3d_image_view
+template<class aT, class sumT>
+inline void vil3d_math_mean_over_planes(const vil3d_image_view<aT>& src,
+                                        vil3d_image_view<sumT>& dest)
+{
+  dest.set_size(src.ni(), src.nj(), src.nk(), 1);
+  for (unsigned k=0;k<src.nk();++k)
+    for (unsigned j=0;j<src.nj();++j)
+      for (unsigned i=0;i<src.ni();++i)
+      {
+        sumT sum=0;
+        for (unsigned p=0;p<src.nplanes();++p)
+          sum += (sumT) src(i,j,k,p);
+        dest(i,j,k) = sum / src.nplanes();
+      }
+}
+
+//: Calc the mean of each pixel over all the planes.
+// \relates vil3d_image_view
+template<class inT, class outT, class sumT>
+inline void vil3d_math_mean_over_planes(const vil3d_image_view<inT>& src,
+                                        vil3d_image_view<outT>& dest,
+                                        sumT /*dummy*/)
+{
+  dest.set_size(src.ni(), src.nj(), src.nk(), 1);
+  for (unsigned k=0;k<src.nk();++k)
+    for (unsigned j=0;j<src.nj();++j)
+      for (unsigned i=0;i<src.ni();++i)
+      {
+        sumT sum=0;
+        for (unsigned p=0;p<src.nplanes();++p)
+          sum += static_cast<sumT>(src(i,j,k,p));
+        dest(i,j,k) = static_cast<outT>(sum / src.nplanes());
+      }
+}
+
+
 //: Compute sum of values in plane p
 // \relates vil3d_image_view
 template <class imT, class sumT>
@@ -126,6 +166,35 @@ inline void vil3d_math_sum_squares(sumT& sum, sumT& sum_sq,
     }
   }
 }
+
+
+//: Multiply values in-place in image view by scale and add offset
+// \relates vil3d_image_view
+template<class imT, class offsetT>
+inline void vil3d_math_scale_and_offset_values(vil3d_image_view<imT>& image,
+double scale, offsetT offset)
+{
+  unsigned ni = image.ni(), nj = image.nj(),
+    nk = image.nk(), np = image.nplanes();
+  vcl_ptrdiff_t istep=image.istep(), jstep=image.jstep(),
+    kstep = image.kstep(), pstep = image.planestep();
+  imT* plane = image.origin_ptr();
+  for (unsigned p=0;p<np;++p,plane += pstep)
+  {
+    imT* slice = plane;
+    for (unsigned k=0;k<nk;++k,slice += kstep)
+    {
+      imT* row = slice;
+      for (unsigned j=0;j<nj;++j,row += jstep)
+      {
+        imT* pixel = row;
+        for (unsigned i=0;i<ni;++i,pixel+=istep)
+          *pixel = imT(scale*(*pixel)+offset);
+      }
+    }
+  }
+}
+
 
 //: Mean and variance of elements in plane p of image
 // \relates vil3d_image_view
