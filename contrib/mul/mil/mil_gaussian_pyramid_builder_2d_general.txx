@@ -141,36 +141,31 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
     int nx2 = src_nx-2;
     int x;
     for (x=2;x<nx2;x++)
-      worka_row[x] = T(  filt2_ * src_col1[x]
+      worka_row[x] = l_round(  filt2_ * src_col1[x]
                        + filt1_ * src_col2[x]
                        + filt0_ * src_col3[x]
                        + filt1_ * src_col4[x]
-                       + filt2_ * src_col5[x]
-                       + 0.5);
+                       + filt2_ * src_col5[x], (T)0);
 
     // Now deal with edge effects :
-    worka_row[0] = T( filt_edge0_ * src_col3[0]
+    worka_row[0] = l_round( filt_edge0_ * src_col3[0]
               + filt_edge1_ * src_col4[0]
-              + filt_edge2_ * src_col5[0]
-              + 0.5);
+              + filt_edge2_ * src_col5[0], (T)0);
 
-    worka_row[1] = T( filt_pen_edge_n1_ * src_col2[1]
+    worka_row[1] = l_round( filt_pen_edge_n1_ * src_col2[1]
               + filt_pen_edge0_ * src_col3[1]
               + filt_pen_edge1_ * src_col4[1]
-              + filt_pen_edge2_ * src_col5[1]
-              + 0.5);
+              + filt_pen_edge2_ * src_col5[1], (T)0);
 
-    worka_row[src_nx-2] = T( filt_pen_edge2_ * src_col1[x]
+    worka_row[src_nx-2] = l_round( filt_pen_edge2_ * src_col1[x]
                  + filt_pen_edge1_ * src_col2[x]
                  + filt_pen_edge0_ * src_col3[x]
-                 + filt_pen_edge_n1_ * src_col4[x]
-                 + 0.5);
+                 + filt_pen_edge_n1_ * src_col4[x], (T)0);
 
     x++;
-    worka_row[src_nx-1] = T( filt_edge2_ * src_col1[x]
+    worka_row[src_nx-1] = l_round( filt_edge2_ * src_col1[x]
                  + filt_edge1_ * src_col2[x]
-                 + filt_edge0_ * src_col3[x]
-                 + 0.5);
+                 + filt_edge0_ * src_col3[x], (T)0);
   }
 
 //  worka_.print_all(vcl_cout);
@@ -186,12 +181,11 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
     const T* worka_row5  = worka_row3 + 2 * work_ystep;
 
     for (int x=0; x<src_nx; x++)
-      workb_row[x] = T(  filt2_ * worka_row1[x]
+      workb_row[x] = l_round(  filt2_ * worka_row1[x]
                        + filt1_ * worka_row2[x]
                        + filt0_ * worka_row3[x]
                        + filt1_ * worka_row4[x]
-                       + filt2_ * worka_row5[x]
-                       + 0.5);
+                       + filt2_ * worka_row5[x], (T)0);
   }
 
   // Now deal with edge effects :
@@ -213,27 +207,23 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
 
   for (int x=0;x<src_nx;x++)
   {
-    workb_row_top[x] = T(  filt_edge0_ * worka_row_top_5[x]
+    workb_row_top[x] = l_round(  filt_edge0_ * worka_row_top_5[x]
                 + filt_edge1_ * worka_row_top_4[x]
-                + filt_edge2_ * worka_row_top_3[x]
-                + 0.5);
+                + filt_edge2_ * worka_row_top_3[x], (T)0);
 
-    workb_row_next_top[x] = T( filt_pen_edge2_ * worka_row_top_5[x]
+    workb_row_next_top[x] = l_round( filt_pen_edge2_ * worka_row_top_5[x]
                   + filt_pen_edge1_ * worka_row_top_4[x]
                   + filt_pen_edge0_ * worka_row_top_3[x]
-                  + filt_pen_edge_n1_ * worka_row_top_2[x]
-                  + 0.5);
+                  + filt_pen_edge_n1_ * worka_row_top_2[x], (T)0);
 
-    workb_row_next_bottom[x] = T(  filt_pen_edge2_ * worka_row_bottom_4[x]
+    workb_row_next_bottom[x] = l_round(  filt_pen_edge2_ * worka_row_bottom_4[x]
                     + filt_pen_edge1_ * worka_row_bottom_3[x]
                     + filt_pen_edge0_ * worka_row_bottom_2[x]
-                    + filt_pen_edge_n1_ * worka_row_bottom_1[x]
-                    + 0.5);
+                    + filt_pen_edge_n1_ * worka_row_bottom_1[x], (T)0); 
 
-    workb_row_bottom[x] = T(   filt_edge2_ * worka_row_bottom_3[x]
+    workb_row_bottom[x] = l_round(   filt_edge2_ * worka_row_bottom_3[x]
                   + filt_edge1_ * worka_row_bottom_2[x]
-                  + filt_edge0_ * worka_row_bottom_1[x]
-                  + 0.5);
+                  + filt_edge0_ * worka_row_bottom_1[x], (T)0);
   }
 
 //  workb_.print_all(vcl_cout);
