@@ -18,7 +18,7 @@ vil2_image_view_base_sptr vepl2_threshold(vil2_image_view_base const& image, dou
   // byte greyscale
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_BYTE) {
     vil2_image_view<vxl_byte>* out = new vil2_image_view<vxl_byte>(image.ni(),image.nj(),image.nplanes());
-    vipl_threshold<vil2_image_view_base,vil2_image_view_base,vxl_byte,vxl_byte,vipl_trivial_pixeliter>
+    vipl_threshold<vil2_image_view_base,vil2_image_view_base,vxl_byte,vxl_byte>
       op((vxl_byte)threshold, (vxl_byte)below, (vxl_byte)above);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
@@ -30,7 +30,7 @@ vil2_image_view_base_sptr vepl2_threshold(vil2_image_view_base const& image, dou
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_UINT_16) {
     typedef unsigned short ushort;
     vil2_image_view<ushort>* out = new vil2_image_view<ushort>(image.ni(),image.nj(),image.nplanes());
-    vipl_threshold<vil2_image_view_base,vil2_image_view_base,ushort,ushort,vipl_trivial_pixeliter>
+    vipl_threshold<vil2_image_view_base,vil2_image_view_base,ushort,ushort>
       op((ushort)threshold, (ushort)below, (ushort)above);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
@@ -41,7 +41,7 @@ vil2_image_view_base_sptr vepl2_threshold(vil2_image_view_base const& image, dou
   // float
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_FLOAT) {
     vil2_image_view<float>* out = new vil2_image_view<float>(image.ni(),image.nj(),image.nplanes());
-    vipl_threshold<vil2_image_view_base,vil2_image_view_base,float,float,vipl_trivial_pixeliter>
+    vipl_threshold<vil2_image_view_base,vil2_image_view_base,float,float>
       op((float)threshold, (float)below, (float)above);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
@@ -52,7 +52,7 @@ vil2_image_view_base_sptr vepl2_threshold(vil2_image_view_base const& image, dou
   // double
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_DOUBLE) {
     vil2_image_view<double>* out = new vil2_image_view<double>(image.ni(),image.nj(),image.nplanes());
-    vipl_threshold<vil2_image_view_base,vil2_image_view_base,double,double,vipl_trivial_pixeliter>
+    vipl_threshold<vil2_image_view_base,vil2_image_view_base,double,double>
       op(threshold, below, above);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);

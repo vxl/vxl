@@ -16,7 +16,7 @@ vil2_image_view_base_sptr vepl2_convert(vil2_image_view_base const& image, D dum
   // byte greyscale
   if (image.pixel_format() == VIL2_PIXEL_FORMAT_BYTE) {
     vil2_image_view<D > out(image.ni(),image.nj(),image.nplanes());
-    vipl_convert<vil2_image_view_base,vil2_image_view_base,vxl_byte,D,vipl_trivial_pixeliter> op;
+    vipl_convert<vil2_image_view_base,vil2_image_view_base,vxl_byte,D> op;
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -25,9 +25,8 @@ vil2_image_view_base_sptr vepl2_convert(vil2_image_view_base const& image, D dum
 
   // byte rgb
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_RGB_BYTE) {
-    typedef unsigned char vxl_byte;
     vil2_image_view<D > out(image.ni(),image.nj(),image.nplanes());
-    vipl_convert<vil2_image_view_base,vil2_image_view_base,vil2_rgb<vxl_byte> ,D ,vipl_trivial_pixeliter> op;
+    vipl_convert<vil2_image_view_base,vil2_image_view_base,vil2_rgb<vxl_byte>,D> op;
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -37,7 +36,7 @@ vil2_image_view_base_sptr vepl2_convert(vil2_image_view_base const& image, D dum
   // float
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_FLOAT) {
     vil2_image_view<D > out(image.ni(),image.nj(),image.nplanes());
-    vipl_convert<vil2_image_view_base,vil2_image_view_base,float,D ,vipl_trivial_pixeliter> op;
+    vipl_convert<vil2_image_view_base,vil2_image_view_base,float,D> op;
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -47,7 +46,7 @@ vil2_image_view_base_sptr vepl2_convert(vil2_image_view_base const& image, D dum
   // double
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_DOUBLE) {
     vil2_image_view<D > out(image.ni(),image.nj(),image.nplanes());
-    vipl_convert<vil2_image_view_base,vil2_image_view_base,double,D ,vipl_trivial_pixeliter> op;
+    vipl_convert<vil2_image_view_base,vil2_image_view_base,double,D> op;
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(&out);
     op.filter();

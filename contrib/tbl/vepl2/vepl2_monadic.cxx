@@ -4,6 +4,7 @@
 #include <vipl/vipl_monadic.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_pixel_format.h>
+#include <vil2/vil2_rgb.h>
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
@@ -29,7 +30,8 @@ vil2_image_view_base_sptr vepl2_monadic_abs(vil2_image_view_base const& image)
 {
   // byte rgb
   if (image.pixel_format() == VIL2_PIXEL_FORMAT_RGB_BYTE) {
-    vil2_image_view<vil2_rgb<vxl_byte> >* im = new vil2_image_view<vil2_rgb<vxl_byte> >;
+    typedef vil2_rgb<vxl_byte> r_g_b;
+    vil2_image_view<r_g_b>* im = new vil2_image_view<r_g_b>;
     im->deep_copy((vil2_image_view<vxl_byte>const&)(image));
     // vxl_byte is unsigned so nothing happens
     return im;
@@ -62,7 +64,7 @@ vil2_image_view_base_sptr vepl2_monadic_abs(vil2_image_view_base const& image)
   // float
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_FLOAT) {
     vil2_image_view<float>* out = new vil2_image_view<float>(image.ni(),image.nj(),image.nplanes());
-    vipl_monadic<vil2_image_view_base,vil2_image_view_base,float,float,vipl_trivial_pixeliter> op(abs_float);
+    vipl_monadic<vil2_image_view_base,vil2_image_view_base,float,float> op(abs_float);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
     op.filter();
@@ -72,7 +74,7 @@ vil2_image_view_base_sptr vepl2_monadic_abs(vil2_image_view_base const& image)
   // double
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_DOUBLE) {
     vil2_image_view<double>* out = new vil2_image_view<double>(image.ni(),image.nj(),image.nplanes());
-    vipl_monadic<vil2_image_view_base,vil2_image_view_base,double,double,vipl_trivial_pixeliter> op(abs_double);
+    vipl_monadic<vil2_image_view_base,vil2_image_view_base,double,double> op(abs_double);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
     op.filter();
@@ -91,7 +93,7 @@ vil2_image_view_base_sptr vepl2_monadic_sqrt(vil2_image_view_base const& image)
   // float
   if (image.pixel_format() == VIL2_PIXEL_FORMAT_FLOAT) {
     vil2_image_view<float>* out = new vil2_image_view<float>(image.ni(),image.nj(),image.nplanes());
-    vipl_monadic<vil2_image_view_base,vil2_image_view_base,float,float,vipl_trivial_pixeliter> op(sqrt_float);
+    vipl_monadic<vil2_image_view_base,vil2_image_view_base,float,float> op(sqrt_float);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
     op.filter();
@@ -101,7 +103,7 @@ vil2_image_view_base_sptr vepl2_monadic_sqrt(vil2_image_view_base const& image)
   // double
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_DOUBLE) {
     vil2_image_view<double>* out = new vil2_image_view<double>(image.ni(),image.nj(),image.nplanes());
-    vipl_monadic<vil2_image_view_base,vil2_image_view_base,double,double,vipl_trivial_pixeliter> op(sqrt_double);
+    vipl_monadic<vil2_image_view_base,vil2_image_view_base,double,double> op(sqrt_double);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
     op.filter();
@@ -120,7 +122,7 @@ vil2_image_view_base_sptr vepl2_monadic_sqr(vil2_image_view_base const& image)
   // byte greyscale
   if (image.pixel_format() == VIL2_PIXEL_FORMAT_BYTE) {
     vil2_image_view<vxl_byte>* out = new vil2_image_view<vxl_byte>(image.ni(),image.nj(),image.nplanes());
-    vipl_monadic<vil2_image_view_base,vil2_image_view_base,vxl_byte,vxl_byte,vipl_trivial_pixeliter> op(sqr_ubyte);
+    vipl_monadic<vil2_image_view_base,vil2_image_view_base,vxl_byte,vxl_byte> op(sqr_ubyte);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
     op.filter();
@@ -130,7 +132,7 @@ vil2_image_view_base_sptr vepl2_monadic_sqr(vil2_image_view_base const& image)
   // short
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_UINT_16) {
     vil2_image_view<vxl_uint_16>* out = new vil2_image_view<vxl_uint_16>(image.ni(),image.nj(),image.nplanes());
-    vipl_monadic<vil2_image_view_base,vil2_image_view_base,vxl_uint_16,vxl_uint_16,vipl_trivial_pixeliter> op(sqr_short);
+    vipl_monadic<vil2_image_view_base,vil2_image_view_base,vxl_uint_16,vxl_uint_16> op(sqr_short);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
     op.filter();
@@ -140,7 +142,7 @@ vil2_image_view_base_sptr vepl2_monadic_sqr(vil2_image_view_base const& image)
   // int
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_UINT_32) {
     vil2_image_view<vxl_uint_32>* out = new vil2_image_view<vxl_uint_32>(image.ni(),image.nj(),image.nplanes());
-    vipl_monadic<vil2_image_view_base,vil2_image_view_base,vxl_uint_32,vxl_uint_32,vipl_trivial_pixeliter> op(sqr_int);
+    vipl_monadic<vil2_image_view_base,vil2_image_view_base,vxl_uint_32,vxl_uint_32> op(sqr_int);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
     op.filter();
@@ -150,7 +152,7 @@ vil2_image_view_base_sptr vepl2_monadic_sqr(vil2_image_view_base const& image)
   // float
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_FLOAT) {
     vil2_image_view<float>* out = new vil2_image_view<float>(image.ni(),image.nj(),image.nplanes());
-    vipl_monadic<vil2_image_view_base,vil2_image_view_base,float,float,vipl_trivial_pixeliter> op(sqr_float);
+    vipl_monadic<vil2_image_view_base,vil2_image_view_base,float,float> op(sqr_float);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
     op.filter();
@@ -160,7 +162,7 @@ vil2_image_view_base_sptr vepl2_monadic_sqr(vil2_image_view_base const& image)
   // double
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_DOUBLE) {
     vil2_image_view<double>* out = new vil2_image_view<double>(image.ni(),image.nj(),image.nplanes());
-    vipl_monadic<vil2_image_view_base,vil2_image_view_base,double,double,vipl_trivial_pixeliter> op(sqr_double);
+    vipl_monadic<vil2_image_view_base,vil2_image_view_base,double,double> op(sqr_double);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
     op.filter();
@@ -181,7 +183,7 @@ vil2_image_view_base_sptr vepl2_monadic_shear(vil2_image_view_base const& image,
   // byte greyscale
   if (image.pixel_format() == VIL2_PIXEL_FORMAT_BYTE) {
     vil2_image_view<vxl_byte>* out = new vil2_image_view<vxl_byte>(image.ni(),image.nj(),image.nplanes());
-    vipl_monadic<vil2_image_view_base,vil2_image_view_base,vxl_byte,vxl_byte,vipl_trivial_pixeliter> op(shear_ubyte);
+    vipl_monadic<vil2_image_view_base,vil2_image_view_base,vxl_byte,vxl_byte> op(shear_ubyte);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
     op.filter();
@@ -191,7 +193,7 @@ vil2_image_view_base_sptr vepl2_monadic_shear(vil2_image_view_base const& image,
   // short
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_UINT_16) {
     vil2_image_view<vxl_uint_16>* out = new vil2_image_view<vxl_uint_16>(image.ni(),image.nj(),image.nplanes());
-    vipl_monadic<vil2_image_view_base,vil2_image_view_base,vxl_uint_16,vxl_uint_16,vipl_trivial_pixeliter> op(shear_short);
+    vipl_monadic<vil2_image_view_base,vil2_image_view_base,vxl_uint_16,vxl_uint_16> op(shear_short);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
     op.filter();
@@ -201,7 +203,7 @@ vil2_image_view_base_sptr vepl2_monadic_shear(vil2_image_view_base const& image,
   // int
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_UINT_32) {
     vil2_image_view<vxl_uint_32>* out = new vil2_image_view<vxl_uint_32>(image.ni(),image.nj(),image.nplanes());
-    vipl_monadic<vil2_image_view_base,vil2_image_view_base,vxl_uint_32,vxl_uint_32,vipl_trivial_pixeliter> op(shear_int);
+    vipl_monadic<vil2_image_view_base,vil2_image_view_base,vxl_uint_32,vxl_uint_32> op(shear_int);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
     op.filter();
@@ -211,7 +213,7 @@ vil2_image_view_base_sptr vepl2_monadic_shear(vil2_image_view_base const& image,
   // float
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_FLOAT) {
     vil2_image_view<float>* out = new vil2_image_view<float>(image.ni(),image.nj(),image.nplanes());
-    vipl_monadic<vil2_image_view_base,vil2_image_view_base,float,float,vipl_trivial_pixeliter> op(shear_float);
+    vipl_monadic<vil2_image_view_base,vil2_image_view_base,float,float> op(shear_float);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
     op.filter();
@@ -221,7 +223,7 @@ vil2_image_view_base_sptr vepl2_monadic_shear(vil2_image_view_base const& image,
   // double
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_DOUBLE) {
     vil2_image_view<double>* out = new vil2_image_view<double>(image.ni(),image.nj(),image.nplanes());
-    vipl_monadic<vil2_image_view_base,vil2_image_view_base,double,double,vipl_trivial_pixeliter> op(shear_double);
+    vipl_monadic<vil2_image_view_base,vil2_image_view_base,double,double> op(shear_double);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
     op.filter();

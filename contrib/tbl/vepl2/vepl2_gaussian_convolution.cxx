@@ -18,7 +18,7 @@ vil2_image_view_base_sptr vepl2_gaussian_convolution(vil2_image_view_base const&
   // byte greyscale
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_BYTE) {
     vil2_image_view<vxl_byte>* out = new vil2_image_view<vxl_byte>(image.ni(),image.nj(),image.nplanes());
-    vipl_gaussian_convolution<vil2_image_view_base,vil2_image_view_base,vxl_byte,vxl_byte,vipl_trivial_pixeliter>
+    vipl_gaussian_convolution<vil2_image_view_base,vil2_image_view_base,vxl_byte,vxl_byte>
       op(sigma, cutoff);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
@@ -29,7 +29,7 @@ vil2_image_view_base_sptr vepl2_gaussian_convolution(vil2_image_view_base const&
   // short
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_UINT_16) {
     vil2_image_view<vxl_uint_16>* out = new vil2_image_view<vxl_uint_16>(image.ni(),image.nj(),image.nplanes());
-    vipl_gaussian_convolution<vil2_image_view_base,vil2_image_view_base,vxl_uint_16,vxl_uint_16,vipl_trivial_pixeliter>
+    vipl_gaussian_convolution<vil2_image_view_base,vil2_image_view_base,vxl_uint_16,vxl_uint_16>
       op(sigma, cutoff);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
@@ -40,7 +40,7 @@ vil2_image_view_base_sptr vepl2_gaussian_convolution(vil2_image_view_base const&
   // int
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_UINT_32) {
     vil2_image_view<vxl_uint_32>* out = new vil2_image_view<vxl_uint_32>(image.ni(),image.nj(),image.nplanes());
-    vipl_gaussian_convolution<vil2_image_view_base,vil2_image_view_base,vxl_uint_32,vxl_uint_32,vipl_trivial_pixeliter>
+    vipl_gaussian_convolution<vil2_image_view_base,vil2_image_view_base,vxl_uint_32,vxl_uint_32>
       op(sigma, cutoff);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
@@ -51,7 +51,7 @@ vil2_image_view_base_sptr vepl2_gaussian_convolution(vil2_image_view_base const&
   // float
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_FLOAT) {
     vil2_image_view<float>* out = new vil2_image_view<float>(image.ni(),image.nj(),image.nplanes());
-    vipl_gaussian_convolution<vil2_image_view_base,vil2_image_view_base,float,float,vipl_trivial_pixeliter>
+    vipl_gaussian_convolution<vil2_image_view_base,vil2_image_view_base,float,float>
       op(sigma, cutoff);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
@@ -62,7 +62,7 @@ vil2_image_view_base_sptr vepl2_gaussian_convolution(vil2_image_view_base const&
   // double
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_DOUBLE) {
     vil2_image_view<double>* out = new vil2_image_view<double>(image.ni(),image.nj(),image.nplanes());
-    vipl_gaussian_convolution<vil2_image_view_base,vil2_image_view_base,double,double,vipl_trivial_pixeliter>
+    vipl_gaussian_convolution<vil2_image_view_base,vil2_image_view_base,double,double>
       op(sigma, cutoff);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);

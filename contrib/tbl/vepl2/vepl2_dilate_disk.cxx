@@ -1,17 +1,9 @@
 #include "vepl2_dilate_disk.h"
-#include <vil2/vil2_rgb.h>
 #include <vepl2/accessors/vipl_accessors_vil2_image_view_base.h>
 #include <vipl/vipl_dilate_disk.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_pixel_format.h>
 #include <vxl_config.h> // for vxl_byte
-
-#if 0 // currently no dilation of colour images
-static inline bool operator<(vil2_rgb<vxl_byte> const& a, vil2_rgb<vxl_byte> const& b)
-{
-  return a.r<b.r || (a.r==b.r && a.g<b.g) || (a.r==b.r && a.g==b.g && a.b<b.b);
-}
-#endif // 0
 
 vil2_image_view_base_sptr vepl2_dilate_disk(vil2_image_view_base const& image, float radius)
 {
@@ -24,7 +16,7 @@ vil2_image_view_base_sptr vepl2_dilate_disk(vil2_image_view_base const& image, f
   // byte greyscale
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_BYTE) {
     vil2_image_view<vxl_byte>* out = new vil2_image_view<vxl_byte>(image.ni(),image.nj(),image.nplanes());
-    vipl_dilate_disk<vil2_image_view_base,vil2_image_view_base,vxl_byte,vxl_byte,vipl_trivial_pixeliter> op(radius);
+    vipl_dilate_disk<vil2_image_view_base,vil2_image_view_base,vxl_byte,vxl_byte> op(radius);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
     op.filter();
@@ -34,7 +26,7 @@ vil2_image_view_base_sptr vepl2_dilate_disk(vil2_image_view_base const& image, f
   // short
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_UINT_16) {
     vil2_image_view<unsigned short>* out = new vil2_image_view<unsigned short>(image.ni(),image.nj(),image.nplanes());
-    vipl_dilate_disk<vil2_image_view_base,vil2_image_view_base,unsigned short,unsigned short,vipl_trivial_pixeliter> op(radius);
+    vipl_dilate_disk<vil2_image_view_base,vil2_image_view_base,unsigned short,unsigned short> op(radius);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
     op.filter();
@@ -44,7 +36,7 @@ vil2_image_view_base_sptr vepl2_dilate_disk(vil2_image_view_base const& image, f
   // int
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_UINT_32) {
     vil2_image_view<unsigned>* out = new vil2_image_view<unsigned>(image.ni(),image.nj(),image.nplanes());
-    vipl_dilate_disk<vil2_image_view_base,vil2_image_view_base,unsigned,unsigned,vipl_trivial_pixeliter> op(radius);
+    vipl_dilate_disk<vil2_image_view_base,vil2_image_view_base,unsigned,unsigned> op(radius);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
     op.filter();
@@ -54,7 +46,7 @@ vil2_image_view_base_sptr vepl2_dilate_disk(vil2_image_view_base const& image, f
   // float
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_FLOAT) {
     vil2_image_view<float>* out = new vil2_image_view<float>(image.ni(),image.nj(),image.nplanes());
-    vipl_dilate_disk<vil2_image_view_base,vil2_image_view_base,float,float,vipl_trivial_pixeliter> op(radius);
+    vipl_dilate_disk<vil2_image_view_base,vil2_image_view_base,float,float> op(radius);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
     op.filter();
@@ -64,7 +56,7 @@ vil2_image_view_base_sptr vepl2_dilate_disk(vil2_image_view_base const& image, f
   // double
   else if (image.pixel_format() == VIL2_PIXEL_FORMAT_DOUBLE) {
     vil2_image_view<double>* out = new vil2_image_view<double>(image.ni(),image.nj(),image.nplanes());
-    vipl_dilate_disk<vil2_image_view_base,vil2_image_view_base,double,double,vipl_trivial_pixeliter> op(radius);
+    vipl_dilate_disk<vil2_image_view_base,vil2_image_view_base,double,double> op(radius);
     op.put_in_data_ptr(&image);
     op.put_out_data_ptr(out);
     op.filter();
