@@ -1,75 +1,37 @@
-// <begin copyright notice>
-// ---------------------------------------------------------------------------
+#ifndef Step_h_
+#define Step_h_
+//:
+// \file
+// \brief detection of step profiles in the intensity image
 //
-//                   Copyright (c) 1997 TargetJr Consortium
-//               GE Corporate Research and Development (GE CRD)
-//                             1 Research Circle
-//                            Niskayuna, NY 12309
-//                            All Rights Reserved
-//              Reproduction rights limited as described below.
-//
-//      Permission to use, copy, modify, distribute, and sell this software
-//      and its documentation for any purpose is hereby granted without fee,
-//      provided that (i) the above copyright notice and this permission
-//      notice appear in all copies of the software and related documentation,
-//      (ii) the name TargetJr Consortium (represented by GE CRD), may not be
-//      used in any advertising or publicity relating to the software without
-//      the specific, prior written permission of GE CRD, and (iii) any
-//      modifications are clearly marked and summarized in a change history
-//      log.
-//
-//      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
-//      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
-//      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
-//      IN NO EVENT SHALL THE TARGETJR CONSORTIUM BE LIABLE FOR ANY SPECIAL,
-//      INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND OR ANY
-//      DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
-//      WHETHER OR NOT ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR ON
-//      ANY THEORY OF LIABILITY ARISING OUT OF OR IN CONNECTION WITH THE
-//      USE OR PERFORMANCE OF THIS SOFTWARE.
-//
-// ---------------------------------------------------------------------------
-// <end copyright notice>
-//-*- c++ -*-------------------------------------------------------------------
-#ifndef _Step_h_
-#define _Step_h_
-//
-// .NAME Step - detection of step profiles in the intensity image
-// .LIBRARY Detection
-// .HEADER Segmentation package
-// .INCLUDE Detection/Step.h
-// .FILE Step.h
-// .FILE Step.C
-//
-// .SECTION Description
 // Operator to implement Canny edge detector which finds elongated
 // step contours with dG. Then junctions are found by extending
 // from end points of dangling contours.
-// The recipe is:
 //
-//    1. Convolution with Gaussian with sigma typically = 1,
+// The recipe is:
+//    -  Convolution with Gaussian with sigma typically = 1,
 //       to well-condition the surface before taking first derivative.
 //       Result is a smoothed image.
 //
-//    2. Convolution with first derivative, or first difference.
+//    -  Convolution with first derivative, or first difference.
 //       Result is a gradient image. Canny proves that first-derivative
 //       of the Gaussian is the optimum filter to detect elongated
 //       step profiles.
 //
-//    3. Optionally estimate sensor/texture sigma, if given noise
+//    -  Optionally estimate sensor/texture sigma, if given noise
 //       sigma is a negative interpolation factor -k in range -[0 1].
 //       noise_sigma = (1-k)*sensor_sigma + k*texture_sigma.
 //       Sensor and texture sigmas are estimated from the histogram
 //       of weak step edges, detected in an ROI centered on gradient image.
 //       (see Step constructor documentation in Step.C - JLM)
 //
-//    4. Non Maximum suppression in the direction of local gradient,
+//    -  Non Maximum suppression in the direction of local gradient,
 //       to detect pixels with maximum local slope, above apriori
 //       noise response. Result is connected contours, width < 2,
 //       broken only at junctions with weaker chains.
 //       Also obtain subpixel accuracy normal to the contour.
 //
-//    5. Optionally extend from end points of contours to search for
+//    -  Optionally extend from end points of contours to search for
 //       maximum slope in the direction normal to the dangling contours,
 //       above some factor of the noise response.
 //       Result is a simple detection of all strong junctions.
@@ -83,8 +45,8 @@
 // Complexity: O(|pixels|) time and space for convolutions.
 //             O(|edgels|) time for iterative extension to recover junctions.
 //
-// .EXAMPLE ../Examples/step.C
-// .SECTION Authors
+// \verbatim
+// Authors
 //  John Canny      (1986) SM Thesis
 //  Chris Connolly  (1987) use directional 1st-difference
 //  Van-Duc Nguyen  (1989) add subpixel location, extension to find junctions
@@ -93,15 +55,15 @@
 //  Joe Mundy       (1997) expanded comments on some methods.  Added gradient
 //                         magnitde, grad_mag,  and graident direction angle
 //                         buffer, angle, to cache between edgel detection phases.
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vcl_iostream.h>
 class gevd_bufferxy;
 
-
 class gevd_step
 {
-public:
+ public:
   gevd_step(float smooth_sigma=1,       // spatial smoothing [0.5 2.0]
             float noise_sigma=-0.5,     // sensor/texture intensity noise -[0 1]
             float contour_factor=1.0,   // threshold factor for contour edgels
@@ -132,11 +94,11 @@ public:
   friend vcl_ostream& operator << (vcl_ostream& os, const gevd_step& st);
   friend vcl_ostream& operator << (vcl_ostream& os, gevd_step& st);
 
-protected:
+ protected:
   float smoothSigma;                   // spatial smoothing
   float noiseSigma;                    // sensor/texture noise
   float contourFactor, junctionFactor; // threshold factor for edgels
   float filterFactor;                  // factor in convolution filter
 };
 
-#endif
+#endif // Step_h_

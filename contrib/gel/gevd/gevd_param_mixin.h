@@ -1,62 +1,21 @@
-// <begin copyright notice>
-// ---------------------------------------------------------------------------
-//
-//                   Copyright (c) 1997 TargetJr Consortium
-//               GE Corporate Research and Development (GE CRD)
-//                             1 Research Circle
-//                            Niskayuna, NY 12309
-//                            All Rights Reserved
-//              Reproduction rights limited as described below.
-//
-//      Permission to use, copy, modify, distribute, and sell this software
-//      and its documentation for any purpose is hereby granted without fee,
-//      provided that (i) the above copyright notice and this permission
-//      notice appear in all copies of the software and related documentation,
-//      (ii) the name TargetJr Consortium (represented by GE CRD), may not be
-//      used in any advertising or publicity relating to the software without
-//      the specific, prior written permission of GE CRD, and (iii) any
-//      modifications are clearly marked and summarized in a change history
-//      log.
-//
-//      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
-//      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
-//      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
-//      IN NO EVENT SHALL THE TARGETJR CONSORTIUM BE LIABLE FOR ANY SPECIAL,
-//      INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND OR ANY
-//      DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
-//      WHETHER OR NOT ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR ON
-//      ANY THEORY OF LIABILITY ARISING OUT OF OR IN CONNECTION WITH THE
-//      USE OR PERFORMANCE OF THIS SOFTWARE.
-//
-// ---------------------------------------------------------------------------
-// <end copyright notice>
-
-#ifndef _gevd_param_mixin_h
-#define _gevd_param_mixin_h
-
+#ifndef gevd_param_mixin_h_
+#define gevd_param_mixin_h_
+//=======================================================================
 //:
 // \file
-
-//=========================== Basics ====================================
+// \brief A mixin to package algorithm parameters
 //
-// .NAME    gevd_param_mixin - A mixin to package algorithm parameters
-// .HEADER  gel Package
-// .LIBRARY gevd
-// .INCLUDE Basics/gevd_param_mixin.h
-// .FILE    gevd_param_mixin.C
-//
-// .SECTION Description
 //   The base class for blocks of algorithm parameters. Algorithms,
 //   such as edge detection, would inhert specializations of this mixin
 //   which contain the actual parameters and methods to validate the
 //   parameters.
 //
-// Written by:  J.L. Mundy
-// Date:        November 28, 1997
+// \author J.L. Mundy
+// \date   November 28, 1997
 //
-// Modified by: Rupert Curwen
-// Date:        February 3, 1998
-
+// \verbatim
+//  Modifications:
+//   Rupert Curwen -  February 3, 1998
 //      Added the ParamModifier class as an abstract base class which
 //      will allow parameter blocks to support generic "modifier"
 //      classes.  A parameter class defines the virtual method
@@ -67,17 +26,17 @@
 //      which builds a dialog which will then modify the parameter
 //      class.  Or it might just print the values to a stream.  See
 //      Segmentation/Detection/DetectorParams for an example of use.
-//
+// \endverbatim
 //======================================================================
-//#include <cool/String.h>
-//#include <Basics/types.h>
-#include <vcl_string.h>
 
+#include <vcl_string.h>
 class ParamModifier;
 
 class gevd_param_mixin
 {
-public:
+  bool _valid;
+  vcl_string _error_msg;
+ public:
   //=====================================================
   // Constructors and Destructors
   gevd_param_mixin();
@@ -88,14 +47,11 @@ public:
   const char* GetErrorMsg() {return _error_msg.c_str();}
   void SetErrorMsg(const char* msg);
   virtual void Describe(ParamModifier&) {};
-private:
-  bool _valid;
-  vcl_string _error_msg;
 };
 
 class ParamModifier
 {
-public:
+ public:
   //------------------------------------------------------------
   //: These are some standard boolean choice styles defined for convenience.
   enum BoolChoiceStyle { TrueFalse, OnOff, YesNo };
@@ -130,4 +86,4 @@ public:
                         BoolChoiceStyle style = TrueFalse) = 0;
 };
 
-#endif // _gevd_param_mixin_h
+#endif // gevd_param_mixin_h_
