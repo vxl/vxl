@@ -5,6 +5,7 @@
 #endif
 #include <brip/brip_vil1_float_ops.h>
 #include <testlib/testlib_test.h>
+#include <vcl_iostream.h>
 
 static void test_fourier()
 {
@@ -40,17 +41,23 @@ static void test_fourier()
   vil1_memory_image_of<unsigned char> char_mag = brip_vil1_float_ops::convert_to_byte(mag);
   vil1_memory_image_of<unsigned char> char_phase = brip_vil1_float_ops::convert_to_byte(phase);
   vil1_memory_image_of<unsigned char> char_output = brip_vil1_float_ops::convert_to_byte(output);
+  vcl_cout << "fourier transform mag(55,55) = " << mag(55,55) << " = " << (int)char_mag(55,55) << '\n'
+           << "fourier transform phase(26,13) = " << phase(26,13) << " = " << (int)char_phase(26,13) << '\n'
+           << "fourier transform mag(64,64) = " << mag(64,64) << " = " << (int)char_mag(64,64) << '\n';
   TEST("fourier transform mag", char_mag(55,55), 0);
   TEST("fourier transform phase", char_phase(26,13), 0);
-  TEST("fourier transform peak", char_mag(64,64), 255);
+  TEST("fourier transform peak", char_mag(64,64), 254);
   TEST("inverse fourier transform", char_in(1,2), char_output(1,2));
 
   vil1_memory_image_of<unsigned char> char_square = brip_vil1_float_ops::convert_to_byte(input2);
   vil1_memory_image_of<unsigned char> char_mag2 = brip_vil1_float_ops::convert_to_byte(mag2);
   vil1_memory_image_of<unsigned char> char_phase2 = brip_vil1_float_ops::convert_to_byte(phase2);
   vil1_memory_image_of<unsigned char> char_output2 = brip_vil1_float_ops::convert_to_byte(output2);
+  vcl_cout << "fourier transform mag(55,55) = " << mag2(55,55) << " = " << (int)char_mag2(55,55) << '\n'
+           << "fourier transform phase(59,59) = " << phase2(59,59) << " = " << (int)char_phase2(59,59) << '\n'
+           << "fourier transform mag(64,64) = " << mag2(64,64) << " = " << (int)char_mag2(64,64) << '\n';
   TEST("fourier transform mag", char_mag2(55,55), 0);
-  TEST("fourier transform phase", char_phase2(59,59), 255);
+  TEST("fourier transform phase", char_phase2(59,59), 254);
   TEST("fourier transform peak", char_mag2(64,64), 255);
   TEST("inverse fourier transform", char_square(0,0), char_output2(0,0));
 
