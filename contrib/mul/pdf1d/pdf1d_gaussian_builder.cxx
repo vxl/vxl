@@ -105,7 +105,7 @@ void pdf1d_gaussian_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>& d
     vcl_abort();
   }
 
-    if (data.is_a()=="mbl_data_array_wrapper<T>")
+    if (data.is_class("mbl_data_array_wrapper<T>"))
     {
       // Use more efficient build_from_array algorithm
       mbl_data_array_wrapper<double>& data_array =
@@ -246,8 +246,8 @@ void pdf1d_gaussian_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,min_var_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_gaussian_builder &) \n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_gaussian_builder &)\n"
+               << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }

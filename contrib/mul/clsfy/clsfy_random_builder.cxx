@@ -1,10 +1,8 @@
 // This is mul/clsfy/clsfy_random_builder.cxx
+// Copyright (c) 2001: British Telecommunications plc
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
-// Copyright (c) 2001: British Telecommunications plc
-
 //:
 // \file
 // \brief Implement a random classifier builder
@@ -101,7 +99,7 @@ double clsfy_random_builder::build(clsfy_classifier_base& model,
                                    const vcl_vector<unsigned> &outputs) const
 {
   const unsigned n = outputs.size();
-  assert(model.is_a() == "clsfy_random_classifier");
+  assert(model.is_class("clsfy_random_classifier"));
   clsfy_random_classifier &randclass = (clsfy_random_classifier&) model;
 
   if (nClasses==1) nClasses=2;

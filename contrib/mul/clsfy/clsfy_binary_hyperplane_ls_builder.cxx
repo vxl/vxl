@@ -54,7 +54,7 @@ double clsfy_binary_hyperplane_ls_builder::build(
 {
   assert(outputs.size() == inputs.size());
   assert(* vcl_max_element(outputs.begin(), outputs.end()) <= 1);
-  assert(classifier.is_a() == "clsfy_binary_hyperplane");
+  assert(classifier.is_class("clsfy_binary_hyperplane"));
 
   clsfy_binary_hyperplane &hyperplane = (clsfy_binary_hyperplane &) classifier;
 

@@ -81,8 +81,8 @@ void pdf1d_exponential_builder::build_from_array(pdf1d_pdf& model, const double*
 {
   if (n<2)
   {
-    vcl_cerr<<"pdf1d_exponential_builder::build_from_array()";
-    vcl_cerr<<" Too few examples available.\n";
+    vcl_cerr<<"pdf1d_exponential_builder::build_from_array()"
+            <<" Too few examples available.\n";
     vcl_abort();
   }
 
@@ -106,14 +106,14 @@ void pdf1d_exponential_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>
     vcl_abort();
   }
 
-    if (data.is_a()=="mbl_data_array_wrapper<T>")
-    {
-      // Use more efficient build_from_array algorithm
-      mbl_data_array_wrapper<double>& data_array =
-                       static_cast<mbl_data_array_wrapper<double>&>(data);
-      build_from_array(model,data_array.data(),n_samples);
-      return;
-    }
+  if (data.is_class("mbl_data_array_wrapper<T>"))
+  {
+    // Use more efficient build_from_array algorithm
+    mbl_data_array_wrapper<double>& data_array =
+                     static_cast<mbl_data_array_wrapper<double>&>(data);
+    build_from_array(model,data_array.data(),n_samples);
+    return;
+  }
 
   double sum = 0;
 
@@ -241,8 +241,8 @@ void pdf1d_exponential_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,min_var_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_exponential_builder &) \n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_exponential_builder &)\n"
+               << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }

@@ -2,7 +2,7 @@
 #ifndef mbl_file_data_collector_txx_
 #define mbl_file_data_collector_txx_
 //:
-//  \file
+// \file
 
 #include "mbl_file_data_collector.h"
 
@@ -40,7 +40,7 @@ mbl_file_data_collector<T>::mbl_file_data_collector(vcl_string& path)
 template<class T>
 mbl_file_data_collector<T>::mbl_file_data_collector(const mbl_data_collector_base& c)
 {
-  assert( c.is_a()== (vcl_string) "mbl_file_data_collector<T>" );
+  assert( c.is_class("mbl_file_data_collector<T>") );
   *this= c;
 }
 

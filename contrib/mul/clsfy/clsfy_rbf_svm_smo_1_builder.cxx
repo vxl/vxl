@@ -1,5 +1,5 @@
 // This is mul/clsfy/clsfy_rbf_svm_smo_1_builder.cxx
-//  Copyright: (C) 2001 British Telecommunications plc.
+// Copyright: (C) 2001 British Telecommunications plc.
 #include "clsfy_rbf_svm_smo_1_builder.h"
 //:
 // \file
@@ -42,7 +42,7 @@ double clsfy_rbf_svm_smo_1_builder::build(clsfy_classifier_base& classifier,
   assert(outputs.size() == nSamples);
   assert(*vcl_max_element(outputs.begin(), outputs.end()) <= 1);
 
-  assert(classifier.is_a() == "clsfy_rbf_svm");
+  assert(classifier.is_class("clsfy_rbf_svm"));
   clsfy_rbf_svm &svm = static_cast<clsfy_rbf_svm &>(classifier);
 
   clsfy_smo_1_rbf svAPI;

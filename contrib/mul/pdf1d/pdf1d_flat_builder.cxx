@@ -115,7 +115,7 @@ void pdf1d_flat_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>& data)
     vcl_abort();
   }
 
-  if (data.is_a()=="mbl_data_array_wrapper<T>")
+  if (data.is_class("mbl_data_array_wrapper<T>"))
   {
     // Use more efficient build_from_array algorithm
     mbl_data_array_wrapper<double>& data_array =

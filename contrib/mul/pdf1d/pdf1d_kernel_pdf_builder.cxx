@@ -137,7 +137,7 @@ void pdf1d_kernel_pdf_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>&
     vcl_abort();
   }
 
-  if (data.is_a()=="mbl_data_array_wrapper<T>")
+  if (data.is_class("mbl_data_array_wrapper<T>"))
   {
     mbl_data_array_wrapper<double>& data_array =
                    static_cast<mbl_data_array_wrapper<double>&>(data);
@@ -319,8 +319,8 @@ void pdf1d_kernel_pdf_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,min_var_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_kernel_pdf_builder &) \n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_kernel_pdf_builder &)\n"
+               << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }

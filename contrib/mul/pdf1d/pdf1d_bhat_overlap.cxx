@@ -18,7 +18,7 @@ double pdf1d_bhat_overlap(const pdf1d_pdf& pdf1, const pdf1d_pdf& pdf2,
   if (use_analytic)
   {
     // Check for known analytic cases
-    if (pdf1.is_a()=="pdf1d_gaussian" && pdf2.is_a()=="pdf1d_gaussian")
+    if (pdf1.is_class("pdf1d_gaussian") && pdf2.is_class("pdf1d_gaussian"))
       return pdf1d_bhat_overlap_gaussians(pdf1,pdf2);
   }
 
@@ -42,7 +42,7 @@ double pdf1d_bhat_overlap(const pdf1d_pdf& pdf,
                           const double* p, int n)
 {
   // Use more efficient calculation for Gaussian case
-  if (pdf.is_a()=="pdf1d_gaussian")
+  if (pdf.is_class("pdf1d_gaussian"))
     return pdf1d_bhat_overlap_gaussian(pdf.mean(),pdf.variance(),x,p,n);
 
   // Otherwise use a general form
@@ -90,7 +90,7 @@ double pdf1d_bhat_overlap_gaussians(const pdf1d_pdf& g1, const pdf1d_pdf& g2)
 //: Bhat. overlap between Gaussian and arbitrary pdf (estimate by sampling at n points)
 double pdf1d_bhat_overlap_gaussian_with_pdf(double m, double v, const pdf1d_pdf& pdf, int n)
 {
-  if (pdf.is_a()=="pdf1d_gaussian")
+  if (pdf.is_class("pdf1d_gaussian"))
     return pdf1d_bhat_overlap_gaussians(m,v,pdf.mean(),pdf.variance());
 
   double k = 1.0/vcl_sqrt(2*3.141528*v);

@@ -3,9 +3,9 @@
 #pragma implementation
 #endif
 //:
-//  \file
-//  \brief Load and save mil_image_2d_of<vil_byte> from named files.
-//  \author Tim Cootes
+// \file
+// \brief Load and save mil_image_2d_of<vil_byte> from named files.
+// \author Tim Cootes
 
 #include "mil_byte_image_2d_io.h"
 
@@ -54,7 +54,8 @@ void mil_byte_image_2d_io::setColour(const vcl_string& c)
     return;
   }
 
-  vcl_cerr << " mil_byte_image_2d_io::set_colour(int); colour depth string " << c << " not supported\n";
+  vcl_cerr << " mil_byte_image_2d_io::set_colour(int); colour depth string "
+           << c << " not supported\n";
 }
 
 //: Set the colour by the depth or using the standard code in the header
@@ -70,8 +71,8 @@ bool mil_byte_image_2d_io::set_colour_depth( int new_depth )
     return true;
   }
 
-  vcl_cerr << " mil_byte_image_2d_io::set_colour(int); colour depth code " << new_depth
-           << " not supported - NON FATAL ERROR\n";
+  vcl_cerr << " mil_byte_image_2d_io::set_colour(int); colour depth code "
+           << new_depth << " not supported - NON FATAL ERROR\n";
   return false;
 }
 
@@ -128,7 +129,7 @@ bool mil_byte_image_2d_io::saveImage(const mil_image& image,
                                      const vcl_string& path,
                                      const vcl_string& filetype) const
 {
-  assert(image.is_a()=="mil_image_2d_of<vil_byte>");
+  assert(image.is_class("mil_image_2d_of<vil_byte>"));
   return saveTheImage((const mil_image_2d_of<vil_byte>&) image,path,filetype);
 }
 
@@ -239,8 +240,8 @@ bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil_byte>& image,
   }
   else
   {
-    vcl_cerr << "mil_byte_image_2d_io::loadTheImage(); colour_depth() " << colour_depth()
-             << " not supported - NON FATAL ERROR\n";
+    vcl_cerr << "mil_byte_image_2d_io::loadTheImage(); colour_depth() "
+             << colour_depth() << " not supported - NON FATAL ERROR\n";
     return false;
   }
 
@@ -369,8 +370,8 @@ void mil_byte_image_2d_io::b_read(vsl_b_istream& bfs)
   case (1):
     break;
   default:
-    vcl_cerr << "I/O ERROR: mil_byte_image_2d_io::b_read(vsl_b_istream&) \n";
-    vcl_cerr << "           Unknown version number "<< version << "\n";
+    vcl_cerr << "I/O ERROR: mil_byte_image_2d_io::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< version << "\n";
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
