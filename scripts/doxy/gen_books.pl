@@ -127,7 +127,9 @@ sub update_book
 
     $booktexi = "$vxlsrc/$book/doc/book/book.texi";
 #    xec("texi2html -expandinfo -number -split_chapter $booktexi");
-    xec("texi2html -number $booktexi > $doxydir/output/texi2html_$book.out 2>&1");
+     $booklogfile = $book;
+     $booklogfile =~ s/\//_/g;
+     xec("texi2html -number $booktexi > $doxydir/output/texi2html_$booklogfile.out 2>&1");
 
 
   }
