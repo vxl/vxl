@@ -176,17 +176,7 @@ class vnl_vector_fixed_ref_const
   // use this user-defined conversion. For those cases, use the
   // explicit as_ref() method instead.
   operator const vnl_vector_ref<T>() const { return vnl_vector_ref<T>( n, const_cast<T*>(data_) ); }
-#if 0
-  //----------------------------------------------------------------------
-  // Conversion to vnl_vector_fixed_ref. Similar to above
 
-  vnl_vector_fixed_ref<T,n> as_fixed_ref() { return vnl_vector_fixed_ref<T,n>( data_block() ); }
-
-  vnl_vector_fixed_ref_const<T,n> as_fixed_ref() const { return vnl_vector_fixed_ref_const<T,n>( data_block() ); }
-
-  operator vnl_vector_fixed_ref_const<T,n>() const { return vnl_vector_fixed_ref_const<T,n>( (data_block()) ); }
-  operator vnl_vector_fixed_ref<T,n>() { return vnl_vector_fixed_ref<T,n>( (data_block()) ); }
-#endif // 0
   //----------------------------------------------------------------------
 
   //: Type defs for iterators
