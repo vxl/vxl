@@ -53,13 +53,13 @@ void vpdfl_axis_gaussian_builder::set_min_var(double min_var)
 //=======================================================================
 //: Get lower threshold on variance for built models
 //=======================================================================
-double vpdfl_axis_gaussian_builder::min_var()
+double vpdfl_axis_gaussian_builder::min_var() const
 {
   return min_var_;
 }
 
 void vpdfl_axis_gaussian_builder::build(vpdfl_pdf_base& model,
-                                        const vnl_vector<double>& mean)
+                                        const vnl_vector<double>& mean) const
 {
   vpdfl_axis_gaussian& g = gaussian(model);
 
@@ -70,7 +70,7 @@ void vpdfl_axis_gaussian_builder::build(vpdfl_pdf_base& model,
 }
 
 void vpdfl_axis_gaussian_builder::build(vpdfl_pdf_base& model,
-                                        mbl_data_wrapper<vnl_vector<double> >& data)
+                                        mbl_data_wrapper<vnl_vector<double> >& data) const
 {
   vpdfl_axis_gaussian& g = gaussian(model);
 
@@ -119,7 +119,7 @@ void vpdfl_axis_gaussian_builder::build(vpdfl_pdf_base& model,
 
 void vpdfl_axis_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
                                                  mbl_data_wrapper<vnl_vector<double> >& data,
-                                                 const vcl_vector<double>& wts)
+                                                 const vcl_vector<double>& wts) const
 {
   vpdfl_axis_gaussian& g = gaussian(model);
 

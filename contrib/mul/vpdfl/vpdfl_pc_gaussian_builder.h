@@ -55,20 +55,20 @@ public:
 
     //: Build default model with given mean
   virtual void build(vpdfl_pdf_base& model,
-                     const vnl_vector<double>& mean);
+                     const vnl_vector<double>& mean) const;
 
     //: Build model from data
   virtual void build(vpdfl_pdf_base& model,
-                     mbl_data_wrapper<vnl_vector<double> >& data);
+                     mbl_data_wrapper<vnl_vector<double> >& data) const;
 
     //: Build model from weighted data
   virtual void weighted_build(vpdfl_pdf_base& model,
                               mbl_data_wrapper<vnl_vector<double> >& data,
-                              const vcl_vector<double>& wts);
+                              const vcl_vector<double>& wts) const;
 
     //: Computes mean and covariance of given data
   void mean_covar(vnl_vector<double>& mean, vnl_matrix<double>& covar,
-                  mbl_data_wrapper<vnl_vector<double> >& data);
+                  mbl_data_wrapper<vnl_vector<double> >& data) const;
 
 
     //: Decide where to partition an Eigenvector space

@@ -6,6 +6,22 @@ General utilities used by several mul libraries.
 @section Random Number Generator
 @cindex mbl_mz_random
 @cindex mz_random
+
+Rather than use vnl_sample, mbl_mz_rnadom, provides a superior
+random number generator.
+
+@itemize
+@item It should provide the same pseudo-random sequence whatever platform you are running
+on.
+@item It is based on an algorithm which is known to have less correlation between
+adjacent samples, than some standard pseudo random number generators.
+@item It has been thoroughly tested (See below for some examples.)
+@end itemize.
+
+The downside of mbl_mz_random is that it is about 5 times slower than some other
+pseudo-random number generators. For a discussion on speed/randomness trade-off see
+@cite{Press et al. Numerical Recipes in C, Cambridge, 1992.}
+
 @subsection The randomness of mbl_mz_random
 
 
@@ -31,10 +47,12 @@ were all greater than the expected value. This bias was reduced
 but still evident when the number of samples was increased from 10^4 to 10^5 and 10^6.
 
 The results for a key of  9667566 are
+@example
 Got 3183 samples outside 1 sd- expected3174
 Got 463 samples outside 2 sd- expected455
 Got 28 samples outside 3 sd- expected27.5
 Got 0 samples outside 4 sd- expected0.6
+@end example
 
 These seem @emph{more normal}.
 
@@ -61,3 +79,13 @@ Use a different seed 9667566
 
 Ian Scott
 29 November 2000
+
+@section Further Development
+@subsection Other Algorithms.
+It would be useful to have several random number generators all with a similar
+interface to @code{mbl_mz_random}. Adding an abstract base class, would allow the
+use of the strategy pattern - for instance swapping in a more random generator.
+
+@subsection Input/Output
+Since the random number generator has a real state, it could be useful to be able
+to save  that state to a @code{vsl_b_istream}.

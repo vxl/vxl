@@ -77,7 +77,7 @@ vpdfl_pdf_base* vpdfl_pc_gaussian_builder::new_model() const
 
 
 void vpdfl_pc_gaussian_builder::build(vpdfl_pdf_base& model,
-                                      const vnl_vector<double>& mean)
+                                      const vnl_vector<double>& mean) const
 {
   vpdfl_pc_gaussian& g = gaussian(model);
   int n = mean.size();
@@ -95,7 +95,7 @@ void vpdfl_pc_gaussian_builder::build(vpdfl_pdf_base& model,
 void vpdfl_pc_gaussian_builder::buildFromCovar(vpdfl_pc_gaussian& g,
                                                const vnl_vector<double>& mean,
                                                const vnl_matrix<double>& S,
-                                               unsigned nPrinComps)
+                                               unsigned nPrinComps) const
 {
   int n = mean.size();
   vnl_matrix<double> evecs;
@@ -142,7 +142,7 @@ static void eValsFloorZero(vnl_vector<double> &v)
 
 
 void vpdfl_pc_gaussian_builder::build(vpdfl_pdf_base& model,
-                                      mbl_data_wrapper<vnl_vector<double> >& data)
+                                      mbl_data_wrapper<vnl_vector<double> >& data) const
 {
   vpdfl_pc_gaussian& g = gaussian(model);
 
@@ -191,7 +191,7 @@ void vpdfl_pc_gaussian_builder::build(vpdfl_pdf_base& model,
 
 //: Computes mean and covariance of given data
 void vpdfl_pc_gaussian_builder::mean_covar(vnl_vector<double>& mean, vnl_matrix<double>& S,
-                                           mbl_data_wrapper<vnl_vector<double> >& data)
+                                           mbl_data_wrapper<vnl_vector<double> >& data) const
 {
   int n_samples = data.size();
 
@@ -221,7 +221,7 @@ void vpdfl_pc_gaussian_builder::mean_covar(vnl_vector<double>& mean, vnl_matrix<
 
 void vpdfl_pc_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
                                                mbl_data_wrapper<vnl_vector<double> >& data,
-                                               const vcl_vector<double>& wts)
+                                               const vcl_vector<double>& wts) const
 {
   vpdfl_pc_gaussian& g = gaussian(model);
 

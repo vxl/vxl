@@ -196,3 +196,12 @@ It is straightforward to merge the above examples, demonstrating how to
 using a @acronym{PDF} and sampler
 to generate some data, and then building a new @acronym{PDF} from that data.
 This is exactly what the test programs do.
+
+
+@section Further Development
+
+@subsection Discrete Probability Distributions.
+There is nothing fundamental in the design that means that a @acronym{PDF}
+has to be defined over a real vector space. It should be possible to template
+the base classes, so that the basic design could be used for discrete distributions
+or for continuous univariate distributions.

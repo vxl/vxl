@@ -68,7 +68,7 @@ void vpdfl_gaussian_builder::set_min_var(double min_var)
 //=======================================================================
 //: Get lower threshold on variance for built models
 //=======================================================================
-double vpdfl_gaussian_builder::min_var()
+double vpdfl_gaussian_builder::min_var() const
 {
   return min_var_;
 }
@@ -76,7 +76,7 @@ double vpdfl_gaussian_builder::min_var()
 //=======================================================================
 
 void vpdfl_gaussian_builder::build(vpdfl_pdf_base& model,
-                                   const vnl_vector<double>& mean)
+                                   const vnl_vector<double>& mean) const
 {
   vpdfl_gaussian& g = gaussian(model);
   int n = mean.size();
@@ -127,7 +127,7 @@ void vpdfl_gaussian_builder::updateCovar(vnl_matrix<double>& S,
     //: Build model from mean and covariance
 void vpdfl_gaussian_builder::buildFromCovar(vpdfl_gaussian& g,
                                             const vnl_vector<double>& mean,
-                                            const vnl_matrix<double>& S)
+                                            const vnl_matrix<double>& S) const
 {
   int n = mean.size();
   vnl_matrix<double> evecs(S.rows(), S.rows());
@@ -151,7 +151,7 @@ void vpdfl_gaussian_builder::buildFromCovar(vpdfl_gaussian& g,
 //=======================================================================
 
 void vpdfl_gaussian_builder::build(vpdfl_pdf_base& model,
-                                   mbl_data_wrapper<vnl_vector<double> >& data)
+                                   mbl_data_wrapper<vnl_vector<double> >& data) const
 {
   vpdfl_gaussian& g = gaussian(model);
 
@@ -169,7 +169,7 @@ void vpdfl_gaussian_builder::build(vpdfl_pdf_base& model,
 
 //: Computes mean and covariance of given data
 void vpdfl_gaussian_builder::meanCovar(vnl_vector<double>& mean, vnl_matrix<double>& S,
-                                       mbl_data_wrapper<vnl_vector<double> >& data)
+                                       mbl_data_wrapper<vnl_vector<double> >& data) const
 {
   int n_samples = data.size();
 
@@ -199,7 +199,7 @@ void vpdfl_gaussian_builder::meanCovar(vnl_vector<double>& mean, vnl_matrix<doub
 
 void vpdfl_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
                                             mbl_data_wrapper<vnl_vector<double> >& data,
-                                            const vcl_vector<double>& wts)
+                                            const vcl_vector<double>& wts) const
 {
   vpdfl_gaussian& g = gaussian(model);
 

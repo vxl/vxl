@@ -46,20 +46,20 @@ public:
   virtual void set_min_var(double min_var) =0;
 
     //: Get lower threshold on variance for built models
-  virtual double min_var() =0;
+  virtual double min_var() const =0;
 
     //: Build default model with given mean
   virtual void build(vpdfl_pdf_base& model,
-                     const vnl_vector<double>& mean) = 0;
+                     const vnl_vector<double>& mean) const = 0;
 
     //: Build model from data
   virtual void build(vpdfl_pdf_base& model,
-                     mbl_data_wrapper<vnl_vector<double> >& data) = 0;
+                     mbl_data_wrapper<vnl_vector<double> >& data) const = 0;
 
     //: Build model from weighted data
   virtual void weighted_build(vpdfl_pdf_base& model,
                               mbl_data_wrapper<vnl_vector<double> >& data,
-                              const vcl_vector<double>& wts) = 0;
+                              const vcl_vector<double>& wts) const = 0;
 
 
   /*========= methods which do not change state (const) ==========*/
