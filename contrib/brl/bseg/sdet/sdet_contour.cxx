@@ -1200,7 +1200,7 @@ bool sdet_contour::near_border(vtol_vertex_2d_sptr const&  v)
   const int ymin = FRAME;
   const int xmax = vertexMap->rows()-FRAME-1;
   const int ymax = vertexMap->columns()-FRAME-1;
-  int x = v->x(), y = v->y();
+  int x = int(v->x()), y = int(v->y());
   return x<=xmin||x>=xmax||y<=ymin||y>=ymax;
 }
 
@@ -1736,7 +1736,7 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
       vtol_edge_2d_sptr weaker = NULL, stronger = NULL;
       int index; // location on stronger contour
       if (DetectJunction(endv, index, weaker, stronger, maxSpiral, edgels))
-       {
+      {
         if (sdet_contour::debug_)
           vcl_cout << "detected junction near (" << endv->x() <<' '<< endv->y()
                    << ")\n";
@@ -1745,7 +1745,8 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
 
         //If v1 is NULL then the edge is a cycle
 
-        if (!stronger->v1()) { 
+        if (!stronger->v1())
+        {
             // cycle is now split at junction
             vtol_edge_2d_sptr split = NULL;
             BreakCycle(endv, index, stronger, split);
@@ -1760,42 +1761,39 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
                        << endv->y() << ")\n";
             }
             jcycle++;             // remove original edge
+        }
+        else if (weaker == stronger)                  // touch itself or another 1-chain
+        {
+            vtol_edge_2d_sptr straight = NULL, curled = NULL;
+            // break own chain and make a loop
+            // edgel chain gaps are updated internally
+            LoopChain(endv, index, stronger, straight, curled);
 
+            LookupTableReplace(edges, stronger, straight);
+            LookupTableInsert(edges, curled);
 
-        } else {                  // touch itself or another 1-chain
-            if (weaker == stronger) {
-              
-              vtol_edge_2d_sptr straight = NULL, curled = NULL;
-              // break own chain and make a loop
-              // edgel chain gaps are updated internally
-              LoopChain(endv, index, stronger, straight, curled);
+            if (sdet_contour::debug_)
+              vcl_cout << "new position on loop chain (" << endv->x()
+                       << " " << endv->y()<< ")\n";
+            jchain++;
+        }
+        else
+        {
+            vtol_edge_2d_sptr longer = NULL, shorter = NULL;
+            BreakChain(endv, index, stronger,longer, shorter);
+            LookupTableReplace(edges, stronger, longer);
+            LookupTableInsert(edges, shorter);
 
-              LookupTableReplace(edges, stronger, straight);
-              LookupTableInsert(edges, curled);
+            //Replace the mutated weaker digital curve
+            //since the endpoint may have moved
+            update_edgel_chain(weaker, old_x, old_y, endv);
+            if (sdet_contour::debug_)
+              vcl_cout << "old position on chain (" << old_x
+                       << " " << old_y
+                       << ")  new position on chain (" << endv->x()
+                       << " " << endv->y()<< ")(" << endv->numsup() <<")\n";
 
-              if (sdet_contour::debug_)
-                vcl_cout << "new position on loop chain (" << endv->x()
-                         << " " << endv->y()<< ")\n";
-              jchain++;
-            }
-            else
-            {
-              vtol_edge_2d_sptr longer = NULL, shorter = NULL;
-              BreakChain(endv, index, stronger,longer, shorter);
-              LookupTableReplace(edges, stronger, longer);
-              LookupTableInsert(edges, shorter);
-
-              //Replace the mutated weaker digital curve
-              //since the endpoint may have moved
-              update_edgel_chain(weaker, old_x, old_y, endv);
-              if (sdet_contour::debug_)
-                vcl_cout << "old position on chain (" << old_x
-                         << " " << old_y
-                         << ")  new position on chain (" << endv->x()
-                         << " " << endv->y()<< ")(" << endv->numsup() <<")\n";
-
-              jchain++;
-            }
+            jchain++;
         }
       }
     }
