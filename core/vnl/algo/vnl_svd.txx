@@ -76,7 +76,8 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
                      &job, &info);
 
     // Error return?
-    if (info != 0) {
+    if (info != 0)
+    {
       // If info is non-zero, it contains the number of singular values
       // for this the SVD algorithm failed to converge. The condition is
       // not bogus. Even if the returned singular values are sensible,
@@ -135,13 +136,15 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
     }
   }
 
-  if (test_heavily) {
+  if (test_heavily)
+  {
     // Test that recomposed matrix == M
     typedef typename vnl_numeric_traits<T>::abs_t abs_t;
     abs_t recomposition_residual = vcl_abs((recompose() - M).fro_norm());
     abs_t n = vcl_abs(M.fro_norm());
     abs_t thresh = m_ * abs_t(vnl_math::eps) * n;
-    if (recomposition_residual > thresh) {
+    if (recomposition_residual > thresh)
+    {
       vcl_cerr << "vnl_svd<T>::vnl_svd<T>() -- Warning, recomposition_residual = "
                << recomposition_residual << vcl_endl
                << "fro_norm(M) = " << n << vcl_endl
@@ -196,13 +199,16 @@ vnl_svd<T>::zero_out_absolute(double tol)
 {
   last_tol_ = tol;
   rank_ = W_.rows();
-  for (unsigned k = 0; k < W_.rows(); k++) {
+  for (unsigned k = 0; k < W_.rows(); k++)
+  {
     singval_t& weight = W_(k, k);
-    if (vcl_abs(weight) <= tol) {
+    if (vcl_abs(weight) <= tol)
+    {
       Winverse_(k,k) = 0;
       weight = 0;
       --rank_;
-    } else {
+    } else
+    {
       Winverse_(k,k) = singval_t(1.0)/weight;
     }
   }
@@ -221,7 +227,8 @@ typename vnl_svd<T>::singval_t vnl_svd<T>::determinant_magnitude() const
 {
   {
     static bool warned = false;
-    if (!warned && m_ != n_) {
+    if (!warned && m_ != n_)
+    {
       vcl_cerr << __FILE__ ": called determinant_magnitude() on SVD of non-square matrix" << vcl_endl;
       warned = true;
     }
@@ -308,12 +315,11 @@ vnl_matrix<T> vnl_svd<T>::solve(vnl_matrix<T> const& B)  const
     x = U_.conjugate_transpose() * yy;
   } else
     x = U_.conjugate_transpose() * B;
-  unsigned long i, j;
-  for (i = 0; i < x.rows(); i++) {                      // multiply with diagonal 1/W
+  for (unsigned long i = 0; i < x.rows(); ++i) {        // multiply with diagonal 1/W
     T weight = W_(i, i);
     if (weight != T(0)) //vnl_numeric_traits<T>::zero)
       weight = T(1) / weight;
-    for (j = 0; j < x.columns(); j++)
+    for (unsigned long j = 0; j < x.columns(); ++j)
       x(i, j) *= weight;
   }
   x = V_ * x;                                           // premultiply with v.
@@ -325,7 +331,8 @@ template <class T>
 vnl_vector<T> vnl_svd<T>::solve(vnl_vector<T> const& y)  const
 {
   // fsm sanity check :
-  if (y.size() != U_.rows()) {
+  if (y.size() != U_.rows())
+  {
     vcl_cerr << __FILE__ << ": size of rhs is incompatible with no. of rows in U_\n"
              << "y =" << y << "\n"
              << "m_=" << m_ << "\n"
@@ -359,7 +366,8 @@ vnl_vector<T> vnl_svd<T>::solve(vnl_vector<T> const& y)  const
   return V_ * x;                                // premultiply with v.
 }
 template <class T> // FIXME. this should implement the above, not the other way round.
-void vnl_svd<T>::solve(T const *y, T *x) const {
+void vnl_svd<T>::solve(T const *y, T *x) const
+{
   solve(vnl_vector<T>(y, m_)).copy_out(x);
 }
 
