@@ -425,7 +425,7 @@ struct vil_dicom_header_info
   vil_dicom_header_type_of<vil_dicom_header_US>::type high_bit_;  /*< The bit used as the high bit */
   vil_dicom_header_type_of<vil_dicom_header_US>::type small_im_pix_val_;   /*< The smallest image pixel value */
   vil_dicom_header_type_of<vil_dicom_header_US>::type large_im_pix_val_;   /*< The largest image pixel value */
-  vil_dicom_header_type_of<vil_dicom_header_SS>::type pixel_padding_val_;  /*< The value used for padding pixels */
+  vil_dicom_header_type_of<vil_dicom_header_US>::type pixel_padding_val_;  /*< The value used for padding pixels */
   vil_dicom_header_type_of<vil_dicom_header_DS>::type window_centre_;      /*< The value of the image window's centre */
   vil_dicom_header_type_of<vil_dicom_header_DS>::type window_width_;       /*< The actual width of the image window */
 

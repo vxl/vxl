@@ -68,16 +68,6 @@ class vil_dicom_image : public vil_image_resource
 
   // Dicom specific stuff
   vil_dicom_header_info const& header() const { return header_; }
-  protected:
-  //:correct known manufacturers drop-offs in header data!
-  //For example Hologic encode pixel-size in the imageComment!
-  //NB if this section starts bloating, use derived classes which override correct_manufacturer_discrepancies
-  virtual void correct_manufacturer_discrepancies();
-  //:try and interpret the hologic comments section to extract pixel size
-  virtual bool interpret_hologic_header(float& xpixSize, float& ypixSize);
-
-
 };
 
 #endif // vil_dicom_file_format_h_
-
