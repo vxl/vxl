@@ -174,6 +174,12 @@ SOURCE=.\Templates/vil3d_copy+uint_32-.cxx
 SOURCE=.\Templates/vil3d_image_view+sbyte-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil3d_resample_simple+int-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_resample_trilinear+int-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vil3d_memory_image.cxx
 # End Source File
 # Begin Source File
@@ -277,6 +283,18 @@ SOURCE=.\vil3d_save.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil3d_from_image_2d.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_resample_simple.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_resample_simple.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_resample_trilinear.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_resample_trilinear.txx
 # End Source File
 # End Group
 # End Target
