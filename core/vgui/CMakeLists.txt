@@ -5,7 +5,7 @@ INCLUDE(${MODULE_PATH}/FindOpenGL.cmake)
 # Build here only if OpenGL is available:
 IF (HAS_OPENGL)
 
-INCLUDE(${MODULE_PATH}/FindX11.cmake)
+INCLUDE(${MODULE_PATH}/NewCMake/FindX11.cmake)
 # Qv needed by vrml only
 INCLUDE(${MODULE_PATH}/FindQv.cmake)
 # glut optionally used by vgui_text and by the glut toolkit
@@ -16,7 +16,7 @@ INCLUDE(${MODULE_PATH}/FindGLUT.cmake)
 # implementations
 INCLUDE(${MODULE_PATH}/NewCMake/FindQt.cmake)
 INCLUDE(${MODULE_PATH}/FindGTK.cmake)
-INCLUDE(${MODULE_PATH}/FindFltk.cmake)
+INCLUDE(${MODULE_PATH}/NewCMake/FindFltk.cmake)
 
 INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_PATH})
 IF( HAS_GLUT )
@@ -171,12 +171,12 @@ IF (HAS_MFC)
   )
 ENDIF (HAS_MFC)
 
-IF (HAS_X11)
-  INCLUDE_DIRECTORIES(${X11_INCLUDE_PATH})
+IF (X11_FOUND)
+  INCLUDE_DIRECTORIES(${X11_INCLUDE_DIR})
   SET(vgui_sources ${vgui_sources}
     internals/vgui_accelerate_x11.cxx internals/vgui_accelerate_x11.h
   )
-ENDIF (HAS_X11)
+ENDIF (X11_FOUND)
 
 IF (HAS_MFC)
   # add stuff to use MFC in this executable
@@ -217,16 +217,16 @@ IF (HAS_GLUT)
 
       impl/glut/menu_hack.h
     )
-    IF (HAS_X11)
-      INCLUDE_DIRECTORIES(${X11_INCLUDE_PATH})
+    IF (X11_FOUND)
+      INCLUDE_DIRECTORIES(${X11_INCLUDE_DIR})
       SET(vgui_glut_sources ${vgui_glut_sources}
         impl/glut/menu_hack_X11.cxx
       )
-    ELSE (HAS_X11)
+    ELSE (X11_FOUND)
       SET(vgui_glut_sources ${vgui_glut_sources}
         impl/glut/menu_hack_none.cxx
       )
-    ENDIF (HAS_X11)
+    ENDIF (X11_FOUND)
 
     SET( vgui_sources ${vgui_sources} ${vgui_glut_sources} )
 
@@ -318,7 +318,7 @@ ENDIF (HAS_MFC)
 # X
 ##################################################
 
-IF (HAS_X11)
+IF (X11_FOUND)
 
   OPTION(VGUI_USE_X "Should X support be compiled into vgui?" YES)
 
@@ -326,7 +326,7 @@ IF (HAS_X11)
 
     ADD_DEFINITIONS( "-DVGUI_USE_X" )
 
-    INCLUDE_DIRECTORIES(${X11_INCLUDE_PATH})
+    INCLUDE_DIRECTORIES(${X11_INCLUDE_DIR})
 
     SET(vgui_X_sources
       impl/X/vgui_X_utils.cxx impl/X/vgui_X_utils.h
@@ -336,7 +336,7 @@ IF (HAS_X11)
 
   ENDIF(VGUI_USE_X)
 
-ENDIF (HAS_X11)
+ENDIF (X11_FOUND)
 
 
 ##################################################
@@ -467,7 +467,7 @@ ENDIF (HAS_MOTIF)
 # FLTK
 ##################################################
 
-IF (HAS_FLTK)
+IF (FLTK_FOUND)
 
   OPTION(VGUI_USE_FL "Should Fl support be compiled into vgui?" YES)
 
@@ -475,7 +475,7 @@ IF (HAS_FLTK)
 
     ADD_DEFINITIONS( "-DVGUI_USE_FL" )
 
-    INCLUDE_DIRECTORIES(${X11_INCLUDE_PATH} ${FLTK_INCLUDE_PATH})
+    INCLUDE_DIRECTORIES(${X11_INCLUDE_DIR} ${FLTK_INCLUDE_DIR})
 
     SET(vgui_Fl_sources
       impl/Fl/vgui_Fl.cxx             impl/Fl/vgui_Fl.h
@@ -491,7 +491,7 @@ IF (HAS_FLTK)
 
   ENDIF(VGUI_USE_FL)
 
-ENDIF (HAS_FLTK)
+ENDIF (FLTK_FOUND)
 
 
 ######################################################################
@@ -522,18 +522,18 @@ ENDIF (HAS_QV)
 
 TARGET_LINK_LIBRARIES(vgui ${OPENGL_LIBRARIES})
 
-IF (HAS_X11)
+IF (X11_FOUND)
   TARGET_LINK_LIBRARIES(vgui ${X11_LIBRARIES})
-ENDIF (HAS_X11)
+ENDIF (X11_FOUND)
 
 
 # Dependencies created by the toolkit implementations
 
 IF (VGUI_USE_GLUT)
   TARGET_LINK_LIBRARIES(vgui vil vul ${GLUT_LIBRARIES})
-  IF (HAS_X11)
+  IF (X11_FOUND)
     TARGET_LINK_LIBRARIES(vgui ${X11_LIBRARIES})
-  ENDIF (HAS_X11)
+  ENDIF (X11_FOUND)
 ENDIF (VGUI_USE_GLUT)
 IF (VGUI_USE_QT)
   TARGET_LINK_LIBRARIES(vgui vul vbl ${QT_LIBRARIES})
