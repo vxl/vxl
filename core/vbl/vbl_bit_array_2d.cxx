@@ -132,7 +132,7 @@ bool vbl_bit_array_2d::operator() (int i, int j) const
 
   unsigned char mask= (1<<bitindex);
 
-  return bool(data_[byteindex] & mask);
+  return (data_[byteindex] & mask) != 0;
 }
 
 bool vbl_bit_array_2d::operator() (int i, int j)
@@ -143,7 +143,7 @@ bool vbl_bit_array_2d::operator() (int i, int j)
 
   unsigned char mask= (1<<bitindex);
 
-  return bool(data_[byteindex] & mask);
+  return (data_[byteindex] & mask) != 0;
 }
 
 void vbl_bit_array_2d::put(int i, int j, bool const &x)

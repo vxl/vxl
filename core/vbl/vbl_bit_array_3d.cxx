@@ -86,7 +86,7 @@ bool vbl_bit_array_3d::operator() (unsigned int i1, unsigned int i2, unsigned in
   index(i1, i2, i3, byteindex, bitindex);
   unsigned char mask = (1<<bitindex);
 
-  return bool(data_[byteindex] & mask);
+  return (data_[byteindex] & mask) != 0;
 }
 
 void vbl_bit_array_3d_base::index(unsigned x, unsigned y, unsigned z,
