@@ -7,11 +7,11 @@ of this facility.
 
 All objects in VXL should be able to save themselves to a stream (eg a file)
 and restore (load) themselves from a stream (file). The main functions provided
-for this purpose are @code{viol_b_write(os,object);} and @code{viol_b_read(is,object&);}.
+for this purpose are @code{vsl_b_write(os,object);} and @code{vsl_b_read(is,object&);}.
 
 The binary IO for the core libraries (vbl, vil, vgl and vnl) is implemented in `clip-on'
 libraries which live in the @code{io} subdirectories of each library (thus the
-declaration of the function @code{viol_b_write(viol_b_ostream&,const vnl_vector&);}
+declaration of the function @code{vsl_b_write(vsl_b_ostream&,const vnl_vector&);}
 lives in the file @file{vnl/io/vnl_io_vector.h}.
 
 However, it is recommended that I/O for other libraries be provided by writing
@@ -27,14 +27,14 @@ vxl_myclass my_object;
 
 // Fill my_object
 
-viol_b_ostream bfs("my_object.bvl");
+vsl_b_ostream bfs("my_object.bvl");
 if (!bfs)
 @{
     vcl_cerr<<"Failed to open my_object.bvl for output."<<vcl_endl;
 @}
 else
 @{
-    viol_b_write(bfs,my_object);
+    vsl_b_write(bfs,my_object);
     bfs.close();
 @}
 @end example
@@ -44,14 +44,14 @@ To load/restore the object from a file:
 @example
 vxl_myclass my_new_object;
 
-viol_b_istream bfs("my_object.bvl");
+vsl_b_istream bfs("my_object.bvl");
 if (!bfs)
 @{
     vcl_cerr<<"Failed to open my_object.bvl for input."<<vcl_endl;
 @}
 else
 @{
-    viol_b_read(bfs,my_object);
+    vsl_b_read(bfs,my_object);
     bfs.close();
 @}
 @end example
@@ -61,12 +61,12 @@ This extension does not appear to be used by any other program. In many cases ho
 will want to pick a new extension to indicate the contents of a file. For example, we store
 active shape model objects with ending @code{.asm}.
 
-The classes @code{viol_b_ifstream} and @code{viol_b_ofstream} are simple wrappers around
+The classes @code{vsl_b_ifstream} and @code{vsl_b_ofstream} are simple wrappers around
 real @code{vcl_ifstream} and @code{vcl_ofstream} objects. These wrappers ensure that
 you open a file with CR/LF conversion turned off, and they should also allow lots of
 common misuses to be caught at compile time.
 
-The functions @code{viol_b_write(os,X)} and @code{viol_b_read(is,X)} are defined for all
+The functions @code{vsl_b_write(os,X)} and @code{vsl_b_read(is,X)} are defined for all
 reasonable cases, including all inbuilt types, most classes in vcl and the classes in
 the core vxl libraries.
 
@@ -78,8 +78,8 @@ Or for simplicity we provide the utility functions which would allow you to writ
 @example
 vxl_myclass my_object,my_new_object;
 
-viol_binary_save_to_file("my_object.bvl",my_object);
-viol_binary_load_from_file("my_object.bvl",my_new_object);
+vsl_binary_save_to_file("my_object.bvl",my_object);
+vsl_binary_load_from_file("my_object.bvl",my_new_object);
 @end example
 
 @subsection Saving multiple objects
@@ -92,15 +92,15 @@ vxl_my_other_class my_other_object;
 // Fill objects
 // ...
 
-viol_b_ofstream bfs("my_object.bvl");
+vsl_b_ofstream bfs("my_object.bvl");
 if (!bfs)
 @{
     vcl_cerr<<"Failed to open my_object.bvl for output."<<vcl_endl;
 @}
 else
 @{
-    viol_b_write(bfs,my_object);
-    viol_b_write(bfs,my_other_object);
+    vsl_b_write(bfs,my_object);
+    vsl_b_write(bfs,my_other_object);
     bfs.close();
 @}
 @end example
@@ -111,7 +111,7 @@ else
 
 When using polymorphism, there are frequently times when one needs to
 save and restore an object just using a base class pointer to it.
-@code{viol} provides facilities to do this.
+@code{vsl} provides facilities to do this.
 
 There are two cases to consider
 @itemize
@@ -132,8 +132,8 @@ libaries.
 class vxl_my_class : public vxl_baseclass
 @{
 // ...
-  virtual void b_write(viol_b_ostream&) const;
-  virtual void b_read(viol_b_ostream&);
+  virtual void b_write(vsl_b_ostream&) const;
+  virtual void b_read(vsl_b_ostream&);
   virtual vcl_string is_a() const;
   virtual vxl_baseclass* clone() const;
 @};
@@ -142,27 +142,27 @@ class vxl_my_class : public vxl_baseclass
 //  that might appear in the stream.
 void vxl_configure_loaders()
 @{
-    viol_add_to_binary_loader(vxl_my_class());
+    vsl_add_to_binary_loader(vxl_my_class());
 @}
 
-void demonstrate_save(viol_b_ostream& os)
+void demonstrate_save(vsl_b_ostream& os)
 @{
     vxl_baseclass *base_ptr = new vxl_my_class;
 
     // Write the object to the stream, together with
     // an identifier indicating what type it is.
-    viol_b_write(os,base_ptr);
+    vsl_b_write(os,base_ptr);
 
     // Tidy up
     delete base_ptr;
 @}
 
 
-void demonstrate_load(viol_b_istream& is)
+void demonstrate_load(vsl_b_istream& is)
 @{
     vxl_baseclass *base_ptr
 
-    viol_b_read(is,base_ptr);
+    vsl_b_read(is,base_ptr);
 
     // Show the object
     cout<<"Loaded object: "<<base_ptr<<endl;
@@ -173,17 +173,17 @@ void demonstrate_load(viol_b_istream& is)
 @end example
 
 @subsubsection How loading by baseclass pointer works (in-class case)
-When an object is saved by baseclass pointer, using @code{viol_b_write(os,const baseclass*)},
+When an object is saved by baseclass pointer, using @code{vsl_b_write(os,const baseclass*)},
 the name of the class is written first, then the object itself.
 
-When one comes to load the object, using @code{viol_b_read(is,baseclass* &)}, the following
+When one comes to load the object, using @code{vsl_b_read(is,baseclass* &)}, the following
 occurs:
 
 @enumerate
-@item The singleton loader object (@code{viol_binary_loader<baseclass>}) is invoked.
+@item The singleton loader object (@code{vsl_binary_loader<baseclass>}) is invoked.
 @item The loader reads the name of the class from the stream.
 @item The loader compares this name with a list of possible objects,
-      which have been supplied by earlier calls to @code{viol_add_to_loader(derived_class())}.
+      which have been supplied by earlier calls to @code{vsl_add_to_loader(derived_class())}.
 @item If the loader finds a match, it creates a clone of the named class object.
 @item This clone loads the data from the stream.
 @item The loader then sets the baseclass pointer to point to this new object.
@@ -218,10 +218,10 @@ public:
   virtual vxl_baseclass* new_object() const;
 
   //: Write derived class to os using baseclass reference
-  virtual void b_write_by_base(viol_b_ostream& os, const vxl_baseclass& base) const;
+  virtual void b_write_by_base(vsl_b_ostream& os, const vxl_baseclass& base) const;
 
    //: Write derived class to os using baseclass reference
-  virtual void b_read_by_base(viol_b_istream& is, vxl_baseclass& base) const;
+  virtual void b_read_by_base(vsl_b_istream& is, vxl_baseclass& base) const;
 
     //: Copy this object onto the heap and return a pointer
   virtual vxl_baseclassIO* clone() const;
@@ -240,7 +240,7 @@ public:
 // that might appear in the stream.
 void vxl_configure_loaders()
 @{
-    viol_add_to_binary_loader(vxl_my_class_io());
+    vsl_add_to_binary_loader(vxl_my_class_io());
 @}
 
 // The actual IO calls are then identical to those described above for the
@@ -257,21 +257,21 @@ is written to the stream to indicate which class is saved, and when reading
 the stream this is used to indicate what to generate on the heap.
 However, the details of the implementation are more complicated.
 
-When an object is saved by baseclass pointer, using @code{viol_b_write(os,const baseclass*)},
-a function in @code{viol_clipon_binary_loader<baseclass,baseclass_io>} is invoked.
+When an object is saved by baseclass pointer, using @code{vsl_b_write(os,const baseclass*)},
+a function in @code{vsl_clipon_binary_loader<baseclass,baseclass_io>} is invoked.
 It contains a list of IO objects, each of which is queried
 (using the @code{io.is_io_for(const baseclass&)} function to see if it can deal with the
 given class.  If so a name, @code{io.target_classname()}, is saved to the stream, then the
 IO object is used to save the target object.
 
-When one comes to load the object, using @code{viol_b_read(is,baseclass* &)}, the following
+When one comes to load the object, using @code{vsl_b_read(is,baseclass* &)}, the following
 occurs:
 
 @enumerate
-@item The singleton loader object (@code{viol_clipon_binary_loader<baseclass,baseclass_io>}) is invoked.
+@item The singleton loader object (@code{vsl_clipon_binary_loader<baseclass,baseclass_io>}) is invoked.
 @item The loader reads the name of the class from the stream.
 @item The loader compares this name with a list of possible objects,
-      which have been supplied by earlier calls to @code{viol_add_to_loader(derived_class())}.
+      which have been supplied by earlier calls to @code{vsl_add_to_loader(derived_class())}.
 @item If the loader finds a match, it uses the IO object to create a new object on the heap
 @item The io object then loads the data from the stream into the object on the heap
 @item The loader then sets the baseclass pointer to point to this new object.
@@ -311,10 +311,10 @@ For plain classes (those with no virtual functions), and those derived from plai
 you need to add the following functions to the class definition in the .h file.
 @example
 //: Binary save self to stream.
-  void b_write(viol_b_ostream &os) const;
+  void b_write(vsl_b_ostream &os) const;
 
   //: Binary load self from stream.
-  void b_read(viol_b_istream &is);
+  void b_read(vsl_b_istream &is);
 
   //: Return IO version number;
   short version() const;
@@ -331,10 +331,10 @@ declarations to the .h file
 
 @example
 //: Binary save vnl_my_class to stream.
-void viol_b_write(viol_b_ostream &os, const vnl_my_class & b);
+void vsl_b_write(vsl_b_ostream &os, const vnl_my_class & b);
 
 //: Binary load vnl_my_class from stream.
-void viol_b_read(viol_b_istream &is, vnl_my_class & b);
+void vsl_b_read(vsl_b_istream &is, vnl_my_class & b);
 @end example
 
 NOTE: YOU SHOULD ALSO ADD APPROPRIATE TEST PROGRAMS : See below
@@ -345,10 +345,10 @@ you need to add the following functions to the class definition in the .h file.
 
 @example
   //: Binary save self to stream.
-  virtual void b_write(viol_b_ostream &os) const;
+  virtual void b_write(vsl_b_ostream &os) const;
 
   //: Binary load self from stream.
-  virtual void b_read(viol_b_istream &is);
+  virtual void b_read(vsl_b_istream &is);
 
   //: Return IO version number;
   short version() const;
@@ -369,27 +369,27 @@ You will also need to add the following global scope helper function declaration
 
 @example
   //: Binary save vnl_my_class to stream.
-  void viol_b_write(viol_b_ostream &os, const vnl_my_class & b);
+  void vsl_b_write(vsl_b_ostream &os, const vnl_my_class & b);
 
   //: Binary load vnl_my_class from stream.
-  void viol_b_read(viol_b_istream &is, vnl_my_class & b);
+  void vsl_b_read(vsl_b_istream &is, vnl_my_class & b);
 
     //: Binary file stream output operator for class reference
-  void viol_b_write(viol_b_ostream &os, const vanyl_my_base_class* b);
+  void vsl_b_write(vsl_b_ostream &os, const vanyl_my_base_class* b);
 
     //: Allows derived class to be loaded by base-class pointer
     //  A loader object exists which is invoked by calls
-    //  of the form "viol_b_read(os,base_ptr)".  This loads derived class
+    //  of the form "vsl_b_read(os,base_ptr)".  This loads derived class
     //  objects from the disk, places them on the heap and
     //  returns a base class pointer.
     //  In order to work the loader object requires
     //  an instance of each derived class that might be
     //  found.  This function gives the model class to
     //  the appropriate loader.
-  void viol_add_to_binary_loader(const vanyl_my_base_class& b);
+  void vsl_add_to_binary_loader(const vanyl_my_base_class& b);
 
     //: Stream output operator for class pointer
-  void viol_print_summary(vcl_ostream& os,const vanyl_my_base_class* b);
+  void vsl_print_summary(vcl_ostream& os,const vanyl_my_base_class* b);
 @end example
 
 NOTE: YOU SHOULD ALSO ADD APPROPRIATE TEST PROGRAMS : See below
@@ -400,10 +400,10 @@ you need to add the following functions to the class definition in the .h file.
 
 @example
   //: Binary save self to stream.
-  virtual void b_write(viol_b_ostream &os) const;
+  virtual void b_write(vsl_b_ostream &os) const;
 
   //: Binary load self from stream.
-  virtual void b_read(viol_b_istream &is);
+  virtual void b_read(vsl_b_istream &is);
 
   //: Return IO version number;
   short version() const;
@@ -468,11 +468,11 @@ The standard form for the method is
 @example
 //=======================================
 //: Binary save self to stream.
-void vanyl_my_class::b_write(viol_b_ostream &os) const
+void vanyl_my_class::b_write(vsl_b_ostream &os) const
 @{
-  viol_b_write(os, version());
+  vsl_b_write(os, version());
   vanyl_my_base_class::b_write(os); // vanyl_my_base_class is parent of vanyl_my_class
-  viol_b_write(os, this->my_value);
+  vsl_b_write(os, this->my_value);
   ...
 @}
 @end example
@@ -485,15 +485,15 @@ solely to give as much backwards compatibility as you are willing to program.
 @example
 //=======================================
 //: Binary load self from stream.
-void vanyl_my_class::b_read(viol_b_istream &is)
+void vanyl_my_class::b_read(vsl_b_istream &is)
 @{
   short ver;
-  viol_b_read(is, ver);
+  vsl_b_read(is, ver);
   switch(ver)
   @{
   case 1:
     vanyl_my_base_class::b_read(is); // vanyl_my_base_class is parent of vanyl_my_class
-    viol_b_read(is, this->my_value);
+    vsl_b_read(is, this->my_value);
     ...
   break;
 
@@ -572,14 +572,14 @@ vanyl_my_base_class* vanyl_my_class::clone() const
 @example
 //==============================================
 //: Binary save vnl_vector to stream.
-void viol_b_write(viol_b_ostream &os, const vanyl_my_class & v)
+void vsl_b_write(vsl_b_ostream &os, const vanyl_my_class & v)
 @{
   v.b_write(os);
 @}
 
 //==============================================
 //: Binary load vnl_vector from stream.
-void viol_b_read(viol_b_istream &is, vanyl_my_class & v)
+void vsl_b_read(vsl_b_istream &is, vanyl_my_class & v)
 @{
   v.b_read(is);
 @}
@@ -590,12 +590,12 @@ will optimise them completely away.
 @example
 //==============================================
 //: Output a human readable summary to the stream
-void viol_print_summary(vcl_ostream& os,const vanyl_my_class& v)
+void vsl_print_summary(vcl_ostream& os,const vanyl_my_class& v)
 @{
   os << v.is_a() << ": ";
-  viol_indent(os)++;
+  vsl_indent(os)++;
   v.print_summary(os);
-  viol_indent(os)--;
+  vsl_indent(os)--;
 @}
 
 @end example
@@ -608,37 +608,37 @@ The implementation code for functions to be added to base classes is as follows
 //==============================================
 //: Allows derived class to be loaded by base-class pointer
 //  A loader object exists which is invoked by calls
-//  of the form "viol_b_read(os,base_ptr);".  This loads derived class
+//  of the form "vsl_b_read(os,base_ptr);".  This loads derived class
 //  objects from the stream, places them on the heap and
 //  returns a base class pointer.
 //  In order to work the loader object requires
 //  an instance of each derived class that might be
 //  found.  This function gives the model class to
 //  the appropriate loader.
-void viol_add_to_binary_loader(const vanyl_my_base_class& b)
+void vsl_add_to_binary_loader(const vanyl_my_base_class& b)
 @{
-  viol_binary_loader<vanyl_my_base_class>::instance().append(b);
+  vsl_binary_loader<vanyl_my_base_class>::instance().append(b);
 @}
 
 //==============================================
 //:  Binary output to stream by base class pointer
-void viol_b_write(viol_b_ostream &os, const vanyl_my_base_class* b)
+void vsl_b_write(vsl_b_ostream &os, const vanyl_my_base_class* b)
 @{
   if (b)
   @{
-    viol_b_write(os, b->is_a());  // write the objects actual name
+    vsl_b_write(os, b->is_a());  // write the objects actual name
     b->b_write(os);
   @}
   else
-    viol_b_write(os,vcl_string("VIOL_NULL_PTR"));
+    vsl_b_write(os,vcl_string("VIOL_NULL_PTR"));
 @}
 
 //==============================================
 //: Stream summary output for base class pointer
-void viol_print_summary(vcl_ostream& os,const vanyl_my_base_class* b)
+void vsl_print_summary(vcl_ostream& os,const vanyl_my_base_class* b)
 @{
     if (b)
-        return viol_print_summary(*b);
+        return vsl_print_summary(*b);
     else
         return os << "No vanyl_my_base_class defined.";
 @}
@@ -656,10 +656,10 @@ as pure virtual methods in the .h file.
     virtual void print_summary(vcl_ostream& os) const = 0;
 
         //: Save class to binary file stream
-    virtual void b_write(viol_b_ostream& bfs) const = 0;
+    virtual void b_write(vsl_b_ostream& bfs) const = 0;
 
          //: Load class from binary file stream
-    virtual void b_read(viol_b_istream& bfs) = 0;
+    virtual void b_read(vsl_b_istream& bfs) = 0;
 
 @end example
 
@@ -686,8 +686,8 @@ If you are using shared objects though existing classes such as @code{vbl_smart_
 serialisation.
 
 If you are managing shared ownership in any of your classes, you will need to write
-the serialising code yourself. There is no language support for serialisation in C++ 
-(unlike Java), however the viol library does provide some support.
+the serialising code yourself. There is no language support for serialisation in C++
+(unlike Java), however the @code{vsl} library does provide some support.
 
 The basic algorithm performed by all of the owner objects during saving is
 @itemize
@@ -698,7 +698,7 @@ The basic algorithm performed by all of the owner objects during saving is
   @item save object B
   @end itemize
 @item else if we have already saved B
-  @itemize 
+  @itemize
   @item find unique serial number for object B
   @item save the serial number
   @end itemize
@@ -721,8 +721,8 @@ The basic algorithm performed by all of the owner objects during loading is
 @item end
 @end itemize
 
-You can use the serialisation record in @code{viol_b_istream} and
-@code{viol_b_ostream} to record the serial numbers, and whether
+You can use the serialisation record in @code{vsl_b_istream} and
+@code{vsl_b_ostream} to record the serial numbers, and whether
 you have already saved object B.
 
 The best way to explain the detail is in this simplified and
@@ -731,17 +731,17 @@ In this case all the smart_ptr<T> objects are the As, and the
 objects they point to are the Bs.
 
 @example
-#include <viol/viol_binary_io.h>
+#include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_smart_ptr.h>
 
 //: Binary save smart_ptr and serialised *smart_ptr to stream.
 template<class T>
-void viol_b_write(viol_b_ostream & os, const vbl_smart_ptr<T> &p)
+void vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T> &p)
 {
 
   // write version number
   const short io_version_no = 1;
-  viol_b_write(os, io_version_no);
+  vsl_b_write(os, io_version_no);
 
   // Get a serial_number for object being pointed to
   unsigned long id = os.get_serial_number(p.ptr());
@@ -754,45 +754,45 @@ void viol_b_write(viol_b_ostream & os, const vbl_smart_ptr<T> &p)
     // Store a record of the address of B and get a serial number
     id = os.add_serialisation_record(p.ptr());
 
-    viol_b_write(os, id);     // Save the serial number
+    vsl_b_write(os, id);     // Save the serial number
 
 // If you get a compiler error in the next line, it could be because your type T
-// has no viol_b_write(viol_b_ostream &,const T*)  defined on it.
+// has no vsl_b_write(vsl_b_ostream &,const T*)  defined on it.
 // See the documentation in the .h file to see how to add it.
-    viol_b_write(os, p.ptr());  // Only save the actual object if
+    vsl_b_write(os, p.ptr());  // Only save the actual object if
                                 // it hasn't been saved before to this stream
   }
   else
   {
-    viol_b_write(os, id);         // Save the serial number
+    vsl_b_write(os, id);         // Save the serial number
   }
-  
+
 }
 
 //=============================================================================
 //: Binary load self from stream.
 template<class T>
-void viol_b_read(viol_b_istream &is, vbl_smart_ptr<T> &p)
+void vsl_b_read(vsl_b_istream &is, vbl_smart_ptr<T> &p)
 {
   short ver;
-  viol_b_read(is, ver);
+  vsl_b_read(is, ver);
   switch(ver)
   {
   case 1:
     {
       unsigned long id; // Unique serial number indentifying object
-      viol_b_read(is, id);
+      vsl_b_read(is, id);
 
       T * pointer = (T *) is.get_serialisation_pointer(id);
       if (pointer == 0) // Not loaded before
       {
 // If you get a compiler error in the next line, it could be because your type T
-// has no viol_b_read(viol_b_ostream&,T*&)  defined on it.
+// has no vsl_b_read(vsl_b_ostream&,T*&)  defined on it.
 // See the documentation in the .h file to see how to add it.
-        viol_b_read(is, pointer);                 // load object B
+        vsl_b_read(is, pointer);                 // load object B
         is.add_serialisation_record(id, pointer); // remember location of B
       }
-            
+
       p.set_ptr(pointer); // This operator method will set the internal
                           // pointer in vbl_smart_ptr.
     }
@@ -812,31 +812,31 @@ for the class of object B. If not, the following examples might help.
 
 @example
 // Save with base class pointers
-void viol_b_read(viol_b_istream& is, class_B * &p)
+void vsl_b_read(vsl_b_istream& is, class_B * &p)
 {
   delete p;
   bool not_null_ptr;
-  viol_b_read(is, not_null_ptr);
+  vsl_b_read(is, not_null_ptr);
   if (not_null_ptr)
   {
-  	p = new class_B;
-    viol_b_read(is, *p);
+    p = new class_B;
+    vsl_b_read(is, *p);
   }
-  else 
+  else
     p = 0;
-} 
+}
 
 template<class T>
-void viol_b_write(viol_b_ostream& os, const class_B *p)
+void vsl_b_write(vsl_b_ostream& os, const class_B *p)
 {
   if (p==0)
   {
-  	viol_b_write(os, false); /* Indicate null pointer stored */ 
+    vsl_b_write(os, false); /* Indicate null pointer stored */
   }
   else
   {
-    viol_b_write(os,true); /* Indicate non-null pointer stored */
-	  viol_b_write(os,*p);
+    vsl_b_write(os,true); /* Indicate non-null pointer stored */
+      vsl_b_write(os,*p);
   }
 }
 @end example
@@ -856,11 +856,12 @@ classes that are members of a level-1 library.
 @item There is a desire to keep the level 1 libaries small.  IO is available if required.
 @end enumerate
 
-Binary IO for the level-1 libraries (vbl,vil,vgl,vnl) is implemented using
+Binary IO for the level-1 libraries (@code{vbl},@code{vil},@code{vgl},@code{vnl})
+is implemented using
 `clip-on' libraries, the code for which lives in `io' subdirectories of
 each library.  Thus the code for the IO for @code{vnl_vector<T>} lives in
 @file{vnl/io/vnl_io_vector.h/.txx}.  Binary IO for vcl containers is provided in
-the library viol.
+the library @code{vsl}.
 
 The `clip-on' libraries provide a set of external functions and classes which
 allow binary save and restore of the level 1 classes through their public
@@ -870,13 +871,13 @@ Essentially this means writing the following functions for each class:
 
 @example
   //: Binary save vnl_my_class to stream.
-  void viol_b_write(viol_b_ostream &os, const vnl_my_class & c);
+  void vsl_b_write(vsl_b_ostream &os, const vnl_my_class & c);
 
   //: Binary load vnl_my_class from stream.
-  void viol_b_read(viol_b_istream &is, vnl_my_class & c);
+  void vsl_b_read(vsl_b_istream &is, vnl_my_class & c);
 
     //: Stream output operator for class pointer
-  void viol_print_summary(vcl_ostream& os, const vnl_my_class& c);
+  void vsl_print_summary(vcl_ostream& os, const vnl_my_class& c);
 @end example
 
 Each one is written using only the public access functions of the class.
@@ -897,19 +898,19 @@ For instance, @code{vgl_point_2d} has binary IO as follows:
 // \author Tim Cootes
 
 #include <vgl/vgl_point_2d.h>
-#include <viol/viol_binary_io.h>
+#include <vsl/vsl_binary_io.h>
 
 //: Binary save vgl_point_2d to stream.
 template <class T>
-void viol_b_write(viol_b_ostream &os, const vgl_point_2d<T>& p);
+void vsl_b_write(vsl_b_ostream &os, const vgl_point_2d<T>& p);
 
 //: Binary load vgl_point_2d from stream.
 template <class T>
-void viol_b_read(viol_b_istream &is, vgl_point_2d<T>& p);
+void vsl_b_read(vsl_b_istream &is, vgl_point_2d<T>& p);
 
 //: Print human readable summary of a vgl_point_2d object to a stream
 template <class T>
-void viol_print_summary(vcl_ostream& os,const vgl_point_2d<T>& p);
+void vsl_print_summary(vcl_ostream& os,const vgl_point_2d<T>& p);
 #endif // #ifndef vgl_io_point_2d_h_
 @end example
 
@@ -919,35 +920,35 @@ The implementation is
 // This is vxl/vgl/vgl_io_point_2d.txx
 
 #include <vgl/io/vgl_io_point_2d.h>
-#include <viol/viol_binary_io.h>
+#include <vsl/vsl_binary_io.h>
 
 //==============================================================================
 //: Binary save vgl_point_2d to stream.
 template<class T>
-void viol_b_write(viol_b_ostream &os, const vgl_point_2d<T>& p)
+void vsl_b_write(vsl_b_ostream &os, const vgl_point_2d<T>& p)
 {
-  viol_b_write(os, p.version());
-  viol_b_write(os, v.x());
-  viol_b_write(os, v.y());
+  vsl_b_write(os, p.version());
+  vsl_b_write(os, v.x());
+  vsl_b_write(os, v.y());
 }
 
 //==============================================================================
 //: Binary load vgl_point_2d from stream.
 template<class T>
-void viol_b_read(viol_b_istream &is, vgl_point_2d<T>& p)
+void vsl_b_read(vsl_b_istream &is, vgl_point_2d<T>& p)
 {
   short w;
-  viol_b_read(is, w);
+  vsl_b_read(is, w);
   switch(w)
   {
   case 1:
-    viol_b_read(is, p.x());
-    viol_b_read(is, p.y());
+    vsl_b_read(is, p.x());
+    vsl_b_read(is, p.y());
     break;
 
   default:
-    vcl_cerr << "b_read(viol_b_istream &, const vgl_point_2d<T>&)"
-		         << " Unknown version number "<< v << vcl_endl;
+    vcl_cerr << "b_read(vsl_b_istream &, const vgl_point_2d<T>&)"
+                 << " Unknown version number "<< v << vcl_endl;
     vcl_abort();
   }
 
@@ -957,19 +958,19 @@ void viol_b_read(viol_b_istream &is, vgl_point_2d<T>& p)
 //==============================================================================
 //: Output a human readable summary of a vgl_point_2d object to the stream
 template<class T>
-void viol_print_summary(vcl_ostream &os, const vgl_point_2d<T>& p)
+void vsl_print_summary(vcl_ostream &os, const vgl_point_2d<T>& p)
 {
     os<<"(";
-    viol_print_summary(p.x());
+    vsl_print_summary(p.x());
     os<<","
-    viol_print_summary(p.y());
+    vsl_print_summary(p.y());
     os<<")";
 }
 
 #define VGL_IO_LINE_2D_INSTANTIATE(T) \
-template void viol_print_summary(vcl_ostream &, const vgl_point_2d<T >&); \
-template void viol_b_read(viol_b_istream &, vgl_point_2d<T >&); \
-template void viol_b_write(viol_b_ostream &, const vgl_point_2d<T >&); \
+template void vsl_print_summary(vcl_ostream &, const vgl_point_2d<T >&); \
+template void vsl_b_read(vsl_b_istream &, vgl_point_2d<T >&); \
+template void vsl_b_write(vsl_b_ostream &, const vgl_point_2d<T >&); \
 ;
 @end example
 
@@ -989,7 +990,7 @@ Here is an example of a @file{BaseClassIO.h}
 #endif
 
 // This is BaseClass.h
-#include <viol/viol_binary_io.h>
+#include <vsl/vsl_binary_io.h>
 
 // Predeclare classes
 class BaseClass;
@@ -1011,10 +1012,10 @@ public:
   virtual BaseClass* new_object() const;
 
   //: Write derived class to os using baseclass reference
-  virtual void b_write_by_base(viol_b_ostream& os, const BaseClass& base) const;
+  virtual void b_write_by_base(vsl_b_ostream& os, const BaseClass& base) const;
 
    //: Write derived class to os using baseclass reference
-  virtual void b_read_by_base(viol_b_istream& is, BaseClass& base) const;
+  virtual void b_read_by_base(vsl_b_istream& is, BaseClass& base) const;
 
     //: Copy this object onto the heap and return a pointer
   virtual BaseClassIO* clone() const;
@@ -1029,25 +1030,25 @@ public:
 };
 
 //: Add example object to list of those that can be loaded
-//  The viol_binary_loader must see an example of each derived class
+//  The vsl_binary_loader must see an example of each derived class
 //  before it knows how to deal with them.
 //  A clone is taken of b
-void viol_add_to_binary_loader(const BaseClassIO& b);
+void vsl_add_to_binary_loader(const BaseClassIO& b);
 
 //: Binary save to stream by baseclass pointer
-void viol_b_write(viol_b_ostream &os, const BaseClass * b);
+void vsl_b_write(vsl_b_ostream &os, const BaseClass * b);
 
 //: Binary read from stream by baseclass pointer
-void viol_b_read(viol_b_istream &is, BaseClass* &b);
+void vsl_b_read(vsl_b_istream &is, BaseClass* &b);
 
 //: Binary save vgl_my_class to stream.
-void viol_b_write(viol_b_ostream &os, const BaseClass & b);
+void vsl_b_write(vsl_b_ostream &os, const BaseClass & b);
 
 //: Binary load vgl_my_class from stream.
-void viol_b_read(viol_b_istream &is, BaseClass & b);
+void vsl_b_read(vsl_b_istream &is, BaseClass & b);
 
 //: Print human readable summary of object to a stream
-void viol_print_summary(vcl_ostream& os,const BaseClass & b);
+void vsl_print_summary(vcl_ostream& os,const BaseClass & b);
 
 @end example
 
@@ -1063,7 +1064,7 @@ For a BaseClass, one creates @file{BaseClassIO.cxx} as follows
 // This is BaseClassIO.cxx
 #include <BaseClass.h>
 #include <BaseClassIO.h>
-#include <viol/viol_clipon_binary_loader.txx>
+#include <vsl/vsl_clipon_binary_loader.txx>
 //:
 // \file
 // \author Tim Cootes
@@ -1085,15 +1086,15 @@ BaseClass* BaseClassIO()::new_object() const
 }
 
 //: Write derived class to os using baseclass reference
-void BaseClassIO()::b_write_by_base(viol_b_ostream& os, const BaseClass& base) const
+void BaseClassIO()::b_write_by_base(vsl_b_ostream& os, const BaseClass& base) const
 {
-  viol_b_write(os,base);
+  vsl_b_write(os,base);
 }
 
 //: Write derived class to os using baseclass reference
-void BaseClassIO()::b_read_by_base(viol_b_istream& is, BaseClass& base) const
+void BaseClassIO()::b_read_by_base(vsl_b_istream& is, BaseClass& base) const
 {
-  viol_b_read(is,base);
+  vsl_b_read(is,base);
 }
 
 
@@ -1117,31 +1118,31 @@ bool BaseClassIO()::is_io_for(const BaseClass& b) const
 
 //====================================================================================
 //: Binary write to stream.
-void viol_b_write(viol_b_ostream &os, const BaseClass & p)
+void vsl_b_write(vsl_b_ostream &os, const BaseClass & p)
 {
   const short io_version_no = 1;
-  viol_b_write(os, io_version_no);
-  viol_b_write(os, p.x());
-  viol_b_write(os, p.y());
+  vsl_b_write(os, io_version_no);
+  vsl_b_write(os, p.x());
+  vsl_b_write(os, p.y());
   ... Insert rest of xxxxxx code here
 }
 
 //====================================================================================
 //: Binary load from stream.
-void viol_b_read(viol_b_istream &is, BaseClass & p)
+void vsl_b_read(vsl_b_istream &is, BaseClass & p)
 {
   short v;
-  viol_b_read(is, v);
+  vsl_b_read(is, v);
   switch(v)
   {
   case 1:
-    viol_b_read(is, p.x());
-    viol_b_read(is, p.y());
+    vsl_b_read(is, p.x());
+    vsl_b_read(is, p.y());
     ... Insert rest of xxxxxx code here
     break;
 
   default:
-    vcl_cerr << "viol_b_read(is,BaseClass) Unknown version number "<< v << vcl_endl;
+    vcl_cerr << "vsl_b_read(is,BaseClass) Unknown version number "<< v << vcl_endl;
     vcl_abort();
   }
 
@@ -1150,32 +1151,32 @@ void viol_b_read(viol_b_istream &is, BaseClass & p)
 
 //====================================================================================
 //: Output a human readable summary to the stream
-void viol_print_summary(vcl_ostream& os,const BaseClass & p)
+void vsl_print_summary(vcl_ostream& os,const BaseClass & p)
 {
     os<<"("<<p.x()<<","<<p.y()<<")";
     ... Insert rest of xxxxxx code here
 }
 
 //: Add example object to list of those that can be loaded
-//  The viol_binary_loader must see an example of each derived class
+//  The vsl_binary_loader must see an example of each derived class
 //  before it knows how to deal with them.
 //  A clone is taken of b
-void viol_add_to_binary_loader(const BaseClassIO& b)
+void vsl_add_to_binary_loader(const BaseClassIO& b)
 {
-    viol_clipon_binary_loader<BaseClass,BaseClassIO>::instance().add(b);
+    vsl_clipon_binary_loader<BaseClass,BaseClassIO>::instance().add(b);
 }
 
 
 //: Binary save to stream by baseclass pointer
-void viol_b_write(viol_b_ostream &os, const BaseClass * b)
+void vsl_b_write(vsl_b_ostream &os, const BaseClass * b)
 {
-    viol_clipon_binary_loader<BaseClass,BaseClassIO>::instance().write_object(os,b);
+    vsl_clipon_binary_loader<BaseClass,BaseClassIO>::instance().write_object(os,b);
 }
 
 //: Binary read from stream by baseclass pointer
-void viol_b_read(viol_b_istream &is, BaseClass* &b)
+void vsl_b_read(vsl_b_istream &is, BaseClass* &b)
 {
-    viol_clipon_binary_loader<BaseClass,BaseClassIO>::instance().read_object(is,b);
+    vsl_clipon_binary_loader<BaseClass,BaseClassIO>::instance().read_object(is,b);
 }
 
 
@@ -1219,10 +1220,10 @@ public:
   virtual BaseClass* new_object() const;
 
   //: Write derived class to os using baseclass reference
-  virtual void b_write_by_base(viol_b_ostream& os, const BaseClass& base) const;
+  virtual void b_write_by_base(vsl_b_ostream& os, const BaseClass& base) const;
 
    //: Write derived class to os using baseclass reference
-  virtual void b_read_by_base(viol_b_istream& is, BaseClass& base) const;
+  virtual void b_read_by_base(vsl_b_istream& is, BaseClass& base) const;
 
     //: Copy this object onto the heap and return a pointer
   virtual BaseClassIO* clone() const;
@@ -1237,13 +1238,13 @@ public:
 };
 
 //: Binary save vgl_my_class to stream.
-void viol_b_write(viol_b_ostream &os, const DerivedClass & b);
+void vsl_b_write(vsl_b_ostream &os, const DerivedClass & b);
 
 //: Binary load vgl_my_class from stream.
-void viol_b_read(viol_b_istream &is, DerivedClass & b);
+void vsl_b_read(vsl_b_istream &is, DerivedClass & b);
 
 //: Print human readable summary of object to a stream
-void viol_print_summary(vcl_ostream& os, const DerivedClass & b);
+void vsl_print_summary(vcl_ostream& os, const DerivedClass & b);
 
 @end example
 
@@ -1282,15 +1283,15 @@ BaseClass* DerivedClassIO()::new_object() const
 }
 
 //: Write derived class to os using baseclass reference
-void DerivedClassIO()::b_write_by_base(viol_b_ostream& os, const BaseClass& base) const
+void DerivedClassIO()::b_write_by_base(vsl_b_ostream& os, const BaseClass& base) const
 {
-  viol_b_write(os,base);
+  vsl_b_write(os,base);
 }
 
 //: Write derived class to os using baseclass reference
-void DerivedClassIO()::b_read_by_base(viol_b_istream& is, BaseClass& base) const
+void DerivedClassIO()::b_read_by_base(vsl_b_istream& is, BaseClass& base) const
 {
-  viol_b_read(is,base);
+  vsl_b_read(is,base);
 }
 
 
@@ -1314,31 +1315,31 @@ bool DerivedClassIO()::is_io_for(const BaseClass& b) const
 
 //====================================================================================
 //: Binary write to stream.
-void viol_b_write(viol_b_ostream &os, const DerivedClass & p)
+void vsl_b_write(vsl_b_ostream &os, const DerivedClass & p)
 {
   const short io_version_no = 1;
-  viol_b_write(os, io_version_no);
-  viol_b_write(os, p.x());
-  viol_b_write(os, p.y());
+  vsl_b_write(os, io_version_no);
+  vsl_b_write(os, p.x());
+  vsl_b_write(os, p.y());
   ... Insert rest of xxxxxx code here
 }
 
 //====================================================================================
 //: Binary load from stream.
-void viol_b_read(viol_b_istream &is, DerivedClass & p)
+void vsl_b_read(vsl_b_istream &is, DerivedClass & p)
 {
   short v;
-  viol_b_read(is, v);
+  vsl_b_read(is, v);
   switch(v)
   {
   case 1:
-    viol_b_read(is, p.x());
-    viol_b_read(is, p.y());
+    vsl_b_read(is, p.x());
+    vsl_b_read(is, p.y());
     ... Insert rest of xxxxxx code here
     break;
 
   default:
-    vcl_cerr << "viol_b_read(is,DerivedClass) Unknown version number "<< v << vcl_endl;
+    vcl_cerr << "vsl_b_read(is,DerivedClass) Unknown version number "<< v << vcl_endl;
     vcl_abort();
   }
 
@@ -1384,14 +1385,14 @@ void test_point_2d_double_io()
     vgl_point_2d<double> p_out(1.2,3.4), p_in;
 
 
-    viol_b_ofstream bfs_out("vgl_point_2d_test_double_io.bvl.tmp");
+    vsl_b_ofstream bfs_out("vgl_point_2d_test_double_io.bvl.tmp");
     TEST ("Created vgl_point_2d_test_double_io.bvl.tmp for writing", (!bfs_out), false);
-    viol_b_write(bfs_out, p_out);
+    vsl_b_write(bfs_out, p_out);
     bfs_out.close();
 
-    viol_b_ifstream bfs_in("vgl_point_2d_test_double_io.bvl.tmp");
+    vsl_b_ifstream bfs_in("vgl_point_2d_test_double_io.bvl.tmp");
     TEST ("Opened vgl_point_2d_test_double_io.bvl.tmp for reading", (!bfs_in), false);
-    viol_b_read(bfs_in, p_in);
+    vsl_b_read(bfs_in, p_in);
     bfs_in.close();
 
 
@@ -1399,8 +1400,8 @@ void test_point_2d_double_io()
     TEST ("p_out == p_in", p_out == p_in, true);
 
 
-    viol_print_summary(vcl_cout, p_out);
-		vcl_cout << vcl_endl;
+    vsl_print_summary(vcl_cout, p_out);
+        vcl_cout << vcl_endl;
 
 @}
 
@@ -1459,7 +1460,7 @@ restoring all VXL objects to streams/files, in a cross platform manner.
 
 The original intention was that ALL classes with data should implement
 @code{b_write(os)} and @code{b_read(is)} as member functions, and that
-the external @code{viol_b_write(os,object);} would be implemented using
+the external @code{vsl_b_write(os,object);} would be implemented using
 the member function.  The advantages of this scheme are that
 
 @itemize
@@ -1468,7 +1469,7 @@ the member function.  The advantages of this scheme are that
 @end itemize
 
 Unfortunately a problem arises with templated containers, such as @code{vbl_array_2d<T>}.
-Creating a container of type T requires that @code{viol_b_write(os,T)} is implemented,
+Creating a container of type T requires that @code{vsl_b_write(os,T)} is implemented,
 otherwise the @code{b_write} for the array will not compile.  This means that
 adding such code to the library would break existing code, and force un-necessary
 implementation of reading/writing functions (even when creating arrays of
@@ -1492,10 +1493,10 @@ alpha processors.) We has to choose one, and we mostly use Intel platforms.
 
 @subsubsection Format of Integer types
 
-The original code from which viol was derived was cross platform only in the sense
+The original code from which @code{vsl} was derived was cross platform only in the sense
 that it worked on either big-endian 32-bit platforms or little-endian 32-bit platforms.
 This was not an unreasonable assumption at the time it was written. However during the
-requirements capture for viol, it became clear that being able to handle 64-bit
+requirements capture for @code{vsl}, it became clear that being able to handle 64-bit
 fundamental types would be necessary. For example the long on an alpha-64 is 64 bits.
 
 It is fundamentally impracticable to deal quietly and correctly with the problems this
@@ -1540,9 +1541,9 @@ The results do not include memory allocation overhead but does include some OS o
 @example
 Type     Range of values  Range of encoded size  Encoding time   Decoding time
                                  / bytes         /clock cycles   /clock cycles
-unsigned    0  -> 127             1                  18              24        
+unsigned    0  -> 127             1                  18              24
 int        -64 ->  63             1                  19              28
-unsigned    0  ->  4G     1,2,3,4,but mostly 5       37              95       
+unsigned    0  ->  4G     1,2,3,4,but mostly 5       37              95
 int        -2G ->  2G     1,2,3,4,but mostly 5       47             105
 @end example
 
@@ -1571,14 +1572,14 @@ The dest alternative would be to switch to variable length encoded floating poin
 It might be easier just to design a 128 bit format. Until then I/O of long doubles is not
 supported. Please contact the designers if you need to add it.
 
-  
+
 @subsection Changing the IO format
 
-The viol system stores a IO schema version number at the start of the stream. This will enable
+The @code{vsl} system stores a IO schema version number at the start of the stream. This will enable
 a clean backwards compatible upgrade of the IO schema. It will not however make the code rewrite
 trivial. Contact the designers if you wish to change the schema.
 
-  
+
 @subsection Serialisation
 
 A common approach to performing serialisation, is to store the serial number in the shared object
@@ -1593,8 +1594,8 @@ is being written to two streams. When do you clear the already saved flag for ea
 What happens if the output to the two streams is being interleaved? Will a shared object get
 saved to one stream and not the other?
 
-A different approach is used by viol. Here the serialisation record is kept by the stream object.
-Pointers are used to uniquely indentify each shared object within each computer, and a serial number
+A different approach is used by @code{vsl}. Here the serialisation record is kept by the stream object.
+Pointers are used to uniquely identify each shared object within each computer, and a serial number
 is generated to be saved on the stream. Since there is now a record for each pair
 (stream, shared object) there will not be any clashes when saving to multiple streams. It also
 avoids having to modify the shared object.
@@ -1607,7 +1608,7 @@ Your principle designers for this chapter have been Tim Cootes and Ian Scott.
 We based the first draft on the design of the Binary IO system in RADIAL, which was
 originally in designed Manchester by Dave Bales and Dave Cooper.
 
-Finally, the hard work of programming viol and the vxl/io libraries was performed by the
+Finally, the hard work of programming @code{vsl} and the vxl/io libraries was performed by the
 C++ user's group at the Dept. of Imaging Science; Danny Allen, Tim Cootes, Nick Costen,
 Ian Scott, Christine Beeston, David Cristinacce, Franck Bettinger, Louise Butcher, and
 John Kang.

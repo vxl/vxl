@@ -1351,7 +1351,7 @@ into matrix @code{pts}, and a hyperplane fitted using two different methods.
 
 @section Polynomials
 
-The @code{vnl_rpoly_roots} class in @code{vnl/algo} is used to compute 
+The @code{vnl_rpoly_roots} class in @code{vnl/algo} is used to compute
 the roots (or "zeros") of a real polynomial.   For example, given the
 cubic equation
 @example
@@ -1406,11 +1406,11 @@ your problem so that the leading coefficient (i.e. poly[0]) is equal to 1.
 
 @section Nonlinear Optimization
 It is not uncommon in computer vision research to meet problems for which
-there is no known closed-form solution, and a common class of such problems 
+there is no known closed-form solution, and a common class of such problems
 are of the form "find @math{x}, @math{y} and @math{z}, such that the
 function @math{f(x,y,z)} takes its minmimum value".  For example, fitting a
 line to a set of 2D points @{(x_i,y_i) | i=1..n@}. The problem is then
-to find a,b,c to minimize the sum of distances of each point to the line 
+to find a,b,c to minimize the sum of distances of each point to the line
 (@math{a x + b y + c = 0})
 @example
                   n   (a * x[i] + b * y[i] + c)^2
@@ -1489,7 +1489,7 @@ the declaration of @code{my_rosenbrock_functor}.
        @}
 @end example
 Because a @code{vnl_cost_function} can deal with cost functions of any
-dimension, not just the 2D example here, 
+dimension, not just the 2D example here,
 @code{my_rosenbrock_functor} must tell the base class the size of the
 space it's working in.  This is done in the constructor as follows:
 @example
@@ -1502,7 +1502,7 @@ And we can now close the declaration of @code{my_rosenbrock_functor}:
 @end example
 
 
-@c 
+@c
 @c We first derive a function object from @code{vnl_least_squares_function}.
 @c The function object must initialize the base class with the number of
 @c variables, and the number of residuals or unknowns.  In this case, both
@@ -1514,7 +1514,7 @@ And we can now close the declaration of @code{my_rosenbrock_functor}:
 @c   Rosenbrock(): vnl_least_squares_function(2, 2, no_gradient) @{@}
 @c @};
 @c @end example
-@c 
+@c
 @c Then the abstract method @code{f} is implemented, which evaluates the
 @c function.  Any data required for the evaluation can be stored in the class
 @c and will be available whenever @code{f} is called.
@@ -2044,7 +2044,7 @@ simple.
 @cindex Loading objects
 @cindex Restoring objects
 
-@include chapter_viol.texi
+@include chapter_vsl.texi
 
 @comment ------------------------------------------------------------------
 @node    vgui,      Conclusion,     viol,      top
