@@ -101,6 +101,12 @@ void vsrl_menus::corner_method_callback()
   return;
 }
 
+void vsrl_menus::jseg_regions_callback()
+{
+  vsrl_manager::instance()->run_jseg(vsrl_manager::instance()->get_left_image());
+  return;
+}
+
 // vsrl_menus definitions
 
 vgui_menu vsrl_menus::get_menus()
