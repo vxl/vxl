@@ -193,6 +193,26 @@ bmrf_network::prune_by_gamma(double min_gamma, double max_gamma)
 }
 
 
+//: Prune directed arcs leaving the undirected subset of the network
+void 
+bmrf_network::prune_directed()
+{
+  vcl_cout << "pruning directed" << vcl_endl;
+  for( seg_node_map::const_iterator itr = node_from_seg_.begin();
+       itr != node_from_seg_.end(); )
+  {
+    itr->second->prune_directed();
+    if( itr->second->out_arcs_.empty() ){
+      seg_node_map::const_iterator next_itr = itr; ++next_itr;
+      this->remove_node(itr->second);
+      itr = next_itr;
+      vcl_cout << "removing node" << vcl_endl;
+    }else
+      ++itr;
+  }
+}
+
+
 //: Set the epipole for frame \p frame
 void
 bmrf_network::set_epipole(const bmrf_epipole& epipole, int frame)

@@ -194,6 +194,32 @@ bmrf_node::prune_by_probability(double threshold, bool relative)
   }
 }
 
+ 
+//: Prune directed arcs leaving only arcs to nodes which have arcs back to this node
+void 
+bmrf_node::prune_directed()
+{
+  for (int t = 0; t<ALL; ++t){
+    for (arc_iterator o_itr = boundaries_[t]; o_itr != boundaries_[t+1]; ) {
+      bool found = false;
+      for ( arc_iterator i_itr = in_arcs_.begin();
+            i_itr != in_arcs_.end(); ++i_itr ) 
+        if( (*i_itr)->from_ == (*o_itr)->to_ ){
+          found = true;
+          break;
+        }
+      if(!found){
+        arc_iterator next_itr = o_itr;
+        ++next_itr;
+        remove_helper(o_itr, neighbor_type(t));
+        o_itr = next_itr;
+      }
+      else
+        ++o_itr;
+    }
+  }
+}
+
 
 //: Calculate the error in similarity between this transformed by \p xform
 double

@@ -83,6 +83,9 @@ class bmrf_network : public vbl_ref_count
   //: Prune nodes with a mean gamma outside this range
   void prune_by_gamma(double min_gamma, double max_gamma);
 
+  //: Prune directed arcs leaving the undirected subset of the network
+  void prune_directed();
+
   //: Set the epipole for frame \p frame
   void set_epipole(const bmrf_epipole& epipole, int frame);
 

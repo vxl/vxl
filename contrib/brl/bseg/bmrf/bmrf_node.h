@@ -135,6 +135,9 @@ class bmrf_node : public vbl_ref_count
   //: Prune neighbors with a probability below \p threshold
   void prune_by_probability(double threshold, bool relative = false);
 
+  //: Prune directed arcs leaving only arcs to nodes which have arcs back to this node
+  void prune_directed();
+
   //: Add \p node as a neighbor of type \p type
   // \retval true if the node was added successfully
   // \retval false if the neighbor is not valid or already exists
