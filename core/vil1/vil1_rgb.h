@@ -154,7 +154,8 @@ ostream& operator<<(ostream& s, vil_rgb<T> const& rgb)
 }
 
 // Specialization to get vil_rgb<byte> right.
-VCL_DECLARE_SPECIALIZATION(ostream& operator<<(ostream& s, vil_rgb<unsigned char> const& rgb))
+VCL_DEFINE_SPECIALIZATION
+ostream& operator<<(ostream&, vil_rgb<unsigned char> const&);
 
 // ** Arithmetic operators
 

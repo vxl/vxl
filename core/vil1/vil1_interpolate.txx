@@ -4,7 +4,7 @@
 // Author: awf@robots.ox.ac.uk
 // Created: 02 Apr 00
 
-#include <vil/vil_interpolate.h>
+#include "vil_interpolate.h"
 
 template <class T, class U>
 bool vil_interpolate_nearest(vil_memory_image_of<T> const& img, double src_x, double src_y, U* out)
@@ -154,5 +154,5 @@ template bool vil_interpolate_bilinear(vil_memory_image_of<T> const& img, double
 template bool vil_interpolate_bilinear_grad(vil_memory_image_of<T> const&, double, double, U*, U*, U*); \
 template bool vil_interpolate_bicubic(vil_memory_image_of<T> const&, double, double, U*);
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_interpolate.
+#endif
 

@@ -2,7 +2,7 @@
 #ifndef vil_rgba_h_
 #define vil_rgba_h_
 #ifdef __GNUC__
-#pragma interface
+#pragma interface "vil_rgba"
 #endif
 // class vil_rgba<T>:
 //    This is the appropriate pixel type for RGBA colour images.
@@ -135,4 +135,4 @@ public:
 #define VIL_RGBA_INSTANTIATE \
 extern "please include vil/vil_rgba.txx instead"
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_rgba.
+#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_rgba<>.
