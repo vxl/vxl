@@ -52,9 +52,9 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
-# ADD CPP /nologo /GR /MD /W3 /GX /Zm1000 /O2 BUILD_INCLUDES EXTRA_DEFINES /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /c
+# ADD CPP /nologo /GR /MD /W3 /GX /Zm1000 /O2 BUILD_INCLUDES EXTRA_DEFINES /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /D "_AFXDLL" /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
-# ADD RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG" /d "_AFXDLL"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -75,9 +75,9 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB"  /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /GR /GX /Zm1000 /Zi /Od BUILD_INCLUDES EXTRA_DEFINES /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB"  /FD /GZ /c
-# ADD BASE RSC /l 0x409 /d "_DEBUG"
-# ADD RSC /l 0x409 /d "_DEBUG"
+# ADD CPP /nologo /MDd /W3 /GR /GX /Zm1000 /Zi /Od BUILD_INCLUDES EXTRA_DEFINES /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "_AFXDLL" /FD /GZ /c
+# ADD BASE RSC /l 0x409 /d "_DEBUG" 
+# ADD RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -97,10 +97,10 @@ LIB32=link.exe -lib
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MD /W3 /O1 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "_ATL_DLL" /FD /c
-# ADD CPP /nologo /GR /GX /Zm1000 /MD /W3 /O1 BUILD_INCLUDES EXTRA_DEFINES /D "NDEBUG" /D "_MBCS" /D "_ATL_DLL"  /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /FD /c
+# ADD CPP /nologo /GR /GX /Zm1000 /MD /W3 /O1 BUILD_INCLUDES EXTRA_DEFINES /D "NDEBUG" /D "_MBCS" /D "_ATL_DLL"  /D "WIN32" /D "_WINDOWS" /D "_USRDLL" /D "_AFXDLL" /FD /c
 # SUBTRACT CPP /YX /Yc /Yu
-# ADD BASE RSC /l 0x409 /d "NDEBUG"
-# ADD RSC /l 0x409 /d "NDEBUG"
+# ADD BASE RSC /l 0x409 /d "NDEBUG" 
+# ADD RSC /l 0x409 /d "NDEBUG" /d "_AFXDLL"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -116,4 +116,3 @@ LIB32=link.exe -lib
 # Name "OUTPUT_LIBNAME - Win32 Release"
 # Name "OUTPUT_LIBNAME - Win32 Debug"
 # Name "OUTPUT_LIBNAME - Win32 Release MinSize"
-

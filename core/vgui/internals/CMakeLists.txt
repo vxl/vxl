@@ -9,6 +9,7 @@ ADD_LIBRARY(vgui_internals vgui_internals_sources)
 
 
 SOURCE_FILES(vgui_internals_sources
+vgui_accelerate_tag
 vgui_rasterpos
 trackball
 vgui_dialog_field
@@ -29,7 +30,9 @@ vgui_draw_line
 vgui_accelerate
 )
 
-
+IF(WIN32)
+  SOURCE_FILES(vgui_internals_sources vgui_accelerate_mfc)
+ENDIF(WIN32)
 
 INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindX11.cmake)
 IF(X11_LIBRARY)
@@ -40,8 +43,3 @@ IF(X11_LIBRARY)
   )
 ENDIF(X11_LIBRARY)
 
-IF(WIN32)
-  SOURCE_FILES(vgui_internals_sources
-    vgui_accelerate_mfc
-  )
-ENDIF(WIN32)

@@ -55,9 +55,9 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GR /GX /Zm1000 /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /nologo /MD /W3 /GR /GX /Zm1000 /O2 /D "WIN32" BUILD_INCLUDES EXTRA_DEFINES /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
+# ADD CPP /nologo /MD /W3 /GR /GX /Zm1000 /O2 /D "WIN32" BUILD_INCLUDES EXTRA_DEFINES /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /D "_AFXDLL" /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
-# ADD RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG" /d "_AFXDLL"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -80,10 +80,10 @@ CM_MULTILINE_LIBRARIES
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP  /W3 /GR /Zm1000 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
-# ADD CPP /nologo /W3 /MDd /GR /Gm /GX /Zm1000 /ZI /Od /D "WIN32" BUILD_INCLUDES EXTRA_DEFINES /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
+# ADD CPP /nologo /W3 /MDd /GR /Gm /GX /Zm1000 /ZI /Od /D "WIN32" BUILD_INCLUDES EXTRA_DEFINES /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D "_AFXDLL" /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "_DEBUG"
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
@@ -106,9 +106,9 @@ CM_MULTILINE_LIBRARIES
 # PROP Intermediate_Dir "ReleaseMinSize"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MD /W3 /GR /GX /Zm1000 /O1 /Gs /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /nologo /MD /W3 /GR /GX /Zm1000 /O1 /Gs /D "WIN32" BUILD_INCLUDES EXTRA_DEFINES /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
+# ADD CPP /nologo /MD /W3 /GR /GX /Zm1000 /O1 /Gs /D "WIN32" BUILD_INCLUDES EXTRA_DEFINES /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "_AFXDLL" /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
-# ADD RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG" /d "_AFXDLL"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
