@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vil_open"
+#pragma implementation
 #endif
 #include "vil_open.h"
 
