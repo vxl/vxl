@@ -93,7 +93,11 @@ vgl_homg_point_3d<Type> vgl_homg_operators_3d<Type>::intersect_line_and_plane (
   double denominator = dot_product (x2, p);
 
   // Scale for conditioning
-  double scale = 1.0/(numerator + denominator);
+  double scale;
+  if( numerator + denominator != 0 )
+    scale = 1.0/(numerator + denominator);
+  else
+    scale = 1.0/numerator;
   numerator *= scale;
   denominator *= scale;
 
