@@ -10,9 +10,6 @@ SUBDIRS(geml)
 # octree stuff from Geoff's thesis
 SUBDIRS(octree)
 
-# Multi-view database
-SUBDIRS(gmvl)
-
 # Dense matcher
 SUBDIRS(vsrl)
 
@@ -24,6 +21,9 @@ SUBDIRS(vsol)
 
 # topology
 SUBDIRS(gst vtol)
+
+# Multi-view database
+SUBDIRS(gmvl)
 
 # digital  geometry
 SUBDIRS(vdgl)
