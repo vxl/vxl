@@ -1,4 +1,10 @@
+ADD_LIBRARY( vbl_example_templates vbl_example_templates )
+AUX_SOURCE_DIRECTORY( Templates vbl_example_templates )
+
+LINK_LIBRARIES( vbl_example_templates )
+
 ADD_EXECUTABLE( vbl_smart_ptr_example vbl_smart_ptr_example )
+
 
 # Immediate dependencies
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vbl/CMakeListsLink.txt )
