@@ -1,5 +1,4 @@
-//--*-c++-*---
-// This is oxl/mvl/bvgl_h_matrix_3d.h
+// This is brl/bbas/bvgl/bvgl_h_matrix_3d.h
 #ifndef bvgl_h_matrix_3d_h_
 #define bvgl_h_matrix_3d_h_
 //:
@@ -61,17 +60,13 @@ class bvgl_h_matrix_3d
   void set_identity();
   void set(const T *t_matrix);
   void set(vnl_matrix_fixed<T,4,4> const& t_matrix);
-
-// stream I/O
-
-friend
-vcl_ostream &operator<<(vcl_ostream &,bvgl_h_matrix_3d const &);
-
-friend
-vcl_istream& operator>>(vcl_istream &,bvgl_h_matrix_3d       &);
 };
 
+// stream I/O
+template <class T> vcl_ostream& operator<<(vcl_ostream& s, bvgl_h_matrix_3d<T> const& h);
+template <class T> vcl_istream& operator>>(vcl_istream& s, bvgl_h_matrix_3d<T>&       h);
 
-#define BVGL_H_MATRIX_3D_INSTANTIATE(T) extern "please include bvgl/bvgl_h_matrix_3d.txx first" 
+
+#define BVGL_H_MATRIX_3D_INSTANTIATE(T) extern "please include bvgl/bvgl_h_matrix_3d.txx first"
 
 #endif // bvgl_h_matrix_3d_h_

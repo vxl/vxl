@@ -1,4 +1,3 @@
-//--*-c++-*------
 // This is brl/bbas/bvgl/bvgl_h_matrix_1d.h
 #ifndef bvgl_h_matrix_1d_h_
 #define bvgl_h_matrix_1d_h_
@@ -16,7 +15,7 @@
 // Modifications
 //    22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
 //    23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
-//    22 Mar 2003 - J.L. Mundy - preparing for upgrade to vgl 
+//    22 Mar 2003 - J.L. Mundy - preparing for upgrade to vgl
 // \endverbatim
 
 #include <vnl/vnl_matrix_fixed.h>
@@ -60,13 +59,12 @@ class bvgl_h_matrix_1d
 
   static bvgl_h_matrix_1d<T > read(char const* filename);
   static bvgl_h_matrix_1d<T > read(vcl_istream&);
-
-  friend
-  vcl_ostream& operator << (vcl_ostream& s, const bvgl_h_matrix_1d<T >& h);
-  friend
-  vcl_istream& operator >> (vcl_istream& s, bvgl_h_matrix_1d<T >& h);
 };
 
+template <class T> vcl_ostream& operator<<(vcl_ostream& s, const bvgl_h_matrix_1d<T>& h);
+template <class T> vcl_istream& operator>>(vcl_istream& s, bvgl_h_matrix_1d<T>& h);
 
-#define BVGL_H_MATRIX_1D_INSTANTIATE(T) extern "please include bvgl/bvgl_h_matrix_1d.txx first" 
+
+#define BVGL_H_MATRIX_1D_INSTANTIATE(T) extern "please include bvgl/bvgl_h_matrix_1d.txx first"
+
 #endif // bvgl_h_matrix_1d_h_

@@ -1,7 +1,6 @@
-//--*-c++-*------
-// This is oxl/mvl/bvgl_h_matrix_2d.h
-#ifndef _bvgl_h_matrix_2d_h
-#define _bvgl_h_matrix_2d_h
+// This is brl/bbas/bvgl/bvgl_h_matrix_2d.h
+#ifndef bvgl_h_matrix_2d_h_
+#define bvgl_h_matrix_2d_h_
 //:
 //  \file
 // \brief 3x3 plane-to-plane projectivity
@@ -13,7 +12,7 @@
 // Modifications
 //    22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
 //    23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
-//    22 Mar 2003 - J.L. Mundy - preparing for upgrade to vgl 
+//    22 Mar 2003 - J.L. Mundy - preparing for upgrade to vgl
 // \endverbatim
 
 #include <vnl/vnl_matrix_fixed.h>
@@ -54,7 +53,7 @@ class bvgl_h_matrix_2d
 
   //: assumed to be a point conic
   vgl_conic<T> operator() (vgl_conic<T> const& c) const;
-  
+
   // these operations require taking an inverse
   vgl_homg_point_2d<T> preimage(vgl_homg_point_2d<T> const& p) const;
   vgl_homg_line_2d<T> operator()(vgl_homg_line_2d<T> const& l) const;
@@ -77,13 +76,12 @@ class bvgl_h_matrix_2d
 
   bool read(vcl_istream& s);
   bool read(char const* filename);
-
-  friend
-  vcl_ostream& operator << (vcl_ostream& s, const bvgl_h_matrix_2d<T>& h);
-  friend
-  vcl_istream& operator >> (vcl_istream& s, bvgl_h_matrix_2d<T>& h);
 };
 
-#define BVGL_H_MATRIX_2D_INSTANTIATE(T) extern "please include bvgl/bvgl_h_matrix_2d.txx first" 
+template <class T> vcl_ostream& operator<<(vcl_ostream& s, const bvgl_h_matrix_2d<T>& h);
+template <class T> vcl_istream& operator>>(vcl_istream& s, bvgl_h_matrix_2d<T>& h);
 
-#endif // _bvgl_h_matrix_2d_h
+
+#define BVGL_H_MATRIX_2D_INSTANTIATE(T) extern "please include bvgl/bvgl_h_matrix_2d.txx first"
+
+#endif // bvgl_h_matrix_2d_h_
