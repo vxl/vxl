@@ -2,6 +2,7 @@
 #include <vil3d/algo/vil3d_binary_dilate.h>
 #include <vil3d/algo/vil3d_binary_erode.h>
 #include <vil3d/algo/vil3d_binary_opening.h>
+#include <vil3d/algo/vil3d_convolve_1d.h>
 #include <vil3d/algo/vil3d_exp_filter.h>
 #include <vil3d/algo/vil3d_gauss_reduce.h>
 #include <vil3d/algo/vil3d_grad_1x3.h>
@@ -21,11 +22,14 @@
 #include <vil3d/vil3d_new.h>
 #include <vil3d/vil3d_plane.h>
 #include <vil3d/vil3d_print.h>
+#include <vil3d/vil3d_property.h>
 #include <vil3d/vil3d_sample_profile_trilin.h>
+#include <vil3d/vil3d_save.h>
 #include <vil3d/vil3d_slice.h>
 #include <vil3d/vil3d_switch_axes.h>
 #include <vil3d/vil3d_trilin_interp.h>
 #include <vil3d/vil3d_transform.h>
-#include <vil3d/vil3d_property.h>
+
+#include <vil3d/vil3d_fwd.h>
 
 int main() { return 0; }
