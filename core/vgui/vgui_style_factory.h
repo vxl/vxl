@@ -8,16 +8,15 @@
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   18 Oct 1999
-// \brief  Factory to manufactures vgui_style objects.
-//         Contains classes: vgui_style_factory
+// \brief  Factory that manufactures vgui_style objects.
+//  Contains classes: vgui_style_factory
 //
-// \endverbatim
+// \verbatim
 //  Modifications:
 //    18-OCT-1999 P.Pritchett - Initial version.
 // \endverbatim
 
 #include <vcl_functional.h>
-#include <vcl_utility.h>
 #include <vcl_vector.h>
 #include <vcl_map.h>
 #include "dll.h"
