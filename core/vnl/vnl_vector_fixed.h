@@ -169,12 +169,12 @@ vcl_ostream &operator<<(vcl_ostream &os, vnl_vector_fixed<T, n> const &v) {
 
 //                                        what's this?
 #if !defined (VCL_SUNPRO_CC) || ! defined (_ODI_OSSG_)
-vnl_vector_fixed<double,3> cross_3d (vnl_vector_fixed_ref<double,3> const& vect1,
-                                     vnl_vector_fixed_ref<double,3> const& vect2);
-vnl_vector_fixed<float,3> cross_3d (vnl_vector_fixed_ref<float,3> const& vect1,
-                                    vnl_vector_fixed_ref<float,3> const& vect2);
-vnl_vector_fixed<int,3> cross_3d (vnl_vector_fixed_ref<int,3> const& vect1,
-                                  vnl_vector_fixed_ref<int,3> const& vect2);
+vnl_vector_fixed<double,3> cross_3d (vnl_vector_fixed<double,3> const& vect1,
+                                     vnl_vector_fixed<double,3> const& vect2);
+vnl_vector_fixed<float,3> cross_3d (vnl_vector_fixed<float,3> const& vect1,
+                                    vnl_vector_fixed<float,3> const& vect2);
+vnl_vector_fixed<int,3> cross_3d (vnl_vector_fixed<int,3> const& vect1,
+                                  vnl_vector_fixed<int,3> const& vect2);
 #endif
 
 
