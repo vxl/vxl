@@ -138,6 +138,18 @@ SOURCE=.\Templates/vsl_map_io+unsigned.vnl_double_2-.cxx
 SOURCE=.\Templates/vsl_vector_io+vcl_pair+double.bmrf_node_sptr--.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+bmrf_curve_3d-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bmrf_curve_3d-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_list_io+bmrf_curvel_3d_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bmrf_curve_3d.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\bmrf_epi_point.cxx
 # End Source File
 # Begin Source File
@@ -238,6 +250,12 @@ SOURCE=.\bmrf_arc_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\bmrf_epi_seg_compare.h
+# End Source File
+# Begin Source File
+SOURCE=.\bmrf_curve_3d.h
+# End Source File
+# Begin Source File
+SOURCE=.\bmrf_curve_3d_sptr.h
 # End Source File
 # End Group
 # End Target
