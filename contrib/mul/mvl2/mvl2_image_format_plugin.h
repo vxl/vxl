@@ -42,7 +42,7 @@ class mvl2_image_format_plugin : public vil_image_resource_plugin
                                const vcl_string & path, const vcl_string & filetype,
                                const vcl_string & colour);
 
-  //: Check wether a filename is a potential candidate for loading and if it is available.
+  //: Check whether a filename is a potential candidate for loading and if it is available.
   virtual bool can_be_loaded(const vcl_string& filename);
 
  protected:  // add user-defined methods after this line (do not remove)
