@@ -55,5 +55,7 @@ MAIN( test_bilin_interp )
   START( "Bilinear Interpolation" );
 
   test_bilin_interp_byte();
+
+  SUMMARY();
 }
 

@@ -93,7 +93,7 @@ void test_image_view_byte()
   image0(2,3)=222;
   TEST("set_to_window is shallow copy",image_win(0,0),222);
 
-	vcl_cout<<image0.is_a()<<vcl_endl;
+  vcl_cout<<image0.is_a()<<vcl_endl;
   TEST("is_a() specialisation for vil_byte",image0.is_a(),"vil2_image_view<unsigned char>");
 }
 
@@ -143,4 +143,8 @@ MAIN( test_image_view )
 
   test_image_view_byte();
 //  test_image_2d_byte_io();
+
+
+  SUMMARY();
+
 }
