@@ -15,7 +15,7 @@
 //: Minor version number.
 // This increments between versions. There is no
 // "even = release, odd = developement" pattern, or anything like that.
-#define VXL_VERSION_MINOR 0
+#define VXL_VERSION_MINOR 1
 
 //: Patch number.
 // This is only likely to be non-zero if an serious bug is found soon after the
