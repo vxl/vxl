@@ -103,7 +103,9 @@ generate_random_indices( vcl_vector<bool>& to_use ) const
       continue;
     
     // mark it
+    // vcl_cout << index << ' ';
     to_use[index] = true;
     ++num;
   }
+  // vcl_cout <<"\n";
 }
