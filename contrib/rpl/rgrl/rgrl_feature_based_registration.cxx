@@ -288,7 +288,6 @@ register_single_feature( rgrl_mask_box            image_region,
     current_stage_ = resolution;
 
     DebugMacro(  1, " Current resolution "<< resolution <<'\n' );
-    DebugMacro( 2, "Current geometric scale = "<<scale->geometric_scale()<<'\n' );
 
     // If no estimator found for the current stage, the default is
     // from the initializer. Feature_based can only deal with one
@@ -360,6 +359,7 @@ register_single_feature( rgrl_mask_box            image_region,
           if ( new_scale->has_geometric_scale() &&
                new_scale->geometric_scale() < expected_min_geometric_scale_ ) {
             should_estimate_scale = false;
+            if (!scale) scale = new_scale;
             scale->set_geometric_scale(expected_min_geometric_scale_);
             DebugMacro( 2, "Scale below expected_min_geometric_scale. Set to expected_min_geometric_scale.\n" );
           }
@@ -626,6 +626,7 @@ register_multi_feature( rgrl_mask_box            image_region,
             if ( new_scale->has_geometric_scale() &&
                  new_scale->geometric_scale() < expected_min_geometric_scale_ ) {
               should_estimate_scale = false;
+              if (!scales[fs]) scales[fs] = new_scale;
               scales[fs]->set_geometric_scale(expected_min_geometric_scale_);
               DebugMacro( 2, "Scale below expected_min_geometric_scale. Set to expected_min_geometric_scale.\n" );
             }
