@@ -222,7 +222,7 @@ edgePtr(gevd_bufferxy& edgeMap, int x, int y)
 inline vtol_edge_2d *
 edgePtr(const gevd_bufferxy& edgeMap, int x, int y)
 {
-  return (*((vtol_edge_2d **) edgeMap.GetElementAddr(x,y)));
+  return (*((vtol_edge_2d *const *) edgeMap.GetElementAddr(x,y)));
 }
 
 
@@ -235,7 +235,7 @@ vertexPtr(gevd_bufferxy& vertexMap, int x, int y)
 inline vtol_vertex_2d *
 vertexPtr(const gevd_bufferxy& vertexMap, int x, int y)
 {
-  return (*((vtol_vertex_2d **) vertexMap.GetElementAddr(x,y)));
+  return (*((vtol_vertex_2d *const *) vertexMap.GetElementAddr(x,y)));
 }
 
 #endif

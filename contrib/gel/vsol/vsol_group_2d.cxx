@@ -148,7 +148,7 @@ int vsol_group_2d::deep_size(void) const
 
   for(i=storage_->begin();i!=storage_->end();++i)
     {
-      // g=dynamic_cast<vsol_group_2d *>((*i).ptr());   // GOOD VERSION
+      // g=dynamic_cast<vsol_group_2d const *>((*i).ptr());   // GOOD VERSION
       g=(vsol_group_2d *)((*i).ptr()->cast_to_group()); // BAD HACK
       if(g!=0)
         result+=g->deep_size();
@@ -213,7 +213,7 @@ vsol_group_2d::is_child(const vsol_spatial_object_2d_sptr &new_object) const
       result=(*i).ptr()==new_object.ptr();
       if(!result)
         {
-          // g=dynamic_cast<vsol_group_2d *>((*i).ptr());   // GOOD VERSION
+          // g=dynamic_cast<vsol_group_2d const *>((*i).ptr());   // GOOD VERSION
           g=(vsol_group_2d *)((*i).ptr()->cast_to_group()); // BAD HACK
           if(g!=0)
             g->is_child(new_object);

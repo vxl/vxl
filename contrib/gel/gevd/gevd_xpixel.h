@@ -48,7 +48,7 @@ fvectorPixel(gevd_bufferxy& buf, int x, int y)
 inline vnl_vector<float>*
 fvectorPixel(const gevd_bufferxy& buf, int x, int y)
 {
-  return (*((vnl_vector<float>**) buf.GetElementAddr(x,y)));
+  return (*((vnl_vector<float>*const *) buf.GetElementAddr(x,y)));
 }
 
 inline void freeFVectors(gevd_bufferxy& buf)

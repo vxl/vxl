@@ -455,7 +455,7 @@ inline void vsol_spatial_object_2d::describe(vcl_ostream &strm,
 inline vcl_ostream &operator<<(vcl_ostream &strm,
                            const vsol_spatial_object_2d &so)
 {
-  ((vsol_spatial_object_2d*)&so)->print(strm);
+  ((vsol_spatial_object_2d const*)&so)->print(strm);
   return strm;
 }
 
@@ -463,7 +463,7 @@ inline vcl_ostream &operator<<(vcl_ostream &strm,
                            const vsol_spatial_object_2d *so)
 {
   if(so!=0)
-    ((vsol_spatial_object_2d*)so)->print(strm);
+    ((vsol_spatial_object_2d const*)so)->print(strm);
   else
     strm << " NULL Spatial Object. ";
   return strm;

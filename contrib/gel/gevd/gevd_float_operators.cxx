@@ -3785,10 +3785,10 @@ gevd_float_operators::BufferToFloat (const gevd_bufferxy& from, gevd_bufferxy& t
     break;
   case sizeof(int):
     {
-      unsigned int* frombuf = (unsigned int*) from.GetBuffer();
+      const unsigned int* frombuf = (const unsigned int*) from.GetBuffer();
       float* tobuf = (float*) to.GetBuffer();
       for (int i = 0; i < size; i++)
-        tobuf[i] = (unsigned int) frombuf[i];
+        tobuf[i] = frombuf[i];
     }
     break;
   default:
