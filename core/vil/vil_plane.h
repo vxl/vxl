@@ -24,6 +24,26 @@ inline vil2_image_view<T> vil2_plane(const vil2_image_view<T> &im, unsigned p)
     im.istep(),im.jstep(),im.planestep());
 }
 
+//: Return a view of a selection of im's planes.
+// You can select any equally-spaced sequence of planes.
+// \param first The index of the first plane you want to select.
+// \param skip The spacing in your selection - will be 1 for adjacent planes.
+// \param n The total number of planes in your selection.
+//  O(1).
+template<class T>
+inline vil2_image_view<T> vil2_planes(const vil2_image_view<T> &im,
+                                     unsigned first, int skip,
+                                     unsigned n)
+{
+  assert(first<im.nplanes());
+  assert(first + n*skip < im.nplanes());
+  assert(first + n*skip > 0);
+  return vil2_image_view<T>(im.memory_chunk(),
+    im.top_left_ptr()+first*im.planestep(),
+    im.ni(),im.nj(),n,
+    im.istep(),im.jstep(),skip*im.planestep());
+}
+
 
 //: Return a specific plane of an image.
 // \relates vil2_image_resource

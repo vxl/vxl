@@ -247,6 +247,14 @@ void test_image_view(S d1, vcl_string s_name, T d2)
   // Only test rgba conversion for float and byte.
   // other components types don't have rgba instantiated.
   test_image_view_rgba(image2, image7);
+
+  //Test vil2_planes
+  vil2_image_view<S> image8(11,17,9);
+  vil2_image_view<S> image9 = vil2_planes(image8,7,-2,3);
+  TEST("vil2_planes",
+    vil2_plane(image9,0) == vil2_plane(image8,7) &&
+    vil2_plane(image9,1) == vil2_plane(image8,5) &&
+    vil2_plane(image9,2) == vil2_plane(image8,3), true);
 }
 
 static

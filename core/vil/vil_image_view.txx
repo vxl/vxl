@@ -653,7 +653,7 @@ bool vil2_image_view<T>::operator==(const vil2_image_view_base &rhs) const
     nplanes_   == other.nplanes_ &&
     ni_        == other.ni_ &&
     nj_        == other.nj_ &&
-    planestep_ == other.planestep_ &&
+    (nplanes_ <= 1 || planestep_ == other.planestep_) &&
     istep_     == other.istep_ &&
     jstep_     == other.jstep_;
 }
