@@ -189,9 +189,6 @@ SOURCE=.\internals/trackball.c
 SOURCE=.\internals/vgui_accelerate.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\internals/vgui_accelerate_mfc.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\internals/vgui_accelerate_tag.cxx
 # End Source File
 # Begin Source File
@@ -778,9 +775,6 @@ SOURCE=.\internals/trackball.h
 # End Source File
 # Begin Source File
 SOURCE=.\internals/vgui_accelerate.h
-# End Source File
-# Begin Source File
-SOURCE=.\internals/vgui_accelerate_mfc.h
 # End Source File
 # Begin Source File
 SOURCE=.\internals/vgui_accelerate_x11.h
