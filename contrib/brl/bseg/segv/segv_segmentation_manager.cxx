@@ -411,14 +411,10 @@ void segv_segmentation_manager::draw_regions(vcl_vector<vtol_intensity_face_sptr
     t2D->add_face(f);
     if (verts)
     {
-      vcl_vector<vtol_vertex_sptr>* vts = f->vertices();
-      for (vcl_vector<vtol_vertex_sptr>::iterator vit = vts->begin();
-           vit != vts->end(); vit++)
-      {
-        vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
-        t2D->add_vertex(v);
-      }
-      delete vts;
+      vcl_vector<vtol_vertex_sptr> vts; f->vertices(vts);
+      for (vcl_vector<vtol_vertex_sptr>::iterator vit = vts.begin();
+           vit != vts.end(); ++vit)
+        t2D->add_vertex((*vit)->cast_to_vertex_2d());
     }
   }
   t2D->post_redraw();

@@ -25,7 +25,7 @@ vcl_ostream& segv_vtol_soview2D_edge::print(vcl_ostream& s) const
   return vgui_soview2D_linestrip::print(s);
 }
 
-segv_vtol_soview2D_edge::segv_vtol_soview2D_edge(vtol_edge_2d_sptr& e)
+segv_vtol_soview2D_edge::segv_vtol_soview2D_edge(vtol_edge_2d_sptr const& e)
 {
   if (!e)
   {
@@ -98,13 +98,7 @@ segv_vtol_soview2D_face::segv_vtol_soview2D_face(vtol_face_2d_sptr& f)
     vcl_cout << "In segv_vtol_soview2D_face(..) - null input face\n";
     return;
   }
-  edge_list* edges = f->edges();
-
-  for (edge_list::iterator eit = edges->begin(); eit != edges->end(); eit++)
-  {
-    vtol_edge_2d_sptr e = (*eit)->cast_to_edge_2d();
-    vgui_soview2D* sov = new segv_vtol_soview2D_edge(e);
-    ls.push_back(sov);
-  }
-  delete edges;
+  edge_list edges; f->edges(edges);
+  for (edge_list::iterator eit = edges.begin(); eit != edges.end(); ++eit)
+    ls.push_back(new segv_vtol_soview2D_edge((*eit)->cast_to_edge_2d()));
 }
