@@ -21,7 +21,7 @@
 struct vnl_brent_data;
 
 //: Brent 1D minimizer
-// This minimised uses both golden section search and parbolic interpolation
+// This minimised uses both golden section search and parabolic interpolation
 // for a fast and robust function minimiser.
 class vnl_brent : public vnl_nonlinear_minimizer
 {
