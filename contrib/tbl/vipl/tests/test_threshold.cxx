@@ -21,7 +21,7 @@
   ONE_TEST(x,p,shrt_img,shrt_ori,vil_image,unsigned short,1298,m+"_short"); \
 /*ONE_TEST(x,p,flot_img,flot_ori,vil_image,float,0,m+"_float") */
 
-int vepl_test_threshold() {
+int vipl_test_threshold() {
   vil_image byte_img = CreateTest8bitImage(32,32),  byte_ori = CreateTest8bitImage(32,32);
   vil_image shrt_img = CreateTest16bitImage(32,32), shrt_ori = CreateTest16bitImage(32,32);
   vil_image colr_img = CreateTest24bitImage(32,32), colr_ori = CreateTest24bitImage(32,32);
@@ -36,4 +36,4 @@ int vepl_test_threshold() {
   return 0;
 }
 
-TESTMAIN(vepl_test_threshold);
+TESTMAIN(vipl_test_threshold);
