@@ -18,7 +18,6 @@
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_matrix.h>
-#include <vcl_iosfwd.h>
 
 //: Specializes vnl_matrix for integers, adding a vnl_matrix<double> ctor.
 class vnl_int_matrix : public vnl_matrix<int>
@@ -32,7 +31,7 @@ class vnl_int_matrix : public vnl_matrix<int>
   vnl_int_matrix(unsigned r, unsigned c, int fillvalue): Base(r, c, fillvalue) {}
   vnl_int_matrix(const vnl_matrix<double>& d);
   vnl_int_matrix(const vnl_matrix<int>& d):Base(d) {}
-  vnl_int_matrix& operator = (const vnl_matrix<int>& d) { return (vnl_int_matrix&)Base::operator = (d); }
+  vnl_int_matrix& operator=(const vnl_matrix<int>& d) { return (vnl_int_matrix&)Base::operator=(d); }
 };
 
 #endif // vnl_int_matrix_h_
