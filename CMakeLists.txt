@@ -7,15 +7,19 @@ PROJECT(allvxl)
 
 INCLUDE (${CMAKE_ROOT}/Modules/Dart.cmake)
 
+IF(WIN32)
+  OPTION(BUILD_SHARED_LIBS "Should shared libraries be the default?" NO)
+ELSE(WIN32)
+  OPTION(BUILD_SHARED_LIBS "Should shared libraries be the default?" YES)
+ENDIF(WIN32)
+
 # Some people may want to build the test cases even though they aren't
 # using Dart.
 IF(NOT DART_ROOT)
   IF(WIN32)
     OPTION(BUILD_TESTING "Should the tests be built?" NO)
-    OPTION(BUILD_SHARED_LIBS "Should shared libraries be the default?" NO)
   ELSE(WIN32)
     OPTION(BUILD_TESTING "Should the tests be built?" YES)
-    OPTION(BUILD_SHARED_LIBS "Should shared libraries be the default?" YES)
   ENDIF(WIN32)
 
   IF(BUILD_TESTING)
