@@ -137,6 +137,12 @@ SOURCE=.\test_temp_filename.cxx
 # Begin Source File
 SOURCE=.\test_url.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_sleep_timer.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_vul_file.cxx
+# End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
