@@ -15,12 +15,7 @@
 #                  vipl_with_section            (for group D)
 
 USES = vxl tbl
-TRY_TIFF := 1
-TRY_JPEG := 1
-TRY_PNG := 1
-
-## vil_stream_url uses tcp sockets.
-USE_SOCKETS := 1
+include ${IUEROOT}/vxl/vil/config.mk
 
 # A. using vil_image as 2D storage class:
 MINI_PROG_SOURCES += example_convert.cxx
