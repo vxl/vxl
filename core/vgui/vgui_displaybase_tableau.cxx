@@ -205,10 +205,10 @@ void vgui_displaybase_tableau::draw_soviews_select()
     // only highlight if the so is selectable
     vgui_soview* so = *so_iter;
     if ( so->get_selectable())
-      {
-	so->load_name();
-        so->draw_select();
-      }
+    {
+      so->load_name();
+      so->draw_select();
+    }
   }//  for all soviews
 
   // remove name of last object
@@ -281,14 +281,14 @@ bool vgui_displaybase_tableau::select(unsigned id)
     vgui_soview* so = vgui_soview::id_to_object(id);
 
     if ( so->get_selectable())
-      {
-        vgui_message msg;
-        //msg.text = "soview select";
-        msg.user = (void const*) &vgui_soview::msg_select;
-        so->notify(msg);
+    {
+      vgui_message msg;
+      //msg.text = "soview select";
+      msg.user = (void const*) &vgui_soview::msg_select;
+      so->notify(msg);
 
-        if (cb_) cb_->select(id);
-      }
+      if (cb_) cb_->select(id);
+    }
   }
 
   return true;

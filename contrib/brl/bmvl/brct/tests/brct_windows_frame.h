@@ -29,7 +29,7 @@ class vgui_window;
 class brct_windows_frame : public vgui_wrapper_tableau
 {
  public:
-	void show_back_projection();
+  void show_back_projection();
   void show_next_observes();
   void add_predicted_curve2d(vcl_vector<vgl_point_2d<double> > &pts);
   void show_predicted_curve();
@@ -69,7 +69,7 @@ class brct_windows_frame : public vgui_wrapper_tableau
 
   //: 2d curve for the next frame, which is used for debugging
   vcl_vector<vgui_soview2D_lineseg* > debug_curves_2d_;
-  
+
   //: 2d curve at time t
   vcl_vector<vgui_soview2D_lineseg* > curves_2d_;
 

@@ -40,10 +40,12 @@ bool vgui_displaylist2D_tableau::handle(const vgui_event& e)
     this->highlight(0);
     post_overlay_redraw();
   }
-  
-  if (e.type == vgui_OVERLAY_DRAW) {
+
+  if (e.type == vgui_OVERLAY_DRAW)
+  {
     unsigned highlighted = this->get_highlighted();
-    if (highlighted) {
+    if (highlighted)
+    {
       vgui_soview* so = vgui_soview::id_to_object(highlighted);
       vgui_style* style = so->get_style();
       style->apply_point_size();
@@ -52,13 +54,13 @@ bool vgui_displaylist2D_tableau::handle(const vgui_event& e)
       so->draw();
     }
   }
-  
+
   return vgui_displaybase_tableau::handle(e);
 }
 
 //: Return indices of my elements which are near (x,y)
 void vgui_displaylist2D_tableau::get_hits(float x, float y,
-					  vcl_vector<unsigned>& my_hits)
+                                          vcl_vector<unsigned>& my_hits)
 {
   // select objects within 20 pixels of the mouse
   GLuint *ptr = vgui_utils::enter_pick_mode(x,y,20);
@@ -83,10 +85,12 @@ void vgui_displaylist2D_tableau::get_hits(float x, float y,
   // list's id.
 
   for (vcl_vector<vcl_vector<unsigned> >::iterator i=hits.begin();
-       i != hits.end(); ++i) {
+       i != hits.end(); ++i)
+  {
     vcl_vector<unsigned> const& names = *i;
 
-    if( ! names.empty() && names[0] == this->get_id() ) {
+    if ( ! names.empty() && names[0] == this->get_id() )
+    {
       // this assertion is based on the code in
       // vgui_displaybase_tableau::draw_soviews_select(). If this is
       // not true, then please review the assumptions about the
@@ -99,14 +103,14 @@ void vgui_displaylist2D_tableau::get_hits(float x, float y,
 }
 
 unsigned vgui_displaylist2D_tableau::find_closest(float x, float y,
-						  vcl_vector<unsigned> const& hits)
+                                                  vcl_vector<unsigned> const& hits)
 {
   unsigned closest = 0;
   float closest_dist = -1; // vnl_numeric_traits<float>::maxval;
 
   for (vcl_vector<unsigned>::const_iterator h_iter = hits.begin();
-       h_iter != hits.end(); ++h_iter) {
-
+       h_iter != hits.end(); ++h_iter)
+  {
     // In principle, VXL shouldn't use dynamic_cast since it depends
     // on RTTI, and so far (July 2003), we are not allowed to depend
     // on RTTI in vxl/core code. However, dynamic_cast is *much*
@@ -128,8 +132,8 @@ unsigned vgui_displaylist2D_tableau::find_closest(float x, float y,
   return closest;
 }
 
-bool vgui_displaylist2D_tableau::motion(int x, int y) {
-
+bool vgui_displaylist2D_tableau::motion(int x, int y)
+{
   vgui_projection_inspector pi;
   float ix, iy;
   pi.window_to_image_coordinates(x,y, ix,iy);
@@ -138,13 +142,12 @@ bool vgui_displaylist2D_tableau::motion(int x, int y) {
   get_hits(x,y,hits);
   unsigned closest_id = find_closest(ix,iy,hits);
 
-  if( closest_id != this->get_highlighted() ) {
+  if ( closest_id != this->get_highlighted() ) {
     this->highlight( closest_id );
     post_overlay_redraw();
-  }// end if
+  }
 
   return false;
-
 }
 
 bool vgui_displaylist2D_tableau::mouse_down(int x, int y, vgui_button button, vgui_modifier modifier)
@@ -153,7 +156,8 @@ bool vgui_displaylist2D_tableau::mouse_down(int x, int y, vgui_button button, vg
   vgui_projection_inspector().window_to_image_coordinates(x,y, ix,iy);
 
   // selecting
-  if (button == vgui_LEFT && modifier == 0) {
+  if (button == vgui_LEFT && modifier == 0)
+  {
 #ifdef DEBUG
     vcl_cerr << "selecting at " << x << ' ' << y << vcl_endl;
 #endif
@@ -171,9 +175,10 @@ bool vgui_displaylist2D_tableau::mouse_down(int x, int y, vgui_button button, vg
   }// end selecting
 
   // deselecting
-  else if (button == vgui_MIDDLE) {
-
-    if (modifier & vgui_SHIFT) {
+  else if (button == vgui_MIDDLE)
+  {
+    if (modifier & vgui_SHIFT)
+    {
 #ifdef DEBUG
       vcl_cerr << "deselecting all\n";
 #endif
@@ -194,8 +199,7 @@ bool vgui_displaylist2D_tableau::mouse_down(int x, int y, vgui_button button, vg
       this->post_redraw();
       return true;
     }
-
     return false;
   }// end deselecting
   return false;
-}// end mouse_down
+}

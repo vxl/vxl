@@ -30,7 +30,7 @@ class kalman_filter
   virtual kalman_state inc(double dt);
 #endif // 0
  public:
-	vcl_vector<vgl_point_2d<double> > get_back_projection();
+  vcl_vector<vgl_point_2d<double> > get_back_projection();
   vnl_matrix<double> get_predicted_curve();
   vnl_double_3 get_next_motion(vnl_double_3 v);
   vcl_vector<vgl_point_2d<double> > get_pre_observes();
