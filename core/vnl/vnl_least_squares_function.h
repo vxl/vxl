@@ -43,7 +43,7 @@ public:
     use_gradient
   };
   bool failure;
-public:
+
 // -- Construct vnl_least_squares_function, passing number of parameters
 // (unknowns, domain dimension) and number of residuals (range dimension).
 // The optional argument should be no_gradient if the gradf function has not
@@ -53,7 +53,7 @@ public:
   virtual ~vnl_least_squares_function();
 
   // Operations----------------------------------------------------------------
-  void throw_failure(); // the virtuals may call this to a signal failure.
+  void throw_failure(); // the virtuals may call this to signal a failure.
   void clear_failure(); // 
 
   // Computations--------------------------------------------------------------
