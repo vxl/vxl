@@ -1,6 +1,6 @@
 #ifndef vcl_borland_cstdlib_h_
 #define vcl_borland_cstdlib_h_
-// This is first attempt at a <cstdlib> for the Borland compiler - PVr,Dec.2003.
+// This is a first attempt at a <cstdlib> for the Borland compiler - PVr,Dec.2003.
 #include <cstdlib>
 
 // If we define vcl_abs, for example, to ::abs, we have conflicts
@@ -9,18 +9,9 @@
 // functions into the std namespace.
 
 namespace std {
-  typedef ::div_t div_t;
-  typedef ::ldiv_t ldiv_t;
-
-  inline int abs(int x) { return x >= 0 ? x : -x; }
+  //inline int abs(int x) { return x >= 0 ? x : -x; }
   inline long abs(long x) { return x >= 0 ? x : -x; }
-
   inline long labs(long x) { return x >= 0 ? x : -x; }
-
-  inline div_t div(int x, int y) { return ::div(x,y); }
-  inline ldiv_t div(long x, long y) { return ::ldiv(x,y); }
-
-  inline ldiv_t ldiv(long x, long y) { return ::ldiv(x,y); }
 }
 
 #ifndef vcl_abs
