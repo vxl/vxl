@@ -1,5 +1,5 @@
-#ifndef vpl_vpl_h_
-#define vpl_vpl_h_
+#ifndef vpl_h_
+#define vpl_h_
 
 #include <vcl_cstddef.h>
 
