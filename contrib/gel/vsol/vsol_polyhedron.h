@@ -26,13 +26,11 @@ class vsol_polyhedron;
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include "vsol_polyhedron_sptr.h"
-#include "vsol_volume_3d.h"
-
-#include "vsol_point_3d.h"
-#include "vsol_point_3d_sptr.h"
-#include "vsol_box_3d_sptr.h"
+#include <vsol/vsol_volume_3d.h>
+#include <vsol/vsol_point_3d.h>
+#include <vsol/vsol_point_3d_sptr.h>
 #include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 
 class vsol_polyhedron : public vsol_volume_3d
 {
@@ -42,7 +40,7 @@ class vsol_polyhedron : public vsol_volume_3d
   //***************************************************************************
 
   //---------------------------------------------------------------------------
-  // Description: List of vertices
+  //: List of vertices
   //---------------------------------------------------------------------------
   vcl_vector<vsol_point_3d_sptr> storage_;
 
@@ -149,9 +147,9 @@ class vsol_polyhedron : public vsol_volume_3d
 
  protected:
   //---------------------------------------------------------------------------
-  //: Default constructor. Do nothing. Just to enable inheritance.
+  //: Default constructor. Do nothing. Just to enable inheritance. Protected.
   //---------------------------------------------------------------------------
-  vsol_polyhedron(void) {}
+  vsol_polyhedron() {}
 };
 
 #endif // vsol_polyhedron_h_

@@ -25,6 +25,7 @@
 // External declarations for values
 //*****************************************************************************
 #include <vsol/vsol_polygon_2d.h>
+#include <vcl_iosfwd.h>
 
 class vsol_rectangle_2d : public vsol_polygon_2d
 {

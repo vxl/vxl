@@ -27,6 +27,7 @@
 #include <vsol/vsol_region_3d.h>
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 #include <vgl/vgl_fwd.h> // vgl_vector_3d
 
 class vsol_polygon_3d : public vsol_region_3d
@@ -37,7 +38,7 @@ class vsol_polygon_3d : public vsol_region_3d
   //***************************************************************************
 
   //---------------------------------------------------------------------------
-  // Description: List of vertices
+  //: List of vertices
   //---------------------------------------------------------------------------
   vcl_vector<vsol_point_3d_sptr> *storage_;
 
@@ -135,7 +136,7 @@ class vsol_polygon_3d : public vsol_region_3d
 
   //---------------------------------------------------------------------------
   //: Are `new_vertices' valid vertices to build a polygon of the current type?
-  //  That is are all vertices in the same plane ?
+  //  That is: are all vertices in the same plane ?
   //---------------------------------------------------------------------------
   virtual bool valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_vertices) const;
 
@@ -161,9 +162,9 @@ class vsol_polygon_3d : public vsol_region_3d
 
  protected:
   //---------------------------------------------------------------------------
-  //: Default constructor. Do nothing. Just to enable inheritance.
+  //: Default constructor. Do nothing. Just to enable inheritance.  Protected.
   //---------------------------------------------------------------------------
-  vsol_polygon_3d(void);
+  vsol_polygon_3d();
 };
 
 #endif // vsol_polygon_3d_h_

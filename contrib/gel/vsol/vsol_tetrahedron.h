@@ -20,9 +20,9 @@
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
-#include "vsol_tetrahedron_sptr.h"
-#include "vsol_polyhedron.h"
-#include "vsol_point_3d.h"
+#include <vsol/vsol_polyhedron.h>
+#include <vsol/vsol_point_3d.h>
+#include <vcl_iosfwd.h>
 
 class vsol_tetrahedron : public vsol_polyhedron
 {
@@ -32,7 +32,7 @@ class vsol_tetrahedron : public vsol_polyhedron
   //***************************************************************************
 
   //---------------------------------------------------------------------------
-  //: Constructor from its 4 vertices
+  //: Constructor from 4 points
   //---------------------------------------------------------------------------
   vsol_tetrahedron(const vsol_point_3d_sptr &new_p0,
                    const vsol_point_3d_sptr &new_p1,

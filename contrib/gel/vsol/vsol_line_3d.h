@@ -29,6 +29,8 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_homg_line_3d_2_points.h>
 
+#include <vcl_iosfwd.h>
+
 class vsol_line_3d : public vsol_curve_3d
 {
   //***************************************************************************
@@ -36,12 +38,12 @@ class vsol_line_3d : public vsol_curve_3d
   //***************************************************************************
 
   //---------------------------------------------------------------------------
-  // Description: First point of the straight line segment
+  //: First point of the straight line segment
   //---------------------------------------------------------------------------
   vsol_point_3d_sptr p0_;
 
   //---------------------------------------------------------------------------
-  // Description: Last point of the straight line segment
+  //: Last point of the straight line segment
   //---------------------------------------------------------------------------
   vsol_point_3d_sptr p1_;
 
@@ -123,11 +125,13 @@ class vsol_line_3d : public vsol_curve_3d
   //---------------------------------------------------------------------------
   inline bool operator!=(const vsol_line_3d &o) const {return !operator==(o);}
 
+#if 0
   //---------------------------------------------------------------------------
-  //: Save downcasting methods
+  //: Safe downcasting methods
   //---------------------------------------------------------------------------
-//   virtual vsol_line_3d* cast_to_line(void) { return this;}
-//   virtual const vsol_line_3d * cast_to_line(void) const { return this;}
+  virtual vsol_line_3d* cast_to_line(void) { return this;}
+  virtual const vsol_line_3d * cast_to_line(void) const { return this;}
+#endif // 0
 
   //***************************************************************************
   // Status report

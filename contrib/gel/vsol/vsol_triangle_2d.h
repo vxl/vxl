@@ -21,6 +21,7 @@
 // External declarations for values
 //*****************************************************************************
 #include <vsol/vsol_polygon_2d.h>
+#include <vcl_iosfwd.h>
 
 class vsol_triangle_2d : public vsol_polygon_2d
 {
@@ -30,7 +31,7 @@ class vsol_triangle_2d : public vsol_polygon_2d
   //***************************************************************************
 
   //---------------------------------------------------------------------------
-  //: Constructor from its 3 vertices
+  //: Constructor from 3 points
   //---------------------------------------------------------------------------
   vsol_triangle_2d(const vsol_point_2d_sptr &new_p0,
                    const vsol_point_2d_sptr &new_p1,

@@ -26,6 +26,7 @@
 //*****************************************************************************
 #include <vsol/vsol_polygon_3d.h>
 #include <vsol/vsol_point_3d_sptr.h>
+#include <vcl_iosfwd.h>
 
 class vsol_rectangle_3d : public vsol_polygon_3d
 {
