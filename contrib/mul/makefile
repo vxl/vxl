@@ -9,6 +9,9 @@ SUBDIRS += vpdfl
 # Manchester images 
 SUBDIRS += mil
 
+# Manchester classifier
+SUBDIRS += clsfy
+
 ################################
 include ${IUEROOT}/config/top.mk
 ################################
