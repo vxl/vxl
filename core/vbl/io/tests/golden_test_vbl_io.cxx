@@ -7,7 +7,7 @@
 #include <vbl/io/vbl_io_array_3d.h>
 #include <vbl/io/vbl_io_user_info.h>
 
-#include <vbl/io/tests/vbl_io_test_classes.h>
+#include <vbl/io/tests/vbl_io_test_classes.cxx>
 
 
 #include <vbl/io/vbl_io_smart_ptr.h>
@@ -122,12 +122,13 @@ void golden_test_vbl_io(bool save_file)
     sa_out[k]=data1;
 */
   
-  
+/* This won't work on systems without a user called cbj!
   // User Info
   vcl_string name="cjb";
   vbl_user_info ui_out(name), ui_in("");
   ui_out.init("cjb");
-  
+*/
+
   
   // Smart Pointer
   n = 50;
@@ -151,7 +152,7 @@ void golden_test_vbl_io(bool save_file)
     vsl_b_write(bfs_out, a2_out);	
     vsl_b_write(bfs_out, a3_out);
 //    vsl_b_write(bfs_out, sa_out);
-    vsl_b_write(bfs_out, ui_out);
+//    vsl_b_write(bfs_out, ui_out);
     vsl_b_write(bfs_out, sp1_out);
     vsl_b_write(bfs_out, sp2_out);
     
@@ -173,7 +174,7 @@ void golden_test_vbl_io(bool save_file)
   vsl_b_read(bfs_in, a2_in);	
   vsl_b_read(bfs_in, a3_in);
 //  vsl_b_read(bfs_in, sa_in);
-  vsl_b_read(bfs_in, ui_in);
+//  vsl_b_read(bfs_in, ui_in);
   vsl_b_read(bfs_in, sp1_in);
   vsl_b_read(bfs_in, sp2_in);
   
@@ -266,12 +267,14 @@ void golden_test_vbl_io(bool save_file)
     }
   }
   TEST ("sa_out == sa_in",test_result4, true);
-*/  
+*/
+
+/*
   //Test User Info
   TEST ("ui_out == ui_in",ui_out.uid==ui_in.uid && ui_out.gid==ui_in.gid && ui_out.name==ui_in.name &&
     ui_out.home_directory==ui_in.home_directory && ui_out.full_name==ui_in.full_name &&
     ui_out.shell==ui_in.shell && ui_out.passwd==ui_in.passwd, true);
-  
+*/
   
   
   // Test Smart Pointer
