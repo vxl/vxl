@@ -13,7 +13,6 @@
 // for basic types to ensure that templated classes
 // vsl_print_summaries can work with all types
 
-
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>
@@ -26,7 +25,7 @@
 // Currently the main use of this is to encourage streams to be opened
 // in binary mode (ie. withour CR/LF conversion)
 //
-// These classes also provide basic support for serialisation. This allows an
+// This class also provide basic support for serialisation. This allows an
 // object which has multiple pointers to it to be saved only once. During
 // reloading, the pointers can be all set up again to point to the single
 // object. vsl_b_ostream does not do the serialisation itself, but instead
@@ -36,8 +35,6 @@
 class vsl_b_ostream
 {
 public:
-
-
   //: Create this adaptor using an existing stream
   // The stream (os) must be open (i.e. ready to receive insertions)
   // so that the
@@ -66,7 +63,7 @@ public:
   // If error checking is on, and the object pointer is already in the records,
   // this function will abort()
   virtual unsigned long add_serialisation_record(void *pointer,
-                                                  int other_data = 0);
+    int other_data = 0);
 
   //: Returns a unique identifier for the object.
   // Returns 0 if there is no record of the object.
@@ -141,8 +138,13 @@ public:
 //: An adaptor for any vcl_istream to make it suitable for binary input
 // Currently the main use of this is to encourage file streams to be opened
 // in binary mode (ie. withour CR/LF conversion)
-// In future, if someone wants to add serialisation support, they
-// can modify these classes to do that.
+//
+// This class also provide basic support for serialisation. During loading,
+// multiple pointers to one object can be all set up again to point to the
+// single object. vsl_b_ostream does not do the serialisation itself, but
+// instead keeps records of unique identifiers to allow the user's code to
+// perform serialisation safely. For instance, a smart pointer type object will
+// have to know how to safely save whatever it is pointing to.
 class vsl_b_istream
 {
 public:
@@ -275,7 +277,6 @@ void vsl_b_read(vsl_b_istream& is,vcl_string& n );
 inline void vsl_print_summary(vcl_ostream& os, const vcl_string& n )
 {  os << n; }
 
-
 //: Write  to vsl_b_ostream
 void vsl_b_write(vsl_b_ostream& os,const char* s );
 //: Read  from vsl_b_istream
@@ -350,7 +351,6 @@ void vsl_b_read(vsl_b_istream& is,double& n );
 inline void vsl_print_summary(vcl_ostream& os, double n )
 { os << n; }
 
-
 //: Write a block of values to a vsl_b_ostream
 // If you want to output a block of fundamental data types very efficiently,
 // then just #include <vsl_binary_explicit_io.h>
@@ -370,6 +370,4 @@ inline void vsl_b_read_block(vsl_b_istream &is, T* begin, unsigned nelems)
   while (nelems--)
     vsl_b_read(is, *(begin++));
 }
-
-
 #endif // vsl_binary_complex_io_h_
