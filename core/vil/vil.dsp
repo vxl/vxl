@@ -330,6 +330,9 @@ SOURCE=.\Templates/vil2_rgba+float-.cxx
 SOURCE=.\Templates/vil2_rgba+unsignedchar-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil2_resample_bilin+byte.byte-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vil2_open.cxx
 # End Source File
 # Begin Source File
