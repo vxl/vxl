@@ -4,6 +4,7 @@
 #include <vil/algo/vil_binary_opening.h>
 #include <vil/algo/vil_blob_finder.h>
 #include <vil/algo/vil_cartesian_differential_invariants.h>
+#include <vil/algo/vil_colour_space.h>
 #include <vil/algo/vil_convolve_1d.h>
 #include <vil/algo/vil_convolve_2d.h>
 #include <vil/algo/vil_corners.h>
