@@ -26,6 +26,7 @@ SOURCE_FILES(mil_sources
                                  mil_gaussian_pyramid_builder_2d.h
  mil_scale_pyramid_builder_2d.txx mil_scale_pyramid_builder_2d.h mil_scale_pyramid_builder_2d.cxx
  mil_sample_profile_2d.txx       mil_sample_profile_2d.h
+ mil_sample_grid_2d.txx          mil_sample_grid_2d.h
 
  mil_bilin_interp_2d.h
  mil_convert_vil.h
