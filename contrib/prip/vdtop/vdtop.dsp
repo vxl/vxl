@@ -92,9 +92,6 @@ SOURCE=.\vdtop_well_composed_lower_leveling_kernel.h
 # Begin Source File
 SOURCE=.\vil_canny_deriche_grad_filter.h
 # End Source File
-# Begin Source File
-SOURCE=.\vil_clamp.h
-# End Source File
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
