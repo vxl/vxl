@@ -5,13 +5,14 @@
 #pragma interface
 #endif
 //
-// Class : QvVrmlFile
+// .NAME QvVrmlFile - Parse VRML 1.0 file.
+// .INCLUDE QvVrmlFile.h
+// .FILE QvVrmlFile.cxx
 //
 // .SECTION Description
 //    QvQvVrmlFile is used to parse a VRML 1.0 file, so that the QvVisitor
 //    can be used later to traverse it.
 //
-// .NAME        QvVrmlFile - Parse VRML 1.0 file.
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 09 Jan 99
 //

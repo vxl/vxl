@@ -27,7 +27,9 @@
 
 //<file>
 //
-// Name:        vecutil.h
+// .NAME        vecutil.h - utilities for 3D vectors
+// .INCLUDE     vecutil.h
+// .FILE        vecutil.cxx
 //
 // Purpose:     utilities for 3D vectors
 //
