@@ -27,12 +27,12 @@ char const* vil_ras_format_tag = "ras";
 
 namespace
 {
+#if VXL_LITTLE_ENDIAN
   //: Change the byte order on a little endian machine.
   // Do nothing on a big endian machine.
   inline
   void swap_endian( vxl_uint_32& word )
   {
-#if VXL_LITTLE_ENDIAN
     vxl_uint_8* bytes = reinterpret_cast<vxl_uint_8*>( &word );
     vxl_uint_8 t = bytes[0];
     bytes[0] = bytes[3];
@@ -40,8 +40,8 @@ namespace
     t = bytes[1];
     bytes[1] = bytes[2];
     bytes[2] = t;
-#endif
   }
+#endif
 
   //: Equivalent of ntoh
   // Read a big-endian word from the stream, storing it in the
@@ -50,7 +50,9 @@ namespace
   {
     if ( vs->read( &word, 4 ) < 4 )
       return false;
+#if VXL_LITTLE_ENDIAN
     swap_endian( word );
+#endif
     return true;
   }
 
@@ -58,7 +60,9 @@ namespace
   // Write a host-format word as to a big-endian formatted stream.
   bool write_uint_32( vil_stream* vs, vxl_uint_32 word )
   {
+#if VXL_LITTLE_ENDIAN
     swap_endian( word );
+#endif
     return vs->write( &word, 4 ) == 4;
   }
 

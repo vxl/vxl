@@ -171,10 +171,11 @@ static int ReadInteger(vil_stream* vs, char& temp)
   return n;
 }
 
+#if VXL_LITTLE_ENDIAN
+
 // Convert the buffer of 16 bit words from MSB to host order
 static void ConvertMSBToHost( void* buf, int num_words )
 {
-#if VXL_LITTLE_ENDIAN
   unsigned char* ptr = static_cast<unsigned char*>(buf);
   for ( int i=0; i < num_words; ++i )
   {
@@ -183,13 +184,11 @@ static void ConvertMSBToHost( void* buf, int num_words )
     *(ptr+1) = t;
     ptr += 2;
   }
-#endif
 }
 
 // Convert the buffer of 16 bit words from host order to MSB
 static void ConvertHostToMSB( void* buf, int num_words )
 {
-#if VXL_LITTLE_ENDIAN
   unsigned char* ptr = static_cast<unsigned char*>(buf);
   for ( int i=0; i < num_words; ++i )
   {
@@ -198,8 +197,9 @@ static void ConvertHostToMSB( void* buf, int num_words )
     *(ptr+1) = t;
     ptr += 2;
   }
-#endif
 }
+
+#endif // VXL_LITTLE_ENDIAN
 
 
 //: This method accepts any valid PNM file (first 3 bytes "P1\n" to "P6\n")
@@ -352,13 +352,15 @@ vil_image_view_base_sptr vil_pnm_image::get_copy_view(
       vs_->read((unsigned char *)buf->data() + y * byte_out_width, byte_out_width);
       byte_start += byte_width;
     }
-    if ( bytes_per_sample==2 && VXL_LITTLE_ENDIAN )
-      ConvertMSBToHost( reinterpret_cast<unsigned char *>(buf->data()), ni*nj*nplanes() );
-    else if ( bytes_per_sample > 2 )
+    if ( bytes_per_sample > 2 )
     {
       vcl_cerr << "ERROR: pnm: reading rawbits format with > 16bit samples\n";
       return 0;
     }
+#if VXL_LITTLE_ENDIAN
+    else if ( bytes_per_sample==2 )
+      ConvertMSBToHost( reinterpret_cast<unsigned char *>(buf->data()), ni*nj*nplanes() );
+#endif
 #if 0 // see comment below
     if (ncomponents_ == 1) {
 #endif
@@ -541,7 +543,9 @@ bool vil_pnm_image::put_view(const vil_image_view_base& view,
       {
         vs_->seek(byte_start);
         vcl_memcpy(&tempbuf[0], pb->top_left_ptr() + y * view.ni(), byte_out_width);
+#if VXL_LITTLE_ENDIAN
         ConvertHostToMSB(&tempbuf[0], view.ni());
+#endif
         vs_->write(&tempbuf[0], byte_out_width);
         byte_start += byte_width;
       }
@@ -579,7 +583,9 @@ bool vil_pnm_image::put_view(const vil_image_view_base& view,
           vxl_uint_16 tempbuf[3];
           for (unsigned p = 0; p < ncomponents_; ++p)
             tempbuf[p] = (*pb)(x,y,p);
+#if VXL_LITTLE_ENDIAN
           ConvertHostToMSB(tempbuf, ncomponents_);
+#endif
           vs_->write(tempbuf, bytes_per_pixel);
         }
         byte_start += byte_width;
