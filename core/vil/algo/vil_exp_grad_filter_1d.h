@@ -43,7 +43,7 @@ inline void vil2_exp_grad_filter_1d(const srcT* src, vcl_ptrdiff_t sstep,
   src_end = src;
   while (s!=src_end)
   {
-    *dest += rt/k_sum;      // Add in value for +ive half of filter
+    *dest += (destT)(rt/k_sum); // Add in value for +ive half of filter
     rt *= k; k_sum *= k;    // Scale sums
     rt += *s; k_sum += 1.0; // Increment with next element
     s-=sstep; dest-=dstep;  // Move to next element
