@@ -71,4 +71,4 @@ void test_normalise_image_2d()
   TEST("test variance normalisation",diff2<1e-6,true);
 }
 
-TESTMAIN(test_convert_vil);
+TESTMAIN(test_normalise_image_2d);
