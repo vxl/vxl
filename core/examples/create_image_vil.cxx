@@ -1,7 +1,6 @@
 #include <vcl_string.h>
 #include <vul/vul_arg.h>
 #include <vil/vil_save.h>
-#include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
 
 vil_image_view<unsigned char> make_image(int wd, int ht)
