@@ -21,6 +21,8 @@ SOURCES += strk_tracking_face_2d.cxx
 MANPAGE_SOURCES += strk_tracking_face_2d_sptr.h
 SOURCES += strk_region_info.cxx
 SOURCES += strk_region_info_params.cxx
+SOURCES += strk_feature_capture_process.cxx
+SOURCES += strk_io.cxx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
