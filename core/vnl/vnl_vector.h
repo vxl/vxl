@@ -88,6 +88,7 @@ public:
     : num_elmts(that.num_elmts), data(that.data)
     { that.num_elmts=0; that.data=0; }
 
+#ifndef VXL_DOXYGEN_SHOULD_SKIP_THIS 
   // <internal>
   // These constructors are here so that operator* etc can take
   // advantage of the C++ return value optimization.
@@ -101,6 +102,7 @@ public:
   vnl_vector (vnl_vector<T> const &, vnl_matrix<T> const &, vnl_tag_mul); // v * M
   vnl_vector (vnl_vector<T> const &, vnl_tag_grab); // magic
   // </internal>
+#endif
 
   //: Destructor
   ~vnl_vector() { if (data) destroy(); }
@@ -150,7 +152,7 @@ public:
   vnl_vector<T>& operator+= (T );
 
   //: Subtract scalar value from all elements
-  vnl_vector<T>& operator-= (T );
+  vnl_vector<T>& operator-= (T value) { return *this += (-value); }
 
   //: Multiply all elements by scalar
   vnl_vector<T>& operator*= (T );
@@ -174,7 +176,8 @@ public:
 
   //: *this = (*this)*M where M is a suitable matrix
   //  this is treated as a row vector
-  vnl_vector<T>& operator*= (vnl_matrix<T> const&);
+  vnl_vector<T>& operator*= (vnl_matrix<T> const& m) { return this->post_multiply(m); }
+
 
   //: Unary plus operator
   // Return new vector = (*this)
@@ -281,14 +284,16 @@ public:
   //: Return fourth element of vector
   T& t() const { return data[3]; }
 
+#ifndef VXL_I_dont_want_crazy_methods_in_my_classes
   //: Set the first element (with bound checking)
-  inline void set_x(T const&);
+  void set_x(T const&xx) { if (size() >= 1) data[0] = xx; }
   //: Set the second element (with bound checking)
-  inline void set_y(T const&);
+  void set_y(T const&yy) { if (size() >= 2) data[1] = yy; }
   //: Set the third element (with bound checking)
-  inline void set_z(T const&);
+  void set_z(T const&zz) { if (size() >= 3) data[2] = zz; }
   //: Set the fourth element (with bound checking)
-  inline void set_t(T const&);
+  void set_t(T const&tt) { if (size() >= 4) data[3] = tt; }
+#endif
 
   //: Check that size()==sz - if not, abort();
   void assert_size(unsigned sz) const;
@@ -310,7 +315,7 @@ public:
   //: Resize to n elements.  Old data is discarded.  Returns true if size change successful.
   bool resize (unsigned n);
 
-
+  //: Make the vector as if it had been default-constructed.
   void clear();
 
 
@@ -348,20 +353,13 @@ protected:
 # undef m
 #endif
 
-    //: Some general wierdness
+  // inline function template instantiation hack for gcc 2.97 -- fsm
   static void inline_function_tickler();
 };
 
 
-
-
-
-
-
-//--------------------------------------------------------------------------------
-//
 // Definitions of inline functions
-//
+
 
 //: Gets the element at specified index and return its value. O(1).
 // Range check is performed.
@@ -385,21 +383,6 @@ inline void vnl_vector<T>::put (unsigned int index, T const& value) {
     vnl_error_vector_index ("put", index); // Raise exception
 #endif
   this->data[index] = value;    // Assign data value
-}
-
-//: Mutates lhs vector to substract all its elements with value. O(n).
-
-template<class T>
-inline vnl_vector<T>& vnl_vector<T>::operator-= (T const value) {
-  return *this += (- value);
-}
-
-//: Mutates lhs vector to stores its post-multiplication with
-// matrix m: v = v * m. O(m*n).
-
-template<class T>
-inline vnl_vector<T>& vnl_vector<T>::operator*= (vnl_matrix<T> const& m) {
-  return this->post_multiply(m);
 }
 
 //: multiply matrix and (column) vector. O(m*n).
@@ -426,45 +409,12 @@ inline vnl_vector<T> operator* (T s, vnl_vector<T> const& v) {
   return vnl_vector<T>(v, s, vnl_tag_mul());
 }
 
-// set_x(Type) --
-
-template<class T>
-inline void vnl_vector<T>::set_x(T const& xx){
-  if (size() >= 1)
-    data[0] = xx;
-}
-
-
-// set_y(Type) --
-template<class T>
-inline void vnl_vector<T>::set_y(T const& yy){
-  if (size() >= 2)
-    data[1] = yy;
-}
-
-// set_z(Type) --
-
-template<class T>
-inline void vnl_vector<T>::set_z(T const& zz){
-  if (size() >= 3)
-    data[2] = zz;
-}
-
-// set_t(Type) -- Sets the coordinates of a vector with
-// a check for valid length. O(1).
-
-template<class T>
-inline void vnl_vector<T>::set_t(T const& tt){
-  if (size() >= 4)
-    data[3] = tt;
-}
-
 template<class T>
 inline void swap(vnl_vector<T> &a, vnl_vector<T> &b) { a.swap(b); }
 
 //: Read/write vector from/to an istream :
-template <class T> vcl_ostream& operator<< (vcl_ostream &, vnl_vector<T> const&);
-template <class T> vcl_istream& operator>> (vcl_istream &, vnl_vector<T>      &);
+export template <class T> vcl_ostream& operator<< (vcl_ostream &, vnl_vector<T> const&);
+export template <class T> vcl_istream& operator>> (vcl_istream &, vnl_vector<T>      &);
 
 
 #endif // vnl_vector_h_

@@ -19,12 +19,8 @@
 #include <vnl/vnl_error.h>
 #include <vnl/vnl_c_vector.h>
 
-template <class T> class vnl_vector;
-template <class T> class vnl_matrix;
-
 export template <class T> class vnl_vector;
 export template <class T> class vnl_matrix;
-
 
 //--------------------------------------------------------------------------------
 
@@ -133,26 +129,20 @@ public:
 
   //vnl_matrix(const DiagMatrix<T>&); this confuses g++ 2.7.2 When an vnl_vector<int> is declared nearby...
 
+#ifndef VXL_DOXYGEN_SHOULD_SKIP_THIS 
 // <internal>
   // These constructors are here so that operator* etc can take
   // advantage of the C++ return value optimization.
-  //: Magic constructor to allow use of C++ return value optimization
   vnl_matrix (vnl_matrix<T> const &, vnl_matrix<T> const &, vnl_tag_add); // M + M
-  //: Magic constructor to allow use of C++ return value optimization
   vnl_matrix (vnl_matrix<T> const &, vnl_matrix<T> const &, vnl_tag_sub); // M - M
-  //: Magic constructor to allow use of C++ return value optimization
   vnl_matrix (vnl_matrix<T> const &, T,                     vnl_tag_mul); // M * s
-  //: Magic constructor to allow use of C++ return value optimization
   vnl_matrix (vnl_matrix<T> const &, T,                     vnl_tag_div); // M / s
-  //: Magic constructor to allow use of C++ return value optimization
   vnl_matrix (vnl_matrix<T> const &, T,                     vnl_tag_add); // M + s
-  //: Magic constructor to allow use of C++ return value optimization
   vnl_matrix (vnl_matrix<T> const &, T,                     vnl_tag_sub); // M - s
-  //: Magic constructor to allow use of C++ return value optimization
   vnl_matrix (vnl_matrix<T> const &, vnl_matrix<T> const &, vnl_tag_mul); // M * M
-  //: Magic constructor to allow use of C++ return value optimization
   vnl_matrix (vnl_matrix<T> const &, vnl_tag_grab); // magic
 // </internal>
+#endif
 
   //: Matrix destructor
   ~vnl_matrix() {
@@ -254,7 +244,7 @@ public:
   //: Subtract rhs from lhs matrix in situ
   vnl_matrix<T>& operator-= (vnl_matrix<T> const&);
   //: Multiply lhs matrix in situ by rhs
-  vnl_matrix<T>& operator*= (vnl_matrix<T> const&);
+  vnl_matrix<T>& operator*= (vnl_matrix<T> const&rhs) { *this = (*this) * rhs; return *this; }
 
   //: Negate all elements of matrix
   vnl_matrix<T> operator- () const;
@@ -408,6 +398,7 @@ public:
   //: Return mean of all matrix elements
   T mean() const { return vnl_c_vector<T>::mean(begin(), size()); }
 
+#ifndef VXL_DOXYGEN_SHOULD_SKIP_THIS 
   // <deprecated>
   // These two methods have been intentionally poisoned. The new equivalents are:
   //   array_one_norm() / array_inf_norm()
@@ -416,6 +407,7 @@ public:
   abs_t one_norm(void *) const { return vnl_c_vector<T>::one_norm(begin(), size()); }
   abs_t inf_norm(void *) const { return vnl_c_vector<T>::inf_norm(begin(), size()); }
   // </deprecated>
+#endif
 
   // predicates
 
@@ -475,8 +467,8 @@ public:
   //  2d array, [row][column].
   T      *      * data_array () { return data; }
 
-  //: Iterators
   typedef T element_type;
+  
   //: Iterators
   typedef T       *iterator;
   //: Iterator pointing to start of data
@@ -505,9 +497,8 @@ public:
   //: Print matrix to os in some hopefully sensible format
   void print(vcl_ostream& os) const;
 
-  //--------------------------------------------------------------------------------
+  //: Make the matrix as if it had been default-constructed.
   void clear();
-
 
   //: Resize to r rows by c columns. Old data lost.
   // returns true if size changed.
@@ -542,21 +533,16 @@ protected:
 # undef v
 # undef m
 #endif
+
+  // inline function template instantiation hack for gcc 2.97 -- fsm
   static void inline_function_tickler();
-
-
 };
-//
 
-//--------------------------------------------------------------------------------
-//
+
 // Definitions of inline functions.
-//
 
-template<class T>
-inline void swap(vnl_matrix<T> &A, vnl_matrix<T> &B) { A.swap(B); }
 
-// get -- Returns the value of the element at specified row and column. O(1).
+//: get -- Returns the value of the element at specified row and column. O(1).
 // Checks for valid range of indices.
 
 template<class T>
@@ -570,7 +556,7 @@ inline T vnl_matrix<T>::get (unsigned row, unsigned column) const {
   return this->data[row][column];
 }
 
-// put -- Puts value into element at specified row and column. O(1).
+//: put -- Puts value into element at specified row and column. O(1).
 // Checks for valid range of indices.
 
 template<class T>
@@ -585,15 +571,6 @@ inline void vnl_matrix<T>::put (unsigned row, unsigned column, T const& value) {
 }
 
 
-//: operator*= -- Multiplies lhs matrix with rhs matrix,
-// Assigns the product to lhs matrix. O(n^3).
-template<class T>
-inline vnl_matrix<T>& vnl_matrix<T>::operator*= (vnl_matrix<T> const&rhs)
-{
-  *this = (*this) * rhs;              // multiply then assign
-  return *this;
-}
-
 // non-member arithmetical operators.
 
 template<class T>
@@ -605,6 +582,9 @@ template<class T>
 inline vnl_matrix<T> operator+ (T const& value, vnl_matrix<T> const& m) {
   return vnl_matrix<T>(m, value, vnl_tag_add());
 }
+
+template<class T>
+inline void swap(vnl_matrix<T> &A, vnl_matrix<T> &B) { A.swap(B); }
 
 
 #endif // vnl_matrix_h_
