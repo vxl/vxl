@@ -126,7 +126,7 @@ void gmvl_connection_cache::rebuild()
 
       if( biggest>= cachebool_.rows())
         {
-          gbl_bit_array_2d temp( biggest+1, biggest+1, false);
+          vbl_bit_array_2d temp( biggest+1, biggest+1, false);
 
           for( int ci=0; ci< cachebool_.rows(); ci++)
             for( int cj=0; cj< cachebool_.cols(); cj++)

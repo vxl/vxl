@@ -9,7 +9,7 @@
 
 #include <vcl_vector.h>
 
-#include <gbl/gbl_bit_array_2d.h>
+#include <vbl/vbl_bit_array_2d.h>
 #include <gmvl/gmvl_connection_sptr.h>
 
 class gmvl_connection_cache
@@ -46,7 +46,7 @@ protected:
   vcl_vector<vcl_vector<int> > cache_;
 
   // and more caching...
-  gbl_bit_array_2d cachebool_;
+  vbl_bit_array_2d cachebool_;
 };
 
 vcl_ostream &operator<<( vcl_ostream &os, const gmvl_connection_cache &c);
