@@ -45,6 +45,10 @@ ENDIF( MPEG2_FOUND )
 
 IF (WIN32)
   IF (NOT CYGWIN)
+    # Borland compilers may fail to link vfw32.lib if they are not
+    # installed correctly.  Make sure the ilink32.cfg file
+    # lists the directory containing the library in the -L option.
+    # For example: -L"c:\Borland\BCC55\Lib";"c:\Borland\BCC55\Lib\PSDK"
     TARGET_LINK_LIBRARIES( vidl_vil1 vfw32.lib )
   ENDIF (NOT CYGWIN)
 ENDIF (WIN32)

@@ -19,11 +19,11 @@
 #include <vidl_vil1/vidl_vil1_codec.h>
 #include <vidl_vil1/vidl_vil1_avicodec_sptr.h>
 #include <vidl_vil1/vidl_vil1_frame_sptr.h>
-#ifdef VCL_VC
-#include <windows.h>
-#undef min
-#undef max
-#include <vfw.h>
+#if defined(VCL_VC) || defined(VCL_BORLAND)
+# include <windows.h>
+# undef min
+# undef max
+# include <vfw.h>
 #endif
 
 
