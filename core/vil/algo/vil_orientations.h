@@ -37,7 +37,7 @@ void vil_orientations_from_sobel(const vil_image_view<T>& src_image,
 {
   vil_image_view<float> grad_i,grad_j;
   vil_sobel_3x3(src_image,grad_i,grad_j);
-  vil_orientations(grad_i,grad_j,orient_im,grad_im);
+  vil_orientations(grad_i,grad_j,orient_im,grad_mag);
 }
 
 //: Compute discrete orientation and gradient using sobel operations
@@ -51,11 +51,11 @@ template <class T>
 void vil_orientations_from_sobel(const vil_image_view<T>& src_image,
                       vil_image_view<vxl_byte>& orient_im,
                       vil_image_view<float>& grad_mag,
-                      unsigned n_orientations=256);
+                      unsigned n_orientations=256)
 {
   vil_image_view<float> grad_i,grad_j;
   vil_sobel_3x3(src_image,grad_i,grad_j);
-  vil_orientations(grad_i,grad_j,orient_im,grad_im,n_orientations);
+  vil_orientations(grad_i,grad_j,orient_im,grad_mag,n_orientations);
 }
 
 
