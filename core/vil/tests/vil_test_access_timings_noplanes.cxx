@@ -1,16 +1,16 @@
 //:
 // \file
 // \brief Tool to test performance of different methods of accessing image data
-//        When run, tries a variety of different approaches and reports their timings.
-//        Useful to try it on different platforms to how different optimisers perform.
+//   When run, tries a variety of different approaches and reports their timings.
+//   Useful to try it on different platforms to how different optimisers perform.
 // \author Tim Cootes
 
+#include <vcl_cassert.h>
 #include <vcl_iostream.h>
-#include <vxl_config.h> // for imT
+#include <vxl_config.h> // for vxl_byte
 #include <vil2/vil2_image_view.h>
 #include <vcl_ctime.h>
 #include <mbl/mbl_stats_1d.h>
-#include <vcl_vector.h>
 #include <vil/vil_rgb.h>
 
 const unsigned NI=256;
@@ -106,7 +106,7 @@ double method5(vil2_image_view<imT>& image, int n_loops)
 template <class imT>
 double method6(vil2_image_view<imT>& image, int n_loops)
 {
-  assert (image.istep() == 1);
+  assert(image.istep() == 1);
   // Uses row[i] to simulate lookup type access used in original vil images
   vcl_time_t t0=vcl_clock();
   for (int n=0;n<n_loops;++n)
@@ -127,7 +127,7 @@ double method6(vil2_image_view<imT>& image, int n_loops)
 template <class imT>
 double method7(vil2_image_view<imT>& image, int n_loops)
 {
-  assert (image.istep() == 1);
+  assert(image.istep() == 1);
   // Uses row[i] to simulate lookup type access used in original vil images
   assert(image.ni() == NI);
   imT* raster_ptrs[NJ];
@@ -155,7 +155,7 @@ double method7(vil2_image_view<imT>& image, int n_loops)
 template <class imT>
 double method8(vil2_image_view<imT>& image, int n_loops)
 {
-  assert (image.istep() == 1);
+  assert(image.istep() == 1);
 
   vcl_time_t t0=vcl_clock();
   for (int n=0;n<n_loops;++n)

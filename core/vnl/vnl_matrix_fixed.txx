@@ -8,6 +8,7 @@
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h> // for abort
+#include <vcl_cassert.h>
 
 #include "vnl_error.h"
 #include "vnl_math.h"
@@ -17,9 +18,8 @@ void
 vnl_matrix_fixed<T,nrows,ncols>::add( const T* a, const T* b, T* r )
 {
   unsigned int count = nrows*ncols;
-  while ( count-- ) {
+  while ( count-- )
     *(r++) = *(a++) + *(b++);
-  }
 }
 
 
@@ -28,9 +28,8 @@ void
 vnl_matrix_fixed<T,nrows,ncols>::add( const T* a, T b, T* r )
 {
   unsigned int count = nrows*ncols;
-  while ( count-- ) {
+  while ( count-- )
     *(r++) = *(a++) + b;
-  }
 }
 
 template<class T, unsigned nrows, unsigned ncols>
@@ -38,9 +37,8 @@ void
 vnl_matrix_fixed<T,nrows,ncols>::sub( const T* a, const T* b, T* r )
 {
   unsigned int count = nrows*ncols;
-  while ( count-- ) {
+  while ( count-- )
     *(r++) = *(a++) - *(b++);
-  }
 }
 
 template<class T, unsigned nrows, unsigned ncols>
@@ -48,9 +46,8 @@ void
 vnl_matrix_fixed<T,nrows,ncols>::sub( const T* a, T b, T* r )
 {
   unsigned int count = nrows*ncols;
-  while ( count-- ) {
+  while ( count-- )
     *(r++) = *(a++) - b;
-  }
 }
 
 template<class T, unsigned nrows, unsigned ncols>
@@ -58,9 +55,8 @@ void
 vnl_matrix_fixed<T,nrows,ncols>::sub( T a, const T* b, T* r )
 {
   unsigned int count = nrows*ncols;
-  while ( count-- ) {
+  while ( count-- )
     *(r++) = a - *(b++);
-  }
 }
 
 template<class T, unsigned nrows, unsigned ncols>
@@ -68,9 +64,8 @@ void
 vnl_matrix_fixed<T,nrows,ncols>::mul( const T* a, const T* b, T* r )
 {
   unsigned int count = nrows*ncols;
-  while ( count-- ) {
+  while ( count-- )
     *(r++) = *(a++) * *(b++);
-  }
 }
 
 template<class T, unsigned nrows, unsigned ncols>
@@ -78,9 +73,8 @@ void
 vnl_matrix_fixed<T,nrows,ncols>::mul( const T* a, T b, T* r )
 {
   unsigned int count = nrows*ncols;
-  while ( count-- ) {
+  while ( count-- )
     *(r++) = *(a++) * b;
-  }
 }
 
 template<class T, unsigned nrows, unsigned ncols>
@@ -88,9 +82,8 @@ void
 vnl_matrix_fixed<T,nrows,ncols>::div( const T* a, const T* b, T* r )
 {
   unsigned int count = nrows*ncols;
-  while ( count-- ) {
+  while ( count-- )
     *(r++) = *(a++) / *(b++);
-  }
 }
 
 template<class T, unsigned nrows, unsigned ncols>
@@ -98,9 +91,8 @@ void
 vnl_matrix_fixed<T,nrows,ncols>::div( const T* a, T b, T* r )
 {
   unsigned int count = nrows*ncols;
-  while ( count-- ) {
+  while ( count-- )
     *(r++) = *(a++) / b;
-  }
 }
 
 template<class T, unsigned nrows, unsigned ncols>
@@ -108,9 +100,8 @@ bool
 vnl_matrix_fixed<T,nrows,ncols>::equal( const T* a, const T* b )
 {
   unsigned int count = nrows*ncols;
-  while ( count-- ) {
+  while ( count-- )
     if ( *(a++) != *(b++) )  return false;
-  }
   return true;
 }
 
@@ -140,7 +131,8 @@ template<class T, unsigned nrows, unsigned ncols>
 void
 vnl_matrix_fixed<T,nrows,ncols>::print(vcl_ostream& os) const
 {
-  for (unsigned int i = 0; i < nrows; i++) {
+  for (unsigned int i = 0; i < nrows; i++)
+  {
     os << (*this)(i,0);
     for (unsigned int j = 1; j < ncols; j++)
       os << " " << (*this)(i,j);
@@ -274,15 +266,18 @@ void
 vnl_matrix_fixed<T,nrows,ncols>::normalize_rows()
 {
   typedef typename vnl_numeric_traits<T>::abs_t abs_t;
-  for (unsigned int i = 0; i < nrows; i++) {
+  for (unsigned int i = 0; i < nrows; i++)
+  {
     abs_t norm(0); // double will not do for all types.
     for (unsigned int j = 0; j < ncols; j++)
       norm += vnl_math_squared_magnitude( (*this)(i,j) );
 
-    if (norm != 0) {
+    if (norm != 0)
+    {
       typedef typename vnl_numeric_traits<abs_t>::real_t real_t;
       real_t scale = real_t(1)/vcl_sqrt((real_t)norm);
-      for (unsigned int j = 0; j < ncols; j++) {
+      for (unsigned int j = 0; j < ncols; j++)
+      {
         // FIXME need correct rounding here
         // There is e.g. no *standard* operator*=(complex<float>, double), hence the T() cast.
         (*this)(i,j) *= (T)(scale);
@@ -301,10 +296,12 @@ vnl_matrix_fixed<T,nrows,ncols>::normalize_columns()
     for (unsigned int i = 0; i < nrows; i++)
       norm += vnl_math_squared_magnitude( (*this)(i,j) );
 
-    if (norm != 0) {
+    if (norm != 0)
+    {
       typedef typename vnl_numeric_traits<abs_t>::real_t real_t;
       real_t scale = real_t(1)/vcl_sqrt((real_t)norm);
-      for (unsigned int i = 0; i < nrows; i++) {
+      for (unsigned int i = 0; i < nrows; i++)
+      {
         // FIXME need correct rounding here
         // There is e.g. no *standard* operator*=(complex<float>, double), hence the T() cast.
         (*this)(i,j) *= (T)(scale);
@@ -473,7 +470,8 @@ vnl_matrix_fixed<T,nrows,ncols>::is_identity() const
   T const zero(0);
   T const one(1);
   for (unsigned int i = 0; i < nrows; ++i)
-    for (unsigned int j = 0; j < ncols; ++j) {
+    for (unsigned int j = 0; j < ncols; ++j)
+    {
       T xm = (*this)(i,j);
       if ( !((i == j) ? (xm == one) : (xm == zero)) )
         return false;
@@ -488,7 +486,8 @@ vnl_matrix_fixed<T,nrows,ncols>::is_identity(double tol) const
 {
   T one(1);
   for (unsigned int i = 0; i < nrows; ++i)
-    for (unsigned int j = 0; j < ncols; ++j) {
+    for (unsigned int j = 0; j < ncols; ++j)
+    {
       T xm = (*this)(i,j);
       abs_t absdev = (i == j) ? vnl_math_abs(xm - one) : vnl_math_abs(xm);
       if (absdev > tol)
@@ -554,17 +553,17 @@ vnl_matrix_fixed<T,nrows,ncols>::assert_finite_internal() const
   if (is_finite())
     return;
 
-  vcl_cerr << vcl_endl << vcl_endl;
-  vcl_cerr << __FILE__ ":" << __LINE__ << ": matrix has non-finite elements" << vcl_endl;
+  vcl_cerr << "\n\n" << __FILE__ ":" << __LINE__ << ": matrix has non-finite elements\n";
 
-  if (rows() <= 20 && cols() <= 20) {
-    vcl_cerr << __FILE__ ": here it is:\n" << *this;
-  }
-  else {
-    vcl_cerr << __FILE__ ": it is quite big (" << rows() << 'x' << cols() << ")" << vcl_endl;
-    vcl_cerr << __FILE__ ": in the following picture '-' means finite and '*' means non-finite:" << vcl_endl;
+  if (rows() <= 20 && cols() <= 20)
+    vcl_cerr << __FILE__ ": here it is:\n" << *this << '\n';
+  else
+  {
+    vcl_cerr << __FILE__ ": it is quite big (" << rows() << 'x' << cols() << ")\n"
+             << __FILE__ ": in the following picture '-' means finite and '*' means non-finite:\n";
 
-    for (unsigned int i=0; i<rows(); ++i) {
+    for (unsigned int i=0; i<rows(); ++i)
+    {
       for (unsigned int j=0; j<cols(); ++j)
         vcl_cerr << char(vnl_math_isfinite((*this)(i, j)) ? '-' : '*');
       vcl_cerr << vcl_endl;
@@ -579,7 +578,8 @@ template <class T, unsigned nrows, unsigned ncols>
 void
 vnl_matrix_fixed<T,nrows,ncols>::assert_size_internal(unsigned rs,unsigned cs) const
 {
-  if (nrows!=rs || ncols!=cs) {
+  if (nrows!=rs || ncols!=cs)
+  {
     vcl_cerr << __FILE__ ": size is " << nrows << 'x' << ncols
              << ". should be " << rs << 'x' << cs << vcl_endl;
     vcl_abort();
@@ -590,7 +590,8 @@ template <class T, unsigned nrows, unsigned ncols>
 bool
 vnl_matrix_fixed<T,nrows,ncols>::read_ascii(vcl_istream& s)
 {
-  if (!s.good()) {
+  if (!s.good())
+  {
     vcl_cerr << __FILE__ ": vnl_matrix<T>::read_ascii: Called with bad stream\n";
     return false;
   }
@@ -607,9 +608,11 @@ template <class T, unsigned nrows, unsigned ncols>
 void
 vnl_matrix_fixed<T,nrows,ncols>::flipud()
 {
-  for (unsigned int r1 = 0; 2*r1+1 < nrows; ++r1) {
+  for (unsigned int r1 = 0; 2*r1+1 < nrows; ++r1)
+  {
     unsigned int r2 = nrows - 1 - r1;
-    for (unsigned int c = 0; c < ncols; ++c) {
+    for (unsigned int c = 0; c < ncols; ++c)
+    {
       T tmp = (*this)(r1, c);
       (*this)(r1, c) = (*this)(r2, c);
       (*this)(r2, c) = tmp;
@@ -622,9 +625,11 @@ template <class T, unsigned nrows, unsigned ncols>
 void
 vnl_matrix_fixed<T,nrows,ncols>::fliplr()
 {
-  for (unsigned int c1 = 0; 2*c1+1 < ncols; ++c1) {
+  for (unsigned int c1 = 0; 2*c1+1 < ncols; ++c1)
+  {
     unsigned int c2 = ncols - 1 - c1;
-    for (unsigned int r = 0; r < nrows; ++r) {
+    for (unsigned int r = 0; r < nrows; ++r)
+    {
       T tmp = (*this)(r, c1);
       (*this)(r, c1) = (*this)(r, c2);
       (*this)(r, c2) = tmp;
@@ -637,7 +642,8 @@ typename vnl_matrix_fixed<T,nrows,ncols>::abs_t
 vnl_matrix_fixed<T,nrows,ncols>::operator_one_norm() const
 {
   abs_t max = 0;
-  for (unsigned int j=0; j<ncols; ++j) {
+  for (unsigned int j=0; j<ncols; ++j)
+  {
     abs_t tmp = 0;
     for (unsigned int i=0; i<nrows; ++i)
       tmp += vnl_math_abs( (*this)(i,j) );
@@ -652,7 +658,8 @@ typename vnl_matrix_fixed<T,nrows,ncols>::abs_t
 vnl_matrix_fixed<T,nrows,ncols>::operator_inf_norm() const
 {
   abs_t max = 0;
-  for (unsigned int i=0; i<nrows; ++i) {
+  for (unsigned int i=0; i<nrows; ++i)
+  {
     abs_t tmp = 0;
     for (unsigned int j=0; j<ncols; ++j)
       tmp += vnl_math_abs( (*this)(i,j) );
@@ -668,7 +675,8 @@ void vnl_matrix_fixed<T,nrows,ncols>::inplace_transpose()
 {
   assert(nrows==ncols); // cannot inplace_transpose non-square fixed size matrix
   for (unsigned i = 0; i < nrows; ++i)
-  for (unsigned j = i+1; j < ncols; ++j) {
+  for (unsigned j = i+1; j < ncols; ++j)
+  {
     T t = (*this)(i,j);
     (*this)(i,j) = (*this)(j,i);
     t = (*this)(j,i) = t;

@@ -11,6 +11,7 @@
 #include <vcl_ctime.h>
 #include <mbl/mbl_stats_1d.h>
 #include <vcl_vector.h>
+#include <vcl_cassert.h>
 
 const unsigned NI=256;
 const unsigned NJ=256;
@@ -32,7 +33,6 @@ double method1(vil2_image_view<imT>& image,
   vcl_time_t t1=vcl_clock();
   vcl_cout << sum;
   return 1e9*(double(t1)-double(t0))/(double(n_pts)*n_loops*CLOCKS_PER_SEC);
-  
 }
 
 template <class imT>
@@ -103,10 +103,8 @@ void compute_stats(int i, vil2_image_view<imT>& image,
   vcl_cout << "\t\t\t\t";
   for (int j=0;j<10;++j) stats.obs(method(i,image,x,y,n_pts,n_loops));
   vcl_cout<<"\nMethod "<<i<<") Mean: "<<0.1*int(10*stats.mean()+5)
-          <<"ns  +/-"<<0.1*int(5*(stats.max()-stats.min())+5)<<"ns"<<vcl_endl;
+          <<"ns  +/-"<<0.1*int(5*(stats.max()-stats.min())+5)<<"ns\n";
 }
-
-
 
 
 // ================== Bilinear ========================
@@ -226,7 +224,7 @@ void compute_bilin_stats(int i, vil2_image_view<imT>& image,int n_pts, int n_loo
   vcl_cout << "\t\t\t\t";
   for (int j=0;j<10;++j) stats.obs(bilin_method(i,image,n_pts,n_loops));
   vcl_cout<<"\nBilin. Method "<<i<<") Mean: "<<0.1*int(10*stats.mean()+5)
-          <<"ns  +/-"<<0.1*int(5*(stats.max()-stats.min())+5)<<"ns"<<vcl_endl;
+          <<"ns  +/-"<<0.1*int(5*(stats.max()-stats.min())+5)<<"ns\n";
 }
 
 int main(int argc, char** argv)
@@ -244,25 +242,25 @@ int main(int argc, char** argv)
 
   n_pts = 100;
   n_loops = 10000;
-  vcl_cout<<"Times to randomly access image (in nanosecs) [Range= 0.5(max-min)]"<<vcl_endl;
-  vcl_cout<<"Images of BYTE"<<vcl_endl;
+  vcl_cout<<"Times to randomly access image (in nanosecs) [Range= 0.5(max-min)]\n";
+  vcl_cout<<"Images of BYTE\n";
   for (int i=1;i<=3;++i)
   {
     compute_stats(i,byte_image,&x[0],&y[0],n_pts,n_loops);
   }
-  vcl_cout<<"Images of FLOAT"<<vcl_endl;
+  vcl_cout<<"Images of FLOAT\n";
   for (int i=1;i<=3;++i)
   {
     compute_stats(i,float_image,&x[0],&y[0],n_pts,n_loops);
   }
 
-  vcl_cout<<"Using Bilinear interpolation."<<vcl_endl;
-  vcl_cout<<"Images of BYTE"<<vcl_endl;
+  vcl_cout<<"Using Bilinear interpolation.\n";
+  vcl_cout<<"Images of BYTE\n";
   for (int i=1;i<=3;++i)
   {
     compute_bilin_stats(i,byte_image,n_pts,n_loops);
   }
-  vcl_cout<<"Images of FLOAT"<<vcl_endl;
+  vcl_cout<<"Images of FLOAT\n";
   for (int i=1;i<=3;++i)
   {
     compute_bilin_stats(i,float_image,n_pts,n_loops);

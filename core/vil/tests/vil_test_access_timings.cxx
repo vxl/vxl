@@ -6,11 +6,11 @@
 // \author Tim Cootes
 
 #include <vcl_iostream.h>
-#include <vxl_config.h> // for imT
+#include <vxl_config.h> // for vxl_byte
 #include <vil2/vil2_image_view.h>
 #include <vcl_ctime.h>
 #include <mbl/mbl_stats_1d.h>
-#include <vcl_vector.h>
+#include <vcl_cassert.h>
 
 const unsigned NI=256;
 const unsigned NJ=256;
@@ -120,7 +120,7 @@ double method5(vil2_image_view<imT>& image, int n_loops)
 template <class imT>
 double method6(vil2_image_view<imT>& image, int n_loops)
 {
-  assert (image.istep() == 1);
+  assert(image.istep() == 1);
   // Uses row[i] to simulate lookup type access used in original vil images
   vcl_time_t t0=vcl_clock();
   for (int n=0;n<n_loops;++n)
@@ -145,7 +145,7 @@ double method6(vil2_image_view<imT>& image, int n_loops)
 template <class imT>
 double method7(vil2_image_view<imT>& image, int n_loops)
 {
-  assert (image.istep() == 1);
+  assert(image.istep() == 1);
   // Uses row[i] to simulate lookup type access used in original vil images
   assert(image.nplanes() == NP && image.ni() == NI);
   imT* raster_ptrs[NP][NJ];
@@ -177,7 +177,7 @@ double method7(vil2_image_view<imT>& image, int n_loops)
 template <class imT>
 double method8(vil2_image_view<imT>& image, int n_loops)
 {
-  assert (image.istep() == 1);
+  assert(image.istep() == 1);
 
   vcl_time_t t0=vcl_clock();
   for (int n=0;n<n_loops;++n)
@@ -224,7 +224,7 @@ void compute_stats(int i, vil2_image_view<imT>& image, int n_loops)
   mbl_stats_1d stats;
   for (int j=0;j<10;++j) stats.obs(method(i,image,n_loops));
   vcl_cout<<"Method "<<i<<") Mean: "<<int(stats.mean()+0.5)
-          <<"us  +/-"<<int(0.5*(stats.max()-stats.min())+0.5)<<"us"<<vcl_endl;
+          <<"us  +/-"<<int(0.5*(stats.max()-stats.min())+0.5)<<"us\n";
 }
 
 int main(int argc, char** argv)
@@ -234,13 +234,13 @@ int main(int argc, char** argv)
   int n_loops = 100;
 
   vcl_cout<<"Times to fill a "<<NI<<" x "<<NJ
-          <<" image of "<<NP<<" planes (in microsecs) [Range= 0.5(max-min)]"<<vcl_endl;
-  vcl_cout<<"Images of BYTE"<<vcl_endl;
+          <<" image of "<<NP<<" planes (in microsecs) [Range= 0.5(max-min)]\n";
+  vcl_cout<<"Images of BYTE\n";
   for (int i=1;i<=8;++i)
   {
     compute_stats(i,byte_image,n_loops);
   }
-  vcl_cout<<"Images of FLOAT"<<vcl_endl;
+  vcl_cout<<"Images of FLOAT\n";
   for (int i=1;i<=8;++i)
   {
     compute_stats(i,float_image,n_loops);

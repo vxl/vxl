@@ -5,12 +5,12 @@
 //        Useful to try it on different platforms to how different optimisers perform.
 // \author Tim Cootes
 
-#include <vcl_iostream.h>
-#include <vxl_config.h> // for imT
-#include <vil2/vil2_image_view.h>
 #include <vcl_ctime.h>
+#include <vcl_cassert.h>
+#include <vcl_iostream.h>
+#include <vxl_config.h> // for vxl_byte
+#include <vil2/vil2_image_view.h>
 #include <mbl/mbl_stats_1d.h>
-#include <vcl_vector.h>
 
 const unsigned NI=256;
 const unsigned NJ=256;
@@ -175,7 +175,7 @@ double method7(const vil2_image_view<imT>& src_image,
     unsigned ni=src_image.ni(),nj=src_image.nj(),np=src_image.nplanes();
     for (unsigned p=0;p<np;++p)
       for (unsigned j=0;j<nj;++j)
-	  {
+      {
         (src_raster_ptrs)[p][j] = & src_image(0,j,p);
         (dest_raster_ptrs)[p][j] = & dest_image(0,j,p);
       }
