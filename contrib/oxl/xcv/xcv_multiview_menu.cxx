@@ -1,0 +1,61 @@
+#include "xcv_multiview.h"
+#include <vgui/vgui_menu.h>
+
+vgui_menu xcv_multiview::create_multiview_menu()
+{
+  vgui_menu mult_menu;
+  
+  //---- Two view menu --------------------- 
+  vgui_menu two_menu;
+  vgui_menu twoload_menu;
+  twoload_menu.add("Load FMatrix", load_f_matrix);
+  twoload_menu.add("Load HMatrix2D", load_h_matrix2d);
+  //twoload_menu.add("Load corner matches", load_corner_matches);
+  //twoload_menu.add("Load line matches", twoview);
+  two_menu.add("Load", twoload_menu);
+  
+  vgui_menu twosave_menu;
+  twosave_menu.add("Save FMatrix", save_f_matrix);
+  twosave_menu.add("Save HMatrix2D", save_h_matrix2d);
+  twosave_menu.add("Save corner matches", save_corner_matches);
+  two_menu.add("Save", twosave_menu);
+  
+  vgui_menu twodisp_menu;
+  twodisp_menu.add("Toggle display FMatrix", toggle_f_matrix);
+  twodisp_menu.add("Toggle display HMatrix2D", toggle_h_matrix);
+  //twodisp_menu.add("Display corner matches", display_corner_matches);
+  twodisp_menu.add("Display corner tracks", display_corner_tracks);
+  two_menu.add("Display", twodisp_menu);
+#if 0
+  vgui_menu twocomp_menu;
+  twocomp_menu.add("Compute FMatrix", xcv_ox_multiview::compute_f_matrix);
+  twocomp_menu.add("Compute HMatrix2D", xcv_ox_multiview::compute_h_matrix2d);
+  two_menu.add("Compute", twocomp_menu);
+#endif
+  
+  mult_menu.add("Two view", two_menu);
+  //---- Three view menu --------------------- 
+  vgui_menu three_menu;
+  vgui_menu threeload_menu;
+  threeload_menu.add("Load TriTensor", load_tri_tensor);
+  three_menu.add("Load", threeload_menu);
+ 
+  vgui_menu threesave_menu;
+  threesave_menu.add("Save TriTensor", save_tri_tensor);
+  three_menu.add("Save", threesave_menu);
+  
+  vgui_menu threedisp_menu;
+  threedisp_menu.add("Toggle display TriTensor", toggle_tri_tensor);
+  threedisp_menu.add("Transfer point", transfer_point);
+  threedisp_menu.add("Transfer line", transfer_line);
+  three_menu.add("Display", threedisp_menu);
+  
+#if 0
+  vgui_menu threecomp_menu;
+  threecomp_menu.add("Compute TriTensor", xcv_ox_multiview::compute_tri_tensor);
+  three_menu.add("Compute", threecomp_menu); 
+  mult_menu.add("Three view", three_menu);
+#endif
+  
+  return mult_menu;
+}
