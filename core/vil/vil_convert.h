@@ -195,8 +195,8 @@ macro( vxl_uint_64 )
 // declare general case in case anyone needs something weird.
 
 #if defined(VCL_VC)
-// Visual C++ intentionally warnings when a non-bool is assigned or
-// cast to a bool. Since the following cast is valid, we supress the
+// Visual C++ intentionally warns when a non-bool is assigned or
+// cast to a bool. Since the following cast is valid, we suppress the
 // warning.
 # pragma warning( push )
 # pragma warning( disable : 4800 )
