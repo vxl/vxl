@@ -97,4 +97,11 @@ IF(RUN_CONFIGURE)
                 ${allvxl_BINARY_DIR} )
 ENDIF(RUN_CONFIGURE)
 
-INCLUDE( ${allvxl_SOURCE_DIR}/CMakeListsLocal.txt OPTIONAL )
+# include CMakeListsLocal.txt from source directory if it exists
+# also include it from the binary dir if different from source dir
+IF( ${allvxl_BINARY_DIR} MATCHES ${allvxl_SOURCE_DIR} )
+  INCLUDE( ${allvxl_SOURCE_DIR}/CMakeListsLocal.txt OPTIONAL )
+ELSE( ${allvxl_BINARY_DIR} MATCHES ${allvxl_SOURCE_DIR} )
+  INCLUDE( ${allvxl_SOURCE_DIR}/CMakeListsLocal.txt OPTIONAL )
+  INCLUDE( ${allvxl_BINARY_DIR}/CMakeListsLocal.txt OPTIONAL )
+ENDIF( ${allvxl_BINARY_DIR} MATCHES ${allvxl_SOURCE_DIR} )
