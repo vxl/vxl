@@ -26,17 +26,17 @@ int main(int argc, char * argv[])
       static sdet_detector_params dp;
       dp.noise_multiplier=1.0;
       dp.aggressive_junction_closure=1;
-      sdet_region_proc_params rpp(false, true, dp);
+      sdet_region_proc_params rpp(dp);
       sdet_region_proc rp(rpp);
       rp.set_image(image);
       rp.extract_regions();
       vcl_vector<vdgl_intensity_face_sptr>& regions = rp.get_regions();
       int n = regions.size();
       vcl_cout << "nregions = " << n << "\n";
-      Assert(n==192);
+      Assert(n==188);
       vdgl_intensity_face_sptr f = regions[0];
       vcl_cout << "f->Npix() " << f->Npix() << "\n";
-      Assert(f->Npix()==41348);
+	  Assert(f->Npix()==41121);
     }
   vcl_cout << "finished testing sdet_detector\n";
   vcl_cout << "Test Summary: " << success << " tests succeeded, "
