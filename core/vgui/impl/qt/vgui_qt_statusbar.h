@@ -1,17 +1,15 @@
+// This is oxl/vgui/impl/qt/vgui_qt_statusbar.h
 #ifndef VGUI_QT_STATUSBAR_H_
 #define VGUI_QT_STATUSBAR_H_
-
-// .NAME vgui_qt_statusbar - hmm untested ?
-// .HEADER vxl package
-// .LIBRARY vgui-qt
-// .INCLUDE vgui/impl/qt/vgui_qt_statusbar.h
-// .FILE vgui_qt_statusbar.cxx
-
-// .SECTION Author
-// Joris Schouteden
-
-// .SECTION Modifications:
+//:
+// \file
+// \brief hmm untested ?
+// \author Joris Schouteden
+//
+// \verbatim
+// Modifications:
 // 24.03.2000 JS  Initial Version, adapted from vgui_gtk_statusbar
+// \endverbatim
 
 #include <vcl_string.h>
 #include <vcl_iosfwd.h>

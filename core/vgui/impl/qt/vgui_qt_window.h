@@ -1,17 +1,15 @@
+// This is oxl/vgui/impl/qt/vgui_qt_window.h
 #ifndef VGUI_QT_WINDOW_H_
 #define VGUI_QT_WINDOW_H_
-
-// .NAME vgui_qt_window - qt vensters
-// .HEADER vxl package
-// .LIBRARY vgui-qt
-// .INCLUDE vgui/impl/qt/vgui_qt_window.h
-// .FILE vgui_qt_window.cxx
-
-// .SECTION Author
-// Joris Schouteden
-
-// .SECTION Modifications:
+//:
+// \file
+// \brief qt windows
+// \author Joris Schouteden
+//
+// \verbatim
+// Modifications:
 // 24.03.2000 JS  Initial Version, adapted from vgui_gtk_window
+// \endverbatim
 
 #include <vgui/vgui_window.h>
 #include <vgui/vgui_menu.h>

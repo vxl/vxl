@@ -1,26 +1,23 @@
+// This is oxl/vgui/impl/qt/vgui_qt_dialog_impl.h
 #ifndef VGUI_QT_DIALOG_IMPL_H_
 #define VGUI_QT_DIALOG_IMPL_H_
-
-// .NAME vgui_qt_dialog_impl - QT Dialog wrapper
-// .HEADER vxl package
-// .LIBRARY vgui-qt
-// .INCLUDE vgui/impl/qt/vgui_qt_dialog_impl.h
-// .FILE vgui_qt_dialog_impl.cxx
-
-// .SECTION Author
-// Joris Schouteden
-
-// .SECTION Modifications:
+//:
+// \file
+// \brief QT Dialog wrapper
+// \author Joris Schouteden
+//
+// \verbatim
+// Modifications:
 // 27.03.2000 JS  Initial Version, adapted from vgui_Fl_dialog_impl
 // 26.10.2000 JS  Added file browser and text message
 // 09.11.2000 JS  Added colour browser
+// \endverbatim
 
 #include <vgui/internals/vgui_dialog_impl.h>
-
 #include <qdialog.h>
 
 //: QT implementation of vgui_dialog_impl.
-class vgui_qt_dialog_impl : 
+class vgui_qt_dialog_impl :
    public QDialog,
    public vgui_dialog_impl
 {
@@ -62,13 +59,13 @@ public:
   ~vgui_qt_filebrowser_impl() { };
 
    vcl_string  file() { return vcl_string(edit_->text().latin1()); };
-  
+
 public slots:
    void get_a_file();
 
 private:
    vcl_string&    filter_;
-   QLineEdit*     edit_;   
+   QLineEdit*     edit_;
 };
 
 class vgui_qt_colorchooser_impl :
@@ -80,7 +77,7 @@ public:
   ~vgui_qt_colorchooser_impl() { };
 
   vcl_string  color() { return value_; };
-  
+
 public slots:
    void get_a_color();
 
