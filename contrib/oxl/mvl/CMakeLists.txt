@@ -60,11 +60,13 @@ LineSegSet
 MatchSet
 NViewMatches
 PMatrix
+PMatrixAffine
 PMatrixCompute
 PMatrixComputeLinear
 PMatrixDec
 PMatrixDecompAa
 PMatrixDecompCR
+PMatrixEuclidean
 PairMatchMulti
 PairMatchMultiIterator
 PairMatchSet
