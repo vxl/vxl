@@ -13,6 +13,10 @@
 // fsm: but the compiler might supply <cwctype>?
 // PVr: but that file probably just #includes wctype.h?
 # include <wchar.h>
+#elif defined(sun)
+// PVr: solaris 2.7 does not declare iswblank
+extern "C" int iswblank(unsigned int);
+# include "iso/vcl_cwctype.h"
 #else
 # include "iso/vcl_cwctype.h"
 #endif
