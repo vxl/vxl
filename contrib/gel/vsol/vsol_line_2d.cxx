@@ -10,6 +10,7 @@
 #include <vcl_cmath.h>
 #include <vnl/vnl_math.h>
 #include <vsol/vsol_point_2d.h>
+#include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/vgl_line_segment_2d.h>
@@ -188,20 +189,26 @@ double vsol_line_2d::length(void) const
 }
 
 //---------------------------------------------------------------------------
-//: Return the tangent angle in degrees  of `this'
+//: Return the tangent angle in degrees  of `this'.  By convention, the 
+//  angle is in degrees and lies on the interval, [0, 360].
 //---------------------------------------------------------------------------
 double vsol_line_2d::tangent_angle(void) const
 {
-  static const double deg_per_rad = 45.0/vcl_atan2(1.0,1.0);
+  static const double deg_per_rad = 180.0/vnl_math::pi;
   double dy = p1_->y()-p0_->y();
   double dx = p1_->x()-p0_->x();
+
+  double ang = -1;
   // do special cases separately, to avoid rounding errors:
-  if (dx == 0) return dy<0 ? -90.0 : 90.0;
-  if (dy == 0) return dx<0 ? 180.0 : 0.0;
-  if (dy == dx) return dy<0 ? -135.0 : 45.0;
-  if (dy+dx == 0) return dy<0 ? -45.0 : 135.0;
-  // general case:
-  return deg_per_rad * vcl_atan2(dy,dx);
+  if (dx == 0) ang = dy<0 ? -90.0 : 90.0;
+  if (dy == 0) ang = dx<0 ? 180.0 : 0.0;
+  if (dy == dx)ang = dy<0 ? -135.0 : 45.0;
+  if (dy+dx == 0) ang = dy<0 ? -45.0 : 135.0;
+  // the general case:
+  if(ang == -1)
+    ang = deg_per_rad * vcl_atan2(dy,dx);
+  if(ang<0) ang+= 360.0;
+  return ang;
 }
 
 //***************************************************************************
@@ -281,6 +288,29 @@ vsol_line_2d::tangent_at_point(const vsol_point_2d_sptr &p) const
   // require
   assert(in(p));
 
-  return new vgl_homg_line_2d<double>(p0_->y()-p1_->y(),p1_->x()-p0_->x(),
+   return new vgl_homg_line_2d<double>(p0_->y()-p1_->y(),p1_->x()-p0_->x(),
                                       p0_->x()*p1_->y()-p0_->y()*p1_->x());
+  
+}
+
+//--------------------------------------------------------------------
+//: compute an infinite homogenous line corresponding to *this
+//--------------------------------------------------------------------
+vgl_homg_line_2d<double> vsol_line_2d::vgl_hline_2d() const
+{
+  vgl_homg_point_2d<double> vp0(p0_->x(), p0_->y());
+  vgl_homg_point_2d<double> vp1(p1_->x(), p1_->y());
+  vgl_homg_line_2d<double> l(vp0, vp1);
+  return l;
+}
+
+//--------------------------------------------------------------------
+//: compute a vgl line segment corresponding to *this
+//--------------------------------------------------------------------
+vgl_line_segment_2d<double> vsol_line_2d::vgl_seg_2d() const
+{
+  vgl_homg_point_2d<double> vp0(p0_->x(), p0_->y());
+  vgl_homg_point_2d<double> vp1(p1_->x(), p1_->y());
+  vgl_line_segment_2d<double> l(vp0, vp1);
+  return l;
 }

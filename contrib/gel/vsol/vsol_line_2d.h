@@ -27,7 +27,8 @@
 #include <vsol/vsol_point_2d_sptr.h>
 
 #include <vgl/vgl_fwd.h> // vgl_line_segment_2d, vgl_homg_line_2d, vgl_point_2d
-
+#include <vgl/vgl_homg_line_2d.h>
+#include <vgl/vgl_line_segment_2d.h>
 class vsol_line_2d : public vsol_curve_2d
 {
   //***************************************************************************
@@ -129,6 +130,16 @@ class vsol_line_2d : public vsol_curve_2d
   //---------------------------------------------------------------------------
   virtual vsol_point_2d_sptr p1(void) const;
 
+  //---------------------------------------------------------------------------
+  //: Get an unbounded vgl_homg_line_2d
+  //---------------------------------------------------------------------------
+  vgl_homg_line_2d<double> vgl_hline_2d() const;
+
+  //---------------------------------------------------------------------------
+  //: Get a vgl_line_segment_2d
+  //---------------------------------------------------------------------------
+  vgl_line_segment_2d<double> vgl_seg_2d() const;
+
   //***************************************************************************
   // Comparison
   //***************************************************************************
@@ -164,7 +175,7 @@ class vsol_line_2d : public vsol_curve_2d
   virtual double length(void) const;
 
   //---------------------------------------------------------------------------
-  //: Return the tangent angle (in degrees) of `this'
+  //: Return the tangent angle (in degrees) of `this'. 0<angle<360
   //---------------------------------------------------------------------------
   double tangent_angle(void) const;
 
