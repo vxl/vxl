@@ -23,6 +23,7 @@ SOURCES += gevd_edgel_regions.cxx
 SOURCES += gevd_region_edge.cxx
 SOURCES += gevd_region_proc.cxx
 SOURCES += gevd_region_proc_params.cxx
+SOURCES += gevd_fold.cxx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
