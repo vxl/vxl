@@ -13,10 +13,14 @@
 #include <vcl_vector.h>
 #include <vcl_string.h>
 
-#include <vxl_config.h>
+#include <vxl_config.h> // for vxl_int_64
 
 struct oxp_bunch_of_files {
+#ifdef vxl_int_64
   typedef vxl_int_64 offset_t;
+#else // vcl_int_64 is typedef'd to void
+  typedef long offset_t;
+#endif
 
   oxp_bunch_of_files();
   oxp_bunch_of_files(char const* fmt);
@@ -25,7 +29,7 @@ struct oxp_bunch_of_files {
   bool open(char const* fmt);
   void close();
 
-  void seek(offset_t t);
+  void seek(offset_t to);
   int tell() const;
   int read(void*, unsigned int);
   bool ok() { return current_file_index != -1; }
