@@ -11,6 +11,7 @@
 
 #include <vbl/vbl_printf.h>
 #include <oxp/JPEG_Decompressor.h>
+#include <vxl_config.h>
 
 /////////////////////////////////////////////////////////////////////////////
 static int get_u16(vcl_istream& f);
@@ -394,7 +395,7 @@ void SGIMV_Variables::read(vcl_istream& f) {
     f.read(var_buf, 16);
     var_buf[16] = 0;
 
-    u32 var_size = get_u32(f);
+    vxl_uint_32 var_size = get_u32(f);
     vcl_vector<char> val_buf(var_size+1,0);
     f.read(&val_buf[0], var_size);
 
@@ -459,7 +460,7 @@ static void hexdump(vcl_ifstream& f, int nframes)
 {
   for(int j = 0; j < nframes; ++j) {
     int pos = f.tellg();
-    u8 buf[16];
+    vxl_uint_8 buf[16];
     f.read((char*)buf,16);
     vbl_printf(vcl_cerr, "%08x:", pos);
     for(int i = 0; i < 16; ++i) {
@@ -473,14 +474,14 @@ static void hexdump(vcl_ifstream& f, int nframes)
 
 static int get_u16(vcl_istream& f)
 {
-  u8 buf[2];
+  vxl_uint_8 buf[2];
   f.read((char*)buf, 2);
   return (buf[0] << 8) + buf[1];
 }
 
 static int get_u32(vcl_istream& f)
 {
-  u8 buf[4];
+  vxl_uint_8 buf[4];
   f.read((char*)buf, 4);
   return (((unsigned long)buf[0] << 24) |
           ((unsigned long)buf[1] << 16) |

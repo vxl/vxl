@@ -18,17 +18,13 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_functional.h> //vxl_filter
-#include <vcl_utility.h> //vxl_filter
+#include <vcl_functional.h>
+#include <vcl_utility.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_map.h>
 
 #include <vcl_iosfwd.h>
-
-typedef unsigned char  u8;
-typedef unsigned short u16;
-typedef unsigned int   u32;
 
 struct SGIMV_Variables {
 
