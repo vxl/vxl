@@ -28,9 +28,9 @@ void test_mz_random()
   int n = 1000;
   for (int i=0;i<n;++i)
   {
-  	double r = mz_random.normal();
-	sum += r;
-	sum_sq += r*r;
+    double r = mz_random.normal();
+    sum += r;
+    sum_sq += r*r;
   }
 
   double mean = sum/n;
@@ -44,9 +44,9 @@ void test_mz_random()
   sum_sq = 0.0;
   for (int i=0;i<n;++i)
   {
-  	double r = mz_random.normal64();
-	sum += r;
-	sum_sq += r*r;
+    double r = mz_random.normal64();
+    sum += r;
+    sum_sq += r*r;
   }
 
   mean = sum/n;
@@ -55,7 +55,6 @@ void test_mz_random()
   dv = var-1.0;
   TEST("normal64() var near one",dv*dv<1e4,true);
   vcl_cout<<"Mean: "<<mean<<" var: "<<var<<vcl_endl;
-
 }
 
 TESTMAIN(test_mz_random);
