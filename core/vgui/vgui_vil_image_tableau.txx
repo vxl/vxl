@@ -14,8 +14,6 @@
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_gl.h>
 
-#include <vxl_config.h>
-
 namespace {
 
 // helper routines and classes
@@ -28,10 +26,7 @@ struct to_string {
 
 template<typename T>
 const char* to_string<T>::name = "<(no name)>";
-
-const char* to_string<vxl_byte>::name = "<vxl_byte>";
-
-const char* to_string<vxl_uint_16>::name = "<vxl_uint_16>";
+// To be specialised for each templated type; see instantiation macro
 
 } // end anonymous namespace
 
@@ -165,5 +160,10 @@ vgui_vil2_image_tableau<T>::handle( vgui_event const &e )
   else
     return false;
 }
+
+#undef VGUI_VIL2_IMAGE_TABLEAU_INSTANTIATE
+#define VGUI_VIL2_IMAGE_TABLEAU_INSTANTIATE(T) \
+namespace { const char* to_string<T >::name = "<##T##>"; } \
+template class vgui_vil2_image_tableau<T >
 
 #endif // vgui_vil2_image_tableau_txx_
