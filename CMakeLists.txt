@@ -5,52 +5,28 @@
 
 PROJECT(allvxl)
 
-INCLUDE (${CMAKE_ROOT}/Modules/Dart.cmake)
+SET( LIBRARY_OUTPUT_PATH ${allvxl_BINARY_DIR}/lib CACHE PATH
+     "Output directory for the vxl libraries" )
 
-IF(WIN32)
-  OPTION(BUILD_SHARED_LIBS "Should shared libraries be the default?" NO)
-ELSE(WIN32)
-  OPTION(BUILD_SHARED_LIBS "Should shared libraries be the default?" YES)
-ENDIF(WIN32)
+# This prevents UseVXL.cmake from attempting to load the main vxl
+# cache.
+SET( BUILDING_IN_VXL_TREE "YES" )
 
-SET(SOLARIS 0)
-IF(CMAKE_SYSTEM MATCHES "SunOS.*")
-  SET(SOLARIS 1)
-ENDIF(CMAKE_SYSTEM MATCHES "SunOS.*")
+INCLUDE( ${allvxl_SOURCE_DIR}/UseVXL.cmake )
 
-# Assume no MFC support
-SET(HAS_MFC 0)
-# Add MFC support if win32 and not cygwin and not borland
-IF(WIN32)
-  IF(NOT CYGWIN)
-     IF(NOT BORLAND)
-       SET(HAS_MFC 1)
-       ADD_DEFINITIONS(-DHAS_MFC)
-     ENDIF(NOT BORLAND)
-  ENDIF(NOT CYGWIN)
-ENDIF(WIN32)
+# Copy the UseVXL.cmake file to the binary directory so that client
+# projects don't need to find the source directory first. They can run
+# the UseVXL.cmake from the vxl binary directory, and determine the
+# vxl source directory by loading the cache.
+CONFIGURE_FILE( ${allvxl_SOURCE_DIR}/UseVXL.cmake
+                ${allvxl_BINARY_DIR}/UseVXL.cmake COPYONLY )
 
-# Some people may want to build the test cases even though they aren't
-# using Dart.
-IF(NOT DART_ROOT)
-  IF(WIN32)
-    OPTION(BUILD_TESTING "Should the tests be built?" NO)
-  ELSE(WIN32)
-    OPTION(BUILD_TESTING "Should the tests be built?" YES)
-  ENDIF(WIN32)
+# To avoid typing for the FindXXX.cmake modules
+SET( MODULE_PATH ${allvxl_SOURCE_DIR}/config.cmake/Modules CACHE STATIC "VXL module path" )
 
-  IF(BUILD_TESTING)
-    ENABLE_TESTING()
-  ENDIF(BUILD_TESTING)
-ENDIF(NOT DART_ROOT)
-OPTION(BUILD_TESTING "Should the tests be built?" YES)
+# For use in client projects that call UseVXL.cmake
+SET (VXL_LIBRARY_PATH ${LIBRARY_OUTPUT_PATH} CACHE STATIC "Where all the vxl libraries are, for clients to use." )
 
-# By default, build examples when building tests.
-OPTION(BUILD_EXAMPLES "Should the examples be built?" ${BUILD_TESTING})
-
-OPTION(WARN_DEPRECATED "Enable runtime warnings for deprecated functions?" YES)
-OPTION(WARN_DEPRECATED_ONCE "Only warn once per function (if runtime warnings are enabled)?" YES)
-OPTION(WARN_DEPRECATED_ABORT "Abort on executing a deprecated function (if runtime warnings are enabled)?" NO)
 
 OPTION(BUILD_MUL "Should the Manchester University Library be built?" YES)
 OPTION(BUILD_OXL "Should the Oxford University Library be built?" YES)
@@ -59,21 +35,6 @@ OPTION(BUILD_TBL "Should the TB Library be built?" YES)
 OPTION(BUILD_RPL "Should the RPI Library be built?" YES)
 OPTION(BUILD_OUL "Should the Otago University package be built?" YES)
 OPTION(BUILD_CONVERSIONS "Should the Conversions Examples be built?" YES)
-
-
-
-IF(WARN_DEPRECATED)
-  ADD_DEFINITIONS( -DVXL_WARN_DEPRECATED )
-  IF(WARN_DEPRECATED_ONCE)
-     ADD_DEFINITIONS( -DVXL_WARN_DEPRECATED_ONCE )
-  ENDIF(WARN_DEPRECATED_ONCE)
-  IF(WARN_DEPRECATED_ABORT)
-     ADD_DEFINITIONS( -DVXL_WARN_DEPRECATED_ABORT )
-  ENDIF(WARN_DEPRECATED_ABORT)
-ENDIF(WARN_DEPRECATED)
-
-# To avoid typing for the FindXXX.cmake modules
-SET( MODULE_PATH ${allvxl_SOURCE_DIR}/config.cmake/Modules )
 
 
 SUBDIRS(vcl v3p vxl)
@@ -105,20 +66,6 @@ ENDIF(BUILD_OUL)
 IF(BUILD_CONVERSIONS)
   SUBDIRS(conversions)
 ENDIF(BUILD_CONVERSIONS)
-
-
-# For out of place builds, the configure generated headers are in the
-# binary directory
-INCLUDE_DIRECTORIES(${allvxl_BINARY_DIR}/vcl
-                    ${allvxl_BINARY_DIR}/vxl)
-
-INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vcl)
-
-IF(WIN32)
-  IF(NOT CYGWIN)
-    INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vcl/config.win32-VC60)
-  ENDIF(NOT CYGWIN)
-ENDIF(WIN32)
 
 IF(RUN_CONFIGURE)
   EXEC_PROGRAM( ${allvxl_SOURCE_DIR}/configure
