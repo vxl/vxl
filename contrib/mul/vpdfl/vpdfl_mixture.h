@@ -34,7 +34,6 @@ private:
     //: Workspace so we don't have to keep creating vectors
   mutable vnl_vector<double> ws_;
 
-  void init();
   void delete_stuff();
 public:
 
@@ -69,7 +68,7 @@ public:
 
   //: Initialise to use n components of type comp_type
   //  Clones taken by comp_type
-  void init(const vpdfl_pdf_base& comp_type, int n);
+  void init(const vpdfl_pdf_base& comp_type, unsigned n);
 
   //: Return instance object for this PDF
   //  Object is created on heap. Caller responsible for deletion.
@@ -92,6 +91,10 @@ public:
 
   //: Return index of component nearest to x
   unsigned nearest_comp(const vnl_vector<double>& x) const;
+
+  //: Set the contents of the mixture model.
+  // Clones are taken of all the data, and the class will be responsible for their deletion.
+  void set(const vcl_vector<vpdfl_pdf_base*> components, const vcl_vector<double> & weights);
 
   //: Add a component to current model
   //  Clone taken of comp

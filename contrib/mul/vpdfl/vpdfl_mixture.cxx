@@ -17,31 +17,27 @@
 
 //=======================================================================
 
+#include "vpdfl_mixture.h"
 #include <vcl_cmath.h>
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
-#include <vpdfl/vpdfl_mixture.h>
 #include <vpdfl/vpdfl_mixture_sampler.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_vector_io.h>
 #include <vnl/vnl_c_vector.h>
+#include <vnl/vnl_math.h>
 
 //=======================================================================
 
-void vpdfl_mixture::init()
-{
-}
 
 vpdfl_mixture::vpdfl_mixture()
 {
-  init();
 }
 
 vpdfl_mixture::vpdfl_mixture(const vpdfl_mixture& m)
 {
-  init();
   *this = m;
 }
 
@@ -53,9 +49,9 @@ vpdfl_mixture& vpdfl_mixture::operator=(const vpdfl_mixture& m)
 
   vpdfl_pdf_base::operator=(m);
 
-  int n = m.component_.size();
+  unsigned n = m.component_.size();
   component_.resize(n);
-  for (int i=0;i<n;++i)
+  for (unsigned i=0;i<n;++i)
     component_[i] = m.component_[i]->clone();
 
   weight_ = m.weight_;
@@ -67,8 +63,8 @@ vpdfl_mixture& vpdfl_mixture::operator=(const vpdfl_mixture& m)
 
 void vpdfl_mixture::delete_stuff()
 {
-  int n = component_.size();
-  for (int i=0;i<n;++i)
+  unsigned n = component_.size();
+  for (unsigned i=0;i<n;++i)
     delete component_[i];
   component_.resize(0);
   weight_.resize(0);
@@ -79,7 +75,7 @@ vpdfl_mixture::~vpdfl_mixture()
   delete_stuff();
 }
 
-
+//=======================================================================
 //: Return instance of this PDF
 vpdfl_sampler_base* vpdfl_mixture::new_sampler() const
 {
@@ -89,17 +85,81 @@ vpdfl_sampler_base* vpdfl_mixture::new_sampler() const
   return i;
 }
 
+//=======================================================================
 //: Initialise to use n components of type comp_type
-void vpdfl_mixture::init(const vpdfl_pdf_base& comp_type, int n)
+void vpdfl_mixture::init(const vpdfl_pdf_base& comp_type, unsigned n)
 {
   delete_stuff();
   component_.resize(n);
   weight_.resize(n);
-  for (int i=0;i<n;++i)
+  for (unsigned i=0;i<n;++i)
   {
     component_[i] = comp_type.clone();
     weight_[i] = 1.0/n;
   }
+}
+
+
+//=======================================================================
+//: Add Y*v to X
+static inline void incXbyYv(vnl_vector<double> *X, const vnl_vector<double> &Y, double v)
+{
+  assert(X->size() == Y.size());
+  int i = ((int)X->size()) - 1;
+  double * const pX=X->data_block();
+  while (i >= 0)
+  {
+    pX[i] += Y[i] * v;
+    i--;
+  }
+}
+
+//: Add (Y + Z.*Z)*v to X
+static inline void incXbyYplusXXv(vnl_vector<double> *X, const vnl_vector<double> &Y,
+                               const vnl_vector<double> &Z, double v)
+{
+  assert(X->size() == Y.size());
+  int i = ((int)X->size()) - 1;
+  double * const pX=X->data_block();
+  while (i >= 0)
+  {
+    pX[i] += (Y[i] + vnl_math_sqr(Z[i]))* v;
+    i--;
+  }
+}
+
+//=======================================================================
+//: Set the contents of the mixture model.
+// Clones are taken of all the data, and the class will be responsible for their deletion.
+void vpdfl_mixture::set(const vcl_vector<vpdfl_pdf_base*> components, const vcl_vector<double> & weights)
+{
+  unsigned n = components.size();
+  assert (weights.size() == n);
+
+  component_.resize(n);
+  for (int i=0;i<n;++i)
+    component_[i] = components[i]->clone();
+
+  weight_ = weights;
+
+  // Calculate the mixtures overall mean and variance.
+
+  unsigned  m = (n==0)?0:component_[0]->mean().size();
+  vnl_vector<double> mean(m, 0.0);
+  vnl_vector<double> var(m, 0.0);
+
+  for (unsigned i=0; i<n; ++i)
+  {
+    incXbyYv(&mean, component_[i]->mean(), weight_[i]);
+    incXbyYplusXXv(&var, component_[i]->variance(),
+      component_[i]->mean(), weight_[i]);
+  }
+
+  for (unsigned i=0; i<m; ++i)
+    var(i) -= vnl_math_sqr(mean(i));
+
+  set_mean(mean);
+  set_variance(var);
 }
 
 //=======================================================================
@@ -108,13 +168,13 @@ void vpdfl_mixture::add_component(const vpdfl_pdf_base& comp)
 {
   vcl_vector<vpdfl_pdf_base*> old_comps = component_;
   vcl_vector<double> old_wts = weight_;
-  unsigned int n = component_.size();
+  unsigned n = component_.size();
   assert(n == weight_.size());
 
   component_.resize(n+1);
   weight_.resize(n+1);
 
-  for (unsigned int i=0;i<n;++i)
+  for (unsigned i=0;i<n;++i)
   {
     component_[i] = old_comps[i];
     weight_[i] = old_wts[i];
@@ -154,11 +214,11 @@ bool vpdfl_mixture::is_valid_pdf() const
   return true;
 }
 
+//=======================================================================
 //: Set the whole pdf mean and variance values.
 void vpdfl_mixture::set_mean_and_variance(vnl_vector<double>&m, vnl_vector<double>&v)
 {
   assert(m.size() == v.size());
-
   set_mean(m);
   set_variance(v);
 }
