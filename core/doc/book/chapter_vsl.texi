@@ -528,16 +528,15 @@ you need to add the following functions to the class definition in the .h file.
   virtual void print_summary(vcl_ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const;
+  virtual vcl_string is_a() const=0;
 
   //: Return true if the argument matches the string identifying the class
   virtual bool is_class(vcl_string const&) const;
 
   //: Create a copy of the object on the heap.
   // The caller is responsible for deletion
-  virtual vanyl_my_base_class* clone() const;   // This function is not strictly
-                                                // necessary if the class is not
-                                                // part of an inheritance hierarchy
+  virtual vanyl_my_base_class* clone() const=0;
+
 @end example
 You will also need to add the following global scope helper function declarations to the .h file
 
@@ -584,18 +583,15 @@ you need to add the following functions to the class definition in the .h file.
   virtual void print_summary(vcl_ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const;   // This function is not strictly necessary
-                                     // if the class is not part of an inheritance
-                                     // hierarchy
+  virtual vcl_string is_a() const;
 
   //: Return true if the argument matches the string identifying the class or any parent class
   bool is_class(vcl_string const&) const;
 
   //: Create a copy of the object on the heap.
   // The caller is responsible for deletion
-  virtual vanyl_my_base_class* clone() const;   // This function is not strictly
-                                                // necessary if the class is not
-                                                // part of an inheritance hierarchy
+  virtual vanyl_my_base_class* clone() const;
+  
 @end example
 
 In this case you should not need any global helper functions, as they
