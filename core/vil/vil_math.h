@@ -252,6 +252,35 @@ inline void vil2_math_normalise(vil2_image_view<imT>& image)
   vil2_math_scale_and_offset_values(image,s,-s*mean);
 }
 
+//: Computes RMS of each pixel over the planes of src image
+// Dest is a single plane image, $dest(i,j)^2 = 1/np sum_p src(i,j,p)^2$
+// Summation is performed using type destT
+template<class srcT, class destT>
+inline
+void vil2_math_rms(const vil2_image_view<srcT>& src,
+                          vil2_image_view<destT>& dest)
+{
+  unsigned ni = src.ni(),nj = src.nj(),np = src.nplanes();
+  dest.set_size(ni,nj,1);
+
+  vcl_ptrdiff_t istepA=src.istep(),jstepA=src.jstep(),pstepA = src.planestep();
+  vcl_ptrdiff_t istepB=dest.istep(),jstepB=dest.jstep();
+  const srcT* rowA = src.top_left_ptr();
+  destT* rowB = dest.top_left_ptr();
+  for (unsigned j=0;j<nj;++j,rowA += jstepA,rowB += jstepB)
+  {
+      const srcT* pixelA = rowA;
+      destT* pixelB = rowB;
+      for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelB+=istepB)
+      {
+        destT sum2 = 0;
+        const srcT* p=pixelA;
+        for (unsigned k=0;k<np;++k,p+=pstepA) sum2 += destT(*p)*destT(*p);
+        *pixelB = vcl_sqrt(sum2/np);
+      }
+  }
+}
+
 //: Compute sum of two images (im_sum = imA+imB)
 // \relates vil2_image_view
 template<class aT, class bT, class sumT>

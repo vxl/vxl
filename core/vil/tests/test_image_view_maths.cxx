@@ -69,6 +69,14 @@ void test_image_view_maths_byte()
   TEST_NEAR("vil2_math_image_product : im_ratio(5,7)",
             im_ratio(5,7),float(imA(5,7))/float(imB(5,7)),1e-6);
 
+  vil2_image_view<float> im3(5,6,3),im_rms;
+  im3.fill(1.7);
+  im3(2,3,0)=2.0;
+  im3(2,3,1)=3.0;
+  im3(2,3,2)=4.0;
+  vil2_math_rms(im3,im_rms);
+  TEST_NEAR("im_rms(1,1)",im_rms(1,1),1.7,1e-6);
+  TEST_NEAR("im_rms(2,3)",im_rms(2,3),vcl_sqrt(29.0/3.0),1e-6);
 
   vil2_image_view<float> im_diff;
   vil2_math_image_difference(imA,imB,im_diff);
