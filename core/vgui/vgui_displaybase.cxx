@@ -191,6 +191,8 @@ void vgui_displaybase::draw_soviews_select() {
   glPushName(id);
   for (vcl_vector<vgui_soview*>::iterator so_iter=objects.begin();
        so_iter != objects.end(); ++so_iter) {
+
+    vgui_soview *so = *so_iter;
     
     // only highlight if the so is selectable
     if( so->get_selectable())
