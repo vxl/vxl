@@ -506,10 +506,10 @@ text { return ret; }
 // architecture issues, like endianness.
 
 //: VCL_LITTLE_ENDIAN
-// Set to 0,1 or 1,0 respectively, dependending on the architecture.
+// Set to 0,1 or 1,0 respectively, depending on the architecture.
 #define VCL_LITTLE_ENDIAN 1
 //: VCL_BIG_ENDIAN
-// Set to 0,1 or 1,0 respectively, dependending on the architecture.
+// Set to 0,1 or 1,0 respectively, depending on the architecture.
 #define VCL_BIG_ENDIAN    0
 
 
