@@ -68,16 +68,17 @@ compute_weights( rgrl_scale const&  scales,
     if ( fitr.size() == 0 )  continue;
 
     double sum_weights = 0; // for normalizing, later
-    rgrl_feature_sptr mapped_from = fitr.mapped_from_feature();
+    //rgrl_feature_sptr mapped_from = fitr.mapped_from_feature();
 
     for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr )
     {
       DebugMacro_abv( 1, titr.to_feature()->location() << "\t " );
 
       //  for each match with a "to" image feature
-      rgrl_feature_sptr to_feature = titr.to_feature();
+      // rgrl_feature_sptr to_feature = titr.to_feature();
       //double geometric_err = mapped_from->geometric_error( *to_feature );
-      double geometric_err = to_feature->geometric_error( *mapped_from );
+      //double geometric_err = to_feature->geometric_error( *mapped_from );
+      double geometric_err = titr.geometric_error();
       double geometric_wgt = m_est_->wgt( geometric_err, geometric_scale );
 
       DebugMacro_abv(1, geometric_err << "\t " << geometric_wgt << "\t " );
@@ -87,12 +88,22 @@ compute_weights( rgrl_scale const&  scales,
         signature_wgt = titr . signature_weight( );
       }
       else if ( use_signature_error_ ) {
+        
+        // GY: usually geometric error can be computed in a much faster way 
+        //     then remapping a feature.
+        //     But this part needs a *updated* mapped from. 
+        //     As far as I know, nobody is using it 
+        //     Even it is being used, it shall create a loop by itself, preceded by 
+        //     remapping from features
+        assert( !"remapping feature is computationally heavy. disable it for now." );
+#if 0
         vnl_vector<double> error_vector = to_feature->signature_error_vector( *mapped_from );
         assert ( error_vector.size() > 0 );
         double signature_err = vcl_sqrt( dot_product( error_vector * signature_inv_covar, error_vector ) );
         // CS: we may need to add some chi-squared normalization
         // here for large signature vectors.
         signature_wgt = m_est_->wgt( signature_err );  // already normalized at this point
+#endif
       }
 
       double cumul_wgt = geometric_wgt * signature_wgt;
@@ -123,15 +134,15 @@ compute_weights( rgrl_scale const&  scales,
 
 double 
 rgrl_weighter_m_est::
-aux_sum_weighted_residuals( rgrl_scale const&  scale,
-                            rgrl_match_set&    match_set,
-                            rgrl_transformation const&  xform )
+aux_sum_weighted_residuals( rgrl_scale const&        scale,
+                            rgrl_match_set&          match_set,
+                            rgrl_transformation_sptr const&  xform )
 {
   typedef rgrl_match_set::from_iterator  from_iter;
   typedef from_iter::to_iterator         to_iter;
 
   if ( match_set.from_size() > 0) {
-    match_set.remap_from_features( xform );
+    match_set.update_geometric_error( xform );
     compute_weights( scale, match_set );
   }
   
@@ -140,12 +151,13 @@ aux_sum_weighted_residuals( rgrl_scale const&  scale,
   for ( from_iter fitr = match_set.from_begin(); fitr != match_set.from_end(); ++fitr ){
       if ( fitr.size() == 0 )  continue;
       
-      rgrl_feature_sptr mapped_from = fitr.mapped_from_feature();
+      //rgrl_feature_sptr mapped_from = fitr.mapped_from_feature();
       for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
         //  for each match with a "to" image feature
-        rgrl_feature_sptr to_feature = titr.to_feature();
-        double geometric_err = to_feature->geometric_error( *mapped_from );
-        
+        // rgrl_feature_sptr to_feature = titr.to_feature();
+        // double geometric_err = to_feature->geometric_error( *mapped_from );
+        const double geometric_err = titr.geometric_error();
+     
         weighted_sum += vnl_math_sqr(geometric_err) * titr.geometric_weight();
       }
   }
@@ -155,26 +167,29 @@ aux_sum_weighted_residuals( rgrl_scale const&  scale,
 
 double
 rgrl_weighter_m_est::
-aux_sum_rho_values( rgrl_scale const&  scale,
-                    rgrl_match_set&    match_set,
-                    rgrl_transformation const&  xform )
+aux_sum_rho_values( rgrl_scale const&                scale,
+                    rgrl_match_set&                  match_set,
+                    rgrl_transformation_sptr const&  xform )
 {
   typedef rgrl_match_set::from_iterator  from_iter;
   typedef from_iter::to_iterator         to_iter;
 
   if ( match_set.from_size() == 0 ) return 0;
+  
+  match_set.update_geometric_error( xform );
 
   double sum_rho = 0;
 
   for ( from_iter fitr = match_set.from_begin(); fitr != match_set.from_end(); ++fitr ){
       if ( fitr.size() == 0 )  continue;
       
-      rgrl_feature_sptr mapped_from = fitr.from_feature()->transform( xform );
+      // rgrl_feature_sptr mapped_from = fitr.from_feature()->transform( xform );
       for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
         //  for each match with a "to" image feature
-        rgrl_feature_sptr to_feature = titr.to_feature();
-        double geometric_err = to_feature->geometric_error( *mapped_from );
-
+        // rgrl_feature_sptr to_feature = titr.to_feature();
+        // double geometric_err = to_feature->geometric_error( *mapped_from );
+        const double geometric_err = titr.geometric_error();
+        
         // signature weight
         //
         double signature_wgt = 1.0;
@@ -194,7 +209,7 @@ double
 rgrl_weighter_m_est::
 aux_neg_log_likelihood( rgrl_scale const&  scale,
                         rgrl_match_set&    match_set,
-                        rgrl_transformation const&  xform )
+                        rgrl_transformation_sptr const&  xform )
 {
   typedef rgrl_match_set::from_iterator  from_iter;
   typedef from_iter::to_iterator         to_iter;
