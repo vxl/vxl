@@ -18,6 +18,7 @@
 
 #include <vcl_deprecated.h>
 
-
+#include <vbl/vbl_sparse_array_1d.h>
 #define vbl_sparse_array vbl_sparse_array_1d
+
 #endif // vbl_sparse_array_h_

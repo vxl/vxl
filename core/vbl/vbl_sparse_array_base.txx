@@ -1,3 +1,6 @@
+#ifndef vbl_sparse_array_base_txx_
+#define vbl_sparse_array_base_txx_
+
 // This is vxl/vbl/vbl_sparse_array_base.txx
 
 //:
@@ -63,8 +66,9 @@ bool vbl_sparse_array_base<T, Index>::put(Index i, const T& t)
 } 
 
 
-#undef VBL_SPARSE_ARRAY_INSTANTIATE
-#define VBL_SPARSE_ARRAY_INSTANTIATE(T)\
-template class vbl_sparse_array<T>; \
+#undef VBL_SPARSE_ARRAY_BASE_INSTANTIATE
+#define VBL_SPARSE_ARRAY_BASE_INSTANTIATE(T)\
+template class vbl_sparse_array_base<T >
 
 
+#endif
