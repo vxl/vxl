@@ -55,7 +55,7 @@ void test_bsta_histogram()
   h.print();
   double ent = h.entropy();
   vcl_cout << "Uniform Entropy for " << bins << " bins = " << ent  << " bits\n";
-  TEST("test histogram uniform distribution entropy", ent==4, true);
+  TEST_NEAR("test histogram uniform distribution entropy", ent, 4, 1e-9);
 
   bsta_joint_histogram<double> jh(range, bins);
   double va = 0;
@@ -68,7 +68,7 @@ void test_bsta_histogram()
   double jent = jh.entropy();
   vcl_cout << "Uniform Joint Entropy for " << bins*bins << " bins = "
            << jent  << " bits\n";
-  TEST_NEAR("test joint histogram uniform distribution entropy", jent,8, 0.001);
+  TEST_NEAR("test joint histogram uniform distribution entropy", jent, 8, 1e-9);
 }
 
 TESTMAIN(test_bsta_histogram);
