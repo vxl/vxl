@@ -1,11 +1,11 @@
+#ifndef rgrl_feature_set_location_masked_txx_
+#define rgrl_feature_set_location_masked_txx_
 //:
 // \file
 // \author Charlene Tsai
 // \date   Oct 2003
 
 #include "rgrl_feature_set_location_masked.h"
-
-#include <vcl_cassert.h>
 
 template<unsigned N>
 rgrl_feature_set_location_masked<N>::
@@ -15,7 +15,7 @@ rgrl_feature_set_location_masked( feature_vector const& features,
                                   double bin_size):
   rgrl_feature_set_location<N>(features, use_bins, bin_size),
   mask_( mask )
-{  
+{
 }
 
 template<unsigned N>
@@ -30,7 +30,7 @@ rgrl_feature_set_location_masked<N>::
 features_in_region( rgrl_mask_box const& roi ) const
 {
   feature_vector final_results, results;
- 
+
   results = rgrl_feature_set_location<N>::features_in_region( roi );
 
   // check if features are in the valid region
@@ -46,7 +46,7 @@ features_in_region( rgrl_mask_box const& roi ) const
 
 
 template<unsigned N>
-rgrl_feature_sptr 
+rgrl_feature_sptr
 rgrl_feature_set_location_masked<N>::
 nearest_feature( rgrl_feature_sptr feature ) const
 {
@@ -67,13 +67,13 @@ features_within_distance( rgrl_feature_sptr feature, double distance ) const
 
   if ( !mask_->inside(feature->location()) )
     return results;
-  
+
   results = rgrl_feature_set_location<N>::features_within_distance( feature , distance);
   return results;
 }
 
 
-//:  Return the k nearest features based on Euclidiean distance.
+//:  Return the k nearest features based on Euclidean distance.
 template<unsigned N>
 typename rgrl_feature_set_location_masked<N>::feature_vector
 rgrl_feature_set_location_masked<N>::
@@ -87,3 +87,5 @@ k_nearest_features( rgrl_feature_sptr feature, unsigned int k ) const
   results = rgrl_feature_set_location<N>::k_nearest_features(feature, k);
   return results;
 }
+
+#endif // rgrl_feature_set_location_masked_txx_

@@ -1,3 +1,5 @@
+#ifndef rgrl_set_of_txx_
+#define rgrl_set_of_txx_
 //:
 // \file
 // \author Amitha Perera
@@ -13,7 +15,7 @@ rgrl_set_of()
 
 
 template<typename T>
-void 
+void
 rgrl_set_of<T>::
 push_back( T const& item )
 {
@@ -63,3 +65,5 @@ resize( unsigned n )
 {
   data_.resize( n );
 }
+
+#endif // rgrl_set_of_txx_
