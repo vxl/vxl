@@ -1,4 +1,3 @@
-
 //:
 //  \file
 
@@ -920,7 +919,7 @@ void osl_canny_ox::Scale_imageOX(float **image, float scale)
 {
   for (unsigned int x=0; x<xsize_; ++x)
     for (unsigned int y=0; y<ysize_; ++y)
-      image[x][y] = vnl_math_min( (int) (image[x][y]*scale), 255 );
+      image[x][y] = vnl_math_min( image[x][y]*scale, 255.0f );
 }
 
 
