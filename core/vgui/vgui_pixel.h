@@ -58,7 +58,11 @@ struct vgui_pixel_rgb<5,6,5>
 #endif
   vgui_pixel_rgb<5,6,5>() { }
   vgui_pixel_rgb<5,6,5>( vxl_byte red, vxl_byte green, vxl_byte blue, vxl_byte /*alpha*/ = 0 )
+#if VXL_LITTLE_ENDIAN
+  : B(blue>>3), G(green>>2), R(red>>3) {}
+#else
   : R(red>>3), G(green>>2), B(blue>>3) {}
+#endif
 };
 typedef vgui_pixel_rgb<5,6,5> vgui_pixel_rgb565;
 
