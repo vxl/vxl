@@ -52,7 +52,7 @@
 #define LENGTH 512
 
 int vil_viff_imagesize(struct vil_viff_xvimage *image,int *dsize, int *dcount, int *msize,
-                  int *mcount, int *lsize,int *lcount);
+                       int *mcount, int *lsize,int *lcount);
 
 /**************************************************************
 *
@@ -82,8 +82,8 @@ int vil_viff_imagesize(struct vil_viff_xvimage *image,int *dsize, int *dcount, i
 
 struct vil_viff_xvimage *
 vil_viff_createimage(col_size, row_size, data_storage_type, num_of_images,
-                num_data_bands, comment, map_row_size, map_col_size,
-                map_scheme, map_storage_type, location_type, location_dim)
+                     num_data_bands, comment, map_row_size, map_col_size,
+                     map_scheme, map_storage_type, location_type, location_dim)
 unsigned
 long    col_size,
         row_size,
@@ -116,9 +116,8 @@ int     image_data_size_bytes,          /* # data bytes */
 
     if ((image=(struct vil_viff_xvimage *)malloc(sizeof(struct vil_viff_xvimage)))== NULL)
     {
-         fprintf(stderr,"vil_viff_createimage: No space for image \
-- malloc failed!\n");
-        return 0;
+       fprintf(stderr,"vil_viff_createimage: No space for image - malloc failed!\n");
+       return 0;
     }
 
 /* setup the comment (can only be 511 chars) */
@@ -317,23 +316,22 @@ unsigned long vil_viff_getmachsize(unsigned long mtype,unsigned long dtype)
 {
    unsigned long tmp = (mtype==VFF_DEP_CRAYORDER) + 1;
    switch(dtype){
-      case VFF_TYP_BIT     : return((unsigned long)0);
-      case VFF_TYP_1_BYTE  : return((unsigned long)1);
-      case VFF_TYP_2_BYTE  : if(mtype==VFF_DEP_CRAYORDER)
-                                return((unsigned long)8);
+      case VFF_TYP_BIT     : return (unsigned long)0;
+      case VFF_TYP_1_BYTE  : return (unsigned long)1;
+      case VFF_TYP_2_BYTE  : if (mtype==VFF_DEP_CRAYORDER)
+                                return (unsigned long)8;
                              else
-                                return((unsigned long)2);
-      case VFF_TYP_4_BYTE  : return((unsigned long)4*tmp);
-      case VFF_TYP_FLOAT   : return((unsigned long)4*tmp);
-      case VFF_TYP_DOUBLE  : return((unsigned long)8);
-      case VFF_TYP_COMPLEX : return((unsigned long)8*tmp);
-      case VFF_TYP_DCOMPLEX: return((unsigned long)16);
-      default: return((unsigned long)255);
+                                return (unsigned long)2;
+      case VFF_TYP_4_BYTE  : return (unsigned long)4*tmp;
+      case VFF_TYP_FLOAT   : return (unsigned long)4*tmp;
+      case VFF_TYP_DOUBLE  : return (unsigned long)8;
+      case VFF_TYP_COMPLEX : return (unsigned long)8*tmp;
+      case VFF_TYP_DCOMPLEX: return (unsigned long)16;
+      default: return (unsigned long)255;
    }
 }
 
 /*
-
     IMAGESIZE - Compute the size in bytes and objects of the
                 components of an KHOROS 3 image.
 
@@ -356,7 +354,7 @@ unsigned long vil_viff_getmachsize(unsigned long mtype,unsigned long dtype)
 */
 
 int vil_viff_imagesize(struct vil_viff_xvimage *image,int *dsize, int *dcount, int *msize,
-                  int *mcount, int *lsize,int *lcount)
+                       int *mcount, int *lsize,int *lcount)
 {
     long rows,cols;
     unsigned long mach;
@@ -372,7 +370,7 @@ int vil_viff_imagesize(struct vil_viff_xvimage *image,int *dsize, int *dcount, i
     /*
     ** Compute total size of DATA in bytes
     */
-    if(image->data_storage_type==VFF_TYP_BIT){
+    if (image->data_storage_type==VFF_TYP_BIT){
        datasize = ((cols+7)/8)*rows;
        datacount = datasize;
     }else{
@@ -411,11 +409,11 @@ int vil_viff_imagesize(struct vil_viff_xvimage *image,int *dsize, int *dcount, i
     /*
     ** mapcount now contains the number of CELLS, so convert to bytes
     */
-    if(image->map_storage_type==VFF_MAPTYP_NONE){
+    if (image->map_storage_type==VFF_MAPTYP_NONE){
        mapsize = 0;
     }else{
        mapsize = mapcount*vil_viff_getmachsize(mach,
-                 (unsigned long)image->map_storage_type);
+                                               (unsigned long)image->map_storage_type);
     }
 
     /*
