@@ -22,7 +22,7 @@
 # include <vidl/vidl_mpegcodec.h>
 #endif
 
-#ifdef VCL_WIN32
+#ifdef HAS_AVI
 #include <vidl/vidl_avicodec.h>
 #endif
 
@@ -46,7 +46,7 @@ int main(int argc, char** argv)
   // Register video codecs
   vidl_io::register_codec(new vidl_image_list_codec);
 
-#ifdef VCL_WIN32
+#ifdef HAS_AVI
   vidl_io::register_codec(new vidl_avicodec);
 #endif
 
