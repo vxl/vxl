@@ -29,6 +29,22 @@ void vil_orientations(const vil_image_view<float>& grad_i,
                       vil_image_view<float>& grad_mag,
                       unsigned n_orientations=256);
 
+//: Compute discrete orientation and gradient magnitude at edge pixels
+//  Comutes orientation at each pixel and scales to range [0,n_orientations].
+//  If gradient magnitude is less than grad_threshold, then orientation
+//  of zero is set, meaning undefined orientation.
+//
+//  Orientation of i>0 corresponds to angles in range [(i-1.5)dA,(i-0.5)dA]
+//  where dA=2*pi/n_orientations.
+//
+//  Images assumed to be single plane
+void vil_orientations_at_edges(const vil_image_view<float>& grad_i,
+                      const vil_image_view<float>& grad_j,
+                      vil_image_view<vxl_byte>& orient_im,
+                      vil_image_view<float>& grad_mag,
+                      float grad_threshold,
+                      unsigned n_orientations=255);
+
 //: Compute orientation and gradient magnitude using sobel to get gradients
 template <class T>
 inline void vil_orientations_from_sobel(const vil_image_view<T>& src_image,
