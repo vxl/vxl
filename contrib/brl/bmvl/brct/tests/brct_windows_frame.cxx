@@ -356,18 +356,25 @@ void brct_windows_frame::init_epipole()
   assert(lines_.size() >= 2);
   vgl_homg_point_2d<double> epipole = vgl_homg_operators_2d<double>::lines_to_point(lines_);
 
-  e_ -> set(epipole.x() / epipole.w(), epipole.y()/ epipole.w());
+  vcl_cout<<"epipole = ("<<epipole.x()<<" " << epipole.y() << " "<< epipole.w()<<")\n";
 
-  kalman_->init_epipole(epipole.x(), epipole.y());
+  vgl_point_2d<double> pt(epipole);
+  e_ -> set(pt.x(), pt.y());
+  
+
+  kalman_->init_epipole(pt.x(), pt.y());
   
 }
 
 void brct_windows_frame::creat_line()
 {
   float x1=0, y1=0, x2=0, y2=0;
-  vcl_cout<<"pick the first line";
+  vcl_cout<<"pick a line\n";
   tab_picker_->pick_line(&x1, &y1, &x2, &y2);
   vgl_homg_point_2d<double> p1(x1, y1, 1), p2(x2, y2, 1);
   vgl_homg_line_2d<double> l(p1, p2);
   lines_.push_back(l);
+  vgui_soview2D_lineseg* ls = easy_2d_->add_line(x1, y1, x2, y2);
+  debug_curves_2d_.push_back(ls);
+  instance_->post_redraw();
 }

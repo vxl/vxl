@@ -72,6 +72,8 @@ void kalman_filter::init()
 
 kalman_filter::~kalman_filter()
 {
+  if(e_)
+    delete e_;
 }
 
 void kalman_filter::init_transit_matrix()
