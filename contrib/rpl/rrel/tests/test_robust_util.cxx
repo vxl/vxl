@@ -1,6 +1,6 @@
+// This is rpl/rrel/tests/test_robust_util.cxx
 #include <vcl_cmath.h>
 #include <vcl_vector.h>
-#include <vcl_algorithm.h>
 #include <vnl/vnl_math.h>
 
 #include <rrel/rrel_util.h>
