@@ -4,6 +4,7 @@
 #include <vil/vil_rgb_byte.h>
 #include <vcl_cmath.h> // for vcl_fabs()
 
+DECLARE( vipl_test_histogram );
 DECLARE( vipl_test_erode_disk );
 DECLARE( vipl_test_threshold );
 DECLARE( vipl_test_gaussian_convolution );
@@ -11,6 +12,7 @@ DECLARE( vipl_test_gaussian_convolution );
 void
 register_tests()
 {
+  REGISTER( vipl_test_histogram );
   REGISTER( vipl_test_erode_disk );
   REGISTER( vipl_test_threshold );
   REGISTER( vipl_test_gaussian_convolution );

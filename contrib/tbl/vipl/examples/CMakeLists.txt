@@ -37,6 +37,8 @@ ADD_EXECUTABLE(vipl_example2_threshold example2_threshold.cxx)
 ADD_EXECUTABLE(vipl_example_x_gradient example_x_gradient.cxx)
 ADD_EXECUTABLE(vipl_example_histogram example_histogram.cxx)
 
+ADD_EXECUTABLE(vipl_example_histogram2 example_histogram2.cxx)
+
 # For B:
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/CMakeListsLink.txt )
 
