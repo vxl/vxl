@@ -25,6 +25,7 @@
 
 static bool first_window = true;
 
+void
 vgui_mfc_window::init_window(char const *title,
                              vgui_menu const &menubar,
                              bool has_menu,
