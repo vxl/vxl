@@ -74,10 +74,10 @@ void vil_memory_image_impl::init(void *buf,
   bits_per_component_ = bits_per_component;
   component_format_ = component_format;
 
-  bytes_per_pixel_ = bits_per_component_ * components_ / 8;
-  //assert(bytes_per_pixel_ * 8 == bits_per_component_ * components_);
+  bytes_per_pixel_ = (bits_per_component_ * components_ + 7) / 8;
+  int bytes_per_row = (width_ * bits_per_component_ * components_ + 7) / 8;
 
-  int size = planes_ * height_ * width_ * bytes_per_pixel_;
+  int size = planes_ * height_ * bytes_per_row;
   if (size) {
     // non-empty image
     if (is_foreign_buf_)
@@ -85,7 +85,6 @@ void vil_memory_image_impl::init(void *buf,
     else
       buf_ = new unsigned char[size];
     rows_ = new void**[planes_];
-    int bytes_per_row = width_ * bytes_per_pixel_;
 
     unsigned char* ptr = buf_;
     for (int p = 0; p < planes_; ++p) {
@@ -160,19 +159,20 @@ void vil_memory_image_impl::resize(int planes, int width, int height)
 bool vil_memory_image_impl::get_section(void* obuf, int x0, int y0,
                                         int xs, int ys) const
 {
+  int bytes_per_row = (width_ * bits_per_component_ * components_ + 7) / 8;
   for (int p=0; p<planes_; ++p) {
-    int offset = (y0 * width_ + x0) * bytes_per_pixel_;
-    int byte_out_width = bytes_per_pixel_ * xs;
+    int offset = y0 * bytes_per_row + x0 * bytes_per_pixel_;
     if (width_ != xs) {
+      int byte_out_width = bytes_per_pixel_ * xs;
       int byte_width = bytes_per_pixel_ * width_;
 
       for (int y = 0; y < ys; ++y) {
         vcl_memcpy((unsigned char*)obuf + y * byte_out_width, buf_ + offset + y * byte_width, byte_out_width);
       }
     } else {
-      vcl_memcpy((unsigned char*)obuf, buf_ + offset, byte_out_width * ys);
+      vcl_memcpy((unsigned char*)obuf, buf_ + offset, bytes_per_row * ys);
     }
-    obuf = (void*)((char*)obuf + bytes_per_pixel_*width_*height_);
+    obuf = (void*)((char*)obuf + bytes_per_row*height_);
   }
 
   return true;
@@ -181,20 +181,22 @@ bool vil_memory_image_impl::get_section(void* obuf, int x0, int y0,
 bool vil_memory_image_impl::put_section(void const* ibuf, int x0,
                                         int y0, int xs, int ys)
 {
+  int bytes_per_row = (width_ * bits_per_component_ * components_ + 7) / 8;
   for (int p=0; p<planes_; ++p) {
-    int offset = (y0 * width_ + x0) * bytes_per_pixel_;
-    int byte_in_width = bytes_per_pixel_ * xs;
+    int offset = y0 * bytes_per_row + x0 * bytes_per_pixel_;
     if (width_ != xs) {
+      int byte_in_width = bytes_per_pixel_ * xs;
       int byte_width = bytes_per_pixel_ * width_;
 
       for (int y = 0; y < ys; ++y) {
         vcl_memcpy(buf_ + offset + y * byte_width,
                (unsigned char const*)ibuf + y * byte_in_width, byte_in_width);
       }
+      ibuf = (void const*)((char const*)ibuf + byte_in_width * ys);
     } else {
-      vcl_memcpy(buf_ + offset, (unsigned char const*)ibuf, byte_in_width * ys);
+      vcl_memcpy(buf_ + offset, (unsigned char const*)ibuf, bytes_per_row * ys);
+      ibuf = (void const*)((char const*)ibuf + bytes_per_row * ys);
     }
-    ibuf = (void const*)((char const*)ibuf + byte_in_width * ys);
   }
 
   return true;
