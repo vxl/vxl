@@ -1,7 +1,7 @@
 Before anything else, let's look at some example programs.
 
-@subsection Hello world
-Here's one to print "Hello world":
+@section Gradients
+The image processing equivalent of "Hello world":
 @example
 
 #include <vcl_iostream.h>

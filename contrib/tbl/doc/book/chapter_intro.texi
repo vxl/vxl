@@ -32,3 +32,5 @@ intimidating, and so there is an alternative library the ...
 @item vepl: The Easy Image Processing Library
 
 vepl provides simple functions to perform the most common image processing operations.
+
+@end itemize
