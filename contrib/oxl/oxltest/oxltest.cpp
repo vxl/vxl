@@ -1,7 +1,7 @@
 // oxltest.cpp : Defines the entry point for the console application.
 //
 
-#include "stdafx.h"
+#include "StdAfx.h"
 
 #include <mvl/HomgOperator3D.h>
 
