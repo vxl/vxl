@@ -1,6 +1,5 @@
 #ifndef vnl_complex_eigensystem_h_
 #define vnl_complex_eigensystem_h_
-
 //:
 //  \file
 //  \brief  Calculates eigenvalues and eigenvectors of a square complex matrix
@@ -35,21 +34,22 @@
 //  The ith right eigenvector v satisfies A*v = W[i]*v   \n
 //  The ith left  eigenvector u satisfies u*A = W[i]*u (no conjugation)
 
-class vnl_complex_eigensystem {
-public:
+class vnl_complex_eigensystem
+{
+ public:
+  // please do not add underscores to my members - they are publicly accessible
+  int const N;
+  vnl_matrix<vcl_complex<double> > L; // left evecs
+  vnl_matrix<vcl_complex<double> > R; // right evecs
+  vnl_vector<vcl_complex<double> > W; // evals
 
+  // constructors
   vnl_complex_eigensystem(vnl_matrix<double> const& A_real,
                           vnl_matrix<double> const& A_imag,
                           bool right=true, bool left=false);
 
   vnl_complex_eigensystem(vnl_matrix<vcl_complex<double> > const& A,
                           bool right=true, bool left=false);
-
-  // please do not add underscores to my members.
-  int const N;
-  vnl_matrix<vcl_complex<double> > L; // left evecs
-  vnl_matrix<vcl_complex<double> > R; // right evecs
-  vnl_vector<vcl_complex<double> > W; // evals
 
   // convenience methods
   vcl_complex<double> eigen_value(unsigned i) const { return W[i]; }
@@ -58,7 +58,7 @@ public:
   vnl_vector<vcl_complex<double> > right_eigen_vector(unsigned i)
       const { return R.get_row(i); }
 
-private:
+ private:
   void compute(vnl_matrix<vcl_complex<double> > const&,bool,bool);
 };
 
