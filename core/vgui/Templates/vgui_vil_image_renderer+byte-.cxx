@@ -1,6 +1,3 @@
-#include <vgui/vgui_vil2_image_renderer.txx>
 #include <vxl_config.h>
-
-typedef vxl_byte Type;
-
-template class vgui_vil2_image_renderer<Type>;
+#include <vgui/vgui_vil2_image_renderer.txx>
+template class vgui_vil2_image_renderer<vxl_byte>;
