@@ -1,6 +1,6 @@
-#include <testlib/testlib_test.h>
-#include <vbl/vbl_bounding_box.h>
 #include <vcl_iostream.h>
+#include <vbl/vbl_bounding_box.h>
+#include <testlib/testlib_test.h>
 
 static
 void vbl_test_bounding_box()
