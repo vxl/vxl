@@ -35,7 +35,7 @@ jvx_manager::~jvx_manager()
 {
 }
 
-// make an event handler
+//: make an event handler
 // note that we have to get an adaptor and set the tableau to receive events
 bool jvx_manager::handle(const vgui_event &e)
 {
@@ -63,10 +63,10 @@ void jvx_manager::load_video_file()
     vgui_error_dialog("Failed to load movie file");
     return;
   }
- _tabs.clear();
- vcl_cout << vcl_endl;
- vidl_movie::frame_iterator pframe(_my_movie);
- pframe = _my_movie->first();
+  _tabs.clear();
+  vcl_cout << vcl_endl;
+  vidl_movie::frame_iterator pframe(_my_movie);
+  pframe = _my_movie->first();
 
   vil_image img = pframe->get_image();
   _height = img.height();
@@ -74,10 +74,10 @@ void jvx_manager::load_video_file()
   vcl_cout << "Video Height " << _height
            << " Video Width " << _width << vcl_endl;
 
- int i = 0;
- int inc = 40;
- while (pframe!=_my_movie->last())
- {
+  int i = 0;
+  int inc = 40;
+  while (pframe!=_my_movie->last())
+  {
    //Get the image from the video and wrap it with a viewer2D tableau
    vgui_easy2D_new easy2D(vgui_image_tableau_new(pframe->get_image()));
    vgui_viewer2D_sptr t = vgui_viewer2D_new(easy2D);
@@ -85,7 +85,7 @@ void jvx_manager::load_video_file()
    _tabs.push_back(t);
 
    //reduce the display resolution
-   t->zoomout(2.0, 0.0, 0.0);
+   t->zoomin(0.5f, 0, 0); // zoom out by factor 2 around pixel (0,0)
    t->center_image(_width,_height);
 
    //Display some dots on the video that move
@@ -104,8 +104,8 @@ void jvx_manager::load_video_file()
    vcl_cout << "Loading Frame[" << i << "]:(" <<_width <<" "<<_height << ")\n";
    inc++;
    i++;
- }
- //Display the first frame
+  }
+  //Display the first frame
   unsigned row=0, col=0;
   this->add_at(_tabs[0], col, row);
   this->post_redraw();
@@ -153,6 +153,7 @@ void jvx_manager::play_video()
     t.mark();
   }
 }
+
 //Here are other functions to be coded
 void jvx_manager::stop_video()
 {}
