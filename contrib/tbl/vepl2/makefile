@@ -8,7 +8,7 @@
 # The examples subdirectory contains example programs showing how to use the
 # filter classes with vil2 images.
 
-USES += contrib/tbl contrib/mul core
+USES += contrib/tbl core
 # Make sure all template instantiations are available in this library:
 USE_IMPLICIT_TEMPLATES := 1
 

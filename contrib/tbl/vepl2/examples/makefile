@@ -9,7 +9,7 @@
 #
 #   DEPENDENCIES:  vepl2 vipl vil2
 
-USES += contrib/tbl contrib/mul core
+USES += contrib/tbl core
 include ../config.mk
 include ${IUEROOT}/core/vpl/config.mk
 

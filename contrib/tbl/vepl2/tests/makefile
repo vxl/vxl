@@ -1,4 +1,4 @@
-USES += contrib/tbl contrib/mul core
+USES += contrib/tbl core
 include ../config.mk
 include ${IUEROOT}/core/testlib/config.mk
 
