@@ -3,6 +3,7 @@
 IF( NOT BUILDING_IN_VXL_TREE )
 
   IF( VXL_BINARY_PATH )
+    IF (EXISTS ${VXL_BINARY_PATH}/CMakeCache.txt)
     LOAD_CACHE( ${VXL_BINARY_PATH}
       EXCLUDE
         BUILD_CONVERSIONS
@@ -38,6 +39,10 @@ IF( NOT BUILDING_IN_VXL_TREE )
         vxl_BINARY_DIR
     )
     LINK_DIRECTORIES( ${VXL_LIBRARY_PATH} )
+    ELSE (EXISTS ${VXL_BINARY_PATH}/CMakeCache.txt)
+     
+    MESSAGE( SEND_ERROR "*******\n UseVXL.cmake requires the variable VXL_BINARY_PATH\n to point to the vxl binary directory and to be right\n (i.e. the file ${VXL_BINARY_PATH}/CMakeCache.txt must exist)" )
+    ENDIF (EXISTS ${VXL_BINARY_PATH}/CMakeCache.txt)
   ELSE( VXL_BINARY_PATH )
     MESSAGE( SEND_ERROR "UseVXL.cmake requires the variable VXL_BINARY_PATH to point to the vxl binary directory" )
   ENDIF( VXL_BINARY_PATH )
@@ -52,7 +57,7 @@ INCLUDE( ${CMAKE_ROOT}/Modules/Dart.cmake )
 IF( WIN32 )
   OPTION( BUILD_SHARED_LIBS "Should shared libraries be the default?" NO )
 ELSE( WIN32 )
-  OPTION( BUILD_SHARED_LIBS "Should shared libraries be the default?" YES )
+  OPTION( BUILD_SHARED_LIBS "Should shared libraries be the default?" NO )
 ENDIF( WIN32 )
 
 SET( SOLARIS 0 )
