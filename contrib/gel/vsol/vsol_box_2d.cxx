@@ -5,12 +5,6 @@
 // \file
 #include <vcl_cassert.h>
 
-vsol_box_2d::vsol_box_2d(vsol_box_2d const &b)
-  : vbl_ref_count(), vul_timestamp()
-{
-  box_ = b.box_;
-}
-
 double vsol_box_2d::get_min_x() const
 {
   assert(!box_.empty());
@@ -68,7 +62,7 @@ inline static bool near_same(double f1, double f2, float tolerance)
   return f1-f2<tolerance && f2-f1<tolerance;
 }
 
-bool vsol_box_2d::near_equal(vsol_box_2d& b, float tolerance)
+bool vsol_box_2d::near_equal(vsol_box_2d const& b, float tolerance) const
 {
   if (box_.empty() && b.box_.empty()) return true;
   if (b.box_.empty() || b.box_.empty()) return false;

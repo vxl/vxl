@@ -29,11 +29,12 @@ class vsol_box_2d : public vbl_ref_count, public vul_timestamp
 
  public:
   //: create an empty box
-  vsol_box_2d(void) {}
+  vsol_box_2d() {}
 
-  vsol_box_2d(vsol_box_2d const &b);
+  vsol_box_2d(vsol_box_2d const &b)
+    : vbl_ref_count(), vul_timestamp(), box_(b.box_) {}
 
-  vsol_box_2d(vbl_bounding_box<double,2> const &b){box_=b;}
+  vsol_box_2d(vbl_bounding_box<double,2> const &b) : box_(b) {}
 
   ~vsol_box_2d() {}
 
@@ -59,7 +60,7 @@ class vsol_box_2d : public vbl_ref_count, public vul_timestamp
   bool operator< (vsol_box_2d& b);  // a<b means a is inside b
 
   // is box about the same as this?
-  bool near_equal(vsol_box_2d& b, float tolerance);
+  bool near_equal(vsol_box_2d const& b, float tolerance) const;
 
   //: reset the bounds of the box, i.e., make the box empty
   void reset_bounds();
@@ -79,10 +80,10 @@ class vsol_box_2d : public vbl_ref_count, public vul_timestamp
   void print_summary(vcl_ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  vcl_string is_a() const { return vcl_string("vsol_box_2d"); }
+  virtual vcl_string is_a() const { return vcl_string("vsol_box_2d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  bool is_class(const vcl_string& cls) const { return cls==is_a(); }
+  virtual bool is_class(const vcl_string& cls) const { return cls==is_a(); }
 };
 
 #include "vsol_box_2d_sptr.h"
