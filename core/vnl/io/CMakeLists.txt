@@ -1,9 +1,9 @@
 # vxl/vnl/io/CMakeLists.txt
 
-# nb line below required to instansiate
-# vsl_vector_io+vcl_vector_vcl_vector_vnl_vector~-.cxx
-# in the templates folder (otherwise gcc gives template level depth error)
-ADD_DEFINITIONS(-ftemplate-depth-25)
+
+IF (CMAKE_COMPILER_IS_GNUCXX)
+  SET_SOURCE_FILES_PROPERTIES(Templates/vsl_vector_io+vcl_vector+vcl_vector+vnl_vector+double----.cxx COMPILE_FLAGS -ftemplate-depth-25)
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 SET(vnl_io_sources
   vnl_io_nonlinear_minimizer.cxx vnl_io_nonlinear_minimizer.h
