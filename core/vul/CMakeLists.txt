@@ -30,5 +30,5 @@ vul_expand_path
 
 AUX_SOURCE_DIRECTORY(Templates vul_sources)
 
-SUBDIRS(io examples)
+SUBDIRS(io tests examples)
 
