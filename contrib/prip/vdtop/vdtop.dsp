@@ -51,9 +51,6 @@ SOURCE=.\vdtop_draw_digital_graph.h
 SOURCE=.\vdtop_freeman_code.h
 # End Source File
 # Begin Source File
-SOURCE=.\vdtop_image_view.h
-# End Source File
-# Begin Source File
 SOURCE=.\vdtop_kernel.h
 # End Source File
 # Begin Source File
