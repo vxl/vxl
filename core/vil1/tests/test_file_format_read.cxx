@@ -74,7 +74,7 @@ public:
   {
     assert( p == 0 || p==1 || p==2 );
     if (!img_ || pixel.size() != 1) return false;
-    int imp = img_(15*y+3*x+p,0);
+    TruePixelType imp = img_(15*y+3*x+p,0);
     if (pixel[0] != imp)
       vcl_cout << "(x,y)=(" << x << ',' << y << "): p=" << pixel[0] << ", i=" << imp << '\n' << vcl_flush;
     return pixel[0] == imp;
@@ -100,7 +100,7 @@ public:
   {
     assert( p == 0 );
     if (!img_ || pixel.size() != 1) return false;
-    int imp = img_(x,y);
+    TruePixelType imp = img_(x,y);
     if (pixel[0] != imp)
       vcl_cout << "(x,y)=(" << x << ',' << y << "): p=" << pixel[0] << ", i=" << imp << '\n' << vcl_flush;
     return pixel[0] == imp;
@@ -126,7 +126,7 @@ public:
   {
     assert( p == 0 );
     if (!img_ || pixel.size() != 1) return false;
-    int imp = (img_(x/8,y)>>(7-x&7))&1;
+    TruePixelType imp = (img_(x/8,y)>>(7-x&7))&1;
     if (pixel[0] != imp)
       vcl_cout << "(x,y)=(" << x << ',' << y << "): p=" << pixel[0] << ", i=" << imp << '\n' << vcl_flush;
     return pixel[0] == imp;
