@@ -92,4 +92,7 @@
 #include <vil/vil_view_as.h>
 #include <vil/vil_warp.h>
 
+// Put vil_config.h at the end, to verify that none of the above implicitly depend on it
+#include <vil/vil_config.h>
+
 int main() { return 0; }

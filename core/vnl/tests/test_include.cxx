@@ -145,4 +145,7 @@
 #include <vnl/algo/vnl_fft_base.h>
 #include <vnl/algo/vnl_fft_prime_factors.h>
 
+// Put vnl_config.h at the end, to verify that none of the above implicitly depend on it
+#include <vnl/vnl_config.h>
+
 int main() { return 0; }
