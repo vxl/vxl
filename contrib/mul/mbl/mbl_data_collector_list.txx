@@ -35,9 +35,9 @@ void mbl_data_collector_list<T>::clear()
 
 //: Hint about how many examples to expect
 template<class T>
-void mbl_data_collector_list<T>::set_n_samples(int)
+void mbl_data_collector_list<T>::set_n_samples(int n)
 {
-  // ignored.
+  data_.reserve(n);
 }
 
   //: Record given object
@@ -51,7 +51,15 @@ void mbl_data_collector_list<T>::record(const T& d)
 template<class T>
 mbl_data_wrapper<T >& mbl_data_collector_list<T>::data_wrapper()
 {
-  wrapper_.set(&data_[0],data_.size()); // not data_.begin() since set() expects T*, not vector_iterator
+  if (data_.size())
+  {
+    // Check assumption that vcl_vectors store their data in a contiguous block of memory
+    assert(&data_[data_.size()-1] - &data_[0] == data_.size() - 1);
+
+    wrapper_.set(&data_[0],data_.size()); // not data_.begin() since set() expects T*, not vector_iterator
+  }
+  else
+    wrapper_.set(0, 0);
   return wrapper_;
 }
 
