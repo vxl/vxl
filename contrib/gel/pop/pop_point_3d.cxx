@@ -1,6 +1,8 @@
-#include <pop/pop_point_3d.h>
-#include <vcl_fstream.h>
-#include <vcl_cmath.h>
+// This is gel/pop/pop_point_3d.cxx
+#include "pop_point_3d.h"
+//:
+// \file
+#include <vcl_iostream.h>
 
 
 //: constructor
@@ -16,46 +18,38 @@ pop_point_3d::pop_point_3d(pop_vertex *coordinate_system,double x, double y, dou
   vgl_point_3d<double>(x,y,z),
   pop_geometric_object(coordinate_system)
 {
-
 }
-  
 
 //: destructor
 pop_point_3d::~pop_point_3d()
 {
-
 }
 
-//: this is the update method 
+//: this is the update method
 
 void pop_point_3d::update()
 {
-	vgl_point_3d<double>::set(params_[0]->value_,params_[1]->value_,params_[2]->value_);
+  vgl_point_3d<double>::set(params_[0]->value_,params_[1]->value_,params_[2]->value_);
 }
 
-
-//: compute the cost between to geometric objects 
+//: compute the cost between to geometric objects
 double pop_point_3d::cost(pop_geometric_object *other)
 {
   pop_point_3d *p = other->cast_to_pop_point_3d();
 
-  if(p->coordinate_system_ != this->coordinate_system_){
-    vcl_cout << "Warning the systems do not match" << vcl_endl;
+  if (p->coordinate_system_ != this->coordinate_system_) {
+    vcl_cout << "Warning the systems do not match\n";
   }
-  
-  if(p){
-    // the cost is the square distance between the two points
-    
 
+  if (p)
+  {
+    // the cost is the square distance between the two points
     double dx = (this->x() - p->x());
     double dy = (this->y() - p->y());
     double dz = (this->z() - p->z());
-   
-	
-    
-	double residule = dx*dx + dy*dy + dz*dz;
-	return residule;
+
+    double residule = dx*dx + dy*dy + dz*dz;
+    return residule;
   }
   return 0;
-
 }
