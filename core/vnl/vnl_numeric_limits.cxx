@@ -273,8 +273,8 @@ long double vnl_numeric_limits<long double>::signaling_NaN()
 }
 
 const bool vnl_numeric_limits<long double>::is_specialized VCL_STATIC_CONST_INIT_INT_DEFN(true);
-const int  vnl_numeric_limits<long double>::digits   VCL_STATIC_CONST_INIT_INT_DEFN(85-10*szl+.75*szl*szl);
-const int  vnl_numeric_limits<long double>::digits10 VCL_STATIC_CONST_INIT_INT_DEFN(9-3.5*szl+.25*szl*szl-5);
+const int  vnl_numeric_limits<long double>::digits   VCL_STATIC_CONST_INIT_INT_DEFN((int)(85-10*szl+.75*szl*szl));
+const int  vnl_numeric_limits<long double>::digits10 VCL_STATIC_CONST_INIT_INT_DEFN((int)(9-3.5*szl+.25*szl*szl-5));
 // this is 15, 21, and 35 for sizes 8, 12, and 16.
 const bool vnl_numeric_limits<long double>::is_signed  VCL_STATIC_CONST_INIT_INT_DEFN(true);
 const bool vnl_numeric_limits<long double>::is_integer VCL_STATIC_CONST_INIT_INT_DEFN(false);
