@@ -5,13 +5,19 @@
 #include <vil1/vil1_pixel.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_image_as.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_new.h>
+#include <vil/vil_convert.h>
 #include <vgel/vgel_multi_view_data.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vidl_vil1/vidl_vil1_frame.h>
 #include <vidl_vil1/vidl_vil1_movie.h>
+#include <vidl/vidl_frame.h>
+#include <vidl/vidl_movie.h>
 
+#include <vcl_deprecated.h>
 #include <vcl_iostream.h>
-
+#include <vcl_cassert.h>
 
 vgel_kl::vgel_kl(const vgel_kl_params & params) : params_(params)
 {
@@ -44,19 +50,57 @@ void vgel_kl::reset_prev_frame()
     }
 }
 
-void vgel_kl::match_sequence(vil1_image&                        prev_img,
-                             vil1_image&                        cur_img,
-                             vgel_multi_view_data_vertex_sptr   matches,
-                             bool                               use_persistent_features)
+void vgel_kl::match_sequence(
+    vil1_image&                      prev_img,
+    vil1_image&                      cur_img,
+    vgel_multi_view_data_vertex_sptr matches,
+    bool                             use_persistent_features)
 {
-    // Get the current image width & height.  (The KLT code
-    // assumes these are constant for the duration of a
-    // continuous tracking sequence!)
-    int    width = cur_img.width();
-    int    height = cur_img.height();
+  VXL_DEPRECATED( "vgel_kl::match_sequence(vil1_image&, vil1_image&, vgel_multi_view_data_vertex_sptr,  bool)" );
 
+  // Get the current image width & height.  (The KLT code
+  // assumes these are constant for the duration of a
+  // continuous tracking sequence!)
+  int width = cur_img.width();
+  int height = cur_img.height();
+  KLT_PixelType * prev_img_gs = NULL;
+  KLT_PixelType * cur_img_gs = convert_to_gs_image(cur_img);
+  if (!prev_frame_) {
+      assert (width == prev_img.width());
+      assert (height == prev_img.height());
+      prev_img_gs = convert_to_gs_image(prev_img);
+  }
+  match_sequence_base (prev_img_gs, cur_img_gs, width, height, matches, use_persistent_features);
+}
+
+void vgel_kl::match_sequence(
+    vil_image_resource_sptr&         prev_img,
+    vil_image_resource_sptr&         cur_img,
+    vgel_multi_view_data_vertex_sptr matches,
+    bool                             use_persistent_features)
+{
+  int width = (*cur_img).ni();
+  int height = (*cur_img).nj();
+  KLT_PixelType * prev_img_gs = NULL;
+  KLT_PixelType * cur_img_gs = convert_to_gs_image(cur_img);
+  if (!prev_frame_) {
+      assert (width == int((*prev_img).ni()));
+      assert (height == int((*prev_img).nj()));
+      prev_img_gs = convert_to_gs_image(prev_img);
+  }
+  match_sequence_base (prev_img_gs, cur_img_gs, width, height, matches, use_persistent_features);
+}
+
+void vgel_kl::match_sequence_base(
+    KLT_PixelType *                  prev_img_gs,
+    KLT_PixelType *                  cur_img_gs,
+    int                              width,
+    int                              height,
+    vgel_multi_view_data_vertex_sptr matches,
+    bool                             use_persistent_features)
+{
     // Get the current image as a linear buffer
-    KLT_PixelType*    cur_frame = convert_to_gs_image(cur_img);
+    KLT_PixelType*    cur_frame = cur_img_gs;
 
     if (use_persistent_features)
     {
@@ -77,7 +121,7 @@ void vgel_kl::match_sequence(vil1_image&                        prev_img,
     if (!prev_frame_)
     {
         // Get the previous image as a linear buffer
-        prev_frame_ = convert_to_gs_image(prev_img);
+        prev_frame_ = prev_img_gs;
 
         // Create & initialize a tracking context for the sequence
         if (seq_tc_ != NULL)
@@ -152,12 +196,47 @@ void vgel_kl::match_sequence(vil1_image&                        prev_img,
     prev_frame_ = cur_frame;
 }
 
-void vgel_kl::match_sequence(vcl_vector<vil1_image>&            image_list,
-                             vgel_multi_view_data_vertex_sptr   matches)
+void vgel_kl::match_sequence(
+    vcl_vector<vil1_image> &         image_list,
+    vgel_multi_view_data_vertex_sptr matches)
+{
+  VXL_DEPRECATED( "vgel_kl::match_sequence(vcl_vector<vil1_image> &, vgel_multi_view_data_vertex_sptr)" );
+
+  vcl_vector<KLT_PixelType *> image_list_gs(image_list.size());
+  int width = image_list[0].width();
+  int height = image_list[0].height();
+  for (unsigned n=0; n<image_list.size(); n++) {
+      assert (width == image_list[n].width());
+      assert (height == image_list[n].height());
+      image_list_gs[n] = convert_to_gs_image(image_list[n]);
+  }
+  match_sequence_base (image_list_gs, width, height, matches);
+}
+
+void vgel_kl::match_sequence(
+    vcl_vector<vil_image_resource_sptr> & image_list,
+    vgel_multi_view_data_vertex_sptr      matches)
+{
+  vcl_vector<KLT_PixelType *> image_list_gs(image_list.size());
+  int width = (*image_list[0]).ni();
+  int height = (*image_list[0]).nj();
+  for (unsigned n=0; n<image_list.size(); n++) {
+      assert (width == int((*image_list[1]).ni()));
+      assert (height == int((*image_list[1]).nj()));
+      image_list_gs[n] = convert_to_gs_image(image_list[n]);
+  }
+  match_sequence_base (image_list_gs, width, height, matches);
+}
+
+void vgel_kl::match_sequence_base(
+    vcl_vector<KLT_PixelType *> &    image_list_gs,
+    int                              width,
+    int                              height,
+    vgel_multi_view_data_vertex_sptr matches)
 {
   // Uses the KL tracker to track points through an image
   int nFeatures = params_.numpoints;
-  int nFrames = image_list.size();
+  int nFrames = image_list_gs.size();
 
   // If there are no frames in this movie, then skip
   if (nFrames < 1) return;
@@ -171,11 +250,8 @@ void vgel_kl::match_sequence(vcl_vector<vil1_image>&            image_list,
   set_tracking_context (tc);
   tc->sequentialMode = TRUE;
 
-  int width=image_list[0].width();
-  int height=image_list[0].height();
-
   // Now, get the imagery into a linear buffer
-  KLT_PixelType* img1=convert_to_gs_image(image_list[0]);
+  KLT_PixelType* img1=image_list_gs[0];
 
   // Get some features from the first image
   KLTSelectGoodFeatures(tc, img1, width, height, fl);
@@ -183,7 +259,7 @@ void vgel_kl::match_sequence(vcl_vector<vil1_image>&            image_list,
 
   for (int i=1; i<nFrames; i++)
   {
-    KLT_PixelType* img2=convert_to_gs_image(image_list[i]);
+    KLT_PixelType* img2=image_list_gs[i];
 
     // Track the points
     KLTTrackFeatures(tc, img1, img2, width, height, fl);
@@ -273,9 +349,11 @@ void vgel_kl::matches_from_feature_table(KLT_FeatureTable                 ft,
 #endif
 }
 
-void vgel_kl::match_sequence(vidl_vil1_movie_sptr                    movie,
+void vgel_kl::match_sequence(vidl_vil1_movie_sptr               movie,
                              vgel_multi_view_data_vertex_sptr   matches)
 {
+  VXL_DEPRECATED( "vgel_kl::match_sequence(vidl_vil1_movie_sptr, vgel_multi_view_data_vertex_sptr)" );
+
   vcl_vector<vil1_image> image_list;
   for (vidl_vil1_movie::frame_iterator pframe = movie->first();
        pframe <= movie->last();
@@ -287,13 +365,43 @@ void vgel_kl::match_sequence(vidl_vil1_movie_sptr                    movie,
   match_sequence(image_list,matches);
 }
 
+void vgel_kl::match_sequence(vidl_movie_sptr                    movie,
+                             vgel_multi_view_data_vertex_sptr   matches)
+{
+  vcl_vector<vil_image_resource_sptr> image_list;
+  for (vidl_movie::frame_iterator pframe = movie->first();
+       pframe <= movie->last();
+       ++pframe)
+  {
+      vil_image_resource_sptr im = vil_new_image_resource_of_view (*pframe->get_view());
+    image_list.push_back(im);
+  }
+  match_sequence(image_list,matches);
+}
+
 vcl_vector<vtol_vertex_2d_sptr>* vgel_kl::extract_points(vil1_image & image)
 {
+  VXL_DEPRECATED( "vgel_kl::extract_points(vil1_image &)" );
+
   int width=image.width();
   int height=image.height();
+  KLT_PixelType* image_gs=convert_to_gs_image(image);
+  return extract_points_base (image_gs, width, height);
+}
+
+vcl_vector<vtol_vertex_2d_sptr>* vgel_kl::extract_points(vil_image_resource_sptr & image)
+{
+  int width=(*image).ni();
+  int height=(*image).nj();
+  KLT_PixelType* image_gs=convert_to_gs_image(image);
+  return extract_points_base (image_gs, width, height);
+}
+
+vcl_vector<vtol_vertex_2d_sptr>* vgel_kl::extract_points_base(KLT_PixelType * image_gs, int width, int height)
+{
   vcl_cerr << "Beginning points extraction\n";
 
-  KLT_PixelType* img1=convert_to_gs_image(image);
+  KLT_PixelType* img1=image_gs;
 
   // Now, run the extractor
   int nFeatures = params_.numpoints;
@@ -336,9 +444,10 @@ vcl_vector<vtol_vertex_2d_sptr>* vgel_kl::extract_points(vil1_image & image)
   return grp;
 }
 
-//Convert a vil1_image to an array of grey scale
 KLT_PixelType* vgel_kl::convert_to_gs_image(vil1_image &image)
 {
+  // this method is private, so no need to mark it deprecated
+
   if (vil1_pixel_format(image)==VIL1_RGB_BYTE)
   {
     vcl_cerr << "Converting image to grey scale...\n";
@@ -354,9 +463,9 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil1_image &image)
     vil1_image_as_byte(image).get_section(ima_mono.get_buffer(), 0, 0, w, h);
     vxl_byte* p=ima_mono.get_buffer();
 
-    for (int i=0;i<w;i++)
-      for (int j=0;j<h;j++)
-        tab_mono[i*h+j]=(KLT_PixelType)p[i*h+j];
+    for (int j=0;j<h;j++)
+      for (int i=0;i<w;i++)
+        tab_mono[j*w+i]=(KLT_PixelType)p[j*w+i];
     return tab_mono;
   }
   else if (vil1_pixel_format(image)==VIL1_BYTE)
@@ -372,9 +481,9 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil1_image &image)
     vil1_image_as_byte(image).get_section(ima_mono.get_buffer(), 0, 0, w, h);
     vxl_byte* p=ima_mono.get_buffer();
 
-    for (int i=0;i<w;i++)
-      for (int j=0;j<h;j++)
-        tab_mono[i*h+j]=(KLT_PixelType)p[i*h+j];
+    for (int j=0;j<h;j++)
+      for (int i=0;i<w;i++)
+        tab_mono[j*w+i]=(KLT_PixelType)p[j*w+i];
 
     return tab_mono;
   }
@@ -391,9 +500,9 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil1_image &image)
     vil1_image_as_uint16(image).get_section(ima_mono.get_buffer(), 0, 0, w, h);
     vxl_uint_16* p=ima_mono.get_buffer();
 
-    for (int i=0;i<w;i++)
-      for (int j=0;j<h;j++)
-        tab_mono[i*h+j]=(KLT_PixelType)p[i*h+j];
+    for (int j=0;j<h;j++)
+      for (int i=0;i<w;i++)
+        tab_mono[j*w+i]=(KLT_PixelType)p[j*w+i];
 
     return tab_mono;
   }
@@ -410,9 +519,9 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil1_image &image)
     vil1_image_as_uint16(image).get_section(ima_mono.get_buffer(), 0, 0, w, h);
     vxl_uint_16* p=ima_mono.get_buffer();
 
-    for (int i=0;i<w;i++)
-      for (int j=0;j<h;j++)
-        tab_mono[i*h+j]=(KLT_PixelType)p[i*h+j];
+    for (int j=0;j<h;j++)
+      for (int i=0;i<w;i++)
+        tab_mono[j*w+i]=(KLT_PixelType)p[j*w+i];
 
     return tab_mono;
   }
@@ -422,6 +531,33 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil1_image &image)
              << vil1_print(vil1_pixel_format(image)) << vcl_endl;
     return NULL;
   }
+}
+
+KLT_PixelType* vgel_kl::convert_to_gs_image(vil_image_resource_sptr &image)
+{
+  // view of the image with the right type
+  vil_image_view<KLT_PixelType> imgv = vil_convert_cast (KLT_PixelType(), image->get_view());
+
+  // view of image converted to gray
+  vil_image_view<KLT_PixelType> imgg;
+  // only convert to gray if we have to
+  if (imgv.nplanes() == 3)
+      vil_convert_planes_to_grey (imgv, imgg);
+  else
+      imgg = imgv;
+
+  assert ( 1 == imgg.nplanes() );
+
+  KLT_PixelType* tab_mono=new KLT_PixelType[ imgg.ni() * imgg.nj() ];
+
+  // view of the image using memory organized for the underlying library
+  vil_image_view<KLT_PixelType> imgc (tab_mono,
+                                      imgg.ni(), imgg.nj(), 1,
+                                      1, imgg.ni(), imgg.ni() * imgg.nj());
+
+  vil_copy_deep (imgg, imgc);
+
+  return tab_mono;
 }
 
 void vgel_kl::set_tracking_context( KLT_TrackingContext tc)
