@@ -64,6 +64,7 @@ vgui_gtk_adaptor::~vgui_gtk_adaptor() {
   // No more events must reach the adaptor now.
   gtk_signal_disconnect(GTK_OBJECT(widget), event_handler_id);
 
+  glFlush();
   gtk_widget_destroy(widget);
 }
 
