@@ -346,17 +346,6 @@ read( vcl_istream& is )
 }
 
 void
-rgrl_transformation::
-inv_map( const vnl_vector<double>& /*to*/,
-         bool /*initialize_next*/,
-         const vnl_vector<double>& /*to_delta*/,
-         vnl_vector<double>& /*from*/,
-         vnl_vector<double>& /*from_next_est*/) const
-{
-  assert ( ! "rgrl_transformation::inv_map() is not defined" );
-}
-
-void
 rgrl_trans_reduced_quad::
 inv_map( vnl_vector<double> const& /*to*/,
          vnl_vector<double>& /*from*/ ) const
