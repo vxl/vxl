@@ -1,4 +1,4 @@
-// This is mul/vil2/algo/vil2_correlate_2d.h
+// This is core/vil2/algo/vil2_correlate_2d.h
 #ifndef vil2_correlate_2d_h_
 #define vil2_correlate_2d_h_
 //:
@@ -14,9 +14,9 @@
 // Returns  sum_ijp src_im[i*istep+j*jstep+p*pstep]*kernel(i,j,p)
 template <class srcT, class kernelT, class accumT>
 inline accumT vil2_correlate_2d_at_pt(const srcT *src_im, vcl_ptrdiff_t s_istep,
-                                     vcl_ptrdiff_t s_jstep, vcl_ptrdiff_t s_pstep,
-                                     const vil2_image_view<kernelT>& kernel,
-                                     accumT)
+                                      vcl_ptrdiff_t s_jstep, vcl_ptrdiff_t s_pstep,
+                                      const vil2_image_view<kernelT>& kernel,
+                                      accumT)
 {
   unsigned ni = kernel.ni();
   unsigned nj = kernel.nj();
@@ -51,9 +51,9 @@ inline accumT vil2_correlate_2d_at_pt(const srcT *src_im, vcl_ptrdiff_t s_istep,
 // \relates vil2_image_view
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil2_correlate_2d(const vil2_image_view<srcT>& src_im,
-                                  vil2_image_view<destT>& dest_im,
-                                  const vil2_image_view<kernelT>& kernel,
-                                  accumT ac)
+                              vil2_image_view<destT>& dest_im,
+                              const vil2_image_view<kernelT>& kernel,
+                              accumT ac)
 {
   int ni = 1+src_im.ni()-kernel.ni(); assert(ni >= 0);
   int nj = 1+src_im.nj()-kernel.nj(); assert(nj >= 0);

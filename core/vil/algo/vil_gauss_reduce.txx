@@ -1,4 +1,4 @@
-// This is mul/vil2/algo/vil2_gauss_reduce.txx
+// This is core/vil2/algo/vil2_gauss_reduce.txx
 #ifndef vil2_gauss_reduce_txx_
 #define vil2_gauss_reduce_txx_
 //:
@@ -124,8 +124,6 @@ void vil2_gauss_reduce_general_plane(const vil2_image_view<T>& src,
   // Convolve src with a 5 x 1 gaussian filter,
   // placing result in worka
 
-
-
   // First perform horizontal smoothing
   for (unsigned y=0;y<src.nj();y++)
   {
@@ -185,7 +183,7 @@ void vil2_gauss_reduce_general_plane(const vil2_image_view<T>& src,
     workb(x,1) = l_round( params.filt_pen_edge2() * worka(x,3)
                         + params.filt_pen_edge1() * worka(x,2)
                         + params.filt_pen_edge0() * worka(x,1)
-                        + params.filt_pen_edge_n1() * worka(x,0), (T)0); 
+                        + params.filt_pen_edge_n1() * worka(x,0), (T)0);
 
     workb(x,0) = l_round( params.filt_edge2() * worka(x,2)
                         + params.filt_edge1() * worka(x,1)

@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_transpose.h
+// This is core/vil2/vil2_transpose.h
 #ifndef vil2_transpose_h_
 #define vil2_transpose_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

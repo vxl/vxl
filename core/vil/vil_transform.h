@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_transform.h
+// This is core/vil2/vil2_transform.h
 #ifndef vil2_transform_h_
 #define vil2_transform_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -21,7 +21,7 @@ inline void vil2_transform(const vil2_image_view<inP >&src, vil2_image_view<outP
   const unsigned ni = src.ni(), nj= src.nj(), np = src.nplanes();
 
   dest.set_size(ni, nj, np);
-  
+
   // Optimise special case;
   if (dest.istep()==1 && src.istep()==1)
   {
@@ -50,7 +50,7 @@ inline void vil2_transform2(const vil2_image_view<inP >&src, vil2_image_view<out
   const unsigned ni = src.ni(), nj= src.nj(), np = src.nplanes();
 
   dest.set_size(ni, nj, np);
-  
+
   // Optimise special case;
   if (dest.istep()==1 && src.istep()==1)
   {

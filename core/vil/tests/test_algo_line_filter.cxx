@@ -1,4 +1,4 @@
-// This is mul/vil2/tests/test_algo_line_filter.cxx
+// This is core/vil2/tests/test_algo_line_filter.cxx
 #include <vcl_iostream.h>
 #include <vil2/algo/vil2_line_filter.h>
 #include <vil2/vil2_image_view.h>
@@ -8,7 +8,7 @@ static unsigned char black = 0, white = 10;
 
 static void print_out(unsigned int n,
                       const char* s1, vil2_image_view<unsigned char> a,
-                      const char* s2, vil2_image_view<unsigned char> b, 
+                      const char* s2, vil2_image_view<unsigned char> b,
                       const char* s3, vil2_image_view<float> c)
 {
   vcl_cout << '\n';

@@ -1,4 +1,4 @@
-// This is mul/vil2/file_formats/vil2_bmp_file_header.cxx
+// This is core/vil2/file_formats/vil2_bmp_file_header.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -31,7 +31,7 @@ vil2_bmp_file_header::vil2_bmp_file_header()
 void vil2_bmp_file_header::print(vcl_ostream &s) const
 {
   s << "vil2_bmp_file_header:\n"
-    << "  magic   : " << vcl_hex 
+    << "  magic   : " << vcl_hex
     << "0x" << unsigned(magic[0]) << ' '
     << "0x" << unsigned(magic[1]) << vcl_endl
     << "  filesize: 0x" << file_size << vcl_endl

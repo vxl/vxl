@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_image_view.txx
+// This is core/vil2/vil2_image_view.txx
 #ifndef vil2_image_view_txx_
 #define vil2_image_view_txx_
 //:

@@ -1,4 +1,4 @@
-// This is mul/vil2/file_formats/vil2_jpeg.h
+// This is core/vil2/file_formats/vil2_jpeg.h
 #ifndef vil2_jpeg_file_format_h_
 #define vil2_jpeg_file_format_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -52,7 +52,7 @@ class vil2_jpeg_image : public vil2_image_resource
   virtual unsigned nplanes() const;
   virtual unsigned ni() const;
   virtual unsigned nj() const;
- 
+
   virtual enum vil2_pixel_format pixel_format() const;
 
   //: returns "jpeg"

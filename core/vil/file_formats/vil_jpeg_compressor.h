@@ -1,4 +1,4 @@
-// This is mul/vil2/file_formats/vil2_jpeg_compressor.h
+// This is core/vil2/file_formats/vil2_jpeg_compressor.h
 #ifndef vil2_jpeg_compressor_h_
 #define vil2_jpeg_compressor_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

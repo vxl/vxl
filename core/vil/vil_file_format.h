@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_file_format.h
+// This is core/vil2/vil2_file_format.h
 #ifndef vil2_file_format_h_
 #define vil2_file_format_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

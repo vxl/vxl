@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_convert.h
+// This is core/vil2/vil2_convert.h
 #ifndef vil2_convert_h_
 #define vil2_convert_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -163,7 +163,6 @@ inline void vil2_convert_cast(const vil2_image_view_base_sptr&src, vil2_image_vi
 }
 
 
-
 //: Performs rounding between different pixel types.
 template <class In, class Out>
 class vil2_convert_round_pixel
@@ -260,8 +259,6 @@ inline void vil2_convert_round_pixel<In, Out>::operator () (In v, Out &d) const
 }
 
 
-
-
 //: Convert one pixel type to another with rounding.
 // This should only be used to convert scalar pixel types to other scalar
 // pixel types, or RGBs to RGBs. This function only rounds in terms of the
@@ -285,7 +282,7 @@ template <class inP, class outP>
 class vil2_convert_rgb_to_grey_pixel
 {
   double rw_, gw_, bw_;
-public:
+ public:
   vil2_convert_rgb_to_grey_pixel(double rw, double gw, double bw):
     rw_(rw), gw_(gw), bw_(bw) {}
 
@@ -408,8 +405,8 @@ macro(VIL2_PIXEL_FORMAT_DOUBLE , double )
 
 //: Create a greyscale image of specified pixel type from any image src.
 // This function is designed to be used with vil2_load or vil2_image_resource::get_view()
-// where you do not know the pixel type in advance. 
-// The output may be a reconfigured view of the input.This 
+// where you do not know the pixel type in advance.
+// The output may be a reconfigured view of the input.This
 //
 // Default weights convert from linear RGB to CIE luminance assuming a
 // modern monitor.  See Charles Pontyon's Colour FAQ

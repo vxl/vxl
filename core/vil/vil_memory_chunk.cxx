@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_memory_chunk.cxx
+// This is core/vil2/vil2_memory_chunk.cxx
 #include "vil2_memory_chunk.h"
 //:
 // \file

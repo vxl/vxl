@@ -1,4 +1,4 @@
-// This is mul/vil2/io/tests/test_image_view_io.cxx
+// This is core/vil2/io/tests/test_image_view_io.cxx
 #include <testlib/testlib_test.h>
 
 #include <vcl_iostream.h>

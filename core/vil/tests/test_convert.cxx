@@ -1,4 +1,4 @@
-// This is mul/vil2/tests/test_convert.cxx
+// This is core/vil2/tests/test_convert.cxx
 #include <vil2/vil2_convert.h>
 #include <vil2/vil2_image_view.h>
 #include <vxl_config.h> // for vxl_byte
@@ -56,7 +56,7 @@ void test_convert_diff_types(const char * golden_data_dir)
   vil2_convert_cast( image_base1, image_16_2 );
   testlib_test_perform( image_16_2 && image_16_2(4,0) == vxl_uint_16( image1(4,0) ) );
 
-  if( image_16_2 ) {
+  if ( image_16_2 ) {
     vil2_print_all(vcl_cout, image_16_2);
   } else {
     vcl_cout << "(no dump)\n";
@@ -66,7 +66,7 @@ void test_convert_diff_types(const char * golden_data_dir)
 static
 void test_convert_stretch_range()
 {
-  vcl_cout<<"testing vil2_convert_stretch_range(src,dest):"<<vcl_endl;
+  vcl_cout<<"testing vil2_convert_stretch_range(src,dest):\n";
   vil2_image_view<float> f_image(10,10);
   for (unsigned j=0;j<f_image.nj();++j)
     for (unsigned i=0;i<f_image.ni();++i)  f_image(i,j)=0.1f*i+0.01f*j+5.f;

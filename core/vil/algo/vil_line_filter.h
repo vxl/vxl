@@ -1,4 +1,4 @@
-// This is mul/vil2/algo/vil2_line_filter.h
+// This is core/vil2/algo/vil2_line_filter.h
 #ifndef vil2_line_filter_h_
 #define vil2_line_filter_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

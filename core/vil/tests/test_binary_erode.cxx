@@ -1,4 +1,4 @@
-// This is mul/vil2/tests/test_binary_erode.cxx
+// This is core/vil2/tests/test_binary_erode.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
@@ -30,7 +30,7 @@ void test_binary_erode_byte()
 
   image0(5,5)=true;  // Central pixel
   image0(3,0)=true;  // Edge pixel
-  vcl_cout<<"Original image"<<vcl_endl;
+  vcl_cout<<"Original image\n";
   print_binary_image(image0);
 
   vcl_vector<int> px(3),py(3);
@@ -44,13 +44,13 @@ void test_binary_erode_byte()
   vil2_binary_dilate(image0,image1,element_i);
   vil2_image_view<bool> image2;
   vil2_binary_dilate(image1,image2,element_j);
-  vcl_cout<<"Result of two dilations"<<vcl_endl;
+  vcl_cout<<"Result of two dilations\n";
   print_binary_image(image2);
 
 
   vil2_image_view<bool> image3;
   vil2_binary_erode(image2,image3,element_j);
-  vcl_cout<<"Result of one erosion"<<vcl_endl;
+  vcl_cout<<"Result of one erosion\n";
   print_binary_image(image3);
 
   TEST("image3(5,5)",image3(5,5),true);
@@ -60,7 +60,7 @@ void test_binary_erode_byte()
 
   vil2_image_view<bool> image4;
   vil2_binary_erode(image3,image4,element_i);
-  vcl_cout<<"Result of two erosions"<<vcl_endl;
+  vcl_cout<<"Result of two erosions\n";
   print_binary_image(image4);
 
   TEST("image4(5,5)",image4(5,5),true);
@@ -69,7 +69,7 @@ void test_binary_erode_byte()
   TEST("image4(3,0)",image4(3,0),false);
 
 
-  vcl_cout<<"Testing vil2_binary_closing"<<vcl_endl;
+  vcl_cout<<"Testing vil2_binary_closing\n";
   image0.fill(false);
   image0(4,5)=true;
   image0(6,5)=true;
@@ -79,7 +79,7 @@ void test_binary_erode_byte()
   TEST("image1(6,5)",image1(6,5),true);
   TEST("image1(7,5)",image1(7,5),false);
 
-  vcl_cout<<"Testing vil2_binary_opening"<<vcl_endl;
+  vcl_cout<<"Testing vil2_binary_opening\n";
   vil2_binary_opening(image0,image1,element_i);
   TEST("image1(4,5)",image1(4,5),false);
   TEST("Gap",image1(5,5),false);

@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_smart_ptr.h
+// This is core/vil2/vil2_smart_ptr.h
 #ifndef vil2_smart_ptr_h_
 #define vil2_smart_ptr_h_
 //:
@@ -31,8 +31,9 @@
 //
 // See also vbl_ref_count
 template <class T>
-class vil2_smart_ptr {
-public:
+class vil2_smart_ptr
+{
+ public:
   vil2_smart_ptr ()
     :  ptr_(0) { }
 
@@ -122,7 +123,7 @@ public:
   bool operator<=(vil2_smart_ptr<T>const&p)const{return ptr_ <= p.as_pointer();}
   bool operator>=(vil2_smart_ptr<T>const&p)const{return ptr_ >= p.as_pointer();}
 
-private:
+ private:
   // These two methods should not be inlined as they call T's ref()
   // and unref() or are specializations. The big gain from that is
   // that vil2_smart_ptr<T> can be forward declared even if T is still

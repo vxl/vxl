@@ -1,4 +1,4 @@
-// This is mul/vil2/tests/test_sample_profile_bicub.cxx
+// This is core/vil2/tests/test_sample_profile_bicub.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
@@ -8,11 +8,11 @@
 
 void test_sample_profile_bicub_byte()
 {
-  vcl_cout << "***********************************\n";
-  vcl_cout << " Testing vil2_sample_profile_bicub\n";
-  vcl_cout << "***********************************\n";
+  vcl_cout << "***********************************\n"
+           << " Testing vil2_sample_profile_bicub\n"
+           << "***********************************\n";
 
-  vcl_cout<< "One plane image"<<vcl_endl;
+  vcl_cout<< "One plane image\n";
   vil2_image_view<vxl_byte> image1;
   image1.set_size(10,10);
 
@@ -33,7 +33,7 @@ void test_sample_profile_bicub_byte()
   TEST_NEAR("First value",vec2[0],55,1e-6);
   TEST_NEAR("Last value (outside image)",vec2[7],0,1e-6);
 
-  vcl_cout<< "Three plane image (float)"<<vcl_endl;
+  vcl_cout<< "Three plane image (float)\n";
   vil2_image_view<float> image3;
   image3.set_size(10,10,3);
 

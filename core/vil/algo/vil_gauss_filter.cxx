@@ -1,4 +1,4 @@
-// This is mul/vil2/algo/vil2_gauss_filter.cxx
+// This is core/vil2/algo/vil2_gauss_filter.cxx
 #include "vil2_gauss_filter.h"
 //:
 // \file

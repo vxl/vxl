@@ -1,4 +1,4 @@
-// This is mul/vil2/algo/vil2_gauss_reduce.h
+// This is core/vil2/algo/vil2_gauss_reduce.h
 #ifndef vil2_gauss_reduce_h_
 #define vil2_gauss_reduce_h_
 //:
@@ -36,7 +36,7 @@ class vil2_gauss_reduce_params
   double filt_edge2_, filt_edge1_, filt_edge0_;
   double filt_pen_edge2_, filt_pen_edge1_,
          filt_pen_edge0_, filt_pen_edge_n1_;
-public:
+ public:
   explicit vil2_gauss_reduce_params(double scale_step);
   //: the scale step between pyramid levels
   double scale_step() const {return scale_step_;}

@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_file_format.cxx
+// This is core/vil2/vil2_file_format.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

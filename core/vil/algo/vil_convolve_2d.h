@@ -1,4 +1,4 @@
-// This is mul/vil2/algo/vil2_convolve_2d.h
+// This is core/vil2/algo/vil2_convolve_2d.h
 #ifndef vil2_convolve_2d_h_
 #define vil2_convolve_2d_h_
 //:
@@ -18,10 +18,11 @@
 // \relates vil2_image_view
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil2_convolve_2d(const vil2_image_view<srcT>& src_im,
-                                  vil2_image_view<destT>& dest_im,
-                                  const vil2_image_view<kernelT>& kernel,
-                                  accumT ac)
+                             vil2_image_view<destT>& dest_im,
+                             const vil2_image_view<kernelT>& kernel,
+                             accumT ac)
 {
   vil2_correlate_2d(src_im,dest_im,vil2_flip_ud(vil2_flip_lr(kernel)), ac);
 }
+
 #endif // vil2_convolve_2d_h_

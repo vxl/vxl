@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_image_resource.h
+// This is core/vil2/vil2_image_resource.h
 #ifndef vil2_image_resource_h_
 #define vil2_image_resource_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

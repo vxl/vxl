@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_clamp.cxx
+// This is core/vil2/vil2_clamp.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -37,8 +37,8 @@ bool vil2_clamp_image_resource::get_property(char const* tag, void* property_val
   return src_->get_property(tag, property_value);
 }
 
-vil2_image_view_base_sptr vil2_clamp_image_resource::get_copy_view(unsigned i0, unsigned ni, 
-                                                unsigned j0, unsigned nj) const
+vil2_image_view_base_sptr vil2_clamp_image_resource::get_copy_view(unsigned i0, unsigned ni,
+                                                                   unsigned j0, unsigned nj) const
 {
   vil2_image_view_base_sptr vs = src_->get_copy_view(i0, ni, j0, nj);
   if (!vs) return 0;

@@ -1,4 +1,4 @@
-// This is mul/vil2/file_formats/vil2_bmp.h
+// This is core/vil2/file_formats/vil2_bmp.h
 #ifndef vil2_bmp_file_format_h_
 #define vil2_bmp_file_format_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -44,10 +44,10 @@ class vil2_bmp_file_format : public vil2_file_format
   virtual char const* tag() const;
   virtual vil2_image_resource_sptr make_input_image(vil2_stream* vs);
   virtual vil2_image_resource_sptr make_output_image(vil2_stream* vs,
-                                                 unsigned nx,
-                                                 unsigned ny,
-                                                 unsigned nplanes,
-                                                 vil2_pixel_format format);
+                                                     unsigned nx,
+                                                     unsigned ny,
+                                                     unsigned nplanes,
+                                                     vil2_pixel_format format);
 };
 
 //: Generic image implementation for BMP files
@@ -96,7 +96,7 @@ class vil2_bmp_image : public vil2_image_resource
   xBITMAPFILEHEADER fbmp;
   int pixsize;
   int** local_color_map_;
-#endif
+#endif // 0
 };
 
 

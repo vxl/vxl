@@ -1,4 +1,4 @@
-// This is mul/vil2/file_formats/vil2_pnm.h
+// This is core/vil2/file_formats/vil2_pnm.h
 #ifndef vil2_pnm_file_format_h_
 #define vil2_pnm_file_format_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_fwd.h
+// This is core/vil2/vil2_fwd.h
 #ifndef vil2_fwd_h_
 #define vil2_fwd_h_
 

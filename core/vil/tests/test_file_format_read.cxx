@@ -1,4 +1,4 @@
-// This is mul/vil2/tests/test_file_format_read.cxx
+// This is core/vil2/tests/test_file_format_read.cxx
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_vector.h>

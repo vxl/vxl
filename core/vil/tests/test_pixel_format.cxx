@@ -1,4 +1,4 @@
-// This is mul/vil2/tests/test_pixel_format.cxx
+// This is core/vil2/tests/test_pixel_format.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
@@ -26,7 +26,7 @@ int test_pixel_format_main( int /*argc*/, char* /*argv*/[] )
        vil2_pixel_format_component_format(vil2_pixel_format_of(vil2_rgba<vxl_byte>())),
        VIL2_PIXEL_FORMAT_BYTE);
 
-  vcl_cout << VIL2_PIXEL_FORMAT_RGBA_DOUBLE << '\n' << 
+  vcl_cout << VIL2_PIXEL_FORMAT_RGBA_DOUBLE << '\n' <<
               VIL2_PIXEL_FORMAT_RGBA_INT_32 << '\n' <<
               VIL2_PIXEL_FORMAT_RGBA_UINT_32 << '\n' <<
               VIL2_PIXEL_FORMAT_RGBA_INT_16 << '\n' <<

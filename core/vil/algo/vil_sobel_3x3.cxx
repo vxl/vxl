@@ -1,4 +1,4 @@
-// This is mul/vil2/algo/vil2_sobel_3x3.cxx
+// This is core/vil2/algo/vil2_sobel_3x3.cxx
 #include "vil2_sobel_3x3.h"
 //:
 // \file

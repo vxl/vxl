@@ -1,28 +1,27 @@
-// This is mul/vimt/tests/test_deep_copy_3_plane.cxx
+// This is core/vil2/tests/test_deep_copy_3_plane.cxx
 #include <testlib/testlib_test.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_new.h>
 
 bool equal_image(const vil2_image_view< vxl_byte >& im0,
-           const vil2_image_view< vxl_byte >& im1)
+                 const vil2_image_view< vxl_byte >& im1)
 {
   if (im0.ni() != im1.ni() || im0.nj()!=im1.nj() || im0.nplanes() != im1.nplanes()) return false;
   for (int i=0;i<4;++i)
    for (int j=0;j<4;++j)
     for (int p=0;p<3;++p)
     {
-      if (im0(i,j,p) != im1(i,j,p)) return false;  
+      if (im0(i,j,p) != im1(i,j,p)) return false;
     }
     return true;
 }
 
 void test_deep_copy_3_plane()
 {
-
   vxl_byte dummy(1);
 
-  vil2_image_view< vxl_byte >  rgbrgb_im=vil2_new_image_view_j_i_plane (4,4,3, dummy); 
-  
+  vil2_image_view< vxl_byte >  rgbrgb_im=vil2_new_image_view_j_i_plane (4,4,3, dummy);
+
   vil2_image_view< vxl_byte >  rrggbb_im(4,4,3);
   for (int i=0;i<4;++i)
    for (int j=0;j<4;++j)

@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_save.cxx
+// This is core/vil2/vil2_save.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -33,7 +33,7 @@ bool vil2_save(const vil2_image_view_base &im, char const* filename, char const*
     vcl_cerr << __FILE__ ": (vil2_save) Cannot save to type [" << file_format << "]\n";
     return false;
   }
-  
+
   // Use smart copy constructor to convert multi-component images
   // into multi-plane ones.
   switch (vil2_pixel_format_component_format(im.pixel_format()))

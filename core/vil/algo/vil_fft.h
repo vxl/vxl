@@ -1,4 +1,4 @@
-// This is mul/vil2/algo/vil2_fft.h
+// This is core/vil2/algo/vil2_fft.h
 #ifndef vil2_fft_h_
 #define vil2_fft_h_
 //:

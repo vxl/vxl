@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_pixel_traits.h
+// This is core/vil2/vil2_pixel_traits.h
 #ifndef vil2_pixel_traits_h_
 #define vil2_pixel_traits_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

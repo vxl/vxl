@@ -1,4 +1,4 @@
-// This is mul/vil2/io/tests/test_memory_chunk_io.cxx
+// This is core/vil2/io/tests/test_memory_chunk_io.cxx
 #include <testlib/testlib_test.h>
 
 #include <vil2/vil2_memory_chunk.h>
@@ -35,7 +35,7 @@ inline void test_memory_chunk_io_as(T value)
 
   vsl_b_ifstream bfs_in("vil2_memory_chunk_test_io.bvl.tmp");
   TEST("Opened vil2_memory_chunk_test_io.bvl.tmp for reading", (!bfs_in), false);
-  vsl_b_read(bfs_in, chunk2); vcl_cout<<"Read in chunk2"<<vcl_endl;
+  vsl_b_read(bfs_in, chunk2); vcl_cout<<"Read in chunk2\n";
   vsl_b_read(bfs_in, chunk_sptr2);
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
@@ -49,7 +49,7 @@ inline void test_memory_chunk_io_as(T value)
   TEST("Type OK", chunk1.pixel_format(),chunk2.pixel_format());
   TEST_NEAR("Data",data1[3],data2[3],1e-6);
 
-  vcl_cout<<"Testing IO using smart pointer"<<vcl_endl;
+  vcl_cout<<"Testing IO using smart pointer\n";
   TEST("Size OK",chunk_sptr2->size()==chunk1.size(),true);
   TEST("Type OK", chunk_sptr2->pixel_format(),chunk1.pixel_format());
 }

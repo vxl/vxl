@@ -1,4 +1,4 @@
-// This is mul/vil2/tests/test_bilin_interp.cxx
+// This is core/vil2/tests/test_bilin_interp.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte

@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_smart_ptr.txx
+// This is core/vil2/vil2_smart_ptr.txx
 #ifndef vil2_smart_ptr_txx_
 #define vil2_smart_ptr_txx_
 

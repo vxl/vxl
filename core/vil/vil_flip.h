@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_flip.h
+// This is core/vil2/vil2_flip.h
 #ifndef vil2_flip_h_
 #define vil2_flip_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -58,7 +58,7 @@ class vil2_flip_lr_image_resource : public vil2_image_resource
   virtual enum vil2_pixel_format pixel_format() const { return src_->pixel_format(); }
 
 
-  virtual vil2_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni, 
+  virtual vil2_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
                                                   unsigned j0, unsigned nj) const;
 
   virtual vil2_image_view_base_sptr get_view(unsigned i0, unsigned ni,
@@ -67,7 +67,7 @@ class vil2_flip_lr_image_resource : public vil2_image_resource
 
   //: Put the data in this view back into the image source.
   virtual bool put_view(const vil2_image_view_base& im, unsigned i0,
-                        unsigned j0); 
+                        unsigned j0);
 
   //: Extra property information
   virtual bool get_property(char const* tag, void* property_value = 0) const {
@@ -99,7 +99,7 @@ class vil2_flip_ud_image_resource : public vil2_image_resource
   virtual enum vil2_pixel_format pixel_format() const { return src_->pixel_format(); }
 
 
-  virtual vil2_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni, 
+  virtual vil2_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
                                                   unsigned j0, unsigned nj) const;
 
   virtual vil2_image_view_base_sptr get_view(unsigned i0, unsigned ni,
@@ -108,7 +108,7 @@ class vil2_flip_ud_image_resource : public vil2_image_resource
 
   //: Put the data in this view back into the image source.
   virtual bool put_view(const vil2_image_view_base& im, unsigned i0,
-                        unsigned j0); 
+                        unsigned j0);
 
   //: Extra property information
   virtual bool get_property(char const* tag, void* property_value = 0) const {

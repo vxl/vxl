@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_image_view_base.h
+// This is core/vil2/vil2_image_view_base.h
 #ifndef vil2_image_view_base_h_
 #define vil2_image_view_base_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -20,7 +20,7 @@
 
 class vil2_image_view_base
 {
-protected:
+ protected:
   //: Number of columns.
   unsigned ni_;
   //: Number of rasters.
@@ -35,7 +35,7 @@ protected:
   //  Don't set nplanes_ to zero as it confuses set_size(nx,ny) later
   vil2_image_view_base(): ni_(0), nj_(0), nplanes_(1), reference_count_(0) {}
 
-public:
+ public:
   // The destructor must be virtual so that the memory chunk is destroyed.
   virtual ~vil2_image_view_base() {};
 

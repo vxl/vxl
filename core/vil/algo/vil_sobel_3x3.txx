@@ -1,4 +1,4 @@
-// This is mul/vil2/algo/vil2_sobel_3x3.txx
+// This is core/vil2/algo/vil2_sobel_3x3.txx
 #ifndef vil2_sobel_3x3_txx_
 #define vil2_sobel_3x3_txx_
 //:

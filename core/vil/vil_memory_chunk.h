@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_memory_chunk.h
+// This is core/vil2/vil2_memory_chunk.h
 #ifndef vil2_memory_chunk_h_
 #define vil2_memory_chunk_h_
 //:

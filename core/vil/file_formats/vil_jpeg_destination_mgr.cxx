@@ -1,4 +1,4 @@
-// This is mul/vil2/file_formats/vil2_jpeg_destination_mgr.cxx
+// This is core/vil2/file_formats/vil2_jpeg_destination_mgr.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif

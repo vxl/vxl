@@ -1,4 +1,4 @@
-// This is vil2/tests/test_suppress_non_max.cxx
+// This is core/vil2/tests/test_suppress_non_max.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vil2/algo/vil2_suppress_non_max.h>

@@ -1,4 +1,4 @@
-// This is mul/vil2/tests/test_algo_convolve_1d.cxx
+// This is core/vil2/tests/test_algo_convolve_1d.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
@@ -23,9 +23,9 @@ void test_algo_convolve_1d_double()
   // They are included to test for over-runs.
 
   vil2_convolve_1d(&src[0],n,1, &dest[1],1,
-                    &kernel[1],-1,1,
-                    double(), // indicates accumulator type
-                    vil2_convolve_no_extend,vil2_convolve_no_extend);
+                   &kernel[1],-1,1,
+                   double(), // indicates accumulator type
+                   vil2_convolve_no_extend,vil2_convolve_no_extend);
   TEST_NEAR("First full value",dest[2],10.0,1e-6);
   TEST_NEAR("Last full value",dest[n-1],6*n-8.0,1e-6);
 
@@ -33,9 +33,9 @@ void test_algo_convolve_1d_double()
   for (int i=0;i<n+2;++i) dest[i]=999;
 
   vil2_convolve_1d(&src[0],n,1, &dest[1],1,
-                    &kernel[1],-1,1,
-                    double(), // indicates accumulator type
-                    vil2_convolve_ignore_edge,vil2_convolve_ignore_edge);
+                   &kernel[1],-1,1,
+                   double(), // indicates accumulator type
+                   vil2_convolve_ignore_edge,vil2_convolve_ignore_edge);
 
   TEST_NEAR("Start",dest[1],999,1e-6);
   TEST_NEAR("First full value",dest[2],10.0,1e-6);
@@ -48,9 +48,9 @@ void test_algo_convolve_1d_double()
   for (int i=0;i<n+2;++i) dest[i]=999;
 
   vil2_convolve_1d(&src[0],n,1, &dest[1],1,
-                    &kernel[1],-1,1,
-                    double(), // indicates accumulator type
-                    vil2_convolve_no_extend,vil2_convolve_no_extend);
+                   &kernel[1],-1,1,
+                   double(), // indicates accumulator type
+                   vil2_convolve_no_extend,vil2_convolve_no_extend);
 
   TEST_NEAR("Start",dest[1],0,1e-6);
   TEST_NEAR("First full value",dest[2],10.0,1e-6);
@@ -63,9 +63,9 @@ void test_algo_convolve_1d_double()
   vcl_cout<<"Testing vil2_convolve_zero_extend end type\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil2_convolve_1d(&src[0],n,1, &dest[1],1,
-                    &kernel[1],-1,1,
-                    double(), // indicates accumulator type
-                    vil2_convolve_zero_extend,vil2_convolve_zero_extend);
+                   &kernel[1],-1,1,
+                   double(), // indicates accumulator type
+                   vil2_convolve_zero_extend,vil2_convolve_zero_extend);
 
   TEST_NEAR("Start",dest[1],4,1e-6);
   TEST_NEAR("First full value",dest[2],10.0,1e-6);
@@ -77,9 +77,9 @@ void test_algo_convolve_1d_double()
   vcl_cout<<"Testing vil2_convolve_constant_extend end type\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil2_convolve_1d(&src[0],n,1, &dest[1],1,
-                    &kernel[1],-1,1,
-                    double(), // indicates accumulator type
-                    vil2_convolve_constant_extend,vil2_convolve_constant_extend);
+                   &kernel[1],-1,1,
+                   double(), // indicates accumulator type
+                   vil2_convolve_constant_extend,vil2_convolve_constant_extend);
 
   TEST_NEAR("Start",dest[1],7.0,1e-6);
   TEST_NEAR("First full value",dest[2],10.0,1e-6);
@@ -91,9 +91,9 @@ void test_algo_convolve_1d_double()
   vcl_cout<<"Testing vil2_convolve_reflect_extend end type\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil2_convolve_1d(&src[0],n,1, &dest[1],1,
-                    &kernel[1],-1,1,
-                    double(), // indicates accumulator type
-                    vil2_convolve_reflect_extend,vil2_convolve_reflect_extend);
+                   &kernel[1],-1,1,
+                   double(), // indicates accumulator type
+                   vil2_convolve_reflect_extend,vil2_convolve_reflect_extend);
 
   TEST_NEAR("Start",dest[1],10.0,1e-6);
   TEST_NEAR("First full value",dest[2],10.0,1e-6);
@@ -105,9 +105,9 @@ void test_algo_convolve_1d_double()
   vcl_cout<<"Testing vil2_convolve_periodic_extend end type\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil2_convolve_1d(&src[0],n,1, &dest[1],1,
-                    &kernel[1],-1,1,
-                    double(), // indicates accumulator type
-                    vil2_convolve_periodic_extend,vil2_convolve_periodic_extend);
+                   &kernel[1],-1,1,
+                   double(), // indicates accumulator type
+                   vil2_convolve_periodic_extend,vil2_convolve_periodic_extend);
 
   TEST_NEAR("Start",dest[1],3.0*n+4.0,1e-6);
   TEST_NEAR("First full value",dest[2],10.0,1e-6);
@@ -119,9 +119,9 @@ void test_algo_convolve_1d_double()
   vcl_cout<<"Testing vil2_convolve_trim end type\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil2_convolve_1d(&src[0],n,1, &dest[1],1,
-                    &kernel[1],-1,1,
-                    double(), // indicates accumulator type
-                    vil2_convolve_trim,vil2_convolve_trim);
+                   &kernel[1],-1,1,
+                   double(), // indicates accumulator type
+                   vil2_convolve_trim,vil2_convolve_trim);
 
   TEST_NEAR("Start",dest[1],8.0,1e-6);
   TEST_NEAR("First full value",dest[2],10.0,1e-6);

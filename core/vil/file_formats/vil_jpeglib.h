@@ -1,4 +1,4 @@
-// This is mul/vil2/file_formats/vil2_jpeglib.h
+// This is core/vil2/file_formats/vil2_jpeglib.h
 #ifndef vil2_jpeglib_h_
 #define vil2_jpeglib_h_
 //:

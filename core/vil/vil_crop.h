@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_crop.h
+// This is core/vil2/vil2_crop.h
 #ifndef vil2_crop_h_
 #define vil2_crop_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -46,7 +46,7 @@ class vil2_crop_image_resource : public vil2_image_resource
   virtual enum vil2_pixel_format pixel_format() const { return src_->pixel_format(); }
 
 
-  virtual vil2_image_view_base_sptr get_copy_view(unsigned i0, unsigned n_i, 
+  virtual vil2_image_view_base_sptr get_copy_view(unsigned i0, unsigned n_i,
                                                   unsigned j0, unsigned n_j) const
   {
     if (i0 + n_i > ni() || j0 + n_j > nj()) return 0;

@@ -1,4 +1,4 @@
-// This is mul/vil2/algo/vil2_greyscale_dilate.txx
+// This is core/vil2/algo/vil2_greyscale_dilate.txx
 #ifndef vil2_greyscale_dilate_txx_
 #define vil2_greyscale_dilate_txx_
 //:

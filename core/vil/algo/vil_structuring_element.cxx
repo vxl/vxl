@@ -1,4 +1,4 @@
-// This is mul/vil2/algo/vil2_structuring_element.cxx
+// This is core/vil2/algo/vil2_structuring_element.cxx
 #include "vil2_structuring_element.h"
 //:
 // \file

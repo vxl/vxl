@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_copy.txx
+// This is core/vil2/vil2_copy.txx
 #ifndef vil2_copy_txx_
 #define vil2_copy_txx_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

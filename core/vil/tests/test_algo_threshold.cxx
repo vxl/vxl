@@ -1,4 +1,4 @@
-// This is mul/vil2/tests/test_algo_threshold.cxx
+// This is core/vil2/tests/test_algo_threshold.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
@@ -43,7 +43,7 @@ void test_threshold_byte()
 
   test_threshold_byte(image);
 
-  vcl_cout<<"Test non-contiguous image"<<vcl_endl;
+  vcl_cout<<"Test non-contiguous image\n";
   vil2_image_view<vxl_byte> crop_image = vil2_crop(image,2,10,3,10);
   for (unsigned j=0;j<crop_image.nj();++j)
     for (unsigned i=0;i<crop_image.ni();++i) crop_image(j,i) = i+10*j;

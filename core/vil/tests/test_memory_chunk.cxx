@@ -1,4 +1,4 @@
-// This is mul/vil2/tests/test_memory_chunk.cxx
+// This is core/vil2/tests/test_memory_chunk.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vil2/vil2_memory_chunk.h>

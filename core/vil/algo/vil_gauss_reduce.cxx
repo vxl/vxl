@@ -1,4 +1,4 @@
-// This is mul/vil2/algo/vil2_gauss_reduce.cxx
+// This is core/vil2/algo/vil2_gauss_reduce.cxx
 #include "vil2_gauss_reduce.h"
 //:
 // \file

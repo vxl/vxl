@@ -1,4 +1,4 @@
-// This is mul/vil2/algo/vil2_gauss_filter.txx
+// This is core/vil2/algo/vil2_gauss_filter.txx
 #ifndef vil2_gauss_filter_txx_
 #define vil2_gauss_filter_txx_
 //:

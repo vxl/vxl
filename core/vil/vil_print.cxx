@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_print.cxx
+// This is core/vil2/vil2_print.cxx
 #include "vil2_print.h"
 //:
 // \file
@@ -219,8 +219,5 @@ void vil2_print_value(vcl_ostream& os, const vil2_rgba<vxl_byte>& value)
 VCL_DEFINE_SPECIALIZATION
 void vil2_print_value(vcl_ostream& os, const vil2_rgba<float>& value)
 {
-  os<<value.r<<'/';
-  os<<value.g<<'/';
-  os<<value.b<<'/';
-  os<<value.a;
+  os<<value.r<<'/'<<value.g<<'/'<<value.b<<'/'<<value.a;
 }

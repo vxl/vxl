@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_fill.h
+// This is core/vil2/vil2_fill.h
 #ifndef vil2_fill_h_
 #define vil2_fill_h_
 //:
@@ -79,8 +79,8 @@ void vil2_fill_col(vil2_image_view<T>& view, unsigned i, T value)
 template<class srcT>
 inline
 void vil2_fill_mask(vil2_image_view<srcT>& image,
-                     const vil2_image_view<bool>& mask,
-                     srcT value, bool b=true)
+                    const vil2_image_view<bool>& mask,
+                    srcT value, bool b=true)
 {
   unsigned ni = image.ni(),nj = image.nj(),np = image.nplanes();
   assert(ni==mask.ni() && nj==mask.nj());
