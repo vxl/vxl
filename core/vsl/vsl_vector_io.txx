@@ -12,6 +12,7 @@
 #include <vsl/vsl_block_binary.h>
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
+#include <vsl/vsl_indent.h>
 
 //====================================================================================
 //: Write vector to binary stream
@@ -88,15 +89,17 @@ void vsl_b_read(vsl_b_istream& is, vcl_vector<T>& v)
 template <class T>
 void vsl_print_summary(vcl_ostream& os, const vcl_vector<T> &v)
 {
-  os << "Vector length: " << v.size() << vcl_endl;
+  os << vsl_indent() << "Vector length: " << v.size() << vcl_endl;
   for (unsigned int i=0; i<v.size() && i<5; i++)
   {
-    os << ' ' << i << ": ";
+    os << vsl_indent() << ' ' << i << ": ";
+    vsl_indent_inc(os);
     vsl_print_summary(os, v[i]);
     os << vcl_endl;
+    vsl_indent_dec(os);
   }
   if (v.size() > 5)
-    os << " ...\n";
+    os << vsl_indent() << " ...\n";
 }
 
 
