@@ -26,6 +26,7 @@ int test_new_main(int, char*[]);
 int test_set_main(int, char*[]);
 int test_stlfwd_main(int, char*[]); // need not be called: just a compiler test
 int test_string_main(int, char*[]);
+int test_sstream_main(int, char*[]);
 int test_vector_main(int, char*[]);
 int test_cstdio_main(int, char*[]);
 
@@ -103,6 +104,8 @@ int main( int argc, char* argv[] )
   DO_TEST( set );
 
   DO_TEST( string );
+
+  DO_TEST( sstream );
 
   DO_TEST( vector );
 

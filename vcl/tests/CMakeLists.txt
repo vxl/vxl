@@ -26,6 +26,7 @@ ADD_EXECUTABLE( vcl_test_all
      test_set.cxx
      test_stlfwd.cxx
      test_string.cxx
+     test_sstream.cxx
      test_vector.cxx
      test_cstdio.cxx
 )
@@ -47,6 +48,7 @@ ADD_TEST( vcl_test_multimap    vcl_test_all test_multimap )
 ADD_TEST( vcl_test_new         vcl_test_all test_new )
 ADD_TEST( vcl_test_set         vcl_test_all test_set )
 ADD_TEST( vcl_test_string      vcl_test_all test_string )
+ADD_TEST( vcl_test_sstream     vcl_test_all test_sstream )
 ADD_TEST( vcl_test_vector      vcl_test_all test_vector )
 ADD_TEST( vcl_test_cstdio      vcl_test_all test_cstdio ${vxl_SOURCE_DIR}/vcl/tests/test_cstdio.txt )
 # Only a compiler test:
