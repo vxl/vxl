@@ -4,7 +4,7 @@
 //:
 //  \file
 
-#include <mbl/mbl_data_array_wrapper.h>
+#include "mbl_data_array_wrapper.h"
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
