@@ -6,6 +6,7 @@ include ${IUEROOT}/core/testlib/config.mk
 TESTMAIN := test_driver.cxx
 
 TESTS += test_osl_to_vdgl.cxx
+DEFINES += -DHAS_VDGL -DHAS_OSL
 
 ifneq (,$(wildcard $(IUEROOT)/SpatialObjects/DigitalGeometry/DigitalCurve.h))
 USES += COOL GeneralUtility SpatialObjects Numerics
