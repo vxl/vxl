@@ -148,16 +148,6 @@ private:
 };
 
 
-// GCC 2.7 really *does* need this non-member equality operator,
-// even though a member version is already present.
-#if defined(VCL_GCC_27)
-template <class T>
-inline bool operator== (vbl_smart_ptr<T> const& a, vbl_smart_ptr<T> const& b)
-{
-  return a.as_pointer() == b.as_pointer();
-}
-#endif
-
 // -- Comparison of pointer with smart-pointer (cannot be a member function)
 template <class T>
 inline bool operator== (T const* p, vbl_smart_ptr<T> const& a)
