@@ -72,6 +72,16 @@ vil3d_image_view<T>::vil3d_image_view(const vil_memory_chunk_sptr& mem_chunk,
   }
 }
 
+//: Copy constructor
+// If this view cannot set itself to view the other data (e.g. because the
+// types are incompatible) it will set itself to empty.
+template<class T>
+vil3d_image_view<T>::vil3d_image_view(const vil3d_image_view<T>& that)
+  :top_left_(0), istep_(0), jstep_(0), kstep_(0), planestep_(0), ptr_(0)
+{
+  operator=( static_cast<vil3d_image_view_base const&>(that) );
+}
+
 //: Create shallow copy of image with given base reference
 //  Sets to empty image if target is of different pixel type
 template<class T>

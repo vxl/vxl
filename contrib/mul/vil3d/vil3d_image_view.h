@@ -79,6 +79,10 @@ class vil3d_image_view : public vil3d_image_view_base
                    vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step,
                    vcl_ptrdiff_t k_step, vcl_ptrdiff_t plane_step);
 
+  //: Copy construct.
+  // The new object will point to the same underlying image as the rhs.
+  vil3d_image_view(const vil3d_image_view<T>& rhs);
+
   //: Create shallow copy of image with given base reference
   //  Sets to empty image if target is of different pixel type
   vil3d_image_view(const vil3d_image_view_base& base_ref);
