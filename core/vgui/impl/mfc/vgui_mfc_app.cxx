@@ -4,6 +4,7 @@
 // \file
 // \author  Marko Bacic, Oxford RRG
 // \date    27 July 2000
+// \brief   See vgui_mfc_app.h for a description of this file.
 //
 // \verbatim
 //  Modifications:
@@ -25,18 +26,15 @@
   #endif
 #endif
 /////////////////////////////////////////////////////////////////////////////
-// vgui_mfc_app construction
-
+//: vgui_mfc_app construction
 vgui_mfc_app::vgui_mfc_app()
 {
   // TODO: add construction code here,
   // Place all significant initialization in InitInstance
 }
 /////////////////////////////////////////////////////////////////////////////
-// The one and only vgui_mfc_app object
-
-
-class CMyCommandLineInfo : public CCommandLineInfo {
+//: The one and only vgui_mfc_app object
+class vgui_mfc_app_command_line_info : public CCommandLineInfo {
 public:
   void ParseParam( LPCTSTR lpszParam, BOOL bFlag, BOOL bLast ) {
     CCommandLineInfo::ParseParam(lpszParam, bFlag, bLast);
@@ -46,8 +44,7 @@ public:
 static void f();
 
 /////////////////////////////////////////////////////////////////////////////
-// vgui_mfc_app initialization
-
+//: vgui_mfc_app initialization
 BOOL vgui_mfc_app::InitInstance()
 {
   AfxEnableControlContainer();
@@ -81,7 +78,7 @@ BOOL vgui_mfc_app::InitInstance()
   AddDocTemplate(pDocTemplate);
 
   // Parse command line for standard shell commands, DDE, file open
-  CMyCommandLineInfo cmdInfo;
+  vgui_mfc_app_command_line_info cmdInfo;
 //      ParseCommandLine(cmdInfo);
 
   // *** IMPORTANT STUFF (marko) ***
@@ -188,6 +185,5 @@ BOOL vgui_mfc_app::Run()
   ASSERT(FALSE);  // not reachable
 }
 /////////////////////////////////////////////////////////////////////////////
-// vgui_mfc_app message handlers
-
+//: vgui_mfc_app message handlers
 void f() {}
