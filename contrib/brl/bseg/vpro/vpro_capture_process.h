@@ -14,7 +14,9 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 #include <vcl_list.h>
+#include <vcl_vector.h>
 #include <vcl_string.h>
+#include <vul/vul_timer.h>
 #include <vpro/vpro_video_process.h>
 
 class vpro_capture_process : public vpro_video_process
@@ -27,10 +29,14 @@ class vpro_capture_process : public vpro_video_process
   virtual bool execute();
   virtual bool finish();
  private:
-  //members
   vpro_capture_process();
+  bool save_time_stamps();
+  //members
+  static vul_timer time_;
+  static bool capture_started_;
   vcl_string video_file_;
   vcl_list<vil1_image> frames_;
+  vcl_vector<long> time_stamps_;
 };
 
 #endif // vpro_capture_process_h_
