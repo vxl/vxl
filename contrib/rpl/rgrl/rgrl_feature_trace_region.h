@@ -1,7 +1,6 @@
-
 #ifndef rgrl_feature_trace_region_h_
 #define rgrl_feature_trace_region_h_
-
+//:
 // \file
 // \author Amitha Perera
 // \date   Feb 2003
@@ -18,19 +17,18 @@
 class rgrl_feature_trace_region
   : public rgrl_feature_trace_pt, public rgrl_feature_region
 {
-public:
+ public:
   typedef vcl_vector<rgrl_feature_sptr >  feature_vector;
 
-public:  
+ public:
   //:  Constructor to initialize feature_trace_region location.
   rgrl_feature_trace_region( vnl_vector<double> const& loc,
                          vnl_vector<double> const& tangent );
 
-  //:  Constructor to initialize feature_trace_region location that has a length 
-  //   along the tangent and an normal.
+  //:  Constructor to initialize feature_trace_region location that has a length along the tangent and an normal.
   rgrl_feature_trace_region( vnl_vector<double> const& loc,
                          vnl_vector<double> const& tangent,
-                         double                    region_length, 
+                         double                    region_length,
                          double                    region_radius );
 
   //: The result is a rgrl_feature_trace_region, without transforming the radius/length parameters
@@ -41,10 +39,10 @@ public:
   rgrl_feature_sptr
   transform_region( rgrl_transformation const& xform ) const;
 
-  //: The result is a vector of boundary locations in the direction of the normal in the plane defined by the tangent and in_direction.
-//    //  CAVEAT: This design is not good enough for 3D trace points, since it only 
-//    //          produces 2 boundary constraints. This function should be revised 
-//    //          later for 3D. 
+  //: Result is a vector of boundary locations in the direction of the normal in the plane defined by the tangent and in_direction.
+//    //  CAVEAT: This design is not good enough for 3D trace points, since it only
+//    //          produces 2 boundary constraints. This function should be revised
+//    //          later for 3D.
 //    //
 //    //  Chuck's comment:  I'm not sure this should be here.  It can
 //    //  easily be extracted in an arbitrary set of dimensions from a
@@ -60,15 +58,14 @@ public:
   double region_length() const { return region_length_; }
   double region_radius() const { return region_radius_; }
 
-  //:  Extract the pixel coordinates within the oriented rectangular
-  //   solid defined by the feature.
+  //:  Extract the pixel coordinates within the oriented rectangular solid defined by the feature.
   virtual void generate_pixel_coordinates( vnl_vector< double > const& spacing_ratio );
 
   //  Chuck's note:  I am beginning to wonder if we are trying to do
   //  too much here.  Perhaps we should be make a subclass for the
   //  region-based estimator.
 
-private:
+ private:
   //:
   // Create an uninitialized feature with enough space to store a dim
   // dimensional feature. The error projection matrix is initialized
@@ -82,13 +79,12 @@ private:
   //  the pseudo-feature-based registration application, you might
   //  want the radius to be slightly larger...
 
-  //  For pseudo matcher method, length_ is the length along the 
+  //  For pseudo matcher method, length_ is the length along the
   //  tangent direction, centered at the feature point's location.
   double region_length_;
   //  For pseudo matcher method, radius_ is half of the length along
   //  the normal directions.
   double region_radius_;
-
 };
 
 #endif

@@ -1,11 +1,9 @@
 #ifndef rgrl_matcher_pseudo_h_
 #define rgrl_matcher_pseudo_h_
-
 //:
 // \file
 // \author Chuck Stewart
 // \date   Sept 2003
-
 
 #include <rgrl/rgrl_matcher.h>
 #include <rgrl/rgrl_feature_set.h>
@@ -22,8 +20,7 @@
 #include "rgrl_evaluator_sptr.h"
 //#include <itkImage.h>
 
-//: For each "from" pseudo / weak feature, use intensity based
-// matching to construct the "to" features.
+//: For each "from" pseudo / weak feature, use intensity based matching to construct the "to" features.
 //
 // This will map the "from" feature and its surrounding region using
 // the current transformation, and search for the best
@@ -38,12 +35,12 @@ template < class PixelType >
 class rgrl_matcher_pseudo
   : public rgrl_matcher
 {
-public:
+ public:
 
 //   typedef vnl_vector< PixelType > rgrl_pixel_type;
 
   class rgrl_mapped_pixel_type {
-  public:
+   public:
     vnl_double_2  location;
     double              intensity;
     double              weight;
@@ -59,8 +56,7 @@ public:
                        rgrl_mask_sptr from_mask = 0,
                        rgrl_mask_sptr to_mask = 0 );
 
-  //:  Match the features in the "from" image to the intensity in the
-  //  "to" image. 
+  //:  Match the features in the "from" image to the intensity in the "to" image. 
   //
   rgrl_match_set_sptr
   compute_matches( rgrl_feature_set const&     from_features,
@@ -72,7 +68,7 @@ public:
   // Defines type-related functions
   rgrl_type_macro( rgrl_matcher_pseudo, rgrl_matcher );
 
-private:
+ private:
   //:  Map the intensities of the image region.
   void 
   map_region_intensities( rgrl_transformation      const& trans,
@@ -97,7 +93,7 @@ private:
                  rgrl_mapped_pixel_vector_type const& mapped_pixels,
                  vnl_double_2            const& shift ) const;
 
-private:
+ private:
 //  typedef itkImage< PixelType, Dimension > ImageType;
 
   //  These are currently only for 2d images.  ITK templates across
