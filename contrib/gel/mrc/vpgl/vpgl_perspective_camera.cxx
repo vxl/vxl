@@ -58,13 +58,11 @@ void vpgl_perspective_camera::update_intrinsic()
   M(0,0) = alpha_u; M(0,1) = -alpha_u*cott; M(0,2) = _params[uo];
   M(1,1) = alpha_v/sint; M(1,2) = _params[vo];
   M(2,2) = 1.0;
-  vcl_cout << "Intrinsic:" << vcl_endl;
-  vcl_cout << M;
-  double ge ;
-  int row, col;
-  for (row = 0; row < 3; row++)
-    for (col = 0; col < 3; col++)
-      ge=(*_mat_cam)(row, col) = M(row, col);
+  vcl_cout << "Intrinsic:" << vcl_endl
+           << M;
+  for (int row = 0; row < 3; row++)
+    for (int col = 0; col < 3; col++)
+      /* double ge = */ (*_mat_cam)(row, col) = M(row, col);
 }
 
 void vpgl_perspective_camera::update() {
