@@ -23,9 +23,11 @@ inline void vil3d_print_all(vcl_ostream& os,const vil3d_image_view<T>& view)
     <<" kstep: "<<view.kstep()<<' '
     <<" planestep: "<<view.planestep()<<'\n' << vcl_flush;
   for (unsigned int p=0;p<view.nplanes();++p)
+	{
+   if (view.nplanes()>1) os<<"Plane "<<p<<vcl_endl;
    for (unsigned int k=0;k<view.nk();++k)
    {
-    if (view.nplanes()>1) os<<"Plane "<<p<<", Slice "<<k<<":\n";
+		if (view.nk()>1) os<<"Slice "<<k<<":\n";
     for (unsigned int j=0;j<view.nj();++j)
     {
       for (unsigned int i=0;i<view.ni();++i)
@@ -35,6 +37,7 @@ inline void vil3d_print_all(vcl_ostream& os,const vil3d_image_view<T>& view)
       }
       os<<'\n' << vcl_flush;
     }
+   }
   }
 }
 
