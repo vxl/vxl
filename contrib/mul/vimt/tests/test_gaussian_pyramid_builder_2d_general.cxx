@@ -6,10 +6,20 @@
 #include <vimt/vimt_image_pyramid.h>
 #include <vsl/vsl_binary_loader.h>
 #include <testlib/testlib_test.h>
-
+#include <vil2/vil2_plane.h>
 #ifndef LEAVE_FILES_BEHIND
 #define LEAVE_FILES_BEHIND 0
 #endif
+
+template <class T>
+bool all_pixels_equal_to(const vil2_image_view<T>& in, T v)
+{
+  for (unsigned p=0; p<in.nplanes(); ++p)
+    for (unsigned j=0; j<in.nj(); ++j)
+      for (unsigned i=0; i<in.ni(); ++i)
+        if (in(i,j,p) !=v) return false;
+  return true;
+}
 
 void test_gaussian_pyramid_builder_2d_general_a()
 {
@@ -85,6 +95,21 @@ void test_gaussian_pyramid_builder_2d_general_a()
 
   TEST("No drift upwards in a float pyramid", all_less_than_256, true);
   TEST("No drift downwards in a float pyramid", all_more_than_254, false);
+
+
+
+  vimt_image_2d_of<vxl_byte> col_im(10, 10, 3);
+  vil2_plane(col_im.image(),0).fill(10);
+  vil2_plane(col_im.image(),1).fill(20);
+  vil2_plane(col_im.image(),2).fill(200);
+  builder.build(image_pyr, col_im);
+  vil2_image_view<vxl_byte > view_l1 = static_cast<vimt_image_2d_of<vxl_byte>&>(image_pyr(1)).image();
+  TEST("Check a colour image pyramid doesn't distort colour",
+    all_pixels_equal_to<vxl_byte>(vil2_plane(view_l1,0), 10) &&
+    all_pixels_equal_to<vxl_byte>(vil2_plane(view_l1,1), 20) &&
+    all_pixels_equal_to<vxl_byte>(vil2_plane(view_l1,2), 200), true);
+  
+  image_pyr.print_all(vcl_cout);
 
   vcl_cout<<"\n\n======== TESTING I/O ===========\n";
 
