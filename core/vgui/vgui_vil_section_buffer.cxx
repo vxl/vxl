@@ -12,10 +12,7 @@
 #include "vgui_vil2_section_buffer.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstring.h> // memmove()
-#include <vcl_vector.h>
-
-#include <vil2/vil2_image_view.h>
+#include <vcl_iostream.h>
 
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_section_render.h>
@@ -76,7 +73,6 @@ vgui_vil2_section_buffer( unsigned x, unsigned y,
 
   // make sure allocw_ and alloch_ have been initialized.
   assert( allocw_*alloch_ >= w_*h_ );
-
 }
 
 //: Destructor.
@@ -119,7 +115,7 @@ bool
 vgui_vil2_section_buffer::
 draw_as_image(float x0, float y0,  float x1, float y1) const
 {
-  if( !conversion_okay_ ) {
+  if ( !conversion_okay_ ) {
     vgui_macro_warning << "bad conversion in draw_as_image()\n";
     return draw_as_rectangle( x0, y0, x1, y1 );
   }
