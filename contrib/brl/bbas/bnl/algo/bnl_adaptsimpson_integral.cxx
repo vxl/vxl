@@ -1,5 +1,5 @@
 #include "bnl_adaptsimpson_integral.h"
-#include "bnl_netlib.h"
+#include <netlib/b3p_netlib.h>
 
 double bnl_adaptsimpson_integral::int_fnct_(float* x)
 {
