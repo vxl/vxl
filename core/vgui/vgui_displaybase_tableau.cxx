@@ -102,21 +102,15 @@ void vgui_displaybase_tableau::remove(vgui_soview* object)
     objects.erase(i);
   }
 
-  bool found = false;
-
   for ( vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin() ;
-        !found && it != groupings.end() ;
-        it++ )
-  {
+        it != groupings.end(); it++ )  {
     vcl_vector<vgui_soview*>::iterator a = vcl_find(it->second.objects.begin(), it->second.objects.end(), object);
-    if (a != objects.end())
-    {
+    if (a != objects.end()) {
       it->second.objects.erase(a);
-      if ( it->second.objects.size() == 0 )
-      {
+      if ( it->second.objects.size() == 0 )  {
         groupings.erase( it );
       }
-      found = true;
+      break; //found obj, stop iterating
     }
   }
 }
