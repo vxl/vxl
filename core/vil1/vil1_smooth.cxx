@@ -15,7 +15,6 @@
 #include <vil/vil_convolve.h>
 #include <vil/vil_rgb.h>
 #include <vil/vil_new.h>
-#include <vil/vil_buffer.h>
 
 #include <vil/vil_convolve.txx>
 
@@ -26,7 +25,7 @@ vil_image vil_smooth_gaussian(vil_image const & in, double sigma)
   double lc = -2 * vcl_log(cutoff); // cutoff guaranteed > 0
   int radius = (lc<=0) ? 0 : 1 + int(vcl_sqrt(lc)*sigma); // sigma guaranteed >= 0
   int size = 2*radius + 1;
-  vil_buffer<float> mask(size);
+  vcl_vector<float> mask(size);
   double halfnorm = 0.5;
   mask[radius] = 1.0;
   for (int x=1; x<=radius; ++x) {
@@ -42,7 +41,7 @@ vil_image vil_smooth_gaussian(vil_image const & in, double sigma)
   
   // Call convolver
   if (vil_pixel_type(in) == VIL_BYTE)
-    return vil_convolve_separable(in, mask.data(), size-1, (vil_byte*)0, (float*)0);
+    return vil_convolve_separable(in, /* xxx */&mask[0], size-1, (vil_byte*)0, (float*)0);
 
 // if (vil_pixel_type(in) == VIL_RGB_BYTE)
 //    return vil_convolve_separable(in, mask.begin(), size, (vil_rgb_byte*)0, (vil_rgb<float>*)0);

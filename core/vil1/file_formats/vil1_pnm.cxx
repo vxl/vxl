@@ -212,7 +212,10 @@ bool vil_pnm_generic_image::write_header()
   vs_->seek(0);
 
   char buf[1024];
-  sprintf(buf, "P%d\n# VIL pnm image\n%u %u\n%lu\n",
+  //sprintf(buf, "P%d\n# VIL pnm image\n%u %u\n%lu\n",
+  //        magic_, width_, height_, maxval_);
+  // The comment does not add any useful information.
+  sprintf(buf, "P%d\n%u %u\n%lu\n",
           magic_, width_, height_, maxval_);
   vs_->write(buf, strlen(buf));
   start_of_data_ = vs_->tell();

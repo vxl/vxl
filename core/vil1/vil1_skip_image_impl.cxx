@@ -9,8 +9,7 @@
 #include <vcl_climits.h> // CHAR_BIT
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
-
-#include <vil/vil_buffer.h>
+#include <vcl_vector.h>
 
 vil_skip_image_impl::vil_skip_image_impl(vil_image const &underlying, unsigned sx, unsigned sy)
   : base(underlying)
@@ -57,7 +56,7 @@ bool vil_skip_image_impl::get_section(void * buf, int x0, int y0, int w, int h) 
   unsigned cell_size = base.planes() * base.components() * base.bits_per_component();
   cell_size /= CHAR_BIT;
   unsigned buffer_size = (skipx*w * cell_size);
-  vil_buffer<unsigned char> buffer(buffer_size);
+  vcl_vector<unsigned char> buffer(buffer_size);
 
   // destination, as a unsigned char*
   unsigned char *dst = static_cast<unsigned char*>(buf);
@@ -65,7 +64,7 @@ bool vil_skip_image_impl::get_section(void * buf, int x0, int y0, int w, int h) 
   // for each raster
   for (unsigned j=0; j<h; ++j) {
     // get from underlying :
-    bool v = base.get_section(buffer.data(), skipx*x0, skipy*(y0+j), skipx*w, 1);
+    bool v = base.get_section(/* xxx */&buffer[0], skipx*x0, skipy*(y0+j), skipx*w, 1);
     if (!v)
       return false; // failed
     

@@ -5,7 +5,6 @@
 
 #include <vil/vil_load.h>
 #include <vil/vil_image.h>
-#include <vil/vil_buffer.h>
 
 ostream &dec(ostream &os, unsigned char c) {
   static char dig[]="0123456789";
@@ -32,9 +31,9 @@ int main(int argc, char **argv) {
   
   typedef unsigned char byte;
   if (I.planes()==1 && I.components()==3 && I.bits_per_component()==8) {
-    vil_buffer<byte> buf(3*w*h);
+    vcl_vector<byte> buf(3*w*h);
     
-    bool f = I.get_section(buf.data(), x0, y0, w, h);
+    bool f = I.get_section(/* xxx */&buf[0], x0, y0, w, h);
     if (f) {
       vcl_cerr << "get_section succeeded." << vcl_endl;
       vcl_cout << "red values:" << vcl_endl;

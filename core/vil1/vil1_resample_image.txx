@@ -2,8 +2,8 @@
 #define vil_resample_image_txx_
 
 #include "vil_resample_image.h"
+#include <vcl_vector.h>
 #include <vil/vil_image.h>
-#include <vil/vil_buffer.h>
 
 template <class T, class A>
 bool vil_resample_image(vil_image const &base, unsigned new_width, unsigned new_height,
@@ -23,8 +23,8 @@ bool vil_resample_image(vil_image const &base, unsigned new_width, unsigned new_
   unsigned base_h = base_y1 - base_y0;
  
   // make buffer for, and get, region needed from base image.
-  vil_buffer<T> base_buf(base_w * base_h);
-  if (! base.get_section(&base_buf[0], base_x0, base_y0, base_w, base_h)) {
+  vcl_vector<T> base_buf(base_w * base_h);
+  if (! base.get_section(/* xxx */&base_buf[0], base_x0, base_y0, base_w, base_h)) {
     vcl_cerr << __FILE__ ": get_section() failed on base image " << base << vcl_endl;
     return false;
   }

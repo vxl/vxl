@@ -6,13 +6,13 @@
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
+#include <vcl_vector.h>
 
 #define TRACE 0
 #if TRACE
 #include <vcl_iostream.h>
 #endif
 
-#include <vil/vil_buffer.h>
 //#include <vil/vil_ip_traits.h>
 
 //--------------------------------------------------------------------------------
@@ -94,7 +94,7 @@ void vil_convolve_simple(vil_memory_image_of<I1> const &input1,    // input 1
   assert( output.in_range(xo, yo, w1+w2-1, h1+h2-1) );
 
   //
-  vil_buffer<I1 const *> in1(h1);
+  vcl_vector<I1 const *> in1(h1);
   for (unsigned k=0; k<h1; ++k)
     in1[k] = input1[y1+k] + x1;
 #if TRACE
@@ -102,7 +102,7 @@ void vil_convolve_simple(vil_memory_image_of<I1> const &input1,    // input 1
 #endif
   
   //
-  vil_buffer<I2 const *> in2(h2);
+  vcl_vector<I2 const *> in2(h2);
   for (unsigned k=0; k<h2; ++k)
     in2[k] = input2[y2+k] + x2;
 #if TRACE
@@ -110,7 +110,7 @@ void vil_convolve_simple(vil_memory_image_of<I1> const &input1,    // input 1
 #endif
 
   //
-  vil_buffer<O *> out(h1+h2-1);
+  vcl_vector<O *> out(h1+h2-1);
   for (unsigned k=0; k<h1+h2-1; ++k)
     out[k] = output[yo+k] + xo;
 #if TRACE
@@ -124,10 +124,10 @@ void vil_convolve_simple(vil_memory_image_of<I1> const &input1,    // input 1
 		   O        * const *) = 0;
   if (!f)
     f = vil_convolve_simple;
-  (*f)(const_cast<I1 const * const *>(in1.data()), w1, h1,
-       const_cast<I2 const * const *>(in2.data()), w2, h2,
+  (*f)(const_cast<I1 const * const *>(/* xxx */&in1[0]), w1, h1,
+       const_cast<I2 const * const *>(/* xxx */&in2[0]), w2, h2,
        (AC*)0,
-       const_cast<O        * const *>(out.data()));
+       const_cast<O        * const *>(/* xxx */&out[0]));
 }
 
 #define VIL_CONVOLVE_SIMPLE_INSTANTIATE1(I1, I2, AC, O) \

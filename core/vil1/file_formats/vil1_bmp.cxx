@@ -6,8 +6,8 @@
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
+#include <vcl_vector.h>
 
-#include <vil/vil_buffer.h>
 #include <vil/vil_stream.h>
 #include <vil/vil_image.h>
 
@@ -211,8 +211,8 @@ bool vil_bmp_generic_image::read_header()
     else
       cmap_size = ccount*4;
     
-    vil_buffer<uchar> cmap(cmap_size, 0); // use vil_buffer<> to avoid coreleak
-    if (is_->read(cmap.data(),1024) != 1024) {
+    vcl_vector<uchar> cmap(cmap_size, 0); // use vector<> to avoid coreleak
+    if (is_->read(/* xxx */&cmap[0], 1024) != 1024) {
       vcl_cerr << "Error reading image palette" << vcl_endl;
       return false;
     }
