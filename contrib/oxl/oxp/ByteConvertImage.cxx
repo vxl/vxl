@@ -88,7 +88,7 @@ void ByteConvertImage::filter(vil_memory_image_of<float> const& in)
       if (ignore_zero_ && v == 0.0F)
 	(*this)(x,y) = 0;
       else
-	(*this)(x,y) = vil_clamp((v - min_) * scale, (vil_byte *)0);
+	(*this)(x,y) = (vil_byte)vil_clamp_pixel((v - min_) * scale, 0, 255);
     }
 }
 
@@ -102,7 +102,7 @@ void ByteConvertImage::filter(vil_memory_image_of<double> const& in)
       if (ignore_zero_ && v == 0.0F)
 	(*this)(x,y) = 0;
       else
-	(*this)(x,y) = vil_clamp((v - dmin) * scale, (vil_byte *)0);
+	(*this)(x,y) = (vil_byte)vil_clamp_pixel((v - dmin) * scale, 0, 255);
     }
 }
  
