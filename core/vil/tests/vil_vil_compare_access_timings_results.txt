@@ -42,3 +42,26 @@ Method 2) Mean: 1372us  +/-55us
 vil2_image_view Images of RGB<BYTE>
 Method 1) Mean: 1432us  +/-50us
 Method 2) Mean: 1442us  +/-55us
+
+550MHz P3 Linux Box, using gcc-2.95.2
+----------------------------------
+Using -O2
+vil_memory_image_of Images of BYTE
+Method 1) Mean: 1990us  +/-50us
+Method 2) Mean: 1420us  +/-50us
+vil2_image_view Images of BYTE
+Method 1) Mean: 2360us  +/-100us
+Method 2) Mean: 1610us  +/-100us
+vil_memory_image_of Images of FLOAT
+Method 1) Mean: 3500us  +/-100us
+Method 2) Mean: 2690us  +/-100us
+vil2_image_view Images of FLOAT
+Method 1) Mean: 4220us  +/-150us
+Method 2) Mean: 3200us  +/-100us
+vil_memory_image_of Images of RGB<BYTE>
+Method 1) Mean: 3410us  +/-100us
+Method 2) Mean: 2340us  +/-50us
+vil2_image_view Images of RGB<BYTE>
+Method 1) Mean: 3640us  +/-50us
+Method 2) Mean: 2820us  +/-100us
+

@@ -30,7 +30,7 @@ unsigned height(const vil_memory_image_of<T> & im){return im.height();}
 template <class imT>
 double method1(imT& image, int n_loops)
 {
-  typedef imT::pixel_type PT;
+  typedef typename imT::pixel_type PT;
   vcl_time_t t0=vcl_clock();
   for (int n=0;n<n_loops;++n)
   {
@@ -45,7 +45,7 @@ double method1(imT& image, int n_loops)
 template <class imT>
 double method2(imT& image, int n_loops)
 {
-  typedef imT::pixel_type PT;
+  typedef typename imT::pixel_type PT;
   vcl_time_t t0=vcl_clock();
   for (int n=0;n<n_loops;++n)
   {
