@@ -1,17 +1,16 @@
 //-*- c++ -*-------------------------------------------------------------------
-#ifndef _CannyBase_h
-#define _CannyBase_h
+#ifndef vsl_canny_base_h_
+#define vsl_canny_base_h_
 //
-// .NAME CannyBase - a base class for edge detectors
-// .LIBRARY Detection
+// .NAME vsl_canny_base - a base class for edge detectors
+// .LIBRARY vsl
 // .HEADER Segmentation package
-// .INCLUDE Detection/CannyBase.h
-// .FILE CannyBase.h
-// .FILE CannyBase.C
+// .INCLUDE vsl/vsl_canny_base.h
+// .FILE vsl_canny_base.cxx
 //
 // .SECTION Description:
 //
-// Definition of a Base class for doing Canny edge detection. 
+// Definition of a base class for doing Canny edge detection. 
 // Note that nothing special has been done around the border of the image;
 // we have simply ignored a border of size _width all the way round. Perhaps
 // this should be changed to provide consistency with the rest of TargetJr.
@@ -19,7 +18,7 @@
 // .SECTION Author:
 //       Samer Abdallah - 5/10/95
 //       Robotics Research Group, Oxford University
-//         CannyBase is built from Canny  which was originally developed by
+//         vsl_canny_base is built from Canny  which was originally developed by
 //         Charlie Rothwell - 25/1/92
 //         GE Corporate Research and Development
 // .SECTION Modifications :

@@ -6,7 +6,7 @@
 
 //----------------------------------------------------------------------
 // .NAME        vnl_diag_matrix - Time/space efficient diagonal matrix
-// .FILE        vnl/vnl_diag_matrix.cxx
+// .FILE        vnl_diag_matrix.txx
 //
 // .SECTION Description
 //    vnl_diag_matrix stores a diagonal matrix for time and space efficiency.

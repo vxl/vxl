@@ -44,7 +44,7 @@
 //  format (column-stored) matrix.
 //
 // .NAME        vnl_fortran_copy - Undocumented class FIXME
-// .FILE        vnl/vnl_fortran_copy.cxx
+// .FILE        vnl_fortran_copy.txx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 29 Aug 96
 //

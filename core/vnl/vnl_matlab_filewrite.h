@@ -1,5 +1,5 @@
-#ifndef vnl_MATLABMatFileWrite_h_
-#define vnl_MATLABMatFileWrite_h_
+#ifndef vnl_matlab_filewrite_h_
+#define vnl_matlab_filewrite_h_
 #ifdef __GNUC__
 #pragma interface
 #endif

@@ -3,9 +3,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME        vnl_symmetric_eigensystem - @{\boldmath Solve $A x = \lambda x$ using vnl_qr. @}
+// .NAME        vnl_symmetric_eigensystem - Solve $A x = \lambda x$ using vnl_qr.
 // .INCLUDE     vnl/algo/vnl_symmetric_eigensystem.h
-// .FILE        vnl/algo/vnl_symmetric_eigensystem.cxx
+// .FILE        vnl_symmetric_eigensystem.cxx
 //
 // .SECTION Description
 // @{

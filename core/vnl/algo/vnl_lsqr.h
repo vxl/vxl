@@ -17,7 +17,7 @@
 // .LIBRARY     vnl
 // .HEADER	vnl Package
 // .INCLUDE     vnl/algo/vnl_lsqr.h
-// .FILE        vnl/algo/vnl_lsqr.cxx
+// .FILE        vnl_lsqr.cxx
 // .SECTION Author
 //     David Capel, capes@robots, July 2000
 //

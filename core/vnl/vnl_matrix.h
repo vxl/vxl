@@ -45,9 +45,6 @@
 template <class T> class vnl_vector;
 template <class T> class vnl_matrix;
 
-// // define _vnl_matrix_h_INCLUDED for IUE compatibility
-// #define _vnl_matrix_h_INCLUDED
-
 // // define which makes life easy for the IUE
 // #define IUE_diagonal_matrix DiagMatrix
 

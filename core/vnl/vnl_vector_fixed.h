@@ -1,8 +1,6 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifndef vnl_vector_fixed_h_
 #define vnl_vector_fixed_h_
-// define the following for IUE compatibility
-#define _vnl_vector_h_INCLUDED 
 #ifdef __GNUC__
 #pragma interface
 #endif
@@ -24,7 +22,7 @@
 // .LIBRARY     vnl
 // .HEADER	Numerics package
 // .INCLUDE     vnl/vnl_vector_fixed.h
-// .FILE        vnl/vnl_vector_fixed.cxx
+// .FILE        vnl_vector_fixed.txx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 04 Aug 96
 //
@@ -230,6 +228,4 @@ vnl_vector_fixed<int,3> cross_3d (const vnl_vector_fixed<int,3>& vect1,
 // # endif
 // #endif
 
-
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vnl_vector_fixed.
-
+#endif // vnl_vector_fixed_h_

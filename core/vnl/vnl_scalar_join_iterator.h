@@ -39,7 +39,7 @@
 // .LIBRARY     vnl
 // .HEADER	Numerics Package
 // .INCLUDE     vnl/vnl_scalar_join_iterator.h
-// .FILE        vnl/vnl_scalar_join_iterator.cxx
+// .FILE        vnl_scalar_join_iterator.txx
 //
 // .SECTION Description
 //    vnl_scalar_join_iterator implements a fast database join on columns

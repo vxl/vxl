@@ -39,7 +39,7 @@
 // .LIBRARY     vnl
 // .HEADER	Numerics Package
 // .INCLUDE     vnl/vnl_file_matrix.h
-// .FILE        vnl/vnl_file_matrix.cxx
+// .FILE        vnl_file_matrix.txx
 //
 // .SECTION Description
 //    vnl_file_matrix is a class to load a matrix from a file.

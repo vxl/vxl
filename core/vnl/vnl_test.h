@@ -10,8 +10,8 @@
 // express or implied warranty.
 //
 
-#ifndef vnl_test_h
-#define vnl_test_h
+#ifndef vnl_test_h_
+#define vnl_test_h_
 
 #include <vcl/vcl_string.h>
 

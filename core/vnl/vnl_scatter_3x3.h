@@ -14,7 +14,7 @@
 // .LIBRARY     vnl
 // .HEADER	Numerics Package
 // .INCLUDE     vnl/vnl_scatter_3x3.h
-// .FILE        vnl/vnl_scatter_3x3.cxx
+// .FILE        vnl_scatter_3x3.txx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 02 Oct 96
 //

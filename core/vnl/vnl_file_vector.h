@@ -35,14 +35,14 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME        FileVector - Load vnl_vector<T> from file.
+// .NAME        vnl_file_vector - Load vnl_vector<T> from file.
 // .LIBRARY     vnl
-// .HEADER	Numerics Package
-// .INCLUDE     vnl/FileVector.h
-// .FILE        vnl/FileVector.cxx
+// .HEADER	vxl Package
+// .INCLUDE     vnl/vnl_file_vector.h
+// .FILE        vnl_file_vector.txx
 //
 // .SECTION Description
-//    FileVector is a class to load a vector from a file.
+//    vnl_file_vector is a templated class to load a vector from a file.
 //
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 23 Dec 96

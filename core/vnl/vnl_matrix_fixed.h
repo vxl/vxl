@@ -7,7 +7,7 @@
 // .LIBRARY     vnl
 // .HEADER	Numerics Package
 // .INCLUDE     vnl/vnl_matrix_fixed.h
-// .FILE        vnl/vnl_matrix_fixed.cxx
+// .FILE        vnl_matrix_fixed.txx
 //
 // .SECTION Description
 //    vnl_matrix_fixed<T,m,n> - Fixed size matrix.  A subclass of vnl_matrix_fixed_ref,
