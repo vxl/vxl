@@ -175,7 +175,7 @@ inline vnl_vector_fixed<T,n> element_quotient (vnl_vector_fixed<T,n> const& a,
 }
 #endif
 
-#if defined(VCL_GCC_27) || defined(VCL_SGI_CC_7)
+#if defined(VCL_SGI_CC_7)
 template <class T, int n>
 inline
 vcl_ostream &operator<<(vcl_ostream &os, vnl_vector_fixed<T, n> const &v) {
