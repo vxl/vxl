@@ -52,7 +52,7 @@ void vbl_qsort_descending(T* base, int n)
   qsort(base, n, sizeof base[0], vbl_qsort_helper<T>::ascend);
 }
 
-// -- Sort am STL vector into ascending order, using the standard comparison
+// -- Sort an STL vector into ascending order, using the standard comparison
 // operations for T, namely operator> and operator==.  I know STL has a sort,
 // but this is easier, and faster in the 20th century.
 template <class T>
