@@ -534,7 +534,7 @@ class vmap_permutation_kernel : public vmap_kernel<typename TPermutation::map_ty
   }
 
   template <class TPp>
-  void operator=(const vmap_permutation_kernel<TPp> & arg)
+  vmap_permutation_kernel<TPermutation>& operator=(const vmap_permutation_kernel<TPp> & arg)
   {
     dart_.resize(arg.size()) ;
     dart_associated_elt_.resize(arg.size());
@@ -544,6 +544,7 @@ class vmap_permutation_kernel : public vmap_kernel<typename TPermutation::map_ty
       dart_associated_elt_[i]=p_.get_cycle_pointer(arg.get_element_index(i)) ;
     }
     representatives_=arg.representatives() ;
+    return *this;
   }
 
   const vbl_controlled_partition & representatives() const
