@@ -9,6 +9,8 @@
 // \date: 2003/12/26
 // \author: mlaymon
 
+#include <vcl_string.h>
+
 #include "vil_nitf_version.h"
 
 class vil_nitf_version_v20 : public vil_nitf_version
@@ -19,6 +21,7 @@ class vil_nitf_version_v20 : public vil_nitf_version
   bool operator==(vil_nitf_version&);
 
   static vil_nitf_version_v20 * GetVersion();
+  static vcl_string get_version_str();
 
   virtual vil_nitf_image_subheader_band * newImageHeaderBand(
              vil_nitf_image_subheader_band * ish_band = 0);
