@@ -12,7 +12,6 @@
 #include <vcl_iosfwd.h>
 #include <vnl/vnl_fwd.h>
 
-#include <vnl/vnl_fwd.h>
 #include <vnl/vnl_matlab_print_format.h>
 
 // If a variable name (e.g. "foo") is given, the raw data will be preceded by
