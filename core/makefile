@@ -32,6 +32,8 @@ SUBDIRS += vcsl
 # examples
 ifndef NOTEST
 SUBDIRS += examples
+SUBDIRS += test_allvxl
+SUBDIRS += apps/vxl_vrml_viewer
 endif
 
 ######################################
