@@ -16,8 +16,10 @@
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
+#include <vgui/vgui_grid_tableau.h>
 #include <bgui/bgui_vtol2D_tableau.h>
 #include <vtol/vtol_face_2d.h>
+#include <vtol/vtol_edge_2d.h>
 #include <sdet/sdet_detector_params.h>
 #include <vvid/cmu_1394_camera_params.h>
 #include <vpro/vpro_video_process.h>
