@@ -111,17 +111,15 @@ LINK32=link.exe
 
 # Begin Group "Source Files"
 # Begin Source File
-
 SOURCE=.\test_driver.cxx
-
 # End Source File
 # Begin Source File
-
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_container.cxx
-
 # End Source File
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
-

@@ -43,7 +43,6 @@ MTL=midl.exe
 RSC=rc.exe
 
 !IF  "$(CFG)" == "test_mil3d - Win32 Release"
-
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "Release"
@@ -88,10 +87,7 @@ LINK32=link.exe
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/zlib/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/tiff/$(OUTDIR)"
 # ADD LINK32 "mil.lib" "mbl.lib" "vnl_io.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vbl_io.lib" "vbl.lib" "vgl_io.lib" "vgl.lib" "vil_io.lib" "vil.lib" "vpl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vsl.lib" "vcl.lib" /STACK:10000000 
-
-
 !ELSEIF  "$(CFG)" == "test_mil3d - Win32 Debug"
-
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
 # PROP BASE Output_Dir "Debug"
@@ -138,7 +134,6 @@ LINK32=link.exe
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/zlib/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/tiff/$(OUTDIR)"
 # ADD LINK32 "mil.lib" "mbl.lib" "vnl_io.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vbl_io.lib" "vbl.lib" "vgl_io.lib" "vgl.lib" "vil_io.lib" "vil.lib" "vpl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vsl.lib" "vcl.lib" /STACK:10000000 
-
 !ENDIF 
 
 # Begin Target
@@ -149,13 +144,11 @@ LINK32=link.exe
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\test_mil3d.cxx
-
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
-

@@ -40,7 +40,6 @@ MTL=midl.exe
 RSC=rc.exe
 
 !IF  "$(CFG)" == "vil3d_test_driver - Win32 Release"
-
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "Release"
@@ -85,12 +84,7 @@ LINK32=link.exe
 # ADD LINK32 vcl.lib
 # ADD LINK32 ws2_32.lib
 # ADD LINK32 /STACK:10000000 
-
-
-
-
 !ELSEIF  "$(CFG)" == "vil3d_test_driver - Win32 Debug"
-
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
 # PROP BASE Output_Dir "Debug"
@@ -137,10 +131,6 @@ LINK32=link.exe
 # ADD LINK32 vcl.lib
 # ADD LINK32 ws2_32.lib
 # ADD LINK32 /STACK:10000000 
-
-
-
-
 !ELSEIF  "$(CFG)" == "vil3d_test_driver - Win32 MinSizeRel"
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -186,12 +176,7 @@ LINK32=link.exe
 # ADD LINK32 vcl.lib
 # ADD LINK32 ws2_32.lib
 # ADD LINK32 /STACK:10000000 
-
-
-
-
 !ELSEIF  "$(CFG)" == "vil3d_test_driver - Win32 RelWithDebInfo"
-
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "RelWithDebInfo"
@@ -236,10 +221,6 @@ LINK32=link.exe
 # ADD LINK32 vcl.lib
 # ADD LINK32 ws2_32.lib
 # ADD LINK32 /STACK:10000000 
-
-
-
-
 !ENDIF 
 
 # Begin Target
@@ -251,6 +232,9 @@ LINK32=link.exe
 
 # Begin Group "Source Files"
 # PROP Default_Filter ""
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
 # Begin Source File
 SOURCE=.\test_algo_binary_dilate.cxx
 # End Source File
@@ -291,8 +275,5 @@ SOURCE=.\test_switch_axes.cxx
 SOURCE=.\test_trilin_interp.cxx
 # End Source File
 # End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
-# End Group
 # End Target
 # End Project
-

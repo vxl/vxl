@@ -90,6 +90,9 @@ LINK32=link.exe
 SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\golden_test_vgl_io.cxx
 # End Source File
 # Begin Source File
@@ -121,9 +124,6 @@ SOURCE=.\test_homg_point_2d_io.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_homg_point_3d_io.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_includes.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_line_2d_io.cxx

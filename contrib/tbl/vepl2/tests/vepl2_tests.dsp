@@ -1,5 +1,6 @@
 # Begin Group "Source Files"
 SOURCE=.\test_driver.cxx
+SOURCE=.\test_include.cxx
 SOURCE=.\vepl2_test_dilate_disk.cxx
 SOURCE=.\vepl2_test_dyadic.cxx
 SOURCE=.\vepl2_test_erode_disk.cxx

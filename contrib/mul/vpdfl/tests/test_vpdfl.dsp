@@ -29,7 +29,6 @@ CPP=cl.exe
 RSC=rc.exe
 
 !IF  "$(CFG)" == "test_vpdfl - Win32 Release"
-
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "Release"
@@ -51,9 +50,7 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
 # ADD LINK32 vpdfl.lib vnl_io.lib vsl.lib mbl.lib vnl_algo.lib netlib.lib vnl.lib vcl.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /libpath:"$(VXLROOT)\lib\Release"
-
 !ELSEIF  "$(CFG)" == "test_vpdfl - Win32 Debug"
-
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
 # PROP BASE Output_Dir "Debug"
@@ -77,7 +74,6 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 vpdfl.lib vnl_io.lib vsl.lib mbl.lib vnl_algo.lib netlib.lib vnl.lib vcl.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"$(VXLROOT)\lib\Debug"
 # SUBTRACT LINK32 /verbose /pdb:none
-
 !ENDIF 
 
 # Begin Target
@@ -88,13 +84,11 @@ LINK32=link.exe
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
-
 SOURCE=.\test_vpdfl.cxx
 # End Source File
-# End Group
-# Begin Group "Header Files"
-
-# PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

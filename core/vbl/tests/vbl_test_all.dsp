@@ -87,6 +87,9 @@ LINK32=link.exe
 SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vbl_test_classes.cxx
 # End Source File
 # Begin Source File

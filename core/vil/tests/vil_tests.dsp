@@ -7,6 +7,9 @@
 SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_file_format_read.cxx
 # End Source File
 # Begin Source File

@@ -131,6 +131,9 @@ LINK32=link.exe
 SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_vsol_conic_2d.cxx
 # End Source File
 # Begin Source File
@@ -172,8 +175,6 @@ SOURCE=.\test_vsol_triangle_2d.cxx
 # Begin Source File
 SOURCE=.\test_vsol_triangle_3d.cxx
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project

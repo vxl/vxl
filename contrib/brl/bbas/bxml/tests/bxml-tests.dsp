@@ -6,6 +6,9 @@
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx;c"
 # Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\bxml_test_map.cxx
 # End Source File
 # Begin Source File

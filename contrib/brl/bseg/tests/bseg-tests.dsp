@@ -243,13 +243,14 @@ LINK32=link.exe
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\sdet_test_detector.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\sdet_test_region_proc.cxx
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project

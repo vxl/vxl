@@ -87,122 +87,68 @@ LINK32=link.exe
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
-
 SOURCE=.\test_driver.cxx
-
 # End Source File
 # Begin Source File
-
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_algorithm.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\test_cctype.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\test_cmath.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\test_compiler.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\test_complex.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\test_deque.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\test_exception.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\test_fstream.cxx
-
 # End Source File
 # Begin Source File
-
-SOURCE=.\test_headers.cxx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\test_iostream.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\test_iterator.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\test_list.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\test_map.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\test_multimap.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\test_new.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\test_set.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\test_stlfwd.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\test_string.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\test_vector.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\test_cstdio.cxx
-
 # End Source File
 # End Group
-# Begin Group "Header Files"
-
-# PROP Default_Filter "h;hpp;hxx;hm;inl"
-# End Group
-# Begin Group "Resource Files"
-
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
-# End Group
-# Begin Source File
-
-SOURCE=.\ReadMe.txt
-# End Source File
 # End Target
 # End Project

@@ -85,7 +85,7 @@ LINK32=link.exe
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
-SOURCE=.\vbl_io_test_all.cxx
+SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\golden_test_vbl_io.cxx

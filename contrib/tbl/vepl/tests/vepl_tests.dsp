@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="vipl_test_histogram" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="vepl_tests" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -13,25 +13,25 @@
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/tbl" /I "$(VXLROOT)/v3p/jpeg" /I "$(VXLROOT)/v3p/png" /I "$(VXLROOT)/v3p/zlib" /I "$(VXLROOT)/v3p/tiff" == include path
 # $(VXLROOT)/bin/ == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF == compiler defines
-# vipl_test_histogram  == name of output library
-#  /libpath:"$(VXLROOT)/contrib/tbl/vipl/$(OUTDIR)" /libpath:"$(VXLROOT)/contrib/tbl/vipl/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vil/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vil/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vpl/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vpl/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/jpeg/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/jpeg/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/png/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/png/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/zlib/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/zlib/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/tiff/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/tiff/$(OUTDIR)" "vipl.lib" "vil.lib" "vpl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" /STACK:10000000  == libraries linked in 
+# vepl_tests  == name of output library
+# /libpath:"$(VXLROOT)/contrib/tbl/vepl/$(OUTDIR)" /libpath:"$(VXLROOT)/contrib/tbl/vepl/$(OUTDIR)" /libpath:"$(VXLROOT)/contrib/tbl/vipl/$(OUTDIR)" /libpath:"$(VXLROOT)/contrib/tbl/vipl/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vil/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vil/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vpl/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vpl/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/jpeg/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/jpeg/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/png/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/png/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/zlib/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/zlib/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/tiff/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/tiff/$(OUTDIR)" "vepl.lib" "vipl.lib" "vil.lib" "vpl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" /STACK:10000000  == libraries linked in 
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
-CFG=vipl_test_histogram - Win32 Debug
+CFG=vepl_tests - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "vipl_test_histogram.mak".
+!MESSAGE NMAKE /f "vepl_tests.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "vipl_test_histogram.mak" CFG="vipl_test_histogram - Win32 Debug"
+!MESSAGE NMAKE /f "vepl_tests.mak" CFG="vepl_tests - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "vipl_test_histogram - Win32 Debug" (based on "Win32 (x86) Application")
-!MESSAGE "vipl_test_histogram - Win32 Release" (based on "Win32 (x86) Application")
+!MESSAGE "vepl_tests - Win32 Debug" (based on "Win32 (x86) Application")
+!MESSAGE "vepl_tests - Win32 Release" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -42,7 +42,7 @@ CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "vipl_test_histogram - Win32 Release"
+!IF  "$(CFG)" == "vepl_tests - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -56,7 +56,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /FD /c
 # ADD CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/tbl" /I "$(VXLROOT)/v3p/jpeg" /I "$(VXLROOT)/v3p/png" /I "$(VXLROOT)/v3p/zlib" /I "$(VXLROOT)/v3p/tiff" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "vipl_test_histogram_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/tbl" /I "$(VXLROOT)/v3p/jpeg" /I "$(VXLROOT)/v3p/png" /I "$(VXLROOT)/v3p/zlib" /I "$(VXLROOT)/v3p/tiff" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "vepl_tests_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -67,6 +67,7 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 # ADD LINK32 /nologo /subsystem:console /machine:I386 /IGNORE:4089
+# ADD LINK32 /libpath:"$(VXLROOT)/contrib/tbl/vepl/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/contrib/tbl/vipl/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/core/vil/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/core/vpl/$(OUTDIR)"
@@ -74,9 +75,9 @@ LINK32=link.exe
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/png/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/zlib/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/tiff/$(OUTDIR)"
-# ADD LINK32 "vipl.lib" "vil.lib" "vpl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" /STACK:10000000 
+# ADD LINK32 "vepl.lib" "vipl.lib" "vil.lib" "vpl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" /STACK:10000000 
 
-!ELSEIF  "$(CFG)" == "vipl_test_histogram - Win32 Debug"
+!ELSEIF  "$(CFG)" == "vepl_tests - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -90,7 +91,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP   /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FD /GZ /c
 # ADD CPP /nologo  /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/tbl" /I "$(VXLROOT)/v3p/jpeg" /I "$(VXLROOT)/v3p/png" /I "$(VXLROOT)/v3p/zlib" /I "$(VXLROOT)/v3p/tiff" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "vipl_test_histogram_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/tbl" /I "$(VXLROOT)/v3p/jpeg" /I "$(VXLROOT)/v3p/png" /I "$(VXLROOT)/v3p/zlib" /I "$(VXLROOT)/v3p/tiff" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "vepl_tests_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -103,6 +104,7 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
 # ADD LINK32 /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
+# ADD LINK32 /libpath:"$(VXLROOT)/contrib/tbl/vepl/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/contrib/tbl/vipl/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/core/vil/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/core/vpl/$(OUTDIR)"
@@ -110,38 +112,37 @@ LINK32=link.exe
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/png/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/zlib/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/tiff/$(OUTDIR)"
-# ADD LINK32 "vipl.lib" "vil.lib" "vpl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" /STACK:10000000 
+# ADD LINK32 "vepl.lib" "vipl.lib" "vil.lib" "vpl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" /STACK:10000000 
 
 !ENDIF 
 
 # Begin Target
 
-# Name "vipl_test_histogram - Win32 Release"
-# Name "vipl_test_histogram - Win32 Debug"
+# Name "vepl_tests - Win32 Release"
+# Name "vepl_tests - Win32 Debug"
 
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\test_driver.cxx
-
 # End Source File
 # Begin Source File
-
-SOURCE=.\vipl_test_histogram.cxx
-
+SOURCE=.\test_include.cxx
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+# Begin Source File
+SOURCE=.\vepl_test_erode_disk.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vepl_test_threshold.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\test_driver.h
-
 # End Source File
+# End Group
+# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
-

@@ -87,6 +87,9 @@ LINK32=link.exe
 SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_area.cxx
 # End Source File
 # Begin Source File
@@ -106,9 +109,6 @@ SOURCE=.\test_ellipse_scan_iterator.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_homg.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_includes.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_polygon.cxx
