@@ -30,6 +30,17 @@ mbl_data_wrapper_mixer<T>::mbl_data_wrapper_mixer(vcl_vector<mbl_data_wrapper<T>
   set(&wrapper[0],wrapper.size());
 }
 
+//: Constructor
+template<class T>
+mbl_data_wrapper_mixer<T>::mbl_data_wrapper_mixer(mbl_data_wrapper<T>& wrapper1,
+                                                  mbl_data_wrapper<T>& wrapper2)
+{
+  vcl_vector<mbl_data_wrapper<T>*> w(2);
+  w[0] = &wrapper1;
+  w[1] = &wrapper2;
+  set(&w[0],w.size());
+}
+
 
 
 //: Initialise to return elements from data[i]

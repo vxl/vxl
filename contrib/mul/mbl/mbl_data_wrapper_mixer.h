@@ -34,6 +34,13 @@ public:
   // The wrappers must be kept in scope, this does not take a copy.
   mbl_data_wrapper_mixer(vcl_vector<mbl_data_wrapper<T> *> wrapper);
 
+  //: Construct to mix two data wrappers
+  // Sets up object to return examples from wrapper1 then wrapper2
+  // The wrappers must be kept in scope, this does not take a copy
+  // (Pointers are retained).
+  mbl_data_wrapper_mixer(mbl_data_wrapper<T>& wrapper1,
+                         mbl_data_wrapper<T>& wrapper2);
+
   //: Sets up object to return examples from wrapper[i] (i=0..n-1) in turn
   // The wrappers must be kept in scope, this does not take a copy.
   void set(mbl_data_wrapper<T> **wrapper, unsigned long n_wrappers);
