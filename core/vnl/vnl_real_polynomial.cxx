@@ -22,10 +22,10 @@ T vnl_real_polynomial_evaluate(double const *a, int n, T const& x)
   --n;
   T acc = a[n];
   T xn = x;
-  do {
+  while (n) {
     acc += a[--n] * xn;
     xn *= x;
-  } while (n);
+  } ;
 
   return acc;
 }

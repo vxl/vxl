@@ -43,6 +43,10 @@ void test_real_polynomial()
 
   TEST("Integral",vcl_fabs(3*f1.evaluate_integral(2.0)-70)<1e-6, true);
 
+  TEST("Polynomial of degree 0", vnl_real_polynomial(1.0).evaluate(0.5),1.0);
+  TEST("Vector initialisation",
+    vnl_real_polynomial(vnl_vecd(3,3.0,2.0,1.0)).evaluate(2.0),17.0);
+
   TEST("RMS difference(f1,f2) is zero",vnl_rms_difference(f1,f1,0,1)<1e-8,true);
 }
 

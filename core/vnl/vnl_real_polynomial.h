@@ -21,6 +21,7 @@
 #include <vnl/vnl_vector.h>
 #include <vcl_complex.h>
 #include <vcl_iosfwd.h>
+#include <vcl_cassert.h>
 
 //:Evaluation of real polynomials at real and complex points.
 //    vnl_real_polynomial represents a univariate polynomial with real
@@ -34,21 +35,24 @@ class vnl_real_polynomial
  public:
   //: Initialize polynomial.
   // The polynomial is $ a[0] x^d + a[1] x^{d-1} + \cdots + a[d] = 0 $.
-  vnl_real_polynomial(vnl_vector<double> const & a): coeffs_(a) {}
+  vnl_real_polynomial(vnl_vector<double> const & a): coeffs_(a) {
+    assert(!coeffs_.empty()); }
 
   //: Initialize polynomial from C vector.
   // The parameter len is the number
   // of coefficients, one greater than the degree.
-  vnl_real_polynomial(double const * a, int len): coeffs_(a, len) {}
+  vnl_real_polynomial(double const * a, unsigned len): coeffs_(a, len) {
+    assert(len>0);}
 
   //: Initialize polynomial from double.
   // Useful when adding or multiplying a polynomial and a number.
-  vnl_real_polynomial(double a): coeffs_(1) { coeffs_[0] = a; }
+  vnl_real_polynomial(double a): coeffs_(1u, a) {}
 
   //: Initialize polynomial of a given degree.
-  vnl_real_polynomial(int d): coeffs_(d+1) {}
+  vnl_real_polynomial(int d): coeffs_(d+1) {assert (d>=0);}
 
-  bool operator==(vnl_real_polynomial const& p) { return p.coefficients() == coeffs_; }
+  bool operator==(vnl_real_polynomial const& p) {
+    return p.coefficients() == coeffs_; }
 
   //: Evaluate polynomial at value x
   double evaluate(double x) const;
@@ -98,8 +102,10 @@ class vnl_real_polynomial
 
  protected:
   //: The coefficients of the polynomial.
-  // coeffs_[0] is the const term.
-  // coeffs_[n] is the coefficient of the x^n term.
+  // coeffs_.back() is the const term.
+  // coeffs_[n] is the coefficient of the x^(d-n) term,
+  //    where d=coeffs_.size()-1
+  // \invariant coeffs_size() >= 1;
   vnl_vector<double> coeffs_;
 };
 
