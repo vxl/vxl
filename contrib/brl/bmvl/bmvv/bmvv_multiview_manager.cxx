@@ -40,6 +40,7 @@
 // pilou's line
 #include <bdgl/bdgl_curve_description.h>
 #include <bdgl/bdgl_curve_tracker.h>
+#include <bdgl/bdgl_curve_tracker_primitive.h>
 #include <bdgl/bdgl_curve_matcher.h>
 
 //static live_video_manager instance
@@ -541,28 +542,63 @@ void bmvv_multiview_manager::track_edges()
   // compute the tracking/matching
   tracker.track();
 
-  // output the results : generate links between the curves in both images
+  //display the edges
+	// frame 0
+  for (unsigned int i=0;i<tracker.get_output_size_at(0);i++){
+		//vcl_cout<<".";
+		draw_colored_edgel_chain(0,0, tracker.get_output_curve_at(0,i), tracker.get_output_id_at(0,i) );
+	}
+	// frame 1
+  for (unsigned int i=0;i<tracker.get_output_size_at(1);i++){
+		//vcl_cout<<".";
+		draw_colored_edgel_chain(1,0, tracker.get_output_curve_at(1,i), tracker.get_output_id_at(1,i) );
+	}
+	return;
+}
+//-----------------------------------------------------------------------------
+void bmvv_multiview_manager::draw_colored_edgel_chain(unsigned col, unsigned row, vdgl_edgel_chain_sptr ec, int label)
+{
+	float r,g,b;
 
-  //display the edges
-  edges = det1.GetEdges();
-  //display the edges
-  btab = this->get_vtol2D_tableau_at(0,0);
-  if (btab){
-    tracker.draw_lines(0, btab);
-  } else {
-    vcl_cout << "In bmvv_multiview_manager::track_edges() - null tableau\n";
-    return;
-  }
-  edges = det2.GetEdges();
-  //display the edges
-  btab = this->get_vtol2D_tableau_at(1,0);
-  if (btab){
-    tracker.draw_lines(1, btab);
-  } else {
+  bgui_vtol2D_tableau_sptr btab = this->get_vtol2D_tableau_at(col,row);
+  if (!btab){
       vcl_cout << "In bmvv_multiview_manager::track_edges() - null tableau\n";
       return;
+	} else {
+		btab->disable_highlight();
+		set_changing_colors( label, &r, &g, &b );
+		btab->set_edgel_chain_style(r, g, b, 3.0);
+		btab->add_edgel_chain( ec );
+	  btab->post_redraw();
   }
-  return;
+
+	return;
+}
+
+// set changing colors for labelling curves, points, etc
+//-----------------------------------------------------------------------------
+void bmvv_multiview_manager::set_changing_colors(int num, float *r, float *g, float *b)
+{
+	int strenght = (int)floor(num/6);
+	int pattern = num - 6*strenght;
+	strenght = strenght - 20*(int)floor(strenght/20);
+
+	switch(pattern){
+		case 0 : (*r) = 256-strenght*256/20; (*g) = 0; (*b) = 0; break;
+		case 1 : (*r) = 0; (*g) = 256-strenght*256/20; (*b) = 0; break;
+		case 2 : (*r) = 0; (*g) = 0; (*b) = 256-strenght*256/20; break;
+		case 3 : (*r) = 256-strenght*256/20; (*g) = 256-strenght*256/20; (*b) = 0; break;
+		case 4 : (*r) = 0; (*g) = 256-strenght*256/20; (*b) = 256-strenght*256/20; break;
+		case 5 : (*r) = 256-strenght*256/20; (*g) = 0; (*b) = 256-strenght*256/20; break;
+		default : (*r) = 0; (*g) = 0; (*b) = 0; break;
+	}
+	//vcl_cout<<"color : "<<(*r)<<" : "<<(*g)<<" : "<<(*b)<<"\n";
+
+	(*r) = (*r)/(float)256;
+	(*g) = (*g)/(float)256;
+	(*b) = (*b)/(float)256;
+
+	return;
 }
 
 //====================================================================

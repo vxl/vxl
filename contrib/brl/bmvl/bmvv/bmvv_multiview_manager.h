@@ -17,6 +17,7 @@
 #include <vil/vil_image.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vdgl/vdgl_intensity_face_sptr.h>
+#include <vdgl/vdgl_edgel_chain_sptr.h>
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_easy2D_tableau_sptr.h>
 #include <vgui/vgui_grid_tableau.h>
@@ -56,6 +57,8 @@ class bmvv_multiview_manager : public vgui_wrapper_tableau
   virtual bool handle(const vgui_event&);
 
   void load_image_file(vcl_string image_filename, bool greyscale, unsigned col, unsigned row);
+	void draw_colored_edgel_chain(unsigned col, unsigned row, vdgl_edgel_chain_sptr ec, int label);
+	void set_changing_colors(int num, float *r, float *g, float *b);
 
  protected:
   //:internal utility methods
