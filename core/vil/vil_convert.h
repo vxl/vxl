@@ -76,6 +76,7 @@ class vil_convert_cast_pixel
   void operator () (In v, Out &d) const;
 };
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 // deal with conversions from floating point types to/from some compounds
 #define macro( in , out )\
 VCL_DEFINE_SPECIALIZATION \
@@ -151,7 +152,7 @@ macro( vxl_uint_16 )
 macro( vxl_int_32 )
 macro( vxl_uint_32 )
 #undef macro
-
+#endif //DOXYGEN_SHOULD_SKIP_THIS
 // declare general case in case anyone needs something weird.
 template <class In, class Out>
 inline void vil_convert_cast_pixel<In, Out>::operator () (In v, Out &d) const
@@ -244,6 +245,7 @@ class vil_convert_round_pixel
   void operator () (In v, Out &d) const;
 };
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 // deal with conversions from floating point types to some compounds
 #define macro( in , out )\
 VCL_DEFINE_SPECIALIZATION \
@@ -326,7 +328,7 @@ macro( vxl_int_32 , double )
 macro( vxl_uint_32 , float )
 macro( vxl_uint_32 , double )
 #undef macro
-
+#endif //DOXYGEN_SHOULD_SKIP_THIS
 
 // declare general case for scalars
 template <class In, class Out>
@@ -375,7 +377,7 @@ class vil_convert_rgb_to_grey_pixel
 //
 // Default weights convert from linear RGB to CIE luminance assuming a
 // modern monitor.  See Charles Poynton's Colour FAQ
-// http://www.inforamp.net/~poynton/notes/colour_and_gamma/ColorFAQ.html
+// http://www.poynton.com/ColorFAQ.html
 template <class rgbP, class outP>
 inline void vil_convert_rgb_to_grey(const vil_image_view<rgbP >&src,
                                     vil_image_view<outP >&dest,
@@ -397,7 +399,7 @@ inline void vil_convert_rgb_to_grey(const vil_image_view<rgbP >&src,
 //
 // Default weights convert from linear RGB to CIE luminance assuming a
 // modern monitor.  See Charles Pontyon's Colour FAQ
-// http://www.inforamp.net/~poynton/notes/colour_and_gamma/ColorFAQ.html
+// http://www.poynton.com/ColorFAQ.html
 template <class inP, class outP>
 inline void vil_convert_planes_to_grey(const vil_image_view<inP>&src,
                                        vil_image_view<outP>&dest,
@@ -788,7 +790,7 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 //
 // Default weights convert from linear RGB to CIE luminance assuming a
 // modern monitor.  See Charles Poynton's Colour FAQ
-// http://www.inforamp.net/~poynton/notes/colour_and_gamma/ColorFAQ.html
+// http://www.poynton.com/ColorFAQ.html
 
 inline vil_image_view_base_sptr vil_convert_to_grey_using_rgb_weighting(
   const vil_image_view_base_sptr &src)
@@ -805,7 +807,7 @@ inline vil_image_view_base_sptr vil_convert_to_grey_using_rgb_weighting(
 //
 // Default weights convert from linear RGB to CIE luminance assuming a
 // modern monitor.  See Charles Poynton's Colour FAQ
-// http://www.inforamp.net/~poynton/notes/colour_and_gamma/ColorFAQ.html
+// http://www.poynton.com/ColorFAQ.html
 // \deprecated Use other version of vil_convert_to_grey_using_rgb_weighting
 template <class outP>
 inline vil_image_view<outP> vil_convert_to_grey_using_rgb_weighting(
