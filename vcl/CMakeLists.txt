@@ -1,5 +1,17 @@
 # vcl/CMakeLists.txt
 
+IF(WIN32)
+  # MSVC.NET produces lots of warnings like
+  # "warning LNK4221: no public symbols found; archive member will be inaccessible"
+  # that depend on subtle logic at compile time.
+  # This is a bit indescriminate, but it may be the only feasible way to suppress them.
+  IF (CMAKE_CXX_COMPILER MATCHES "^cl$")
+	SET ( CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} /WARN:0")
+	SET ( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /WARN:0")
+  ENDIF (CMAKE_CXX_COMPILER MATCHES "^cl$")
+ENDIF(WIN32)
+
+
 PROJECT( vcl )
 
 # Set up vcl_where_root_dir.h to have a macro set to $VCL_SOURCE_ROOT_DIR
@@ -322,6 +334,8 @@ SET( vcl_sources
 
 AUX_SOURCE_DIRECTORY(Templates vcl_sources)
 
+
+
 ADD_LIBRARY(vcl ${vcl_sources})
 
 IF(WIN32)
@@ -329,15 +343,6 @@ IF(WIN32)
     ADD_DEFINITIONS( -DBUILDING_VCL_DLL )
     INCLUDE_DIRECTORIES( config.win32 )
   ENDIF(NOT CYGWIN)
-
-  # MSVC.NET produces lots of warnings like
-  # "warning LNK4221: no public symbols found; archive member will be inaccessible"
-  # that depend on subtle logic at compile time.
-  # This is a bit indescriminate, but it may be the only feasible way to suppress them.
-  IF (CMAKE_CXX_COMPILER MATCHES "^cl$")
-	SET ( CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} /WARN:2")
-	SET ( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /WARN:2")
-  ENDIF (CMAKE_CXX_COMPILER MATCHES "^cl$")
 ENDIF(WIN32)
 
 
