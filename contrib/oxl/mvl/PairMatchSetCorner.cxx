@@ -72,7 +72,7 @@ void PairMatchSetCorner::extract_matches(vcl_vector<HomgPoint2D>& points1,
   points1.resize(n);
   points2.resize(n);
   int i = 0;
-  for (iterator match = *this; match; ++match) {
+  for (PairMatchSet::iterator match = *this; match; ++match) {
     points1[i] = corners1_->get_homg(match.get_i1());
     points2[i] = corners2_->get_homg(match.get_i2());
     ++i;
@@ -99,7 +99,7 @@ void PairMatchSetCorner::extract_matches(vcl_vector<HomgPoint2D>& points1,
   corner_index_1.resize(n);
   corner_index_2.resize(n);
   int i = 0;
-  for (iterator match = *this; match; match.next()) {
+  for (PairMatchSet::iterator match = *this; match; match.next()) {
     corner_index_1[i] = match.get_i1();
     corner_index_2[i] = match.get_i2();
     points1[i] = corners1_->get_homg(match.get_i1());
