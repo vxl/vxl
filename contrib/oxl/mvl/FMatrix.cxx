@@ -18,13 +18,12 @@
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_transpose.h>
-
+#include <vnl/vnl_cross_product_matrix.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_rpoly_roots.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 
 #include <mvl/HomgOperator2D.h>
-#include <mvl/PMatrix.h>
 
 //--------------------------------------------------------------
 //
@@ -559,6 +558,23 @@ FMatrix::find_nearest_perfect_match(const HomgPoint2D& point1,
 }
 
 //-------------------------------------------------------------------
+
+void FMatrix::compute_P_matrix(vnl_matrix<double> &P2) const
+{
+  HomgPoint2D e1, e2;
+  get_epipoles(&e1, &e2);
+
+  vnl_double_3x3 A;
+  vnl_double_3 a = e2.get_vector();
+
+  vnl_cross_product_matrix e2x(a);
+  A = e2x * f_matrix_;
+
+  P2.set_columns(0, A);
+  P2.set_column(3, a);
+}
+
+//-------------------------------------------------------------------
 //
 //: Ensure the current Fundamental matrix is rank 2.
 // Does this by taking its vnl_svd<double>, setting the smallest singular value
@@ -664,8 +680,6 @@ bool FMatrix::set (const vnl_matrix<double>& f_matrix)
 
   return true;
 }
-
-#include <vnl/vnl_cross_product_matrix.h>
 
 //: Set from two P matrices
 void FMatrix::set (const PMatrix& P1, const PMatrix& P2)

@@ -20,8 +20,10 @@
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgPoint2D.h>
 #include <vgl/vgl_homg_line_2d.h>
+#include <mvl/PMatrix.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vcl_iosfwd.h>
+#include <vgl/algo/vgl_p_matrix.h>
 
 #include <vnl/vnl_double_3x3.h>
 
@@ -93,6 +95,18 @@ class FMatrix
                                   vgl_homg_point_2d<double>& out2) const;
 
   // Data Access------------------------------------------------------------
+  void compute_P_matrix(vnl_matrix<double> &P2) const;
+  void compute_P_matrix(PMatrix &P2) const {
+    vnl_matrix<double> temp(3,4);
+    compute_P_matrix(temp);
+    P2.set(temp);
+  }
+  void compute_P_matrix(vgl_p_matrix<double> &P2) const {
+    vnl_matrix<double> temp(3,4);
+    compute_P_matrix(temp);
+    P2.set(temp);
+  }
+
 
   double get (unsigned int row_index, unsigned int col_index) const;
 
