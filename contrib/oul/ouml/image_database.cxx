@@ -22,7 +22,8 @@
 #include "image_database.h"
 #include <vcl_iostream.h>
 #include <vcl_cerrno.h> // for EEXIST
-#include <vcl_cstdio.h>
+#include <vcl_cctype.h> // for tolower()
+#include <vcl_cstdio.h> // for fscanf()
 #include <vpl/vpl.h> // for vpl_mkdir
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
@@ -148,4 +149,15 @@ bool ImageDatabase::load(const char *name)
   }
   vcl_fclose(db);
   return true;
+}
+
+bool ImageDatabase::ltstr::operator()(const char* s1, const char* s2) const
+{
+  // do a case insensitive comparison. Can't use strcasecmp
+  // because it's not standard.
+  vcl_string tmp1( s1 );
+  vcl_string tmp2( s2 );
+  vcl_transform( tmp1.begin(), tmp1.end(), tmp1.begin(), ::tolower );
+  vcl_transform( tmp2.begin(), tmp2.end(), tmp2.begin(), ::tolower );
+  return vcl_strcmp( tmp1.c_str(), tmp2.c_str() ) < 0;
 }

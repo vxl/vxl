@@ -24,7 +24,6 @@
 
 #include <vcl_sys/types.h>
 #include <vcl_cstring.h> // for strcpy(), strcmp()
-#include <vcl_cctype.h> // for tolower()
 #include <vcl_string.h>
 #include <vcl_map.h>
 #include <vcl_utility.h>
@@ -37,16 +36,7 @@ class ImageDatabase
 public:
   struct ltstr
   {
-    bool operator()(const char* s1, const char* s2) const
-    {
-      // do a case insensitive comparision. Can't use strcasecmp
-      // because it's not standard.
-      vcl_string tmp1( s1 );
-      vcl_string tmp2( s2 );
-      vcl_transform( tmp1.begin(), tmp1.end(), tmp1.begin(), vcl_tolower );
-      vcl_transform( tmp2.begin(), tmp2.end(), tmp2.begin(), vcl_tolower );
-      return vcl_strcmp( tmp1.c_str(), tmp2.c_str() ) < 0;
-    }
+    bool operator()(const char* s1, const char* s2) const;
   };
 
 private:
