@@ -1,8 +1,12 @@
 //this-sets-emacs-to-*-c++-*-mode
+
+//:
+// \file
+// \author J.L. Mundy
+
 #include <math.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
 #include <vul/vul_timer.h>
 #include <vil/vil_image.h>
 #include <vgui/vgui.h>
@@ -26,7 +30,7 @@ vvid_file_manager *vvid_file_manager::_instance = 0;
 //The vvid_file_manager is a singleton class
 vvid_file_manager *vvid_file_manager::instance()
 {
-  if(!_instance)
+  if (!_instance)
     _instance = new vvid_file_manager();
   return vvid_file_manager::_instance;
 }
@@ -66,7 +70,6 @@ bool vvid_file_manager::handle(const vgui_event &e)
 //-----------------------------------------------------------------------------
 void vvid_file_manager::load_video_file()
 {
-
   vgui_dialog load_video_dlg("Load video file");
   static vcl_string image_filename = "";
   static vcl_string ext = "*.avi";
@@ -74,7 +77,7 @@ void vvid_file_manager::load_video_file()
   load_video_dlg.checkbox("Cache Frames ", _cache_frames);
   if (!load_video_dlg.ask())
     return;
-	
+
   _my_movie = vidl_io::load_movie(image_filename.c_str());
   if (!_my_movie) {
     vgui_error_dialog("Failed to load movie file");
@@ -90,12 +93,12 @@ void vvid_file_manager::load_video_file()
   width_ = img.width();
   vcl_cout << "Video Height " << height_ << vcl_endl
            << " Video Width " << width_ << vcl_endl;
-  if(_win)
+  if (_win)
     _win->reshape(width_, height_);
-	
+
   int i = 0;
   int inc = 40;
-  if(_cache_frames)
+  if (_cache_frames)
     {
       while (pframe!=_my_movie->last())
         {
@@ -127,22 +130,22 @@ void vvid_file_manager::cached_play()
   for (vcl_vector<vgui_easy2D_tableau_sptr>::iterator vit = _tabs.begin();
        vit != _tabs.end()&&_play_video; vit++)
     {
-      //pause by repeating the same frame 
-      if(_pause_video&&_play_video)
+      //pause by repeating the same frame
+      if (_pause_video&&_play_video)
         {
-          if(_next_frame&&vit!=_tabs.end()-2)
+          if (_next_frame&&vit!=_tabs.end()-2)
             {
               vit+=2;
               _next_frame = false;
             }
-          if(_prev_frame&&vit!=_tabs.begin()+2)
+          if (_prev_frame&&vit!=_tabs.begin()+2)
             {
               vit--;
               _prev_frame = false;
             }
           vit--;
         }
-      _v2D->child.assign(*vit);      
+      _v2D->child.assign(*vit);
       //Here we can put some stuff to control the frame rate. Hard coded to
       //a delay of 10 for now
       while (t.all()<_time_interval) ;
@@ -156,18 +159,18 @@ void vvid_file_manager::un_cached_play()
 {
   vul_timer t;
   vidl_movie::frame_iterator pframe(_my_movie);
-  for(pframe=_my_movie->first(); pframe!=_my_movie->last()&&_play_video;
+  for (pframe=_my_movie->first(); pframe!=_my_movie->last()&&_play_video;
       ++pframe)
     {
-      //pause by repeating the same frame 
-      if(_pause_video&&_play_video)
+      //pause by repeating the same frame
+      if (_pause_video&&_play_video)
         {
-          if(_next_frame&&pframe!=_my_movie->last()-2)
+          if (_next_frame&&pframe!=_my_movie->last()-2)
             {
               ++pframe;++pframe;
               _next_frame = false;
             }
-          if(_prev_frame&&pframe!=_my_movie->first()+2)
+          if (_prev_frame&&pframe!=_my_movie->first()+2)
             {
               --pframe;
               _prev_frame = false;
@@ -176,7 +179,7 @@ void vvid_file_manager::un_cached_play()
         }
       vil_image img = pframe->get_image();
       vgui_easy2D_tableau_sptr e;
-      e.vertical_cast(vgui_find_below_by_type_name(_v2D->child, 
+      e.vertical_cast(vgui_find_below_by_type_name(_v2D->child,
                                                    vcl_string("vgui_easy2D_tableau")));
       e->get_image_tableau()->set_image(img);
       while (t.all()<_time_interval) ;
@@ -192,7 +195,7 @@ void vvid_file_manager::play_video()
   _pause_video = false;
   _time_interval = 10.0;
   //return the display to the first frame after the play is finished
-  if(_cache_frames)
+  if (_cache_frames)
     {
       this->cached_play();
     _v2D->child.assign(_tabs[0]);
@@ -202,7 +205,7 @@ void vvid_file_manager::play_video()
       this->un_cached_play();
       vil_image img =_my_movie->get_image(0);
       vgui_easy2D_tableau_sptr e;
-      e.vertical_cast(vgui_find_below_by_type_name(_v2D->child, 
+      e.vertical_cast(vgui_find_below_by_type_name(_v2D->child,
                                                    vcl_string("vgui_easy2D_tableau")));
       e->get_image_tableau()->set_image(img);
     }
@@ -249,15 +252,15 @@ void vvid_file_manager::easy2D_tableau_demo()
 {
   int inc = 40;
   for (vcl_vector<vgui_easy2D_tableau_sptr>::iterator eit = _tabs.begin();
-         eit != _tabs.end(); eit++, ++inc)
-      {
-        (*eit)->clear();
-        (*eit)->set_foreground(0,1,1);
-        (*eit)->set_point_radius(5);
-        if (inc>60)
-          inc = 40;
-        for (unsigned int j = 0; j<=height_; j+=inc)
-          for (unsigned int k=0; k<=width_; k+=inc)
-            (*eit)->add_point(k,j);
-      }
+       eit != _tabs.end(); eit++, ++inc)
+    {
+      (*eit)->clear();
+      (*eit)->set_foreground(0,1,1);
+      (*eit)->set_point_radius(5);
+      if (inc>60)
+        inc = 40;
+      for (unsigned int j = 0; j<=height_; j+=inc)
+        for (unsigned int k=0; k<=width_; k+=inc)
+          (*eit)->add_point(k,j);
+    }
 }

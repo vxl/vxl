@@ -1,13 +1,15 @@
 //this-sets-emacs-to-*-c++-*-mode
+
+//:
+// \file
+// \author J.L. Mundy
+
+#include "vvid_live_video_manager.h"
 #include <math.h>
 #include <vcl_cstdlib.h> // for vcl_exit()
-#include <vcl_vector.h>
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vul/vul_timer.h>
 #include <vil/vil_image.h>
 #include <vil/vil_pixel.h>
-#include <vil/vil_memory_image_impl.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_modifier.h>
 #include <vgui/vgui.h>
@@ -29,18 +31,17 @@
 #include <vvid/cmu_1394_camera_params.h>
 #include <vvid/vvid_video_process.h>
 #include <vvid/vvid_epipolar_space_process.h>
-#include <vvid/vvid_live_video_manager.h>
 
 static vil_memory_image_of<unsigned char> convert_to_grey(vil_image& image)
 {
   int h = image.height();
   int w = image.width();
   vil_memory_image_of<unsigned char> grey_img(w,h);
-  if(vil_pixel_format(image)==VIL_RGB_BYTE)
+  if (vil_pixel_format(image)==VIL_RGB_BYTE)
     {
       vil_memory_image_of<vil_rgb<unsigned char> > mimg(image);
-      for(int y = 0; y<h; y++)
-        for(int x =0; x<w; x++)
+      for (int y = 0; y<h; y++)
+        for (int x =0; x<w; x++)
           grey_img(x,y)=(mimg(x,y)).grey();
     }
   return grey_img;
@@ -51,21 +52,21 @@ static void fill_float_array_at_y(vil_memory_image_of<unsigned char>& img,
 {
   int N = 2*radius +1;
   //clear the array
-  for(int i = 0; i<N; i++)
+  for (int i = 0; i<N; i++)
     data[i]=0;
- 
+
   int h = img.height();
-  if(y-radius <0||y+radius>h-1)
+  if (y-radius <0||y+radius>h-1)
     return;
-  for(int dy = -radius; dy<=radius; dy++)
+  for (int dy = -radius; dy<=radius; dy++)
     data[radius+dy] = (float)img(x,y+dy);
 }
-static vil_memory_image_of<unsigned char> 
+static vil_memory_image_of<unsigned char>
 make_epi(int y, vil_memory_image_of<unsigned char>& img1,
          vil_memory_image_of<unsigned char>& img2)
 {
   int h = img1.height();
- 
+
   int w = img1.width();
   int shift=0;
   float s = 255*2.0, radius = 2;
@@ -73,16 +74,16 @@ make_epi(int y, vil_memory_image_of<unsigned char>& img1,
   float* d1 = new float[N1];
   float* d2 = new float[N2];
   vil_memory_image_of<unsigned char> epi_img(w,w);
-  for(int x1 =0; x1<w; x1++)
-    for(int x2 =0; x2<w; x2++)
+  for (int x1 =0; x1<w; x1++)
+    for (int x2 =0; x2<w; x2++)
       {
         fill_float_array_at_y(img1, x1, y, radius, d1);
         fill_float_array_at_y(img2, x2, y, 2*radius, d2);
-        float c = 
-          0.5*fabs(gevd_float_operators::Correlation(d2, N2, d1, radius, 2*radius));
+        double c =
+          0.5*vcl_fabs(gevd_float_operators::Correlation(d2, N2, d1, radius, 2*radius));
         c = 255*c;
-        if(c>255) c=255;
-        if(c<0)c=0;
+        if (c>255) c=255;
+        if (c<0)c=0;
         epi_img(x1,x2)=(unsigned char) c;
       }
   delete [] d1;
@@ -95,7 +96,7 @@ vvid_live_video_manager *vvid_live_video_manager::_instance = 0;
 
 vvid_live_video_manager *vvid_live_video_manager::instance()
 {
-  if(!_instance)
+  if (!_instance)
     _instance = new vvid_live_video_manager();
   return vvid_live_video_manager::_instance;
 }
@@ -130,7 +131,7 @@ bool vvid_live_video_manager::handle(const vgui_event &e)
 }
 void vvid_live_video_manager::set_camera_params()
 {
-  if(!_vframes.size())
+  if (!_vframes.size())
     {
       vcl_cout << "in vvid_live_video_manager::set_camera_params() - no live"
                << " video frames " << vcl_endl;
@@ -149,7 +150,7 @@ void vvid_live_video_manager::set_camera_params()
   if (!cam_dlg.ask())
     return;
   _cp.constrain();//constrain the parameters to be consistent
-  for(int i = 0; i<_N_views; i++)
+  for (int i = 0; i<_N_views; i++)
     _vframes[i]->set_camera_params(_cp);
 }
 //----------------------------------------------------------
@@ -158,21 +159,20 @@ void vvid_live_video_manager::set_camera_params()
 //
 void vvid_live_video_manager::setup_views()
 {
-  
   //Determine the number of active cameras
   // for now we assume use a pre-defined _N_views
   _init_successful = true;
   _vframes.clear();
-  for(int i = 0; i<_N_views; i++)
+  for (int i = 0; i<_N_views; i++)
     {
-      vvid_live_video_frame_sptr vf = 
+      vvid_live_video_frame_sptr vf =
         new vvid_live_video_frame(i, 2, cmu_1394_camera_params());
       _vframes.push_back(vf);
       _init_successful = _init_successful&&vf->attach_live_video();
-      if(!_init_successful)
+      if (!_init_successful)
         {
           vcl_cout << "In vvid_live_video_manager::setup_views() - bad camera"
-                   << " initialization " << vcl_endl;
+                   << " initialization\n";
           return;
         }
       //Experimental Kludge
@@ -185,7 +185,7 @@ void vvid_live_video_manager::setup_views()
       //end kludge
       this->add_at(vf->get_viewer2D_tableau(), 1,i);
     }
- 
+
     _it = vgui_image_tableau_new();
   _v2D = vgui_viewer2D_tableau_new(_it);
   this->add_at(_v2D, 0,0);
@@ -193,56 +193,55 @@ void vvid_live_video_manager::setup_views()
 
 void vvid_live_video_manager::run_frames()
 {
-  if(!_init_successful)
+  if (!_init_successful)
     return;
-	while(_live_capture){
-		for(int i=0; i<_N_views; i++)
-		_vframes[i]->update_frame();   
+  while (_live_capture){
+    for (int i=0; i<_N_views; i++)
+    _vframes[i]->update_frame();
 
-    if(!_cp._rgb&&_N_views==2)//i.e. grey scale
+    if (!_cp._rgb&&_N_views==2)//i.e. grey scale
       {
         vil_memory_image_of<unsigned char> i1, i2;
         vil_memory_image_of<vil_rgb<unsigned char> > im;
 
         _video_process->clear_input();
 
-        if(_vframes[0]->get_current_mono_image(2,i1))
+        if (_vframes[0]->get_current_mono_image(2,i1))
           _video_process->add_input_image(i1);
         else return;
-        if(_vframes[1]->get_current_mono_image(2,i2))
+        if (_vframes[1]->get_current_mono_image(2,i2))
           _video_process->add_input_image(i2);
         else
           return;
-       if(_video_process->execute())
+       if (_video_process->execute())
          _it->set_image(_video_process->get_output_image());
        else
          return;
       }
-		_v2D->post_redraw();
-		vgui::run_till_idle();
-	}
+    _v2D->post_redraw();
+    vgui::run_till_idle();
+  }
 }
 void vvid_live_video_manager::start_live_video()
 {
-  if(!_init_successful)
+  if (!_init_successful)
     this->setup_views();
-  if(!_init_successful)
+  if (!_init_successful)
     return;
 
-  for(int i=0; i<_N_views; i++)
+  for (int i=0; i<_N_views; i++)
     _vframes[i]->start_live_video();
 
   _live_capture=true;
   this->run_frames();
-} 
+}
 
 void vvid_live_video_manager::stop_live_video()
 {
-
   _live_capture=false;
-  if(!_init_successful)
+  if (!_init_successful)
     return;
-  for(int i=0; i<_N_views; i++)
+  for (int i=0; i<_N_views; i++)
     _vframes[i]->stop_live_video();
 }
 
@@ -251,20 +250,20 @@ void vvid_live_video_manager::quit()
   this->stop_live_video();
   vcl_exit(1);
 }
-bool 
+bool
 vvid_live_video_manager::get_current_rgb_image(int view_no,
                                                int pix_sample_interval,
                                                vil_memory_image_of< vil_rgb<unsigned char> >& im)
 {
-  if(!_init_successful)
+  if (!_init_successful)
     return false;
-  if(_vframes.size()< view_no+1)
+  if (_vframes.size()< view_no+1)
     {
       vcl_cout << "In vvid_live_video_manger::get_current_rgb_imge(..) -"
-               << " view_no out of range" << vcl_endl;
+               << " view_no out of range\n";
       return false;
     }
-  
+
   return _vframes[view_no]->get_current_rgb_image(pix_sample_interval, im);
 }
 
@@ -272,15 +271,15 @@ bool vvid_live_video_manager::
 get_current_mono_image(int view_no, int pix_sample_interval,
                        vil_memory_image_of<unsigned char>& im)
 {
-  if(!_init_successful)
+  if (!_init_successful)
     return false;
-  if(_vframes.size()< view_no+1)
+  if (_vframes.size()< view_no+1)
     {
       vcl_cout << "In vvid_live_video_manger::get_current_mono_imge(..) -"
-               << " view_no out of range" << vcl_endl;
+               << " view_no out of range\n";
       return false;
     }
-  
+
   return _vframes[view_no]->get_current_mono_image(pix_sample_interval, im);
 }
 
