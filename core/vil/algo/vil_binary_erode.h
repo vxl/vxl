@@ -9,15 +9,15 @@
 
 
 //: Return false if any im[offset[k]] is zero
-inline bool vil2_binary_erode(const vxl_byte* im, const int* offset, unsigned n)
+inline bool vil2_binary_erode(const bool* im, const int* offset, unsigned n)
 {
-  for (unsigned i=0;i<n;++i) if (im[offset[i]]==0) return false;
+  for (unsigned i=0;i<n;++i) if (!im[offset[i]]) return false;
   return true;
 }
 
 //: Erodes src_image to produce dest_image (assumed single plane)
-void vil2_binary_erode(const vil2_image_view<vxl_byte>& src_image,
-                        vil2_image_view<vxl_byte>& dest_image,
+void vil2_binary_erode(const vil2_image_view<bool>& src_image,
+                        vil2_image_view<bool>& dest_image,
                         const vil2_structuring_element& element);
 
 
