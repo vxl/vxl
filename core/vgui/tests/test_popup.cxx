@@ -9,6 +9,7 @@
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_tableau.h>
+#include <vgui/vgui_command.h>
 
 // example of a tableau which has an associated menu :
 struct joe_tab : public vgui_tableau
@@ -19,8 +20,8 @@ struct joe_tab : public vgui_tableau
   joe_tab(const vcl_string &m) : msg(m) {
     the_menu.add("joe(0)",joe_callback,0 /*data*/);
     the_menu.add("joe(this)",joe_callback,this /*data*/);
-    the_menu.add("toggle1", false);
-    the_menu.add("toggle2", true);
+    the_menu.add("toggle1", new vgui_command_toggle(false) );
+    the_menu.add("toggle2", new vgui_command_toggle(true) );
   }
   ~joe_tab() { }
 
