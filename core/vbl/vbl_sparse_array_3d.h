@@ -19,30 +19,10 @@
 // \endverbatim
 
 
-#include <vbl/vbl_sparse_array_base.h>
 #include <vcl_iosfwd.h>
+#include <vbl/vbl_sparse_array_base.h>
+#include <vbl/vbl_index_3d.h>
 
-//: An index for 3d arrays
-// Used specifically with vbl_sparse_array_3d, but can be used
-// for other things.
-struct vbl_index_3d
-{
-  //: Construct 3d index.
-  vbl_index_3d(unsigned index_i, unsigned index_j,
-               unsigned index_k):
-    i(index_i), j(index_j), k(index_k) {}
-
-  unsigned i;
-  unsigned j;
-  unsigned k;
-};
-
-//: Defines an ordering on vbl_index_2d
-inline bool operator< (const vbl_index_3d &a, const vbl_index_3d &other)
-{
-  if (a.i == other.i) return (a.j < other.j);
-  else return (a.i < other.i);
-}
 
 
 

@@ -1,3 +1,6 @@
+#ifndef vbl_sparse_array_2d_txx_
+#define vbl_sparse_array_2d_txx_
+
 // This is vxl/vbl/vbl_sparse_array_2d.txx
 
 
@@ -18,7 +21,8 @@ vcl_ostream& vbl_sparse_array_2d<T>::print(vcl_ostream& out) const
 
 #undef VBL_SPARSE_ARRAY_2D_INSTANTIATE
 #define VBL_SPARSE_ARRAY_2D_INSTANTIATE(T)\
-template class vbl_sparse_array_2d<T >; \
 template class vbl_sparse_array_base<T , vbl_index_2d >; \
+template class vbl_sparse_array_2d<T >; \
 VCL_INSTANTIATE_INLINE(vcl_ostream& operator<< (vcl_ostream&, const vbl_sparse_array_2d<T > &))
  
+#endif
