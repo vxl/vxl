@@ -1,5 +1,5 @@
 #######################################
-include ${IUEROOT}/config/usr_params.mk
+include ${IUEROOT}/config/top-params.mk
 #######################################
 
 USES += vxl
@@ -67,7 +67,7 @@ SOURCES += vil_copy.cxx
 SOURCES += vil_crop.cxx
 SOURCES += vil_skip.cxx
 SOURCES += vil_flipud.cxx
-SOURCES += vil_convolve.cxx
+MANPAGE_SOURCES += vil_convolve.txx
 SOURCES += vil_smooth.cxx
 
 # Utilities
@@ -92,5 +92,5 @@ SUBDIRS += examples
 endif
 
 ######################################
-include ${IUEROOT}/config/usr_rules.mk
+include ${IUEROOT}/config/top-rules.mk
 ######################################
