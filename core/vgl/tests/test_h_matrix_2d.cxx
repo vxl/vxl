@@ -16,7 +16,7 @@
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_4point.h>
-
+#include <vgl/algo/vgl_h_matrix_2d_optimize_lmq.h>
 static void test_identity_transform()
 {
   vcl_cout << "\n=== Testing identity transform on point ===\n";
@@ -144,6 +144,15 @@ static void test_compute_linear_points()
   vgl_homg_point_2d<double> hdiag(M[0][0], M[1][1], M[2][2]);
   vcl_cout << "The normalized upper diagonal "<< hdiag << '\n';
   TEST_NEAR("recover 2x scale matrix", length(hdiag-p23), 0.0, 1e-06);
+  // Test if optimization converges
+  vgl_h_matrix_2d<double> h_init, h_opt;
+  M[0][0] += 0.1;//perturb the initial guess
+  h_init.set(M);
+  vgl_h_matrix_2d_optimize_lmq lmq(h_init);
+  lmq.optimize(points1, points2, h_opt);
+  vcl_cout << "The optimized transform\n" << h_opt << '\n';
+  vnl_matrix_fixed<double,3,3> Mop = h_opt.get_matrix();
+  TEST_NEAR("Optimized Scale Factor", Mop[0][0]/Mop[2][2], 2.0, 5e-03);
 }
 
 static void test_compute_linear_lines()
@@ -186,6 +195,17 @@ static void test_compute_linear_lines()
   vcl_cout << "The normalized upper diagonal (least squares) "<< hdiag_wls << '\n';
   TEST_NEAR("recover 2x scale matrix from weighted least squares",
             length(hdiag_wls-p23), 0.0, 1e-12);
+  // Test if optimization converges
+  vgl_h_matrix_2d<double> h_init, h_opt;
+  M[0][0] += 0.5;//perturb the initial guess
+  h_init.set(M);
+  vgl_h_matrix_2d_optimize_lmq lmq(h_init);
+  lmq.set_htol(1e-12);
+  lmq.optimize(lines1, lines2, h_opt);
+  vcl_cout << "The optimized transform\n" << h_opt << '\n';
+  vnl_matrix_fixed<double,3,3> Mop = h_opt.get_matrix();
+  //Seems to work but convergence is slow and not particularly accurate
+  TEST_NEAR("Optimized Scale Factor", Mop[0][0]/Mop[2][2], 2.0, 0.07);
 }
 
 static void test_compute_4point()
