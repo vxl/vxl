@@ -362,7 +362,7 @@ bool vimt3d_vil3d_v3i_image::put_view(const vil3d_image_view_base& vv,
     macro(VIL_PIXEL_FORMAT_FLOAT , float )
 //  macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
+   default:
+    return false;
   }
-
-  return false;
 }
