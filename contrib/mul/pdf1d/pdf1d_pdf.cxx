@@ -78,7 +78,6 @@ double pdf1d_pdf::log_prob_thresh(double pass_proportion) const
   const unsigned n_stat = 30;
 
   unsigned nSamples;
-  vnl_vecd p;
   double right;
   double left;
 
