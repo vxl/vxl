@@ -53,7 +53,7 @@ same_int_region( unsigned i, unsigned j,
                  vcl_vector<unsigned>& rj )
 {
   // early stop if this pixel has already been processed
-  if( processed_(i,j) )
+  if ( processed_(i,j) )
     return;
 
   // otherwise, add this pixel's coordinates and process neighbours
@@ -63,11 +63,11 @@ same_int_region( unsigned i, unsigned j,
   ri.push_back( i );
   rj.push_back( j );
 
-  for( unsigned c = 0; c < num_nbrs_; ++c ) {
+  for ( unsigned c = 0; c < num_nbrs_; ++c ) {
     unsigned nbr_i = i + nbr_delta_[c][0];
     unsigned nbr_j = j + nbr_delta_[c][1];
-    if( 0 <= nbr_i && nbr_i < image_.ni() &&
-        0 <= nbr_j && nbr_j < image_.nj() &&
+    if (nbr_i < image_.ni() &&
+        nbr_j < image_.nj() &&
         image_( nbr_i, nbr_j ) == p ) {
       same_int_region( nbr_i, nbr_j, ri, rj );
     }
