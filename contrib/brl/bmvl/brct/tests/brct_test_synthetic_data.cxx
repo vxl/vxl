@@ -3,6 +3,7 @@
 #include <vcl_fstream.h>
 #include <vcl_vector.h>
 #include <vcl_string.h>
+#include <vcl_where_root_dir.h>
 #include <vil1/vil1_save.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vdgl/vdgl_edgel_chain.h>
@@ -154,10 +155,9 @@ write_track_to_file(vcl_vector<vdgl_digital_curve_sptr> const& track,
   str.close();
 }
 
-int main(int argc, char * argv[])
+int main()
 {
-//  vcl_string file = "c:/videos/PoliceCar2/track_data/par.txt";
-  vcl_string path = "c:/vxl/vxl/contrib/brl/bmvl/brct/tests/";
+  vcl_string path = VCL_SOURCE_ROOT_DIR "/contrib/brl/bmvl/brct/tests/";
   int success=0, failures=0;
   brct_epi_reconstructor kf;
   vnl_double_3x4 P = generate_P(generate_K());
