@@ -34,7 +34,7 @@ void vil_histogram(const vil_image_view<T>& image,
       for (unsigned i=0;i<ni;++i,pixel+=istep)
       {
         int index = int(0.5+s*(double(*pixel) - x0));
-        if (index>=0 && index<n_bins) histo[index]+=1;
+        if (index>=0 && (unsigned)index<n_bins) histo[index]+=1;
       }
     }
   }
