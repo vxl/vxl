@@ -7,9 +7,9 @@
 // \date 16 Feb 2005
 
 #include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 
 #include <rgrl/rgrl_initializer.h>
-#include <rgrl/rgrl_scale_sptr.h>
 #include <rgrl/rgrl_scale_sptr.h>
 #include <rgrl/rgrl_mask.h>
 #include <rgrl/rgrl_transformation_sptr.h>
@@ -40,16 +40,16 @@ class rgrl_initializer_reader
   rgrl_type_macro( rgrl_initializer_reader, rgrl_initializer );
 
  protected:
- 
+
   struct init_record {
     rgrl_view_sptr            view_;
     rgrl_scale_sptr           scale_;
     rgrl_transformation_sptr  xform_;
-  };   
- 
+  };
+
   vcl_vector< init_record >           init_records_;
   unsigned int xform_index_;
-  
+
   rgrl_mask_box       from_image_roi_;
   rgrl_mask_box       to_image_roi_;
   rgrl_scale_sptr     prior_scale_;
