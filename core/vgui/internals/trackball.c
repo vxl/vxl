@@ -66,7 +66,10 @@
  * at least when math.h provides this.
  */
 #include <vxl_config.h>
-#if !VXL_MATH_HAS_SQRTF
+#if ! VXL_MATH_HAS_SQRTF
+#define sqrtf(x) (float)sqrt((double)(x))
+#else
+/* see comments in v3p/netlib/netlib.h */
 #define sqrtf(x) (float)sqrt((double)(x))
 #endif
 
