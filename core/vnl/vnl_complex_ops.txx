@@ -5,6 +5,8 @@
 */
 #include "vnl_complex_ops.h"
 
+#include <vcl_cassert.h>
+
 //-----------------------------------------------------------------------
 
 template <class T>
@@ -26,10 +28,27 @@ vnl_vector<vcl_complex<T> > vnl_complexify(vnl_vector<T> const &v) {
   return vc;
 }
 
+template <class T> 
+vnl_vector<vcl_complex<T> > vnl_complexify(vnl_vector<T> const &re, vnl_vector<T> const &im) {
+  assert(re.size() == im.size());
+  vnl_vector<vcl_complex<T> > vc(re.size());
+  vnl_complexify(re.begin(), im.begin(), vc.begin(), re.size());
+  return vc;
+}
+
 template <class T>
 vnl_matrix<vcl_complex<T> > vnl_complexify(vnl_matrix<T> const &M) {
   vnl_matrix<vcl_complex<T> > Mc(M.rows(), M.cols());
   vnl_complexify(M.begin(), Mc.begin(), M.size());
+  return Mc;
+}
+
+template <class T>
+vnl_matrix<vcl_complex<T> > vnl_complexify(vnl_matrix<T> const &re, vnl_matrix<T> const &im) {
+  assert(re.rows() == im.rows());
+  assert(re.cols() == im.cols());
+  vnl_matrix<vcl_complex<T> > Mc(re.rows(), re.cols());
+  vnl_complexify(re.begin(), im.begin(), Mc.begin(), re.size());
   return Mc;
 }
 
@@ -131,7 +150,9 @@ template void vnl_complexify(T const *, vcl_complex<T > *, unsigned); \
 template void vnl_complexify(T const *, T const *, vcl_complex<T > *, unsigned); \
 \
 template vnl_vector<vcl_complex<T > > vnl_complexify(vnl_vector<T > const &); \
+template vnl_vector<vcl_complex<T > > vnl_complexify(vnl_vector<T > const &, vnl_vector<T > const &); \
 template vnl_matrix<vcl_complex<T > > vnl_complexify(vnl_matrix<T > const &); \
+template vnl_matrix<vcl_complex<T > > vnl_complexify(vnl_matrix<T > const &, vnl_matrix<T > const &); \
 \
 template vnl_vector<T> imag (vnl_vector<vcl_complex<T> > const &); \
 template vnl_vector<T> angle(vnl_vector<vcl_complex<T> > const &); \
