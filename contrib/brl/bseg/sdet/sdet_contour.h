@@ -68,6 +68,7 @@
 //  Joe Mundy       (1999) Modified ::InsertBorder to use ROI bounds
 //  Joe Mundy       (2002) Extensive repairs and consolidation after conversion to VXL
 //  Peter Vanroose  (2003) removed z coord arg of Translate()
+//  Joe Mundy       (2003) [Aug] Eliminate zig-zags in ::FindChains
 //-----------------------------------------------------------------------------
 
 #include <vcl_vector.h>
