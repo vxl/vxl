@@ -167,6 +167,9 @@ SOURCE=.\vil3d_crop.h
 # Begin Source File
 SOURCE=.\vil3d_switch_axes.h
 # End Source File
+# Begin Source File
+SOURCE=.\vil3d_math.h
+# End Source File
 # End Group
 # End Target
 # End Project
