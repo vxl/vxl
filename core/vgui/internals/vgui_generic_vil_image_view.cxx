@@ -7,6 +7,7 @@
 #include "vgui_generic_vil_image_view.h"
 
 #include <vcl_iostream.h>
+#include <vcl_cassert.h>
 
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_image_view_base.h>
@@ -135,7 +136,7 @@ view_data
 cast_and_extract( vil_image_view_base const& base_view,
                   vil_pixel_format_invalid_type* /*dummy*/ )
 {
-  vcl_cerr << __FILE__ << ":" << __LINE__ << ": "
+  vcl_cerr << __FILE__ << ": " << __LINE__ << ": "
            << "Error: image pixel format " << base_view.pixel_format()
            << " does not have a valid C++ type\n";
   return view_data( 0, 0, 0, 0, 0 );
@@ -163,7 +164,7 @@ cast_and_extract( vil_image_view_base const& base_view,
     static view_data                                                            \
     process( vil_image_view_base const& other )                                 \
       {                                                                         \
-        if( other.pixel_format() == fmt ) {                                     \
+        if ( other.pixel_format() == fmt ) {                                    \
           typedef Typename vil_pixel_format_type_of<fmt>::type pixel_type;      \
           return cast_and_extract( other, (pixel_type*)0 );                     \
         } else {                                                                \
@@ -176,7 +177,7 @@ cast_and_extract( vil_image_view_base const& base_view,
   VCL_DEFINE_SPECIALIZATION                             \
   ExtractDefinition( vil_pixel_format( fmt ),           \
                      < vil_pixel_format( fmt ) >,       \
-		     NoParameter /*no typename*/ )
+                     NoParameter /*no typename*/ )
 
 
 // This defines the normal, recucursively instantiating template
@@ -191,7 +192,7 @@ struct extract<VIL_PIXEL_FORMAT_ENUM_END>
   static view_data
   process( vil_image_view_base const& other )
     {
-      vcl_cerr << __FILE__ << ":" << __LINE__ << ": "
+      vcl_cerr << __FILE__ << ": " << __LINE__ << ": "
                << "Error: image pixel format " << other.pixel_format()
                << " is not known\n";
       return view_data( 0, 0, 0, 0, 0 );
@@ -245,7 +246,7 @@ vil_image_view_base_sptr
 create_view_of( vgui_generic_vil_image_view const& generic,
                 vil_pixel_format_invalid_type* /*dummy*/ )
 {
-  vcl_cerr << __FILE__ << ":" << __LINE__ << ": "
+  vcl_cerr << __FILE__ << ": " << __LINE__ << ": "
            << "Error: image pixel format " << generic.pixel_format()
            << " does not have a valid C++ type\n";
   return 0;
@@ -271,7 +272,7 @@ struct try_view_of fmt_specialization                                           
   static vil_image_view_base_sptr                                               \
   process( vgui_generic_vil_image_view const& generic )                         \
     {                                                                           \
-      if( generic.pixel_format() == fmt ) {                                     \
+      if ( generic.pixel_format() == fmt ) {                                    \
         typedef Typename vil_pixel_format_type_of< fmt >::type pixel_type;      \
         return create_view_of( generic, (pixel_type*)0 );                       \
       } else {                                                                  \
@@ -283,8 +284,8 @@ struct try_view_of fmt_specialization                                           
 #define TryViewOfRecursionBreak( fmt )                  \
   VCL_DEFINE_SPECIALIZATION                             \
   TryViewOfDefinition( vil_pixel_format( fmt ),         \
-                     < vil_pixel_format( fmt ) >,       \
-		     NoParameter /*no typename*/ )
+                       < vil_pixel_format( fmt ) >,     \
+                       NoParameter /*no typename*/ )
 
 // This defines the normal, recucursively instantiating template
 template< vil_pixel_format fmt >
@@ -299,7 +300,7 @@ struct try_view_of<VIL_PIXEL_FORMAT_ENUM_END>
   static vil_image_view_base_sptr
   process( vgui_generic_vil_image_view const& generic )
     {
-      vcl_cerr << __FILE__ << ":" << __LINE__ << ": "
+      vcl_cerr << __FILE__ << ": " << __LINE__ << ": "
                << "Error: image pixel format " << generic.pixel_format()
                << " is not known\n";
       return 0;
@@ -328,7 +329,6 @@ make_image_view( vgui_generic_vil_image_view const& generic )
 }
 
 } // anonymous namespace
-
 
 
 // =============================================================================
