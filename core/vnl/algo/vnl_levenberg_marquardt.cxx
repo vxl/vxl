@@ -263,6 +263,35 @@ void vnl_levenberg_marquardt::lmder_lsqfun(int* n,          // I    Number of re
   else if (*iflag == 2) {
     f->gradf(ref_x, ref_fJ);
     ref_fJ.inplace_transpose();
+
+    // check derivative?
+    if( active->check_derivatives_ > 0 ) {
+      active->check_derivatives_--;
+
+      // use finite difference to compute Jacobian 
+      vnl_vector<double> feval( *n );
+      vnl_matrix<double> finite_jac( *p, *n, 0.0 );
+      vnl_vector<double> wa1( *n );
+      int info=1;
+      double diff;
+      f->f( ref_x, feval );
+      fdjac2_(lmdif_lsqfun, n, p, x, 
+              feval.data_block(), 
+              finite_jac.data_block(),
+              n, 
+              &info,
+              &(active->epsfcn),
+              wa1.data_block());
+      // compute difference
+      diff = (ref_fJ-finite_jac).array_two_norm();
+      if(  diff > vcl_sqrt(active->epsfcn) ) {
+        vcl_cerr << "Current x value:\n" << ref_x << vcl_endl;
+        vcl_cerr << "Analytical Jacobian is different form finite difference by " << diff << vcl_endl;
+        vcl_cerr << "  Analytical Jacobian is: \n " << ref_fJ.transpose() << vcl_endl;
+        vcl_cerr << "  Finite-difference Jacobian is: \n " << finite_jac.transpose() << vcl_endl;
+        vcl_cerr << vcl_endl;
+      }
+    }
   }
 
   if (f->failure) {
