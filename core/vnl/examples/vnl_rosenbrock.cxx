@@ -6,9 +6,6 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl_iostream.h>
-#ifdef VCL_VC60
-#include <vcl_limits.h> // The order of some vcl_files can cause problems: IMS
-#endif
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/vnl_least_squares_cost_function.h>
