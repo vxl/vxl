@@ -299,8 +299,8 @@ void vimt_dog_pyramid_builder_2d<T>::b_read(vsl_b_istream& bfs)
 }
 
 template<class T>
-void vimt_dog_pyramid_builder_2d<T>::gauss_reduce(const vimt_image_2d_of<T>& src_im,
-                                                  vimt_image_2d_of<T>& dest_im) const
+void vimt_dog_pyramid_builder_2d<T>::gauss_reduce(const vimt_image_2d_of<T>& /*src_im*/,
+                                                  vimt_image_2d_of<T>& /*dest_im*/) const
 {
   vcl_cerr << "ERROR: vimt_dog_pyramid_builder_2d<T>::gauss_reduce() not yet implemented\n";
 }

@@ -11,7 +11,7 @@
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector.h>
 
-int main(int argc, char** argv)
+int main()
 {
   int nx=10;
   int ny=10;
@@ -29,18 +29,17 @@ int main(int argc, char** argv)
   builder.build(image_pyr,base_image);
 
   image_pyr.print_all(vcl_cout);
-  vcl_cout<<vcl_endl;
 
   vgl_point_2d<double> p0(3,3);
   vgl_vector_2d<double> u(0.5,0.25);
   vnl_vector<double> v;
-  vcl_cout<<"Sampling along (0.5,0.25) starting at (3,3) :\n";
+  vcl_cout<<"\nSampling along (0.5,0.25) starting at (3,3) :\n";
   vimt_sample_profile_bilin(v,static_cast<const vimt_image_2d_of<vxl_byte>&>( image_pyr(0)),p0,u,7);
   vcl_cout<<"Level 0: "<<v<<vcl_endl;
   vimt_sample_profile_bilin(v,static_cast<const vimt_image_2d_of<vxl_byte>&>(image_pyr(1)),p0,u,7);
-  vcl_cout<<"Level 1: "<<v<<vcl_endl;
+  vcl_cout<<"Level 1: "<<v<<vcl_endl
 
-  vcl_cout<<"Notice that the projection of the world coordinates "
+          <<"Notice that the projection of the world coordinates "
           <<"into image coordinates is all handled for us.\n";
   return 0;
 }

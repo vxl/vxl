@@ -73,13 +73,12 @@ bool mvl2_video_from_sequence::initialize( int width, int height,
 
   no_digits_=0;
   offset_=0;
-  int curr_no=0;
   name_length=file_name.length();
   for (int i=1;i<9;++i)
   {
     vcl_string last_i;
     last_i=file_name.substr(name_length-i,i);
-    curr_no=atoi(last_i.c_str());
+    int curr_no=atoi(last_i.c_str());
     if (curr_no>0)
     {
       no_digits_=i;
@@ -175,8 +174,9 @@ int mvl2_video_from_sequence::get_height()
   return height_;
 }
 
-void mvl2_video_from_sequence::set_capture_size(int width,int height)
+void mvl2_video_from_sequence::set_capture_size(int /*width*/,int /*height*/)
 {
+  vcl_cerr << "mvl2_video_from_sequence::set_capture_size() NYI\n";
 }
 
 int mvl2_video_from_sequence::length()

@@ -149,8 +149,9 @@ void mvl2_video_from_avi::reset_frame()
   current_frame_=0;
 }
 
-void mvl2_video_from_avi::set_frame_rate(double frame_rate)
+void mvl2_video_from_avi::set_frame_rate(double /*frame_rate*/)
 {
+  vcl_cerr << "mvl2_video_from_avi::set_frame_rate() NYI\n";
 }
 
 double mvl2_video_from_avi::get_frame_rate()
@@ -177,20 +178,20 @@ int mvl2_video_from_avi::get_height()
   return height_;
 }
 
-void mvl2_video_from_avi::set_capture_size(int width,int height)
+void mvl2_video_from_avi::set_capture_size(int /*width*/,int /*height*/)
 {
+  vcl_cerr << "mvl2_video_from_avi::set_capture_size() NYI\n";
 }
 
 void mvl2_video_from_avi::getVideoFormat(BITMAPINFO& bmp_info )
 {
-  BITMAPINFO* vfmt=0;
-  HRESULT hr;
   long lStreamSize;
   AVIStreamFormatSize(ppavi_, 0, &lStreamSize);
 
-  vfmt = (LPBITMAPINFO)LocalAlloc(LPTR, lStreamSize);
+  BITMAPINFO* vfmt = (LPBITMAPINFO)LocalAlloc(LPTR, lStreamSize);
 
-  hr = AVIStreamReadFormat(ppavi_, 0, vfmt, &lStreamSize); // Read format
+  /* HRESULT hr = */
+  AVIStreamReadFormat(ppavi_, 0, vfmt, &lStreamSize); // Read format
   bmp_info=*vfmt;
   LocalFree(vfmt);
   return;

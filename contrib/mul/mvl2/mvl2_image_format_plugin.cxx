@@ -93,7 +93,7 @@ bool mvl2_image_format_plugin::get_frame_number_and_filename(
 
 bool mvl2_image_format_plugin::load_the_image (
     vil_image_view_base_sptr& image,
-    const vcl_string & path, const vcl_string & filetype,
+    const vcl_string & path, const vcl_string & /*filetype*/,
     const vcl_string & colour)
 {
   int frame_number;

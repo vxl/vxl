@@ -153,8 +153,8 @@ void vil1_gen_generic_image::init(vcl_string const& s)
     bits_per_component_ = 8;
     type_ = vil1_gen_rgb;
 
-    vcl_cerr << "vil1_gen_generic_image: p0 = ["<<params_[0]<<"], "
-             << "p1 = ["<<params_[1]<<"], p2 = ["<<params_[2]<<"]\n";
+    vcl_cerr << "vil1_gen_generic_image: p0 = [" << params_[0] << "], p1 = ["
+             << params_[1] << "], p2 = [" << params_[2] << "]\n";
   }
   else
     assert(!"type must be one of grey, gray or rgb");
@@ -171,9 +171,9 @@ bool vil1_gen_generic_image::get_property(char const *tag, void *prop) const
   return false;
 }
 
-// TODO - x0,y0 are unused
-bool vil1_gen_generic_image::get_section(void* buf, int x0, int y0, int xs, int ys) const
+bool vil1_gen_generic_image::get_section(void* buf, int /*x0*/, int /*y0*/, int xs, int ys) const
 {
+  // A constant (generic) image pixel value is independent of (x0,y0)
   if (type_ == vil1_gen_gray) {
     vcl_memset(buf, params_[0], xs*ys);
     return true;

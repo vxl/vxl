@@ -9,7 +9,7 @@
 #include <vxl_config.h> // for vxl_byte
 #include <vcl_iostream.h>
 
-int main(int argc, char** argv)
+int main()
 {
   int nx=20;
   int ny=20;
