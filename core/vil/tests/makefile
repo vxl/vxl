@@ -24,6 +24,7 @@ TESTS += test_pixel_format.cxx
 TESTS += test_image_view_maths.cxx
 TESTS += test_memory_chunk.cxx
 TESTS += test_convert.cxx
+PARAMS_test_convert := file_read_data
 TESTS += test_binary_dilate.cxx
 TESTS += test_binary_erode.cxx
 TESTS += test_resample_bilin.cxx
