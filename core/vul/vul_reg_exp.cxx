@@ -123,7 +123,8 @@
 
 //: Copies the given regular expression.
 
-vul_reg_exp::vul_reg_exp (vul_reg_exp const& rxp) {
+vul_reg_exp::vul_reg_exp (vul_reg_exp const& rxp)
+{
   int ind;
   this->progsize = rxp.progsize;            // Copy regular expression size
   this->program = new char[this->progsize]; // Allocate storage
@@ -149,7 +150,8 @@ vul_reg_exp::vul_reg_exp (vul_reg_exp const& rxp) {
 
 //: Returns true if two regular expressions have the same compiled program for pattern matching.
 
-bool vul_reg_exp::operator== (vul_reg_exp const& rxp) const {
+bool vul_reg_exp::operator== (vul_reg_exp const& rxp) const
+{
   if (this != &rxp) {                           // Same address?
     int ind = this->progsize;                   // Get regular expression size
     if (ind != rxp.progsize)                    // If different size regexp
@@ -164,7 +166,8 @@ bool vul_reg_exp::operator== (vul_reg_exp const& rxp) const {
 
 //: Returns true if have the same compiled regular expressions and the same start and end pointers.
 
-bool vul_reg_exp::deep_equal (vul_reg_exp const& rxp) const {
+bool vul_reg_exp::deep_equal (vul_reg_exp const& rxp) const
+{
   int ind = this->progsize;                     // Get regular expression size
   if (ind != rxp.progsize)                      // If different size regexp
     return false;                               // Return failure
@@ -174,7 +177,6 @@ bool vul_reg_exp::deep_equal (vul_reg_exp const& rxp) const {
   return this->startp[0] == rxp.startp[0] &&    // Else if same start/end ptrs,
            this->endp[0] == rxp.endp[0];        // Return true
 }
-
 
 
 // The remaining code in this file is derived from the  regular expression code
@@ -316,7 +318,6 @@ const unsigned char MAGIC = 0234;
 #define WORST           0       // Worst case.
 
 
-
 //: Return an expression that will match precisely c
 // The returned string is owned by the function, and
 // will be overwritten in subsequent calls.
@@ -325,7 +326,7 @@ const char * vul_reg_exp::protect(char c)
   //: This should be in thread local storage.
   static char pattern[3];
 
-  if (strchr(META, c) != 0)
+  if (vcl_strchr(META, c) != 0)
   {
     pattern[0] = '\\';
     pattern[1] = c;
@@ -389,7 +390,8 @@ static void        regoptail (char*, const char*);
 
 //: Compile a regular expression into internal code for later pattern matching.
 
-void vul_reg_exp::compile (char const* exp) {
+void vul_reg_exp::compile (char const* exp)
+{
     register const char* scan;
     register const char* longest;
     register unsigned long len;
@@ -487,7 +489,8 @@ void vul_reg_exp::compile (char const* exp) {
 // is a trifle forced, but the need to tie the tails of the branches to what
 // follows makes it hard to avoid.
 //
-static char* reg (int paren, int *flagp) {
+static char* reg (int paren, int *flagp)
+{
     register char* ret;
     register char* br;
     register char* ender;
@@ -567,7 +570,8 @@ static char* reg (int paren, int *flagp) {
 //
 // Implements the concatenation operator.
 //
-static char* regbranch (int *flagp) {
+static char* regbranch (int *flagp)
+{
     register char* ret;
     register char* chain;
     register char* latest;
@@ -604,7 +608,8 @@ static char* regbranch (int *flagp) {
 // It might seem that this node could be dispensed with entirely, but the
 // endmarker role is not redundant.
 //
-static char* regpiece (int *flagp) {
+static char* regpiece (int *flagp)
+{
     register char* ret;
     register char  op;
     register char* next;
@@ -672,7 +677,8 @@ static char* regpiece (int *flagp) {
 // faster to run.  Backslashed characters are exceptions, each becoming a
 // separate node; the code is simpler that way and it's not worth fixing.
 //
-static char* regatom (int *flagp) {
+static char* regatom (int *flagp)
+{
     register char* ret;
              int   flags;
 
@@ -794,7 +800,8 @@ static char* regatom (int *flagp) {
 // emit a node
 // Location.
 //
-static char* regnode (char op) {
+static char* regnode (char op)
+{
     register char* ret;
     register char* ptr;
 
@@ -816,7 +823,8 @@ static char* regnode (char op) {
 
 // emit (if appropriate) a byte of code
 //
-static void regc (unsigned char b) {
+static void regc (unsigned char b)
+{
     if (regcode != &regdummy)
         *regcode++ = b;
     else
@@ -828,7 +836,8 @@ static void regc (unsigned char b) {
 //
 // Means relocating the operand.
 //
-static void reginsert (char op, char* opnd) {
+static void reginsert (char op, char* opnd)
+{
     register char* src;
     register char* dst;
     register char* place;
@@ -853,7 +862,8 @@ static void reginsert (char op, char* opnd) {
 
 // set the next-pointer at the end of a node chain
 //
-static void regtail (char* p, const char* val) {
+static void regtail (char* p, const char* val)
+{
     register char* scan;
     register char* temp;
     register vcl_ptrdiff_t  offset;
@@ -881,7 +891,8 @@ static void regtail (char* p, const char* val) {
 
 // regtail on operand of first argument; nop if operandless
 //
-static void regoptail (char* p, const char* val) {
+static void regoptail (char* p, const char* val)
+{
     // "Operandless" and "op != BRANCH" are synonymous in practice.
     if (p == NULL || p == &regdummy || OP(p) != BRANCH)
         return;
@@ -918,15 +929,17 @@ void         regdump ();
 static char* regprop ();
 #endif
 
-bool vul_reg_exp::find (vcl_string const& s) {
-return find(s.c_str());
+bool vul_reg_exp::find (vcl_string const& s)
+{
+  return find(s.c_str());
 }
 
 
 //: Matches the regular expression to the given string.
 // Returns true if found, and sets start and end indexes accordingly.
 
-bool vul_reg_exp::find (char const* string) {
+bool vul_reg_exp::find (char const* string)
+{
     register const char* s;
 
     this->searchstring = string;
@@ -982,7 +995,8 @@ bool vul_reg_exp::find (char const* string) {
 // 0 failure, 1 success
 //
 static int regtry (const char* string, const char* *start,
-                   const char* *end, const char* prog) {
+                   const char* *end, const char* prog)
+{
     register       int    i;
     register const char* *sp1;
     register const char* *ep;
@@ -1017,7 +1031,8 @@ static int regtry (const char* string, const char* *start,
 // by recursion.
 // 0 failure, 1 success
 //
-static int regmatch (const char* prog) {
+static int regmatch (const char* prog)
+{
     register const char* scan; // Current node.
              const char* next; // Next node.
 
@@ -1195,7 +1210,8 @@ static int regmatch (const char* prog) {
 
 // repeatedly match something simple, report how many
 //
-static int regrepeat (const char* p) {
+static int regrepeat (const char* p)
+{
     register       int   count = 0;
     register const char* scan;
     register const char* opnd;
@@ -1237,7 +1253,8 @@ static int regrepeat (const char* p) {
 
 // dig the "next" pointer out of a node
 //
-static const char* regnext (register const char* p) {
+static const char* regnext (register const char* p)
+{
     register int offset;
 
     if (p == &regdummy)
@@ -1254,7 +1271,8 @@ static const char* regnext (register const char* p) {
 }
 
 
-static char* regnext (register char* p) {
+static char* regnext (register char* p)
+{
     register int offset;
 
     if (p == &regdummy)
