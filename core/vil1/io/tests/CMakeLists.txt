@@ -23,4 +23,3 @@ ADD_TEST( vil_io_test_golden                  vil_io_test_driver golden_test_vil
 # Immediate dependencies
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/testlib/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vil/io/CMakeListsLink.txt )
-INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )

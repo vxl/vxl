@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 #include <vcl_cstring.h>
-#include <vul/vul_root_dir.h>
+#include <testlib/testlib_root_dir.h>
 
 #include <vsl/vsl_test.h>
 #include <vsl/vsl_binary_io.h>
@@ -172,7 +172,7 @@ void test_binary_io()
   vcl_string string_in2;
   char c_string_in2[80];
 
-  vcl_string gold_path=vul_root_dir()+"/vxl/vsl/tests/golden_test_binary_io.bvl";
+  vcl_string gold_path=testlib_root_dir()+"/vxl/vsl/tests/golden_test_binary_io.bvl";
   vsl_b_ifstream bfs_in2(gold_path.c_str());
 
   // If this test fails, it could be due to a missing golden file, or one

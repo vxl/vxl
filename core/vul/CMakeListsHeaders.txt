@@ -11,7 +11,6 @@ SOURCE_FILES( vul_sources
   vul_psfile.h
   vul_redirector.h
   vul_reg_exp.h
-  vul_root_dir.h
   vul_sequence_filename_map.h
   vul_sprintf.h
   vul_string.h

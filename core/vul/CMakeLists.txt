@@ -2,14 +2,6 @@
 
 ADD_LIBRARY(vul vul_sources)
 
-FIND_FILE(VUL_VCL_WHERE_ROOT_DIR_H
-          vcl_where_root_dir.h
-          ${allvxl_BINARY_DIR}/vcl )
-
-IF (VUL_VCL_WHERE_ROOT_DIR_H)
-  ADD_DEFINITIONS(-DVCL_WHERE_ROOT_DIR_H_EXISTS)
-ENDIF(VUL_VCL_WHERE_ROOT_DIR_H)
-
 SOURCE_FILES( vul_sources
   vul_arg.cxx
   vul_reg_exp.cxx
@@ -29,7 +21,6 @@ SOURCE_FILES( vul_sources
   vul_user_info.cxx
   vul_redirector.cxx
   vul_expand_path.cxx
-  vul_root_dir.cxx
   vul_url.cxx
   vul_temp_filename.cxx
 )

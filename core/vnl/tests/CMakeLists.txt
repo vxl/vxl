@@ -83,6 +83,7 @@ ADD_TEST( vnl_test_convolve vnl_test_convolve )
 ADD_TEST( vnl_test_real_polynomial vnl_test_real_polynomial )
 
 # Immediate dependencies
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/testlib/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/algo/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vpl/CMakeListsLink.txt )

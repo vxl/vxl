@@ -4,7 +4,7 @@
 #include <vcl_string.h>
 #include <vcl_fstream.h>
 #include <vsl/vsl_binary_io.h>
-#include <vul/vul_root_dir.h>
+#include <testlib/testlib_root_dir.h>
 
 #include <vgl/io/vgl_io_box_2d.h>
 #include <vgl/io/vgl_io_box_3d.h>
@@ -298,7 +298,7 @@ void golden_test_vgl_io(bool save_file)
   }
 
   // Read in file to each class in turn
-  vcl_string gold_path=vul_root_dir()+"/vxl/vgl/io/tests/golden_vgl_io_test.bvl";
+  vcl_string gold_path=testlib_root_dir()+"/vxl/vgl/io/tests/golden_vgl_io_test.bvl";
   vsl_b_ifstream bfs_in(gold_path.c_str());
   TEST ("Opened golden_vgl_io_test.bvl for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, double_point_2d_in);

@@ -13,7 +13,7 @@
 #include <vil/io/vil_io_memory_image_of.h>
 #include <vil/io/vil_io_rgb.h>
 #include <vil/io/vil_io_rgba.h>
-#include <vul/vul_root_dir.h>
+#include <testlib/testlib_root_dir.h>
 
 #include <testlib/testlib_test.h>
 
@@ -122,7 +122,7 @@ void golden_test_vil_io(bool save_file)
     vsl_add_to_binary_loader(vil_io_memory_image_impl());
 
     // Read in file to each class in turn
-    vcl_string gold_path=vul_root_dir()+"/vxl/vil/io/tests/golden_test_vil_io.bvl";
+    vcl_string gold_path=testlib_root_dir()+"/vxl/vil/io/tests/golden_test_vil_io.bvl";
     vsl_b_ifstream bfs_in(gold_path.c_str());
     vsl_b_read(bfs_in, p_in_memory_image_of);
     vsl_b_read(bfs_in, p_in_memory_image_impl);

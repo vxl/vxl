@@ -20,7 +20,7 @@
 #include <vul/vul_trace.h>
 #include <vul/vul_user_info.h>
 #include <vul/vul_whereami.h>
-#include <vul/vul_root_dir.h>
+#include <testlib/testlib_root_dir.h>
 
 
 int main() { return 0; }
