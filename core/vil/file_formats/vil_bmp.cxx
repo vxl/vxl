@@ -396,7 +396,6 @@ bool vil_bmp_image::put_view(const vil_image_view_base& view,
   }
   else
   {
-    rowlen=padlen;
     assert(nplanes()==3);
     vxl_byte* buf = new vxl_byte[rowlen+padlen];
     for (unsigned i=rowlen; i<rowlen+padlen; ++i) buf[i]=0;
