@@ -14,11 +14,11 @@ vtol_vertex_2d_sptr convert_vertex_2d(osl_vertex & in)
   return new vtol_vertex_2d(in.GetX(),in.GetY());
 }
 
-vtol_edge_2d_sptr convert_edge_2d(osl_edge & in,vsol_curve_2d::vsol_curve_2d_type type)
+vtol_edge_2d_sptr convert_edge_2d(osl_edge & in,vcl_string type)
 {
   vtol_edge_2d_sptr out;
 
-  if (type==vsol_curve_2d::CURVE_NO_TYPE)
+  if (type=="CURVE_NO_TYPE")
   {
     float *x=in.GetX();
     float *y=in.GetY();
@@ -28,7 +28,7 @@ vtol_edge_2d_sptr convert_edge_2d(osl_edge & in,vsol_curve_2d::vsol_curve_2d_typ
       new_vertices.push_back(new vtol_vertex_2d(x[i],y[i]));
     out=new vtol_edge_2d(new vtol_zero_chain(new_vertices));
   }
-  else if (type==vsol_curve_2d::LINE)
+  else if (type=="LINE")
   {
     osl_vertex* v1=in.GetV1();
     osl_vertex* v2=in.GetV2();
@@ -40,7 +40,7 @@ vtol_edge_2d_sptr convert_edge_2d(osl_edge & in,vsol_curve_2d::vsol_curve_2d_typ
   return out;
 }
 
-vcl_vector<vtol_edge_2d_sptr>* convert_vector_edge_2d(vcl_list<osl_edge*> & in,vsol_curve_2d::vsol_curve_2d_type type)
+vcl_vector<vtol_edge_2d_sptr>* convert_vector_edge_2d(vcl_list<osl_edge*> & in,vcl_string type)
 {
   vcl_list<osl_edge*>::iterator iter;
   vcl_vector<vtol_edge_2d_sptr>* out=new vcl_vector<vtol_edge_2d_sptr>();
@@ -53,7 +53,7 @@ vcl_vector<vtol_edge_2d_sptr>* convert_vector_edge_2d(vcl_list<osl_edge*> & in,v
 }
 
 vcl_vector<vcl_vector<vtol_edge_2d_sptr>*>* convert_array_edge_2d(vcl_list<vcl_list<osl_edge *>*> & in,
-                                                                  vsol_curve_2d::vsol_curve_2d_type type)
+                                                                  vcl_string type)
 {
   vcl_list<vcl_list<osl_edge *>*>::iterator iter;
   vcl_vector<vcl_vector<vtol_edge_2d_sptr>*>* out=new vcl_vector<vcl_vector<vtol_edge_2d_sptr>*>;
