@@ -15,7 +15,7 @@ vnl_file_vector<T>::vnl_file_vector(char const* filename)
   : vnl_vector<T>() // makes an empty vector.
 {
 #ifdef DEBUG
-  //  vcl_cerr << "filename=" << filename << "\nlength=" << this->length() << '\n';
+  vcl_cerr << "filename=" << filename << "\nsize=" << this->size() << '\n';
 #endif
   if (filename && vcl_strcmp(filename, "-")) {
     vcl_ifstream o(filename);
@@ -24,7 +24,7 @@ vnl_file_vector<T>::vnl_file_vector(char const* filename)
   else
     ok_ = this->read_ascii(vcl_cin);
 #ifdef DEBUG
-  //  vcl_cerr << "length=" << this->length() << '\n';
+    vcl_cerr << "size=" << this->size() << '\n';
 #endif
   if (!ok_)
     vcl_cerr << "vnl_file_vector: ERROR loading from " << filename << '\n';
