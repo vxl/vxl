@@ -15,6 +15,7 @@ IF(NOT HAS_GTK)
         /usr/include/X11
         /usr/X11R6/include/gtk12
         /usr/include/gtk-1.2
+	/usr/local/include/gtk-1.2
       )
 
       # Some Linux distributions (e.g. Red Hat) have glibconfig.h
@@ -28,6 +29,7 @@ IF(NOT HAS_GTK)
         /usr/openwin/share/include
         /usr/local/include/glib12
         /usr/lib/glib/include
+	/usr/local/lib/glib/include
       )
 
       FIND_PATH( GTK_glib_INCLUDE_PATH glib.h
@@ -38,6 +40,7 @@ IF(NOT HAS_GTK)
         /usr/local/include/glib12
         /usr/lib/glib/include
         /usr/include/glib-1.2
+	/usr/local/include/glib-1.2
       )
 
       FIND_PATH( GTK_gtkgl_INCLUDE_PATH gtkgl/gtkglarea.h
