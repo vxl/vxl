@@ -9,7 +9,7 @@
 # already been used, so do not edit here...
 
 # variables to REPLACE
-# 
+#
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
@@ -20,16 +20,16 @@
 CFG=vgl_io - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "vgl_io.mak".
-!MESSAGE 
+!MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "vgl_io.mak" CFG="vgl_io - Win32 Debug"
-!MESSAGE 
+!MESSAGE
 !MESSAGE Possible choices for configuration are:
-!MESSAGE 
+!MESSAGE
 !MESSAGE "vgl_io - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "vgl_io - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
@@ -89,7 +89,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-!ENDIF 
+!ENDIF
 
 # Begin Target
 
@@ -232,6 +232,9 @@ SOURCE=.\Templates/vsl_vector_io+vgl_point_3d+double--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vsl_vector_io+vgl_vector_2d+double--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vcl_vector+vgl_point_2d+int---.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vgl_io_polygon.cxx

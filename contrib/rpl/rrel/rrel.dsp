@@ -9,7 +9,7 @@
 # already been used, so do not edit here...
 
 # variables to REPLACE
-# 
+#
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/rpl" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
@@ -20,16 +20,16 @@
 CFG=rrel - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "rrel.mak".
-!MESSAGE 
+!MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "rrel.mak" CFG="rrel - Win32 Debug"
-!MESSAGE 
+!MESSAGE
 !MESSAGE Possible choices for configuration are:
-!MESSAGE 
+!MESSAGE
 !MESSAGE "rrel - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "rrel - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
@@ -89,7 +89,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-!ENDIF 
+!ENDIF
 
 # Begin Target
 
@@ -99,225 +99,143 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\rrel_cauchy_obj.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_estimation_problem.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_homography2d_est.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_irls.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_linear_regression.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_lms_obj.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_lts_obj.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_m_est_obj.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_misc.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_mlesac_obj.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_muse_table.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_muset_obj.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_orthogonal_regression.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_ran_sam_search.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_ransac_obj.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_trunc_quad_obj.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_tukey_obj.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/rrel_util_double~.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/rrel_util_list+double-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/rrel_util_vector+double-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_kernel_density_obj.cxx
-
+# End Source File
+# Begin Source File
+SOURCE=.\rrel_shift2d_est.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\rrel_cauchy_obj.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_estimation_problem.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_homography2d_est.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_irls.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_linear_regression.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_lms_obj.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_lts_obj.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_m_est_obj.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_misc.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_mlesac_obj.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_muse_table.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_muset_obj.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_orthogonal_regression.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_ran_sam_search.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_ransac_obj.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_trunc_quad_obj.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_tukey_obj.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_objective.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_util.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_util.txx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_wls_obj.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\rrel_kernel_density_obj.h
-
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+# Begin Source File
+SOURCE=.\rrel_shift2d_est.h
+# End Source File
 # End Group
 # End Target
 # End Project

@@ -2,34 +2,33 @@
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-
 # variables to REPLACE
-# 
+#
 #  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\rpl" /I "$(VXLROOT)\contrib\mul" == include path
 #  == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 # rrel_test_driver  == name of output library
-#  /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\  rrel.lib testlib.lib vbl.lib mbl.lib vnl_io.lib vnl_algo.lib vnl.lib netlib.lib vgl_io.lib vsl.lib vgl.lib vcl.lib /STACK:10000000  == libraries linked in 
+#  /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\  rrel.lib testlib.lib vbl.lib mbl.lib vnl_io.lib vnl_algo.lib vnl.lib netlib.lib vgl_io.lib vsl.lib vgl.lib vcl.lib /STACK:10000000  == libraries linked in
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
 CFG=rrel_test_driver - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "rrel_test_driver.mak".
-!MESSAGE 
+!MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "rrel_test_driver.mak" CFG="rrel_test_driver - Win32 Debug"
-!MESSAGE 
+!MESSAGE
 !MESSAGE Possible choices for configuration are:
-!MESSAGE 
+!MESSAGE
 !MESSAGE "rrel_test_driver - Win32 MinSizeRel" (based on "Win32 (x86) Application")
 !MESSAGE "rrel_test_driver - Win32 Release" (based on "Win32 (x86) Application")
 !MESSAGE "rrel_test_driver - Win32 RelWithDebInfo" (based on "Win32 (x86) Application")
 !MESSAGE "rrel_test_driver - Win32 Debug" (based on "Win32 (x86) Application")
-!MESSAGE 
+!MESSAGE
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
@@ -65,7 +64,7 @@ LINK32=link.exe
 # ADD BASE LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 
-# ADD LINK32 /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\ 
+# ADD LINK32 /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\
 # ADD LINK32 rrel.lib
 # ADD LINK32 testlib.lib
 # ADD LINK32 vbl.lib
@@ -78,10 +77,7 @@ LINK32=link.exe
 # ADD LINK32 vsl.lib
 # ADD LINK32 vgl.lib
 # ADD LINK32 vcl.lib
-# ADD LINK32 /STACK:10000000 
-
-
-
+# ADD LINK32 /STACK:10000000
 
 !ELSEIF  "$(CFG)" == "rrel_test_driver - Win32 Debug"
 
@@ -111,7 +107,7 @@ LINK32=link.exe
 # ADD BASE LINK32   kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
 
-# ADD LINK32 /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\ 
+# ADD LINK32 /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\
 # ADD LINK32 rrel.lib
 # ADD LINK32 testlib.lib
 # ADD LINK32 vbl.lib
@@ -124,12 +120,10 @@ LINK32=link.exe
 # ADD LINK32 vsl.lib
 # ADD LINK32 vgl.lib
 # ADD LINK32 vcl.lib
-# ADD LINK32 /STACK:10000000 
-
-
-
+# ADD LINK32 /STACK:10000000
 
 !ELSEIF  "$(CFG)" == "rrel_test_driver - Win32 MinSizeRel"
+
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "MinSizeRel"
@@ -154,7 +148,7 @@ LINK32=link.exe
 # ADD BASE LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 # ADD LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 
-# ADD LINK32 /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\ 
+# ADD LINK32 /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\
 # ADD LINK32 rrel.lib
 # ADD LINK32 testlib.lib
 # ADD LINK32 vbl.lib
@@ -167,10 +161,7 @@ LINK32=link.exe
 # ADD LINK32 vsl.lib
 # ADD LINK32 vgl.lib
 # ADD LINK32 vcl.lib
-# ADD LINK32 /STACK:10000000 
-
-
-
+# ADD LINK32 /STACK:10000000
 
 !ELSEIF  "$(CFG)" == "rrel_test_driver - Win32 RelWithDebInfo"
 
@@ -198,7 +189,7 @@ LINK32=link.exe
 # ADD BASE LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /IGNORE:4089
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /IGNORE:4089
 
-# ADD LINK32 /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\ 
+# ADD LINK32 /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\
 # ADD LINK32 rrel.lib
 # ADD LINK32 testlib.lib
 # ADD LINK32 vbl.lib
@@ -211,12 +202,9 @@ LINK32=link.exe
 # ADD LINK32 vsl.lib
 # ADD LINK32 vgl.lib
 # ADD LINK32 vcl.lib
-# ADD LINK32 /STACK:10000000 
+# ADD LINK32 /STACK:10000000
 
-
-
-
-!ENDIF 
+!ENDIF
 
 # Begin Target
 
@@ -269,6 +257,9 @@ SOURCE=.\test_robust_util.cxx
 # Begin Source File
 SOURCE=.\test_similarity_from_matches.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_shift2d_est.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -280,4 +271,3 @@ SOURCE=.\similarity_from_matches.h
 # End Group
 # End Target
 # End Project
-
