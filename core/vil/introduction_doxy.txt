@@ -221,8 +221,10 @@ vil_image_view<vxl_byte> filtered_image = vil_transpose(tmp_image2);
 * - vil_median        - Compute median over area described by vil_structuring_element
 * - vil_fft_2d_fwd,bwd - Perform in-place 2D FFT on an image of a complex type
 * - vil_suppress_non_max_3x3 - Zero all pixels which are not local maxima
-* - vil_corners        - Forstner/Harris cornerness operator
+* - vil_corners        - Harris cornerness operator
 * - vil_find_peaks     - Locate local peaks in an image
+* - vil_orientations   - Compute angle and edge magnitude at each pixel
+* - vil_distance_transform - Apply distance transform to images
 *
 * See also the vipl library for a more generic image processing interface and
 * more image processing algorithms.
@@ -244,6 +246,7 @@ vil_image_view<vxl_byte> filtered_image = vil_transpose(tmp_image2);
 * - vil_math_image_product(imA,imB,imP)            : imP(x,y,p) = imA(x,y,p)*imB(x,y,p)
 * - vil_math_image_ratio(imA,imB,imP)              : imP(x,y,p) = imA(x,y,p)/imB(x,y,p)
 * - vil_math_add_image_fraction(imA,fa,imB,fb)     : imA = fa*imA + fb*imB  (Useful for moving averages!)
+* - vil_math_sqrt(im)                              : im(x,y,p) = sqrt(im(x,y,p)) or zero if -ive
 *
 * Morphological functions  (using vil_structuring_element)
 * - vil_binary_erode
@@ -288,6 +291,9 @@ vil_image_view<vxl_byte> filtered_image = vil_transpose(tmp_image2);
 * - vil_trace_4con_boundary : Traces around 4 connected regions in bool image
 * - vil_trace_8con_boundary : Traces around 8 connected regions in bool image
 * - vil_blob_finder : Class to find all connected regions in an image
+*
+* \subsection utils General utilities
+* - vil_tile_images : Generate single image by tiling together a set of images
 *
 * \subsection conventions Parameter Conventions
 * For your ease of use, all vil functions and methods adhere to the following
