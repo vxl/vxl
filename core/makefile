@@ -23,7 +23,7 @@ SUBDIRS += vnl
 SUBDIRS += vgl
 
 # image
-SUBDIRS += vil vil2
+SUBDIRS += vil vil1
 
 # video
 SUBDIRS += vidl

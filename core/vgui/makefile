@@ -4,7 +4,7 @@ TRY_GLUT := 1 # vgui_text needs glut. fsm.
 TRY_X11 := 1
 TRY_HERMES := 1
 LIBRARY := vgui
-IMMEDIATE_LIBS += -lvil -lvbl -lvnl-algo -lvnl -lvul
+IMMEDIATE_LIBS += -lvil1 -lvil -lvbl -lvnl-algo -lvnl -lvul
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
@@ -141,11 +141,11 @@ SOURCES += vgui_statusbuf.cxx
 SOURCES += vgui_statusbar.cxx
 
 # vil2 support
-SOURCES += vgui_vil2_section_buffer.cxx
-MANPAGE_SOURCES += vgui_vil2_image_renderer.txx
-MANPAGE_SOURCES += vgui_vil2_image_tableau.txx
-MANPAGE_SOURCES += vgui_vil2_image_tableau_sptr.h
-MANPAGE_SOURCES += vgui_vil2_section_buffer_apply.txx
+SOURCES += vgui_vil_section_buffer.cxx
+MANPAGE_SOURCES += vgui_vil_image_renderer.txx
+MANPAGE_SOURCES += vgui_vil_image_tableau.txx
+MANPAGE_SOURCES += vgui_vil_image_tableau_sptr.h
+MANPAGE_SOURCES += vgui_vil_section_buffer_apply.txx
 
 # internals
 SOURCES += internals/vgui_invert_homg4x4.cxx
