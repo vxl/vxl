@@ -1,5 +1,5 @@
 #include <vcl_utility.h>
 #include <vsl/vsl_vector_io.txx>
 #include <vsl/vsl_pair_io.txx>
-typedef vcl_vector<vcl_pair<unsigned int,unsigned int> > vector_pair_uu;
-VSL_VECTOR_IO_INSTANTIATE(vector_pair_uu);
+typedef vcl_pair<unsigned int,unsigned int> pair_uu;
+VSL_VECTOR_IO_INSTANTIATE(pair_uu);
