@@ -9,6 +9,7 @@
 // $P \vec X_i \sim \vec u_i$.
 
 #include <mvl/PMatrixCompute.h>
+class PMatrix;
 
 class PMatrixComputeLinear : public PMatrixCompute {
 public:
