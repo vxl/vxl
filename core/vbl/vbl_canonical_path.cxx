@@ -81,7 +81,7 @@ vcl_string vbl_canonical_path_internal(vcl_string path)
 	}
 	
 	// collapse foo/.. into /
-	if (i+2<bits.size() && bits[i]!="/" && bits[i+1]=="/" && bits[i+2]=="..") {
+	if (i+2<bits.size() && !(bits[i]=="/") && bits[i+1]=="/" && bits[i+2]=="..") {
 	  bits.erase(bits.begin() + i+2); // ..
 	  bits.erase(bits.begin() + i);   // foo
 	  again = true;
