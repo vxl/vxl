@@ -22,6 +22,11 @@
 // copy the buffer into a memory image
 vil1_memory_image_of<vil1_rgb<GLubyte> > vgui_utils::get_image()
 {
+  // We should grab the pixels off the front buffer, since that is what is visible.
+  GLint cur_read_buffer;
+  glGetIntegerv( GL_READ_BUFFER, &cur_read_buffer );
+  glReadBuffer( GL_FRONT );
+
   // get viewport size
   GLint vp[4]; // x,y,w,h
   glGetIntegerv(GL_VIEWPORT, vp);
@@ -53,6 +58,8 @@ vil1_memory_image_of<vil1_rgb<GLubyte> > vgui_utils::get_image()
                GL_RGBA,          // format
                GL_UNSIGNED_BYTE, // type
                pixels);
+
+  glReadBuffer( cur_read_buffer );
 
   // glReadPixels() reads the pixels from the bottom of the viewport up.
   // Copy them into an vil1_memory_image_of in the other order :
