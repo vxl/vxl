@@ -241,6 +241,8 @@ void brct_windows_frame::go()
   //add 3D resoult
   vcl_vector<vgl_point_3d<double> > c3d = kalman_->get_local_pts();
   add_curve3d(c3d);
+
+  show_epipole();
   this->post_redraw();
 }
 
@@ -344,7 +346,6 @@ void brct_windows_frame::show_epipole()
   vgl_point_2d<double> e = kalman_->get_cur_epipole();
   vcl_cout<<"\n epipole ("<<e.x() <<'\t'<<e.y()<<")\n";
   instance_->easy_2d_->add_point(e.x(), e.y());
-  instance_->post_redraw();
 }
 
 void brct_windows_frame::init_epipole()
@@ -372,7 +373,6 @@ void brct_windows_frame::creat_line()
   vgl_homg_point_2d<double> p1(x1, y1, 1), p2(x2, y2, 1);
   vgl_homg_line_2d<double> l(p1, p2);
   lines_.push_back(l);
-  vgui_soview2D_lineseg* ls = easy_2d_->add_line(x1, y1, x2, y2);
-  debug_curves_2d_.push_back(ls);
+  easy_2d_->add_infinite_line( y1-y2, x2-x1, x1*y2 - x2*y1 );
   instance_->post_redraw();
 }
