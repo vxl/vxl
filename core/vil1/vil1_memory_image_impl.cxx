@@ -5,8 +5,12 @@
 #include "vil_memory_image_impl.h"
 
 #include <vcl/vcl_cassert.h>
+#include <vcl/vcl_cstring.h>   // strcmp()
 #include <vcl/vcl_iostream.h>
-#include <vcl/vcl_memory.h>
+// <memory> provides names like std::allocator and std::auto_ptr.
+// it does *not* declare the memcpy() or strcmp() functions. they
+// live in <cstring>
+//#include <vcl/vcl_memory.h>
 
 #include <vil/vil_image.h>
 
@@ -156,4 +160,9 @@ vil_image vil_memory_image_impl::get_plane(int /*plane*/) const
 {
   assert(false);
   return 0;
+}
+
+bool vil_memory_image_impl::get_property(char const *tag, void *property_value) const
+{
+  return 0==strcmp(tag, "memory");
 }

@@ -36,6 +36,8 @@ public:
   virtual bool get_section(void* buf, int x0, int y0, int width, int height) const;
   virtual bool put_section(void const* buf, int x0, int y0, int width, int height);
 
+  virtual bool get_property(char const *tag, void *property_value = 0) const;
+
   void resize(int planes, int width, int height);
   
 protected:
