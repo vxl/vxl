@@ -246,7 +246,7 @@ bool SGIMovieFile::GetFrame(int frame_index, void* buffer)
 	}
       }
     }
-    delete [] row_buf;
+
     if (MovieFileInterface::verbose) vbl_printf(cerr, "] ");
     fclose(fp);
     delete[] row_buf;
