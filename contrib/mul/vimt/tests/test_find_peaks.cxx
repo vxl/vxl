@@ -28,6 +28,13 @@ void test_find_peaks_byte()
   TEST("Number of peaks",w_peaks.size(),2);
   TEST_NEAR("Peak 0",(w_peaks[0]-vgl_point_2d<double>(5,2)).length(),0,1e-6);
   TEST_NEAR("Peak 1",(w_peaks[1]-vgl_point_2d<double>(1,4)).length(),0,1e-6);
+
+  vgl_point_2d<int> im_p1 = vimt_find_max(image0.image());
+  TEST_NEAR("Global peak",(im_p1-vgl_point_2d<int>(7,5)).length(),0,1e-6);
+
+  vgl_point_2d<double> w_p1 = vimt_find_max(image0);
+  TEST_NEAR("Global peak",(w_p1-vgl_point_2d<double>(5,2)).length(),0,1e-6);
+
 }
 
 MAIN( test_find_peaks )

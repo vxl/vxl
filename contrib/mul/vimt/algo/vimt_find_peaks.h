@@ -60,5 +60,39 @@ inline void vimt_find_world_peaks_3x3(vcl_vector<vgl_point_2d<double> >& peaks,
   }
 }
 
+//: Return image co-ordinates of maximum value in image
+//  (Or first one found if multiple equivalent maxima)
+template <class T>
+inline
+vgl_point_2d<int> vimt_find_max(const vil2_image_view<T>& im, unsigned plane=0)
+{
+  vgl_point_2d<int> p(0,0);
+  T max_val = im(0,0,plane);
+  unsigned ni=im.ni(),nj=im.nj();
+  int istep = im.istep(),jstep=im.jstep();
+  const T* row = im.top_left_ptr()+plane*im.planestep();
+  for (int j=0;j<nj;++j,row+=jstep)
+  {
+    const T* pixel = row;
+    for (int i=0;i<ni;++i,pixel+=istep)
+      if (*pixel>max_val)
+	  {
+	    max_val = *pixel;
+		p = vgl_point_2d<int>(i,j);
+      }
+  }
+  return p;
+}
+
+//: Return world co-ordinates of maximum value in image
+//  (Or first one found if multiple equivalent maxima)
+template <class T>
+inline
+vgl_point_2d<double> vimt_find_max(const vimt_image_2d_of<T>& image,unsigned plane=0)
+{
+  vgl_point_2d<int> im_p = vimt_find_max(image.image(),plane);
+  return image.world2im().inverse()(im_p.x(),im_p.y());
+}
+
 
 #endif // vimt_find_peaks_h_
