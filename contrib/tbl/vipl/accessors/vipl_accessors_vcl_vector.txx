@@ -23,7 +23,8 @@ DataType getpixel(vcl_vector<DataType> const& i, int x, int y, DataType /* dummy
 }
 template <class DataType>
 void setpixel(vcl_vector<DataType>& i, int x, int y, DataType e) {
-  if (x<0 || (unsigned)x>=i.size() || y!=0) return;
+  assert(x>=0 && y==0);
+  if ((unsigned)x>=i.size()) i.resize(x+1);
   i[x] = e;
 }
 
