@@ -6,7 +6,6 @@
 // Modifications
 // 23 April 2001 IMS - Ported to VXL
 
-
 #include <mbl/mbl_matxvec.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>
@@ -16,29 +15,21 @@
 #include "vpdfl_pc_gaussian.h"
 
 
-
-
-
-
-
-
-
-
 //=======================================================================
 // Method: is_a
 //=======================================================================
-vcl_string  vpdfl_pc_gaussian_sampler::is_a() const 
-{ 
-	return vcl_string("vpdfl_pc_gaussian_sampler"); 
+vcl_string  vpdfl_pc_gaussian_sampler::is_a() const
+{
+  return vcl_string("vpdfl_pc_gaussian_sampler");
 }
 
 //=======================================================================
 // Method: version_no
 //=======================================================================
 
-short vpdfl_pc_gaussian_sampler::version_no() const 
-{ 
-	return 1; 
+short vpdfl_pc_gaussian_sampler::version_no() const
+{
+  return 1;
 }
 
 //=======================================================================
@@ -47,8 +38,6 @@ short vpdfl_pc_gaussian_sampler::version_no() const
 
 vpdfl_sampler_base* vpdfl_pc_gaussian_sampler::clone() const
 {
-	return new vpdfl_pc_gaussian_sampler(*this);
+  return new vpdfl_pc_gaussian_sampler(*this);
 }
-
-
 

@@ -33,11 +33,9 @@ public:
     //: Destructor
   virtual ~vpdfl_axis_gaussian_sampler();
 
-		//: Set model for which this is an instance
+    //: Set model for which this is an instance
     // Error check that it is an axis gaussian.
-	virtual void set_model(const vpdfl_pdf_base&);
-
-
+  virtual void set_model(const vpdfl_pdf_base&);
 
     //: Draw random sample from Gaussian distribution
   virtual void sample(vnl_vector<double>& x);
@@ -59,15 +57,11 @@ public:
 
     //: Name of the class
   virtual vcl_string is_a() const;
+    //: Name of the class
+  virtual bool is_a(vcl_string const& s) const;
 
     //: Create a copy on the heap and return base class pointer
   virtual vpdfl_sampler_base* clone() const;
-
-
-protected:
-
-
 };
-
 
 #endif // vpdfl_pdf_sampler_base_h

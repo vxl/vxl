@@ -9,7 +9,6 @@
 // \brief Base for classes to build vpdfl_pdf_base objects.
 
 
-#include <vcl_cassert.h>
 #include <vpdfl/vpdfl_builder_base.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
@@ -57,6 +56,11 @@ void vsl_add_to_binary_loader(const vpdfl_builder_base& b)
 vcl_string vpdfl_builder_base::is_a() const
 {
   return vcl_string("vpdfl_builder_base");
+}
+
+bool vpdfl_builder_base::is_a(vcl_string const& s) const
+{
+  return s==vcl_string("vpdfl_builder_base");
 }
 
 //=======================================================================

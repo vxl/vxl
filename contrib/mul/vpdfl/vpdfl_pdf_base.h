@@ -74,10 +74,10 @@ public:
     //: Compute threshold for PDF to pass a given proportion
   virtual double log_prob_thresh(double pass_proportion)const =0;
 
-		//: Compute nearest point to x which has a density above a threshold
+    //: Compute nearest point to x which has a density above a threshold
     //  If log_p(x)>log_p_min then x unchanged.  Otherwise x is moved
     //  (typically up the gradient) until log_p(x)>=log_p_min.
-		// \param x This may be modified to the nearest plausible position.
+    // \param x This may be modified to the nearest plausible position.
   virtual void nearest_plausible(vnl_vector<double>& x, double log_p_min)const =0;
 
 
@@ -88,6 +88,8 @@ public:
 
     //: Name of the class
   virtual vcl_string is_a() const = 0;
+    //: Name of the class
+  virtual bool is_a(vcl_string const& s) const;
 
     //: Create a copy on the heap and return base class pointer
   virtual vpdfl_pdf_base* clone() const = 0;
@@ -111,7 +113,6 @@ private:
 
     //: To record name of class, returned by is_a() method
   static vcl_string class_name_;
-
 };
 
   //: Allows derived class to be loaded by base-class pointer

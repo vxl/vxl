@@ -30,7 +30,7 @@
 //=======================================================================
 
 vpdfl_gaussian_builder::vpdfl_gaussian_builder()
-	: min_var_(1.0e-6)
+  : min_var_(1.0e-6)
 {
 }
 
@@ -46,15 +46,15 @@ vpdfl_gaussian_builder::~vpdfl_gaussian_builder()
 
 vpdfl_gaussian& vpdfl_gaussian_builder::gaussian(vpdfl_pdf_base& model) const
 {
-		// need a vpdfl_gaussian
-	assert(model.is_a()==vcl_string("vpdfl_gaussian"));
-	return (vpdfl_gaussian&) model;
+    // need a vpdfl_gaussian
+  assert(model.is_a("vpdfl_gaussian"));
+  return (vpdfl_gaussian&) model;
 }
 //=======================================================================
 
 vpdfl_pdf_base* vpdfl_gaussian_builder::new_model() const
 {
-	return new vpdfl_gaussian;
+  return new vpdfl_gaussian;
 }
 
 //=======================================================================
@@ -62,7 +62,7 @@ vpdfl_pdf_base* vpdfl_gaussian_builder::new_model() const
 //=======================================================================
 void vpdfl_gaussian_builder::set_min_var(double min_var)
 {
-	min_var_ = min_var;
+  min_var_ = min_var;
 }
 
 //=======================================================================
@@ -70,185 +70,191 @@ void vpdfl_gaussian_builder::set_min_var(double min_var)
 //=======================================================================
 double vpdfl_gaussian_builder::min_var()
 {
-	return min_var_;
+  return min_var_;
 }
-	
+
 //=======================================================================
 
 void vpdfl_gaussian_builder::build(vpdfl_pdf_base& model,
-									const vnl_vector<double>& mean)
+                                   const vnl_vector<double>& mean)
 {
-	vpdfl_gaussian& g = gaussian(model);
-	int n = mean.size();
-	
-	vnl_vector<double> var(n);
-	for (int i=0;i<n;i++) var(i)=min_var_;
-	
-	// Generate an identity matrix for eigenvectors
-	vnl_matrix<double> P(n,n);
-	for (int i=0;i<n;++i)
-		for (int j=0;j<n;++j) P(i,j) = 0.0;
-	
-	for (int i=0;i<n;++i) P(i,i) = 1.0;
+  vpdfl_gaussian& g = gaussian(model);
+  int n = mean.size();
 
-	g.set(mean,var,P,var);
+  vnl_vector<double> var(n);
+  for (int i=0;i<n;i++) var(i)=min_var_;
+
+  // Generate an identity matrix for eigenvectors
+  vnl_matrix<double> P(n,n);
+  for (int i=0;i<n;++i)
+    for (int j=0;j<n;++j) P(i,j) = 0.0;
+
+  for (int i=0;i<n;++i) P(i,i) = 1.0;
+
+  g.set(mean,var,P,var);
 }
 //=======================================================================
 
-void vpdfl_gaussian_builder::updateCovar(vnl_matrix<double>& S, 
-				const vnl_vector<double>& vec, double w) const
+void vpdfl_gaussian_builder::updateCovar(vnl_matrix<double>& S,
+                                         const vnl_vector<double>& vec,
+                                         double w) const
 {
-	int n = vec.size();
-	const double *v = vec.data_block();
-	if (S.rows()!=n)
-	{
-		S.resize(n,n);
-		double **S_data = S.data_array();
-		for (int i=0; i<n; ++i)
-			for (int j=0; j<n; ++j)
-				S_data[j][i] = w*v[i]*v[j];
-	}
-	else
-	{
-		double **S_data = S.data_array();
-		double * S_row;
-		for (int i=0; i<n; ++i)
-		{
-			S_row = S_data[i];
-			double vw = w*v[i];
-			for (int j=0; j<n; ++j)
-				S_row[j] += vw*v[j];
-		}
-	}
+  int n = vec.size();
+  const double *v = vec.data_block();
+  if (S.rows()!=n)
+  {
+    S.resize(n,n);
+    double **S_data = S.data_array();
+    for (int i=0; i<n; ++i)
+      for (int j=0; j<n; ++j)
+        S_data[j][i] = w*v[i]*v[j];
+  }
+  else
+  {
+    double **S_data = S.data_array();
+    double * S_row;
+    for (int i=0; i<n; ++i)
+    {
+      S_row = S_data[i];
+      double vw = w*v[i];
+      for (int j=0; j<n; ++j)
+        S_row[j] += vw*v[j];
+    }
+  }
 }
-	//=======================================================================
+  //=======================================================================
 
-		//: Build model from mean and covariance
+    //: Build model from mean and covariance
 void vpdfl_gaussian_builder::buildFromCovar(vpdfl_gaussian& g,
-						const vnl_vector<double>& mean,
-						const vnl_matrix<double>& S)
+                                            const vnl_vector<double>& mean,
+                                            const vnl_matrix<double>& S)
 {
-	int n = mean.size();
-	vnl_matrix<double> evecs(S.rows(), S.rows());
-	vnl_vector<double> evals(S.rows());
-	
+  int n = mean.size();
+  vnl_matrix<double> evecs(S.rows(), S.rows());
+  vnl_vector<double> evals(S.rows());
 
-	vnl_symmetric_eigensystem_compute(S, evecs, evals);
+
+  vnl_symmetric_eigensystem_compute(S, evecs, evals);
   // eigenvalues are lowest first here
   evals.flip();
   evecs.fliplr();
   // eigenvalues are highest first now
-	
-	// Apply threshold to variance
-	double *ev = evals.data_block();
-	for (int i=0;i<n;++i)
-		if (ev[i]<min_var_) ev[i]=min_var_;
-		
-	g.set(mean,evecs,evals);
+
+  // Apply threshold to variance
+  double *ev = evals.data_block();
+  for (int i=0;i<n;++i)
+    if (ev[i]<min_var_) ev[i]=min_var_;
+
+  g.set(mean,evecs,evals);
 }
 
 //=======================================================================
 
 void vpdfl_gaussian_builder::build(vpdfl_pdf_base& model,
-						mbl_data_wrapper<vnl_vector<double> >& data)
+                                   mbl_data_wrapper<vnl_vector<double> >& data)
 {
-	vpdfl_gaussian& g = gaussian(model);
+  vpdfl_gaussian& g = gaussian(model);
 
-	int n_samples = data.size();
+  int n_samples = data.size();
 
-	assert (n_samples >= 2); // Not enough examples available
+  assert(n_samples >= 2); // Not enough examples available
 
-	vnl_vector<double> mean;
-	vnl_matrix<double> S;
-	
-	meanCovar(mean,S,data);
-	buildFromCovar(g,mean,S);
+  vnl_vector<double> mean;
+  vnl_matrix<double> S;
+
+  meanCovar(mean,S,data);
+  buildFromCovar(g,mean,S);
 }
 //=======================================================================
 
 //: Computes mean and covariance of given data
 void vpdfl_gaussian_builder::meanCovar(vnl_vector<double>& mean, vnl_matrix<double>& S,
-	               mbl_data_wrapper<vnl_vector<double> >& data)
+                                       mbl_data_wrapper<vnl_vector<double> >& data)
 {
-	int n_samples = data.size();
+  int n_samples = data.size();
 
-	assert (n_samples!=0);
+  assert(n_samples!=0);
 
   int n_dims = data.current().size();
-	vnl_vector<double> sum(n_dims);
-	sum.fill(0);
+  vnl_vector<double> sum(n_dims);
+  sum.fill(0);
 
-	S.resize(0,0);
+  S.resize(0,0);
 
-	data.reset();
-	for (int i=0;i<n_samples;i++)
-	{
-		sum += data.current();
-		updateCovar(S,data.current(),1.0);
+  data.reset();
+  for (int i=0;i<n_samples;i++)
+  {
+    sum += data.current();
+    updateCovar(S,data.current(),1.0);
 
-		data.next();
-	}
-	
-	mean = sum / (double) n_samples;
-	updateCovar(S, mean, - (double)n_samples);
-	S/=(n_samples-1);
+    data.next();
+  }
+
+  mean = sum / (double) n_samples;
+  updateCovar(S, mean, - (double)n_samples);
+  S/=(n_samples-1);
 }
 
 //=======================================================================
 
 void vpdfl_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
-						mbl_data_wrapper<vnl_vector<double> >& data,
-						const vcl_vector<double>& wts)
+                                            mbl_data_wrapper<vnl_vector<double> >& data,
+                                            const vcl_vector<double>& wts)
 {
-	vpdfl_gaussian& g = gaussian(model);
+  vpdfl_gaussian& g = gaussian(model);
 
-	int n_samples = data.size();
+  int n_samples = data.size();
 
-	assert (n_samples>=2); // Need enough samples
+  assert(n_samples>=2); // Need enough samples
 
-	int n_dims = data.current().size();
-	vnl_vector<double> sum(n_dims);
-	sum.fill(0);
-	vnl_matrix<double> S;
-	double w_sum = 0.0;
-	unsigned actual_samples = 0;
+  int n_dims = data.current().size();
+  vnl_vector<double> sum(n_dims);
+  sum.fill(0);
+  vnl_matrix<double> S;
+  double w_sum = 0.0;
+  unsigned actual_samples = 0;
 
-	data.reset();
-	for (int i=0;i<n_samples;i++)
-	{
-		double w = wts[i];
-		if (w != 0.0) actual_samples ++;
-		w_sum += w;
-		sum += w*data.current();
-		updateCovar(S,data.current(),w);
+  data.reset();
+  for (int i=0;i<n_samples;i++)
+  {
+    double w = wts[i];
+    if (w != 0.0) actual_samples ++;
+    w_sum += w;
+    sum += w*data.current();
+    updateCovar(S,data.current(),w);
 
-		data.next();
-	}
-	
-	updateCovar(S, sum, -1.0/w_sum);
-	S*=actual_samples/((actual_samples - 1) *w_sum);
-	sum/=w_sum;
-	// now sum = weighted mean
-	// and S = weighted covariance corrected for unbiased rather than ML result.
-	
-	buildFromCovar(g,sum,S);
+    data.next();
+  }
+
+  updateCovar(S, sum, -1.0/w_sum);
+  S*=actual_samples/((actual_samples - 1) *w_sum);
+  sum/=w_sum;
+  // now sum = weighted mean
+  // and S = weighted covariance corrected for unbiased rather than ML result.
+
+  buildFromCovar(g,sum,S);
 }
 //=======================================================================
 // Method: is_a
 //=======================================================================
 
-vcl_string  vpdfl_gaussian_builder::is_a() const 
-{ 
-	return vcl_string("vpdfl_gaussian_builder"); 
+vcl_string  vpdfl_gaussian_builder::is_a() const
+{
+  return vcl_string("vpdfl_gaussian_builder");
+}
+
+bool vpdfl_gaussian_builder::is_a(vcl_string const& s) const
+{
+  return vpdfl_builder_base::is_a(s) || s==vcl_string("vpdfl_gaussian_builder");
 }
 
 //=======================================================================
 // Method: version_no
 //=======================================================================
 
-short vpdfl_gaussian_builder::version_no() const 
-{ 
-	return 1; 
+short vpdfl_gaussian_builder::version_no() const
+{
+  return 1;
 }
 
 //=======================================================================
@@ -257,7 +263,7 @@ short vpdfl_gaussian_builder::version_no() const
 
 vpdfl_builder_base* vpdfl_gaussian_builder::clone() const
 {
-	return new vpdfl_gaussian_builder(*this);
+  return new vpdfl_gaussian_builder(*this);
 }
 
 //=======================================================================
@@ -266,7 +272,7 @@ vpdfl_builder_base* vpdfl_gaussian_builder::clone() const
 
 void vpdfl_gaussian_builder::print_summary(vcl_ostream& os) const
 {
-	os << "Min. var. : "<< min_var_;
+  os << "Min. var. : "<< min_var_;
 }
 
 //=======================================================================
@@ -275,9 +281,9 @@ void vpdfl_gaussian_builder::print_summary(vcl_ostream& os) const
 
 void vpdfl_gaussian_builder::b_write(vsl_b_ostream& bfs) const
 {
-	vsl_b_write(bfs,is_a());
-	vsl_b_write(bfs,version_no());
-	vsl_b_write(bfs,min_var_);
+  vsl_b_write(bfs,is_a());
+  vsl_b_write(bfs,version_no());
+  vsl_b_write(bfs,min_var_);
 }
 
 //=======================================================================
@@ -286,28 +292,28 @@ void vpdfl_gaussian_builder::b_write(vsl_b_ostream& bfs) const
 
 void vpdfl_gaussian_builder::b_read(vsl_b_istream& bfs)
 {
-	vcl_string name;
-	vsl_b_read(bfs,name);
-	if (name != is_a())
-	{
-		vcl_cerr << "vpdfl_gaussian_builder::load : ";
-		vcl_cerr << "Attempted to load object of type ";
-		vcl_cerr << name <<" into object of type " << is_a() << vcl_endl;
-		abort();
-	}
+  vcl_string name;
+  vsl_b_read(bfs,name);
+  if (name != is_a())
+  {
+    vcl_cerr << "vpdfl_gaussian_builder::load : ";
+    vcl_cerr << "Attempted to load object of type ";
+    vcl_cerr << name <<" into object of type " << is_a() << vcl_endl;
+    vcl_abort();
+  }
 
-	short version;
-	vsl_b_read(bfs,version);
-	switch (version)
-	{
-		case (1):
-			vsl_b_read(bfs,min_var_);
-			break;
-		default:
-			vcl_cerr << "vpdfl_gaussian_builder::b_read() ";
-			vcl_cerr << "Unexpected version number " << version << vcl_endl;
-			abort();
-	}
+  short version;
+  vsl_b_read(bfs,version);
+  switch (version)
+  {
+    case (1):
+      vsl_b_read(bfs,min_var_);
+      break;
+    default:
+      vcl_cerr << "vpdfl_gaussian_builder::b_read() ";
+      vcl_cerr << "Unexpected version number " << version << vcl_endl;
+      vcl_abort();
+  }
 }
 
 //==================< end of vpdfl_gaussian_builder.cxx >====================

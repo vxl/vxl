@@ -35,11 +35,11 @@ public:
     //: Destructor
   virtual ~vpdfl_sampler_base();
 
-		//: PDF of which this is an instance
-	const vpdfl_pdf_base& model() const;
-	
-		//: Set model for which this is an instance
-	virtual void set_model(const vpdfl_pdf_base&);
+    //: PDF of which this is an instance
+  const vpdfl_pdf_base& model() const;
+
+    //: Set model for which this is an instance
+  virtual void set_model(const vpdfl_pdf_base&);
 
     //: Draw random sample from distribution
   virtual void sample(vnl_vector<double>& x)=0;
@@ -57,16 +57,14 @@ public:
 
     //: Name of the class
   virtual vcl_string is_a() const = 0;
+    //: Name of the class
+  virtual bool is_a(vcl_string const& s) const;
 
     //: Create a copy on the heap and return base class pointer
   virtual vpdfl_sampler_base* clone() const = 0;
 
     //: Print class to os
   virtual void print_summary(vcl_ostream& os) const;
-
-protected:
-
-
 };
 
 

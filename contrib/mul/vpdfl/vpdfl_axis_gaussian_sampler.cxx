@@ -40,7 +40,11 @@ vpdfl_axis_gaussian_sampler::~vpdfl_axis_gaussian_sampler()
 vcl_string vpdfl_axis_gaussian_sampler::is_a() const
 {
   return vcl_string("vpdfl_axis_gaussian_sampler");
+}
 
+bool vpdfl_axis_gaussian_sampler::is_a(vcl_string const& s) const
+{
+  return vpdfl_sampler_base::is_a(s) || s==vcl_string("vpdfl_axis_gaussian_sampler");
 }
 
 //=======================================================================
@@ -63,8 +67,9 @@ void vpdfl_axis_gaussian_sampler::reseed(unsigned long seed)
 // Error check that it is an axis gaussian.
 void vpdfl_axis_gaussian_sampler::set_model(const vpdfl_pdf_base& model)
 {
-// rtti currently turned off
-//  assert(dynamic_cast<const vpdfl_axis_gaussian*>(&model));
+  assert(model.is_a("vpdfl_axis_gaussian"));
+  // cannot use dynamic_cast<> without rtti - PVr
+  // rtti currently turned off
   vpdfl_sampler_base::set_model(model);
 }
 
@@ -93,5 +98,4 @@ const vpdfl_axis_gaussian& vpdfl_axis_gaussian_sampler::axis_gaussian() const
 {
   return (const vpdfl_axis_gaussian&) model();
 }
-
 

@@ -69,6 +69,8 @@ public:
 
     //: Name of the class
   virtual vcl_string is_a() const = 0;
+    //: Name of the class
+  virtual bool is_a(vcl_string const& s) const;
 
     //: Create a copy on the heap and return base class pointer
   virtual vpdfl_builder_base* clone() const = 0;

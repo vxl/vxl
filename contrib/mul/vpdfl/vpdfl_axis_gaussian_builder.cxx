@@ -4,6 +4,7 @@
 
 #include <vcl_cassert.h>
 #include <vcl_string.h>
+#include <vcl_cstdlib.h> // vcl_abort()
 
 #include <vsl/vsl_indent.h>
 #include <mbl/mbl_data_wrapper.h>
@@ -32,7 +33,7 @@ vpdfl_axis_gaussian_builder::~vpdfl_axis_gaussian_builder()
 vpdfl_axis_gaussian& vpdfl_axis_gaussian_builder::gaussian(vpdfl_pdf_base& model) const
 {
   // require a vpdfl_axis_gaussian
-  assert(model.is_a()==vcl_string("vpdfl_axis_gaussian"));
+  assert(model.is_a("vpdfl_axis_gaussian"));
   return (vpdfl_axis_gaussian&) model;
 }
 
@@ -191,6 +192,11 @@ void vpdfl_axis_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
 vcl_string  vpdfl_axis_gaussian_builder::is_a() const
 {
   return vcl_string("vpdfl_axis_gaussian_builder");
+}
+
+bool vpdfl_axis_gaussian_builder::is_a(vcl_string const& s) const
+{
+  return vpdfl_builder_base::is_a(s) || s==vcl_string("vpdfl_axis_gaussian_builder");
 }
 
 //=======================================================================

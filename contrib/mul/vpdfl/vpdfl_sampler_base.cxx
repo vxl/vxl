@@ -51,7 +51,11 @@ const vpdfl_pdf_base& vpdfl_sampler_base::model() const
 vcl_string vpdfl_sampler_base::is_a() const
 {
   return vcl_string("vpdfl_sampler_base");
+}
 
+bool vpdfl_sampler_base::is_a(vcl_string const& s) const
+{
+  return s==vcl_string("vpdfl_sampler_base");
 }
 
 //=======================================================================

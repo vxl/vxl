@@ -25,32 +25,27 @@ class vpdfl_gaussian;
 //: Multi-Variate Axis-Aligned principal component Gaussian PDF
 class vpdfl_pc_gaussian_sampler : public vpdfl_gaussian_sampler {
 private:
-	//: workspace;
-	vnl_vector<double> dx_;
-	//: workspace;
-	vnl_vector<double> b_;
+  //: workspace;
+  vnl_vector<double> dx_;
+  //: workspace;
+  vnl_vector<double> b_;
 public:
-	
-	
-		//: Calculate the log probability density at position x.
-	double log_p(const vnl_vector<double>& x);
-
-	/*========= methods which do not change state (const) ==========*/
-
-		//: Version number for I/O 
-	short version_no() const;
-
-		//: Name of the class
-	virtual vcl_string is_a() const;
-
-		//: Create a copy on the heap and return base class pointer
-	virtual	vpdfl_sampler_base*	clone()	const;
-
-		
 
 
+    //: Calculate the log probability density at position x.
+  double log_p(const vnl_vector<double>& x);
+
+  /*========= methods which do not change state (const) ==========*/
+
+    //: Version number for I/O
+  short version_no() const;
+
+    //: Name of the class
+  virtual vcl_string is_a() const;
+
+    //: Create a copy on the heap and return base class pointer
+  virtual vpdfl_sampler_base* clone() const;
 };
 //=======================================================================
+
 #endif
-
-

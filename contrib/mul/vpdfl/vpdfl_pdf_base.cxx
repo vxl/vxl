@@ -8,7 +8,7 @@
 // \date 12-Apr-2001
 // \brief Base class for Multi-Variate Probability Density Function classes.
 
-#include <vcl_cassert.h>
+#include <vcl_cstdlib.h> // vcl_abort()
 #include <vcl_cmath.h>
 #include <vpdfl/vpdfl_pdf_base.h>
 #include <vsl/vsl_indent.h>
@@ -35,7 +35,7 @@ vpdfl_pdf_base::~vpdfl_pdf_base()
 //=======================================================================
 double vpdfl_pdf_base::operator()(const vnl_vector<double>& x) const
 {
-  return exp(log_p(x));
+  return vcl_exp(log_p(x));
 }
 
 //=======================================================================
@@ -63,7 +63,11 @@ void vsl_add_to_binary_loader(const vpdfl_pdf_base& b)
 vcl_string vpdfl_pdf_base::is_a() const
 {
   return vcl_string("vpdfl_pdf_base");
+}
 
+bool vpdfl_pdf_base::is_a(vcl_string const& s) const
+{
+  return s==vcl_string("vpdfl_pdf_base");
 }
 
 //=======================================================================
