@@ -44,6 +44,7 @@ public:
 
   bool handle(const vgui_event& e);
 
+  vcl_string name() const { return name_; };
   vcl_string file_name() const;
   vcl_string pretty_name() const;
   vcl_string type_name() const;
