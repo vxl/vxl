@@ -217,7 +217,7 @@ template <class T> void vnl_svd<T>::zero_out_relative(double tol) // sqrt(machin
 
 //: Calculate determinant as product of diagonals in W.
 template <class T>
-vnl_svd<T>::singval_t vnl_svd<T>::determinant_magnitude() const
+typename vnl_svd<T>::singval_t vnl_svd<T>::determinant_magnitude() const
 {
   {
     static bool warned = false;
@@ -234,7 +234,7 @@ vnl_svd<T>::singval_t vnl_svd<T>::determinant_magnitude() const
 }
 
 template <class T>
-vnl_svd<T>::singval_t vnl_svd<T>::norm() const
+typename vnl_svd<T>::singval_t vnl_svd<T>::norm() const
 {
   return vcl_abs(sigma_max());
 }
