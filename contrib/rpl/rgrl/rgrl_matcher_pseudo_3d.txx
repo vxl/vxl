@@ -2,8 +2,8 @@
 #define rgrl_matcher_pseudo_3d_txx_
 
 #include "rgrl_matcher_pseudo_3d.h"
-#include "rgrl_feature_face_region.h"
-#include "rgrl_feature_trace_region.h"
+#include <rgrl/rgrl_feature_face_region.h>
+#include <rgrl/rgrl_feature_trace_region.h>
 #include <rgrl/rgrl_cast.h>
 #include <rgrl/rgrl_match_set.h>
 #include <vnl/vnl_matrix.h>
@@ -176,7 +176,8 @@ compute_matches( rgrl_feature_set const&    from_set,
 
     // if the location is not inside the valid region
     // set the weight = 0
-    if ( !physical_in_range<PixelType>( to_image_, mask_, mapped_feature->location(), to_spacing_ratio_ ) ) {
+    if ( !physical_in_range( to_image_, mask_, mapped_feature->location(), to_spacing_ratio_ ) )
+    {
       //  Make a dummy vector of intensity weights.
       // vcl_vector< double > dummy_intensity_weights( 0 ); //CT: not needed now
       vcl_vector< double > match_weights( 0 );
@@ -302,7 +303,7 @@ map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
   {
     current_pixel_loc = pixel_locations[i];
     // Check if the location is inside the valid region
-    if ( !pixel_in_range<PixelType>( from_image_, mask_, current_pixel_loc ) )
+    if ( !pixel_in_range( from_image_, mask_, current_pixel_loc ) )
       continue;
 
 //  //  Copy the int pixel locations to doubles.  Yuck.
@@ -314,7 +315,7 @@ map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
     vnl_double_3 mapped_pt;
     trans.map_location( physical_loc, mapped_pt.as_ref().non_const() );
     // Check if the mapped location is inside the valid region
-    if ( !physical_in_range<PixelType>( to_image_, mask_, mapped_pt, to_spacing_ratio_ ) )
+    if ( !physical_in_range( to_image_, mask_, mapped_pt, to_spacing_ratio_ ) )
       continue;
 
     physical_to_pixel( mapped_pt, mapped_pixel.location, to_spacing_ratio_ );
@@ -439,7 +440,7 @@ match_mapped_region( rgrl_feature_sptr         mapped_feature,
         int i = offset + max_offset;
         responses[i] = this -> compute_response( mapped_location, mapped_pixels, basis * offset );
         DBG( vcl_cout << " response at offset " << offset
-             << " ( i = " << i << " ) : " << responses[ i ] << vcl_endl
+                      << " ( i = " << i << " ) : " << responses[ i ] << vcl_endl
         );
 
         // We don't want to use the responses of the offsets that shift
@@ -518,12 +519,10 @@ match_mapped_region( rgrl_feature_sptr         mapped_feature,
     // derivative value of the other neighbor
     else {
       second_derivative = 0;
-      DBG(
-        vcl_cout << "index=" << index << ", max_offset="
-        << max_offset << ", responses[index-1]=" << responses[index-1]
-        << ", responses[index+1]=" << responses[index+1] << '\n'
-      );
-      DBG( vcl_cout << "   neighbors' responses are not valid. Set the second_derivative = 0\n" );
+      DBG( vcl_cout << "index=" << index << ", max_offset="
+                    << max_offset << ", responses[index-1]=" << responses[index-1]
+                    << ", responses[index+1]=" << responses[index+1] << '\n'
+                    << "   neighbors' responses are not valid. Set the second_derivative = 0\n" );
     }
   }
 
@@ -599,11 +598,11 @@ match_mapped_region( rgrl_feature_sptr         mapped_feature,
       if ( sub_offset1 < -max_offset ) sub_offset1 = -max_offset;
       if ( sub_offset1 > max_offset ) sub_offset1 = max_offset;
       DBG( vcl_cout << " sub_offset1 = " << sub_offset1 << " in [ "
-                    << -max_offset << " , " << max_offset << " ] " << vcl_endl );
+                    << -max_offset << " , " << max_offset << " ]" << vcl_endl );
     }
 
     double second_d1 = vnl_math_abs( responses[ idx1-1 ][ idx2 ] + responses[ idx1+1 ][ idx2 ]
-             - 2 * responses[ idx1 ][ idx2 ] );
+                                     - 2 * responses[ idx1 ][ idx2 ] );
 
     int deriv_loc2 = best_off2;
     if ( deriv_loc2 == -max_offset ) ++deriv_loc2;
@@ -628,11 +627,11 @@ match_mapped_region( rgrl_feature_sptr         mapped_feature,
       if ( sub_offset2 < -max_offset ) sub_offset2 = -max_offset;
       if ( sub_offset2 > max_offset ) sub_offset2 = max_offset;
       DBG( vcl_cout << " sub_offset2 = " << sub_offset2 << " in [ "
-                    << -max_offset << " , " << max_offset << " ] " << vcl_endl; );
+                    << -max_offset << " , " << max_offset << " ]" << vcl_endl; );
     }
 
     double second_d2 = vnl_math_abs( responses[ idx1 ][ idx2-1 ] + responses[ idx1 ][ idx2+1 ]
-             - 2 * responses[ idx1 ][ idx2 ] );
+                                     - 2 * responses[ idx1 ][ idx2 ] );
 
     second_derivative = vnl_math_min( second_d1, second_d2 );
     match_location = mapped_location + basis1 * sub_offset1 + basis2 * sub_offset2;
@@ -696,7 +695,7 @@ compute_response( vnl_double_3                  const& mapped_location,
     loc = mapped_physical + shift;
     // Check if the location is inside the valid region,
     // if not, we don't use the response of this shift
-    if ( !physical_in_range<PixelType>( to_image_, mask_, loc, to_spacing_ratio_ ) ) {
+    if ( !physical_in_range( to_image_, mask_, loc, to_spacing_ratio_ ) ) {
       DBG( vnl_double_3 tmp;
            physical_to_pixel( loc, tmp, to_spacing_ratio_ );
            vcl_cout << "out of range: " << tmp << " ( " << loc << " )\n" );

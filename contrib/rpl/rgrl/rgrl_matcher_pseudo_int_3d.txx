@@ -189,7 +189,7 @@ compute_matches( rgrl_feature_set const&    from_set,
 
      // if the location is not inside the valid region
      // set the weight = 0
-     if ( !physical_in_range<PixelType>( to_image_, mask_, mapped_feature->location(), to_spacing_ratio_ ) ) {
+     if ( !physical_in_range( to_image_, mask_, mapped_feature->location(), to_spacing_ratio_ ) ) {
        //  Make a dummy vector of intensity weights.
        // vcl_vector< double > dummy_intensity_weights( 0 ); //CT: not needed now
        // vcl_vector< double > match_weights( 0 );
@@ -316,7 +316,7 @@ map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
   {
     current_pixel_loc = pixel_locations[i];
     // Check if the location is inside the valid region
-    if ( !pixel_in_range<PixelType>( from_image_, mask_, current_pixel_loc ) )
+    if ( !pixel_in_range( from_image_, mask_, current_pixel_loc ) )
       continue;
 
     //  Copy the int pixel locations to doubles.  Yuck.
@@ -327,7 +327,7 @@ map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
     vnl_double_3 mapped_physical_pt;
     trans.map_location( physical_loc, mapped_physical_pt.as_ref().non_const() );
     // Check if the mapped location is inside the valid region
-    if ( !physical_in_range<PixelType>( to_image_, mask_, mapped_physical_pt, to_spacing_ratio_ ) )
+    if ( !physical_in_range( to_image_, mask_, mapped_physical_pt, to_spacing_ratio_ ) )
       continue;
 
     // store
@@ -532,9 +532,8 @@ slide_window(rgrl_feature_sptr         mapped_feature,
       do {
         int i = offset + max_offset;
         responses[i] = this -> compute_response( mapped_pixels, discrete_offsets[i].shift_ );
-        DebugMacro( 2, " response at offset " << discrete_offsets[i].shift_
-             << " ( i = " << i << " ) : " << responses[ i ] << vcl_endl
-        );
+        DebugMacro(2, " response at offset " << discrete_offsets[i].shift_
+                   << " ( i = " << i << " ) : " << responses[ i ] << vcl_endl );
 
         // We don't want to use the responses of the offsets that shift
         // the box across the boundary.
@@ -553,7 +552,7 @@ slide_window(rgrl_feature_sptr         mapped_feature,
     if ( !is_best_initialized )
     {
       DebugMacro(1, "For mapped feature: " << mapped_feature->location()
-                    << ", the slide window is invalid." << vcl_endl );
+                 << ", the slide window is invalid." << vcl_endl );
       return;
     }
 
@@ -592,7 +591,7 @@ slide_window(rgrl_feature_sptr         mapped_feature,
 
     double a1, a2, a3, d1, d2, sumd;
     //assert( responses[ index ] != max_response_value );
-    if ( index >0 && index+1 < responses.size() &&
+    if ( index > 0 && index+1 < (int)responses.size() &&
          responses[ index ] != max_response_value &&
          index + 1 <= 2*max_offset &&
          index - 1 >= -2*max_offset &&
@@ -611,23 +610,21 @@ slide_window(rgrl_feature_sptr         mapped_feature,
                                    a2*responses[ index ] +
                                    a3*responses[ index + 1] );
       DebugMacro(3, "  2nd Derivative(at " << index
-                    << "): d1=" << d1 << " d2=" << d2
-                    << "\n       a1=" << a1 <<" a2=" << a2
-                    << " a3=" << a3
-                    << "\n        res1 " << responses[ index-1 ]
-                    << "  res2 " << responses[ index ]
-                    << "  res3 " << responses[ index+1 ]
-                    << "\n        deriv=" << second_derivative << vcl_endl ) ;
+                 << "): d1=" << d1 << " d2=" << d2
+                 << "\n       a1=" << a1 <<" a2=" << a2
+                 << " a3=" << a3
+                 << "\n        res1 " << responses[ index-1 ]
+                 << "  res2 " << responses[ index ]
+                 << "  res3 " << responses[ index+1 ]
+                 << "\n        deriv=" << second_derivative << vcl_endl ) ;
     }
     else
     {
       second_derivative = 0;
-      DebugMacro(2,
-        "index=" << index << ", max_offset="
-        << max_offset << ", responses[index-1]=" << responses[index-1]
-        << ", responses[index+1]=" << responses[index+1] << '\n'
-      );
-      DebugMacro(2, "   neighbors' responses are not valid. Set the second_derivative = 0\n" );
+      DebugMacro(2, "index=" << index << ", max_offset=" << max_offset
+                 << ", responses[index-1]=" << responses[index-1]
+                 << ", responses[index+1]=" << responses[index+1] << '\n'
+                 << "   neighbors' responses are not valid. Set the second_derivative = 0\n" );
     }
   }
   else if ( normal_space . columns() == 2 )
@@ -674,7 +671,7 @@ slide_window(rgrl_feature_sptr         mapped_feature,
     if ( !is_best_initialized )
     {
       DebugMacro(1, "For mapped feature: " << mapped_feature->location()
-                    << ", the slide window is invalid." << vcl_endl );
+                 << ", the slide window is invalid." << vcl_endl );
       return;
     }
 
@@ -730,7 +727,7 @@ slide_window(rgrl_feature_sptr         mapped_feature,
     }
 
     double second_d1 = vnl_math_abs( responses[ idx1-1 ][ idx2 ] + responses[ idx1+1 ][ idx2 ]
-             - 2 * responses[ idx1 ][ idx2 ] );
+                                     - 2 * responses[ idx1 ][ idx2 ] );
 
     int deriv_loc2 = best_off2;
     if ( deriv_loc2 == -max_offset ) ++deriv_loc2;
@@ -759,7 +756,7 @@ slide_window(rgrl_feature_sptr         mapped_feature,
     }
 
     double second_d2 = vnl_math_abs( responses[ idx1 ][ idx2-1 ] + responses[ idx1 ][ idx2+1 ]
-             - 2 * responses[ idx1 ][ idx2 ] );
+                                     - 2 * responses[ idx1 ][ idx2 ] );
 
     second_derivative = vnl_math_min( second_d1, second_d2 );
     match_location = mapped_location + basis1 * sub_offset1 + basis2 * sub_offset2;
@@ -790,7 +787,7 @@ slide_window(rgrl_feature_sptr         mapped_feature,
   assert( weight >= 0.0 );
 
   DebugMacro(2, "second derivative: " << second_derivative
-       << "\nmin_response: " << min_response << "\nweight : " << weight << vcl_endl );
+             << "\nmin_response: " << min_response << "\nweight : " << weight << vcl_endl );
   match_weights.push_back( weight );
 }
 
@@ -821,7 +818,7 @@ compute_response( rgrl_mapped_pixel_vector_type const& mapped_pixels,
     loc = mapped_pixels[i].location + shift;
     // Check if the location is inside the valid region,
     // if not, we don't use the response of this shift
-    if ( !pixel_in_range<PixelType>( to_image_, mask_, loc ) ) {
+    if ( !pixel_in_range( to_image_, mask_, loc ) ) {
       DebugMacro(2, "out of range: " << loc << " ( shift: " << shift << " )\n" );
       return max_response_value;
     }
