@@ -9,7 +9,7 @@
 // \author Aaron Kotcheff (Manchester)
 // \brief A superior random number generator
 
-const int mbl_mz_array_size = 37;
+const int vnl_random_array_size = 37;
 
 //: A superior random number generator.
 // Implements a new random number generator that
@@ -24,8 +24,8 @@ class vnl_random
 {
     enum {linear_congruential_multiplier = 1664525, mz_previous1 = 24};
     unsigned long linear_congruential_previous;
-    unsigned long mz_seed_array[mbl_mz_array_size];
-    unsigned long mz_array[mbl_mz_array_size];
+    unsigned long mz_seed_array[vnl_random_array_size];
+    unsigned long mz_array[vnl_random_array_size];
     int mz_array_position;
     int mz_borrow;
     unsigned long linear_congruential_lrand32();
@@ -57,7 +57,7 @@ class vnl_random
     //  Initializes the random number generator deterministically
     //  using 37 ulongs as the 'seed'. The same seed will
     //  produce the same series of random numbers.
-    vnl_random(unsigned long seed[mbl_mz_array_size]);
+    vnl_random(unsigned long seed[vnl_random_array_size]);
 
     //: Copy constructor.
     //  Initializes/sets the random number generator to exactly
@@ -78,7 +78,7 @@ class vnl_random
     void reseed(unsigned long);
 
     //: Starts a new deterministic sequence from an already declared generator using the provided seed.
-    void reseed(unsigned long[mbl_mz_array_size]);
+    void reseed(unsigned long[vnl_random_array_size]);
 
     //: This restarts the sequence of random numbers.
     //  Restarts so that it repeats

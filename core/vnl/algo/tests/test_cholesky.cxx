@@ -1,4 +1,4 @@
-// This is core/vnl/tests/test_cholesky.cxx
+// This is core/vnl/algo/tests/test_cholesky.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vnl/vnl_matrix.h>
@@ -10,7 +10,7 @@
 
 void test_cholesky()
 {
-  vnl_random rng;
+  vnl_random rng(1000);
   vnl_matrix<double> A(3,3);
   test_util_fill_random(A.begin(), A.end(), rng);
   A = A * A.transpose();
@@ -23,18 +23,18 @@ void test_cholesky()
     vnl_svd<double> svd(A);
     vcl_cout << "cholesky inverse:\n" << chol.inverse() << '\n'
              << "svd inverse:\n" << svd.inverse() << '\n';
-    TEST_NEAR("svd.inverse() ~= cholesky.inverse()",
-              (chol.inverse() - svd.inverse()).fro_norm(), 0.0, 1e-10);
+    testlib_test_assert_near("svd.inverse() ~= cholesky.inverse()",
+                             (chol.inverse() - svd.inverse()).fro_norm());
   }
   {
     vnl_cholesky chol(A);
-    TEST_NEAR("Ai * A ~= I", (chol.inverse() * A - I).fro_norm(), 0.0, 1e-11);
-    TEST_NEAR("Ai * A ~= I", (A * chol.inverse() - I).fro_norm(), 0.0, 1e-11);
+    testlib_test_assert_near("Ai * A - I", (chol.inverse() * A - I).fro_norm());
+    testlib_test_assert_near("Ai * A - I", (A * chol.inverse() - I).fro_norm());
   }
   {
     vnl_cholesky chol(A, vnl_cholesky::estimate_condition);
-    TEST_NEAR("Ai * A ~= I", (chol.inverse() * A - I).fro_norm(), 0.0, 1e-11);
-    TEST_NEAR("Ai * A ~= I", (A * chol.inverse() - I).fro_norm(), 0.0, 1e-11);
+    testlib_test_assert_near("Ai * A - I", (chol.inverse() * A - I).fro_norm());
+    testlib_test_assert_near("Ai * A - I", (A * chol.inverse() - I).fro_norm());
   }
 }
 

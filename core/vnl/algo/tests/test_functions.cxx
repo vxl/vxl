@@ -1,4 +1,4 @@
-// This is core/vnl/tests/test_functions.cxx
+// This is core/vnl/algo/tests/test_functions.cxx
 #include <testlib/testlib_test.h>
 //:
 // \file

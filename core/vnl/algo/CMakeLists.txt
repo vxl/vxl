@@ -80,4 +80,10 @@ IF(NETLIB_FOUND)
   ADD_LIBRARY( vnl_algo ${vnl_algo_sources})
   TARGET_LINK_LIBRARIES( vnl_algo ${NETLIB_LIBRARIES} vnl )
 
+
+  IF( BUILD_TESTING )
+    SUBDIRS(tests)
+  ENDIF( BUILD_TESTING )
+
+
 ENDIF(NETLIB_FOUND)

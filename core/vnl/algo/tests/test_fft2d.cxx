@@ -1,4 +1,4 @@
-// This is core/vnl/tests/test_fft2d.cxx
+// This is core/vnl/algo/tests/test_fft2d.cxx
 #include <testlib/testlib_test.h>
 //:
 // \file

@@ -1,4 +1,4 @@
-// This is core/vnl/tests/test_algo.cxx
+// This is core/vnl/algo/tests/test_algo.cxx
 
 //:
 // \file

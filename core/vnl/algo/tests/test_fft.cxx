@@ -1,4 +1,4 @@
-// This is core/vnl/tests/test_fft.cxx
+// This is core/vnl/algo/tests/test_fft.cxx
 /*
   fsm
 */
