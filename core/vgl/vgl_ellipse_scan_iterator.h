@@ -14,7 +14,12 @@
 //: Scan convert an ellipse
 //  The ellipse is parameterised by (\a xc, \a yc) (the centre), by \a
 //  a and \a b (the radii along the principle axes) and by \a theta,
-//  the rotation about the centre of the ellipse.
+//  the rotation of the main axis (in radians) about the centre of the
+//  ellipse w.r.t\. the horizontal direction (X-axis).
+//
+//  Scan lines are horizontal lines intersecting the ellipse interior.
+//  For a convex region like an ellipse, such a scan line is fully determined
+//  by the two end points (startx(),scany()) and (endx(),scany()).
 //
 class vgl_ellipse_scan_iterator : public vgl_region_scan_iterator
 {
@@ -22,7 +27,8 @@ public:
   //: Constructor
   //  The ellipse is parameterised by (\a xc, \a yc) (the centre), by \a
   //  rx and \a ry (the radii along the principle axes) and by \a theta,
-  //  the rotation about the centre of the ellipse.
+  //  the rotation of the main axis (in radians) about the centre of the
+  //  ellipse w.r.t\. the horizontal direction (X-axis).
   vgl_ellipse_scan_iterator( double xc, double yc, double rx, double ry, double theta );
 
   //: Destructor
@@ -37,13 +43,13 @@ public:
   //  Returns false if there are no more scan lines.
   virtual bool next();
 
-  //: y-coordinate of the current scan line
+  //: y-coordinate of the current scan line.
   virtual int  scany() const { return y_; }
 
   //: Returns starting x-value of the current scan line.
   virtual int  startx() const { return start_x_; }
 
-  //: Returns starting x-value of the current scan line.
+  //: Returns ending x-value of the current scan line.
   virtual int  endx() const { return end_x_; }
 
 private:
