@@ -1,4 +1,4 @@
-// This is contrib/brl/bseg/bmrf/bmrf_network.h
+// This is brl/bseg/bmrf/bmrf_network.h
 #ifndef bmrf_network_h_
 #define bmrf_network_h_
 //:
@@ -27,7 +27,7 @@
 //: The MRF network
 class bmrf_network : public vbl_ref_count
 {
-public:
+ public:
   typedef vcl_map<bmrf_epi_seg*, bmrf_node_sptr> node_map;
   //: Constructor
   bmrf_network();
@@ -50,7 +50,7 @@ public:
   // \retval true if any arcs have been purged
   // \retval false if all arcs were found to be valid
   bool purge();
-    
+
   //: Look up the node corresponding to an epi-segment
   // Returns a null smart pointer if no node exists
   bmrf_node_sptr seg_to_node(const bmrf_epi_seg_sptr& seg) const;
@@ -76,16 +76,16 @@ public:
   //: Print an ascii summary to the stream
   void print_summary(vcl_ostream &os) const;
 
-private:
-  
+ private:
+
   //: The map of nodes in the network
   // \note indexed by epi_seg pointers for quick reverse lookup
   node_map nodes_;
 
-public:
+ public:
   class iterator
   {
-  public:
+   public:
     //: Constructor
     iterator( bmrf_network_sptr network, bmrf_node_sptr node ) : network_(network), curr_node_(node) {}
 
@@ -95,7 +95,7 @@ public:
     //: Increment
     iterator& operator++ () { next_node(); return *this; }
 
-    //: Increment the current node 
+    //: Increment the current node
     virtual void next_node() = 0;
 
     //: Dereference
@@ -103,38 +103,38 @@ public:
 
     //: Equality comparison
     bool operator == (const iterator& rhs) { return rhs.curr_node_ == this->curr_node_; }
-    
-  protected:
+
+   protected:
     bmrf_network_sptr network_;
     bmrf_node_sptr curr_node_;
   };
 
   // Depth first search iterator
-  class depth_iterator : iterator
+  class depth_iterator : private iterator
   {
-  public:
+   public:
     //: Constructor
     depth_iterator( bmrf_network_sptr network, bmrf_node_sptr node ) : iterator(network, node){}
 
     //: Increment the current node
     void next_node();
-      
-  protected:
+
+   protected:
     vcl_deque<bmrf_node_sptr> eval_queue_;
     vcl_set<bmrf_node_sptr> visited_;
   };
 
   // Breadth first search iterator
-  class breadth_iterator : iterator
+  class breadth_iterator : private iterator
   {
-  public:
+   public:
     //: Constructor
     breadth_iterator( bmrf_network_sptr network, bmrf_node_sptr node ) : iterator(network, node){}
 
     //: Increment the current node
     void next_node();
 
-  protected:
+   protected:
     vcl_deque<bmrf_node_sptr> eval_queue_;
     vcl_set<bmrf_node_sptr> visited_;
   };
@@ -148,7 +148,6 @@ public:
   breadth_iterator breadth_begin(bmrf_node_sptr node) { return breadth_iterator(this, node); }
   //: Breadth first search end iterator
   breadth_iterator breadth_end()   { return breadth_iterator(this, NULL); }
-
 };
 
 
