@@ -12,7 +12,6 @@
 //     25 Sep 2002 Ian Scott - convert to vil2.
 //\endverbatim
 
-
 #include "vil2_new.h"
 
 #include <vcl_cstring.h>
@@ -28,7 +27,7 @@
 
 //: Make a new image of given format.
 vil2_image_resource_sptr vil2_new_image_resource(unsigned ni, unsigned nj, unsigned nplanes,
-                                         vil2_pixel_format format)
+                                                 vil2_pixel_format format)
 {
   return new vil2_memory_image(ni, nj, nplanes, format);
 }
@@ -37,28 +36,27 @@ vil2_image_resource_sptr vil2_new_image_resource(unsigned ni, unsigned nj, unsig
 vil2_image_resource_sptr vil2_new_image_resource(unsigned ni, unsigned nj, vil2_image_resource_sptr const& prototype)
 {
   return vil2_new_image_resource(ni, nj, prototype->nplanes(),
-                             prototype->pixel_format()); 
+                                 prototype->pixel_format());
 }
 
-
 vil2_image_resource_sptr vil2_new_image_resource(vil_stream* os,
-                                         unsigned ni,
-                                         unsigned nj,
-                                         unsigned nplanes,
-                                         vil2_pixel_format format,
-                                         char const* file_format)
+                                                 unsigned ni,
+                                                 unsigned nj,
+                                                 unsigned nplanes,
+                                                 vil2_pixel_format format,
+                                                 char const* file_format)
 {
   if (!file_format) // avoid segfault in strcmp()
     file_format = "pnm";
 
   vil2_image_resource_sptr outimage = 0;
-  for (vil2_file_format** p = vil2_file_format::all(); *p; ++p) {
+  for (vil2_file_format** p = vil2_file_format::all(); *p; ++p)
+  {
     vil2_file_format* fmt = *p;
     if (vcl_strcmp(fmt->tag(), file_format) == 0) {
       outimage = fmt->make_output_image(os, ni, nj, nplanes, format);
-      if (!outimage) {
-        vcl_cerr << "vil2_new: Unknown cannot new to type [" << file_format << "]\n";
-      }
+      if (!outimage)
+        vcl_cerr << "vil2_new: Cannot new to type [" << file_format << "]\n";
       return outimage;
     }
   }
@@ -69,27 +67,27 @@ vil2_image_resource_sptr vil2_new_image_resource(vil_stream* os,
 
 //: Make a new vil2_image_impl, writing to stream "os", size ni x nj, copying pixel format etc from "prototype".
 vil2_image_resource_sptr vil2_new_image_resource(vil_stream* os,
-                                         unsigned ni, unsigned nj,
-                                         vil2_image_resource_sptr const& prototype,
-                                         char const* file_format)
+                                                 unsigned ni, unsigned nj,
+                                                 vil2_image_resource_sptr const& prototype,
+                                                 char const* file_format)
 {
   return vil2_new_image_resource(os,
-                             prototype->nplanes(),
-                             ni, nj,
-                             prototype->pixel_format(),
-                             file_format ? file_format : prototype->file_format());
+                                 prototype->nplanes(),
+                                 ni, nj,
+                                 prototype->pixel_format(),
+                                 file_format ? file_format : prototype->file_format());
 }
 
 //: Make a new vil2_image_impl, writing to file "filename", size "w" x "h", copying pixel format etc from "prototype".
 vil2_image_resource_sptr vil2_new_image_resource(char const* filename,
-                                         unsigned ni, unsigned nj,
-                                         vil2_image_resource_sptr const& prototype,
-                                         char const* file_format)
+                                                 unsigned ni, unsigned nj,
+                                                 vil2_image_resource_sptr const& prototype,
+                                                 char const* file_format)
 {
   vil_stream_fstream* os = new vil_stream_fstream(filename, "w");
   return vil2_new_image_resource(os,
-                             ni, nj,
-                             prototype->nplanes(),
-                             prototype->pixel_format(),
-                             file_format ? file_format : prototype->file_format());
+                                 ni, nj,
+                                 prototype->nplanes(),
+                                 prototype->pixel_format(),
+                                 file_format ? file_format : prototype->file_format());
 }
