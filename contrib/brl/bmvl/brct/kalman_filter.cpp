@@ -47,9 +47,13 @@ void kalman_filter::init()
   // initialize the transit matrix
   dt_ = 1.0;
 
+  //
+  memory_size_ = 0;
+
   // initialize the default queue size
   queue_size_ = 10;
   observes_.resize(queue_size_);
+  motions_.resize(queue_size_);
   
   init_transit_matrix();
 
@@ -57,6 +61,8 @@ void kalman_filter::init()
   // initialize the observe matrix
   //init_observes();
   init_state_vector();
+  memory_size_ = 2;
+
   // init covariant matrix P_
   init_covariant_matrix();
 
@@ -194,7 +200,12 @@ void kalman_filter::init_state_vector()
     }
   }
 
+
   num_points_ = pts_3d.size();
+
+  // save the motion
+  motions_[0] = P1;
+  motions_[1] = P2;
 
   // get observes
   vnl_matrix<double> t0(2, num_points_);
@@ -358,19 +369,19 @@ vnl_double_2 kalman_filter::projection(const vnl_double_3x4 &P, const vnl_double
 }
 
 
-void kalman_filter::update_observes(const vnl_double_3x4 &P)
+void kalman_filter::update_observes(const vnl_double_3x4 &P, int iframe)
 {
   vnl_matrix<double> t(2, num_points_);
   for (int i=0; i<num_points_; i++){
    vgl_point_3d<double> X(Xl_[0][i], Xl_[1][i], Xl_[2][i]);
    vgl_point_2d<double> x = brct_algos::projection_3d_point(X, P);
-   vgl_point_2d<double> u = brct_algos::closest_point(curves_[cur_pos_], x);
+   vgl_point_2d<double> u = brct_algos::closest_point(curves_[iframe], x);
 
    t[0][i] = u.x();
    t[1][i] = u.y();
   }
 
-  observes_[cur_pos_] = t;
+  observes_[iframe] = t;
 }
 
 void kalman_filter::update_covariant()
@@ -387,10 +398,10 @@ void kalman_filter::inc()
   X_pred_ = A_*X_;
 
   vnl_double_3x4 P = get_projective_matrix(X_pred_);
-  update_observes(P);
+  update_observes(P, cur_pos_+1);
 
   // adjustion
-  vnl_matrix<double> & cur_measures = observes_[cur_pos_];
+  vnl_matrix<double> & cur_measures = observes_[cur_pos_+1];
 
   for (int i=0; i<num_points_; i++)
   {
@@ -410,7 +421,7 @@ void kalman_filter::inc()
 
     vnl_double_2 z_pred = projection(P,X);
 
-    adjust_state_vector(z_pred, z);
+    adjust_state_vector(z_pred, z, prob_[i]);
   }
 
   cur_pos_ = (cur_pos_+1) % queue_size_;
@@ -466,7 +477,7 @@ void kalman_filter::inc()
   }
 }
 
-void kalman_filter::adjust_state_vector(vnl_double_2 const& pred, vnl_double_2 const& meas)
+void kalman_filter::adjust_state_vector(vnl_double_2 const& pred, vnl_double_2 const& meas, double confidence)
 {
   X_pred_ += K_*(meas - pred);
 }

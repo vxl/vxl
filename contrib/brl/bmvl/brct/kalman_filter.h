@@ -47,10 +47,10 @@ class kalman_filter
   virtual ~kalman_filter();
 
  protected:
-  //: update the matched point using closeset neighbour.
-  void update_observes(const vnl_double_3x4 &P);
+  //: update the matched points in the next frame using closeset neighbour.
+  void update_observes(const vnl_double_3x4 &P, int iframe);
   void init_velocity();
-  void adjust_state_vector(vnl_double_2 const& pred, vnl_double_2 const& meas);
+  void adjust_state_vector(vnl_double_2 const& pred, vnl_double_2 const& meas, double confidence);
 
   //: set linearized observation matrix
   void set_H_matrix(vnl_double_3x4 &P, vnl_double_3 &X);
@@ -81,6 +81,8 @@ class kalman_filter
   int cur_pos_;
   int queue_size_;
   int num_points_;
+
+  //: how much the queue has been used
   int memory_size_;
 
   //: transit matrix

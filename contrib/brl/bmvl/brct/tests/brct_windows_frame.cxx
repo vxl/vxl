@@ -155,6 +155,10 @@ void brct_windows_frame::add_curve3d(vcl_vector<vgl_point_3d<double> >& pts)
 
 void brct_windows_frame::remove_curve3d()
 {
+  int size = curves_3d_.size();
+  for(int i=0; i<size; i++){
+    instance_->tab_3d_->remove(curves_3d_[i]);
+  }
   curves_3d_.clear();
   this->post_redraw();
 }
@@ -182,4 +186,13 @@ void brct_windows_frame::init_kalman()
   // add the curve in the second view
   c2d = kalman_->get_cur_observes();
   add_curve2d(c2d); 
+}
+
+void brct_windows_frame::go()
+{
+  remove_curve3d();
+  kalman_->inc();
+  vcl_vector<vgl_point_3d<double> > c3d = kalman_->get_local_pts();
+  add_curve3d(c3d);
+  this->post_redraw();
 }

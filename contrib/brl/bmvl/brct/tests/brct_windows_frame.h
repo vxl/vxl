@@ -30,6 +30,7 @@ class vgui_window;
 class brct_windows_frame : public vgui_wrapper_tableau
 {
  public:
+	 void go();
   brct_windows_frame();
   ~brct_windows_frame();
   static brct_windows_frame *instance();

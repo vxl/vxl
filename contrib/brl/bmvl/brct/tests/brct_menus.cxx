@@ -37,8 +37,5 @@ vgui_menu brct_menus::get_menu()
 void brct_menus::kalman_go_callback()
 {
   vcl_cerr<<"goes into kalman_go_callback\n";
-  vcl_vector<vgl_point_3d<double> > curve;
-  curve.push_back(vgl_point_3d<double> (25, 25, 25));
-  curve.push_back(vgl_point_3d<double> (50, 50, 50));
-  brct_windows_frame::instance()->add_curve3d(curve);
+  brct_windows_frame::instance()->go();
 }
