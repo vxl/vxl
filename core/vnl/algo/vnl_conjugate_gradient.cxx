@@ -9,11 +9,14 @@
 //
 //-----------------------------------------------------------------------------
 #include "vnl_conjugate_gradient.h"
+
+#include <vcl_cstdlib.h>
+#include <vcl_cassert.h>
+#include <vcl_iostream.h>
+
 #include <vnl/vnl_cost_function.h>
 #include <vnl/vnl_vector_ref.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vcl_cstdlib.h>
-#include <vcl_cassert.h>
 
 // external netlib function
 extern "C"
@@ -203,4 +206,9 @@ void vnl_conjugate_gradient::diagnose_outcome(vcl_ostream& os) const
      << f_->reported_error(end_error_)
      << " . Final step size = " << final_step_size_
      << vcl_endl;
+}
+
+void vnl_conjugate_gradient::diagnose_outcome() const
+{
+  diagnose_outcome(vcl_cout);
 }
