@@ -17,6 +17,8 @@
 #include <vil/algo/vil_greyscale_erode.h>
 #include <vil/algo/vil_greyscale_opening.h>
 #include <vil/algo/vil_grid_merge.h>
+#include <vil/algo/vil_histogram.h>
+#include <vil/algo/vil_histogram_equalise.h>
 #include <vil/algo/vil_line_filter.h>
 #include <vil/algo/vil_median.h>
 #include <vil/algo/vil_normalised_correlation_2d.h>
