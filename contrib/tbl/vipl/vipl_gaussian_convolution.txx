@@ -21,11 +21,11 @@ bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section
   // horizontal convolution:
   int starty = start(Y_Axis());
   int stopy = stop(Y_Axis());
-  for(int j = starty; j < stopy; ++j) {
+  for (int j = starty; j < stopy; ++j) {
     int buf_j = j - starty;
     int startx = start(X_Axis(),j);
     int stopx = stop(X_Axis(),j);
-    for(int i = startx; i < stopx; ++i) {
+    for (int i = startx; i < stopx; ++i) {
       int buf_i = i - startx;
       double result = mask()[0] * fgetpixel(in, i, j, dummy);
       for (int x=1; x<size; ++x)
@@ -34,20 +34,21 @@ bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section
     }
   }
   // vertical convolution:
-  for(int j = starty; j < stopy; ++j) {
+  for (int j = starty; j < stopy; ++j) {
     int buf_j = j - starty;
     int startx = start(X_Axis(),j);
     int stopx = stop(X_Axis(),j);
-    for(int i = startx; i < stopx; ++i) {
+    for (int i = startx; i < stopx; ++i) {
       int buf_i = i - startx;
       double result = mask()[0] * buf[buf_i+width*buf_j];
       for (int y=1; y<size; ++y) {
         if (buf_j+y < height) result += mask()[y] * buf[buf_i+width*(buf_j+y)];
         if (buf_j >= y) result += mask()[y] * buf[buf_i+width*(buf_j-y)];
       }
-      fsetpixel(out, i, j, result);
+      fsetpixel(out, i, j, (DataOut)result);
     }
   }
+  delete[] buf;
   return true;
 }
 
@@ -60,7 +61,7 @@ bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: preop()
   int radius = (lc<=0) ? 0 : 1 + int(vcl_sqrt(lc)*sigma()); // sigma guaranteed >= 0
   int size = radius + 1; // only need half mask, because it is symmetric
   ref_masksize() = size;
-  if(mask() == 0) ref_mask() = new double[size];
+  if (mask() == 0) ref_mask() = new double[size];
   else { delete[] ref_mask(); ref_mask() = new double[size]; }
   double halfnorm = 0.5;
   ref_mask()[0] = 1.0;
