@@ -210,18 +210,6 @@ void vpdfl_pdf_base::b_read(vsl_b_istream& bfs)
   }
 }
 
-//=======================================================================
-
-void vsl_b_write(vsl_b_ostream& bfs, const vpdfl_pdf_base* b)
-{
-  if (b)
-  {
-    vsl_b_write(bfs, b->is_a());
-    b->b_write(bfs);
-  }
-  else
-    vsl_b_write(bfs, vcl_string("VSL_NULL_PTR"));
-}
 
 //=======================================================================
 

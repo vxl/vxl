@@ -126,9 +126,6 @@ void vsl_add_to_binary_loader(const vpdfl_pdf_base& b);
   //: Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const vpdfl_pdf_base& b);
 
-  //: Binary file stream output operator for pointer to class
-void vsl_b_write(vsl_b_ostream& bfs, const vpdfl_pdf_base* b);
-
   //: Binary file stream input operator for class reference
 void vsl_b_read(vsl_b_istream& bfs, vpdfl_pdf_base& b);
 

@@ -8,23 +8,17 @@
 #include <vsl/vsl_binary_loader.h>
 
 //=======================================================================
-// Dflt ctor
-//=======================================================================
 
 mil_image_io::mil_image_io()
 {
 }
 
 //=======================================================================
-// Destructor
-//=======================================================================
 
 mil_image_io::~mil_image_io()
 {
 }
 
-//=======================================================================
-// Method: version_no
 //=======================================================================
 
 short mil_image_io::version_no() const
@@ -33,8 +27,6 @@ short mil_image_io::version_no() const
 }
 
 //=======================================================================
-// Method: vsl_add_to_binary_loader
-//=======================================================================
 
 void vsl_add_to_binary_loader(const mil_image_io& b)
 {
@@ -42,16 +34,12 @@ void vsl_add_to_binary_loader(const mil_image_io& b)
 }
 
 //=======================================================================
-// Method: is_a
-//=======================================================================
 
 vcl_string mil_image_io::is_a() const
 {
   return vcl_string("mil_image_io");
 }
 
-//=======================================================================
-// Method: is_class
 //=======================================================================
 
 bool mil_image_io::is_class(vcl_string const& s) const
@@ -61,23 +49,6 @@ bool mil_image_io::is_class(vcl_string const& s) const
 }
 
 //=======================================================================
-// Associated function: operator<<
-//=======================================================================
-
-void vsl_b_write(vsl_b_ostream& bfs, const mil_image_io* b)
-{
-    if (b)
-    {
-        vsl_b_write(bfs,b->is_a());
-        b->b_write(bfs);
-    }
-    else
-        vsl_b_write(bfs,vcl_string("VSL_NULL_PTR"));
-}
-
-//=======================================================================
-// Associated function: operator<<
-//=======================================================================
 
 void vsl_b_write(vsl_b_ostream& bfs, const mil_image_io& b)
 {
@@ -85,16 +56,12 @@ void vsl_b_write(vsl_b_ostream& bfs, const mil_image_io& b)
 }
 
 //=======================================================================
-// Associated function: operator>>
-//=======================================================================
 
 void vsl_b_read(vsl_b_istream& bfs, mil_image_io& b)
 {
     b.b_read(bfs);
 }
 
-//=======================================================================
-// Associated function: operator<<
 //=======================================================================
 
 vcl_ostream& operator<<(vcl_ostream& os,const mil_image_io& b)
@@ -106,8 +73,6 @@ vcl_ostream& operator<<(vcl_ostream& os,const mil_image_io& b)
     return os;
 }
 
-//=======================================================================
-// Associated function: operator<<
 //=======================================================================
 
 vcl_ostream& operator<<(vcl_ostream& os,const mil_image_io* b)

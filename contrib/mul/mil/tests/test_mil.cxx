@@ -16,7 +16,7 @@
 #define TESTMAIN(x) int main() \
   { vnl_test_start(#x); x(); return vnl_test_summary(); }
 
-void run_test_vsml()
+void run_test_mil()
 {
   test_transform_2d();
   test_image_2d_of();
@@ -27,4 +27,4 @@ void run_test_vsml()
 }
 
 
-TESTMAIN(run_test_vsml);
+TESTMAIN(run_test_mil);

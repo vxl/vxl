@@ -12,23 +12,17 @@
 #include <vsl/vsl_binary_loader.h>
 
 //=======================================================================
-// Dflt ctor
-//=======================================================================
 
 mil_image_pyramid_builder::mil_image_pyramid_builder()
 {
 }
 
 //=======================================================================
-// Destructor
-//=======================================================================
 
 mil_image_pyramid_builder::~mil_image_pyramid_builder()
 {
 }
 
-//=======================================================================
-// Method: version_no
 //=======================================================================
 
 short mil_image_pyramid_builder::version_no() const
@@ -37,8 +31,6 @@ short mil_image_pyramid_builder::version_no() const
 }
 
 //=======================================================================
-// Method: vsl_add_to_binary_loader
-//=======================================================================
 
 void vsl_add_to_binary_loader(const mil_image_pyramid_builder& b)
 {
@@ -46,16 +38,12 @@ void vsl_add_to_binary_loader(const mil_image_pyramid_builder& b)
 }
 
 //=======================================================================
-// Method: is_a
-//=======================================================================
 
 vcl_string mil_image_pyramid_builder::is_a() const
 {
   return vcl_string("mil_image_pyramid_builder");
 }
 
-//=======================================================================
-// Method: is_class
 //=======================================================================
 
 bool mil_image_pyramid_builder::is_class(vcl_string const& s) const
@@ -65,23 +53,6 @@ bool mil_image_pyramid_builder::is_class(vcl_string const& s) const
 }
 
 //=======================================================================
-// Associated function: operator<<
-//=======================================================================
-
-void vsl_b_write(vsl_b_ostream& bfs, const mil_image_pyramid_builder* b)
-{
-    if (b)
-    {
-        vsl_b_write(bfs,b->is_a());
-        b->b_write(bfs);
-    }
-    else
-        vsl_b_write(bfs,vcl_string("VSL_NULL_PTR"));
-}
-
-//=======================================================================
-// Associated function: operator<<
-//=======================================================================
 
 void vsl_b_write(vsl_b_ostream& bfs, const mil_image_pyramid_builder& b)
 {
@@ -89,16 +60,12 @@ void vsl_b_write(vsl_b_ostream& bfs, const mil_image_pyramid_builder& b)
 }
 
 //=======================================================================
-// Associated function: operator>>
-//=======================================================================
 
 void vsl_b_read(vsl_b_istream& bfs, mil_image_pyramid_builder& b)
 {
     b.b_read(bfs);
 }
 
-//=======================================================================
-// Associated function: operator<<
 //=======================================================================
 
 vcl_ostream& operator<<(vcl_ostream& os,const mil_image_pyramid_builder& b)
@@ -110,8 +77,6 @@ vcl_ostream& operator<<(vcl_ostream& os,const mil_image_pyramid_builder& b)
     return os;
 }
 
-//=======================================================================
-// Associated function: operator<<
 //=======================================================================
 
 vcl_ostream& operator<<(vcl_ostream& os,const mil_image_pyramid_builder* b)

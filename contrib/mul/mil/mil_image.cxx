@@ -54,20 +54,6 @@ bool mil_image::is_class(vcl_string const& s) const
   return s==s_;
 }
 
-//=======================================================================
-// Associated function: operator<<
-//=======================================================================
-
-void vsl_b_write(vsl_b_ostream& bfs, const mil_image* b)
-{
-    if (b)
-    {
-        vsl_b_write(bfs,b->is_a());
-        b->b_write(bfs);
-    }
-    else
-        vsl_b_write(bfs,vcl_string("VSL_NULL_PTR"));
-}
 
 //=======================================================================
 // Associated function: operator<<

@@ -55,19 +55,6 @@ bool vpdfl_builder_base::is_class(vcl_string const& s) const
 
 //=======================================================================
 
-void vsl_b_write(vsl_b_ostream& bfs, const vpdfl_builder_base* b)
-{
-  if (b)
-  {
-    vsl_b_write(bfs,b->is_a());
-    b->b_write(bfs);
-  }
-  else
-    vsl_b_write(bfs,vcl_string("VSL_NULL_PTR"));
-}
-
-//=======================================================================
-
 void vsl_b_write(vsl_b_ostream& bfs, const vpdfl_builder_base& b)
 {
   b.b_write(bfs);
