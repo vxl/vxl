@@ -1,16 +1,12 @@
 #include <testlib/testlib_test.h>
-#include <vcl_vector.h>
 #include <vcl_iostream.h>
-#include <vxl_config.h> // for vxl_byte
 #include <vil/algo/vil_distance_transform.h>
-#include <vil/vil_print.h>
-#include <vcl_algorithm.h>
 
 void test_distance_transform1()
 {
-  vcl_cout << "********************************************\n"
-           << " Testing vil_distance_transform           \n"
-           << "********************************************\n";
+  vcl_cout << "********************************\n"
+           << " Testing vil_distance_transform\n"
+           << "********************************\n";
 
   vil_image_view<float> src_im(21,21,1);
 
@@ -31,14 +27,14 @@ void test_distance_transform1()
   TEST_NEAR("(11,11)",src_im(11,11),1.414214,1e-6);
   TEST_NEAR("(11,12)",src_im(11,12),2.414214,1e-6);
 
-  vcl_cout<<"Test edge"<<vcl_endl;
+  vcl_cout<<"Test edge\n";
   TEST_NEAR("(0,5)",src_im(0,5),0,1e-6);
   TEST_NEAR("(0,3)",src_im(0,3),2,1e-6);
   TEST_NEAR("(0,4)",src_im(0,4),1,1e-6);
   TEST_NEAR("(0,6)",src_im(0,6),1,1e-6);
   TEST_NEAR("(0,7)",src_im(0,7),2,1e-6);
 
-  vcl_cout<<"Test edge"<<vcl_endl;
+  vcl_cout<<"Test edge\n";
   TEST_NEAR("(5,20)",src_im(5,20),0,1e-6);
   TEST_NEAR("(4,20)",src_im(4,20),1,1e-6);
   TEST_NEAR("(6,20)",src_im(6,20),1,1e-6);
