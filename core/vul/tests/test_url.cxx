@@ -84,7 +84,7 @@ void test_url()
     vcl_istream* i = vul_url::open("http://vxl.sourceforge.net/");
     TEST("vul_url::open(\"http://vxl.sourceforge.net/\")", i==0, false);
 
-    char b[]="<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n<html>\n  <head>\n    <title>VXL homepage</title>";
+    char b[]="<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n<html>\n  <head>\n    <title>VXL - C++ Libraries for Computer Vision</title>";
     if (i)
     {
       int l = vcl_strlen(b);
