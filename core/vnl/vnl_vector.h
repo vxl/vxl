@@ -269,6 +269,12 @@ public:
   //: Return largest absolute element value
   abs_t inf_norm() const { return vnl_c_vector<T>::inf_norm(begin(), size()); }
 
+  //: Normalise by dividing through by the magnitude
+  vnl_vector<T>& normalize() { vnl_c_vector<T>::normalize(begin(), size()); return *this; }
+
+  // These next 6 functions are should really be helper functions since they aren't
+  // really proper functions on a vector in a philosophial sense.
+
   //: Root Mean Squares of values
   abs_t rms     () const { return vnl_c_vector<T>::rms_norm(begin(), size()); }
 
@@ -281,8 +287,8 @@ public:
   //: Mean of values in vector
   T mean() const { return vnl_c_vector<T>::mean(begin(), size()); }
 
-  //: Normalise by dividing through by the magnitude
-  vnl_vector<T>& normalize() { vnl_c_vector<T>::normalize(begin(), size()); return *this; }
+  //: Sum of values in a vector 
+  T sum() const { return vnl_c_vector<T>::sum(begin(), size()); }
 
   //: Reverse the order of the elements
   //  Element i swaps with element size()-1-i
@@ -461,6 +467,13 @@ inline T vnl_vector_ssd (vnl_vector<T> const& v1, vnl_vector<T> const& v2)
 #endif
   return vnl_c_vector<T>::euclid_dist_sq(v1.begin(), v2.begin(), v1.size());
 }
+
+
+
+// Non-vector Functions which are nevertheless very useful.
+
+
+
 
 
 //: Read/write vector from/to a vcl_istream
