@@ -574,10 +574,14 @@ inline T dot_product( const vnl_vector<T>& a, const vnl_vector_fixed_ref_const<T
   return dot_product( a, b.as_ref() );
 }
 
-template<class T, unsigned int n>
-inline vnl_matrix<T> outer_product( const vnl_vector_fixed_ref_const<T,n>& a, const vnl_vector_fixed_ref_const<T,n>& b )
+template<class T, unsigned int m, unsigned int n>
+inline vnl_matrix_fixed<T,m,n> outer_product( const vnl_vector_fixed_ref_const<T,m>& a, const vnl_vector_fixed_ref_const<T,n>& b )
 {
-  return outer_product( a.as_ref(), b.as_ref());
+  vnl_matrix_fixed<T,m,n> out; // = a.column() * b.row()
+  for (unsigned int i = 0; i < m; i++)
+    for (unsigned int j = 0; j < n; j++)
+      out[i][j] = a[i] * b[j];
+  return out;
 }
 
 template<class T,unsigned int n>
