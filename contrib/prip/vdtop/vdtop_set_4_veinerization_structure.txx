@@ -3,7 +3,7 @@
 //:
 // \file
 
-#include "vcl_limits.h"
+#include <vcl_limits.h>
 
 //: The 3 in 1 function.
 // It computes upper masks, removes non maximal directions, and compute the down-left version of the symmetric

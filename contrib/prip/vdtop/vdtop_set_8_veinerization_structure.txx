@@ -1,7 +1,7 @@
 #ifndef vdtop_set_8_veinerization_structure_txx_
 #define vdtop_set_8_veinerization_structure_txx_
 
-#include "vcl_limits.h"
+#include <vcl_limits.h>
 
 template <class T>
 void vdtop_compute_8_veinerization_mask(vil_image_view<T> & img,
