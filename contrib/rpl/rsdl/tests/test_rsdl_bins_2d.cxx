@@ -13,10 +13,10 @@
 #include <rsdl/rsdl_bins_2d.h>
 
 static bool close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-6; }
-static bool less_first( const vcl_pair<double,int>& left,
-                        const vcl_pair<double,int>& right )
+static bool less_first( const vcl_pair<double,int>& l,
+                        const vcl_pair<double,int>& r )
 {
-  return left.first < right.first;
+  return l.first < r.first;
 }
 
 
@@ -138,4 +138,5 @@ main()
   }
 
   vbl_test_summary();
+  return 0;
 }
