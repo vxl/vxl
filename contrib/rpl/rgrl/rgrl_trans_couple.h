@@ -6,9 +6,9 @@
 // \author Gehua Yang
 // \date Feb 2005
 
-
 #include <rgrl/rgrl_transformation_sptr.h>
 #include <rgrl/rgrl_transformation.h>
+#include <vcl_iosfwd.h>
 
 //: A base class that represents a pair of transformation: forward & backward
 //
@@ -80,7 +80,7 @@ class rgrl_trans_couple
 
   //: Compute jacobian w.r.t. location
   virtual void jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& from_loc ) const;
-  
+
   //:  transform the transformation for images of different resolution
   virtual rgrl_transformation_sptr scale_by( double scale ) const;
 
