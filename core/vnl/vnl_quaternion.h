@@ -57,9 +57,10 @@ template <class T>
 class vnl_quaternion : public vnl_vector_fixed<T, 4> { // public for IS-A relation
   typedef vnl_vector_fixed<T, 4> Base;
 public:
-  vnl_quaternion (T x=0, T y=0, T z=0, T r=1); // null quat
+  vnl_quaternion () {} // null quat
+  vnl_quaternion (T x, T y, T z, T r);
   vnl_quaternion (const vnl_vector<T>& axis, T angle); 
-  vnl_quaternion (const vnl_matrix<T>& transform); // from 3-4 square row-major
+  explicit vnl_quaternion (const vnl_matrix<T>& transform); // from 3-4 square row-major
   vnl_quaternion (const vnl_vector<T>& vec);     // from 3-4D vector
   inline vnl_quaternion (const vnl_quaternion<T>& from);  // copy constructor
   inline ~vnl_quaternion();			       // free internal array
