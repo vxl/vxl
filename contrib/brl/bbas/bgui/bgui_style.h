@@ -4,8 +4,8 @@
 //--------------------------------------------------------------------------------
 //:
 // \file
-// \brief A local version of vgui_style. So far identical to vgui_style but 
-//        with a smart pointer and set methods.
+// \brief A local version of vgui_style.
+//  So far identical to vgui_style but with a smart pointer and set methods.
 // \author
 //   J.L. Mundy
 //
@@ -37,9 +37,7 @@ class bgui_style : public vgui_style, public vbl_ref_count
   vgui_style* style_new();
 
   //: Destructor
-  ~bgui_style() {;}
-
+  ~bgui_style() {}
 };
-
 
 #endif // bgui_style_h_
