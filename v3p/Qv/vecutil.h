@@ -131,7 +131,7 @@ void multiplyVector3DMatrix4D (const vector3D vec, ARRAYconst matrix4D mat, vect
 
 void transposematrix (matrix4D mat);  // replaces mat with its transposed form
 
-// make 3d transformation matrix from homogenous trf. mat.
+// make 3d transformation matrix from homogeneous trf. mat.
 // (discard translation and perspective transformations)
 void mat4Dto3D (matrix4D mat);
 
