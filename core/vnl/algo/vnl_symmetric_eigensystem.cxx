@@ -9,6 +9,7 @@
 //-----------------------------------------------------------------------------
 
 #include "vnl_symmetric_eigensystem.h"
+#include <vcl_cmath.h> // for sqrt(double)
 #include <vcl_iostream.h>
 #include <vnl/vnl_copy.h>
 #include <vnl/algo/vnl_netlib.h> // rs_()
