@@ -25,15 +25,14 @@
 
 static bool first_window = true;
 
-void
-vgui_mfc_window::init_window(char const *title,
+void vgui_mfc_window::init_window(char const *title,
                              vgui_menu const &menubar,
                              bool has_menu,
                              unsigned width, unsigned height,
                              int posx,
                              int posy)
 {
- //if (first_window) // First time use the main window
+  //if (first_window) // First time use the main window
   {
     // Get a pointer to the single CWinApp object for the application:
     CWinApp *app = AfxGetApp();
@@ -107,14 +106,14 @@ void vgui_mfc_window::hide()
 
 void vgui_mfc_window::enable_hscrollbar(bool show)
 {
-        CWnd *wnd = AfxGetApp()->GetMainWnd();
-        wnd->ShowScrollBar(SB_HORZ,show);
+  CWnd *wnd = AfxGetApp()->GetMainWnd();
+  wnd->ShowScrollBar(SB_HORZ,show);
 }
 
 void vgui_mfc_window::enable_vscrollbar(bool show)
 {
-        CWnd *wnd = AfxGetApp()->GetMainWnd();
-        wnd->ShowScrollBar(SB_VERT,show);
+  CWnd *wnd = AfxGetApp()->GetMainWnd();
+  wnd->ShowScrollBar(SB_VERT,show);
 }
 
 void vgui_mfc_window::iconify()
@@ -123,14 +122,51 @@ void vgui_mfc_window::iconify()
 
 void vgui_mfc_window::reshape(unsigned w, unsigned h)
 {
+  CWnd *main_wnd = AfxGetApp()->GetMainWnd();
+  WINDOWPLACEMENT w_placement;
+  // Obtain window geometry information
+  main_wnd->GetWindowPlacement(&w_placement);
+  // Quick hack, needs more research into MFC land
+  // Modify bottom right position to adapt to new shape
+  // But, there are margins associated with the scroll bars and
+  // menu bar, which need to be determined.
+  //Maybe there is a way to resize the active window and that will take
+  //care of the other stuff.  JLM 10/3/2002
+  int kludge_width_margin = 35, kludge_height_margin=100;
+  
+  w_placement.rcNormalPosition.right = w_placement.rcNormalPosition.left+w+kludge_width_margin;
+  w_placement.rcNormalPosition.bottom = w_placement.rcNormalPosition.top+h+kludge_height_margin;
+  // Store the geometry information back into window
+  main_wnd->SetWindowPlacement(&w_placement);
 }
 
 void vgui_mfc_window::reposition(int x,int y)
 {
+  CWnd *main_wnd = AfxGetApp()->GetMainWnd();
+  WINDOWPLACEMENT w_placement;
+
+  // Obtain window geometry information
+  main_wnd->GetWindowPlacement(&w_placement);
+  int width = w_placement.rcNormalPosition.right -
+    w_placement.rcNormalPosition.left;
+  int height = w_placement.rcNormalPosition.bottom -
+    w_placement.rcNormalPosition.top;
+
+  // Modify upper left hand corner
+  w_placement.rcNormalPosition.left=x;
+  w_placement.rcNormalPosition.top=y;
+
+  // Adjust the lower right accordingly
+  w_placement.rcNormalPosition.right=x+width;
+  w_placement.rcNormalPosition.bottom=y+height;
+
+  // Store the geometry information back into window
+  main_wnd->SetWindowPlacement(&w_placement);
+
 }
 
 void vgui_mfc_window::set_title(const vcl_string &s)
 {
- CWinApp *app = AfxGetApp();
- app->GetMainWnd()->SetWindowText(s.c_str());
+  CWinApp *app = AfxGetApp();
+  app->GetMainWnd()->SetWindowText(s.c_str());
 }
