@@ -6,10 +6,8 @@
 // \file
 // \author fsm@robots.ox.ac.uk
 
-
 #include "vil_image.h"
-
-#include <vcl_climits.h>
+#include <vcl_climits.h> // for CHAR_BIT
 #include <vcl_iostream.h>
 
 vcl_ostream& vil_image::print(vcl_ostream& s) const

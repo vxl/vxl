@@ -7,7 +7,7 @@
 // \author fsm@robots.ox.ac.uk
 
 #include "vil_flipud_impl.h"
-#include <vcl_climits.h>
+#include <vcl_climits.h> // for CHAR_BIT
 
 vil_image vil_flipud_impl::get_plane(int i) const {
   return new vil_flipud_impl(base.get_plane(i));

@@ -1,14 +1,13 @@
 // This is vxl/vil/vil_jpeglib.h
 #ifndef vil_jpeglib_h_
 #define vil_jpeglib_h_
-
 //:
 // \file
 // \brief Stuff for jpeg I/O
 // \author fsm@robots.ox.ac.uk
 
-#include <vcl_cstdio.h>
-#include <vcl_cstdlib.h>
+#include <vcl_cstdio.h> // for FILE, used in jpeglib.h !!
+#include <vcl_cstddef.h> // for size_t, used in jpeglib.h !!
 
 // ?
 extern "C" {
