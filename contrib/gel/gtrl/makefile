@@ -1,4 +1,4 @@
-USES += v3p vxl gel
+USES += v3p/netlib vxl gel
 
 LIBRARY = gtrl
 
