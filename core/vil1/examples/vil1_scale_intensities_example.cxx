@@ -1,0 +1,33 @@
+#include <vcl/vcl_iostream.h>
+#include <vcl/vcl_cstdlib.h>
+#include <vil/vil_load.h>
+#include <vil/vil_save.h>
+#include <vil/vil_clamp.h>
+#include <vil/vil_image.h>
+#include <vil/vil_image_as.h>
+#include <vil/vil_pixel.h>
+#include <vil/vil_scale_intensities.h>
+
+int main (int argc, char** argv) {
+
+  if (argc != 5) {
+    cerr << __FILE__ " : scale shift in_image out_image" << endl;
+    abort();
+  }
+
+  double scale = atof(argv[1]);
+  double shift = atof(argv[2]);
+
+  vil_image in = vil_load(argv[3]);
+
+  if (vil_pixel_type(in) == VIL_BYTE) {
+    vil_image real_img = vil_image_as_float(in);
+    vil_image scaled_image = vil_scale_intensities(real_img, scale, shift);
+    vil_save(vil_image_as_byte(vil_clamp(scaled_image, 0, 255)), argv[4], "pnm");
+  }
+  else if (vil_pixel_type(in) == VIL_RGB_BYTE) {
+    vil_image real_img = vil_image_as_rgb_float(in);
+    vil_image scaled_image = vil_scale_intensities(real_img, scale, shift);
+    vil_save(vil_image_as_rgb_byte(vil_clamp(scaled_image, 0, 255)), argv[4], "pnm");
+  }  
+}
