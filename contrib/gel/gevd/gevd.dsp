@@ -140,6 +140,9 @@ SOURCE=.\gevd_region_proc.cxx
 # Begin Source File
 SOURCE=.\gevd_region_proc_params.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\gevd_fold.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -193,6 +196,9 @@ SOURCE=.\gevd_region_proc.h
 # End Source File
 # Begin Source File
 SOURCE=.\gevd_region_proc_params.h
+# End Source File
+# Begin Source File
+SOURCE=.\gevd_fold.h
 # End Source File
 # End Group
 # End Target
