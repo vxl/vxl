@@ -50,17 +50,17 @@ void test_image_resource(vcl_string type, vil2_pixel_format format, T dummy)
   T v1, v2;
 
   vil2_math_value_range(view1, v1, v2);
-  TEST("Value range is 0,10", v1 == 0.0f && v2 == 10.0f, true);
+  TEST("Value range is 0,10", v1 == 0 && v2 == 10, true);
 
-  vil2_image_resource_sptr clamp = vil2_clamp(mem, 1.0, 9.0);
+  vil2_image_resource_sptr clamp = vil2_clamp(mem, 1.0, 9.0); // arguments of type double, not T
   view1 = clamp->get_view(0, clamp->ni(), 0, clamp->nj());
   vil2_print_all(vcl_cout, view1);
   vil2_math_value_range(view1, v1, v2);
-  TEST("Value range after clamping is 1,9", v1 == 1.0f && v2 == 9.0f, true);
+  TEST("Value range after clamping is 1,9", v1 == 1 && v2 == 9, true);
 
 
   view2.resize(1,1,1);
-  view2.fill(20);
+  view2.fill(T(20));
   vil2_image_resource_sptr trans = vil2_transpose(mem);
   TEST("Transpose::put_view",trans->put_view(view2,3,0), true);
   view1 = mem->get_view(0, mem->ni(), 0, mem->nj());
@@ -69,15 +69,14 @@ void test_image_resource(vcl_string type, vil2_pixel_format format, T dummy)
   trans = vil2_transpose(clamp);
 
   view1 = clamp->get_view(0, clamp->ni()/2, 0, clamp->nj()/2);
-  TEST("Clamping", view1 && view1(3,0) == 1.0f && view1(0,3)==9.0f, true);
+  TEST("Clamping", view1 && view1(3,0) == 1 && view1(0,3)==9, true);
   view1 = trans->get_view(0, trans->ni()/2, 0, trans->nj()/2);
-  TEST("Transpose, and clamping", view1 && view1(3,0) == 9.0f && view1(0,3)==1.0f, true);
+  TEST("Transpose, and clamping", view1 && view1(3,0) == 9 && view1(0,3)==1, true);
 
-
-  vil2_image_resource_sptr flip1 = vil2_flip_lr(mem);
-  vil2_image_resource_sptr flip2 = vil2_flip_ud(flip1);
-  vil2_image_resource_sptr flip3 = vil2_flip_lr(flip2);
-  vil2_image_resource_sptr flip4 = vil2_flip_ud(flip3);
+  vil2_image_resource_sptr flip1 = vil2_flip_ud(mem);
+  vil2_image_resource_sptr flip2 = vil2_flip_lr(flip1);
+  vil2_image_resource_sptr flip3 = vil2_flip_ud(flip2);
+  vil2_image_resource_sptr flip4 = vil2_flip_lr(flip3);
   view1 = flip4->get_view(0, flip4->ni(), 0, flip4->nj());
   view2 = mem->get_view(0, mem->ni(), 0, mem->nj());
   // Check that they are the same view of the same data
@@ -107,7 +106,7 @@ void test_image_resource(vcl_string type, vil2_pixel_format format, T dummy)
   view1 = flip4->get_copy_view(0,10,0,8);
   view2(0,3) = 30;
   TEST("vil2_decimate put_view pixels",
-    vil2_image_view_deep_equality(view1, view2), true);
+       vil2_image_view_deep_equality(view1, view2), true);
 }
 
 MAIN( test_image_resource )
