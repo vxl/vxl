@@ -3,7 +3,6 @@
 #include "bgui_linked_vsol_soview2D.h"
 
 #include <vcl_iostream.h>
-#include <vcl_cassert.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_style.h>
@@ -12,6 +11,15 @@
 
 #include <vgl/vgl_distance.h>
 #include <vgui/vgui_soview2D.h>
+
+#include <vdgl/vdgl_digital_curve.h>
+#include <vdgl/vdgl_interpolator.h>
+#include <vdgl/vdgl_edgel_chain.h>
+#include <vdgl/vdgl_edgel.h>
+#include <vsol/vsol_line_2d.h>
+#include <vsol/vsol_point_2d.h>
+#include <vsol/vsol_polyline_2d.h>
+#include <vsol/vsol_polygon_2d.h>
 
 //--------------------------------------------------------------------------
 //: vsol_point_2d view
@@ -48,7 +56,6 @@ void bgui_linked_vsol_soview2D_point::translate(float tx, float ty)
   sptr->set_x( sptr->x() + tx );
   sptr->set_y( sptr->y() + ty );
 }
-
 
 
 //--------------------------------------------------------------------------
