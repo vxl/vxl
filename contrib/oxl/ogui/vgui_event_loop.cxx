@@ -81,7 +81,7 @@ void vgui_event_loop_service()
       vgui_event e;
       bool ok = st->slab->queue_next(&e);
 
-      // despatch it, ...
+      // dispatch it, ...
       if (ok) {
         if (e.type == vgui_DRAW) {
           if (st->slab->overlay_active())
