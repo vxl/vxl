@@ -31,20 +31,6 @@ bool vgui::init_called = false;
 vcl_ostream vgui::out(vcl_cout.rdbuf());
 
 
-// Trigger the registration of all the available toolkit
-// implementations. This variable has to appear in a translation unit
-// (.cxx file) that has a function used by the main
-// program. Otherwise, for static libraries, the linker will not link
-// in the corresponding object file, which means the variable is never
-// initialized, which means that no toolkits are registered. Since
-// anyone using vgui must call vgui::init at some point, this
-// translation unit will be included in the final executable, and
-// therefore the trigger variable below will be initialized, causing
-// the toolkits to be registered.
-int vgui_register_all_implementations();
-static int trigger = vgui_register_all_implementations();
-
-
 //--------------------------------------------------------------------------------
 
 bool vgui_images_are_textures = false;
