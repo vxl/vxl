@@ -38,7 +38,7 @@ class bmrf_curvel_3d : public bugl_gaussian_point_3d<double>, public vbl_ref_cou
   //  \p node at the value \p alpha
   void set_proj_in_frame(unsigned int frame, double alpha, const bmrf_node_sptr& node);
 
-  //: Returns the 2d position of this curvel in frame \p frame by reference
+  //: Returns the 2d position of this curvel in \p frame by reference
   // \retval true if a correspondence exists at this frame
   // \retval false if no correspondence exists at this frame
   bool pos_in_frame(unsigned int frame, vnl_double_2& pos) const;
@@ -52,10 +52,19 @@ class bmrf_curvel_3d : public bugl_gaussian_point_3d<double>, public vbl_ref_cou
   //: Return the number of projections available
   int num_projections() const;
 
+  //: Return the projection error
+  double proj_error() const { return proj_error_; }
+
+  //: Set the projection error
+  void set_proj_error(double error) { proj_error_ = error; }
+
  protected:
 
   //: A vector of alpha/node pairs which represent the projection of this curvel into image i.
   vcl_vector<vcl_pair<double,bmrf_node_sptr> > projs_2d_;
+
+  //: The error in the projection;
+  double proj_error_;
 };
 
 #endif // bmrf_curvel_3d_h_
