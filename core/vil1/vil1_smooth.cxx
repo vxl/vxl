@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vil_smooth"
+#pragma implementation "vil_smooth.h"
 #endif
 #include "vil_smooth.h"
 

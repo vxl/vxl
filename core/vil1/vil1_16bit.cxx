@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vil_16bit"
+#pragma implementation "vil_16bit.h"
 #endif
 #include "vil_16bit.h"
 #include <vil/vil_stream.h>

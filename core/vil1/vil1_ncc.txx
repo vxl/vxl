@@ -2,7 +2,7 @@
   capes@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vil_ncc"
+#pragma implementation "vil_ncc.h"
 #endif
 #include "vil_ncc.h"
 #include <vcl/vcl_cassert.h>

@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vil_pyramid"
+#pragma implementation "vil_pyramid.h"
 #endif
 #include "vil_pyramid.h"
 #include <vcl/vcl_cassert.h>
