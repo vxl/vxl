@@ -139,7 +139,6 @@ vtol_two_chain::vtol_two_chain(vtol_two_chain const &other)
       vcl_cout << "new f" << vcl_endl;
       new_f->describe();
 
-
       assert(*new_f == *f);
 
       link_inferior(*new_f);
@@ -405,7 +404,7 @@ vtol_two_chain::break_into_connected_components( vcl_vector<vtol_topology_object
 #endif
 
 void vtol_two_chain::add_face(vtol_face &new_face,
-                                 signed char dir)
+                              signed char dir)
 {
   _directions.push_back(dir);
   link_inferior(new_face);
@@ -488,7 +487,7 @@ vtol_two_chain::valid_superior_type(vtol_topology_object const &superior) const
 //: Is `chain_inf_sup' type valid for `this' ?
 //---------------------------------------------------------------------------
 bool
-vtol_two_chain::valid_chain_type(const vtol_chain &chain_inf_sup) const
+vtol_two_chain::valid_chain_type(vtol_chain const& chain_inf_sup) const
 {
   return chain_inf_sup.cast_to_two_chain()!=0;
 }
@@ -512,7 +511,6 @@ vertex_list *vtol_two_chain::outside_boundary_vertices(void)
   delete ptr_list;
 
   return new_ref_list;
-
 }
 
 vcl_vector<vtol_vertex *> *
@@ -722,7 +720,6 @@ two_chain_list *vtol_two_chain::superior_two_chains(void)
 
 two_chain_list *vtol_two_chain::outside_boundary_two_chains(void)
 {
-
   vcl_vector<vtol_two_chain*>* ptr_list= outside_boundary_compute_two_chains();
   two_chain_list *ref_list= new two_chain_list();
 
@@ -736,7 +733,7 @@ two_chain_list *vtol_two_chain::outside_boundary_two_chains(void)
 
 vcl_vector<vtol_two_chain*>  *vtol_two_chain::outside_boundary_compute_two_chains(void)
 {
- LIST_SELF(vtol_two_chain);
+  LIST_SELF(vtol_two_chain);
 }
 
 //***************************************************************************
@@ -745,7 +742,7 @@ vcl_vector<vtol_two_chain*>  *vtol_two_chain::outside_boundary_compute_two_chain
 
 //: equality operator
 
-bool vtol_two_chain::operator==(const vtol_two_chain &other) const
+bool vtol_two_chain::operator==(vtol_two_chain const& other) const
 {
   if(this==&other){
     return true;
@@ -777,12 +774,10 @@ bool vtol_two_chain::operator==(const vtol_two_chain &other) const
     if (!(*d1 == *d2))
       return false;
 
-
   const chain_list &righth=_chain_inferiors;
   const chain_list &lefth=other._chain_inferiors;
   if(righth.size()!=lefth.size())
     return false;
-
 
   chain_list::const_iterator hi1,hi2;
 
@@ -806,7 +801,6 @@ bool vtol_two_chain::operator==(vsol_spatial_object_3d const& obj) const
   : false;
 }
 
-
 //***************************************************************************
 //    Utility Functions
 //***************************************************************************
@@ -815,7 +809,6 @@ bool vtol_two_chain::operator==(vsol_spatial_object_3d const& obj) const
 void vtol_two_chain::correct_chain_directions(void)
 {
   vcl_cerr << "vtol_two_chain::correct_chain_directions() not yet implemented\n";
-
 }
 
 //***************************************************************************
@@ -849,7 +842,7 @@ void vtol_two_chain::describe(vcl_ostream &strm,
   describe_superiors(strm,blanking);
 }
 
-signed char vtol_two_chain::direction(const vtol_face &f) const
+signed char vtol_two_chain::direction(vtol_face const& f) const
 {
   // return the direction of the face
 

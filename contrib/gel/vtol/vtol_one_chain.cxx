@@ -67,7 +67,7 @@ vtol_one_chain::vtol_one_chain(edge_list &edgs,
 // Copy constructor
 //---------------------------------------------------------------------------
 //  Copy Constructor....does a deep copy.
-vtol_one_chain::vtol_one_chain(const vtol_one_chain &other)
+vtol_one_chain::vtol_one_chain(vtol_one_chain const& other)
 {
   vtol_one_chain *el;
   vertex_list *verts;

@@ -75,7 +75,7 @@ public:
   //---------------------------------------------------------------------------
   //: Copy constructor
   //---------------------------------------------------------------------------
-  vtol_one_chain(const vtol_one_chain &other);
+  vtol_one_chain(vtol_one_chain const& other);
 
   //---------------------------------------------------------------------------
   //: Destructor
@@ -98,7 +98,7 @@ public:
   //---------------------------------------------------------------------------
   virtual vtol_topology_object_type topology_type(void) const;
 
-  virtual signed char direction(const vtol_edge &e) const;
+  virtual signed char direction(vtol_edge const& e) const;
 
   //***************************************************************************
   // Replaces dynamic_cast<T>
@@ -122,19 +122,19 @@ public:
   //: Is `inferior' type valid for `this' ?
   //---------------------------------------------------------------------------
   virtual bool
-  valid_inferior_type(const vtol_topology_object &inferior) const;
+  valid_inferior_type(vtol_topology_object const& inferior) const;
 
   //---------------------------------------------------------------------------
   //: Is `superior' type valid for `this' ?
   //---------------------------------------------------------------------------
   virtual bool
-  valid_superior_type(const vtol_topology_object &superior) const;
+  valid_superior_type(vtol_topology_object const& superior) const;
 
   //---------------------------------------------------------------------------
   //: Is `chain_inf_sup' type valid for `this' ?
   //---------------------------------------------------------------------------
   virtual bool
-  valid_chain_type(const vtol_chain &chain_inf_sup) const;
+  valid_chain_type(vtol_chain const& chain_inf_sup) const;
 
   //: accessors for outside boundary elements
 
@@ -147,9 +147,7 @@ public:
   virtual one_chain_list *inferior_one_chains(void);
   virtual one_chain_list *superior_one_chains(void);
 
-
-  // Utilities
-  //: \brief Utilitites
+  //: \brief Utilities
 
   virtual void reverse_directions(void);
 
@@ -160,31 +158,24 @@ public:
   virtual void compute_bounding_box(void); //A local implementation
 
   virtual vtol_edge *edge(int i) const;
-  virtual int num_edges(void) const
-  {
-    return numinf();
-  }
+  virtual int num_edges(void) const { return numinf(); }
 
   virtual void determine_edge_directions(void);
   virtual void add_edge(vtol_edge &, bool);
   virtual void remove_edge(vtol_edge &, bool);
 
-
-  // Operators
   //: \brief Operators
 
-  virtual bool operator==(const vtol_one_chain &other) const;
-  bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object_3d
+  virtual bool operator==(vtol_one_chain const& other) const;
+  bool operator==(vsol_spatial_object_3d const& obj) const; // virtual of vsol_spatial_object_3d
 
   virtual void print(vcl_ostream &strm=vcl_cout) const;
-  virtual void describe_directions(vcl_ostream &strm=vcl_cout,
-                                   int blanking=0) const;
-  virtual void describe(vcl_ostream &strm=vcl_cout,
-                        int blanking=0) const;
+  virtual void describe_directions(vcl_ostream &strm=vcl_cout, int blanking=0) const;
+  virtual void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;
 
 public:
 
-  //: Warning clients should not use these methods;
+  // \warning clients should not use these methods
 
   virtual vcl_vector<vtol_vertex*> *compute_vertices(void);
   virtual vcl_vector<vtol_edge*> *compute_edges(void);

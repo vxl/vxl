@@ -63,20 +63,19 @@ public:
   //---------------------------------------------------------------------------
   //: Constructor
   //---------------------------------------------------------------------------
-  explicit vtol_two_chain(face_list &,
-                             bool new_is_cycle=false);
+  explicit vtol_two_chain(face_list &, bool new_is_cycle=false);
 
   //---------------------------------------------------------------------------
   //: Constructor
   //---------------------------------------------------------------------------
   explicit vtol_two_chain(face_list &,
-                             vcl_vector<signed char> &,
-                             bool new_is_cycle=false);
+                          vcl_vector<signed char> &,
+                          bool new_is_cycle=false);
 
   //---------------------------------------------------------------------------
   //: Copy constructor
   //---------------------------------------------------------------------------
-  vtol_two_chain(const vtol_two_chain &other);
+  vtol_two_chain(vtol_two_chain const& other);
 
   //---------------------------------------------------------------------------
   //: Destructor
@@ -101,12 +100,9 @@ public:
 
   //: get the direction of the face
 
-  signed char direction(const vtol_face &f) const;
+  signed char direction(vtol_face const& f) const;
 
-  virtual vtol_face *face(int i)
-  {
-    return (vtol_face *)(_inferiors[i].ptr());
-  }
+  virtual vtol_face *face(int i) { return (vtol_face *)(_inferiors[i].ptr()); }
 
   //---------------------------------------------------------------------------
   //: Shallow copy with no links
@@ -144,20 +140,17 @@ public:
   //---------------------------------------------------------------------------
   //: Is `inferior' type valid for `this' ?
   //---------------------------------------------------------------------------
-  virtual bool
-  valid_inferior_type(const vtol_topology_object &inferior) const;
+  virtual bool valid_inferior_type(vtol_topology_object const& inferior) const;
 
   //---------------------------------------------------------------------------
   //: Is `superior' type valid for `this' ?
   //---------------------------------------------------------------------------
-  virtual bool
-  valid_superior_type(const vtol_topology_object &superior) const;
+  virtual bool valid_superior_type(vtol_topology_object const& superior) const;
 
   //---------------------------------------------------------------------------
   //: Is `chain_inf_sup' type valid for `this' ?
   //---------------------------------------------------------------------------
-  virtual bool
-  valid_chain_type(const vtol_chain &chain_inf_sup) const;
+  virtual bool valid_chain_type(vtol_chain const& chain_inf_sup) const;
 
   //: network access methods
 
@@ -188,28 +181,18 @@ public:
   virtual vcl_vector<vtol_face*> *outside_boundary_compute_faces(void);
   virtual vcl_vector<vtol_two_chain*> *outside_boundary_compute_two_chains(void);
 
-
-
-
-
-
-
-
-  virtual int num_faces(void) const { return numinf();}
+  virtual int num_faces(void) const { return numinf(); }
 
   virtual void correct_chain_directions(void);
 
-  virtual bool operator==(const vtol_two_chain &other) const;
-  bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object_3d
+  virtual bool operator==(vtol_two_chain const& other) const;
+  bool operator==(vsol_spatial_object_3d const& obj) const; // virtual of vsol_spatial_object_3d
 
   virtual void print(vcl_ostream &strm=vcl_cout) const;
-  virtual void describe_directions(vcl_ostream &strm=vcl_cout,
-                                   int blanking=0) const;
-  virtual void describe(vcl_ostream &strm=vcl_cout,
-                        int blanking=0) const;
+  virtual void describe_directions(vcl_ostream &strm=vcl_cout, int blanking=0) const;
+  virtual void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;
 
   virtual bool break_into_connected_components(vcl_vector<vtol_topology_object *> &components);
-
 };
 
 #endif   // vtol_two_chain.h
