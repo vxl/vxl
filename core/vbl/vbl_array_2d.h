@@ -31,6 +31,9 @@ public:
   //: Construct m-by-n array.
   vbl_array_2d(int m, int n) { construct(m, n); }
 
+  //: Construct and fill an m-by-n array.
+  vbl_array_2d(int m, int n, const T &v) { construct(m, n); fill(v);}
+
   //: Construct from a 2d array
   vbl_array_2d(vbl_array_2d<T> const &that) {
     construct(that.rows(), that.cols());
