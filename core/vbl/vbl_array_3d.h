@@ -20,6 +20,8 @@
 //        01 Mar 2001 fsm@robots. Converted to fascist C++
 //------------------------------------------------------------------------------
 
+#include <vcl_compiler.h>
+
 #ifdef __OPTIMIZE__
 # define RANGECHECK(i,j,k) ((void)0)
 #else
@@ -29,7 +31,7 @@
 
 //: Templated 3-dimensional array
 
-template <class T>
+export template <class T>
 class vbl_array_3d {
 public:
   typedef T element_type;
@@ -100,8 +102,8 @@ private:
 // formatted I/O
 //
 #include <vcl_iosfwd.h>
-template <class T> vcl_ostream& operator<<(vcl_ostream&,vbl_array_3d<T >const&);
-template <class T> vcl_istream& operator>>(vcl_istream&,vbl_array_3d<T >&);
+export template <class T> vcl_ostream& operator<<(vcl_ostream&,vbl_array_3d<T >const&);
+export template <class T> vcl_istream& operator>>(vcl_istream&,vbl_array_3d<T >&);
 
 #define VBL_ARRAY_3D_INSTANTIATE \
 extern "please include vbl/vbl_array_3d.txx instead"

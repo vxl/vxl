@@ -22,7 +22,7 @@
 //     Andrew W. Fitzgibbon, Oxford RRG, 04 Aug 96
 
 //: fixed length  stack-stored vnl_vector.
-template <class T, int n>
+export template <class T, int n>
 class vnl_vector_fixed : public vnl_vector_ref<T> {
   typedef vnl_vector_ref<T> Base;
 public:

@@ -48,21 +48,25 @@
 #include <vnl/vnl_error.h>
 #include <vnl/vnl_c_vector.h>
 
-template <class T> class vnl_vector;
-template <class T> class vnl_matrix;
+export template <class T> class vnl_vector;
+export template <class T> class vnl_matrix;
 
 //--------------------------------------------------------------------------------
 
-template <class T> vnl_matrix<T> operator+ (T const&, vnl_matrix<T> const&);
-template <class T> vnl_matrix<T> operator- (T const&, vnl_matrix<T> const&);
-template <class T> vnl_matrix<T> operator* (T const&, vnl_matrix<T> const&);
-template <class T> vnl_matrix<T> element_product(vnl_matrix<T> const&,vnl_matrix<T> const&);
-template <class T> vnl_matrix<T> element_quotient(vnl_matrix<T> const&,vnl_matrix<T> const&);
-template <class T> T             dot_product (vnl_matrix<T> const&, vnl_matrix<T> const&);
-template <class T> T             inner_product (vnl_matrix<T> const&, vnl_matrix<T> const&);
-template <class T> T             cos_angle(vnl_matrix<T> const&, vnl_matrix<T> const& );
-template <class T> vcl_ostream& operator<< (vcl_ostream& os, vnl_matrix<T> const& m);
-template <class T> vcl_istream& operator>> (vcl_istream& os, vnl_matrix<T>& m);
+#define v vnl_vector<T>
+#define m vnl_matrix<T>
+template <class T> m operator+ (T const&, m const&);
+template <class T> m operator- (T const&, m const&);
+template <class T> m operator* (T const&, m const&);
+template <class T> m element_product(m const&, m const&);
+template <class T> m element_quotient(m const&, m const&);
+template <class T> T dot_product (m const&, m const&); 
+template <class T> T inner_product (m const&, m const&); 
+template <class T> T cos_angle(m const&, m const& );
+template <class T> vcl_ostream& operator<< (vcl_ostream&, m const&);
+template <class T> vcl_istream& operator>> (vcl_istream&, m&);
+#undef v
+#undef m
 
 //--------------------------------------------------------------------------------
 
