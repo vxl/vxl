@@ -1,6 +1,6 @@
 # brl/bbas/bxml/tests/CMakeLists.txt
 
-LINK_LIBRARIES( bxml vtol vsol vnl testlib )
+LINK_LIBRARIES( bxml vtol vsol testlib )
 
 ADD_EXECUTABLE( bxml_test_all
   test_driver.cxx
