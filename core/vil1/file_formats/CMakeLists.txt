@@ -24,7 +24,7 @@ INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindJPEG.cmake)
 INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindPNG.cmake)
 INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindTIFF.cmake)
 
-IF(NATIVE_JPEG_LIBRARY)
+IF(HAS_NATIVE_JPEG)
 
   INCLUDE_DIRECTORIES( ${NATIVE_JPEG_INCLUDE_PATH})
   SOURCE_FILES( vil_file_formats_sources 
@@ -34,7 +34,7 @@ IF(NATIVE_JPEG_LIBRARY)
                 vil_jpeg_destination_mgr
                 vil_jpeg_source_mgr )
 
-ELSE(NATIVE_JPEG_LIBRARY)
+ELSE(HAS_NATIVE_JPEG)
 
   INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/v3p/jpeg)
   SOURCE_FILES( vil_file_formats_sources 
@@ -44,7 +44,7 @@ ELSE(NATIVE_JPEG_LIBRARY)
                 vil_jpeg_destination_mgr
                 vil_jpeg_source_mgr )
 
-ENDIF(NATIVE_JPEG_LIBRARY)
+ENDIF(HAS_NATIVE_JPEG)
 
 IF(NATIVE_PNG_LIBRARY)
 
