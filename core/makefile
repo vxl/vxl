@@ -2,6 +2,9 @@
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
+# utilities
+SUBDIRS += vul
+
 # stream I/O
 SUBDIRS += vsl
 
@@ -10,9 +13,6 @@ SUBDIRS += vpl
 
 # "basics" (templates)
 SUBDIRS += vbl
-
-# utilities
-SUBDIRS += vul
 
 # numerics
 SUBDIRS += vnl
