@@ -3,7 +3,7 @@
 % Load plain if necessary, i.e., if running under initex.
 \expandafter\ifx\csname fmtname\endcsname\relax\input plain\fi
 %
-\def\texinfoversion{2001-03-29.00}
+\def\texinfoversion{2001-04-10.13}
 %
 % Copyright (C) 1985, 86, 88, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99
 % Free Software Foundation, Inc.
@@ -1107,7 +1107,9 @@ where each line of input produces a line of output.}
 % Set the font macro #1 to the font named #2, adding on the
 % specified font prefix (normally `cm').
 % #3 is the font's design size, #4 is a scale factor
-\def\setfont#1#2#3#4{\font#1=\fontprefix#2#3 scaled #4}
+\ifx\txisetfont\undefined
+\def\txisetfont#1#2#3#4{\font#1=\fontprefix#2#3 scaled #4}
+\fi
 
 % Use cm as the default font prefix.
 % To specify the font prefix, you must define \fontprefix
@@ -1134,102 +1136,102 @@ where each line of input produces a line of output.}
 
 \ifx\bigger\relax
 \let\mainmagstep=\magstep1
-\setfont\textrm\rmshape{12}{1000}
-\setfont\texttt\ttshape{12}{1000}
+\txisetfont\textrm\rmshape{12}{1000}
+\txisetfont\texttt\ttshape{12}{1000}
 \else
-\setfont\textrm\rmshape{10}{\mainmagstep}
-\setfont\texttt\ttshape{10}{\mainmagstep}
+\txisetfont\textrm\rmshape{10}{\mainmagstep}
+\txisetfont\texttt\ttshape{10}{\mainmagstep}
 \fi
 % Instead of cmb10, you many want to use cmbx10.
 % cmbx10 is a prettier font on its own, but cmb10
 % looks better when embedded in a line with cmr10.
-\setfont\textbf\bfshape{10}{\mainmagstep}
-\setfont\textit\itshape{10}{\mainmagstep}
-\setfont\textsl\slshape{10}{\mainmagstep}
-\setfont\textsf\sfshape{10}{\mainmagstep}
-\setfont\textsc\scshape{10}{\mainmagstep}
-\setfont\textttsl\ttslshape{10}{\mainmagstep}
-\setfont\textttbf\ttbshape{10}{\mainmagstep}
+\txisetfont\textbf\bfshape{10}{\mainmagstep}
+\txisetfont\textit\itshape{10}{\mainmagstep}
+\txisetfont\textsl\slshape{10}{\mainmagstep}
+\txisetfont\textsf\sfshape{10}{\mainmagstep}
+\txisetfont\textsc\scshape{10}{\mainmagstep}
+\txisetfont\textttsl\ttslshape{10}{\mainmagstep}
+\txisetfont\textttbf\ttbshape{10}{\mainmagstep}
 \font\texti=cmmi10 scaled \mainmagstep
 \font\textsy=cmsy10 scaled \mainmagstep
 
 % A few fonts for @defun, etc.
-\setfont\defbf\bxshape{10}{\magstep1} %was 1314
-\setfont\deftt\ttshape{10}{\magstep1}
+\txisetfont\defbf\bxshape{10}{\magstep1} %was 1314
+\txisetfont\deftt\ttshape{10}{\magstep1}
 \def\df{\let\tentt=\deftt \let\tenbf = \defbf \bf}
 
 % Fonts for indices, footnotes, small examples (9pt).
-\setfont\smallrm\rmshape{9}{1000}
-\setfont\smalltt\ttshape{9}{1000}
-\setfont\smallbf\bfshape{10}{900}
-\setfont\smallit\itshape{9}{1000}
-\setfont\smallsl\slshape{9}{1000}
-\setfont\smallsf\sfshape{9}{1000}
-\setfont\smallsc\scshape{10}{900}
-\setfont\smallttsl\ttslshape{10}{900}
+\txisetfont\smallrm\rmshape{9}{1000}
+\txisetfont\smalltt\ttshape{9}{1000}
+\txisetfont\smallbf\bfshape{10}{900}
+\txisetfont\smallit\itshape{9}{1000}
+\txisetfont\smallsl\slshape{9}{1000}
+\txisetfont\smallsf\sfshape{9}{1000}
+\txisetfont\smallsc\scshape{10}{900}
+\txisetfont\smallttsl\ttslshape{10}{900}
 \font\smalli=cmmi9
 \font\smallsy=cmsy9
 
 % Fonts for title page:
-\setfont\titlerm\rmbshape{12}{\magstep3}
-\setfont\titleit\itbshape{10}{\magstep4}
-\setfont\titlesl\slbshape{10}{\magstep4}
-\setfont\titlett\ttbshape{12}{\magstep3}
-\setfont\titlettsl\ttslshape{10}{\magstep4}
-\setfont\titlesf\sfbshape{17}{\magstep1}
+\txisetfont\titlerm\rmbshape{12}{\magstep3}
+\txisetfont\titleit\itbshape{10}{\magstep4}
+\txisetfont\titlesl\slbshape{10}{\magstep4}
+\txisetfont\titlett\ttbshape{12}{\magstep3}
+\txisetfont\titlettsl\ttslshape{10}{\magstep4}
+\txisetfont\titlesf\sfbshape{17}{\magstep1}
 \let\titlebf=\titlerm
-\setfont\titlesc\scbshape{10}{\magstep4}
+\txisetfont\titlesc\scbshape{10}{\magstep4}
 \font\titlei=cmmi12 scaled \magstep3
 \font\titlesy=cmsy10 scaled \magstep4
 \def\authorrm{\secrm}
 
 % Chapter (and unnumbered) fonts (17.28pt).
-\setfont\chaprm\rmbshape{12}{\magstep2}
-\setfont\chapit\itbshape{10}{\magstep3}
-\setfont\chapsl\slbshape{10}{\magstep3}
-\setfont\chaptt\ttbshape{12}{\magstep2}
-\setfont\chapttsl\ttslshape{10}{\magstep3}
-\setfont\chapsf\sfbshape{17}{1000}
+\txisetfont\chaprm\rmbshape{12}{\magstep2}
+\txisetfont\chapit\itbshape{10}{\magstep3}
+\txisetfont\chapsl\slbshape{10}{\magstep3}
+\txisetfont\chaptt\ttbshape{12}{\magstep2}
+\txisetfont\chapttsl\ttslshape{10}{\magstep3}
+\txisetfont\chapsf\sfbshape{17}{1000}
 \let\chapbf=\chaprm
-\setfont\chapsc\scbshape{10}{\magstep3}
+\txisetfont\chapsc\scbshape{10}{\magstep3}
 \font\chapi=cmmi12 scaled \magstep2
 \font\chapsy=cmsy10 scaled \magstep3
 
 % Section fonts (14.4pt).
-\setfont\secrm\rmbshape{12}{\magstep1}
-\setfont\secit\itbshape{10}{\magstep2}
-\setfont\secsl\slbshape{10}{\magstep2}
-\setfont\sectt\ttbshape{12}{\magstep1}
-\setfont\secttsl\ttslshape{10}{\magstep2}
-\setfont\secsf\sfbshape{12}{\magstep1}
+\txisetfont\secrm\rmbshape{12}{\magstep1}
+\txisetfont\secit\itbshape{10}{\magstep2}
+\txisetfont\secsl\slbshape{10}{\magstep2}
+\txisetfont\sectt\ttbshape{12}{\magstep1}
+\txisetfont\secttsl\ttslshape{10}{\magstep2}
+\txisetfont\secsf\sfbshape{12}{\magstep1}
 \let\secbf\secrm
-\setfont\secsc\scbshape{10}{\magstep2}
+\txisetfont\secsc\scbshape{10}{\magstep2}
 \font\seci=cmmi12 scaled \magstep1
 \font\secsy=cmsy10 scaled \magstep2
 
-% \setfont\ssecrm\bxshape{10}{\magstep1}    % This size an font looked bad.
-% \setfont\ssecit\itshape{10}{\magstep1}    % The letters were too crowded.
-% \setfont\ssecsl\slshape{10}{\magstep1}
-% \setfont\ssectt\ttshape{10}{\magstep1}
-% \setfont\ssecsf\sfshape{10}{\magstep1}
+% \txisetfont\ssecrm\bxshape{10}{\magstep1}    % This size an font looked bad.
+% \txisetfont\ssecit\itshape{10}{\magstep1}    % The letters were too crowded.
+% \txisetfont\ssecsl\slshape{10}{\magstep1}
+% \txisetfont\ssectt\ttshape{10}{\magstep1}
+% \txisetfont\ssecsf\sfshape{10}{\magstep1}
 
-%\setfont\ssecrm\bfshape{10}{1315}      % Note the use of cmb rather than cmbx.
-%\setfont\ssecit\itshape{10}{1315}      % Also, the size is a little larger than
-%\setfont\ssecsl\slshape{10}{1315}      % being scaled magstep1.
-%\setfont\ssectt\ttshape{10}{1315}
-%\setfont\ssecsf\sfshape{10}{1315}
+%\txisetfont\ssecrm\bfshape{10}{1315}      % Note the use of cmb rather than cmbx.
+%\txisetfont\ssecit\itshape{10}{1315}      % Also, the size is a little larger than
+%\txisetfont\ssecsl\slshape{10}{1315}      % being scaled magstep1.
+%\txisetfont\ssectt\ttshape{10}{1315}
+%\txisetfont\ssecsf\sfshape{10}{1315}
 
 %\let\ssecbf=\ssecrm
 
 % Subsection fonts (13.15pt).
-\setfont\ssecrm\rmbshape{12}{\magstephalf}
-\setfont\ssecit\itbshape{10}{1315}
-\setfont\ssecsl\slbshape{10}{1315}
-\setfont\ssectt\ttbshape{12}{\magstephalf}
-\setfont\ssecttsl\ttslshape{10}{1315}
-\setfont\ssecsf\sfbshape{12}{\magstephalf}
+\txisetfont\ssecrm\rmbshape{12}{\magstephalf}
+\txisetfont\ssecit\itbshape{10}{1315}
+\txisetfont\ssecsl\slbshape{10}{1315}
+\txisetfont\ssectt\ttbshape{12}{\magstephalf}
+\txisetfont\ssecttsl\ttslshape{10}{1315}
+\txisetfont\ssecsf\sfbshape{12}{\magstephalf}
 \let\ssecbf\ssecrm
-\setfont\ssecsc\scbshape{10}{\magstep1}
+\txisetfont\ssecsc\scbshape{10}{\magstep1}
 \font\sseci=cmmi12 scaled \magstephalf
 \font\ssecsy=cmsy10 scaled 1315
 % The smallcaps and symbol fonts should actually be scaled \magstep1.5,
@@ -1301,9 +1303,9 @@ where each line of input produces a line of output.}
 \newcount\fontdepth \fontdepth=0
 
 % Fonts for short table of contents.
-\setfont\shortcontrm\rmshape{12}{1000}
-\setfont\shortcontbf\bxshape{12}{1000}
-\setfont\shortcontsl\slshape{12}{1000}
+\txisetfont\shortcontrm\rmshape{12}{1000}
+\txisetfont\shortcontbf\bxshape{12}{1000}
+\txisetfont\shortcontsl\slshape{12}{1000}
 
 %% Add scribe-like font environments, plus @l for inline lisp (usually sans
 %% serif) and @ii for TeX italic
@@ -1336,7 +1338,7 @@ where each line of input produces a line of output.}
 }
 \let\ttfont=\t
 \def\samp#1{`\tclose{#1}'\null}
-\setfont\keyrm\rmshape{8}{1000}
+\txisetfont\keyrm\rmshape{8}{1000}
 \font\keysy=cmsy9
 \def\key#1{{\keyrm\textfont2=\keysy \leavevmode\hbox{%
   \raise0.4pt\hbox{\angleleft}\kern-.08em\vtop{%
@@ -4634,7 +4636,7 @@ width0pt\relax} \fi
 \def\defunargs#1{\functionparens \sl
 % Expand, preventing hyphenation at `-' chars.
 % Note that groups don't affect changes in \hyphenchar.
-% Set the font temporarily and use \font in case \setfont made \tensl a macro.
+% Set the font temporarily and use \font in case \txisetfont made \tensl a macro.
 {\tensl\hyphenchar\font=0}%
 #1%
 {\tensl\hyphenchar\font=45}%
