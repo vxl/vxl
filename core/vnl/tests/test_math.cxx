@@ -53,6 +53,7 @@ void test_math() {
 #if defined(__alpha__)
   float b1 = 0.0f/0.0f; // compiler warning
   double b2 = 0.0/0.0; // compiler warning
+  int t = 0x7f800000; a1 = *((float*)(&t)); a2 = -a1;
 # if VCL_USE_LONG_DOUBLE
   long double b3 = (long double)0.0/(long double)0.0; // compiler warning
 # endif
