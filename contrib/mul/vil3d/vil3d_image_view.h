@@ -81,27 +81,6 @@ class vil3d_image_view : public vil3d_image_view_base
                    vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step,
                    vcl_ptrdiff_t k_step, vcl_ptrdiff_t plane_step);
 
-  //: Construct from various vil3d_image_view types.
-  // The new object will point to the same underlying image as the rhs
-  // You can assign a vil3d_image_view<compound_type<T>> to a vil3d_image_view<T>
-  // in all reasonable cases - the lhs will have as many planes as the rhs has
-  // components. You can assign a vil3d_image_view<T> to a vil3d_image_view<compound_type<T>>
-  // when the underlying data is formatted appropriately and the lhs has
-  // as many components as the rhs has planes. O(1).
-  // If the view types are not compatible this object will be set to empty.
-  vil3d_image_view(const vil3d_image_view_base& rhs);
-
-  //: Construct from various vil3d_image_view types.
-  // The new object will point to the same underlying image as the rhs.
-  //
-  // You can assign a vil3d_image_view<compound_type<T>> to a vil3d_image_view<T>
-  // in all reasonable cases - the lhs will have as many planes as the rhs has
-  // components. You can assign a vil3d_image_view<T> to a vil3d_image_view<compound_type<T>>
-  // when the underlying data is formatted appropriately and the lhs has
-  // as many components as the rhs has planes. O(1).
-  // If the view types are not compatible this object will be set to empty.
-  vil3d_image_view(const vil3d_image_view_base_sptr& rhs);
-
   //  Destructor
   virtual ~vil3d_image_view();
 
@@ -259,30 +238,6 @@ class vil3d_image_view : public vil3d_image_view_base
 
   //: Provides an ordering.
   inline bool operator<=(const vil3d_image_view<T>& other) const { return !operator>(other); }
-
-  //: Copy a view. The rhs and lhs will point to the same image data.
-  // You can assign a vil3d_image_view<compound_type<T>> to a vil3d_image_view<T>
-  // in all reasonable cases - the lhs will have as many planes as the rhs has
-  // components. You can assign a vil3d_image_view<T> to a vil3d_image_view<compound_type<T>>
-  // when the underlying data is formatted appropriately and the lhs has
-  // as many components as the rhs has planes. O(1).
-  // If the view types are not compatible this object will be set to empty.
-  const vil3d_image_view<T>& operator=(const vil3d_image_view_base & rhs);
-
-  //: Copy a view. The rhs and lhs will point to the same image data.
-  // You can assign a vil3d_image_view<compound_type<T>> to a vil3d_image_view<T>
-  // in all reasonable cases - the lhs will have as many planes as the rhs has
-  // components. You can assign a vil3d_image_view<T> to a vil3d_image_view<compound_type<T>>
-  // when the underlying data is formatted appropriately and the lhs has
-  // as many components as the rhs has planes. O(1).
-  // If the view types are not compatible this object will be set to empty.
-  // If the pointer is null, this object will be set to empty.
-  inline const vil3d_image_view<T>& operator=(const vil3d_image_view_base_sptr& rhs)
-  {
-    if (!rhs) clear();
-    else *this = *rhs;
-    return *this;
-  }
 };
 
 //: Print a 1-line summary of contents
