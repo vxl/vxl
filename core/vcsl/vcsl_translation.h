@@ -4,9 +4,8 @@
 //
 // .NAME vcsl_translation - Translation transformation
 // .LIBRARY vcsl
-// .HEADER  vcsl/vcsl_translation.h
-// .INCLUDE vcsl/vcsl_translation_ref.h
-// .INCLUDE vcsl/vcsl_spatial_transformation.h
+// .HEADER  vxl package
+// .INCLUDE vcsl/vcsl_translation.h
 // .FILE    vcsl/vcsl_translation.cxx
 //
 // .SECTION Description 
@@ -89,4 +88,4 @@ protected:
   list_of_vectors *_vector;
 };
 
-#endif VCSL_TRANSLATION_H
+#endif // VCSL_TRANSLATION_H
