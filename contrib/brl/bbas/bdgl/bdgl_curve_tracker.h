@@ -15,7 +15,7 @@
 #include <vcl_map.h>
 #include <vcl_utility.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
-#include <vdgl/vdgl_digital_curve.h>
+#include <vdgl/vdgl_digital_curve_sptr.h>
 #include <bdgl/bdgl_curve_matcher.h>
 #include <bdgl/bdgl_curve_tracker_primitive.h>
 #include <vsol/vsol_spatial_object_2d_sptr.h>
@@ -23,22 +23,16 @@
 //-----------------------------------------------------------------------------
 class bdgl_curve_tracker_params
 {
- public:
-  // Parameters
-
-  bool debug_;               //!< Carry out debug processing
+ public: // Parameters
   bool verbose_;             //!< Print detailed output
-
-  double match_thres_;         // threshold on the allowed matching quality
+  bool debug_;               //!< Carry out debug processing
+  double match_thres_;       //!< threshold on the allowed matching quality
 
   bdgl_curve_matcher_params match_params_;
 
   bdgl_curve_tracker_params(){}
-
-  bdgl_curve_tracker_params(bool verbose, bool debug){verbose_=verbose; debug_=debug; }
-  bdgl_curve_tracker_params(double th){ match_thres_ = th; }
-
-  ~bdgl_curve_tracker_params(){}
+  bdgl_curve_tracker_params(bool verbo, bool dbg):verbose_(verbo),debug_(dbg){}
+  bdgl_curve_tracker_params(double thres):match_thres_(thres){}
 };
 
 
@@ -58,7 +52,6 @@ class bdgl_curve_tracker
 
   bdgl_curve_tracker(){}
   bdgl_curve_tracker(bdgl_curve_tracker_params p){ params_ = p; }
-  ~bdgl_curve_tracker(){}
   vcl_vector< vcl_vector< vdgl_edgel_chain_sptr > > get_input(){ return input_curve_; }
   void set_input(vcl_vector< vcl_vector< vdgl_edgel_chain_sptr > > curve){ input_curve_=curve; }
 
@@ -86,12 +79,10 @@ class bdgl_curve_tracker
   vcl_vector<vcl_vector<int> > aspects;
   vcl_vector< vcl_vector< bdgl_curve_tracker_primitive > > aspect_output_curve_;
 
-
  private:
 
   vcl_map<vcl_pair<int,int>,vcl_vector<double> > map_of_T;
   vcl_map<int,int> store_matches;
-
 };
 
 #if 0 // class commented out
@@ -99,7 +90,6 @@ template <class CURVE_TYPE>
 class bdgl_curve_tracker
 {
  public:
-
 
   // Params
   bdgl_curve_tracker_params params_;
@@ -145,4 +135,4 @@ class bdgl_tracking_feature
   // bdgl_curve_description desc;
 };
 
-#endif
+#endif // bdgl_curve_tracker_h_
