@@ -10,7 +10,7 @@
 // \date   08 Dec 2001
 //
 // \verbatim
-// History
+//  Modifications
 //   08 Dec 2001 first version.
 // \endverbatim
 
