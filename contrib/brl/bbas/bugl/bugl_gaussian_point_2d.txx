@@ -9,7 +9,7 @@ bugl_gaussian_point_2d<T>::bugl_gaussian_point_2d(T x, T y, vnl_matrix_fixed<T, 
 : bugl_uncertainty_point_2d<T>(x, y)
 {
   sigma_ = s;
-  sigma_inv_ = vnl_inverse<T>(s);
+  sigma_inv_ = vnl_inverse(s);
 }
 
 //----------------------------------------------------------------------------

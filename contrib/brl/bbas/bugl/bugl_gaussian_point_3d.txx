@@ -9,7 +9,7 @@ bugl_gaussian_point_3d<T>::bugl_gaussian_point_3d(T x, T y, T z, vnl_matrix_fixe
 bugl_uncertainty_point_3d<T>(x, y, z)
 {
   sigma_ = s;
-  sigma_inv_ = vnl_inverse<T>(s);
+  sigma_inv_ = vnl_inverse(s);
 }
 
 //----------------------------------------------------------------------------
