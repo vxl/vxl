@@ -151,9 +151,9 @@
 #ifndef vcl_wostringstream
 #define vcl_wostringstream vcl_generic_iosfwd_STD :: wostringstream
 #endif
-// stringstream
-#ifndef vcl_stringstream
-#define vcl_stringstream vcl_generic_iosfwd_STD :: stringstream
+// wstringstream
+#ifndef vcl_wstringstream
+#define vcl_wstringstream vcl_generic_iosfwd_STD :: wstringstream
 #endif
 // wfilebuf
 #ifndef vcl_wfilebuf

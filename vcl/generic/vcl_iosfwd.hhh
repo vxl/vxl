@@ -35,7 +35,7 @@
 @wstringbuf
 @wistringstream
 @wostringstream
-@stringstream
+@wstringstream
 @wfilebuf
 @wifstream
 @wofstream
