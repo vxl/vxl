@@ -388,15 +388,17 @@ sub process_headers {
       s/<Numerics\/SparseMatrix\.h>/<vnl\/vnl_sparse_matrix.h>/;
       s/<Numerics\/Transpose\.h>/<vnl\/vnl_transpose.h>/;
       s/<Numerics\/Scatter3x3\.h>/<vnl\/algo\/vnl_scatter_3x3.h>/g;
+      s/<Numerics\/Amoeba\.h>/<vnl\/algo\/vnl_amoeba.h>/g;
       s/<Numerics\/CrossProductMatrix\.h>/<vnl\/vnl_cross_product_matrix.h>/g;
       s/<Numerics\/Identity3x3\.h>/<vnl\/vnl_identity_3x3.h>/g;
       s/<Numerics\/Int([0-9x]+)\.h>/<vnl\/vnl_int_$1.h>/;
       s/<Numerics\/Float([0-9x]+)\.h>/<vnl\/vnl_float_$1.h>/;
       s/<Numerics\/Double([0-9x]+)\.h>/<vnl\/vnl_double_$1.h>/;
+      s/<Numerics\/OuterProduct(|3x3)\.h>/<vnl\/vnl_vector.h>/g;
       s/<math\/resize\.h>/<vnl\/vnl_resize.h>/;
       s/^(\#include <math\/matlab\.h>)/\#define matlab(M) M \/\/$1/;
       s/<math\/BaseSVD\.h>/<vnl\/algo\/vnl_svd.h>/;
-      s/<math\/numeric_limits\.h>/<vnl\/vnl_numeric_limits.h>/;
+      s/<math\/numeric_limits(|_double|_float|_int)\.h>/<vnl\/vnl_numeric_limits.h>/;
       s/<math\/numeric_traits\.h>/<vnl\/vnl_numeric_traits.h>/;
       s/<math\/complex_traits\.h>/<vnl\/vnl_complex_traits.h>/;
       s/<math\/MatOps\.h>/<vnl\/vnl_matops.h> \/\/ use vnl_matlab_print.h for pretty printing/;
@@ -867,6 +869,8 @@ sub process_lines {
       s/\bFloat2\b/vnl_float_2/g;
       s/\bFloat3\b/vnl_float_3/g;
       s/\bScatter3x3\b/vnl_scatter_3x3<double>/g;
+      s/\bOuterProduct(|3x3)\s*<\s*(float|double|int)\s*>\s*(\S+)\s*\(/vnl_matrix<$2> $2 = outer_product(/g;
+      s/\bOuterProduct(|3x3)\b/outer_product/g;
       s/\bAmoeba\b/vnl_amoeba/g;
       s/\bIUE_VectorDereference\b/vnl_vector_dereference/g;
       s/\bVectorDereference\b/vnl_vector_dereference/g;
