@@ -97,6 +97,7 @@ foreach $dir (@DIRS)
     map s/^/$prefix/,@updir_files;
     @updir_files = grep(/\.h$/, @updir_files);
     @updir_files = grep(!/vidl_(win|avifile)_avicodec/, @updir_files);
+    @updir_files = grep(!/\bdll\.h$/, @updir_files);
     @updir_files = sort(@updir_files); push @updir_files, "~END";
     open(FILE, "$dir/test_include.cxx");
     while(<FILE>) {
@@ -145,7 +146,6 @@ foreach $dir (@DIRS)
     push @hfiles, $fx;
   }
   @source = ();
-  @source = ("test_vdgl.cxx") if ($dir =~ m+\bgel/vdgl/tests$+);
   @hsource = ();
   $f = "";
   foreach $fx (@tmp_list) {
@@ -327,6 +327,7 @@ foreach $dir (@DIRS)
     push @subdirs2, @tmpl_list;
   }
   # add Templates to source_files, if asked
+  $cmakefile .= "\nAUX_SOURCE_DIRECTORY(Templates vcl_sources)" if ($dir =~ m/\/vcl$/);
   while ($cmakefile =~ s/\bAUX_SOURCE_DIRECTORY\s*\(\s*(\S+)\s+\S+sources\s*\)//) {
     $file = "$1";
     if (opendir(TMPL,"$dir/$file")) {
