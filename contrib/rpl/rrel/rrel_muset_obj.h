@@ -112,7 +112,7 @@ private:
   //  value of the objective function, and \a sigma_est is an estimate
   //  of the scale.
   void internal_fcn( vect_const_iter begin, vect_const_iter end,
-                     double& objective, double& sigma_est ) const;
+                     double& sigma_est ) const;
 
 protected:
   bool use_sk_refine_;

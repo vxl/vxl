@@ -45,9 +45,9 @@ rrel_muset_obj::fcn( vect_const_iter begin, vect_const_iter end,
                      vect_const_iter /*scale begin*/,
                      vnl_vector<double>* /*param_vector*/ ) const
 {
-  double sigma, objective;
-  internal_fcn( begin, end, objective, sigma );
-  return objective;
+  double sigma;
+  internal_fcn( begin, end, sigma );
+  return sigma;
 }
 
 
@@ -56,24 +56,24 @@ rrel_muset_obj::fcn( vect_const_iter begin, vect_const_iter end,
                    double /*scale*/,
                    vnl_vector<double>* /*param_vector*/ ) const
 {
-  double sigma, objective;
-  internal_fcn( begin, end, objective, sigma );
-  return objective;
+  double sigma;
+  internal_fcn( begin, end, sigma );
+  return sigma;
 }
 
 
 double
 rrel_muset_obj::scale( vect_const_iter begin, vect_const_iter end ) const
 {
-  double sigma, objective;
-  internal_fcn( begin, end, objective, sigma );
+  double sigma;
+  internal_fcn( begin, end, sigma );
   return sigma;
 }
 
 
 void
 rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
-                              double& best_objective, double& sigma_est ) const
+                              double& sigma_est ) const
 {
   // Calculate the absolute residuals and sort them.
   vcl_vector<double> abs_residuals;
@@ -83,20 +83,23 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
   }
   vcl_sort( abs_residuals.begin(), abs_residuals.end() );
 
+  unsigned int num_residuals = abs_residuals.size();
   bool at_start=true;
-  int best_k;
-  double best_sk;
-  int prev_k = -1;
+  unsigned int best_k = 0;
+  double best_sk = 0;
+  unsigned int prev_k = 0;
   double sum_residuals=0;
-  double best_sum;
-  int num_residuals = abs_residuals.size();
+  double best_sum = 0;
+  double best_objective = 0;
 
   //  Find the best k
   for ( double frac=min_frac_; frac<=max_frac_+0.00001; frac+=frac_inc_ ) {
-    int k = vnl_math_rnd( frac*num_residuals ) - 1;
-    if ( k>=num_residuals ) k=num_residuals-1;
-    if ( k<=0 ) k=1;
-    for ( int i=prev_k+1; i<=k; i++ ) {
+    unsigned int k = vnl_math_rnd( frac*num_residuals );
+    if( k>num_residuals ) k=num_residuals;
+    if( k<=0 ) k=1;
+    if( k == prev_k )  continue;
+
+    for ( unsigned int i=prev_k; i<k; ++i ) {
       sum_residuals += abs_residuals[i];
     }
 
@@ -111,6 +114,7 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
       best_sum = sum_residuals;
       best_objective = objective;
     }
+    prev_k = k;
   }
 
   //  Refine the scale estimate
@@ -118,12 +122,10 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
     sigma_est = best_sk;
   }
   else {
-    int new_n = best_k;
-    for ( int i=best_k; i<num_residuals && abs_residuals[i] < 3*best_sk; ++i ) {
-      new_n = i;
-    }
+    unsigned int new_n = 0;
+    while( new_n<num_residuals && abs_residuals[new_n] < 3*best_sk )
+      ++new_n;
+    if( best_k > new_n ) best_k = new_n;
     sigma_est = best_sum / table_->muset_divisor(best_k, new_n);
-    best_objective = sigma_est * table_->standard_dev_kth(best_k, new_n) /
-      table_->expected_kth(best_k, new_n);
   }
 }
