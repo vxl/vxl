@@ -22,8 +22,10 @@ MINI_PROG_SOURCES += example_multiple_windows.cxx
 MINI_PROG_SOURCES += example_poly_tableau.cxx
 MINI_PROG_SOURCES += example_satellite_tableau.cxx
 MINI_PROG_SOURCES += example_vgui_observer.cxx
+ifdef HAS_GLUT
 MINI_PROG_SOURCES += glut1_raw.cxx
 MINI_PROG_SOURCES += glut2_raw.cxx
+endif
 MINI_PROG_SOURCES += gtk1_display_image.cxx
 MINI_PROG_SOURCES += gtk2_movie_player.cxx
 MINI_PROG_SOURCES += gtk3_vidl.cxx
