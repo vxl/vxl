@@ -1,9 +1,7 @@
+// This is vxl/vsl/tests/test_indent.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vsl/vsl_indent.h>
+#include <testlib/testlib_test.h>
 
 static void test_indent1(int t)
 {
@@ -22,9 +20,9 @@ static void test_indent1(int t)
 
 void test_indent()
 {
-  vcl_cout << "*******************\n"
+  vcl_cout << "******************\n"
            << "Testing vsl_indent\n"
-           << "*******************\n\n";
+           << "******************\n\n";
 
   vcl_cout<<"Using Tab size 2:\n\n";
   vsl_indent_set_tab(vcl_cout,2);

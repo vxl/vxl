@@ -1,19 +1,15 @@
+// This is vxl/vnl/io/tests/test_bignum_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vnl/vnl_bignum.h>
-
 #include <vnl/io/vnl_io_bignum.h>
-
 #include <vsl/vsl_binary_io.h>
+#include <testlib/testlib_test.h>
 
 void test_bignum_io()
 {
-  vcl_cout << "**************\n";
-  vcl_cout << "test_bignum_io\n";
-  vcl_cout << "**************\n";
+  vcl_cout << "**************\n"
+           << "test_bignum_io\n"
+           << "**************\n";
 
   vnl_bignum nil(0), big(-3245444l), verybig("4235702934875938745092384750293845"),
              p_inf("Infinity"), m_inf("-Inf");

@@ -1,16 +1,14 @@
+// This is vxl/vsl/tests/test_deque_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_deque_io.h>
+#include <testlib/testlib_test.h>
 
 void test_deque_io()
 {
-  vcl_cout << "****************************" << vcl_endl;
-  vcl_cout << "Testing vcl_deque binary io" << vcl_endl;
-  vcl_cout << "****************************" << vcl_endl;
+  vcl_cout << "***************************\n"
+           << "Testing vcl_deque binary io\n"
+           << "***************************\n";
 
   int n = 10;
   vcl_deque<int> d_int_out;

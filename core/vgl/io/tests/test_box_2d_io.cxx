@@ -1,9 +1,7 @@
+// This is vxl/vgl/io/tests/test_box_2d_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vgl/io/vgl_io_box_2d.h>
+#include <testlib/testlib_test.h>
 
 void test_box_2d_double_io()
 {

@@ -1,17 +1,14 @@
+// This is vxl/vnl/io/tests/test_matrix_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vnl/vnl_matrix.h>
-
 #include <vnl/io/vnl_io_matrix.h>
+#include <testlib/testlib_test.h>
 
 void test_matrix_double_io()
 {
-  vcl_cout << "*****************************\n";
-  vcl_cout << "Testing vnl_matrix<double> io\n";
-  vcl_cout << "*****************************\n";
+  vcl_cout << "*****************************\n"
+           << "Testing vnl_matrix<double> io\n"
+           << "*****************************\n";
   //// test constructors, accessors
   const int m = 10;
   const int n = 6;

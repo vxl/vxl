@@ -1,16 +1,14 @@
+// This is vxl/vgl/io/tests/test_homg_line_3d_2_points_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/io/vgl_io_homg_line_3d_2_points.h>
+#include <testlib/testlib_test.h>
 
 void test_homg_line_3d_2_points_double_io()
 {
-  vcl_cout << "***********************\n"
+  vcl_cout << "********************************************\n"
            << "Testing vgl_homg_line_3d_2_points<double> io\n"
-           << "***********************\n";
+           << "********************************************\n";
 
   //// test constructors, accessors
   vgl_homg_point_3d<float> p1(1.25f, 3.5f, -9.9e1f), p2(5.625f, 7.875f, 0.0f);

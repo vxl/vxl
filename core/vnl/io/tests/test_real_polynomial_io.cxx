@@ -1,17 +1,14 @@
+// This is vxl/vnl/io/tests/test_real_polynomial_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vnl/vnl_real_polynomial.h>
 #include <vnl/io/vnl_io_real_polynomial.h>
-
+#include <testlib/testlib_test.h>
 
 void test_real_polynomial_io()
 {
-  vcl_cout << "***********************" << vcl_endl;
-  vcl_cout << "Testing vnl_real_polynomial io" << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "******************************\n"
+           << "Testing vnl_real_polynomial io\n"
+           << "******************************\n";
   //// test constructors, accessors
   const int n = 10;
   vnl_vector<double> v(n);

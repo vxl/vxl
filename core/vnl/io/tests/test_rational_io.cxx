@@ -1,18 +1,15 @@
+// This is vxl/vnl/io/tests/test_rational_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vnl/vnl_rational.h>
-
 #include <vnl/io/vnl_io_rational.h>
 #include <vsl/vsl_binary_io.h>
+#include <testlib/testlib_test.h>
 
 void test_rational_io()
 {
-  vcl_cout << "****************\n";
-  vcl_cout << "test_rational_io\n";
-  vcl_cout << "****************\n";
+  vcl_cout << "****************\n"
+           << "test_rational_io\n"
+           << "****************\n";
 
   vnl_rational nil(0L), inf(1L, 0L), one(2L,2L);
 

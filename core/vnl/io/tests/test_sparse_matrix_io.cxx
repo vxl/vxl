@@ -1,10 +1,9 @@
+// This is vxl/vnl/io/tests/test_sparse_matrix_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-#include <testlib/testlib_test.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/vnl_sparse_matrix.h>
 #include <vnl/io/vnl_io_sparse_matrix.h>
+#include <testlib/testlib_test.h>
 
 static bool Compare(vnl_sparse_matrix<double>& M1, vnl_sparse_matrix<double>& M2)
 {
@@ -25,9 +24,9 @@ static bool Compare(vnl_sparse_matrix<double>& M1, vnl_sparse_matrix<double>& M2
 
 void test_sparse_matrix_double_io()
 {
-  vcl_cout << "************************************\n";
-  vcl_cout << "Testing vnl_sparse_matrix<double> io\n";
-  vcl_cout << "************************************\n";
+  vcl_cout << "************************************\n"
+           << "Testing vnl_sparse_matrix<double> io\n"
+           << "************************************\n";
   //// test constructors, accessors
 
   vnl_sparse_matrix<double>  m_out(3,3), m_in0(3,3), m_in1(3,3);

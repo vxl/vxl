@@ -1,16 +1,14 @@
+// This is vxl/vsl/tests/test_complex_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_complex_io.h>
+#include <testlib/testlib_test.h>
 
 void test_complex_io()
 {
-  vcl_cout << "****************************" << vcl_endl;
-  vcl_cout << "Testing vcl_complex binary io" << vcl_endl;
-  vcl_cout << "****************************" << vcl_endl;
+  vcl_cout << "*****************************\n"
+           << "Testing vcl_complex binary io\n"
+           << "*****************************\n";
 
   vcl_complex<float> c_float_out(1.23f, 4.56f);
 

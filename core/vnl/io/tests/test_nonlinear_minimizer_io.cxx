@@ -1,16 +1,14 @@
+// This is vxl/vnl/io/tests/test_nonlinear_minimizer_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vnl/vnl_nonlinear_minimizer.h>
 #include <vnl/io/vnl_io_nonlinear_minimizer.h>
+#include <testlib/testlib_test.h>
 
 void test_nonlinear_minimizer_io()
 {
-  vcl_cout << "***********************************" << vcl_endl;
-  vcl_cout << "Testing vnl_nonlinear_minimizer_io" << vcl_endl;
-  vcl_cout << "***********************************" << vcl_endl;
+  vcl_cout << "**********************************\n"
+           << "Testing vnl_nonlinear_minimizer_io\n"
+           << "**********************************\n";
 
   //// test constructors, accessors
   vnl_nonlinear_minimizer minimizer_out, minimizer_in;

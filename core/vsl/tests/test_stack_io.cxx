@@ -1,16 +1,14 @@
+// This is vxl/vsl/tests/test_stack_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_stack_io.h>
+#include <testlib/testlib_test.h>
 
 void test_stack_io()
 {
-  vcl_cout << "****************************" << vcl_endl;
-  vcl_cout << "Testing vcl_stack binary io" << vcl_endl;
-  vcl_cout << "****************************" << vcl_endl;
+  vcl_cout << "***************************\n"
+           << "Testing vcl_stack binary io\n"
+           << "***************************\n";
 
   int n = 10;
   vcl_stack<int> s_int_out;

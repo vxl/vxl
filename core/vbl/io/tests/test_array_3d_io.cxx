@@ -1,15 +1,13 @@
+// This is vxl/vbl/io/tests/test_array_3d_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vbl/io/vbl_io_array_3d.h>
+#include <testlib/testlib_test.h>
 
 void test_array_3d_io()
 {
-  vcl_cout << "***********************" << vcl_endl;
-  vcl_cout << "Testing vbl_array_3d<float> io" << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "******************************\n"
+           << "Testing vbl_array_3d<float> io\n"
+           << "******************************\n";
 
   //// test constructors, accessors
   const int array_row1 = 8;

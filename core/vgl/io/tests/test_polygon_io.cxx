@@ -1,16 +1,14 @@
+// This is vxl/vgl/io/tests/test_polygon_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/io/vgl_io_polygon.h>
+#include <testlib/testlib_test.h>
 
 void test_polygon_io()
 {
-  vcl_cout << "***********************\n"
+  vcl_cout << "**********************\n"
            << "Testing vgl_polygon io\n"
-           << "***********************\n";
+           << "**********************\n";
 
   //// test constructors, accessors
   vgl_polygon p_out(1), p_in;

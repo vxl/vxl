@@ -1,18 +1,15 @@
+// This is vxl/vnl/io/tests/test_vector_fixed_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/io/vnl_io_vector.h>
-
 #include <vsl/vsl_binary_io.h>
+#include <testlib/testlib_test.h>
 
 void test_vector_fixed_double_3_io()
 {
-  vcl_cout << "*************************************\n";
-  vcl_cout << "Testing vnl_vector_fixed<double,3> io\n";
-  vcl_cout << "*************************************\n";
+  vcl_cout << "*************************************\n"
+           << "Testing vnl_vector_fixed<double,3> io\n"
+           << "*************************************\n";
   //// test constructors, accessors
 
   vnl_vector_fixed<double,3> m_out(1.2,3.4,5.6), m_in;

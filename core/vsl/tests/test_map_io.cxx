@@ -1,17 +1,15 @@
+// This is vxl/vsl/tests/test_map_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
 #include <vcl_string.h>
-
-#include <testlib/testlib_test.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_map_io.h>
+#include <testlib/testlib_test.h>
 
 void test_map_io()
 {
-  vcl_cout << "****************************" << vcl_endl;
-  vcl_cout << "Testing vcl_map binary io" << vcl_endl;
-  vcl_cout << "****************************" << vcl_endl;
+  vcl_cout << "*************************\n"
+           << "Testing vcl_map binary io\n"
+           << "*************************\n";
 
   int n = 10;
   vcl_map<int, int, vcl_less<int> > m_int_int_out;

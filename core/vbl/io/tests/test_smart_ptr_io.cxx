@@ -1,17 +1,14 @@
+// This is vxl/vbl/io/tests/test_smart_ptr_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include "vbl_io_test_classes.h"
 #include "vbl_io_test_classes.cxx"
-
+#include <testlib/testlib_test.h>
 
 void test_smart_ptr_io()
 {
-  vcl_cout << "**************************\n";
-  vcl_cout << "Testing smart_ptr<impl> io\n";
-  vcl_cout << "**************************\n";
+  vcl_cout << "**************************\n"
+           << "Testing smart_ptr<impl> io\n"
+           << "**************************\n";
 
   const int n = 50;
 

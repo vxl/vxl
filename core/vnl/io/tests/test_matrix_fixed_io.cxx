@@ -1,17 +1,14 @@
+// This is vxl/vnl/io/tests/test_matrix_fixed_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vnl/vnl_matrix_fixed.h>
-
 #include <vnl/io/vnl_io_matrix.h>
+#include <testlib/testlib_test.h>
 
 void test_matrix_fixed_double_2_2_io()
 {
-  vcl_cout << "***************************************\n";
-  vcl_cout << "Testing vnl_matrix_fixed<double,2,2> io\n";
-  vcl_cout << "***************************************\n";
+  vcl_cout << "***************************************\n"
+           << "Testing vnl_matrix_fixed<double,2,2> io\n"
+           << "***************************************\n";
   //// test constructors, accessors
    double datablock[4] = {
                            1.1, 1.2,

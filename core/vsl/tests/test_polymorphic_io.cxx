@@ -1,17 +1,14 @@
-// This is ./vxl/vsl/tests/test_polymorphic_io.cxx
+// This is vxl/vsl/tests/test_polymorphic_io.cxx
 
 //:
 // \file
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_binary_loader.txx>
+#include <testlib/testlib_test.h>
 
 //: Base class to test polymorphic loading
 class test_base_class {

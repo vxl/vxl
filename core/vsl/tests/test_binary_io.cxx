@@ -1,18 +1,15 @@
+// This is vxl/vsl/tests/test_binary_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
 #include <vcl_cstring.h>
-#include <testlib/testlib_root_dir.h>
-
-#include <testlib/testlib_test.h>
 #include <vsl/vsl_binary_io.h>
-
+#include <testlib/testlib_root_dir.h>
+#include <testlib/testlib_test.h>
 
 void test_binary_io()
 {
-  vcl_cout << "*********************" << vcl_endl;
-  vcl_cout << "Testing vsl binary io" << vcl_endl;
-  vcl_cout << "*********************" << vcl_endl;
+  vcl_cout << "*********************\n"
+           << "Testing vsl binary io\n"
+           << "*********************\n";
 
   bool b_out = true;
   char c_out = 'y';
@@ -144,10 +141,9 @@ void test_binary_io()
   TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-
-  vcl_cout << "*****************************" << vcl_endl;
-  vcl_cout << "Testing Golden vsl binary io" << vcl_endl;
-  vcl_cout << "****************************" << vcl_endl;
+  vcl_cout << "****************************\n"
+           << "Testing Golden vsl binary io\n"
+           << "****************************\n";
 
   // Test global consistancy - can it load the golden binary output file
   // This should be identical what has just been saved, which should

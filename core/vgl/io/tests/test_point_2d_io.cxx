@@ -1,17 +1,15 @@
+// This is vxl/vgl/io/tests/test_point_2d_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/io/vgl_io_point_2d.h>
 #include <vsl/vsl_binary_io.h>
+#include <testlib/testlib_test.h>
 
 void test_point_2d_double_io()
 {
-  vcl_cout << "***********************\n"
+  vcl_cout << "*******************************\n"
            << "Testing vgl_point_2d<double> io\n"
-           << "***********************\n";
+           << "*******************************\n";
 
   //// test constructors, accessors
   vgl_point_2d<double> p_out(1.2,3.4), p_in;

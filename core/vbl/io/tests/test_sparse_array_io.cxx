@@ -1,17 +1,14 @@
+// This is vxl/vbl/io/tests/test_sparse_array_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vbl/io/vbl_io_sparse_array_2d.h>
 #include <vbl/vbl_sparse_array_2d.h>
-
+#include <testlib/testlib_test.h>
 
 void test_sparse_array_io()
 {
-  vcl_cout << "**************************************" << vcl_endl;
-  vcl_cout << "Testing vbl_sparse_array_2d<double> io" << vcl_endl;
-  vcl_cout << "**************************************" << vcl_endl;
+  vcl_cout << "**************************************\n"
+           << "Testing vbl_sparse_array_2d<double> io\n"
+           << "**************************************\n";
 
   vbl_sparse_array_2d<double> v_out, v_in;
 
@@ -41,15 +38,15 @@ void test_sparse_array_io()
 
   bool test_result = true;
   //same number of non zero elements?
-  if(v_out.count_nonempty() != v_in.count_nonempty())
+  if (v_out.count_nonempty() != v_in.count_nonempty())
     test_result=false;
   else {
     //check every key/data pair, require same order too.
   vbl_sparse_array_2d<double>::const_iterator s = v_in.begin();
   vbl_sparse_array_2d<double>::const_iterator r;
   //N.B. relies on sensible == operator for <T>
-  for(r = v_out.begin(); r != v_out.end(); ++r){
-    if(!((*s).first == (*r).first) || !((*s).second == (*r).second))
+  for (r = v_out.begin(); r != v_out.end(); ++r){
+    if (!((*s).first == (*r).first) || !((*s).second == (*r).second))
       test_result=false;
     s++;
   }

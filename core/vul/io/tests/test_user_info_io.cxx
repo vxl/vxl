@@ -1,9 +1,6 @@
 // This is vxl/vul/io/tests/test_user_info_io.cxx
-#include <vul/vul_user_info.h>
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
+#include <vul/vul_user_info.h>
 #include <vul/io/vul_io_user_info.h>
 #include <vsl/vsl_binary_io.h>
 

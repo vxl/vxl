@@ -1,15 +1,13 @@
+// This is vxl/vgl/io/tests/test_line_segment_2d_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vgl/io/vgl_io_line_segment_2d.h>
+#include <testlib/testlib_test.h>
 
 void test_line_segment_2d_double_io()
 {
-  vcl_cout << "***********************\n"
+  vcl_cout << "**************************************\n"
            << "Testing vgl_line_segment_2d<double> io\n"
-           << "***********************\n";
+           << "**************************************\n";
 
   vgl_point_2d<double> end0(1.2,3.4);
   vgl_point_2d<double> end1(5.6,7.8);

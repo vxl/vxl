@@ -1,11 +1,9 @@
+// This is vxl/vgl/io/tests/test_vector_2d_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/io/vgl_io_vector_2d.h>
 #include <vsl/vsl_binary_io.h>
+#include <testlib/testlib_test.h>
 
 void test_vector_2d_double_io()
 {

@@ -1,19 +1,16 @@
+// This is vxl/vnl/io/tests/test_diag_matrix_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vnl/vnl_vector.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/vnl_diag_matrix.h>
 #include <vnl/io/vnl_io_diag_matrix.h>
-
+#include <testlib/testlib_test.h>
 
 void test_diag_matrix_double_io()
 {
-  vcl_cout << "*******************\n";
-  vcl_cout << "test_diag_matrix_io\n";
-  vcl_cout << "*******************\n";
+  vcl_cout << "*******************\n"
+           << "test_diag_matrix_io\n"
+           << "*******************\n";
   //// test constructors, accessors
   const int n = 50;
   vnl_vector<double> v_out(n), v_in(n);

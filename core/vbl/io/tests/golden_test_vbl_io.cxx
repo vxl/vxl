@@ -1,4 +1,14 @@
-// This is ./vxl/vbl/io/tests/golden_test_vbl_io.cxx
+// This is vxl/vbl/io/tests/golden_test_vbl_io.cxx
+
+//:
+// \file
+// \brief Read in a golden data file, and check the values are correct.
+//
+// If you need to recreate the golden data file build this as a
+// standalone program, and run it with the single parameter create:
+// \verbatim
+// golden_test_vnl_io create
+// \endverbatim
 
 #include <vsl/vsl_binary_io.h>
 
@@ -15,18 +25,7 @@
 #include <vbl/io/vbl_io_bounding_box.h>
 
 #include <vcl_string.h>
-#include <vcl_fstream.h>
 #include <testlib/testlib_root_dir.h>
-
-//:
-// \file
-// \brief Read in a golden data file, and check the values are correct.
-//
-// If you need to recreate the golden data file build this as a
-// standalone program, and run it with the single parameter create:
-// \verbatim
-// golden_test_vnl_io create
-// \verbatim
 
 void golden_test_vbl_io(bool save_file=false);
 
@@ -66,10 +65,9 @@ void golden_test_vbl_io(bool save_file)
   //------------------------------------------------------------------------
 
 
-  vcl_cout << "***********************" << vcl_endl;
-  vcl_cout << "Testing a golden data file for cross platform consistency"
-    << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "*********************************************************\n";
+  vcl_cout << "Testing a golden data file for cross platform consistency\n";
+  vcl_cout << "*********************************************************\n";
 
 
   // vbl_bounding_box
@@ -84,9 +82,7 @@ void golden_test_vbl_io(bool save_file)
 
   a1_out.reserve(n+10);
   for (int i=0; i<n; i++)
-  {
-    a1_out.push_back(i*i);
-  }
+    a1_out.push_back(1.f*i*i);
 
 
   // 2d Array

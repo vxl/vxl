@@ -1,14 +1,11 @@
-// This is ./vxl/vul/vul_psfile.cxx
+// This is vxl/vul/vul_psfile.cxx
 
 //:
 // \file
 
 #include "vul_psfile.h"
-#include <vcl_iomanip.h>
 #include <vcl_cmath.h>
-#include <vcl_fstream.h>
 #include <vcl_iostream.h>
-
 #include <vul/vul_printf.h>
 
 #define PIX2INCH 72.0
@@ -298,18 +295,18 @@ void vul_psfile::print_greyscale_image(byte* buffer, int sizex, int sizey)
     for (int i = 0; i < new_width; i++)
     {
       // Reduce resolution of image if necessary
-      if(reduction_factor != 1)
+      if (reduction_factor != 1)
       {
         int pixel_number= (width * j + i) * reduction_factor;
         index=0;
         width_left = new_width - i;
         number_of_pixels_sampled=0;
-        if( width_left >= 1)
+        if ( width_left >= 1)
         {
           for (int m=0; m < reduction_factor;m++)
           {
             height_left = new_height - j;
-            if( height_left >= 1)
+            if ( height_left >= 1)
             {
               for (int n=0; n < reduction_factor;n++)
               {
@@ -332,7 +329,7 @@ void vul_psfile::print_greyscale_image(byte* buffer, int sizex, int sizey)
           for (int m=0; m <= width % reduction_factor; m++)
           {
             height_left = new_height - j;
-            if( height_left >= 1)
+            if ( height_left >= 1)
             {
               for (int n=0; n < reduction_factor;n++)
               {
@@ -493,18 +490,18 @@ void vul_psfile::print_color_image(byte* data, int width_arg, int height_arg)
       index = (int) (*(data + width_arg * bytes_per_pixel * j +i));
       countrow+=6 *bytes_per_pixel;
       // Reduce Image if necessary
-      if(reduction_factor != 1)
+      if (reduction_factor != 1)
       {
         int pixel_number= (width_arg * bytes_per_pixel * j + i) * reduction_factor;
         index=0;
         width_left = new_width - i;
         number_of_pixels_sampled=0;
-        if(width_left >= 1)
+        if (width_left >= 1)
         {
           for (int m=0; m < reduction_factor;m++)
           {
             height_left = new_height - j;
-            if( height_left >= 1)
+            if ( height_left >= 1)
             {
               for (int n=0; n < reduction_factor;n++)
               {
@@ -527,7 +524,7 @@ void vul_psfile::print_color_image(byte* data, int width_arg, int height_arg)
           for (int m=0; m <= width_arg % reduction_factor; m++)
           {
             height_left = new_height - j;
-            if( height_left >= 1)
+            if ( height_left >= 1)
             {
               for (int n=0; n < reduction_factor;n++)
               {

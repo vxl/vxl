@@ -1,20 +1,16 @@
+// This is vxl/vnl/io/tests/test_real_npolynomial_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_real_npolynomial.h>
-
 #include <vnl/io/vnl_io_real_npolynomial.h>
-
+#include <testlib/testlib_test.h>
 
 void test_real_npolynomial_io()
 {
-  vcl_cout << "************************\n";
-  vcl_cout << "test_real_npolynomial_io\n";
-  vcl_cout << "************************\n";
+  vcl_cout << "************************\n"
+           << "test_real_npolynomial_io\n"
+           << "************************\n";
   //// test constructors, accessors
   vnl_vector<double> coeffs(4),coeffs2;
   vnl_matrix<int> exponents(4,2);

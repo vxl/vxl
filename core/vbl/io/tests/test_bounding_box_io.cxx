@@ -1,18 +1,15 @@
+// This is vxl/vbl/io/tests/test_bounding_box_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vbl/vbl_bounding_box.h>
 #include <vbl/io/vbl_io_bounding_box.h>
 #include <vsl/vsl_binary_io.h>
-
+#include <testlib/testlib_test.h>
 
 void test_bounding_box_double_io()
 {
-  vcl_cout << "***********************" << vcl_endl;
-  vcl_cout << "Testing vbl_bounding_box<double> io" << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "***********************************\n"
+           << "Testing vbl_bounding_box<double> io\n"
+           << "***********************************\n";
   //// test constructors, accessors
   vbl_bounding_box<double, 2> p_out, p_in;
   double X = 1.2;
