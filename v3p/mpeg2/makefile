@@ -6,7 +6,7 @@ VERSION := 1.0
 
 # This is where configure will put config.h and inttypes.h
 INCDIRS += $(RELOBJDIR)/include
-INCDIRS += ./include
+INCDIRS += ./include/mpeg2dec
 
 SOURCES += libmpeg2/decode.c
 SOURCES += libmpeg2/header.c
