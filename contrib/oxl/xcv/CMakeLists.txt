@@ -31,6 +31,8 @@ INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/vxl )
 
 AUX_SOURCE_DIRECTORY( Templates xcv_sources )
 
+INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindGLUT.cmake )
+
 # Immediate dependencies
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vcgl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/oxl/osl/CMakeListsLink.txt )

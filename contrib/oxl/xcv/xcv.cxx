@@ -477,7 +477,7 @@ void xcv_window_size_adaptive(int rows, int cols,
 //-----------------------------------------------------------------------------
 // main.
 //-----------------------------------------------------------------------------
-
+ 
 int main(int argc, char** argv)
 {
   //fsm: explicit calls to toolkit tag functions now live
