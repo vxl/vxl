@@ -8,7 +8,9 @@
 #undef  VCL_DEQUE_INSTANTIATE
 #define VCL_DEQUE_INSTANTIATE(T) \
 template class vcl_deque<T >; \
-template class _Deque_base<T, allocator<T >, 0>; \
+template class _Deque_base<T, allocator<T >, 0>
+
+#define VCL_DEQUE_INSTANTIATE_HEAP(T) \
 template void __push_heap<_Deque_iterator<T,T&,T*,0>,T,T,greater<T > >(_Deque_iterator<T,T&,T*,0>,T,T,T,greater<T >); \
 template void __adjust_heap<_Deque_iterator<T,T&,T*,0>,T,T,greater<T > >(_Deque_iterator<T,T&,T*,0>,T,T,T,greater<T >)
 
