@@ -36,10 +36,10 @@ void vnl_complex_eigensystem::compute(vnl_matrix<vcl_complex<double> > const & A
   //
   vnl_matrix<vcl_complex<double> > tmp(A);
 
-  unsigned int work_space=10*N;
+  int work_space=10*N;
   vnl_vector<vcl_complex<double> > work(work_space);
 
-  unsigned int rwork_space=2*N;
+  int rwork_space=2*N;
   vnl_vector<double> rwork(rwork_space);
 
   int info;
