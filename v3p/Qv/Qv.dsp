@@ -558,11 +558,6 @@ SOURCE=.\mtl.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\stdafx.h
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vectors.h
 
 # End Source File
