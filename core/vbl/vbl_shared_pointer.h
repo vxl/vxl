@@ -50,19 +50,19 @@ struct vbl_shared_pointer
   //   vbl_shared_pointer<T> sp(3, "foo");
   // instead of
   //   vbl_shared_pointer<T> sp = new T(3, "foo");
-  template <typename V1>
+  template </*typename*/ class V1>
   explicit vbl_shared_pointer(V1 const &v1)
     : data(new data_t(new T(v1), 1)) { }
 
-  template <typename V1, typename V2>
+  template <class V1, class V2>
   explicit vbl_shared_pointer(V1 const &v1, V2 const &v2)
     : data(new data_t(new T(v1, v2), 1)) { }
 
-  template <typename V1, typename V2, typename V3>
+  template <class V1, class V2, class V3>
   explicit vbl_shared_pointer(V1 const &v1, V2 const &v2, V3 const &v3)
     : data(new data_t(new T(v1, v2, v3), 1)) { }
 
-  template <typename V1, typename V2, typename V3, typename V4>
+  template <class V1, class V2, class V3, class V4>
   explicit vbl_shared_pointer(V1 const &v1, V2 const &v2, V3 const &v3, V4 const &v4)
     : data(new data_t(new T(v1, v2, v3, v4), 1)) { }
 #endif
