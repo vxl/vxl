@@ -6,7 +6,10 @@
 // Class: vgui_mfc_app
 // Author: Marko Bacic, Oxford RRG
 // Created: 31 July 2000 
-//   
+//  
+// Modifications:
+//   03-MAR-2001 K.Y.McGaul -- Added correct modifiers to key press/release events.
+//                          -- Set checkboxes to display current value correctly.
 //-----------------------------------------------------------------------------
 
 #include <vcl_string.h>
@@ -33,7 +36,7 @@ BEGIN_MESSAGE_MAP(vgui_mfc_dialog_impl, CWnd)
 	ON_CONTROL_RANGE(BN_CLICKED,ID_CHOOSE_COLOUR,ID_CHOOSE_COLOUR+100,OnChooseColour)	
 END_MESSAGE_MAP()
 //--------------------------------------------------------------------------------
-// -- Constructor
+//: Constructor
 vgui_mfc_dialog_impl::vgui_mfc_dialog_impl(const char* name)
   : CWnd(),vgui_dialog_impl(name) 
 {
@@ -47,7 +50,7 @@ vgui_mfc_dialog_impl::vgui_mfc_dialog_impl(const char* name)
 
 
 //--------------------------------------------------------------------------------
-// -- Destructor
+//: Destructor
 vgui_mfc_dialog_impl::~vgui_mfc_dialog_impl() {
 }
 
@@ -59,7 +62,7 @@ struct mfc_choice {
 
 
 //--------------------------------------------------------------------------------
-// -- Make a choice widget
+//: Make a choice widget
 void* vgui_mfc_dialog_impl::choice_field_widget(const char* /*txt*/,
 					  const vcl_vector<vcl_string>& labels, int& val) {
 
@@ -72,14 +75,16 @@ void* vgui_mfc_dialog_impl::choice_field_widget(const char* /*txt*/,
 
 static int loop_flag = 0;
 
-
-//--------------------------------------------------------------------------------
-//-- Changes the modality of the dialog.  True makes the dialog modal (i.e. the
-// dialog 'grabs' all events), this is the default.  False makes the dialog non-modal.
+//: Sets the modality of the dialog box.  
+//  True makes the dialog modal (i.e. the dialog 'grabs' all events), this is 
+//  the default.  False makes the dialog non-modal.  WARNING: It is dangerous to 
+//  make a dialog that changes data non-modal, only messages should be non-modal.
 void vgui_mfc_dialog_impl::modal(const bool m)
 {
   is_modal = m;
 }
+
+//: Called by MFC when the user clicks the OK button.
 void vgui_mfc_dialog_impl::OnOk()
 {
 	ASSERT(::IsWindow(m_hWnd));
@@ -90,6 +95,8 @@ void vgui_mfc_dialog_impl::OnOk()
 	::EndDialog(m_hWnd, nResult);
 	ok_clicked = true;
 }
+
+//: Called by MFC when the user clicks the cancel button.
 void vgui_mfc_dialog_impl::OnCancel()
 {
 	ASSERT(::IsWindow(m_hWnd));
@@ -99,7 +106,9 @@ void vgui_mfc_dialog_impl::OnCancel()
 
 	::EndDialog(m_hWnd, nResult);
 }
-// -- Fire up File browser dialog box
+
+//: Called by MFC when the user clicks the (file) browse button.
+//  Fires up File browser dialog box
 void vgui_mfc_dialog_impl::OnBrowse(UINT uID)
 {
 	int which = uID-ID_BROWSE_FILES;
@@ -110,7 +119,9 @@ void vgui_mfc_dialog_impl::OnBrowse(UINT uID)
 	CString s(file_dialog.GetPathName());
 	fbsrs[which]->SetWindowText(s);
 }
-// -- Fire up Colour chooser dialog box
+
+//: Called by MFC when the user clicks the colour chooser button.
+//  Fires up Colour chooser dialog box
 void vgui_mfc_dialog_impl::OnChooseColour(UINT uID)
 {
 	char buffer[20];
@@ -131,19 +142,20 @@ void vgui_mfc_dialog_impl::OnChooseColour(UINT uID)
 	csrs[which]->SetWindowText(s);
 }
 
+//: Called by MFC when the appication is about to terminate.
 void vgui_mfc_dialog_impl::OnClose()
 {
 	OnCancel();
 }
-//-------------------------------------------------------------------------------
+
 //: Display the dialog box.
 bool vgui_mfc_dialog_impl::ask() 
 {
 
-  // -- Get the pointer to the main window
+  // Get the pointer to the main window
   CWnd *main_window = AfxGetApp()->GetMainWnd();
 	
-  // -- Find out the size of the dialog box needed
+  // Find out the size of the dialog box needed
   int width,height,max_length = 0,fbsr_count = 0;
 
   for (vcl_vector<element>::iterator e_iter = elements.begin(); 
@@ -153,28 +165,40 @@ bool vgui_mfc_dialog_impl::ask()
       element l = *e_iter;
       vgui_dialog_field *field = l.field;
       if(l.type!=bool_elem && l.type!=text_msg)
-	if(max_length<strlen(field->label.c_str()))	
-	  max_length = strlen(field->label.c_str());
-	else {
-	  if(l.type == bool_elem)
-	    {
-	      vgui_bool_field *field = static_cast<vgui_bool_field*>(l.field);
-	      if(max_length<strlen(field->label.c_str()))
-		max_length = strlen(field->label.c_str());
+      {
+        // Add 40 extra characters to the length to leave space for
+        // the user response box:
+        int field_length = strlen(field->label.c_str()) + 40;
+	      if(max_length<field_length)	
+	        max_length = field_length;
+      }
+	    else 
+      {
+	      if(l.type == bool_elem)
+	      {
+	        vgui_bool_field *field = static_cast<vgui_bool_field*>(l.field);
+          int field_length = strlen(field->label.c_str());
+	        if(max_length<field_length)
+		        max_length = field_length;
+	      }
+	      else 
+	      {			
+	        vgui_int_field *field = static_cast<vgui_int_field*>(l.field);
+	        if(max_length<field->label.size()+field->current_value().size())
+		        max_length = field->label.size()+field->current_value().size();
+	      }
 	    }
-	  else 
-	    {
-				
-	      vgui_int_field *field = static_cast<vgui_int_field*>(l.field);
-	      if(max_length<field->label.size()+field->current_value().size())
-		max_length = field->label.size()+field->current_value().size();
-	    }
-	}
       if(l.type == file_bsr || l.type == inline_file_bsr ||
-	 l.type == color_csr || l.type == inline_color_csr)
-	fbsr_count++;
+	    l.type == color_csr || l.type == inline_color_csr)
+	      fbsr_count++;
     }	
-  width = (max_length+10)*8+3*10*8;
+
+  // Width of the dialog box is approx 8 times the number of characters:
+  width = 8*max_length;
+  // If the width is too small to contain the buttons then make it bigger:
+  if (width < 200)
+    width = 200;
+  max_length = max_length - 40;
   height = 45*(elements.size()+fbsr_count+1)+6*8;
   fbsr_count++;
   // -- Create dialog box window
@@ -197,9 +221,9 @@ bool vgui_mfc_dialog_impl::ask()
   font->CreateFontIndirect(&m_logfont);
   SetFont(font);
   
-  // -- Attach basic buttons "OK" and "Cancel" at the bottom of the dialog
+  // Attach basic buttons "OK" and "Cancel" at the bottom of the dialog
 
-  // -- Ok button
+  // Ok button
   CButton* accept = 0;
   int right_of_ok_button;
   if (ok_button_text_.size() > 0) {
@@ -217,7 +241,7 @@ bool vgui_mfc_dialog_impl::ask()
     accept->SetFont(font);
   }
 
-  // -- Cancel button
+  // Cancel button
   CButton* cancel = 0;
   if (cancel_button_text_.size() > 0) {
     CRect r;
@@ -232,7 +256,7 @@ bool vgui_mfc_dialog_impl::ask()
     cancel->SetFont(font);
   }
 
-  // -- Add elements from top to bottom
+  // Add elements from top to bottom
   CRect r;
   r.left = 999; // set later
   r.right = 999; //
@@ -266,7 +290,7 @@ bool vgui_mfc_dialog_impl::ask()
       r.left = 2*4+max_length*8+2*8;
       r.right = width-2*8;//r.left+20*8;
 
-      // -- CEdit::Create does not support extended window styles
+      // CEdit::Create does not support extended window styles
       //MFC impl:Create(_T("EDIT"), NULL, dwStyle, rect, pParentWnd, nID);
       // So we use CWnd::CreateEx. Note that the class name is EDIT
       edit->CreateEx(WS_EX_CLIENTEDGE,_T("EDIT"),NULL,
@@ -281,22 +305,22 @@ bool vgui_mfc_dialog_impl::ask()
       wlist.push_back(edit);
     }
     else if(l.type == bool_elem)
-      {
-	r.left = 2*4;
-	r.top+=5*8;
-	r.bottom+=5*8;
-	r.right = r.left+(field->label.size()+3)*8;
-	vgui_bool_field *field = static_cast<vgui_bool_field*>(l.field);
-	CButton *checkbox = new CButton();
-	checkbox->Create(_T(field->label.c_str()),
-			 WS_VISIBLE|WS_CHILD|WS_TABSTOP|BS_AUTOCHECKBOX,
-			 r,this,4);
-	checkbox->SetFont(font);
-	checkbox->UpdateWindow();
-	checkbox->ShowWindow(SW_SHOW);
-	awlist.push_back(checkbox);
-	wlist.push_back(checkbox);
-      }	
+    {
+      r.left = 2*4;
+      r.top+=5*8;
+      r.bottom+=5*8;
+      r.right = r.left+(field->label.size()+3)*8;
+      vgui_bool_field *field = static_cast<vgui_bool_field*>(l.field);
+      CButton *checkbox = new CButton();
+      checkbox->Create(_T(field->label.c_str()),
+			  WS_VISIBLE|WS_CHILD|WS_TABSTOP|BS_AUTOCHECKBOX, r,this,4);
+      checkbox->SetFont(font);
+      checkbox->SetCheck(field->var); // Make sure checkbox displays current bool value.
+      checkbox->UpdateWindow();
+      checkbox->ShowWindow(SW_SHOW);
+      awlist.push_back(checkbox);
+      wlist.push_back(checkbox);
+    }	
     else if(l.type == choice_elem)
       {
 	vgui_int_field *field = static_cast<vgui_int_field*>(l.field);
@@ -304,7 +328,7 @@ bool vgui_mfc_dialog_impl::ask()
 	r.top+=4*8;
 	r.bottom+=4*8;
 	r.right = r.left+field->label.size()*8;
-	// -- Set static text first
+	// Set static text first
 	CStatic *text = new CStatic();
 	text->Create(_T(field->label.c_str()),WS_CHILD|WS_VISIBLE|SS_LEFT,r,this);
 	text->SetFont(font);
@@ -402,12 +426,12 @@ bool vgui_mfc_dialog_impl::ask()
 	text->SetFont(font);
 	awlist.push_back(text);
 
-	// -- Now set the line editor next
+	// Now set the line editor next
 	CEdit *edit = new CEdit();
 	r.left  = r.right+3*8;
 	r.left = 2*4+max_length*8+2*8;
 	r.right = width-2*8;//r.left+(l.field->current_value().size()+2)*8;
-	// -- CEdit::Create does not support extended window styles
+	// CEdit::Create does not support extended window styles
 	//MFC impl:Create(_T("EDIT"), NULL, dwStyle, rect, pParentWnd, nID);
 	// So we use CWnd::CreateEx. Note that the class name is EDIT
 	edit->CreateEx(WS_EX_CLIENTEDGE,_T("EDIT"),NULL,
@@ -477,13 +501,13 @@ bool vgui_mfc_dialog_impl::ask()
       }
     }
   }
-  // -- Remove all the created objects from the heap
+  // Remove all the created objects from the heap
   for(vcl_vector<CWnd *>::iterator w_iter = awlist.begin();w_iter!=awlist.end();++w_iter)
     delete (*w_iter);
   delete accept;
   delete cancel;
   DestroyWindow();     
-  // -- Enable the parent window
+  // Enable the parent window
   AfxGetApp()->EnableModeless(TRUE);
   AfxGetApp()->GetMainWnd()->EnableWindow(TRUE);
   main_window->SetActiveWindow();

@@ -37,25 +37,37 @@ public:
   ~vgui_mfc_dialog_impl();
   
   void* choice_field_widget(const char*, const vcl_vector<vcl_string>&, int&);
-
+  //: Sets the modality of the dialog box.
   void modal(const bool);
+  //: Display the dialog box.
   bool ask();
 protected:
   LOGFONT m_logfont;
+  //: Called by MFC when the user clicks the OK button.
   virtual void OnOk();
+  //: Called by MFC when the user clicks the cancel button.
   virtual void OnCancel();
+  //: Called by MFC when the user clicks the (file) browse button.
   virtual void OnBrowse(UINT uID);
+  //: Called by MFC when the user clicks the colour chooser button.
   virtual void OnChooseColour(UINT uID);
+  //: Called by MFC when the appication is about to terminate.
   afx_msg void OnClose();
 private:
   int nResult;
+  //: File browser counter.
   int count_fbsr;
+  //: Colour chooser counter.
   int count_csr;
   bool ok_clicked;
+  //: Array of MFC file browser objects.
   CWnd *fbsrs[100];
+  //: Array of MFC colour chooser objects.
   CWnd *csrs[100];
+  //: MFC dialog box object.
   CWnd *dialog_box;
   vcl_vector<CWnd *> wlist;
+  //: List of created MFC objects (so we can delete them).
   vcl_vector<CWnd *> awlist;
   DECLARE_MESSAGE_MAP()
 };
