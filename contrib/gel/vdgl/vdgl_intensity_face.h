@@ -32,7 +32,7 @@
 #include <vtol/vtol_face_sptr.h>
 #include <vdgl/vdgl_intensity_face_sptr.h>
 
-class vdgl_intensity_face : public vdgl_digital_region, public vtol_face_2d 
+class vdgl_intensity_face : public vtol_face_2d, public vdgl_digital_region 
 {
 public:
   //Constructors
