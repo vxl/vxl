@@ -27,7 +27,7 @@ int main(int argc, char** argv)
 
   vcl_cout<<vcl_endl;
   vcl_cout<<"View central square of image"<<vcl_endl;
-  vil2_image_view<vil_byte> win1 = image.window(2,4,2,4);
+  vil2_image_view<vil_byte> win1 = vil2_window(image,2,4,2,4);
   vil2_print_all(vcl_cout,win1);
 
   vcl_cout<<vcl_endl;
@@ -39,7 +39,7 @@ int main(int argc, char** argv)
 
   vcl_cout<<vcl_endl;
   vcl_cout<<"View first plane of image"<<vcl_endl;
-  vil2_image_view<vil_byte> plane = image.plane(1);
+  vil2_image_view<vil_byte> plane = vil2_plane(image,1);
   vil2_print_all(vcl_cout,plane);
 
   vcl_cout<<vcl_endl;
