@@ -23,6 +23,8 @@
 #include "test_file_data_wrapper.cxx"
 #include "test_combination.cxx"
 #include "test_ar_process.cxx"
+#include "test_random_n_from_m.cxx"
+#include "test_select_n_from_m.cxx"
 
 #undef TESTLIB_DEFINE_MAIN
 #define TESTLIB_DEFINE_MAIN(x) int main() \
@@ -49,6 +51,8 @@ void run_test_mbl()
   test_data_wrapper_mixer();
   test_combination();
   test_ar_process();
+  test_random_n_from_m();
+  test_select_n_from_m();
 }
 
 TESTLIB_DEFINE_MAIN(run_test_mbl);

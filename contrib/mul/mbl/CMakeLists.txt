@@ -5,6 +5,8 @@ SET(mbl_sources
  mbl_matrix_products.cxx           mbl_matrix_products.h
  mbl_matxvec.cxx                   mbl_matxvec.h
  mbl_mz_random.cxx                 mbl_mz_random.h
+ mbl_random_n_from_m.cxx           mbl_random_n_from_m.h
+ mbl_select_n_from_m.cxx           mbl_select_n_from_m.h
  mbl_k_means.cxx                   mbl_k_means.h
  mbl_data_collector_base.cxx       mbl_data_collector_base.h
  mbl_stats_1d.cxx                  mbl_stats_1d.h
