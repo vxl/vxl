@@ -1,13 +1,10 @@
 #ifndef vtol_edge_h
 #define vtol_edge_h
 
-// .NAME vtol_edge - Represents the basic 1D topological entity
-// .LIBRARY vtol
-// .HEADER gel package
-// .INCLUDE vtol/vtol_edge.h
-// .FILE vtol_edge.cxx
+//:
+// \file
+// \brief Represents the basic 1D topological entity
 //
-// .SECTION Description
 //  The vtol_edge class is used to represent a topological edge.  An vtol_edge
 //  maintains a data pointer to the specific mathematical curve geometry
 //  which describes the point set that makes up the edge.  For convenience
@@ -18,7 +15,8 @@
 //  topological hierarchy.  In rare cases, an edge will be used to represent
 //  a Ray.  In this case, only _v1 will be valid and _v2 will be NULL.
 //
-// .SECTION Modifications:
+// \verbatim
+// Modifications:
 //     JLM December 1995, Added timeStamp (Touch) to
 //         operations which affect bounds.
 //     JLM December 1995 Added method for ComputeBoundingBox
@@ -39,6 +37,7 @@
 //
 //   02-26-97 Added implementation for virtual Transform() - Peter Vanroose
 //   PTU ported to vxl may 2000.
+// \endverbatim
 
 #include <vtol/vtol_edge_sptr.h>
 
@@ -47,11 +46,10 @@
 #include <vtol/vtol_zero_chain.h>
 #include <vtol/vtol_vertex.h>
 
-//: \brief topological edge
-
 class vtol_edge_2d;
 class vtol_edge_3d;
 
+//: topological edge
 
 class vtol_edge
   : public vtol_topology_object
@@ -77,15 +75,12 @@ public:
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-
   virtual ~vtol_edge();
-
 
   //---------------------------------------------------------------------------
   //: Return the topology type
   //---------------------------------------------------------------------------
   virtual vtol_topology_object_type topology_type(void) const { return EDGE; }
-
 
   //---------------------------------------------------------------------------
   //: Return the first endpoint
@@ -113,14 +108,13 @@ public:
   virtual void set_v2(vtol_vertex *new_v2);
 
   //---------------------------------------------------------------------------
-  // Task: Determine the endpoints of an edge from its inferiors
+  //: Determine the endpoints of an edge from its inferiors
   //---------------------------------------------------------------------------
   virtual void set_vertices_from_zero_chains(void);
 
   //---------------------------------------------------------------------------
   //: replace the current end point
   //---------------------------------------------------------------------------
-
   virtual void replace_end_point(vtol_vertex &current_end_point,
                                  vtol_vertex &new_end_point);
 
@@ -143,7 +137,6 @@ public:
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
   virtual vtol_edge *cast_to_edge(void);
-
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
@@ -184,8 +177,8 @@ public:
 
   //:
   // Inferior/Superior Accessor Methods
-
-  // : Warning - should not be used by clients
+  //
+  // WARNING should not be used by clients
   virtual vcl_vector<vtol_vertex*> *compute_vertices(void);
   virtual vcl_vector<vtol_edge*> *compute_edges(void);
   virtual vcl_vector<vtol_zero_chain*> *compute_zero_chains(void);
@@ -194,11 +187,9 @@ public:
   virtual vcl_vector<vtol_two_chain*> *compute_two_chains(void);
   virtual vcl_vector<vtol_block*> *compute_blocks(void);
 
-  //:
-  // get a list of endpoints
+  //: get a list of endpoints
   virtual vertex_list *endpoints(void);
 
-  //:
   // Utility Functions
 
   virtual bool share_vertex_with(vtol_edge &other);
@@ -219,9 +210,8 @@ public:
   virtual void describe(vcl_ostream &strm=vcl_cout,
                         int blanking=0) const;
 
-  // compare the geometry
-
+  //: compare the geometry
   virtual bool compare_geometry(const vtol_edge &other) const =0;
-
 };
-#endif
+
+#endif // vtol_edge_h

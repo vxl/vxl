@@ -26,6 +26,7 @@ void golden_test_vnl_io(bool save_file=false);
 // \verbatim
 
 
+//:
 // This nasty macro stuff is to allow the program to be compiled as a stand
 // alone program or as part of a larger test program.
 #ifndef TESTMAIN
@@ -62,6 +63,7 @@ void golden_test_vnl_io(bool save_file)
   // of each class
   // Otherwise it just fills them with values for comparison to the values read in.
   //------------------------------------------------------------------------------------
+
   // vnl_vector
   const int n_vec = 50;
   vnl_vector<double> v_out(n_vec),v_in;
@@ -70,7 +72,6 @@ void golden_test_vnl_io(bool save_file)
   {
     v_out(i) = (double)(i*i);
   }
-
 
   // vnl_matrix
   const int m_mat = 10;
@@ -85,9 +86,7 @@ void golden_test_vnl_io(bool save_file)
     }
   }
 
-
   // vnl_diag_matrix
-
   vnl_diag_matrix<double> diag_mat_out(v_out), diag_mat_in;
 
   // vnl_matrix_fixed
@@ -175,7 +174,6 @@ void golden_test_vnl_io(bool save_file)
   }
 
   // Read in file to each class in turn
-
   vsl_b_ifstream bfs_in("golden_test_vnl_io.bvl");
   TEST ("Opened golden_test_vnl_io.bvl for reading ", ! bfs_in, false);
   vsl_b_read(bfs_in, v_in);

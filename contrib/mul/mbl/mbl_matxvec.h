@@ -17,14 +17,13 @@
 // NPC    Added NC_VecXMat
 // IMS    started conversion to VXL 18 April 2001
 // \endverbatim
-
-
+//
 // Some of the code in this file has been converted to use VXL,
 // the rest has been #if-ed out. Only convert the other functions
 // as they are needed, and after chacking that a suitable function doesn't
 // already exist in VXL.
-#include <vnl/vnl_fwd.h>
 
+#include <vnl/vnl_fwd.h>
 
 #if 0 // commented out
 #include <vcl_vector.h>

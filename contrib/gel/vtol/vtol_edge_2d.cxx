@@ -93,8 +93,7 @@ vtol_edge_2d::vtol_edge_2d(const vtol_edge_2d &other)
 //---------------------------------------------------------------------------
 //: Constructor from a zero-chain.
 //---------------------------------------------------------------------------
-
-//:
+//
 // Constructor for an vtol_edge_2d. If the vtol_zero_chain has two vertices , then the
 // first and last vertices of the vtol_zero_chain are used for endpoints and
 // an ImplicitLine is assumed to be the curve.  Otherwise, the all data
@@ -144,13 +143,11 @@ vtol_edge_2d::vtol_edge_2d(zero_chain_list &newchains)
 // determine vtol_vertex_2d, _v1.  The coordinates, (x2, y2, z2), determine _v2.
 // If curve is NULL, an ImplicitLine is generated for the vtol_edge_2d.
 
-// vtol_edge_2d::vtol_edge_2d(double x1, double y1, double z1, double x2, double y2, double z2, vsol_curve_2d* curve)
 vtol_edge_2d::vtol_edge_2d(double x1,
                            double y1,
                            double x2,
                            double y2,
                            vsol_curve_2d_sptr curve)
-
 {
   _v1=new vtol_vertex_2d(x1,y1);
   _v2=new vtol_vertex_2d(x2,y2);
@@ -173,6 +170,7 @@ vtol_edge_2d::vtol_edge_2d(double x1,
 // and _v2 are left as NULL.
 // (Actually, this description is wrong. The endpoints are retreived
 // from the curve, regardless of its type. -JLM)
+
 vtol_edge_2d::vtol_edge_2d(vsol_curve_2d &edgecurve)
 {
   vtol_zero_chain *newzc;
@@ -293,7 +291,6 @@ bool vtol_edge_2d::operator==(const vsol_spatial_object_3d& obj) const
 //
 //    Inferior/Superior Accessor Functions
 //
-
 // ******************************************************
 //
 //    I/O methods
