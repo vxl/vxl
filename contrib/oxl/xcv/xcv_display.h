@@ -3,11 +3,12 @@
 //
 // This is xcv/xcv_display.h
 //
-//: Creates a menu for, and provides an interface to operations that change
-//  the display.
-//
+//:
 // \file
 // \author   K.Y.McGaul
+// \brief Interface for display functions.
+//  Creates a menu for, and provides an interface to operations that change
+//  the display.
 // \verbatim
 //  Modifications:
 //   K.Y.McGaul     27-JAN-2000    Initial version.

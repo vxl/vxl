@@ -1,11 +1,12 @@
 //
 // This is xcv/xcv.cxx
 //
-//: This contains the main function for xcv, a program designed to demonstrate 
-//  the functionality of vxl.
-//
+//:
 // \file
 // \author  K.Y.McGaul
+// \brief Main function for xcv.
+//  This contains the main function for xcv, a program designed to demonstrate 
+//  the functionality of vxl.
 // \verbatim
 //  Modifications:
 //   K.Y.McGaul     27-JAN-2000    Initial version.

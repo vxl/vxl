@@ -3,18 +3,20 @@
 //
 // This is xcv/xcv_axes_limits.h
 //
-//: Given a range (from the number low to high) this class computes
-//  a suitable spacing, start value and end value for tick marks
-//  the axes of a graph.
-//
+//:
 // \file 
 // \author   Andrew Fitzgibbon <andrewfg@ed.ac.uk>
 // \date     23 Apr 96
+// \brief Compute marks for the axes of a graph.
+//  Given a range (from the number low to high) this class computes
+//  a suitable spacing, start value and end value for tick marks
+//  for the axes of a graph.
 // \verbatim
 //   Modifications:
 //     Andrew Fitzgibbon 23-APR-1996   Initial version.
 //     K.Y.McGaul        26-APR-2001   Converted to vxl.
 // \endverbatim
+//
 
 class xcv_axes_limits {
 public:

@@ -4,13 +4,13 @@
 // 
 // This is xcv/xcv_picker_tableau.h
 //
-//: Tableau to pick points and lines.
+//:
+// \file
+// \author K.Y.McGaul
+// \brief  Tableau to pick points and lines.
 //  The difference between this picker tableau and vgui_rubberbander is that this
 //  keeps control of the event loop until the object has been picked.  The functions
 //  pick_point/pick_line will only return once the user has picked a point/line.
-//
-// \file
-// \author   K.Y.McGaul
 // \verbatim
 //  Modifications:
 //   K.Y.McGaul   23-MAR-2001  Initial version.

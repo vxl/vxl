@@ -1,13 +1,15 @@
 #ifndef xcv_file_h_
 #define xcv_file_h_
 // This is xcv/xcv_file.h
-
 //:
 // \file
 // Creates a menu for, and provides an interface to operations for loading
 // and saving files.
 //
 // \author  K.Y.McGaul
+// \brief Interface to file functions.
+//  Creates a menu for, and provides an interface to operations for loading
+//  and saving files.
 // \verbatim
 //  Modifications:
 //   K.Y.McGaul     27-JAN-2000    Initial version.
@@ -27,6 +29,7 @@ public:
   static void load_image();
   //: Save image to specified file.
   static void save_image();
+  //: Save image and spatial objects to postscript file.
   static void save_as_ps();
   //: Remove currently selected image.
   static void remove_image();

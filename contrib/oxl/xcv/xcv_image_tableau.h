@@ -3,10 +3,10 @@
 //
 // This is xcv/xcv_image_tableau.h
 //
-//: An image tableau with an associated region of interest.
-//
+//:
 // \file
 // \author  Marko Bacic (u97mb@robots.ox.ac.uk)
+// \brief An image tableau with an associated region of interest.
 // \verbatim
 //  Modifications:
 //    Marko Bacic   AUG-2000   Initial version.
