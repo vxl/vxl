@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_math.h
+// This is core/vil2/vil2_math.h
 #ifndef vil2_math_h_
 #define vil2_math_h_
 //:
@@ -79,6 +79,26 @@ inline sumT vil2_math_ssd(const vil2_image_view<imT>& imA, const vil2_image_view
       {
         const sumT v = ((sumT)imA(i,j,p) - (sumT)imB(i,j,p));
         ssd += v*v;
+      }
+  return ssd;
+}
+
+//: Sum squared magnitude differences between two complex images
+// \relates vil2_image_view
+template <class imT, class sumT>
+inline sumT
+vil2_math_ssd_complex(const vil2_image_view<vcl_complex<imT> >& imA,
+                      const vil2_image_view<vcl_complex<imT> >& imB,
+                      sumT /*dummy*/)
+{
+  assert(imA.ni() == imB.ni() && imB.nj() == imB.nj() && imA.nplanes() == imB.nplanes());
+  sumT ssd=0;
+  for (unsigned p=0;p<imA.nplanes();++p)
+    for (unsigned j=0;j<imA.nj();++j)
+      for (unsigned i=0;i<imA.ni();++i)
+      {
+        const vcl_complex<imT> d = imA(i,j,p) - imB(i,j,p);
+        ssd += sumT( d.real()*d.real() + d.imag()*d.imag() );
       }
   return ssd;
 }
@@ -457,10 +477,6 @@ inline void vil2_math_integral_sqr_image(const vil2_image_view<aT>& imA,
 
     }
   }
-
-
-
-
 }
 
 #endif // vil2_math_h_

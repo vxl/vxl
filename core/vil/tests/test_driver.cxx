@@ -35,6 +35,7 @@ DECLARE( test_algo_threshold );
 DECLARE( test_deep_copy_3_plane );
 DECLARE( test_algo_grid_merge );
 DECLARE( test_algo_find_4con_boundary );
+DECLARE( test_algo_fft );
 
 void
 register_tests()
@@ -74,6 +75,7 @@ register_tests()
   REGISTER( test_deep_copy_3_plane );
   REGISTER( test_algo_grid_merge );
   REGISTER( test_algo_find_4con_boundary );
+  REGISTER( test_algo_fft );
 }
 
 DEFINE_MAIN;

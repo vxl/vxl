@@ -9,6 +9,7 @@
 #include <vil2/vil2_rgba.h>
 #include <vxl_config.h> // for vxl_uint_32 etc.
 #include <vcl_iosfwd.h>
+#include <vcl_complex.h>
 
 //: Describes the type of the concrete data.
 enum vil2_pixel_format {
@@ -50,10 +51,14 @@ enum vil2_pixel_format {
   VIL2_PIXEL_FORMAT_RGBA_FLOAT = 32,
   VIL2_PIXEL_FORMAT_RGBA_DOUBLE = 33,
 //  VIL2_PIXEL_FORMAT_RGBA_LONG_DOUBLE = 34,
+
+  VIL2_PIXEL_FORMAT_COMPLEX_FLOAT = 35,
+  VIL2_PIXEL_FORMAT_COMPLEX_DOUBLE = 36,
+
 // Add values here and be careful to keep values in vil2_pixel_format.cxx in sync
 // Don't forget to increase the end value. Also add to vil2_convert_cast in vil2_convert.h
 
-  VIL2_PIXEL_FORMAT_ENUM_END = 35
+  VIL2_PIXEL_FORMAT_ENUM_END = 37
 };
 
 
@@ -114,6 +119,9 @@ vil2_pixel_format_macro(vil2_rgba<vxl_byte>,    VIL2_PIXEL_FORMAT_RGBA_BYTE)
 vil2_pixel_format_macro(vil2_rgba<vxl_sbyte>,   VIL2_PIXEL_FORMAT_RGBA_SBYTE)
 vil2_pixel_format_macro(vil2_rgba<float>,       VIL2_PIXEL_FORMAT_RGBA_FLOAT)
 vil2_pixel_format_macro(vil2_rgba<double>,      VIL2_PIXEL_FORMAT_RGBA_DOUBLE)
+
+vil2_pixel_format_macro(vcl_complex<float>,   VIL2_PIXEL_FORMAT_COMPLEX_FLOAT)
+vil2_pixel_format_macro(vcl_complex<double>,  VIL2_PIXEL_FORMAT_COMPLEX_DOUBLE)
 
 #undef vil2_pixel_format_macro
 

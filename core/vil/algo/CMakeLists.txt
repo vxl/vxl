@@ -26,6 +26,7 @@ SET( vil2_algo_sources
   vil2_threshold.txx           vil2_threshold.h
                                vil2_grid_merge.h
                                vil2_find_4con_boundary.h
+  vil2_fft.txx                 vil2_fft.h
 )
 
 
@@ -33,4 +34,4 @@ AUX_SOURCE_DIRECTORY(Templates vil2_algo_sources)
 
 ADD_LIBRARY(vil2_algo ${vil2_algo_sources})
 
-TARGET_LINK_LIBRARIES( vil2_algo vil2 vil vnl vcl )
+TARGET_LINK_LIBRARIES( vil2_algo vil2 vil vnl_algo vnl vcl )

@@ -5,6 +5,7 @@
 // \author Ian Scott.
 
 #include <vcl_cassert.h>
+#include <vcl_complex.h>
 
 static unsigned component_size[]={
   0,                   //  VIL2_PIXEL_FORMAT_UNKNOWN
@@ -44,6 +45,10 @@ static unsigned component_size[]={
   sizeof(vxl_sbyte),   //  VIL2_PIXEL_FORMAT_RGBA_SBYTE
   sizeof(float),       //  VIL2_PIXEL_FORMAT_RGBA_FLOAT
   0,                   //  VIL2_PIXEL_FORMAT_RGBA_LONG_DOUBLE
+
+  sizeof(vcl_complex<float>),   // VIL2_PIXEL_FORMAT_COMPLEX_FLOAT
+  sizeof(vcl_complex<double>),  // VIL2_PIXEL_FORMAT_COMPLEX_DOUBLE
+
 };
 
 
@@ -86,6 +91,10 @@ static unsigned num_components[]={
   4,  //  VIL2_PIXEL_FORMAT_RGBA_FLOAT
   4,  //  VIL2_PIXEL_FORMAT_RGBA_DOUBLE
   0,  //  VIL2_PIXEL_FORMAT_RGBA_LONG_DOUBLE
+
+  1,  //  VIL2_PIXEL_FORMAT_COMPLEX_FLOAT
+  1,  //  VIL2_PIXEL_FORMAT_COMPLEX_DOUBLE
+
 };
 
 
@@ -128,6 +137,10 @@ VIL2_PIXEL_FORMAT_SBYTE,    //  VIL2_PIXEL_FORMAT_RGBA_SBYTE
 VIL2_PIXEL_FORMAT_FLOAT,    //  VIL2_PIXEL_FORMAT_RGBA_FLOAT
 VIL2_PIXEL_FORMAT_DOUBLE,   //  VIL2_PIXEL_FORMAT_RGBA_DOUBLE
 VIL2_PIXEL_FORMAT_UNKNOWN,  //  VIL2_PIXEL_FORMAT_RGBA_LONG_DOUBLE
+
+VIL2_PIXEL_FORMAT_COMPLEX_FLOAT,       //  VIL2_PIXEL_FORMAT_COMPLEX_FLOAT
+VIL2_PIXEL_FORMAT_COMPLEX_DOUBLE,      //  VIL2_PIXEL_FORMAT_COMPLEX_DOUBLE
+
 };
 
 
@@ -186,6 +199,9 @@ vcl_ostream & operator << (vcl_ostream &os, vil2_pixel_format f)
     case VIL2_PIXEL_FORMAT_RGBA_SBYTE:   os << "vil2_rgba<vxl_sbyte>";  break;
     case VIL2_PIXEL_FORMAT_RGBA_FLOAT:   os << "vil2_rgba<float>";  break;
     case VIL2_PIXEL_FORMAT_RGBA_DOUBLE:  os << "vil2_rgba<double>";  break;
+
+    case VIL2_PIXEL_FORMAT_COMPLEX_FLOAT:   os << "complex<float>";  break;
+    case VIL2_PIXEL_FORMAT_COMPLEX_DOUBLE:  os << "complex<double>";  break;
 
     default:  os << "VIL2_PIXEL_FORMAT_INVALID";  break;
   }

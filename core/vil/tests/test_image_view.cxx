@@ -338,6 +338,43 @@ void test_image_view_fill()
   TEST("fill (no j over-run) ", image(8,4,0), vxl_byte(11));
 }
 
+void test_complex_image_view()
+{
+  vcl_cout << "*************************************************\n"
+           << " Testing vil2_image_view complex image functions\n"
+           << "*************************************************\n";
+
+  vil2_image_view<vcl_complex<float> > image_cf (10,7,1);
+  image_cf.fill (vcl_complex<float> (1.1f, 2.2f));
+
+  vil2_image_view<vcl_complex<double> > image_cd;
+  vil2_convert_cast(image_cf, image_cd);
+  TEST("vil2_convert_cast<complex<float>, complex<double> >", image_cd, true);
+
+  vil2_image_view<double> image_rd;
+  image_rd = vil2_view_real_part (image_cd);
+  TEST("vil2_view_real_part<double>", image_rd, true);
+  TEST_NEAR("Real part correct value", image_rd(1,1,0), 1.1, 1e-5);
+
+  vil2_image_view<double> image_id;
+  image_id = vil2_view_imag_part (image_cd);
+  TEST("vil2_view_imag_part<double>", image_id, true);
+  TEST_NEAR("Imag part correct value", image_id(1,1,0), 2.2, 1e-5);
+
+  image_rd (1,1,0) = 3.3;
+  TEST_NEAR("Changing real view changes complex view", image_cd(1,1,0).real(), 3.3, 1e-5);
+
+  vil2_image_view<float> image_pf;
+  image_pf = vil2_view_as_planes (image_cf);
+  TEST("vil2_view_as_planes<float>", image_pf, true);
+
+  vil2_image_view<vcl_complex<float> > image_cf2;
+  image_cf2 = vil2_view_as_complex (image_pf);
+  TEST("vil2_view_as_complex<float>", image_cf2, true);
+
+  TEST("Conversion from complex<float> to planes and back", image_cf2, image_cf);
+}
+
 MAIN( test_image_view )
 {
   START( "vil2_image_view" );
@@ -359,6 +396,7 @@ MAIN( test_image_view )
   test_image_view(vxl_uint_32(), "vxl_uint_32", float());
   test_contiguous();
   test_image_view_fill();
+  test_complex_image_view();
 
   SUMMARY();
 }

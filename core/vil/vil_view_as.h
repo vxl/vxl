@@ -71,5 +71,56 @@ inline vil2_image_view<vil2_rgba<T> > vil2_view_as_rgba(const vil2_image_view<T>
                                        v.istep()/3,v.jstep()/3,1);
 }
 
+//: Return an complex component view of a 2N-plane image.
+// \return an empty view if it can't do the conversion (e.g. planestep != 1)
+//  O(1).
+// \relates vil2_image_view
+template<class T>
+inline vil2_image_view<vcl_complex<T> >
+vil2_view_as_complex (const vil2_image_view<T> & v)
+{
+  if ((v.nplanes()%2!=0) || (v.planestep()!=1) || (v.istep()!=2 && v.jstep()!=2))
+      return vil2_image_view<vil2_rgb<T> >();
+
+  return vil2_image_view<vcl_complex<T> > (
+      v.memory_chunk(),
+      reinterpret_cast<vcl_complex<T> const *> (v.top_left_ptr()),
+      v.ni(), v.nj(), v.nplanes()/2,
+      v.istep()/2, v.jstep()/2, 1);
+}
+
+//: Base function to do the work for both vil2_view_real/imag_part
+// O(1).
+// \relates vil2_image_view
+template <class T>
+inline vil2_image_view<T>
+vil2_view_part (vil2_image_view<vcl_complex<T> > img, int pt)
+{
+  return vil2_image_view<T> (
+      img.memory_chunk(),
+      reinterpret_cast<T *>(img.top_left_ptr()) + pt,
+      img.ni(), img.nj(), img.nplanes(),
+      2*img.istep(), 2*img.jstep(), 2*img.planestep());
+}
+
+//: Return a view of the real part of a complex image.
+// O(1).
+// \relates vil2_image_view
+template <class T>
+inline vil2_image_view<T>
+vil2_view_real_part (vil2_image_view<vcl_complex<T> > img)
+{
+  return vil2_view_part (img, 0);
+}
+
+//: Return a view of the imaginary part of a complex image.
+// O(1).
+// \relates vil2_image_view
+template <class T>
+inline vil2_image_view<T>
+vil2_view_imag_part (vil2_image_view<vcl_complex<T> > img)
+{
+  return vil2_view_part (img, 1);
+}
 
 #endif // vil2_view_as_h_

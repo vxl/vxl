@@ -6,6 +6,7 @@
 // \author Tim Cootes - Manchester
 
 #include <vxl_config.h> // for vxl_uint_32 etc.
+#include <vcl_complex.h>
 #include <vil2/vil2_rgb.h>
 
 //: Explicit overload for bool
@@ -95,6 +96,13 @@ void vil2_print_value(vcl_ostream& os, const float& value)
 //: Explicit overload for float
 VCL_DEFINE_SPECIALIZATION
 void vil2_print_value(vcl_ostream& os, const double& value)
+{
+  os<<value;
+}
+
+//: Explicit overload for complex double
+VCL_DEFINE_SPECIALIZATION
+void vil2_print_value(vcl_ostream& os, const vcl_complex<double>& value)
 {
   os<<value;
 }

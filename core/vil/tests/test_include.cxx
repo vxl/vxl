@@ -9,6 +9,7 @@
 #include <vil2/algo/vil2_exp_filter_1d.h>
 #include <vil2/algo/vil2_exp_grad_filter_1d.h>
 #include <vil2/algo/vil2_find_4con_boundary.h>
+#include <vil2/algo/vil2_fft.h>
 #include <vil2/algo/vil2_gauss_filter.h>
 #include <vil2/algo/vil2_gauss_reduce.h>
 #include <vil2/algo/vil2_greyscale_closing.h>
