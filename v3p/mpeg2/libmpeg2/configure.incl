@@ -1,0 +1,18 @@
+AC_SUBST([LIBMPEG2_CFLAGS])
+AC_SUBST([LIBMPEG2_LIBS])
+
+dnl avoid -fPIC when possible
+LIBMPEG2_CFLAGS="$LIBMPEG2_CFLAGS -prefer-non-pic"
+
+dnl check for mlib
+AC_ARG_ENABLE([mlib],
+    [  --disable-mlib          make a version not using mediaLib])
+if test x"$enable_mlib" != x"no"; then
+    cflags_save="$CFLAGS"
+    CFLAGS="$CFLAGS -L/opt/SUNWmlib/lib -R/opt/SUNWmlib/lib"
+    AC_CHECK_LIB([mlib],[mlib_VideoColorYUV2RGB420],
+        [AC_DEFINE([LIBMPEG2_MLIB],,[libmpeg2 mediaLib support])
+        LIBMPEG2_CFLAGS="$LIBMPEG2_CFLAGS -I/opt/SUNWmlib/include"
+        LIBMPEG2_LIBS="$LIBMPEG2_LIBS -L/opt/SUNWmlib/lib -R/opt/SUNWmlib/lib -lmlib"])
+    CFLAGS="$cflags_save"
+fi
