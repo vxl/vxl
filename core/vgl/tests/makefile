@@ -1,8 +1,10 @@
 USES += vxl
 IULIBS := -lvgl
 
-MINI_PROG_SOURCES += test_triangle_scan_iterator.cxx
+TESTS += test_homg.cxx
+TESTS += test_cartesian.cxx
+TESTS += test_triangle_scan_iterator.cxx
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+#########################################
+include ${IUEROOT}/config/static-tests.mk
+#########################################
