@@ -1,8 +1,8 @@
-// vcl_tests.cpp : Run all vcl tests from one app.
-//  I think this is prefereable to having many vcl_test_* projects.
-//  awf, mar 2000
-//
-
+//:
+// \file
+// \brief vcl_tests.cxx : Run all vcl tests from one app.
+//  I think this is preferable to having many vcl_test_* projects.
+// \author awf, mar 2000
 
 #include "test_vcl_algorithm.cxx"
 #include "test_vcl_cctype.cxx"
@@ -26,7 +26,9 @@
 
 // rel_ops conflicts with vector::iterator with GCC 3.0
 // rel_ops are bad. Don't use them.
-//#include "test_vcl_rel_ops.cxx"
+#if 0
+#include "test_vcl_rel_ops.cxx"
+#endif
 
 int result;
 
