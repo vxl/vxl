@@ -1,10 +1,12 @@
+//:
+// \file
 #include "gevd_detector_params.h"
 
 #include <vcl_strstream.h>
 //#include <Basics/types.h> // Gets AttributeValuePair
 
 //------------------------------------------------------------------------
-//: Constructors
+// Constructors
 //
 
 gevd_detector_params::gevd_detector_params(const gevd_detector_params& dp)
@@ -23,7 +25,7 @@ gevd_detector_params::gevd_detector_params(float smooth_sigma, float noise_w,
                                            float maxgp, float minjmp,
                                            float contour_f, float junction_f,
                                            bool recover_j, bool equal_spacing,
-                                           bool follow_b, 
+                                           bool follow_b,
                                            bool peaks_only,
                                            bool valleys_only,
                                            float ang, float sep, int min_corner_len,
@@ -73,7 +75,7 @@ void gevd_detector_params::InitParams(float smooth_sigma, float noise_w,
   // arguments.  If the value is >0 then the variable is assumed to
   // be a bool and the parameters are determined from computation.
 
-  if(aggressive_junction_closure<0)
+  if (aggressive_junction_closure<0)
     {
       junctionp = recover_j;
       contourFactor = contour_f;
@@ -110,8 +112,6 @@ void gevd_detector_params::set_close_borders(bool cb)
 {
   borderp = cb;
 }
-
-
 
 
 //-----------------------------------------------------------------------------
@@ -202,29 +202,29 @@ bool gevd_detector_params::SanityCheck()
         << vcl_ends;
     valid = false;
     }
-  
-  if(corner_angle < 5.0f)
+
+  if (corner_angle < 5.0f)
     {
       msg << "ERROR: Value of corner angle is too low <5" << vcl_ends;
     }
 
-  if(separation < 1.0f)
+  if (separation < 1.0f)
     {
       msg << "ERROR: Value of corner separation is too low <1" << vcl_ends;
     }
 
-  if(min_corner_length < 5)
+  if (min_corner_length < 5)
     {
       msg << "ERROR: Value of minimum chain length too low <5" << vcl_ends;
     }
 
-  if(cycle > 10)
+  if (cycle > 10)
     {
       msg << "ERROR: Value of number of corners in a 1-cycle is too "
           << "high > 10" << vcl_ends;
     }
 
-  if(ndimension > 3)
+  if (ndimension > 3)
     {
       msg << "ERROR: Value of corner spatial dimension is too large > 3"
           << vcl_ends;
