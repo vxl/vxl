@@ -8,7 +8,6 @@
 
 #include <vcl_iostream.h>
 #include <vcl_string.h>
-#include <vcl_cmath.h>
 #include <vcl_algorithm.h>
 #include <clsfy/clsfy_simple_adaboost.h>
 #include <clsfy/clsfy_binary_threshold_1d_builder.h>
@@ -111,13 +110,13 @@ void test_adaboost()
   vcl_vector< vnl_vector<double> > inputs_vec(0);
   vcl_vector< unsigned > outputs(0);
   for (int j=0; j<n_pos; ++j)
-  { 
+  {
     inputs_vec.push_back( pos_samples[j] );
     outputs.push_back( 1 );
   }
 
   for (int j=0; j<n_neg; ++j)
-  { 
+  {
     inputs_vec.push_back( neg_samples[j] );
     outputs.push_back( 0 );
   }
@@ -133,8 +132,7 @@ void test_adaboost()
                                        egs0, egs1 );
 
 
-
-   // build clsfy_simple_adaboost using sorted method 3
+  // build clsfy_simple_adaboost using sorted method 3
   vcl_cout<<"*************sorted classifier4************\n";
   clsfy_simple_adaboost *pClassifier4 = new clsfy_simple_adaboost;
   clsfy_binary_threshold_1d_builder b_thresh_sorted_builder4;
@@ -146,7 +144,7 @@ void test_adaboost()
   adab_sorted_builder.build( *pClassifier4, inputs, 1, outputs);
 
   pClassifier4->print_summary(vcl_cout);
-  
+
 
    // compare alpha values for classifier4 (with classifier1)
   double diff=0;
@@ -234,7 +232,6 @@ void test_adaboost()
 
     delete c1d2;
   }
-
 
 
   vcl_cout<<"======== TESTING I/O ===========\n";
