@@ -139,8 +139,10 @@ void test_rational() {
   }
   {
     vnl_rational n = vnl_numeric_traits<vnl_rational>::zero;
-    vnl_rational u = vnl_numeric_traits<vnl_rational>::one;
+    vcl_cout << "zero = " << n << '\n';
     TEST("zero", n, 0L);
+    vnl_rational u = vnl_numeric_traits<vnl_rational>::one;
+    vcl_cout << "one  = " << u << '\n';
     TEST("one", u, 1L);
   }
   {
@@ -155,6 +157,14 @@ void test_rational() {
     TEST("complex conjugate", vnl_complex_traits<vnl_rational>::conjugate(cc), cc);
     TEST("complex conjugate", vnl_complex_traits<vcl_complex<vnl_rational> >::conjugate(c), -c);
     TEST("complexify", vnl_complex_traits<vcl_complex<vnl_rational> >::complexify(cc), c*c);
+  }
+  {
+    vcl_complex<vnl_rational> n = vnl_numeric_traits<vcl_complex<vnl_rational> >::zero;
+    vcl_cout << "zero = " << n << '\n';
+    TEST("zero", n, vcl_complex<vnl_rational>(0L,0L));
+    vcl_complex<vnl_rational> u = vnl_numeric_traits<vcl_complex<vnl_rational> >::one;
+    vcl_cout << "one  = " << u << '\n';
+    TEST("one", u, vcl_complex<vnl_rational>(1L,0L));
   }
 }
 
