@@ -9,7 +9,8 @@
 #include "vcl_compiler.h"
 
 // SunPro 5.0's <csetjmp> is broken.
-#if !VCL_CXX_HAS_HEADER_CSETJMP || defined(VCL_SUNPRO_CC_50)
+// VisualC++'s <csetjmp> does not use namespace std.
+#if !VCL_CXX_HAS_HEADER_CSETJMP || defined(VCL_SUNPRO_CC_50) || defined(VCL_VC)
 # include <setjmp.h>
 # define vcl_generic_csetjmp_STD /* */
 # include "generic/vcl_csetjmp.h"
