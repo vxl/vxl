@@ -1,5 +1,5 @@
-#ifndef FloatOperators_h_
-#define FloatOperators_h_
+#ifndef gevd_float_operators_h_
+#define gevd_float_operators_h_
 //:
 // \file
 // \brief Operators on float pixels in 2D images
@@ -23,18 +23,18 @@
 //
 // float is used throughout to avoid overflow/underflow and conversion
 // on math operations like sqrt, sin, etc...
-// All convolution operators has a running cache of the input, and so
+// All convolution operators have a running cache of the input, and so
 // the from/to buffers can be the same.
 //
 // \verbatim
 //  Modifications
-//   Van-Duc Nguyen  (1990) convolution to support image segmentation
-//   Van-Duc Nguyen  (1992) add pyramid and wavelet
-//   Van-Duc Nguyen  (1996) add circular/reflection at border
-//   Van-Duc Nguyen  (1997) add running sum
-//   Chuck Stewart   (1997) added SurfaceNormalD, SurfaceCurvatureD
-//                          and ShrinkBy2_D
-//   Peter Vanroose - July 1999 - made all methods static (class has no data)
+//   Van-Duc Nguyen (1990) convolution to support image segmentation
+//   Van-Duc Nguyen (1992) add pyramid and wavelet
+//   Van-Duc Nguyen (1996) add circular/reflection at border
+//   Van-Duc Nguyen (1997) add running sum
+//   Chuck Stewart  (1997) added SurfaceNormalD, SurfaceCurvatureD, ShrinkBy2_D
+//   Peter Vanroose July 1999 -made all methods static (class has no data)
+//   Peter Vanroose Sept 2004 -all methods now support "from" & "to" being equal
 // \endverbatim
 
 class gevd_bufferxy;       // buffer of floats
@@ -49,18 +49,18 @@ class gevd_float_operators
   static float Convolve(const gevd_bufferxy& from, const gevd_bufferxy& kernel,
                         gevd_bufferxy*& to);
   static gevd_bufferxy* Read2dKernel(const char* filename);
-  static float Convolve(gevd_bufferxy& from, gevd_bufferxy*& to,// can mutate in place
+  static float Convolve(const gevd_bufferxy& from, gevd_bufferxy*& to,// can mutate in place
                         const float* xkernel, // when from==to
                         const int xradius, const bool xevenp,
                         const float* ykernel,
                         const int yradius, const bool yevenp,
                         const bool xwrap=false, const bool ywrap=false);
-  static float Convolve(gevd_bufferxy& from, gevd_bufferxy*& to,// can mutate in place
+  static float Convolve(const gevd_bufferxy& from, gevd_bufferxy*& to,// can mutate in place
                         const float* xkernel, // when from==to
                         const int xradius, const bool xevenp,
                         const int yradius,    // running sum along y-axis
                         const bool xwrap=false, const bool ywrap=false);
-  static float Convolve(float* from, float*& to, const int len,
+  static float Convolve(const float* from, float*& to, const int len,
                         const float* kernel, const int radius,
                         const bool evenp, const bool wrap=false);
   static float RunningSum(float* from, float*& to, const int len,
@@ -354,4 +354,4 @@ class gevd_float_operators
   static void TestWavelets();
 };
 
-#endif // FloatOperators_h_
+#endif // gevd_float_operators_h_
