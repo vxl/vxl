@@ -7,8 +7,10 @@
 # include <string.h>
 # define vcl_generic_cstring_STD /* */
 # include "generic/vcl_cstring.h"
-#elif defined(VCL_VC)
-# include "win32/vcl_cstring.h"
+#elif defined(VCL_VC60)
+# include "win32-vc60/vcl_cstring.h"
+#elif defined(VCL_VC70)
+# include "win32-vc70/vcl_cstring.h"
 #elif defined(VCL_METRO_WERKS)
 # include <cstring>
 # define vcl_generic_cstring_STD /* */

@@ -17,8 +17,10 @@
 # include "sgi/vcl_cstdlib.h"
 #elif defined(VCL_SUNPRO_CC)
 # include "sunpro/vcl_cstdlib.h"
-#elif defined(VCL_VC)
-# include "win32/vcl_cstdlib.h" // VC++
+#elif defined(VCL_VC60)
+# include "win32-vc60/vcl_cstdlib.h"
+#elif defined(VCL_VC70)
+# include "win32-vc70/vcl_cstdlib.h"
 #elif defined(VCL_METRO_WERKS)
 # include "mwerks/vcl_cstdlib.h"
 #else

@@ -12,8 +12,10 @@
 # include <time.h>
 # define vcl_generic_ctime_STD /* */
 # include "generic/vcl_ctime.h"
-#elif defined(VCL_VC)
-# include "win32/vcl_ctime.h"
+#elif defined(VCL_VC60)
+# include "win32-vc60/vcl_ctime.h"
+#elif defined(VCL_VC70)
+# include "win32-vc70/vcl_ctime.h"
 #else
 # include "iso/vcl_ctime.h"
 #endif
