@@ -2,7 +2,7 @@
 #pragma implementation
 #endif
 //
-// Class: vnl_rpoly_roots
+// .NAME vnl_rpoly_roots
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 06 Aug 96
 //

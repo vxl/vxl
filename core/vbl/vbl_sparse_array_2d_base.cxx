@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vbl_sparse_array_2d_base
+// .NAME vbl_sparse_array_2d_base
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 29 Jun 97
 //

@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_listmanager2D
+// .NAME vgui_listmanager2D
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 21 Oct 99
 //

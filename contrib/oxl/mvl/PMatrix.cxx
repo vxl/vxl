@@ -116,8 +116,7 @@ PMatrix::~PMatrix()
 
 //-----------------------------------------------------------------------------
 //
-// -- Return the image point which is the projection of the specified 
-// 3D point X
+// -- Return the image point which is the projection of the specified 3D point X
 HomgPoint2D PMatrix::project (const HomgPoint3D& X) const
 { 
   vnl_double_3 x = _p_matrix * X.get_vector();
@@ -127,8 +126,7 @@ HomgPoint2D PMatrix::project (const HomgPoint3D& X) const
 
 //-----------------------------------------------------------------------------
 //
-// -- Return the image line which is the projection of the specified 
-// 3D line L
+// -- Return the image line which is the projection of the specified 3D line L
 HomgLine2D PMatrix::project (const HomgLine3D& L) const
 {
   return HomgOperator2D::join(project(L.get_point_finite()), project(L.get_point_infinite()));
@@ -136,8 +134,7 @@ HomgLine2D PMatrix::project (const HomgLine3D& L) const
 
 //-----------------------------------------------------------------------------
 //
-// -- Return the image linesegment which is the projection of the specified 
-// 3D linesegment L
+// -- Return the image linesegment which is the projection of the specified 3D linesegment L
 HomgLineSeg2D PMatrix::project (const HomgLineSeg3D& L) const
 {
   return HomgLineSeg2D(project(L.get_point1()), project(L.get_point2()));
@@ -156,8 +153,7 @@ HomgPoint3D PMatrix::backproject_pseudoinverse (const HomgPoint2D& x) const
 
 //-----------------------------------------------------------------------------
 //
-// -- Return the 3D line which is the backprojection of the specified 
-// image point, x.
+// -- Return the 3D line which is the backprojection of the specified image point, x.
 // Uses svd().
 
 HomgLine3D PMatrix::backproject (const HomgPoint2D& x) const
@@ -197,7 +193,7 @@ static bool ok(vcl_istream& f) { return f.good() || f.eof(); }
 // -- Load from file
 // <pre>
 // P.read_ascii("file.P");
-// <pre>
+// </pre>
 bool PMatrix::read_ascii(vcl_istream& f)
 {
   f >> (vnl_matrix<double>&)this->_p_matrix;

@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_tview_launcher
+// .NAME vgui_tview_launcher
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 21 Oct 99
 //

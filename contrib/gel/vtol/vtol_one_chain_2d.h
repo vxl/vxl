@@ -4,7 +4,7 @@
 //
 // .NAME        vtol_one_chain_2d - Represents a set of edges
 // .LIBRARY     vtol
-// .HEADER      vxl package
+// .HEADER      gel package
 // .INCLUDE     vtol/vtol_one_chain_2d.h
 // .FILE        vtol_one_chain_2d.cxx
 //
@@ -43,21 +43,17 @@ class vtol_block_2d;
 class vtol_zero_chain_2d;
 class vtol_two_chain_2d;
 
-//: 
-// \verbatim
-// The class represents a collection of edges and orientations
-// \endverbatim
-
+//: The class represents a collection of edges and orientations
 
 class vtol_one_chain_2d
 //: public vtol_topology_object_2d,
-  : public vtol_chain_2d 
+  : public vtol_chain_2d
 {
 public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
-  
+
   //---------------------------------------------------------------------------
   //: Default constructor
   //---------------------------------------------------------------------------
@@ -85,7 +81,7 @@ public:
   //: Destructor
   //---------------------------------------------------------------------------
   virtual ~vtol_one_chain_2d();
-  
+
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   //: See Prototype pattern
@@ -160,7 +156,7 @@ public:
   virtual vtol_one_chain_2d *
   copy_with_arrays(vcl_vector<vtol_topology_object_2d_ref> &verts,
                    vcl_vector<vtol_topology_object_2d_ref> &edges) const;
-  
+
   virtual void compute_bounding_box(void); //A local implementation
 
   virtual vtol_edge_2d *edge(int i) const;
@@ -170,7 +166,7 @@ public:
   }
 
   //  virtual vtol_one_chain_2d *copy() { return new vtol_one_chain_2d(*this); }
- 
+
   virtual void determine_edge_directions(void);
   virtual void add_edge(vtol_edge_2d &, bool);
   virtual void remove_edge(vtol_edge_2d &, bool);
@@ -208,4 +204,4 @@ public:
   virtual vcl_vector<vtol_one_chain_2d*> *outside_boundary_compute_one_chains(void);
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vtol_one_chain_2d.
+#endif // vtol_one_chain_2d_h_

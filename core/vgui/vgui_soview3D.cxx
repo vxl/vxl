@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_soview3D
+// .NAME vgui_soview3D
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 24 Mar 99
 //

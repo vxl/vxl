@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_tview
+// .NAME vgui_tview
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 12 Oct 99
 //

@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_composite
+// .NAME vgui_composite
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 15 Sep 99
 //

@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_debug_tableau
+// .NAME vgui_debug_tableau
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 08 Oct 99
 //

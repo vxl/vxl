@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_event_server
+// .NAME vgui_event_server
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 29 Sep 99
 //

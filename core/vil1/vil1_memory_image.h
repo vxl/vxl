@@ -3,7 +3,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_memory_image
+// .NAME vil_memory_image - vil_image, stored entirely in RAM
 // .INCLUDE vil/vil_memory_image.h
 // .FILE vil_memory_image.cxx
 // .SECTION Author

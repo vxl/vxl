@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_mfc_statusbar
+// .NAME vgui_mfc_statusbar
 // Author: Marko Bacic, RRG, University of Oxford
 // Created: 10 Aug 2000
 //

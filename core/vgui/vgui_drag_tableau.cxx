@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_drag_tableau
+// .NAME vgui_drag_tableau
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 11 Jan 00
 //

@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_statusbuf
+// .NAME vgui_statusbuf
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 21 Nov 99
 //

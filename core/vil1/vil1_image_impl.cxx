@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vil_image_impl
+// .NAME vil_image_impl
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 16 Feb 00
 //

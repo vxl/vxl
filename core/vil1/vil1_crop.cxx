@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vil_crop
+// .NAME vil_crop
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 16 Feb 00
 //

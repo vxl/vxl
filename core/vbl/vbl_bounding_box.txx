@@ -1,6 +1,6 @@
 //-*- c++ -*-------------------------------------------------------------------
 //
-// Class: vbl_bounding_box
+// .NAME vbl_bounding_box
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 07 Aug 97
 //

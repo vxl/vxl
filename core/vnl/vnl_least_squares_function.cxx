@@ -1,7 +1,7 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
-// Class: vnl_least_squares_function
+// .NAME vnl_least_squares_function
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 31 Aug 96
 

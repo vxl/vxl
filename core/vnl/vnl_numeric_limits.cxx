@@ -2,7 +2,7 @@
 #pragma implementation
 #endif
 //
-// Class: numeric_limits
+// .NAME numeric_limits
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 28 Aug 96
 //

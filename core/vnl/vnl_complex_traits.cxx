@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vnl_complex_traits
+// .NAME vnl_complex_traits
 // Author: F. Schaffalitzky, Oxford RRG
 // Created: 26 Mar 1999
 //

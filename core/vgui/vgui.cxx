@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui
+// .NAME vgui
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 30 Sep 99
 //

@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_easy3D
+// .NAME vgui_easy3D
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 24 Sep 99
 //

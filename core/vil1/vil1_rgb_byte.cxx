@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vil_rgb_byte
+// .NAME vil_rgb_byte
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 17 Feb 00
 //

@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_roi_tableau
+// .NAME vgui_roi_tableau
 // Author: Marko Bacic, RRG, University of Oxford
 // Created: 18 Jul 2000
 //

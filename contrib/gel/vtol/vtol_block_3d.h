@@ -4,7 +4,7 @@
 //
 // .NAME        vtol_block_3d - Highest node in a 3D topological structure
 // .LIBRARY     vtol
-// .HEADER      vxl package
+// .HEADER      gel package
 // .INCLUDE     vtol/vtol_block_3d.h
 // .FILE        vtol_block_3d.cxx
 //
@@ -58,7 +58,7 @@ public:
   //: Return the topology type
   //---------------------------------------------------------------------------
   virtual vtol_topology_object_3d_type topology_type(void) const;
-  
+
   vtol_two_chain_3d *get_boundary_cycle() { if (_inferiors.size() > 0)
                                    return (vtol_two_chain_3d*) _inferiors[0];
                                   else return NULL;
@@ -78,7 +78,7 @@ public:
   vcl_vector<vtol_two_chain_3d*>* two_chains();
   vcl_vector<vtol_block_3d*>* blocks();
   vcl_vector< vtol_two_chain_3d* > * get_hole_cycles();
-  
+
   //: Utility and Editing Functions
   bool add_hole_cycle( vtol_two_chain_3d * new_hole );
   bool add_face_loop(vtol_two_chain_3d*) ;
@@ -110,5 +110,4 @@ public:
                            vcl_vector< vtol_topology_object_3d * > & deleted );
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vtol_block_3d.
-
+#endif // vtol_block_3d_H

@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vil_copy
+// .NAME vil_copy
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 16 Feb 00
 //

@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_viewer2D
+// .NAME vgui_viewer2D
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 14 Sep 99
 //

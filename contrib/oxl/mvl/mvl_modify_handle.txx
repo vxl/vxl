@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: mvl_modify_handle
+// .NAME mvl_modify_handle
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 07 Aug 96
 //

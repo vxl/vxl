@@ -1,11 +1,12 @@
-/* -*- c++ -*-
- * test program for 1D FFT routines
- * creates 1D arrays and vectors, computes forward fft, then backward fft 
- * for all (where applicable) constructors of the class
- * and computes differences between input and output.
- ************************************************************/
+// -*- c++ -*-
 //
-// Class: testvnl_fft2d
+// .NAME testvnl_fft2d
+// .SECTION Description
+// test program for 1D FFT routines
+// creates 1D arrays and vectors, computes forward fft, then backward fft 
+// for all (where applicable) constructors of the class
+// and computes differences between input and output.
+//
 // Author: Veit U.B. Schenk, Oxford RRG
 // Created: 20 Mar 1998
 //

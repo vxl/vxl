@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vbl_qsort
+// .NAME vbl_qsort
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 19 Nov 97
 //

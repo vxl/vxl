@@ -1,4 +1,4 @@
-// Class: vnl_scalar_join_iterator
+// .NAME vnl_scalar_join_iterator
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 27 Dec 96
 //

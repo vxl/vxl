@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vnl_lsqr
+// .NAME vnl_lsqr
 // Author: David Capel
 // Created: July 2000
 //

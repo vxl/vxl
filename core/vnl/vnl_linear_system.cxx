@@ -2,7 +2,7 @@
 #pragma implementation
 #endif
 
-// Class: vnl_linear_system
+// .NAME vnl_linear_system
 // Author: David Capel, capes@robots
 // Created: July 2000
 

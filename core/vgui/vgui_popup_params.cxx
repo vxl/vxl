@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_popup_params
+// .NAME vgui_popup_params
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 21 Jan 00
 //

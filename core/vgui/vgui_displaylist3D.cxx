@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_displaylist3D
+// .NAME vgui_displaylist3D
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 14 Sep 99
 //

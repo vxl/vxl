@@ -1,4 +1,4 @@
-// Class: vil_memory_image_of
+// .NAME vil_memory_image_of
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 19 Aug 96
 //

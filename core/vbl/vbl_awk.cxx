@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vbl_awk
+// .NAME vbl_awk
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 17 May 97
 //

@@ -3,7 +3,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_image
+// .NAME vil_image - A reference-counted image object
 // .INCLUDE vil/vil_image.h
 // .FILE vil_image.cxx
 // @author fsm@robots.ox.ac.uk
@@ -11,7 +11,7 @@
 #include <vcl_iosfwd.h>
 #include <vil/vil_image_impl.h>
 
-//: A reference-counted image object.
+//:
 // All operations are delegated to the vil_image_impl object,
 // which uses class inheritance to make various file images etc.
 // For fuller documentation on any method, see vil_image_impl

@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_file_field
+// .NAME vgui_file_field
 // Author: 
 // Created: 
 //

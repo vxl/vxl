@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_mfc
+// .NAME vgui_mfc
 // Author: awf@robots.ox.ac.uk
 // Created: July 2000
 //

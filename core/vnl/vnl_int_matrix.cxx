@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vnl_int_matrix
+// .NAME vnl_int_matrix
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 27 Dec 96
 //

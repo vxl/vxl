@@ -2,7 +2,7 @@
 #pragma implementation
 #endif
 //
-// Class: vnl_cholesky
+// .NAME vnl_cholesky
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 08 Dec 96
 //

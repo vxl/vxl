@@ -1,6 +1,6 @@
 //-*- c++ -*-------------------------------------------------------------------
 //
-// Class: vbl_sort
+// .NAME vbl_sort
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 19 Nov 97
 //

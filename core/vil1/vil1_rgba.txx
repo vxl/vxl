@@ -1,6 +1,6 @@
 //-*- c++ -*-------------------------------------------------------------------
 //
-// Class: vil_rgba
+// .NAME vil_rgba
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 12 Nov 99
 //

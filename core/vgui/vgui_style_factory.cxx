@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_style_factory
+// .NAME vgui_style_factory
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 18 Oct 99
 //

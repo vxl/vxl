@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vnl_nonlinear_minimizer
+// .NAME vnl_nonlinear_minimizer
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 22 Aug 99
 //

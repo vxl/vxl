@@ -2,7 +2,7 @@
 #pragma implementation
 #endif
 //
-// Class: vnl_generalized_eigensystem
+// .NAME vnl_generalized_eigensystem
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 29 Aug 96
 //

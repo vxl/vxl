@@ -3,7 +3,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_stream_section
+// .NAME vil_stream_section - make a section of a vil_stream behave like a vil_stream
 // .INCLUDE vil/vil_stream_section.h
 // .FILE vil_stream_section.cxx
 // .SECTION Author

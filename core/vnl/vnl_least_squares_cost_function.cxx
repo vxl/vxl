@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vnl_least_squares_cost_function
+// .NAME vnl_least_squares_cost_function
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 20 Aug 99
 //

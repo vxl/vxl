@@ -3,7 +3,7 @@
 #endif
 //-*- c++ -*-------------------------------------------------------------------
 //
-// Class: vgui_displaybase
+// .NAME vgui_displaybase
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 14 Sep 99
 //

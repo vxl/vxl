@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vnl_fastops
+// .NAME vnl_fastops
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 08 Dec 96
 //

@@ -1,7 +1,7 @@
 #ifndef vil_resample_image_h_
 #define vil_resample_image_h_
 
-// .NAME vil_resample_image
+// .NAME vil_resample_image - Adaptor which produces an image by resampling
 // .LIBRARY vil
 // .INCLUDE vil/vil_resample_image.h
 // .FILE    vil_resample_image.txx

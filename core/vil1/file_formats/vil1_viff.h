@@ -4,7 +4,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_viff
+// .NAME vil_viff - Loader for 1-banded Khoros 1.0 images
 // .INCLUDE vil/file_formats/vil_viff.h
 // .FILE file_formats/vil_viff.cxx
 // .SECTION Author

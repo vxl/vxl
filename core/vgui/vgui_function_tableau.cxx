@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_function_tableau
+// .NAME vgui_function_tableau
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 25 Nov 99
 //

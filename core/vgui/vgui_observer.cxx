@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_observer
+// .NAME vgui_observer
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 11 Sep 99
 //

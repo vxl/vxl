@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_image_blender
+// .NAME vgui_image_blender
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 27 Oct 99
 //

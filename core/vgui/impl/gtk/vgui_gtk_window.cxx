@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_gtk_window
+// .NAME vgui_gtk_window
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 18 Dec 99
 //

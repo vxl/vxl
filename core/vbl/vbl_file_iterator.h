@@ -40,7 +40,7 @@ public:
 
   //: Ask if done.
   // Won't spin the disk
-  operator bool(); 
+  operator bool();
 
   //: Return the currently pointed-to pathname.
   // Won't spin the disk
@@ -56,7 +56,7 @@ public:
   //: Increment to the next file
   // Will spin the disk
   vbl_file_iterator& operator++();
-  
+
   //: Run a new match
   void reset(char const* glob);
 
@@ -68,5 +68,4 @@ private:
   vbl_file_iterator operator++(int) { return vbl_file_iterator(); }
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vbl_file_iterator.
-
+#endif // vbl_file_iterator_h_

@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vbl_printf
+// .NAME vbl_printf
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 03 Jul 97
 //

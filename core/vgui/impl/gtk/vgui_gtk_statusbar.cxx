@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_gtk_statusbar
+// .NAME vgui_gtk_statusbar
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 21 Nov 99
 //

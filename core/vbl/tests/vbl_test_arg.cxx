@@ -1,6 +1,6 @@
 //-*- c++ -*-------------------------------------------------------------------
 //
-// Class: test_vbl_arg
+// .NAME test_vbl_arg
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 21 Jan 97
 //

@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vbl_sprintf
+// .NAME vbl_sprintf
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 08 Aug 96
 //

@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vnl_real_eigensystem
+// .NAME vnl_real_eigensystem
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 23 Jan 97
 //

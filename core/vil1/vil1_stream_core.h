@@ -3,7 +3,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_stream_core
+// .NAME vil_stream_core - An in-core vil_stream implementation
 // .INCLUDE vil/vil_stream_core.h
 // .FILE vil_stream_core.cxx
 // .SECTION Author

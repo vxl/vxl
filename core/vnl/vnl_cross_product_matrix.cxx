@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vnl_cross_product_matrix
+// .NAME vnl_cross_product_matrix
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 19 Sep 96
 //

@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_text
+// .NAME vgui_text
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 19 Oct 99
 //   

@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vnl_gaussian_kernel_1d
+// .NAME vnl_gaussian_kernel_1d
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 07 Aug 97
 //

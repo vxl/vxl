@@ -11,7 +11,7 @@
 #include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>
 
-//: Adaptor which produces a image by resampling.
+//: Adaptor which produces an image by resampling.
 class vil_resample_image_impl : public vil_image_impl {
 public:
   vil_resample_image_impl(vil_image const &underlying, unsigned nw, unsigned nh);

@@ -1,11 +1,10 @@
-
 #ifndef vtol_one_chain_3d_h_
 #define vtol_one_chain_3d_h_
 //-----------------------------------------------------------------------------
 //
 // .NAME        vtol_one_chain_3d - Represents a set of edges
 // .LIBRARY     vtol
-// .HEADER      vxl package
+// .HEADER      gel package
 // .INCLUDE     vtol/vtol_one_chain_3d.h
 // .FILE        vtol_one_chain_3d.cxx
 //
@@ -43,13 +42,9 @@ class vtol_block_3d;
 class vtol_zero_chain_3d;
 class vtol_two_chain_3d;
 
-//: 
-// \verbatim
-// The class represents a collection of edges and orientations
-// \endverbatim
+//: The class represents a collection of edges and orientations
 
-
-class vtol_one_chain_3d : public vtol_topology_object_3d, public vtol_hierarchy_node_3d 
+class vtol_one_chain_3d : public vtol_topology_object_3d, public vtol_hierarchy_node_3d
 {
 protected:
 
@@ -59,7 +54,7 @@ protected:
 public:
 
   // Constructors and Destructors...
-  
+
   //: \brief Contstructors
 
   vtol_one_chain_3d();
@@ -68,7 +63,7 @@ public:
   vtol_one_chain_3d(vtol_one_chain_3d const&);
 
   ~vtol_one_chain_3d();
-  
+
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   //: See Prototype pattern
@@ -92,10 +87,10 @@ public:
   inline void set_cycle_p(bool cyc)  { _cycle_p = cyc; }
 
   vtol_one_chain_3d * cast_to_one_chain_3d() { return this; }
-  
+
   vcl_vector<vtol_vertex_3d*>* outside_boundary_vertices();
   vcl_vector<vtol_vertex_3d*>* vertices();
-  
+
   vcl_vector<vtol_zero_chain_3d*>* outside_boundary_zero_chains();
   vcl_vector<vtol_zero_chain_3d*>* zero_chains();
   vcl_vector<vtol_edge_3d*>* outside_boundary_edges();
@@ -114,8 +109,8 @@ public:
   void reverse_directions();
 
   vtol_one_chain_3d* copy_with_arrays(vcl_vector<vtol_topology_object_3d*>& verts,
-				    vcl_vector<vtol_topology_object_3d*>& edges);
-  
+				      vcl_vector<vtol_topology_object_3d*>& edges);
+
   virtual void compute_bounding_box(); //A local implementation
   void clear();
 
@@ -128,13 +123,12 @@ public:
   inline bool is_sub_chain() { return ( _hierarchy_superiors.size() > 0); }
 
   vtol_one_chain_3d *copy() { return new vtol_one_chain_3d(*this); }
- 
+
   void determine_edge_directions();
   void add_inferior_one_chain( vtol_one_chain_3d*);
   void remove_inferior_one_chain( vtol_one_chain_3d*);
   bool add_edge(vtol_edge_3d*, bool);
   bool remove_edge(vtol_edge_3d*, bool);
-
 
   void deep_remove( vcl_vector< vtol_topology_object_3d * > & removed );
 
@@ -147,8 +141,6 @@ public:
   void print(vcl_ostream& strm = vcl_cout) const;
   void describe_directions(vcl_ostream& strm = vcl_cout, int blanking = 0) const;
   void describe(vcl_ostream& strm = vcl_cout, int blanking = 0) const;
-
-
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vtol_one_chain_3d.
+#endif // vtol_one_chain_3d_h_

@@ -1,4 +1,4 @@
-// Class: vnl_fortran_copy
+// .NAME vnl_fortran_copy
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 29 Aug 96
 //

@@ -12,13 +12,13 @@
       {\
        sublist = (*i)->target();\
         if (sublist->size())\
-	{ \
+        { \
           vcl_vector<suptype*>::iterator m_i; \
           for(m_i=sublist->begin();m_i!=sublist->end();m_i++){ \
                new_list->push_back(*m_i); \
           } \
-	}\
-	delete sublist; \
+        }\
+        delete sublist; \
       }\
        tagged_union((vcl_vector<vsol_spatial_object_3d*> *)new_list); \
       return new_list
@@ -49,24 +49,23 @@
     hierarchy_node_list_3d::iterator hi; \
     for (hi=_hierarchy_inferiors.begin(); hi != _hierarchy_inferiors.end(); hi++ ) \
        { \
-	 templist = ((suptype *) (*hi))->target(); \
+         templist = ((suptype *) (*hi))->target(); \
           vcl_vector<inftype*>::iterator m_i; \
           for(m_i=templist->begin();m_i!=templist->end();m_i++){ \
             listnm->push_back(*m_i); \
           } \
-	 delete templist;\
+         delete templist;\
        } \
     tagged_union((vcl_vector<vsol_spatial_object_3d*> *)listnm); \
     return listnm
 
 
- 
 #define OUTSIDE_BOUNDARY_3d(targettype, inftype, target) \
    vcl_vector<targettype*> *newlist = new vcl_vector<targettype*>(); \
    vcl_vector<targettype*> *templist;  \
       for(topology_list_3d::iterator i = _inferiors.begin(); i != _inferiors.end(); i++) \
          { \
-	templist = ((inftype*)(*i))->outside_boundary_##target(); \
+        templist = ((inftype*)(*i))->outside_boundary_##target(); \
         vcl_vector<targettype*>::iterator m_i; \
         for(m_i=templist->begin();m_i!=templist->end();m_i++){ \
             newlist->push_back(*m_i); \
@@ -74,7 +73,6 @@
         delete templist;  \
       } \
       return newlist
- 
 
 
 #define LIST_SELF_3d(selftype) \
@@ -90,7 +88,7 @@
    {\
    new_list->push_back((suptype*)(*i)); \
    }\
-   return new_list       
+   return new_list
 
 #define COPY_INF_3d(inftype) \
    vcl_vector<inftype*> *new_list = new vcl_vector<inftype*>(); \
@@ -98,14 +96,6 @@
      {\
    new_list->push_back((inftype*)(*i)); \
    }\
-   return new_list       
+   return new_list
 
-
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS macros.
-
-
-
-
-
-
-
+#endif // MACROS_3d_H

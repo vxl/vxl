@@ -1,17 +1,14 @@
-
 #ifndef vsol_box_3d_H
 #define vsol_box_3d_H
-
-
 //
 // .NAME        vsol_box_3d - A bounding box
 // .LIBRARY     vsol
-// .HEADER	vxl package
+// .HEADER      gel package
 // .INCLUDE     vsol/vsol_box_3d.h
 // .FILE        vsol_box_3d.cxx
 //
 // .SECTION Description
-//  
+//
 //                     Note that the definition of width, depth and 
 //                     height are such that the X-Y plane is considered
 //                     as a Rectangle with a "width" and "height" 
@@ -37,21 +34,19 @@
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_bounding_box.h>
 
-// \brief A bounding box for 3d spatial objects 
+//: \brief A bounding box for 3d spatial objects
 
 class vsol_box_3d : public vbl_ref_count , public vbl_timestamp
 {
  public:
-  
+
   vsol_box_3d();
   vsol_box_3d(vsol_box_3d const& b);
- 
+
   ~vsol_box_3d();
-  
-  
 
   //: \brief accessors
-  
+
   double get_min_x();
   double get_max_x();
 
@@ -71,16 +66,9 @@ class vsol_box_3d : public vbl_ref_count , public vbl_timestamp
   void set_min_z(const double& v);
   void set_max_z(const double& v);
 
-  
  protected:
-  
+
   vbl_bounding_box<double,3> _box;
-
-
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vtol_topology_hierarchy_node.
-
-
-
-
+#endif // vsol_box_3d_H

@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_string_field
+// .NAME vgui_string_field
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 24 Oct 99
 //

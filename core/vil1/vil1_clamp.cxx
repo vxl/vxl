@@ -2,7 +2,7 @@
 #pragma implementation
 #endif
 //
-// Class: vil_clamp
+// .NAME vil_clamp
 // Author: David Capel, Oxford RRG
 // Created: 14 Aug 98
 //

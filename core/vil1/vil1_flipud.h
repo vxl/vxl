@@ -3,7 +3,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_flipud
+// .NAME vil_flipud - turn an image upside-down
 // .INCLUDE vil/vil_flipud.h
 // .FILE vil_flipud.cxx
 // .SECTION Author

@@ -2,7 +2,7 @@
 #pragma implementation
 #endif
 //
-// Class: vnl_int_3
+// .NAME vnl_int_3
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 31 Aug 96
 //

@@ -1,5 +1,5 @@
 //-*- c++ -*-
-// Class: vnl_vector_fixed
+// .NAME vnl_vector_fixed
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 05 Aug 96
 //

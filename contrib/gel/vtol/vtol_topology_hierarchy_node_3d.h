@@ -60,7 +60,6 @@ protected:
 
   bool find(topology_list_3d &list, vtol_topology_object_3d *object);
   void remove(topology_list_3d &list, vtol_topology_object_3d *object);
-    
 
 public:
   //: \brief Constructors and Destructors
@@ -75,7 +74,7 @@ public:
 
   int numinf() const { return _inferiors.size(); }
   int numsup() const { return _superiors.size(); }
- 
+
   void describe_inferiors(vcl_ostream& strm=vcl_cout,int blanking=0) const;
   void describe_superiors(vcl_ostream& strm=vcl_cout,int blanking=0) const;
   void print(vcl_ostream& strm=vcl_cout) const;
@@ -86,7 +85,7 @@ public:
 
   inline const topology_list_3d * get_inferiors() const { return &_inferiors; }
   inline const topology_list_3d * get_superiors() const { return &_superiors; }
-  
+
   void set_inferiors(topology_list_3d& newinf) { _inferiors = newinf; }
   void set_superiors(topology_list_3d& newsup) { _superiors = newsup; }
   topology_list_3d * inferiors() { return &_inferiors;}
@@ -108,8 +107,4 @@ public:
   void unlink_all_inferiors_twoway( vtol_topology_object_3d * );
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vtol_topology_hierarchy_node_3d.
-
-
-
-
+#endif // VTOL_TOPOLOGY_HIERARCHY_NODE_3D_H

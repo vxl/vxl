@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vnl_lbfgs
+// .NAME vnl_lbfgs
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 22 Aug 99
 //

@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vnl_numeric_traits
+// .NAME vnl_numeric_traits
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 12 Feb 98
 //

@@ -4,7 +4,7 @@
 //
 // .NAME        vtol_hierarchy_node_3d - Base class of TwoChain and OneChain (representation of holes)
 // .LIBRARY     vtol
-// .HEADER vxl package
+// .HEADER      gel package
 // .INCLUDE     vtol/vtol_hierarchy_node_3d.h
 // .FILE        vtol_hierarchy_node_3d.cxx
 //
@@ -65,13 +65,6 @@ public:
 
   int num_hierarchy_superiors( void ) { return _hierarchy_superiors.size(); }
   int num_hierarchy_inferiors( void ) { return _hierarchy_inferiors.size(); }
-
 };
 
-
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vtol_hierarchy_node_3d.
-
-
-
-
-
+#endif // vtol_hierarchy_node_3d_h_

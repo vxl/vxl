@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_vrml_texture_map
+// .NAME vgui_vrml_texture_map
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 28 Sep 99
 //

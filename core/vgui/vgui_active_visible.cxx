@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_active_visible
+// .NAME vgui_active_visible
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 25 Jan 00
 //

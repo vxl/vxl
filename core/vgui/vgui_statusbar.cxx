@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_statusbar
+// .NAME vgui_statusbar
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 21 Nov 99
 //

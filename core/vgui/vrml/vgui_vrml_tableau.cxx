@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_vrml_tableau
+// .NAME vgui_vrml_tableau
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 17 Sep 99
 //

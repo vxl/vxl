@@ -3,7 +3,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_ip_traits
+// .NAME vil_ip_traits - Describe image types
 // .INCLUDE vil/vil_ip_traits.h
 // .SECTION Author
 //    awf@robots.ox.ac.uk

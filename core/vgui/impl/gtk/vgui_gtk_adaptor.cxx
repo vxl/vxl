@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_gtk_adaptor
+// .NAME vgui_gtk_adaptor
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 19 Dec 99
 //

@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vnl_amoeba
+// .NAME vnl_amoeba
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 23 Oct 97
 //

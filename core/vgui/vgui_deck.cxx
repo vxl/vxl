@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_deck
+// .NAME vgui_deck
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 13 Sep 99
 //

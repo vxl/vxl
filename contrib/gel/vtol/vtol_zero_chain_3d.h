@@ -4,7 +4,7 @@
 //
 // .NAME        vtol_zero_chain_3d - Represents a set of Vertices
 // .LIBRARY     vtol
-// .HEADER	vxl package
+// .HEADER      gel package
 // .INCLUDE     vtol/vtol_zero_chain_3d.h
 // .FILE        vtol_zero_chain_3d.cxx
 //
@@ -37,7 +37,7 @@ public:
   vtol_zero_chain_3d();
   vtol_zero_chain_3d(vtol_vertex_3d *v1, vtol_vertex_3d *v2);    // special for two vertex edge.
   vtol_zero_chain_3d(vcl_vector<vtol_vertex_3d*>&); // special for two vertex edge.
-  vtol_zero_chain_3d(vtol_zero_chain_3d const&);   
+  vtol_zero_chain_3d(vtol_zero_chain_3d const&);
   ~vtol_zero_chain_3d();
 
   //---------------------------------------------------------------------------
@@ -78,7 +78,7 @@ public:
 
   inline bool remove_vertex(vtol_vertex_3d *v){this->touch(); return unlink_inferior(v);}
 
-  
+
   void print (vcl_ostream& strm =vcl_cout) const;
   void describe (vcl_ostream& strm =vcl_cout, int blanking = 0) const;
 
@@ -95,4 +95,4 @@ public:
                            vcl_vector< vtol_topology_object_3d * > & deleted );
 };
 
-#endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vtol_zero_chain_3d.
+#endif // vtol_zero_chain_3d_H

@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_dialog_impl
+// .NAME vgui_dialog_impl
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 25 Oct 99
 //

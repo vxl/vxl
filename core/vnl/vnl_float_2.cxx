@@ -2,7 +2,7 @@
 #pragma implementation
 #endif
 //
-// Class: vnl_float_2
+// .NAME vnl_float_2
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 05 Aug 96
 //

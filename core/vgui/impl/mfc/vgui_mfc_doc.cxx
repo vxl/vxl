@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_mfc_doc
+// .NAME vgui_mfc_doc
 // Author: Marko Bacic, Oxford RRG
 // Created: 27 July 2000 
 //   

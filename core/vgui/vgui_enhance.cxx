@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_enhance
+// .NAME vgui_enhance
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 17 Nov 99
 //

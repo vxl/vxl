@@ -1,4 +1,4 @@
-// Class: vgui_utils
+// .NAME vgui_utils
 // Author: fsm@robots.ox.ac.uk
 // Created: Oct 99
 

@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: UnaryFunction
+// .NAME UnaryFunction
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 28 Nov 98
 //

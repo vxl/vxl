@@ -1,6 +1,6 @@
 //-*- c++ -*-------------------------------------------------------------------
 //
-// Class: ImageWarp
+// .NAME ImageWarp
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 23 Jan 99
 // Modifications:

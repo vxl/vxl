@@ -2,7 +2,7 @@
 #pragma implementation
 #endif
 //
-// Class: vnl_levenberg_marquardt
+// .NAME vnl_levenberg_marquardt
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 31 Aug 96
 //

@@ -2,7 +2,7 @@
 #pragma implementation
 #endif
 //
-// Class: vnl_matops
+// .NAME vnl_matops
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 05 Aug 96
 //

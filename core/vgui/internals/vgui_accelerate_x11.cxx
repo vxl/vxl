@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_accelerate
+// .NAME vgui_accelerate
 // Author: David Capel
 // Created: 28 Mar 2000
 //

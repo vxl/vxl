@@ -2,7 +2,7 @@
 #pragma implementation
 #endif
 //
-// Class: vnl_real_polynomial
+// .NAME vnl_real_polynomial
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 23 Aug 96
 //

@@ -2,7 +2,7 @@
 #pragma implementation
 #endif
 //
-// Class: vnl_real_npolynomial
+// .NAME vnl_real_npolynomial
 // Author: Marc Pollefeys, ESAT-VISICS, K.U.Leuven
 // Created: 12 08 97
 //

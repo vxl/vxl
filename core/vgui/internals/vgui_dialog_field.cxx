@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_dialog_field
+// .NAME vgui_dialog_field
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 23 Oct 99
 //

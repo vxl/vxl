@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_clear_tableau
+// .NAME vgui_clear_tableau
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 11 Nov 99
 //

@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_camera
+// .NAME vgui_camera
 // Author: Geoffrey Cross, Oxford RRG
 // Created: 03 Nov 99
 //

@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vbl_user_info
+// .NAME vbl_user_info
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 08 Apr 99
 //

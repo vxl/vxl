@@ -1,6 +1,6 @@
 //-*- c++ -*-------------------------------------------------------------------
 //
-// Class: vbl_sparse_array_2d
+// .NAME vbl_sparse_array_2d
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 02 Oct 96
 //

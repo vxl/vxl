@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_drag_mixin
+// .NAME vgui_drag_mixin
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 11 Sep 99
 //

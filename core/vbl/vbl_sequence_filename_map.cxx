@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vbl_sequence_filename_map
+// .NAME vbl_sequence_filename_map
 // Author: David Capel, Oxford RRG
 // Created: 15 April 2000
 //

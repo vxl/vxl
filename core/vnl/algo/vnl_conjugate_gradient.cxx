@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vnl_conjugate_gradient
+// .NAME vnl_conjugate_gradient
 // Author: Geoffrey Cross, Oxford RRG
 // Created: 15 Feb 99
 //

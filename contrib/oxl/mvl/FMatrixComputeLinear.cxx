@@ -4,7 +4,7 @@
 
 //-----------------------------------------------------------------------------
 //
-// Class: FMatrixComputeLinear
+// .NAME FMatrixComputeLinear
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 23 Jul 96
 //

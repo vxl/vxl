@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_vrml_draw_visitor
+// .NAME vgui_vrml_draw_visitor
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 09 Jan 99
 //

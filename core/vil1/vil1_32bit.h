@@ -4,7 +4,7 @@
 #pragma interface
 #endif
 
-// .NAME vil_32bit
+// .NAME vil_32bit - read/write integers to/from vil_stream
 // .INCLUDE vil/vil_32bit.h
 // .FILE vil_32bit.cxx
 // .SECTION Description

@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vil_save
+// .NAME vil_save
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 16 Feb 00
 //

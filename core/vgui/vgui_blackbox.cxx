@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// Class: vgui_blackbox
+// .NAME vgui_blackbox
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 13 Oct 99
 //
