@@ -42,7 +42,7 @@ public:
   //: Get the texture names for the current viewport
   bool get_section(int id, int x, int y,int width,int height,
                    image_cache_quadrants *quadrants,dimension *pos,dimension *size);
-  // --
+  //:
   void TexImage2D_Brownie(vil_image img);
   //: Get the image quadrant width
   int get_quadrant_width() const
@@ -64,7 +64,7 @@ private:
   //: Miscalleneous
   int quadrant_width_;
   int quadrant_height_;
-  //: Maximum number of textures(limited by memory size -- driver dependent,
+  //: Maximum number of textures(limited by memory size - driver dependent,
   // as some drivers will do their one caching so that the number of textures
   // is only limited by the size of virtual memory
   int max_texture_num_;

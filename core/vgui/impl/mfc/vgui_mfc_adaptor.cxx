@@ -1,12 +1,12 @@
 // \file implementation file
 //
-// 13-08-2000  Marko Bacic, Oxford RRG -- Fixed textures
+// 13-08-2000  Marko Bacic, Oxford RRG - Fixed textures
 // 14-08-2000  FSM, Oxford RRG - Fixed double buffering/rubber banding issues
-// 14-08-2000  Marko Bacic, Oxford RRG -- Added right popup menu
-// 30-08-2000  Marko Bacic, Oxford RRG -- Support for Windows/MFC acceleration
-// 06-02-2001  AWF, Oxford RRG -- Make acceleration work...
-// 02-03-2001  K.Y.McGaul -- Add shift & ctrl modifiers to key press/release events.
-//                        -- Edited and added Doxygen comments.
+// 14-08-2000  Marko Bacic, Oxford RRG - Added right popup menu
+// 30-08-2000  Marko Bacic, Oxford RRG - Support for Windows/MFC acceleration
+// 06-02-2001  AWF, Oxford RRG - Make acceleration work...
+// 02-03-2001  K.Y.McGaul - Add shift & ctrl modifiers to key press/release events.
+//                        - Edited and added Doxygen comments.
 
 #include "vgui_mfc_adaptor.h"
 
@@ -217,7 +217,6 @@ int vgui_mfc_adaptor::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 BOOL vgui_mfc_adaptor::SetupPixelFormat()
 {
-
   // default pixel format for a single-buffered,
   // OpenGL-supporting, hardware-accelerated,
   // RGBA-mode format. Pass in a pointer to a different
@@ -293,14 +292,13 @@ void vgui_mfc_adaptor::OnDestroy()
   {
     delete m_pDC;
   }
-
 }
 
 //: Called by MFC when the background needs erasing.
 //  For example this would be called if the window was resized.
 BOOL vgui_mfc_adaptor::OnEraseBkgnd(CDC* pDC)
 {
-  // don't clear -- gl will do it.
+  // don't clear - gl will do it.
   return TRUE;
 }
 
@@ -360,14 +358,12 @@ void vgui_mfc_adaptor::OnPaint()
   redraw_posted = true; // ensure that draw does something
   // don't call 'post_redraw' as that invalidates the window again...
 
-
   CView::OnPaint();
 }
 
 //: Called by MFC when the application is resized.
 void vgui_mfc_adaptor::OnSize(UINT nType, int cx, int cy)
 {
-
   CView::OnSize(nType, cx, cy);
 
   m_width = cx;
@@ -395,7 +391,6 @@ void vgui_mfc_adaptor::OnSize(UINT nType, int cx, int cy)
     DeleteObject(m_oldbitmap);
   }
   post_redraw();
-
 }
 
 //: Convert MFC key character into an int suitable for vgui.

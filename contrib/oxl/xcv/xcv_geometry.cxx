@@ -659,7 +659,7 @@ static void add(vgl_polygon const& p)
   }
 }
 
-//--
+//:
 void xcv_geometry::polygon_intersect()
 {
   vcl_vector<vgl_polygon> all_polys;

@@ -94,7 +94,7 @@ spaced_angles(double alpha1,
   return npoints;
 }
 
-// --
+//:
 vsl_conic_points::vsl_conic_points(vsl_conic_as_matrix const& conic,
                                    double xmin, double xmax, double ymin, double ymax)
 {

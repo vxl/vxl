@@ -203,7 +203,7 @@ double HomgMetric::image_to_homg_distance_sqr(double image_distance_2) const
     return image_distance_2;
 }
 
-// --
+//: As above, but for squared distances
 double HomgMetric::homg_to_image_distance_sqr(double image_distance) const
 {
   if (_metric)

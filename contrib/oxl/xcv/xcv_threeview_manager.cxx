@@ -54,7 +54,7 @@ void xcv_threeview_manager::toggle_tri_tensor_display()
 }
 
 //-----------------------------------------------------------------------------
-//--
+//:
 //-----------------------------------------------------------------------------
 void xcv_threeview_manager::draw_tri_tensor(vgui_event const& e, vgui_tableau_sptr const& child_tab,
   bool make_permanent)

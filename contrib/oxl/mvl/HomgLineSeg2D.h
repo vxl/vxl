@@ -54,7 +54,7 @@ vcl_ostream& operator<<(vcl_ostream& s, const HomgLineSeg2D& );
 
 //--------------------------------------------------------------
 //
-// -- Return the line through the two points.
+//: Return the line through the two points.
 inline const HomgLine2D& HomgLineSeg2D::get_line () const
 {
   return *this;
@@ -62,7 +62,7 @@ inline const HomgLine2D& HomgLineSeg2D::get_line () const
 
 //--------------------------------------------------------------
 //
-// -- Return the first point of the line segment
+//: Return the first point of the line segment
 inline const HomgPoint2D& HomgLineSeg2D::get_point1 () const
 {
   return _point1;
@@ -70,7 +70,7 @@ inline const HomgPoint2D& HomgLineSeg2D::get_point1 () const
 
 //--------------------------------------------------------------
 //
-// -- Return the second point of the line segment
+//: Return the second point of the line segment
 inline const HomgPoint2D& HomgLineSeg2D::get_point2 () const
 {
   return _point2;
