@@ -21,13 +21,13 @@ double vnl_log_gamma(double x);
 inline double vnl_gamma(double x) { return vcl_exp(vnl_log_gamma(x)); }
 
 //: Normalised Incomplete gamma function, P(a,x)
-// $P(a,x)=\frac{1}{\Gamma(a)}\int_0^x e^{-t}t^{a-1}dt
+// $P(a,x)=\frac{1}{\Gamma(a)}\int_0^x e^{-t}t^{a-1}dt$
 // Note the order of parameters - this is the normal maths order.
 // MATLAB uses gammainc(x,a), ie the other way around
 double vnl_gamma_p(double a, double x);
 
 //:Normalised Incomplete gamma function, Q(a,x)
-// $Q(a,x)=\frac{1}{\Gamma(a)}\int_x^{\infty}e^{-t}t^{a-1}dt
+// $Q(a,x)=\frac{1}{\Gamma(a)}\int_x^{\infty}e^{-t}t^{a-1}dt$
 double vnl_gamma_q(double a, double x);
 
 //: P(chi<chi2)
