@@ -10,6 +10,7 @@ TESTS += test_triangle_scan_iterator.cxx
 TESTS += test_conic.cxx 
 TESTS += test_polygon.cxx
 TESTS += test_ellipse_scan_iterator.cxx
+TESTS += test_distance.cxx
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
