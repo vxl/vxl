@@ -37,8 +37,8 @@ public:
   vcl_complex (vcl_float_complex const& that): re(that.real()), im(that.imag()) {}
   vcl_complex (vcl_double_complex const& that): re(that.real()), im(that.imag()) {}
 #else
-  vcl_complex (vcl_complex<float> const& that): re(that.real()), im(that.imag()) {}
-  vcl_complex (vcl_complex<double> const& that): re(that.real()), im(that.imag()) {}
+  vcl_complex (vcl_complex<float> const& that): re(FLOAT(that.real())), im(FLOAT(that.imag())) {}
+  vcl_complex (vcl_complex<double>const& that): re(FLOAT(that.real())), im(FLOAT(that.imag())) {}
 #endif
 #endif
 
