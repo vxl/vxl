@@ -139,6 +139,12 @@ public:
   // but that was not the design choice.  Hence, leaving the really private
   // (because subject to removal) data member initialized_ freely accessible
   // is a very bad idea...
+  // HUH???
+  //#pragma reality_check
+  // But those members are still public; they are exposed by min() and max(),
+  // except the client must use the odd "bb.min()[i]" instead of "bb.min[i]".
+  // I predict the response to this observation will be the removal of the two
+  // non-const versions.
 
 private:
   bool initialized_;
@@ -165,7 +171,7 @@ inline // this is "operator \subseteq"
 bool nested(vbl_bounding_box_base<T,DIM_> const &a, vbl_bounding_box_base<T,DIM_> const &b)
 {
   for (int i=0; i<DIM_::value; ++i)
-    if (a.min_[i] < b.min_[i] || a.max_[i] > b.max_[i])
+    if (a.min()[i] < b.min()[i] || a.max()[i] > b.max()[i])
       return false;
   return true;
 }
@@ -176,7 +182,7 @@ bool disjoint(vbl_bounding_box_base<T,DIM_> const &a,
               vbl_bounding_box_base<T,DIM_> const &b)
 {
   for (int i=0; i<DIM_::value; ++i)
-    if (a.min_[i] > b.max_[i] || a.max_[i] < b.min_[i])
+    if (a.min()[i] > b.max()[i] || a.max()[i] < b.min()[i])
       return true;
   return false;
 }
