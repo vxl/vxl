@@ -4,7 +4,7 @@
 #include <vcl/vcl_compiler.h>
 
 #if !defined(VCL_HAS_EXCEPTIONS)
-#if defined(VCL_WIN32) || defined(__EXCEPTIONS)
+#if defined(VCL_WIN32) || defined(__EXCEPTIONS) || _COMPILER_VERSION == 721
 # define VCL_HAS_EXCEPTIONS 1
 #else
 # define VCL_HAS_EXCEPTIONS 0
