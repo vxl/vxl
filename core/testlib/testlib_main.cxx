@@ -40,6 +40,11 @@ LONG WINAPI vxl_exception_filter( struct _EXCEPTION_POINTERS *ExceptionInfo )
 }
 #endif // defined(VCL_WIN32)
 
+#if defined(VCL_BORLAND)
+# include <math.h>
+# include <float.h>
+#endif // defined(VCL_BORLAND)
+
 static vcl_vector<TestMainFunction> testlib_test_func_;
 static vcl_vector<vcl_string>       testlib_test_name_;
 
@@ -75,6 +80,11 @@ testlib_main( int argc, char* argv[] )
   }
 #endif //defined(VCL_WIN32)
 
+  // Disable Borland's floating point exceptions.
+#if defined(VCL_BORLAND)
+  _control87(MCW_EM, MCW_EM);  
+#endif // defined(VCL_BORLAND)
+  
   // Assume the index type for vector<string> and
   // vector<TestMainFunction> are the same.
   typedef vcl_vector<vcl_string>::size_type vec_size_t;
