@@ -1,10 +1,13 @@
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <direct.h>
+#include <io.h>
+#include <afxmt.h>
 
 char *
 vpl_getcwd( char *buf, vcl_size_t buf_size )
 {
-  return getcwd( buf, buf_size );
+  return _getcwd( buf, buf_size );
 }
 
 int
@@ -29,7 +32,7 @@ vpl_chdir( const char *dir )
 int
 vpl_unlink( const char *file )
 {
-  return unlink( file );
+  return _unlink( file );
 }
 
 unsigned int
