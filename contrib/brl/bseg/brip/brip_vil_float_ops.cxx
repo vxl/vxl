@@ -1719,7 +1719,7 @@ brip_vil_float_ops::rotate(vil_image_view<float> const & input,
 
 bool brip_vil_float_ops::chip(vil_image_view<float> const & input,
                               vsol_box_2d_sptr const& roi,
-                              vil_image_view<float> chip)
+                              vil_image_view<float>& chip)
 {
   if (!input||!roi)
     return false;

@@ -225,9 +225,9 @@ class brip_vil1_float_ops
   vil1_memory_image_of<float> rotate(vil1_memory_image_of<float> const & input,
                                      const double theta_deg);
 
-  bool chip(vil1_memory_image_of<float> const & input,
+  static bool chip(vil1_memory_image_of<float> const & input,
                                vsol_box_2d_sptr const& roi,
-                               vil1_memory_image_of<float> chip);
+                               vil1_memory_image_of<float>& chip);
   
   
   //:cross-correlate two images at a given sub-pixel location

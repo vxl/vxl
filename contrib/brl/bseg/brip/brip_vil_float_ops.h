@@ -225,7 +225,7 @@ class brip_vil_float_ops
 
   //:extract a region of interest. If roi does not overlap input, return false
   static bool chip(vil_image_view<float> const & input,
-                   vsol_box_2d_sptr const& roi, vil_image_view<float> chip);
+                   vsol_box_2d_sptr const& roi, vil_image_view<float>& chip);
 
   //:cross-correlate two images at a given sub-pixel location
   static float
