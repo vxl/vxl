@@ -4,9 +4,14 @@ USE_STDC++ := 0
 LIBRARY := mpeg2
 VERSION := 1.0
 
+INCDIRS += ./include/mpeg2dec
+
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
 # This is where configure will put config.h and inttypes.h
 INCDIRS += $(RELOBJDIR)/include
-INCDIRS += ./include/mpeg2dec
 
 SOURCES += libmpeg2/decode.c
 SOURCES += libmpeg2/header.c
@@ -37,9 +42,9 @@ xall:: $(RELOBJDIR)/include/config.h
 $(RELOBJDIR)/include/config.h: configure
 	PwD=`pwd` ; cd $(RELOBJDIR) ; $$PwD/configure .
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################
 
 # Always optimize this lib
 debug = $(optimize)

@@ -28,8 +28,12 @@ ifneq (,$(strip $(wildcard $(TIFF_INC_DIR)/../v3p_tag)))
 SUBDIRS += tiff
 endif
 
-ifneq (,$(strip $(wildcard $(MPEG2_INC_DIR)/../v3p_tag)))
+ifneq (,$(strip $(wildcard $(MPEG2_INC_DIR)/../../v3p_tag)))
 SUBDIRS += mpeg2
+endif
+
+ifneq (,$(strip $(wildcard $(DCMTK_INC_DIR)/../../../v3p_tag)))
+SUBDIRS += dcmtk
 endif
 
 ######################################
