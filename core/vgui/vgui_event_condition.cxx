@@ -147,6 +147,11 @@ vcl_string vgui_event_condition::as_string(int field_width) const
     s << key;
     r += s.str();
   }
+  if (vgui_key/*egcs for i386 needs cast*/(ascii_char) != vgui_KEY_NULL) {
+    vcl_ostringstream s;
+    s << ascii_char;
+    r += s.str();
+  }
 
   return r;
 }
