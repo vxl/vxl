@@ -19,8 +19,6 @@ SET(sdet_sources
     sdet_fit_lines_params.cxx    sdet_fit_lines_params.h
     sdet_grid_finder_params.cxx  sdet_grid_finder_params.h
     sdet_grid_finder.cxx         sdet_grid_finder.h
-    # although not ready for use:
-    sdet_champher.h
     sdet_region.cxx    sdet_region.h sdet_region_sptr.h
     sdet_watershed_region_proc_params.cxx   sdet_watershed_region_proc_params.h
     sdet_watershed_region_proc.cxx   sdet_watershed_region_proc.h
