@@ -35,6 +35,13 @@ class vbl_sparse_array_1d: public vbl_sparse_array_base<T, unsigned>
   }
 };
 
+//: Stream operator - print the Array to a stream in "(i,j): value" format.
+template <class T>
+inline vcl_ostream& operator<< (vcl_ostream& s, const vbl_sparse_array_1d<T>& a)
+{
+  return a.print(s);
+}
+
 #define VBL_SPARSE_ARRAY_1D_INSTANTIATE(T) \
 extern "please include vbl/vbl_sparse_array_1d.txx instead"
 
