@@ -151,7 +151,7 @@ bool gevd_detector_params::SanityCheck()
   if (noise_weight > 0.0 || noise_weight < -1.0)   // Noise weighting factor
   {
     msg << "ERROR: Value of noise weight must be between -1 and 0, not "
-        << noise_weight << "\0";
+        << noise_weight << '\0';
     noise_weight = -0.5f;
   }
   if (noise_multiplier <= 0)    // The over all noise scale factor
@@ -232,7 +232,7 @@ bool gevd_detector_params::SanityCheck()
 
 //------------------------------------------------------------
 //: Describe the parameters to a parameter modifier.
-void gevd_detector_params::Describe(ParamModifier& mod)
+void gevd_detector_params::Describe(ParamModifier& /*mod*/)
 {
   vcl_cerr << "gevd_detector_params::Describe() not yet implemented\n";
 #if 0

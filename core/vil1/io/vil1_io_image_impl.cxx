@@ -55,7 +55,7 @@ bool vil1_io_image_impl::is_io_for(const vil1_image_impl& b) const
 
 //=========================================================================
 //: Binary save self to stream.
-void vsl_b_write(vsl_b_ostream & os, const vil1_image_impl & p)
+void vsl_b_write(vsl_b_ostream & os, const vil1_image_impl & )
 {
   const short io_version_no = 1;
   vsl_b_write(os, io_version_no);
@@ -64,7 +64,7 @@ void vsl_b_write(vsl_b_ostream & os, const vil1_image_impl & p)
 
 //=========================================================================
 //: Binary load self from stream.
-void vsl_b_read(vsl_b_istream &is, vil1_image_impl & p)
+void vsl_b_read(vsl_b_istream &is, vil1_image_impl & )
 {
   if (!is) return;
 

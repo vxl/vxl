@@ -338,8 +338,9 @@ void vtol_two_chain::update_superior_list_p_from_hierarchy_parent(void)
 }
 
 bool
-vtol_two_chain::break_into_connected_components( topology_list& components )
+vtol_two_chain::break_into_connected_components( topology_list& /*components*/ )
 {
+  vcl_cerr << "vtol_two_chain::break_into_connected_components() not yet implemented\n";
 #if 0 // TODO
   topology_list * tmp = get_inferiors();
   int numfaces = tmp->size();

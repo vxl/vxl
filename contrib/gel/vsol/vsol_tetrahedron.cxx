@@ -118,9 +118,9 @@ double vsol_tetrahedron::volume(void) const
   double dx23=storage_[2]->x()-storage_[3]->x();
   double dy23=storage_[2]->y()-storage_[3]->y();
   double dz23=storage_[2]->z()-storage_[3]->z();
-  return vcl_abs(dx23*(dy01*dz12-dy12*dz01)
-                +dy23*(dz01*dx12-dz12*dx01)
-                +dz23*(dx01*dy12-dx12*dy01))/6;
+  return vcl_abs( dx23*(dy01*dz12-dy12*dz01)
+                 +dy23*(dz01*dx12-dz12*dx01)
+                 +dz23*(dx01*dy12-dx12*dy01))/6;
 }
 //***************************************************************************
 // Element change
@@ -169,7 +169,7 @@ void vsol_tetrahedron::set_p3(vsol_point_3d_sptr new_p3)
 //---------------------------------------------------------------------------
 //: Is `p' in `this' ?
 //---------------------------------------------------------------------------
-bool vsol_tetrahedron::in(vsol_point_3d const& p) const
+bool vsol_tetrahedron::in(vsol_point_3d const& ) const
 {
   // TODO
   vcl_cerr << "Warning: vsol_tetrahedron::in() has not been implemented yet\n";

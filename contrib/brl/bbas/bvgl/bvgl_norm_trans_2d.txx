@@ -97,9 +97,9 @@ compute_from_points(vcl_vector<vgl_homg_point_2d<T> > const& points)
 
 template <class T>
 bool bvgl_norm_trans_2d<T>::
-compute_from_lines(vcl_vector<vgl_homg_line_2d<T>  > const& lines)
+compute_from_lines(vcl_vector<vgl_homg_line_2d<T>  > const& /*lines*/)
 {
-  //not yet implemented
+  vcl_cerr << "bvgl_norm_trans_2d<T>::compute_from_lines() not yet implemented\n";
   return false;
 }
 

@@ -63,7 +63,7 @@ class vil3d_image_resource
   virtual vil3d_image_view_base_sptr get_view(unsigned i0, unsigned ni,
                                               unsigned j0, unsigned nj,
                                               unsigned k0, unsigned nk) const
-  { return get_copy_view (i0, ni, j0, nj, k0, nj); }
+  { return get_copy_view (i0, ni, j0, nj, k0, nk); }
 
   //: Create a read/write view of a copy of this data.
   // This function will always return a

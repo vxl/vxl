@@ -514,11 +514,11 @@ class vnl_matrix
  private:
   //: Resize to r rows by c columns. Old data lost.
   // \deprecated in favour of set_size()
-   bool resize (unsigned r, unsigned c) { return false; }
+  bool resize (unsigned , unsigned ) { return false; }
 
   //: Resize to r rows by c columns. Old data lost.
   // \deprecated in favour of set_size()
-   bool make_size (unsigned r, unsigned c) { return false; };
+  bool make_size (unsigned , unsigned ) { return false; };
  public:
   //: Resize to r rows by c columns. Old data lost.
   // Returns true if size changed.

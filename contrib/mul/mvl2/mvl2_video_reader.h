@@ -80,19 +80,19 @@ class mvl2_video_reader
   virtual bool get_frame(vil_image_view<vxl_byte>& image)=0;
 
   //: Set the brightness of the picture
-  virtual void set_brightness(int value) {}
+  virtual void set_brightness(int /*value*/) {}
 
   //: Set the hue of the picture
-  virtual void set_hue(int value) {}
+  virtual void set_hue(int /*value*/) {}
 
   //: Set the colour of the picture
-  virtual void set_colour(int value) {}
+  virtual void set_colour(int /*value*/) {}
 
   //: Set the contrast of the picture
-  virtual void set_contrast(int value) {}
+  virtual void set_contrast(int /*value*/) {}
 
   //: Set the whiteness of the picture
-  virtual void set_whiteness(int value) {}
+  virtual void set_whiteness(int /*value*/) {}
 
   //: Name of the class
   virtual vcl_string is_a() const;

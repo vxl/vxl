@@ -1,10 +1,9 @@
 #ifndef rrel_objective_h_
 #define rrel_objective_h_
-
 //:
 // \file
 // \author Chuck Stewart (stewart@cs.rpi.edu)
-// Abstract base class for robust objective functions.
+// \brief Abstract base class for robust objective functions.
 
 #include <vnl/vnl_fwd.h>
 #include <vcl_vector.h>
@@ -17,8 +16,9 @@
 //  which points are inliers and which are outliers, and will
 //  downgrade the influence of the of those samples.
 
-class rrel_objective {
-public:
+class rrel_objective
+{
+ public:
   //: The iterators used to pass in values.
   //  Since we don't allow member templates, we have to fix on a
   //  particular type of container for residuals. Using this typedef
@@ -29,11 +29,11 @@ public:
   //: The iterators used to pass out values.
   typedef vcl_vector<double>::iterator vect_iter;
 
-public:
+ public:
   rrel_objective() {};
   virtual ~rrel_objective() {}
 
-  //: Evaluate the objective function on heteroscedastic residuals.  
+  //: Evaluate the objective function on heteroscedastic residuals.
   // This version is used for heteroscedastic data, where each
   // residual has its own scale.  Some objective functions, such as
   // M-estimators, will require a scale value.  Others, such as Least
@@ -46,7 +46,7 @@ public:
                       vect_const_iter scale_begin,
                       vnl_vector<double>* param_vector ) const = 0;
 
-  //: Evaluate the objective function on homoscedastic residuals.  
+  //: Evaluate the objective function on homoscedastic residuals.
   // This version is used for homoscedastic data, where each residual
   // is distributed with a common scale.  Some objective functions,
   // such as M-estimators, will require a scale value.  Others, such
@@ -73,7 +73,7 @@ public:
 
   //: Scale estimate.
   //  The result is undefined if can_estimate_scale() is false.
-  virtual double scale( vect_const_iter res_begin, vect_const_iter res_end ) const { return 0.0; }
+  virtual double scale( vect_const_iter /*res_begin*/, vect_const_iter /*res_end*/ ) const { return 0.0; }
 };
 
 #endif

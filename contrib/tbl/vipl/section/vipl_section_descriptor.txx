@@ -1,8 +1,7 @@
 #ifndef vipl_section_descriptor_txx_
 #define vipl_section_descriptor_txx_
-
 //:
-//  \file
+// \file
 
 #include "vipl_section_descriptor.h"
 #include <vipl/section/vipl_section_container.h>
@@ -33,9 +32,9 @@ vipl_section_descriptor< DataType > ::vipl_section_descriptor(
 {
   if (desc) FILTER_IMPTR_INC_REFCOUNT(desc);
   if (container) FILTER_IMPTR_INC_REFCOUNT(container);
-#if 0
-  vcl_cerr << "Warning: called unimplemented constructor with signature "
-           << "vipl_section_descriptor< DataType >* desc, vipl_section_container< DataType >* container\n";
+#ifdef DEBUG
+  vcl_cerr << "Warning: called unimplemented vipl_section_descriptor constructor with signature "
+           << "vipl_section_descriptor<DataType>*, vipl_section_container<DataType>*\n";
 #endif
 }
 
@@ -60,9 +59,9 @@ vipl_section_descriptor< DataType > ::vipl_section_descriptor(
 {
   hsreal_descriptor = desc->virtual_copy();
   hsreal_container = container->virtual_copy();
-#if 0
-  vcl_cerr << "Warning: called unimplemented constructor with signature "
-           << "const vipl_section_descriptor< DataType >* desc, const vipl_section_container< DataType >* container, int t\n";
+#ifdef DEBUG
+  vcl_cerr << "Warning: called unimplemented vipl_section_descriptor constructor with signature "
+           << "const vipl_section_descriptor<DataType>*, const vipl_section_container<DataType>*, int\n";
 #endif
 }
 
@@ -85,7 +84,10 @@ vipl_section_descriptor< DataType > ::vipl_section_descriptor(
     hsi_curr_sec_size (2,0),
     refcount_ (1)
 {
-  vcl_cerr << "Warning: called unimplemented constructor with sig vcl_vector< int >& startpts, vcl_vector< int >& endpts\n";
+#ifdef DEBUG
+  vcl_cerr << "Warning: called unimplemented vipl_section_descriptor constructor with signature "
+           << "vcl_vector<int>&, vcl_vector<int>&\n";
+#endif
 }
 
 template < class DataType >
@@ -95,7 +97,7 @@ vipl_section_descriptor< DataType > ::~vipl_section_descriptor()
     FILTER_IMPTR_DEC_REFCOUNT(hsreal_descriptor);
   if (hsreal_container && hsreal_container->refcount()>1)
     FILTER_IMPTR_DEC_REFCOUNT(hsreal_container);
-#if 0
+#ifdef DEBUG
   vcl_cerr << "Warning: called unfinished destructor\n";
 #endif
 }
@@ -144,9 +146,9 @@ vipl_section_descriptor< DataType > ::vipl_section_descriptor(const vipl_section
 // of the next (i.e. associated with the higher coordinate value) data item
 // along the axis.
 template < class DataType >
-int vipl_section_descriptor< DataType > ::data_offsets( int axis) const
+int vipl_section_descriptor< DataType > ::data_offsets( int /*axis*/ ) const
 {
-  vcl_cerr << "Warning: called unimplemented method data_offsets\n";
+  vcl_cerr << "Warning: called unimplemented method vipl_section_descriptor::data_offsets\n";
   return 0;
 }
 
@@ -155,7 +157,7 @@ int vipl_section_descriptor< DataType > ::data_offsets( int axis) const
 template < class DataType >
 DataType* vipl_section_descriptor< DataType > ::data_ptr()
 {
-  vcl_cerr << "Warning: called unimplemented method data_ptr\n";
+  vcl_cerr << "Warning: called unimplemented method vipl_section_descriptor::data_ptr\n";
   return 0;
 }
 
@@ -164,7 +166,7 @@ DataType* vipl_section_descriptor< DataType > ::data_ptr()
 template < class DataType >
 const DataType* vipl_section_descriptor< DataType > ::data_ptr() const
 {
-  vcl_cerr << "Warning: called unimplemented method data_ptr\n";
+  vcl_cerr << "Warning: called unimplemented method vipl_section_descriptor::data_ptr\n";
   return 0;
 }
 
@@ -192,7 +194,6 @@ vipl_section_descriptor< DataType >* vipl_section_descriptor< DataType > ::virtu
   rtn->put_i_curr_sec_start(i_curr_sec_start());
   rtn->put_i_curr_sec_end(i_curr_sec_end());
   rtn->put_i_curr_sec_size(i_curr_sec_size());
-  // vcl_cerr << "Warning: called possibly method virtual_copy\n";
   return rtn;
 }
 

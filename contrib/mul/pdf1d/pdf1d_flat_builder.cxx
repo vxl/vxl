@@ -79,8 +79,7 @@ void pdf1d_flat_builder::build_from_array(pdf1d_pdf& model, const double* data, 
 {
   if (n<2)
   {
-    vcl_cerr<<"pdf1d_flat_builder::build_from_array()"
-            <<" Too few examples available.\n";
+    vcl_cerr<<"pdf1d_flat_builder::build_from_array(): too few examples available.\n";
     vcl_abort();
   }
 
@@ -111,7 +110,7 @@ void pdf1d_flat_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>& data)
 
   if (n_samples<2)
   {
-    vcl_cerr<<"pdf1d_flat_builder::build() Too few examples available.\n";
+    vcl_cerr<<"pdf1d_flat_builder::build(): too few examples available.\n";
     vcl_abort();
   }
 
@@ -150,9 +149,9 @@ void pdf1d_flat_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>& data)
 
 void pdf1d_flat_builder::weighted_build(pdf1d_pdf& model,
                                         mbl_data_wrapper<double>& data,
-                                        const vcl_vector<double>& wts) const
+                                        const vcl_vector<double>& /*wts*/) const
 {
-  // Ignore weights
+  // TODO - Currently ignore weights
   build(model,data);
 }
 //=======================================================================

@@ -179,37 +179,37 @@ template < class DataType >
 // None of the comparison operators are implemented yet. FIXME
 
 template < class DataType >
-  bool vipl_section_container< DataType > ::operator<( const vipl_section_container< DataType >& b) const
+  bool vipl_section_container< DataType > ::operator<( const vipl_section_container< DataType >& ) const
 {
-  vcl_cerr << "Warning: called unimplemented method operator<\n";
+  vcl_cerr << "Warning: called unimplemented method vipl_section_container::operator<\n";
   return false;
 }
 
 template < class DataType >
-  bool vipl_section_container< DataType > ::operator>( const vipl_section_container< DataType >& b) const
+  bool vipl_section_container< DataType > ::operator>( const vipl_section_container< DataType >& ) const
 {
-  vcl_cerr << "Warning: called unimplemented method operator>\n";
+  vcl_cerr << "Warning: called unimplemented method vipl_section_container::operator>\n";
   return false;
 }
 
 template < class DataType >
-  bool vipl_section_container< DataType > ::operator<=( const vipl_section_container< DataType >& b) const
+  bool vipl_section_container< DataType > ::operator<=( const vipl_section_container< DataType >& ) const
 {
-  vcl_cerr << "Warning: called unimplemented method operator<=\n";
+  vcl_cerr << "Warning: called unimplemented method vipl_section_container::operator<=\n";
   return false;
 }
 
 template < class DataType >
-  bool vipl_section_container< DataType > ::operator>=( const vipl_section_container< DataType >& b) const
+  bool vipl_section_container< DataType > ::operator>=( const vipl_section_container< DataType >& ) const
 {
-  vcl_cerr << "Warning: called unimplemented method operator>=\n";
+  vcl_cerr << "Warning: called unimplemented method vipl_section_container::operator>=\n";
   return false;
 }
 
 template < class DataType >
-  void vipl_section_container< DataType > ::swap( const vipl_section_container< DataType >& b) const
+  void vipl_section_container< DataType > ::swap( const vipl_section_container< DataType >& ) const
 {
-  vcl_cerr << "Warning: called unimplemented method swap\n";
+  vcl_cerr << "Warning: called unimplemented method vipl_section_container::swap\n";
 }
 
 // Modifies the passed in descriptor to point to the next section . This is
@@ -343,7 +343,7 @@ template < class DataType >
 // (i.e. 0) axis, the second (i.e. 1) axis etc... The Axes have const values
 // in the class filter, e.g. vipl_filter::X_Axis
 template < class DataType >
-  int vipl_section_container< DataType > ::image_start(int axis) const
+  int vipl_section_container< DataType > ::image_start(int /*axis*/) const
 {
   return 0;
 }

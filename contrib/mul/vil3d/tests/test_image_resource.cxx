@@ -8,10 +8,10 @@
 #include <vil3d/vil3d_print.h>
 
 template <class T>
-void test_image_resource(vcl_string type, vil_pixel_format format, T dummy)
+void test_image_resource(vcl_string type, vil_pixel_format format, T /*dummy*/)
 {
   vcl_cout << "******************************************************************\n"
-           << " Testing vil3d_image_resource objects with pixel type = " << type << "\n"
+           << " Testing vil3d_image_resource objects with pixel type = " << type << '\n'
            << "******************************************************************\n";
 
   vil3d_image_resource_sptr mem = vil3d_new_image_resource(10,5,3,1,format);
@@ -45,7 +45,6 @@ void test_image_resource(vcl_string type, vil_pixel_format format, T dummy)
 
   vil3d_math_value_range(view1, v1, v2);
   TEST("Value range is 0,10", v1 == 0 && v2 == 10, true);
-
 }
 
 MAIN( test_image_resource )

@@ -181,7 +181,7 @@ vil_dicom_header_type vil_dicom_header_format::determineFileType(vil_stream &fs)
           fs.read(&data_block_size, sizeof(vxl_uint_32));
           data_block_size = intSwap(data_block_size);
           if (data_block_size > 0x1000000) {
-            vcl_cerr << __FILE__ "," << __LINE__ << " : WARNING: data_block_size="
+            vcl_cerr << __FILE__ ": " << __LINE__ << " : WARNING: data_block_size="
                      << data_block_size << " is most probably too large\n";
             break;
           }
@@ -204,13 +204,13 @@ vil_dicom_header_type vil_dicom_header_format::determineFileType(vil_stream &fs)
             fs.read(&data_block_size, sizeof(vxl_uint_32));
             data_block_size = intSwap(data_block_size);
             if (data_block_size > 0x1000000) {
-              vcl_cerr << __FILE__ "," << __LINE__ << " : WARNING: data_block_size="
+              vcl_cerr << __FILE__ ": " << __LINE__ << " : WARNING: data_block_size="
                        << data_block_size << " is most probably too large\n";
               break;
             }
 
             num_elements++;
-          } // End of while (group...
+          } // End of while (group...)
 
           // Check the elements read and see if it fits
           // with a known header
@@ -224,7 +224,7 @@ vil_dicom_header_type vil_dicom_header_format::determineFileType(vil_stream &fs)
               fs.seek(0);
               result = VIL_DICOM_HEADER_DTNON_PART10;
               known = true;
-            } // End of if (element...
+            } // End of if (element...)
             // Now a non-standard non-Part10
             else if (element == VIL_DICOM_HEADER_IDIMAGETYPE ||
                      element == VIL_DICOM_HEADER_IDLENGTHTOEND ||
@@ -234,7 +234,7 @@ vil_dicom_header_type vil_dicom_header_format::determineFileType(vil_stream &fs)
               fs.seek(0);
               result = VIL_DICOM_HEADER_DTNON_PART10;
               known = true;
-            } // End of else if (element...
+            } // End of else if (element...)
           } // End of if (group == VIL_DICOM_HEADER_IDENTIFYINGGROUP)
 
           if (!known)
@@ -284,7 +284,7 @@ void vil_dicom_header_format::readHeaderElements(vil_stream &fs)
       break;
     data_block_size = intSwap(data_block_size);
     if (data_block_size > 0x1000000) {
-      vcl_cerr << __FILE__ "," << __LINE__ << " : WARNING: data_block_size="
+      vcl_cerr << __FILE__ ": " << __LINE__ << " : WARNING: data_block_size="
                << data_block_size << " is most probably too large\n";
       break;
     }
@@ -338,7 +338,7 @@ void vil_dicom_header_format::readHeaderElements(vil_stream &fs)
     return;
   data_block_size = intSwap(data_block_size);
   if (data_block_size > 0x1000000)
-    vcl_cerr << __FILE__ "," << __LINE__ << " : WARNING: data_block_size="
+    vcl_cerr << __FILE__ ": " << __LINE__ << " : WARNING: data_block_size="
              << data_block_size << " is most probably too large\n";
   else
     convertValueRepresentation(data_block_size, fs);
@@ -639,7 +639,7 @@ bool vil_dicom_header_format::convertValueRepresentation(unsigned int &dblock_si
       fs.read(&dblock_size, sizeof(int));
       dblock_size = 0;
       result = true;
-    } // End of if (first...
+    } // End of if (first...)
     else if (first == VIL_DICOM_HEADER_OTHERBYTE ||
              first == VIL_DICOM_HEADER_OTHERWORD ||
              last == VIL_DICOM_HEADER_OTHERBYTE  ||
@@ -648,7 +648,7 @@ bool vil_dicom_header_format::convertValueRepresentation(unsigned int &dblock_si
       fs.read(&dblock_size, sizeof(int));
       dblock_size = shortSwap(dblock_size);
       result = true;
-    } // End of else if (first...
+    } // End of else if (first...)
     else if (dblock_size == VIL_DICOM_HEADER_ALLSET)
     {
       dblock_size = 0;
@@ -686,7 +686,7 @@ bool vil_dicom_header_format::convertValueRepresentation(unsigned int &dblock_si
       }
 
       result = true;
-    } // End of else if (first...
+    } // End of else if (first...)
     else if (last == VIL_DICOM_HEADER_APPLICATIONENTRY    ||
              last == VIL_DICOM_HEADER_AGESTRING           ||
              last == VIL_DICOM_HEADER_ATTRIBUTETAG        ||
@@ -719,7 +719,7 @@ bool vil_dicom_header_format::convertValueRepresentation(unsigned int &dblock_si
       }
 
       result = true;
-    } // End of else if (last...
+    } // End of else if (last...)
   } // End of if (last_read_.file_type_ != VIL_DICOM_HEADER_DTUNKNOWN)
 
   return result;
@@ -905,7 +905,7 @@ vil_dicom_header_endian vil_dicom_header_format::determineMetaInfo(vil_stream &f
       break;
     data_block_size = intSwap(data_block_size);
     if (data_block_size > 0x1000000) {
-      vcl_cerr << __FILE__ "," << __LINE__ << " : WARNING: data_block_size="
+      vcl_cerr << __FILE__ ": " << __LINE__ << " : WARNING: data_block_size="
                << data_block_size << " is most probably too large\n";
       break;
     }
@@ -1001,8 +1001,7 @@ vil_dicom_header_endian vil_dicom_header_format::determineMetaInfo(vil_stream &f
           image_type_ = VIL_DICOM_HEADER_DITRLE;
         }
       } // End of if (tfx_type)
-       
-    } // End of if (group...
+    } // End of if (group...)
     else if (group == VIL_DICOM_HEADER_DELIMITERGROUP &&
              (element == VIL_DICOM_HEADER_DLITEM ||
               element == VIL_DICOM_HEADER_DLITEMDELIMITATIONITEM ||
@@ -1120,109 +1119,109 @@ void vil_dicom_header_format::charSwap(char *char_in, int val_size)
 
 void vil_dicom_header_print(vcl_ostream &os, const vil_dicom_header_info &s)
 {
-  vcl_cout << "\n\nGeneral info fields\n";
-  vcl_cout << " file_type        The type of dicom file: " << s.file_type_ << vcl_endl;
-  vcl_cout << " sys_endian       The endian of the architecture: " << s.sys_endian_ << vcl_endl;
-  vcl_cout << " image_type       The encapsulated (or not) image type: " <<s.image_type_ << vcl_endl;
+  os << "\n\nGeneral info fields\n"
+     << " file_type        The type of dicom file: " << s.file_type_ << vcl_endl
+     << " sys_endian       The endian of the architecture: " << s.sys_endian_ << vcl_endl
+     << " image_type       The encapsulated (or not) image type: " <<s.image_type_ << vcl_endl
 
-  vcl_cout << "\n\nIdentifying fields\n";
-  vcl_cout << " image_id_type    The image type from the dicom header: " << s.image_id_type_ << vcl_endl;
-  vcl_cout << " sop_cl_uid       The class unique id for the Service/Object Pair: " << s.sop_cl_uid_ << vcl_endl;
-  vcl_cout << " sop_in_uid       The instance uid for the SOP: " << s.sop_in_uid_ << vcl_endl;
-  vcl_cout << " study_date       The date of the study: " << s.study_date_ << vcl_endl;
-  vcl_cout << " series_date      The date this series was collected: " << s.series_date_ << vcl_endl;
-  vcl_cout << " acquisition_date The date of acquisition: " << s.acquisition_date_ << vcl_endl;
-  vcl_cout << " image_date       The date of this image: " << s.image_date_ << vcl_endl;
-  vcl_cout << " study_time       The time of the study: " << s.study_time_ << vcl_endl;
-  vcl_cout << " series_time      The time of the series: " << s.series_time_ << vcl_endl;
-  vcl_cout << " acquisition_time The time acquisition: " << s.acquisition_time_ << vcl_endl;
-  vcl_cout << " image_time       The time of the image: " << s.image_time_ << vcl_endl;
-  vcl_cout << " accession_number The accession number for this image: " << s.accession_number_ << vcl_endl;
-  vcl_cout << " modality         The imaging modality: " << s.modality_ << vcl_endl;
-  vcl_cout << " manufacturer     The name of the scanner manufacturer: " << s.manufacturer_ << vcl_endl;
-  vcl_cout << " institution_name The name of the institution: " << s.institution_name_ << vcl_endl;
-  vcl_cout << " institution_addr The address of the institution: " << s.institution_addr_ << vcl_endl;
-  vcl_cout << " ref_phys_name    The name of the referring physician: " << s.ref_phys_name_ << vcl_endl;
-  vcl_cout << " station_name     The name of the station used: " << s.station_name_ << vcl_endl;
-  vcl_cout << " study_desc       A description of the study: " << s.study_desc_ << vcl_endl;
-  vcl_cout << " series_desc      A description of the series: " << s.series_desc_ << vcl_endl;
-  vcl_cout << " att_phys_name    The name of the attending physician: " << s.att_phys_name_ << vcl_endl;
-  vcl_cout << " operator_name    The name of the MR operator: " << s.operator_name_ << vcl_endl;
-  vcl_cout << " model_name       The name of the MR scanner model: " << s.model_name_ << vcl_endl;
+     << "\n\nIdentifying fields\n"
+     << " image_id_type    The image type from the dicom header: " << s.image_id_type_ << vcl_endl
+     << " sop_cl_uid       The class unique id for the Service/Object Pair: " << s.sop_cl_uid_ << vcl_endl
+     << " sop_in_uid       The instance uid for the SOP: " << s.sop_in_uid_ << vcl_endl
+     << " study_date       The date of the study: " << s.study_date_ << vcl_endl
+     << " series_date      The date this series was collected: " << s.series_date_ << vcl_endl
+     << " acquisition_date The date of acquisition: " << s.acquisition_date_ << vcl_endl
+     << " image_date       The date of this image: " << s.image_date_ << vcl_endl
+     << " study_time       The time of the study: " << s.study_time_ << vcl_endl
+     << " series_time      The time of the series: " << s.series_time_ << vcl_endl
+     << " acquisition_time The time acquisition: " << s.acquisition_time_ << vcl_endl
+     << " image_time       The time of the image: " << s.image_time_ << vcl_endl
+     << " accession_number The accession number for this image: " << s.accession_number_ << vcl_endl
+     << " modality         The imaging modality: " << s.modality_ << vcl_endl
+     << " manufacturer     The name of the scanner manufacturer: " << s.manufacturer_ << vcl_endl
+     << " institution_name The name of the institution: " << s.institution_name_ << vcl_endl
+     << " institution_addr The address of the institution: " << s.institution_addr_ << vcl_endl
+     << " ref_phys_name    The name of the referring physician: " << s.ref_phys_name_ << vcl_endl
+     << " station_name     The name of the station used: " << s.station_name_ << vcl_endl
+     << " study_desc       A description of the study: " << s.study_desc_ << vcl_endl
+     << " series_desc      A description of the series: " << s.series_desc_ << vcl_endl
+     << " att_phys_name    The name of the attending physician: " << s.att_phys_name_ << vcl_endl
+     << " operator_name    The name of the MR operator: " << s.operator_name_ << vcl_endl
+     << " model_name       The name of the MR scanner model: " << s.model_name_ << vcl_endl
 
-  vcl_cout << "\n\nPatient info\n";
-  vcl_cout << " patient_name     Patient's name: " << s.patient_name_ << vcl_endl;
-  vcl_cout << " patient_id       Patient's ID: " << s.patient_id_ << vcl_endl;
-  vcl_cout << " patient_dob      The patient's date of birth: " << s.patient_dob_ << vcl_endl;
-  vcl_cout << " patient_sex      The sex of the patient: " << s.patient_sex_ << vcl_endl;
-  vcl_cout << " patient_age      The age of the patient: " << s.patient_age_ << vcl_endl;
-  vcl_cout << " patient_weight_  The weight of the patient: " << s.patient_weight_ << vcl_endl;
-  vcl_cout << " patient_hist     Any additional patient history: " << s.patient_hist_ << vcl_endl;
+     << "\n\nPatient info\n"
+     << " patient_name     Patient's name: " << s.patient_name_ << vcl_endl
+     << " patient_id       Patient's ID: " << s.patient_id_ << vcl_endl
+     << " patient_dob      The patient's date of birth: " << s.patient_dob_ << vcl_endl
+     << " patient_sex      The sex of the patient: " << s.patient_sex_ << vcl_endl
+     << " patient_age      The age of the patient: " << s.patient_age_ << vcl_endl
+     << " patient_weight_  The weight of the patient: " << s.patient_weight_ << vcl_endl
+     << " patient_hist     Any additional patient history: " << s.patient_hist_ << vcl_endl
 
-  vcl_cout << "\n\nAcquisition Info\n";
-  vcl_cout << " scanning_seq     A description of the scanning sequence: " << s.scanning_seq_ << vcl_endl;
-  vcl_cout << " sequence_var     A description of the sequence variant: " << s.sequence_var_ << vcl_endl;
-  vcl_cout << " scan_options     A description of various scan options: " << s.scan_options_ << vcl_endl;
-  vcl_cout << " mr_acq_type      The acquisition type for this scan: " << s.mr_acq_type_ << vcl_endl;
-  vcl_cout << " sequence_name    The name of the sequence: " << s.sequence_name_ << vcl_endl;
-  vcl_cout << " angio_flag       The angio flag for this sequence: " << s.angio_flag_ << vcl_endl;
-  vcl_cout << " slice_thickness_ Slice thickness (for voxel size): " << s.slice_thickness_ << vcl_endl;
-  vcl_cout << " repetition_time_ Scan repetition time: " << s.repetition_time_ << vcl_endl;
-  vcl_cout << " echo_time        Scan echo time: " << s.echo_time_ << vcl_endl;
-  vcl_cout << " inversion_time   Scan inversion time: " << s.inversion_time_ << vcl_endl;
-  vcl_cout << " number_of_averages The number of averages for this scan: " << s.number_of_averages_ << vcl_endl;
-  vcl_cout << " echo_numbers     The echo numbers for this scan: " << s.echo_numbers_ << vcl_endl;
-  vcl_cout << " mag_field_strength The strength of the magnetic field: " << s.mag_field_strength_ << vcl_endl;
-  vcl_cout << " echo_train_length The length of the echo train: " << s.echo_train_length_ << vcl_endl;
-  vcl_cout << " pixel_bandwidth  The bandwidth of the pixels: " << s.pixel_bandwidth_ << vcl_endl;
-  vcl_cout << " software_vers_   Versions of the scanner software used: " << s.software_vers_ << vcl_endl;
-  vcl_cout << " protocol_name    The name of the protocol used: " << s.protocol_name_ << vcl_endl;
-  vcl_cout << " heart_rate       The patient's heart rate: " << s.heart_rate_ << vcl_endl;
-  vcl_cout << " card_num_images  The cardiac number of images: " << s.card_num_images_ << vcl_endl;
-  vcl_cout << " trigger_window   The trigger window for this image: " << s.trigger_window_ << vcl_endl;
-  vcl_cout << " reconst_diameter The reconstruction diameter: " << s.reconst_diameter_ << vcl_endl;
-  vcl_cout << " receiving_coil_  Details of the receiving coil: " << s.receiving_coil_ << vcl_endl;
-  vcl_cout << " phase_enc_dir    The phase encoding direction: " << s.phase_enc_dir_ << vcl_endl;
-  vcl_cout << " flip_angle       The flip angle: " << s.flip_angle_ << vcl_endl;
-  vcl_cout << " sar              The specific absorption rate: " << s.sar_ << vcl_endl;
-  vcl_cout << " patient_pos      The position of the patient in the scanner: " << s.patient_pos_ << vcl_endl;
+     << "\n\nAcquisition Info\n"
+     << " scanning_seq     A description of the scanning sequence: " << s.scanning_seq_ << vcl_endl
+     << " sequence_var     A description of the sequence variant: " << s.sequence_var_ << vcl_endl
+     << " scan_options     A description of various scan options: " << s.scan_options_ << vcl_endl
+     << " mr_acq_type      The acquisition type for this scan: " << s.mr_acq_type_ << vcl_endl
+     << " sequence_name    The name of the sequence: " << s.sequence_name_ << vcl_endl
+     << " angio_flag       The angio flag for this sequence: " << s.angio_flag_ << vcl_endl
+     << " slice_thickness_ Slice thickness (for voxel size): " << s.slice_thickness_ << vcl_endl
+     << " repetition_time_ Scan repetition time: " << s.repetition_time_ << vcl_endl
+     << " echo_time        Scan echo time: " << s.echo_time_ << vcl_endl
+     << " inversion_time   Scan inversion time: " << s.inversion_time_ << vcl_endl
+     << " number_of_averages The number of averages for this scan: " << s.number_of_averages_ << vcl_endl
+     << " echo_numbers     The echo numbers for this scan: " << s.echo_numbers_ << vcl_endl
+     << " mag_field_strength The strength of the magnetic field: " << s.mag_field_strength_ << vcl_endl
+     << " echo_train_length The length of the echo train: " << s.echo_train_length_ << vcl_endl
+     << " pixel_bandwidth  The bandwidth of the pixels: " << s.pixel_bandwidth_ << vcl_endl
+     << " software_vers_   Versions of the scanner software used: " << s.software_vers_ << vcl_endl
+     << " protocol_name    The name of the protocol used: " << s.protocol_name_ << vcl_endl
+     << " heart_rate       The patient's heart rate: " << s.heart_rate_ << vcl_endl
+     << " card_num_images  The cardiac number of images: " << s.card_num_images_ << vcl_endl
+     << " trigger_window   The trigger window for this image: " << s.trigger_window_ << vcl_endl
+     << " reconst_diameter The reconstruction diameter: " << s.reconst_diameter_ << vcl_endl
+     << " receiving_coil_  Details of the receiving coil: " << s.receiving_coil_ << vcl_endl
+     << " phase_enc_dir    The phase encoding direction: " << s.phase_enc_dir_ << vcl_endl
+     << " flip_angle       The flip angle: " << s.flip_angle_ << vcl_endl
+     << " sar              The specific absorption rate: " << s.sar_ << vcl_endl
+     << " patient_pos      The position of the patient in the scanner: " << s.patient_pos_ << vcl_endl
 
-  vcl_cout << "\n\nRelationship info\n";
-  vcl_cout << " stud_ins_uid     The study instance unique id: " << s.stud_ins_uid_ << vcl_endl;
-  vcl_cout << " ser_ins_uid      The series instance unique id: " << s.ser_ins_uid_ << vcl_endl;
-  vcl_cout << " study_id         The id of this study: " << s.study_id_ << vcl_endl;
-  vcl_cout << " series_number    The number of this series: " << s.series_number_ << vcl_endl;
-  vcl_cout << " acquisition_number The number of the acquisition: " << s.acquisition_number_ << vcl_endl;
-  vcl_cout << " image_number     The number of this image instance: " << s.image_number_ << vcl_endl;
-  vcl_cout << " pat_orient       The orientation of the patient: " << s.pat_orient_ << vcl_endl;
-  vcl_cout << " image_pos        The image position relative to the patient: " << s.image_pos_ << vcl_endl;
-  vcl_cout << " image_orient     The image orientation relative to the patient: " << s.image_orient_ << vcl_endl;
-  vcl_cout << " frame_of_ref     The frame of reference" << s.frame_of_ref_ << vcl_endl;
-  vcl_cout << " images_in_acq    Then number ot images in the acquisition: " << s.images_in_acq_ << vcl_endl;
-  vcl_cout << " pos_ref_ind      The position reference indicator: " << s.pos_ref_ind_ << vcl_endl;
-  vcl_cout << " slice_location   The location of the slice: " << s.slice_location_ << vcl_endl;
+     << "\n\nRelationship info\n"
+     << " stud_ins_uid     The study instance unique id: " << s.stud_ins_uid_ << vcl_endl
+     << " ser_ins_uid      The series instance unique id: " << s.ser_ins_uid_ << vcl_endl
+     << " study_id         The id of this study: " << s.study_id_ << vcl_endl
+     << " series_number    The number of this series: " << s.series_number_ << vcl_endl
+     << " acquisition_number The number of the acquisition: " << s.acquisition_number_ << vcl_endl
+     << " image_number     The number of this image instance: " << s.image_number_ << vcl_endl
+     << " pat_orient       The orientation of the patient: " << s.pat_orient_ << vcl_endl
+     << " image_pos        The image position relative to the patient: " << s.image_pos_ << vcl_endl
+     << " image_orient     The image orientation relative to the patient: " << s.image_orient_ << vcl_endl
+     << " frame_of_ref     The frame of reference" << s.frame_of_ref_ << vcl_endl
+     << " images_in_acq    Then number ot images in the acquisition: " << s.images_in_acq_ << vcl_endl
+     << " pos_ref_ind      The position reference indicator: " << s.pos_ref_ind_ << vcl_endl
+     << " slice_location   The location of the slice: " << s.slice_location_ << vcl_endl
 
-  vcl_cout << "\n\nImage info\n";
-  vcl_cout << " pix_samps        The number of samples per pixel: " << s.pix_samps_ << vcl_endl;
-  vcl_cout << " photo_interp     The photometric interpretation: " << s.photo_interp_ << vcl_endl;
-  vcl_cout << " dimx             The number of columns: " << s.dimx_ << vcl_endl;
-  vcl_cout << " dimy             The number of rows: " << s.dimy_ << vcl_endl;
-  vcl_cout << " dimz             The number of planes: " << s.dimz_ << vcl_endl;
-  vcl_cout << " high_bit         The bit used as the high bit: " << s.high_bit_ << vcl_endl;
-  vcl_cout << " small_im_pix_val The smallest image pixel value: " << s.small_im_pix_val_ << vcl_endl;
-  vcl_cout << " large_im_pix_val The largest image pixel value: " << s.large_im_pix_val_ << vcl_endl;
-  vcl_cout << " pixel_padding_val The value used for padding pixels: " << s.pixel_padding_val_ << vcl_endl;
-  vcl_cout << " window_centre    The value of the image window's centre: " << s.window_centre_ << vcl_endl;
-  vcl_cout << " window_width     The actual width of the image window: " << s.window_width_ << vcl_endl;
+     << "\n\nImage info\n"
+     << " pix_samps        The number of samples per pixel: " << s.pix_samps_ << vcl_endl
+     << " photo_interp     The photometric interpretation: " << s.photo_interp_ << vcl_endl
+     << " dimx             The number of columns: " << s.dimx_ << vcl_endl
+     << " dimy             The number of rows: " << s.dimy_ << vcl_endl
+     << " dimz             The number of planes: " << s.dimz_ << vcl_endl
+     << " high_bit         The bit used as the high bit: " << s.high_bit_ << vcl_endl
+     << " small_im_pix_val The smallest image pixel value: " << s.small_im_pix_val_ << vcl_endl
+     << " large_im_pix_val The largest image pixel value: " << s.large_im_pix_val_ << vcl_endl
+     << " pixel_padding_val The value used for padding pixels: " << s.pixel_padding_val_ << vcl_endl
+     << " window_centre    The value of the image window's centre: " << s.window_centre_ << vcl_endl
+     << " window_width     The actual width of the image window: " << s.window_width_ << vcl_endl
 
-  vcl_cout << "\n\nInfo from the tags specifically for reading the image data\n";
-  vcl_cout << " xsize            The pixel spacing in x: " << s.xsize_ << vcl_endl;
-  vcl_cout << " ysize            The pixel spacing in y: " << s.ysize_ << vcl_endl;
-  vcl_cout << " slice_spacing    The pixel spacing in z: " << s.slice_spacing_ << vcl_endl;
-  vcl_cout << " res_intercept    The image rescale intercept: " << s.res_intercept_ << vcl_endl;
-  vcl_cout << " res_slope        The image rescale slope: " << s.res_slope_ << vcl_endl;
-  vcl_cout << " pix_rep          The pixel representation (+/-): " << s.pix_rep_ << vcl_endl;
-  vcl_cout << " stored_bits      The bits stored: " << s.stored_bits_ << vcl_endl;
-  vcl_cout << " allocated_bits   The bits allocated: " << s.allocated_bits_ << vcl_endl;
-};
+     << "\n\nInfo from the tags specifically for reading the image data\n"
+     << " xsize            The pixel spacing in x: " << s.xsize_ << vcl_endl
+     << " ysize            The pixel spacing in y: " << s.ysize_ << vcl_endl
+     << " slice_spacing    The pixel spacing in z: " << s.slice_spacing_ << vcl_endl
+     << " res_intercept    The image rescale intercept: " << s.res_intercept_ << vcl_endl
+     << " res_slope        The image rescale slope: " << s.res_slope_ << vcl_endl
+     << " pix_rep          The pixel representation (+/-): " << s.pix_rep_ << vcl_endl
+     << " stored_bits      The bits stored: " << s.stored_bits_ << vcl_endl
+     << " allocated_bits   The bits allocated: " << s.allocated_bits_ << vcl_endl;
+}
 

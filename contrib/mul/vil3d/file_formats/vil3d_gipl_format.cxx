@@ -102,8 +102,8 @@ vil3d_image_resource_sptr vil3d_gipl_format::make_input_image(const char *filena
 // The width/height etc are explicitly specified, so that file_format implementors
 // know what they need to do...
 vil3d_image_resource_sptr vil3d_gipl_format::make_output_image
-                   (const char* filename, unsigned ni, unsigned nj,
-                    unsigned nk, unsigned nplanes, enum vil_pixel_format) const
+                   (const char* /*filename*/, unsigned /*ni*/, unsigned /*nj*/,
+                    unsigned /*nk*/, unsigned /*nplanes*/, enum vil_pixel_format) const
 {
   vcl_cerr <<"vil3d_gipl_format::make_output_image() NYI\n";
   vcl_abort();
@@ -310,8 +310,8 @@ bool vil3d_gipl_image::get_property(char const *key, void * value) const
 }
 
 //: Set the contents of the volume.
-bool vil3d_gipl_image::put_view(const vil3d_image_view_base& vv,
-                                unsigned i0, unsigned j0, unsigned k0)
+bool vil3d_gipl_image::put_view(const vil3d_image_view_base& /*vv*/,
+                                unsigned /*i0*/, unsigned /*j0*/, unsigned /*k0*/)
 {
   vcl_cerr << "ERROR: vil3d_gipl_image::put_view NYI\n\n";
   return false;

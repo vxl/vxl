@@ -5,6 +5,7 @@
 #include <vnl/vnl_math.h>
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>
+#include <vcl_iostream.h>
 
 namespace {
   inline void shft2(double &a, double &b, const double c)
@@ -28,11 +29,11 @@ rrel_kernel_density_obj::rrel_kernel_density_obj(rrel_kernel_scale_type scale_ty
 }
 
 double
-rrel_kernel_density_obj::fcn(vect_const_iter res_begin, vect_const_iter res_end,
-                             vect_const_iter scale_begin,
-                             vnl_vector<double>* param_vector ) const
+rrel_kernel_density_obj::fcn(vect_const_iter /*res_begin*/, vect_const_iter /*res_end*/,
+                             vect_const_iter /*scale_begin*/,
+                             vnl_vector<double>* /*param_vector*/ ) const
 {
-  //not implemented.
+  vcl_cerr << "rrel_kernel_density_obj::fcn() not implemented\n";
   return 0;
 }
 

@@ -24,7 +24,7 @@ btol_edge_algs::~btol_edge_algs()
 //-----------------------------------------------------------------------------
 bool btol_edge_algs::split_edge_2d(vtol_vertex_2d_sptr const& /*v*/,
                                    vtol_edge_2d_sptr const& /*e*/,
-                                   vtol_edge_2d_sptr& e1, vtol_edge_2d_sptr& /*e2*/)
+                                   vtol_edge_2d_sptr& /*e1*/, vtol_edge_2d_sptr& /*e2*/)
 {
   vcl_cout << "tol = " << btol_edge_algs::tol << vcl_endl
            << "btol_edge_algs::split_edge_2d - not implemented\n";

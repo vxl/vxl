@@ -42,7 +42,7 @@ bvgl_h_matrix_1d_compute::compute_array_dbl(const double p1[],
 bool
 bvgl_h_matrix_1d_compute::compute_cool_homg(const vcl_vector<vgl_homg_point_1d<double> > &,
                                             const vcl_vector<vgl_homg_point_1d<double> > &,
-                                            bvgl_h_matrix_1d<double>& H)
+                                            bvgl_h_matrix_1d<double>& )
 {
   vcl_cerr << "\nbvgl_h_matrix_1d_compute::compute_cool_homg() :\n"
            << "This is a virtual method which should have been\n"

@@ -56,7 +56,7 @@ class FMatrixPlanar : public FMatrix
   //: Returns the rank2 flag which is always true for FMatrixPlanar.
   inline bool get_rank2_flag (void) const { return true; }
   //: Null function since planar FMatrix has already rank 2.
-  inline void set_rank2_flag (bool rank2_flag) const {}
+  inline void set_rank2_flag (bool /*rank2_flag*/) const {}
 };
 
 #endif // FMatrixPlanar_h_

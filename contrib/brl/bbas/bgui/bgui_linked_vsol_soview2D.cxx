@@ -4,9 +4,6 @@
 #include <vcl_cassert.h>
 
 #include <vgui/vgui_gl.h>
-#include <vgui/vgui_style.h>
-#include <vgui/vgui_projection_inspector.h>
-#include <vgui/internals/vgui_draw_line.h>
 
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
@@ -82,7 +79,7 @@ void bgui_linked_vsol_soview2D_line_seg::translate(float tx, float ty)
 //--------------------------------------------------------------------------
 
 
-bgui_linked_vsol_soview2D_polyline::bgui_linked_vsol_soview2D_polyline(vsol_polyline_2d_sptr const& pline)
+bgui_linked_vsol_soview2D_polyline::bgui_linked_vsol_soview2D_polyline(vsol_polyline_2d_sptr const& /*pline*/)
 {
   assert(!"TODO");
 }

@@ -11,7 +11,7 @@
 #include <vxl_config.h> // for vxl_byte
 
 template <class D>
-vil_image_view_base_sptr vepl2_convert(vil_image_view_base const& image, D dummy)
+vil_image_view_base_sptr vepl2_convert(vil_image_view_base const& image, D /*dummy*/)
 {
   // byte greyscale
   if (image.pixel_format() == VIL_PIXEL_FORMAT_BYTE) {

@@ -81,8 +81,9 @@ static void user_write_data(png_structp png_ptr, png_bytep data, png_size_t leng
   f->write(data, length);
 }
 
-static void user_flush_data(png_structp png_ptr)
+static void user_flush_data(png_structp /*png_ptr*/)
 {
+  vcl_cerr << "vil1_png_generic_image::user_flush_data() NYI\n";
 #if 0 // NYI
   IOFile* f = (IOFile*)png_get_io_ptr(png_ptr);
   // urk.  how to flush?

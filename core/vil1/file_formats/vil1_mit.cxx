@@ -135,10 +135,11 @@ vil1_mit_generic_image::vil1_mit_generic_image(vil1_stream* is, int planes,
                                                int height,
                                                int components,
                                                int bits_per_component,
-                                               vil1_component_format format):
+                                               vil1_component_format ):
   is_(is)
 {
   is_->ref();
+  assert(planes==1);
   width_ = width;
   height_ = height;
   components_ = components;

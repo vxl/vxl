@@ -29,14 +29,13 @@ vil_image_resource_sptr vil_dicom_file_format::make_input_image(vil_stream* vs)
     return 0;
 }
 
-vil_image_resource_sptr vil_dicom_file_format::make_output_image(vil_stream* vs,
-                                                                 unsigned ni,
-                                                                 unsigned nj,
-                                                                 unsigned nplanes,
-                                                                 vil_pixel_format format)
+vil_image_resource_sptr vil_dicom_file_format::make_output_image(vil_stream* /*vs*/,
+                                                                 unsigned /*ni*/,
+                                                                 unsigned /*nj*/,
+                                                                 unsigned /*nplanes*/,
+                                                                 vil_pixel_format )
 {
-  vcl_cerr << "ERROR: vil_dicom_file::make_output_file\n"
-           << "       Doesn't support output yet\n";
+  vcl_cerr << "ERROR: vil_dicom_file doesn't support output yet\n";
   return 0;
 #if 0
 

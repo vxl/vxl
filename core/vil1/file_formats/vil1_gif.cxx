@@ -327,7 +327,7 @@ bool vil1_gif_loader_saver::put_section(void const *buf, int x0, int y0, int w, 
     return false;
 }
 
-bool vil1_gif_loader_saver::get_section(int image, void* buf, int x0, int y0, int w, int h) const
+bool vil1_gif_loader_saver::get_section(int /*image*/, void* /*buf*/, int /*x0*/, int /*y0*/, int /*w*/, int /*h*/) const
 {
 #if 1
   // Damn! Have to implement LZW decompression here. Maybe some other day.

@@ -12,6 +12,11 @@
 //
 // \author Paul P. Smyth, Vicon Motion Systems Ltd.
 // \date 02 May 2001
+//
+// \verbatim
+//  Modifications
+//   4-Jul-2003 Paul Smyth - general cleanup and rewrite; interface now as vnl_vector_fixed
+// \endverbatim
 
 #include <vcl_cassert.h>
 #include <vnl/vnl_vector_fixed.h>
@@ -269,14 +274,14 @@ class vnl_vector_fixed_ref_const
 
  private:
   //: See assert_finite().
-  const vnl_vector_fixed_ref_const<T,n> & operator=(const vnl_vector_fixed<T,n> & i_Input) const
+  const vnl_vector_fixed_ref_const<T,n> & operator=(const vnl_vector_fixed<T,n> & ) const
   {
-    assert(!"This is illegal for a fixed_ref_const");
+    assert(!"Assignment is illegal for a vnl_vector_fixed_ref_const");
     return *this;
   }
-  const vnl_vector_fixed_ref_const<T,n> & operator=(const vnl_vector_fixed_ref_const<T,n> & i_Input) const
+  const vnl_vector_fixed_ref_const<T,n> & operator=(const vnl_vector_fixed_ref_const<T,n> & ) const
   {
-    assert(!"This is illegal for a fixed_ref_const");
+    assert(!"Assignment is illegal for a vnl_vector_fixed_ref_const");
     return *this;
   }
   void assert_finite_internal() const;

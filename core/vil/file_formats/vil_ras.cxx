@@ -139,7 +139,7 @@ vil_ras_image( vil_stream* vs ):
 
 bool
 vil_ras_image::
-get_property( char const *tag, void *prop ) const
+get_property( char const* /*tag*/, void* /*prop*/ ) const
 {
   // This is not an in-memory image type, nor is it read-only:
   return false;
@@ -161,7 +161,7 @@ vil_ras_image(vil_stream* vs,
               unsigned nplanes,
               vil_pixel_format format )
 {
-  vs_->ref();
+  vs_ = vs; vs_->ref();
   width_ = ni;
   height_ = nj;
 

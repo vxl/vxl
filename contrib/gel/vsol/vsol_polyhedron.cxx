@@ -116,7 +116,7 @@ bool vsol_polyhedron::is_convex(void) const
 //---------------------------------------------------------------------------
 //: Is `p' in `this' ?
 //---------------------------------------------------------------------------
-bool vsol_polyhedron::in(vsol_point_3d const& p) const
+bool vsol_polyhedron::in(vsol_point_3d const& ) const
 {
   // TODO
   vcl_cerr << "Warning: vsol_polyhedron::in() has not been implemented yet\n";

@@ -92,7 +92,7 @@ vil1_pnm_generic_image::vil1_pnm_generic_image(vil1_stream* vs, int planes,
                                                int height,
                                                int components,
                                                int bits_per_component,
-                                               vil1_component_format format):
+                                               vil1_component_format ):
   vs_(vs)
 {
   vs_->ref();

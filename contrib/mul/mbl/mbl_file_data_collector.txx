@@ -97,9 +97,9 @@ void mbl_file_data_collector<T>::clear()
 
 //: Hint about how many examples to expect
 template<class T>
-void mbl_file_data_collector<T>::set_n_samples(int n)
+void mbl_file_data_collector<T>::set_n_samples(int /*n*/)
 {
-  // not useful
+  vcl_cerr << "mbl_file_data_collector::set_n_samples() is not useful\n";
 }
 
 //: Record given object

@@ -122,9 +122,9 @@ double vsol_triangle_3d::area(void) const
   double dx12=(*storage_)[1]->x()-(*storage_)[2]->x();
   double dy12=(*storage_)[1]->y()-(*storage_)[2]->y();
   double dz12=(*storage_)[1]->z()-(*storage_)[2]->z();
-  return vcl_sqrt(vnl_math_sqr(dy02*dz12-dy12*dz02)
-                 +vnl_math_sqr(dz02*dx12-dz12*dx02)
-                 +vnl_math_sqr(dx02*dy12-dx12*dy02))/2;
+  return vcl_sqrt( vnl_math_sqr(dy02*dz12-dy12*dz02)
+                  +vnl_math_sqr(dz02*dx12-dz12*dx02)
+                  +vnl_math_sqr(dx02*dy12-dx12*dy02))/2;
 }
 //***************************************************************************
 // Element change
@@ -161,7 +161,7 @@ void vsol_triangle_3d::set_p2(const vsol_point_3d_sptr &new_p2)
 //---------------------------------------------------------------------------
 //: Is `p' in `this' ?
 //---------------------------------------------------------------------------
-bool vsol_triangle_3d::in(const vsol_point_3d_sptr &p) const
+bool vsol_triangle_3d::in(const vsol_point_3d_sptr& ) const
 {
   // TODO
   vcl_cerr << "Warning: vsol_triangle_3d::in() has not been implemented yet\n";

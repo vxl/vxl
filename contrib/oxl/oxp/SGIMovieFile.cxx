@@ -306,10 +306,11 @@ bool SGIMovieFile::GetFrame(int frame_index, void* buffer)
   return true;
 }
 
-bool SGIMovieFile::GetField(int field_index, void* buffer)
+bool SGIMovieFile::GetField(int /*field_index*/, void* /*buffer*/)
 {
-  return false; // NYI
-#if 0
+  vcl_cerr << "SGIMovieFile::GetField() not yet implemented\n";
+  return false;
+#if 0 // TODO
   if (!p->interlaced)
     return GetFrame(field_index, buffer);
 

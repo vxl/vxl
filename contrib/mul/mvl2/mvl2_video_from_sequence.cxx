@@ -43,7 +43,7 @@ bool mvl2_video_from_sequence::initialize( int width, int height,
   if (!format.find(vcl_string("Grey"))) use_colour_=false;
   if (!vul_file::exists(file_name) || vul_file::is_directory(file_name))
   {
-    vcl_cerr<<"File "<<file_name<<" does not exist"<<vcl_endl;
+    vcl_cerr<<"File "<<file_name<<" does not exist\n";
     is_initialized_=false;
     return false;
   }
@@ -155,8 +155,9 @@ void mvl2_video_from_sequence::reset_frame()
   current_frame_=0;
 }
 
-void mvl2_video_from_sequence::set_frame_rate(double frame_rate)
+void mvl2_video_from_sequence::set_frame_rate(double /*frame_rate*/)
 {
+  vcl_cerr << "mvl2_video_from_sequence::set_frame_rate() NYI\n";
 }
 
 double mvl2_video_from_sequence::get_frame_rate()

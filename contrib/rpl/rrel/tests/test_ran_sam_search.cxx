@@ -32,8 +32,8 @@ struct null_problem : public rrel_estimation_problem
   null_problem( unsigned int num_samples, unsigned int dof, unsigned int min_samples )
     : rrel_estimation_problem( dof, min_samples ), ns(num_samples) { }
   unsigned int num_samples() const { return ns; }
-  void compute_residuals( const vnl_vector<double>& params,
-                          vcl_vector<double>& residuals ) const { }
+  void compute_residuals( const vnl_vector<double>& /*params*/,
+                          vcl_vector<double>& /*residuals*/ ) const { }
   unsigned int ns;
 };
 

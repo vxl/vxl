@@ -139,12 +139,10 @@
 // \date   04 Aug 96
 //
 // \verbatim
-// Modifications:
-//  Peter Vanroose, 27 nov 1996:  added default constructor, which does
-//            itself allocate the matrix storage.  Necessary because otherwise
-//            the compiler will itself generate a default constructor.
-//  4/4/01 LSB (Manchester) Tidied documentation
-//   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
+//  Modifications:
+//   27-Nov-1996 Peter Vanroose - added default constructor which allocates matrix storage
+//    4-Jul-2003 Paul Smyth - general cleanup and rewrite; interface now as vnl_matrix_fixed
+//   15-Aug-2003 Peter Vanroose - removed "duplicate" operator=(vnl_matrix_fixed<T,n> const&)
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -377,15 +375,9 @@ class vnl_matrix_fixed_ref_const
   static bool equal( const T* a, const T* b ) { return vnl_matrix_fixed<T,num_rows,num_cols>::equal(a,b); }
 
  private:
-  const vnl_matrix_fixed_ref_const<T,num_rows,num_cols> & operator=(const vnl_matrix_fixed<T,num_rows,num_cols>& i_Input) const
-  {
-    assert(!"This is illegal for a fixed_ref_const");
-    return *this;
-  }
-
   const vnl_matrix_fixed_ref_const<T,num_rows,num_cols> & operator=(const vnl_matrix_fixed_ref_const<T,num_rows,num_cols>& ) const
   {
-    assert(!"This is illegal for a fixed_ref_const");
+    assert(!"Assignment is illegal for a vnl_matrix_fixed_ref_const");
     return *this;
   }
 

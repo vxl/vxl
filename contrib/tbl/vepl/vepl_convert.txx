@@ -9,7 +9,7 @@
 #include <vil1/vil1_rgb.h>
 
 template <class D>
-vil1_image vepl_convert(vil1_image const& image, D dummy)
+vil1_image vepl_convert(vil1_image const& image, D /*dummy*/)
 {
   // byte greyscale
   if (vil1_pixel_format(image) == VIL1_BYTE) {

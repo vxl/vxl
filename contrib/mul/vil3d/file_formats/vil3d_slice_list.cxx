@@ -48,7 +48,6 @@ void parse_globbed_filenames(const vcl_string & input,
     filename.replace(j,1,"[0123456789]");
 
 
-
   // Search for the files
   for (vul_file_iterator fit(filename); fit; ++fit)
     filenames.push_back(fit());
@@ -167,9 +166,9 @@ vil3d_slice_list_to_volume(const vcl_vector<vil_image_resource_sptr> & images)
 // The width/height etc are explicitly specified, so that file_format implementors
 // know what they need to do...
 vil3d_image_resource_sptr
-vil3d_slice_list_format::make_output_image(const char* filename,
-                                           unsigned ni, unsigned nj,
-                                           unsigned nk, unsigned nplanes,
+vil3d_slice_list_format::make_output_image(const char* /*filename*/,
+                                           unsigned /*ni*/, unsigned /*nj*/,
+                                           unsigned /*nk*/, unsigned /*nplanes*/,
                                            enum vil_pixel_format) const
 {
   // This should follow the pattern of make_input_image.
@@ -277,8 +276,8 @@ vil3d_slice_list_image::get_copy_view(unsigned i0, unsigned ni,
 }
 
 //: Set the contents of the volume.
-bool vil3d_slice_list_image::put_view(const vil3d_image_view_base& vv,
-                                      unsigned i0, unsigned j0, unsigned k0)
+bool vil3d_slice_list_image::put_view(const vil3d_image_view_base& /*vv*/,
+                                      unsigned /*i0*/, unsigned /*j0*/, unsigned /*k0*/)
 {
   vcl_cerr << "ERROR: vil3d_slice_list_image::put_view NYI\n\n";
   return false;

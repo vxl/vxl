@@ -103,7 +103,7 @@ rrel_orthogonal_regression::compute_residuals( const vnl_vector<double>& params,
 // The cofact matrix is not used or set.
 bool
 rrel_orthogonal_regression::weighted_least_squares_fit( vnl_vector<double>& params,
-                                                        vnl_matrix<double>& cofact,
+                                                        vnl_matrix<double>& /*cofact*/,
                                                         const vcl_vector<double> *weights ) const
 {
   // If params and cofact are NULL pointers and the fit is successful,

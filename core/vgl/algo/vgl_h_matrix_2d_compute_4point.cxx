@@ -61,11 +61,11 @@ bool vgl_h_matrix_2d_compute_4point::compute_l(vcl_vector<vgl_homg_line_2d<doubl
   return true;
 }
 
-bool vgl_h_matrix_2d_compute_4point::compute_pl(vcl_vector<vgl_homg_point_2d<double> > const& points1,
-                                                vcl_vector<vgl_homg_point_2d<double> > const& points2,
-                                                vcl_vector<vgl_homg_line_2d<double> > const& lines1,
-                                                vcl_vector<vgl_homg_line_2d<double> > const& lines2,
-                                                vgl_h_matrix_2d<double>& H)
+bool vgl_h_matrix_2d_compute_4point::compute_pl(vcl_vector<vgl_homg_point_2d<double> > const& /*points1*/,
+                                                vcl_vector<vgl_homg_point_2d<double> > const& /*points2*/,
+                                                vcl_vector<vgl_homg_line_2d<double> > const& /*lines1*/,
+                                                vcl_vector<vgl_homg_line_2d<double> > const& /*lines2*/,
+                                                vgl_h_matrix_2d<double>& )
 {
   assert(!"vgl_h_matrix_2d_compute_4point::compute_pl() NYI");
   return false;

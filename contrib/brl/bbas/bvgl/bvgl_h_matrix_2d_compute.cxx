@@ -23,11 +23,11 @@ compute_l(vcl_vector<vgl_homg_line_2d<double> > const&l1,
 }
 
 bool bvgl_h_matrix_2d_compute::
-compute_pl(vcl_vector<vgl_homg_point_2d<double> > const& points1,
-           vcl_vector<vgl_homg_point_2d<double> > const& points2, 
-           vcl_vector<vgl_homg_line_2d<double> > const& lines1,
-           vcl_vector<vgl_homg_line_2d<double> > const& lines2,
-           bvgl_h_matrix_2d<double>& H)
+compute_pl(vcl_vector<vgl_homg_point_2d<double> > const& /*points1*/,
+           vcl_vector<vgl_homg_point_2d<double> > const& /*points2*/, 
+           vcl_vector<vgl_homg_line_2d<double> > const& /*lines1*/,
+           vcl_vector<vgl_homg_line_2d<double> > const& /*lines2*/,
+           bvgl_h_matrix_2d<double>& /*H*/)
 {
   vcl_cerr << "\nbvgl_h_matrix_2d_compute::compute_pl() :\n"
            << "This is a virtual method which should have been\n"
