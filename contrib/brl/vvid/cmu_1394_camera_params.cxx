@@ -5,38 +5,83 @@ cmu_1394_camera_params::~cmu_1394_camera_params()
 {
 }
 
-cmu_1394_camera_params::cmu_1394_camera_params(int video_format,int video_mode,
-                                               int frame_rate, int shutter,
-                                               int brightness, int sharpness,
-                                               int exposure, int gain,
-                                               bool capture, bool rgb)
+cmu_1394_camera_params::cmu_1394_camera_params(int video_format,
+                                               int video_mode,
+                                               int frame_rate, 
+                                               bool auto_exposure,
+                                               bool auto_gain,
+                                               bool manual_shutter_control,
+                                               bool auto_exposure_control,
+                                               int shutter,
+                                               int min_shutter,
+                                               int max_shutter,
+                                               int gain, 
+                                               int min_gain,
+                                               int max_gain,
+                                               int brightness,
+                                               int min_brightness,
+                                               int max_brightness,
+                                               int sharpness,
+                                               int min_sharpness,
+                                               int max_sharpness,
+                                               int exposure,
+                                               int min_exposure,
+                                               int max_exposure,
+                                               bool capture,
+                                               bool rgb)
 {
-  video_format_=video_format;
-  video_mode_=video_mode;
-  frame_rate_=frame_rate;
-  shutter_ = shutter;
-  brightness_=brightness;
-  sharpness_=sharpness;
-  exposure_=exposure;
-  gain_ = gain;
-  capture_=capture;
-  rgb_=rgb;
-  this->constrain();
-}
+ video_format_ = video_format;
+ video_mode_ = video_mode;
+ frame_rate_ = frame_rate; 
+ auto_exposure_ = auto_exposure;
+ auto_gain_ = auto_gain;
 
+ manual_shutter_control_ = manual_shutter_control;
+ shutter_ = shutter;
+ min_shutter_ = min_shutter;
+ max_shutter_ = max_shutter;
+ gain_ = gain; 
+ min_gain_ = min_gain;
+ max_gain_ = max_gain;
+ brightness_ = brightness;
+ min_brightness_ = min_brightness;
+ max_brightness_ = max_brightness;
+ sharpness_ = sharpness;
+ min_sharpness_ = min_sharpness;
+ max_sharpness_ = max_sharpness;
+ auto_exposure_control_ = auto_exposure_control;
+ exposure_ = exposure;
+ min_exposure_ = min_exposure;
+ max_exposure_ = max_exposure;
+ capture_ = capture;
+ rgb_ = rgb;
+}
 void cmu_1394_camera_params::set_params(const cmu_1394_camera_params& cp)
 {
-  video_format_=cp.video_format_;
-  video_mode_=cp.video_mode_;
-  frame_rate_=cp.frame_rate_;
-  shutter_=cp.shutter_;
-  brightness_=cp.brightness_;
-  sharpness_=cp.sharpness_;
-  exposure_=cp.exposure_;
-  gain_ = cp.gain_;
-  capture_=cp.capture_;
-  rgb_=cp.rgb_;
-  this->constrain();
+ video_format_ = cp.video_format_;
+ video_mode_ = cp.video_mode_;
+ frame_rate_ = cp.frame_rate_; 
+ auto_exposure_ = cp.auto_exposure_;
+ auto_gain_ = cp.auto_gain_;
+ manual_shutter_control_ =  cp.manual_shutter_control_;
+ shutter_ = cp.shutter_;
+ min_shutter_ = cp.min_shutter_;
+ max_shutter_ = cp.max_shutter_;
+ gain_ = cp.gain_; 
+ min_gain_ = cp.min_gain_;
+ max_gain_ = cp.max_gain_;
+ brightness_ = cp.brightness_;
+ min_brightness_ = cp.min_brightness_;
+ max_brightness_ = cp.max_brightness_;
+ sharpness_ = cp.sharpness_;
+ min_sharpness_ = cp.min_sharpness_;
+ max_sharpness_ = cp.max_sharpness_;
+ auto_exposure_control_ = cp.auto_exposure_control_;
+ exposure_ = cp.exposure_;
+ min_exposure_ = cp.min_exposure_;
+ max_exposure_ = cp.max_exposure_;
+ capture_ = cp.capture_;
+ rgb_ = cp.rgb_;
 }
 
 cmu_1394_camera_params::cmu_1394_camera_params(const cmu_1394_camera_params& cp)
@@ -44,15 +89,37 @@ cmu_1394_camera_params::cmu_1394_camera_params(const cmu_1394_camera_params& cp)
   this->set_params(cp);
 }
 
-//ensure that the parameters are consistent
+//ensure that the parameters are consistent with the bounds
 void cmu_1394_camera_params::constrain()
 {
-  return; //JLM
-  //rgb vs monochrome - the boolean flag is considered dominant
-  if (rgb_)
-    video_mode_ = 4;
-  else
-    video_mode_ = 5;
+  if(!manual_shutter_control_&&auto_exposure_control_)
+    auto_exposure_ = true;
+
+  //shutter
+  if(shutter_<min_shutter_)
+    shutter_ = min_shutter_;
+  if(shutter_>max_shutter_)
+    shutter_ = max_shutter_;
+  //gain
+  if(gain_<min_gain_)
+    gain_ = min_gain_;
+  if(gain_>max_gain_)
+    gain_ = max_gain_;
+  //brightness
+  if(brightness_<min_brightness_)
+    brightness_ = min_brightness_;
+  if(brightness_>max_brightness_)
+    brightness_ = max_brightness_;
+  //sharpness
+  if(sharpness_<min_sharpness_)
+    sharpness_ = min_sharpness_;
+  if(sharpness_>max_sharpness_)
+    sharpness_ = max_sharpness_;
+  //exposure
+  if(exposure_<min_exposure_)
+    exposure_ = min_exposure_;
+  if(exposure_>max_exposure_)
+    exposure_ = max_exposure_;
 }
 vcl_string cmu_1394_camera_params::
 video_configuration(const int video_format, const int video_mode) const
@@ -141,12 +208,38 @@ vcl_ostream& operator << (vcl_ostream& os, const cmu_1394_camera_params& cp)
   os << "video_format: " << cp.video_format_ << vcl_endl;
   os << "video_mode: " << cp.video_mode_ << vcl_endl;
   os << "frame_rate: " << cp.frame_rate_ << vcl_endl;
-  os << "shutter: " << cp.shutter_ << vcl_endl;
-  os << "brightness: " << cp.brightness_ << vcl_endl;
-  os << "sharpness: " << cp.sharpness_ << vcl_endl;
-  os << "exposure: " << cp.exposure_ << vcl_endl;
+
+  if(cp.manual_shutter_control_)
+    os << "manual shutter control: YES |";
+  else
+    os << "manual shutter control: NO |";
+
+  if(cp.auto_exposure_control_)
+    os << " auto exposure control: YES \n";
+  else
+    os << " auto exposure control: NO \n";
+
+  if(cp.auto_exposure_)
+    os << "auto_exposure: ON |";
+  else
+    os << "auto_exposure: OFF |";
+
+  if(cp.auto_gain_)
+    os << " auto_gain: ON \n";
+  else
+    os << " auto_gain: OFF \n";
+  
+  os << "shutter: " << cp.min_shutter_ << " < " 
+     << cp.shutter_ << " < " << cp.max_shutter_ << vcl_endl;
+  os << "gain: " << cp.min_gain_ << " < " 
+     << cp.gain_ << " < " << cp.max_gain_ << vcl_endl;
+  os << "brightness: " << cp.min_brightness_ << " < " 
+     << cp.brightness_ << " < " << cp.max_brightness_ << vcl_endl;
+  os << "sharpness: " << cp.min_sharpness_ << " < " 
+     << cp.sharpness_ << " < " << cp.max_sharpness_ << vcl_endl;
+  os << "exposure: " << cp.min_exposure_ << " < " 
+     << cp.exposure_ << " < " << cp.max_exposure_ << vcl_endl;
   os << "capture: " << cp.capture_ << vcl_endl;
-  os << "gain: " << cp.gain_ << vcl_endl;
   os << "rgb: " << cp.rgb_ << vcl_endl;
   return os;
 }

@@ -56,12 +56,15 @@ class vvid_live_video_manager : public vgui_wrapper_tableau
   void start_live_video();
   void stop_live_video();
 
-  //: capture and save a video sequence
+  //: capture and save a video sequence (old approach)
   void capture_sequence();
 
   //: new capture approach
   void init_capture();
   void stop_capture();
+
+  //: reset the camera hardwareinterface
+  void reset_camera_link();
 
   //: quit the application
   void quit();

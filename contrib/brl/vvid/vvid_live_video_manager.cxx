@@ -79,6 +79,7 @@ void vvid_live_video_manager::init()
                << " initialization\n";
       return;
     }
+  cp_ = vtab_->get_camera_params();
   vt2D_ =  bgui_vtol2D_tableau_new(vtab_);
   vt2D_->disable_highlight();
   vgui_viewer2D_tableau_sptr v2d = vgui_viewer2D_tableau_new(vt2D_);
@@ -95,6 +96,14 @@ bool vvid_live_video_manager::handle(const vgui_event &e)
   //just pass the event back to the base class
   return vgui_wrapper_tableau::handle(e);
 }
+//---------------------------------------------------------
+//: Cameras have different possible resolutions, frame rates and color 
+//  sampling choices. This method sets up a vgui choice menu item
+//  based on the valid video configurations supported by the camera.
+//  (currently the rgb_ flag doesn't do anything but ultimately will
+//   control color/vs/mono acquisition if the camera supports it.)
+//  The pix_sample_interval determines the resolution of the display
+//
 void vvid_live_video_manager::set_camera_params()
 {
   if (!vtab_)
@@ -103,41 +112,23 @@ void vvid_live_video_manager::set_camera_params()
                << " video tableau \n";
       return;
     }
+  cp_ = vtab_->get_camera_params();
   static int pix_sample_interval = 1;
-  vcl_vector<int> format, mode, rate;
   vcl_vector<vcl_string> choices;
   vcl_string no_choice="CurrentConfiguration";
   choices.push_back(no_choice);
-  static int old_choice=0, choice = 0;
-  format.push_back(cp_.video_format_);
-  mode.push_back(cp_.video_mode_);
-  rate.push_back(cp_.frame_rate_);
-  static vcl_string current_config=" ";
-  for(int i = 0; i<3; i++)
-    for(int j = 0; j<6; j++)
-      for(int k = 0; k<6; k++)
-        if(vtab_->video_capabilities(i,j,k))
-          {
-            vcl_string temp = cp_.video_configuration(i,j);
-            temp += " Fr/Sec(";
-            temp += cp_.frame_rate(k);
-            temp += ")";
-            choices.push_back(temp);
-            format.push_back(i);
-            mode.push_back(j);
-            rate.push_back(k);
-            if(i==cp_.video_format_&&j==cp_.video_mode_&&k==cp_.frame_rate_)
-              current_config = temp;
-            else
-              current_config = " ";
-          }
-
+  vcl_vector<vcl_string> valid_descrs = 
+    vtab_->get_capability_descriptions();
+  for(vcl_vector<vcl_string>::iterator cit = valid_descrs.begin();
+      cit != valid_descrs.end(); cit++)
+      choices.push_back(*cit);
+  static int choice=0;
   //Set up the dialog.
-  vcl_string current = "Video Configuration ";
-  current += current_config;
   vgui_dialog cam_dlg("Camera Parameters");
-  cam_dlg.message(current.c_str());
+  cam_dlg.message(vtab_->current_capability_desc().c_str());
   cam_dlg.choice("Choose Configuration", choices, choice); 
+  cam_dlg.checkbox("Auto Exposure ", cp_.auto_exposure_);
+  cam_dlg.checkbox("Auto Gain ", cp_.auto_gain_);
   cam_dlg.field("Shutter Speed", cp_.shutter_);
   cam_dlg.field("brightness",cp_.brightness_);
   cam_dlg.field("sharpness",cp_.sharpness_);
@@ -149,16 +140,12 @@ void vvid_live_video_manager::set_camera_params()
   if (!cam_dlg.ask())
     return;
   if(choice)
-    old_choice = choice;
-  cp_.video_format_ = format[old_choice];
-  cp_.video_mode_ = mode[old_choice];
-  cp_.frame_rate_ = rate[old_choice];
-  current_config = choices[old_choice];
-  cp_.constrain();//constrain the parameters to be consistent
+    vtab_->set_current(choice-1);
   vtab_->set_pixel_sample_interval(pix_sample_interval);
   vtab_->set_camera_params(cp_);
   vcl_cout << "Current Camera Parameters \n" << cp_ << "\n";
 }
+
 void vvid_live_video_manager::set_detection_params()
 {
   if (!vtab_)
@@ -232,6 +219,21 @@ void vvid_live_video_manager::stop_capture()
 {
   this->stop_live_video();
   vtab_->stop_capture();
+}
+
+void vvid_live_video_manager::reset_camera_link()
+{
+  this->stop_live_video();
+  if(vtab_)
+    vtab_->reset_camera_link();
+  if(!vtab_->attach_live_video())
+    {
+      vcl_cout <<"In vvid_live_video_manager::reset_camera_link()"
+               <<" - reset failed\n";
+      init_successful_ = false;
+      return;
+    }
+  init_successful_ = true;
 }
 
 void vvid_live_video_manager::display_topology()

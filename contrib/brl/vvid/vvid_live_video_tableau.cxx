@@ -70,6 +70,7 @@ bool vvid_live_video_tableau::attach_live_video()
                << "no camera present\n";
       return false;
     }
+  cam_.m_cameraInitialized = false;
   cam_.init(node_);
   vcl_cout << "The Camera Attributes: \n" << cam_ << " \n";
   return true;
@@ -132,6 +133,12 @@ void vvid_live_video_tableau::stop_live_video()
     }
   cam_.stop();
   live_=false;
+}
+
+void vvid_live_video_tableau::reset_camera_link()
+{
+  cam_.ResetLink(true);
+  cam_.m_cameraInitialized = false;
 }
 
 void vvid_live_video_tableau::

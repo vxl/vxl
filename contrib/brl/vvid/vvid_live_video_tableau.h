@@ -29,15 +29,24 @@ class vvid_live_video_tableau : public vgui_image_tableau
                           const cmu_1394_camera_params& cp);
   ~vvid_live_video_tableau();
   vcl_string type_name() const;
-  //camera manipulation
-  void set_camera_params(const cmu_1394_camera_params& cp);
-  cmu_1394_camera_params get_camera_params() { return (cmu_1394_camera_params)cam_; }
-  bool video_capabilities(int format, int mode, int frame_rate) { return cam_.m_videoFlags[format][mode][frame_rate]; }
 
+  //:video camera properties
+  void set_camera_params(const cmu_1394_camera_params& cp);
+  cmu_1394_camera_params get_camera_params(){return (cmu_1394_camera_params)cam_;}
+  bool video_capabilities(const int format, const int mode, const int frame_rate){return cam_.m_videoFlags[format][mode][frame_rate];}
+  
+  int get_current(){return cam_.get_current();}
+  void set_current(int current){cam_.set_current(current);}
+  vcl_string current_capability_desc(){return cam_.current_capability_desc();}
+  vcl_vector<vcl_string> get_capability_descriptions()
+    {return cam_.get_capability_descriptions();}
+
+  //:live video processing
   bool attach_live_video();
   bool start_live_video();
   void update_frame();
   void stop_live_video();
+  void reset_camera_link();
 
   //:live capture methods
   void start_capture(vcl_string const & video_file_name)
