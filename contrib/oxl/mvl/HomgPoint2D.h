@@ -48,11 +48,7 @@ class HomgPoint2D : public Homg2D
     return mvl_abs(w()) <= tol*mvl_abs(x()) && mvl_abs(w()) <= tol*mvl_abs(y());
 #undef mvl_abs
   }
- private:
-  // Deprecated form of ideal()
-  bool check_infinity() const { return ideal(0.0); }
-  bool check_infinity(double tol) const { return ideal(tol); }
- public:
+
   bool get_nonhomogeneous(double& px, double& py) const;
   vnl_double_2 get_double2() const;
   inline vnl_double_2 get_nonhomogeneous() const { return get_double2(); }

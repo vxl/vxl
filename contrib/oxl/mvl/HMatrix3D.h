@@ -23,6 +23,7 @@
 #include <mvl/HomgPoint3D.h>
 #include <mvl/HomgLine3D.h>
 #include <mvl/HomgLineSeg3D.h>
+#include <vcl_iosfwd.h>
 
 class PMatrix;
 
@@ -54,19 +55,12 @@ class HMatrix3D : public vnl_double_4x4
   void get (vnl_matrix<double>* t_matrix) const;
 
   HMatrix3D get_inverse() const;
-
- private:
-  // @deprecated
-  vnl_double_4x4& asMatrix () { return *this; }
-
-  // @deprecated
-  const vnl_double_4x4& get_matrix() const { return *this; }
 };
 
 PMatrix operator* (const PMatrix&, const HMatrix3D& H);
 
 // stream I/O
-vcl_ostream &operator<<(vcl_ostream &,HMatrix3D const &);
+vcl_ostream& operator<<(vcl_ostream &,HMatrix3D const &);
 vcl_istream& operator>>(vcl_istream &,HMatrix3D       &);
 
 #endif // HMatrix3D_h_

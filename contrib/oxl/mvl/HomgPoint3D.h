@@ -43,10 +43,7 @@ class HomgPoint3D : public Homg3D
     return mvl_abs(w()) <= tol*mvl_abs(x()) && mvl_abs(w()) <= tol*mvl_abs(y()) && mvl_abs(w()) <= tol*mvl_abs(z());
 #undef mvl_abs
   }
- private:
-  // Deprecated form of ideal()
-  bool check_infinity(double tol = 1e-12) const { return ideal(tol); }
- public:
+
   bool get_nonhomogeneous(double& x, double& y, double& z) const;
   vnl_double_3 get_double3() const;
   double radius() const { return get_double3().magnitude(); }

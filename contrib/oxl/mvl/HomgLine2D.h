@@ -48,11 +48,7 @@ class HomgLine2D : public Homg2D
     return mvl_abs(x()) <= tol*mvl_abs(w()) && mvl_abs(y()) <= tol*mvl_abs(w());
 #undef mvl_abs
   }
- private:
-  // Deprecated form of ideal()
-  bool check_infinity() const { return ideal(0.0); }
-  bool check_infinity(double tol) const { return ideal(tol); }
- public:
+
   // Clip the infinite line to the given bounding box and return
   HomgLineSeg2D clip(int x0, int y0, int x1, int y1) const;
 
