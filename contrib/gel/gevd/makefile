@@ -20,7 +20,7 @@ TRY_PNG  := 1
 SOURCES += gevd_param_mixin.cxx
 SOURCES += gevd_detector_params.cxx
 SOURCES += gevd_detector.cxx
-SOURCES += gevd_contour.cxx
+#SOURCES += gevd_contour.cxx
 SOURCES += gevd_status_mixin.cxx
 SOURCES += gevd_memory_mixin.cxx
 SOURCES += gevd_bufferxy.cxx
@@ -30,10 +30,10 @@ SOURCES += gevd_step.cxx
 
 
 ########################
-USES += v3p
-LDLIBS += -lvnl -lvil -lvcl -lvbl
-PROGRAM := gevd
-SOURCES += main.cc
+#USES += v3p
+#LDLIBS += -lvnl -lvil -lvcl -lvbl
+#PROGRAM := gevd
+#SOURCES += main.cc
 ######################## 
 
 INCDIRS = ..
