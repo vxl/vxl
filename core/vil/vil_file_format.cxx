@@ -19,7 +19,7 @@ vil2_file_format::~vil2_file_format()
 // #define HAS_JPEG
 // #define HAS_PNG
 // #define HAS_TIFF
-#define HAS_RAS  0
+#define HAS_RAS  1
 #define HAS_GEN  0
 
 #if HAS_PNM

@@ -283,10 +283,8 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_begin( "  8-bit RGB packbits" );
   testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_packbits.tif" ) ) );
 
-#if 0
   testlib_test_begin( "  8-bit indexed RGB" );
   testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_indexed.ras" ) ) );
-
 
   vcl_cout << "Sun raster [ras]\n";
   testlib_test_begin( "  8-bit grey, no colourmap" );
@@ -296,6 +294,7 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_begin( "  8-bit indexed RGB" );
   testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_indexed.ras" ) ) );
 
+#if 0
    vcl_cout << "SGI IRIS [iris]\n";
    testlib_test_begin( "  8-bit RGB rle" );
    testlib_test_perform( test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_byte>( "ff_rgb8bit.iris" ) ) );
