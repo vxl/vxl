@@ -157,7 +157,7 @@ segv_segmentation_manager::draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges,
 //: Draw line segments on the tableau
 //-----------------------------------------------------------------------------
 void segv_segmentation_manager::
-draw_line_segments(vcl_vector<vgl_line_segment_2d<double> > const& segs)
+draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines)
 {
   if (!t2D_)
     return;
@@ -168,9 +168,9 @@ draw_line_segments(vcl_vector<vgl_line_segment_2d<double> > const& segs)
       vcl_cout << "In segv_segmentation_manager::draw_edges - null image tab\n";
       return;
     }
-  for (vcl_vector<vgl_line_segment_2d<double> >::const_iterator sit = segs.begin();
-       sit != segs.end(); sit++)
-      t2D_->add_line_segment(*sit);
+  for (vcl_vector<vsol_line_2d_sptr>::const_iterator lit = lines.begin();
+       lit != lines.end(); lit++)
+      t2D_->add_vsol_line_2d(*lit);
 
   t2D_->post_redraw();
 }
@@ -455,7 +455,7 @@ void segv_segmentation_manager::fit_lines()
   sdet_fit_lines fl(flp);
   fl.set_edges(*edges);
   fl.fit_lines();
-  this->draw_line_segments(fl.get_line_segs());
+  this->draw_lines(fl.get_line_segs());
 }
 
 

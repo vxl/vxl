@@ -15,7 +15,7 @@
 //---------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vil/vil_image.h>
-#include <vgl/vgl_line_segment_2d.h>
+#include <vsol/vsol_line_2d_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vdgl/vdgl_intensity_face_sptr.h>
 #include <vgui/vgui_wrapper_tableau.h>
@@ -54,7 +54,7 @@ class segv_segmentation_manager : public vgui_wrapper_tableau
 
  protected:
   void draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges, bool verts=false);
-  void draw_line_segments(vcl_vector<vgl_line_segment_2d<double> > const & line_segs);
+  void draw_lines(vcl_vector<vsol_line_2d_sptr> const & line_segs);
   void draw_regions(vcl_vector<vdgl_intensity_face_sptr>& regions,
                     bool verts=false);
  private:
