@@ -4,8 +4,8 @@
 
 #include "QvVisitor.h"
 
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_string.h>
+#include <vcl_iostream.h>
+#include <vcl_string.h>
 
 #include "QvString.h"
 #include "QvInput.h"
@@ -71,7 +71,7 @@ struct QvVisitorIndenter {
   }
 };
 
-ostream& operator<<(ostream& s, const QvName& name)
+vcl_ostream& operator<<(vcl_ostream& s, const QvName& name)
 {
   if (name.getLength())
     s << "[name `" << name.getString() << "']";
@@ -96,12 +96,12 @@ bool QvVisitor::Visit(QvNode* node)
   int type = node->nodeType ();
   
   if (verbose) {
-    cerr << is << "Node type " << typenames[type] << endl;
+    vcl_cerr << is << "Node type " << typenames[type] << vcl_endl;
     // Print fields
     QvFieldData * fields = node->getFieldData();
     int nfields = fields->getNumFields();
     for(int f = 0; f < nfields; ++f)
-      cerr << is << "Field " << fields->getFieldName(f).getString() << endl;
+      vcl_cerr << is << "Field " << fields->getFieldName(f).getString() << vcl_endl;
   }
   
   QvVisitorIndenter incdecindent(&indent);
@@ -149,7 +149,7 @@ bool QvVisitor::Visit(QvNode* node)
       DO_VISIT(QvLightModel)
 #undef DO_VISIT
     default: {
-      cerr << "Unknown node, type " << typenames[type] << " " <<  node->getName() << endl;
+      vcl_cerr << "Unknown node, type " << typenames[type] << " " <<  node->getName() << vcl_endl;
       return false;
     }
   }
@@ -179,7 +179,7 @@ bool QvVisitor::Visit(QvSwitch* node) {
     if (child_index >= 0 && child_index < n)
       Visit(node->getChild(child_index));
     else
-      cerr << "QvVisitor: whichChild " << child_index << "out of range [0.."<<(n-1)<<"]\n";
+      vcl_cerr << "QvVisitor: whichChild " << child_index << "out of range [0.."<<(n-1)<<"]\n";
   }
       
   return true;
@@ -195,14 +195,14 @@ bool QvVisitor::Visit(QvTransformSeparator* node)
 
 bool QvVisitor::Visit(QvWWWInline* node)
 {
-  cerr << "QvVisitor: WARNING: Can't handle WWWInline nodes\n";
+  vcl_cerr << "QvVisitor: WARNING: Can't handle WWWInline nodes\n";
   return true;
 }
 
 static const bool warn = false;
 
 #define NOWARN_IMPLEMENTATION(T)  bool QvVisitor::Visit(T*) { return false; }
-#define DEFAULT_IMPLEMENTATION(T) bool QvVisitor::Visit(T*) { if (warn) cerr << "QvVisitor: ignoring " << #T << endl; return false; }
+#define DEFAULT_IMPLEMENTATION(T) bool QvVisitor::Visit(T*) { if (warn) vcl_cerr << "QvVisitor: ignoring " << #T << vcl_endl; return false; }
 
 NOWARN_IMPLEMENTATION(QvInfo);
 NOWARN_IMPLEMENTATION(QvCoordinate3);

@@ -42,9 +42,9 @@ enum Part { goofyPart };        // cfront confused about QvCone::Part and QvCyli
 enum Binding { goofyBinding };  // cfront confused about QvMaterialBinding/QvNormalBinding::Binding
 #endif
 
-#include <vcl/vcl_cstdio.h>
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_cmath.h>
+#include <vcl_cstdio.h>
+#include <vcl_iostream.h>
+#include <vcl_cmath.h>
 
 #include "QvElement.h"
 #include "QvNodes.h"
@@ -61,7 +61,7 @@ void ge3dPushIdentity() {}
 static QvSwitch* camswitch;
 static int camswindex;
 
-#define DEBUGNL(x) (cerr << x << endl)
+#define DEBUGNL(x) (vcl_cerr << x << vcl_endl)
 
 
 // convert radians to degrees
@@ -152,7 +152,7 @@ void QvSeparator::build (QvState* state)
   // set object boundig to union of children's world boundings
   QvGroup::build (state);
 
-  //cerr << "QvSeparator::build: pop ()" << endl;
+  //vcl_cerr << "QvSeparator::build: pop ()" << vcl_endl;
   ge3d_pop_matrix ();
   state->pop ();  // pop stacks (cleans up)
 
@@ -269,12 +269,12 @@ void QvCoordinate3::build (QvState* state)
   const point3D* vert = (const point3D*) point.values;
   while (n--)
   {
-    // cerr << "point " << *vert << endl;
+    // vcl_cerr << "point " << *vert << vcl_endl;
     extendBoundingbox (*vert, *vert, min, max);
     vert++;
   }
 
-  // cerr << "coordinate3 boundings: " << omin_ << ", " << omax_ << endl;
+  // vcl_cerr << "coordinate3 boundings: " << omin_ << ", " << omax_ << vcl_endl;
 
   // a Coordinate3 node has *no* extent itself, only shapes that use
   // it (which must transform the boundings into world coordinates -
@@ -331,7 +331,7 @@ void QvMaterial::build (QvState* state)
     // ambient would be possible too if identical to diffuse (not checked)
     // transparency not yet implemented (TODO)
     mats.multival = 1;
-    cerr << ("multivalued material (other than diffuse) will hit performance");
+    vcl_cerr << ("multivalued material (other than diffuse) will hit performance");
   }
 
   mats.rgb_ambient = (colorRGB*) ambientColor.values;
@@ -350,7 +350,7 @@ void QvMaterial::build (QvState* state)
 //float alpha = 1.0;
 //if (transparency.num)
 //  alpha -= *transparency.values;
-//cerr << "material transparency: " << 1.0 - alpha << " (alpha: " << alpha << ")" << endl;
+//vcl_cerr << "material transparency: " << 1.0 - alpha << " (alpha: " << alpha << ")" << vcl_endl;
 
   // compute modified materials (for highlighting)
   // copy and modify diffuse and emissive color (complete arrays)
@@ -439,7 +439,7 @@ void QvShapeHints::build (QvState* state)
 {
   backfaceculling_ = (vertexOrdering.value == COUNTERCLOCKWISE)
                   && (shapeType.value == SOLID);
-//cerr << "backfaceculling: " << backfaceculling_ << endl;
+//vcl_cerr << "backfaceculling: " << backfaceculling_ << vcl_endl;
   // TODO: must be undone at end of separator (pushed on stack ShapeHintsIndex)
 
   QvElement* el = new QvElement;
@@ -535,8 +535,8 @@ void QvOrthographicCamera::build (QvState*)
   rotangle_ = orientation.angle;  // radians
   rotaxis_ = (const vector3D*) orientation.axis;
   height_ = height.value;
-// cerr << "orthographic camera: position " << *pos_ << ", rotangle " << rotangle_ << ", rotaxis " << *rotaxis_
-// << ", height " << height_ << endl;
+// vcl_cerr << "orthographic camera: position " << *pos_ << ", rotangle " << rotangle_ << ", rotaxis " << *rotaxis_
+// << ", height " << height_ << vcl_endl;
 
   camswitch_ = camswitch;
   camswindex_ = camswindex;
@@ -575,8 +575,8 @@ void QvPerspectiveCamera::build (QvState*)
   rotangle_ = orientation.angle;  // radians
   rotaxis_ = (const vector3D*) orientation.axis;
   yangle_ = heightAngle.value;  // radians
-// cerr << "perspective camera: position " << *pos_ << ", rotangle " << rotangle_ << ", rotaxis " << *rotaxis_
-// << ", heightangle " << yangle_ << endl;
+// vcl_cerr << "perspective camera: position " << *pos_ << ", rotangle " << rotangle_ << ", rotaxis " << *rotaxis_
+// << ", heightangle " << yangle_ << vcl_endl;
 
   camswitch_ = camswitch;
   camswindex_ = camswindex;
@@ -612,7 +612,7 @@ void QvPerspectiveCamera::build (QvState*)
 
 void QvTransform::build (QvState*)
 {
-  //  cerr << "QvTransform ignored";
+  //  vcl_cerr << "QvTransform ignored";
 #if 0
   const vector3D* tran1 = (const vector3D*) translation.value;
   const vector3D* tran2 = (const vector3D*) center.value;
@@ -637,7 +637,7 @@ void QvTransform::build (QvState*)
   copymatrix (mat_, invmat_);
   invertmatrix (invmat_);
 
-// cerr << "inverse transformation matrix: " << endl;
+// vcl_cerr << "inverse transformation matrix: " << vcl_endl;
 // for (int i = 0;  i < 4;  i++)
 // printf ("%13f %12f %12f %12f\n", invmat_ [i][0], invmat_ [i][1], invmat_ [i][2], invmat_ [i][3]);
 
@@ -650,7 +650,7 @@ void QvTransform::build (QvState*)
 void QvRotation::build (QvState*)
 {
 #if 1
-  // cerr << "QvRotation ignored\n";
+  // vcl_cerr << "QvRotation ignored\n";
 #else
   const vector3D* axis = (const vector3D*) rotation.axis;
   float angle = rotation.angle;  // rad
@@ -691,7 +691,7 @@ void QvMatrixTransform::build (QvState*)
 
 void QvTranslation::build (QvState*)
 {
-  //cerr << "QvTranslation ignored\n";
+  //vcl_cerr << "QvTranslation ignored\n";
   //trans_ = (const vector3D*) translation.value;
   //ge3dTranslate (trans_);  // set up transformation (as in draw)
 }
@@ -707,7 +707,7 @@ void QvScale::build (QvState*)
   invscale_[1] = (scale_[1] ? 1/scale_[1] : 1);
   invscale_[2] = (scale_[2] ? 1/scale_[2] : 1);
 
-  // cerr << "QvScale ignored\n";
+  // vcl_cerr << "QvScale ignored\n";
 
   //ge3dScale (scale_);  // set up transformation (as in draw)
 }
@@ -730,7 +730,7 @@ void QvAsciiText::build (QvState*)
     size_ = fontstyle->size.value / 10.0;
     if (size_ == 1.0)
       size_ = 0;
-    // if (size_)  cerr << "scaling font by " << size_ << endl;
+    // if (size_)  vcl_cerr << "scaling font by " << size_ << vcl_endl;
     bold_ = fontstyle->style.value & QvFontStyle::BOLD;
     italic_ = fontstyle->style.value & QvFontStyle::ITALIC;
     switch (fontstyle->family.value)
@@ -855,7 +855,7 @@ void QvCube::build (QvState*)
 void QvCone::build (QvState*)
 {
 #if 1
-  //  cerr << "Cone no implemented\n";
+  //  vcl_cerr << "Cone no implemented\n";
 #else
   int pts = parts.value;
   parts_ = 0;
@@ -889,7 +889,7 @@ void QvCone::build (QvState*)
 void QvCylinder::build (QvState*)
 {
 #if 1
-  cerr << "not implemented\n";
+  vcl_cerr << "not implemented\n";
 #else
   int pts = parts.value;
   parts_ = 0;
@@ -928,7 +928,7 @@ void QvCylinder::build (QvState*)
 void QvSphere::build (QvState*)
 {
 #if 1
-  cerr << "not implemented\n";
+  vcl_cerr << "not implemented\n";
 #else
   float r = radius.value;
   omin_.x = omin_.y = omin_.z = -r;
@@ -945,10 +945,10 @@ void QvSphere::build (QvState*)
 
 void QvIndexedFaceSet::build (QvState* state)
 {
-//cerr << "QvIndexedFaceSet::build" << endl;
+//vcl_cerr << "QvIndexedFaceSet::build" << vcl_endl;
   QvElement* attr = state->getTopElement (QvState::Coordinate3Index);
   if (!attr)
-  { cerr << "QvIndexedFaceSet. error: no vertices" << endl;
+  { vcl_cerr << "QvIndexedFaceSet. error: no vertices" << vcl_endl;
     numvertinds_ = nummatinds_ = numnormalinds_ = numtextureinds_ = 0;
     numvertices_ = 0;
     return;
@@ -961,7 +961,7 @@ void QvIndexedFaceSet::build (QvState* state)
   hasextent_ = 1;
 
   const QvMFVec3f& verts = coords->point;
-  //cerr << "size of vertex coord list: " << verts.num << "; no. of coord indices: " << coordIndex.num << endl;
+  //vcl_cerr << "size of vertex coord list: " << verts.num << "; no. of coord indices: " << coordIndex.num << vcl_endl;
 
   // TODO: ensure that all indices are in proper range
   vertexlist_ = (const point3D*) verts.values;
@@ -1002,7 +1002,7 @@ void QvIndexedFaceSet::build (QvState* state)
       int v0 = cind [0];
       int v1 = cind [1];
       int v2 = cind [2];
-      // cerr << "computing face normal from indices " << v0 << ", " << v1 << ", " << v2 << ": ";
+      // vcl_cerr << "computing face normal from indices " << v0 << ", " << v1 << ", " << v2 << ": ";
       if (v0 >= 0 && v1 >= 0 && v2 >= 0 && nv > 2)
       {
         if (nv == 3 || cind [3] < 0)  // triangle: simple normal vector calculation of the 3 vertices
@@ -1030,13 +1030,13 @@ void QvIndexedFaceSet::build (QvState* state)
           fn->z += (vert1->x - vert2->x) * (vert1->y + vert2->y);
         }
 
-        // cerr << *fn << endl;
+        // vcl_cerr << *fn << vcl_endl;
         float norm2 = dot3D (*fn, *fn);
         if (norm2 > 0.0)  // normalize
         { norm2 = 1 / sqrt (norm2);
           scl3D (*fn, norm2);
         }
-        // cerr << *fn << endl;
+        // vcl_cerr << *fn << vcl_endl;
       }
       else  // face with less than 3 vertices
         init3D (*fn, 0, 0, 0);
@@ -1142,7 +1142,7 @@ void QvIndexedFaceSet::build (QvState* state)
   else
   {
     const QvMFVec3f& normals = ((QvNormal*) attr->data)->vector;
-    //cerr << "size of normal vector list: " << normals.num << "; no. of normal indices: " << normalIndex.num << endl;
+    //vcl_cerr << "size of normal vector list: " << normals.num << "; no. of normal indices: " << normalIndex.num << vcl_endl;
 
     // normal binding not checked in this case
 
@@ -1175,7 +1175,7 @@ void QvIndexedFaceSet::build (QvState* state)
   else
   {
     const QvMFVec2f& texverts = ((QvTextureCoordinate2*) attr->data)->point;
-    //cerr << "size of tex.vert. list: " << texverts.num << "; no. of texture ind.: " << textureCoordIndex.num << endl;
+    //vcl_cerr << "size of tex.vert. list: " << texverts.num << "; no. of texture ind.: " << textureCoordIndex.num << vcl_endl;
 
     // TODO: ensure that all indices are in proper range
     texvertlist_ = (const point2D*) texverts.values;
@@ -1196,11 +1196,11 @@ void QvIndexedFaceSet::build (QvState* state)
 
 void QvIndexedLineSet::build (QvState* state)
 {
-//cerr << "QvIndexedLineSet::build" << endl;
+//vcl_cerr << "QvIndexedLineSet::build" << vcl_endl;
 
   QvElement* attr = state->getTopElement (QvState::Coordinate3Index);
   if (!attr)
-  { cerr << "QvIndexedLineSet. error: no vertices" << endl;
+  { vcl_cerr << "QvIndexedLineSet. error: no vertices" << vcl_endl;
     numvertinds_ = 0;
     return;
   }
@@ -1217,15 +1217,15 @@ void QvIndexedLineSet::build (QvState* state)
   dec3D (omin_, delta);  // omin_ -= epsilon
   computeBoundingbox (omin_, omax_, wmin_, wmax_);
   hasextent_ = 1;
-  //cerr << "world bounding box: " << wmin_ << wmax_ << endl;
+  //vcl_cerr << "world bounding box: " << wmin_ << wmax_ << vcl_endl;
 
   const QvMFVec3f& verts = coords->point;
 
   // TODO: ensure that all indices are in proper range
   // TODO: consider current material binding
 
-//cerr << "number of points - size of vertex list: " << verts.num
-//<< "; no. of coord indices: " << coordIndex.num << endl;
+//vcl_cerr << "number of points - size of vertex list: " << verts.num
+//<< "; no. of coord indices: " << coordIndex.num << vcl_endl;
 
   vertexlist_ = (const point3D*) verts.values;
   numvertinds_ = coordIndex.num;  // no. of vertex indices
@@ -1241,7 +1241,7 @@ void QvPointSet::build (QvState* state)
 {
   QvElement* attr = state->getTopElement (QvState::Coordinate3Index);
   if (!attr)
-  { cerr << "QvPointSet. error: no vertices" << endl;
+  { vcl_cerr << "QvPointSet. error: no vertices" << vcl_endl;
     num_ = 0;
     return;
   }
@@ -1258,7 +1258,7 @@ void QvPointSet::build (QvState* state)
   dec3D (omin_, delta);  // omin_ -= epsilon
   computeBoundingbox (omin_, omax_, wmin_, wmax_);
   hasextent_ = 1;
-  // cerr << "world bounding box: " << wmin_ << wmax_ << endl;
+  // vcl_cerr << "world bounding box: " << wmin_ << wmax_ << vcl_endl;
 
   const QvMFVec3f& verts = coords->point;
 
@@ -1271,8 +1271,8 @@ void QvPointSet::build (QvState* state)
 
   points_ += start;  // true beginning
 
-// cerr << "QvPointSet::build: startIndex " << start
-// << ", number: " << num_ << " (originally " << numPoints.value << ")" << endl;
+// vcl_cerr << "QvPointSet::build: startIndex " << start
+// << ", number: " << num_ << " (originally " << numPoints.value << ")" << vcl_endl;
 
 } // QvPointSet
 
@@ -1327,7 +1327,7 @@ void QvWWWInline::build (QvState* state)
 
   if (state_ == s_completed)  // children already read: use their bounding box
   {
-    // cerr << "QvWWWInline::build: children already fetched. using their bounding box." << endl;
+    // vcl_cerr << "QvWWWInline::build: children already fetched. using their bounding box." << vcl_endl;
     hasextent_ = 0;  // possibly no geometry
     QvGroup::build (state);
   }
@@ -1346,9 +1346,9 @@ void QvWWWInline::build (QvState* state)
   { DEBUGNL ("QvWWWInline::build with empty bounding box");
   }
 
-// cerr << "QvWWWInline::build. bounding box defined: " << hasextent_ << endl;
+// vcl_cerr << "QvWWWInline::build. bounding box defined: " << hasextent_ << vcl_endl;
 // if (hasextent_)
-// cerr << "object boundings: " << min_ << ", " << max_ << ", world boundings: " << wmin_ << ", " << wmax_ << endl;
+// vcl_cerr << "object boundings: " << min_ << ", " << max_ << ", world boundings: " << wmin_ << ", " << wmax_ << vcl_endl;
 
 } // QvWWWInline
 
@@ -1359,14 +1359,14 @@ void QvWWWInline::build (QvState* state)
 void QvInfo::build (QvState*)
 {
 #if 1
-  cerr << "not implemented\n";
+  vcl_cerr << "not implemented\n";
 #else
   const char* name = objName->getString ();  // objName non nil
   if (!name || !*name)  // unnamed info
     return;
 
   const char* info = string.value.getString ();
-  // cerr << "Info [" << name << "]: " << info << endl;
+  // vcl_cerr << "Info [" << name << "]: " << info << vcl_endl;
   if (!info || !*info)  // empty info
     return;
 

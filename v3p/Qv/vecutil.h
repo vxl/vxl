@@ -44,7 +44,7 @@
 
 #include "vectors.h"
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_ostream.h>
 
 #ifdef WIN32
 #  include <float.h>
@@ -60,7 +60,7 @@
 #    include <values.h>
 #  endif
 #  ifndef MAXFLOAT
-#    include <vcl/vcl_cmath.h>
+#    include <vcl_cmath.h>
 #  endif
 #  ifdef SUN5
 #    define ARRAYconst  /**/
@@ -226,9 +226,9 @@ inline void extendBoundingbox (const point3D& pmin, const point3D& pmax, point3D
 
 /*** output (printing) operators ***/
 
-ostream& operator << (ostream&, const point3D&);
-ostream& operator << (ostream&, const point2D&);
-ostream& operator << (ostream&, const spherepoint&);
-ostream& operator << (ostream&, ARRAYconst matrix4D);
+vcl_ostream& operator << (vcl_ostream&, const point3D&);
+vcl_ostream& operator << (vcl_ostream&, const point2D&);
+vcl_ostream& operator << (vcl_ostream&, const spherepoint&);
+vcl_ostream& operator << (vcl_ostream&, ARRAYconst matrix4D);
 
 #endif // harmony_scene_vecutil_h

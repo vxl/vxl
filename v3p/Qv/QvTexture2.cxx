@@ -1,6 +1,6 @@
 #include "QvTexture2.h"
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 
 QV_NODE_SOURCE(QvTexture2);
 
@@ -47,7 +47,7 @@ void QvTexture2::setHandle (int newhandle, int alpha)
     if (freeTexture_)
       freeTexture_ (handle_);
     else
-      cerr << "QvTexture2: error: handle_ " << handle_ << " could not freed!" << endl;
+      vcl_cerr << "QvTexture2: error: handle_ " << handle_ << " could not freed!" << vcl_endl;
   }
   // mpichler, 19960506
   handle_ = newhandle;

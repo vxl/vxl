@@ -1,5 +1,5 @@
 #include "QvString.h"
-#include <vcl/vcl_cctype.h>
+#include <vcl_cctype.h>
 
 #define CHUNK_SIZE	4000
 

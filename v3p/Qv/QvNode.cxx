@@ -1,4 +1,4 @@
-#include <vcl/vcl_cctype.h>
+#include <vcl_cctype.h>
 #include "QvDB.h"
 #include "QvInput.h"
 #include "QvDebugError.h"
@@ -32,7 +32,7 @@ QvDict		*QvNode::nameDict = NULL;
 #define REFERENCE_KEYWORD	"USE"
 #define NULL_KEYWORD		"NULL"
 
-#include <vcl/vcl_iostream.h>
+#include <vcl_iostream.h>
 void
 QvNode::init()
 {
@@ -456,12 +456,12 @@ QvNode::flushInput(QvInput *in)
 
 void QvNode::draw ()
 {
-  cerr << "AWF QvNode draw\n";
+  vcl_cerr << "AWF QvNode draw\n";
 }
 
 void QvNode::pass (QvGroup* /*parent*/, int /*childindex*/)
 {
-  cerr << "AWF QvNode pass\n";
+  vcl_cerr << "AWF QvNode pass\n";
 }
 
 

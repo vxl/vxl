@@ -37,8 +37,8 @@
 //</file>
 
 
-#include <vcl/vcl_cmath.h>
-
+#include <vcl_cmath.h>
+#include <vcl_iostream.h>
 #include "vecutil.h"
 
 // became obsolete by ge3dPushIdentity
@@ -356,15 +356,15 @@ void sphere2cartes (const spherepoint& s, point3D& p)
 
 //   // sorry, ge3d (as gl) expects angles in degrees
 //   // note: the matrices are PREconcatenated, therefore to be read from bottom up!
-// if (firstcall)  cerr << "rotz" << endl;
+// if (firstcall)  vcl_cerr << "rotz" << vcl_endl;
 //   ge3d_rotate_axis ('z', DEGREES (s.phi));
-// if (firstcall)  ge3d_print_cur_matrix (), cerr << "roty" << endl;
+// if (firstcall)  ge3d_print_cur_matrix (), vcl_cerr << "roty" << vcl_endl;
 //   ge3d_rotate_axis ('y', DEGREES (s.theta));
-// if (firstcall)  ge3d_print_cur_matrix (), cerr << "rotz" << endl;
+// if (firstcall)  ge3d_print_cur_matrix (), vcl_cerr << "rotz" << vcl_endl;
 //   ge3d_rotate_axis ('z', DEGREES (omega));  // u lies in positive z axis
-// if (firstcall)  ge3d_print_cur_matrix (), cerr << "roty" << endl;
+// if (firstcall)  ge3d_print_cur_matrix (), vcl_cerr << "roty" << vcl_endl;
 //   ge3d_rotate_axis ('y', DEGREES (-s.theta));
-// if (firstcall)  ge3d_print_cur_matrix (), cerr << "rotz" << endl;
+// if (firstcall)  ge3d_print_cur_matrix (), vcl_cerr << "rotz" << vcl_endl;
 //   ge3d_rotate_axis ('z', DEGREES (-s.phi));
 // if (firstcall)  ge3d_print_cur_matrix ();
 // firstcall = 0;
@@ -477,45 +477,45 @@ void computeBoundingbox (const point3D& /*omin*/, const point3D& /*omax*/,
 } // computeBoundingbox
 
 
-// ostream << point3D
-// also handles ostream << vector3D
+// vcl_ostream << point3D
+// also handles vcl_ostream << vector3D
 
-ostream& operator << (ostream& os, const point3D& pt)
+vcl_ostream& operator << (vcl_ostream& os, const point3D& pt)
 {
   os << '(' << pt.x << ", " << pt.y << ", " << pt.z << ')';
   return os;
 }
 
 
-// ostream << point2D
+// vcl_ostream << point2D
 
-ostream& operator << (ostream& os, const point2D& pt)
+vcl_ostream& operator << (vcl_ostream& os, const point2D& pt)
 {
   os << '(' << pt.x << ", " << pt.y << ')';
   return os;
 }
 
 
-// ostream << spherepoint
+// vcl_ostream << spherepoint
 
-ostream& operator << (ostream& os, const spherepoint& sp)
+vcl_ostream& operator << (vcl_ostream& os, const spherepoint& sp)
 {
   os << '[' << sp.r << ", " << sp.phi << ", " << sp.theta << ']';
   return os;
 }
 
 
-// ostream << matrix4D
+// vcl_ostream << matrix4D
 
-ostream& operator << (ostream& os, ARRAYconst matrix4D mat)
+vcl_ostream& operator << (vcl_ostream& os, ARRAYconst matrix4D mat)
 {
   os << '\n';
 
   for (int i = 0;  i < 4;  i++)
   {
     const float* row = &(mat [i][0]);
-    os << row [0] << ", " << row [1] << ", " << row [2] << ", " << row [3] << endl;
+    os << row [0] << ", " << row [1] << ", " << row [2] << ", " << row [3] << vcl_endl;
   }
 
-  return os << endl;
+  return os << vcl_endl;
 }

@@ -1,6 +1,6 @@
-#include <vcl/vcl_cctype.h>
-#include <vcl/vcl_cstdlib.h>
-#include <vcl/vcl_cstdio.h>
+#include <vcl_cctype.h>
+#include <vcl_cstdlib.h>
+#include <vcl_cstdio.h>
 #include "QvInput.h"
 #include "QvDebugError.h"
 #include "QvReadError.h"

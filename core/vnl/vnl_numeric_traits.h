@@ -182,7 +182,7 @@ public:
   static const double zero VCL_STATIC_CONST_INIT_FLOAT(0.0);
   static const double one VCL_STATIC_CONST_INIT_FLOAT(1.0);
   typedef double abs_t;
-  typedef VCL_long_double double_t;
+  typedef vcl_long_double double_t;
   typedef double real_t;
 };
 

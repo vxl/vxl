@@ -4,10 +4,10 @@
 
 #include "QvVrmlFile.h"
 
-#include <vcl/vcl_cstdio.h>
-#include <vcl/vcl_string.h>
-#include <vcl/vcl_vector.h>
-#include <vcl/vcl_iostream.h>
+#include <vcl_cstdio.h>
+#include <vcl_string.h>
+#include <vcl_vector.h>
+#include <vcl_iostream.h>
 
 #include "QvVisitor.h"
 #include "QvString.h"
@@ -44,7 +44,7 @@ bool QvVrmlFile::load(char const* filename)
   p->filename_ = filename;
   FILE* fp = fopen(filename, "r");
   if (!fp) {
-    cerr << "QvVrmlFile::load: Can't open [" << filename << "]\n";
+    vcl_cerr << "QvVrmlFile::load: Can't open [" << filename << "]\n";
     return false;
   }
   
@@ -54,20 +54,20 @@ bool QvVrmlFile::load(char const* filename)
   
   //TopologyHierarchyNode::DEFER_SUPERIORS = true;
   
-  cerr << "VRML_IO: ";
+  vcl_cerr << "VRML_IO: ";
   while (1) {
     QvNode* node = 0;
-    cerr << "R";
+    vcl_cerr << "R";
     if (!QvNode::read(&in, node)) break;
     if (!node) break;
     QvState state;
-    cerr << "B";
+    vcl_cerr << "B";
     node->build(&state);
     p->nodes.push_back(node);
-    cerr << " ";
+    vcl_cerr << " ";
   }
-  cerr << endl;
-  cerr << "VRML_IO: Loaded " << p->nodes.size() << " topology objects\n";
+  vcl_cerr << vcl_endl;
+  vcl_cerr << "VRML_IO: Loaded " << p->nodes.size() << " topology objects\n";
   return true;
 }
 
@@ -82,7 +82,7 @@ void QvVrmlFile::traverse(QvVisitor* visitor)
     visitor->Visit(*np);
 }
 
-#include <vcl/vcl_vector.txx>
+#include <vcl_vector.txx>
 VCL_VECTOR_INSTANTIATE(QvNode*);
 
 #include "QvPointSet.h"
@@ -172,7 +172,7 @@ void QvVrmlFile::compute_centroid_radius()
   centroid[1] = vcv.centroid[1];
   centroid[2] = vcv.centroid[2];
   radius = vcv.radius;
-  cerr << "QvVrmlFile::compute_centroid_radius: c = " << 
+  vcl_cerr << "QvVrmlFile::compute_centroid_radius: c = " << 
     centroid[0] << " " << centroid[1] << " " << centroid[2] << 
-    ", r = " << radius << endl;
+    ", r = " << radius << vcl_endl;
 }

@@ -14,17 +14,17 @@ enum Binding { goofyBinding };  // confused about QvMaterialBinding/QvNormalBind
 # include <sys/types.h>
 #endif
 
-#include <vcl/vcl_cstdlib.h>
+#include <vcl_cstdlib.h>
 
 // RWMC: Had to define _strdup for linux since __PC__ set.  Hope this
 // doesn't break other systems.
-#include <vcl/vcl_cmath.h>
+#include <vcl_cmath.h>
 #include "QvBasic.h"
 
 // mpichler, 19950802
 #ifndef WIN32
 #if defined(PMAX) || defined(PMAX_GNU) || defined(__PC__)
-#  include <vcl/vcl_cstring.h>
+#  include <vcl_cstring.h>
 #  include <malloc.h>
 char* strdup (const char* s)  // strdup not contained in system libraries
 {

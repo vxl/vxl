@@ -17,7 +17,7 @@
 
 #include "QvString.h"
 
-#include <vcl/vcl_iosfwd.h>
+#include <vcl_iosfwd.h>
 
 #include "vectors.h"
 

@@ -3,9 +3,9 @@
 
 //#include <sys/types.h>
 /* #include <libc.h> */
-#include <vcl/vcl_cstdio.h>
-#include <vcl/vcl_cmath.h>
-#include <vcl/vcl_cstdio.h>
+#include <vcl_cstdio.h>
+#include <vcl_cmath.h>
+#include <vcl_cstdio.h>
 
 #ifndef FALSE
 #   define FALSE	0
