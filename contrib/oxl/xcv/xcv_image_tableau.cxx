@@ -15,7 +15,6 @@
 #include <vcl_cmath.h>
 #include <vcl_sstream.h>
 
-#include <vul/vul_sprintf.h>
 #include <vil1/vil1_crop.h>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_rgba.h>
@@ -168,7 +167,7 @@ bool xcv_image_tableau::handle(vgui_event const &e)
 
     // Display on status bar:
     vcl_ostringstream str;
-    str << "("<<intx<<","<<inty<<")  R="<<int(pixel.r)<<",G="<<int(pixel.g)<<",B="<<int(pixel.b);
+    str << '('<<intx<<','<<inty<<")  R="<<int(pixel.r)<<",G="<<int(pixel.g)<<",B="<<int(pixel.b);
     post_to_status_bar(str.str().c_str());
   }
 
