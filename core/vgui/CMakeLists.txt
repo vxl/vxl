@@ -16,7 +16,7 @@ INCLUDE(${MODULE_PATH}/FindGLUT.cmake)
 # implementations
 INCLUDE(${MODULE_PATH}/NewCMake/FindQt.cmake)
 INCLUDE(${MODULE_PATH}/NewCMake/FindGTK.cmake)
-INCLUDE(${MODULE_PATH}/NewCMake/FindFltk.cmake)
+INCLUDE(${MODULE_PATH}/NewCMake/FindFLTK.cmake)
 
 INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_PATH})
 IF( HAS_GLUT )
