@@ -2,6 +2,7 @@
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
 #include <vcl_ctime.h>
+#include <vcl_config_compiler.h>
 #include <vsl/vsl_binary_explicit_io.h>
 #include <testlib/testlib_test.h>
 #include <vpl/vpl.h>
@@ -180,8 +181,8 @@ void test_explicit_int_io()
     if (n != i) break;
   }
 
-// stringstream not yet properly supported on gcc-2.95.2 (see vcl/vcl_sstream.h)
-#if (!defined(VCL_GCC) || defined(GNU_LIBSTDCXX_V3)) && !defined(VCL_SGI_CC_720)
+// stringstream not yet properly supported on gcc-2.95.2 (see vcl/vcl_sstream.h) and SGI
+#if VCL_HAS_WORKING_STRINGSTREAM
   vcl_stringstream ss(vcl_ios_in | vcl_ios_out | vcl_ios_binary);
   //const char *b= ss.str().c_str();
   //Is the above simply to make a call to c_str? b is otherwise unused. Removing it
