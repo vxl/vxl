@@ -4,8 +4,7 @@
 // \file
 
 #include <vidl/vidl_codec.h>
-#include <vidl/vidl_frame_as_image.h>
-#include <vil/vil_image_view.h>
+#include <vil/vil_image_view_base.h>
 
 //=========================================================================
 //  Methods for vidl_frame.
