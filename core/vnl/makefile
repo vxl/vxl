@@ -171,8 +171,9 @@ FLAGS_Templates/vnl_c_vector+float_complex-.cxx := $(optimize)
 FLAGS_Templates/vnl_c_vector+double_complex-.cxx := $(optimize)
 FLAGS_Templates/vnl_sparse_matrix_instances.cxx := $(optimize)
 
-ifeq ($(OS),OSF1V4) # with optimisation, the is_finite etc functions fail for long double
+ifeq ($(OS),OSF1V5) # with optimisation, the is_finite etc functions fail for long double
 FLAGS_vnl_math.cxx := -O0
+FLAGS_vnl_bignum.cxx := -O0
                     # and these need too much memory with gcc 3.0
 FLAGS_Templates/vnl_matrix+long-.cxx := -O0
 FLAGS_Templates/vnl_matrix+ulong-.cxx := -O0
