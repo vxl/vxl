@@ -113,11 +113,7 @@ void gevd_bufferxy::dump(const char* filename)
 
 static int read_from_file(const char* filename)
 {
-#ifdef VCL_WIN32
-  vcl_ifstream f(filename,vcl_ios_in|vcl_ios_binary|vcl_ios::nocreate);
-#else
-  vcl_ifstream f(filename);
-#endif
+  vcl_ifstream f(filename,vcl_ios_in|vcl_ios_binary); // ios::nocreate is on by default for VCL_WIN32
   if (!f) { vcl_cerr <<"Cannot open "<< filename <<" for reading\n"; return -1; }
   char l[1024];
   f.get(l, 1024); // read single line
@@ -139,11 +135,7 @@ gevd_bufferxy::gevd_bufferxy(const char* filename) : gevd_memory_mixin(read_from
   yra(0), xra(0)
 {
   if (gevd_memory_mixin::GetSize() > 0) {
-#ifdef VCL_WIN32
-    vcl_ifstream f(filename,vcl_ios_in|vcl_ios_binary|vcl_ios::nocreate);
-#else
-    vcl_ifstream f(filename);
-#endif
+    vcl_ifstream f(filename,vcl_ios_in|vcl_ios_binary); // ios::nocreate is on by default for VCL_WIN32
     char l[1024];
     f.get(l, 1024); // read single line
     int x=-1, y=-1, b=-1;
