@@ -111,6 +111,7 @@ void vtol_topology_object::link_inferior(vtol_topology_object_sptr inferior)
 
   inferiors_.push_back(inferior);
   inferior->superiors_.push_back(this);
+  inferior->touch();//The inferior's topology cache is now stale as well JLM
   touch();
 }
 
