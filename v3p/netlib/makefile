@@ -9,7 +9,7 @@ LIBRARY := netlib
 VERSION := 1.0
 
 #*********************
-# Std Fortran Library 
+# Std Fortran Library
 #*********************
 SOURCES += F77_aloc.c
 SOURCES += exit.c
@@ -22,7 +22,7 @@ SOURCES += d_cnjg.c
 SOURCES += d_imag.c
 SOURCES += z_div.c
 SOURCES += z_abs.c
-SOURCES += z_sqrt.c 
+SOURCES += z_sqrt.c
 SOURCES += cabs.c
 SOURCES += c_abs.c
 SOURCES += c_div.c
@@ -36,7 +36,7 @@ SOURCES += pow_ri.c
 SOURCES += pow_di.c
 SOURCES += pow_dd.c
 
-# BLAS 
+# BLAS
 SOURCES += izamax.c
 
 SOURCES += daxpy.c
@@ -77,6 +77,7 @@ SOURCES += zcopy.c
 SOURCES += zdotc.c
 SOURCES += zdotu.c
 SOURCES += zdrot.c
+SOURCES += dznrm2.c
 SOURCES += zdscal.c
 SOURCES += zgemm.c
 SOURCES += zgemv.c
@@ -90,7 +91,7 @@ SOURCES += zswap.c
 # LINALG
 SOURCES += lsqr.c
 
-# LINPACK 
+# LINPACK
 SOURCES += ssvdc.c # xSVD
 SOURCES += dsvdc.c
 SOURCES += csvdc.c
@@ -110,7 +111,7 @@ SOURCES += dpodi.c
 SOURCES += isamax.c
 SOURCES += idamax.c
 
-# EISPACK 
+# EISPACK
 SOURCES += rsg.c
 SOURCES += rg.c
 SOURCES += rs.c
@@ -119,7 +120,7 @@ SOURCES += tql2.c
 SOURCES += tred1.c
 SOURCES += tred2.c
 
-# MINPACK 
+# MINPACK
 SOURCES += enorm.c
 SOURCES += fdjac2.c
 SOURCES += lmpar.c
@@ -131,23 +132,23 @@ SOURCES += lmder1.c
 SOURCES += pythag.c
 SOURCES += rpoly.c
 
-# TOMS Misc 
+# TOMS Misc
 SOURCES += dtrans.c
 SOURCES += trans.c
 
-# General 
+# General
 SOURCES += machineparams.c
 
 # Temperton FFT routines
-SOURCES += dgpfa.c  
-SOURCES += dgpfa3f.c  
-SOURCES += dsetgpfa.c 
-SOURCES += gpfa2f.c 
+SOURCES += dgpfa.c
+SOURCES += dgpfa3f.c
+SOURCES += dsetgpfa.c
+SOURCES += gpfa2f.c
 SOURCES += gpfa5f.c
-SOURCES += dgpfa2f.c 
-SOURCES += dgpfa5f.c 
-SOURCES += gpfa.c  
-SOURCES += gpfa3f.c 
+SOURCES += dgpfa2f.c
+SOURCES += dgpfa5f.c
+SOURCES += gpfa.c
+SOURCES += gpfa3f.c
 SOURCES += setgpfa.c
 
 # NAPACK
@@ -169,6 +170,7 @@ SOURCES += ilaenv.c
 SOURCES += izmax1.c
 
 SOURCES += xerbla.c
+SOURCES += urand.c
 SOURCES += lsame.c
 SOURCES += dlamch.c
 SOURCES += slamch.c
@@ -284,6 +286,9 @@ SOURCES += dtrmv.c
 SOURCES += dtrsv.c
 SOURCES += i_dnnt.c
 
+MANPAGE_SOURCES += f2c.h
+MANPAGE_SOURCES += netlib.h
+
 #######################################
 include ${IUEROOT}/config/top-params.mk
 #######################################
@@ -315,7 +320,7 @@ ifeq ($(OS),HP-UX10.20)
 endif
 
 ifneq ($(OS),win32)
-#   debug := 
+#   debug :=
 #   APP_CFLAGS = $(optimize)
 endif
 
