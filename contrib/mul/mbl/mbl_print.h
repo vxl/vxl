@@ -219,5 +219,14 @@ void mbl_print_vnl_matd(const vnl_matrix<double>* A)
   if (m<int(A->rows())) vcl_cout << "( ... )\n";
 }
 
+
+void mbl_print_carray_double(const double* v, int n)
+{
+  vcl_cout << "( ";
+  for (int i=0; i<n ;++i) vcl_cout << v[i] << " ";
+  vcl_cout << ")\n";
+}
+
+
 #endif // NDEBUG // skip all this if not debugging
 #endif // mbl_print_h_
