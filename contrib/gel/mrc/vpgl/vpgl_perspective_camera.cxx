@@ -44,7 +44,7 @@ vpgl_perspective_camera::~vpgl_perspective_camera()
 vcl_vector<double> vpgl_perspective_camera::get_params() {return _params;}
 
 //: Set parameter vector
-void vpgl_perspective_camera::set_params(vcl_vector<double> new_params, const vcsl_spatial_sptr & acs)
+void vpgl_perspective_camera::set_params(vcl_vector<double> new_params, const vcsl_spatial_sptr & )
 {
   _params = new_params;
   update();

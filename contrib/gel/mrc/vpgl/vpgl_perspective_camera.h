@@ -54,7 +54,7 @@ public:
   void print_data(vcl_ostream &strm) const;
   double& operator() (PerspParams param_index);
   vcl_vector<double> get_params();
-  void set_params(vcl_vector<double> new_params,const vcsl_spatial_sptr & acs);
+  void set_params(vcl_vector<double> new_params,const vcsl_spatial_sptr & acs = 0);
   vnl_vector<double> get_position() const;
 
   void update_intrinsic();
