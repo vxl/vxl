@@ -10,8 +10,8 @@
 // \date   02 Apr 00
 //
 // \verbatim
-// Modifications:
-// Binary IO added and documentation tidied up NPC, 20/03/01
+//  Modifications
+//   Binary IO added and documentation tidied up NPC, 20/03/01
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
@@ -68,7 +68,7 @@ class vgl_polygon
   //: Destructor
   ~vgl_polygon();
 
-  //: Returns true if \a x,y is inside the polyon, else false
+  //: Returns true if \a x,y is inside the polygon, else false
   bool contains(float x, float y) const;
 
   // creation
