@@ -41,6 +41,11 @@ vcl_string vul_file::get_cwd()
   return buf;
 }
 
+bool vul_file::change_directory(char const* dirname)
+{
+  return 0 == chdir(dirname);
+}
+
 bool vul_file::make_directory(char const* name)
 {
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
