@@ -1,20 +1,19 @@
 #ifndef vgui_dialog_impl_h_
 #define vgui_dialog_impl_h_
+// This is vgui/internals/vgui_dialog_impl.h
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// This is vgui/internals/vgui_dialog_impl.h
-//
+
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   25 Oct 99
 // \brief vgui_dialog_impl is the abstract base class for dialog implementation.
 //  It contains methods for adding fields corresponding to those in
-//  vgui_dialog. It also contains a vcl_vector of elements which are tuples of 
-//  vgui_dialog_field and a variable indicating what type of field they are. The 
-//  elements also contain void* for implementors to add any gui specific 
+//  vgui_dialog. It also contains a vcl_vector of elements which are tuples of
+//  vgui_dialog_field and a variable indicating what type of field they are. The
+//  elements also contain void* for implementors to add any gui specific
 //  information/class to the element.
 // \verbatim
 //  Modifications:

@@ -1,7 +1,9 @@
 //
 // This is xcv/xcv_display.cxx
 // See xcv_display.h for a description of this file.
-//
+
+//:
+// \file
 // \author K.Y.McGaul
 // \verbatim
 //  Modifications:
@@ -294,7 +296,7 @@ void xcv_display::show_line_slice()
   profile_dialog.set_ok_button("close");
   profile_dialog.set_cancel_button(0);
   profile_dialog.ask();
-  /*
+#if 0
   vgui_window *popup = vgui::produce_window(700, 500, "Image Line Profile");
   if (popup)
   {
@@ -302,7 +304,7 @@ void xcv_display::show_line_slice()
     popup->get_adaptor()->set_tableau(vgui_shell_tableau_new(viewer));
     popup->show();
   }
-  */
+#endif
 }
 
 //-----------------------------------------------------------------------------

@@ -1,12 +1,12 @@
 #ifndef xcv_file_h_
 #define xcv_file_h_
-//
 // This is xcv/xcv_file.h
-//
-//: Creates a menu for, and provides an interface to operations for loading
-//  and saving files.
-// 
+
+//:
 // \file
+// Creates a menu for, and provides an interface to operations for loading
+// and saving files.
+//
 // \author  K.Y.McGaul
 // \verbatim
 //  Modifications:

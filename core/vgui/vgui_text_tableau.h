@@ -1,12 +1,11 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifndef vgui_text_tableau_h_
 #define vgui_text_tableau_h_
+// This is vgui/vgui_text_tableau.h
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// This is vgui/vgui_text_tableau.h
-//
+
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
