@@ -22,6 +22,7 @@ SOURCES += vil_32bit.cxx
 SOURCES += vil_stream_fstream.cxx     # from a file
 SOURCES += vil_stream_core.cxx        # in-core vil_stream
 SOURCES += vil_stream_section.cxx     # present a section of a vil_stream
+SOURCES += vil_stream_url.cxx         # load image from URL
 
 # classes derived from vil_image
 SOURCES += vil_file_image.cxx
