@@ -28,11 +28,11 @@ int osl_canny_nms(int _xsize, int _ysize,
 
       // we have an edge
       float thick = _grad[x][y];
-      float theta = k*vcl_atan2(_dx[x][y],_dy[x][y]);
+      float theta = k*(float)vcl_atan2(_dx[x][y],_dy[x][y]);
       // theta not to be used to define _theta[x][y]. Only to define orient.
       int orient = ( (int) (theta+202.5) ) / 45;
 
-      float newx = 0.0, newy = 0.0; // Initialise
+      float newx = 0.0f, newy = 0.0f; // Initialise
 
       // Identify quadrant:
       //                     3   2   1
@@ -44,19 +44,19 @@ int osl_canny_nms(int _xsize, int _ysize,
       case 0:   // sort of horizontal
       case 4:
       case 8:
-        newx=x+0.5;   // pixel centre
+        newx=x+0.5f;   // pixel centre
         del  =  _grad[x][y-1]-_grad[x][y+1];
         del /= (_grad[x][y+1]+_grad[x][y-1]-2*_grad[x][y])*2;
-        if (del>0.5) continue;
-        newy=y+del+0.5;
+        if (del>0.5f) continue;
+        newy=y+del+0.5f;
         break;
       case 2:   // sort of vertical
       case 6:
-        newy=y+0.5;
+        newy=y+0.5f;
         del  = _grad[x-1][y]-_grad[x+1][y];
         del /= (_grad[x-1][y]+_grad[x+1][y]-2*_grad[x][y])*2;
-        if (del>0.5) continue;
-        newx=x+del+0.5;
+        if (del>0.5f) continue;
+        newx=x+del+0.5f;
         break;
       case 1:   // sort of left diagonal
       case 5:
@@ -64,9 +64,9 @@ int osl_canny_nms(int _xsize, int _ysize,
           continue;
         del  = _grad[x-1][y+1]-_grad[x+1][y-1];
         del /= (_grad[x-1][y+1]+_grad[x+1][y-1]-2*_grad[x][y])*2;
-        if (del>0.5) continue;
-        newy=y-del+0.5;
-        newx=x+del+0.5;
+        if (del>0.5f) continue;
+        newy=y-del+0.5f;
+        newx=x+del+0.5f;
         break;
       case 3:   // sort of right diagonal
       case 7:
@@ -74,9 +74,9 @@ int osl_canny_nms(int _xsize, int _ysize,
           continue;
         del  = _grad[x+1][y+1]-_grad[x-1][y-1];
         del /= (_grad[x+1][y+1]+_grad[x-1][y-1]-2*_grad[x][y])*2;
-        if (del>0.5) continue;
-        newy=y-del+0.5;
-        newx=x-del+0.5;
+        if (del>0.5f) continue;
+        newy=y-del+0.5f;
+        newx=x-del+0.5f;
         break;
       }   // end switch
 
@@ -89,7 +89,7 @@ int osl_canny_nms(int _xsize, int _ysize,
       //  _theta[x][y] now stores the normal to the edge tangent.
       //  Before it stored the tangent to the edge.
       //  _theta[x][y] = theta;  // This how it was defined previously
-      _theta[x][y] = k*vcl_atan2(-_dy[x][y],_dx[x][y]);
+      _theta[x][y] = k*(float)vcl_atan2(-_dy[x][y],_dx[x][y]);
 
       _thick[x][y] = thick;
       _dx[x][y] = newx;
