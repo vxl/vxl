@@ -67,18 +67,19 @@ class vgui
 
   //: Select a toolkit from command line arguments and environment variables.
   //
-  // First, the command line is scanned for --factory=xxx options.
+  //  First, the command line is scanned for --factory=xxx options.
   //
-  // If no such option is given, the environment variable 'vgui' is inspected.
+  //  If no such option is given, the environment variable 'vgui' is inspected.
   //
-  // If no such environment variable is set, no toolkit is selected and the
-  // function returns false. Else the return value is true.
+  //  If no such environment variable is set, no toolkit is selected and the
+  //  function returns false. Else the return value is true.
   static bool select(int &argc, char **argv);
 
   //: Initialize the selected toolkit passing it the given command line.
   static void init(int &argc, char **argv);
 
   // Factory methods
+  //----------------
 
   //: Produce window with menubar.
   static vgui_window* produce_window(int width, int height,
@@ -91,30 +92,42 @@ class vgui
   static vgui_dialog_impl* produce_dialog(vcl_string const &name);
 
   // Convenience methods
+  //--------------------
 
   //: Display this tableau and run till dead (no menubar).
   static int run(vgui_tableau_sptr const&, int w, int h,
                  vcl_string const &title ="");
+
   //: Display this tableau and run till dead (with menubar)
-  static int run(vgui_tableau_sptr const&, int w, int h, vgui_menu const &menubar,
-                 vcl_string const &title ="");
+  static int run(vgui_tableau_sptr const&, int w, int h, 
+    vgui_menu const &menubar, vcl_string const &title ="");
+
+  //: Create the vgui_window but don't run it (no menubar).
   static vgui_window *adapt(vgui_tableau_sptr const&, int w, int h,
                             vcl_string const &title ="");
-  static vgui_window *adapt(vgui_tableau_sptr const&, int w, int h, vgui_menu const &,
-                            vcl_string const &title ="");
+
+  //: Create the vgui_window but don't run it (with menubar).
+  static vgui_window *adapt(vgui_tableau_sptr const&, int w, int h, 
+    vgui_menu const &, vcl_string const &title ="");
 
   // Functions for event-loop management
+  //------------------------------------
 
-  //:
+  //: Run until quit is called.
   static int  run();
+
   //: Run the next event in the event queue.
   static void run_one_event();
+
   //: Run all events in the event queue.
   static void run_till_idle();
+
   //: Remove all events from the event queue.
   static void flush();
+
   //: Add event to the event queue.
   static void add_event(vgui_event const &);
+
   //: Quit application.
   static void quit();
 
@@ -124,7 +137,8 @@ class vgui
  private:
   //: Selected toolkit instance.
   static vgui_DLLDATA vgui_toolkit* instance_;
-  //:
+
+  //: True once init() has been called.
   static vgui_DLLDATA bool init_called;
 };
 

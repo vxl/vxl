@@ -40,16 +40,11 @@ void vgui_matrix_state::restore() const {
 
 
 void vgui_matrix_state::print(vcl_ostream &s) {
-#if 0
-  s << "GL_PROJECTION_MATRIX " << vcl_endl << projection_matrix() << vcl_endl;
-  s << "GL_MODELVIEW_MATRIX " << vcl_endl << modelview_matrix() << vcl_endl;
-#else
   vnl_matlab_print_format_push(vnl_matlab_print_format_long);
   vnl_matlab_print(s, projection_matrix(), "GL_PROJECTION_MATRIX");
   vnl_matlab_print(s, modelview_matrix (), "GL_MODELVIEW_MATRIX" );
   vnl_matlab_print_format_pop();
   s << vcl_endl;
-#endif
 }
 
 

@@ -15,17 +15,22 @@
 
 #include <vgui/vgui_event.h>
 
-// Default ctor
+//-----------------------------------------------------------------------------
+//: Constructor - don't use this, use vgui_debug_tableau_new.
+//  Takes the one and only child of this tableau.
 vgui_debug_tableau::vgui_debug_tableau(vgui_tableau_sptr const& child):
   vgui_wrapper_tableau(child)
 {
   verbosity = 1;
 }
 
+//-----------------------------------------------------------------------------
+//: Destructor - called by vgui_debug_tableau_sptr.
 vgui_debug_tableau::~vgui_debug_tableau()
 {
 }
 
+//-----------------------------------------------------------------------------
 static void print_tableau(vcl_ostream& s, vcl_string indent, vgui_tableau_sptr t)
 {
   s << indent << t->pretty_name() << vcl_endl;
@@ -43,11 +48,14 @@ static void print_tableau(vcl_ostream& s, vcl_string indent, vgui_tableau_sptr t
     print_tableau(s, indent, children[i]);
 }
 
+//-----------------------------------------------------------------------------
 static void print_tableau(vgui_tableau_sptr t)
 {
   print_tableau(vcl_cerr, __FILE__ ": ", t);
 }
 
+//-----------------------------------------------------------------------------
+//: Handle events by printing them and then forwarding to the child tableau.
 bool vgui_debug_tableau::handle(const vgui_event& e)
 {
   vgui_event e_in = e;

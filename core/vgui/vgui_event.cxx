@@ -64,7 +64,7 @@ long vgui_event::usecs_since(vgui_event const& e) const {
   return long(this->timestamp - e.timestamp) * 1000;
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 // formatted stream output operators below.
 
@@ -108,28 +108,6 @@ vcl_ostream& operator<<(vcl_ostream& s, vgui_event_type t)
   return s << "[" __FILE__ " : bad event, code " << int(t) << "]";
 }
 
-#if 0
-struct bitcode {
-  int code;
-  char const* name;
-};
-
-static vcl_ostream& print_bitcodes(vcl_ostream& s, bitcode* codes, int val)
-{
-  int val_in = val;
-  char const *spc = "";
-  for (; codes->name; ++codes)
-    if (val & codes->code) {
-      s << spc << codes->name;
-      spc = " ";
-      val &= ~codes->code;
-    }
-  if (val != 0)
-    s << "[Bad code, val " << val_in << "]";
-  return s;
-}
-#endif // 0
-
 vcl_ostream& operator<<(vcl_ostream& s, vgui_event const& e)
 {
   s << "[type:" << e.type;
@@ -142,11 +120,11 @@ vcl_ostream& operator<<(vcl_ostream& s, vgui_event const& e)
   return s << "]";
 };
 
-//--------------------------------------------------------------------------------
-
-// isn't this what the compiler would have generated anyway?
-// moreover, the compiler-generated one wouldn't need to be
-// updated when the fields are changed. fsm@robots.
+//------------------------------------------------------------------------------
+//: Returns true if events are the same.
+//  Isn't this what the compiler would have generated anyway?
+//  moreover, the compiler-generated one wouldn't need to be
+//  updated when the fields are changed. fsm@robots.
 bool operator==(vgui_event const& a, vgui_event const& b)
 {
   return  a.type    == b.type &&

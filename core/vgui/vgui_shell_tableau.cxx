@@ -9,7 +9,7 @@
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_clear_tableau.h>
 //#include <vgui/vgui_matrix_state.h>
-#include <vgui/vgui_tview_launcher.h>
+#include <vgui/vgui_tview_launcher_tableau.h>
 
 vcl_string vgui_shell_tableau::type_name() const {
   return "vgui_shell_tableau";
@@ -21,15 +21,15 @@ vgui_shell_tableau::vgui_shell_tableau() {
 
 vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const &t0) {
   init();
-  vgui_composite::add(t0);
+  vgui_composite_tableau::add(t0);
 }
 
 vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const &t0,
                                        vgui_tableau_sptr const &t1)
 {
   init();
-  vgui_composite::add(t0);
-  vgui_composite::add(t1);
+  vgui_composite_tableau::add(t0);
+  vgui_composite_tableau::add(t1);
 }
 
 vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const &t0,
@@ -37,9 +37,9 @@ vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const &t0,
                                        vgui_tableau_sptr const &t2)
 {
   init();
-  vgui_composite::add(t0);
-  vgui_composite::add(t1);
-  vgui_composite::add(t2);
+  vgui_composite_tableau::add(t0);
+  vgui_composite_tableau::add(t1);
+  vgui_composite_tableau::add(t2);
 }
 
 vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const &t0,
@@ -48,26 +48,26 @@ vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const &t0,
                                        vgui_tableau_sptr const &t3)
 {
   init();
-  vgui_composite::add(t0);
-  vgui_composite::add(t1);
-  vgui_composite::add(t2);
-  vgui_composite::add(t3);
+  vgui_composite_tableau::add(t0);
+  vgui_composite_tableau::add(t1);
+  vgui_composite_tableau::add(t2);
+  vgui_composite_tableau::add(t3);
 }
 
 void vgui_shell_tableau::init() {
   clear = vgui_clear_tableau_new();
-  graph = vgui_tview_launcher_new();
+  graph = vgui_tview_launcher_tableau_new();
 
-  vgui_composite::add(clear);
-  vgui_composite::add(graph);
+  vgui_composite_tableau::add(clear);
+  vgui_composite_tableau::add(graph);
 
   do_quit = true;
   enable_key_bindings = false;
 }
 
 vgui_shell_tableau::~vgui_shell_tableau() {
-  vgui_composite::remove(graph);
-  vgui_composite::remove(clear);
+  vgui_composite_tableau::remove(graph);
+  vgui_composite_tableau::remove(clear);
 }
 
 //--------------------------------------------------------------------------------

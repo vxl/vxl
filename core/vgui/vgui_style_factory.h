@@ -40,7 +40,8 @@ class vgui_style_factory
   static vgui_style_factory* instance();
 
   //: Returns a pointer to the vgui_style corresponding to the given values.
-  static vgui_style* get_style(float r, float g, float b, float point_size, float line_width);
+  static vgui_style* get_style(float r, float g, float b, float point_size, 
+    float line_width);
 
   //: Gets a list of pointers to all styles held in the factory.
   static void get_styles(vcl_vector<vgui_style*>& styles_copy);

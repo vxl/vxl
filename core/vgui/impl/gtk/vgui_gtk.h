@@ -8,7 +8,7 @@
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   16 Sep 99
-// \brief  The GTK+ (GIMP Toolkit) implementation of vgui.
+// \brief  The GTK+ (GIMP Toolkit) implementation of vgui_toolkit.
 //
 //  Contains classes: vgui_gtk
 //  For info on GTK see: http://www.gtk.org/
@@ -29,7 +29,7 @@ class vgui_gtk_adaptor;
 class vgui_gtk_window;
 
 
-//: The GTK+ implementation of vgui.
+//: The GTK+ implementation of vgui_toolkit.
 //  Provides functions for controlling the event loop.
 //  For info on GTK see: http://www.gtk.org/
 class vgui_gtk : public vgui_toolkit

@@ -15,16 +15,21 @@
 
 #include "vgui_drag_tableau.h"
 
-//: Default ctor
+//----------------------------------------------------------------------------
+//: Constructor - don't use this, use vgui_drag_tableau_new.
 vgui_drag_tableau::vgui_drag_tableau()
 {
 }
 
-//: Destructor
+//----------------------------------------------------------------------------
+//: Constructor - don't use this, use vgui_drag_tableau_new.
+//: Destructor - called by vgui_drag_tableau_sptr.
 vgui_drag_tableau::~vgui_drag_tableau()
 {
 }
 
+//----------------------------------------------------------------------------
+//: Constructor - don't use this, use vgui_drag_tableau_new.
 bool vgui_drag_tableau::handle(const vgui_event& e)
 {
   if (vgui_drag_mixin::handle(e))

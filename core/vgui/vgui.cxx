@@ -31,13 +31,12 @@ bool vgui::init_called = false;
 vcl_ostream vgui::out(vcl_cout.rdbuf());
 
 
-//--------------------------------------------------------------------------------
-
 bool vgui_images_are_textures = false;
 bool vgui_emulate_overlays = false;
 bool vgui_glerrors_are_bad = false;
 
-// Remove an argument from a command line argument vec*tor :
+//----------------------------------------------------------------------------
+//: Remove an argument from a command line argument vec*tor :
 static void vgui_remove_arg(unsigned index, int &argc, char **argv)
 {
   // NB ISO says argv[argc] is required to be 0, so argv[i+1] is right.
@@ -46,13 +45,13 @@ static void vgui_remove_arg(unsigned index, int &argc, char **argv)
   --argc;
 }
 
+//----------------------------------------------------------------------------
 // [*] Note on vgui_tag_call():
 // This may be the first method on vgui to be called so we
 // should call the tag functions now. It is not a problem if
 // vgui_tag_call() gets invoked multiple times because (a)
 // the tag function are supposed to be idempotent and (b) a
 // tag function is called at most once per registration.
-
 bool vgui::exists(char const *toolkit)
 {
   vgui_tag_call(); // see [*] above.
@@ -64,6 +63,9 @@ bool vgui::exists(char const *toolkit)
   return false;
 }
 
+//----------------------------------------------------------------------------
+//: Method for selecting a specific toolkit.
+//  This will abort() if given a toolkit which is not available.
 void vgui::select(char const *toolkit)
 {
   vgui_tag_call(); // see [*] above.
@@ -75,10 +77,13 @@ void vgui::select(char const *toolkit)
       return;
     }
   }
-  vgui_macro_warning << "no such toolkit \'" << toolkit << "\' -- vcl_abort()ing\n";
+  vgui_macro_warning << "no such toolkit \'" << toolkit 
+  << "\' -- vcl_abort()ing\n";
   vcl_abort();
 }
 
+//----------------------------------------------------------------------------
+//: Select a toolkit from command line arguments and environment variables.
 bool vgui::select(int &argc, char **argv)
 {
   vgui_tag_call(); // see [*] above.
@@ -108,6 +113,8 @@ bool vgui::select(int &argc, char **argv)
 }
 
 
+//----------------------------------------------------------------------------
+//: Initialise the selected toolkit passing it the given command line.
 void vgui::init(int &argc, char **argv)
 {
   vgui_tag_call(); // see [*] above.
@@ -134,18 +141,24 @@ void vgui::init(int &argc, char **argv)
 
   // abort if no toolkit has been selected.
   if (! instance_) {
-    vgui_macro_warning << "failed to find a toolkit implementation - vcl_abort()ing.\n";
+    vgui_macro_warning 
+      << "failed to find a toolkit implementation - vcl_abort()ing.\n";
     vcl_abort();
   }
   assert(instance_); // need an instance.
 
   // Look for command line options.
   for (int i=1; i<argc; ) {
-    if (vcl_strncmp(argv[i],"--factory=",10) == 0) {            // --factory=<name>
-      vgui_macro_warning << "superfluous command line argument \'"<< argv[i] << "\' ignored\n";
+    if (vcl_strncmp(argv[i],"--factory=",10) == 0) 
+    {            
+      // --factory=<name>
+      vgui_macro_warning << "superfluous command line argument \'"
+        << argv[i] << "\' ignored\n";
       vgui_remove_arg(i, argc, argv);
     }
-    else if (vcl_strncmp(argv[i],"--no-accel",10) == 0) {       // matches --no-accel*
+    else if (vcl_strncmp(argv[i],"--no-accel",10) == 0) 
+    {       
+      // matches --no-accel*
       vgui_accelerate::vgui_no_acceleration = true;
       vgui_remove_arg(i, argc, argv);
     }
@@ -178,8 +191,8 @@ void vgui::init(int &argc, char **argv)
   instance_->init(argc, argv);
 }
 
-//-----------------------------------------------------------------------
-
+//----------------------------------------------------------------------------
+//: Produce window with menubar.
 vgui_window *vgui::produce_window(int width,
                                   int height,
                                   vgui_menu const &menubar,
@@ -193,6 +206,8 @@ vgui_window *vgui::produce_window(int width,
   }
 }
 
+//----------------------------------------------------------------------------
+//: Produce window without menubar.
 vgui_window *vgui::produce_window(int width,
                                   int height,
                                   vcl_string const &title)
@@ -205,6 +220,8 @@ vgui_window *vgui::produce_window(int width,
   }
 }
 
+//----------------------------------------------------------------------------
+//: Produce dialog box.
 vgui_dialog_impl *vgui::produce_dialog(vcl_string const &name)
 {
   if (instance_)
@@ -215,6 +232,8 @@ vgui_dialog_impl *vgui::produce_dialog(vcl_string const &name)
   }
 }
 
+//----------------------------------------------------------------------------
+//: Quit application.
 void vgui::quit()
 {
   if (instance_)
@@ -225,11 +244,13 @@ void vgui::quit()
   }
 }
 
+//----------------------------------------------------------------------------
+//: Run until quit is called.
 int vgui::run()
 {
   if (instance_) {
     instance_->run();
-    return 0; // FIXME
+    return 0; 
   }
   else {
     vgui_macro_warning << "no toolkit selected\n";
@@ -237,6 +258,8 @@ int vgui::run()
   }
 }
 
+//----------------------------------------------------------------------------
+//: Run the next event in the event queue.
 void vgui::run_one_event()
 {
   if (instance_)
@@ -245,6 +268,8 @@ void vgui::run_one_event()
     vgui_macro_warning << "no toolkit selected\n";
 }
 
+//----------------------------------------------------------------------------
+//: Run all events in the event queue.
 void vgui::run_till_idle()
 {
   if (instance_)
@@ -253,6 +278,8 @@ void vgui::run_till_idle()
     vgui_macro_warning << "no toolkit selected\n";
 }
 
+//----------------------------------------------------------------------------
+//: Remove all events from the event queue.
 void vgui::flush()
 {
   if (instance_)
@@ -261,6 +288,8 @@ void vgui::flush()
     vgui_macro_warning << "no toolkit selected\n";
 }
 
+//-----------------------------------------------------------------------------
+//: Add event to the event queue.
 void vgui::add_event(vgui_event const& e) {
   if (instance_)
     instance_->add_event(e);
@@ -268,11 +297,8 @@ void vgui::add_event(vgui_event const& e) {
     vgui_macro_warning << "no toolkit selected\n";
 }
 
-//-----------------------------------------------------------------------
-
-// == Convenience methods ==
-
-//: Display this tableau and run till dead.
+//-----------------------------------------------------------------------------
+//: Display this tableau and run till dead (no menubar).
 int vgui::run(vgui_tableau_sptr const& tableau, int width, int height,
               vcl_string const &title)
 {
@@ -280,6 +306,8 @@ int vgui::run(vgui_tableau_sptr const& tableau, int width, int height,
   return vgui::run();
 }
 
+//-----------------------------------------------------------------------------
+//: Display this tableau and run till dead (with menubar).
 int vgui::run(vgui_tableau_sptr const& tableau, int width, int height,
               vgui_menu const &menubar, vcl_string const &title)
 {
@@ -287,9 +315,10 @@ int vgui::run(vgui_tableau_sptr const& tableau, int width, int height,
   return vgui::run();
 }
 
-//
-vgui_window *vgui::adapt(vgui_tableau_sptr const& tableau, int width, int height,
-                         vcl_string const &title)
+//-----------------------------------------------------------------------------
+//: Create the vgui_window but don't run it (no menubar).
+vgui_window *vgui::adapt(vgui_tableau_sptr const& tableau, int width, 
+  int height, vcl_string const &title)
 {
   vgui_window *win = vgui::produce_window(width, height, title);
   win->get_adaptor()->set_tableau(tableau);
@@ -297,13 +326,13 @@ vgui_window *vgui::adapt(vgui_tableau_sptr const& tableau, int width, int height
   return win;
 }
 
-vgui_window *vgui::adapt(vgui_tableau_sptr const& tableau, int width, int height,
-                         vgui_menu const &mb, vcl_string const &title)
+//-----------------------------------------------------------------------------
+//: Create the vgui_window but don't run it (with menubar).
+vgui_window *vgui::adapt(vgui_tableau_sptr const& tableau, int width, 
+  int height, vgui_menu const &mb, vcl_string const &title)
 {
   vgui_window *win = vgui::produce_window(width, height, mb, title);
   win->get_adaptor()->set_tableau(tableau);
   win->show();
   return win;
 }
-
-//--------------------------------------------------------------------------------

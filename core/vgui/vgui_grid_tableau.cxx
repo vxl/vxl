@@ -115,7 +115,7 @@ float vgui_grid_tableau::get_x(unsigned col_pos)
 //------------------------------------------------------------------------------
 //: Given the row number, returns the y coord for that row.
 //   Note row_pos is numbered from 0.
-//   Note that polytab coord system starts in the bottom left and we want
+//   Note that poly_tableau coord system starts in the bottom left and we want
 //   rows to be numbered from the top down.
 //------------------------------------------------------------------------------
 float vgui_grid_tableau::get_y(unsigned row_pos)
@@ -377,42 +377,6 @@ vcl_vector<int>* row_pos, vcl_vector<int>* times)
   return nb_selected;
 }
 
-#if 0
-//------------------------------------------------------------------------------
-//:
-// Number of rows and columns in the grid is changeable if true is passed in
-// (this is the default) otherwise if false is given then the number of rows
-// and columns is fixed.
-//------------------------------------------------------------------------------
-void vgui_grid_tableau::set_uses_plus_minus_events(bool c)
-{
-//if (debug && c == false) vcl_cerr << "set_uses_plus_minus_events: set to false" << vcl_endl;
-  uses_plus_minus_events = c;
-}
-
-//------------------------------------------------------------------------------
-//:
-//   If true is passed in then this tableau will use PageUp and PageDown events
-//   to 'flip' through the vcl_list of tableaux it holds (this is the default).
-//   Otherwise if false is given then the PageUp and PageDown events will be
-//   passed to the base tableau.  (This might be handy if you wanted to display
-//   2 separate deck tableaux side by side for example.)
-//------------------------------------------------------------------------------
-void vgui_grid_tableau::set_uses_paging_events(bool u)
-{
-//if (debug && u == false) vcl_cerr << "set_uses_paging_events: set to false" << vcl_endl;
-  uses_paging_events = u;
-}
-
-//------------------------------------------------------------------------------
-//: If false, any mouse down events will be ignored.
-//------------------------------------------------------------------------------
-void vgui_grid_tableau::set_frames_selectable(bool p)
-{
-  frames_selectable = p;
-}
-#endif
-
 //------------------------------------------------------------------------------
 //: Redraw the grid of tableaux keeping each tableau in its current row and column.
 //   If for example a new column had been added, using this would redraw the
@@ -672,5 +636,5 @@ bool vgui_grid_tableau::handle(const vgui_event &e)
   }
 
   // We are not interested in other events, so pass event to base class:
-  return vgui_polytab::handle(e);
+  return vgui_poly_tableau::handle(e);
 }

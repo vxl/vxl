@@ -2,9 +2,9 @@
 #define VGUI_QT_H_
 //:
 // \file
-// \brief QT implementation of vgui
+// \brief QT implementation of vgui_toolkit.
 //
-// vgui_qt is a QT implementation of vgui.
+// vgui_qt is a QT implementation of vgui_toolkit.
 // Provides functions for controlling the event loop.
 //
 // \author
@@ -21,7 +21,7 @@
 class vgui_qt_adaptor;
 class vgui_qt_window;
 
-//: QT implementation of vgui
+//: QT implementation of vgui_toolkit.
 class vgui_qt : public vgui_toolkit
 {
 public:

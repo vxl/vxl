@@ -14,27 +14,34 @@
 
 #include "vgui_camera.h"
 
-// Default ctor
+//----------------------------------------------------------------------------
+//: Constructor - create a camera with a default projection matrix.
 vgui_camera::vgui_camera()
   : pmatrix(3,4)
 {
 }
 
+//----------------------------------------------------------------------------
+//: Constructor - create a camera with the given projection matrix.
 vgui_camera::vgui_camera( const vnl_matrix<double> &m)
   : pmatrix(3,4)
 {
   set_pmatrix( m);
 }
 
+//----------------------------------------------------------------------------
+//: Set the projection matrix to the given matrix.
 void vgui_camera::set_pmatrix( const vnl_matrix<double> &m)
 {
   pmatrix= m;
 }
 
-// Note: this will return a GL_PROJECTION_MATRIX with the assumption that
-//   you have an euclidean reconstruction.  The result is that the front and
-//   back clipping planes will be PARALLEL (note: not projective frame!) to 
-//   the image plane. 
+//----------------------------------------------------------------------------
+//: Plug this matrix into a vgui_loader_tableau.
+//  Note: this will return a GL_PROJECTION_MATRIX with the assumption that
+//  you have an euclidean reconstruction.  The result is that the front and
+//  back clipping planes will be PARALLEL (note: not projective frame!) to 
+//  the image plane. 
 vnl_matrix<double> vgui_camera::get_glprojmatrix( const int imagesizex, const int imagesizey) const
 {
   vnl_matrix<double> C(4,4);

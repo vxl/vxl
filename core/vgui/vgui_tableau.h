@@ -30,7 +30,7 @@
 #include <vcl_vector.h>
 
 #include <vgui/vgui_event.h>
-#include <vgui/internals/vgui_slot_data.h>
+#include <vgui/internals/vgui_parent_child_link_data.h>
 #include "dll.h"
 
 class vgui_menu;
@@ -78,7 +78,7 @@ struct vgui_tableau_sptr;
 //  a window, add an adaptor and set the tableau in that adaptor to be
 //  your top level (highest parent) tableau. See the examples on the VXL
 //  webpage to see this done.
-class vgui_tableau : public vgui_slot_data
+class vgui_tableau : public vgui_parent_child_link_data
 {
  public:
   vgui_tableau();
@@ -174,8 +174,8 @@ class vgui_tableau : public vgui_slot_data
   virtual ~vgui_tableau();
 
  private:
-  friend struct vgui_slot;
-  friend struct vgui_slot_impl;
+  friend struct vgui_parent_child_link;
+  friend struct vgui_parent_child_link_impl;
   friend class vgui_adaptor;
 
   int references; // reference count. starts at 0.

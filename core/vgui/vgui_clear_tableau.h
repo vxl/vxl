@@ -25,14 +25,15 @@ class vgui_menu;
 
 //: Tableau performing OpenGL clearing.
 //
-// vgui_clear_tableau is a tableau that performs OpenGL clearing upon
-// receipt of a vgui_DRAW event. It passes all events to its single child.
+//  vgui_clear_tableau is a tableau that performs OpenGL clearing upon
+//  receipt of a vgui_DRAW event. It has no child tableau.
 //
-// This is provided by default if you use a vgui_shell_tableau.
+//  This is provided by default if you use a vgui_shell_tableau.
 class vgui_clear_tableau : public vgui_tableau
 {
  public:
   //: Constructor - don't use this, use vgui_clear_tableau_new.
+  //  A vgui_clear_tableau does not have any children.
   vgui_clear_tableau();
 
   //: Returns the type of this tableau ('vgui_clear_tableau').
@@ -54,7 +55,10 @@ class vgui_clear_tableau : public vgui_tableau
   void config_dialog();
 
  protected:
+  //: Destructor - called by vgui_clear_tableau_sptr.
   virtual ~vgui_clear_tableau();
+
+  //: Handle events sent to this tableau - use draw to perform OpenGL clearing.
   virtual bool handle(const vgui_event&);
 
  private:

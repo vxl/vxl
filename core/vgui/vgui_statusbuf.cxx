@@ -32,20 +32,3 @@ int vgui_statusbuf::overflow(int ch)
   pbump (-n);  // Reset pptr().
   return 0; 
 }
-
-#if 0
-int vgui_statusbuf::xsputn(char* text, int n)
-{
-}
-
-vcl_streamsize vgui_statusbuf::xsputn(char* text, vcl_streamsize n)
-{ 
-  vcl_cerr << "xsputn " << text << " " << n << vcl_endl;
-  return sync() == EOF ? 0 : status->write(text, n);
-}
-
-vcl_streamsize vgui_statusbuf::xsputn(const char* text, vcl_streamsize n) {
-  vcl_cerr << "xsputn const " << text << " " << n << vcl_endl;
-  return sync() == EOF ? 0 : status->write(text, n);
-}
-#endif

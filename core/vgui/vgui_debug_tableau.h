@@ -28,14 +28,17 @@ class vgui_debug_tableau : public vgui_wrapper_tableau
 {
  public:
   //: Constructor - don't use this, use vgui_debug_tableau_new.
-  //  Takes the only child of this tableau.
+  //  Takes the one and only child of this tableau.
   vgui_debug_tableau(vgui_tableau_sptr const& child);
 
   //: Returns the type of this tableau ('vgui_debug_tableau').
   vcl_string type_name() const { return "vgui_debug_tableau"; }
 
  protected:
+  //: Destructor - called by vgui_debug_tableau_sptr.
   ~vgui_debug_tableau();
+
+  //: Handle events by printing them and then forwarding to the child tableau.
   bool handle(const vgui_event& e);
   int verbosity;
 };

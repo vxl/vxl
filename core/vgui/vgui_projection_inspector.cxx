@@ -271,18 +271,10 @@ void vgui_projection_inspector::image_to_window_coordinates(float ix,float iy,fl
 //
 //vgui_token2D is now deprecated.
 
-#if 0 // commented out
-bool vgui_projection_inspector::compute_token2D(int width, int height, vgui_token2D& token)
-{
-  return compute_as_2d_affine(width, height,
-                              &token.offsetX, &token.offsetY,
-                              &token.scaleX, &token.scaleY);
-}
-#endif
-
+//-----------------------------------------------------------------------------
 bool vgui_projection_inspector::compute_as_2d_affine(int width, int height,
-                                                     float* offsetX, float* offsetY,
-                                                     float* scaleX, float* scaleY)
+                                        float* offsetX, float* offsetY,
+                                        float* scaleX, float* scaleY)
 {
   if (!diagonal_scale_3d)
     return false;
@@ -299,7 +291,9 @@ bool vgui_projection_inspector::compute_as_2d_affine(int width, int height,
 }
 
 
-bool vgui_projection_inspector::image_viewport(float& a0, float& b0, float& a1, float& b1) {
+//-----------------------------------------------------------------------------
+bool vgui_projection_inspector::image_viewport(float& a0, float& b0, 
+  float& a1, float& b1) {
   if (!diagonal_scale_3d)
     return false;
 
@@ -310,5 +304,3 @@ bool vgui_projection_inspector::image_viewport(float& a0, float& b0, float& a1, 
 
   return true;
 }
-
-//------------------------------------------------------------------------------

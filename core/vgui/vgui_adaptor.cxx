@@ -26,8 +26,7 @@
 #include <vgui/internals/vgui_accelerate.h>
 #include <vgui/internals/vgui_adaptor_tableau.h>
 
-//--------------------------------------------------------------------------------
-
+//------------------------------------------------------------------------------
 vgui_adaptor *vgui_adaptor::current = 0;
 
 static int adaptor_count = 0;
@@ -61,8 +60,7 @@ vgui_adaptor::~vgui_adaptor()
   }
 }
 
-//--------------------------------------------------------------------------------
-
+//------------------------------------------------------------------------------
 vgui_tableau_sptr vgui_adaptor::get_tableau() const
 {
   return the_tableau->get_child();
@@ -73,9 +71,8 @@ void vgui_adaptor::set_tableau(vgui_tableau_sptr const& t)
   the_tableau->set_child(t);
 }
 
-//--------------------------------------------------------------------------------
-
-//: returns concatenation of the adaptor's menu with the tableau's menu.
+//------------------------------------------------------------------------------
+//: Returns concatenation of the adaptor's menu with the tableau's menu.
 vgui_menu vgui_adaptor::get_total_popup(vgui_popup_params &params) const
 {
   // set popup_params members
@@ -98,8 +95,7 @@ vgui_menu vgui_adaptor::get_total_popup(vgui_popup_params &params) const
   return pop;
 }
 
-//--------------------------------------------------------------------------------
-
+//------------------------------------------------------------------------------
 //: this method pops up a dialog for changing the popup modifier and button bindings.
 void vgui_adaptor::config_dialog() {
 
@@ -170,8 +166,7 @@ void vgui_adaptor::config_dialog() {
   }
 }
 
-//--------------------------------------------------------------------------------
-
+//------------------------------------------------------------------------------
 //: Dispatches the given event to the tableau.
 // This method performs various checks which can be performed generically for
 // all tableaux. It is not the responsibility of this method to take care of
@@ -181,7 +176,8 @@ bool vgui_adaptor::dispatch_to_tableau(vgui_event const &e) {
 
   // if the event is DRAW, DRAW_OVERLAY or RESHAPE
   // then set the glViewport and clear the OpenGL matrices
-  if (e.type == vgui_DRAW || e.type == vgui_DRAW_OVERLAY || e.type == vgui_RESHAPE) {
+  if (e.type == vgui_DRAW || e.type == vgui_DRAW_OVERLAY 
+    || e.type == vgui_RESHAPE) {
     glViewport(0, 0, get_width(), get_height());
 
     // set projection matrices.
@@ -189,7 +185,8 @@ bool vgui_adaptor::dispatch_to_tableau(vgui_event const &e) {
     vgui_matrix_state::identity_gl_matrices(); // to identity
 
 #if 1
-    if (e.type == vgui_DRAW && !vgui_accelerate::vgui_mfc_acceleration) {
+    if (e.type == vgui_DRAW && !vgui_accelerate::vgui_mfc_acceleration) 
+    {
       GLint buffer;
       glGetIntegerv(GL_DRAW_BUFFER,&buffer);
       if (buffer != GL_BACK) {
@@ -218,45 +215,52 @@ bool vgui_adaptor::dispatch_to_tableau(vgui_event const &e) {
   return f;
 }
 
-//--------------------------------------------------------------------------------
-
+//------------------------------------------------------------------------------
 vgui_window *vgui_adaptor::get_window() const {
   vgui_macro_warning << "get_window() not implemented" << vcl_endl;
   return 0;
 }
 
+//------------------------------------------------------------------------------
 //: Bind the given modifier/button combination to the popup menu.
 void vgui_adaptor::bind_popups(vgui_modifier /*m*/, vgui_button /*b*/) {
   vgui_macro_warning << "bind_popups() not implemented" << vcl_endl;
 }
 
+//------------------------------------------------------------------------------
 void vgui_adaptor::get_popup_bindings(vgui_modifier &, vgui_button &) const {
   vgui_macro_warning << "get_popup_bindings() not implemented" << vcl_endl;
 }
 
+//------------------------------------------------------------------------------
 void vgui_adaptor::swap_buffers() {
   vgui_macro_warning << "swap_buffers() not implemented" << vcl_endl;
 }
+
+//------------------------------------------------------------------------------
 void vgui_adaptor::post_message(char const *, void const *)
 {
   vgui_macro_warning << "post_message() not implemented" << vcl_endl;
 }
+
+//------------------------------------------------------------------------------
 void vgui_adaptor::make_current() {
   vgui_macro_warning << "make_current() not implemented" << vcl_endl;
 }
 
+//------------------------------------------------------------------------------
 void vgui_adaptor::post_timer(float, int) {
   vgui_macro_warning << "post_timer(float, int) not implemented" << vcl_endl;
 }
 
+//------------------------------------------------------------------------------
 int  vgui_adaptor::post_timer(float t) {
   static int counter = 0;
   post_timer(t, counter);
   return counter++;
 }
 
+//------------------------------------------------------------------------------
 void vgui_adaptor::post_destroy() {
   vgui_macro_warning << "post_destroy() not implemented" << vcl_endl;
 }
-
-//--------------------------------------------------------------------------------

@@ -8,7 +8,7 @@
 // \file
 // \author Geoffrey Cross, Oxford RRG
 // \date   03 Nov 99
-// \brief  Allows 3D models to project into a GL context given a camera projection matrix.
+// \brief Projects 3D models into a GL context given a camera projection matrix.
 //
 // Contains classes: vgui_camera
 // 
@@ -21,7 +21,7 @@
 
 class PMatrix;
 
-//: Allows 3D models to project into a GL context given a camera projection matrix.
+//: Projects 3D models into a GL context given a camera projection matrix.
 //
 //  vgui_camera is a utility class which allows 3D models to projected into
 //  a GL context given a known camera projection matrix.  Note comments in
@@ -41,14 +41,16 @@ class vgui_camera
   //: Set the projection matrix to the given matrix.
   void set_pmatrix( const vnl_matrix<double> &m);
 
-  //: Plug this matrix into a vgui_load or vgui_mult tableau.
+  //: Plug this matrix into a vgui_loader_tableau.
   //  Note: this will return a GL_PROJECTION_MATRIX with the assumption that
   //  you have an euclidean reconstruction.  The result is that the front and
   //  back clipping planes will be PARALLEL (note: not projective frame!) to
   //  the image plane.
-  vnl_matrix<double> get_glprojmatrix( const int imagesizex= 720, const int imagesizey= 576) const;
+  vnl_matrix<double> get_glprojmatrix( const int imagesizex= 720, 
+    const int imagesizey= 576) const;
 
  protected:
+  //: The projection matrix.
   vnl_matrix<double> pmatrix;
 };
 

@@ -33,8 +33,10 @@ class vgui_style
 
   //: Style colour.
   float rgba[4];
+
   //: Style line width.
   float line_width;
+
   //: Style point radius.
   float point_size;
 };

@@ -36,7 +36,8 @@ class vgui_event_server_interpose_tableau;
 //   will have changed.  This means for a draw_overlay event we would end up 
 //   drawing into the wrong buffer. For a mouse event we may not be able to get 
 //   the position in the image using the projection_inspector (if e.g. the image
-//   was zoomed) since all the gl matrices would have been reset - kym.
+//   was zoomed) since all the gl matrices would have been reset.  I guess
+//   you could use it to get key presses! - kym
 class vgui_event_server
 {
  public:
@@ -44,10 +45,13 @@ class vgui_event_server
   vgui_event_server(vgui_tableau_sptr const&);
 
   void reset();
+
+  //: Move on to the next event in the event queue.
   bool next();
 
   void set_popup(const vgui_menu&);
 
+  //: Returns the last event.
   vgui_event last_event();
 
  protected:

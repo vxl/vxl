@@ -21,13 +21,13 @@
 #include <vbl/vbl_array_2d.h>
 
 #include "vgui_grid_tableau_sptr.h"
-#include <vgui/vgui_polytab.h>
+#include <vgui/vgui_poly_tableau.h>
 #include <vgui/vgui_event_condition.h>
 
 //: Data required by each rectangle in the grid of vgui_grid_tableau.
 struct vgui_grid_tableau_data
 {
-  //: Handle returned by polytab.
+  //: Handle returned by poly_tableau.
   int handle;
   //: Position of our tableau in the array of tableaux (`tabs')
   int tab_pos;
@@ -42,10 +42,10 @@ bool operator==(vgui_grid_tableau_data const &a,
 
 //: A tableau which renders its child tableaux as a rectangular grid.
 //
-//  It is derived from vgui_polytab but unlike vgui_polytab, the child tableaux
-//  of vgui_grid can only be laid out in an m by n rectangular grid.  Rows
-//  and columns are numbered starting from 0 with (0,0) in the top left
-//  and (m-1,n-1) in the bottom right.
+//  It is derived from vgui_poly_tableau but unlike vgui_poly_tablea, the 
+//  child tableaux of vgui_grid_tableau can only be laid out in an m by n 
+//  rectangular grid.  Rows and columns are numbered starting from 0 with 
+//  (0,0) in the top left and (m-1,n-1) in the bottom right.
 //
 //  The default behaviour of vgui_grid is to keep a list of every tableau
 //  added to the grid (using add_next to add to the next free position
@@ -71,7 +71,7 @@ bool operator==(vgui_grid_tableau_data const &a,
 //
 //  This tableau was originally written for xcv, so look at this application 
 //  to get a better idea what it does.
-class vgui_grid_tableau : public vgui_polytab
+class vgui_grid_tableau : public vgui_poly_tableau
 {
  public:
   typedef vgui_grid_tableau_data grid_data;
@@ -89,7 +89,8 @@ class vgui_grid_tableau : public vgui_polytab
 
   //: Constructor - don't use this, use vgui_grid_tableau_new.
   //  This creates a tri-tab, taking the three tableau as parameters.
-  vgui_grid_tableau(vgui_tableau_sptr const& l, vgui_tableau_sptr const& m, vgui_tableau_sptr const& r);
+  vgui_grid_tableau(vgui_tableau_sptr const& l, vgui_tableau_sptr const& m, 
+                    vgui_tableau_sptr const& r);
 
   //: Given the column number, returns the x coord for that column.
   float get_x(unsigned index);
@@ -249,7 +250,7 @@ struct vgui_grid_tableau_new : public vgui_grid_tableau_sptr {
     : base(new vgui_grid_tableau(1, 1)) { }
   vgui_grid_tableau_new(vgui_tableau_sptr const& l, vgui_tableau_sptr const& r)
     : base(new vgui_grid_tableau(l, r)) { }
-  vgui_grid_tableau_new(vgui_tableau_sptr const& l, vgui_tableau_sptr const& m, vgui_tableau_sptr const& r)
+  vgui_grid_tableau_new(vgui_tableau_sptr const& l, vgui_tableau_sptr const& m,                         vgui_tableau_sptr const& r)
     : base(new vgui_grid_tableau(l, m, r)) { }
 };
 

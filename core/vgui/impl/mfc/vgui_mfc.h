@@ -8,7 +8,7 @@
 // \file
 // \author  awf@robots.ox.ac.uk 
 // \date    July 2000
-// \brief   The MFC (Microsoft Foundation Classes) implementation of vgui
+// \brief   MFC (Microsoft Foundation Classes) implementation of vgui_toolkit.
 //
 // \verbatim
 //  Modifications:
@@ -23,7 +23,7 @@ class vgui_mfc_adaptor;
 class vgui_mfc_window;
 class vgui_mfc_utils;
 
-//: The MFC (Microsoft Foundation Classes) implementation of vgui.
+//: The MFC (Microsoft Foundation Classes) implementation of vgui_toolkit.
 //
 // Provides functions for controlling the event loop.
 // Based upon vgui_gtk.

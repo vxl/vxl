@@ -64,41 +64,50 @@ class vgui_dialog
   void field(const char*, vcl_string&);
 
   //: Multiple choice - with two options.
-  void choice(const char* label, const char* option1, const char* option2, int& chosen);
+  void choice(const char* label, const char* option1, 
+    const char* option2, int& chosen);
+
   //: Multiple choice - with three options.
-  void choice(const char* label, const char* option1, const char* option2, const char* option3, int& chosen);
+  void choice(const char* label, const char* option1, 
+    const char* option2, const char* option3, int& chosen);
+
   //: Multiple choice - with the list of options given.
   void choice(const char*, const vcl_vector<vcl_string>&, int &);
-  void choice(const char*s, const vcl_vector<vcl_string>&v, unsigned &r) { choice(s,v,*reinterpret_cast<int*>(&r)); }
 
-#if 0
-  //: get indices in vcl_vector of strings.
-  void choices(const vcl_vector<vcl_string> &,vcl_vector<int> &);
-#endif
+  void choice(const char*s, const vcl_vector<vcl_string>&v, unsigned &r) 
+  { choice(s,v,*reinterpret_cast<int*>(&r)); }
 
   //: File browsers
   void file (const char* label, vcl_string& regexp, vcl_string& filepath);
-  //void files(const char *label,vcl_string& regexp, vcl_vector<vcl_string> &);
+
   //: inline file browser
   void inline_file(const char* label, vcl_string& regexp,vcl_string& filepath);
+
   //: Color chooser
   void color (const char* label, vcl_string&);
+
   //: Inline color chooser
   void inline_color(const char *label, vcl_string &);
+
   //: Text message
   void message(const char*);
 
   //: Display a tableau in the dialog
-  void inline_tableau(const vgui_tableau_sptr tab, unsigned width, unsigned height);
+  void inline_tableau(const vgui_tableau_sptr tab, unsigned width, 
+    unsigned height);
 
   //: Set the labels on each button, if 0 that button does not appear.
   void set_cancel_button(const char* label);
+
   //: Set the labels on each button, if 0 that button does not appear.
   void set_ok_button(const char* label);
 
   //: A "modal" dialog captures all events sent to the application.
   void set_modal(const bool);
 
+  //: Display the dialog box and wait for the users response.
+  //  Returns true if the user clicks on the 'OK' button and false if the
+  //  user clicks on the 'Cancel' button.
   bool ask();
 
  protected:

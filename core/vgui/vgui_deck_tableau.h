@@ -21,7 +21,7 @@
 #include "vgui_deck_tableau_sptr.h"
 #include <vgui/vgui_observable.h>
 #include <vgui/vgui_tableau.h>
-#include <vgui/vgui_slot.h>
+#include <vgui/vgui_parent_child_link.h>
 #include <vcl_string.h>
 
 //: Tableau holding many child tableaux, but only one receives events.
@@ -46,11 +46,11 @@ public:
   vgui_deck_tableau(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1, vgui_tableau_sptr const& child2);
 
   //: Add a tableau to the deck
-  // It is placed on top, and made current.
+  //  It is placed on top, and made current.
   void add(vgui_tableau_sptr const&);
 
   //: Remove the tableau pointed to by P.
-  // The one below is then mde current.
+  //  The one below is then made current.
   void remove(vgui_tableau_sptr const& p);
 
   //: Return a pointer to the current tableau
@@ -59,7 +59,7 @@ public:
   //: Return a pointer to the tableau at a given location
   vgui_tableau_sptr get_tableau_at(int);
 
-  //: Return number of tableaux on deck.
+  //: Return number of child tableaux in the deck.
   int size();
 
   //: Say which tableau is current
@@ -110,16 +110,27 @@ public:
   //: Destructor - called by vgui_deck_tableau_sptr.
   virtual ~vgui_deck_tableau();
 
+  //: Handle events by passing to the current child tableau.
   virtual bool handle(const vgui_event&);
 
+  //: Add a tableau to the deck
+  //  It is placed on top, and made current.
+  //  Overrides virtual base class method.
   bool add_child(vgui_tableau_sptr const& t);
+
+  //: Remove the given child tableau from the deck.
   bool remove_child(vgui_tableau_sptr const& );
 
-  // helper
+  //: Returns true if given integer could be an index to the list of children.
   bool index_ok(int) const;
 
   // data
-  vcl_vector<vgui_slot> children;
+  //-----
+
+  //: List of child tableaux.
+  vcl_vector<vgui_parent_child_link> children;
+
+  //: Currently active child tableau.
   int index_;
 };
 

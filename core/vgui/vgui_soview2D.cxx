@@ -176,31 +176,7 @@ vcl_ostream& vgui_soview2D_infinite_line::print(vcl_ostream& s) const
 
 void vgui_soview2D_infinite_line::draw()
 {
-#if 0
-  // compute the bounding box
-  // this will be the viewport but in the coords of
-  // the image
-
-  vgui_projection_inspector pi;
-  float x0, y0, x1, y1;
-  pi.image_viewport(x0,y0,x1,y1);
-
-  double x3, y3;
-  double x4, y4;
-  bool f = vgl_clip_line_to_box(a,b,c,
-                                x0, y0, x1, y1,
-                                x3, y3, x4,y4);
-  if (!f)
-    return; // no intersection
-
-  //glLineWidth(style->line_width);
-  glBegin(GL_LINES);
-  glVertex2f(x3,y3);
-  glVertex2f(x4,y4);
-  glEnd();
-#else
   vgui_draw_line(a, b, c);
-#endif
 }
 
 

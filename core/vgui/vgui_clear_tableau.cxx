@@ -15,6 +15,9 @@
 #include <vgui/vgui_dialog.h>
 #include <vgui/internals/vgui_accelerate.h>
 
+//-----------------------------------------------------------------------------
+//: Constructor - don't use this, use vgui_clear_tableau_new.
+//  A vgui_clear_tableau does not have any children.
 vgui_clear_tableau::vgui_clear_tableau()
 {
   // These are the initial glClear() colour
@@ -30,13 +33,21 @@ vgui_clear_tableau::vgui_clear_tableau()
   stencil = 0;
 }
 
+//-----------------------------------------------------------------------------
+//: Destructor - called by vgui_clear_tableau_sptr.
 vgui_clear_tableau::~vgui_clear_tableau()
 {
 }
 
-vcl_string vgui_clear_tableau::type_name() const { return "vgui_clear_tableau"; }
+//-----------------------------------------------------------------------------
+//: Returns the type of this tableau ('vgui_clear_tableau').
+vcl_string vgui_clear_tableau::type_name() const 
+{ 
+  return "vgui_clear_tableau"; 
+}
 
-
+//-----------------------------------------------------------------------------
+//: Handle events sent to this tableau - use draw to perform OpenGL clearing.
 bool vgui_clear_tableau::handle(const vgui_event& event)
 {
   if (event.type==vgui_DRAW && clearing_)
@@ -53,29 +64,8 @@ bool vgui_clear_tableau::handle(const vgui_event& event)
     if (mask & GL_STENCIL_BUFFER_BIT)
       glClearStencil(stencil);
 
-#if 0
-      GLint vp[4]; // current viewport
-      glGetIntegerv(GL_VIEWPORT,vp);
-
-      GLint sc[4]; // old scissors
-      glGetIntegerv(GL_SCISSOR_BOX,sc);
-      bool sc_enabled = glIsEnabled(GL_SCISSOR_TEST);
-
-      // turn on scissor test and set the scissor box to the viewport :
-      glEnable(GL_SCISSOR_TEST);
-      glScissor(vp[0], vp[1], vp[2], vp[3]);
-#endif
-
     if (mask)
       vgui_accelerate::instance()->vgui_glClear(mask);
-
-#if 0
-    // turn off the scissor test, if it wasn't already on, and
-    // restore old scissor settings :
-    if (!sc_enabled)
-      glDisable(GL_SCISSOR_TEST);
-      glScissor(sc[0], sc[1], sc[2], sc[3]);
-#endif
 
     return true;
   }
@@ -83,6 +73,8 @@ bool vgui_clear_tableau::handle(const vgui_event& event)
   return false;
 }
 
+//-----------------------------------------------------------------------------
+//: Set colour of clear tableau to the given red, green, blue values.
 void vgui_clear_tableau::set_colour(float r, float g, float b, float a)
 {
   colour[0] = r;
@@ -91,12 +83,15 @@ void vgui_clear_tableau::set_colour(float r, float g, float b, float a)
   colour[3] = a;
 }
 
+//-----------------------------------------------------------------------------
+//: Set the given GLbitfield as the mask.
 void vgui_clear_tableau::set_mask(GLbitfield m)
 {
   mask = m;
 }
 
-
+//-----------------------------------------------------------------------------
+//: Make the given menu the default pop-up menu.
 void vgui_clear_tableau::add_popup(vgui_menu &menu)
 {
   menu.add("Configure",
@@ -110,13 +105,16 @@ void vgui_clear_tableau::add_popup(vgui_menu &menu)
            new vgui_command_simple<vgui_clear_tableau>(this, &vgui_clear_tableau::toggle_clearing));
 }
 
-
+//-----------------------------------------------------------------------------
+//: Toggle clearing on and off.
 void vgui_clear_tableau::toggle_clearing()
 {
   clearing_ = !clearing_;
   post_redraw();
 }
 
+//-----------------------------------------------------------------------------
+//: Display a dialog box to get data (colour, etc) for the clear tableau.
 void vgui_clear_tableau::config_dialog()
 {
   bool colour_val = (mask & GL_COLOR_BUFFER_BIT) != 0;

@@ -31,12 +31,12 @@ public:
 
   //: Constructor - don't use this, use vgui_image_tableau_new.
   //  Creates a tableau displaying the given image.
-  vgui_image_tableau(vil_image const &);
+  vgui_image_tableau(vil_image const &img);
 
   //: Constructor - don't use this, use vgui_image_tableau_new.
   //  Creates a tableau which loads and displays an image from
   //  the given file.
-  vgui_image_tableau(char const *);
+  vgui_image_tableau(char const *filename);
 
   //: Returns the type of this tableau ('vgui_image_tableau').
   vcl_string type_name() const;
@@ -53,10 +53,10 @@ public:
   vil_image get_image() const;
 
   //: Make the given image, the image rendered by this tableau.
-  void set_image(vil_image const &);
+  void set_image(vil_image const &img);
 
   //: Make image loaded from the given file, the image rendered by this tableau.
-  void set_image(char const *);
+  void set_image(char const *filename);
 
   //: Reread the image from file.
   void reread_image();

@@ -14,7 +14,7 @@
 
 #include "vgui_wrapper_tableau_sptr.h"
 #include <vgui/vgui_tableau.h>
-#include <vgui/vgui_slot.h>
+#include <vgui/vgui_parent_child_link.h>
 
 //: Base class tableau for tableau who want only a single child.
 //
@@ -65,7 +65,7 @@ public:
   bool get_bounding_box(float low[3], float high[3]) const;
 
   //: The single child of this tableau.
-  vgui_slot child;
+  vgui_parent_child_link child;
 
 protected:
   // Destructor - called by vgui_wrapper_tableau_sptr.

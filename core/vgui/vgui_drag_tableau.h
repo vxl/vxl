@@ -16,10 +16,13 @@
 //  Modifications
 //    000111 AWF Initial version.
 //    26-APR-2002 K.Y.McGaul - Converted to doxygen style comments.
+//    01-OCT-2002 K.Y.McGaul - Moved vgui_image_blender to vgui_blender_tableau.
+//    02-OCT-2002 K.Y.McGaul - Added vgui_blender_tableau_new.
 // \endverbatim
 
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_drag_mixin.h>
+#include <vgui/vgui_drag_tableau_sptr.h>
 
 //: A bare tableau which uses the vgui_drag_mixin
 //
@@ -30,11 +33,22 @@
 class vgui_drag_tableau : public vgui_tableau, public vgui_drag_mixin
 {
  public:
+  //: Constructor - don't use this, use vgui_drag_tableau_new.
   vgui_drag_tableau();
 
  protected:
+  //: Destructor - called by vgui_drag_tableau_sptr.
   ~vgui_drag_tableau();
+
+  //: Handle all events sent to this tableau.
   bool handle(const vgui_event& e);
+};
+
+//: Creates a smart-pointer to a vgui_drag_tableau.
+struct vgui_drag_tableau_new : vgui_drag_tableau_sptr
+{
+  //: Constructor - create a default vgui_drag_tableau.
+  vgui_drag_tableau_new() : vgui_drag_tableau_sptr(new vgui_drag_tableau) { }
 };
 
 #endif // vgui_drag_tableau_h_

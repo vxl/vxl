@@ -18,7 +18,7 @@
 //: Useful static functions for vgui.
 class vgui_utils {
 public:
-  //: Dump to .pnm bitmap
+  //: Dump the OpenGL area to the given image filename.
   static void dump_colour_buffer(char const *file);
 
   //: Copy front colour buffer to back colour buffer.

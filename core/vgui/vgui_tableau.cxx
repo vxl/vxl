@@ -22,7 +22,7 @@
 
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_event.h>
-#include <vgui/vgui_slot.h>
+#include <vgui/vgui_parent_child_link.h>
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_popup_params.h>
 
@@ -34,6 +34,10 @@
 // must be a ptr as must live longer than any vgui_tableau_sptr
 static vgui_DLLDATA vcl_vector<vgui_tableau*>* all = 0;
 
+//-----------------------------------------------------------------------------
+//: Constructor.
+//  Don't use the constructor for a tableau, use vgui_tableau_sptr to get
+//  a smart-pointer to your tableau.
 vgui_tableau::vgui_tableau()
   : references(0)
 {
@@ -47,6 +51,7 @@ vgui_tableau::vgui_tableau()
   all->push_back(this);
 }
 
+//-----------------------------------------------------------------------------
 vgui_tableau::~vgui_tableau()
 {
   debug << "vgui_tableau destructor : this = " << (void*)this << vcl_endl;
@@ -67,11 +72,13 @@ vgui_tableau::~vgui_tableau()
   }
 }
 
+//-----------------------------------------------------------------------------
 void vgui_tableau::ref() const
 {
   ++ const_cast<int &>(references);
 }
 
+//-----------------------------------------------------------------------------
 void vgui_tableau::unref() const
 {
   assert(references > 0); // fatal if not
@@ -82,8 +89,7 @@ void vgui_tableau::unref() const
   }
 }
 
-//--------------------------------------------------------------------------------
-
+//-----------------------------------------------------------------------------
 //: Override in subclasses to give the tableau some appearance and behaviour.
 bool vgui_tableau::handle(vgui_event const &event) {
   vgui_macro_report_errors;
@@ -112,37 +118,44 @@ bool vgui_tableau::handle(vgui_event const &event) {
   }
 }
 
+//-----------------------------------------------------------------------------
 bool vgui_tableau::mouse_down(int, int, vgui_button, vgui_modifier) {
   //debug << "vgui_tableau::mouse_down\n";
   return false;
 }
 
+//-----------------------------------------------------------------------------
 bool vgui_tableau::mouse_up(int, int, vgui_button, vgui_modifier) {
   //debug << "vgui_tableau::mouse_up\n";
   return false;
 }
 
+//-----------------------------------------------------------------------------
 bool vgui_tableau::motion(int, int) {
   //debug << "vgui_tableau::motion\n";
   return false;
 }
 
+//-----------------------------------------------------------------------------
 bool vgui_tableau::key_press(int, int, vgui_key, vgui_modifier) {
   //debug << "vgui_tableau::key_press\n";
   return false;
 }
 
+//-----------------------------------------------------------------------------
 bool vgui_tableau::help() {
   //debug << "vgui_tableau::help\n";
   return false;
 }
 
+//-----------------------------------------------------------------------------
 bool vgui_tableau::draw() {
   //debug << "vgui_tableau::draw\n";
   return false;
 }
 
 
+//-----------------------------------------------------------------------------
 //: Return the bounding box of this tableau.
 // If infinite in extent, or nothing is drawn, or you can't be bothered to
 // implement it, return false.
@@ -150,21 +163,7 @@ bool vgui_tableau::get_bounding_box(float /*low*/[3], float /*high*/[3]) const {
   return false;
 }
 
-//--------------------------------------------------------------------------------
-
-#if 0
-void vgui_tableau::post(const vgui_message &m) {
-  //  // send message to all observers :
-  //  notify(m);
-
-  // send message to all parents :
-  vcl_vector<vgui_tableau*> parents;
-  this->get_parents(parents);
-  for (unsigned i=0;i<parents.size();i++)
-    parents[i]->post(m);
-}
-#endif
-
+//-----------------------------------------------------------------------------
 void vgui_tableau::post_message(char const *msg, void const *data) {
   vcl_vector<vgui_tableau_sptr> ps;
   get_parents(&ps);
@@ -172,6 +171,7 @@ void vgui_tableau::post_message(char const *msg, void const *data) {
     ps[i]->post_message(msg, data);
 }
 
+//-----------------------------------------------------------------------------
 void vgui_tableau::post_redraw() {
   vcl_vector<vgui_tableau_sptr> ps;
   get_parents(&ps);
@@ -179,6 +179,7 @@ void vgui_tableau::post_redraw() {
     ps[i]->post_redraw();
 }
 
+//-----------------------------------------------------------------------------
 void vgui_tableau::post_overlay_redraw() {
   vcl_vector<vgui_tableau_sptr> ps;
   get_parents(&ps);
@@ -186,24 +187,26 @@ void vgui_tableau::post_overlay_redraw() {
     ps[i]->post_overlay_redraw();
 }
 
-//--------------------------------------------------------------------------------
-
+//-----------------------------------------------------------------------------
 //: virtual. returns some sort of name.
 vcl_string vgui_tableau::name() const {
   return file_name();
 }
 
+//-----------------------------------------------------------------------------
 //: virtual. returns the name of a file associated with some tableau below.
 vcl_string vgui_tableau::file_name() const {
   return "(none)";
 }
 
+//-----------------------------------------------------------------------------
 //: virtual. used to provide an informative name for printouts, debugging etc.
 // Often it's type_name() + some representation of the essential state.
 vcl_string vgui_tableau::pretty_name() const {
   return type_name();
 }
 
+//-----------------------------------------------------------------------------
 //: Return the name of the most derived (tableau) class.
 // virtual. This ought never to be called as derived classes should implement type_name().
 vcl_string vgui_tableau::type_name() const {
@@ -215,18 +218,19 @@ vcl_string vgui_tableau::type_name() const {
   return "vgui_tableau";
 }
 
-//--------------------------------------------------------------------------------
-
+//-----------------------------------------------------------------------------
 // push parents onto the given vcl_vector.
 void vgui_tableau::get_parents(vcl_vector<vgui_tableau_sptr> *v) const {
-  vgui_slot::get_parents_of(const_cast<vgui_tableau*>(this),v);
+  vgui_parent_child_link::get_parents_of(const_cast<vgui_tableau*>(this),v);
 }
 
+//-----------------------------------------------------------------------------
 // push children onto the given vcl_vector.
 void vgui_tableau::get_children(vcl_vector<vgui_tableau_sptr> *v) const {
-  vgui_slot::get_children_of(const_cast<vgui_tableau*>(this),v);
+  vgui_parent_child_link::get_children_of(const_cast<vgui_tableau*>(this),v);
 }
 
+//-----------------------------------------------------------------------------
 // get the ith child, or return 0. supplied by special request from geoff.
 vgui_tableau_sptr vgui_tableau::get_child(unsigned i) const {
   vcl_vector<vgui_tableau_sptr> children;
@@ -234,16 +238,19 @@ vgui_tableau_sptr vgui_tableau::get_child(unsigned i) const {
   return i<children.size() ? children[i] : vgui_tableau_sptr();
 }
 
+//-----------------------------------------------------------------------------
 // virtual overridden by consenting parents :
 bool vgui_tableau::add_child(vgui_tableau_sptr const &) {
   return false;
 }
 
+//-----------------------------------------------------------------------------
 //
 bool vgui_tableau::remove_child(vgui_tableau_sptr const&) {
   return false;
 }
 
+//-----------------------------------------------------------------------------
 //:
 // This method is called when some part of the program (typically the slot
 // mechanism) is about to forcibly replace a child of this tableau.
@@ -254,9 +261,10 @@ bool vgui_tableau::notify_replaced_child(vgui_tableau_sptr const& /*old_child*/,
   return true;
 }
 
-//--------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 // == MENUS ==
 
+//-----------------------------------------------------------------------------
 //:
 // This method is for tableaux to implement if they want to _add_ some items to
 // the popup menu. They can assign to or clear 'menu', but that is not recommended
@@ -268,8 +276,10 @@ void vgui_tableau::add_popup(vgui_menu &/*menu*/) {
   // do nothing by default.
 }
 
+//-----------------------------------------------------------------------------
 //: Gets popup menu for this tableau.
-// If recurse is, true, recursively add the popup menus for children and children's children etc.
+// If recurse is, true, recursively add the popup menus for children and 
+// children's children etc.
 //
 // ** this is a mixin method. it does some work for you. **
 void vgui_tableau::get_popup(vgui_popup_params const &params, vgui_menu &menu) {
@@ -307,18 +317,20 @@ void vgui_tableau::get_popup(vgui_popup_params const &params, vgui_menu &menu) {
   }
 }
 
+//-----------------------------------------------------------------------------
 void vgui_tableau::adopt (vgui_tableau_sptr const &) const
 {
 }
 
+//-----------------------------------------------------------------------------
 void vgui_tableau::disown(vgui_tableau_sptr const &) const
 {
 }
 
-//--------------------------------------------------------------------------------
 
-// prints pretty name and address of tableau.
-// eg : pig.jpg[vgui_composite:0xeffff728]
+//-----------------------------------------------------------------------------
+//: Prints pretty name and address of tableau.
+//  eg : pig.jpg[vgui_composite:0xeffff728]
 vcl_ostream &operator<<(vcl_ostream &os, vgui_tableau_sptr const &t)
 {
   if (t)
@@ -327,16 +339,16 @@ vcl_ostream &operator<<(vcl_ostream &os, vgui_tableau_sptr const &t)
     return os << "(empty vgui_tableau_sptr)" << vcl_flush;
 }
 
-//--------------------------------------------------------------------------------
-
-// push all tableaux onto v :
+//-----------------------------------------------------------------------------
+//: Push all tableaux onto v :
 void vgui_tableau::get_all(vcl_vector<vgui_tableau_sptr> *v) {
   //v->insert(v->begin(), all->begin(), all->end());
   for (unsigned i=0; i<all->size(); ++i)
     v->push_back((*all)[i]);
 }
 
-// returns true if the given address points to a valid tableau.
+//-----------------------------------------------------------------------------
+//: Returns true if the given address points to a valid tableau.
 bool vgui_tableau::exists(vgui_tableau_sptr const& ptr) {
   return vcl_find(all->begin(), all->end(), ptr.operator->()) != all->end();
 }

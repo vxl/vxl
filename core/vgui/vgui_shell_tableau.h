@@ -17,9 +17,9 @@
 // \endverbatim
 
 #include "vgui_shell_tableau_sptr.h"
-#include <vgui/vgui_composite.h>
+#include <vgui/vgui_composite_tableau.h>
 #include <vgui/vgui_clear_tableau_sptr.h>
-#include <vgui/vgui_tview_launcher_sptr.h>
+#include <vgui/vgui_tview_launcher_tableau_sptr.h>
 //class vgui_quit_tableau;
 
 
@@ -36,9 +36,9 @@
 //    m=3 your_tableau_0 <--- first user added child.
 // ^  2   clear_tableau
 // |  1   quit_tableau
-// |  0   tview_launcher <--- first child.
+// |  0   tview_launch_tableau <--- first child.
 // \endverbatim
-class vgui_shell_tableau : public vgui_composite {
+class vgui_shell_tableau : public vgui_composite_tableau {
 public:
   vgui_shell_tableau();
   vgui_shell_tableau(vgui_tableau_sptr const &);
@@ -60,7 +60,7 @@ public:
   void set_enable_key_bindings(bool on) { enable_key_bindings = on; }
 
   vgui_clear_tableau_sptr get_clear() const { return clear; }
-  vgui_tview_launcher_sptr get_graph() const { return graph; }
+  vgui_tview_launcher_tableau_sptr get_graph() const { return graph; }
 
 protected:
   ~vgui_shell_tableau();
@@ -71,7 +71,7 @@ private:
   bool do_quit;
   bool enable_key_bindings;
   vgui_clear_tableau_sptr clear;
-  vgui_tview_launcher_sptr graph;
+  vgui_tview_launcher_tableau_sptr graph;
 };
 
 //: Create a smart-pointer to a vgui_shell_tableau.

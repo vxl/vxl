@@ -11,6 +11,9 @@
 #include "vgui_function_tableau.h"
 #include <vgui/vgui_event.h>
 
+//----------------------------------------------------------------------------
+//: Constructor - don't use this, use vgui_function_tableau_new.
+//  Creates a default vgui_function_tableau.
 vgui_function_tableau::vgui_function_tableau()
   : draw_(0)
   , mouse_up_(0)
@@ -21,12 +24,16 @@ vgui_function_tableau::vgui_function_tableau()
 {
 }
 
+//----------------------------------------------------------------------------
+//: Destructor - called by vgui_function_tableau_sptr.
 vgui_function_tableau::~vgui_function_tableau()
 {
 }
 
 bool vgui_function_tableau::redraw = false;
 
+//----------------------------------------------------------------------------
+//: Handles all events by passing them to the appropriate functions.
 bool vgui_function_tableau::handle(const vgui_event& event) {
 
   if (event.type==vgui_DRAW && draw_) {
@@ -74,7 +81,5 @@ bool vgui_function_tableau::handle(const vgui_event& event) {
       return retv;
     }
   }
-
-
   return false;
 }

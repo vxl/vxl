@@ -64,7 +64,7 @@ vgui_event_server::vgui_event_server(vgui_tableau_sptr const& t):
 //  vcl_cerr << "vgui_event_server::hooking up \n";
 
   // link up grabber
-  vgui_slot::replace_child_everywhere(t, grabber_);
+  vgui_parent_child_link::replace_child_everywhere(t, grabber_);
 
   // Link t to grabber as child
   grabber_->add_child(t);
@@ -73,7 +73,7 @@ vgui_event_server::vgui_event_server(vgui_tableau_sptr const& t):
 vgui_event_server::~vgui_event_server()
 {
   // Replace the grabber with its child
-  vgui_slot::replace_child_everywhere(grabber_, grabber_->child);
+  vgui_parent_child_link::replace_child_everywhere(grabber_, grabber_->child);
 
 //if (debug)
 //  vcl_cerr << "vgui_event_server::unhooking\n";
