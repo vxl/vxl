@@ -89,6 +89,10 @@ char const *guess_file_format(char const* filename)
     macro(pnm, pnm);
     macro(jpg, jpeg);
     macro(jpeg, jpeg);
+    macro(iris, iris);
+    macro(rgb, iris);
+    macro(viff, viff);
+    macro(mit, mit);
 #undef macro
     else {
       //file_format = dot+1; // hope it works.
