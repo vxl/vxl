@@ -1,19 +1,16 @@
 #ifndef vcl_iso_ostream_h_
 #define vcl_iso_ostream_h_
 
+// This is a generated file. DO NOT EDIT! Not even a little bit.
+
 #include <ostream>
 
-// basic_ostream
-#ifndef vcl_basic_ostream
-#define vcl_basic_ostream std::basic_ostream
+#ifdef vcl_generic_ostream_STD
+  ** error **
+#else
+# define vcl_generic_ostream_STD std
 #endif
-// ostream
-#ifndef vcl_ostream
-#define vcl_ostream std::ostream
-#endif
-// wostream
-#ifndef vcl_wostream
-#define vcl_wostream std::wostream
-#endif
+
+#include "../generic/vcl_ostream.h"
 
 #endif // vcl_iso_ostream_h_
