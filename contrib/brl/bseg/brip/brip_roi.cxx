@@ -14,9 +14,7 @@ void brip_roi::set_image_bounds(const int n_image_cols,
   n_image_rows_ = n_image_rows;
 }
 
-vsol_box_2d_sptr brip_roi::clip_to_image_bounds(vsol_box_2d_sptr box,
-                                                const int n_image_cols,
-                                                const int n_image_rows)
+vsol_box_2d_sptr brip_roi::clip_to_image_bounds(vsol_box_2d_sptr box)
 {
   if (!box||!n_image_cols_||!n_image_rows_)
     return box;
@@ -31,8 +29,8 @@ vsol_box_2d_sptr brip_roi::clip_to_image_bounds(vsol_box_2d_sptr box,
     y0 = 0;
   if (x0 > n_image_cols_-1)
     x0 = n_image_cols_-1;
-  if (y0 > n_image_rows-1)
-    y0 = n_image_rows-1;
+  if (y0 > n_image_rows_-1)
+    y0 = n_image_rows_-1;
   if (xm < 0)
     xm = 0;
   if (xm > n_image_cols_-1)
@@ -63,7 +61,7 @@ void brip_roi::add_region(const int x0, const int y0, const int xs, const int ys
   }
   //need to potentially clip the region
   vsol_box_2d_sptr creg =
-    this->clip_to_image_bounds(reg, n_image_cols_, n_image_rows_);
+    this->clip_to_image_bounds(reg);
   regions_.push_back(creg);
 }
 
@@ -81,7 +79,7 @@ void brip_roi::add_region(const int xc, const int yc, const int radius)
   }
   //need to potentially clip the region
   vsol_box_2d_sptr creg =
-    this->clip_to_image_bounds(reg, n_image_cols_, n_image_rows_);
+    this->clip_to_image_bounds(reg);
   regions_.push_back(creg);
 }
 
@@ -94,7 +92,7 @@ void brip_roi::add_region(vsol_box_2d_sptr const & box)
   }
   //need to potentially clip the region
   vsol_box_2d_sptr creg =
-    this->clip_to_image_bounds(box, n_image_cols_, n_image_rows_);
+    this->clip_to_image_bounds(box);
   regions_.push_back(creg);
 }
 
@@ -112,13 +110,12 @@ bool brip_roi::empty()
   return false;
 }
 
-void brip_roi::clip_to_image_bounds(const int n_image_cols,
-                                    const int n_image_rows)
+void brip_roi::clip_to_image_bounds()
 {
   vcl_vector<vsol_box_2d_sptr> temp;
   for (vcl_vector<vsol_box_2d_sptr>::iterator rit = regions_.begin();
        rit != regions_.end(); rit++)
-    temp.push_back(this->clip_to_image_bounds(*rit, n_image_cols_, n_image_rows_));
+    temp.push_back(this->clip_to_image_bounds(*rit));
   regions_ = temp;
 }
 
@@ -166,7 +163,7 @@ int brip_roi::ir(int row, int i)
 
 bool brip_roi::remove_region(int i)
 {
-  //not yet implemented
+  vcl_cerr << "brip_roi::remove_region(" << i << ") NYI\n";
   return false;
 }
 

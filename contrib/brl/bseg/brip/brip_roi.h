@@ -42,12 +42,9 @@ class brip_roi : public vbl_ref_count
   void add_region(vsol_box_2d_sptr const & box);
 
   //:useful for inserting a new region, doesn't affect existing image bounds
-  vsol_box_2d_sptr clip_to_image_bounds(vsol_box_2d_sptr box, 
-                                        const int n_image_cols,
-                                        const int n_image_rows);
+  vsol_box_2d_sptr clip_to_image_bounds(vsol_box_2d_sptr box);
   //:clips all existing regions, doesn't affect existing image bounds
-  void clip_to_image_bounds(const int n_image_cols,
-                            const int n_image_rows);
+  void clip_to_image_bounds();
   bool empty();
   unsigned int n_regions() { return regions_.size(); }
   int cmin(int i); //!< column minimum for region_i
