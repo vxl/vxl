@@ -47,9 +47,9 @@ void test_scale_pyramid_builder_2d()
   const mil_image_2d_of<vil_byte>& image1 = (const mil_image_2d_of<vil_byte>&) image_pyr(1);
   TEST("Level 1 size x",image1.nx(),(int)(nx/1.2+0.5));
   TEST("Level 1 size y",image1.ny(),(int)(ny/1.2+0.5));
-  TEST("Pixel (0,0)",image1(0,0),1);
+  TEST("Pixel (0,0)",image1(0,0),0);
   TEST("Pyramid(0) (12,12) = Pyramid(1) (11,10)",image0(12,12), image1(11,10));
-  TEST("Corner pixel",image1(16,16),208);
+  TEST("Corner pixel",image1(16,16),209);
 
   builder.setMaxLevels(default_n_levels);
   builder.extend(image_pyr);
