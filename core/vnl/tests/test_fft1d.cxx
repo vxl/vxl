@@ -3,7 +3,7 @@
 // \brief test program for 1D FFT routines.
 // \author Veit U.B. Schenk, Oxford RRG.
 // \date 20 Mar 1998
-// Creates 1D arrays and vectors, computes forward fft, then backward fft 
+// Creates 1D arrays and vectors, computes forward fft, then backward fft
 // for all (where applicable) constructors of the class
 // and computes differences between input and output.
 //
@@ -34,19 +34,16 @@ const fsm_real maxImagErrorPrecision = 1e-5;
 void test_fft1d () {
   const int ciArraySizeX = 64;
 
-  /*
-   * calculate prime factors for this size array
-   **************************************************/
+  // calculate prime factors for this size array
+  //============================================
   vnl_fftxd_prime_factors<fsm_real> oPFx (ciArraySizeX);
   if (!oPFx) {
     vcl_cerr << "cannot decompose X-size " << ciArraySizeX << ")into the form (2^P)(3^Q)(5^R)\n";
     abort();
   }
 
-  /*
-   * create a number of arrays for testing the different constructors
-   ************************************************************/
-
+  // create a number of arrays for testing the different constructors
+  //=================================================================
   vnl_vector<vcl_complex<fsm_real> > fTestArrayComplex(ciArraySizeX);
   vnl_vector<fsm_real> fTestArray(ciArraySizeX);
   vnl_vector<fsm_real> fZeroArray(ciArraySizeX,0.0); // imag == 0.0
@@ -63,14 +60,14 @@ void test_fft1d () {
       complArray[iC] = iC; // (default = complex<T>(r,0.0))
     }
 
-  /****************************** super-easy constructors ***************/
+  //============================= super-easy constructors =====================
   // simplest of all constructors: just a 'real' array
   vnl_fft1d<fsm_real> oFFTSimple (fTestArray);
   // second simplest: a complex array
   vnl_fft1d<fsm_real> oFFTSimpleComplex (fTestArrayComplex, +1);
   // the following are the constructors that take twiddle factors
 
-  /******************************* take matrices *******************************/
+  //============================= take matrices ===============================
   // real matrix
   vnl_fft1d<fsm_real> oFFTRealMTwiddle(fTestArray, oPFx, +1);
   // real/imag matrices
@@ -79,7 +76,7 @@ void test_fft1d () {
   // complex matrix
   vnl_fft1d<fsm_real> oFFTComplMTwiddle(fTestArrayComplex, oPFx, +1);
 #endif
-  /******************************* arrays of data *******************************/
+  //============================= arrays of data ==============================
   // real data
   vnl_fft1d<fsm_real> oFFTrealDTwiddle(realArray, ciArraySizeX,
                                       oPFx, +1);
@@ -102,9 +99,8 @@ void test_fft1d () {
   vnl_test_assert ("test forward 6", oFFTSimple == oFFTimagDTwiddle);
   //awfasabove; vnl_test_assert ("test forward 7", oFFTSimple == oFFTcomplDTwiddle);
 
-  /*
-   * the whole thing backwards
-   **************************************************/
+  // the whole thing backwards
+  //==========================
   vnl_vector<fsm_real> fBackRealMat = real(VCL_OVERLOAD_CAST(vnl_vector<vcl_complex<fsm_real> >&, oFFTSimple));
   vnl_vector<fsm_real> fBackImagMat = imag(VCL_OVERLOAD_CAST(vnl_vector<vcl_complex<fsm_real> >&, oFFTSimple));
   fsm_real *realBackArray = fBackRealMat.data_block ();
@@ -115,7 +111,7 @@ void test_fft1d () {
   vnl_fft1d<fsm_real> oFFTBackSimpleComplex (oFFTSimple, -1);
   // the following are the constructors that take twiddle factors
 
-  /******************************* take matrices *******************************/
+  //============================== take matrices ==============================
   // real/imag matrices
   vnl_fft1d<fsm_real> oFFTBackRIMTwiddle (fBackRealMat, fBackImagMat,
                                           oPFx, -1);
@@ -123,7 +119,7 @@ void test_fft1d () {
   // complex matrix
   vnl_fft1d<fsm_real> oFFTBackComplMTwiddle(oFFTSimple, oPFx, -1);
 #endif
-  /******************************* arrays of data *******************************/
+  //============================== arrays of data =============================
   // real/imag data
   vnl_fft1d<fsm_real> oFFTBackimagDTwiddle(realBackArray, imagBackArray,
                                            ciArraySizeX,
