@@ -269,10 +269,10 @@ void segv_segmentation_manager::test_face()
   vsol_point_2d_sptr pb = new vsol_point_2d(sx-2,1);  
   vsol_point_2d_sptr pc = new vsol_point_2d(sx-2,sy-2);  
   vsol_point_2d_sptr pd = new vsol_point_2d(1,sy-2);
-  vsol_curve_2d_sptr cab = new vdgl_digital_curve(*pa, *pb);
-  vsol_curve_2d_sptr cbc = new vdgl_digital_curve(*pb, *pc);
-  vsol_curve_2d_sptr ccd = new vdgl_digital_curve(*pc, *pd);
-  vsol_curve_2d_sptr cda = new vdgl_digital_curve(*pd, *pa);
+  vsol_curve_2d_sptr cab = new vdgl_digital_curve(pa, pb);
+  vsol_curve_2d_sptr cbc = new vdgl_digital_curve(pb, pc);
+  vsol_curve_2d_sptr ccd = new vdgl_digital_curve(pc, pd);
+  vsol_curve_2d_sptr cda = new vdgl_digital_curve(pd, pa);
   vtol_vertex_2d_sptr va = new vtol_vertex_2d(*pa);
   vtol_vertex_2d_sptr vb = new vtol_vertex_2d(*pb);
   vtol_vertex_2d_sptr vc = new vtol_vertex_2d(*pc);
@@ -293,9 +293,9 @@ void segv_segmentation_manager::test_face()
   vsol_point_2d_sptr p1 = new vsol_point_2d(px+3,py+3);  
   vsol_point_2d_sptr p2 = new vsol_point_2d(px,py-3);
   vsol_point_2d_sptr p3 = new vsol_point_2d(px-3,py+3);  
-  vsol_curve_2d_sptr c12 = new vdgl_digital_curve(*p1, *p2);
-  vsol_curve_2d_sptr c23 = new vdgl_digital_curve(*p2, *p3);
-  vsol_curve_2d_sptr c31 = new vdgl_digital_curve(*p3, *p1);
+  vsol_curve_2d_sptr c12 = new vdgl_digital_curve(p1, p2);
+  vsol_curve_2d_sptr c23 = new vdgl_digital_curve(p2, p3);
+  vsol_curve_2d_sptr c31 = new vdgl_digital_curve(p3, p1);
   vtol_vertex_2d_sptr v1 = new vtol_vertex_2d(*p1);
   vtol_vertex_2d_sptr v2 = new vtol_vertex_2d(*p2);
   vtol_vertex_2d_sptr v3 = new vtol_vertex_2d(*p3);
