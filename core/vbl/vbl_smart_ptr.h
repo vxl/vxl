@@ -24,6 +24,7 @@
 //
 // .SECTION Modifications
 // 2000.05.15 François BERTEL Added some missing <T>
+// 2000.05.16 Peter Vanroose  Operators > < >= <= made const
 //
 //-----------------------------------------------------------------------------
 
@@ -111,19 +112,19 @@ public:
   }
 
   // Comparison of pointers
-  bool operator < (const vbl_smart_ptr<T> &r)
+  bool operator < (const vbl_smart_ptr<T> &r) const
   { return (void*)ptr_ < (void*) r.ptr_; }
 
-  bool operator > (const vbl_smart_ptr<T> &r)
+  bool operator > (const vbl_smart_ptr<T> &r) const
   { return (void*)ptr_ > (void*) r.ptr_; }
 
-  bool operator <= (const vbl_smart_ptr<T> &r)
+  bool operator <= (const vbl_smart_ptr<T> &r) const
   { return (void*)ptr_ <= (void*) r.ptr_; }
 
-  bool operator >= (const vbl_smart_ptr<T> &r)
+  bool operator >= (const vbl_smart_ptr<T> &r) const
   { return (void*)ptr_ >= (void*) r.ptr_; }
 
-  vbl_smart_ptr<T> &operator = (const vbl_smart_ptr<T> &r)
+  vbl_smart_ptr<T>& operator = (vbl_smart_ptr<T> const& r)
   { 
     return this->operator = (r.ptr()); 
   }
