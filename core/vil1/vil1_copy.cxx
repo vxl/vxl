@@ -4,7 +4,6 @@
 #endif
 //:
 // \file
-// vil_copy
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date 16 Feb 00
 //
@@ -17,8 +16,6 @@
 #include "vil_copy.h"
 
 #include <vcl_cassert.h>
-#include <vcl_climits.h>
-
 #include <vil/vil_image.h>
 #include <vil/vil_memory_image.h>
 

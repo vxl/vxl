@@ -10,8 +10,6 @@
 //-----------------------------------------------------------------------------
 
 #include "vil_image_impl.h"
-
-#include <vcl_climits.h> // CHAR_BIT
 #include <vcl_iostream.h>
 #include <vil/vil_image.h>
 
