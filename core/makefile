@@ -40,6 +40,9 @@ SUBDIRS += vsl
 # coordinate systems
 SUBDIRS += vcsl
 
+# digital geometry
+SUBDIRS += vdgl
+
 #######################################
 include ${IUEROOT}/config/top-params.mk
 #######################################
