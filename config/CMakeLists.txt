@@ -8,7 +8,13 @@
 # It might be a good idea to move this CMakeLists.txt file to its own
 # new directory named VXLSRC/export.
 
-# Needed to get non-cached settings used in VXLConfig.cmake.in
+# Needed to get non-cached variable settings used in VXLConfig.cmake.in
+INCLUDE( ${MODULE_PATH}/FindNetlib.cmake )
+INCLUDE( ${MODULE_PATH}/FindQv.cmake )
+INCLUDE( ${MODULE_PATH}/FindZLIB.cmake )
+INCLUDE( ${MODULE_PATH}/FindPNG.cmake )
+INCLUDE( ${MODULE_PATH}/FindJPEG.cmake )
+INCLUDE( ${MODULE_PATH}/FindTIFF.cmake )
 INCLUDE( ${MODULE_PATH}/FindMPEG2.cmake )
 
 # Save the compiler settings so another project can import them.
