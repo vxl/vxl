@@ -1,14 +1,9 @@
-
-//	Copyright: (C) 2001 British Telecommunications PLC
-
+// Copyright: (C) 2001 British Telecommunications PLC
 
 //:
 // \file
 // \brief Tests the Sequential minimum optimisation code.
 // \author Ian Scott
-
-
-// inclusions
 
 #include <vcl_climits.h>
 #include <vcl_iostream.h>
@@ -29,9 +24,8 @@
 #include <mbl/mbl_print.h>
 #include <vul/vul_timer.h>
 
-
 //=======================================================================
-  
+
 void test_smo()
 {
   vcl_cout << "\n\n\n";
@@ -39,178 +33,172 @@ void test_smo()
   vcl_cout << " Testing clsfy_smo_1_rbf \n";
   vcl_cout << "*************************\n" << vcl_endl;
 
-
   vcl_cout<<"======== TESTING BUILDING ==========="<<vcl_endl;
 
+  vcl_vector<vpdfl_axis_gaussian_sampler *> generator(4);//
+  const unsigned nDims = 2;
+  vnl_vector<double> mean0(nDims), var0(nDims), mean1(nDims), var1(nDims), mean2(nDims), var2(nDims), mean3(nDims), var3(nDims);
+  vpdfl_axis_gaussian PDF0, PDF1, PDF2, PDF3;
 
-	vcl_vector<vpdfl_axis_gaussian_sampler *> generator(4);//
-	const unsigned nDims = 2;
-	vnl_vector<double> mean0(nDims), var0(nDims), mean1(nDims), var1(nDims), mean2(nDims), var2(nDims), mean3(nDims), var3(nDims);
-	vpdfl_axis_gaussian PDF0, PDF1, PDF2, PDF3;
-
-
-	mean0.fill(0.0); mean0(0) = 1;
-	mean1.fill(0.0); mean1(0) = -1;
-	mean2.fill(0.0); mean2(1) = 1;
-	mean3.fill(0.0); mean3(1) = -1;
-
+  mean0.fill(0.0); mean0(0) = 1;
+  mean1.fill(0.0); mean1(0) = -1;
+  mean2.fill(0.0); mean2(1) = 1;
+  mean3.fill(0.0); mean3(1) = -1;
 
   const double width = 0.05;
-	var0.fill(width/10.0); var0(0) = width;
-	var1.fill(width/10.0); var1(0) = width;
-	var2.fill(width/10.0); var2(1) = width;
-	var3.fill(width/10.0); var3(1) = width;
+  var0.fill(width/10.0); var0(0) = width;
+  var1.fill(width/10.0); var1(0) = width;
+  var2.fill(width/10.0); var2(1) = width;
+  var3.fill(width/10.0); var3(1) = width;
 
-	PDF0.set(mean0, var0);
-	PDF1.set(mean1, var1);
-	PDF2.set(mean2, var2);
-	PDF3.set(mean3, var3);
-	
-	generator[0] = (vpdfl_axis_gaussian_sampler *)PDF0.new_sampler();
-	generator[1] = (vpdfl_axis_gaussian_sampler *)PDF1.new_sampler();
-	generator[2] = (vpdfl_axis_gaussian_sampler *)PDF2.new_sampler();
-	generator[3] = (vpdfl_axis_gaussian_sampler *)PDF3.new_sampler();
-	mbl_mz_random rng; 
-	rng.reseed(33323335);
-	const unsigned nSamples = 200;
-	vcl_vector<unsigned> labels(nSamples);
-	vcl_vector<int> svlabels(nSamples);
-	vcl_vector<vnl_vector<double> > data(nSamples);
-	vnl_vector<double> s;
-	vcl_cout << "Generating test data" << vcl_endl;
-	vcl_vector<unsigned> labelcount(4, 0u);
+  PDF0.set(mean0, var0);
+  PDF1.set(mean1, var1);
+  PDF2.set(mean2, var2);
+  PDF3.set(mean3, var3);
+
+  TEST("is_a() and is_class() for vpdfl_axis_gaussian",
+       PDF0.is_class("vpdfl_axis_gaussian") &&
+       PDF0.is_class("vpdfl_pdf_base") &&
+       PDF0.is_a() == "vpdfl_axis_gaussian", true);
+
+  generator[0] = (vpdfl_axis_gaussian_sampler *)PDF0.new_sampler();
+  generator[1] = (vpdfl_axis_gaussian_sampler *)PDF1.new_sampler();
+  generator[2] = (vpdfl_axis_gaussian_sampler *)PDF2.new_sampler();
+  generator[3] = (vpdfl_axis_gaussian_sampler *)PDF3.new_sampler();
+
+  TEST("is_a() and is_class() for vpdfl_axis_gaussian_sampler",
+       generator[0]->is_class("vpdfl_axis_gaussian_sampler") &&
+       generator[0]->is_class("vpdfl_sampler_base") &&
+       generator[0]->is_a() == "vpdfl_axis_gaussian_sampler", true);
+
+  mbl_mz_random rng;
+  rng.reseed(33323335);
+  const unsigned nSamples = 200;
+  vcl_vector<unsigned> labels(nSamples);
+  vcl_vector<int> svlabels(nSamples);
+  vcl_vector<vnl_vector<double> > data(nSamples);
+  vnl_vector<double> s;
+  vcl_cout << "Generating test data" << vcl_endl;
+  vcl_vector<unsigned> labelcount(4, 0u);
 #if 0
   vcl_ofstream svmtest("C:\\svmtest.txt");
 #endif
-	for (int i=0; i<nSamples; i++)
-	{
-		int c = rng.lrand32(3);
-		labels[i] = c/2;
-		svlabels[i] = (c/2) * 2 - 1;
-		labelcount[c] ++;
-		generator[c]->sample(s);
+  for (int i=0; i<nSamples; i++)
+  {
+    int c = rng.lrand32(3);
+    labels[i] = c/2;
+    svlabels[i] = (c/2) * 2 - 1;
+    labelcount[c] ++;
+    generator[c]->sample(s);
 #if 0
     svmtest << s << " " << svlabels[i] << vcl_endl;
 #endif
-		data[i] = s;
-	}
+    data[i] = s;
+  }
 
-	delete generator[0];
-	delete generator[1];
-	delete generator[2];
-	delete generator[3];
+  delete generator[0];
+  delete generator[1];
+  delete generator[2];
+  delete generator[3];
 
-	mbl_data_array_wrapper<vnl_vector<double> > trainingVectors(data);
+  mbl_data_array_wrapper<vnl_vector<double> > trainingVectors(data);
 
-	
-	vcl_cout << "****************The Training set****************" <<vcl_endl;
-	vcl_cout << "The number of labels from each generators are respectively ";
-	vcl_cout << labelcount[0] << ' ' << labelcount[1] << ' ' << labelcount[2] << ' ' << labelcount[3] <<  vcl_endl;
+  vcl_cout << "****************The Training set****************" <<vcl_endl;
+  vcl_cout << "The number of labels from each generators are respectively ";
+  vcl_cout << labelcount[0] << ' ' << labelcount[1] << ' ' << labelcount[2] << ' ' << labelcount[3] <<  vcl_endl;
 
+  vnl_vector<double> x(nDims);
+  vcl_vector<double> out(1);
+  x.fill(0.0);
+  vcl_cout << "x(2) varies across from -2 to + 2" << vcl_endl;
+  vcl_cout << "x(1) varies down from -2 to + 2" << vcl_endl;
 
-	vnl_vector<double> x(nDims);
-	vcl_vector<double> out(1);
-	x.fill(0.0);
-	vcl_cout << "x(2) varies across from -2 to + 2" << vcl_endl;
-	vcl_cout << "x(1) varies down from -2 to + 2" << vcl_endl;
-	
+  clsfy_k_nearest_neighbour knn;
+  knn.set(data, labels);
+  knn.set_k(3);
+  vcl_cout  << vcl_endl << "KNN output"<<vcl_endl;
+  vcl_cout << vcl_setprecision(4);
+  for (x(0) = -2; x(0) <= 2 ; x(0) += 0.25)
+  {
+    for (x(1) = -2; x(1) <= 2 ; x(1) += 0.25)
+    {
+      knn.class_probabilities(out, x);
+      vcl_cout << vcl_fixed << vcl_setw(3) << out[0] << ' ';
+    }
+    vcl_cout << vcl_endl;
+  }
 
-	
-	clsfy_k_nearest_neighbour knn;
-	knn.set(data, labels);
-	knn.set_k(3);
-	vcl_cout  << vcl_endl << "KNN output"<<vcl_endl;
-	vcl_cout << vcl_setprecision(4);
-	for (x(0) = -2; x(0) <= 2 ; x(0) += 0.25)
-	{
-		for (x(1) = -2; x(1) <= 2 ; x(1) += 0.25)
-		{
-			knn.class_probabilities(out, x);
-			vcl_cout << vcl_fixed << vcl_setw(3) << out[0] << ' ';
-		}
-		vcl_cout << vcl_endl;
-	}
-		
-	for (x(0) = -2; x(0) <= 2 ; x(0) += 0.25)
-	{
-		for (x(1) = -2; x(1) <= 2 ; x(1) += 0.25)
-		{
+  for (x(0) = -2; x(0) <= 2 ; x(0) += 0.25)
+  {
+    for (x(1) = -2; x(1) <= 2 ; x(1) += 0.25)
+    {
+      vcl_cout << knn.classify(x);
+    }
+    vcl_cout << vcl_endl;
+  }
 
-			vcl_cout << knn.classify(x);
-		}
-		vcl_cout << vcl_endl;
-	}
+  clsfy_rbf_parzen win;
+  win.set(data, labels);
+  win.set_rbf_width(0.14);
+  win.set_power(10);
+  vcl_cout << vcl_endl << "Training data distribution"<<vcl_endl;
+  vcl_cout << vcl_setprecision(1);
+  for (x(0) = -2; x(0) <= 2 ; x(0) += 0.25)
+  {
+    for (x(1) = -2; x(1) <= 2 ; x(1) += 0.25)
+    {
+      double v = win.weightings(x);
+      if (v < 0.01)
+        vcl_cout << " 0   ";
+      else
+        vcl_cout << vcl_fixed << vcl_setw(4) << v << ' ';
+    }
+    vcl_cout << vcl_endl;
+  }
 
-	clsfy_rbf_parzen win;
-	win.set(data, labels);
-	win.set_rbf_width(0.14); 
-	win.set_power(10);
-	vcl_cout << vcl_endl << "Training data distribution"<<vcl_endl;
-	vcl_cout << vcl_setprecision(1);
-	for (x(0) = -2; x(0) <= 2 ; x(0) += 0.25)
-	{
-		for (x(1) = -2; x(1) <= 2 ; x(1) += 0.25)
-		{
-			double v = win.weightings(x);
-			if (v < 0.01)
-				vcl_cout << " 0   ";
-			else
-				vcl_cout << vcl_fixed << vcl_setw(4) << v << ' ';
-		}
-		vcl_cout << vcl_endl;
-	}
+  mbl_data_wrapper<vnl_vector<double> > &inputs = trainingVectors;
 
-	mbl_data_wrapper<vnl_vector<double> > &inputs = trainingVectors;
+  vcl_cout << "****************Testing SVM on Training set**************" <<vcl_endl;
+  vcl_cout << vcl_setprecision(8) << vcl_resetiosflags(vcl_ios_floatfield);
 
-	vcl_cout << "****************Testing SVM on Training set**************" <<vcl_endl;
-	vcl_cout << vcl_setprecision(8) << vcl_resetiosflags(vcl_ios::floatfield);
-
-	clsfy_smo_1_rbf svAPI;
-	svAPI.set_gamma( (1.0/(2.0*0.2*0.2)));
+  clsfy_smo_1_rbf svAPI;
+  svAPI.set_gamma( (1.0/(2.0*0.2*0.2)));
   //svAPI.set_C(1.0);
-	int i;
-	svAPI.set_data(inputs, svlabels  );
-		
+  int i;
+  svAPI.set_data(inputs, svlabels  );
 
   vul_timer mytimer;
 
- 
-
- 
-	svAPI.calc();
+  svAPI.calc();
   vcl_cerr << "Optimisation took " << mytimer.real() << " milliseconds\n";
 
   int nSupports=0;
-	for (i=0; i<nSamples; i++)
-	{
+  for (i=0; i<nSamples; i++)
+  {
     if (svAPI.lagrange_mults()(i) != 0.0)
     {
       nSupports++;
-			inputs.set_index(i);
-			vcl_cout << i << " " << vcl_fabs(svAPI.lagrange_mults()(i)) << " ";
-			for (int j=0; j<nDims; j++)
-				vcl_cout << inputs.current().operator()(j) << " ";
-			vcl_cout << labels[i] <<vcl_endl;
+      inputs.set_index(i);
+      vcl_cout << i << " " << vcl_fabs(svAPI.lagrange_mults()(i)) << " ";
+      for (int j=0; j<nDims; j++)
+        vcl_cout << inputs.current().operator()(j) << " ";
+      vcl_cout << labels[i] <<vcl_endl;
     }
-	}
+  }
 
-  
-  
   vcl_cout << "\n\n" << "Number of support vectors = " << nSupports << vcl_endl;
   TEST("Number of support vectors ~= 29",
-    nSupports >= 26 && nSupports <= 32, true);
+       nSupports >= 26 && nSupports <= 32, true);
 
-	vcl_cout << "\n\n" << "Bias = " << svAPI.bias() << vcl_endl;
+  vcl_cout << "\n\n" << "Bias = " << svAPI.bias() << vcl_endl;
   TEST("Bias ~= -0.064",
-    vnl_math_sqr(svAPI.bias()+0.064) < 1.0e-3, true);
+       vnl_math_sqr(svAPI.bias()+0.064) < 1.0e-3, true);
 
-
-	vcl_cout << "\n\n" << "Error = " << svAPI.error() << vcl_endl;
+  vcl_cout << "\n\n" << "Error = " << svAPI.error() << vcl_endl;
   TEST("Error = 0.0",
-    svAPI.error() == 0.0, true);
+       svAPI.error() == 0.0, true);
 
-	vcl_cout << vcl_setprecision(6) << vcl_resetiosflags(vcl_ios::floatfield);
-
+  vcl_cout << vcl_setprecision(6) << vcl_resetiosflags(vcl_ios_floatfield);
 }
 
 TESTMAIN(test_smo)

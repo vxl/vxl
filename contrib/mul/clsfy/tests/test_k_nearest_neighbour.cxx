@@ -312,7 +312,9 @@ void test_k_nearest_neighbour()
   TEST("Original KNN == KNN loaded by base ptr",
        knn.n_classes() == p_base_class_knn_in->n_classes() &&
        knn.n_dims() == p_base_class_knn_in->n_dims() &&
-       knn.is_a() == p_base_class_knn_in->is_a(),
+       knn.is_a() == p_base_class_knn_in->is_a() &&
+       p_base_class_knn_in->is_class(knn.is_a()) &&
+       p_base_class_knn_in->is_class("clsfy_classifier_base"),
        true);
 
   TEST("Original KNN(2.0, 2.0) == Loaded by base ptr KNN(2.0, 2.0)",
@@ -334,7 +336,9 @@ void test_k_nearest_neighbour()
   TEST("Original Parzen == Parzen loaded by base ptr",
        win.n_classes() == p_base_class_win_in->n_classes() &&
        win.n_dims() == p_base_class_win_in->n_dims() &&
-       win.is_a() == p_base_class_win_in->is_a(),
+       win.is_a() == p_base_class_win_in->is_a() &&
+       p_base_class_win_in->is_class(win.is_a()) &&
+       p_base_class_win_in->is_class("clsfy_classifier_base"),
        true);
 
   TEST("Original Parzen(2.0, 2.0) == Loaded by base ptr Parzen(2.0, 2.0)",
