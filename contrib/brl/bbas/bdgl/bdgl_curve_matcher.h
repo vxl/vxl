@@ -14,8 +14,6 @@
 //-----------------------------------------------------------------------------
 #include <vdgl/vdgl_edgel_chain_sptr.h>
 #include <bdgl/bdgl_curve_tracker_primitive.h>
-#include <vnl/vnl_matrix.h>
-
 
 class bdgl_curve_matcher_params
 {

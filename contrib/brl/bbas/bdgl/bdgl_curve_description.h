@@ -33,31 +33,31 @@ class bdgl_curve_description
   double               gradient_mean_dir_;
   double               gradient_std_val_;
   double               gradient_std_dir_;
- 
+
   vcl_vector<vgl_point_2d<double> > points_;
   vcl_vector<double> angles_;
   vcl_vector<double> grad_;
-  vsol_box_2d_sptr	   box_;
-	
+  vsol_box_2d_sptr   box_;
+
   //:Constructors/Destructor-------------------------
   ~bdgl_curve_description(){}
 
   bdgl_curve_description();
   //:Creates a description from a digital curve (edgel chain)
   bdgl_curve_description(vdgl_edgel_chain_sptr  ec)
-  { 
-	  init(ec); 
-	  compute_bounding_box(ec);
+  {
+    init(ec);
+    compute_bounding_box(ec);
   }
   void compute_bounding_box(vdgl_edgel_chain_sptr const& ec)
   {
-	vdgl_digital_curve_sptr dc;
-	dc = new vdgl_digital_curve(new vdgl_interpolator_linear(ec));
-	dc->compute_bounding_box();
-	box_=dc->get_bounding_box();
+  vdgl_digital_curve_sptr dc;
+  dc = new vdgl_digital_curve(new vdgl_interpolator_linear(ec));
+  dc->compute_bounding_box();
+  box_=dc->get_bounding_box();
   }
   void init(vdgl_edgel_chain_sptr const& ec);
-  
+
   // display information
   void info();
 };

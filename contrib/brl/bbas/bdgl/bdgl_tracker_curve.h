@@ -1,6 +1,5 @@
-// \file 
-// \brief basic data structures to represent curves and store
-// information about their matches
+// \file
+// \brief basic data structures to represent curves and store information about their matches
 // \author vj (vj@lems.brown.edu)
 // \date   8/20/2003
 // \verbatim
@@ -15,7 +14,6 @@
 #include <bdgl/bdgl_curve_description.h>
 #include<vcl_map.h>
 #include <vbl/vbl_ref_count.h>
-#include <vbl/vbl_smart_ptr.h>
 class bdgl_tracker_curve;
 
 #include <bdgl/bdgl_tracker_curve_sptr.h>
@@ -24,20 +22,21 @@ class bdgl_tracker_curve;
 class match_data : public vbl_ref_count
 {
  public:
-  match_data(){
+  match_data()
+  {
     curve_set=0;
     cost_=0;
     euc_=0;
     energy_=0;
   }
   ~match_data(){}
-  
+
   //holds the set of matched curves(can be one or more than one)
   vcl_vector<bdgl_tracker_curve_sptr> match_curve_set;
-  
+
   //the representative
   bdgl_tracker_curve_sptr curve_set;
-  
+
   //transformation of the matched_curve
   vnl_matrix<double> R_;
   vnl_matrix<double> T_;
@@ -55,68 +54,55 @@ class match_data : public vbl_ref_count
 
 class bdgl_tracker_curve  : public vbl_ref_count
 {
-  
-  public :
-    
+ public :
+
    bdgl_tracker_curve();
   ~bdgl_tracker_curve(){}
   //initialize the curve
   void init_set( vtol_edge_2d_sptr const &c,int id);
-  // intialize the curve using a set of points
+  // initialize the curve using a set of points
   void init_set(vcl_vector<vgl_point_2d<double> > p,int id);
- 
-  void set_curve(vtol_edge_2d_sptr c)
-    {  c_=c;}
-  
+
+  void set_curve(vtol_edge_2d_sptr c) { c_=c; }
+
   int get_id(){return id_;}
   void set_id(int id){id_=id;}
-  
-  void set_best_match_next(match_data_sptr bmn)
-    {best_match_next_=bmn;}
-  void set_best_match_prev(match_data_sptr bmp)
-    { best_match_prev_=bmp;	}
-  
-  match_data_sptr get_best_match_prev()
-    {return best_match_prev_;}
-  match_data_sptr get_best_match_next()
-    {return best_match_next_;}
+
+  void set_best_match_next(match_data_sptr bmn) { best_match_next_=bmn; }
+  void set_best_match_prev(match_data_sptr bmp) { best_match_prev_=bmp; }
+
+  match_data_sptr get_best_match_prev() {return best_match_prev_;}
+  match_data_sptr get_best_match_next() {return best_match_next_;}
   // get the curve
-  vtol_edge_2d_sptr get_curve_set(){return c_;}
+  vtol_edge_2d_sptr get_curve_set() { return c_; }
   double compute_euclidean_distance (vnl_matrix<double> R, vnl_matrix<double> T,double s);
   double compute_euclidean_distance_next (vnl_matrix<double> R, vnl_matrix<double> T,double s);
   void compute_transformation(vcl_vector<vgl_point_2d<double> > curve,
-				vcl_vector<vgl_point_2d<double> > & transformed_curve,
-				vnl_matrix<double> R,vnl_matrix<double> T);
+                              vcl_vector<vgl_point_2d<double> > & transformed_curve,
+                              vnl_matrix<double> R,vnl_matrix<double> T);
   double compute_mean(vcl_vector<double> t);
   // contains some basic level information about curve
   bdgl_curve_description * desc;
-  
+
   vcl_vector<match_data_sptr> next_;
   vcl_vector<match_data_sptr> prev_;
   vcl_vector<match_data_sptr> seg_prev_;
-  
+
   int match_id_;
   int group_id_;
   int frame_number;
   bool ismatchedprev_;
   bool ismatchednext_;
-  
+
   bool isreliable_;
   bool isreal_;
   //bool ismatched_;
-  protected :
+ protected :
     vtol_edge_2d_sptr c_;
   int id_;
-  
+
   match_data_sptr best_match_next_;
   match_data_sptr best_match_prev_;
-  
-
 };
 
-
-
-
 #endif
-
-

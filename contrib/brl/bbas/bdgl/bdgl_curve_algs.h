@@ -30,7 +30,7 @@ class bdgl_curve_algs
 
   //:Finds the x-y coordinates on a digital curve closest to the given point
   static bool closest_point(vdgl_digital_curve_sptr const& dc,
-                           const double x, const double y,
+                            const double x, const double y,
                             double& xc, double& yc);
 
   //:Finds location on a digital curve closest to the given point at index
@@ -61,10 +61,10 @@ class bdgl_curve_algs
                                  const double x, const double y,
                                  bool debug = false);
 
-  static void 
-	  smooth_curve(vcl_vector<vgl_point_2d<double> > & curve,double sigma);
-  static vdgl_digital_curve_sptr 
-	  create_digital_curves(vcl_vector<vgl_point_2d<double> > & curve);
+  static void
+    smooth_curve(vcl_vector<vgl_point_2d<double> > & curve,double sigma);
+  static vdgl_digital_curve_sptr
+    create_digital_curves(vcl_vector<vgl_point_2d<double> > & curve);
 
  private:
   bdgl_curve_algs();
