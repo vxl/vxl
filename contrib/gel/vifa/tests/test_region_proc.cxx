@@ -66,12 +66,10 @@ static void test_region_proc(int argc, char* argv[])
         {
           vtol_one_chain_sptr  oc = (*ocli);
 
-          vcl_cout << "    One Chain #" << j << ": " << (*oc);
-
-          topology_list*    tl = oc->inferiors();
-
-          if (tl)
+          if (oc->numinf() > 0)
           {
+            vcl_cout << "    One Chain #" << j << ": " << (*oc);
+            topology_list*    tl = oc->inferiors();
             topology_list::const_iterator  tli = tl->begin();
             for (int k = 1; tli != tl->end(); tli++, k++)
             {
@@ -97,10 +95,10 @@ static void test_region_proc(int argc, char* argv[])
 
           vcl_cout << "Perimeter (Edge-based): " << perim1 << vcl_endl;
           vcl_cout << "Perimeter (Curve-based): " << perim2 << vcl_endl;
-          oc->describe_directions(vcl_cout, 4);
+//        oc->describe_directions(vcl_cout, 4);
         }
 
-        delete ocl;
+//      delete ocl;
       }
     }
   }
