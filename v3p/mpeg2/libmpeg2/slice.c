@@ -1028,7 +1028,7 @@ static inline void slice_non_intra_DCT (picture_t * picture, uint8_t * dest,
                       2 * picture->uv_stride, 4)
 
 static void motion_mp1 (picture_t * picture, motion_t * motion,
-                        void (** table) (uint8_t *, uint8_t *, int, int))
+                        void (** table) (uint8_t *, uint8_t *, int32_t, int32_t))
 {
 #define bit_buf (picture->bitstream_buf)
 #define bits (picture->bitstream_bits)
@@ -1059,7 +1059,7 @@ static void motion_mp1 (picture_t * picture, motion_t * motion,
 }
 
 static void motion_fr_frame (picture_t * picture, motion_t * motion,
-                             void (** table) (uint8_t *, uint8_t *, int, int))
+                             void (** table) (uint8_t *, uint8_t *, int32_t, int32_t))
 {
 #define bit_buf (picture->bitstream_buf)
 #define bits (picture->bitstream_bits)
@@ -1086,7 +1086,7 @@ static void motion_fr_frame (picture_t * picture, motion_t * motion,
 }
 
 static void motion_fr_field (picture_t * picture, motion_t * motion,
-                             void (** table) (uint8_t *, uint8_t *, int, int))
+                             void (** table) (uint8_t *, uint8_t *, int32_t, int32_t))
 {
 #define bit_buf (picture->bitstream_buf)
 #define bits (picture->bitstream_bits)
@@ -1133,7 +1133,7 @@ static void motion_fr_field (picture_t * picture, motion_t * motion,
 }
 
 static void motion_fr_dmv (picture_t * picture, motion_t * motion,
-                           void (** table) (uint8_t *, uint8_t *, int, int))
+                           void (** table) (uint8_t *, uint8_t *, int32_t, int32_t))
 {
 #define bit_buf (picture->bitstream_buf)
 #define bits (picture->bitstream_bits)
@@ -1199,7 +1199,7 @@ static void motion_fr_dmv (picture_t * picture, motion_t * motion,
 }
 
 static void motion_reuse (picture_t * picture, motion_t * motion,
-                          void (** table) (uint8_t *, uint8_t *, int, int))
+                          void (** table) (uint8_t *, uint8_t *, int32_t, int32_t))
 {
     int motion_x, motion_y;
     unsigned int pos_x, pos_y, xy_half, offset;
@@ -1211,7 +1211,7 @@ static void motion_reuse (picture_t * picture, motion_t * motion,
 }
 
 static void motion_zero (picture_t * picture, motion_t * motion,
-                         void (** table) (uint8_t *, uint8_t *, int, int))
+                         void (** table) (uint8_t *, uint8_t *, int32_t, int32_t))
 {
     unsigned int offset;
 
@@ -1255,7 +1255,7 @@ static void motion_fr_conceal (picture_t * picture)
 }
 
 static void motion_fi_field (picture_t * picture, motion_t * motion,
-                             void (** table) (uint8_t *, uint8_t *, int, int))
+                             void (** table) (uint8_t *, uint8_t *, int32_t, int32_t))
 {
 #define bit_buf (picture->bitstream_buf)
 #define bits (picture->bitstream_bits)
@@ -1286,7 +1286,7 @@ static void motion_fi_field (picture_t * picture, motion_t * motion,
 }
 
 static void motion_fi_16x8 (picture_t * picture, motion_t * motion,
-                            void (** table) (uint8_t *, uint8_t *, int, int))
+                            void (** table) (uint8_t *, uint8_t *, int32_t, int32_t))
 {
 #define bit_buf (picture->bitstream_buf)
 #define bits (picture->bitstream_bits)
@@ -1334,7 +1334,7 @@ static void motion_fi_16x8 (picture_t * picture, motion_t * motion,
 }
 
 static void motion_fi_dmv (picture_t * picture, motion_t * motion,
-                           void (** table) (uint8_t *, uint8_t *, int, int))
+                           void (** table) (uint8_t *, uint8_t *, int32_t, int32_t))
 {
 #define bit_buf (picture->bitstream_buf)
 #define bits (picture->bitstream_bits)
