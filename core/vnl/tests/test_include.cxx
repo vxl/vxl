@@ -45,6 +45,7 @@
 #include <vnl/vnl_identity_3x3.h>
 #include <vnl/vnl_imag.h>
 #include <vnl/vnl_int_2.h>
+#include <vnl/vnl_int_2x2.h>
 #include <vnl/vnl_int_3.h>
 #include <vnl/vnl_int_4.h>
 #include <vnl/vnl_int_matrix.h>
