@@ -83,7 +83,7 @@ bool vmal_multi_view_data<T>::get_first_track(vcl_map<int,T,vcl_less<int> > & tr
 template <class T>
 bool vmal_multi_view_data<T>::get_next_track(vcl_map<int,T,vcl_less<int> > & track)
 {
-  if(MVM.size()>_matchnum)
+  if(int(MVM.size())>_matchnum)
   {
     track.clear();
     for (unsigned int i=0;i <MVM[_matchnum].size();i++)

@@ -82,26 +82,26 @@ bool vsol_polygon_2d::operator==(const vsol_polygon_2d &other) const
 {
   bool result = (this==&other);
 
-  if(!result)
+  if (!result)
+  {
+    result = (storage_->size()==other.storage_->size());
+    if(result)
     {
-      result = (storage_->size()==other.storage_->size());
-      if(result)
-        {
-          vsol_point_2d_sptr p=(*storage_)[0];
+      vsol_point_2d_sptr p=(*storage_)[0];
 
-          unsigned int i=0;
-          for(result=false;i<storage_->size()&&!result;++i)
-            result = (*p==*(*other.storage_)[i]);
-          if(result)
-            {
-              for(unsigned int j=1;j<size()&&result;++i,++j)
-                {
-                  if(i>=storage_->size()) i=0;
-                  result = ((*storage_)[i]==(*storage_)[j]);
-                }
-            }
+      unsigned int i=0;
+      for (result=false;i<storage_->size()&&!result;++i)
+        result = (*p==*(*other.storage_)[i]);
+      if(result)
+      {
+        for (int j=1;j<size()&&result;++i,++j)
+        {
+          if (i>=storage_->size()) i=0;
+          result = ((*storage_)[i]==(*storage_)[j]);
         }
+      }
     }
+  }
   return result;
 }
 
