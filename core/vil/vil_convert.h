@@ -912,7 +912,7 @@ inline vil_image_view_base_sptr vil_convert_to_grey_using_rgb_weighting(
   return vil_convert_to_grey_using_rgb_weighting(0.2125, 0.7154, 0.0721, src);
 }
 
-
+#if 0 // deprecated version of this function now commented out
 //: Create a greyscale image of specified pixel type from any image src.
 // This function is designed to be used with vil_load or
 // vil_image_resource::get_view()
@@ -977,6 +977,7 @@ inline vil_image_view<outP> vil_convert_to_grey_using_rgb_weighting(
   }
   return dest;
 }
+#endif // 0
 
 //: Create an n plane image from any image src.
 // This function is designed to be used with vil_load or
