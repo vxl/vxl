@@ -15,7 +15,7 @@
 // in separate source files.
 #define fsm_dont_croak
 // Known problems : the convolvers may segfault if the kernel
-//                  is larger then the input signal.
+//                  is larger than the input signal.
 #include "vil_convolve_1d_x.txx"
 #include "vil_convolve_1d_y.txx"
 

@@ -3,6 +3,9 @@
 // .NAME vil_convolve
 // .INCLUDE vil/vil_convolve.h
 // .FILE vil_convolve.txx
+// .FILE vil_convolve_1d.txx
+// .FILE vil_convolve_1d_x.txx
+// .FILE vil_convolve_1d_y.txx
 // @author fsm@robots.ox.ac.uk
 
 #include <vcl/vcl_compiler.h>

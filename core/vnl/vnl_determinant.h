@@ -3,13 +3,17 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
-
-// purpose:
+//
+// .NAME	vnl_determinant
+// .LIBRARY	vnl
+// .HEADER	vxl Package
+// .INCLUDE	vnl/vnl_determinant.h
+// .FILE	vnl_determinant.txx
+// .SECTION Description
 // direct evaluation of determinants.
 // (no netlib routines required).
+// .SECTION Author
+//  fsm@robots.ox.ac.uk
 
 // 2x2 matrix
 template <class T> T vnl_determinant(T const *row0, 

@@ -10,14 +10,14 @@
 // .INCLUDE mvl/Homg3D.h
 // .FILE Homg3D.cxx
 //
-// .SECTION Description:
+// .SECTION Description
 // Base class for 3D homogeneous features.
 //
-// .SECTION Author:
+// .SECTION Author
 //             Paul Beardsley, 29.03.96
 //             Oxford University, UK
 //
-// .SECTION Modifications :
+// .SECTION Modifications
 //    210297 AWF Switched to fixed-length vectors for speed.
 //    110397 Peter Vanroose - added operator==
 //

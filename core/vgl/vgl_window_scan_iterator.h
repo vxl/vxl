@@ -3,9 +3,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vgl_scan_iterator
-// .INCLUDE vgl/vgl_scan_iterator.h
-// .FILE vgl_scan_iterator.cxx
+// .NAME vgl_window_scan_iterator
+// .INCLUDE vgl/vgl_window_scan_iterator.h
+// .FILE vgl_window_scan_iterator.cxx
 // .SECTION Author
 //  fsm@robots.ox.ac.uk
 //

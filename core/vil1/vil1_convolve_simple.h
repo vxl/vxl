@@ -1,11 +1,13 @@
 #ifndef vil_convolve_simple_h_
 #define vil_convolve_simple_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
-
-template <class T> class vil_memory_image_of;
-
+// .NAME vil_convolve_simple
+// .LIBRARY vil
+// .INCLUDE vil/vil_convolve_simple.h
+// .FILE    vil_convolve_simple.txx
+// .SECTION Author
+//  fsm@robots.ox.ac.uk
+//
+// .SECTION Description
 // This function assumes that the image types provide operator[] to
 // return a pointer (or something which behaves like one) to the y'th
 // raster.
@@ -21,6 +23,9 @@ template <class T> class vil_memory_image_of;
 // I2 : input image type
 // AC : accumulator pixel type
 // O  : output image type
+
+template <class T> class vil_memory_image_of;
+
 template <class I1, class I2, class AC, class O>
 void vil_convolve_simple(I1 const* const*  in1, unsigned w1, unsigned h1, // input 1
 			 I2 const* const*  in2, unsigned w2, unsigned h2, // input 2

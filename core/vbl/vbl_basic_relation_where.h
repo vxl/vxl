@@ -3,6 +3,7 @@
 
 //-----------------------------------------------------------------------------
 //
+// .NAME vbl_basic_relation_where
 // .LIBRARY vbl
 // .HEADER vxl Package
 // .INCLUDE vbl/vbl_basic_relation_where.h

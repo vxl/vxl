@@ -3,6 +3,8 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .NAME vil_ip_traits
+// .INCLUDE vil/vil_ip_traits.h
 // .SECTION Author
 //    awf@robots.ox.ac.uk
 // Created: 02 Mar 00

@@ -3,11 +3,12 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  capes@robots.ox.ac.uk
-*/
 
-// Routines to compute normalized cross-correlation between two images.
+// .NAME vil_ncc - Routines to compute normalized cross-correlation between two images
+// .INCLUDE vil/vil_ncc.h
+// .FILE vil_ncc.txx
+// .SECTION Author
+//  capes@robots.ox.ac.uk
 
 #include <vil/vil_memory_image_of.h>
 

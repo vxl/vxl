@@ -6,7 +6,7 @@
 // .LIBRARY vbl
 // .HEADER vxl package
 // .INCLUDE vbl/vbl_protection_traits.h
-// .FILE vbl_protection_traits.cxx
+// .FILE vbl_protection_traits.txx
 //
 // .SECTION Description
 //

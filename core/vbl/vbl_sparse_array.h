@@ -8,7 +8,7 @@
 // .LIBRARY	vbl
 // .HEADER	vxl package
 // .INCLUDE	vbl/vbl_sparse_array.h
-// .FILE	vbl_sparse_array.cxx
+// .FILE	vbl_sparse_array.txx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 02 Oct 96
 //

@@ -4,6 +4,7 @@
 #pragma interface
 #endif
 // .NAME vgl_rtree
+// .LIBRARY vgl-algo
 // .INCLUDE vgl/algo/vgl_rtree.h
 // .FILE vgl_rtree.txx
 // @author fsm@robots.ox.ac.uk

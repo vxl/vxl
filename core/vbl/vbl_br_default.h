@@ -3,10 +3,11 @@
 
 //-----------------------------------------------------------------------------
 //
+// .NAME vbl_br_default
 // .LIBRARY vbl
 // .HEADER vxl package
 // .INCLUDE vbl/vbl_br_default.h
-// .FILE vbl_br_default.cxx
+// .FILE vbl_br_default.txx
 //
 // .SECTION Author:
 //             Rupert Curwen, January 14th, 1998

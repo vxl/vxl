@@ -4,6 +4,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .NAME vrml_out - A class to write to a VRML 1.0 file
+// .INCLUDE vrml/vrml_out.h
+// .FILE vrml_out.cxx
 // Author: awf@robots.ox.ac.uk
 // Created: 19 Mar 00
 

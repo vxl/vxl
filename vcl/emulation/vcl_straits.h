@@ -29,7 +29,7 @@
 #define vcl_emulation_straits_h
 
 #include "vcl_stlconf.h"
-// .NAME vcl_alloc
+// .NAME vcl_straits
 // .INCLUDE vcl/emulation/vcl_straits.h
 // .FILE emulation/vcl_straits.cxx
 //

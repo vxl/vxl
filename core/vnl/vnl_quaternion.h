@@ -3,6 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .NAME	vnl_quaternion
+// .LIBRARY	vnl
+// .HEADER	vxl package
+// .INCLUDE	vnl/vnl_quaternion.h
+// .FILE	vnl_quaternion.txx
 // .SECTION Author
 //    awf@robots.ox.ac.uk
 // Created: 16 Mar 00

@@ -8,7 +8,7 @@
 // .LIBRARY	vnl
 // .HEADER	vxl package
 // .INCLUDE	vnl/vnl_matrix_fixed_ref.h
-// .FILE	vnl_matrix_fixed_ref.cxx
+// .FILE	vnl_matrix_fixed_ref.txx
 //
 // .SECTION Description
 //    vnl_matrix_fixed_ref is a fixed-size vnl_matrix for which the data space

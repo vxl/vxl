@@ -4,7 +4,7 @@
 #pragma interface
 #endif
 // .NAME vil_block_cache_image_impl
-// .INCLUDE vil/vil_block_cache_image_impl
+// .INCLUDE vil/vil_block_cache_image_impl.h
 // .FILE vil_block_cache_image_impl.cxx
 // .SECTION Author
 //  fsm@robots.ox.ac.uk

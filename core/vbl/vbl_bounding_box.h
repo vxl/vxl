@@ -3,6 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .NAME vbl_bounding_box - A class to hold and update a bounding box
+// .LIBRARY vbl
+// .HEADER vxl package
+// .INCLUDE vbl/vbl_bounding_box.h
+// .FILE vbl_bounding_box.txx
 // .SECTION Author
 //    awf@robots.ox.ac.uk
 // Created: 17 Mar 00

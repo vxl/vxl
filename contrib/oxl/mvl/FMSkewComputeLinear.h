@@ -6,7 +6,7 @@
 // .NAME	FMSkewComputeLinear - Linear fit for skew F matrix
 // .LIBRARY	MViewCompute
 // .HEADER	MultiView Package
-// .INCLUDE	FMSkewComputeLinear.h
+// .INCLUDE	mvl/FMSkewComputeLinear.h
 // .FILE	FMSkewComputeLinear.cxx
 //
 // .SECTION Description

@@ -9,7 +9,8 @@
 // .HEADER	vxl package
 // .INCLUDE	vbl/vbl_arg.h
 // .FILE	vbl_arg.cxx
-// .KEYWORDS	command-line arguments options switches getopt
+// .SECTION Keywords
+//     command-line arguments options switches getopt
 //
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 05 Feb 98

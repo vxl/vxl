@@ -8,7 +8,7 @@
 // .LIBRARY	vnl
 // .HEADER	vxl package
 // .INCLUDE	vnl/vnl_vector_ref.h
-// .FILE	vnl_vector_ref.cxx
+// .FILE	vnl_vector_ref.txx
 //
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 04 Aug 96

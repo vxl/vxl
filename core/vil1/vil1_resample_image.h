@@ -1,7 +1,12 @@
 #ifndef vil_resample_image_h_
 #define vil_resample_image_h_
 
-// Purpose: Support function for vil_resample_image_impl.
+// .NAME vil_resample_image
+// .LIBRARY vil
+// .INCLUDE vil/vil_resample_image.h
+// .FILE    vil_resample_image.txx
+// .SECTION Description
+//  Support function for vil_resample_image_impl.
 
 class vil_image;
 

@@ -3,6 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .NAME	vnl_sparse_matrix
+// .LIBRARY	vnl
+// .HEADER	vxl package
+// .INCLUDE	vnl/vnl_sparse_matrix.h
+// .FILE	vnl_sparse_matrix.txx
 // .SECTION Description
 //    vnl_sparse_matrix<T> - Simple sparse matrix.  Only those values which
 //    are non-zero are stored. The sparse matrix currently supports
@@ -16,7 +21,7 @@
 // .SECTION Author
 //     Rupert W. Curwen, GE CR&D, 20 Oct 98
 //
-// .SECTION Modifications: 
+// .SECTION Modifications
 //
 //     Robin Flatland 5/31/99 Added pre_mult(lhs,result), where
 //                            lhs is a vector.

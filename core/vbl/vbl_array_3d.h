@@ -4,10 +4,11 @@
 #pragma interface
 #endif
 
+// .NAME vbl_array_3d
 // .LIBRARY vbl
 // .HEADER vxl package
 // .INCLUDE vbl/vbl_array_3d.h
-// .FILE vbl_array_3d.cxx
+// .FILE vbl_array_3d.txx
 //
 // .SECTION Author:
 //             Paul Beardsley, 29.03.96

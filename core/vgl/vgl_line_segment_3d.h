@@ -4,6 +4,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .NAME vgl_line_segment_3d - Represents a 3D line segment using two points
+// .LIBRARY vgl
+// .INCLUDE vgl/vgl_line_segment_3d.h
+// .FILE    vgl_line_segment_3d.txx
 // .SECTION Author
 //    awf@robots.ox.ac.uk
 // Created: 19 Mar 00

@@ -4,7 +4,7 @@
 #pragma interface
 #endif
 // .NAME vil_flipud
-// .INCLUDE vil/vil_flipud
+// .INCLUDE vil/vil_flipud.h
 // .FILE vil_flipud.cxx
 // .SECTION Author
 //  fsm@robots.ox.ac.uk

@@ -8,7 +8,7 @@
 // .LIBRARY	vbl
 // .HEADER	vxl package
 // .INCLUDE	vbl/vbl_sort.h
-// .FILE	vbl_sort.cxx
+// .FILE	vbl_sort.txx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 19 Nov 97
 //

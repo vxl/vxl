@@ -4,7 +4,7 @@
 #pragma interface
 #endif
 // .NAME vil_memory_image_window
-// .INCLUDE vil/vil_memory_image_window
+// .INCLUDE vil/vil_memory_image_window.h
 // .FILE vil_memory_image_window.cxx
 
 #include "vil_memory_image_of.h"

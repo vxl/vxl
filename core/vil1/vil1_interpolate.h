@@ -4,6 +4,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .NAME vil_interpolate
+// .LIBRARY vil
+// .INCLUDE vil/vil_interpolate.h
+// .FILE    vil_interpolate.txx
 // .SECTION Author
 //    awf@robots.ox.ac.uk
 // Created: 02 Apr 00

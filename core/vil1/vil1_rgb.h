@@ -3,7 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME    vil_rgb<> - Templated three-value colour cell
+// .NAME    vil_rgb - Templated three-value colour cell
+// .LIBRARY vil
+// .INCLUDE vil/vil_rgb.h
+// .FILE    vil_rgb.txx
 //
 // .SECTION Description
 //    This is the appropriate pixel type for 24-bit colour images.

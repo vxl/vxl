@@ -6,6 +6,7 @@
 // .NAME vil_image_as
 // .INCLUDE vil/vil_image_as.h
 // .FILE vil_image_as.cxx
+// .FILE vil_memory_image_of_format.txx
 // @author fsm@robots.ox.ac.uk
 
 #include <vil/vil_image.h>

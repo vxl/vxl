@@ -2,7 +2,7 @@
 #define vbl_test_smart_ptr_h_
 
 // .NAME vbl_test_classes
-// .INCLUDE vbl/vbl_test_classes.h
+// .INCLUDE vbl/tests/vbl_test_classes.h
 // .FILE vbl_test_classes.cxx
 
 #include <vcl/vcl_iostream.h>

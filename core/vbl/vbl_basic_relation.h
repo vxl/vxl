@@ -3,10 +3,11 @@
 
 //-----------------------------------------------------------------------------
 //
+// .NAME vbl_basic_relation
 // .LIBRARY vbl
 // .HEADER vxl package
 // .INCLUDE vbl/vbl_basic_relation.h
-// .FILE vbl_basic_relation.cxx
+// .FILE vbl_basic_relation.txx
 //
 // .SECTION Author:
 //             Rupert Curwen, October 31st, 1997

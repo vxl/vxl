@@ -1,6 +1,8 @@
 #ifndef vcl_iostream_h_
 #define vcl_iostream_h_
 
+// .NAME vcl_iostream
+// .INCLUDE vcl/vcl_iostream.h
 // .SECTION Author
 //    awf@robots.ox.ac.uk
 // .SECTION Description

@@ -6,6 +6,9 @@
 
 //----------------------------------------------------------------------
 // .NAME	vnl_diag_matrix - Time/space efficient diagonal matrix
+// .LIBRARY	vnl
+// .HEADER	vxl Package
+// .INCLUDE	vnl/vnl_diag_matrix.h
 // .FILE	vnl_diag_matrix.txx
 //
 // .SECTION Description

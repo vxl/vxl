@@ -3,9 +3,12 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME    vnl_adjugate
+// .LIBRARY vnl-algo
+// .INCLUDE vnl/algo/vnl_adjugate.h
+// .FILE    vnl_adjugate.txx
+// .SECTION Author
+//  fsm@robots.ox.ac.uk
 
 template <class T> class vnl_matrix;
 

@@ -1,6 +1,9 @@
 #ifndef _HMatrix1DComputeOptimize1_h_
 #define _HMatrix1DComputeOptimize1_h_
 
+// .NAME HMatrix1DComputeOptimize1
+// .INCLUDE mvl/HMatrix1DComputeOptimize1.h
+// .FILE HMatrix1DComputeOptimize1.cxx
 
 #include "HMatrix1DCompute.h"
 

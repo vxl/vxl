@@ -4,6 +4,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .NAME vbl_hash_map - Simpler hashtable
+// .LIBRARY vbl
+// .HEADER vxl package
+// .INCLUDE vbl/vbl_hash_map.h
+// .FILE vbl_hash_map.txx
 
 #include <vcl/vcl_iosfwd.h>
 #include <vcl/vcl_functional.h> // vcl_equal_to()

@@ -8,7 +8,7 @@
 // .LIBRARY	vbl
 // .HEADER	vxl package
 // .INCLUDE	vbl/vbl_sparse_array_2d.h
-// .FILE	vbl_sparse_array_2d.cxx
+// .FILE	vbl_sparse_array_2d.txx
 //
 // .SECTION Description
 //    vbl_sparse_array_2d is a sparse 2D array allowing space efficient access of

@@ -4,6 +4,7 @@
 #pragma interface
 #endif
 //
+// .NAME vbl_base_array_3d
 // .LIBRARY vbl
 // .HEADER vxl package
 // .INCLUDE vbl/vbl_base_array_3d.h

@@ -45,10 +45,10 @@
 //     }
 // 
 //
-// .SECTION Author 
+// .SECTION Author
 //    Adapted from FillPolygon by J.L. Mundy 
 //
-// .SECTION Modifications:
+// .SECTION Modifications
 //     May 1997 - Added a constructor variable, boundaryp, which defines 
 //                whether or not the polygon boundary is included in the 
 //                scan lines. The original design produced only interior 

@@ -3,9 +3,12 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// .NAME vil_flipud_impl
+// .INCLUDE vil/vil_flipud_impl.h
+// .FILE vil_flipud_impl.cxx
+// .SECTION Author
+//  fsm@robots.ox.ac.uk
+//
 
 #include <vil/vil_image.h>
 

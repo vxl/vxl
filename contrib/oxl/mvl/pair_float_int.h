@@ -6,6 +6,9 @@
 /*
   fsm@robots.ox.ac.uk
 */
+// .NAME pair_float_int
+// .INCLUDE mvl/pair_float_int.h
+// .FILE pair_float_int.cxx
 
 #include <vcl/vcl_iostream.h>
 

@@ -8,7 +8,7 @@
 // .LIBRARY	vbl
 // .HEADER	vxl package
 // .INCLUDE	vbl/vbl_sparse_array_3d.h
-// .FILE	vbl_sparse_array_3d.cxx
+// .FILE	vbl_sparse_array_3d.txx
 //
 // .SECTION Description
 //    vbl_sparse_array_3d is a sparse 3D array allowing space efficient access of

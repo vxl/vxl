@@ -5,6 +5,9 @@
 #endif
 //
 // .NAME	vnl_fortran_copy - convert row-stored matrix to column-stored
+// .LIBRARY	vnl
+// .HEADER	vxl Package
+// .INCLUDE	vnl/vnl_fortran_copy.h
 // .FILE	vnl_fortran_copy.txx
 // .SECTION Description
 //    convert C format (row-stored) matrix to fortran format (column-stored) matrix.

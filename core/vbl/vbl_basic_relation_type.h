@@ -3,6 +3,7 @@
 
 //-----------------------------------------------------------------------------
 //
+// .NAME vbl_basic_relation_type
 // .LIBRARY vbl
 // .HEADER vxl package
 // .INCLUDE vbl/vbl_basic_relation_type.h

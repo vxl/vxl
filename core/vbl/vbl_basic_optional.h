@@ -3,6 +3,7 @@
 
 //-----------------------------------------------------------------------------
 //
+// .NAME vbl_basic_optional
 // .LIBRARY vbl
 // .HEADER vxl package
 // .INCLUDE vbl/vbl_basic_optional.h

@@ -3,10 +3,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-
 // .NAME vgl_homg_operators_2d
-// .INCLUDE vgl/vgl_homg_operators_2d.h
+// .LIBRARY vgl-algo
+// .INCLUDE vgl/algo/vgl_homg_operators_2d.h
 // .FILE vgl_homg_operators_2d.txx
 // .SECTION Author
 //   Don Hamilton, Peter Tu

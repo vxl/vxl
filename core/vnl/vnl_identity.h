@@ -4,7 +4,7 @@
 #pragma interface
 #endif
 //
-// .NAME	vnl_dentity
+// .NAME	vnl_identity
 // .LIBRARY	vnl
 // .HEADER	vxl package
 // .INCLUDE	vnl/vnl_identity.h

@@ -3,7 +3,7 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME	vnl_eigensystem - Unsymmetric real eigensystem
+// .NAME	vnl_real_eigensystem - Unsymmetric real eigensystem
 // .LIBRARY	vnl-algo
 // .HEADER	vxl Package
 // .INCLUDE	vnl/algo/vnl_real_eigensystem.h

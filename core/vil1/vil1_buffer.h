@@ -3,11 +3,15 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
-
-// Purpose: an exception-safe way to allocate a contiguous array
+// .NAME vil_buffer
+// .LIBRARY vil
+// .INCLUDE vil/vil_buffer.h
+// .FILE    vil_buffer.txx
+// .SECTION Author
+//  fsm@robots.ox.ac.uk
+//
+// .SECTION Description
+// an exception-safe way to allocate a contiguous array
 // of memory of a given type. The ISO vector<> is not suitable as
 // there is no guarantee of contiguity.
 

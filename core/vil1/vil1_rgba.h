@@ -3,7 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// class vil_rgba<T>:
+// .NAME    vil_rgba - Templated four-value colour cell
+// .LIBRARY vil
+// .INCLUDE vil/vil_rgba.h
+// .FILE    vil_rgba.txx
+// .SECTION Description
 //    This is the appropriate pixel type for RGBA colour images.
 // The purpose of rgba<T> is to provide an object which consists of four Ts arranged
 // in order and which can be referred to as 'R', 'G', 'B' and 'A'. Thus, if win32

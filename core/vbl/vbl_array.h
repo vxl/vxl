@@ -3,13 +3,17 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
-
-// Purpose: a container which stores its elements in contiguous
+// .NAME	vbl_array
+// .LIBRARY	vbl
+// .HEADER	vxl package
+// .INCLUDE	vbl/vbl_array.h
+// .FILE	vbl_array.txx
+// .SECTION Description
+// a container which stores its elements in contiguous
 // storage and whose iterator types are raw pointers. There is
 // no requirement that the element type have a default constructor.
+// .SECTION Author
+//  fsm@robots.ox.ac.uk
 
 #include <vcl/vcl_new.h>
 

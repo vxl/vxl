@@ -5,9 +5,9 @@
 #endif
 //
 // .NAME	SGIMovieFileWrite
-// .LIBRARY	vview
+// .LIBRARY	oxp
 // .HEADER	Oxford Package
-// .INCLUDE	vview/SGIMovieFileWrite.h
+// .INCLUDE	oxp/SGIMovieFileWrite.h
 // .FILE	SGIMovieFileWrite.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 11 Jan 99

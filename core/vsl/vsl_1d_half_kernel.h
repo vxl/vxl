@@ -5,7 +5,7 @@
 #endif
 // .NAME vsl_1d_half_kernel
 // .INCLUDE vsl/vsl_1d_half_kernel.h
-// .FILE vsl_1d_half_kernel.cxx
+// .FILE vsl_1d_half_kernel.txx
 // \author fsm@robots.ox.ac.uk
 
 //: This structure holds half of a symmetric convolution kernel.

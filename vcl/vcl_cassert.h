@@ -1,6 +1,6 @@
 #ifndef vcl_cassert_h_
 #define vcl_cassert_h_
-// .NAME vcl_cassert.h
+// .NAME vcl_cassert
 // .INCLUDE vcl/vcl_cassert.h
 // .FILE vcl_cassert.cxx
 // @author fsm@robots.ox.ac.uk

@@ -4,7 +4,7 @@
 #pragma interface
 #endif
 // .NAME vil_stream_core
-// .INCLUDE vil/vil_stream_core
+// .INCLUDE vil/vil_stream_core.h
 // .FILE vil_stream_core.cxx
 // .SECTION Author
 //  fsm@robots.ox.ac.uk

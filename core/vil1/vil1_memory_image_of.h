@@ -3,6 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .NAME vil_memory_image_of
+// .INCLUDE vil/vil_memory_image_of.h
+// .FILE vil_memory_image_of.txx
+// .FILE vil_memory_image_of_format.txx
 // .SECTION Author
 //    awf@robots.ox.ac.uk
 // Created: 16 Feb 00

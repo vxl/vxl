@@ -1,6 +1,9 @@
 #ifndef _HMatrix1DComputeDesign_h_
 #define _HMatrix1DComputeDesign_h_
 
+// .NAME HMatrix1DComputeDesign
+// .INCLUDE mvl/HMatrix1DComputeDesign.h
+// .FILE HMatrix1DComputeDesign.cxx
 
 #include "HMatrix1DCompute.h"
 

@@ -8,7 +8,7 @@
 // .LIBRARY	oxp
 // .HEADER	Oxford Package
 // .INCLUDE	oxp/ImageWarp.h
-// .FILE	ImageWarp.cxx
+// .FILE	ImageWarp.txx
 //
 // .SECTION Description
 //    ImageWarp is a namespace for static `image warping' functions

@@ -5,6 +5,8 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .NAME vcl_typeinfo
+// .INCLUDE vcl/vcl_typeinfo.h
 // .SECTION Description
 //    Provide a uniform interface to the variously supported
 //    RTTI's

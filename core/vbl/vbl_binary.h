@@ -3,11 +3,13 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
-
-// Purpose: save and load vcl_vector<T>s in binary format.
+// .NAME vbl_binary - save and load vcl_vector<T>s in binary format
+// .LIBRARY vbl
+// .HEADER vxl package
+// .INCLUDE vbl/vbl_binary.h
+// .FILE vbl_binary.txx
+// .SECTION Author
+//  fsm@robots.ox.ac.uk
 
 #include <vcl/vcl_iosfwd.h>
 #include <vcl/vcl_vector.h>

@@ -1,6 +1,6 @@
 #ifndef vcl_cmath_h_
 #define vcl_cmath_h_
-// .NAME vcl_cmath.h
+// .NAME vcl_cmath
 // .INCLUDE vcl/vcl_cmath.h
 // .FILE vcl_cmath.cxx
 

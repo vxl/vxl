@@ -3,6 +3,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// .NAME ProjStructure
+// .INCLUDE mvl/ProjStructure.h
+// .FILE ProjStructure.cxx
 // Author: awf@robots.ox.ac.uk
 // Created: 17 Mar 00
 

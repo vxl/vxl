@@ -12,17 +12,17 @@
 // .INCLUDE mvl/TriTensorCompute.h
 // .FILE TriTensorCompute.cxx
 //
-// .SECTION Description:
+// .SECTION Description
 // A class to generate a Trifocal Tensor from point/line segment matched triplets,
 // with separate functions for the linear/non-linear computations.
 // Linear computation uses RANSAC and is robust to the presence of
 // incorrect matches.
 //
-// .SECTION Author:
+// .SECTION Author
 //             Paul Beardsley, 29.03.96
 //             Oxford University, UK
 //
-// .SECTION Modifications :
+// .SECTION Modifications
 //   <none yet>
 //
 //---------------------------------------------------------------------------

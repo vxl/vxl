@@ -2,8 +2,8 @@
 #define vbl_smart_ptr_h_
 // .NAME vbl_smart_ptr - A templated smart pointer class
 // .INCLUDE vbl/vbl_smart_ptr.h
-// .FILE vbl_smart_ptr.cxx
-// .EXAMPLE vbl/examples/vbl_smart_ptr_example.cxx
+// .FILE vbl_smart_ptr.txx
+// .EXAMPLE examples/vbl_smart_ptr_example.cxx
 //
 // .SECTION Description
 // This class requires that the class being templated over has

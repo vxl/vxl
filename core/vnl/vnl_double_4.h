@@ -3,11 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME	vnl_double_3
+// .NAME	vnl_double_4
 // .LIBRARY	vnl
 // .HEADER	vxl package
-// .INCLUDE	vnl/vnl_double_3.h
-// .FILE	vnl_double_3.cxx
+// .INCLUDE	vnl/vnl_double_4.h
+// .FILE	vnl_double_4.cxx
 //
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 05 Aug 96

@@ -16,7 +16,7 @@
 //    The cholesky decomposition decomposes symmetric A = L*L.transpose()
 //    where L is lower triangular 
 //
-// .SECTION See Also
+// .SECTION See also
 //     vnl_symmetric_eigensystem
 //
 // .SECTION Author

@@ -1,6 +1,6 @@
 #ifndef vcl_cstdlib_h_
 #define vcl_cstdlib_h_
-// .NAME vcl_cstdlib.h
+// .NAME vcl_cstdlib
 // .INCLUDE vcl/vcl_cstdlib.h
 // .FILE vcl_cstdlib.cxx
 

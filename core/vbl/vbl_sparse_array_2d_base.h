@@ -4,6 +4,7 @@
 #pragma interface
 #endif
 //
+// .NAME	vbl_sparse_array_2d_base
 // .LIBRARY	vbl
 // .HEADER	vxl package
 // .INCLUDE	vbl/vbl_sparse_array_2d_base.h
@@ -16,7 +17,6 @@
 //
 //-----------------------------------------------------------------------------
 
-//: a class that awf hasn't documented properly. FIXME
 struct vbl_sparse_array_2d_base {
 
   // protected: should be ,  but need templated friends...

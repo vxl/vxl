@@ -4,6 +4,8 @@
 #pragma interface
 #endif
 //
+// .NAME vbl_whereami
+// .INCLUDE vbl/vbl_whereami.h
 // .SECTION Author
 //  fsm@robots.ox.ac.uk
 //

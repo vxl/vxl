@@ -3,11 +3,12 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
 
-// Routines to compute sum of squared differences between two images.
+// .NAME vil_ssd - Routines to compute sum of squared differences between two images
+// .INCLUDE vil/vil_ssd.h
+// .FILE vil_ssd.txx
+// .SECTION Author
+//  fsm@robots.ox.ac.uk
 
 #include <vil/vil_memory_image_of.h>
 

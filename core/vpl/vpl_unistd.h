@@ -1,6 +1,6 @@
 #ifndef vpl_unistd_h_
 #define vpl_unistd_h_
-// .NAME vpl_unistd.h
+// .NAME vpl_unistd
 // .INCLUDE vpl/vpl_unistd.h
 // .FILE vpl_unistd.cxx
 // @author fsm@robots.ox.ac.uk

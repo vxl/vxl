@@ -7,6 +7,8 @@
 //-*- c++ -*----------------------------------------------------------------
 //
 // .NAME PMatrixDec
+// .INCLUDE mvl/PMatrixDec.h
+// .FILE PMatrixDec.cxx
 //
 // .SECTION Description
 //   The PMatrixDec class is a subclass of PMatrix.
