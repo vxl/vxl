@@ -1,4 +1,4 @@
-// This is mul/vil2/algo/vil2_line_filter.txx
+// This is core/vil2/algo/vil2_line_filter.txx
 #ifndef vil2_line_filter_txx_
 #define vil2_line_filter_txx_
 //:
@@ -392,7 +392,7 @@ void vil2_line_filter<Type>::dark_lines_5x5(vil2_image_view<vxl_byte>& line_dir,
       if (f4<min_f) { best_d=4; min_f=f4;}
 
         // Average on line - average off line
-      float edge_s = (f1+f2+f3+f4)/12 - (17.0f/60) * min_f - 0.2*(*i_row);
+      float edge_s = (f1+f2+f3+f4)/12 - (17.0f/60) * min_f - 0.2f*(*i_row);
       if (edge_s>edge_thresh)
       {
         *d_row = best_d;
