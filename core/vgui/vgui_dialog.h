@@ -47,6 +47,7 @@ class vgui_dialog_impl;
 //     return; // cancelled
 //   send_order(the_table, the_dressing, has_mayo);
 // \endcode
+
 class vgui_dialog
 {
  public:
@@ -58,6 +59,7 @@ class vgui_dialog
   void checkbox(const char*, bool&);
 
   void field(const char*, int&);
+  void field(const char* c, unsigned int& v) { field(c,*reinterpret_cast<int*>(&v)); }
   void field(const char*, long&);
   void field(const char*, float&);
   void field(const char*, double&);
@@ -69,7 +71,7 @@ class vgui_dialog
 
   //: Multiple choice - with three options.
   void choice(const char* label, const char* option1,
-    const char* option2, const char* option3, int& chosen);
+              const char* option2, const char* option3, int& chosen);
 
   //: Multiple choice - with the list of options given.
   void choice(const char*, const vcl_vector<vcl_string>&, int &);
@@ -94,7 +96,7 @@ class vgui_dialog
 
   //: Display a tableau in the dialog
   void inline_tableau(const vgui_tableau_sptr tab, unsigned width,
-    unsigned height);
+                      unsigned height);
 
   //: Set the labels on each button, if 0 that button does not appear.
   void set_cancel_button(const char* label);
