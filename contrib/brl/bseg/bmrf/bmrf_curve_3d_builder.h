@@ -35,7 +35,8 @@ class bmrf_curve_3d_builder
   void set_network(const bmrf_network_sptr& network);
 
   //: Build The curves
-  bool build();
+  //  Curves with less than \p min_prj projections are removed
+  bool build(int min_prj = 3, int min_len = 10, float smooth = 0.5);
 
   //: Return the constructed curves
   vcl_set<vcl_list<bmrf_curvel_3d_sptr> > curves() const;
@@ -58,15 +59,20 @@ class bmrf_curve_3d_builder
   vcl_map<double, bmrf_node_sptr> find_curves_at(double alpha, int frame = -1);
 
   //: return the curvel in \p list that best matches \p node at \p alpha
-  bmrf_curvel_3d_sptr best_match(const bmrf_node_sptr& node,
-                                 const vcl_list<bmrf_curvel_3d_sptr>& list,
-                                 double alpha) const;
+  vcl_list<bmrf_curvel_3d_sptr>::iterator  best_match(const bmrf_node_sptr& node, 
+                                                      vcl_list<bmrf_curvel_3d_sptr>& list,
+                                                      double alpha) const;
+
+  //: return the node iterator in \p choices that best matches \p curvel at \p alpha
+  vcl_map<double, bmrf_node_sptr>::iterator best_match( const bmrf_curvel_3d_sptr& curvel, 
+                                                        vcl_map<double, bmrf_node_sptr>& choices,
+                                                        double alpha, int frame ) const;
 
   //: Reconstruct the 3d location of a curvel from its projections
   void reconstruct_point(bmrf_curvel_3d_sptr curvel) const;
 
   //: Simultaneously reconstruct all points in a 3d curve
-  void reconstruct_curve(vcl_list<bmrf_curvel_3d_sptr>& curve) const;
+  void reconstruct_curve(vcl_list<bmrf_curvel_3d_sptr>& curve, float smooth = 0.5) const;
 
   //: Match the \p curvels to the ends of the \p growing_curves
   void append_curvels(vcl_list<bmrf_curvel_3d_sptr> curvels,
