@@ -242,7 +242,7 @@ void vvid_live_video_manager::init_capture()
   for (unsigned i=0; i<num_cameras_; ++i)
   {
     vcl_stringstream camera_subdir;
-    camera_subdir << "/camera" << i << '/' << vcl_ends;
+    camera_subdir << "/camera" << i << '/';
     vul_file::make_directory(video_filename+camera_subdir.str());
     vtabs_[i]->start_capture(video_filename+camera_subdir.str());
   }
