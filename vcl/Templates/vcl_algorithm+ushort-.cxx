@@ -6,7 +6,7 @@ VCL_FIND_INSTANTIATE(unsigned short*, unsigned short);
 VCL_FIND_INSTANTIATE(unsigned short const*, unsigned short);
 
 #if defined(VCL_EGCS) && !defined(GNU_LIBSTDCXX_V3)
-template unsigned *unique(unsigned short *, unsigned short *);
+template unsigned short* unique(unsigned short *, unsigned short *);
 #endif
 
 #if defined(VCL_GCC_295) && !defined(GNU_LIBSTDCXX_V3)
