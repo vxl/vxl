@@ -25,6 +25,7 @@ SET( vil2_algo_sources
   vil2_line_filter.txx         vil2_line_filter.h
   vil2_threshold.txx           vil2_threshold.h
                                vil2_grid_merge.h
+                               vil2_find_4con_boundary.h
 )
 
 
