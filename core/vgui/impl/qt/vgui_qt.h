@@ -21,6 +21,7 @@
 class vgui_qt_adaptor;
 class vgui_qt_window;
 
+//: QT implementation of vgui
 class vgui_qt : public vgui_toolkit
 {
 public:

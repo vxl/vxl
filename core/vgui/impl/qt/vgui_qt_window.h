@@ -23,6 +23,7 @@
 
 class vgui_gtk_adaptor;
 
+//: QT implemenation of vgui_window.
 class vgui_qt_window :
    public QMainWindow,
    public vgui_window

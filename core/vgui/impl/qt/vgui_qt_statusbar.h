@@ -21,6 +21,7 @@
 
 #include <qstatusbar.h>
 
+//: QT implementation of vgui_statusbar.
 class vgui_qt_statusbar :
    public QStatusBar,
    public vgui_statusbar

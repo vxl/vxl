@@ -20,6 +20,7 @@
 #include <qgl.h>
 #include <qevent.h>
 
+//: OpenGL canvas in QT as a VGUI adaptor
 class vgui_qt_adaptor : 
    public QGLWidget,
    public vgui_adaptor, 

@@ -19,6 +19,7 @@
 
 #include <qdialog.h>
 
+//: QT implementation of vgui_dialog_impl.
 class vgui_qt_dialog_impl : 
    public QDialog,
    public vgui_dialog_impl

@@ -21,6 +21,7 @@
 
 typedef vbl_smart_ptr<vgui_command> vgui_command_sptr;
 
+//: QT implementation of vgui_menu.
 class vgui_qt_menu : public QPopupMenu
 {
    Q_OBJECT
