@@ -935,10 +935,9 @@ vcl_vector<vdgl_digital_curve_sptr> brct_epi_reconstructor::read_track_file(char
   return tracker;
 }
 //---------------------------------------------------------------
-//: Use the initial epipole to specify the velocity at the first time
-//  step.  The initial projection matrix is assumed to be the identity
-//  camera. The camera at the first time step is deterimined from the
-//  relation,
+//: Use the initial epipole to specify the velocity at the first time step.
+//  The initial projection matrix is assumed to be the identity camera.
+//  The camera at the first time step is deterimined from the relation,
 // \verbatim
 //           _    _        _          _   _  _
 //          | w ex |      | 1  0  0  0 | | Tx |
