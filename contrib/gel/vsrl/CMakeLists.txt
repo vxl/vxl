@@ -27,7 +27,7 @@ INCLUDE( ${VXLCORE_INCLUDE_DIR}/vgui/UseVGUI.cmake )
 IF (HAS_VGUI)
  SET(vsrl_sources ${vsrl_sources}
   vsrl_point_picker.cxx         vsrl_point_picker.h    vsrl_point_picker_sptr.h
-  vsrl_menus.h
+  vsrl_menus.h vsrl_menus.cxx
  )
  IF( EXISTS ${vxl_SOURCE_DIR}/contrib/tbl/vepl/CMakeLists.txt )
   INCLUDE_DIRECTORIES(${TBL_INCLUDE_DIR})
