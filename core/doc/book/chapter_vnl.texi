@@ -111,7 +111,7 @@ decided that zero-based indexing was closer to being ``not weird''.
   vcl_cerr << "A has a total of " << A.@ttb{size}() << " elements" << vcl_endl;
   A(0,0) = 2.0; // Set top-left component of A.
   A(3,3) = 0.0; // *** Error, (3,3) is outside the range of A.
-  A.@ttb{resize}(3,4); // Change size of A, invalidating elements.
+  A.@ttb{set_size}(3,4); // Change size of A, invalidating elements.
   R.@ttb{update}(A, 0, 1); // Copy A into R, starting at (0,1): last 3 cols
   R.@ttb{set_column}(0, B.@ttb{get_column}(0)); // Copy 1st col of B into R
   vcl_cerr << R.@ttb{extract}(3,3, 0,1); // Print last 3 cols
