@@ -30,6 +30,7 @@ DECLARE( test_read_props );
 DECLARE( test_correspond_points );
 DECLARE( test_rbf_network );
 DECLARE( test_table );
+DECLARE( test_cloneables_factory );
 
 void
 register_tests()
@@ -64,6 +65,7 @@ register_tests()
   REGISTER( test_correspond_points );
   REGISTER( test_rbf_network );
   REGISTER( test_table );
+  REGISTER( test_cloneables_factory );
 }
 
 DEFINE_MAIN;

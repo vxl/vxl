@@ -33,6 +33,7 @@ ADD_EXECUTABLE( mbl_test_all
   test_correspond_points.cxx
   test_rbf_network.cxx
   test_table.cxx
+  test_cloneables_factory.cxx
 )
 
 TARGET_LINK_LIBRARIES(mbl_test_all mbl vbl vul vpl testlib )

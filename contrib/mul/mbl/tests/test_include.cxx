@@ -3,6 +3,7 @@
 #include <mbl/mbl_chord.h>
 #include <mbl/mbl_clamped_plate_spline_2d.h>
 #include <mbl/mbl_cloneable_ptr.h>
+#include <mbl/mbl_cloneables_factory.h>
 #include <mbl/mbl_combination.h>
 #include <mbl/mbl_correspond_points.h>
 #include <mbl/mbl_data_array_ptr_wrapper.h>

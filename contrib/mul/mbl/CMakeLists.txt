@@ -50,6 +50,7 @@ SET(mbl_sources
 
   mbl_chord.h
   mbl_cloneable_ptr.h
+  mbl_cloneables_factory.h
   mbl_combination.h
   mbl_print.h
   mbl_priority_bounded_queue.h
