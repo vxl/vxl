@@ -41,7 +41,6 @@ class vsol_digital_curve_2d : public vsol_curve_2d
   // Description: List of vsol_point_2d
   //---------------------------------------------------------------------------
   vcl_vector<vsol_point_2d_sptr> samples_;
-  
 
  public:
 
@@ -97,11 +96,11 @@ class vsol_digital_curve_2d : public vsol_curve_2d
 
   //---------------------------------------------------------------------------
   //: Interpolate a point on the curve given a floating point index
-  //  linear interpolation is used for now
+  //  Linear interpolation is used for now
   //  \note index is NOT arc length.  For example, if size()==10
   //        then interp(5.5) is interpolated half way between points
   //        at indices 5 and 6.  In general this is not at 5.5 units along
-  //        the curve or even at 55% through the curve. 
+  //        the curve or even at 55% through the curve.
   //---------------------------------------------------------------------------
   vgl_point_2d<double> interp(double index) const;
 
