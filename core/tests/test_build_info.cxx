@@ -1,5 +1,5 @@
 // This is core/tests/test_build_info.cxx
-#include "test_build_info.h"
+#include <test_build_info.h>
 //:
 // \file
 // Based on ITK, Testing/Code/Common/itkSystemInformationTest.cxx
@@ -105,7 +105,6 @@ static void test_build_info()
     vxl_BUILD_DIR "/core/vnl/vnl_config.h",
     vxl_BUILD_DIR "/v3p/dcmtk/osconfig.h",
     vxl_BUILD_DIR "/v3p/mpeg2/include/config.h",
-    vxl_BUILD_DIR "/v3p/mpeg2/include/inttypes.h",
     0
   };
 
@@ -142,7 +141,7 @@ static void test_build_info()
   }
   else
   {
-    vcl_cerr << "Error writing this information to file "
+    vcl_cout << "Error writing this information to file "
              << vxl_BUILD_INFO_NOTES << '\n';
     testlib_test_perform(false);
   }
