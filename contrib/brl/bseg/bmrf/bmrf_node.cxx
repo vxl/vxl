@@ -335,7 +335,7 @@ bmrf_node::print_summary( vcl_ostream& os ) const
 
 //: Binary save self to stream.
 void
-bmrf_node::bmrf_arc::b_write( vsl_b_ostream& os ) const
+bmrf_node::bmrf_arc::b_write( vsl_b_ostream& ) const
 {
   // Nothing to write
 }
@@ -343,7 +343,7 @@ bmrf_node::bmrf_arc::b_write( vsl_b_ostream& os ) const
 
 //: Binary load self from stream.
 void
-bmrf_node::bmrf_arc::b_read( vsl_b_istream& is )
+bmrf_node::bmrf_arc::b_read( vsl_b_istream& )
 {
   // Nothing to read
 }
@@ -425,7 +425,7 @@ vsl_b_read(vsl_b_istream &is, bmrf_node::bmrf_arc* &a)
 
 //: Print an ASCII summary to the stream
 void
-vsl_print_summary(vcl_ostream &os, const bmrf_node::bmrf_arc* a)
+vsl_print_summary(vcl_ostream &os, const bmrf_node::bmrf_arc* )
 {
   os << "brmf_arc{}";
 }
