@@ -76,6 +76,13 @@
 # endif
 #endif
 
+// win32 or vc++ ?
+// awf hack alert:
+#ifdef VCL_WIN32
+#pragma warning(disable:4786 4660 4661)
+#pragma warning(disable:4786 4660 4355 4390)
+#endif
+
 #if defined(__KCC)
 # define VCL_KAI
 #endif
@@ -84,11 +91,6 @@
 #include <vcl/vcl_config_manual.h>
 #include <vcl/vcl_config_compiler.h>
 #include <vcl/vcl_config_headers.h>
-
-// backwards compatibility.
-#define VXL_BIG_ENDIAN                VCL_BIG_ENDIAN
-#define VXL_LITTLE_ENDIAN             VCL_LITTLE_ENDIAN
-#define VCL_STL_NULL_TMPL_ARGS        VCL_NULL_TMPL_ARGS
 
 // -------------------- default template parameters
 #if VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER

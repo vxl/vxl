@@ -40,6 +40,8 @@
 
 #include <vcl/vcl_compiler.h>
 
+#undef vcl_cmath_std
+
 // 1. include system header
 #if defined(VCL_GCC_27)
 # include <math.h>
@@ -51,6 +53,7 @@
 # include <cmath> // got the right prototypes, but not in namespace std::
 #else // iso
 # include <vcl/iso/vcl_cmath.h>
+# define vcl_cmath_std
 #endif
 
 
@@ -77,13 +80,40 @@
 inline float       vcl_abs (float  x) { return (x >= 0.0f) ? x : -x; }
 inline double      vcl_abs (double x) { return fabs (x); }
 inline long double vcl_abs (long double x) { return fabs (x); }
-# elif defined(VCL_VC60)
-#  define vcl_abs abs
 # else
-#  define vcl_abs std::abs
+#define vcl_abs vcl_cmath_std abs
 # endif
 #endif
 
+// 3. Define remaining math functions
+// Don't do this for iso as it has already been done in iso/vcl_cmath.h
+#ifndef vcl_cmath_std
+#define vcl_acos acos
+#define vcl_asin asin
+#define vcl_atan atan
+#define vcl_atan2 atan2
+#define vcl_ceil ceil
+#define vcl_cos cos
+#define vcl_cosh cosh
+#define vcl_exp exp
+#define vcl_fabs fabs
+#define vcl_floor floor
+#define vcl_fmod fmod
+#define vcl_frexp frexp
+#define vcl_ldexp ldexp
+#define vcl_log log
+#define vcl_log10 log10
+#define vcl_modf modf
+#define vcl_pow pow
+#define vcl_pow pow
+#define vcl_sin sin
+#define vcl_sinh sinh
+#define vcl_sqrt sqrt
+#define vcl_tan tan
+#define vcl_tanh tanh
+#endif
+
+#undef vcl_cmath_std
 
 // vcl_min/vcl_max moved to vcl_algorithm.h
 

@@ -313,6 +313,7 @@ sub process_headers {
       s/<Basics\/Array3D\.h>/<vbl\/vbl_array_3d.h>/;
       s/<Basics\/Array2D\.C>/<vbl\/vbl_array_2d.txx>/;
       s/<Basics\/Array3D\.C>/<vbl\/vbl_array_3d.txx>/;
+      s/<Basics\/BaseArray3D\.h>/<vbl\/vbl_base_array_3d.h>/;
       s/<Basics\/file\.h>/<vbl\/vbl_file.h>/;
       s/<Basics\/stat\.h>/<vbl\/vbl_file.h> \/\/ use vbl_file instead of IUE_stat/;
       s/<Basics\/IUE_stat\.h>/<vbl\/vbl_file.h> \/\/ use vbl_file instead of IUE_stat/;
@@ -364,6 +365,9 @@ sub process_headers {
       s/<Numerics\/MatrixInverse\.h>/<vnl\/algo\/vnl_matrix_inverse.h>/;
       s/<Numerics\/Eigensystem\.h>/<vnl\/algo\/vnl_real_eigensystem.h>/;
       s/<Numerics\/SparseMatrix\.h>/<vnl\/vnl_sparse_matrix.h>/;
+      s/<Numerics\/Int(.)\.h>/<vnl\/vnl_int_$1.h>;
+      s/<Numerics\/Float(.)\.h>/<vnl\/vnl_float_$1.h>;
+      s/<Numerics\/Double(.)\.h>/<vnl\/vnl_double_$1.h>;
       s/<math\/resize\.h>/<vnl\/vnl_resize.h>/;
       s/^(\#include <math\/matlab\.h>)/\#define matlab(M) M \/\/$1/;
       s/<math\/BaseSVD\.h>/<vnl\/algo\/vnl_svd.h>/;
@@ -694,6 +698,7 @@ sub process_lines {
       s/\bIUE_file\b/vbl_file/g;
       s/\bArray2D</vbl_array_2d</g;
       s/\bArray3D</vbl_array_3d</g;
+      s/\bBaseArray3D</vbl_base_array_3d</g;
       s/\bAWK\b/vbl_awk/g;
       s/\bprintf\(([^\"])/vbl_printf\($1/g;
       s/\bCoolTimer/vbl_timer/g;

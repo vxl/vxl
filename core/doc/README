@@ -10,10 +10,10 @@ The VXL Book
 ************
 
 The book (in subdirectory book) is a human-written collection of VXL
-documentation, suitable for printing.  It is written in texinfo, a limited form
-of LaTeX which allows us to make various forms of output: printed, HTML, windows
-help files, emacs info, and plain text files.  Each of these forms has its
-adherents, and each is useful.
+documentation.  It is written in texinfo, a limited form of LaTeX which allows
+us to make various forms of output: printed, HTML, windows help files, emacs
+info, and plain text files.  Each of these forms has its adherents, and each is
+useful.
 
 Automatically generated documentation
 *************************************

@@ -12,10 +12,16 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
+    Project_Dep_Name vcl
+    End Project Dependency
+    Begin Project Dependency
     Project_Dep_Name vbl
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name vcl
+    Project_Dep_Name vnl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name netlib
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vgl
@@ -24,13 +30,10 @@ Package=<4>
     Project_Dep_Name vil
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name vnl
+    Project_Dep_Name vsl
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vnl_algo
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vsl
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vgui
@@ -252,6 +255,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "vipl"=.\vipl\vipl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "vnl"=.\vnl\vnl.dsp - Package Owner=<4>
 
 Package=<5>
@@ -310,6 +325,18 @@ Package=<4>
 ###############################################################################
 
 Project: "vsl_harris"=.\VSL\EXAMPLES\vsl_harris.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vtol"=.\vtol\vtol.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
