@@ -96,7 +96,7 @@ vcl_ostream& operator<<(vcl_ostream& s, const vdgl_edgel_chain& p)
   for (unsigned int i=1; i< p.es_.size(); ++i)
     s << ", " << p.es_[i];
 
-  return s << ")";
+  return s << ')';
 }
 
 inline static double sq_dist(vdgl_edgel const& e, double x, double y)
@@ -108,9 +108,10 @@ inline static double sq_dist(vdgl_edgel const& e, double x, double y)
 vdgl_edgel_chain_sptr vdgl_edgel_chain::extract_subchain(int start, int end)
 {
   vcl_vector<vdgl_edgel> e;
-  if (start < size() && end >= 0)
-    for (int i=start; i<= end; ++i)
-      e.push_back(edgel(i));
+  if (end >= (int)size()) end = size()-1;
+  if (start < 0) start = 0;
+  for (int i=start; i<=end; ++i)
+    e.push_back(edgel(i));
   return new vdgl_edgel_chain(e); // could be empty
 }
 

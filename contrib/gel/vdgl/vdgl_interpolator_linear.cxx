@@ -28,7 +28,7 @@ vsol_point_2d_sptr vdgl_interpolator_linear::closest_point_on_curve ( vsol_point
 {
   double min_distance = -1.0;
   int index = -1;
-  for ( int i=0; i< chain_->size(); i++)
+  for ( unsigned int i=0; i< chain_->size(); ++i)
   {
     vgl_point_2d<double> curve_point = chain_->edgel(i).get_pt();
     double d = p->distance ( vsol_point_2d ( curve_point ) );
@@ -100,8 +100,8 @@ double vdgl_interpolator_linear::get_tangent_angle( const double index)
   assert(index >= 0 && index <= chain_->size() - 1);
   if (N==1)
   {
-    vcl_cout << " vdgl_interpolator_linear::get_theta(..) - can't compute angle"
-             << " for a chain with one edgel\n";
+    vcl_cout << " vdgl_interpolator_linear::get_theta(..) -"
+             << " can't compute angle for a chain with one edgel\n";
     return 0;
   }
   int a = int(index); // round down
@@ -185,9 +185,9 @@ void vdgl_interpolator_linear::recompute_length()
 {
   lengthcache_= 0;
 
-  for ( int i=0; i< chain_->size(); i++)
+  for ( unsigned int i=0; i< chain_->size(); ++i)
   {
-    int j = i==0 ? chain_->size()-1 : i-1;
+    unsigned int j = i==0 ? chain_->size()-1 : i-1;
     vgl_point_2d<double> p1= chain_->edgel(j).get_pt();
     vgl_point_2d<double> p2= chain_->edgel(i).get_pt();
 
@@ -207,11 +207,11 @@ void vdgl_interpolator_linear::recompute_bbox()
   minycache_= chain_->edgel( 0).get_y();
   maxycache_= chain_->edgel( 0).get_y();
 
-  for ( int i=1; i< chain_->size(); i++)
+  for (unsigned int i=1; i< chain_->size(); ++i)
   {
-    if ( chain_->edgel( i).get_x()< minxcache_) minxcache_= chain_->edgel( i).get_x();
-    if ( chain_->edgel( i).get_x()> maxxcache_) maxxcache_= chain_->edgel( i).get_x();
-    if ( chain_->edgel( i).get_y()< minycache_) minycache_= chain_->edgel( i).get_y();
-    if ( chain_->edgel( i).get_y()> maxycache_) maxycache_= chain_->edgel( i).get_y();
+    if (chain_->edgel(i).get_x()< minxcache_) minxcache_= chain_->edgel(i).get_x();
+    if (chain_->edgel(i).get_x()> maxxcache_) maxxcache_= chain_->edgel(i).get_x();
+    if (chain_->edgel(i).get_y()< minycache_) minycache_= chain_->edgel(i).get_y();
+    if (chain_->edgel(i).get_y()> maxycache_) maxycache_= chain_->edgel(i).get_y();
   }
 }

@@ -52,7 +52,7 @@ class vdgl_edgel_chain : public vul_timestamp,
 
   // Data Access---------------------------------------------------------------
 
-  int size() const { return es_.size(); }
+  unsigned int size() const { return es_.size(); }
   vdgl_edgel& edgel( int i) { return es_[i]; }
   vdgl_edgel const& edgel( int i) const { return es_[i]; }
   vdgl_edgel& operator[]( int i) { return es_[i]; }
