@@ -125,6 +125,12 @@ SOURCE=.\bvgl_h_matrix_1d_compute_linear.cxx
 # Begin Source File
 SOURCE=.\bvgl_h_matrix_1d_compute_3point.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bvgl_h_matrix_1d_compute.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bvgl_h_matrix_2d_compute_4point.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -163,6 +169,12 @@ SOURCE=.\bvgl_h_matrix_1d.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvgl_h_matrix_1d_compute_3point.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvgl_h_matrix_1d_compute.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvgl_h_matrix_2d_compute_4point.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvgl_h_matrix_1d_compute_linear.h
