@@ -76,11 +76,19 @@ SET( vnl_sources
   vnl_float_2.cxx              vnl_float_2.h
   vnl_float_3.cxx              vnl_float_3.h
   vnl_float_4.cxx              vnl_float_4.h
+                               vnl_float_1x3.h
+                               vnl_float_3x1.h
                                vnl_float_2x2.h
+                               vnl_float_3x3.h
+                               vnl_float_3x4.h
+                               vnl_float_4x3.h
+                               vnl_float_4x4.h
   vnl_double_2.cxx             vnl_double_2.h
   vnl_double_3.cxx             vnl_double_3.h
   vnl_double_4.cxx             vnl_double_4.h
                                vnl_double_5.h
+                               vnl_double_1x3.h
+                               vnl_double_3x1.h
                                vnl_double_2x2.h
   vnl_double_2x3.cxx           vnl_double_2x3.h
   vnl_double_3x2.cxx           vnl_double_3x2.h
