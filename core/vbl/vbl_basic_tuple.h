@@ -169,10 +169,10 @@ public:
   }
 
   // Print the tuple on cout.
-  inline void Print() { Dump(cout); }
+  inline void Print() { Dump(vcl_cout); }
 
   // Print the tuple on cerr.
-  void Dump(ostream& str = cerr) const
+  void Dump(ostream& str = vcl_cerr) const
   {
     str << "<" << first << "," << second;
     if (!vbl_basic_optional_traits<T3>::IsOptional)

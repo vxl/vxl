@@ -11,7 +11,7 @@ int main()
   m.push_back(2);
 
   for(container::iterator p = m.begin(); p != m.end(); ++p)
-    cout << (*p) << endl;
+    vcl_cout << (*p) << vcl_endl;
 
 
   // fixme how do i do this on win32?  copy(m.begin(), m.end(), ostream_iterator<int>(cerr));

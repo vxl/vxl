@@ -17,7 +17,7 @@ struct X
   X(int a, int b) : x(a + b) { }
   X(float a, float b) : x(a + b) { }
   X(double a, double b) : x(a + b) { }
-  void method() { cerr << '[' << x << ']' << flush;; }
+  void method() { vcl_cerr << '[' << x << ']' << vcl_flush;; }
 private:
   double x;
 };
@@ -26,16 +26,16 @@ int main(int, char **)
 {
   container<X> v;
 
-  cerr << "size " << v.size() << endl
-       << "capacity " << v.capacity() << endl;
+  vcl_cerr << "size " << v.size() << vcl_endl
+       << "capacity " << v.capacity() << vcl_endl;
 
   v.push_back(X(1, 2));
   v.push_back(X(1.0f, 2.0f));
   v.push_back(v.front());
   v.push_back(X(1.0, 2.0));
 
-  cerr << "size " << v.size() << endl
-       << "capacity " << v.capacity() << endl;
+  vcl_cerr << "size " << v.size() << vcl_endl
+       << "capacity " << v.capacity() << vcl_endl;
 
   for (container<X>::iterator i=v.begin(); i!=v.end(); ++i)
     (*i).method();

@@ -24,7 +24,7 @@ static void do_vbl_sprintf(vcl_string &str,const char *fmt,va_list ap)
   char s[vbl_sprintf_BUFSIZE];
   vsprintf(s, fmt, ap);
   if (strlen(s) >= vbl_sprintf_BUFSIZE)
-    cerr << "WARNING : possible memory corruption in do_vbl_sprintf(\"" << fmt << "\",...)!\n";
+    vcl_cerr << "WARNING : possible memory corruption in do_vbl_sprintf(\"" << fmt << "\",...)!\n";
   str = s;
 }
 
@@ -68,8 +68,8 @@ ostream & operator<<(ostream &os,const vbl_sprintf& s)
 #ifdef RUNTEST
 main()
 {
-  cout << vbl_sprintf("fred%d\n", 3);
+  vcl_cout << vbl_sprintf("fred%d\n", 3);
   vcl_string fmt("foobar%d\n");
-  cout << vbl_sprintf(fmt,4);
+  vcl_cout << vbl_sprintf(fmt,4);
 }
 #endif

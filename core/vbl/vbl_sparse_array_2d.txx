@@ -19,7 +19,7 @@ ostream& vbl_sparse_array_2d<T>::print(ostream& out) const
   for(const_iterator p = storage_.begin(); p != enD; ++p) {
     unsigned i,j;
     vbl_sparse_array_2d_base::decode((*p).first, i, j);
-    out << "(" << i << "," << j << "): " << (*p).second << endl;
+    out << "(" << i << "," << j << "): " << (*p).second << vcl_endl;
   }
   return out;
 }
@@ -45,16 +45,16 @@ int main()
   x(1,2) = 1.23;
   x(100,200) = 100.2003;
 
-  cout << "2,3 was " << x.put(2,3, 7) << endl;
-  cout << "2,3 is " << *x.get_addr(2,3) << endl;
+  vcl_cout << "2,3 was " << x.put(2,3, 7) << vcl_endl;
+  vcl_cout << "2,3 is " << *x.get_addr(2,3) << vcl_endl;
 
-  cout << "12 = " << x(1,2) << endl;
-  cout << "22 = " << x(2,2) << endl;
+  vcl_cout << "12 = " << x(1,2) << vcl_endl;
+  vcl_cout << "22 = " << x(2,2) << vcl_endl;
 
-  cout << "100, 200 = " << x(100,200) << endl;
+  vcl_cout << "100, 200 = " << x(100,200) << vcl_endl;
 
-  cout << "333 is full? " << x.fullp(3,3) << endl;
+  vcl_cout << "333 is full? " << x.fullp(3,3) << vcl_endl;
   
-  cout << x;
+  vcl_cout << x;
 }
 #endif

@@ -49,7 +49,7 @@ vbl_user_info::vbl_user_info(uid_type uid_)
 
 void vbl_user_info::init(uid_type /*uid*/)
 {
-  cerr << "Not implemented\n";
+  vcl_cerr << "Not implemented\n";
 }
 
 void vbl_user_info::init(char const* name_)

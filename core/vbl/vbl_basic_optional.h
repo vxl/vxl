@@ -37,7 +37,7 @@ class vbl_basic_optional
 public:
   vbl_basic_optional() {}
   vbl_basic_optional(const vbl_basic_optional&) {}
-  inline static void Error(const char* message) { cerr << message << endl; abort(); }
+  inline static void Error(const char* message) { vcl_cerr << message << vcl_endl; abort(); }
 };
 
 // Here is the general case for the traits class used to determine

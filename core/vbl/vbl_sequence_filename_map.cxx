@@ -183,7 +183,7 @@ void vbl_sequence_filename_map::parse()
 	}
       }
     if (!found_match) {
-      cerr << __FILE__ << " : Can't find files matching " << basename_ << index_format_ << " in common locations with common format!" << endl;
+      vcl_cerr << __FILE__ << " : Can't find files matching " << basename_ << index_format_ << " in common locations with common format!" << vcl_endl;
       abort();
     }      
   } 
@@ -232,7 +232,7 @@ void vbl_sequence_filename_map::parse()
 	closedir(dir_handle);
       }
     if (!found_match) {
-      cerr << __FILE__ << " : Can't find files matching " << basename_ << index_format_ << image_extension_ << " in common locations!" << endl;
+      vcl_cerr << __FILE__ << " : Can't find files matching " << basename_ << index_format_ << image_extension_ << " in common locations!" << vcl_endl;
       abort();
     }
   }
@@ -272,7 +272,7 @@ void vbl_sequence_filename_map::parse()
       closedir(dir_handle);
     }
     if (!found_match) {
-      cerr << __FILE__ << " : Can't find files matching " << image_dir_ << basename_ << index_format_ << " with common extension!" << endl;
+      vcl_cerr << __FILE__ << " : Can't find files matching " << image_dir_ << basename_ << index_format_ << " with common extension!" << vcl_endl;
       abort();
     }
   }
@@ -302,13 +302,13 @@ void vbl_sequence_filename_map::parse()
   }
 
   if (debug) {
-    cerr << seq_template_ << endl;
-    cerr << "    image dir : " << image_dir_ << endl;
-    cerr << "    basename  : " << basename_ << endl;
-    cerr << " index format : " << index_format_ << endl;
-    cerr << "    extension : " << image_extension_ << endl;
-    cerr << "    indices   : " << start_ << ":" << step_ << ":" << end_ << endl;
-    cerr << endl;
+    vcl_cerr << seq_template_ << vcl_endl;
+    vcl_cerr << "    image dir : " << image_dir_ << vcl_endl;
+    vcl_cerr << "    basename  : " << basename_ << vcl_endl;
+    vcl_cerr << " index format : " << index_format_ << vcl_endl;
+    vcl_cerr << "    extension : " << image_extension_ << vcl_endl;
+    vcl_cerr << "    indices   : " << start_ << ":" << step_ << ":" << end_ << vcl_endl;
+    vcl_cerr << vcl_endl;
   }
 }
 

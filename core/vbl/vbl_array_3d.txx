@@ -142,9 +142,9 @@ ostream & operator<<(ostream &os,const vbl_array_3d<T> & A)
 	  os << ' ';
 	os << A(i,j,k);
       }
-      os << endl;
+      os << vcl_endl;
     }
-    os << endl;
+    os << vcl_endl;
   }
   return os;
 }

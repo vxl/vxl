@@ -5,7 +5,7 @@
 int main()
 {
   for(int i = 0; i < 2; ++i)
-    cerr << i << endl;
+    vcl_cerr << i << vcl_endl;
   for(int i = 0; i < 2; ++i);
 
   return 0;

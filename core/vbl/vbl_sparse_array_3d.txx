@@ -104,7 +104,7 @@ ostream& vbl_sparse_array_3d<T>::print(ostream& out) const
   for(Map::const_iterator p = storage_.begin(); p != storage_.end(); ++p) {
     unsigned i,j,k;
     decode((*p).first, i, j, k);
-    out << "(" << i << "," << j << "," << k << "): " << (*p).second << endl;
+    out << "(" << i << "," << j << "," << k << "): " << (*p).second << vcl_endl;
   }
   return out;
 }
@@ -126,11 +126,11 @@ int main()
   x(1,2,3) = 1.23;
   x(100,200,3) = 100.2003;
 
-  cout << "123 = " << x(1,2,3) << endl;
-  cout << "222 = " << x(2,2,2) << endl;
+  vcl_cout << "123 = " << x(1,2,3) << vcl_endl;
+  vcl_cout << "222 = " << x(2,2,2) << vcl_endl;
 
-  cout << "333 is full? " << x.fullp(3,3,3) << endl;
+  vcl_cout << "333 is full? " << x.fullp(3,3,3) << vcl_endl;
   
-  cout << x;
+  vcl_cout << x;
 }
 #endif

@@ -76,7 +76,7 @@ vbl_basic_relation<T1,T2,T3,T4,T5>::vbl_basic_relation(vbl_basic_relation<T1,T2,
 {
   if (!impl)
     {
-      cerr << "Copy constructor called with invalid easy relation" << endl;
+      vcl_cerr << "Copy constructor called with invalid easy relation" << vcl_endl;
       abort();
     }
   impl->ref();
@@ -245,10 +245,10 @@ vbl_basic_relation<T1,T2,T3,T4,T5>::where_is(const vbl_basic_relation_where<T1,T
 template <class T1, class T2, class T3, class T4, class T5>
 void vbl_basic_relation<T1,T2,T3,T4,T5>::dump_relation(ostream& str)
 {
-  str << "Relation " << get_name() << ":" << endl;
+  str << "Relation " << get_name() << ":" << vcl_endl;
   where->Dump(str);
   for (iterator i = begin(); i != end(); i++)
-    str << "\t" << *i << endl;
+    str << "\t" << *i << vcl_endl;
 }
 
 //------------------------------------------------------------

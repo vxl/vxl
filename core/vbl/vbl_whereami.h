@@ -12,6 +12,6 @@
 
 #include <vcl/vcl_iostream.h>
 
-#define vbl_whereami (cerr << __FILE__ ", line " << __LINE__ << " : ")
+#define vbl_whereami (vcl_cerr << __FILE__ ", line " << __LINE__ << " : ")
 
 #endif // vbl_whereami_h_

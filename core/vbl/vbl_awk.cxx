@@ -92,7 +92,7 @@ char const* vbl_awk::line_from(int field_number) const
   if (field_number >= NF())
     field_number = NF() - 1;
   if (field_number < 0) {
-    cerr << "vbl_awk::line_from("<< field_number <<") -- ZOIKS\n";
+    vcl_cerr << "vbl_awk::line_from("<< field_number <<") -- ZOIKS\n";
     return line();
   }
   
@@ -101,8 +101,8 @@ char const* vbl_awk::line_from(int field_number) const
 
 void testvbl_awk()
 {
-  cout << "Start\n";
-  for(vbl_awk awk(cin); awk; ++awk) {
-    cout << awk.NF() << ":" << awk[2] << endl;
+  vcl_cout << "Start\n";
+  for(vbl_awk awk(vcl_cin); awk; ++awk) {
+    vcl_cout << awk.NF() << ":" << awk[2] << vcl_endl;
   }
 }

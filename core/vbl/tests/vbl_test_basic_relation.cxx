@@ -15,8 +15,8 @@
 class TestType
 {
 public:
-  void ref() { count++; cout << "ref " << this << " = " << count << endl; }
-  void unref() { count--; cout << "unref " << this << " = " << count << endl; if (!count) delete this; }
+  void ref() { count++; vcl_cout << "ref " << this << " = " << count << vcl_endl; }
+  void unref() { count--; vcl_cout << "unref " << this << " = " << count << vcl_endl; if (!count) delete this; }
  
 public:
   int i,count;
@@ -31,7 +31,7 @@ public:
  
   ~TestType()
   {
-    cout << "Destructor " << this << endl;
+    vcl_cout << "Destructor " << this << vcl_endl;
     ninstances--;
   }
 };
@@ -80,8 +80,8 @@ bool CheckRelation(vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2 >& r
       int len = r.where_second(i).size();
       if (len != 3)
 	{
-	  cout << "Failed: where_second(" << i << ").size() returns " << len
-	       << ", should be 3" << endl;
+	  vcl_cout << "Failed: where_second(" << i << ").size() returns " << len
+	       << ", should be 3" << vcl_endl;
 	  passed = false;
 	}
       vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2>::iterator j;
@@ -92,7 +92,7 @@ bool CheckRelation(vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2 >& r
 	{
 	  if ((*j).GetSecond() != i)
 	    {
-	      cout << "Failed: where_second(" << i << ") returns tuple " << *j << endl;
+	      vcl_cout << "Failed: where_second(" << i << ") returns tuple " << *j << vcl_endl;
 	      passed = false;
 	    }
 	  if (! ((*j).GetFirst() == (*j).GetThird()) )
@@ -103,8 +103,8 @@ bool CheckRelation(vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2 >& r
 	}
       if (count != 3)
 	{
-	  cout << "Failed: where_second(" << i << ") returns " << count 
-	       << " tuples, should be 3." << endl;
+	  vcl_cout << "Failed: where_second(" << i << ") returns " << count 
+	       << " tuples, should be 3." << vcl_endl;
 	  passed = false;
 	}
       bool case1found = false;
@@ -124,7 +124,7 @@ bool CheckRelation(vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2 >& r
 	}
       if (!case1found || !case2found || !case3found)
 	{
-	  cout << "Failed: where_second(" << i << ") returns wrong three tuples." << endl;
+	  vcl_cout << "Failed: where_second(" << i << ") returns wrong three tuples." << vcl_endl;
 	  passed = false;
 	}
 
@@ -132,15 +132,15 @@ bool CheckRelation(vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2 >& r
       int l1 = r.where_first(s1).size();
       if (l1 != 2)
 	{
-	  cout << "Failed: where_first(" << s1 << ") has size " << l1 
-	       << ", expected 2" << endl;
+	  vcl_cout << "Failed: where_first(" << s1 << ") has size " << l1 
+	       << ", expected 2" << vcl_endl;
 	  passed = false;
 	}
       int l2 = r.where_third(s2).size();
       if (l2 != 2)
 	{
-	  cout << "Failed: where_third(" << s2 << ") has size " << l2 
-	       << ", expected 2" << endl;
+	  vcl_cout << "Failed: where_third(" << s2 << ") has size " << l2 
+	       << ", expected 2" << vcl_endl;
 	  passed = false;
 	}
 
@@ -148,43 +148,43 @@ bool CheckRelation(vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2 >& r
       int l12 = r.where_first(s1).where_third(s2).size();
       if (l12 != 1)
 	{
-	  cout << "Failed: where_first(" << s1 << ").where_third(" << s2 << ") has size " << l12 
-	       << ", expected 1" << endl;
+	  vcl_cout << "Failed: where_first(" << s1 << ").where_third(" << s2 << ") has size " << l12 
+	       << ", expected 1" << vcl_endl;
 	  passed = false;
 	}
       int l11 = r.where_first(s1).where_third(s1).size();
       if (l11 != 1)
 	{
-	  cout << "Failed: where_first(" << s1 << ").where_third(" << s1 << ") has size " << l11 
-	       << ", expected 1" << endl;
+	  vcl_cout << "Failed: where_first(" << s1 << ").where_third(" << s1 << ") has size " << l11 
+	       << ", expected 1" << vcl_endl;
 	  passed = false;
 	}
       int l22 = r.where_first(s2).where_third(s2).size();
       if (l22 != 1)
 	{
-	  cout << "Failed: where_first(" << s2 << ").where_third(" << s2 << ") has size " << l22 
-	       << ", expected 1" << endl;
+	  vcl_cout << "Failed: where_first(" << s2 << ").where_third(" << s2 << ") has size " << l22 
+	       << ", expected 1" << vcl_endl;
 	  passed = false;
 	}
       int li12 = r.where_first(s1).where_second(i).where_third(s2).size();
       if (li12 != 1)
 	{
-	  cout << "Failed: where_first(" << s1 << ").where_second(" << i << ").where_third(" << s2 << ") has size " << li12 
-	       << ", expected 1" << endl;
+	  vcl_cout << "Failed: where_first(" << s1 << ").where_second(" << i << ").where_third(" << s2 << ") has size " << li12 
+	       << ", expected 1" << vcl_endl;
 	  passed = false;
 	}
       int li11 = r.where_first(s1).where_second(i).where_third(s1).size();
       if (li11 != 1)
 	{
-	  cout << "Failed: where_first(" << s1 << ").where_second(" << i << ").where_third(" << s1 << ") has size " << li11 
-	       << ", expected 1" << endl;
+	  vcl_cout << "Failed: where_first(" << s1 << ").where_second(" << i << ").where_third(" << s1 << ") has size " << li11 
+	       << ", expected 1" << vcl_endl;
 	  passed = false;
 	}
       int li22 = r.where_first(s2).where_second(i).where_third(s2).size();
       if (li22 != 1)
 	{
-	  cout << "Failed: where_first(" << s2 << ").where_second(" << i << ").where_third(" << s2 << ") has size " << li22 
-	       << ", expected 1" << endl;
+	  vcl_cout << "Failed: where_first(" << s2 << ").where_second(" << i << ").where_third(" << s2 << ") has size " << li22 
+	       << ", expected 1" << vcl_endl;
 	  passed = false;
 	}
     }
@@ -197,7 +197,7 @@ void testStringIntString()
   r.insert("Rupert",30,"blue");
   r.insert("Bill",31,"brown");
   r.insert("Joe",120,"brown");
-  cout << r << endl;
+  vcl_cout << r << vcl_endl;
 
   // Do a stress test.
   int i;
@@ -212,9 +212,9 @@ void testStringIntString()
 
   // Test length;
   if (r.size() == 3 + 3*ntest)
-    cout << "insert test passed\n";
+    vcl_cout << "insert test passed\n";
   else
-    cout << "insert test failed\n";
+    vcl_cout << "insert test failed\n";
 
   // Delete those three tuples.
   r.remove("Rupert",30,"blue");
@@ -222,15 +222,15 @@ void testStringIntString()
   r.remove("Joe",120,"brown");
   
   if (r.size() == 3*ntest)
-    cout << "remove test passed\n";
+    vcl_cout << "remove test passed\n";
   else
-    cout << "remove test failed\n";
+    vcl_cout << "remove test failed\n";
 
   bool passed = CheckRelation(r);
   if (passed)
-    cout << "Where test passed" << endl;
+    vcl_cout << "Where test passed" << vcl_endl;
   else
-    cout << "Where test failed" << endl;
+    vcl_cout << "Where test failed" << vcl_endl;
 
   // Test random insert/delete.
   vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2> temp_rel("holding_relation");
@@ -248,7 +248,7 @@ void testStringIntString()
 	      if (count == m)
 		{
 		  temp_rel.insert(*j);
-		  cout << "Removing " << *j << endl;
+		  vcl_cout << "Removing " << *j << vcl_endl;
 		  r.remove(*j);
 		  break;
 		}
@@ -260,7 +260,7 @@ void testStringIntString()
 	  if (j != temp_rel.end())
 	    {
 	      r.insert(*j);
-	      cout << "inserting " << *j << endl;
+	      vcl_cout << "inserting " << *j << vcl_endl;
 	      temp_rel.remove(*j);
 	    }
 	}
@@ -272,16 +272,16 @@ void testStringIntString()
        j++)
     {
       r.insert(*j);
-      cout << "inserting " << *j << endl;
+      vcl_cout << "inserting " << *j << vcl_endl;
     }
 
   temp_rel.clear();
 
   passed  = passed && CheckRelation(r);
   if (passed)
-    cout << "Stress test passed" << endl;
+    vcl_cout << "Stress test passed" << vcl_endl;
   else
-    cout << "Stress test failed" << endl;
+    vcl_cout << "Stress test failed" << vcl_endl;
 
   r.clear();
 }
@@ -295,31 +295,31 @@ void testDowncasting()
   vbl_basic_relation<TestType*,int,vcl_string BR_DEFAULT2>* r1p = 
     vbl_basic_relation<TestType*,int,vcl_string BR_DEFAULT2>::cast(r);
   if (r1p != &r1)
-    cout << "Failed downcast test 1" << endl;
+    vcl_cout << "Failed downcast test 1" << vcl_endl;
   else
-    cout << "Passed downcast test 1" << endl;
+    vcl_cout << "Passed downcast test 1" << vcl_endl;
 
   r = &r2;
   r1p = vbl_basic_relation<TestType*,int,vcl_string BR_DEFAULT2>::cast(r);
   if (r1p)
-    cout << "Failed downcast test 2" << endl;
+    vcl_cout << "Failed downcast test 2" << vcl_endl;
   else
-    cout << "Passed downcast test 2" << endl;
+    vcl_cout << "Passed downcast test 2" << vcl_endl;
 
   r = &r1;
   vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2>* r2p = 
     vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2>::cast(r);
   if (r2p)
-    cout << "Failed downcast test 3" << endl;
+    vcl_cout << "Failed downcast test 3" << vcl_endl;
   else
-    cout << "Passed downcast test 3" << endl;
+    vcl_cout << "Passed downcast test 3" << vcl_endl;
 
   r = &r2;
   r2p = vbl_basic_relation<vcl_string,int,vcl_string BR_DEFAULT2>::cast(r);
   if (r2p != &r2)
-    cout << "Failed downcast test 4" << endl;
+    vcl_cout << "Failed downcast test 4" << vcl_endl;
   else
-    cout << "Passed downcast test 4" << endl;
+    vcl_cout << "Passed downcast test 4" << vcl_endl;
 }
 
 //extern "C" void test_vbl_basic_relation()
@@ -327,61 +327,61 @@ main()
 {
   TestType* e1 = new TestType(2);
   vbl_basic_relation<TestType*,int,vcl_string BR_DEFAULT2> rel("my_relation");
-  cout << rel << endl;
+  vcl_cout << rel << vcl_endl;
   rel.insert(e1,20,"what is it?");
   rel.insert(e1,40,"what is it?");
   rel.insert(e1,10,"who is it?");
   rel.insert(e1,10,"why is it?");
   // This insert should fail.
   if (rel.insert(e1,10,"who is it?"))
-    cout << "Failed: duplicate tuple inserted." << endl;
+    vcl_cout << "Failed: duplicate tuple inserted." << vcl_endl;
   else
-    cout << "Passed: duplicate tuple was not inserted." << endl;
+    vcl_cout << "Passed: duplicate tuple was not inserted." << vcl_endl;
 
   vbl_basic_relation<TestType*,int,vcl_string BR_DEFAULT2>::iterator i;
   int count = 0;
   for (i = rel.where_second(10).begin();
        i != rel.end();
        i++, count++)
-    cout << "Found tuple where second = 10 : " << *i << endl;
+    vcl_cout << "Found tuple where second = 10 : " << *i << vcl_endl;
   if (count == 2)
-    cout << "Passed: where_second succeeded." << endl;
+    vcl_cout << "Passed: where_second succeeded." << vcl_endl;
   else
-    cout << "Failed: where_second returned " << count << " tuples, expected 2." << endl;
+    vcl_cout << "Failed: where_second returned " << count << " tuples, expected 2." << vcl_endl;
 
   vbl_basic_relation<TestType*,int,vcl_string BR_DEFAULT2> selected = rel.where_third("what is it?");
-  cout << "Where third = \"what is it?\" :" << selected << endl;
+  vcl_cout << "Where third = \"what is it?\" :" << selected << vcl_endl;
 
   count = 0;
   for (i = selected.begin();
        i != selected.end();
        i++, count++)
-    cout << "Found tuple " << *i << endl;
+    vcl_cout << "Found tuple " << *i << vcl_endl;
   if (count == 2)
-    cout << "Passed: where_third succeeded." << endl;
+    vcl_cout << "Passed: where_third succeeded." << vcl_endl;
   else
-    cout << "Failed: where_third returned " << count << " tuples, expected 2." << endl;
+    vcl_cout << "Failed: where_third returned " << count << " tuples, expected 2." << vcl_endl;
 
   if (rel.size() == 4)
-    cout << "Passed: size succeeded." << endl;
+    vcl_cout << "Passed: size succeeded." << vcl_endl;
   else
-    cout << "Failed: size returned " << rel.size() << " tuples, expected 4." << endl;
+    vcl_cout << "Failed: size returned " << rel.size() << " tuples, expected 4." << vcl_endl;
 
-  cout << rel << endl;
+  vcl_cout << rel << vcl_endl;
   rel.where_second(10).clear();
 
   if (rel.size() == 2)
-    cout << "Passed: clear where second = 10 succeeded." << endl;
+    vcl_cout << "Passed: clear where second = 10 succeeded." << vcl_endl;
   else
-    cout << "Failed: clear where second = 10 failed, leaving " << rel.size() << " tuples, expected 2." << endl;
+    vcl_cout << "Failed: clear where second = 10 failed, leaving " << rel.size() << " tuples, expected 2." << vcl_endl;
 
-  cout << rel << endl;
+  vcl_cout << rel << vcl_endl;
   rel.clear();
 
   if (TestType::ninstances == 0)
-    cout << "Passed: no leaks found." << endl;
+    vcl_cout << "Passed: no leaks found." << vcl_endl;
   else
-    cout << "Failed: " << TestType::ninstances << " instances of T leaked." << endl;
+    vcl_cout << "Failed: " << TestType::ninstances << " instances of T leaked." << vcl_endl;
 
   rel.clear();
 

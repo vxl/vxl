@@ -6,13 +6,13 @@
 #if defined(VCL_SGI_CC)
 // urgh! there is no rdbuf() method for *setting* the
 // stream buffer.
-# include <memory.h>
-# include <stddef.h>
-# define private public
-# define protected public
-# include <iostream.h>
-# undef private
-# undef protected
+# include <memory.h>         // These headers are
+# include <stddef.h>         // in the old style
+# define private public      // intentionally. We
+# define protected public    // *want* to include
+# include <iostream.h>       // the old SGI headers
+# undef private              // as they are without
+# undef protected            // going through vcl.
 #endif
 
 #include <vbl/vbl_redirector.h>

@@ -95,7 +95,7 @@ ostream& operator<< (ostream &os, const vbl_array_2d<T> &array)
       for( int j=0; j< array.columns(); j++)
 	os << array(i,j) << " ";
 
-      os << endl;
+      os << vcl_endl;
     }
 
   return os;

@@ -13,7 +13,7 @@
 
 void Assert(char const* msg, bool expr)
 {
-  cout << msg << " - " << (expr?"passed":"failed") << "." << endl;
+  vcl_cout << msg << " - " << (expr?"passed":"failed") << "." << vcl_endl;
 }
 
 char const * my_argv_1[] = {
@@ -55,10 +55,10 @@ void test_do_vbl_arg()
   vbl_arg<char*> filename1;
 
   int my_argc = count_my_args(my_argv_1);
-  cerr << "vbl_argc = " << my_argc
+  vcl_cerr << "vbl_argc = " << my_argc
        << ", bool1 = " << bool1()
        << ", bool2 = " << bool2()
-       << ", bool3 = " << bool3() << endl;
+       << ", bool3 = " << bool3() << vcl_endl;
   char **my_argv = (char**) my_argv_1;
 
   vbl_arg_parse(my_argc, my_argv);
@@ -74,7 +74,7 @@ void test_do_vbl_arg()
   bool ok = true;
   for(int i = 0; i < true_list_length; ++i) {
     if (vcl_find(l.begin(), l.end(), list_contents[i]) == l.end()) {
-      cerr << "Integer [" << list_contents[i] << "] not found in list\n";
+      vcl_cerr << "Integer [" << list_contents[i] << "] not found in list\n";
       ok = false;
     }
   }
@@ -89,7 +89,7 @@ void test_vbl_arg()
 
 int main()
 {
-  cout << "Running" << endl;
+  vcl_cout << "Running" << vcl_endl;
   test_vbl_arg();
   return 0;
 }

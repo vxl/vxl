@@ -185,5 +185,5 @@ long vbl_timer::all()
 // -- Display user and real time since the last mark.
 void vbl_timer::print(ostream& s)
 {
-  s << "Time: user " << user() / 1000.0 << ", real " << real() / 1000.0 << endl;
+  s << "Time: user " << user() / 1000.0 << ", real " << real() / 1000.0 << vcl_endl;
 }

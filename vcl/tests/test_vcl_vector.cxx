@@ -20,17 +20,17 @@ int main()
     m.push_back(2);
     
     for(container::iterator p = m.begin(); p != m.end(); ++p)
-    cout << (*p) << endl;
+    vcl_cout << (*p) << vcl_endl;
     
     //   copy(m.begin(), m.end(), vcl_ostream_iterator<int>(cerr));
   }
   {
     vcl_vector<double> v;
     for (unsigned i=0; i<10; ++i) {
-      cout << "size : " << v.size() << delim
+      vcl_cout << "size : " << v.size() << delim
 	   << "capacity : " << v.capacity() << delim
 	   << "begin : " << (void*) &* v.begin() << delim
-	   << "end : " << (void*) &* v.end() << endl;
+	   << "end : " << (void*) &* v.end() << vcl_endl;
       
       v.push_back(3.1415926 * i);
     }

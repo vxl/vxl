@@ -1,3 +1,5 @@
+#include <vcl/vcl_functional.h>
+#include <vcl/vcl_utility.h>
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_map.h>
 
@@ -19,27 +21,27 @@ int main()
   mymap::iterator b = m.begin();
   mymap::iterator e = m.end();
 
-  cout << "the whole container:" << endl;
+  vcl_cout << "the whole container:" << vcl_endl;
   for (mymap::iterator p = b; p != e; ++p)
-    cout << *p << endl;
+    vcl_cout << *p << vcl_endl;
   
-  cout << "lower_bound() and upper_bound():" << endl;
+  vcl_cout << "lower_bound() and upper_bound():" << vcl_endl;
   for (int k=-1; k<=4; ++k) {  
-    cout << "k=" << k << endl;
+    vcl_cout << "k=" << k << vcl_endl;
 
     mymap::iterator lo = m.lower_bound(k);
-    cout << "  lo: ";
-    if (lo==b) cout << "begin";
-    else if (lo==e) cout << "end";
-    else cout << *lo;
-    cout << endl;
+    vcl_cout << "  lo: ";
+    if (lo==b) vcl_cout << "begin";
+    else if (lo==e) vcl_cout << "end";
+    else vcl_cout << *lo;
+    vcl_cout << vcl_endl;
 
     mymap::iterator hi = m.upper_bound(k);
-    cout << "  hi: ";
-    if (hi==b) cout << "begin";
-    else if (hi==e) cout << "end";
-    else cout << *hi;
-    cout << endl;
+    vcl_cout << "  hi: ";
+    if (hi==b) vcl_cout << "begin";
+    else if (hi==e) vcl_cout << "end";
+    else vcl_cout << *hi;
+    vcl_cout << vcl_endl;
   }
   
   return 0;

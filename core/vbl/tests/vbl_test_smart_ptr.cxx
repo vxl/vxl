@@ -6,7 +6,7 @@
 
 void printval (base_ref const &p)
 {
-  cout << "base_impl val = " << p->n << endl;
+  vcl_cout << "base_impl val = " << p->n << vcl_endl;
 }
 
 void changeval (base_impl *p, int k)
@@ -35,17 +35,17 @@ int doit ()
   if (p == (base_impl*)0) // identical result - just to demonstrate operator==()
     p = new base_impl;
 
-  cout << "operator<< gives : " << p << endl;
+  vcl_cout << "operator<< gives : " << p << vcl_endl;
 
   base_ref a = new base_impl (5);
   if (p == a)
-    cout << "FAILED: p==a (wrong)" << endl;
+    vcl_cout << "FAILED: p==a (wrong)" << vcl_endl;
   if (p != a)
-    cout << "p!=a (correct)" << endl;
+    vcl_cout << "p!=a (correct)" << vcl_endl;
   if (!p)
-    cout << "FAILED: !p (wrong)" << endl;
+    vcl_cout << "FAILED: !p (wrong)" << vcl_endl;
   if (p)
-    cout << "p converts to true (correct)" << endl;
+    vcl_cout << "p converts to true (correct)" << vcl_endl;
 
   // Get a smart pointer as the return value of a function :
   base_ref q = newbase_impl(10);
@@ -58,12 +58,12 @@ int doit ()
   p = q;
   // They should be the same
   if (p == q)
-    cout << "p and q are the same\n" << endl;
+    vcl_cout << "p and q are the same\n" << vcl_endl;
   else
-    cout << "FAILED: p == q" << endl;
+    vcl_cout << "FAILED: p == q" << vcl_endl;
 
-  cout << "value of   p->n : " << p->n << endl;
-  cout << "value of (*p).n : " << (*p).n << endl;
+  vcl_cout << "value of   p->n : " << p->n << vcl_endl;
+  vcl_cout << "value of (*p).n : " << (*p).n << vcl_endl;
 
   {
     // make a new base
@@ -86,15 +86,15 @@ int doit ()
     }
 
     // Print out the list
-    cout << "List of video sequences" << endl;
+    vcl_cout << "List of video sequences" << vcl_endl;
     for (vcl_list<base_ref>::const_iterator i = videos.begin(); i != videos.end(); i++) 
-      cout << " " << *i << endl;
+      vcl_cout << " " << *i << vcl_endl;
     //cout << videos << endl;
 
     // Clear the list
     videos.clear();
 
-    cout << "Video list is clear : filling again" << endl;
+    vcl_cout << "Video list is clear : filling again" << vcl_endl;
 
     for (int i=11; i<=15; i++)
     {
@@ -103,9 +103,9 @@ int doit ()
     }
 
     // Print out the list
-    cout << "List of video sequences" << endl;
+    vcl_cout << "List of video sequences" << vcl_endl;
     for (vcl_list<base_ref>::const_iterator i = videos.begin(); i != videos.end(); i++) 
-      cout << " " << *i << endl;
+      vcl_cout << " " << *i << vcl_endl;
     //cout << videos << endl;
   }
   return 0;
@@ -113,7 +113,7 @@ int doit ()
 
 extern "C" void test_vbl_smart_ptr()
 {
-  cout << "Running" << endl;
+  vcl_cout << "Running" << vcl_endl;
   doit();
   base_impl::checkcount();
 }

@@ -106,10 +106,10 @@ public:
   }
 
   // Print the where clause on cout.
-  inline void Print() { Dump(cout); }
+  inline void Print() { Dump(vcl_cout); }
 
   // Print the where clause on cerr or stream.
-  void Dump(ostream& str = cerr) const
+  void Dump(ostream& str = vcl_cerr) const
   {
     str << "<";
     if (first_wild) str << "*";

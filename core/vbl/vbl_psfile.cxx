@@ -67,7 +67,7 @@ vbl_psfile::vbl_psfile(char const* f)
   bg_r = 1; bg_g = 1; bg_b = 1;
   line_width = 1;
 
-  if (debug) cerr << "vbl_psfile::vbl_psfile" << endl;
+  if (debug) vcl_cerr << "vbl_psfile::vbl_psfile" << vcl_endl;
 }
 
 //-----------------------------------------------------------------------------
@@ -75,7 +75,7 @@ vbl_psfile::vbl_psfile(char const* f)
 //-----------------------------------------------------------------------------
 vbl_psfile::~vbl_psfile()
 {
-  if (debug) cerr << "vbl_psfile::~vbl_psfile" << endl;
+  if (debug) vcl_cerr << "vbl_psfile::~vbl_psfile" << vcl_endl;
   reset_bounding_box();
   if (!doneps)
     done();
@@ -208,8 +208,8 @@ void vbl_psfile::compute_bounding_box()
   ox = (int) (pos_inx * PIX2INCH + 0.5);
   oy = (int) (pos_iny * PIX2INCH + 0.5);
 
-  if (debug) cerr << "vbl_psfile::compute_bounding_box, box_width = " << box_width
-    << ", box_height = " << box_height << endl;
+  if (debug) vcl_cerr << "vbl_psfile::compute_bounding_box, box_width = " << box_width
+    << ", box_height = " << box_height << vcl_endl;
 }
 
 //-----------------------------------------------------------------------------
@@ -241,8 +241,8 @@ void vbl_psfile::set_min_max_xy(int x, int y)
 //-----------------------------------------------------------------------------
 void vbl_psfile::print_greyscale_image(byte* buffer, int sizex, int sizey)
 {
-  if (debug) cerr << "vbl_psfile::print_greyscale_image, width = " << sizex <<
-    ", height = " << sizey  << ", reduction_factor = " << reduction_factor << endl;
+  if (debug) vcl_cerr << "vbl_psfile::print_greyscale_image, width = " << sizex <<
+    ", height = " << sizey  << ", reduction_factor = " << reduction_factor << vcl_endl;
 
   exist_image = true;
   width = sizex;
@@ -357,7 +357,7 @@ void vbl_psfile::print_greyscale_image(byte* buffer, int sizex, int sizey)
         output_filestream << pixel;
       }
       else
-        cout << " index out of range: " << index << endl;
+        vcl_cout << " index out of range: " << index << vcl_endl;
 
       if (countrow >= linesize)
       {
@@ -382,7 +382,7 @@ void vbl_psfile::print_color_image(byte* data, int width, int height)
   int new_height;
   int new_width;
   exist_image = true;
-  if (debug) cerr << "Reduction factor is " << reduction_factor << "\n";
+  if (debug) vcl_cerr << "Reduction factor is " << reduction_factor << "\n";
   new_width = (int)(width/reduction_factor);
   new_height= (int)(height/reduction_factor);
 
@@ -597,9 +597,9 @@ void vbl_psfile::image_translate_and_scale()
   int scale_min_x  = (int) ((float) min_x * scale_x/100.0);
   int scale_max_y  = (int) ((float) max_y * scale_y/100.0);
 
-  if (debug) cerr << "vbl_psfile::image_translate_and_scale, scale_height= " << 
+  if (debug) vcl_cerr << "vbl_psfile::image_translate_and_scale, scale_height= " << 
     scale_height << ", scale_min_x = " << scale_min_x << ", scale_max_y = " <<
-    scale_max_y << endl;
+    scale_max_y << vcl_endl;
 
   vbl_printf(output_filestream, "%d %d translate\n", ox - scale_min_x, oy + scale_max_y - scale_height);
   vbl_printf(output_filestream, "\n%% size of image (on paper, in 1/72inch coords)\n");
@@ -722,7 +722,7 @@ void vbl_psfile::postscript_header()
 {
   if (header_pos != HEADER_START) 
   {
-    cerr << "vbl_psfile: Header already set to " << header_pos << endl;
+    vcl_cerr << "vbl_psfile: Header already set to " << header_pos << vcl_endl;
     return;
   }
 
@@ -1315,12 +1315,12 @@ void vbl_psfile::print_graphics_prolog()
 
 void vbl_psfile::done()
 {
-  if (debug) cerr << "vbl_psfile::done" << endl;
+  if (debug) vcl_cerr << "vbl_psfile::done" << vcl_endl;
   doneps = true;
   if (graphics_prolog_exists) 
   {
-    output_filestream << "end % TargetjrDict" << endl;
+    output_filestream << "end % TargetjrDict" << vcl_endl;
   }
 
-  output_filestream << "showpage\n%%Trailer" << endl;  
+  output_filestream << "showpage\n%%Trailer" << vcl_endl;  
 }

@@ -4,7 +4,7 @@
 extern "C"
 void Assert(char const* msg, bool expr)
 {
-  cout << msg << " - " << (expr?"passed":" *** failed") << "." << endl;
+  vcl_cout << msg << " - " << (expr?"passed":" *** failed") << "." << vcl_endl;
 }
 
 void test_vbl_sparse_array_2d(void)
@@ -33,7 +33,7 @@ void test_vbl_sparse_array_2d(void)
 
 int main(int,char**)
 {
-  cout << "Running" << endl;
+  vcl_cout << "Running" << vcl_endl;
   test_vbl_sparse_array_2d();
   return 0;
 }

@@ -9,17 +9,17 @@ int base_impl::reftotal = 0;
 
 base_impl::base_impl(int nn) : n(nn) {
   reftotal++;
-  cout <<  "base_impl ctor : this=" << (void*)this << endl;
+  vcl_cout <<  "base_impl ctor : this=" << (void*)this << vcl_endl;
 }
 
 base_impl::base_impl() : n(7) {
   reftotal++;
-  cout <<  "base_impl ctor : this=" << (void*)this << endl;
+  vcl_cout <<  "base_impl ctor : this=" << (void*)this << vcl_endl;
 }
 
 base_impl::~base_impl() {
   reftotal--;
-  cout <<  "base_impl dtor : this=" << (void*)this << endl;
+  vcl_cout <<  "base_impl dtor : this=" << (void*)this << vcl_endl;
 }
 
 void base_impl::Print (ostream &str) {
@@ -28,8 +28,8 @@ void base_impl::Print (ostream &str) {
   
 void base_impl::checkcount () {
   if (reftotal == 0)
-    cout << "base_impl : PASSED" << endl;
+    vcl_cout << "base_impl : PASSED" << vcl_endl;
   else
-    cout << "base_impl : FAILED : count = " << reftotal << endl;
+    vcl_cout << "base_impl : FAILED : count = " << reftotal << vcl_endl;
 } 
 

@@ -11,6 +11,6 @@ int main()
   s.insert(1);
 
   for(myset::iterator p = s.begin(); p != s.end(); ++p)
-    cout << *p << endl;
+    vcl_cout << *p << vcl_endl;
   return 0;
 }

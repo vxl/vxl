@@ -3,9 +3,9 @@
 #include <vcl/vcl_cassert.h>
 #include <vcl/vcl_iostream.h>
 
-#define Assert(x) {cout << "TEST " #x " : "; bool b = (x); cout << (b?"PASSED":"FAILED")}
+#define Assert(x) {vcl_cout << "TEST " #x " : "; bool b = (x); vcl_cout << (b?"PASSED":"FAILED")}
 
-#define AssertEq(x) {cout << "TEST [" << fred << "] == [" << x << "] : "; bool b = fred == (x); cout << (b?"PASSED":"FAILED") << endl; }
+#define AssertEq(x) {vcl_cout << "TEST [" << fred << "] == [" << x << "] : "; bool b = fred == (x); vcl_cout << (b?"PASSED":"FAILED") << vcl_endl; }
 
 int main()
 {

@@ -8,7 +8,7 @@ void my_abort();
 
 void my_abort()
 {
-  cerr << "abort()\n";
+  vcl_cerr << "abort()\n";
 }
 
 main()
@@ -17,9 +17,9 @@ main()
     vcl_throw "Bad something....\n";
   }
   vcl_catch (char* e) {
-    cerr << "caught " << e << endl;
+    vcl_cerr << "caught " << e << vcl_endl;
   }
   vcl_catch_all {
-    cerr << "caught nuffink " << endl;
+    vcl_cerr << "caught nuffink " << vcl_endl;
   }
 }

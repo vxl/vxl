@@ -21,6 +21,7 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <vcl/vcl_functional.h>
 #include <vcl/vcl_map.h>
 #include <vcl/vcl_utility.h>
 #include <vcl/vcl_iosfwd.h>

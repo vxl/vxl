@@ -1,3 +1,5 @@
+#include <vcl/vcl_functional.h>
+#include <vcl/vcl_utility.h>
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_map.h>
 
@@ -10,7 +12,7 @@ int main()
   m.insert(mymap::value_type(2, 3141));
 
   for(mymap::iterator p = m.begin(); p != m.end(); ++p)
-    cout << (*p).first << " " << (*p).second << endl;
+    vcl_cout << (*p).first << " " << (*p).second << vcl_endl;
 
   mymap::iterator i = m.find(3);
 

@@ -109,7 +109,7 @@ void vbl_qsort(vcl_vector<T>& v, int (*compare)(T const& a, T const& b))
 #if VXL_STDLIB_HAS_QSORT
   qsort(&v[0], v.size(), sizeof v[0], (vbl_qsort_compare_t)compare); //vector<>::iterator
 #else
-  cerr << "Sorry, this type of qsort has not been implemented\n";
+  vcl_cerr << "Sorry, this type of qsort has not been implemented\n";
 #endif
 }
 

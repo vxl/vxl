@@ -7,13 +7,13 @@
 
 int main(int, char **) 
 {
-  cerr << vcl_string("hello, vcl") << vcl_endl
+  vcl_cerr << vcl_string("hello, vcl") << vcl_endl
        << vcl_hex << 0x1000 << vcl_endl
        << vcl_dec <<   1000 << vcl_endl
-       << endl;
+       << vcl_endl;
 
-  vcl_streampos a = cin.tellg();
-  vcl_streampos b = cout.tellp();
+  vcl_streampos a = vcl_cin.tellg();
+  vcl_streampos b = vcl_cout.tellp();
   a = b; b = a; // quell warning about unused vars. compilers are sooo gullible.
 
   vcl_streambuf *ptr = 0;
@@ -38,10 +38,10 @@ int main(int, char **)
 
   if (false) {
     signed char sc;
-    cin >> sc;
+    vcl_cin >> sc;
     
     bool bb;
-    cin >> bb;
+    vcl_cin >> bb;
   }
 
   return 0;

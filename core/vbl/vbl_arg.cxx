@@ -65,13 +65,13 @@ void vbl_arg_base::set_help_option(char const* str)
 
 void vbl_arg_base::display_usage(char const* msg)
 {
-  if (msg) cerr << "** WARNING ** " << msg << endl;
+  if (msg) vcl_cerr << "** WARNING ** " << msg << vcl_endl;
   current_list().display_help("");
 }
 
 void vbl_arg_base::display_usage_and_exit(char const* msg)
 {
-  if (msg) cerr << "** ERROR ** " << msg << endl;
+  if (msg) vcl_cerr << "** ERROR ** " << msg << vcl_endl;
   current_list().display_help("");
   exit(-1);
 }
@@ -118,8 +118,8 @@ void vbl_arg_info_list::set_help_option(char const* str)
   // check that the operator isn't already being used
   for (int i=0; i<nargs; i++) {
     if (strcmp(args[i]->option(),str) == 0) {
-      cerr << "vbl_arg_info_list: WARNING: requested help operator already assigned" 
-	   << endl;
+      vcl_cerr << "vbl_arg_info_list: WARNING: requested help operator already assigned" 
+	   << vcl_endl;
       return;
     }
   }
@@ -131,8 +131,8 @@ void vbl_arg_info_list::set_help_option(char const* str)
 void vbl_arg_info_list::add(vbl_arg_base* arg)
 {
   if ( arg->option() && help == arg->option() )
-    cerr << "vbl_arg_info_list: WARNING: '-" << help 
-	 << "' option reserved and will be ignored" << endl;
+    vcl_cerr << "vbl_arg_info_list: WARNING: '-" << help 
+	 << "' option reserved and will be ignored" << vcl_endl;
   else
     args[nargs++] = arg;
 }
@@ -151,25 +151,25 @@ void vbl_arg_info_list::include(vbl_arg_info_list& l)
 void vbl_arg_info_list::display_help( char const*progname)
 {
   if (progname)
-    cout << "Usage: " << progname << " ";
+    vcl_cout << "Usage: " << progname << " ";
   else
-    cout << "Usage: aprog ";
+    vcl_cout << "Usage: aprog ";
 
   // Print "prog [-a int] string string"
   for ( int i=0; i< nargs; i++) {
     if (args[i]->option()) {
-      cout << "[";
-      cout << args[i]->option();
+      vcl_cout << "[";
+      vcl_cout << args[i]->option();
       if (strlen(args[i]->type_)> 0)
-	cout << " " << args[i]->type_;
-      cout << "] ";
+	vcl_cout << " " << args[i]->type_;
+      vcl_cout << "] ";
     } else {
       // options without switches are required.
-      cout << args[i]->type_ << " ";
+      vcl_cout << args[i]->type_ << " ";
     }
   }
 
-  cout << endl << endl;
+  vcl_cout << vcl_endl << vcl_endl;
 
   // Find longest option, type name, or default
   int maxl_option  = 8; // Length of "REQUIRED"
@@ -192,24 +192,24 @@ void vbl_arg_info_list::display_help( char const*progname)
   sprintf(fmtbuf, "%%%ds %%-%ds %%s ", maxl_option, maxl_type);
   
   // Do required args first
-  vbl_printf(cerr, "REQUIRED:\n");
+  vbl_printf(vcl_cerr, "REQUIRED:\n");
   for (int i=0; i< nargs; i++)
     if (args[i]->help_)
       if (args[i]->option() == 0) {
-	vbl_printf(cerr, fmtbuf, "", args[i]->type_, args[i]->help_);
-	cerr << " ["; args[i]->print_value(cerr); cerr << "]\n"; // default
+	vbl_printf(vcl_cerr, fmtbuf, "", args[i]->type_, args[i]->help_);
+	vcl_cerr << " ["; args[i]->print_value(vcl_cerr); vcl_cerr << "]\n"; // default
       }
-  cerr << endl;
+  vcl_cerr << vcl_endl;
 
   // Then others
-  vbl_printf(cerr, "Optional:\n");
-  vbl_printf(cerr, fmtbuf, "Switch", "Type", "Help [value]") << endl << endl;
+  vbl_printf(vcl_cerr, "Optional:\n");
+  vbl_printf(vcl_cerr, fmtbuf, "Switch", "Type", "Help [value]") << vcl_endl << vcl_endl;
   for (int i=0; i< nargs; i++)
     if (args[i]->help_)
       if (args[i]->option() != 0) {
-	vbl_printf(cerr, fmtbuf, args[i]->option(), args[i]->type_, args[i]->help_);
+	vbl_printf(vcl_cerr, fmtbuf, args[i]->option(), args[i]->type_, args[i]->help_);
 	
-	cerr << " ["; args[i]->print_value(cerr); cerr << "]\n"; // default
+	vcl_cerr << " ["; args[i]->print_value(vcl_cerr); vcl_cerr << "]\n"; // default
       }
 }
 
@@ -225,7 +225,7 @@ void vbl_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
       for (int j = i+1; j < nargs; ++j)
 	if (args[j]->option_)
 	  if (0==strcmp(args[i]->option_, args[j]->option_))
-	    cerr << "vbl_arg_info_list: WARNING: repeated switch [" 
+	    vcl_cerr << "vbl_arg_info_list: WARNING: repeated switch [" 
 		 << args[j]->option_ << "]\n";
   
   // 0a. Clear "set" flags on args
@@ -266,10 +266,10 @@ void vbl_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
   }
   
   if (verbose_) {
-    cerr << "args remaining:";
+    vcl_cerr << "args remaining:";
     for(char ** av = argv; *av; ++av)
-      cerr << " [" << *av << "]";
-    cerr << endl;
+      vcl_cerr << " [" << *av << "]";
+    vcl_cerr << vcl_endl;
   }
 
   // 2. Just take from the list to fill the non-option arguments
@@ -285,7 +285,7 @@ void vbl_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
       } else {
 	display_help(argv[0]);
 
-	cerr << "\nargParse::ERROR: Required arg " << (num_satisfied+1) 
+	vcl_cerr << "\nargParse::ERROR: Required arg " << (num_satisfied+1) 
 	     << " not supplied\n\n";
 	exit(1);
       }
@@ -303,10 +303,10 @@ void vbl_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
 
   // 4.2 Sometimes it's bad if all args weren't used (i.e. trailing args)
   if (autonomy_ == all) {
-    cerr << "vbl_arg_info_list: Some arguments were unused: ";
+    vcl_cerr << "vbl_arg_info_list: Some arguments were unused: ";
     for(char ** av = argv; *av; ++av)
-      cerr << " " << *av;
-    cerr << endl;
+      vcl_cerr << " " << *av;
+    vcl_cerr << vcl_endl;
     display_help(argv[0]);
   }
   
@@ -315,7 +315,7 @@ void vbl_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
     for(char ** av = argv; *av; ++av)
       if (**av == '-') {
 	display_help(argv[0]);
-	cerr << "vbl_arg_info_list: WARNING: Unparsed switch [" << *av << "]\n";
+	vcl_cerr << "vbl_arg_info_list: WARNING: Unparsed switch [" << *av << "]\n";
       }
   
   // 5. Some people like a chatty program.
@@ -324,25 +324,25 @@ void vbl_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
     // Print outcome
     for (int i = 0; i < nargs; ++i)
       if (args[i]->option_) {
-	cerr << "Switch " << args[i]->option_ << ": ";
-	cerr << (!done_once[i]? "not ":"") << "done, ";
-	cerr << "value [";
-	args[i]->print_value(cerr);
-	cerr << "]\n";
+	vcl_cerr << "Switch " << args[i]->option_ << ": ";
+	vcl_cerr << (!done_once[i]? "not ":"") << "done, ";
+	vcl_cerr << "value [";
+	args[i]->print_value(vcl_cerr);
+	vcl_cerr << "]\n";
       }
 
     for (int i = 0; i < nargs; ++i)
       if (!args[i]->option_) {
-	cerr << "Trailer: ";
-	args[i]->print_value(cerr);
-	cerr << endl;
+	vcl_cerr << "Trailer: ";
+	args[i]->print_value(vcl_cerr);
+	vcl_cerr << vcl_endl;
       }
 
-    cerr << "args remaining [argc = " << argc << "]:";
+    vcl_cerr << "args remaining [argc = " << argc << "]:";
     for(char ** av = argv; *av; ++av)
-      cerr << " " << *av;
-    cerr << endl;
-    cerr << "--------------\n";
+      vcl_cerr << " " << *av;
+    vcl_cerr << vcl_endl;
+    vcl_cerr << "--------------\n";
 #endif
   }
 }
@@ -386,7 +386,7 @@ static int list_parse(vcl_list<int> &out, char ** argv)
     long start= range_regexp.start(0);
     long end  = range_regexp.end(0);
     if (start != 0) {
-      cerr << "vbl_arg<vcl_list<int> >: Bad argument [" << argv[0] << "]\n";
+      vcl_cerr << "vbl_arg<vcl_list<int> >: Bad argument [" << argv[0] << "]\n";
       return 0;
     }
     
@@ -426,14 +426,14 @@ static int list_parse(vcl_list<int> &out, char ** argv)
     // cerr << "  " << s << ":" << d << ":" << e << endl;
     if (e >= s) {
       if (d < 0) {
-	cerr << "WARNING: d < 0\n";
+	vcl_cerr << "WARNING: d < 0\n";
 	d = -d;
       }
       for(int i = s; i <= e; i += d)
 	out.push_back(i);
     } else {
       if (d > 0) {
-	cerr << "WARNING: d > 0\n";
+	vcl_cerr << "WARNING: d > 0\n";
 	d = -d;
       }
       for(int i = s; i >= e; i += d)
@@ -474,11 +474,11 @@ VDS int parse(vbl_arg<int>* arg, char ** argv) {
   double v = strtod(argv[0], &endptr);
   if (*endptr != '\0') {
     // There is junk after the number, or no number was found
-    cerr << "vbl_arg_parse: WARNING: Attempt to parse " << *argv << " as int\n";
+    vcl_cerr << "vbl_arg_parse: WARNING: Attempt to parse " << *argv << " as int\n";
     return -1;
   }
   if (v != floor(v)) {
-    cerr << "vbl_arg_parse: Expected integer: saw " << argv[0] << endl;
+    vcl_cerr << "vbl_arg_parse: Expected integer: saw " << argv[0] << vcl_endl;
     return -1;
   }
   arg->value_ = int(v);
@@ -495,11 +495,11 @@ VDS int parse(vbl_arg<unsigned>* arg, char ** argv) {
   double v = strtod(argv[0], &endptr);
   if (*endptr != '\0') {
     // There is junk after the number, or no number was found
-    cerr << "vbl_arg_parse: WARNING: Attempt to parse " << *argv << " as int\n";
+    vcl_cerr << "vbl_arg_parse: WARNING: Attempt to parse " << *argv << " as int\n";
     return -1;
   }
   if (v != floor(v)) {
-    cerr << "vbl_arg_parse: Expected integer: saw " << argv[0] << endl;
+    vcl_cerr << "vbl_arg_parse: Expected integer: saw " << argv[0] << vcl_endl;
     return -1;
   }
   arg->value_ = unsigned(v);
@@ -517,7 +517,7 @@ VDS int parse(vbl_arg<float>* arg, char ** argv) {
   if (*endptr == '\0')
     return 1;
   // There is junk after the number, or no number was found
-  cerr << "vbl_arg_parse: WARNING: Attempt to parse " << *argv << " as float\n";
+  vcl_cerr << "vbl_arg_parse: WARNING: Attempt to parse " << *argv << " as float\n";
   return -1;
 }
 template class vbl_arg<float>;
@@ -532,7 +532,7 @@ VDS int parse(vbl_arg<double>* arg, char ** argv) {
   if (*endptr == '\0')
     return 1;
   // There is junk after the number, or no number was found
-  cerr << "vbl_arg_parse: WARNING: Attempt to parse " << *argv << " as double\n";
+  vcl_cerr << "vbl_arg_parse: WARNING: Attempt to parse " << *argv << " as double\n";
   return -1;
 }
 template class vbl_arg<double>;
@@ -567,7 +567,7 @@ VDS int parse(vbl_arg<vcl_string>* arg, char ** argv) {
     return 1;
   }
   else {
-    cerr << __FILE__ ": no argument to string option" << endl;
+    vcl_cerr << __FILE__ ": no argument to string option" << vcl_endl;
     return 0;
   }
 }

@@ -11,7 +11,7 @@ int main()
   dq.push_front(1);
 
   for(mydeque::iterator p = dq.begin(); p != dq.end(); ++p)
-    cout << *p << endl;
+    vcl_cout << *p << vcl_endl;
 
   return 0;  
 }
