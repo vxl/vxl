@@ -147,6 +147,8 @@ SET( vnl_sources
   vnl_least_squares_cost_function.cxx vnl_least_squares_cost_function.h
   vnl_nonlinear_minimizer.cxx         vnl_nonlinear_minimizer.h
 
+  vnl_hungarian_algorithm.cxx         vnl_hungarian_algorithm.h
+
   # linear systems
   vnl_linear_system.cxx               vnl_linear_system.h
   vnl_sparse_matrix_linear_system.cxx vnl_sparse_matrix_linear_system.h

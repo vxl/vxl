@@ -25,6 +25,7 @@ DECLARE( test_vector_fixed_ref );
 DECLARE( test_gamma );
 DECLARE( test_random );
 DECLARE( test_arithmetic );
+DECLARE( test_hungarian_algorithm );
 
 void
 register_tests()
@@ -54,6 +55,7 @@ register_tests()
   REGISTER( test_gamma );
   REGISTER( test_random );
   REGISTER( test_arithmetic );
+  REGISTER( test_hungarian_algorithm );
 }
 
 DEFINE_MAIN;

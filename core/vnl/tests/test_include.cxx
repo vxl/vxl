@@ -51,6 +51,7 @@
 #include <vnl/vnl_float_4x4.h>
 #include <vnl/vnl_fortran_copy.h>
 #include <vnl/vnl_gamma.h>
+#include <vnl/vnl_hungarian_algorithm.h>
 #include <vnl/vnl_identity.h>
 #include <vnl/vnl_identity_3x3.h>
 #include <vnl/vnl_imag.h>
