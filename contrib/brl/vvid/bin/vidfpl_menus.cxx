@@ -5,7 +5,7 @@
 #include <vgui/vgui_menu.h>
 #include <vvid/vvid_file_manager.h>
 #include <vvid/bin/vidfpl_menus.h>
-#ifdef HAS_MPEG
+#ifdef HAS_MPEG2
 #include <vidl/vidl_mpegcodec.h>
 
 //define mpeg callback here
@@ -30,7 +30,7 @@ vidfpl_load_mpegcodec_callback(vidl_codec * vc)
 
   if ( !dialog.ask())
     {
-      vcl_cout << "vidfpl_load_mpegcodec_callback. did not initialize codec." << vcl_endl;
+      vcl_cout << "vidfpl_load_mpegcodec_callback. did not initialize codec.\n";
     }
 
   vidl_mpegcodec * mpegcodec = vc->castto_vidl_mpegcodec();
@@ -43,35 +43,35 @@ vidfpl_load_mpegcodec_callback(vidl_codec * vc)
   mpegcodec->init();
 }
 
-#endif
+#endif // HAS_MPEG2
 
 //Static munu callback functions
- void vidfpl_menus::load_video_callback()
- {
+void vidfpl_menus::load_video_callback()
+{
    vvid_file_manager::instance()->load_video_file();
- }
+}
 
- void vidfpl_menus::pause_video_callback()
+void vidfpl_menus::pause_video_callback()
 {
   vvid_file_manager::instance()->pause_video();
 }
 
- void vidfpl_menus::next_frame_callback()
+void vidfpl_menus::next_frame_callback()
 {
   vvid_file_manager::instance()->next_frame();
 }
 
- void vidfpl_menus::prev_frame_callback()
+void vidfpl_menus::prev_frame_callback()
 {
   vvid_file_manager::instance()->prev_frame();
 }
 
- void vidfpl_menus::play_video_callback()
+void vidfpl_menus::play_video_callback()
 {
   vvid_file_manager::instance()->play_video();
 }
 
- void vidfpl_menus::stop_video_callback()
+void vidfpl_menus::stop_video_callback()
 {
   vvid_file_manager::instance()->stop_video();
 }
@@ -81,9 +81,9 @@ void vidfpl_menus::easy2D_tableau_demo_callback()
   vvid_file_manager::instance()->easy2D_tableau_demo();
 }
 
- void vidfpl_menus::quit_callback()
+void vidfpl_menus::quit_callback()
 {
-	 vcl_exit(1);
+  vcl_exit(1);
 }
 
 
@@ -114,4 +114,3 @@ vgui_menu vidfpl_menus::get_menu()
   menubar.add( "Edit", menuedit);
   return menubar;
 }
-

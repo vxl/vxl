@@ -1,5 +1,3 @@
-#include <vcl_ios.h>
-#include <vcl_iostream.h>
 #include <vcl_cstdlib.h> // for vcl_exit()
 
 #include <vgui/vgui.h>
@@ -11,7 +9,7 @@
 #include "vidfpl_menus.h"
 #include <vvid/vvid_file_manager.h>
 
-#ifdef HAS_MPEG
+#ifdef HAS_MPEG2
 # include <vidl/vidl_mpegcodec.h>
 #endif
 
@@ -26,7 +24,7 @@ int main(int argc, char** argv)
   vidl_io::register_codec(new vidl_avicodec);
 #endif
 
-#ifdef HAS_MPEG
+#ifdef HAS_MPEG2
   vidl_io::register_codec(new vidl_mpegcodec);
 #endif
 
@@ -44,6 +42,6 @@ int main(int argc, char** argv)
   win->show();
   vvid_file_manager::instance()->set_window(win);
   vvid_file_manager::instance()->post_redraw();
-  
+
   return  vgui::run();
 }
