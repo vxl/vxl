@@ -21,7 +21,8 @@ AUX_SOURCE_DIRECTORY(Templates octree_sources)
 
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/oxl)
 INCLUDE( ${allvxl_SOURCE_DIR}/oxl/mvl/CMakeListsLink.txt )
-# This will link with mvl, vgl, vnl, vnl-algo, vbl
+# This will link with mvl, vnl, vnl-algo, vbl
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vil/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vgl/CMakeListsLink.txt )
 # This will link with vil, png, tiff, zlib, jpeg
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )
