@@ -57,7 +57,6 @@ T vnl_determinant(T const *row0, T const *row1, T const *row2, T const *row3) {
 //--------------------------------------------------------------------------------
 
 
-
 template <class T>
 T vnl_determinant(T const *const *rows, int size, bool balance)
 {
@@ -72,7 +71,7 @@ T vnl_determinant(vnl_matrix<T> const &M, bool balance)
 {
   unsigned n = M.rows();
   assert(M.cols() == n);
-  
+
   switch (n) {
   case 1: return M[0][0];
   case 2: return vnl_determinant(M[0], M[1]);
@@ -110,6 +109,5 @@ template T vnl_determinant(T const *, T const *, T const *); \
 template T vnl_determinant(T const *, T const *, T const *, T const *); \
 template T vnl_determinant(T const * const *, int, bool); \
 template T vnl_determinant(vnl_matrix<T > const &, bool)
-
 
 #endif // vnl_algo_determinant_txx_
