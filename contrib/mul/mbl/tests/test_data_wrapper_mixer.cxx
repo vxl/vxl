@@ -10,6 +10,7 @@
 
 void test_data_wrapper_pair_mixer(unsigned n1, unsigned n2)
 {
+  vcl_cout<<"Testing mix of wrappers of size "<<n1<<" and "<<n2<<vcl_endl;
   vcl_vector<vnl_vector<double> > data1(n1);
   vcl_vector<vnl_vector<double> > data2(n2);
 
@@ -59,6 +60,7 @@ void test_data_wrapper_mixer()
   vcl_cout << "*****************************" << vcl_endl;
 
   test_data_wrapper_pair_mixer(3,7);
+  test_data_wrapper_pair_mixer(1,7);
   vcl_cout<<"Testing empty data"<<vcl_endl;
   test_data_wrapper_pair_mixer(5,0);
   test_data_wrapper_pair_mixer(0,5);

@@ -98,8 +98,11 @@ bool mbl_data_wrapper_mixer<T>::next()
   if (index_<n_ && !wrapper_[current_wrapper_]->next())
   {
     // Find next non-empty wrapper
-	while (current_wrapper_<(wrapper_.size()-1) && wrapper_[current_wrapper_+1]->size()==0)
+	if (current_wrapper_<(wrapper_.size()-1)) current_wrapper_++;
+
+	while (current_wrapper_<(wrapper_.size()-1) && wrapper_[current_wrapper_]->size()==0)
 	  current_wrapper_++;
+
     wrapper_[current_wrapper_]->reset();
   }
 
