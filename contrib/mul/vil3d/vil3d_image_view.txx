@@ -2,9 +2,9 @@
 #ifndef vil3d_image_view_txx_
 #define vil3d_image_view_txx_
 //:
-//  \file
-//  \brief Represent images of one or more planes of Ts.
-//  \author Tim Cootes, Ian Scott
+// \file
+// \brief Represent images of one or more planes of Ts.
+// \author Tim Cootes, Ian Scott
 //
 // Note: To keep down size of vil3d_image_view
 // Please think carefully before adding any new methods.
@@ -38,8 +38,8 @@ vil3d_image_view<T>::vil3d_image_view(unsigned ni, unsigned nj,
 //: Set this view to look at someone else's memory data.
 template<class T>
 vil3d_image_view<T>::vil3d_image_view(const T* top_left,
-                  unsigned n_i, unsigned n_j, unsigned n_k, unsigned n_planes,
-                  int i_step, int j_step, int k_step, int plane_step)
+                                      unsigned n_i, unsigned n_j, unsigned n_k, unsigned n_planes,
+                                      int i_step, int j_step, int k_step, int plane_step)
 {
   set_to_memory(top_left,n_i,n_j,n_k,n_planes,i_step,j_step,k_step,plane_step);
 }
@@ -48,9 +48,9 @@ vil3d_image_view<T>::vil3d_image_view(const T* top_left,
 //  Need to pass the memory chunk to set up the internal smart ptr appropriately
 template<class T>
 vil3d_image_view<T>::vil3d_image_view(const vil2_memory_chunk_sptr& mem_chunk,
-                    const T* top_left, unsigned n_i, unsigned n_j,
-                    unsigned n_k, unsigned n_planes,
-                    int i_step, int j_step, int k_step, int plane_step)
+                                      const T* top_left, unsigned n_i, unsigned n_j,
+                                      unsigned n_k, unsigned n_planes,
+                                      int i_step, int j_step, int k_step, int plane_step)
  : vil3d_image_view_base(n_i, n_j, n_k, n_planes)
  , top_left_(const_cast<T*>( top_left))
  , istep_(i_step), jstep_(j_step), kstep_(k_step)
@@ -225,9 +225,9 @@ inline bool convert_planes_from_components(vil3d_image_view<vxl_byte> &lhs,
     const vil3d_image_view<vxl_byte> &rhs = static_cast<const vil3d_image_view<vxl_byte>&>(rhs_base);
 
     lhs = vil3d_image_view<vxl_byte>(rhs.memory_chunk(), rhs.origin_ptr(),
-                                    rhs.ni(),rhs.nj(),rhs.nk(),ncomp,
-                                    rhs.istep()*ncomp,rhs.jstep()*ncomp,
-                                    rhs.kstep()*ncomp,1);
+                                     rhs.ni(),rhs.nj(),rhs.nk(),ncomp,
+                                     rhs.istep()*ncomp,rhs.jstep()*ncomp,
+                                     rhs.kstep()*ncomp,1);
     return true;
   }
   else
@@ -250,8 +250,8 @@ inline bool convert_planes_from_components(vil3d_image_view<vxl_uint_16> &lhs,
     const vil3d_image_view<vxl_uint_16> &rhs = static_cast<const vil3d_image_view<vxl_uint_16>&>(rhs_base);
 
     lhs = vil3d_image_view<vxl_uint_16>(rhs.memory_chunk(), rhs.origin_ptr(),
-                                       rhs.ni(),rhs.nj(),rhs.nk(),ncomp,
-                                       rhs.istep()*ncomp,rhs.jstep()*ncomp,rhs.kstep()*ncomp,1);
+                                        rhs.ni(),rhs.nj(),rhs.nk(),ncomp,
+                                        rhs.istep()*ncomp,rhs.jstep()*ncomp,rhs.kstep()*ncomp,1);
     return true;
   }
   else
@@ -274,8 +274,8 @@ inline bool convert_planes_from_components(vil3d_image_view<vxl_int_16> &lhs,
     const vil3d_image_view<vxl_int_16> &rhs = static_cast<const vil3d_image_view<vxl_int_16>&>(rhs_base);
 
     lhs = vil3d_image_view<vxl_int_16>(rhs.memory_chunk(), rhs.origin_ptr(),
-                                      rhs.ni(),rhs.nj(),rhs.nk(),ncomp,
-                                      rhs.istep()*ncomp,rhs.jstep()*ncomp,rhs.kstep()*ncomp,1);
+                                       rhs.ni(),rhs.nj(),rhs.nk(),ncomp,
+                                       rhs.istep()*ncomp,rhs.jstep()*ncomp,rhs.kstep()*ncomp,1);
     return true;
   }
   else
@@ -298,8 +298,8 @@ inline bool convert_planes_from_components(vil3d_image_view<vxl_uint_32> &lhs,
     const vil3d_image_view<vxl_uint_32> &rhs = static_cast<const vil3d_image_view<vxl_uint_32>&>(rhs_base);
 
     lhs = vil3d_image_view<vxl_uint_32>(rhs.memory_chunk(), rhs.origin_ptr(),
-                                       rhs.ni(),rhs.nj(),rhs.nk(),ncomp,
-                                       rhs.istep()*ncomp,rhs.jstep()*ncomp,rhs.kstep()*ncomp,1);
+                                        rhs.ni(),rhs.nj(),rhs.nk(),ncomp,
+                                        rhs.istep()*ncomp,rhs.jstep()*ncomp,rhs.kstep()*ncomp,1);
     return true;
   }
   else
@@ -322,9 +322,9 @@ inline bool convert_planes_from_components(vil3d_image_view<vxl_int_32> &lhs,
     const vil3d_image_view<vxl_int_32> &rhs = static_cast<const vil3d_image_view<vxl_int_32>&>(rhs_base);
 
     lhs = vil3d_image_view<vxl_int_32>(rhs.memory_chunk(), rhs.origin_ptr(),
-                                      rhs.ni(),rhs.nj(),rhs.nk(),ncomp,
-                                      rhs.istep()*ncomp,rhs.jstep()*ncomp,
-                                      rhs.kstep()*ncomp,1);
+                                       rhs.ni(),rhs.nj(),rhs.nk(),ncomp,
+                                       rhs.istep()*ncomp,rhs.jstep()*ncomp,
+                                       rhs.kstep()*ncomp,1);
     return true;
   }
   else
@@ -347,8 +347,8 @@ inline bool convert_planes_from_components(vil3d_image_view<float> &lhs,
     const vil3d_image_view<float> &rhs = static_cast<const vil3d_image_view<float>&>(rhs_base);
 
     lhs = vil3d_image_view<float>(rhs.memory_chunk(), rhs.origin_ptr(),
-                                 rhs.ni(),rhs.nj(),rhs.nk(),ncomp,
-                                 rhs.istep()*ncomp,rhs.jstep()*ncomp,rhs.kstep()*ncomp,1);
+                                  rhs.ni(),rhs.nj(),rhs.nk(),ncomp,
+                                  rhs.istep()*ncomp,rhs.jstep()*ncomp,rhs.kstep()*ncomp,1);
     return true;
   }
   else
@@ -371,8 +371,8 @@ inline bool convert_planes_from_components(vil3d_image_view<double> &lhs,
     const vil3d_image_view<double> &rhs = static_cast<const vil3d_image_view<double>&>(rhs_base);
 
     lhs = vil3d_image_view<double>(rhs.memory_chunk(), rhs.origin_ptr(),
-                                  rhs.ni(),rhs.nj(),rhs.nk(),ncomp,
-                                  rhs.istep()*ncomp,rhs.jstep()*ncomp,rhs.kstep()*ncomp,1);
+                                   rhs.ni(),rhs.nj(),rhs.nk(),ncomp,
+                                   rhs.istep()*ncomp,rhs.jstep()*ncomp,rhs.kstep()*ncomp,1);
     return true;
   }
   else
@@ -383,7 +383,7 @@ inline bool convert_planes_from_components(vil3d_image_view<double> &lhs,
 //: Create a copy of the data viewed by this, and return a view of copy.
 // This function can be made a lot more powerful - to automatically convert between pixel types.
 template<class T>
-const vil3d_image_view<T> & vil3d_image_view<T>::operator= (const vil3d_image_view_base & rhs)
+const vil3d_image_view<T>& vil3d_image_view<T>::operator=(const vil3d_image_view_base & rhs)
 {
   if (static_cast<const vil3d_image_view_base*>(this) == &rhs)
     return *this;
@@ -490,9 +490,9 @@ void vil3d_image_view<T>::set_size(unsigned n_i, unsigned n_j, unsigned n_k, uns
 //: Set this view to look at someone else's memory.
 template<class T>
 void vil3d_image_view<T>::set_to_memory(const T* top_left,
-                                       unsigned n_i, unsigned n_j,
-                                       unsigned n_k, unsigned n_planes,
-                                       int i_step, int j_step, int k_step, int plane_step)
+                                        unsigned n_i, unsigned n_j,
+                                        unsigned n_k, unsigned n_planes,
+                                        int i_step, int j_step, int k_step, int plane_step)
 {
   release_memory();
   top_left_ = const_cast<T*>(top_left);  // Remove const, as view may end up manipulating data
@@ -613,10 +613,10 @@ bool vil3d_image_view_deep_equality(const vil3d_image_view<T> &lhs,
 }
 
 #define VIL3D_IMAGE_VIEW_INSTANTIATE(T) \
-template class vil3d_image_view<T >; \
 VCL_DEFINE_SPECIALIZATION vcl_string vil3d_image_view<T >::is_a() const \
-{  return vcl_string("vil3d_image_view<" #T ">"); } \
+{ return vcl_string("vil3d_image_view<" #T ">"); } \
+template class vil3d_image_view<T >; \
 template bool vil3d_image_view_deep_equality(const vil3d_image_view<T >&, \
-                                            const vil3d_image_view<T >&);
+                                             const vil3d_image_view<T >&)
 
 #endif // vil3d_image_view_txx_
