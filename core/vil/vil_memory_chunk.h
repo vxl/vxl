@@ -54,6 +54,9 @@ class vil2_memory_chunk
     //: Pointer to first element of data
     void* data() { return data_;}
 
+    //: Pointer to first element of data
+    void* const_data() const { return data_;}
+
     //: Indicate what format data is to be saved as in binary IO
     vil2_pixel_format pixel_format() const { return pixel_format_; }
 
