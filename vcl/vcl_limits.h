@@ -9,7 +9,7 @@
 
 #include "vcl_compiler.h"
 
-#if VCL_HAS_HEADER_LIMITS
+#if VCL_CXX_HAS_HEADER_LIMITS
 #include <limits>
 #else
 #include <limits.h>
