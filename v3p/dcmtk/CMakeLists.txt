@@ -387,7 +387,7 @@ INCLUDE_DIRECTORIES( ${PROJECT_SOURCE_DIR}/dcmdata/include )
 INCLUDE_DIRECTORIES( ${PROJECT_SOURCE_DIR}/dcmimgle/include )
 
 
-SET( srcFiles
+SET( dcmtk_sources
   ofstd/libsrc/ofcond.cxx
   ofstd/libsrc/ofconsol.cxx
   ofstd/libsrc/ofcrc32.cxx
@@ -484,7 +484,7 @@ SET( srcFiles
   dcmimgle/libsrc/diutils.cxx
 )
 
-ADD_LIBRARY( dcmtk ${srcFiles} )
+ADD_LIBRARY( dcmtk ${dcmtk_sources} )
 IF(WIN32)
   TARGET_LINK_LIBRARIES( dcmtk Netapi32 )
 ENDIF(WIN32)
