@@ -207,6 +207,9 @@ SOURCE=.\Templates/vbl_smart_ptr+vsol_polyline_2d-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+vsol_polyhedron-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vcl_algorithm+vsol_spatial_object_2d~-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vsol_box_2d.cxx
 # End Source File
 # Begin Source File
