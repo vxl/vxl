@@ -1,10 +1,9 @@
-// This is core/vil2/vil2_sample_profile_bilin.txx
-#ifndef vil2_sample_profile_bilin_txx_
-#define vil2_sample_profile_bilin_txx_
+// This is core/vil2/vil2_sample_profile_bicub.txx
+#ifndef vil2_sample_profile_bicub_txx_
+#define vil2_sample_profile_bicub_txx_
 //:
 // \file
-// \brief Bilinear profile sampling functions for 2D images
-// \author Tim Cootes
+// \brief Bicubic profile sampling functions for 2D images
 
 // The vil2 bicub source files were derived from the corresponding
 // vil2 bilin files, thus the vil2 bilin/bicub source files are very
@@ -12,32 +11,32 @@
 // corresponding bilin/bicub file that would likely also benefit from
 // the same change.
 
-#include "vil2_sample_profile_bilin.h"
-#include <vil2/vil2_bilin_interp.h>
+#include "vil2_sample_profile_bicub.h"
+#include <vil2/vil2_bicub_interp.h>
 
 inline bool vil2_profile_in_image(double x0, double y0,
                                   double x1, double y1,
                                   const vil2_image_view_base& image)
 {
-  if (x0<1) return false;
-  if (y0<1) return false;
-  if (x0+2>image.ni()) return false;
-  if (y0+2>image.nj()) return false;
-  if (x1<1) return false;
-  if (y1<1) return false;
-  if (x1+2>image.ni()) return false;
-  if (y1+2>image.nj()) return false;
+  if (x0<2) return false;
+  if (y0<2) return false;
+  if (x0+3>image.ni()) return false;
+  if (y0+3>image.nj()) return false;
+  if (x1<2) return false;
+  if (y1<2) return false;
+  if (x1+3>image.ni()) return false;
+  if (y1+3>image.nj()) return false;
 
   return true;
 }
 
-//: Sample along profile, using safe bilinear interpolation
+//: Sample along profile, using safe bicubic interpolation
 //  Profile points are along the line between p0 and p1 (in image co-ordinates).
 //  Vector v is resized to n*np elements, where np=image.n_planes().
 //  v[0]..v[np-1] are the values from point p
 //  Points outside image return zero.
 template <class imType, class vecType>
-void vil2_sample_profile_bilin(vecType* v,
+void vil2_sample_profile_bicub(vecType* v,
                                const vil2_image_view<imType>& image,
                                double x0, double y0, double dx, double dy,
                                int n)
@@ -59,14 +58,14 @@ void vil2_sample_profile_bilin(vecType* v,
     if (np==1)
     {
       for (int k=0;k<n;++k,x+=dx,y+=dy)
-      v[k] = vil2_bilin_interp(x,y,plane0,ni,nj,istep,jstep);
+      v[k] = vil2_bicub_interp(x,y,plane0,ni,nj,istep,jstep);
     }
     else
     {
       for (int k=0;k<n;++k,x+=dx,y+=dy)
       {
         for (unsigned int p=0;p<np;++p,++v)
-          *v = vil2_bilin_interp(x,y,plane0+p*pstep,ni,nj,istep,jstep);
+          *v = vil2_bicub_interp(x,y,plane0+p*pstep,ni,nj,istep,jstep);
       }
     }
   }
@@ -76,24 +75,24 @@ void vil2_sample_profile_bilin(vecType* v,
     if (np==1)
     {
       for (int k=0;k<n;++k,x+=dx,y+=dy)
-      v[k] = vil2_bilin_interp_safe(x,y,plane0,ni,nj,istep,jstep);
+      v[k] = vil2_bicub_interp_safe(x,y,plane0,ni,nj,istep,jstep);
     }
     else
     {
       for (int k=0;k<n;++k,x+=dx,y+=dy)
       {
         for (unsigned int p=0;p<np;++p,++v)
-          *v = vil2_bilin_interp_safe(x,y,plane0+p*pstep,ni,nj,istep,jstep);
+          *v = vil2_bicub_interp_safe(x,y,plane0+p*pstep,ni,nj,istep,jstep);
       }
     }
   }
 }
 
-#define VIL2_SAMPLE_PROFILE_BILIN_INSTANTIATE( imType, vecType ) \
-template void vil2_sample_profile_bilin(vecType* v, \
+#define VIL2_SAMPLE_PROFILE_BICUB_INSTANTIATE( imType, vecType ) \
+template void vil2_sample_profile_bicub(vecType* v, \
                                         const vil2_image_view<imType >& image, \
                                         double x0, double y0, \
                                         double dx, double dy, \
                                         int n)
 
-#endif // vil2_sample_profile_bilin
+#endif // vil2_sample_profile_bicub

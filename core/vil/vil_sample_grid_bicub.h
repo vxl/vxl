@@ -1,9 +1,8 @@
-#ifndef vil2_sample_grid_bilin_h_
-#define vil2_sample_grid_bilin_h_
+#ifndef vil2_sample_grid_bicub_h_
+#define vil2_sample_grid_bicub_h_
 //:
 //  \file
-//  \brief Bilinear grid sampling function for 2D images
-//  \author Tim Cootes
+//  \brief Bicubic grid sampling function for 2D images
 
 // The vil2 bicub source files were derived from the corresponding
 // vil2 bilin files, thus the vil2 bilin/bicub source files are very
@@ -13,7 +12,7 @@
 
 #include <vil2/vil2_image_view.h>
 
-//: Sample grid from image, using bilinear interpolation
+//: Sample grid from image, using bicubic interpolation
 //  Grid points are (x0+i.dx1+j.dx2,y0+i.dy1+j.dy2), where i=[0..n1-1], j=[0..n2-1]
 //  Vector v is filled with n1*n2*np elements, where np=image.nplanes()*image.ncomponents()
 //  v[0]..v[np-1] are the values from point (x0,y0)
@@ -21,9 +20,9 @@
 //  Points outside image return zero.
 // \relates vil2_image_view
 template <class imType, class vecType>
-void vil2_sample_grid_bilin(vecType* v,
+void vil2_sample_grid_bicub(vecType* v,
                             const vil2_image_view<imType>& image,
                             double x0, double y0, double dx1, double dy1,
                             double dx2, double dy2, int n1, int n2);
 
-#endif // vil2_sample_grid_bilin_h_
+#endif // vil2_sample_grid_bicub_h_

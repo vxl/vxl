@@ -69,11 +69,17 @@ SET( vil2_sources ${vil2_sources}
   vil2_new.cxx   vil2_new.h
   vil2_print.cxx vil2_print.h
 
-  # Sampling Operations
+  # Bilinear Sampling Operations
   vil2_bilin_interp.h
   vil2_sample_profile_bilin.txx vil2_sample_profile_bilin.h
   vil2_sample_grid_bilin.txx    vil2_sample_grid_bilin.h
   vil2_resample_bilin.txx       vil2_resample_bilin.h
+
+  # Bicubic Sampling Operations
+  vil2_bicub_interp.h
+  vil2_sample_profile_bicub.txx vil2_sample_profile_bicub.h
+  vil2_sample_grid_bicub.txx    vil2_sample_grid_bicub.h
+  vil2_resample_bicub.txx       vil2_resample_bicub.h
 
   # Stuff
   vil2_smart_ptr.txx vil2_smart_ptr.h

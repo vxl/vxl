@@ -23,6 +23,7 @@
 #include <vil2/algo/vil2_sobel_3x3.h>
 #include <vil2/algo/vil2_structuring_element.h>
 #include <vil2/algo/vil2_threshold.h>
+#include <vil2/vil2_bicub_interp.h>
 #include <vil2/vil2_bilin_interp.h>
 #include <vil2/vil2_clamp.h>
 #include <vil2/vil2_convert.h>
@@ -48,10 +49,13 @@
 #include <vil2/vil2_plane.h>
 #include <vil2/vil2_print.h>
 #include <vil2/vil2_property.h>
+#include <vil2/vil2_resample_bicub.h>
 #include <vil2/vil2_resample_bilin.h>
 #include <vil2/vil2_rgb.h>
 #include <vil2/vil2_rgba.h>
+#include <vil2/vil2_sample_grid_bicub.h>
 #include <vil2/vil2_sample_grid_bilin.h>
+#include <vil2/vil2_sample_profile_bicub.h>
 #include <vil2/vil2_sample_profile_bilin.h>
 #include <vil2/vil2_save.h>
 #include <vil2/vil2_smart_ptr.h>

@@ -6,6 +6,12 @@
 // \brief Bilinear interpolation functions for 2D images
 // \author Tim Cootes
 
+// The vil2 bicub source files were derived from the corresponding
+// vil2 bilin files, thus the vil2 bilin/bicub source files are very
+// similar.  If you modify something in this file, there is a
+// corresponding bilin/bicub file that would likely also benefit from
+// the same change.
+
 #include <vcl_cassert.h>
 #include <vcl_cstddef.h>
 

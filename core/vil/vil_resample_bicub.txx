@@ -1,10 +1,9 @@
-// This is core/vil2/vil2_resample_bilin.txx
-#ifndef vil2_resample_bilin_txx_
-#define vil2_resample_bilin_txx_
+// This is core/vil2/vil2_resample_bicub.txx
+#ifndef vil2_resample_bicub_txx_
+#define vil2_resample_bicub_txx_
 //:
 //  \file
-//  \brief Sample grid of points with bilinear interpolation in one image and place in another
-//  \author Tim Cootes
+//  \brief Sample grid of points with bicubic interpolation in one image and place in another
 
 // The vil2 bicub source files were derived from the corresponding
 // vil2 bilin files, thus the vil2 bilin/bicub source files are very
@@ -12,27 +11,27 @@
 // corresponding bilin/bicub file that would likely also benefit from
 // the same change.
 
-#include "vil2_resample_bilin.h"
-#include <vil2/vil2_bilin_interp.h>
+#include "vil2_resample_bicub.h"
+#include <vil2/vil2_bicub_interp.h>
 
 inline bool vil2_grid_corner_in_image(double x0, double y0,
                                       const vil2_image_view_base& image)
 {
-  if (x0<1) return false;
-  if (y0<1) return false;
-  if (x0+2>image.ni()) return false;
-  if (y0+2>image.nj()) return false;
+  if (x0<2) return false;
+  if (y0<2) return false;
+  if (x0+3>image.ni()) return false;
+  if (y0+3>image.nj()) return false;
   return true;
 }
 
-//: Sample grid of points in one image and place in another, using bilinear interpolation.
+//: Sample grid of points in one image and place in another, using bicubic interpolation.
 //  dest_image(i,j,p) is sampled from the src_image at
 //  (x0+i.dx1+j.dx2,y0+i.dy1+j.dy2), where i=[0..n1-1], j=[0..n2-1]
 //  dest_image resized to (n1,n2,src_image.nplanes())
 //  Points outside image return zero.
 // \relates vil2_image_view
 template <class sType, class dType>
-void vil2_resample_bilin(const vil2_image_view<sType>& src_image,
+void vil2_resample_bicub(const vil2_image_view<sType>& src_image,
                          vil2_image_view<dType>& dest_image,
                          double x0, double y0, double dx1, double dy1,
                          double dx2, double dy2, int n1, int n2)
@@ -70,7 +69,7 @@ void vil2_resample_bilin(const vil2_image_view<sType>& src_image,
         double x=x1, y=y1;  // Start of j-th row
         dType *dpt = row;
         for (int i=0;i<n1;++i,x+=dx1,y+=dy1,dpt+=d_istep)
-          *dpt = (dType) vil2_bilin_interp_raw(x,y,plane0,istep,jstep);
+          *dpt = (dType) vil2_bicub_interp_raw(x,y,plane0,istep,jstep);
       }
     }
     else
@@ -83,7 +82,7 @@ void vil2_resample_bilin(const vil2_image_view<sType>& src_image,
         for (int i=0;i<n1;++i,x+=dx1,y+=dy1,dpt+=d_istep)
         {
           for (unsigned int p=0;p<np;++p)
-            dpt[p*d_pstep] = (dType) vil2_bilin_interp_raw(x,y,plane0+p*pstep,istep,jstep);
+            dpt[p*d_pstep] = (dType) vil2_bicub_interp_raw(x,y,plane0+p*pstep,istep,jstep);
         }
       }
     }
@@ -99,7 +98,7 @@ void vil2_resample_bilin(const vil2_image_view<sType>& src_image,
         double x=x1, y=y1;  // Start of j-th row
         dType *dpt = row;
         for (int i=0;i<n1;++i,x+=dx1,y+=dy1,dpt+=d_istep)
-          *dpt = (dType) vil2_bilin_interp_safe(x,y,plane0,
+          *dpt = (dType) vil2_bicub_interp_safe(x,y,plane0,
                                                 ni,nj,istep,jstep);
       }
     }
@@ -113,7 +112,7 @@ void vil2_resample_bilin(const vil2_image_view<sType>& src_image,
         for (int i=0;i<n1;++i,x+=dx1,y+=dy1,dpt+=d_istep)
         {
           for (unsigned int p=0;p<np;++p)
-            dpt[p*d_pstep] = (dType) vil2_bilin_interp_safe(x,y,plane0+p*pstep,
+            dpt[p*d_pstep] = (dType) vil2_bicub_interp_safe(x,y,plane0+p*pstep,
                                                             ni,nj,istep,jstep);
         }
       }
@@ -121,10 +120,10 @@ void vil2_resample_bilin(const vil2_image_view<sType>& src_image,
   }
 }
 
-#define VIL2_RESAMPLE_BILIN_INSTANTIATE( sType, dType ) \
-template void vil2_resample_bilin(const vil2_image_view<sType >& src_image, \
+#define VIL2_RESAMPLE_BICUB_INSTANTIATE( sType, dType ) \
+template void vil2_resample_bicub(const vil2_image_view<sType >& src_image, \
                          vil2_image_view<dType >& dest_image, \
                          double x0, double y0, double dx1, double dy1, \
                          double dx2, double dy2, int n1, int n2)
 
-#endif // vil2_resample_bilin
+#endif // vil2_resample_bicub

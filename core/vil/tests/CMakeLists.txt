@@ -14,6 +14,10 @@ ADD_EXECUTABLE( vil2_test_all
   test_sample_profile_bilin.cxx
   test_sample_grid_bilin.cxx
   test_resample_bilin.cxx
+  test_bicub_interp.cxx
+  test_sample_profile_bicub.cxx
+  test_sample_grid_bicub.cxx
+  test_resample_bicub.cxx
   test_algo_gauss_reduce.cxx
   test_algo_convolve_1d.cxx
   test_algo_correlate_1d.cxx
@@ -52,6 +56,11 @@ ADD_TEST( vil2_test_image_resource          vil2_test_all test_image_resource)
 ADD_TEST( vil2_test_bilin_interp            vil2_test_all test_bilin_interp)
 ADD_TEST( vil2_test_sample_profile_bilin    vil2_test_all test_sample_profile_bilin)
 ADD_TEST( vil2_test_sample_grid_bilin       vil2_test_all test_sample_grid_bilin)
+ADD_TEST( vil2_resample_bilin               vil2_test_all test_resample_bilin)
+ADD_TEST( vil2_test_bicub_interp            vil2_test_all test_bicub_interp)
+ADD_TEST( vil2_test_sample_profile_bicub    vil2_test_all test_sample_profile_bicub)
+ADD_TEST( vil2_test_sample_grid_bicub       vil2_test_all test_sample_grid_bicub)
+ADD_TEST( vil2_resample_bicub               vil2_test_all test_resample_bicub)
 ADD_TEST( vil2_test_algo_gauss_reduce       vil2_test_all test_algo_gauss_reduce)
 ADD_TEST( vil2_test_algo_gauss_filter       vil2_test_all test_algo_gauss_filter)
 ADD_TEST( vil2_test_algo_convolve_1d        vil2_test_all test_algo_convolve_1d)
@@ -62,7 +71,6 @@ ADD_TEST( vil2_test_algo_exp_filter_1d      vil2_test_all test_algo_exp_filter_1
 ADD_TEST( vil2_test_algo_exp_grad_filter_1d vil2_test_all test_algo_exp_grad_filter_1d)
 ADD_TEST( vil2_test_image_view_maths        vil2_test_all test_image_view_maths)
 ADD_TEST( vil2_memory_chunk                 vil2_test_all test_memory_chunk)
-ADD_TEST( vil2_resample_bilin               vil2_test_all test_resample_bilin)
 ADD_TEST( vil2_test_binary_dilate           vil2_test_all test_binary_dilate)
 ADD_TEST( vil2_test_binary_erode            vil2_test_all test_binary_erode)
 ADD_TEST( vil2_test_greyscale_dilate        vil2_test_all test_greyscale_dilate)

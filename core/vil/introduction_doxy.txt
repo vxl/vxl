@@ -256,9 +256,14 @@ vil2_image_view<vxl_byte> filtered_image = vil2_transpose(tmp_image2);
 * - vil2_bilin_interp_safe : Interpolate, returning zero if outside image
 * - vil2_bilin_interp_safe_extend : Interpolate, returning nearest edge value if outside
 *
-* Other methods of sampling include:
-* - vil2_sample_profile_bilin : Sample values along a line (using bilin. interpolation)
-* - vil2_sample_grid_bilin : Sample values over a grid (using bilin. interpolation)
+* Other methods of sampling with bilinear interpolation include:
+* - vil2_sample_profile_bilin : Sample values along a line
+* - vil2_sample_grid_bilin : Sample values over a grid, storing in a vector
+* - vil2_resample_bilin : Sample values over a grid, storing in a image
+*
+* Bicubic interpolation: For each of the bilinear interpolation
+* functions there is a corresponding bicubic interpolation function.
+* Just use "bicub" instead of "bilin" in the name.
 *
 * \subsection regions Region finding
 * The boundaries of thresholded regions can be found using
