@@ -12,6 +12,7 @@
 
 #include <vnl/vnl_error.h>
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_vector_fixed.h>
 
 template<class T, unsigned nrows, unsigned ncols>
 void
@@ -686,13 +687,5 @@ void vnl_matrix_fixed<T,nrows,ncols>::inplace_transpose()
 #define VNL_MATRIX_FIXED_INSTANTIATE(T, M, N) \
 template class vnl_matrix_fixed<T ,M ,N >
 
-
-# undef VNL_MATRIX_FIXED_PAIR_INSTANTIATE
-#if !defined(VCL_SUNPRO_CC) && !defined(VCL_WIN32)
-# define VNL_MATRIX_FIXED_PAIR_INSTANTIATE(T, M, N, O) \
-  template vnl_matrix_fixed<T, M, O> operator*(const vnl_matrix_fixed<T, M, N>& a, const vnl_matrix_fixed<T, N, O>& b)
-#else
-# define VNL_MATRIX_FIXED_PAIR_INSTANTIATE(T, M, N, O) /* */
-#endif
 
 #endif // vnl_matrix_fixed_txx_
