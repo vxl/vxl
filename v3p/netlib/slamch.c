@@ -116,7 +116,8 @@ real slamch_(const char *cmach)
     else return 0.f; /* in case a non-documented argument was passed */
 } /* slamch_ */
 
-/* Subroutine */ void slamc1_(integer *beta, integer *t, logical *rnd, logical *ieee1)
+/* Subroutine */
+static void slamc1_(integer *beta, integer *t, logical *rnd, logical *ieee1)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
@@ -289,9 +290,10 @@ real slamch_(const char *cmach)
     *ieee1 = lieee1;
 } /* slamc1_ */
 
-/* Subroutine */ void slamc2_(integer *beta, integer *t, logical *rnd,
-                              real *eps, integer *emin, real *rmin,
-                              integer *emax, real *rmax)
+/* Subroutine */
+static void slamc2_(integer *beta, integer *t, logical *rnd,
+                    real *eps, integer *emin, real *rmin,
+                    integer *emax, real *rmax)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
@@ -543,7 +545,7 @@ real slamch_(const char *cmach)
 #endif
 #endif
 
-real slamc3_(real *a, real *b)
+static real slamc3_(real *a, real *b)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
@@ -576,7 +578,8 @@ real slamc3_(real *a, real *b)
 #endif
 #endif
 
-/* Subroutine */ void slamc4_(integer *emin, real *start, integer *base)
+/* Subroutine */
+static void slamc4_(integer *emin, real *start, integer *base)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
@@ -641,8 +644,9 @@ real slamc3_(real *a, real *b)
     }
 } /* slamc4_ */
 
-/* Subroutine */ void slamc5_(integer *beta, integer *p, integer *emin,
-                              logical *ieee, integer *emax, real *rmax)
+/* Subroutine */
+static void slamc5_(integer *beta, integer *p, integer *emin,
+                    logical *ieee, integer *emax, real *rmax)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,

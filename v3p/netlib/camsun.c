@@ -250,7 +250,8 @@ L3000:
     *cdf = cdfn;
 } /* chscdf_ */
 
-/* Subroutine */ void norcdf_(x, cdf)
+/* Subroutine */
+static void norcdf_(x, cdf)
 real *x, *cdf;
 {
     /* Initialized data */
@@ -560,7 +561,8 @@ L3000:
     *cdf = cdfn;
 } /* dchscdf_ */
 
-/* Subroutine */ void dnorcdf_(x, cdf)
+/* Subroutine */
+static void dnorcdf_(x, cdf)
 doublereal *x, *cdf;
 {
     /* Initialized data */
