@@ -319,7 +319,7 @@ void my_field(vo_frame_t *, int)
 static
 void my_draw(vo_frame_t *frame_p)
 {
-  if (verbose) vcl_printf("draw: frame = 0x%08X\nmy_draw()\n", unsigned(frame));
+  if (verbose) vcl_printf("draw: frame = 0x%08X\nmy_draw()\n", unsigned(frame_p));
   oxp_mpeg_codec_data *impl = (oxp_mpeg_codec_data*)frame_p->instance;
   oxp_mpeg_codec_data::frame_plus_index* frame =
     static_cast<oxp_mpeg_codec_data::frame_plus_index*>(frame_p);
