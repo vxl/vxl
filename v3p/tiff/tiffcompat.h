@@ -91,6 +91,9 @@
 #define	bcmp(src, dst, len)	memcmp((char *)dst, (char *)src, len)
 #endif
 
+#ifdef WIN32
+#define BSDTYPES
+#endif
 /*
  * The BSD typedefs are used throughout the library.
  * If your system doesn't have them in <sys/types.h>,
