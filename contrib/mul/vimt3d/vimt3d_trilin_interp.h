@@ -12,7 +12,7 @@
 //: Compute trilinear interpolation at (x,y,z) in world coordinates, no bound checks
 //  Interpolates given plane of image.image() at image.world2im(p)
 template<class T>
-inline double vimt3d_bilin_interp_safe(const vimt3d_image_3d_of<T>& image,
+inline double vimt3d_trilin_interp_safe(const vimt3d_image_3d_of<T>& image,
                                      const vgl_point_3d<double>& p,
                                      int plane=0)
 {
