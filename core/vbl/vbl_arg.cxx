@@ -446,21 +446,27 @@ static int list_parse(vcl_list<int> &out, char ** argv)
 // specializations for specific types. C-s for "//: unsigned" to find the
 // implementation for vbl_arg<unsigned>
 
+#if 1
+# define VDS VCL_DEFINE_SPECIALIZATION
+#else
+# define VDS /* template <> */
+#endif
+
 //: bool
-void settype(vbl_arg<bool> &arg) { arg.type_ = "bool"; }
-void print_value(ostream &s, vbl_arg<bool> const &arg) 
+VDS void settype(vbl_arg<bool> &arg) { arg.type_ = "bool"; }
+VDS void print_value(ostream &s, vbl_arg<bool> const &arg) 
 { s << (arg() ? "set" : "not set"); }
-int parse(vbl_arg<bool>* arg, char ** /*argv*/) {
+VDS int parse(vbl_arg<bool>* arg, char ** /*argv*/) {
   arg->value_ = true;
   return 0; // bool sucks zero args, most others take one.
 }
 template class vbl_arg<bool>;
 
 //: int
-void settype(vbl_arg<int> &arg) { arg.type_ = "integer"; }
-void print_value(ostream  &s, vbl_arg<int> const &arg) 
+VDS void settype(vbl_arg<int> &arg) { arg.type_ = "integer"; }
+VDS void print_value(ostream  &s, vbl_arg<int> const &arg) 
 { s << arg(); }
-int parse(vbl_arg<int>* arg, char ** argv) {
+VDS int parse(vbl_arg<int>* arg, char ** argv) {
   char* endptr = 0;
   double v = strtod(argv[0], &endptr);
   if (*endptr != '\0') {
@@ -478,10 +484,10 @@ int parse(vbl_arg<int>* arg, char ** argv) {
 template class vbl_arg<int>;
 
 //: unsigned
-void settype(vbl_arg<unsigned> &arg) { arg.type_ = "integer"; }
-void print_value(ostream &s, vbl_arg<unsigned> const &arg) 
+VDS void settype(vbl_arg<unsigned> &arg) { arg.type_ = "integer"; }
+VDS void print_value(ostream &s, vbl_arg<unsigned> const &arg) 
 { s << arg(); }
-int parse(vbl_arg<unsigned>* arg, char ** argv) {
+VDS int parse(vbl_arg<unsigned>* arg, char ** argv) {
   char* endptr = 0;
   double v = strtod(argv[0], &endptr);
   if (*endptr != '\0') {
@@ -499,10 +505,10 @@ int parse(vbl_arg<unsigned>* arg, char ** argv) {
 template class vbl_arg<unsigned>;
 
 //: float
-void settype(vbl_arg<float> &arg) { arg.type_ = "float"; }
-void print_value(ostream &s, vbl_arg<float> const &arg) 
+VDS void settype(vbl_arg<float> &arg) { arg.type_ = "float"; }
+VDS void print_value(ostream &s, vbl_arg<float> const &arg) 
 { s << arg(); }
-int parse(vbl_arg<float>* arg, char ** argv) {
+VDS int parse(vbl_arg<float>* arg, char ** argv) {
   char* endptr = 0;
   arg->value_ = strtod(argv[0], &endptr);
   if (*endptr == '\0')
@@ -514,10 +520,10 @@ int parse(vbl_arg<float>* arg, char ** argv) {
 template class vbl_arg<float>;
 
 //: double
-void settype(vbl_arg<double> &arg) { arg.type_ = "float"; }
-void print_value(ostream &s, vbl_arg<double> const &arg) 
+VDS void settype(vbl_arg<double> &arg) { arg.type_ = "float"; }
+VDS void print_value(ostream &s, vbl_arg<double> const &arg) 
 { s << arg(); }
-int parse(vbl_arg<double>* arg, char ** argv) {
+VDS int parse(vbl_arg<double>* arg, char ** argv) {
   char* endptr = 0;
   arg->value_ = strtod(argv[0], &endptr);
   if (*endptr == '\0')
@@ -529,30 +535,30 @@ int parse(vbl_arg<double>* arg, char ** argv) {
 template class vbl_arg<double>;
 
 //: char *
-void settype(vbl_arg<char *> &arg) { arg.type_ = "string"; }
-void print_value(ostream &s, vbl_arg<char *> const &arg) 
+VDS void settype(vbl_arg<char *> &arg) { arg.type_ = "string"; }
+VDS void print_value(ostream &s, vbl_arg<char *> const &arg) 
 { s << '\'' << (arg()?arg():"(null)") << '\''; }
-int parse(vbl_arg<char*>* arg, char ** argv) {
+VDS int parse(vbl_arg<char*>* arg, char ** argv) {
   arg->value_ = argv[0]; // argv is valid till the end of the program so 
   return 1;              // it's ok to just grab the pointer.
 }
 template class vbl_arg<char*>;
 
 //: char const *
-void settype(vbl_arg<char const *> &arg) { arg.type_ = "string"; }
-void print_value(ostream &s, vbl_arg<char const *> const &arg) 
+VDS void settype(vbl_arg<char const *> &arg) { arg.type_ = "string"; }
+VDS void print_value(ostream &s, vbl_arg<char const *> const &arg) 
 { s << '\'' << arg() << '\''; }
-int parse(vbl_arg<char const *>* arg, char ** argv) {
+VDS int parse(vbl_arg<char const *>* arg, char ** argv) {
   arg->value_ = argv[0]; // argv is valid till the end of the program so 
   return 1;              // it's ok to just grab the pointer.
 }
 template class vbl_arg<char const*>;
 
 //: vcl_string
-void settype(vbl_arg<vcl_string> &arg) { arg.type_ = "string"; }
-void print_value(ostream &s, vbl_arg<vcl_string> const &arg) 
+VDS void settype(vbl_arg<vcl_string> &arg) { arg.type_ = "string"; }
+VDS void print_value(ostream &s, vbl_arg<vcl_string> const &arg) 
 { s << '\'' << arg() << '\''; }
-int parse(vbl_arg<vcl_string>* arg, char ** argv) {
+VDS int parse(vbl_arg<vcl_string>* arg, char ** argv) {
   if (argv[0]) {
     arg->value_ = argv[0];
     return 1;
@@ -565,23 +571,23 @@ int parse(vbl_arg<vcl_string>* arg, char ** argv) {
 template class vbl_arg<vcl_string>;
 
 //: vcl_list<int>
-void settype(vbl_arg<vcl_list<int> > &arg) { arg.type_ = "integer list"; }
-void print_value(ostream &s, vbl_arg<vcl_list<int> > const &arg) {
+VDS void settype(vbl_arg<vcl_list<int> > &arg) { arg.type_ = "integer list"; }
+VDS void print_value(ostream &s, vbl_arg<vcl_list<int> > const &arg) {
   for (vcl_list<int>::const_iterator i=arg().begin(); i!=arg().end(); ++i)
     s << ' ' << *i;
 }
-int parse(vbl_arg<vcl_list<int> >* arg, char ** argv) {
+VDS int parse(vbl_arg<vcl_list<int> >* arg, char ** argv) {
   return list_parse(arg->value_,argv);
 }
 template class vbl_arg<vcl_list<int> >;
 
 //: vcl_vector<int>
-void settype(vbl_arg<vcl_vector<int> > &arg) { arg.type_ = "integer list"; }
-void print_value(ostream &s, vbl_arg<vcl_vector<int> > const &arg) {
+VDS void settype(vbl_arg<vcl_vector<int> > &arg) { arg.type_ = "integer list"; }
+VDS void print_value(ostream &s, vbl_arg<vcl_vector<int> > const &arg) {
   for (unsigned i=0; i<arg().size(); ++i)
     s << ' ' << arg()[i];
 }
-int parse(vbl_arg<vcl_vector<int> >* arg, char ** argv) {
+VDS int parse(vbl_arg<vcl_vector<int> >* arg, char ** argv) {
   vcl_list<int> tmp;
   int retval = list_parse(tmp,argv);
   for (vcl_list<int>::iterator i=tmp.begin() ; i!=tmp.end() ; ++i)
@@ -591,12 +597,12 @@ int parse(vbl_arg<vcl_vector<int> >* arg, char ** argv) {
 template class vbl_arg<vcl_vector<int> >;
 
 //: vcl_vector<unsigned>
-void settype(vbl_arg<vcl_vector<unsigned> > &arg) { arg.type_ = "integer list"; }
-void print_value(ostream &s, vbl_arg<vcl_vector<unsigned> > const &arg) {
+VDS void settype(vbl_arg<vcl_vector<unsigned> > &arg) { arg.type_ = "integer list"; }
+VDS void print_value(ostream &s, vbl_arg<vcl_vector<unsigned> > const &arg) {
   for (unsigned i=0; i<arg().size(); ++i)
     s << ' ' << arg()[i];
 }
-int parse(vbl_arg<vcl_vector<unsigned> >* arg, char ** argv) {
+VDS int parse(vbl_arg<vcl_vector<unsigned> >* arg, char ** argv) {
   vcl_list<int> tmp;
   int retval = list_parse(tmp,argv);
   for (vcl_list<int>::iterator i=tmp.begin() ; i!=tmp.end() ; ++i)

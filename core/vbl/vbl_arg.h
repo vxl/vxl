@@ -17,9 +17,12 @@
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_string.h>
 
-// forward declare all classes
+//: forward declare all classes and their helper functions.
 class vbl_arg_info_list;
 template <class T> class vbl_arg;
+template <class T> void settype     (vbl_arg<T> &);
+template <class T> void print_value (ostream &, vbl_arg<T> const &);
+template <class T> int  parse       (vbl_arg<T>*, char**);
 
 //: This is the base class for the templated vbl_arg<T>s
 class vbl_arg_base {
@@ -39,7 +42,7 @@ public:
   // -- Returns true if arg was set on the command line.
   bool set() const { return set_; };
 
-protected:
+public://protected:
   bool set_;
   char const* option_;
   int optlen_;
@@ -108,10 +111,10 @@ inline void vbl_arg_display_usage_and_exit(char const* msg = 0)
 template <class T>
 class vbl_arg : public vbl_arg_base {
 public: 
-  friend void settype(vbl_arg<T> &);
-  friend void print_value(ostream &, vbl_arg<T> const &);
-  friend int  parse(vbl_arg<T>*, char**);
-  T value_;// public until templated friends of templates are recognized
+  //friend void settype     VCL_STL_NULL_TMPL_ARGS (vbl_arg<T> &);
+  //friend void print_value VCL_STL_NULL_TMPL_ARGS (ostream &, vbl_arg<T> const &);
+  //friend int  parse       VCL_STL_NULL_TMPL_ARGS (vbl_arg<T>*, char**);
+  T value_;// public so we don't have to worry about templated friends.
   
   // -- Construct an vbl_arg<T> with command-line switch \arg{option_string}, and default
   // value \arg{default_value}.  Add this argument to the global list of arguments
@@ -135,8 +138,8 @@ public:
     : vbl_arg_base(l, option_string, helpstring), value_(default_value) { settype(); }    
   
   //: return the arg's current value, whether the default or the one from the command line.
-  T      & operator () (/*void*/) { return value_; }
-  T const& operator () (/*void*/) const { return value_; }
+  T      & operator () () { return value_; }
+  T const& operator () () const { return value_; }
   //operator T& () { return value_; }
   
   //: returns number of args chomped, or -1 on failure.
