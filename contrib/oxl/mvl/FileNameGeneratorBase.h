@@ -15,7 +15,7 @@
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_unary_function.h>
-#include <vcl/vcl_string.h>
+#include <vcl_string.h>
 
 class FileNameGeneratorBase {
 protected:
