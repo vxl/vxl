@@ -7,14 +7,15 @@
 //:
 // \file
 // \author François BERTEL
+// \brief transformation between 2 spatial coordinate systems
 //
 // \verbatim
-// Modifications
-// 2000/06/28 François BERTEL Creation. Adapted from IUE
-// 2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
-// 2002/01/22 Peter Vanroose - added lmi() as it is used in vcsl_matrix.cxx
-// 2002/01/22 Peter Vanroose - return type of lqi(), lvi(), execute() and inverse() changed to non-ptr
-// 2002/01/28 Peter Vanroose - vcl_vector members beat_ and interpolator_ changed to non-ptr
+//  Modifications
+//   2000/06/28 François BERTEL Creation. Adapted from IUE
+//   2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
+//   2002/01/22 Peter Vanroose - added lmi() as it is used in vcsl_matrix.cxx
+//   2002/01/22 Peter Vanroose - return type of lqi(), lvi(), execute() and inverse() changed to non-ptr
+//   2002/01/28 Peter Vanroose - vcl_vector members beat_ and interpolator_ changed to non-ptr
 // \endverbatim
 
 #include <vcsl/vcsl_spatial_transformation_sptr.h>
@@ -33,10 +34,10 @@ enum vcsl_interpolator
   vcsl_cubic,
   vcsl_spline
 };
+
 //: Transformation between 2 spatial coordinate systems
 // A spatial transformation can be static or dynamic
-class vcsl_spatial_transformation
-  : public vbl_ref_count
+class vcsl_spatial_transformation : public vbl_ref_count
 {
  public:
 
