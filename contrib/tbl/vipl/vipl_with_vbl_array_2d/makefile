@@ -19,6 +19,8 @@ MANPAGE_SOURCES += accessors/vipl_accessors_vbl_array_2d.txx
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
+SOURCES += dummy.cxx
+
 # No need to compile the files in Templates when implicitly instantiating:
 ifeq ($(USE_IMPLICIT_TEMPLATES),1)
   TEMPLATE_SOURCES :=
