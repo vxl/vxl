@@ -87,119 +87,119 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=.\Templates\vbl_bounding_box_3double-.cxx
+SOURCE=.\Templates\vbl_bounding_box+double.3-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vbl_smart_ptr+vsol_box_2d.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vsol_box_2d-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vbl_smart_ptr+vsol_box_3d.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vsol_box_3d-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vbl_smart_ptr+vsol_conic_2d.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vsol_conic_2d-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vbl_smart_ptr+vsol_curve_2d.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vsol_curve_2d-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vbl_smart_ptr+vsol_curve_3d.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vsol_curve_3d-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vbl_smart_ptr+vsol_group_2d.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vsol_group_2d-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vbl_smart_ptr+vsol_group_3d.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vsol_group_3d-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vbl_smart_ptr+vsol_line_2d.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vsol_line_2d-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vbl_smart_ptr+vsol_line_3d.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vsol_line_3d-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vbl_smart_ptr+vsol_point_2d.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vsol_point_2d-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vbl_smart_ptr+vsol_point_3d.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vsol_point_3d-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vbl_smart_ptr+vsol_polygon_2d.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vsol_polygon_2d-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vbl_smart_ptr+vsol_polygon_3d.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vsol_polygon_3d-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vbl_smart_ptr+vsol_rectangle_2d.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vsol_rectangle_2d-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vbl_smart_ptr+vsol_rectangle_3d.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vsol_rectangle_3d-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vbl_smart_ptr+vsol_region_2d.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vsol_region_2d-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vbl_smart_ptr+vsol_region_3d.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vsol_region_3d-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vbl_smart_ptr+vsol_spatial_object_2d.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vsol_spatial_object_2d-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vbl_smart_ptr+vsol_spatial_object_3d.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vsol_spatial_object_3d-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vbl_smart_ptr+vsol_surface_3d.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vsol_surface_3d-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vbl_smart_ptr+vsol_triangle_2d.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vsol_triangle_2d-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vbl_smart_ptr+vsol_triangle_3d.cxx
+SOURCE=.\Templates\vbl_smart_ptr+vsol_triangle_3d-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vcl_list+vsol_spatial_object_2d_sptr.cxx
+SOURCE=.\Templates\vcl_list+vsol_spatial_object_2d_sptr-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vcl_list+vsol_spatial_object_3d_sptr.cxx
+SOURCE=.\Templates\vcl_list+vsol_spatial_object_3d_sptr-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vcl_vector+vsol_point_2d_sptr.cxx
+SOURCE=.\Templates\vcl_vector+vsol_point_2d_sptr-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vcl_vector+vsol_point_3d_sptr.cxx
+SOURCE=.\Templates\vcl_vector+vsol_point_3d_sptr-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vector+vsol_spatial_object_2d~-.cxx
+SOURCE=.\Templates\vcl_vector+vsol_spatial_object_2d~-.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vector+vsol_spatial_object_3d~-.cxx
+SOURCE=.\Templates\vcl_vector+vsol_spatial_object_3d~-.cxx
 # End Source File
 # Begin Source File
 
@@ -255,6 +255,10 @@ SOURCE=.\vsol_polygon_3d.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vsol_polyhedron.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\vsol_rectangle_2d.cxx
 # End Source File
 # Begin Source File
@@ -283,11 +287,23 @@ SOURCE=.\vsol_surface_3d.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vsol_tetrahedron.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\vsol_triangle_2d.cxx
 # End Source File
 # Begin Source File
 
 SOURCE=.\vsol_triangle_3d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsol_volume_3d.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vbl_smart_ptr+vsol_tetrahedron-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

@@ -122,6 +122,10 @@ SOURCE=.\gmvl_tag_node.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\gmvl_topology_node.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=".\Templates\vbl_smart_ptr+gmvl_connection-.cxx"
 # End Source File
 # Begin Source File

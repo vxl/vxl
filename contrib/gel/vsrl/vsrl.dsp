@@ -148,6 +148,14 @@ SOURCE=.\vsrl_token_saliency.cxx
 
 SOURCE=.\vsrl_window_accumulator.cxx
 # End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vsrl_intensity_token~-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vcl_vector+vsrl_token~-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 

@@ -87,6 +87,10 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
+SOURCE=".\Templates\vbl_smart_ptr+vdgl_digital_curve-.cxx"
+# End Source File
+# Begin Source File
+
 SOURCE=".\Templates\vbl_smart_ptr+vdgl_edgel_chain-.cxx"
 # End Source File
 # Begin Source File
@@ -100,6 +104,10 @@ SOURCE=".\Templates\vcl_vector+vdgl_edgel-.cxx"
 # Begin Source File
 
 SOURCE=.\vdgl_digital_curve.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vdgl_digital_region.cxx
 # End Source File
 # Begin Source File
 
@@ -124,6 +132,14 @@ SOURCE=.\vdgl_interpolator_cubic.cxx
 # Begin Source File
 
 SOURCE=.\vdgl_interpolator_linear.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vdgl_ortho_regress.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vdgl_OrthogRegress.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

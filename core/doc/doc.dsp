@@ -62,16 +62,6 @@ MTL=midl.exe
 # Begin Source File
 
 SOURCE=.\book\book.texi
-
-!IF  "$(CFG)" == "doc - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "doc - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-# PROP Ignore_Default_Tool 1
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 

@@ -132,7 +132,6 @@ LIB32=xilink6.exe -lib
 # Name "vnl_algo - Win32 Debug"
 # Name "vnl_algo - Win32 StaticDebug"
 # Name "vnl_algo - Win32 StaticRelease"
-# Name "vnl_algo - Win32 ReleaseWithDBInfo"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"

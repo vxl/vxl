@@ -3,7 +3,7 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "allgel"=.\allgel\allgel.dsp - Package Owner=<4>
+Project: "gel"=.\gel.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -23,6 +23,66 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name vsrl
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vdgl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vmal
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vsol
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vtol
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "vdgl"=.\vdgl\vdgl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vmal"=.\vmal\vmal.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vsol"=.\vsol\vsol.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vtol"=.\vtol\vtol.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
 }}}
 
 ###############################################################################

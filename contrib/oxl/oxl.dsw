@@ -3,7 +3,7 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "alloxl"=.\alloxl\alloxl.dsp - Package Owner=<4>
+Project: "oxl"=.\oxl.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -19,6 +19,27 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vrml
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name osl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgui
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgui_glut
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgui_mfc
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgui_vrml
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name xcv
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vplayer
     End Project Dependency
 }}}
 
@@ -76,57 +97,6 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name jpeg
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "glmovie"=.\apps\glmovie\app_glmovie.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name oxp
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vbl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vgl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vidl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vil
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vnl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vnl_algo
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vpl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name jpeg
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vgui
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vgui_glut
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name netlib
     End Project Dependency
 }}}
 
@@ -368,159 +338,6 @@ Package=<5>
 
 Package=<4>
 {{{
-}}}
-
-###############################################################################
-
-Project: "vxlcalc"=.\apps\vxlcalc\vxlcalc.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name mvl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name oxp
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vbl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vgl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vidl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vil
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vnl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vnl_algo
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vpl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name osl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name netlib
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name jpeg
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "vxlhwarp"=.\apps\vxlhwarp\vxlhwarp.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name mvl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name oxp
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vbl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vgl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vil
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vnl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vnl_algo
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vpl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name netlib
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vgui
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vgui_glut
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vgui_mfc
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vidl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name jpeg
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "vxlpca"=.\apps\vxlpca\vxlpca.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name mvl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name netlib
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name oxp
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vbl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vcl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vgl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vidl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vil
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vnl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vnl_algo
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vpl
-    End Project Dependency
 }}}
 
 ###############################################################################

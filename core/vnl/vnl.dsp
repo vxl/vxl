@@ -184,7 +184,6 @@ LIB32=xilink6.exe -lib
 # Name "vnl - Win32 StaticRelease"
 # Name "vnl - Win32 DebugSTLPort"
 # Name "vnl - Win32 ReleaseSTLPort"
-# Name "vnl - Win32 ReleaseWithDBInfo"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"

@@ -83,7 +83,6 @@ LIB32=xilink6.exe -lib
 
 # Name "vgui - Win32 Release"
 # Name "vgui - Win32 Debug"
-# Name "vgui - Win32 ReleaseWithDBInfo"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"

@@ -89,7 +89,6 @@ LINK32=link.exe
 
 # Name "vxl_vrml_viewer - Win32 Release"
 # Name "vxl_vrml_viewer - Win32 Debug"
-# Name "vxl_vrml_viewer - Win32 ReleaseWithDBInfo"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"

@@ -13,7 +13,7 @@ CFG=vgl - Win32 StaticDebug
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "vgl.mak" CFG="vgl - Win32 StaticDebug"
+!MESSAGE NMAKE /f "vgl.mak" CFG="vgl - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
@@ -134,7 +134,6 @@ LIB32=xilink6.exe -lib
 # Name "vgl - Win32 Debug"
 # Name "vgl - Win32 StaticDebug"
 # Name "vgl - Win32 StaticRelease"
-# Name "vgl - Win32 ReleaseWithDBInfo"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
@@ -249,10 +248,6 @@ SOURCE=".\Templates\vgl_line_segment_3d+double-.cxx"
 # Begin Source File
 
 SOURCE=".\Templates\vgl_line_segment_3d+float-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=.\Templates\vgl_line_segment_3d.cxx
 # End Source File
 # Begin Source File
 

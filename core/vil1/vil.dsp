@@ -132,7 +132,6 @@ LIB32=xilink6.exe -lib
 # Name "vil - Win32 Debug"
 # Name "vil - Win32 StaticDebug"
 # Name "vil - Win32 StaticRelease"
-# Name "vil - Win32 ReleaseWithDBInfo"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"

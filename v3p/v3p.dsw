@@ -3,7 +3,7 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "Qv"=.\Qv\Qv.dsp - Package Owner=<4>
+Project: "netlib"=.\netlib\netlib.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -15,7 +15,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "allv3p"=.\allv3p\allv3p.dsp - Package Owner=<4>
+Project: "tiff"=.\tiff\tiff.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -26,14 +26,38 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name jpeg
     End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name Qv
-    End Project Dependency
 }}}
 
 ###############################################################################
 
 Project: "jpeg"=.\jpeg\jpeg.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "Qv"=.\Qv\Qv.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name vcl
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "vcl"=..\vcl\vcl.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

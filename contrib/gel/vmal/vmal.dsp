@@ -85,11 +85,11 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=".\Templates\vbl_smart_ptr+vmal_multi_vew_data+vertex.cxx"
+SOURCE=".\Templates\vbl_smart_ptr+vmal_multi_view_data+vtol_vertex_2d_sptr--.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vbl_smart_ptr+vmal_multi_view_data+edge.cxx"
+SOURCE=".\Templates\vbl_smart_ptr+vmal_multi_view_data+vtol_edge_2d_sptr--.cxx"
 # End Source File
 # Begin Source File
 

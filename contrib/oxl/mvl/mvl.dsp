@@ -187,7 +187,6 @@ LIB32=link.exe -lib
 
 # Name "mvl - Win32 Release"
 # Name "mvl - Win32 Debug"
-# Name "mvl - Win32 ReleaseWithDBInfo"
 # Name "mvl - Win32 StaticDebug"
 # Name "mvl - Win32 StaticRelease"
 # Name "mvl - Win32 ReleaseSTLPort"

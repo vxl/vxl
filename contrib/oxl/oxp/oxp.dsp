@@ -82,7 +82,6 @@ LIB32=xilink6.exe -lib
 
 # Name "oxp - Win32 Release"
 # Name "oxp - Win32 Debug"
-# Name "oxp - Win32 ReleaseWithDBInfo"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"

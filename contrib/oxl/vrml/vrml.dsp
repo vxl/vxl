@@ -132,7 +132,6 @@ LIB32=link.exe -lib
 
 # Name "vrml - Win32 Release"
 # Name "vrml - Win32 Debug"
-# Name "vrml - Win32 ReleaseWithDBInfo"
 # Name "vrml - Win32 StaticDebug"
 # Name "vrml - Win32 StaticRelease"
 # Begin Group "Source Files"

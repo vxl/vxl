@@ -23,7 +23,6 @@ CFG=vcl - Win32 DebugSTLPort
 !MESSAGE "vcl - Win32 StaticRelease" (based on "Win32 (x86) Static Library")
 !MESSAGE "vcl - Win32 DebugSTLPort" (based on "Win32 (x86) Static Library")
 !MESSAGE "vcl - Win32 ReleaseSTLPort" (based on "Win32 (x86) Static Library")
-!MESSAGE "vcl - Win32 ReleaseWithDBInfo" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -47,7 +46,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /D "WIN32" /D "NDEBUG" /D "_LIB" /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /D "WIN32" /D "NDEBUG" /D "_LIB" /FD /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
@@ -95,7 +94,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "StaticDebug"
 # PROP Target_Dir ""
 MTL=midl.exe
-# ADD BASE CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
+# ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /Ob2 /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
 # ADD CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
 # ADD RSC /l 0x409 /d "_DEBUG"
@@ -119,7 +118,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "StaticRelease"
 # PROP Target_Dir ""
 MTL=midl.exe
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /FD /c
+# ADD BASE CPP /nologo /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /FD /c
 # SUBTRACT BASE CPP /YX
 # ADD CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /D "WIN32" /D "NDEBUG" /D "_LIB" /FD /c
 # SUBTRACT CPP /YX
@@ -145,7 +144,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug-STLPort"
 # PROP Target_Dir ""
 MTL=midl.exe
-# ADD BASE CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
+# ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /Ob2 /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
 # ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(STLPORT)\stlport" /I "$(IUEROOT)\vcl\config.stlport.win32-vc60" /I "$(IUEROOT)\vcl" /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
 # ADD RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
@@ -169,9 +168,9 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Release-STLPort"
 # PROP Target_Dir ""
 MTL=midl.exe
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /FD /c
+# ADD BASE CPP /nologo /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /FD /c
 # SUBTRACT BASE CPP /YX
-# ADD CPP /nologo /MT /W3 /GX /O2 /Ob2 /I "$(STLPORT)\stlport" /I "$(IUEROOT)\vcl\config.stlport.win32-vc60" /I "$(IUEROOT)\vcl" /D "WIN32" /D "NDEBUG" /D "_LIB" /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /Ob2 /I "$(STLPORT)\stlport" /I "$(IUEROOT)\vcl\config.stlport.win32-vc60" /I "$(IUEROOT)\vcl" /D "WIN32" /D "NDEBUG" /D "_LIB" /FD /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
@@ -181,32 +180,6 @@ BSC32=bscmake.exe
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\Release\vcl.lib"
 # ADD LIB32 /nologo /out:"..\Release-STLPort\vcl.lib"
-
-!ELSEIF  "$(CFG)" == "vcl - Win32 ReleaseWithDBInfo"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "vcl___Win32_ReleaseWithDBInfo"
-# PROP BASE Intermediate_Dir "vcl___Win32_ReleaseWithDBInfo"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "ReleaseWithDBInfo"
-# PROP Intermediate_Dir "ReleaseWithDBInfo"
-# PROP Target_Dir ""
-MTL=midl.exe
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /FD /c
-# SUBTRACT BASE CPP /YX
-# ADD CPP /nologo /MT /W3 /GX /Zi /O2 /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /D "WIN32" /D "NDEBUG" /D "_LIB" /FD /c
-# SUBTRACT CPP /YX
-# ADD BASE RSC /l 0x409 /d "NDEBUG"
-# ADD RSC /l 0x409 /d "NDEBUG"
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\Release\vcl.lib"
-# ADD LIB32 /nologo /out:"..\Release\vcl.lib"
 
 !ENDIF 
 
@@ -218,7 +191,6 @@ LIB32=link.exe -lib
 # Name "vcl - Win32 StaticRelease"
 # Name "vcl - Win32 DebugSTLPort"
 # Name "vcl - Win32 ReleaseSTLPort"
-# Name "vcl - Win32 ReleaseWithDBInfo"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
@@ -340,14 +312,6 @@ SOURCE=".\Templates\vcl_map+long.void~-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_map+string.int-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vcl_map+string.string-.cxx"
-# End Source File
-# Begin Source File
-
 SOURCE=".\Templates\vcl_map+unsigned_int.double-.cxx"
 # End Source File
 # Begin Source File
@@ -361,6 +325,14 @@ SOURCE=".\Templates\vcl_map+unsigned_int.unsigned_int-.cxx"
 # Begin Source File
 
 SOURCE=".\Templates\vcl_map+unsigned_int.void~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_map+vcl_string.int-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_map+vcl_string.vcl_string-.cxx"
 # End Source File
 # Begin Source File
 
@@ -428,22 +400,6 @@ SOURCE=".\Templates\vcl_vector+char~-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+complex+double--.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vcl_vector+complex+double-~-.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vcl_vector+complex+float--.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vcl_vector+complex+float-~-.cxx"
-# End Source File
-# Begin Source File
-
 SOURCE=".\Templates\vcl_vector+const_char~-.cxx"
 # End Source File
 # Begin Source File
@@ -492,7 +448,7 @@ SOURCE=".\Templates\vcl_vector+schar~-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+string-.cxx"
+SOURCE=".\Templates\vcl_vector+vcl_string-.cxx"
 # End Source File
 # Begin Source File
 
@@ -517,6 +473,22 @@ SOURCE=".\Templates\vcl_vector+ulong-.cxx"
 # Begin Source File
 
 SOURCE=".\Templates\vcl_vector+ulong~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+vcl_complex+double--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+vcl_complex+double-~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+vcl_complex+float--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+vcl_complex+float-~-.cxx"
 # End Source File
 # Begin Source File
 
@@ -548,15 +520,15 @@ SOURCE=".\Templates\vcl_vector+vcl_pair+int.int-~-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vcl_vector+vcl_pair+int.string--.cxx"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vcl_vector+vcl_pair+string.string--.cxx"
+SOURCE=".\Templates\vcl_vector+vcl_pair+int.vcl_string--.cxx"
 # End Source File
 # Begin Source File
 
 SOURCE=".\Templates\vcl_vector+vcl_pair+uint.uint--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+vcl_pair+vcl_string.vcl_string--.cxx"
 # End Source File
 # Begin Source File
 
@@ -577,6 +549,106 @@ SOURCE=".\Templates\vcl_vector+vcl_vector+unsigned-~-.cxx"
 # Begin Source File
 
 SOURCE=".\Templates\vcl_vector+void~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\alloc-instances.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_algorithm+uchar-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_algorithm+vcl_pair+double.int--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_algorithm+vcl_pair+float.int--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_list+vcl_pair+void~.void~--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_map+int.vcl_string-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_map+ulong.vcl_pair+void~.int--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_map+vcl_pair+int.int-.vcl_pair+float.float--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_map+vcl_pair+int.int-.void~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_map+vcl_pair+uint.uint-.double-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_map+vcl_pair+uint.uint-.int-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_map+vcl_string.void~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_map+void~.vcl_pair+int.int--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_map+void~.vcl_pair+ulong.int--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_queue+double-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_set+vcl_pair+int.int--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_unique+double~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+long_double-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+long_double~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+vcl_complex+long_double--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+vcl_complex+long_double-~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+vcl_pair+char~.int--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+vcl_pair+float.int--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+vcl_pair+int.double~--.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+vcl_vector+int-~-.cxx"
 # End Source File
 # End Group
 # Begin Group "Header Files"
