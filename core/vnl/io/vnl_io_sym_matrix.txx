@@ -38,7 +38,7 @@ void vsl_b_read(vsl_b_istream &is, vnl_sym_matrix<T> & p)
   {
   case 1:
     vsl_b_read(is, n);
-    p.resize(n);
+    p.set_size(n);
     // Calling begin() on empty matrix causes segfault
     if (n>0)
       vsl_b_read_block_old(is, p.data_block(), p.size());
@@ -46,7 +46,7 @@ void vsl_b_read(vsl_b_istream &is, vnl_sym_matrix<T> & p)
 
   case 2:
     vsl_b_read(is, n);
-    p.resize(n);
+    p.set_size(n);
     // Calling begin() on empty matrix causes segfault
     if (n>0)
       vsl_block_binary_read(is, p.data_block(), p.size());
