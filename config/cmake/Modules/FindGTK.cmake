@@ -14,12 +14,14 @@ IF (UNIX)
       /usr/openwin/include
       /usr/X11R6/include
       /usr/include/X11
+      /usr/X11R6/include/gtk12
     )
 
     FIND_PATH( GTK_glib_INCLUDE_PATH glibconfig.h
       /usr/include
       /usr/local/include
       /usr/openwin/share/include
+      /usr/local/include/glib12
     )
 
     FIND_PATH( GTK_gtkgl_INCLUDE_PATH gtkgl/gtkglarea.h
@@ -35,32 +37,40 @@ IF (UNIX)
       /usr/X11R6/lib
     )
 
-    FIND_LIBRARY( GTK_gtk_LIBRARY gtk
-      /usr/lib
-      /usr/local/lib
-      /usr/openwin/lib
-      /usr/X11R6/lib
+    #
+    # The 12 suffix is thanks to the FreeBSD ports collection
+    #
+
+    FIND_LIBRARY( GTK_gtk_LIBRARY
+      NAMES  gtk gtk12
+      PATHS /usr/lib
+            /usr/local/lib
+            /usr/openwin/lib
+            /usr/X11R6/lib
     )
 
-    FIND_LIBRARY( GTK_gdk_LIBRARY gdk
-      /usr/lib
-      /usr/local/lib
-      /usr/openwin/lib
-      /usr/X11R6/lib
+    FIND_LIBRARY( GTK_gdk_LIBRARY
+      NAMES  gdk gdk12
+      PATHS  /usr/lib
+             /usr/local/lib
+             /usr/openwin/lib
+             /usr/X11R6/lib
     )
 
-    FIND_LIBRARY( GTK_gmodule_LIBRARY gmodule
-      /usr/lib
-      /usr/local/lib
-      /usr/openwin/lib
-      /usr/X11R6/lib
+    FIND_LIBRARY( GTK_gmodule_LIBRARY
+      NAMES  gmodule gmodule12
+      PATHS  /usr/lib
+             /usr/local/lib
+             /usr/openwin/lib
+             /usr/X11R6/lib
     )
 
-    FIND_LIBRARY( GTK_glib_LIBRARY glib
-      /usr/lib
-      /usr/local/lib
-      /usr/openwin/lib
-      /usr/X11R6/lib
+    FIND_LIBRARY( GTK_glib_LIBRARY
+      NAMES  glib glib12
+      PATHS  /usr/lib
+             /usr/local/lib
+             /usr/openwin/lib
+             /usr/X11R6/lib
     )
 
 

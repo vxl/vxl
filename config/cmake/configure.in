@@ -510,6 +510,8 @@ AC_PATH_PROGS(RUNMAKE, gmake make)
 
 # from vcl/configure.in
 
+CXXFLAGS_saved=$CXXFLAGS
+
 
 #--------------------------------------------------------------------------------
 # MANUAL OPTIONS
@@ -898,6 +900,7 @@ AC_SUBST(VXL_IEEE_64)
 #AC_SUBST(VXL_IEEE_128)
 
 
+CXXFLAGS=$CXXFLAGS_saved
 
 
 # generate output files.

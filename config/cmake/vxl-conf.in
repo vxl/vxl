@@ -4,6 +4,8 @@
 # from vcl/configure.in
 
 
+CXXFLAGS_saved=$CXXFLAGS
+
 #--------------------------------------------------------------------------------
 # MANUAL OPTIONS
 
@@ -389,6 +391,9 @@ AC_SUBST(VXL_IEEE_32)
 AC_SUBST(VXL_IEEE_64)
 #AC_SUBST(VXL_IEEE_96)
 #AC_SUBST(VXL_IEEE_128)
+
+CXXFLAGS=$CXXFLAGS_saved
+
 
 AC_OUTPUT(
 vcl/vcl_config_manual.h~:vcl/vcl_config_manual.h.in
