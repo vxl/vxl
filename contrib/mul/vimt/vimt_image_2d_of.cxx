@@ -18,6 +18,10 @@ template<> vcl_string vimt_image_2d_of<int>::is_a() const
 template<> vcl_string vimt_image_2d_of<float>::is_a() const
 {  return vcl_string("vimt_image_2d_of<float>"); }
 
+// Specialise the is_a() for double 
+template<> vcl_string vimt_image_2d_of<double>::is_a() const
+{  return vcl_string("vimt_image_2d_of<double>"); }
+
 // Specialise the is_a() for char
 template<> vcl_string vimt_image_2d_of<char>::is_a() const
 {  return vcl_string("vimt_image_2d_of<char>"); }
