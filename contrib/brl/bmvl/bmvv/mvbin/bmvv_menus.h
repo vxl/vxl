@@ -20,7 +20,9 @@ class bmvv_menus
   static void load_image_callback();
   static void clear_display_callback();
   static void vd_edges_callback();
+#ifdef HAS_XERCES
   static void read_xml_edges_callback();
+#endif
   static void show_epipolar_line_callback();
   static vgui_menu get_menu();
  private:

@@ -28,11 +28,12 @@ void bmvv_menus::vd_edges_callback()
   bmvv_multiview_manager::instance()->vd_edges();
 }
 
-
+#ifdef HAS_XERCES
 void bmvv_menus::read_xml_edges_callback()
 {
   bmvv_multiview_manager::instance()->read_xml_edges();
 }
+#endif
 
 void bmvv_menus::show_epipolar_line_callback()
 {
@@ -49,7 +50,9 @@ vgui_menu bmvv_menus::get_menu()
   //file menu entries
   menufile.add( "Quit", quit_callback,(vgui_key)'q', vgui_CTRL);
   menufile.add( "Load Image", load_image_callback,(vgui_key)'l', vgui_CTRL);
+#ifdef HAS_XERCES
   menufile.add( "Load XML Edges", read_xml_edges_callback);
+#endif
   //view menu entries
   menuview.add("Clear Display", clear_display_callback);
   menuview.add( "Epipolar Line", show_epipolar_line_callback,
