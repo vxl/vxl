@@ -175,8 +175,8 @@ inline vgl_point_2d<Type> midpoint(vgl_point_2d<Type> const& p1,
 template <class Type>
 inline vgl_point_2d<Type> centre(vgl_point_2d<Type> const& p1,
                                  vgl_point_2d<Type> const& p2) {
-  return vgl_point_2d<Type>((p1.x() + p2.x() + p3.x())/2 ,
-                            (p1.y() + p2.y() + p3.y())/2 );
+  return vgl_point_2d<Type>((p1.x() + p2.x())/2 ,
+                            (p1.y() + p2.y())/2 );
 }
 
 //: Return the point at the centre of gravity of three given points.
