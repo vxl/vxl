@@ -1,5 +1,5 @@
 USES += contrib/mul core
-include ${IUEROOT}/contrib/mul/mil/algo/config.mk
+include ../algo/config.mk
 include $(IUEROOT)/core/vpl/config.mk
 include $(IUEROOT)/core/testlib/config.mk
 

@@ -1,5 +1,5 @@
 USES += contrib/mul core
-include ${IUEROOT}/contrib/mul/clsfy/config.mk
+include ../config.mk
 include ${IUEROOT}/contrib/mul/pdf1d/config.mk
 include $(IUEROOT)/core/vul/config.mk
 include $(IUEROOT)/core/vpl/config.mk
