@@ -257,9 +257,13 @@ union vnl_numeric_limits_long_double_inf {
 #elif VXL_BIG_ENDIAN
     x[0] = 0x7f; x[1] = 0xf0;
 #else
+# if defined(VCL_BORLAND)
+    x[szl-1] = 0x7f; x[szl-2] = 0xff; x[szl-3] = 0x80;
+# else
     x[szl-1] = 0x7f; x[szl-2] = 0xf0;
     if (szl == 12) // intel
       x[9]=x[11]=0x7f, x[8]=x[10]=0xff, x[7] = 0x80;
+# endif
 #endif
   }
 };

@@ -37,17 +37,11 @@ extern "C" int finitef(float);
 # endif
 
 #elif defined(VCL_BORLAND) 
-extern "C" {
-# include "math.h"
-# include "float.h"
-}
-# define finite _finite
-# define finitef _finite
-# define isnan _isnan
-
+# include <math.h>
+# include <float.h>
 #else
-#warning finite() is not declared on this platform
-#define VNL_HAS_NO_FINITE
+# warning finite() is not declared on this platform
+# define VNL_HAS_NO_FINITE
 #endif
 
 #ifdef VCL_SUNPRO_CC_50
@@ -89,7 +83,7 @@ const float vnl_math::float_sqrteps    VCL_STATIC_CONST_INIT_FLOAT_DEFN( 3.45266
 #endif
 
 //--------------------------------------------------------------------------------
-#if defined(__INTEL_COMPILER)
+#if defined(VCL_ICC)
 #include <mathimf.h> // defines isnanf, isnan, and isnanl
 //: Return true iff x is "Not a Number"
 bool vnl_math_isnan(float x) { return isnanf(x); }
@@ -97,6 +91,13 @@ bool vnl_math_isnan(float x) { return isnanf(x); }
 bool vnl_math_isnan(double x) { return isnan(x); }
 //: Return true iff x is "Not a Number"
 bool vnl_math_isnan(long double x) { return isnanl(x); }
+#elif defined(VCL_BORLAND)
+//: Return true iff x is "Not a Number"
+bool vnl_math_isnan(float x) { return _isnan(x); }
+//: Return true iff x is "Not a Number"
+bool vnl_math_isnan(double x) { return _isnan(x); }
+//: Return true iff x is "Not a Number"
+bool vnl_math_isnan(long double x) { return _isnanl(x); }
 #elif !defined(VNL_HAS_NO_FINITE) && !defined(VCL_SGI_CC_7) && !defined(__alpha__) && !defined(VCL_WIN32)
 //: Return true iff x is "Not a Number"
 bool vnl_math_isnan(float x) { return x != x; } // causes "floating exception" on alpha & sgi
@@ -137,15 +138,11 @@ static const int sz_l = sizeof(long double)/sizeof(int) -1;
 // Assume IEEE floating point number representation
 bool vnl_math_isnan( float x){return bMe(&x,0x7f800000L,sz_f)&&bMp(&x,0x007fffffL,sz_f);}
 bool vnl_math_isnan(double x){return bMe(&x,0x7ff00000L,sz_d)&&bMp(&x,0x000fffffL,sz_d);}
-# if defined(VCL_BORLAND)
-bool vnl_math_isnan(long double x) { return isnan(x); }
-# else
 bool vnl_math_isnan(long double x) {
   if (sizeof(long double) == 8) return bMe(&x,0x7ff00000L,sz_l) && bMp(&x,0x000fffffL,sz_l);
   else if (sizeof(long double) <= 12) return bMe(&x,0x4001ffffL,sz_l) && bMp(&x,0x40000000,sz_l-4);
   else return bMe(&x,0x7ff70000L,sz_l) && bMp(&x,0x0008ffffL,sz_l);
 }
-# endif
 #endif
 
 // fsm
@@ -164,7 +161,14 @@ bool vnl_math_isnan(long double x) {
 # endif
 #endif
 
-#if !defined(VNL_HAS_NO_FINITE)
+#if defined(VCL_BORLAND)
+//: Return true if x is neither NaN nor Inf.
+bool vnl_math_isfinite(float x) { return _finite(x) != 0; }
+//: Return true if x is neither NaN nor Inf.
+bool vnl_math_isfinite(double x) { return _finite(x) != 0; }
+//: Return true if x is neither NaN nor Inf.
+bool vnl_math_isfinite(long double x) { return _finitel(x) != 0 && !_isnanl(x); }
+#elif !defined(VNL_HAS_NO_FINITE)
 //: Return true if x is neither NaN nor Inf.
 bool vnl_math_isfinite(float x) { return finitef(x) != 0; }
 //: Return true if x is neither NaN nor Inf.
@@ -183,7 +187,14 @@ bool vnl_math_isfinite(long double x) {
 #endif
 
 
-#if !defined(VNL_HAS_NO_FINITE)
+#if defined(VCL_BORLAND)
+//: Return true if x is inf
+bool vnl_math_isinf(float x) { return !_finite(x) && !_isnan(x); }
+//: Return true if x is inf
+bool vnl_math_isinf(double x) { return !_finite(x) && !_isnan(x); }
+//: Return true if x is inf
+bool vnl_math_isinf(long double x) { return !_finitel(x) && !_isnanl(x); }
+#elif !defined(VNL_HAS_NO_FINITE)
 //: Return true if x is inf
 bool vnl_math_isinf(float x) { return !finitef(x) && !isnan(x); }
 //: Return true if x is inf
