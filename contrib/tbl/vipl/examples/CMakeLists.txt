@@ -15,26 +15,26 @@
 #                  vipl_with_section            (for group D)
 
 # A. using vil_image as 2D storage class:
-ADD_EXECUTABLE(example_convert example_convert.cxx)
-ADD_EXECUTABLE(example_add_random_noise example_add_random_noise.cxx)
-ADD_EXECUTABLE(example_std_dev example_std_dev.cxx)
-ADD_EXECUTABLE(example1_threshold example1_threshold.cxx)
-ADD_EXECUTABLE(example4_threshold example4_threshold.cxx)
+ADD_EXECUTABLE(vipl_example_convert example_convert.cxx)
+ADD_EXECUTABLE(vipl_example_add_random_noise example_add_random_noise.cxx)
+ADD_EXECUTABLE(vipl_example_std_dev example_std_dev.cxx)
+ADD_EXECUTABLE(vipl_example1_threshold example1_threshold.cxx)
+ADD_EXECUTABLE(vipl_example4_threshold example4_threshold.cxx)
 
 # B. using vnl_matrix<T> as 2D storage class:
-ADD_EXECUTABLE(example3_threshold example3_threshold.cxx)
-ADD_EXECUTABLE(example_median example_median.cxx)
+ADD_EXECUTABLE(vipl_example3_threshold example3_threshold.cxx)
+ADD_EXECUTABLE(vipl_example_median example_median.cxx)
 
 # C. using vbl_array_2d<T> as 2D storage class:
-ADD_EXECUTABLE(example_gradient_mag example_gradient_mag.cxx)
-ADD_EXECUTABLE(example_sobel example_sobel.cxx)
+ADD_EXECUTABLE(vipl_example_gradient_mag example_gradient_mag.cxx)
+ADD_EXECUTABLE(vipl_example_sobel example_sobel.cxx)
 
 # D. using section<T,2> as 2D storage class:
-ADD_EXECUTABLE(example_dilate_disk example_dilate_disk.cxx)
-ADD_EXECUTABLE(example_erode_disk example_erode_disk.cxx)
-ADD_EXECUTABLE(example2_threshold example2_threshold.cxx)
-ADD_EXECUTABLE(example_x_gradient example_x_gradient.cxx)
-ADD_EXECUTABLE(example_histogram example_histogram.cxx)
+ADD_EXECUTABLE(vipl_example_dilate_disk example_dilate_disk.cxx)
+ADD_EXECUTABLE(vipl_example_erode_disk example_erode_disk.cxx)
+ADD_EXECUTABLE(vipl_example2_threshold example2_threshold.cxx)
+ADD_EXECUTABLE(vipl_example_x_gradient example_x_gradient.cxx)
+ADD_EXECUTABLE(vipl_example_histogram example_histogram.cxx)
 
 # For B:
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/CMakeListsLink.txt )
