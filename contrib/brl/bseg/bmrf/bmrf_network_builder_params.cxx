@@ -22,7 +22,7 @@ bmrf_network_builder_params(const bmrf_network_builder_params& tp)
              tp.elv_max_,
              tp.Ns_,
              tp.alpha_range_,
-             tp.gamma_max_
+             tp.max_delta_recip_s_
              );
 }
 
@@ -54,7 +54,7 @@ void bmrf_network_builder_params::InitParams(
                                      int elv_max,
                                      int Ns,
                                      float alpha_range,
-                                     float  gamma_max)
+                                     float max_delta_recip_s)
 
 {
   eu_ = eu;
@@ -64,7 +64,7 @@ void bmrf_network_builder_params::InitParams(
   elv_max_ = elv_max;
   Ns_ = Ns;
   alpha_range_ = alpha_range;
-  gamma_max_ = gamma_max;
+  max_delta_recip_s_ = max_delta_recip_s;
 }
 
 //-----------------------------------------------------------------------------
