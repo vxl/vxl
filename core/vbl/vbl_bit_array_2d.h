@@ -11,7 +11,8 @@
 //
 // \verbatim
 // Modifications
-// Peter Vanroose -4dec01- adapted interface to that of vbl_array_2d<T>
+// Peter Vanroose - 4dec01 - adapted interface to that of vbl_array_2d<T>
+// Peter Vanroose - 26 Aug 2004 - adapted interface to that of vbl_array_2d<T>
 // \endverbatim
 //-----------------------------------------------------------------------------
 
@@ -25,9 +26,11 @@ class vbl_bit_array_2d
   // Default constructor
   vbl_bit_array_2d() : data_(0), num_rows_(0), num_cols_(0) {}
   //: Construct num_rows x num_cols array and leave data uninitialised
-  vbl_bit_array_2d(int m, int n) { construct(m,n); }
+  vbl_bit_array_2d(unsigned int m, unsigned int n) { construct(m,n); }
   //: Construct num_rows x num_cols array and fill all cells with v
-  vbl_bit_array_2d(int m, int n, bool v) { construct(m,n); fill(v); }
+  vbl_bit_array_2d(unsigned int m, unsigned int n, bool v) { construct(m,n); fill(v); }
+  //: Construct num_rows x num_cols array and fill all cells with v
+  vbl_bit_array_2d(unsigned int m, unsigned int n, bool v[]);
   //: Copy constructor
   vbl_bit_array_2d(vbl_bit_array_2d const &);
   // Destructor
@@ -46,32 +49,36 @@ class vbl_bit_array_2d
   //: Fill with value
   void fill(bool value);
   //: Delete contents and resize to m rows x n cols
-  void resize(int m, int n) { destruct(); construct(m,n); }
+  void resize(unsigned int m, unsigned int n) { destruct(); construct(m,n); }
   //: Resizes and pads with zeros; keeps existing data
-  void enlarge(int m, int n);
+  void enlarge(unsigned int m, unsigned int n);
   //: make as if default-constructed.
   void clear() { if (data_) { destruct(); construct(0,0); } }
 
   // Data Access---------------------------------------------------------------
-  bool operator() (int i, int j) const;
-  bool operator() (int i, int j);
+  bool operator() (unsigned int i, unsigned int j) const;
+  bool operator() (unsigned int i, unsigned int j);
 
-  void put(int i, int j, bool const &x);
-  bool get(int i, int j) const;
+  void put(unsigned int i, unsigned int j, bool const &x);
+  bool get(unsigned int i, unsigned int j) const;
+  //: Set the value of a cell; default is to set the value on
+  void set(unsigned int i, unsigned int j, bool v=true) { put(i, j, v); }
+  //: Change the value of a cell
+  void flip(unsigned int i, unsigned int j) { put(i, j, !get(i,j)); }
 
-  inline int rows() const { return num_rows_; }
-  inline int cols() const { return num_cols_; }
-  inline int columns() const { return num_cols_; }
+  inline unsigned int rows() const { return num_rows_; }
+  inline unsigned int cols() const { return num_cols_; }
+  inline unsigned int columns() const { return num_cols_; }
   //: Number of bytes allocated by the data
-  int size() const;
+  unsigned long size() const;
 
  private:
   unsigned char *data_;
-  int num_rows_;
-  int num_cols_;
+  unsigned int num_rows_;
+  unsigned int num_cols_;
 
-  void destruct() { if (data_) delete[] data_; }
-  void construct(int m, int n);
+  void destruct() { delete[] data_; data_=0; }
+  void construct(unsigned int m, unsigned int n);
 
   //helper
   void index( unsigned int x, unsigned int y, unsigned long &byteindex, unsigned int &bitindex) const;

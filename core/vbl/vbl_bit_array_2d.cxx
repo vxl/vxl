@@ -29,6 +29,14 @@ vbl_bit_array_2d::vbl_bit_array_2d(vbl_bit_array_2d const& that)
   }
 }
 
+vbl_bit_array_2d::vbl_bit_array_2d(unsigned int m, unsigned int n, bool v[])
+{
+  construct(m,n);
+  for (unsigned int x=0; x<m; ++x)
+    for (unsigned int y=0; y<n; ++y)
+      set(x,y, v[m*y+x]);
+}
+
 //: Assignment operator
 vbl_bit_array_2d& vbl_bit_array_2d::operator=(vbl_bit_array_2d const& that)
 {
@@ -47,20 +55,20 @@ vbl_bit_array_2d& vbl_bit_array_2d::operator=(vbl_bit_array_2d const& that)
 }
 
 //: Resizes and pads with zeros; keeps existing data
-void vbl_bit_array_2d::enlarge( int num_rows, int num_cols)
+void vbl_bit_array_2d::enlarge( unsigned int num_rows, unsigned int num_cols)
 {
-  assert(( num_rows> num_rows_) || ( num_cols> num_cols_));
+  assert (num_rows >= num_rows_ && num_cols >= num_cols_);
 
   unsigned char *tempdata= data_;
-  int tempm= num_rows_;
-  int tempn= num_cols_;
+  unsigned int tempm= num_rows_;
+  unsigned int tempn= num_cols_;
 
   construct( num_rows, num_cols);
   fill( false);
 
   if (tempdata)
   {
-    for (int i=0; i< tempm; i++)
+    for (unsigned int i=0; i< tempm; ++i)
     {
       // find start of new column
       unsigned long byteindex;
@@ -71,7 +79,7 @@ void vbl_bit_array_2d::enlarge( int num_rows, int num_cols)
       unsigned long idx= i* tempn;
       unsigned long oldbyteindex= (unsigned long)(double(idx)/CHAR_BIT);
 
-      for (int j=0; j< tempn/CHAR_BIT; j++)
+      for (unsigned int j=0; j< tempn/CHAR_BIT; ++j)
         data_[byteindex+j] = tempdata[oldbyteindex+j];
     }
     delete[] tempdata;
@@ -97,17 +105,18 @@ void vbl_bit_array_2d::fill(bool value)
     data_[i]= v;
 }
 
-int vbl_bit_array_2d::size() const { return rows()*cols()/CHAR_BIT; }
-
-void vbl_bit_array_2d::construct(int num_rows, int num_cols)
+unsigned long vbl_bit_array_2d::size() const
 {
-  // ensure that we have a factor of CHAR_BIT rows and cols
-  num_rows= (int((num_rows-1)/CHAR_BIT)+1)*CHAR_BIT;
-  num_cols= (int((num_cols-1)/CHAR_BIT)+1)*CHAR_BIT;
+  return (num_rows_*num_cols_+CHAR_BIT-1)/CHAR_BIT;
+}
 
+void vbl_bit_array_2d::construct(unsigned int num_rows, unsigned int num_cols)
+{
+  // quick return if possible
+  if (num_rows==0 || num_cols==0) { num_rows_=num_cols_=0; data_ = 0; return; }
   num_rows_ = num_rows;
   num_cols_ = num_cols;
-  data_ = new unsigned char [num_rows*num_cols/CHAR_BIT + 1];
+  data_ = new unsigned char [size() + 1];
 }
 
 void vbl_bit_array_2d::index( unsigned int x, unsigned int y, unsigned long &byteindex, unsigned int &bitindex) const
@@ -125,7 +134,7 @@ bool vbl_bit_array_2d::operator==(vbl_bit_array_2d const &a) const
   return 0 == vcl_memcmp(data_, a.data_, size());
 }
 
-bool vbl_bit_array_2d::operator() (int i, int j) const
+bool vbl_bit_array_2d::operator() (unsigned int i, unsigned int j) const
 {
   unsigned long byteindex;
   unsigned int bitindex;
@@ -136,7 +145,7 @@ bool vbl_bit_array_2d::operator() (int i, int j) const
   return (data_[byteindex] & mask) != 0;
 }
 
-bool vbl_bit_array_2d::operator() (int i, int j)
+bool vbl_bit_array_2d::operator() (unsigned int i, unsigned int j)
 {
   unsigned long byteindex;
   unsigned int bitindex;
@@ -147,7 +156,7 @@ bool vbl_bit_array_2d::operator() (int i, int j)
   return (data_[byteindex] & mask) != 0;
 }
 
-void vbl_bit_array_2d::put(int i, int j, bool const &x)
+void vbl_bit_array_2d::put(unsigned int i, unsigned int j, bool const &x)
 {
   unsigned long byteindex;
   unsigned int bitindex;
@@ -160,7 +169,7 @@ void vbl_bit_array_2d::put(int i, int j, bool const &x)
   data_[byteindex]= mask+(nmask & data_[byteindex]);
 }
 
-bool vbl_bit_array_2d::get(int i, int j) const
+bool vbl_bit_array_2d::get(unsigned int i, unsigned int j) const
 {
   return operator()(i,j);
 }
@@ -168,9 +177,9 @@ bool vbl_bit_array_2d::get(int i, int j) const
 //
 vcl_ostream& operator<< (vcl_ostream &os, const vbl_bit_array_2d &array)
 {
-  for (int i=0; i< array.rows(); i++)
+  for (unsigned int i=0; i< array.rows(); i++)
   {
-    for (int j=0; j< array.columns(); j++)
+    for (unsigned int j=0; j< array.columns(); j++)
       os << array(i,j) << ' ';
 
     os << vcl_endl;
