@@ -165,6 +165,7 @@ int mvl2_video_from_avi::seek(int frame_number)
   {
     reset_frame();
     next_frame();
+    current_frame_=0;
     return 0;
   }
   if (frame_number==current_frame_) return current_frame_;
