@@ -5,8 +5,8 @@
 */
 #include "vbl_shared_pointer.h"
 
-#undef VUL_SHARED_POINTER_INSTANTIATE
-#define VUL_SHARED_POINTER_INSTANTIATE(T) \
+#undef VBL_SHARED_POINTER_INSTANTIATE
+#define VBL_SHARED_POINTER_INSTANTIATE(T) \
 template struct vbl_shared_pointer<T >
 
 #endif
