@@ -20,31 +20,31 @@ template <class srcT, class destT, class accumT>
 inline void vil_canny_deriche_base_filter_1d(const srcT* src, vcl_ptrdiff_t sstep,
                                               destT* dest, vcl_ptrdiff_t dstep,
                                               int n, accumT a1, accumT a2, accumT a3, accumT a4, accumT b1, accumT b2, accumT c1)
- {
-   const srcT* s = src, *p=src;
-   const srcT* src_end = src + (n-1)*sstep;
-   accumT y2=0, y1=0, y =0 ;
+{
+  const srcT* s = src, *p=src;
+  const srcT* src_end = src + (n-1)*sstep;
 
-   // Forward pass
-   while (s!=src_end)
-   {
-      y=a1* *s+a2* *p+b1*y1+b2*y2 ; // y+(x) = a1 I(x)+a2 I(x-1)+b1 y+(x-1)+ b2 y+(x-2)
-     *dest = (destT)(y);
-     y2=y1 ; y1=y ; p=s ; s+=sstep; dest+=dstep;  // Move to next element
-   }
+  // Forward pass
+  accumT y2=0, y1=0;
+  while (s!=src_end)
+  {
+    accumT y=a1*(*s)+a2*(*p)+b1*y1+b2*y2; // y+(x) = a1 I(x) + a2 I(x-1) + b1 y + (x-1) + b2 y + (x-2)
+    *dest = (destT)(y);
+    y2=y1 ; y1=y ; p=s ; s+=sstep; dest+=dstep;  // Move to next element
+  }
 
-   // Backward pass
-   y2=0; y1=0; y =0;
-   p=s ; s-=sstep;
-   dest[0]=0; dest-=dstep;dest-=dstep;
-   src_end = src;
-   while (s!=src_end)
-   {
-     y=a3* *s+a4* *p+b1*y1+b2*y2 ;  // y+(x) = a3 I(x-1)+a4 I(x-2)+b1 y+(x-1)+ b2 y+(x-2)
-     *dest = (destT)(c1*((accumT)*dest + y)); // y(x) = a (y+(x) - y-(x))
-     y2=y1 ; y1=y ; p=s ; s-=sstep; dest-=dstep;  // Move to next element
-   }
- }
+  // Backward pass
+  y2=0; y1=0;
+  p=s ; s-=sstep;
+  dest[0]=0; dest-=dstep; dest-=dstep;
+  src_end = src;
+  while (s!=src_end)
+  {
+    accumT y=a3*(*s)+a4*(*p)+b1*y1+b2*y2;  // y+(x) = a3 I(x-1) + a4 I(x-2) + b1 y + (x-1) + b2 y + (x-2)
+    *dest = (destT)(c1*((accumT)(*dest) + y)); // y(x) = a (y+(x) - y-(x))
+    y2=y1 ; y1=y ; p=s ; s-=sstep; dest-=dstep;  // Move to next element
+  }
+}
 
 //: the canny deriche filter.
 template <class srcT, class destT, class accumT>
