@@ -9,8 +9,6 @@
 IF(NOT HAS_NETLIB)
 
   SET( HAS_NETLIB "YES" )
-  SET( NETLIB_INCLUDE_PATH ${allvxl_SOURCE_DIR}/v3p/netlib )
-  SET( NETLIB_LIBRARIES netlib )
   LINK_LIBRARIES( netlib )
   IF(UNIX)
     # netlib needs --of course-- libm: for sqrt, exp, log, pow, sin, cos.

@@ -21,7 +21,6 @@ IF(NOT HAS_PNG)
   
       SET( HAS_PNG "YES" )
       ADD_DEFINITIONS( -DHAS_PNG )
-      SET( PNG_LIBRARIES png )
   
       INCLUDE( ${allvxl_SOURCE_DIR}/v3p/png/CMakeListsLink.txt )
 
