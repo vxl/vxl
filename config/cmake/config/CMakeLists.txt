@@ -5,6 +5,16 @@ PROJECT(vxl_config)
 CMAKE_MINIMUM_REQUIRED(VERSION 1.8)
 
 #
+# The tests results will be cached. Allow the user to re-run the tests
+# if necessary This flag will be reset to "OFF" every time, so that
+# the tests are typically just run once. Set it to ON to refresh your
+# machine's configuration if you believe the test results are stale or
+# wrong.
+#
+OPTION( VXL_UPDATE_CONFIGURATION "Re-run the configuration tests?" "OFF" )
+MARK_AS_ADVANCED( VXL_UPDATE_CONFIGURATION )
+
+#
 # Include necessary modules
 #
 
@@ -17,8 +27,14 @@ INCLUDE (${CMAKE_ROOT}/Modules/CheckSymbolExists.cmake)
 #
 # Perform the VXL specific test with status output
 #
+# Sets the TEST to 1 if the corresponding program could be compiled
+# and linked
+#
 
 MACRO(PERFORM_CMAKE_TEST FILE TEST)
+  IF( VXL_UPDATE_CONFIGURATION )
+    SET( ${TEST} "${TEST}" )
+  ENDIF( VXL_UPDATE_CONFIGURATION )
   IF("${TEST}" MATCHES "^${TEST}$")
     # Perform test
     SET(MACRO_CHECK_FUNCTION_DEFINITIONS
@@ -56,8 +72,14 @@ ENDMACRO(PERFORM_CMAKE_TEST FILE TEST)
 #
 # Perform the VXL specific try-run test with status output
 #
+# Sets TEST to 1 if the corresponding program compiles, links, run,
+# and returns 0 (indicating success).
+#
 
 MACRO(PERFORM_CMAKE_TEST_RUN FILE TEST)
+  IF( VXL_UPDATE_CONFIGURATION )
+    SET( ${TEST} "${TEST}" )
+  ENDIF( VXL_UPDATE_CONFIGURATION )
   IF("${TEST}" MATCHES "^${TEST}$")
     # Perform test
     SET(MACRO_CHECK_FUNCTION_DEFINITIONS
@@ -76,17 +98,21 @@ MACRO(PERFORM_CMAKE_TEST_RUN FILE TEST)
             OUTPUT_VARIABLE OUTPUT)
     IF(${TEST}_COMPILED)
       IF(${TEST})
-        SET(${TEST} 1 CACHE INTERNAL "VXL test ${FUNCTION}")
-        MESSAGE(STATUS "Performing Test ${TEST} - Success")
-      ELSE(${TEST})
         MESSAGE(STATUS "Performing Test ${TEST} - Failed")
-        SET(${TEST} 0 CACHE INTERNAL "Test ${FUNCTION}")
+        SET(${TEST} 0 CACHE INTERNAL "Test ${FUNCTION} (failed to run)")
         WRITE_FILE(${CMAKE_BINARY_DIR}/CMakeError.log
                    "Performing Test ${TEST} failed with the following output:\n"
+                   "${OUTPUT}\n" APPEND)
+      ELSE(${TEST})
+        SET(${TEST} 1 CACHE INTERNAL "VXL test ${FUNCTION} (successful run)")
+        MESSAGE(STATUS "Performing Test ${TEST} - Success")
+        WRITE_FILE(${CMAKE_BINARY_DIR}/CMakeError.log
+                   "Performing Test ${TEST} succeeded with the following output:\n"
                    "${OUTPUT}\n" APPEND)
       ENDIF(${TEST})
     ELSE(${TEST}_COMPILED)
       MESSAGE(STATUS "Performing Try-Run Test ${TEST} - Test Compilation Failed")
+      SET(${TEST} 0 CACHE INTERNAL "Test ${FUNCTION} (failed to compile)")
       WRITE_FILE(${CMAKE_BINARY_DIR}/CMakeError.log
                  "Performing Try-Run Test ${TEST} failed to compile with the following output:\n"
                  "${OUTPUT}\n" APPEND)
@@ -104,6 +130,9 @@ ENDMACRO(PERFORM_CMAKE_TEST_RUN FILE TEST)
 #
 
 MACRO(PERFORM_CHECK_HEADER FILE VARIABLE)
+  IF( VXL_UPDATE_CONFIGURATION )
+    SET( ${VARIABLE} )
+  ENDIF( VXL_UPDATE_CONFIGURATION )
   CHECK_INCLUDE_FILE_CXX(${FILE} ${VARIABLE})
   IF("${VARIABLE}" MATCHES "^$")
     SET(${VARIABLE} 0)
@@ -142,6 +171,9 @@ ENDMACRO(SET_INVERT VAR VALUE)
 #
 
 MACRO(CHECK_TYPE_EXISTS TYPE FILES VARIABLE)
+  IF( VXL_UPDATE_CONFIGURATION )
+    SET( ${VARIABLE} "${VARIABLE}" )
+  ENDIF( VXL_UPDATE_CONFIGURATION )
   IF("${VARIABLE}" MATCHES "^${VARIABLE}$")
     SET(CHECK_TYPE_EXISTS_CONTENT "/* */\n")
     SET(MACRO_CHECK_TYPE_EXISTS_FLAGS ${CMAKE_REQUIRED_FLAGS})
@@ -192,6 +224,9 @@ ENDMACRO(CHECK_TYPE_EXISTS TYPE FILES VARIABLE)
 #
 
 MACRO(CHECK_TYPE_EXISTS_ZERO SYMBOL FILES VARIABLE)
+  IF( VXL_UPDATE_CONFIGURATION )
+    SET( ${VARIABLE} )
+  ENDIF( VXL_UPDATE_CONFIGURATION )
   CHECK_TYPE_EXISTS("${SYMBOL}" "${FILES}" "${VARIABLE}")
   IF(NOT ${VARIABLE})
     SET(${VARIABLE} 0)
@@ -203,6 +238,9 @@ ENDMACRO(CHECK_TYPE_EXISTS_ZERO SYMBOL FILES VARIABLE)
 #
 
 MACRO(CHECK_FUNCTION_EXISTS_ZERO FUNCTION VARIABLE)
+  IF( VXL_UPDATE_CONFIGURATION )
+    SET( ${VARIABLE} )
+  ENDIF( VXL_UPDATE_CONFIGURATION )
   CHECK_FUNCTION_EXISTS("${FUNCTION}" "${VARIABLE}")
   IF(NOT ${VARIABLE})
     SET(${VARIABLE} 0)
@@ -214,9 +252,11 @@ ENDMACRO(CHECK_FUNCTION_EXISTS_ZERO FUNCTION VARIABLE)
 #
 
 MACRO( DETERMINE_TYPE VAR INTEGRAL_TYPE SIZE TYPE_LIST )
+  IF( VXL_UPDATE_CONFIGURATION )
+    SET( VXL_${VAR} "" )
+  ENDIF( VXL_UPDATE_CONFIGURATION )
   # If we've tested this before, use the cached result and don't re-run
   IF( NOT VXL_${VAR} )
-
     # We can't have IF commands on a macro parameter. For example,
     # IF( INTEGRAL_TYPE ) doesn't seem to work. I think the
     # expansion is done at the wrong time. A macro is not a procedure
@@ -266,6 +306,7 @@ ENDMACRO( DETERMINE_TYPE VAR SIZE TYPE_LIST )
 # Perform all the specific tests
 #
 
+PERFORM_CMAKE_TEST(vxl_platform_tests.cxx MY_NEW_TEST)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_HAS_BOOL)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_HAS_TYPENAME)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_HAS_EXPORT)
@@ -309,6 +350,7 @@ PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_ALLOWS_NAMESPACE_STD)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_NEEDS_NAMESPACE_STD)
   SET_INVERT(VCL_NEEDS_NAMESPACE_STD "${VCL_NEEDS_NAMESPACE_STD}")
 PERFORM_CMAKE_TEST_RUN(vxl_platform_tests.cxx VCL_HAS_SLICED_DESTRUCTOR_BUG)
+  SET_INVERT(VCL_HAS_SLICED_DESTRUCTOR_BUG "${VCL_HAS_SLICED_DESTRUCTOR_BUG}")
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_UNISTD_USLEEP_IS_VOID)
   SET_INVERT(VXL_UNISTD_USLEEP_IS_VOID "${VXL_UNISTD_USLEEP_IS_VOID}")
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_STDLIB_HAS_QSORT)
@@ -477,3 +519,6 @@ CONFIGURE_FILE(${vxl_SOURCE_DIR}/vcl/vcl_config_headers.h.in ${vxl_BINARY_DIR}/v
 CONFIGURE_FILE(${vxl_SOURCE_DIR}/vcl/vcl_config_manual.h.in ${vxl_BINARY_DIR}/vcl/vcl_config_manual.h)
 CONFIGURE_FILE(${vxl_SOURCE_DIR}/vcl/vcl_where_root_dir.h.in ${vxl_BINARY_DIR}/vcl/vcl_where_root_dir.h)
 CONFIGURE_FILE(${vxl_SOURCE_DIR}/core/vxl_config.h.in ${vxl_BINARY_DIR}/core/vxl_config.h)
+
+# Reset the update configuration flag
+SET( VXL_UPDATE_CONFIGURATION "OFF" CACHE BOOL "Re-run the configuration tests?" FORCE )
