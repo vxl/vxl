@@ -39,14 +39,18 @@ AUX_SOURCE_DIRECTORY(Templates vul_sources)
 #
 SET( vul_network_sources
   vul_url.h                   vul_url.cxx
-)
+)  
 
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
   SET_SOURCE_FILES_PROPERTIES(vul_sequence_filename_map.cxx COMPILE_FLAGS -O0)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
-IF(NOT SOLARIS)
+IF(APPLE)
+  ADD_LIBRARY(vul ${vul_sources})
+ELSE(APPLE)
+
+IF(NOT SOLARIS) 
   ADD_LIBRARY(vul ${vul_sources} ${vul_network_sources})
 ELSE(NOT SOLARIS)
   ADD_LIBRARY(vul ${vul_sources})
@@ -60,6 +64,8 @@ ENDIF (NOT UNIX)
 IF (SOLARIS)
   TARGET_LINK_LIBRARIES( vul nsl vul_network socket )
 ENDIF (SOLARIS)
+
+ENDIF(APPLE)
 
 TARGET_LINK_LIBRARIES( vul vcl )
 

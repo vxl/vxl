@@ -25,8 +25,6 @@ SET( vil1_sources
   vil1_stream_core.cxx                       vil1_stream_core.h
   # present a section of a vil1_stream
   vil1_stream_section.cxx                    vil1_stream_section.h
-  # load image from URL
-  vil1_stream_url.cxx                        vil1_stream_url.h
 
   # classes derived from vil1_image
   vil1_file_image.cxx                        vil1_file_image.h
@@ -99,6 +97,15 @@ SET( vil1_sources
   vil1_memory_image_window.cxx               vil1_memory_image_window.h
   vil1_ip_traits.h
 )
+
+SET( vil1_network_sources
+   # load image from URL
+  vil1_stream_url.cxx                        vil1_stream_url.h
+)
+
+IF(NOT APPLE)
+  SET (vil1_sources ${vil1_sources} ${vil1_network_sources} )
+ENDIF(NOT APPLE)
 
 # vil1_file_formats.cxx uses -DTIFF, etc, so we need to do this here.
 INCLUDE(${MODULE_PATH}/FindJPEG.cmake)

@@ -67,11 +67,14 @@ vil1_stream *vil1_open(char const* what, char const* how)
     // maybe it's a URL?
     int l = vcl_strlen(what);
     if (l > 4 && vcl_strncmp(what, "http://", 7) == 0) {
+#ifdef __APPLE__
+      vcl_cerr << __FILE__ ": cannot open URL for writing (yet)\n";
+#else
       if (vcl_strcmp(how, "r") == 0) {
         is = new vil1_stream_url(what);
       }
-      else
-        vcl_cerr << __FILE__ ": cannot open URL for writing (yet)\n";
+      else vcl_cerr << __FILE__ ": cannot open URL for writing (yet)\n";
+#endif
     }
   }
   if (is && !is->ok()) {

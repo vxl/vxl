@@ -150,13 +150,18 @@ SET( vil_network_sources
   vil_stream_url.cxx vil_stream_url.h
 )
 
-
-IF(NOT SOLARIS)
-  ADD_LIBRARY(vil ${vil_sources} ${vil_network_sources})
-ELSE(NOT SOLARIS)
+# vil_stream_url not working on Apple MacOSX
+IF(APPLE)
   ADD_LIBRARY(vil ${vil_sources})
-  ADD_LIBRARY(vil_network ${vil_network_sources})
-ENDIF(NOT SOLARIS)
+ELSE(APPLE)
+  IF(NOT SOLARIS)
+    ADD_LIBRARY(vil ${vil_sources} ${vil_network_sources})
+  ELSE(NOT SOLARIS)
+    ADD_LIBRARY(vil ${vil_sources})
+      ADD_LIBRARY(vil_network ${vil_network_sources})
+    ENDIF(NOT APPLE)
+  ENDIF(NOT SOLARIS)
+ENDIF(APPLE)
 
 IF(JPEG_FOUND)
   TARGET_LINK_LIBRARIES( vil ${JPEG_LIBRARIES} )
