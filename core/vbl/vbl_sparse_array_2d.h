@@ -73,6 +73,9 @@ inline vcl_ostream& operator <<
   return a.print(s);
 }
 
+//#if VCL_CAN_DO_PARTIAL_SPECIALIZATION
+//# include <vbl/vbl_sparse_array_2d_partial_spec.h>
+//#endif
 
 #define VBL_SPARSE_ARRAY_2D_INSTANTIATE(T) \
 extern "please include vbl/vbl_sparse_array_2d.txx instead"
