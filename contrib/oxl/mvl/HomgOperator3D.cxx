@@ -1,5 +1,4 @@
 #include "HomgOperator3D.h"
-
 //:
 //  \file
 
@@ -74,7 +73,7 @@ HomgOperator3D::sort_points(HomgPoint3D* points, int n)
   for (int p_index = 0; p_index < n; p_index++) {
     HomgPoint3D* p = &points[p_index];
     if (p->get_w() != 0) {
-      sort_table[p_index].first = HomgOperator3D::distance_squared(faraway, *p);
+      sort_table[p_index].first = (float)HomgOperator3D::distance_squared(faraway, *p);
       sort_table[p_index].second = p_index;
     }
   }
