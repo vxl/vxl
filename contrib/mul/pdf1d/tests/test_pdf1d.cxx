@@ -4,12 +4,12 @@
 #undef TESTMAIN
 #define TESTMAIN(x)
 
-#include <pdf1d/tests/test_weighted_epanech_kernel_pdf.cxx>
-#include <pdf1d/tests/test_gaussian_kernel_pdf.cxx>
-#include <pdf1d/tests/test_gaussian.cxx>
-#include <pdf1d/tests/test_exponential.cxx>
-#include <pdf1d/tests/test_mixture.cxx>
-#include <pdf1d/tests/test_compare_to_pdf_ks.cxx>
+#include "test_weighted_epanech_kernel_pdf.cxx"
+#include "test_gaussian_kernel_pdf.cxx"
+#include "test_gaussian.cxx"
+#include "test_exponential.cxx"
+#include "test_mixture.cxx"
+#include "test_compare_to_pdf_ks.cxx"
 
 #undef TESTMAIN
 #define TESTMAIN(x) int main() \
