@@ -1,13 +1,14 @@
 // This is oxl/osl/osl_OrthogRegress.h
 #ifndef osl_OrthogRegress_h_
 #define osl_OrthogRegress_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
-// .NAME osl_OrthogRegress
-// .INCLUDE osl/osl_OrthogRegress.h
-// .FILE osl_OrthogRegress.cxx
+//:
+// \file
 // \author fsm
+//
+// \verbatim
+//  Modifications
+//   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
+// \endverbatim
 
 #include <vcl_cmath.h>
 #include <osl/osl_hacks.h>

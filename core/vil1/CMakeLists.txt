@@ -14,7 +14,7 @@ SET( vil1_sources
   vil1_32bit.cxx                             vil1_32bit.h
   vil1_rgb.txx                               vil1_rgb.h
   vil1_rgba.txx                              vil1_rgba.h
-  vil1_rgb_byte.cxx                          vil1_rgb_byte.h
+  vil1_rgb_byte.h
   vil1_property.h
 
   # various vil1_stream classes

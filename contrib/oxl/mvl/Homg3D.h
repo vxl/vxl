@@ -1,9 +1,6 @@
 // This is oxl/mvl/Homg3D.h
 #ifndef Homg3D_h_
 #define Homg3D_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Base class for 3D homogeneous features
@@ -18,6 +15,7 @@
 //  Modifications
 //   210297 AWF Switched to fixed-length vectors for speed.
 //   110397 Peter Vanroose - added operator==
+//   100904 Peter Vanroose - Inlined all 1-line methods in class decl
 // \endverbatim
 //-----------------------------------------------------------------------------
 

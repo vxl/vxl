@@ -1,19 +1,9 @@
-
-
 #include <vcl_cassert.h>
 
 #include "oxp_vidl_mpeg_codec.h"
 
-// leave non-inline so compiler plonks vtbl nicely
-
-const char* 
-oxp_vidl_mpeg_codec::type()
-{
-  return "MPEG";
-}
-
 vidl_vil1_codec_sptr
-oxp_vidl_mpeg_codec::load(const char* fname, char mode) 
+oxp_vidl_mpeg_codec::load(const char* fname, char mode)
 {
   if (!p.load(fname, mode))
     return 0;

@@ -1,34 +1,33 @@
 #ifndef vcsl_length_unit_h
 #define vcsl_length_unit_h
-
 //:
 // \file
 // \author François BERTEL
 //
 // \verbatim
-// Modifications
-// 2000/06/28 François BERTEL Creation. Adapted from IUE
-// 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
+//  Modifications
+//   2000/06/28 François BERTEL Creation. Adapted from IUE
+//   2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
+//   2004/09/10 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
-
 #include <vcsl/vcsl_length_unit_sptr.h>
-
 #include <vcsl/vcsl_unit.h>
+
 //: Abstract unit associated to the length dimension
 class vcsl_length_unit
   : public vcsl_unit
 {
-public:
+ public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
 
   //: Default constructor
-  explicit vcsl_length_unit(void);
+  explicit vcsl_length_unit() {}
 
   //: Destructor
-  virtual ~vcsl_length_unit();
+  virtual ~vcsl_length_unit() {}
 
   //***************************************************************************
   // Status report
@@ -42,10 +41,10 @@ public:
   virtual vcsl_unit_sptr standard_unit(void) const;
 
   //***************************************************************************
-  // Because VXL does not use dynamic_cast<> :-(
+  // Because VXL does not necessarily use dynamic_cast<>
   //***************************************************************************
 
-  virtual const vcsl_length_unit *cast_to_length_unit(void) const;
+  virtual const vcsl_length_unit *cast_to_length_unit(void) const {return this;}
 };
 
 #endif // vcsl_length_unit_h

@@ -1,29 +1,32 @@
 // This is core/vbl/vbl_shared_pointer.h
 #ifndef vbl_shared_pointer_h_
 #define vbl_shared_pointer_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Non-intrusive smart pointers
 // \author fsm
+//
+// \verbatim
+//  Modifications
+//   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
+// \endverbatim
 
 #include <vcl_compiler.h>
 
 #define vbl_shared_pointer_zero(var) (var) = 0
 
 //: Non-intrusive smart pointers
-template </*typename*/class T>
-struct vbl_shared_pointer
+template <class T>
+class vbl_shared_pointer
 {
+ public:
   typedef T element_type;
   typedef vbl_shared_pointer<T> self;
 
   struct data_t
   {
-    T *pointer;    // pointer to object.
-    int use_count; // number of shared_pointers using object.
+    T *pointer;    //!< pointer to object.
+    int use_count; //!< number of shared_pointers using object.
     data_t(T *p, int u) : pointer(p), use_count(u) { }
   };
 
@@ -118,9 +121,10 @@ struct vbl_shared_pointer
       delete data;
     }
   }
-
  private:
   data_t *data;
 };
+
+#define VBL_SHARED_POINTER_INSTANTIATE(T) // template class vbl_shared_pointer<T >
 
 #endif // vbl_shared_pointer_h_

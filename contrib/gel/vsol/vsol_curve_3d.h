@@ -2,22 +2,20 @@
 #define VSOL_CURVE_3D_H
 //*****************************************************************************
 //:
-//  \file
+// \file
 // \brief Abstract curve in a 3D space
 //
 // \author
 // François BERTEL
 //
 // \verbatim
-// Modifications
-//  2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-//  2000/05/03 François BERTEL Creation
+//  Modifications
+//   2000/05/03 François BERTEL Creation
+//   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
+//   2004/10/09 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 //*****************************************************************************
 
-//*****************************************************************************
-// External declarations for values
-//*****************************************************************************
 #include <vsol/vsol_spatial_object_3d.h>
 #include <vsol/vsol_point_3d_sptr.h>
 
@@ -26,7 +24,7 @@ class vsol_line_3d;
 class vsol_curve_3d
   :public vsol_spatial_object_3d
 {
-public:
+ public:
   enum vsol_curve_3d_type
   { CURVE_NO_TYPE=0,
     LINE,
@@ -38,11 +36,11 @@ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
-public:
+ public:
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vsol_curve_3d();
+  virtual ~vsol_curve_3d() {}
 
   //---------------------------------------------------------------------------
   //: Return the spatial type
@@ -101,4 +99,4 @@ public:
   virtual void set_p1(const vsol_point_3d_sptr &new_p1)=0;
 };
 
-#endif // #ifndef VSOL_CURVE_3D_H
+#endif // VSOL_CURVE_3D_H

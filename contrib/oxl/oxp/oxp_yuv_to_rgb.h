@@ -1,37 +1,38 @@
 // This is oxl/oxp/oxp_yuv_to_rgb.h
 #ifndef oxp_yuv_to_rgb_h_
 #define oxp_yuv_to_rgb_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author fsm
 //
-// \verbatim
 // RGB to YUV Conversion
-// 
+// \code
 //      Y  =      (0.257 * R) + (0.504 * G) + (0.098 * B) + 16
 //      Cr = V =  (0.439 * R) - (0.368 * G) - (0.071 * B) + 128
 //      Cb = U = -(0.148 * R) - (0.291 * G) + (0.439 * B) + 128
-// 
+// \endcode
 // YUV to RGB Conversion
-// 
+// \code
 //      B = 1.164(Y - 16)                  + 2.018(U - 128)
 //      G = 1.164(Y - 16) - 0.813(V - 128) - 0.391(U - 128)
 //      R = 1.164(Y - 16) + 1.596(V - 128)
-
+// \endcode
 // Alternative:
+// \code
 //      Y = 0.299R + 0.587G + 0.114B
 //      U'= (B-Y)*0.565
 //      V'= (R-Y)*0.713
-// 
+// \endcode
 // with reciprocal versions:
-// 
+// \code
 //      R = Y + 1.403V'
 //      G = Y - 0.344U' - 0.714V'
 //      B = Y + 1.770U'
+// \endcode
 //
+// \verbatim
+//  Modifications
+//   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
 inline

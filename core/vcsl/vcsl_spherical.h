@@ -1,16 +1,15 @@
 #ifndef VCSL_SPHERICAL_H
 #define VCSL_SPHERICAL_H
-
 //:
-// \file 
+// \file
 // \author François BERTEL
 //
 // \verbatim
-// Modifications
-// 2000/06/28 François BERTEL Creation. Adapted from IUE
-// 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
+//  Modifications
+//   2000/06/28 François BERTEL Creation. Adapted from IUE
+//   2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
+//   2004/09/10 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
-
 
 #include <vcsl/vcsl_spherical_sptr.h>
 
@@ -22,7 +21,7 @@
 class vcsl_spherical
   : public vcsl_spatial
 {
-public:
+ public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
@@ -31,13 +30,13 @@ public:
   explicit vcsl_spherical(void);
 
   //: Destructor
-  virtual ~vcsl_spherical();
+  virtual ~vcsl_spherical() {}
 
   //***************************************************************************
-  // Because VXL does not use dynamic_cast<> :-(
+  // Because VXL does not necessarily use dynamic_cast<>
   //***************************************************************************
 
-  virtual const vcsl_spherical *cast_to_spherical(void) const;
+  virtual const vcsl_spherical *cast_to_spherical(void) const { return this; }
 };
 
-#endif // #ifndef VCSL_SPHERICAL_H
+#endif // VCSL_SPHERICAL_H

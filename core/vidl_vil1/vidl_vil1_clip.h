@@ -1,15 +1,14 @@
 #ifndef vidl_vil1_clip_h
 #define vidl_vil1_clip_h
-
 //:
 // \file
 // \author Nicolas Dano, september 1999
 //
 // \verbatim
-// Modifications
-// Julien ESTEVE, June 2000
-//     Ported from TargetJr
-// 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
+//  Modifications
+//   June 2000 Julien ESTEVE          Ported from TargetJr
+//   10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
+//   10/9/2004 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
 #include <vbl/vbl_ref_count.h>
@@ -33,52 +32,52 @@
 class vidl_vil1_clip : public vbl_ref_count
 {
   // PUBLIC INTERFACE
-public:
+ public:
 
   // Constructors
-  vidl_vil1_clip(
-        vidl_vil1_codec_sptr codec,
-        int start = 0,
-        int end = 0,
-        int increment = 1
-        );
+  vidl_vil1_clip(vidl_vil1_codec_sptr codec,
+                 int start = 0,
+                 int end = 0,
+                 int increment = 1);
 
-  vidl_vil1_clip(
-        vcl_list<vil1_image> &images,
-        int start = 0,
-        int end = 0,
-        int increment = 1
-        );
+  vidl_vil1_clip(vcl_list<vil1_image> &images,
+                 int start = 0,
+                 int end = 0,
+                 int increment = 1);
 
-  vidl_vil1_clip(
-        vcl_vector<vil1_image> &images,
-        int start = 0,
-        int end = 0,
-        int increment = 1
-        );
+  vidl_vil1_clip(vcl_vector<vil1_image> &images,
+                 int start = 0,
+                 int end = 0,
+                 int increment = 1);
+
+  vidl_vil1_clip(vidl_vil1_clip const& x);
 
   // Destructor
-  ~vidl_vil1_clip();
+  ~vidl_vil1_clip() {}
 
   // Data Access
   vidl_vil1_frame_sptr get_frame(int n);
-  int length();
+
+  //: Return the number of frames
+  int length() { return (endframe_-startframe_)/increment_ + 1; }
 
   // Get the size in pixels
   int width() const;
   int height() const;
 
+  //: Return the codec.
   vidl_vil1_codec_sptr get_codec();
 
-protected:
+ protected:
   void init(int start, int end, int increment);
 
   // Data Members
-  vcl_vector<vidl_vil1_frame_sptr> frames_; // Where are stored the frames
-  int startframe_;               // The clip begins at startframe_
-  int endframe_;                 // The clip ends at startframe_
-  int increment_;                // The clip use 1 frame every "increment_"
-  double frame_rate_;            // 1 frame every ?? secs
-  vidl_vil1_codec_sptr coder_;          // video codec used for storage
+  vcl_vector<vidl_vil1_frame_sptr> frames_; //!< Where are the frames stored
+  int startframe_;               //!< The clip begins at startframe_
+  int endframe_;                 //!< The clip ends at startframe_
+  int increment_;                //!< The clip uses 1 frame every "increment_"
+  double frame_rate_;            //!< 1 frame every ?? secs
+  vidl_vil1_codec_sptr coder_;   //!< video codec used for storage
 };
+
 #endif // vidl_vil1_clip_h

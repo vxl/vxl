@@ -1,22 +1,20 @@
 // This is oxl/mvl/FileNameGenerator.h
 #ifndef FileNameGenerator_h_
 #define FileNameGenerator_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
-//
+//:
+// \file
 // \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 25 Feb 98
 //
 // \verbatim
-// Modifications
-//  Dec.2001 - Ported to vxl by Peter Vanroose
+//  Modifications
+//   Dec.2001 - Ported to vxl by Peter Vanroose
+//   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
 
 #include <vcl_string.h>
-
 #include <mvl/FileNameGeneratorBase.h>
 
 class FileNameGenerator

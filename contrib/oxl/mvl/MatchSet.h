@@ -5,7 +5,7 @@
 #pragma interface
 #endif
 //:
-//  \file
+// \file
 // \brief Base class for correspondences
 //
 //    MatchSet is a base class for classes that store correspondences
@@ -17,6 +17,11 @@
 //
 // \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 09 Aug 96
+//
+// \verbatim
+//  Modifications
+//   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 class MatchSet
@@ -28,7 +33,7 @@ class MatchSet
   static inline bool matchp(int i) { return i != NoMatch; }
 
   MatchSet() {}
-  virtual ~MatchSet();
+  virtual ~MatchSet() {}
 };
 
 #endif // MatchSet_h_

@@ -8,6 +8,11 @@
 // \file
 // \brief A base class reference-counting view of some image data.
 // \author Ian Scott - Manchester
+//
+// \verbatim
+//  Modifications
+//   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
+// \endverbatim
 
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
@@ -37,7 +42,7 @@ class vil_image_view_base
 
  public:
   // The destructor must be virtual so that the memory chunk is destroyed.
-  virtual ~vil_image_view_base() { assert( reference_count_ == 0 ); };
+  virtual ~vil_image_view_base() { assert( reference_count_ == 0 ); }
 
   //: Width
   unsigned ni()  const {return ni_;}
@@ -70,7 +75,7 @@ class vil_image_view_base
   virtual enum vil_pixel_format pixel_format() const=0;
 
   //: True if this is (or is derived from) class s
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(vcl_string const& s) const { return s=="vil_image_view_base"; }
 
  private:
   // You probably should not use a vil_image_view in a vbl_smart_ptr, so the

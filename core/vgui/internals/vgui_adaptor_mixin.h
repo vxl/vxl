@@ -1,13 +1,15 @@
 // This is core/vgui/internals/vgui_adaptor_mixin.h
 #ifndef vgui_adaptor_mixin_h_
 #define vgui_adaptor_mixin_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author fsm
 // \brief  Holds the dimensions of the adaptor and the event causing popup menus.
+//
+// \verbatim
+//  Modifications
+//   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
+// \endverbatim
 
 #include <vgui/vgui_button.h>
 #include <vgui/vgui_modifier.h>
@@ -16,8 +18,10 @@
 class vgui_adaptor_mixin
 {
  public:
-  vgui_adaptor_mixin();
-  ~vgui_adaptor_mixin();
+  vgui_adaptor_mixin() : width(0), height(0),
+                         popup_button(vgui_RIGHT),
+                         popup_modifier(vgui_MODIFIER_NULL) {}
+  ~vgui_adaptor_mixin() {}
 
   //: Cached width of adaptor render area.
   unsigned width;

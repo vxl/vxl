@@ -8,6 +8,11 @@
 // \file
 // \author  K.Y.McGaul, VGG, Oxford University
 // \brief   File browser in a dialog.
+//
+// \verbatim
+//  Modifications
+//   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
+// \endverbatim
 
 #include <vcl_string.h>
 #include "vgui_dialog_field.h"
@@ -20,15 +25,17 @@
 class vgui_file_field : public vgui_dialog_field
 {
  public:
-  vgui_file_field(const char *text, vcl_string&, vcl_string&);
-  ~vgui_file_field();
+  vgui_file_field(const char *txt, vcl_string& regex, vcl_string& var_to_modify)
+  : vgui_dialog_field(txt), var_(var_to_modify), regexp_(regex) {}
 
-  vcl_string current_value() const;
-  bool update_value(const vcl_string &);
+  ~vgui_file_field() {}
+
+  vcl_string current_value() const { return var_; }
+  bool update_value(vcl_string const& s) { var_ = s; return true; }
 
  private:
-  vcl_string &var;
-  vcl_string &regexp;
+  vcl_string &var_;
+  vcl_string &regexp_;
 };
 
 #endif // vgui_file_field_h_

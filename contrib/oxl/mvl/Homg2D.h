@@ -1,11 +1,8 @@
 // This is oxl/mvl/Homg2D.h
 #ifndef _Homg2D_h
 #define _Homg2D_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
-//  \file
+// \file
 // \brief Base class for 2D homogeneous features
 //
 // Base class for 2D homogeneous features.  This provides get/set.
@@ -18,6 +15,7 @@
 //  Modifications
 //   210297 AWF Switched to fixed-length vectors for speed.
 //   110397 Peter Vanroose - added operator==
+//   100904 Peter Vanroose - Inlined all 1-line methods in class decl
 // \endverbatim
 //
 //-----------------------------------------------------------------------------

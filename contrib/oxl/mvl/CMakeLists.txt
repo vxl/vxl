@@ -28,8 +28,8 @@ SET(mvl_sources
     HMatrix2DSimilarityCompute.cxx         HMatrix2DSimilarityCompute.h
     HMatrix3D.cxx                          HMatrix3D.h
     Homg.cxx                               Homg.h
-    Homg2D.cxx                             Homg2D.h
-    Homg3D.cxx                             Homg3D.h
+                                           Homg2D.h
+                                           Homg3D.h
     HomgPoint2D.cxx                        HomgPoint2D.h
     HomgPoint3D.cxx                        HomgPoint3D.h
     HomgInterestPoint.cxx                  HomgInterestPoint.h
@@ -46,16 +46,16 @@ SET(mvl_sources
     HomgPrettyPrint.cxx                    HomgPrettyPrint.h
     ImageMetric.cxx                        ImageMetric.h
     LineSegSet.cxx                         LineSegSet.h
-    MatchSet.cxx                           MatchSet.h
+                                           MatchSet.h
     NViewMatches.cxx                       NViewMatches.h
-    PMatrix.cxx                            PMatrix.h PMatrix_sptr.h
-    PMatrixAffine.cxx                      PMatrixAffine.h
-    PMatrixCompute.cxx                     PMatrixCompute.h
+    PMatrix.cxx                            PMatrix.h      PMatrix_sptr.h
+                                           PMatrixAffine.h
+                                           PMatrixEuclidean.h
+                                           PMatrixCompute.h
     PMatrixComputeLinear.cxx               PMatrixComputeLinear.h PMatrixCompute6Point.h
     PMatrixDec.cxx                         PMatrixDec.h
     PMatrixDecompAa.cxx                    PMatrixDecompAa.h
     PMatrixDecompCR.cxx                    PMatrixDecompCR.h
-    PMatrixEuclidean.cxx                   PMatrixEuclidean.h
     PairMatchMulti.cxx                     PairMatchMulti.h
     PairMatchMultiIterator.cxx             PairMatchMultiIterator.h
     PairMatchSet.cxx                       PairMatchSet.h
@@ -88,7 +88,7 @@ SET(mvl_sources
     HMatrix2DComputeRobust.cxx             HMatrix2DComputeRobust.h
     Probability.cxx                        Probability.h
     FileNameGeneratorBase.cxx              FileNameGeneratorBase.h
-    FileNameGenerator.cxx                  FileNameGenerator.h
+                                           FileNameGenerator.h
     RawPMatrixStore.cxx                    RawPMatrixStore.h
 
     HomgMap2D.h

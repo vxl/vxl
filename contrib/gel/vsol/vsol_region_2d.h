@@ -14,12 +14,10 @@
 //   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 //   2003/01/08 Peter Vanroose  Added pure virtual is_convex()
 //   2003/11/06 Amir Tamrakar   Added safe cast methods to polygon_2d
+//   2004/10/09 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 //*****************************************************************************
 
-//*****************************************************************************
-// External declarations for values
-//*****************************************************************************
 #include <vsol/vsol_spatial_object_2d.h>
 
 class vsol_polygon_2d;
@@ -50,7 +48,7 @@ class vsol_region_2d : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   // Destructor
   //---------------------------------------------------------------------------
-  virtual ~vsol_region_2d();
+  virtual ~vsol_region_2d() {}
 
   //***************************************************************************
   // virtuals of vsol_spatial_object_2d
@@ -77,4 +75,4 @@ class vsol_region_2d : public vsol_spatial_object_2d
   virtual bool is_convex(void) const=0;
 };
 
-#endif // #ifndef vsol_region_2d_h_
+#endif // vsol_region_2d_h_

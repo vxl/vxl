@@ -1,11 +1,6 @@
 // This is oxl/mvl/PMatrixAffine.h
 #ifndef PMatrixAffine_h_
 #define PMatrixAffine_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
-
-//--------------------------------------------------------------
 //:
 // \file
 // \brief Affine 3x4 projection matrix
@@ -15,6 +10,10 @@
 // perform common operations e.g. projecting point in 3d space to
 // its image on the image plane
 //
+// \verbatim
+//  Modifications
+//   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
+// \endverbatim
 
 #include <mvl/PMatrix.h>
 

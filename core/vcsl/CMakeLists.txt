@@ -1,12 +1,12 @@
 # vxl/vcsl/CMakeLists.txt
 
   SET( vcsl_sources
-    vcsl_dimension.cxx vcsl_dimension.h vcsl_dimension_sptr.h
+    vcsl_dimension.h vcsl_dimension_sptr.h
     vcsl_length.cxx vcsl_length.h vcsl_length_sptr.h
 
     vcsl_angle.cxx vcsl_angle.h vcsl_angle_sptr.h
 
-    vcsl_unit.cxx vcsl_unit.h vcsl_unit_sptr.h
+    vcsl_unit.h vcsl_unit_sptr.h
     vcsl_length_unit.cxx vcsl_length_unit.h vcsl_length_unit_sptr.h
     vcsl_meter.cxx vcsl_meter.h vcsl_meter_sptr.h
 
@@ -17,7 +17,7 @@
     vcsl_axis.cxx vcsl_axis.h vcsl_axis_sptr.h
     vcsl_coordinate_system.cxx vcsl_coordinate_system.h vcsl_coordinate_system_sptr.h
 
-    vcsl_cartesian.cxx vcsl_cartesian.h vcsl_cartesian_sptr.h
+    vcsl_cartesian.h vcsl_cartesian_sptr.h
 
     vcsl_spatial.cxx vcsl_spatial.h vcsl_spatial_sptr.h
     vcsl_graph.cxx vcsl_graph.h vcsl_graph_sptr.h
@@ -33,7 +33,7 @@
     vcsl_geographic.cxx vcsl_geographic.h vcsl_geographic_sptr.h
     vcsl_utm.cxx vcsl_utm.h vcsl_utm_sptr.h
     vcsl_geocentric.cxx vcsl_geocentric.h vcsl_geocentric_sptr.h
-    vcsl_geodetic.cxx vcsl_geodetic.h vcsl_geodetic_sptr.h
+    vcsl_geodetic.h vcsl_geodetic_sptr.h
     vcsl_lambertian.cxx vcsl_lambertian.h vcsl_lambertian_sptr.h
 
     vcsl_spatial_transformation.cxx vcsl_spatial_transformation.h vcsl_spatial_transformation_sptr.h

@@ -6,22 +6,19 @@
 // \author François BERTEL
 //
 // \verbatim
-// Modifications
-// 2000/06/28 François BERTEL Creation. Adapted from IUE
+//  Modifications
+//   2000/06/28 François BERTEL Creation. Adapted from IUE
+//   2004/09/10 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
 #include <vcsl/vcsl_cartesian_2d_sptr.h>
-
-//*****************************************************************************
-// External declarations for values
-//*****************************************************************************
 #include <vcsl/vcsl_spatial.h>
 
 //: 2D Cartesian coordinate system
 class vcsl_cartesian_2d
   : public vcsl_spatial
 {
-public:
+ public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
@@ -30,29 +27,29 @@ public:
   explicit vcsl_cartesian_2d(void);
 
   //: Destructor
-  virtual ~vcsl_cartesian_2d();
+  virtual ~vcsl_cartesian_2d() {}
 
   //***************************************************************************
-  // Because VXL does not use dynamic_cast<> :-(
+  // Because VXL does not necessarily use dynamic_cast<>
   //***************************************************************************
 
-  virtual const vcsl_cartesian_2d *cast_to_cartesian_2d(void) const;
+  virtual const vcsl_cartesian_2d *cast_to_cartesian_2d(void)const{return this;}
 
   //***************************************************************************
   // Status report
   //***************************************************************************
 
   //: Are the axes of `this' right handed ?
-  virtual bool is_right_handed(void) const;
+  virtual bool is_right_handed(void) const { return right_handed_; }
 
   //***************************************************************************
   // Status setting
   //***************************************************************************
 
   //: Set whether the coordinate system is right handed or not
-  virtual void set_right_handed(const bool new_right_handed);
+  virtual void set_right_handed(bool val) { right_handed_ = val; }
 
-protected:
+ protected:
   //***************************************************************************
   // Implementation
   //***************************************************************************

@@ -7,15 +7,7 @@
 // \author crossge@crd.ge.com
 
 #include "gmvl_node.h"
-
-gmvl_node::gmvl_node()
-  : type_( "gmvl_node"), ref_( -1)
-{
-}
-
-gmvl_node::~gmvl_node()
-{
-}
+#include <vcl_iostream.h>
 
 vcl_ostream &operator<<( vcl_ostream &os, gmvl_node &node)
 {

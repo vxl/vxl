@@ -14,6 +14,7 @@
 //   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 //   2003/01/08 Peter Vanroose  Added pure virtual is_convex()
 //   2004/09/06 Peter Vanroose  Added safe cast methods to polygon_3d
+//   2004/10/09 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 //*****************************************************************************
 
@@ -46,7 +47,7 @@ class vsol_region_3d : public vsol_surface_3d
   //---------------------------------------------------------------------------
   // Destructor
   //---------------------------------------------------------------------------
-  virtual ~vsol_region_3d();
+  virtual ~vsol_region_3d() {}
 
   //***************************************************************************
   // virtuals of vsol_spatial_object_3d
@@ -73,4 +74,4 @@ class vsol_region_3d : public vsol_surface_3d
   virtual bool is_convex(void) const=0;
 };
 
-#endif // #ifndef vsol_region_3d_h_
+#endif // vsol_region_3d_h_

@@ -1,7 +1,6 @@
 # gel/vdgl/CMakeLists.txt
 
 SET(vdgl_sources
- vdgl_OrthogRegress.cxx       vdgl_OrthogRegress.h
  vdgl_digital_curve.cxx       vdgl_digital_curve.h     vdgl_digital_curve_sptr.h
  vdgl_digital_region.cxx      vdgl_digital_region.h    vdgl_digital_region_sptr.h
  vdgl_edgel.cxx               vdgl_edgel.h
@@ -12,7 +11,7 @@ SET(vdgl_sources
  vdgl_interpolator.cxx        vdgl_interpolator.h      vdgl_interpolator_sptr.h
  vdgl_interpolator_cubic.cxx  vdgl_interpolator_cubic.h
  vdgl_interpolator_linear.cxx vdgl_interpolator_linear.h
- vdgl_ortho_regress.cxx       vdgl_ortho_regress.h
+ vdgl_ortho_regress.cxx       vdgl_ortho_regress.h     vdgl_OrthogRegress.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vdgl_sources)

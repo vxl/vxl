@@ -1,19 +1,22 @@
 // This is gel/vdgl/vdgl_OrthogRegress.h
 #ifndef vdgl_OrthogRegress_h_
 #define vdgl_OrthogRegress_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
-// .NAME vdgl_OrthogRegress
-// .INCLUDE vdgl/vdgl_OrthogRegress.h
-// .FILE vdgl_OrthogRegress.cxx
+//:
+// \file
 // \author fsm
+//
+// \verbatim
+//  Modifications
+//   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
+// \endverbatim
 
 #include <vcl_cmath.h>
 #include <vdgl/vdgl_ortho_regress.h>
 
 class vdgl_OrthogRegress : public vdgl_ortho_regress
 {
+  double a_, b_, c_;
+  double est_;
  public:
   typedef vdgl_ortho_regress base;
   vdgl_OrthogRegress() { }
@@ -28,10 +31,6 @@ class vdgl_OrthogRegress : public vdgl_ortho_regress
   double GetEstCost() const { return est_; }
   void SetEstCost(double v) { est_ = v; }
   void Reset() { base::reset(); }
-
- private:
-  double a_, b_, c_;
-  double est_;
 };
 
 #endif // vdgl_OrthogRegress_h_

@@ -8,6 +8,11 @@
 // \file
 // \brief A base class reference-counting view of some image data.
 // \author Ian Scott - Manchester
+//
+// \verbatim
+//  Modifications
+//   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
+// \endverbatim
 
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
@@ -20,7 +25,7 @@
 
 class vil3d_image_view_base
 {
-protected:
+ protected:
   //: Number of columns.
   unsigned ni_;
   //: Number of rasters.
@@ -37,9 +42,9 @@ protected:
   //  Don't set nplanes_ to zero as it confuses set_size(nx,ny,nz) later
   vil3d_image_view_base(): ni_(0), nj_(0), nk_(0), nplanes_(1), reference_count_(0) {}
 
-public:
+ public:
   // The destructor must be virtual so that the memory chunk is destroyed.
-  virtual ~vil3d_image_view_base() {};
+  virtual ~vil3d_image_view_base() {}
 
   //: Width
   unsigned ni()  const {return ni_;}
@@ -53,7 +58,7 @@ public:
   //: The number of pixels.
   unsigned long size() const { return ni_ * nj_ * nk_ * nplanes_; }
 
-  //: resize current planes to ni x nj * nk 
+  //: resize current planes to ni x nj * nk
   // If already correct size, this function returns quickly
   virtual void set_size(unsigned ni, unsigned nj, unsigned nk) =0;
 
@@ -74,7 +79,7 @@ public:
   virtual enum vil_pixel_format pixel_format() const=0;
 
   //: True if this is (or is derived from) class s
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(vcl_string const& s) const { return s=="vil3d_image_view_base"; }
 
  private:
   // You probably should not use a vil3d_image_view in a vbl_smart_ptr, so the

@@ -1,7 +1,7 @@
 # mul/mvl2/CMakeLists.txt
 
 SET(mvl2_sources
-    mvl2_video_writer.h        mvl2_video_writer.cxx
+    mvl2_video_writer.h
     mvl2_video_reader.h        mvl2_video_reader.cxx
     mvl2_video_from_sequence.h mvl2_video_from_sequence.cxx
 )

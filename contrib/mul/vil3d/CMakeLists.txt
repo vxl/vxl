@@ -2,7 +2,7 @@
 
 SET(vil3d_sources
     vil3d_property.h
-    vil3d_image_view_base.h          vil3d_image_view_base.cxx
+    vil3d_image_view_base.h
     vil3d_image_view.h               vil3d_image_view.txx
     vil3d_print.h
     vil3d_plane.h

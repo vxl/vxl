@@ -1,9 +1,15 @@
 #ifndef vsrl_dense_matcher_h
 #define vsrl_dense_matcher_h
+//:
+// \file
+// \brief this is a base class for various dense matchers
+//
+// \verbatim
+//  Modifications
+//   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
+// \endverbatim
 
 #include <vil1/vil1_image.h>
-
-// this is a base class for various dence matchers
 
 class vsrl_dense_matcher
 {
@@ -16,19 +22,19 @@ class vsrl_dense_matcher
 
   // constructor
 
-  vsrl_dense_matcher(const vil1_image &image1);
+  vsrl_dense_matcher(vil1_image const& image1) : image1_(image1) {}
 
   // destructor
 
-  virtual ~vsrl_dense_matcher();
+  virtual ~vsrl_dense_matcher() {}
 
   // set the correlation range
 
-  virtual void set_correlation_range(int range);
+  void set_correlation_range(int range) { correlation_range_=range; }
 
   // get the correlation range
 
-  virtual int get_correlation_range();
+  int get_correlation_range() { return correlation_range_; }
 
   // get the assigned coordinate
 

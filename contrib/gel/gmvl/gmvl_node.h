@@ -7,8 +7,13 @@
 //:
 // \file
 // \author crossge@crd.ge.com
+//
+// \verbatim
+//  Modifications
+//   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
+// \endverbatim
 
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <vcl_string.h>
 #include <vbl/vbl_ref_count.h>
 
@@ -17,17 +22,17 @@ class gmvl_connection_cache;
 
 //:
 // Types of node:
-//      images
-//      image features (points, lines, conics...)
-//      transformations (homographies, projection matrices...)
-//      coordinate systems (?)
+//  -    images
+//  -    image features (points, lines, conics...)
+//  -    transformations (homographies, projection matrices...)
+//  -    coordinate systems (?)
 
 class gmvl_node : public vbl_ref_count
 {
  public:
-
-  gmvl_node();
-  virtual ~gmvl_node();
+  gmvl_node() : type_("gmvl_node"), ref_(-1) {}
+  gmvl_node(gmvl_node const& n) : vbl_ref_count(), type_(n.type_), ref_(n.ref_) {}
+  virtual ~gmvl_node() {}
 
   // getter
   vcl_string &type() { return type_; }
@@ -35,12 +40,11 @@ class gmvl_node : public vbl_ref_count
   // input output
   friend vcl_ostream &operator<<( vcl_ostream &os, gmvl_node &node);
 
-  // to allow the cache to access ref 
+  // to allow the cache to access ref
   friend class gmvl_node_cache;
   friend class gmvl_connection_cache;
 
  protected:
-
   // type name (name of class)
   vcl_string type_;
 
@@ -48,6 +52,6 @@ class gmvl_node : public vbl_ref_count
   int ref_;
 };
 
-vcl_ostream &operator<<( vcl_ostream &os, gmvl_node &node);
+vcl_ostream &operator<<(vcl_ostream &os, gmvl_node &node);
 
 #endif // gmvl_node_h_

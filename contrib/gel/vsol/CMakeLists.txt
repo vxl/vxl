@@ -14,7 +14,7 @@ SET(vsol_sources
  vsol_polyline_2d.cxx       vsol_polyline_2d.h       vsol_polyline_2d_sptr.h
  vsol_digital_curve_2d.cxx  vsol_digital_curve_2d.h  vsol_digital_curve_2d_sptr.h
  # 2-D
- vsol_region_2d.cxx         vsol_region_2d.h         vsol_region_2d_sptr.h
+                            vsol_region_2d.h         vsol_region_2d_sptr.h
  vsol_polygon_2d.cxx        vsol_polygon_2d.h        vsol_polygon_2d_sptr.h
  vsol_triangle_2d.cxx       vsol_triangle_2d.h       vsol_triangle_2d_sptr.h
  vsol_rectangle_2d.cxx      vsol_rectangle_2d.h      vsol_rectangle_2d_sptr.h
@@ -26,16 +26,16 @@ SET(vsol_sources
  # 0-D
  vsol_point_3d.cxx          vsol_point_3d.h          vsol_point_3d_sptr.h
  # 1-D
- vsol_curve_3d.cxx          vsol_curve_3d.h          vsol_curve_3d_sptr.h
+                            vsol_curve_3d.h          vsol_curve_3d_sptr.h
  vsol_line_3d.cxx           vsol_line_3d.h           vsol_line_3d_sptr.h
  # 2-D
- vsol_surface_3d.cxx        vsol_surface_3d.h        vsol_surface_3d_sptr.h
- vsol_region_3d.cxx         vsol_region_3d.h         vsol_region_3d_sptr.h
+                            vsol_surface_3d.h        vsol_surface_3d_sptr.h
+                            vsol_region_3d.h         vsol_region_3d_sptr.h
  vsol_polygon_3d.cxx        vsol_polygon_3d.h        vsol_polygon_3d_sptr.h
  vsol_triangle_3d.cxx       vsol_triangle_3d.h       vsol_triangle_3d_sptr.h
  vsol_rectangle_3d.cxx      vsol_rectangle_3d.h      vsol_rectangle_3d_sptr.h
  # 3-D
- vsol_volume_3d.cxx         vsol_volume_3d.h         vsol_volume_3d_sptr.h
+                            vsol_volume_3d.h         vsol_volume_3d_sptr.h
  vsol_polyhedron.cxx        vsol_polyhedron.h        vsol_polyhedron_sptr.h
  vsol_tetrahedron.cxx       vsol_tetrahedron.h       vsol_tetrahedron_sptr.h
 )

@@ -59,7 +59,7 @@ SET(vgui_sources
   vgui_tag.cxx                  vgui_tag.h
   vgui_window.cxx               vgui_window.h
   vgui_adaptor.cxx              vgui_adaptor.h
-  vgui_tableau.cxx              vgui_tableau.h          vgui_tableau_sptr.h
+  vgui_tableau.cxx              vgui_tableau.h    vgui_tableau_sptr.h
   vgui_parent_child_link.cxx    vgui_parent_child_link.h
   vgui_key.cxx                  vgui_key.h
   vgui_button.cxx               vgui_button.h
@@ -67,8 +67,8 @@ SET(vgui_sources
   vgui_event.cxx                vgui_event.h
   vgui_command.cxx              vgui_command.h
   vgui_menu.cxx                 vgui_menu.h
-  vgui_popup_params.cxx         vgui_popup_params.h
-  vgui_message.cxx              vgui_message.h
+  vgui_popup_params.h
+  vgui_message.h
   vgui_observer.cxx             vgui_observer.h
   vgui_observable.cxx           vgui_observable.h
   vgui_satellite_tableau.txx vgui_satellite_tableau.h
@@ -104,7 +104,7 @@ SET(vgui_sources
   vgui_grid_tableau.cxx         vgui_grid_tableau.h       vgui_grid_tableau_sptr.h
   vgui_drag_mixin.cxx           vgui_drag_mixin.h
   vgui_active_tableau.cxx       vgui_active_tableau.h     vgui_active_tableau_sptr.h
-  vgui_drag_tableau.cxx         vgui_drag_tableau.h       vgui_drag_tableau_sptr.h
+                                vgui_drag_tableau.h       vgui_drag_tableau_sptr.h
   vgui_clear_tableau.cxx        vgui_clear_tableau.h      vgui_clear_tableau_sptr.h
   vgui_debug_tableau.cxx        vgui_debug_tableau.h      vgui_debug_tableau_sptr.h
   vgui_quit_tableau.cxx         vgui_quit_tableau.h       vgui_quit_tableau_sptr.h
@@ -139,15 +139,15 @@ SET(vgui_sources
 
   # dialog classes
   vgui_dialog.cxx                    vgui_dialog.h
-  internals/vgui_dialog_field.cxx    internals/vgui_dialog_field.h
-  internals/vgui_simple_field.cxx    internals/vgui_simple_field.h
-  internals/vgui_string_field.cxx    internals/vgui_string_field.h
-  internals/vgui_file_field.cxx      internals/vgui_file_field.h
   internals/vgui_dialog_impl.cxx     internals/vgui_dialog_impl.h
+  internals/vgui_dialog_field.h
+  internals/vgui_simple_field.h      internals/vgui_simple_field.cxx
+  internals/vgui_string_field.h
+  internals/vgui_file_field.h
 
   # statusbar classes
   vgui_statusbuf.cxx            vgui_statusbuf.h
-  vgui_statusbar.cxx            vgui_statusbar.h
+  vgui_statusbar.h
 
   # extra header files
   vgui_gl.h
@@ -159,8 +159,8 @@ SET(vgui_sources
   internals/vgui_back_project.cxx    internals/vgui_back_project.h
   internals/vgui_un_project.cxx      internals/vgui_un_project.h
   internals/vgui_adaptor_tableau.cxx internals/vgui_adaptor_tableau.h
-  internals/vgui_parent_child_link_data.cxx       internals/vgui_parent_child_link_data.h
-  internals/vgui_adaptor_mixin.cxx   internals/vgui_adaptor_mixin.h
+  internals/vgui_parent_child_link_data.h
+  internals/vgui_adaptor_mixin.h
   internals/vgui_overlay_helper.cxx  internals/vgui_overlay_helper.h
   internals/vgui_multiply_4x4.cxx    internals/vgui_multiply_4x4.h
   internals/vgui_transpose_4x4.cxx   internals/vgui_transpose_4x4.h
@@ -186,7 +186,6 @@ IF (QV_FOUND)
     vrml/vgui_vrml_tableau.cxx       vrml/vgui_vrml_tableau.h
     vrml/vgui_vrml_texture_map.cxx   vrml/vgui_vrml_texture_map.h
   )
-  AUX_SOURCE_DIRECTORY(vrml/Templates vgui_sources)
 ENDIF (QV_FOUND)
 
 IF (MFC_FOUND)
@@ -251,8 +250,6 @@ IF (GLUT_FOUND)
     ENDIF (X11_FOUND)
 
     SET( vgui_sources ${vgui_sources} ${vgui_glut_sources} )
-
-    AUX_SOURCE_DIRECTORY(impl/glut/Templates vgui_sources)
 
   ENDIF(VGUI_USE_GLUT)
 
@@ -361,8 +358,6 @@ IF (GTK_GL_FOUND)
 
     SET( vgui_sources ${vgui_sources} ${vgui_gtk_sources} )
 
-    AUX_SOURCE_DIRECTORY(impl/gtk/Templates vgui_gtk_sources)
-
   ENDIF(VGUI_USE_GTK)
 
 ENDIF (GTK_GL_FOUND)
@@ -401,8 +396,6 @@ IF (GTK2_FOUND)
     )
 
     SET( vgui_sources ${vgui_sources} ${vgui_gtk2_sources} )
-
-    AUX_SOURCE_DIRECTORY(impl/gtk2/Templates vgui_gtk2_sources)
 
   ENDIF(VGUI_USE_GTK2)
 

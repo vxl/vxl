@@ -14,6 +14,7 @@
 //   2000/05/04 François BERTEL Creation
 //   2001/07/03 Peter Vanroose  Replaced vnl_double_3 by vgl_vector_3d
 //   2004/09/06 Peter Vanroose  Added safe cast methods to region_3d
+//   2004/10/09 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 //*****************************************************************************
 
@@ -32,7 +33,7 @@ class vsol_surface_3d : public vsol_spatial_object_3d
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vsol_surface_3d();
+  virtual ~vsol_surface_3d() {}
 
   //***************************************************************************
   // virtuals of vsol_spatial_object_3d

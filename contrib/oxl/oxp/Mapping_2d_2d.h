@@ -1,11 +1,8 @@
 // This is oxl/oxp/Mapping_2d_2d.h
 #ifndef Mapping_2d_2d_h_
 #define Mapping_2d_2d_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
-//  \file
+// \file
 // \brief Mapping from R^2 -> R^2
 //
 //    Mapping_2d_2d is a base class for functions from R^2 -> R^2.
@@ -17,12 +14,18 @@
 //
 // \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 16 Mar 97
+//
+// \verbatim
+//  Modifications
+//   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_double_2.h>
-struct Mapping_2d_2d
+class Mapping_2d_2d
 {
-  virtual ~Mapping_2d_2d();
+ public:
+  virtual ~Mapping_2d_2d() {}
 
   //: Map (x1, y1) to (x2, y2)
   void map(double x1, double y1, double* x2, double* y2) {
@@ -48,7 +51,6 @@ struct Mapping_2d_2d
     return ret;
   }
 
- public:
   virtual void implement_map(double x1, double y1, double* x2, double* y2) = 0;
   virtual void implement_inverse_map(double x2, double y2, double* x1, double* y1) = 0;
 };

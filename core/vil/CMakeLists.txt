@@ -55,14 +55,13 @@ ENDIF(DCMTK_FOUND)
 # Store the external library configurations in to the config file
 CONFIGURE_FILE( ${vxl_SOURCE_DIR}/core/vil/vil_config.h.in
                 ${vxl_BINARY_DIR}/core/vil/vil_config.h @ONLY IMMEDIATE )
-  
 
 SET( vil_sources ${vil_sources}
 
   # basic things
   vil_config.h.in
   vil_memory_chunk.cxx                  vil_memory_chunk.h
-  vil_image_view_base.cxx               vil_image_view_base.h
+  vil_image_view_base.h
   vil_image_view.h                      vil_image_view.txx
   vil_image_resource.cxx                vil_image_resource.h
                                         vil_image_resource_sptr.h

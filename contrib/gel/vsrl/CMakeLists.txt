@@ -2,7 +2,7 @@
 
 SET(vsrl_sources
  vsrl_3d_output.cxx             vsrl_3d_output.h
- vsrl_dense_matcher.cxx         vsrl_dense_matcher.h
+                                vsrl_dense_matcher.h
  vsrl_diffusion.cxx             vsrl_diffusion.h
  vsrl_dynamic_program.cxx       vsrl_dynamic_program.h
  vsrl_image_correlation.cxx     vsrl_image_correlation.h
@@ -14,12 +14,11 @@ SET(vsrl_sources
  vsrl_saliency_diffusion.cxx    vsrl_saliency_diffusion.h
  vsrl_step_diffusion.cxx        vsrl_step_diffusion.h
  vsrl_stereo_dense_matcher.cxx  vsrl_stereo_dense_matcher.h
- vsrl_token.cxx                 vsrl_token.h
+                                vsrl_token.h
  vsrl_token_saliency.cxx        vsrl_token_saliency.h
  vsrl_window_accumulator.cxx    vsrl_window_accumulator.h
  vsrl_region_disparity.cxx      vsrl_region_disparity.h
 )
-AUX_SOURCE_DIRECTORY(Templates vsrl_sources)
 
 # vsrl_manager depends on vgui, on tbl/vepl and on brl/bseg/sdet
 # vsrl_menus and vsrl_point_picker depend on vgui

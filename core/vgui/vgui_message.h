@@ -27,6 +27,7 @@
 //         without warning.
 //
 //   fsm - now I've done it.
+//   10-SEP-2004 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
 //: Used to send messages from observables to observers.
@@ -81,7 +82,7 @@
 class vgui_message
 {
  public:
-  vgui_message();
+  vgui_message() : from(0), user(0), data(0) {}
 
   //: Pointer to sender.
   //  When the message was broadcast from a vgui_observer

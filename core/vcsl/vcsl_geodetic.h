@@ -1,14 +1,14 @@
 #ifndef VCSL_GEODETIC_H
 #define VCSL_GEODETIC_H
-
 //:
-// \file 
+// \file
 // \author François BERTEL
 //
 // \verbatim
-// Modifications
-// 2000/06/29 François BERTEL Creation. Adapted from IUE
-// 10/4/2001 Ian Scott (Manchester.) Converted perceps header to doxygen
+//  Modifications
+//   2000/06/29 François BERTEL Creation. Adapted from IUE
+//   2001/04/10 Ian Scott (Manchester.) Converted perceps header to doxygen
+//   2004/09/10 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
 #include <vcsl/vcsl_geodetic_sptr.h>
@@ -28,16 +28,16 @@
 class vcsl_geodetic
   : public vcsl_geographic
 {
-public:
+ public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
 
   //: Default constructor.
-  explicit vcsl_geodetic(void);
+  explicit vcsl_geodetic() {}
 
   //: Destructor
-  virtual ~vcsl_geodetic();
+  virtual ~vcsl_geodetic() {}
 };
 
-#endif // #ifndef VCSL_GEODETIC_H
+#endif // VCSL_GEODETIC_H

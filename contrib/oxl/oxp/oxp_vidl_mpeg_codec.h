@@ -4,6 +4,11 @@
 // \file
 // \author awf
 // \date Dec 2001
+//
+// \verbatim
+//  Modifications
+//   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
+// \endverbatim
 
 #include <vidl_vil1/vidl_vil1_codec.h>
 #include <oxp/oxp_mpeg_codec.h>
@@ -26,7 +31,7 @@ class oxp_vidl_mpeg_codec : public vidl_vil1_codec
   virtual bool probe(const char* fname) { return p.probe(fname); }
   virtual vidl_vil1_codec_sptr load(const char* fname, char mode = 'r' );
   virtual bool save(vidl_vil1_movie* movie, const char* fname);
-  virtual const char* type();
+  virtual const char* type() { return "MPEG"; }
 
   // Call before destruction to a void segv on exit
   void close() { p.close(); }

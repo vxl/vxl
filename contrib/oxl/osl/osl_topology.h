@@ -11,6 +11,11 @@
 // *** This is a permanent conversion hack ***
 // Do not expect that future Canny's will provide output in this form.
 // Do not expect this code to be supported in any way whatsoever.
+//
+// \verbatim
+//  Modifications
+//   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
+// \endverbatim
 
 #include <vcl_list.h>
 #include <vbl/vbl_ref_count.h>
@@ -29,6 +34,8 @@ struct osl_stash_link;
 
 struct osl_topology_base : public vbl_ref_count
 {
+  osl_topology_base(osl_topology_base const& x)
+    : vbl_ref_count(), id(x.id), stash_head(x.stash_head) {}
   int id;
   osl_topology_base();
   ~osl_topology_base();
