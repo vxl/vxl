@@ -1319,8 +1319,10 @@ vil_nitf_image_subheader_v20::GetHeaderLength() const
 
 void vil_nitf_image_subheader_v20::init()
 {
-  IREP = 0;
-  ICAT = 0;
+// These values are initialized in super-class vil_nitf_image_subheader constructor.
+// Re-setting them to null here causes memory leak.  mal 30apr2004
+//  IREP = 0;
+//  ICAT = 0;
 
   setVersion (vil_nitf_version_v20::get_version_str());
 
