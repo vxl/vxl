@@ -1,6 +1,6 @@
 //:
 // \file
-// \brief Tool to test performance of varous vnl operations.
+// \brief Tool to test performance of various vnl operations.
 // \author Ian Scott
 
 #include <vcl_vector.h>
@@ -12,15 +12,16 @@
 #include <vcl_ctime.h>
 #include <vcl_algorithm.h>
 #include <vcl_string.h>
+
 const unsigned NI=280;
 const unsigned NJ=256;
-
 
 const unsigned nstests = 10;
 
 template <class T>
-void distance_squared(const vcl_vector<vnl_vector<T> > &s1, const vcl_vector<vnl_vector<T> > &s2, 
-                   vcl_vector<T> & d, int n_loops)
+void distance_squared(const vcl_vector<vnl_vector<T> > &s1,
+                      const vcl_vector<vnl_vector<T> > &s2, 
+                      vcl_vector<T> & d, int n_loops)
 {
   vnl_vector<double> stats(nstests);
   for (unsigned st=0;st<nstests;++st)
@@ -36,12 +37,13 @@ void distance_squared(const vcl_vector<vnl_vector<T> > &s1, const vcl_vector<vnl
   }
   vcl_sort(stats.begin(), stats.end());
   vcl_cout<<"  Mean: "<<stats.mean()
-        <<"ns  +/-"<<stats((unsigned)(nstests*0.75))-stats((unsigned)(nstests*0.25))<<"ns\n"<<vcl_endl;
+          <<"ns  +/-"<<stats((unsigned)(nstests*0.75))-stats((unsigned)(nstests*0.25))<<"ns\n\n";
 }
 
 template <class T>
-void dot_product(const vcl_vector<vnl_vector<T> > &s1, const vcl_vector<vnl_vector<T> > &s2,
-                   vcl_vector<T> & d, int n_loops)
+void dot_product(const vcl_vector<vnl_vector<T> > &s1,
+                 const vcl_vector<vnl_vector<T> > &s2,
+                 vcl_vector<T> & d, int n_loops)
 {
   vnl_vector<double> stats(nstests);
   for (unsigned st=0;st<nstests;++st)
@@ -57,8 +59,9 @@ void dot_product(const vcl_vector<vnl_vector<T> > &s1, const vcl_vector<vnl_vect
   }
   vcl_sort(stats.begin(), stats.end());
   vcl_cout<<"  Mean: "<<stats.mean()
-        <<"ns  +/-"<<stats((unsigned)(nstests*0.75))-stats((unsigned)(nstests*0.25))<<"ns\n"<<vcl_endl;
+          <<"ns  +/-"<<stats((unsigned)(nstests*0.75))-stats((unsigned)(nstests*0.25))<<"ns\n\n";
 }
+
 template <class T>
 void mat_x_vec(const vnl_matrix<T> &s1, const vcl_vector<vnl_vector<T> > &s2,
                int n_loops)
@@ -77,7 +80,7 @@ void mat_x_vec(const vnl_matrix<T> &s1, const vcl_vector<vnl_vector<T> > &s2,
   }
   vcl_sort(stats.begin(), stats.end());
   vcl_cout<<"  Mean: "<<stats.mean()
-        <<"us  +/-"<<stats((unsigned)(nstests*0.75))-stats((unsigned)(nstests*0.25))<<"us\n"<<vcl_endl;
+          <<"us  +/-"<<stats((unsigned)(nstests*0.75))-stats((unsigned)(nstests*0.25))<<"us\n\n";
 }
 
 template <class T>
@@ -98,7 +101,7 @@ void vec_x_mat(const vcl_vector<vnl_vector<T> > &s1, const vnl_matrix<T> &s2,
   }
   vcl_sort(stats.begin(), stats.end());
   vcl_cout<<"  Mean: "<<stats.mean()
-        <<"us  +/-"<<stats((unsigned)(nstests*0.75))-stats((unsigned)(nstests*0.25))<<"us\n"<<vcl_endl;
+          <<"us  +/-"<<stats((unsigned)(nstests*0.75))-stats((unsigned)(nstests*0.25))<<"us\n\n";
 }
 
 template <class T>
@@ -109,27 +112,27 @@ void print_pointers(const vcl_vector<vnl_vector<T> >&va, const vcl_vector<vnl_ve
   unsigned i;
   vcl_ofstream os(file.c_str());
   os << "Data values\n";
-  os << "\nva:" << &va.front() << " " << &va.back() << "\n";
+  os << "\nva:" << &va.front() << " " << &va.back() << '\n';
   for (i=0;i<va.size();++i)
-    os << va[i].data_block() << va[i].size() << "\n";
+    os << va[i].data_block() << va[i].size() << '\n';
 
-  os << "\n\nvb:" << &vb.front() << " " << &vb.back() << "\n";
+  os << "\n\nvb:" << &vb.front() << " " << &vb.back() << '\n';
   for (i=0;i<vb.size();++i)
-    os << vb[i].data_block() << vb[i].size() << "\n";
+    os << vb[i].data_block() << vb[i].size() << '\n';
 
-  os << "\n\nvc:" << &vc.front() << " " << &vc.back() << "\n";
+  os << "\n\nvc:" << &vc.front() << " " << &vc.back() << '\n';
   for (i=0;i<vc.size();++i)
-    os << vc[i].data_block() << vc[i].size() << "\n";
+    os << vc[i].data_block() << vc[i].size() << '\n';
 
-  os << "\n\nna:" << &na.front() << " " << &na.back() << "\n";
+  os << "\n\nna:" << &na.front() << " " << &na.back() << '\n';
 
-  os << "\n\nma:" << ma.data_block() << " " << ma.rows() << " " << ma.cols() << "\n";
+  os << "\n\nma:" << ma.data_block() << " " << ma.rows() << " " << ma.cols() << '\n';
   for (i=0;i<ma.rows();++i)
-    os << ma[i] << "\n";
+    os << ma[i] << '\n';
 }
 
 template <class T>
-void run_for_size(unsigned m, unsigned n, T dummy, const char * type, const char *size)
+void run_for_size(unsigned m, unsigned n, T /*dummy*/, const char * type, const char *size)
 {
   const unsigned n_data = 10;
   vcl_vector<vnl_vector<T> > x(n_data), y(n_data), z(n_data);
@@ -148,9 +151,8 @@ void run_for_size(unsigned m, unsigned n, T dummy, const char * type, const char
   vnl_sample_uniform(A.begin(), A.end(), -10000,10000);
 
   int n_loops = 1000000/m;
-  vcl_cout<<"\nTimes to operator on "<<type<<" "<<m<<"-d vectors and "<<m<<" x "<<n<<" matrices"
-          <<vcl_endl;
-  vcl_cout<<"Sum of square differences       " << vcl_flush;
+  vcl_cout<<"\nTimes to operator on "<<type<<" "<<m<<"-d vectors and "<<m<<" x "<<n<<" matrices\n"
+          <<"Sum of square differences       " << vcl_flush;
   distance_squared(z,y,v,n_loops);
 //  print_pointers(z, y, x, v, A, vcl_string("testA")+type+size);
   vcl_cout<<"Vector dot product              " << vcl_flush;
@@ -167,7 +169,7 @@ void run_for_size(unsigned m, unsigned n, T dummy, const char * type, const char
 
 int main(int argc, char *argv[])
 {
-  vcl_cout << "Range = 75%tile-25%tile" << vcl_endl;
+  vcl_cout << "Range = 75%tile-25%tile\n";
   vnl_sample_reseed(12354);
   run_for_size(2, 20, double(), "double", "2x20");
   run_for_size(300, 300, double(), "double", "300x300");
