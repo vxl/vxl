@@ -1504,6 +1504,14 @@ MAIN( test_config )
 #endif
   vcl_cout << vcl_endl;
 
+  vcl_cout << "__GNUC_PATCHLEVEL__ ";
+#ifdef __GNUC_PATCHLEVEL__
+  vcl_cout << "is set to " << quote(__GNUC_PATCHLEVEL__);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
   vcl_cout << "__VERSION__ ";
 #ifdef __VERSION__
   vcl_cout << "is set to " << quote(__VERSION__);
@@ -1515,6 +1523,22 @@ MAIN( test_config )
   vcl_cout << "__OPTIMIZE__ ";
 #ifdef __OPTIMIZE__
   vcl_cout << "is set to " << quote(__OPTIMIZE__);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "__ICC ";
+#ifdef __ICC
+  vcl_cout << "is set to " << quote(__ICC);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "__ECC ";
+#ifdef __ECC
+  vcl_cout << "is set to " << quote(__ECC);
 #else
   vcl_cout << "is not set";
 #endif
@@ -1667,6 +1691,22 @@ MAIN( test_config )
   vcl_cout << "__unix ";
 #ifdef __unix
   vcl_cout << "is set to " << quote(__unix);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "__linux ";
+#ifdef __linux
+  vcl_cout << "is set to " << quote(__linux);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "__linux__ ";
+#ifdef __linux__
+  vcl_cout << "is set to " << quote(__linux__);
 #else
   vcl_cout << "is not set";
 #endif

@@ -252,11 +252,14 @@ for $var_exp (
 
   # compiler related
   '__STRICT_ANSI__',    # gcc
-  '__GNUC__',           # gcc
-  '__GNUG__',           # gcc
-  '__GNUC_MINOR__',     # gcc
+  '__GNUC__',           # gcc, icc
+  '__GNUG__',           # gcc, icc
+  '__GNUC_MINOR__',     # gcc, icc
+  '__GNUC_PATCHLEVEL__',# gcc, icc
   '__VERSION__',        # gcc, icc
   '__OPTIMIZE__',       # gcc, icc
+  '__ICC',              # icc
+  '__ECC',              # icc?
   '__INTEL_COMPILER',   # icc
   '__BORLANDC__',       # bcc
   '__SUNPRO_CC',        # sun
@@ -278,6 +281,8 @@ for $var_exp (
   'macintosh',          #
   'unix',               #
   '__unix',             #
+  '__linux',            # icc
+  '__linux__',          # icc
 
   # other
   '__DATE__',           # gcc (set at compile time)
