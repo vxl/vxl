@@ -11,35 +11,6 @@
 
 //--------------------------------------------------------------
 //
-// Constructor and Destructor Functions
-//
-//--------------------------------------------------------------
-
-// - Constructor
-HomgPoint3D::HomgPoint3D ()
-{
-}
-
-// - Constructor
-HomgPoint3D::HomgPoint3D (double x, double y, double z)
-    : Homg3D (x, y, z, 1)
-{
-}
-
-//: Constructor. The homogeneous parameter w defaults to 1.
-HomgPoint3D::HomgPoint3D (double x, double y, double z, double w)
-    : Homg3D (x, y, z, w)
-{
-}
-
-// - Destructor
-HomgPoint3D::~HomgPoint3D ()
-{
-}
-
-
-//--------------------------------------------------------------
-//
 //: Return true if the point is at infinity
 //--------------------------------------------------------------
 //
