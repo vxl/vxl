@@ -37,7 +37,7 @@ bool ComputeGRIC::compute(PairMatchSetCorner* matches) {
   basisF_ = computor1->get_basis();
   F_ = F;
   delete computor1;
-  cout << "Finished calculations" << endl;
+  vcl_cout << "Finished calculations" << vcl_endl;
 
   // Compare the GRIC scores of the two different models
   int inf = 0, inh = 0;
@@ -58,12 +58,12 @@ bool ComputeGRIC::compute(PairMatchSetCorner* matches) {
   }
   stdf /= inf;
   stdh /= inh;
-  cout << "inf : " << inf << endl;
-  cout << "inh : " << inh << endl;
-  cout << "stdf : " << stdf << endl;
-  cout << "stdh : " <<	 stdh << endl;
+  vcl_cout << "inf : " << inf << vcl_endl;
+  vcl_cout << "inh : " << inh << vcl_endl;
+  vcl_cout << "stdf : " << stdf << vcl_endl;
+  vcl_cout << "stdh : " <<	 stdh << vcl_endl;
   int df = 3, dh = 2, r = 4, kf = 7, kh = 8;
-  double l1 = log(4), l2 = log(4*n), l3 = 2.0;
+  double l1 = vcl_log(4.0), l2 = vcl_log(4.0*n), l3 = 2.0;
   double GRICF = 0.0;
   double thresh = l3*(r - df);
   for(int i = 0; i < residualsF_.size(); i++) {
@@ -74,7 +74,7 @@ bool ComputeGRIC::compute(PairMatchSetCorner* matches) {
       GRICF += thresh;
   }
   GRICF += l1*(df*n) + l2*kf;
-  cout << "GRICF : " << GRICF << endl;
+  vcl_cout << "GRICF : " << GRICF << vcl_endl;
   double GRICH = 0.0;
   thresh = l3*(r - dh);
   for(int i = 0; i < residualsH_.size(); i++) {
@@ -85,7 +85,7 @@ bool ComputeGRIC::compute(PairMatchSetCorner* matches) {
       GRICH += thresh;
   }
   GRICH += l1*(dh*n) + l2*kh;
-  cout << "GRICH : " << GRICH << endl;
+  vcl_cout << "GRICH : " << GRICH << vcl_endl;
 
   // Determine the winner
   if(GRICH < GRICF) {

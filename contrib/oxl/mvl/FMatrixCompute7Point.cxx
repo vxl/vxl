@@ -56,8 +56,8 @@ bool FMatrixCompute7Point::compute (vcl_vector<HomgPoint2D>& points1, vcl_vector
 {
   
   if (points1.size() < 7 || points2.size() < 7) {
-    cerr << "FMatrixCompute7Point: Need at least 7 point pairs." << endl;
-    cerr << "Number in each set: " << points1.size() << ", " << points2.size() << endl;
+    vcl_cerr << "FMatrixCompute7Point: Need at least 7 point pairs." << vcl_endl;
+    vcl_cerr << "Number in each set: " << points1.size() << ", " << points2.size() << vcl_endl;
     return false;
   }
 

@@ -33,9 +33,7 @@
 #include <mvl/AffineMetric.h>
 #include <mvl/HomgNorm2D.h>
 #include <mvl/PairMatchSetCorner.h>
-
-class FMatrix;
-//class ImageMetric;
+#include <mvl/FMatrix.h> // needed since there is an FMatrix data member
 
 class FMatrixComputeNonLinear : public vnl_least_squares_function {
 public:

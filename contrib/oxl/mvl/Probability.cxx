@@ -29,12 +29,12 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
   double col_div = col_size/buckets;  
   int no_buckets = buckets*buckets;
   if(buckets < 1) {
-    cout << "Warning Monte Carlo sampling will not work." << endl;
-    cout << "Not enough buckets, need 1 " << " have " << buckets << "." << endl;
+    vcl_cout << "Warning Monte Carlo sampling will not work." << vcl_endl;
+    vcl_cout << "Not enough buckets, need 1 " << " have " << buckets << "." << vcl_endl;
   }
   if(index.size() < samples) {
-    cout << "Warning Monte Carlo sampling will not work." << endl;
-    cout << "Not enough points to choose from, need " << samples << " have " << index.size() << "." << endl; 
+    vcl_cout << "Warning Monte Carlo sampling will not work." << vcl_endl;
+    vcl_cout << "Not enough points to choose from, need " << samples << " have " << index.size() << "." << vcl_endl; 
   }
   int i = 0;
   while(i < samples) {
@@ -47,7 +47,7 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
 
     int row_num;
     if(buckets > 1) {
-      row_num = abs(random/buckets);
+      row_num = vcl_abs(random/buckets);
     } else {
       row_num = 0;
     }
@@ -100,7 +100,7 @@ points[j].get_x() < col_check_upper) {
           i++;
         } else {
           counter++;
-          //cout << "Failed" << endl;
+          //vcl_cout << "Failed" << vcl_endl;
         }
       }       
     }  
@@ -146,20 +146,20 @@ double Sampsons_MLE(HomgPoint2D x1, HomgPoint2D x2, FMatrix *F)
   double rX, rY, rX_dash, rY_dash, GRADr, r, dist; 
   vnl_matrix<double> temp(3, 3);
   temp = (vnl_matrix<double>)F->get_matrix();
-  cout << x2.get_x() << endl;
+  vcl_cout << x2.get_x() << vcl_endl;
   rX = temp.get(0, 0)*x2.get_x() + temp.get(1, 0)*x2.get_y() + temp.get(2, 0);
   rY = F->get(0, 1)*x2.get_x() + F->get(1, 1)*x2.get_y() + F->get(2, 1);  
   rX_dash = F->get(0, 0)*x1.get_x() + F->get(0, 1)*x1.get_y() + F->get(0, 2);
   rY_dash = F->get(1, 0)*x1.get_x() + F->get(1, 1)*x1.get_y() + F->get(1, 2);
-  cout << "Points : " << rX << " " << rY << " " << rX_dash << " " << rY_dash << endl;
+  vcl_cout << "Points : " << rX << " " << rY << " " << rX_dash << " " << rY_dash << vcl_endl;
   GRADr = vnl_math_sqr(rX*rX + rY*rY + rX_dash*rX_dash + rY_dash*rY_dash);
-  cout << "1 : " << " " << GRADr << endl;
+  vcl_cout << "1 : " << " " << GRADr << vcl_endl;
   // This is an annoying interface
   HomgPoint2D *x1p = new HomgPoint2D(x1.get_x(), x1.get_y(), 1.0);
   HomgPoint2D *x2p = new HomgPoint2D(x2.get_x(), x2.get_y(), 1.0);
-  cout << "2" << endl;
+  vcl_cout << "2" << vcl_endl;
   r = F->image1_epipolar_distance_squared(x1p, x2p);
-  cout << "r " << r << endl;
+  vcl_cout << "r " << r << vcl_endl;
   dist = r/GRADr;
   return dist;
 }

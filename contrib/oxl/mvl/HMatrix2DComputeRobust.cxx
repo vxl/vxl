@@ -73,7 +73,7 @@ bool HMatrix2DComputeRobust::compute(PairMatchSetCorner& matches, HMatrix2D *H)
 
 
     if(!Computor->compute(four1_homg, four2_homg, H_temp))
-      cout << "HMatrix2DCompute4Point - failure!" << endl;
+      vcl_cout << "HMatrix2DCompute4Point - failure!" << vcl_endl;
     delete Computor;
 
     // De-condition H
@@ -93,15 +93,15 @@ bool HMatrix2DComputeRobust::compute(PairMatchSetCorner& matches, HMatrix2D *H)
       inlier_list = list;
       residualsH = residuals;
       count = temp_count;
-      cout << "Minimum so far... : " << Ds << endl;
-      cout << "Inliers : " << count << endl;
-      cout << "HMatrix2D : " << Hs.get_matrix() << endl;
+      vcl_cout << "Minimum so far... : " << Ds << vcl_endl;
+      vcl_cout << "Inliers : " << count << vcl_endl;
+      vcl_cout << "HMatrix2D : " << Hs.get_matrix() << vcl_endl;
     }
 
   }
-  cout << "Final Figures..." << endl;
-  cout << "Ds : " << Ds << endl;
-  cout << "HMatrix2D : " << Hs << endl;
+  vcl_cout << "Final Figures..." << vcl_endl;
+  vcl_cout << "Ds : " << Ds << vcl_endl;
+  vcl_cout << "HMatrix2D : " << Hs << vcl_endl;
   H->set(Hs.get_matrix());
 
   int inlier_count = count;
@@ -111,9 +111,9 @@ bool HMatrix2DComputeRobust::compute(PairMatchSetCorner& matches, HMatrix2D *H)
   inlier_count = matches.compute_match_count();
   inliers_ = inlier_list;
   residuals_ = residualsH;
-  cout << "Residuals Variance : " << std_in << endl;
-  cout << "Inlier - " << endl;
-  cout << "         " << inlier_count << endl;
+  vcl_cout << "Residuals Variance : " << std_in << vcl_endl;
+  vcl_cout << "Inlier - " << vcl_endl;
+  vcl_cout << "         " << inlier_count << vcl_endl;
 
   return true;
 }
