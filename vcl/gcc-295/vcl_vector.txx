@@ -19,6 +19,6 @@ VCL_VECTOR_STLINST_uninitialized_copy(vector<T >::const_iterator, vector<T >::it
 /*VCL_FIND_INSTANTIATE(vector<T >::iterator, T);*/\
 /* the next one is for the inline "void insert(pos, first, last);" method. */ \
 template void vector<T, allocator<T > >::_M_range_insert(T *, T *, T *, forward_iterator_tag); \
-template class vector<T >;
+template class vector<T >
 
-#endif
+#endif // vcl_gcc295_vector_txx_

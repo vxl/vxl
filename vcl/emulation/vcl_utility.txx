@@ -14,7 +14,7 @@ template class vcl_pair<T1, T2 >; \
 template struct vcl_select1st<vcl_pair<T1, T2 > >; \
 /*VCL_CONTAINABLE0_INSTANTIATE(vcl_pair<T1 VCL_COMMA T2 >);*/ \
 VCL_CONTAINABLE_INSTANTIATE(vcl_pair<T1 VCL_COMMA T2 >); \
-VCL_SWAP_INSTANTIATE(vcl_pair<T1 VCL_COMMA T2 >);
+VCL_SWAP_INSTANTIATE(vcl_pair<T1 VCL_COMMA T2 >)
 
 // swap can't be defined if either T1 or T2 is a const type
 #undef VCL_PAIR_const_INSTANTIATE
@@ -22,6 +22,6 @@ VCL_SWAP_INSTANTIATE(vcl_pair<T1 VCL_COMMA T2 >);
 template class vcl_pair<T1, T2 >; \
 template struct vcl_select1st<vcl_pair<T1, T2 > >; \
 /*VCL_CONTAINABLE0_INSTANTIATE(vcl_pair<T1 VCL_COMMA T2 >);*/ \
-VCL_CONTAINABLE_INSTANTIATE(vcl_pair<T1 VCL_COMMA T2 >);
+VCL_CONTAINABLE_INSTANTIATE(vcl_pair<T1 VCL_COMMA T2 >)
 
-#endif
+#endif // vcl_emulation_utility_txx_

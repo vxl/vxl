@@ -8,6 +8,6 @@
 
 #undef VCL_BASIC_STRING_INSTANTIATE
 #define VCL_BASIC_STRING_INSTANTIATE(charT, Traits) \
-template class vcl_basic_string<charT, Traits >;
+template class vcl_basic_string<charT, Traits >
 
-#endif
+#endif // vcl_gcc295_string_txx_
