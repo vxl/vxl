@@ -143,7 +143,7 @@ vidl_clip_sptr  vidl_io::load_clip(
           // So, we will process all the files in this directory
           // as images making the video.
           return 0;
-#if 0 // avoid warnings about unreachable code -- fsm@robots.ox.ac.uk
+#if 0 // avoid warnings about unreachable code - fsm@robots.ox.ac.uk
           Dir dir(fname);
           if(!dir.IsOpen())
              return 0;
@@ -319,7 +319,7 @@ void vidl_io::register_codec(vidl_codec* codec)
   supported_types_.push_back(codec);
 }
 
-//-- Destroy codecs.
+//: Destroy codecs.
 // Must call this before the MPEG library is deleted, i.e. on exit.
 void vidl_io::close()
 {
