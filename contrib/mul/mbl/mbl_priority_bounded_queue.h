@@ -79,8 +79,11 @@ public:
       else return;
     }
     c_.push_back(x);
-    vcl_push_heap(c_.begin(), c_.end(), comp_); }
-
+    vcl_push_heap(c_.begin(), c_.end(), comp_); } // ignore purify:UMR error here
+  // It can be resolved by replacing a comparator object with a function pointer.
+  // It seems that when using an object, some compilers put a small data marker in
+  // to represent the object. But it contatins no useful data.
+  // Ignore purify:UMR error on next line as well - same cause.
   void pop() {vcl_pop_heap(c_.begin(), c_.end(), comp_); c_.pop_back(); }
 
 protected:
