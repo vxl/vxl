@@ -64,10 +64,28 @@ void vsl_binary_loader<BaseClass>::load_object( vsl_b_istream& is, BaseClass*& b
   }
 }
 
+#if VCL_CAN_DO_STATIC_TEMPLATE_MEMBER
+#ifdef __GNUC__
+#define VNL_BINARY_LOADER_INSTANTIATE(T) \
+vsl_binary_loader<T >* vsl_binary_loader<T >::instance_ = 0; \
+template class vsl_binary_loader<T >; \
+template void vsl_b_read( vsl_b_istream& bfs, T*& b); \
+/* Create space for singleton pointer */ \
+VCL_VECTOR_INSTANTIATE(T*)
+#else
 #define VNL_BINARY_LOADER_INSTANTIATE(T) \
 template class vsl_binary_loader<T >; \
 template void vsl_b_read( vsl_b_istream& bfs, T*& b); \
 /* Create space for singleton pointer */ \
-vsl_binary_loader<T >* vsl_binary_loader<T >::instance_ = 0; \
 VCL_VECTOR_INSTANTIATE(T*)
 
+template <class T> vsl_binary_loader<T >* vsl_binary_loader<T >::instance_ = 0;
+
+#endif
+#else
+#define VNL_BINARY_LOADER_INSTANTIATE(T) \
+template class vsl_binary_loader<T >; \
+template void vsl_b_read( vsl_b_istream& bfs, T*& b); \
+/* Create space for singleton pointer */ \
+VCL_VECTOR_INSTANTIATE(T*)
+#endif
