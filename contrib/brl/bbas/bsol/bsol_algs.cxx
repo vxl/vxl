@@ -147,6 +147,28 @@ bool bsol_algs::box_union(vsol_box_2d_sptr const & a,
 }
 
 //-----------------------------------------------------------------------------
+// :expand or contract a box with the supplied absolute margin
+//-----------------------------------------------------------------------------
+bool bsol_algs::box_with_margin(vsol_box_2d_sptr const & b,
+                     const double margin,
+                     vsol_box_2d_sptr& bmod)
+{
+  if(!b)
+    return false;
+  double x_min = b->get_min_x(), y_min = b->get_min_y();
+  double x_max = b->get_max_x(), y_max = b->get_max_y();
+  double width = x_max-x_min, height = y_max-y_min;
+  //See if the margin for contraction is too large, i.e. margin is negative
+  if((width+2*margin)<0)
+    return false;
+  if((height+2*margin)<0)
+    return false;
+  bmod = new vsol_box_2d();
+  bmod->add_point(x_min-margin, y_min-margin);
+  bmod->add_point(x_max+margin, y_max+margin);
+  return true;
+}
+//-----------------------------------------------------------------------------
 // :Compute the convex hull of a set of polygons
 //-----------------------------------------------------------------------------
 bool bsol_algs::hull_of_poly_set(vcl_vector<vsol_polygon_2d_sptr> const& polys,

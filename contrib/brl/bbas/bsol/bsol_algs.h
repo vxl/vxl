@@ -59,6 +59,12 @@ class bsol_algs
                         vsol_box_2d_sptr const & b,
                         vsol_box_2d_sptr& a_union_b);
 
+  //:expand/contract box by an absolute margin
+  static bool box_with_margin(vsol_box_2d_sptr const & b,
+                              const double margin,
+                              vsol_box_2d_sptr& bmod);
+
+
   //:find the convex hull of a set of polygons
   static bool hull_of_poly_set(vcl_vector<vsol_polygon_2d_sptr> const& polys,
                                vsol_polygon_2d_sptr& hull);
