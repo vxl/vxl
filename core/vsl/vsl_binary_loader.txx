@@ -82,16 +82,16 @@ void vsl_binary_loader<BaseClass>::load_object( vsl_b_istream& is, BaseClass*& b
 // as well would give linker errors (multiple definition of the same symbol).
 //
 // An alternative solution is a single inline definition in vsl_binary_io.h
+// This definition must be implemented identically to the one in
+// vsl_binary_io.h, otherwise there may be a io incompatibility.
 
 inline void vsl_b_write(vsl_b_ostream& bfs, const char* b)
 {
-  if (b)
-  {
-    while (*b) { vsl_b_write(bfs, *b); ++b; }
-    vsl_b_write(bfs, *b); // '\0'
-  }
-  else
-    vsl_b_write(bfs, vcl_string("VSL_NULL_PTR"));
+  int i = -1;
+  do {
+     i++;
+     vsl_b_write(bfs,b[i]);
+  } while ( b[i] != 0 );
 }
 #endif
 
