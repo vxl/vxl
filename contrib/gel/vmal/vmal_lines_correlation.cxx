@@ -46,15 +46,15 @@ double vmal_lines_correlation::find_min_corr(vnl_double_3 &line0p, vnl_double_3 
 }
 
 double vmal_lines_correlation::lines_correlation(vnl_double_3 &line0_p, vnl_double_3 &line0_q,
-                           vnl_double_3 &line1_p, vnl_double_3 &line1_q,
-                                 vil_memory_image_of<vil_byte> &image0,
-                             vil_memory_image_of<vil_byte> &image1,
-                         vnl_double_3 &trans, int bias)
+                                                 vnl_double_3 &line1_p, vnl_double_3 &line1_q,
+                                                 vil_memory_image_of<vil_byte> &image0,
+                                                 vil_memory_image_of<vil_byte> &image1,
+                                                 vnl_double_3 &trans, int bias)
 {
 
   //compute the director vector of the segments
   vnl_double_2 tan0(line0_q[0]-line0_p[0], line0_q[1]-line0_p[1]);
-  vnl_double_2 tan1(line1_q[0]-line1_p[0], line1_q[1]-line1_p[1]);
+//vnl_double_2 tan1(line1_q[0]-line1_p[0], line1_q[1]-line1_p[1]);
 
   //compute the normal vector to the segments and multiply it by the radius
   vnl_double_2 norm0(-line0_p[1]+line0_q[1], -line0_q[0]+line0_p[0]);
@@ -89,7 +89,6 @@ double vmal_lines_correlation::lines_correlation(vnl_double_3 &line0_p, vnl_doub
 
   int num_pixel_width=(int)(2*_radius)+1;
   int num_pixel_height=(int)(tan0.magnitude())+1;
-
 
   double sum=0;
   vnl_double_3 pixel0;
