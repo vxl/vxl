@@ -16,7 +16,7 @@ void testing_graph()
   cg.add_vertex(source_id);
   cg.add_vertex(source_id);
 
-  cg.print(vcl_cout);
+  cg.print(vcl_cerr);
 }
 
 void testing_linear_calibration()
@@ -48,7 +48,7 @@ void testing_linear_calibration()
   assert(trans);
   trans->set_beat(t_beats);
 
-  cg.print(vcl_cout);
+  cg.print(vcl_cerr);
 
   // read feature point for each view
   cg.get_vertex(camID)->readData("data1.txt" , 0);

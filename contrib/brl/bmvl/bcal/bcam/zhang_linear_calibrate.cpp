@@ -45,18 +45,16 @@ int zhang_linear_calibrate::compute_homography()
 
   vcl_vector<vgl_homg_point_2d<double> > &p0 = camGraph_->get_source()->get_points();
 
-  camera_graph<calibrate_plane, zhang_camera_node, euclidean_transformation>::iterator
-    iter = camGraph_->begin();
 
   for (int i=0; i<size; i++) {// for each camera
+    zhang_camera_node *cam = camGraph_->get_vertex_from_pos(i);
+    assert(cam);
     // compute homography
-    int nViews = iter->num_views();
+    int nViews = cam->num_views();
     for (int j=0; j<nViews; j++){ // for each view
-      vcl_vector<vgl_homg_point_2d<double> > &p1 = iter->getPoints(j);
+      vcl_vector<vgl_homg_point_2d<double> > &p1 = cam->getPoints(j);
       h_matrice_[i][j] = hmcl.compute(p0, p1);
     }
-
-    ++iter;
   }
   return 0;
 }
@@ -69,15 +67,14 @@ int zhang_linear_calibrate::initialize()
   num_views_.resize(num_camera);
 
   // allocate vgl_h_matrix_2d<double> for each views
-  camera_graph<calibrate_plane, zhang_camera_node, euclidean_transformation>::iterator
-    iter = camGraph_->begin();
-
   for (int i=0; i<num_camera; i++){ // from camera 1 to camera n
-    int nViews = iter->num_views();
+    zhang_camera_node *cam = camGraph_->get_vertex_from_pos(i);
+    assert(cam);
+
+    int nViews = cam->num_views();
     num_views_[i] = nViews;
     for (int j=0; j<nViews; j++)
       h_matrice_[i] = new vgl_h_matrix_2d<double> [nViews];
-    iter++;
   }
 
   return 0;
@@ -296,37 +293,35 @@ vnl_double_3x3 zhang_linear_calibrate::get_closest_rotation(const vnl_double_3x3
 
 void zhang_linear_calibrate::calibrate_intrinsic()
 {
-  camera_graph<calibrate_plane, zhang_camera_node, euclidean_transformation>::iterator
-    iter = camGraph_->begin();
-
-  int num_camera = camGraph_->num_vertice();
-
+  int num_camera = camGraph_->num_vertice();  
   for (int i= 0; i<num_camera; i++){
+    zhang_camera_node *cam = camGraph_->get_vertex_from_pos(i);
+    assert(cam);
     vnl_double_3x3 K = compute_intrinsic(h_matrice_[i], num_views_[i]);
-    iter->set_intrinsic(K);
-    vcl_cerr<<"intrinsic parameters K is: \n"<<iter->get_intrinsic()<<"\n";
-    iter++;
+    cam->set_intrinsic(K);
+    vcl_cerr<<"intrinsic parameters K is: \n"<<cam->get_intrinsic()<<"\n";
   }
 
 }
 
 int zhang_linear_calibrate::calibrate_extrinsic()
 {
-  camera_graph<calibrate_plane, zhang_camera_node, euclidean_transformation>::iterator
-    iter = camGraph_->begin();
 
   int num_camera = camGraph_->num_vertice();
 
   for (int i= 0; i<num_camera; i++){// for each camera
     // get edge
+    zhang_camera_node *cam = camGraph_->get_vertex_from_pos(i);
+    assert(cam);
     int source_id = camGraph_->get_source_id();
-    int vertex_id = iter.get_vertex_id();
+    int vertex_id = camGraph_->get_vertex_id(i);
     euclidean_transformation *e = camGraph_->get_edge(source_id, vertex_id);
     assert(e != 0) ;
 
-    // compute and set extrinsic parameter
-    vnl_double_3x3 K = iter->get_intrinsic();
-    int num_views = iter->num_views();
+    // compute and set extrinsic parameter 
+    vnl_double_3x3 K = cam->get_intrinsic();
+    int num_views = cam->num_views();
+
     vcl_vector<vgl_h_matrix_3d<double> > trans_list(num_views);
     for (int j=0; j< num_views; j++){ // for each view
       trans_list[j] = compute_extrinsic(h_matrice_[i][j], K);
@@ -334,7 +329,6 @@ int zhang_linear_calibrate::calibrate_extrinsic()
 
     // store it into edge
     e->set_transformations(trans_list);
-    iter++;
   }
 
   return 0;
