@@ -26,7 +26,6 @@ vnl_cpoly_roots
 vnl_rnpoly_solve
 vnl_fft
 vnl_fftxd_prime_factors
-vnl_determinant
 vnl_chi_squared
 vnl_gaussian_kernel_1d
 )
