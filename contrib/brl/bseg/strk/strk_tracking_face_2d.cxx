@@ -5,6 +5,7 @@
 // See strk_tracking_face_2d.h
 //
 //-----------------------------------------------------------------------------
+#include <vcl_cmath.h> // for fabs()
 #include <strk/strk_tracking_face_2d.h>
 #include <btol/btol_face_algs.h>
 #include <vsol/vsol_point_2d.h>
