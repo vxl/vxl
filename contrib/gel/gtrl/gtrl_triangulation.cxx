@@ -69,7 +69,7 @@ void gtrl_triangulation::run()
   out.numberoftriangleattributes= 0;
 
   // do triangulation
-  triangulate( "-z -i", &in, &out, 0);
+  triangulate( "-z -i -q", &in, &out, 0);
 
   // create any new points that are necessary
   for( int i=0; i< out.numberofpoints; i++)
@@ -96,6 +96,8 @@ void gtrl_triangulation::run()
       if (poly_.inside( triangle->mid_point()))
 	tris_.push_back( triangle);
     }
+
+  pts_= pointlist;
 
   // clean memory
   delete[] out.pointlist;

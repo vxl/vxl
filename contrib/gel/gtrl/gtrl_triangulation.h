@@ -21,11 +21,13 @@ public:
   // implementation
   void run();
   vcl_vector<gtrl_triangle_ref> get_triangles() const { return tris_; }
+  vcl_vector<gtrl_vertex_ref> get_points() const { return pts_; }
 
 protected:
   gtrl_polygon poly_;
   
   vcl_vector<gtrl_triangle_ref> tris_;
+  vcl_vector<gtrl_vertex_ref>   pts_;
 };
 
 #endif
