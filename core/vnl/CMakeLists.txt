@@ -32,6 +32,7 @@ CONFIGURE_FILE(${vxl_SOURCE_DIR}/core/vnl/vnl_config.h.in
                ${vxl_BINARY_DIR}/core/vnl/vnl_config.h @ONLY IMMEDIATE)
 
 SET( vnl_sources
+  vnl_config.h.in
   vnl_fwd.h
   vnl_tag.h
 
@@ -98,7 +99,7 @@ SET( vnl_sources
 
   # traits
   # vnl_numeric_limits can be removed after the release of VXL 1.1.0
-  vnl_numeric_limits.cxx       vnl_numeric_limits.h
+# vnl_numeric_limits.cxx       vnl_numeric_limits.h
   vnl_numeric_traits.cxx       vnl_numeric_traits.h
                                vnl_complex_traits.h
   vnl_bignum_traits.cxx        vnl_bignum_traits.h
