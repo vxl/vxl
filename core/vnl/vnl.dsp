@@ -735,6 +735,12 @@ SOURCE=.\Templates/vnl_matrix_fixed+double.2.4-.cxx
 SOURCE=.\Templates/vnl_matrix_fixed+double.4.2-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vnl_matrix_fixed+double.3.5-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_vector_fixed+double.5-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vnl_gamma.cxx
 # End Source File
 # End Group
