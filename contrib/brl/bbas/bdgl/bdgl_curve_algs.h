@@ -24,8 +24,12 @@ class bdgl_curve_algs
   static BTOL_DLL_DATA const double synthetic;
   ~bdgl_curve_algs();
 
-  //:Finds the edgel index on a digital curve closest to the given point
+  //:Finds the index on a digital curve closest to the given point
   static int closest_point(vdgl_edgel_chain_sptr const& ec,
+                              const double x, const double y);
+
+  //:Finds the index on a digital curve closest to the given point
+  static double closest_point(vdgl_digital_curve_sptr const& dc,
                            const double x, const double y);
 
   //:Finds the x-y coordinates on a digital curve closest to the given point
@@ -46,10 +50,23 @@ class bdgl_curve_algs
   //:Reverses the edgel chain
   static vdgl_digital_curve_sptr reverse(vdgl_digital_curve_sptr const& dc);
 
-  //:Intersect the curve with an infinite line
+  //:Intersect the curve with an infinite line, return the index values
+  static bool intersect_line(vdgl_digital_curve_sptr const& dc,
+                             vgl_line_2d<double> & line,
+                             vcl_vector<double>& indices);
+
+  //:Intersect the curve with an infinite line, return the points
   static bool intersect_line(vdgl_digital_curve_sptr const& dc,
                              vgl_line_2d<double> & line,
                              vcl_vector<vgl_point_2d<double> >& pts);
+
+ //:Intersect a curve with a line and match the reference edgel point
+  static bool match_intersection(vdgl_digital_curve_sptr const& dc,
+                             vgl_line_2d<double>& line,
+                             vgl_point_2d<double> const& ref_point,
+							 double ref_gradient_angle,
+                             vgl_point_2d<double>& point);
+
 
   //:Generate points along a digital straight line
   static  bool line_gen(float xs, float ys, float xe, float ye,
@@ -63,6 +80,7 @@ class bdgl_curve_algs
 
   static void
     smooth_curve(vcl_vector<vgl_point_2d<double> > & curve,double sigma);
+
   static vdgl_digital_curve_sptr
     create_digital_curves(vcl_vector<vgl_point_2d<double> > & curve);
 

@@ -24,7 +24,7 @@ AUX_SOURCE_DIRECTORY(Templates bdgl_sources)
 
 ADD_LIBRARY(bdgl ${bdgl_sources})
 
-TARGET_LINK_LIBRARIES(bdgl vtol vdgl vsol vgl vnl_algo vnl vbl)
+TARGET_LINK_LIBRARIES(bdgl vtol vdgl vsol vgl_algo vgl vnl_algo vnl vbl)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)
