@@ -19,6 +19,7 @@ IF (WIN32)
     FIND_PATH(OPENGL_INCLUDE_DIR GL/gl.h
       /usr/include
       /usr/X11R6/include
+      ${OPENGL_INCLUDE_PATH}
     )
 
     FIND_LIBRARY(OPENGL_gl_LIBRARY opengl32
@@ -70,6 +71,7 @@ ELSE (WIN32)
     /usr/openwin/share/include
     /opt/graphics/OpenGL/include
     /usr/X11R6/include
+    ${OPENGL_INCLUDE_PATH}
   )
 
   FIND_PATH(OPENGL_xmesa_INCLUDE_DIR GL/xmesa.h

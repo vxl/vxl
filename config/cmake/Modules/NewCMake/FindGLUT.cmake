@@ -16,6 +16,7 @@ IF (WIN32)
 
     FIND_PATH( GLUT_INCLUDE_DIR GL/glut.h
       /usr/include
+      ${GLUT_INCLUDE_PATH}
     )
 
     FIND_LIBRARY( GLUT_glut_LIBRARY glut32
@@ -60,6 +61,7 @@ ELSE (WIN32)
       /usr/include/X11
       /opt/graphics/OpenGL/include
       /opt/graphics/OpenGL/contrib/libglut
+      ${GLUT_INCLUDE_PATH}
     )
 
     FIND_LIBRARY( GLUT_glut_LIBRARY glut
