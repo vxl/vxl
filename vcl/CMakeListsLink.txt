@@ -1,7 +1,5 @@
 INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/vcl )
 
-LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/vcl )
-
 LINK_LIBRARIES( vcl )
 
 IF(UNIX)
