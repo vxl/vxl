@@ -87,7 +87,7 @@ struct vul_file {
 inline bool vul_file_exists(char const *f) { return vul_file::exists(f); }
 inline bool vul_file_exists(vcl_string  f) { return vul_file::exists(f); }
 
-inline bool vul_file_size(char const *f) { return vul_file::size(f); }
-inline bool vul_file_size(vcl_string  f) { return vul_file::size(f); }
+inline int vul_file_size(char const *f) { return vul_file::size(f); }
+inline int vul_file_size(vcl_string  f) { return vul_file::size(f); }
 
 #endif // vul_file_h_
