@@ -20,6 +20,8 @@
 #include <vcl_cstdio.h>
 #include <vbl/vbl_sprintf.h>
 
+#include <vgui/vgui_gl.h>
+#include <vgui/impl/gtk/vgui_gtk_adaptor.h>
 #include <vgui/internals/vgui_dialog_field.h>
 #include <vgui/internals/vgui_simple_field.h>
 #include <vgui/internals/vgui_string_field.h>
@@ -27,6 +29,8 @@
 
 static bool debug = false;
 static bool is_modal = true;
+vcl_string ok_text;
+vcl_string cancel_text;
 vcl_string title;
 
 // Stuff for file browser and color chooser:
@@ -45,6 +49,8 @@ vgui_gtk_dialog_impl::vgui_gtk_dialog_impl(const char* name)
   : vgui_dialog_impl(name)
 {
   title = name;
+  ok_text = "OK";
+  cancel_text = "Cancel";
 }
 
 
@@ -70,6 +76,20 @@ void* vgui_gtk_dialog_impl::choice_field_widget(const char* /*txt*/,
   ch->index = val;
 
   return (void*)ch;
+}
+
+//--------------------------------------------------------------------------------
+//: Make a tableau widget.
+void* vgui_gtk_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr tab,
+  unsigned width, unsigned height)
+{
+  vgui_gtk_adaptor *ct = new vgui_gtk_adaptor();
+  ct->set_tableau(tab);
+  GtkWidget *glarea= (( vgui_gtk_adaptor *)ct)->get_glarea_widget();
+  gtk_widget_set_usize(glarea, width, height);
+  gtk_widget_show(glarea);
+
+  return (void*)glarea;
 }
 
 static int loop_flag = 0;
@@ -109,6 +129,22 @@ void choose_cb(GtkWidget* /*widget*/,
 void vgui_gtk_dialog_impl::modal(const bool m)
 {
   is_modal = m;
+}
+
+void vgui_gtk_dialog_impl::set_ok_button(const char* txt)
+{
+  if (txt)
+    ok_text = vcl_string(txt);
+  else
+    ok_text = vcl_string("REMOVEBUTTON");
+}
+
+void vgui_gtk_dialog_impl::set_cancel_button(const char* txt)
+{
+  if (txt)
+    cancel_text = vcl_string(txt);
+  else
+    cancel_text = vcl_string("REMOVEBUTTON");
 }
 
 //--------------------------------------------------------------------------------
@@ -229,24 +265,26 @@ bool vgui_gtk_dialog_impl::ask() {
   gtk_window_set_position(GTK_WINDOW(dialog), GTK_WIN_POS_CENTER);
   gtk_window_set_modal(GTK_WINDOW(dialog), is_modal);
 
-  GtkWidget *accept = gtk_button_new_with_label ("OK");
-  GtkWidget *cancel = gtk_button_new_with_label ("Cancel");
-
-  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
+  if (ok_text.compare("REMOVEBUTTON"))
+  {
+    GtkWidget *accept = gtk_button_new_with_label (ok_text.c_str());
+    gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
                      accept, TRUE, TRUE, 0);
-  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
-                     cancel, TRUE, TRUE, 0);
-  gtk_signal_connect(GTK_OBJECT(accept), "clicked",
+    gtk_signal_connect(GTK_OBJECT(accept), "clicked",
                      GTK_SIGNAL_FUNC(accept_cb),
                      dialog);
-
-  gtk_signal_connect(GTK_OBJECT(cancel), "clicked",
+    gtk_widget_show(accept);
+  }
+  if (cancel_text.compare("REMOVEBUTTON"))
+  {
+    GtkWidget *cancel = gtk_button_new_with_label (cancel_text.c_str());
+    gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
+                     cancel, TRUE, TRUE, 0);
+    gtk_signal_connect(GTK_OBJECT(cancel), "clicked",
                      GTK_SIGNAL_FUNC(cancel_cb),
                      dialog);
-
-  gtk_widget_show(accept);
-  gtk_widget_show(cancel);
-
+    gtk_widget_show(cancel);
+  }
 
   vcl_vector<GtkWidget*> wlist;
 
@@ -432,6 +470,16 @@ bool vgui_gtk_dialog_impl::ask() {
       gtk_widget_show(hbox);
       wlist.push_back(color_entry);
     }
+    else if (l.type == inline_tabl) {
+      GtkWidget* widg = (GtkWidget*)l.widget;
+      GtkWidget* hbox = gtk_hbox_new(FALSE, 10);
+      gtk_widget_reparent(widg,hbox);
+
+      gtk_box_pack_start(GTK_BOX(hbox), widg, TRUE, TRUE, 0);
+      gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), hbox, TRUE, TRUE, 0);
+      gtk_widget_show(hbox);
+      wlist.push_back(widg);
+    }
     else {
       vcl_cerr << "Unknown type = " << l.type << vcl_endl;
     }
@@ -445,16 +493,14 @@ bool vgui_gtk_dialog_impl::ask() {
     gtk_main_iteration();
     if (loop_flag)
       break;
-
   }
 
-  if (loop_flag == 2) {
+  if (loop_flag == 2)  // OK button has been pressed
+  {
     vcl_vector<GtkWidget*>::iterator w_iter = wlist.begin();
     for (vcl_vector<element>::iterator e_iter = elements.begin();
          e_iter != elements.end(); ++e_iter, ++w_iter) {
       element l = *e_iter;
-      GtkWidget *input = *w_iter;
-
       if (l.type == int_elem ||
           l.type == long_elem ||
           l.type == float_elem ||
@@ -463,13 +509,15 @@ bool vgui_gtk_dialog_impl::ask() {
           l.type == file_bsr ||
           l.type == color_csr ||
           l.type == inline_color_csr) {
+        GtkWidget *input = *w_iter;
         l.field->update_value(gtk_entry_get_text(GTK_ENTRY(input)));
       }
       if(l.type == inline_file_bsr)
-          l.field->update_value(gtk_file_selection_get_filename(GTK_FILE_SELECTION(filew)));
+        l.field->update_value(gtk_file_selection_get_filename(GTK_FILE_SELECTION(filew)));
 
       if (l.type == bool_elem) {
         vgui_bool_field *field = static_cast<vgui_bool_field*>(l.field);
+        GtkWidget *input = *w_iter;
         field->var = (bool) gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(input));
       }
       if (l.type == choice_elem) {
@@ -478,6 +526,8 @@ bool vgui_gtk_dialog_impl::ask() {
         field->var = ch->index;
       }
     }
+    // Need to flush GL events if we have a tableau field, otherwise it crashes:
+    glFlush();
     gtk_widget_destroy(dialog);
 
     return true;
