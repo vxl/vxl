@@ -161,9 +161,9 @@ QvNode::addName(QvNode *b, const char *name)
 
     if (nameDict == NULL) nameDict = new QvDict;
 
-    if (!nameDict->find((u_long)name, t)) {
+    if (!nameDict->find(name, t)) {
         list = new QvPList;
-        nameDict->enter((u_long)name, list);
+        nameDict->enter(name, list);
     }
     else {
         list = (QvPList *)t;
@@ -180,7 +180,7 @@ QvNode::removeName(QvNode *b, const char *name)
     void        *t;
     int         i;
 
-    found = nameDict->find((u_long) name, t);
+    found = nameDict->find( name, t);
 
     if (found) {
         list = (QvPList *) t;

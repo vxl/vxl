@@ -1,5 +1,20 @@
 #include "QvDict.h"
 
+#ifdef _MSC_VER
+# if _MSC_VER <= 1200
+   typedef unsigned long intptr_t;
+# else
+#  include <stddef.h>
+#  include <stdlib.h> /* for malloc and friends */
+# endif
+#else
+# if defined(__alpha) || defined(__CYGWIN__)  /* there is no inttypes.h here */
+   typedef unsigned long intptr_t;
+# else
+#  include <inttypes.h> /* for intptr_t on e.g. SGI, Linux, Solaris */
+# endif
+#endif
+
 struct QvDictListThing {
     QvPList *keyList;
     QvPList *valueList;
@@ -36,7 +51,7 @@ QvDict::clear()
 }
 
 QvBool
-QvDict::enter(u_long key, void *value)
+QvDict::enter(const char* key, void *value)
 {
     QvDictEntry         *&entry = findEntry(key);
 
@@ -52,7 +67,7 @@ QvDict::enter(u_long key, void *value)
 }
 
 QvBool
-QvDict::find(u_long key, void *&value) const
+QvDict::find(const char* key, void *&value) const
 {
     QvDictEntry         *&entry = findEntry(key);
 
@@ -67,11 +82,11 @@ QvDict::find(u_long key, void *&value) const
 }
 
 QvDictEntry *&
-QvDict::findEntry(u_long key) const
+QvDict::findEntry(const char* key) const
 {
     QvDictEntry         **entry;
 
-    entry = &buckets[key % tableSize];
+    entry = &buckets[ (intptr_t)key % tableSize];
 
     while (*entry != NULL) {
         if ((*entry)->key == key)
@@ -82,7 +97,7 @@ QvDict::findEntry(u_long key) const
 }
 
 QvBool
-QvDict::remove(u_long key)
+QvDict::remove(const char* key)
 {
     QvDictEntry         *&entry = findEntry(key);
     QvDictEntry         *tmp;

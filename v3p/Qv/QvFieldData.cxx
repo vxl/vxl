@@ -4,13 +4,15 @@
 #include "QvField.h"
 #include "QvUnknownNode.h"
 
+#include <vcl_cstddef.h>
+
 #define OPEN_BRACE_CHAR         '['
 #define CLOSE_BRACE_CHAR        ']'
 #define VALUE_SEPARATOR_CHAR    ','
 
 struct QvFieldEntry {
     QvName              name;
-    long                offset;
+    vcl_ptrdiff_t       offset;
 };
 
 struct QvEnumEntry {

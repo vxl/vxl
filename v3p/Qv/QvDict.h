@@ -7,10 +7,10 @@
 
 class QvDictEntry {
   private:
-    u_long              key;
+    const char*         key;
     void *              value;
     QvDictEntry *       next;
-    QvDictEntry(u_long k, void *v)      { key = k; value = v; };
+    QvDictEntry(const char* k, void *v)      { key = k; value = v; };
 
 friend class QvDict;
 };
@@ -20,14 +20,14 @@ class QvDict {
     QvDict( int entries = 251 );
     ~QvDict();
     void        clear();
-    QvBool      enter(u_long key, void *value);
-    QvBool      find(u_long key, void *&value) const;
-    QvBool      remove(u_long key);
+    QvBool      enter(const char* key, void *value);
+    QvBool      find(const char* key, void *&value) const;
+    QvBool      remove(const char* key);
 
   private:
     int                 tableSize;
     QvDictEntry *       *buckets;
-    QvDictEntry *&      findEntry(u_long key) const;
+    QvDictEntry *&      findEntry(const char* key) const;
 };
 
 #endif /* _QV_DICT_ */

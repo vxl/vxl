@@ -523,7 +523,7 @@ QvInput::readDigits(char *string)
         }
     }
 
-    return s - string;
+    return int(s - string);
 }
 
 int
@@ -542,7 +542,7 @@ QvInput::readHexDigits(char *string)
         }
     }
 
-    return s - string;
+    return int(s - string);
 }
 
 int
@@ -570,7 +570,7 @@ QvInput::readChar(char *string, char charToRead)
 void
 QvInput::addReference(const QvName &name, QvNode *node)
 {
-    refDict.enter((u_long) name.getString(), (void *) node);
+    refDict.enter( name.getString(), (void *) node);
 
     node->setName(name);
 }
@@ -580,7 +580,7 @@ QvInput::findReference(const QvName &name) const
 {
     void *node;
 
-    if (refDict.find((u_long) name.getString(), node))
+    if (refDict.find( name.getString(), node))
         return (QvNode*)node;
 
     return NULL;
