@@ -13,7 +13,6 @@
 
 #include <testlib/testlib_test.h>
 
-static long double zerold = 0.0L;
 static double zerod = 0.0;
 static float zerof = 0.0f;
 
@@ -332,7 +331,6 @@ static void run_division_tests() {
   TEST("vnl_bignum(\"+Inf\")/(-1L)", vnl_bignum("+Inf")/(-1L), vnl_bignum("-Inf"));
   TEST("vnl_bignum(-1L)/0L", vnl_bignum(-1L)/0L, vnl_bignum("-Inf"));
 
-  vnl_bignum b1,b2,b3;
   long i,j,k,l;
   long div_errors = 0;
   long mod_errors = 0;
