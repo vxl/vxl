@@ -1188,7 +1188,6 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
             }
 
           edge->set_v1(v1->cast_to_vertex());         // link both directions v-e
-          int junk = v1->numsup();
           test_verts_.push_back(new vtol_vertex_2d(x, y));
 //           vcl_cout << "adding vertex (" << x << " " << y
 //                    << ")\n";
