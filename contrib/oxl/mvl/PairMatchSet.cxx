@@ -188,11 +188,12 @@ void PairMatchSet::write_ascii(vcl_ostream& s) const
   for (unsigned i = 0; i < matches_.size(); ++i) {
     int to_index = matches_[i];
     if (to_index != NoMatch)
-      s << i << " " << to_index << vcl_endl;
+      s << i << ' ' << to_index << vcl_endl;
   }
 }
 
-vcl_ostream& operator<<(vcl_ostream& s, const PairMatchSet& cc) {
+vcl_ostream& operator<<(vcl_ostream& s, const PairMatchSet& cc)
+{
   cc.write_ascii(s);
   return s;
 }
@@ -212,15 +213,15 @@ bool PairMatchSet::read_ascii(vcl_istream& s)
 
     // Sanity check
     if (i1 < 0 || i2 < 0 || i1 >= (int)matches_.size()) {
-      vcl_cerr << "PairMatchSet::read_ascii -- Pair " << i1 << "-" << i2 << " is outside the valid range.\n";
+      vcl_cerr << "PairMatchSet::read_ascii -- Pair " << i1 << '-' << i2 << " is outside the valid range.\n";
       clear();
       return false;
     }
 
     // More sanity checking
     if (matches_[i1] != NoMatch) {
-      vcl_cerr << "PairMatchSet::read_ascii() -- Warning:\n";
-      vcl_cerr << "Duplicate matches for " << i1 << ": " << matches_[i1] << " and " << i2 << vcl_endl;
+      vcl_cerr << "PairMatchSet::read_ascii() -- Warning:\n"
+               << "Duplicate matches for " << i1 << ": " << matches_[i1] << " and " << i2 << vcl_endl;
       return false;
     }
 
@@ -230,18 +231,18 @@ bool PairMatchSet::read_ascii(vcl_istream& s)
   return compute_match_count() > 0;
 }
 
-vcl_istream& operator>>(vcl_istream& s, PairMatchSet& cc) {
+vcl_istream& operator>>(vcl_istream& s, PairMatchSet& cc)
+{
   cc.read_ascii(s);
   return s;
 }
-
 
 //: Summarize matches on stream
 void PairMatchSet::print_brief(vcl_ostream& s) const
 {
   s << "PairMatchSet: ";
   for (unsigned i = 0; i < matches_.size(); i++)
-    s << matches_[i] << " ";
+    s << matches_[i] << ' ';
   s << vcl_endl;
 }
 
@@ -257,7 +258,7 @@ void PairMatchSet::print_brief() const
 
   for (unsigned i = 0; i < n; ++i)
     if (matches_[i] != NoMatch)
-      vcl_cout << " " << matches_[i];
+      vcl_cout << ' ' << matches_[i];
   vcl_cout << c << vcl_endl;
 }
 
@@ -306,9 +307,7 @@ bool PairMatchSet::iterator::next()
   return c_->get_match(++match_index_, &i1, &i2);
 }
 
-// insert these here for documentation purposes
-
-#if 0
+#if 0 // insert these here for documentation purposes
 //: Return the first component of the match currently "pointed to" by the match iterator.
 int PairMatchSet::iterator::get_i1() const
 {
@@ -327,17 +326,4 @@ int PairMatchSet::iterator::get_i2() const
 bool PairMatchSet::iterator::isfull() const
 {
   return i1 != NoMatch && i2 != NoMatch;
-}
-
-//: Return true if the iterator has not yet enumerated all matches.
-PairMatchSet::iterator::operator PairMatchSet::iterator::safe_bool () const
-{
-  return (match_index_ < c_->size())? VCL_SAFE_BOOL_TRUE : 0;
-
-}
-
-//: Return false if the iterator has not yet enumerated all matches.
-bool PairMatchSet::iterator::operator!() const
-{
-  return (match_index_ < c_->size())? false : true;
 }
