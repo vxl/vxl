@@ -108,8 +108,11 @@ class vgui_adaptor
 
   // These methods are called by vgui_adaptor (in its capacity as a base class)
   // when a post arrives.
-  virtual int  post_timer(float);
+  // The single-argument version calls the two-argument one with increasing
+  // counter value on subsequent calls.  The used counter value is returned.
+  // The two-argument version must be implemented by the derived class.
   virtual void post_timer(float, int );
+          int  post_timer(float);
   //: Redraw the rendering area.
   virtual void post_redraw() =0;
   virtual void post_overlay_redraw() =0;

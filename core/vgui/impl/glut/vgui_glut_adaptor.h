@@ -30,7 +30,6 @@ struct vgui_glut_adaptor : vgui_adaptor
   void post_redraw();
   void post_overlay_redraw();
   void post_timer(float, int);
-  int  post_timer(float t) { return vgui_adaptor::post_timer(t); }
   void post_destroy();
   void swap_buffers();
   void make_current();
