@@ -176,10 +176,17 @@ static void test_point_2d()
   r = cross_ratio(p1,p2,c,p3);
   TEST("cross_ratio", r, 1.5);
 
-  vgl_line_2d<double> l1(1,0,0), l2(0,1,0);
+  vgl_line_2d<double> l1(3,4,5), l2(3,2,1);
   vgl_point_2d<double> pi(l1,l2); // intersection
-  vgl_point_2d<double> pp(0,0);
+  vgl_point_2d<double> pp(1,-2);
   TEST("intersection", pi, pp);
+
+  vgl_line_2d<int> l3(1,2,3), l4(3,2,1);
+  vgl_point_2d<int> pj(l3,l4); // intersection
+  vgl_point_2d<int> pq(1,-2);
+  TEST("intersection", pj, pq);
+
+  TEST("vgl_distance_origin", vgl_distance_origin(l1), 1);
 }
 
 static void test_point_3d()
@@ -246,6 +253,28 @@ static void test_line_2d()
   vcl_cout << li << vcl_endl;
   vgl_line_2d<double> ll(1,1,-1);
   TEST("join", li, ll);
+
+  vgl_line_segment_2d<double> ls(p1,p2); // line segment through these two points
+  TEST("line segment", ls.point1(), p1);
+  TEST("line segment", ls.point2(), p2);
+
+  vgl_line_segment_2d<double> ls2(p2,p1); // inverse line segment through these points
+  TEST("line segment intersection", vgl_lineseg_test(ls,ls2), true); // should be more extensively tested - TODO
+
+  vgl_box_2d<double> bx(0,0,2,3);
+  vgl_line_segment_2d<double> ls3 = vgl_clip_line_to_box(li,bx);
+#if 0 // does not seem to work - TODO
+  TEST("line segment equality", ls3, ls);
+  TEST("line segment equality", ls3, ls2);
+#endif
+}
+
+static void test_line_3d()
+{
+  vgl_point_3d<double> p1(1,0,0), p2(0,1,2);
+  vgl_line_segment_3d<double> ls(p1,p2); // line segment through these two points
+  TEST("line segment", ls.point1(), p1);
+  TEST("line segment", ls.point2(), p2);
 }
 
 static void test_plane_3d()
@@ -388,6 +417,8 @@ MAIN( test_cartesian )
   test_point_3d();
   vcl_cout << "--- test_line_2d ---\n";
   test_line_2d();
+  vcl_cout << "--- test_line_3d ---\n";
+  test_line_3d();
   vcl_cout << "--- test_plane_3d ---\n";
   test_plane_3d();
   vcl_cout << "--- test_box_2d ---\n";
