@@ -22,3 +22,6 @@ SUBDIRS(bvgl)
 
 # uncertainty geometry library
 SUBDIRS(bugl)
+
+# Additions to vnl
+SUBDIRS(bvnl)
