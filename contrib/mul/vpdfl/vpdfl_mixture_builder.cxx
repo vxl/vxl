@@ -141,8 +141,8 @@ double vpdfl_mixture_builder::min_var() const
 //=======================================================================
 
 //: Build default model with given mean
-void vpdfl_mixture_builder::build(vpdfl_pdf_base& model,
-            const vnl_vector<double>& mean) const
+void vpdfl_mixture_builder::build(vpdfl_pdf_base& /*model*/,
+            const vnl_vector<double>& /*mean*/) const
 {
   vcl_cerr<<"vpdfl_mixture_builder::build(model,mean) Not yet implemented."<<vcl_endl;
   vcl_abort();

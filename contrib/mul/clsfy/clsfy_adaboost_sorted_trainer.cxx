@@ -124,8 +124,6 @@ void clsfy_adaboost_sorted_trainer::build_strong_classifier(
   clsfy_classifier_1d* c1d = builder.new_classifier();
   clsfy_classifier_1d* best_c1d= builder.new_classifier();
 
-
-  vnl_vector<double> best_params;
   double beta, alpha;
 
   for (int r=0;r<max_n_clfrs;++r)
@@ -244,7 +242,7 @@ clsfy_adaboost_sorted_trainer& clsfy_adaboost_sorted_trainer::operator=(const cl
 //=======================================================================
 
     // required if data is present in this class
-void clsfy_adaboost_sorted_trainer::print_summary(vcl_ostream& os) const
+void clsfy_adaboost_sorted_trainer::print_summary(vcl_ostream& /*os*/) const
 {
     // os << data_; // example of data output
     vcl_cerr << "clsfy_adaboost_sorted_trainer::print_summary() NYI" << vcl_endl;
@@ -253,7 +251,7 @@ void clsfy_adaboost_sorted_trainer::print_summary(vcl_ostream& os) const
 //=======================================================================
 
   // required if data is present in this class
-void clsfy_adaboost_sorted_trainer::b_write(vsl_b_ostream& bfs) const
+void clsfy_adaboost_sorted_trainer::b_write(vsl_b_ostream& /*bfs*/) const
 {
   //vsl_b_write(bfs, version_no());
   //vsl_b_write(bfs, data_);
@@ -263,7 +261,7 @@ void clsfy_adaboost_sorted_trainer::b_write(vsl_b_ostream& bfs) const
 //=======================================================================
 
   // required if data is present in this class
-void clsfy_adaboost_sorted_trainer::b_read(vsl_b_istream& bfs)
+void clsfy_adaboost_sorted_trainer::b_read(vsl_b_istream& /*bfs*/)
 {
   vcl_cerr << "clsfy_adaboost_sorted_trainer::b_read() NYI" << vcl_endl;
 #if 0

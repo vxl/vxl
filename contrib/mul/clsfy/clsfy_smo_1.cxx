@@ -292,36 +292,27 @@ int clsfy_smo_1_lin::examine_example(int i1)
 
 
     // second choice Heuristic B - Find any unbound example that give positive progress.
-      // start from random location
+    // start from random location
+    for (unsigned long k0 = rng_.lrand32(N-1), k = k0; k < N + k0; ++k)
     {
-      int k, k0;
-      int i2;
-
-      for (k0 = rng_.lrand32(N-1), k = k0; k < N + k0; k++)
+      unsigned long i2 = k % N;
+      if (alph_(i2) > 0 && alph_(i2) < C_)
       {
-        i2 = k % N;
-        if (alph_(i2) > 0 && alph_(i2) < C_)
-        {
-          if (take_step(i1, i2, E1))
-            return 1;
-        }
+        if (take_step(i1, i2, E1))
+          return 1;
       }
     }
 
 
     // second choice Heuristic C - Find any example that give positive progress.
+    // start from random location
+    for (unsigned long k0 = rng_.lrand32(N-1), k = k0; k < N + k0; ++k)
     {
-      int k0, k, i2;
-
-      // start from random location
-      for (k0 = rng_.lrand32(N-1), k = k0; k < N + k0; k++)
+      unsigned long i2 = k % N;
+      if (alph_(i2) == 0 || alph_(i2) == C_)
       {
-        i2 = k % N;
-        if (alph_(i2) == 0 || alph_(i2) == C_)
-        {
-          if (take_step(i1, i2, E1))
-            return 1;
-        }
+        if (take_step(i1, i2, E1))
+          return 1;
       }
     }
   }

@@ -46,8 +46,6 @@ void test_tps_at_fixed_points(int n_points)
     vcl_cout<<"Test point "<<i<<" : ";
     TEST("Warped point = target point",vgl_distance(tps3(pts1[i]),pts2[i])<1e-6,true);
   }
-
-
 }
 
 void test_thin_plate_spline_2d()
@@ -55,8 +53,6 @@ void test_thin_plate_spline_2d()
   vcl_cout << "******************************" << vcl_endl;
   vcl_cout << " Testing mbl_thin_plate_spline_2d " << vcl_endl;
   vcl_cout << "*****************************" << vcl_endl;
-
-  mbl_thin_plate_spline_2d tps;
 
   for (int i=1;i<=5;++i)
     test_tps_at_fixed_points(i);

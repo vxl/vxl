@@ -349,7 +349,7 @@ unsigned vpdfl_mixture::nearest_comp(const vnl_vector<double>& x) const
 //  If log_p(x)>log_p_min then x unchanged.  Otherwise x is moved
 //  (typically up the gradient) until log_p(x)>=log_p_min.
 // \param x This may be modified to the nearest plausible position.
-void vpdfl_mixture::nearest_plausible(vnl_vector<double>& x, double log_p_min) const
+void vpdfl_mixture::nearest_plausible(vnl_vector<double>& /*x*/, double /*log_p_min*/) const
 {
   vcl_cerr << "ERROR: vpdfl_mixture::nearest_plausible NYI" << vcl_endl;
   vcl_abort();

@@ -29,7 +29,7 @@ void test_matxvec()
   TEST("mbl_matxvec_prod_mv x(2)",vcl_fabs(x(2)-26)<1e-8,true);
   TEST("mbl_matxvec_prod_mv x(3)",vcl_fabs(x(3)-32)<1e-8,true);
 
-  vnl_vector<double> c(5),y;
+  vnl_vector<double> c(5);
   for (unsigned int i=0;i<c.size();++i) c(i)=1+i;
 
   mbl_matxvec_prod_vm(c,A.transpose(),x);

@@ -40,10 +40,10 @@ clsfy_adaboost_trainer::~clsfy_adaboost_trainer()
 void clsfy_adaboost_trainer::clsfy_get_elements(vnl_vector<double>& v,
                                mbl_data_wrapper<vnl_vector<double> >& data, int j)
 {
-  int n = data.size();
+  unsigned long n = data.size();
   v.resize(n);
   data.reset();
-  for (int i=0;i<n;++i)
+  for (unsigned long i=0;i<n;++i)
   {
     v[i] = data.current()[j];
     data.next();
@@ -95,9 +95,8 @@ void clsfy_adaboost_trainer::build_strong_classifier(
   vnl_vector<double> wts0(n0,0.5/n0);
   vnl_vector<double> wts1(n1,0.5/n1);
 
-  vnl_vector<double> best_params, egs0_1d, egs1_1d;
+  vnl_vector<double> egs0_1d, egs1_1d;
   double beta, alpha;
-
 
   for (int i=0;i<n;++i)
   {
@@ -222,7 +221,7 @@ clsfy_adaboost_trainer& clsfy_adaboost_trainer::operator=(const clsfy_adaboost_t
 //=======================================================================
 
     // required if data is present in this class
-void clsfy_adaboost_trainer::print_summary(vcl_ostream& os) const
+void clsfy_adaboost_trainer::print_summary(vcl_ostream& /*os*/) const
 {
     // os << data_; // example of data output
     vcl_cerr << "clsfy_adaboost_trainer::print_summary() NYI" << vcl_endl;
@@ -231,7 +230,7 @@ void clsfy_adaboost_trainer::print_summary(vcl_ostream& os) const
 //=======================================================================
 
   // required if data is present in this class
-void clsfy_adaboost_trainer::b_write(vsl_b_ostream& bfs) const
+void clsfy_adaboost_trainer::b_write(vsl_b_ostream& /*bfs*/) const
 {
   //vsl_b_write(bfs, version_no());
   //vsl_b_write(bfs, data_);
@@ -241,7 +240,7 @@ void clsfy_adaboost_trainer::b_write(vsl_b_ostream& bfs) const
 //=======================================================================
 
   // required if data is present in this class
-void clsfy_adaboost_trainer::b_read(vsl_b_istream& bfs)
+void clsfy_adaboost_trainer::b_read(vsl_b_istream& /*bfs*/)
 {
   vcl_cerr << "clsfy_adaboost_trainer::b_read() NYI" << vcl_endl;
 #if 0

@@ -32,10 +32,10 @@
 void get_1d_inputs(vnl_vector<double>& v,
                                mbl_data_wrapper<vnl_vector<double> >& data, int j)
 {
-  int n = data.size();
+  unsigned long n = data.size();
   v.resize(n);
   data.reset();
-  for (int i=0;i<n;++i)
+  for (unsigned long i=0;i<n;++i)
   {
     v[i] = data.current()[j];
     data.next();
@@ -150,7 +150,6 @@ void test_adaboost()
 
   // test positive examples from training set
   // nb egs0 are the positive training examples
-  vcl_vector<unsigned> outputs;
   int tp=0, fp=0;
   double tpr=0.0, fpr=1.0, adab_te=0.0, te; // initialise to make compiler happy
 

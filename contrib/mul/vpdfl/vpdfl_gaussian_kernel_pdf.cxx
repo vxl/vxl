@@ -79,9 +79,9 @@ vpdfl_sampler_base* vpdfl_gaussian_kernel_pdf::new_sampler() const
 //=======================================================================
 
 
-void vpdfl_gaussian_kernel_pdf::gradient(vnl_vector<double>& g,
-                              const vnl_vector<double>& x,
-                              double& p) const
+void vpdfl_gaussian_kernel_pdf::gradient(vnl_vector<double>& /*g*/,
+                              const vnl_vector<double>& /*x*/,
+                              double& /*p*/) const
 {
   vcl_cerr<<"vpdfl_gaussian_kernel_pdf::gradient() Not yet implemented."<<vcl_endl;
   vcl_abort();
@@ -89,7 +89,7 @@ void vpdfl_gaussian_kernel_pdf::gradient(vnl_vector<double>& g,
 
 //=======================================================================
 
-void vpdfl_gaussian_kernel_pdf::nearest_plausible(vnl_vector<double>& x, double log_p_min) const
+void vpdfl_gaussian_kernel_pdf::nearest_plausible(vnl_vector<double>& /*x*/, double /*log_p_min*/) const
 {
   vcl_cerr<<"pdf1d_gaussian_kernel_pdf::nearest_plausible() Not yet implemented."<<vcl_endl;
   vcl_abort();

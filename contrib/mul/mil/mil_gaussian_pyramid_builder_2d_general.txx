@@ -79,34 +79,34 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
 
 
 //: An optimisable rounding function
-inline unsigned char l_round(double x, unsigned char dummy)
+inline unsigned char l_round(double x, unsigned char )
 {  return (unsigned char) (x+0.5);}
 
-inline signed char l_round(double x, signed char dummy)
+inline signed char l_round(double x, signed char )
 {  return (signed char) (x+0.5);}
 
-inline unsigned short l_round(double x, unsigned short dummy)
+inline unsigned short l_round(double x, unsigned short )
 {  return (unsigned short) (x+0.5);}
 
-inline signed short l_round(double x, signed short dummy)
+inline signed short l_round(double x, signed short )
 {  return (signed short) (x+0.5);}
 
-inline unsigned int l_round(double x, unsigned int dummy)
+inline unsigned int l_round(double x, unsigned int )
 {  return (unsigned int) (x+0.5);}
 
-inline signed int l_round(double x, signed int dummy)
+inline signed int l_round(double x, signed int )
 {  return (signed int) (x+0.5);}
 
-inline unsigned long l_round(double x, unsigned long dummy)
+inline unsigned long l_round(double x, unsigned long )
 {  return (unsigned long) (x+0.5);}
 
-inline signed long l_round(double x, signed long dummy)
+inline signed long l_round(double x, signed long )
 {  return (signed long) (x+0.5);}
 
-inline double l_round (double x, double dummy)
+inline double l_round (double x, double )
 {  return x; }
 
-inline float l_round (double x, float dummy)
+inline float l_round (double x, float )
 {  return (float) x; }
 
 //=======================================================================

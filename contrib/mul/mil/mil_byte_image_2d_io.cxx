@@ -105,8 +105,7 @@ vcl_string mil_byte_image_2d_io::guessFileType(const vcl_string& path)
 // which can be found by subsequent calls to image()
 bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil_byte>& image,
               const vcl_string& path,
-              const vcl_string& f_type)
-
+              const vcl_string& /*f_type*/)
 {
   vil_image img = vil_load(path.c_str());  // ie f_type is ignored here !!
   int nx = img.width();

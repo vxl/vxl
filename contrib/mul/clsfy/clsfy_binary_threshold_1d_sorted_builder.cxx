@@ -226,7 +226,7 @@ clsfy_builder_1d* clsfy_binary_threshold_1d_sorted_builder::clone() const
 //=======================================================================
 
     // required if data is present in this base class
-void clsfy_binary_threshold_1d_sorted_builder::print_summary(vcl_ostream& os) const
+void clsfy_binary_threshold_1d_sorted_builder::print_summary(vcl_ostream& /*os*/) const
 {
   // clsfy_builder_1d::print_summary(os); // Uncomment this line if it has one.
   // vsl_print_summary(os, data_); // Example of data output
@@ -237,7 +237,7 @@ void clsfy_binary_threshold_1d_sorted_builder::print_summary(vcl_ostream& os) co
 //=======================================================================
 
   // required if data is present in this base class
-void clsfy_binary_threshold_1d_sorted_builder::b_write(vsl_b_ostream& bfs) const
+void clsfy_binary_threshold_1d_sorted_builder::b_write(vsl_b_ostream& /*bfs*/) const
 {
   //vsl_b_write(bfs, version_no());
   //clsfy_builder_1d::b_write(bfs);  // Needed if base has any data
@@ -248,7 +248,7 @@ void clsfy_binary_threshold_1d_sorted_builder::b_write(vsl_b_ostream& bfs) const
 //=======================================================================
 
   // required if data is present in this base class
-void clsfy_binary_threshold_1d_sorted_builder::b_read(vsl_b_istream& bfs)
+void clsfy_binary_threshold_1d_sorted_builder::b_read(vsl_b_istream& /*bfs*/)
 {
   vcl_cerr << "clsfy_binary_threshold_1d_sorted_builder::b_read() NYI" << vcl_endl;
 #if 0
