@@ -17,6 +17,9 @@
 // \endverbatim
 
 #include <vbl/vbl_ref_count.h>
+#include <vcl_map.h>
+#include "bmrf_epi_seg_sptr.h"
+
 
 //: Gamma function base class
 class bmrf_gamma_func : public vbl_ref_count
@@ -68,7 +71,7 @@ class bmrf_const_gamma_func : public bmrf_gamma_func
 class bmrf_linear_gamma_func : public bmrf_gamma_func
 {
  public:
-  // Constructor
+  //: Constructor
   bmrf_linear_gamma_func(double m = 0.0, double b = 0.0) : m_(m), b_(b) {}
 
   //: Set the linear function parameters
@@ -86,6 +89,31 @@ class bmrf_linear_gamma_func : public bmrf_gamma_func
  private:
   //: The function parameters
   double m_, b_;
+};
+
+
+//: A piecewise linear gamma function
+class bmrf_pwl_gamma_func : public bmrf_gamma_func
+{
+ public:
+  //: Constructor
+  bmrf_pwl_gamma_func( const bmrf_epi_seg_sptr& ep1, 
+                       const bmrf_epi_seg_sptr& ep2,
+                       double t = 1.0 );
+
+
+  //: Return the average gamma value at time \p t
+  //  Here, this value is independent of t
+  virtual double mean(double /*t*/=1.0) const;
+
+ protected:
+  //: Return the gamma value for any \p alpha and time \p t
+  //  Here, this value is independent of t
+  virtual double value(double alpha, double /*t*/) const;
+
+ private:
+  //: The knots
+  vcl_map<double, double> knots_;
 };
 
 #endif // bmrf_gamma_func_h_
