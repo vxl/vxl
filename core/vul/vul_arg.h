@@ -46,10 +46,12 @@ class vul_arg_base
   friend class vul_arg_info_list;
 
   char const* option();
+  char const* help();
 
   //: Returns true if arg was set on the command line.
   bool set() const;
 
+  virtual vcl_ostream& print_value(vcl_ostream&) = 0;
 
  public:   // Avoid errors on some compilers that don't follow
            // protected: directive correctly with type_
@@ -70,7 +72,6 @@ class vul_arg_base
   virtual ~vul_arg_base();
 
   virtual int parse(char ** argv) = 0;
-  virtual vcl_ostream& print_value(vcl_ostream&) = 0;
 };
 
 //: parse command-line arguments

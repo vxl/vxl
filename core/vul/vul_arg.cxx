@@ -44,6 +44,9 @@ vul_arg_base::~vul_arg_base()
 char const* vul_arg_base::option()
 { return option_.c_str(); }
 
+char const* vul_arg_base::help()
+{ return help_.c_str(); }
+
 //: Parse the list of arguments....
 void vul_arg_parse(int& argc, char **& argv,
                    bool warn_about_unrecognized_arguments)
