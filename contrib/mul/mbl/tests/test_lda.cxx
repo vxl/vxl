@@ -6,13 +6,10 @@
 
 #include <mbl/mbl_lda.h>
 
-// nb can't use vpdfl here as built after mbl
-//#include <vpdfl/vpdfl_axis_gaussian_sampler.h>
-//#include <vpdfl/vpdfl_axis_gaussian.h>
-
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matlab_print.h>
+#include <vnl/vnl_random.h>
 
 #include <testlib/testlib_test.h>
 
@@ -57,12 +54,12 @@ void add_data(vcl_vector< vnl_vector<double> >& d_vec,
   }
 }
 
-void sample_axis_gaussian( vcl_vector< vnl_vector<double> >& sample,
-                     vnl_vector<double>& mean,
-                     vnl_vector<double>& var,
-                     int ns)
+void sample_axis_gaussian(vcl_vector< vnl_vector<double> >& sample,
+                          vnl_vector<double>& mean,
+                          vnl_vector<double>& var,
+                          int ns)
 {
-  mbl_mz_random mzr(3);
+  vnl_random mzr(3);
   sample.resize(0);
   int d= mean.size();
   assert ( mean.size() == var.size() );

@@ -10,7 +10,7 @@
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vcl_vector.h>
 #include <vcl_iosfwd.h>
-#include <mbl/mbl_mz_random.h>
+#include <vnl/vnl_random.h>
 
 //=======================================================================
 
@@ -43,7 +43,7 @@ class mbl_stochastic_data_collector: public mbl_data_collector<T>
   unsigned long nPresented_;
 
   //: Random number generator used to decide whether to store a particular vector.
-  mbl_mz_random rand;
+  vnl_random rand;
 
  public:
 

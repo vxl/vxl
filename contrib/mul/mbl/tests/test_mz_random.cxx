@@ -1,16 +1,16 @@
 // This is mul/mbl/tests/test_mz_random.cxx
 #include <vcl_iostream.h>
 #include <vcl_cmath.h> // for vcl_sqrt()
-#include <mbl/mbl_mz_random.h>
+#include <vnl/vnl_random.h>
 #include <testlib/testlib_test.h>
 
 void test_mz_random()
 {
-  vcl_cout << "***********************\n";
-  vcl_cout << " Testing mbl_mz_random\n";
-  vcl_cout << "***********************\n";
+  vcl_cout << "********************\n"
+           << " Testing vnl_random\n"
+           << "********************\n";
 
-  mbl_mz_random mz_random;
+  vnl_random mz_random;
   mz_random.reseed(123456);
 
 

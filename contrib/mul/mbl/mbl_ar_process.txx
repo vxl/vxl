@@ -10,7 +10,7 @@
 #include <vnl/algo/vnl_qr.h>
 #include <vnl/algo/vnl_matrix_inverse.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <mbl/mbl_mz_random.h>
+#include <vnl/vnl_random.h>
 #include <vcl_cmath.h>
 
 //: Constructor
@@ -74,7 +74,7 @@ vnl_vector<T> mbl_ar_process<T>::predict(vnl_vector<T>& Xm1,
 
   vnl_vector<T> wk(Xm.size());
 
-  static mbl_mz_random mz_random;
+  static vnl_random mz_random;
 
   for (unsigned int i=0;i<Xm.size();i++)
   {

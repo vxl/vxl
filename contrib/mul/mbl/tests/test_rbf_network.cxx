@@ -4,7 +4,7 @@
 #include <vcl_cassert.h>
 #include <vcl_vector.h>
 
-#include <mbl/mbl_mz_random.h>
+#include <vnl/vnl_random.h>
 #include <mbl/mbl_rbf_network.h>
 #include <vnl/vnl_vector.h>
 
@@ -16,7 +16,7 @@ void test_rbf_network()
            <<   " Testing mbl_rbf_network\n"
            <<   "*************************\n";
 
-  mbl_mz_random rng;
+  vnl_random rng;
   rng.reseed(123456);
 
 //const unsigned nCentres = 64;

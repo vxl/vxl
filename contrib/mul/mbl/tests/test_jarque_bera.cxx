@@ -2,7 +2,7 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <mbl/mbl_jarque_bera.h>
-#include <mbl/mbl_mz_random.h>
+#include <vnl/vnl_random.h>
 
 void test_jarque_bera()
 {
@@ -11,7 +11,7 @@ void test_jarque_bera()
            << "*************************\n";
 
   const unsigned n = 200;
-  mbl_mz_random rng(9667566ul);
+  vnl_random rng(9667566ul);
   vcl_vector<double> x(n);
   for (unsigned i=0; i!=n; ++i)
   {

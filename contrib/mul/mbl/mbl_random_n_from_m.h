@@ -6,13 +6,13 @@
 // \author Tim Cootes
 
 #include <vcl_vector.h>
-#include <mbl/mbl_mz_random.h>
+#include <vnl/vnl_random.h>
 
 //: Class to generate arrays of n integers chosen without replacement from [0,m-1]
 class mbl_random_n_from_m
 {
  private:
-  mbl_mz_random mz_random_;
+  vnl_random mz_random_;
   vcl_vector<bool> used_;
  public:
 

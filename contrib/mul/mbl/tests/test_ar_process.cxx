@@ -1,7 +1,7 @@
 // This is mul/mbl/tests/test_ar_process.cxx
 #include <vcl_iostream.h>
 #include <mbl/mbl_ar_process.h>
-#include <mbl/mbl_mz_random.h>
+#include <vnl/vnl_random.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_matrix.h>
 
@@ -52,7 +52,7 @@ void test_ar_process()
            << " Testing mbl_ar_process\n"
            << "************************\n";
 
-  mbl_mz_random mz_random;
+  vnl_random mz_random;
   mz_random.reseed(1000);
 
   // A, B and C are random diagonal matrices:

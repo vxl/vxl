@@ -1,7 +1,7 @@
 // This is mul/mbl/tests/test_correspond_points.cxx
 #include <vcl_iostream.h>
 #include <mbl/mbl_correspond_points.h>
-#include <mbl/mbl_mz_random.h>
+#include <vnl/vnl_random.h>
 
 void test_correspond_points()
 {
@@ -10,7 +10,7 @@ void test_correspond_points()
            << "*******************************\n";
 
   mbl_correspond_points cp;
-  mbl_mz_random mz_random(325746);
+  vnl_random mz_random(325746);
 
   unsigned n1 = 10;
   vcl_vector<vgl_point_2d<double> > points1(n1),points2(n1),points3(n1),points4(n1),points5(n1);

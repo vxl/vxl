@@ -1,7 +1,7 @@
 // This is mul/mbl/tests/test_thin_plate_spline_weights_3d.cxx
 #include <vcl_iostream.h>
 #include <mbl/mbl_thin_plate_spline_weights_3d.h>
-#include <mbl/mbl_mz_random.h>
+#include <vnl/vnl_random.h>
 #include <vgl/vgl_distance.h>
 #include <testlib/testlib_test.h>
 
@@ -10,7 +10,7 @@ void test_tpsw3d_at_fixed_points(int n_points)
   vcl_cout<<"Testing with "<<n_points<<" points\n";
   vcl_vector<vgl_point_3d<double> > pts1(n_points),pts2(n_points);
 
-  mbl_mz_random mz_random;
+  vnl_random mz_random;
   mz_random.reseed(1647+2*n_points);
 
   for (int i=0;i<n_points;++i)
@@ -52,7 +52,7 @@ void test_tpsw3d_at_fixed_points_with_weights(int n_points)
   vcl_cout<<"Testing with "<<n_points<<" points\n";
   vcl_vector<vgl_point_3d<double> > pts1(n_points),pts2(n_points),wts(n_points);
 
-  mbl_mz_random mz_random;
+  vnl_random mz_random;
   mz_random.reseed(1647+2*n_points);
 
   for (int i=0;i<n_points;++i)
@@ -105,7 +105,6 @@ void test_thin_plate_spline_weights_3d()
 
   for (int i=1;i<=5;++i)
     test_tpsw3d_at_fixed_points_with_weights(i);
-
 }
 
 TESTLIB_DEFINE_MAIN( test_thin_plate_spline_weights_3d );

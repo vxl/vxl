@@ -4,7 +4,7 @@
 #include <vcl_cassert.h>
 #include <vcl_vector.h>
 
-#include <mbl/mbl_mz_random.h>
+#include <vnl/vnl_random.h>
 #include <mbl/mbl_k_means.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vbl/vbl_array_3d.h>
@@ -17,10 +17,10 @@
 void test_k_means()
 {
   vcl_cout << "\n*********************\n"
-           <<   " Testing mbl_k_means \n"
+           <<   " Testing mbl_k_means\n"
            <<   "*********************\n";
 
-  mbl_mz_random rng;
+  vnl_random rng;
   rng.reseed(123456);
 
   const unsigned nCentres = 64;
@@ -28,7 +28,7 @@ void test_k_means()
   const unsigned nDims = 3;
 
   vcl_cout << "Find " << nCentres << " clusters from " << nSamples
-           << " " << nDims << "-D points.\n";
+           << ' ' << nDims << "-D points.\n";
 
   vcl_vector<vnl_vector<double> >
     data(nSamples, vnl_vector<double>(nDims, 0.0));
@@ -180,7 +180,7 @@ void test_k_means()
   i=0;
   while ( i<centres.size() && centres[i](0) > 0.5 ) i++;
   TEST("All cluster centres are on correct side of bias decision line",
-        i, centres.size());
+       i, centres.size());
 
   vcl_cout << "\n\n";
 }
