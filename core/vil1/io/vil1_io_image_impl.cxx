@@ -1,8 +1,9 @@
+// This is vxl/vil/io/vil_io_image_impl.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
 
-// This is vxl/vil/io/vil_io_image_impl.cxx
+#include <vcl_cstdlib.h> // vcl_abort()
 #include <vsl/vsl_binary_io.h>
 #include "vil_io_image_impl.h"
 #include <vsl/vsl_clipon_binary_loader.txx>
@@ -19,21 +20,21 @@ vil_io_image_impl::~vil_io_image_impl()
 
 
 //: Write derived class to os using vil_image_impl reference
-void vil_io_image_impl::b_write_by_base(vsl_b_ostream& os, 
+void vil_io_image_impl::b_write_by_base(vsl_b_ostream& os,
                                         const vil_image_impl& base) const
 {
   vsl_b_write(os,base);
 }
 
 //: Write derived class to os using vil_image_impl reference
-void vil_io_image_impl::b_read_by_base(vsl_b_istream& is, 
+void vil_io_image_impl::b_read_by_base(vsl_b_istream& is,
                                        vil_image_impl& base) const
 {
   vsl_b_read(is,base);
 }
 
 //: Print summary of derived class to os using vil_image_impl reference
-void vil_io_image_impl::print_summary_by_base(vcl_ostream& os, 
+void vil_io_image_impl::print_summary_by_base(vcl_ostream& os,
                                               const vil_image_impl& base) const
 {
   vsl_print_summary(os,base);
@@ -74,9 +75,8 @@ void vsl_b_read(vsl_b_istream &is, vil_image_impl & p)
   default:
     vcl_cerr << "vsl_b_read(vsl_b_istream &, vil_image_impl & ): ";
     vcl_cerr << "Unknown version number "<< ver << vcl_endl;
-    abort();
+    vcl_abort();
   }
-
 }
 
 //=========================================================================

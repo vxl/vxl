@@ -48,7 +48,7 @@ void test_sparse_array_io()
   vbl_sparse_array_2d<double>::const_iterator r;
   //N.B. relies on sensible == operator for <T> 
   for(r = v_out.begin(); r != v_out.end(); ++r){
-    if(((*s).first != (*r).first) || ((*s).second != (*r).second)) 
+    if(!((*s).first == (*r).first) || !((*s).second == (*r).second)) 
       test_result=false;
     s++;
   }

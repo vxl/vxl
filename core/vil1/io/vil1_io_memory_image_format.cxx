@@ -1,10 +1,11 @@
 // This is vxl/vil/io/vil_io_memory_image_format.txx
 
+#include <vcl_cstdlib.h> // vcl_abort()
 #include "vil_io_memory_image_format.h"
 
 //========================================================================
 //: Binary save vil_memory_image_format to stream.
-void vsl_b_write(vsl_b_ostream &os, const vil_memory_image_format& v) 
+void vsl_b_write(vsl_b_ostream &os, const vil_memory_image_format& v)
 {
   const short io_version_no = 1;
   vsl_b_write(os, io_version_no);
@@ -33,15 +34,14 @@ void vsl_b_read(vsl_b_istream &is, vil_memory_image_format& v)
     vcl_cerr << "vsl_b_read(vsl_b_istream_adpt &is, ";
     vcl_cerr << "vil_memory_image_format& v) Unknown version number ";
     vcl_cerr << vcl_endl;
-    abort();
+    vcl_abort();
   }
-
 }
 
 
 //========================================================================
 //: Output a human readable summary of a vil_memory_image_format object
-void vsl_print_summary(vcl_ostream &os, const vil_memory_image_format& v) 
+void vsl_print_summary(vcl_ostream &os, const vil_memory_image_format& v)
 {
     os<<"Memory image format : ( ";
     os<<v.components<<" , ";

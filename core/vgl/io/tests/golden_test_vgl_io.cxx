@@ -10,7 +10,6 @@
 #include <vcl_fstream.h>
 #include <vsl/vsl_binary_io.h>
 
-
 #include <vgl/io/vgl_io_box_2d.h>
 #include <vgl/io/vgl_io_box_3d.h>
 #include <vgl/io/vgl_io_homg_line_2d.h>
@@ -169,32 +168,50 @@ void golden_test_vgl_io(bool save_file)
 
   // vgl_line_2d
 
-  vgl_line_2d<double> double_line_2d_out(double_point_2d_out,double_point_2d_out2),double_line_2d_in;
-  vgl_line_2d<float> float_line_2d_out(float_point_2d_out,float_point_2d_out2),float_line_2d_in;
+  vgl_line_2d<double> double_line_2d_out(double_point_2d_out,
+                                         double_point_2d_out2),
+                      double_line_2d_in;
+  vgl_line_2d<float>  float_line_2d_out(float_point_2d_out,
+                                        float_point_2d_out2),
+                      float_line_2d_in;
 
   // vgl_homg_line_2d
 
-  vgl_homg_line_2d<double> double_homg_line_2d_out(double_homg_point_2d_out,double_homg_point_2d_out2),double_homg_line_2d_in;
-  vgl_homg_line_2d<float> float_homg_line_2d_out(float_homg_point_2d_out,float_homg_point_2d_out2),float_homg_line_2d_in;
+  vgl_homg_line_2d<double> double_homg_line_2d_out(double_homg_point_2d_out,
+                                                   double_homg_point_2d_out2),
+                           double_homg_line_2d_in;
+  vgl_homg_line_2d<float>  float_homg_line_2d_out(float_homg_point_2d_out,
+                                                  float_homg_point_2d_out2),
+                           float_homg_line_2d_in;
 
   // vgl_homg_line_3d_2_points
 
   vgl_homg_line_3d_2_points<double>
       double_homg_line_3d_2_points_out(double_homg_point_3d_out,
-          double_homg_point_3d_out2),double_homg_line_3d_2_points_in;
+                                       double_homg_point_3d_out2),
+      double_homg_line_3d_2_points_in;
   vgl_homg_line_3d_2_points<float>
       float_homg_line_3d_2_points_out(float_homg_point_3d_out,
-          float_homg_point_3d_out2),float_homg_line_3d_2_points_in;
+                                      float_homg_point_3d_out2),
+      float_homg_line_3d_2_points_in;
 
   // vgl_line_segment_2d
 
-  vgl_line_segment_2d<double> double_line_segment_2d_out(double_point_2d_out,double_point_2d_out2),double_line_segment_2d_in;
-  vgl_line_segment_2d<float> float_line_segment_2d_out(float_point_2d_out,float_point_2d_out2),float_line_segment_2d_in;
+  vgl_line_segment_2d<double>
+      double_line_segment_2d_out(double_point_2d_out,double_point_2d_out2),
+      double_line_segment_2d_in;
+  vgl_line_segment_2d<float>
+      float_line_segment_2d_out(float_point_2d_out,float_point_2d_out2),
+      float_line_segment_2d_in;
 
   // vgl_line_segment_3d
 
-  vgl_line_segment_3d<double> double_line_segment_3d_out(double_point_3d_out,double_point_3d_out2),double_line_segment_3d_in;
-  vgl_line_segment_3d<float> float_line_segment_3d_out(float_point_3d_out,float_point_3d_out2),float_line_segment_3d_in;
+  vgl_line_segment_3d<double>
+      double_line_segment_3d_out(double_point_3d_out,double_point_3d_out2),
+      double_line_segment_3d_in;
+  vgl_line_segment_3d<float>
+      float_line_segment_3d_out(float_point_3d_out,float_point_3d_out2),
+      float_line_segment_3d_in;
 
   // vgl_box_2d
 
@@ -203,18 +220,26 @@ void golden_test_vgl_io(bool save_file)
   float float_min_pos[2]={2.4f,4.6f};
   float float_max_pos[2]={7.7f,9.0f};
 
-  vgl_box_2d<double> double_box_2d_out(double_min_pos,double_max_pos), double_box_2d_in;
-  vgl_box_2d<float> float_box_2d_out(float_min_pos,float_max_pos), float_box_2d_in;
+  vgl_box_2d<double> double_box_2d_out(double_min_pos,double_max_pos),
+                     double_box_2d_in;
+  vgl_box_2d<float>  float_box_2d_out(float_min_pos,float_max_pos),
+                     float_box_2d_in;
 
   // vgl_box_3d
 
-  vgl_box_3d<double> double_box_3d_out(-4.6,2.8,0.56,4.3,4.7,2.12), double_box_3d_in;
-  vgl_box_3d<float> float_box_3d_out(-3.6f,1.8f,5.46f,3.9f,6.7f,9.04f), float_box_3d_in;
+  vgl_box_3d<double> double_box_3d_out(-4.6,2.8,0.56,4.3,4.7,2.12),
+                     double_box_3d_in;
+  vgl_box_3d<float>  float_box_3d_out(-3.6f,1.8f,5.46f,3.9f,6.7f,9.04f),
+                     float_box_3d_in;
 
   // vgl_homg_plane_3d
 
-  vgl_homg_plane_3d<double> double_homg_plane_3d_out(double_homg_pos,double_homg_point_3d_out), double_homg_plane_3d_in;
-  vgl_homg_plane_3d<float> float_homg_plane_3d_out(float_homg_pos,float_homg_point_3d_out), float_homg_plane_3d_in;
+  vgl_homg_plane_3d<double>
+      double_homg_plane_3d_out(double_homg_pos,double_homg_point_3d_out),
+      double_homg_plane_3d_in;
+  vgl_homg_plane_3d<float>
+      float_homg_plane_3d_out(float_homg_pos,float_homg_point_3d_out),
+      float_homg_plane_3d_in;
 
   // vgl_polygon
 
@@ -222,53 +247,53 @@ void golden_test_vgl_io(bool save_file)
   for (int i=0;i<3;i++)
     for (int j=0;j<5;j++)
       polygon_out[i].push_back(vgl_point_2d<float>((float)i+((float)j)/10.0f,
-                             (float)i-((float)j)/10.0f));
+                               (float)i-((float)j)/10.0f));
 
   // Save if option set
   if (save_file)
   {
-  vsl_b_ofstream bfs_out("golden_vgl_io_test.bvl");
-  TEST ("Opened golden_vgl_io_test.bvl for writing", (!bfs_out), false);
-  if (!bfs_out)
+    vsl_b_ofstream bfs_out("golden_vgl_io_test.bvl");
+    TEST ("Opened golden_vgl_io_test.bvl for writing", (!bfs_out), false);
+    if (!bfs_out)
     {
-    vcl_cerr<<"Problems opening file for output"<<vcl_endl;
-    exit(1);
+      vcl_cerr<<"Problems opening file for output"<<vcl_endl;
+      vcl_exit(1);
     }
-  vsl_b_write(bfs_out, double_point_2d_out);
-  vsl_b_write(bfs_out, double_point_2d_out2);
-  vsl_b_write(bfs_out, float_point_2d_out);
-  vsl_b_write(bfs_out, float_point_2d_out2);
-  vsl_b_write(bfs_out, double_point_3d_out);
-  vsl_b_write(bfs_out, double_point_3d_out2);
-  vsl_b_write(bfs_out, float_point_3d_out);
-  vsl_b_write(bfs_out, float_point_3d_out2);
-  vsl_b_write(bfs_out, double_homg_point_2d_out);
-  vsl_b_write(bfs_out, double_homg_point_2d_out2);
-  vsl_b_write(bfs_out, float_homg_point_2d_out);
-  vsl_b_write(bfs_out, float_homg_point_2d_out2);
-  vsl_b_write(bfs_out, double_homg_point_3d_out);
-  vsl_b_write(bfs_out, double_homg_point_3d_out2);
-  vsl_b_write(bfs_out, float_homg_point_3d_out);
-  vsl_b_write(bfs_out, float_homg_point_3d_out2);
-  vsl_b_write(bfs_out, double_line_2d_out);
-  vsl_b_write(bfs_out, float_line_2d_out);
-  vsl_b_write(bfs_out, double_homg_line_2d_out);
-  vsl_b_write(bfs_out, float_homg_line_2d_out);
-  vsl_b_write(bfs_out, double_homg_line_3d_2_points_out);
-  vsl_b_write(bfs_out, float_homg_line_3d_2_points_out);
-  vsl_b_write(bfs_out, double_line_segment_2d_out);
-  vsl_b_write(bfs_out, float_line_segment_2d_out);
-  vsl_b_write(bfs_out, double_line_segment_3d_out);
-  vsl_b_write(bfs_out, float_line_segment_3d_out);
-  vsl_b_write(bfs_out, double_box_2d_out);
-  vsl_b_write(bfs_out, float_box_2d_out);
-  vsl_b_write(bfs_out, double_box_3d_out);
-  vsl_b_write(bfs_out, float_box_3d_out);
-  vsl_b_write(bfs_out, double_homg_plane_3d_out);
-  vsl_b_write(bfs_out, float_homg_plane_3d_out);
-  vsl_b_write(bfs_out, polygon_out);
-  vsl_b_write(bfs_out, double_point_2d_out);
-  bfs_out.close();
+    vsl_b_write(bfs_out, double_point_2d_out);
+    vsl_b_write(bfs_out, double_point_2d_out2);
+    vsl_b_write(bfs_out, float_point_2d_out);
+    vsl_b_write(bfs_out, float_point_2d_out2);
+    vsl_b_write(bfs_out, double_point_3d_out);
+    vsl_b_write(bfs_out, double_point_3d_out2);
+    vsl_b_write(bfs_out, float_point_3d_out);
+    vsl_b_write(bfs_out, float_point_3d_out2);
+    vsl_b_write(bfs_out, double_homg_point_2d_out);
+    vsl_b_write(bfs_out, double_homg_point_2d_out2);
+    vsl_b_write(bfs_out, float_homg_point_2d_out);
+    vsl_b_write(bfs_out, float_homg_point_2d_out2);
+    vsl_b_write(bfs_out, double_homg_point_3d_out);
+    vsl_b_write(bfs_out, double_homg_point_3d_out2);
+    vsl_b_write(bfs_out, float_homg_point_3d_out);
+    vsl_b_write(bfs_out, float_homg_point_3d_out2);
+    vsl_b_write(bfs_out, double_line_2d_out);
+    vsl_b_write(bfs_out, float_line_2d_out);
+    vsl_b_write(bfs_out, double_homg_line_2d_out);
+    vsl_b_write(bfs_out, float_homg_line_2d_out);
+    vsl_b_write(bfs_out, double_homg_line_3d_2_points_out);
+    vsl_b_write(bfs_out, float_homg_line_3d_2_points_out);
+    vsl_b_write(bfs_out, double_line_segment_2d_out);
+    vsl_b_write(bfs_out, float_line_segment_2d_out);
+    vsl_b_write(bfs_out, double_line_segment_3d_out);
+    vsl_b_write(bfs_out, float_line_segment_3d_out);
+    vsl_b_write(bfs_out, double_box_2d_out);
+    vsl_b_write(bfs_out, float_box_2d_out);
+    vsl_b_write(bfs_out, double_box_3d_out);
+    vsl_b_write(bfs_out, float_box_3d_out);
+    vsl_b_write(bfs_out, double_homg_plane_3d_out);
+    vsl_b_write(bfs_out, float_homg_plane_3d_out);
+    vsl_b_write(bfs_out, polygon_out);
+    vsl_b_write(bfs_out, double_point_2d_out);
+    bfs_out.close();
   }
 
   // Read in file to each class in turn
@@ -313,257 +338,257 @@ void golden_test_vgl_io(bool save_file)
 
   // Test that each object created is the same as read in from the file.
   TEST ("double_point_2d_out == double_point_2d_in",
-    almost_equal(double_point_2d_out.x(), double_point_2d_in.x()) &&
-    almost_equal(double_point_2d_out.y(), double_point_2d_in.y()),
-    true);
+        almost_equal(double_point_2d_out.x(), double_point_2d_in.x()) &&
+        almost_equal(double_point_2d_out.y(), double_point_2d_in.y()),
+        true);
   TEST ("float_point_2d_out == float_point_2d_in",
-    almost_equal(float_point_2d_out.x(), float_point_2d_in.x()) &&
-    almost_equal(float_point_2d_out.y(), float_point_2d_in.y()),
-    true);
+        almost_equal(float_point_2d_out.x(), float_point_2d_in.x()) &&
+        almost_equal(float_point_2d_out.y(), float_point_2d_in.y()),
+        true);
   TEST ("double_point_2d_out2 == double_point_2d_in2",
-    almost_equal(double_point_2d_out2.x(), double_point_2d_in2.x()) &&
-    almost_equal(double_point_2d_out2.y(), double_point_2d_in2.y()),
-    true);
+        almost_equal(double_point_2d_out2.x(), double_point_2d_in2.x()) &&
+        almost_equal(double_point_2d_out2.y(), double_point_2d_in2.y()),
+        true);
   TEST ("float_point_2d_out2 == float_point_2d_in2",
-    almost_equal(float_point_2d_out2.x(), float_point_2d_in2.x()) &&
-    almost_equal(float_point_2d_out2.y(), float_point_2d_in2.y()),
-    true);
+        almost_equal(float_point_2d_out2.x(), float_point_2d_in2.x()) &&
+        almost_equal(float_point_2d_out2.y(), float_point_2d_in2.y()),
+        true);
   TEST ("double_point_3d_out == double_point_3d_in",
-    almost_equal(double_point_3d_out.x(), double_point_3d_in.x()) &&
-    almost_equal(double_point_3d_out.y(), double_point_3d_in.y()) &&
-    almost_equal(double_point_3d_out.z(), double_point_3d_in.z()),
-    true);
+        almost_equal(double_point_3d_out.x(), double_point_3d_in.x()) &&
+        almost_equal(double_point_3d_out.y(), double_point_3d_in.y()) &&
+        almost_equal(double_point_3d_out.z(), double_point_3d_in.z()),
+        true);
   TEST ("float_point_3d_out == float_point_3d_in",
-    almost_equal(float_point_3d_out.x(), float_point_3d_in.x()) &&
-    almost_equal(float_point_3d_out.y(), float_point_3d_in.y()) &&
-    almost_equal(float_point_3d_out.z(), float_point_3d_in.z()),
-    true);
+        almost_equal(float_point_3d_out.x(), float_point_3d_in.x()) &&
+        almost_equal(float_point_3d_out.y(), float_point_3d_in.y()) &&
+        almost_equal(float_point_3d_out.z(), float_point_3d_in.z()),
+        true);
   TEST ("double_point_3d_out2 == double_point_3d_in2",
-    almost_equal(double_point_3d_out2.x(), double_point_3d_in2.x()) &&
-    almost_equal(double_point_3d_out2.y(), double_point_3d_in2.y()) &&
-    almost_equal(double_point_3d_out2.z(), double_point_3d_in2.z()),
-    true);
+        almost_equal(double_point_3d_out2.x(), double_point_3d_in2.x()) &&
+        almost_equal(double_point_3d_out2.y(), double_point_3d_in2.y()) &&
+        almost_equal(double_point_3d_out2.z(), double_point_3d_in2.z()),
+        true);
   TEST ("float_point_3d_out2 == float_point_3d_in2",
-    almost_equal(float_point_3d_out2.x(), float_point_3d_in2.x()) &&
-    almost_equal(float_point_3d_out2.y(), float_point_3d_in2.y()) &&
-    almost_equal(float_point_3d_out2.z(), float_point_3d_in2.z()),
-    true);
+        almost_equal(float_point_3d_out2.x(), float_point_3d_in2.x()) &&
+        almost_equal(float_point_3d_out2.y(), float_point_3d_in2.y()) &&
+        almost_equal(float_point_3d_out2.z(), float_point_3d_in2.z()),
+        true);
   TEST ("double_homg_point_2d_out == double_homg_point_2d_in",
-    almost_equal(double_homg_point_2d_out.x(), double_homg_point_2d_in.x()) &&
-    almost_equal(double_homg_point_2d_out.y(), double_homg_point_2d_in.y()) &&
-    almost_equal(double_homg_point_2d_out.w(), double_homg_point_2d_in.w()),
-    true);
+        almost_equal(double_homg_point_2d_out.x(), double_homg_point_2d_in.x()) &&
+        almost_equal(double_homg_point_2d_out.y(), double_homg_point_2d_in.y()) &&
+        almost_equal(double_homg_point_2d_out.w(), double_homg_point_2d_in.w()),
+        true);
   TEST ("float_homg_point_2d_out == float_homg_point_2d_in",
-    almost_equal(float_homg_point_2d_out.x(), float_homg_point_2d_in.x()) &&
-    almost_equal(float_homg_point_2d_out.y(), float_homg_point_2d_in.y()) &&
-    almost_equal(float_homg_point_2d_out.w(), float_homg_point_2d_in.w()),
-    true);
+        almost_equal(float_homg_point_2d_out.x(), float_homg_point_2d_in.x()) &&
+        almost_equal(float_homg_point_2d_out.y(), float_homg_point_2d_in.y()) &&
+        almost_equal(float_homg_point_2d_out.w(), float_homg_point_2d_in.w()),
+        true);
   TEST ("double_homg_point_2d_out2 == double_homg_point_2d_in2",
-    almost_equal(double_homg_point_2d_out2.x(), double_homg_point_2d_in2.x()) &&
-    almost_equal(double_homg_point_2d_out2.y(), double_homg_point_2d_in2.y()) &&
-    almost_equal(double_homg_point_2d_out2.w(), double_homg_point_2d_in2.w()),
-    true);
+        almost_equal(double_homg_point_2d_out2.x(), double_homg_point_2d_in2.x()) &&
+        almost_equal(double_homg_point_2d_out2.y(), double_homg_point_2d_in2.y()) &&
+        almost_equal(double_homg_point_2d_out2.w(), double_homg_point_2d_in2.w()),
+        true);
   TEST ("float_homg_point_2d_out2 == float_homg_point_2d_in2",
-    almost_equal(float_homg_point_2d_out2.x(), float_homg_point_2d_in2.x()) &&
-    almost_equal(float_homg_point_2d_out2.y(), float_homg_point_2d_in2.y()) &&
-    almost_equal(float_homg_point_2d_out2.w(), float_homg_point_2d_in2.w()),
-    true);
+        almost_equal(float_homg_point_2d_out2.x(), float_homg_point_2d_in2.x()) &&
+        almost_equal(float_homg_point_2d_out2.y(), float_homg_point_2d_in2.y()) &&
+        almost_equal(float_homg_point_2d_out2.w(), float_homg_point_2d_in2.w()),
+        true);
   TEST ("double_homg_point_3d_out == double_homg_point_3d_in",
-    almost_equal(double_homg_point_3d_out.x(), double_homg_point_3d_in.x()) &&
-    almost_equal(double_homg_point_3d_out.y(), double_homg_point_3d_in.y()) &&
-    almost_equal(double_homg_point_3d_out.z(), double_homg_point_3d_in.z()) &&
-    almost_equal(double_homg_point_3d_out.w(),
-      double_homg_point_3d_in.w()),
-    true);
+        almost_equal(double_homg_point_3d_out.x(), double_homg_point_3d_in.x()) &&
+        almost_equal(double_homg_point_3d_out.y(), double_homg_point_3d_in.y()) &&
+        almost_equal(double_homg_point_3d_out.z(), double_homg_point_3d_in.z()) &&
+        almost_equal(double_homg_point_3d_out.w(),
+        double_homg_point_3d_in.w()),
+        true);
   TEST ("float_homg_point_3d_out == float_homg_point_3d_in",
-    almost_equal(float_homg_point_3d_out.x(), float_homg_point_3d_in.x()) &&
-    almost_equal(float_homg_point_3d_out.y(), float_homg_point_3d_in.y()) &&
-    almost_equal(float_homg_point_3d_out.z(), float_homg_point_3d_in.z()) &&
-    almost_equal(float_homg_point_3d_out.w(),
-      float_homg_point_3d_in.w()),
-    true);
+        almost_equal(float_homg_point_3d_out.x(), float_homg_point_3d_in.x()) &&
+        almost_equal(float_homg_point_3d_out.y(), float_homg_point_3d_in.y()) &&
+        almost_equal(float_homg_point_3d_out.z(), float_homg_point_3d_in.z()) &&
+        almost_equal(float_homg_point_3d_out.w(),
+        float_homg_point_3d_in.w()),
+        true);
   TEST ("double_homg_point_3d_out2 == double_homg_point_3d_in2",
-    almost_equal(double_homg_point_3d_out2.x(), double_homg_point_3d_in2.x()) &&
-    almost_equal(double_homg_point_3d_out2.y(), double_homg_point_3d_in2.y()) &&
-    almost_equal(double_homg_point_3d_out2.z(), double_homg_point_3d_in2.z()) &&
-    almost_equal(double_homg_point_3d_out2.w(),
-      double_homg_point_3d_in2.w()),
-    true);
+        almost_equal(double_homg_point_3d_out2.x(), double_homg_point_3d_in2.x()) &&
+        almost_equal(double_homg_point_3d_out2.y(), double_homg_point_3d_in2.y()) &&
+        almost_equal(double_homg_point_3d_out2.z(), double_homg_point_3d_in2.z()) &&
+        almost_equal(double_homg_point_3d_out2.w(),
+        double_homg_point_3d_in2.w()),
+        true);
   TEST ("float_homg_point_3d_out2 == float_homg_point_3d_in2",
-    almost_equal(float_homg_point_3d_out2.x(), float_homg_point_3d_in2.x()) &&
-    almost_equal(float_homg_point_3d_out2.y(), float_homg_point_3d_in2.y()) &&
-    almost_equal(float_homg_point_3d_out2.z(), float_homg_point_3d_in2.z()) &&
-    almost_equal(float_homg_point_3d_out2.w(), float_homg_point_3d_in2.w()),
-    true);
+        almost_equal(float_homg_point_3d_out2.x(), float_homg_point_3d_in2.x()) &&
+        almost_equal(float_homg_point_3d_out2.y(), float_homg_point_3d_in2.y()) &&
+        almost_equal(float_homg_point_3d_out2.z(), float_homg_point_3d_in2.z()) &&
+        almost_equal(float_homg_point_3d_out2.w(), float_homg_point_3d_in2.w()),
+        true);
   TEST ("double_line_2d_out == double_line_2d_in",
-    almost_equal(double_line_2d_out.a(), double_line_2d_in.a()) &&
-    almost_equal(double_line_2d_out.b(), double_line_2d_in.b()) &&
-    almost_equal(double_line_2d_out.c(), double_line_2d_in.c()),
-    true);
+        almost_equal(double_line_2d_out.a(), double_line_2d_in.a()) &&
+        almost_equal(double_line_2d_out.b(), double_line_2d_in.b()) &&
+        almost_equal(double_line_2d_out.c(), double_line_2d_in.c()),
+        true);
   TEST ("float_line_2d_out == float_line_2d_in",
-    almost_equal(float_line_2d_out.a(), float_line_2d_in.a()) &&
-    almost_equal(float_line_2d_out.b(), float_line_2d_in.b()) &&
-    almost_equal(float_line_2d_out.c(), float_line_2d_in.c()),
-    true);
+        almost_equal(float_line_2d_out.a(), float_line_2d_in.a()) &&
+        almost_equal(float_line_2d_out.b(), float_line_2d_in.b()) &&
+        almost_equal(float_line_2d_out.c(), float_line_2d_in.c()),
+        true);
   TEST ("double_homg_line_2d_out == double_homg_line_2d_in",
-    almost_equal(double_homg_line_2d_out.a(), double_homg_line_2d_in.a()) &&
-    almost_equal(double_homg_line_2d_out.b(), double_homg_line_2d_in.b()) &&
-    almost_equal(double_homg_line_2d_out.c(), double_homg_line_2d_in.c()),
-    true);
+        almost_equal(double_homg_line_2d_out.a(), double_homg_line_2d_in.a()) &&
+        almost_equal(double_homg_line_2d_out.b(), double_homg_line_2d_in.b()) &&
+        almost_equal(double_homg_line_2d_out.c(), double_homg_line_2d_in.c()),
+        true);
   TEST ("float_homg_line_2d_out == float_homg_line_2d_in",
-    almost_equal(float_homg_line_2d_out.a(), float_homg_line_2d_in.a()) &&
-    almost_equal(float_homg_line_2d_out.b(), float_homg_line_2d_in.b()) &&
-    almost_equal(float_homg_line_2d_out.c(), float_homg_line_2d_in.c()),
-    true);
+        almost_equal(float_homg_line_2d_out.a(), float_homg_line_2d_in.a()) &&
+        almost_equal(float_homg_line_2d_out.b(), float_homg_line_2d_in.b()) &&
+        almost_equal(float_homg_line_2d_out.c(), float_homg_line_2d_in.c()),
+        true);
   TEST ("double_homg_line_3d_2_points_out == double_homg_line_3d_2_points_in",
-    almost_equal(
-      double_homg_line_3d_2_points_out.get_point_finite().x(),
-      double_homg_line_3d_2_points_in.get_point_finite().x()) &&
-    almost_equal(
-      double_homg_line_3d_2_points_out.get_point_finite().y(),
-      double_homg_line_3d_2_points_in.get_point_finite().y()) &&
-    almost_equal(
-      double_homg_line_3d_2_points_out.get_point_finite().z(),
-      double_homg_line_3d_2_points_in.get_point_finite().z()) &&
-    almost_equal(
-      double_homg_line_3d_2_points_out.get_point_infinite().x(),
-      double_homg_line_3d_2_points_in.get_point_infinite().x()) &&
-    almost_equal(
-      double_homg_line_3d_2_points_out.get_point_infinite().y(),
-      double_homg_line_3d_2_points_in.get_point_infinite().y()) &&
-    almost_equal(
-      double_homg_line_3d_2_points_out.get_point_infinite().z(),
-      double_homg_line_3d_2_points_in.get_point_infinite().z()),
-    true);
+        almost_equal(
+          double_homg_line_3d_2_points_out.get_point_finite().x(),
+          double_homg_line_3d_2_points_in.get_point_finite().x()) &&
+        almost_equal(
+          double_homg_line_3d_2_points_out.get_point_finite().y(),
+          double_homg_line_3d_2_points_in.get_point_finite().y()) &&
+        almost_equal(
+          double_homg_line_3d_2_points_out.get_point_finite().z(),
+          double_homg_line_3d_2_points_in.get_point_finite().z()) &&
+        almost_equal(
+          double_homg_line_3d_2_points_out.get_point_infinite().x(),
+          double_homg_line_3d_2_points_in.get_point_infinite().x()) &&
+        almost_equal(
+          double_homg_line_3d_2_points_out.get_point_infinite().y(),
+          double_homg_line_3d_2_points_in.get_point_infinite().y()) &&
+        almost_equal(
+          double_homg_line_3d_2_points_out.get_point_infinite().z(),
+          double_homg_line_3d_2_points_in.get_point_infinite().z()),
+        true);
   TEST ("float_homg_line_3d_2_points_out == float_homg_line_3d_2_points_in",
-    almost_equal(
-      float_homg_line_3d_2_points_out.get_point_finite().x(),
-      float_homg_line_3d_2_points_in.get_point_finite().x()) &&
-    almost_equal(
-      float_homg_line_3d_2_points_out.get_point_finite().y(),
-      float_homg_line_3d_2_points_in.get_point_finite().y()) &&
-    almost_equal(
-      float_homg_line_3d_2_points_out.get_point_finite().z(),
-      float_homg_line_3d_2_points_in.get_point_finite().z()) &&
-    almost_equal(
-      float_homg_line_3d_2_points_out.get_point_infinite().x(),
-      float_homg_line_3d_2_points_in.get_point_infinite().x()) &&
-    almost_equal(
-      float_homg_line_3d_2_points_out.get_point_infinite().y(),
-      float_homg_line_3d_2_points_in.get_point_infinite().y()) &&
-    almost_equal(
-      float_homg_line_3d_2_points_out.get_point_infinite().z(),
-      float_homg_line_3d_2_points_in.get_point_infinite().z()),
-    true);
+        almost_equal(
+          float_homg_line_3d_2_points_out.get_point_finite().x(),
+          float_homg_line_3d_2_points_in.get_point_finite().x()) &&
+        almost_equal(
+          float_homg_line_3d_2_points_out.get_point_finite().y(),
+          float_homg_line_3d_2_points_in.get_point_finite().y()) &&
+        almost_equal(
+          float_homg_line_3d_2_points_out.get_point_finite().z(),
+          float_homg_line_3d_2_points_in.get_point_finite().z()) &&
+        almost_equal(
+          float_homg_line_3d_2_points_out.get_point_infinite().x(),
+          float_homg_line_3d_2_points_in.get_point_infinite().x()) &&
+        almost_equal(
+          float_homg_line_3d_2_points_out.get_point_infinite().y(),
+          float_homg_line_3d_2_points_in.get_point_infinite().y()) &&
+        almost_equal(
+          float_homg_line_3d_2_points_out.get_point_infinite().z(),
+          float_homg_line_3d_2_points_in.get_point_infinite().z()),
+        true);
   TEST ("double_line_segment_2d_out == double_line_segment_2d_in",
-    almost_equal(double_line_segment_2d_out.get_point1().x(),
-      double_line_segment_2d_in.get_point1().x()) &&
-    almost_equal(double_line_segment_2d_out.get_point1().y(),
-      double_line_segment_2d_in.get_point1().y()) &&
-    almost_equal(double_line_segment_2d_out.get_point2().x(),
-      double_line_segment_2d_in.get_point2().x()) &&
-    almost_equal(double_line_segment_2d_out.get_point2().y(),
-      double_line_segment_2d_in.get_point2().y()),
-    true);
+        almost_equal(double_line_segment_2d_out.get_point1().x(),
+          double_line_segment_2d_in.get_point1().x()) &&
+        almost_equal(double_line_segment_2d_out.get_point1().y(),
+          double_line_segment_2d_in.get_point1().y()) &&
+        almost_equal(double_line_segment_2d_out.get_point2().x(),
+          double_line_segment_2d_in.get_point2().x()) &&
+        almost_equal(double_line_segment_2d_out.get_point2().y(),
+          double_line_segment_2d_in.get_point2().y()),
+        true);
   TEST ("float_line_segment_2d_out == float_line_segment_2d_in",
-    almost_equal(float_line_segment_2d_out.get_point1().x(),
-      float_line_segment_2d_in.get_point1().x()) &&
-    almost_equal(float_line_segment_2d_out.get_point1().y(),
-      float_line_segment_2d_in.get_point1().y()) &&
-    almost_equal(float_line_segment_2d_out.get_point2().x(),
-      float_line_segment_2d_in.get_point2().x()) &&
-    almost_equal(float_line_segment_2d_out.get_point2().y(),
-      float_line_segment_2d_in.get_point2().y()),
-    true);
+        almost_equal(float_line_segment_2d_out.get_point1().x(),
+          float_line_segment_2d_in.get_point1().x()) &&
+        almost_equal(float_line_segment_2d_out.get_point1().y(),
+          float_line_segment_2d_in.get_point1().y()) &&
+        almost_equal(float_line_segment_2d_out.get_point2().x(),
+          float_line_segment_2d_in.get_point2().x()) &&
+        almost_equal(float_line_segment_2d_out.get_point2().y(),
+          float_line_segment_2d_in.get_point2().y()),
+        true);
   TEST ("double_line_segment_3d_out==double_line_segment_3d_in",
-    almost_equal(double_line_segment_3d_out.get_point1().x(),
-      double_line_segment_3d_in.get_point1().x()) &&
-    almost_equal(double_line_segment_3d_out.get_point1().y(),
-      double_line_segment_3d_in.get_point1().y()) &&
-    almost_equal(double_line_segment_3d_out.get_point1().z(),
-      double_line_segment_3d_in.get_point1().z()) &&
-    almost_equal(double_line_segment_3d_out.get_point2().x(),
-      double_line_segment_3d_in.get_point2().x()) &&
-    almost_equal(double_line_segment_3d_out.get_point2().y(),
-      double_line_segment_3d_in.get_point2().y()) &&
-    almost_equal(double_line_segment_3d_out.get_point2().z(),
-      double_line_segment_3d_in.get_point2().z()),
-    true);
+        almost_equal(double_line_segment_3d_out.get_point1().x(),
+          double_line_segment_3d_in.get_point1().x()) &&
+        almost_equal(double_line_segment_3d_out.get_point1().y(),
+          double_line_segment_3d_in.get_point1().y()) &&
+        almost_equal(double_line_segment_3d_out.get_point1().z(),
+          double_line_segment_3d_in.get_point1().z()) &&
+        almost_equal(double_line_segment_3d_out.get_point2().x(),
+          double_line_segment_3d_in.get_point2().x()) &&
+        almost_equal(double_line_segment_3d_out.get_point2().y(),
+          double_line_segment_3d_in.get_point2().y()) &&
+        almost_equal(double_line_segment_3d_out.get_point2().z(),
+          double_line_segment_3d_in.get_point2().z()),
+        true);
   TEST ("float_line_segment_3d_out == float_line_segment_3d_in",
-    almost_equal(float_line_segment_3d_out.get_point1().x(),
-      float_line_segment_3d_in.get_point1().x()) &&
-    almost_equal(float_line_segment_3d_out.get_point1().y(),
-      float_line_segment_3d_in.get_point1().y()) &&
-    almost_equal(float_line_segment_3d_out.get_point1().z(),
-      float_line_segment_3d_in.get_point1().z()) &&
-    almost_equal(float_line_segment_3d_out.get_point2().x(),
-      float_line_segment_3d_in.get_point2().x()) &&
-    almost_equal(float_line_segment_3d_out.get_point2().y(),
-      float_line_segment_3d_in.get_point2().y()) &&
-    almost_equal(float_line_segment_3d_out.get_point2().z(),
-      float_line_segment_3d_in.get_point2().z()),
-    true);
+        almost_equal(float_line_segment_3d_out.get_point1().x(),
+          float_line_segment_3d_in.get_point1().x()) &&
+        almost_equal(float_line_segment_3d_out.get_point1().y(),
+          float_line_segment_3d_in.get_point1().y()) &&
+        almost_equal(float_line_segment_3d_out.get_point1().z(),
+          float_line_segment_3d_in.get_point1().z()) &&
+        almost_equal(float_line_segment_3d_out.get_point2().x(),
+          float_line_segment_3d_in.get_point2().x()) &&
+        almost_equal(float_line_segment_3d_out.get_point2().y(),
+          float_line_segment_3d_in.get_point2().y()) &&
+        almost_equal(float_line_segment_3d_out.get_point2().z(),
+          float_line_segment_3d_in.get_point2().z()),
+        true);
   TEST ("double_box_2d_out == double_box_2d_in",
-    almost_equal(double_box_2d_out.get_min_x(), double_box_2d_in.get_min_x()) &&
-    almost_equal(double_box_2d_out.get_min_y(), double_box_2d_in.get_min_y()) &&
-    almost_equal(double_box_2d_out.get_max_x(), double_box_2d_in.get_max_x()) &&
-    almost_equal(double_box_2d_out.get_max_y(), double_box_2d_in.get_max_y()),
-    true);
+        almost_equal(double_box_2d_out.get_min_x(), double_box_2d_in.get_min_x()) &&
+        almost_equal(double_box_2d_out.get_min_y(), double_box_2d_in.get_min_y()) &&
+        almost_equal(double_box_2d_out.get_max_x(), double_box_2d_in.get_max_x()) &&
+        almost_equal(double_box_2d_out.get_max_y(), double_box_2d_in.get_max_y()),
+        true);
   TEST ("float_box_2d_out == float_box_2d_in",
-    almost_equal(float_box_2d_out.get_min_x(), float_box_2d_in.get_min_x()) &&
-    almost_equal(float_box_2d_out.get_min_y(), float_box_2d_in.get_min_y()) &&
-    almost_equal(float_box_2d_out.get_max_x(), float_box_2d_in.get_max_x()) &&
-    almost_equal(float_box_2d_out.get_max_y(), float_box_2d_in.get_max_y()),
-    true);
+        almost_equal(float_box_2d_out.get_min_x(), float_box_2d_in.get_min_x()) &&
+        almost_equal(float_box_2d_out.get_min_y(), float_box_2d_in.get_min_y()) &&
+        almost_equal(float_box_2d_out.get_max_x(), float_box_2d_in.get_max_x()) &&
+        almost_equal(float_box_2d_out.get_max_y(), float_box_2d_in.get_max_y()),
+        true);
   TEST ("double_box_3d_out == double_box_3d_in",
-    almost_equal(double_box_3d_out.get_min_x(), double_box_3d_in.get_min_x()) &&
-    almost_equal(double_box_3d_out.get_max_x(), double_box_3d_in.get_max_x()) &&
-    almost_equal(double_box_3d_out.get_min_y(), double_box_3d_in.get_min_y()) &&
-    almost_equal(double_box_3d_out.get_max_y(), double_box_3d_in.get_max_y()) &&
-    almost_equal(double_box_3d_out.get_min_z(), double_box_3d_in.get_min_z()) &&
-    almost_equal(double_box_3d_out.get_max_z(), double_box_3d_in.get_max_z()),
-    true);
+        almost_equal(double_box_3d_out.get_min_x(), double_box_3d_in.get_min_x()) &&
+        almost_equal(double_box_3d_out.get_max_x(), double_box_3d_in.get_max_x()) &&
+        almost_equal(double_box_3d_out.get_min_y(), double_box_3d_in.get_min_y()) &&
+        almost_equal(double_box_3d_out.get_max_y(), double_box_3d_in.get_max_y()) &&
+        almost_equal(double_box_3d_out.get_min_z(), double_box_3d_in.get_min_z()) &&
+        almost_equal(double_box_3d_out.get_max_z(), double_box_3d_in.get_max_z()),
+        true);
   TEST ("float_box_3d_out == float_box_3d_in",
-    almost_equal(float_box_3d_out.get_min_x(), float_box_3d_in.get_min_x()) &&
-    almost_equal(float_box_3d_out.get_max_x(), float_box_3d_in.get_max_x()) &&
-    almost_equal(float_box_3d_out.get_min_y(), float_box_3d_in.get_min_y()) &&
-    almost_equal(float_box_3d_out.get_max_y(), float_box_3d_in.get_max_y()) &&
-    almost_equal(float_box_3d_out.get_min_z(), float_box_3d_in.get_min_z()) &&
-    almost_equal(float_box_3d_out.get_max_z(), float_box_3d_in.get_max_z()),
-    true);
+        almost_equal(float_box_3d_out.get_min_x(), float_box_3d_in.get_min_x()) &&
+        almost_equal(float_box_3d_out.get_max_x(), float_box_3d_in.get_max_x()) &&
+        almost_equal(float_box_3d_out.get_min_y(), float_box_3d_in.get_min_y()) &&
+        almost_equal(float_box_3d_out.get_max_y(), float_box_3d_in.get_max_y()) &&
+        almost_equal(float_box_3d_out.get_min_z(), float_box_3d_in.get_min_z()) &&
+        almost_equal(float_box_3d_out.get_max_z(), float_box_3d_in.get_max_z()),
+        true);
   TEST ("double_homg_plane_3d_out == double_homg_plane_3d_in",
-    almost_equal(double_homg_plane_3d_out.nx(), double_homg_plane_3d_in.nx()) &&
-    almost_equal(double_homg_plane_3d_out.ny(), double_homg_plane_3d_in.ny()) &&
-    almost_equal(double_homg_plane_3d_out.nz(), double_homg_plane_3d_in.nz()) &&
-    almost_equal(double_homg_plane_3d_out.d(), double_homg_plane_3d_in.d()),
-    true);
+        almost_equal(double_homg_plane_3d_out.nx(), double_homg_plane_3d_in.nx()) &&
+        almost_equal(double_homg_plane_3d_out.ny(), double_homg_plane_3d_in.ny()) &&
+        almost_equal(double_homg_plane_3d_out.nz(), double_homg_plane_3d_in.nz()) &&
+        almost_equal(double_homg_plane_3d_out.d(), double_homg_plane_3d_in.d()),
+        true);
   TEST ("float_homg_plane_3d_out == float_homg_plane_3d_in",
-    almost_equal(float_homg_plane_3d_out.nx(),
-      float_homg_plane_3d_in.nx()) &&
-    almost_equal(float_homg_plane_3d_out.ny(), float_homg_plane_3d_in.ny()) &&
-    almost_equal(float_homg_plane_3d_out.nz(), float_homg_plane_3d_in.nz()) &&
-    almost_equal(float_homg_plane_3d_out.d(), float_homg_plane_3d_in.d()),
-    true);
+        almost_equal(float_homg_plane_3d_out.nx(),
+          float_homg_plane_3d_in.nx()) &&
+        almost_equal(float_homg_plane_3d_out.ny(), float_homg_plane_3d_in.ny()) &&
+        almost_equal(float_homg_plane_3d_out.nz(), float_homg_plane_3d_in.nz()) &&
+        almost_equal(float_homg_plane_3d_out.d(), float_homg_plane_3d_in.d()),
+        true);
   bool poly_is_equal;
   poly_is_equal = (polygon_out.num_sheets() == polygon_in.num_sheets());
   if (poly_is_equal==true)
-    {
+  {
     for (int i=0;i<3;i++)
-      {
+    {
       for (int j=0;j<5;j++)
-        {
+      {
         poly_is_equal = (poly_is_equal && (
           almost_equal(polygon_out[i][j].x(), polygon_in[i][j].x()) &&
           almost_equal(polygon_out[i][j].y(), polygon_in[i][j].y())
           ));
-        }
       }
     }
+  }
   TEST ("polygon_out == polygon_in",
-    poly_is_equal,
-    true);
+        poly_is_equal,
+        true);
   TEST ("double_point_2d_out == double_point_2d_in_bis",
-    almost_equal(double_point_2d_out.x(), double_point_2d_in_bis.x()) &&
-    almost_equal(double_point_2d_out.y(), double_point_2d_in_bis.y()),
-    true);
+        almost_equal(double_point_2d_out.x(), double_point_2d_in_bis.x()) &&
+        almost_equal(double_point_2d_out.y(), double_point_2d_in_bis.y()),
+        true);
 }

@@ -4,12 +4,12 @@
 
 // This is vxl/vil/io/vil_io_memory_image_impl.txx
 
+#include <vcl_cstdlib.h> // vcl_abort()
 #include <vil/vil_memory_image_impl.h>
 #include <vil/io/vil_io_memory_image_format.h>
 #include <vil/io/vil_io_memory_image_impl.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_explicit_io.h>
-
 
 
 //:
@@ -33,7 +33,7 @@ vil_image_impl* vil_io_memory_image_impl::new_object() const
 }
 
 //: Write derived class to os using vil_image_impl reference
-void vil_io_memory_image_impl::b_write_by_base(vsl_b_ostream& os, 
+void vil_io_memory_image_impl::b_write_by_base(vsl_b_ostream& os,
                                                const vil_image_impl& base)
                                                const
 {
@@ -41,7 +41,7 @@ void vil_io_memory_image_impl::b_write_by_base(vsl_b_ostream& os,
 }
 
 //: Write derived class to os using vil_image_impl reference
-void vil_io_memory_image_impl::b_read_by_base(vsl_b_istream& is, 
+void vil_io_memory_image_impl::b_read_by_base(vsl_b_istream& is,
                                               vil_image_impl& base) const
 {
   vsl_b_read(is,(vil_memory_image_impl&) base);
@@ -79,21 +79,19 @@ void vsl_b_write(vsl_b_ostream &os, const vil_memory_image_impl & p)
   vsl_b_write(os,p.components());
   vsl_b_write(os,p.bits_per_component());
   vsl_b_write(os,p.component_format());
-  int nelems = p.planes() * p.height() * p.width() * p.components(); 
+  int nelems = p.planes() * p.height() * p.width() * p.components();
   int size = nelems * p.bits_per_component() / CHAR_BIT;
   unsigned char* buf = new unsigned char[size];
   p.get_section(buf,0,0,p.width(),p.height());
   vsl_swap_bytes((char*) buf,p.bits_per_component(),nelems);
   os.os().write((const char*) buf,size);
   delete buf;
-  
 }
 
 //========================================================================
 //: Binary load self from stream.
 void vsl_b_read(vsl_b_istream &is, vil_memory_image_impl & p)
 {
- 
   short v;
   vsl_b_read(is, v);
   switch(v)
@@ -110,7 +108,7 @@ void vsl_b_read(vsl_b_istream &is, vil_memory_image_impl & p)
     vsl_b_read(is,component_format);
     p.resize(planes,width,height,components,
       bits_per_component,vil_component_format(component_format));
-    int nelems = p.planes() * p.height() * p.width() * p.components(); 
+    int nelems = p.planes() * p.height() * p.width() * p.components();
     int size = nelems * p.bits_per_component() / CHAR_BIT;
     unsigned char* buf = new unsigned char[size];
     is.is().read((char*) buf,size);
@@ -122,9 +120,8 @@ void vsl_b_read(vsl_b_istream &is, vil_memory_image_impl & p)
   default:
   vcl_cerr << "vsl_b_read(vil_memory_image_impl) Unknown version number ";
   vcl_cerr << v << vcl_endl;
-  abort();
+  vcl_abort();
   }
-
 }
 
 //========================================================================
@@ -159,9 +156,5 @@ void vsl_print_summary(vcl_ostream& os,const vil_memory_image_impl & p)
     os << "unknown";
     break;
   }
-  
 }
-
-
-
 

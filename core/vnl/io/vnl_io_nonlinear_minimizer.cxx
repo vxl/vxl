@@ -1,8 +1,9 @@
+// This is vxl/vnl/io/vnl_io_nonlinear_minimizer.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
 
-// This is vxl/vnl/io/vnl_io_nonlinear_minimizer.cxx
+#include <vcl_cstdlib.h> // vcl_abort()
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_nonlinear_minimizer.h>
 #include <vsl/vsl_clipon_binary_loader.txx>
@@ -24,21 +25,21 @@ vnl_nonlinear_minimizer* vnl_io_nonlinear_minimizer::new_object() const
 }
 
 //: Write derived class to os using vnl_nonlinear_minimizer reference
-void vnl_io_nonlinear_minimizer::b_write_by_base(vsl_b_ostream& os, 
+void vnl_io_nonlinear_minimizer::b_write_by_base(vsl_b_ostream& os,
        const vnl_nonlinear_minimizer& base) const
 {
   vsl_b_write(os,base);
 }
 
 //: Write derived class to os using vnl_nonlinear_minimizer reference
-void vnl_io_nonlinear_minimizer::b_read_by_base(vsl_b_istream& is, 
+void vnl_io_nonlinear_minimizer::b_read_by_base(vsl_b_istream& is,
       vnl_nonlinear_minimizer& base) const
 {
   vsl_b_read(is,base);
 }
 
 //: Print summary of derived class to os using vnl_nonlinear_minimizer reference
-void vnl_io_nonlinear_minimizer::print_summary_by_base(vcl_ostream& os, 
+void vnl_io_nonlinear_minimizer::print_summary_by_base(vcl_ostream& os,
         const vnl_nonlinear_minimizer& base) const
 {
   vsl_print_summary(os,base);
@@ -117,18 +118,17 @@ void vsl_b_read(vsl_b_istream &is, vnl_nonlinear_minimizer & p)
     break;
 
   default:
-    vcl_cerr << "vsl_b_read(vsl_b_istream &, vnl_nonlinear_minimizer & ):" 
+    vcl_cerr << "vsl_b_read(vsl_b_istream &, vnl_nonlinear_minimizer & ):"
         <<"Unknown version number "<< ver << vcl_endl;
-    abort();
+    vcl_abort();
   }
-
 }
 
 //==============================================================================
 //: Output a human readable summary to the stream
 void vsl_print_summary(vcl_ostream & os,const vnl_nonlinear_minimizer & p)
 {
-  os<<"Tolerance of {F, X, G}: {"<<p.get_f_tolerance() << ", " 
+  os<<"Tolerance of {F, X, G}: {"<<p.get_f_tolerance() << ", "
   << p.get_x_tolerance()<<", "<<p.get_g_tolerance() << "}" << vcl_endl;
   os<<"Max Function Evals:"<<p.get_max_function_evals()<<"    Epsilon function:"
   <<p.get_epsilon_function()<<"       Trace:"<<p.get_trace()<<vcl_endl;

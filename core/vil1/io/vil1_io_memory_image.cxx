@@ -1,9 +1,9 @@
+// This is vil/io/vil_io_memory_image.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
 
-// This is vil/io/vil_io_memory_image.cxx
-
+#include <vcl_cstdlib.h> // vcl_abort()
 #include <vil/io/vil_io_memory_image.h>
 #include <vil/io/vil_io_image.h>
 #include <vil/vil_memory_image.h>
@@ -37,15 +37,14 @@ void vsl_b_read(vsl_b_istream &is, vil_memory_image & p)
     {
       vsl_b_read(is, (vil_image &) p);
       p.recache_from_impl();
-    }        
+    }
     break;
 
   default:
     vcl_cerr << "vsl_b_read(is,vil_memory_image) ";
     vcl_cerr << "Unknown version number "<< v << vcl_endl;
-    abort();
+    vcl_abort();
   }
-
 }
 
 

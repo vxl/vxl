@@ -1,6 +1,7 @@
 #ifndef vbl_io_test_classes_cxx_
 #define vbl_io_test_classes_cxx_
 
+#include <vcl_cstdlib.h> // vcl_abort()
 #include <vbl/vbl_smart_ptr.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vbl/io/tests/vbl_io_test_classes.h>
@@ -10,15 +11,15 @@
 // \brief Contains some stuff for testing smart ptr IO
 
 #include <vbl/vbl_smart_ptr.txx>
-VBL_SMART_PTR_INSTANTIATE(impl)
+VBL_SMART_PTR_INSTANTIATE(impl);
 
 #include <vbl/io/vbl_io_smart_ptr.txx>
-VBL_IO_SMART_PTR_INSTANTIATE(impl)
+VBL_IO_SMART_PTR_INSTANTIATE(impl);
 
 
 typedef vbl_smart_ptr<impl> base_sptr;
 
-// Remember, the template instances must be in 
+// Remember, the template instances must be in
 // Templates, but they use these classes, so the class
 // implementation must be in the library even if only
 // one test uses it.
@@ -43,13 +44,13 @@ impl::~impl() {
 void impl::Print (vcl_ostream &str) {
   str << "impl(" << n << ") ";
 }
-  
+
 void impl::checkcount () {
   if (reftotal == 0)
     vcl_cout << "impl : PASSED" << vcl_endl;
   else
     vcl_cout << "impl : FAILED : count = " << reftotal << vcl_endl;
-} 
+}
 
 void vsl_b_write(vsl_b_ostream& os, const impl &p)
 {
@@ -74,7 +75,7 @@ void vsl_b_read(vsl_b_istream& is, impl &p)
   default:
     vcl_cerr << "vsl_b_read(is, impl &) Unknown version number "
       << ver << vcl_endl;
-    abort();
+    vcl_abort();
   }
 }
 
@@ -93,15 +94,15 @@ void vsl_b_read(vsl_b_istream& is, impl * &p)
     p = new impl();
     vsl_b_read(is, *p);
   }
-  else 
+  else
     p = 0;
-} 
+}
 
 void vsl_b_write(vsl_b_ostream& os, const impl *p)
 {
   if (p==0)
   {
-    vsl_b_write(os, false); // Indicate null pointer stored 
+    vsl_b_write(os, false); // Indicate null pointer stored
   }
   else
   {
@@ -116,10 +117,9 @@ void vsl_print_summary(vcl_ostream& os, const impl *p)
     os << "NULL PTR";
   else
   {
-    os << "T" << ": "; 
+    os << "T" << ": ";
     vsl_print_summary(os, *p);
-  } 
+  }
 };
 
 #endif // vbl_io_test_classes_cxx_
-

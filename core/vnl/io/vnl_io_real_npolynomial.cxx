@@ -1,5 +1,6 @@
 // This is vxl/vnl/io/vnl_io_real_npolynomial.cxx
 
+#include <vcl_cstdlib.h> // vcl_abort()
 #include <vsl/vsl_binary_io.h>
 #include <vnl/vnl_real_npolynomial.h>
 #include <vnl/io/vnl_io_vector.h>
@@ -21,7 +22,6 @@ void vsl_b_write(vsl_b_ostream & os, const vnl_real_npolynomial & p)
 //: Binary load self from stream.
 void vsl_b_read(vsl_b_istream &is, vnl_real_npolynomial & p)
 {
-
   short ver;
   vnl_vector<double> coeffs;
   vnl_matrix<int> polyn;
@@ -37,9 +37,8 @@ void vsl_b_read(vsl_b_istream &is, vnl_real_npolynomial & p)
   default:
     vcl_cerr << "ERROR: vsl_b_read(s, vnl_real_npolynomial&): Unknown version number "
             << ver << vcl_endl;
-    abort();
+    vcl_abort();
   }
-
 }
 
 //==============================================================================
