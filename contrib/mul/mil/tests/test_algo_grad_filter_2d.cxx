@@ -24,10 +24,11 @@ void test_algo_grad_filter_2d_byte_float()
 
 //  src.print_all(vcl_cout);
 
-  mil_algo_grad_filter_2d<unsigned char, float> filter;
-  filter.filter_xy_3x3(gx,gy,src);
-//  gx.print_all(vcl_cout);
-//  gy.print_all(vcl_cout);
+  mil_algo_grad_filter_2d<unsigned char, float>::filter_xy_3x3(gx,gy,src);
+#ifdef DEBUG
+  gx.print_all(vcl_cout);
+  gy.print_all(vcl_cout);
+#endif
 
   TEST("Left edge of gx is zero",vcl_fabs(gx(0,5))<1e-6,true);
   TEST("Left edge of gy is zero",vcl_fabs(gy(0,5))<1e-6,true);
@@ -70,10 +71,11 @@ void test_algo_grad_filter_2d_float_float()
 
 //  src.print_all(vcl_cout);
 
-  mil_algo_grad_filter_2d<float, float> filter;
-  filter.filter_xy_3x3(gx,gy,src);
-//  gx.print_all(vcl_cout);
-//  gy.print_all(vcl_cout);
+  mil_algo_grad_filter_2d<float, float>::filter_xy_3x3(gx,gy,src);
+#ifdef DEBUG
+  gx.print_all(vcl_cout);
+  gy.print_all(vcl_cout);
+#endif
 
   TEST("Left edge of gx is zero",vcl_fabs(gx(0,5))<1e-6,true);
   TEST("Left edge of gy is zero",vcl_fabs(gy(0,5))<1e-6,true);
