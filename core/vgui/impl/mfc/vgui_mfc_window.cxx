@@ -131,4 +131,6 @@ void vgui_mfc_window::reposition(int x,int y)
 
 void vgui_mfc_window::set_title(const vcl_string &s)
 {
+ CWinApp *app = AfxGetApp();
+ app->GetMainWnd()->SetWindowText(s.c_str());
 }
