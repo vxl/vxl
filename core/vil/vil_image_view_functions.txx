@@ -102,6 +102,14 @@ void vil2_fill(vil2_image_view<T>& view, T value)
   }
 }
 
+//: Fill data[i*step] (i=0..n-1) with given value
+template<class T>
+void vil2_fill_line(T* data, unsigned n, int step, T value)
+{
+  T* end_data = data + n*step;
+  while (data!=end_data) { *data=value; data+=step; }
+}
+
 //: Fill row y in view with given value
 template<class T>
 void vil2_fill_row(vil2_image_view<T>& view, unsigned y, T value)
@@ -114,10 +122,7 @@ void vil2_fill_row(vil2_image_view<T>& view, unsigned y, T value)
 
   T* row = view.top_left_ptr() + y*ystep;
   for (int p=0;p<np;++p,row += pstep)
-  {
-    T* pixel = row;
-    for (int x=0;x<nx;++x,pixel+=xstep) *pixel=value;
-  }
+    vil2_fill_line(row,nx,xstep,value);
 }
 
 //: Fill column x in view with given value
@@ -131,10 +136,7 @@ void vil2_fill_col(vil2_image_view<T>& view, unsigned x, T value)
   assert(x<nx);
   T* col_top = view.top_left_ptr() + x*xstep;
   for (int p=0;p<np;++p,col_top += pstep)
-  {
-    T* pixel = col_top;
-    for (int y=0;y<ny;++y,pixel+=ystep) *pixel=value;
-  }
+    vil2_fill_line(col_top,ny,ystep,value);
 }
 
 
@@ -174,7 +176,7 @@ void vil2_print_all(vcl_ostream& os,const vil2_image_view<T>& view)
 #define VIL2_IMAGE_VIEW_FUNCTIONS_INSTANTIATE_FOR_SCALARS(T) \
 template vil2_image_view<T > vil2_view_as_planes(const vil2_image_view<vil_rgb<T > >&); \
 template vil2_image_view<vil_rgb<T > > vil2_view_as_rgb(const vil2_image_view<T >& plane_view); \
-template void vil2_value_range(T& min_value, T& max_value,const vil2_image_view<T >& view); \
+template void vil2_value_range(T& min_value, T& max_value,const vil2_image_view<T>& view); \
 template void vil2_print_value(vcl_ostream& os, const T& value)
 
 // For everything else
@@ -182,6 +184,7 @@ template void vil2_print_value(vcl_ostream& os, const T& value)
 template vil2_image_view<T > vil2_transpose(const vil2_image_view<T >& v); \
 template void vil2_print_all(vcl_ostream& os,const vil2_image_view<T >& view); \
 template void vil2_fill(vil2_image_view<T >& view, T value); \
+template void vil2_fill_line(T * data, unsigned n, int step, T value); \
 template void vil2_fill_row(vil2_image_view<T >& view, unsigned y, T value); \
 template void vil2_fill_col(vil2_image_view<T >& view, unsigned x, T value)
 

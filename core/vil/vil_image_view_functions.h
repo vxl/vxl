@@ -27,6 +27,10 @@ vil2_image_view<T> vil2_transpose(const vil2_image_view<T>& view);
 template<class T>
 void vil2_fill(vil2_image_view<T>& view, T value);
 
+//: Fill data[i*step] (i=0..n-1) with given value
+template<class T>
+void vil2_fill_line(T* data, unsigned n, int step, T value);
+
 //: Fill row y in view with given value
 template<class T>
 void vil2_fill_row(vil2_image_view<T>& view, unsigned y, T value);
