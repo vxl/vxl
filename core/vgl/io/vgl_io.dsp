@@ -357,6 +357,16 @@ SOURCE=.\Templates/vgl_io_vector_2d+float-.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\Templates/vgl_io_conic+float-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates/vgl_io_conic+double-.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/vsl_vector_io+vgl_point_2d+int--.cxx
 
 # End Source File
