@@ -6,9 +6,9 @@
 //  \author Tim Cootes
 //  These are not templated because
 //  a) Each type tends to need a slightly different implementation
-//  b) Let's not have too many templates.
+//  b) Let's not have too manj templates.
 
-#include <vil2/algo/vil2_algo_gauss_reduce.h>
+#include <vil2/algo/vil2_gauss_reduce.h>
 
 //: Smooth and subsample single plane src_im in i to produce dest_im
 //  Applies 1-5-8-5-1 filter in i, then samples
@@ -18,18 +18,68 @@
 //  By applying three times we can obtain a full gaussian smoothed and
 //  sub-sampled 3D image
 template<class T>
-void vil3d_gauss_reduce(T* dest_im,
-                           int d_i_step, int d_j_step, int d_k_step,
-                           const T* src_im,
+inline void vil3d_gauss_reduce(const T* src_im,
                            int src_ni, int src_nj, int src_nk,
-                           int s_i_step, int s_j_step, int s_k_step)
+                           int s_i_step, int s_j_step, int s_k_step,
+						   T* dest_im,
+                           int d_i_step, int d_j_step, int d_k_step)
 {
   for (int k=0;k<src_nk;++k)
   {
-    vil2_algo_gauss_reduce(dest_im,d_i_step, d_j_step,
-                           src_im, src_ni,src_nj, s_i_step,s_j_step);
+    vil2_gauss_reduce(src_im, src_ni,src_nj, s_i_step,s_j_step,
+	                  dest_im,d_i_step, d_j_step);
     dest_im += d_k_step;
     src_im  += s_k_step;
+  }
+}
+
+//: Smooth and subsample src_im to produce dest_im
+//  Applies filter in i,j and k directions, then samples every other pixel.
+template<class T>
+inline void vil3d_gauss_reduce(const vil3d_image_view<T>& src_im,
+                               vil3d_image_view<T>& dest_im,
+							   vil3d_image_view<T>& work_im1,
+							   vil3d_image_view<T>& work_im2)
+{
+  unsigned ni = src_im.ni();
+  unsigned nj = src_im.nj();
+  unsigned nk = src_im.nk();
+  unsigned n_planes = src_im.nplanes();
+
+  // Output image size
+  unsigned ni2 = (ni+1)/2;
+  unsigned nj2 = (nj+1)/2;
+  unsigned nk2 = (nk+1)/2;
+
+  dest_im.resize(ni2,nj2,nk2,n_planes);
+
+  if (work_im1.ni()<ni2 || work_im1.nj()<nj || work_im1.nk()<nk)
+    work_im1.resize(ni2,nj,nk);
+
+  if (work_im2.ni()<ni2 || work_im2.nj()<nj2 || work_im2.nk()<nk)
+    work_im2.resize(ni2,nj2,nk);
+
+  // Reduce plane-by-plane
+  for (int p=0;p<n_planes;++p)
+  {
+    // Smooth and subsample in i, result in work_im1
+    vil3d_gauss_reduce(
+      src_im.origin_ptr()+p*src_im.planestep(),ni,nj,nk,
+      src_im.istep(),src_im.jstep(),src_im.kstep(),
+	  work_im1.origin_ptr(),work_im1.istep(),work_im1.jstep(),work_im1.kstep());
+
+    // Smooth and subsample in j (by implicitly transposing), result in work_im2
+    vil3d_gauss_reduce(
+      work_im1.origin_ptr(),nj,ni2,nk,
+      work_im1.jstep(),work_im1.istep(),work_im1.kstep(),
+	  work_im2.origin_ptr(),work_im2.jstep(),work_im2.istep(),work_im2.kstep());
+
+    // Smooth and subsample in k (by implicitly transposing)
+    vil3d_gauss_reduce(
+      work_im2.origin_ptr(),nk,ni2,nj2,
+      work_im2.kstep(),work_im2.istep(),work_im2.jstep(),
+	  dest_im.origin_ptr()+p*dest_im.planestep(),
+	  dest_im.kstep(),dest_im.istep(),dest_im.jstep());
   }
 }
 
