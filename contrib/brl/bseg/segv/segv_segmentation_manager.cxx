@@ -93,7 +93,7 @@ void segv_segmentation_manager::quit()
 
 void segv_segmentation_manager::load_image()
 {
-  bool greyscale = false;
+  static bool greyscale = false;
   vgui_dialog load_image_dlg("Load image file");
   static vcl_string image_filename = "c:/images/ShortBaseline/bad-region-jar-1.tif";
   static vcl_string ext = "*.*";
@@ -101,7 +101,18 @@ void segv_segmentation_manager::load_image()
   load_image_dlg.checkbox("greyscale ", greyscale);
   if (!load_image_dlg.ask())
     return;
-  img_ = vil1_load(image_filename.c_str());
+
+  vil1_image temp = vil1_load(image_filename.c_str());
+
+  if(greyscale)
+    {
+      vil1_memory_image_of<unsigned char> temp1 = 
+      brip_float_ops::convert_to_grey(temp);
+      img_ = temp1;
+    }
+  else
+    img_ = temp;
+
   t2D_->get_image_tableau()->set_image(img_);
   t2D_->post_redraw();
 }
