@@ -16,7 +16,7 @@ vcl_string vul_expand_path_uncached(vcl_string path) { return path; }
 #include <vcl_functional.h>
 #include <vcl_vector.h>
 #include <vcl_map.h>
-
+#include <vcl_cstdlib.h> // for getenv()
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
@@ -30,7 +30,7 @@ vcl_string vul_expand_path_internal(vcl_string path)
 
   // expand ~/ or just ~
   if ((path.size()>=2 && path[0] == '~' && path[1] == '/') || path == "~") {
-    char const *HOME = getenv("HOME");
+    char const *HOME = vcl_getenv("HOME");
     if (! HOME) {
       // urgh!
       HOME = "/HOME";
