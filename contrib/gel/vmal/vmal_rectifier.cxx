@@ -1,10 +1,11 @@
 // This is gel/vmal/vmal_rectifier.cxx
 #include "vmal_rectifier.h"
 //:
-//  \file
+// \file
 
 #include <vmal/vmal_convert.h>
 #include <vcl_cmath.h> // atan2()
+#include <vbl/vbl_bounding_box.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_matrix_inverse.h>
 #include <vnl/algo/vnl_determinant.h>
@@ -16,7 +17,6 @@
 #include <mvl/FMatrixComputeMLESAC.h>
 #include <mvl/FMatrixComputeRobust.h>
 #include <vil/vil_bilin_interp.h>
-#include <vil/vil_save.h>
 
 vmal_rectifier::vmal_rectifier()
 {
@@ -26,8 +26,8 @@ vmal_rectifier::vmal_rectifier()
   lines1_q_=NULL;
   points0_=NULL;
   points1_=NULL;
-  rectL =  new vil_image_view<vxl_byte>(1,1,1); 
-  rectR =  new vil_image_view<vxl_byte>(1,1,1); 
+  rectL =  new vil_image_view<vxl_byte>(1,1,1);
+  rectR =  new vil_image_view<vxl_byte>(1,1,1);
   //  rectL =  NULL;
   //  rectR =  NULL;
 }
@@ -42,8 +42,8 @@ vmal_rectifier::vmal_rectifier(vmal_multi_view_data_vertex_sptr mvd_vertex,
   lines1_p_=NULL;
   lines1_q_=NULL;
   points0_=NULL;
-  rectL =  new vil_image_view<vxl_byte>(1,1,1); 
-  rectR =  new vil_image_view<vxl_byte>(1,1,1); 
+  rectL =  new vil_image_view<vxl_byte>(1,1,1);
+  rectR =  new vil_image_view<vxl_byte>(1,1,1);
 
   if ((mvd_vertex->get_nb_views()>1) && (mvd_edge->get_nb_views()>1))
   {
@@ -56,7 +56,6 @@ vmal_rectifier::vmal_rectifier(vmal_multi_view_data_vertex_sptr mvd_vertex,
 
     convert_lines_double_3(tmp_lines0, lines0_p_, lines0_q_);
     convert_lines_double_3(tmp_lines1, lines1_p_, lines1_q_);
-
 
     vcl_vector<vtol_vertex_2d_sptr> tmp_points0;
     vcl_vector<vtol_vertex_2d_sptr> tmp_points1;
@@ -75,55 +74,40 @@ vmal_rectifier::vmal_rectifier(vmal_multi_view_data_vertex_sptr mvd_vertex,
 vmal_rectifier::vmal_rectifier(vcl_vector< vnl_vector<double> >* pts0,
                                vcl_vector< vnl_vector<double> >* pts1,
                                int ima_height, int ima_width) :
+  lines0_p_(0), lines0_q_(0), lines1_p_(0), lines1_q_(0),
+  numpoints_(pts0->size()), height_(ima_height), width_(ima_width),
   is_f_compute_(false)
 {
-  lines0_p_=NULL;
-  lines0_q_=NULL;
-  lines1_p_=NULL;
-  lines1_q_=NULL;
-  points0_=NULL;
-  points1_=NULL;
-  rectL =  new vil_image_view<vxl_byte>(1,1,1); 
-  rectR =  new vil_image_view<vxl_byte>(1,1,1); 
-
-  height_=ima_height;
-  width_=ima_width;
-  numpoints_ = pts0->size();
+  rectL = new vil_image_view<vxl_byte>(1,1,1);
+  rectR = new vil_image_view<vxl_byte>(1,1,1);
 
   // put the points in the proper buffers...
   points0_ = new vnl_double_3[numpoints_];
   points1_ = new vnl_double_3[numpoints_];
   vcl_vector< vnl_vector<double> >::iterator vit0 = pts0->begin();
   vcl_vector< vnl_vector<double> >::iterator vit1 = pts1->begin();
-  for (int i=0; i<numpoints_; i++) {
-    points0_[i][0] = (*vit0).x();
-    points0_[i][1] = (*vit0).y();
-    //points0_[i][0] = (*vit0).y();
-    //points0_[i][1] = (*vit0).x();
-    points0_[i][2] = 1;
-    points1_[i][0] = (*vit1).x();
-    points1_[i][1] = (*vit1).y();
-    //points1_[i][0] = (*vit1).y();
-    //points1_[i][1] = (*vit1).x();
-    points1_[i][2] = 1;
-    vit0++;
-    vit1++;
+  for (int i=0; i<numpoints_; ++i,++vit0,++vit1)
+  {
+    points0_[i][0] = (*vit0).x(); // .y()
+    points0_[i][1] = (*vit0).y(); // .x()
+    points0_[i][2] = 1.0;
+    points1_[i][0] = (*vit1).x(); // .y()
+    points1_[i][1] = (*vit1).y(); // .x()
+    points1_[i][2] = 1.0;
   }
-  
 }
-
 
 
 vmal_rectifier::~vmal_rectifier()
 {
-  if (points0_!=NULL) delete [] points0_;
-  if (points1_!=NULL) delete [] points1_;
-  if (lines0_p_!=NULL) delete [] lines0_p_;
-  if (lines0_q_!=NULL) delete [] lines0_q_;
-  if (lines1_p_!=NULL) delete [] lines1_p_;
-  if (lines1_q_!=NULL) delete [] lines1_q_;
-  if (rectL != NULL) delete rectL;
-  if (rectR != NULL) delete rectR;
+  delete [] points0_;
+  delete [] points1_;
+  delete [] lines0_p_;
+  delete [] lines0_q_;
+  delete [] lines1_p_;
+  delete [] lines1_q_;
+  delete rectL;
+  delete rectR;
 }
 
 void vmal_rectifier::rectification_matrix(vnl_double_3x3& H0,
@@ -147,7 +131,7 @@ void vmal_rectifier::rectification_matrix(vnl_double_3x3& H0,
     tmp_fcom.compute(v_points0,v_points1,& tmp_f);
     tmp_f.get(&F12_.as_ref().non_const());
 
-    vcl_cout << "Fundamental Matrix: " << vcl_endl << tmp_f << vcl_endl;
+    vcl_cout << "Fundamental Matrix:\n" << tmp_f << vcl_endl;
 
     HomgPoint2D epi1;
     HomgPoint2D epi2;
@@ -295,7 +279,6 @@ void vmal_rectifier::compute_initial_joint_epipolar_transforms (
       refine_Q_matrix (u1, v1, u2, v2, numpoints, Q);
       checkQmatrix (u1, v1, u2, v2, numpoints, Q);
     }
-
 
     // Compute the epipolar transforms.
     if ( !compute_initial_joint_epipolar_transforms (Q, sweeti, sweetj, H0, H1))
@@ -493,7 +476,6 @@ void vmal_rectifier::apply_affine_correction (
 
    // Make both H0 and H1 have positive determinant)
    if (vnl_determinant (H1) < 0.0) H1 = -H1;
-   
 }
 
 void vmal_rectifier::rectify_rotate90 (
@@ -553,34 +535,32 @@ void vmal_rectifier::conditional_rectify_rotate180 (
 // the images according to the transforms.  The resultant images are returned
 // through the provided pointers.
 
-void vmal_rectifier::resample (vnl_double_3x3 H0, vnl_double_3x3 H1,
-                               vil_image_view<vxl_byte> imgL,
-                               vil_image_view<vxl_byte> imgR)
+void vmal_rectifier::resample(vnl_double_3x3 H0, vnl_double_3x3 H1,
+                              vil_image_view<vxl_byte> imgL,
+                              vil_image_view<vxl_byte> imgR)
 {
   // Find the bound of the image to be resampled
   vnl_double_3 ipointL; // input and output image points
   vnl_double_3 opointL; // "input" = non-rectified image
   vnl_double_3 ipointR; // "output" = rectified image
   vnl_double_3 opointR;
-  double maxiL=-1e15; double maxjL=-1e15;
-  double miniL=1e15; double minjL=1e15;
-  double maxiR=-1e15; double maxjR=-1e15;
-  double miniR=1e15; double minjR=1e15;
+  vbl_bounding_box<double,2> boxL;
   // Here we're presuming the two images are the same dimensions!
   int img_h = imgL.nj();
   int img_w = imgL.ni();
-  for (int i=0; i<img_h; i++) {
-    for (int j=0; j<img_w; j++) {
+  for (int i=0; i<img_h; i++)
+  {
+    for (int j=0; j<img_w; j++)
+    {
       ipointL[0]=j; ipointL[1]=i; ipointL[2]=1.0;
       ipointR[0]=j; ipointR[1]=i; ipointR[2]=1.0;
       opointL = H0 * ipointL;
       opointR = H1 * ipointR;
-      opointL /= opointL[2]; // homogenize the point... [x,y,1.0]
-      opointR /= opointR[2]; 
-      if (opointL[1]>maxiL) maxiL=opointL[1];  // save the extremes for image sizing
-      if (opointL[0]>maxjL) maxjL=opointL[0];  // and bounds checking
-      if (opointL[1]<miniL) miniL=opointL[1];
-      if (opointL[0]<minjL) minjL=opointL[0];
+      opointL /= opointL[2]; // unhomogenize the point... [x,y,1.0]
+      opointR /= opointR[2];
+      // save the extremes for image sizing and bounds checking
+      boxL.update(opointL[0],opointL[1]);
+//    boxR.update(opointR[0],opointR[1]);
     }
   }
 
@@ -594,47 +574,43 @@ void vmal_rectifier::resample (vnl_double_3x3 H0, vnl_double_3x3 H1,
   vnl_matrix_inverse<double> inv1(H1);
   vnl_double_3x3 H1inv = inv1.inverse();
 
-  int img2_h = maxiL - miniL+1;  // output image size (make them both the same)
-  int img2_w = maxjL - minjL+1;
+  int img2_h = int(boxL.max()[1] - boxL.min()[1] + 1); // output image size
+  int img2_w = int(boxL.max()[0] - boxL.min()[0] + 1); // (make them both the same)
   int planes=1;
 
   //re-size the images for the next iteration...
   rectL->set_size(img2_w,img2_h,planes);
   rectR->set_size(img2_w,img2_h,planes);
-  //  rectL = new vil_image_view<vxl_byte>(img2_w,img2_h,planes);
-  //  rectR = new vil_image_view<vxl_byte>(img2_w,img2_h,planes);
 
-
-  double maxh=0, minh=1e15, maxw=0, minw=1e15;
-  for (int i=0; i<img2_h; i++) {
-    for (int j=0; j<img2_w; j++) {
-      (*rectL)(j,i) = 0.0;  // clear everything first.
-      (*rectR)(j,i) = 0.0;  // clear everything first.
-
+  for (int i=0; i<img2_h; i++)
+  {
+    for (int j=0; j<img2_w; j++)
+    {
       // create the homogeneous point in rectified image(s)
-      opointL[0]=j+minjL; opointL[1]=i+miniL; opointL[2]=1.0;
+      opointL[0]=j+boxL.min()[0]; opointL[1]=i+boxL.min()[1]; opointL[2]=1.0;
 
       // map it into the original image(s)
-      ipointL = H0inv * opointL;
-      ipointL /= ipointL[2]; // homogenize
-      ipointR = H1inv * opointL;
-      ipointR /= ipointR[2]; // homogenize
+      ipointL = H0inv * opointL; ipointL /= ipointL[2]; // unhomogenize
+      ipointR = H1inv * opointL; ipointR /= ipointR[2];
 
       // Bounds checking...
-      if (ipointL[0] >= 0 &&
-          ipointL[0] < img_w-1 &&
-          ipointL[1] >= 0 &&
-          ipointL[1] < img_h-1) {
+      if (ipointL[0] >= 0 && ipointL[0] < img_w-1 &&
+          ipointL[1] >= 0 && ipointL[1] < img_h-1)
+      {
         // interpolate the rectified image point from the original.
-        (*rectL)(j,i,0) = vil_bilin_interp(imgL,ipointL[0],ipointL[1],0);
+        (*rectL)(j,i) = (vxl_byte)vil_bilin_interp(imgL,ipointL[0],ipointL[1],0);
       }
-      if (ipointR[0] >= 0 &&
-          ipointR[0] < img_w-1 &&
-          ipointR[1] >= 0 &&
-          ipointR[1] < img_h-1) {
+      else
+        (*rectL)(j,i) = vxl_byte(0);
+
+      if (ipointR[0] >= 0 && ipointR[0] < img_w-1 &&
+          ipointR[1] >= 0 && ipointR[1] < img_h-1)
+      {
         // interpolate the rectified image point from the original.
-        (*rectR)(j,i,0) = vil_bilin_interp(imgR,ipointR[0],ipointR[1],0);
+        (*rectR)(j,i) = (vxl_byte)vil_bilin_interp(imgR,ipointR[0],ipointR[1],0);
       }
+      else
+        (*rectR)(j,i) = vxl_byte(0);
     }
   }
 }
