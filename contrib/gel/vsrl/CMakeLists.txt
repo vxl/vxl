@@ -19,10 +19,10 @@ SET(vsrl_sources
  vsrl_window_accumulator.cxx    vsrl_window_accumulator.h
  vsrl_region_disparity.cxx      vsrl_region_disparity.h
 )
-
 AUX_SOURCE_DIRECTORY(Templates vsrl_sources)
 
 # vsrl_manager depends on vgui, on tbl/vepl and on brl/bseg/sdet
+# vsrl_menus and vsrl_point_picker depend on vgui
 INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
 
 IF (HAS_VGUI)
@@ -32,27 +32,27 @@ IF (HAS_VGUI)
   vsrl_point_picker.cxx         vsrl_point_picker.h    vsrl_point_picker_sptr.h
   vsrl_menus.h vsrl_menus.cxx
  )
- IF( EXISTS ${vxl_SOURCE_DIR}/contrib/tbl/vepl/CMakeLists.txt )
+ IF (BUILD_TBL)
   INCLUDE_DIRECTORIES(${TBL_INCLUDE_DIR})
-  IF( BUILD_BRL )
+  IF (BUILD_BRL)
    INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg)
    SET(vsrl_sources ${vsrl_sources}
     vsrl_manager.cxx              vsrl_manager.h
    )
-  ENDIF( BUILD_BRL )
- ENDIF( EXISTS ${vxl_SOURCE_DIR}/contrib/tbl/vepl/CMakeLists.txt )
+  ENDIF (BUILD_BRL)
+ ENDIF (BUILD_TBL)
 ENDIF (HAS_VGUI)
 
 ADD_LIBRARY(vsrl ${vsrl_sources})
 
 IF (HAS_VGUI)
- IF( EXISTS ${vxl_SOURCE_DIR}/contrib/brl/bseg/sdet/CMakeLists.txt )
+ IF (BUILD_BRL)
   TARGET_LINK_LIBRARIES(vsrl sdet)
- ENDIF( EXISTS ${vxl_SOURCE_DIR}/contrib/brl/bseg/sdet/CMakeLists.txt )
+ ENDIF (BUILD_BRL)
  TARGET_LINK_LIBRARIES(vsrl vgui)
- IF( EXISTS ${vxl_SOURCE_DIR}/contrib/tbl/vepl/CMakeLists.txt )
+ IF (BUILD_TBL)
   TARGET_LINK_LIBRARIES(vsrl vepl)
- ENDIF( EXISTS ${vxl_SOURCE_DIR}/contrib/tbl/vepl/CMakeLists.txt )
+ ENDIF (BUILD_TBL)
 ENDIF (HAS_VGUI)
 
 TARGET_LINK_LIBRARIES(vsrl vtol vdgl vgl vil1 vnl vgel rsdl)
