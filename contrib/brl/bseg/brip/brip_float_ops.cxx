@@ -1,4 +1,7 @@
 #include "brip_float_ops.h"
+//:
+// \file
+
 #include <vcl_fstream.h>
 #include <vul/vul_timer.h>
 #include <vnl/vnl_numeric_traits.h>
@@ -40,32 +43,32 @@ static void fill_1d_array(vil_memory_image_of<float> const & input,
                           const int y, float* output)
 {
   int w = input.width();
-  for(int x = 0; x<w; x++)
-	  output[x] = input(x,y);
+  for (int x = 0; x<w; x++)
+    output[x] = input(x,y);
 }
 
 //: Downsamples the 1-d array by 2 using the Burt-Adelson reduction algorithm.
-void brip_float_ops::half_resolution_1d(const float* input, int width, 
+void brip_float_ops::half_resolution_1d(const float* input, int width,
                                         const float k0, const float k1,
                                         const float k2, float* output)
 {
   float w[5];
   int n = 0;
-  for(; n<5; n++)
+  for (; n<5; n++)
     w[n]=input[n];
   output[0]=k0*w[0]+ 2.0*(k1*w[1] + k2*w[2]);//reflect at boundary
-  for(int x = 1; x<width; x++)
+  for (int x = 1; x<width; x++)
     {
       output[x]=k0*w[2]+ k1*(w[1]+w[3]) + k2*(w[0]+w[4]);
       //shift the window, w, over by two pixels
       w[0] = w[2];       w[1] = w[3];     w[2] = w[4];
       //handle the boundary conditions
-      if(x<width-2)
+      if (x<width-2)
         {w[3] = input[n++]; w[4]= input[n++];}
       else
         {w[3] =w[1]; w[4]= w[0];}
     }
-} 
+}
 
 //: Downsamples the image by 2 using the Burt-Adelson reduction algorithm.
 // Convolution with a 5-point kernel [(0.5-ka)/2, 0.25, ka, 0.25, (0.5-ka)/2]
@@ -74,7 +77,7 @@ void brip_float_ops::half_resolution_1d(const float* input, int width,
 // ka = 0.4  Gaussian filter
 // ka = 0.359375 min aliasing, wider than Gaussian
 // The image sizes are related by: output_dimension = (input_dimension +1)/2.
-vil_memory_image_of<float> 
+vil_memory_image_of<float>
 brip_float_ops::half_resolution(vil_memory_image_of<float> const & input,
                                 float filter_coef)
 {
@@ -94,8 +97,8 @@ brip_float_ops::half_resolution(vil_memory_image_of<float> const & input,
   float* out2 = new float[half_w];  float* out3 = new float[half_w];
   float* out4 = new float[half_w];
   //Intitialize arrays
-  fill_1d_array(input, n++, in0);   fill_1d_array(input, n++, in1); 
-  fill_1d_array(input, n++, in2);   fill_1d_array(input, n++, in3); 
+  fill_1d_array(input, n++, in0);   fill_1d_array(input, n++, in1);
+  fill_1d_array(input, n++, in2);   fill_1d_array(input, n++, in3);
   fill_1d_array(input, n++, in4);
 
   //downsample initial arrays
@@ -106,20 +109,20 @@ brip_float_ops::half_resolution(vil_memory_image_of<float> const & input,
   brip_float_ops::half_resolution_1d(in4, half_w, k0, k1, k2, out4);
   int x=0, y=0;
   //do the first output line
-  for(;x<half_w;x++)
+  for (;x<half_w;x++)
     output(x,0)= k0*out0[x]+ 2.0*(k1*out1[x]+k2*out2[x]);
   //normal lines
-  for(y=1; y<half_h; y++)
+  for (y=1; y<half_h; y++)
     {
-      for(x=0; x<half_w; x++)
+      for (x=0; x<half_w; x++)
         output(x,y) = k0*out2[x]+ k1*(out1[x]+out3[x]) + k2*(out0[x]+out4[x]);
       //shift the neighborhood down two lines
       float* temp0 = out0;
       float* temp1 = out1;
-      out0 = out2;  out1 = out3;  out2 = out4;  
+      out0 = out2;  out1 = out3;  out2 = out4;
       out3 = temp0; out4 = temp1;//reflect values
       //test border condition
-      if(y<half_h-2)
+      if (y<half_h-2)
         {
           //normal processing, so don't reflect
           fill_1d_array(input, n++, in3);
@@ -129,9 +132,9 @@ brip_float_ops::half_resolution(vil_memory_image_of<float> const & input,
         }
     }
   delete [] in0;  delete [] in1; delete [] in2;
-  delete [] in3;  delete [] in4; 
+  delete [] in3;  delete [] in4;
   delete [] out0;  delete [] out1; delete [] out2;
-  delete [] out3;  delete [] out4; 
+  delete [] out3;  delete [] out4;
   vcl_cout << "\nDownsample a "<< w <<" x " << h << " image in "<< t.real() << " msecs.\n";
   return output;
 }
@@ -217,20 +220,20 @@ void brip_float_ops::hessian_3x3(vil_memory_image_of<float> const & input,
 {
   vul_timer t;
   int w = input.width(), h = input.height();
-  for(int y = 1; y<h-1; y++)
-    for(int x = 1; x<w-1; x++)
+  for (int y = 1; y<h-1; y++)
+    for (int x = 1; x<w-1; x++)
       {
         float xx = input(x-1,y-1)+input(x-1,y)+input(x+1,y)+
           input(x+1,y-1)+input(x+1,y)+input(x+1,y+1)-
           2.0*(input(x,y-1)+input(x,y)+input(x,y+1));
- 
+
         float xy = (input(x-1,y-1)+input(x+1,y+1))-
           (input(x-1,y+1)+input(x+1,y-1));
- 
+
         float yy = input(x-1,y-1)+input(x,y-1)+input(x+1,y-1)+
           input(x-1,y+1)+input(x,y+1)+input(x+1,y+1)-
           2.0*(input(x-1,y)+input(x,y)+input(x+1,y));
- 
+
         Ixx(x,y) = xx/3.0;
         Ixy(x,y) = xy/4.0;
         Iyy(x,y) = yy/3.0;
@@ -243,28 +246,28 @@ void brip_float_ops::hessian_3x3(vil_memory_image_of<float> const & input,
   brip_float_ops::fill_y_border(Iyy, 1, 0.0);
   vcl_cout << "\nCompute a hessian matrix "<< w <<" x " << h << " image in "<< t.real() << " msecs.\n";
 }
-vil_memory_image_of<float> 
+
+vil_memory_image_of<float>
 brip_float_ops::beaudet(vil_memory_image_of<float> const & Ixx,
                         vil_memory_image_of<float> const & Ixy,
                         vil_memory_image_of<float> const & Iyy
                         )
-
 {
   int w = Ixx.width(), h = Ixx.height();
   vil_memory_image_of<float> output;
   output.resize(w, h);
-  for(int y = 0; y<h; y++)
-    for(int x = 0; x<w; x++)
+  for (int y = 0; y<h; y++)
+    for (int x = 0; x<w; x++)
       {
         double xx = Ixx(x,y), xy = Ixy(x,y), yy = Iyy(x,y);
-       //compute eigenvalues for experimentation
-		double det = xx*yy-xy*xy;
+        //compute eigenvalues for experimentation
+        double det = xx*yy-xy*xy;
         double tr = xx+yy;
         double arg = tr*tr-4.0*det, lambda0 = 0, lambda1=0;
-        if(arg>0)
+        if (arg>0)
           {
-            lambda0 = tr+sqrt(arg);
-            lambda1 = tr-sqrt(arg);
+            lambda0 = tr+vcl_sqrt(arg);
+            lambda1 = tr-vcl_sqrt(arg);
           }
         output(x,y)=lambda0*lambda1; //just det for now
       }
@@ -284,7 +287,7 @@ brip_float_ops::beaudet(vil_memory_image_of<float> const & Ixx,
 //
 // over a a 2n+1 x 2n+1 neigborhood
 //
-void 
+void
 brip_float_ops::grad_matrix_NxN(vil_memory_image_of<float> const & input,
                                 const int n,
                                 vil_memory_image_of<float>& IxIx,
@@ -323,7 +326,8 @@ brip_float_ops::grad_matrix_NxN(vil_memory_image_of<float> const & input,
   brip_float_ops::fill_y_border(IyIy, n, 0.0);
   vcl_cout << "\nCompute a gradient matrix "<< w <<" x " << h << " image in "<< t.real() << " msecs.\n";
 }
-vil_memory_image_of<float> 
+
+vil_memory_image_of<float>
 brip_float_ops::harris(vil_memory_image_of<float> const & IxIx,
                        vil_memory_image_of<float> const & IxIy,
                        vil_memory_image_of<float> const & IyIy,
@@ -333,8 +337,8 @@ brip_float_ops::harris(vil_memory_image_of<float> const & IxIx,
   int w = IxIx.width(), h = IxIx.height();
   vil_memory_image_of<float> output;
   output.resize(w, h);
-  for(int y = 0; y<h; y++)
-    for(int x = 0; x<w; x++)
+  for (int y = 0; y<h; y++)
+    for (int x = 0; x<w; x++)
       {
         double xx = IxIx(x,y), xy = IxIy(x,y), yy = IyIy(x,y);
         double det = xx*yy-xy*xy, trace = xx+yy;
@@ -389,6 +393,7 @@ brip_float_ops::sqrt_grad_singular_values(vil_memory_image_of<float> & input,
   vcl_cout << "\nCompute sqrt(sigma0*sigma1) in" << t.real() << " msecs.\n";
   return output;
 }
+
 //---------------------------------------------------------------------
 // Lucas-Kanade motion vectors:  Solve for the motion vectors over a
 // (2n+1)x(2n+1) neighborhood. The time derivative of intensity is computed
@@ -397,7 +402,7 @@ brip_float_ops::sqrt_grad_singular_values(vil_memory_image_of<float> & input,
 // i.e, |lambda_1*lambda_2*dI/dt|<thresh.  Thus motion is only reported when
 // the solution is well-conditioned.
 //
-void 
+void
 brip_float_ops::Lucas_KanadeMotion(vil_memory_image_of<float> & current_frame,
                                    vil_memory_image_of<float> & previous_frame,
                                    int n, double thresh,
