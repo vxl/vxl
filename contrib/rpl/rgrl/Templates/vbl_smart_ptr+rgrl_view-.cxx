@@ -1,4 +1,6 @@
 // This avoids automatic instantiation of other smart pointers:
+#define rgrl_transformation_sptr_h_
+class rgrl_transformation_sptr {};
 #define rgrl_estimator_sptr_h_
 class rgrl_estimator_sptr {};
 
