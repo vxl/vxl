@@ -1,19 +1,24 @@
 //:
 // \file
 // \author Tim Cootes
+// \verbatim
+// Modifications
+//   Feb.2003 - Ian Scott - Upgraded IO to use vsl_block_binary io
+// \endverbatim
 
 #include "vil2_io_memory_chunk.h"
+#include <vsl/vsl_block_binary.h>
 
 #define write_case_macro(T)\
 vsl_b_write(os,unsigned(chunk.size()/sizeof(T ))); \
-vsl_b_write_block(os,(const T*) chunk.const_data(), \
+vsl_block_binary_write(os,(const T*) chunk.const_data(), \
                      chunk.size()/sizeof(T ))
 
 
 //: Binary save vil2_memory_chunk to stream.
 void vsl_b_write(vsl_b_ostream &os, const vil2_memory_chunk& chunk)
 {
-  const short io_version_no = 1;
+  const short io_version_no = 2;
   vsl_b_write(os, io_version_no);
   vsl_b_write(os, int(chunk.pixel_format()));
 
@@ -55,9 +60,13 @@ void vsl_b_write(vsl_b_ostream &os, const vil2_memory_chunk& chunk)
 
 #undef write_case_macro
 
-#define read_case_macro(T)\
+#define read_case_macro_v1(T)\
 chunk.set_size(n*sizeof(T ),pixel_format); \
 vsl_b_read_block(is,(T *)chunk.data(),n)
+
+#define read_case_macro_v2(T)\
+chunk.set_size(n*sizeof(T ),pixel_format); \
+vsl_block_binary_read(is,(T *)chunk.data(),n)
 
 //: Binary load vil2_memory_chunk from stream.
 void vsl_b_read(vsl_b_istream &is, vil2_memory_chunk& chunk)
@@ -77,31 +86,71 @@ void vsl_b_read(vsl_b_istream &is, vil2_memory_chunk& chunk)
     switch (pixel_format)
     {
       case VIL2_PIXEL_FORMAT_UINT_32:
-        read_case_macro(vxl_uint_32);
+        read_case_macro_v1(vxl_uint_32);
         break;
       case VIL2_PIXEL_FORMAT_INT_32:
-        read_case_macro(vxl_int_32);
+        read_case_macro_v1(vxl_int_32);
         break;
       case VIL2_PIXEL_FORMAT_UINT_16:
-        read_case_macro(vxl_uint_16);
+        read_case_macro_v1(vxl_uint_16);
         break;
       case VIL2_PIXEL_FORMAT_INT_16:
-        read_case_macro(vxl_int_16);
+        read_case_macro_v1(vxl_int_16);
         break;
       case VIL2_PIXEL_FORMAT_BYTE:
-        read_case_macro(vxl_byte);
+        read_case_macro_v1(vxl_byte);
         break;
       case VIL2_PIXEL_FORMAT_SBYTE:
-        read_case_macro(vxl_sbyte);
+        read_case_macro_v1(vxl_sbyte);
         break;
       case VIL2_PIXEL_FORMAT_FLOAT:
-        read_case_macro(float);
+        read_case_macro_v1(float);
         break;
       case VIL2_PIXEL_FORMAT_DOUBLE:
-        read_case_macro(double);
+        read_case_macro_v1(double);
         break;
       case VIL2_PIXEL_FORMAT_BOOL:
-        read_case_macro(bool);
+        read_case_macro_v1(bool);
+        break;
+      default:
+        vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil2_memory_chunk&) \n";
+        vcl_cerr << "           Unknown pixel format "<< format << "\n";
+        is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+        return;
+    }
+    break;
+
+  case 2:
+    vsl_b_read(is, format); pixel_format=vil2_pixel_format(format);
+    vsl_b_read(is, n);
+    switch (pixel_format)
+    {
+      case VIL2_PIXEL_FORMAT_UINT_32:
+        read_case_macro_v2(vxl_uint_32);
+        break;
+      case VIL2_PIXEL_FORMAT_INT_32:
+        read_case_macro_v2(vxl_int_32);
+        break;
+      case VIL2_PIXEL_FORMAT_UINT_16:
+        read_case_macro_v2(vxl_uint_16);
+        break;
+      case VIL2_PIXEL_FORMAT_INT_16:
+        read_case_macro_v2(vxl_int_16);
+        break;
+      case VIL2_PIXEL_FORMAT_BYTE:
+        read_case_macro_v2(vxl_byte);
+        break;
+      case VIL2_PIXEL_FORMAT_SBYTE:
+        read_case_macro_v2(vxl_sbyte);
+        break;
+      case VIL2_PIXEL_FORMAT_FLOAT:
+        read_case_macro_v2(float);
+        break;
+      case VIL2_PIXEL_FORMAT_DOUBLE:
+        read_case_macro_v2(double);
+        break;
+      case VIL2_PIXEL_FORMAT_BOOL:
+        read_case_macro_v2(bool);
         break;
       default:
         vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil2_memory_chunk&) \n";
