@@ -6,6 +6,7 @@
 #include <vnl/vnl_test.h>
 #include <mil/algo/mil_algo_gaussian_filter.h>
 #include <vil/vil_byte.h>
+#include <vcl_cstdlib.h> // for abs(int)
 #include <vcl_cmath.h> // for fabs()
 #include <vcl_algorithm.h>
 
@@ -60,7 +61,7 @@ void test_algo_gaussian_filter_byte_float()
     for (int j=0;j<n;++j)
     {
       sum += dest(i,j);
-      if (vcl_max(vcl_fabs(i-n/2), vcl_fabs(j-n/2)) > 2 && dest(i,j) != 0)
+      if (vcl_max(vcl_abs(i-n/2), vcl_abs(j-n/2)) > 2 && dest(i,j) != 0)
         fail1 = true;
       if (dest(i,j) > dest(n/2,n/2)) fail2=true;
     }
