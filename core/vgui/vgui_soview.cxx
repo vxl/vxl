@@ -73,7 +73,7 @@ vgui_soview* vgui_soview::id_to_object(unsigned id) {
 }
 
 
-vgui_soview::vgui_soview() :  style(0) {
+vgui_soview::vgui_soview() : selectable(true), style(0) {
   add_id();
 }
 
