@@ -1,7 +1,7 @@
-#include<bdgl/bdgl_tracker_curve_sptr.h>
-#include<bdgl/bdgl_tracker_curve.h>
-#include<bdgl/bdgl_curve_algs.h>
-#include<vdgl/vdgl_edgel_chain.h>
+#include <bdgl/bdgl_tracker_curve.h>
+#include <bdgl/bdgl_curve_algs.h>
+#include <vdgl/vdgl_edgel_chain.h>
+#include <vcl_cmath.h>
 
 bdgl_tracker_curve  :: bdgl_tracker_curve()
 {
@@ -45,8 +45,8 @@ void bdgl_tracker_curve  ::init_set(vtol_edge_2d_sptr const& c,int id)
       i+=2;
     }
   desc= new bdgl_curve_description(ec_sub);
-
 }
+
 void bdgl_tracker_curve  ::init_set(vcl_vector<vgl_point_2d<double> > p,int id)
 {
   c_=0;
@@ -69,9 +69,8 @@ void bdgl_tracker_curve  ::init_set(vcl_vector<vgl_point_2d<double> > p,int id)
   ec=dc->get_interpolator()->get_edgel_chain();
 
   desc= new bdgl_curve_description(ec);
-
-
 }
+
 double bdgl_tracker_curve::compute_mean(vcl_vector<double> t)
 {
   double sum=0;
@@ -82,6 +81,7 @@ double bdgl_tracker_curve::compute_mean(vcl_vector<double> t)
   sum=sum/t.size();
   return sum;
 }
+
 void bdgl_tracker_curve
         ::compute_transformation(vcl_vector<vgl_point_2d<double> > p,
                                  vcl_vector<vgl_point_2d<double> > & transformed_curve,
@@ -109,9 +109,7 @@ void bdgl_tracker_curve
 
     vgl_point_2d<double> temp(tx,ty);
     transformed_curve.push_back(temp);
-
   }
-
 }
 
 double bdgl_tracker_curve ::compute_euclidean_distance(vnl_matrix<double> R,vnl_matrix<double> T,double s)
@@ -163,7 +161,6 @@ double bdgl_tracker_curve ::compute_euclidean_distance_next(vnl_matrix<double> R
 {
   if (get_best_match_next())
   {
-
    double x1,y1,x2,y2;
    double dist=0;
    vcl_map<int,int> alignment= get_best_match_next()->mapping_;
