@@ -11,7 +11,6 @@
 #include <vil2/vil2_plane.h>
 
 
-
 //: Compute minimum and maximum values over view
 template<class T>
 inline void vil2_math_value_range(const vil2_image_view<T>& view, T& min_value, T& max_value)
@@ -71,8 +70,8 @@ inline void vil2_math_value_range(const vil2_image_view<vil_rgb<float> >& rgb_vi
 
 //: Sum of squared differences between two images
 // \relates vil2_image_view
-template<class imT, class sumT>
-inline sumT vil2_math_ssd(const vil2_image_view<imT>& imA, const vil2_image_view<imT>& imB, sumT dummy=sumT())
+template <class imT, class sumT>
+inline sumT vil2_math_ssd(const vil2_image_view<imT>& imA, const vil2_image_view<imT>& imB, sumT dummy)
 {
   assert(imA.ni() == imB.ni() && imB.nj() == imB.nj() && imA.nplanes() == imB.nplanes());
   sumT ssd=0;
