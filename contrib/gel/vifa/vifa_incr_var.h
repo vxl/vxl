@@ -20,6 +20,7 @@
 
 #include <vcl_vector.h>
 #include <vbl/vbl_ref_count.h>
+#include <vbl/vbl_bounding_box.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vul/vul_timestamp.h>
 
@@ -38,13 +39,10 @@ class vifa_incr_var : public vul_timestamp, public vbl_ref_count
   double  data_var_;
 
   //: The number of samples in the data set
-  int    n_;
+  int     n_;
 
-  //: The minimum-value sample of the data set
-  double  min_;
-
-  //: The maximum-value sample of the data set
-  double  max_;
+  //: The minimum-value and maximum-value sample of the data set
+  vbl_bounding_box<double,1>  min_max_;
 
  public:
   //: Default constructor

@@ -6,9 +6,7 @@ vifa_incr_var::
 vifa_incr_var(void) :
   data_mean_(0.0),
   data_var_(0.0),
-  n_(0),
-  min_(1e6),
-  max_(1e-6)
+  n_(0)
 {
   // No further explicit initialization needed
 }
@@ -34,13 +32,13 @@ get_n(void) const
 double vifa_incr_var::
 get_min(void) const
 {
-  return min_;
+  return min_max_.min()[0];
 }
 
 double vifa_incr_var::
 get_max(void) const
 {
-  return max_;
+  return min_max_.max()[0];
 }
 
 void vifa_incr_var::
@@ -59,14 +57,7 @@ add_sample(double  data_point,
         (curr_factor * data_delta * data_delta);
 
   // Track min/max data points
-  if (data_point < min_)
-  {
-    min_ = data_point;
-  }
-  if (data_point > max_)
-  {
-    max_ = data_point;
-  }
+  min_max_.update(data_point);
 
   // Increment the count
   n_++;
