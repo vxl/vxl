@@ -23,7 +23,7 @@ bool vipl_add_random_noise <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_app
       else if (!clipping_ && rnd+p > vnl_numeric_traits<DataOut>::maxval)
         setpixel(out_data(), i, j, vnl_numeric_traits<DataOut>::maxval);
       else
-        setpixel(out_data(), i, j, p+q);
+        setpixel(out_data(), i, j, DataOut(p+q));
   }
   return true;
 }
