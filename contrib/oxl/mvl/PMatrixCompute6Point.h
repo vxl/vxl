@@ -3,15 +3,16 @@
 //:
 // \file
 //
-// PMatrixCompute6Point contains a linear method to calculate the P matrix
-// given the minimum  number of points necessary to get a unique solution
-// upto scale i.e. six points.
+//  PMatrixCompute6Point is actually identical to PMatrixComputeLinear,
+//  a ``6-point'' linear least squares algorithm for estimation of
+//  the projection matrix.
+//
+//  It calculates the P-matrix given the minimum number of points necessary
+//  to get a unique solution upto scale viz. six points.
+//
 
-#include <mvl/PMatrixCompute.h>
+#include <mvl/PMatrixComputeLinear.h>
 
-class PMatrixCompute6Point : public PMatrixCompute {
-public:
-  bool compute (PMatrix *t_matrix_ptr);
-};
+typedef PMatrixCompute6Point PMatrixComputeLinear;
 
 #endif // PMatrixCompute6Point_h_
