@@ -23,20 +23,6 @@
 #include <vcsl/vcsl_meter.h>
 #include <vcsl/vcsl_length.h>
 
-#include <vbl/vbl_smart_ptr.txx>
-//VBL_SMART_PTR_INSTANTIATE(matrix_param);
-VBL_SMART_PTR_INSTANTIATE(vpgl_matrix_camera);
-VBL_SMART_PTR_INSTANTIATE(vcsl_axis);
-VBL_SMART_PTR_INSTANTIATE(vcsl_unit);
-VBL_SMART_PTR_INSTANTIATE(vcsl_graph);
-VBL_SMART_PTR_INSTANTIATE(vcsl_spatial_transformation);
-VBL_SMART_PTR_INSTANTIATE(vcsl_matrix);
-VBL_SMART_PTR_INSTANTIATE(vcsl_cartesian_3d);
-VBL_SMART_PTR_INSTANTIATE(vcsl_spatial);
-VBL_SMART_PTR_INSTANTIATE(vcsl_dimension);
-VBL_SMART_PTR_INSTANTIATE(vcsl_length);
-VBL_SMART_PTR_INSTANTIATE(vcsl_meter);
-
 int get_int_random ()
 {
   int temp;
