@@ -97,15 +97,15 @@ void mvl2_video_reader::display_configs()
 
 bool mvl2_video_reader::use_config(vcl_string configname)
 {
-  int position;
-  position=vcl_find(config_names_.begin(), config_names_.end(), configname) - config_names_.begin();
+  unsigned int position=vcl_find(config_names_.begin(), config_names_.end(), configname) - config_names_.begin();
   if (position<config_names_.size())
   {
     return initialize(config_sizes_[position].first,
                       config_sizes_[position].second,
                       config_strings_[position],config_filenames_[position]);
   }
-  return false;
+  else
+    return false;
 }
 
 int mvl2_video_reader::length()
