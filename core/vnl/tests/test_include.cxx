@@ -58,7 +58,6 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matrix_exp.h>
 #include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_matrix_fixed_ref.h>
 #include <vnl/vnl_matrix_ref.h>
 #include <vnl/vnl_nonlinear_minimizer.h>
 #include <vnl/vnl_numeric_limits.h>
@@ -83,7 +82,6 @@
 #include <vnl/vnl_unary_function.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_vector_fixed_ref.h>
 #include <vnl/vnl_vector_ref.h>
 
 #include <vnl/algo/vnl_algo_fwd.h>

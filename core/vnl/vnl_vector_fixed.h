@@ -17,7 +17,7 @@
 // Paul Smyth     02/5/01 Inserted vnl_vector_fixed_ref as immediate base clase
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //   Oct.2002 - Amitha Perera - decoupled vnl_vector and vnl_vector_fixed for
-//              space efficiency.
+//              space efficiency, removed necessity for vnl_vector_fixed_ref
 // \endverbatim
 
 #include <vcl_cstring.h> // memcpy()

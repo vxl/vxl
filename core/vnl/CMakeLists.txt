@@ -9,12 +9,10 @@ SET( vnl_sources
   vnl_vector.txx               vnl_vector.h
   vnl_vector_ref.txx           vnl_vector_ref.h
   vnl_vector_fixed.txx         vnl_vector_fixed.h
-  vnl_vector_fixed_ref.txx     vnl_vector_fixed_ref.h
   vnl_file_vector.txx          vnl_file_vector.h
   vnl_matrix.txx               vnl_matrix.h
   vnl_matrix_ref.h
   vnl_matrix_fixed.txx         vnl_matrix_fixed.h
-  vnl_matrix_fixed_ref.txx     vnl_matrix_fixed_ref.h
   vnl_diag_matrix.txx          vnl_diag_matrix.h
   vnl_sparse_matrix.txx        vnl_sparse_matrix.h
   vnl_matrix_exp.txx           vnl_matrix_exp.h

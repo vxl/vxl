@@ -6,8 +6,6 @@
 #include <vnl/vnl_matrix_ref.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_vector_fixed_ref.h>
-#include <vnl/vnl_matrix_fixed_ref.h>
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
@@ -71,29 +69,6 @@ test_arithmetic_fixed()
 #undef NewMat
 #undef NewVec
 
-
-// --- fixed ref ----------------------------
-
-#undef NewMat
-#undef NewVec
-
-#define NewMat(mat, r,c,data) \
-   assert( sizeof(data) >= r*c*sizeof(double) ); \
-   vnl_matrix_fixed_ref<double,r,c> mat( data )
-#define NewVec(vec, n,data) \
-   assert( sizeof(data) >= n*sizeof(double) ); \
-   vnl_vector_fixed_ref<double,n> vec( data )
-
-static
-void
-test_arithmetic_fixed_ref()
-{
-#include "test_arithmetic_body.h"
-}
-
-#undef NewMat
-#undef NewVec
-
 void test_arithmetic()
 {
   vcl_cout << "---- dynamic ----\n";
@@ -102,8 +77,6 @@ void test_arithmetic()
   test_arithmetic_ref();
   vcl_cout << "---- fixed ----\n";
   test_arithmetic_fixed();
-  vcl_cout << "---- fixed ref ----\n";
-  test_arithmetic_fixed_ref();
 }
 
 TESTMAIN( test_arithmetic );

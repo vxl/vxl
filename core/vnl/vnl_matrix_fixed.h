@@ -17,7 +17,8 @@
 // Peter Vanroose, 23 Nov 1996:  added explicit copy constructor
 // LSB (Manchester) 15/03/2001:  added Binary I/O and tidied up the documentation
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
-//   Oct.2002 - Amitha Perera  - separated vnl_matrix and vnl_matrix_fixed
+//   Oct.2002 - Amitha Perera  - separated vnl_matrix and vnl_matrix_fixed,
+//                               removed necessity for vnl_matrix_fixed_ref
 // \endverbatim
 //-----------------------------------------------------------------------------
 
