@@ -83,16 +83,16 @@ public:
   virtual void set_from_std(const vcsl_std_spheroid new_std_spheroid);
 
   //: Set the major axis of spheroid
-  virtual void set_a(const double new_a);
+  virtual void set_a(double new_a);
 
   //: Set the minor axis of spheroid
-  virtual void set_b(const double new_b);
+  virtual void set_b(double new_b);
 
   //: Set the eccentricity of spheroid
-  virtual void set_e(const double new_e);
+  virtual void set_e(double new_e);
 
   //: Set the flattening of spheroid
-  virtual void set_f(const double new_f);
+  virtual void set_f(double new_f);
 
 
   //***************************************************************************

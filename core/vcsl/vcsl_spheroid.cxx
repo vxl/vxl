@@ -148,7 +148,7 @@ void vcsl_spheroid::set_from_std(const vcsl_std_spheroid new_std_spheroid)
 //---------------------------------------------------------------------------
 // Set the major axis of spheroid
 //---------------------------------------------------------------------------
-void vcsl_spheroid::set_a(const double new_a)
+void vcsl_spheroid::set_a(double new_a)
 {
   a_=new_a;
 }
@@ -156,7 +156,7 @@ void vcsl_spheroid::set_a(const double new_a)
 //---------------------------------------------------------------------------
 // Set the minor axis of spheroid
 //---------------------------------------------------------------------------
-void vcsl_spheroid::set_b(const double new_b)
+void vcsl_spheroid::set_b(double new_b)
 {
   b_=new_b;
 }
@@ -164,7 +164,7 @@ void vcsl_spheroid::set_b(const double new_b)
 //---------------------------------------------------------------------------
 // Set the eccentricity of spheroid
 //---------------------------------------------------------------------------
-void vcsl_spheroid::set_e(const double new_e)
+void vcsl_spheroid::set_e(double new_e)
 {
   e_=new_e;
 }
@@ -172,7 +172,7 @@ void vcsl_spheroid::set_e(const double new_e)
 //---------------------------------------------------------------------------
 // Set the flattening of spheroid
 //---------------------------------------------------------------------------
-void vcsl_spheroid::set_f(const double new_f)
+void vcsl_spheroid::set_f(double new_f)
 {
   f_=new_f;
 }
