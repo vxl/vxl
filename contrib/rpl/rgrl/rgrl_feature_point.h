@@ -1,7 +1,6 @@
-
 #ifndef rgrl_feature_point_h_
 #define rgrl_feature_point_h_
-
+//:
 // \file
 // \author Amitha Perera
 // \date   Feb 2003
@@ -16,7 +15,7 @@
 class rgrl_feature_point
   : public rgrl_feature
 {
-public:  
+ public:
   //:
   rgrl_feature_point( vnl_vector<double> const& loc );
 
@@ -36,7 +35,7 @@ public:
   // Defines type-related functions
   rgrl_type_macro( rgrl_feature_point, rgrl_feature );
 
-protected:
+ protected:
   //:
   // Create an uninitialized feature with enough space to store a dim
   // dimensional feature.

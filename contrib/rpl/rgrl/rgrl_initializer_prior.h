@@ -1,6 +1,6 @@
 #ifndef rgrl_initializer_prior_h_
 #define rgrl_initializer_prior_h_
-
+//:
 // \file
 // \brief Generate initial estimates based on a single prior transformation.
 // \author Chuck Stewart
@@ -15,7 +15,7 @@
 class rgrl_initializer_prior
   : public rgrl_initializer
 {
-public:
+ public:
   //: Initialize with a view
   rgrl_initializer_prior( rgrl_view_sptr            prior_view,
                           rgrl_scale_sptr           prior_scale = 0);
@@ -51,7 +51,7 @@ public:
   // Defines type-related functions
   rgrl_type_macro( rgrl_initializer_prior, rgrl_initializer );
 
-protected:
+ protected:
   rgrl_view_sptr           init_view_;
   rgrl_scale_sptr          prior_scale_;
   bool                     called_before_;    //  has next_initial been called yet?

@@ -1,6 +1,6 @@
 #ifndef rgrl_invariant_match_h_
 #define rgrl_invariant_match_h_
-
+//:
 // \file
 // \brief A match based on the similarity of the invariant features
 // \author Charlene Tsai
@@ -21,7 +21,7 @@ class rgrl_scale;
 class rgrl_invariant_match
   : public rgrl_object
 {
-public:
+ public:
   //: Constructor
   rgrl_invariant_match(rgrl_invariant_sptr from,
                        rgrl_invariant_sptr to);
@@ -31,17 +31,17 @@ public:
 
   //: Returns a smart pointer to the "from" invariant
   rgrl_invariant_sptr from() const {return from_;}
-  
+
   //: Returns a smart pointer to the "to" invariant
   rgrl_invariant_sptr to() const {return to_;}
-  
+
   //: Returns the distance between the constellations in the match
   //  \note distance is calculated as the Euclidean distance in the
   //  "invariant space"
   double distance() const {return distance_;}
 
   //: Returns a transform smart pointer to the estimated transform
-  rgrl_transformation_sptr transform() const; 
+  rgrl_transformation_sptr transform() const;
 
   //: Return a scale smart pointer to the estimated similarity transform
   rgrl_scale_sptr scale() const;
@@ -59,7 +59,7 @@ public:
   // Defines type-related functions
   rgrl_type_macro( rgrl_invariant_match, rgrl_object );
 
-private:
+ private:
   rgrl_invariant_sptr from_;
   rgrl_invariant_sptr to_;
   double distance_;
@@ -77,13 +77,13 @@ bool operator > (const rgrl_invariant_match& left,
                  const rgrl_invariant_match& right);
 
 //: Same as operator <, but operates on smart pointers to constellation matches
-//  \note This function is used to in vcl_sort to sort vectors of smart 
+//  \note This function is used to in vcl_sort to sort vectors of smart
 //        pointers to pregl_constellation_match objects
 bool dist_less (const vbl_smart_ptr<rgrl_invariant_match>& left,
                 const vbl_smart_ptr<rgrl_invariant_match>& right);
 
 //: Same as operator >, but operates on smart pointers to constellation matches
-//  \note This function is used to in vcl_sort to sort vectors of smart 
+//  \note This function is used to in vcl_sort to sort vectors of smart
 //        pointers to pregl_constellation_match objects
 bool dist_greater (const vbl_smart_ptr<rgrl_invariant_match>& left,
                    const vbl_smart_ptr<rgrl_invariant_match>& right);

@@ -1,8 +1,8 @@
 #ifndef rgrl_view_h_
 #define rgrl_view_h_
-
+//:
 // \file
-// \brief  Represent a "view" of the registration problem. 
+// \brief  Represent a "view" of the registration problem.
 // \author Chuck Stewart
 // \date 12 Nov 2002
 
@@ -12,23 +12,23 @@
 
 #include "rgrl_view_sptr.h"
 
-//: Represnts a "view" of the registration problem.
+//: Represents a "view" of the registration problem.
 //
 // A view captures the current region, the current transformation (and
-// estimator), and the current resolution. 
+// estimator), and the current resolution.
 //
 class rgrl_view
   : public rgrl_object
 {
-public:
+ public:
   //:  Build a view for registration estimation problem.
-  rgrl_view( rgrl_mask_box            const& from_image_roi, 
-	     rgrl_mask_box            const& to_image_roi,
-	     rgrl_mask_box            const& region,
-       rgrl_mask_box            const& global_region,
-	     rgrl_estimator_sptr        xform_estimator,
+  rgrl_view( rgrl_mask_box       const& from_image_roi,
+             rgrl_mask_box       const& to_image_roi,
+             rgrl_mask_box       const& region,
+             rgrl_mask_box       const& global_region,
+             rgrl_estimator_sptr        xform_estimator,
              rgrl_transformation_sptr   xform_estimate,
-	     unsigned                   resolution = 0);
+             unsigned                   resolution = 0);
 
   // default copy and assignment are good.
 
@@ -52,7 +52,7 @@ public:
 
   //:  Access the current resolution at which registration is working
   unsigned resolution() const;
-  
+
   //:  Return true if the current resolution is the finest level
   bool is_at_finest_resolution() const;
 
@@ -66,24 +66,24 @@ public:
   //:  Return true if both xform_estimator_ and xform_estimate_ are not null
   bool is_valid() const;
 
-  /*
+#if 0
   //: True iff all the components are equal.
   bool operator==( const rgrl_view& other ) const;
 
   //: True iff some of the components are not equal.
   bool operator!=( const rgrl_view& other ) const;
-  */
+#endif
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_view, rgrl_object );
 
-private:
+ private:
   rgrl_mask_box                   from_image_roi_;
   rgrl_mask_box                   to_image_roi_;
 
   rgrl_mask_box                   current_region_;
-  rgrl_mask_box                   global_region_; //The estimated overlap region 
-                                             //of from_image_roi_ with 
+  rgrl_mask_box                   global_region_; //The estimated overlap region
+                                             //of from_image_roi_ with
                                              //to_image_roi_
 
   rgrl_estimator_sptr        xform_estimator_;

@@ -1,9 +1,13 @@
 #ifndef rgrl_invariant_single_landmark_h_
 #define rgrl_invariant_single_landmark_h_
+//:
+// \file
+// \brief  Represent a 2D bifurcation landmark associated with a set of invariant properties.
+// \author Charlene Tsai
+// \date   March 2004
 
 #include <vcl_vector.h>
 #include <vnl/vnl_double_2.h>
-#include <vbl/vbl_bounding_box.h>
 
 #include "rgrl_transformation_sptr.h"
 #include "rgrl_scale_sptr.h"
@@ -11,16 +15,10 @@
 #include "rgrl_mask.h"
 #include "rgrl_invariant.h"
 
-// \file
-// \brief  Represent a 2D bifurcation landmark associated with a set of invariant properties.
-// \author Charlene Tsai
-// \date   March 2004
-
-
-//: Represent a 2D bifurcation landmark associated with a set of invariant properties. 
+//: Represent a 2D bifurcation landmark associated with a set of invariant properties.
 //
 //  This is the simplied implementation of the single-landmark feature
-//  with invariant properties in "The Dual-Bootstrap Interative
+//  with invariant properties in "The Dual-Bootstrap Iterative
 //  Closest Point Algorithm with Application to Retinal Image
 //  Registration" by Stewart et al., TMI 2003, vol 22, no 11.
 //
@@ -29,7 +27,7 @@
 //  properties of a landmark includes the center location, 3 direction
 //  vectors of the vessels that come to meet, 3 associated widths. The
 //  radius of the circular region that the landmark occupies is taken
-//  as the maximum of the 3 widths. 
+//  as the maximum of the 3 widths.
 //
 //  The transformation model is similarity
 //  (translation+scaling+rotaion), estimated using the landmark center
@@ -38,14 +36,14 @@
 class rgrl_invariant_single_landmark
   : public rgrl_invariant
 {
-public:
+ public:
   //: Constructor, both angular_variance and width_ratio_variance are in radius
   rgrl_invariant_single_landmark(vnl_vector<double> location,
                                  vnl_vector<double> vessel_dir1,
                                  vnl_vector<double> vessel_dir2,
                                  vnl_vector<double> vessel_dir3,
                                  double width1, double width2, double width3,
-                                 double angular_std = 1, 
+                                 double angular_std = 1,
                                  double width_ratio_std = 1);
 
   //: Construct the constellation from another by shifting indices counterclockwise
@@ -54,13 +52,13 @@ public:
   //  directions. Both angular_variance and width_ratio_variance are
   //  in radius
   rgrl_invariant_single_landmark(const rgrl_invariant_single_landmark& copy,
-                                 double angular_std = 1, 
+                                 double angular_std = 1,
                                  double width_ratio_std = 1);
 
   //: Return the location
   const vnl_double_2& location() const;
-  
-  //: Returns the i-th boundary point location 
+
+  //: Returns the i-th boundary point location
   const vnl_double_2& boundary_point_location(int i) const;
 
   //: Returns the i-th boundary point normal direction
@@ -70,13 +68,13 @@ public:
   bool estimate(rgrl_invariant_sptr         from,
                 rgrl_transformation_sptr&   xform,
                 rgrl_scale_sptr&            scale );
-  
+
   //: Returns the vector of invariants normalized by scale
   const vnl_vector<double>& cartesian_invariants() const;
 
   //: Returns the vector of invariants normalized by scale
   const vnl_vector<double>& angular_invariants() const;
-  
+
   //: Computes the valid match region for the constellation
   rgrl_mask_box region() const;
 
@@ -100,7 +98,7 @@ public:
   // Defines type-related functions
   rgrl_type_macro( rgrl_invariant_single_landmark, rgrl_invariant );
 
-private:
+ private:
   //: A helper function to compute the counterclockwise angles between two orientation vectors
   // \return angles in the range of [0,2*PI)
   double ccw_angle_between(vnl_double_2 from, vnl_double_2 to);
@@ -110,12 +108,12 @@ private:
   //  \note The indices are passed in by reference.  The indices
   //  specified are reordered counterclockwise from the basis
   //  direction specified. The counterclockwise angles from the basis
-  //  are also returned by referance. 
+  //  are also returned by referance.
   void reorder_vessel( vcl_vector<vnl_vector<double> >& directions,
                        vcl_vector<double>& local_widths,
                        vcl_vector<double>& angles);
 
-private:
+ private:
   vnl_double_2 location_;
   vcl_vector<double> local_widths_;
   vcl_vector<vnl_double_2> boundary_points_;
