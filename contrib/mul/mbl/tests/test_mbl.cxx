@@ -6,6 +6,7 @@
 
 
 #include <mbl/tests/test_mz_random.cxx>
+#include <mbl/tests/test_matrix_products.cxx>
 
 #undef TESTMAIN
 #define TESTMAIN(x) int main() \
@@ -14,6 +15,7 @@
 void run_test_mbl()
 {
   test_mz_random();
+  test_matrix_products();
 }
 
 
