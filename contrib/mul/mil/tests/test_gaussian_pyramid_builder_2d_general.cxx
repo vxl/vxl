@@ -72,6 +72,7 @@ void test_gaussian_pyramid_builder_2d_general()
   mil_image_pyramid image_pyr2;
   mil_gaussian_pyramid_builder_2d_general<float> builder2;
   builder2.set_scale_step(1.2);
+// At the next line, on Alpha (64-bit), a "floating point exception" occurs:
   builder2.build(image_pyr2, image2);
   bool all_less_than_256 = true;
   bool all_more_than_254 = true;
@@ -118,4 +119,4 @@ void test_gaussian_pyramid_builder_2d_general()
 }
 
 
-TESTMAIN(test_gaussian_pyramid_builder_2d);
+TESTMAIN(test_gaussian_pyramid_builder_2d_general);
