@@ -25,12 +25,12 @@
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vcl_iostream.h>
-#include <vcl_cmath.h> // for sqrt()
+#include <vcl_cmath.h> // for vcl_sqrt()
 
 typedef unsigned char ubyte;
 float square(float const& x) { return x*x; }
 void is_minus(float& x, float const& y) { x-=y; }
-float squareroot(float const& x) { return (float)sqrt(double(x)); }
+float squareroot(float const& x) { return vcl_sqrt(x); }
 
 int
 main(int argc, char** argv) {
@@ -45,7 +45,7 @@ main(int argc, char** argv) {
 
   // Intermediate image:
   vil_memory_image_of<ubyte> tmp (out);
-  
+
   // The second moment filter.  result: E(X*X), into out.
   vipl_moment<vil_image,vil_image,ubyte,float VCL_DFL_TMPL_ARG(vipl_trivial_pixeliter)> scnd_moment(2, 5, 5);
   scnd_moment.put_in_data_ptr(&in);
@@ -70,7 +70,7 @@ main(int argc, char** argv) {
   minus_op.put_out_data_ptr(&out);
   minus_op.filter();
 
-  // The monadic "squareroot" point operator (input = output)
+  // The monadic "square root" point operator (input = output)
   vipl_monadic<vil_image,vil_image,float,float VCL_DFL_TMPL_ARG(vipl_trivial_pixeliter)> sqrt_op(squareroot);
   sqrt_op.put_in_data_ptr(&out);
   sqrt_op.put_out_data_ptr(&out);

@@ -37,7 +37,7 @@ typedef unsigned int VIPL_FILTER_STATE;
 
 #define MASK_CONV(X1, Y1, X2, Y2, DELTA_X, DELTA_Y, SRC, DST, KERN) do {\
   KernType val;\
-  clock_t ct = clock(),ct1;\
+  vcl_clock_t ct = clock(),ct1;\
   for (int y = (Y1); y < (Y2); ++y)\
     for (int x = (X1) ; x < (X2); ++x) {\
       val = 0.0;\
@@ -55,7 +55,7 @@ typedef unsigned int VIPL_FILTER_STATE;
 #define MASK_CONV_BOARDER(X1, Y1, X2, Y2, DELTA_X, DELTA_Y, SRC, DST, KERN) \
   do {\
   KernType val;\
-  clock_t ct = clock(),ct1;\
+  vcl_clock_t ct = clock(),ct1;\
   for (int y = (Y1); y < (Y2); ++y)\
     for (int x = (X1) ; x < (X2); ++x) {\
       val = 0.0;\
@@ -76,7 +76,7 @@ typedef unsigned int VIPL_FILTER_STATE;
 // extern int over, under;
 
 #define HORIZ_CONV(X1, Y1, X2, Y2, DELTA_X, DELTA_Y, SRC, DST, KERN) do {\
-  clock_t ct = clock();\
+  vcl_clock_t ct = clock();\
   KernType val;\
   for (int y = ((Y1) ); y < ((Y2) ); ++y) {\
     for (int x = ((X1) ); x < ((X2) ); ++x) {\
@@ -86,11 +86,11 @@ typedef unsigned int VIPL_FILTER_STATE;
       FSET_PIXEL((DST),x, y, (CONVERT_TO_OUT(val)));\
     }\
   }\
-  clock_t ct2= clock();\
+  vcl_clock_t ct2= clock();\
 } while (false)
 
 #define HORIZ_CONV_BOARDER(X1, Y1, X2, Y2, DELTA_X, DELTA_Y, SRC, DST, KERN)\ do {\
-  clock_t ct = clock();\
+  vcl_clock_t ct = clock();\
   KernType val;\
   for (int y = ((Y1) ); y < ((Y2) ); ++y) {\
     for (int x = ((X1) ); x < ((X2) ); ++x) {\
@@ -100,12 +100,12 @@ typedef unsigned int VIPL_FILTER_STATE;
       SET_PIXEL((DST),x, y, (CONVERT_TO_OUT(val)));\
     }\
   }\
-  clock_t ct2= clock();\
+  vcl_clock_t ct2= clock();\
 } while (false)
 
 #define VERTI_CONV(X1, Y1, X2, Y2, DELTA_X, DELTA_Y, SRC, DST, KERN) do {\
   KernType val;\
-  clock_t ct = clock();\
+  vcl_clock_t ct = clock();\
   for (int x = ((X1) ); x < ((X2) ); ++x) {\
     for (int y = ((Y1) ); y < ((Y2) ); ++y) {\
       val = 0;\
@@ -114,12 +114,12 @@ typedef unsigned int VIPL_FILTER_STATE;
       FSET_PIXEL((DST),x, y, (CONVERT_TO_OUT(val)));\
     }\
   }\
-  clock_t ct2= clock();\
+  vcl_clock_t ct2= clock();\
 } while (false)
 
 #define VERTI_CONV_BOARDER(X1, Y1, X2, Y2, DELTA_X, DELTA_Y, SRC, DST, KERN)\ do {\
   KernType val;\
-  clock_t ct = clock();\
+  vcl_clock_t ct = clock();\
   for (int x = ((X1) ); x < ((X2) ); ++x) {\
     for (int y = ((Y1) ); y < ((Y2) ); ++y) {\
       val = 0;\
@@ -128,14 +128,14 @@ typedef unsigned int VIPL_FILTER_STATE;
       SET_PIXEL((DST),x, y, (CONVERT_TO_OUT(val)));\
     }\
   }\
-  clock_t ct2= clock();\
+  vcl_clock_t ct2= clock();\
 } while (false)
 
 #else //else we flip intermediate
 
 #define HORIZ_CONV(X1, Y1, X2, Y2, DELTA_X, DELTA_Y, SRC, DST, KERN) do {\
   KernType val;\
-  clock_t ct = clock();\
+  vcl_clock_t ct = clock();\
   for (int y = ((Y1) + DELTA_Y); y < ((Y2) - (DELTA_Y)); ++y) {\
     for (int x = ((X1) + (DELTA_X)); x < ((X2) - (DELTA_X)); ++x) {\
       val = 0.0;\
@@ -144,12 +144,12 @@ typedef unsigned int VIPL_FILTER_STATE;
       FSET_PIXEL((DST), y,x, (CONVERT_TO_OUT(val)));\
     }\
   }\
-  clock_t ct2= clock();\
+  vcl_clock_t ct2= clock();\
 } while (false)
 
 #define HORIZ_CONV_BOARDER(X1, Y1, X2, Y2, DELTA_X, DELTA_Y, SRC, DST, KERN) \ do {\
   KernType val;\
-  clock_t ct = clock();\
+  vcl_clock_t ct = clock();\
   for (int y = ((Y1) + DELTA_Y); y < ((Y2) - (DELTA_Y)); ++y) {\
     for (int x = ((X1) + (DELTA_X)); x < ((X2) - (DELTA_X)); ++x) {\
       val = 0.0;\
@@ -158,13 +158,13 @@ typedef unsigned int VIPL_FILTER_STATE;
       SET_PIXEL((DST), y,x, (CONVERT_TO_OUT(val)));\
     }\
   }\
-  clock_t ct2= clock();\
+  vcl_clock_t ct2= clock();\
 } while (false)
 
 #define VERTI_CONV(X1, Y1, X2, Y2, DELTA_X, DELTA_Y, SRC, DST, KERN)
    do {\
   KernType val;\
-  clock_t ct = clock();\
+  vcl_clock_t ct = clock();\
   for (int x = ((X1) + (DELTA_X)); x < ((X2) - (DELTA_X)); ++x) {\
     for (int y = ((Y1) + (DELTA_Y)); y < ((Y2) - (DELTA_Y)); ++y) {\
       val = 0;\
@@ -173,12 +173,12 @@ typedef unsigned int VIPL_FILTER_STATE;
       FSET_PIXEL((DST),x, y, (CONVERT_TO_OUT(val)));\
     }\
   }\
-  clock_t ct2= clock();\
+  vcl_clock_t ct2= clock();\
 } while (false)
 
 #define VERTI_CONV_BOARDER(X1, Y1, X2, Y2, DELTA_X, DELTA_Y, SRC, DST, KERN)\ do {\
   KernType val;\
-  clock_t ct = clock();\
+  vcl_clock_t ct = clock();\
   for (int x = ((X1) + (DELTA_X)); x < ((X2) - (DELTA_X)); ++x) {\
     for (int y = ((Y1) + (DELTA_Y)); y < ((Y2) - (DELTA_Y)); ++y) {\
       val = 0;\
@@ -187,7 +187,7 @@ typedef unsigned int VIPL_FILTER_STATE;
       SET_PIXEL((DST),x, y, (CONVERT_TO_OUT(val)));\
     }\
   }\
-  clock_t ct2= clock();\
+  vcl_clock_t ct2= clock();\
 } while (false)
 
 #endif

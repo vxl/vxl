@@ -3,6 +3,7 @@
 
 #include <vipl/filter/vipl_filter.h>
 #include <vcl_iostream.h>
+#include <vcl_algorithm.h> // for vcl_max and vcl_min
 
 #ifdef VCL_WIN32
 #pragma warning( disable: 4390 )
@@ -240,8 +241,8 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   // if we make it this far, must be in
     }
   } else {
+    // if we don't have an ROA we must be in it.
     if (!ROA())
-  // if we don't have an ROA we must be in it.
       return true;
     // should this consider insecp???????
     if(secp()) { // ok have a valid section .
@@ -280,12 +281,10 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
       }
       st += ibs;
       end -= ibs;
-      // vcl_cerr << "c st end ibs" << st << " " << end << " " << ibs << vcl_endl;
-#define min(a,b) ((a<b)?(a):(b))
-#define max(a,b) ((a>b)?(a):(b))
+      vcl_cerr << "i_ st end ibs" << st << " " << end << " " << ibs << vcl_endl;
       if(inROA()) {
         int t = inROA()->curr_sec_start(axis)+ibs;
-        st =min(end,max(st,t));
+        st =vcl_min(end,vcl_max(st,t));
       }
       return st;
     }
@@ -295,7 +294,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
       int ibs = image_border_size();
       int end = secp()->curr_sec_end(axis);
       int st = secp()->curr_sec_start(axis);
-      // vcl_cerr << "a st end ibs" << st << " " << end << " " << ibs << vcl_endl;
+      vcl_cerr << "o_ st end ibs" << st << " " << end << " " << ibs << vcl_endl;
       if(st > end){ // swap hack in case people get it wrong....
         int temp = end;
         end = st;
@@ -303,12 +302,12 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
       }
       st += ibs;
       end -= ibs;
-      // vcl_cerr << "c st end ibs" << st << " " << end << " " << ibs << vcl_endl;
-      if(ROA()) st = min(end,max(st,ROA()->curr_sec_start(axis)+ibs));
+      vcl_cerr << "o_ st end ibs" << st << " " << end << " " << ibs << vcl_endl;
+      if(ROA()) st = vcl_min(end,vcl_max(st,ROA()->curr_sec_start(axis)+ibs));
       return st;
     }
   }
-  //else
+  //else // error
   vcl_cerr << "Warning: called start but no valid sections defined. Returning 0\n";
   return 0;
 }
@@ -327,43 +326,43 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   int vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
                      ::stop(int axis) const
 {
-         if(is_input_driven()){
-           if(insecp()){ // ok have a valid section
-             int ibs = image_border_size();
-             int end = insecp()->curr_sec_end(axis);
-             int st = insecp()->curr_sec_start(axis);
-             if(st > end){ // swap hack in case people get it wrong....
-               int temp = end;
-               end = st;
-               st = temp;
-             }
-             st += ibs;
-             end -= ibs;
-             // vcl_cerr << "c st end ibs" << st << " " << end << " " << ibs << vcl_endl;
-             if(inROA())
-               if(inROA()) st = min(end,max(st,inROA()->curr_sec_start(axis)+ibs));
-             return end;
-           }
-         } else {
-           if(secp()){ // ok have a valid section
-             int ibs = image_border_size();
-             int end = secp()->curr_sec_end(axis);
-             int st = secp()->curr_sec_start(axis);
-             if(st > end){ // swap hack in case people get it wrong....
-               int temp = end;
-               end = st;
-               st = temp;
-             }
-             st += ibs;
-             end -= ibs;
-             // vcl_cerr << "c st end ibs" << st << " " << end << " " << ibs << vcl_endl;
-             if(ROA()) st = min(end,max(st,ROA()->curr_sec_start(axis)+ibs));
-             return end;
-           }
-         }
-        //else
-        vcl_cerr << "Warning: called stop but no valid sections defined. Returning 0\n";
-        return 0;
+  if(is_input_driven()){
+    if(insecp()){ // ok have a valid section
+      int ibs = image_border_size();
+      int end = insecp()->curr_sec_end(axis);
+      int st = insecp()->curr_sec_start(axis);
+      if(st > end){ // swap hack in case people get it wrong....
+        int temp = end;
+        end = st;
+        st = temp;
+      }
+      st += ibs;
+      end -= ibs;
+      vcl_cerr << "_i st end ibs" << st << " " << end << " " << ibs << vcl_endl;
+      if(inROA())
+        if(inROA()) st = vcl_min(end,vcl_max(st,inROA()->curr_sec_start(axis)+ibs));
+      return end;
+    }
+  } else {
+    if(secp()){ // ok have a valid section
+      int ibs = image_border_size();
+      int end = secp()->curr_sec_end(axis);
+      int st = secp()->curr_sec_start(axis);
+      if(st > end){ // swap hack in case people get it wrong....
+        int temp = end;
+        end = st;
+        st = temp;
+      }
+      st += ibs;
+      end -= ibs;
+      vcl_cerr << "_o st end ibs" << st << " " << end << " " << ibs << vcl_endl;
+      if(ROA()) st = vcl_min(end,vcl_max(st,ROA()->curr_sec_start(axis)+ibs));
+      return end;
+    }
+  }
+  //else // error
+  vcl_cerr << "Warning: called stop but no valid sections defined. Returning 0\n";
+  return 0;
 }
 
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr>

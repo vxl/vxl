@@ -5,6 +5,7 @@
 #endif
 
 #include <vcl_vector.h>
+#include <vcl_cstddef.h>
 #include <vipl/filter/vipl_filter_abs.h>
 template <  class DataType > class vipl_section_descriptor; //template forward reference
 template <  class DataType > class vipl_section_iterator; //template forward reference
@@ -22,8 +23,8 @@ class vipl_section_container {
   typedef vipl_section_descriptor< DataType >* pointer;
   typedef vipl_section_iterator< DataType > iterator;
   typedef const vipl_section_iterator< DataType > const_iterator;
-  typedef ptrdiff_t difference_type;
-  typedef size_t size_type;
+  typedef vcl_ptrdiff_t difference_type;
+  typedef vcl_size_t size_type;
  protected:
   // declare data, accessors from codegen
   vipl_section_container< DataType >* hsthe;
