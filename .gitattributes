@@ -4,7 +4,6 @@
 *.dsptemplate   -crlf
 *.dsw           -crlf
 *.pl             crlf=input
-*.png           -crlf
 *.sh             crlf=input
 check_dsp        crlf=input
 check_syntax     crlf=input
