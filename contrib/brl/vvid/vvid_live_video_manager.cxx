@@ -32,64 +32,6 @@
 #include <vvid/vvid_video_process.h>
 #include <vvid/vvid_epipolar_space_process.h>
 
-static vil_memory_image_of<unsigned char> convert_to_grey(vil_image& image)
-{
-  int h = image.height();
-  int w = image.width();
-  vil_memory_image_of<unsigned char> grey_img(w,h);
-  if (vil_pixel_format(image)==VIL_RGB_BYTE)
-    {
-      vil_memory_image_of<vil_rgb<unsigned char> > mimg(image);
-      for (int y = 0; y<h; y++)
-        for (int x =0; x<w; x++)
-          grey_img(x,y)=(mimg(x,y)).grey();
-    }
-  return grey_img;
-}
-
-static void fill_float_array_at_y(vil_memory_image_of<unsigned char>& img,
-                                  int x, int y, int radius, float* data)
-{
-  int N = 2*radius +1;
-  //clear the array
-  for (int i = 0; i<N; i++)
-    data[i]=0;
-
-  int h = img.height();
-  if (y-radius <0||y+radius>h-1)
-    return;
-  for (int dy = -radius; dy<=radius; dy++)
-    data[radius+dy] = (float)img(x,y+dy);
-}
-static vil_memory_image_of<unsigned char>
-make_epi(int y, vil_memory_image_of<unsigned char>& img1,
-         vil_memory_image_of<unsigned char>& img2)
-{
-  int h = img1.height();
-
-  int w = img1.width();
-  int shift=0;
-  float s = 255*2.0, radius = 2;
-  float N1 = 2*radius +1, N2=4*radius+1;
-  float* d1 = new float[N1];
-  float* d2 = new float[N2];
-  vil_memory_image_of<unsigned char> epi_img(w,w);
-  for (int x1 =0; x1<w; x1++)
-    for (int x2 =0; x2<w; x2++)
-      {
-        fill_float_array_at_y(img1, x1, y, radius, d1);
-        fill_float_array_at_y(img2, x2, y, 2*radius, d2);
-        double c =
-          0.5*vcl_fabs(gevd_float_operators::Correlation(d2, N2, d1, radius, 2*radius));
-        c = 255*c;
-        if (c>255) c=255;
-        if (c<0)c=0;
-        epi_img(x1,x2)=(unsigned char) c;
-      }
-  delete [] d1;
-  delete [] d2;
-  return epi_img;
-}
 //static live_video_manager instance
 vvid_live_video_manager *vvid_live_video_manager::_instance = 0;
 
