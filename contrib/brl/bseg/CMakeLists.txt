@@ -7,8 +7,12 @@ SUBDIRS(sdet)
 # segmentation view library
 SUBDIRS(segv)
 
-# segmentation applicationexecutables
+# float image operations
+SUBDIRS(brip)
+
+# segmentation application executables
 SUBDIRS(sbin)
+
 
 # segmentation tests
 SUBDIRS(tests)
