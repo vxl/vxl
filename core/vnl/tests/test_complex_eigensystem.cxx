@@ -36,12 +36,12 @@ void test_complex_eigensystem1()
   vnl_complex_eigensystem eig(A,     // compute both
                               true,  // left and right
                               true); // eigenvectors
-
-  //vcl_cout << "A = " << A << vcl_endl;
-  //vcl_cout << "eigenvalues = " << eig.W << vcl_endl;
-  //vcl_cout << "L = " << eig.L << vcl_endl;
-  //vcl_cout << "R = " << eig.R << vcl_endl;
-
+#if 0
+  vcl_cout << "A = " << A << vcl_endl
+           << "eigenvalues = " << eig.W << vcl_endl
+           << "L = " << eig.L << vcl_endl
+           << "R = " << eig.R << vcl_endl;
+#endif
   for (unsigned i=0;i<N;i++) {
     //vcl_cout << "i=" << i << vcl_endl;
     //

@@ -691,7 +691,7 @@ vnl_matrix<T> vnl_matrix<T>::extract (unsigned rowz, unsigned colz,
                                 this->num_rows, this->num_cols, bottom, right);
   vnl_matrix<T> result(rowz, colz);
   for (unsigned int i = 0; i < rowz; i++)      // actual copy of all elements
-    for (unsigned int j = 0; j < colz ; j++)   // in submatrix
+    for (unsigned int j = 0; j < colz; j++)    // in submatrix
       result.data[i][j] = data[top+i][left+j];
   return result;
 }
@@ -1094,23 +1094,22 @@ void vnl_matrix<T>::assert_finite_internal() const
 {
   if (is_finite())
     return;
-  
-  vcl_cerr << vcl_endl << vcl_endl;
-  vcl_cerr << __FILE__ ":" << __LINE__ << ": matrix has non-finite elements" << vcl_endl;
-  if (rows() <= 20 && cols() <= 20) {
-    vcl_cerr << __FILE__ ": here it is:" << vcl_endl;
-    vcl_cerr << *this;
-  }
+
+  vcl_cerr << vcl_endl << vcl_endl
+           << __FILE__ ":" << __LINE__ << ": matrix has non-finite elements"
+           << vcl_endl;
+  if (rows() <= 20 && cols() <= 20)
+    vcl_cerr << __FILE__ ": here it is:\n" << *this;
   else {
-    vcl_cerr << __FILE__ ": it is quite big (" << rows() << 'x' << cols() << ")" << vcl_endl;
-    vcl_cerr << __FILE__ ": in the following picture - means finite and * means non-finite:" << vcl_endl;
+    vcl_cerr << __FILE__ ": it is quite big (" << rows() << 'x' << cols() << ")\n"
+             << __FILE__ ": in the following picture - means finite and * means non-finite:\n";
     for (unsigned int i=0; i<rows(); ++i) {
       for (unsigned int j=0; j<cols(); ++j)
         vcl_cerr << char(vnl_math_isfinite((*this)(i, j)) ? '-' : '*');
       vcl_cerr << vcl_endl;
     }
   }
-  vcl_cerr << __FILE__ ": calling abort()" << vcl_endl;
+  vcl_cerr << __FILE__ ": calling abort()\n";
   vcl_abort();
 }
 

@@ -39,12 +39,12 @@ void test_rational() {
     a *= b;
     a /= b;
     a %= b;
-    vcl_cout << vcl_setprecision(20);
-    vcl_cout << "a=" << a << "=" << (double)a << vcl_endl;
-    vcl_cout << "b=" << b << "=" << (double)b << vcl_endl;
-    vcl_cout << "c=" << c << "=" << (double)c << vcl_endl;
-    vcl_cout << "d=" << d << "=" << (double)d << vcl_endl;
-    vcl_cout << "e=" << e << vcl_endl; // (double)d ==> floating exception
+    vcl_cout << vcl_setprecision(20)
+             << "a=" << a << "=" << (double)a << vcl_endl
+             << "b=" << b << "=" << (double)b << vcl_endl
+             << "c=" << c << "=" << (double)c << vcl_endl
+             << "d=" << d << "=" << (double)d << vcl_endl
+             << "e=" << e << vcl_endl; // (double)d ==> floating exception
     d = -7;
     d = -7L;
     vcl_cout << vcl_endl;
@@ -74,8 +74,8 @@ void test_rational() {
     double pi_a = double(pi);
     TEST("pi", pi_a-vnl_math::pi < 1e-18 && vnl_math::pi-pi_a < 1e-18, true);
     vcl_cout << "Best rational approximation of pi: " << pi << " = "
-             << pi_a << vcl_endl;
-    vcl_cout << "Compare this with pi in 20 decimals:                     "
+             << pi_a << vcl_endl
+             << "Compare this with pi in 20 decimals:                     "
              << vnl_math::pi << vcl_endl;
   }
   {
@@ -99,8 +99,8 @@ void test_rational() {
     d = sqrt(vnl_rational(2L));
     double sqrt2 = sqrt(2.0), sqrt_2 = double(d);
     vcl_cout << "Best rational approximation of sqrt(2): " << d << " = "
-             << sqrt_2 << vcl_endl;
-    vcl_cout << "Compare this with sqrt(2) in 20 decimals:                     "
+             << sqrt_2 << vcl_endl
+             << "Compare this with sqrt(2) in 20 decimals:                     "
              << sqrt2 << vcl_endl;
     TEST("sqrt(2)", sqrt2-sqrt_2 < 1e-18 && sqrt_2-sqrt2 < 1e-18, true);
   }

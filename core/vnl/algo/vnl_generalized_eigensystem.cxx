@@ -46,8 +46,8 @@ vnl_generalized_eigensystem::vnl_generalized_eigensystem(const vnl_matrix<double
     const double THRESH = 1e-8;
     vnl_symmetric_eigensystem<double> eig(B);
     if (eig.D(0,0) < -THRESH) {
-      vcl_cerr << "**** vnl_generalized_eigensystem: ERROR\n";
-      vcl_cerr << "Matrix B is not nonneg-definite\n";
+      vcl_cerr << "**** vnl_generalized_eigensystem: ERROR\n"
+               << "Matrix B is not nonneg-definite\n";
       MATLABPRINT(B);
       vcl_cerr << "**** eigenvalues(B) = " << eig.D << vcl_endl;
       return;
@@ -99,14 +99,14 @@ vnl_generalized_eigensystem::vnl_generalized_eigensystem(const vnl_matrix<double
     if (ierr == 10*n)
       vcl_cerr << "vnl_generalized_eigensystem: N is greater than NM.  Bug in interface to rsg.f\n";
     else {
-      vcl_cerr << "vnl_generalized_eigensystem: The " <<
-        ierr << "-th eigenvalue has not been determined after 30 iterations.\n";
-      vcl_cerr << "The eigenvalues should be correct for indices 1.." << ierr-1;
-      vcl_cerr << ", but no eigenvectors are computed.\n";
-      vcl_cerr << "A = " << A << vcl_endl;
-      vcl_cerr << "singular values(A) = " << vnl_svd<double>(A).W() << vcl_endl;
-      vcl_cerr << "B = " << B << vcl_endl;
-      vcl_cerr << "singular values(B) = " << vnl_svd<double>(B).W() << vcl_endl;
+      vcl_cerr << "vnl_generalized_eigensystem: The "
+               << ierr << "-th eigenvalue has not been determined after 30 iterations.\n"
+               << "The eigenvalues should be correct for indices 1.." << ierr-1
+               << ", but no eigenvectors are computed.\n"
+               << "A = " << A
+               << "\nsingular values(A) = " << vnl_svd<double>(A).W() << "\n"
+               << "B = " << B
+               << "\nsingular values(B) = " << vnl_svd<double>(B).W() << "\n";
     }
   }
 }

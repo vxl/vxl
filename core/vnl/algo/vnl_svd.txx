@@ -87,8 +87,8 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
       // The only solution to that is to increase the maximum number of
       // iterations in the netlib code. Diagnose the problem here by
       // printing a warning message.
-      vcl_cerr << __FILE__ ": suspicious return value (" << info << ") from SVDC" << vcl_endl;
-      vcl_cerr << __FILE__ ": M is " << M.rows() << 'x' << M.cols() << vcl_endl;
+      vcl_cerr << __FILE__ ": suspicious return value (" << info << ") from SVDC\n"
+               << __FILE__ ": M is " << M.rows() << 'x' << M.cols() << vcl_endl;
     }
 
     // Copy fortran outputs into our storage
@@ -121,10 +121,10 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
     abs_t thresh = m_ * vnl_math::eps * n;
     if (recomposition_residual > thresh) {
       vcl_cerr << "vnl_svd<T>::vnl_svd<T>() -- Warning, recomposition_residual = "
-           << recomposition_residual << vcl_endl;
-      vcl_cerr << "fro_norm(M) = " << n << vcl_endl;
-      vcl_cerr << "eps*fro_norm(M) = " << thresh << vcl_endl;
-      vcl_cerr << "Press return to continue\n";
+               << recomposition_residual << vcl_endl
+               << "fro_norm(M) = " << n << vcl_endl
+               << "eps*fro_norm(M) = " << thresh << vcl_endl
+               << "Press return to continue\n";
       char x;
       vcl_cin.get(&x, 1, '\n');
     }
@@ -155,12 +155,12 @@ vnl_svd<T>& vnl_svd<T>::operator=(vnl_svd<T> const& that)
 template <class T>
 vcl_ostream& operator<<(vcl_ostream& s, const vnl_svd<T>& svd)
 {
-  s << "vnl_svd<T>:\n";
-  //s << "M = [\n" << M << "]\n";
-  s << "U = [\n" << svd.U() << "]\n";
-  s << "W = " << svd.W() << "\n";
-  s << "V = [\n" << svd.V() << "]\n";
-  s << "rank = " << svd.rank() << vcl_endl;
+  s << "vnl_svd<T>:\n"
+//  << "M = [\n" << M << "]\n"
+    << "U = [\n" << svd.U() << "]\n"
+    << "W = " << svd.W() << "\n"
+    << "V = [\n" << svd.V() << "]\n"
+    << "rank = " << svd.rank() << vcl_endl;
   return s;
 }
 
@@ -293,21 +293,21 @@ vnl_vector<T> vnl_svd<T>::solve(vnl_vector<T> const& y)  const
 {
   // fsm sanity check :
   if (y.size() != U_.rows()) {
-    vcl_cerr << __FILE__ << ": size of rhs is incompatible with no. of rows in U_" << vcl_endl;
-    vcl_cerr << "y =" << y << vcl_endl;
-    vcl_cerr << "m_=" << m_ << vcl_endl;
-    vcl_cerr << "n_=" << n_ << vcl_endl;
-    vcl_cerr << "U_=" << vcl_endl << U_;
-    vcl_cerr << "V_=" << vcl_endl << V_;
-    vcl_cerr << "W_=" << vcl_endl << W_;
+    vcl_cerr << __FILE__ << ": size of rhs is incompatible with no. of rows in U_\n"
+             << "y =" << y << "\n"
+             << "m_=" << m_ << "\n"
+             << "n_=" << n_ << "\n"
+             << "U_=\n" << U_
+             << "V_=\n" << V_
+             << "W_=\n" << W_;
   }
 
   vnl_vector<T> x(V_.rows());                   // Solution matrix.
   if (U_.rows() < U_.columns()) {               // Augment y with extra rows of
     vnl_vector<T> yy(U_.rows(), T(0));          // zeros, so that it matches
     if (yy.size()<y.size()) { // fsm
-      vcl_cerr << "yy=" << yy << vcl_endl;
-      vcl_cerr << "y =" << y  << vcl_endl;
+      vcl_cerr << "yy=" << yy << vcl_endl
+               << "y =" << y  << vcl_endl;
       // the update() call on the next line will abort...
     }
     yy.update(y);                               // cols of u.transpose.

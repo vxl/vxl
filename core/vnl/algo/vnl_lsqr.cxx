@@ -118,11 +118,11 @@ int vnl_lsqr::minimize(vnl_vector<double>& result)
   A_condition_estimate_ = acond;
 
 #if 0
-  vcl_cerr << "A Fro norm estimate      = " << anorm << vcl_endl;
-  vcl_cerr << "A condition estimate     = " << acond << vcl_endl;
-  vcl_cerr << "Residual norm estimate   = " << rnorm << vcl_endl;
-  vcl_cerr << "A'(Ax - b) norm estimate = " << arnorm << vcl_endl;
-  vcl_cerr << "x norm estimate          = " << xnorm << vcl_endl;
+  vcl_cerr << "A Fro norm estimate      = " << anorm << vcl_endl
+           << "A condition estimate     = " << acond << vcl_endl
+           << "Residual norm estimate   = " << rnorm << vcl_endl
+           << "A'(Ax - b) norm estimate = " << arnorm << vcl_endl
+           << "x norm estimate          = " << xnorm << vcl_endl;
 #endif
 
   return 0; // return value not used
@@ -131,10 +131,10 @@ int vnl_lsqr::minimize(vnl_vector<double>& result)
 void vnl_lsqr::diagnose_outcome(vcl_ostream& os) const
 {
   translate_return_code(os, return_code_);
-  os << __FILE__ " : residual norm estimate = " << resid_norm_estimate_ << vcl_endl;
-  os << __FILE__ " : result norm estimate   = " << result_norm_estimate_ << vcl_endl;
-  os << __FILE__ " : condition no. estimate = " << A_condition_estimate_ << vcl_endl;
-  os << __FILE__ " : iterations             = " << num_iter_ << vcl_endl;
+  os << __FILE__ " : residual norm estimate = " << resid_norm_estimate_ << vcl_endl
+     << __FILE__ " : result norm estimate   = " << result_norm_estimate_ << vcl_endl
+     << __FILE__ " : condition no. estimate = " << A_condition_estimate_ << vcl_endl
+     << __FILE__ " : iterations             = " << num_iter_ << vcl_endl;
 }
 
 void vnl_lsqr::translate_return_code(vcl_ostream& os, int rc)

@@ -11,21 +11,21 @@ void test_math() {
   vcl_complex<double> z(-1,2);
   vcl_complex<double> e_ipi = vcl_exp(d*i);
 
-  vcl_cout << "n=" << n << vcl_endl;
-  vcl_cout << "f=" << f << vcl_endl;
-  vcl_cout << "d=" << d << vcl_endl;
-  vcl_cout << "i=" << i << vcl_endl;
-  vcl_cout << "z=" << z << vcl_endl;
-  vcl_cout << "exp(d*i)=" << e_ipi << vcl_endl;
-  vcl_cout << vcl_endl;
+  vcl_cout << "n=" << n << vcl_endl
+           << "f=" << f << vcl_endl
+           << "d=" << d << vcl_endl
+           << "i=" << i << vcl_endl
+           << "z=" << z << vcl_endl
+           << "exp(d*i)=" << e_ipi << vcl_endl
+           << vcl_endl
 
-  vcl_cout << "abs(n)=" << vnl_math_abs(n) << vcl_endl;
-  vcl_cout << "abs(f)=" << vnl_math_abs(f) << vcl_endl;
-  vcl_cout << "abs(d)=" << vnl_math_abs(d) << vcl_endl;
-  vcl_cout << "abs(i)=" << vnl_math_abs(i) << vcl_endl;
-  vcl_cout << "abs(z)=" << vnl_math_abs(z) << vcl_endl;
-  vcl_cout <<"norm(z)=" << vnl_math_squared_magnitude(z) << vcl_endl;
-  vcl_cout << vcl_endl;
+           << "abs(n)=" << vnl_math_abs(n) << vcl_endl
+           << "abs(f)=" << vnl_math_abs(f) << vcl_endl
+           << "abs(d)=" << vnl_math_abs(d) << vcl_endl
+           << "abs(i)=" << vnl_math_abs(i) << vcl_endl
+           << "abs(z)=" << vnl_math_abs(z) << vcl_endl
+           <<"norm(z)=" << vnl_math_squared_magnitude(z) << vcl_endl
+           << vcl_endl;
 
   vnl_test_assert("abs(n) == 11", vnl_math_abs(n) == 11);
   vnl_test_assert("abs(f) == 7.5", vnl_math_abs(f) == 7.5);

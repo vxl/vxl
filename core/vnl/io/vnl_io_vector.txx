@@ -39,8 +39,8 @@ void vsl_b_read(vsl_b_istream &is, vnl_vector<T> & p)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_vector<T>&) \n";
-    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_vector<T>&)\n"
+             << "           Unknown version number "<< ver << "\n";
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -53,7 +53,7 @@ void vsl_print_summary(vcl_ostream & os,const vnl_vector<T> & p)
 {
   os<<"Len: "<<p.size()<<" (";
   for ( int i =0; i < p.size() && i < 5; ++i )
-    os << p.operator()(i) <<" " ;
+    os << p.operator()(i) <<" ";
   if (p.size() > 5) os << " ...";
   os << ")";
 }

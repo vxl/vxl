@@ -44,18 +44,18 @@ void test_complex() {
     a -= b;
     a *= b;
     a /= b;
-    vcl_cout << "a=" << a << vcl_endl;
-    vcl_cout << "b=" << b << vcl_endl;
-    vcl_cout << "c=" << c << vcl_endl;
-    vcl_cout << vcl_endl;
+    vcl_cout << "a=" << a << vcl_endl
+             << "b=" << b << vcl_endl
+             << "c=" << c << vcl_endl
+             << vcl_endl;
   }
 
   {
     vnl_vector<vcl_complex<double> > a(5); fill_rand(a.begin(), a.end());
     vnl_vector<vcl_complex<double> > b(5); fill_rand(b.begin(), b.end());
 
-    vcl_cout << "a=" << a << vcl_endl;
-    vcl_cout << "b=" << b << vcl_endl;
+    vcl_cout << "a=" << a << vcl_endl
+             << "b=" << b << vcl_endl;
 
     vcl_complex<double> i(0,1);
 

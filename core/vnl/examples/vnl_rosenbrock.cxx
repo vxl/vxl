@@ -70,10 +70,10 @@ int main()
   vnl_levenberg_marquardt levmarq(f, x);
 
   // Summarize the results
-  vcl_cout << "** LevenbergMarquardt default **" << vcl_endl;
-  vcl_cout << "Rosenbrock min of " << levmarq.get_end_error() << " at " << x << vcl_endl;
-  vcl_cout << "Iterations: " << levmarq.get_num_iterations() << "    ";
-  vcl_cout << "Evaluations: " << levmarq.get_num_evaluations() << vcl_endl;
+  vcl_cout << "** LevenbergMarquardt default **" << vcl_endl
+           << "Rosenbrock min of " << levmarq.get_end_error() << " at " << x << vcl_endl
+           << "Iterations: " << levmarq.get_num_iterations() << "    "
+           << "Evaluations: " << levmarq.get_num_evaluations() << vcl_endl;
   levmarq.diagnose_outcome();
 
   // Now rerun the optimizer with a new, looser, X tolerance.
@@ -84,10 +84,10 @@ int main()
 
   // Summarize the results. It has taken fewer iterations to reach the same
   // answer.
-  vcl_cout << "** LevenbergMarquardt xtol=0.1 **" << vcl_endl;
-  vcl_cout << "Rosenbrock min of " << levmarq.get_end_error() << " at " << x << vcl_endl;
-  vcl_cout << "Iterations: " << levmarq.get_num_iterations() << "    ";
-  vcl_cout << "Evaluations: " << levmarq.get_num_evaluations() << vcl_endl;
+  vcl_cout << "** LevenbergMarquardt xtol=0.1 **" << vcl_endl
+           << "Rosenbrock min of " << levmarq.get_end_error() << " at " << x << vcl_endl
+           << "Iterations: " << levmarq.get_num_iterations() << "    "
+           << "Evaluations: " << levmarq.get_num_evaluations() << vcl_endl;
   levmarq.diagnose_outcome();
 
   {
@@ -97,8 +97,8 @@ int main()
     vnl_amoeba amoeba(cf);
     x = x0;
     amoeba.minimize(x);
-    vcl_cout << "Rosenbrock min of " << cf.f(x) << " at " << x << vcl_endl;
-    vcl_cout << "Evaluations: " << amoeba.get_num_evaluations() << vcl_endl;
+    vcl_cout << "Rosenbrock min of " << cf.f(x) << " at " << x << vcl_endl
+             << "Evaluations: " << amoeba.get_num_evaluations() << vcl_endl;
   }
   {
     vcl_cout << "** Conjugate Gradient ** \n";
@@ -117,8 +117,8 @@ int main()
     x = x0;
     lbfgs.minimize(x);
     //    assert(lbfgs.get_end_error() == rcf.f(x));
-    vcl_cout << "L-BFGS min of " << lbfgs.get_end_error() << " at " << x << vcl_endl;
-    vcl_cout << "Evaluations: " << lbfgs.get_num_evaluations() << vcl_endl;
+    vcl_cout << "L-BFGS min of " << lbfgs.get_end_error() << " at " << x << vcl_endl
+             << "Evaluations: " << lbfgs.get_num_evaluations() << vcl_endl;
   }
 
   {
@@ -128,8 +128,8 @@ int main()
     x = x0;
     powell.minimize(x);
     //    assert(lbfgs.get_end_error() == rcf.f(x));
-    vcl_cout << "Powell min of " << powell.get_end_error() << " at " << x << vcl_endl;
-    vcl_cout << "Evaluations: " << powell.get_num_evaluations() << vcl_endl;
+    vcl_cout << "Powell min of " << powell.get_end_error() << " at " << x << vcl_endl
+             << "Evaluations: " << powell.get_num_evaluations() << vcl_endl;
   }
   return 0;
 }

@@ -39,8 +39,8 @@ void vsl_b_read(vsl_b_istream &is, vnl_sparse_matrix_pair<T> & p)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_sparse_matrix_pair<T>&) \n";
-    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_sparse_matrix_pair<T>&)\n"
+             << "           Unknown version number "<< ver << "\n";
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -64,10 +64,10 @@ void vsl_b_write(vsl_b_ostream & os, const vnl_sparse_matrix<T> & p)
   typedef vnl_sparse_matrix_pair<T> pair_t;
 #if defined(VCL_SUNPRO_CC)
   // SunPro is the broken one.
-  typedef vcl_vector < typename pair_t > row ;
+  typedef vcl_vector < typename pair_t > row;
   typedef vcl_vector < typename row > vnl_sparse_matrix_elements;
 #else
-  typedef vcl_vector < pair_t > row ;
+  typedef vcl_vector < pair_t > row;
   typedef vcl_vector < row > vnl_sparse_matrix_elements;
 #endif
 
@@ -100,10 +100,10 @@ void vsl_b_read(vsl_b_istream &is, vnl_sparse_matrix<T> & p)
   typedef vnl_sparse_matrix_pair<T> pair_t;
 #if defined(VCL_SUNPRO_CC)
   // SunPro is the broken one.
-  typedef vcl_vector < typename pair_t > row ;
+  typedef vcl_vector < typename pair_t > row;
   typedef vcl_vector < typename row > vnl_sparse_matrix_elements;
 #else
-  typedef vcl_vector < pair_t > row ;
+  typedef vcl_vector < pair_t > row;
   typedef vcl_vector < row > vnl_sparse_matrix_elements;
 #endif
 
@@ -141,8 +141,8 @@ void vsl_b_read(vsl_b_istream &is, vnl_sparse_matrix<T> & p)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_sparse_matrix<T>&) \n";
-    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_sparse_matrix<T>&)\n"
+             << "           Unknown version number "<< ver << "\n";
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

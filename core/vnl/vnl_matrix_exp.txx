@@ -24,13 +24,17 @@ bool vnl_matrix_exp(vnl_matrix<T> const &X, vnl_matrix<T> &expX, double max_err)
   expX.set_identity();
   vnl_matrix<T> acc(X);
   double norm_acc_bound = norm_X;
-  for (unsigned n=1; ; ++n) {
+  for (unsigned n=1; true; ++n) {
     expX += acc;
-    //vcl_cerr << "n=" << n << vcl_endl;
+#ifdef DEBUG
+    vcl_cerr << "n=" << n << vcl_endl;
+#endif
 
     if (norm_X < n) {
       double err_bound = norm_acc_bound / (1 - norm_X/n);
-      //vcl_cerr << "err_bound = " << err_bound << vcl_endl;
+#ifdef DEBUG
+      vcl_cerr << "err_bound = " << err_bound << vcl_endl;
+#endif
       if (err_bound < max_err)
         break;
     }
