@@ -55,8 +55,8 @@ void bgui_vtol2D_tableau::init()
   //these can be overridden by later set_*_syle commands prior to drawing.
   //
    this->set_vsol_point_2d_style(0.0f, 1.0f, 0.0f, 5.0f);
+   this->set_vsol_line_2d_style(0.8f, 0.2f, 0.9f, 3.0f);
    this->set_digital_curve_style(0.8f, 0.0f, 0.8f, 3.0f);
-   this->set_line_segment_style(0.8f, 0.2f, 0.9f, 3.0f);
    this->set_dotted_digital_curve_style(0.8f, 0.0f, 0.8f, 3.0f, 3.0f);
    this->set_vertex_style(1.0f, 0.0f, 0.0f, 3.0f);
    this->set_edge_style(0.0f, 1.0f, 0.0f, 3.0f);
@@ -115,6 +115,17 @@ bgui_vtol2D_tableau::add_vsol_point_2d(vsol_point_2d_sptr const& p)
   return obj;
 }
 
+bgui_vtol_soview2D_line_seg*
+bgui_vtol2D_tableau::add_vsol_line_2d(vsol_line_2d_sptr const& line)
+{
+  bgui_vtol_soview2D_line_seg* obj =
+    new bgui_vtol_soview2D_line_seg(line);
+  add(obj);
+  //set the default style
+  bgui_style_sptr sty = style_map_[obj->type_name()];
+  obj->set_style(sty.ptr());
+  return obj;
+}
 
 bgui_vtol_soview2D_digital_curve*
 bgui_vtol2D_tableau::add_digital_curve(vdgl_digital_curve_sptr const& dc)
@@ -152,17 +163,6 @@ bgui_vtol2D_tableau::add_dotted_digital_curve(vdgl_digital_curve_sptr const& dc)
   return obj;
 }
 
-bgui_vtol_soview2D_line_seg*
-bgui_vtol2D_tableau::add_line_segment(vgl_line_segment_2d<double> const& seg)
-{
-  bgui_vtol_soview2D_line_seg* obj =
-    new bgui_vtol_soview2D_line_seg(seg);
-  add(obj);
-  //set the default style
-  bgui_style_sptr sty = style_map_[obj->type_name()];
-  obj->set_style(sty.ptr());
-  return obj;
-}
 
 bgui_vtol_soview2D_vertex*
 bgui_vtol2D_tableau::add_vertex(vtol_vertex_2d_sptr const& v)
@@ -394,6 +394,15 @@ void bgui_vtol2D_tableau::set_vsol_point_2d_style(const float r, const float g,
   style_map_[p.type_name()]=sty;
 }
 
+void bgui_vtol2D_tableau::set_vsol_line_2d_style(const float r, const float g,
+                                                 const float b,
+                                                 const float line_width)
+{
+  bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
+  bgui_vtol_soview2D_line_seg seg;
+  style_map_[seg.type_name()]=sty;
+}
+
 void bgui_vtol2D_tableau::set_digital_curve_style(const float r, const float g,
                                                   const float b,
                                                   const float line_width)
@@ -412,14 +421,6 @@ void bgui_vtol2D_tableau::set_dotted_digital_curve_style(const float r, const fl
   style_map_[dc.type_name()]=sty;
 }
 
-void bgui_vtol2D_tableau::set_line_segment_style(const float r, const float g,
-                                                 const float b,
-                                                 const float line_width)
-{
-  bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
-  bgui_vtol_soview2D_line_seg seg;
-  style_map_[seg.type_name()]=sty;
-}
 
 void bgui_vtol2D_tableau::set_vtol_topology_object_style(vtol_topology_object_sptr tos,
                                                          const float r, const float g, const float b,

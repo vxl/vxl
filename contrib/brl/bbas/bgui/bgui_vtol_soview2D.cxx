@@ -9,6 +9,9 @@
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_edgel_chain.h>
+#include <vsol/vsol_point_2d.h>
+#include <vsol/vsol_point_2d_sptr.h>
+#include <vsol/vsol_line_2d.h>
 #include <vtol/vtol_face_2d.h>
 #include <bgui/bgui_vtol_soview2D.h>
 
@@ -95,12 +98,12 @@ bgui_vtol_soview2D_digital_curve(vdgl_digital_curve_sptr const& dc)
 
 
 bgui_vtol_soview2D_line_seg::
-bgui_vtol_soview2D_line_seg(vgl_line_segment_2d<double> const& seg)
+bgui_vtol_soview2D_line_seg(vsol_line_2d_sptr const& seg)
 {
-  vgl_point_2d<double> p1 = seg.point1();
-  vgl_point_2d<double> p2 = seg.point2();
-  x0=p1.x(); y0 = p1.y();
-  x1=p2.x(); y1 = p2.y();
+  vsol_point_2d_sptr p0 = seg->p0();
+  vsol_point_2d_sptr p1 = seg->p1();
+  x0=p0->x(); y0 = p0->y();
+  x1=p1->x(); y1 = p1->y();
 }
 
 //--------------------------------------------------------------------------
