@@ -14,7 +14,3 @@ SUBDIRS(mvl oxp vrml osl)
 
 # using vgui:
 SUBDIRS(xcv VPLAYER apps)
-
-IF(BUILD_TESTING)
-  SUBDIRS(oxltest)
-ENDIF(BUILD_TESTING)
