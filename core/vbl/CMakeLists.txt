@@ -7,6 +7,8 @@ SET( vbl_sources
   vbl_protection_traits.txx   vbl_protection_traits.h
   vbl_smart_ptr.txx           vbl_smart_ptr.h
                               vbl_shared_pointer.h
+                              vbl_scoped_ptr.h
+                              vbl_checked_delete.h
   vbl_sort.txx                vbl_sort.h           vbl_sort.cxx
   vbl_qsort.cxx               vbl_qsort.h
 
