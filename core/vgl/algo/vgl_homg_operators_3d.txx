@@ -159,10 +159,28 @@ typename vgl_homg_operators_3d<Type>::vgl_homg_line_3d
 vgl_homg_operators_3d<Type>::perp_line_through_point(const vgl_homg_line_3d& l,
                                                      const vgl_homg_point_3d<Type>& p)
 {
-  vgl_homg_point_3d<Type> q = vgl_homg_operators_3d<Type>::perp_projection(l,p);
-  if (get_vector(p)==get_vector(q))
-    vcl_cerr << "Warning: cannot return vgl_homg_operators_3d<>::perp_line_through_point() for point on line\n";
-  return vgl_homg_line_3d(p,q);
+  if (p.ideal())
+  {
+    // this only works if p is not on l; and since the implementation below
+    // only works when p is a finite point, use this one when p is at infinity.
+    vgl_homg_point_3d<Type> perp_dirn = vgl_homg_operators_3d<Type>::perp_projection(l,p);
+    if (get_vector(p)==get_vector(perp_dirn))
+      vcl_cerr << "Warning: perp_line_through_point() makes no sense if the point is the infinity point of the line\n";
+    return vgl_homg_line_3d(p, perp_dirn);
+  }
+  else // by Brendan McCane
+  {
+    // OK this is a better version because it works even if the point
+    // is on the line. It does this simply by creating a direction
+    // perpendicular to the current line and then creating a new
+    // line with the passed in pt and the perpendicular direction.
+    vgl_homg_point_3d<Type> dirn = l.point_infinite();
+    vgl_homg_point_3d<Type> perp_dirn(Type(1)/dirn.x(), (-dirn.z()-1)/dirn.y(), Type(1), Type(0));
+    // should put an assert in here making sure that the dot product
+    // is zero (or close to), but I don't know how to do that with
+    // templates eg complex<1e-8 probably doesn't make sense.
+    return vgl_homg_line_3d(p, perp_dirn);
+  }
 }
 
 
