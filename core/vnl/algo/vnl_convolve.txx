@@ -24,7 +24,7 @@ vnl_vector<U> vnl_convolve_cyclic_using_fft(vnl_vector<T1> const& v1, vnl_vector
 #ifdef DEBUG
   vcl_cout << w1 << vcl_endl;
 #endif
-  
+
   vnl_vector<U> r(n);
   for (unsigned int i = 0; i<n; ++i)
     r[i] = U(vcl_real(w1[i]) / n); // the imaginary part is certainly zero

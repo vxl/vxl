@@ -110,19 +110,19 @@ void vnl_discrete_diff_test_lsf(vnl_least_squares_function *lsf, vnl_vector<doub
   unsigned int m = lsf->get_number_of_residuals();
   unsigned int n = lsf->get_number_of_unknowns ();
   assert(x.size() == n);
-  
+
   vnl_matrix<double> J1(m, n);
   lsf->gradf(x, J1);
-  
+
   vnl_matrix<double> J2(m, n);
   vnl_discrete_diff_sym(lsf, 0.0001, x, J2);
-  
+
   double e = (J1 - J2).fro_norm();
   double t = cos_angle(J1, J2);
-  
+
   vcl_cerr << __FILE__ ": e = " << e << vcl_endl;
   vcl_cerr << __FILE__ ": t = " << t << vcl_endl;
-  
+
   //assert(e <= 1e-3);
   //assert(t >= 0.99);
 }

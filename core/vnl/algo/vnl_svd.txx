@@ -79,7 +79,7 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
     if (info != 0) {
       // If info is non-zero, it contains the number of singular values
       // for this the SVD algorithm failed to converge. The condition is
-      // not bogus. Even if the returned singular values are sensible, 
+      // not bogus. Even if the returned singular values are sensible,
       // the singular vectors can be utterly wrong.
 
       // It is possible the failure was due to NaNs or infinities in the
@@ -87,7 +87,7 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
       M.assert_finite();
 
       // If we get here it might be because
-      // 1. The scalar type has such 
+      // 1. The scalar type has such
       // extreme precision that too few iterations were performed to
       // converge to within machine precision (that is the svdc criterion).
       // One solution to that is to increase the maximum number of
@@ -106,7 +106,7 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
       // You may be able to diagnose the problem here by printing a warning message.
       vcl_cerr << __FILE__ ": suspicious return value (" << info << ") from SVDC\n"
                << __FILE__ ": M is " << M.rows() << 'x' << M.cols() << vcl_endl;
-      
+
       vnl_matlab_print(vcl_cerr, M, "M", vnl_matlab_print_format_long);
       valid_ = false;
     }
