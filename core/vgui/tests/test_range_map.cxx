@@ -3,6 +3,7 @@
 #include <vxl_config.h>
 #include <vgui/vgui_range_map.h>
 #include <vil/vil_pixel_traits.h>
+#include <vcl_vector.h>
 static void test_range_map()
 {
   //Test the range map parameter class
@@ -62,8 +63,8 @@ static void test_range_map()
   vgui_range_map_params_sptr Lrmpuc = new vgui_range_map_params(min, max);
   vgui_range_map<vxl_byte> Lrmuc(*Lrmpuc);
   vxl_byte val8 = Lrmuc.map_L_pixel(127);
-  vxl_byte* map8 = Lrmuc.Lmap();
-  float* fmap8 = Lrmuc.fLmap();
+  vcl_vector<vxl_byte> map8 = Lrmuc.Lmap();
+  vcl_vector<float> fmap8 = Lrmuc.fLmap();
   vxl_byte val8f = (vxl_byte)(fmap8[127]*255 + 0.5);
   unsigned size8 = Lrmuc.map_size();
   bool map_good = false;
@@ -82,7 +83,7 @@ static void test_range_map()
   vgui_range_map_params_sptr Lrmpsc = new vgui_range_map_params(-128,127);
   vgui_range_map<vxl_sbyte> Lrmsc(*Lrmpsc);
   vxl_byte valsc = Lrmsc.map_L_pixel(-64);
-  vxl_byte* mapsc = Lrmsc.Lmap();
+  vcl_vector<vxl_byte> mapsc = Lrmsc.Lmap();
   unsigned sizesc = Lrmsc.map_size();
   int offsc = Lrmsc.offset();
   map_good = false;
@@ -100,7 +101,7 @@ static void test_range_map()
   vgui_range_map_params_sptr Lrmpsh = new vgui_range_map_params(-128,127);
   vgui_range_map<short> Lrmsh(*Lrmpsh);
   vxl_byte valsh = Lrmsh.map_L_pixel(0);
-  vxl_byte* mapsh = Lrmsh.Lmap();
+  vcl_vector<vxl_byte> mapsh = Lrmsh.Lmap();
   unsigned sizesh = Lrmsh.map_size();
   int offsh = Lrmsh.offset();
   map_good = false;
@@ -119,7 +120,7 @@ static void test_range_map()
   vgui_range_map_params_sptr Lrmpush = new vgui_range_map_params(0,255);
   vgui_range_map<unsigned short> Lmush(*Lrmpush);
   vxl_byte valush = Lmush.map_L_pixel(128);
-  vxl_byte* mapush = Lmush.Lmap();
+  vcl_vector<vxl_byte> mapush = Lmush.Lmap();
   unsigned sizeush = Lmush.map_size();
   int offush = Lmush.offset();
   map_good = false;
@@ -153,12 +154,12 @@ static void test_range_map()
   vxl_byte Rval = RGBrmuc.map_R_pixel(127);
   vxl_byte Gval = RGBrmuc.map_G_pixel(127);
   vxl_byte Bval = RGBrmuc.map_B_pixel(127);
-  vxl_byte* Rmap = RGBrmuc.Rmap();
-  vxl_byte* Gmap = RGBrmuc.Gmap();
-  vxl_byte* Bmap = RGBrmuc.Bmap();
-  float* fRmap = RGBrmuc.fRmap();
-  float* fGmap = RGBrmuc.fGmap();
-  float* fBmap = RGBrmuc.fBmap();
+  vcl_vector<vxl_byte> Rmap = RGBrmuc.Rmap();
+  vcl_vector<vxl_byte> Gmap = RGBrmuc.Gmap();
+  vcl_vector<vxl_byte> Bmap = RGBrmuc.Bmap();
+  vcl_vector<float> fRmap = RGBrmuc.fRmap();
+  vcl_vector<float> fGmap = RGBrmuc.fGmap();
+  vcl_vector<float> fBmap = RGBrmuc.fBmap();
   unsigned RGBsize8 = RGBrmuc.map_size();
   map_good = false;
   if (RGBrmuc.mapable())

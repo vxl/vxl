@@ -91,40 +91,44 @@ map_pixel_float(const Type pix, const Type min, const Type max,
 }
 
 template <class Type>
-vxl_byte* vgui_range_map<Type>::
+vcl_vector<vxl_byte>  vgui_range_map<Type>::
 compute_byte_table(const Type min, const Type max, const Type gamma,
                    const long double ratio)
 {
-  vxl_byte* bmap =  new vxl_byte[size_];
+  vcl_vector<vxl_byte> bmap(size_);
   //there are two cases, signed and unsigned map domains
   if (!vil_pixel_traits<Type>::is_signed())
     for (unsigned int i = 0; i < size_; i++)
       bmap[i] = map_pixel_byte(Type(i), min, max, gamma, ratio);
   else
-  {
-    //The values have to be shifted by min
-    Type mint = vil_pixel_traits<Type>::minval();
-    Type maxt = vil_pixel_traits<Type>::maxval();
-    for (unsigned int i = 0; Type(mint+i) <= maxt; ++i)
-      bmap[i] = map_pixel_byte(Type(mint+i), min, max, gamma, ratio);
-  }
-  maps_.push_back(bmap);
-  return bmap;
+    {
+      //The values have to be shifted by min
+      int mint = vil_pixel_traits<Type>::minval();
+      int maxt = vil_pixel_traits<Type>::maxval();
+      for(int i = mint; i <= maxt; i++) 
+        {
+          Type arg = (Type)i;//eliminate warnings
+          bmap[i-mint] = map_pixel_byte(arg, min, max, gamma, ratio);
+        }
+    }
+	return bmap;
 }
 
 // Hardware mapping cannot support signed Types
 template <class Type>
-float* vgui_range_map<Type>::
+vcl_vector<float> vgui_range_map<Type>::
 compute_float_table(const Type min, const Type max, const Type gamma,
                     const long double ratio)
 {
   if (vil_pixel_traits<Type>::is_signed())
     return 0;
-  float* fmap =  new float[size_];
-  Type maxt = vil_pixel_traits<Type>::maxval();
-  for (unsigned int i = 0; Type(i) <= maxt; ++i)
-    fmap[i] = map_pixel_float(Type(i), min, max, gamma, ratio);
-  fmaps_.push_back(fmap);
+  vcl_vector<float> fmap(size_);
+  unsigned maxt = vil_pixel_traits<Type>::maxval();
+  for(int i = 0; i <= maxt; i++) 
+    {
+      Type arg = (Type)i;//eliminate warnings
+      fmap[i] = map_pixel_float(arg, min, max, gamma, ratio);
+    }
   return fmap;
 }
 
@@ -140,30 +144,25 @@ vgui_range_map<Type>::vgui_range_map(vgui_range_map_params const& rmp)
       vil_pixel_traits<Type>::num_bits()>16 ||
       vil_pixel_traits<Type>::real_number_field())
     table_mapable_ = false;
-  if (!table_mapable_)
-    size_ = 0;
   //A lookup table is used to represent the pixel mapping
   //The table will primarily be used for byte and short pixel types
   //and can handle direct lookup of the mapping
   if (table_mapable_)
     size_ = 1 << vil_pixel_traits<Type>::num_bits();
+
   //The table is not mapable so it will be necessary to compute
   //the mapping on the fly
+  if(!table_mapable_)
+    size_ = 0;
 }
 
 template <class Type>
 vgui_range_map<Type>::~vgui_range_map()
 {
-  for (vcl_vector<vxl_byte*>::iterator mit = maps_.begin();
-       mit!=maps_.end(); ++mit)
-    delete [] *mit;
-  for (vcl_vector<float*>::iterator fmit = fmaps_.begin();
-       fmit!=fmaps_.end(); ++fmit)
-    delete [] *fmit;
-}
 
-// The offset for signed, non field, types so that negative values can be
-// used as table index entries.
+}
+//: The offset for signed, non field, types so that negative values can be 
+//  used as table index entries.
 template <class Type>
 int vgui_range_map<Type>::offset()
 {
