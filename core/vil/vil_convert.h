@@ -105,7 +105,6 @@ inline void vil2_convert_cast_pixel<vxl_byte, vil_rgba<vxl_byte> >::operator ()
 //: Cast one pixel type to another (with rounding).
 // There must be a cast operator from inP to outP
 // \relates vil2_image_view
-// \relates vil2_convert.h
 template <class inP, class outP>
 inline void vil2_convert_cast(const vil2_image_view<inP >&src, vil2_image_view<outP >&dest)
 {
