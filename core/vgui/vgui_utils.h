@@ -14,11 +14,14 @@
 
 #include <vgui/vgui_gl.h>
 #include <vcl_vector.h>
+#include <vil1/vil1_rgb.h>
+#include <vil1/vil1_memory_image_of.h>
 
 //: Useful static functions for vgui.
-class vgui_utils
-{
- public:
+class vgui_utils {
+public:
+  //: Get an image corresponding to the OpenGL area
+  static vil1_memory_image_of<vil1_rgb<unsigned char> > colour_buffer_to_image();
   //: Dump the OpenGL area to the given image filename.
   static void dump_colour_buffer(char const *file);
 
@@ -42,7 +45,8 @@ class vgui_utils
   //: Returns the number of bits per pixel.
   static int bits_per_pixel(GLenum format, GLenum type);
 
- private:
+private:
+  static vil1_memory_image_of<vil1_rgb<GLubyte> > get_image();
   static void do_copy();
 };
 

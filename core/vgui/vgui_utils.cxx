@@ -10,17 +10,16 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 
-#include <vil1/vil1_rgb.h>
 #include <vil1/vil1_rgba.h>
-#include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_save.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>
 
 //------------------------------------------------------------------------------
-
-void vgui_utils::dump_colour_buffer(char const *file) {
+// copy the buffer into a memory image
+vil1_memory_image_of<vil1_rgb<GLubyte> > vgui_utils::get_image()
+{
   // get viewport size
   GLint vp[4]; // x,y,w,h
   glGetIntegerv(GL_VIEWPORT, vp);
@@ -65,10 +64,24 @@ void vgui_utils::dump_colour_buffer(char const *file) {
 
   //
   delete [] pixels;
-
-  //
-  vil1_save(colour_buffer, file);
+  return colour_buffer;
 }
+// return a memory image corresponding to the GL buffer
+vil1_memory_image_of<vil1_rgb<unsigned char> > 
+vgui_utils::colour_buffer_to_image()
+{
+  vil1_memory_image_of<vil1_rgb<GLubyte> > colour_buffer =
+    vgui_utils::get_image();
+  vil1_memory_image_of<vil1_rgb<unsigned char> > temp(colour_buffer);
+  return temp;
+}
+
+// write the GL buffer to a file
+void vgui_utils::dump_colour_buffer(char const *file) {
+  vil1_memory_image_of<vil1_rgb<GLubyte> > colour_buffer =
+    vgui_utils::get_image();
+  vil1_save(colour_buffer, file);
+}  
 
 //------------------------------------------------------------------------------
 
