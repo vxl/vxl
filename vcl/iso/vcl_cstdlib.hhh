@@ -38,8 +38,8 @@ using std::abort;
 using std::qsort;
 using std::free;
 using std::malloc;
-using std::strtol;
-using std::strtoul;
+//using std::strtol;
+//using std::strtoul;
 using std::realloc;
 using std::atof;
 

@@ -14,6 +14,8 @@
 # undef vcl_abs
 inline int  vcl_abs(int  x) { return x >= 0 ? x : -x; }
 inline long vcl_abs(long x) { return x >= 0 ? x : -x; }
+# define vcl_strtol  ::strtol
+# define vcl_strtoul ::strtoul
 
 #else
 # include "../iso/vcl_cstdlib.h"
