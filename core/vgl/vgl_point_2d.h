@@ -87,8 +87,8 @@ public:
   
   // Data Access-------------------------------------------------------------
 
-  inline Type x() const {return data_[0];}
-  inline Type y() const {return data_[1];}
+  inline Type const& x() const {return data_[0];}
+  inline Type const& y() const {return data_[1];}
   inline Type& x() {return data_[0];}
   inline Type& y() {return data_[1];}
 
