@@ -127,7 +127,7 @@ public:
 // - Assignment
   vcl_basic_string& operator= (const vcl_basic_string& str);
 
-// @{ CONSTRUCTORS @}
+// == CONSTRUCTORS ==
 
 //: Default ctor
   explicit vcl_basic_string (): data_(0),strlen_(0),current_size_(0) { }
@@ -169,7 +169,7 @@ public:
       delete [] data_;
     }
 
-// @{ APPENDING, ASSIGNMENT @}
+// == APPENDING, ASSIGNMENT ==
 
 //: append str[pos..pos+n] etc.
   vcl_basic_string& append (const vcl_basic_string& str, size_type pos = 0,
@@ -215,7 +215,7 @@ public:
   vcl_basic_string& operator+= (charT c)
     { return append (1, c); }
 
-// @{ INSERTION @}
+// == INSERTION ==
 
 //: insert str[pos2..pos2+n] after position pos1.
   vcl_basic_string& insert (size_type pos1, const vcl_basic_string& str,
@@ -246,7 +246,7 @@ public:
     void insert(iterator p, InputIterator first, InputIterator last);
 #endif
 
-// @{ ERASING @}
+// == ERASING ==
 
 //: erase [pos..pos+n]
   vcl_basic_string& erase (size_type pos = 0, size_type n = npos)
@@ -265,7 +265,7 @@ public:
       return begin() + __o; }
 
 
-// @{ REPLACING @}
+// == REPLACING ==
 
 //: replace this[pos1..pos1+n1] with str[pos2..pos2+n2].
   vcl_basic_string& replace (size_type pos1, size_type n1, const vcl_basic_string& str,
@@ -304,7 +304,7 @@ public:
     { return replace(i1 - begin(), i2-i1, j1, j2-j1); }
 #endif
 
-// @{ MISCELLANEOUS @}
+// == MISCELLANEOUS ==
 
 //: swap with that.
   void swap (vcl_basic_string &that) {
@@ -352,7 +352,7 @@ public:
 //: Take a copy of s[0..n], placing after pos.
   size_type copy (charT* s, size_type n, size_type pos = 0);
 
-// @{ SEARCHING @}
+// == SEARCHING ==
 
 //: Return index of first occurrence of str, starting at pos.
   size_type find (const vcl_basic_string& str, size_type pos = 0) const
@@ -410,7 +410,7 @@ public:
   vcl_basic_string substr (size_type pos = 0, size_type n = npos) const
     { return vcl_basic_string (*this, pos, n); }
 
-// @{ COMPARISON @}
+// == COMPARISON ==
 
 //: Return -,0,+ comparing str to this[pos,pos+n].
   int compare (const vcl_basic_string& str, size_type pos = 0, size_type n = npos) const;
@@ -419,7 +419,7 @@ public:
   int compare (const charT* s, size_type pos = 0) const
     { return compare (s, pos, traits::length (s)); }
 
-// @{ STL ITERATORS @}
+// == STL ITERATORS ==
 
   iterator begin () { return data_; }
 
@@ -505,21 +505,21 @@ inline bool
 operator== (const vcl_basic_string <charT, traits>& lhs,
             const vcl_basic_string <charT, traits>& rhs)
 {
-  return (lhs.compare (rhs) == 0);
+  return lhs.compare (rhs) == 0;
 }
 
 template <class charT, class traits>
 inline bool
 operator== (const charT* lhs, const vcl_basic_string <charT, traits>& rhs)
 {
-  return (rhs.compare (lhs) == 0);
+  return rhs.compare (lhs) == 0;
 }
 
 template <class charT, class traits>
 inline bool
 operator== (const vcl_basic_string <charT, traits>& lhs, const charT* rhs)
 {
-  return (lhs.compare (rhs) == 0);
+  return lhs.compare (rhs) == 0;
 }
 
 template <class charT, class traits>
@@ -549,63 +549,63 @@ inline bool
 operator< (const vcl_basic_string <charT, traits>& lhs,
            const vcl_basic_string <charT, traits>& rhs)
 {
-  return (lhs.compare (rhs) < 0);
+  return lhs.compare (rhs) < 0;
 }
 
 template <class charT, class traits>
 inline bool
 operator< (const charT* lhs, const vcl_basic_string <charT, traits>& rhs)
 {
-  return (rhs.compare (lhs) > 0);
+  return rhs.compare (lhs) > 0;
 }
 
 template <class charT, class traits>
 inline bool
 operator< (const vcl_basic_string <charT, traits>& lhs, const charT* rhs)
 {
-  return (lhs.compare (rhs) < 0);
+  return lhs.compare (rhs) < 0;
 }
 
 template <class charT, class traits>
 inline bool
 operator> (const charT* lhs, const vcl_basic_string <charT, traits>& rhs)
 {
-  return (rhs.compare (lhs) < 0);
+  return rhs.compare (lhs) < 0;
 }
 
 template <class charT, class traits>
 inline bool
 operator> (const vcl_basic_string <charT, traits>& lhs, const charT* rhs)
 {
-  return (lhs.compare (rhs) > 0);
+  return lhs.compare (rhs) > 0;
 }
 
 template <class charT, class traits>
 inline bool
 operator<= (const charT* lhs, const vcl_basic_string <charT, traits>& rhs)
 {
-  return (rhs.compare (lhs) >= 0);
+  return rhs.compare (lhs) >= 0;
 }
 
 template <class charT, class traits>
 inline bool
 operator<= (const vcl_basic_string <charT, traits>& lhs, const charT* rhs)
 {
-  return (lhs.compare (rhs) <= 0);
+  return lhs.compare (rhs) <= 0;
 }
 
 template <class charT, class traits>
 inline bool
 operator>= (const charT* lhs, const vcl_basic_string <charT, traits>& rhs)
 {
-  return (rhs.compare (lhs) <= 0);
+  return rhs.compare (lhs) <= 0;
 }
 
 template <class charT, class traits>
 inline bool
 operator>= (const vcl_basic_string <charT, traits>& lhs, const charT* rhs)
 {
-  return (lhs.compare (rhs) >= 0);
+  return lhs.compare (rhs) >= 0;
 }
 
 // Kludge this until g++ supports the new template overloading semantics.
@@ -621,7 +621,7 @@ inline bool
 operator!= (const vcl_basic_string <charT, traits>& lhs,
             const vcl_basic_string <charT, traits>& rhs)
 {
-  return (lhs.compare (rhs) != 0);
+  return lhs.compare (rhs) != 0;
 }
 #endif
 
@@ -630,7 +630,7 @@ inline bool
 operator> (const vcl_basic_string <charT, traits>& lhs,
            const vcl_basic_string <charT, traits>& rhs)
 {
-  return (lhs.compare (rhs) > 0);
+  return lhs.compare (rhs) > 0;
 }
 
 template <class charT, class traits>
@@ -638,7 +638,7 @@ inline bool
 operator<= (const vcl_basic_string <charT, traits>& lhs,
             const vcl_basic_string <charT, traits>& rhs)
 {
-  return (lhs.compare (rhs) <= 0);
+  return lhs.compare (rhs) <= 0;
 }
 
 template <class charT, class traits>
@@ -646,7 +646,7 @@ inline bool
 operator>= (const vcl_basic_string <charT, traits>& lhs,
             const vcl_basic_string <charT, traits>& rhs)
 {
-  return (lhs.compare (rhs) >= 0);
+  return lhs.compare (rhs) >= 0;
 }
 #endif
 // #endif

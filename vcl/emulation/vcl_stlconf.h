@@ -51,13 +51,3 @@
 #ifndef __DFL_TYPE_PARAM_STLDECL
 #define __DFL_TYPE_PARAM_STLDECL(A,a) __DFL_TYPE_PARAM(A,a)
 #endif
-
-// IUE hack to support implicit template instantiation with SunPro
-#if defined(__SUNPRO_CC)
-# ifndef IUEi_STL_INLINE
-#  define IUEi_STL_INLINE /* */
-# endif
-#else
-# define IUEi_STL_INLINE inline
-#endif
-

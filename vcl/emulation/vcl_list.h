@@ -238,7 +238,7 @@ public:
 protected:
     link_type get_node() { return list_node_allocator::allocate(); }
     void put_node(link_type p) { list_node_allocator::deallocate(p); }
-    IUEi_STL_INLINE void clear();
+    inline void clear();
 };
 
 template <class T, class Alloc>
@@ -328,10 +328,9 @@ public:
         return tmp;
     }
     iterator insert(iterator position) { return insert(position, T()); }
-    IUEi_STL_INLINE void insert(iterator position, const T* first, const T* last);
-    IUEi_STL_INLINE void insert(iterator position, const_iterator first,
-                const_iterator last);
-    IUEi_STL_INLINE void insert(iterator position, size_type n, const T& x);
+    inline void insert(iterator position, const T* first, const T* last);
+    inline void insert(iterator position, const_iterator first, const_iterator last);
+    inline void insert(iterator position, size_type n, const T& x);
     void push_front(const T& x) { insert(begin(), x); }
     void push_back(const T& x) { insert(end(), x); }
     void erase(iterator position) {
@@ -344,10 +343,10 @@ public:
         --length;
         __stl_debug_do(invalidate_iterator(position));
     }
-    IUEi_STL_INLINE void erase(iterator first, iterator last);
-    IUEi_STL_INLINE void resize(size_type new_size, const T& x);
+    inline void erase(iterator first, iterator last);
+    inline void resize(size_type new_size, const T& x);
     void resize(size_type new_size) { resize(new_size, T()); }
-    IUEi_STL_INLINE void clear();
+    inline void clear();
 
     void pop_front() { erase(begin()); }
     void pop_back() {
@@ -370,12 +369,7 @@ public:
         insert(begin(), x.begin(), x.end());
     }
     ~vcl_list() {}
-#ifdef __SUNPRO_CC
-inline
-#else
-    IUEi_STL_INLINE
-#endif
-      self& operator=(const self& x);
+    inline self& operator=(const self& x);
 
 protected:
     void transfer(iterator position, iterator first, iterator last) {
@@ -427,11 +421,11 @@ public:
             __stl_debug_do(x.invalidate_all());
         }
     }
-    IUEi_STL_INLINE void remove(const T& value);
-    IUEi_STL_INLINE void unique();
-    IUEi_STL_INLINE void merge(vcl_list<T, Alloc>& x);
-    IUEi_STL_INLINE void reverse();
-    IUEi_STL_INLINE void sort();
+    inline void remove(const T& value);
+    inline void unique();
+    inline void merge(vcl_list<T, Alloc>& x);
+    inline void reverse();
+    inline void sort();
 };
 
 # if defined (__STL_NESTED_TYPE_PARAM_BUG)
@@ -447,7 +441,7 @@ INLINE_LOOP void vcl_list<T, Alloc>::insert(iterator position, const T* first, c
 
 template <class T, class Alloc>
 INLINE_LOOP void vcl_list<T, Alloc>::insert(iterator position, const_iterator first,
-                     const_iterator last) {
+                                            const_iterator last) {
     for (; first != last; ++first) insert(position, *first);
 }
 

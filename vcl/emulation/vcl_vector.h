@@ -134,7 +134,7 @@ public:
     typedef vcl_reverse_iterator<iterator, value_type, reference,
                                  difference_type> reverse_iterator;
 protected:
-    IUEi_STL_INLINE void insert_aux(pointer position, const T& x);
+    inline void insert_aux(pointer position, const T& x);
 public:
     pointer begin_() { return start; }
     const_pointer begin_() const { return start; }
@@ -184,7 +184,7 @@ public:
         finish = vcl_uninitialized_copy(__ptr(first), __ptr(last), start);
     }
     ~vcl_vector() {}
-    IUEi_STL_INLINE self& operator=(const self& x);
+    inline self& operator=(const self& x);
     void reserve(size_type n) {
         const size_type old_size(size());
         if (capacity() < n) {
@@ -245,8 +245,8 @@ public:
         return begin()+n;
     }
     iterator insert(iterator position) { return insert(position, T()); }
-    IUEi_STL_INLINE void insert (iterator position, size_type n, const T& x);
-    IUEi_STL_INLINE void insert (iterator position, const_iterator first, const_iterator last);
+    inline void insert (iterator position, size_type n, const T& x);
+    inline void insert (iterator position, const_iterator first, const_iterator last);
 
     void pop_back() {
         __stl_verbose_assert(!empty(), __STL_MSG_EMPTY_CONTAINER);
@@ -382,7 +382,7 @@ void vcl_vector<T, Alloc>::insert(__iterator__ position, __size_type__ n, const 
 
 template <class T, class Alloc>
 void vcl_vector<T, Alloc>::insert(__iterator__ position, __const_iterator__ first,
-                              __const_iterator__ last) {
+                                  __const_iterator__ last) {
     if (first == last) return;
     size_type n = 0;
     vcl_distance(first, last, n);

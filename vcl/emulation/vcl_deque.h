@@ -359,7 +359,7 @@ protected:
     return __deque_buf_size(sizeof(value_type)); }
   static size_type init_map_size() {
     return __deque_buf_size(sizeof(pointer)); }
-  IUEi_STL_INLINE void deallocate_at_begin();
+  inline void deallocate_at_begin();
 public:
   typedef vcl_simple_alloc<value_type*, allocator_type> map_allocator;
   typedef vcl_simple_alloc<value_type, allocator_type> data_allocator;
@@ -411,9 +411,9 @@ public:
           reverse_iterator;
 protected:
   typedef pointer* map_pointer;
-  IUEi_STL_INLINE void allocate_at_begin();
-  IUEi_STL_INLINE void allocate_at_end();
-  IUEi_STL_INLINE void deallocate_at_end();
+  inline void allocate_at_begin();
+  inline void allocate_at_end();
+  inline void deallocate_at_end();
 public:
   vcl_deque() { }
   iterator begin() { return start; }
@@ -440,8 +440,8 @@ public:
 private:
 
 #  if defined (__STL_USE_EXCEPTIONS)
-  IUEi_STL_INLINE void push_back_cleanup(int steps_remaining);
-  IUEi_STL_INLINE void push_front_cleanup(int steps_remaining, bool allocated_at_begin);
+  inline void push_back_cleanup(int steps_remaining);
+  inline void push_front_cleanup(int steps_remaining, bool allocated_at_begin);
   class push_back_protector;
   friend class push_back_protector;
   class push_back_protector
@@ -534,15 +534,15 @@ public:
     vcl_swap(map_size, x.map_size);
     __stl_debug_do(swap_owners(x));
   }
-  IUEi_STL_INLINE iterator insert(iterator position, const T& x);
+  inline iterator insert(iterator position, const T& x);
   iterator insert(iterator position) { return insert(position, T()); }
-  IUEi_STL_INLINE void insert(iterator position, size_type n, const T& x);
+  inline void insert(iterator position, size_type n, const T& x);
 //template <class Iterator> void insert(iterator position,
 //                                      Iterator first, Iterator last);
-  IUEi_STL_INLINE void insert(iterator position, const T* first, const T* last);
-  IUEi_STL_INLINE void insert(iterator position, const_iterator first, const_iterator last);
-  IUEi_STL_INLINE void erase(iterator position);
-  IUEi_STL_INLINE void erase(iterator first, iterator last);
+  inline void insert(iterator position, const T* first, const T* last);
+  inline void insert(iterator position, const_iterator first, const_iterator last);
+  inline void erase(iterator position);
+  inline void erase(iterator first, iterator last);
   void resize(size_type new_size, const T& x) {
     if (new_size < size())
       erase(begin() + new_size, end());
@@ -920,13 +920,13 @@ operator<(const vcl_deque<T>& x, const vcl_deque<T>& y) {
 # endif /* __STL_DEFAULT_TYPE_PARAM */
 
 template <class T, class Alloc>
-IUEi_STL_INLINE
+inline
 bool operator==(const __deque__<T, Alloc>& x, const __deque__<T, Alloc>& y) {
   return x.size() == y.size() && vcl_equal(x.begin(), x.end(), y.begin());
 }
 
 template <class T, class Alloc>
-IUEi_STL_INLINE
+inline
 bool operator<(const __deque__<T, Alloc>& x, const __deque__<T, Alloc>& y) {
   return lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());
 }

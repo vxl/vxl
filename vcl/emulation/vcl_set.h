@@ -82,15 +82,13 @@ public:
     vcl_set(const value_type* first, const value_type* last) : t(Compare()) {
           t.insert_unique(first, last);
     }
-    vcl_set(const value_type* first, const value_type* last,
-             const Compare& comp) : t(comp) {
+    vcl_set(const value_type* first, const value_type* last, const Compare& comp) : t(comp) {
           t.insert_unique(first, last);
     }
     vcl_set(const_iterator first, const_iterator last ) : t(Compare()) {
                t.insert_unique(first, last);
     }
-    vcl_set(const_iterator first, const_iterator last,
-        const Compare& comp) : t(comp) {
+    vcl_set(const_iterator first, const_iterator last, const Compare& comp) : t(comp) {
                t.insert_unique(first, last);
     }
     vcl_set(const self& x) : t(x.t) {}
@@ -156,8 +154,8 @@ public:
     vcl_pair<iterator,iterator> equal_range(const key_type& x) const {
         return t.equal_range(x);
     }
-  friend IUEi_STL_INLINE bool operator==(const self&, const self&);
-  friend IUEi_STL_INLINE bool operator<(const self&, const self&);
+  friend inline bool operator==(const self&, const self&);
+  friend inline bool operator<(const self&, const self&);
 };
 __END_STL_FULL_NAMESPACE
 

@@ -35,7 +35,7 @@
 #include "vcl_bool.h"
 
 template <class RandomAccessIterator, class Distance, class T>
-IUEi_STL_INLINE
+inline
 void __push_heap(RandomAccessIterator first, Distance holeIndex,
                  Distance topIndex, T value) {
     Distance parent = (holeIndex - 1) / 2;
@@ -60,7 +60,7 @@ inline void vcl_push_heap(RandomAccessIterator first, RandomAccessIterator last)
 }
 
 template <class RandomAccessIterator, class Distance, class T, class Compare>
-IUEi_STL_INLINE
+inline
 void __push_heap(RandomAccessIterator first, Distance holeIndex,
                  Distance topIndex, T value, Compare comp) {
     Distance parent = (holeIndex - 1) / 2;
@@ -85,7 +85,7 @@ inline void vcl_push_heap(RandomAccessIterator first, RandomAccessIterator last,
 }
 
 template <class RandomAccessIterator, class Distance, class T>
-IUEi_STL_INLINE
+inline
 void __adjust_heap(RandomAccessIterator first, Distance holeIndex, Distance len, T value) {
     Distance topIndex = holeIndex;
     Distance secondChild = 2 * holeIndex + 2;
@@ -122,7 +122,7 @@ inline void vcl_pop_heap(RandomAccessIterator first, RandomAccessIterator last) 
 }
 
 template <class RandomAccessIterator, class Distance, class T, class Compare>
-IUEi_STL_INLINE
+inline
 void __adjust_heap(RandomAccessIterator first, Distance holeIndex,
                    Distance len, T value, Compare comp) {
     Distance topIndex = holeIndex;
@@ -161,7 +161,7 @@ inline void vcl_pop_heap(RandomAccessIterator first, RandomAccessIterator last, 
 }
 
 template <class RandomAccessIterator, class T, class Distance>
-IUEi_STL_INLINE
+inline
 void __make_heap(RandomAccessIterator first, RandomAccessIterator last, T*,
                  Distance*) {
     if (last - first < 2) return;
@@ -181,7 +181,7 @@ inline void vcl_make_heap(RandomAccessIterator first, RandomAccessIterator last)
 }
 
 template <class RandomAccessIterator, class Compare, class T, class Distance>
-IUEi_STL_INLINE
+inline
 void __make_heap(RandomAccessIterator first, RandomAccessIterator last,
                  Compare comp, T*, Distance*) {
     if (last - first < 2) return;
@@ -201,13 +201,13 @@ inline void vcl_make_heap(RandomAccessIterator first, RandomAccessIterator last,
 }
 
 template <class RandomAccessIterator>
-IUEi_STL_INLINE
+inline
 void sort_heap(RandomAccessIterator first, RandomAccessIterator last) {
     while (last - first > 1) vcl_pop_heap(first, last--);
 }
 
 template <class RandomAccessIterator, class Compare>
-IUEi_STL_INLINE
+inline
 void sort_heap(RandomAccessIterator first, RandomAccessIterator last, Compare comp) {
     while (last - first > 1) vcl_pop_heap(first, last--, comp);
 }

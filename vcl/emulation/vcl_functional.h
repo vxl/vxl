@@ -277,7 +277,7 @@ public:
 
 template <class Operation1, class Operation2>
 inline vcl_unary_compose<Operation1, Operation2> compose1(const Operation1& op1,
-                                                      const Operation2& op2) {
+                                                          const Operation2& op2) {
   return vcl_unary_compose<Operation1, Operation2>(op1, op2);
 }
 
@@ -291,7 +291,7 @@ protected:
     Operation3 op3;
 public:
     vcl_binary_compose(const Operation1& x, const Operation2& y,
-                   const Operation3& z) : op1(x), op2(y), op3(z) { }
+                       const Operation3& z) : op1(x), op2(y), op3(z) { }
     typename __BINARY_ARG(Operation1,result_type)
     operator()(const typename __UNARY_ARG(Operation2,argument_type)& x) const {
         return op1(op2(x), op3(x));
@@ -444,7 +444,7 @@ public:
     table[index1] = table[index1] - table[index2];
     return table[index1] % limit;
   }
-  IUEi_STL_INLINE void initialize(T seed);
+  inline void initialize(T seed);
 };
 
 template <class T>

@@ -49,8 +49,8 @@
 
 template <class T, VCL_DFL_TMPL_PARAM_STLDECL(Sequence,vcl_vector<T>) >
 class vcl_stack {
-friend IUEi_STL_INLINE bool operator==(const vcl_stack<T, Sequence>& x, const vcl_stack<T, Sequence>& y);
-friend IUEi_STL_INLINE bool operator<(const vcl_stack<T, Sequence>& x, const vcl_stack<T, Sequence>& y);
+friend inline bool operator==(const vcl_stack<T, Sequence>& x, const vcl_stack<T, Sequence>& y);
+friend inline bool operator<(const vcl_stack<T, Sequence>& x, const vcl_stack<T, Sequence>& y);
 public:
     typedef typename Sequence::value_type value_type;
     typedef typename Sequence::size_type size_type;
@@ -66,13 +66,13 @@ public:
 };
 
 template <class T, class Sequence>
-IUEi_STL_INLINE
+inline
 bool operator==(const vcl_stack<T, Sequence>& x, const vcl_stack<T, Sequence>& y) {
     return x.c == y.c;
 }
 
 template <class T, class Sequence>
-IUEi_STL_INLINE
+inline
 bool operator<(const vcl_stack<T, Sequence>& x, const vcl_stack<T, Sequence>& y) {
     return x.c < y.c;
 }
@@ -80,8 +80,8 @@ bool operator<(const vcl_stack<T, Sequence>& x, const vcl_stack<T, Sequence>& y)
 
 template <class T, VCL_DFL_TMPL_PARAM_STLDECL(Sequence,vcl_deque<T>) >
 class vcl_queue {
-friend IUEi_STL_INLINE bool operator==(const vcl_queue<T, Sequence>& x, const vcl_queue<T, Sequence>& y);
-friend IUEi_STL_INLINE bool operator<(const vcl_queue<T, Sequence>& x, const vcl_queue<T, Sequence>& y);
+friend inline bool operator==(const vcl_queue<T, Sequence>& x, const vcl_queue<T, Sequence>& y);
+friend inline bool operator<(const vcl_queue<T, Sequence>& x, const vcl_queue<T, Sequence>& y);
 public:
     typedef typename Sequence::value_type value_type;
     typedef typename Sequence::size_type size_type;
@@ -99,13 +99,13 @@ public:
 };
 
 template <class T, class Sequence>
-IUEi_STL_INLINE
+inline
 bool operator==(const vcl_queue<T, Sequence>& x, const vcl_queue<T, Sequence>& y) {
     return x.c == y.c;
 }
 
 template <class T, class Sequence>
-IUEi_STL_INLINE
+inline
 bool operator<(const vcl_queue<T, Sequence>& x, const vcl_queue<T, Sequence>& y) {
     return x.c < y.c;
 }

@@ -93,7 +93,7 @@ public:
         t.insert_equal(first, last);
   }
   vcl_multimap(const value_type* first, const value_type* last,
-      const Compare& comp) : t(comp) {
+               const Compare& comp) : t(comp) {
         t.insert_equal(first, last);
   }
   vcl_multimap(const_iterator first, const_iterator last) :
@@ -101,7 +101,7 @@ public:
         t.insert_equal(first, last);
   }
   vcl_multimap(const_iterator first, const_iterator last,
-      const Compare& comp) : t(comp) {
+               const Compare& comp) : t(comp) {
         t.insert_equal(first, last);
   }
   vcl_multimap(const self& x) : t(x.t) { }
@@ -164,8 +164,8 @@ public:
   vcl_pair<const_iterator,const_iterator> equal_range(const key_type& x) const {
     return t.equal_range(x);
   }
-  friend IUEi_STL_INLINE bool operator==(const self&, const self&);
-  friend IUEi_STL_INLINE bool operator<(const self&, const self&);
+  friend inline bool operator==(const self&, const self&);
+  friend inline bool operator<(const self&, const self&);
 };
 __END_STL_FULL_NAMESPACE
 
@@ -208,11 +208,11 @@ public:
     vcl_multimap(const typename super::value_type* first, const typename super::value_type* last) :
         super(first, last, Compare()) { }
     vcl_multimap(const typename super::value_type* first, const typename super::value_type* last,
-        const Compare& comp) : super(first, last, comp) { }
+                 const Compare& comp) : super(first, last, comp) { }
     vcl_multimap(typename super::const_iterator first, typename super::const_iterator last) :
         super(first, last, Compare()) { }
     vcl_multimap(typename super::const_iterator first, typename super::const_iterator last,
-        const Compare& comp) : super(first, last, comp) { }
+                 const Compare& comp) : super(first, last, comp) { }
 };
 
 #  if defined (__STL_BASE_MATCH_BUG)

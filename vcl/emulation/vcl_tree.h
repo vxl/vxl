@@ -569,8 +569,8 @@ protected:
 #  endif
         return z;
     }
-    static IUEi_STL_INLINE link_type __copy_aux(link_type x, link_type p);
-    static IUEi_STL_INLINE void __erase(link_type x);
+    static inline link_type __copy_aux(link_type x, link_type p);
+    static inline void __erase(link_type x);
     static inline link_type __copy(link_type x, link_type p);
 
 public:
@@ -609,7 +609,7 @@ protected:
   static const Key& key(link_type x) { return KeyOfValue()(value(x)); }
   static const Key& key(base_ptr x) { return KeyOfValue()(value(link_type(x)));}
 private:
-  IUEi_STL_INLINE iterator __insert(base_ptr x, base_ptr y, const value_type& v);
+  inline iterator __insert(base_ptr x, base_ptr y, const value_type& v);
   void init() {
       root() = 0;
       leftmost() = header;
@@ -633,7 +633,7 @@ public:
   }
 
   ~rb_tree() { clear();}
-  IUEi_STL_INLINE self& operator=(const self& x);
+  inline self& operator=(const self& x);
 
 public:
   // accessors:
@@ -744,8 +744,8 @@ public:
     }
   }
 
-  void insert_unique(const_iterator first, const_iterator last){  while (first != last) insert_unique(*first++);};
-  void insert_unique(const value_type* first, const value_type* last){  while (first != last) insert_unique(*first++);};
+  void insert_unique(const_iterator    first, const_iterator    last){while (first != last) insert_unique(*first++);}
+  void insert_unique(const value_type* first, const value_type* last){while (first != last) insert_unique(*first++);}
   void insert_equal(const_iterator first, const_iterator last) {
     while (first != last) insert_equal(*first++);
   }
@@ -754,25 +754,25 @@ public:
     while (first != last) insert_equal(*first++);
   }
 
-  IUEi_STL_INLINE void erase(iterator position);
-  IUEi_STL_INLINE void erase(iterator first, iterator last);
-  IUEi_STL_INLINE size_type erase(const key_type& x);
-  IUEi_STL_INLINE void erase(const key_type* first, const key_type* last);
+  inline void erase(iterator position);
+  inline void erase(iterator first, iterator last);
+  inline size_type erase(const key_type& x);
+  inline void erase(const key_type* first, const key_type* last);
 
 public:
                                 // vcl_set operations:
-  IUEi_STL_INLINE iterator find(const key_type& x);
-  IUEi_STL_INLINE const_iterator find(const key_type& x) const;
-  IUEi_STL_INLINE size_type count(const key_type& x) const;
-  IUEi_STL_INLINE iterator lower_bound(const key_type& x);
-  IUEi_STL_INLINE const_iterator lower_bound(const key_type& x) const;
-  IUEi_STL_INLINE iterator upper_bound(const key_type& x);
-  IUEi_STL_INLINE const_iterator upper_bound(const key_type& x) const;
-  IUEi_STL_INLINE vcl_pair<iterator,iterator> equal_range(const key_type& x);
-  IUEi_STL_INLINE vcl_pair<const_iterator, const_iterator> equal_range(const key_type& x) const;
+  inline iterator find(const key_type& x);
+  inline const_iterator find(const key_type& x) const;
+  inline size_type count(const key_type& x) const;
+  inline iterator lower_bound(const key_type& x);
+  inline const_iterator lower_bound(const key_type& x) const;
+  inline iterator upper_bound(const key_type& x);
+  inline const_iterator upper_bound(const key_type& x) const;
+  inline vcl_pair<iterator,iterator> equal_range(const key_type& x);
+  inline vcl_pair<const_iterator, const_iterator> equal_range(const key_type& x) const;
 public:
                                 // Debugging.
-  IUEi_STL_INLINE bool __rb_verify() const;
+  inline bool __rb_verify() const;
 };
 
 // fbp: these defines are for outline methods definitions.
@@ -909,7 +909,7 @@ __rb_tree_base<Value, Alloc>::__copy(__rb_tree_node<Value>* x, __rb_tree_node<Va
 }
 
 template <class Value, class Alloc>
-IUEi_STL_INLINE
+inline
 __rb_tree_node<Value>*
 __rb_tree_base<Value, Alloc>::__copy_aux(__rb_tree_node<Value>* x,
                                          __rb_tree_node<Value>* p) {
@@ -932,7 +932,7 @@ __rb_tree_base<Value, Alloc>::__copy_aux(__rb_tree_node<Value>* x,
 
 
 template <class Value, class Alloc>
-IUEi_STL_INLINE
+inline
 void __rb_tree_base<Value, Alloc>::__erase(__rb_tree_node<Value>* x) {
     // erase without rebalancing
     while (x != 0) {
@@ -956,7 +956,7 @@ rb_tree<Key, Value, KeyOfValue, Compare, Alloc>::erase(__iterator__ first,
 
 template <class Key, class Value, class KeyOfValue, class Compare, class Alloc>
 void rb_tree<Key, Value, KeyOfValue, Compare, Alloc>::erase(const Key* first,
-                      const Key* last) {
+                                                            const Key* last) {
     while (first != last) erase(*first++);
 }
 

@@ -115,10 +115,10 @@ public:
   vcl_hash_map(const value_type* f, const value_type* l, size_type n)
     : rep(n, hasher(), key_equal()) { rep.insert_unique(f, l); }
   vcl_hash_map(const value_type* f, const value_type* l, size_type n,
-           const hasher& hf)
+               const hasher& hf)
     : rep(n, hf, key_equal()) { rep.insert_unique(f, l); }
   vcl_hash_map(const value_type* f, const value_type* l, size_type n,
-           const hasher& hf, const key_equal& eql)
+               const hasher& hf, const key_equal& eql)
     : rep(n, hf, eql) { rep.insert_unique(f, l); }
 
   vcl_hash_map(const_iterator f, const_iterator l)
@@ -126,10 +126,10 @@ public:
   vcl_hash_map(const_iterator f, const_iterator l, size_type n)
     : rep(n, hasher(), key_equal()) { rep.insert_unique(f, l); }
   vcl_hash_map(const_iterator f, const_iterator l, size_type n,
-           const hasher& hf)
+               const hasher& hf)
     : rep(n, hf, key_equal()) { rep.insert_unique(f, l); }
   vcl_hash_map(const_iterator f, const_iterator l, size_type n,
-           const hasher& hf, const key_equal& eql)
+               const hasher& hf, const key_equal& eql)
     : rep(n, hf, eql) { rep.insert_unique(f, l); }
 
 public:
@@ -219,10 +219,10 @@ public:
   vcl_hash_multimap(const value_type* f, const value_type* l, size_type n)
     : rep(n, hasher(), key_equal()) { rep.insert_equal(f, l); }
   vcl_hash_multimap(const value_type* f, const value_type* l, size_type n,
-           const hasher& hf)
+                    const hasher& hf)
     : rep(n, hf, key_equal()) { rep.insert_equal(f, l); }
   vcl_hash_multimap(const value_type* f, const value_type* l, size_type n,
-           const hasher& hf, const key_equal& eql)
+                    const hasher& hf, const key_equal& eql)
     : rep(n, hf, eql) { rep.insert_equal(f, l); }
 
   vcl_hash_multimap(const_iterator f, const_iterator l)
@@ -230,10 +230,10 @@ public:
   vcl_hash_multimap(const_iterator f, const_iterator l, size_type n)
     : rep(n, hasher(), key_equal()) { rep.insert_equal(f, l); }
   vcl_hash_multimap(const_iterator f, const_iterator l, size_type n,
-           const hasher& hf)
+                    const hasher& hf)
     : rep(n, hf, key_equal()) { rep.insert_equal(f, l); }
   vcl_hash_multimap(const_iterator f, const_iterator l, size_type n,
-           const hasher& hf, const key_equal& eql)
+                    const hasher& hf, const key_equal& eql)
     : rep(n, hf, eql) { rep.insert_equal(f, l); }
 
 public:
@@ -331,16 +331,16 @@ public:
   vcl_hash_map(const value_type* f, const value_type* l) : super(f,l) {}
   vcl_hash_map(const value_type* f, const value_type* l, size_type n): super(f,l,n) {}
   vcl_hash_map(const value_type* f, const value_type* l, size_type n,
-           const hasher& hf) : super(f,l,n,hf) {}
+               const hasher& hf) : super(f,l,n,hf) {}
   vcl_hash_map(const value_type* f, const value_type* l, size_type n,
-           const hasher& hf, const key_equal& eql) : super(f,l,n,hf, eql) {}
+               const hasher& hf, const key_equal& eql) : super(f,l,n,hf, eql) {}
   vcl_hash_map(const_iterator f, const_iterator l) : super(f,l) { }
   vcl_hash_map(const_iterator f, const_iterator l, size_type n) : super(f,l,n) { }
   vcl_hash_map(const_iterator f, const_iterator l, size_type n,
-           const hasher& hf) : super(f, l, n, hf) { }
+               const hasher& hf) : super(f, l, n, hf) { }
   vcl_hash_map(const_iterator f, const_iterator l, size_type n,
-           const hasher& hf, const key_equal& eql) : super(f, l, n, hf, eql) { }
-  friend IUEi_STL_INLINE bool operator==(const self& hm1, const self& hm2);
+               const hasher& hf, const key_equal& eql) : super(f, l, n, hf, eql) { }
+  friend inline bool operator==(const self& hm1, const self& hm2);
 };
 
 
@@ -373,17 +373,17 @@ public:
   vcl_hash_multimap(const value_type* f, const value_type* l) : super(f,l) {}
   vcl_hash_multimap(const value_type* f, const value_type* l, size_type n): super(f,l,n) {}
   vcl_hash_multimap(const value_type* f, const value_type* l, size_type n,
-           const hasher& hf) : super(f,l,n,hf) {}
+                    const hasher& hf) : super(f,l,n,hf) {}
   vcl_hash_multimap(const value_type* f, const value_type* l, size_type n,
-           const hasher& hf, const key_equal& eql) : super(f,l,n,hf, eql) {}
+                    const hasher& hf, const key_equal& eql) : super(f,l,n,hf, eql) {}
 
   vcl_hash_multimap(const_iterator f, const_iterator l) : super(f,l) { }
   vcl_hash_multimap(const_iterator f, const_iterator l, size_type n) : super(f,l,n) { }
   vcl_hash_multimap(const_iterator f, const_iterator l, size_type n,
-           const hasher& hf) : super(f, l, n, hf) { }
+                    const hasher& hf) : super(f, l, n, hf) { }
   vcl_hash_multimap(const_iterator f, const_iterator l, size_type n,
-           const hasher& hf, const key_equal& eql) : super(f, l, n, hf, eql) { }
-  friend IUEi_STL_INLINE bool operator==(const self& hm1, const self& hm2);
+                    const hasher& hf, const key_equal& eql) : super(f, l, n, hf, eql) { }
+  friend inline bool operator==(const self& hm1, const self& hm2);
 };
 
 template <class Key, class T, class HashFcn, class EqualKey >

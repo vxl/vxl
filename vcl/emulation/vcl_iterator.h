@@ -257,7 +257,7 @@ inline vcl_insert_iterator<Container> vcl_inserter(Container& x, Iterator i) {
 
 // Forward declarations
 template <class BidirectionalIterator, class T, class Reference, class Distance> class vcl_reverse_bidirectional_iterator;
-template <class BidirectionalIterator, class T, class Reference, class Distance> IUEi_STL_INLINE bool operator==(
+template <class BidirectionalIterator, class T, class Reference, class Distance> inline bool operator==(
     const vcl_reverse_bidirectional_iterator<BidirectionalIterator, T, Reference, Distance>& x,
     const vcl_reverse_bidirectional_iterator<BidirectionalIterator, T, Reference, Distance>& y);
 
@@ -301,22 +301,19 @@ public:
 
 template <class BidirectionalIterator, class T, class Reference, class Distance>
 inline vcl_bidirectional_iterator_tag
-iterator_category(const vcl_reverse_bidirectional_iterator<BidirectionalIterator, T,
-                  Reference, Distance>&) {
+iterator_category(const vcl_reverse_bidirectional_iterator<BidirectionalIterator, T, Reference, Distance>&) {
     return vcl_bidirectional_iterator_tag();
 }
 
 template <class BidirectionalIterator, class T, class Reference, class Distance>
 inline T*
-value_type(const vcl_reverse_bidirectional_iterator<BidirectionalIterator, T,
-           Reference, Distance>&) {
+value_type(const vcl_reverse_bidirectional_iterator<BidirectionalIterator, T, Reference, Distance>&) {
     return (T*) 0;
 }
 
 template <class BidirectionalIterator, class T, class Reference, class Distance>
 inline Distance*
-distance_type(const vcl_reverse_bidirectional_iterator<BidirectionalIterator, T,
-                                                  Reference, Distance>&) {
+distance_type(const vcl_reverse_bidirectional_iterator<BidirectionalIterator, T, Reference, Distance>&) {
   return (Distance*) 0;
 }
 
@@ -329,17 +326,17 @@ inline bool operator==(
 
 // Forward declarations
 template <class RandomAccessIterator, class T, class Reference, class Distance> class vcl_reverse_iterator;
-template <class RandomAccessIterator, class T, class Reference, class Distance> IUEi_STL_INLINE bool operator==(
+template <class RandomAccessIterator, class T, class Reference, class Distance> inline bool operator==(
     const vcl_reverse_iterator<RandomAccessIterator, T, Reference, Distance>& x,
     const vcl_reverse_iterator<RandomAccessIterator, T, Reference, Distance>& y);
-template <class RandomAccessIterator, class T, class Reference, class Distance> IUEi_STL_INLINE bool operator<(
+template <class RandomAccessIterator, class T, class Reference, class Distance> inline bool operator<(
     const vcl_reverse_iterator<RandomAccessIterator, T, Reference, Distance>& x,
     const vcl_reverse_iterator<RandomAccessIterator, T, Reference, Distance>& y);
-template <class RandomAccessIterator, class T, class Reference, class Distance> IUEi_STL_INLINE Distance operator-(
+template <class RandomAccessIterator, class T, class Reference, class Distance> inline Distance operator-(
     const vcl_reverse_iterator<RandomAccessIterator, T, Reference, Distance>& x,
     const vcl_reverse_iterator<RandomAccessIterator, T, Reference, Distance>& y);
 template <class RandomAccessIterator, class T, class Reference, class Distance>
-   IUEi_STL_INLINE vcl_reverse_iterator<RandomAccessIterator, T, Reference, Distance> operator+(
+   inline vcl_reverse_iterator<RandomAccessIterator, T, Reference, Distance> operator+(
     const vcl_reverse_iterator<RandomAccessIterator, T, Reference, Distance>& x,
     const vcl_reverse_iterator<RandomAccessIterator, T, Reference, Distance>& y);
 
@@ -481,7 +478,7 @@ iterator_category(const vcl_raw_storage_iterator<ForwardIterator, T>&)
 
 // Forward declarations
 template <class T, class Distance> class vcl_istream_iterator;
-template <class T, class Distance> IUEi_STL_INLINE bool operator==(
+template <class T, class Distance> inline bool operator==(
     const vcl_istream_iterator<T, Distance>& x,
     const vcl_istream_iterator<T, Distance>& y);
 
@@ -529,7 +526,7 @@ inline Distance* distance_type(const vcl_istream_iterator<T, Distance>&) {
 }
 
 template <class T, class Distance>
-IUEi_STL_INLINE
+inline
 bool operator==(const vcl_istream_iterator<T, Distance>& x,
                 const vcl_istream_iterator<T, Distance>& y) {
     return x.stream == y.stream && x.end_marker == y.end_marker ||

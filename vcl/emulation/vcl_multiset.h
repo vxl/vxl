@@ -84,14 +84,14 @@ public:
                t.insert_equal(first, last);
     }
     vcl_multiset(const value_type* first, const value_type* last,
-             const Compare& comp) : t(comp) {
+                 const Compare& comp) : t(comp) {
                t.insert_equal(first, last);
     }
     vcl_multiset(const_iterator first, const_iterator last ) : t(Compare()) {
                t.insert_equal(first, last);
     }
     vcl_multiset(const_iterator first, const_iterator last,
-             const Compare& comp) : t(comp) {
+                 const Compare& comp) : t(comp) {
                t.insert_equal(first, last);
     }
     vcl_multiset(const self& x) : t(x.t) {}
@@ -151,8 +151,8 @@ public:
     vcl_pair<iterator,iterator> equal_range(const key_type& x) const {
         return t.equal_range(x);
     }
-  friend IUEi_STL_INLINE bool operator==(const self&, const self&);
-  friend IUEi_STL_INLINE bool operator<(const self&, const self&);
+  friend inline bool operator==(const self&, const self&);
+  friend inline bool operator<(const self&, const self&);
 };
 __END_STL_FULL_NAMESPACE
 
@@ -195,11 +195,11 @@ public:
     vcl_multiset(const value_type* first, const value_type* last) :
         super(first, last, Compare()) { }
     vcl_multiset(const value_type* first, const value_type* last,
-        const Compare& comp) : super(first, last, comp) { }
+                 const Compare& comp) : super(first, last, comp) { }
     vcl_multiset(const_iterator first, const_iterator last) :
         super(first, last, Compare()) { }
     vcl_multiset(const_iterator first, const_iterator last,
-        const Compare& comp) : super(first, last, comp) { }
+                 const Compare& comp) : super(first, last, comp) { }
 };
 
 #  if defined (__STL_BASE_MATCH_BUG)

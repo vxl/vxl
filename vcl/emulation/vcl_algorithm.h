@@ -93,7 +93,7 @@ inline const T& __median(const T& a, const T& b, const T& c, Compare comp) {
 }
 
 template <class InputIterator, class Function>
-IUEi_STL_INLINE
+inline
 Function vcl_for_each(InputIterator first, InputIterator last, Function f) {
     __stl_debug_check(__check_range(first, last));
     for (;first != last;++first) f(*first);
@@ -101,7 +101,7 @@ Function vcl_for_each(InputIterator first, InputIterator last, Function f) {
 }
 
 template <class InputIterator, class T>
-IUEi_STL_INLINE
+inline
 InputIterator vcl_find(InputIterator first, InputIterator last, const T& value) {
     __stl_debug_check(__check_range(first, last));
     while (first != last && *first != value) ++first;
@@ -109,16 +109,16 @@ InputIterator vcl_find(InputIterator first, InputIterator last, const T& value) 
 }
 
 template <class InputIterator, class Predicate>
-IUEi_STL_INLINE
+inline
 InputIterator vcl_find_if(InputIterator first, InputIterator last,
-                      Predicate pred) {
+                          Predicate pred) {
     __stl_debug_check(__check_range(first, last));
     while (first != last && !pred(*first)) ++first;
     return first;
 }
 
 template <class ForwardIterator>
-IUEi_STL_INLINE
+inline
 ForwardIterator vcl_adjacent_find(ForwardIterator first, ForwardIterator last) {
     __stl_debug_check(__check_range(first, last));
     if (first == last) return last;
@@ -131,9 +131,9 @@ ForwardIterator vcl_adjacent_find(ForwardIterator first, ForwardIterator last) {
 }
 
 template <class ForwardIterator, class BinaryPredicate>
-IUEi_STL_INLINE
+inline
 ForwardIterator vcl_adjacent_find(ForwardIterator first, ForwardIterator last,
-                              BinaryPredicate binary_pred) {
+                                  BinaryPredicate binary_pred) {
     __stl_debug_check(__check_range(first, last));
     if (first == last) return last;
     ForwardIterator next = first;
@@ -145,25 +145,25 @@ ForwardIterator vcl_adjacent_find(ForwardIterator first, ForwardIterator last,
 }
 
 template <class InputIterator, class T, class Size>
-IUEi_STL_INLINE
+inline
 void vcl_count(InputIterator first, InputIterator last, const T& value,
-           Size& n) {
+               Size& n) {
     __stl_debug_check(__check_range(first, last));
     for (; first != last; ++first)
         if (*first == value) ++n;
 }
 
 template <class InputIterator, class Predicate, class Size>
-IUEi_STL_INLINE
+inline
 void vcl_count_if(InputIterator first, InputIterator last, Predicate pred,
-              Size& n) {
+                  Size& n) {
     __stl_debug_check(__check_range(first, last));
     for (;first != last;++first)
         if (pred(*first)) ++n;
 }
 
 template <class ForwardIterator1, class ForwardIterator2, class Distance1, class Distance2>
-IUEi_STL_INLINE
+inline
 ForwardIterator1 __search(ForwardIterator1 first1, ForwardIterator1 last1,
                           ForwardIterator2 first2, ForwardIterator2 last2,
                           Distance1*, Distance2*) {
@@ -190,7 +190,7 @@ ForwardIterator1 __search(ForwardIterator1 first1, ForwardIterator1 last1,
 
 template <class ForwardIterator1, class ForwardIterator2>
 inline ForwardIterator1 vcl_search(ForwardIterator1 first1, ForwardIterator1 last1,
-                               ForwardIterator2 first2, ForwardIterator2 last2)
+                                   ForwardIterator2 first2, ForwardIterator2 last2)
 {
     __stl_debug_check(__check_range(first1, last1));
     __stl_debug_check(__check_range(first2, last2));
@@ -199,7 +199,7 @@ inline ForwardIterator1 vcl_search(ForwardIterator1 first1, ForwardIterator1 las
 }
 
 template <class ForwardIterator1, class ForwardIterator2, class BinaryPredicate, class Distance1, class Distance2>
-IUEi_STL_INLINE
+inline
 ForwardIterator1 __search(ForwardIterator1 first1, ForwardIterator1 last1,
                           ForwardIterator2 first2, ForwardIterator2 last2,
                           BinaryPredicate binary_pred, Distance1*, Distance2*) {
@@ -226,8 +226,8 @@ ForwardIterator1 __search(ForwardIterator1 first1, ForwardIterator1 last1,
 
 template <class ForwardIterator1, class ForwardIterator2, class BinaryPredicate>
 inline ForwardIterator1 vcl_search(ForwardIterator1 first1, ForwardIterator1 last1,
-                               ForwardIterator2 first2, ForwardIterator2 last2,
-                               BinaryPredicate binary_pred) {
+                                   ForwardIterator2 first2, ForwardIterator2 last2,
+                                   BinaryPredicate binary_pred) {
     __stl_debug_check(__check_range(first1, last1));
     __stl_debug_check(__check_range(first2, last2));
     return __search(first1, last1, first2, last2, binary_pred,
@@ -235,37 +235,37 @@ inline ForwardIterator1 vcl_search(ForwardIterator1 first1, ForwardIterator1 las
 }
 
 template <class ForwardIterator1, class ForwardIterator2>
-IUEi_STL_INLINE
+inline
 ForwardIterator2 vcl_swap_ranges(ForwardIterator1 first1, ForwardIterator1 last1,
-                             ForwardIterator2 first2) {
+                                 ForwardIterator2 first2) {
     __stl_debug_check(__check_range(first1, last1));
     for (;first1 != last1;++first1,++first2) iter_swap(first1, first2);
     return first2;
 }
 
 template <class InputIterator, class OutputIterator, class UnaryOperation>
-IUEi_STL_INLINE
+inline
 OutputIterator vcl_transform(InputIterator first, InputIterator last,
-                         OutputIterator result, UnaryOperation op) {
+                             OutputIterator result, UnaryOperation op) {
     __stl_debug_check(__check_range(first, last));
     for (;first != last;++first,++result) *result = op(*first);
     return result;
 }
 
 template <class InputIterator1, class InputIterator2, class OutputIterator, class BinaryOperation>
-IUEi_STL_INLINE
+inline
 OutputIterator vcl_transform(InputIterator1 first1, InputIterator1 last1,
-                         InputIterator2 first2, OutputIterator result,
-                         BinaryOperation binary_op) {
+                             InputIterator2 first2, OutputIterator result,
+                             BinaryOperation binary_op) {
     __stl_debug_check(__check_range(first1, last1));
     for (;first1 != last1;++first1,++first2,++result) *result = binary_op(*first1, *first2);
     return result;
 }
 
 template <class ForwardIterator, class T>
-IUEi_STL_INLINE
+inline
 void vcl_replace(ForwardIterator first, ForwardIterator last, const T& old_value,
-             const T& new_value) {
+                 const T& new_value) {
     __stl_debug_check(__check_range(first, last));
     while (first != last) {
         if (*first == old_value) *first = new_value;
@@ -274,9 +274,9 @@ void vcl_replace(ForwardIterator first, ForwardIterator last, const T& old_value
 }
 
 template <class ForwardIterator, class Predicate, class T>
-IUEi_STL_INLINE
+inline
 void vcl_replace_if(ForwardIterator first, ForwardIterator last, Predicate pred,
-                const T& new_value) {
+                    const T& new_value) {
     __stl_debug_check(__check_range(first, last));
     while (first != last) {
         if (pred(*first)) *first = new_value;
@@ -285,10 +285,10 @@ void vcl_replace_if(ForwardIterator first, ForwardIterator last, Predicate pred,
 }
 
 template <class InputIterator, class OutputIterator, class T>
-IUEi_STL_INLINE
+inline
 OutputIterator vcl_replace_copy(InputIterator first, InputIterator last,
-                            OutputIterator result, const T& old_value,
-                            const T& new_value) {
+                                OutputIterator result, const T& old_value,
+                                const T& new_value) {
     __stl_debug_check(__check_range(first, last));
     for (;first != last;++first,++result) {
         *result = *first == old_value ? new_value : *first;
@@ -297,10 +297,10 @@ OutputIterator vcl_replace_copy(InputIterator first, InputIterator last,
 }
 
 template <class Iterator, class OutputIterator, class Predicate, class T>
-IUEi_STL_INLINE
+inline
 OutputIterator vcl_replace_copy_if(Iterator first, Iterator last,
-                               OutputIterator result, Predicate pred,
-                               const T& new_value) {
+                                   OutputIterator result, Predicate pred,
+                                   const T& new_value) {
     __stl_debug_check(__check_range(first, last));
     for (; first != last; ++first,++result) {
         *result = pred(*first) ? new_value : *first;
@@ -309,23 +309,23 @@ OutputIterator vcl_replace_copy_if(Iterator first, Iterator last,
 }
 
 template <class ForwardIterator, class Generator>
-IUEi_STL_INLINE
+inline
 void vcl_generate(ForwardIterator first, ForwardIterator last, Generator gen) {
     __stl_debug_check(__check_range(first, last));
     for (; first != last; ++first) *first = gen();
 }
 
 template <class OutputIterator, class Size, class Generator>
-IUEi_STL_INLINE
+inline
 OutputIterator vcl_generate_n(OutputIterator first, Size n, Generator gen) {
     for (; n > 0; --n, ++first) *first = gen();
     return first;
 }
 
 template <class InputIterator, class OutputIterator, class T>
-IUEi_STL_INLINE
+inline
 OutputIterator vcl_remove_copy(InputIterator first, InputIterator last,
-                           OutputIterator result, const T& value) {
+                               OutputIterator result, const T& value) {
     __stl_debug_check(__check_range(first, last));
     for (; first != last; ++first) {
         if (*first != value)  {
@@ -337,7 +337,7 @@ OutputIterator vcl_remove_copy(InputIterator first, InputIterator last,
 }
 
 template <class InputIterator, class OutputIterator, class Predicate>
-IUEi_STL_INLINE
+inline
 OutputIterator vcl_remove_copy_if(InputIterator first, InputIterator last,
                                   OutputIterator result, Predicate pred) {
     __stl_debug_check(__check_range(first, last));
@@ -351,7 +351,7 @@ OutputIterator vcl_remove_copy_if(InputIterator first, InputIterator last,
 }
 
 template <class ForwardIterator, class T>
-IUEi_STL_INLINE
+inline
 ForwardIterator vcl_remove(ForwardIterator first, ForwardIterator last, const T& value) {
     __stl_debug_check(__check_range(first, last));
     first = vcl_find(first, last, value);
@@ -360,7 +360,7 @@ ForwardIterator vcl_remove(ForwardIterator first, ForwardIterator last, const T&
 }
 
 template <class ForwardIterator, class Predicate>
-IUEi_STL_INLINE
+inline
 ForwardIterator vcl_remove_if(ForwardIterator first, ForwardIterator last, Predicate pred) {
     __stl_debug_check(__check_range(first, last));
     first = vcl_find_if(first, last, pred);
@@ -369,7 +369,7 @@ ForwardIterator vcl_remove_if(ForwardIterator first, ForwardIterator last, Predi
 }
 
 template <class InputIterator, class ForwardIterator>
-IUEi_STL_INLINE
+inline
 ForwardIterator __unique_copy(InputIterator first, InputIterator last,
                               ForwardIterator result, vcl_forward_iterator_tag) {
     *result = *first;
@@ -395,7 +395,7 @@ inline RandomAccessIterator __unique_copy(InputIterator first,
 }
 
 template <class InputIterator, class OutputIterator, class T>
-IUEi_STL_INLINE
+inline
 OutputIterator __unique_copy(InputIterator first, InputIterator last,
                              OutputIterator result, T*) {
     T value = *first;
@@ -417,13 +417,13 @@ inline OutputIterator __unique_copy(InputIterator first, InputIterator last,
 
 template <class InputIterator, class OutputIterator>
 inline OutputIterator vcl_unique_copy(InputIterator first, InputIterator last,
-                                  OutputIterator result) {
+                                      OutputIterator result) {
     __stl_debug_check(__check_range(first, last));
     if (first == last) return result;
     return __unique_copy(first, last, result, iterator_category(result));
 }
 template <class InputIterator, class ForwardIterator, class BinaryPredicate>
-IUEi_STL_INLINE
+inline
 ForwardIterator __unique_copy(InputIterator first, InputIterator last,
                               ForwardIterator result,
                               BinaryPredicate binary_pred,
@@ -455,7 +455,7 @@ inline RandomAccessIterator __unique_copy(InputIterator first,
 }
 
 template <class InputIterator, class OutputIterator, class BinaryPredicate, class T>
-IUEi_STL_INLINE
+inline
 OutputIterator __unique_copy(InputIterator first, InputIterator last,
                              OutputIterator result,
                              BinaryPredicate binary_pred, T*) {
@@ -488,7 +488,7 @@ inline OutputIterator vcl_unique_copy(InputIterator first, InputIterator last,
 }
 
 template <class ForwardIterator>
-IUEi_STL_INLINE
+inline
 ForwardIterator vcl_unique(ForwardIterator first, ForwardIterator last) {
     __stl_debug_check(__check_range(first, last));
     first = vcl_adjacent_find(first, last);
@@ -496,7 +496,7 @@ ForwardIterator vcl_unique(ForwardIterator first, ForwardIterator last) {
 }
 
 template <class ForwardIterator, class BinaryPredicate>
-IUEi_STL_INLINE
+inline
 ForwardIterator vcl_unique(ForwardIterator first, ForwardIterator last,
                            BinaryPredicate binary_pred) {
     __stl_debug_check(__check_range(first, last));
@@ -505,7 +505,7 @@ ForwardIterator vcl_unique(ForwardIterator first, ForwardIterator last,
 }
 
 template <class BidirectionalIterator>
-IUEi_STL_INLINE
+inline
 void __reverse(BidirectionalIterator first, BidirectionalIterator last,
                vcl_bidirectional_iterator_tag) {
     while (true)
@@ -518,7 +518,7 @@ void __reverse(BidirectionalIterator first, BidirectionalIterator last,
 }
 
 template <class RandomAccessIterator>
-IUEi_STL_INLINE
+inline
 void __reverse(RandomAccessIterator first, RandomAccessIterator last,
                vcl_random_access_iterator_tag) {
     for (; first < last; ++first) iter_swap(first, --last);
@@ -540,7 +540,7 @@ INLINE_LOOP OutputIterator vcl_reverse_copy(BidirectionalIterator first,
 }
 
 template <class ForwardIterator, class Distance>
-IUEi_STL_INLINE
+inline
 void __rotate(ForwardIterator first, ForwardIterator middle,
               ForwardIterator last, Distance*, vcl_forward_iterator_tag) {
     for (ForwardIterator i = middle; true; ) {
@@ -556,7 +556,7 @@ void __rotate(ForwardIterator first, ForwardIterator middle,
 }
 
 template <class BidirectionalIterator, class Distance>
-IUEi_STL_INLINE
+inline
 void __rotate(BidirectionalIterator first, BidirectionalIterator middle,
               BidirectionalIterator last, Distance*,
               vcl_bidirectional_iterator_tag) {
@@ -566,7 +566,7 @@ void __rotate(BidirectionalIterator first, BidirectionalIterator middle,
 }
 
 template <class EuclideanRingElement>
-IUEi_STL_INLINE
+inline
 EuclideanRingElement __gcd(EuclideanRingElement m, EuclideanRingElement n)
 {
     while (n != 0) {
@@ -578,7 +578,7 @@ EuclideanRingElement __gcd(EuclideanRingElement m, EuclideanRingElement n)
 }
 
 template <class RandomAccessIterator, class Distance, class T>
-IUEi_STL_INLINE
+inline
 void __rotate_cycle(RandomAccessIterator first, RandomAccessIterator last,
                     RandomAccessIterator initial, Distance shift, T*) {
     T value = *initial;
@@ -607,7 +607,7 @@ INLINE_LOOP void __rotate(RandomAccessIterator first, RandomAccessIterator middl
 
 template <class ForwardIterator>
 inline void vcl_rotate(ForwardIterator first, ForwardIterator middle,
-                   ForwardIterator last) {
+                       ForwardIterator last) {
     __stl_debug_check(__check_range(middle,first, last));
     if (first == middle || middle == last) return;
     __rotate(first, middle, last, distance_type(first),
@@ -615,15 +615,15 @@ inline void vcl_rotate(ForwardIterator first, ForwardIterator middle,
 }
 
 template <class ForwardIterator, class OutputIterator>
-IUEi_STL_INLINE
+inline
 OutputIterator vcl_rotate_copy(ForwardIterator first, ForwardIterator middle,
-                           ForwardIterator last, OutputIterator result) {
+                               ForwardIterator last, OutputIterator result) {
     __stl_debug_check(__check_range(middle, first, last));
     return vcl_copy(first, middle, vcl_copy(middle, last, result));
 }
 
 template <class RandomAccessIterator, class Distance>
-IUEi_STL_INLINE
+inline
 void __random_shuffle(RandomAccessIterator first, RandomAccessIterator last,
                       Distance*) {
     if (first == last) return;
@@ -633,15 +633,15 @@ void __random_shuffle(RandomAccessIterator first, RandomAccessIterator last,
 
 template <class RandomAccessIterator>
 inline void vcl_random_shuffle(RandomAccessIterator first,
-                           RandomAccessIterator last) {
+                               RandomAccessIterator last) {
     __stl_debug_check(__check_range(first, last));
     __random_shuffle(first, last, distance_type(first));
 }
 
 template <class RandomAccessIterator, class RandomNumberGenerator>
-IUEi_STL_INLINE
+inline
 void vcl_random_shuffle(RandomAccessIterator first, RandomAccessIterator last,
-                    RandomNumberGenerator& rand) {
+                        RandomNumberGenerator& rand) {
     __stl_debug_check(__check_range(first, last));
     if (first == last) return;
     for (RandomAccessIterator i = first + 1; i != last; ++i)
@@ -649,9 +649,9 @@ void vcl_random_shuffle(RandomAccessIterator first, RandomAccessIterator last,
 }
 
 template <class ForwardIterator, class OutputIterator, class Distance>
-IUEi_STL_INLINE
+inline
 OutputIterator vcl_random_sample_n(ForwardIterator first, ForwardIterator last,
-                               OutputIterator out, const Distance n)
+                                   OutputIterator out, const Distance n)
 {
     __stl_debug_check(__check_range(first, last));
     Distance remaining = 0;
@@ -672,10 +672,10 @@ OutputIterator vcl_random_sample_n(ForwardIterator first, ForwardIterator last,
 }
 
 template <class ForwardIterator, class OutputIterator, class Distance, class RandomNumberGenerator>
-IUEi_STL_INLINE
+inline
 OutputIterator vcl_random_sample_n(ForwardIterator first, ForwardIterator last,
-                               OutputIterator out, const Distance n,
-                               RandomNumberGenerator& rand)
+                                   OutputIterator out, const Distance n,
+                                   RandomNumberGenerator& rand)
 {
     __stl_debug_check(__check_range(first, last));
     Distance remaining = 0;
@@ -696,7 +696,7 @@ OutputIterator vcl_random_sample_n(ForwardIterator first, ForwardIterator last,
 }
 
 template <class InputIterator, class RandomAccessIterator, class Distance>
-IUEi_STL_INLINE
+inline
 RandomAccessIterator __random_sample(InputIterator first, InputIterator last,
                                      RandomAccessIterator out,
                                      const Distance n)
@@ -718,7 +718,7 @@ RandomAccessIterator __random_sample(InputIterator first, InputIterator last,
 }
 
 template <class InputIterator, class RandomAccessIterator, class RandomNumberGenerator, class Distance>
-IUEi_STL_INLINE
+inline
 RandomAccessIterator __random_sample(InputIterator first, InputIterator last,
                                      RandomAccessIterator out,
                                      RandomNumberGenerator& rand,
@@ -743,7 +743,7 @@ RandomAccessIterator __random_sample(InputIterator first, InputIterator last,
 template <class InputIterator, class RandomAccessIterator>
 inline RandomAccessIterator
 vcl_random_sample(InputIterator first, InputIterator last,
-              RandomAccessIterator out_first, RandomAccessIterator out_last)
+                  RandomAccessIterator out_first, RandomAccessIterator out_last)
 {
     __stl_debug_check(__check_range(first, last));
     return __random_sample(first, last, out_first, out_last - out_first);
@@ -752,17 +752,17 @@ vcl_random_sample(InputIterator first, InputIterator last,
 template <class InputIterator, class RandomAccessIterator, class RandomNumberGenerator>
 inline RandomAccessIterator
 vcl_random_sample(InputIterator first, InputIterator last,
-              RandomAccessIterator out_first, RandomAccessIterator out_last,
-              RandomNumberGenerator& rand)
+                  RandomAccessIterator out_first, RandomAccessIterator out_last,
+                  RandomNumberGenerator& rand)
 {
     __stl_debug_check(__check_range(first, last));
     return __random_sample(first, last, out_first, rand, out_last - out_first);
 }
 
 template <class BidirectionalIterator, class Predicate>
-IUEi_STL_INLINE
+inline
 BidirectionalIterator vcl_partition(BidirectionalIterator first,
-                                BidirectionalIterator last, Predicate pred) {
+                                    BidirectionalIterator last, Predicate pred) {
     __stl_debug_check(__check_range(first, last));
     while (true) {
         while (true)
@@ -786,7 +786,7 @@ BidirectionalIterator vcl_partition(BidirectionalIterator first,
 }
 
 template <class ForwardIterator, class Predicate, class Distance>
-IUEi_STL_INLINE
+inline
 ForwardIterator __inplace_stable_partition(ForwardIterator first,
                                            ForwardIterator last,
                                            Predicate pred, Distance len) {
@@ -806,7 +806,7 @@ ForwardIterator __inplace_stable_partition(ForwardIterator first,
 }
 
 template <class ForwardIterator, class Predicate, class Distance, class T>
-IUEi_STL_INLINE
+inline
 ForwardIterator __stable_partition_adaptive(ForwardIterator first,
                                             ForwardIterator last,
                                             Predicate pred, Distance len,
@@ -865,7 +865,7 @@ ForwardIterator __stable_partition_adaptive(ForwardIterator first,
 }
 
 template <class ForwardIterator, class Predicate, class T, class Distance>
-IUEi_STL_INLINE
+inline
 ForwardIterator __stable_partition(ForwardIterator first, ForwardIterator last,
                                    Predicate pred, Distance len,
                                    __stl_tempbuf<T, Distance>& buffer) {
@@ -894,7 +894,7 @@ inline ForwardIterator stable_partition(ForwardIterator first,
 }
 
 template <class RandomAccessIterator, class T>
-IUEi_STL_INLINE
+inline
 RandomAccessIterator __unguarded_partition(RandomAccessIterator first,
                                            RandomAccessIterator last,
                                            T pivot) {
@@ -913,7 +913,7 @@ RandomAccessIterator __unguarded_partition(RandomAccessIterator first,
 }
 
 template <class RandomAccessIterator, class T, class Compare>
-IUEi_STL_INLINE
+inline
 RandomAccessIterator __unguarded_partition(RandomAccessIterator first,
                                            RandomAccessIterator last,
                                            T pivot, Compare comp) {
@@ -930,7 +930,7 @@ RandomAccessIterator __unguarded_partition(RandomAccessIterator first,
 # define  __stl_threshold  16
 
 template <class RandomAccessIterator, class T>
-IUEi_STL_INLINE
+inline
 void __unguarded_linear_insert(RandomAccessIterator last, T value) {
     RandomAccessIterator next = last;
     --next;
@@ -943,7 +943,7 @@ void __unguarded_linear_insert(RandomAccessIterator last, T value) {
 }
 
 template <class RandomAccessIterator, class T, class Compare>
-IUEi_STL_INLINE
+inline
 void __unguarded_linear_insert(RandomAccessIterator last, T value,
                                Compare comp) {
     RandomAccessIterator next = last;
@@ -979,7 +979,7 @@ inline void __linear_insert(RandomAccessIterator first,
 }
 
 template <class RandomAccessIterator>
-IUEi_STL_INLINE
+inline
 void __insertion_sort(RandomAccessIterator first, RandomAccessIterator last) {
     if (first == last) return;
     for (RandomAccessIterator i = first + 1; i != last; ++i)
@@ -987,7 +987,7 @@ void __insertion_sort(RandomAccessIterator first, RandomAccessIterator last) {
 }
 
 template <class RandomAccessIterator, class Compare>
-IUEi_STL_INLINE
+inline
 void __insertion_sort(RandomAccessIterator first,
                       RandomAccessIterator last, Compare comp) {
     if (first == last) return;
@@ -996,7 +996,7 @@ void __insertion_sort(RandomAccessIterator first,
 }
 
 template <class RandomAccessIterator, class T>
-IUEi_STL_INLINE
+inline
 void __unguarded_insertion_sort_aux(RandomAccessIterator first,
                                     RandomAccessIterator last, T*) {
     for (RandomAccessIterator i = first; i != last; ++i)
@@ -1010,7 +1010,7 @@ inline void __unguarded_insertion_sort(RandomAccessIterator first,
 }
 
 template <class RandomAccessIterator, class T, class Compare>
-IUEi_STL_INLINE
+inline
 void __unguarded_insertion_sort_aux(RandomAccessIterator first,
                                     RandomAccessIterator last,
                                     T*, Compare comp) {
@@ -1026,7 +1026,7 @@ inline void __unguarded_insertion_sort(RandomAccessIterator first,
 }
 
 template <class RandomAccessIterator>
-IUEi_STL_INLINE
+inline
 void __final_insertion_sort(RandomAccessIterator first,
                             RandomAccessIterator last) {
     if (last - first > __stl_threshold) {
@@ -1037,7 +1037,7 @@ void __final_insertion_sort(RandomAccessIterator first,
 }
 
 template <class RandomAccessIterator, class Compare>
-IUEi_STL_INLINE
+inline
 void __final_insertion_sort(RandomAccessIterator first,
                             RandomAccessIterator last, Compare comp) {
     if (last - first > __stl_threshold) {
@@ -1048,7 +1048,7 @@ void __final_insertion_sort(RandomAccessIterator first,
 }
 
 template <class Size>
-IUEi_STL_INLINE
+inline
 Size __lg(Size n) {
     Size k;
     for (k = 0; n != 1; n = n / 2) ++k;
@@ -1056,7 +1056,7 @@ Size __lg(Size n) {
 }
 
 template <class RandomAccessIterator, class T, class Size>
-IUEi_STL_INLINE
+inline
 void __introsort_loop(RandomAccessIterator first,
                       RandomAccessIterator last, T*,
                       Size depth_limit) {
@@ -1075,7 +1075,7 @@ void __introsort_loop(RandomAccessIterator first,
 }
 
 template <class RandomAccessIterator, class T, class Size, class Compare>
-IUEi_STL_INLINE
+inline
 void __introsort_loop(RandomAccessIterator first,
                       RandomAccessIterator last, T*,
                       Size depth_limit, Compare comp) {
@@ -1103,17 +1103,16 @@ inline void vcl_sort(RandomAccessIterator first, RandomAccessIterator last) {
 
 template <class RandomAccessIterator, class Compare>
 inline void vcl_sort(RandomAccessIterator first, RandomAccessIterator last,
-                 Compare comp) {
+                     Compare comp) {
     __stl_debug_check(__check_range(first, last));
     if (first == last) return;
-    __introsort_loop(first, last, value_type(first), __lg(last - first) * 2,
-                     comp);
+    __introsort_loop(first, last, value_type(first), __lg(last - first) * 2, comp);
     __final_insertion_sort(first, last, comp);
 }
 
 
 template <class RandomAccessIterator>
-IUEi_STL_INLINE
+inline
 void __inplace_stable_sort(RandomAccessIterator first,
                            RandomAccessIterator last) {
     if (last - first < 15) {
@@ -1127,7 +1126,7 @@ void __inplace_stable_sort(RandomAccessIterator first,
 }
 
 template <class RandomAccessIterator, class Compare>
-IUEi_STL_INLINE
+inline
 void __inplace_stable_sort(RandomAccessIterator first,
                            RandomAccessIterator last, Compare comp) {
     if (last - first < 15) {
@@ -1142,7 +1141,7 @@ void __inplace_stable_sort(RandomAccessIterator first,
 }
 
 template <class RandomAccessIterator1, class RandomAccessIterator2, class Distance>
-IUEi_STL_INLINE
+inline
 void __merge_sort_loop(RandomAccessIterator1 first,
                        RandomAccessIterator1 last,
                        RandomAccessIterator2 result, Distance step_size) {
@@ -1159,7 +1158,7 @@ void __merge_sort_loop(RandomAccessIterator1 first,
 }
 
 template <class RandomAccessIterator1, class RandomAccessIterator2, class Distance, class Compare>
-IUEi_STL_INLINE
+inline
 void __merge_sort_loop(RandomAccessIterator1 first,
                        RandomAccessIterator1 last,
                        RandomAccessIterator2 result, Distance step_size,
@@ -1180,7 +1179,7 @@ void __merge_sort_loop(RandomAccessIterator1 first,
 const int __stl_chunk_size = 7;
 
 template <class RandomAccessIterator, class Distance>
-IUEi_STL_INLINE
+inline
 void __chunk_insertion_sort(RandomAccessIterator first,
                             RandomAccessIterator last, Distance chunk_size) {
     while (last - first >= chunk_size) {
@@ -1191,7 +1190,7 @@ void __chunk_insertion_sort(RandomAccessIterator first,
 }
 
 template <class RandomAccessIterator, class Distance, class Compare>
-IUEi_STL_INLINE
+inline
 void __chunk_insertion_sort(RandomAccessIterator first,
                             RandomAccessIterator last,
                             Distance chunk_size, Compare comp) {
@@ -1203,7 +1202,7 @@ void __chunk_insertion_sort(RandomAccessIterator first,
 }
 
 template <class RandomAccessIterator, class Distance, class T>
-IUEi_STL_INLINE
+inline
 void __merge_sort_with_buffer(RandomAccessIterator first,
                               RandomAccessIterator last,
                               __stl_tempbuf<T, Distance>& buffer) {
@@ -1224,7 +1223,7 @@ void __merge_sort_with_buffer(RandomAccessIterator first,
 
 
 template <class RandomAccessIterator, class Distance, class T, class Compare>
-IUEi_STL_INLINE
+inline
 void __merge_sort_with_buffer(RandomAccessIterator first,
                               RandomAccessIterator last,
                               __stl_tempbuf<T, Distance>& buffer,
@@ -1245,7 +1244,7 @@ void __merge_sort_with_buffer(RandomAccessIterator first,
 }
 
 template <class RandomAccessIterator, class Distance, class T>
-IUEi_STL_INLINE
+inline
 void __stable_sort_adaptive(RandomAccessIterator first,
                             RandomAccessIterator last,
                             __stl_tempbuf<T,Distance>& buffer) {
@@ -1263,7 +1262,7 @@ void __stable_sort_adaptive(RandomAccessIterator first,
 }
 
 template <class RandomAccessIterator, class Distance, class T, class Compare>
-IUEi_STL_INLINE
+inline
 void __stable_sort_adaptive(RandomAccessIterator first,
                             RandomAccessIterator last,
                             __stl_tempbuf<T,Distance>& buffer,
@@ -1330,21 +1329,21 @@ inline void __stable_sort_aux(RandomAccessIterator first,
 
 template <class RandomAccessIterator>
 inline void vcl_stable_sort(RandomAccessIterator first,
-                        RandomAccessIterator last) {
+                            RandomAccessIterator last) {
     __stl_debug_check(__check_range(first, last));
     __stable_sort_aux(first, last, value_type(first), distance_type(first));
 }
 
 template <class RandomAccessIterator, class Compare>
 inline void vcl_stable_sort(RandomAccessIterator first,
-                        RandomAccessIterator last, Compare comp) {
+                            RandomAccessIterator last, Compare comp) {
     __stl_debug_check(__check_range(first, last));
     __stable_sort_aux(first, last, value_type(first), distance_type(first),
                       comp);
 }
 
 template <class RandomAccessIterator, class T>
-IUEi_STL_INLINE
+inline
 void __partial_sort(RandomAccessIterator first, RandomAccessIterator middle,
                     RandomAccessIterator last, T*) {
     vcl_make_heap(first, middle);
@@ -1356,14 +1355,14 @@ void __partial_sort(RandomAccessIterator first, RandomAccessIterator middle,
 
 template <class RandomAccessIterator>
 inline void vcl_partial_sort(RandomAccessIterator first,
-                         RandomAccessIterator middle,
-                         RandomAccessIterator last) {
+                             RandomAccessIterator middle,
+                             RandomAccessIterator last) {
     __stl_debug_check(__check_range(middle,first, last));
     __partial_sort(first, middle, last, value_type(first));
 }
 
 template <class RandomAccessIterator, class T, class Compare>
-IUEi_STL_INLINE
+inline
 void __partial_sort(RandomAccessIterator first, RandomAccessIterator middle,
                     RandomAccessIterator last, T*, Compare comp) {
     vcl_make_heap(first, middle, comp);
@@ -1375,14 +1374,14 @@ void __partial_sort(RandomAccessIterator first, RandomAccessIterator middle,
 
 template <class RandomAccessIterator, class Compare>
 inline void vcl_partial_sort(RandomAccessIterator first,
-                         RandomAccessIterator middle,
-                         RandomAccessIterator last, Compare comp) {
+                             RandomAccessIterator middle,
+                             RandomAccessIterator last, Compare comp) {
     __stl_debug_check(__check_range(middle,first, last));
     __partial_sort(first, middle, last, value_type(first), comp);
 }
 
 template <class InputIterator, class RandomAccessIterator, class Distance, class T>
-IUEi_STL_INLINE
+inline
 RandomAccessIterator __partial_sort_copy(InputIterator first,
                                          InputIterator last,
                                          RandomAccessIterator result_first,
@@ -1406,8 +1405,8 @@ RandomAccessIterator __partial_sort_copy(InputIterator first,
 template <class InputIterator, class RandomAccessIterator>
 inline RandomAccessIterator
 vcl_partial_sort_copy(InputIterator first, InputIterator last,
-                  RandomAccessIterator result_first,
-                  RandomAccessIterator result_last) {
+                      RandomAccessIterator result_first,
+                      RandomAccessIterator result_last) {
     __stl_debug_check(__check_range(first, last));
     __stl_debug_check(__check_range(result_first, result_last));
     return __partial_sort_copy(first, last, result_first, result_last,
@@ -1415,7 +1414,7 @@ vcl_partial_sort_copy(InputIterator first, InputIterator last,
 }
 
 template <class InputIterator, class RandomAccessIterator, class Compare, class Distance, class T>
-IUEi_STL_INLINE
+inline
 RandomAccessIterator __partial_sort_copy(InputIterator first,
                                          InputIterator last,
                                          RandomAccessIterator result_first,
@@ -1440,8 +1439,8 @@ RandomAccessIterator __partial_sort_copy(InputIterator first,
 template <class InputIterator, class RandomAccessIterator, class Compare>
 inline RandomAccessIterator
 vcl_partial_sort_copy(InputIterator first, InputIterator last,
-                  RandomAccessIterator result_first,
-                  RandomAccessIterator result_last, Compare comp) {
+                      RandomAccessIterator result_first,
+                      RandomAccessIterator result_last, Compare comp) {
     __stl_debug_check(__check_range(first, last));
     __stl_debug_check(__check_range(result_first, result_last));
     return __partial_sort_copy(first, last, result_first, result_last, comp,
@@ -1449,7 +1448,7 @@ vcl_partial_sort_copy(InputIterator first, InputIterator last,
 }
 
 template <class RandomAccessIterator, class T>
-IUEi_STL_INLINE
+inline
 void __nth_element(RandomAccessIterator first, RandomAccessIterator nth,
                    RandomAccessIterator last, T*) {
     while (last - first > 3) {
@@ -1466,13 +1465,13 @@ void __nth_element(RandomAccessIterator first, RandomAccessIterator nth,
 
 template <class RandomAccessIterator>
 inline void vcl_nth_element(RandomAccessIterator first, RandomAccessIterator nth,
-                        RandomAccessIterator last) {
+                            RandomAccessIterator last) {
     __stl_debug_check(__check_range(nth,first, last));
     __nth_element(first, nth, last, value_type(first));
 }
 
 template <class RandomAccessIterator, class T, class Compare>
-IUEi_STL_INLINE
+inline
 void __nth_element(RandomAccessIterator first, RandomAccessIterator nth,
                    RandomAccessIterator last, T*, Compare comp) {
     while (last - first > 3) {
@@ -1489,13 +1488,13 @@ void __nth_element(RandomAccessIterator first, RandomAccessIterator nth,
 
 template <class RandomAccessIterator, class Compare>
 inline void vcl_nth_element(RandomAccessIterator first, RandomAccessIterator nth,
-                        RandomAccessIterator last, Compare comp) {
+                            RandomAccessIterator last, Compare comp) {
     __stl_debug_check(__check_range(nth, first, last));
     __nth_element(first, nth, last, value_type(first), comp);
 }
 
 template <class ForwardIterator, class T, class Distance>
-IUEi_STL_INLINE
+inline
 ForwardIterator __lower_bound(ForwardIterator first, ForwardIterator last,
                               const T& value, Distance*,
                               vcl_forward_iterator_tag) {
@@ -1528,7 +1527,7 @@ inline ForwardIterator __lower_bound(ForwardIterator first,
 }
 
 template <class RandomAccessIterator, class T, class Distance>
-IUEi_STL_INLINE
+inline
 RandomAccessIterator __lower_bound(RandomAccessIterator first,
                                    RandomAccessIterator last, const T& value,
                                    Distance*, vcl_random_access_iterator_tag) {
@@ -1557,7 +1556,7 @@ inline ForwardIterator vcl_lower_bound(ForwardIterator first, ForwardIterator la
 }
 
 template <class ForwardIterator, class T, class Compare, class Distance>
-IUEi_STL_INLINE
+inline
 ForwardIterator __lower_bound(ForwardIterator first, ForwardIterator last,
                               const T& value, Compare comp, Distance*,
                               vcl_forward_iterator_tag) {
@@ -1590,7 +1589,7 @@ inline ForwardIterator __lower_bound(ForwardIterator first,
 }
 
 template <class RandomAccessIterator, class T, class Compare, class Distance>
-IUEi_STL_INLINE
+inline
 RandomAccessIterator __lower_bound(RandomAccessIterator first,
                                    RandomAccessIterator last,
                                    const T& value, Compare comp, Distance*,
@@ -1620,7 +1619,7 @@ inline ForwardIterator vcl_lower_bound(ForwardIterator first, ForwardIterator la
 }
 
 template <class ForwardIterator, class T, class Distance>
-IUEi_STL_INLINE
+inline
 ForwardIterator __upper_bound(ForwardIterator first, ForwardIterator last,
                               const T& value, Distance*,
                               vcl_forward_iterator_tag) {
@@ -1654,7 +1653,7 @@ inline ForwardIterator __upper_bound(ForwardIterator first,
 }
 
 template <class RandomAccessIterator, class T, class Distance>
-IUEi_STL_INLINE
+inline
 RandomAccessIterator __upper_bound(RandomAccessIterator first,
                                    RandomAccessIterator last, const T& value,
                                    Distance*, vcl_random_access_iterator_tag) {
@@ -1677,14 +1676,14 @@ RandomAccessIterator __upper_bound(RandomAccessIterator first,
 
 template <class ForwardIterator, class T>
 inline ForwardIterator vcl_upper_bound(ForwardIterator first, ForwardIterator last,
-                                   const T& value) {
+                                       const T& value) {
     __stl_debug_check(__check_range(first, last));
     return __upper_bound(first, last, value, distance_type(first),
                          iterator_category(first));
 }
 
 template <class ForwardIterator, class T, class Compare, class Distance>
-IUEi_STL_INLINE
+inline
 ForwardIterator __upper_bound(ForwardIterator first, ForwardIterator last,
                               const T& value, Compare comp, Distance*,
                               vcl_forward_iterator_tag) {
@@ -1718,7 +1717,7 @@ inline ForwardIterator __upper_bound(ForwardIterator first,
 }
 
 template <class RandomAccessIterator, class T, class Compare, class Distance>
-IUEi_STL_INLINE
+inline
 RandomAccessIterator __upper_bound(RandomAccessIterator first,
                                    RandomAccessIterator last,
                                    const T& value, Compare comp, Distance*,
@@ -1742,14 +1741,14 @@ RandomAccessIterator __upper_bound(RandomAccessIterator first,
 
 template <class ForwardIterator, class T, class Compare>
 inline ForwardIterator vcl_upper_bound(ForwardIterator first, ForwardIterator last,
-                                   const T& value, Compare comp) {
+                                       const T& value, Compare comp) {
     __stl_debug_check(__check_range(first, last));
     return __upper_bound(first, last, value, comp, distance_type(first),
                          iterator_category(first));
 }
 
 template <class ForwardIterator, class T, class Distance>
-IUEi_STL_INLINE
+inline
 vcl_pair<ForwardIterator, ForwardIterator>
 __equal_range(ForwardIterator first, ForwardIterator last, const T& value,
               Distance*, vcl_forward_iterator_tag) {
@@ -1787,7 +1786,7 @@ __equal_range(ForwardIterator first, ForwardIterator last, const T& value,
 }
 
 template <class RandomAccessIterator, class T, class Distance>
-IUEi_STL_INLINE
+inline
 vcl_pair<RandomAccessIterator, RandomAccessIterator>
 __equal_range(RandomAccessIterator first, RandomAccessIterator last,
               const T& value, Distance*, vcl_random_access_iterator_tag) {
@@ -1821,7 +1820,7 @@ vcl_equal_range(ForwardIterator first, ForwardIterator last, const T& value) {
 }
 
 template <class ForwardIterator, class T, class Compare, class Distance>
-IUEi_STL_INLINE
+inline
 vcl_pair<ForwardIterator, ForwardIterator>
 __equal_range(ForwardIterator first, ForwardIterator last, const T& value,
               Compare comp, Distance*, vcl_forward_iterator_tag) {
@@ -1859,7 +1858,7 @@ __equal_range(ForwardIterator first, ForwardIterator last, const T& value,
 }
 
 template <class RandomAccessIterator, class T, class Compare, class Distance>
-IUEi_STL_INLINE
+inline
 vcl_pair<RandomAccessIterator, RandomAccessIterator>
 __equal_range(RandomAccessIterator first, RandomAccessIterator last,
               const T& value, Compare comp, Distance*,
@@ -1888,33 +1887,33 @@ __equal_range(RandomAccessIterator first, RandomAccessIterator last,
 template <class ForwardIterator, class T, class Compare>
 inline vcl_pair<ForwardIterator, ForwardIterator>
 vcl_equal_range(ForwardIterator first, ForwardIterator last, const T& value,
-            Compare comp) {
+                Compare comp) {
     __stl_debug_check(__check_range(first, last));
     return __equal_range(first, last, value, comp, distance_type(first),
                          iterator_category(first));
 }
 
 template <class ForwardIterator, class T>
-IUEi_STL_INLINE
+inline
 bool vcl_binary_search(ForwardIterator first, ForwardIterator last,
-                   const T& value) {
+                       const T& value) {
     ForwardIterator i = vcl_lower_bound(first, last, value);
     return i != last && !(value < *i);
 }
 
 template <class ForwardIterator, class T, class Compare>
-IUEi_STL_INLINE
+inline
 bool vcl_binary_search(ForwardIterator first, ForwardIterator last, const T& value,
-                   Compare comp) {
+                       Compare comp) {
     ForwardIterator i = vcl_lower_bound(first, last, value, comp);
     return i != last && !comp(value, *i);
 }
 
 template <class InputIterator1, class InputIterator2, class OutputIterator>
-IUEi_STL_INLINE
+inline
 OutputIterator vcl_merge(InputIterator1 first1, InputIterator1 last1,
-                     InputIterator2 first2, InputIterator2 last2,
-                     OutputIterator result) {
+                         InputIterator2 first2, InputIterator2 last2,
+                         OutputIterator result) {
     __stl_debug_check(__check_range(first1, last1));
     __stl_debug_check(__check_range(first2, last2));
     for (; first1 != last1 && first2 != last2; ++result)
@@ -1926,10 +1925,10 @@ OutputIterator vcl_merge(InputIterator1 first1, InputIterator1 last1,
 }
 
 template <class InputIterator1, class InputIterator2, class OutputIterator, class Compare>
-IUEi_STL_INLINE
+inline
 OutputIterator vcl_merge(InputIterator1 first1, InputIterator1 last1,
-                     InputIterator2 first2, InputIterator2 last2,
-                     OutputIterator result, Compare comp) {
+                         InputIterator2 first2, InputIterator2 last2,
+                         OutputIterator result, Compare comp) {
     __stl_debug_check(__check_range(first1, last1));
     __stl_debug_check(__check_range(first2, last2));
     for (; first1 != last1 && first2 != last2; ++result)
@@ -1941,7 +1940,7 @@ OutputIterator vcl_merge(InputIterator1 first1, InputIterator1 last1,
 }
 
 template <class BidirectionalIterator, class Distance>
-IUEi_STL_INLINE
+inline
 void __merge_without_buffer(BidirectionalIterator first,
                             BidirectionalIterator middle,
                             BidirectionalIterator last,
@@ -1975,7 +1974,7 @@ void __merge_without_buffer(BidirectionalIterator first,
 }
 
 template <class BidirectionalIterator, class Distance, class Compare>
-IUEi_STL_INLINE
+inline
 void __merge_without_buffer(BidirectionalIterator first,
                             BidirectionalIterator middle,
                             BidirectionalIterator last,
@@ -2009,7 +2008,7 @@ void __merge_without_buffer(BidirectionalIterator first,
 }
 
 template <class BidirectionalIterator1, class BidirectionalIterator2, class Distance>
-IUEi_STL_INLINE
+inline
 BidirectionalIterator1 __rotate_adaptive(BidirectionalIterator1 first,
                                          BidirectionalIterator1 middle,
                                          BidirectionalIterator1 last,
@@ -2033,7 +2032,7 @@ BidirectionalIterator1 __rotate_adaptive(BidirectionalIterator1 first,
 }
 
 template <class BidirectionalIterator1, class BidirectionalIterator2, class BidirectionalIterator3>
-IUEi_STL_INLINE
+inline
 BidirectionalIterator3 __merge_backward(BidirectionalIterator1 first1,
                                         BidirectionalIterator1 last1,
                                         BidirectionalIterator2 first2,
@@ -2057,7 +2056,7 @@ BidirectionalIterator3 __merge_backward(BidirectionalIterator1 first1,
 }
 
 template <class BidirectionalIterator1, class BidirectionalIterator2, class BidirectionalIterator3, class Compare>
-IUEi_STL_INLINE
+inline
 BidirectionalIterator3 __merge_backward(BidirectionalIterator1 first1,
                                         BidirectionalIterator1 last1,
                                         BidirectionalIterator2 first2,
@@ -2082,7 +2081,7 @@ BidirectionalIterator3 __merge_backward(BidirectionalIterator1 first1,
 }
 
 template <class BidirectionalIterator, class Distance, class T>
-IUEi_STL_INLINE
+inline
 void __merge_adaptive(BidirectionalIterator first,
                       BidirectionalIterator middle,
                       BidirectionalIterator last, Distance len1, Distance len2,
@@ -2120,7 +2119,7 @@ void __merge_adaptive(BidirectionalIterator first,
 }
 
 template <class BidirectionalIterator, class Distance, class T, class Compare>
-IUEi_STL_INLINE
+inline
 void __merge_adaptive(BidirectionalIterator first,
                       BidirectionalIterator middle,
                       BidirectionalIterator last, Distance len1, Distance len2,
@@ -2158,7 +2157,7 @@ void __merge_adaptive(BidirectionalIterator first,
 }
 
 template <class BidirectionalIterator, class Distance, class T>
-IUEi_STL_INLINE
+inline
 void __inplace_merge(BidirectionalIterator first,
                      BidirectionalIterator middle,
                      BidirectionalIterator last, Distance len1, Distance len2,
@@ -2177,7 +2176,7 @@ void __inplace_merge(BidirectionalIterator first,
 }
 
 template <class BidirectionalIterator, class Distance, class T, class Compare>
-IUEi_STL_INLINE
+inline
 void __inplace_merge(BidirectionalIterator first,
                      BidirectionalIterator middle,
                      BidirectionalIterator last, Distance len1, Distance len2,
@@ -2241,7 +2240,7 @@ inline void inplace_merge(BidirectionalIterator first,
 }
 
 template <class InputIterator1, class InputIterator2>
-IUEi_STL_INLINE
+inline
 bool includes(InputIterator1 first1, InputIterator1 last1,
               InputIterator2 first2, InputIterator2 last2) {
     __stl_debug_check(__check_range(first1, last1));
@@ -2258,7 +2257,7 @@ bool includes(InputIterator1 first1, InputIterator1 last1,
 }
 
 template <class InputIterator1, class InputIterator2, class Compare>
-IUEi_STL_INLINE
+inline
 bool includes(InputIterator1 first1, InputIterator1 last1,
               InputIterator2 first2, InputIterator2 last2, Compare comp) {
     __stl_debug_check(__check_range(first1, last1));
@@ -2275,7 +2274,7 @@ bool includes(InputIterator1 first1, InputIterator1 last1,
 }
 
 template <class InputIterator1, class InputIterator2, class OutputIterator>
-IUEi_STL_INLINE
+inline
 OutputIterator set_union(InputIterator1 first1, InputIterator1 last1,
                          InputIterator2 first2, InputIterator2 last2,
                          OutputIterator result) {
@@ -2297,7 +2296,7 @@ OutputIterator set_union(InputIterator1 first1, InputIterator1 last1,
 }
 
 template <class InputIterator1, class InputIterator2, class OutputIterator, class Compare>
-IUEi_STL_INLINE
+inline
 OutputIterator set_union(InputIterator1 first1, InputIterator1 last1,
                          InputIterator2 first2, InputIterator2 last2,
                          OutputIterator result, Compare comp) {
@@ -2319,7 +2318,7 @@ OutputIterator set_union(InputIterator1 first1, InputIterator1 last1,
 }
 
 template <class InputIterator1, class InputIterator2, class OutputIterator>
-IUEi_STL_INLINE
+inline
 OutputIterator set_intersection(InputIterator1 first1, InputIterator1 last1,
                                 InputIterator2 first2, InputIterator2 last2,
                                 OutputIterator result) {
@@ -2340,7 +2339,7 @@ OutputIterator set_intersection(InputIterator1 first1, InputIterator1 last1,
 }
 
 template <class InputIterator1, class InputIterator2, class OutputIterator, class Compare>
-IUEi_STL_INLINE
+inline
 OutputIterator set_intersection(InputIterator1 first1, InputIterator1 last1,
                                 InputIterator2 first2, InputIterator2 last2,
                                 OutputIterator result, Compare comp) {
@@ -2361,7 +2360,7 @@ OutputIterator set_intersection(InputIterator1 first1, InputIterator1 last1,
 }
 
 template <class InputIterator1, class InputIterator2, class OutputIterator>
-IUEi_STL_INLINE
+inline
 OutputIterator set_difference(InputIterator1 first1, InputIterator1 last1,
                               InputIterator2 first2, InputIterator2 last2,
                               OutputIterator result) {
@@ -2383,7 +2382,7 @@ OutputIterator set_difference(InputIterator1 first1, InputIterator1 last1,
 }
 
 template <class InputIterator1, class InputIterator2, class OutputIterator, class Compare>
-IUEi_STL_INLINE
+inline
 OutputIterator set_difference(InputIterator1 first1, InputIterator1 last1,
                               InputIterator2 first2, InputIterator2 last2,
                               OutputIterator result, Compare comp) {
@@ -2405,7 +2404,7 @@ OutputIterator set_difference(InputIterator1 first1, InputIterator1 last1,
 }
 
 template <class InputIterator1, class InputIterator2, class OutputIterator>
-IUEi_STL_INLINE
+inline
 OutputIterator set_symmetric_difference(InputIterator1 first1,
                                         InputIterator1 last1,
                                         InputIterator2 first2,
@@ -2432,7 +2431,7 @@ OutputIterator set_symmetric_difference(InputIterator1 first1,
 }
 
 template <class InputIterator1, class InputIterator2, class OutputIterator, class Compare>
-IUEi_STL_INLINE
+inline
 OutputIterator set_symmetric_difference(InputIterator1 first1,
                                         InputIterator1 last1,
                                         InputIterator2 first2,
@@ -2459,7 +2458,7 @@ OutputIterator set_symmetric_difference(InputIterator1 first1,
 }
 
 template <class ForwardIterator>
-IUEi_STL_INLINE
+inline
 ForwardIterator vcl_max_element(ForwardIterator first, ForwardIterator last) {
     __stl_debug_check(__check_range(first, last));
     if (first == last) return first;
@@ -2470,7 +2469,7 @@ ForwardIterator vcl_max_element(ForwardIterator first, ForwardIterator last) {
 }
 
 template <class ForwardIterator, class Compare>
-IUEi_STL_INLINE
+inline
 ForwardIterator vcl_max_element(ForwardIterator first, ForwardIterator last,
                                 Compare comp) {
     __stl_debug_check(__check_range(first, last));
@@ -2482,7 +2481,7 @@ ForwardIterator vcl_max_element(ForwardIterator first, ForwardIterator last,
 }
 
 template <class ForwardIterator>
-IUEi_STL_INLINE
+inline
 ForwardIterator min_element(ForwardIterator first, ForwardIterator last) {
     __stl_debug_check(__check_range(first, last));
     if (first == last) return first;
@@ -2493,7 +2492,7 @@ ForwardIterator min_element(ForwardIterator first, ForwardIterator last) {
 }
 
 template <class ForwardIterator, class Compare>
-IUEi_STL_INLINE
+inline
 ForwardIterator min_element(ForwardIterator first, ForwardIterator last,
                             Compare comp) {
     __stl_debug_check(__check_range(first, last));
@@ -2505,7 +2504,7 @@ ForwardIterator min_element(ForwardIterator first, ForwardIterator last,
 }
 
 template <class BidirectionalIterator>
-IUEi_STL_INLINE
+inline
 bool next_permutation(BidirectionalIterator first,
                       BidirectionalIterator last) {
     __stl_debug_check(__check_range(first, last));
@@ -2533,7 +2532,7 @@ bool next_permutation(BidirectionalIterator first,
 }
 
 template <class BidirectionalIterator, class Compare>
-IUEi_STL_INLINE
+inline
 bool next_permutation(BidirectionalIterator first, BidirectionalIterator last,
                       Compare comp) {
     __stl_debug_check(__check_range(first, last));
@@ -2561,7 +2560,7 @@ bool next_permutation(BidirectionalIterator first, BidirectionalIterator last,
 }
 
 template <class BidirectionalIterator>
-IUEi_STL_INLINE
+inline
 bool prev_permutation(BidirectionalIterator first,
                       BidirectionalIterator last) {
     __stl_debug_check(__check_range(first, last));
@@ -2589,7 +2588,7 @@ bool prev_permutation(BidirectionalIterator first,
 }
 
 template <class BidirectionalIterator, class Compare>
-IUEi_STL_INLINE
+inline
 bool prev_permutation(BidirectionalIterator first, BidirectionalIterator last,
                       Compare comp) {
     __stl_debug_check(__check_range(first, last));
@@ -2617,7 +2616,7 @@ bool prev_permutation(BidirectionalIterator first, BidirectionalIterator last,
 }
 
 template <class InputIterator, class T>
-IUEi_STL_INLINE
+inline
 T vcl_accumulate(InputIterator first, InputIterator last, T init) {
     __stl_debug_check(__check_range(first, last));
     for (; first != last; ++first)
@@ -2626,9 +2625,9 @@ T vcl_accumulate(InputIterator first, InputIterator last, T init) {
 }
 
 template <class InputIterator, class T, class BinaryOperation>
-IUEi_STL_INLINE
+inline
 T vcl_accumulate(InputIterator first, InputIterator last, T init,
-             BinaryOperation binary_op) {
+                 BinaryOperation binary_op) {
     __stl_debug_check(__check_range(first, last));
     for (; first != last; ++first)
         init = binary_op(init, *first);
@@ -2636,9 +2635,9 @@ T vcl_accumulate(InputIterator first, InputIterator last, T init,
 }
 
 template <class InputIterator1, class InputIterator2, class T>
-IUEi_STL_INLINE
+inline
 T vcl_inner_product(InputIterator1 first1, InputIterator1 last1,
-                InputIterator2 first2, T init) {
+                    InputIterator2 first2, T init) {
     __stl_debug_check(__check_range(first1, last1));
     for (; first1 != last1; ++first1,++first2)
         init = init + (*first1 * *first2);
@@ -2646,10 +2645,10 @@ T vcl_inner_product(InputIterator1 first1, InputIterator1 last1,
 }
 
 template <class InputIterator1, class InputIterator2, class T, class BinaryOperation1, class BinaryOperation2>
-IUEi_STL_INLINE
+inline
 T vcl_inner_product(InputIterator1 first1, InputIterator1 last1,
-                InputIterator2 first2, T init, BinaryOperation1 binary_op1,
-                BinaryOperation2 binary_op2) {
+                    InputIterator2 first2, T init, BinaryOperation1 binary_op1,
+                    BinaryOperation2 binary_op2) {
     __stl_debug_check(__check_range(first1, last1));
     for (; first1 != last1; ++first1,++first2)
         init = binary_op1(init, binary_op2(*first1, *first2));
@@ -2668,9 +2667,9 @@ INLINE_LOOP OutputIterator __partial_sum(InputIterator first, InputIterator last
 }
 
 template <class InputIterator, class OutputIterator>
-IUEi_STL_INLINE
+inline
 OutputIterator vcl_partial_sum(InputIterator first, InputIterator last,
-                           OutputIterator result) {
+                               OutputIterator result) {
     __stl_debug_check(__check_range(first, last));
     if (first == last) return result;
     *result = *first;
@@ -2690,9 +2689,9 @@ INLINE_LOOP OutputIterator __partial_sum(InputIterator first, InputIterator last
 }
 
 template <class InputIterator, class OutputIterator, class BinaryOperation>
-IUEi_STL_INLINE
+inline
 OutputIterator vcl_partial_sum(InputIterator first, InputIterator last,
-                           OutputIterator result, BinaryOperation binary_op) {
+                               OutputIterator result, BinaryOperation binary_op) {
     __stl_debug_check(__check_range(first, last));
     if (first == last) return result;
     *result = *first;
@@ -2712,9 +2711,9 @@ INLINE_LOOP OutputIterator __adjacent_difference(InputIterator first, InputItera
 }
 
 template <class InputIterator, class OutputIterator>
-IUEi_STL_INLINE
+inline
 OutputIterator vcl_adjacent_difference(InputIterator first, InputIterator last,
-                                   OutputIterator result) {
+                                       OutputIterator result) {
     __stl_debug_check(__check_range(first, last));
     if (first == last) return result;
     *result = *first;
@@ -2735,10 +2734,10 @@ INLINE_LOOP OutputIterator __adjacent_difference(InputIterator first, InputItera
 }
 
 template <class InputIterator, class OutputIterator, class BinaryOperation>
-IUEi_STL_INLINE
+inline
 OutputIterator vcl_adjacent_difference(InputIterator first, InputIterator last,
-                                   OutputIterator result,
-                                   BinaryOperation binary_op) {
+                                       OutputIterator result,
+                                       BinaryOperation binary_op) {
     __stl_debug_check(__check_range(first, last));
     if (first == last) return result;
     *result = *first;
@@ -2747,14 +2746,14 @@ OutputIterator vcl_adjacent_difference(InputIterator first, InputIterator last,
 }
 
 template <class ForwardIterator, class T>
-IUEi_STL_INLINE
+inline
 void vcl_iota(ForwardIterator first, ForwardIterator last, T value) {
     __stl_debug_check(__check_range(first, last));
     for (; first != last; ++first,++value) *first = value;
 }
 
 template <class RandomAccessIterator, class Distance>
-IUEi_STL_INLINE
+inline
 bool __is_heap(RandomAccessIterator first, RandomAccessIterator last,
                Distance*)
 {
@@ -2779,7 +2778,7 @@ inline bool vcl_is_heap(RandomAccessIterator first, RandomAccessIterator last)
 
 
 template <class RandomAccessIterator, class Distance, class StrictWeakOrdering>
-IUEi_STL_INLINE
+inline
 bool __is_heap(RandomAccessIterator first, RandomAccessIterator last,
                StrictWeakOrdering comp,
                Distance*)
@@ -2798,7 +2797,7 @@ bool __is_heap(RandomAccessIterator first, RandomAccessIterator last,
 
 template <class RandomAccessIterator, class StrictWeakOrdering>
 inline bool vcl_is_heap(RandomAccessIterator first, RandomAccessIterator last,
-                    StrictWeakOrdering comp)
+                        StrictWeakOrdering comp)
 {
     __stl_debug_check(__check_range(first, last));
     return __is_heap(first, last, comp, distance_type(first));
@@ -2806,7 +2805,7 @@ inline bool vcl_is_heap(RandomAccessIterator first, RandomAccessIterator last,
 
 
 template <class ForwardIterator>
-IUEi_STL_INLINE
+inline
 bool vcl_is_sorted(ForwardIterator first, ForwardIterator last)
 {
     __stl_debug_check(__check_range(first, last));
@@ -2823,9 +2822,9 @@ bool vcl_is_sorted(ForwardIterator first, ForwardIterator last)
 }
 
 template <class ForwardIterator, class StrictWeakOrdering>
-IUEi_STL_INLINE
+inline
 bool vcl_is_sorted(ForwardIterator first, ForwardIterator last,
-               StrictWeakOrdering comp)
+                   StrictWeakOrdering comp)
 {
     __stl_debug_check(__check_range(first, last));
     if (first == last)
