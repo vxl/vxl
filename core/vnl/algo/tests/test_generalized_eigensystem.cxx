@@ -1,4 +1,4 @@
-// This is core/vnl/tests/test_generalized_eigensystem.cxx
+// This is core/vnl/algo/tests/test_generalized_eigensystem.cxx
 #include <testlib/testlib_test.h>
 //:
 // \file

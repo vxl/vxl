@@ -1,7 +1,6 @@
-// This is core/vnl/tests/test_sparse_matrix.cxx
+// This is core/vnl/algo/tests/test_sparse_matrix.cxx
 #include <vcl_ctime.h>
 #include <vcl_iostream.h>
-#include <vcl_cmath.h>
 #include <vnl/vnl_sparse_matrix.h>
 #include <vnl/algo/vnl_sparse_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
@@ -73,7 +72,8 @@ void doTest1()
 void doTest2()
 {
   vcl_clock_t t = vcl_clock();
-  for (unsigned int n = 1000; n<4000; n+=1000) {
+  for (unsigned int n = 1000; n<4000; n+=1000)
+  {
     vnl_sparse_matrix<double> m1(n,n);
     for (unsigned i=0; i<n; i++) {
       m1(i,i) = 2.0;
@@ -153,27 +153,23 @@ void doTest4()
        es.CalculateNPairs(ms,nvals), 0);
 
   // Report 'em.
-  for (unsigned i=0; i<nvals; i++) {
+  for (unsigned i=0; i<nvals; i++)
+  {
     double dense = ed.D(i,i);
     double sparse = es.get_eigenvalue(i);
     vcl_cout << "Dense[" << i << "] : " << dense << vcl_endl
              << "Sparse[" << i << "]: " << sparse << vcl_endl;
-    double err = vcl_fabs(dense - sparse);
-    vcl_cout << "Error: " << err << vcl_endl;
-    testlib_test_assert("vnl_sparse_symmetric_eigensystem eigenvalue error", err < 1e-10);
+    double err = sparse - dense;
+    TEST_NEAR("vnl_sparse_symmetric_eigensystem eigenvalue difference", err, 0.0, 1e-10);
   }
 }
 
 static void test_sparse_matrix()
 {
-  vcl_cout << "Starting test 1\n";
-  doTest1();
-  vcl_cout << "Starting test 2\n";
-  doTest2();
-  vcl_cout << "Starting test 3\n";
-  doTest3();
-  vcl_cout << "Starting test 4\n";
-  doTest4();
+  vcl_cout << "Starting test 1\n"; doTest1();
+  vcl_cout << "Starting test 2\n"; doTest2();
+  vcl_cout << "Starting test 3\n"; doTest3();
+  vcl_cout << "Starting test 4\n"; doTest4();
 }
 
 TESTMAIN(test_sparse_matrix);

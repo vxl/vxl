@@ -1,4 +1,4 @@
-// This is core/vul/tests/test_file.cxx
+// This is core/vul/tests/test_vul_file.cxx
 #include <vul/vul_file.h>
 #include <testlib/testlib_test.h>
 

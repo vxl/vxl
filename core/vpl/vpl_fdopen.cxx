@@ -1,4 +1,4 @@
-// This is core/vpl/vpl_fdopen.h
+// This is core/vpl/vpl_fdopen.cxx
 #include "vpl_fdopen.h"
 #include <vcl_cstdio.h>
 

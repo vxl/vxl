@@ -1,17 +1,15 @@
-// This is brl/vpro/vpro_lucas_kanade_process.h
+// This is brl/bseg/vpro/vpro_lucas_kanade_process.h
 #ifndef vpro_lucas_kanade_process_h_
 #define vpro_lucas_kanade_process_h_
 //--------------------------------------------------------------------------------
 //:
 // \file
 // \brief  computes the Lucas-Kanade motion vector.
-// \author
-//   J.L. Mundy
+// \author J.L. Mundy
 //
 // \verbatim
-//  Modifications:
-//   J.L. Mundy February 19, 2003
-//  Initial version.
+//  Modifications
+//   J.L. Mundy - February 19, 2003 - Initial version.
 // \endverbatim
 //-----------------------------------------------------------------------------
 
@@ -26,7 +24,7 @@ class vpro_lucas_kanade_process : public vpro_video_process
   vpro_lucas_kanade_process(bool down_sample=false, int window_size=2,
                             double thresh=20000);
   ~vpro_lucas_kanade_process();
-  virtual process_data_type get_output_type(){return IMAGE;}
+  virtual process_data_type get_output_type() { return IMAGE; }
   //: compute lucas_kanade
   virtual bool execute();
   virtual bool finish();

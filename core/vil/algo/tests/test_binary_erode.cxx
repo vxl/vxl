@@ -1,4 +1,4 @@
-// This is core/vil/tests/test_binary_erode.cxx
+// This is core/vil/algo/tests/test_binary_erode.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
@@ -53,20 +53,20 @@ static void test_binary_erode_byte()
   vcl_cout<<"Result of one erosion\n";
   print_binary_image(image3);
 
-  TEST("image3(5,5)",image3(5,5),true);
-  TEST("image3(4,5)",image3(4,5),true);
-  TEST("image3(6,5)",image3(6,5),true);
-  TEST("image3(5,6)",image3(5,6),false);
+  TEST("image3(5,5)", image3(5,5), true);
+  TEST("image3(4,5)", image3(4,5), true);
+  TEST("image3(6,5)", image3(6,5), true);
+  TEST("image3(5,6)", image3(5,6), false);
 
   vil_image_view<bool> image4;
   vil_binary_erode(image3,image4,element_i);
   vcl_cout<<"Result of two erosions\n";
   print_binary_image(image4);
 
-  TEST("image4(5,5)",image4(5,5),true);
-  TEST("image4(4,5)",image4(4,5),false);
-  TEST("image4(6,5)",image4(6,5),false);
-  TEST("image4(3,0)",image4(3,0),false);
+  TEST("image4(5,5)", image4(5,5), true);
+  TEST("image4(4,5)", image4(4,5), false);
+  TEST("image4(6,5)", image4(6,5), false);
+  TEST("image4(3,0)", image4(3,0), false);
 
 
   vcl_cout<<"Testing vil_binary_closing\n";
@@ -74,17 +74,17 @@ static void test_binary_erode_byte()
   image0(4,5)=true;
   image0(6,5)=true;
   vil_binary_closing(image0,image1,element_i);
-  TEST("image1(4,5)",image1(4,5),true);
-  TEST("Gap filled",image1(5,5),true);
-  TEST("image1(6,5)",image1(6,5),true);
-  TEST("image1(7,5)",image1(7,5),false);
+  TEST("image1(4,5)", image1(4,5), true);
+  TEST("Gap filled",  image1(5,5), true);
+  TEST("image1(6,5)", image1(6,5), true);
+  TEST("image1(7,5)", image1(7,5), false);
 
   vcl_cout<<"Testing vil_binary_opening\n";
   vil_binary_opening(image0,image1,element_i);
-  TEST("image1(4,5)",image1(4,5),false);
-  TEST("Gap",image1(5,5),false);
-  TEST("image1(6,5)",image1(6,5),false);
-  TEST("image1(7,5)",image1(7,5),false);
+  TEST("image1(4,5)", image1(4,5), false);
+  TEST("Gap",         image1(5,5), false);
+  TEST("image1(6,5)", image1(6,5), false);
+  TEST("image1(7,5)", image1(7,5), false);
 }
 
 static void test_binary_erode()

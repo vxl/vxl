@@ -1,7 +1,7 @@
-// This is oxl/mvl/bvgl_h_matrix_2d_compute_linear.cxx
+// This is brl/bbas/bvgl/bvgl_h_matrix_2d_compute_linear.cxx
 #include "bvgl_h_matrix_2d_compute_linear.h"
 //:
-//  \file
+// \file
 
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
@@ -11,7 +11,7 @@
 
 //: Construct a bvgl_h_matrix_2d_compute_linear object.
 // The allow_ideal_points flag is described below.
-bvgl_h_matrix_2d_compute_linear::bvgl_h_matrix_2d_compute_linear(bool allow_ideal_points):
+bvgl_h_matrix_2d_compute_linear::bvgl_h_matrix_2d_compute_linear(bool allow_ideal_points) :
   allow_ideal_points_(allow_ideal_points)
 {
 }
@@ -50,7 +50,7 @@ compute_p(vcl_vector<vgl_homg_point_2d<double> > const& points1,
           vcl_vector<vgl_homg_point_2d<double> > const& points2,
           bvgl_h_matrix_2d<double>& H)
 {
-  //number of points must be the same 
+  //number of points must be the same
   assert(points1.size() == points2.size());
   int n = points1.size();
 
@@ -62,16 +62,17 @@ compute_p(vcl_vector<vgl_homg_point_2d<double> > const& points1,
   }
   //compute the normalizing transforms
   bvgl_norm_trans_2d<double> tr1, tr2;
-  if(!tr1.compute_from_points(points1))
+  if (!tr1.compute_from_points(points1))
     return false;
-  if(!tr2.compute_from_points(points2))
+  if (!tr2.compute_from_points(points2))
     return false;
 
   //transform the point sets and fill the design matrix
   vnl_matrix<double> D(equ_count, TM_UNKNOWNS_COUNT);
 
   int row = 0;
-  for (int i = 0; i < n; i++) {
+  for (int i = 0; i < n; i++)
+  {
     vgl_homg_point_2d<double> p1 = tr1(points1[i]);
     vgl_homg_point_2d<double> p2 = tr2(points2[i]);
     D(row, 0) =  p1.x() * p2.w();
@@ -96,7 +97,8 @@ compute_p(vcl_vector<vgl_homg_point_2d<double> > const& points1,
     D(row, 8) = -p1.w() * p2.y();
     ++row;
 
-    if (allow_ideal_points_) {
+    if (allow_ideal_points_)
+    {
       D(row, 0) =  p1.x() * p2.y();
       D(row, 1) =  p1.y() * p2.y();
       D(row, 2) =  p1.w() * p2.y();
@@ -116,16 +118,16 @@ compute_p(vcl_vector<vgl_homg_point_2d<double> > const& points1,
   //
   // FSM added :
   //
-  if (svd.W(7)<DEGENERACY_THRESHOLD*svd.W(8)) {
-    vcl_cerr << "bvgl_h_matrix_2d_compute_linear : design matrix has rank < 8" << vcl_endl;
-    vcl_cerr << "bvgl_h_matrix_2d_compute_linear : probably due to degenerate point configuration" << vcl_endl;
+  if (svd.W(7) < DEGENERACY_THRESHOLD*svd.W(8)) {
+    vcl_cerr << "bvgl_h_matrix_2d_compute_linear : design matrix has rank < 8\n"
+             << "bvgl_h_matrix_2d_compute_linear : probably due to degenerate point configuration\n";
     return false;
   }
   // form the matrix from the nullvector
   bvgl_h_matrix_2d<double> hh;
   hh.set(svd.nullvector().data_block());
   //
-  // Next, hh has to be transformed back to the coordinate system of 
+  // Next, hh has to be transformed back to the coordinate system of
   // the original point sets, i.e.,
   //  p1' = tr1 p1 , p2' = tr2 p2
   // hh was detemined from the transform relation

@@ -1,16 +1,15 @@
-//this-sets-emacs-to-*-c++-*-mode
+// This is brl/bseg/vpro/vpro_motion_process.h
 #ifndef vpro_motion_process_h_
 #define vpro_motion_process_h_
 //--------------------------------------------------------------------------------
 //:
 // \file
 // \brief detects linear motion
-// \author
-//   J.L. Mundy
+// \author J.L. Mundy
 //
 // \verbatim
-//  Modifications:
-//   J.L. Mundy February 16, 2003    Initial version.
+//  Modifications
+//   J.L. Mundy - February 16, 2003 - Initial version.
 // \endverbatim
 //-----------------------------------------------------------------------------
 #include <vcl_vector.h>
@@ -23,7 +22,7 @@ class vpro_motion_process: public vpro_video_process, public vpro_motion_params
   enum state_symbol {NO_IMAGE=0, FIRST_IMAGE, IN_PROCESS};
   vpro_motion_process(vpro_motion_params& vmp);
   ~vpro_motion_process();
-  virtual process_data_type get_output_type(){return IMAGE;}
+  virtual process_data_type get_output_type() { return IMAGE; }
   //: compute motion
   virtual bool execute();
   virtual bool finish();

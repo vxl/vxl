@@ -1,4 +1,4 @@
-// This is mul/mbl/tests/test_gamma.cxx
+// This is mul/mbl/tests/test_select_n_from_m.cxx
 #include <vcl_iostream.h>
 #include <mbl/mbl_select_n_from_m.h>
 #include <testlib/testlib_test.h>
@@ -10,7 +10,7 @@ void test_select_n_from_m()
            << "*****************************\n";
 
   mbl_select_n_from_m selector(2,9);
-  
+
   selector.reset();
   TEST("Two selected",selector.subset().size(),2);
   TEST("First element 0",selector.subset()[0],0);
@@ -32,10 +32,10 @@ void test_select_n_from_m()
   do
   {
     count++;
-    vcl_cout<<selector.subset()[0]<<","<<selector.subset()[1]<<vcl_endl;
+    vcl_cout << selector.subset()[0] << ',' << selector.subset()[1] << vcl_endl;
   }
   while (selector.next());
-  vcl_cout<<"count = "<<count<<vcl_endl;
+  vcl_cout << "count = " << count << vcl_endl;
 
   TEST("2 from 9 = 9*8/2 = 36 combinations",count,36);
 

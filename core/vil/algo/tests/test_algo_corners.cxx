@@ -1,4 +1,4 @@
-// This is core/vil/tests/test_algo_corners.cxx
+// This is core/vil/algo/tests/test_algo_corners.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vil/algo/vil_corners.h>
@@ -23,12 +23,12 @@ static void test_algo_corners_byte_float()
   vil_image_view<float> corner_im;
   vil_corners(image0,corner_im);
 
-  TEST("Correct size",corner_im.ni(),image0.ni());
+  TEST("Correct size", corner_im.ni(), image0.ni());
 
-  TEST("Peak just inside corner",vil_is_peak_3x3(&corner_im( 7, 7),corner_im.istep(),corner_im.jstep()),true);
-  TEST("Peak just inside corner",vil_is_peak_3x3(&corner_im( 7,12),corner_im.istep(),corner_im.jstep()),true);
-  TEST("Peak just inside corner",vil_is_peak_3x3(&corner_im(12, 7),corner_im.istep(),corner_im.jstep()),true);
-  TEST("Peak just inside corner",vil_is_peak_3x3(&corner_im(12,12),corner_im.istep(),corner_im.jstep()),true);
+  TEST("Peak just inside corner", vil_is_peak_3x3(&corner_im( 7, 7),corner_im.istep(),corner_im.jstep()), true);
+  TEST("Peak just inside corner", vil_is_peak_3x3(&corner_im( 7,12),corner_im.istep(),corner_im.jstep()), true);
+  TEST("Peak just inside corner", vil_is_peak_3x3(&corner_im(12, 7),corner_im.istep(),corner_im.jstep()), true);
+  TEST("Peak just inside corner", vil_is_peak_3x3(&corner_im(12,12),corner_im.istep(),corner_im.jstep()), true);
 
 
   vcl_cout<<"Testing black square on white background\n";
@@ -38,12 +38,12 @@ static void test_algo_corners_byte_float()
 
   vil_corners(image0,corner_im);
 
-  TEST("Correct size",corner_im.ni(),image0.ni());
+  TEST("Correct size", corner_im.ni(), image0.ni());
 
-  TEST("Peak just inside corner",vil_is_peak_3x3(&corner_im( 7, 7),corner_im.istep(),corner_im.jstep()),true);
-  TEST("Peak just inside corner",vil_is_peak_3x3(&corner_im( 7,12),corner_im.istep(),corner_im.jstep()),true);
-  TEST("Peak just inside corner",vil_is_peak_3x3(&corner_im(12, 7),corner_im.istep(),corner_im.jstep()),true);
-  TEST("Peak just inside corner",vil_is_peak_3x3(&corner_im(12,12),corner_im.istep(),corner_im.jstep()),true);
+  TEST("Peak just inside corner", vil_is_peak_3x3(&corner_im( 7, 7),corner_im.istep(),corner_im.jstep()), true);
+  TEST("Peak just inside corner", vil_is_peak_3x3(&corner_im( 7,12),corner_im.istep(),corner_im.jstep()), true);
+  TEST("Peak just inside corner", vil_is_peak_3x3(&corner_im(12, 7),corner_im.istep(),corner_im.jstep()), true);
+  TEST("Peak just inside corner", vil_is_peak_3x3(&corner_im(12,12),corner_im.istep(),corner_im.jstep()), true);
 }
 
 static void test_algo_corners()

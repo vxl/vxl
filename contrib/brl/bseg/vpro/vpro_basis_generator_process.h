@@ -1,16 +1,15 @@
-// This is brl/vpro/vpro_basis_generator_process.h
+// This is brl/bseg/vpro/vpro_basis_generator_process.h
 #ifndef vpro_basis_generator_process_h_
 #define vpro_basis_generator_process_h_
 //--------------------------------------------------------------------------------
 //:
 // \file
 // \brief  Generates an image sequence corresponding to a basis
-// \author
-//   J.L. Mundy
+// \author J.L. Mundy
 //
 // \verbatim
-//  Modifications:
-//   J.L. Mundy October 16, 2003    Initial version.
+//  Modifications
+//   J.L. Mundy - October 16, 2003 - Initial version.
 // \endverbatim
 //-----------------------------------------------------------------------------
 #include <vcl_vector.h>
@@ -23,7 +22,7 @@ class vpro_basis_generator_process : public vpro_video_process
  public:
   vpro_basis_generator_process(vcl_string const & video_file);
   ~vpro_basis_generator_process();
-  virtual process_data_type get_output_type(){return NOTYPE;}
+  virtual process_data_type get_output_type() { return NOTYPE; }
   //: compute edges on the input image
   virtual bool execute();
   virtual bool finish();

@@ -1,4 +1,6 @@
-// This is brl/vpro/vpro_edge_process.cxx
+// This is brl/bseg/vpro/vpro_edge_process.cxx
+#include "vpro_edge_process.h"
+//: \file
 #include <vcl_iostream.h>
 #include <vul/vul_timer.h>
 #include <vcl_vector.h>
@@ -7,7 +9,6 @@
 #include <vtol/vtol_edge_2d.h>
 #include <brip/brip_vil1_float_ops.h>
 #include <sdet/sdet_detector.h>
-#include <vpro/vpro_edge_process.h>
 
 vpro_edge_process::vpro_edge_process(sdet_detector_params & dp)
   : sdet_detector_params(dp)
@@ -21,30 +22,29 @@ vpro_edge_process::~vpro_edge_process()
 bool vpro_edge_process::execute()
 {
   vul_timer t;
-  if (this->get_N_input_images()!=1)
-    {
-      vcl_cout << "In vpro_edge_process::execute() - not exactly one"
-               << " input image \n";
-      return false;
-    }
+  if (this->get_N_input_images() != 1)
+  {
+    vcl_cout<<"In vpro_edge_process::execute() - not exactly one input image\n";
+    return false;
+  }
   output_topo_objs_.clear();
 
   vil1_image img = vpro_video_process::get_input_image(0);
   vil1_memory_image_of<unsigned char> cimg;
-  if (img.components()==3)
-    {
-      vil1_memory_image_of<float> fimg = brip_vil1_float_ops::convert_to_float(img);
-      vpro_video_process::clear_input();//remove image from input
-      //convert a color image to grey
-      cimg = brip_vil1_float_ops::convert_to_byte(fimg);
-    }
+  if (img.components() == 3)
+  {
+    vil1_memory_image_of<float> fimg = brip_vil1_float_ops::convert_to_float(img);
+    vpro_video_process::clear_input();//remove image from input
+    //convert a color image to grey
+    cimg = brip_vil1_float_ops::convert_to_byte(fimg);
+  }
   else
-    {
-      cimg = vil1_memory_image_of<unsigned char>(img);
-      vpro_video_process::clear_input();
-    }
+  {
+    cimg = vil1_memory_image_of<unsigned char>(img);
+    vpro_video_process::clear_input();
+  }
   //initialize the detector
-  sdet_detector detector(*((sdet_detector_params*)this));
+  sdet_detector detector(*(static_cast<sdet_detector_params*>(this)));
   detector.SetImage(cimg);
   //process edges
   detector.DoContour();

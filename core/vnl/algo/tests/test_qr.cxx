@@ -1,4 +1,5 @@
-// This is core/vnl/tests/test_qr.cxx
+// This is core/vnl/algo/tests/test_qr.cxx
+#include "test_util.h"
 #include <vcl_iostream.h>
 #include <vcl_complex.h>
 #include <testlib/testlib_test.h>
@@ -6,8 +7,6 @@
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_matlab_print.h>
 #include <vnl/algo/vnl_qr.h>
-
-#include "test_util.h"
 
 //--------------------------------------------------------------------------------
 
@@ -161,7 +160,8 @@ void complex_test()
 
 //--------------------------------------------------------------------------------
 
-extern "C" void test_qr() {
+extern "C" void test_qr()
+{
   vcl_cout << "-------------------- double_complex\n";
   complex_test();
   vcl_cout << "-------------------- double\n";

@@ -1,4 +1,4 @@
-// This is core/vidl/example/vidl_player_manager.h
+// This is core/vidl/examples/vidl_player_manager.h
 #ifndef vidl_player_manager_h_
 #define vidl_player_manager_h_
 //-----------------------------------------------------------------------------
@@ -19,7 +19,7 @@
 
 //: A singleton manager class for playing videos.
 //  The purpose this code is demonstrate the use of vidl.  The vidl_player
-//  loads, displays, and saves (saving not implemented yet) videos in the 
+//  loads, displays, and saves (saving not implemented yet) videos in the
 //  following formats:
 //   - Directory of Images (any type supported by vil)
 //   - MPEG (still in early stages of development)
@@ -66,7 +66,7 @@ class vidl_player_manager : public vgui_wrapper_tableau
   vgui_window* get_window() { return win_; }
 
   //: set the window
-  void set_window(vgui_window* win){win_=win;}
+  void set_window(vgui_window* win) { win_=win; }
 
   //: tableau handle function
   virtual bool handle(const vgui_event&);
@@ -91,7 +91,6 @@ class vidl_player_manager : public vgui_wrapper_tableau
   vgui_image_tableau_sptr itab_;
 
   static vidl_player_manager *instance_;
-
 };
 
 #endif // vidl_player_manager_h_

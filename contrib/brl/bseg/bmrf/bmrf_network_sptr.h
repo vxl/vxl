@@ -1,4 +1,4 @@
-// This is core/doc/bmrf_network_sptr.h
+// This is brl/bseg/bmrf/bmrf_network_sptr.h
 #ifndef bmrf_network_sptr_h_
 #define bmrf_network_sptr_h_
 //:

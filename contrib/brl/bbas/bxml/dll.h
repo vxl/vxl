@@ -1,4 +1,4 @@
-// This is vxl/brl/bbas/bxml/dll.h
+// This is brl/bbas/bxml/dll.h
 #ifndef bxml_dll_h_
 #define bxml_dll_h_
 

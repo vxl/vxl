@@ -1,4 +1,4 @@
-// This is core/vil/tests/test_algo_find_peaks.cxx
+// This is core/vil/algo/tests/test_algo_find_peaks.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
@@ -19,10 +19,10 @@ static void test_find_peaks_byte()
   vcl_vector<unsigned> pi,pj;
   vil_find_peaks_3x3(pi,pj,image0,vxl_byte(0));
 
-  TEST("Number of peaks",pi.size(),2);
+  TEST("Number of peaks", pi.size(), 2);
 
-  TEST("Peak at (3,7)",pi[1]==3 && pj[1]==7, true);
-  TEST("Peak at (7,5)",pi[0]==7 && pj[0]==5, true);
+  TEST("Peak at (3,7)", pi[1]==3 && pj[1]==7, true);
+  TEST("Peak at (7,5)", pi[0]==7 && pj[0]==5, true);
 }
 
 static void test_algo_find_peaks()

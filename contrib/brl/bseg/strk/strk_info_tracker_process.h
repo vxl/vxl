@@ -1,16 +1,15 @@
-// This is brl/strk/strk_info_tracker_process.h
+// This is brl/bseg/strk/strk_info_tracker_process.h
 #ifndef strk_info_tracker_process_h_
 #define strk_info_tracker_process_h_
 //----------------------------------------------------------------------------
 //:
 // \file
 // \brief tracks a correlation window across frames
-// \author
-//   J.L. Mundy
+// \author J.L. Mundy
 //
 // \verbatim
-//  Modifications:
-//   J.L. Mundy August 21, 2002    Initial version.
+//  Modifications
+//   J.L. Mundy - August 21, 2002 - Initial version.
 // \endverbatim
 //---------------------------------------------------------------------------
 #include <vtol/vtol_face_2d_sptr.h>
@@ -23,7 +22,7 @@ class strk_info_tracker_process : public vpro_video_process
  public:
   strk_info_tracker_process(strk_info_tracker_params & tp);
   ~strk_info_tracker_process();
-  virtual process_data_type get_output_type(){return TOPOLOGY;}
+  virtual process_data_type get_output_type() { return TOPOLOGY; }
 
   //: track to next frame
   virtual bool execute();

@@ -1,4 +1,4 @@
-// This is core/vil/tests/test_algo_exp_filter_1d.cxx
+// This is core/vil/algo/tests/test_algo_exp_filter_1d.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
@@ -36,7 +36,7 @@ static void test_algo_exp_filter_1d_byte_float()
   vil_exp_filter_1d(&src[0],1,&dest[0],1,n,float(k));
   sum = 0;
   for (int i=0;i<n;++i) sum+=dest[i];
-  TEST_NEAR("Sum unchanged (more complex data)",sum,200,1e-4);
+  TEST_NEAR("Sum unchanged (more complex data)", sum, 200, 1e-4);
 
   for (int i=30;i<=70;++i) src[i]=100;
   vil_exp_filter_1d(&src[0],1,&dest[0],1,n,float(k));
@@ -50,18 +50,18 @@ static void test_algo_exp_filter_1d_byte_float()
   vil_image_view<float> dest_im;
   for (unsigned j=0;j<10;++j)
     for (unsigned i=0;i<10;++i)
-      src_im(i,j)=i+10*j;
+      src_im(i,j) = i+10*j;
   vil_exp_filter_i(src_im,dest_im,double(0.1));
 
-  TEST("Width",dest_im.ni(),src_im.ni());
-  TEST("Height",dest_im.nj(),src_im.nj());
-  TEST_NEAR("dest_im(5,5)",dest_im(5,5),55,1e-2);
+  TEST("Width", dest_im.ni(), src_im.ni());
+  TEST("Height",dest_im.nj(), src_im.nj());
+  TEST_NEAR("dest_im(5,5)", dest_im(5,5), 55, 1e-2);
 
   vil_exp_filter_j(src_im,dest_im,double(0.1));
 
-  TEST("Width",dest_im.ni(),src_im.ni());
-  TEST("Height",dest_im.nj(),src_im.nj());
-  TEST_NEAR("dest_im(5,5)",dest_im(5,5),55,1e-2);
+  TEST("Width", dest_im.ni(), src_im.ni());
+  TEST("Height",dest_im.nj(), src_im.nj());
+  TEST_NEAR("dest_im(5,5)", dest_im(5,5), 55, 1e-2);
 }
 
 static void test_algo_exp_filter_1d_float_float()

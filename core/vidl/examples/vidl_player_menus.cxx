@@ -1,12 +1,11 @@
-// This is core/vidl/example/vidl_player_menus.cxx
-
+// This is core/vidl/examples/vidl_player_menus.cxx
+#include "vidl_player_menus.h"
+#include "vidl_player_manager.h"
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vgui/vgui.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_modifier.h>
 #include <vgui/vgui_menu.h>
-#include "vidl_player_manager.h"
-#include "vidl_player_menus.h"
 
 #ifdef HAS_MPEG2
 #include <vidl/vidl_mpegcodec.h>
@@ -33,9 +32,9 @@ vidl_player_load_mpegcodec_callback(vidl_codec * vc)
   dialog.field("total frames. if not known, leave it.",numframes);
 
   if ( !dialog.ask())
-    {
-      vcl_cout << "vidl_player_load_mpegcodec_callback. did not initialize codec.\n";
-    }
+  {
+    vcl_cout << "vidl_player_load_mpegcodec_callback. did not initialize codec.\n";
+  }
 
   vidl_mpegcodec * mpegcodec = vc->castto_vidl_mpegcodec();
   if (!mpegcodec) return;
@@ -55,10 +54,10 @@ vidl_player_load_mpegcodec_callback(vidl_codec * vc)
 void vidl_player_menus::load_video_callback()
 {
 #ifdef HAS_MPEG2
-   //need to define callbacks
-   vidl_io::load_mpegcodec_callback = &vidl_player_load_mpegcodec_callback;
+  //need to define callbacks
+  vidl_io::load_mpegcodec_callback = &vidl_player_load_mpegcodec_callback;
 #endif
-   vidl_player_manager::instance()->load_video_file();
+  vidl_player_manager::instance()->load_video_file();
 }
 
 void vidl_player_menus::quit_callback()
@@ -96,7 +95,6 @@ void vidl_player_menus::stop_video_callback()
 {
   vidl_player_manager::instance()->stop_video();
 }
-
 
 
 //----- vidl_player_menus definition -----

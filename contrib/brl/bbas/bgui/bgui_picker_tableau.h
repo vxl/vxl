@@ -1,4 +1,4 @@
-// This is oxl/xcv/bgui_picker_tableau.h
+// This is brl/bbas/bgui/bgui_picker_tableau.h
 #ifndef bgui_picker_tableau_h_
 #define bgui_picker_tableau_h_
 //:
@@ -6,14 +6,14 @@
 // \author K.Y.McGaul
 // \brief  Tableau to pick points and lines.
 //
-//  The difference between this picker tableau and vgui_rubberbander is that 
-//  this keeps control of the event loop until the object has been picked.  
-//  The functions pick_point/pick_line will only return once the user has 
+//  The difference between this picker tableau and vgui_rubberbander is that
+//  this keeps control of the event loop until the object has been picked.
+//  The functions pick_point/pick_line will only return once the user has
 //  picked a point/line.
 //
 // \verbatim
-//  Modifications:
-//   K.Y.McGaul   23-MAR-2001  Initial version.
+//  Modifications
+//   K.Y.McGaul - 23-MAR-2001 - Initial version.
 // \endverbatim
 
 #include <vgui/vgui_tableau.h>
@@ -26,7 +26,7 @@
 
 class bgui_picker_tableau : public vgui_tableau
 {
-public:
+ public:
 
   //: Constructor, takes a child tableau.
   bgui_picker_tableau(vgui_tableau_sptr const&);
@@ -41,11 +41,10 @@ public:
   //: Handles all events for this tableau.
   bool handle(const vgui_event&);
 
-
-protected:
+ protected:
   vgui_parent_child_link child_tab;
 
-private:
+ private:
   //: Draw a line to help the user pick it.
   void draw_line();
   //: Get next event in the event loop.
@@ -77,8 +76,8 @@ private:
 struct bgui_picker_tableau_new : public bgui_picker_tableau_sptr
 {
   typedef bgui_picker_tableau_sptr base;
-  bgui_picker_tableau_new(vgui_tableau_sptr const& arg1000) : base(new bgui_picker_tableau(arg1000)) { }
+  bgui_picker_tableau_new(vgui_tableau_sptr const& arg1000) : base(new bgui_picker_tableau(arg1000)) {}
 };
-// <vgui_make_sptr>
+// </vgui_make_sptr>
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS bgui_picker_tableau.

@@ -1,4 +1,4 @@
-// This is core/vil/tests/test_algo_correlate_2d.cxx
+// This is core/vil/algo/tests/test_algo_correlate_2d.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
@@ -29,11 +29,11 @@ static void test_algo_correlate_2d_byte()
   vil_correlate_2d(src_im,dest_im,kernel1,double());
 
   vcl_cout<<"Kernel - single row of ones\n";
-  TEST("Destination size",dest_im.ni(),1+n-m);
+  TEST("Destination size", dest_im.ni(), 1+n-m);
 
-  TEST_NEAR("dest_im(0,0)",dest_im(0,0),0.5*m*(m+1),1e-6);
-  TEST_NEAR("dest_im(1,0)",dest_im(1,0),0.5*m*(m+1)+m,1e-6);
-  TEST_NEAR("dest_im(0,1)",dest_im(0,1),0.5*m*(m+1)+n*m,1e-6);
+  TEST_NEAR("dest_im(0,0)", dest_im(0,0), 0.5*m*(m+1),     1e-6);
+  TEST_NEAR("dest_im(1,0)", dest_im(1,0), 0.5*m*(m+1)+m,   1e-6);
+  TEST_NEAR("dest_im(0,1)", dest_im(0,1), 0.5*m*(m+1)+n*m, 1e-6);
 
   vcl_cout<<"Kernel - three rows of ones\n";
   vil_image_view<float> kernel2(m,3,1);
@@ -43,12 +43,12 @@ static void test_algo_correlate_2d_byte()
 
   vil_correlate_2d(src_im,dest_im,kernel2,double());
 
-  TEST("Destination size",dest_im.ni(),1+n-m);
-  TEST("Destination size",dest_im.nj(),1+n-3);
+  TEST("Destination size", dest_im.ni(), 1+n-m);
+  TEST("Destination size", dest_im.nj(), 1+n-3);
 
-  TEST_NEAR("dest_im(0,0)",dest_im(0,0),0.5*m*(m+1)*3+30*m,1e-6);
-  TEST_NEAR("dest_im(1,0)",dest_im(1,0),0.5*m*(m+1)*3+33*m,1e-6);
-  TEST_NEAR("dest_im(0,1)",dest_im(0,1),0.5*m*(m+1)*3+60*m,1e-6);
+  TEST_NEAR("dest_im(0,0)", dest_im(0,0), 0.5*m*(m+1)*3+30*m, 1e-6);
+  TEST_NEAR("dest_im(1,0)", dest_im(1,0), 0.5*m*(m+1)*3+33*m, 1e-6);
+  TEST_NEAR("dest_im(0,1)", dest_im(0,1), 0.5*m*(m+1)*3+60*m, 1e-6);
 
   vcl_cout<<"Kernel - three rows of 1s, 2s 3s\n";
   vil_image_view<float> kernel3(m,3,1);
@@ -58,12 +58,12 @@ static void test_algo_correlate_2d_byte()
 
   vil_correlate_2d(src_im,dest_im,kernel3,double());
 
-  TEST("Destination size",dest_im.ni(),1+n-m);
-  TEST("Destination size",dest_im.nj(),1+n-3);
+  TEST("Destination size", dest_im.ni(), 1+n-m);
+  TEST("Destination size", dest_im.nj(), 1+n-3);
 
-  TEST_NEAR("dest_im(0,0)",dest_im(0,0),0.5*m*(m+1)*6 +  8*m*n,1e-6);
-  TEST_NEAR("dest_im(1,0)",dest_im(1,0),0.5*m*(m+3)*6 +  8*m*n,1e-6);
-  TEST_NEAR("dest_im(0,1)",dest_im(0,1),0.5*m*(m+1)*6 + 14*m*n,1e-6);
+  TEST_NEAR("dest_im(0,0)", dest_im(0,0), 0.5*m*(m+1)*6 + 8*m*n, 1e-6);
+  TEST_NEAR("dest_im(1,0)", dest_im(1,0), 0.5*m*(m+3)*6 + 8*m*n, 1e-6);
+  TEST_NEAR("dest_im(0,1)", dest_im(0,1), 0.5*m*(m+1)*6 +14*m*n, 1e-6);
 }
 
 static void test_algo_correlate_2d()

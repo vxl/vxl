@@ -1,4 +1,4 @@
-// This is core/vil/tests/test_algo_cartesian_differential_invariants.cxx
+// This is core/vil/algo/tests/test_algo_cartesian_differential_invariants.cxx
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h> // for fabs(float)
@@ -26,8 +26,7 @@ static void test_algo_cartesian_differential_invariants()
   vil_print_all(vcl_cout,  src);
   vcl_cout << "Destination\n";
   vil_print_all(vcl_cout,  dest);
-  TEST("dest is correct size", dest.ni()==n && dest.nj()==n &&
-       dest.nplanes()==8, true);
+  TEST("dest is correct size", dest.ni() == n && dest.nj() == n && dest.nplanes() == 8, true);
 
 
   // I have visually compared impulse response function images from

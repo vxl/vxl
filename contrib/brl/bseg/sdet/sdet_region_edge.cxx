@@ -1,8 +1,8 @@
-// This is brl/sdet/sdet_region_edge.cxx
-#include <vcl_algorithm.h>//find
-#include <sdet/sdet_region_edge.h>
+// This is brl/bseg/sdet/sdet_region_edge.cxx
+#include "sdet_region_edge.h"
 //:
 // \file
+#include <vcl_algorithm.h> // find
 #include <vtol/vtol_edge_2d.h>
 
 sdet_region_edge::sdet_region_edge(vtol_edge_2d_sptr e)
@@ -22,22 +22,23 @@ bool sdet_region_edge::is_vertex() const
 bool sdet_region_edge::SetNewLabel(unsigned int label)
 {
   if (label == 0) return false;
-  if(vcl_find(labels_.begin(), labels_.end(), label) == labels_.end())
+  if (vcl_find(labels_.begin(), labels_.end(), label) == labels_.end())
     labels_.push_back(label);
   return true;
 }
+
 unsigned int sdet_region_edge::NumLabels(unsigned int max_label) const
 {
   unsigned int n  = labels_.size();
-  if(n<=max_label)
+  if (n<=max_label)
     return n;
   else
-    {
-      vcl_cout << "In sdet_region_edge::NumLabels(..) - n labels exceeds max label"
-               << vcl_endl;
+  {
+    vcl_cout << "In sdet_region_edge::NumLabels(..) - # labels exceeds max label\n";
     return 0;
-    }
+  }
 }
+
 //--------------------------------------------------------
 //: Conditionally propagate the labels of a sdet_region_edge.
 //  In this approach we don't differentiate between Right

@@ -1,4 +1,4 @@
-// This is vxl/brl/bbas/btol/dll.h
+// This is brl/bbas/btol/dll.h
 #ifndef btol_dll_h_
 #define btol_dll_h_
 

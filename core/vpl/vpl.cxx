@@ -1,4 +1,4 @@
-// This is core/vpl/vpl.h
+// This is core/vpl/vpl.cxx
 #include "vpl.h"
 
 #if defined(__CYGWIN__)

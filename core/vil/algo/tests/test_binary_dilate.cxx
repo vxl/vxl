@@ -1,4 +1,4 @@
-// This is core/vil/tests/test_binary_dilate.cxx
+// This is core/vil/algo/tests/test_binary_dilate.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vil/algo/vil_binary_dilate.h>
@@ -38,25 +38,25 @@ static void test_binary_dilate_byte()
   vil_binary_dilate(image0,image1,element_i);
   vcl_cout<<"Result of one dilation\n";
   print_binary_image(image1);
-  TEST("image1(5,5)",image1(5,5),true);
-  TEST("image1(4,5)",image1(4,5),true);
-  TEST("image1(6,5)",image1(6,5),true);
-  TEST("image1(5,6)",image1(5,6),false);
-  TEST("image1(2,0)",image1(2,0),true);
+  TEST("image1(5,5)", image1(5,5), true);
+  TEST("image1(4,5)", image1(4,5), true);
+  TEST("image1(6,5)", image1(6,5), true);
+  TEST("image1(5,6)", image1(5,6), false);
+  TEST("image1(2,0)", image1(2,0), true);
 
   vil_image_view<bool> image2;
   vil_binary_dilate(image1,image2,element_j);
   vcl_cout<<"Result of two dilations\n";
   print_binary_image(image2);
-  TEST("image2(5,5)",image2(5,5),true);
-  TEST("image2(4,5)",image2(4,5),true);
-  TEST("image2(6,5)",image2(6,5),true);
-  TEST("image2(5,6)",image2(5,6),true);
-  TEST("image2(5,4)",image2(5,4),true);
-  TEST("image2(5,0)",image2(5,0),false);
-  TEST("image2(5,9)",image2(5,9),false);
-  TEST("image2(2,0)",image2(2,0),true);
-  TEST("image2(2,1)",image2(2,1),true);
+  TEST("image2(5,5)", image2(5,5), true);
+  TEST("image2(4,5)", image2(4,5), true);
+  TEST("image2(6,5)", image2(6,5), true);
+  TEST("image2(5,6)", image2(5,6), true);
+  TEST("image2(5,4)", image2(5,4), true);
+  TEST("image2(5,0)", image2(5,0), false);
+  TEST("image2(5,9)", image2(5,9), false);
+  TEST("image2(2,0)", image2(2,0), true);
+  TEST("image2(2,1)", image2(2,1), true);
 
   vil_structuring_element disk;
   disk.set_to_disk(4);

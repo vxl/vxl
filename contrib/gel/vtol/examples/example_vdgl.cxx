@@ -1,4 +1,4 @@
-// This is gel/vdgl/examples/test_vdgl.cxx
+// This is gel/vtol/examples/example_vdgl.cxx
 #include <vcl_iostream.h>
 
 #include <vsol/vsol_point_2d.h>
@@ -76,7 +76,7 @@ int main()
     double x= digital_curve->get_x(i);
     double y= digital_curve->get_y(i);
 
-    vcl_cout << x << "\t" << y << '\n';
+    vcl_cout << x << '\t' << y << '\n';
   }
 
   // And now play with the digital region

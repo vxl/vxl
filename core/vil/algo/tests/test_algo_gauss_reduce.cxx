@@ -1,10 +1,22 @@
-// This is core/vil/tests/test_algo_gauss_reduce.cxx
+// This is core/vil/algo/tests/test_algo_gauss_reduce.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_print.h>
 #include <vil/vil_image_view.h>
 #include <vil/algo/vil_gauss_reduce.h>
+
+template <class T>
+inline void print_out(vil_image_view<T> const& orig,
+                      const char* msg,
+                      vil_image_view<T> const& modif)
+{
+  vcl_cout<<"Original: ";
+  vil_print_all(vcl_cout,orig);
+  vcl_cout<< '\n' << msg << " : ";
+  vil_print_all(vcl_cout,modif);
+  vcl_cout<<'\n';
+}
 
 static void test_algo_gauss_reduce_byte(unsigned nx)
 {
@@ -25,13 +37,12 @@ static void test_algo_gauss_reduce_byte(unsigned nx)
                    image0.istep(),image0.jstep(),
                    reduced_x.top_left_ptr(),reduced_x.istep(),reduced_x.jstep());
 
-  vcl_cout<<"Original: "; vil_print_all(vcl_cout,image0); vcl_cout<<'\n';
-  vcl_cout<<"reduced_x : "; vil_print_all(vcl_cout,reduced_x); vcl_cout<<'\n';
+  print_out(image0,"reduced_x",reduced_x);
 
-  TEST("First element",reduced_x(0,1),image0(0,1));
-  TEST("Next element", reduced_x(1,1),image0(2,1));
+  TEST("First element", reduced_x(0,1), image0(0,1));
+  TEST("Next element",  reduced_x(1,1), image0(2,1));
   unsigned L = (nx-1)/2;
-  TEST("Last element", reduced_x(L,1),image0(2*L,1));
+  TEST("Last element",  reduced_x(L,1), image0(2*L,1));
 
   vil_image_view<vxl_byte> test2;
   test2.set_size(nx,3);
@@ -55,12 +66,11 @@ static void test_algo_gauss_reduce_byte(unsigned nx)
                    image1.jstep(),image1.istep(),
                    reduced_y.top_left_ptr(),reduced_y.jstep(),reduced_y.istep());
 
-  vcl_cout<<"Original: "; vil_print_all(vcl_cout,image1); vcl_cout<<'\n';
-  vcl_cout<<"reduced_y : "; vil_print_all(vcl_cout,reduced_y); vcl_cout<<'\n';
+  print_out(image1,"reduced_y",reduced_y);
 
-  TEST("First element",reduced_y(1,0),image1(1,0));
-  TEST("Next element", reduced_y(1,1),image1(1,2));
-  TEST("Last element", reduced_y(1,L),image1(1,2*L));
+  TEST("First element",reduced_y(1,0), image1(1,0));
+  TEST("Next element", reduced_y(1,1), image1(1,2));
+  TEST("Last element", reduced_y(1,L), image1(1,2*L));
 }
 
 static void test_algo_gauss_reduce_int_32(unsigned nx)
@@ -82,13 +92,12 @@ static void test_algo_gauss_reduce_int_32(unsigned nx)
                    image0.istep(),image0.jstep(),
                    reduced_x.top_left_ptr(),reduced_x.istep(),reduced_x.jstep());
 
-  vcl_cout<<"Original: "; vil_print_all(vcl_cout,image0); vcl_cout<<'\n';
-  vcl_cout<<"reduced_x : "; vil_print_all(vcl_cout,reduced_x); vcl_cout<<'\n';
+  print_out(image0,"reduced_x",reduced_x);
 
-  TEST("First element",reduced_x(0,1),image0(0,1));
-  TEST("Next element", reduced_x(1,1),image0(2,1));
+  TEST("First element",reduced_x(0,1), image0(0,1));
+  TEST("Next element", reduced_x(1,1), image0(2,1));
   unsigned L = (nx-1)/2;
-  TEST("Last element", reduced_x(L,1),image0(2*L,1));
+  TEST("Last element", reduced_x(L,1), image0(2*L,1));
 
   vil_image_view<vxl_int_32> test2;
   test2.set_size(nx,3);
@@ -96,7 +105,7 @@ static void test_algo_gauss_reduce_int_32(unsigned nx)
   vil_gauss_reduce(image0.top_left_ptr(),image0.ni(),image0.nj(),
                    image0.istep(),image0.jstep(),
                    test2.top_left_ptr(),test2.istep(),test2.jstep());
-  TEST("No overrun",test2(L+1,1),222);
+  TEST("No overrun", test2(L+1,1), 222);
 
   // Test it can be used to smooth in y by swapping ordinates
   vil_image_view<vxl_int_32> image1;
@@ -112,12 +121,11 @@ static void test_algo_gauss_reduce_int_32(unsigned nx)
                    image1.jstep(),image1.istep(),
                    reduced_y.top_left_ptr(),reduced_y.jstep(),reduced_y.istep());
 
-  vcl_cout<<"Original: "; vil_print_all(vcl_cout,image1); vcl_cout<<'\n';
-  vcl_cout<<"reduced_y : "; vil_print_all(vcl_cout,reduced_y); vcl_cout<<'\n';
+  print_out(image1,"reduced_y",reduced_y);
 
-  TEST("First element",reduced_y(1,0),image1(1,0));
-  TEST("Next element", reduced_y(1,1),image1(1,2));
-  TEST("Last element", reduced_y(1,L),image1(1,2*L));
+  TEST("First element",reduced_y(1,0), image1(1,0));
+  TEST("Next element", reduced_y(1,1), image1(1,2));
+  TEST("Last element", reduced_y(1,L), image1(1,2*L));
 }
 
 static void test_algo_gauss_reduce_float(unsigned int nx)
@@ -139,8 +147,7 @@ static void test_algo_gauss_reduce_float(unsigned int nx)
                    image0.istep(),image0.jstep(),
                    reduced_x.top_left_ptr(),reduced_x.istep(),reduced_x.jstep());
 
-  vcl_cout<<"Original: "; vil_print_all(vcl_cout,image0); vcl_cout<<'\n';
-  vcl_cout<<"reduced_x : "; vil_print_all(vcl_cout,reduced_x); vcl_cout<<'\n';
+  print_out(image0,"reduced_x",reduced_x);
 
   TEST_NEAR("First element",reduced_x(0,1),image0(0,1),1e-6);
   TEST_NEAR("Next element",reduced_x(1,1),image0(2,1),1e-6);
@@ -176,8 +183,7 @@ static void test_algo_gauss_reduce_121_byte(unsigned nx, unsigned ny)
                        image0.istep(),image0.jstep(),
                        reduced_x.top_left_ptr(),reduced_x.istep(),reduced_x.jstep());
 
-  vcl_cout<<"Original: "; vil_print_all(vcl_cout,image0); vcl_cout<<'\n';
-  vcl_cout<<"reduced_x : "; vil_print_all(vcl_cout,reduced_x); vcl_cout<<'\n';
+  print_out(image0,"reduced_x",reduced_x);
 
   TEST("First element",reduced_x(0,1),image0(0,2));
   TEST("Next element",reduced_x(1,1),image0(2,2));
@@ -223,8 +229,7 @@ static void test_algo_gauss_reduce_121_int_32(unsigned nx, unsigned ny)
                        image0.istep(),image0.jstep(),
                        reduced_x.top_left_ptr(),reduced_x.istep(),reduced_x.jstep());
 
-  vcl_cout<<"Original: "; vil_print_all(vcl_cout,image0); vcl_cout<<'\n';
-  vcl_cout<<"reduced_x : "; vil_print_all(vcl_cout,reduced_x); vcl_cout<<'\n';
+  print_out(image0,"reduced_x",reduced_x);
 
   TEST("First element",reduced_x(0,1),image0(0,2));
   TEST("Next element",reduced_x(1,1),image0(2,2));
@@ -270,8 +275,7 @@ static void test_algo_gauss_reduce_121_float(unsigned nx, unsigned ny)
                        image0.istep(),image0.jstep(),
                        reduced_x.top_left_ptr(),reduced_x.istep(),reduced_x.jstep());
 
-  vcl_cout<<"Original: "; vil_print_all(vcl_cout,image0); vcl_cout<<'\n';
-  vcl_cout<<"reduced_x : "; vil_print_all(vcl_cout,reduced_x); vcl_cout<<'\n';
+  print_out(image0,"reduced_x",reduced_x);
 
   TEST_NEAR("First element",reduced_x(0,1),image0(0,2),1e-6);
   TEST_NEAR("Next element",reduced_x(1,1),image0(2,2),1e-6);
@@ -317,8 +321,7 @@ static void test_algo_gauss_reduce_2_3_float(unsigned nx, unsigned ny)
                        image0.istep(),image0.jstep(),
                        reduced_x.top_left_ptr(),reduced_x.istep(),reduced_x.jstep());
 
-  vcl_cout<<"Original: "; vil_print_all(vcl_cout,image0); vcl_cout<<'\n';
-  vcl_cout<<"reduced_x : "; vil_print_all(vcl_cout,reduced_x); vcl_cout<<'\n';
+  print_out(image0,"reduced_x",reduced_x);
 
   TEST_NEAR("1st element",reduced_x(0,1),0.75f*image0(0,1)+0.25*image0(1,1),1e-6);
   TEST_NEAR("2nd element",reduced_x(1,1),0.5f*image0(1,1)+0.5*image0(2,1),1e-6);

@@ -1,4 +1,4 @@
-// This is core/vil/tests/test_algo_convolve_1d.cxx
+// This is core/vil/algo/tests/test_algo_convolve_1d.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
@@ -14,7 +14,7 @@ static void test_algo_convolve_1d_double()
            << "*************************\n";
 
   const int n = 10;
-  vcl_vector<double> src(n),dest(n+2),kernel(3);
+  vcl_vector<double> src(n), dest(n+2), kernel(3);
   for (int i=0;i<n;++i) src[i]=i+1;
   for (int i=0;i<3;++i) kernel[i]=i+1;
 

@@ -1,4 +1,4 @@
-// This is core/vpl/tests/test_unistd.h
+// This is core/vpl/tests/test_unistd.cxx
 #include <vcl_fstream.h>
 
 #include <testlib/testlib_test.h>
@@ -61,8 +61,8 @@ static void test_unistd()
     int data[1] = { 0 };
     int n = vcl_fread (data, sizeof(data[0]), 1, fp2);
     TEST("fread return value", n, 1);
-    vcl_cout << "fread return value: " << n << vcl_endl;
-    vcl_cout << "data[0]: " << data[0] << vcl_endl;
+    vcl_cout << "fread return value: " << n << vcl_endl
+             << "data[0]: " << data[0] << vcl_endl;
     TEST("fileno/fdopen", data[0], 99);
     vcl_fclose (fp1);
     vcl_fclose (fp2);
@@ -80,7 +80,7 @@ static void test_unistd()
 
   vcl_cout << "sleeping for 2 seconds..." << vcl_flush;
   vpl_usleep(2000000); // 2 seconds
-  vcl_cout << "done" << vcl_endl;
+  vcl_cout << "\b\b\b, done\n";
 }
 
 TESTMAIN(test_unistd);

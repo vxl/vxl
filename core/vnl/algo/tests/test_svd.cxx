@@ -1,7 +1,8 @@
-// This is core/vnl/tests/test_svd.cxx
-#include <testlib/testlib_test.h>
+// This is core/vnl/algo/tests/test_svd.cxx
+#include "test_util.h"
 //:
 // \file
+#include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vcl_complex.h>
 
@@ -10,11 +11,9 @@
 #include <vnl/vnl_random.h>
 #include <vnl/algo/vnl_svd.h>
 
-#include "test_util.h"
-
+//: Solve LS problem M x = B, warning if M is nearly singular.
 vnl_matrix<double> solve_with_warning(const vnl_matrix<double>& M,
                                       const vnl_matrix<double>& B)
-// Solve LS problem M x = B, warning if M is nearly singular.
 {
   // Take svd of vnl_matrix<double> M, trim the singular values at 1e-8,
   // and hold the result.
@@ -65,7 +64,8 @@ void test_ls()
 
   // Generate parabola design matrix
   vnl_matrix<double> D(100, 3);
-  for (int n = 0; n < 100; ++n) {
+  for (int n = 0; n < 100; ++n)
+  {
     double x = n;
     D(n, 0) = x*x;
     D(n, 1) = x;
@@ -74,7 +74,8 @@ void test_ls()
 
   // Generate Y vector
   vnl_vector<double> y(100);
-  for (int n = 0; n < 100; ++n) {
+  for (int n = 0; n < 100; ++n)
+  {
     double x = n;
     double fx = a * x * x + b * x + c;
     // Add sawtooth "noise"

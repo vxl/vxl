@@ -1,13 +1,12 @@
-// This is core/vidl/example/vidl_player_main.cxx
+// This is core/vidl/examples/vidl_player_main.cxx
+#include "vidl_player_menus.h"
+#include "vidl_player_manager.h"
 #include <vgui/vgui.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_window.h>
 #include <vgui/vgui_command.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vidl/vidl_io.h>
-#include "vidl_player_menus.h"
-#include "vidl_player_manager.h"
-
 
 int main(int argc, char** argv)
 {
@@ -18,10 +17,10 @@ int main(int argc, char** argv)
 
   vcl_cout << "-- Registered codecs --\n";
   vcl_list<vcl_string> types = vidl_io::supported_types();
-  for( vcl_list<vcl_string>::iterator t = types.begin();
-       t != types.end(); ++t )
-    vcl_cout << *t << '\n';
-  vcl_cout << "-----------------------" << vcl_endl;
+  for ( vcl_list<vcl_string>::iterator t = types.begin();
+        t != types.end(); ++t )
+    vcl_cout << *t << vcl_endl;
+  vcl_cout << "-----------------------\n";
 
   vcl_string title = "VIDL Video Player";
   vgui_window* win = vgui::produce_window(w, h, menubar, title);

@@ -1,4 +1,4 @@
-// This is core/vil/algo/vil3d_normalised_correlation_3d.h
+// This is mul/vil3d/algo/vil3d_normalised_correlation_3d.h
 #ifndef vil3d_normalised_correlation_3d_h_
 #define vil3d_normalised_correlation_3d_h_
 //:
@@ -17,10 +17,10 @@
 // \relates vil3d_image_view
 template <class srcT, class kernelT, class accumT>
 inline accumT vil_norm_corr_2d_at_pt(const srcT *src_im, vcl_ptrdiff_t s_istep,
-                                      vcl_ptrdiff_t s_jstep, vcl_ptrdiff_t s_kstep,
-                                      vcl_ptrdiff_t s_pstep,
-                                      const vil3d_image_view<kernelT>& kernel,
-                                      accumT)
+                                     vcl_ptrdiff_t s_jstep, vcl_ptrdiff_t s_kstep,
+                                     vcl_ptrdiff_t s_pstep,
+                                     const vil3d_image_view<kernelT>& kernel,
+                                     accumT)
 {
   unsigned ni = kernel.ni();
   unsigned nj = kernel.nj();
@@ -53,9 +53,9 @@ inline accumT vil_norm_corr_2d_at_pt(const srcT *src_im, vcl_ptrdiff_t s_istep,
         // Sum over j-th row
         for (unsigned int i=0;i<ni;++i, sp += s_istep, kp += k_istep)
         {
-          sum += accumT(*sp)*accumT(*kp);
+          sum += accumT(*sp) * accumT(*kp);
           mean+= accumT(*sp);
-          sum_sq += accumT(*sp)*accumT(*sp);
+          sum_sq += accumT(*sp) * accumT(*sp);
         }
       }
     }
@@ -77,9 +77,9 @@ inline accumT vil_norm_corr_2d_at_pt(const srcT *src_im, vcl_ptrdiff_t s_istep,
 // \relates vil3d_image_view
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil3d_normalised_correlation_3d(const vil3d_image_view<srcT>& src_im,
-                                           vil3d_image_view<destT>& dest_im,
-                                           const vil3d_image_view<kernelT>& kernel,
-                                           accumT ac)
+                                            vil3d_image_view<destT>& dest_im,
+                                            const vil3d_image_view<kernelT>& kernel,
+                                            accumT ac)
 {
   unsigned ni = 1+src_im.ni()-kernel.ni(); assert(1+src_im.ni() >= kernel.ni());
   unsigned nj = 1+src_im.nj()-kernel.nj(); assert(1+src_im.nj() >= kernel.nj());
@@ -108,11 +108,10 @@ inline void vil3d_normalised_correlation_3d(const vil3d_image_view<srcT>& src_im
       destT* dp = dest_row;
       for (unsigned i=0;i<ni;++i, sp += s_istep, dp += d_istep)
         *dp =(destT)vil_norm_corr_2d_at_pt(sp,s_istep,s_jstep,s_kstep,
-                                            s_pstep,kernel,ac);
+                                           s_pstep,kernel,ac);
       // Convolve at src(i,j,k)
     }
  }
 }
 
 #endif // vil3d_normalised_correlation_3d_h_
-

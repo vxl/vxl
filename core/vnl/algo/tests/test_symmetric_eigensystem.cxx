@@ -1,4 +1,4 @@
-// This is core/vnl/tests/test_symmetric_eigensystem.cxx
+// This is core/vnl/algo/tests/test_symmetric_eigensystem.cxx
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -34,8 +34,8 @@ void test_symmetric_eigensystem()
 
     vcl_cout<<"Eigenvalues: ";
     for (int i=0;i<6;++i)
-      vcl_cout<<eig.get_eigenvalue(i)<<' ';
-    vcl_cout<<vcl_endl;
+      vcl_cout << eig.get_eigenvalue(i) << ' ';
+    vcl_cout << vcl_endl;
   }
 
   double Cdata[36] = {
@@ -58,8 +58,8 @@ void test_symmetric_eigensystem()
 
     vcl_cout<<"Eigenvalues: ";
     for (int i=0;i<6;++i)
-      vcl_cout<<eig.get_eigenvalue(i)<<' ';
-    vcl_cout<<vcl_endl;
+      vcl_cout << eig.get_eigenvalue(i) << ' ';
+    vcl_cout << vcl_endl;
   }
 
   {
@@ -70,16 +70,18 @@ void test_symmetric_eigensystem()
     vnl_matrix<double> D_rand(s,n);
     for (int i=0;i<s;++i)
       for (int j=0;j<n;++j)
-        D_rand(i,j)=1.0 + 2.0*rng.normal64();
+        D_rand(i,j) = 1.0 + 2.0*rng.normal64();
 
-    vnl_matrix<double> S = D_rand.transpose()*D_rand;
+    vnl_matrix<double> S = D_rand.transpose() * D_rand;
     vnl_matrix<double> evecs(n,n);
     vnl_vector<double> evals(n);
     vnl_symmetric_eigensystem_compute(S,evecs,evals);
-    vcl_cout<<"Testing random system:\n"
-            <<"evals: "<<evals<<vcl_endl;
+    vcl_cout << "Testing random system:\n"
+             << "evals: "<<evals<<vcl_endl;
     for (int i=1;i<n;++i)
-      TEST("Eigenvalue increases",evals(i)>=evals(i-1),true);
+    {
+      TEST("Eigenvalue increases", evals(i) >= evals(i-1), true);
+    }
   }
 }
 

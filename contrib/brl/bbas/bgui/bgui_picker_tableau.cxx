@@ -1,13 +1,13 @@
-// This is oxl/xcv/bgui_picker_tableau.cxx
+// This is brl/bbas/bgui/bgui_picker_tableau.cxx
 #include "bgui_picker_tableau.h"
 //:
-//  \file
+// \file
 // \author K.Y.McGaul
 //  See bgui_picker_tableau.h for a description of this file.
 //
 // \verbatim
-//  Modifications:
-//    K.Y.McGaul 26-APR-2001   Initial version.
+//  Modifications
+//   K.Y.McGaul - 26-APR-2001 - Initial version.
 // \endverbatim
 
 #include <vgui/vgui.h>
@@ -78,8 +78,7 @@ void bgui_picker_tableau::draw_line()
 //  This function grabs the event loop and will not return until two mouse
 //  down events occur.
 //  The parameters return the two points defining the line.
-void bgui_picker_tableau::pick_line(float* x1, float* y1, float* x2,
-  float* y2)
+void bgui_picker_tableau::pick_line(float* x1, float* y1, float* x2, float* y2)
 {
   obj_type = line_enum;
   picking_completed = false;
@@ -146,8 +145,7 @@ bool bgui_picker_tableau::handle(const vgui_event& event)
       if (FIRSTPOINT)
       {
         vgui_projection_inspector p_insp;
-        p_insp.window_to_image_coordinates(event.wx, event.wy,
-          pointx1, pointy1);
+        p_insp.window_to_image_coordinates(event.wx,event.wy, pointx1,pointy1);
         pointx2 = pointx1;
         pointy2 = pointy1;
         FIRSTPOINT=false;

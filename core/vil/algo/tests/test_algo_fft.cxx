@@ -1,4 +1,4 @@
-// This is core/vil/tests/test_algo_fft.cxx
+// This is core/vil/algo/tests/test_algo_fft.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_complex.h>
 #include <vil/vil_math.h>
