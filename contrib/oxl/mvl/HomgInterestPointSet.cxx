@@ -279,7 +279,7 @@ bool HomgInterestPointSet::read(vcl_istream& f, const ImageMetric* c)
 //: Load a corner set from a simple ASCII file of x y pairs, and use vil_image src to compute mean_intensities.
 // If ImageMetric is supplied, it is used to convert image coordinates to homogeneous form.
 // NOT YET IMPLEMENTED
-bool HomgInterestPointSet::read(const char* filename, vil_image const& src, const HomgMetric& c)
+bool HomgInterestPointSet::read(const char* filename, vil_image const& /*src*/, const HomgMetric& c)
 {
   if (!read(filename, c))
     return false;

@@ -89,9 +89,9 @@ bool LineSegSet::load_ascii(vcl_istream& f, HomgMetric const& c)
   return true;
 }
 
-int LineSegSet::FindNearestLineIndex(double x, double y)
+int LineSegSet::FindNearestLineIndex(double /*x*/, double /*y*/)
 {
-  vcl_cerr <<"LineSegSet::FindNearestLineIndex AIIEEEEE\n";
+  vcl_cerr <<"LineSegSet::FindNearestLineIndex not yet implemented\n";
   return -1;
 #if 0 // commented out
   double mindist=-1.0f;
@@ -125,8 +125,8 @@ bool LineSegSet::save_ascii(vcl_ostream& f) const
     vnl_double_2 p1 = conditioner_.homg_to_image(l.get_point1());
     vnl_double_2 p2 = conditioner_.homg_to_image(l.get_point2());
 
-    f << p1[0] << " " << p1[1] << "\t";
-    f << p2[0] << " " << p2[1] << vcl_endl;
+    f << p1[0] << " " << p1[1] << "\t"
+      << p2[0] << " " << p2[1] << vcl_endl;
   }
   vcl_cerr << "LineSegSet: Saved " << hlines_.size() << " line segments\n";
   return true;
