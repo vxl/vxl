@@ -64,7 +64,7 @@ class rgrl_trans_homography2d
   virtual void jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& from_loc ) const;
 
   //: Return the jacobian of the transform. This is a 2x3 matrix
-  vnl_matrix<double> homo_jacobian( vnl_vector<double> const& from_loc ) const;
+  vnl_matrix_fixed<double,2,3> homo_jacobian( vnl_vector_fixed<double,2> const& from_loc ) const;
 
   //:  transform the transformation for images of different resolution
   rgrl_transformation_sptr scale_by( double scale ) const;
@@ -79,21 +79,20 @@ class rgrl_trans_homography2d
   void read(vcl_istream& is );
 
   // uncenter H matrix
-  vnl_matrix_fixed<double, 3, 3>  
-  uncenter_H_matrix( ) const;
+  vnl_matrix_fixed<double,3,3> uncenter_H_matrix() const;
 
  protected:
   void map_loc( vnl_vector<double> const& from,
-                vnl_vector<double>      & to ) const;
+                vnl_vector<double>      & to  ) const;
 
   void map_dir( vnl_vector<double> const& from_loc,
                 vnl_vector<double> const& from_dir,
-                vnl_vector<double>      & to_dir    ) const;
+                vnl_vector<double>      & to_dir  ) const;
 
  private:
-  vnl_matrix_fixed<double, 3, 3> H_;
-  vnl_vector_fixed<double, 2> from_centre_;
-  vnl_vector_fixed<double, 2> to_centre_;
+  vnl_matrix_fixed<double,3,3> H_;
+  vnl_vector_fixed<double,2>   from_centre_;
+  vnl_vector_fixed<double,2>   to_centre_;
 };
 
 #endif
