@@ -52,7 +52,7 @@ SET( vcl_sources
   vcl_iostream.h
   vcl_istream.h
   vcl_iterator.txx vcl_iterator.h
-  vcl_limits.h
+  vcl_limits.h vcl_limits.cxx
   vcl_list.txx vcl_list.h
   vcl_locale.h
   vcl_map.txx vcl_map.h
