@@ -199,11 +199,14 @@ becomes clear on 64 bit platforms. What types should 16bit or 32bit data get
 loaded into (The same platform can't define short as both.). Decision at 
 Providence meeting. Question - do the float types need to be specific or can 
 we assume IEEE standard lengths?&nbsp; </p>
-<h4>All operations will default to scalar components and multiple planes.</h4>
+<h4>All operations will default to scalar pixels and multiple planes. <code>vil2_image_data</code>
+hierarchy will mostly work only with scalar pixels.</h4>
 <p>Nothing prevents you from using <code>vil_rgb </code>pixels, and we will 
 provide appropriate support. However planes are more general than components, 
 and <code>vil2_image_data </code>hierarchy can be simpler if it only thinks 
-about scalar pixels. Decision confirmed at Providence meeting.</p>
+about scalar pixels. In particular it may not be feasible to consider every
+possible compound pixel type in a <code>switch()</code> statement, but it is
+feasible to consider every possible scalar pixel type. Decision confirmed at Providence meeting.</p>
 <h4>Base class image type polymorphic in dimension and pixel type, and containing world to image 
 transforms will be provided in a separate level2 library - vimt.</h4>
 <p>vimt benefits from being able to use both vil and vgl (and possibly vnl). 
