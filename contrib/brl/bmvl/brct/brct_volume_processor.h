@@ -3,30 +3,27 @@
 
 //:
 // \file
-
 // \brief A class to compute volume occupancy statistics
 //
 // \author J.L. Mundy
 // \verbatim
-// Initial version March. 1, 2004
+//  Initial version March. 1, 2004
 // \endverbatim
 //
 //////////////////////////////////////////////////////////////////////
 
 #include <vcl_vector.h>
 #include <vcl_string.h>
-#include <vsol/vsol_point_3d_sptr.h>
 #include <vsol/vsol_box_3d_sptr.h>
 #include <bsol/bsol_point_index_3d.h>
 #include <brct/brct_volume_processor_params.h>
 class brct_volume_processor : public brct_volume_processor_params
 {
  public:
-  brct_volume_processor(brct_volume_processor_params& sp);
+  brct_volume_processor(brct_volume_processor_params const& sp);
   ~brct_volume_processor();
 
-  //:Accessors
-
+  // Accessors
 
   //:Mutators
   bool read_points_3d_vrml(vcl_string const&  filename);
@@ -35,11 +32,8 @@ class brct_volume_processor : public brct_volume_processor_params
   bool write_prob_volumes_vrml(vcl_string const&  filename);
   bool compute_change();
   bool write_changed_volumes_vrml(vcl_string const&  filename);
+
  protected:
-  //local utility functions
-
-  //flags
-
   //members
   int ncols_;
   int nrows_;
