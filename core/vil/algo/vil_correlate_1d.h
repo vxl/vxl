@@ -2,13 +2,12 @@
 #ifndef vil2_correlate_1d_h_
 #define vil2_correlate_1d_h_
 //:
-//  \file
-//  \brief 1D Convolution with cunning boundary options
-//  \author Tim Cootes (based on work by fsm)
+// \file
+// \brief 1D Convolution with cunning boundary options
+// \author Tim Cootes (based on work by fsm)
 
 #include <vcl_compiler.h>
 #include <vcl_algorithm.h>
-#include <vcl_cstdlib.h> // for vcl_abort()
 #include <vcl_cstring.h>
 #include <vcl_cassert.h>
 #include <vil2/vil2_image_view.h>
@@ -20,12 +19,12 @@
 // Assumes dest and src same size (nx)
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil2_correlate_1d(const srcT* src0, unsigned nx, vcl_ptrdiff_t s_step,
-                             destT* dest0, vcl_ptrdiff_t d_step,
-                             const kernelT* kernel,
-                             vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
-                             accumT ac,
-                             vil2_convolve_boundary_option start_option,
-                             vil2_convolve_boundary_option end_option)
+                              destT* dest0, vcl_ptrdiff_t d_step,
+                              const kernelT* kernel,
+                              vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
+                              accumT ac,
+                              vil2_convolve_boundary_option start_option,
+                              vil2_convolve_boundary_option end_option)
 {
   // Deal with start (fill elements 0..1-k_lo of dest)
   vil2_convolve_edge_1d(src0,nx,s_step,dest0,d_step,kernel,-k_hi,-k_lo,-1,ac,start_option);
@@ -56,12 +55,12 @@ inline void vil2_correlate_1d(const srcT* src0, unsigned nx, vcl_ptrdiff_t s_ste
 // \relates vil2_image_view
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil2_correlate_1d(const vil2_image_view<srcT>& src_im,
-                             vil2_image_view<destT>& dest_im,
-                             const kernelT* kernel,
-                             vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
-                             accumT ac,
-                             vil2_convolve_boundary_option start_option,
-                             vil2_convolve_boundary_option end_option)
+                              vil2_image_view<destT>& dest_im,
+                              const kernelT* kernel,
+                              vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
+                              accumT ac,
+                              vil2_convolve_boundary_option start_option,
+                              vil2_convolve_boundary_option end_option)
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
@@ -100,7 +99,6 @@ inline void vil2_correlate_1d(const vil2_image_view<srcT>& src_im,
           vil2_correlate_1d(src_row,ni,s_istep,  dest_row,d_istep,
                            kernel,k_lo,k_hi,ac,start_option,end_option);
     }
-
   }
 }
 
@@ -120,9 +118,9 @@ class vil2_correlate_1d_resource : public vil2_image_resource
   //: Construct a correlate filter.
   // You can't create one of these directly, use vil2_correlate_1d instead
   vil2_correlate_1d_resource(const vil2_image_resource_sptr& src,
-                            const kernelT* kernel, int k_lo, int k_hi,
-                            vil2_convolve_boundary_option start_option,
-                            vil2_convolve_boundary_option end_option)  :
+                             const kernelT* kernel, int k_lo, int k_hi,
+                             vil2_convolve_boundary_option start_option,
+                             vil2_convolve_boundary_option end_option)  :
       src_(src), kernel_(kernel), klo_(k_lo), khi_(k_hi),
       start_option_(start_option), end_option_(end_option)
     {
