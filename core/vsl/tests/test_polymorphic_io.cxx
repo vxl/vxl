@@ -16,13 +16,13 @@ public:
   virtual int data() const { return 0; }
 
   //: Binary save self to stream.
-  virtual void b_write(vsl_b_ostream &os) const = 0;
+  virtual void b_write(vsl_b_ostream &os) const { assert(false); } //= 0;
 
   //: Binary load self from stream.
-  virtual void b_read(vsl_b_istream &is) = 0;
+  virtual void b_read(vsl_b_istream &is) { assert(false); } //= 0;
 
   //: Clone this
-  virtual test_base_class* clone() const = 0;
+  virtual test_base_class* clone() const { assert(false); return 0; } //= 0;
 
   //: Return a platform independent string identifying the class
   virtual vcl_string is_a() const

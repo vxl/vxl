@@ -9,6 +9,7 @@
 
 //: Base class to test polymorphic loading
 class test2_base_class {
+  void vtable_hack();
 public:
   //: Destructor
   virtual ~test2_base_class() {};
@@ -25,6 +26,8 @@ public:
     os<<is_a()<<vcl_endl;
   };
 };
+
+void test2_base_class::vtable_hack() { }
 
 //: Base class to test polymorphic loading
 class test2_base_class_io {
@@ -81,6 +84,7 @@ void vsl_print_summary(vcl_ostream &os, const test2_base_class * b)
 
 //: Derived class to test polymorphic loading
 class test2_derived_class : public test2_base_class{
+  void vtable_hack();
 private:
   int data_;
 public:
@@ -97,6 +101,7 @@ public:
   virtual vcl_string is_a() const;
 };
 
+void test2_derived_class::vtable_hack() { }
 
 //: Return a platform independent string identifying the class
 vcl_string test2_derived_class::is_a() const
