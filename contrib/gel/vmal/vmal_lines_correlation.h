@@ -29,10 +29,10 @@
 
 #include <vnl/vnl_double_3.h>
 #include <vil/vil_memory_image_of.h>
+#include <vil/vil_byte.h>
 
 class vmal_lines_correlation
 {
-
 public:
   vmal_lines_correlation();
 

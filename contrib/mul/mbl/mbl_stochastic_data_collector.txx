@@ -5,7 +5,7 @@
 //  \file
 
 #include <vcl_string.h>
-#include <vsl/vsl_indent.h>
+#include <vsl/vsl_vector_io.h>
 #include <mbl/mbl_stochastic_data_collector.h>
 #include <vnl/vnl_math.h>
 

@@ -2,7 +2,7 @@
 //  \brief Apply gradient operator to 2D planes of data
 //  \author Tim Cootes
 
-#include <vnl/vnl_math.h>
+#include "mil_algo_grad_3x3.h"
 
 //: Compute gradients of single plane of 2D data using 3x3 Sobel filters
 //  Computes both x and y gradients of an nx x ny plane of data

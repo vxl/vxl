@@ -10,6 +10,7 @@
 #include <vcl_cstdio.h>
 #include <vcl_cstdlib.h>
 
+#include <vil/vil_byte.h>
 #include <vil/vil_memory_image_of.h>
 #include <vnl/vnl_matrix.h>
 

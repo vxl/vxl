@@ -4,7 +4,7 @@
 //  \file
 
 #include <vmal/vmal_convert.h>
-
+#include <vcl_cmath.h> // atan2()
 #include <vnl/algo/vnl_svd.h>
 
 #include <vnl/algo/vnl_determinant.h>
@@ -60,12 +60,12 @@ vmal_rectifier::~vmal_rectifier()
 void vmal_rectifier::rectification_matrix(vnl_double_3x3& H0,
                                           vnl_double_3x3& H1)
 {
-  if(!_is_f_compute)
+  if (!_is_f_compute)
   {
     _is_f_compute=true;
     vcl_vector<HomgPoint2D> v_points0;
     vcl_vector<HomgPoint2D> v_points1;
-    for(int i=0;i<_numpoints;i++)
+    for (int i=0;i<_numpoints;i++)
     {
       HomgPoint2D tmp_point0(_points0[i][0],_points0[i][1]);
       HomgPoint2D tmp_point1(_points1[i][0],_points1[i][1]);
@@ -259,7 +259,7 @@ int vmal_rectifier::compute_initial_joint_epipolar_transforms (
   if (p1[0] == 0.0 && p1[1] == 0.0)
   {
     vcl_cerr<<"Error : Epipole is at image center"<<vcl_endl;
-    return (0);
+    return 0;
   }
 
   // Next determine a rotation that will send the epipole to (1, 0, x)

@@ -3,13 +3,13 @@
 //  \author Tim Cootes
 
 #include <mil/mil_normalise_image_2d.h>
+#include <vnl/vnl_vector.h>
 #include <vcl_cmath.h>
 
-//: creates a variance normalised version of an input image  
+//: creates a variance normalised version of an input image
 void mil_var_norm_image_2d(mil_image_2d_of<float>& dest,
                           const mil_image_2d_of<float>& src)
 {
-
   int n = src.n_planes();
   int nx = src.nx();
   int ny = src.ny();
@@ -20,7 +20,7 @@ void mil_var_norm_image_2d(mil_image_2d_of<float>& dest,
   int dystep=dest.ystep();
 
   vnl_vector<float> mean(n), std(n);
-  
+
   // calculate the mean and variance of the src image
   for (int i=0;i<n;++i)
   {
@@ -39,13 +39,12 @@ void mil_var_norm_image_2d(mil_image_2d_of<float>& dest,
 
       s_row += systep;
     }
-    
+
     // calc mean and variance for this plane
     int np=nx*ny;
     mean(i)= sum/np;
     std(i) = vcl_sqrt ( sqr_sum/np - mean(i)*mean(i) );
     //vcl_cout<<"std("<<i<<")= "<<std(i)<<vcl_endl;
-
   }
 
 
@@ -74,11 +73,10 @@ void mil_var_norm_image_2d(mil_image_2d_of<float>& dest,
   dest.setWorld2im(src.world2im());
 }
 
-//: creates a mean normalised version of an input image  
+//: creates a mean normalised version of an input image
 void mil_mean_norm_image_2d(mil_image_2d_of<float>& dest,
                           const mil_image_2d_of<float>& src)
 {
-
   int n = src.n_planes();
   int nx = src.nx();
   int ny = src.ny();
@@ -89,7 +87,7 @@ void mil_mean_norm_image_2d(mil_image_2d_of<float>& dest,
   int dystep=dest.ystep();
 
   vnl_vector<float> mean(n);
-  
+
   // calculate the mean and variance of the src image
   for (int i=0;i<n;++i)
   {
@@ -107,11 +105,10 @@ void mil_mean_norm_image_2d(mil_image_2d_of<float>& dest,
 
       s_row += systep;
     }
-    
+
     // calc mean and variance for this plane
     int np=nx*ny;
     mean(i)= sum/np;
-
   }
 
 
@@ -139,8 +136,3 @@ void mil_mean_norm_image_2d(mil_image_2d_of<float>& dest,
   }
   dest.setWorld2im(src.world2im());
 }
-
-
-
-
-
