@@ -76,6 +76,12 @@ AC_DEFUN([AC_CHECK_GENERATE_INTTYPES],
 
 #ifndef _INTTYPES_H
 #define _INTTYPES_H
+
+/* Cygwin now has a sys/types.h */
+#if defined(__CYGWIN__) && defined(HAVE_SYS_TYPES_H)
+#include <sys/types.h>
+#else
+
 #if (!defined __int8_t_defined) && (!defined __BIT_TYPES_DEFINED__)
 #define __int8_t_defined
 typedef signed char int8_t;
@@ -93,6 +99,8 @@ typedef unsigned int uint32_t;
 typedef unsigned long long uint64_t;
 #endif
 #endif
+#endif
+
 #endif
 EOF
 	if cmp -s include/inttypes.h.new include/inttypes.h 2>/dev/null; then
