@@ -190,8 +190,9 @@ foreach $f (@FILES)
   }
 # Presence of VCL_*_INSTANTIATE in *.cxx files outside Templates directories
   if ($f !~ m+/Templates/+ &&
-      $f !~ m+vcl/tests/test_vcl_rel_ops.cxx$+ &&
-      $f !~ m+oxl/vgui/examples/awf/glmovie.cxx$+ &&
+      $f !~ m+vcl/tests/test_vcl_rel_ops\.cxx$+ &&
+      $f !~ m+vxl/vsl/tests/test_polymorphic_io\.cxx$+ &&
+      $f !~ m+oxl/vgui/examples/awf/glmovie\.cxx$+ &&
       $file_s =~ m+\n\s*(VCL_[_A-Z]*INSTANTIATE[_A-Z]*)+) {
     print "$f\t\# $1 may only be used in Templates subdirectories\n";
     $printed = 1;
@@ -233,6 +234,7 @@ foreach $f (@FILES)
   foreach $wd (split(' ',"abort exit")) {
     if ($f !~ m/\bv3p\/(netlib|jpeg|png|zlib)\// &&
         $f !~ m/\.c$/ &&
+        "$f.$wd" !~ m/\bvcl\/tests\/test_vcl_exception\.cxx\.abort$/ &&
         $file_s =~ m/\b$wd\s*(\s*)\(/) {
       print "$f\t\# $wd$1() must be vcl_$wd()\n";
       $printed = 1;
@@ -250,6 +252,7 @@ foreach $f (@FILES)
         "$f.$wd" !~ m/\bvil\/vil_rgb\.(h|txx)\.(min|max)$/ &&
         "$f.$wd" !~ m/\bvbl\/vbl_bounding_box\.(h|txx)\.(min|max)$/ &&
         "$f.$wd" !~ m/\bgel\/vgel\/kl\/base\.h\.(min|max)$/ &&
+        "$f.$wd" !~ m/\bmul\/mbl\/mbl_stats_1d\.h\.(min|max)$/ &&
         "$f.$wd" !~ m/\boxl\/mvl\/HomgConic\.(h|cxx)\.polar$/ &&
         "$f.$wd" !~ m/\bvnl\/algo\/vnl_rn?poly_(solve|roots)\.h\.(real|imag)$/ &&
         $file_s =~ m/[^.\005\006]\b$wd\s*(\s*)\(/) { # \005 is :: and \006 is ->
@@ -277,6 +280,7 @@ foreach $f (@FILES)
   foreach $wd (split(' ',"beg cur end")) {
     if ($f !~ m/\bvcl\/.*\bvcl_(ios|iosfwd|iomanip|[siof]+stream|strstream|streambuf)\.h/ &&
         $f !~ m/\bv3p\/(netlib|jpeg|tiff|png|zlib)\// &&
+        ($f !~ m/\bvcl\/emulation\/vcl_string\.h$/ || $wd !~ m/end/ ) &&
         $file_s =~ m/,\s*$wd\s*\)/) {
       print "$f\t\# $wd must be vcl_ios_$wd\n";
       $printed = 1;
@@ -298,6 +302,9 @@ foreach $f (@FILES)
   foreach $wd (split(' ',"internal left right")) {
     if ($f !~ m/\bvcl\/.*\bvcl_(ios|iosfwd|iomanip|[siof]+stream|strstream|streambuf)\.h/ &&
         $f !~ m/\bv3p\/(netlib|jpeg|tiff|png|zlib)\// &&
+        ($f !~ m/\bvcl\/emulation\/vcl_(algorithm|tree).h$/ || $wd !~ m/(left|right)/ ) &&
+        ($f !~ m/\bvnl\/(vnl_matrix\.txx|algo\/vnl_complex_eigensystem\.cxx)$/ || $wd !~ m/(left|right)/ ) &&
+        ($f !~ m/\b(oxl\/oxp\/vsl_conic_points\.cxx|gel\/gevd\/gevd_float_operators\.cxx)$/ || $wd !~ m/(left|right)/ ) &&
         $file_s =~ m/[^ .>]\s*\b$wd\s*[|),]/) {
       print "$f\t\# $wd must be vcl_ios_$wd\n";
       $printed = 1;
@@ -310,6 +317,7 @@ foreach $f (@FILES)
     }
     if ($f !~ m/\bvcl\/.*\bvcl_(ios|iosfwd|iomanip|[siof]+stream|strstream|streambuf)\.h/ &&
         ($f !~ m/\bvcl\/emulation\/vcl_tree\.h$/ || $wd !~ m/^(left|right)$/) &&
+        ($f !~ m/\boxl\/oxp\/vsl_conic_points\.cxx$/ || $wd !~ m/(left|right)/ ) &&
         $file_s =~ m/\b$wd\s*\(/) {
       print "$f\t\# $wd() must be vcl_$wd()\n";
       $printed = 1;
@@ -357,6 +365,14 @@ foreach $f (@FILES)
     if ($f !~ m/\bvcl\/.*\bvcl_c(stddef|stdio|time)\./ &&
         $f !~ m/\bv3p\/(jpeg|tiff|png)\// &&
         $f !~ m/\.c$/ &&
+        $file_s =~ m/\b$wd\b/) {
+      print "$f\t\# $wd must be vcl_$wd\n";
+      $printed = 1;
+    }
+  }
+  foreach $wd (split(' ',"iterator_traits back_insert_iterator front_insert_iterator insert_iterator input_iterator_tag output_iterator_tag forward_iterator_tag bidirectional_iterator_tag random_access_iterator_tag")) {
+    if ($f !~ m/\bvcl\/.*\bvcl_iterator\.(h|txx)$/ &&
+        $f !~ m/\bv3p\/(jpeg|tiff|png)\// &&
         $file_s =~ m/\b$wd\b/) {
       print "$f\t\# $wd must be vcl_$wd\n";
       $printed = 1;
