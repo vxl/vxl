@@ -21,8 +21,8 @@ SOURCE_FILES( testlib_sources
   # The main function of the driver executable
   testlib_main.cxx
 
-  # Used to find lcate test files in source tree
-  testlib_root_dir.cxx
+  # Used to locate test files in source tree
+  testlib_root_dir.h            testlib_root_dir.cxx
 )
 
 IF( BUILD_TESTING )
