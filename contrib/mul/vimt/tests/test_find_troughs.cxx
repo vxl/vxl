@@ -12,12 +12,12 @@ void test_find_troughs_byte()
   image0.image()(3,7)=8;  // One trough
   image0.image()(7,5)=9;  // Another trough
 
-  vcl_vector<vgl_point_2d<int> > im_troughs;
+  vcl_vector<vgl_point_2d<unsigned> > im_troughs;
   vimt_find_image_troughs_3x3(im_troughs,image0.image());
 
   TEST("Number of troughs",im_troughs.size(),2);
-  TEST_NEAR("Peak 0",(im_troughs[0]-vgl_point_2d<int>(7,5)).length(),0,1e-6);
-  TEST_NEAR("Peak 1",(im_troughs[1]-vgl_point_2d<int>(3,7)).length(),0,1e-6);
+  TEST_NEAR("Peak 0",(im_troughs[0]-vgl_point_2d<unsigned>(7,5)).length(),0,1e-6);
+  TEST_NEAR("Peak 1",(im_troughs[1]-vgl_point_2d<unsigned>(3,7)).length(),0,1e-6);
 
   vcl_vector<vgl_point_2d<double> > w_troughs;
   vimt_transform_2d w2i;

@@ -9,7 +9,7 @@
 
 void test_gaussian_pyramid_builder_2d_general_a()
 {
-  int ni = 20, nj = 20;
+  unsigned ni = 20, nj = 20;
   vcl_cout << "\n\n**************************************************************\n"
            <<     " Testing vimt_gaussian_pyramid_builder_2d_general (byte)(ni="<<ni<<")\n"
            <<     "**************************************************************\n";
@@ -19,8 +19,8 @@ void test_gaussian_pyramid_builder_2d_general_a()
   image0.image().resize(ni,nj);
 
 #if 0 // use 2x2 chessboard pattern
-  for (int y=0;y<nj/2;++y)
-     for (int x=0;x<ni/2;++x)
+  for (unsigned y=0;y<nj/2;++y)
+     for (unsigned x=0;x<ni/2;++x)
      {
        image0.image()(x,y) = 100;
        image0.image()(x+ni/2,y+nj/2) = 100;
@@ -28,8 +28,8 @@ void test_gaussian_pyramid_builder_2d_general_a()
        image0.image()(x+ni/2,y) = 200;
      }
 #else // Use smooth plane pattern
-  for (int y=0;y<image0.image().nj();++y)
-     for (int x=0;x<image0.image().ni();++x)
+  for (unsigned y=0;y<image0.image().nj();++y)
+     for (unsigned x=0;x<image0.image().ni();++x)
      {
        image0.image()(x,y) = x+y*10;
      }
@@ -50,8 +50,8 @@ void test_gaussian_pyramid_builder_2d_general_a()
   TEST("Found correct number of levels", image_pyr.n_levels(), 2);
 
   const vimt_image_2d_of<vil_byte>& image1 = (const vimt_image_2d_of<vil_byte>&) image_pyr(1);
-  TEST("Level 1 size x",image1.image().ni(),(int)(ni/1.2+0.5));
-  TEST("Level 1 size y",image1.image().nj(),(int)(nj/1.2+0.5));
+  TEST("Level 1 size x",image1.image().ni(),(unsigned)(ni/1.2+0.5));
+  TEST("Level 1 size y",image1.image().nj(),(unsigned)(nj/1.2+0.5));
   TEST("Pixel (0,0)",image1.image()(0,0),1);
   TEST("Pyramid(0) (12,12) = Pyramid(1) (11,10)",image0.image()(12,12), image1.image()(11,10));
   TEST("Corner pixel",image1.image()(16,16),208);
@@ -72,8 +72,8 @@ void test_gaussian_pyramid_builder_2d_general_a()
   builder2.build(image_pyr2, image2);
   bool all_less_than_256 = true;
   bool all_more_than_254 = true;
-  for (int y=0;y<image0.image().nj();++y)
-     for (int x=0;x<image0.image().ni();++x)
+  for (unsigned y=0;y<image0.image().nj();++y)
+     for (unsigned x=0;x<image0.image().ni();++x)
      {
        if (image0.image()(x,y) > 255.01) all_less_than_256 = false;
        if (image0.image()(x,y) < 254.99) all_more_than_254 = false;

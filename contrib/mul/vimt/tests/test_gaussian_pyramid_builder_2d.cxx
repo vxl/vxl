@@ -8,15 +8,15 @@
 
 void test_gaussian_pyramid_builder_2d_build(vimt_gaussian_pyramid_builder_2d<vxl_byte>& builder)
 {
-  int ni = 20, nj = 20;
+  unsigned ni = 20, nj = 20;
   vcl_cout<<"Filter Width: "<<builder.filter_width()<<'\n';
   vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<'\n';
 
   vimt_image_2d_of<vxl_byte> image0;
   image0.image().resize(ni,nj);
 
-  for (int y=0;y<image0.image().nj();++y)
-    for (int x=0;x<image0.image().ni();++x)
+  for (unsigned y=0;y<image0.image().nj();++y)
+    for (unsigned x=0;x<image0.image().ni();++x)
       image0.image()(x,y) = x+y*10;
 
   int default_n_levels = builder.max_levels();
@@ -33,8 +33,8 @@ void test_gaussian_pyramid_builder_2d_build(vimt_gaussian_pyramid_builder_2d<vxl
   TEST("Base width",v_image0.image().ni(),ni);
   TEST("Base height",v_image0.image().nj(),nj);
 
-  int ni2 = (ni+1)/2;
-  int nj2 = (nj+1)/2;
+  unsigned ni2 = (ni+1)/2;
+  unsigned nj2 = (nj+1)/2;
   const vimt_image_2d_of<vxl_byte>& v_image1 = (const vimt_image_2d_of<vxl_byte>&) image_pyr(1);
   const vil2_image_view<vxl_byte>& image1 = v_image1.image();
   TEST("Level 1 size x",image1.ni(),(ni+1)/2);
