@@ -321,6 +321,8 @@ void vimt_gaussian_pyramid_builder_2d<T>::b_read(vsl_b_istream& bfs)
 }
 
 #define VIMT_GAUSSIAN_PYRAMID_BUILDER_2D_INSTANTIATE(T) \
+VCL_DEFINE_SPECIALIZATION vcl_string vimt_gaussian_pyramid_builder_2d<T >::is_a() const \
+{  return vcl_string("vimt_gaussian_pyramid_builder_2d<" #T ">"); }\
 template class vimt_gaussian_pyramid_builder_2d<T >
 
 #endif // vimt_gaussian_pyramid_builder_2d_txx_
