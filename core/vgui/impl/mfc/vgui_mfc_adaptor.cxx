@@ -5,6 +5,8 @@
 // 14-08-2000  Marko Bacic, Oxford RRG -- Added right popup menu
 // 30-08-2000  Marko Bacic, Oxford RRG -- Support for Windows/MFC acceleration
 // 06-02-2001  AWF, Oxford RRG -- Make acceleration work...
+// 02-03-2001  K.Y.McGaul -- Add shift & ctrl modifiers to key press/release events.
+//                        -- Edited and added Doxygen comments.
 
 #include "vgui_mfc_adaptor.h"
 
@@ -27,9 +29,9 @@ static bool debug = false;
 vgui_menu vgui_mfc_adaptor::last_popup;
 IMPLEMENT_DYNCREATE(vgui_mfc_adaptor, CView)
 
-vgui_mfc_adaptor::vgui_mfc_adaptor():ovl_helper(0), come_out_now(false), redraw_posted(true)
+vgui_mfc_adaptor::vgui_mfc_adaptor():ovl_helper(0), /*come_out_now(false),*/ redraw_posted(true)
 {
-  double_buffered = true;
+  double_buffered = false; //kym changed from true (because it breaks xcv);
 }
 
 vgui_mfc_adaptor::~vgui_mfc_adaptor()
@@ -56,11 +58,15 @@ END_MESSAGE_MAP()
 
 
 // 0. vgui_adaptor methods
+//------------------------
+
+//: MFC implementation of vgui_adaptor function - redraws overlay buffer.
 void vgui_mfc_adaptor::post_overlay_redraw()
 {
   redraw_posted = true;
 }
 
+//: MFC implementation of vgui_adaptor function - redraws rendering area.
 void vgui_mfc_adaptor::post_redraw()
 {
   if (!redraw_posted) {
@@ -72,30 +78,32 @@ void vgui_mfc_adaptor::post_redraw()
   redraw_posted = true;
 }
 
+//: MFC implementation of vgui_adaptor function - 
 void vgui_mfc_adaptor::make_current()
 {
   ::wglMakeCurrent( m_pDC->GetSafeHdc(), m_hRC ); 
 }
 
+//: MFC implementation of vgui_adaptor function - swap buffers if using double buffering.
 void vgui_mfc_adaptor::swap_buffers()
 {
   vgui_mfc_adaptor_global_dc = m_pDC; 
   if(double_buffered)
     SwapBuffers(m_pDC->m_hDC);
 }
+
+//: Change the default popup menu to the given one (not yet implemented).
 void vgui_mfc_adaptor::set_default_popup(vgui_menu) 
 {
   vcl_cerr << "vgui_mfc_adaptor::set_default_popup"<< vcl_endl;
 }
+
+//: Return the default popup menu (not yet implemented).
 vgui_menu vgui_mfc_adaptor::get_popup()
 {
   vcl_cerr<< "vgui_mfc_adaptor::get_popup"<< vcl_endl;
   return vgui_menu();
 }
-
-
-/////////////////////////////////////////////////////////////////////////////
-// vgui_mfc_adaptor diagnostics
 
 #ifdef _DEBUG
 void vgui_mfc_adaptor::AssertValid() const
@@ -109,9 +117,7 @@ void vgui_mfc_adaptor::Dump(CDumpContext& dc) const
 }
 #endif //_DEBUG
 
-/////////////////////////////////////////////////////////////////////////////
-// vgui_mfc_adaptor message handlers
-
+//: Called by MFC before the creation of the window attached to this object.
 BOOL vgui_mfc_adaptor::PreCreateWindow(CREATESTRUCT& cs) 
 {
   // TODO: Add your specialized code here and/or call the base class
@@ -124,6 +130,9 @@ BOOL vgui_mfc_adaptor::PreCreateWindow(CREATESTRUCT& cs)
   return CView::PreCreateWindow(cs);
 }
 
+//: Called by MFC when the application requests the creation of a window.
+//  This function must return 0 to continue the creation of the CWind
+//  object, returning -1 destroys the window.
 int vgui_mfc_adaptor::OnCreate(LPCREATESTRUCT lpCreateStruct) 
 {
   if (CView::OnCreate(lpCreateStruct) == -1)
@@ -259,11 +268,10 @@ BOOL vgui_mfc_adaptor::SetupPixelFormat()
     return FALSE;
   }
   
-  return TRUE;
-  
-  
+  return TRUE;  
 }
 
+//: Called by MFC when the window has been destroyed.
 void vgui_mfc_adaptor::OnDestroy() 
 {
   CView::OnDestroy();
@@ -288,17 +296,15 @@ void vgui_mfc_adaptor::OnDestroy()
   
 }
 
+//: Called by MFC when the background needs erasing.
+//  For example this would be called if the window was resized.
 BOOL vgui_mfc_adaptor::OnEraseBkgnd(CDC* pDC) 
 {
   // don't clear -- gl will do it. 
   return TRUE;
 }
 
-
-/////////////////////////////////////////////////////////////////////////////
-// vgui_mfc_adaptor drawing
-
-
+//: Redraws the OpenGL area.
 void vgui_mfc_adaptor::service_redraws()
 {
   if (redraw_posted) {
@@ -321,13 +327,15 @@ void vgui_mfc_adaptor::service_redraws()
     redraw_posted = false;
   }	
 }
-// -- Sets the timer to dispatch WM_TIME event to a mainframe every time miliseconds
+
+//: Sets the timer to dispatch WM_TIME event to a mainframe every time miliseconds
 void vgui_mfc_adaptor::post_timer(float tm,int id)
 {
   CWnd *wnd = AfxGetApp()->GetMainWnd();
   wnd->SetTimer(id,tm,NULL);
 }
 
+//: Called by MFC when a draw event is required - overridden to draw this view.
 void vgui_mfc_adaptor::OnDraw(CDC* pDC)
 {
   if(debug)
@@ -338,13 +346,14 @@ void vgui_mfc_adaptor::OnDraw(CDC* pDC)
   // CView::OnDraw(pDC);
 }
 
-// -- Redraw everything NOW!
+//: MFC implementation of vgui_adaptor function - redraw everything now!
 void vgui_mfc_adaptor::draw()
 {
   post_redraw();
   service_redraws();
 }
 
+//: Called by MFC when the application requests part of the window is redrawn.
 void vgui_mfc_adaptor::OnPaint()
 {
   // if i get a paint that isn't due to my posting a redraw, it must be an expose?
@@ -355,6 +364,7 @@ void vgui_mfc_adaptor::OnPaint()
   CView::OnPaint();
 }
 
+//: Called by MFC when the application is resized.
 void vgui_mfc_adaptor::OnSize(UINT nType, int cx, int cy) 
 {
   
@@ -388,6 +398,7 @@ void vgui_mfc_adaptor::OnSize(UINT nType, int cx, int cy)
   
 }
 
+//: Convert MFC key character into an int suitable for vgui.
 int mfc_key(UINT nChar, UINT nFlags)
 {
   if (nFlags & 256) {
@@ -419,36 +430,44 @@ int mfc_key(UINT nChar, UINT nFlags)
   }
 }
 
+//: Create the corresponding vgui_event from an MFC event.
+vgui_event vgui_mfc_adaptor::generate_vgui_event(UINT nChar, UINT nRepCnt, UINT nFlags, vgui_event_type evttype)
+{
+  vgui_event evt(evttype);
+  if (GetKeyState(VK_SHIFT) & 0x8000)
+    evt.modifier = vgui_SHIFT;
+  if (GetKeyState(VK_CONTROL) & 0x8000)
+    evt.modifier = vgui_CTRL;
+
+  int k = mfc_key(nChar, nFlags);
+  evt.key = vgui_key(k);
+  vcl_cout << "KYM evt = " << evt << vcl_endl;
+  return evt;
+}
+
+//: Called by MFC when a key is pressed inside the application.
 void vgui_mfc_adaptor::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
-  if (nChar == VK_SHIFT) {
-    //     lpKeyState[nChar] = 1;
+   // Ignore Ctrl and Shift pressed alone:
+  if (nChar == VK_SHIFT || nChar == VK_CONTROL)
     return;
-  }
-  
-  vgui_event e(vgui_KEY_PRESS);    
-  int k = mfc_key(nChar, nFlags);
-  e.key = vgui_key(k);
-  
-  dispatch_to_tableau(e);
-  
+ 
+  dispatch_to_tableau(generate_vgui_event(nChar, nRepCnt, nFlags, vgui_KEY_PRESS));
   service_redraws();
 }
 
+//: Called by MFC when a key is released inside the application.
 void vgui_mfc_adaptor::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
-  if (nChar == VK_SHIFT) {
-    //   lpKeyState[nChar] = 0;
+  // Ignore Ctrl and Shift pressed alone:
+  if (nChar == VK_SHIFT || nChar == VK_CONTROL)
     return;
-  }
-  
-  vgui_event e(vgui_KEY_RELEASE);
-  e.key = vgui_key(mfc_key(nChar, nFlags));
-  dispatch_to_tableau(e);
-  
+
+  dispatch_to_tableau(generate_vgui_event(nChar, nRepCnt, nFlags, vgui_KEY_RELEASE));
   service_redraws();
 }
 
+//: Handles mouse press/release events.
 void vgui_mfc_adaptor::domouse(vgui_event_type et, UINT nFlags, CPoint point, vgui_button b)
 {
   //vcl_cerr << "vgui_mfc_adaptor::domouse: wo = " << point.x << ", " << point.y << vcl_endl;
@@ -458,7 +477,7 @@ void vgui_mfc_adaptor::domouse(vgui_event_type et, UINT nFlags, CPoint point, vg
   point.y += 2;
   // FIXME
 
-  come_out_now = true;
+  //come_out_now = true;
   vgui_event e(et);
 
   e.button = b;
@@ -497,41 +516,51 @@ void vgui_mfc_adaptor::domouse(vgui_event_type et, UINT nFlags, CPoint point, vg
   }
 }
 
+//: Called by MFC when the left mouse button is pressed inside the application.
 void vgui_mfc_adaptor::OnLButtonDown(UINT nFlags, CPoint point) 
 {
   domouse(vgui_BUTTON_DOWN, nFlags, point, vgui_LEFT);
 }
 
+//: Called by MFC when the left mouse button is released inside the application.
 void vgui_mfc_adaptor::OnLButtonUp(UINT nFlags, CPoint point) 
 {
   domouse(vgui_BUTTON_UP, nFlags, point, vgui_LEFT);
 }
 
+//: Called by MFC when the middle mouse button is pressed inside the application.
 void vgui_mfc_adaptor::OnMButtonDown(UINT nFlags, CPoint point) 
 {
   domouse(vgui_BUTTON_DOWN, nFlags, point, vgui_MIDDLE);
 }
 
+//: Called by MFC when the middle mouse button is released inside the application.
 void vgui_mfc_adaptor::OnMButtonUp(UINT nFlags, CPoint point) 
 {
   domouse(vgui_BUTTON_UP, nFlags, point, vgui_MIDDLE);
 }
+
+//: Called by MFC when the right mouse button is pressed inside the application.
 void vgui_mfc_adaptor::OnRButtonDown(UINT nFlags, CPoint point) 
 {
   domouse(vgui_BUTTON_DOWN, nFlags, point, vgui_RIGHT);
 }
 
+//: Called by MFC when the right mouse button is released inside the application.
 void vgui_mfc_adaptor::OnRButtonUp(UINT nFlags, CPoint point) 
 {
   domouse(vgui_BUTTON_UP, nFlags, point, vgui_RIGHT);
 }
 
+//: Called by MFC when the mouse is moved inside the application.
 void vgui_mfc_adaptor::OnMouseMove(UINT nFlags, CPoint point) 
 {
   domouse(vgui_MOTION, nFlags, point, vgui_BUTTON_NULL);
 }
 
+//: Called by MFC when a user rotates a mouse wheel.
 BOOL vgui_mfc_adaptor::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt) 
 {
-  abort();
+  vcl_cerr << "Mouse wheel events are not handled" << vcl_endl;
+  return FALSE;
 }
