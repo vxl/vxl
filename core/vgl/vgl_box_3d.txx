@@ -189,6 +189,6 @@ vcl_istream& vgl_box_3d<Type>::read(vcl_istream& s)
 }
 
 #define VGL_BOX_3D_INSTANTIATE(Type) \
-template class vgl_box_3d<Type >;
+template class vgl_box_3d<Type >
 
 #endif // vgl_box_3d_txx_
