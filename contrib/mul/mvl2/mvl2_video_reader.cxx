@@ -7,7 +7,9 @@
 // \author Louise Butcher
 
 #include "mvl2_video_reader.h"
-#include <vcl_cstdlib.h>
+#include <vcl_cstdlib.h> // for vcl_getenv()
+#include <vcl_algorithm.h> // for vcl_find()
+#include <vcl_fstream.h>
 
 mvl2_video_reader::mvl2_video_reader()
 {
