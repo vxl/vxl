@@ -91,7 +91,7 @@ void brip_gauss_filter( const vil_image_view<srcT>& src_im,
   assert (k_size>1 && k_size<ni && k_size<nj);
 
   // compute the kernel
-  vcl_vector<double> kernel(k_size);
+  double kernel[k_size];
   for(int i=0; i<k_size; ++i){
     double val = ((double(i)+0.5)-double(k_size)/2.0);
     kernel[i] = vcl_exp(-(val*val)/(2.0*sigma*sigma));
@@ -103,12 +103,14 @@ void brip_gauss_filter( const vil_image_view<srcT>& src_im,
   vil_image_view<destT> work(ni, nj, n_planes);
 
   // filter horizontal
-  vil_convolve_1d(src_im, work, kernel.begin()+int(k_size)/2, 
+  vil_convolve_1d(src_im, work, kernel+int(k_size)/2,
                   -int(k_size)/2, int(k_size-1)/2, 
                   destT(0), option, option);
 
   // filter vertical
-  vil_convolve_1d(vil_transpose(work), vil_transpose(dest_im), kernel.begin()+int(k_size)/2, 
+  vil_image_view<destT> work_t = vil_transpose(work);
+  vil_image_view<destT> dest_t = vil_transpose(dest_im);
+  vil_convolve_1d(work_t, dest_t, kernel+int(k_size)/2,
                   -int(k_size)/2, int(k_size-1)/2, 
                   destT(0), option, option);    
 
