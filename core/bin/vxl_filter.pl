@@ -128,6 +128,9 @@ sub process_headers {
     # copy line from array to $_:
     $_ = $lines[$ii];
     
+    # skip lines that contain the word "dont_vxl_filter"
+    next if m/\bdont_vxl_filter\b/;
+    
     #---------------------------------------- old <vcl/vcl_blah> -> new <vcl_blah>
     s/include\s+<vcl\/([^>]*vcl_[^>]*)>/include <$1>/;
     
@@ -289,6 +292,8 @@ sub process_headers {
       s/\b(std::)?istream\b/vcl_istream/g;
       s/\b(std::)?ostream\b/vcl_ostream/g;
       s/\b(std::)?fstream\b/vcl_fstream/g;
+      s/\b(std::)?ifstream\b/vcl_ifstream/g;
+      s/\b(std::)?ofstream\b/vcl_ofstream/g;
       
       # remember what we saw
       $saw_functional_h = 1 if m/include <vcl_functional\.h>/;
@@ -621,7 +626,7 @@ sub process_lines {
       s/\bIUE_STL_USE_ABBREVS\b/__STL_USE_ABBREVS/g;
       
       # classes and functions
-      s/\breverse_iterator\b/vcl_reverse_iterator/g;
+      #this is often a typedef member.  s/\breverse_iterator\b/vcl_reverse_iterator/g;
       s/\bistream_iterator\b/vcl_istream_iterator/g;
       s/\bostream_iterator\b/vcl_ostream_iterator/g;
       s/\bforward_iterator\b/vcl_iterator/g; # no ISO forward_iterator<>
