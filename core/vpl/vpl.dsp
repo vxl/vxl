@@ -92,29 +92,33 @@ LIB32=link.exe -lib
 !ENDIF 
 
 # Begin Target
-
 # Name "vpl - Win32 Release"
 # Name "vpl - Win32 Debug"
-
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\vpl.cxx
-
+# End Source File
+# Begin Source File
+SOURCE=.\vpl_fdopen.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vpl_fileno.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\vpl.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vpl_mutex.h
-
+# End Source File
+# Begin Source File
+SOURCE=.\vpl_fdopen.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpl_fileno.h
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
