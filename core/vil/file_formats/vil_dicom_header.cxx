@@ -658,12 +658,11 @@ bool vil_dicom_header_format::convertValueRepresentation(unsigned int &dblock_si
              last == VIL_DICOM_HEADER_OTHERBYTE  ||
              last == VIL_DICOM_HEADER_OTHERWORD)
     {
-
-        vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> " << "About to read dblock_size again in convertValue"<<vcl_endl;  
+      vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\tAbout to read dblock_size again in convertValue\n";
       fs.read(&dblock_size, sizeof(int));
-      vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> " << "Pre-Dodgy Looking Short-Swap data_block_size= "<<dblock_size;
+      vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\tPre-Dodgy Looking Short-Swap data_block_size= "<<dblock_size<<vcl_endl;
       dblock_size = shortSwap(dblock_size);
-      vcl_cerr<< "\tPost-Dodgy Looking Short-Swap data_block_size= "<<dblock_size<<vcl_endl;
+      vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\tPost-Dodgy Looking Short-Swap data_block_size= "<<dblock_size<<vcl_endl;
       result = true;
     } // End of else if (first...)
     else if (dblock_size == VIL_DICOM_HEADER_ALLSET)
@@ -910,26 +909,26 @@ vil_dicom_header_endian vil_dicom_header_format::determineMetaInfo(vil_stream &f
 
   // Read the next group
   fs.read(&group,sizeof(vxl_uint_16));
-  vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> " << "Pre-Swap group= "<<group;
+  vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\tPre-Swap group= "<<group<<vcl_endl;
   group = shortSwap(group);
-  vcl_cerr<< "\tPost-Swap group= "<<group<<vcl_endl;
-  
+  vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\tPost-Swap group= "<<group<<vcl_endl;
+
   while (fs.ok() && group <= VIL_DICOM_HEADER_METAFILEGROUP)
   {
     // Read the element
 
     fs.read(&element,sizeof(vxl_uint_16));
-    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> " << "Pre-Swap element= "<<element;
+    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\tPre-Swap element= "<<element<<vcl_endl;
     element = shortSwap(element);
-    vcl_cerr<< "\tPost-Swap element= "<<element<<vcl_endl;;
+    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\tPost-Swap element= "<<element<<vcl_endl;
 
     // Read the data block size
     if (sizeof(vxl_uint_32) != fs.read(&data_block_size, sizeof(vxl_uint_32)))
       break;
 
-    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> " << "Pre-Swap data_block_size= "<<data_block_size;
+    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\tPre-Swap data_block_size= "<<data_block_size<<vcl_endl;
     data_block_size = intSwap(data_block_size);
-    vcl_cerr<< "\tPost-Swap data_block_size= "<<data_block_size<<vcl_endl;;
+    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\tPost-Swap data_block_size= "<<data_block_size<<vcl_endl;
 
     if (data_block_size > 0x1000000) {
       vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\t" << __FILE__ << ": " << __LINE__ << " : WARNING:\n"
@@ -1055,13 +1054,13 @@ vil_dicom_header_endian vil_dicom_header_format::determineMetaInfo(vil_stream &f
     ret_pos = fs.tell();
 
     // Read the next group
-    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> "<<"......About to read next group - file position = "<<fs.tell()<<" data_block_size = "<<data_block_size<<vcl_endl;
+    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\t......About to read next group - file position = "<<fs.tell()
+            <<"; data_block_size = "<<data_block_size<<vcl_endl;
     fs.read(&group,sizeof(vxl_uint_16));
 
-    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> " << "Pre-Swap group= "<<group;
+    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\tPre-Swap group= "<<group<<vcl_endl;
     group = shortSwap(group);
-    vcl_cerr<< "\tPost-Swap group= "<<group<<vcl_endl;
-
+    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\tPost-Swap group= "<<group<<vcl_endl;
   } // End of while
 
   // Reset the pointer before the last read group
