@@ -24,6 +24,7 @@
 #include <vcl_string.h>
 #include <vcl_map.h>
 #include <vcl_iostream.h>
+#include <vcl_stdio.h>
 
 #define BUFFER_SIZE 4096
 #define DEMUX_PAYLOAD_START 1
@@ -194,7 +195,7 @@ class vidl_mpegcodec_helper
   // of mpeg2dec
   uint8_t buffer_[BUFFER_SIZE];
   vcl_string filename_;
-  FILE * in_file_;
+  vcl_FILE * in_file_;
   int demux_track_;
   int demux_pid_;
   int disable_accel_;
