@@ -216,13 +216,7 @@ LINK32=link.exe
 SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_histogram.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_mutual_info.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\test_watershed.cxx
+SOURCE=.\test_tracking_face_2d.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_include.cxx
