@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_line_2d.h
+// This is core/vgl/vgl_line_2d.h
 #ifndef vgl_line_2d_h_
 #define vgl_line_2d_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -57,7 +57,7 @@ class vgl_line_2d
   //  The two points must be distinct!
   vgl_line_2d (vgl_point_2d<Type> const& p1, vgl_point_2d<Type> const& p2);
 
-#if 0
+#if 0 // use compiler defaults for these
   // Default destructor
   inline ~vgl_line_2d () {}
 
@@ -74,8 +74,17 @@ class vgl_line_2d
 
   inline bool operator!=(vgl_line_2d<Type>const& other)const{return !operator==(other);}
 
-  //: angle
-  double tangent_angle() const;
+  //: angle with the horizontal line y=0, measured in radians.
+  //  Returns values between -pi and pi, i.e., the lines x-y=0 and y-x=0
+  //  return different values (pi/4 and -3pi/4 respectively) although these
+  //  lines are identical.
+  double slope_radians() const;
+
+  //: angle with the horizontal line y=0, measured in 360-degrees.
+  //  Returns values between -180 and 180, i.e., the lines x-y=0 and y-x=0
+  //  return different values (45 and -135 respectively) although these
+  //  lines are identical.
+  double slope_degrees() const;
 
   // Data Access-------------------------------------------------------------
 
@@ -97,20 +106,6 @@ class vgl_line_2d
   //: normalize the line coefficents s.t. a^2 + b^2 = 1
   bool normalize();
 
- private: // \deprecated
-  //: \deprecated \a x component of unit vector describing direction of line
-  inline double dir_x() const { return direction().x(); }
-
-  //: \deprecated \a y component of unit vector describing direction of line
-  inline double dir_y() const { return direction().y(); }
-
-  //: \deprecated \a x component of unit vector orthogonal to line
-  inline double normal_x() const { return normal().x(); }
-
-  //: \deprecated \a y component of unit vector orthogonal to line
-  inline double normal_y() const { return normal().y(); }
-
- public:
   //: Set a b c.
   //  The values of a and b should not be both zero.
   //  Note that it does not make sense to set a, b or c separately
