@@ -32,6 +32,7 @@ PARAMS_test_vil1 := file_read_data
 TESTS += test_greyscale_dilate.cxx
 TESTS += test_greyscale_erode.cxx
 TESTS += test_median.cxx
+TESTS += test_algo_exp_grad_filter_1d.cxx
 
 include ${IUEROOT}/config/identify-os.mk
 ifeq ($(OS),OSF1V4) # with optimisation, gcc 3.x runs out of memory
