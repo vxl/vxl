@@ -37,16 +37,16 @@ spline_2d_value( vnl_vector<double> pt, vnl_vector<double> c, vnl_vector< unsign
   }
   double u = pt[ 0 ] - f[ 0 ]; // a number between 0 and 1
   double v = pt[ 1 ] - f[ 1 ]; // a number between 0 and 1
-  unsigned i = f[1] * ( m[0] + 3 ) + f[0];
+  unsigned ii = f[1] * ( m[0] + 3 ) + f[0];
 
   vnl_vector< double > control_v( 4 );
   vnl_vector< double > control_u( 4 );
   for (unsigned j=0; j<4; ++j ) {
     for (unsigned k=0; k<4; ++k ) {
-      control_u[ k ] = c[ i+k ];
+      control_u[ k ] = c[ ii+k ];
     }
     control_v[ j ] = spline_1d_value( u, control_u );
-    i += m[0]+3;
+    ii += m[0]+3;
   }
 
   return spline_1d_value( v, control_v );
@@ -66,13 +66,13 @@ spline_3d_value(vnl_vector<double> pt, vnl_vector<double> c, vnl_vector< unsigne
   double u = pt[ 0 ] - f[ 0 ]; // a number between 0 and 1
   double v = pt[ 1 ] - f[ 1 ]; // a number between 0 and 1
   double w = pt[ 2 ] - f[ 2 ]; // a number between 0 and 1
-  unsigned i = f[2] * ( m[0]+3 ) * ( m[1]+3 ) + f[1] * ( m[0] + 3 ) + f[0];
+  unsigned ii = f[2] * ( m[0]+3 ) * ( m[1]+3 ) + f[1] * ( m[0] + 3 ) + f[0];
 
   vnl_vector< double > control_w( 4 );
   vnl_vector< double > control_v( 4 );
   vnl_vector< double > control_u( 4 );
   for (unsigned l=0; l<4; ++l ) {
-    unsigned j = i;
+    unsigned j = ii;
     for (unsigned k=0; k<4; ++k ) {
       for (unsigned n=0; n<4; ++n ) {
         control_u[ n ] = c[ j+n ];
@@ -81,7 +81,7 @@ spline_3d_value(vnl_vector<double> pt, vnl_vector<double> c, vnl_vector< unsigne
       j += m[0]+3;
     }
     control_w[ l ] = spline_1d_value( v, control_v );
-    i += (m[0]+3)*(m[1]+3);
+    ii += (m[0]+3)*(m[1]+3);
   }
 
   return spline_1d_value( w, control_w );
