@@ -8,16 +8,12 @@
 #include <vcl_vector.txx>
 #include <vcl_list.h>
 
+#include "LineSegSet.h"
+
 #include <vnl/vnl_matops.h> // use vnl_matlab_print.h for pretty printing
 
-#include <mvl/LineSeg.h>
 #include <mvl/ImageMetric.h>
 #include <mvl/HomgPoint2D.h>
-
-////////////////#include <Geometry/ImplicitLine.h>
-//////////////#include <Topology/Edge.h>
-
-#include "LineSegSet.h"
 
 // Default ctor
 LineSegSet::LineSegSet():
