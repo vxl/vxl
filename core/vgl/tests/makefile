@@ -11,6 +11,7 @@ TESTS += test_conic.cxx
 TESTS += test_polygon.cxx
 TESTS += test_ellipse_scan_iterator.cxx
 TESTS += test_distance.cxx
+TESTS += test_polygon_scan_iterator.cxx
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
