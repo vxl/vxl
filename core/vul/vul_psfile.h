@@ -32,15 +32,14 @@ public:
 
   vul_psfile(char const* filename, bool debug_output=false);
   ~vul_psfile();
+  operator bool () { return (bool)output_filestream; }
 
   void set_min_max_xy(float x, float y);
   void set_min_max_xy(int x, int y);
   bool set_parameters(int sizex, int sizey);
   void set_paper_type(vul_psfile::paper_type type){printer_paper_type = type;}
-  void set_paper_layout(vul_psfile::paper_layout layout)
-  {printer_paper_layout = layout;}
-  void set_paper_orientation(vul_psfile::paper_orientation o)
-  {printer_paper_orientation = o;}
+  void set_paper_layout(vul_psfile::paper_layout layout) {printer_paper_layout = layout;}
+  void set_paper_orientation(vul_psfile::paper_orientation o) {printer_paper_orientation = o;}
   void set_reduction_factor(int rf) {reduction_factor = rf;}
   void set_scale_x(int sx) {scale_x = sx;}
   void set_scale_y(int sy) {scale_x = sy;}
