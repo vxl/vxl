@@ -5,8 +5,7 @@
 // \file
 // \author  Matt Leotta
 // \brief   A tableau to a histogram for an image
-//
-//  The histogram is plotted on a easy2D tableau
+//  The histogram is plotted on an easy2D tableau
 
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_rgb.h>
@@ -14,16 +13,11 @@
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_soview2D.h>
 #include <vgui/vgui_easy2D_tableau_sptr.h>
-
-class vgui_tableau;
-
 #include <bgui/bgui_histogram_tableau_sptr.h>
-
 
 class bgui_histogram_tableau : public vgui_tableau
 {
-public:
-
+ public:
   //: Constructor takes all the labels used on the graph.
   bgui_histogram_tableau();
   //: Destructor.
@@ -36,10 +30,7 @@ public:
   bool handle(const vgui_event&);
   //: Clear the data
   void clear();
-
-protected:
-
-private:
+ private:
   int left_offset_;
   int top_offset_;
   int graph_width_;
@@ -52,14 +43,11 @@ private:
 };
 
 
-// <vgui_make_sptr>
 struct bgui_histogram_tableau_new : public bgui_histogram_tableau_sptr
 {
   typedef bgui_histogram_tableau_sptr base;
   bgui_histogram_tableau_new()
     : base(new bgui_histogram_tableau()) { }
 };
-// <vgui_make_sptr>
 
-
-#endif //bgui_histogram_tableau.
+#endif // bgui_histogram_tableau_h_
