@@ -19,7 +19,7 @@
 
 class HomgOperator3D
 {
-public:
+ public:
   static double angle_between_oriented_lines (const HomgLine3D& line1, const HomgLine3D& line2);
   static double distance_squared (const HomgPoint3D& point1, const HomgPoint3D& point2);
   static HomgPoint3D intersect_line_and_plane (const HomgLine3D&, const HomgPlane3D&);
@@ -40,7 +40,7 @@ public:
 
   static void sort_points(HomgPoint3D* p, int n);
 
-  // cross ratio of four colinear points, or four planes through a common line
+  // cross ratio of four collinear points, or four planes through a common line
   static double CrossRatio(const Homg3D& p1, const Homg3D& p2,
                            const Homg3D& p3, const Homg3D& p4);
 };

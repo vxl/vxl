@@ -448,7 +448,7 @@ double HomgOperator2D::CrossRatio(const Homg2D& a, const Homg2D& b, const Homg2D
   return n/m;
 }
 
-//: Conjugate point of three given colinear points.
+//: Conjugate point of three given collinear points.
 // If cross ratio cr is given (default: -1), the generalized conjugate point
 // returned is such that ((x1,x2;x3,answer)) = cr.
 Homg2D HomgOperator2D::Conjugate(const Homg2D& a, const Homg2D& b, const Homg2D& c, double cr)

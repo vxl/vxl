@@ -60,7 +60,7 @@ class HomgOperator2D
   // "Intersect" a set of lines
   static HomgPoint2D lines_to_point(const vcl_vector<HomgLine2D>&);
 
-  // cross ratio of four colinear points, or four concurrent lines
+  // cross ratio of four collinear points, or four concurrent lines
   static double CrossRatio(const Homg2D& p1, const Homg2D& p2,
                            const Homg2D& p3, const Homg2D& p4);
   static Homg2D Conjugate(const Homg2D& a, const Homg2D& b, const Homg2D& c,
