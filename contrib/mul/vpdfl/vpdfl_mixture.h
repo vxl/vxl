@@ -75,10 +75,16 @@ public:
   //: Number of components in mixture
   unsigned n_components() const { return component_.size(); }
 
+  //: Get i<I>th</I> weight.
+  double weight(unsigned i) { return weight_[i]; }
+
   //: Array of weights
+  // Use weight(i) where possible
   const vcl_vector<double>& weights() const { return weight_; }
 
   //: Array of weights
+  // Warning care must be taken to ensure consistency when modifying weights
+  // Warning. Use weight(i) where possible
   vcl_vector<double>& weights() { return weight_; }
 
   //: Return index of component nearest to x
@@ -91,13 +97,23 @@ public:
   //: Remove all components cleanly
   void clear();
 
-  //: Access to components - for use by builders
-  //  Care must be taken to ensure consistency when modifying
-  vcl_vector<vpdfl_pdf_base*>& components() { return component_; }
+  //: Get i<I>th</I> component.
+  const vpdfl_pdf_base const & component(unsigned i) { return *component_[i]; }
 
   //: Access to components - for use by builders
   //  Care must be taken to ensure consistency when modifying
+  // Use component(i) where possible
+  vcl_vector<vpdfl_pdf_base*>& components() { return component_; }
+
+  //: Access to components - for use by builders
+  // Use component(i) where possible
   const vcl_vector<vpdfl_pdf_base*>& components() const { return component_; }
+
+  //: Set the whole pdf mean and variance values.
+  // Components and Weights should already be correct so that
+  // the error checking can work.
+  // #define NDEBUG to turn off error checking.
+  void set_mean_and_variance(vnl_vector<double>&m, vnl_vector<double>&v);
 
   //: Return true if the object represents a valid PDF.
   // This will return false, if n_dims() is 0, for example just ofter

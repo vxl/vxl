@@ -226,7 +226,7 @@ vpdfl_builder_base* vpdfl_axis_gaussian_builder::clone() const
 
 void vpdfl_axis_gaussian_builder::print_summary(vcl_ostream& os) const
 {
-  os << "Min. var. : "<< min_var_;
+  os << "Min. var.: "<< min_var_;
 }
 
 //=======================================================================

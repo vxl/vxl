@@ -24,29 +24,22 @@
 //=======================================================================
 
 
-void configure()
-{
-  vsl_add_to_binary_loader(vpdfl_axis_gaussian());
-  vsl_add_to_binary_loader(vpdfl_axis_gaussian_builder());
-  vsl_add_to_binary_loader(vpdfl_mixture());
-  vsl_add_to_binary_loader(vpdfl_mixture_builder());
-}
 
-void ShowVec(vcl_ostream& os,const vnl_vector<double>& v)
-{
-  os<<"(";
-  int n = v.size();
-  for (int i=1;i<n;++i) os<<v(i)<<",";
-  if (n>0) os<<v(n);
-  os<<")"<<vcl_endl;
-}
 
 
 //: Generate losts of samples using pdf, build new pdf with builder
 //  and compare the two
 void test_mixture()
 {
-  configure();
+  vcl_cout << "\n\n**************************" << vcl_endl;
+  vcl_cout << " Testing vpdfl_mixture" << vcl_endl;
+  vcl_cout << "**************************" << vcl_endl;
+
+  
+  vsl_add_to_binary_loader(vpdfl_axis_gaussian());
+  vsl_add_to_binary_loader(vpdfl_axis_gaussian_builder());
+  vsl_add_to_binary_loader(vpdfl_mixture());
+  vsl_add_to_binary_loader(vpdfl_mixture_builder());
 
   vpdfl_axis_gaussian_builder g_builder;
   vpdfl_axis_gaussian         a_gaussian;
@@ -90,16 +83,40 @@ void test_mixture()
 
   vpdfl_pdf_base* p_pdf = builder.new_model();
 
-  mbl_data_array_wrapper<vnl_vector<double> > data_array(&data[0]/*.begin()*/,n_samples);
+  mbl_data_array_wrapper<vnl_vector<double> > data_array(data);
 
   builder.build(*p_pdf,data_array);
 
   vcl_cout<<"Original PDF: "<<pdf<<vcl_endl;
-  vcl_cout<<"Mean: "; ShowVec(vcl_cout,pdf.mean());
-  vcl_cout<<"Var:  "; ShowVec(vcl_cout,pdf.variance());
+  vcl_cout<<"Mean: "<< pdf.mean() <<vcl_endl;
+  vcl_cout<<"Var:  "<<pdf.variance()<<vcl_endl;
   vcl_cout<<"New PDF: "<<p_pdf<<vcl_endl;
-  vcl_cout<<"Mean: "; ShowVec(vcl_cout,p_pdf->mean());
-  vcl_cout<<"Var:  "; ShowVec(vcl_cout,p_pdf->variance());;
+  vcl_cout<<"Mean: " << p_pdf->mean()<<vcl_endl;
+  vcl_cout<<"Var:  " << p_pdf->variance()<<vcl_endl;
+
+  vpdfl_mixture & gmm =  (vpdfl_mixture &) (*p_pdf);
+
+  vcl_vector<double> test_wts(n_comp, 1.0/n_comp);
+  TEST("Weights are about correct",
+    vnl_c_vector<double>:: euclid_dist_sq(&gmm.weights()[0],
+      &test_wts[0], n_comp) < 0.01,
+    true);
+
+  if (vnl_vector_ssd(gmm.component(0).mean(), mean[0]) < 
+    vnl_vector_ssd(gmm.component(0).mean(), mean[1]) )
+  {
+    TEST("Means are about correct",
+      (vnl_vector_ssd(gmm.component(0).mean(), mean[0]) < 0.05 &&
+      vnl_vector_ssd(gmm.component(1).mean(), mean[1]) < 0.05),
+      true);
+  }
+  else
+  {
+    TEST("Means are about correct",
+      (vnl_vector_ssd(gmm.component(0).mean(), mean[1]) < 0.05 &&
+      vnl_vector_ssd(gmm.component(1).mean(), mean[0]) < 0.05),
+      true);
+  }
 
   vcl_string test_path = "test_mixture.bvl.tmp";
 
@@ -132,11 +149,11 @@ void test_mixture()
   vcl_cout<<vcl_endl;
 
   vcl_cout<<"Original PDF: "; vsl_print_summary(vcl_cout, p_pdf); vcl_cout<<vcl_endl;
-  vcl_cout<<"Mean: "; ShowVec(vcl_cout,p_pdf->mean());
-  vcl_cout<<"Var:  "; ShowVec(vcl_cout,p_pdf->variance());
+  vcl_cout<<"Mean: " << p_pdf->mean()<<vcl_endl;
+  vcl_cout<<"Var:  " << p_pdf->variance()<<vcl_endl;
   vcl_cout<<"Loaded PDF: "; vsl_print_summary(vcl_cout, p_pdf2); vcl_cout<<vcl_endl;
-  vcl_cout<<"Mean: "; ShowVec(vcl_cout,p_pdf2->mean());
-  vcl_cout<<"Var:  "; ShowVec(vcl_cout,p_pdf2->variance());
+  vcl_cout<<"Mean: " << p_pdf2->mean()<<vcl_endl;
+  vcl_cout<<"Var:  " << p_pdf2->variance()<<vcl_endl;
   vcl_cout<<vcl_endl;
 
   vcl_cout<<vcl_endl;

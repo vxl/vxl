@@ -25,6 +25,7 @@
 #include <mbl/mbl_mz_random.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
+#include <vnl/vnl_math.h>
 #include <vsl/vsl_binary_loader.h>
 
 //=======================================================================
@@ -142,9 +143,7 @@ void vpdfl_mixture_builder::build(vpdfl_pdf_base& model,
 void vpdfl_mixture_builder::build(vpdfl_pdf_base& model,
             mbl_data_wrapper<vnl_vector<double> >& data) const
 {
-  int n = data.size();
-  vcl_vector<double> wts(n);
-  for (int i=0;i<n;++i) wts[i]=1.0;
+  vcl_vector<double> wts(data.size(), 1.0);
   weighted_build(model,data,wts);
 }
 
@@ -207,6 +206,8 @@ void vpdfl_mixture_builder::weighted_build(vpdfl_pdf_base& base_model,
     move = m_step(model,probs,data_ptr,wts);
     n_its++;
   }
+  calc_mean_and_variance(model);
+  assert(model.is_valid_pdf());
 }
 
 static void UpdateRange(vnl_vector<double>& min_vec, vnl_vector<double>& max_vec, const vnl_vector<double>& vec)
@@ -351,6 +352,58 @@ double vpdfl_mixture_builder::m_step(vpdfl_mixture& model,
 
 //=======================================================================
 
+//: Add Y*v to X
+static inline void incXbyYv(vnl_vector<double> *X, const vnl_vector<double> &Y, double v)
+{
+  assert(X->size() == Y.size());
+  int i = ((int)X->size()) - 1;
+  double * const pX=X->data_block();
+  while (i >= 0)
+  {
+    pX[i] += Y[i] * v;
+    i--;
+  }
+}
+
+//: Add (Y + Z.*Z)*v to X
+static inline void incXbyYplusXXv(vnl_vector<double> *X, const vnl_vector<double> &Y,
+                               const vnl_vector<double> &Z, double v)
+{
+  assert(X->size() == Y.size());
+  int i = ((int)X->size()) - 1;
+  double * const pX=X->data_block();
+  while (i >= 0)
+  {
+    pX[i] += (Y[i] + vnl_math_sqr(Z[i]))* v;
+    i--;
+  }
+}
+
+
+
+//: Calculate and set the mixture's mean and variance.
+void vpdfl_mixture_builder::calc_mean_and_variance(vpdfl_mixture& model)
+{
+  unsigned n = model.component(0).mean().size();
+  vnl_vector<double> mean(n, 0.0);
+  vnl_vector<double> var(n, 0.0);
+
+  unsigned i;
+  for (i=0; i<model.n_components(); ++i)
+  {
+    incXbyYv(&mean, model.component(i).mean(), model.weight(i));
+    incXbyYplusXXv(&var, model.component(i).variance(),
+      model.component(i).mean(), model.weight(i));
+  }
+
+  for (i=0; i<n; ++i)
+    var(i) -= vnl_math_sqr(mean(i));
+
+  model.set_mean_and_variance(mean, var);
+}
+
+//=======================================================================
+
 vcl_string vpdfl_mixture_builder::is_a() const
 {
   return vcl_string("vpdfl_mixture_builder");
@@ -382,11 +435,10 @@ vpdfl_builder_base* vpdfl_mixture_builder::clone() const
 void vpdfl_mixture_builder::print_summary(vcl_ostream& os) const
 {
   os<<vcl_endl;
-  vsl_inc_indent(os);
   for (int i=0;i<builder_.size();++i)
   {
-    os<<vsl_indent()<<"Builder "<<i<<" : "<<vcl_endl;
-    os<<builder_[i]<<vcl_endl;
+    os<<vsl_indent()<<"Builder "<<i<<": ";
+    vsl_print_summary(os, builder_[i]); os << vcl_endl;
   }
 }
 

@@ -171,17 +171,26 @@ bool vpdfl_pdf_base::is_class(vcl_string const& s) const
 }
 
 //=======================================================================
-// Method: print
-//=======================================================================
+
+static void ShowStartVec(vcl_ostream& os, const vnl_vector<double>& v)
+{
+  int n = 3;
+  if (n>v.size()) n=v.size();
+  os<<"(";
+  for (int i=0;i<n;++i) os<<v(i)<<" ";
+  if (v.size()>n) os<<"...";
+  os<<")";
+}
+
 
   // required if data is present in this base class
 void vpdfl_pdf_base::print_summary(vcl_ostream& os) const
 {
-  os << vsl_indent() << "N. Dims : "<< mean_.size();
+  os <<  "N. Dims: "<< mean_.size();
+  os <<  "  Mean: "; ShowStartVec(os, mean_);
+  os <<  "  Variance: "; ShowStartVec(os, var_);
 }
 
-//=======================================================================
-// Method: save
 //=======================================================================
 
   // required if data is present in this base class
@@ -192,8 +201,6 @@ void vpdfl_pdf_base::b_write(vsl_b_ostream& bfs) const
   vsl_b_write(bfs, var_);
 }
 
-//=======================================================================
-// Method: load
 //=======================================================================
 
   // required if data is present in this base class
@@ -215,8 +222,6 @@ void vpdfl_pdf_base::b_read(vsl_b_istream& bfs)
 }
 
 //=======================================================================
-// Associated function: operator<<
-//=======================================================================
 
 void vsl_b_write(vsl_b_ostream& bfs, const vpdfl_pdf_base* b)
 {
@@ -230,16 +235,12 @@ void vsl_b_write(vsl_b_ostream& bfs, const vpdfl_pdf_base* b)
 }
 
 //=======================================================================
-// Associated function: operator<<
-//=======================================================================
 
 void vsl_b_write(vsl_b_ostream& bfs, const vpdfl_pdf_base& b)
 {
   b.b_write(bfs);
 }
 
-//=======================================================================
-// Associated function: operator>>
 //=======================================================================
 
 void vsl_b_read(vsl_b_istream& bfs, vpdfl_pdf_base& b)

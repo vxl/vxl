@@ -52,7 +52,10 @@ public:
     //: Initialise safely
     // Calculates the variance, and checks that
     // the Eigenvalues are ordered and the Eigenvectors are unit normal
+    //
     // Turn off assertions to remove error checking.
+    //
+    // This functions should only be used by builders.
   virtual void set(const vnl_vector<double>& mean,
                    const vnl_matrix<double>& evecs,
                    const vnl_vector<double>& evals);
@@ -60,9 +63,15 @@ public:
     //: Initialise from mean and covariance matrix
     //  Note, eigenvectors computed from covar, and those corresponding
     //  to evals smaller than min_eval are truncated
+    //
+    // This functions should only be used by builders.
   void set(const vnl_vector<double>& mean,
            const vnl_matrix<double>& covar,
            double min_eval = 1e-6);
+
+    //: Modify just the mean of the distribution
+    // This functions should only be used by builders.
+  void set_mean(const vnl_vector<double>& mean);
 
     //: Eigenvectors of covariance matrix
     // List ordering corresponds to eVals();

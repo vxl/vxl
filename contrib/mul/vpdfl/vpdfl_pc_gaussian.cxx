@@ -230,12 +230,10 @@ vpdfl_pdf_base* vpdfl_pc_gaussian::clone() const
 
 void vpdfl_pc_gaussian::print_summary(vcl_ostream& os) const
 {
+  os << "Partition at: " << partition_;
+  os << "  Log(k) for principal space: "<< log_k_principal_ << vcl_endl;
+  os << vsl_indent();
   vpdfl_gaussian::print_summary(os);
-  os << vcl_endl;
-  vsl_inc_indent(os);
-  os << vsl_indent() << "Partition at: " << partition_ << " Log(k) for principal space: ";
-  os << log_k_principal_ << vcl_endl;
-  vsl_dec_indent(os);
 }
 
 //=======================================================================

@@ -36,15 +36,11 @@ static bool vectorHasDescendingOrder(const vnl_vector<double>& v);
 #endif
 
 //=======================================================================
-// Dflt ctor
-//=======================================================================
 
 vpdfl_gaussian::vpdfl_gaussian()
 {
 }
 
-//=======================================================================
-// Destructor
 //=======================================================================
 
 vpdfl_gaussian::~vpdfl_gaussian()
@@ -112,6 +108,14 @@ void vpdfl_gaussian::set(const vnl_vector<double>& m,
 
   calcLogK();
 }
+
+//: Modify just the mean of the distribution
+// This functions should only be used by builders.
+void vpdfl_gaussian::set_mean(const vnl_vector<double>& mean)
+{
+  vpdfl_pdf_base::set_mean(mean);
+}
+
 
 //=======================================================================
 
@@ -402,17 +406,13 @@ static void ShowStartMat(vcl_ostream& os, const vnl_matrix<double>& A)
 
 void vpdfl_gaussian::print_summary(vcl_ostream& os) const
 {
-  os<<vcl_endl;
   vpdfl_pdf_base::print_summary(os);
-  if (n_dims()==1)
-    os<<" (Mean: "<<mean()(0)<<" Var: "<<variance()(0)<<")";
-  else
+  os << vcl_endl;
+  if (n_dims()!=1)
   {
-    os<<" Mean: "; vsl_print_summary(os,mean());
-    os<<vsl_indent()<<" Variance: "; vsl_print_summary(os, eigenvals() );
-    os<<vsl_indent()<<" Eigenvectors: "; vsl_print_summary(os, eigenvecs() );
-    os<<vsl_indent()<<" log_k: "<< log_k_;
-//  os<<vsl_indent()<<" Covariance: "; ShowStartMat(os, covariance() );
+    os<<vsl_indent()<<"Eigenvectors: "; vsl_print_summary(os, eigenvecs() );
+    os<<vsl_indent()<<"log_k: "<< log_k_ <<vcl_endl;
+//  os<<vsl_indent()<<"Covariance: "; ShowStartMat(os, covariance() );
   }
 }
 

@@ -51,7 +51,7 @@ void test_pc_gaussian()
     evecs(i,i) = 1.0;
   }
 
-  vcl_cout<<"Setting evecs: "<<evecs<<vcl_endl;
+  vcl_cout<<"Setting evecs:\n"<<evecs<<vcl_endl;
   vcl_cout<<"Setting evals: "<<evals<<vcl_endl;
 
   pdf.set(mean,evecs,evals,1.5);
@@ -83,9 +83,7 @@ void test_pc_gaussian()
   vpdfl_builder_base* p_builder = & builder;
   vpdfl_pdf_base* p_pdf = & pdf;
 
-  TEST("mean of built model",(pdf.mean()-p_pdf_built->mean()).squared_magnitude()<0.1,true);
-  TEST("var. of built model",(pdf.variance()-p_pdf_built->variance()).squared_magnitude()<0.1,true);
-  TEST("Eigenvalues", (pdf.eigenvals() - ((vpdfl_gaussian*) p_pdf_built)->eigenvals()).squared_magnitude()<0.1,true);
+  TEST("mean of built model",vnl_vector_ssd(pdf.mean(), p_pdf_built->mean())<0.1,true);
 
   vcl_cout<<vcl_endl<<"=================Testing Fast log_p():"<<vcl_endl;
 

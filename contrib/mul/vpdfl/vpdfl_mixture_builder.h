@@ -38,15 +38,18 @@ private:
                   const vnl_vector<double>* data,
                   const vcl_vector<double>& wts) const;
 
+  //: The Expectation part of the EM algorithm
   void e_step(vpdfl_mixture& model,
               vcl_vector<vnl_vector<double> >& probs,
               const vnl_vector<double>* data,
               const vcl_vector<double>& wts) const;
 
+  //: The Maximisation part of the EM algorithm
   double m_step(vpdfl_mixture& model,
                 const vcl_vector<vnl_vector<double> >& probs,
                 const vnl_vector<double>* data,
                 const vcl_vector<double>& wts) const;
+
 
   void init();
   void delete_stuff();
@@ -79,6 +82,11 @@ public:
 
   //: Get lower threshold on variance for built models
   virtual double min_var() const;
+
+  //: Calculate and set the mixture's mean and variance
+  // This should be used after the weights or components of
+  // the model have been altered.
+  static void calc_mean_and_variance(vpdfl_mixture& model);
 
   //: Build default model with given mean
   virtual void build(vpdfl_pdf_base& model,

@@ -139,6 +139,7 @@ void vpdfl_mixture::clear()
 // default construction.
 bool vpdfl_mixture::is_valid_pdf() const
 {
+  if (!vpdfl_pdf_base::is_valid_pdf()) return false;
   const unsigned n = n_components();
     // the number of components should be consistent
   if (weight_.size() != n || component_.size() != n || n < 1) return false;
@@ -148,10 +149,20 @@ bool vpdfl_mixture::is_valid_pdf() const
   for (unsigned i=0; i<n; ++i)
   {
     if (!components()[i]->is_valid_pdf()) return false;
-    if (!components()[i]->n_dims() != n_dims()) return false;
+    if (components()[i]->n_dims() != n_dims()) return false;
   }
   return true;
 }
+
+//: Set the whole pdf mean and variance values.
+void vpdfl_mixture::set_mean_and_variance(vnl_vector<double>&m, vnl_vector<double>&v)
+{
+  assert(m.size() == v.size());
+
+  set_mean(m);
+  set_variance(v);
+}
+
 
 //=======================================================================
 
@@ -184,28 +195,17 @@ vpdfl_pdf_base* vpdfl_mixture::clone() const
 
 //=======================================================================
 
-static void ShowStartVec(vcl_ostream& os, const vnl_vector<double>& v)
-{
-  int n = 3;
-  if (n>v.size()) n=v.size();
-  os<<"(";
-  for (int i=1;i<=n;++i) os<<v(i)<<" ";
-  if (v.size()>n) os<<"...";
-  os<<")"<<vcl_endl;
-}
 
 void vpdfl_mixture::print_summary(vcl_ostream& os) const
 {
   os<<vcl_endl;
-  vsl_inc_indent(os);
+  vpdfl_pdf_base::print_summary(os);
+  os<<vcl_endl;
   for (int i=0;i<component_.size();++i)
   {
-    os<<vsl_indent()<<"Component "<<i<<" :  Wt: "<<weight_[i]<<" Mean: ";
-    ShowStartVec(os,component_[i]->mean());
-    os<<vsl_indent()<<" PDF: "<<vcl_endl;
-    os<<vsl_indent()<<component_[i]<<vcl_endl;
+    os<<vsl_indent()<<"Component "<<i<<" :  Wt: "<<weight_[i] <<vcl_endl;
+    os<<vsl_indent()<<"PDF: " << component_[i]<<vcl_endl;
   }
-  vsl_dec_indent(os);
 }
 
 //=======================================================================

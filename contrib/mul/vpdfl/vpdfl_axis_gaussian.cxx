@@ -213,20 +213,6 @@ void vpdfl_axis_gaussian::print_summary(vcl_ostream& os) const
 {
   os<<vcl_endl;
   vpdfl_pdf_base::print_summary(os);
-  if (n_dims()==0) return;
-  else
-  if (n_dims()==1)
-    os<<" (Mean: "<<mean()(0)<<" Var: "<<variance()(0)<<")";
-  else
-  {
-    // Show the first few means and variances
-    int n = 3;
-    if (n>n_dims()) n=n_dims();
-    os<<" Var: (";
-    for (int i=0;i<n;++i) os<<variance()(i)<<" ";
-    if (n_dims()>n) os<<"...";
-    os<<")";
-  }
 }
 
 //=======================================================================

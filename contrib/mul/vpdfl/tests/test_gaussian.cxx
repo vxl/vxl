@@ -21,7 +21,7 @@
 //  and compare the two
 void test_gaussian()
 {
-  vcl_cout << "************************" << vcl_endl;
+  vcl_cout << "\n\n************************" << vcl_endl;
   vcl_cout << " Testing vpdfl_gaussian " << vcl_endl;
   vcl_cout << "************************" << vcl_endl;
 
@@ -81,9 +81,9 @@ void test_gaussian()
   vpdfl_builder_base* p_builder = & builder;
   vpdfl_pdf_base* p_pdf = & pdf;
 
-  TEST("mean of built model",(pdf.mean()-p_pdf_built->mean()).squared_magnitude()<0.1,true);
-  TEST("var. of built model",(pdf.variance()-p_pdf_built->variance()).squared_magnitude()<0.1,true);
-  TEST("Eigenvalues", (pdf.eigenvals() - ((vpdfl_gaussian*) p_pdf_built)->eigenvals()).squared_magnitude()<0.1,true);
+  TEST("Mean of built model",vnl_vector_ssd(pdf.mean(), p_pdf_built->mean())<0.1,true);
+  TEST("Variances",vnl_vector_ssd(pdf.variance(), p_pdf_built->variance())<0.1,true);
+  TEST("Eigenvalues", vnl_vector_ssd(pdf.eigenvals(),  ((vpdfl_gaussian*) p_pdf_built)->eigenvals())<0.1,true);
 
   vcl_cout<<"\n\n=================Testing I/O:\nSaving data...\n";
   vsl_b_ofstream bfs_out("test_gaussian.bvl.tmp");

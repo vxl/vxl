@@ -25,6 +25,7 @@
 #include <mbl/mbl_data_wrapper.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_c_vector.h>
 #include "vpdfl_pc_gaussian_builder.h"
 #include "vpdfl_pc_gaussian.h"
 //#include <vcl_algorithm.h>
@@ -236,17 +237,17 @@ void vpdfl_pc_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
     vcl_abort();
   }
 
+  data.reset();
   const int n = data.current().size();
   vnl_vector<double> sum(n);
   sum.fill(0.0);
-  vnl_matrix<double> evecs;
-  vnl_vector<double> evals;
+  vnl_matrix<double> evecs(n,n);
+  vnl_vector<double> evals(n);
   vnl_matrix<double> S;
   double w_sum = 0.0;
   double w;
   unsigned actual_samples = 0;
 
-  data.reset();
   for (int i=0;i<n_samples;i++)
   {
     w = wts[i];
@@ -279,13 +280,13 @@ void vpdfl_pc_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
   vnl_vector<double> principleEVals(n_principle_components);
 
   // Apply threshold to variance
-  for (int i=1;i<=n_principle_components;++i)
+  for (int i=0;i<n_principle_components;++i)
     if (evals(i)<min_var())
       principleEVals(i)=min_var();
     else
       principleEVals(i)=evals(i);
   double eVsum = 0.0; // The sum of the complementary space eigenvalues.
-  for (int i=n_principle_components+1; i <= n; i++)
+  for (int i=n_principle_components; i < n; i++)
     eVsum += evals(i);
 
     // The Eigenvalue of the complementary space basis vectors
@@ -303,7 +304,7 @@ void vpdfl_pc_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
 
 //: Decide where to partition an Eigenvector space
 // Returns the number of principle components to be used.
-// Pass in the Eigenvlaues (eVals), the number of samples
+// Pass in the Eigenvalues (eVals), the number of samples
 // that went to make up this Gaussian (nSamples), and the noise floor
 // for the dataset. The method may use simplified algorithms if
 // you indicate that the number of samples or noise floor is unknown
@@ -311,23 +312,18 @@ void vpdfl_pc_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
 unsigned vpdfl_pc_gaussian_builder::decide_partition(const vnl_vector<double>& eVals, unsigned nSamples /*=0*/,
   double noise /*=0.0*/) const
 {
+  assert (eVals.size() > 0);
   if (partitionMethod_ == fixed)
   {
-    return vnl_math_min(eVals.size()-1, fixed_partition());;
+    return vnl_math_min(eVals.size(), fixed_partition()+1);;
   }
   else if (partitionMethod_ == proportionate)
   {
-    double sum = 0.0;
-    unsigned i;
-    for (i=1; i<eVals.size(); i++)
-    {
-      assert(eVals(i) >= 0.0);
-      sum += eVals(i);
-    }
-    assert (proportionOfVariance_ < 1.0);
+    double sum = vnl_c_vector<double>::sum(eVals.data_block(), eVals.size());
+    assert (proportionOfVariance_ < 1.0 && proportionOfVariance_ > 0.0);
     double stopWhen = sum * proportionOfVariance_;
-    i=1;
-    sum = eVals(1);
+    sum = eVals(0);
+    unsigned i=0;
     while (sum <= stopWhen)
     {
       i++;
@@ -337,15 +333,13 @@ unsigned vpdfl_pc_gaussian_builder::decide_partition(const vnl_vector<double>& e
   }
   else
   {
-    vcl_cerr << "vpdfl_pc_gaussian_builder::decidePartition: Unexpected partition method: " << partitionMethod_ <<vcl_endl;
+    vcl_cerr << "vpdfl_pc_gaussian_builder::decide_partition(): Unexpected partition method: " << partitionMethod_ <<vcl_endl;
     vcl_abort();
     return 0;
   }
 }
 
 
-//=======================================================================
-// Method: is_a
 //=======================================================================
 
 vcl_string vpdfl_pc_gaussian_builder::is_a() const
