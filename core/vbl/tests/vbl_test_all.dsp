@@ -125,6 +125,9 @@ SOURCE=.\vbl_test_sparse_array_3d.cxx
 # Begin Source File
 SOURCE=.\vbl_test_ref_count.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vbl_test_scoped_ptr.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;hpp;hxx;hm;inl"

@@ -170,6 +170,9 @@ SOURCE=.\rrel_homography2d_est_aff.cxx
 # Begin Source File
 SOURCE=.\rrel_affine_est.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\rrel_wgted_ran_sam_search.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -247,6 +250,9 @@ SOURCE=.\rrel_homography2d_est_aff.h
 # End Source File
 # Begin Source File
 SOURCE=.\rrel_affine_est.h
+# End Source File
+# Begin Source File
+SOURCE=.\rrel_wgted_ran_sam_search.h
 # End Source File
 # End Group
 # End Target

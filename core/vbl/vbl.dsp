@@ -323,6 +323,12 @@ SOURCE=.\vbl_sparse_array_base.h
 # Begin Source File
 SOURCE=.\vbl_triple.h
 # End Source File
+# Begin Source File
+SOURCE=.\vbl_checked_delete.h
+# End Source File
+# Begin Source File
+SOURCE=.\vbl_scoped_ptr.h
+# End Source File
 # End Group
 # End Target
 # End Project
