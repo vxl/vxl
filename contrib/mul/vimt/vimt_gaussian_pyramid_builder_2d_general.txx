@@ -89,7 +89,7 @@ void vimt_gaussian_pyramid_builder_2d_general<T>::build(
     const vimt_image_2d_of<T>& src = static_cast<const vimt_image_2d_of<T>&>(im_pyr(i-1));
 
     s*=scale_step();
-    gauss_reduce_general(src.image(), dest.image(), worka_, workb_, scale_params_);
+    vil2_gauss_reduce_general(src.image(), dest.image(), worka_, workb_, scale_params_);
 
     // Sort out world to image transformation for destination image
     vimt_transform_2d scaling;
@@ -165,7 +165,7 @@ void vimt_gaussian_pyramid_builder_2d_general<T>::extend(vimt_image_pyramid& ima
         im_i1.image().nplanes());
 
       s*=scale_step();
-      gauss_reduce_general(im_i1.image(), im_i0.image(), worka_, workb_, scale_params_);
+      vil2_gauss_reduce_general(im_i1.image(), im_i0.image(), worka_, workb_, scale_params_);
     }
   }
 }
