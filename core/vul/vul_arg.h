@@ -1,10 +1,9 @@
-// This is ./vxl/vul/vul_arg.h
+// This is vxl/vul/vul_arg.h
 #ifndef vul_arg_h_
 #define vul_arg_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Command-line arguments
@@ -32,7 +31,7 @@ template <class T> int  parse       (vul_arg<T>*, char**);
 //: This is the base class for the templated vul_arg<T>s
 class vul_arg_base
 {
-public:
+ public:
   static void parse_deprecated(int& argc, char **& argv,
                bool warn_about_unrecognized_arguments = true);
   static void include_deprecated(vul_arg_info_list& l);
@@ -49,7 +48,7 @@ public:
   //: Returns true if arg was set on the command line.
   bool set() const;
 
-public://protected:
+ public://protected:
   bool set_;
   char const* option_;
   int optlen_;
@@ -99,7 +98,7 @@ public://protected:
 // from the argument list.  Note: default is -? but can be anything.
 //
 void vul_arg_parse(int& argc, char **& argv,
-                          bool warn_about_unrecognized_arguments = true);
+                   bool warn_about_unrecognized_arguments = true);
 
 //: Add an externally supplied list of args to the global list.
 void vul_arg_include(vul_arg_info_list& l);
@@ -111,10 +110,7 @@ void vul_arg_display_usage_and_exit(char const* msg = 0);
 template <class T>
 class vul_arg : public vul_arg_base
 {
-public:
-  //friend void settype     VCL_NULL_TMPL_ARGS (vul_arg<T> &);
-  //friend void print_value VCL_NULL_TMPL_ARGS (vcl_ostream &, vul_arg<T> const &);
-  //friend int  parse       VCL_NULL_TMPL_ARGS (vul_arg<T>*, char**);
+ public:
   T value_;// public so we don't have to worry about templated friends.
 
   //: Construct an vul_arg<T> with command-line switch and default value.
@@ -155,17 +151,16 @@ public:
     return s; // << flush
   }
 
-private:
+ private:
   void settype() { ::settype(*this); }
 };
 
-//: vul_arg_info_list - argparse helper.
-// vul_arg_info_list is a helper for vul_arg::parse.
+//: a helper for vul_arg::parse.
 // Users might need it if they wish to parse several command lines.
 //
 class vul_arg_info_list
 {
-public:
+ public:
   enum autonomy {
     subset,
     all
@@ -179,7 +174,7 @@ public:
   void verbose(bool on);
   void set_help_option(char const* str);
 
-public:
+ public://protected:
   vcl_vector<vul_arg_base*> args;
   vcl_string help;
 
@@ -188,16 +183,16 @@ public:
 
   void display_help( char const* progname= 0);
 
-private:
+ private:
   vul_arg_info_list(vul_arg_info_list const &) { }
   void operator=(vul_arg_info_list const &) { }
 };
 
 #ifdef VCL_KAI
 #define declare_specialization(T) \
-template <> void settype(vul_arg<T > &); \
-template <> void print_value(vcl_ostream &, vul_arg<T > const &); \
-template <> int  parse(vul_arg<T> *, char **)
+template<> void settype(vul_arg<T > &); \
+template<> void print_value(vcl_ostream &, vul_arg<T > const &); \
+template<> int  parse(vul_arg<T > *, char **)
 
 declare_specialization(bool);
 declare_specialization(int);
