@@ -15,6 +15,7 @@
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_grid_tableau_sptr.h>
 #include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_homg_line_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgui/vgui_soview2D.h>
 #include <bmvl/brct/kalman_filter.h>
@@ -45,6 +46,7 @@ class brct_windows_frame : public vgui_wrapper_tableau
   void add_curve3d(vcl_vector<vgl_point_3d<double> > &pts);
   void add_next_observes(vcl_vector<vgl_point_2d<double> > &pts);
   void remove_curve3d();
+  void init_epipole();
   void init_kalman();
 
   void init();
@@ -82,6 +84,10 @@ class brct_windows_frame : public vgui_wrapper_tableau
   vgui_easy3D_tableau_sptr tab_3d_;
   vil1_image img_;
   vgui_grid_tableau_sptr grid_;
+
+  //: inital epipole
+  vcl_vector<vgl_homg_line_2d<double> > lines_;
+  vgl_point_2d<double> *e_;
   static brct_windows_frame *instance_;
 };
 

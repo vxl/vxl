@@ -19,7 +19,8 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
-
+#include <vgl/vgl_homg_point_2d.h>
+#include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vil1/vil1_load.h>
 #include "brct_menus.h"
 
@@ -102,6 +103,7 @@ void brct_windows_frame::init()
 
   // set a kalman filter
   kalman_ = new kalman_filter("data/curves.txt");
+  e_ = 0;
 }
 
 //=========================================================================
@@ -126,6 +128,9 @@ void brct_windows_frame::clean_up()
 {
   if (kalman_)
     delete kalman_;
+
+  if(e_)
+    delete e_;
 }
 
 void brct_windows_frame::add_curve2d(vcl_vector<vgl_point_2d<double> > &pts)
@@ -336,4 +341,16 @@ void brct_windows_frame::show_epipole()
   vcl_cout<<"\n epipole ("<<x <<"\t"<<y<<")\n";
   instance_->post_redraw();
 
+}
+
+void brct_windows_frame::init_epipole()
+{
+  if(!e_){
+    e_ = new vgl_point_2d<double>;
+  }
+    
+  assert(lines_.size() >= 2);
+   vgl_homg_point_2d<double> epipole = vgl_homg_operators_2d<double>::lines_to_point(lines_);
+ 
+   e_ -> set(epipole.x() / epipole.w(), epipole.y()/ epipole.w());
 }

@@ -577,14 +577,6 @@ void kalman_filter::init_velocity()
 
   vgl_homg_point_2d<double> epipole = vgl_homg_operators_2d<double>::lines_to_point(lines);
   vnl_double_3 e(epipole.x(),epipole.y(),epipole.w());
-#if 0 // F is not used
-  vnl_double_3x3 F;
-  F[0][0] =  0;    F[0][1] = -e[2]; F[0][2] =  e[1];
-  F[1][0] =  e[2]; F[1][1] =  0;    F[1][2] = -e[0];
-  F[2][0] = -e[1]; F[2][1] =  e[0]; F[2][2] =  0;
-
-  FMatrix Fmat(F);
-#endif // 0
   init_cam_intrinsic();
 
   // get translation
