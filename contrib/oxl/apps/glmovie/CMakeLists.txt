@@ -2,7 +2,7 @@
 
 INCLUDE(${MODULE_PATH}/NewCMake/FindGLUT.cmake)
 INCLUDE(${MODULE_PATH}/NewCMake/FindOpenGL.cmake)
-INCLUDE(${MODULE_PATH}/NewCMake/FindMPEG2.cmake)
+INCLUDE(${CMAKE_ROOT}/Modules/FindMPEG2.cmake)
 
 LINK_LIBRARIES( oxp vidl_vil1 vil1 vnl vul )
 
