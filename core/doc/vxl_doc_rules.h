@@ -39,7 +39,7 @@
 // \author Someone else
 // Here you can write the long description of what's in this file
 // Doxygen will add this to the extended documentation of the file
-// Put the data and author tags immediatly following the brief tag,
+// Put the data and author tags immediately following the brief tag,
 // as doxygen (poor thing) is easily confused otherwise.
 //
 // \verbatim
@@ -49,8 +49,7 @@
 
 //: Brief description of the class
 // The long description starts here
-// \verbatim
-// Everything between these tags is not formatted but kept "as is".
+// \verbatim// Everything between these tags is not formatted but kept "as is".
 // This is similar to the \verbatim command in LaTeX.
 // \endverbatim
 // For a list of items, you do not need verbatim:
@@ -60,6 +59,9 @@
 
 class my_class {
 public:
+
+  //: Brief description of the member variable.
+  double my_value;
 
   //: Brief description of method. Don't forget the colon
   // Do not leave any blank lines without the //, or doxygen
