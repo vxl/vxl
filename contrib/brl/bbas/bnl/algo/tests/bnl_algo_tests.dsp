@@ -145,9 +145,6 @@ LINK32=link.exe
 # Begin Source File
 SOURCE=.\test_legendre_polynomial.cxx
 # End Source File
-# Begin Source File
-SOURCE=.\test_integral.cxx
-# End Source File
 # End Group
 # End Target
 # End Project
