@@ -1,10 +1,10 @@
-// This is ./vxl/vgl/io/vgl_io_homg_point_2d.txx
+// This is vxl/vgl/io/vgl_io_homg_point_2d.txx
 #ifndef vgl_io_homg_point_2d_txx_
 #define vgl_io_homg_point_2d_txx_
-
 //:
 // \file
 
+#include "vgl_io_homg_point_2d.h"
 #include <vgl/vgl_homg_point_2d.h>
 #include <vsl/vsl_binary_io.h>
 

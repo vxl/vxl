@@ -1,10 +1,10 @@
-// This is ./vxl/vgl/io/vgl_io_vector_3d.txx
+// This is vxl/vgl/io/vgl_io_vector_3d.txx
 #ifndef vgl_io_vector_3d_txx_
 #define vgl_io_vector_3d_txx_
-
 //:
 // \file
 
+#include "vgl_io_vector_3d.h"
 #include <vgl/vgl_vector_3d.h>
 #include <vsl/vsl_binary_io.h>
 
