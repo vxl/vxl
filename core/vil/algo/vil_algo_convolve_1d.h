@@ -17,48 +17,48 @@
 enum vil2_convolve_boundary_option {
   // Do not fill destination edges at all
   // ie leave them unchanged.
-  vil2_convolve_ignore_edge,
+  vil2_convolve_ignore_edge, /**< Do not fill destination edges at all. */  
   // Do not to extend the signal, but pad with zeros.
   //     |                               |
   // K                       ----*-------
   // in   ... ---------------------------
   // out  ... --------------------0000000
-  vil2_convolve_no_extend,
+  vil2_convolve_no_extend, /**< Do not to extend the signal, but pad with zeros. */
 
   // Zero-extend the input signal beyond the boundary.
   //     |                               |
   // K                              ----*--------
   // in   ... ---------------------------000000000000...
   // out  ... ---------------------------
-  vil2_convolve_zero_extend,
+  vil2_convolve_zero_extend, /**< Zero-extend the input signal beyond the boundary. */
 
   // Extend the signal to be constant beyond the boundary
   //     |                               |
   // K                              ----*--------
   // in   ... --------------------------aaaaaaaaaaaaa...
   // out  ... ---------------------------
-  vil2_convolve_constant_extend,
+  vil2_convolve_constant_extend, /**< Extend the signal to be constant beyond the boundary. */
 
   // Extend the signal periodically beyond the boundary.
   //     |                               |
   // K                              ----*--------
   // in   abc...-------------------------abc...------..
   // out  ... ---------------------------
-  vil2_convolve_periodic_extend,
+  vil2_convolve_periodic_extend, /**< Extend the signal periodically beyond the boundary. */
 
   // Extend the signal by reflection about the boundary.
   //     |                               |
   // K                               ----*--------
   // in   ... -------------------...edcbabcde...
   // out  ... ---------------------------
-  vil2_convolve_reflect_extend,
+  vil2_convolve_reflect_extend, /**< Extend the signal by reflection about the boundary. */
 
   // This one is slightly different. The input signal is not
   // extended in any way, but the kernel is trimmed to allow
   // convolution to proceed up to the boundary and reweighted
   // to keep the total area the same.
   // *** may not work with kernels which take negative values.
-  vil2_convolve_trim
+  vil2_convolve_trim /**< Kernel is trimmed and reweighted, to allow convolution up to boundary. */
 };
 
 //: Convolve edge with kernel[x*kstep] x in [k_lo,k_hi] (k_lo<=0)
