@@ -94,6 +94,8 @@ void test_image_2d_of_byte()
 
   image0(2,3)=222;
   TEST("setToWindow is shallow copy",image_win(0,0)==222, true);
+
+  TEST("is_a() specialisation for vil_byte",image0.is_a()=="mil_image_2d_of<vil_byte>",true);
 }
 
 void test_image_2d_byte_io()

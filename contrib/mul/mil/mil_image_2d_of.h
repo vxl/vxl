@@ -13,6 +13,7 @@
 #include <mil/mil_transform_2d.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vcl_vector.h>
+#include <vil/vil_byte.h>
 
 //: Represent images of one or more planes of type T.
 //  Each plane is nx() x ny() Ts, with the (x,y) element
@@ -223,5 +224,15 @@ public:
         //!out: bfs: Target binary file stream
     virtual void b_read(vsl_b_istream& bfs);
 };
+
+//: Specialise the is_a() for vil_byte
+template<> vcl_string mil_image_2d_of<vil_byte>::is_a() const;
+
+//: Specialise the is_a() for int
+template<> vcl_string mil_image_2d_of<int>::is_a() const;
+
+//: Specialise the is_a() for float
+template<> vcl_string mil_image_2d_of<float>::is_a() const;
+
 
 #endif
