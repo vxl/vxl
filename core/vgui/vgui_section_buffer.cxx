@@ -23,6 +23,7 @@
 #include <vcl_vector.h>
 
 #include <vil/vil_image.h>
+#include <vil/vil_image_as.h>
 #include <vil/vil_pixel.h>
 
 #include <vgui/vgui_macro.h>
@@ -99,6 +100,9 @@ vgui_section_buffer::vgui_section_buffer(int x_, int y_,
     
 #ifdef GL_UNSIGNED_SHORT_5_6_5
   case GL_UNSIGNED_SHORT_5_6_5:
+#endif
+#ifdef GL_UNSIGNED_SHORT_5_5_5_1
+  case GL_UNSIGNED_SHORT_5_5_5_1:
 #endif
   case GL_UNSIGNED_SHORT:
   case GL_SHORT: 
@@ -182,9 +186,13 @@ unsigned vgui_section_buffer::num_components() const {
 #ifdef GL_UNSIGNED_SHORT_5_6_5
   case GL_UNSIGNED_SHORT_5_6_5: // urgh!
 #endif
+#ifdef GL_UNSIGNED_SHORT_5_5_5_1
+  case GL_UNSIGNED_SHORT_5_5_5_1: // urgh!
+#endif
     return 1;
 
   case GL_RGB:
+  case GL_BGR:
     return 3;
 
   case GL_RGBA:
@@ -237,17 +245,30 @@ else { /* not really necessary */ } \
 delete [] data; \
 assert(section_ok)
 
-void vgui_section_buffer::apply(vil_image const &image) {
+void vgui_section_buffer::apply(vil_image const& image_in) {
   // FIXME: the calls to fsm_macro_magic() are identical for each image pixel type.
   // They could be coalesced to reduce code maintenance.
+  vil_image image = image_in;
+  vil_pixel_format_t pixel_format = vil_pixel_format(image);
+
+  // Convert non-handled formats to ones we can handle.
+  // e.g. uint32 -> float
+  if (pixel_format == VIL_UINT32) {
+    image  = vil_image_as_float(image_in);
+    pixel_format = vil_pixel_format(image);
+  }
 
   // 8bit greyscale
-  if (vil_pixel_format(image) == VIL_BYTE) {
+  if (pixel_format == VIL_BYTE) {
     fsm_macro_begin(GLubyte, "8 bit greyscale");
     fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
+    fsm_macro_magic(GL_BGR,      GL_UNSIGNED_BYTE,        vgui_pixel_bgr888);
     fsm_macro_magic(GL_RGBA,     GL_UNSIGNED_BYTE,        vgui_pixel_rgba8888);
 #if defined(GL_UNSIGNED_SHORT_5_6_5)
     fsm_macro_magic(GL_RGB,      GL_UNSIGNED_SHORT_5_6_5, vgui_pixel_rgb565);
+#endif
+#if defined(GL_UNSIGNED_SHORT_5_5_5_1)
+    fsm_macro_magic(GL_RGB,      GL_UNSIGNED_SHORT_5_5_5_1, vgui_pixel_bgra5551);
 #endif
 #if defined(GL_BGRA)
     fsm_macro_magic(GL_BGRA,     GL_UNSIGNED_BYTE,        vgui_pixel_bgra8888);
@@ -259,12 +280,16 @@ void vgui_section_buffer::apply(vil_image const &image) {
   }
   
   // 24bit rgb
-  else if (vil_pixel_format(image) == VIL_RGB_BYTE) {
+  else if (pixel_format == VIL_RGB_BYTE) {
     fsm_macro_begin(vgui_pixel_rgb888, "24 bit RGB");
     fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
+    fsm_macro_magic(GL_BGR,      GL_UNSIGNED_BYTE,        vgui_pixel_bgr888);
     fsm_macro_magic(GL_RGBA,     GL_UNSIGNED_BYTE,        vgui_pixel_rgba8888);
 #if defined(GL_UNSIGNED_SHORT_5_6_5)
     fsm_macro_magic(GL_RGB,      GL_UNSIGNED_SHORT_5_6_5, vgui_pixel_rgb565);
+#endif
+#if defined(GL_UNSIGNED_SHORT_5_5_5_1)
+    fsm_macro_magic(GL_RGB,      GL_UNSIGNED_SHORT_5_5_5_1, vgui_pixel_bgra5551);
 #endif
 #if defined(GL_BGRA)
     fsm_macro_magic(GL_BGRA,     GL_UNSIGNED_BYTE,        vgui_pixel_bgra8888);
@@ -276,12 +301,16 @@ void vgui_section_buffer::apply(vil_image const &image) {
   }
 
   // 32bit rgba
-  else if (vil_pixel_format(image) == VIL_RGBA_BYTE) {
+  else if (pixel_format == VIL_RGBA_BYTE) {
     fsm_macro_begin(vgui_pixel_rgba8888, "32 bit RGBA");
     fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
+    fsm_macro_magic(GL_BGR,      GL_UNSIGNED_BYTE,        vgui_pixel_bgr888);
     fsm_macro_magic(GL_RGBA,     GL_UNSIGNED_BYTE,        vgui_pixel_rgba8888);
 #if defined(GL_UNSIGNED_SHORT_5_6_5)
     fsm_macro_magic(GL_RGB,      GL_UNSIGNED_SHORT_5_6_5, vgui_pixel_rgb565);
+#endif
+#if defined(GL_UNSIGNED_SHORT_5_5_5_1)
+    fsm_macro_magic(GL_RGB,      GL_UNSIGNED_SHORT_5_5_5_1, vgui_pixel_bgra5551);
 #endif
 #if defined(GL_BGRA)
     fsm_macro_magic(GL_BGRA,     GL_UNSIGNED_BYTE,        vgui_pixel_bgra8888);
@@ -293,13 +322,16 @@ void vgui_section_buffer::apply(vil_image const &image) {
   }
 
   // 32bit float
-  else if (vil_pixel_format(image) == VIL_FLOAT) {
-    vcl_cerr << " hey \n";
+  else if (pixel_format == VIL_FLOAT) {
     fsm_macro_begin(float, "32 bit float");
     fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
+    fsm_macro_magic(GL_BGR,      GL_UNSIGNED_BYTE,        vgui_pixel_bgr888);
     fsm_macro_magic(GL_RGBA,     GL_UNSIGNED_BYTE,        vgui_pixel_rgba8888);
 #if defined(GL_UNSIGNED_SHORT_5_6_5)
     fsm_macro_magic(GL_RGB,      GL_UNSIGNED_SHORT_5_6_5, vgui_pixel_rgb565);
+#endif
+#if defined(GL_UNSIGNED_SHORT_5_5_5_1)
+    fsm_macro_magic(GL_RGB,      GL_UNSIGNED_SHORT_5_5_5_1, vgui_pixel_bgra5551);
 #endif
 #if defined(GL_BGRA)
     fsm_macro_magic(GL_BGRA,     GL_UNSIGNED_BYTE,        vgui_pixel_bgra8888);
