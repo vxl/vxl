@@ -193,7 +193,7 @@ void vpdfl_mixture_builder::weighted_build(vpdfl_pdf_base& base_model,
 			data.next();
 		}
 		
-		data_ptr = data_array.begin();
+		data_ptr = &data_array[0]/*.begin()*/;
 	}
 	
 	if (!model_setup)

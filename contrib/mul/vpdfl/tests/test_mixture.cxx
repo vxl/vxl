@@ -92,7 +92,7 @@ void test_mixture()
 		
 	vpdfl_pdf_base* p_pdf = builder.new_model();
 	
-	mbl_data_array_wrapper<vnl_vector<double> > data_array(data.begin(),n_samples);
+	mbl_data_array_wrapper<vnl_vector<double> > data_array(&data[0]/*.begin()*/,n_samples);
 	
 	builder.build(*p_pdf,data_array);
 	
