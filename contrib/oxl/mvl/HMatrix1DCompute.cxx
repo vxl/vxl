@@ -1,3 +1,4 @@
+// This is oxl/mvl/HMatrix1DCompute.cxx
 #include "HMatrix1DCompute.h"
 
 #include <vcl_cstdlib.h>
@@ -63,13 +64,4 @@ HMatrix1DCompute::compute(const vcl_vector<HomgPoint1D> &p1,
                           HMatrix1D *H)
 {
   return compute_cool_homg(p1,p2,H);
-}
-
-bool
-compute_array_dbl(const double p1[],
-                  const double p2[],
-                  int N,
-                  HMatrix1D *H)
-{
-  return compute_array_dbl(p1,p2,N,H);
 }
