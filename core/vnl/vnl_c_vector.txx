@@ -281,7 +281,8 @@ T vnl_c_vector<T>::sum_sq_diff_means(T const* v, unsigned n)
     sum += *v;
     sum_sq += *v * *v;
   }
-  return sum_sq - sum*sum / T(n);
+  typedef typename vnl_numeric_traits<T>::abs_t abs_t;
+  return sum_sq - sum*sum / abs_t(n);
 }
 
 //------------------------------------------------------------

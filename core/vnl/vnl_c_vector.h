@@ -107,7 +107,7 @@ class vnl_c_vector
   // This method uses the 1/(n-1) normalisation, assuming that your
   // data is a sample of a population.
   static inline real_t std(T const *p, unsigned n) {
-    return vcl_sqrt(real_t(sum_sq_diff_means(p, n))/real_t(n-1));}
+    return vcl_sqrt(real_t(sum_sq_diff_means(p, n))/real_t(abs_t(n-1)));}
 
   //: The sum of squared differences from the mean
   static T sum_sq_diff_means(T const* v, unsigned n);
