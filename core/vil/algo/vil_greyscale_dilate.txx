@@ -1,13 +1,15 @@
+// This is mul/vil2/algo/vil2_grayscale_dilate.txx
 #ifndef vil2_greyscale_dilate_txx_
 #define vil2_greyscale_dilate_txx_
-
-//: \file
+//:
+//  \file
 //  \brief Perform greyscale dilation on images
 //  \author Tim Cootes
 
 #include "vil2_greyscale_dilate.h"
+#include <vcl_cassert.h>
 
-//: Dilates src_image to produce dest_image (assumed single plane)
+//: Dilates src_image to produce dest_image (assumed single plane).
 // dest_image(i0,j0) is the maximum value of the pixels under the
 // structuring element when it is centred on src_image(i0,j0)
 template <class T>
@@ -38,19 +40,19 @@ void vil2_greyscale_dilate(const vil2_image_view<T>& src_image,
   // Deal with left edge
   for (int i=0;i<ilo;++i)
     for (int j=0;j<nj;++j)
-	  dest_image(i,j,0)=vil2_greyscale_dilate(src_image,0,element,i,j);
+      dest_image(i,j,0)=vil2_greyscale_dilate(src_image,0,element,i,j);
   // Deal with right edge
   for (int i=ihi+1;i<ni;++i)
     for (int j=0;j<nj;++j)
-	  dest_image(i,j,0)=vil2_greyscale_dilate(src_image,0,element,i,j);
+      dest_image(i,j,0)=vil2_greyscale_dilate(src_image,0,element,i,j);
   // Deal with bottom edge
   for (int i=ilo;i<=ihi;++i)
     for (int j=0;j<jlo;++j)
-	  dest_image(i,j,0)=vil2_greyscale_dilate(src_image,0,element,i,j);
+      dest_image(i,j,0)=vil2_greyscale_dilate(src_image,0,element,i,j);
   // Deal with top edge
   for (int i=ilo;i<=ihi;++i)
     for (int j=jhi+1;j<nj;++j)
-	  dest_image(i,j,0)=vil2_greyscale_dilate(src_image,0,element,i,j);
+      dest_image(i,j,0)=vil2_greyscale_dilate(src_image,0,element,i,j);
 
   for (int j=jlo;j<=jhi;++j)
   {
@@ -58,19 +60,15 @@ void vil2_greyscale_dilate(const vil2_image_view<T>& src_image,
     T* dest_p = dest_row0 + j*d_jstep + ilo * d_istep;
 
     for (int i=ilo;i<=ihi;++i,src_p+=s_istep,dest_p+=d_istep)
-    {
-	  *dest_p=vil2_greyscale_dilate(src_p,&offset[0],offset.size());
-    }
+      *dest_p=vil2_greyscale_dilate(src_p,&offset[0],offset.size());
   }
-
 }
 
 #undef VIL2_GREYSCALE_DILATE_INSTANTIATE
 #define VIL2_GREYSCALE_DILATE_INSTANTIATE(T) \
 template void vil2_greyscale_dilate(const vil2_image_view< T >& src_image, \
-                        vil2_image_view< T >& dest_image, \
-                        const vil2_structuring_element& element)
+                                    vil2_image_view< T >& dest_image, \
+                                    const vil2_structuring_element& element)
 
 
-#endif
-
+#endif // vil2_greyscale_dilate_txx_

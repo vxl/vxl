@@ -203,8 +203,8 @@ inline void vil2_math_normalise(vil2_image_view<imT>& image)
   double mean,var;
   vil2_math_mean_and_variance(mean,var,image,0);
   double s=0;
-	if (var>0) s = 1.0/sqrt(var);
-	vil2_math_scale_and_offset_values(image,s,-s*mean);
+  if (var>0) s = 1.0/vcl_sqrt(var);
+  vil2_math_scale_and_offset_values(image,s,-s*mean);
 }
 
 //: Compute sum of two images (im_sum = imA+imB)

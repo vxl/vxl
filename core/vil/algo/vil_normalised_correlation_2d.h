@@ -18,9 +18,9 @@
 // \relates vil2_image_view
 template <class srcT, class kernelT, class accumT>
 inline accumT vil2_norm_corr_2d_at_pt(const srcT *src_im,
-                                          int s_istep, int s_jstep, int s_pstep,
-                                          const vil2_image_view<kernelT>& kernel,
-                                          accumT)
+                                      int s_istep, int s_jstep, int s_pstep,
+                                      const vil2_image_view<kernelT>& kernel,
+                                      accumT)
 {
   unsigned ni = kernel.ni();
   unsigned nj = kernel.nj();
@@ -29,8 +29,8 @@ inline accumT vil2_norm_corr_2d_at_pt(const srcT *src_im,
   int k_istep = kernel.istep(), k_jstep = kernel.jstep();
 
   accumT sum=0;
-	accumT mean=0;
-	accumT sum_sq=0;
+  accumT mean=0;
+  accumT sum_sq=0;
   for (unsigned p = 0; p<np; ++p)
   {
     // Select first row of p-th plane
@@ -43,22 +43,21 @@ inline accumT vil2_norm_corr_2d_at_pt(const srcT *src_im,
       const kernelT* kp = k_row;
       // Sum over j-th row
       for (unsigned int i=0;i<ni;++i, sp += s_istep, kp += k_istep)
-			{
+      {
         sum += accumT(*sp)*accumT(*kp);
-				mean+= accumT(*sp);
-				sum_sq += accumT(*sp)*accumT(*sp);
+        mean+= accumT(*sp);
+        sum_sq += accumT(*sp)*accumT(*sp);
       }
     }
   }
 
-	int n=ni*nj*np;
-	mean/=n;
-	accumT var = sum_sq/n - mean*mean;
-	if (var<=0) return 0;
-  return sum/vcl_sqrt(var);
+  int n=ni*nj*np;
+  mean/=n;
+  accumT var = sum_sq/n - mean*mean;
+  return var<=0 ? 0 : sum/vcl_sqrt(var);
 }
 
-//: Normalised cross-correlation of (pre-normalised) kernel with srcT
+//: Normalised cross-correlation of (pre-normalised) kernel with srcT.
 // dest is resized to (1+src_im.ni()-kernel.ni())x(1+src_im.nj()-kernel.nj())
 // (a one plane image).
 // On exit dest(x,y) = sum_ij src_im(x+i,y+j)*kernel(i,j)/sd_under_region
@@ -68,9 +67,9 @@ inline accumT vil2_norm_corr_2d_at_pt(const srcT *src_im,
 // \relates vil2_image_view
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil2_normalised_correlation_2d(const vil2_image_view<srcT>& src_im,
-                                  vil2_image_view<destT>& dest_im,
-                                  const vil2_image_view<kernelT>& kernel,
-                                  accumT ac)
+                                           vil2_image_view<destT>& dest_im,
+                                           const vil2_image_view<kernelT>& kernel,
+                                           accumT ac)
 {
   int ni = 1+src_im.ni()-kernel.ni(); assert(ni >= 0);
   int nj = 1+src_im.nj()-kernel.nj(); assert(nj >= 0);
@@ -90,7 +89,7 @@ inline void vil2_normalised_correlation_2d(const vil2_image_view<srcT>& src_im,
     destT* dp = dest_row;
     for (int i=0;i<ni;++i, sp += s_istep, dp += d_istep)
       *dp = (destT) vil2_norm_corr_2d_at_pt(sp,s_istep,s_jstep,s_pstep,kernel,accumT());
-      // Convolve at src(i,j)
+    // Convolve at src(i,j)
   }
 }
 
