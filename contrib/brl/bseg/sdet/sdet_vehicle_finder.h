@@ -19,6 +19,7 @@
 #include <vil1/vil1_image.h>
 #include <vsol/vsol_box_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
+#include <vtol/vtol_face_2d_sptr.h>
 #include <brip/brip_roi_sptr.h>
 #include <sdet/sdet_region_sptr.h>
 #include <sdet/sdet_vehicle_finder_params.h>
@@ -43,10 +44,13 @@ class sdet_vehicle_finder : public sdet_vehicle_finder_params
   vsol_polygon_2d_sptr shadow_hull(){return shadow_hull_;}
   vsol_polygon_2d_sptr para_hull(){return para_hull_;}
   vsol_polygon_2d_sptr vehicle_track_poly(){return vehicle_track_poly_;}
+  vtol_face_2d_sptr vehicle_track_face(){return vehicle_track_face_;}
   //Utility Methods
   bool detect_shadow_regions();
   bool detect_para_regions();
   bool compute_track_boundary();
+  //:the main detection method
+  bool detect_vehicle();
   //Debug methods
 
  protected:
@@ -67,6 +71,7 @@ class sdet_vehicle_finder : public sdet_vehicle_finder_params
   vsol_polygon_2d_sptr shadow_hull_;
   vsol_polygon_2d_sptr para_hull_;
   vsol_polygon_2d_sptr vehicle_track_poly_;
+  vtol_face_2d_sptr vehicle_track_face_;
   bool shadows_valid_;      //process state flag
   vil1_image overlay_image_; // for display
   vcl_vector<sdet_region_sptr> shadow_regions_; //shadow regions near pick

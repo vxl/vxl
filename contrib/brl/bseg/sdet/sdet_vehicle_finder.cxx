@@ -3,6 +3,7 @@
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <bsol/bsol_algs.h>
+#include <btol/btol_face_algs.h>
 #include <sdet/sdet_region.h>
 #include <brip/brip_roi.h>
 #include <brip/brip_para_cvrg.h>
@@ -76,10 +77,10 @@ n_regions_closest_to_pick(vcl_vector<sdet_region_sptr> const& regions,
       int xp = pick_.x(), yp = pick_.y();
       float d = (x0-xp)*(x0-xp) + (y0-yp)*(y0-yp);
       double max_d = distance_scale_*distance_scale_ * (*rit)->area();
-#ifdef DEBUG
-      vcl_cout << "d = " << d << '\n'
+      //#ifdef DEBUG
+      vcl_cout << "d(" << x0 << " " << y0  <<  ")= " << d << '\n'
                << "max_d = " << max_d << '\n';
-#endif
+      //#endif
       if (d>max_d)
         continue;
       if (dmin<0 || d<dmin)
@@ -223,5 +224,20 @@ bool sdet_vehicle_finder::compute_track_boundary()
   polys.push_back(shadow_hull_);  polys.push_back(para_hull_);
   if (!bsol_algs::hull_of_poly_set(polys, vehicle_track_poly_))
     return false;
+  return true;
+}
+
+bool sdet_vehicle_finder::detect_vehicle()
+{
+  if(!this->detect_shadow_regions())
+    return false;
+  if(!this->detect_para_regions())
+    return false;
+  if(!this->compute_track_boundary())
+    return false;
+  if(!vehicle_track_poly_)
+    return false;
+  if(!btol_face_algs::vsol_to_vtol(vehicle_track_poly_, vehicle_track_face_))
+     return false;
   return true;
 }

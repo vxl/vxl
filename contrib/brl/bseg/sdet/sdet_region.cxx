@@ -31,7 +31,8 @@ bool sdet_region::compute_boundary()
 {
   if (boundary_valid_)
     return true;
-  if (this->Npix()==0)
+  //need at least a triangle
+  if (this->Npix()<3)
     return false;
   vcl_vector<vgl_point_2d<double> > region_points;
   for (this->reset(); this->next();)
@@ -48,7 +49,9 @@ bool sdet_region::compute_boundary()
 
 vsol_polygon_2d_sptr sdet_region::boundary()
 {
+  vsol_polygon_2d_sptr temp;
   if (!boundary_valid_)
-    this->compute_boundary();
+    if(!this->compute_boundary())
+      return temp;
   return boundary_;
 }
