@@ -13,7 +13,8 @@ vil_image vepl_add_random_noise(vil_image const& image, double maxdev)
     typedef unsigned char ubyte;
     vil_memory_image_of<ubyte> mem(image); // load in memory to pass to filter
     vil_memory_image_of<ubyte> out(image);
-    vipl_add_random_noise<vil_image,vil_image,ubyte,ubyte,vipl_trivial_pixeliter> op(GAUSSIAN_NOISE,maxdev,seed);
+    vipl_add_random_noise<vil_image,vil_image,ubyte,ubyte,vipl_trivial_pixeliter>
+      op(GAUSSIAN_NOISE,(ubyte)(0.5+maxdev),seed);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -25,8 +26,9 @@ vil_image vepl_add_random_noise(vil_image const& image, double maxdev)
     typedef unsigned char ubyte;
     vil_memory_image_of<vil_rgb<ubyte> > mem(image); // load in memory to pass to filter
     vil_memory_image_of<vil_rgb<ubyte> > out(image);
-    vipl_add_random_noise<vil_image,vil_image,vil_rgb<ubyte> ,vil_rgb<ubyte> ,vipl_trivial_pixeliter>
-      op(GAUSSIAN_NOISE,maxdev,seed);
+    vil_rgb<ubyte> m ((ubyte)(0.5+maxdev),(ubyte)(0.5+maxdev),(ubyte)(0.5+maxdev));
+    vipl_add_random_noise<vil_image,vil_image,vil_rgb<ubyte>,vil_rgb<ubyte>,vipl_trivial_pixeliter>
+      op(GAUSSIAN_NOISE,m,seed);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();
@@ -37,7 +39,7 @@ vil_image vepl_add_random_noise(vil_image const& image, double maxdev)
   else if (vil_pixel_format(image) == VIL_FLOAT) {
     vil_memory_image_of<float> mem(image); // load in memory to pass to filter
     vil_memory_image_of<float> out(image);
-    vipl_add_random_noise<vil_image,vil_image,float,float,vipl_trivial_pixeliter> op(GAUSSIAN_NOISE,maxdev,seed);
+    vipl_add_random_noise<vil_image,vil_image,float,float,vipl_trivial_pixeliter> op(GAUSSIAN_NOISE,(float)maxdev,seed);
     op.put_in_data_ptr(&mem);
     op.put_out_data_ptr(&out);
     op.filter();

@@ -49,8 +49,8 @@ public:
 // -+-+- data members: -+-+-
 private: RandomNoiseType type_;
 public: RandomNoiseType type() const { return type_; }
-private: double maxdev_;
-public: double maxdev() const { return maxdev_; }
+private: DataOut maxdev_;
+public: DataOut maxdev() const { return maxdev_; }
 private: int seed_;
 public: int seed() const { return seed_; }
 #ifdef STAT_LIB
@@ -60,8 +60,8 @@ public: Distribution* distrib() const { return distrib_; }
 
 // -+-+- constructors/destructors: -+-+-
 public:
-  inline vipl_add_random_noise(RandomNoiseType t, double m, int s=12345)
-    : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), type_(t), maxdev_( (m<0)?(-m):m ), seed_(s)
+  inline vipl_add_random_noise(RandomNoiseType t, DataOut const& m, int s=12345)
+    : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), type_(t), maxdev_(m), seed_(s)
 #ifdef STAT_LIB
       , distrib_(
        (t==UNIFORM_NOISE) ? (Distribution*)(new UniformDistribution(-m,m)) :
