@@ -15,6 +15,11 @@ vil3d_image_resource_sptr vil3d_load_image_resource(char const* filename)
       vil3d_file_format::format(i).make_input_image(filename);
     if (im) return im;
   }
+  vcl_cerr << "WARNING vil3d_load unable to load " << filename <<
+      "\n Tried ";
+  for (unsigned i=0;i<vil3d_file_format::n_formats();++i)
+    vcl_cerr << vil3d_file_format::format(i).tag() << ' ';
+  vcl_cerr << vcl_endl; 
   return 0;
 }
 
