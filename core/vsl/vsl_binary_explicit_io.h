@@ -533,7 +533,7 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
 // platform) the stream's error flag will be set.
 //
 // Warning: This function should be used infrequently and carefully. Under
-// all normal cicurmstances, the generic vsl_b_read and vsl_b_write in
+// all normal circumstances, the generic vsl_b_read and vsl_b_write in
 // vsl_binary_io.h will be perfectly adequate.
 //
 // You must use vsl_b_read_uint_16() to read the value saved with this
@@ -548,7 +548,7 @@ inline void vsl_b_write_uint_16(vsl_b_ostream& os, unsigned long n )
 //: Read an unsigned int as 16 bits from vsl_b_istream
 //
 // Warning: This function should be used infrequently and carefully. Under
-// all normal cicurmstances, the generic vsl_b_read and vsl_b_write in
+// all normal circumstances, the generic vsl_b_read and vsl_b_write in
 // vsl_binary_io.h will be perfectly adequate.
 //
 // This function will only read values saved using vsl_b_write_uint_16().
@@ -567,7 +567,7 @@ inline void vsl_b_read_uint_16(vsl_b_istream& is, unsigned long& n )
 // platform) the stream's error flag will be set.
 //
 // Warning: This function should be used infrequently and carefully. Under
-// all normal cicurmstances, the generic vsl_b_read and vsl_b_write in
+// all normal circumstances, the generic vsl_b_read and vsl_b_write in
 // vsl_binary_io.h will be perfectly adequate.
 //
 // You must vsl_b_read_int_16() to read the value saved with this function.
@@ -581,7 +581,7 @@ inline void vsl_b_write_int_16(vsl_b_ostream& os, long n )
 //: Read a signed int as 16 bits from vsl_b_istream
 //
 // Warning: This function should be used infrequently and carefully. Under
-// all normal cicurmstances, the generic vsl_b_read and vsl_b_write in
+// all normal circumstances, the generic vsl_b_read and vsl_b_write in
 // vsl_binary_io.h will be perfectly adequate.
 //
 // This function will only read values saved using vsl_b_write_int_16().
