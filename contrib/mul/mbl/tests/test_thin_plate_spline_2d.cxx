@@ -14,38 +14,38 @@ void test_tps_at_fixed_points(int n_points)
   vcl_vector<vgl_point_2d<double> > pts1(n_points),pts2(n_points);
 
   mbl_mz_random mz_random;
-	mz_random.reseed(1647+2*n_points);
+  mz_random.reseed(1647+2*n_points);
 
-	for (int i=0;i<n_points;++i)
-	{
-	  pts1[i]=vgl_point_2d<double>(mz_random.drand64(),mz_random.drand64());
-	  pts2[i]=vgl_point_2d<double>(mz_random.drand64(),mz_random.drand64());
-	}
-	vsl_print_summary(vcl_cout,pts1);
-	vsl_print_summary(vcl_cout,pts2);
+  for (int i=0;i<n_points;++i)
+  {
+    pts1[i]=vgl_point_2d<double>(mz_random.drand64(),mz_random.drand64());
+    pts2[i]=vgl_point_2d<double>(mz_random.drand64(),mz_random.drand64());
+  }
+//  vsl_print_summary(vcl_cout,pts1);
+//  vsl_print_summary(vcl_cout,pts2);
 
   mbl_thin_plate_spline_2d tps;
   tps.build(pts1,pts2);
-	vcl_cout<<tps<<vcl_endl;
+//  vcl_cout<<tps<<vcl_endl;
 
-	for (int i=0;i<n_points;++i)
-	{
-	  vcl_cout<<"Test point "<<i<<" : ";
-	  TEST("Warped point = target point",vgl_distance(tps(pts1[i]),pts2[i])<1e-6,true);
-	}
+  for (int i=0;i<n_points;++i)
+  {
+    vcl_cout<<"Test point "<<i<<" : ";
+    TEST("Warped point = target point",vgl_distance(tps(pts1[i]),pts2[i])<1e-6,true);
+  }
 
   mbl_thin_plate_spline_2d tps2 = tps;
-	TEST("Comparison operator",tps==tps2,true);
+  TEST("Comparison operator",tps==tps2,true);
 
-	vcl_cout<<"Testing set_source_pts(),build() pair"<<vcl_endl;
+  vcl_cout<<"Testing set_source_pts(),build() pair"<<vcl_endl;
   mbl_thin_plate_spline_2d tps3;
-	tps3.set_source_pts(pts1);
-	tps3.build(pts2);
-	for (int i=0;i<n_points;++i)
-	{
-	  vcl_cout<<"Test point "<<i<<" : ";
-	  TEST("Warped point = target point",vgl_distance(tps(pts1[i]),pts2[i])<1e-6,true);
-	}
+  tps3.set_source_pts(pts1);
+  tps3.build(pts2);
+  for (int i=0;i<n_points;++i)
+  {
+    vcl_cout<<"Test point "<<i<<" : ";
+    TEST("Warped point = target point",vgl_distance(tps3(pts1[i]),pts2[i])<1e-6,true);
+  }
 
 
 }
@@ -58,7 +58,7 @@ void test_thin_plate_spline_2d()
 
   mbl_thin_plate_spline_2d tps;
 
-	for (int i=1;i<=5;++i)
+  for (int i=1;i<=5;++i)
     test_tps_at_fixed_points(i);
  }
 

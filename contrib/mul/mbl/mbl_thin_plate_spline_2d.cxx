@@ -41,16 +41,16 @@ mbl_thin_plate_spline_2d::~mbl_thin_plate_spline_2d()
 inline double r2lnr(const vgl_point_2d<double>&  pt)
 {
   double r2 = pt.x() * pt.x() + pt.y() * pt.y();
-  if (r2>1e-8) return 0.5 * r2 * vcl_log(r2);
-  else         return 0;
+  if (r2>1e-8)   return 0.5 * r2 * vcl_log(r2);
+  else     return 0;
 }
 
 // First some useful maths functions
 inline double r2lnr(const vgl_vector_2d<double>&  pt)
 {
   double r2 = pt.x() * pt.x() + pt.y() * pt.y();
-  if (r2>1e-8) return 0.5 * r2 * vcl_log(r2);
-  else         return 0;
+  if (r2>1e-8)   return 0.5 * r2 * vcl_log(r2);
+  else     return 0;
 }
 
 inline double r2lnr(double x, double y)
@@ -176,7 +176,7 @@ void mbl_thin_plate_spline_2d::build_pure_affine(
     // (see below for details)
 
     vgl_point_2d<double>  x1,x2,u1,u2;
-    double dx,dy,du,dv; // Points (x2-x1) and (u2-u1)
+    double dx,dy,du,dv;    // Points (x2-x1) and (u2-u1)
     double a,b;
 
     x1 = source_pts[0];
@@ -363,12 +363,10 @@ void mbl_thin_plate_spline_2d::build(const vcl_vector<vgl_point_2d<double> >& so
   src_pts_ = source_pts;
 
   vnl_matrix<double> L;
-  vnl_vector<double> Bx(n+3), W1(n+3); // Used to compute X parameters
-  vnl_vector<double> By(n+3), W2(n+3); // Used to compute Y parameters
+  vnl_vector<double> Bx(n+3), W1(n+3);  // Used to compute X parameters
+  vnl_vector<double> By(n+3), W2(n+3);  // Used to compute Y parameters
 
   build_L(L,source_pts);
-
-  vcl_cout<<"n="<<n<<"  L:"<<L<<vcl_endl;
 
   set_up_rhs(Bx,By,dest_pts);
 
@@ -377,19 +375,22 @@ void mbl_thin_plate_spline_2d::build(const vcl_vector<vgl_point_2d<double> >& so
   // ***** Cholesky seems to fail, producing NaNs despite
   //       sensible condition numbers
 
-#if 0
-  vnl_cholesky chol(L,vnl_cholesky::estimate_condition);
-  vcl_cout<<"rcond: "<<chol.rcond()<<vcl_endl;
-  if (chol.rcond()>1e-8)
-  {
-    chol.solve(Bx,&W1);
-    chol.solve(By,&W2);
-    vcl_cout<<"Chol OK!"<<vcl_endl;
-  }
-  else
-#endif
+//   vnl_cholesky chol(L,vnl_cholesky::estimate_condition);
+//   vcl_cout<<"rcond: "<<chol.rcond()<<vcl_endl;
+//   vcl_cout<<"Det: "<<chol.determinant()<<vcl_endl;
+//   vcl_cout<<"L: "<<chol.lower_triangle()<<vcl_endl;
+//   vcl_cout<<L-(chol.lower_triangle()*chol.upper_triangle())<<vcl_endl;
+//   if (chol.rcond()>1e-8)
+//   {
+//     chol.solve(Bx,&W1);
+//     chol.solve(By,&W2);
+//     vcl_cout<<"Chol OK!"<<vcl_endl;
+//   }
+//   else
   {
     vnl_svd<double> svd(L);
+//	vcl_cout<<"Singular values: "<<svd.W()<<vcl_endl;
+//	vcl_cout<<"Det:"<<svd.W().determinant()<<vcl_endl;
     svd.solve(Bx.data_block(),W1.data_block());
     svd.solve(By.data_block(),W2.data_block());
   }
@@ -416,13 +417,14 @@ void mbl_thin_plate_spline_2d::set_source_pts(const vcl_vector<vgl_point_2d<doub
   vnl_matrix<double> L;
   build_L(L,source_pts);
 
-  vnl_cholesky chol(L,vnl_cholesky::estimate_condition);
-  vcl_cout<<"rcond: "<<chol.rcond()<<vcl_endl;
-  if (chol.rcond()>1e-8)
-  {
-      L_inv_ = chol.inverse();
-  }
-  else
+  // Cholesky fails despite L being symmetric, +ive definite
+//   vnl_cholesky chol(L,vnl_cholesky::estimate_condition);
+//   vcl_cout<<"rcond: "<<chol.rcond()<<vcl_endl;
+//   if (chol.rcond()>1e-8)
+//   {
+//       L_inv_ = chol.inverse();
+//   }
+//   else
   {
     vnl_svd<double> svd(L);
     L_inv_ = svd.inverse();
@@ -445,8 +447,8 @@ void mbl_thin_plate_spline_2d::build(const vcl_vector<vgl_point_2d<double> >& de
     return;
   }
 
-  vnl_vector<double> Bx(n+3), W1(n+3); // Used to compute X parameters
-  vnl_vector<double> By(n+3), W2(n+3); // Used to compute Y parameters
+  vnl_vector<double> Bx(n+3), W1(n+3);  // Used to compute X parameters
+  vnl_vector<double> By(n+3), W2(n+3);  // Used to compute Y parameters
 
   set_up_rhs(Bx,By,dest_pts);
 
@@ -480,10 +482,6 @@ vgl_point_2d<double>  mbl_thin_plate_spline_2d::operator()(double x, double y) c
     y_sum += (Ui * Wy_data[i]);
   }
 
-  // Wierdly, this is necessary to avoid returning (NaN,NaN)
-  // Bizarre compiler error?
-  vcl_cout<<"x_sum: "<<x_sum<<vcl_endl;
-
   return vgl_point_2d<double>(x_sum,y_sum);
 }
 
@@ -507,10 +505,10 @@ void mbl_thin_plate_spline_2d::print_summary(vcl_ostream& os) const
   os<<vcl_endl;
   os<<"fx: "<<Ax0_<<" + "<<AxX_<<"*x + "<<AxY_<<"*y   Nonlinear terms:";
   for (int i=0;i<Wx_.size();++i) os<<Wx_[i]<<" ";
-  os << vcl_endl;
+  vcl_endl;
   os<<"fy: "<<Ay0_<<" + "<<AyX_<<"*x + "<<AyY_<<"*y   Nonlinear terms:";
   for (int i=0;i<Wy_.size();++i) os<<Wy_[i]<<" ";
-  os << vcl_endl;
+  vcl_endl;
 }
 
 //=======================================================================
@@ -580,7 +578,8 @@ bool mbl_thin_plate_spline_2d::operator==(const mbl_thin_plate_spline_2d& tps) c
 
 void vsl_b_write(vsl_b_ostream& bfs, const mbl_thin_plate_spline_2d& b)
 {
-  b.b_write(bfs);
+    b.b_write(bfs);
+
 }
 
 //=======================================================================
@@ -589,7 +588,8 @@ void vsl_b_write(vsl_b_ostream& bfs, const mbl_thin_plate_spline_2d& b)
 
 void vsl_b_read(vsl_b_istream& bfs, mbl_thin_plate_spline_2d& b)
 {
-  b.b_read(bfs);
+    b.b_read(bfs);
+
 }
 
 //=======================================================================

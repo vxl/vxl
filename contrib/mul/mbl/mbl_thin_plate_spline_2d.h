@@ -26,92 +26,92 @@
 // use set_source_pts(src_pts);  then build(target_pts); for each target set.
 class mbl_thin_plate_spline_2d {
 private:
-	vnl_vector<double> Wx_,Wy_;
-	double Ax0_, AxX_, AxY_;
-	double Ay0_, AyX_, AyY_;
-	double energy_x_,energy_y_;
+  vnl_vector<double> Wx_,Wy_;
+  double Ax0_, AxX_, AxY_;
+  double Ay0_, AyX_, AyY_;
+  double energy_x_,energy_y_;
 
-	vcl_vector<vgl_point_2d<double> > src_pts_;
+  vcl_vector<vgl_point_2d<double> > src_pts_;
 
-	  //: Used to estimate weights in set_source_points()
-	vnl_matrix<double> L_inv_;
+    //: Used to estimate weights in set_source_points()
+  vnl_matrix<double> L_inv_;
 
-	  //: Build from small number of points
-	void build_pure_affine(const vcl_vector<vgl_point_2d<double> >& source_pts,
-				const vcl_vector<vgl_point_2d<double> >& dest_pts);
+    //: Build from small number of points
+  void build_pure_affine(const vcl_vector<vgl_point_2d<double> >& source_pts,
+        const vcl_vector<vgl_point_2d<double> >& dest_pts);
 
    //: Set parameters from vectors
   void set_params(const vnl_vector<double>& W1,
-	                const vnl_vector<double>& W2);
+                  const vnl_vector<double>& W2);
 
   void set_up_rhs(vnl_vector<double>& Bx,
-	                vnl_vector<double>& By,
-									const vcl_vector<vgl_point_2d<double> >& dest_pts);
+                  vnl_vector<double>& By,
+                  const vcl_vector<vgl_point_2d<double> >& dest_pts);
 
    //: Compute spline bending energy
   void compute_energy(vnl_vector<double>& W1,
-	                vnl_vector<double>& W2,
-									const vnl_matrix<double>& L);
+                  vnl_vector<double>& W2,
+                  const vnl_matrix<double>& L);
 
 public:
 
-		//: Dflt ctor
-	mbl_thin_plate_spline_2d();
+    //: Dflt ctor
+  mbl_thin_plate_spline_2d();
 
-		//: Destructor
-	virtual ~mbl_thin_plate_spline_2d();
+    //: Destructor
+  virtual ~mbl_thin_plate_spline_2d();
 
-		//: Sets up internal transformation to map source_pts onto dest_pts
-	void build(const vcl_vector<vgl_point_2d<double> >& source_pts,
-				const vcl_vector<vgl_point_2d<double> >& dest_pts,
-									 bool compute_the_energy=false);
+    //: Sets up internal transformation to map source_pts onto dest_pts
+  void build(const vcl_vector<vgl_point_2d<double> >& source_pts,
+        const vcl_vector<vgl_point_2d<double> >& dest_pts,
+                   bool compute_the_energy=false);
 
-		//: Define source point positions
-		//  Performs precomputations so that build(dest_points) can be
-		//  called multiple times efficiently
-	void set_source_pts(const vcl_vector<vgl_point_2d<double> >& source_pts);
+    //: Define source point positions
+    //  Performs precomputations so that build(dest_points) can be
+    //  called multiple times efficiently
+  void set_source_pts(const vcl_vector<vgl_point_2d<double> >& source_pts);
 
-		//: Sets up internal transformation to map source_pts onto dest_pts
-	void build(const vcl_vector<vgl_point_2d<double> >& dest_pts);
-
-       //: Return transformed version of (x,y)
-	vgl_point_2d<double>  operator()(double x, double y) const;
+    //: Sets up internal transformation to map source_pts onto dest_pts
+  void build(const vcl_vector<vgl_point_2d<double> >& dest_pts);
 
        //: Return transformed version of (x,y)
-	vgl_point_2d<double>  operator()(const vgl_point_2d<double>&  p) const
-	{ return operator()(p.x(),p.y()); }
+  vgl_point_2d<double>  operator()(double x, double y) const;
 
-		//: Bending energy of X component (zero for pure affine)
-		//  A measure of total amount of non-linear deformation
-	double bendingEnergyX() const { return energy_x_; }
+       //: Return transformed version of (x,y)
+  vgl_point_2d<double>  operator()(const vgl_point_2d<double>&  p) const
+  { return operator()(p.x(),p.y()); }
 
-		//: Bending energy of X component (zero for pure affine)
-		//  A measure of total amount of non-linear deformation
-	double bendingEnergyY() const { return energy_y_; }
+    //: Bending energy of X component (zero for pure affine)
+    //  A measure of total amount of non-linear deformation
+  double bendingEnergyX() const { return energy_x_; }
 
-		//: Version number for I/O
-	short version_no() const;
+    //: Bending energy of X component (zero for pure affine)
+    //  A measure of total amount of non-linear deformation
+  double bendingEnergyY() const { return energy_y_; }
 
-		//: Print class to os
+    //: Version number for I/O
+  short version_no() const;
+
+    //: Print class to os
   void print_summary(vcl_ostream& os) const;
 
-		//: Save class to binary file stream
+    //: Save class to binary file stream
   void b_write(vsl_b_ostream& bfs) const;
 
-		//: Load class from binary file stream
+    //: Load class from binary file stream
   void b_read(vsl_b_istream& bfs);
 
-	  //: Comparison operator
+    //: Comparison operator
   bool operator==(const mbl_thin_plate_spline_2d& tps) const;
 };
 
-	//: Binary file stream output operator for class reference
+  //: Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const mbl_thin_plate_spline_2d& b);
 
-	//: Binary file stream input operator for class reference
+  //: Binary file stream input operator for class reference
 void vsl_b_read(vsl_b_istream& bfs, mbl_thin_plate_spline_2d& b);
 
-	//: Stream output operator for class reference
+  //: Stream output operator for class reference
 vcl_ostream& operator<<(vcl_ostream& os,const mbl_thin_plate_spline_2d& b);
 
 #endif

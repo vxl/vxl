@@ -17,6 +17,7 @@
 #include <mbl/tests/test_gamma.cxx>
 #include <mbl/tests/test_index_sort.cxx>
 #include <mbl/tests/test_lru_cache.cxx>
+#include <mbl/tests/test_thin_plate_spline_2d.cxx>
 #include <mbl/mbl_print.h>
 
 #undef TESTMAIN
@@ -38,6 +39,7 @@ void run_test_mbl()
   test_gamma();
   test_index_sort();
   test_lru_cache();
+  test_thin_plate_spline_2d();
 }
 
 TESTMAIN(run_test_mbl);
