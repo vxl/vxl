@@ -19,6 +19,8 @@ SOURCES += sdet_grid_finder.cxx
 SOURCES += sdet_grid_finder_params.cxx
 SOURCES += sdet_tracker.cxx
 SOURCES += sdet_tracker_params.cxx
+SOURCES += sdet_info_tracker.cxx
+SOURCES += sdet_info_tracker_params.cxx
 
 MANPAGE_SOURCES += sdet_region_edge_sptr.h
 MANPAGE_SOURCES += sdet_champher.h # although not ready for use ...

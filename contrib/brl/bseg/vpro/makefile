@@ -22,6 +22,8 @@ SOURCES += vpro_line_fit_process.cxx
 SOURCES += vpro_edge_line_process.cxx
 SOURCES += vpro_grid_finder_process.cxx
 SOURCES += vpro_corr_tracker_process.cxx
+SOURCES += vpro_info_tracker_process.cxx
+SOURCES += vpro_track_display_process.cxx
 
 ################################
 include ${IUEROOT}/config/top.mk
