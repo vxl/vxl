@@ -15,7 +15,7 @@ void test_hist(const vil_image_view<T>& image,
   double test_sum = 0.0;
 
   //vcl_cout << "Histogram: ";
-  for(int i=0; i<hist.size(); ++i){
+  for (unsigned int i=0; i<hist.size(); ++i){
     //vcl_cout << hist[i] << ' ';
     test_sum += hist[i];
   }
@@ -38,9 +38,9 @@ void test_hist_weight(const vil_image_view<T>& image,
   double sum = brip_weighted_histogram(image, weights, hist, min, max, n_bins);
   double test_sum = 0.0;
 
-  for(int i=0; i<weights.ni(); ++i)
-    for(int j=0; j<weights.nj(); ++j)
-      for(int p=0; p<weights.nplanes(); ++p)
+  for (unsigned int i=0; i<weights.ni(); ++i)
+    for (unsigned int j=0; j<weights.nj(); ++j)
+      for (unsigned int p=0; p<weights.nplanes(); ++p)
         test_sum += weights(i,j,p);
 
   //vcl_cout << "Sum: " << sum << vcl_endl;
@@ -61,8 +61,8 @@ void test_hist_joint(const vil_image_view<T>& image1,
   double sum = brip_joint_histogram(image1, image2, hist, min, max, n_bins);
   double test_sum = 0.0;
 
-  for(int i=0; i<n_bins; ++i){
-    for(int j=0; j<n_bins; ++j){
+  for (unsigned int i=0; i<n_bins; ++i) {
+    for (unsigned int j=0; j<n_bins; ++j) {
       test_sum += hist[i][j];
       //vcl_cout << hist[i][j] << ' ';
     }
@@ -78,10 +78,8 @@ void test_hist_joint(const vil_image_view<T>& image1,
 }
 
 
-MAIN( test_histogram )
+static void test_histogram()
 {
-  START ("histogram");
-
   unsigned ni=256;
   unsigned nj=256;
   vil_image_view<vxl_byte> image1(ni,nj), image2(ni,nj);
@@ -96,12 +94,9 @@ MAIN( test_histogram )
 
   ni = 1000; nj = 100;
   vil_image_view<double> image4(ni,nj);
-  for (unsigned j=0;j<nj;++j){
-    for (unsigned i=0;i<ni;++i){
+  for (unsigned j=0;j<nj;++j)
+    for (unsigned i=0;i<ni;++i)
       image4(i,j) = 10.0/(i+j+10);
-    }
-  }
-
 
   test_hist(image1, 0, 255, 16);
   test_hist(image1, 0, 255, 256);
@@ -119,7 +114,6 @@ MAIN( test_histogram )
 
   test_hist_joint(image1, image2, 0, 255, 16);
   test_hist_joint(image1, image1, 0, 255, 16);
-
-  
-  SUMMARY();
 }
+
+TESTMAIN(test_histogram);
