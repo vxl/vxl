@@ -9,11 +9,9 @@
 #include "vgl_triangle_scan_iterator.h"
 
 #include <vcl_cmath.h>
-#include <vcl_cstdlib.h>
-
 #include <vcl_iostream.h>
 
-template </*typename*/class T>
+template <class T>
 static inline
 void min_n_max(T a, T b, T c, T *min, T *max)
 {
