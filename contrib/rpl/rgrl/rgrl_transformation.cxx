@@ -109,19 +109,19 @@ map_normal( vnl_vector<double> const & from_loc,
   {
     // avoid using SVD to
     // obtain two tangent bases
-    // Description of this naive method:
-    // In order to obtain get the 1st tangent basis,
-    // First, let's look at 3D orthogonality constraint:
+    // Description of this somewhat naive method:
+    // In order to obtain the 1st tangent basis,
+    // given normal vector n, 3D orthogonality constraint is:
     // t^T * n = 0
-    // Now, let's set one particular element as 0(suppose it is the first one)
+    // Now, if we set one particular element as 0(suppose it is the first one)
     // what is left in the constraint is 0 + t2*n2 + t3*n3 = 0
     // which is essentially 2D.
-    // We can solve t2 and t3 using the above method.
-    // Then we obtain first tangent [0 t2 t3]
+    // We can solve scalars t2 and t3 using the above method.
+    // Then we obtain the first tangent [0 t2 t3]
     // We can use cross product to obtain the second tangent.
     // The only tricky part is which element to pick to set as 0!
     // The solution is to pick the element with smallest magnitude
-    // Why? Think about a normal vector [1 0 0].
+    // Why? Think about a normal vector in such a form [1 0.2 0].
     vnl_double_3 from_tangent0;
     vnl_double_3 from_tangent1;
     // find the element with smallest magnitude
