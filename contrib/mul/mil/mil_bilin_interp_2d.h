@@ -1,18 +1,15 @@
 #ifndef mil_bilin_interp_2d_h_
 #define mil_bilin_interp_2d_h_
-
 //: \file
 //  \brief Bilinear interpolation functions for 2D images
 //  \author Tim Cootes
 
+#include <vcl_cassert.h>
+#include <vcl_cfloat.h>
+
 //: Compute bilinear interpolation at (x,y), no bound checks
 //  Image is nx * ny array of T. x,y element is data[ystep*y+x]
 //  No bound checks are done.
-
-
-#include <vcl_cfloat.h>
-
-
 template<class T>
 inline double mil_bilin_interp_2d(double x, double y, const T* data, int ystep)
 {
@@ -111,7 +108,7 @@ inline double mil_assert_bilin_interp_2d(double x, double y, const T* data, int 
 //  The safe interpolatable region is [0,nx)*[0,ny).
 template<class T>
 inline double mil_assert_bilin_interp_2d(double x, double y, const T* data,
-                                       int nx, int ny, int xstep, int ystep)
+                                         int nx, int ny, int xstep, int ystep)
 {
     assert (x>=0);
     assert (y>=0);
@@ -146,6 +143,5 @@ inline double mil_safe_extend_bilin_interp_2d(double x, double y, const T* data,
     if (y>=ny-1) y=(double)ny-1.00000001;
     return mil_bilin_interp_2d(x,y,data,xstep,ystep);
 }
-
 
 #endif // mil_bilin_interp_2d_h_
