@@ -34,19 +34,19 @@ template <class T>
 class vnl_numeric_traits;
 #if 0
 {
-//: Additive identity
+  //: Additive identity
   static const T zero;
 
-//: Multiplicative identity
+  //: Multiplicative identity
   static const T one;
 
-//: Return value of abs()
+  //: Return value of abs()
   typedef T abs_t;
 
-//: Name of a type twice as long as this one for accumulators and products.
+  //: Name of a type twice as long as this one for accumulators and products.
   typedef /* long */ double double_t;
 
-//: Name of type which results from multiplying this type with a double
+  //: Name of type which results from multiplying this type with a double
   typedef double real_t;
 };
 #endif
@@ -55,10 +55,15 @@ class vnl_numeric_traits;
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<bool> {
 public:
+  //: Additive identity
   static const bool zero VCL_STATIC_CONST_INIT_INT(0);
+  //: Multiplicative identity
   static const bool one VCL_STATIC_CONST_INIT_INT(1);
+  //: Return value of abs()
   typedef unsigned int abs_t;
+  //: Name of a type twice as long as this one for accumulators and products.
   typedef unsigned int double_t;
+  //: Name of type which results from multiplying this type with a double
   typedef double real_t;
 };
 #endif
@@ -66,150 +71,225 @@ public:
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<unsigned char> {
 public:
+  //: Additive identity
   static const unsigned char zero VCL_STATIC_CONST_INIT_INT(0);
+  //: Multiplicative identity
   static const unsigned char one VCL_STATIC_CONST_INIT_INT(1);
+  //: Return value of abs()
   typedef unsigned char abs_t;
+  //: Name of a type twice as long as this one for accumulators and products.
   typedef unsigned short double_t;
+  //: Name of type which results from multiplying this type with a double
   typedef double real_t;
 };
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<signed char> {
 public:
+  //: Additive identity
   static const signed char zero VCL_STATIC_CONST_INIT_INT(0);
+  //: Multiplicative identity
   static const signed char one VCL_STATIC_CONST_INIT_INT(1);
+  //: Return value of abs()
   typedef unsigned char abs_t;
+  //: Name of a type twice as long as this one for accumulators and products.
   typedef signed short double_t;
+  //: Name of type which results from multiplying this type with a double
   typedef double real_t;
 };
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<unsigned short> {
 public:
+  //: Additive identity
   static const unsigned short zero VCL_STATIC_CONST_INIT_INT(0);
+  //: Multiplicative identity
   static const unsigned short one VCL_STATIC_CONST_INIT_INT(1);
+  //: Return value of abs()
   typedef unsigned short abs_t;
+  //: Name of a type twice as long as this one for accumulators and products.
   typedef unsigned int double_t;
+  //: Name of type which results from multiplying this type with a double
   typedef double real_t;
 };
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<signed short> {
 public:
+  //: Additive identity
   static const signed short zero VCL_STATIC_CONST_INIT_INT(0);
+  //: Multiplicative identity
   static const signed short one VCL_STATIC_CONST_INIT_INT(1);
+  //: Return value of abs()
   typedef unsigned short abs_t;
+  //: Name of a type twice as long as this one for accumulators and products.
   typedef signed int double_t;
+  //: Name of type which results from multiplying this type with a double
   typedef double real_t;
 };
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<unsigned int> {
 public:
+  //: Additive identity
   static const unsigned int zero VCL_STATIC_CONST_INIT_INT(0);
+  //: Multiplicative identity
   static const unsigned int one VCL_STATIC_CONST_INIT_INT(1);
+  //: Return value of abs()
   typedef unsigned int abs_t;
+  //: Name of a type twice as long as this one for accumulators and products.
   typedef unsigned int double_t;
+  //: Name of type which results from multiplying this type with a double
   typedef double real_t;
 };
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<signed int> {
 public:
+  //: Additive identity
   static const signed int zero VCL_STATIC_CONST_INIT_INT(0);
+  //: Multiplicative identity
   static const signed int one VCL_STATIC_CONST_INIT_INT(1);
+  //: Return value of abs()
   typedef unsigned int abs_t;
+  //: Name of a type twice as long as this one for accumulators and products.
   typedef signed int double_t;
+  //: Name of type which results from multiplying this type with a double
   typedef double real_t;
 };
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<signed long> {
 public:
+  //: Additive identity
   static const signed long zero VCL_STATIC_CONST_INIT_INT(0);
+  //: Multiplicative identity
   static const signed long one VCL_STATIC_CONST_INIT_INT(1);
+  //: Return value of abs()
   typedef unsigned long abs_t;
+  //: Name of a type twice as long as this one for accumulators and products.
   typedef signed long double_t;
+  //: Name of type which results from multiplying this type with a double
   typedef double real_t;
 };
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<unsigned long> {
 public:
+  //: Additive identity
   static const unsigned long zero VCL_STATIC_CONST_INIT_INT(0);
+  //: Multiplicative identity
   static const unsigned long one VCL_STATIC_CONST_INIT_INT(1);
+  //: Return value of abs()
   typedef unsigned long abs_t;
+  //: Name of a type twice as long as this one for accumulators and products.
   typedef unsigned long double_t;
+  //: Name of type which results from multiplying this type with a double
   typedef double real_t;
 };
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<float> {
 public:
+  //: Additive identity
   static const float zero VCL_STATIC_CONST_INIT_FLOAT(0.0F);
+  //: Multiplicative identity
   static const float one VCL_STATIC_CONST_INIT_FLOAT(1.0F);
+  //: Return value of abs()
   typedef float abs_t;
+  //: Name of a type twice as long as this one for accumulators and products.
   typedef double double_t;
+  //: Name of type which results from multiplying this type with a double
   typedef double real_t;
 };
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<double> {
 public:
+  //: Additive identity
   static const double zero VCL_STATIC_CONST_INIT_FLOAT(0.0);
+  //: Multiplicative identity
   static const double one VCL_STATIC_CONST_INIT_FLOAT(1.0);
+  //: Return value of abs()
   typedef double abs_t;
+  //: Name of a type twice as long as this one for accumulators and products.
   typedef long double double_t;
+  //: Name of type which results from multiplying this type with a double
   typedef double real_t;
 };
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<long double> {
 public:
+  //: Additive identity
   static const long double zero VCL_STATIC_CONST_INIT_FLOAT(0.0);
+  //: Multiplicative identity
   static const long double one VCL_STATIC_CONST_INIT_FLOAT(1.0);
+  //: Return value of abs()
   typedef long double abs_t;
+  //: Name of a type twice as long as this one for accumulators and products.
   typedef long double double_t; // ahem
+  //: Name of type which results from multiplying this type with a double
   typedef long double real_t;
 };
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits< vcl_complex<float> > {
 public:
+  //: Additive identity
   static const vcl_complex<float> zero;
+  //: Multiplicative identity
   static const vcl_complex<float> one;
+  //: Return value of abs()
   typedef float abs_t;
+  //: Name of a type twice as long as this one for accumulators and products.
   typedef vcl_complex<vnl_numeric_traits<float>::double_t> double_t;
+  //: Name of type which results from multiplying this type with a double
   typedef vcl_complex<float> real_t;
 };
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits< vcl_complex<double> > {
 public:
+  //: Additive identity
   static const vcl_complex<double> zero;
+  //: Multiplicative identity
   static const vcl_complex<double> one;
+  //: Return value of abs()
   typedef double abs_t;
+  //: Name of a type twice as long as this one for accumulators and products.
   typedef vcl_complex<vnl_numeric_traits<double>::double_t> double_t;
+  //: Name of type which results from multiplying this type with a double
   typedef vcl_complex<double> real_t;
 };
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits< vcl_complex<long double> > {
 public:
+  //: Additive identity
   static const vcl_complex<long double> zero;
+  //: Multiplicative identity
   static const vcl_complex<long double> one;
+  //: Return value of abs()
   typedef long double abs_t;
+  //: Name of a type twice as long as this one for accumulators and products.
   typedef vcl_complex<vnl_numeric_traits<long double>::double_t> double_t;
+  //: Name of type which results from multiplying this type with a double
   typedef vcl_complex<long double> real_t;
 };
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<vnl_rational> {
 public:
+  //: Additive identity
   static const vnl_rational zero;
+  //: Multiplicative identity
   static const vnl_rational one;
+  //: Return value of abs()
   typedef vnl_rational abs_t;
+  //: Name of a type twice as long as this one for accumulators and products.
   typedef vnl_rational double_t;
+  //: Name of type which results from multiplying this type with a double
   typedef double real_t;
 };
 
