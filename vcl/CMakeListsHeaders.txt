@@ -1,4 +1,6 @@
 SOURCE_FILES( vcl_sources
+  vcl_where_root_dir.h.in
+
   vcl_algorithm.h
   vcl_bitset.h
   vcl_cassert.h

@@ -8,6 +8,7 @@ SOURCE_FILES( vgl_sources
   vgl_distance.h
   vgl_ellipse_scan_iterator.h
   vgl_homg.h
+  vgl_homg_1d.h
   vgl_homg_line_2d.h
   vgl_homg_line_3d_2_points.h
   vgl_homg_plane_3d.h
@@ -36,6 +37,7 @@ SOURCE_FILES( vgl_sources
   vgl_box_2d.txx
   vgl_box_3d.txx
   vgl_conic.txx
+  vgl_homg_1d.txx
   vgl_homg_line_2d.txx
   vgl_homg_line_3d_2_points.txx
   vgl_homg_plane_3d.txx

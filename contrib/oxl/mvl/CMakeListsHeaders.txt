@@ -99,4 +99,5 @@ SOURCE_FILES( mvl_sources
   mvl_psi.h
   mvl_six_point_design_matrix_row.h
   mvl_three_view_six_point_structure.h
+  PMatrix_sptr.h
 )

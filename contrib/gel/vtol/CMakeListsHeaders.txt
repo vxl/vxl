@@ -29,4 +29,10 @@ SOURCE_FILES( vtol_sources
   vtol_vertex_sptr.h
   vtol_zero_chain.h
   vtol_zero_chain_sptr.h
+  vtol_edge_3d.h
+  vtol_face_3d.h
+  vtol_topology_cache_3d.h
+  vtol_topology_object_3d.h
+  vtol_two_chain_3d.h
+  vtol_vertex_3d.h
 )

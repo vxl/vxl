@@ -1,0 +1,3 @@
+SOURCE_FILES(global_files
+ vxl_copyright.h
+)

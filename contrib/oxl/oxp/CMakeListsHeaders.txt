@@ -23,6 +23,7 @@ SOURCE_FILES(oxp_sources
   oxp_mpeg_codec.h
   oxp_vidl_moviefile.h
   oxp_vidl_mpeg_codec.h
+  oxp_yuv_to_rgb.h
 
   ImageWarp.txx
 )
