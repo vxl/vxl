@@ -1,7 +1,7 @@
+// This is vxl/vnl/tests/test_matlab.cxx
 /*
   fsm@robots.ox.ac.uk
 */
-#include <vcl_cmath.h>
 #include <vcl_cstring.h>
 #include <vcl_fstream.h>
 
@@ -9,12 +9,13 @@
 
 #include <vul/vul_temp_filename.h>
 
-#include <testlib/testlib_test.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matlab_print.h>
 #include <vnl/vnl_matlab_write.h>
 #include <vnl/vnl_matlab_read.h>
+
+#include <testlib/testlib_test.h>
 
 static void fsm_assert_(int lineno, bool pass, char const *expr) {
   vcl_cout << __FILE__ ":" << lineno << vcl_endl;
@@ -25,12 +26,12 @@ static void fsm_assert_(int lineno, bool pass, char const *expr) {
 void test_matlab() {
   vnl_vector<float> v(7);
   for (unsigned i=0; i<v.size(); ++i)
-    v[i] = i;
+    v[i] = 0.1f*i;
 
   vnl_matrix<double> M(6,8);
   for (unsigned i=0; i<M.rows(); ++i)
     for (unsigned j=0; j<M.cols(); ++j)
-      M(i,j) = i*j;
+      M(i,j) = 0.1*i*j;
 
   { // vnl_matlab_print
     vcl_cout << v << vcl_endl;
