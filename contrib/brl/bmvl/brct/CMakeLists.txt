@@ -10,6 +10,8 @@ SET(brct_sources
 AUX_SOURCE_DIRECTORY(Templates brct_sources)
 
 ADD_LIBRARY(brct ${brct_sources})
-
 TARGET_LINK_LIBRARIES(brct bdgl vdgl vsol mvl vnl vgl)
 
+IF(BUILD_TESTING)
+  SUBDIRS(tests)
+ENDIF(BUILD_TESTING)
