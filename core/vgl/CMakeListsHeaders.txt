@@ -1,4 +1,5 @@
 SOURCE_FILES( vgl_sources
+  vgl_fwd.h
   vgl_1d_basis.h
   vgl_box_2d.h
   vgl_box_3d.h
@@ -6,7 +7,7 @@ SOURCE_FILES( vgl_sources
   vgl_conic.h
   vgl_distance.h
   vgl_ellipse_scan_iterator.h
-  vgl_fwd.h
+  vgl_homg.h
   vgl_homg_line_2d.h
   vgl_homg_line_3d_2_points.h
   vgl_homg_plane_3d.h
