@@ -13,6 +13,7 @@
 // ** make sure gcc 2.7 sees this **
 VCL_COMPLEX_INSTANTIATE(float);
 VCL_COMPLEX_INSTANTIATE(double);
+#endif
 
 // ---------- egcs and gcc 2.95
 #elif defined(VCL_GCC_295) || defined(VCL_GCC_EGCS)
