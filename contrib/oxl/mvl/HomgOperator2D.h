@@ -6,9 +6,7 @@
 #endif
 //:
 // \file
-// \brief operators for the 2D homogeneous primitive classes
-//
-// Useful operators for the 2D homogeneous primitive classes.
+// \brief useful operators for the 2D homogeneous primitive classes
 //
 // \verbatim
 // Modifications
