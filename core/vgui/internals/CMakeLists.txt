@@ -27,16 +27,18 @@ vgui_multiply_4x4
 vgui_transpose_4x4
 vgui_draw_line
 vgui_accelerate
+vgui_accelerate_tag
 )
 
 IF(WIN32)
-  SOURCE_FILES(vgui_internals_sources vgui_accelerate_mfc)
+  SOURCE_FILES(vgui_internals_sources
+    vgui_accelerate_mfc
+  )
 ENDIF(WIN32)
 
 INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindX11.cmake)
 IF(HAS_X11)
   SOURCE_FILES(vgui_internals_sources
-    vgui_accelerate_tag
     vgui_accelerate_x11
   )
 ENDIF(HAS_X11)
