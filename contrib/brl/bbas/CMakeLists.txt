@@ -7,3 +7,5 @@ SUBDIRS(btol)
 # digital library algorithms
 SUBDIRS(bdgl)
 
+# xml<->vxl conversion 
+SUBDIRS(bxml)
