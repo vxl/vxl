@@ -31,6 +31,10 @@ class bdgl_curve_tracker_primitive
   int num_;
   int prev_num_;
   int next_num_;
+  
+  double tx_prev_;
+  double ty_prev_;
+  double theta_prev_;
 
   bdgl_curve_tracker_primitive(){}
   bdgl_curve_tracker_primitive(int id, vdgl_edgel_chain_sptr curve){ init(id, curve); }
@@ -43,6 +47,7 @@ class bdgl_curve_tracker_primitive
 
   vdgl_edgel_chain_sptr get_curve(){ return curve_; }
   void set_curve(vdgl_edgel_chain_sptr curve){ curve_=curve; }
+
 
   void set_region(bdgl_curve_region r){ region_ = r; }
   bdgl_curve_region region(){ return region_; }

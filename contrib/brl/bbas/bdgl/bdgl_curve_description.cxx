@@ -5,7 +5,7 @@
 #include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
 #include <vdgl/vdgl_edgel_chain.h>
-
+#include <bdgl/bdgl_curve_algs.h>
 
 //: Constructor
 bdgl_curve_description::bdgl_curve_description()
@@ -28,25 +28,35 @@ void bdgl_curve_description::init(vdgl_edgel_chain_sptr const& ec)
     vcl_cout<<"In bdgl_curve_description::bdgl_curve_description(..) - warning, null chain\n";
     return;
   }
+ 
 
+  vgl_point_2d<double> current_point;
   center_.set(0.0, 0.0);
   curvature_ = 0.0;
   int N = ec->size();
   double m_val=0.0, m_dir=0.0, m_curv=0.0, curv;
   vdgl_edgel ed,ep,en;
-
+  points_.clear();
   // means
   for (int i = 0; i<N; i++) {
     ed = ec->edgel(i);
-
+	current_point.set(ed.get_x(),ed.get_y());
     center_.set(center_.x() + ed.get_x(), center_.y() + ed.get_y());
     m_val += ed.get_grad();
     m_dir += ed.get_theta();
+	points_.push_back(current_point);
+	
+	angles_.push_back(ed.get_theta());
+	grad_.push_back(ed.get_grad());
+
     //vcl_cout<<"grad:("<<ed.get_grad()<<", "<<ed.get_theta()<<")\n";
   }
   center_.set( center_.x()/(double)N , center_.y()/(double)N );
   gradient_mean_val_ = (m_val/(double)N);
   gradient_mean_dir_ = (m_dir/(double)N);
+  int smooth_=0;
+  if(smooth_)
+	  bdgl_curve_algs::smooth_curve(points_,1);
 
   // standard deviations
   m_val = 0.0;

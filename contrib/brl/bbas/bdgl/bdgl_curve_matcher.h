@@ -14,6 +14,8 @@
 //-----------------------------------------------------------------------------
 #include <vdgl/vdgl_edgel_chain_sptr.h>
 #include <bdgl/bdgl_curve_tracker_primitive.h>
+#include <vnl/vnl_matrix.h>
+
 
 class bdgl_curve_matcher_params
 {
@@ -47,6 +49,7 @@ class bdgl_curve_matcher
   double   matching_score_;          // confidence on matching
   int      matching_flag_;          // encode particular events
 
+
   // Params
   bdgl_curve_matcher_params params_;
 
@@ -69,6 +72,9 @@ class bdgl_curve_matcher
   double angle_scale(){ return params_.angle_scale_; }
 
   void match();
+  // author: vj 
+  // Curve matching using dynamic programming
+  void match_DP();
 };
 
 #endif // bdgl_curve_matcher_h_

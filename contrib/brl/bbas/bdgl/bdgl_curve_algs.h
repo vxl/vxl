@@ -61,6 +61,11 @@ class bdgl_curve_algs
                                  const double x, const double y,
                                  bool debug = false);
 
+  static void 
+	  smooth_curve(vcl_vector<vgl_point_2d<double> > & curve,double sigma);
+  static vdgl_digital_curve_sptr 
+	  create_digital_curves(vcl_vector<vgl_point_2d<double> > & curve);
+
  private:
   bdgl_curve_algs();
 };

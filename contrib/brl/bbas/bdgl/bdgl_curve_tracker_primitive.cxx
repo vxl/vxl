@@ -16,7 +16,10 @@ void bdgl_curve_tracker_primitive::init(int id, vdgl_edgel_chain_sptr curve)
   prev_num_ = -1;
   next_num_ = -1;
 
-  return;
+  tx_prev_=0;
+  ty_prev_=0;
+  theta_prev_=0;
+  return ;
 }
 
 //-----------------------------------------------------------------------------
