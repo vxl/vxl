@@ -108,7 +108,7 @@ int main (int argc, char** argv) {
 
   int wd=img.width(), ht=img.height();
   vgui_text_tableau_new text_tab;
-  text_tab->add(wd/2-100,ht/2,vul_sprintf("This is view %i",window_count));
+  text_tab->add(wd*.5f-100,ht*.5f,vul_sprintf("This is view %i",window_count));
 
   example_flim_tableau_new flim_tab;
 
