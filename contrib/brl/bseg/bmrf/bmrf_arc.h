@@ -18,6 +18,8 @@
 #include <vsl/vsl_binary_io.h>
 #include <bmrf/bmrf_node_sptr.h>
 #include <bmrf/bmrf_arc_sptr.h>
+#include <bmrf/bmrf_gamma_func_sptr.h>
+
 
 //: Directed arc from one node to another
 class bmrf_arc : public vbl_ref_count
@@ -63,6 +65,9 @@ class bmrf_arc : public vbl_ref_count
   //  \note this maps the "to" arc to the "from" arc
   double induced_gamma_inv() const { return inv_gamma_; }
 
+  //: Return the piecewise linear gamma function fit to the pair
+  bmrf_gamma_func_sptr gamma_func();
+
   //: Return the average match error given the induced gamma
   double induced_match_error() const { return induced_match_error_; }
 
@@ -89,6 +94,8 @@ class bmrf_arc : public vbl_ref_count
   double gamma_, inv_gamma_;
   double avg_intensity_error_;
   double induced_match_error_;
+
+  bmrf_gamma_func_sptr gamma_func_;
 };
 
 

@@ -16,7 +16,8 @@ bmrf_arc::bmrf_arc()
   : from_(NULL), to_(NULL), probability_(-1.0),
     min_alpha_(0.0), max_alpha_(0.0),
     gamma_(0.0), inv_gamma_(0.0),
-    avg_intensity_error_(0.0), induced_match_error_(0.0)
+    avg_intensity_error_(0.0), induced_match_error_(0.0),
+    gamma_func_(NULL)
 {
 }
 
@@ -26,7 +27,8 @@ bmrf_arc::bmrf_arc(bmrf_arc const& a)
   : vbl_ref_count(), from_(a.from_), to_(a.to_), probability_(a.probability_),
     min_alpha_(a.min_alpha_), max_alpha_(a.max_alpha_),
     gamma_(a.gamma_), inv_gamma_(a.inv_gamma_),
-    avg_intensity_error_(a.avg_intensity_error_), induced_match_error_(a.induced_match_error_)
+    avg_intensity_error_(a.avg_intensity_error_), induced_match_error_(a.induced_match_error_),
+    gamma_func_(NULL)
 {
 }
 
@@ -36,7 +38,8 @@ bmrf_arc::bmrf_arc( const bmrf_node_sptr& f, const bmrf_node_sptr& t)
   : from_(f.ptr()), to_(t.ptr()), probability_(-1.0),
     min_alpha_(0.0), max_alpha_(0.0),
     gamma_(0.0), inv_gamma_(0.0),
-    avg_intensity_error_(0.0), induced_match_error_(0.0)
+    avg_intensity_error_(0.0), induced_match_error_(0.0),
+    gamma_func_(NULL)
 {
   if ( from_ && to_ ) {
     if (from_->frame_num() != to_->frame_num())
@@ -55,11 +58,14 @@ bmrf_arc::reverse() const
   rev_arc->probability_ = -1.0;
   rev_arc->gamma_ = this->inv_gamma_;
   rev_arc->inv_gamma_ = this->gamma_;
+  rev_arc->gamma_func_ = NULL;
+
+  double t = double(rev_arc->time_step());
 
   bmrf_epi_seg_sptr ep1 = rev_arc->from_->epi_seg();
   bmrf_epi_seg_sptr ep2 = rev_arc->to_->epi_seg();
   bmrf_gamma_func_sptr gamma_inv = new bmrf_const_gamma_func(rev_arc->inv_gamma_);
-  bmrf_epi_seg_sptr xform_seg = bmrf_epi_transform(ep2, gamma_inv, double(-rev_arc->time_step()));
+  bmrf_epi_seg_sptr xform_seg = bmrf_epi_transform(ep2, gamma_inv, -t);
   rev_arc->induced_match_error_ = bmrf_match_error(ep1, xform_seg);
 
   return rev_arc;
@@ -128,6 +134,17 @@ bmrf_arc::time_init()
   bmrf_gamma_func_sptr gamma_inv = new bmrf_const_gamma_func(inv_gamma_);
   bmrf_epi_seg_sptr xform_seg = bmrf_epi_transform(ep2, gamma_inv, double(-t));
   induced_match_error_ = bmrf_match_error(ep1, xform_seg);
+}
+
+
+//: Return the piecewise linear gamma function fit to the pair
+bmrf_gamma_func_sptr 
+bmrf_arc::gamma_func(){ 
+  if(!gamma_func_)
+    gamma_func_ = new bmrf_pwl_gamma_func( from_->epi_seg(), 
+                                           to_->epi_seg(), 
+                                           double(time_step()) );
+  return gamma_func_; 
 }
 
 
