@@ -2,7 +2,6 @@
 #define image_ops__INCLUDED
 
 #include <vil/vil_memory_image_of.h>
-#include <vcl_cassert.h>
 
 template <class T>
 vil_memory_image_of<T> &operator -=

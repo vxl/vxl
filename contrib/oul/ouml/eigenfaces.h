@@ -17,8 +17,6 @@
 #include <vcl_cstdio.h>
 #include "inlines.h"
 #include <vcl_fstream.h>
-#include <vcl_map.h>
-#include <vcl_queue.h>
 #include "image_database.h"
 #include "io.h"
 
