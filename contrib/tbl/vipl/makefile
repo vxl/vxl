@@ -24,6 +24,12 @@ VERSION := 1.0
 USE_IMPLICIT_TEMPLATES := 1
 
 SOURCES += filter/vipl_filter_abs.cxx
+MANPAGE_SOURCES += filter/vipl_filter_helper.h
+MANPAGE_SOURCES += filter/vipl_trivial_pixeliter.h
+MANPAGE_SOURCES += section/vipl_filterable_section_container_generator_vil_image.txx
+MANPAGE_SOURCES += vipl_with_section/vipl_filterable_section_container_generator_section.txx
+MANPAGE_SOURCES += vipl_with_vbl_array_2d/vipl_filterable_section_container_generator_vbl_array_2d.txx
+MANPAGE_SOURCES += vipl_with_vnl_matrix/vipl_filterable_section_container_generator_vnl_matrix.txx
 
 # A. Point operators:
 MANPAGE_SOURCES += vipl_convert.txx
