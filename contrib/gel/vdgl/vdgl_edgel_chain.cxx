@@ -108,9 +108,10 @@ inline static double sq_dist(vdgl_edgel const& e, double x, double y)
 vdgl_edgel_chain_sptr vdgl_edgel_chain::extract_subchain(int start, int end)
 {
   vcl_vector<vdgl_edgel> e;
-  if (end >= (int)size()) end = size()-1;
+  ++end;
+  if (end > (int)size()) end = size();
   if (start < 0) start = 0;
-  for (int i=start; i<=end; ++i)
+  for (int i=start; i<end; ++i)
     e.push_back(edgel(i));
   return new vdgl_edgel_chain(e); // could be empty
 }
