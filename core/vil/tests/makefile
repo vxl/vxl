@@ -1,7 +1,7 @@
-USES += contrib/mul core
+USES += core
 include ../config.mk
-include ${IUEROOT}/contrib/mul/vil2/algo/config.mk
-include ${IUEROOT}/contrib/mul/vil2/io/config.mk
+include ../algo/config.mk
+include ../io/config.mk
 include ${IUEROOT}/core/vul/config.mk
 include ${IUEROOT}/core/vpl/config.mk
 include ${IUEROOT}/core/testlib/config.mk
@@ -41,8 +41,6 @@ TESTS += test_algo_correlate_2d.cxx
 TESTS += test_algo_threshold.cxx
 TESTS += test_deep_copy_3_plane.cxx
 
-include ${IUEROOT}/mul/mbl/config.mk
-include ${IUEROOT}/mul/mil/config.mk
 MINI_PROG_SOURCES += vil2_mil_gauss_general_timings.cxx
 MINI_PROG_SOURCES += vil2_vil_compare_access_timings.cxx
 MINI_PROG_SOURCES += vil2_test_access_timings.cxx
@@ -56,5 +54,5 @@ include ${IUEROOT}/config/static-tests.mk
 #########################################
 
 ifeq ($(OS),OSF1V4) # with optimisation, gcc 3.x runs out of memory
-FLAGS_test_algo_convolve_1d.cxx := -O0
+ FLAGS_test_algo_convolve_1d.cxx := -O0
 endif

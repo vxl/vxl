@@ -1,4 +1,4 @@
-USES += contrib/mul core
+USES += core
 
 LIBRARY := vil2
 VERSION := 1.0

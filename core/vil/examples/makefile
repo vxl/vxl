@@ -1,5 +1,5 @@
-USES += contrib/mul core
-include ${IUEROOT}/contrib/mul/vil2/algo/config.mk
+USES += core
+include ${IUEROOT}/core/vil2/algo/config.mk
 include ${IUEROOT}/core/testlib/config.mk
 
 MINI_PROG_SOURCES += example1.cxx

@@ -1,4 +1,4 @@
-USES += contrib/mul core
+USES += core
 include ../config.mk
 include $(IUEROOT)/core/vpl/config.mk
 include ${IUEROOT}/core/testlib/config.mk
