@@ -5,10 +5,6 @@ SET(bnl_sources
     bnl_parabolic_interpolator.cxx  bnl_parabolic_interpolator.h
     bnl_quadratic_interpolator.cxx  bnl_quadratic_interpolator.h
 
-    # classes for numerical integral
-                                    bnl_integrant_fnct.h
-                                    bnl_analytic_integrant.h
-    bnl_definite_integral.cxx       bnl_definite_integral.h
 )
 
 
