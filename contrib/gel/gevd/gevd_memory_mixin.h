@@ -136,7 +136,7 @@ class gevd_memory_mixin : public gevd_status_mixin
     //
     int  GetOffset()       { return(offset);                              }
     void SetOffset()       { offset = curr_into;                          }
-#define min(a,b) ((a<b)?a:b)
+#define min(a,b) ((a)<(b)?a:b)
     void SkipBytes(int b)  { int skip = min(b,size-curr_into);
                              current += skip; curr_into += skip;
                              if(skip<b) SetStatus(MM_OVERFLOW);
