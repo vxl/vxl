@@ -76,17 +76,35 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(mil_image_2d_of<T>
 }
 
 
-//: An optimisable templated rounding function
-template <class T>
-inline T l_round(double x, T dummy)
-{  return (T) (x+0.5);}
+//: An optimisable rounding function
+inline unsigned char l_round(double x, unsigned char dummy)
+{  return (unsigned char) (x+0.5);}
 
-template <>
-inline double l_round<double> (double x, double dummy)
+inline signed char l_round(double x, signed char dummy)
+{  return (signed char) (x+0.5);}
+
+inline unsigned short l_round(double x, unsigned short dummy)
+{  return (unsigned short) (x+0.5);}
+
+inline signed short l_round(double x, signed short dummy)
+{  return (signed short) (x+0.5);}
+
+inline unsigned int l_round(double x, unsigned int dummy)
+{  return (unsigned int) (x+0.5);}
+
+inline signed int l_round(double x, signed int dummy)
+{  return (signed int) (x+0.5);}
+
+inline unsigned long l_round(double x, unsigned long dummy)
+{  return (unsigned long) (x+0.5);}
+
+inline signed long l_round(double x, signed long dummy)
+{  return (signed long) (x+0.5);}
+
+inline double l_round (double x, double dummy)
 {  return x; }
 
-template <>
-inline float l_round<float> (double x, float dummy)
+inline float l_round (double x, float dummy)
 {  return (float) x; }
 
 //=======================================================================
@@ -235,7 +253,7 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(T* dest_im, int de
 		for (int xi=0; xi<dest_nx; xi++)
 		{
 
-			dest_row[xi] = l_round<T> (mil_safe_extend_bilin_interp_2d(x, y,
+			dest_row[xi] = l_round (mil_safe_extend_bilin_interp_2d(x, y,
 					workb_im,  src_nx, src_ny, work_ystep), (T)0);
 			x += scale_step_;
 
