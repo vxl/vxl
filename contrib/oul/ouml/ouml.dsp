@@ -188,16 +188,25 @@ SOURCE=.\eigenfaces.h
 SOURCE=.\image_convert.h
 # End Source File
 # Begin Source File
+SOURCE=.\image_convert.txx
+# End Source File
+# Begin Source File
 SOURCE=.\image_database.h
 # End Source File
 # Begin Source File
 SOURCE=.\image_ops.h
 # End Source File
 # Begin Source File
+SOURCE=.\image_ops.txx
+# End Source File
+# Begin Source File
 SOURCE=.\inlines.h
 # End Source File
 # Begin Source File
 SOURCE=.\io.h
+# End Source File
+# Begin Source File
+SOURCE=.\io.txx
 # End Source File
 # Begin Source File
 SOURCE=.\polygon_mesh.h
