@@ -3,7 +3,7 @@
 //  \brief A base class for arbitrary 2D images+transform
 //  \author Tim Cootes
 
-#include <vimt/vimt_image_2d.h>
+#include "vimt_image_2d.h"
 
 //: Return vector indicating size of image in pixels
 //  2D image is v[0] x v[1],  3D image is v[0] x v[1] x v[2]
@@ -18,7 +18,7 @@ vcl_vector<unsigned> vimt_image_2d::image_size() const
 
 //: Return vectors defining bounding box containing image in world co-ords
 void vimt_image_2d::world_bounds(vcl_vector<double>& b_lo,
-                            vcl_vector<double>& b_hi) const
+                                 vcl_vector<double>& b_hi) const
 {
   b_lo.resize(2); b_hi.resize(2);
   vgl_point_2d<double> p = world2im_.inverse()(0,0);

@@ -3,7 +3,7 @@
 //  \brief A base class for arbitrary 3d images+transform
 //  \author Tim Cootes
 
-#include <vimt3d/vimt3d_image_3d.h>
+#include "vimt3d_image_3d.h"
 
 //: Return vector indicating size of image in pixels
 //  3D image is v[0] x v[1] x v[2]

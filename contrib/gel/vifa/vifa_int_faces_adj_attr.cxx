@@ -1,6 +1,5 @@
 // This is gel/vifa/vifa_int_faces_adj_attr.cxx
-#include <vifa/vifa_int_faces_adj_attr.h>
-
+#include "vifa_int_faces_adj_attr.h"
 
 vifa_int_faces_adj_attr::
 vifa_int_faces_adj_attr(void)

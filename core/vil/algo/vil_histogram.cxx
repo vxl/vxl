@@ -3,7 +3,7 @@
 // \brief Construct histogram from pixels in given image.
 // \author Tim Cootes
 
-#include <vil/algo/vil_histogram.h>
+#include "vil_histogram.h"
 
 //: Construct histogram from pixels in given image of bytes
 //  Resulting histogram has 256 bins
