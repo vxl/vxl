@@ -31,7 +31,7 @@ vcl_rel_ops.h
 vcl_stlfwd.h
   Forward declare the most commonly used parts of the STL, if possible.
 
-vcl_unistd.h>
+vcl_unistd.h
   <unistd.h> is part of the POSIX standard, not ISO. Since it's so useful to 
   have and so broken on most systems, we supply vcl_unistd.h
 
@@ -54,12 +54,13 @@ header has to be modified.
 
 template files
 --------------
-This is an unofficial codification of existing practice, as observed by fsm.
-~       is for pointer
+This is the official codification of template file naming, as was proposed by
+Peter Vanroose.
+~       is for pointer (*)
 +       is for < in templates
 -       is for > in templates
 .       is for the commas between template arguments
-_ or __ is for the :: in nested classe (which is preferred?)
++-      is for the :: in nested classes
 The abbreviations uchar, ushort, uint, ulong stand for unsigned versions of 
 integer types. Use 's' as a prefix for signed versions. Beware that 'char'
 can be either signed or unsigned and may or may not be the same type as the
