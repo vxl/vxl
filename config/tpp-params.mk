@@ -124,6 +124,15 @@ ifeq ($(strip $(HAS_MPEG2))-$(strip $(MPEG2_LIB_DIR)),1-)
   MPEG2_LIBS := -lmpeg2
 endif
 
+# if no DCMTK_LIB_DIR supplied, use the one in v3p.
+ifeq ($(strip $(HAS_DCMTK))-$(strip $(DCMTK_LIB_DIR)),1-)
+  DCMTK_INC_DIR := $(IUEROOT)/v3p/dcmtk/ofstd/include $(IUEROOT)/v3p/dcmtk/dcmdata/include $(IUEROOT)/v3p/dcmtk/dcmimgle/include $(IUEROOT_libbase)/v3p/$(tj_libdir)
+  ifndef CENTRAL_LIBDIR
+    DCMTK_LIB_DIR := $(IUEROOT_libbase)/v3p/$(tj_libdir)
+  endif
+  DCMTK_LIBS := -ldcmtk
+endif
+
 # NETLIB: if none supplied, use the one in v3p
 ifneq ($(strip $(HAS_NETLIB)),1)
   HAS_NETLIB := 1

@@ -202,6 +202,18 @@ ifeq ($(strip $(USE_MPEG2)),1)
   endif
 endif
 
+# Select: USE_DCMTK
+# Set to 1 to use the DCMTK library
+ifeq ($(strip $(USE_DCMTK)),1)
+  INCDIRS += $(DCMTK_INC_DIR)
+  LIBDIRS += $(DCMTK_LIB_DIR)
+  DEFINES += -DHAS_DCMTK
+  STDLIBS += $(DCMTK_LIBS)
+  ifndef HAS_DCMTK
+    err_CANNOT_BUILD_HERE += "USE_DCMTK"
+  endif
+endif
+
 # Select: USE_AVI
 # Set to 1 to use the AVI library
 ifeq ($(strip $(USE_AVI)),1)
