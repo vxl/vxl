@@ -12,7 +12,7 @@ bool vipl_gradient_mag <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop
     for(int i = start(X_Axis(),j); i < stop(X_Axis(),j); ++i) {
       dx = fgetpixel(in, i, j, dummy) - getpixel(in, i-1, j, dummy);
       dy = fgetpixel(in, i, j, dummy) - getpixel(in, i, j-1, dummy);
-      dx = (sqrt( dx*dx + dy*dy ) + shift()) * scale();
+      dx = (vcl_sqrt( dx*dx + dy*dy ) + shift()) * scale();
       fsetpixel(out, i, j, (DataOut)dx);
     }
   return true;
