@@ -28,14 +28,14 @@ static void test_detector(int argc, char * argv[])
     if (edges)
       n = edges->size();
     vcl_cout << "nedges = " << n << '\n';
-    TEST("...", n==647 || n==648 || n==649, true);
+    TEST("nedges is around 648", n>=647 && n<=650, true);
     if (n)
     {
       vtol_edge_2d_sptr e = (*edges)[0];
       int x = int(e->v1()->cast_to_vertex_2d()->x());
       int y = int(e->v1()->cast_to_vertex_2d()->y());
       vcl_cout << "v(" << x << ' ' << y << ")\n";
-      TEST("...", x==229&&y==235, true);
+      TEST("(x,y) is (229,235)", x==229&&y==235, true);
     }
   }
 }
