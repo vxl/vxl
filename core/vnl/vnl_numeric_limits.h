@@ -1,9 +1,9 @@
+// This is vxl/vnl/vnl_numeric_limits.h
 #ifndef vnl_numeric_limits_h_
 #define vnl_numeric_limits_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_numeric_limits.h
 
 //: \file
 //  \brief Standard limits for numeric datatypes
@@ -68,13 +68,13 @@ public:
   static const int  digits10;
 
 //: True if the type is signed.
-  static const bool is_signed; 
+  static const bool is_signed;
 
-//; True if the type is integer  
-  static const bool is_integer; 
-  
+//; True if the type is integer
+  static const bool is_integer;
+
 //: True if the type uses an exact representation
-//  All integer types are exact, but not vice versa.  
+//  All integer types are exact, but not vice versa.
 //  For example, rational and fixed-exponent
 //  representations are exact but not integer.
   static const bool is_exact;
@@ -86,7 +86,7 @@ public:
 //    distinguishes types with bases other than 2 (e.g. BCD).
   static const int  radix;
 
-//:  Machine epsilon: 
+//:  Machine epsilon:
 //  The difference between 1 and the least value greater
 //    than 1 that is representable.  Equivalent to FLT_EPSILON, DBL_EPSILON,
 //    LDBL_EPSILON.

@@ -5,7 +5,7 @@
 
 bool vnl_rotation_matrix(double const x[3], double **R)
 {
-  // start with an identity matrix.  
+  // start with an identity matrix.
   for (unsigned i=0; i<3; ++i)
     for (unsigned j=0; j<3; ++j)
       R[i][j] = (i==j ? 1 : 0);
@@ -18,13 +18,13 @@ bool vnl_rotation_matrix(double const x[3], double **R)
   u[0] /= angle;
   u[1] /= angle;
   u[2] /= angle;
-  
+
   // add (cos(angle)-1)*(1 - u u').
   double cos_angle = vcl_cos(angle);
   for (unsigned i=0; i<3; ++i)
     for (unsigned j=0; j<3; ++j)
       R[i][j] += (cos_angle-1) * ((i==j ? 1:0) - u[i]*u[j]);
-  
+
   // add sin(angle) * [u]
   double sin_angle = vcl_sin(angle);
   /* */                      R[0][1] -= sin_angle*u[2]; R[0][2] += sin_angle*u[1];
@@ -33,7 +33,7 @@ bool vnl_rotation_matrix(double const x[3], double **R)
 
 #if 0
   //cerr << "axis = [" << axis[0] << ' ' << axis[1] << ' ' << axis[2] << "];" << endl;
-  
+
   vcl_cerr << "R=[" << vcl_endl;
   for (unsigned i=0; i<3; ++i) {
     for (unsigned j=0; j<3; ++j)
@@ -41,7 +41,7 @@ bool vnl_rotation_matrix(double const x[3], double **R)
     vcl_cerr << vcl_endl;
   }
   vcl_cerr << "];" << vcl_endl;
-  exit(1);
+  vcl_exit(1);
 #endif
   return true;
 }

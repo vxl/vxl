@@ -7,6 +7,7 @@
 #pragma implementation
 #endif
 #include "vnl_sample.h"
+#include <vnl/vnl_math.h>
 
 #include <vcl_cmath.h>
 #include <vcl_cstdlib.h>
@@ -36,7 +37,7 @@ void vnl_sample_reseed()
 }
 
 //: return a random number uniformly drawn on [a, b)
-double vnl_sample_uniform(double a, double b) 
+double vnl_sample_uniform(double a, double b)
 {
 #if VXL_STDLIB_HAS_DRAND48
   // it's your lucky day.
@@ -53,15 +54,15 @@ double vnl_sample_uniform(double a, double b)
 void vnl_sample_normal_2(double *x, double *y)
 {
   double u     = vnl_sample_uniform(0, 1);
-  double theta = vnl_sample_uniform(0, 2 * /* pi = */3.14159265358979);
-  
+  double theta = vnl_sample_uniform(0, 2 * vnl_math::pi);
+
   double r = vcl_sqrt(-2*vcl_log(u));
-  
+
   if (x) *x = r * vcl_cos(theta);
   if (y) *y = r * vcl_sin(theta);
 }
 
-double vnl_sample_normal(double mean, double sigma) 
+double vnl_sample_normal(double mean, double sigma)
 {
   double x;
   vnl_sample_normal_2(&x, 0);

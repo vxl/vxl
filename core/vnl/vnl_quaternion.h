@@ -1,16 +1,16 @@
+// This is vxl/vnl/vnl_quaternion.h
 #ifndef vnl_quaternion_h_
 #define vnl_quaternion_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_quaternion.h
 
 //: \file
 //  \brief Unit quaternion represents rotation in 3D.
 //  \author awf@robots.ox.ac.uk 16 Mar 00
 //
 
- 
+
 //  Modifications
 //  20-05-2000 fsm@robots. changed FLOAT to T since gcc will barf at
 //            the very reasonable forward declaration
@@ -25,13 +25,13 @@
 // \verbatim
 //    q = r + (i*x + j*y + k*z)
 //    r = cos(theta/2)
-//    (x, y, z) = sin(theta/2) (kx, ky, kz) 
+//    (x, y, z) = sin(theta/2) (kx, ky, kz)
 // \endverbatim
-// where theta and k are  respectively the angle and axis of rotation. 
+// where theta and k are  respectively the angle and axis of rotation.
 // 3D vectors can be  thought  of  as  imaginary  quaternions, and  so  a
 // quaternion is represented as a Vector<T> with the imaginary
 // part before the real part for 1-1 alignment.
-// 
+//
 // Unit quaternion provides a more efficient representation for
 // rotation, than  the usual orthonormal matrix that has nine
 // parameters  and  six  orthonormal  constraints.   The   unit
@@ -45,9 +45,9 @@
 //
 // See also
 // Vector<Type> and Matrix<Type> for basic operations on vectors and matrices.
-// 
+//
 // Transform for coordinate transformations.
-// 
+//
 // Envelope for envelope-letter scheme that avoids deep copy on
 // return by value in arithmetic expressions like: q1 * q2 * q3 *...
 //
@@ -68,13 +68,13 @@ public:
   vnl_quaternion (T x, T y, T z, T r);
 
  //: Construct quaternion from axis and angle of rotation
-  vnl_quaternion (const vnl_vector<T>& axis, T angle); 
+  vnl_quaternion (const vnl_vector<T>& axis, T angle);
 
  //: Construct quaternion from from 3-4 square row-major
   explicit vnl_quaternion (const vnl_matrix<T>& transform); // from 3-4 square row-major
 
  //: Construct quaternion from from from 3-4D vector
-  vnl_quaternion (const vnl_vector<T>& vec); 
+  vnl_quaternion (const vnl_vector<T>& vec);
 
  //: Copy constructor
   inline vnl_quaternion (const vnl_quaternion<T>& from);
@@ -98,7 +98,7 @@ public:
   inline T z () const;
   inline T r () const;
   inline T real () const;
-  
+
  //: Imaginary vector part
   inline vnl_vector<T> imaginary () const;
 
@@ -107,20 +107,20 @@ public:
 
  //: Angle of rotation
   T angle () const;
-  
+
  //: 3x3 rotation matrix
   vnl_matrix_fixed<T,3,3> rotation_matrix () const;
 
  //: 4x4 rotation matrix
   vnl_matrix_fixed<T,4,4> rotation_matrix_4 () const;
 
- //: Same real, opposite img part 
+ //: Same real, opposite img part
   vnl_quaternion<T> conjugate () const;
 
  //: Inverse for nonzero quat
   vnl_quaternion<T> inverse () const;
-  
-  vnl_quaternion<T> operator* (const vnl_quaternion<T>&) const; 
+
+  vnl_quaternion<T> operator* (const vnl_quaternion<T>&) const;
 
   //: Rotate 3D v
   vnl_vector<T> rotate (const vnl_vector<T>& v) const;
@@ -149,14 +149,14 @@ inline T& vnl_quaternion<T>::x () {
   return this->operator()(0);
 }
 
-//: y 
+//: y
 
 template <class T>
 inline T& vnl_quaternion<T>::y () {
   return this->operator()(1);
 }
 
-//:  z 
+//:  z
 
 template <class T>
 inline T& vnl_quaternion<T>::z () {
@@ -180,13 +180,13 @@ inline T vnl_quaternion<T>::x () const {
   return this->operator()(0);
 }
 
-//: y 
+//: y
 template <class T>
 inline T vnl_quaternion<T>::y () const {
   return this->operator()(1);
 }
 
-//: z 
+//: z
 template <class T>
 inline T vnl_quaternion<T>::z () const {
   return this->operator()(2);
@@ -237,6 +237,6 @@ inline vcl_ostream& operator<< (vcl_ostream& os, const vnl_quaternion<T>& q) {
 //   return os << *((vnl_vector<T>*) q);
 // }
 
-#define VNL_QUATERNION_INSTANTIATE(T) extern "Error, include vnl/vnl_quaternion.txx";
+#define VNL_QUATERNION_INSTANTIATE(T) extern "you must include vnl/vnl_quaternion.txx first"
 
 #endif // vnl_quaternion_h_

@@ -10,10 +10,10 @@
 //  \author F. Schaffalitzky, Oxford RRG, 26 Mar 1999
 
 
-//     
+//
 //
 // Modifications:
-// LSB (Manchester) 26/3/01 Documentation tidied 
+// LSB (Manchester) 26/3/01 Documentation tidied
 //
 //-----------------------------------------------------------------------------
 
@@ -42,7 +42,7 @@ class vnl_complex_traits< vcl_complex<float> > {
 public:
   enum { isreal = false };
   static vcl_complex<float> conjugate(vcl_complex<float> z)
-    { return vcl_complex<float>(z.real(), -z.imag()); }
+    { return vcl_complex<float>(vcl_real(z), -vcl_imag(z)); }
   static vcl_complex<float> complexify(vcl_complex<float> z)
     { return z; }
 };
@@ -53,7 +53,7 @@ class vnl_complex_traits< vcl_complex<double> > {
 public:
   enum { isreal = false };
   static vcl_complex<double> conjugate(vcl_complex<double> z)
-    { return vcl_complex<double>(z.real(), -z.imag()); }
+    { return vcl_complex<double>(vcl_real(z), -vcl_imag(z)); }
   static vcl_complex<double> complexify(vcl_complex<double> z)
     { return z; }
 };

@@ -33,7 +33,7 @@ void vnl_copy(S const &src, T &dst)
 
 // C arrays
 #define VNL_COPY_INSTANTIATE0(S, T) \
-template void vnl_copy(S const *, T *, unsigned );
+template void vnl_copy(S const *, T *, unsigned )
 
 VNL_COPY_INSTANTIATE0(float, double);
 VNL_COPY_INSTANTIATE0(double, float);
@@ -45,7 +45,7 @@ VCL_DEFINE_SPECIALIZATION \
 void vnl_copy(vcl_complex<S> const *src, vcl_complex<D> *dst, unsigned n) \
 { \
   for (int i=0; i<n; ++i) \
-    dst[i] = vcl_complex<D>(src[i].real(), src[i].imag()); \
+    dst[i] = vcl_complex<D>(vcl_real(src[i]), vcl_imag(src[i])); \
 }
 macro(float, double);
 macro(double, float);
@@ -57,7 +57,7 @@ macro(long double, double);
 #define VNL_COPY_INSTANTIATE(S, T) \
 template void vnl_copy(vnl_vector<S > const &, vnl_vector<T > &); \
 template void vnl_copy(vnl_matrix<S > const &, vnl_matrix<T > &); \
-template void vnl_copy(vnl_diag_matrix<S > const &, vnl_diag_matrix<T > &);
+template void vnl_copy(vnl_diag_matrix<S > const &, vnl_diag_matrix<T > &)
 
 #define VNL_COPY_INSTANTIATE_twoway(S, T) \
 VNL_COPY_INSTANTIATE(S, T); \

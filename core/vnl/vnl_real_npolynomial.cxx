@@ -10,7 +10,7 @@
 //  Implements a polynomial with N variables
 
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>    // fabs()
+#include <vcl_cmath.h>    // vcl_fabs()
 #include <vcl_iostream.h>
 #include "vnl_real_npolynomial.h"
 
@@ -85,7 +85,7 @@ double vnl_real_npolynomial::eval(const vnl_vector<double>& x)
 }
 
 
-//: Set the coefficients and degree of variable 
+//: Set the coefficients and degree of variable
 void vnl_real_npolynomial::set(const vnl_vector<double>& c, const vnl_matrix<int>& p)
 {
   coeffs_= c;
@@ -197,7 +197,7 @@ vcl_ostream& operator<<(vcl_ostream& os, vnl_real_npolynomial const& P)
   if (P.nvar_ <= 3) for (int i=0; i<P.nterms_; ++i) {
     os << ' ';
     if (i>0 && P.coeffs_(i) > 0) os << '+';
-    if (fabs(P.coeffs_(i)) != 1) os << P.coeffs_(i) << ' ';
+    if (vcl_fabs(P.coeffs_(i)) != 1) os << P.coeffs_(i) << ' ';
     int totaldeg = 0;
     if (P.nvar_ > 0 && P.polyn_(i,0) > 0)  { os << 'X'; totaldeg += P.polyn_(i,0); }
     if (P.nvar_ > 0 && P.polyn_(i,0) > 1)  os << '^' << P.polyn_(i,0);
@@ -205,25 +205,20 @@ vcl_ostream& operator<<(vcl_ostream& os, vnl_real_npolynomial const& P)
     if (P.nvar_ > 1 && P.polyn_(i,1) > 1)  os << '^' << P.polyn_(i,1);
     if (P.nvar_ > 2 && P.polyn_(i,2) > 0)  { os << 'Z'; totaldeg += P.polyn_(i,2); }
     if (P.nvar_ > 2 && P.polyn_(i,2) > 1)  os << '^' << P.polyn_(i,2);
-    if (totaldeg == 0 && fabs(P.coeffs_(i)) == 1) os << P.coeffs_(i);
+    if (totaldeg == 0 && vcl_fabs(P.coeffs_(i)) == 1) os << P.coeffs_(i);
   }
   else for (int i=0; i<P.nterms_; ++i) {
     os << ' ';
     if (i>0 && P.coeffs_(i) > 0) os << '+';
-    if (fabs(P.coeffs_(i)) != 1) os << P.coeffs_(i) << ' ';
+    if (vcl_fabs(P.coeffs_(i)) != 1) os << P.coeffs_(i) << ' ';
     int totaldeg = 0;
     for (int j=0; j<P.nvar_; ++j) {
       if (P.polyn_(i,j) > 0)  os << 'X' << j;
       if (P.polyn_(i,j) > 1)  os << '^' << P.polyn_(i,j);
       totaldeg += P.polyn_(i,j);
     }
-    if (totaldeg == 0 && fabs(P.coeffs_(i)) == 1) os << P.coeffs_(i);
+    if (totaldeg == 0 && vcl_fabs(P.coeffs_(i)) == 1) os << P.coeffs_(i);
   }
   os << vcl_endl; return os;
 }
-
-
-
-
-
 

@@ -20,7 +20,7 @@ T vnl_trace(vnl_matrix<T> const &M) {
 }
 
 #define VNL_TRACE_INSTANTIATE(T) \
-template T vnl_trace(vnl_matrix<T > const &);
+template T vnl_trace(vnl_matrix<T > const &)
 
 VNL_TRACE_INSTANTIATE(float);
 VNL_TRACE_INSTANTIATE(double);

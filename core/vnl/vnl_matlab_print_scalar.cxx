@@ -119,8 +119,8 @@ void vnl_matlab_print_scalar(vcl_complex<double> v,
   default:/*vnl_matlab_print_format_default:*/ vcl_abort(); break;
   }
 
-  double r = v.real();
-  double i = v.imag();
+  double r = vcl_real(v);
+  double i = vcl_imag(v);
 
   char fmt[1024];
   // Real part
@@ -186,8 +186,8 @@ void vnl_matlab_print_scalar(vcl_complex<float> v,
   default:/*vnl_matlab_print_format_default:*/ vcl_abort(); break;
   }
 
-  float r = v.real();
-  float i = v.imag();
+  float r = vcl_real(v);
+  float i = vcl_imag(v);
 
   char fmt[1024];
   // Real part
@@ -221,5 +221,5 @@ void vnl_matlab_print_scalar(vcl_complex<long double> v,
                              char *buf,
                              vnl_matlab_print_format format)
 {
-  vnl_matlab_print_scalar(vcl_complex<double>(v.real(), v.imag()), buf, format); // FIXME
+  vnl_matlab_print_scalar(vcl_complex<double>(vcl_real(v), vcl_imag(v)), buf, format); // FIXME
 }

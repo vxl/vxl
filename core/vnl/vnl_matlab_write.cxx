@@ -49,14 +49,14 @@ void vnl_write_real(vcl_ostream &s, double const *data, unsigned n)
 void vnl_write_real(vcl_ostream &s, vcl_complex<float> const *data, unsigned n) {
   float dummy;
   for (unsigned i=0; i<n; ++i) { // real block
-    dummy = data[i].real();
+    dummy = vcl_real(data[i]);
     ::vnl_write_bytes(s, &dummy, sizeof(dummy));
   }
 }
 void vnl_write_real(vcl_ostream &s, vcl_complex<double> const *data, unsigned n) {
   double dummy;
   for (unsigned i=0; i<n; ++i) { // real block
-    dummy = data[i].real();
+    dummy = vcl_real(data[i]);
     ::vnl_write_bytes(s, &dummy, sizeof(dummy));
   }
 }
@@ -67,14 +67,14 @@ void vnl_write_imag(vcl_ostream &, double const *, unsigned ) { }
 void vnl_write_imag(vcl_ostream &s, vcl_complex<float> const *data, unsigned n) {
   float dummy;
   for (unsigned i=0; i<n; ++i) { // imag block
-    dummy = data[i].imag();
+    dummy = vcl_imag(data[i]);
     ::vnl_write_bytes(s, &dummy, sizeof(dummy));
   }
 }
 void vnl_write_imag(vcl_ostream &s, vcl_complex<double> const *data, unsigned n) {
   double dummy;
   for (unsigned i=0; i<n; ++i) { // imag block
-    dummy = data[i].imag();
+    dummy = vcl_imag(data[i]);
     ::vnl_write_bytes(s, &dummy, sizeof(dummy));
   }
 }

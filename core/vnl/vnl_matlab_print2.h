@@ -1,9 +1,9 @@
+// This is vxl/vnl/vnl_matlab_print2.h
 #ifndef vnl_matlab_print2_h_
 #define vnl_matlab_print2_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_matlab_print2.h
 
 //: \file
 //  \author fsm@robots.ox.ac.uk
@@ -24,9 +24,7 @@
 //        vnl_matlab_print(cerr, foo, "foo");
 //        vnl_matlab_print(cerr, foo, 0, vnl_matlab_fmt_long);
 // \endverbatim
-//
-//
-//     
+
 #include <vnl/vnl_matlab_print.h>
 
 // The proxy classes.
@@ -66,10 +64,9 @@ vnl_matlab_print(T const &obj,
 
 #define VNL_MATLAB_PRINT2_INSTANTIATE(T) \
 template struct vnl_matlab_print_proxy<T >; \
-VCL_INSTANTIATE_INLINE(vcl_ostream &operator<<(vcl_ostream &, \
-                                           vnl_matlab_print_proxy<T > const &)); \
-VCL_INSTANTIATE_INLINE(vnl_matlab_print_proxy<T > vnl_matlab_print(T const &, \
-                                                                   char const *, \
-                                                                   vnl_matlab_print_format));
+VCL_INSTANTIATE_INLINE(vcl_ostream & \
+    operator<<(vcl_ostream &, vnl_matlab_print_proxy<T > const &)); \
+VCL_INSTANTIATE_INLINE(vnl_matlab_print_proxy<T > \
+    vnl_matlab_print(T const &, char const *, vnl_matlab_print_format))
 
 #endif // vnl_matlab_print2_h_

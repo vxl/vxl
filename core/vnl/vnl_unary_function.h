@@ -1,11 +1,11 @@
+// This is vxl/vnl/vnl_unary_function.h
 #ifndef vnl_unary_function_h_
 #define vnl_unary_function_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_unary_function.h
 
-//: 
+//:
 //  \file
 //  \brief Abstract 1D map
 //  \author Andrew W. Fitzgibbon, Oxford RRG, 28 Nov 98
