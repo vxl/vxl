@@ -1,0 +1,30 @@
+// The following text is included in the main documentation page by doxygen
+/*! \mainpage vimt : Polymorphic image + transform library
+* Provides a set of image classes, derived from vimt_image, which can be used
+* as `views' on actual image data.
+*
+* The images use pointer arithmetic to get at the pixel values, so store pointers
+* to the start of each plane, and integers indicating how to get to neighbours in
+* the x, y (and z) directions.  See vil2_image_view.
+*
+* The most commonly used classes are likely to be vimt_image_2d_of<T> and
+* vimt_image_3d_of<T> templated multi-plane images.
+**
+* \subsection pyr Image Pyramids
+* Image pyramids (vimt_image_pyramid) are stacks of images, assumed to have lower
+* resolution as one goes up the stack.
+*
+* They can be build using vimt_image_pyramid_builder objects such as
+* - vimt_gaussian_pyramid_builder_2d
+* - vimt_gaussian_pyramid_builder_2d_general
+*
+* \subsection Interp Interpolation
+* Interpolation functions include
+* - vimt_bilin_interp_2d (Fast interpolation with no checks on image size - seg fault if outside)
+* - vimt_safe_bilin_interp_2d (Check inside image, if not, return zero)
+* - vimt_safe_extend_bilin_interp_2d (Bilinear, if outside return value at nearest edge pixel)
+*
+* \subsection Sampling Sampling
+* Profiles can be sampled using vimt_sample_profile_2d
+*
+*/
