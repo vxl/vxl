@@ -23,6 +23,7 @@
 inline void vsl_block_binary_read_confirm_specialisation(vsl_b_istream &is,
   bool specialised)
 {
+  if (!is) return;
   bool b;
   vsl_b_read(is, b);
   if (b != specialised)
@@ -79,6 +80,7 @@ VCL_DEFINE_SPECIALIZATION
 VCL_VC60_STATIC inline void vsl_block_binary_read(vsl_b_istream &is, double* begin, unsigned nelems)
 {
   vsl_block_binary_read_confirm_specialisation(is, true);
+  if (!is) return;
   is.is().read((char*) begin, (unsigned long)(nelems*sizeof(double)));
   vsl_swap_bytes((char *)begin, sizeof(double), nelems);
 }
@@ -106,6 +108,7 @@ VCL_DEFINE_SPECIALIZATION
 VCL_VC60_STATIC inline void vsl_block_binary_read(vsl_b_istream &is, float* begin, unsigned nelems)
 {
   vsl_block_binary_read_confirm_specialisation(is, true);
+  if (!is) return;
   is.is().read((char*) begin, (unsigned long)(nelems*sizeof(float)));
   vsl_swap_bytes((char *)begin, sizeof(float), nelems);
 }
@@ -136,8 +139,8 @@ VCL_VC60_STATIC inline void vsl_block_binary_write(vsl_b_ostream &os, const int*
 VCL_DEFINE_SPECIALIZATION
 VCL_VC60_STATIC inline void vsl_block_binary_read(vsl_b_istream &is, int* begin, unsigned nelems)
 {
-  if (!is) return;
   vsl_block_binary_read_confirm_specialisation(is, true);
+  if (!is) return;
   unsigned long nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
@@ -184,6 +187,7 @@ VCL_DEFINE_SPECIALIZATION
 VCL_VC60_STATIC inline void vsl_block_binary_read(vsl_b_istream &is, unsigned int* begin, unsigned nelems)
 {
   vsl_block_binary_read_confirm_specialisation(is, true);
+  if (!is) return;
   unsigned long nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
@@ -230,6 +234,7 @@ VCL_DEFINE_SPECIALIZATION
 VCL_VC60_STATIC inline void vsl_block_binary_read(vsl_b_istream &is, short* begin, unsigned nelems)
 {
   vsl_block_binary_read_confirm_specialisation(is, true);
+  if (!is) return;
   unsigned long nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
@@ -276,6 +281,7 @@ VCL_DEFINE_SPECIALIZATION
 VCL_VC60_STATIC inline void vsl_block_binary_read(vsl_b_istream &is, unsigned short* begin, unsigned nelems)
 {
   vsl_block_binary_read_confirm_specialisation(is, true);
+  if (!is) return;
   unsigned long nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
@@ -322,6 +328,7 @@ VCL_DEFINE_SPECIALIZATION
 VCL_VC60_STATIC inline void vsl_block_binary_read(vsl_b_istream &is, long* begin, unsigned nelems)
 {
   vsl_block_binary_read_confirm_specialisation(is, true);
+  if (!is) return;
   unsigned long nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
@@ -368,6 +375,7 @@ VCL_DEFINE_SPECIALIZATION
 VCL_VC60_STATIC inline void vsl_block_binary_read(vsl_b_istream &is, unsigned long* begin, unsigned nelems)
 {
   vsl_block_binary_read_confirm_specialisation(is, true);
+  if (!is) return;
   unsigned long nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
@@ -416,6 +424,7 @@ inline void vsl_block_binary_write(vsl_b_ostream &os, const vcl_ptrdiff_t* begin
 inline void vsl_block_binary_read(vsl_b_istream &is, vcl_ptrdiff_t* begin, unsigned nelems)
 {
   vsl_block_binary_read_confirm_specialisation(is, true);
+  if (!is) return;
   unsigned long nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
@@ -460,6 +469,7 @@ inline void vsl_block_binary_write(vsl_b_ostream &os, const vcl_size_t* begin, u
 inline void vsl_block_binary_read(vsl_b_istream &is, vcl_size_t* begin, unsigned nelems)
 {
   vsl_block_binary_read_confirm_specialisation(is, true);
+  if (!is) return;
   unsigned long nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
@@ -501,6 +511,7 @@ template <class T>
 VCL_VC60_STATIC inline void vsl_block_binary_read(vsl_b_istream &is, T* begin, unsigned nelems)
 {
   vsl_block_binary_read_confirm_specialisation(is, false);
+  if (!is) return;
   while (nelems--)
     vsl_b_read(is, *(begin++));
 }

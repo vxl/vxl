@@ -8,10 +8,7 @@
 
 #include <vcl_iosfwd.h>
 #include <vcl_vector.h>
-
-// Forward declaration
-class vsl_b_ostream;
-class vsl_b_istream;
+#include <vsl/vsl_fwd.h>
 
 //: Write vector to binary stream
 template <class T>
