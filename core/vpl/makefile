@@ -16,7 +16,6 @@ endif
 
 SOURCES += vpl.cxx # includes one of os_cygwin/vpl.cxx os_win32/vpl.cxx os_unix/vpl.cxx
 MANPAGE_SOURCES += vpl_mutex.h
-MANPAGE_SOURCES += vpl_unistd.h
 
 DEFINES += -DBUILDING_VPL_DLL
 
