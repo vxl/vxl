@@ -273,7 +273,8 @@ vtol_edge_2d *vtol_vertex_2d::new_edge(vtol_vertex_2d *other_vert)
 double vtol_vertex_2d::distance_from(const vector_2d &v)
 {
   //  return _point->distance_from(v);
-  cout << "Not implemented " << endl;
+  cerr << "vtol_vertex_2d::distance_from() not implemented yet\n";
+  return -1; // TO DO
 }
 
 //:
@@ -283,7 +284,8 @@ double vtol_vertex_2d::distance_from(const vector_2d &v)
 double vtol_vertex_2d::euclidean_distance(vtol_vertex_2d& v)
 {
   //  return _point->euclidean_distance(*v.get_point());
-  cout << "Not implemented" <<endl;
+  cerr << "vtol_vertex_2d::euclidean_distance() not yet implemented\n";
+  return -1; // TO DO
 }
 
 //:
@@ -337,7 +339,8 @@ for (face_list_2d::iterator i = faces.begin();
 vtol_vertex_2d *vtol_vertex_2d::vertex_diff(vtol_vertex_2d& diffvert)
 {
   // return new vtol_vertex_2d((*_point) - (*(diffvert._point)));
-  cout << "not implemented " << endl;
+  cerr << "vtol_vertex_2d::vertex_diff() not implemented yet\n";
+  return 0; // TO DO
 }
 
 //:
@@ -452,7 +455,8 @@ void vtol_vertex_2d::merge_references(vtol_vertex_2d *v2)
 //:
 // Vertex* min_z_vertex(vertex_list_2d* Verts) --
 // not implemented.
-/* use in 3d 
+# if 0 // use in 3d 
+// TO DO
 vtol_vertex_2d* min_z_vertex(vertex_list_2d* Verts)
 {
   vtol_vertex_2d* min_vertex;
@@ -474,7 +478,7 @@ vtol_vertex_2d* min_z_vertex(vertex_list_2d* Verts)
   return min_vertex;
 }
 
-*/
+#endif
 
 // vertex_list_2d* merge_vertices_listwise(vertex_list_2d* Verts) --
 // not tested....should not be a method.

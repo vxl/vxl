@@ -126,7 +126,7 @@ vtol_topology_object_3d::topology_type(void) const
 
 vertex_list_3d* vtol_topology_object_3d::vertices()
 {
-  cerr << "Barfing Merrily, vtol_topology_object_3d::vertices()" << endl;
+  cerr << "Error: vtol_topology_object_3d::vertices() not implemented for this topology object\n";
   return new vertex_list_3d;
 }
 
@@ -145,7 +145,7 @@ void vtol_topology_object_3d::vertices(vertex_list_3d& verts)
 // Get list of zero_chains 
 zero_chain_list_3d* vtol_topology_object_3d::zero_chains()
 {
-  cerr << "Barfing Merrily, vtol_topology_object_3d::vertices()" << endl;
+  cerr << "Error: vtol_topology_object_3d::zero_chains() not implemented for this topology object\n";
   return new zero_chain_list_3d;
 }
 
@@ -164,7 +164,7 @@ void vtol_topology_object_3d::zero_chains( zero_chain_list_3d& zerochains)
 
 one_chain_list_3d* vtol_topology_object_3d::one_chains()
 {
-  cerr << "Barfing Merrily, vtol_topology_object_3d::vertices()" << endl;
+  cerr << "Error: vtol_topology_object_3d::one_chains() not implemented for this topology object\n";
   return new one_chain_list_3d;
 }
 
@@ -183,7 +183,7 @@ void vtol_topology_object_3d::one_chains( one_chain_list_3d& onechains)
 
 edge_list_3d* vtol_topology_object_3d::edges()
 {
-  cerr << "Barfing Merrily, vtol_topology_object_3d::vertices()" << endl;
+  cerr << "Error: vtol_topology_object_3d::edges() not implemented for this topology object\n";
   return new edge_list_3d;
 }
 

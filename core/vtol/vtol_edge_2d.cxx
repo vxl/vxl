@@ -260,8 +260,8 @@ vtol_topology_object_2d *vtol_edge_2d::shallow_copy_with_no_links(void)
   vtol_edge_2d *newedge=new vtol_edge_2d(*this); 
   topology_list_2d *infs=newedge->get_inferiors();
   if (infs->size()!=1) 
-    cerr << "Error in vtol_edge_2d::ShallowCopyWithNoLinks\n"
-         << "vtol_edge_2d does not have 1 inferior\n";
+    cerr << "Error in vtol_edge_2d::shallow_copy_with_no_links\n"
+         << "vtol_edge_2d does not have exactly 1 inferior\n";
   vtol_topology_object_2d *inf=(*infs)[0];
   newedge->unlink_inferior(inf);
   iu_delete(inf);
@@ -366,7 +366,8 @@ bool vtol_edge_2d::set_end_points(vtol_vertex_2d *endpt1,
   if((vcl_find(verts->begin(),verts->end(),endpt1)==verts->end())||
      (vcl_find(verts->begin(),verts->end(),endpt2)==verts->end()))
     {
-      cerr << "In vtol_edge_2d::SetEndPoints, both endpoints must be on vtol_edge_2d.\n";
+      cerr << "Error in vtol_edge_2d::set_end_points(): both endpoints must be on this vtol_edge_2d.\n";
+      delete verts;
       return false;
     }
   _v1=endpt1;
@@ -389,14 +390,13 @@ bool vtol_edge_2d::replace_end_point(vtol_vertex_2d *curendpt,
   // Some error checking
   if((curendpt==0)||(newendpt==0))
     {
-      cerr << "In vtol_edge_2d::ReplaceEndPoint, neither curendpt nor newendpt "
-           << "can not be NULL.\n";
+      cerr << "Error in vtol_edge_2d::replace_end_point(): arguments can not be NULL.\n";
       return false;
     }
   
   if((curendpt!=this->get_v1())&&(curendpt!=this->get_v2()))
     {
-      cerr << "In vtol_edge_2d::ReplaceEndPoint, curendpt must be _v1 or _v2.\n";
+      cerr << "Error in vtol_edge_2d::replace_end_point(): first argument must be _v1 or _v2.\n";
       return false;
     }
   
@@ -697,7 +697,8 @@ bool vtol_edge_2d::disconnect(vcl_vector< vtol_topology_object_2d *> &changes,
   for (s= sup.begin();s!= sup.end();)
     // TODO
     // (*s)->remove( this, changes, deleted );
-    cout << "must imp remove" << endl;
+    ;
+  cerr << "must implement vtol_one_chain_2d::remove()\n";
 
   unlink_all_superiors_twoway(this);
   deep_remove(deleted);
@@ -717,7 +718,7 @@ bool vtol_edge_2d::remove(vtol_zero_chain_2d *,
                           vcl_vector<vtol_topology_object_2d *> &changes,
                           vcl_vector<vtol_topology_object_2d *> &deleted)
 {
-  // cout << "      Entering vtol_edge_2d::Remove\n";
+  // cerr << "      Entering vtol_edge_2d::remove()\n";
 
   // Removing the zero chain from the edge will destroy it.
   // Therefore, recursively remove the edge from its superiors.
@@ -731,11 +732,10 @@ bool vtol_edge_2d::remove(vtol_zero_chain_2d *,
   
   vcl_vector<vtol_one_chain_2d *>::iterator s;
   for(s= sup.begin();s!= sup.end();s++)
-    {	
-      // TODO
-      // ((*s))->remove( this, changes, deleted );
-      cout << "Must implement romove" << endl;
-    }
+    // TODO
+    // (*s)->remove( this, changes, deleted );
+    ;
+  cerr << "Must implement vtol_one_chain_2d::remove()\n";
 
   // Removal of a zerochain from an edge always results in the
   // destruction of the edge.
@@ -743,7 +743,7 @@ bool vtol_edge_2d::remove(vtol_zero_chain_2d *,
   unlink_all_superiors_twoway(this);
   unlink_all_inferiors_twoway(this);
   
-  // cout << "      Exiting vtol_edge_2d::Remove\n";
+  // cerr << "      Exiting vtol_edge_2d::remove()\n";
   
   return false; 
 }
@@ -757,7 +757,7 @@ bool vtol_edge_2d::remove(vtol_zero_chain_2d *,
 
 void vtol_edge_2d::deep_remove(vcl_vector<vtol_topology_object_2d *> &removed)
 {
-  // cout << "               Entering vtol_edge_2d::DeepDeleteInferiors\n";
+  // cerr << "               Entering vtol_edge_2d::deep_remove()\n";
 
   topology_list_2d *tmp=get_inferiors();
   vcl_vector<vtol_zero_chain_2d *>inferiors;
@@ -782,7 +782,7 @@ void vtol_edge_2d::deep_remove(vcl_vector<vtol_topology_object_2d *> &removed)
       inferior->deep_remove(removed);
   }
   removed.push_back(this);
-  // cout << "               Exiting vtol_edge_2d::DeepDeleteInferiors\n";
+  // cerr << "               Exiting vtol_edge_2d::deep_remove()\n";
 }
 
 //:

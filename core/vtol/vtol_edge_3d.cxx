@@ -1,4 +1,3 @@
-
 #include <vtol/vtol_edge_3d.h>
 // #include <vtol/vtol_vertex_3d.h>
 #include <vtol/vtol_zero_chain_3d.h>
@@ -261,8 +260,8 @@ vtol_topology_object_3d *vtol_edge_3d::shallow_copy_with_no_links(void)
   vtol_edge_3d *newedge=new vtol_edge_3d(*this); 
   topology_list_3d *infs=newedge->get_inferiors();
   if (infs->size()!=1) 
-    cerr << "Error in vtol_edge_3d::ShallowCopyWithNoLinks\n"
-         << "vtol_edge_3d does not have 1 inferior\n";
+    cerr << "Error in vtol_edge_3d::shallow_copy_with_no_links():\n"
+         << "vtol_edge_3d does not have exactly 1 inferior\n";
   vtol_topology_object_3d *inf=(*infs)[0];
   newedge->unlink_inferior(inf);
   iu_delete(inf);
@@ -367,7 +366,8 @@ bool vtol_edge_3d::set_end_points(vtol_vertex_3d *endpt1,
   if((vcl_find(verts->begin(),verts->end(),endpt1)==verts->end())||
      (vcl_find(verts->begin(),verts->end(),endpt2)==verts->end()))
     {
-      cerr << "In vtol_edge_3d::SetEndPoints, both endpoints must be on vtol_edge_3d.\n";
+      cerr << "Error in vtol_edge_3d::set_end_points(): both endpoints must be on this vtol_edge_3d.\n";
+      delete verts;
       return false;
     }
   _v1=endpt1;
@@ -390,14 +390,13 @@ bool vtol_edge_3d::replace_end_point(vtol_vertex_3d *curendpt,
   // Some error checking
   if((curendpt==0)||(newendpt==0))
     {
-      cerr << "In vtol_edge_3d::ReplaceEndPoint, neither curendpt nor newendpt "
-           << "can not be NULL.\n";
+      cerr << "Error in vtol_edge_3d::replace_end_point(): arguments can not be NULL.\n";
       return false;
     }
   
   if((curendpt!=this->get_v1())&&(curendpt!=this->get_v2()))
     {
-      cerr << "In vtol_edge_3d::ReplaceEndPoint, curendpt must be _v1 or _v2.\n";
+      cerr << "Error in vtol_edge_3d::replace_end_point(): first argument must be _v1 or _v2.\n";
       return false;
     }
   
@@ -698,7 +697,8 @@ bool vtol_edge_3d::disconnect(vcl_vector< vtol_topology_object_3d *> &changes,
   for (s= sup.begin();s!= sup.end();)
     // TODO
     // (*s)->remove( this, changes, deleted );
-    cout << "must imp remove" << endl;
+    ;
+  cerr << "Must implement vtol_one_chain_3d::remove()\n";
 
   unlink_all_superiors_twoway(this);
   deep_remove(deleted);
@@ -718,7 +718,7 @@ bool vtol_edge_3d::remove(vtol_zero_chain_3d *,
                           vcl_vector<vtol_topology_object_3d *> &changes,
                           vcl_vector<vtol_topology_object_3d *> &deleted)
 {
-  // cout << "      Entering vtol_edge_3d::Remove\n";
+  // cerr << "      Entering vtol_edge_3d::remove()\n";
 
   // Removing the zero chain from the edge will destroy it.
   // Therefore, recursively remove the edge from its superiors.
@@ -732,11 +732,10 @@ bool vtol_edge_3d::remove(vtol_zero_chain_3d *,
   
   vcl_vector<vtol_one_chain_3d *>::iterator s;
   for(s= sup.begin();s!= sup.end();s++)
-    {	
-      // TODO
-      // ((*s))->remove( this, changes, deleted );
-      cout << "Must implement romove" << endl;
-    }
+    // TODO
+    // ((*s))->remove( this, changes, deleted );
+    ;
+  cerr << "Must implement vtol_one_chain_3d::remove()\n";
 
   // Removal of a zerochain from an edge always results in the
   // destruction of the edge.
@@ -744,7 +743,7 @@ bool vtol_edge_3d::remove(vtol_zero_chain_3d *,
   unlink_all_superiors_twoway(this);
   unlink_all_inferiors_twoway(this);
   
-  // cout << "      Exiting vtol_edge_3d::Remove\n";
+  // cerr << "      Exiting vtol_edge_3d::remove()\n";
   
   return false; 
 }
@@ -758,7 +757,7 @@ bool vtol_edge_3d::remove(vtol_zero_chain_3d *,
 
 void vtol_edge_3d::deep_remove(vcl_vector<vtol_topology_object_3d *> &removed)
 {
-  // cout << "               Entering vtol_edge_3d::DeepDeleteInferiors\n";
+  // cerr << "               Entering vtol_edge_3d::deep_remove()\n";
 
   topology_list_3d *tmp=get_inferiors();
   vcl_vector<vtol_zero_chain_3d *>inferiors;
@@ -783,7 +782,7 @@ void vtol_edge_3d::deep_remove(vcl_vector<vtol_topology_object_3d *> &removed)
       inferior->deep_remove(removed);
   }
   removed.push_back(this);
-  // cout << "               Exiting vtol_edge_3d::DeepDeleteInferiors\n";
+  // cerr << "               Exiting vtol_edge_3d::deep_remove()\n";
 }
 
 //:
