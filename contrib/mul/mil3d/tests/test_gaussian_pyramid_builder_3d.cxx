@@ -47,7 +47,9 @@ void test_gaussian_pyramid_builder_3d_build(mil3d_gaussian_pyramid_builder_3d<fl
   TEST("Pixel (2,3,3)",vcl_fabs(image1(2,3,3)-664)<1e-6,true);
   TEST("Corner pixel",vcl_fabs(image0(nx2*2-2,ny2*2-2,nz2*2-2)-image1(nx2-1,ny2-1,nz2-1))<1e-6,true);
 
+  // restore maxLevels:
   builder.setMaxLevels(default_n_levels);
+
   vcl_cout<<"\n\nTesting builder.extend():\n";
   builder.extend(image_pyr);
 //  image_pyr.print_all(vcl_cout);
@@ -80,6 +82,8 @@ void test_gaussian_pyramid_builder_3d_build_xy(mil3d_gaussian_pyramid_builder_3d
 
   builder.set_min_size(4,4,4);
   builder.build(image_pyr,image0);
+  // restore maxLevels:
+  builder.setMaxLevels(default_n_levels);
 
   vcl_cout<<"Resulting pyramid: "<<image_pyr<<vcl_endl;
 
@@ -126,6 +130,8 @@ void test_gaussian_pyramid_builder_3d_build_xz(mil3d_gaussian_pyramid_builder_3d
 
   builder.set_min_size(4,4,4);
   builder.build(image_pyr,image0);
+  // restore maxLevels:
+  builder.setMaxLevels(default_n_levels);
 
   vcl_cout<<"Resulting pyramid: "<<image_pyr<<vcl_endl;
 
@@ -172,6 +178,8 @@ void test_gaussian_pyramid_builder_3d_build_yz(mil3d_gaussian_pyramid_builder_3d
 
   builder.set_min_size(4,4,4);
   builder.build(image_pyr,image0);
+  // restore maxLevels:
+  builder.setMaxLevels(default_n_levels);
 
   vcl_cout<<"Resulting pyramid: "<<image_pyr<<vcl_endl;
 
