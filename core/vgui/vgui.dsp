@@ -381,10 +381,10 @@ SOURCE=.\Templates/vgui_range_map+short-.cxx
 SOURCE=.\Templates/vgui_range_map+signed_char-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_range_map+unsigned_int-.cxx
+SOURCE=.\Templates/vgui_range_map+uint-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vgui_range_map+unsigned_long-.cxx
+SOURCE=.\Templates/vgui_range_map+ulong-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vgui_range_map+vxl_byte-.cxx
