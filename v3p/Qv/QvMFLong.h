@@ -2,16 +2,14 @@
 #define  _QV_MF_LONG_
 
 #include "QvSubField.h"
+#include <vxl_config.h> // for vxl_int_32
 
-class QvMFLong : public QvMField {
+class QvMFLong : public QvMField
+{
  public:
-#ifdef __osf__
   // different sizes of int (4) and long (8) on DEC ALPHA, prefer 4-byte integer
-  int* values;  // mpichler, 19950428
-#else
-  long *values;
-#endif
+  vxl_int_32* values;  // mpichler, 19950428
   QV_MFIELD_HEADER(QvMFLong);
 };
 
-#endif /* _QV_MF_LONG_ */
+#endif // _QV_MF_LONG_
