@@ -12,7 +12,6 @@
 #include <vcl_iostream.h>
 #include <vcl_cstring.h>
 #include <vcl_cstddef.h>
-#include <vcl_cstdlib.h> // for abs(long)
 #include <vcl_cassert.h>
 
 #include "vil_nitf_util.h"
@@ -842,8 +841,6 @@ bool vil_nitf_image_subheader::get_rational_camera_data(
   static vcl_string method_name =
       "vil_nitf_image_subheader::get_rational_camera_data: ";
 
-  bool success = false;  // RETURN VALUE
-
   int O_SCALE  = scale_index;
   int O_OFFSET = offset_index;
 
@@ -998,7 +995,7 @@ bool vil_nitf_image_subheader::get_rational_camera_data(
       ul_sample = int ((FI_COL_11 + 0.5) - 1.0);
 
       vcl_cout << "ICHIPB Present - offsetting Rational Camera by ("
-               << ul_sample << " " << ul_line << ")\n";
+               << ul_sample << ' ' << ul_line << ")\n";
   }
   // Use this to rescale the image
   double scale = 1 / scale_factor;
@@ -1013,9 +1010,8 @@ bool vil_nitf_image_subheader::get_rational_camera_data(
   display_camera_attributes (method_name);  //
   vcl_cout << vcl_endl;
 
-  // IF WE GOT HERE, EVERYTING SET OK.
-  success = true;
-  return success;
+  // IF WE GOT HERE, EVERYTHING SET OK.
+  return true;
 }  // end method get_rational_camera_data
 
 ////////////////////////////////////////////////////////
@@ -1038,9 +1034,7 @@ bool vil_nitf_image_subheader::get_image_corners (
     vcl_vector<double>& LR,
     vcl_vector<double>& LL) const
 {
-    static vcl_string method_name = "vil_nitf_image_subheader::get_image_corners: ";
-
-    bool success = false;  // RETURN VALUE
+  static vcl_string method_name = "vil_nitf_image_subheader::get_image_corners: ";
 
   double ULlat, ULlon;
   double URlat, URlon;
@@ -1073,9 +1067,8 @@ bool vil_nitf_image_subheader::get_image_corners (
   LL[1] = LLlat;
   LL[2] = mean_elev;
 
-  // IF WE GOT HERE, EVERYTING SET OK.
-  success = true;
-  return success;
+  // IF WE GOT HERE, EVERYTHING SET OK.
+  return true;
 }  // end method get_image_corners
 
 // END RATIONAL CAMERA STUFF.
@@ -1101,15 +1094,13 @@ void vil_nitf_image_subheader::display_camera_attributes (vcl_string caller) con
         return;
     }
 
-    vcl_cout << "##### start RPC camera data #####\n";
-
-    vcl_cout << "ICAT (image category) = " << this->ICAT << vcl_endl;
+    vcl_cout << "##### start RPC camera data #####\n"
+             << "ICAT (image category) = " << this->ICAT << vcl_endl;
 
 #ifdef WITH_SAR_RPC_EXTRACT
     // SAR = Synthetic Aperature Radar
-    if (vcl_strncmp (this->ICAT, "SAR", 3) != 0) {
-        vcl_cout << "WARNING: ICAT != \"SAR\".  Necessary for RPC ?\n";
-    }
+    if (vcl_strncmp (this->ICAT, "SAR", 3) != 0)
+      vcl_cout << "WARNING: ICAT != \"SAR\".  Necessary for RPC ?\n";
 #endif
 
     vcl_cout << "LONG_SCALE = " << this->LONG_SCALE << vcl_endl
@@ -1121,9 +1112,9 @@ void vil_nitf_image_subheader::display_camera_attributes (vcl_string caller) con
              << "LINE_SCALE = " << this->LINE_SCALE << vcl_endl
              << "LINE_OFF = " << this->LINE_OFF << vcl_endl
              << "SAMP_SCALE = " << this->SAMP_SCALE << vcl_endl
-             << "SAMP_OFF = " << this->SAMP_OFF << vcl_endl;
+             << "SAMP_OFF = " << this->SAMP_OFF << vcl_endl
 
-    vcl_cout << "##### end RPC camera data #####\n";
+             << "##### end RPC camera data #####\n";
 }  // end method display_camera_attributes
 
 ////////////////////////////////////////////////////////////////////////
@@ -1148,11 +1139,9 @@ void vil_nitf_image_subheader::display_size_attributes (vcl_string caller) const
     }
 
     vcl_cout << "NCOLS (image cols) = " << this->NCOLS << vcl_endl
-             << "NROWS (image rows) = " << this->NROWS << vcl_endl;
-
-    vcl_cout << "NBANDS (number bands) = " << this->NBANDS << vcl_endl;
-
-    vcl_cout << "NBPR (number of blocks per row) = " << this->NBPR << vcl_endl;
+             << "NROWS (image rows) = " << this->NROWS << vcl_endl
+             << "NBANDS (number bands) = " << this->NBANDS << vcl_endl
+             << "NBPR (number of blocks per row) = " << this->NBPR << vcl_endl;
     if (this->NBPR) {
       vcl_cout << "NPPBH (number of pixels per block horizontal) = "
                << this->NPPBH << vcl_endl;
@@ -1168,7 +1157,7 @@ void vil_nitf_image_subheader::display_size_attributes (vcl_string caller) const
     vcl_cout << "calculated columns = NBPR X NPPBH = " << calculated_pixels
              << vcl_endl;
     if (calculated_pixels != this->NCOLS) {
-        unsigned long diff = calculated_pixels - this->NCOLS;
+        long diff = (long)calculated_pixels - (long)this->NCOLS;
         vcl_cout << "WARNING: (NBPR X NPPBH) != NCOLS."
                  << "  Difference = " << diff << vcl_endl;
     }
@@ -1178,7 +1167,7 @@ void vil_nitf_image_subheader::display_size_attributes (vcl_string caller) const
     vcl_cout << "calculated rows = NBPC X NPPBV = " << calculated_pixels
              << vcl_endl;
     if (calculated_pixels != this->NROWS) {
-        unsigned long diff = calculated_pixels - this->NROWS;
+        long diff = (long)calculated_pixels - (long)this->NROWS;
         vcl_cout << "WARNING: (NBPC X NPPBV) != NROWS."
                  << "  Difference = " << diff << vcl_endl;
     }
@@ -1191,7 +1180,8 @@ void vil_nitf_image_subheader::display_size_attributes (vcl_string caller) const
     if ((NBPP % 8) != 0) {
         vcl_cerr << "WARNING: NBBP is not a multiple of 8.\n";
     }
-    vcl_cout << "IMODE (image mode = interleave type for pixels) = " << this->IMODE_ << vcl_endl;
+    vcl_cout << "IMODE (image mode = interleave type for pixels) = "
+             << this->IMODE_ << vcl_endl;
 
     // CHECK IMAGE SIZE = NCOLS X NROWS X (NBPP / 8) X NBANDS
     vcl_cout << "image data size = " << this->get_data_length() << vcl_endl;
@@ -1200,17 +1190,9 @@ void vil_nitf_image_subheader::display_size_attributes (vcl_string caller) const
              << image_size << vcl_endl;
     if (image_size != this->get_data_length()) {
 
-        unsigned long diff = vcl_abs((long)this->get_data_length() - (long)image_size);
-        bool neg_diff = false;
-        if (this->get_data_length() < image_size) {
-            neg_diff = true;
-        }
-        vcl_cout << "WARNING: calculated image size using pixels != image size in header."
-                 << "  Difference = ";
-        if (neg_diff) {
-            vcl_cout << "-";
-        }
-        vcl_cout << diff << vcl_endl;
+        long diff = (long)image_size - (long)this->get_data_length();
+        vcl_cout << "WARNING: calculated image size using pixels != image size in header.\n"
+                 << "Difference = " << diff << vcl_endl;
     }
     else {
         vcl_cout << "Calculated image size using pixels OK.\n";
@@ -1232,18 +1214,17 @@ void vil_nitf_image_subheader::display_size_attributes (vcl_string caller) const
                      << image_size << vcl_endl;
         }
         if (image_size != this->get_data_length()) {
-            unsigned long diff = image_size - this->get_data_length();
-            vcl_cout << "WARNING: calculated image size != image size in header."
-                     << "  Difference = " << diff << vcl_endl;
+            long diff = (long)image_size - (long)this->get_data_length();
+            vcl_cout << "WARNING: calculated image size != image size in header.\n"
+                     << "Difference = " << diff << vcl_endl;
         }
         else {
             vcl_cout << "Calculated image size using blocks OK.\n";
         }
     }
 
-    vcl_cout << "PJUST (justification for ABPP) = " << this->PJUST << vcl_endl;
-
-    vcl_cout << "PVTYPE = " << this->PVTYPE_ << vcl_endl;
+    vcl_cout << "PJUST (justification for ABPP) = " << this->PJUST << vcl_endl
+             << "PVTYPE = " << this->PVTYPE_ << vcl_endl;
 }  // end method display_size_attributes
 
 // FIGURE OUT HOW TO PASS vcl_out.
@@ -1256,9 +1237,7 @@ void vil_nitf_image_subheader::display_attributes (vcl_string caller) const
     if (caller.length() > 0) {
       vcl_cout << " from " << caller;
     }
-    vcl_cout << vcl_endl;
-
-    vcl_cout << "IDATIM (image date and time) = " << this->IDATIM_ << vcl_endl;
+    vcl_cout << "\nIDATIM (image date and time) = " << this->IDATIM_ << vcl_endl;
 
     display_size_attributes ("");
 
