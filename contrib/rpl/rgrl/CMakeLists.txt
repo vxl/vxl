@@ -114,7 +114,6 @@ SET( rgrl_sources
   rgrl_convergence_tester_sptr.h
   rgrl_convergence_on_median_error.h   rgrl_convergence_on_median_error.cxx
   rgrl_convergence_on_weighted_error.h rgrl_convergence_on_weighted_error.cxx
-  rgrl_convergence_on_weighted_nas.h   rgrl_convergence_on_weighted_nas.cxx
 
   rgrl_converge_status_nas.h           rgrl_converge_status_nas.cxx      
   rgrl_converge_status.h               rgrl_converge_status.cxx      
