@@ -297,6 +297,9 @@ SOURCE=.\gcc-295/vcl_list.txx
 SOURCE=.\gcc-295/vcl_map.txx
 # End Source File
 # Begin Source File
+SOURCE=.\gcc-295/vcl_memory.h
+# End Source File
+# Begin Source File
 SOURCE=.\gcc-295/vcl_set.txx
 # End Source File
 # Begin Source File
