@@ -848,7 +848,7 @@ void vil_dicom_header_format::clearInfo(void)
   last_read_.res_slope_ = VIL_DICOM_HEADER_DEFAULTSLOPE;
   last_read_.pix_rep_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
   last_read_.stored_bits_ = VIL_DICOM_HEADER_UNSPECIFIED;
-  last_read_.allocated_bits_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  last_read_.allocated_bits_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
 
   // And make it invalid
   info_valid_ = false;
