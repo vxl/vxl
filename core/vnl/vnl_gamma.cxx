@@ -107,3 +107,4 @@ double vnl_gamma_q(double a, double x)
   else
     return vnl_gamma_cont_frac(a,x); // Use continued fraction representation
 }
+

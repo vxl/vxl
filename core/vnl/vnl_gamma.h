@@ -30,12 +30,6 @@ double vnl_gamma_p(double a, double x);
 // $Q(a,x)=\frac{1}{\Gamma(a)}\int_x^{\infty}e^{-t}t^{a-1}dt
 double vnl_gamma_q(double a, double x);
 
-//: The Error function
-// erf(x) = (2/sqrt(pi)) Integral from 0 to x (exp(-t^2) dt)
-// \note the output ranges from -1 to 1, and vnl_erf(0) = 0.
-inline double vnl_erf(double x)
-{ return (x<0)?-vnl_gamma_p(0.5,x*x):vnl_gamma_p(0.5,x*x); };
-
 //: P(chi<chi2)
 // Calculates the probability that a value generated
 // at random from a chi-square distribution with given
