@@ -1,21 +1,30 @@
+//*****************************************************************************
+// File name: vgl_homg_point_3d.h
+// Description: Represents a homogeneous 3D point
+//-----------------------------------------------------------------------------
+// Language: C++
+//
+// Version |Date      | Author                   |Comment
+// --------+----------+--------------------------+-----------------------------
+// 1.0     |2000/05/05| François BERTEL          |Add default constructor
+// --------+----------+--------------------------+-----------------------------
+// 1.0     |2000/02/29| Peter VANROOSE           |Several minor fixes
+// --------+----------+--------------------------+-----------------------------
+// 1.0     |2000/02/15| Don HAMILTON, Peter TU   |Creation
+//*****************************************************************************
 #ifndef vgl_homg_point_3d_h
-#define  vgl_homg_point_3d_h
+#define vgl_homg_point_3d_h
+
 #ifdef __GNUC__
 #pragma interface
 #endif
 
-// Author: Don Hamilton, Peter Tu
-// Copyright:
-// Created: Feb 15 2000
-// Modifications:
-//  Peter Vanroose, 29 Feb 2000: several minor fixes
+template <class Type>
+class vgl_point_3d;
 
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_algorithm.h>
 #include <vcl/vcl_cmath.h> // for fabs()
-
-template <class Type>
-class vgl_point_3d;
 
 //: Represents a homogeneous 3D point.
 template <class Type>
@@ -26,8 +35,11 @@ public:
  
   // Constructors/Initializers/Destructors-----------------------------------
 
-  // Default constructor  
-  // vgl_homg_point_3d () {}
+  //---------------------------------------------------------------------------
+  // Name: vgl_homg_point_3d
+  // Task: Default constructor with (0,0,0,1)
+  //---------------------------------------------------------------------------
+  explicit vgl_homg_point_3d(void);
   
   // Default copy constructor  
   // vgl_homg_point_3d (const vgl_homg_point_3d<Type>& that) {
@@ -95,8 +107,7 @@ istream&  operator>>(istream& is,  vgl_homg_point_3d<Type>& p) {
   return is >> p->data_[0] >> p->data_[1] >> p->data_[2] >> p->data_[3]; 
 }
 
-#endif
-
+#endif // #ifndef vgl_homg_point_3d_h
 
 
 

@@ -1,9 +1,28 @@
-// Author: Don Hamilton, Peter Tu
-// Copyright:
-// Created: Feb 15 2000
-//: Represents a homogeneous 3D point.
+//*****************************************************************************
+// File name: vgl_homg_point_3d.h
+// Description: Represents a homogeneous 3D point
+//-----------------------------------------------------------------------------
+// Language: C++
+//
+// Version |Date      | Author                   |Comment
+// --------+----------+--------------------------+-----------------------------
+// 1.0     |2000/05/05| François BERTEL          |Add default constructor
+// --------+----------+--------------------------+-----------------------------
+// 1.0     |2000/02/29| Peter VANROOSE           |Several minor fixes
+// --------+----------+--------------------------+-----------------------------
+// 1.0     |2000/02/15| Don HAMILTON, Peter TU   |Creation
+//*****************************************************************************
+#include <vgl/vgl_homg_point_3d.h>
 
-
-#include <vgl/vgl_homg_point_3d.h> 
-
-
+//---------------------------------------------------------------------------
+// Name: vgl_homg_point_3d
+// Task: Default constructor with (0,0,0,1)
+//---------------------------------------------------------------------------
+template <class Type>
+vgl_homg_point_3d<Type>::vgl_homg_point_3d(void)
+{
+  data_[0]=0;
+  data_[1]=0;
+  data_[2]=0;
+  data_[3]=0;
+}

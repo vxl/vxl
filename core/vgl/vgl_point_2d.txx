@@ -14,8 +14,8 @@
 #include <vgl/vgl_line_2d.h> 
 
 template <class Type>
-vgl_point_2d::vgl_point_2d<Type> (vgl_line_2d<Type> const& l1,
-                                  vgl_line_2d<Type> const& l2)
+vgl_point_2d<Type>::vgl_point_2d(vgl_line_2d<Type> const& l1,
+                                 vgl_line_2d<Type> const& l2)
 {
   // TODO
 }

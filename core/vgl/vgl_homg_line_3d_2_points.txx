@@ -1,36 +1,44 @@
-// Author: Don Hamilton. Peter Tu
-// Copyright:
-// Created: Feb 15 2000
-//: Represents a homogeneous 3d line.
-
-
-//--------------------------------------------------------------
+//*****************************************************************************
+// File name: vgl_homg_point_3d.txx
+// Description: Represents a homogeneous 3D line using two points.
+//              A class to hold a homogeneous representation of a 3D Line. The
+//              line is stored as a pair of homogeneous 3d points.
+//-----------------------------------------------------------------------------
+// Language: C++
 //
-// Class : vgl_homg_line_3d_2_points
-//
-//--------------------------------------------------------------
-
+// Version |Date      | Author                   |Comment
+// --------+----------+--------------------------+-----------------------------
+// 1.0     |2000/05/05| François BERTEL          |Change default constructor
+// --------+----------+--------------------------+-----------------------------
+// 1.0     |2000/02/15| Don HAMILTON, Peter TU   |Creation
+//*****************************************************************************
 #include <vgl/vgl_homg_line_3d_2_points.h> 
 
-// -- Constructor
+
+//---------------------------------------------------------------------------
+// Name: vgl_homg_line_3d_2_points
+// Task: Default constructor with (0,0,0,1) and (1,0,0,0)
+//---------------------------------------------------------------------------
 template <class Type>
-vgl_homg_line_3d_2_points<Type>::vgl_homg_line_3d_2_points()
+vgl_homg_line_3d_2_points<Type>::vgl_homg_line_3d_2_points(void)
+  : point_finite_(0,0,0,1),
+    point_infinite_(1,0,0,0)
 {
 }
 
 // -- Constructor
 template <class Type>
 vgl_homg_line_3d_2_points<Type>::vgl_homg_line_3d_2_points( const vgl_homg_line_3d_2_points<Type> &that)
-  : point_finite_(that.point_finite_)
-  , point_infinite_(that.point_infinite_)
+  : point_finite_(that.point_finite_),
+    point_infinite_(that.point_infinite_)
 {
 }
 
 // -- Constructor, initialise using the specified distinct points
 // on the line.
 template <class Type>
-vgl_homg_line_3d_2_points<Type>::vgl_homg_line_3d_2_points (const vgl_homg_point_3d<Type>& start,
-                                                            const vgl_homg_point_3d<Type>& end)
+vgl_homg_line_3d_2_points<Type>::vgl_homg_line_3d_2_points(const vgl_homg_point_3d<Type> &start,
+                                                           const vgl_homg_point_3d<Type> &end)
 {
   // ho_quadvecstd_points2_to_line
   bool start_finite = start.w() != 0;
@@ -38,7 +46,7 @@ vgl_homg_line_3d_2_points<Type>::vgl_homg_line_3d_2_points (const vgl_homg_point
   
   if (start_finite && end_finite) {
     point_finite_ = start;
-
+    
     Type dx = end.x() - start.x();
     Type dy = end.y() - start.y();
     Type dz = end.z() - start.z();
