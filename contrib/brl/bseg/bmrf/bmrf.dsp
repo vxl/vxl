@@ -170,6 +170,9 @@ SOURCE=.\bmrf_curvel_3d.cxx
 # Begin Source File
 SOURCE=.\bmrf_arc.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bmrf_epi_seg_compare.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -229,6 +232,9 @@ SOURCE=.\bmrf_arc.h
 # End Source File
 # Begin Source File
 SOURCE=.\bmrf_arc_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bmrf_epi_seg_compare.h
 # End Source File
 # End Group
 # End Target

@@ -22,6 +22,7 @@ MANPAGE_SOURCES += bmrf_curvel_3d_sptr.h
 SOURCES += bmrf_curve_3d_builder.cxx
 SOURCES += bmrf_arc.cxx
 MANPAGE_SOURCES += bmrf_arc_sptr.h
+SOURCES += bmrf_epi_seg_compare.cxx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
