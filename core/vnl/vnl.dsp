@@ -1074,6 +1074,9 @@ SOURCE=.\vnl_T_n.h
 SOURCE=.\vnl_config.h.in
 # End Source File
 # Begin Source File
+SOURCE=.\vnl_config.h
+# End Source File
+# Begin Source File
 SOURCE=.\vnl_double_2x2.h
 # End Source File
 # Begin Source File
