@@ -1,5 +1,5 @@
 // The following text is included in the main documentation page by doxygen
-/*! \mainpage vil2 : New core image library (in development)
+/*! \mainpage vil2 : New core image library
 * A set of classes to represent and manipulate images
 *
 * NOTE: This library will in time replace vil as the core image library for vxl
