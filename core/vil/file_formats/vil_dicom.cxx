@@ -321,8 +321,10 @@ bool vil_dicom_image::put_view(const vil_image_view_base& view,
 //NB if this section starts bloating, use derived classes which override correct_manufacturer_discrepancies
 void vil_dicom_image::correct_manufacturer_discrepancies()
 {
+    //If manufacturer is Holgic and it's a QDR or Discovery model DXA scanner...
   if ( ( (header_.manufacturer_ == "HOLOGIC") || (header_.manufacturer_ == "Hologic") ) &&
-         (header_.model_name_.find("QDR") != header_.model_name_.npos ) )
+       ( (header_.model_name_.find("QDR") != header_.model_name_.npos ) ||
+         (header_.model_name_.find("Discovery") != header_.model_name_.npos )         ) )
   {
     //Hologic QDR Bone Densitometry source - set (default) pixel spacing from private format image comments
     float xPixelSize=1.0;
