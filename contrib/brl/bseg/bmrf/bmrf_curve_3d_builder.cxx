@@ -6,6 +6,7 @@
 #include "bmrf_curvel_3d.h"
 #include "bmrf_network.h"
 #include "bmrf_node.h"
+#include "bmrf_arc.h"
 #include "bmrf_epipole.h"
 #include "bmrf_gamma_func.h"
 
@@ -270,7 +271,7 @@ bmrf_curve_3d_builder::best_match( const bmrf_node_sptr& node,
                                    double alpha ) const
 {
   vcl_vector<vcl_list<bmrf_curvel_3d_sptr>::iterator> matches;
-  vcl_vector<bmrf_node::bmrf_arc_sptr> arcs;
+  vcl_vector<bmrf_arc_sptr> arcs;
   node->probability();
   for ( bmrf_node::arc_iterator itr = node->begin(bmrf_node::TIME);
         itr != node->end(bmrf_node::TIME); ++itr )
@@ -309,7 +310,7 @@ bmrf_curve_3d_builder::best_match( const bmrf_curvel_3d_sptr& curvel,
                                    double alpha, int frame ) const
 {
   vcl_vector<vcl_map<double, bmrf_node_sptr>::iterator> matches;
-  vcl_vector<bmrf_node::bmrf_arc_sptr> arcs;
+  vcl_vector<bmrf_arc_sptr> arcs;
 
   bmrf_node_sptr node = curvel->node_at_frame(frame-1);
   if (!node)

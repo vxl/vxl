@@ -4,7 +4,8 @@
 // \file
 
 #include "bmrf_node.h"
-#include <bmrf/bmrf_gamma_func.h>
+#include "bmrf_arc.h"
+#include "bmrf_gamma_func.h"
 #include <vbl/io/vbl_io_smart_ptr.h>
 
 

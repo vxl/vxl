@@ -11,6 +11,7 @@ SET(bmrf_sources
     bmrf_epi_seg.cxx           bmrf_epi_seg.h            bmrf_epi_seg_sptr.h
     bmrf_gamma_func.cxx        bmrf_gamma_func.h         bmrf_gamma_func_sptr.h
     bmrf_epi_transform.cxx     bmrf_epi_transform.h
+    bmrf_arc.cxx               bmrf_arc.h                bmrf_arc_sptr.h
     bmrf_node.cxx              bmrf_node.h               bmrf_node_sptr.h
     bmrf_network.cxx           bmrf_network.h            bmrf_network_sptr.h
     bmrf_network_builder_params.cxx   bmrf_network_builder_params.h  
