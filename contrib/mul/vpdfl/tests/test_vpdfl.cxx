@@ -5,10 +5,10 @@
 #define TESTMAIN(x)
 
 
-#include <vpdfl/tests/test_mixture.cxx>
-#include <vpdfl/tests/test_gaussian.cxx>
-#include <vpdfl/tests/test_axis_gaussian.cxx>
-#include <vpdfl/tests/test_pc_gaussian.cxx>
+#include "test_mixture.cxx"
+#include "test_gaussian.cxx"
+#include "test_axis_gaussian.cxx"
+#include "test_pc_gaussian.cxx"
 
 #undef TESTMAIN
 #define TESTMAIN(x) int main() \

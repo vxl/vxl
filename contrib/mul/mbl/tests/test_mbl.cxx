@@ -4,20 +4,20 @@
 #undef TESTMAIN
 #define TESTMAIN(x)
 
-#include <mbl/tests/test_selected_data_wrapper.cxx>
-#include <mbl/tests/test_stochastic_data_collector.cxx>
-#include <mbl/tests/test_histogram.cxx>
-#include <mbl/tests/test_k_means.cxx>
-#include <mbl/tests/test_mz_random.cxx>
-#include <mbl/tests/test_matrix_products.cxx>
-#include <mbl/tests/test_matxvec.cxx>
-#include <mbl/tests/test_stats_1d.cxx>
-#include <mbl/tests/test_sum_1d.cxx>
-#include <mbl/tests/test_priority_bounded_queue.cxx>
-#include <mbl/tests/test_gamma.cxx>
-#include <mbl/tests/test_index_sort.cxx>
-#include <mbl/tests/test_lru_cache.cxx>
-#include <mbl/tests/test_thin_plate_spline_2d.cxx>
+#include "test_selected_data_wrapper.cxx"
+#include "test_stochastic_data_collector.cxx"
+#include "test_histogram.cxx"
+#include "test_k_means.cxx"
+#include "test_mz_random.cxx"
+#include "test_matrix_products.cxx"
+#include "test_matxvec.cxx"
+#include "test_stats_1d.cxx"
+#include "test_sum_1d.cxx"
+#include "test_priority_bounded_queue.cxx"
+#include "test_gamma.cxx"
+#include "test_index_sort.cxx"
+#include "test_lru_cache.cxx"
+#include "test_thin_plate_spline_2d.cxx"
 #include <mbl/mbl_print.h>
 
 #undef TESTMAIN
