@@ -1,4 +1,5 @@
 MANPAGE_SOURCES += vxl_copyright.h
+MANPAGE_SOURCES += vxl_version.h
 MANPAGE_SOURCES += vxl_config.h.in
 
 # common test executable
