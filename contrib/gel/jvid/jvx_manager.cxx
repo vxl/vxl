@@ -13,8 +13,8 @@
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_macro.h>
-#include <vgui/vgui_easy2D.h>
-#include <vgui/vgui_viewer2D.h>
+#include <vgui/vgui_easy2D_tableau.h>
+#include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 
@@ -84,8 +84,8 @@ void jvx_manager::load_video_file()
   while (pframe!=my_movie_->last())
   {
    //Get the image from the video and wrap it with a viewer2D tableau
-   vgui_easy2D_new easy2D(vgui_image_tableau_new(pframe->get_image()));
-   vgui_viewer2D_sptr t = vgui_viewer2D_new(easy2D);
+   vgui_easy2D_tableau_new easy2D(vgui_image_tableau_new(pframe->get_image()));
+   vgui_viewer2D_tableau_sptr t = vgui_viewer2D_tableau_new(easy2D);
    //put it in the viewer stack
    tabs_.push_back(t);
 
@@ -118,15 +118,15 @@ void jvx_manager::load_video_file()
 }
 
 //-----------------------------------------------------------------------------
-//: Return the underlying vgui_viewer2D from the tableau at the given position.
+//: Return the underlying vgui_viewer2D_tableau from the tableau at the given position.
 //  This function returns NULL if it fails.
 //-----------------------------------------------------------------------------
-vgui_viewer2D_sptr jvx_manager::get_vgui_viewer2D_at(unsigned col, unsigned row)
+vgui_viewer2D_tableau_sptr jvx_manager::get_vgui_viewer2D_at(unsigned col, unsigned row)
 {
   vgui_tableau_sptr top_tab = this->get_tableau_at(col, row);
   if (top_tab)
   {
-    vgui_viewer2D_sptr tab;
+    vgui_viewer2D_tableau_sptr tab;
     tab.vertical_cast(top_tab);
     return tab;
   }
@@ -140,7 +140,7 @@ vgui_viewer2D_sptr jvx_manager::get_vgui_viewer2D_at(unsigned col, unsigned row)
 void jvx_manager::play_video()
 {
   vul_timer t;
-  for (vcl_vector<vgui_viewer2D_sptr>::iterator vit = tabs_.begin();
+  for (vcl_vector<vgui_viewer2D_tableau_sptr>::iterator vit = tabs_.begin();
        vit != tabs_.end(); vit++)
   {
     //Remove the previous frame at grid position (0,0)

@@ -15,7 +15,7 @@
 //--------------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vgui/vgui_grid_tableau.h>
-#include <vgui/vgui_viewer2D_sptr.h>
+#include <vgui/vgui_viewer2D_tableau_sptr.h>
 #include <vgui/vgui_dialog.h>
 #include <vidl/vidl_movie.h>
 
@@ -75,11 +75,11 @@ class jvx_manager : public vgui_grid_tableau
   void prev_frame();
   void set_speed();
  protected:
-  vgui_viewer2D_sptr get_vgui_viewer2D_at(unsigned col, unsigned row);
+  vgui_viewer2D_tableau_sptr get_vgui_viewer2D_at(unsigned col, unsigned row);
  private:
   unsigned width_;
   unsigned height_;
   vidl_movie_sptr my_movie_;
-  vcl_vector<vgui_viewer2D_sptr> tabs_;
+  vcl_vector<vgui_viewer2D_tableau_sptr> tabs_;
 };
 #endif // jvx_manager_h_
