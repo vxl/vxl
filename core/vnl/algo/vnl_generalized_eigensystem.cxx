@@ -11,6 +11,7 @@
 #include "vnl_generalized_eigensystem.h"
 
 #include <vcl_iostream.h>
+#include <vcl_cmath.h> // required for sgi CC 7.30
 
 #include <vnl/vnl_fortran_copy.h>
 #include <vnl/vnl_matlab_print.h>
