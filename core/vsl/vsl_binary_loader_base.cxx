@@ -14,15 +14,11 @@
 static vcl_vector<vsl_binary_loader_base*> *loader_list_ = 0;
 
 //=======================================================================
-// Dflt ctor
-//=======================================================================
 
 vsl_binary_loader_base::vsl_binary_loader_base()
 {
 }
 
-//=======================================================================
-// Destructor
 //=======================================================================
 
 vsl_binary_loader_base::~vsl_binary_loader_base()
@@ -30,8 +26,7 @@ vsl_binary_loader_base::~vsl_binary_loader_base()
 }
 
 //=======================================================================
-//: Register this, so it can be deleted by RD_DeleteAllLoaders();
-//=======================================================================
+//: Register this, so it can be deleted by vsl_delete_all_loaders();
 void vsl_binary_loader_base::register_this()
 {
   if (loader_list_==0) loader_list_ = new vcl_vector<vsl_binary_loader_base*>;
@@ -40,7 +35,7 @@ void vsl_binary_loader_base::register_this()
 
 //=======================================================================
 //: Deletes all the loaders
-//  Deletes every loader for which registerThis() has been called
+//  Deletes every loader for which register_this() has been called
 void vsl_delete_all_loaders()
 {
   if (loader_list_==0) return;

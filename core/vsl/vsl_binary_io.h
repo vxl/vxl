@@ -333,6 +333,27 @@ void vsl_b_read(vsl_b_istream& is,unsigned long& n );
 inline void vsl_print_summary(vcl_ostream& os, unsigned long n )
 {  os << n; }
 
+#ifdef VCL_VC70
+// When the macro is ready, this test will be
+// #if ! VCL_PTRDIFF_T_IS_A_STANDARD_TYPE
+
+//: Write  to vsl_b_ostream
+void vsl_b_write(vsl_b_ostream& os,vcl_ptrdiff_t n );
+//: Read  from vsl_b_istream
+void vsl_b_read(vsl_b_istream& is,vcl_ptrdiff_t & n );
+//: Print to a stream
+inline void vsl_print_summary(vcl_ostream& os, vcl_ptrdiff_t n )
+{  os << n; }
+
+//: Write  to vsl_b_ostream
+void vsl_b_write(vsl_b_ostream& os,vcl_size_t n );
+//: Read  from vsl_b_istream
+void vsl_b_read(vsl_b_istream& is,vcl_size_t& n );
+//: Print to a stream
+inline void vsl_print_summary(vcl_ostream& os, vcl_size_t n )
+{  os << n; }
+#endif
+
 //: Write  to vsl_b_ostream
 // Number is saved with ANSI/IEEE Standard 754-1985 single precision.
 void vsl_b_write(vsl_b_ostream& os,float n );

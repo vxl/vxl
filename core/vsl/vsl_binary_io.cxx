@@ -5,10 +5,11 @@
 // \brief Functions to perform consistent binary IO within vsl
 // \author Tim Cootes and Ian Scott
 
-#include <vsl/vsl_binary_explicit_io.h>
+#include <vcl_cstddef.h>
 #include <vcl_cassert.h>
 #include <vcl_map.txx>
 #include <vcl_cstdlib.h> // abort()
+#include <vsl/vsl_binary_explicit_io.h>
 
 void vsl_b_write(vsl_b_ostream& os, char n )
 {
@@ -112,7 +113,7 @@ void vsl_b_read(vsl_b_istream &is,int& n )
   do
   {
     vsl_b_read(is, *ptr);
-    if (ptr-buf >= (int)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(int)))
+    if (ptr-buf >= (vcl_ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(int)))
     {
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, int& )\n"
                << "           Integer too big. Likely cause either file "
@@ -143,7 +144,7 @@ void vsl_b_read(vsl_b_istream &is,unsigned int& n )
   do
   {
     vsl_b_read(is, *ptr);
-    if (ptr-buf >= (int)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned int)))
+    if (ptr-buf >= (vcl_ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned int)))
     {
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, unsigned int& )"
                << "\n           Integer too big. Likely cause either file "
@@ -173,7 +174,7 @@ void vsl_b_read(vsl_b_istream &is,short& n )
   {
     vsl_b_read(is, *ptr);
 
-    if (ptr-buf >= (int)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(short)))
+    if (ptr-buf >= (vcl_ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(short)))
     {
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, short& )"
                << "\n           Integer too big. Likely cause either file "
@@ -203,7 +204,7 @@ void vsl_b_read(vsl_b_istream &is, unsigned short& n )
   do
   {
     vsl_b_read(is, *ptr);
-    if (ptr-buf >= (int)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short)))
+    if (ptr-buf >= (vcl_ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short)))
     {
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, unsigned short& )"
                << "\n           Integer too big. Likely cause either file "
@@ -232,7 +233,7 @@ void vsl_b_read(vsl_b_istream &is,long& n )
   do
   {
     vsl_b_read(is, *ptr);
-    if (ptr-buf >= (int)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(long)))
+    if (ptr-buf >= (vcl_ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(long)))
     {
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, long& )"
                << "\n           Integer too big. Likely cause either file "
@@ -262,7 +263,7 @@ void vsl_b_read(vsl_b_istream &is,unsigned long& n )
   do
   {
     vsl_b_read(is, *ptr);
-    if (ptr-buf >= (int)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned long)))
+    if (ptr-buf >= (vcl_ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned long)))
     {
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, unsigned long& )"
                << "\n           Integer too big. Likely cause either file "
@@ -275,6 +276,75 @@ void vsl_b_read(vsl_b_istream &is,unsigned long& n )
   while (!(*(ptr++) & 128));
   vsl_convert_from_arbitrary_length(buf, &n);
 }
+
+
+#ifdef VCL_VC70
+// When the macro is ready, this test will be
+// #if ! VCL_PTRDIFF_T_IS_A_STANDARD_TYPE
+
+void vsl_b_write(vsl_b_ostream& os, vcl_ptrdiff_t n )
+{
+  unsigned char buf[
+    VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vcl_ptrdiff_t))];
+  unsigned long nbytes = vsl_convert_to_arbitrary_length(&n, buf);
+  os.os().write((char*)buf, nbytes );
+}
+
+void vsl_b_read(vsl_b_istream &is, vcl_ptrdiff_t& n )
+{
+  unsigned char buf[
+    VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vcl_ptrdiff_t))];
+  unsigned char *ptr=buf;
+  do
+  {
+    vsl_b_read(is, *ptr);
+    if (ptr-buf >= (vcl_ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vcl_ptrdiff_t)))
+    {
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, vcl_ptrdiff_t& )"
+               << "\n           Integer too big. Likely cause either file "
+               << "corruption, or\n           file was created on platform"
+               << " with larger integer sizes and represents a very large"
+               << " data structure.\n";
+      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      return;
+    }
+  }
+  while (!(*(ptr++) & 128));
+  vsl_convert_from_arbitrary_length(buf, &n);
+}
+
+
+void vsl_b_write(vsl_b_ostream& os, vcl_size_t n )
+{
+  unsigned char buf[
+    VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vcl_size_t))];
+  unsigned long nbytes = vsl_convert_to_arbitrary_length(&n, buf);
+  os.os().write((char*)buf, nbytes );
+}
+
+void vsl_b_read(vsl_b_istream &is, vcl_size_t& n )
+{
+  unsigned char buf[
+    VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vcl_size_t))];
+  unsigned char *ptr=buf;
+  do
+  {
+    vsl_b_read(is, *ptr);
+    if (ptr-buf >= (vcl_ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vcl_size_t)))
+    {
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, vcl_size_t& )"
+               << "\n           Integer too big. Likely cause either file "
+               << "corruption, or\n           file was created on platform"
+               << " with larger integer sizes and represents a very large"
+               << " data structure.\n";
+      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      return;
+    }
+  }
+  while (!(*(ptr++) & 128));
+  vsl_convert_from_arbitrary_length(buf, &n);
+}
+#endif
 
 
 void vsl_b_write(vsl_b_ostream& os,float n )

@@ -1,6 +1,7 @@
 // This is vxl/vsl/tests/test_binary_io.cxx
 #include <vcl_iostream.h>
 #include <vcl_cstring.h>
+#include <vcl_cstddef.h>
 #include <vsl/vsl_binary_io.h>
 #include <testlib/testlib_root_dir.h>
 #include <testlib/testlib_test.h>
@@ -25,6 +26,8 @@ void test_binary_io()
   double d_out = 3.4;
   vcl_string string_out = "Hello World!";
   const char* c_string_out = "A C string";
+  vcl_size_t size_t_out = 1023;
+  vcl_ptrdiff_t ptrdiff_t_out = 23;
 
   vsl_b_ofstream bfs_out("vsl_binary_io_test.bvl.tmp");
   TEST ("Created vsl_binary_io_test.bvl.tmp for writing", (!bfs_out), false);
@@ -42,6 +45,8 @@ void test_binary_io()
   vsl_b_write(bfs_out, d_out);
   vsl_b_write(bfs_out, string_out);
   vsl_b_write(bfs_out, c_string_out);
+  vsl_b_write(bfs_out, size_t_out);
+  vsl_b_write(bfs_out, ptrdiff_t_out);
   bfs_out.close();
 
   // Initialise each built in type to something different from
@@ -60,6 +65,8 @@ void test_binary_io()
   double d_in = 99.9;
   vcl_string string_in;
   char c_string_in[80];
+  vcl_size_t size_t_in = 99;
+  vcl_ptrdiff_t ptrdiff_t_in = 99;
 
   // Test the internal consistency - can it load what it just saved?
 
@@ -138,6 +145,16 @@ void test_binary_io()
   vsl_print_summary(vcl_cout, c_string_out);
   vcl_cout << vcl_endl;
 
+  vsl_b_read(bfs_in, size_t_in);
+  TEST ("vcl_size_t out == vcl_size_t in", size_t_out == size_t_in, true);
+  vsl_print_summary(vcl_cout, size_t_out);
+  vcl_cout << vcl_endl;
+
+  vsl_b_read(bfs_in, ptrdiff_t_in);
+  TEST ("vcl_ptrdiff_t out == vcl_ptrdiff_t in", ptrdiff_t_out == ptrdiff_t_in, true);
+  vsl_print_summary(vcl_cout, ptrdiff_t_out);
+  vcl_cout << vcl_endl;
+
   TEST ("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
@@ -167,6 +184,8 @@ void test_binary_io()
   double d_in2 = 99.9;
   vcl_string string_in2;
   char c_string_in2[80];
+  vcl_size_t size_t_in2 = 99;
+  vcl_ptrdiff_t ptrdiff_t_in2 = 99;
 
   vcl_string gold_path=testlib_root_dir()+"/vxl/vsl/tests/golden_test_binary_io.bvl";
   vsl_b_ifstream bfs_in2(gold_path.c_str());
@@ -191,6 +210,8 @@ void test_binary_io()
     vsl_b_read(bfs_in2, d_in2);
     vsl_b_read(bfs_in2, string_in2);
     vsl_b_read(bfs_in2, c_string_in2);
+    vsl_b_read(bfs_in2, size_t_in2);
+    vsl_b_read(bfs_in2, ptrdiff_t_in2);
   }
   TEST ("Finished reading file successfully", (!bfs_in2), false);
   bfs_in2.close();
@@ -212,6 +233,9 @@ void test_binary_io()
   TEST ("Golden string out == string in", string_out == string_in2, true);
   TEST ("Golden C string out == C string in",
     vcl_string(c_string_out) == vcl_string(c_string_in2), true);
+  TEST ("Golden vcl_size_t out == vcl_size_t in", size_t_out == size_t_in2, true);
+  TEST ("Golden vcl_ptrdiff_t out == vcl_ptrdiff_t in", 
+    ptrdiff_t_out == ptrdiff_t_in2, true);
 }
 
 TESTLIB_DEFINE_MAIN(test_binary_io);
