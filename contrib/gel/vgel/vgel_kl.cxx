@@ -92,8 +92,8 @@ void vgel_kl::match_sequence(
 }
 
 void vgel_kl::match_sequence(
-    vil_image_view<vxl_byte>*         prev_img,
-    vil_image_view<vxl_byte>*         cur_img,
+    vil_image_view<vxl_byte>*        prev_img,
+    vil_image_view<vxl_byte>*        cur_img,
     vgel_multi_view_data_vertex_sptr matches,
     bool                             use_persistent_features)
 {
@@ -297,9 +297,7 @@ void vgel_kl::match_sequence_base(
   // MPP 9/24/2003
   // We're done with the image & tracking context -- plug memory leaks!
   delete img1;
-  img1 = NULL;
   KLTFreeTrackingContext(tc);
-  tc = NULL;
 
   // Go through the feature table and extract the matches
   matches_from_feature_table(ft, matches);
@@ -367,8 +365,8 @@ void vgel_kl::matches_from_feature_table(KLT_FeatureTable                 ft,
 #endif
 }
 
-void vgel_kl::match_sequence(vidl_vil1_movie_sptr               movie,
-                             vgel_multi_view_data_vertex_sptr   matches)
+void vgel_kl::match_sequence(vidl_vil1_movie_sptr             movie,
+                             vgel_multi_view_data_vertex_sptr matches)
 {
   VXL_DEPRECATED( "vgel_kl::match_sequence(vidl_vil1_movie_sptr, vgel_multi_view_data_vertex_sptr)" );
 
@@ -383,8 +381,8 @@ void vgel_kl::match_sequence(vidl_vil1_movie_sptr               movie,
   match_sequence(image_list,matches);
 }
 
-void vgel_kl::match_sequence(vidl_movie_sptr                    movie,
-                             vgel_multi_view_data_vertex_sptr   matches)
+void vgel_kl::match_sequence(vidl_movie_sptr                  movie,
+                             vgel_multi_view_data_vertex_sptr matches)
 {
   vcl_vector<vil_image_resource_sptr> image_list;
   for (vidl_movie::frame_iterator pframe = movie->first();
@@ -588,7 +586,7 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil_image_view<vxl_byte>* image)
   vil_image_view<KLT_PixelType> imgg;
   // only convert to gray if we have to
   if (imgv.nplanes() == 3)
-    vil_convert_planes_to_grey (imgv, imgg); 
+    vil_convert_planes_to_grey (imgv, imgg);
   else
     imgg = imgv;
 
