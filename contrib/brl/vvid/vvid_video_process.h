@@ -1,14 +1,13 @@
-//this-sets-emacs-to-*-c++-*-mode
+// This is brl/vvid/vvid_video_process.h
 #ifndef vvid_video_process_h_
 #define vvid_video_process_h_
 //--------------------------------------------------------------------------------
 //:
 // \file
 // \brief live vvid_video_process
-//   A generic video processor that is called from the live_video_manager
-//   to carry out algorithms on the live video frames.
-//   
-// \endbrief
+//
+//  A generic video processor that is called from the live_video_manager
+//  to carry out algorithms on the live video frames.
 // \author
 //   J.L. Mundy
 //
@@ -25,7 +24,7 @@
 
 class vvid_video_process : public vbl_ref_count
 {
-public:
+ public:
   enum output_type {NOTYPE=0, IMAGE, SPATIAL_OBJECT, TOPOLOGY};
   vvid_video_process();
   ~vvid_video_process();
@@ -37,15 +36,14 @@ public:
   vcl_vector<vtol_topology_object_sptr> const & get_segmentation();
   vcl_vector<vsol_spatial_object_2d_sptr> const& get_spatial_objects();
   virtual output_type get_output_type(){return NOTYPE;}
-  virtual bool execute()=0;  
-  virtual bool finish()=0;  
-protected: 
+  virtual bool execute()=0;
+  virtual bool finish()=0;
+ protected:
   //members
   vcl_vector<vil_image> input_images_;
   vil_image output_image_;
   vcl_vector<vtol_topology_object_sptr> topo_objs_;
   vcl_vector<vsol_spatial_object_2d_sptr> spat_objs_;
 };
- 
 
 #endif // vvid_video_process_h_

@@ -7,6 +7,7 @@
 //:
 // \file
 // \brief Design matrix for linear FMatrix least squares
+//
 //    FDesignMatrix is a subclass of Matrix that, given $n$ pairs of homogeneous
 //    2D points, creates the $n \times 9$ design matrix for the linear least squares
 //    problem $(m_2^\top F m_1)^2 = 0$ where $F$ is the fundamental matrix.
@@ -18,8 +19,8 @@
 //     Andrew W. Fitzgibbon, Oxford RRG, 21 Aug 96
 //
 // \verbatim
-// Modifications
-//    22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
+//  Modifications
+//   22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
 // \endverbatim
 //-----------------------------------------------------------------------------
 

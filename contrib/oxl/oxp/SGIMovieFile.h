@@ -7,8 +7,9 @@
 //:
 // \file
 // \brief Read SGI movie files
-//    SGIMovieFile is an implementation of MovieFileInterface that reads
-//    SGI movie files.
+//
+//  SGIMovieFile is an implementation of MovieFileInterface that reads
+//  SGI movie files.
 // \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 30 Dec 98
 //

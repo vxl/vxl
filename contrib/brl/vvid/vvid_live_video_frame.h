@@ -1,14 +1,14 @@
-//this-sets-emacs-to-*-c++-*-mode
+// This is brl/vvid/vvid_live_video_frame.h
 #ifndef vvid_live_video_frame_h_
 #define vvid_live_video_frame_h_
 //--------------------------------------------------------------------------------
 //:
 // \file
 // \brief live vvid_live_video_frame
-//   A special tableau that has a live camera as an image generator. The
-//   basic image tableau is wrapped in a easy2D_tableau so that overlays
-//   can be generated if desired
-// \endbrief
+//
+//  A special tableau that has a live camera as an image generator. The
+//  basic image tableau is wrapped in a easy2D_tableau so that overlays
+//  can be generated if desired
 // \author
 //   J.L. Mundy
 //
@@ -26,7 +26,7 @@
 
 class vvid_live_video_frame : public vbl_ref_count
 {
-public:
+ public:
   vvid_live_video_frame(int node, int pixel_sample_interval,
                         const cmu_1394_camera_params& cp);
   ~vvid_live_video_frame();

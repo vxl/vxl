@@ -9,8 +9,11 @@
 // \author Ian Scott
 // \date 21-Jul-2000
 // \brief Interface for Multi-variate principal Component gaussian PDF sampler.
-// Modifications
-// 23 April 2001 IMS - Ported to VXL
+//
+// \verbatim
+//  Modifications
+//   23 April 2001 IMS - Ported to VXL
+// \endverbatim
 
 
 //=======================================================================

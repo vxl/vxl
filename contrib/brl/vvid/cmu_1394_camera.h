@@ -5,10 +5,11 @@
 //:
 // \file
 // \brief cmu_1394_camera
-//   A wrapper class for the cmu 1394 camera.  Mainly to set parameters. The
-//   approach is inheritance so we don't have to duplicate the CMU camera
-//   interface. The parameters can be passed as a block to duplicate camera
-//   setup and to conveniently support file I/0.
+//
+//  A wrapper class for the cmu 1394 camera.  Mainly to set parameters. The
+//  approach is inheritance so we don't have to duplicate the CMU camera
+//  interface. The parameters can be passed as a block to duplicate camera
+//  setup and to conveniently support file I/0.
 // \author
 //   J.L. Mundy
 //

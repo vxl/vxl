@@ -7,10 +7,11 @@
 //:
 // \file
 // \brief Demand-load image sequence from disk
-//    The RawPMatrixStore provides demand-based access to an image sequence.
-//    Individual images are accessed via integer indices, and the class
-//    contains a printf-style format specifier to convert indices to
-//    filenames.
+//
+//  The RawPMatrixStore provides demand-based access to an image sequence.
+//  Individual images are accessed via integer indices, and the class
+//  contains a printf-style format specifier to convert indices to
+//  filenames.
 //
 // \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 22 Aug 97
@@ -18,9 +19,7 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl_vector.h>
-
 #include <mvl/FileNameGenerator.h>
-
 #include <mvl/PMatrix_sptr.h>
 
 class RawPMatrixStore

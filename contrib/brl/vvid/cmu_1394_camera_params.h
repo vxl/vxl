@@ -1,13 +1,14 @@
-//this-sets-emacs-to-*-c++-*-mode
+// This is brl/vvid/cmu_1394_camera_params.h
 #ifndef cmu_1394_camera_params_h_
 #define cmu_1394_camera_params_h_
 //--------------------------------------------------------------------------------
 //:
 // \file
 // \brief cmu_1394_camera_params
-//   A parameter block for CMU's 1394 camera class. This block supports
-//   both menu operations and file-based configuration. The acquisition
-//   mode is constrained to match the rgb/monochrome flag.
+//
+//  A parameter block for CMU's 1394 camera class. This block supports
+//  both menu operations and file-based configuration. The acquisition
+//  mode is constrained to match the rgb/monochrome flag.
 // \author
 //   J.L. Mundy
 //
@@ -18,8 +19,9 @@
 //--------------------------------------------------------------------------------
 #include <vcl_iostream.h>
 
-class cmu_1394_camera_params{
-public:
+class cmu_1394_camera_params
+{
+ public:
   cmu_1394_camera_params(int video_format=0, int video_mode=4,
                          int frame_rate=2, int brightness=350,
                          int sharpness=50, int exposure=1, int gain = 0,

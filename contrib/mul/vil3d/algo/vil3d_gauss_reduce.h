@@ -4,6 +4,7 @@
 //:
 // \file
 // \brief Functions to smooth and sub-sample 3D images in one direction
+//
 //  These are not templated because
 //  - Each type tends to need a slightly different implementation
 //  - Let's not have too many templates.

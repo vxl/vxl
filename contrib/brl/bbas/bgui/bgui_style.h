@@ -1,10 +1,11 @@
-//this-sets-emacs-to-*-c++-*-mode
+// This is brl/bbas/bgui/bgui_style.h
 #ifndef bgui_style_h_
 #define bgui_style_h_
 //--------------------------------------------------------------------------------
 //:
 // \file
 // \brief A local version of vgui_style.
+//
 //  So far identical to vgui_style but with a smart pointer and set methods.
 // \author
 //   J.L. Mundy

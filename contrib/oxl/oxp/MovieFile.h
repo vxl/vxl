@@ -7,8 +7,9 @@
 //:
 // \file
 // \brief Read various movie formats
-//    MovieFile is an interface to movie files and image sequences.
-//    It is currently read-only.
+// 
+//  MovieFile is an interface to movie files and image sequences.
+//  It is currently read-only.
 // \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 26 Aug 98
 //

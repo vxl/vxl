@@ -7,6 +7,7 @@
 //:
 // \file
 // \brief Interface for loading new image formats
+//
 // This class provides an interface for loading images in new formats
 // \author      Franck Bettinger
 // \date        Sun Mar 17 22:57:00 2002
