@@ -29,8 +29,9 @@
 //=======================================================================
 static bool inline almostEqualsOne(double value);
 static bool columnsAreUnitNorm(const vnl_matrix<double>& vecs);
-// static bool vectorHasDescendingOrder(const vnl_vector<double>& v);
-
+#if 0
+static bool vectorHasDescendingOrder(const vnl_vector<double>& v);
+#endif
 
 //=======================================================================
 // Dflt ctor
@@ -166,13 +167,15 @@ static bool columnsAreUnitNorm(const vnl_matrix<double>& vecs)
 }
 //=======================================================================
 
-// static bool vectorHasDescendingOrder(const vnl_vector<double>& v)
-// {
-//   int n = v.size();
-//   for (int i = 1; i < n; i++)
-//     if (v(i-1) < v(i)) return false;
-//   return true;
-// }
+#if 0
+static bool vectorHasDescendingOrder(const vnl_vector<double>& v)
+{
+  int n = v.size();
+  for (int i = 1; i < n; i++)
+    if (v(i-1) < v(i)) return false;
+  return true;
+}
+#endif
 
 //=======================================================================
 
