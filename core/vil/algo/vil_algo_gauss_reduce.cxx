@@ -9,11 +9,11 @@
 //: Smooth and subsample single plane src_im in x to produce dest_im
 //  Applies 1-5-8-5-1 filter in x, then samples
 //  every other pixel.  Fills [0,(ni+1)/2-1][0,nj-1] elements of dest
-void vil2_algo_gauss_reduce(vil2_byte* dest_im,
-                            int d_x_step, int d_y_step,
-                            const vil2_byte* src_im,
+void vil2_algo_gauss_reduce(const vil2_byte* src_im,
                             int src_ni, int src_nj,
-                            int s_x_step, int s_y_step)
+                            int s_x_step, int s_y_step,
+														vil2_byte* dest_im,
+                            int d_x_step, int d_y_step)
 {
     vil2_byte* d_row = dest_im;
     const vil2_byte* s_row = src_im;
@@ -46,11 +46,10 @@ void vil2_algo_gauss_reduce(vil2_byte* dest_im,
 //: Smooth and subsample single plane src_im in x to produce dest_im
 //  Applies 1-5-8-5-1 filter in x, then samples
 //  every other pixel.  Fills [0,(ni+1)/2-1][0,nj-1] elements of dest
-void vil2_algo_gauss_reduce(float* dest_im,
-                            int d_x_step, int d_y_step,
-                            const float* src_im,
+void vil2_algo_gauss_reduce(const float* src_im,
                             int src_ni, int src_nj,
-                            int s_x_step, int s_y_step)
+                            int s_x_step, int s_y_step,
+														float* dest_im,int d_x_step, int d_y_step)
 {
     float* d_row = dest_im;
     const float* s_row = src_im;
@@ -83,11 +82,11 @@ void vil2_algo_gauss_reduce(float* dest_im,
 //: Smooth and subsample single plane src_im in x to produce dest_im
 //  Applies 1-5-8-5-1 filter in x, then samples
 //  every other pixel.  Fills [0,(ni+1)/2-1][0,nj-1] elements of dest
-void vil2_algo_gauss_reduce(int* dest_im,
-                            int d_x_step, int d_y_step,
-                            const int* src_im,
+void vil2_algo_gauss_reduce(const int* src_im,
                             int src_ni, int src_nj,
-                            int s_x_step, int s_y_step)
+                            int s_x_step, int s_y_step,
+														int* dest_im,
+                            int d_x_step, int d_y_step)
 {
     int* d_row = dest_im;
     const int* s_row = src_im;
@@ -120,11 +119,10 @@ void vil2_algo_gauss_reduce(int* dest_im,
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
 //  Smooths with a 3x3 filter and subsamples
-void vil2_algo_gauss_reduce_121(vil2_byte* dest_im,
-                                int d_x_step, int d_y_step,
-                                const vil2_byte* src_im,
+void vil2_algo_gauss_reduce_121(const vil2_byte* src_im,
                                 int src_ni, int src_nj,
-                                int s_x_step, int s_y_step)
+                                int s_x_step, int s_y_step,
+																vil2_byte* dest_im,int d_x_step, int d_y_step)
 {
   int sxs2 = s_x_step*2;
   int sys2 = s_y_step*2;
@@ -191,11 +189,11 @@ void vil2_algo_gauss_reduce_121(vil2_byte* dest_im,
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
 //  Smooths with a 3x3 filter and subsamples
-void vil2_algo_gauss_reduce_121(float* dest_im,
-                                int d_x_step, int d_y_step,
-                                const float* src_im,
+void vil2_algo_gauss_reduce_121(const float* src_im,
                                 int src_ni, int src_nj,
-                                int s_x_step, int s_y_step)
+                                int s_x_step, int s_y_step,
+																float* dest_im,
+                                int d_x_step, int d_y_step)
 {
   int sxs2 = s_x_step*2;
   int sys2 = s_y_step*2;
@@ -262,11 +260,11 @@ void vil2_algo_gauss_reduce_121(float* dest_im,
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
 //  Smooths with a 3x3 filter and subsamples
-void vil2_algo_gauss_reduce_121(int* dest_im,
-                                int d_x_step, int d_y_step,
-                                const int* src_im,
+void vil2_algo_gauss_reduce_121(const int* src_im,
                                 int src_ni, int src_nj,
-                                int s_x_step, int s_y_step)
+                                int s_x_step, int s_y_step,
+																int* dest_im,
+                                int d_x_step, int d_y_step)
 {
   int sxs2 = s_x_step*2;
   int sys2 = s_y_step*2;

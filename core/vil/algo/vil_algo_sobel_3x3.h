@@ -11,7 +11,7 @@
 //  1 pixel border around grad images is set to zero
 // \relates vil2_image_view
 template<class srcT, class destT>
-void vil2_algo_sobel_3x3(vil2_image_view<srcT>& src,
+void vil2_algo_sobel_3x3(const vil2_image_view<srcT>& src,
                          vil2_image_view<destT>& grad_i,
                          vil2_image_view<destT>& grad_j);
 
@@ -22,7 +22,7 @@ void vil2_algo_sobel_3x3(vil2_image_view<srcT>& src,
 //  1 pixel border around grad images is set to zero
 // \relates vil2_image_view
 template<class srcT, class destT>
-void vil2_algo_sobel_3x3(vil2_image_view<srcT>& src,
+void vil2_algo_sobel_3x3(const vil2_image_view<srcT>& src,
                          vil2_image_view<destT>& grad_ij);
 
 //: Compute gradients of single plane of 2D data using 3x3 Sobel filters

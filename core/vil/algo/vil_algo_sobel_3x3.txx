@@ -12,7 +12,7 @@
 //  dest has twice as many planes as src, with dest plane (2i) being the i-gradient
 //  of source plane i and dest plane (2i+1) being the j-gradient.
 template<class srcT, class destT>
-void vil2_algo_sobel_3x3(vil2_image_view<srcT>& src,
+void vil2_algo_sobel_3x3(const vil2_image_view<srcT>& src,
                          vil2_image_view<destT>& grad_ij)
 {
   int np = src.nplanes();
@@ -32,7 +32,7 @@ void vil2_algo_sobel_3x3(vil2_image_view<srcT>& src,
 
 //: Apply Sobel 3x3 gradient filter to 2D image
 template<class srcT, class destT>
-void vil2_algo_sobel_3x3(vil2_image_view<srcT>& src,
+void vil2_algo_sobel_3x3(const vil2_image_view<srcT>& src,
                          vil2_image_view<destT>& grad_i,
                          vil2_image_view<destT>& grad_j)
 {
@@ -55,9 +55,9 @@ void vil2_algo_sobel_3x3(vil2_image_view<srcT>& src,
 
 #undef VIL2_ALGO_SOBEL_3X3_INSTANTIATE
 #define VIL2_ALGO_SOBEL_3X3_INSTANTIATE(srcT, destT) \
-template void vil2_algo_sobel_3x3(vil2_image_view<srcT >& src, \
+template void vil2_algo_sobel_3x3(const vil2_image_view<srcT >& src, \
                                   vil2_image_view<destT >& grad_ij); \
-template void vil2_algo_sobel_3x3(vil2_image_view<srcT >& src, \
+template void vil2_algo_sobel_3x3(const vil2_image_view<srcT >& src, \
                                   vil2_image_view<destT >& grad_i, \
                                   vil2_image_view<destT >& grad_j)
 

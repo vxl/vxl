@@ -10,8 +10,8 @@
 //  Applies filter in x and y, then samples every other pixel.
 //  work_im provides workspace
 template<class T>
-void vil2_algo_gauss_reduce(vil2_image_view<T>& dest_im,
-                            const vil2_image_view<T>& src_im,
+void vil2_algo_gauss_reduce(const vil2_image_view<T>& src_im,
+                            vil2_image_view<T>& dest_im,
                             vil2_image_view<T>& work_im)
 {
   int ni = src_im.ni();
@@ -31,24 +31,24 @@ void vil2_algo_gauss_reduce(vil2_image_view<T>& dest_im,
   for (int i=0;i<n_planes;++i)
   {
     // Smooth and subsample in x, result in work_im
-    vil2_algo_gauss_reduce(work_im.top_left_ptr(),
-                           work_im.istep(),work_im.jstep(),
-                           src_im.top_left_ptr()+i*src_im.planestep(),ni,nj,
-                           src_im.istep(),src_im.jstep());
+    vil2_algo_gauss_reduce(src_im.top_left_ptr()+i*src_im.planestep(),ni,nj,
+                           src_im.istep(),src_im.jstep(),
+													 work_im.top_left_ptr(),
+                           work_im.istep(),work_im.jstep());
 
     // Smooth and subsample in y (by implicitly transposing work_im)
-    vil2_algo_gauss_reduce(dest_im.top_left_ptr()+i*dest_im.planestep(),
-                           dest_im.jstep(),dest_im.istep(),
-                           work_im.top_left_ptr(),nj,ni2,
-                           work_im.jstep(),work_im.istep());
+    vil2_algo_gauss_reduce(work_im.top_left_ptr(),nj,ni2,
+                           work_im.jstep(),work_im.istep(),
+													 dest_im.top_left_ptr()+i*dest_im.planestep(),
+                           dest_im.jstep(),dest_im.istep());
   }
 }
 //: Smooth and subsample src_im to produce dest_im
 //  Applies filter in x and y, then samples every other pixel.
 //  work_im provides workspace
 template<class T>
-void vil2_algo_gauss_reduce_121(vil2_image_view<T>& dest_im,
-                                const vil2_image_view<T>& src_im,
+void vil2_algo_gauss_reduce_121(const vil2_image_view<T>& src_im,
+                                vil2_image_view<T>& dest_im,
                                 vil2_image_view<T>& work_im)
 {
   int ni = src_im.ni();
@@ -68,26 +68,26 @@ void vil2_algo_gauss_reduce_121(vil2_image_view<T>& dest_im,
   for (int i=0;i<n_planes;++i)
   {
     // Smooth and subsample in x, result in work_im
-    vil2_algo_gauss_reduce_121(work_im.top_left_ptr(),
-                               work_im.istep(),work_im.jstep(),
-                               src_im.top_left_ptr()+i*src_im.planestep(),ni,nj,
-                               src_im.istep(),src_im.jstep());
+    vil2_algo_gauss_reduce_121(src_im.top_left_ptr()+i*src_im.planestep(),ni,nj,
+                               src_im.istep(),src_im.jstep(),
+															 work_im.top_left_ptr(),
+                               work_im.istep(),work_im.jstep());
 
     // Smooth and subsample in y (by implicitly transposing work_im)
-    vil2_algo_gauss_reduce_121(dest_im.top_left_ptr()+i*dest_im.planestep(),
-                               dest_im.jstep(),dest_im.istep(),
-                               work_im.top_left_ptr(),nj,ni2,
-                               work_im.jstep(),work_im.istep());
+    vil2_algo_gauss_reduce_121(work_im.top_left_ptr(),nj,ni2,
+                               work_im.jstep(),work_im.istep(),
+															 dest_im.top_left_ptr()+i*dest_im.planestep(),
+                               dest_im.jstep(),dest_im.istep());
   }
 }
 
 #undef VIL2_ALGO_GAUSS_REDUCE_INSTANTIATE
 #define VIL2_ALGO_GAUSS_REDUCE_INSTANTIATE(T) \
-template void vil2_algo_gauss_reduce(vil2_image_view<T >& dest, \
-                                     const vil2_image_view<T >& src, \
+template void vil2_algo_gauss_reduce(const vil2_image_view<T >& src, \
+                                     vil2_image_view<T >& dest, \
                                      vil2_image_view<T >& work_im); \
-template void vil2_algo_gauss_reduce_121(vil2_image_view<T >& dest, \
-                                         const vil2_image_view<T >& src, \
+template void vil2_algo_gauss_reduce_121(const vil2_image_view<T >& src, \
+                                         vil2_image_view<T >& dest, \
                                          vil2_image_view<T >& work_im)
 
 #endif // vil2_algo_gauss_reduce_txx_
