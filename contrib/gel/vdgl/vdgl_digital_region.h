@@ -7,9 +7,9 @@
 //
 //  Maintains the discrete geometry and intensity data of a Face, a 2-d
 //  analog of EdgelChain. So far the class is a very simple group of 1-d
-//  arrays for holding the x, y, z, pixel locations and the intensity.
-//  The class maintains 2d/3d pixels in the style of TargetJr and could be
-//  used to represent 3-d intensity points
+//  arrays for holding the x and y pixel locations and the intensity.
+//  The class maintains 2d pixels in the style of TargetJr and could be
+//  used to represent 2-d intensity points
 //
 // \author
 //   Joe Mundy November 27, 1999
@@ -22,11 +22,16 @@
 //                (There were three pairs of data members both referring to
 //                 intensity information, but only one of them was updated.)
 //   8-Jan-2003 - Peter Vanroose - added is_convex() (virtual of vsol_region_2d)
+//  22-Sep-2004 - Peter Vanroose - removed 3D interface: class is intrinsically 2D
+//  22-Sep-2004 - Peter Vanroose - added transform() (projective transformation)
+//  22-Sep-2004 - Peter Vanroose - added histogram() and residual_histogram()
 // \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vcl_vector.h>
+#include <vcl_string.h>
 #include <vnl/vnl_double_3x3.h>
+#include <vnl/vnl_float_3x3.h>
 #include <vsol/vsol_region_2d.h>
 
 class vdgl_digital_region : public vsol_region_2d
@@ -34,9 +39,15 @@ class vdgl_digital_region : public vsol_region_2d
  public:
 
   // Constructors/Initializers/Destructors---------------------------------
-  vdgl_digital_region();
+  vdgl_digital_region()
+  : vsol_region_2d(),
+    npts_(0), pixel_size_(1.f), xp_(0), yp_(0), pix_(0),
+    max_(0), min_((unsigned short)(-1)), xo_(0.f), yo_(0.f),
+    io_(0.f), io_stdev_(0.0f), pix_index_(0),
+    fit_valid_(false), scatter_matrix_valid_(false),
+    X2_(0), Y2_(0), I2_(0), XY_(0), XI_(0), YI_(0), error_(0), sigma_sq_(0) {}
+
   vdgl_digital_region(int npts, const float* xp, const float* yp, const unsigned short *pix);
-  vdgl_digital_region(int npts, const float* xp, const float* yp, const float* zp, const unsigned short *pix);
   vdgl_digital_region(vdgl_digital_region const& r);
   ~vdgl_digital_region();
 
@@ -44,17 +55,14 @@ class vdgl_digital_region : public vsol_region_2d
   // Data storage for the pixel arrays
   void ResetPixelData();
   void IncrementMeans(float x, float y, unsigned short pix);
-  void IncrementMeans(float x, float y, float z, unsigned short pix);
   void InitPixelArrays();
   void InsertInPixelArrays(float x, float y, unsigned short pix);
-  void InsertInPixelArrays(float x, float y, float z, unsigned short pix);
 
   //: The region pixel coordinates and intensities
   float const* Xj() const {return xp_;}
   float const* Yj() const {return yp_;}
-  float const* Zj() const {return zp_;}
   unsigned short const* Ij() const {return pix_;}
-  int Npix() const {return npts_;}
+  unsigned int Npix() const {return npts_;}
 
   //: The size of a region pixel in image pixel units
   //(due to expanded resolution processing)
@@ -62,15 +70,14 @@ class vdgl_digital_region : public vsol_region_2d
   float get_pixel_size() const {return pixel_size_;}
 
   // Min and Max region intensities
-  float get_min() const {return min_;}
-  float get_max() const {return max_;}
-  // Access to the pixels interior to the region
-  void reset() const; //!< Reset pixel iterator
-  bool next() const;  //!< Increment to next pixel
+  float get_min() const { return min_; }
+  float get_max() const { return max_; }
+  //: reset the iterator for accessing region pixels
+  void reset() const { pix_index_ = -1; }
+  //: increment to next pixel and check if iterator is finished
+  bool next() const { ++pix_index_; return pix_index_<(int)npts_; }
   float X() const;    //!< The x pixel coordinate
   float Y() const;    //!< The y pixel coordinate
-  //:should deprecate the Z access since intensity face is strictly 2d
-  float Z() const;    //!< The z pixel coordinate
   unsigned short I() const;//!< The pixel intensity
 
   void set_X(float x);    //!< change x pixel coordinate
@@ -80,7 +87,6 @@ class vdgl_digital_region : public vsol_region_2d
   // The mean geometric and intensity values of the region
   float Xo() const; //!< The mean X value of the region
   float Yo() const; //!< The mean Y value of the region
-  float Zo() const; //!< The mean Z value of the region
   float Io() const; //!< The mean intensity value of the region
   float Io_sd() const; //!< The intensity standard deviation value of the region
   float ComputeIntensityStdev(); //!< Compute the intensity stdev for the region
@@ -97,6 +103,16 @@ class vdgl_digital_region : public vsol_region_2d
   float AspectRatio() const;
   // distinguish from vtol_face::area()
   virtual double area() const { return npts_*pixel_size_*pixel_size_; }
+
+  //: transform this region using the given 3x3 projective transformation matrix
+  bool transform(vnl_float_3x3 const& t);
+
+  //: Compute the intensity histogram
+  //  The intensity ranges from get_min() to get_max().
+  vcl_vector<unsigned int> histogram(int nbins);
+  //: Compute the residual intensity histogram
+  //  The intensity range is returned as the last two arguments.
+  vcl_vector<unsigned int> residual_histogram(int nbins, float* min=0, float* max=0);
 
   //: Return true if this region is convex
   virtual bool is_convex() const { return false; } // virtual of vsol_region_2d
@@ -117,16 +133,16 @@ class vdgl_digital_region : public vsol_region_2d
   virtual vsol_spatial_object_2d* clone() const;
 
   //: Return a platform independent string identifying the class
-  vcl_string is_a() const;
+  vcl_string is_a() const { return vcl_string("vdgl_digital_region"); }
 
  protected:
   // Members
-  int npts_;                //!< Number of pixels in the region
+  unsigned int npts_;       //!< Number of pixels in the region
   float pixel_size_;        //!< Image pixel size in fractions of a pixel
-  float *xp_, *yp_, *zp_;   //!< The location of each pixel
-  unsigned short *pix_;     //!< The pixel intensity
+  float *xp_, *yp_;         //!< The location of each pixel
+  unsigned short *pix_;     //!< The pixel intensities
   float max_, min_;         //!< Upper and lower bounds
-  float xo_, yo_, zo_, io_; //!< Mean Values
+  float xo_, yo_, io_;      //!< Mean Values
   float io_stdev_;          //!< Intensity standard deviation for region
   mutable int pix_index_;   //!< Index in pixel array (iterator)
   void ComputeScatterMatrix() const; // mutable
