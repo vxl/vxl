@@ -14,6 +14,7 @@
 #include <vnl/vnl_math.h> // for pi
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_quaternion.h>
+#include <vnl/vnl_numeric_traits.h>
 #include <vdgl/vdgl_edgel.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
@@ -320,10 +321,20 @@ void kalman_filter::update_observes(const vnl_double_3x4 &P, int iframe)
     bugl_gaussian_point_2d<double> x = brct_algos::project_3d_point(P, curve_3d_[i]);
 
     vgl_point_2d<double> u = brct_algos::most_possible_point(curves_[iframe], x);
+    // check whether a outlier founded
+    vnl_double_2 z(u.x(), u.y());
+    vnl_double_2 z_pred(x.x(), x.y());
+
+    if(is_outlier(z, z_pred)){
+      u.set(this->large_num_, this->large_num_);
+    }
+    
+    // set point
     observes_[iframe%queue_size_][i].set_point(u);
     vnl_double_2x2 sigma;
     sigma.set_identity();
     observes_[iframe%queue_size_][i].set_covariant_matrix(sigma);
+    
   }
 
 }
@@ -402,12 +413,14 @@ void kalman_filter::inc()
 
     //
     // go to the correction step
-    //
-    Xpred = Xpred +  G_*(z - z_pred)*prob_[i];
+    // 
+    if(!is_outlier(z, z_pred)){
+      Xpred = Xpred +  G_*(z - z_pred)*prob_[i];
 
-    vnl_matrix_fixed<double, 6, 6> I;
-    I.set_identity();
-    Q_ = (I - G_*H)*Qpred;
+      vnl_matrix_fixed<double, 6, 6> I;
+      I.set_identity();
+      Q_ = (I - G_*H)*Qpred;
+    }
   }
 
   double dt = time_tick_[cur_pos_] - time_tick_[cur_pos_-1];
@@ -435,8 +448,11 @@ void kalman_filter::inc()
   {
     for (int j=0; j<memory_size_; j++)
     {
-      pts[j] = vnl_double_2(observes_[j][i].x(), observes_[j][i].y());
-      Ps[j] = get_projective_matrix(motions_[j]);
+      if(observes_[j][i].x() != this->large_num_ || \
+          observes_[j][i].y() != this->large_num_){
+        pts[j] = vnl_double_2(observes_[j][i].x(), observes_[j][i].y());
+        Ps[j] = get_projective_matrix(motions_[j]);
+      }
     }
     
     vgl_point_3d<double> X3d = brct_algos::bundle_reconstruct_3d_point(pts, Ps);
@@ -706,6 +722,16 @@ void kalman_filter::init_epipole(double x, double y)
   
   (*e_)[0] = x;
   (*e_)[1] = y;
+}
+
+bool kalman_filter::is_outlier(vnl_double_2& z, vnl_double_2& z_pred)
+{
+  // a brutal-force implementation
+  vnl_double_2 dz = z - z_pred;
+  if(sqrt(dz[0]*dz[0] + dz[1]*dz[1]) > 3.0)
+    return true;
+  else
+    return false;
 }
 
 vnl_matrix_fixed<double, 6, 6> kalman_filter::get_transit_matrix(int i, int j)
