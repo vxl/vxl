@@ -191,8 +191,20 @@ endif
 AUX_SOURCE_DIRECTORY += impl/glut/Templates
 endif
 
+ifeq ($(HAS_GTK2),1)
+INCDIRS += $(GTK2_INC_DIRS)
+DEFINES += $(GTK2CONFIGCFLAGS) -DVGUI_USE_GTK2
+SOURCES += impl/gtk2/vgui_gtk2.cxx
+SOURCES += impl/gtk2/vgui_gtk2_adaptor.cxx
+SOURCES += impl/gtk2/vgui_gtk2_dialog_impl.cxx
+SOURCES += impl/gtk2/vgui_gtk2_statusbar.cxx
+SOURCES += impl/gtk2/vgui_gtk2_tag.cxx
+SOURCES += impl/gtk2/vgui_gtk2_utils.cxx
+SOURCES += impl/gtk2/vgui_gtk2_window.cxx
+AUX_SOURCE_DIRECTORY += impl/gtk2/Templates
+else
 ifeq ($(HAS_GTKGLAREA),1)
-INCDIRS += $(GTKGLAREA_INC_DIR)
+INCDIRS += $(GTKGLAREA_INC_DIR) $(GTK_INC_DIRS)
 DEFINES += $(GTKCONFIGCFLAGS) -DVGUI_USE_GTK
 SOURCES += impl/gtk/vgui_gtk.cxx
 SOURCES += impl/gtk/vgui_gtk_adaptor.cxx
@@ -203,17 +215,6 @@ SOURCES += impl/gtk/vgui_gtk_utils.cxx
 SOURCES += impl/gtk/vgui_gtk_window.cxx
 AUX_SOURCE_DIRECTORY += impl/gtk/Templates
 endif
-
-ifneq ($(HAS_GTKGLAREA),1)
-DEFINES += $(GTKCONFIGCFLAGS) -DVGUI_USE_GTK2
-SOURCES += impl/gtk2/vgui_gtk2.cxx
-SOURCES += impl/gtk2/vgui_gtk2_adaptor.cxx
-SOURCES += impl/gtk2/vgui_gtk2_dialog_impl.cxx
-SOURCES += impl/gtk2/vgui_gtk2_statusbar.cxx
-SOURCES += impl/gtk2/vgui_gtk2_tag.cxx
-SOURCES += impl/gtk2/vgui_gtk2_utils.cxx
-SOURCES += impl/gtk2/vgui_gtk2_window.cxx
-AUX_SOURCE_DIRECTORY += impl/gtk2/Templates
 endif
 
 ifeq ($(HAS_QGL), 1)
