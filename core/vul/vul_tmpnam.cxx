@@ -3,12 +3,9 @@
 #endif
 
 #include <vul/vul_tmpnam.h>
-
 #include <vcl_string.h>
-
 #include <vcl_ctime.h>
 #include <vcl_cstdlib.h> // for rand/srand
-
 #ifndef _MSC_VER
   #include <unistd.h> // for unlink
 #else
@@ -19,7 +16,6 @@
 
 // Helper functions
 namespace {
-
   // The filename is okay if it doesn't exist and can be opened for
   // writing.
   bool is_okay( const vcl_string& name )
@@ -38,8 +34,8 @@ namespace {
       close( fd );
 #else
       if( _close( fd ) == -1 ) {
-	perror("vul_tmpnam: closing temporary file");
-	okay = false;
+        perror("vul_tmpnam: closing temporary file");
+        okay = false;
       }
       // no need to unlink under Windows, since _O_TEMPORARY will ensure the file is
       // deleted when the descriptor is closed.
