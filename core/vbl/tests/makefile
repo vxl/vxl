@@ -3,20 +3,20 @@ USES = vxl
 LIBRARY := vbl-test
 SOURCES += vbl_test_classes.cxx
 
-MINI_PROG_SOURCES += vbl_test_all.cxx
-MINI_PROG_SOURCES += vbl_test_arg.cxx
-MINI_PROG_SOURCES += vbl_test_array.cxx
-MINI_PROG_SOURCES += vbl_test_sparse_array_2d.cxx
-MINI_PROG_SOURCES += vbl_test_sparse_array_3d.cxx
-MINI_PROG_SOURCES += vbl_test_sprintf.cxx
-MINI_PROG_SOURCES += vbl_test_smart_ptr.cxx
-#MINI_PROG_SOURCES += vbl_test_basic_relation.cxx # FIXME
+TESTS += vbl_test_all.cxx
+TESTS += vbl_test_arg.cxx
+TESTS += vbl_test_array.cxx
+TESTS += vbl_test_sparse_array_2d.cxx
+TESTS += vbl_test_sparse_array_3d.cxx
+TESTS += vbl_test_sprintf.cxx
+TESTS += vbl_test_smart_ptr.cxx
+#TESTS += vbl_test_basic_relation.cxx # FIXME
 
 IULIBS := -lvbl-test -lvbl
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+#########################################
+include ${IUEROOT}/config/static-tests.mk
+#########################################
 
 # PVr:
 # Each makefile MUST have include $(IUEROOT)/config/something in
