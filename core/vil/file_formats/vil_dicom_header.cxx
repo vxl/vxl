@@ -1669,7 +1669,7 @@ void vil_dicom_header_format::clearInfo(void)
   last_read_.slice_location_ = VIL_DICOM_HEADER_UNSPECIFIED;
 
   // Image info
-  last_read_.pix_samps_ = VIL_DICOM_HEADER_UNSPECIFIED;
+  last_read_.pix_samps_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
   last_read_.photo_interp_ = "";
   last_read_.dimx_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
   last_read_.dimy_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;
