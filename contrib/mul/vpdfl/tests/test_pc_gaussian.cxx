@@ -79,7 +79,7 @@ void test_pc_gaussian()
   vcl_cout<<"Original PDF: "; vsl_print_summary(vcl_cout, pdf);
   vcl_cout<<"\nRebuilt PDF: "; vsl_print_summary(vcl_cout, p_pdf_built);
   vcl_cout<<"\n\nPDF sampler: "; vsl_print_summary(vcl_cout, p_sampler);
-  vcl_cout<<vcl_endl;
+  vcl_cout<<'\n';
 
 // Test the IO ================================================
   vpdfl_builder_base* p_builder = & builder;
@@ -143,11 +143,9 @@ void test_pc_gaussian()
 
   vcl_cout<<"\nOriginal PDF: "; vsl_print_summary(vcl_cout, pdf);
   vcl_cout<<"\nOriginal builder: "; vsl_print_summary(vcl_cout, builder);
-  vcl_cout<<vcl_endl;
-
-  vcl_cout<<"\nLoaded PDF: "; vsl_print_summary(vcl_cout, pdf_in);
+  vcl_cout<<"\n\nLoaded PDF: "; vsl_print_summary(vcl_cout, pdf_in);
   vcl_cout<<"\nLoaded builder: "; vsl_print_summary(vcl_cout, builder_in);
-  vcl_cout<<vcl_endl<<vcl_endl;
+  vcl_cout<<"\n\n";
 
   TEST("Original Model == Loaded model",
        pdf.mean()==pdf_in.mean() &&
@@ -162,7 +160,8 @@ void test_pc_gaussian()
   TEST("Original Model == model loaded by base ptr",
        pdf.mean()==p_base_pdf_in->mean() &&
        pdf.variance()==p_base_pdf_in->variance() &&
-       pdf.is_a()==p_base_pdf_in->is_a(),
+       pdf.is_a()==p_base_pdf_in->is_a() &&
+       pdf.is_class(p_base_pdf_in->is_a()),
        true);
   TEST("Original Builder == Loaded builder",
        builder.min_var()==builder_in.min_var() &&
@@ -172,7 +171,8 @@ void test_pc_gaussian()
        true);
   TEST("Original Builder == Builder loaded by base ptr",
        builder.min_var()==p_base_builder_in->min_var() &&
-       builder.is_a()==p_base_builder_in->is_a(),
+       builder.is_a()==p_base_builder_in->is_a() &&
+       builder.is_class(p_base_builder_in->is_a()),
        true);
 
   const vpdfl_pc_gaussian_builder *chooser =

@@ -107,9 +107,9 @@ void test_weighted_epanech_kernel_pdf()
 
   builder.build(*p_pdf_built,data_array);
 
-  vcl_cout<<"Original PDF: "; vsl_print_summary(vcl_cout, datagen); vcl_cout<<vcl_endl;
-  vcl_cout<<"Rebuilt PDF: "; vsl_print_summary(vcl_cout, p_pdf_built); vcl_cout<<vcl_endl;
-  vcl_cout<<vcl_endl;
+  vcl_cout<<"Original PDF: "; vsl_print_summary(vcl_cout, datagen);
+  vcl_cout<<"\nRebuilt PDF: "; vsl_print_summary(vcl_cout, p_pdf_built);
+  vcl_cout<<"\n\n";
 
 // Test the IO ================================================
 
@@ -136,16 +136,15 @@ void test_weighted_epanech_kernel_pdf()
   vpl_unlink("test_gaussian_kernel_pdf.bvl.tmp");
 #endif
 
-  vcl_cout<<"Original PDF: "; vsl_print_summary(vcl_cout, p_pdf_built); vcl_cout<<vcl_endl;
-  vcl_cout<<vcl_endl;
-
-  vcl_cout<<"Loaded PDF: "; vsl_print_summary(vcl_cout, p_pdf_in); vcl_cout<<vcl_endl;
-  vcl_cout<<vcl_endl;
+  vcl_cout<<"Original PDF: "; vsl_print_summary(vcl_cout, p_pdf_built);
+  vcl_cout<<"\n\nLoaded PDF: "; vsl_print_summary(vcl_cout, p_pdf_in);
+  vcl_cout<<"\n\n";
 
   TEST("Original Model == model loaded by base ptr",
        p_pdf_built->mean()==p_pdf_in->mean() &&
        p_pdf_built->variance()==p_pdf_in->variance() &&
-       p_pdf_built->is_a()==p_pdf_in->is_a(),
+       p_pdf_built->is_a()==p_pdf_in->is_a() &&
+       p_pdf_built->is_class(p_pdf_in->is_a()),
        true);
 
   vcl_cout << "\n\n========Testing PDF Thresholds==========\n";

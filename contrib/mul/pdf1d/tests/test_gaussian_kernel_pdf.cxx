@@ -63,10 +63,10 @@ void test_gaussian_kernel_pdf()
 
   pdf1d_sampler *p_sampler = p_pdf_built->new_sampler();
 
-  vcl_cout<<"Original PDF: "; vsl_print_summary(vcl_cout, datagen); vcl_cout<<vcl_endl;
-  vcl_cout<<"Rebuilt PDF: "; vsl_print_summary(vcl_cout, p_pdf_built); vcl_cout<<vcl_endl;
-  vcl_cout<<vcl_endl;
-  vcl_cout<<"PDF sampler: "; vsl_print_summary(vcl_cout, p_sampler); vcl_cout<<vcl_endl;
+  vcl_cout<<"Original PDF: "; vsl_print_summary(vcl_cout, datagen);
+  vcl_cout<<"\nRebuilt PDF: "; vsl_print_summary(vcl_cout, p_pdf_built);
+  vcl_cout<<"\n\nPDF sampler: "; vsl_print_summary(vcl_cout, p_sampler);
+  vcl_cout<<'\n';
 
 // Test the IO ================================================
 
@@ -100,25 +100,25 @@ void test_gaussian_kernel_pdf()
   vpl_unlink("test_gaussian_kernel_pdf.bvl.tmp");
 #endif
 
-  vcl_cout<<"Original PDF: "; vsl_print_summary(vcl_cout, p_pdf_built); vcl_cout<<vcl_endl;
-  vcl_cout<<"Original builder: "; vsl_print_summary(vcl_cout, builder); vcl_cout<<vcl_endl;
-  vcl_cout<<vcl_endl;
-
-  vcl_cout<<"Loaded PDF: "; vsl_print_summary(vcl_cout, p_pdf_in); vcl_cout<<vcl_endl;
-  vcl_cout<<"Loaded builder: "; vsl_print_summary(vcl_cout, builder_in); vcl_cout<<vcl_endl;
-  vcl_cout<<vcl_endl;
+  vcl_cout<<"Original PDF: "; vsl_print_summary(vcl_cout, p_pdf_built);
+  vcl_cout<<"\nOriginal builder: "; vsl_print_summary(vcl_cout, builder);
+  vcl_cout<<"\n\nLoaded PDF: "; vsl_print_summary(vcl_cout, p_pdf_in);
+  vcl_cout<<"\nLoaded builder: "; vsl_print_summary(vcl_cout, builder_in);
+  vcl_cout<<"\n\n";
 
   TEST("Original Model == model loaded by base ptr",
        p_pdf_built->mean()==p_pdf_in->mean() &&
        p_pdf_built->variance()==p_pdf_in->variance() &&
-       p_pdf_built->is_a()==p_pdf_in->is_a(),
+       p_pdf_built->is_a()==p_pdf_in->is_a() &&
+       p_pdf_built->is_class(p_pdf_in->is_a()),
        true);
   TEST("Original Builder == Loaded builder",
        builder.min_var()==builder_in.min_var(),
        true);
   TEST("Original Builder == Builder loaded by base ptr",
        builder.min_var()==p_builder_in->min_var() &&
-       builder.is_a()==p_builder_in->is_a(),
+       builder.is_a()==p_builder_in->is_a() &&
+       builder.is_class(p_builder_in->is_a()),
        true);
 
   vcl_cout << "\n\n========Testing PDF Thresholds==========\n";
@@ -134,9 +134,9 @@ void test_gaussian_kernel_pdf()
 
   pass=0; fail=0; sample_pass=0; sample_fail=0;
   thresh = p_pdf_built->inverse_cdf(0.9);
-  vcl_cout << "\nSample value threshold for passing 90%:                   " << thresh << vcl_endl;
+  vcl_cout << "\nSample value threshold for passing 90%:                   " << thresh;
   sample_thresh  = test_sample_inverse_cdf.pdf1d_pdf::inverse_cdf(0.9);
-  vcl_cout <<   "Threshold calculated using sample method for passing 90%: " << sample_thresh << vcl_endl;
+  vcl_cout << "\nThreshold calculated using sample method for passing 90%: " << sample_thresh << vcl_endl;
   for (unsigned i=0; i < 1000; i++)
   {
     double x = p_sampler2->sample();
@@ -155,9 +155,9 @@ void test_gaussian_kernel_pdf()
 
   pass=0; fail=0; sample_pass=0; sample_fail=0;
   thresh = p_pdf_built->inverse_cdf(0.1);
-  vcl_cout << "\nSample value threshold for passing 10%:                   " << thresh << vcl_endl;
+  vcl_cout << "\nSample value threshold for passing 10%:                   " << thresh;
   sample_thresh  = test_sample_inverse_cdf.pdf1d_pdf::inverse_cdf(0.1);
-  vcl_cout <<   "Threshold calculated using sample method for passing 10%: " << sample_thresh << vcl_endl;
+  vcl_cout << "\nThreshold calculated using sample method for passing 10%: " << sample_thresh << vcl_endl;
   for (unsigned i=0; i < 1000; i++)
   {
     double x = p_sampler2->sample();
@@ -176,7 +176,7 @@ void test_gaussian_kernel_pdf()
 
   pass=0, fail=0;
   thresh = p_pdf_built->log_prob_thresh(0.9);
-  vcl_cout << vcl_endl << "log density threshold for passing 90%: " << thresh << vcl_endl;
+  vcl_cout << "\nlog density threshold for passing 90%: " << thresh << vcl_endl;
   for (unsigned i=0; i < 1000; i++)
   {
     double x = p_sampler2->sample();
@@ -190,7 +190,7 @@ void test_gaussian_kernel_pdf()
 
   pass=0; fail=0;
   thresh = p_pdf_built->log_prob_thresh(0.1);
-  vcl_cout <<  vcl_endl << "log density threshold for passing 10%: " << thresh << vcl_endl;
+  vcl_cout <<  "\nlog density threshold for passing 10%: " << thresh << vcl_endl;
   for (unsigned i=0; i < 1000; i++)
   {
     double x = p_sampler2->sample();
