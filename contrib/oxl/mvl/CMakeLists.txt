@@ -87,6 +87,16 @@ mvl_multi_view_matches
 mvl_psi
 mvl_six_point_design_matrix_row
 mvl_three_view_six_point_structure
+ComputeGRIC
+FMatrixCompute7Point
+FMatrixComputeLMedSq
+FMatrixComputeMLESAC
+FMatrixComputeNonLinear
+FMatrixComputeRANSAC
+FMatrixComputeRobust
+HMatrix2DComputeMLESAC
+HMatrix2DComputeRobust
+Probability
 )
 
 AUX_SOURCE_DIRECTORY(Templates mvl_sources)
