@@ -40,6 +40,7 @@ vil_crop_image_impl
 vil_skip_image_impl
 vil_resample_image_impl
 vil_flipud_impl
+vil_flip_components_impl
 vil_block_cache_image_impl
 vil_clamp_image_impl
 # Helper specializations for vil_clamp_image_impl
@@ -73,6 +74,7 @@ vil_resample
 vil_warp
 #vil_warp
 vil_flipud
+vil_flip_components
 #vil_convolve
 #vil_convolve_simple
 #vil_convolve_1d

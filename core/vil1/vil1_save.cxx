@@ -14,6 +14,7 @@
 #include <vil/vil_copy.h>
 #include <vil/vil_property.h> // for vil_property_top_row_first
 #include <vil/vil_flipud.h>
+#include <vil/vil_flip_components.h>
 
 #include <vil/vil_rgb.h>
 #include <vil/vil_memory_image_of.h>
@@ -30,6 +31,8 @@ bool vil_save(vil_image i, char const* filename, char const* file_format)
   bool top_first;
   if (out.get_property(vil_property_top_row_first, &top_first) && !top_first)
     i = vil_flipud(i);
+  if (i.components() == 3 && out.get_property(vil_property_component_order_is_BGR))
+    i = vil_flip_components(i);
   vil_copy(i, out);
   return true;
 }

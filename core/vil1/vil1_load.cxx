@@ -17,6 +17,7 @@
 #include <vil/vil_image.h>
 #include <vil/vil_property.h> // for vil_property_top_row_first
 #include <vil/vil_flipud.h>
+#include <vil/vil_flip_components.h>
 
 vil_image vil_load_raw(vil_stream *is)
 {
@@ -106,5 +107,7 @@ vil_image vil_load(char const* filename)
   bool top_first;
   if (i.get_property(vil_property_top_row_first, &top_first) && !top_first)
     i = vil_flipud(i);
+  if (i.components() == 3 && i.get_property(vil_property_component_order_is_BGR))
+    i = vil_flip_components(i);
   return i;
 }

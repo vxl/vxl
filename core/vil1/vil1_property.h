@@ -80,9 +80,12 @@
 #define vil_property_memory "memory"
 
 //: Indicate whether the first image row is the top or the bottom of the image
-#define vil_property_top_row_first "top_row_first"
+#define vil_property_top_row_first "top row first"
 
 //: Indicate whether the first pixel in an image row is at left or at right
-#define vil_property_left_first "left_first"
+#define vil_property_left_first "left first"
+
+//: Indicate that the colour cell order is B,G,R instead of the default R,G,B
+#define vil_property_component_order_is_BGR "component order is B,G,R"
 
 #endif // vil_property_h_

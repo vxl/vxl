@@ -72,6 +72,9 @@ bool vil_bmp_generic_image::get_property(char const *tag, void *prop) const
   if (0==vcl_strcmp(tag, vil_property_left_first))
     return prop ? (*(bool*)prop) = true : true;
 
+  if (0==vcl_strcmp(tag, vil_property_component_order_is_BGR))
+    return prop ? (*(bool*)prop) = true : true;
+
   return false;
 }
 
