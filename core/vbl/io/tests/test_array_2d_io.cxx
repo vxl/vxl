@@ -21,18 +21,18 @@ void test_array_2d_io()
   }
 
   vsl_b_ofstream bfs_out("vbl_array_2d_test_io.bvl.tmp");
-  TEST ("Created vbl_array_2d_test_io.bvl.tmp for writing", (!bfs_out), false);
+  TEST("Created vbl_array_2d_test_io.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out, v_out);
   bfs_out.close();
 
   vsl_b_ifstream bfs_in("vbl_array_2d_test_io.bvl.tmp");
-  TEST ("Opened vbl_array_2d_test_io.bvl.tmp for reading", (!bfs_in), false);
+  TEST("Opened vbl_array_2d_test_io.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, v_in);
-  TEST ("Finished reading file successfully", (!bfs_in), false);
+  TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   //kym - double = not defined for vbl_array_2d
-  //TEST ("v_out == v_in", v_out == v_in, true);
+  //TEST("v_out == v_in", v_out, v_in);
 
   bool test_result = true;
   if (v_out.rows() != v_in.rows())
@@ -50,16 +50,10 @@ void test_array_2d_io()
           test_result = false;
     }
   }
-  TEST ("v_out == v_in", test_result, true);
+  TEST("v_out == v_in", test_result, true);
 
   vsl_print_summary(vcl_cout, v_in);
   vcl_cout << vcl_endl;
 }
 
-void test_array_2d_prime()
-{
-  test_array_2d_io();
-}
-
-
-TESTLIB_DEFINE_MAIN(test_array_2d_prime);
+TESTMAIN(test_array_2d_io);

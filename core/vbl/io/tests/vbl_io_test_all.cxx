@@ -9,5 +9,3 @@
 #include <vbl/io/vbl_io_sparse_array_3d.h>
 #include <vbl/io/vbl_io_sparse_array_base.h>
 #include <vbl/io/vbl_io_triple.h>
-
-int main() { return 0; }

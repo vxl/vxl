@@ -17,7 +17,6 @@
 #include <vbl/io/vbl_io_array_3d.h>
 
 #include "vbl_io_test_classes.h"
-#include "vbl_io_test_classes.cxx"
 
 #include <vbl/io/vbl_io_smart_ptr.h>
 
@@ -26,34 +25,7 @@
 
 #include <vcl_string.h>
 #include <testlib/testlib_root_dir.h>
-
-void golden_test_vbl_io(bool save_file=false);
-
-// This nasty macro stuff is to allow the program to be compiled as a stand
-// alone program or as part of a larger test program.
-#ifndef TESTLIB_DEFINE_MAIN
-  #include <testlib/testlib_test.h>
-  int main( int argc, char* argv[] )
-  {
-    testlib_test_start("golden_test_all_vbl_io");
-    bool save_file=false;
-
-    if (argc==2)
-    {
-      vcl_string conf = argv[1];
-      vcl_string ref="create";
-      if (conf==ref)
-      {
-        save_file =true;
-      }
-    }
-    golden_test_vbl_io(save_file);
-    return testlib_test_summary();
-  }
-#else
-  #include <testlib/testlib_test.h>
-#endif
-
+#include <testlib/testlib_test.h>
 
 void golden_test_vbl_io(bool save_file)
 {
@@ -133,7 +105,7 @@ void golden_test_vbl_io(bool save_file)
   {
     vcl_cout << "Going to create the golden test file" << vcl_endl;
     vsl_b_ofstream bfs_out("golden_test_vbl_io.bvl");
-    TEST ("Opened golden_test_vbl_io.bvl for writing ", ! bfs_out, false);
+    TEST("Opened golden_test_vbl_io.bvl for writing ", ! bfs_out, false);
 
     vsl_b_write(bfs_out, b_box_out);
     vsl_b_write(bfs_out, a1_out);
@@ -153,7 +125,7 @@ void golden_test_vbl_io(bool save_file)
   vcl_string gold_path=testlib_root_dir()+"/vxl/vbl/io/tests/golden_test_vbl_io.bvl";
   vsl_b_ifstream bfs_in(gold_path.c_str());
 
-  TEST ("Opened golden_test_vbl_io.bvl for reading ", ! bfs_in, false);
+  TEST("Opened golden_test_vbl_io.bvl for reading ", ! bfs_in, false);
 
   vsl_b_read(bfs_in, b_box_in);
   vsl_b_read(bfs_in, a1_in);
@@ -163,18 +135,18 @@ void golden_test_vbl_io(bool save_file)
   vsl_b_read(bfs_in, sp1_in);
   vsl_b_read(bfs_in, sp2_in);
 
-  TEST ("Finished reading file successfully", (!bfs_in), false);
+  TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
 
   // Test that each object created is the same as read in from the file.
 
   // Test bounding box
-  TEST ("vbl_bounding_box: b_box_out.empty() == b_box_in.empty()", b_box_out.empty(), b_box_in.empty());
-  TEST ("vbl_bounding_box: b_box_out.min()[0] == b_box_in.min()[0]", b_box_out.min()[0], b_box_in.min()[0]);
-  TEST ("vbl_bounding_box: b_box_out.min()[1] == b_box_in.min()[1]", b_box_out.min()[1], b_box_in.min()[1]);
-  TEST ("vbl_bounding_box: b_box_out.max()[0] == b_box_in.max()[0]", b_box_out.max()[0], b_box_in.max()[0]);
-  TEST ("vbl_bounding_box: b_box_out.max()[1] == b_box_in.max()[1]", b_box_out.max()[1], b_box_in.max()[1]);
+  TEST("vbl_bounding_box: b_box_out.empty() == b_box_in.empty()", b_box_out.empty(), b_box_in.empty());
+  TEST("vbl_bounding_box: b_box_out.min()[0] == b_box_in.min()[0]", b_box_out.min()[0], b_box_in.min()[0]);
+  TEST("vbl_bounding_box: b_box_out.min()[1] == b_box_in.min()[1]", b_box_out.min()[1], b_box_in.min()[1]);
+  TEST("vbl_bounding_box: b_box_out.max()[0] == b_box_in.max()[0]", b_box_out.max()[0], b_box_in.max()[0]);
+  TEST("vbl_bounding_box: b_box_out.max()[1] == b_box_in.max()[1]", b_box_out.max()[1], b_box_in.max()[1]);
 
 
   //Test 1d array
@@ -192,7 +164,7 @@ void golden_test_vbl_io(bool save_file)
         test_result1 = false;
     }
   }
-  TEST ("vbl_array_1d: a1_out == a1_in", test_result1, true);
+  TEST("vbl_array_1d: a1_out == a1_in", test_result1, true);
 
 
   // Test 2d array
@@ -212,7 +184,7 @@ void golden_test_vbl_io(bool save_file)
           test_result2 = false;
     }
   }
-  TEST ("vbl_array_2d: a2_out == a2_in", test_result2, true);
+  TEST("vbl_array_2d: a2_out == a2_in", test_result2, true);
 
 
   // Test 3d array
@@ -234,7 +206,7 @@ void golden_test_vbl_io(bool save_file)
           if (a3_out(i,j,k) != a3_in(i,j,k))
             test_result3 = false;
   }
-  TEST ("vbl_array_3d: a3_out == a3_in", test_result3, true);
+  TEST("vbl_array_3d: a3_out == a3_in", test_result3, true);
 
 
   // Test Sparse Array
@@ -251,12 +223,28 @@ void golden_test_vbl_io(bool save_file)
       s++;
     }
   }
-  TEST ("vbl_sparse_array_1d: sa_out == sa_in",test_result4, true);
+  TEST("vbl_sparse_array_1d: sa_out == sa_in", test_result4, true);
 
 
   // Test Smart Pointer
-  TEST ("vbl_smart_ptr: sp1_in == sp2_in", sp1_in == sp2_in, true);
-  TEST ("vbl_smart_ptr: sp1_in->get_references() == 2", ((sp1_in) && (sp1_in->get_references() ==2)), true);
+  TEST("vbl_smart_ptr: sp1_in == sp2_in", sp1_in == sp2_in, true);
+  TEST("vbl_smart_ptr: sp1_in->get_references() == 2",
+       ((sp1_in) && (sp1_in->get_references() ==2)), true);
 
   return;
+}
+
+MAIN(golden_test_vbl_io)
+{
+  START("golden_test_vbl_io");
+  bool save_file=false;
+  if (argc==2)
+  {
+    vcl_string conf = argv[1];
+    vcl_string ref="create";
+    if (conf==ref)
+      save_file =true;
+  }
+  golden_test_vbl_io(save_file);
+  SUMMARY();
 }
