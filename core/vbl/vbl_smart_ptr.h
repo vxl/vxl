@@ -149,7 +149,9 @@ public:
   //: Relational operators.
   //There's no need for casts to void* or any other pointer type than T* here.
   bool operator==(T const *p) const { return ptr_ == p; }
+  bool operator!=(T const *p) const { return ptr_ != p; }
   bool operator==(vbl_smart_ptr<T>const&p)const{return ptr_ == p.as_pointer();}
+  bool operator!=(vbl_smart_ptr<T>const&p)const{return ptr_ != p.as_pointer();}
   bool operator< (vbl_smart_ptr<T>const&p)const{return ptr_ <  p.as_pointer();}
   bool operator> (vbl_smart_ptr<T>const&p)const{return ptr_ >  p.as_pointer();}
   bool operator<=(vbl_smart_ptr<T>const&p)const{return ptr_ <= p.as_pointer();}
@@ -177,6 +179,11 @@ template <class T>
 inline bool operator== (T const* p, vbl_smart_ptr<T> const& a)
 {
   return a.as_pointer() == p;
+}
+template <class T>
+inline bool operator!= (T const* p, vbl_smart_ptr<T> const& a)
+{
+  return a.as_pointer() != p;
 }
 
 // Sunpro and GCC need an ostream operator. It need not be inline
