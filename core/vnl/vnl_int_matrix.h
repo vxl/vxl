@@ -1,23 +1,24 @@
-// This is vxl/vnl/vnl_int_matrix.h
+// This is core/vnl/vnl_int_matrix.h
 #ifndef vnl_int_matrix_h_
 #define vnl_int_matrix_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
-//  \file
-//  \brief Specializes vnl_matrix for integers
-//  \author Andrew W. Fitzgibbon, Oxford RRG
-//  \date   27 Dec 96
+// \file
+// \brief Specializes vnl_matrix for integers
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   27 Dec 96
 //
 // \verbatim
-// Modifications:
-// LSB (Manchester) 23/3/01 Tidied documentation
+//  Modifications:
+//   LSB (Manchester) 23/3/01 Tidied documentation
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_matrix.h>
+#include <vcl_iosfwd.h>
 
 //: Specializes vnl_matrix for integers, adding a vnl_matrix<double> ctor.
 class vnl_int_matrix : public vnl_matrix<int>

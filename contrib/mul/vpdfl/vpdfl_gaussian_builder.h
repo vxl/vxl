@@ -10,15 +10,14 @@
 // \author Tim Cootes
 // \date 16-Oct-98
 // \verbatim
-//    IMS   Converted to VXL 18 April 2000
+//  Modifications
+//   IMS   Converted to VXL 18 April 2000
 // \endverbatim
-
-
 //=======================================================================
-// inclusions
+
 #include <vpdfl/vpdfl_builder_base.h>
 #include <vnl/vnl_fwd.h>
-
+#include <vcl_iosfwd.h>
 
 //=======================================================================
 
@@ -99,4 +98,4 @@ class vpdfl_gaussian_builder : public vpdfl_builder_base
   virtual void b_read(vsl_b_istream& bfs);
 };
 
-#endif //vpdfl_gaussian_builder_h
+#endif // vpdfl_gaussian_builder_h

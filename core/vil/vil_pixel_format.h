@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_pixel_format.h
+// This is core/vil2/vil2_pixel_format.h
 #ifndef vil2_pixel_format_h_
 #define vil2_pixel_format_h_
 //:
@@ -8,6 +8,7 @@
 #include <vil2/vil2_rgb.h>
 #include <vil2/vil2_rgba.h>
 #include <vxl_config.h> // for vxl_uint_32 etc.
+#include <vcl_iosfwd.h>
 
 //: Describes the type of the concrete data.
 enum vil2_pixel_format {
@@ -53,7 +54,7 @@ enum vil2_pixel_format {
 // Don't forget to increase the end value.
 
   VIL2_PIXEL_FORMAT_ENUM_END = 35
-}; 
+};
 
 
 template <class T>
@@ -105,4 +106,4 @@ vil2_pixel_format vil2_pixel_format_component_format(enum vil2_pixel_format f);
 //: Output a pretty string representing the pixel format.
 vcl_ostream & operator << (vcl_ostream &os, vil2_pixel_format f);
 
-#endif // vil2_pixel_format
+#endif // vil2_pixel_format_h_

@@ -1,8 +1,8 @@
-// This is vxl/vbl/io/vbl_io_smart_ptr.h
+// This is core/vbl/io/vbl_io_smart_ptr.h
 #ifndef vbl_io_smart_ptr_h
 #define vbl_io_smart_ptr_h
 //:
-// \file 
+// \file
 // \brief Serialised binary IO functions for vbl_smart_ptr<T>
 // \author Ian Scott (Manchester)
 // \date 26-Mar-2001
@@ -24,15 +24,15 @@
 //     p = new MY_CLASS();
 //     vsl_b_read(is, *p);
 //   }
-//   else 
+//   else
 //     p = 0;
-// } 
-// 
+// }
+//
 // void vsl_b_write(vsl_b_ostream& os, const MY_CLASS *p)
 // {
 //   if (p==0)
 //   {
-//     vsl_b_write(os, false); // Indicate null pointer stored 
+//     vsl_b_write(os, false); // Indicate null pointer stored
 //   }
 //   else
 //   {
@@ -40,7 +40,7 @@
 //     vsl_b_write(os,*p);
 //   }
 // }
-// 
+//
 // void vsl_print_summary(vcl_ostream& os, const MY_CLASS *p)
 // {
 //   if (p==0)
@@ -48,9 +48,9 @@
 //   else
 //   {http://www.isbe.man.ac.uk/internal/software/c++/vxl-doxygen/
 //                              vcl/html/class_vcl_not_equal_to.html
-//     os << "T" << ": "; 
+//     os << "T" << ": ";
 //     vsl_print_summary(os, *p);
-//   } 
+//   }
 // };
 // \endcode
 //
@@ -58,6 +58,7 @@
 
 #include <vsl/vsl_fwd.h>
 #include <vbl/vbl_smart_ptr.h>
+#include <vcl_iosfwd.h>
 
 //: Binary save vbl_smart_ptr to stream.
 template <class T>

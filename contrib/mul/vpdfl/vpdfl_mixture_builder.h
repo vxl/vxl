@@ -9,8 +9,8 @@
 // \date 21-July-98
 //
 // \verbatim
-// Modifications
-//    IMS   Converted to VXL 14 May 2000, with redesign
+//  Modifications
+//   IMS   Converted to VXL 14 May 2000, with redesign
 // \endverbatim
 
 //=======================================================================
@@ -18,6 +18,7 @@
 #include <vpdfl/vpdfl_builder_base.h>
 #include <vpdfl/vpdfl_mixture_builder.h>
 #include <vpdfl/vpdfl_mixture.h>
+#include <vcl_iosfwd.h>
 
 //=======================================================================
 

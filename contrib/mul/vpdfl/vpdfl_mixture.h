@@ -1,26 +1,23 @@
+// This is mul/vpdfl/vpdfl_mixture.h
+// Copyright: (C) 2000 Victoria University of Manchester
 #ifndef vpdfl_mixture_h_
 #define vpdfl_mixture_h_
-//=======================================================================
-//
-//  Copyright: (C) 2000 Victoria University of Manchester
-//
-//=======================================================================
-
 //:
 // \file
 // \brief Implements a mixture model (a set of individual pdfs + weights)
 // \author Tim Cootes
 // \date 21-July-98
 //
-// Modifications
 // \verbatim
-//    IMS   Converted to VXL 12 May 2000
+//  Modifications
+//   IMS   Converted to VXL 12 May 2000
 // \endverbatim
 
 //=======================================================================
 
 #include <vpdfl/vpdfl_pdf_base.h>
 #include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 
 //=======================================================================
 
@@ -34,7 +31,7 @@ class vpdfl_mixture : public vpdfl_pdf_base
   mutable vnl_vector<double> ws_;
 
   void delete_stuff();
-public:
+ public:
 
   //: Dflt ctor
   vpdfl_mixture();

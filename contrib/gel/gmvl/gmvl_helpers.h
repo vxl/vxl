@@ -10,6 +10,7 @@
 
 #include <vcl_vector.h>
 #include <vcl_string.h>
+#include <vcl_iosfwd.h>
 #include <gmvl/gmvl_node_sptr.h>
 
 //: to print out a lot of nodes

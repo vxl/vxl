@@ -2,16 +2,14 @@
 #ifndef mil_scale_pyramid_builder_2d_h_
 #define mil_scale_pyramid_builder_2d_h_
 //:
-//  \file
-//  \brief Build scale image pyramids at any scale separation
-//  \author Ian Scott
-
+// \file
+// \brief Build scale image pyramids at any scale separation
+// \author Ian Scott
 //=======================================================================
-// inclusions
 
 #include <mil/mil_image_pyramid_builder.h>
 #include <mil/mil_image_2d_of.h>
-
+#include <vcl_iosfwd.h>
 
 //: Build pyramids of mil_image_2d_of<vil_byte> at any scale step
 
@@ -113,4 +111,4 @@ class mil_scale_pyramid_builder_2d : public mil_image_pyramid_builder
   virtual void b_read(vsl_b_istream& bfs);
 };
 
-#endif
+#endif // mil_scale_pyramid_builder_2d_h_

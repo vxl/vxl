@@ -7,6 +7,7 @@
 
 #include <vnl/vnl_rational.h>
 #include <vnl/vnl_numeric_traits.h>
+#include <vcl_iosfwd.h>
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<vnl_rational>

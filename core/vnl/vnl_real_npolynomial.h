@@ -1,31 +1,32 @@
-// This is vxl/vnl/vnl_real_npolynomial.h
+// This is core/vnl/vnl_real_npolynomial.h
 #ifndef vnl_real_npolynomial_h_
 #define vnl_real_npolynomial_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
-//  \file
-//  \brief contains class for polynomials with N variables
+// \file
+// \brief contains class for polynomials with N variables
 //
-//  Implements a polynomial with N variables
+// Implements a polynomial with N variables
 //
-//  \author Marc Pollefeys, ESAT-VISICS, K.U.Leuven
-//  \date   12-08-97
+// \author Marc Pollefeys, ESAT-VISICS, K.U.Leuven
+// \date   12-08-97
 //
-//  \verbatim
+// \verbatim
 //  Modifications
-//  Peter Vanroose 10 Oct 1999 - added simplify();
-//                               determine nterms_ nvar_ ideg_ automatically
-//  Peter Vanroose 20 Oct 1999 - Added operator+(), - * and vcl_ostream <<
-//  dac (Manchester) 15/03/2001: Tidied up the documentation + added binary_io
-//  \endverbatim
+//   Peter Vanroose 10 Oct 1999 - added simplify();
+//                                determine nterms_ nvar_ ideg_ automatically
+//   Peter Vanroose 20 Oct 1999 - Added operator+(), - * and vcl_ostream <<
+//   dac (Manchester) 15/03/2001: Tidied up the documentation + added binary_io
+// \endverbatim
 
 
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
+#include <vcl_iosfwd.h>
 
 //: real polynomial in N variables.
 //    vnl_real_npolynomial represents a polynomial in multiple variables.

@@ -10,6 +10,7 @@
 // \brief Test if data from a given distribution using Kolmogorov-Smirnov
 
 #include <pdf1d/pdf1d_compare_to_pdf.h>
+#include <vcl_iosfwd.h>
 
 // \brief Test if data from a given distribution using Kolmogorov-Smirnov
 class pdf1d_compare_to_pdf_ks : public pdf1d_compare_to_pdf

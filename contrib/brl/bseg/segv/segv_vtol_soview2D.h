@@ -1,4 +1,4 @@
-//this-sets-emacs-to-*-c++-*-mode
+// This is brl/bseg/segv/segv_vtol_soview2D.h
 #ifndef segv_vtol_soview2D_h_
 #define segv_vtol_soview2D_h_
 //--------------------------------------------------------------------------------
@@ -14,6 +14,7 @@
 // \endverbatim
 //--------------------------------------------------------------------------------
 #include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vtol/vtol_face_2d_sptr.h>

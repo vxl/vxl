@@ -10,12 +10,14 @@
 // \author Tim Cootes
 // \date 16-Oct-98
 // \verbatim
-//    IMS   Converted to VXL 18 April 2000
+//  Modifications
+//   IMS   Converted to VXL 18 April 2000
 // \endverbatim
 
 #include <vpdfl/vpdfl_pdf_base.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
+#include <vcl_iosfwd.h>
 
 //: Class for multi-variate gaussians with arbitrary axes.
 //  Covariance matrix is represented by its eigenvectors and values

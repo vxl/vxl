@@ -1,3 +1,4 @@
+// This is mul/pdf1d/pdf1d_mixture_builder.h
 #ifndef pdf1d_mixture_builder_h_
 #define pdf1d_mixture_builder_h_
 //:
@@ -10,14 +11,14 @@
 #include <pdf1d/pdf1d_builder.h>
 #include <pdf1d/pdf1d_mixture_builder.h>
 #include <pdf1d/pdf1d_mixture.h>
+#include <vcl_iosfwd.h>
 
 //=======================================================================
 
-class pdf1d_mixture;
-
 //: Uses the EM algorithm to build pdf1d_mixture objects.
-class pdf1d_mixture_builder : public pdf1d_builder {
-private:
+class pdf1d_mixture_builder : public pdf1d_builder
+{
+ private:
   vcl_vector<pdf1d_builder*> builder_;
   double min_var_;
   int max_its_;
@@ -43,7 +44,7 @@ private:
 
   void init();
   void delete_stuff();
-public:
+ public:
 
   //: Dflt ctor
   pdf1d_mixture_builder();

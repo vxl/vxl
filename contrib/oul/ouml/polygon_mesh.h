@@ -1,18 +1,18 @@
-//-*-c++-*--------------------------------------------------------------
-//
-// polygon_mesh.h: a class for polygon meshes
-//
+// This is oul/ouml/polygon_mesh.h
 // Copyright (c) 2001 Brendan McCane University of Otago, Dunedin, New
-// Zealand Reproduction rights limited as described in the COPYRIGHT
-// file.
-//----------------------------------------------------------------------
-
+// Zealand Reproduction rights limited as described in the COPYRIGHT file.
 #ifndef OTAGO_polygon_mesh__h_INCLUDED
 #define OTAGO_polygon_mesh__h_INCLUDED
+//:
+// \file
+// \brief a class for polygon meshes
+//
+//----------------------------------------------------------------------
 
 #include <vgl/vgl_point_3d.h>
-#include <vcl_vector.h>
 #include <vnl/vnl_vector_fixed.h>
+#include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 
 class PolygonMesh
 {
@@ -26,7 +26,7 @@ class PolygonMesh
   vcl_vector<Face> face_list;
 
  public:
-  PolygonMesh(int num_vertices=100, int num_faces=100): 
+  PolygonMesh(int num_vertices=100, int num_faces=100):
     vertex_list(num_vertices), face_list(num_faces){}
   int add_vertex(DPoint &pt);
   int set_vertex(int index, DPoint &pt);
@@ -34,7 +34,7 @@ class PolygonMesh
   int set_face(int index, Face &fc);
   DPoint get_vertex(int index);
   Polygon get_face(int index);
-  DVector3D get_face_normal(int face_index, 
+  DVector3D get_face_normal(int face_index,
                             int vertex_index);
   bool read_file(char *filename);
   inline int num_faces(){return face_list.size();}

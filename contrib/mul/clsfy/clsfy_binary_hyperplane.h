@@ -1,31 +1,29 @@
+// This is mul/clsfy/clsfy_binary_hyperplane.h
+// Copyright: (C) 2000 British Telecommunications PLC
 #ifndef clsfy_binary_hyperplane_bin_h_
 #define clsfy_binary_hyperplane_bin_h_
-
-// Copyright: (C) 2000 British Telecommunications PLC
-
 //:
 // \file
 // \brief Describe a linear binary classifier
 // \author Ian Scott
 // \date 4 June 2001
 
-
 #include <clsfy/clsfy_classifier_base.h>
 #include <vnl/vnl_vector.h>
-
+#include <vcl_iosfwd.h>
 
 //:  A binary output hyperplane classifier.
 // The classifier could be considered as a single perceptron.
 
 class clsfy_binary_hyperplane : public clsfy_classifier_base
 {
-protected:
+ protected:
   //: Hyperplane normal
   vnl_vector<double> weights_;
   //: Bias: ||weights_|| * distance from origin to hyperplane
-  double bias_; 
+  double bias_;
 
-public:
+ public:
 
   //: Find the posterior probability of the input being in the positive class.
   // The result is outputs(0)

@@ -11,6 +11,7 @@
 
 #include <pdf1d/pdf1d_compare_to_pdf.h>
 #include <mbl/mbl_cloneable_ptr.h>
+#include <vcl_iosfwd.h>
 
 //: Test if data from a given distribution using Bhattacharyya overlap
 //  Uses builder() to build a pdf from supplied data.  This is then

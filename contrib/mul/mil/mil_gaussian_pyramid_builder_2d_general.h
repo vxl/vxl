@@ -1,24 +1,22 @@
+// This is mul/mil/mil_gaussian_pyramid_builder_2d_general.h
 #ifndef mil_gaussian_pyramid_builder_2d_general_h_
 #define mil_gaussian_pyramid_builder_2d_general_h_
 //:
-//  \file
-//  \brief Build Gaussian image pyramids at any scale separation
-//  \author Ian Scott
-
-
+// \file
+// \brief Build Gaussian image pyramids at any scale separation
+// \author Ian Scott
 //=======================================================================
-// inclusions
 
 #include <mil/mil_gaussian_pyramid_builder_2d.h>
 #include <mil/mil_image_2d_of.h>
-
+#include <vcl_iosfwd.h>
 
 //: Build pyramids of mil_image_2d_of<vil_byte> at any scale step
 
 template <class T>
 class mil_gaussian_pyramid_builder_2d_general : public mil_gaussian_pyramid_builder_2d<T>
 {
-private:
+ private:
     //: the current scale step between pyramid levels
     double scale_step_;
     //: image workspace
@@ -66,7 +64,7 @@ private:
     // Corresponds to the filt1_ elements in a symmetrical filter
     double filt_pen_edge_n1_;
 
-public:
+ public:
     //: Build pyramid
     virtual void build(mil_image_pyramid& im_pyr, const mil_image& im) const;
 
@@ -121,4 +119,4 @@ public:
     void b_read(vsl_b_istream& bfs);
 };
 
-#endif
+#endif // mil_gaussian_pyramid_builder_2d_general_h_

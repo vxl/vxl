@@ -11,6 +11,7 @@
 
 #include <pdf1d/pdf1d_pdf.h>
 #include <pdf1d/pdf1d_kernel_pdf.h>
+#include <vcl_iosfwd.h>
 
 //: Univariate Epanechnikov kernel PDF $k(x)=0.75(1-0.2x^2)/ \sqrt{5}$
 class pdf1d_epanech_kernel_pdf : public pdf1d_kernel_pdf

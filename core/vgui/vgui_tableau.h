@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_tableau.h
+// This is core/vgui/vgui_tableau.h
 #ifndef vgui_tableau_h_
 #define vgui_tableau_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -13,22 +13,23 @@
 //  Contains classes: vgui_tableau.
 //
 // \verbatim
-// Modifications:
-//  21-SEP-1999 fsm various changes.
-//  05-OCT-1999 fsm
-//  11-OCT-1999 fsm. removed old build_chain code.
-//  12-OCT-1999 fsm. added type_name() method. various cleanup.
-//  13-OCT-1999 fsm. deprecated draw_impl() and draw_overlay_impl().
-//  16-OCT-1999 fsm. deprecated draw(), draw_overlay() + two minor
-//                     methods. added get_popup().
-//  11-NOV-1999 fsm. added add_popup() now that get_popup() has a
-//                     different meaning. Added exists().
-//  07-AUG-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
-//  08-OCT-2002 K.Y.McGaul - Removed unused adopt and disown functions.
+//  Modifications:
+//   21-SEP-1999 fsm various changes.
+//   05-OCT-1999 fsm
+//   11-OCT-1999 fsm. removed old build_chain code.
+//   12-OCT-1999 fsm. added type_name() method. various cleanup.
+//   13-OCT-1999 fsm. deprecated draw_impl() and draw_overlay_impl().
+//   16-OCT-1999 fsm. deprecated draw(), draw_overlay() + two minor
+//                      methods. added get_popup().
+//   11-NOV-1999 fsm. added add_popup() now that get_popup() has a
+//                      different meaning. Added exists().
+//   07-AUG-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
+//   08-OCT-2002 K.Y.McGaul - Removed unused adopt and disown functions.
 // \endverbatim
 
 #include <vcl_string.h>
 #include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 
 #include <vgui/vgui_event.h>
 #include <vgui/internals/vgui_parent_child_link_data.h>
@@ -191,7 +192,7 @@ class vgui_tableau : public vgui_parent_child_link_data
   friend class vgui_adaptor;
 
   //: Reference count - starts at 0.
-  int references; 
+  int references;
 };
 
 //: Print some indication of what the tableau is.

@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_diag_matrix.h
+// This is core/vnl/vnl_diag_matrix.h
 #ifndef vnl_diag_matrix_h_
 #define vnl_diag_matrix_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -12,12 +12,13 @@
 //
 // \verbatim
 //  Modifications
-//  IMS (Manchester) 16/03/2001: Tidied up the documentation + added binary_io
+//   IMS (Manchester) 16/03/2001: Tidied up the documentation + added binary_io
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //   Sep.2002 - Peter Vanroose - Added operator+, operator-, operator*
 // \endverbatim
 
 #include <vcl_cassert.h>
+#include <vcl_iosfwd.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 

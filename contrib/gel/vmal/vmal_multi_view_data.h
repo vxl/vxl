@@ -4,12 +4,13 @@
 //--------------------------------------------------------------------------------
 //:
 // \file
-//   Class to hold the matched points through mutli views
+// \brief Class to hold the matched points through multi views
 // \author
 //   L. Guichard
 //--------------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vcl_map.h>
+#include <vcl_iosfwd.h>
 #include <mvl/NViewMatches.h>
 #include <vbl/vbl_ref_count.h>
 

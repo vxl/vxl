@@ -11,6 +11,7 @@
 
 #include <vnl/vnl_vector.h>
 #include <vcl_string.h>
+#include <vcl_iosfwd.h>
 class pdf1d_pdf;
 
 //=======================================================================

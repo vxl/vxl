@@ -10,6 +10,7 @@
 // \brief Builds gaussian kernel pdfs
 
 #include <pdf1d/pdf1d_kernel_pdf_builder.h>
+#include <vcl_iosfwd.h>
 
 //=======================================================================
 

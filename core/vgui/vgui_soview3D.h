@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_soview3D.h
+// This is core/vgui/vgui_soview3D.h
 #ifndef vgui_soview3D_h_
 #define vgui_soview3D_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -9,12 +9,13 @@
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   24 Mar 99
 // \brief  3-dimensional spatial object view.
-// 
+//
 // Contains classes:  vgui_soview3D  vgui_point3D  vgui_linseg3D
 // Notes:  We use floats instead of doubles as size is a speed issue (sic.)
 //
 
 #include "vgui_soview.h"
+#include <vcl_iosfwd.h>
 
 //: 3-dimensional spatial object view.
 class vgui_soview3D : public vgui_soview

@@ -1,9 +1,7 @@
 // This is mul/clsfy/clsfy_knn_builder.h
+// Copyright: (C) 2001 British Telecommunications plc
 #ifndef clsfy_knn_builder_h_
 #define clsfy_knn_builder_h_
-
-// Copyright: (C) 2001 British Telecommunications plc
-
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -16,6 +14,7 @@
 #include <clsfy/clsfy_builder_base.h>
 #include <vcl_vector.h>
 #include <vcl_string.h>
+#include <vcl_iosfwd.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vnl/vnl_vector.h>
 

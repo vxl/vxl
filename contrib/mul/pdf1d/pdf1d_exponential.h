@@ -10,6 +10,7 @@
 // \author Tim Cootes
 
 #include <pdf1d/pdf1d_pdf.h>
+#include <vcl_iosfwd.h>
 
 //: Class for exponential distributions
 //  $p(x)=\lambda exp(-\lambda x)$

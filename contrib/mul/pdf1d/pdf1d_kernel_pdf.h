@@ -12,6 +12,7 @@
 #include <pdf1d/pdf1d_pdf.h>
 #include <vnl/vnl_vector.h>
 #include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 
 //: Class for univariate kernel based PDFs.
 //  Distribution is the sum of a set of kernel functions placed on the training

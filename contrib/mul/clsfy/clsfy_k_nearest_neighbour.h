@@ -1,10 +1,7 @@
+// This is mul/clsfy/clsfy_k_nearest_neighbour.h
+// Copyright: (C) 2000 British Telecommunications plc.
 #ifndef clsfy_k_nearest_neighbour_h_
 #define clsfy_k_nearest_neighbour_h_
-
-
-// Copyright: (C) 2000 British Telecommunications plc.
-
-
 //:
 // \file
 // \brief Describe an KNN classifier
@@ -12,15 +9,15 @@
 // \date 2000/05/10
 // \verbatim
 //  Modifications
-//  2 May 2001 IMS Converted to VXL
+//   2 May 2001 IMS Converted to VXL
 // \endverbatim
 
-
 #include <clsfy/clsfy_classifier_base.h>
-
+#include <vcl_iosfwd.h>
 
 //: A Binary k-Nearest Neighbour Neighbour classifier
-class clsfy_k_nearest_neighbour : public clsfy_classifier_base {
+class clsfy_k_nearest_neighbour : public clsfy_classifier_base
+{
   //: The number of nearest neighbours to look for.
   unsigned k_;
 
@@ -30,7 +27,7 @@ class clsfy_k_nearest_neighbour : public clsfy_classifier_base {
   //: The set of training output values.  Size should equal number of inputs.
   vcl_vector<unsigned> trainOutputs_;
 
-public:
+ public:
   //: Construct a KNN classifier.
   clsfy_k_nearest_neighbour():k_(1) {}
 

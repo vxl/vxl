@@ -10,6 +10,7 @@
 // \author Tim Cootes
 
 #include <vcl_cmath.h>
+#include <vcl_iosfwd.h>
 #include <pdf1d/pdf1d_pdf.h>
 
 //: Class for univariate flat distributions: p(x)=1/(hi-lo) in [lo,hi]

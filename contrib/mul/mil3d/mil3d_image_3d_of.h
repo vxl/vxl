@@ -13,6 +13,7 @@
 #include <vbl/vbl_smart_ptr.h>
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
+#include <vcl_iosfwd.h>
 
 //: Represent images of one or more planes of type T.
 //  Each plane is nx() x ny() x nz() Ts, with the (x,y) element

@@ -1,26 +1,26 @@
+// This is mul/clsfy/clsfy_rbf_svm.h
+// Copyright: (C) 2000 British Telecommunications plc.
 #ifndef clsfy_rbf_svm_h_
 #define clsfy_rbf_svm_h_
-
-// Copyright: (C) 2000 British Telecommunications plc.
-
 //:
 // \file
 // \brief Describe a RBF Support Vector Machine
 // \author Ian Scott
 // \date Jan 2001
-// Modifications
 // \verbatim
-// 31 May 2001 IMS Converted to VXL
-// 31 May 2001 IMS Merged with Finder/IS_OrderedSVM
+//  Modifications
+//   31 May 2001 IMS Converted to VXL
+//   31 May 2001 IMS Merged with Finder/IS_OrderedSVM
 // \endverbatim
 
 #include <clsfy/clsfy_classifier_base.h>
 #include <vcl_cmath.h>
+#include <vcl_iosfwd.h>
 
 //: A Support Vector Machine Binary Classifier.
 class clsfy_rbf_svm : public clsfy_classifier_base
 {
-protected:
+ protected:
   //: the starting upper bound.
   // If the function sum exceeds this value, the decision will definitely be 1.
   double upper_target_;
@@ -41,7 +41,7 @@ protected:
   //: -1/(2 * sigma*sigma), where sigma = RBF kernel width
   double gamma_;
 
-public:
+ public:
 
   //: Dflt constructor
   clsfy_rbf_svm();
@@ -127,7 +127,7 @@ public:
   //: Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs);
 
-protected:
+ protected:
   //: Set the private target member values to the correct value.
   void calculate_targets();
 

@@ -1,13 +1,14 @@
-// This is vxl/vnl/io/vnl_io_matrix.h
+// This is core/vnl/io/vnl_io_matrix.h
 #ifndef vnl_io_matrix_h
 #define vnl_io_matrix_h
 //:
-// \file 
+// \file
 // \author Louise Butcher
 // \date 20-Mar-2001
 
 #include <vsl/vsl_fwd.h>
 #include <vnl/vnl_matrix.h>
+#include <vcl_iosfwd.h>
 
 //: Binary save vnl_matrix to stream.
 template <class T>

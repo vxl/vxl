@@ -1,4 +1,4 @@
-//this-sets-emacs-to-*-c++-*-mode
+// This is brl/vvid/cmu_1394_camera.h
 #ifndef cmu_1394_camera_h_
 #define cmu_1394_camera_h_
 //--------------------------------------------------------------------------------
@@ -23,10 +23,11 @@
 #include <vil/vil_rgb.h>
 #include <vil/vil_memory_image_of.h>
 #include <vvid/cmu_1394_camera_params.h>
+#include <vcl_iosfwd.h>
 
 class cmu_1394_camera : public cmu_1394_camera_params, public C1394Camera
 {
-public:
+ public:
   cmu_1394_camera();
   cmu_1394_camera(int node, const cmu_1394_camera_params& cp);
 
@@ -46,7 +47,7 @@ public:
   bool  get_monochrome_image(vil_memory_image_of<unsigned char>& im,
                              int pixel_sample_interval =1, bool reread = true);
   friend vcl_ostream& operator << (vcl_ostream& os, const cmu_1394_camera& c);
-private:
+ private:
   //internal methods
 
   //camera status flags

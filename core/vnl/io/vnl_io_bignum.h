@@ -1,17 +1,17 @@
-// This is vxl/vnl/io/vnl_io_bignum.h
+// This is core/vnl/io/vnl_io_bignum.h
 #ifndef vnl_io_bignum_h
 #define vnl_io_bignum_h
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
-// \file 
+// \file
 // \author Ian Scott
 // \date 10-Oct-2001
 
+#include <vsl/vsl_fwd.h>
 #include <vnl/vnl_bignum.h>
-class vsl_b_ostream;
-class vsl_b_istream;
+#include <vcl_iosfwd.h>
 
 //: Binary save vnl_bignum to stream.
 void vsl_b_write(vsl_b_ostream & os, vnl_bignum const& v);

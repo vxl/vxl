@@ -1,4 +1,4 @@
-// This is vxl/vbl/vbl_basic_relation_where.h
+// This is core/vbl/vbl_basic_relation_where.h
 #ifndef vbl_basic_relation_where_h
 #define vbl_basic_relation_where_h
 //:
@@ -7,13 +7,14 @@
 // \date   Nov 13, 1997
 //
 // \verbatim
-// Modifications
-// PDA (Manchester) 21/03/2001: Tidied up the documentation
+//  Modifications
+//   PDA (Manchester) 21/03/2001: Tidied up the documentation
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
 
 #include <vbl/vbl_basic_tuple.h>
+#include <vcl_iosfwd.h>
 
 //: A tuple used to select in vbl_basic_relation
 //  This class is used internal to the vbl_basic_relation class to specify

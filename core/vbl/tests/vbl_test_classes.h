@@ -3,12 +3,14 @@
 
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
+#include <vcl_iosfwd.h>
 
-class base_impl : public vbl_ref_count  {
-public :
+class base_impl : public vbl_ref_count
+{
+ public:
   static int reftotal;
   int n;
- 
+
   base_impl(int nn);
   base_impl();
   ~base_impl();
@@ -17,10 +19,11 @@ public :
 };
 
 //-------------------------------------------------------
- 
+
 class derived_impl : public base_impl
 {
-   public : int k;
+ public:
+  int k;
 };
 
 //======================================================================

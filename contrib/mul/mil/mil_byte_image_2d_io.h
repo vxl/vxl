@@ -12,9 +12,7 @@
 #include <mil/mil_image_io.h>
 #include <mil/mil_image_2d_of.h>
 #include <vil/vil_byte.h>
-
-class vil_image;
-
+#include <vcl_iosfwd.h>
 class mil_image;
 
 enum mil_byte_image_2d_io_std_depths

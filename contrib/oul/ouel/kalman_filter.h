@@ -1,19 +1,13 @@
-//-*-c++-*--------------------------------------------------------------
-//
-// kalman_filter.h: A linear Kalman filter class
-//
+// This is oul/ouel/kalman_filter.h
 // Copyright (c) 1999 Brendan McCane
 // University of Otago, Dunedin, New Zealand
 // Reproduction rights limited as described in the COPYRIGHT file.
 //----------------------------------------------------------------------
-
 #ifndef OTAGO_kalman_filter__h_INCLUDED
-#define OTAGO_kalman_filter__h_INCLUDED 1
-
-//----------------------------------------------------------------------
+#define OTAGO_kalman_filter__h_INCLUDED
 //:
 // \file
-// \brief The Kalman filter class
+// \brief A linear Kalman filter class
 //
 // Implementation of a linear Kalman filter. We want to estimate the
 // value of a time-varying signal from a measurement and predict the
@@ -40,6 +34,7 @@
 //----------------------------------------------------------------------
 
 #include <vnl/vnl_matrix.h>
+#include <vcl_iosfwd.h>
 
 class KalmanFilter
 {
@@ -76,7 +71,7 @@ class KalmanFilter
   // The Kalman gain matrix (ns*nm)
   vnl_matrix<double> K;
 
-public:
+ public:
   KalmanFilter(unsigned int ns, unsigned int nm, unsigned int nc,
                const vnl_matrix<double> &Ai,
                const vnl_matrix<double> &Hi,

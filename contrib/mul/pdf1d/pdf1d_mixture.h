@@ -1,3 +1,4 @@
+// This is mul/pdf1d/pdf1d_mixture.h
 #ifndef pdf1d_mixture_h_
 #define pdf1d_mixture_h_
 //:
@@ -9,17 +10,19 @@
 
 #include <pdf1d/pdf1d_pdf.h>
 #include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 
 //=======================================================================
 
 //: Represents a mixture model (a set of individual pdfs + weights)
-class pdf1d_mixture : public pdf1d_pdf {
+class pdf1d_mixture : public pdf1d_pdf
+{
   vcl_vector<pdf1d_pdf*> component_;
   vcl_vector<double>     weight_;
 
   void init();
   void delete_stuff();
-public:
+ public:
 
   //: Dflt ctor
   pdf1d_mixture();

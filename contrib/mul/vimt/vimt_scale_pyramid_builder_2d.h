@@ -1,17 +1,15 @@
-// This is mul/mil/vimt_scale_pyramid_builder_2d.h
+// This is mul/vimt/vimt_scale_pyramid_builder_2d.h
 #ifndef vimt_scale_pyramid_builder_2d_h_
 #define vimt_scale_pyramid_builder_2d_h_
 //:
-//  \file
-//  \brief Build scale image pyramids at any scale separation
-//  \author Ian Scott
-
+// \file
+// \brief Build scale image pyramids at any scale separation
+// \author Ian Scott
 //=======================================================================
-// inclusions
 
 #include <vimt/vimt_image_pyramid_builder.h>
 #include <vimt/vimt_image_2d_of.h>
-
+#include <vcl_iosfwd.h>
 
 //: Build pyramids of vimt_image_2d_of<vxl_byte> at any scale step
 template <class T>
@@ -112,4 +110,4 @@ class vimt_scale_pyramid_builder_2d : public vimt_image_pyramid_builder
   virtual void b_read(vsl_b_istream& bfs);
 };
 
-#endif
+#endif // vimt_scale_pyramid_builder_2d_h_

@@ -1,22 +1,22 @@
+// This is mul/clsfy/clsfy_simple_adaboost.h
 #ifndef clsfy_simple_adaboost_h_
 #define clsfy_simple_adaboost_h_
-
 //:
 // \file
 // \brief Classifier using adaboost on combinations of simple 1D classifiers
 // \author Tim Cootes
 
-
 #include <clsfy/clsfy_classifier_base.h>
 #include <clsfy/clsfy_classifier_1d.h>
 #include <vnl/vnl_vector.h>
-
+#include <vcl_iosfwd.h>
 
 //: Classifier using adaboost on combinations of simple 1D classifiers
 //  Uses a weighted combination of 1D classifiers applied to the
 //  elements of the input vector.
-class clsfy_simple_adaboost : public clsfy_classifier_base {
-protected:
+class clsfy_simple_adaboost : public clsfy_classifier_base
+{
+ protected:
 
   //: The classifiers in order
   vcl_vector<clsfy_classifier_1d*> classifier_1d_;
@@ -39,7 +39,7 @@ protected:
   //: Delete objects on heap
   void delete_stuff();
 
-public:
+ public:
 
   //: Default constructor
   clsfy_simple_adaboost();

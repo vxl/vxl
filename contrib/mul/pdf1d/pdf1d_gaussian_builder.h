@@ -10,6 +10,7 @@
 // \brief Class to build pdf1d_gaussian objects
 
 #include <pdf1d/pdf1d_builder.h>
+#include <vcl_iosfwd.h>
 
 //=======================================================================
 

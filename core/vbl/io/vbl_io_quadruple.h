@@ -1,14 +1,14 @@
-// This is vxl/vbl/io/vbl_io_quadruple.h
+// This is core/vbl/io/vbl_io_quadruple.h
 #ifndef vbl_io_quadruple_h_
 #define vbl_io_quadruple_h_
 //:
-// \file 
+// \file
 // \brief   binary IO functions for vbl_quadruple<S, T, U>
 // \author  Ian Scott
 
+#include <vsl/vsl_fwd.h>
 #include <vbl/vbl_quadruple.h>
-class vsl_b_ostream;
-class vsl_b_istream;
+#include <vcl_iosfwd.h>
 
 //: Write pair to binary stream
 template <class S, class T, class U, class V>

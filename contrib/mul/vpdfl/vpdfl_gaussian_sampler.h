@@ -11,6 +11,7 @@
 // \brief Sampler class for Multi-Variate Gaussian.
 
 #include <vcl_string.h>
+#include <vcl_iosfwd.h>
 #include <mbl/mbl_mz_random.h>
 #include <vnl/vnl_fwd.h>
 #include <vpdfl/vpdfl_sampler_base.h>

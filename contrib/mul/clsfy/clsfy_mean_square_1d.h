@@ -1,3 +1,4 @@
+// This is mul/clsfy/clsfy_mean_square_1d.h
 #ifndef clsfy_mean_square_1d_h_
 #define clsfy_mean_square_1d_h_
 //:
@@ -7,7 +8,7 @@
 
 #include <clsfy/clsfy_classifier_1d.h>
 #include <vnl/vnl_vector.h>
-
+#include <vcl_iosfwd.h>
 
 //: Simplest possible 1D classifier: A single thresholding function.
 //  Returns class zero if s_*x<threshold_
@@ -27,7 +28,7 @@ class clsfy_mean_square_1d : public clsfy_classifier_1d
   // Returns a number between 0 and nClasses-1 inclusive to represent the most likely class
   virtual unsigned classify(double input) const
     { double k=(input-mean_);
-      if (k*k<threshold_) return 1; 
+      if (k*k<threshold_) return 1;
       else return 0; }
 
   //: Log likelihood of being in the positive class/

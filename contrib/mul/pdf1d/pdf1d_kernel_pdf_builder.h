@@ -10,6 +10,7 @@
 // \brief Initialises kernel pdfs
 
 #include <pdf1d/pdf1d_builder.h>
+#include <vcl_iosfwd.h>
 
 //=======================================================================
 
@@ -54,7 +55,7 @@ class pdf1d_kernel_pdf_builder : public pdf1d_builder
   void set_use_fixed_width(double width);
 
   //: Use equal width kernels of width depending on number of samples.
-  // This method appears to give a lower density near the tails 
+  // This method appears to give a lower density near the tails
   void set_use_equal_width();
 
   //: Kernel width proportional to distance to nearby samples.
@@ -114,7 +115,7 @@ class pdf1d_kernel_pdf_builder : public pdf1d_builder
   // based on a pilot estimate as calculated by build_select_equal_width().
   // The kernel centres in the pdf will have same value and order as
   // the training data.
-  // 
+  //
   // This method gives a significantly higher density near the edges
   // of the distribution than suggested by the cumulative histogram of
   // the training data,

@@ -1,3 +1,4 @@
+// This is mul/clsfy/clsfy_binary_threshold_1d.h
 #ifndef clsfy_binary_threshold_1d_h_
 #define clsfy_binary_threshold_1d_h_
 //:
@@ -7,7 +8,7 @@
 
 #include <clsfy/clsfy_classifier_1d.h>
 #include <vnl/vnl_vector.h>
-
+#include <vcl_iosfwd.h>
 
 //: Simplest possible 1D classifier: A single thresholding function.
 //  Returns class zero if s_*x<threshold_

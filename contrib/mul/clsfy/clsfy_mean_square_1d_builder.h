@@ -1,3 +1,4 @@
+// This is mul/clsfy/clsfy_mean_square_1d_builder.h
 #ifndef clsfy_mean_square_1d_builder_h_
 #define clsfy_mean_square_1d_builder_h_
 //:
@@ -7,6 +8,7 @@
 
 #include "clsfy_builder_1d.h"
 #include <vcl_string.h>
+#include <vcl_iosfwd.h>
 #include <vnl/vnl_vector.h>
 #include <vbl/vbl_triple.h>
 #include <clsfy/clsfy_classifier_1d.h>

@@ -1,4 +1,4 @@
-// This is vxl/vbl/io/vbl_io_bounding_box.h
+// This is core/vbl/io/vbl_io_bounding_box.h
 #ifndef vbl_io_bounding_box_h
 #define vbl_io_bounding_box_h
 //:
@@ -8,6 +8,7 @@
 
 #include <vsl/vsl_fwd.h>
 #include <vbl/vbl_bounding_box.h>
+#include <vcl_iosfwd.h>
 
 //: Binary save vbl_bounding_box to stream.
 template <class T, class DIM_>

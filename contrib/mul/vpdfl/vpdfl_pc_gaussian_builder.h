@@ -11,15 +11,13 @@
 // \date 21-Jul-2000
 //
 // \verbatim
-// Modifications
-// 23 April 2001 IMS - Ported to VXL
+//  Modifications
+//   23 April 2001 IMS - Ported to VXL
 // \endverbatim
-
-
 //=======================================================================
-// inclusions
-#include <vpdfl/vpdfl_gaussian_builder.h>
 
+#include <vpdfl/vpdfl_gaussian_builder.h>
+#include <vcl_iosfwd.h>
 
 //=======================================================================
 

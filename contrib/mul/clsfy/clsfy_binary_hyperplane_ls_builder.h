@@ -1,8 +1,7 @@
+// This is mul/clsfy/clsfy_binary_hyperplane_ls_builder.h
+// Copyright: (C) 2000 British Telecommunications PLC
 #ifndef clsfy_binary_hyperplane_ls_builder_h_
 #define clsfy_binary_hyperplane_ls_builder_h_
-// Copyright: (C) 2000 British Telecommunications PLC
-
-
 //:
 // \file
 // \brief Describe a binary linear classifier builder
@@ -11,10 +10,12 @@
 
 #include <clsfy/clsfy_binary_hyperplane.h>
 #include <clsfy/clsfy_builder_base.h>
+#include <vcl_iosfwd.h>
 
 //: Build a binary linear classifier using least squares
-class clsfy_binary_hyperplane_ls_builder : public clsfy_builder_base {
-public:
+class clsfy_binary_hyperplane_ls_builder : public clsfy_builder_base
+{
+ public:
   // Dflt ctor
   clsfy_binary_hyperplane_ls_builder() {}
 

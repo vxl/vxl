@@ -1,14 +1,14 @@
-// This is vxl/vnl/io/vnl_io_vector_fixed.h
+// This is core/vnl/io/vnl_io_vector_fixed.h
 #ifndef vnl_io_vector_fixed_h
 #define vnl_io_vector_fixed_h
 //:
-// \file 
+// \file
 // \author Amitha Perera
 // \date Oct 2002
 
+#include <vsl/vsl_fwd.h>
 #include <vnl/vnl_vector_fixed.h>
-class vsl_b_ostream;
-class vsl_b_istream;
+#include <vcl_iosfwd.h>
 
 //: Binary save vnl_vector_fixed to stream.
 template <class T, unsigned n>

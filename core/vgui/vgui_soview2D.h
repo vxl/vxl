@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_soview2D.h
+// This is core/vgui/vgui_soview2D.h
 #ifndef vgui_soview2D_h_
 #define vgui_soview2D_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -19,12 +19,12 @@
 //
 // \verbatim
 //  Modifications
-//    10 Feb 2000 fsm - removed dependency on MultiView
-//    04 Jul 2000 Marko Bacic - Fixed vgui_soview2D_circle
+//   10 Feb 2000 fsm - removed dependency on MultiView
+//   04 Jul 2000 Marko Bacic - Fixed vgui_soview2D_circle
 // \endverbatim
 
-
 #include "vgui_soview.h"
+#include <vcl_iosfwd.h>
 
 //-----------------------------------------------------------------------------
 //: 2-dimensional spatial object view.
@@ -106,7 +106,7 @@ class vgui_soview2D_lineseg : public vgui_soview2D
 
   //: Returns the distance squared to this 2D line segment.
   virtual float distance_squared(float x, float y) const;
- 
+
   //: Returns the type of this class ('vgui_soview2D_lineseg').
   vcl_string type_name() const { return "vgui_soview2D_lineseg"; }
 
@@ -229,7 +229,7 @@ class vgui_soview2D_circle : public vgui_soview2D
   //: x-coordinate of the centre of the cirle.
   float x;
   //: y-coordinate of the centre of the cirle.
-  float y; 
+  float y;
 
   //: Compile the vcl_list
   static void compile();
@@ -261,7 +261,7 @@ class vgui_soview2D_ellipse : public vgui_soview2D
 
   //: Translate this 2D ellipse by the given x and y distances.
   void translate(float x, float y);
- 
+
   //: Centre, width, height and angle of this 2D ellipse.
   float x, y, w, h, phi;
 

@@ -11,6 +11,7 @@
 // \brief Class to build vpdfl_axis_gaussian objects
 
 #include <vpdfl/vpdfl_builder_base.h>
+#include <vcl_iosfwd.h>
 
 //=======================================================================
 

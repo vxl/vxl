@@ -1,16 +1,17 @@
-// This is vxl/vnl/vnl_sym_matrix.h
+// This is core/vnl/vnl_sym_matrix.h
 #ifndef vnl_sym_matrix_h_
 #define vnl_sym_matrix_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
-//  \file
-//  \brief Contains class for symmetric matrices
-//  \author Ian Scott (Manchester ISBE)
-//  \date   6/12/2001
+// \file
+// \brief Contains class for symmetric matrices
+// \author Ian Scott (Manchester ISBE)
+// \date   6/12/2001
 //
 #include <vcl_cassert.h>
+#include <vcl_iosfwd.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_c_vector.h>
@@ -115,7 +116,7 @@ class vnl_sym_matrix
   //: Set the first i values of row i
   // or the top i values of column i
   void set_half_row (const vnl_vector<T> &half_row, unsigned i);
- 
+
   //: Replaces the symmetric submatrix of THIS matrix with the elements of matrix m.
   // Starting at top left corner. Complexity is $O(m^2)$.
   vnl_sym_matrix<T>& update (vnl_sym_matrix<T> const& m, unsigned diag_start=0);

@@ -12,6 +12,7 @@
 
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
+#include <vcl_iosfwd.h>
 
 //:
 class vgui_projection_inspector

@@ -10,6 +10,7 @@
 // \author Ian Scott
 
 #include <pdf1d/pdf1d_kernel_pdf.h>
+#include <vcl_iosfwd.h>
 
 //: Class for univariate kernel based PDFs.
 //  Distribution is the sum of a set of kernel functions placed on the training
@@ -17,7 +18,7 @@
 //
 //  Essentially a special case of a mixture model.  It differs from
 //  the former in that a) every component has the same shape, though
-//  possibly a different width 
+//  possibly a different width
 //  b) Usually one uses different training algorithms.
 //  Mixture models are more general.
 //

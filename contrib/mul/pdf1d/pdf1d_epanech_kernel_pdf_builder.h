@@ -10,6 +10,7 @@
 // \brief Builds Epanechnikov kernel pdfs
 
 #include <pdf1d/pdf1d_kernel_pdf_builder.h>
+#include <vcl_iosfwd.h>
 
 //=======================================================================
 

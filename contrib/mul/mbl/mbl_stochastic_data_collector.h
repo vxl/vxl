@@ -1,17 +1,15 @@
 #ifndef mbl_stochastic_data_collector_h_
 #define mbl_stochastic_data_collector_h_
-
 //:
 // \file
 // \brief Describe class that collects random subset of arbitrary length data.
 // \author Ian Scott
-
-
 //=======================================================================
 
 #include <mbl/mbl_data_collector.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 #include <mbl/mbl_mz_random.h>
 
 //=======================================================================
@@ -26,7 +24,7 @@
 // can be used as follows.
 // \code
 // mbl_stochastic_data_collector<double> c(100);
-// while(..)
+// while (..)
 // {
 //   if (c.store_next()) c.force_record(f());
 // }
@@ -34,7 +32,7 @@
 template <class T>
 class mbl_stochastic_data_collector: public mbl_data_collector<T>
 {
-private:
+ private:
   //: Recorded samples are stored here
   vcl_vector<T > samples_;
 
@@ -47,7 +45,7 @@ private:
   //: Random number generator used to decide whether to store a particular vector.
   mbl_mz_random rand;
 
-public:
+ public:
 
   //: Dflt ctor
   mbl_stochastic_data_collector();
@@ -111,4 +109,4 @@ public:
   virtual void b_read(vsl_b_istream& bfs);
 };
 
-#endif
+#endif // mbl_stochastic_data_collector_h_

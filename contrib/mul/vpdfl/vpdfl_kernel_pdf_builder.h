@@ -10,6 +10,7 @@
 // \brief Initialises kernel pdfs
 
 #include <vpdfl/vpdfl_builder_base.h>
+#include <vcl_iosfwd.h>
 
 //=======================================================================
 

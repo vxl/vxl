@@ -1,3 +1,4 @@
+// This is mul/clsfy/clsfy_direct_boost_builder.h
 // Copyright: (C) 2000 British Telecommunications plc
 #ifndef clsfy_direct_boost_builder_h_
 #define clsfy_direct_boost_builder_h_
@@ -6,11 +7,11 @@
 // \brief Describe a concrete classifier
 // \author dac
 // \date 2000/05/10
-// \verbatim
 
 #include <clsfy/clsfy_builder_base.h> // parent class
 #include <vcl_vector.h>
 #include <vcl_string.h>
+#include <vcl_iosfwd.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vnl/vnl_vector.h>
 class clsfy_builder_1d;
@@ -56,7 +57,7 @@ class clsfy_direct_boost_builder : public clsfy_builder_base
   double calc_prop_same(const vcl_vector<bool>& vec1,
                         const vcl_vector<bool>& vec2) const;
 
-public:
+ public:
 
   // Dflt ctor
   clsfy_direct_boost_builder();

@@ -1,9 +1,7 @@
+// This is mul/clsfy/clsfy_adaboost_sorted_builder.h
+// Copyright: (C) 2000 British Telecommunications plc
 #ifndef clsfy_adaboost_sorted_builder_h_
 #define clsfy_adaboost_sorted_builder_h_
-
-// Copyright: (C) 2000 British Telecommunications plc
-
-
 //:
 // \file
 // \brief Describe an concrete classifier
@@ -11,13 +9,13 @@
 // \date 2000/05/10
 // \verbatim
 //  Modifications
-//  2 May 2001 IMS Converted to VXL
+//   2 May 2001 IMS Converted to VXL
 // \endverbatim
-
 
 #include <clsfy/clsfy_builder_base.h>
 #include <vcl_vector.h>
 #include <vcl_string.h>
+#include <vcl_iosfwd.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vnl/vnl_vector.h>
 
@@ -55,13 +53,13 @@ class clsfy_adaboost_sorted_builder : public clsfy_builder_base
   //: Create empty model
   virtual clsfy_classifier_base* new_classifier() const;
 
-  //: set batch size 
+  //: set batch size
   void set_batch_size(int bs) { bs_ = bs; }
 
   //: set save data to disk bool
   void set_save_data_to_disk(bool x) { save_data_to_disk_ = x; }
 
-  //: set max_n_clfrs 
+  //: set max_n_clfrs
   void set_max_n_clfrs(int max_n_clfrs) { max_n_clfrs_ = max_n_clfrs; }
 
   //: set weak builder ( a pointer is retained )

@@ -5,20 +5,20 @@
 #pragma interface
 #endif
 //:
-//  \file
+// \file
 // \brief Store integer triplets
 //
-//    A TripleMatchSet contains "triplets": 3-tuples of integers (i1, i2, i3),
-//    and methods to access and modify the set.    Access is fast only for
-//    "forward" matches of the form i1->i2->i3, but this has proved to be
-//    adequate for all of the triplet work so far.
+// A TripleMatchSet contains "triplets": 3-tuples of integers (i1, i2, i3),
+// and methods to access and modify the set.  Access is fast only for
+// "forward" matches of the form i1->i2->i3, but this has proved to be
+// adequate for all of the triplet work so far.
 //
-//    An iterator class is provided to allow iteration through all triplets
-//    in the set.
+// An iterator class is provided to allow iteration through all triplets
+// in the set.
 //
-//    TripleMatchSet storage is a pair of subclass-supplied PairMatchSets.
-//    Modifying the TripleMatchSet by adding or removing tuples will modify
-//    the underlying PairMatchSets.
+// TripleMatchSet storage is a pair of subclass-supplied PairMatchSets.
+// Modifying the TripleMatchSet by adding or removing tuples will modify
+// the underlying PairMatchSets.
 //
 // \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 09 Aug 96
@@ -33,6 +33,7 @@
 #include <mvl/MatchSet.h>
 #include <mvl/PairMatchSet.h>
 #include <vcl_cstdlib.h> // for vcl_abort()
+#include <vcl_iosfwd.h>
 
 class TripleMatchSet : public MatchSet
 {

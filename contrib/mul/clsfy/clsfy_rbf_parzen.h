@@ -1,3 +1,4 @@
+// This is mul/clsfy/clsfy_rbf_parzen.h
 // Copyright: (C) 2000 British Telecommunications plc.
 #ifndef clsfy_rbf_parzen_h_
 #define clsfy_rbf_parzen_h_
@@ -8,10 +9,11 @@
 // \date 2000/05/10
 // \verbatim
 //  Modifications
-//  2 May 2001 IMS Converted to VXL
+//   2 May 2001 IMS Converted to VXL
 // \endverbatim
 
 #include <clsfy/clsfy_classifier_base.h>
+#include <vcl_iosfwd.h>
 
 //: A Parzen binary classifier using an RBF Window
 // A given vector, x0, is classified, by placing a window defined by w = exp(-1/(2*sigma^p) * |x-x0|^p),
@@ -22,7 +24,7 @@ class clsfy_rbf_parzen : public clsfy_classifier_base
   // Inversely proportional to width of the RBF window function.  Default value is -0.5.
   //
   // width_ = 1/sqrt(-2*gamma_)
-  double gamma_; 
+  double gamma_;
 
   //: Width of the rbf window function.
   // Default value is 1.0.
@@ -30,15 +32,15 @@ class clsfy_rbf_parzen : public clsfy_classifier_base
   double width_;
 
   //: The power, p, in the window function. Default value is 2.0.
-  double power_; 
+  double power_;
 
   //: The set of training input values.  Size should equal number of outputs.
-  vcl_vector<vnl_vector<double> > trainInputs_; 
+  vcl_vector<vnl_vector<double> > trainInputs_;
 
   //: The set of training output values.  Size should equal number of inputs.
-  vcl_vector<unsigned> trainOutputs_; 
+  vcl_vector<unsigned> trainOutputs_;
 
-public:
+ public:
   //: Construct a Parzen classifier.
   clsfy_rbf_parzen() { set_rbf_width(1.0); set_power(2.0);}
 

@@ -21,6 +21,7 @@
 
 #include <vcl_cstring.h> // memcpy()
 #include <vcl_cassert.h>
+#include <vcl_iosfwd.h>
 #include "vnl_vector.h"
 #include "vnl_vector_ref.h"
 #include "vnl_matrix.h" // outerproduct

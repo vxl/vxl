@@ -8,6 +8,7 @@
 
 #include <vimt3d/vimt3d_image_3d.h>
 #include <vil3d/vil3d_image_view.h>
+#include <vcl_iosfwd.h>
 
 //: Represent 2D image of type T together with a transform.
 //  Each plane is ni() x nj() Ts, with the (x,y) element

@@ -2,12 +2,13 @@
 #ifndef vimt_image_2d_of_h_
 #define vimt_image_2d_of_h_
 //:
-//  \file
-//  \brief Container for vil2_image_view<T> + transform
-//  \author Tim Cootes
+// \file
+// \brief Container for vil2_image_view<T> + transform
+// \author Tim Cootes
 
 #include <vimt/vimt_image_2d.h>
 #include <vil2/vil2_image_view.h>
+#include <vcl_iosfwd.h>
 
 //: Represent 2D image of type T together with a transform.
 //  Each plane is ni() x nj() Ts, with the (x,y) element

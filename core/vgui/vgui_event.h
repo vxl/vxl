@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_event.h
+// This is core/vgui/vgui_event.h
 #ifndef vgui_event_h_
 #define vgui_event_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -11,21 +11,22 @@
 // \brief  vgui_event class encapsulates the events handled by the vgui system.
 //
 // \verbatim
-// Modifications:
-// 16-Sep-1999  fsm. various.
-//  5-Oct-1999  fsm. replaced (x,y) by (wx,wy) and (ux,uy).
-// 10-Oct-1999  pcp         added timestamp
-// 20-Oct-1999  awf         Changed timestamp to int.
-// 19-Oct-1999  fsm. added pointer to adaptor.
-//  1-Nov-1999  fsm. events now use viewport, not window coordinates.
-// 28-Nov-1999  fsm. added vcl_string event.
-// 22-Aug-2000  Marko Bacic. added support for scroll bar events
-// 04-Oct-2002  K.Y.McGaul - Added set_key() to make sure vgui_key is now
-//                           always lower case to save confusion.
-//                         - Added ascii_char value to vgui_event.
+//  Modifications:
+//   16-Sep-1999  fsm. various.
+//    5-Oct-1999  fsm. replaced (x,y) by (wx,wy) and (ux,uy).
+//   10-Oct-1999  pcp         added timestamp
+//   20-Oct-1999  awf         Changed timestamp to int.
+//   19-Oct-1999  fsm. added pointer to adaptor.
+//    1-Nov-1999  fsm. events now use viewport, not window coordinates.
+//   28-Nov-1999  fsm. added vcl_string event.
+//   22-Aug-2000  Marko Bacic. added support for scroll bar events
+//   04-Oct-2002  K.Y.McGaul - Added set_key() to make sure vgui_key is now
+//                             always lower case to save confusion.
+//                           - Added ascii_char value to vgui_event.
 // \endverbatim
 
 #include <vcl_string.h>
+#include <vcl_iosfwd.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_button.h>
 #include <vgui/vgui_modifier.h>
@@ -63,7 +64,7 @@ vcl_ostream& operator<<(vcl_ostream& s, vgui_event_type e);
 //  \endverbatim
 //
 //  We have decided to make it a standard that key is always lower case for
-//  simplicity.  In particular people have been defining impossible 
+//  simplicity.  In particular people have been defining impossible
 //  vgui_event_conditions, eg key='A', modifier=NULL (where NULL is the
 //  default modifier) and then wondering why SHIFT+a doesn't work.
 //

@@ -13,6 +13,7 @@
 #include <vnl/vnl_vector.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 
 //=======================================================================
 

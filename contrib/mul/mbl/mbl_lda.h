@@ -12,6 +12,7 @@
 
 #include <vcl_string.h>
 #include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
@@ -21,7 +22,7 @@
 //: Class to perform linear discriminant analysis
 class mbl_lda
 {
-private:
+ private:
 
   vcl_vector<vnl_vector<double> > mean_;
   vcl_vector<vnl_vector<double> > d_mean_;

@@ -9,6 +9,7 @@
 // \author crossge@crd.ge.com
 
 #include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 
 #include <vbl/vbl_bit_array_2d.h>
 #include <gmvl/gmvl_connection_sptr.h>

@@ -12,7 +12,7 @@
 #include <clsfy/clsfy_rbf_svm.h>
 #include <vnl/vnl_vector.h>
 #include <mbl/mbl_data_wrapper.h>
-
+#include <vcl_iosfwd.h>
 
 //: Base for classes to build clsfy_classifier_base objects
 class clsfy_rbf_svm_smo_1_builder : public clsfy_builder_base

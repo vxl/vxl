@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_complex.h
+// This is core/vnl/vnl_complex.h
 #ifndef vnl_complex_h_
 #define vnl_complex_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -8,19 +8,20 @@
 // \file
 // \brief Complex additions to vnl_math.
 //
-//     We don't want everyone to pay for complex when they don't need it, as
-//     its ratio of expense to frequency of use is high. So we define those
-//     functions from vnl_math which use complex here instead.
-//     In a sense, vnl_math should be a namespace, and this file adds to that
-//     namespace.
+// We don't want everyone to pay for complex when they don't need it, as
+// its ratio of expense to frequency of use is high. So we define those
+// functions from vnl_math which use complex here instead.
+// In a sense, vnl_math should be a namespace, and this file adds to that
+// namespace.
 //
 // \verbatim
-// Modifications
-// LSB (Manchester) 26/3/01 Tidied documentation
+//  Modifications
+//   LSB (Manchester) 26/3/01 Tidied documentation
 // \endverbatim
 
 #include <vcl_cmath.h> // for sqrt(double)
 #include <vcl_complex.h>
+#include <vcl_iosfwd.h>
 #include <vnl/vnl_math.h>
 
 // these function could have been templated, if not for the

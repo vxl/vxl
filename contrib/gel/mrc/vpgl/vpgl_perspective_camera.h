@@ -1,29 +1,30 @@
-#ifndef VPGL_PERSPECTIVE_CAMERA_H
-#define VPGL_PERSPECTIVE_CAMERA_H
-
+// This is gel/mrc/vpgl/vpgl_perspective_camera.h
+#ifndef vpgl_perspective_camera_h_
+#define vpgl_perspective_camera_h_
+//:
+// \file
+//
 // Intrinsic Camera Parameters
 // ---------------------------
-// f = Focal Length (in whatever units of length).
-// ku = Number of pixels per unit length along the horizontal u-axis in
-//      the image.  Alternatively, 1/ku = size in units of length, of
-//      horizontal pixel.
-// kv = Number of pixels per unit length along the vertical v-axis in
-//      the image.  Alternatively, 1/kv = size in units of length, of
-//      vertical pixel.
-// uo = u-coordinate of the principal point.
-// vo = v-coordinate of the principal point.
-// theta = Angle (in radians) between the u & v axes in the image.
-//         Typically axes are orthogonal, ie. theta = 90.0.
+// - f  = Focal Length (in whatever units of length).
+// - ku = Number of pixels per unit length along the horizontal u-axis in
+//        the image.  Alternatively, 1/ku = size in units of length, of
+//        horizontal pixel.
+// - kv = Number of pixels per unit length along the vertical v-axis in
+//        the image.  Alternatively, 1/kv = size in units of length, of
+//        vertical pixel.
+// - uo = u-coordinate of the principal point.
+// - vo = v-coordinate of the principal point.
+// - theta = Angle (in radians) between the u & v axes in the image.
+//           Typically axes are orthogonal, ie. theta = 90.0.
 //
 // Extrinsic Camera Parameters
 // ---------------------------
-// <XL, YL, ZL> = World Coordinates of the Camera Center.
-// <omega, phi, kappa> = Rotations about the X, Y and Z axes resp, which
-//                       take the world coordinate system to the camera
-//                       coordinate system.  These rotations are specified
-//                       in Degrees.  Defaults to 0.0 each.
-//
-// .SECTION Modifications :
+// - <XL, YL, ZL> = World Coordinates of the Camera Center.
+// - <omega, phi, kappa> = Rotations about the X, Y and Z axes resp, which
+//                         take the world coordinate system to the camera
+//                         coordinate system.  These rotations are specified
+//                         in Degrees.  Defaults to 0.0 each.
 //
 //-----------------------------------------------------------------------------
 
@@ -32,10 +33,11 @@
 #include <vcsl/vcsl_matrix.h>
 #include <vcsl/vcsl_cartesian_3d.h>
 #include <vcsl/vcsl_graph_sptr.h>
+#include <vcl_iosfwd.h>
 
 class vpgl_perspective_camera : public vpgl_basic_camera
 {
-public:
+ public:
   enum PerspParams{f=0, ku, kv, uo, vo, theta, XL, YL, ZL, omega, phi, kappa, parent};
 
   // Constructors/Initializers/Destructors-------------------------------------
@@ -63,8 +65,8 @@ public:
 vcsl_spatial_sptr  get_lcs();
 void set_acs(const vcsl_spatial_sptr &new_acs);
 vcsl_spatial_sptr  get_acs();
-protected:
-private:
+
+ private:
   // Data Members--------------------------------------------------------------
 
   // Projection matrix from 3d to 2d
@@ -74,7 +76,7 @@ private:
 
   void update_matrix_camera();
 
-protected:
+ protected:
    //Phsical properties which will be converted to projection matrix
   vcl_vector<double> _params;
    //Local coordinate system of the camera
@@ -84,4 +86,4 @@ protected:
   vcsl_graph_sptr graph;
 };
 
-#endif // _vpgl_perspective_camera_h
+#endif // vpgl_perspective_camera_h_

@@ -4,13 +4,14 @@
 //--------------------------------------------------------------------------------
 //:
 // \file
-//   Class to hold the matched points through multi views
+// \brief Class to hold the matched points through multi views
 // \author
 //   L. Guichard
 //--------------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <mvl/NViewMatches.h>
 #include <vbl/vbl_ref_count.h>
+#include <vcl_iosfwd.h>
 
 template <class T>
 class gkll_multi_view_data: public vbl_ref_count

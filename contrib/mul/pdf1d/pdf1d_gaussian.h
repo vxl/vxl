@@ -10,6 +10,7 @@
 // \author Tim Cootes
 
 #include <pdf1d/pdf1d_pdf.h>
+#include <vcl_iosfwd.h>
 
 //: Class for univariate gaussian.
 class pdf1d_gaussian : public pdf1d_pdf

@@ -10,13 +10,14 @@
 // \author Tim Cootes
 // \date 12-Apr-2001
 // \verbatim
-// Modifications
-// 19 April 2001 IMS - Moved sampling functionality into a sampler class
-// 20 April 2001 IMS - Implemented log_prob_thresh()
-// 20 April 2001 IMS - Implemented log_p_min in nearest_plausible
+//  Modifications
+//   19 April 2001 IMS - Moved sampling functionality into a sampler class
+//   20 April 2001 IMS - Implemented log_prob_thresh()
+//   20 April 2001 IMS - Implemented log_p_min in nearest_plausible
 // \endverbatim
 
 #include <vpdfl/vpdfl_pdf_base.h>
+#include <vcl_iosfwd.h>
 
 //: Multi-variate Gaussian PDF, with a diagonal covariance matrix
 class vpdfl_axis_gaussian : public vpdfl_pdf_base

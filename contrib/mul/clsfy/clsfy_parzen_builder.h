@@ -1,9 +1,7 @@
 // This is mul/clsfy/clsfy_parzen_builder.h
+// Copyright: (C) 2001 British Telecommunications plc
 #ifndef clsfy_parzen_builder_h_
 #define clsfy_parzen_builder_h_
-
-// Copyright: (C) 2001 British Telecommunications plc
-
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -13,10 +11,10 @@
 // \author Ian Scott
 // \date 2001/10/07
 
-
 #include <clsfy/clsfy_builder_base.h>
 #include <vcl_vector.h>
 #include <vcl_string.h>
+#include <vcl_iosfwd.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vnl/vnl_vector.h>
 
@@ -31,7 +29,7 @@ class clsfy_parzen_builder : public clsfy_builder_base
   double sigma_;
 
   //: The power, p, in the window function.  Default value is 2.0.
-  double power_; 
+  double power_;
 
  public:
   // Dflt ctor

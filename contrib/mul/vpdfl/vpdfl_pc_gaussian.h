@@ -10,14 +10,14 @@
 // \author Ian Scott
 // \date 21-Jul-2000
 //
-// Modifications
 // \verbatim
-// 23 April 2001 IMS - Ported to VXL
+//  Modifications
+//   23 April 2001 IMS - Ported to VXL
 // \endverbatim
-
 //=======================================================================
-// inclusions
+
 #include <vpdfl/vpdfl_gaussian.h>
+#include <vcl_iosfwd.h>
 
 //=======================================================================
 
@@ -27,7 +27,7 @@ class vpdfl_pc_gaussian_builder;
 // The principal components can have general covariance.
 // The complementary components (least significant eigenvalues) have a
 // spherical distribution.
-class vpdfl_pc_gaussian : public vpdfl_gaussian 
+class vpdfl_pc_gaussian : public vpdfl_gaussian
 {
   //: The number of dimensions to have full Covariance (i.e. elliptical shape)
   // The rest are assumed spherical

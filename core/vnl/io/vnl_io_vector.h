@@ -1,14 +1,14 @@
-// This is vxl/vnl/io/vnl_io_vector.h
+// This is core/vnl/io/vnl_io_vector.h
 #ifndef vnl_io_vector_h
 #define vnl_io_vector_h
 //:
-// \file 
+// \file
 // \author Louise Bucther
 // \date 20-Mar-2001
 
+#include <vsl/vsl_fwd.h>
 #include <vnl/vnl_vector.h>
-class vsl_b_ostream;
-class vsl_b_istream;
+#include <vcl_iosfwd.h>
 
 //: Binary save vnl_vector to stream.
 template <class T>

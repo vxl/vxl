@@ -1,7 +1,7 @@
+// This is mul/clsfy/clsfy_binary_pdf_classifier.h
+// Copyright: (C) 2000 British Telecommunications PLC
 #ifndef clsfy_binary_pdf_classifier_h_
 #define clsfy_binary_pdf_classifier_h_
-// Copyright: (C) 2000 British Telecommunications PLC
-
 //:
 // \file
 // \brief Describe a classifier based on a single pdf.
@@ -10,18 +10,20 @@
 #include <clsfy/clsfy_classifier_base.h>
 #include <vpdfl/vpdfl_pdf_base.h>
 #include <vcl_cassert.h>
+#include <vcl_iosfwd.h>
 
 //:  Decisions are based on an explicit multivariate probability distribution
-class clsfy_binary_pdf_classifier : public clsfy_classifier_base {
-protected:
+class clsfy_binary_pdf_classifier : public clsfy_classifier_base
+{
+ protected:
   //: The current distribution model
-  vpdfl_pdf_base *pdf_; 
+  vpdfl_pdf_base *pdf_;
 
   //: The value of log probability density marking the class boundary
   // Above this value the answer is 1, and below it is 0
-  double log_prob_limit_; 
+  double log_prob_limit_;
 
-public:
+ public:
 
   // default constructor
   clsfy_binary_pdf_classifier(): pdf_(0), log_prob_limit_(0.0) {}
@@ -111,7 +113,7 @@ public:
   //: Load the class from a Binary File Stream
   virtual void b_read(vsl_b_istream& bfs);
 
-public:
+ public:
 
   // Copy constructor
   clsfy_binary_pdf_classifier( const clsfy_binary_pdf_classifier& b ):
@@ -120,7 +122,7 @@ public:
   //:Assignment operator
   clsfy_binary_pdf_classifier& operator=(const clsfy_binary_pdf_classifier& classifier);
 
-protected:
+ protected:
 
   // Delete members
   void deleteStuff();

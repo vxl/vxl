@@ -5,7 +5,7 @@
 #pragma interface
 #endif
 //:
-//  \file
+// \file
 // \brief The trifocal tensor
 //
 // A class to hold a Trifocal Tensor and perform common operations, such as
@@ -24,6 +24,7 @@
 //------------------------------------------------------------------------------
 
 #include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 
 #include <vbl/vbl_array_3d.h>
 

@@ -8,22 +8,23 @@
 // \file
 // \brief Set of interest points on an image
 //
-//    HomgInterestPointSet holds a set of corners (or points of interest) computed
-//    from an image.  The current implementation provides a moderately
-//    abstract interface, but assumes that it is efficient to associate
-//    an index with each corner.  I *know* this ought to be elsewhere.
+// HomgInterestPointSet holds a set of corners (or points of interest) computed
+// from an image.  The current implementation provides a moderately
+// abstract interface, but assumes that it is efficient to associate
+// an index with each corner.  I *know* this ought to be elsewhere.
 //
 // \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 17 Aug 96
 //
 // \verbatim
-// Modifications:
+//  Modifications:
 //   Peter Vanroose - 27 aug.97 - moved vcl_vector<HomgInterestPoint> instantiation to Templates
 //   Peter Vanroose - 22 oct.02 - added vgl_homg_point_2d interface
 // \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 
 #include <vnl/vnl_double_2.h>
 #include <vgl/vgl_homg_point_2d.h>

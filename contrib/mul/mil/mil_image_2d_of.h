@@ -2,9 +2,9 @@
 #ifndef mil_image_2d_of_h_
 #define mil_image_2d_of_h_
 //:
-//  \file
-//  \brief Represent images of one or more planes of type T.
-//  \author Tim Cootes
+// \file
+// \brief Represent images of one or more planes of type T.
+// \author Tim Cootes
 
 #include <mil/mil_image_data.h>
 #include <mil/mil_image_2d.h>
@@ -12,6 +12,7 @@
 #include <vbl/vbl_smart_ptr.h>
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
+#include <vcl_iosfwd.h>
 
 //: Represent images of one or more planes of type T.
 //  Each plane is nx() x ny() Ts, with the (x,y) element

@@ -1,4 +1,4 @@
-// This is vxl/vnl/algo/vnl_lsqr.h
+// This is core/vnl/algo/vnl_lsqr.h
 #ifndef vnl_lsqr_h_
 #define vnl_lsqr_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -8,16 +8,16 @@
 // \file
 // \brief Linear least squares
 //
-//    vnl_lsqr implements an algorithm for large, sparse linear systems and
-//    sparse, linear least squares. It is a wrapper for the LSQR algorithm
-//    of Paige and Saunders (ACM TOMS 583). The sparse system is encapsulated
-//    by a vnl_linear_system.
+// vnl_lsqr implements an algorithm for large, sparse linear systems and
+// sparse, linear least squares. It is a wrapper for the LSQR algorithm
+// of Paige and Saunders (ACM TOMS 583). The sparse system is encapsulated
+// by a vnl_linear_system.
 //
 // \author David Capel, capes@robots
 // \date   July 2000
 //
 // \verbatim
-// Modifications
+//  Modifications
 //   000705 capes@robots initial version.
 //   4/4/01 LSB (Manchester) Documentation tidied
 // \endverbatim
@@ -25,6 +25,7 @@
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_linear_system.h>
+#include <vcl_iosfwd.h>
 
 //: Linear least squares
 //  vnl_lsqr implements an algorithm for large, sparse linear systems and

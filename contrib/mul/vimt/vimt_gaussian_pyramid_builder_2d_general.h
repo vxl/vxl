@@ -1,25 +1,23 @@
+// This is mul/vimt/vimt_gaussian_pyramid_builder_2d_general.h
 #ifndef vimt_gaussian_pyramid_builder_2d_general_h_
 #define vimt_gaussian_pyramid_builder_2d_general_h_
 //:
-//  \file
-//  \brief Build gaussian image pyramids at any scale separation
-//  \author Ian Scott
-
-
+// \file
+// \brief Build gaussian image pyramids at any scale separation
+// \author Ian Scott
 //=======================================================================
-// inclusions
 
 #include <vimt/vimt_gaussian_pyramid_builder_2d.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/algo/vil2_gauss_reduce.h>
-
+#include <vcl_iosfwd.h>
 
 //: Build pyramids of vimt_image_2d_of<vxl_byte> at any scale step
 
 template <class T>
 class vimt_gaussian_pyramid_builder_2d_general : public vimt_gaussian_pyramid_builder_2d<T>
 {
-private:
+ private:
     //: image workspace
     mutable vil2_image_view<T> worka_;
     //: image workspace
@@ -29,7 +27,7 @@ private:
     vil2_gauss_reduce_params scale_params_;
 
 
-public:
+ public:
     //: Build pyramid
     virtual void build(vimt_image_pyramid& im_pyr, const vimt_image& im) const;
 
@@ -67,4 +65,4 @@ public:
     void b_read(vsl_b_istream& bfs);
 };
 
-#endif
+#endif // vimt_gaussian_pyramid_builder_2d_general_h_
