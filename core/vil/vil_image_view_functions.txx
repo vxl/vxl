@@ -236,11 +236,7 @@ template void vil2_value_range(T& min_value, T& max_value,const vil2_image_view<
 
 // For everything else
 #define VIL2_IMAGE_VIEW_FUNCTIONS_INSTANTIATE(T) \
-template void vil2_copy_to_window(const vil2_image_view<T > &src, vil2_image_view<T > &dest, \
-  unsigned i0, unsigned j0); \
 template bool vil2_deep_equality(const vil2_image_view<T > &lhs, const vil2_image_view<T > &rhs); \
-template void vil2_copy_reformat(const vil2_image_view<T > &src, vil2_image_view<T > &dest); \
-template vil2_image_view<T > vil2_copy_deep(const vil2_image_view<T > &rhs); \
 template vil2_image_view<T > vil2_window(const vil2_image_view<T > &im, \
   unsigned i0, unsigned ni, unsigned j0, unsigned nj); \
 template vil2_image_view<T > vil2_plane(const vil2_image_view<T > &im, unsigned p); \
