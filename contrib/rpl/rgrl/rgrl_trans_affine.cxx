@@ -84,7 +84,7 @@ map_loc( vnl_vector<double> const& from,
   // to = A_ * (from-from_centre_) + trans_;
   // 
   vnl_fastops::Ab( to, A_, from-from_centre_ );
-  to -= trans_;
+  to += trans_;
 }
 
 
