@@ -117,6 +117,9 @@ SOURCE=.\vimt_add_all_binary_loaders.cxx
 SOURCE=.\vimt_image_2d.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vimt_load_transform.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vimt_sample_grid_bilin+byte.double-.cxx
 # End Source File
 # Begin Source File
@@ -247,6 +250,9 @@ SOURCE=.\vimt_dog_pyramid_builder_2d.h
 # End Source File
 # Begin Source File
 SOURCE=.\vimt_dog_pyramid_builder_2d.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vimt_load_transform.h
 # End Source File
 # End Group
 # End Target
