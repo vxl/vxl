@@ -141,9 +141,6 @@ SOURCE=.\vidl_clip.cxx
 SOURCE=.\vidl_frame.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vidl_frame_as_image.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vidl_image_list_codec.cxx
 # End Source File
 # Begin Source File
@@ -169,9 +166,6 @@ SOURCE=.\vidl_clip.h
 # End Source File
 # Begin Source File
 SOURCE=.\vidl_frame.h
-# End Source File
-# Begin Source File
-SOURCE=.\vidl_frame_as_image.h
 # End Source File
 # Begin Source File
 SOURCE=.\vidl_image_list_codec.h
@@ -202,9 +196,6 @@ SOURCE=.\vidl_yuv_2_rgb.h
 # End Source File
 # Begin Source File
 SOURCE=.\vidl_codec_sptr.h
-# End Source File
-# Begin Source File
-SOURCE=.\vidl_frame_as_image_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\vidl_frame_sptr.h
