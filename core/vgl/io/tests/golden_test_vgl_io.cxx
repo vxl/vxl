@@ -108,10 +108,9 @@ void golden_test_vgl_io(bool save_file)
   //------------------------------------------------------------------------
 
 
-  vcl_cout << "***********************" << vcl_endl;
-  vcl_cout << "Testing a golden data file for cross platform consistency"
-           << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "***********************\n"
+           << "Testing a golden data file for cross platform consistency\n"
+           << "***********************\n";
 
 
   // vgl_point_2d
@@ -256,7 +255,7 @@ void golden_test_vgl_io(bool save_file)
     TEST ("Opened golden_vgl_io_test.bvl for writing", (!bfs_out), false);
     if (!bfs_out)
     {
-      vcl_cerr<<"Problems opening file for output"<<vcl_endl;
+      vcl_cerr<<"Problems opening file for output\n";
       vcl_exit(1);
     }
     vsl_b_write(bfs_out, double_point_2d_out);

@@ -6,12 +6,12 @@
 #include <vgl/vgl_polygon.h>
 #include <vgl/io/vgl_io_polygon.h>
 
-
 void test_polygon_io()
 {
-  vcl_cout << "***********************" << vcl_endl;
-  vcl_cout << "Testing vgl_polygon io" << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "***********************\n"
+           << "Testing vgl_polygon io\n"
+           << "***********************\n";
+
   //// test constructors, accessors
   vgl_polygon p_out(1), p_in;
   p_out.push_back(1.1f, 1.2f);
@@ -21,7 +21,6 @@ void test_polygon_io()
   p_out.push_back(1.3f, 1.4f);
   p_out.push_back(2.3f, 2.4f);
   p_out.push_back(3.3f, 3.4f);
-
 
   vsl_b_ofstream bfs_out("vgl_polygon_test_io.bvl.tmp");
   TEST ("Created vgl_polygon_test_io.bvl.tmp for writing",
@@ -35,20 +34,17 @@ void test_polygon_io()
   bfs_in.close();
 
   TEST ("p_out == p_in", 
-    p_out.num_sheets()==p_in.num_sheets() && 
-    p_out[0]==p_in[0] && 
-    p_out[1]==p_in[1] , true);
+        p_out.num_sheets()==p_in.num_sheets() && 
+        p_out[0]==p_in[0] && 
+        p_out[1]==p_in[1] , true);
 
   vsl_print_summary(vcl_cout, p_out);
   vcl_cout << vcl_endl;
-
 }
-
 
 void test_polygon_prime()
 {
   test_polygon_io();
 }
-
 
 TESTMAIN(test_polygon_prime);
