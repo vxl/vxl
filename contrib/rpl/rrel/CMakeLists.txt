@@ -19,6 +19,7 @@ SET(rrel_sources
  rrel_estimation_problem.cxx    rrel_estimation_problem.h
  rrel_linear_regression.cxx     rrel_linear_regression.h
  rrel_orthogonal_regression.cxx rrel_orthogonal_regression.h
+ rrel_affine_est.cxx            rrel_affine_est.h
  rrel_homography2d_est.cxx      rrel_homography2d_est.h
  rrel_homography2d_est_aff.cxx  rrel_homography2d_est_aff.h
  rrel_shift2d_est.cxx           rrel_shift2d_est.h
