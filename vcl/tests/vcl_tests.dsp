@@ -90,13 +90,105 @@ LINK32=link.exe
 
 SOURCE=.\vcl_tests.cxx
 
-!IF  "$(CFG)" == "vcl_tests - Win32 Release"
+# End Source File
+# Begin Source File
 
-!ELSEIF  "$(CFG)" == "vcl_tests - Win32 Debug"
+SOURCE=.\test_vcl_algorithm.cxx
 
-# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
 
-!ENDIF 
+SOURCE=.\test_vcl_cctype.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\test_vcl_cmath.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\test_vcl_compiler.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\test_vcl_complex.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\test_vcl_deque.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\test_vcl_exception.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\test_vcl_fstream.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\test_vcl_headers.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\test_vcl_iostream.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\test_vcl_iterator.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\test_vcl_list.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\test_vcl_map.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\test_vcl_multimap.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\test_vcl_new.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\test_vcl_rel_ops.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\test_vcl_set.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\test_vcl_stlfwd.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\test_vcl_string.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\test_vcl_vector.cxx
 
 # End Source File
 # End Group
