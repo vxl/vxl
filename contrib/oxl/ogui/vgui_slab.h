@@ -1,6 +1,6 @@
-// This is oxl/vgui/vgui_slab.h
-#ifndef vgui_slab_h_
-#define vgui_slab_h_
+// This is oxl/ogui/vgui_slab.h
+#ifndef ogui_slab_h_
+#define ogui_slab_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -23,7 +23,7 @@ struct vgui_slab
   //vgui_window *window() const { return 0; }
   //vgui_toolkit *toolkit() const { return 0; }
   virtual int  post_timer(float);
-  virtual void post_timer(float, int );
+  virtual void post_timer(float, int);
   virtual void post_redraw();
   virtual void post_overlay_redraw();
 
@@ -57,4 +57,4 @@ struct vgui_slab
   virtual bool queue_next (vgui_event *pe) { return queue_peek(pe, 0) && queue_pop(); }
 };
 
-#endif // vgui_slab_h_
+#endif // ogui_slab_h_

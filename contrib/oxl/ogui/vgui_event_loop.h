@@ -1,6 +1,6 @@
-// This is oxl/vgui/vgui_event_loop.h
-#ifndef vgui_event_loop_h_
-#define vgui_event_loop_h_
+// This is oxl/ogui/vgui_event_loop.h
+#ifndef ogui_event_loop_h_
+#define ogui_event_loop_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -22,4 +22,4 @@ int  vgui_event_loop();
 
 void vgui_event_loop_finish();
 
-#endif // vgui_event_loop_h_
+#endif // ogui_event_loop_h_
