@@ -17,6 +17,7 @@ vnl_fft_prime_factors<T>::vnl_fft_prime_factors()
 template <class T>
 void vnl_fft_prime_factors<T>::construct(int N)
 {
+  assert(N>0);
   trigs_ = new T[2*N];
   number_ = N;
   vnl_fft_setgpfa (trigs_, number_, pqr_, &info_);
