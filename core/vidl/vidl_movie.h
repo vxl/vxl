@@ -40,6 +40,8 @@ public:
   // Data Access
   vidl_frame_sptr get_frame(int n);
   int length() const;
+  unsigned int frame_rate() const {return frame_rate_;}
+  void set_frame_rate(unsigned int fr) {frame_rate_ = fr;}
 
   vcl_list<vidl_clip_sptr> get_clips() const {return clip_;}
 
@@ -49,6 +51,8 @@ public:
   // Data Control
   void add_clip(vidl_clip_sptr  clip);
 
+private:
+  unsigned int frame_rate_;
 
 protected:
   // Data Members

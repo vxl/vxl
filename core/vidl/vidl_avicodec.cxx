@@ -337,7 +337,7 @@ bool vidl_avicodec::save(vidl_movie* movie, const char* fname)
   avi_stream_info.fccType                = streamtypeVIDEO;// stream type
   avi_stream_info.fccHandler             = 0;
   avi_stream_info.dwScale                = 1;
-  avi_stream_info.dwRate                 = 30;                // 30 fps
+  avi_stream_info.dwRate                 = movie->frame_rate();
   avi_stream_info.dwLength               = movie->length();
   avi_stream_info.dwSuggestedBufferSize  = movie->width()*movie->height()*3;//codec->get_bytes_pixel();
   SetRect(&avi_stream_info.rcFrame, 0, 0,             // rectangle for stream

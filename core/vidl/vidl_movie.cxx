@@ -13,14 +13,16 @@
 // CONSTRUCTOR(S) AND DESTRUCTOR
 
 //: Constructor
-vidl_movie::vidl_movie() {}
+vidl_movie::vidl_movie() 
+  : frame_rate_ ( 30 ) {}
 
 //: Constructor, build a movie with the single given clip
 vidl_movie::vidl_movie(vidl_clip_sptr clip)
+  : frame_rate_ ( 30 ) 
 {
   // Check validity of initialisation
   if (!clip_.empty())
-    vcl_cerr << "Bad inittialisation of the movie."<< vcl_endl;
+    vcl_cerr << "Bad initialisation of the movie."<< vcl_endl;
 
   add_clip(clip);
 }
