@@ -47,8 +47,8 @@ void vsl_print_summary(vcl_ostream& os, const vbl_triple<S, T, U> &v)
 }
 
 
-#undef VBL_TRIPLE_INSTANTIATE
-#define VBL_TRIPLE_INSTANTIATE(S, T, U ) \
+#undef VBL_IO_TRIPLE_INSTANTIATE
+#define VBL_IO_TRIPLE_INSTANTIATE(S, T, U ) \
 template void vsl_print_summary(vcl_ostream& s, const vbl_triple<S, T, U >& v); \
 template void vsl_b_write(vsl_b_ostream& s, const vbl_triple<S, T, U > & v); \
 template void vsl_b_read(vsl_b_istream& s, vbl_triple<S, T, U > & v)
