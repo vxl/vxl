@@ -106,7 +106,7 @@ be useful to set the size of a image without knowing its type. Decision IMS and
 TFC.</p>
 <h4><code>vil2_memory_chunk </code>should not be templated.</h4>
 <p>You could have a memory chunk containing rgb, and choose to view it as
-a <code>vil2_image_view&lt;vil_rgb&lt;vil2_byte&gt;&gt;</code> with nplanes=1, or 
+a <code>vil2_image_view&lt;vil_rgb&lt;vxl_byte&gt;&gt;</code> with nplanes=1, or 
 <code>vil2_image_view&lt;char&gt;</code> with nplanes =3; It
 is hard to get the type of the smart pointers correct without linking the types 
 T of the <code>vil2_memory_chunk&lt;T&gt;</code> and <code>vil2_image_view&lt;T&gt;</code>. 
@@ -184,10 +184,10 @@ using this design for 18 months with no problems. Decision at Providence meeting
 <h4>vil2_image_view&lt;T&gt;::operator=() can be smart but should do fast view 
 transforms only.</h4>
 <p>Allowing <br>
-<code>vil2_image_view&lt;vil_rgb&lt;vil2_byte&gt; &gt; im_rgb(ni, nj);<br>
-vil2_image_view&lt;vil2_byte&gt; im_planes = im_rgb;<br>
+<code>vil2_image_view&lt;vil_rgb&lt;vxl_byte&gt; &gt; im_rgb(ni, nj);<br>
+vil2_image_view&lt;vxl_byte&gt; im_planes = im_rgb;<br>
 </code>and<br>
-<code>vil2_image_view&lt;vil_rgb&lt;vil2_byte&gt;&gt; pnm = vil2_load(&quot;filename.ppm&quot;);<br>
+<code>vil2_image_view&lt;vil_rgb&lt;vxl_byte&gt;&gt; pnm = vil2_load(&quot;filename.ppm&quot;);<br>
 </code>makes for easy use. However , expensive operations should not have short 
 names. So this should not include doing conversions such as byte to float 
 conversion. These conversions should be done by separately named functions. 

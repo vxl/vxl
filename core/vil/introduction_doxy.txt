@@ -9,7 +9,7 @@
 * which can only be accessed indirectly.  In most cases images in files are loaded
 * into memory in one go, where they can then be manipulated.  However, for some
 * very large images this is not possible or desirable.  In this case it is useful
-* to be able to load in a sub-section of the image, manipulate it,and possible
+* to be able to load in a sub-section of the image, manipulate it, and possible
 * write it out again.  vil2 supports both memory images and external images.
 *
 * The core class is vil2_image_view<T> which gives a view of an image in memory.
@@ -20,33 +20,33 @@
 * requested section into memory and creates a suitable vil2_image_view<T>.
 *
 * The vil2_image_view<T> represents a view of a multi-plane image of given type.
-* A pointer is stored to the top-left pixel in the first plane of the image (top_left_ptr())
-* and integers indicating how to get to neighbours in
+* A pointer is stored to the top-left pixel in the first plane of the image
+* (top_left_ptr()) and integers indicating how to get to neighbours in
 * the i (istep()), j (jstep()) and plane (planestep()) directions.
 *
 * The advantages of this approach are
 * - It is actually faster than pointer indirection on most architectures
-* - It allows one to access non-contiguous data as if it is a single plane
+* - It allows one to access non-contiguous data as if it were a single plane
 * - One can use it to wrap up other image classes transparently.
 * - It is simple to extend to 3D images, and avoids huge arrays of pointers
 *
 *
 * Note that the same colour image can either be viewed as a one plane image
-* with RGB pixels (using vil2_image_view<vil_rgb<vil2_byte> >) or as a 3 plane
-* byte image (using vil2_image_view<vil2_byte> with nplanes() == 3).
+* with RGB pixels (using vil2_image_view<vil_rgb<vxl_byte> >) or as a 3 plane
+* byte image (using vil2_image_view<vxl_byte> with nplanes() == 3).
 * \verbatim
-vil2_image_view<vil_rgb<vil2_byte> > rgb_image;
+vil2_image_view<vil_rgb<vxl_byte> > rgb_image;
 rgb_image = vil2_load("my_image.jpg");
 
   // Create a 3 plane view of rgb
-vil2_image_view<vil2_byte > three_plane_image =  rgb_image;
+vil2_image_view<vxl_byte > three_plane_image =  rgb_image;
   // or explicitly
 three_plane_image =  vil2_view_as_planes(rgb_image);
   // or with less typing
 three_plane_image = vil2_load("my_image.jpg");
 
   // Now create rgb view of 3 plane image (note: will set view to empty if not possible)
-vil2_image_view<vil_rgb<vil2_byte> > rgb_image2 = three_plane_image;
+vil2_image_view<vil_rgb<vxl_byte> > rgb_image2 = three_plane_image;
   // or explicitly
 rgb_image2 = vil2_view_as_rgb(three_plane_image);
 
@@ -61,7 +61,7 @@ rgb_image2 = vil2_view_as_rgb(three_plane_image);
 * a chunk of memory that the view does not have direct control of, such as a video
 * buffer). This view copying will work between different types of view
 * if it is possible to reconfigure the view very cheaply.
-* If you wish to copy the image data itself, then use the vil2_copy_deep(src_im),
+* If you wish to copy the image data itself, then use the vil2_copy_deep(src_im)
 * function. This copies the raw data into a newly created space, and returns
 * a new view of it.  Alternatively, use the method deep_copy(dest_im), or the
 * function vil2_copy_reformat(src_im, dest_im).
@@ -69,9 +69,9 @@ rgb_image2 = vil2_view_as_rgb(three_plane_image);
 *
 * Example of loading, copying then processing:
 * \verbatim
-vil2_image_view<vil2_byte> image;
+vil2_image_view<vxl_byte> image;
 image = *vil2_load("test_image.jpg");
-vil2_image_view<vil2_byte> image2 = image.deep_copy();
+vil2_image_view<vxl_byte> image2 = image.deep_copy();
 vil2_invert_image(image2);
 vil2_save(image2,"output_image.jpg");
 \endverbatim
@@ -81,12 +81,12 @@ vil2_save(image2,"output_image.jpg");
 unsigned ni=256;
 unsigned nj=256;
 unsigned nplanes=3;
-vil2_image_view<vil2_byte> image(ni,nj,nplanes);
-vil2_byte* plane_data = image.top_left_ptr();
+vil2_image_view<vxl_byte> image(ni,nj,nplanes);
+vxl_byte* plane_data = image.top_left_ptr();
 for (unsigned p=0;p<nplanes;++p)
   for (unsigned j=0;j<nj;++j)
     for (unsigned i=0;i<ni;++i)
-      image(i,j,p) = vil2_byte(i+j+p);
+      image(i,j,p) = vxl_byte(i+j+p);
 \endverbatim
 *
 * Example of creating an image in memory, using fast pointer arithmetic
@@ -94,16 +94,16 @@ for (unsigned p=0;p<nplanes;++p)
   unsigned ni=256;
   unsigned nj=256;
   unsigned nplanes=3;
-  vil2_image_view<vil2_byte> image(ni,nj,nplanes);
-  vil2_byte* plane = image.top_left_ptr();
+  vil2_image_view<vxl_byte> image(ni,nj,nplanes);
+  vxl_byte* plane = image.top_left_ptr();
   for (unsigned p=0;p<nplanes;++p,plane += image.planestep())
   {
-    vil2_byte* row = plane;
+    vxl_byte* row = plane;
     for (unsigned j=0;j<nj;++j,row += image.jstep())
     {
-      vil2_byte* pixel = row;
+      vxl_byte* pixel = row;
       for (unsigned i=0;i<ni;++i,pixel+=image.istep())
-        *pixel = vil2_byte(i+10*j+100*p);
+        *pixel = vxl_byte(i+10*j+100*p);
     }
   }
 \endverbatim
@@ -125,12 +125,12 @@ for (unsigned p=0;p<nplanes;++p)
 * one need only write it for one direction, then can apply it to the original image and
 * its transpose.
 * \verbatim
-vil2_image_view<vil2_byte> ;
+vil2_image_view<vxl_byte> ;
 src_image = *vil2_load("image_file.jpg");
-vil2_image_view<vil2_byte> tmp_image1,tmp_image2;
+vil2_image_view<vxl_byte> tmp_image1,tmp_image2;
 vil2_algo_exp_filter_1d(tmp_image1,src_image,k,double());  // Apply filter to rows of src_image
 vil2_algo_exp_filter_1d(tmp_image2,tmp_image1.tranpose(),k,double());  // Apply filter to cols of tmp_image1
-vil2_image_view<vil2_byte> filtered_image = vil2_flip_transpose(tmp_image2);
+vil2_image_view<vxl_byte> filtered_image = vil2_flip_transpose(tmp_image2);
 // Note that vil2_filter_rows(vil2_flip_transpose(filtered_image),vil2_flip_transpose(tmp_image1))
 // would only work correctly if filtered_image was already the correct size.
 // If it isn't, then the view created by vil2_flip_transpose(filtered_image) would be resized,
@@ -163,17 +163,19 @@ vil2_image_view<vil2_byte> filtered_image = vil2_flip_transpose(tmp_image2);
 * Most instances of vil2_image_data objects will be through smart pointers. So expect to see
 * lots of references to vil2_image_data_sptr types. vil2_image_data objects in most cases
 * only deal with scalar-type pixels. Of course once you get a view of real image data in memory, you
-* can easily convert a multi-planar view into multi-component view.
+* can easily convert a multi-planar view into a multi-component view.
 *
 * \section algo Algorithms and Image Processing
-* Some simple algorithms for manipulation images are included in the algo sub-directory.
-* Note that the argument order is typically of the form vil2_algo_f(src_im,dest_im,params)
+* Some simple algorithms for manipulating images are included in the algo sub-directory.
+* Note that the argument order is typically of the form vil2_algo_f(src_im,dest_im,params).
 * Examples include
 * - vil2_algo_convolve_1d - Convolve with 1D filter - all manner of edge effects catered for
 * - vil2_algo_convolve_2d - Convolve with 2D filter (no edge effects catered for yet!)
 * - vil2_algo_exp_filter_1d - Apply exponential filter along one axis (fast recursive method)
 * - vil2_algo_sobel_3x3 - to generate X/Y gradient images using 3x3 Sobel operators
 * - vil2_algo_gauss_reduce - smooth and sub-sample to produce half sized image
+* See also the vipl library for a more generic image processing interface and
+* more image processing algorithms.
 *
 * \subsection maths Mathematics on images
 * Functions to evaluate image properties:
@@ -206,14 +208,13 @@ vil2_image_view<vil2_byte> filtered_image = vil2_flip_transpose(tmp_image2);
 * - vil2_sample_grid_bilin : Sample values over a grid (using bilin. interpolation)
 *
 * \subsection conventions Parameter Conventions
-* For your ease of usee, all vil2 functions and methods adhere to the following
-* parameter conventions
-*
+* For your ease of use, all vil2 functions and methods adhere to the following
+* parameter conventions:
 * - Index types - All pixel index and image size types are unsigned.
 * - Specifying a pixel - func(i,j) assumes plane 0 or func(i,j,p)
 * - Specifying a window - func(i0,ni,j0,nj) window includes all planes.
 *
 * \section Examples examples
 * There are plenty of working examples in the examples subdirectory - these can be
-* treated as a mini-tutorial
+* treated as a mini-tutorial.
 */
