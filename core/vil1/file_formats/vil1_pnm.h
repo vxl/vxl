@@ -50,7 +50,7 @@ public:
 					       vil_component_format format);
   ~vil_pnm_generic_image();
 
-  //: Dimensions.  Planes x W x H x Components
+  //: Dimensions:  planes x width x height x components
   virtual int planes() const { return 1; }
   virtual int width() const { return width_; }
   virtual int height() const { return height_; }
@@ -59,11 +59,12 @@ public:
   virtual int bits_per_component() const { return bits_per_component_; }
   virtual enum vil_component_format component_format() const { return VIL_COMPONENT_FORMAT_UNSIGNED_INT; }
   
-  //: Copy this to BUF, 
+  //: Copy contents of this image to buf
   virtual bool get_section(void* buf, int x0, int y0, int width, int height) const;
+  //: Copy contents of buf to this image
   virtual bool put_section(void const* buf, int x0, int y0, int width, int height);
   
-  //: Return the image interpreted as rgb bytes.
+  // Return the image interpreted as rgb bytes.
   //virtual bool get_section_rgb_byte(void* buf, int x0, int y0, int width, int height) const;
   //virtual bool get_section_float(void* buf, int x0, int y0, int width, int height) const;
   //virtual bool get_section_byte(void* buf, int x0, int y0, int width, int height) const;

@@ -10,7 +10,8 @@
 // .SECTION Description
 //    matops is a collection of Matrix operations, mostly declared
 //    as static methods.  Highlights include the in-place transpose,
-//    type conversions, and MATLABPRINT.
+//    and type conversions.
+//    matlab_print has been moved to vnl_matlab_print.h.
 //
 // .SECTION Author
 //    Andrew W. Fitzgibbon, Oxford RRG, 05 Aug 96

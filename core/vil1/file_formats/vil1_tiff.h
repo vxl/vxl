@@ -25,7 +25,7 @@ public:
 
 struct vil_tiff_structures;
 
-//: Generic image implementation for PNM files
+//: Generic image interface for TIFF files
 class vil_tiff_generic_image : public vil_image_impl {
   vil_stream* is_;
   vil_tiff_structures* p;

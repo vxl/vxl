@@ -25,7 +25,7 @@ public:
 					       vil_component_format format);
 };
 
-//: Generic image implementation for PNM files
+//: Generic image implementation for PNG files
 class vil_png_generic_image : public vil_image_impl {
   vil_stream* vs_;
   int width_;
