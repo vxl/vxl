@@ -10,6 +10,7 @@
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_easy3D_tableau.h>
+#include <vgui/vgui_soview3D.h> // for vgui_lineseg3D
 #include <vgui/vgui_viewer3D_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_easy2D_tableau.h>
@@ -287,7 +288,7 @@ void brct_windows_frame::show_back_projection()
 
   int framenum = c2d.size();
 
-  for(int f=0; f<framenum; f++)
+  for (int f=0; f<framenum; f++)
   {
     int size = c2d[f].cols();
     assert(size > 1);
