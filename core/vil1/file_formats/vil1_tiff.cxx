@@ -238,7 +238,7 @@ bool vil_tiff_generic_image::get_property(char const *tag, void *prop) const
 {
   unsigned short orientation;
   int orientation_val_ok = TIFFGetField(p->tif, TIFFTAG_ORIENTATION, &orientation);
-  if (orienatation_val_ok != 1)
+  if (orientation_val_ok != 1)
   {
     // kym - apparently most products ignore this orientation tag and use the default
     // value of 1 (eg Adobe Photoshop) so its debatable whether its worth reading at all.
