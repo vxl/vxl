@@ -1,6 +1,6 @@
 // This is gel/vsol/vsol_spatial_object_2d.h
-#ifndef _vsol_spatial_object_2d_h_
-#define _vsol_spatial_object_2d_h_
+#ifndef vsol_spatial_object_2d_h_
+#define vsol_spatial_object_2d_h_
 //-----------------------------------------------------------------------------
 //:
 // \file
@@ -234,7 +234,7 @@ public:
   {
     not_applicable("SetScalar");
   }
-#endif
+#endif // 0
 
   virtual void UpdateGeometry(void)
   {
@@ -300,9 +300,9 @@ public:
   inline virtual void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;
 
   friend inline vcl_ostream &operator<<(vcl_ostream &,
-                                    const vsol_spatial_object_2d &);
+                                        const vsol_spatial_object_2d &);
   friend inline vcl_ostream &operator<<(vcl_ostream &,
-                                    const vsol_spatial_object_2d *);
+                                        const vsol_spatial_object_2d *);
 };
 
 // inline member functions
@@ -447,14 +447,14 @@ inline void vsol_spatial_object_2d::describe(vcl_ostream &strm,
 
 
 inline vcl_ostream &operator<<(vcl_ostream &strm,
-                           const vsol_spatial_object_2d &so)
+                               const vsol_spatial_object_2d &so)
 {
   ((vsol_spatial_object_2d const*)&so)->print(strm);
   return strm;
 }
 
 inline vcl_ostream &operator<<(vcl_ostream &strm,
-                           const vsol_spatial_object_2d *so)
+                               const vsol_spatial_object_2d *so)
 {
   if (so!=0)
     ((vsol_spatial_object_2d const*)so)->print(strm);
@@ -463,4 +463,4 @@ inline vcl_ostream &operator<<(vcl_ostream &strm,
   return strm;
 }
 
-#endif // _vsol_spatial_object_2d_h_
+#endif // vsol_spatial_object_2d_h_
