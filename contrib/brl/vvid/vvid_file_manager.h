@@ -112,9 +112,6 @@ class vvid_file_manager : public vgui_wrapper_tableau
   //: show VanDuc edges
   void compute_vd_edges();
 
-  //: show curve tracking
-  void compute_curve_tracking();
-
   //: show fit lines
   void compute_line_fit();
 

@@ -42,7 +42,6 @@
 #include <strk/strk_info_tracker_params.h>
 #include <strk/strk_info_model_tracker_params.h>
 #include <strk/strk_art_info_model.h>
-#include <bdgl/bdgl_curve_tracking.h>
 
 #include <vpro/vpro_frame_diff_process.h>
 #include <vpro/vpro_motion_process.h>
@@ -51,7 +50,6 @@
 #include <vpro/vpro_edge_process.h>
 #include <vpro/vpro_edge_line_process.h>
 #include <vpro/vpro_grid_finder_process.h>
-#include <vpro/vpro_curve_tracking_process.h>
 #include <strk/strk_corr_tracker_process.h>
 #include <strk/strk_info_model_tracker_process.h>
 #include <strk/strk_info_tracker_process.h>
@@ -678,85 +676,7 @@ void vvid_file_manager::compute_grid_match()
   video_process_  = new vpro_grid_finder_process(dp, flp, gfp);
 }
 
-void vvid_file_manager::compute_curve_tracking()
-{
-  // get parameters
 
-  static int track_window;
-  static bdgl_curve_tracking_params tp;
-  static double ex,ey;
-  vgui_dialog* tr_dialog = new vgui_dialog("Curve Tracking");
-  tr_dialog->field("Estimated Motion", tp.mp.motion_in_pixels);
-  tr_dialog->field("No of Top matches",tp.mp.no_of_top_choices);
-  tr_dialog->field("Min Length of curves",tp.min_length_of_curves);
-  tr_dialog->checkbox("Matching", tp.mp.matching_);
-  tr_dialog->field("epipole x",ex);
-  tr_dialog->field("epipole y",ey);
-  tr_dialog->checkbox("Transitive closure", tp.transitive_closure);
-  tr_dialog->field("Window size", tp.window_size);
-  tr_dialog->checkbox("Clustering", tp.clustering_);
-  tr_dialog->field("No of clusters ",tp.cp.no_of_clusters);
-  tr_dialog->field("Min Euc Distance",tp.cp.min_cost_threshold);
-  tr_dialog->field("Fg and Bg Threshold",tp.cp.foreg_backg_threshold);
-  tr_dialog->checkbox("write moving curves", tp.ps_moving_curves);
-  tr_dialog->checkbox("write match curves", tp.ps_match_curves);
-  tr_dialog->checkbox("Tracks", track_);
-  tr_dialog->field("Window", track_window);
-  static sdet_detector_params dp;
-  vgui_dialog* dp_dialog = new vgui_dialog("Edge detection");
-  static bool agr = true;
-  dp_dialog->field("Gaussian sigma", dp.smooth);
-  dp_dialog->field("Noise Threshold", dp.noise_multiplier);
-  dp_dialog->checkbox("Automatic Threshold", dp.automatic_threshold);
-  dp_dialog->checkbox("Compute Junctions", dp.junctionp);
-  dp_dialog->checkbox("Agressive Closure", agr);
-
-  if (!tr_dialog->ask())
-    return;
-  if (!dp_dialog->ask())
-    return;
-
-  tp.mp.e_.set(ex,ey);
-
-  if (agr)
-    dp.aggressive_junction_closure=1;
-  else
-    dp.aggressive_junction_closure=0;
-
-  color_label_ = true;
-
-  if (cache_frames_)
-  {
-    video_process_  = new vpro_curve_tracking_process(tp,dp);
-    for (vcl_vector<bgui_vtol2D_tableau_sptr>::iterator vit = tabs_.begin();
-         vit != tabs_.end()&&play_video_; vit++)
-    {
-      vgui_image_tableau_sptr temp_img=(*vit)->get_image_tableau();
-      vil1_image temp1_img=temp_img->get_image();
-      vil1_memory_image_of<unsigned char> image(temp1_img);
-      video_process_->add_input_image(image);
-      if (video_process_->execute())
-      {
-        if (video_process_->get_output_type()==vpro_video_process::IMAGE)
-          vcl_cout<<"\n output is image";//display_image();
-        if (video_process_->get_output_type()==vpro_video_process::SPATIAL_OBJECT)
-          cached_spat_objs_.push_back(video_process_->get_output_spatial_objects());
-        vcl_cout<<"\n output is spatial objects";//display_image();
-        if (video_process_->get_output_type()==
-            vpro_video_process::TOPOLOGY)
-          vcl_cout<<"\n output is topology_objects";//display_topology();
-      }
-    }
-  }
-  else
-    video_process_ = new vpro_curve_tracking_process(tp,dp);
-
-  if (track_)
-  {
-    frame_trail_.clear();
-    frame_trail_.set_window(track_window);
-  }
-}
 
 void vvid_file_manager::compute_corr_tracking()
 {
