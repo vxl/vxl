@@ -46,15 +46,15 @@ public:
   void scale_matrices(double s);
 
   // Operations----------------------------------------------------------------
-  virtual HomgPoint2D image_to_homg(const vnl_double_2&);
-  virtual HomgPoint2D image_to_homg(double x, double y);
-  virtual vnl_double_2 homg_to_image(const HomgPoint2D&);
-  virtual HomgPoint2D imagehomg_to_homg(const HomgPoint2D&);
-  virtual HomgPoint2D homg_to_imagehomg(const HomgPoint2D&);
+  virtual HomgPoint2D image_to_homg(const vnl_double_2&) const;
+  virtual HomgPoint2D image_to_homg(double x, double y) const;
+  virtual vnl_double_2 homg_to_image(const HomgPoint2D&) const;
+  virtual HomgPoint2D imagehomg_to_homg(const HomgPoint2D&) const;
+  virtual HomgPoint2D homg_to_imagehomg(const HomgPoint2D&) const;
 
-  virtual double perp_dist_squared(HomgPoint2D const& p, HomgLine2D const& l);
-  virtual double distance_squared(HomgPoint2D const&, HomgPoint2D const&);
-  virtual double distance_squared(HomgLineSeg2D const& segment, HomgLine2D const& line);
+  virtual double perp_dist_squared(HomgPoint2D const& p, HomgLine2D const& l) const;
+  virtual double distance_squared(HomgPoint2D const&, HomgPoint2D const&) const;
+  virtual double distance_squared(HomgLineSeg2D const& segment, HomgLine2D const& line) const;
 
   virtual bool is_linear() const { return true; }
   virtual const vnl_matrix<double>& get_C() const { return cond_matrix; }
@@ -73,10 +73,10 @@ public:
 
 protected:
   // Data Members--------------------------------------------------------------
-  double _centre_x;
-  double _centre_y;
-  double _inv_scale;
-  double _scale;
+  double centre_x_;
+  double centre_y_;
+  double inv_scale_;
+  double scale_;
 
   vnl_double_3x3 cond_matrix;
   vnl_double_3x3 inv_cond_matrix;

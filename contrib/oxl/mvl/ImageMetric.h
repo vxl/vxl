@@ -52,30 +52,30 @@ public:
 
   // Computations--------------------------------------------------------------
 
-  virtual HomgPoint2D homg_to_imagehomg(const HomgPoint2D&);
-  virtual HomgPoint2D imagehomg_to_homg(const HomgPoint2D&);
+  virtual HomgPoint2D homg_to_imagehomg(const HomgPoint2D&) const;
+  virtual HomgPoint2D imagehomg_to_homg(const HomgPoint2D&) const;
 
   // The following virtuals may be overridden if desired.
   // By default they are implemented in terms of the previous two
-  virtual vnl_double_2 homg_to_image(const HomgPoint2D&);
-  virtual HomgPoint2D image_to_homg(const vnl_double_2&);
-  virtual HomgPoint2D image_to_homg(double x, double y);
+  virtual vnl_double_2 homg_to_image(const HomgPoint2D&) const;
+  virtual HomgPoint2D image_to_homg(const vnl_double_2&) const;
+  virtual HomgPoint2D image_to_homg(double x, double y) const;
 
-  virtual HomgLine2D homg_to_image_line(const HomgLine2D&);
-  virtual HomgLine2D image_to_homg_line(const HomgLine2D&);
+  virtual HomgLine2D homg_to_image_line(const HomgLine2D&) const;
+  virtual HomgLine2D image_to_homg_line(const HomgLine2D&) const;
 
-  virtual HomgLineSeg2D image_to_homg_line(const HomgLineSeg2D&);
-  virtual HomgLineSeg2D homg_line_to_image(const HomgLineSeg2D&);
+  virtual HomgLineSeg2D image_to_homg_line(const HomgLineSeg2D&) const;
+  virtual HomgLineSeg2D homg_line_to_image(const HomgLineSeg2D&) const;
 
-  virtual FMatrix image_to_homg_deprecated(FMatrix const&);
-  virtual FMatrix homg_to_image_deprecated(FMatrix const&);
+  virtual FMatrix image_to_homg_deprecated(FMatrix const&) const;
+  virtual FMatrix homg_to_image_deprecated(FMatrix const&) const;
 
-  virtual double perp_dist_squared(const HomgPoint2D&, const HomgLine2D&);
-  virtual HomgPoint2D perp_projection(const HomgLine2D & l, const HomgPoint2D & p);
-  virtual double distance_squared(const HomgPoint2D&, const HomgPoint2D&);
-  virtual double distance_squared(const HomgLineSeg2D& segment, const HomgLine2D& line); // ca_distance_squared_lineseg_to_line
+  virtual double perp_dist_squared(const HomgPoint2D&, const HomgLine2D&) const;
+  virtual HomgPoint2D perp_projection(const HomgLine2D & l, const HomgPoint2D & p) const;
+  virtual double distance_squared(const HomgPoint2D&, const HomgPoint2D&) const;
+  virtual double distance_squared(const HomgLineSeg2D& segment, const HomgLine2D& line) const;// ca_distance_squared_lineseg_to_line
 
-  virtual bool is_within_distance(const HomgPoint2D&, const HomgPoint2D&, double distance);
+  virtual bool is_within_distance(const HomgPoint2D&, const HomgPoint2D&, double distance) const;
 
   // Data Access---------------------------------------------------------------
   virtual const vnl_matrix<double>& get_C() const;

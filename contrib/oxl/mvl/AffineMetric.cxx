@@ -61,20 +61,20 @@ void AffineMetric::set(double a11, double a13,
 // @{ Implementation of ImageMetric @}
 
 //: Transform p
-HomgPoint2D AffineMetric::homg_to_imagehomg(const HomgPoint2D& p)
+HomgPoint2D AffineMetric::homg_to_imagehomg(const HomgPoint2D& p) const
 {
   return A_ * p.get_vector();
 }
 
 //: Inverse-transform p
-HomgPoint2D AffineMetric::imagehomg_to_homg(const HomgPoint2D& p)
+HomgPoint2D AffineMetric::imagehomg_to_homg(const HomgPoint2D& p) const
 {
   return A_inverse_ * p.get_vector();
 }
 
-HomgPoint2D AffineMetric::image_to_homg(double x, double y)
+HomgPoint2D AffineMetric::image_to_homg(double x, double y) const
 {
-  double** a = A_inverse_.data_array();
+  const double*const* a = A_inverse_.data_array();
   double h1 = a[0][0] * x + a[0][1] * y + a[0][2];
   double h2 = a[1][0] * x + a[1][1] * y + a[1][2];
   double h3 = a[2][0] * x + a[2][1] * y + a[2][2];
@@ -82,13 +82,13 @@ HomgPoint2D AffineMetric::image_to_homg(double x, double y)
   return HomgPoint2D(h1, h2, h3);
 }
 
-HomgPoint2D AffineMetric::image_to_homg(const vnl_double_2& p)
+HomgPoint2D AffineMetric::image_to_homg(const vnl_double_2& p) const
 {
   return image_to_homg(p.x(), p.y());
 }
 
 //: Convert conditioned point p to image coordinates
-vnl_double_2 AffineMetric::homg_to_image(const HomgPoint2D& p)
+vnl_double_2 AffineMetric::homg_to_image(const HomgPoint2D& p) const
 {
   vnl_double_3 x = A_ * p.get_vector();
   double s = 1/x[2];
