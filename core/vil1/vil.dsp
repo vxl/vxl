@@ -571,6 +571,15 @@ SOURCE=.\Templates\vil_convolve_1d+float.int.float.float-.cxx
 
 SOURCE=.\Templates\vil_resample_image+vil_rgb+vil_byte-.vil_rgb+int--.cxx
 # End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_rgb+vxl_uint_16-.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vil_memory_image_of+vil_rgb+vxl_uint_16--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
