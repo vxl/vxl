@@ -6,7 +6,7 @@
 // \brief Includes the right file depending on the platform
 // \author Franck Bettinger
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__BORLANDC__)
 #include "mvl2_video_from_avi_windows.h"
 #else
 #include "mvl2_video_from_avi_linux.h"
