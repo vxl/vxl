@@ -10,17 +10,17 @@ INCLUDE( ${VXLCORE_INCLUDE_DIR}/vgui/UseVGUI.cmake )
 
 IF(HAS_VGUI)
 
-SET(test_brct_sources
+SET(brct_test_sources
   brct_menus.cxx          brct_menus.h
   brct_windows_frame.cxx  brct_windows_frame.h
   test_brct_kalman.cxx
 )
 
-AUX_SOURCE_DIRECTORY(Templates test_brct_sources)
+AUX_SOURCE_DIRECTORY(Templates brct_test_sources)
 
-ADD_EXECUTABLE(test_brct ${test_brct_sources})
-ADD_TEST(test_brct_kalman test_brct)
+ADD_EXECUTABLE(brct_test ${brct_test_sources})
+ADD_TEST(brct_test_kalman test_brct)
 
-TARGET_LINK_LIBRARIES(test_brct vcl vgui brct)
+TARGET_LINK_LIBRARIES(brct_test vcl vgui brct bugl)
 
 ENDIF(HAS_VGUI)
