@@ -12,11 +12,14 @@
 #include <vil/vil_byte.h>
 
 
-void test_gaussian_pyramid_builder_2d_byte(int nx, int ny)
+
+void test_gaussian_pyramid_builder_2d()
 {
-  vcl_cout << "*************************" << vcl_endl;
+  int nx = 20, ny = 20;
+  vcl_cout << "*******************************************************" << vcl_endl;
   vcl_cout << " Testing mil_gaussian_pyramid_builder_2d (byte)(nx="<<nx<<")" << vcl_endl;
-  vcl_cout << "*************************" << vcl_endl;
+  vcl_cout << "*******************************************************" << vcl_endl;
+
 
   mil_image_2d_of<vil_byte> image0;
   image0.resize(nx,ny);
@@ -27,7 +30,10 @@ void test_gaussian_pyramid_builder_2d_byte(int nx, int ny)
        image0(x,y) = x+y*10;
      }
 
+
   mil_gaussian_pyramid_builder_2d<vil_byte> builder;
+  int default_n_levels = builder.maxLevels();
+  builder.setMaxLevels(2);
   mil_image_pyramid image_pyr;
 
   builder.build(image_pyr,image0);
@@ -35,21 +41,26 @@ void test_gaussian_pyramid_builder_2d_byte(int nx, int ny)
   vcl_cout<<"Result:"<<vcl_endl;
   image_pyr.print_all(vcl_cout);
 
-  if (image_pyr.nLevels()>0)
-  {
-    int nx2 = (nx+1)/2;
-    int ny2 = (ny+1)/2;
-    const mil_image_2d_of<vil_byte>& image1 = (const mil_image_2d_of<vil_byte>&) image_pyr(1);
-    TEST("Level 1 size",image1.nx()==(nx+1)/2 && image1.ny()==(ny+1)/2, true);
-    TEST("Pixel (0,0)",image0(0,0)==image1(0,0),true);
-    TEST("Pixel (1,1)",image0(2,2)==image1(1,1),true);
-    TEST("Corner pixel",image0(nx2*2-2,ny2*2-2)==image1(nx2-1,ny2-1),true);
-  }
-}
 
-void test_gaussian_pyramid_builder_2d()
-{
-  test_gaussian_pyramid_builder_2d_byte(10,10);
+  TEST("Found correct number of levels", image_pyr.nLevels(), 2);
+
+  int nx2 = (nx+1)/2;
+  int ny2 = (ny+1)/2;
+  const mil_image_2d_of<vil_byte>& image1 = (const mil_image_2d_of<vil_byte>&) image_pyr(1);
+  TEST("Level 1 size",image1.nx()==(nx+1)/2 && image1.ny()==(ny+1)/2, true);
+  TEST("Pixel (0,0)",image0(0,0)==image1(0,0),true);
+  TEST("Pixel (1,1)",image0(2,2)==image1(1,1),true);
+  TEST("Corner pixel",image0(nx2*2-2,ny2*2-2)==image1(nx2-1,ny2-1),true);
+
+  builder.setMaxLevels(default_n_levels);
+  builder.extend(image_pyr);
+  vcl_cout<<"\n\n\nTesting builder.extend():"<<vcl_endl;
+  image_pyr.print_all(vcl_cout);
+
+
+  TEST("Found correct number of levels", image_pyr.nLevels(), 3);
+
+  
 }
 
 

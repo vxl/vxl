@@ -167,6 +167,13 @@ public:
     const T& operator()(int x, int y) const
         { return planes_[0][ystep_*y+x*xstep_]; }
 
+
+      //: True if transfordms are equal, and they share same image data.
+      // This does not do a deep equality on image data. If the images point to
+      // different image data objects that contain identical images, then
+      // the result will still be false.
+    bool operator==(const mil_image_2d_of<T> &) const;
+
         //: Define valid data region (including transform)
         //  Resizes and sets the tranformation so that
         //  worldToIm(x,y) is valid for all points in range

@@ -501,6 +501,27 @@ void mil_image_2d_of<T>::b_read(vsl_b_istream& bfs)
         planes_[i]=(T*)data_->data() + plane_offsets[i];
 }
 
+
+//=======================================================================
+//: True if transfords, etc. are equal, and they share same image data.
+// This does not do a deep equality on image data. If the images point to
+// different image data objects that contain identical images, then
+// the result will still be false.
+template<class T>
+bool mil_image_2d_of<T>::operator==(const mil_image_2d_of<T> &other) const
+{
+  return data_ == other.data_ &&
+    planes_ == other.planes_ &&
+    nx_ == other.nx_ &&
+    ny_ == other.ny_ &&
+    xstep_ == other.xstep_ &&
+    ystep_ == other.ystep_ &&
+    format_ == other.format_ &&
+    world2im_ == other.world2im_;
+}
+
+
+
 #if 0
 #define MIL_IMAGE_2D_OF_INSTANTIATE(T) \
 template class mil_image_2d_of<T >

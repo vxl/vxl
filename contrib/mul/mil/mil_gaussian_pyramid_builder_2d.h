@@ -56,6 +56,11 @@ public:
         //: Build pyramid
     virtual void build(mil_image_pyramid&, const mil_image&);
 
+        //: Extend pyramid
+        // The first layer of the pyramid must already be set.
+        // Scale steps must be equal.
+    virtual void extend(mil_image_pyramid&);
+
         //: Smooth and subsample src_im to produce dest_im
         //  Applies 1-5-8-5-1 filter in x and y, then samples
         //  every other pixel.

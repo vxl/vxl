@@ -149,7 +149,7 @@ void mil_gaussian_pyramid_builder_2d<T>::checkPyr(mil_image_pyramid& im_pyr,  in
 
 //=======================================================================
 //: Build pyramid
-//=======================================================================
+
 template<class T>
 void mil_gaussian_pyramid_builder_2d<T>::build(mil_image_pyramid& image_pyr,
                                     const mil_image& im)
@@ -165,20 +165,20 @@ void mil_gaussian_pyramid_builder_2d<T>::build(mil_image_pyramid& image_pyr,
     // Compute number of levels to pyramid so that top is no less
     // than 5 x 5
     int s = 1;
-    int max_level = 0;
+    int max_levels = 1;
     while ((nx/(2*s)>=5) && (ny/(2*s)>=5))
     {
-        max_level++;
+        max_levels++;
         s*=2;
     }
 
-    if (max_level>=max_levels_)
-        max_level=max_levels_-1;
+    if (max_levels>max_levels_)
+        max_levels=max_levels_;
 
     work_im_.resize(nx,ny);
 
     // Set up image pyramid
-    checkPyr(image_pyr,max_level+1);
+    checkPyr(image_pyr,max_levels);
 
     mil_image_2d_of<T>& im0 = (mil_image_2d_of<T>&) image_pyr(0);
 
@@ -186,7 +186,7 @@ void mil_gaussian_pyramid_builder_2d<T>::build(mil_image_pyramid& image_pyr,
     im0.setToWindow(base_image,0,nx-1,0,ny-1);
 
     int i;
-    for (i=1;i<=max_level;i++)
+    for (i=1;i<max_levels;i++)
     {
         mil_image_2d_of<T>& im_i0 = (mil_image_2d_of<T>&) image_pyr(i);
         mil_image_2d_of<T>& im_i1 = (mil_image_2d_of<T>&) image_pyr(i-1);
@@ -205,6 +205,60 @@ void mil_gaussian_pyramid_builder_2d<T>::build(mil_image_pyramid& image_pyr,
 
     image_pyr.setWidths(base_pixel_width,scale_step);
 }
+
+//=======================================================================
+//: Extend pyramid
+// The first layer of the pyramid must already be set.
+
+template<class T>
+void mil_gaussian_pyramid_builder_2d<T>::extend(mil_image_pyramid& image_pyr)
+{
+    //  Require image mil_image_2d_of<T>
+    assert(image_pyr(0).is_a() == work_im_.is_a());
+
+    assert(image_pyr.scaleStep() == scaleStep());
+
+    int nx = image_pyr(0).nx();
+    int ny = image_pyr(0).ny();
+
+    // Compute number of levels to pyramid so that top is no less
+    // than 5 x 5
+    int s = 1;
+    int max_levels = 1;
+    while ((nx/(2*s)>=5) && (ny/(2*s)>=5))
+    {
+        max_levels++;
+        s*=2;
+    }
+
+    if (max_levels>max_levels_)
+        max_levels=max_levels_;
+
+    work_im_.resize(nx,ny);
+
+    // Set up image pyramid
+    int oldsize = image_pyr.nLevels();
+    if (oldsize<max_levels) // only extend, if it isn't already tall enough
+    {
+      image_pyr.data().resize(max_levels);
+
+
+      int i;
+      for (i=oldsize;i<max_levels;++i)
+          image_pyr.data()[i] = new mil_image_2d_of<T>;
+
+      for (i=oldsize;i<max_levels;i++)
+      {
+          mil_image_2d_of<T>& im_i0 = (mil_image_2d_of<T>&) image_pyr(i);
+          mil_image_2d_of<T>& im_i1 = (mil_image_2d_of<T>&) image_pyr(i-1);
+
+          gaussReduce(im_i0,im_i1);
+      }
+    }
+
+}
+
+
 
 //=======================================================================
 // Method: is_a

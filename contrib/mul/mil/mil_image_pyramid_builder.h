@@ -42,6 +42,10 @@ public:
         //: Build pyramid
     virtual void build(mil_image_pyramid&, const mil_image&) = 0;
 
+        //: Extend pyramid
+        // The first layer of the pyramid must already be set.
+    virtual void extend(mil_image_pyramid&) = 0;
+
         //: Scale step between levels
     virtual double scaleStep() const = 0;
 
