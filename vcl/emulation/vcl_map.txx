@@ -12,7 +12,6 @@
 #undef VCL_MAP_INSTANTIATE
 #define VCL_MAP_INSTANTIATE(T, Key, Comp)			\
 template class vcl_map<T, Key, Comp VCL_DFL_TMPL_ARG(vcl_alloc) >;	\
-template class vcl_multimap<T,Key,Comp VCL_DFL_TMPL_ARG(vcl_alloc) >;	\
 VCL_RBTREE_MAP_PAIR_INSTANTIATE(T, Key, __LINE__)
 
 // This "vcl_identity" passthru gets __LINE__ expanded
