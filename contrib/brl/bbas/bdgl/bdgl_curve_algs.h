@@ -29,6 +29,10 @@ class bdgl_curve_algs
   //:Reverses the edgel chain
   static vdgl_digital_curve_sptr reverse(vdgl_digital_curve_sptr& dc);
 
+  //:Intersect the curve with an infinite line
+  static bool intersect_line(vdgl_digital_curve_sptr& dc,
+                             vgl_line_2d<double>& line,
+                             vcl_vector<vgl_point_2d<double> >& pts);
  private:
   bdgl_curve_algs();
 };
