@@ -34,7 +34,12 @@ The binary I/O code is known to work across the following hardware/OS/compiler c
 @item  DEC alpha - gcc-2.95.2  (64 bit!)
 @end enumerate
 
-Thus binary files produced by any of the above should be readable by any other of the above.
+Thus
+binary files produced by any of the above should be readable by any other of the above.
+There is of-course an exception; large numbers saved on a 64-bit platform cannot
+be read on a 32-bit platform.
+
+
 
 @section Using Binary I/O
 
@@ -858,7 +863,7 @@ void vsl_b_read(vsl_b_istream& is, class_B * &p)
   @}
   else
     p = 0;
-@} 
+@}
 
 template<class T>
 void vsl_b_write(vsl_b_ostream& os, const class_B *p)
