@@ -99,49 +99,52 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "c;cxx"
 # Begin Source File
-SOURCE=.\CameraGraph.cpp
+SOURCE=.\zhang_camera_node.cpp
 # End Source File
 # Begin Source File
-SOURCE=.\ZhangCameraNode.cpp
-# End Source File
-# Begin Source File
-SOURCE=.\ZhangLinearCalibrate.cpp
+SOURCE=.\zhang_linear_calibrate.cpp
 # End Source File
 # Begin Source File
 SOURCE=.\camera.cpp
 # End Source File
 # Begin Source File
-SOURCE=.\CalibratePlane.cpp
+SOURCE=.\calibrate_plane.cpp
 # End Source File
 # Begin Source File
-SOURCE=.\CalibrationObject.cpp
+SOURCE=.\calibrate_object.cpp
 # End Source File
 # Begin Source File
-SOURCE=.\CameraNode.cpp
+SOURCE=.\camera_node.cpp
+# End Source File
+# Begin Source File
+SOURCE=.\euclidean_transformation.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\CalibratePlane.h
+SOURCE=.\calibrate_plane.h
 # End Source File
 # Begin Source File
-SOURCE=.\CalibrationObject.h
+SOURCE=.\calibrate_object.h
 # End Source File
 # Begin Source File
-SOURCE=.\CameraNode.h
+SOURCE=.\camera_node.h
 # End Source File
 # Begin Source File
 SOURCE=.\camera.h
 # End Source File
 # Begin Source File
-SOURCE=.\CameraGraph.h
+SOURCE=.\camera_graph.h
 # End Source File
 # Begin Source File
-SOURCE=.\ZhangCameraNode.h
+SOURCE=.\zhang_camera_node.h
 # End Source File
 # Begin Source File
-SOURCE=.\ZhangLinearCalibrate.h
+SOURCE=.\zhang_linear_calibrate.h
+# End Source File
+# Begin Source File
+SOURCE=.\euclidean_transformation.h
 # End Source File
 # End Group
 # End Target
