@@ -245,8 +245,11 @@ int main(int argc, char** argv)
   vil2_image_view<vil_rgb<vxl_byte> >    rgb_2image(NI,NJ);
   vcl_cout<<"Times to process a "<<NI<<" x "<<NJ
           <<" image (in microsecs) [Range= 0.5(max-min)]"<<vcl_endl;
+	  
+  // Estimate time so we can set n_loops appropriately
+  double t = fill(byte_1image,5000,false);
 
-  int n_loops = 25;
+  int n_loops = int(100000/t); // Number required for about half a sec running time
   compute_stats(1,byte_1image,n_loops);
   compute_stats(1,byte_2image,n_loops);
   compute_stats(1,float_1image,n_loops);
@@ -263,7 +266,7 @@ int main(int argc, char** argv)
   compute_stats(2,rgb_2image,n_loops);
   vcl_cout << "\n\n";
 
-  n_loops = 5;
+  n_loops/=5;
   compute_stats(3,byte_1image,n_loops);
   compute_stats(3,byte_2image,n_loops);
   compute_stats(3,float_1image,n_loops);
