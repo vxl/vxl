@@ -300,7 +300,7 @@ foreach $f (@FILES)
     elsif ($j eq "vnl/algo/vnl_algo_fwd.h") { $i="vnl_(svd|qr|matrix_inverse|symmetric_eigensystem|cholesky|complex_eigensystem|conjugate_gradient|cpoly_roots|lbfgs|levenberg_marquardt)"; }
     elsif ($j eq "vnl/algo/vnl_chi_squared.h") { $i="($i)_[a-z]+"; }
     elsif ($j eq "vnl/algo/vnl_fft.h") { $i="$i(|_(|set)gpfa)"; }
-    elsif ($j eq "vnl/algo/vnl_netlib.h") { $i="(zgeev|rpoly)_"; }
+    elsif ($j eq "vnl/algo/vnl_netlib.h") { $i="(zgeev|rpoly|dchscdf|dpofa|dposl|dpoco|dpodi|dgpfa|rsg|dgges|lbfgs|lmdif|lsqr|qrdc|qrsl|rs|rg|dnlaso|svdc)_"; }
     elsif ($j eq "vnl/algo/vnl_symmetric_eigensystem.h") { $i="$i(|_compute)"; }
     elsif ($j eq "vnl/vnl_bignum_traits.h") { $i="vnl_bignum"; }
     elsif ($j eq "vnl/vnl_rational_traits.h") { $i="vnl_rational"; }
