@@ -1,0 +1,7 @@
+LINK_LIBRARIES( pdf1d )
+LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/isbe_pdf/pdf1d )
+
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vbl/io/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/mul/mbl/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vgl/io/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/algo/CMakeListsLink.txt ) 

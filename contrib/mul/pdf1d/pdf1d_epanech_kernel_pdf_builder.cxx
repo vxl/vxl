@@ -1,0 +1,100 @@
+#ifdef __GNUC__
+#pragma implementation
+#endif
+
+//:
+// \file
+// \author Tim Cootes
+// \brief Builds Epanechnikov kernel pdfs
+
+#include <vcl_cassert.h>
+#include <vcl_string.h>
+#include <vcl_cstdlib.h> // vcl_abort()
+
+#include <vsl/vsl_indent.h>
+#include <mbl/mbl_data_wrapper.h>
+#include <pdf1d/pdf1d_epanech_kernel_pdf.h>
+#include <pdf1d/pdf1d_epanech_kernel_pdf_builder.h>
+#include <pdf1d/pdf1d_calc_mean_var.h>
+
+//=======================================================================
+// Dflt ctor
+//=======================================================================
+
+pdf1d_epanech_kernel_pdf_builder::pdf1d_epanech_kernel_pdf_builder()
+{
+}
+
+//=======================================================================
+// Destructor
+//=======================================================================
+
+pdf1d_epanech_kernel_pdf_builder::~pdf1d_epanech_kernel_pdf_builder()
+{
+}
+
+//=======================================================================
+
+pdf1d_epanech_kernel_pdf& pdf1d_epanech_kernel_pdf_builder::gkpdf(pdf1d_pdf& model) const
+{
+  // require a pdf1d_epanech_kernel_pdf
+  assert(model.is_class("pdf1d_epanech_kernel_pdf"));
+  return (pdf1d_epanech_kernel_pdf&) model;
+}
+
+pdf1d_pdf* pdf1d_epanech_kernel_pdf_builder::new_model() const
+{
+  return new pdf1d_epanech_kernel_pdf;
+}
+
+
+vcl_string pdf1d_epanech_kernel_pdf_builder::new_model_type() const
+{
+  return vcl_string("pdf1d_epanech_kernel_pdf");
+}
+
+//=======================================================================
+// Method: is_a
+//=======================================================================
+
+vcl_string pdf1d_epanech_kernel_pdf_builder::is_a() const
+{
+  return vcl_string("pdf1d_epanech_kernel_pdf_builder");
+}
+
+//=======================================================================
+// Method: is_class
+//=======================================================================
+
+bool pdf1d_epanech_kernel_pdf_builder::is_class(vcl_string const& s) const
+{
+  return pdf1d_kernel_pdf_builder::is_class(s) || s==pdf1d_epanech_kernel_pdf_builder::is_a();
+}
+
+//=======================================================================
+// Method: version_no
+//=======================================================================
+
+short pdf1d_epanech_kernel_pdf_builder::version_no() const
+{
+  return 1;
+}
+
+//=======================================================================
+// Method: clone
+//=======================================================================
+
+pdf1d_builder* pdf1d_epanech_kernel_pdf_builder::clone() const
+{
+  return new pdf1d_epanech_kernel_pdf_builder(*this);
+}
+
+//=======================================================================
+// Method: print
+//=======================================================================
+
+void pdf1d_epanech_kernel_pdf_builder::print_summary(vcl_ostream& os) const
+{
+}
+
+

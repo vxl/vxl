@@ -1,0 +1,85 @@
+#ifndef pdf1d_compare_to_pdf_bhat_h
+#define pdf1d_compare_to_pdf_bhat_h
+#ifdef __GNUC__
+#pragma interface
+#endif
+
+//:
+// \file
+// \author Tim Cootes
+// \brief Test if data from a given distribution using Bhattacharyya overlap
+
+#include <pdf1d/pdf1d_compare_to_pdf.h>
+#include <mbl/mbl_cloneable_ptr.h>
+
+//: Test if data from a given distribution using Bhattacharyya overlap
+//  Uses builder() to build a pdf from supplied data.  This is then
+//  tested against the target distribution using an estimate of the
+//  Bhattacharyya overlap.
+class pdf1d_compare_to_pdf_bhat : public pdf1d_compare_to_pdf {
+private:
+    //: Define method of building pdf from data
+  mbl_cloneable_ptr<pdf1d_builder> builder_;
+
+    //: Number of samples per data-point used in estimating overlap
+  int n_per_point_;
+public:
+
+    //: Dflt ctor
+  pdf1d_compare_to_pdf_bhat();
+
+    //: Construct and define method of building pdf from data
+	// \param n_per_point : Number of samples per data-point used in estimating overlap
+  pdf1d_compare_to_pdf_bhat(const pdf1d_builder& builder, int n_per_point);
+
+    //: Destructor
+  virtual ~pdf1d_compare_to_pdf_bhat();
+
+    //: Define method of building pdf from data
+  void set_builder(const pdf1d_builder&);
+
+    //: Method of building pdf from data
+  const pdf1d_builder& builder() const { return builder_; }
+
+    //: Number of samples per data-point used in estimating overlap
+  int n_per_point() const { return n_per_point_; }
+
+    //: Number of samples per data-point used in estimating overlap
+  void set_n_per_point(int n);
+
+
+    //: Test whether data came from the given distribution
+  virtual double compare(const double* data, int n, const pdf1d_pdf& pdf);
+
+    //: Test whether data has form of the given distribution
+	//  Repeatedly resamples n values from data[0..n-1] and
+	//  calls compare_form().
+	//  Individual comparisons are returned in B.
+	//  \return Mean of B
+  virtual double bootstrap_compare_form(vnl_vector<double>& B,
+                              const double* data, int n,
+                              const pdf1d_builder& builder, int n_trials);
+
+    //: Version number for I/O
+  short version_no() const;
+
+    //: Name of the class
+  virtual vcl_string is_a() const;
+
+    //: Does the name of the class match the argument?
+  virtual bool is_class(vcl_string const& s) const;
+
+    //: Create a copy on the heap and return base class pointer
+  virtual pdf1d_compare_to_pdf* clone() const;
+
+    //: Print class to os
+  virtual void print_summary(vcl_ostream& os) const;
+
+    //: Save class to binary file stream
+  virtual void b_write(vsl_b_ostream& bfs) const;
+
+    //: Load class from binary file stream
+  virtual void b_read(vsl_b_istream& bfs);
+};
+
+#endif // pdf1d_compare_to_pdf_bhat_h
