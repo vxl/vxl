@@ -2,6 +2,7 @@
 #include <testlib/testlib_test.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vimt/vimt_image_2d_of.h>
+#include <vimt/vimt_crop.h>
 
 bool Equal(const vimt_image_2d_of<vxl_byte>& im0,
            const vimt_image_2d_of<vxl_byte>& im1)
@@ -51,9 +52,30 @@ void test_image_2d_byte_io()
   TEST("Data connected correctly",image_in1.image()(3,4,1),17);
 }
 
+void test_image_2d_byte_functions()
+{
+  vimt_image_2d_of<vxl_byte> image0;
+  image0.image().resize(5,6,2);
+  for (int p=0;p<2;++p)
+    for (int j=0;j<6;++j)
+      for (int i=0;i<5;++i)
+        image0.image()(i,j,p)=i+10*j+100*p;
+
+	// Test external functions
+	vcl_cout<<"Testing vimt_crop"<<vcl_endl;
+  vimt_image_2d_of<vxl_byte> image1 = vimt_crop(image0,1,3,2,4);
+	TEST("Origin",image1.image()(0,0),image0.image()(1,2));
+	TEST("Width",image1.image().ni(),3);
+	TEST("Height",image1.image().nj(),4);
+
+  vgl_point_2d<double> p0 = image1.world2im().inverse()(0,0);
+	TEST_NEAR("Transform",(p0-vgl_point_2d<double>(1,2)).length(),0,1e-6);
+}
+
 MAIN( test_image_2d_of )
 {
   START( "vimt_image_2d_of" );
+  test_image_2d_byte_functions();
   test_image_2d_byte_io();
 
   SUMMARY();

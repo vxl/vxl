@@ -22,7 +22,7 @@ vimt_image_2d_of<T> vimt_crop(const vimt_image_2d_of<T>& im,
 {
   vimt_transform_2d trans;
   trans.set_translation(-double(x0),-double(y0));
-  return vimt_image_2d_of<T>(vil2_crop(im.image(),x0,ny,y0,ny),trans*im.world2im());
+  return vimt_image_2d_of<T>(vil2_crop(im.image(),x0,nx,y0,ny),trans*im.world2im());
 }
 
 
