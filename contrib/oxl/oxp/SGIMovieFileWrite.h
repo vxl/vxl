@@ -15,7 +15,7 @@
 // .HEADER	Oxford Package
 // .INCLUDE     vview/SGIMovieFileWrite.h
 // .FILE        SGIMovieFileWrite.h
-// .FILE        SGIMovieFileWrite.C
+// .FILE        SGIMovieFileWrite.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 11 Jan 99
 //

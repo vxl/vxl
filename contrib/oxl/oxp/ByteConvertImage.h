@@ -11,11 +11,11 @@
 //    ByteConvertImage is a class that awf hasn't documented properly. FIXME
 //
 // .NAME        ByteConvertImage - Undocumented class FIXME
-// .LIBRARY     POX
-// .HEADER	Oxford Package
+// .LIBRARY     oxp
+// .HEADER	oxl Package
 // .INCLUDE     oxp/ByteConvertImage.h
 // .FILE        ByteConvertImage.h
-// .FILE        ByteConvertImage.C
+// .FILE        ByteConvertImage.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 22 Dec 98
 //

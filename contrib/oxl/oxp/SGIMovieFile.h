@@ -16,7 +16,7 @@
 // .HEADER	Oxford Package
 // .INCLUDE     oxp/SGIMovieFile.h
 // .FILE        SGIMovieFile.h
-// .FILE        SGIMovieFile.C
+// .FILE        SGIMovieFile.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 30 Dec 98
 //

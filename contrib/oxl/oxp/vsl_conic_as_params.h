@@ -15,7 +15,7 @@
 // .HEADER	Oxford Package
 // .INCLUDE     oxp/vsl_conic_as_params.h
 // .FILE        vsl_conic_as_params.h
-// .FILE        vsl_conic_as_params.C
+// .FILE        vsl_conic_as_params.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 12 Nov 99
 //

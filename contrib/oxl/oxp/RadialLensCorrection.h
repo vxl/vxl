@@ -15,7 +15,7 @@
 // .HEADER	Oxford Package
 // .INCLUDE     oxp/RadialLensCorrection.h
 // .FILE        RadialLensCorrection.h
-// .FILE        RadialLensCorrection.C
+// .FILE        RadialLensCorrection.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 13 Jul 98
 //

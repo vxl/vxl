@@ -16,7 +16,7 @@
 // .HEADER	Oxford Package
 // .INCLUDE     oxp/vsl_conic_points.h
 // .FILE        vsl_conic_points.h
-// .FILE        vsl_conic_points.C
+// .FILE        vsl_conic_points.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 12 Nov 99
 //

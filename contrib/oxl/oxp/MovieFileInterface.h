@@ -15,7 +15,7 @@
 // .HEADER	Oxford Package
 // .INCLUDE     oxp/MovieFileInterface.h
 // .FILE        MovieFileInterface.h
-// .FILE        MovieFileInterface.C
+// .FILE        MovieFileInterface.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 30 Dec 98
 //

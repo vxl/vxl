@@ -24,7 +24,7 @@
 // .HEADER	Oxford Package
 // .INCLUDE     oxp/JPEG_Decompressor.h
 // .FILE        JPEG_Decompressor.h
-// .FILE        JPEG_Decompressor.C
+// .FILE        JPEG_Decompressor.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 30 Dec 98
 //

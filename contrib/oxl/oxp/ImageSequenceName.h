@@ -15,7 +15,7 @@
 // .HEADER	Oxford Package
 // .INCLUDE     oxp/ImageSequenceName.h
 // .FILE        ImageSequenceName.h
-// .FILE        ImageSequenceName.C
+// .FILE        ImageSequenceName.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 31 Dec 98
 //

@@ -20,7 +20,7 @@
 // .HEADER	Oxford Package
 // .INCLUDE     oxp/Mapping_2d_2d.h
 // .FILE        Mapping_2d_2d.h
-// .FILE        Mapping_2d_2d.C
+// .FILE        Mapping_2d_2d.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 16 Mar 97
 //

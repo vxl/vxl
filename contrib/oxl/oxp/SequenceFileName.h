@@ -15,7 +15,7 @@
 // .HEADER	Oxford Package
 // .INCLUDE     oxp/SequenceFileName.h
 // .FILE        SequenceFileName.h
-// .FILE        SequenceFileName.C
+// .FILE        SequenceFileName.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 26 Jan 99
 //

@@ -15,7 +15,7 @@
 // .HEADER	Oxford Package
 // .INCLUDE     oxp/vsl_conic_as_matrix.h
 // .FILE        vsl_conic_as_matrix.h
-// .FILE        vsl_conic_as_matrix.C
+// .FILE        vsl_conic_as_matrix.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 12 Nov 99
 //

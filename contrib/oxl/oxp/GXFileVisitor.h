@@ -15,7 +15,7 @@
 // .HEADER	Oxford Package
 // .INCLUDE     oxp/GXFileVisitor.h
 // .FILE        GXFileVisitor.h
-// .FILE        GXFileVisitor.C
+// .FILE        GXFileVisitor.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 21 May 99
 //

@@ -15,7 +15,7 @@
 // .HEADER	Oxford Package
 // .INCLUDE     oxp/SGIMovieFilePrivates.h
 // .FILE        SGIMovieFilePrivates.h
-// .FILE        SGIMovieFilePrivates.C
+// .FILE        SGIMovieFilePrivates.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 31 Dec 98
 //
