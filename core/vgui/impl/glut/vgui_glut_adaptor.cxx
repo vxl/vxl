@@ -63,9 +63,9 @@ vgui_glut_adaptor::~vgui_glut_adaptor() {
   sub_contexts.clear();
 
   // remove `this' from `all()'.
-  vcl_vector<vgui_glut_adaptor*>::iterator i = vcl_find(all().begin(), all().end(), this);
-  assert(i != all().end());
-  all().erase(i);
+  vcl_vector<vgui_glut_adaptor*>::iterator it = vcl_find(all().begin(), all().end(), this);
+  assert(it != all().end());
+  all().erase(it);
 }
 
 //--------------------------------------------------------------------------------
