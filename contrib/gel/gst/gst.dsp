@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/gel/gst/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "gst - Win32 Release"
 USERDEP__HACK=\
@@ -217,57 +217,57 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gst/Templates/vbl_smart_ptr+gst_edge_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+gst_edge_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gst/Templates/vbl_smart_ptr+gst_polygon_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+gst_polygon_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gst/Templates/vbl_smart_ptr+gst_vertex_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+gst_vertex_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gst/Templates/vcl_vector+gst_edge_2d_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+gst_edge_2d_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gst/Templates/vcl_vector+gst_polygon_2d_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+gst_polygon_2d_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gst/Templates/vcl_vector+gst_vertex_2d_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+gst_vertex_2d_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gst/gst_edge_2d.cxx
+SOURCE=.\gst_edge_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gst/gst_face_2d.cxx
+SOURCE=.\gst_face_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gst/gst_polygon_2d.cxx
+SOURCE=.\gst_polygon_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gst/gst_polygon_2d_operators.cxx
+SOURCE=.\gst_polygon_2d_operators.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gst/gst_vertex_2d.cxx
+SOURCE=.\gst_vertex_2d.cxx
 
 # End Source File
 # End Group

@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/vxl/vnl/io/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "vnl_io - Win32 Release"
 USERDEP__HACK=\
@@ -217,157 +217,157 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/Templates/vnl_io_diag_matrix+double-.cxx
+SOURCE=.\Templates/vnl_io_diag_matrix+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/Templates/vnl_io_diag_matrix+float-.cxx
+SOURCE=.\Templates/vnl_io_diag_matrix+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/Templates/vnl_io_diag_matrix+int-.cxx
+SOURCE=.\Templates/vnl_io_diag_matrix+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/Templates/vnl_io_diag_matrix+vcl_complex+double--.cxx
+SOURCE=.\Templates/vnl_io_diag_matrix+vcl_complex+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/Templates/vnl_io_diag_matrix+vcl_complex+float--.cxx
+SOURCE=.\Templates/vnl_io_diag_matrix+vcl_complex+float--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/Templates/vnl_io_matrix+double-.cxx
+SOURCE=.\Templates/vnl_io_matrix+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/Templates/vnl_io_matrix+float-.cxx
+SOURCE=.\Templates/vnl_io_matrix+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/Templates/vnl_io_matrix+int-.cxx
+SOURCE=.\Templates/vnl_io_matrix+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/Templates/vnl_io_matrix+long-.cxx
+SOURCE=.\Templates/vnl_io_matrix+long-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/Templates/vnl_io_matrix+schar-.cxx
+SOURCE=.\Templates/vnl_io_matrix+schar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/Templates/vnl_io_matrix+uchar-.cxx
+SOURCE=.\Templates/vnl_io_matrix+uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/Templates/vnl_io_matrix+uint-.cxx
+SOURCE=.\Templates/vnl_io_matrix+uint-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/Templates/vnl_io_matrix+ulong-.cxx
+SOURCE=.\Templates/vnl_io_matrix+ulong-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/Templates/vnl_io_matrix+vcl_complex+double--.cxx
+SOURCE=.\Templates/vnl_io_matrix+vcl_complex+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/Templates/vnl_io_matrix+vcl_complex+float--.cxx
+SOURCE=.\Templates/vnl_io_matrix+vcl_complex+float--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/Templates/vnl_io_sparse_matrix+double-.cxx
+SOURCE=.\Templates/vnl_io_sparse_matrix+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/Templates/vnl_io_sparse_matrix+float-.cxx
+SOURCE=.\Templates/vnl_io_sparse_matrix+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/Templates/vnl_io_vector+double-.cxx
+SOURCE=.\Templates/vnl_io_vector+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/Templates/vnl_io_vector+float-.cxx
+SOURCE=.\Templates/vnl_io_vector+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/Templates/vnl_io_vector+int-.cxx
+SOURCE=.\Templates/vnl_io_vector+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/Templates/vnl_io_vector+long-.cxx
+SOURCE=.\Templates/vnl_io_vector+long-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/Templates/vnl_io_vector+schar-.cxx
+SOURCE=.\Templates/vnl_io_vector+schar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/Templates/vnl_io_vector+uchar-.cxx
+SOURCE=.\Templates/vnl_io_vector+uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/Templates/vnl_io_vector+uint-.cxx
+SOURCE=.\Templates/vnl_io_vector+uint-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/Templates/vnl_io_vector+ulong-.cxx
+SOURCE=.\Templates/vnl_io_vector+ulong-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/Templates/vnl_io_vector+vcl_complex+double--.cxx
+SOURCE=.\Templates/vnl_io_vector+vcl_complex+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/Templates/vnl_io_vector+vcl_complex+float--.cxx
+SOURCE=.\Templates/vnl_io_vector+vcl_complex+float--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/Templates/vsl_vector_io+vnl_vector+double--.cxx
+SOURCE=.\Templates/vsl_vector_io+vnl_vector+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/vnl_io_nonlinear_minimizer.cxx
+SOURCE=.\vnl_io_nonlinear_minimizer.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/vnl_io_real_npolynomial.cxx
+SOURCE=.\vnl_io_real_npolynomial.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/io/vnl_io_real_polynomial.cxx
+SOURCE=.\vnl_io_real_polynomial.cxx
 
 # End Source File
 # End Group

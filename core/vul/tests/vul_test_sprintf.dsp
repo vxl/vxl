@@ -196,7 +196,7 @@ LINK32=link.exe
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/vxl/vul/tests/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "vul_test_sprintf - Win32 Release"
 USERDEP__HACK=\
@@ -265,7 +265,7 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vul/tests/vul_test_sprintf.cxx
+SOURCE=.\vul_test_sprintf.cxx
 
 # End Source File
 # End Group

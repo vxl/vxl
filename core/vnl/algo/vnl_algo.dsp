@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/vxl/vnl/algo/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "vnl_algo - Win32 Release"
 USERDEP__HACK=\
@@ -217,387 +217,387 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/fsm_qr+double-.cxx
+SOURCE=.\Templates/fsm_qr+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/fsm_qr+float-.cxx
+SOURCE=.\Templates/fsm_qr+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/fsm_qr+long_double-.cxx
+SOURCE=.\Templates/fsm_qr+long_double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/fsm_qr+vcl_complex+double--.cxx
+SOURCE=.\Templates/fsm_qr+vcl_complex+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/fsm_qr+vcl_complex+float--.cxx
+SOURCE=.\Templates/fsm_qr+vcl_complex+float--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/fsm_qr+vcl_complex+long_double--.cxx
+SOURCE=.\Templates/fsm_qr+vcl_complex+long_double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/fsm_svdc+double-.cxx
+SOURCE=.\Templates/fsm_svdc+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/fsm_svdc+float-.cxx
+SOURCE=.\Templates/fsm_svdc+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/fsm_svdc+long_double-.cxx
+SOURCE=.\Templates/fsm_svdc+long_double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/fsm_svdc+vcl_complex+double--.cxx
+SOURCE=.\Templates/fsm_svdc+vcl_complex+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/fsm_svdc+vcl_complex+float--.cxx
+SOURCE=.\Templates/fsm_svdc+vcl_complex+float--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/fsm_svdc+vcl_complex+long_double--.cxx
+SOURCE=.\Templates/fsm_svdc+vcl_complex+long_double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vcl_vector+vnl_amoeba_SimplexCorner-.cxx
+SOURCE=.\Templates/vcl_vector+vnl_amoeba_SimplexCorner-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_adjugate+double-.cxx
+SOURCE=.\Templates/vnl_adjugate+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_convolve+double.double-.cxx
+SOURCE=.\Templates/vnl_convolve+double.double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_convolve+int.double-.cxx
+SOURCE=.\Templates/vnl_convolve+int.double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_convolve+int.int-.cxx
+SOURCE=.\Templates/vnl_convolve+int.int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_determinant+double-.cxx
+SOURCE=.\Templates/vnl_determinant+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_determinant+float-.cxx
+SOURCE=.\Templates/vnl_determinant+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_determinant+long_double-.cxx
+SOURCE=.\Templates/vnl_determinant+long_double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_determinant+long_double_complex-.cxx
+SOURCE=.\Templates/vnl_determinant+long_double_complex-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_determinant+vcl_complex+double--.cxx
+SOURCE=.\Templates/vnl_determinant+vcl_complex+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_determinant+vcl_complex+float--.cxx
+SOURCE=.\Templates/vnl_determinant+vcl_complex+float--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_fft1d+double-.cxx
+SOURCE=.\Templates/vnl_fft1d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_fft1d+float-.cxx
+SOURCE=.\Templates/vnl_fft1d+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_fft2d+double-.cxx
+SOURCE=.\Templates/vnl_fft2d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_fft2d+float-.cxx
+SOURCE=.\Templates/vnl_fft2d+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_fft_1d+double-.cxx
+SOURCE=.\Templates/vnl_fft_1d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_fft_1d+float-.cxx
+SOURCE=.\Templates/vnl_fft_1d+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_fft_2d+double-.cxx
+SOURCE=.\Templates/vnl_fft_2d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_fft_2d+float-.cxx
+SOURCE=.\Templates/vnl_fft_2d+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_fft_base+1.double-.cxx
+SOURCE=.\Templates/vnl_fft_base+1.double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_fft_base+1.float-.cxx
+SOURCE=.\Templates/vnl_fft_base+1.float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_fft_base+2.double-.cxx
+SOURCE=.\Templates/vnl_fft_base+2.double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_fft_base+2.float-.cxx
+SOURCE=.\Templates/vnl_fft_base+2.float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_fft_prime_factors+double-.cxx
+SOURCE=.\Templates/vnl_fft_prime_factors+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_fft_prime_factors+float-.cxx
+SOURCE=.\Templates/vnl_fft_prime_factors+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_matrix_inverse+double-.cxx
+SOURCE=.\Templates/vnl_matrix_inverse+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_orthogonal_complement+double-.cxx
+SOURCE=.\Templates/vnl_orthogonal_complement+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_orthogonal_complement+vcl_complex+double--.cxx
+SOURCE=.\Templates/vnl_orthogonal_complement+vcl_complex+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_orthogonal_complement+vcl_complex+float--.cxx
+SOURCE=.\Templates/vnl_orthogonal_complement+vcl_complex+float--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_orthogonal_complement+vcl_complex+long_double--.cxx
+SOURCE=.\Templates/vnl_orthogonal_complement+vcl_complex+long_double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_qr+double-.cxx
+SOURCE=.\Templates/vnl_qr+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_qr+float-.cxx
+SOURCE=.\Templates/vnl_qr+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_qr+long_double-.cxx
+SOURCE=.\Templates/vnl_qr+long_double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_qr+vcl_complex+double--.cxx
+SOURCE=.\Templates/vnl_qr+vcl_complex+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_qr+vcl_complex+float--.cxx
+SOURCE=.\Templates/vnl_qr+vcl_complex+float--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_qr+vcl_complex+long_double--.cxx
+SOURCE=.\Templates/vnl_qr+vcl_complex+long_double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_scatter_3x3+double-.cxx
+SOURCE=.\Templates/vnl_scatter_3x3+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_scatter_3x3+float-.cxx
+SOURCE=.\Templates/vnl_scatter_3x3+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_svd+double-.cxx
+SOURCE=.\Templates/vnl_svd+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_svd+float-.cxx
+SOURCE=.\Templates/vnl_svd+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_svd+long_double-.cxx
+SOURCE=.\Templates/vnl_svd+long_double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_svd+vcl_complex+double--.cxx
+SOURCE=.\Templates/vnl_svd+vcl_complex+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_svd+vcl_complex+float--.cxx
+SOURCE=.\Templates/vnl_svd+vcl_complex+float--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/Templates/vnl_svd+vcl_complex+long_double--.cxx
+SOURCE=.\Templates/vnl_svd+vcl_complex+long_double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_amoeba.cxx
+SOURCE=.\vnl_amoeba.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_brent.cxx
+SOURCE=.\vnl_brent.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_chi_squared.cxx
+SOURCE=.\vnl_chi_squared.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_cholesky.cxx
+SOURCE=.\vnl_cholesky.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_complex_eigensystem.cxx
+SOURCE=.\vnl_complex_eigensystem.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_conjugate_gradient.cxx
+SOURCE=.\vnl_conjugate_gradient.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_cpoly_roots.cxx
+SOURCE=.\vnl_cpoly_roots.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_discrete_diff.cxx
+SOURCE=.\vnl_discrete_diff.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_fft.cxx
+SOURCE=.\vnl_fft.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_fftxd_prime_factors.cxx
+SOURCE=.\vnl_fftxd_prime_factors.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_gaussian_kernel_1d.cxx
+SOURCE=.\vnl_gaussian_kernel_1d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_generalized_eigensystem.cxx
+SOURCE=.\vnl_generalized_eigensystem.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_lbfgs.cxx
+SOURCE=.\vnl_lbfgs.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_levenberg_marquardt.cxx
+SOURCE=.\vnl_levenberg_marquardt.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_lsqr.cxx
+SOURCE=.\vnl_lsqr.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_powell.cxx
+SOURCE=.\vnl_powell.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_real_eigensystem.cxx
+SOURCE=.\vnl_real_eigensystem.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_rnpoly_solve.cxx
+SOURCE=.\vnl_rnpoly_solve.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_rpoly_roots.cxx
+SOURCE=.\vnl_rpoly_roots.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_sparse_symmetric_eigensystem.cxx
+SOURCE=.\vnl_sparse_symmetric_eigensystem.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/algo/vnl_symmetric_eigensystem.cxx
+SOURCE=.\vnl_symmetric_eigensystem.cxx
 
 # End Source File
 # End Group

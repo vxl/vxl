@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/tbl/vipl/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "vipl - Win32 Release"
 USERDEP__HACK=\
@@ -213,392 +213,392 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_accessors_vil_image+double-.cxx
+SOURCE=.\Templates/vipl_accessors_vil_image+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_accessors_vil_image+float-.cxx
+SOURCE=.\Templates/vipl_accessors_vil_image+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_accessors_vil_image+int-.cxx
+SOURCE=.\Templates/vipl_accessors_vil_image+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_accessors_vil_image+short-.cxx
+SOURCE=.\Templates/vipl_accessors_vil_image+short-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_accessors_vil_image+uchar-.cxx
+SOURCE=.\Templates/vipl_accessors_vil_image+uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_accessors_vil_image+ushort-.cxx
+SOURCE=.\Templates/vipl_accessors_vil_image+ushort-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_add_random_noise+vil_image.vil_image.uchar.uchar-.cxx
+SOURCE=.\Templates/vipl_add_random_noise+vil_image.vil_image.uchar.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_convert+vil_image.vil_image.double.uchar-.cxx
+SOURCE=.\Templates/vipl_convert+vil_image.vil_image.double.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_convert+vil_image.vil_image.float.uchar-.cxx
+SOURCE=.\Templates/vipl_convert+vil_image.vil_image.float.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_convert+vil_image.vil_image.int.uchar-.cxx
+SOURCE=.\Templates/vipl_convert+vil_image.vil_image.int.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_convert+vil_image.vil_image.short.uchar-.cxx
+SOURCE=.\Templates/vipl_convert+vil_image.vil_image.short.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_convert+vil_image.vil_image.uchar.uchar-.cxx
+SOURCE=.\Templates/vipl_convert+vil_image.vil_image.uchar.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_convert+vil_image.vil_image.vil_rgb+uchar-.uchar-.cxx
+SOURCE=.\Templates/vipl_convert+vil_image.vil_image.vil_rgb+uchar-.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_dilate_disk+vil_image.vil_image.uchar.uchar-.cxx
+SOURCE=.\Templates/vipl_dilate_disk+vil_image.vil_image.uchar.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_dyadic+vil_image.vil_image.float.float-.cxx
+SOURCE=.\Templates/vipl_dyadic+vil_image.vil_image.float.float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_erode_disk+vil_image.vil_image.float.float-.cxx
+SOURCE=.\Templates/vipl_erode_disk+vil_image.vil_image.float.float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_erode_disk+vil_image.vil_image.uchar.uchar-.cxx
+SOURCE=.\Templates/vipl_erode_disk+vil_image.vil_image.uchar.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_erode_disk+vil_image.vil_image.ushort.ushort-.cxx
+SOURCE=.\Templates/vipl_erode_disk+vil_image.vil_image.ushort.ushort-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_filter_2d+vil_image.vil_image.double.uchar-.cxx
+SOURCE=.\Templates/vipl_filter_2d+vil_image.vil_image.double.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_filter_2d+vil_image.vil_image.float.float-.cxx
+SOURCE=.\Templates/vipl_filter_2d+vil_image.vil_image.float.float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_filter_2d+vil_image.vil_image.float.uchar-.cxx
+SOURCE=.\Templates/vipl_filter_2d+vil_image.vil_image.float.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_filter_2d+vil_image.vil_image.int.uchar-.cxx
+SOURCE=.\Templates/vipl_filter_2d+vil_image.vil_image.int.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_filter_2d+vil_image.vil_image.short.short-.cxx
+SOURCE=.\Templates/vipl_filter_2d+vil_image.vil_image.short.short-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_filter_2d+vil_image.vil_image.short.uchar-.cxx
+SOURCE=.\Templates/vipl_filter_2d+vil_image.vil_image.short.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_filter_2d+vil_image.vil_image.uchar.float-.cxx
+SOURCE=.\Templates/vipl_filter_2d+vil_image.vil_image.uchar.float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_filter_2d+vil_image.vil_image.uchar.uchar-.cxx
+SOURCE=.\Templates/vipl_filter_2d+vil_image.vil_image.uchar.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_filter_2d+vil_image.vil_image.ushort.ushort-.cxx
+SOURCE=.\Templates/vipl_filter_2d+vil_image.vil_image.ushort.ushort-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_filter_2d+vil_image.vil_image.vil_rgb+uchar-.uchar-.cxx
+SOURCE=.\Templates/vipl_filter_2d+vil_image.vil_image.vil_rgb+uchar-.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_gradient_mag+vil_image.vil_image.uchar.uchar-.cxx
+SOURCE=.\Templates/vipl_gradient_mag+vil_image.vil_image.uchar.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_median+vil_image.vil_image.uchar.uchar-.cxx
+SOURCE=.\Templates/vipl_median+vil_image.vil_image.uchar.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_moment+vil_image.vil_image.uchar.float-.cxx
+SOURCE=.\Templates/vipl_moment+vil_image.vil_image.uchar.float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_monadic+vil_image.vil_image.float.float-.cxx
+SOURCE=.\Templates/vipl_monadic+vil_image.vil_image.float.float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_section_container+double-.cxx
+SOURCE=.\Templates/vipl_section_container+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_section_container+float-.cxx
+SOURCE=.\Templates/vipl_section_container+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_section_container+int-.cxx
+SOURCE=.\Templates/vipl_section_container+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_section_container+short-.cxx
+SOURCE=.\Templates/vipl_section_container+short-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_section_container+uchar-.cxx
+SOURCE=.\Templates/vipl_section_container+uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_section_container+ushort-.cxx
+SOURCE=.\Templates/vipl_section_container+ushort-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_section_container+vil_rgb+uchar--.cxx
+SOURCE=.\Templates/vipl_section_container+vil_rgb+uchar--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_section_descriptor+double-.cxx
+SOURCE=.\Templates/vipl_section_descriptor+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_section_descriptor+float-.cxx
+SOURCE=.\Templates/vipl_section_descriptor+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_section_descriptor+int-.cxx
+SOURCE=.\Templates/vipl_section_descriptor+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_section_descriptor+short-.cxx
+SOURCE=.\Templates/vipl_section_descriptor+short-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_section_descriptor+uchar-.cxx
+SOURCE=.\Templates/vipl_section_descriptor+uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_section_descriptor+ushort-.cxx
+SOURCE=.\Templates/vipl_section_descriptor+ushort-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_section_descriptor+vil_rgb+uchar--.cxx
+SOURCE=.\Templates/vipl_section_descriptor+vil_rgb+uchar--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_section_iterator+double-.cxx
+SOURCE=.\Templates/vipl_section_iterator+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_section_iterator+float-.cxx
+SOURCE=.\Templates/vipl_section_iterator+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_section_iterator+int-.cxx
+SOURCE=.\Templates/vipl_section_iterator+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_section_iterator+short-.cxx
+SOURCE=.\Templates/vipl_section_iterator+short-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_section_iterator+uchar-.cxx
+SOURCE=.\Templates/vipl_section_iterator+uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_section_iterator+ushort-.cxx
+SOURCE=.\Templates/vipl_section_iterator+ushort-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_section_iterator+vil_rgb+uchar--.cxx
+SOURCE=.\Templates/vipl_section_iterator+vil_rgb+uchar--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_sobel+vil_image.vil_image.uchar.uchar-.cxx
+SOURCE=.\Templates/vipl_sobel+vil_image.vil_image.uchar.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_threshold+vil_image.vil_image.float.float-.cxx
+SOURCE=.\Templates/vipl_threshold+vil_image.vil_image.float.float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_threshold+vil_image.vil_image.uchar.uchar-.cxx
+SOURCE=.\Templates/vipl_threshold+vil_image.vil_image.uchar.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_threshold+vil_image.vil_image.ushort.ushort-.cxx
+SOURCE=.\Templates/vipl_threshold+vil_image.vil_image.ushort.ushort-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/Templates/vipl_x_gradient+vil_image.vil_image.uchar.uchar-.cxx
+SOURCE=.\Templates/vipl_x_gradient+vil_image.vil_image.uchar.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/filter/vipl_filter_abs.cxx
+SOURCE=.\filter/vipl_filter_abs.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/vipl_with_section/Templates/vipl_accessors_section+int.2-.cxx
+SOURCE=.\vipl_with_section/Templates/vipl_accessors_section+int.2-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/vipl_with_section/Templates/vipl_accessors_section+uchar.2-.cxx
+SOURCE=.\vipl_with_section/Templates/vipl_accessors_section+uchar.2-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/vipl_with_section/Templates/vipl_accessors_section+vil_rgb+uchar-.2-.cxx
+SOURCE=.\vipl_with_section/Templates/vipl_accessors_section+vil_rgb+uchar-.2-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/vipl_with_section/Templates/vipl_dilate_disk+section+vil_rgb+uchar-.2-.section+vil_rgb+uchar-.2-.vil_rgb+uchar-.vil_rgb+uchar--.cxx
+SOURCE=.\vipl_with_section/Templates/vipl_dilate_disk+section+vil_rgb+uchar-.2-.section+vil_rgb+uchar-.2-.vil_rgb+uchar-.vil_rgb+uchar--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/vipl_with_section/Templates/vipl_erode_disk+section+uchar.2-.section+uchar.2-.uchar.uchar-.cxx
+SOURCE=.\vipl_with_section/Templates/vipl_erode_disk+section+uchar.2-.section+uchar.2-.uchar.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/vipl_with_section/Templates/vipl_filter_2d+section+uchar.2-.section+int.2-.uchar.int-.cxx
+SOURCE=.\vipl_with_section/Templates/vipl_filter_2d+section+uchar.2-.section+int.2-.uchar.int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/vipl_with_section/Templates/vipl_filter_2d+section+uchar.2-.section+uchar.2-.uchar.uchar-.cxx
+SOURCE=.\vipl_with_section/Templates/vipl_filter_2d+section+uchar.2-.section+uchar.2-.uchar.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/vipl_with_section/Templates/vipl_filter_2d+section+vil_rgb+uchar-.2-.section+vil_rgb+uchar-.2-.vil_rgb+uchar-.vil_rgb+uchar--.cxx
+SOURCE=.\vipl_with_section/Templates/vipl_filter_2d+section+vil_rgb+uchar-.2-.section+vil_rgb+uchar-.2-.vil_rgb+uchar-.vil_rgb+uchar--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/vipl_with_section/Templates/vipl_histogram+section+uchar.2-.section+int.2-.uchar.int-.cxx
+SOURCE=.\vipl_with_section/Templates/vipl_histogram+section+uchar.2-.section+int.2-.uchar.int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/vipl_with_section/Templates/vipl_threshold+section+uchar.2-.section+uchar.2-.uchar.uchar-.cxx
+SOURCE=.\vipl_with_section/Templates/vipl_threshold+section+uchar.2-.section+uchar.2-.uchar.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/vipl_with_section/Templates/vipl_x_gradient+section+vil_rgb+uchar-.2-.section+vil_rgb+uchar-.2-.vil_rgb+uchar-.vil_rgb+uchar--.cxx
+SOURCE=.\vipl_with_section/Templates/vipl_x_gradient+section+vil_rgb+uchar-.2-.section+vil_rgb+uchar-.2-.vil_rgb+uchar-.vil_rgb+uchar--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/vipl_with_vbl_array_2d/Templates/vipl_accessors_vbl_array_2d+uchar-.cxx
+SOURCE=.\vipl_with_vbl_array_2d/Templates/vipl_accessors_vbl_array_2d+uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/vipl_with_vbl_array_2d/Templates/vipl_filter_2d+vbl_array_2d+uchar-.vbl_array_2d+uchar-.uchar.uchar-.cxx
+SOURCE=.\vipl_with_vbl_array_2d/Templates/vipl_filter_2d+vbl_array_2d+uchar-.vbl_array_2d+uchar-.uchar.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/vipl_with_vbl_array_2d/Templates/vipl_gradient_mag+vbl_array_2d+uchar-.vbl_array_2d+uchar-.uchar.uchar-.cxx
+SOURCE=.\vipl_with_vbl_array_2d/Templates/vipl_gradient_mag+vbl_array_2d+uchar-.vbl_array_2d+uchar-.uchar.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/vipl_with_vbl_array_2d/Templates/vipl_sobel+vbl_array_2d+uchar-.vbl_array_2d+uchar-.uchar.uchar-.cxx
+SOURCE=.\vipl_with_vbl_array_2d/Templates/vipl_sobel+vbl_array_2d+uchar-.vbl_array_2d+uchar-.uchar.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/vipl_with_vnl_matrix/Templates/vipl_accessors_vnl_matrix+uchar-.cxx
+SOURCE=.\vipl_with_vnl_matrix/Templates/vipl_accessors_vnl_matrix+uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/vipl_with_vnl_matrix/Templates/vipl_filter_2d+vnl_matrix+uchar-.vnl_matrix+uchar-.uchar.uchar-.cxx
+SOURCE=.\vipl_with_vnl_matrix/Templates/vipl_filter_2d+vnl_matrix+uchar-.vnl_matrix+uchar-.uchar.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/vipl_with_vnl_matrix/Templates/vipl_median+vnl_matrix+uchar-.vnl_matrix+uchar-.uchar.uchar-.cxx
+SOURCE=.\vipl_with_vnl_matrix/Templates/vipl_median+vnl_matrix+uchar-.vnl_matrix+uchar-.uchar.uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/tbl/vipl/vipl_with_vnl_matrix/Templates/vipl_threshold+vnl_matrix+uchar-.vnl_matrix+uchar-.uchar.uchar-.cxx
+SOURCE=.\vipl_with_vnl_matrix/Templates/vipl_threshold+vnl_matrix+uchar-.vnl_matrix+uchar-.uchar.uchar-.cxx
 
 # End Source File
 # End Group

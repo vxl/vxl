@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/vxl/vbl/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "vbl - Win32 Release"
 USERDEP__HACK=\
@@ -213,177 +213,177 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/Templates/vbl_array_1d+double-.cxx
+SOURCE=.\Templates/vbl_array_1d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/Templates/vbl_array_1d+float-.cxx
+SOURCE=.\Templates/vbl_array_1d+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/Templates/vbl_array_2d+bool-.cxx
+SOURCE=.\Templates/vbl_array_2d+bool-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/Templates/vbl_array_2d+double-.cxx
+SOURCE=.\Templates/vbl_array_2d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/Templates/vbl_array_2d+int-.cxx
+SOURCE=.\Templates/vbl_array_2d+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/Templates/vbl_array_2d+unsigned-.cxx
+SOURCE=.\Templates/vbl_array_2d+unsigned-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/Templates/vbl_array_2d+unsignedchar-.cxx
+SOURCE=.\Templates/vbl_array_2d+unsignedchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/Templates/vbl_array_3d+double-.cxx
+SOURCE=.\Templates/vbl_array_3d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/Templates/vbl_array_3d+int-.cxx
+SOURCE=.\Templates/vbl_array_3d+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/Templates/vbl_array_3d+uchar-.cxx
+SOURCE=.\Templates/vbl_array_3d+uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/Templates/vbl_array_3d+uint-.cxx
+SOURCE=.\Templates/vbl_array_3d+uint-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/Templates/vbl_array_3d+void~-.cxx
+SOURCE=.\Templates/vbl_array_3d+void~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/Templates/vbl_bounding_box+double.2-.cxx
+SOURCE=.\Templates/vbl_bounding_box+double.2-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/Templates/vbl_bounding_box+float.2-.cxx
+SOURCE=.\Templates/vbl_bounding_box+float.2-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/Templates/vbl_bounding_box+int.2-.cxx
+SOURCE=.\Templates/vbl_bounding_box+int.2-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/Templates/vbl_quadruple+int.int.int.int-.cxx
+SOURCE=.\Templates/vbl_quadruple+int.int.int.int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/Templates/vbl_shared_pointer+int-.cxx
+SOURCE=.\Templates/vbl_shared_pointer+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/Templates/vbl_sparse_array_1d+double-.cxx
+SOURCE=.\Templates/vbl_sparse_array_1d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/Templates/vbl_sparse_array_1d+int-.cxx
+SOURCE=.\Templates/vbl_sparse_array_1d+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/Templates/vbl_sparse_array_2d+double-.cxx
+SOURCE=.\Templates/vbl_sparse_array_2d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/Templates/vbl_sparse_array_2d+int-.cxx
+SOURCE=.\Templates/vbl_sparse_array_2d+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/Templates/vbl_sparse_array_3d+double-.cxx
+SOURCE=.\Templates/vbl_sparse_array_3d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/Templates/vbl_sparse_array_3d+void~-.cxx
+SOURCE=.\Templates/vbl_sparse_array_3d+void~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/Templates/vbl_triple+double.int.int-.cxx
+SOURCE=.\Templates/vbl_triple+double.int.int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/Templates/vbl_triple+float.float.float-.cxx
+SOURCE=.\Templates/vbl_triple+float.float.float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/Templates/vbl_triple+int.int.int-.cxx
+SOURCE=.\Templates/vbl_triple+int.int.int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/Templates/vbl_triple+uint.uint.uint-.cxx
+SOURCE=.\Templates/vbl_triple+uint.uint.uint-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/Templates/vcl_map+vbl_triple+uint.uint.uint-.double-.cxx
+SOURCE=.\Templates/vcl_map+vbl_triple+uint.uint.uint-.double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/Templates/vcl_vector+vbl_triple+double.int.int--.cxx
+SOURCE=.\Templates/vcl_vector+vbl_triple+double.int.int--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/vbl_bool_ostream.cxx
+SOURCE=.\vbl_bool_ostream.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/vbl_qsort.cxx
+SOURCE=.\vbl_qsort.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/vbl_ref_count.cxx
+SOURCE=.\vbl_ref_count.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/vbl_shared_pointer.cxx
+SOURCE=.\vbl_shared_pointer.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/vbl_sort.cxx
+SOURCE=.\vbl_sort.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/vbl_test.cxx
+SOURCE=.\vbl_test.cxx
 
 # End Source File
 # End Group

@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/vxl/vbl/io/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "vbl_io - Win32 Release"
 USERDEP__HACK=\
@@ -217,72 +217,72 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/io/Templates/vbl_io_array_1d+double-.cxx
+SOURCE=.\Templates/vbl_io_array_1d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/io/Templates/vbl_io_array_1d+float-.cxx
+SOURCE=.\Templates/vbl_io_array_1d+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/io/Templates/vbl_io_array_2d+double-.cxx
+SOURCE=.\Templates/vbl_io_array_2d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/io/Templates/vbl_io_array_2d+int-.cxx
+SOURCE=.\Templates/vbl_io_array_2d+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/io/Templates/vbl_io_array_2d+unsigned-.cxx
+SOURCE=.\Templates/vbl_io_array_2d+unsigned-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/io/Templates/vbl_io_array_2d+unsignedchar-.cxx
+SOURCE=.\Templates/vbl_io_array_2d+unsignedchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/io/Templates/vbl_io_array_3d+int-.cxx
+SOURCE=.\Templates/vbl_io_array_3d+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/io/Templates/vbl_io_bounding_box+double.2-.cxx
+SOURCE=.\Templates/vbl_io_bounding_box+double.2-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/io/Templates/vbl_io_bounding_box+float.2-.cxx
+SOURCE=.\Templates/vbl_io_bounding_box+float.2-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/io/Templates/vbl_io_bounding_box+int.2-.cxx
+SOURCE=.\Templates/vbl_io_bounding_box+int.2-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/io/Templates/vbl_io_sparse_array+double.uint-.cxx
+SOURCE=.\Templates/vbl_io_sparse_array+double.uint-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/io/Templates/vbl_io_sparse_array+double.vcl_pair+uint.uint--.cxx
+SOURCE=.\Templates/vbl_io_sparse_array+double.vcl_pair+uint.uint--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/io/Templates/vbl_io_sparse_array+int.uint-.cxx
+SOURCE=.\Templates/vbl_io_sparse_array+int.uint-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vbl/io/Templates/vbl_io_sparse_array+int.vcl_pair+uint.uint--.cxx
+SOURCE=.\Templates/vbl_io_sparse_array+int.vcl_pair+uint.uint--.cxx
 
 # End Source File
 # End Group

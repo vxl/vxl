@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/oxl/vgui/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "vgui - Win32 Release"
 USERDEP__HACK=\
@@ -229,672 +229,672 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/Templates/vbl_array_2d+vgui_grid_tableau+-grid_data-.cxx
+SOURCE=.\Templates/vbl_array_2d+vgui_grid_tableau+-grid_data-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/Templates/vbl_smart_ptr+vgui_command-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vgui_command-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/Templates/vbl_smart_ptr+vgui_tableau-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vgui_tableau-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/Templates/vcl_algorithm+vgui_style~-.cxx
+SOURCE=.\Templates/vcl_algorithm+vgui_style~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/Templates/vcl_list+vgui_event-.cxx
+SOURCE=.\Templates/vcl_list+vgui_event-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/Templates/vcl_map+vgui_style~.vgui_soview~-.cxx
+SOURCE=.\Templates/vcl_map+vgui_style~.vgui_soview~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/Templates/vcl_vector+vcl_pair+vil_image.vcl_vector+GLuint-~-~-.cxx
+SOURCE=.\Templates/vcl_vector+vcl_pair+vil_image.vcl_vector+GLuint-~-~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/Templates/vcl_vector+vgui_dialog_impl+-element-.cxx
+SOURCE=.\Templates/vcl_vector+vgui_dialog_impl+-element-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/Templates/vcl_vector+vgui_event-.cxx
+SOURCE=.\Templates/vcl_vector+vgui_event-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/Templates/vcl_vector+vgui_image_tableau~-.cxx
+SOURCE=.\Templates/vcl_vector+vgui_image_tableau~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/Templates/vcl_vector+vgui_menu_item-.cxx
+SOURCE=.\Templates/vcl_vector+vgui_menu_item-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/Templates/vcl_vector+vgui_observer~-.cxx
+SOURCE=.\Templates/vcl_vector+vgui_observer~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/Templates/vcl_vector+vgui_polytab+-item-.cxx
+SOURCE=.\Templates/vcl_vector+vgui_polytab+-item-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/Templates/vcl_vector+vgui_rubberbander_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vgui_rubberbander_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/Templates/vcl_vector+vgui_slab~-.cxx
+SOURCE=.\Templates/vcl_vector+vgui_slab~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/Templates/vcl_vector+vgui_slot-.cxx
+SOURCE=.\Templates/vcl_vector+vgui_slot-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/Templates/vcl_vector+vgui_soview2D_lineseg~-.cxx
+SOURCE=.\Templates/vcl_vector+vgui_soview2D_lineseg~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/Templates/vcl_vector+vgui_soview2D~-.cxx
+SOURCE=.\Templates/vcl_vector+vgui_soview2D~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/Templates/vcl_vector+vgui_soview3D~-.cxx
+SOURCE=.\Templates/vcl_vector+vgui_soview3D~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/Templates/vcl_vector+vgui_soview~-.cxx
+SOURCE=.\Templates/vcl_vector+vgui_soview~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/Templates/vcl_vector+vgui_style~-.cxx
+SOURCE=.\Templates/vcl_vector+vgui_style~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/Templates/vcl_vector+vgui_tableau_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vgui_tableau_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/Templates/vcl_vector+vgui_tableau~-.cxx
+SOURCE=.\Templates/vcl_vector+vgui_tableau~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/Templates/vcl_vector+vgui_toolkit~-.cxx
+SOURCE=.\Templates/vcl_vector+vgui_toolkit~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/Templates/vcl_vector+vgui_tview+-icon-.cxx
+SOURCE=.\Templates/vcl_vector+vgui_tview+-icon-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/Templates/vgui_simple_command+vgui_active_visible-.cxx
+SOURCE=.\Templates/vgui_simple_command+vgui_active_visible-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/Templates/vgui_simple_command+vgui_adaptor-.cxx
+SOURCE=.\Templates/vgui_simple_command+vgui_adaptor-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/Templates/vgui_simple_command+vgui_clear_tableau-.cxx
+SOURCE=.\Templates/vgui_simple_command+vgui_clear_tableau-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/Templates/vgui_simple_command+vgui_tableau-.cxx
+SOURCE=.\Templates/vgui_simple_command+vgui_tableau-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/internals/trackball.c
+SOURCE=.\internals/trackball.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/internals/vgui_accelerate.cxx
+SOURCE=.\internals/vgui_accelerate.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/internals/vgui_accelerate_mfc.cxx
+SOURCE=.\internals/vgui_accelerate_mfc.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/internals/vgui_accelerate_tag.cxx
+SOURCE=.\internals/vgui_accelerate_tag.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/internals/vgui_adaptor_mixin.cxx
+SOURCE=.\internals/vgui_adaptor_mixin.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/internals/vgui_adaptor_tableau.cxx
+SOURCE=.\internals/vgui_adaptor_tableau.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/internals/vgui_back_project.cxx
+SOURCE=.\internals/vgui_back_project.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/internals/vgui_dialog_field.cxx
+SOURCE=.\internals/vgui_dialog_field.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/internals/vgui_dialog_impl.cxx
+SOURCE=.\internals/vgui_dialog_impl.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/internals/vgui_draw_line.cxx
+SOURCE=.\internals/vgui_draw_line.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/internals/vgui_file_field.cxx
+SOURCE=.\internals/vgui_file_field.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/internals/vgui_invert_homg4x4.cxx
+SOURCE=.\internals/vgui_invert_homg4x4.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/internals/vgui_multiply_4x4.cxx
+SOURCE=.\internals/vgui_multiply_4x4.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/internals/vgui_overlay_helper.cxx
+SOURCE=.\internals/vgui_overlay_helper.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/internals/vgui_rasterpos.cxx
+SOURCE=.\internals/vgui_rasterpos.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/internals/vgui_simple_field.cxx
+SOURCE=.\internals/vgui_simple_field.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/internals/vgui_slot_data.cxx
+SOURCE=.\internals/vgui_slot_data.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/internals/vgui_string_field.cxx
+SOURCE=.\internals/vgui_string_field.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/internals/vgui_transpose_4x4.cxx
+SOURCE=.\internals/vgui_transpose_4x4.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/internals/vgui_un_project.cxx
+SOURCE=.\internals/vgui_un_project.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui.cxx
+SOURCE=.\vgui.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_active_visible.cxx
+SOURCE=.\vgui_active_visible.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_adaptor.cxx
+SOURCE=.\vgui_adaptor.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_blackbox.cxx
+SOURCE=.\vgui_blackbox.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_button.cxx
+SOURCE=.\vgui_button.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_cache_wizard.cxx
+SOURCE=.\vgui_cache_wizard.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_camera.cxx
+SOURCE=.\vgui_camera.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_clear_tableau.cxx
+SOURCE=.\vgui_clear_tableau.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_color.cxx
+SOURCE=.\vgui_color.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_color_text.cxx
+SOURCE=.\vgui_color_text.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_command.cxx
+SOURCE=.\vgui_command.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_composite.cxx
+SOURCE=.\vgui_composite.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_debug_tableau.cxx
+SOURCE=.\vgui_debug_tableau.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_deck_tableau.cxx
+SOURCE=.\vgui_deck_tableau.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_dialog.cxx
+SOURCE=.\vgui_dialog.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_displaybase.cxx
+SOURCE=.\vgui_displaybase.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_displaylist2D.cxx
+SOURCE=.\vgui_displaylist2D.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_displaylist3D.cxx
+SOURCE=.\vgui_displaylist3D.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_drag_mixin.cxx
+SOURCE=.\vgui_drag_mixin.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_drag_tableau.cxx
+SOURCE=.\vgui_drag_tableau.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_easy2D.cxx
+SOURCE=.\vgui_easy2D.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_easy3D.cxx
+SOURCE=.\vgui_easy3D.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_enhance.cxx
+SOURCE=.\vgui_enhance.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_error_dialog.cxx
+SOURCE=.\vgui_error_dialog.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_event.cxx
+SOURCE=.\vgui_event.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_event_condition.cxx
+SOURCE=.\vgui_event_condition.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_event_loop.cxx
+SOURCE=.\vgui_event_loop.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_event_server.cxx
+SOURCE=.\vgui_event_server.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_find.cxx
+SOURCE=.\vgui_find.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_function_tableau.cxx
+SOURCE=.\vgui_function_tableau.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_glut.cxx
+SOURCE=.\vgui_glut.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_grid_tableau.cxx
+SOURCE=.\vgui_grid_tableau.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_image_blender.cxx
+SOURCE=.\vgui_image_blender.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_image_renderer.cxx
+SOURCE=.\vgui_image_renderer.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_image_tableau.cxx
+SOURCE=.\vgui_image_tableau.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_key.cxx
+SOURCE=.\vgui_key.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_listmanager2D.cxx
+SOURCE=.\vgui_listmanager2D.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_load.cxx
+SOURCE=.\vgui_load.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_macro.cxx
+SOURCE=.\vgui_macro.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_matrix_state.cxx
+SOURCE=.\vgui_matrix_state.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_menu.cxx
+SOURCE=.\vgui_menu.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_message.cxx
+SOURCE=.\vgui_message.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_modifier.cxx
+SOURCE=.\vgui_modifier.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_observable.cxx
+SOURCE=.\vgui_observable.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_observer.cxx
+SOURCE=.\vgui_observer.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_pixel.cxx
+SOURCE=.\vgui_pixel.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_polytab.cxx
+SOURCE=.\vgui_polytab.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_popup_params.cxx
+SOURCE=.\vgui_popup_params.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_projection_inspector.cxx
+SOURCE=.\vgui_projection_inspector.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_quit_tableau.cxx
+SOURCE=.\vgui_quit_tableau.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_roi_tableau.cxx
+SOURCE=.\vgui_roi_tableau.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_rubberbander.cxx
+SOURCE=.\vgui_rubberbander.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_section_buffer.cxx
+SOURCE=.\vgui_section_buffer.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_section_buffer_of.cxx
+SOURCE=.\vgui_section_buffer_of.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_section_render.cxx
+SOURCE=.\vgui_section_render.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_shell_tableau.cxx
+SOURCE=.\vgui_shell_tableau.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_slab.cxx
+SOURCE=.\vgui_slab.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_slot.cxx
+SOURCE=.\vgui_slot.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_soview.cxx
+SOURCE=.\vgui_soview.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_soview2D.cxx
+SOURCE=.\vgui_soview2D.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_soview3D.cxx
+SOURCE=.\vgui_soview3D.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_statusbar.cxx
+SOURCE=.\vgui_statusbar.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_statusbuf.cxx
+SOURCE=.\vgui_statusbuf.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_style.cxx
+SOURCE=.\vgui_style.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_style_factory.cxx
+SOURCE=.\vgui_style_factory.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_tableau.cxx
+SOURCE=.\vgui_tableau.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_tag.cxx
+SOURCE=.\vgui_tag.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_test.cxx
+SOURCE=.\vgui_test.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_text_graph.cxx
+SOURCE=.\vgui_text_graph.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_text_put.cxx
+SOURCE=.\vgui_text_put.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_text_tableau.cxx
+SOURCE=.\vgui_text_tableau.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_texture_hacks.cxx
+SOURCE=.\vgui_texture_hacks.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_toolkit.cxx
+SOURCE=.\vgui_toolkit.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_tview.cxx
+SOURCE=.\vgui_tview.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_tview_launcher.cxx
+SOURCE=.\vgui_tview_launcher.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_utils.cxx
+SOURCE=.\vgui_utils.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_viewer2D.cxx
+SOURCE=.\vgui_viewer2D.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_viewer3D.cxx
+SOURCE=.\vgui_viewer3D.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_window.cxx
+SOURCE=.\vgui_window.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vgui_wrapper_tableau.cxx
+SOURCE=.\vgui_wrapper_tableau.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vrml/Templates/vcl_vector+vgui_vrml_tableau_sptr-.cxx
+SOURCE=.\vrml/Templates/vcl_vector+vgui_vrml_tableau_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vrml/Templates/vcl_vector+vgui_vrml_texture_map~-.cxx
+SOURCE=.\vrml/Templates/vcl_vector+vgui_vrml_texture_map~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vrml/vgui_vrml_draw_visitor.cxx
+SOURCE=.\vrml/vgui_vrml_draw_visitor.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vrml/vgui_vrml_tableau.cxx
+SOURCE=.\vrml/vgui_vrml_tableau.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/vrml/vgui_vrml_texture_map.cxx
+SOURCE=.\vrml/vgui_vrml_texture_map.cxx
 
 # End Source File
 # End Group

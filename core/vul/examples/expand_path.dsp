@@ -196,7 +196,7 @@ LINK32=link.exe
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/vxl/vul/examples/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "expand_path - Win32 Release"
 USERDEP__HACK=\
@@ -265,7 +265,7 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vul/examples/expand_path.cxx
+SOURCE=.\expand_path.cxx
 
 # End Source File
 # End Group

@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/vxl/vsl/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "vsl - Win32 Release"
 USERDEP__HACK=\
@@ -213,122 +213,122 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vsl/Templates/vcl_vector+vsl_binary_loader_base~-.cxx
+SOURCE=.\Templates/vcl_vector+vsl_binary_loader_base~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vsl/Templates/vsl_complex+double-.cxx
+SOURCE=.\Templates/vsl_complex+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vsl/Templates/vsl_complex+float-.cxx
+SOURCE=.\Templates/vsl_complex+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vsl/Templates/vsl_deque+int-.cxx
+SOURCE=.\Templates/vsl_deque+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vsl/Templates/vsl_list+float-.cxx
+SOURCE=.\Templates/vsl_list+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vsl/Templates/vsl_list+int-.cxx
+SOURCE=.\Templates/vsl_list+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vsl/Templates/vsl_map_io+int.int-.cxx
+SOURCE=.\Templates/vsl_map_io+int.int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vsl/Templates/vsl_map_io+int.vcl_string-.cxx
+SOURCE=.\Templates/vsl_map_io+int.vcl_string-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vsl/Templates/vsl_map_io+vcl_string.int-.cxx
+SOURCE=.\Templates/vsl_map_io+vcl_string.int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vsl/Templates/vsl_pair+uint.uint-.cxx
+SOURCE=.\Templates/vsl_pair+uint.uint-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vsl/Templates/vsl_pair+vcl_pair+uint.uint-.double-.cxx
+SOURCE=.\Templates/vsl_pair+vcl_pair+uint.uint-.double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vsl/Templates/vsl_pair+vcl_pair+uint.uint-.int-.cxx
+SOURCE=.\Templates/vsl_pair+vcl_pair+uint.uint-.int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vsl/Templates/vsl_set+int-.cxx
+SOURCE=.\Templates/vsl_set+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vsl/Templates/vsl_set+vcl_string-.cxx
+SOURCE=.\Templates/vsl_set+vcl_string-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vsl/Templates/vsl_stack+int-.cxx
+SOURCE=.\Templates/vsl_stack+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vsl/Templates/vsl_vector_io+double-.cxx
+SOURCE=.\Templates/vsl_vector_io+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vsl/Templates/vsl_vector_io+float-.cxx
+SOURCE=.\Templates/vsl_vector_io+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vsl/Templates/vsl_vector_io+int-.cxx
+SOURCE=.\Templates/vsl_vector_io+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vsl/Templates/vsl_vector_io+uint-.cxx
+SOURCE=.\Templates/vsl_vector_io+uint-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vsl/Templates/vsl_vector_io+vcl_string-.cxx
+SOURCE=.\Templates/vsl_vector_io+vcl_string-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vsl/vsl_binary_io.cxx
+SOURCE=.\vsl_binary_io.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vsl/vsl_binary_loader_base.cxx
+SOURCE=.\vsl_binary_loader_base.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vsl/vsl_indent.cxx
+SOURCE=.\vsl_indent.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vsl/vsl_test.cxx
+SOURCE=.\vsl_test.cxx
 
 # End Source File
 # End Group

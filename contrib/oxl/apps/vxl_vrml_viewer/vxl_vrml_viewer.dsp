@@ -504,7 +504,7 @@ LINK32=link.exe
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/oxl/apps/vxl_vrml_viewer/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "vxl_vrml_viewer - Win32 Release"
 USERDEP__HACK=\
@@ -681,7 +681,7 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/apps/vxl_vrml_viewer/main.cxx
+SOURCE=.\main.cxx
 
 # End Source File
 # End Group

@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/gel/gmvl/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "gmvl - Win32 Release"
 USERDEP__HACK=\
@@ -217,77 +217,77 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gmvl/Templates/vbl_smart_ptr+gmvl_connection-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+gmvl_connection-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gmvl/Templates/vbl_smart_ptr+gmvl_node-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+gmvl_node-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gmvl/Templates/vcl_vector+gmvl_connection_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+gmvl_connection_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gmvl/Templates/vcl_vector+gmvl_node_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+gmvl_node_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gmvl/Templates/vcl_vector+vcl_pair+vcl_string.vcl_vector+gmvl_node_sptr---.cxx
+SOURCE=.\Templates/vcl_vector+vcl_pair+vcl_string.vcl_vector+gmvl_node_sptr---.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gmvl/gmvl_connection.cxx
+SOURCE=.\gmvl_connection.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gmvl/gmvl_connection_cache.cxx
+SOURCE=.\gmvl_connection_cache.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gmvl/gmvl_corner_node.cxx
+SOURCE=.\gmvl_corner_node.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gmvl/gmvl_database.cxx
+SOURCE=.\gmvl_database.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gmvl/gmvl_helpers.cxx
+SOURCE=.\gmvl_helpers.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gmvl/gmvl_image_node.cxx
+SOURCE=.\gmvl_image_node.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gmvl/gmvl_node.cxx
+SOURCE=.\gmvl_node.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gmvl/gmvl_node_cache.cxx
+SOURCE=.\gmvl_node_cache.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gmvl/gmvl_tag_node.cxx
+SOURCE=.\gmvl_tag_node.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gmvl/gmvl_topology_node.cxx
+SOURCE=.\gmvl_topology_node.cxx
 
 # End Source File
 # End Group

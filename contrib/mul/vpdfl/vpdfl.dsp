@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/mul/vpdfl/CMakeLists.txt"
+SOURCE=.\CMakeLists.txt
 
 !IF  "$(CFG)" == "vpdfl - Win32 Release"
 USERDEP__HACK=\
@@ -213,127 +213,127 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/vpdfl/Templates/mbl_cloneable_ptr+vpdfl_builder_base-.cxx
+SOURCE=.\Templates/mbl_cloneable_ptr+vpdfl_builder_base-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/vpdfl/Templates/mbl_cloneable_ptr+vpdfl_pdf_base-.cxx
+SOURCE=.\Templates/mbl_cloneable_ptr+vpdfl_pdf_base-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/vpdfl/Templates/vcl_vector+vpdfl_builder_base~-.cxx
+SOURCE=.\Templates/vcl_vector+vpdfl_builder_base~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/vpdfl/Templates/vcl_vector+vpdfl_pdf_base~-.cxx
+SOURCE=.\Templates/vcl_vector+vpdfl_pdf_base~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/vpdfl/Templates/vcl_vector+vpdfl_sampler_base~-.cxx
+SOURCE=.\Templates/vcl_vector+vpdfl_sampler_base~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/vpdfl/Templates/vsl_binary_loader+vpdfl_builder_base-.cxx
+SOURCE=.\Templates/vsl_binary_loader+vpdfl_builder_base-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/vpdfl/Templates/vsl_binary_loader+vpdfl_pdf_base-.cxx
+SOURCE=.\Templates/vsl_binary_loader+vpdfl_pdf_base-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/vpdfl/Templates/vsl_vector_io+vpdfl_builder_base~-.cxx
+SOURCE=.\Templates/vsl_vector_io+vpdfl_builder_base~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/vpdfl/Templates/vsl_vector_io+vpdfl_pdf_base~-.cxx
+SOURCE=.\Templates/vsl_vector_io+vpdfl_pdf_base~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_axis_gaussian.cxx
+SOURCE=.\vpdfl_axis_gaussian.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_axis_gaussian_builder.cxx
+SOURCE=.\vpdfl_axis_gaussian_builder.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_axis_gaussian_sampler.cxx
+SOURCE=.\vpdfl_axis_gaussian_sampler.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_builder_base.cxx
+SOURCE=.\vpdfl_builder_base.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_gaussian.cxx
+SOURCE=.\vpdfl_gaussian.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_gaussian_builder.cxx
+SOURCE=.\vpdfl_gaussian_builder.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_gaussian_sampler.cxx
+SOURCE=.\vpdfl_gaussian_sampler.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_mixture.cxx
+SOURCE=.\vpdfl_mixture.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_mixture_builder.cxx
+SOURCE=.\vpdfl_mixture_builder.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_mixture_sampler.cxx
+SOURCE=.\vpdfl_mixture_sampler.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_pc_gaussian.cxx
+SOURCE=.\vpdfl_pc_gaussian.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_pc_gaussian_builder.cxx
+SOURCE=.\vpdfl_pc_gaussian_builder.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_pc_gaussian_sampler.cxx
+SOURCE=.\vpdfl_pc_gaussian_sampler.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_pdf_base.cxx
+SOURCE=.\vpdfl_pdf_base.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_prob_chi2.cxx
+SOURCE=.\vpdfl_prob_chi2.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/vpdfl/vpdfl_sampler_base.cxx
+SOURCE=.\vpdfl_sampler_base.cxx
 
 # End Source File
 # End Group

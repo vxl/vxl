@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/vxl/vil/io/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "vil_io - Win32 Release"
 USERDEP__HACK=\
@@ -265,117 +265,117 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_memory_image_of+bool-.cxx
+SOURCE=.\Templates/vil_io_memory_image_of+bool-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_memory_image_of+double-.cxx
+SOURCE=.\Templates/vil_io_memory_image_of+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_memory_image_of+float-.cxx
+SOURCE=.\Templates/vil_io_memory_image_of+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_memory_image_of+signed_char-.cxx
+SOURCE=.\Templates/vil_io_memory_image_of+signed_char-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_memory_image_of+signed_int-.cxx
+SOURCE=.\Templates/vil_io_memory_image_of+signed_int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_memory_image_of+signed_short-.cxx
+SOURCE=.\Templates/vil_io_memory_image_of+signed_short-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_memory_image_of+unsigned_char-.cxx
+SOURCE=.\Templates/vil_io_memory_image_of+unsigned_char-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_memory_image_of+unsigned_int-.cxx
+SOURCE=.\Templates/vil_io_memory_image_of+unsigned_int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_memory_image_of+unsigned_short-.cxx
+SOURCE=.\Templates/vil_io_memory_image_of+unsigned_short-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_memory_image_of+vcl_complex+double--.cxx
+SOURCE=.\Templates/vil_io_memory_image_of+vcl_complex+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_memory_image_of+vcl_complex+float--.cxx
+SOURCE=.\Templates/vil_io_memory_image_of+vcl_complex+float--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_memory_image_of+vil_rgb+double--.cxx
+SOURCE=.\Templates/vil_io_memory_image_of+vil_rgb+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_memory_image_of+vil_rgb+float--.cxx
+SOURCE=.\Templates/vil_io_memory_image_of+vil_rgb+float--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_memory_image_of+vil_rgb+uchar--.cxx
+SOURCE=.\Templates/vil_io_memory_image_of+vil_rgb+uchar--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_rgb+double-.cxx
+SOURCE=.\Templates/vil_io_rgb+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_rgb+float-.cxx
+SOURCE=.\Templates/vil_io_rgb+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_rgba+double-.cxx
+SOURCE=.\Templates/vil_io_rgba+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vil/io/Templates/vil_io_rgba+float-.cxx
+SOURCE=.\Templates/vil_io_rgba+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vil/io/vil_io_image.cxx
+SOURCE=.\vil_io_image.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vil/io/vil_io_image_impl.cxx
+SOURCE=.\vil_io_image_impl.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vil/io/vil_io_memory_image.cxx
+SOURCE=.\vil_io_memory_image.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vil/io/vil_io_memory_image_format.cxx
+SOURCE=.\vil_io_memory_image_format.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vil/io/vil_io_memory_image_impl.cxx
+SOURCE=.\vil_io_memory_image_impl.cxx
 
 # End Source File
 # End Group

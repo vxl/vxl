@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/oxl/oxp/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "oxp - Win32 Release"
 USERDEP__HACK=\
@@ -217,112 +217,112 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/ByteConvertImage.cxx
+SOURCE=.\ByteConvertImage.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/GXFileVisitor.cxx
+SOURCE=.\GXFileVisitor.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/ImageSequenceMovieFile.cxx
+SOURCE=.\ImageSequenceMovieFile.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/ImageSequenceName.cxx
+SOURCE=.\ImageSequenceName.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/JPEG_Decompressor.cxx
+SOURCE=.\JPEG_Decompressor.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/Mapping_2d_2d.cxx
+SOURCE=.\Mapping_2d_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/MedianReduceImage.cxx
+SOURCE=.\MedianReduceImage.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/MovieFile.cxx
+SOURCE=.\MovieFile.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/MovieFileInterface.cxx
+SOURCE=.\MovieFileInterface.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/RadialLensCorrection.cxx
+SOURCE=.\RadialLensCorrection.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/SGIMovieFile.cxx
+SOURCE=.\SGIMovieFile.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/SGIMovieFilePrivates.cxx
+SOURCE=.\SGIMovieFilePrivates.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/SGIMovieFileWrite.cxx
+SOURCE=.\SGIMovieFileWrite.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/SequenceFileName.cxx
+SOURCE=.\SequenceFileName.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/Templates/ImageWarp+byte-.cxx
+SOURCE=.\Templates/ImageWarp+byte-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/Templates/vcl_vector+SGIMV_FrameIndex-.cxx
+SOURCE=.\Templates/vcl_vector+SGIMV_FrameIndex-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/Templates/vcl_vector+SGIMV_FrameIndexArray-.cxx
+SOURCE=.\Templates/vcl_vector+SGIMV_FrameIndexArray-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/Templates/vcl_vector+SGIMV_Variables-.cxx
+SOURCE=.\Templates/vcl_vector+SGIMV_Variables-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/oxp_parse_seqname.cxx
+SOURCE=.\oxp_parse_seqname.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/vsl_conic_as_matrix.cxx
+SOURCE=.\vsl_conic_as_matrix.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/vsl_conic_as_params.cxx
+SOURCE=.\vsl_conic_as_params.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxp/vsl_conic_points.cxx
+SOURCE=.\vsl_conic_points.cxx
 
 # End Source File
 # End Group

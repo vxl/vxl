@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/gel/vtol/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "vtol - Win32 Release"
 USERDEP__HACK=\
@@ -217,262 +217,262 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vbl_smart_ptr+vtol_block-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vtol_block-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vbl_smart_ptr+vtol_chain-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vtol_chain-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vbl_smart_ptr+vtol_edge-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vtol_edge-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vbl_smart_ptr+vtol_edge_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vtol_edge_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vbl_smart_ptr+vtol_face-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vtol_face-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vbl_smart_ptr+vtol_face_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vtol_face_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vbl_smart_ptr+vtol_one_chain-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vtol_one_chain-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vbl_smart_ptr+vtol_topology_object-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vtol_topology_object-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vbl_smart_ptr+vtol_two_chain-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vtol_two_chain-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vbl_smart_ptr+vtol_vertex-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vtol_vertex-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vbl_smart_ptr+vtol_vertex_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vtol_vertex_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vbl_smart_ptr+vtol_zero_chain-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vtol_zero_chain-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_list+vtol_chain_sptr-.cxx
+SOURCE=.\Templates/vcl_list+vtol_chain_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_list+vtol_topology_object_sptr-.cxx
+SOURCE=.\Templates/vcl_list+vtol_topology_object_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_block_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_block_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_block~-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_block~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_chain_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_chain_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_edge_2d_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_edge_2d_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_edge_2d~-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_edge_2d~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_edge_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_edge_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_edge~-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_edge~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_face_2d_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_face_2d_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_face_2d~-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_face_2d~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_face_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_face_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_face~-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_face~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_one_chain_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_one_chain_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_one_chain~-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_one_chain~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_topology_object_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_topology_object_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_topology_object~-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_topology_object~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_two_chain_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_two_chain_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_two_chain~-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_two_chain~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_vertex_2d_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_vertex_2d_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_vertex_2d~-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_vertex_2d~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_vertex_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_vertex_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_vertex~-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_vertex~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_zero_chain_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_zero_chain_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/Templates/vcl_vector+vtol_zero_chain~-.cxx
+SOURCE=.\Templates/vcl_vector+vtol_zero_chain~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_block.cxx
+SOURCE=.\vtol_block.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_chain.cxx
+SOURCE=.\vtol_chain.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_edge.cxx
+SOURCE=.\vtol_edge.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_edge_2d.cxx
+SOURCE=.\vtol_edge_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_face.cxx
+SOURCE=.\vtol_face.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_face_2d.cxx
+SOURCE=.\vtol_face_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_list_functions.cxx
+SOURCE=.\vtol_list_functions.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_one_chain.cxx
+SOURCE=.\vtol_one_chain.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_topology_cache.cxx
+SOURCE=.\vtol_topology_cache.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_topology_io.cxx
+SOURCE=.\vtol_topology_io.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_topology_object.cxx
+SOURCE=.\vtol_topology_object.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_two_chain.cxx
+SOURCE=.\vtol_two_chain.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_vertex.cxx
+SOURCE=.\vtol_vertex.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_vertex_2d.cxx
+SOURCE=.\vtol_vertex_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vtol/vtol_zero_chain.cxx
+SOURCE=.\vtol_zero_chain.cxx
 
 # End Source File
 # End Group

@@ -352,7 +352,7 @@ LINK32=link.exe
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/oxl/osl/examples/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "run_osl_canny - Win32 Release"
 USERDEP__HACK=\
@@ -501,7 +501,7 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/examples/run_osl_canny.cxx
+SOURCE=.\run_osl_canny.cxx
 
 # End Source File
 # End Group

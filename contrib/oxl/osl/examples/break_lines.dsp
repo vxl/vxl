@@ -352,7 +352,7 @@ LINK32=link.exe
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/oxl/osl/examples/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "break_lines - Win32 Release"
 USERDEP__HACK=\
@@ -501,7 +501,7 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/examples/break_lines.cxx
+SOURCE=.\break_lines.cxx
 
 # End Source File
 # End Group

@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/oxl/osl/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "osl - Win32 Release"
 USERDEP__HACK=\
@@ -217,212 +217,212 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/Templates/osl_1d_half_kernel+double-.cxx
+SOURCE=.\Templates/osl_1d_half_kernel+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/Templates/osl_canny_smooth+float-.cxx
+SOURCE=.\Templates/osl_canny_smooth+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/Templates/osl_canny_smooth+ushort-.cxx
+SOURCE=.\Templates/osl_canny_smooth+ushort-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/Templates/osl_canny_smooth+vil_byte-.cxx
+SOURCE=.\Templates/osl_canny_smooth+vil_byte-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/Templates/osl_canny_smooth+vil_rgb+uchar--.cxx
+SOURCE=.\Templates/osl_canny_smooth+vil_rgb+uchar--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/Templates/vcl_list+osl_edgel_chain~-.cxx
+SOURCE=.\Templates/vcl_list+osl_edgel_chain~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/Templates/vcl_list+osl_edge~-.cxx
+SOURCE=.\Templates/vcl_list+osl_edge~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/Templates/vcl_list+osl_vertex~-.cxx
+SOURCE=.\Templates/vcl_list+osl_vertex~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/Templates/vcl_vector+osl_LINK~-.cxx
+SOURCE=.\Templates/vcl_vector+osl_LINK~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/Templates/vcl_vector+osl_edge~-.cxx
+SOURCE=.\Templates/vcl_vector+osl_edge~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/Templates/vcl_vector+osl_vertex~-.cxx
+SOURCE=.\Templates/vcl_vector+osl_vertex~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/internals/droid.cxx
+SOURCE=.\internals/droid.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/internals/osl_reorder_chain.cxx
+SOURCE=.\internals/osl_reorder_chain.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/osl_OrthogRegress.cxx
+SOURCE=.\osl_OrthogRegress.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/osl_break_edge.cxx
+SOURCE=.\osl_break_edge.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/osl_canny_base.cxx
+SOURCE=.\osl_canny_base.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/osl_canny_gradient.cxx
+SOURCE=.\osl_canny_gradient.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/osl_canny_nms.cxx
+SOURCE=.\osl_canny_nms.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/osl_canny_ox.cxx
+SOURCE=.\osl_canny_ox.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/osl_canny_ox_params.cxx
+SOURCE=.\osl_canny_ox_params.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/osl_canny_port.cxx
+SOURCE=.\osl_canny_port.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/osl_canny_rothwell.cxx
+SOURCE=.\osl_canny_rothwell.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/osl_canny_rothwell_params.cxx
+SOURCE=.\osl_canny_rothwell_params.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/osl_canny_smooth.cxx
+SOURCE=.\osl_canny_smooth.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/osl_chamfer.cxx
+SOURCE=.\osl_chamfer.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/osl_convolve.cxx
+SOURCE=.\osl_convolve.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/osl_easy_canny.cxx
+SOURCE=.\osl_easy_canny.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/osl_edge.cxx
+SOURCE=.\osl_edge.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/osl_edge_detector.cxx
+SOURCE=.\osl_edge_detector.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/osl_edge_detector_params.cxx
+SOURCE=.\osl_edge_detector_params.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/osl_edgel_chain.cxx
+SOURCE=.\osl_edgel_chain.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/osl_fit_lines.cxx
+SOURCE=.\osl_fit_lines.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/osl_fit_lines_params.cxx
+SOURCE=.\osl_fit_lines_params.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/osl_harris.cxx
+SOURCE=.\osl_harris.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/osl_harris_params.cxx
+SOURCE=.\osl_harris_params.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/osl_kernel.cxx
+SOURCE=.\osl_kernel.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/osl_load_topology.cxx
+SOURCE=.\osl_load_topology.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/osl_ortho_regress.cxx
+SOURCE=.\osl_ortho_regress.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/osl_roi_window.cxx
+SOURCE=.\osl_roi_window.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/osl_save_topology.cxx
+SOURCE=.\osl_save_topology.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/osl_topology.cxx
+SOURCE=.\osl_topology.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/osl/osl_vertex.cxx
+SOURCE=.\osl_vertex.cxx
 
 # End Source File
 # End Group

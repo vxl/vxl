@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/gel/mrc/vpgl/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "vpgl - Win32 Release"
 USERDEP__HACK=\
@@ -221,17 +221,17 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/mrc/vpgl/vpgl_basic_camera.cxx
+SOURCE=.\vpgl_basic_camera.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/mrc/vpgl/vpgl_matrix_camera.cxx
+SOURCE=.\vpgl_matrix_camera.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/mrc/vpgl/vpgl_perspective_camera.cxx
+SOURCE=.\vpgl_perspective_camera.cxx
 
 # End Source File
 # End Group

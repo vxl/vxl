@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/mul/mbl/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "mbl - Win32 Release"
 USERDEP__HACK=\
@@ -213,82 +213,82 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/Templates/mbl_data_array_wrapper+vnl_vector+double--.cxx
+SOURCE=.\Templates/mbl_data_array_wrapper+vnl_vector+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/Templates/mbl_data_collector+vnl_vector+double--.cxx
+SOURCE=.\Templates/mbl_data_collector+vnl_vector+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/Templates/mbl_data_collector_list+vnl_vector+double--.cxx
+SOURCE=.\Templates/mbl_data_collector_list+vnl_vector+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/Templates/mbl_data_wrapper+vnl_vector+double--.cxx
+SOURCE=.\Templates/mbl_data_wrapper+vnl_vector+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/Templates/mbl_stochastic_data_collector+vnl_vector+double--.cxx
+SOURCE=.\Templates/mbl_stochastic_data_collector+vnl_vector+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/Templates/vcl_vector+mbl_data_collector_base~-.cxx
+SOURCE=.\Templates/vcl_vector+mbl_data_collector_base~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/Templates/vsl_binary_loader+mbl_data_collector_base-.cxx
+SOURCE=.\Templates/vsl_binary_loader+mbl_data_collector_base-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/Templates/vsl_vector_io+mbl_chord-.cxx
+SOURCE=.\Templates/vsl_vector_io+mbl_chord-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/mbl_data_collector_base.cxx
+SOURCE=.\mbl_data_collector_base.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/mbl_gamma.cxx
+SOURCE=.\mbl_gamma.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/mbl_k_means.cxx
+SOURCE=.\mbl_k_means.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/mbl_matrix_products.cxx
+SOURCE=.\mbl_matrix_products.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/mbl_matxvec.cxx
+SOURCE=.\mbl_matxvec.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/mbl_mz_random.cxx
+SOURCE=.\mbl_mz_random.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/mbl_read_props.cxx
+SOURCE=.\mbl_read_props.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/mul/mbl/mbl_stats_1d.cxx
+SOURCE=.\mbl_stats_1d.cxx
 
 # End Source File
 # End Group

@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/gel/vsol/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "vsol - Win32 Release"
 USERDEP__HACK=\
@@ -217,277 +217,282 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_bounding_box+double.3-.cxx
+SOURCE=.\Templates/vbl_bounding_box+double.3-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_box_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_box_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_box_3d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_box_3d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_conic_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_conic_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_curve_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_curve_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_curve_3d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_curve_3d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_group_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_group_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_group_3d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_group_3d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_line_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_line_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_line_3d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_line_3d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_point_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_point_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_point_3d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_point_3d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_polygon_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_polygon_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_polygon_3d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_polygon_3d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_rectangle_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_rectangle_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_rectangle_3d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_rectangle_3d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_region_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_region_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_region_3d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_region_3d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_spatial_object_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_spatial_object_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_spatial_object_3d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_spatial_object_3d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_surface_3d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_surface_3d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_tetrahedron-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_tetrahedron-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_triangle_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_triangle_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vbl_smart_ptr+vsol_triangle_3d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_triangle_3d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vcl_list+vsol_spatial_object_2d_sptr-.cxx
+SOURCE=.\Templates/vcl_list+vsol_point_2d_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vcl_list+vsol_spatial_object_3d_sptr-.cxx
+SOURCE=.\Templates/vcl_list+vsol_spatial_object_2d_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vcl_vector+vsol_point_2d_sptr-.cxx
+SOURCE=.\Templates/vcl_list+vsol_spatial_object_3d_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vcl_vector+vsol_point_3d_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vsol_point_2d_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vcl_vector+vsol_spatial_object_2d~-.cxx
+SOURCE=.\Templates/vcl_vector+vsol_point_3d_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/Templates/vcl_vector+vsol_spatial_object_3d~-.cxx
+SOURCE=.\Templates/vcl_vector+vsol_spatial_object_2d~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_box_2d.cxx
+SOURCE=.\Templates/vcl_vector+vsol_spatial_object_3d~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_box_3d.cxx
+SOURCE=.\vsol_box_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_conic_2d.cxx
+SOURCE=.\vsol_box_3d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_curve_2d.cxx
+SOURCE=.\vsol_conic_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_curve_3d.cxx
+SOURCE=.\vsol_curve_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_group_2d.cxx
+SOURCE=.\vsol_curve_3d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_group_3d.cxx
+SOURCE=.\vsol_group_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_line_2d.cxx
+SOURCE=.\vsol_group_3d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_line_3d.cxx
+SOURCE=.\vsol_line_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_point_2d.cxx
+SOURCE=.\vsol_line_3d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_point_3d.cxx
+SOURCE=.\vsol_point_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_polygon_2d.cxx
+SOURCE=.\vsol_point_3d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_polygon_3d.cxx
+SOURCE=.\vsol_polygon_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_polyhedron.cxx
+SOURCE=.\vsol_polygon_3d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_rectangle_2d.cxx
+SOURCE=.\vsol_polyhedron.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_rectangle_3d.cxx
+SOURCE=.\vsol_rectangle_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_region_2d.cxx
+SOURCE=.\vsol_rectangle_3d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_region_3d.cxx
+SOURCE=.\vsol_region_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_spatial_object_2d.cxx
+SOURCE=.\vsol_region_3d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_spatial_object_3d.cxx
+SOURCE=.\vsol_spatial_object_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_surface_3d.cxx
+SOURCE=.\vsol_spatial_object_3d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_tetrahedron.cxx
+SOURCE=.\vsol_surface_3d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_triangle_2d.cxx
+SOURCE=.\vsol_tetrahedron.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_triangle_3d.cxx
+SOURCE=.\vsol_triangle_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsol/vsol_volume_3d.cxx
+SOURCE=.\vsol_triangle_3d.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vsol_volume_3d.cxx
 
 # End Source File
 # End Group

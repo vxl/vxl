@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/vxl/vul/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "vul - Win32 Release"
 USERDEP__HACK=\
@@ -213,92 +213,92 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vul/vul_arg.cxx
+SOURCE=.\vul_arg.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vul/vul_awk.cxx
+SOURCE=.\vul_awk.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vul/vul_expand_path.cxx
+SOURCE=.\vul_expand_path.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vul/vul_file.cxx
+SOURCE=.\vul_file.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vul/vul_file_iterator.cxx
+SOURCE=.\vul_file_iterator.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vul/vul_get_timestamp.cxx
+SOURCE=.\vul_get_timestamp.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vul/vul_printf.cxx
+SOURCE=.\vul_printf.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vul/vul_psfile.cxx
+SOURCE=.\vul_psfile.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vul/vul_redirector.cxx
+SOURCE=.\vul_redirector.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vul/vul_reg_exp.cxx
+SOURCE=.\vul_reg_exp.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vul/vul_sequence_filename_map.cxx
+SOURCE=.\vul_sequence_filename_map.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vul/vul_sprintf.cxx
+SOURCE=.\vul_sprintf.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vul/vul_string.cxx
+SOURCE=.\vul_string.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vul/vul_test.cxx
+SOURCE=.\vul_test.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vul/vul_timer.cxx
+SOURCE=.\vul_timer.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vul/vul_timestamp.cxx
+SOURCE=.\vul_timestamp.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vul/vul_trace.cxx
+SOURCE=.\vul_trace.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vul/vul_user_info.cxx
+SOURCE=.\vul_user_info.cxx
 
 # End Source File
 # End Group

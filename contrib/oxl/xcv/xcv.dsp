@@ -528,7 +528,7 @@ LINK32=link.exe
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/oxl/xcv/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "xcv - Win32 Release"
 USERDEP__HACK=\
@@ -701,107 +701,107 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/xcv/Templates/vcl_vector+vgui_easy2D_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vgui_easy2D_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/xcv/Templates/vcl_vector+vgui_rubberbander_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vgui_rubberbander_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/xcv/Templates/vcl_vector+xcv_image_tableau_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+xcv_image_tableau_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/xcv/Templates/vcl_vector+xcv_mview_manager~-.cxx
+SOURCE=.\Templates/vcl_vector+xcv_mview_manager~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/xcv/Templates/vcl_vector+xcv_threeview_manager~-.cxx
+SOURCE=.\Templates/vcl_vector+xcv_threeview_manager~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/xcv/Templates/vcl_vector+xcv_twoview_manager~-.cxx
+SOURCE=.\Templates/vcl_vector+xcv_twoview_manager~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/xcv/xcv.cxx
+SOURCE=.\xcv.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/xcv/xcv_axes_limits.cxx
+SOURCE=.\xcv_axes_limits.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/xcv/xcv_axes_tableau.cxx
+SOURCE=.\xcv_axes_tableau.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/xcv/xcv_display.cxx
+SOURCE=.\xcv_display.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/xcv/xcv_file.cxx
+SOURCE=.\xcv_file.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/xcv/xcv_geometry.cxx
+SOURCE=.\xcv_geometry.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/xcv/xcv_image_tableau.cxx
+SOURCE=.\xcv_image_tableau.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/xcv/xcv_multiview.cxx
+SOURCE=.\xcv_multiview.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/xcv/xcv_multiview_create_multiview_menu.cxx
+SOURCE=.\xcv_multiview_create_multiview_menu.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/xcv/xcv_picker_tableau.cxx
+SOURCE=.\xcv_picker_tableau.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/xcv/xcv_processing.cxx
+SOURCE=.\xcv_processing.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/xcv/xcv_segmentation.cxx
+SOURCE=.\xcv_segmentation.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/xcv/xcv_threeview_manager.cxx
+SOURCE=.\xcv_threeview_manager.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/xcv/xcv_tjunction.cxx
+SOURCE=.\xcv_tjunction.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/xcv/xcv_twoview_manager.cxx
+SOURCE=.\xcv_twoview_manager.cxx
 
 # End Source File
 # End Group

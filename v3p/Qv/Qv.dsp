@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/v3p/Qv/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "Qv - Win32 Release"
 USERDEP__HACK=\
@@ -233,52 +233,52 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/Qv/QvLib.cxx
+SOURCE=.\QvLib.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/Qv/QvVisitor.cxx
+SOURCE=.\QvVisitor.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/Qv/QvVrmlFile.cxx
+SOURCE=.\QvVrmlFile.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/Qv/Templates/vcl_vector+QvNode~-.cxx
+SOURCE=.\Templates/vcl_vector+QvNode~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/Qv/Templates/vcl_vector+point2D_const~-.cxx
+SOURCE=.\Templates/vcl_vector+point2D_const~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/Qv/Templates/vcl_vector+point3D~-.cxx
+SOURCE=.\Templates/vcl_vector+point3D~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/Qv/Templates/vcl_vector+vector3D_const~-.cxx
+SOURCE=.\Templates/vcl_vector+vector3D_const~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/Qv/vecutil.cxx
+SOURCE=.\vecutil.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/Qv/wrlbuild.cxx
+SOURCE=.\wrlbuild.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/Qv/wrltraverse.cxx
+SOURCE=.\wrltraverse.cxx
 
 # End Source File
 # End Group

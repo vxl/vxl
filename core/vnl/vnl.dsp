@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/vxl/vnl/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "vnl - Win32 Release"
 USERDEP__HACK=\
@@ -213,897 +213,897 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vcl_list+vnl_double_4-.cxx
+SOURCE=.\Templates/vcl_list+vnl_double_4-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vcl_vector+vcl_vector+vnl_double_3x4--.cxx
+SOURCE=.\Templates/vcl_vector+vcl_vector+vnl_double_3x4--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vcl_vector+vcl_vector+vnl_float_2--.cxx
+SOURCE=.\Templates/vcl_vector+vcl_vector+vnl_float_2--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vcl_vector+vcl_vector+vnl_sparse_matrix_pair+double---.cxx
+SOURCE=.\Templates/vcl_vector+vcl_vector+vnl_sparse_matrix_pair+double---.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vcl_vector+vcl_vector+vnl_sparse_matrix_pair+float---.cxx
+SOURCE=.\Templates/vcl_vector+vcl_vector+vnl_sparse_matrix_pair+float---.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vcl_vector+vnl_double_2-.cxx
+SOURCE=.\Templates/vcl_vector+vnl_double_2-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vcl_vector+vnl_double_3-.cxx
+SOURCE=.\Templates/vcl_vector+vnl_double_3-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vcl_vector+vnl_double_3x3-.cxx
+SOURCE=.\Templates/vcl_vector+vnl_double_3x3-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vcl_vector+vnl_double_4-.cxx
+SOURCE=.\Templates/vcl_vector+vnl_double_4-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vcl_vector+vnl_float_2-.cxx
+SOURCE=.\Templates/vcl_vector+vnl_float_2-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vcl_vector+vnl_float_3-.cxx
+SOURCE=.\Templates/vcl_vector+vnl_float_3-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vcl_vector+vnl_matrix+double--.cxx
+SOURCE=.\Templates/vcl_vector+vnl_matrix+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vcl_vector+vnl_matrix+double-~-.cxx
+SOURCE=.\Templates/vcl_vector+vnl_matrix+double-~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vcl_vector+vnl_matrix+float--.cxx
+SOURCE=.\Templates/vcl_vector+vnl_matrix+float--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vcl_vector+vnl_matrix_fixed+double.3.4--.cxx
+SOURCE=.\Templates/vcl_vector+vnl_matrix_fixed+double.3.4--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vcl_vector+vnl_matrix_fixed+float.3.4--.cxx
+SOURCE=.\Templates/vcl_vector+vnl_matrix_fixed+float.3.4--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vcl_vector+vnl_real_npolynomial~-.cxx
+SOURCE=.\Templates/vcl_vector+vnl_real_npolynomial~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vcl_vector+vnl_sparse_matrix_pair+double--.cxx
+SOURCE=.\Templates/vcl_vector+vnl_sparse_matrix_pair+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vcl_vector+vnl_sparse_matrix_pair+float--.cxx
+SOURCE=.\Templates/vcl_vector+vnl_sparse_matrix_pair+float--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vcl_vector+vnl_vector+double--.cxx
+SOURCE=.\Templates/vcl_vector+vnl_vector+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vcl_vector+vnl_vector+double-~-.cxx
+SOURCE=.\Templates/vcl_vector+vnl_vector+double-~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vcl_vector+vnl_vector+float--.cxx
+SOURCE=.\Templates/vcl_vector+vnl_vector+float--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vcl_vector+vnl_vector+float-~-.cxx
+SOURCE=.\Templates/vcl_vector+vnl_vector+float-~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vcl_vector+vnl_vector+vcl_complex+double---.cxx
+SOURCE=.\Templates/vcl_vector+vnl_vector+vcl_complex+double---.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_c_vector+double-.cxx
+SOURCE=.\Templates/vnl_c_vector+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_c_vector+double_complex-.cxx
+SOURCE=.\Templates/vnl_c_vector+double_complex-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_c_vector+float-.cxx
+SOURCE=.\Templates/vnl_c_vector+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_c_vector+float_complex-.cxx
+SOURCE=.\Templates/vnl_c_vector+float_complex-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_c_vector+int-.cxx
+SOURCE=.\Templates/vnl_c_vector+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_c_vector+long-.cxx
+SOURCE=.\Templates/vnl_c_vector+long-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_c_vector+long_double-.cxx
+SOURCE=.\Templates/vnl_c_vector+long_double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_c_vector+long_double_complex-.cxx
+SOURCE=.\Templates/vnl_c_vector+long_double_complex-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_c_vector+schar-.cxx
+SOURCE=.\Templates/vnl_c_vector+schar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_c_vector+uchar-.cxx
+SOURCE=.\Templates/vnl_c_vector+uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_c_vector+uint-.cxx
+SOURCE=.\Templates/vnl_c_vector+uint-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_c_vector+ulong-.cxx
+SOURCE=.\Templates/vnl_c_vector+ulong-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_complex_ops+double-.cxx
+SOURCE=.\Templates/vnl_complex_ops+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_complex_ops+float-.cxx
+SOURCE=.\Templates/vnl_complex_ops+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_complex_ops+long_double-.cxx
+SOURCE=.\Templates/vnl_complex_ops+long_double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_determinant+double-.cxx
+SOURCE=.\Templates/vnl_determinant+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_determinant+float-.cxx
+SOURCE=.\Templates/vnl_determinant+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_determinant+long_double-.cxx
+SOURCE=.\Templates/vnl_determinant+long_double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_determinant+vcl_complex+double--.cxx
+SOURCE=.\Templates/vnl_determinant+vcl_complex+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_determinant+vcl_complex+float--.cxx
+SOURCE=.\Templates/vnl_determinant+vcl_complex+float--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_determinant+vcl_complex+long_double--.cxx
+SOURCE=.\Templates/vnl_determinant+vcl_complex+long_double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_diag_matrix+double-.cxx
+SOURCE=.\Templates/vnl_diag_matrix+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_diag_matrix+float-.cxx
+SOURCE=.\Templates/vnl_diag_matrix+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_diag_matrix+int-.cxx
+SOURCE=.\Templates/vnl_diag_matrix+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_diag_matrix+long_double-.cxx
+SOURCE=.\Templates/vnl_diag_matrix+long_double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_diag_matrix+vcl_complex+double--.cxx
+SOURCE=.\Templates/vnl_diag_matrix+vcl_complex+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_diag_matrix+vcl_complex+float--.cxx
+SOURCE=.\Templates/vnl_diag_matrix+vcl_complex+float--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_file_matrix+double-.cxx
+SOURCE=.\Templates/vnl_file_matrix+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_file_matrix+float-.cxx
+SOURCE=.\Templates/vnl_file_matrix+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_file_matrix+long_double-.cxx
+SOURCE=.\Templates/vnl_file_matrix+long_double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_file_vector+double-.cxx
+SOURCE=.\Templates/vnl_file_vector+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_fortran_copy+double-.cxx
+SOURCE=.\Templates/vnl_fortran_copy+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_fortran_copy+float-.cxx
+SOURCE=.\Templates/vnl_fortran_copy+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_fortran_copy+long_double-.cxx
+SOURCE=.\Templates/vnl_fortran_copy+long_double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_fortran_copy+vcl_complex+double--.cxx
+SOURCE=.\Templates/vnl_fortran_copy+vcl_complex+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_fortran_copy+vcl_complex+float--.cxx
+SOURCE=.\Templates/vnl_fortran_copy+vcl_complex+float--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_fortran_copy+vcl_complex+long_double--.cxx
+SOURCE=.\Templates/vnl_fortran_copy+vcl_complex+long_double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matlab_print+double-.cxx
+SOURCE=.\Templates/vnl_matlab_print+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matlab_print+float-.cxx
+SOURCE=.\Templates/vnl_matlab_print+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matlab_print+int-.cxx
+SOURCE=.\Templates/vnl_matlab_print+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matlab_print+long_double-.cxx
+SOURCE=.\Templates/vnl_matlab_print+long_double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matlab_print+vcl_complex+double--.cxx
+SOURCE=.\Templates/vnl_matlab_print+vcl_complex+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matlab_print+vcl_complex+float--.cxx
+SOURCE=.\Templates/vnl_matlab_print+vcl_complex+float--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matlab_print+vcl_complex+long_double--.cxx
+SOURCE=.\Templates/vnl_matlab_print+vcl_complex+long_double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix+double-.cxx
+SOURCE=.\Templates/vnl_matrix+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix+float-.cxx
+SOURCE=.\Templates/vnl_matrix+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix+int-.cxx
+SOURCE=.\Templates/vnl_matrix+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix+long-.cxx
+SOURCE=.\Templates/vnl_matrix+long-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix+long_double-.cxx
+SOURCE=.\Templates/vnl_matrix+long_double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix+schar-.cxx
+SOURCE=.\Templates/vnl_matrix+schar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix+uchar-.cxx
+SOURCE=.\Templates/vnl_matrix+uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix+uint-.cxx
+SOURCE=.\Templates/vnl_matrix+uint-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix+ulong-.cxx
+SOURCE=.\Templates/vnl_matrix+ulong-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix+vcl_complex+double--.cxx
+SOURCE=.\Templates/vnl_matrix+vcl_complex+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix+vcl_complex+float--.cxx
+SOURCE=.\Templates/vnl_matrix+vcl_complex+float--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix+vcl_complex+long_double--.cxx
+SOURCE=.\Templates/vnl_matrix+vcl_complex+long_double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix_exp+double-.cxx
+SOURCE=.\Templates/vnl_matrix_exp+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix_fixed+double.2.2-.cxx
+SOURCE=.\Templates/vnl_matrix_fixed+double.2.2-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix_fixed+double.2.3-.cxx
+SOURCE=.\Templates/vnl_matrix_fixed+double.2.3-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix_fixed+double.2.6-.cxx
+SOURCE=.\Templates/vnl_matrix_fixed+double.2.6-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix_fixed+double.3.12-.cxx
+SOURCE=.\Templates/vnl_matrix_fixed+double.3.12-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix_fixed+double.3.3-.cxx
+SOURCE=.\Templates/vnl_matrix_fixed+double.3.3-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix_fixed+double.3.4-.cxx
+SOURCE=.\Templates/vnl_matrix_fixed+double.3.4-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix_fixed+double.4.3-.cxx
+SOURCE=.\Templates/vnl_matrix_fixed+double.4.3-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix_fixed+double.4.4-.cxx
+SOURCE=.\Templates/vnl_matrix_fixed+double.4.4-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix_fixed+float.3.3-.cxx
+SOURCE=.\Templates/vnl_matrix_fixed+float.3.3-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix_fixed_pairwise_ops.cxx
+SOURCE=.\Templates/vnl_matrix_fixed_pairwise_ops.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix_fixed_ref+double.2.2-.cxx
+SOURCE=.\Templates/vnl_matrix_fixed_ref+double.2.2-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix_fixed_ref+double.2.3-.cxx
+SOURCE=.\Templates/vnl_matrix_fixed_ref+double.2.3-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix_fixed_ref+double.3.12-.cxx
+SOURCE=.\Templates/vnl_matrix_fixed_ref+double.3.12-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix_fixed_ref+double.3.3-.cxx
+SOURCE=.\Templates/vnl_matrix_fixed_ref+double.3.3-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix_fixed_ref+double.3.4-.cxx
+SOURCE=.\Templates/vnl_matrix_fixed_ref+double.3.4-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix_fixed_ref+double.4.3-.cxx
+SOURCE=.\Templates/vnl_matrix_fixed_ref+double.4.3-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix_fixed_ref+double.4.4-.cxx
+SOURCE=.\Templates/vnl_matrix_fixed_ref+double.4.4-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix_ref+double-.cxx
+SOURCE=.\Templates/vnl_matrix_ref+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_matrix_ref+float-.cxx
+SOURCE=.\Templates/vnl_matrix_ref+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_quaternion+double-.cxx
+SOURCE=.\Templates/vnl_quaternion+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_sparse_matrix+double-.cxx
+SOURCE=.\Templates/vnl_sparse_matrix+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_sparse_matrix+float-.cxx
+SOURCE=.\Templates/vnl_sparse_matrix+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_vector+double-.cxx
+SOURCE=.\Templates/vnl_vector+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_vector+float-.cxx
+SOURCE=.\Templates/vnl_vector+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_vector+int-.cxx
+SOURCE=.\Templates/vnl_vector+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_vector+long-.cxx
+SOURCE=.\Templates/vnl_vector+long-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_vector+long_double-.cxx
+SOURCE=.\Templates/vnl_vector+long_double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_vector+schar-.cxx
+SOURCE=.\Templates/vnl_vector+schar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_vector+uchar-.cxx
+SOURCE=.\Templates/vnl_vector+uchar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_vector+uint-.cxx
+SOURCE=.\Templates/vnl_vector+uint-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_vector+ulong-.cxx
+SOURCE=.\Templates/vnl_vector+ulong-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_vector+vcl_complex+double--.cxx
+SOURCE=.\Templates/vnl_vector+vcl_complex+double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_vector+vcl_complex+float--.cxx
+SOURCE=.\Templates/vnl_vector+vcl_complex+float--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_vector+vcl_complex+long_double--.cxx
+SOURCE=.\Templates/vnl_vector+vcl_complex+long_double--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_vector_fixed+double.1-.cxx
+SOURCE=.\Templates/vnl_vector_fixed+double.1-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_vector_fixed+double.2-.cxx
+SOURCE=.\Templates/vnl_vector_fixed+double.2-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_vector_fixed+double.3-.cxx
+SOURCE=.\Templates/vnl_vector_fixed+double.3-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_vector_fixed+double.4-.cxx
+SOURCE=.\Templates/vnl_vector_fixed+double.4-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_vector_fixed+double.6-.cxx
+SOURCE=.\Templates/vnl_vector_fixed+double.6-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_vector_fixed+float.1-.cxx
+SOURCE=.\Templates/vnl_vector_fixed+float.1-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_vector_fixed+float.2-.cxx
+SOURCE=.\Templates/vnl_vector_fixed+float.2-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_vector_fixed+float.3-.cxx
+SOURCE=.\Templates/vnl_vector_fixed+float.3-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_vector_fixed+float.4-.cxx
+SOURCE=.\Templates/vnl_vector_fixed+float.4-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_vector_fixed+int.1-.cxx
+SOURCE=.\Templates/vnl_vector_fixed+int.1-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_vector_fixed+int.2-.cxx
+SOURCE=.\Templates/vnl_vector_fixed+int.2-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_vector_fixed+int.3-.cxx
+SOURCE=.\Templates/vnl_vector_fixed+int.3-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_vector_fixed+int.4-.cxx
+SOURCE=.\Templates/vnl_vector_fixed+int.4-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_vector_ref+double-.cxx
+SOURCE=.\Templates/vnl_vector_ref+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/Templates/vnl_vector_ref+int-.cxx
+SOURCE=.\Templates/vnl_vector_ref+int-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_alloc.cxx
+SOURCE=.\vnl_alloc.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_block.cxx
+SOURCE=.\vnl_block.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_complex.cxx
+SOURCE=.\vnl_complex.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_complex_traits.cxx
+SOURCE=.\vnl_complex_traits.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_copy.cxx
+SOURCE=.\vnl_copy.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_cost_function.cxx
+SOURCE=.\vnl_cost_function.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_cross_product_matrix.cxx
+SOURCE=.\vnl_cross_product_matrix.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_double_2.cxx
+SOURCE=.\vnl_double_2.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_double_2x3.cxx
+SOURCE=.\vnl_double_2x3.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_double_3.cxx
+SOURCE=.\vnl_double_3.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_double_3x2.cxx
+SOURCE=.\vnl_double_3x2.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_double_4.cxx
+SOURCE=.\vnl_double_4.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_error.cxx
+SOURCE=.\vnl_error.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_fastops.cxx
+SOURCE=.\vnl_fastops.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_float_2.cxx
+SOURCE=.\vnl_float_2.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_float_3.cxx
+SOURCE=.\vnl_float_3.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_float_4.cxx
+SOURCE=.\vnl_float_4.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_identity_3x3.cxx
+SOURCE=.\vnl_identity_3x3.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_int_2.cxx
+SOURCE=.\vnl_int_2.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_int_3.cxx
+SOURCE=.\vnl_int_3.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_int_4.cxx
+SOURCE=.\vnl_int_4.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_int_matrix.cxx
+SOURCE=.\vnl_int_matrix.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_least_squares_cost_function.cxx
+SOURCE=.\vnl_least_squares_cost_function.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_least_squares_function.cxx
+SOURCE=.\vnl_least_squares_function.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_linear_operators_3.cxx
+SOURCE=.\vnl_linear_operators_3.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_linear_system.cxx
+SOURCE=.\vnl_linear_system.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_math.cxx
+SOURCE=.\vnl_math.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_matlab_filewrite.cxx
+SOURCE=.\vnl_matlab_filewrite.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_matlab_header.cxx
+SOURCE=.\vnl_matlab_header.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_matlab_print.cxx
+SOURCE=.\vnl_matlab_print.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_matlab_print2.cxx
+SOURCE=.\vnl_matlab_print2.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_matlab_print_format.cxx
+SOURCE=.\vnl_matlab_print_format.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_matlab_print_scalar.cxx
+SOURCE=.\vnl_matlab_print_scalar.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_matlab_read.cxx
+SOURCE=.\vnl_matlab_read.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_matlab_write.cxx
+SOURCE=.\vnl_matlab_write.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_matops.cxx
+SOURCE=.\vnl_matops.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_nonlinear_minimizer.cxx
+SOURCE=.\vnl_nonlinear_minimizer.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_numeric_limits.cxx
+SOURCE=.\vnl_numeric_limits.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_numeric_traits.cxx
+SOURCE=.\vnl_numeric_traits.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_rational.cxx
+SOURCE=.\vnl_rational.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_real_npolynomial.cxx
+SOURCE=.\vnl_real_npolynomial.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_real_polynomial.cxx
+SOURCE=.\vnl_real_polynomial.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_rotation_matrix.cxx
+SOURCE=.\vnl_rotation_matrix.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_sample.cxx
+SOURCE=.\vnl_sample.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_sparse_matrix_linear_system.cxx
+SOURCE=.\vnl_sparse_matrix_linear_system.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_test.cxx
+SOURCE=.\vnl_test.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_trace.cxx
+SOURCE=.\vnl_trace.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_transpose.cxx
+SOURCE=.\vnl_transpose.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vnl/vnl_unary_function.cxx
+SOURCE=.\vnl_unary_function.cxx
 
 # End Source File
 # End Group

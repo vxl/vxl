@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/gel/gtrl/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "gtrl - Win32 Release"
 USERDEP__HACK=\
@@ -217,42 +217,42 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gtrl/Templates/vbl_smart_ptr+gtrl_triangle-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+gtrl_triangle-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gtrl/Templates/vbl_smart_ptr+gtrl_vertex-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+gtrl_vertex-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gtrl/Templates/vcl_vector+gtrl_triangle_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+gtrl_triangle_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gtrl/Templates/vcl_vector+gtrl_vertex_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+gtrl_vertex_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gtrl/gtrl_polygon.cxx
+SOURCE=.\gtrl_polygon.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gtrl/gtrl_triangle.cxx
+SOURCE=.\gtrl_triangle.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gtrl/gtrl_triangulation.cxx
+SOURCE=.\gtrl_triangulation.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/gtrl/gtrl_vertex.cxx
+SOURCE=.\gtrl_vertex.cxx
 
 # End Source File
 # End Group

@@ -196,7 +196,7 @@ LINK32=link.exe
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/vxl/vul/tests/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "vul_test_all - Win32 Release"
 USERDEP__HACK=\
@@ -265,7 +265,7 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vul/tests/vul_test_all.cxx
+SOURCE=.\vul_test_all.cxx
 
 # End Source File
 # End Group

@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/gel/vmal/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "vmal - Win32 Release"
 USERDEP__HACK=\
@@ -217,67 +217,67 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vmal/Templates/vbl_smart_ptr+vmal_multi_view_data+vtol_edge_2d_sptr--.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vmal_multi_view_data+vtol_edge_2d_sptr--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vmal/Templates/vbl_smart_ptr+vmal_multi_view_data+vtol_vertex_2d_sptr--.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vmal_multi_view_data+vtol_vertex_2d_sptr--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vmal/vmal_convert.cxx
+SOURCE=.\vmal_convert.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vmal/vmal_dense_matching.cxx
+SOURCE=.\vmal_dense_matching.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vmal/vmal_homog2d.cxx
+SOURCE=.\vmal_homog2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vmal/vmal_kl.cxx
+SOURCE=.\vmal_kl.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vmal/vmal_kl_params.cxx
+SOURCE=.\vmal_kl_params.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vmal/vmal_lines_correlation.cxx
+SOURCE=.\vmal_lines_correlation.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vmal/vmal_multi_view_data.cxx
+SOURCE=.\vmal_multi_view_data.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vmal/vmal_operators.cxx
+SOURCE=.\vmal_operators.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vmal/vmal_rectifier.cxx
+SOURCE=.\vmal_rectifier.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vmal/vmal_refine_lines.cxx
+SOURCE=.\vmal_refine_lines.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vmal/vmal_track_lines.cxx
+SOURCE=.\vmal_track_lines.cxx
 
 # End Source File
 # End Group

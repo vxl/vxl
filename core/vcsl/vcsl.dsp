@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/vxl/vcsl/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "vcsl - Win32 Release"
 USERDEP__HACK=\
@@ -213,367 +213,367 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_angle-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_angle-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_angle_unit-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_angle_unit-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_axis-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_axis-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_cartesian-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_cartesian-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_cartesian_2d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_cartesian_2d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_cartesian_3d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_cartesian_3d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_composition-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_composition-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_coordinate_system-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_coordinate_system-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_cylindrical-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_cylindrical-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_cylindrical_to_cartesian_3d-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_cylindrical_to_cartesian_3d-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_degree-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_degree-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_dimension-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_dimension-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_displacement-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_displacement-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_geocentric-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_geocentric-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_geodetic-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_geodetic-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_geographic-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_geographic-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_graph-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_graph-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_lambertian-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_lambertian-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_length-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_length-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_length_unit-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_length_unit-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_matrix_param-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_matrix_param-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_meter-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_meter-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_perspective-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_perspective-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_polar-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_polar-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_radian-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_radian-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_rotation-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_rotation-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_scale-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_scale-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_spatial-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_spatial-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_spatial_transformation-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_spatial_transformation-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_spherical-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_spherical-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_spheroid-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_spheroid-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_translation-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_translation-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_unit-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_unit-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vbl_smart_ptr+vcsl_utm-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_utm-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vcl_vector+vcsl_axis_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vcsl_axis_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vcl_vector+vcsl_interpolator-.cxx
+SOURCE=.\Templates/vcl_vector+vcsl_interpolator-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vcl_vector+vcsl_matrix_param_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vcsl_matrix_param_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vcl_vector+vcsl_spatial_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vcsl_spatial_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/Templates/vcl_vector+vcsl_spatial_transformation_sptr-.cxx
+SOURCE=.\Templates/vcl_vector+vcsl_spatial_transformation_sptr-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_angle.cxx
+SOURCE=.\vcsl_angle.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_angle_unit.cxx
+SOURCE=.\vcsl_angle_unit.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_axis.cxx
+SOURCE=.\vcsl_axis.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_cartesian.cxx
+SOURCE=.\vcsl_cartesian.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_cartesian_2d.cxx
+SOURCE=.\vcsl_cartesian_2d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_cartesian_3d.cxx
+SOURCE=.\vcsl_cartesian_3d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_composition.cxx
+SOURCE=.\vcsl_composition.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_coordinate_system.cxx
+SOURCE=.\vcsl_coordinate_system.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_cylindrical.cxx
+SOURCE=.\vcsl_cylindrical.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_cylindrical_to_cartesian_3d.cxx
+SOURCE=.\vcsl_cylindrical_to_cartesian_3d.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_degree.cxx
+SOURCE=.\vcsl_degree.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_dimension.cxx
+SOURCE=.\vcsl_dimension.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_displacement.cxx
+SOURCE=.\vcsl_displacement.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_geocentric.cxx
+SOURCE=.\vcsl_geocentric.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_geodetic.cxx
+SOURCE=.\vcsl_geodetic.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_geographic.cxx
+SOURCE=.\vcsl_geographic.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_graph.cxx
+SOURCE=.\vcsl_graph.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_lambertian.cxx
+SOURCE=.\vcsl_lambertian.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_length.cxx
+SOURCE=.\vcsl_length.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_length_unit.cxx
+SOURCE=.\vcsl_length_unit.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_matrix.cxx
+SOURCE=.\vcsl_matrix.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_meter.cxx
+SOURCE=.\vcsl_meter.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_perspective.cxx
+SOURCE=.\vcsl_perspective.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_polar.cxx
+SOURCE=.\vcsl_polar.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_radian.cxx
+SOURCE=.\vcsl_radian.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_rotation.cxx
+SOURCE=.\vcsl_rotation.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_scale.cxx
+SOURCE=.\vcsl_scale.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_spatial.cxx
+SOURCE=.\vcsl_spatial.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_spatial_transformation.cxx
+SOURCE=.\vcsl_spatial_transformation.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_spherical.cxx
+SOURCE=.\vcsl_spherical.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_spheroid.cxx
+SOURCE=.\vcsl_spheroid.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_translation.cxx
+SOURCE=.\vcsl_translation.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_unit.cxx
+SOURCE=.\vcsl_unit.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vcsl/vcsl_utm.cxx
+SOURCE=.\vcsl_utm.cxx
 
 # End Source File
 # End Group

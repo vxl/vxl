@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/vxl/vidl/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "vidl - Win32 Release"
 USERDEP__HACK=\
@@ -213,82 +213,82 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/Templates/vbl_smart_ptr+vidl_clip-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vidl_clip-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/Templates/vbl_smart_ptr+vidl_codec-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vidl_codec-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/Templates/vbl_smart_ptr+vidl_frame-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vidl_frame-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/Templates/vbl_smart_ptr+vidl_image_list_codec-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vidl_image_list_codec-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/Templates/vbl_smart_ptr+vidl_movie-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vidl_movie-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/Templates/vcl_list+vbl_smart_ptr+vidl_clip--.cxx
+SOURCE=.\Templates/vcl_list+vbl_smart_ptr+vidl_clip--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/Templates/vcl_list+vbl_smart_ptr+vidl_codec--.cxx
+SOURCE=.\Templates/vcl_list+vbl_smart_ptr+vidl_codec--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/Templates/vcl_vector+vbl_smart_ptr+vidl_frame--.cxx
+SOURCE=.\Templates/vcl_vector+vbl_smart_ptr+vidl_frame--.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/vidl_avicodec.cxx
+SOURCE=.\vidl_avicodec.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/vidl_clip.cxx
+SOURCE=.\vidl_clip.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/vidl_frame.cxx
+SOURCE=.\vidl_frame.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/vidl_frame_as_image.cxx
+SOURCE=.\vidl_frame_as_image.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/vidl_image_list_codec.cxx
+SOURCE=.\vidl_image_list_codec.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/vidl_io.cxx
+SOURCE=.\vidl_io.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/vidl_movie.cxx
+SOURCE=.\vidl_movie.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vidl/vidl_test.cxx
+SOURCE=.\vidl_test.cxx
 
 # End Source File
 # End Group

@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/gel/vsrl/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "vsrl - Win32 Release"
 USERDEP__HACK=\
@@ -217,92 +217,92 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsrl/Templates/vcl_vector+vsrl_intensity_token~-.cxx
+SOURCE=.\Templates/vcl_vector+vsrl_intensity_token~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsrl/Templates/vcl_vector+vsrl_token~-.cxx
+SOURCE=.\Templates/vcl_vector+vsrl_token~-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_3d_output.cxx
+SOURCE=.\vsrl_3d_output.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_dense_matcher.cxx
+SOURCE=.\vsrl_dense_matcher.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_diffusion.cxx
+SOURCE=.\vsrl_diffusion.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_dynamic_program.cxx
+SOURCE=.\vsrl_dynamic_program.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_image_correlation.cxx
+SOURCE=.\vsrl_image_correlation.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_intensity_token.cxx
+SOURCE=.\vsrl_intensity_token.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_null_token.cxx
+SOURCE=.\vsrl_null_token.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_parameters.cxx
+SOURCE=.\vsrl_parameters.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_raster_dp_setup.cxx
+SOURCE=.\vsrl_raster_dp_setup.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_results_dense_matcher.cxx
+SOURCE=.\vsrl_results_dense_matcher.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_saliency_diffusion.cxx
+SOURCE=.\vsrl_saliency_diffusion.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_step_diffusion.cxx
+SOURCE=.\vsrl_step_diffusion.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_stereo_dense_matcher.cxx
+SOURCE=.\vsrl_stereo_dense_matcher.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_token.cxx
+SOURCE=.\vsrl_token.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_token_saliency.cxx
+SOURCE=.\vsrl_token_saliency.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vsrl/vsrl_window_accumulator.cxx
+SOURCE=.\vsrl_window_accumulator.cxx
 
 # End Source File
 # End Group

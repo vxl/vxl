@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/oxl/vrml/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "vrml - Win32 Release"
 USERDEP__HACK=\
@@ -217,7 +217,7 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vrml/vrml_out.cxx
+SOURCE=.\vrml_out.cxx
 
 # End Source File
 # End Group

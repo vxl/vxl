@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/oxl/vgui/impl/mfc/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "vgui_mfc - Win32 Release"
 USERDEP__HACK=\
@@ -237,67 +237,67 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/impl/mfc/vgui_mfc.cxx
+SOURCE=.\vgui_mfc.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/impl/mfc/vgui_mfc_adaptor.cxx
+SOURCE=.\vgui_mfc_adaptor.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/impl/mfc/vgui_mfc_app.cxx
+SOURCE=.\vgui_mfc_app.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/impl/mfc/vgui_mfc_app_init.cxx
+SOURCE=.\vgui_mfc_app_init.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/impl/mfc/vgui_mfc_dialog_impl.cxx
+SOURCE=.\vgui_mfc_dialog_impl.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/impl/mfc/vgui_mfc_doc.cxx
+SOURCE=.\vgui_mfc_doc.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/impl/mfc/vgui_mfc_mainfrm.cxx
+SOURCE=.\vgui_mfc_mainfrm.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/impl/mfc/vgui_mfc_statusbar.cxx
+SOURCE=.\vgui_mfc_statusbar.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/impl/mfc/vgui_mfc_tag.cxx
+SOURCE=.\vgui_mfc_tag.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/impl/mfc/vgui_mfc_util.cxx
+SOURCE=.\vgui_mfc_util.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/impl/mfc/vgui_mfc_utils.cxx
+SOURCE=.\vgui_mfc_utils.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/impl/mfc/vgui_mfc_view.cxx
+SOURCE=.\vgui_mfc_view.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/vgui/impl/mfc/vgui_mfc_window.cxx
+SOURCE=.\vgui_mfc_window.cxx
 
 # End Source File
 # End Group

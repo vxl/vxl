@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/vxl/vpl/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "vpl - Win32 Release"
 USERDEP__HACK=\
@@ -213,7 +213,7 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vpl/vpl_unistd.cxx
+SOURCE=.\vpl_unistd.cxx
 
 # End Source File
 # End Group

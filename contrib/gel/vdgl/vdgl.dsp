@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/gel/vdgl/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "vdgl - Win32 Release"
 USERDEP__HACK=\
@@ -217,72 +217,72 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vdgl/Templates/vbl_smart_ptr+vdgl_digital_curve-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vdgl_digital_curve-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vdgl/Templates/vbl_smart_ptr+vdgl_edgel_chain-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vdgl_edgel_chain-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vdgl/Templates/vbl_smart_ptr+vdgl_interpolator-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vdgl_interpolator-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vdgl/Templates/vcl_vector+vdgl_edgel-.cxx
+SOURCE=.\Templates/vcl_vector+vdgl_edgel-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vdgl/vdgl_OrthogRegress.cxx
+SOURCE=.\vdgl_OrthogRegress.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vdgl/vdgl_digital_curve.cxx
+SOURCE=.\vdgl_digital_curve.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vdgl/vdgl_digital_region.cxx
+SOURCE=.\vdgl_digital_region.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vdgl/vdgl_edgel.cxx
+SOURCE=.\vdgl_edgel.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vdgl/vdgl_edgel_chain.cxx
+SOURCE=.\vdgl_edgel_chain.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vdgl/vdgl_fit_line.cxx
+SOURCE=.\vdgl_fit_line.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vdgl/vdgl_interpolator.cxx
+SOURCE=.\vdgl_interpolator.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vdgl/vdgl_interpolator_cubic.cxx
+SOURCE=.\vdgl_interpolator_cubic.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vdgl/vdgl_interpolator_linear.cxx
+SOURCE=.\vdgl_interpolator_linear.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/gel/vdgl/vdgl_ortho_regress.cxx
+SOURCE=.\vdgl_ortho_regress.cxx
 
 # End Source File
 # End Group

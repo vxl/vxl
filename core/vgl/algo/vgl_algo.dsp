@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/vxl/vgl/algo/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "vgl_algo - Win32 Release"
 USERDEP__HACK=\
@@ -217,27 +217,27 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vgl/algo/Templates/vgl_homg_operators_2d+double-.cxx
+SOURCE=.\Templates/vgl_homg_operators_2d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vgl/algo/Templates/vgl_homg_operators_2d+float-.cxx
+SOURCE=.\Templates/vgl_homg_operators_2d+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vgl/algo/Templates/vgl_homg_operators_3d+double-.cxx
+SOURCE=.\Templates/vgl_homg_operators_3d+double-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vgl/algo/Templates/vgl_homg_operators_3d+float-.cxx
+SOURCE=.\Templates/vgl_homg_operators_3d+float-.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/vxl/vgl/algo/vgl_algo.cxx
+SOURCE=.\vgl_algo.cxx
 
 # End Source File
 # End Group

@@ -292,7 +292,7 @@ LINK32=link.exe
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/oxl/oxltest/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "oxltest - Win32 Release"
 USERDEP__HACK=\
@@ -385,12 +385,12 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxltest/StdAfx.cpp
+SOURCE=.\StdAfx.cpp
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/oxltest/oxltest.cpp
+SOURCE=.\oxltest.cpp
 
 # End Source File
 # End Group

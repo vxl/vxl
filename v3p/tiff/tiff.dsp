@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/v3p/tiff/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "tiff - Win32 Release"
 USERDEP__HACK=\
@@ -229,167 +229,167 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_aux.c
+SOURCE=.\tif_aux.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_close.c
+SOURCE=.\tif_close.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_codec.c
+SOURCE=.\tif_codec.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_compress.c
+SOURCE=.\tif_compress.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_dir.c
+SOURCE=.\tif_dir.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_dirinfo.c
+SOURCE=.\tif_dirinfo.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_dirread.c
+SOURCE=.\tif_dirread.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_dirwrite.c
+SOURCE=.\tif_dirwrite.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_dumpmode.c
+SOURCE=.\tif_dumpmode.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_error.c
+SOURCE=.\tif_error.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_fax3.c
+SOURCE=.\tif_fax3.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_fax3sm.c
+SOURCE=.\tif_fax3sm.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_flush.c
+SOURCE=.\tif_flush.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_getimage.c
+SOURCE=.\tif_getimage.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_jpeg.c
+SOURCE=.\tif_jpeg.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_luv.c
+SOURCE=.\tif_luv.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_lzw.c
+SOURCE=.\tif_lzw.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_next.c
+SOURCE=.\tif_next.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_open.c
+SOURCE=.\tif_open.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_packbits.c
+SOURCE=.\tif_packbits.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_pixarlog.c
+SOURCE=.\tif_pixarlog.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_predict.c
+SOURCE=.\tif_predict.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_print.c
+SOURCE=.\tif_print.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_read.c
+SOURCE=.\tif_read.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_strip.c
+SOURCE=.\tif_strip.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_swab.c
+SOURCE=.\tif_swab.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_thunder.c
+SOURCE=.\tif_thunder.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_tile.c
+SOURCE=.\tif_tile.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_version.c
+SOURCE=.\tif_version.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_warning.c
+SOURCE=.\tif_warning.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_win32.c
+SOURCE=.\tif_win32.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_write.c
+SOURCE=.\tif_write.c
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/v3p/tiff/tif_zip.c
+SOURCE=.\tif_zip.c
 
 # End Source File
 # End Group

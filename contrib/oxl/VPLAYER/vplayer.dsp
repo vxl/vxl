@@ -200,7 +200,7 @@ LINK32=link.exe
 
 # Begin Source File
 
-SOURCE="c:/awf/src/vxl/oxl/VPLAYER/CMakeLists.txt"
+SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "VPLAYER - Win32 Release"
 USERDEP__HACK=\
@@ -261,32 +261,32 @@ USERDEP__HACK=\
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/VPLAYER/easy2D_loader.cxx
+SOURCE=.\easy2D_loader.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/VPLAYER/easy2D_sequencer.cxx
+SOURCE=.\easy2D_sequencer.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/VPLAYER/vplayer.cxx
+SOURCE=.\vplayer.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/VPLAYER/vplayer_file.cxx
+SOURCE=.\vplayer_file.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/VPLAYER/vplayer_geometry.cxx
+SOURCE=.\vplayer_geometry.cxx
 
 # End Source File
 # Begin Source File
 
-SOURCE=c:/awf/src/vxl/oxl/VPLAYER/vplayer_video.cxx
+SOURCE=.\vplayer_video.cxx
 
 # End Source File
 # End Group
