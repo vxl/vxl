@@ -11,7 +11,7 @@
 // This appears to do nothing, and it doesn't compile on MSVC with some weird error
 //      'flux' : illegal member initialization: 'fstream' is not a base or member
 #ifndef VCL_VC
-struct flux : vcl_fstream
+struct flux : public vcl_fstream
 {
   // check that bitwise OR of {openmode}s works.
   flux(vcl_ios_openmode mode = vcl_ios_in | vcl_ios_binary)
@@ -124,5 +124,5 @@ int test_vcl_iostream_main()
 
   vcl_stringstream s(vcl_ios_in | vcl_ios_out | vcl_ios_binary);
 
-  return 0;
+  return s==0;
 }

@@ -16,7 +16,7 @@
 #include <vbl/vbl_ref_count.h>
 
 //: this defines the abstract interface to commands
-struct vgui_command : vbl_ref_count
+struct vgui_command : public vbl_ref_count
 {
   vgui_command();
   virtual ~vgui_command();
@@ -24,7 +24,7 @@ struct vgui_command : vbl_ref_count
 };
 
 //: an implementation using a C callback function
-struct vgui_command_cfunc : vgui_command
+struct vgui_command_cfunc : public vgui_command
 {
   typedef void (*function_pv)(void const*);
   typedef void (*function)();
@@ -39,7 +39,7 @@ struct vgui_command_cfunc : vgui_command
 };
 
 //: command for toggle buttons
-struct vgui_command_toggle : vgui_command
+struct vgui_command_toggle : public vgui_command
 {
   bool state;
   vgui_command_toggle(bool v) : state(v) { }
@@ -63,7 +63,7 @@ struct vgui_command_toggle : vgui_command
 //  and pass it to a menu.
 //
 template <class receiver>
-struct vgui_command_simple : vgui_command
+struct vgui_command_simple : public vgui_command
 {
   typedef void (receiver::* action)();
 
@@ -78,7 +78,7 @@ template struct vgui_command_simple<receiver >
 
 // similar, but for methods that take a single argument (fsm).
 template <class object_t, class data_t>
-struct vgui_command_bound_method : vgui_command
+struct vgui_command_bound_method : public vgui_command
 {
   typedef void (object_t::*action_t)(data_t);
 

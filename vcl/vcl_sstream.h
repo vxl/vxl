@@ -13,7 +13,7 @@
 
 # undef  vcl_stringstream
 # define vcl_stringstream vcl_stringstream
-struct vcl_stringstream : strstream
+struct vcl_stringstream : public strstream
 {
   vcl_stringstream(int /*which*/ = vcl_ios_in | vcl_ios_out) { }
   //FIXME vcl_stringstream(vcl_string const &s, int /*which*/ = vcl_ios_in | vcl_ios_out) { }
@@ -25,7 +25,7 @@ struct vcl_stringstream : strstream
 
 # undef  vcl_istringstream
 # define vcl_istringstream vcl_istringstream
-struct vcl_istringstream : istrstream
+struct vcl_istringstream : public istrstream
 {
   vcl_istringstream(vcl_string const &s) : istrstream(s.c_str()) { }
   
@@ -36,7 +36,7 @@ struct vcl_istringstream : istrstream
 
 # undef  vcl_ostringstream
 # define vcl_ostringstream vcl_ostringstream
-struct vcl_ostringstream : ostrstream
+struct vcl_ostringstream : public ostrstream
 {
   // [27.7.3.2]
   vcl_string str() { return ostrstream::str(); }

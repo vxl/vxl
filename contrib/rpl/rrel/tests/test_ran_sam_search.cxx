@@ -37,7 +37,7 @@ sample_ok( const vcl_vector<int>& indices, int num_pts )
 }
 
 
-struct null_problem : rrel_estimation_problem
+struct null_problem : public rrel_estimation_problem
 {
   null_problem( unsigned int num_samples, unsigned int dof, unsigned int min_samples )
     : rrel_estimation_problem( dof, min_samples ), ns(num_samples) { }
