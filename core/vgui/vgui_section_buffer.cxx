@@ -147,7 +147,8 @@ vgui_section_buffer( unsigned in_x, unsigned in_y,
     h_( in_h ),
     allocw_( w_ ),
     alloch_( h_ ),
-    buffer_( 0 )
+    buffer_( 0 ),
+    buffer_ok_( false )
 {
   assert( w_ > 0 && h_ > 0 );
 
@@ -264,8 +265,9 @@ apply( vil_image_view_base const& image_in )
 
   if( !conversion_okay ) {
     vcl_cerr << __FILE__ << ":" << __LINE__ << ": conversion failed\n";
-    buffer_ok_ = false;
   }
+
+  buffer_ok_ = conversion_okay;
 }
 
 
