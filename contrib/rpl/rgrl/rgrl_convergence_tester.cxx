@@ -1,7 +1,7 @@
 #include "rgrl_convergence_tester.h"
-#include "rgrl_view.h"
-#include "rgrl_converge_status.h"
-#include "rgrl_view.h"
+#include <rgrl/rgrl_view.h>
+#include <rgrl/rgrl_converge_status.h>
+#include <vcl_cassert.h>
 
 rgrl_convergence_tester::
 ~rgrl_convergence_tester()
@@ -60,7 +60,7 @@ compute_status( rgrl_converge_status_sptr               prev_status,
 }
 
 
-rgrl_converge_status_sptr 
+rgrl_converge_status_sptr
 rgrl_convergence_tester::
 verify( rgrl_transformation_sptr    const& xform_estimate,
         rgrl_match_set_sptr         const& current_match_set,
@@ -73,7 +73,7 @@ verify( rgrl_transformation_sptr    const& xform_estimate,
   return this->verify( xform_estimate, match_sets, scales );
 }
 
-rgrl_converge_status_sptr 
+rgrl_converge_status_sptr
 rgrl_convergence_tester::
 verify( rgrl_transformation_sptr         const& xform_estimate,
         rgrl_set_of<rgrl_match_set_sptr> const& current_match_sets,
@@ -146,15 +146,15 @@ compute_status_helper( double new_error,
       // look for oscillation
       // There are two kinds of oscillation:
       // 1. the error increases and decreases in turn
-      // 2. Once it is good enough, the error increases slightly 
-      // 
-      
+      // 2. Once it is good enough, the error increases slightly
+      //
+
       // first situation
-      if( !good_enough ) {
+      if ( !good_enough ) {
         if ( error_diff * prev_status->error_diff() < 0.0 ) {
           oscillation_count = prev_status->oscillation_count() + 1;
           DebugMacro_abv(1, "Oscillation. Count="<<oscillation_count<<'\n' );
-  
+
         } else {
           if ( prev_status->oscillation_count() > 0 )
             oscillation_count = prev_status->oscillation_count() - 1;
@@ -163,15 +163,15 @@ compute_status_helper( double new_error,
           stagnated = true;
         }
       } else {
-        
-        // second situation 
-        if( error_diff > 0 )  { // error increases again
+
+        // second situation
+        if ( error_diff > 0 )  { // error increases again
           oscillation_count = prev_status->oscillation_count() + 1;
           DebugMacro_abv(1, "Good Oscillation. Count="<<oscillation_count<<'\n' );
         }
-        
+
         // check for oscillation, call convergence
-        if( oscillation_count > 3 )
+        if ( oscillation_count > 3 )
           converged = true;
       }
     }
