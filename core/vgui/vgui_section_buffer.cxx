@@ -149,6 +149,9 @@ vgui_section_buffer::~vgui_section_buffer() {
 #ifdef GL_UNSIGNED_SHORT_5_6_5
   case GL_UNSIGNED_SHORT_5_6_5:
 #endif
+#ifdef GL_UNSIGNED_SHORT_5_5_5_1
+  case GL_UNSIGNED_SHORT_5_5_5_1:
+#endif
   case GL_UNSIGNED_SHORT:
   case GL_SHORT:
     fsm_dealloc_buffer(GLshort);
