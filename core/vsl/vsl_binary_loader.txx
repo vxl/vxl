@@ -21,7 +21,7 @@ template<class BaseClass>
 void vsl_binary_loader<BaseClass>::make_empty()
 {
     for (int i=0; i<object_.size(); ++i)
-    delete object_[i];
+      delete object_[i];
     object_.resize(0);
 }
 
@@ -29,6 +29,7 @@ template<class BaseClass>
 vsl_binary_loader<BaseClass>::~vsl_binary_loader()
 {
     make_empty();
+    instance_=0;
 }
 
 // IO for  pointers to BaseClass:
