@@ -1,6 +1,7 @@
 // This is mul/vil3d/tests/test_switch_axes.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
+#include <vxl_config.h>
 #include <vil3d/vil3d_switch_axes.h>
 
 void test_switch_axes_int()
@@ -9,7 +10,7 @@ void test_switch_axes_int()
            << " Testing vil3d_switch_axes\n"
            << "***************************\n";
 
-  vil3d_image_view<int> image(5,5,5);
+  vil3d_image_view<vxl_int_32> image(5,5,5);
   for (int k=0;k<5;++k)
     for (int j=0;j<5;++j)
       for (int i=0;i<5;++i)
