@@ -3017,6 +3017,31 @@ char **argv;
 
 /*****************************************************************************/
 /*                                                                           */
+/* print_cast()  Convert a pointer to an unsigned long integer for display   */
+/*                                                                           */
+/* This is used to avoid compiler warnings for those compilers that check    */
+/* and warn about potential 64-bit problems.                                 */
+/*****************************************************************************/
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1300)
+#  pragma warning( push )
+   /* warning C4311: 'type cast' : pointer truncation from 'void *' to 
+    *'unsigned long' */
+#  pragma warning( disable: 4311 )
+#endif
+
+static
+unsigned long print_cast( void* p )
+{
+  return (unsigned long)p;
+}
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1300)
+#  pragma warning( pop )
+#endif
+
+/*****************************************************************************/
+/*                                                                           */
 /*  printtriangle()   Print out the details of a triangle/edge handle.       */
 /*                                                                           */
 /*  I originally wrote this procedure to simplify debugging; it can be       */
@@ -3033,27 +3058,27 @@ struct triedge *t;
   struct edge printsh;
   point printpoint;
 
-  printf("triangle x%lx with orientation %d:\n", (intptr_t) t->tri,
+  printf("triangle x%lx with orientation %d:\n", print_cast( t->tri ),
          t->orient);
   decode(t->tri[0], printtri);
   if (printtri.tri == dummytri) {
     printf("    [0] = Outer space\n");
   } else {
-    printf("    [0] = x%lx  %d\n", (intptr_t) printtri.tri,
+    printf("    [0] = x%lx  %d\n", print_cast( printtri.tri ),
            printtri.orient);
   }
   decode(t->tri[1], printtri);
   if (printtri.tri == dummytri) {
     printf("    [1] = Outer space\n");
   } else {
-    printf("    [1] = x%lx  %d\n", (intptr_t) printtri.tri,
+    printf("    [1] = x%lx  %d\n", print_cast( printtri.tri ),
            printtri.orient);
   }
   decode(t->tri[2], printtri);
   if (printtri.tri == dummytri) {
     printf("    [2] = Outer space\n");
   } else {
-    printf("    [2] = x%lx  %d\n", (intptr_t) printtri.tri,
+    printf("    [2] = x%lx  %d\n", print_cast( printtri.tri ),
            printtri.orient);
   }
   org(*t, printpoint);
@@ -3061,36 +3086,36 @@ struct triedge *t;
     printf("    Origin[%d] = NULL\n", (t->orient + 1) % 3 + 3);
   else
     printf("    Origin[%d] = x%lx  (%.12g, %.12g)\n",
-           (t->orient + 1) % 3 + 3, (intptr_t) printpoint,
+           (t->orient + 1) % 3 + 3, print_cast( printpoint ),
            printpoint[0], printpoint[1]);
   dest(*t, printpoint);
   if (printpoint == (point) NULL)
     printf("    Dest  [%d] = NULL\n", (t->orient + 2) % 3 + 3);
   else
     printf("    Dest  [%d] = x%lx  (%.12g, %.12g)\n",
-           (t->orient + 2) % 3 + 3, (intptr_t) printpoint,
+           (t->orient + 2) % 3 + 3, print_cast( printpoint ),
            printpoint[0], printpoint[1]);
   apex(*t, printpoint);
   if (printpoint == (point) NULL)
     printf("    Apex  [%d] = NULL\n", t->orient + 3);
   else
     printf("    Apex  [%d] = x%lx  (%.12g, %.12g)\n",
-           t->orient + 3, (intptr_t) printpoint,
+           t->orient + 3, print_cast( printpoint ),
            printpoint[0], printpoint[1]);
   if (useshelles) {
     sdecode(t->tri[6], printsh);
     if (printsh.sh != dummysh) {
-      printf("    [6] = x%lx  %d\n", (intptr_t) printsh.sh,
+      printf("    [6] = x%lx  %d\n", print_cast( printsh.sh ),
              printsh.shorient);
     }
     sdecode(t->tri[7], printsh);
     if (printsh.sh != dummysh) {
-      printf("    [7] = x%lx  %d\n", (intptr_t) printsh.sh,
+      printf("    [7] = x%lx  %d\n", print_cast( printsh.sh ),
              printsh.shorient);
     }
     sdecode(t->tri[8], printsh);
     if (printsh.sh != dummysh) {
-      printf("    [8] = x%lx  %d\n", (intptr_t) printsh.sh,
+      printf("    [8] = x%lx  %d\n", print_cast( printsh.sh ),
              printsh.shorient);
     }
   }
@@ -3118,19 +3143,19 @@ struct edge *s;
   point printpoint;
 
   printf("shell edge x%lx with orientation %d and mark %d:\n",
-         (intptr_t) s->sh, s->shorient, mark(*s));
+         print_cast( s->sh ), s->shorient, mark(*s));
   sdecode(s->sh[0], printsh);
   if (printsh.sh == dummysh) {
     printf("    [0] = No shell\n");
   } else {
-    printf("    [0] = x%lx  %d\n", (intptr_t) printsh.sh,
+    printf("    [0] = x%lx  %d\n", print_cast( printsh.sh ),
            printsh.shorient);
   }
   sdecode(s->sh[1], printsh);
   if (printsh.sh == dummysh) {
     printf("    [1] = No shell\n");
   } else {
-    printf("    [1] = x%lx  %d\n", (intptr_t) printsh.sh,
+    printf("    [1] = x%lx  %d\n", print_cast( printsh.sh ),
            printsh.shorient);
   }
   sorg(*s, printpoint);
@@ -3138,27 +3163,27 @@ struct edge *s;
     printf("    Origin[%d] = NULL\n", 2 + s->shorient);
   else
     printf("    Origin[%d] = x%lx  (%.12g, %.12g)\n",
-           2 + s->shorient, (intptr_t) printpoint,
+           2 + s->shorient, print_cast( printpoint ),
            printpoint[0], printpoint[1]);
   sdest(*s, printpoint);
   if (printpoint == (point) NULL)
     printf("    Dest  [%d] = NULL\n", 3 - s->shorient);
   else
     printf("    Dest  [%d] = x%lx  (%.12g, %.12g)\n",
-           3 - s->shorient, (intptr_t) printpoint,
+           3 - s->shorient, print_cast( printpoint ),
            printpoint[0], printpoint[1]);
   decode(s->sh[4], printtri);
   if (printtri.tri == dummytri) {
     printf("    [4] = Outer space\n");
   } else {
-    printf("    [4] = x%lx  %d\n", (intptr_t) printtri.tri,
+    printf("    [4] = x%lx  %d\n", print_cast( printtri.tri ),
            printtri.orient);
   }
   decode(s->sh[5], printtri);
   if (printtri.tri == dummytri) {
     printf("    [5] = Outer space\n");
   } else {
-    printf("    [5] = x%lx  %d\n", (intptr_t) printtri.tri,
+    printf("    [5] = x%lx  %d\n", print_cast( printtri.tri ),
            printtri.orient);
   }
 }
@@ -4458,7 +4483,7 @@ REAL permanent;
   REAL cxtaa[8], cxtbb[8], cytaa[8], cytbb[8];
   int cxtaalen, cxtbblen, cytaalen, cytbblen;
   REAL axtbc[8], aytbc[8], bxtca[8], bytca[8], cxtab[8], cytab[8];
-  int axtbclen, aytbclen, bxtcalen, bytcalen, cxtablen, cytablen;
+  int axtbclen=0, aytbclen=0, bxtcalen=0, bytcalen=0, cxtablen=0, cytablen=0;
   REAL axtbct[16], aytbct[16], bxtcat[16], bytcat[16], cxtabt[16], cytabt[16];
   int axtbctlen, aytbctlen, bxtcatlen, bytcatlen, cxtabtlen, cytabtlen;
   REAL axtbctt[8], aytbctt[8], bxtcatt[8];
@@ -8707,7 +8732,7 @@ FILE *polyfile;
   int end[2];
   int killpointindex;
   int incorners;
-  int segmentmarkers;
+  int segmentmarkers=0;
   int boundmarker;
   int aroundpoint;
   long hullsize;
@@ -10393,7 +10418,7 @@ int regions;
 {
   struct triedge searchtri;
   struct triedge triangleloop;
-  struct triedge *regiontris;
+  struct triedge *regiontris=0;
   triangle **holetri;
   triangle **regiontri;
   point searchorg, searchdest;
