@@ -7,7 +7,7 @@
 // this is to get the vcl_ios_* macros.
 #include "vcl_iostream.h"
 
-#if (defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)) || defined(VCL_SGI_CC_720)
+#if (defined(VCL_GCC) && !VCL_CXX_HAS_HEADER_SSTREAM) || defined(VCL_SGI_CC_720)
 # include <strstream.h>
 # include <vcl_string.h>
 
