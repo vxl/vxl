@@ -29,6 +29,7 @@ class vgui_window;
 class brct_windows_frame : public vgui_wrapper_tableau
 {
  public:
+	void show_back_projection();
   void show_next_observes();
   void add_predicted_curve2d(vcl_vector<vgl_point_2d<double> > &pts);
   void show_predicted_curve();

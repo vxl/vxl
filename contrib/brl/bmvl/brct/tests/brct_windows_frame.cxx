@@ -277,3 +277,23 @@ void brct_windows_frame::show_next_observes()
   vcl_vector<vgl_point_2d<double> > c2d = kalman_->get_next_observes();
   add_next_observes(c2d);
 }
+
+void brct_windows_frame::show_back_projection()
+{
+
+  vcl_vector<vgl_point_2d<double> > c2d = kalman_->get_back_projection();
+
+
+  int size = c2d.size();
+  assert(size > 1);
+  instance_->tab_2d_->set_foreground(0, 0, 1);
+  for (int i=0; i<size-1; i++) {
+    vgl_point_2d<double>& s = c2d[i];
+    vgl_point_2d<double>& e = c2d[i+1];
+    vgui_soview2D_lineseg* l = instance_->tab_2d_->add_line(s.x(), s.y(), e.x(), e.y());
+    debug_curves_2d_.push_back(l);
+  }
+
+  instance_->post_redraw();
+  
+}

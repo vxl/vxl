@@ -15,6 +15,7 @@
 class brct_menus
 {
  public:
+	static void show_back_projection();
   static void remove_debug_info();
   static void show_next_observes();
   static void show_predicted_curves();

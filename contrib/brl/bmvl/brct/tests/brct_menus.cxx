@@ -30,9 +30,13 @@ vgui_menu brct_menus::get_menu()
   
   action_menu.add("init", init_kalman_callback, (vgui_key)'i', vgui_CTRL);
   action_menu.add("go", kalman_go_callback, (vgui_key)'g', vgui_CTRL);
+
   debug_menu.add("show prediction", show_predicted_curves, (vgui_key)'p', vgui_CTRL);
   debug_menu.add("show next observes", show_next_observes, (vgui_key)'o', vgui_CTRL);
+  debug_menu.add("show back projection", show_back_projection, (vgui_key)'b', vgui_CTRL);
   debug_menu.add("remove debug info", remove_debug_info, (vgui_key)'r', vgui_CTRL);
+  
+
   menu_bar.add("file", file_menu);
   menu_bar.add("action", action_menu);
   menu_bar.add("debug", debug_menu);
@@ -59,4 +63,9 @@ void brct_menus::show_next_observes()
 void brct_menus::remove_debug_info()
 {
   brct_windows_frame::instance()->remove_debug_info();
+}
+
+void brct_menus::show_back_projection()
+{
+  brct_windows_frame::instance()->show_back_projection();
 }

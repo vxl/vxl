@@ -30,6 +30,7 @@ class kalman_filter
   virtual kalman_state inc(double dt);
 #endif // 0
  public:
+	vcl_vector<vgl_point_2d<double> > get_back_projection();
   vnl_matrix<double> get_predicted_curve();
   vnl_double_3 get_next_motion(vnl_double_3 v);
   vcl_vector<vgl_point_2d<double> > get_pre_observes();
@@ -71,7 +72,6 @@ class kalman_filter
 
  private:
    //: position and confidence of feature samples
-  vcl_vector<vnl_double_3> Xl_;
   vcl_vector<vnl_double_3> curve_3d_;
   vcl_vector<double> prob_;
 
