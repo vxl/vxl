@@ -1,4 +1,4 @@
-# ./oxl/CMakeLists.txt
+# oxl/CMakeLists.txt
 
 PROJECT( oxl )
 
@@ -9,6 +9,7 @@ INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR})
 
 OPTION(BUILD_VGUI "Should the VGUI user interface be built?" YES)
 
+# These four libraries are mutually independent:
 SUBDIRS(mvl oxp vrml osl)
 
 # using vgui:

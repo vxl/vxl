@@ -1,5 +1,6 @@
-# ./brl/bbas/CMakeLists.txt
+# brl/bbas/CMakeLists.txt
 # main package for basic operations common to all libraries
+# All libraries are mutually independent, except for bxml <-- bdgl
 
 # spatial object algorithms
 SUBDIRS(bsol)
