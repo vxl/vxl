@@ -1,3 +1,0 @@
-SOURCE_FILES( jvid_sources
-jvx_manager.h
-)
