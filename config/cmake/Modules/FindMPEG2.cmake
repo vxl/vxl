@@ -6,7 +6,7 @@
 #
 #
 # As per the standard scheme the following definitions are used
-# MPEG2_INCLUDE_DIR - where to find mpeg2.h
+# MPEG2_INCLUDE_DIR - where to find mpeg2dec/mpeg2.h
 # MPEG2_LIBRARIES   - the set of libraries to include to use MPEG2.
 # MPEG2_FOUND       - TRUE, if available somewhere on the system.
 
@@ -30,12 +30,17 @@ ELSE( MPEG2_FOUND )
   # will not have the v3p mpeg2 library
   #
 
-  IF(EXISTS ${allvxl_SOURCE_DIR}/v3p/mpeg2/include/mpeg2.h)
+  IF(EXISTS ${allvxl_SOURCE_DIR}/v3p/mpeg2/include/mpeg2dec/mpeg2.h)
 
     SET( MPEG2_FOUND "YES" )
     SET( MPEG2_LIBRARIES mpeg2 vo )
-    SET( MPEG2_INCLUDE_DIR ${allvxl_SOURCE_DIR}/v3p/mpeg2/include)
+    SET( MPEG2_INCLUDE_DIR
+      ${allvxl_SOURCE_DIR}/v3p/mpeg2/include
+      # use of the following is deprecated
+      # it is better to use #include <mpeg2dec/mpeg2.h> in client code
+      ${allvxl_SOURCE_DIR}/v3p/mpeg2/include/mpeg2dec
+    )
 
-  ENDIF(EXISTS ${allvxl_SOURCE_DIR}/v3p/mpeg2/include/mpeg2.h)
+  ENDIF(EXISTS ${allvxl_SOURCE_DIR}/v3p/mpeg2/include/mpeg2dec/mpeg2.h)
 
 ENDIF( MPEG2_FOUND )
