@@ -61,7 +61,7 @@ extern bool get_image_at(vil1_image*, unsigned, unsigned);
 //   new manager is created and returned.
 //-----------------------------------------------------------------------------
 xcv_twoview_manager* xcv_multiview::get_twoview_manager(vcl_vector<int>& col_pos,
-  vcl_vector<int>& row_pos)
+                                                        vcl_vector<int>& row_pos)
 {
   vgui_rubberband_tableau_sptr rubbers[2];
   rubbers[0] = get_rubberbander_at(col_pos[0], row_pos[0]);
@@ -80,7 +80,7 @@ xcv_twoview_manager* xcv_multiview::get_twoview_manager(vcl_vector<int>& col_pos
     }
   }
 
-  // Above the rubberbander for each tableaux, insert a tjunction tableau to
+  // Above the rubberbander for each tableau, insert a t-junction tableau to
   // collect events.  Create a twoview_manager to pass events between these two
   // and add it to the list of managers:
   xcv_twoview_manager* mgr = new xcv_twoview_manager();
@@ -105,12 +105,12 @@ xcv_twoview_manager* xcv_multiview::get_twoview_manager(vcl_vector<int>& col_pos
 }
 
 //-----------------------------------------------------------------------------
-//: Gets a threeview_manager between the tableax at the given positions.
+//: Gets a threeview_manager between the tableaux at the given positions.
 //   If a manager already exists then this manager is returned, otherwise a
 //   new manager is created and returned.
 //-----------------------------------------------------------------------------
 xcv_threeview_manager* xcv_multiview::get_threeview_manager(vcl_vector<int>& col_pos,
-  vcl_vector<int>& row_pos)
+                                                            vcl_vector<int>& row_pos)
 {
   vgui_rubberband_tableau_sptr rubbers[3];
   for (int i=0; i<3; i++)
