@@ -16,4 +16,4 @@ static void mil_add_all_loaders()
   vsl_add_to_binary_loader(mil_image_2d_of<vil_byte>());
 }
 
-#endif mil_all_h_
+#endif //mil_all_h_
