@@ -18,7 +18,8 @@
 // .SECTION Author
 //    Andrew W. Fitzgibbon, Oxford RRG, 09 Dec 96
 
-#include <vnl/vnl_matops.h>
+#include <vnl/vnl_vector.h>
+#include <vnl/vnl_matrix.h>
 
 class vnl_fastops {
 public:
