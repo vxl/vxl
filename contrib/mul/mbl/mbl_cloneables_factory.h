@@ -98,8 +98,8 @@ class mbl_cloneables_factory
 #define MBL_CLONEABLES_FACTORY_INSTANTIATE(T) \
 template class mbl_cloneables_factory< T >; \
 template <class BASE > \
-vcl_auto_ptr<mbl_cloneables_factory<BASE >::MAP > \
+vcl_auto_ptr<typename mbl_cloneables_factory<BASE >::MAP > \
   mbl_cloneables_factory<BASE >::objects_ =  \
-    vcl_auto_ptr<mbl_cloneables_factory<BASE >::MAP >(0)
+    vcl_auto_ptr<typename mbl_cloneables_factory<BASE >::MAP >(0)
 
 #endif  // mbl_cloneables_factory_h
