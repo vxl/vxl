@@ -130,7 +130,7 @@ void test_algo_convolve_1d_double()
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 
-  vcl_cout << "\n\nvil2_convolve_1d(vil_image_resource_sptr&,...)\n";
+  vcl_cout << "\n\nvil_convolve_1d(vil_image_resource_sptr&,...)\n";
 
   vil_image_resource_sptr mem = vil_new_image_resource(n,n,1,VIL_PIXEL_FORMAT_BYTE);
   vil_image_view<vxl_byte> v(n,n,1), v_out(n,n,1);
