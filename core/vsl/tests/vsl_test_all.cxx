@@ -1,5 +1,4 @@
 #include <vsl/vsl_fwd.h>
-#include <vsl/vsl_test.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_explicit_io.h>
 #include <vsl/vsl_binary_loader_base.h>
