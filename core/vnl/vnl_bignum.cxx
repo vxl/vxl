@@ -227,7 +227,8 @@ static bool is_exponential(const char* s, vcl_istream** is = 0)
   while (c >= '0' && c <= '9') c = next(s,is);
   if (c != 'e' && c != 'E') return false;
   c = next(s,is);
-  if (c < '1' || c > '9') return false;
+  if (c == '+') c = next(s,is); // no negative exponent!
+  if (c < '0' || c > '9') return false;
   while (c >= '0' && c <= '9') c = next(s,is);
   if (rt_pos > 0) rt[++rt_pos] = '\0';
   return is ? true : c == '\0';
@@ -271,7 +272,7 @@ static bool is_octal(const char* s, vcl_istream** is = 0)
 vnl_bignum::vnl_bignum (const char *s)
 : count(0), sign(1), data(0) {
   // decimal:     "^ *[-+]?[1-9][0-9]*$"
-  // exponential: "^ *[-+]?[1-9][0-9]*[eE][1-9][0-9]*$"
+  // exponential: "^ *[-+]?[1-9][0-9]*[eE][+]?[0-9]+$"
   // hexadecimal: "^ *[-+]?0[xX][0-9a-fA-F]+$"
   // octal:       "^ *[-+]?0[0-7]*$"
 
@@ -293,16 +294,16 @@ vnl_bignum::vnl_bignum (const char *s)
 vcl_istream& operator>> (vcl_istream& is, vnl_bignum& x)
 {
   // decimal:     "^ *[-+]?[1-9][0-9]*$"
-  // exponential: "^ *[-+]?[1-9][0-9]*[eE][1-9][0-9]*$"
+  // exponential: "^ *[-+]?[1-9][0-9]*[eE][+]?[0-9]+$"
   // hexadecimal: "^ *[-+]?0[xX][0-9a-fA-F]+$"
   // octal:       "^ *[-+]?0[0-7]*$"
   vcl_istream* isp = &is;
   rt[0] = '\0';
 
-  if (is_decimal(rt,&isp))              // If input stream string is decimal
-    x.dtoBigNum(rt);                    // convert decimal to vnl_bignum
-  else if (is_exponential(rt,&isp))     // If string is exponential
+  if (is_exponential(rt,&isp))          // If input stream string is exponential
     x.exptoBigNum(rt);                  // convert exp. to vnl_bignum
+  else if (is_decimal(rt,&isp))         // If string is decimal
+    x.dtoBigNum(rt);                    // convert decimal to vnl_bignum
   else if (is_hexadecimal(rt,&isp))     // If string is hex,
     x.xtoBigNum(rt);                    // convert hex to vnl_bignum
   else if (is_octal(rt,&isp))           // If string is octal
