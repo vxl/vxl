@@ -13,6 +13,7 @@ DECLARE( test_algo_binary_erode );
 DECLARE( test_algo_exp_filter );
 DECLARE( test_algo_grad_1x3 );
 DECLARE( test_image_resource );
+DECLARE( test_algo_normalised_correlation_3d );
 
 void
 register_tests()
@@ -30,6 +31,7 @@ register_tests()
   REGISTER( test_algo_binary_erode );
   REGISTER( test_algo_exp_filter );
   REGISTER( test_algo_grad_1x3 );
+  REGISTER( test_algo_normalised_correlation_3d );
 }
 
 DEFINE_MAIN;
