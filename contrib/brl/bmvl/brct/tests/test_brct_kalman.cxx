@@ -11,9 +11,9 @@
 int main(int argc, char **argv)
 {
   vgui::init(argc, argv);
-
-  // set up components of window: menu, scroll bar etc.
-  vcl_string title = "Brown Reconstruction Demo";
+ 
+	// set up components of window: menu, scroll bar etc.
+  vcl_string title = "Brown Reconstruction Demo (kk)";
   vgui_menu bar = brct_menus::get_menu();
   vgui_window* win = vgui::produce_window(800, 600, bar, title);
   win->get_adaptor()->set_tableau(brct_windows_frame::instance());
@@ -22,8 +22,7 @@ int main(int argc, char **argv)
   win->enable_vscrollbar(true);
   win->enable_hscrollbar(true);
   win->show();
-
+  brct_windows_frame::instance()->post_redraw();
   return vgui::run();
 
-  // return vgui::run(brct_windows_frame::instance(), 800, 600, title);
 }

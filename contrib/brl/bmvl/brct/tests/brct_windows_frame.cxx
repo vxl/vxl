@@ -4,10 +4,14 @@
 
 #include "brct_windows_frame.h"
 #include <vcl_cstdlib.h> // for vcl_exit()
+#include <vcl_iostream.h>
+#include <vcl_cassert.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_easy3D_tableau.h>
 #include <vgui/vgui_viewer3D_tableau.h>
+#include <vgui/vgui_easy2D_tableau.h>
+#include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 #include "brct_menus.h"
@@ -71,8 +75,21 @@ void brct_windows_frame::init()
 
   vgui_viewer3D_tableau_sptr v3d = vgui_viewer3D_tableau_new(tab_3d_);
   grid_->add_at(v3d, col+1, row);
-  vgui_shell_tableau_sptr shell = vgui_shell_tableau_new(grid_);
-   this->add_child(shell);
+  
+  // initialize the easy 2d grid
+  vgui_easy2D_tableau_new tab2d;
+  
+  tab_2d_ = tab2d;
+  tab_2d_->set_foreground(0, 0, 1);
+
+  vgui_viewer2D_tableau_sptr v2d = vgui_viewer2D_tableau_new(tab_2d_);
+  grid_->add_at(v2d, col, row);
+
+	vgui_shell_tableau_sptr shell = vgui_shell_tableau_new(grid_);
+ 	this->add_child(shell);
+
+  // set a kalman filter
+  kalman_ = new kalman_filter();
 }
 
 //=========================================================================
@@ -89,25 +106,69 @@ bool brct_windows_frame::handle(const vgui_event &e)
 
 void brct_windows_frame::quit()
 {
+  clean_up();
   vcl_exit(1);
 }
 
-void brct_windows_frame::add_curve3d(vcl_vector<vgl_point_3d<double> >& pts)
+void brct_windows_frame::clean_up()
+{
+  if(kalman_)
+    delete kalman_;
+}
+
+void brct_windows_frame::add_curve2d(vcl_vector<vgl_point_2d<double> > &pts)
 {
   int size = pts.size();
-  points_3d_.resize(size);
-  instance_->tab_3d_->set_foreground(1, 1, 1);
-  for (int i=0; i<size-1; i++) {
-    vgl_point_3d<double>& s = pts[i];
-    vgl_point_3d<double>& e = pts[i+1];
-    instance_->tab_3d_->add_line(s.x(), s.y(), s.z(), e.x(), e.y(), e.z());
+  assert(size > 1);
+  curves_2d_.resize(size-1);
+  instance_->tab_2d_->set_foreground(1, 1, 1);
+  for(int i=0; i<size-1; i++){
+    vgl_point_2d<double>& s = pts[i];
+    vgl_point_2d<double>& e = pts[i+1];
+    vgui_soview2D_lineseg* l = instance_->tab_2d_->add_line(s.x(), s.y(), e.x(), e.y());
+    curves_2d_[i] = l;
   }
 
   instance_->post_redraw();
 }
 
+void brct_windows_frame::remove_curve2d()
+{
+  curves_2d_.clear();
+  this->post_redraw();
+}
+
+void brct_windows_frame::add_curve3d(vcl_vector<vgl_point_3d<double> >& pts)
+{
+  int size = pts.size();
+  assert(size > 1);
+  curves_3d_.resize(size-1);
+  instance_->tab_3d_->set_foreground(1, 1, 1);
+  for (int i=0; i<size-1; i++) {
+    vgl_point_3d<double>& s = pts[i];
+    vgl_point_3d<double>& e = pts[i+1];
+    vgui_lineseg3D* l = instance_->tab_3d_->add_line(s.x(), s.y(), s.z(), e.x(), e.y(), e.z());
+    curves_3d_[i] = l;
+  }
+  instance_->post_redraw();
+}
+
 void brct_windows_frame::remove_curve3d()
 {
-  points_3d_.clear();
+  curves_3d_.clear();
   this->post_redraw();
+}
+
+void brct_windows_frame::init_kalman()
+{
+  if(kalman_ == 0)
+    vcl_cout<<"brct_windows_frame::kalman_ not created yet\n";
+  else{
+    kalman_->read_data("data/curves.txt");
+    kalman_->init();
+  }
+
+  //update the display.
+  vcl_vector<vgl_point_3d<double> > c=kalman_->get_local_pts();
+  add_curve3d(c);
 }
