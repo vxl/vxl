@@ -8,18 +8,13 @@
 #include "vil2_dicom.h"
 
 #include <vcl_cassert.h>
-#include <vcl_vector.h>
-
 #include <vcl_iostream.h>
-#include <vcl_cstring.h>
 
 #include <vxl_config.h> // for VXL_BIG_ENDIAN and vxl_byte
 
 #include <vil2/vil2_stream.h>
 #include <vil2/vil2_image_resource.h>
 #include <vil2/vil2_image_view.h>
-#include <vil2/vil2_crop.h>
-#include <vil2/vil2_convert.h>
 
 
 char const* vil2_dicom_format_tag = "dicom";
@@ -87,7 +82,7 @@ bool isEncapsulated(vil2_dicom_header_image_type im_type)
 
 
 void imageSwap(char *in_im, int num_bytes,
-                 vil2_dicom_header_info dhi)
+               vil2_dicom_header_info dhi)
 {
   char swaps[2];
   int row_num;
@@ -113,10 +108,8 @@ void imageSwap(char *in_im, int num_bytes,
 }
 
 
-
-
 char *convert12to16(char *im, vil2_dicom_header_info dhi,
-                  bool del_old=true)
+                    bool del_old=true)
 {
   int new_im_size=(dhi.dimx_*2) * dhi.dimy_;
   char *new_im=new char[new_im_size];
@@ -234,7 +227,7 @@ char const* vil2_dicom_image::file_format() const
 }
 
 vil2_dicom_image::vil2_dicom_image(vil2_stream* vs, unsigned ni, unsigned nj,
-                               unsigned nplanes, vil2_pixel_format format):
+                                   unsigned nplanes, vil2_pixel_format format):
   vs_(vs)
 {
   assert(!"vil2_dicom_image doesn't yet support output");
@@ -254,12 +247,11 @@ vil2_dicom_image::~vil2_dicom_image()
 }
 
 
-
 enum vil2_pixel_format vil2_dicom_image::pixel_format() const
 {
   unsigned bytes_read;
   if (header_.allocated_bits_ == 16 ||
-    header_.allocated_bits_ == 12)
+      header_.allocated_bits_ == 12)
     bytes_read = 2;
   else
     bytes_read = 1;
@@ -301,8 +293,8 @@ vil2_image_view_base_sptr vil2_dicom_image::get_copy_view(
   // otherwise just read the data
   if (isEncapsulated(header_.image_type_))
   {
-    vcl_cerr << "ERROR: vil2_dicom_image::get_copy_view\n" <<
-      "       Can't read DICOM images with encapsulated image types" << vcl_endl;
+    vcl_cerr<< "ERROR: vil2_dicom_image::get_copy_view\n"
+            << "       Can't read DICOM images with encapsulated image types\n";
     return 0;
   }
 
@@ -342,8 +334,7 @@ vil2_image_view_base_sptr vil2_dicom_image::get_copy_view(
 
   // First, if it's 12 bit convert to 16
   if (header_.allocated_bits_ == 12)
-    void_im = (void *)convert12to16((char *) void_im,
-                                  header_);
+    void_im = (void *)convert12to16((char *) void_im, header_);
 
   // Do any swapping necessary
   imageSwap((char *)void_im,bytes_read,header_);
@@ -731,4 +722,4 @@ void vil2_dicom_image::charSwap(char *char_in, int val_size)
   } // End of if (head_info.file_endian_...
 } // End of vil2_dicom_image::charSwap
 
-#endif
+#endif // 0
