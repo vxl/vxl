@@ -21,10 +21,6 @@ SOURCES += vgl_window_scan_iterator.cxx
 SOURCES += vgl_polygon_scan_iterator.cxx
 # coming soon: vgl_ellipse_scan_iterator.cxx
 
-ifeq (1,$(strip $(GNU_LIBSTDCXX_V3)))
-FLAGS_Templates/vcl_vector+vgl_polygon-.cxx += -ftemplate-depth-100
-endif
-
 MANPAGE_SOURCES += vgl_point_2d.txx
 MANPAGE_SOURCES += vgl_homg_point_2d.txx
 MANPAGE_SOURCES += vgl_point_3d.txx
