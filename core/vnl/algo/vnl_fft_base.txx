@@ -4,6 +4,7 @@
   fsm@robots.ox.ac.uk
 */
 #include "vnl_fft_base.h"
+#include <vnl/algo/vnl_fft.h>
 #include <vcl_cassert.h>
 
 template <int D, class T>
