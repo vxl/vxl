@@ -19,9 +19,10 @@
 // \endverbatim
 //
 //-------------------------------------------------------------------------
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
+#include <vcl_string.h>
 #include <vbl/vbl_ref_count.h>
-#include <vsl/vsl_binary_io.h>
+#include <vsl/vsl_fwd.h>
 #include <vgl/vgl_point_2d.h>
 
 class bmrf_epi_point:  public vbl_ref_count
@@ -32,16 +33,44 @@ class bmrf_epi_point:  public vbl_ref_count
                  const double s,
                  const double grad_mag,
                  const double grad_ang,
-                 const double tan_ang);
+                 const double tan_ang)
+  : p_(p)
+  , alpha_(alpha)
+  , s_(s)
+  , grad_mag_(grad_mag)
+  , grad_ang_(grad_ang)
+  , tan_ang_(tan_ang) {}
+
+  bmrf_epi_point(bmrf_epi_point const& p)
+  : vbl_ref_count()
+  , p_(p.p_)
+  , alpha_(p.alpha_)
+  , s_(p.s_)
+  , grad_mag_(p.grad_mag_)
+  , grad_ang_(p.grad_ang_)
+  , tan_ang_(p.tan_ang_) {}
 
   bmrf_epi_point(const double x, const double y,
                  const double alpha,
                  const double s,
                  const double grad_mag,
                  const double grad_ang,
-                 const double tan_ang);
+                 const double tan_ang)
+  : p_(x,y)
+  , alpha_(alpha)
+  , s_(s)
+  , grad_mag_(grad_mag)
+  , grad_ang_(grad_ang)
+  , tan_ang_(tan_ang) {}
 
-  bmrf_epi_point();
+  bmrf_epi_point()
+  : p_(0,0)
+  , alpha_(0)
+  , s_(0)
+  , grad_mag_(-1)
+  , grad_ang_(0)
+  , tan_ang_(0) {}
+
   virtual ~bmrf_epi_point() {}
 
   //: accessors
@@ -75,10 +104,10 @@ class bmrf_epi_point:  public vbl_ref_count
   void print_summary(vcl_ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  vcl_string is_a() const;
+  vcl_string is_a() const { return vcl_string("bmrf_epi_point"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  bool is_class(const vcl_string& cls) const;
+  bool is_class(const vcl_string& cls) const { return cls==bmrf_epi_point::is_a(); }
 
  protected:
   vgl_point_2d<double> p_;
@@ -88,6 +117,7 @@ class bmrf_epi_point:  public vbl_ref_count
   double grad_ang_; //gradient angle
   double tan_ang_;  //curve tangent at point
 };
+
 vcl_ostream&  operator<<(vcl_ostream& s, bmrf_epi_point const& ep);
 
 #include <bmrf/bmrf_epi_point_sptr.h>

@@ -22,14 +22,17 @@
 #include <vcl_map.h>
 #include <vcl_utility.h>
 
-
 //: An uncertain 3D curve element
 class bmrf_curvel_3d : public bugl_gaussian_point_3d<double>, public vbl_ref_count
 {
  public:
   //: Constructor
   bmrf_curvel_3d();
+  //: Copy constructor
+  bmrf_curvel_3d(bmrf_curvel_3d const& c);
+  //: Constructor
   bmrf_curvel_3d(vgl_point_3d<double> &p, vnl_double_3x3 &s);
+  //: Constructor
   bmrf_curvel_3d(double x, double y, double z, vnl_double_3x3 & s);
 
   //: Destructor
@@ -39,7 +42,7 @@ class bmrf_curvel_3d : public bugl_gaussian_point_3d<double>, public vbl_ref_cou
   // \return false if merging is not possible
   bool merge(const bmrf_curvel_3d_sptr& other);
 
-  //: Set the projection of this curvel into \p frame as the segment in 
+  //: Set the projection of this curvel into \p frame as the segment in
   //  \p node at the value \p alpha
   void set_proj_in_frame(unsigned int frame, double alpha, const bmrf_node_sptr& node);
 
@@ -92,7 +95,7 @@ class bmrf_curvel_3d : public bugl_gaussian_point_3d<double>, public vbl_ref_cou
 
   //: The sum of gamma values of all projections relative to the frame 0
   double sum_gamma_;
-  
+
   //: The sum of the squared gamma values relative to frame 0;
   double sum_sqr_gamma_;
 

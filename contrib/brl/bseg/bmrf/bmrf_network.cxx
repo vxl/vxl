@@ -9,12 +9,6 @@
 #include <vbl/io/vbl_io_smart_ptr.h>
 
 
-//: Constructor
-bmrf_network::bmrf_network()
-{
-}
-
-
 //: Adds a new to the network
 bool
 bmrf_network::add_node(const bmrf_node_sptr& node)

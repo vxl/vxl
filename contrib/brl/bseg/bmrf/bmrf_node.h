@@ -43,8 +43,11 @@ class bmrf_node : public vbl_ref_count
   //: Constructor
   bmrf_node( const bmrf_epi_seg_sptr& epi_seg = NULL, int frame_num = 0 );
 
+  //: Copy constructor
+  bmrf_node(bmrf_node const& n);
+
   //: Destructor
-  ~bmrf_node(){}
+  ~bmrf_node() {}
 
   //: Return the probability of this node
   // \note probability is computed as needed

@@ -14,9 +14,19 @@
 //: Constructor
 bmrf_arc::bmrf_arc()
   : from_(NULL), to_(NULL), probability_(-1.0),
-    min_alpha_(0.0), max_alpha_(0.0), 
+    min_alpha_(0.0), max_alpha_(0.0),
     gamma_(0.0), inv_gamma_(0.0),
     avg_intensity_error_(0.0), induced_match_error_(0.0)
+{
+}
+
+
+//: Copy constructor
+bmrf_arc::bmrf_arc(bmrf_arc const& a)
+  : vbl_ref_count(), from_(a.from_), to_(a.to_), probability_(a.probability_),
+    min_alpha_(a.min_alpha_), max_alpha_(a.max_alpha_),
+    gamma_(a.gamma_), inv_gamma_(a.inv_gamma_),
+    avg_intensity_error_(a.avg_intensity_error_), induced_match_error_(a.induced_match_error_)
 {
 }
 
@@ -24,7 +34,7 @@ bmrf_arc::bmrf_arc()
 //: Constructor
 bmrf_arc::bmrf_arc( const bmrf_node_sptr& f, const bmrf_node_sptr& t)
   : from_(f.ptr()), to_(t.ptr()), probability_(-1.0),
-    min_alpha_(0.0), max_alpha_(0.0), 
+    min_alpha_(0.0), max_alpha_(0.0),
     gamma_(0.0), inv_gamma_(0.0),
     avg_intensity_error_(0.0), induced_match_error_(0.0)
 {

@@ -17,9 +17,6 @@ struct bmrf_tranformed_epi_seg : public bmrf_epi_seg
                            double t, bool update_all )
     : bmrf_epi_seg(*ep)
   {
-    // Do not keep the ref_count of the object we are copying
-    // ref_count must be reset to 0 or there will be a memory leak
-    this->ref_count = 0;
     for (vcl_vector<bmrf_epi_point_sptr>::iterator s_itr = this->seg_.begin();
          s_itr != seg_.end();  ++s_itr) {
       *s_itr = bmrf_epi_transform(*s_itr, gamma, t, update_all);
@@ -34,7 +31,6 @@ struct bmrf_tranformed_epi_point : public bmrf_epi_point
   bmrf_tranformed_epi_point( const bmrf_epi_point_sptr& ep )
     : bmrf_epi_point( *ep )
   {
-    this->ref_count = 0;
   }
 };
 

@@ -27,12 +27,14 @@ class bmrf_arc : public vbl_ref_count
 
   //: Constructor
   bmrf_arc();
+  //: Copy constructor
+  bmrf_arc(bmrf_arc const& a);
   //: Constructor
   bmrf_arc( const bmrf_node_sptr& f, const bmrf_node_sptr& t);
   //: Destructor
   ~bmrf_arc() {}
 
-  //: Produce a new arc which is the reverse of this one efficiently 
+  //: Produce a new arc which is the reverse of this one efficiently
   bmrf_arc_sptr reverse() const;
 
   //: Binary save self to stream.
@@ -83,7 +85,7 @@ class bmrf_arc : public vbl_ref_count
 
   double probability_;
   double min_alpha_, max_alpha_;
-  
+
   double gamma_, inv_gamma_;
   double avg_intensity_error_;
   double induced_match_error_;

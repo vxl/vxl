@@ -33,11 +33,36 @@
 #include <bmrf/bmrf_epi_point_sptr.h>
 #include <bmrf/bmrf_epi_seg_sptr.h>
 
-class bmrf_epi_seg :  public vbl_ref_count
+class bmrf_epi_seg : public vbl_ref_count
 {
  public:
-
   bmrf_epi_seg();
+  bmrf_epi_seg(bmrf_epi_seg const& s) : vbl_ref_count(),
+                                        limits_valid_(s.limits_valid_),
+                                        int_valid_(s.int_valid_),
+                                        min_index_(s.min_index_),
+                                        max_index_(s.max_index_),
+                                        min_alpha_(s.min_alpha_),
+                                        max_alpha_(s.max_alpha_),
+                                        min_s_(s.min_s_),
+                                        max_s_(s.max_s_),
+                                        avg_tan_ang_(s.avg_tan_ang_),
+                                        min_tan_ang_(s.min_tan_ang_),
+                                        max_tan_ang_(s.max_tan_ang_),
+                                        seg_(s.seg_),
+                                        int_alpha_(s.int_alpha_),
+                                        left_ds_(s.left_ds_),
+                                        left_int_(s.left_int_),
+                                        right_ds_(s.right_ds_),
+                                        right_int_(s.right_int_),
+                                        avg_left_int_(s.avg_left_int_),
+                                        avg_right_int_(s.avg_right_int_),
+                                        left_int_sd_(s.left_int_sd_),
+                                        right_int_sd_(s.right_int_sd_),
+                                        min_left_int_(s.min_left_int_),
+                                        max_left_int_(s.max_left_int_),
+                                        min_right_int_(s.min_right_int_),
+                                        max_right_int_(s.max_right_int_) {}
   bmrf_epi_seg(vcl_vector<bmrf_epi_point_sptr> const & points);
   virtual ~bmrf_epi_seg() {}
 

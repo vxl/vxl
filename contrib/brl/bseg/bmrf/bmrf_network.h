@@ -37,10 +37,16 @@ class bmrf_network : public vbl_ref_count
   typedef bmrf_node::neighbor_type neighbor_type;
 
   //: Constructor
-  bmrf_network();
+  bmrf_network() {}
+
+  //: Copy constructor
+  bmrf_network(bmrf_network const& n) : vbl_ref_count(),
+                                        node_from_seg_(n.node_from_seg_),
+                                        nodes_from_frame_(n.nodes_from_frame_),
+                                        epipoles_(n.epipoles_) {}
 
   //: Destructor
-  ~bmrf_network(){}
+  ~bmrf_network() {}
 
   //: Adds a new to the network
   // \retval true if the node was added

@@ -20,6 +20,14 @@ bmrf_node::bmrf_node( const bmrf_epi_seg_sptr& epi_seg, int frame_num)
 {
 }
 
+//: Copy constructor
+bmrf_node::bmrf_node(bmrf_node const& n)
+  : vbl_ref_count(),
+    segment_(n.segment_), frame_num_(n.frame_num_), probability_(n.probability_),
+    out_arcs_(n.out_arcs_), in_arcs_(n.in_arcs_), boundaries_(n.boundaries_), sizes_(n.sizes_)
+{
+}
+
 //: Strip all of the arcs from this node
 void
 bmrf_node::strip()
@@ -159,7 +167,7 @@ bmrf_node::prune_by_probability(double threshold, bool relative)
 
 
 //: Prune neighbors with a gamma outside this range
-void 
+void
 bmrf_node::prune_by_gamma(double min_gamma, double max_gamma)
 {
   for ( arc_iterator a_itr = this->begin(TIME);
@@ -169,30 +177,30 @@ bmrf_node::prune_by_gamma(double min_gamma, double max_gamma)
 
     arc_iterator next_itr = a_itr;
     ++next_itr;
-    if( gamma < min_gamma || gamma > max_gamma ){
+    if ( gamma < min_gamma || gamma > max_gamma ){
       remove_helper(a_itr, TIME);
     }
     a_itr = next_itr;
   }
 }
 
- 
+
 //: Prune directed arcs leaving only arcs to nodes which have arcs back to this node
-void 
+void
 bmrf_node::prune_directed()
 {
   for (int t = 0; t<ALL; ++t){
     for (arc_iterator o_itr = boundaries_[t]; o_itr != boundaries_[t+1]; ) {
       bool found = false;
       for ( arc_iterator i_itr = in_arcs_.begin();
-            i_itr != in_arcs_.end(); ++i_itr ) 
-        if( (*i_itr)->from_ == (*o_itr)->to_ ){
+            i_itr != in_arcs_.end(); ++i_itr )
+        if ( (*i_itr)->from_ == (*o_itr)->to_ ){
           found = true;
           break;
         }
-      if(!found){
+      if (!found){
         arc_iterator next_itr = o_itr;
-        ++next_itr; 
+        ++next_itr;
         remove_helper(o_itr, neighbor_type(t));
         o_itr = next_itr;
       }
@@ -217,7 +225,7 @@ bmrf_node::probability(const bmrf_gamma_func_sptr& gamma)
     bmrf_node_sptr neighbor = (*a_itr)->to();
     int time_step = neighbor->frame_num() - this->frame_num();
     double error;
-    switch(time_step) {
+    switch (time_step) {
      case -1:
       error = bmrf_match_error(prev_seg, neighbor->epi_seg());
       break;
@@ -267,7 +275,7 @@ bmrf_node::add_neighbor( const bmrf_node_sptr& node, neighbor_type type )
 
 
 //: Add an arc \p arc of type \p type
-bool 
+bool
 bmrf_node::add_arc( const bmrf_arc_sptr& arc, neighbor_type type )
 {
   if ( !arc.ptr() || arc->from_ != this || arc->to_ == this || type == ALL)
@@ -423,55 +431,55 @@ bmrf_node::b_read( vsl_b_istream& is )
 
   short ver;
   vsl_b_read(is, ver);
-  switch(ver)
+  switch (ver)
   {
-  case 1:
-    {
-      vsl_b_read(is, this->segment_);
-      vsl_b_read(is, this->frame_num_);
-      vsl_b_read(is, this->probability_);
+   case 1:
+   {
+    vsl_b_read(is, this->segment_);
+    vsl_b_read(is, this->frame_num_);
+    vsl_b_read(is, this->probability_);
 
-      out_arcs_.clear();
-      boundaries_.clear();
-      boundaries_.resize(ALL+1, out_arcs_.end());
+    out_arcs_.clear();
+    boundaries_.clear();
+    boundaries_.resize(ALL+1, out_arcs_.end());
 
-      int num_neighbors = 0;
-      for (int t=0; t<ALL; ++t) {
-        vsl_b_read(is, sizes_[t]);
-        num_neighbors += sizes_[t];
-      }
-      int type = 0;
-      int b_loc = sizes_[0];
-      for (int n=0; n<num_neighbors; ++n) {
-        bmrf_arc_sptr arc_ptr;
-        vsl_b_read(is, arc_ptr);
-        arc_ptr->from_ = this;
-        if (arc_ptr->to_)
-          arc_ptr->time_init();
-        out_arcs_.push_back(arc_ptr);
+    int num_neighbors = 0;
+    for (int t=0; t<ALL; ++t) {
+      vsl_b_read(is, sizes_[t]);
+      num_neighbors += sizes_[t];
+    }
+    int type = 0;
+    int b_loc = sizes_[0];
+    for (int n=0; n<num_neighbors; ++n) {
+      bmrf_arc_sptr arc_ptr;
+      vsl_b_read(is, arc_ptr);
+      arc_ptr->from_ = this;
+      if (arc_ptr->to_)
+        arc_ptr->time_init();
+      out_arcs_.push_back(arc_ptr);
 
-        while (type < ALL && n == b_loc) {
-          boundaries_[++type] = out_arcs_.end();
-          --boundaries_[type];
-          b_loc += sizes_[type];
-        }
-      }
-      boundaries_[0] = out_arcs_.begin();
-
-      unsigned int num_incoming;
-      vsl_b_read(is, num_incoming);
-      for (unsigned int n=0; n<num_incoming; ++n) {
-        bmrf_arc_sptr arc_ptr;
-        vsl_b_read(is, arc_ptr);
-        arc_ptr->to_ = this;
-        if (arc_ptr->from_)
-          arc_ptr->time_init();
-        in_arcs_.push_back(arc_ptr);
+      while (type < ALL && n == b_loc) {
+        boundaries_[++type] = out_arcs_.end();
+        --boundaries_[type];
+        b_loc += sizes_[type];
       }
     }
-    break;
+    boundaries_[0] = out_arcs_.begin();
 
-  default:
+    unsigned int num_incoming;
+    vsl_b_read(is, num_incoming);
+    for (unsigned int n=0; n<num_incoming; ++n) {
+      bmrf_arc_sptr arc_ptr;
+      vsl_b_read(is, arc_ptr);
+      arc_ptr->to_ = this;
+      if (arc_ptr->from_)
+        arc_ptr->time_init();
+      in_arcs_.push_back(arc_ptr);
+    }
+    break;
+   }
+
+   default:
     vcl_cerr << "I/O ERROR: bmrf_node::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
@@ -494,7 +502,6 @@ bmrf_node::print_summary( vcl_ostream& os ) const
 {
   os << "pr=" << probability_ << ", frame=" << frame_num_;
 }
-
 
 
 //-----------------------------------------------------------------------------------------

@@ -22,6 +22,9 @@
 class bmrf_gamma_func : public vbl_ref_count
 {
  public:
+  bmrf_gamma_func() : vbl_ref_count() {}
+  bmrf_gamma_func(bmrf_gamma_func const& ) : vbl_ref_count() {}
+
   //: Return the gamma value for any \p alpha and time \p t.
   // Calls a pure virtual function
   double operator () (double alpha, double t=1.0) const
@@ -41,17 +44,19 @@ class bmrf_const_gamma_func : public bmrf_gamma_func
 {
  public:
   //: Constructor
-  explicit bmrf_const_gamma_func(double gamma = 0.0);
+  explicit bmrf_const_gamma_func(double gamma = 0.0) : gamma_(gamma) {}
 
   //: Set the constant gamma value
-  void set_gamma(double gamma);
+  void set_gamma(double gamma) { gamma_ = gamma; }
 
-  //: Returns the average gamma value at time \p t
-  virtual double mean(double t=1.0) const;
+  //: Returns the constant average gamma value at time \p t.
+  //  Here, this value is independent of \t t
+  double mean(double /*t*/=1.0) const { return gamma_; }
 
  protected:
-  //: Return the gamma value for any \p alpha and time \p t
-  virtual double value(double alpha, double t) const;
+  //: Return the constant gamma value for any \p alpha and time \p t.
+  //  Here, gamma is independent of \p alpha and of \p t
+  virtual double value(double /*alpha*/, double /*t*/) const { return gamma_; }
 
  private:
   //: The constant gamma value
@@ -63,18 +68,20 @@ class bmrf_const_gamma_func : public bmrf_gamma_func
 class bmrf_linear_gamma_func : public bmrf_gamma_func
 {
  public:
-  //: Constructor
-  bmrf_linear_gamma_func(double m = 0.0, double b = 0.0);
+  // Constructor
+  bmrf_linear_gamma_func(double m = 0.0, double b = 0.0) : m_(m), b_(b) {}
 
-  //: Set the linear function paramaters
-  void set_params(double m, double b);
+  //: Set the linear function parameters
+  void set_params(double m, double b) { m_ = m; b_ = b; }
 
-  //: Returns the average gamma value at time \pt
-  virtual double mean(double t=1.0) const;
+  //: Return the average gamma value at time \p t
+  //  Here, this value is independent of t
+  virtual double mean(double /*t*/=1.0) const { return b_; }
 
  protected:
   //: Return the gamma value for any \p alpha and time \p t
-  virtual double value(double alpha, double t) const;
+  //  Here, this value is independent of t
+  virtual double value(double alpha, double /*t*/) const { return m_*alpha+b_; }
 
  private:
   //: The function parameters
