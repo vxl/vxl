@@ -5,6 +5,7 @@
 // \file
 // \author Tim Cootes
 
+#include <vcl_cstddef.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/io/vil2_io_memory_chunk.h>
 #include <vil2/io/vil2_io_smart_ptr.h>
@@ -25,7 +26,7 @@ inline void vsl_b_write(vsl_b_ostream &os, const vil2_image_view<T>& image)
   {
     vsl_b_write(os, image.memory_chunk());
 
-    long offset = (image.top_left_ptr()-(const T*)image.memory_chunk()->data());
+    vcl_ptrdiff_t offset = (image.top_left_ptr()-(const T*)image.memory_chunk()->data());
     vsl_b_write(os, offset);
   }
 }
@@ -40,7 +41,7 @@ inline void vsl_b_read(vsl_b_istream &is, vil2_image_view<T>& image)
   unsigned ni,nj,np;
   int istep,jstep,pstep;
   vil2_memory_chunk_sptr chunk;
-  long offset;
+  vcl_ptrdiff_t offset;
 
   short w;
   vsl_b_read(is, w);
