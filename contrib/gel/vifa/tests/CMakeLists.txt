@@ -2,7 +2,7 @@
 
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg)
 
-LINK_LIBRARIES( vbl vil vil1 vgl vnl vul testlib vifa gevd vdgl vsol vtol sdet )
+LINK_LIBRARIES( vifa sdet vtol vdgl vil vil1 vgl testlib )
 
 ADD_EXECUTABLE( vifa_test_all
   test_ifa_factory.h

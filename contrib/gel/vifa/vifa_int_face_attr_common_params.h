@@ -23,7 +23,7 @@
 #include <gevd/gevd_param_mixin.h>
 #include <vul/vul_timestamp.h>
 #include <vbl/vbl_ref_count.h>
-#include <sdet/sdet_fit_lines_params.h>
+#include <vdgl/vdgl_fit_lines_params.h>
 #include <vifa/vifa_coll_lines_params.h>
 #include <vifa/vifa_group_pgram_params.h>
 #include <vifa/vifa_norm_params.h>
@@ -36,7 +36,7 @@ class vifa_int_face_attr_common_params : public gevd_param_mixin,
                      public vbl_ref_count
 {
  protected:
-  sdet_fit_lines_params_sptr    fitter_params_;
+  vdgl_fit_lines_params_sptr    fitter_params_;
   vifa_group_pgram_params_sptr  gpp_s_;
   vifa_group_pgram_params_sptr  gpp_w_;
   vifa_coll_lines_params_sptr   cpp_;
@@ -44,7 +44,7 @@ class vifa_int_face_attr_common_params : public gevd_param_mixin,
 
  public:
   //: Line fitting parameters (incl. fit_length).
-  sdet_fit_lines_params_sptr    fitter_params() { return fitter_params_; }
+  vdgl_fit_lines_params_sptr    fitter_params() { return fitter_params_; }
 
   //: Strong projected parallelism parameters.
   vifa_group_pgram_params_sptr  gpp_s() { return gpp_s_; }
@@ -60,7 +60,7 @@ class vifa_int_face_attr_common_params : public gevd_param_mixin,
 
  public:
   //: Default constructor.
-  vifa_int_face_attr_common_params(sdet_fit_lines_params*    fitter_params = 0,
+  vifa_int_face_attr_common_params(vdgl_fit_lines_params*    fitter_params = 0,
                                    vifa_group_pgram_params*  gpp_s = NULL,
                                    vifa_group_pgram_params*  gpp_w = NULL,
                                    vifa_coll_lines_params*   cpp = NULL,
@@ -84,13 +84,13 @@ class vifa_int_face_attr_common_params : public gevd_param_mixin,
 
  protected:
   //: Assign internal parameter blocks.
-  void  init_params(sdet_fit_lines_params*    fitter_params,
+  void  init_params(vdgl_fit_lines_params*    fitter_params,
                     vifa_group_pgram_params*  gpp_s,
                     vifa_group_pgram_params*  gpp_w,
                     vifa_coll_lines_params*   cpp,
                     vifa_norm_params*         np
                    );
-  void  init_params(const sdet_fit_lines_params&    fitter_params,
+  void  init_params(const vdgl_fit_lines_params&    fitter_params,
                     const vifa_group_pgram_params&  gpp_s,
                     const vifa_group_pgram_params&  gpp_w,
                     const vifa_coll_lines_params&   cpp,

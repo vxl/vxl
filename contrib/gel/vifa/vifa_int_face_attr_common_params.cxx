@@ -8,7 +8,7 @@
 
 //: Default constructor
 vifa_int_face_attr_common_params::
-vifa_int_face_attr_common_params(sdet_fit_lines_params*    fitter_params,
+vifa_int_face_attr_common_params(vdgl_fit_lines_params*    fitter_params,
                                  vifa_group_pgram_params*  gpp_s,
                                  vifa_group_pgram_params*  gpp_w,
                                  vifa_coll_lines_params*   cpp,
@@ -109,7 +109,7 @@ print_info(void)
 
 //: Assign internal parameter blocks
 void vifa_int_face_attr_common_params::
-init_params(sdet_fit_lines_params*    fitter_params,
+init_params(vdgl_fit_lines_params*    fitter_params,
             vifa_group_pgram_params*  gpp_s,
             vifa_group_pgram_params*  gpp_w,
             vifa_coll_lines_params*   cpp,
@@ -117,9 +117,9 @@ init_params(sdet_fit_lines_params*    fitter_params,
            )
 {
   if (fitter_params)
-    fitter_params_ = new sdet_fit_lines_params(*fitter_params);
+    fitter_params_ = new vdgl_fit_lines_params(*fitter_params);
   else
-    fitter_params_ = new sdet_fit_lines_params(/*min_fit_length=*/ 6);
+    fitter_params_ = new vdgl_fit_lines_params(/*min_fit_length=*/ 6);
   if (gpp_s)
     gpp_s_ = new vifa_group_pgram_params(*gpp_s);
   else
@@ -141,14 +141,14 @@ init_params(sdet_fit_lines_params*    fitter_params,
 
 //: Assign internal parameter blocks
 void vifa_int_face_attr_common_params::
-init_params(const sdet_fit_lines_params&   fitter_params,
+init_params(const vdgl_fit_lines_params&   fitter_params,
             const vifa_group_pgram_params& gpp_s,
             const vifa_group_pgram_params& gpp_w,
             const vifa_coll_lines_params&  cpp,
             const vifa_norm_params&        np
            )
 {
-  fitter_params_ = new sdet_fit_lines_params(fitter_params);
+  fitter_params_ = new vdgl_fit_lines_params(fitter_params);
   gpp_s_ = new vifa_group_pgram_params(gpp_s);
   gpp_w_ = new vifa_group_pgram_params(gpp_w);
   cpp_ = new vifa_coll_lines_params(cpp);

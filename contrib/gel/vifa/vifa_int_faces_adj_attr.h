@@ -22,7 +22,7 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl_vector.h>
-#include <sdet/sdet_fit_lines_params.h>
+#include <vdgl/vdgl_fit_lines_params.h>
 #include <vtol/vtol_intensity_face_sptr.h>
 #include <vifa/vifa_coll_lines_params.h>
 #include <vifa/vifa_group_pgram_params.h>
@@ -61,7 +61,7 @@ class vifa_int_faces_adj_attr: public vifa_int_faces_attr
   vifa_int_faces_adj_attr(vtol_intensity_face_sptr  seed,
                           int              depth,
                           int              size_filter = -1,
-                          sdet_fit_lines_params*    fitter_params = NULL,
+                          vdgl_fit_lines_params*    fitter_params = NULL,
                           vifa_group_pgram_params*  gpp_s = NULL,
                           vifa_group_pgram_params*  gpp_w = NULL,
                           vifa_coll_lines_params*    cpp = NULL,
@@ -74,7 +74,7 @@ class vifa_int_faces_adj_attr: public vifa_int_faces_attr
                           int                       depth,
                           iface_list&               neighborhood,
                           int                       size_filter  =  -1,
-                          sdet_fit_lines_params*    fitter_params  =  NULL,
+                          vdgl_fit_lines_params*    fitter_params  =  NULL,
                           vifa_group_pgram_params*  gpp_s  =  NULL,
                           vifa_group_pgram_params*  gpp_w  =  NULL,
                           vifa_coll_lines_params*   cpp  =  NULL,

@@ -101,7 +101,7 @@ init()
 }
 
 vifa_int_faces_attr::
-vifa_int_faces_attr(sdet_fit_lines_params*    fitter_params,
+vifa_int_faces_attr(vdgl_fit_lines_params*    fitter_params,
                     vifa_group_pgram_params*  gpp_s,
                     vifa_group_pgram_params*  gpp_w,
                     vifa_coll_lines_params*    cpp,
@@ -115,7 +115,7 @@ vifa_int_faces_attr(sdet_fit_lines_params*    fitter_params,
 
 vifa_int_faces_attr::
 vifa_int_faces_attr(iface_list&          v,
-                    sdet_fit_lines_params*      fitter_params,
+                    vdgl_fit_lines_params*      fitter_params,
                     vifa_group_pgram_params*    gpp_s,
                     vifa_group_pgram_params*    gpp_w,
                     vifa_coll_lines_params*     cpp,

@@ -3,7 +3,7 @@
 #include <vxl_config.h>
 #include <testlib/testlib_test.h>
 #include <sdet/sdet_detector_params.h>
-#include <sdet/sdet_fit_lines_params.h>
+#include <vdgl/vdgl_fit_lines_params.h>
 #include <sdet/sdet_region_proc.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <vifa/vifa_int_face_attr.h>
@@ -43,7 +43,7 @@ static void test_int_face_attr(int argc, char* argv[])
     np.print_info();
 
     // Set up the line fitting parameters
-    sdet_fit_lines_params  flp(5);
+    vdgl_fit_lines_params  flp(5);
 
     vcl_cout << flp;
 

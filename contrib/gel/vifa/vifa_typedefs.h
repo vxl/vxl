@@ -4,7 +4,7 @@
 
 #include <vcl_vector.h>
 #include <vbl/vbl_smart_ptr.h>
-#include <sdet/sdet_fit_lines_params.h>
+#include <vdgl/vdgl_fit_lines_params.h>
 #include <vtol/vtol_intensity_face_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vtol/vtol_topology_object.h>
@@ -35,7 +35,7 @@ typedef vcl_vector<imp_line_list*>    imp_line_table;
 typedef imp_line_table::iterator      imp_line_table_iterator;
 
 // Line fitting parameters
-typedef vbl_smart_ptr<sdet_fit_lines_params>  sdet_fit_lines_params_sptr;
+typedef vbl_smart_ptr<vdgl_fit_lines_params>  vdgl_fit_lines_params_sptr;
 
 
 #endif  // VIFA_TYPEDEFS_H

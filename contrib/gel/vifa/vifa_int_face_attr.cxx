@@ -4,7 +4,7 @@
 
 
 vifa_int_face_attr::
-vifa_int_face_attr(sdet_fit_lines_params*  fitter_params,
+vifa_int_face_attr(vdgl_fit_lines_params*  fitter_params,
                    vifa_group_pgram_params*  gpp,
                    vifa_group_pgram_params*  gpp_w,
                    vifa_norm_params*    np) :
@@ -20,7 +20,7 @@ vifa_int_face_attr(sdet_fit_lines_params*  fitter_params,
 
 vifa_int_face_attr::
 vifa_int_face_attr(vtol_intensity_face_sptr f,
-                   sdet_fit_lines_params*  fitter_params,
+                   vdgl_fit_lines_params*  fitter_params,
                    vifa_group_pgram_params*  gpp,
                    vifa_group_pgram_params*  gpp_w,
                    vifa_norm_params*    np) :

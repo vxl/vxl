@@ -1,5 +1,5 @@
 // This is gel/vifa/vifa_int_face_attr_common.cxx
-#include <sdet/sdet_fit_lines.h>
+#include <vdgl/vdgl_fit_lines.h>
 #include <vtol/vtol_intensity_face.h>
 #include <vgl/vgl_point_2d.h>
 #include <vsol/vsol_line_2d.h>
@@ -10,7 +10,7 @@
 #include <vcl_cmath.h> // fabs()
 
 vifa_int_face_attr_common::
-vifa_int_face_attr_common(sdet_fit_lines_params*    fitter_params,
+vifa_int_face_attr_common(vdgl_fit_lines_params*    fitter_params,
                           vifa_group_pgram_params*  gpp_s,
                           vifa_group_pgram_params*  gpp_w,
                           vifa_coll_lines_params*   cpp,
@@ -200,21 +200,26 @@ fit_lines()
     return;
   }
 
-  edge_2d_list  edges_in;
+  vcl_vector<vdgl_digital_curve_sptr>  curves_in;
   for (edge_2d_iterator ei = edges_in_vect.begin();
        ei != edges_in_vect.end(); ei++)
-    edges_in.push_back(*ei);
+  {
+    vsol_curve_2d_sptr c = (*ei)->curve();
+    vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
+    if (!dc)
+      continue;
+    curves_in.push_back(dc);
+  }
 
   if (!fitter_params_.ptr())
   {
     const int  fit_length = 6;
-    fitter_params_ = new sdet_fit_lines_params(fit_length);
+    fitter_params_ = new vdgl_fit_lines_params(fit_length);
   }
 
   // Call the line fitting routine (thanks Joe!)
-  sdet_fit_lines  fitter(*(fitter_params_.ptr()));
-  fitter.set_edges(edges_in);
-  fitter.fit_lines();
+  vdgl_fit_lines  fitter(*(fitter_params_.ptr()));
+  fitter.set_curves(curves_in);
   vcl_vector<vsol_line_2d_sptr>&  segs = fitter.get_line_segs();
 
 //  vcl_cout << "ifac::fit_lines(): " << segs.size() << " segments from fitter\n";

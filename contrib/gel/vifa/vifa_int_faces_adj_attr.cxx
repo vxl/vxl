@@ -18,7 +18,7 @@ vifa_int_faces_adj_attr::
 vifa_int_faces_adj_attr(vtol_intensity_face_sptr     seed,
                         int                          depth,
                         int                          size_filter,
-                        sdet_fit_lines_params*       fitter_params,
+                        vdgl_fit_lines_params*       fitter_params,
                         vifa_group_pgram_params*     gpp_s,
                         vifa_group_pgram_params*     gpp_w,
                         vifa_coll_lines_params*      cpp,
@@ -43,7 +43,7 @@ vifa_int_faces_adj_attr(vtol_intensity_face_sptr     seed,
                         int                          depth,
                         iface_list&                  neighborhood,
                         int                          size_filter,
-                        sdet_fit_lines_params*       fitter_params,
+                        vdgl_fit_lines_params*       fitter_params,
                         vifa_group_pgram_params*     gpp_s,
                         vifa_group_pgram_params*     gpp_w,
                         vifa_coll_lines_params*      cpp,
@@ -418,9 +418,9 @@ get_adjacent_face_at_edge(vtol_intensity_face_sptr&  known_face,
   {
     if ((faces->size() == 2) &&
       ((*faces)[0]->topology_type() ==
-                  vtol_topology_object::INTENSITYFACE) &&
+       vtol_topology_object::INTENSITYFACE) &&
       ((*faces)[1]->topology_type() ==
-                  vtol_topology_object::INTENSITYFACE))
+       vtol_topology_object::INTENSITYFACE))
     {
       vtol_intensity_face_sptr    f1 = *((vtol_intensity_face_sptr*)
                                         ((void *)&((*faces)[0])));

@@ -3,12 +3,12 @@
 #include <vxl_config.h>
 #include <testlib/testlib_test.h>
 #include <sdet/sdet_detector_params.h>
-#include <sdet/sdet_fit_lines_params.h>
+#include <vdgl/vdgl_fit_lines_params.h>
 #include <sdet/sdet_region_proc.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <vifa/vifa_int_faces_attr.h>
 #include <vifa/vifa_typedefs.h>
-#include <vifa/tests/test_ifa_factory.h>
+#include "test_ifa_factory.h"
 #include <vil/vil_image_view.h>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_image_as.h>
@@ -44,7 +44,7 @@ static void test_int_faces_attr(int argc, char* argv[])
     np.print_info();
 
     // Set up the line fitting parameters
-    sdet_fit_lines_params  flp(5);
+    vdgl_fit_lines_params  flp(5);
 
     vcl_cout << flp;
 

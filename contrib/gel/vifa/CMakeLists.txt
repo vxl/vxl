@@ -1,7 +1,5 @@
 # gel/vifa/CMakeLists.txt
 
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg)
-
 SET(vifa_sources
  vifa_typedefs.h
  vifa_bbox.h
@@ -28,7 +26,7 @@ SET(vifa_sources
 AUX_SOURCE_DIRECTORY(Templates vifa_sources)
 
 ADD_LIBRARY(vifa ${vifa_sources})
-TARGET_LINK_LIBRARIES(vifa sdet vdgl vsol vnl vgl vbl vul vil vcl)
+TARGET_LINK_LIBRARIES(vifa gevd vdgl vsol vnl vgl vbl vul vil vcl)
 
 IF (BUILD_TESTING)
   SUBDIRS(tests)

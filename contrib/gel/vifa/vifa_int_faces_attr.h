@@ -20,7 +20,7 @@
 
 #include <vcl_vector.h>
 #include <vbl/vbl_smart_ptr.h>
-#include <sdet/sdet_fit_lines_params.h>
+#include <vdgl/vdgl_fit_lines_params.h>
 #include <vtol/vtol_intensity_face_sptr.h>
 #include <vifa/vifa_histogram.h>
 #include <vifa/vifa_int_face_attr_common.h>
@@ -72,7 +72,7 @@ class vifa_int_faces_attr : public vifa_int_face_attr_common
   vifa_parallel* npobj_;
   vifa_int_face_attr_factory* factory_;
  public:
-  vifa_int_faces_attr(sdet_fit_lines_params*       fitter_params = NULL,
+  vifa_int_faces_attr(vdgl_fit_lines_params*       fitter_params = NULL,
                       vifa_group_pgram_params*     gpp_s = NULL,
                       vifa_group_pgram_params*     gpp_w = NULL,
                       vifa_coll_lines_params*      cpp = NULL,
@@ -80,7 +80,7 @@ class vifa_int_faces_attr : public vifa_int_face_attr_common
                       vifa_int_face_attr_factory*  factory = NULL
                      );
   vifa_int_faces_attr(iface_list&                  v,
-                      sdet_fit_lines_params*       fitter_params = NULL,
+                      vdgl_fit_lines_params*       fitter_params = NULL,
                       vifa_group_pgram_params*     gpp_s = NULL,
                       vifa_group_pgram_params*     gpp_w = NULL,
                       vifa_coll_lines_params*      cpp = NULL,

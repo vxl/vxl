@@ -21,7 +21,7 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl_vector.h>
-#include <sdet/sdet_fit_lines_params.h>
+#include <vdgl/vdgl_fit_lines_params.h>
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_edge_sptr.h>
 #include <vifa/vifa_coll_lines.h>
@@ -80,7 +80,7 @@ class vifa_int_face_attr_common : public vifa_int_face_attr_common_params
   vifa_int_face_attr_common(void);
 
   //: Full constructor
-  vifa_int_face_attr_common(sdet_fit_lines_params*    fitter_params,
+  vifa_int_face_attr_common(vdgl_fit_lines_params*    fitter_params,
                             vifa_group_pgram_params*  gpp_s,
                             vifa_group_pgram_params*  gpp_w,
                             vifa_coll_lines_params*   cpp,
