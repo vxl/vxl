@@ -332,15 +332,15 @@ void KLTWriteFeatureList(
   char type;
   int i;
 
-  if (KLT_verbose >= 1 && fname != NULL)  {
+  if (KLT_verbose >= 1 && fname)  {
     fprintf(stderr,
             "(KLT) Writing feature list to %s file: '%s'\n",
             (fmt == NULL ? "binary" : "text"), fname);
   }
 
-  if (fmt != NULL) {  /* text file or stderr */
+  if (fmt) {  /* text file or stderr */
     fp = _printSetupTxt(fname, fmt, format, &type);
-    _printHeader(fp, format, FEATURE_LIST, NULL, fl->nFeatures);
+    _printHeader(fp, format, FEATURE_LIST, 0, fl->nFeatures);
 
     for (i = 0 ; i < fl->nFeatures ; i++)  {
       fprintf(fp, "%7d | ", i);
@@ -378,7 +378,7 @@ void KLTWriteFeatureHistory(
 
   if (fmt != NULL) {  /* text file or stderr */
     fp = _printSetupTxt(fname, fmt, format, &type);
-    _printHeader(fp, format, FEATURE_HISTORY, fh->nFrames, NULL);
+    _printHeader(fp, format, FEATURE_HISTORY, fh->nFrames, 0);
 
     for (i = 0 ; i < fh->nFrames ; i++)  {
       fprintf(fp, "%5d | ", i);

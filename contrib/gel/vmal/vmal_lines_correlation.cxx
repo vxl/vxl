@@ -134,7 +134,7 @@ bool vmal_lines_correlation::interpol_pixel(vnl_double_3 &pixel0, vnl_double_3 &
   double dx=pixel0[0]-left;
   double dy=pixel0[1]-bottom;
 
-  value0= dx*dy*p3+(1.0-dx)*dy*p2+(1.0-dy)*dx*p1+(1.0-dx)*(1.0-dy)*p0;
+  value0= (unsigned char) (0.5 + dx*dy*p3+(1.0-dx)*dy*p2+(1.0-dy)*dx*p1+(1.0-dx)*(1.0-dy)*p0);
 
   top=(int)pixel1[1]+1;
   right=(int)pixel1[0]+1;
@@ -154,7 +154,7 @@ bool vmal_lines_correlation::interpol_pixel(vnl_double_3 &pixel0, vnl_double_3 &
   dx=pixel1[0]-left;
   dy=pixel1[1]-bottom;
 
-  value1= dx*dy*p3+(1.0-dx)*dy*p2+(1.0-dy)*dx*p1+(1.0-dx)*(1.0-dy)*p0;
+  value1= (unsigned char) (0.5 + dx*dy*p3+(1.0-dx)*dy*p2+(1.0-dy)*dx*p1+(1.0-dx)*(1.0-dy)*p0);
 
   return true;
 }

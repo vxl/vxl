@@ -74,7 +74,7 @@ void vgel_kl::match_sequence(vcl_vector<vil_image> &image_list,vgel_multi_view_d
       // Get the components of this feature
       float x = feat->x;
       float y = feat->y;
-      int val = feat->val;
+      //int val = feat->val;
 
       // Test to see if this is the continuation of a sequence
       // - then put in the table

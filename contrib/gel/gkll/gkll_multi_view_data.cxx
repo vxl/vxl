@@ -11,7 +11,7 @@ _nbviews(0)
 
 template <class T>
 gkll_multi_view_data<T>::gkll_multi_view_data(int nbviews):
-_nbviews(nbviews),_size_vect_ft(0),_matchnum(-1),MVM(0),_closed_track(true)
+_nbviews(nbviews),_size_vect_ft(0),_matchnum(-1),_closed_track(true),MVM(0)
 {
   //all_pts=new vcl_vector<T>();
 }
