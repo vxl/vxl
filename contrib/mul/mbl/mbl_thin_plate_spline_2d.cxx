@@ -121,7 +121,6 @@ static void build_L(vnl_matrix<double>& L, const vcl_vector<vgl_point_2d<double>
   for (i=n;i<n+3;i++)
     for (j=n;j<n+3;j++)
       L_data[i][j] = 0;
-
 }
 
 //: Build from small number of points
@@ -257,7 +256,6 @@ void mbl_thin_plate_spline_2d::build_pure_affine(
 
     return;
   }
-
 }
 
 //: Set parameters from vectors
@@ -389,8 +387,8 @@ void mbl_thin_plate_spline_2d::build(const vcl_vector<vgl_point_2d<double> >& so
 //   else
   {
     vnl_svd<double> svd(L);
-//	vcl_cout<<"Singular values: "<<svd.W()<<vcl_endl;
-//	vcl_cout<<"Det:"<<svd.W().determinant()<<vcl_endl;
+//  vcl_cout<<"Singular values: "<<svd.W()<<vcl_endl;
+//  vcl_cout<<"Det:"<<svd.W().determinant()<<vcl_endl;
     svd.solve(Bx.data_block(),W1.data_block());
     svd.solve(By.data_block(),W2.data_block());
   }
@@ -505,10 +503,10 @@ void mbl_thin_plate_spline_2d::print_summary(vcl_ostream& os) const
   os<<vcl_endl;
   os<<"fx: "<<Ax0_<<" + "<<AxX_<<"*x + "<<AxY_<<"*y   Nonlinear terms:";
   for (int i=0;i<Wx_.size();++i) os<<Wx_[i]<<" ";
-  vcl_endl;
+  os<<vcl_endl;
   os<<"fy: "<<Ay0_<<" + "<<AyX_<<"*x + "<<AyY_<<"*y   Nonlinear terms:";
   for (int i=0;i<Wy_.size();++i) os<<Wy_[i]<<" ";
-  vcl_endl;
+  os<<vcl_endl;
 }
 
 //=======================================================================
@@ -579,7 +577,6 @@ bool mbl_thin_plate_spline_2d::operator==(const mbl_thin_plate_spline_2d& tps) c
 void vsl_b_write(vsl_b_ostream& bfs, const mbl_thin_plate_spline_2d& b)
 {
     b.b_write(bfs);
-
 }
 
 //=======================================================================
@@ -589,7 +586,6 @@ void vsl_b_write(vsl_b_ostream& bfs, const mbl_thin_plate_spline_2d& b)
 void vsl_b_read(vsl_b_istream& bfs, mbl_thin_plate_spline_2d& b)
 {
     b.b_read(bfs);
-
 }
 
 //=======================================================================
