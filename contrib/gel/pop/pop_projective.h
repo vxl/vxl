@@ -13,9 +13,6 @@
 //            Peter Tu April 2003
 //            General Electric
 //
-// \verbatim
-// \endverbatim
-//
 //-------------------------------------------------------------------------------
 
 #include<pop/pop_object.h>

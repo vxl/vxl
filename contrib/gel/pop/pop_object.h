@@ -12,13 +12,9 @@
 //            Peter Tu April 2003
 //            General Electric
 //
-// \verbatim
-// \endverbatim
-//
 //-------------------------------------------------------------------------------
 #include<vcl_vector.h>
 #include<pop/pop_parameter.h>
-
 
 //: A base class for object that has parameters
 class pop_object

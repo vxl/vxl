@@ -12,15 +12,11 @@
 //            Peter Tu April 2003
 //            General Electric
 //
-// \verbatim
-// \endverbatim
-//
 //-------------------------------------------------------------------------------
-//: base class for geometric cost methods
 
 #include<pop/pop_geometric_object.h>
 
-
+//: base class for geometric cost methods
 class pop_geometric_cost_function
 {
  public:

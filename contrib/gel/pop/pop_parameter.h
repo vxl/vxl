@@ -1,4 +1,4 @@
-// This is core/vgl/pop_parameter.h
+// This is gel/pop/pop_parameter.h
 #ifndef pop_parameter_h_
 #define pop_parameter_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -8,13 +8,9 @@
 // \file
 // \brief a parameter that can be optimized
 //
-//
 // \author
 //            Peter Tu April 2003
 //            General Electric
-//
-// \verbatim
-// \endverbatim
 //
 //-------------------------------------------------------------------------------
 
@@ -24,7 +20,7 @@ class pop_parameter
  public:
   //: constructor
   pop_parameter();
-  
+
   //: destructor
   ~pop_parameter();
 
@@ -32,11 +28,10 @@ class pop_parameter
   double value_;
 
   //: the expected confidence of the value
-  double std_; 
+  double std_;
 
   //: whether or not the value is fixed or changeable
   bool is_changeable_;
-  
 };
 
 #endif // pop_parameter_h_

@@ -12,9 +12,6 @@
 //            Peter Tu April 2003
 //            General Electric
 //
-// \verbatim
-// \endverbatim
-//
 //-------------------------------------------------------------------------------
 
 #include<pop/pop_object.h>
@@ -24,7 +21,6 @@
 #include<vcl_vector.h>
 #include<pop/pop_parameter.h>
 #include<pop/pop_geometric_object.h>
-
 
 //: A parameter that can be optimized
 class pop_homography_2d : public pop_transform
