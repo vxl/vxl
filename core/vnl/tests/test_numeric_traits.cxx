@@ -1,6 +1,7 @@
 #include <vnl/vnl_numeric_traits.h>
 #include <testlib/testlib_test.h>
 #include <vcl_complex.h>
+#include <vcl_iostream.h>
 
 void test_numeric_traits()
 {
@@ -48,6 +49,19 @@ void test_numeric_traits()
        vnl_numeric_traits<vcl_complex<long double> >::zero, vcl_complex<long double>(0.0));
   TEST("vnl_numeric_traits<vcl_complex<long double> >::one",
        vnl_numeric_traits<vcl_complex<long double> >::one, vcl_complex<long double>(1.0));
+  vcl_cout << " vnl_numeric_traits<bool>::maxval = " << vnl_numeric_traits<bool>::maxval << '\n';
+  vcl_cout << " vnl_numeric_traits<char>::maxval = " << (int)vnl_numeric_traits<char>::maxval << '\n';
+  vcl_cout << " vnl_numeric_traits<unsigned char>::maxval = " << (int)vnl_numeric_traits<unsigned char>::maxval << '\n';
+  vcl_cout << " vnl_numeric_traits<signed char>::maxval = " << (int)vnl_numeric_traits<signed char>::maxval << '\n';
+  vcl_cout << " vnl_numeric_traits<short>::maxval = " << vnl_numeric_traits<short>::maxval << '\n';
+  vcl_cout << " vnl_numeric_traits<unsigned short>::maxval = " << vnl_numeric_traits<unsigned short>::maxval << '\n';
+  vcl_cout << " vnl_numeric_traits<int>::maxval = " << vnl_numeric_traits<int>::maxval << '\n';
+  vcl_cout << " vnl_numeric_traits<unsigned int>::maxval = " << vnl_numeric_traits<unsigned int>::maxval << '\n';
+  vcl_cout << " vnl_numeric_traits<long>::maxval = " << vnl_numeric_traits<long>::maxval << '\n';
+  vcl_cout << " vnl_numeric_traits<unsigned long>::maxval = " << vnl_numeric_traits<unsigned long>::maxval << '\n';
+  vcl_cout << " vnl_numeric_traits<float>::maxval = " << vnl_numeric_traits<float>::maxval << '\n';
+  vcl_cout << " vnl_numeric_traits<double>::maxval = " << vnl_numeric_traits<double>::maxval << '\n';
+  vcl_cout << " vnl_numeric_traits<long double>::maxval = " << vnl_numeric_traits<long double>::maxval << '\n';
 }
 
 TESTMAIN(test_numeric_traits);
