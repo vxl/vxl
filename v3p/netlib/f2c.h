@@ -158,17 +158,16 @@ typedef struct Namelist Namelist;
 #define dmin(a,b) (doublereal)min(a,b)
 #define dmax(a,b) (doublereal)max(a,b)
 
-#if 1 /* These are not used in netlib, and are causing gcc compiler warnings */
-
+#ifndef IUE /* These are not used in netlib, and cause the gcc compiler warning
+               "function declaration isn't a prototype" */
+/*
 // d.capel@2d3.com - Actually, they are used in many netlib functions,
 // just not any that are included in v3p/netlib (yet).  However, I am
 // at liberty to use those netlib routines in my own code, and I
 // therefore require that the f2c.h seen by my compiler not be
 // broken. I don't think I should need to have two different versions
 // of f2c.h lying around in order to facilitate this.
-
-// They don't appear to generate any warnings in gcc-2.95 or above, so
-// I'm re-instating them.
+*/
 
 /* procedure parameter types for -A and -C++ */
 
@@ -204,7 +203,7 @@ typedef VOID H_f;       /* character function */
 typedef VOID Z_f;       /* double complex function */
 typedef doublereal E_f; /* real function with -R not specified */
 
-#endif /* 0 */
+#endif /* not used */
 
 /* undef any lower-case symbols that your C compiler predefines, e.g.: */
 
