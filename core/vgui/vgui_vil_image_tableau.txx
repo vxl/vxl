@@ -156,7 +156,7 @@ vgui_vil_image_tableau<T>::handle( vgui_event const &e )
 
 #undef VGUI_VIL_IMAGE_TABLEAU_INSTANTIATE
 #define VGUI_VIL_IMAGE_TABLEAU_INSTANTIATE(T) \
-VCL_DEFINE_SPECIALIZATION const char* vgui_vil_image_tableau_to_string<T >(T*) \
+VCL_DEFINE_SPECIALIZATION const char* vgui_vil_image_tableau_to_string(T*) \
 { return "<" #T ">"; } \
 template class vgui_vil_image_tableau<T >
 
