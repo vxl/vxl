@@ -24,6 +24,7 @@ SET( vil2_sources
 
   # image_data operations
   vil2_crop.cxx  vil2_crop.h
+  vil2_image_view_maths.h
 
   # Operations
   vil2_bilin_interp.h
