@@ -64,12 +64,6 @@ MANPAGE_SOURCES += vnl_finite.h
 #misc header files
 MANPAGE_SOURCES += vnl_T_n.h
 MANPAGE_SOURCES += vnl_config.h
-MANPAGE_SOURCES += vnl_double_2x2.h
-MANPAGE_SOURCES += vnl_double_3x3.h
-MANPAGE_SOURCES += vnl_double_3x4.h
-MANPAGE_SOURCES += vnl_double_4x3.h
-MANPAGE_SOURCES += vnl_double_4x4.h
-MANPAGE_SOURCES += vnl_double_5.h
 MANPAGE_SOURCES += vnl_identity.h
 MANPAGE_SOURCES += vnl_matrix_ref.h
 MANPAGE_SOURCES += vnl_operators.h
@@ -96,12 +90,19 @@ SOURCES += vnl_int_4.cxx
 SOURCES += vnl_float_2.cxx
 SOURCES += vnl_float_3.cxx
 SOURCES += vnl_float_4.cxx
-
 SOURCES += vnl_double_2.cxx
 SOURCES += vnl_double_3.cxx
 SOURCES += vnl_double_4.cxx
+MANPAGE_SOURCES += vnl_double_5.h
+
+MANPAGE_SOURCES += vnl_float_2x2.h
+MANPAGE_SOURCES += vnl_double_2x2.h
 SOURCES += vnl_double_2x3.cxx
 SOURCES += vnl_double_3x2.cxx
+MANPAGE_SOURCES += vnl_double_3x3.h
+MANPAGE_SOURCES += vnl_double_3x4.h
+MANPAGE_SOURCES += vnl_double_4x3.h
+MANPAGE_SOURCES += vnl_double_4x4.h
 
 # optimization
 SOURCES += vnl_cost_function.cxx
