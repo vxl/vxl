@@ -10,12 +10,12 @@
 // \brief  Represent and recognise simple event conditions.
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   04-OCT-2002 K.Y.McGaul - Added doxygen style documentation.
 //                          - Check for impossible events in new init function.
 //                          - key is now always lower case.
-//   22-OCT-2002 A.Fitzibbon & K.Y.McGaul - Added constructor for ascii_char
-//                                          event conditions.
+//   22-OCT-2002 A.Fitzgibbon & K.Y.McGaul - Added constructor for ascii_char
+//                                           event conditions.
 //   05-DEC-2002 K.Y.McGaul - Added Awf's comments from mailing list.
 // \endverbatim
 
@@ -33,12 +33,13 @@ class vgui_event;
 //  The key is now always lower case. ascii_char contains the
 //  actual character returned by the keyboard.  To construct a
 //  vgui_event_condition to detect a SHIFT+b event you can do either:
-//
-// \verbatim
-//  1)   vgui_event_condition my_ec(vgui_key('b'), vgui_SHIFT);
-//
-//  2)   vgui_event_condition my_ec(vgui_key('B');
-// \endverbatim
+// \code
+//       vgui_event_condition my_ec(vgui_key('b'), vgui_SHIFT);
+// \endcode
+//  or
+// \code
+//       vgui_event_condition my_ec(vgui_key('B');
+// \endcode
 //
 //  The point about vgui_event_condition is that it should not be
 //  constructed just before you check the event, but placed in a
@@ -56,7 +57,7 @@ class vgui_event;
 //
 //  Concrete example:  my_tableau spins a 3D model
 //
-// \verbatim
+// \code
 //  struct my_tableau
 //  {
 //    void handle(vgui_event);
@@ -66,7 +67,7 @@ class vgui_event;
 //    vgui_event_condition c_scale;
 //    vgui_event_condition c_zoom;
 //  };
-// \endverbatim
+// \endcode
 //
 //  Note that the event conditions are stored in the object, not hard-coded
 //  in the handle routine.  This means they can be changed by client code
