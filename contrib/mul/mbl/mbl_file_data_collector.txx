@@ -1,6 +1,6 @@
+// This is mul/mbl/mbl_file_data_collector.txx
 #ifndef mbl_file_data_collector_txx_
 #define mbl_file_data_collector_txx_
-
 //:
 //  \file
 
@@ -19,22 +19,20 @@ template<class T>
 mbl_file_data_collector<T>::mbl_file_data_collector(vcl_string& path)
 : bfs_(path), wrapper_(0)
 {
-
-  path_ = path; 
+  path_ = path;
   short vn= 1;
-  if (!bfs_) 
+  if (!bfs_)
   {
     vcl_cerr<<"ERROR: mbl_file_data_collector::constructor"<<vcl_endl;
     vcl_cerr<<"file stream failed"<<vcl_endl;
     vcl_abort();
   }
-    
+
   vsl_b_write(bfs_, vn);
-   
 }
 
+#if 0 // commented out
 
-#if 0
 //CAN'T make copy constructor because have to intialize binary file stream
 //some how. DON'T know how to do that!
 
@@ -51,22 +49,20 @@ template<class T>
 mbl_file_data_collector<T>& mbl_file_data_collector<T>::
       operator=( const mbl_data_collector_base& c)
 {
-  
   assert( c.is_a()="mbl_file_data_collector<T>" );
   mbl_file_data_collector<T>& cref=dynamic_cast< mbl_file_data_collector<T>& > c;
-            
+
   // I think I just need to clone the wrapper
   delete_stuff();
-  
+
   bfs_= cref.bfs_;
   path_ = cref.path_;
   wrapper_ = cref.wrapper_->clone();
 
   return *this;
-
 }
-#endif
 
+#endif // 0
 
 //=======================================================================
 // Destructor
@@ -109,8 +105,7 @@ void mbl_file_data_collector<T>::set_n_samples(int n)
 template<class T>
 void mbl_file_data_collector<T>::record(const T& d)
 {
- 
-  if (!bfs_) 
+  if (!bfs_)
   {
     vcl_cerr<<"ERROR: mbl_file_data_collector::record() "<<vcl_endl;
     vcl_cerr<<"file stream failed"<<vcl_endl;
@@ -119,29 +114,26 @@ void mbl_file_data_collector<T>::record(const T& d)
   else
   {
     vsl_b_write(bfs_, false);
-    vsl_b_write(bfs_, d); 
+    vsl_b_write(bfs_, d);
   }
-
 }
 
 //: Return object describing the stored data
 template<class T>
 mbl_data_wrapper<T >& mbl_file_data_collector<T>::data_wrapper()
 {
-  
   // have to say (like Jim Morrison) "this is the end"
   vsl_b_write(bfs_, true);
 
   // flush the file (to make sure it exists on disk - ie overide buffering)
   bfs_.os().flush();
 
-  if (!wrapper_) 
+  if (!wrapper_)
     wrapper_ = new mbl_file_data_wrapper<T>(path_) ;
 
   wrapper_->reset();  // make sure points to start!
 
   return *wrapper_;
-
 }
 
 template <class T>
@@ -169,13 +161,13 @@ short mbl_file_data_collector<T>::version_no() const
 template <class T>
 mbl_data_collector_base* mbl_file_data_collector<T>::clone() const
 {
-
   vcl_cout<<"ERROR: mbl_file_data_collector<T>::clone() "<<vcl_endl;
   vcl_cout<<"Can't clone this class "<<vcl_endl;
   vcl_abort();
-  
+
   // can't find a way of writing copy constructor! so don't allow clone
   //return new mbl_file_data_collector<T>(*this);
+  return 0;
 }
 
 template <class T>
@@ -198,5 +190,6 @@ void mbl_file_data_collector<T>::b_read(vsl_b_istream& bfs)
 
 
 #define MBL_FILE_DATA_COLLECTOR_INSTANTIATE(T) \
-	template class mbl_file_data_collector< T >
+template class mbl_file_data_collector<T >
+
 #endif // mbl_file_data_collector_txx_
