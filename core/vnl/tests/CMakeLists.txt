@@ -59,6 +59,7 @@ IF(NETLIB_FOUND)
     test_arithmetic.cxx  test_arithmetic_body.h
   )
 
+
   IF(CMAKE_COMPILER_IS_GNUCXX)
     SET_SOURCE_FILES_PROPERTIES(test_rational.cxx COMPILE_FLAGS -O1)
     SET_SOURCE_FILES_PROPERTIES(test_bignum.cxx COMPILE_FLAGS -O1)
@@ -66,6 +67,11 @@ IF(NETLIB_FOUND)
   ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
   TARGET_LINK_LIBRARIES( vnl_test_driver vnl_algo vnl vpl vul testlib ${CMAKE_THREAD_LIBS} )
+
+
+  ADD_EXECUTABLE( vnl_basic_operation_timings basic_operation_timings.cxx  )
+  TARGET_LINK_LIBRARIES( vnl_basic_operation_timings vnl )
+
 
   ADD_TEST( vnl_test_include                  vnl_test_driver test_include                 )
   ADD_TEST( vnl_test_amoeba                   vnl_test_driver test_amoeba                  )
