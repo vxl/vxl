@@ -62,6 +62,7 @@ void vsl_print_summary(vcl_ostream& os, vgl_conic<T> const& conic)
     os<<conic;
 }
 
+#undef VGL_IO_CONIC_INSTANTIATE
 #define VGL_IO_CONIC_INSTANTIATE(T) \
 template void vsl_print_summary(vcl_ostream &, vgl_conic<T > const&); \
 template void vsl_b_read(vsl_b_istream &, vgl_conic<T > &); \
