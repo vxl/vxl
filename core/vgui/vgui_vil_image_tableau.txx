@@ -1,6 +1,7 @@
-// This is core/vgui/vgui_vil2_image_tableau.cxx
+// This is core/vgui/vgui_vil2_image_tableau.txx
+#ifndef vgui_vil2_image_tableau_txx_
+#define vgui_vil2_image_tableau_txx_
 #include "vgui_vil2_image_tableau.h"
-
 //:
 // \file
 // \author Amitha Perera
@@ -8,8 +9,6 @@
 
 #include <vcl_string.h>
 #include <vcl_sstream.h>
-
-#include <vil/vil_load.h>
 
 #include <vgui/vgui_vil2_image_renderer.h>
 #include <vgui/vgui_event.h>
@@ -138,7 +137,7 @@ template<typename T>
 bool
 vgui_vil2_image_tableau<T>::handle( vgui_event const &e )
 {
-  if( e.type == vgui_DRAW )
+  if ( e.type == vgui_DRAW )
   {
     // If blending is turned on, there is a severe performance penalty
     // when rendering an image. So, we turn off blending before calling
@@ -147,18 +146,18 @@ vgui_vil2_image_tableau<T>::handle( vgui_event const &e )
     // fsm
     GLboolean blend_on;
     glGetBooleanv( GL_BLEND, &blend_on );
-    if( blend_on )
+    if ( blend_on )
       glDisable( GL_BLEND );
 
-    if( pixels_centered_ )
+    if ( pixels_centered_ )
       glTranslated( -0.5, -0.5, 0 );
 
     renderer_->render();
 
-    if( pixels_centered_ )
+    if ( pixels_centered_ )
       glTranslated( +0.5, +0.5, 0 );
 
-    if( blend_on )
+    if ( blend_on )
       glEnable( GL_BLEND );
 
     return true;
@@ -166,3 +165,5 @@ vgui_vil2_image_tableau<T>::handle( vgui_event const &e )
   else
     return false;
 }
+
+#endif // vgui_vil2_image_tableau_txx_

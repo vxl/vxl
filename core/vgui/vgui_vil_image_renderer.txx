@@ -1,5 +1,6 @@
-// This is core/vgui/vgui_vil2_image_renderer.cxx
-
+// This is core/vgui/vgui_vil2_image_renderer.txx
+#ifndef vgui_vil2_image_renderer_txx_
+#define vgui_vil2_image_renderer_txx_
 //:
 // \file
 // \author Amitha Perera
@@ -9,7 +10,6 @@
 
 #include "vgui_vil2_image_renderer.h"
 
-#include <vcl_cmath.h>
 #include <vcl_iostream.h>
 
 #include <vgui/vgui_gl.h>
@@ -36,8 +36,7 @@ vgui_vil2_image_renderer<T>::vgui_vil2_image_renderer()
 template<typename T>
 vgui_vil2_image_renderer<T>::~vgui_vil2_image_renderer() 
 {
-  if( buffer_ )
-    delete buffer_;
+  delete buffer_;
 }
 
 //-----------------------------------------------------------------------------
@@ -46,17 +45,16 @@ template<typename T>
 void
 vgui_vil2_image_renderer<T>::set_image( vil2_image_view<T> const &image )
 {
-  if( image == the_image_ )
+  if ( image == the_image_ )
     return; // same image -- do nothing.
 
   // delete old buffer. we could try to reuse it.
-  if( buffer_ )
-    delete buffer_;
+  delete buffer_;
   buffer_ = 0;
 
   //
   the_image_ = image;
-  if( the_image_ )
+  if ( the_image_ )
     trace << "image : " << the_image_ << vcl_flush;
 }
 
@@ -76,13 +74,13 @@ template<typename T>
 void
 vgui_vil2_image_renderer<T>::render()
 {
-  if( !the_image_ )
+  if ( !the_image_ )
     return;
 
   // Delay sectioning until first render time. This allows the section
   // buffer to decide on a cache format which depends on the current GL
   // rendering context.
-  if( !buffer_ ) {
+  if ( !buffer_ ) {
     buffer_ = new vgui_vil2_section_buffer(0, 0,
                                            the_image_.ni(), the_image_.nj(),
                                            GL_NONE, GL_NONE );
@@ -91,3 +89,5 @@ vgui_vil2_image_renderer<T>::render()
 
   buffer_->draw_as_image() || buffer_->draw_as_rectangle();
 }
+
+#endif // vgui_vil2_image_renderer_txx_
