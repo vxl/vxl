@@ -16,7 +16,12 @@
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_menu.h>
 #include "stdafx.h"
-
+class GdkEvent;
+class GdkEventKey;
+class GtkWidget;
+class GtkAccelGroup;
+typedef double gdouble;
+typedef unsigned int guint;
 
 class vgui_mfc_utils {
 public:
