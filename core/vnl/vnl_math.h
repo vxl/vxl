@@ -32,7 +32,7 @@
 //  210598 AWF Removed conditional VCL_IMPLEMENT_STATIC_CONSTS, sometimes gcc needs them.
 //  LSB (Modifications) 23/1/01 Documentation tidied
 //  Peter Vanroose - 7 Sept. 2002 - maxdouble etc. replaced by vnl_numeric_traits<T>::maxval
-//  Amitha Perera - 13 Sep 2002 - make constant initialization standards compilant.
+//  Amitha Perera - 13 Sep 2002 - make constant initialization standards compliant.
 // \endverbatim
 
 #include <vcl_cmath.h>
