@@ -28,8 +28,10 @@ export template <class T> class vnl_matrix;
 
 //--------------------------------------------------------------------------------
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define v vnl_vector<T>
 #define m vnl_matrix<T>
+#endif // DOXYGEN_SHOULD_SKIP_THIS
 template <class T> m operator+ (T const&, m const&);
 template <class T> m operator- (T const&, m const&);
 template <class T> m operator* (T const&, m const&);

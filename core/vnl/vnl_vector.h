@@ -412,8 +412,10 @@ class vnl_vector
   void destroy();
 
 #if VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 # define v vnl_vector<T>
 # define m vnl_matrix<T>
+#endif // DOXYGEN_SHOULD_SKIP_THIS
   friend T      dot_product      VCL_NULL_TMPL_ARGS (v const&, v const&);
   friend T      inner_product    VCL_NULL_TMPL_ARGS (v const&, v const&);
   friend T      bracket          VCL_NULL_TMPL_ARGS (v const&, m const&, v const&);
