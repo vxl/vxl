@@ -17,15 +17,25 @@
 #include <vil/vil_image.h>
 
 //: Adaptor which returns a vil_image with pixel components clamped to given range.
-vil_image vil_clamp(vil_image src, double range_min, double range_max);
-
-// capes@robots : The functions below are deprecated. The new adaptor style fits nicely
-// into the functional composition and lazy evaluation scheme provided by the 
-// other vil adaptors.
+// Fits nicely into the functional composition and lazy evaluation scheme provided
+// by the other vil adaptors.
 // Old code can be implemented in the new style as
 //   vil_image_as_byte(vil_clamp(img, 0, 255));
 //   vil_image_as_rgb_byte(vil_clamp(img, 0, 255));
+vil_image vil_clamp(vil_image src, double range_min, double range_max);
 
+//: Convenience templated functions for clamping of a single pixel.
+//    (vil_byte)vil_clamp_pixel(g, 0, 255);
+//    (vil_rgb<vil_byte>)vil_clamp_pixel(rgb, 0, 255);
+template <class V>
+inline
+V vil_clamp_pixel(V const& b, double range_min, double range_max)
+{
+  return (b < V(range_min) ? V(range_min) : (b > V(range_max) ? V(range_max) : b));
+}
+
+// capes@robots : The functions below are deprecated. Use the adaptor style or the 
+// vil_clamp_pixel functions instead.
 #if 0
 //: 
 // Default behaviour just returns value. Clamping of double to return byte is

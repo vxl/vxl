@@ -5,6 +5,16 @@
 
 //--------------------------------------------------------------------------------
 
+#undef SPECIALIZE_CLAMP_PIXEL
+#define SPECIALIZE_CLAMP_PIXEL(T) \
+VCL_DEFINE_SPECIALIZATION \
+vil_rgb<T> vil_clamp_pixel(vil_rgb<T> const& d, double min, double max) \
+{ \
+  return vil_rgb<T>(vil_clamp_pixel(d.R_, min , max), \
+		    vil_clamp_pixel(d.G_, min , max), \
+		    vil_clamp_pixel(d.B_, min , max)); \
+}
+
 // instantiation macros for vil_rgb<T>s
 #undef VIL_RGB_INSTANTIATE
 #define VIL_RGB_INSTANTIATE(T) \
