@@ -1,1 +1,1 @@
-USES += rpl vxl
+USES += rpl core

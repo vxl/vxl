@@ -1,1 +1,1 @@
-USES += oxl vxl
+USES += oxl core

@@ -1,1 +1,1 @@
-USES += gel vxl
+USES += gel core

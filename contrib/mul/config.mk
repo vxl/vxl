@@ -1,1 +1,1 @@
-USES += mul vxl
+USES += mul core

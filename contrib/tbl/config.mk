@@ -1,1 +1,1 @@
-USES += tbl vxl
+USES += tbl core
