@@ -33,6 +33,9 @@ MANPAGE_SOURCES += vnl_scalar_join_iterator.txx
 SOURCES += vnl_alloc.cxx
 SOURCES += vnl_block.cxx
 SOURCES += vnl_math.cxx
+ifeq ($(OS),OSF1V4) # with optimisation, the is_finite etc functions fail for long double
+FLAGS_vnl_math.cxx += -O0
+endif
 SOURCES += vnl_copy.cxx
 SOURCES += vnl_complex.cxx
 SOURCES += vnl_error.cxx
