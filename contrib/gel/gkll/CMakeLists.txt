@@ -8,6 +8,7 @@ SET(gkll_sources
  gkll_multi_view_data.cxx gkll_multi_view_data.h
  gkll_multi_view_data_vertex_sptr.h
 )
+AUX_SOURCE_DIRECTORY(Templates gkll_sources)
 
 ADD_LIBRARY(gkll ${gkll_sources})
 
