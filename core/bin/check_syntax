@@ -1,0 +1,135 @@
+#! /bin/sh
+exec perl -w -x $0 ${1+"$@"}
+#!perl
+#line 5
+
+# Purpose: list all files in the vxl source tree that have tab characters
+# (and that shouldn't have them because vxl c++ source files shouldn't).
+
+undef $/;
+$full = "";
+
+while (defined($ARGV[0]) && $ARGV[0] =~ m/^-/) {
+  $_ = shift(@ARGV);
+  if (m/^-f$/) {
+    $full = 1;
+  }
+  else {
+    printf STDERR "Unrecognised command line option $_ ignored\n";
+  }
+}
+
+if (defined($ARGV[0])) {
+  @FILES = @ARGV;
+}
+else {
+  $IUEROOT = $ENV{IUEROOT};
+  unless (defined($IUEROOT)) {
+    print STDERR "IUEROOT is not defined, and no command line arguments were given\n";
+    exit 0;
+  }
+  $FILES = `find $IUEROOT/config $IUEROOT/vcl $IUEROOT/v3p $IUEROOT/vxl $IUEROOT/mul $IUEROOT/oxl $IUEROOT/gel $IUEROOT/tbl $IUEROOT/conversions -type f \\\( -name \\\*.cxx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h \\\) -print|grep -v /vxl/....\.new/`;
+  @FILES = split(' ', $FILES);
+}
+
+foreach $f (@FILES)
+{
+  unless (open(FILE, $f)) {
+    print STDERR "File $f does not exist\n";
+    next;
+  }
+  $file=<FILE>;
+  close FILE;
+  $printed = $full;
+
+# 1. abnormal characters (tabs, ascii < 32, etc.)
+  if ($file =~ m/[\000-\010\013-\037\177-\277\320\327\336\360\367\376]/) {
+    print "$f\t\# has non-standard ascii characters\n";
+    $printed = 1;
+  }
+  if ($file =~ m/\t/) {
+    print "$f\t\# contains tabs\n";
+    $printed = 1;
+  }
+
+# 2. spaces at end of line
+  $has_end_spaces = ($file =~ m/ +\n/);
+
+# 3. Comments: long /* ... */ and old-style // -- docs
+  $file =~ s/ +\n/\n/g;
+  $file =~ s/\/\*/\001/g; $file =~ s/\/\001/\/\/\*/g;
+  $file =~ s/\*\//\002/g;
+  $file =~ s/(\"[^\001\n\"]{0,15})\001([^\001\n\"]{0,15}\")/$1\/\*$2/g;
+  $file =~ s/(\"[^\002\n\"]{0,15})\002([^\002\n\"]{0,15}\")/$1\*\/$2/g;
+  if ($file =~ m/\/\/\s*--\s/) {
+    print "$f\t\# contains old style / -- docs\n";
+    $printed = 1;
+  }
+  if ($f !~ m/\.c$/ &&
+      $f !~ m/_mocced\.cxx$/ &&
+      $f !~ m/\/v3p\/(tiff|netlib|jpeg|png|zlib|Qv)\// &&
+      $f !~ m/\/file_formats\/vil_viff(header|_support)/ &&
+      $f !~ m/\/vgui\/internals\/trackball/ &&
+      $f !~ m/\/vcl\/vcl_c/ &&
+      $f !~ m/\/vcl\/emulation\// &&
+      $file =~ m/\001[^\001\002]{100,}/)
+  {
+    print "$f\t\# contains long /*...*/ comments\n";
+    $printed = 1;
+  }
+
+# 4. Now remove comments before checking further:
+  $file_s = "\n" . $file;
+  $file_s =~ s/\n\#if\s+0\s*\n.*?\n\#endif\s*\n/\n/g;
+  $file_s =~ s/\/\/[^\n]*\n/\n/g;
+  $file_s =~ s/\001[^\001\002]*\002//g;
+# if ($file_s =~ m/[\001\002]/) {
+#   print "$f\t\# contains nested comments\n";
+#   $printed = 1;
+# }
+
+# 5. Inclusion guard
+  if ($file_s =~ m/^\s*\#ifndef\s+(\S+)\n#define\s+\1\n/) {
+    $guard = $1;
+    if (defined($inclusion_guards{"$guard"})) {
+      print "$f\t\# has the same inclusion guard as " . $inclusion_guards{"$guard"} . "\n";
+      $printed = 1;
+    }
+    else {
+      $inclusion_guards{"$guard"} = "$f";
+    }
+    undef $guard;
+  }
+  else {
+    unless ($f =~ m/\.cxx$/ || $f =~ m/\.cpp$/ || $f =~ m/\.c$/ ||
+            $f =~ m/vcl\/emulation\/.*stlco(nf|mp)\.h$/ ||
+            $f =~ m/vcl\/vcl_typeinfo\.h$/ ||
+            $f =~ m/v3p\/(jpeg|tiff|zlib)\// ||
+            $f =~ m/\/resource\.h$/i ||
+            $f =~ m/vcl(\/win32)?\/vcl_c(assert|string)/)
+    {
+      print "$f\t\# has no (valid) inclusion guard\n";
+      $printed = 1;
+    }
+  }
+
+# 6. Multiple empty lines, empty line before } or after {
+#   (mentioned only if something else is already printed, or is -f given)
+  if ($printed && $file =~ m/\n\n\n\n/) {
+    print "$f\t\# contains multiple (>=3) empty lines\n";
+    $printed = 1;
+  }
+  print "$f\t\# has lines ending in spaces\n"
+    if ($printed && $has_end_spaces);
+  print "$f\t\# has empty lines before closing brace\n"
+    if ($printed && $file =~ m/\n\n[ \t]*\}\n/);
+  print "$f\t\# has empty lines after opening brace\n"
+    if ($printed && $file =~ m/\n[ \t]*\{\n\n/);
+}
+
+# 7. no end-of-line at end-of-file
+  $file =~ s/.*(.)//;
+  unless ($file =~ m/\n/) {
+    print "$f\t\# has no final end-of-line\n";
+  }
+

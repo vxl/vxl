@@ -4,6 +4,7 @@
 *.dsw           -crlf
 *.pl             crlf=input
 *.sh             crlf=input
+check_syntax     crlf=input
 configure        crlf=input
 script           crlf=input
 time_fastops.mk  crlf=input
