@@ -12,7 +12,7 @@ ifeq ($(OS),win32)
  SOURCES += example_mfc.cpp
  SOURCES += example_mfcDoc.cpp
  SOURCES += example_mfcView.cpp
- MANPAGE_SOURCES += example_mfc.rc
+ SOURCES += example_mfc.rc
 endif
 
 ################################
