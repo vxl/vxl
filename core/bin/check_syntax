@@ -97,8 +97,8 @@ foreach $f (@FILES)
   }
   print "$f\t\# has vcl_endl following a string: replace with \\n\"\n"
     if ($printed && $file =~ m/\"\s*\<\<\s*vcl_endl\b/);
-  print "$f\t\# consider joining consecutive \"\<\<\" output lines\n"
-    if ($printed && $file =~ m/(\S+)\s*\<\<[^;]+\;\s*\1\s*\<\</);
+  print "$f\t\# consider joining consecutive \"\<\<\" output lines for $2\n"
+    if ($printed && $file =~ m/[{;:](\s*\/\/.*\n)?\s*(\S+)\s*\<\<[^;]+\;\s*\2\s*\<\</);
 
 # 4. Consecutive comment blocks, separated by blank lines
   if ($file =~ m!\n\s*//:.*\n( *// .*\n)*\s*\n\s*// !)
@@ -143,11 +143,12 @@ foreach $f (@FILES)
   $includes =~ s/^[^\003]*\003/\003/; $includes =~ s/\004[^\004]*$/\004/;
   $includes =~ s/\004[^\003]*\003/\n/g; $includes =~ s/[\004\003]//g;
   @includes = sort(split('\n', $includes));
-  $jj = ""; $found_cassert = "";
+  $jj = ""; $found_cassert = ""; $found_iostream = "";
   foreach $j (@includes)
   {
     next if ($j eq "");
     $found_cassert = 1 if ($j eq "vcl_cassert.h" || $j eq "assert.h");
+    $found_iostream = 1 if ($j =~ m/^vcl_((i|o|io|f)stream|iosfwd)\.h/ || $j eq "vsl/vsl_binary_io.h");
     print "$f\t\# invalid #include <$j>\n"
       unless ($j =~ m/\.(h|H|hxx|hpp|txx)$/ || $f =~ m/\/vcl\// || $j eq "std/complext.cc");
     next unless ($j =~ m/\.h$/i);
@@ -167,13 +168,14 @@ foreach $f (@FILES)
     next unless ($i =~ s/^(vnl|vil[12]?|vsl|vul|vpl|vgl|vbl|vtol|vsol|vipl\/vipl_with_[a-z_]+|vipl|vepl|mbl|mil)\/(algo\/|io\/|internals\/|filter\/|section\/|vrml\/|impl\/(X|glut|gtk|mfc)\/|)(.*)\.h/$4/ || $i =~ s/^(v[cx]l_[a-z]+)\.h$/$1/);
     next if ($j eq "vcl_compiler.h" || $j eq "vcl_new.h");
     next if ($j eq "vcl_cstdio.h" && $f =~ m/\/StdAfx\.h$/);
-    next if ($j eq "vcl_cmath.h" && $f =~ m/\bvcl\/vcl_cfloat\.h$/);
+    next if ($j eq "vcl_cmath.h" && $f =~ m/\bvcl\/(vcl_cfloat|win32-vc60\/vcl_complex)\.h$/);
+    next if ($j eq "vcl_cmath.h" && $f =~ m/\bvnl\/algo\/vnl_generalized_eigensystem\.cxx$/);
     next if ($j eq "vcl_cstdlib.h" && $f =~ m/\bvcl\/emulation\/vcl_algobase\.h$/);
     next if ($j eq "vcl_ctime.h" && $f =~ m/\bvcl\/emulation\/vcl_alloc\.h$/);
     next if ($j eq "vcl_algorithm.h" && $f =~ m/\bvcl\/gcc-295\/vcl_deque\.txx$/);
     next if ($i =~ m/^(vnl|vil[12]?|vsl|vul|vpl|vgl|vbl)_fwd$/ || $i =~ m/^vgui_glu?x?t?$/ || $i eq "StdAfx");
     next if ($i =~ m/^(v.l)_io_/ && $f =~ m/\/$1\/io\//);
-    next if ($i =~ m/^accessors\/vipl_accessors_/ && $f =~ m/\/v[ie]pl\//);
+    next if ($i =~ m/^accessors\/vipl_accessors_/ && $f =~ m/\/v[ie]pl2?\//);
     next if ($f =~ m/vbl\/io\/vbl_io_sparse_array_[123]d\.h$/ && $i =~ m/^vbl_sparse_array_[123]d$/);
     next if ($f =~ m/vgui\/impl\/gtk\/(vgui_gtk_adaptor\.h|Templates\/vcl_vector\+GtkWidget\~-\.cxx)$/ && $i eq "vcl_string");
     $ii = $i;
@@ -202,30 +204,30 @@ foreach $f (@FILES)
     elsif ($j eq "vcl_deque.h") { $i="vcl_(deque|swap)"; }
     elsif ($j eq "vcl_exception.h") { $i="vcl_(exception|bad_exception|throw|catch|catch_all)"; }
     elsif ($j eq "vcl_fstream.h") { next if ($f =~ m/\bvcl\/(Templates\/f?stream|vcl_iostream|win32-vc60\/vcl_complex\.h$)/); $i="vcl_(filebuf|fstream|ifstream|ofstream)"; }
-    elsif ($j eq "vcl_functional.h") { $i="vcl_(unary_function|binary_function|plus|minus|multiplies|divides|modulus|negate|equal_to|not_equal_to|greater|less|greater_equal|less_equal|logical_and|logical_or|logical_not|unary_negate|not1|binary_negate|not2|binder1st|bind1st|binder2nd|bind2nd|pointer_to_unary_function|ptr_fun|pointer_to_binary_function|mem_fun_t|mem_fun|mem_fun1_t|mem_fun1|mem_fun_ref_t|mem_fun_ref|mem_fun1_ref_t|mem_fun1_ref|const_mem_fun_t|const_mem_fun|const_mem_fun1_t|const_mem_fun1|const_mem_fun_ref_t|const_mem_fun_ref|const_mem_fun1_ref_t|const_mem_fun1_ref|transform)"; }
-    elsif ($j eq "vcl_iomanip.h") { $i="vcl_(resetiosflags|setiosflags|setbase|setfill|setprecision|setw|boolalpha|noboolalpha|showbase|noshowbase|showpoint|noshowpoint|showpos|noshowpos|skipws|noskipws|uppercase|nouppercase|internal|left|right|dec|hex|oct|fixed|scientific)"; }
-    elsif ($j eq "vcl_ios.h") { next if ($f =~ m/\bvcl_iomanip\.h$/); $i="vcl_(ios|streamoff|streamsize|fpos|basic_ios|ios_(basefield|floatfield|adjustfield|boolalpha|noboolalpha|showbase|noshowbase|showpoint|noshowpoint|showpos|noshowpos|skipws|noskipws|uppercase|nouppercase|internal|left|right|dec|hex|oct|fixed|scientific|fmtflags|seekdir|beg|cur|end))"; }
-    elsif ($j eq "vcl_iosfwd.h") { $i="vcl_(streamoff|char_traits|allocator|basic_ios|basic_streambuf|basic_istream|basic_ostream|basic_iostream|basic_stringbuf|basic_istringstream|basic_ostringstream|basic_filebuf|basic_ifstream|basic_ofstream|basic_fstream|istreambuf_iterator|ostreambuf_iterator|ios|wios|streambuf|istream|ostream|iostream|stringbuf|istringstream|ostringstream|stringstream|filebuf|ifstream|ofstream|fstream|wstreambuf|wistream|wostream|wiostream|wstringbuf|wistringstream|wostringstream|wstringstream|wfilebuf|wifstream|wofstream|wfstream|fpos|streampos|wstreampos)"; }
-    elsif ($j eq "vcl_istream.h") { $i="vcl_(basic_istream|istream|wistream|basic_iostream|iostream|wiostream)"; }
-    elsif ($j eq "vcl_iostream.h") { next if ($f =~ m!/(vcl_ios\.h|win32-vc.0/vcl_complex\.h|StdAfx\.h)$!); $i="(vcl_(cin|cout|cerr|clog|istream|ostream|endl|ends|flush|streampos|streambuf|streamsize|hex|oct|dec|ws|setfill|setprecision|setw|fixed|scientific)|vgui_macro_warning)"; }
-    elsif ($j eq "vcl_iterator.h") { next if ($f =~ m/\brpl\/rrel\/rrel_util\.h$/); $i="vcl_(iterator_traits|iterator|reverse_iterator|istream_iterator|ostream_iterator|istreambuf_iterator|ostreambuf_iterator|back_insert_iterator|front_insert_iterator|insert_iterator|inserter|back_inserter|front_inserter|input_iterator_tag|output_iterator_tag|forward_iterator_tag|bidirectional_iterator_tag|random_access_iterator_tag|advance|distance)"; }
+    elsif ($j eq "vcl_functional.h") { $i="vcl_((|pointer_to_)(unary|binary)_(function|negate)|plus|minus|multiplies|divides|modulus|negate|(|not_)equal_to|(greater|less)(|_equal)|logical_(and|or|not)|not(1|2)|bind(|er)(1st|2nd)|ptr_fun|(|const_)mem_fun(|1)(|_ref)(_t|)|transform)"; }
+    elsif ($j eq "vcl_iomanip.h") { $i="vcl_((re|)setiosflags|set(base|fill|precision|w)|(no|)(boolalpha|showbase|showpoint|showpos|skipws|uppercase)|internal|left|right|dec|hex|oct|fixed|scientific)"; }
+    elsif ($j eq "vcl_ios.h") { next if ($f =~ m/\bvcl_iomanip\.h$/); $i="vcl_(ios|streamoff|streamsize|fpos|basic_ios|ios_((base|float|adjust)field|(no|)(boolalpha|showbase|showpoint|showpos|skipws|uppercase)|internal|left|right|dec|hex|oct|fixed|scientific|fmtflags|seekdir|beg|cur|end))"; }
+    elsif ($j eq "vcl_iosfwd.h") { $i="vcl_((basic_||w)(io|i|o|if|of|f|(|i|o)string)stream|streamoff|char_traits|allocator|(basic||w)_ios|(basic_||w)(stream|string|file)buf|(i|o)streambuf_iterator|fpos|(|w)streampos)"; }
+    elsif ($j eq "vcl_istream.h") { $i="vcl_(basic_||w)i(|o)stream"; }
+    elsif ($j eq "vcl_iostream.h") { next if ($f =~ m!/(vcl_ios\.h|win32-vc.0/vcl_complex\.h|StdAfx\.h)$!); $i="(vcl_(cin|cout|cerr|clog|(i|o)stream|endl|ends|flush|stream(pos|buf|size)|hex|oct|dec|ws|setfill|setprecision|setw|fixed|scientific)|vgui_macro_warning)"; }
+    elsif ($j eq "vcl_iterator.h") { next if ($f =~ m/\brpl\/rrel\/rrel_util\.h$/); $i="vcl_(iterator_traits|(|reverse_|(i|o)stream(|buf)_|(back_|front_|)insert_)iterator|(|back_|front_)inserter|(input|output|forward|bidirectional|random_access)_iterator_tag|advance|distance)"; }
     elsif ($j eq "vcl_limits.h") { $i="vcl_(numeric_limits|float_round_style|float_denorm_style)"; }
     elsif ($j eq "vcl_list.h") { $i="vcl_(list|swap)"; }
-    elsif ($j eq "vcl_locale.h") { $i="vcl_(use_facet|has_facet|isspace|isprint|iscntrl|isupper|islower|isalpha|isdigit|ispunct|isxdigit|isalnum|isgraph|toupper|tolower|ctype|codecvt_base|codecvt|codecvt_byname|num_get|num_put|numpunct|numpunct_byname|collate|collate_byname|time_get|time_get_byname|time_put|time_put_byname|money_get|money_put|moneypunct|moneypunct_byname|messages|messages_byname)"; }
+    elsif ($j eq "vcl_locale.h") { $i="vcl_(use_facet|has_facet|isspace|isprint|iscntrl|isupper|islower|isalpha|isdigit|ispunct|isxdigit|isalnum|isgraph|toupper|tolower|ctype|codecvt_base|(codecvt|collate|(num|money)punct|time_(get|put)|messages)(|_byname)|(num|money)(_get|_put))"; }
     elsif ($j eq "vcl_map.h") { $i="vcl_(map|multimap|swap)"; }
     elsif ($j eq "vcl_memory.h") { $i="vcl_(allocator|raw_storage_iterator|get_temporary_buffer|return_temporary_buffer|uninitialized_copy|uninitialized_fill|uninitialized_fill_n|auto_ptr)"; }
     elsif ($j eq "vcl_new.h") { $i="new"; }
     elsif ($j eq "vcl_numeric.h") { $i="vcl_(accumulate|inner_product|partial_sum|adjacent_difference)"; }
-    elsif ($j eq "vcl_ostream.h") { $i="vcl_(basic_ostream|ostream|wostream|endl|ends|flush)"; }
+    elsif ($j eq "vcl_ostream.h") { $i="vcl_((basic_||w)ostream|endl|ends|flush)"; }
     elsif ($j eq "vcl_queue.h") { $i="vcl_(priority_)?queue"; }
     elsif ($j eq "vcl_set.h") { $i="vcl_(set|multiset|swap)"; }
-    elsif ($j eq "vcl_sstream.h") { $i="vcl_(basic_stringbuf|stringbuf|wstringbuf|stringstream|istringstream|ostringstream)"; }
+    elsif ($j eq "vcl_sstream.h") { next if ($f =~ m/\bvcl\/win32-vc60\/vcl_complex\.h$/); $i="vcl_((basic_||w)stringbuf|(|i|o)stringstream)"; }
     elsif ($j eq "vcl_stack.h") { $i="vcl_stack"; }
     elsif ($j eq "vcl_stlfwd.h") { next; }
     elsif ($j eq "vcl_stdexcept.h") { $i="vcl_(logic_error|domain_error|invalid_argument|length_error|out_of_range|runtime_error|range_error|overflow_error|underflow_error)"; }
-    elsif ($j eq "vcl_streambuf.h") { $i="vcl_(basic_streambuf|streambuf)"; }
-    elsif ($j eq "vcl_string.h") { $i="vcl_(char_traits|basic_string|string|wstring|swap|getline)"; }
-    elsif ($j eq "vcl_strstream.h") { $i="vcl_(strstream|istrstream|ostrstream)"; }
+    elsif ($j eq "vcl_streambuf.h") { $i="vcl_(basic_|)streambuf"; }
+    elsif ($j eq "vcl_string.h") { $i="vcl_(char_traits|(basic_||w)string|swap|getline)"; }
+    elsif ($j eq "vcl_strstream.h") { $i="vcl_(|i|o)strstream"; }
     elsif ($j eq "vcl_typeinfo.h") { $i="vcl_(type_info|bad_cast|bad_typeid)"; }
     elsif ($j eq "vcl_utility.h") { $i="vcl_(pair|make_pair)"; }
     elsif ($j eq "vcl_valarray.h") { $i="vcl_(valarray|slice|slice_array|gslice|gslice_array|mask_array|indirect_array|abs|acos|asin|atan|atan2|cos|cosh|exp|log|log10|pow|sin|sinh|sqrt|tan|tanh)"; }
@@ -281,6 +283,7 @@ foreach $f (@FILES)
     elsif ($j =~ m/vil2?\/vil2?_math\.h$/) { $i="($i)_([a-z_]+)"; }
     elsif ($j =~ m/vil2\/vil2_new\.h$/) { $i="($i)_image_(resource|view_j_i_plane|view_plane_i_j)"; }
     elsif ($j =~ m/vil2?\/vil2?_(image_resource|memory_chunk)\.h$/) { $i="$i(|_sptr)"; }
+    elsif ($j =~ m/vil2?\/io\/vil2?_io_memory_chunk\.h$/) { $i="($i|vsl_b_write|VIL2_IO_SMART_PTR_INSTANTIATE.vil2?_memory_chunk)"; }
     elsif ($j eq "vil/vil_image_as.h") { $i="$i(_[a-z16_]+)?"; }
     elsif ($j eq "vil/vil_interpolate.h") { $i="$i(|_[a-z_]+)"; }
     elsif ($j eq "vil/vil_warp.h") { $i="$i(|_mapping|_interpolation_type|_output_driven)"; }
@@ -327,6 +330,7 @@ foreach $f (@FILES)
     elsif ($j eq "vtol/vtol_vertex_2d.h") { $i="$i|cast_to_vertex_2d\(\)"; }
     elsif ($j eq "vtol/vtol_edge_2d.h") { $i="$i|cast_to_edge_2d\(\)"; }
     elsif ($j eq "vtol/vtol_face_2d.h") { $i="$i|cast_to_face_2d\(\)"; }
+    elsif ($j eq "vtol/vtol_zero_chain.h") { $i="$i|outside_boundary_zero_chains\(\)"; }
     elsif ($j eq "vtol/vtol_dtd.h") { $i="$i([0123])"; }
     elsif ($j eq "vtol/vtol_list_functions.h") { $i="(tagged_union|(SEL|COPY)_(SUP|INF))"; }
     elsif ($j eq "vtol/vtol_macros.h") { $i="(SEL|COPY)_(SUP|INF)"; }
@@ -344,54 +348,7 @@ foreach $f (@FILES)
       unless ($fl =~ m/$j\>[^\003]*\b$i\b/ || $f =~ m/\/$ii\./ || $f =~ m/\btests\/test_include\.cxx$/);
   }
   print "$f\t\# should have #include <vcl_cassert.h>\n" if (! $found_cassert && $file =~ m/\n\s*assert\s*\(/);
- #  if ($j eq "vcl_algorithm.h") { $i="vcl_(adjacent_find|and|binary|binary_search|copy|copy_|count|count_if|equal|equal_range|fill|fill_n|find|find_end|find_first_of|find_if|for_each|generate|generate_n|generators_|heap|includes|inplace_merge|iter_swap|lexicographical_compare|lower_bound|make_heap|max|min|max_element|merge|merge_|min_element|mismatch|next_permutation|nth_element|partial_sort|partial_sort_copy|partition|partitions_|pop_heap|prev_permutation|push_heap|random_shuffle|remove|remove_copy|remove_copy_if|remove_if|replace|replace_copy|replace_copy_if|replace_if|reverse|reverse_copy|rotate|rotate_copy|search|search_n|set_difference|set_intersection|set_symmetric_difference|set_union|sort|sort_|sort_heap|stable_sort|swap|swap_|swap_ranges|transform|unique|unique_copy|upper_bound)"; }
- #  if ($j eq "vcl_cassert.h") { $i="assert"; }
- #  if ($j eq "vcl_cctype.h") { $i="(vcl_|)(isalnum|isdigit|isprint|isupper|tolower|isalpha|isgraph|ispunct|isxdigit|toupper|iscntrl|islower|isspace)"; }
- #  if ($j eq "vcl_cerrno.h") { $i="(errno|EBUSY|EEXIST)"; }
- #  if ($j eq "vcl_climits.h") { $i="CHAR_BIT"; }
- #  if ($j eq "vcl_cmath.h") { $i="vcl_(abs|acos|asin|atan|atan2|ceil|cos|cosh|exp|fabs|floor|fmod|frexp|ldexp|log|log10|modf|pow|sin|sinh|sqrt|tan|tanh|hypot)"; }
- #  if ($j eq "vcl_complex.h") { $i="vcl_(complex|real|imag|abs|arg|norm|conj|polar|cos|cosh|exp|log|log10|pow|sin|sinh|sqrt|tan|tanh)"; }
- #  if ($j eq "vcl_complex.h" && $f =~ m/\/tests\/test_cmath\.cxx$/) { $i=""; }
- #  if ($j eq "vcl_csetjmp.h") { $i="(setjmp|vcl_(jmp_buf|longjmp))"; }
- #  if ($j eq "vcl_csignal.h") { $i="vcl_(sig_atomic_t|raise|signal)"; }
- #  if ($j eq "vcl_cstdarg.h") { $i="(vcl_|)va_list"; }
- #  if ($j eq "vcl_cstddef.h") { $i="vcl_(ptrdiff_t|size_t)"; }
- #  if ($j eq "vcl_cstdio.h") { $i="vcl_(FILE|fpos_t|fopen|fclose|feof|ferror|fflush|fgetc|fgetpos|fgets|fwrite|fread|fseek|ftell|perror|clearerr|rename|fputc|fputs|freopen|fsetpos|getc|getchar|gets|putc|putchar|puts|remove|rewind|setbuf|setvbuf|tmpfile|tmpnam|ungetc|printf|sprintf|fprintf|vprintf|vsprintf|vfprintf|scanf|sscanf|fscanf|vscanf|vsscanf|vfscanf)"; }
- #  if ($j eq "vcl_cstdlib.h") { $i="vcl_(abs|div|labs|ldiv|srand|rand|atexit|getenv|system|exit|abort|qsort|calloc|malloc|free|realloc|atol|atof|atoi|mblen|mbstowcs|mbtowc|strtod|strtol|strtoul|wctomb|wcstombs)"; }
- #  if ($j eq "vcl_cstring.h") { $i="vcl_(memchr|memcmp|memcpy|memmove|memset|strcat|strchr|strcmp|strcoll|strcpy|strcspn|strerror|strlen|strncat|strncmp|strncpy|strpbrk|strrchr|strspn|strstr|strtok|strxfrm)"; }
- #  if ($j eq "vcl_ctime.h") { $i="vcl_(clock_t|time_t|tm|asctime|clock|difftime|localtime|strftime|ctime|gmtime|mktime|time)"; }
- #  if ($j eq "vcl_cwchar.h") { $i="vcl_(mbstate_t|wint_t|btowc|fgetwc|fgetws|fputwc|fputws|fwide|fwprintf|fwscanf|getwc|getwchar|mbrlen|mbrtowc|putwc|putwchar|swprintf|swscanf|ungetwc|vfwprintf|vswprintf|vwprintf|wcrtomb|wcscat|wcschr|wcscmp|wcscoll|wcscpy|wcscspn|wcsftime|wcslen|wcsncat|wcsncmp|wcsncpy|wcspbrk|wcsrchr|wcsrtombs|wcsspn|wcsstr|wcstod|wcstok|wcstol|wctoul|wcsxfrm|wctob|wmemchr|wmemcmp|wmemcpy|wmemmove|wmemset|wprintf|wscanf)"; }
- #  if ($j eq "vcl_cwctype.h") { $i="vcl_(wctrans_t|wctype_t|wint_t|iswalnum|iswalpha|iswcntrl|iswctype|iswdigit|iswgraph|iswlower|iswprint|iswpunct|iswspace|iswupper|iswxdigit|iswctrans|iswupper|iswxdigit|towctrans|towlower|towupper|wctrans|wctype)"; }
- #  if ($j eq "vcl_deque.h") { $i="vcl_(deque|swap)"; }
- #  if ($j eq "vcl_exception.h") { $i="vcl_(exception|bad_exception)"; }
- #  if ($j eq "vcl_fstream.h") { $i="vcl_(filebuf|fstream|ifstream|ofstream)"; }
- #  if ($j eq "vcl_functional.h") { $i="vcl_(unary_function|binary_function|plus|minus|multiplies|divides|modulus|negate|equal_to|not_equal_to|greater|less|greater_equal|less_equal|logical_and|logical_or|logical_not|unary_negate|not1|binary_negate|not2|binder1st|bind1st|binder2nd|bind2nd|pointer_to_unary_function|ptr_fun|pointer_to_binary_function|mem_fun_t|mem_fun|mem_fun1_t|mem_fun1|mem_fun_ref_t|mem_fun_ref|mem_fun1_ref_t|mem_fun1_ref|const_mem_fun_t|const_mem_fun|const_mem_fun1_t|const_mem_fun1|const_mem_fun_ref_t|const_mem_fun_ref|const_mem_fun1_ref_t|const_mem_fun1_ref|transform)"; }
- #  if ($j eq "vcl_iomanip.h") { $i="vcl_(resetiosflags|setiosflags|setbase|setfill|setprecision|setw|boolalpha|noboolalpha|showbase|noshowbase|showpoint|noshowpoint|showpos|noshowpos|skipws|noskipws|uppercase|nouppercase|internal|left|right|dec|hex|oct|fixed|scientific)"; }
- #  if ($j eq "vcl_ios.h") { $i="vcl_(ios|streamoff|streamsize|fpos|basic_ios|ios_(basefield|floatfield|adjustfield|boolalpha|noboolalpha|showbase|noshowbase|showpoint|noshowpoint|showpos|noshowpos|skipws|noskipws|uppercase|nouppercase|internal|left|right|dec|hex|oct|fixed|scientific|fmtflags|seekdir|beg|cur|end))"; }
- #  if ($j eq "vcl_iosfwd.h") { $i="vcl_(streamoff|char_traits|allocator|basic_ios|basic_streambuf|basic_istream|basic_ostream|basic_iostream|basic_stringbuf|basic_istringstream|basic_ostringstream|basic_filebuf|basic_ifstream|basic_ofstream|basic_fstream|istreambuf_iterator|ostreambuf_iterator|ios|wios|streambuf|istream|ostream|iostream|stringbuf|istringstream|ostringstream|stringstream|filebuf|ifstream|ofstream|fstream|wstreambuf|wistream|wostream|wiostream|wstringbuf|wistringstream|wostringstream|wstringstream|wfilebuf|wifstream|wofstream|wfstream|fpos|streampos|wstreampos)"; }
- #  if ($j eq "vcl_istream.h") { $i="vcl_(basic_istream|istream|wistream|basic_iostream|iostream|wiostream)"; }
- #  if ($j eq "vcl_iostream.h") { $i="(vcl_(cin|cout|cerr|clog|istream|ostream|endl|ends|flush|streampos|streambuf|streamsize|hex|oct|dec|ws|setfill|setprecision|setw|fixed|scientific)|vgui_macro_warning)"; }
- #  if ($j eq "vcl_iterator.h") { $i="vcl_(iterator_traits|iterator|reverse_iterator|istream_iterator|ostream_iterator|istreambuf_iterator|ostreambuf_iterator|back_insert_iterator|front_insert_iterator|insert_iterator|inserter|back_inserter|front_inserter|input_iterator_tag|output_iterator_tag|forward_iterator_tag|bidirectional_iterator_tag|random_access_iterator_tag|advance|distance)"; }
- #  if ($j eq "vcl_limits.h") { $i="vcl_(numeric_limits|float_round_style|float_denorm_style)"; }
- #  if ($j eq "vcl_list.h") { $i="vcl_(list|swap)"; }
- #  if ($j eq "vcl_locale.h") { $i="vcl_(use_facet|has_facet|isspace|isprint|iscntrl|isupper|islower|isalpha|isdigit|ispunct|isxdigit|isalnum|isgraph|toupper|tolower|ctype|codecvt_base|codecvt|codecvt_byname|num_get|num_put|numpunct|numpunct_byname|collate|collate_byname|time_get|time_get_byname|time_put|time_put_byname|money_get|money_put|moneypunct|moneypunct_byname|messages|messages_byname)"; }
- #  if ($j eq "vcl_map.h") { $i="vcl_(map|multimap|swap)"; }
- #  if ($j eq "vcl_memory.h") { $i="vcl_(allocator|raw_storage_iterator|get_temporary_buffer|return_temporary_buffer|uninitialized_copy|uninitialized_fill|uninitialized_fill_n|auto_ptr)"; }
- #  if ($j eq "vcl_new.h") { $i="new"; }
- #  if ($j eq "vcl_numeric.h") { $i="vcl_(accumulate|inner_product|partial_sum|adjacent_difference)"; }
- #  if ($j eq "vcl_ostream.h") { $i="vcl_(basic_ostream|ostream|wostream|endl|ends|flush)"; }
- #  if ($j eq "vcl_queue.h") { $i="vcl_(priority_)?queue"; }
- #  if ($j eq "vcl_set.h") { $i="vcl_(set|multiset|swap)"; }
- #  if ($j eq "vcl_sstream.h") { $i="vcl_(basic_stringbuf|stringbuf|wstringbuf|stringstream|istringstream|ostringstream)"; }
- #  if ($j eq "vcl_stack.h") { $i="vcl_stack"; }
- #  if ($j eq "vcl_stdexcept.h") { $i="vcl_(logic_error|domain_error|invalid_argument|length_error|out_of_range|runtime_error|range_error|overflow_error|underflow_error)"; }
- #  if ($j eq "vcl_streambuf.h") { $i="vcl_(basic_streambuf|streambuf)"; }
- #  if ($j eq "vcl_string.h") { $i="vcl_(char_traits|basic_string|string|wstring|swap|getline)"; }
- #  if ($j eq "vcl_strstream.h") { $i="vcl_(strstream|istrstream|ostrstream)"; }
- #  if ($j eq "vcl_typeinfo.h") { $i="vcl_(type_info|bad_cast|bad_typeid)"; }
- #  if ($j eq "vcl_utility.h") { $i="vcl_(pair|make_pair)"; }
- #  if ($j eq "vcl_valarray.h") { $i="vcl_(valarray|slice|slice_array|gslice|gslice_array|mask_array|indirect_array|abs|acos|asin|atan|atan2|cos|cosh|exp|log|log10|pow|sin|sinh|sqrt|tan|tanh)"; }
- #  if ($j eq "vcl_vector.h") { $i="vcl_(vector|swap)"; }
+# print "$f\t\# should have #include <vcl_iostream.h> or <vcl_iosfwd.h>\n" if (! $found_iostream && $f =~ m/\.h$/ && $f !~ m/vcl_/ && $file =~ m/\bvcl_(cin|cout|cerr|clog|(i|o)stream|endl|ends|flush|stream(pos|buf|size))\b/);
 
   print "$f\t\# suspicious $1\n"
     if ($f !~ m/\bvcl\/\S*vcl_\S+\.(h|txx)$/ &&
@@ -424,7 +381,7 @@ foreach $f (@FILES)
     $printed = 1;
   }
 
-# 7. Comments: long /* ... */ and old-style // -- docs; RCS indications
+# 7. Comments: long /* ... */ and old-style // -- docs; RCS indications; mistypings
   $file =~ s/ +\n/\n/g;
   $file =~ s/\/\*/\001/g; $file =~ s/\/\001/\/\/\*/g;
   $file =~ s/\*\//\002/g;
@@ -433,7 +390,8 @@ foreach $f (@FILES)
   $file =~ s/\001\*/\/\*\*/g; # Doxygen style comments
   if ($file =~ m/\/\/\s*[a-zA-Z_0_9]*\s*--\s/)
   {
-    print "$f\t\# contains old style // -- docs\n";
+    print "$f\t\# contains old style // -- docs\n"
+      unless ($f =~ m/vcl\/vcl_complex_fwd\.h$/ || $f =~ m/win32-vc60\/vcl_complex\.h$/ || $f =~ m/vgui\/vgui_glut\.h$/);
     $printed = 1;
   }
   if ($cpp_file && $f !~ m/\bvidl\/vidl_mpegcodec\.cxx$/ && $f !~ m/\bvul\/vul_url\.cxx$/ &&
@@ -452,6 +410,11 @@ foreach $f (@FILES)
   {
     print "$f\t\# contains RCS indication $1\n";
     $printed = 1;
+  }
+  #typos
+  if ($file =~ m/\b(octover|milisecond|destuct[a-z]*|constuct[a-z]*|detruct[a-z]*|contruct[a-z]*|continou[a-z]*|defaut|condtion|intial[a-z]*|hierach[a-z]*|implemen[^t][a-z]*|ouput|outputing|supres[a-z]*|judicous|begining|decend[a-z]*|verticies|matricies|vertexes)/i)
+  {
+    print "$f\t\# probably a mistyping: $1\n";
   }
 
 # 8. spurious #pragma interface or #pragma implementation
