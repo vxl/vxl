@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_vector_fixed.txx
+// This is core/vnl/vnl_vector_fixed.txx
 #ifndef vnl_vector_fixed_txx_
 #define vnl_vector_fixed_txx_
 //:
@@ -55,7 +55,7 @@ template <class T, unsigned int n>
 void
 vnl_vector_fixed<T,n>::flip()
 {
-  for ( size_type i=0; 2*i < n-1; ++i )
+  for ( size_type i=0; 2*i+1 < n; ++i )
     vcl_swap( data_[i], data_[n-1-i] );
 }
 
