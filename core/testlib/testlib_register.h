@@ -6,7 +6,7 @@
 // \brief  Macros for registering the tests with the driver.
 //
 // A test driver program would simply look like
-// \verbatim
+// \code
 //   #include <testlib/testlib_register.h>
 //   DECLARE( some_test_name );
 //   void register_tests()
@@ -14,12 +14,12 @@
 //     REGISTER( some_test_name );
 //   }
 //   DEFINE_MAIN;
-// \endverbatim
+// \endcode
 // The DEFINE_MAIN macro will define the main() function for the driver.
 // You will also have to link in a file defining a function
-// \verbatim
+// \code
 //   int some_test_name_main(int,char*[])
-// \endverbatim
+// \endcode
 // See the vxl tests for further examples (such as vil/tests).
 
 #include <vcl_string.h>
