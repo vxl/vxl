@@ -10,7 +10,7 @@
 #define VXL_BIG_ENDIAN    @VXL_BIG_ENDIAN@
 
 // typedefs won't work here, because on systems where there are
-// no 64bit integers we have to #define VXL_INT_64 to `void' in
+// no 64bit integers we have to #define vxl_int_64 to `void' in
 // order to catch illegitimate uses.
 #define vxl_int_8  @VXL_INT_8@
 #define vxl_int_16 @VXL_INT_16@
