@@ -15,6 +15,9 @@
   <li>BMP loader</li>
   <li>Add binary IO</li>
   <li>Convert general Gaussian reduction</li>
+  <li>Add a vil2 wrapper for vil1 image loaders.</li>
+  <li>Convert all Manchester Code</li>
+  <li>Trial conversion of some code that uses vil1</li>
 </ul>
 
 <h2>Good points about existing vil</h2>
@@ -292,18 +295,28 @@ and a TIFF file loader.</p>
   <li>Go through existing examples and VXL book and see if there are any idioms we have missed. - Done TFC 
   </li>
   <li>Add <code>vil_crop </code>style filter example for <code>vil2_image_resource</code>. - Done IMS</li>
-  <li>Decide where to put world to image transforms and write it - Half done TFC</li>
+  <li>Decide where to put world to image transforms and write it - done TFC</li>
   <li>Write <code>vil2_save </code>- done IMS </li>
-  <li>Write <code>vil2_memory_image</code> - half done IMS </li>
-  <li>Write some example standard image processing code - Done TFC</li>
+  <li>Write <code>vil2_memory_image</code> - done IMS </li>
+  <li>Write some example standard image processing code - Done TFC, and IMS</li>
   <li>Write a guide/example for the VXL book explaining how to write code for 
   existing vil, but that will convert well into vil2.</li>
-  <li>Add a <code>set_view(..) </code>function to fill someone's existing view with data
-  (which will probably be useful for implementing <code>vil_clamp </code>style filters)</li>
   <li>Convert rest of file loaders</li>
-  <li>Convert rest of <code>vil2_image_resource</code> filters</li>
-  <li>Add a vil3d library.</li>
+  <li>Convert rest of <code>vil2_image_resource</code> filters - Done IMS</li>
+  <li>Add a vil3d library. - Done TFC</li>
 </ol>
+<h2>Possible improvements</h2>
+<h4>Add a <code>get_pixel(void&nbsp;*buf,i,j)</code> and <code>put_pixel(void&nbsp;*buf,i,j)</code>
+to <code>vil2_image_resource.</code></h4>
+<p>These might be useful for efficient implementation of some algorithms. They
+could be implemented in terms of <code>get_copy_view(..) </code>and<code>
+put_view(..) </code>in the base class. However, in some cases you need to
+probe/set a pixel at a time and the overhead of allocating a <code>vil2_image_view&lt;T&gt;</code>
+for each <code>get_view(..)</code> is quite expensive. Note that the cost of
+allocating the <code>vil2_memory_chunk</code> is irrelevant. If the image is
+already in memory, no new <code>vil2_memory_chunk</code> is allocated. If the
+image isn't already in memory, the cost of the new memory chunk is smaller than
+the disk access time.</p>
 <h2>Notes</h2>
 <p>#includes to vxl/vil are simply to use old vil stuff that doesn't need to be converted. e.g. 
 <code>vil_stream</code></p>
