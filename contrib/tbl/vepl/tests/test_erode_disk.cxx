@@ -121,24 +121,41 @@ static bool difference(vil_image const& a, vil_image const& b, int v, const char
 }
 
 #define TEST(i,r,d,T,v,m,m2) { \
+  vcl_cout << "Starting test\n"; \
   i = vepl_erode_disk(r,5); \
+  vcl_cout << "vepl_erode_disk() called\n"; \
   difference(i,r,v,m,m2); \
+  vcl_cout << "difference() called\n"; \
   if (difference(i,r,0)) vcl_cout<<m<<m2<<"FAILED: input image changed!\n"; }
 #define ALL_TESTS(d,v,m) \
   TEST(byte_img,byte_ori,d,unsigned char,v,m,"_byte"); \
+  vcl_cout << "8-bit test done\n"; \
   TEST(shrt_img,shrt_ori,d,unsigned short,v,m,"_short"); \
-/*TEST(flot_img,flot_ori,d,float,v,m,"_float");*/ \
-/*TEST(colr_img,colr_ori,d,vil_rgb_byte,v,m,"_colour")*/
+  vcl_cout << "16-bit test done\n"; \
+/*TEST(flot_img,flot_ori,d,float,v,m,"_float"); \
+  vcl_cout << "32-bit test done\n";*/ \
+/*TEST(colr_img,colr_ori,d,vil_rgb_byte,v,m,"_colour") \
+  vcl_cout << "3x8-bit test done\n";*/
 
 int main() {
+  vcl_cout << "Starting vepl_erode_disk tests\n";
   vil_image byte_img = CreateTest8bitImage(32,32),  byte_ori = CreateTest8bitImage(32,32);
+  vcl_cout << "8-bit test images created\n";
   vil_image shrt_img = CreateTest16bitImage(32,32), shrt_ori = CreateTest16bitImage(32,32);
+  vcl_cout << "16-bit test images created\n";
 //vil_image colr_img = CreateTest24bitImage(32,32), colr_ori = CreateTest24bitImage(32,32);
+//vcl_cout << "3x8-bit test images created\n";
   vil_image flot_img = CreateTestfloatImage(32,32), flot_ori = CreateTestfloatImage(32,32);
+  vcl_cout << "32-bit (float) test images created\n";
+
   vil_memory_image_of<unsigned char> byte_out(32, 32);
+  vcl_cout << "8-bit output image created\n";
   vil_memory_image_of<unsigned short> shrt_out(32, 32);
-  vil_memory_image_of<float> flot_out(32, 32);
+  vcl_cout << "16-bit output image created\n";
 //vil_memory_image_of<vil_rgb_byte> colr_out(32, 32);
+//vcl_cout << "3x8-bit output image created\n";
+  vil_memory_image_of<float> flot_out(32, 32);
+  vcl_cout << "32-bit (float) output image created\n";
 
   ALL_TESTS(0,0,"vepl_erode_disk");
   return 0;
