@@ -71,6 +71,7 @@ SOURCE_FILES( mvl_sources
   ProjectiveBasis2D.cxx
   SimilarityMetric.cxx
   TriTensor.cxx
+  TriTensorCompute.cxx
   TripleMatchSet.cxx
   TripleMatchSetCorner.cxx
   TripleMatchSetLineSeg.cxx
