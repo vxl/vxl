@@ -20,7 +20,7 @@ test_gevd_float_operators()
   int r = gevd_float_operators::Threshold(buf_in, 4.0f);
   TEST("gevd_float_operators::Threshold()", r, 1);
   gevd_float_operators::Gaussian(buf_in, buf_out);
-  TEST("gevd_float_operators::Gaussian()", *(float*)buf_out->GetElementAddr(7,7), 5.0);
+  TEST_NEAR("gevd_float_operators::Gaussian()", *(float*)buf_out->GetElementAddr(7,7), 5.0, 1e-6);
   gevd_float_operators::Gradient(*buf_out, buf_mag, buf_dirx, buf_diry);
   TEST("gevd_float_operators::Gradient()", *(float*)buf_mag->GetElementAddr(1,3) > 0.7f, true);
   TEST("gevd_float_operators::Gradient()", *(float*)buf_mag->GetElementAddr(5,6) < 1e-5f, true);
