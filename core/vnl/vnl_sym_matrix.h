@@ -29,17 +29,17 @@ class vnl_sym_matrix
   inline void resize(int n) {set_size(n);}
 
  public:
-  //: Construct an empty symmetic matrix.
+  //: Construct an empty symmetric matrix.
   vnl_sym_matrix(): data_(0), index_(0), nn_(0) {}
 
-  //: Construct an symmetic matrix of size nn by nn.
+  //: Construct an symmetric matrix of size nn by nn.
   explicit vnl_sym_matrix(unsigned nn):
   data_(vnl_c_vector<T>::allocate_T(nn * (nn + 1) / 2)),
   index_(vnl_c_vector<T>::allocate_Tptr(nn)),
   nn_(nn) { setup_index(); }
 
   //: Construct a symmetric matrix with elements equal to data
-  // value should be stored row-wise, and contrain the
+  // Value should be stored row-wise, and contain the
   // n*(n+1)/2 diagonal and lower triangular elements
   inline vnl_sym_matrix(T const * data, unsigned nn);
 
