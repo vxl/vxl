@@ -56,6 +56,7 @@
 # define vcl_ws           ws
 # define vcl_setprecision setprecision
 # define vcl_endl         endl
+# define vcl_flush        flush
 # define vcl_streampos    streampos
 # define vcl_streambuf    streambuf
 # define vcl_streamsize   streamsize
