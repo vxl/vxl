@@ -588,6 +588,7 @@ void bmrf_epi_seg::b_read(vsl_b_istream &is)
         vsl_b_read(is, this->right_ds_[i]);
         vsl_b_read(is, this->right_int_[i]);
       }
+      break;
     }
    default:
     assert(!"unknown version");
