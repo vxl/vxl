@@ -7,11 +7,14 @@
   fsm@robots.ox.ac.uk
 */
 
+// .NAME vil_property
+//
+// .SECTION Description
 // There is no class called vil_property.
 //
 // The image class vil_image has the methods :
 //
-//   bool get_property(char const *tag, void *property_value = 0);
+//   bool get_property(char const *tag, void *property_value = 0) const;
 //   bool set_property(char const *tag, void const *property_value = 0) 
 //
 // which allow format extensions to be added without cluttering the

@@ -68,12 +68,9 @@ vil_memory_image::vil_memory_image(int w, int h, vil_pixel_format pixel_format)
   cache_from_impl;
 }
 
-bool vil_memory_image::get_property(char const *tag, void *property_value)
+bool vil_memory_image::get_property(char const *tag, void *property_value) const
 {
-  if (0==strcmp(tag, "memory"))
-    return true;
-
-  return false;
+  return 0==strcmp(tag, "memory");
 }
 
 // make a memory image if input is not already one.
