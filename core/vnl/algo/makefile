@@ -73,6 +73,10 @@ SOURCES += vnl_gaussian_kernel_1d.cxx
 MANPAGE_SOURCES += vnl_adjugate.txx
 MANPAGE_SOURCES += vnl_orthogonal_complement.txx
 
+# integral
+SOURCES += vnl_simpson_integral.cxx
+SOURCES += vnl_adaptsimpson_integral.cxx
+
 #######################################
 include ${IUEROOT}/config/top-params.mk
 #######################################

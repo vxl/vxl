@@ -31,6 +31,7 @@ TESTS += test_diag_matrix.cxx
 TESTS += test_gamma.cxx
 TESTS += test_arithmetic.cxx
 TESTS += test_hungarian_algorithm.cxx
+TESTS += test_integrant.cxx
 
 MANPAGE_SOURCES += test_arithmetic_body.h
 

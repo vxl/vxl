@@ -139,6 +139,11 @@ SOURCES += vnl_random.cxx
 MANPAGE_SOURCES += vnl_unary_function.txx
 MANPAGE_SOURCES += vnl_identity.h
 
+# numerical integration
+MANPAGE_SOURCES += vnl_analytic_integrant.h
+MANPAGE_SOURCES += vnl_integrant_fnct.h
+SOURCES += vnl_definite_integral.cxx
+
 # algo
 SUBDIRS += algo
 

@@ -28,6 +28,7 @@ TESTS += test_convolve.cxx
 TESTS += test_amoeba.cxx
 TESTS += test_cholesky.cxx
 TESTS += test_algo.cxx
+TESTS += test_integral.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
