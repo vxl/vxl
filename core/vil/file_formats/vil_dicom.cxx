@@ -282,7 +282,7 @@ bool vil_dicom_image::get_property(char const* tag, void* value) const
     return true;
   }
 
-  if (vcl_strcmp(vil_property_pixel_size, tag)==0)
+  if (vcl_strcmp(vil_property_pixel_size, tag)==0 && value!=0)
   {
     float *pixel_size = static_cast<float*>(value);
     pixel_size[0] = header_.xsize_ / 1000.0f;
