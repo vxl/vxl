@@ -1,12 +1,11 @@
-#include "vsol_tetrahedron.h"
-
 //:
 //  \file
+
+#include "vsol_tetrahedron.h"
 
 //*****************************************************************************
 // External declarations for implementation
 //*****************************************************************************
-#include <vcl_cassert.h>
 #include <vcl_cmath.h> // for vcl_abs(double)
 #include "vsol_point_3d.h"
 

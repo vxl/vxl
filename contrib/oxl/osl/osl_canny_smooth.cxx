@@ -8,7 +8,6 @@
 // see osl_canny_smooth.txx for template functions.
 
 #include "osl_canny_smooth.h"
-#include <vcl_cassert.h>
 #include <vcl_cstdlib.h> // vcl_abort()
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>

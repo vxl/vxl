@@ -13,7 +13,6 @@
 // \author fsm@robots.ox.ac.uk
 
 #include "osl_canny_smooth.h"
-#include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 #include <vil/vil_rgb.h>

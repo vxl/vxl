@@ -1,13 +1,4 @@
-#include <vsol/vsol_curve_2d.h>
-
-//*****************************************************************************
-// External declarations for implementation
-//*****************************************************************************
-#include <vcl_cassert.h>
-
-//***************************************************************************
-// Initialization
-//***************************************************************************
+#include "vsol_curve_2d.h"
 
 //---------------------------------------------------------------------------
 // Destructor
@@ -15,6 +6,3 @@
 vsol_curve_2d::~vsol_curve_2d()
 {
 }
-
-//#include <vcl_rel_ops.h> // gcc 2.7
-//VCL_INSTANTIATE_INLINE(bool operator!=(vsol_curve_2d const &, vsol_curve_2d const &));

@@ -8,7 +8,6 @@
 // \brief Base for classes with test whether data could come from a given pdf.
 
 #include "pdf1d_compare_to_pdf.h"
-#include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <pdf1d/pdf1d_pdf.h>
 #include <pdf1d/pdf1d_resample.h>

@@ -21,7 +21,6 @@
 
 #include <vcl_cstdio.h>
 #include <vcl_cstdlib.h>
-#include <vcl_cassert.h>
 
 //: Raise exception for invalid index
 void vnl_error_vector_index (char const* fcn, int index) {

@@ -24,8 +24,6 @@
 //
 //-------------------------------------------------------------------------------
 
-#include <vcl_cassert.h>
-
 template <class T>
 class vgl_homg {
 public:

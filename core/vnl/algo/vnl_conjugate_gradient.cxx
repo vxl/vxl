@@ -1,22 +1,20 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./vxl/vnl/vnl_conjugate_gradient.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// vnl_conjugate_gradient
-// Author: Geoffrey Cross, Oxford RRG
-// Created: 15 Feb 99
+//:
+// \file
+// \author Geoffrey Cross, Oxford RRG
+// \date   15 Feb 99
 //
 //-----------------------------------------------------------------------------
 #include "vnl_conjugate_gradient.h"
 
 #include <vcl_cstdlib.h>
-#include <vcl_cassert.h>
 #include <vcl_iostream.h>
 
 #include <vnl/vnl_cost_function.h>
 #include <vnl/vnl_vector_ref.h>
-#include <vnl/algo/vnl_svd.h>
 
 // external netlib function
 extern "C"

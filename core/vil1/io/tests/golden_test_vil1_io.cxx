@@ -1,5 +1,5 @@
 // This is ./vxl/vil/io/tests/golden_test_vil_io.cxx
-#include <vcl_cassert.h>
+
 #include <vcl_string.h>
 #include <vcl_fstream.h>
 #include <vsl/vsl_binary_io.h>

@@ -1,6 +1,5 @@
 // This is ./vxl/vgl/io/tests/golden_test_vgl_io.cxx
 
-#include <vcl_cassert.h>
 #include <vcl_string.h>
 #include <vcl_fstream.h>
 #include <vsl/vsl_binary_io.h>

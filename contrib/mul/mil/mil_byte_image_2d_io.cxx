@@ -6,11 +6,10 @@
 //  \brief Load and save mil_image_2d_of<vil_byte> from named files.
 //  \author Tim Cootes
 
-#include <mil/mil_byte_image_2d_io.h>
+#include "mil_byte_image_2d_io.h"
+
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
-#include <vsl/vsl_indent.h>
-#include <vcl_cassert.h>
 
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
@@ -97,7 +96,6 @@ vcl_string mil_byte_image_2d_io::guessFileType(const vcl_string& path)
 }
 
 
-
 //: Attempt to load image from named file
 // \param filetype  String hinting at what image format is
 // \return true if successful
@@ -134,7 +132,6 @@ bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil_byte>& image,
       vil_memory_image_of<vil_rgb_byte> buf(img);
       mil_convert_vil_cv2gm(image_,buf);
     }
-     
   }
   else if (colour_=="RGB")
   {
@@ -149,13 +146,13 @@ bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil_byte>& image,
     }
     else
     {
-      //ie copy colour image as colour   
+      //ie copy colour image as colour
       vil_memory_image_of<vil_rgb_byte> buf(img);
       mil_convert_vil_cv2cm(image_,buf);
     }
   }
   else
-  {  
+  {
     // ie colour_="" => rely on image
     if (img_is_grey)
     {
@@ -165,12 +162,12 @@ bool mil_byte_image_2d_io::loadTheImage(mil_image_2d_of<vil_byte>& image,
     }
     else
     {
-      //ie copy colour image as colour   
+      //ie copy colour image as colour
       vil_memory_image_of<vil_rgb_byte> buf(img);
       mil_convert_vil_cv2cm(image_,buf);
     }
   }
-  
+
   image=image_;
   return true;
 }
@@ -198,18 +195,15 @@ bool mil_byte_image_2d_io::saveTheImage(const mil_image_2d_of<vil_byte>& image,
   //then use vil_save with appropriate "filetype"
 
   bool image_is_grey=false,image_is_colour=false;
-  if (image.n_planes()==1) 
+  if (image.n_planes()==1)
     image_is_grey=true;
-  else if (image.n_planes()==3) 
+  else if (image.n_planes()==3)
     image_is_colour=true;
   else
   {
     vcl_cerr<<"Failed to save: number of planes = "<<image.n_planes()<<" ??, require 1 or 3"<<vcl_endl;
     return false;
   }
-
-//int nx=image.nx();
-//int ny=image.ny();
 
   if (image_is_grey)
   {

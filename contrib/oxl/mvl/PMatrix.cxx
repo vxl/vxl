@@ -5,11 +5,11 @@
 //:
 //  \file
 
-#include <vcl_cassert.h>
+#include "PMatrix.h"
+
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_cmath.h>
-//#include <vcl_memory.h>
 #include <vcl_cstdlib.h>
 
 #include <vnl/vnl_matrix.h>
@@ -26,7 +26,6 @@
 #include <mvl/HomgPoint3D.h>
 #include <mvl/HomgPlane3D.h>
 #include <mvl/HomgOperator2D.h>
-#include <mvl/PMatrix.h>
 #include <mvl/PMatrixDecompAa.h>
 #include <mvl/HMatrix3D.h>
 #include <mvl/HMatrix2D.h>
@@ -306,8 +305,8 @@ HMatrix3D PMatrix::get_canonical_H() const
 // Equality is assumed if the max abs diff is less than tol.
 bool PMatrix::is_canonical(double tol) const
 {
-  for(int r = 0; r < 3; ++r)
-    for(int c = 0; c < 4; ++c) {
+  for (int r = 0; r < 3; ++r)
+    for (int c = 0; c < 4; ++c) {
       double d = (r == c) ? (_p_matrix(r,c) - 1) : _p_matrix(r,c);
       if (vcl_fabs(d) > tol)
         return false;

@@ -5,13 +5,11 @@
 
 //=======================================================================
 
+#include "pdf1d_sampler.h"
 #include <vcl_cstdlib.h>
-#include <vcl_string.h>
-
 #include <vcl_cmath.h>
-#include <vcl_cassert.h>
-#include <vcl_queue.h>
-#include <pdf1d/pdf1d_sampler.h>
+#include <vcl_string.h>
+#include <pdf1d/pdf1d_mixture.h>
 #include <pdf1d/pdf1d_mixture_sampler.h>
 
 //=======================================================================

@@ -7,7 +7,6 @@
 
 #include "vgui_slab.h"
 
-#include <vcl_cassert.h>
 #include <vcl_vector.h>
 
 vgui_slab::vgui_slab()

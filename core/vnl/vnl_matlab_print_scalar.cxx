@@ -5,11 +5,7 @@
 #include <vcl_cstdio.h>  // sprintf()
 #include <vcl_cstdlib.h> // abort()
 #include <vcl_cstring.h> // strlen()
-#include <vcl_cassert.h>
 #include <vcl_complex.h>
-
-
-// moved here because 2.7 choked
 
 void vnl_matlab_print_scalar(int v,
                              char *buf,

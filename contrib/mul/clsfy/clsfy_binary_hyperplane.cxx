@@ -1,4 +1,3 @@
-
 // Copyright: (C) 2000 British Telecommunications PLC
 
 //:
@@ -9,18 +8,13 @@
 
 //=======================================================================
 
+#include "clsfy_binary_hyperplane.h"
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
-#include <vnl/io/vnl_io_vector.h>
-#include <mbl/mbl_matxvec.h>
-#include <mbl/mbl_matrix_products.h>
-#include <vcl_cassert.h>
 #include <vcl_cmath.h>
-#include <clsfy/clsfy_binary_hyperplane.h>
-#include <vnl/io/vnl_io_vector.h>
-#include <vnl/io/vnl_io_matrix.h>
 #include <vsl/vsl_binary_io.h>
+#include <vnl/io/vnl_io_matrix.h>
 #include <vnl/io/vnl_io_vector.h>
 
 //=======================================================================

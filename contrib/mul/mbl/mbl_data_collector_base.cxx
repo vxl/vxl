@@ -9,7 +9,6 @@
 
 #include <mbl/mbl_data_collector_base.h>
 #include <vcl_cstdlib.h>
-#include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 

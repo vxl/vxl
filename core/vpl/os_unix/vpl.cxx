@@ -5,6 +5,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <vxl_config.h> // for VXL_UNISTD_*
+#include <vcl_cstdlib.h>
+#include <vcl_cstring.h>
 
 char *
 vpl_getcwd( char *buf, vcl_size_t buf_size )
@@ -58,13 +60,9 @@ vpl_usleep( unsigned int t )
 #endif
 }
 
-#include <stdlib.h>
-#include <string.h>
-#include <vcl_cassert.h>
-
 int vpl_putenv ( const char * envvar )
 {
-  char * storage_space = strdup(envvar); // This causes a memory leak
-                                         // but this can't be helped
-  return putenv(storage_space);
+  char * storage_space = vcl_strdup(envvar); // This causes a memory leak
+                                             // but this can't be helped
+  return vcl_putenv(storage_space);
 }

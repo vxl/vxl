@@ -1,5 +1,5 @@
-#ifndef _Homg_h
-#define _Homg_h
+#ifndef Homg_h_
+#define Homg_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
@@ -21,26 +21,19 @@
 // \endverbatim
 //-------------------------------------------------------------------------------
 
-#include <vcl_cassert.h>
-#if defined(VCL_GCC_295)
-# include <vnl/vnl_vector_fixed.h>
-#endif
-
-class Homg {
-
-  // PUBLIC INTERFACE----------------------------------------------------------
+class Homg
+{
 public:
 
-//: Standard placeholder for methods that wish to return infinity.
+  //: Standard placeholder for methods that wish to return infinity.
   static double infinity;
 
-
-//: The tolerance used in "near zero" tests in the Homg subclasses.
+  //: The tolerance used in "near zero" tests in the Homg subclasses.
   static double infinitesimal_tol;
 
-//: Static method to set the default tolerance used for infinitesimal checks.
-// The default is 1e-12.
+  //: Static method to set the default tolerance used for infinitesimal checks.
+  // The default is 1e-12.
   static void set_infinitesimal_tol(double tol);
 };
 
-#endif // _Homg_h
+#endif // Homg_h_

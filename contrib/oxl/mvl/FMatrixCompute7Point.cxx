@@ -11,12 +11,10 @@
 
 #include "FMatrixCompute7Point.h"
 
-#include <vcl_cassert.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
 
-#include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_svd.h>

@@ -7,7 +7,7 @@
 //                            Niskayuna, NY 12309
 //                            All Rights Reserved
 //              Reproduction rights limited as described below.
-//                               
+//
 //      Permission to use, copy, modify, distribute, and sell this software
 //      and its documentation for any purpose is hereby granted without fee,
 //      provided that (i) the above copyright notice and this permission
@@ -17,7 +17,7 @@
 //      the specific, prior written permission of GE CRD, and (iii) any
 //      modifications are clearly marked and summarized in a change history
 //      log.
-//       
+//
 //      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
 //      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
 //      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
@@ -32,12 +32,9 @@
 // <end copyright notice>
 #include "carmen_interface.h"
 #include <vcl_string.h>
-#include <vcl_cassert.h>
-#include <vul/vul_arg.h>
 #include <vcl_iosfwd.h>
 #include <vcl_vector.h>
 #include <vcl_utility.h>
-#include <vbl/vbl_ref_count.h>
 
 //using namespace std;
 
@@ -57,17 +54,3 @@ int main(int argc, char ** argv)
 
   return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,13 +1,11 @@
-#include <vsol/vsol_triangle_2d.h>
-
 //:
 //  \file
+
+#include "vsol_triangle_2d.h"
 
 //*****************************************************************************
 // External declarations for implementation
 //*****************************************************************************
-
-#include <vcl_cassert.h>
 #include <vsol/vsol_point_2d.h>
 
 //***************************************************************************

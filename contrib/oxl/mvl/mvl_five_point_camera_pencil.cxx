@@ -7,7 +7,6 @@
 #include "mvl_five_point_camera_pencil.h"
 
 #include <vcl_cmath.h>
-#include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
 
 #include <vnl/vnl_vector.h>
@@ -91,7 +90,6 @@ bool mvl_five_point_camera_pencil(double const xs[5],
   return true;
 }
 
-//#include <vcl_iostream.h>
 bool mvl_five_point_camera_pencil_parameters(vnl_matrix<double> const &A,
                                              vnl_matrix<double> const &B,
                                              vnl_vector<double> const &X,

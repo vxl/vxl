@@ -7,18 +7,15 @@
 #pragma implementation
 #endif
 
+#include "pdf1d_epanech_kernel_pdf.h"
+
 #include <vcl_cstdlib.h>
-#include <vcl_cassert.h>
 #include <vcl_string.h>
 #include <vcl_cmath.h>
 
-#include <vsl/vsl_indent.h>
-#include <pdf1d/pdf1d_epanech_kernel_pdf.h>
-#include <vnl/vnl_math.h>
 #include <pdf1d/pdf1d_epanech_kernel_pdf_sampler.h>
 #include <pdf1d/pdf1d_sampler.h>
 #include <pdf1d/pdf1d_prob_chi2.h>
-#include <mbl/mbl_gamma.h>
 
 //=======================================================================
 

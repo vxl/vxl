@@ -2,14 +2,12 @@
 #pragma implementation
 #endif
 
-#include <vcl_cassert.h>
+#include "vpdfl_gaussian_kernel_pdf_builder.h"
+
 #include <vcl_string.h>
 #include <vcl_cstdlib.h> // vcl_abort()
 
-#include <vsl/vsl_indent.h>
-#include <mbl/mbl_data_wrapper.h>
 #include <vpdfl/vpdfl_gaussian_kernel_pdf.h>
-#include <vpdfl/vpdfl_gaussian_kernel_pdf_builder.h>
 
 //=======================================================================
 // Dflt ctor

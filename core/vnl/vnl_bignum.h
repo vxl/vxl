@@ -61,7 +61,6 @@
 // \endverbatim
 
 #include <vcl_iostream.h>
-#include <vcl_cassert.h>
 #include <vcl_cmath.h> // for sqrt(double)
 #include <vcl_string.h>
 

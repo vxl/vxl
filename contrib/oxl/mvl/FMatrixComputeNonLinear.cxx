@@ -7,7 +7,6 @@
 
 #include "FMatrixComputeNonLinear.h"
 
-#include <vcl_cassert.h>
 #include <vcl_cstdlib.h> // for abort()
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
@@ -15,8 +14,8 @@
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
+#include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>
-#include <vnl/vnl_double_3x3.h>
 #include <mvl/HomgNorm2D.h>
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgInterestPointSet.h>
@@ -50,13 +49,13 @@ FMatrixComputeNonLinear::FMatrixComputeNonLinear(PairMatchSetCorner* matches) :
   points2_.resize(points2->size());
 
   // Get the actual image points
-  for(int a = 0; a < data_size_; a++) {
+  for (int a = 0; a < data_size_; a++) {
     vnl_double_2 temp1;
     temp1 = points1->get_2d(point1_int[a]);
     points1_[a] = HomgPoint2D(temp1[0], temp1[1], 1.0);
   }
 
-  for(int a = 0; a < data_size_; a++) {
+  for (int a = 0; a < data_size_; a++) {
     vnl_double_2 temp2;
     temp2 = points2->get_2d(point2_int[a]);
     points2_[a] = HomgPoint2D(temp2[0], temp2[1], 1.0);
@@ -69,9 +68,9 @@ FMatrixComputeNonLinear::FMatrixComputeNonLinear(PairMatchSetCorner* matches) :
 bool FMatrixComputeNonLinear::compute_basis(FMatrix* F, vcl_vector<int> basis) {
   one_ = false;
   vcl_vector<HomgPoint2D> basis1(7), basis2(7);
-  for(int i = 0; i < 7; i++) {
+  for (int i = 0; i < 7; i++) {
     int other = matches_.get_match_12(basis[i]);
-    if(other == -1)
+    if (other == -1)
       vcl_cout << "The basis index doesn't include a match for " << i << "." << vcl_endl;
     else {
       vnl_double_2 p1 = matches_.get_corners1()->get_2d(basis[i]);
@@ -95,10 +94,10 @@ bool FMatrixComputeNonLinear::compute(FMatrix* F)
   vcl_cout << "FMatrixComputeNonLinear: matches = "<< data_size_ <<", using "<< FMatrixComputeNonLinear_nparams <<" parameters \n";
   double so_far = 1e+8;
   FMatrix norm_F = *F;
-  if(one_) {
-    for(p_ = 0; p_ < 3; p_++) {
-      for(q_ = 0; q_ < 3; q_++) {
-        for(r_ = 0; r_ < 4; r_++) {
+  if (one_) {
+    for (p_ = 0; p_ < 3; p_++) {
+      for (q_ = 0; q_ < 3; q_++) {
+        for (r_ = 0; r_ < 4; r_++) {
           FMatrix norm_F = *F;
           int r1 = 0, c1 = 0, r2 = 0, c2 = 0;
           get_plan(r1, c1, r2, c2);
@@ -133,7 +132,7 @@ bool FMatrixComputeNonLinear::compute(FMatrix* F)
 //        lm.set_epsilon_function(1e-6);
           lm.minimize(f_params);
 
-          if(lm.get_end_error() < so_far) {
+          if (lm.get_end_error() < so_far) {
             so_far = lm.get_end_error();
             vcl_cout << "so_far : " << so_far << vcl_endl;
             norm_F = params_to_fmatrix(f_params);
@@ -169,10 +168,10 @@ bool FMatrixComputeNonLinear::compute(FMatrix* F)
     lm.set_epsilon_function(1e-4);
     lm.minimize(f_params);
 
-    if(lm.get_end_error() < so_far) {
+    if (lm.get_end_error() < so_far) {
       so_far = lm.get_end_error();
       vcl_cout << "so_far : " << so_far << vcl_endl;
-      for(int l = 0; l < 7; l++)
+      for (int l = 0; l < 7; l++)
         vcl_cout << f_params(l) << vcl_endl;
       norm_F = params_to_fmatrix(f_params);
       F_final->set(norm_F);
@@ -274,7 +273,7 @@ FMatrix FMatrixComputeNonLinear::params_to_fmatrix(const vnl_vector<double>& par
 {
   FMatrix ret;
 
-  if(one_) {
+  if (one_) {
     vnl_matrix<double> ref = ret.get_matrix();
     // Again the d is moved about through the different parametrizations
     int c1= 0, r1 = 0, c2 = 0, r2 = 0;
@@ -346,7 +345,7 @@ FMatrix FMatrixComputeNonLinear::params_to_fmatrix(const vnl_vector<double>& par
     vnl_double_2 e1n = e1.get_double2();
     vnl_double_2 e2n = e2.get_double2();
     double grads1, grads2;
-    for(int i = 0; i < 7; i++) {
+    for (int i = 0; i < 7; i++) {
       vnl_double_2 t1 = basis1_[i].get_double2();
       vnl_double_2 t2 = basis2_[i].get_double2();
       grads1 = -(e1n[1] - t1[1])/(e1n[0] - t1[0]);
@@ -356,7 +355,7 @@ FMatrix FMatrixComputeNonLinear::params_to_fmatrix(const vnl_vector<double>& par
     }
     FMatrixCompute7Point* computor = new FMatrixCompute7Point(true, true);
     vcl_vector<FMatrix*> ref;
-    if(!computor->compute(new_points1, basis2_, ref))
+    if (!computor->compute(new_points1, basis2_, ref))
       vcl_cout << "FMatrixCompute7Point Failure" << vcl_endl;
     double final = 0.0;
     unsigned int num = 0;
@@ -366,7 +365,7 @@ FMatrix FMatrixComputeNonLinear::params_to_fmatrix(const vnl_vector<double>& par
       for (unsigned int m = 0; m < res.size(); m++)
         so_far += res[m];
 //      vcl_cout << "so_far : " << so_far << vcl_endl;
-      if(so_far < final) {
+      if (so_far < final) {
         final = so_far;
         num = l;
       }
@@ -420,7 +419,7 @@ vnl_vector<double> FMatrixComputeNonLinear::calculate_residuals(FMatrix* F) {
   vnl_matrix<double> pre2 = f*z*ft;
 #endif
 
-  for(int i = 0; i < data_size_; i++) {
+  for (int i = 0; i < data_size_; i++) {
     HomgPoint2D one = points1_[i], two = points2_[i];
     double t = 0.0;
     HomgLine2D l1 = F->image2_epipolar_line(one);

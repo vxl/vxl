@@ -19,7 +19,6 @@
 
 #include <vcl_iosfwd.h>
 #include <vgl/vgl_homg_point_3d.h> // data member of this class
-#include <vcl_cassert.h>
 
 //:Represents a homogeneous 3D line using two points
 // A class to hold a homogeneous representation of a 3D Line.  The line is

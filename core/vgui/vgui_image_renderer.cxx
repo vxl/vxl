@@ -1,27 +1,24 @@
 
 //:
 //  \file
-
-/*
-  fsm@robots.ox.ac.uk
-*/
-//  15-AUG-2000 Marko Bacic, Oxford RRG -- Now uses new routines for image
-//              rendering via textures
+// \author fsm@robots.ox.ac.uk
+// \verbatim
+//  Modifications
+//  15-AUG-2000 Marko Bacic, Oxford RRG -- Now uses new routines for image rendering via textures
 //  23-AUG-2000 Marko Bacic, Oxford RRG -- Now uses vgui_cache_wizard
 //  08-AUG-2000 Marko Bacic, Oxford RRG -- Minor changes
+// \endverbatim
+
 #include "vgui_image_renderer.h"
 
 #include <vcl_cmath.h>
-#include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
 
-#include <vcl_cmath.h>
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_section_buffer.h>
 #include <vgui/vgui_projection_inspector.h>
-#include <vgui/internals/vgui_accelerate.h>
 
 // Only check-in false:
 static bool debug = false;

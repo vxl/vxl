@@ -1,5 +1,4 @@
 #include <vcl_string.h> // C++ specific includes first
-#include <vcl_cassert.h>
 #include <vcl_iostream.h>
 
 #define Assert(x) {vcl_cout << "TEST " #x " : "; vcl_cout << ((x)?"PASSED":"FAILED")}

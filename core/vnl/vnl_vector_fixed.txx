@@ -6,7 +6,6 @@
 
 #include "vnl_vector_fixed.h"
 #include <vcl_iostream.h>
-#include <vcl_cassert.h>
 
 
 // instantiation macros for vnl_vector_fixed<T,int> :

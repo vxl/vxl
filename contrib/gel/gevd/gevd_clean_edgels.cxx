@@ -1,15 +1,14 @@
 //:
 // \file
 
-#include <vul/vul_timer.h>
+#include "gevd_clean_edgels.h"
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>   // for vcl_abs(int)
-#include <vcl_cassert.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h> // for vcl_max()
-#include "gevd_clean_edgels.h"
-#include <vil/vil_byte.h>
 #include <vcl_cmath.h>     // for vcl_sqrt()
+#include <vul/vul_timer.h>
+#include <vsol/vsol_point_2d.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
@@ -17,8 +16,8 @@
 #include <vdgl/vdgl_interpolator_sptr.h>
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_interpolator_linear.h>
-#include <vsol/vsol_box_2d.h>
-#include <vsol/vsol_box_2d_sptr.h>
+#include <vtol/vtol_edge.h>
+#include <vtol/vtol_edge_2d.h>
 #include <gevd/gevd_float_operators.h>
 #include <gevd/gevd_pixel.h>
 
@@ -193,7 +192,6 @@ bool gevd_clean_edgels::edge_exists(vtol_vertex_2d_sptr v1, vtol_vertex_2d_sptr 
 //: Remove edges which are aready connected to the given vertex.
 void gevd_clean_edgels::remove_connected_edges(vtol_vertex_2d* v, vcl_vector<vtol_edge_2d_sptr >& edges)
 {
-
   vcl_vector<vtol_edge_2d_sptr > tmp;
   for (vcl_vector<vtol_edge_2d_sptr >::iterator eit = edges.begin(); eit != edges.end(); eit++)
     {

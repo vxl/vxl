@@ -1,5 +1,5 @@
 // This is ./gel/vsol/vsol_point_3d.cxx
-#include <vsol/vsol_point_3d.h>
+#include "vsol_point_3d.h"
 
 //:
 // \file
@@ -7,7 +7,6 @@
 //*****************************************************************************
 // External declarations for implementation
 //*****************************************************************************
-#include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vgl/vgl_distance.h>
 

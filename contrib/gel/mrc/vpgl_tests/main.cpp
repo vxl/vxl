@@ -1,15 +1,9 @@
 #include <vcl_cstdlib.h>
 #include <vcl_fstream.h>
 #include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vcl_cassert.h>
 #include <vcl_vector.h>
 #include <vcl_utility.h>
-#include <vul/vul_arg.h>
-#include <vbl/vbl_ref_count.h>
 #include <vnl/vnl_math.h>
-#include <vnl/vnl_c_vector.h>
-#include <vnl/vnl_vector.h>
 
 #include <vpgl/vpgl_basic_camera.h>
 #include <vpgl/vpgl_matrix_camera.h>
@@ -61,7 +55,7 @@ int main(int argc, char ** argv)
 
   output << "NUMPOINTS:" << "  "<< 10 <<vcl_endl;
 
-  for(int i=0;i<10;i++){
+  for (int i=0;i<10;i++){
     double rnd_x= get_int_random();
     double rnd_y= get_int_random();
     double rnd_z= get_int_random();
@@ -78,7 +72,7 @@ int main(int argc, char ** argv)
 ////////////////////////////////////////////////////
 #if 0
   vcl_ifstream instr("egemen1.cm");
-  if(!instr)
+  if (!instr)
   {
     vcl_cout <<"In carmen_interface::load_correspondence_file()"
              <<" - can't open file  " <<vcl_endl;
@@ -88,7 +82,7 @@ int main(int argc, char ** argv)
   int npts;
   instr >> buf ;
 
-  if(!vcl_strcmp("NUMPOINTS:",buf))
+  if (!vcl_strcmp("NUMPOINTS:",buf))
     instr >> npts;
   else
   {
@@ -98,11 +92,11 @@ int main(int argc, char ** argv)
   int view_no=0, point_id=0;
   double x=0, y=0, z=0;
   float u=0, v=0;
-  for(int i=0; i<npts&&instr; i++)
+  for (int i=0; i<npts&&instr; i++)
   {
     instr >> buf;
 
-    if(vcl_strcmp("CORRESP:",buf))
+    if (vcl_strcmp("CORRESP:",buf))
     {
       vcl_cout << "wrong number of correspondences " << vcl_endl;
       return false;

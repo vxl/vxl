@@ -12,7 +12,6 @@
 
 #include "FMatrixComputeLinear.h"
 
-#include <vcl_cassert.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 

@@ -1,5 +1,5 @@
 // This is ./gel/vsol/vsol_point_2d.cxx
-#include <vsol/vsol_point_2d.h>
+#include "vsol_point_2d.h"
 
 //:
 // \file
@@ -7,7 +7,6 @@
 //*****************************************************************************
 // External declarations for implementation
 //*****************************************************************************
-#include <vcl_cassert.h>
 #include <vgl/vgl_distance.h>
 
 //***************************************************************************
@@ -39,7 +38,7 @@ vsol_spatial_object_2d_sptr vsol_point_2d::clone(void) const
 //---------------------------------------------------------------------------
 bool vsol_point_2d::operator==(const vsol_point_2d &other) const
 {
-  return (this==&other || p_==other.p_);
+  return this==&other || p_==other.p_;
 }
 
 //: spatial object equality

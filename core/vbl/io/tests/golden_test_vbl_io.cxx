@@ -6,15 +6,14 @@
 #include <vbl/io/vbl_io_array_2d.h>
 #include <vbl/io/vbl_io_array_3d.h>
 
-#include <vbl/io/tests/vbl_io_test_classes.h>
-#include <vbl/io/tests/vbl_io_test_classes.cxx>
+#include "vbl_io_test_classes.h"
+#include "vbl_io_test_classes.cxx"
 
 #include <vbl/io/vbl_io_smart_ptr.h>
 
 #include <vbl/io/vbl_io_sparse_array_1d.h>
 #include <vbl/io/vbl_io_bounding_box.h>
 
-#include <vcl_cassert.h>
 #include <vcl_string.h>
 #include <vcl_fstream.h>
 #include <testlib/testlib_root_dir.h>
@@ -245,14 +244,14 @@ void golden_test_vbl_io(bool save_file)
   // Test Sparse Array
   bool test_result4 = true;
   //same number of non zero elements?
-  if(sa_out.count_nonempty() != sa_in.count_nonempty())
+  if (sa_out.count_nonempty() != sa_in.count_nonempty())
     test_result4=false;
   else {
     //check every key/data pair, require same order too.
     vbl_sparse_array_1d<double>::const_iterator s = sa_in.begin();
     //N.B. relies on sensible == operator for <T>
-    for(vbl_sparse_array_1d<double>::const_iterator r = sa_out.begin(); r != sa_out.end(); ++r){
-      if(((*s).first != (*r).first) || ((*s).second != (*r).second)) test_result4=false;
+    for (vbl_sparse_array_1d<double>::const_iterator r = sa_out.begin(); r != sa_out.end(); ++r){
+      if (((*s).first != (*r).first) || ((*s).second != (*r).second)) test_result4=false;
       s++;
     }
   }

@@ -12,7 +12,6 @@
 
 #include "vgl_polygon.h"
 #include <vcl_iostream.h>
-#include <vcl_cassert.h>
 
 // Constructors/Destructor---------------------------------------------------
 
@@ -45,7 +44,7 @@ vgl_polygon::vgl_polygon(vcl_vector<sheet_t> const& sheets):
 vgl_polygon::vgl_polygon(vcl_pair<float, float> const p[], int n):
   sheets_(1, sheet_t(n))
 {
-  for(int i = 0; i < n; ++i)
+  for (int i = 0; i < n; ++i)
     sheets_[0][i].set(p[i].first, p[i].second);
 }
 
@@ -55,7 +54,7 @@ vgl_polygon::vgl_polygon(vcl_pair<float, float> const p[], int n):
 vgl_polygon::vgl_polygon(vcl_pair<double, double> const p[], int n):
   sheets_(1, sheet_t(n))
 {
-  for(int i = 0; i < n; ++i)
+  for (int i = 0; i < n; ++i)
     sheets_[0][i].set(p[i].first, p[i].second);
 }
 
@@ -65,7 +64,7 @@ vgl_polygon::vgl_polygon(vcl_pair<double, double> const p[], int n):
 vgl_polygon::vgl_polygon(float const* x, float const* y, int n):
   sheets_(1, sheet_t(n))
 {
-  for(int i = 0; i < n; ++i)
+  for (int i = 0; i < n; ++i)
     sheets_[0][i].set(x[i], y[i]);
 }
 
@@ -180,7 +179,7 @@ vgl_polygon_sheet_as_array::vgl_polygon_sheet_as_array(vgl_polygon::sheet_t cons
   x = new float[n*2];
   y = x + n;
 
-  for(int v = 0; v < n; ++v) {
+  for (int v = 0; v < n; ++v) {
     x[v] = p[v].x();
     y[v] = p[v].y();
   }

@@ -15,7 +15,6 @@
 
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
-#include <vcl_cassert.h>
 #include <vcl_fstream.h>
 #include <vcl_map.h>
 #include <vcl_utility.h>

@@ -9,17 +9,15 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl_iostream.h>
-#include <vcl_cassert.h>
 
 #ifdef VCL_WIN32
-#include <vgui/impl/mfc/stdafx.h>
+#include <vgui/impl/mfc/StdAfx.h>
 extern CDC *vgui_mfc_adaptor_global_dc;
 #endif
 
 #include "vgui_accelerate.h"
 
 #include <vgui/vgui_gl.h>
-#include <vgui/vgui_utils.h>
 
 bool vgui_accelerate::vgui_no_acceleration = false;
 bool vgui_accelerate::vgui_mfc_acceleration = true;

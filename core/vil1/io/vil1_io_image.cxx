@@ -1,10 +1,8 @@
+// This is vil/io/vil_io_image.txx
 #ifdef __GNUC__
 #pragma implementation
 #endif
 
-// This is vil/io/vil_io_image.txx
-
-#include <vcl_cassert.h>
 #include "vil_io_image.h"
 #include <vil/io/vil_io_image_impl.h>
 #include <vil/vil_image.h>

@@ -3,9 +3,7 @@
 #endif
 
 #include <vcl_string.h>
-#include <vcl_cassert.h>
 #include <vul/vul_arg.h>
-#include <vil/vil_memory_image_of.h>
 #include <vil/vil_image.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
@@ -14,7 +12,7 @@
 
 // ** please don't make this program interactive. it must be
 // usable in a script, as a filter. **
-int main(int argc,char **argv) 
+int main(int argc,char **argv)
 {
   vul_arg<vcl_string> infile ("-in"   ,"input image file"    ,"-"); // default is stdin.
   vul_arg<vcl_string> outfile("-out"  ,"output corner file (default is stdout)"  ,"");
@@ -24,7 +22,7 @@ int main(int argc,char **argv)
   vul_arg<vcl_string> cormap ("-map"  ,"cornerness map (pnm)","");
   vul_arg<bool>       pab    ("-pab"  ,"emulate pab harris"  ,false);
   vul_arg_parse(argc,argv);
-  
+
   // load image
   vil_image I;
   if (infile() == "-") {
@@ -35,7 +33,7 @@ int main(int argc,char **argv)
   }
   else
     I = vil_load(infile().c_str());
-  
+
   // parameters
   osl_harris_params params;
   params.corner_count_max = corner_count_max();
@@ -44,7 +42,7 @@ int main(int argc,char **argv)
   params.adaptive_window_size = adaptive_window_size();
   params.adaptive = (adaptive_window_size() != 0);
   params.pab_emulate = pab();
-  
+
   // compute object
   osl_harris H(params);
   H.compute(I);
@@ -60,6 +58,6 @@ int main(int argc,char **argv)
   // cornerness map
   if (cormap.set())
     vil_save(H.image_cornerness_buf, cormap().c_str(), "pnm");
-  
+
   return 0;
 }

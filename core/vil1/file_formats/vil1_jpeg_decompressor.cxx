@@ -9,7 +9,6 @@
 #include "vil_jpeg_decompressor.h"
 #include "vil_jpeg_source_mgr.h"
 #include <vil/vil_stream.h>
-#include <vcl_cassert.h>
 #include <vcl_iostream.h>
 
 #define trace if (true) { } else vcl_cerr

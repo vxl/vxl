@@ -7,14 +7,13 @@
 
 #include "FMPlanarNonLinFun.h"
 
-#include <vcl_cassert.h>
 #include <vcl_cstdlib.h> // for vcl_abort()
 #include <vcl_iostream.h>
 
+#include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matops.h> // use vnl_matlab_print.h for pretty printing
 
-#include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_cross_product_matrix.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
@@ -43,7 +42,7 @@ FMPlanarNonLinFun::FMPlanarNonLinFun(const ImageMetric* image_metric1,
 {
   // Form single array
   vcl_vector<HomgPoint2D> points(points1);
-  for(unsigned i = 0; i < points2.size(); ++i)
+  for (unsigned i = 0; i < points2.size(); ++i)
     points.push_back(points2[i]);
 
   // Condition points

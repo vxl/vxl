@@ -4,7 +4,6 @@
 #include "menu_hack.h"
 
 #include <vcl_iostream.h>
-#include <vcl_cassert.h>
 #include <vcl_vector.h>
 
 #include <vgui/vgui_gl.h>

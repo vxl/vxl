@@ -1,5 +1,4 @@
 #include <vcl_iostream.h>
-#include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_brent.h>

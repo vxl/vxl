@@ -1,5 +1,5 @@
 // This is ./vxl/vnl/io/tests/golden_test_vnl_io.cxx
-#include <vcl_cassert.h>
+
 #include <vcl_string.h>
 #include <vcl_fstream.h>
 #include <testlib/testlib_root_dir.h>
@@ -205,7 +205,7 @@ void golden_test_vnl_io(bool save_file)
   m_sparse_in.reset();
   bool test_result=true;
 
-  while(m_sparse_out.next() && m_sparse_in.next())
+  while (m_sparse_out.next() && m_sparse_in.next())
   {
     if (m_sparse_out.getrow()!=m_sparse_in.getrow() || m_sparse_out.getcolumn() != m_sparse_in.getcolumn()
         ||  m_sparse_out.value()!= m_sparse_in.value())

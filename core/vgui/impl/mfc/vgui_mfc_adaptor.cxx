@@ -7,7 +7,6 @@
 #include "vgui_mfc_adaptor.h"
 
 #include <vcl_cmath.h>
-#include <vcl_cassert.h>
 #include <vcl_cstring.h>
 
 #include <vgui/vgui_gl.h>
@@ -123,7 +122,7 @@ void vgui_mfc_adaptor::make_current()
 void vgui_mfc_adaptor::swap_buffers()
 {
   vgui_mfc_adaptor_global_dc = m_pDC;
-  if(double_buffered)
+  if (double_buffered)
     SwapBuffers(m_pDC->m_hDC);
 }
 
@@ -185,7 +184,7 @@ int vgui_mfc_adaptor::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
   // TODO: Add your specialized creation code here
 
-  if(vgui_accelerate::vgui_mfc_acceleration)
+  if (vgui_accelerate::vgui_mfc_acceleration)
   {
     CDC *tmp = new CClientDC(this);
     m_pDC = new CDC();
@@ -335,10 +334,10 @@ void vgui_mfc_adaptor::service_redraws()
 {
   if (redraw_posted)
   {
-    if(double_buffered)  // kym - changed from if(!double_buffered) - why change the buffer otherwise?
+    if (double_buffered)  // kym - changed from if(!double_buffered) - why change the buffer otherwise?
       glDrawBuffer(GL_BACK);
     dispatch_to_tableau(vgui_event(vgui_DRAW));
-    if(!double_buffered)
+    if (!double_buffered)
     {
       //CWnd *wnd = AfxGetApp()->GetMainWnd();
       CWnd* wnd;
@@ -372,7 +371,7 @@ void vgui_mfc_adaptor::post_timer(float tm,int id)
 //: Called by MFC when a draw event is required - overridden to draw this view.
 void vgui_mfc_adaptor::OnDraw(CDC* pDC)
 {
-  if(debug)
+  if (debug)
     vcl_cerr << "OnDraw" << vcl_endl;
   // post_redraw();
 
@@ -404,7 +403,7 @@ void vgui_mfc_adaptor::OnSize(UINT nType, int cx, int cy)
 
   m_width = cx;
   m_height = cy;
-  if(cx && cy)
+  if (cx && cy)
   {
     BITMAPINFOHEADER bmi = {sizeof(BITMAPINFOHEADER),
       cx,
@@ -519,7 +518,7 @@ void vgui_mfc_adaptor::domouse(vgui_event_type et, UINT nFlags, CPoint point, vg
   e.wx = point.x;
   e.wy = m_height - point.y;
   //: Deals with right popup menu
-  if(e.modifier == mixin::popup_modifier  && e.button == mixin::popup_button)
+  if (e.modifier == mixin::popup_modifier  && e.button == mixin::popup_button)
   {
     vgui_popup_params params;
     params.x = point.x;

@@ -8,7 +8,6 @@
 #include "POX.h"
 
 #include <vcl_vector.h>
-#include <vcl_cassert.h>
 #include <vbl/vbl_qsort.h>
 
 typedef unsigned char byte;
@@ -28,11 +27,11 @@ MedianReduceImage::MedianReduceImage(vil_memory_image_of<unsigned char> const& i
   vil_memory_image_of<byte>& out = *this;
   vil_memory_image_of<byte> hists(ow * oh, SCALE * SCALE);
   vcl_vector<int> intensities(SCALE*SCALE);
-  for(int ox = 0; ox < ow; ++ox)
-    for(int oy = 0; oy < oh; ++oy) {
+  for (int ox = 0; ox < ow; ++ox)
+    for (int oy = 0; oy < oh; ++oy) {
       int k = 0;
-      for(int ix = ox*SCALE; ix < ox*SCALE+SCALE; ++ix)
-        for(int iy = oy*SCALE; iy < oy*SCALE+SCALE; ++iy)
+      for (int ix = ox*SCALE; ix < ox*SCALE+SCALE; ++ix)
+        for (int iy = oy*SCALE; iy < oy*SCALE+SCALE; ++iy)
           intensities[k++] = in(ix,iy);
       vbl_qsort_ascending(&intensities[0], k);
       out(ox,oy) = intensities[k/2];

@@ -1,5 +1,4 @@
 #include <vcl_cstdio.h>
-#include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vnl/vnl_math.h> // vnl_math_abs()
 #include <vnl/vnl_test.h>
@@ -18,6 +17,7 @@ void test_qsvd() {
   float U[9], V[9], Q[9], Alpha[3], Beta[3], Work[12];
   int m=3, n=3, p=3, k, l, Iwork[3], info;
 
+  vcl_printf("m = 3, n = 3, p = 3\n");
   sggsvd_("U", "V", "Q", &m, &n, &p, &k, &l, AA, &n, BB, &n, Alpha, Beta,
           U, &n, V, &n, Q, &n, Work, Iwork, &info);
 

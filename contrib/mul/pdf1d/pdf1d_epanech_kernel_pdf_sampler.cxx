@@ -8,14 +8,8 @@
 #include "pdf1d_epanech_kernel_pdf_sampler.h"
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
-
 #include <vcl_cmath.h>
-#include <vcl_cassert.h>
-#include <vcl_queue.h>
 #include <vcl_complex.h>
-#include <vsl/vsl_indent.h>
-#include <mbl/mbl_mz_random.h>
-#include <vnl/io/vnl_io_vector.h>
 #include <pdf1d/pdf1d_sampler.h>
 
 //=======================================================================

@@ -3,10 +3,8 @@
 
 #include "ImageWarp.h"
 
-#include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
-#include <vil/vil_file_image.h>
 #include <vil/vil_memory_image_of.h>
 
 #include <oxp/Mapping_2d_2d.h>
@@ -60,8 +58,8 @@ void ImageWarp<PixelType>::gapfill(vil_memory_image_of<PixelType>& out, int ngap
     while (1) {
       vcl_cerr << "Gapfilling " << ngaps << " pixels\n";
       int old_ngaps = ngaps;
-      for(int oy = 0; oy < h; ++oy)
-        for(int ox = 0; ox < w; ++ox)
+      for (int oy = 0; oy < h; ++oy)
+        for (int ox = 0; ox < w; ++ox)
           if (out(ox, oy) == vnl_numeric_traits<PixelType>::zero) {
             int nnz;
             real_t tmp;
@@ -89,8 +87,8 @@ void ImageWarp<PixelType>::warp(Mapping_2d_2d& map,
   int w = in.width();
   int h = in.height();
   int ngaps = 0;
-  for(int iy = 0; iy < h; ++iy)
-    for(int ix = 0; ix < w; ++ix) {
+  for (int iy = 0; iy < h; ++iy)
+    for (int ix = 0; ix < w; ++ix) {
       // *** Correct (ix, iy) to (ox,oy)
 
       // rdc correct
@@ -123,8 +121,8 @@ void ImageWarp<PixelType>::warp_inverse(Mapping_2d_2d& map,
   int out_offset_x = (w - out_w) / 2;
   int out_offset_y = (h - out_h) / 2;
 
-  for(int oy = 0; oy < out_h; ++oy)
-    for(int ox = 0; ox < out_w; ++ox) {
+  for (int oy = 0; oy < out_h; ++oy)
+    for (int ox = 0; ox < out_w; ++ox) {
       // *** Find (ix, iy) from (ox,oy)
 
       // rdc correct

@@ -9,14 +9,10 @@
 #pragma implementation
 #endif
 
-#include <mbl/mbl_matxvec.h>
-#include <vcl_string.h>
-#include <vcl_cassert.h>
-#include <vsl/vsl_indent.h>
-#include <vnl/io/vnl_io_matrix.h>
 #include "vpdfl_pc_gaussian_sampler.h"
-#include "vpdfl_pc_gaussian.h"
 
+#include <vcl_string.h>
+#include <vpdfl/vpdfl_pc_gaussian.h>
 
 //=======================================================================
 // Method: is_a

@@ -14,7 +14,6 @@
 // \file
 
 #include <vcl_iostream.h>
-#include <vcl_cassert.h>
 #include <vcsl/vcsl_cartesian_3d.h>
 #include <vcsl/vcsl_displacement.h>
 #include <vcsl/vcsl_graph.h>

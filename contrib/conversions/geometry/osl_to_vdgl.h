@@ -6,7 +6,6 @@
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_edgel.h>
 #include <vdgl/vdgl_interpolator_linear.h>
-#include <vcl_cassert.h>
 
 inline vdgl_digital_curve osl_to_vdgl(osl_edgel_chain const& dc)
 {
