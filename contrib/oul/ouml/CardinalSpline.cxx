@@ -1,10 +1,11 @@
 #include "CardinalSpline.h"
+#include <vsl/vsl_vector_io.txx>
 
 // Return a list of points on the boundary of the curve. This is
 // intended for drawing the curve as a list of line segments.
 // \param int num_points: the number of points to return.
 // \return vcl_vector<Vector3D>: a list of points.
-vcl_vector<CardinalSpline::Vector3D> CardinalSpline::getPoints(int num_points)
+vcl_vector<CardinalSpline::Vector3D> CardinalSpline::getPoints(int num_points) const
 {
   vcl_vector<Vector3D> points;
   Vector3D current_point;
@@ -19,30 +20,46 @@ vcl_vector<CardinalSpline::Vector3D> CardinalSpline::getPoints(int num_points)
 // Internal helper function. This is a commonly computed value which
 // I've just put in it's own method for convenience.
 CardinalSpline::Vector3D CardinalSpline::getVal(
-    const vnl_matrix_fixed<double, 1, 4> &uvec, int pk)
+    const vnl_matrix_fixed<double, 1, 4> &uvec, int pk) const
 {
-  // first find the relevant control points associated with t
-  int n = controlPoints.size();
-  int pkn1 = (pk+n-1)%n;
-  int pk1 = (pk+1)%n;
-  int pk2 = (pk+2)%n;
+	// first find the relevant control points associated with t
+	int n = controlPoints.size();
+	int pkn1 = (pk+n-1)%n;
+	int pk1 = (pk+1)%n;
+	int pk2 = (pk+2)%n;
 
-  vnl_matrix_fixed<double, 1, 4> weightMatrix;
-  weightMatrix = uvec*Mc;
+	vnl_matrix_fixed<double, 1, 4> weightMatrix;
+	weightMatrix = uvec*Mc;
 
-  // now weight the control points
-  Vector3D res = controlPoints[pkn1]*weightMatrix(0,0)+
-    controlPoints[pk]*weightMatrix(0,1)+
-    controlPoints[pk1]*weightMatrix(0,2)+
-    controlPoints[pk2]*weightMatrix(0,3);
-  return res;
+	// now weight the control points
+	Vector3D res = controlPoints[pkn1]*weightMatrix(0,0)+
+		controlPoints[pk]*weightMatrix(0,1)+
+		controlPoints[pk1]*weightMatrix(0,2)+
+		controlPoints[pk2]*weightMatrix(0,3);
+	return res;
 }
 
 // Returns the relevant point on the spline parameterised by t. t
 // should be between 0 and 1, 0 being the start of the curve, 1 at the
 // end. Actually, in this implementation, it is a closed curve, so 0
 // and 1 will return the same point.
-CardinalSpline::Vector3D CardinalSpline::getPoint(double t)
+CardinalSpline::Vector3D CardinalSpline::getPoint(double t) const
+{
+	// first find the relevant control points associated with t
+	int n = controlPoints.size();
+	t = convert_t(t);
+	int pk = ((int)(t*n))%n;
+	// calculate the parameter u which indicates how far between pk
+	// and pk1 the wanted point is.
+	double u = t*n-(int)(t*n);
+	vnl_matrix<double> uvec(1, 4);
+	uvec(0,3) = 1;
+	for (int i=2; i>=0; i--) uvec(0,i) = uvec(0,i+1)*u;
+	return getVal(uvec, pk);
+}
+
+// Gradient of the spline functions - ie [d_c(x)/du d_c(y)/du d_c(z)/du]^T.
+CardinalSpline::Vector3D CardinalSpline::firstDerivative(double t) const
 {
   // first find the relevant control points associated with t
   int n = controlPoints.size();
@@ -57,58 +74,38 @@ CardinalSpline::Vector3D CardinalSpline::getPoint(double t)
   return getVal(uvec, pk);
 }
 
-// Gradient of the spline functions - ie [d_c(x)/du d_c(y)/du d_c(z)/du]^T.
-CardinalSpline::Vector3D CardinalSpline::firstDerivative(double t)
-{
-  // first find the relevant control points associated with t
-  int n = controlPoints.size();
-  t = convert_t(t);
-  int pk = ((int)(t*n))%n;
-  // calculate the parameter u which indicates how far between pk
-  // and pk1 the wanted point is.
-  double u = t*n-(int)(t*n);
-  vnl_matrix<double> uvec(1, 4);
-  uvec(0,3) = 0;
-  uvec(0,2) = 1;
-  uvec(0,1) = 2*u;
-  uvec(0,0) = 3*u*u;
-  return (double)n*getVal(uvec, pk);
-}
-
 // Second derivative of the spline functions -
 // ie [d^2_c(x)/du^2 d^2_c(y)/du^2 d^2_c(z)/du^2]^T.
-CardinalSpline::Vector3D CardinalSpline::secondDerivative(double t)
+CardinalSpline::Vector3D CardinalSpline::secondDerivative(double t) const
 {
-  // first find the relevant control points associated with t
-  int n = controlPoints.size();
-  t = convert_t(t);
-  int pk = ((int)(t*n))%n;
-  // calculate the parameter u which indicates how far between pk
-  // and pk1 the wanted point is.
-  double u = t*n-(int)(t*n);
-  vnl_matrix<double> uvec(1, 4);
-  uvec(0,3) = 0;
-  uvec(0,2) = 0;
-  uvec(0,1) = 2;
-  uvec(0,0) = 6*u;
-  return (double)(n*n)*getVal(uvec, pk);
+	// first find the relevant control points associated with t
+	int n = controlPoints.size();
+	t = convert_t(t);
+	int pk = ((int)(t*n))%n;
+	// calculate the parameter u which indicates how far between pk
+	// and pk1 the wanted point is.
+	double u = t*n-(int)(t*n);
+	vnl_matrix<double> uvec(1, 4);
+	uvec(0,3) = 0;
+	uvec(0,2) = 0;
+	uvec(0,1) = 2;
+	uvec(0,0) = 6*u;
+	return (double)(n*n)*getVal(uvec, pk);
 }
 
 // This is the derivative of the distance function from a point to the
 // curve at parameter t. Useful for finding the closest point to the curve.
 double CardinalSpline::distanceFunctionFirstDerivative(double t,
-                                                       const Vector3D &point)
+                                                       const Vector3D &point) const
 {
-  Vector3D curvePt = getPoint(t);
-  Vector3D firstDeriv = firstDerivative(t);
-  Vector3D diff = curvePt-point;
-  return 2*dot_product(firstDeriv, diff);
+	Vector3D curvePt = getPoint(t);
+	Vector3D firstDeriv = firstDerivative(t);
+	Vector3D diff = curvePt-point;
+	return 2*dot_product(firstDeriv, diff);
 }
 
-// This is the second derivative of the distance function from a point to the
-// curve at parameter t. Useful for finding the closest point to the curve.
 double CardinalSpline::distanceFunctionSecondDerivative(double t,
-                                                        const Vector3D &point)
+														const Vector3D &point) const
 {
   Vector3D curvePt = getPoint(t);
   Vector3D diff = curvePt-point;
@@ -121,7 +118,7 @@ double CardinalSpline::distanceFunctionSecondDerivative(double t,
 // Return the t value of the closest point to the input point. This is
 // calculated using Newton's method after an initial estimate is
 // bracketed using the control points of the spline.
-double CardinalSpline::closest_point_t(const Vector3D &point)
+double CardinalSpline::closest_point_t(const Vector3D &point) const
 {
   // first bracket the t value
     // do 10 steps per spline segment
@@ -168,4 +165,39 @@ double CardinalSpline::closest_point_t(const Vector3D &point)
   }
 
   return t;
+}
+
+/*
+ * binary I/O
+ */
+
+VSL_VECTOR_IO_INSTANTIATE(CardinalSpline::Vector3D);
+
+void CardinalSpline::b_write(vsl_b_ostream &os) const
+{
+    vsl_b_write(os, controlPoints);
+    vsl_b_write(os, Mc);
+    vsl_b_write(os, s);
+}
+
+void CardinalSpline::b_read(vsl_b_istream &is)
+{
+    vsl_b_read(is, controlPoints);
+    vsl_b_read(is, Mc);
+    vsl_b_read(is, s);
+}
+
+void vsl_b_write(vsl_b_ostream &os, const CardinalSpline &e)
+{
+    e.b_write(os);
+}
+
+void vsl_b_read(vsl_b_istream &is, CardinalSpline &e)
+{
+    e.b_read(is);
+}
+
+void vsl_print_summary(vcl_ostream &os, const CardinalSpline &e)
+{
+    e.print_summary(os);
 }
