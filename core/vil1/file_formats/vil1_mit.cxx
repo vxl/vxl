@@ -196,7 +196,7 @@ bool vil_mit_generic_image::write_header()
 
 bool vil_mit_generic_image::get_section(void* buf, int x0, int y0, int xs, int ys) const
 {
-  assert(buf);
+  assert(buf != 0);
 
   int offset = 8; // fsm: was 4
 
@@ -220,7 +220,7 @@ bool vil_mit_generic_image::get_section(void* buf, int x0, int y0, int xs, int y
 
 bool vil_mit_generic_image::put_section(void const* buf, int x0, int y0, int xs, int ys)
 {
-  assert(buf);
+  assert(buf != 0);
 
   int skip = bytes_per_pixel() * (width_ - xs);
 

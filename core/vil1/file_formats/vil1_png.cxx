@@ -214,7 +214,7 @@ struct vil_png_structures {
         }
       }
     } else {
-      assert(rows);
+      assert(rows != 0);
     }
 
     return rows;

@@ -243,7 +243,6 @@ bool vil_bmp_generic_image::read_header()
       // SetColorMap(color_map);  - TODO find out where to save a color map
       local_color_map_=color_map;
     }
-
   }
 
   // TODO not obvious where the magic number is read
@@ -299,7 +298,7 @@ bool vil_bmp_generic_image::write_header()
 
 bool vil_bmp_generic_image::get_section(void* ib, int x0, int y0, int w, int h) const
 {
-  assert(ib);
+  assert(ib != 0);
   char *bp = static_cast<char*>(ib);
 
   //
@@ -332,7 +331,7 @@ bool vil_bmp_generic_image::get_section(void* ib, int x0, int y0, int w, int h) 
 
 bool vil_bmp_generic_image::put_section(void const *ib, int x0, int y0, int xs, int ys)
 {
-  assert(ib);
+  assert(ib != 0);
   int bypp = (components() * bits_per_component() +7) / 8;
   int rowlen = width() * bypp;
   rowlen += (3-(rowlen-1)%4); // round up to a multiple of 4

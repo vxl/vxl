@@ -184,7 +184,7 @@ void
 vil_jpeg_stream_src_rewind(j_decompress_ptr cinfo, vil_stream *vs) {
   { // verify
     vil_jpeg_srcptr src = ( vil_jpeg_srcptr )( cinfo->src );
-    assert(src);
+    assert(src != 0);
     assert(src->stream == vs);
   }
 
