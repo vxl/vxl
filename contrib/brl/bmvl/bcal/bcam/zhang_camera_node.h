@@ -26,7 +26,7 @@ class zhang_camera_node : public camera_node
    vcl_vector< vgl_homg_point_2d<double> > *pPointLists_;
 
  public: // constructor and deconstructor
-   zhang_camera_node(int id);
+   zhang_camera_node(int id=0);
    virtual ~zhang_camera_node();
  public:
   int removeData();

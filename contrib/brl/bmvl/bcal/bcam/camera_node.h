@@ -20,7 +20,7 @@ protected:
   camera* pCam_;
   int nViews_;
 public:
-  camera_node(int id);
+  camera_node(int id=0);
   virtual ~camera_node();
 public:
   virtual void set_beat(vcl_vector<double> const & new_beat);
