@@ -16,7 +16,7 @@
 #endif
 
 // Converts all alphabetical characters to uppercase.
-char* c_upcase (char* s) {      // Convert entire string to upper case
+char* vul_string_c_upcase (char* s) {      // Convert entire string to upper case
   char* p = s;                  // Point to beginning of string
   while (*p) {                  // While there are still valid characters
     if (islower (*p))           // if this is lower case
@@ -27,7 +27,7 @@ char* c_upcase (char* s) {      // Convert entire string to upper case
 }
 
 // Converts all alphabetical characters to lowercase.
-char* c_downcase (char* s) {    // Convert entire string to lower case
+char* vul_string_c_downcase (char* s) {    // Convert entire string to lower case
   char* p = s;                  // Point to beginning of string
   while (*p) {                  // While there are still valid characters
     if (isupper (*p))           // if this is upper case
@@ -39,7 +39,7 @@ char* c_downcase (char* s) {    // Convert entire string to lower case
 
 // Capitalizes all words in a string. A word is defined as
 // a sequence of characters separated by non-alphanumerics.
-char* c_capitalize (char* s) {          // Capitalize each word in string
+char* vul_string_c_capitalize (char* s) {          // Capitalize each word in string
   char* p = s;                          // Point to beginning of string
   while (true) {                        // Infinite loop
     for (; *p && !isalnum(*p); p++);    // Skip to first alphanumeric
@@ -52,7 +52,7 @@ char* c_capitalize (char* s) {          // Capitalize each word in string
 
 // Removes any occurrence of the string rem from string str,
 // and returns the modified string str.
-char* c_trim (char* str, const char* rem) {     // Trim characters from string
+char* vul_string_c_trim (char* str, const char* rem) {     // Trim characters from string
   char* s = str;
   char* result = str;
   register char c;
@@ -69,7 +69,7 @@ char* c_trim (char* str, const char* rem) {     // Trim characters from string
 
 // Removes any prefix occurrence of the string rem from
 // the first string str, and returns the modified string str.
-char* c_left_trim (char* str, const char* rem) { // Trim prefix from string
+char* vul_string_c_left_trim (char* str, const char* rem) { // Trim prefix from string
   char* result = str;
   char* s;
   register char c;
@@ -87,7 +87,7 @@ char* c_left_trim (char* str, const char* rem) { // Trim prefix from string
 
 // Removes any suffix occurrence of the string rem
 // from the first string str, and returns the modified string str.
-char* c_right_trim (char* str, const char* rem) { // Trim suffix from string
+char* vul_string_c_right_trim (char* str, const char* rem) { // Trim suffix from string
   char* s = str + vcl_strlen(str) - 1;                // last character of str
   for (; s >= str; s--) {
     register const char* r = rem;
@@ -102,7 +102,7 @@ char* c_right_trim (char* str, const char* rem) { // Trim suffix from string
 }
 
 // Reverses the order of the characters in char*.
-void c_reverse (char* c) {                // Reverse the order of characters
+void vul_string_c_reverse (char* c) {                // Reverse the order of characters
   int length = vcl_strlen (c);              // Number of characters in string
   char temp;
  
@@ -119,29 +119,29 @@ void c_reverse (char* c) {                // Reverse the order of characters
 
 
 // Converts all alphabetical characters in string s to uppercase.
-vcl_string& upcase(vcl_string& s)
+vcl_string& vul_string_upcase(vcl_string& s)
 {
-  c_upcase(/*const_cast*/(char *)(s.c_str()));
+  vul_string_c_upcase(/*const_cast*/(char *)(s.c_str()));
   return s;                     // Return reference to modified string
 }
 
 // Converts all alphabetical characters in string s to lowercase.
-vcl_string& downcase(vcl_string& s)
+vcl_string& vul_string_downcase(vcl_string& s)
 {
-  c_downcase(/*const_cast*/(char *)(s.c_str()));
+  vul_string_c_downcase(/*const_cast*/(char *)(s.c_str()));
   return s;                     // Return reference to modified string
 }
 
 // Capitalizes all words in string s.
-vcl_string& capitalize(vcl_string& s)
+vcl_string& vul_string_capitalize(vcl_string& s)
 {
-  c_capitalize(/*const_cast*/(char *)(s.c_str()));
+  vul_string_c_capitalize(/*const_cast*/(char *)(s.c_str()));
   return s;                     // Return reference to modified string
 }
 
 // Removes any occurrence of the character string rem
 // from the string sr, and returns the modified string sr.
-vcl_string& trim(vcl_string& sr, const char* rem)
+vcl_string& vul_string_trim(vcl_string& sr, const char* rem)
 {
   int l = vcl_strlen(rem);
   for (;;) {
@@ -155,7 +155,7 @@ vcl_string& trim(vcl_string& sr, const char* rem)
 
 // Removes any prefix occurrence of the character string rem
 // from the string sr, and returns the modified string sr.
-vcl_string& left_trim(vcl_string& sr, const char* rem)
+vcl_string& vul_string_left_trim(vcl_string& sr, const char* rem)
 {
   int l = vcl_strlen(rem);
   if (vcl_strncmp(sr.c_str(), rem, l) == 0)
@@ -165,7 +165,7 @@ vcl_string& left_trim(vcl_string& sr, const char* rem)
 
 // Removes any suffix occurrence of the character string rem
 // from the string sr, and returns the modified string sr.
-vcl_string& right_trim(vcl_string& sr, const char* rem)
+vcl_string& vul_string_right_trim(vcl_string& sr, const char* rem)
 {
   int l = vcl_strlen(rem);
   int lsr = sr.length();
