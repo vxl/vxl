@@ -31,7 +31,7 @@ IMPLEMENT_DYNCREATE(vgui_mfc_adaptor, CView)
 
 vgui_mfc_adaptor::vgui_mfc_adaptor():ovl_helper(0), /*come_out_now(false),*/ redraw_posted(true)
 {
-  double_buffered = false; //kym changed from true (because it breaks xcv);
+  double_buffered = false; //kym: changed from true (because it breaks xcv);
 }
 
 vgui_mfc_adaptor::~vgui_mfc_adaptor()
@@ -441,7 +441,6 @@ vgui_event vgui_mfc_adaptor::generate_vgui_event(UINT nChar, UINT nRepCnt, UINT 
 
   int k = mfc_key(nChar, nFlags);
   evt.key = vgui_key(k);
-  vcl_cout << "KYM evt = " << evt << vcl_endl;
   return evt;
 }
 
