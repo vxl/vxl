@@ -19,11 +19,11 @@ SUBDIRS(gtrl)
 # spatial objects
 SUBDIRS(vsol)
 
-# digital  geometry
-SUBDIRS(vdgl)
-
 # topology
 SUBDIRS(gst vtol)
+
+# digital  geometry
+SUBDIRS(vdgl)
 
 # Multi-view database
 SUBDIRS(gmvl)
