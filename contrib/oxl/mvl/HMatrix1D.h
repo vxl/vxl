@@ -1,18 +1,11 @@
-#ifndef _HMatrix1D_h
-#define _HMatrix1D_h
+#ifndef HMatrix1D_h_
+#define HMatrix1D_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-//-*- c++ -*-------------------------------------------------------------------
+//:
+// \file
 //
-// .NAME HMatrix1D
-// .LIBRARY MViewBasics
-// .HEADER MultiView package
-// .INCLUDE mvl/HMatrix1D.h
-// .FILE HMatrix1D.cxx
-//
-// .SECTION Description:
 // A class to hold a line-to-line projective transformation matrix
 // and to perform common operations using it e.g. transfer point.
 //
@@ -21,10 +14,11 @@
 #include <mvl/HomgPoint1D.h>
 #include <vcl_iosfwd.h>
 
-
-class HMatrix1D {
-
-  // PUBLIC INTERFACE----------------------------------------------------------
+class HMatrix1D
+{
+  // Data Members--------------------------------------------------------------
+  vnl_double_2x2 _t12_matrix;
+  vnl_double_2x2 _t21_matrix;
 
 public:
   // Constructors/Initializers/Destructors-------------------------------------
@@ -36,17 +30,17 @@ public:
   HMatrix1D(const double* t_matrix);
   HMatrix1D(vcl_istream& s);
  ~HMatrix1D();
- static HMatrix1D read(char const* filename);
- static HMatrix1D read(vcl_istream&);
+  static HMatrix1D read(char const* filename);
+  static HMatrix1D read(vcl_istream&);
 
   // Operations----------------------------------------------------------------
 
- // deprecated. also misnomers :
- HomgPoint1D transform_to_plane2(const HomgPoint1D& x1) const;
- HomgPoint1D transform_to_plane1(const HomgPoint1D& x2) const;
+  // deprecated. also misnomers :
+  HomgPoint1D transform_to_plane2(const HomgPoint1D& x1) const;
+  HomgPoint1D transform_to_plane1(const HomgPoint1D& x2) const;
 
- HomgPoint1D operator()(const HomgPoint1D& x1) const;
- HomgPoint1D preimage(const HomgPoint1D& x2) const;
+  HomgPoint1D operator()(const HomgPoint1D& x1) const;
+  HomgPoint1D preimage(const HomgPoint1D& x2) const;
 
   // Data Access---------------------------------------------------------------
 
@@ -59,15 +53,9 @@ public:
   void set (const double *t_matrix);
   void set (const vnl_matrix<double>& t_matrix);
   void set_inverse (const vnl_matrix<double>& t21_matrix);
-
-  // INTERNALS-----------------------------------------------------------------
-private:
-  // Data Members--------------------------------------------------------------
-  vnl_double_2x2 _t12_matrix;
-  vnl_double_2x2 _t21_matrix;
 };
 
 vcl_ostream& operator << (vcl_ostream& s, const HMatrix1D& H);
 vcl_istream& operator >> (vcl_istream& s, HMatrix1D& H);
 
-#endif // _HMatrix1D_h
+#endif // HMatrix1D_h_

@@ -3,14 +3,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME    NViewMatches - Multiple view matches with wildcards
-// .LIBRARY MViewBasics
-// .HEADER  MultiView Package
-// .INCLUDE mvl/NViewMatches.h
-// .FILE    NViewMatches.cxx
-//
-// .SECTION Description
+//:
+// \file
+// \brief Multiple view matches with wildcards
 //
 //    A class to hold matches over multiple views, allowing for unmatched data.
 //    With each 3d feature there is associated a multiple-view match. A
@@ -21,9 +16,10 @@
 //    Xmatches[v] = i implies that the image of X in view "v" is the corner
 //    with index "i" in view "v".
 //
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 17 May 97
-// .SECTION Modifications:
+// \verbatim
+// Modifications:
 //     970517 AWF Initial version.
 //     270897 PRV Moved vcl_vector<NViewMatch> instantiation to Templates package
 //     151097 AWF Added OffsetNViewMatch.
@@ -31,6 +27,7 @@
 //            allowed merging of consistent multiple-match tracks.
 //     280299 AWF Changed disk format to use "-1" instead of "*" for easier
 //            matlab interaction.
+// \endverbatim
 //
 //-----------------------------------------------------------------------------
 
@@ -38,7 +35,8 @@
 #include <vcl_vector.h>
 #include <vcl_iosfwd.h>
 
-struct NViewMatch : public vnl_vector<int> {
+struct NViewMatch : public vnl_vector<int>
+{
   // Constants
   enum { nomatch = -1 };
 
@@ -52,11 +50,16 @@ struct NViewMatch : public vnl_vector<int> {
   bool is_consistent(const NViewMatch& b) const;
   int count_observations() const;
 };
+
 vcl_ostream& operator<<(vcl_ostream& s, const NViewMatch& c);
 
-class NViewMatches : public vcl_vector<NViewMatch> {
-public:
+class NViewMatches : public vcl_vector<NViewMatch>
+{
+  // Data Members--------------------------------------------------------------
+  int _nviews;
+  int _min_overlap;
 
+ public:
   // Constructors/Destructors--------------------------------------------------
   NViewMatches();
   NViewMatches(vcl_istream& s);
@@ -84,22 +87,10 @@ public:
   int incorporate(const NViewMatch& matches);
   void remove_inconsistencies();
   NViewMatch make_triplet_match(int base_view, int c1, int c2, int c3);
-
-  // Computations--------------------------------------------------------------
-
-  // Data Access---------------------------------------------------------------
-
-  // Data Control--------------------------------------------------------------
-
-protected:
-  // Data Members--------------------------------------------------------------
-  int _nviews;
-  int _min_overlap;
-
-  // Helpers-------------------------------------------------------------------
 };
 
-class OffsetNViewMatch : public NViewMatch {
+class OffsetNViewMatch : public NViewMatch
+{
   int min_view_;
 public:
   OffsetNViewMatch(int min_view, int max_view):

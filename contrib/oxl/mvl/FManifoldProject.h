@@ -3,20 +3,18 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME    FManifoldProject - Fast 2-view Hartley-Sturm
-// .LIBRARY MViewBasics
-// .HEADER  MultiView Package
-// .INCLUDE mvl/FManifoldProject.h
-// .FILE    FManifoldProject.cxx
+//:
+// \file
+// \brief Fast 2-view Hartley-Sturm
 //
-// .SECTION Description
 //    FManifoldProject is a class which allows repeated fast application of the
 //    manifold projection ("Hartley-Sturm") correction to points in two views.
 //
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 22 Jan 97
 //
-// .SECTION Modifications:
+// \verbatim
+// Modifications:
 //   AWF 030897 Moved to MViewBasics
 //   210598 AWF Return squared error, as \sqrt(|x - p|^2 + |x' - p'|^2) is meaningless.
 //   AWF Handle affine F.
@@ -26,6 +24,7 @@
 //     indicating high structure variability and high curvature in the F manifold.
 //     These points should be treated with care, but are interesting as
 //     they are in loci of high information.
+// \endverbatim
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_double_3x3.h>
@@ -35,15 +34,8 @@
 class FMatrix;
 class HomgPoint2D;
 
-class FManifoldProject {
-public:
-  FManifoldProject();
-  FManifoldProject(const FMatrix& F);
-
-  void set_F(const FMatrix& F);
-  double correct(const HomgPoint2D& point1, const HomgPoint2D& point2, HomgPoint2D *, HomgPoint2D *) const;
-
-private:
+class FManifoldProject
+{
   vnl_double_3x3 F_;
 
   // Information to be used for each point
@@ -53,6 +45,13 @@ private:
   vnl_double_4 d_;
 
   bool affine_F_;
+
+public:
+  FManifoldProject();
+  FManifoldProject(const FMatrix& F);
+
+  void set_F(const FMatrix& F);
+  double correct(const HomgPoint2D& point1, const HomgPoint2D& point2, HomgPoint2D *, HomgPoint2D *) const;
 };
 
 #endif // FManifoldProject_h_

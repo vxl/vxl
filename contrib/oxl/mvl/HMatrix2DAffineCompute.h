@@ -3,26 +3,23 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME HMatrix2DAffineCompute
-// .LIBRARY MViewCompute
-// .HEADER MultiView package
-// .INCLUDE mvl/HMatrix2DAffineCompute.h
-// .FILE HMatrix2DAffineCompute.cxx
+//:
+// \file
 //
-// .SECTION Description:
 // HMatrix2DAffineCompute contains a linear method to compute
 // a 2D affine transformation. The H returned is such that
-// @{ \[ x_2 \sim H x_1 \] @}
+// \f\[ x_2 \sim H x_1 \f\]
 //
-// .SECTION Author
-//     David Capel, Oxford RRG, 13 May 98
-// .SECTION Modifications:
+// \author   David Capel, Oxford RRG, 13 May 98
+// \verbatim
+//  Modifications:
 //     FSM 23-08-98 Added constructor so that the class can be used
 //                  as a compute object. Removed compute() method
 //                  taking PairMatchSet argument. Changed the remaining
 //                  compute method to take an HMatrix2D* argument instead
 //                  of returning an HMatrix2D.
-//
+// \endverbatim
+
 #include <mvl/HMatrix2DCompute.h>
 #include <mvl/HMatrix2D.h>
 class HomgPoint2D;
@@ -39,8 +36,8 @@ public:
   int minimum_number_of_correspondences() const { return 3; }
 private:
   static bool tmp_fun(const PointArray&,
-                       const PointArray&,
-                       HMatrix2D*);
+                      const PointArray&,
+                      HMatrix2D*);
 };
 
 //--------------------------------------------------------------------------------

@@ -1,23 +1,18 @@
-//-*- c++ -*-------------------------------------------------------------
-#ifndef _HomgOperator2D_h
-#define _HomgOperator2D_h
+#ifndef HomgOperator2D_h_
+#define HomgOperator2D_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+// \file
+// \brief operators for the 2D homogeneous primitive classes
 //
-// .NAME HomgOperator2D - operators for the 2D homogeneous primitive classes
-// .LIBRARY MViewBasics
-// .HEADER MultiView package
-// .INCLUDE mvl/HomgOperator2D.h
-// .FILE HomgOperator2D.cxx
-//
-// .SECTION Description:
 // Useful operators for the 2D homogeneous primitive classes.
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications
 //   221198 - Peter Vanroose - Added CrossRatio() and Conjugate()
-
-//
+// \endverbatim
 
 #include <vcl_vector.h>
 class Homg2D;
@@ -25,10 +20,9 @@ class HomgLine2D;
 class HomgPoint2D;
 class HomgLineSeg2D;
 
-class HomgOperator2D {
-
-public:
-
+class HomgOperator2D
+{
+ public:
   static double dot(const Homg2D& a, const Homg2D& b);
   static void cross(const Homg2D& a, const Homg2D& b, Homg2D* a_cross_b);
   static void unitize(Homg2D* a);
@@ -72,4 +66,4 @@ public:
                           double cr);
 };
 
-#endif // _HomgOperator2D_h
+#endif // HomgOperator2D_h_

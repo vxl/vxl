@@ -1,23 +1,18 @@
-#ifndef _PMatrixDec_h
-#define _PMatrixDec_h
+#ifndef PMatrixDec_h_
+#define PMatrixDec_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-//-*- c++ -*----------------------------------------------------------------
+//:
+// \file
 //
-// .NAME PMatrixDec
-// .INCLUDE mvl/PMatrixDec.h
-// .FILE PMatrixDec.cxx
-//
-// .SECTION Description
 //   The PMatrixDec class is a subclass of PMatrix.
 //   It justs adds decomposition of the projection matrix, P, into
 //   2 matrices: J (3x3) and D (4x4), with intrinsic and extrinsic
 //   parameters, respectively, where P=[J O_3]D.
 //
 //   References:
-//
+// \verbatim
 //   pp 50 and 52-54, or more widely, CHAPTER 3 in (Faugeras, 1993):
 //   @Book{        faugeras:93,
 //     author    = {Faugeras, Olivier},
@@ -25,13 +20,16 @@
 //     year      = {1993},
 //     publisher = mit-press
 //   }
+// \endverbatim
 //
-// .SECTION Author
+// \author
 //   Angeles Lopez (28-Apr-97)
 //
-// .SECTION Modifications:
+// \verbatim
+// Modifications:
 //   15-May-97, A.Lopez -> Provide access methods for intrinsic
 //                         parameters, denoted by AlphaU, AlphaV, U0 & V0.
+// \endverbatim
 //
 //----------------------------------------------------------------------------
 
@@ -39,12 +37,15 @@
 #include <mvl/PMatrix.h>
 #include <vcl_iosfwd.h>
 
+class PMatrixDec : public PMatrix
+{
+  // Data Members------------------------------------------------------------
 
-class PMatrixDec : public PMatrix {
+  // J and D matrices
+  vnl_matrix<double> _j_matrix;  // 3x3
+  vnl_matrix<double> _d_matrix;  // 4x4
 
-  // PUBLIC INTERFACE-------------------------------------------------------
-public:
-
+ public:
   // Constructors/Initializers/Destructors----------------------------------
   PMatrixDec(const vnl_matrix<double>& p_matrix);
   ~PMatrixDec();
@@ -64,16 +65,8 @@ public:
   friend vcl_ostream& operator<<(vcl_ostream& s, const PMatrixDec& P);
 
   // INTERNALS---------------------------------------------------------------
-protected:
-
-  // Data Members------------------------------------------------------------
-
-  // J and D matrices
-  vnl_matrix<double> _j_matrix;  // 3x3
-  vnl_matrix<double> _d_matrix;  // 4x4
-
 private:
   void Init();
 };
 
-#endif // _PMatrixDec_h
+#endif // PMatrixDec_h_

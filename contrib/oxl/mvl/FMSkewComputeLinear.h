@@ -3,14 +3,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME    FMSkewComputeLinear - Linear fit for skew F matrix
-// .LIBRARY MViewCompute
-// .HEADER  MultiView Package
-// .INCLUDE mvl/FMSkewComputeLinear.h
-// .FILE    FMSkewComputeLinear.cxx
-
 //:
 // \file
+// \brief Linear fit for skew F matrix
 //
 //    FMSkewComputeLinear is a subclass of FMatrixCompute, and implements
 //    the linear least squares algorithm for estimation of
@@ -24,11 +19,13 @@
 //    Note: As with any nonrobust algorithm, mismatches in the input data
 //    may severely effect the result.
 //
-// .SECTION Author
+// \author
 //     Martin Armstrong, Oxford RRG, 20 Nov 96
 //
-// .SECTION Modifications:
+// \verbatim
+// Modifications:
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
+// \endverbatim
 //
 //-----------------------------------------------------------------------------
 
@@ -36,7 +33,8 @@
 
 class FMatrixSkew;
 
-class FMSkewComputeLinear : public FMatrixCompute {
+class FMSkewComputeLinear : public FMatrixCompute
+{
 public:
   //: Initialize FMSkewComputeLinear object.
   //  If precondition = false, points are not conditioned prior to computation.
@@ -50,11 +48,10 @@ public:
   bool compute(vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&, FMatrixSkew* F);
 
 private:
-  bool compute_preconditioned ( vcl_vector<HomgPoint2D>& points1,
-                                vcl_vector<HomgPoint2D>& points2,
-                                FMatrixSkew *F);
-
   bool _precondition;
+  bool compute_preconditioned(vcl_vector<HomgPoint2D>& points1,
+                              vcl_vector<HomgPoint2D>& points2,
+                              FMatrixSkew *F);
 };
 
 #endif // FMSkewComputeLinear_h_

@@ -1,32 +1,27 @@
-#ifndef _HomgPoint3D_h
-#define _HomgPoint3D_h
+#ifndef HomgPoint3D_h_
+#define HomgPoint3D_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-//--------------------------------------------------------------
+//:
+// \file
+// \brief Homogeneous 4-vector representing a 3D point
 //
-// .NAME HomgPoint3D - Homogeneous 4-vector representing a 3D point
-// .LIBRARY MViewBasics
-// .HEADER MultiView package
-// .INCLUDE mvl/HomgPoint3D.h
-// .FILE HomgPoint3D.cxx
-//
-// .SECTION Description:
 // A class to hold a homogeneous 4-vector for a 3D point.
 //
-// .SECTION Modifications:
+// \verbatim
+// Modifications:
 //   Peter Vanroose - 11 Mar 97 - added operator==
+// \endverbatim
 //
 
 #include <vnl/vnl_double_3.h>
 #include <mvl/Homg3D.h>
 #include <vcl_iosfwd.h>
 
-class HomgPoint3D : public Homg3D {
-
-  // PUBLIC INTERFACE--------------------------------------------------------
-public:
-
+class HomgPoint3D : public Homg3D
+{
+ public:
   // Constructors/Initializers/Destructors-----------------------------------
 
   HomgPoint3D ();
@@ -48,4 +43,4 @@ public:
 
 vcl_ostream& operator<<(vcl_ostream& s, const HomgPoint3D& );
 
-#endif // _HomgPoint3D_h
+#endif // HomgPoint3D_h_

@@ -3,23 +3,21 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME    PairMatchSetMulti - Multimap of ints
-// .LIBRARY MViewBasics
-// .HEADER  MultiView Package
-// .INCLUDE mvl/PairMatchSetMulti.h
-// .FILE    PairMatchSetMulti.cxx
+//:
+// \file
+// \brief Multimap of ints
 //
-// .SECTION Description
 //    PairMatchSetMulti is a list of tuples (i1, i2) which allows
 //    efficient O(log n) indexing by I1, and O(n) by i2.
 //
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 16 Sep 96
 //
 //-----------------------------------------------------------------------------
 
-class PairMatchSetMulti {
-public:
+class PairMatchSetMulti
+{
+ public:
   // Constructors/Destructors--------------------------------------------------
 
   PairMatchSetMulti();

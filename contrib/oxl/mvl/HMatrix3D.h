@@ -1,16 +1,11 @@
-#ifndef _HMatrix3D_h
-#define _HMatrix3D_h
+#ifndef HMatrix3D_h_
+#define HMatrix3D_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+// \file
 //
-// .NAME HMatrix3D - 4x4 3D homography
-// .LIBRARY MViewBasics
-// .HEADER MultiView package
-// .INCLUDE mvl/HMatrix3D.h
-// .FILE HMatrix3D.cxx
-//
-// .SECTION Description:
 // A class to hold a 3D projective transformation matrix
 // and to perform common operations using it e.g. transfer point.
 //
@@ -21,7 +16,8 @@
 
 class PMatrix;
 
-class HMatrix3D : public vnl_double_4x4 {
+class HMatrix3D : public vnl_double_4x4
+{
   typedef vnl_double_4x4 Base;
 public:
   HMatrix3D();
@@ -60,4 +56,4 @@ PMatrix operator* (const PMatrix&, const HMatrix3D& H);
 vcl_ostream &operator<<(vcl_ostream &,HMatrix3D const &);
 vcl_istream& operator>>(vcl_istream &,HMatrix3D       &);
 
-#endif // _HMatrix3D_h
+#endif // HMatrix3D_h_

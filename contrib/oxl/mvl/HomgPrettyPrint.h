@@ -3,39 +3,30 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME    HomgPrettyPrint
-// .LIBRARY MViewBasics
-// .HEADER  MultiView Package
-// .INCLUDE mvl/HomgPrettyPrint.h
-// .FILE    HomgPrettyPrint.cxx
-// .SECTION Author
+//:
+// \file
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 12 Oct 97
 //
-// .SECTION Modifications:
+// \verbatim
+// Modifications:
 //   971012 AWF Initial version.
+// \endverbatim
 //
 //-----------------------------------------------------------------------------
 
-class HomgPrettyPrint {
-public:
-  // Constructors/Destructors--------------------------------------------------
-
-  HomgPrettyPrint(bool new_value) {
-    last_pretty_ = pretty;
-    pretty = new_value;
-  }
-  ~HomgPrettyPrint() {
-    pretty = last_pretty_;
-  }
-
-  static bool pretty;
-
-protected:
+class HomgPrettyPrint
+{
   // Data Members--------------------------------------------------------------
   bool last_pretty_;
 
-  // Helpers-------------------------------------------------------------------
+ public:
+  // Constructors/Destructors--------------------------------------------------
+
+  HomgPrettyPrint(bool new_value) { last_pretty_ = pretty; pretty = new_value; }
+  ~HomgPrettyPrint() { pretty = last_pretty_; }
+
+  static bool pretty;
 };
 
 #endif // HomgPrettyPrint_h_

@@ -1,39 +1,36 @@
-#ifndef _HomgLine3D_h
-#define _HomgLine3D_h
+#ifndef HomgLine3D_h_
+#define HomgLine3D_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-//--------------------------------------------------------------
+//:
+// \file
+// \brief Homogeneous 3D Line
 //
-// .NAME HomgLine3D - Homogeneous 3D Line
-// .LIBRARY MViewBasics
-// .HEADER MultiView package
-// .INCLUDE mvl/HomgLine3D.h
-// .FILE HomgLine3D.cxx
-//
-// .SECTION Description:
 // A class to hold a homogeneous representation of a 3D Line.  The
 // line is stored as a pair of HomgPoint3Ds.
 //
-// .SECTION Modifications:
+// \verbatim
+// Modifications:
 //   Peter Vanroose - 11 Mar 97 - added operator==
-//
+// \endverbatim
 
 #include <mvl/HomgPoint3D.h>
 #include <vcl_iosfwd.h>
 
-class HomgLine3D {
+class HomgLine3D
+{
+  // Data Members------------------------------------------------------------
+  HomgPoint3D point_finite_; //!< any finite point on the line
+  HomgPoint3D point_infinite_;
 
-  // PUBLIC INTERFACE--------------------------------------------------------
 public:
-
   // Constructors/Initializers/Destructors-----------------------------------
 
-  HomgLine3D ();
-  HomgLine3D ( const HomgLine3D & );
-  HomgLine3D (const HomgPoint3D& point_finite, const HomgPoint3D& point_infinite);
- ~HomgLine3D ();
+  HomgLine3D();
+  HomgLine3D(const HomgLine3D&);
+  HomgLine3D(const HomgPoint3D& point_finite,const HomgPoint3D& point_infinite);
+ ~HomgLine3D();
 
   // Data Access-------------------------------------------------------------
   HomgPoint3D const & get_point_finite() const { return point_finite_; }
@@ -42,23 +39,13 @@ public:
   HomgPoint3D       & get_point_infinite() { return point_infinite_; }
   vnl_double_3 dir() const;
 
-  // Data Control------------------------------------------------------------
-
   // Utility Methods---------------------------------------------------------
   void force_point2_infinite();
   bool operator==(HomgLine3D const& p) const {
     return point_finite_==p.point_finite_ && point_infinite_==p.point_infinite_;
   }
-
-  // INTERNALS---------------------------------------------------------------
-
-  // Data Members------------------------------------------------------------
-private:
-  // any finite point on the line
-  HomgPoint3D point_finite_;
-  HomgPoint3D point_infinite_;
 };
 
 vcl_ostream& operator<<(vcl_ostream& s, const HomgLine3D& );
 
-#endif // _HomgLine3D_h
+#endif // HomgLine3D_h_

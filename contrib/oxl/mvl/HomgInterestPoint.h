@@ -3,23 +3,16 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+// \file
+// \brief Homogeneous interest point/corner
 //
-// .NAME    HomgInterestPoint - Homogeneous interest point/corner
-// .LIBRARY MViewBasics
-// .HEADER  MultiView Package
-// .INCLUDE mvl/HomgInterestPoint.h
-// .FILE    HomgInterestPoint.cxx
-//
-// .SECTION Description
 //    HomgInterestPoint is a representation of an interest point
 //    resulting from feature detection.  At Oxford this generally
 //    means a Harris corner.
 //
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 17 Aug 96
-//
-// .SECTION Modifications:
-//     <none yet>
 //
 //-----------------------------------------------------------------------------
 
@@ -29,15 +22,16 @@
 
 class HomgMetric;
 
-class HomgInterestPoint {
+class HomgInterestPoint
+{
   // Data Members--------------------------------------------------------------
 public:
-  HomgPoint2D _homg;
+  HomgPoint2D  _homg;
   vnl_double_2 _double2;
-  vnl_int_2 _int2;
-public:
-  float       _mean_intensity;
+  vnl_int_2    _int2;
+  float        _mean_intensity;
 
+public:
   HomgInterestPoint();
   HomgInterestPoint(double x, double y, float mean_intensity = 0.0F);
   HomgInterestPoint(double x, double y, const HomgMetric& c, float mean_intensity = 0.0F);

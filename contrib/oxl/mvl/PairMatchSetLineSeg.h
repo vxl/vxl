@@ -3,35 +3,30 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+// \file
+// \brief Matches between homogeneous line segments
 //
-// .NAME    PairMatchSetLineSeg - Matches between homogeneous line segments
-// .LIBRARY MViewBasics
-// .HEADER  MultiView package
-// .INCLUDE mvl/PairMatchSetLineSeg.h
-// .FILE    PairMatchSetLineSeg.cxx
-//
-// .SECTION Description
 //    PairMatchSetLineSeg holds matches between homogeneous
 //    line segments.  This should be rewritten to use the original
 //    IULine*, but this is efficient.
 //
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 09 Aug 96
-//
-// .SECTION Modifications:
-//     <none yet>
 //
 //-----------------------------------------------------------------------------
 
 #include <mvl/PairMatchSet.h>
-
 class LineSegSet;
 class HomgLineSeg2D;
 
-class PairMatchSetLineSeg : public PairMatchSet {
-public:
-  // Constructors/Destructors--------------------------------------------------
+class PairMatchSetLineSeg : public PairMatchSet
+{
+  LineSegSet* _linesegs1;
+  LineSegSet* _linesegs2;
 
+ public:
+  // Constructors/Destructors--------------------------------------------------
   PairMatchSetLineSeg();
   PairMatchSetLineSeg(LineSegSet& corners1, LineSegSet& corners2);
   ~PairMatchSetLineSeg();
@@ -44,10 +39,6 @@ public:
 
   // Data Control--------------------------------------------------------------
   void set(LineSegSet* lines1, LineSegSet* lines2);
-
-private:
-  LineSegSet* _linesegs1;
-  LineSegSet* _linesegs2;
 };
 
 #endif // PairMatchSetLineSeg_h_

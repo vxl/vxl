@@ -1,18 +1,12 @@
-#ifndef _HomgPlane3D_h
-#define _HomgPlane3D_h
+#ifndef HomgPlane3D_h_
+#define HomgPlane3D_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-//--------------------------------------------------------------
+//:
+// \file
+// \brief Homogeneous 4-vector for a 3D plane
 //
-// .NAME HomgPlane3D - Homogeneous 4-vector for a 3D plane
-// .LIBRARY MViewBasics
-// .HEADER MultiView package
-// .INCLUDE mvl/HomgPlane3D.h
-// .FILE HomgPlane3D.cxx
-//
-// .SECTION Description:
 // A class to hold a homogeneous 4-vector for a 3D plane.
 //
 
@@ -21,12 +15,9 @@
 
 class HomgPoint3D;
 
-class HomgPlane3D : public Homg3D {
-
-  // PUBLIC INTERFACE----------------------------------------------------------
-
-public:
-
+class HomgPlane3D : public Homg3D
+{
+ public:
   // Constructors/Initializers/Destructors-------------------------------------
 
   HomgPlane3D ();
@@ -35,31 +26,13 @@ public:
   HomgPlane3D (const vnl_vector<double>& v): Homg3D(v) {}
   ~HomgPlane3D ();
 
-  // Data Access---------------------------------------------------------------
-
-  // Data Control--------------------------------------------------------------
-
   // Utility Methods-----------------------------------------------------------
   HomgPoint3D closest_point(const HomgPoint3D& x) const;
   double distance(const HomgPoint3D& x) const;
 
   vnl_vector<double> n() const { return _homg_vector.extract(3).normalize(); }
-
-  // Derived operator== is now working so this is not needed:
-  //bool operator==(HomgPlane3D const& p) const { return Homg3D::operator==(p); }
-
-  // INTERNALS-----------------------------------------------------------------
-
-protected:
-
-private:
-
-  // Data Members--------------------------------------------------------------
-
-private:
-
 };
 
 vcl_ostream& operator<<(vcl_ostream&, const HomgPlane3D&);
 
-#endif // _HomgPlane3D_h
+#endif // HomgPlane3D_h_

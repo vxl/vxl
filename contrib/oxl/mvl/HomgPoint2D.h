@@ -1,32 +1,27 @@
-#ifndef _HomgPoint2D_h
-#define _HomgPoint2D_h
+#ifndef HomgPoint2D_h_
+#define HomgPoint2D_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-//-*- c++ -*-------------------------------------------------------------
-//
-// .NAME HomgPoint2D - Homogeneous 3-vector for a 2D point
-// .LIBRARY MViewBasics
-// .HEADER MultiView package
-// .INCLUDE mvl/HomgPoint2D.h
-// .FILE HomgPoint2D.cxx
-//
-// .SECTION Description:
+//:
+// \file
+// \brief Homogeneous 3-vector for a 2D point
 //
 // A class to hold a homogeneous 3-vector for a 2D point.
 //
-// .SECTION Modifications:
+// \verbatim
+// Modifications:
 //   Peter Vanroose - 11 Mar 97 - added operator==
+// \endverbatim
 //
 
 #include <vcl_iosfwd.h>
 #include <vnl/vnl_double_2.h>
 #include <mvl/Homg2D.h>
 
-class HomgPoint2D : public Homg2D {
-public:
-
+class HomgPoint2D : public Homg2D
+{
+ public:
   // Constructors/Initializers/Destructors-----------------------------------
 
   HomgPoint2D () {}
@@ -55,4 +50,4 @@ public:
 vcl_istream& operator>>(vcl_istream& is, HomgPoint2D& p);
 vcl_ostream& operator<<(vcl_ostream& s, const HomgPoint2D& );
 
-#endif // _HomgPoint2D_h
+#endif // HomgPoint2D_h_

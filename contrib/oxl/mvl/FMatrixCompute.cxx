@@ -1,9 +1,8 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
-
 //:
-//  \file
+// \file
 
 #include <mvl/FMatrix.h>
 #include <mvl/FMatrixCompute.h>
@@ -27,7 +26,7 @@ FMatrixCompute::~FMatrixCompute()
 {
 }
 
-// @{COMPUTATIONS@}
+// == COMPUTATIONS ==
 
 //-----------------------------------------------------------------------------
 //: Compute fundamental matrix using given matchlist.
@@ -54,14 +53,16 @@ FMatrix FMatrixCompute::compute (PairMatchSetCorner& matches)
   return ret;
 }
 
-FMatrix FMatrixCompute::compute (vcl_vector<HomgPoint2D>& points1, vcl_vector<HomgPoint2D>& points2)
+FMatrix FMatrixCompute::compute (vcl_vector<HomgPoint2D>& points1,
+                                 vcl_vector<HomgPoint2D>& points2)
 {
   FMatrix ret;
   compute(points1, points2, &ret);
   return ret;
 }
 
-bool FMatrixCompute::compute (vcl_vector<HomgPoint2D>& points1, vcl_vector<HomgPoint2D>& points2,
+bool FMatrixCompute::compute (vcl_vector<HomgPoint2D>& points1,
+                              vcl_vector<HomgPoint2D>& points2,
                               FMatrix* out)
 {
   *out = compute(points1, points2);

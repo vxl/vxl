@@ -3,22 +3,12 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+// \file
+// \brief a class that contains the functions required for FMPlanarComputeLinear.
 //
-// .NAME    FMPlanarNonLinFun
-// .LIBRARY MViewCompute
-// .HEADER  MultiView Package
-// .INCLUDE mvl/FMPlanarNonLinFun.h
-// .FILE    FMPlanarNonLinFun.cxx
-//
-// .SECTION Description
-//    FMPlanarNonLinFun is a class that contains the functions required for
-//  FMPlanarComputeLinear.
-//
-// .SECTION Author
+// \author
 //     Martin Armstrong, Oxford 21/11/96
-//
-// .SECTION Modifications:
-//     <none yet>
 //
 //-----------------------------------------------------------------------------
 
@@ -32,29 +22,8 @@
 class FMatrixPlanar;
 class ImageMetric;
 
-class FMPlanarNonLinFun : public vnl_least_squares_function {
-public:
-
-  // Constructors/Destructors--------------------------------------------------
-  FMPlanarNonLinFun(const ImageMetric*, const ImageMetric*,
-                        double outlier_distance_squared,
-                        vcl_vector<HomgPoint2D>& points1,
-                        vcl_vector<HomgPoint2D>& points2);
-
-  // Operations----------------------------------------------------------------
-
-  // Computations--------------------------------------------------------------
-
-  bool compute(FMatrixPlanar* F);
-
-// The virtual function from vnl_levenberg_marquardt
-  void f(const vnl_vector<double>& x, vnl_vector<double>& fx);
-
-  // Data Access---------------------------------------------------------------
-
-  // Data Control--------------------------------------------------------------
-
-private:
+class FMPlanarNonLinFun : public vnl_least_squares_function
+{
   // Data Members--------------------------------------------------------------
   int _data_size;
 
@@ -73,6 +42,22 @@ private:
   HomgMetric _image_metric1;
   HomgMetric _image_metric2;
 
+public:
+
+  // Constructors/Destructors--------------------------------------------------
+  FMPlanarNonLinFun(const ImageMetric*, const ImageMetric*,
+                        double outlier_distance_squared,
+                        vcl_vector<HomgPoint2D>& points1,
+                        vcl_vector<HomgPoint2D>& points2);
+
+  // Computations--------------------------------------------------------------
+
+  bool compute(FMatrixPlanar* F);
+
+  // The virtual function from vnl_levenberg_marquardt
+  void f(const vnl_vector<double>& x, vnl_vector<double>& fx);
+
+private:
   // Helpers-------------------------------------------------------------------
   void fmatrix_to_params(const FMatrixPlanar& F, vnl_vector<double>& params);
   FMatrixPlanar params_to_fmatrix(const vnl_vector<double>& params);

@@ -3,33 +3,36 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME    SimilarityMetric - Scale + translate ImageMetric
-// .LIBRARY MViewBasics
-// .HEADER  MultiView Package
-// .INCLUDE mvl/SimilarityMetric.h
-// .FILE    SimilarityMetric.cxx
+//:
+// \file
+// \brief Scale + translate ImageMetric
 //
-// .SECTION Description
 //    An ImageMetric that simply scales and translates.  Most often used
 //    to condition points by transforming the image centre to the origin,
 //    and scaling so that the diagonal has length 2.
 //
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 04 Feb 97
-//
-// .SECTION Modifications:
-//     <none yet>
 //
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_double_3x3.h>
 #include <mvl/ImageMetric.h>
 #include <vcl_iosfwd.h>
-
 class Image;
 
-class SimilarityMetric : public ImageMetric {
-public:
+class SimilarityMetric : public ImageMetric
+{
+  // Data Members--------------------------------------------------------------
+  double centre_x_;
+  double centre_y_;
+  double inv_scale_;
+  double scale_;
+
+  vnl_double_3x3 cond_matrix;
+  vnl_double_3x3 inv_cond_matrix;
+
+ public:
   // Constructors/Destructors--------------------------------------------------
 
   SimilarityMetric();
@@ -70,16 +73,6 @@ public:
   vcl_ostream& print(vcl_ostream&) const;
   void print() const;
   void print(char* msg) const;
-
-protected:
-  // Data Members--------------------------------------------------------------
-  double centre_x_;
-  double centre_y_;
-  double inv_scale_;
-  double scale_;
-
-  vnl_double_3x3 cond_matrix;
-  vnl_double_3x3 inv_cond_matrix;
 
 private:
   // Helpers-------------------------------------------------------------------

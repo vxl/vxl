@@ -3,15 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME    AffineMetric - Affine ImageMetric
-// .LIBRARY MViewBasics
-// .HEADER  MultiView Package
-// .INCLUDE mvl/AffineMetric.h
-// .FILE    AffineMetric.cxx
-// .SECTION Description
-//    AffineMetric is an ImageMetric that is an affine transformation.
-// .SECTION Author
+//:
+// \file
+// \brief AffineMetric is an ImageMetric that is an affine transformation.
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 24 Feb 97
 //
 //-----------------------------------------------------------------------------
@@ -19,7 +14,11 @@
 #include <vnl/vnl_double_3x3.h>
 #include <mvl/ImageMetric.h>
 
-class AffineMetric : public ImageMetric {
+class AffineMetric : public ImageMetric
+{
+  // Data Members--------------------------------------------------------------
+  vnl_double_3x3 A_;
+  vnl_double_3x3 A_inverse_;
 public:
   // Constructors/Destructors--------------------------------------------------
 
@@ -46,17 +45,6 @@ public:
 
   // Computations--------------------------------------------------------------
   vcl_ostream& print(vcl_ostream& s) const;
-
-  // Data Access---------------------------------------------------------------
-
-  // Data Control--------------------------------------------------------------
-
-protected:
-  // Data Members--------------------------------------------------------------
-  vnl_double_3x3 A_;
-  vnl_double_3x3 A_inverse_;
-
-  // Helpers-------------------------------------------------------------------
 };
 
 #endif // AffineMetric_h_

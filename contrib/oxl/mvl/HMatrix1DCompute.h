@@ -1,19 +1,12 @@
-#ifndef _HMatrix1DCompute_h
-#define _HMatrix1DCompute_h
-
-//--------------------------------------------------------------
+#ifndef HMatrix1DCompute_h_
+#define HMatrix1DCompute_h_
+//:
+// \file
 //
-// .NAME HMatrix1DCompute
-// .LIBRARY MViewCompute
-// .HEADER MultiView package
-// .INCLUDE mvl/HMatrix1DCompute.h
-// .FILE HMatrix1DCompute.cxx
-//
-// .SECTION Description:
 // Base class of classes to generate a line-to-line projectivity matrix from
 // a set of matched points.
 //
-// .SECTION Author
+// \author
 //  Frederik Schaffalitzky , Robotic Research Group
 //
 
@@ -21,12 +14,8 @@ class HMatrix1D;
 #include <mvl/HomgPoint1D.h>
 #include <vcl_vector.h>
 
-// these make the headers easier to read (in my opinion) - fsm
-
-//
-// definition of class :
-//
-class HMatrix1DCompute {
+class HMatrix1DCompute
+{
  public:
   //
   HMatrix1DCompute() : verbose_(false) { }
@@ -57,4 +46,4 @@ class HMatrix1DCompute {
                                  HMatrix1D *);
 };
 
-#endif // _HMatrix1DCompute_h
+#endif // HMatrix1DCompute_h_

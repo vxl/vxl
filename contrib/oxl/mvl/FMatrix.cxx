@@ -1,7 +1,6 @@
 #ifdef __GNUG__
 #pragma implementation
 #endif
-
 //:
 //  \file
 
@@ -131,7 +130,7 @@ FMatrix FMatrix::read(vcl_istream& s)
   return FMatrix(s);
 }
 
-// @{ OPERATORS @}
+// == OPERATORS ==
 
 //--------------------------------------------------------------
 //
@@ -188,7 +187,7 @@ vcl_ostream& operator<<(vcl_ostream& os, const FMatrix& F) {
   return os;
 }
 
-// @{ COMPUTATIONS @}
+// == COMPUTATIONS ==
 //-------------------------------------------------------------------
 
 //: Return an FMatrix which corresponds to the reverse of this one.
@@ -382,7 +381,7 @@ FMatrix::decompose_to_skew_rank3(vnl_matrix<double>*, vnl_matrix<double>*) const
   assert(!"Not implemented\n");
 }
 
-// @{ DATA ACCESS @}
+// == DATA ACCESS ==
 
 //----------------------------------------------------------------
 //

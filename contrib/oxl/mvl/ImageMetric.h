@@ -3,14 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+// \file
+// \brief Converting between image and metric coordinates
 //
-// .NAME    ImageMetric - Converting between image and metric coordinates
-// .LIBRARY MViewBasics
-// .HEADER  MultiView Package
-// .INCLUDE mvl/ImageMetric.h
-// .FILE    ImageMetric.cxx
-//
-// .SECTION Description
 //    ImageMetric is the baseclass for classes that define how points in image
 //    coordinates are converted to conditioned frames.  For simple systems this
 //    will represent the mapping of the image plane to the unit square, but for
@@ -24,11 +20,8 @@
 //    coordinates have been conditioned, while nonhomogeneous primitives remain in
 //    image coordinates.
 //
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 17 Aug 96
-//
-// .SECTION Modifications:
-//     <none yet>
 //
 //-----------------------------------------------------------------------------
 
@@ -39,18 +32,14 @@ class HomgLineSeg2D;
 class HomgLine2D;
 class FMatrix;
 
-class ImageMetric {
-public:
+class ImageMetric
+{
+ public:
   // Constructors/Destructors--------------------------------------------------
-
   ImageMetric();
   virtual ~ImageMetric();
   //ImageMetric(ImageMetric const& that); - use default
   //ImageMetric& operator=(ImageMetric const& that); - use default
-
-  // Operations----------------------------------------------------------------
-
-  // Computations--------------------------------------------------------------
 
   virtual HomgPoint2D homg_to_imagehomg(const HomgPoint2D&) const;
   virtual HomgPoint2D imagehomg_to_homg(const HomgPoint2D&) const;

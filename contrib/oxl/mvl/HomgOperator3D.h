@@ -1,19 +1,15 @@
-//--------------------------------------------------------------
+#ifndef HomgOperator3D_h_
+#define HomgOperator3D_h_
+//:
+// \file
+// \brief operators for the 3D homogeneous primitive classes
 //
-// .NAME HomgOperator3D - operators for the 3D homogeneous primitive classes
-// .LIBRARY MViewBasics
-// .HEADER MultiView package
-// .INCLUDE mvl/HomgOperator3D.h
-// .FILE HomgOperator3D.cxx
-//
-// .SECTION Description:
 // Useful operators for the 3D homogeneous primitive classes.
 //
-// .SECTION Modifications
+// \verbatim
+// Modifications
 //   221198 - Peter Vanroose - Added CrossRatio()
-
-#ifndef _HomgOperator3D_h
-#define _HomgOperator3D_h
+// \endverbatim
 
 #include <vcl_vector.h>
 
@@ -21,10 +17,9 @@
 #include <mvl/HomgPoint3D.h>
 #include <mvl/HomgPlane3D.h>
 
-class HomgOperator3D {
-
+class HomgOperator3D
+{
 public:
-
   static double angle_between_oriented_lines (const HomgLine3D& line1, const HomgLine3D& line2);
   static double distance_squared (const HomgPoint3D& point1, const HomgPoint3D& point2);
   static HomgPoint3D intersect_line_and_plane (const HomgLine3D&, const HomgPlane3D&);
@@ -50,4 +45,4 @@ public:
                            const Homg3D& p3, const Homg3D& p4);
 };
 
-#endif // _HomgOperator3D_h
+#endif // HomgOperator3D_h_

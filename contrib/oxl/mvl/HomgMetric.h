@@ -3,14 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+// \file
+// \brief Measurments on homogeneous coordinates
 //
-// .NAME    HomgMetric - Measurments on homogeneous coordinates
-// .LIBRARY MViewBasics
-// .HEADER  MultiView Package
-// .INCLUDE mvl/HomgMetric.h
-// .FILE    HomgMetric.cxx
-//
-// .SECTION Description
 //    HomgMetric is a class that allows measurements to be made between
 //    homogeneous primitives.  If attached to an ImageMetric (q.v.), uses
 //    that, otherwise uses HomgOperator2D.
@@ -19,15 +15,11 @@
 //    {\em does not} have responsibility for memory management, no more
 //    than any other pointer.
 //
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 28 Jan 97
-//
-// .SECTION Modifications:
-//     <none yet>
 //
 //-----------------------------------------------------------------------------
 
-//
 #include <vnl/vnl_fwd.h>
 #include <vcl_iosfwd.h>
 
@@ -41,7 +33,10 @@ class TriTensor;
 class HMatrix2D;
 class PMatrix;
 
-class HomgMetric {
+class HomgMetric
+{
+  // Data Members--------------------------------------------------------------
+  const ImageMetric* metric_;
 public:
   // Constructors/Destructors--------------------------------------------------
 
@@ -105,13 +100,6 @@ public:
 
   static HMatrix2D homg_to_image_H(const HMatrix2D&, const HomgMetric& c1, const HomgMetric& c2);
   static HMatrix2D image_to_homg_H(const HMatrix2D&, const HomgMetric& c1, const HomgMetric& c2);
-
-protected:
-  // Data Members--------------------------------------------------------------
-  const ImageMetric* metric_;
-
-private:
-  // Helpers-------------------------------------------------------------------
 };
 
 inline vcl_ostream& operator<<(vcl_ostream& s, const HomgMetric& h) { return h.print(s); }

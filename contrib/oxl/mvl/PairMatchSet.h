@@ -3,14 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+// \file
+// \brief Set of pairs of integers
 //
-// .NAME    PairMatchSet - Set of pairs of integers
-// .LIBRARY MViewBasics
-// .HEADER  MultiView Package
-// .INCLUDE mvl/PairMatchSet.h
-// .FILE    PairMatchSet.cxx
-//
-// .SECTION Description
 //    A PairMatchSet stores tuples of integers (i1, i2), stored as
 //    an array of matches indexed by i1. Access characteristics are
 //    therefore:
@@ -26,7 +22,7 @@
 //    A class PairMatchSet::iterator is provided to allow traversal of
 //    the complete list of matches.
 //
-// .SECTION Author
+// \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 09 Aug 96
 //
 //-----------------------------------------------------------------------------
@@ -35,11 +31,15 @@
 #include <vcl_vector.h>
 #include <mvl/MatchSet.h>
 
-class PairMatchSet : public MatchSet {
+class PairMatchSet : public MatchSet
+{
+  // Data Members--------------------------------------------------------------
+  vcl_vector<int> matches_;
+  unsigned int match_count_;
+ public:
   // Constants-----------------------------------------------------------------
-public:
   enum { use_existing = true };
-public:
+ public:
   // Constructors/Destructors--------------------------------------------------
 
   PairMatchSet(unsigned size = 0);
@@ -73,7 +73,11 @@ public:
 
   // ******* ITERATOR
   class iterator {
-  public:
+    const PairMatchSet* c_;
+    int match_index_;
+    int i1, i2;
+    bool full_only_;
+   public:
     iterator(bool full_only = true);
     iterator(const PairMatchSet& ccc, bool full_only = true);
     iterator& operator=(const PairMatchSet& ccc);
@@ -84,18 +88,10 @@ public:
     bool isfull() const;
     operator bool () const;
 
-  private:
+   private:
     iterator& operator ++ (int /*postfix*/);// { abort(); return *this; }
-
-  private:
-    const PairMatchSet* c_;
-    int match_index_;
-    int i1, i2;
-    bool full_only_;
   };
   // ******* END ITERATOR
-
-  // IO------------------------------------------------------------------------
 
   // Input/Output--------------------------------------------------------------
   void print_brief(vcl_ostream& s) const;
@@ -107,10 +103,6 @@ public:
   friend vcl_istream& operator>>(vcl_istream& s, PairMatchSet& cc);
 
   bool get_match(int at, int* i1, int* i2) const;
-protected:
-  // Data Members--------------------------------------------------------------
-  vcl_vector<int> matches_;
-  unsigned int match_count_;
 };
 
 #endif // PairMatchSet_h_

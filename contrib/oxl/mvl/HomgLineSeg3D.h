@@ -1,34 +1,31 @@
-#ifndef _HomgLineSeg3D_h
-#define _HomgLineSeg3D_h
+#ifndef HomgLineSeg3D_h_
+#define HomgLineSeg3D_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-
-//--------------------------------------------------------------
+//:
+// \file
+// \brief Homogeneous 3D line segment
 //
-// .NAME HomgLineSeg3D - Homogeneous 3D line segment
-// .LIBRARY MViewBasics
-// .HEADER MultiView package
-// .INCLUDE mvl/HomgLineSeg3D.h
-// .FILE HomgLineSeg3D.cxx
-//
-// .SECTION Description:
 // A class to hold a homogeneous representation of a 3D linesegment
 //
-// .SECTION Modifications:
+// \verbatim
+// Modifications:
 //   Peter Vanroose - 11 Mar 97 - added operator==
-//
+// \endverbatim
 
 #include <mvl/HomgLine3D.h>
 #include <mvl/HomgOperator3D.h>
 #include <mvl/HomgPoint3D.h>
 #include <vcl_iosfwd.h>
 
-class HomgLineSeg3D : public HomgLine3D {
+class HomgLineSeg3D : public HomgLine3D
+{
+  // Data Members--------------------------------------------------------------
+  HomgPoint3D _point1;
+  HomgPoint3D _point2;
 
-  // PUBLIC INTERFACE----------------------------------------------------------
 public:
-
   // Constructors/Initializers/Destructors-------------------------------------
 
   HomgLineSeg3D ();
@@ -43,14 +40,8 @@ public:
   const HomgPoint3D& get_point2 () const;
 
   void set (const HomgPoint3D& point1, const HomgPoint3D& point2);
-
-  // INTERNALS-----------------------------------------------------------------
-private:
-  // Data Members--------------------------------------------------------------
-  HomgPoint3D _point1;
-  HomgPoint3D _point2;
 };
 
 vcl_ostream& operator<<(vcl_ostream& s, const HomgLineSeg3D& );
 
-#endif // _HomgLineSeg3D_h
+#endif // HomgLineSeg3D_h_
