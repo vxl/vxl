@@ -41,4 +41,7 @@ SUBDIRS(vgel gkll)
 # Dense matcher
 SUBDIRS(vmal)
 
-INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake)
+# This should *not* be included here since it will cause all programs,
+# also the non-GUI ones, to link against libGL !
+# Place it only in those directories that really need it.
+#INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake)
