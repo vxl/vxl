@@ -7,23 +7,11 @@
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <ipts/ipts_scale_space_peaks.h>
+#include <ipts/ipts_draw.h>
 
 void print_usage()
 {
   vcl_cout<<"find_dog_peaks -i input_image -o out_image -d dog_image"<<vcl_endl;
-}
-
-template<class T>
-void draw_cross(vil_image_view<T>& image, unsigned x, unsigned y, 
-                unsigned s, T value)
-{
-  for (unsigned i=0;i<s;++i)
-  {
-    image(x,y+i)=value;
-    image(x,y-i)=value;
-    image(x-i,y)=value;
-    image(x+i,y)=value;
-  }
 }
 
 int main( int argc, char* argv[] )
@@ -64,9 +52,9 @@ int main( int argc, char* argv[] )
   for (unsigned i=0;i<peak_pts.size();++i)
   {
     if (peak_pts[i].z()>1.1)
-    draw_cross(image,unsigned(peak_pts[i].x()+0.5),
-                     unsigned(peak_pts[i].y()+0.5),
-                     unsigned(peak_pts[i].z()+0.5), vxl_byte(255) );
+    ipts_draw_cross(image,int(peak_pts[i].x()+0.5),
+                     int(peak_pts[i].y()+0.5),
+                     int(peak_pts[i].z()+0.5), vxl_byte(255) );
   }
 
   vimt_image_pyramid_flatten(flat_dog,dog_pyramid);

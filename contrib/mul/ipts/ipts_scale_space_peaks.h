@@ -54,12 +54,12 @@ void ipts_scale_space_peaks_2d(vcl_vector<vgl_point_3d<double> >& peak_pts,
   dw = image.world2im().delta(vgl_point_2d<double>(0,0),dx);
   double scale = 1.0/vcl_sqrt(dw.x()*dw.x()+dw.y()*dw.y());
 
-  // Allow 3 pixel border to ensure avoid problems when
+  // Allow 2 pixel border to ensure avoid problems when
   // testing level above
-  for (unsigned j=3;j<nj-3;++j,row+=jstep)
+  for (unsigned j=2;j<nj-2;++j,row+=jstep)
   {
     const T* pixel = row;
-    for (unsigned i=3;i<ni-3;++i,pixel+=istep)
+    for (unsigned i=2;i<ni-2;++i,pixel+=istep)
     {
       if (vimt_is_peak_3x3(pixel,istep,jstep))
       {
@@ -73,12 +73,16 @@ void ipts_scale_space_peaks_2d(vcl_vector<vgl_point_3d<double> >& peak_pts,
           // (i,j) is local maxima at the level below
           // Check it is also above all pixels nearby in level above
           vgl_point_2d<double> p1 = to_above(i,j);
-          const T* pixel_above=&im_above(int(p1.x()+0.5),int(p1.y()+0.5));
-          if (ipts_is_above_3x3(*pixel,pixel_above,
-                                im_above.istep(),im_above.jstep()))
+          if (p1.x()>0.5 && p1.y()>0.5
+              && p1.x()<im_above.ni()-2 && p1.y()<im_above.nj()-2)
           {
-            vgl_point_2d<double> p = to_base(i,j);
-            peak_pts.push_back(vgl_point_3d<double>(p.x(),p.y(),scale));
+            const T* pixel_above=&im_above(int(p1.x()+0.5),int(p1.y()+0.5));
+            if (ipts_is_above_3x3(*pixel,pixel_above,
+                                  im_above.istep(),im_above.jstep()))
+            {
+              vgl_point_2d<double> p = to_base(i,j);
+              peak_pts.push_back(vgl_point_3d<double>(p.x(),p.y(),scale));
+            }
           }
         }
       }

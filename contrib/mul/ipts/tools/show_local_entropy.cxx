@@ -15,25 +15,13 @@
 #include <ipts/ipts_local_entropy.h>
 #include <vil/algo/vil_suppress_non_max.h>
 #include <vimt/algo/vimt_find_peaks.h>
+#include <ipts/ipts_draw.h>
 
 void print_usage()
 {
   vcl_cout<<"show_local_entropy -i in_image -e entropy_image -o out_image -h half_width"<<vcl_endl;
   vcl_cout<<"Load in an image and generate entropy from square regions."<<vcl_endl;
   vcl_cout<<"Show peaks in entropy as crosses on original image."<<vcl_endl;
-}
-
-template<class T>
-void draw_cross(vil_image_view<T>& image, unsigned x, unsigned y,
-                unsigned s, T value)
-{
-  for (int i=0;i<s;++i)
-  {
-    if ((y+i)<image.nj()) image(x,y+i)=value;
-    if (y>i) image(x,y-i)=value;
-    if (x>i) image(x-i,y)=value;
-    if (x+i<image.ni()) image(x+i,y)=value;
-  }
 }
 
 int main( int argc, char* argv[] )
@@ -79,7 +67,7 @@ int main( int argc, char* argv[] )
   vcl_vector<vgl_point_2d<unsigned> > peaks;
   vimt_find_image_peaks_3x3(peaks,entropy_im);
   for (unsigned i=0;i<peaks.size();++i)
-    draw_cross(grey_im,peaks[i].x()+half_width(),peaks[i].y()+half_width(),half_width()/2,vxl_byte(255));
+    ipts_draw_cross(grey_im,peaks[i].x()+half_width(),peaks[i].y()+half_width(),half_width(),vxl_byte(255));
 
   if (!vil_save(grey_im, out_path().c_str()))
   {
