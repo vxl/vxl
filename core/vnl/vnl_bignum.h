@@ -236,25 +236,19 @@ private:
 //: Returns the addition of two bignum numbers.
 inline vnl_bignum operator+(vnl_bignum const& r1, long r2) { return r1+vnl_bignum(r2); }
 inline vnl_bignum operator+(vnl_bignum const& r1, int r2) { return r1+long(r2); }
+inline vnl_bignum operator+(vnl_bignum const& r1, double r2) { return r1+vnl_bignum(r2); }
 inline vnl_bignum operator+(long r2, vnl_bignum const& r1) { return r1 + r2; }
 inline vnl_bignum operator+(int r2, vnl_bignum const& r1) { return r1 + r2; }
+inline vnl_bignum operator+(double r2, vnl_bignum const& r1) { return r1 + r2; }
 
 //: Returns the difference of two bignum numbers.
-inline vnl_bignum operator-(vnl_bignum const& r1, vnl_bignum const& r2) {
-  return r1 + (-r2);
-}
-inline vnl_bignum operator-(vnl_bignum const& r1, long r2) {
-  return r1 + (-r2);
-}
-inline vnl_bignum operator-(vnl_bignum const& r1, int r2) {
-  return r1 + (-r2);
-}
-inline vnl_bignum operator-(long r2, vnl_bignum const& r1) {
-  return -(r1 + (-r2));
-}
-inline vnl_bignum operator-(int r2, vnl_bignum const& r1) {
-  return -(r1 + (-r2));
-}
+inline vnl_bignum operator-(vnl_bignum const& r1, vnl_bignum const& r2) { return r1 + (-r2); }
+inline vnl_bignum operator-(vnl_bignum const& r1, long r2) { return r1 + (-r2); }
+inline vnl_bignum operator-(vnl_bignum const& r1, int r2) { return r1 + (-r2); }
+inline vnl_bignum operator-(vnl_bignum const& r1, double r2) { return r1 + (-r2); }
+inline vnl_bignum operator-(long r2, vnl_bignum const& r1) { return -(r1 + (-r2)); }
+inline vnl_bignum operator-(int r2, vnl_bignum const& r1) { return -(r1 + (-r2)); }
+inline vnl_bignum operator-(double r2, vnl_bignum const& r1) { return -(r1 + (-r2)); }
 
 //: Returns the multiplication of two bignum numbers.
 inline vnl_bignum operator*(vnl_bignum const& r1, vnl_bignum const& r2) {
@@ -266,11 +260,17 @@ inline vnl_bignum operator*(vnl_bignum const& r1, long r2) {
 inline vnl_bignum operator*(vnl_bignum const& r1, int r2) {
   vnl_bignum result(r1); return result *= (long)r2;
 }
+inline vnl_bignum operator*(vnl_bignum const& r1, double r2) {
+  vnl_bignum result(r1); return result *= (vnl_bignum)r2;
+}
 inline vnl_bignum operator*(long r2, vnl_bignum const& r1) {
   vnl_bignum result(r1); return result *= r2;
 }
 inline vnl_bignum operator*(int r2, vnl_bignum const& r1) {
   vnl_bignum result(r1); return result *= (long)r2;
+}
+inline vnl_bignum operator*(double r2, vnl_bignum const& r1) {
+  vnl_bignum result(r1); return result *= (vnl_bignum)r2;
 }
 
 //: Returns the division of two bignum numbers.
@@ -283,11 +283,17 @@ inline vnl_bignum operator/(vnl_bignum const& r1, long r2) {
 inline vnl_bignum operator/(vnl_bignum const& r1, int r2) {
   vnl_bignum result(r1); return result /= (long)r2;
 }
+inline vnl_bignum operator/(vnl_bignum const& r1, double r2) {
+  vnl_bignum result(r1); return result /= (vnl_bignum)r2;
+}
 inline vnl_bignum operator/(long r1, vnl_bignum const& r2) {
   vnl_bignum result(r1); return result /= r2;
 }
 inline vnl_bignum operator/(int r1, vnl_bignum const& r2) {
   vnl_bignum result((long)r1); return result /= r2;
+}
+inline vnl_bignum operator/(double r1, vnl_bignum const& r2) {
+  vnl_bignum result(r1); return result /= r2;
 }
 
 //: Returns the remainder of r1 divided by r2.
@@ -316,7 +322,7 @@ inline bool operator> (long r1, vnl_bignum const& r2) { return r2< r1; }
 inline bool operator<=(long r1, vnl_bignum const& r2) { return r2>=r1; }
 inline bool operator>=(long r1, vnl_bignum const& r2) { return r2<=r1; }
 
-#if defined(VCL_SUNPRO_CC) || defined(VCL_SGI_CC) || !VCL_USE_NATIVE_COMPLEX
+#if defined(VCL_SUNPRO_CC) || defined(VCL_SGI_CC) || defined(VCL_VC) || defined(VCL_METRO_WERKS)
 inline vnl_bignum vcl_sqrt(vnl_bignum const& x) { return vnl_bignum(vcl_sqrt(double(x))); }
 #else
 namespace std {
@@ -324,7 +330,7 @@ namespace std {
 }
 #endif
 
-#if defined(VCL_SGI_CC_720) || defined(VCL_SUNPRO_CC)
+#if defined(VCL_SUNPRO_CC) || defined(VCL_SGI_CC) || defined(VCL_VC) || defined(VCL_METRO_WERKS)
 inline vnl_bignum vcl_abs(vnl_bignum const& x) { return x.abs(); }
 #else
 namespace std {
@@ -332,20 +338,11 @@ namespace std {
 }
 #endif
 
+inline vnl_bignum vnl_math_abs(vnl_bignum const& x) { return x.abs(); }
 inline vnl_bignum vnl_math_squared_magnitude(vnl_bignum const& x) { return x*x; }
-
-inline vnl_bignum vnl_math_abs(vnl_bignum const& x) { return x<0L ? -x : x; }
-
-#include <vnl/vnl_complex_traits.h>
-
-VCL_DEFINE_SPECIALIZATION
-struct vnl_complex_traits<vnl_bignum>
-{
-  enum { isreal = true };
-  static vnl_bignum conjugate(vnl_bignum x) { return x; }
-  static vcl_complex<vnl_bignum> complexify(vnl_bignum x)
-  { return vcl_complex<vnl_bignum>(x,vnl_bignum(0L)); }
-};
+inline vnl_bignum vnl_math_sqr(vnl_bignum const& x) { return x*x; }
+inline bool vnl_math_isnan(vnl_bignum const& ) { return false; }
+inline bool vnl_math_isfinite(vnl_bignum const& ) { return true; } 
 
 #include <vnl/vnl_numeric_traits.h>
 
@@ -364,8 +361,21 @@ public:
   typedef double real_t;
 };
 
+#include <vnl/vnl_complex_traits.h>
+
+VCL_DEFINE_SPECIALIZATION
+struct vnl_complex_traits<vnl_bignum>
+{
+  enum { isreal = true };
+  static vnl_bignum conjugate(vnl_bignum x) { return x; }
+  static vcl_complex<vnl_bignum> complexify(vnl_bignum x)
+  { return vcl_complex<vnl_bignum>(x,vnl_bignum(0L)); }
+};
+
 #include <vcl_complex.h>
 
+inline bool vnl_math_isnan(vcl_complex<vnl_bignum> const& ) { return false; }
+inline bool vnl_math_isfinite(vcl_complex<vnl_bignum> const&) { return true; }
 inline vnl_bignum vnl_math_squared_magnitude(vcl_complex<vnl_bignum> const& z) { return vcl_norm(z); }
 inline vnl_bignum vnl_math_abs(vcl_complex<vnl_bignum> const& z) { return vcl_sqrt(vcl_norm(z)); }
 inline vcl_complex<vnl_bignum> vnl_math_sqr(vcl_complex<vnl_bignum> const& z) { return z*z; }
