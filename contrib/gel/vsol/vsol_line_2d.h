@@ -115,7 +115,7 @@ public:
   //---------------------------------------------------------------------------
   //: Has `this' not the same points than `other' ?
   //---------------------------------------------------------------------------
-  virtual bool operator!=(const vsol_line_2d &other) const;
+  inline bool operator!=(const vsol_line_2d &o) const {return !operator==(o);}
 
   //***************************************************************************
   // Status report

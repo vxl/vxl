@@ -154,14 +154,6 @@ bool vsol_conic_2d::operator==(const vsol_spatial_object_2d& obj) const
   : false;
 }
 
-//---------------------------------------------------------------------------
-//: Has `this' not the same coeffs than `other', or different end points ?
-//---------------------------------------------------------------------------
-bool vsol_conic_2d::operator!=(const vsol_conic_2d &other) const
-{
-  return !operator==(other);
-}
-
 //***************************************************************************
 // Status report
 //***************************************************************************

@@ -77,7 +77,7 @@ public:
   //---------------------------------------------------------------------------
   //: Has `this' not the same points than `other' in the same order ?
   //---------------------------------------------------------------------------
-  virtual bool operator!=(const vsol_polygon_2d &other) const;
+  inline bool operator!=(const vsol_polygon_2d &o)const{return !operator==(o);}
 
   //***************************************************************************
   // Status report

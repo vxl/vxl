@@ -170,7 +170,7 @@ public:
   //---------------------------------------------------------------------------
   //: Has `this' not the same coeffs than `other', or different end points ?
   //---------------------------------------------------------------------------
-  virtual bool operator!=(const vsol_conic_2d &other) const;
+  inline bool operator!=(const vsol_conic_2d &o) const {return !operator==(o);}
 
   //***************************************************************************
   // Status report

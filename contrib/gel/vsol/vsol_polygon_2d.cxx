@@ -119,14 +119,6 @@ bool vsol_polygon_2d::operator==(const vsol_spatial_object_2d& obj) const
 
 
 //---------------------------------------------------------------------------
-//: Has `this' the same points than `other' in the same order ?
-//---------------------------------------------------------------------------
-bool vsol_polygon_2d::operator!=(const vsol_polygon_2d &other) const
-{
-  return !operator==(other);
-}
-
-//---------------------------------------------------------------------------
 //: Compute the bounding box of `this'
 //---------------------------------------------------------------------------
 void vsol_polygon_2d::compute_bounding_box(void)

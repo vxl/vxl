@@ -127,14 +127,6 @@ bool vsol_line_3d::operator==(const vsol_spatial_object_3d& obj) const
   : false;
 }
 
-//---------------------------------------------------------------------------
-//: Has `this' not the same points than `other' ?
-//---------------------------------------------------------------------------
-bool vsol_line_3d::operator!=(const vsol_line_3d &other) const
-{
-  return !operator==(other);
-}
-
 //***************************************************************************
 // Status report
 //***************************************************************************
