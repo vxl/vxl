@@ -64,14 +64,16 @@ v{@sl x}l
 @end macro
 @end iftex
 @ifnottex
-@macro vxl
-vxl
-@end macro
 @ifhtml
 @macro vxl
 v@emph{x}l
 @end macro
 @end ifhtml
+@ifnothtml
+@macro vxl
+vxl
+@end macro
+@end ifnothtml
 @end ifnottex
 
 @c Define the @LaTeX{} macro
@@ -106,5 +108,8 @@ inputclass \name\
 @strong{\text\}
 @end macro
 @end ifnottex
+
+@c make backslashes normal characters (used in eg "\brief")
+@catcode92=12
 
 @c %**end of header
