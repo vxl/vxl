@@ -572,7 +572,7 @@ class vnl_matrix
 template<class T>
 inline T vnl_matrix<T>::get (unsigned row, unsigned column) const
 {
-#if ERROR_CHECKING
+#ifdef ERROR_CHECKING
   if (row >= this->num_rows)                    // If invalid size specified
     vnl_error_matrix_row_index ("get", row);    // Raise exception
   if (column >= this->num_cols)                 // If invalid size specified
@@ -587,7 +587,7 @@ inline T vnl_matrix<T>::get (unsigned row, unsigned column) const
 template<class T>
 inline void vnl_matrix<T>::put (unsigned row, unsigned column, T const& value)
 {
-#if ERROR_CHECKING
+#ifdef ERROR_CHECKING
   if (row >= this->num_rows)                    // If invalid size specified
     vnl_error_matrix_row_index ("put", row);  // Raise exception
   if (column >= this->num_cols)                 // If invalid size specified

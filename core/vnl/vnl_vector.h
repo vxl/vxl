@@ -444,7 +444,7 @@ class vnl_vector
 
 template <class T>
 inline T vnl_vector<T>::get (unsigned int index) const {
-#if ERROR_CHECKING
+#ifdef ERROR_CHECKING
   if (index >= this->num_elmts)     // If invalid index specified
     vnl_error_vector_index ("get", index);  // Raise exception
 #endif
@@ -456,7 +456,7 @@ inline T vnl_vector<T>::get (unsigned int index) const {
 
 template <class T>
 inline void vnl_vector<T>::put (unsigned int index, T const& value) {
-#if ERROR_CHECKING
+#ifdef ERROR_CHECKING
   if (index >= this->num_elmts)     // If invalid index specified
     vnl_error_vector_index ("put", index); // Raise exception
 #endif

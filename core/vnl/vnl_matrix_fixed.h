@@ -82,7 +82,7 @@ vnl_vector_fixed<T, M> vnl_matrix_fixed_mat_vec_mult(const vnl_matrix_fixed<T, M
 template <class T, unsigned M, unsigned N, unsigned O>
 inline
 vnl_matrix_fixed<T, M, O> vnl_matrix_fixed_mat_mat_mult(const vnl_matrix_fixed<T, M, N>& a, const vnl_matrix_fixed<T, N, O>& b);
-#if VCL_VC60
+#ifdef VCL_VC60
 template <unsigned cols, unsigned rows, class T>
 class vnl_matrix_fixed_fake_base
 {
@@ -329,7 +329,7 @@ class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
     return *this = out;
   }
 
-#if VCL_VC60
+#ifdef VCL_VC60
   template <unsigned o>
   vnl_matrix_fixed<T,num_rows,o> operator*( vnl_matrix_fixed_fake_base<o,num_cols,T> const& mat ) const
   {
@@ -765,7 +765,7 @@ vnl_matrix_fixed_mat_mat_mult(const vnl_matrix_fixed<T, M, N>& a,
   return out;
 }
 
-#if ! VCL_VC60
+#ifndef VCL_VC60
 // The version for correct compilers
 
 //: Multiply  conformant vnl_matrix_fixed (M x N) and vector_fixed (N)

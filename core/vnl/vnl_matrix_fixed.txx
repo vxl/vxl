@@ -368,7 +368,7 @@ vnl_matrix_fixed<T,nrows,ncols>::get_n_columns (unsigned column, unsigned n) con
 template<class T, unsigned nrows, unsigned ncols>
 vnl_vector<T> vnl_matrix_fixed<T,nrows,ncols>::get_row(unsigned row_index) const
 {
-#if ERROR_CHECKING
+#ifdef ERROR_CHECKING
   if (row_index >= nrows)
     vnl_error_matrix_row_index ("get_row", row_index);
 #endif
@@ -383,7 +383,7 @@ vnl_vector<T> vnl_matrix_fixed<T,nrows,ncols>::get_row(unsigned row_index) const
 template<class T, unsigned nrows, unsigned ncols>
 vnl_vector<T> vnl_matrix_fixed<T,nrows,ncols>::get_column(unsigned column_index) const
 {
-#if ERROR_CHECKING
+#ifdef ERROR_CHECKING
   if (column_index >= ncols)
     vnl_error_matrix_col_index ("get_column", column_index);
 #endif
