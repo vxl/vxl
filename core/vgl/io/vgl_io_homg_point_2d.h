@@ -1,4 +1,4 @@
-#ifndef vgl_io__homg_point_2d_h
+#ifndef vgl_io_homg_point_2d_h
 #define vgl_io_homg_point_2d_h
 #ifdef __GNUC__
 #pragma interface
