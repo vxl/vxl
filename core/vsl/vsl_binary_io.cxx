@@ -278,7 +278,7 @@ void vsl_b_read(vsl_b_istream &is,unsigned long& n )
 }
 
 
-#ifdef VCL_VC70
+#if 0
 // When the macro is ready, this test will be
 // #if ! VCL_PTRDIFF_T_IS_A_STANDARD_TYPE
 

@@ -138,7 +138,7 @@ macro (signed int);
 macro (unsigned int);
 macro (signed long);
 macro (unsigned long);
-#ifdef VCL_VC70
+#if 0
 // This test will be replaced with !VCL_PTRDIFF_T_IS_A_STANDARD_TYPE
 // When that macro is working.
 macro(vcl_ptrdiff_t);
@@ -469,7 +469,7 @@ inline unsigned long vsl_convert_from_arbitrary_length(const unsigned char* buff
 
 /////////////////////////////////////////////////////////////////////////
 
-#ifdef VCL_VC70
+#if 0
 // This test will be replaced with !VCL_PTRDIFF_T_IS_A_STANDARD_TYPE
 // When that macro is working.
 
@@ -970,7 +970,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, unsigned long* begin, unsigned n
 
 /////////////////////////////////////////////////////////////////////////
 
-#ifdef VCL_VC70
+#if 0
 // This test will be replaced with !VCL_PTRDIFF_T_IS_A_STANDARD_TYPE
 // When that macro is working.
 
