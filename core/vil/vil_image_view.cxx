@@ -4,8 +4,9 @@
 //  \brief Specialisations of is_a() function
 //  \author Ian Scott
 
-#include <vxl_config.h>
 #include <vil/vil_rgb.h>
+#include <vil/vil_rgba.h>
+#include <vxl_config.h> // for vxl_byte
 #include <vcl_config_compiler.h>
 
 // Specialise the is_a() method for all possible types
