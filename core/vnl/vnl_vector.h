@@ -312,7 +312,9 @@ public:
   //: Inequality test
   bool operator!=(vnl_vector<T> const &that) const { return !this->operator_eq(that); }
 
-  //: Resize to n elements.  Old data is discarded.  Returns true if size change successful.
+  //: Resize to n elements.
+  // Checks early and does nothing if already size n, otherwise
+  // old data is discarded.  Returns true if size change successful.
   bool resize (unsigned n);
 
   //: Make the vector as if it had been default-constructed.
