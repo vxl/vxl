@@ -45,9 +45,9 @@ void TripleMatchSetLineSeg::extract_matches(vcl_vector<HomgLineSeg2D> &linesegs1
                                             vcl_vector<HomgLineSeg2D> &linesegs2, vcl_vector<int> &indices2,
                                             vcl_vector<HomgLineSeg2D> &linesegs3, vcl_vector<int> &indices3) const
 {
-  const LineSegSet* _linesegs1 = get_linesegs1();
-  const LineSegSet* _linesegs2 = get_linesegs2();
-  const LineSegSet* _linesegs3 = get_linesegs3();
+  const LineSegSet* linesegs1_ = get_linesegs1();
+  const LineSegSet* linesegs2_ = get_linesegs2();
+  const LineSegSet* linesegs3_ = get_linesegs3();
 
   int n = count();
   linesegs1.resize(n);
@@ -63,8 +63,8 @@ void TripleMatchSetLineSeg::extract_matches(vcl_vector<HomgLineSeg2D> &linesegs1
     indices1[i] = p.get_i1();
     indices2[i] = p.get_i2();
     indices3[i] = p.get_i3();
-    linesegs1[i] = _linesegs1->get_homg(indices1[i]);
-    linesegs2[i] = _linesegs2->get_homg(indices2[i]);
-    linesegs3[i] = _linesegs3->get_homg(indices3[i]);
+    linesegs1[i] = linesegs1_->get_homg(indices1[i]);
+    linesegs2[i] = linesegs2_->get_homg(indices2[i]);
+    linesegs3[i] = linesegs3_->get_homg(indices3[i]);
   }
 }

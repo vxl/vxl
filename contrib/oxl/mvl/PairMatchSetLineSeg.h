@@ -23,8 +23,8 @@ class HomgLineSeg2D;
 
 class PairMatchSetLineSeg : public PairMatchSet
 {
-  LineSegSet* _linesegs1;
-  LineSegSet* _linesegs2;
+  LineSegSet* linesegs1_;
+  LineSegSet* linesegs2_;
 
  public:
   // Constructors/Destructors--------------------------------------------------
@@ -33,8 +33,8 @@ class PairMatchSetLineSeg : public PairMatchSet
   ~PairMatchSetLineSeg();
 
   // Data Access---------------------------------------------------------------
-  LineSegSet* get_linesegs1() const { return _linesegs1; }
-  LineSegSet* get_linesegs2() const { return _linesegs2; }
+  LineSegSet* get_linesegs1() const { return linesegs1_; }
+  LineSegSet* get_linesegs2() const { return linesegs2_; }
 
   void extract_matches(vcl_vector<HomgLineSeg2D>& l1, vcl_vector<HomgLineSeg2D>& l2) const;
 
