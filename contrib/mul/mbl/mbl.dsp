@@ -228,6 +228,9 @@ SOURCE=.\mbl_thin_plate_spline_2d.cxx
 SOURCE=.\mbl_thin_plate_spline_3d.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\mbl_thin_plate_spline_weights_3d.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\mbl_histogram.cxx
 # End Source File
 # Begin Source File
@@ -367,6 +370,9 @@ SOURCE=.\mbl_thin_plate_spline_2d.h
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_thin_plate_spline_3d.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_thin_plate_spline_weights_3d.h
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_histogram.h
