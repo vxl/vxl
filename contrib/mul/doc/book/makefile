@@ -1,23 +1,21 @@
-
 # You'll need texi2html from
 # http://www.mathematik.uni-kl.de/~obachman/Texi2Html/Distrib
 
-
 ifeq ($(OS),Windows_NT)
-GS = gswin32c
-PNGTOPNM = pngtopnm.exe
-PNMCROP = pnmcrop.exe
-PNMTOPNG = pnmtopng.exe
-MAKEINFO= makeinfo.exe # exe to avoid conflict with cygnus makeinfo sh script
-TEXI2HTML= T2H_HOME=/pkg/Texi2html perl /pkg/texi2html/texi2html.pl
+ GS = gswin32c
+ PNGTOPNM = pngtopnm.exe
+ PNMCROP = pnmcrop.exe
+ PNMTOPNG = pnmtopng.exe
+ MAKEINFO= makeinfo.exe # exe to avoid conflict with cygnus makeinfo sh script
+ TEXI2HTML= T2H_HOME=/pkg/Texi2html perl /pkg/texi2html/texi2html.pl
 else
-GS = gs
-PNGTOPNM = pngtopnm
-PNMCROP = pnmcrop
-PNMTOPNG = pnmtopng
-MAKEINFO = makeinfo
-T2H_HOME = false
-TEXI2HTML = texi2html
+ GS = gs
+ PNGTOPNM = pngtopnm
+ PNMCROP = pnmcrop
+ PNMTOPNG = pnmtopng
+ MAKEINFO = makeinfo
+ T2H_HOME = false
+ TEXI2HTML = texi2html
 endif
 
 MAKEINFOFLAGS=-Dmakeinfo --no-validate
@@ -75,3 +73,4 @@ mbl_mz_random_graph3.png: mbl_mz_random_graph3.eps
 ## for debugging makefile
 echo-%:
 	echo '$(@:echo-%=%)=$($(@:echo-%=%))'
+
