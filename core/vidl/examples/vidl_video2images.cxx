@@ -16,7 +16,9 @@
 #include <vil1/vil1_byte.h>
 #include <vil1/vil1_rgb.h>
 #include <vidl/vidl_io.h>
+#include <vidl/vidl_frame.h>
 #include <vidl/vidl_movie.h>
+
 // windows does not seem to get the -DHAS_MPEG2 option from CMake
 #if defined(HAS_MPEG2) || defined(VCL_WIN32)
 #include <vidl/vidl_mpegcodec.h>
@@ -206,35 +208,33 @@ main (int argc, char **argv)
   // the highest frame index to be converted
   int frame_max = * vcl_max_element (frames().begin(), frames().end());
 
-  vidl_movie::frame_iterator pframe (movie);
+  for (vidl_movie::frame_iterator pframe = movie->begin(); pframe < movie->end(); ++pframe)
+  {
+    int i = pframe->get_real_frame_index();
 
-  for (pframe = movie->first(); pframe <= movie->last(); pframe = pframe + 1) {
+    V2( "frame index: " << i );
 
-      int i = pframe->get_real_frame_index();
-
-      V2( "frame index: " << i );
-
-      if (frames().end() != vcl_find (frames().begin(), frames().end(), i)) {
-          vil1_image frame0 = pframe->get_image();
-          V2( "frame image: " << frame0 );
-          CHECKE( 3 == frame0.components(),
-                  "video frames must have 3 components" );
-          CHECKE( 8 == frame0.bits_per_component(),
-                  "video frames must have 8 bits per component" );
-          vil1_memory_image_of<vil1_rgb<vil1_byte> > frame (frame0);
-          if (oifnt()) {
-              vcl_string fn = vul_sprintf (oifnt(), i);
-              V2( "writing frame to file " << fn );
-              vil1_save (frame, fn.c_str());
-          }
+    if (frames().end() != vcl_find (frames().begin(), frames().end(), i))
+    {
+      vil1_image frame0 = pframe->get_image();
+      V2( "frame image: " << frame0 );
+      CHECKE( 3 == frame0.components(),
+              "video frames must have 3 components" );
+      CHECKE( 8 == frame0.bits_per_component(),
+              "video frames must have 8 bits per component" );
+      vil1_memory_image_of<vil1_rgb<vil1_byte> > frame (frame0);
+      if (oifnt()) {
+        vcl_string fn = vul_sprintf (oifnt(), i);
+        V2( "writing frame to file " << fn );
+        vil1_save (frame, fn.c_str());
       }
-      else {
-          V2( "skip frame" );
-      }
+    }
+    else
+      V2( "skip frame" );
 
-      // if we've reached the last frame, stop iterating through the video
-      if (i >= frame_max)
-          break;
+    // if we've reached the last frame, stop iterating through the video
+    if (i >= frame_max)
+      break;
   }
 
   return 0;

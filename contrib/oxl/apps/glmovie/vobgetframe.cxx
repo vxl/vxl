@@ -6,6 +6,7 @@
 
 #include <vidl/vidl_movie_sptr.h>
 #include <vidl/vidl_movie.h>
+#include <vidl/vidl_frame.h>
 #include <vidl/vidl_io.h>
 #ifdef VCL_WIN32
 #include <vidl/vidl_avicodec.h>

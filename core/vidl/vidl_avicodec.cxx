@@ -2,6 +2,7 @@
 // \file
 
 #include "vidl_avicodec.h"
+#include <vidl/vidl_frame.h>
 #include <vidl/vidl_movie.h>
 
 #include <vcl_iostream.h>

@@ -8,6 +8,7 @@
 #include <vil1/vil1_image_as.h>
 #include <vgel/vgel_multi_view_data.h>
 #include <vtol/vtol_vertex_2d.h>
+#include <vidl/vidl_frame.h>
 #include <vidl/vidl_movie.h>
 
 #include <vcl_iostream.h>
@@ -125,14 +126,14 @@ vcl_vector<vtol_vertex_2d_sptr>* vgel_kl::extract_points(vil1_image & image)
 {
   int width=image.width();
   int height=image.height();
-  vcl_cerr << "Beginning points extraction" << vcl_endl;
+  vcl_cerr << "Beginning points extraction\n";
 
   KLT_PixelType* img1=convert_to_gs_image(image);
 
   // Now, run the extractor
   int nFeatures = params_.numpoints;
 
-  vcl_cerr << "Setting up the context..." << vcl_endl;
+  vcl_cerr << "Setting up the context...\n";
   // Set up the context
   KLT_TrackingContext tc = KLTCreateTrackingContext();
 
@@ -142,11 +143,11 @@ vcl_vector<vtol_vertex_2d_sptr>* vgel_kl::extract_points(vil1_image & image)
   // KLTPrintTrackingContext(tc);
 
   // Set up structure to hold the features.
-  vcl_cerr << "Setting up structure to hold the features..." << vcl_endl;
+  vcl_cerr << "Setting up structure to hold the features...\n";
   KLT_FeatureList fl = KLTCreateFeatureList(nFeatures);
 
   // Extract the features
-  vcl_cerr << "Extracting the features..." << vcl_endl;
+  vcl_cerr << "Extracting the features...\n";
   KLTSelectGoodFeatures(tc, img1, width, height, fl);
 
   // Make an IUPointGroup to hold the values
@@ -175,13 +176,13 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil1_image &image)
 {
   if (vil1_pixel_format(image)==VIL1_RGB_BYTE)
   {
-    vcl_cerr << "Converting image to grey scale..." << vcl_endl;
+    vcl_cerr << "Converting image to grey scale...\n";
 
     int w=image.width();
     int h=image.height();
     KLT_PixelType* tab_mono=new KLT_PixelType[w*h];
-    vcl_cerr << "width: " <<w<< "  height: "<<h<<  vcl_endl;
-    vcl_cerr << "pixel type: byte" << vcl_endl;
+    vcl_cerr << "width: " <<w<< "  height: "<<h<<  vcl_endl
+             << "pixel type: byte\n";
 
     vil1_memory_image_of<vil1_byte> ima_mono;
     ima_mono.resize(w,h);
@@ -201,8 +202,8 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil1_image &image)
     int w=image.width();
     int h=image.height();
     KLT_PixelType* tab_mono=new KLT_PixelType[w*h];
-    vcl_cerr << "width: " <<w<< "  height: "<<h<<  vcl_endl;
-    vcl_cerr << "pixel type: byte" << vcl_endl;
+    vcl_cerr << "width: " <<w<< "  height: "<<h<<  vcl_endl
+             << "pixel type: byte\n";
 
     vil1_memory_image_of<vil1_byte> ima_mono;
     ima_mono.resize(w,h);
@@ -223,8 +224,8 @@ KLT_PixelType* vgel_kl::convert_to_gs_image(vil1_image &image)
     int w=image.width();
     int h=image.height();
     KLT_PixelType* tab_mono=new KLT_PixelType[w*h];
-    vcl_cerr << "width: " <<w<< "  height: "<<h<<  vcl_endl;
-    vcl_cerr << "pixel type: uint_16" << vcl_endl;
+    vcl_cerr << "width: " <<w<< "  height: "<<h<<  vcl_endl
+             << "pixel type: uint_16\n";
 
     vil1_memory_image_of<vxl_uint_16> ima_mono;
     ima_mono.resize(w,h);

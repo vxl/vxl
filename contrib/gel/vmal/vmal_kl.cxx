@@ -7,6 +7,7 @@
 #include <vil1/vil1_image_as.h>
 #include <vmal/vmal_multi_view_data.h>
 #include <vtol/vtol_vertex_2d.h>
+#include <vidl/vidl_frame.h>
 #include <vidl/vidl_movie.h>
 
 #include <vcl_iostream.h>

@@ -11,6 +11,7 @@
 #include <vidl/vidl_io.h>
 #include <vidl/vidl_mpegcodec.h>
 #include <vidl/vidl_movie.h>
+#include <vidl/vidl_frame.h>
 
 static void my_load_mpegcodec_callback(vidl_codec * vc)
 {

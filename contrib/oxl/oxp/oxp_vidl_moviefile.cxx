@@ -9,6 +9,7 @@
 
 #include <vidl/vidl_movie_sptr.h>
 #include <vidl/vidl_movie.h>
+#include <vidl/vidl_frame.h>
 #include <vidl/vidl_io.h>
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)

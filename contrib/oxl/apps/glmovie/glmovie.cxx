@@ -32,6 +32,7 @@
 
 #include <vidl/vidl_movie_sptr.h>
 #include <vidl/vidl_movie.h>
+#include <vidl/vidl_frame.h>
 #include <vidl/vidl_io.h>
 
 #ifdef VCL_WIN32
@@ -301,7 +302,7 @@ bool drawframe(int frame)
     else {
       vil1_save(vil1_flipud(img), buf);
     }
-    vcl_cerr << "[Saved " << buf << "]";
+    vcl_cerr << "[Saved " << buf << ']';
   }
 
   glFlush();
@@ -844,7 +845,7 @@ int main(int argc, char ** argv)
 
   if (a_gx_file()) {
     gx_basename = new ImageSequenceName(a_gx_file(), ::start_frame, increment, "r", ".gx");
-    vcl_cerr << "glmovie: Getting gx from " << *gx_basename << "\n";
+    vcl_cerr << "glmovie: Getting gx from " << *gx_basename << '\n';
   }
   else {
     gx_basename = 0;
