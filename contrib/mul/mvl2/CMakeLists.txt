@@ -9,7 +9,7 @@ SET(mvl2_sources
   mvl2_video_from_sequence.h mvl2_video_from_sequence.cxx
 )
 
-ADD_LIBRARY(mvl2 mvl2_sources)
+ADD_LIBRARY(mvl2 ${mvl2_sources})
     
 IF (NOT WIN32)
   INCLUDE(${MODULE_PATH}/NewCMake/FindAVIFile.cmake)

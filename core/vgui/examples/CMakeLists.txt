@@ -33,7 +33,7 @@ SET(basic_sources
     basic_app.cxx		  
     basic_manager.cxx  basic_manager.h
     basic_menus.cxx    basic_menus.h)
-ADD_EXECUTABLE(basic_app basic_sources)
+ADD_EXECUTABLE(basic_app ${basic_sources})
 TARGET_LINK_LIBRARIES(basic_app vgui vul vbl)
 
 
