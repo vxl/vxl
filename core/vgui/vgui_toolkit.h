@@ -9,7 +9,7 @@
 // \author fsm
 // \brief  Base class for toolkit implementations.
 //
-//  Contains classes:  vgui_toolkit
+//  Contains class vgui_toolkit
 
 #include "dll.h"
 #include <vcl_string.h>
@@ -24,7 +24,7 @@ class vgui_tableau;
 struct vgui_tableau_sptr;
 
 //: Base class for toolkit implementations.
-//  The toolkit is repsonsible for opening the initial
+//  The toolkit is responsible for opening the initial
 //  window, and running the main event loop.
 //  An example derived class is vgui_mfc .
 class vgui_toolkit
