@@ -52,23 +52,14 @@ bool vil_save(const vil_image_view_base &im, char const* filename, char const* f
     return out->put_view(vil_image_view<float>(im),0,0);
   case VIL_PIXEL_FORMAT_BOOL:
     return out->put_view(vil_image_view<bool>(im),0,0);
-#ifdef VIL_TO_BE_FIXED
   case VIL_PIXEL_FORMAT_SBYTE:
     return out->put_view(vil_image_view<vxl_sbyte>(im),0,0);
   case VIL_PIXEL_FORMAT_DOUBLE:
     return out->put_view(vil_image_view<double>(im),0,0);
-#endif
   default:
     return out->put_view(im, 0, 0);
   }
 
-#ifdef VIL_TO_BE_FIXED
-  bool top_first, bgr;
-  if (out.get_property(vil_property_top_row_first, &top_first) && !top_first)
-    im = vil_flipud(i);
-  if (i.components() == 3 && out.get_property(vil_property_component_order_is_BGR, &bgr) && bgr)
-    im = vil_flip_components(i);
-#endif
 }
 
 
