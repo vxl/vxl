@@ -6,6 +6,7 @@
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_image_as.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_image_resource.h>
 #include <vil/vil_new.h>
 #include <vil/vil_convert.h>
 #include <vgel/vgel_multi_view_data.h>
