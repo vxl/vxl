@@ -243,7 +243,7 @@ void test_extreme_int_io()
 
   // Some fudges to get the max values
   // vcl_numeric_limits doesn't seem to work yet
-  long min_long = 1<<(8*sizeof(long)-1);
+  long min_long = 1L<<(8*sizeof(long)-1);
   long max_long = ~min_long;
   unsigned long max_ulong = ~0;
 
