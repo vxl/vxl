@@ -1242,10 +1242,26 @@ AC_DEFUN([VXL_CXX_CHECK_PROVIDES],[
 
 
 dnl ------------------------------------------------------------
+AC_DEFUN(VXL_MATH_HAS_FINITEF,[
+AC_LANG_SAVE
+AC_LANG_C
+VXL_CXX_CHECK_PROVIDES([math.h],[finitef],[4.0f],[VXL_C_MATH_HAS_FINITEF])
+AC_LANG_RESTORE])
+
+
+dnl ------------------------------------------------------------
 AC_DEFUN(VXL_MATH_HAS_FINITE,[
 AC_LANG_SAVE
 AC_LANG_C
 VXL_CXX_CHECK_PROVIDES([math.h],[finite],[4.0],[VXL_C_MATH_HAS_FINITE])
+AC_LANG_RESTORE])
+
+
+dnl ------------------------------------------------------------
+AC_DEFUN(VXL_MATH_HAS_FINITEL,[
+AC_LANG_SAVE
+AC_LANG_C
+VXL_CXX_CHECK_PROVIDES([math.h],[finitel],[(long double)4],[VXL_C_MATH_HAS_FINITEL])
 AC_LANG_RESTORE])
 
 
