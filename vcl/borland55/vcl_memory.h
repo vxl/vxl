@@ -16,7 +16,7 @@ class vcl_auto_ptr
   template <class Y> struct auto_ptr_ref
   {
     vcl_auto_ptr<Y>& p_;
-    auto_ptr_ref(vcl_auto_ptr<Y>& p): p_(p) {}
+    explicit auto_ptr_ref(vcl_auto_ptr<Y>& p): p_(p) {}
   };
   X* x_;
 public:
