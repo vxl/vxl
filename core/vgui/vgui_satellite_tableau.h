@@ -10,7 +10,7 @@
 //                    vgui_satellite_tableau_t_new vgui_satellite_tableau_new
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   02-OCT-2002 A.W.Fitzgibbon - Changed overview documentation.
 // \endverbatim
 
@@ -50,7 +50,7 @@
 // \endverbatim
 //
 // But a single tableau cannot have multiple paths through
-// "handle", so we might split "dob" into two helper tableaus,
+// "handle", so we might split "dob" into two helper tableaux,
 // which each hold a pointer to the data required to implement
 // the drawing.  Then the "handle" methods of each of the helpers
 // are just small stubs which call the handle method on "dob",
