@@ -38,8 +38,8 @@
 # define  vcl_logical_or          vcl_functional_h_STD logical_or
 # define  vcl_logical_not         vcl_functional_h_STD logical_not
 # define  vcl_identity            vcl_functional_h_STD identity
-# define  vcl_select1st           vcl_functional_h_STD select1st
-# define  vcl_select2nd           vcl_functional_h_STD select2nd
+//nonstd # define  vcl_select1st           vcl_functional_h_STD select1st
+//nonstd # define  vcl_select2nd           vcl_functional_h_STD select2nd
 # define  vcl_project1st          vcl_functional_h_STD project1st
 # define  vcl_project2nd          vcl_functional_h_STD project2nd
 # define  vcl_constant_void_fun   vcl_functional_h_STD constant_void_fun
@@ -48,10 +48,10 @@
 #endif
 
 
-
+#if 0 // who needs this? contact fsm if you do.
 // Fixes for SunPro and VisualC++ native STL :
 #if VCL_USE_NATIVE_STL
-# if defined(VCL_SUNPRO_CC) || defined (_MSC_VER)
+# if defined(xxxVCL_SUNPRO_CC) || defined (_MSC_VER)
 // Select1st and Select2nd are extensions: they are not part of the standard.
 // fsm: So why do we need them?
 template <class _Pair>
@@ -70,10 +70,12 @@ struct vcl_Select2nd : public vcl_unary_function<_Pair, typename _Pair::second_t
 
 // Add select* to std.
 namespace std {
-  template <class _Pair> struct select1st : public vcl_Select1st<_Pair> { };
+  template <class _Pair>
+  struct select1st : public vcl_Select1st<_Pair> { };
   template <class _Pair> struct select2nd : public vcl_Select2nd<_Pair> { };
 };
 # endif
+#endif
 #endif
 
 
