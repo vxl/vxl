@@ -102,7 +102,7 @@ void RadialLensCorrection::implement_inverse_map(double x2, double y2, double* x
   if (DELTA < 0)  {
     double S = vnl_math_cuberoot(sqrt(R*R-DELTA));
     double T = atan(sqrt(-DELTA)/R) / 3.0;
-    r = -S * cos(T) + S * sqrt(3) * sin(T);
+    r = -S * cos(T) + S * sqrt(3.0) * sin(T);
     r = -r;
     double res = (r*(1 + _k2 * r * r) - rc);
     if (fabs(res) > 1e-11) {

@@ -42,8 +42,6 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_compiler.h>
-
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_cmath.h>
 #include <vcl/vcl_memory.h>

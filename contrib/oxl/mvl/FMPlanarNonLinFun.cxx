@@ -83,9 +83,9 @@ bool FMPlanarNonLinFun::compute(FMatrixPlanar* F)
        return false;
   
   cout<<"FMPlanarNonLinFun: minimisation start error "
-      << lm.get_start_error() / sqrt(_data_size)
+      << lm.get_start_error() / sqrt(double(_data_size))
       <<" end error "
-      << lm.get_end_error() / sqrt(_data_size)
+      << lm.get_end_error() / sqrt(double(_data_size))
       <<endl;
 
   norm_F = params_to_fmatrix (f_params);
@@ -93,7 +93,7 @@ bool FMPlanarNonLinFun::compute(FMatrixPlanar* F)
   F->set(_denorm_matrix.transpose() * norm_F.get_matrix() * _denorm_matrix);
 
   cout << "fm_fmatrix_nagmin: accepted " << _data_size << '/' << _data_size
-       << " rms point-epipolar error " << lm.get_end_error() / sqrt(_data_size)
+       << " rms point-epipolar error " << lm.get_end_error() / sqrt(double(_data_size))
        << endl;;
 
   return true;
