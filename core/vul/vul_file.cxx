@@ -17,7 +17,7 @@
 #include <vcl_cstring.h>
 #include <vcl_cstdlib.h>
 
-#ifdef WIN32
+#ifdef VCL_WIN32
 #include <direct.h> // for getcwd, mkdir
 #else
 #include <unistd.h>
@@ -35,7 +35,7 @@ vcl_string vul_file::get_cwd()
 
 bool vul_file::make_directory(char const* name)
 {
-#ifdef WIN32
+#ifdef VCL_WIN32
   return -1 != mkdir(name);
 #else
   return -1 != mkdir(name, 0755);
@@ -166,7 +166,7 @@ vcl_string vul_file::expand_tilde(char const* vul_filename)
   if (!vul_filename || (vcl_strlen(vul_filename) == 0))
     return "";
 
-#ifdef WIN32
+#ifdef VCL_WIN32
   // ~ meaningless on win32
   return vcl_string(vul_filename);
 #else
