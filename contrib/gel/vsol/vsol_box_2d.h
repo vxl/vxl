@@ -39,11 +39,11 @@ class vsol_box_2d : public vbl_ref_count, public vul_timestamp
 
   // accessors
 
-  double get_min_x(void) const;
-  double get_max_x(void) const;
+  double get_min_x() const;
+  double get_max_x() const;
 
-  double get_min_y(void) const;
-  double get_max_y(void) const;
+  double get_min_y() const;
+  double get_max_y() const;
 
   inline double width() const { return get_max_x() - get_min_x(); }
   inline double height()const { return get_max_y() - get_min_y(); }
