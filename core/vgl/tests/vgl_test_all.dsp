@@ -117,6 +117,9 @@ SOURCE=.\test_polygon.cxx
 SOURCE=.\test_polygon_scan_iterator.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_h_matrix_1d.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_h_matrix_2d.cxx
 # End Source File
 # Begin Source File
