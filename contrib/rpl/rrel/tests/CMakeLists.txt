@@ -6,6 +6,8 @@ SOURCE_FILES( rrel_tests_sources similarity_from_matches.cxx )
 
 AUX_SOURCE_DIRECTORY( Templates rrel_tests_sources )
 
+LINK_LIBRARIES( rrel_tests )
+
 IF (WIN32)
   IF (NOT CYGWIN)
     INCLUDE(${allvxl_SOURCE_DIR}/rpl/rrel/tests/CMakeListsHeaders.txt)
