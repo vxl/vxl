@@ -16,7 +16,8 @@
 #include <vtol/vtol_two_chain.h>
 #include <vtol/vtol_two_chain_sptr.h>
 
-#define Assert(x) { vcl_cout << #x "\t\t\t test "; if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
+#define Assert(x) { vcl_cout << #x "\t\t\t test "; \
+  if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
 
 
 int main(int, char **)
@@ -36,7 +37,6 @@ int main(int, char **)
   v_list1.push_back(v2->cast_to_vertex());
   v_list1.push_back(v3->cast_to_vertex());
   v_list1.push_back(v4->cast_to_vertex());
-
 
 
   vtol_face_2d_sptr f1 = new vtol_face_2d(v_list1);

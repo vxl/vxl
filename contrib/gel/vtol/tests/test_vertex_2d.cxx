@@ -6,7 +6,8 @@
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_edge_sptr.h>
 
-#define Assert(x) { vcl_cout << #x "\t\t\t test "; if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
+#define Assert(x) { vcl_cout << #x "\t\t\t test "; \
+  if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
 
 
 int main(int, char **)
