@@ -19,6 +19,9 @@
 #include <vil/vil_image.h>
 #include <vil/vil_copy.h>
 
+#include <vil/vil_rgb.h>
+#include <vil/vil_memory_image_of.h>
+
 //: Send vil_image to disk.
 bool vil_save(vil_image const& i, char const* filename, char const* file_format /*VCL_DEFAULT_VALUE("pnm")*/)
 {
@@ -59,6 +62,7 @@ bool vil_save(vil_image const& i, char const* filename)
     // translate common extensions into known file formats.
     if (false) { }
 #define macro(ext, fmt) else if (!strcmp(dot, "." #ext)) file_format = #fmt
+    macro(bmp, bmp);
     macro(pbm, pnm);
     macro(pgm, pnm);
     macro(ppm, pnm);
@@ -76,4 +80,71 @@ bool vil_save(vil_image const& i, char const* filename)
   }
 
   return vil_save(i, filename, file_format);
+}
+
+// What's the point of these *_template functions? Why not just put
+// the function template declaration in the header file?
+
+template<class T>
+static inline
+void vil_save_rgb_template(T const* p, int w, int h, vcl_string const& fn)
+{
+  vil_memory_image_of<vil_rgb<unsigned char> > out(w,h);
+  unsigned char* o = (unsigned char*)out.get_buffer();
+  T const* p_end = p + w*h*3;
+  while (p != p_end)
+    *o++ = *p++;
+  vil_save(out, fn.c_str());
+}
+
+template<class T>
+static inline
+void vil_save_gray_template(T const* p, int w, int h, vcl_string const& fn)
+{
+  vil_memory_image_of<unsigned char> out(w,h);
+  unsigned char* o = out.get_buffer();
+  T const* p_end = p + w*h;
+  while (p != p_end)
+    *o++ = *p++;
+  vil_save(out, fn.c_str());
+}
+
+//: Save raw unsigned chars, deducing format from filename
+void vil_save_gray(unsigned char const* p, int w, int h, vcl_string const& fn)
+{
+  vil_save_gray_template(p, w, h, fn);
+}
+
+//: Save raw floats as gray.
+// No scaling is performed, so values whould be 0..255.
+// File format is deduced from filename.
+void vil_save_gray(float const* p, int w, int h, vcl_string const& fn)
+{
+  vil_save_gray_template(p, w, h, fn);
+}
+
+//: Save raw doubles as gray.
+// No scaling is performed, so values whould be 0..255.
+// File format is deduced from filename.
+void vil_save_gray(double const* p, int w, int h, vcl_string const& fn)
+{
+  vil_save_gray_template(p, w, h, fn);
+}
+
+//: Save raw RGB, deducing format from filename
+void vil_save_rgb(unsigned char const* p, int w, int h, vcl_string const& fn)
+{
+  vil_save_rgb_template(p, w, h, fn);
+}
+
+//: Save raw floats as RGB.  See vil_save_gray.
+void vil_save_rgb(float const* p, int w, int h, vcl_string const& fn)
+{
+  vil_save_rgb_template(p, w, h, fn);
+}
+
+//: Save raw doubles as RGB.  See vil_save_gray.
+void vil_save_rgb(double const* p, int w, int h, vcl_string const& fn)
+{
+  vil_save_rgb_template(p, w, h, fn);
 }
