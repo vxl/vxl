@@ -71,7 +71,7 @@ inline
 void vbl_qsort_ascending(vcl_vector<T>& v)
 {
 #if VXL_STDLIB_HAS_QSORT
-  qsort(v.begin(), v.size(), sizeof v[0], vbl_qsort_helper<T>::ascend);
+  qsort(&v[0], v.size(), sizeof v[0], vbl_qsort_helper<T>::ascend);
 #else
   vcl_sort(v.begin(), v.end(), vcl_less<T>());
 #endif
