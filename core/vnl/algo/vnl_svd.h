@@ -26,7 +26,7 @@
 //: Holds the singular value decomposition of a vnl_matrix.
 //
 //  The class holds three matrices U, W, V such that the original matrix
-//  $M = U W V^\top$.  The DiagMatrix W stores the singular values in decreasing
+//  \f$M = U W V^\top\f$.  The DiagMatrix W stores the singular values in decreasing
 //  order.  The columns of U which correspond to the nonzero singular values
 //  form a basis for range of M, while the columns of V corresponding to the
 //  zero singular values are the nullspace.
@@ -64,14 +64,14 @@ public:
   typedef typename vnl_numeric_traits<T>::abs_t singval_t;
 
 //:
-// Construct an vnl_svd<T> object from $m \times n$ matrix $M$.  The
-// vnl_svd<T> object contains matrices $U$, $W$, $V$ such that
-// $U W V^\top = M$.
+// Construct an vnl_svd<T> object from \f$m \times n\f$ matrix \f$M\f$.  The
+// vnl_svd<T> object contains matrices \f$U\f$, \f$W\f$, \f$V\f$ such that
+// \f$U W V^\top = M\f$.
 //
 // Uses linpack routine DSVDC to calculate an ``economy-size'' SVD
-// where the returned $U$ is the same size as $M$, while $W$
-// and $V$ are both $n \times n$.  This is efficient for
-// large rectangular solves where $m > n$, typical in least squares.
+// where the returned \f$U\f$ is the same size as \f$M\f$, while \f$W\f$
+// and \f$V\f$ are both \f$n \times n\f$.  This is efficient for
+// large rectangular solves where \f$m > n\f$, typical in least squares.
 //
 // The optional argument zero_out_tol is used to mark the zero singular
 // values: If nonnegative, any s.v. smaller than zero_out_tol in
@@ -82,11 +82,15 @@ public:
  ~vnl_svd() {}
 
   // Data Access---------------------------------------------------------------
+    //: find weights below threshold tol, zero them out, and update W_ and
+    // Winverse_
   void            zero_out_absolute(double tol = 1e-8); //sqrt(machine epsilon)
+    //: find weights below tol*max(w) and zero them out
   void            zero_out_relative(double tol = 1e-8); //sqrt(machine epsilon)
   int             singularities () const { return W_.n() - rank(); }
   int             rank () const { return rank_; }
   singval_t       well_condition () const { return sigma_min()/sigma_max(); }
+    //: Calculate determinant as product of diagonals in W.
   singval_t       determinant_magnitude () const;
   singval_t       norm() const;
 
@@ -117,25 +121,39 @@ public:
 
   //
   vnl_matrix<T> inverse () const;
-  //: pseudo-inverse (for non-square matrix).
+    //: pseudo-inverse (for non-square matrix).
   vnl_matrix<T> pinverse () const;
+    //: Calculate inverse of transpose.
   vnl_matrix<T> tinverse () const;
+    //: Recompose SVD to U*W*V'
   vnl_matrix<T> recompose () const;
 
-  //
-  vnl_matrix<T> solve (vnl_matrix<T> const& rhs) const;
-  vnl_vector<T> solve (vnl_vector<T> const& rhs) const;
+    //: Solve the matrix equation M X = B, returning X
+  vnl_matrix<T> solve (vnl_matrix<T> const& B) const;
+    //: Solve the matrix-vector system M x = y, returning x.
+  vnl_vector<T> solve (vnl_vector<T> const& y) const;
   void          solve (T const *rhs, T *lhs) const; // min ||A*lhs - rhs||
+    //: Solve the matrix-vector system M x = y
+    // Assuming that
+    // the singular values W have been preinverted by the caller.
   void solve_preinverted(vnl_vector<T> const& rhs, vnl_vector<T>* out) const;
 
-  //
+    //: Return N such that M * N = 0
   vnl_matrix<T> nullspace() const;
+    //: Return N such that M' * N = 0
   vnl_matrix<T> left_nullspace() const;
 
+    //: Return N such that M * N = 0
   vnl_matrix<T> nullspace(int required_nullspace_dimension) const;
+    //: Implementation to be done yet; currently returns left_nullspace(). - PVR.
   vnl_matrix<T> left_nullspace(int required_nullspace_dimension) const;
 
+    //: Return the rightmost column of V.  Does not check to see whether or
+    // not the matrix actually was rank-deficient - the caller is assumed to have
+    // examined W and decided that to his or her satisfaction.
   vnl_vector<T> nullvector() const;
+    //: Return the rightmost column of U.  Does not check to see whether or
+    // not the matrix actually was rank-deficient.
   vnl_vector<T> left_nullvector() const;
 
 private:
