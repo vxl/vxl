@@ -12,7 +12,6 @@
 #include <vcl_cstring.h>
 #include <vcl_cstdlib.h>
 #include <vcl_vector.h>
-#include <vcl_memory.h>
 
 #include <vxl_config.h> // for vxl_byte and such
 
@@ -777,22 +776,21 @@ namespace
                     Uint16 stored,
                     Uint16 high,
                     Uint16 rep,
-                    vcl_auto_ptr<DiInputPixel>& pixel_data,
+                    DiInputPixel*& pixel_data,
                     vil_pixel_format& act_format )
   {
-    typedef vcl_auto_ptr<DiInputPixel> OutType;
     if( rep == 0 && stored <= 8 ) {
       act_format = VIL_PIXEL_FORMAT_BYTE;
-      pixel_data.reset( new DiInputPixelTemplate<InT,Uint8>( pixels, alloc, stored, high, 0, num_samples ) );
+      pixel_data = new DiInputPixelTemplate<InT,Uint8>( pixels, alloc, stored, high, 0, num_samples );
     } else if( rep == 0 && stored <= 16 ) {
       act_format = VIL_PIXEL_FORMAT_UINT_16;
-      pixel_data.reset( new DiInputPixelTemplate<InT,Uint16>( pixels, alloc, stored, high, 0, num_samples ) );
+      pixel_data = new DiInputPixelTemplate<InT,Uint16>( pixels, alloc, stored, high, 0, num_samples );
     } else if( rep == 1 && stored <= 8 ) {
       act_format = VIL_PIXEL_FORMAT_SBYTE;
-      pixel_data.reset( new DiInputPixelTemplate<InT,Sint8>( pixels, alloc, stored, high, 0, num_samples ) );
+      pixel_data = new DiInputPixelTemplate<InT,Sint8>( pixels, alloc, stored, high, 0, num_samples );
     } else if( rep == 1 && stored <= 16 ) {
       act_format = VIL_PIXEL_FORMAT_INT_16;
-      pixel_data.reset( new DiInputPixelTemplate<InT,Sint16>( pixels, alloc, stored, high, 0, num_samples ) );
+      pixel_data = new DiInputPixelTemplate<InT,Sint16>( pixels, alloc, stored, high, 0, num_samples );
     }
   }
 
@@ -835,8 +833,9 @@ read_pixels_into_buffer( DcmPixelData* pixels,
 
   // First convert from the stored src pixels to the actual
   // pixels. This is an integral type to integral type conversion.
+  // Make sure pixel_data is deleted before this function exits!
   //
-  vcl_auto_ptr<DiInputPixel> pixel_data;
+  DiInputPixel* pixel_data = 0;
   if( pixels->getVR() == EVR_OW ) {
     convert_src_type( (Uint16*)0, pixels, num_samples, alloc, stored, high, rep, pixel_data, act_format );
   } else {
@@ -844,7 +843,7 @@ read_pixels_into_buffer( DcmPixelData* pixels,
   }
 
   // On error, return without doing anything
-  if( pixel_data.get() == 0 ) {
+  if( pixel_data == 0 ) {
     return;
   }
 
@@ -889,4 +888,6 @@ read_pixels_into_buffer( DcmPixelData* pixels,
         vcl_cerr << "vil_dicom ERROR: unexpected internal pixel format\n";
     }
   }
+
+  delete pixel_data;
 }
