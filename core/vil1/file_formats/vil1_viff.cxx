@@ -292,6 +292,7 @@ vil_image vil_viff_generic_image::get_plane(int plane) const
 
 bool vil_viff_generic_image::get_section_rgb_byte(void* buf, int x0, int y0, int width, int height) const
 {
+  cerr << "FIXME: vil_viff_generic_image::get_section_rgb_byte() not yet implemented\n";
   return false;
 }
 
