@@ -906,18 +906,27 @@ vil_dicom_header_endian vil_dicom_header_format::determineMetaInfo(vil_stream &f
 
   // Read the next group
   fs.read(&group,sizeof(vxl_uint_16));
+  vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> " << "Pre-Swap group= "<<group;
   group = shortSwap(group);
+  vcl_cerr<< "\tPost-Swap group= "<<group<<vcl_endl;;
+  
   while (fs.ok() && group <= VIL_DICOM_HEADER_METAFILEGROUP)
   {
     // Read the element
 
     fs.read(&element,sizeof(vxl_uint_16));
+    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> " << "Pre-Swap element= "<<element;
     element = shortSwap(element);
+    vcl_cerr<< "\tPost-Swap element= "<<element<<vcl_endl;;
 
     // Read the data block size
     if (sizeof(vxl_uint_32) != fs.read(&data_block_size, sizeof(vxl_uint_32)))
       break;
+
+    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> " << "Pre-Swap data_block_size= "<<data_block_size;
     data_block_size = intSwap(data_block_size);
+    vcl_cerr<< "\tPost-Swap data_block_size= "<<data_block_size<<vcl_endl;;
+
     if (data_block_size > 0x1000000) {
       vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>>\t" << __FILE__ << ": " << __LINE__ << " : WARNING:\n"
               <<"!!! DICOM BIGENDIAN DEBUG>>>\tdata_block_size=" << data_block_size << " is most probably too large\n";
@@ -1043,7 +1052,10 @@ vil_dicom_header_endian vil_dicom_header_format::determineMetaInfo(vil_stream &f
 
     // Read the next group
     fs.read(&group,sizeof(vxl_uint_16));
+    vcl_cerr<<"!!! DICOM BIGENDIAN DEBUG>>> " << "Pre-Swap group= "<<group;
     group = shortSwap(group);
+    vcl_cerr<< "\tPost-Swap group= "<<group<<vcl_endl;
+
   } // End of while
 
   // Reset the pointer before the last read group
