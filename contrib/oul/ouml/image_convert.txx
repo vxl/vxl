@@ -13,7 +13,7 @@
 //
 // \param from the image converted from
 // \param var  a dummy variable used so the right function is called.
-// \ret        the resultant image - a new one
+// \return     the resultant image - a new one
 //
 // \author Brendan McCane
 //----------------------------------------------------------------------
@@ -43,14 +43,14 @@ vil1_memory_image_of<T2> *convert_image
 //
 // \param from the image converted from
 // \param var  a dummy variable used so the right function is called.
-// \ret        the resultant image - a new one
+// \return     the resultant image - a new one
 //
 // \author Brendan McCane
 //----------------------------------------------------------------------
 
 template <> vil1_memory_image_of<unsigned char> *
 convert_image<vil1_rgb<unsigned char>, unsigned char>
-( 
+(
   const vil1_memory_image_of<vil1_rgb<unsigned char> > &from,
   unsigned char &var
 )
@@ -67,7 +67,7 @@ convert_image<vil1_rgb<unsigned char>, unsigned char>
 
 template <> vil1_memory_image_of<double> *
 convert_image<vil1_rgb<unsigned char>, double>
-( 
+(
   const vil1_memory_image_of<vil1_rgb<unsigned char> > &from,
   double &var
 )

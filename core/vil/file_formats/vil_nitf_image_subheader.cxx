@@ -6,8 +6,8 @@
 // \brief This file implements the NITF image subheader base class.
 // NOTE: Ported from TargetJr ImageSubHeader.  (Code in file NITFHeader.C)
 //
-//  \date: 2003/12/26
-//  \author: mlaymon
+// \date: 2003/12/26
+// \author: mlaymon
 
 #include <vcl_iostream.h>
 #include <vcl_cstring.h>
@@ -803,27 +803,27 @@ void vil_nitf_image_subheader::EncodeICHIPB (
 #endif
 
 /////////////////////////////////////////////////////////////////
-///
-/// Fill in passed vectors with RPC camera data from data in this image header
-/// Only getting data because cannot have dependency on rational camera class.
-///
-/// \param samp_num (20) coefficients for sample numerator cubic
-/// \param samp_denom (20) coefficients for sample denominator cubic
-/// \param line_num (20) coefficients for line numerator cubic
-/// \param line_denom (20) coefficients for line denominator cubic
-/// \param scalex (2) longitude scale/offset
-/// \param scaley (2) latitude scale/offset
-/// \param scalez (2) height scale/offset
-/// \param scales (2) sample scale/offset
-/// \param scalel (2) line scale/offset
-/// \param init_pt (3) centroid of the four world corner points
-/// \param rescales (2) sample scale/offset for rescale
-/// \param rescale1 (2) line scale/offset for rescale
-/// \param scale_index index into scale vectors for scale factor
-/// \param offset_index index into scale vectors for offset factor
-///
-///  \return true if vectors filled in successfully
-///
+//
+//: Fill in passed vectors with RPC camera data from data in this image header
+// Only getting data because cannot have dependency on rational camera class.
+//
+// \param samp_num (20) coefficients for sample numerator cubic
+// \param samp_denom (20) coefficients for sample denominator cubic
+// \param line_num (20) coefficients for line numerator cubic
+// \param line_denom (20) coefficients for line denominator cubic
+// \param scalex (2) longitude scale/offset
+// \param scaley (2) latitude scale/offset
+// \param scalez (2) height scale/offset
+// \param scales (2) sample scale/offset
+// \param scalel (2) line scale/offset
+// \param init_pt (3) centroid of the four world corner points
+// \param rescales (2) sample scale/offset for rescale
+// \param rescale1 (2) line scale/offset for rescale
+// \param scale_index index into scale vectors for scale factor
+// \param offset_index index into scale vectors for offset factor
+//
+// \return true if vectors filled in successfully
+//
 /////////////////////////////////////////////////////////////////
 bool vil_nitf_image_subheader::get_rational_camera_data(
     vcl_vector<double>& samp_num,
@@ -1027,18 +1027,18 @@ bool vil_nitf_image_subheader::get_rational_camera_data(
 }  // end method get_rational_camera_data
 
 ////////////////////////////////////////////////////////
-///
-/// Get the upper left, upper right, lower right, lower left coordinates of an image
-/// as four vectors containing longitude, latitude and elevation for each corner.
-/// Used to verify rational camera class, but may be useful for other stuff.
-///
-///  \param UL vector to be filled in with longitude, latitude and elevation for upper left
-///  \param UR vector to be filled in with longitude, latitude and elevation for upper right
-///  \param LR vector to be filled in with longitude, latitude and elevation for lower right
-///  \param LL vector to be filled in with longitude, latitude and elevation for lower left
-///
-///  \return true if vectors filled in successfully
-///
+//:
+// Get the upper left, upper right, lower right, lower left coordinates of an image
+// as four vectors containing longitude, latitude and elevation for each corner.
+// Used to verify rational camera class, but may be useful for other stuff.
+//
+//  \param UL vector to be filled in with longitude, latitude and elevation for upper left
+//  \param UR vector to be filled in with longitude, latitude and elevation for upper right
+//  \param LR vector to be filled in with longitude, latitude and elevation for lower right
+//  \param LL vector to be filled in with longitude, latitude and elevation for lower left
+//
+//  \return true if vectors filled in successfully
+//
 ////////////////////////////////////////////////////////
 bool vil_nitf_image_subheader::get_image_corners (
     vcl_vector<double>& UL,
@@ -1086,7 +1086,7 @@ bool vil_nitf_image_subheader::get_image_corners (
 // END RATIONAL CAMERA STUFF.
 
 ////////////////////////////////////////////////////////////////////////
-/// Display attributes related to defining a rational polynomial camera.
+//: Display attributes related to defining a rational polynomial camera.
 ////////////////////////////////////////////////////////////////////////
 void vil_nitf_image_subheader::display_camera_attributes (vcl_string caller) const
 {
@@ -1131,11 +1131,11 @@ void vil_nitf_image_subheader::display_camera_attributes (vcl_string caller) con
 }  // end method display_camera_attributes
 
 ////////////////////////////////////////////////////////////////////////
-/// Display attributes related to size of the image.
-/// Also check size of image using three checks:
-///     image size = # columns X # rows X bytes per pixel
-///     number of columns = # blocks per row X block size horizontal
-///     number of rows = # blocks per column X block size vertical
+//: Display attributes related to size of the image.
+// Also check size of image using three checks:
+//     image size = # columns X # rows X bytes per pixel
+//     number of columns = # blocks per row X block size horizontal
+//     number of rows = # blocks per column X block size vertical
 ////////////////////////////////////////////////////////////////////////
 void vil_nitf_image_subheader::display_size_attributes (vcl_string caller) const
 {

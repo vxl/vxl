@@ -123,10 +123,10 @@ vgl_point_2d<Type> vgl_closest_point(vgl_point_2d<Type> const& point,
 // Hence, when observing a point at infinity as a return value, one should
 // interpret this as "all points are closest points".
 //
-// \param const vgl_homg_line_3d_2_points<Type> &line1
-// \param const vgl_homg_line_3d_2_points<Type> &line2
+// \param line1
+// \param line2
 //
-// \return vcl_pair<vgl_homg_point_3d<Type>, vgl_homg_point_3d<Type> >
+// \return vcl_pair<vgl_homg_point_3d<Type>,vgl_homg_point_3d<Type>>
 //
 // \author Paul Bourke, modified for use in VXL by Brendan McCane
 //

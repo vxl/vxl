@@ -64,7 +64,6 @@ bmrf_node::purge()
     }
   }
 
-  
   for (arc_iterator itr = in_arcs_.begin(); itr != in_arcs_.end(); ++itr) {
     if (!(*itr)->from_) {
       in_arcs_.erase(itr--);
@@ -82,7 +81,7 @@ avg_distance_ratio( const bmrf_epi_seg_sptr& ep1, const bmrf_epi_seg_sptr& ep2)
 {
   double min_alpha = MAX(ep1->min_alpha(), ep2->min_alpha());
   double max_alpha = MIN(ep1->max_alpha(), ep2->max_alpha());
-  double d_alpha =  MIN( (ep1->max_alpha() - ep1->min_alpha())/ep1->n_pts() ,
+  double d_alpha =   MIN((ep1->max_alpha() - ep1->min_alpha())/ep1->n_pts() ,
                          (ep2->max_alpha() - ep2->min_alpha())/ep2->n_pts() );
 
   double s1 = 0.0, s2 = 0.0;
@@ -101,7 +100,7 @@ bmrf_match_error( const bmrf_epi_seg_sptr& ep1, const bmrf_epi_seg_sptr& ep2 )
   double min_alpha = MAX(ep1->min_alpha(), ep2->min_alpha());
   double max_alpha = MIN(ep1->max_alpha(), ep2->max_alpha());
 
-  double d_alpha =  MIN( (ep1->max_alpha() - ep1->min_alpha())/ep1->n_pts() ,
+  double d_alpha =   MIN((ep1->max_alpha() - ep1->min_alpha())/ep1->n_pts() ,
                          (ep2->max_alpha() - ep2->min_alpha())/ep2->n_pts() );
   // static double d_alpha = 0.0006;
 
@@ -114,7 +113,7 @@ bmrf_match_error( const bmrf_epi_seg_sptr& ep1, const bmrf_epi_seg_sptr& ep2 )
 }
 
 
-//: Calculate the conditional probability that this node is correct give its neighbors
+//: Calculate the conditional probability that this node is correct given its neighbors
 double
 bmrf_node::probability()
 {
@@ -122,7 +121,8 @@ bmrf_node::probability()
     this->compute_weights();
 
   vcl_vector<vcl_pair<double,double> > pmf;
-  for ( arc_iterator a_itr = this->begin(TIME); a_itr != this->end(TIME); ++a_itr ) {
+  for ( arc_iterator a_itr = this->begin(TIME); a_itr != this->end(TIME); ++a_itr )
+  {
     bmrf_node_sptr neighbor = (*a_itr)->to();
     double dist_ratio = avg_distance_ratio(this->epi_seg(), neighbor->epi_seg());
     int time_step = neighbor->frame_num() - this->frame_num();
@@ -145,7 +145,7 @@ bmrf_node::probability()
 }
 
 
-//: Calculate the error in similarity between this trasformed by \p xform
+//: Calculate the error in similarity between this transformed by \p xform
 double
 bmrf_node::probability(const bmrf_gamma_func_sptr& gamma)
 {
@@ -181,7 +181,7 @@ bmrf_node::probability(const bmrf_gamma_func_sptr& gamma)
 
 
 //: Compute the weights of each node for use in probability computation
-// Nodes are weighted by alpha overlap and intesity similarity
+// Nodes are weighted by alpha overlap and intensity similarity
 void
 bmrf_node::compute_weights()
 {
@@ -195,7 +195,7 @@ bmrf_node::compute_weights()
     double min_alpha = MAX(ep1->min_alpha(), ep2->min_alpha());
     double max_alpha = MIN(ep1->max_alpha(), ep2->max_alpha());
     double alpha_range = max_alpha - min_alpha;
-    double d_alpha =  MIN( (ep1->max_alpha() - ep1->min_alpha())/ep1->n_pts() ,
+    double d_alpha =   MIN((ep1->max_alpha() - ep1->min_alpha())/ep1->n_pts() ,
                            (ep2->max_alpha() - ep2->min_alpha())/ep2->n_pts() );
 
     double l_error = 0.0, r_error = 0.0;
@@ -219,7 +219,7 @@ bmrf_node::compute_weights()
 }
 
 
-//: Add \param node as a neighbor of type \param type
+//: Add \p node as a neighbor of type \p type
 bool
 bmrf_node::add_neighbor( bmrf_node *node, neighbor_type type )
 {
@@ -244,7 +244,7 @@ bmrf_node::add_neighbor( bmrf_node *node, neighbor_type type )
 }
 
 
-//: Remove \param node from the neighborhood
+//: Remove \p node from the neighborhood
 bool
 bmrf_node::remove_neighbor( bmrf_node *node, neighbor_type type )
 {
@@ -276,7 +276,7 @@ bmrf_node::remove_neighbor( bmrf_node *node, neighbor_type type )
 }
 
 
-//: Returns an iterator to the beginning of the type \param type neighbors
+//: Returns an iterator to the beginning of the type \p type neighbors
 bmrf_node::arc_iterator
 bmrf_node::begin( neighbor_type type )
 {
@@ -285,7 +285,7 @@ bmrf_node::begin( neighbor_type type )
 }
 
 
-//: Returns an iterator to the end of the type \param type neighbors
+//: Returns an iterator to the end of the type \p type neighbors
 bmrf_node::arc_iterator
 bmrf_node::end( neighbor_type type )
 {
@@ -294,7 +294,7 @@ bmrf_node::end( neighbor_type type )
 }
 
 
-//: Returns the number of outgoing neighbors to this node of type \param type
+//: Returns the number of outgoing neighbors to this node of type \p type
 int
 bmrf_node::num_neighbors( neighbor_type type )
 {
@@ -396,7 +396,7 @@ bmrf_node::b_read( vsl_b_istream& is )
 
 //: Return IO version number;
 short
-bmrf_node::version(  ) const
+bmrf_node::version() const
 {
   return 1;
 }
@@ -415,7 +415,7 @@ bmrf_node::print_summary( vcl_ostream& os ) const
 //-----------------------------------------------------------------------------------------
 
 
-//: Binary save self to stream.
+//: Binary save bmrf_arc to stream.
 void
 bmrf_node::bmrf_arc::b_write( vsl_b_ostream& ) const
 {
@@ -423,7 +423,7 @@ bmrf_node::bmrf_arc::b_write( vsl_b_ostream& ) const
 }
 
 
-//: Binary load self from stream.
+//: Binary load bmrf_arc from stream.
 void
 bmrf_node::bmrf_arc::b_read( vsl_b_istream& )
 {
@@ -475,7 +475,7 @@ vsl_print_summary(vcl_ostream &os, const bmrf_node* n)
 }
 
 
-//: Binary save bmrf_node::bmrf_arc to stream.
+//: Binary save bmrf_arc \p a to stream.
 void
 vsl_b_write(vsl_b_ostream &os, const bmrf_node::bmrf_arc* a)
 {
@@ -489,7 +489,7 @@ vsl_b_write(vsl_b_ostream &os, const bmrf_node::bmrf_arc* a)
 }
 
 
-//: Binary load bmrf_node::bmrf_arc from stream.
+//: Binary load bmrf_arc \p a from stream.
 void
 vsl_b_read(vsl_b_istream &is, bmrf_node::bmrf_arc* &a)
 {
@@ -505,10 +505,10 @@ vsl_b_read(vsl_b_istream &is, bmrf_node::bmrf_arc* &a)
 }
 
 
-//: Print an ASCII summary to the stream
+//: Print an ASCII summary of a bmrf_arc to the stream (NYI)
 void
 vsl_print_summary(vcl_ostream &os, const bmrf_node::bmrf_arc* )
 {
-  os << "brmf_arc{}";
+  os << "bmrf_arc{}";
 }
 

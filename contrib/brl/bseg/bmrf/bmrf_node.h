@@ -36,7 +36,7 @@ class bmrf_node : public vbl_ref_count
   {
    public:
     friend class bmrf_node;
-     
+
     //: Constructor
     bmrf_arc() : from_(NULL), to_(NULL) {}
     //: Constructor
@@ -55,15 +55,15 @@ class bmrf_node : public vbl_ref_count
 
     //: Smart pointer to the node where this arc ends
     bmrf_node_sptr to() { return bmrf_node_sptr(to_); }
-   
-  private:
+
+   private:
     bmrf_node* from_;
     bmrf_node* to_;
   };
 
 
   friend class bmrf_network;
-  
+
   //: Smart pointer to an arc
   typedef vbl_smart_ptr<bmrf_arc> bmrf_arc_sptr;
 
@@ -118,13 +118,13 @@ class bmrf_node : public vbl_ref_count
 
  protected:
   //: Add \p node as a neighbor of type \p type
-  // \return true if the node was added successfully
-  // \return false if the neighbor is not valid or already exists
+  // \retval true if the node was added successfully
+  // \retval false if the neighbor is not valid or already exists
   bool add_neighbor( bmrf_node *node, neighbor_type type );
 
   //: Remove \p node from the neighborhood
-  // \return true if the node is removed successfully
-  // \return false if the node was not a neighbor
+  // \retval true if the node is removed successfully
+  // \retval false if the node was not a neighbor
   bool remove_neighbor( bmrf_node *node, neighbor_type type = ALL);
 
   //: Strip all of the arcs from this node
@@ -133,7 +133,7 @@ class bmrf_node : public vbl_ref_count
 
   //: Remove any arcs to or from NULL nodes
   // \retval true if any arcs were removed
-  // \retval false of all arcs are valid
+  // \retval false if all arcs are valid
   bool purge();
 
  protected:
@@ -144,7 +144,7 @@ class bmrf_node : public vbl_ref_count
   //: Map nodes to weights
   vcl_map<bmrf_node*, double> weight_;
 
- private:  
+ private:
   //: A smart pointer to the underlying epi-segment data
   bmrf_epi_seg_sptr segment_;
 

@@ -5,19 +5,21 @@
 // \file
 // \brief Implentation for NITF version 2.0 message header.
 //
-//  \date: 2003/12/26
-//  \author: mlaymon
+// \date: 2003/12/26
+// \author: mlaymon
 //
-// Written by:       Lynn Bigelow
-// Date:             July, 1993
+// \verbatim
+//  Written by:       Lynn Bigelow
+//  Date:             July, 1993
 //
-// Modification by:  Paul Max Payton (PMP)
-// Date:             August 14, 1997
-// Why?              Added code to parse rational polynomial stuff in NITF.
+//  Modification by:  Paul Max Payton (PMP)
+//  Date:             August 14, 1997
+//  Why?              Added code to parse rational polynomial stuff in NITF.
 //
-// Modification by:  Paul Max Payton (PMP)
-// Date:             March 16, 1999
-// Why?              Added code to handle anamorphic ratio (MPD26A) in NITF.
+//  Modification by:  Paul Max Payton (PMP)
+//  Date:             March 16, 1999
+//  Why?              Added code to handle anamorphic ratio (MPD26A) in NITF.
+// \endverbatim
 //
 //=====================lkbjfcbtdddhtargbskmtaps=======================
 //
@@ -376,7 +378,7 @@ StatusCode vil_nitf_message_header_v20::Read(vil_stream* file)
 
 //: Read image information.  Does NOT actually read image bytes.
 //
-// \param return false if error
+// \return false if error
 
 bool vil_nitf_message_header_v20::read_image_info(vil_stream* file)
 {
@@ -422,7 +424,7 @@ bool vil_nitf_message_header_v20::read_image_info(vil_stream* file)
 
 //: Read image information for extended headers.
 //
-// \param return false if error
+// \return false if error
 
 bool vil_nitf_message_header_v20::read_extended_header_data(vil_stream* file)
 {

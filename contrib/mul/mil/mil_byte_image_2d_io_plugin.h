@@ -40,7 +40,7 @@ class mil_byte_image_2d_io_plugin
   // \param filetype  String hinting at what image format is
   // \param colour    define whether to load images as colour or grey-scale.
   //        Options are '' (i.e. rely on image), 'Grey' or 'RGB'
-  // \ret   true if successful
+  // \return true if successful
   virtual bool loadTheImage (mil_image_2d_of<vxl_byte>& image,
                              const vcl_string & path,
                              const vcl_string & filetype,

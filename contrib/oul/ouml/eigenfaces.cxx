@@ -71,8 +71,8 @@ bool EigenFace::add_training_image(Image *im, const char * label)
     image_size = image_vector->size();
   if (image_size!=image_vector->size())
   {
-    vcl_cerr << "Error adding training image\n";
-    vcl_cerr << "Image of incorrect size\n";
+    vcl_cerr << "Error adding training image\n"
+             << "Image of incorrect size\n";
     return false;
   }
   training_images.push_back(image_vector);
@@ -100,8 +100,8 @@ vnl_vector<double> *EigenFace::get_eigenvector(int i)
   assert(i>=0);
   if ((unsigned int)i>=eigenvectors.size())
   {
-    vcl_cerr << "Requesting eigenvector, " << i << " which doesn't exist\n";
-    vcl_cerr << "Number of eigenvectors is: " << eigenvectors.size() << vcl_endl;
+    vcl_cerr << "Requesting eigenvector, " << i << " which doesn't exist\n"
+             << "Number of eigenvectors is: " << eigenvectors.size() << vcl_endl;
     return NULL;
   }
   return eigenvectors[i];
@@ -124,8 +124,8 @@ double EigenFace::get_eigenvalue(int i)
   assert(i>=0);
   if ((unsigned int)i>=eigenvalues.size())
   {
-    vcl_cerr << "Requesting eigenvalue, " << i << " which doesn't exist\n";
-    vcl_cerr << "Number of eigenvalues is: " << eigenvalues.size() << vcl_endl;
+    vcl_cerr << "Requesting eigenvalue, " << i << " which doesn't exist\n"
+             << "Number of eigenvalues is: " << eigenvalues.size() << vcl_endl;
     return 0.0;
   }
   return eigenvalues[i];
@@ -179,8 +179,8 @@ bool EigenFace::calculate_eigenfaces()
   cleanup();
   // now calculate the new vectors
   // first calculate the average training image
-  vcl_cout << "Average training image\n";
-  vcl_cout << "ati size = " << average_training_image->size() << vcl_endl;
+  vcl_cout << "Average training image\n"
+           << "ati size = " << average_training_image->size() << vcl_endl;
   for (unsigned int i=0; i<training_images.size(); i++)
   {
     vcl_cout << "adding training image " << i << " size = "
@@ -211,8 +211,8 @@ bool EigenFace::calculate_eigenfaces()
     eigenvalues.push_back(eigen.get_eigenvalue(i));
   }
 
-  vcl_cout << "Eigenvalues = " << eigenvalues << vcl_endl;
-  vcl_cout << "Encoding training images\n";
+  vcl_cout << "Eigenvalues = " << eigenvalues << vcl_endl
+           << "Encoding training images\n";
   encode_training_images();
   // should check they are in fact eigenvectors
   return true;
@@ -223,7 +223,8 @@ void EigenFace::check_training()
   vcl_cout << "Check training image\n";
   if (average_training_image!=NULL)
     vcl_cout << "ati size = " << average_training_image->size() << vcl_endl;
-  else vcl_cout << "ati not set\n";
+  else
+    vcl_cout << "ati not set\n";
   for (unsigned int i=0; i<training_images.size(); i++)
   {
     vcl_cout << "training image " << i << " size = "
@@ -274,18 +275,18 @@ bool EigenFace::check_eigenvectors()
   vcl_cout << "Eigenvalues are: " ;
   vcl_vector<double>::iterator val_iter;
   for (val_iter=eigenvalues.begin(); val_iter!=eigenvalues.end(); val_iter++)
-    vcl_cout << *val_iter << " ";
+    vcl_cout << *val_iter << ' ';
   vcl_cout << vcl_endl;
   vcl_vector<vnl_vector<double> *>::iterator iter1, iter2;
   for (iter1=eigenvectors.begin(); iter1!=eigenvectors.end(); iter1++)
     for (iter2=iter1+1; iter2!=eigenvectors.end(); iter2++)
       if (!epsilon_equals(dot_product(**iter1, **iter2), 0.0))
       {
-        vcl_cout << "vectors aren't eigenvectors\n";
-        vcl_cout << "offending vectors are: ";
-        vcl_cout << "\t" << **iter1 << vcl_endl;
-        vcl_cout << "\t" << **iter2 << vcl_endl;
-        vcl_cout << "dot product is: " << dot_product(**iter1, **iter2) << vcl_endl;
+        vcl_cout << "vectors aren't eigenvectors\n"
+                 << "offending vectors are: "
+                 << '\t' << **iter1 << vcl_endl
+                 << '\t' << **iter2 << vcl_endl
+                 << "dot product is: " << dot_product(**iter1, **iter2) << vcl_endl;
         return false;
       }
   return true;
@@ -305,8 +306,8 @@ void EigenFace::save_as_images(int width, int height)
   assert(width > 0 && height > 0);
   if ((unsigned int)(width*height)!=image_size)
   {
-    vcl_cerr << "width*height must be equal to image size\n";
-    vcl_cerr << "image size is: " << image_size << vcl_endl;
+    vcl_cerr << "width*height must be equal to image size\n"
+             << "image size is: " << image_size << vcl_endl;
     return;
   }
 
@@ -424,7 +425,7 @@ vnl_vector<double>* EigenFace::decode(vnl_vector<double> *wts)
 //
 // \param threshold distances above this threshold are treated as not recognised
 //
-// \ret the label of the recognised image or NULL if unsuccessful
+// \return the label of the recognised image or NULL if unsuccessful
 //
 //.status under development
 //.author Brendan McCane

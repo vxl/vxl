@@ -20,14 +20,14 @@
 
 #include <vcl_string.h>
 
-/// Struct containing header and data lengths for each image segment
+//: Struct containing header and data lengths for each image segment
 struct ImageSH
 {
   int LISH;   //<: Image subheader length - 6 digits - range = 000439 - 999999
   int LI;     //<: Image length - 10 digits - range = 0000000001 - 9999999999
 };
 
-/// Struct containing header and data lengths for each symbol (== grapics) segment
+//: Struct containing header and data lengths for each symbol (== grapics) segment
 struct SymbolSH
 {
   int LSSH;   //<: Symbol subheader length - 4 digits - range = 0258 - 9999

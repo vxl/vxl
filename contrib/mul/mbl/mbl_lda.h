@@ -66,6 +66,7 @@ class mbl_lda
   // \param n  Number of examples
   // \param label  integer indices
   // \param v  Set of vectors [0..n-1]
+  //
   // - label[i] gives class of v[i]
   // - If label[i]<0 the class is assumed to be unknown
   //   and example i is ignored
@@ -75,6 +76,7 @@ class mbl_lda
   //: Perform LDA on data
   // \param label  Array [0..n-1] of integers indices
   // \param v  Set of vectors [0..n-1]
+  //
   // - label[i] gives class of v[i]
   // - If label[i]<0 the class is assumed to be unknown
   //   and example i is ignored
@@ -85,6 +87,7 @@ class mbl_lda
   // \param label  Array [0..n-1] of integers indices
   // \param v  Set of vectors [0..n-1]
   // \param wS  Within class covariance to use
+  //
   // - label[i] gives class of v[i]
   // - If label[i]<0 the class is assumed to be unknown
   //   and example i is ignored
@@ -95,6 +98,7 @@ class mbl_lda
   //: Perform LDA on data
   // \param label  Array [0..n-1] of integers indices
   // \param v  Set of vectors [0..n-1]
+  //
   // - label[i] gives class of v[i]
   // - If label[i]<0 the class is assumed to be unknown
   //   and example i is ignored
@@ -105,6 +109,7 @@ class mbl_lda
   // \param label  Array [0..n-1] of integers indices
   // \param v  Set of vectors [0..n-1]
   // \param wS  Within class covariance to use
+  //
   // - label[i] gives class of v[i]
   // - Classes must be labeled from 0..n-1
   // - If label[i]<0 the class is assumed to be unknown and example i is ignored

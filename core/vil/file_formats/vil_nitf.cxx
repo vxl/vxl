@@ -57,11 +57,11 @@ static bool xxproblem(char const* linefile, char const* msg)
 
 
 ////////////////////////////////////////////////////////////////////
-/// Calculate and display elapsed time given start and end time.
-///
-/// \param start structure containing start time
-/// \param end structure containing end time
-/// \param msg string message to be displayed
+//: Calculate and display elapsed time given start and end time.
+//
+// \param start structure containing start time
+// \param end structure containing end time
+// \param msg string message to be displayed
 ////////////////////////////////////////////////////////////////////
 static
 void display_elapsed_time(
@@ -100,8 +100,7 @@ bool is_nitf_file_format(vil_stream* is)
   return is_nitf_file;
 }
 
-//
-// Read input data from vil_stream and return smart pointer to vil_image_resource.
+//: Read input data from vil_stream and return smart pointer to vil_image_resource.
 // In this case, this will actually be a pointer to the subclass vil_nitf_image.
 //
 //  \param is vil_stream from which the data will be read
@@ -186,10 +185,10 @@ char const* vil_nitf_file_format::tag() const
 }
 
 ///////////////////////////////////////////////////////////////////////
-/// Read header data from input stream.  There are multiple headers.
-/// For now, we read file/message header, plus image subheaders.
-///
-/// \param return true if header data read successfully.
+//: Read header data from input stream.  There are multiple headers.
+// For now, we read file/message header, plus image subheaders.
+//
+// \param return true if header data read successfully.
 //////////////////////////////////////////////////////////////////////
 bool vil_nitf_file_format::read_header_data()
 {
@@ -428,15 +427,16 @@ bool vil_nitf_image::write_header()
 }
 
 ///////////////////////////////////////////////////////////////////////
-/// Find and set value for named property.
-///
-/// \param tag name of property to look up.
-/// \param value pointer to value to be set if property is found
-///     NOTE: At present time, only valid property for NITF is
-///         vil_property_quantisation_depth.  Type of value is unsigned int *
-///
-/// \return true if property was found.
-///
+//: Find and set value for named property.
+//
+// \param tag name of property to look up.
+// \param value pointer to value to be set if property is found
+//
+//     NOTE: At present time, only valid property for NITF is
+//         vil_property_quantisation_depth.  Type of value is unsigned int *
+//
+// \return true if property was found.
+//
 //////////////////////////////////////////////////////////////////////
 bool vil_nitf_image::get_property(char const * tag, void * value) const
 {
@@ -459,7 +459,7 @@ bool vil_nitf_image::get_property(char const * tag, void * value) const
 }
 
 /////////////////////////////////////////////////////////////
-/// Get pixel format.
+//: Get pixel format.
 /////////////////////////////////////////////////////////////
 vil_pixel_format vil_nitf_image::pixel_format() const
 {
@@ -511,7 +511,7 @@ char const* vil_nitf_image::file_format() const
 // \param j0 y origin
 // \param nj number of pixels in y
 //
-// \param return smart pointer to vil_image_view_base
+// \return smart pointer to vil_image_view_base
 //     for NITF image.  Actual sub-class should be vil_image_view<T>.
 
 vil_image_view_base_sptr vil_nitf_image::get_copy_view(
@@ -592,7 +592,7 @@ vil_image_view_base_sptr vil_nitf_image::get_copy_view(
 // \param j0 y origin
 // \param nj number of pixels in y
 //
-// \param return smart pointer to vil_image_view_base
+// \return smart pointer to vil_image_view_base
 //     for NITF image.  Actual sub-class should be vil_image_view<T>.
 
 vil_image_view_base_sptr vil_nitf_image::get_single_band_view(
@@ -644,18 +644,18 @@ vil_image_view_base_sptr vil_nitf_image::get_single_band_view(
 }  // end method get_single_band_view
 
 //////////////////////////////////////////////////////////////////////////////////
-/**
- *  Get vil_image_view for NITF image with single band.
- *  Helper method for get_copy_view.
- *
- * \param i0 x origin
- * \param ni number of pixels in x
- * \param j0 y origin
- * \param nj number of pixels in y
- *
- * \param return smart pointer to vil_memory_chunk containing data
- *     for NITF image.
- */
+//
+//:  Get vil_image_view for NITF image with single band.
+//  Helper method for get_copy_view.
+//
+// \param i0 x origin
+// \param ni number of pixels in x
+// \param j0 y origin
+// \param nj number of pixels in y
+//
+// \return smart pointer to vil_memory_chunk containing data
+//     for NITF image.
+//
 vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
     unsigned i0,
     unsigned ni,
@@ -671,13 +671,13 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
   unsigned start_block_x = 0;
   unsigned start_block_x_offset = 0;  // offset to first column in starting x block
   unsigned max_block_x = get_num_blocks_x();
-  unsigned max_block_x_pixels = get_block_size_x();  /// # of pixels to use in last block in row
+  unsigned max_block_x_pixels = get_block_size_x();  //!< # of pixels to use in last block in row
 
   unsigned start_block_y = 0;
   unsigned start_block_row_offset = 0;  // offset to first row in starting y  block
 
   unsigned max_block_y = get_num_blocks_y();
-  unsigned max_block_y_pixels = get_block_size_y();  /// # of pixels to use in last block in column
+  unsigned max_block_y_pixels = get_block_size_y();  //!< # of pixels to use in last block in column
 
   unsigned long last_image_offset = 0;
 
@@ -1014,16 +1014,16 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
 }  // end method read_single_band_data
 
 ///////////////////////////////////////////////////////////////////////
-/// Create set of pyramid images.
-///     NOTE: Currently, this method only works for 16 bit images.
-///
-/// \param levels number of levels of pyramid images
-/// \param file_name base file
-/// \param dir_name optional parameter for directory where output files should
-///      be written.   If missing, same directory as base file will be used.
-///
-/// \return true if no problems.
-///
+//: Create set of pyramid images.
+//     NOTE: Currently, this method only works for 16 bit images.
+//
+// \param levels number of levels of pyramid images
+// \param file_name base file
+// \param dir_name optional parameter for directory where output files should
+//      be written.   If missing, same directory as base file will be used.
+//
+// \return true if no problems.
+//
 //////////////////////////////////////////////////////////////////////
 bool vil_nitf_image::construct_pyramid_images(
     unsigned int levels,
@@ -1113,13 +1113,13 @@ bool vil_nitf_image::construct_pyramid_images(
 }
 
 ///////////////////////////////////////////////////////////////////////////
-/// Helper method to calculate values for start block in Y.
-///
-/// \param j0 origin
-/// \param block_size size of block in pixels
-/// \param start_block calculated starting block
-/// \param start_block_offset first pixel coordinate if origin is not on block boundary
-///
+//: Helper method to calculate values for start block in Y.
+//
+// \param j0 origin
+// \param block_size size of block in pixels
+// \param start_block calculated starting block
+// \param start_block_offset first pixel coordinate if origin is not on block boundary
+//
 ///////////////////////////////////////////////////////////////////////////
 void  vil_nitf_image::calculate_start_block(
     unsigned j0,
@@ -1151,14 +1151,14 @@ void  vil_nitf_image::calculate_start_block(
 }
 
 ///////////////////////////////////////////////////////////////////////////
-/// Helper method to calculate values for start block in Y.
-///
-/// \param j0 origin
-/// \param nj number of pixels
-/// \param block_size size of block in pixels
-/// \param start_block calculated starting block
-/// \param start_block_offset first pixel coordinate if origin is not on block boundary
-///
+//: Helper method to calculate values for start block in Y.
+//
+// \param j0 origin
+// \param nj number of pixels
+// \param block_size size of block in pixels
+// \param start_block calculated starting block
+// \param start_block_offset first pixel coordinate if origin is not on block boundary
+//
 ///////////////////////////////////////////////////////////////////////////
 void  vil_nitf_image::calculate_max_block(
     unsigned j0,
@@ -1194,14 +1194,14 @@ void  vil_nitf_image::calculate_max_block(
 }  // end calculate_max_block
 
 ///////////////////////////////////////////////////////////////////////////
-/// Test to see if size of image exceeds display limits.
-///
-/// \param ni number of pixels in i dimension
-/// \param nj number of pixels in j dimension
-/// \param bytes_per_pixel bytes per pixel for image
-///
-/// \return true if image exceeds display limits.
-///
+//: Test to see if size of image exceeds display limits.
+//
+// \param ni number of pixels in i dimension
+// \param nj number of pixels in j dimension
+// \param bytes_per_pixel bytes per pixel for image
+//
+// \return true if image exceeds display limits.
+//
 ///////////////////////////////////////////////////////////////////////////
 bool vil_nitf_image::exceeds_display_limits(
     unsigned ni,
@@ -1222,15 +1222,16 @@ bool vil_nitf_image::exceeds_display_limits(
 }
 
 ///////////////////////////////////////////////////////////////////////////
-/// Calculate factor for vil_decimate.  Value is amount image will be reduced,
-/// e.g. if value is 2, a 1024 X 1024 image will become 512 X 512.
-/// For now, assume same factor is used for both i and j dimensions.
-///
-/// \param ni number of pixels in i dimension
-/// \param nj number of pixels in j dimension
-///
-/// \return factor to use for vil_decimate.
-///
+//:
+// Calculate factor for vil_decimate.  Value is amount image will be reduced,
+// e.g. if value is 2, a 1024 X 1024 image will become 512 X 512.
+// For now, assume same factor is used for both i and j dimensions.
+//
+// \param ni number of pixels in i dimension
+// \param nj number of pixels in j dimension
+//
+// \return factor to use for vil_decimate.
+//
 ///////////////////////////////////////////////////////////////////////////
 unsigned int vil_nitf_image::calculate_decimate_factor(
     unsigned ni,
@@ -1268,23 +1269,23 @@ bool vil_nitf_image::put_view(const vil_image_view_base &/*im*/,
 }
 
 /////////////////////////////////////////////////////////////////
-///
-/// Fill in passed vectors with RPC camera data from data in this image header
-///
-/// \param matx (4, 20) matrix to hold co-oefficients of rational cubics
-///        There are twenty values for each of line numerator, line denominator
-///        sample numerator, sample denominator.
-/// \param scalex (2) longitude scale/offset
-/// \param scaley (2) latitude scale/offset
-/// \param scalez (2) height scale/offset
-/// \param scales (2) line scale/offset
-/// \param scalel (2) sample scale/offset
-/// \param init_pt (3) centroid of the four world corner points
-/// \param rescales (2) vector to hold rescale parameters for sample
-/// \param rescale1 (2) vector to hold rescale parameters for line
-///
-///  \return true if vectors filled in successfully
-///
+//
+//: Fill in passed vectors with RPC camera data from data in this image header
+//
+// \param matx (4, 20) matrix to hold co-oefficients of rational cubics
+//        There are twenty values for each of line numerator, line denominator
+//        sample numerator, sample denominator.
+// \param scalex (2) longitude scale/offset
+// \param scaley (2) latitude scale/offset
+// \param scalez (2) height scale/offset
+// \param scales (2) line scale/offset
+// \param scalel (2) sample scale/offset
+// \param init_pt (3) centroid of the four world corner points
+// \param rescales (2) vector to hold rescale parameters for sample
+// \param rescale1 (2) vector to hold rescale parameters for line
+//
+// \return true if vectors filled in successfully
+//
 /////////////////////////////////////////////////////////////////
 bool vil_nitf_image::get_rational_camera_data(
     vcl_vector<double>& samp_num,
@@ -1316,18 +1317,18 @@ bool vil_nitf_image::get_rational_camera_data(
 }
 
 ////////////////////////////////////////////////////////
-///
-/// Get the upper left, upper right, lower right, lower left coordinates of an image
-/// as four vectors containing longitude, latitude and elevation for each corner.
-/// Used to verify rational camera class, but may be useful for other stuff.
-///
-///  \param UL vector to be filled in with longitude, latitude and elevation for upper left
-///  \param UR vector to be filled in with longitude, latitude and elevation for upper right
-///  \param LR vector to be filled in with longitude, latitude and elevation for lower right
-///  \param LL vector to be filled in with longitude, latitude and elevation for lower left
-///
-///  \return true if vectors filled in successfully
-///
+//:
+// Get the upper left, upper right, lower right, lower left coordinates of an image
+// as four vectors containing longitude, latitude and elevation for each corner.
+// Used to verify rational camera class, but may be useful for other stuff.
+//
+//  \param UL vector to be filled in with longitude, latitude and elevation for upper left
+//  \param UR vector to be filled in with longitude, latitude and elevation for upper right
+//  \param LR vector to be filled in with longitude, latitude and elevation for lower right
+//  \param LL vector to be filled in with longitude, latitude and elevation for lower left
+//
+//  \return true if vectors filled in successfully
+//
 ////////////////////////////////////////////////////////
 bool vil_nitf_image::get_image_corners(
     vcl_vector<double>& UL,
@@ -1428,6 +1429,7 @@ InterleaveType vil_nitf_image::get_interleave_type() const
 }
 
 ///////////////////////////////////////////////////////////////
+//:
 // Compare value of image data offset (which was set after reading
 // the message and image headers) and the value calculated by adding
 //  the header lengths read from the file.
@@ -1511,7 +1513,7 @@ unsigned int vil_nitf_image::get_image_length() const
 }
 
 ///////////////////////////////////////////////////////////////////
-///  Display message header attributes.
+//:  Display message header attributes.
 ///////////////////////////////////////////////////////////////////
 void vil_nitf_image::display_message_attributes(vcl_string caller)
 {
@@ -1527,7 +1529,7 @@ void vil_nitf_image::display_message_attributes(vcl_string caller)
 }
 
 ///////////////////////////////////////////////////////////////////
-///  Display image attributes.
+//:  Display image attributes.
 ///////////////////////////////////////////////////////////////////
 void vil_nitf_image::display_image_attributes(vcl_string caller)
 {
@@ -1546,6 +1548,7 @@ void vil_nitf_image::display_image_attributes(vcl_string caller)
 }
 
 ////////////////////////////////////////////////////////////////////
+//:
 // Return boolean value indicating if bytes need to be reversed
 // because of big endian/little endian issues.
 
@@ -1561,6 +1564,7 @@ bool vil_nitf_image::reverse_bytes()
 }
 
 ////////////////////////////////////////////////////////////////////
+//:
 // Reverse bytes in vxl_uint_16.  Used to convert little endian to
 // big endian and vice versa.
 
@@ -1607,14 +1611,14 @@ vxl_uint_16 vil_nitf_image::reverse_bytes(vxl_uint_16 value) const
 }  // end method reverse_bytes
 
 ////////////////////////////////////////////////////////////////////
-/**
- * Reverse bytes in buffer.  Used to convert little endian to
- * big endian and vice versa.
- *
- * \param buffer buffer containing data for one or more values
- * \param buf_len number of bytes in buffer
- * \param bytes_per_value number of bytes per numeric value
- */
+//:
+// Reverse bytes in buffer.  Used to convert little endian to
+// big endian and vice versa.
+//
+// \param buffer buffer containing data for one or more values
+// \param buf_len number of bytes in buffer
+// \param bytes_per_value number of bytes per numeric value
+//
 void vil_nitf_image::reverse_bytes(
     unsigned char * buffer,
     unsigned long buf_len,
@@ -1678,17 +1682,17 @@ void vil_nitf_image::reverse_bytes(
 }  // end method reverse_bytes
 
 ////////////////////////////////////////////////////////////////////
-/**
- * Check high order byte value.
- * NOTE: Right now, this is just for checking first byte of 11 bit value
- *    stored as 16 bits in 2 bytes.
- *
- * \param buffer buffer containing data for one or more values
- * \param buf_len number of bytes in buffer
- * \param bytes_per_value number of bytes per numeric value
- *
- * \return true if any bits other than 3 least significant bits in first byte are being used.
- */
+//
+//: Check high order byte value.
+// NOTE: Right now, this is just for checking first byte of 11 bit value
+//    stored as 16 bits in 2 bytes.
+//
+// \param buffer buffer containing data for one or more values
+// \param buf_len number of bytes in buffer
+// \param bytes_per_value number of bytes per numeric value
+//
+// \return true if any bits other than 3 least significant bits in first byte are being used.
+//
 bool vil_nitf_image::using_upper_bits(
     unsigned char * buffer,
     unsigned long buf_len,
@@ -1735,19 +1739,19 @@ bool vil_nitf_image::using_upper_bits(
 }  // end method using_upper_bits
 
 ////////////////////////////////////////////////////////////////////
-/**
- * Check high order byte value.
- * NOTE: Right now, this is just for checking first byte of 11 bit value
- *    stored as 16 bits in 2 bytes.
- *    This method uses raw data, which is stored as big endian.
- *    Cannot be used after bytes reversed to little endian.
- *
- * \param buffer buffer containing data for one or more values
- * \param buf_len number of bytes in buffer
- * \param bytes_per_value number of bytes per numeric value
- *
- * \return true if any bits other than 3 least significant bits in first byte are being used.
- */
+//
+//: Check high order byte value.
+// NOTE: Right now, this is just for checking first byte of 11 bit value
+//    stored as 16 bits in 2 bytes.
+//    This method uses raw data, which is stored as big endian.
+//    Cannot be used after bytes reversed to little endian.
+//
+// \param buffer buffer containing data for one or more values
+// \param buf_len number of bytes in buffer
+// \param bytes_per_value number of bytes per numeric value
+//
+// \return true if any bits other than 3 least significant bits in first byte are being used.
+//
 vxl_uint_16 vil_nitf_image::check_max_value(
     unsigned char * buffer,
     unsigned long buf_len,
@@ -1809,7 +1813,7 @@ vxl_uint_16 vil_nitf_image::check_max_value(
 }  // end method check_max_value
 
 ////////////////////////////////////////////////////////////////////
-///  Display image pixels. (For image with vxl_uint_16 values only.)
+//:  Display image pixels. (For image with vxl_uint_16 values only.)
 ///////////////////////////////////////////////////////////////////
 void vil_nitf_image::display_image_values(
     unsigned long row,
@@ -1869,7 +1873,7 @@ void vil_nitf_image::display_image_values(
 }  // end method display_image_values
 
 ////////////////////////////////////////////////////////////////////
-///  Display image pixels. (For image with vxl_uint_16 values only.)
+//:  Display image pixels. (For image with vxl_uint_16 values only.)
 ///////////////////////////////////////////////////////////////////
 unsigned int vil_nitf_image::check_image_values(
     unsigned long row,
@@ -1920,7 +1924,7 @@ unsigned int vil_nitf_image::check_image_values(
 }  // end method check_image_values
 
 ////////////////////////////////////////////////////////////////////
-///  Display attributes related to blocking.
+//:  Display attributes related to blocking.
 ///////////////////////////////////////////////////////////////////
 void vil_nitf_image::display_block_attributes(vcl_string caller)
 {
@@ -1940,17 +1944,17 @@ void vil_nitf_image::display_block_attributes(vcl_string caller)
 
 
 ////////////////////////////////////////////////////////////////////
-///
-/// Compare bytes in two buffers.
-///
-/// \param buffer_1 buffer containing first set ofraw bytes
-/// \param buffer_2 buffer containing second set ofraw bytes
-/// \param compare_count number of values to compare
-/// \param bytes_per_pixel number of bytes per pixel
-/// \param label optional string to display explaining meaning of byes.
-///
-/// \return number of bytes which are not equal
-///
+//
+//: Compare bytes in two buffers.
+//
+// \param buffer_1 buffer containing first set ofraw bytes
+// \param buffer_2 buffer containing second set ofraw bytes
+// \param compare_count number of values to compare
+// \param bytes_per_pixel number of bytes per pixel
+// \param label optional string to display explaining meaning of byes.
+//
+// \return number of bytes which are not equal
+//
 ////////////////////////////////////////////////////////////////////
 unsigned long vil_nitf_image::compare_bytes(
     const unsigned char * buffer_1,

@@ -50,14 +50,14 @@ class vil_image_resource_plugin : public vil_image_resource
   // \param filetype  String hinting at what image format is
   // \param colour    define whether to load images as colour or grey-scale.
   //        Options are '' (i.e. rely on image), 'Grey' or 'RGB'
-  // \ret   true if successful
+  // \return  true if successful
   virtual bool load_the_image (vil_image_view_base_sptr& image, const vcl_string & path);
 
   //: Attempt to load image from named file.
   // \param filetype  String hinting at what image format is
   // \param colour    define whether to load images as colour or grey-scale.
   //        Options are '' (i.e. rely on image), 'Grey' or 'RGB'
-  // \ret   true if successful
+  // \return  true if successful
   virtual bool load_the_image (vil_image_view_base_sptr& image,
                                const vcl_string & path,
                                const vcl_string & filetype,

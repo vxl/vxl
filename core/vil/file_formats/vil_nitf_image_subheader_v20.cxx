@@ -1407,7 +1407,7 @@ void vil_nitf_image_subheader_v20::init()
 }  // end method init
 
 ////////////////////////////////////////////////////////////////
-/// Read RPC data from header.
+//: Read RPC data from header.
 ////////////////////////////////////////////////////////////////
 StatusCode vil_nitf_image_subheader_v20::extract_rpc00x_extension()
 {

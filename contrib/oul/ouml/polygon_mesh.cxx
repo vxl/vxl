@@ -20,7 +20,7 @@
 // Add a vertex to the end of the list of vertices
 //
 // \param pt  The location of the vertex
-// \ret       The position of the added vertex
+// \return    The position of the added vertex
 //
 // \author Brendan McCane
 //----------------------------------------------------------------------
@@ -38,7 +38,7 @@ int PolygonMesh::add_vertex(DPoint &pt)
 //
 // \param pt    The location of the vertex
 // \param index Where to add the vertex
-// \ret         The position of the added vertex
+// \return      The position of the added vertex
 //
 // \author Brendan McCane
 //----------------------------------------------------------------------
@@ -58,7 +58,7 @@ int PolygonMesh::set_vertex(int index, DPoint &pt)
 // Add a face to the end of the list of faces
 //
 // \param fc The vertices associated with the face
-// \ret      The position of the added face
+// \return   The position of the added face
 //
 // \author Brendan McCane
 //----------------------------------------------------------------------
@@ -76,7 +76,7 @@ int PolygonMesh::add_face(Face &fc)
 //
 // \param fc    The vertices associated with the face
 // \param index Where to add the face
-// \ret         The position of the added face
+// \return      The position of the added face
 //
 // \author Brendan McCane
 //----------------------------------------------------------------------
@@ -96,7 +96,7 @@ int PolygonMesh::set_face(int index, Face &fc)
 // Returns a vertex at the specified location
 //
 // \param index the position to return
-// \ret         the position of the vertex
+// \return      the position of the vertex
 //
 // \author Brendan McCane
 //----------------------------------------------------------------------
@@ -118,7 +118,7 @@ PolygonMesh::DPoint PolygonMesh::get_vertex(int index)
 // Returns a face at the specified location
 //
 // \param index  the position to return
-// \ret          a list of vertices
+// \return       a list of vertices
 //
 // \author Brendan McCane
 //----------------------------------------------------------------------
@@ -145,7 +145,7 @@ PolygonMesh::Polygon PolygonMesh::get_face(int index)
 // read a mesh in from a file
 //
 // \param filename  the name of the file
-// \ret             whether or not the file was successfully read
+// \return          whether or not the file was successfully read
 //
 // \author Brendan McCane
 //----------------------------------------------------------------------
@@ -209,7 +209,7 @@ bool PolygonMesh::read_file(char *filename)
 // vertex index in the entire list of vertices, but the vertex index
 // within the face).
 //
-// \ret the normalised normal vector
+// \return the normalised normal vector
 //
 // \author Brendan McCane
 //----------------------------------------------------------------------

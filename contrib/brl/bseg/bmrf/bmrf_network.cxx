@@ -1,9 +1,9 @@
-// This is contrib/brl/bseg/bmrf/bmrf_network.cxx
+// This is brl/bseg/bmrf/bmrf_network.cxx
+#include "bmrf_network.h"
 //:
 // \file
 
 #include "bmrf_node.h"
-#include "bmrf_network.h"
 #include <vbl/io/vbl_io_smart_ptr.h>
 
 
@@ -17,9 +17,9 @@ bmrf_network::bmrf_network()
 bool
 bmrf_network::add_node(const bmrf_node_sptr& node)
 {
-  if(!node.ptr()) return false;
-  if(!node->epi_seg().ptr()) return false;
-  if(node_from_seg_.find(node->epi_seg().ptr()) != node_from_seg_.end()) return false;
+  if (!node.ptr()) return false;
+  if (!node->epi_seg().ptr()) return false;
+  if (node_from_seg_.find(node->epi_seg().ptr()) != node_from_seg_.end()) return false;
 
   node_from_seg_[node->epi_seg().ptr()] = node;
   nodes_from_frame_[node->frame_num()][node->epi_seg().ptr()] = node;
@@ -31,10 +31,10 @@ bmrf_network::add_node(const bmrf_node_sptr& node)
 bool
 bmrf_network::remove_node(const bmrf_node_sptr& node)
 {
-  if(!node.ptr()) return false;
-  if(!node->epi_seg().ptr()) return false;
+  if (!node.ptr()) return false;
+  if (!node->epi_seg().ptr()) return false;
   seg_node_map::iterator itr = node_from_seg_.find(node->epi_seg().ptr());
-  if(itr == node_from_seg_.end()) return false;
+  if (itr == node_from_seg_.end()) return false;
 
   node->strip();
   node_from_seg_.erase(itr);
@@ -44,32 +44,32 @@ bmrf_network::remove_node(const bmrf_node_sptr& node)
 }
 
 
-//: Add an arc between \param n1 and \param n2 of type \param type
+//: Add an arc between \p n1 and \p n2 of type \p type
 bool
 bmrf_network::add_arc( const bmrf_node_sptr& n1, const bmrf_node_sptr& n2, neighbor_type type )
 {
-  if(!n1.ptr() || !n2.ptr()) return false;
-  if(!n1->epi_seg().ptr() || !n2->epi_seg().ptr()) return false;
-  
+  if (!n1.ptr() || !n2.ptr()) return false;
+  if (!n1->epi_seg().ptr() || !n2->epi_seg().ptr()) return false;
+
   seg_node_map::iterator itr = node_from_seg_.find(n1->epi_seg().ptr());
-  if(itr == node_from_seg_.end())
-    if( !this->add_node(n1) )
+  if (itr == node_from_seg_.end())
+    if ( !this->add_node(n1) )
       return false;
   itr = node_from_seg_.find(n2->epi_seg().ptr());
-  if(itr == node_from_seg_.end())
-    if( !this->add_node(n2) )
+  if (itr == node_from_seg_.end())
+    if ( !this->add_node(n2) )
       return false;
-      
+
   return n1->add_neighbor(n2.ptr(), type);
 }
 
 
-//: Add an arc between \param n1 and \param n2 of type \param type
+//: Add an arc between \p n1 and \p n2 of type \p type
 bool
 bmrf_network::remove_arc( const bmrf_node_sptr& n1, const bmrf_node_sptr& n2, neighbor_type type )
 {
-  if(!n1.ptr() || !n2.ptr()) return false;
-      
+  if (!n1.ptr() || !n2.ptr()) return false;
+
   return n1->remove_neighbor(n2.ptr(), type);
 }
 
@@ -79,12 +79,12 @@ bmrf_network::purge()
 {
   bool retval = false;
   seg_node_map::const_iterator n_itr = node_from_seg_.begin();
-  for(; n_itr != node_from_seg_.end(); ++n_itr){
+  for (; n_itr != node_from_seg_.end(); ++n_itr) {
     bmrf_node_sptr curr_node = n_itr->second;
     retval = curr_node->purge() || retval; // remove the NULL arcs
     bmrf_node::arc_iterator a_itr = curr_node->begin();
-    for(; a_itr != curr_node->end(); ++a_itr){
-      if(node_from_seg_.find((*a_itr)->to()->epi_seg().ptr()) == node_from_seg_.end()){
+    for (; a_itr != curr_node->end(); ++a_itr) {
+      if (node_from_seg_.find((*a_itr)->to()->epi_seg().ptr()) == node_from_seg_.end()) {
         curr_node->remove_neighbor((*a_itr)->to().ptr());
         retval = true;
       }
@@ -92,7 +92,7 @@ bmrf_network::purge()
   }
   return retval;
 }
-  
+
 
 //: Look up the node corresponding to an epi-segment
 bmrf_node_sptr
@@ -101,15 +101,15 @@ bmrf_network::seg_to_node(const bmrf_epi_seg_sptr& seg, int frame) const
   seg_node_map::const_iterator itr;
   if (frame < 0) {
     itr = node_from_seg_.find(seg.ptr());
-    if(itr == node_from_seg_.end())
+    if (itr == node_from_seg_.end())
       return bmrf_node_sptr(NULL);
   }
   else {
     frame_node_map::const_iterator map_itr = nodes_from_frame_.find(frame);
-    if( map_itr == nodes_from_frame_.end())
+    if ( map_itr == nodes_from_frame_.end())
       return bmrf_node_sptr(NULL);
     itr = map_itr->second.find(seg.ptr());
-    if(itr == map_itr->second.end())
+    if (itr == map_itr->second.end())
       return bmrf_node_sptr(NULL);
   }
 
@@ -144,7 +144,7 @@ bmrf_network::set_epipole(const bmrf_epipole& epipole, int frame)
   // for now we assume that there is only one epipole for the
   // entire sequence.  This function should be update if this
   // assumption changes
-  if(epipoles_.empty())
+  if (epipoles_.empty())
     epipoles_.resize(1);
   epipoles_[0] = epipole;
 }
@@ -161,7 +161,7 @@ bmrf_network::epipole(int frame) const
 }
 
 
-//: Returns the beginning const iterator to the nodes in frame \param frame
+//: Returns the beginning const iterator to the nodes in frame \p frame
 bmrf_network::seg_node_map::const_iterator
 bmrf_network::begin( int frame ) const
 {
@@ -175,7 +175,7 @@ bmrf_network::begin( int frame ) const
 }
 
 
-//: Returns the end const iterator to the nodes in frame \param frame
+//: Returns the end const iterator to the nodes in frame \p frame
 bmrf_network::seg_node_map::const_iterator
 bmrf_network::end( int frame ) const
 {
@@ -199,15 +199,15 @@ bmrf_network::b_write( vsl_b_ostream& os ) const
   // write all the nodes
   seg_node_map::const_iterator itr = node_from_seg_.begin();
 
-  for(; itr != node_from_seg_.end(); ++itr){
+  for (; itr != node_from_seg_.end(); ++itr) {
     vsl_b_write(os, itr->second);
   }
 
   // write the number of epipoles
   vsl_b_write(os, (unsigned int)epipoles_.size());
   // write all the epipoles
-  for( vcl_vector<bmrf_epipole>::const_iterator itr = epipoles_.begin();
-       itr != epipoles_.end(); ++itr ){
+  for ( vcl_vector<bmrf_epipole>::const_iterator itr = epipoles_.begin();
+       itr != epipoles_.end(); ++itr ) {
     vsl_b_write(os, itr->location().x());
     vsl_b_write(os, itr->location().y());
   }
@@ -227,27 +227,27 @@ bmrf_network::b_read( vsl_b_istream& is )
   case 1:
     {
       node_from_seg_.clear();
-      
+
       unsigned int num_nodes;
       vsl_b_read(is, num_nodes);
-      for(unsigned int n=0; n<num_nodes; ++n){
+      for (unsigned int n=0; n<num_nodes; ++n) {
         bmrf_node_sptr node;
         vsl_b_read(is, node);
         node_from_seg_[node->epi_seg().ptr()] = node;
         nodes_from_frame_[node->frame_num()][node->epi_seg().ptr()] = node;
       }
-      
+
       epipoles_.clear();
       unsigned int num_epipoles;
       vsl_b_read(is, num_epipoles);
-      for(unsigned int n=0; n<num_epipoles; ++n){
+      for (unsigned int n=0; n<num_epipoles; ++n) {
         double x,y;
         vsl_b_read(is, x);
         vsl_b_read(is, y);
         epipoles_.push_back(bmrf_epipole(x, y));
       }
     }
-    if(this->purge())
+    if (this->purge())
       vcl_cerr << "I/O WARNING: bmrf_network::b_read(vsl_b_istream&)\n"
                << "             It is likely that the network object is corrupt.\n"
                << "             Invalid arcs have been purged.\n";
@@ -266,7 +266,7 @@ bmrf_network::b_read( vsl_b_istream& is )
 void
 bmrf_network::print_summary( vcl_ostream& os ) const
 {
-  os << " " << node_from_seg_.size() << " nodes in "<< nodes_from_frame_.size() <<" frames ";
+  os << ' ' << node_from_seg_.size() << " nodes in "<< nodes_from_frame_.size() <<" frames ";
 }
 
 
@@ -284,11 +284,11 @@ bmrf_network::depth_iterator::next_node()
 {
   if (curr_node_.ptr() == NULL) return;
   bmrf_node::arc_iterator itr = curr_node_->end();
-  for(--itr; itr != curr_node_->end(); --itr){
-    if( visited_.find((*itr)->to().ptr()) == visited_.end() )
+  for (--itr; itr != curr_node_->end(); --itr) {
+    if ( visited_.find((*itr)->to().ptr()) == visited_.end() )
       eval_queue_.push_front((*itr)->to().ptr());
   }
-  while( !eval_queue_.empty() && visited_.find(eval_queue_.front()) != visited_.end() )
+  while ( !eval_queue_.empty() && visited_.find(eval_queue_.front()) != visited_.end() )
     eval_queue_.pop_front();
   if (eval_queue_.empty())
     curr_node_ = NULL;
@@ -306,15 +306,15 @@ bmrf_network::breadth_iterator::next_node()
 {
   if (curr_node_.ptr() == NULL) return;
   bmrf_node::arc_iterator itr = curr_node_->begin();
-  for(; itr != curr_node_->end(); ++itr){
-    if( visited_.find((*itr)->to().ptr()) == visited_.end() )
+  for (; itr != curr_node_->end(); ++itr) {
+    if ( visited_.find((*itr)->to().ptr()) == visited_.end() )
       eval_queue_.push_back((*itr)->to().ptr());
   }
-  while( !eval_queue_.empty() && visited_.find(eval_queue_.front()) != visited_.end() )
+  while ( !eval_queue_.empty() && visited_.find(eval_queue_.front()) != visited_.end() )
     eval_queue_.pop_front();
   if (eval_queue_.empty())
     curr_node_ = NULL;
-  else{
+  else {
     curr_node_ = eval_queue_.front();
     eval_queue_.pop_front();
     visited_.insert(curr_node_);
@@ -331,10 +331,10 @@ bmrf_network::breadth_iterator::next_node()
 void
 vsl_b_write(vsl_b_ostream &os, const bmrf_network* n)
 {
-  if (n==0){
+  if (n==0) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
-  else{
+  else {
     vsl_b_write(os,true); // Indicate non-null pointer stored
     n->b_write(os);
   }
@@ -348,7 +348,7 @@ vsl_b_read(vsl_b_istream &is, bmrf_network* &n)
   delete n;
   bool not_null_ptr;
   vsl_b_read(is, not_null_ptr);
-  if (not_null_ptr){
+  if (not_null_ptr) {
     n = new bmrf_network();
     n->b_read(is);
   }
@@ -363,6 +363,6 @@ vsl_print_summary(vcl_ostream &os, const bmrf_network* n)
 {
   os << "bmrf_network{";
   n->print_summary(os);
-  os << "}";
+  os << '}';
 }
 

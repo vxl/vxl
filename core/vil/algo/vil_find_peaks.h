@@ -27,7 +27,7 @@ inline bool vil_is_peak_3x3(const T* im, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_s
 
 //: Return (pi,pj) for all points in image strictly above their 8 neighbours
 //  Compute position of all local peaks (pi[k],pj[k]) above given threshold value.
-// \param clear_list: If true (the default) then empty lists before adding new examples
+// \param clear_list  If true (the default) then empty lists before adding new examples
 template <class T>
 inline void vil_find_peaks_3x3(vcl_vector<unsigned>& pi,
                                vcl_vector<unsigned>& pj,

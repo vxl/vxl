@@ -107,6 +107,7 @@ int mbl_lda::nDistinctIDs(const int* id, const int n)
 //: Perform LDA on data
 // \param label  Array [0..n-1] of integers indices
 // \param v  Set of vectors [0..n-1]
+//
 // label[i] gives class of v[i]
 // Classes must be labeled from 0 to m-1
 void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,

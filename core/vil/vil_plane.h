@@ -29,6 +29,7 @@ inline vil_image_view<T> vil_plane(const vil_image_view<T> &im, unsigned p)
 // \param first The index of the first plane you want to select.
 // \param skip The spacing in your selection - will be 1 for adjacent planes.
 // \param n The total number of planes in your selection.
+//
 //  O(1).
 template<class T>
 inline vil_image_view<T> vil_planes(const vil_image_view<T> &im,

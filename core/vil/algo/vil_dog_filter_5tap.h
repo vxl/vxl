@@ -11,9 +11,9 @@
 
 //: Smooth source with gaussian filter and compute difference
 //  Uses a 5-tap filter with gaussian width sigma.
-//  \param sigma: Width of gaussian
-//  \param smooth_im: Result of smoothing the src_im
-//  \param dog_im: src_im - smooth_im
+//  \param sigma     Width of gaussian
+//  \param smooth_im Result of smoothing the src_im
+//  \param dog_im    src_im - smooth_im
 template <class T>
 void vil_dog_filter_5tap(const vil_image_view<T>& src_im,
                          vil_image_view<T>& smooth_im,
