@@ -67,7 +67,7 @@ vul_sequence_filename_map::~vul_sequence_filename_map()
 {
 }
 
-vcl_string vul_sequence_filename_map::name (int frame)
+vcl_string vul_sequence_filename_map::name(int frame)
 {
   vcl_string index_str = vul_sprintf(index_format_.c_str(), indices_[frame]);
   return basename_ + index_str;
@@ -291,7 +291,7 @@ void vul_sequence_filename_map::parse()
              << "    basename  : " << basename_ << vcl_endl
              << " index format : " << index_format_ << vcl_endl
              << "    extension : " << image_extension_ << vcl_endl
-             << "    indices   : " << start_ << ":" << step_ << ":" << end_
+             << "    indices   : " << start_ << ':' << step_ << ':' << end_
              << vcl_endl << vcl_endl;
 }
 
@@ -310,8 +310,8 @@ int vul_sequence_filename_map::get_mapped_index(int real) const
 vcl_ostream& vul_sequence_filename_map::print (vcl_ostream& s) const
 {
   s << "vul_sequence_filename_map : " << image_dir_ << basename_
-    << index_format_ << image_extension_ << " [" << indices_[0] << ":"
-    << indices_[1] - indices_[0] << ":" << indices_.back() << "]\n";
+    << index_format_ << image_extension_ << " [" << indices_[0] << ':'
+    << indices_[1] - indices_[0] << ':' << indices_.back() << "]\n";
 
 #if 0
   s << vul_sprintf("vul_sequence_filename_map : %s%s%s [%i:%i:%i]",
@@ -321,14 +321,14 @@ vcl_ostream& vul_sequence_filename_map::print (vcl_ostream& s) const
   return s;
 }
 
-bool vul_sequence_filename_map::filter_dirent(char const* name, vcl_string const& extension)
+bool vul_sequence_filename_map::filter_dirent(char const* name_string, vcl_string const& extension)
 {
   static unsigned int expected_length = 0;
   if (expected_length == 0)
     expected_length = basename_.size() +
     (vcl_string(vul_sprintf(index_format_.c_str(),0)) + extension).size();
 
-  vcl_string name_str(name);
+  vcl_string name_str(name_string);
 
   if (name_str.size() != expected_length) return false;
 
@@ -338,9 +338,9 @@ bool vul_sequence_filename_map::filter_dirent(char const* name, vcl_string const
   return false;
 }
 
-int vul_sequence_filename_map::extract_index(char const* name)
+int vul_sequence_filename_map::extract_index(char const* name_string)
 {
-  vcl_string name_str(name);
+  vcl_string name_str(name_string);
   vcl_string index_str = name_str.substr(basename_.size(), name_str.size() - image_extension_.size());
   return vcl_atoi(index_str.c_str());
 }
