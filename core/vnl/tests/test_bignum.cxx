@@ -3,6 +3,7 @@
 // converted from COOL/test/test_BigNum.C by Peter Vanroose, 25 April 2002.
 
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vcl_iomanip.h>
 #include <vnl/vnl_bignum.h>
 #include <vnl/vnl_test.h>
@@ -121,12 +122,46 @@ static void run_constructor_tests() {
 #if 0
   vnl_bignum b38("09");
   TEST("vnl_bignum b38(\"09\");", (long)b38, 9);
-
+#endif
   vnl_bignum b39(" 9");
   TEST("vnl_bignum b39(\" 9\");", (long)b39, 9);
-#endif
+
   {vnl_bignum b40("0xf");
   TEST("vnl_bignum b40(\"0xf\");", (long)b40, 0xf);}
+
+  vcl_cout << "reading from istream:\n";
+  {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
+  is << "+1"; is >> b; TEST("\"+1\" >> b;", b, 1L);}
+  {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
+  is << "-1"; is >> b; TEST("\"-1\" >> b;", b, -1L);}
+  {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
+  is << "123"; is >> b; TEST("\"123\";", b, 123L);}
+  {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
+  is << "0x0"; is >> b; TEST("\"0x0\" >> b;", b, 0x0);}
+  {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
+  is << "0x9"; is >> b; TEST("\"0x9\" >> b;", b, 0x9);}
+  {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
+  is << "0xa"; is >> b; TEST("\"0xa\" >> b;", b, 0xa);}
+  {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
+  is << "0xf"; is >> b; TEST("\"0xf\" >> b;", b, 0xf);}
+  {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
+  is << "0xa"; is >> b; TEST("\"0xa\" >> b;", b, 0xa);}
+  {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
+  is << "0xf"; is >> b; TEST("\"0xf\" >> b;", b, 0xf);}
+  {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
+  is << "0x1af"; is >> b; TEST("\"0x1af\" >> b;", b, 0x1af);}
+  {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
+  is << "0"; is >> b; TEST("\"0\" >> b;", b, 0L);}
+  {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
+  is << "00"; is >> b; TEST("\"00\" >> b;", b, 0L);}
+  {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
+  is << "012334567"; is >> b; TEST("\"012334567\" >> b;", b, 012334567);}
+  {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
+  is << "9"; is >> b; TEST("\"9\" >> b;", b, 9L);}
+  {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
+  is << " 9"; is >> b; TEST("\" 9\" >> b;", b, 9L);}
+  {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
+  is << "0xf"; is >> b; TEST("\"0xf\" >> b;", b, 0xf);}
 
   vcl_cout << "vnl_bignum& constructor:\n";
   {vnl_bignum b50(vnl_bignum(0L));
