@@ -14,11 +14,11 @@
 // Modifications
 //970807 AWF Initial version.
 //     07 Mar 01 stewart@cs.rpi.edu added "inside" functions
-// PDA (Manchester) 21/03/2001: Tidied up the documentation and 
+// PDA (Manchester) 21/03/2001: Tidied up the documentation
 // \endverbatim
 
-
 #include <vcl_iosfwd.h>
+#include <vcl_cassert.h>
 
 //: A class to hold and update a bounding box.
 //  Save valuable time not writing
@@ -78,6 +78,7 @@ struct vbl_bounding_box_base
 
   //:  is a 2D point inside the bounding box
   bool inside( const T& x, const T& y) const {
+    assert (DIM_::value >= 2);
     return
       min_[0] <= x && x <= max_[0] &&
       min_[1] <= y && y <= max_[1];
@@ -85,6 +86,7 @@ struct vbl_bounding_box_base
 
   //:  is a 3D point inside the bounding box
   bool inside( const T& x, const T& y, const T& z) const {
+    assert (DIM_::value >= 3);
     return
       min_[0] <= x && x <= max_[0] &&
       min_[1] <= y && y <= max_[1] &&
@@ -118,8 +120,8 @@ struct vbl_bounding_box_base
 
   T const& get_xmin() const { return min_[0]; }
   T const& get_xmax() const { return max_[0]; }
-  T const& get_ymin() const { return min_[1]; }
-  T const& get_ymax() const { return max_[1]; }
+  T const& get_ymin() const { assert(DIM_::value >= 2); return min_[1]; }
+  T const& get_ymax() const { assert(DIM_::value >= 2); return max_[1]; }
 
   //#pragma dogma
   // There is no need for the data members to be private to
