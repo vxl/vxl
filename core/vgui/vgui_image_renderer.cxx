@@ -60,6 +60,7 @@ void vgui_image_renderer::set_image(vil1_image const &image_)
   buffer = 0;
 
   the_image = image_;
+  valid_buffer = false;
 }
 
 //-----------------------------------------------------------------------------
@@ -68,6 +69,7 @@ void vgui_image_renderer::reread_image()
 {
   delete buffer;
   buffer = 0;
+  valid_buffer = false;
 }
 
 void vgui_image_renderer::
