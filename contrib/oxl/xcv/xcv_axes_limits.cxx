@@ -30,9 +30,9 @@ xcv_axes_limits::xcv_axes_limits()
   exp = 1.0;
   exp_n = 0;
 }
- 
+
 //========================================================================
-//: Set the lowest and highest plotted values. 
+//: Set the lowest and highest plotted values.
 void xcv_axes_limits::set_range(double low, double high)
 {
   if (low == high)
@@ -51,7 +51,7 @@ void xcv_axes_limits::calc_ticks()
   tick_start = vcl_floor(low / tick_spacing) * tick_spacing;
   tick_end = vcl_ceil(high / tick_spacing) * tick_spacing;
   tick_n = (int)((tick_end - tick_start) / tick_spacing);
-  if (debug) 
+  if (debug)
   {
     vcl_cout << "calc_ticks: high = " << high << vcl_endl;
     vcl_cout << "calc_ticks: low = " << low << vcl_endl;
@@ -69,10 +69,10 @@ double xcv_axes_limits::calc_tick_spacing()
   static double trythese[] = {0.1, 0.2, 0.5, 1.0, 2.0, 5.0, 10.0, 20.0, 50.0, 100.0,
     200.0, 500.0, 1000.0, 2000.0, 5000.0};
   double l = high - low;
-  
-  exp_n = (int)vcl_floor(log(l) / log(10.0));
-  exp = pow(10.0, (double)exp_n);
-  
+
+  exp_n = (int)vcl_floor(vcl_log10(l));
+  exp = vcl_pow(10.0, exp_n);
+
   for (int i = 0; i < sizeof trythese / sizeof trythese[0]; ++i) {
     double tickspacing = (trythese[i] * exp);
     double num_ticks_at_this_spacing = l / tickspacing;
