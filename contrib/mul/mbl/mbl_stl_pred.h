@@ -11,6 +11,7 @@
 #include <vcl_functional.h>
 #include <vcl_vector.h>
 #include <vcl_string.h>
+#include <vcl_utility.h>
 
 //: Return true if a string contains a substring
 // Note without this you'd need bind2nd mem_fun which can cause reference to reference compile errors
