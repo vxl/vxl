@@ -337,6 +337,23 @@ bool vil_image_as_impl<vil_rgb<unsigned char> >::get_section(void *buf,
     return true;
   }
 
+
+  else if (vil_pixel_format(image) == VIL_RGBA_BYTE) {
+    vcl_vector<vil_byte> scan(4*width);
+    for (unsigned j=0; j<height; ++j) {
+      if (!image.get_section(&scan[0], x0, y0+j, width, 1))
+        return false;
+      for (unsigned i=0; i<width; ++i) {
+        static_cast<vil_byte*>(buf)[3*(i + width*j)+0] = vil_byte(scan[4*i+0]);
+        static_cast<vil_byte*>(buf)[3*(i + width*j)+1] = vil_byte(scan[4*i+1]);
+        static_cast<vil_byte*>(buf)[3*(i + width*j)+2] = vil_byte(scan[4*i+2]);
+      }
+    }
+    return true;
+  }
+
+
+
   // byte rgb
   else if (vil_pixel_format(image) == VIL_RGB_BYTE)
     return image.get_section(buf, x0, y0, width, height);
