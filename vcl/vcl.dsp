@@ -128,21 +128,6 @@ SOURCE=.\vcl_cstdlib.cxx
 # Begin Source File
 SOURCE=.\vcl_deprecated.cxx
 # End Source File
-# Begin Source File
-SOURCE=.\Templates/alloc-instances.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/complex-instances.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/fstream-instances.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/stream-instances.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/string-instances.cxx
-# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -1137,7 +1122,16 @@ SOURCE=.\win32-vc60/vcl_cstdarg.h
 SOURCE=.\win32-vc60/vcl_cstdlib.h
 # End Source File
 # Begin Source File
+SOURCE=.\win32-vc60/vcl_valarray.h
+# End Source File
+# Begin Source File
+SOURCE=.\win32-vc70/vcl_complex.h
+# End Source File
+# Begin Source File
 SOURCE=.\win32-vc70/vcl_cstdlib.h
+# End Source File
+# Begin Source File
+SOURCE=.\win32-vc70/vcl_valarray.h
 # End Source File
 # Begin Source File
 SOURCE=.\borland55/vcl_cfloat.h
@@ -1150,6 +1144,9 @@ SOURCE=.\borland55/vcl_complex.h
 # End Source File
 # Begin Source File
 SOURCE=.\borland55/vcl_cstdlib.h
+# End Source File
+# Begin Source File
+SOURCE=.\borland55/vcl_memory.h
 # End Source File
 # Begin Source File
 SOURCE=.\borland56/vcl_complex.h
