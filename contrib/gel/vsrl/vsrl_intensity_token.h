@@ -2,7 +2,7 @@
 #define vsrl_intensity_token_h
 //:
 // \file
-// This token represents an alement which has a single value associated
+// This token represents an element which has a single value associated
 // with it.
 
 #include <vsrl/vsrl_token.h>
