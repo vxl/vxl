@@ -11,7 +11,7 @@ SET( LIBRARY_OUTPUT_PATH ${vxl_BINARY_DIR}/lib CACHE PATH
      "Output directory for the vxl libraries" )
 
 # CMake support directory.
-SET(VXL_CMAKE_DIR ${vxl_SOURCE_DIR}/config/cmake)
+SET(VXL_CMAKE_DIR ${vxl_SOURCE_DIR}/config/cmake/Modules)
 
 INCLUDE( ${VXL_CMAKE_DIR}/VXLStandardOptions.cmake )
 # INCLUDE( ${vxl_SOURCE_DIR}/UseSTLPort.cmake )
@@ -23,7 +23,8 @@ INCLUDE( ${VXL_CMAKE_DIR}/VXLStandardOptions.cmake )
 CONFIGURE_FILE( ${VXL_CMAKE_DIR}/UseVXL.cmake
                 ${vxl_BINARY_DIR}/UseVXL.cmake COPYONLY )
 
-# To avoid typing for the FindXXX.cmake modules
+# Location of VXL's FindXXX.cmake CMake modules.
+# This is identical to VXL_CMAKE_DIR.  Perhaps we should eliminate MODULE_PATH?
 SET( MODULE_PATH ${vxl_SOURCE_DIR}/config/cmake/Modules CACHE STATIC "VXL module path" )
 
 # For use in client projects that call UseVXL.cmake
@@ -47,12 +48,10 @@ IF(BUILD_TARGETJR)
   SUBDIRS(COOL GeneralUtility Image SpatialObjects Photogrammetry Database MultiView Segmentation Recognition)
 ENDIF(BUILD_TARGETJR)
 
-
 IF(RUN_CONFIGURE)
   EXEC_PROGRAM( ${vxl_SOURCE_DIR}/configure
                 ${vxl_BINARY_DIR} )
 ENDIF(RUN_CONFIGURE)
-
 
 # Some types of path names can cause havoc with regular expressions,
 # so avoid those.
@@ -62,7 +61,6 @@ ENDIF( ${vxl_BINARY_DIR} MATCHES  \\+ )
 IF( ${vxl_SOURCE_DIR} MATCHES  \\+ )
   MESSAGE(SEND_ERROR "You cannot have a + in your source path")
 ENDIF( ${vxl_SOURCE_DIR} MATCHES  \\+ )
-
 
 # include CMakeListsLocal.txt from source directory if it exists
 # also include it from the binary dir if different from source dir
