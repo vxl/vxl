@@ -3,11 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME	vbl_array_1d
-// .LIBRARY	vbl
-// .HEADER	vxl package
-// .INCLUDE	vbl/vbl_array_1d.h
-// .FILE	vbl_array_1d.txx
+// .NAME    vbl_array_1d
+// .LIBRARY vbl
+// .HEADER  vxl package
+// .INCLUDE vbl/vbl_array_1d.h
+// .FILE    vbl_array_1d.txx
 // .SECTION Description
 // a container which stores its elements in contiguous
 // storage and whose iterator types are raw pointers. There is
@@ -23,7 +23,7 @@ template <class T>
 struct vbl_array_1d
 {
   typedef T element_type;
-  
+
   typedef T       *iterator;
   typedef T const *const_iterator;
 
@@ -52,8 +52,8 @@ struct vbl_array_1d
   }
 
   bool operator==(vbl_array_1d<T> const& that) const {
-    T* i = begin_; 
-    T* j = that.begin_; 
+    T* i = begin_;
+    T* j = that.begin_;
     for ( ; i!=end_ && j!=that.end_; ++i, ++j)
       if (!(*i == *j)) return false;
     return (i == end_ && j == that.end_);
@@ -62,19 +62,19 @@ struct vbl_array_1d
   ~vbl_array_1d() {
     if (begin_) {
       clear();
-      delete [] (char*) begin_; 
-    } 
+      delete [] (char*) begin_;
+    }
   }
-  
+
   void reserve(unsigned new_n) {
     unsigned n = end_ - begin_;
-    if (new_n <= n) 
+    if (new_n <= n)
       return;
-    
+
     T *new_begin_ = (T*) new char [new_n * sizeof(T)]; // FIXME alignment
     T *new_end_   = new_begin_ + n;
     T *new_alloc_ = new_begin_ + new_n;
-    
+
     for (unsigned i=0; i<n; ++i) {
       new (new_begin_ + i) T(begin_[i]);
       begin_[i].~T();
@@ -110,20 +110,20 @@ struct vbl_array_1d
       p->~T();
     end_ = begin_;
   }
-  
+
   iterator begin() { return begin_; }
   iterator end() { return end_; }
 
   const_iterator begin() const { return begin_; }
   const_iterator end() const { return end_; }
-  
+
   bool empty() const { return begin_ == end_; }
   unsigned size() const { return end_ - begin_; }
   unsigned capacity() const { return alloc_ - begin_; }
 
   reference       operator[](unsigned i) { return begin_[i]; }
   const_reference operator[](unsigned i) const { return begin_[i]; }
-  
+
 private:
   // begin_ <= end_ <= alloc_
   T *begin_, *end_, *alloc_;

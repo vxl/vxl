@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	vbl_sparse_array_2d - Sparse 2D array
-// .LIBRARY	vbl
-// .HEADER	vxl package
-// .INCLUDE	vbl/vbl_sparse_array_2d.h
-// .FILE	vbl_sparse_array_2d.txx
+// .NAME    vbl_sparse_array_2d - Sparse 2D array
+// .LIBRARY vbl
+// .HEADER  vxl package
+// .INCLUDE vbl/vbl_sparse_array_2d.h
+// .FILE    vbl_sparse_array_2d.txx
 //
 // .SECTION Description
 //    vbl_sparse_array_2d is a sparse 2D array allowing space efficient access of
@@ -45,34 +45,34 @@ public:
 
   // Operations----------------------------------------------------------------
 
-// -- Put a value into location (i,j).
+//: Put a value into location (i,j).
   bool put(unsigned i, unsigned j, const T& t) {
     return Base::put(encode(i,j), t);
   }
 
-// -- Return contents of location (i,j).  Returns an undefined value (in fact a T())
+//: Return contents of location (i,j).  Returns an undefined value (in fact a T())
 // if location (i,j) has not been filled with a value.
   T& operator () (unsigned i, unsigned j) {
     return Base::operator[](encode(i,j));
   }
 
-// -- Return contents of (i,j).  Assertion failure if not yet filled.
+//: Return contents of (i,j).  Assertion failure if not yet filled.
   const T& operator () (unsigned i, unsigned j) const {
     return Base::operator[](encode(i,j));
   }
 
-// -- Return true if location (i,j) has been filled.
+//: Return true if location (i,j) has been filled.
   bool fullp(unsigned i, unsigned j) const {
     return Base::fullp(encode(i,j));
   }
 
-// -- Return the address of location (i,j).  0 if not yet filled.
+//: Return the address of location (i,j).  0 if not yet filled.
   T* get_addr(unsigned i, unsigned j) {
     return Base::get_addr(encode(i,j));
   }
 
   // Computations--------------------------------------------------------------
-// -- Return number of locations that have been assigned a value using "put".
+//: Return number of locations that have been assigned a value using "put".
   vbl_sparse_array<T>::count_nonempty;
 
   typedef vbl_sparse_array<T>::const_iterator const_iterator;

@@ -10,7 +10,7 @@
 //  \brief Base class for nonlinear optimization
 //  \author Andrew W. Fitzgibbon, Oxford RRG, 22 Aug 99
 
-//  Modifications 
+//  Modifications
 //  22/03/2001  dac - added binary io and tidied documentation
 
 #include <vnl/vnl_matrix.h>
@@ -99,7 +99,11 @@ public:
 
   //: Return the name of the class
   //  Used by polymorphic IO
-  virtual vcl_string is_a() const;
+  virtual const vcl_string is_a() const;
+
+  //: Return true if the name of the class matches the argument
+  //  Used by polymorphic IO
+  virtual bool is_a(vcl_string const& s) const { return s=="vnl_nonlinear_minimizer"; }
 
 //:Some generic return codes that apply to all minimizers.
   enum ReturnCodes {

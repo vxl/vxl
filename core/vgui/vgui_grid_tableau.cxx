@@ -7,7 +7,7 @@
 static bool debug = false;
 
 bool operator==(vgui_grid_tableau_data const &a,
-		vgui_grid_tableau_data const &b)
+                vgui_grid_tableau_data const &b)
 {
   return
     a.handle == b.handle &&
@@ -59,7 +59,7 @@ vgui_grid_tableau::vgui_grid_tableau(unsigned initial_cols, unsigned initial_row
   init(initial_cols, initial_rows);
 }
 
-//-- Makes a bitab.
+//: Makes a bitab.
 vgui_grid_tableau::vgui_grid_tableau(vgui_tableau_sptr const& l, vgui_tableau_sptr const& r)
 {
   init(2, 1);
@@ -67,7 +67,7 @@ vgui_grid_tableau::vgui_grid_tableau(vgui_tableau_sptr const& l, vgui_tableau_sp
   add_next(r);
 }
 
-//-- Makes a tritab.
+//: Makes a tritab.
 vgui_grid_tableau::vgui_grid_tableau(vgui_tableau_sptr const& l, vgui_tableau_sptr const& m, vgui_tableau_sptr const& r)
 {
   init(3, 1);
@@ -86,7 +86,7 @@ vcl_string vgui_grid_tableau::type_name() const
 
 
 //------------------------------------------------------------------------------
-//-- Given the column number, returns the x coord for that column.
+//: Given the column number, returns the x coord for that column.
 //   Note col_pos is numbered from 0.
 //------------------------------------------------------------------------------
 float vgui_grid_tableau::get_x(unsigned col_pos)
@@ -101,7 +101,7 @@ float vgui_grid_tableau::get_x(unsigned col_pos)
 }
 
 //------------------------------------------------------------------------------
-//-- Given the row number, returns the y coord for that row.
+//: Given the row number, returns the y coord for that row.
 //   Note row_pos is numbered from 0.
 //   Note that polytab coord system starts in the bottom left and we want
 //   rows to be numbered from the top down.
@@ -118,17 +118,17 @@ float vgui_grid_tableau::get_y(unsigned row_pos)
 }
 
 //------------------------------------------------------------------------------
-//-- Get the width of each column.
+//: Get the width of each column.
 //------------------------------------------------------------------------------
 float vgui_grid_tableau::get_w() { return 1.0/nb_cols; }
 
 //------------------------------------------------------------------------------
-//-- Get the height of each row.
+//: Get the height of each row.
 //------------------------------------------------------------------------------
 float vgui_grid_tableau::get_h() { return 1.0/nb_rows; }
 
 //------------------------------------------------------------------------------
-//-- Adds the default tableau to the given space in the grid
+//: Adds the default tableau to the given space in the grid
 //   (but not to the vcl_list of tableaux).
 //   Note, it is assumed that the given grid position is empty or uninitialized so
 //   nothing is removed from the grid position before the default is added.
@@ -146,7 +146,7 @@ void vgui_grid_tableau::add_default(unsigned col_pos, unsigned row_pos)
 }
 
 //------------------------------------------------------------------------------
-//-- Adds a tableau to the next free space in the grid
+//: Adds a tableau to the next free space in the grid
 //   and to the end of the vcl_list of tableaux.
 //   If there are no free spaces and the grid size is changeable then it adds a
 //   new column to the RHS of the grid and adds the new tableau to the top of it.
@@ -195,7 +195,7 @@ void vgui_grid_tableau::add_next(vgui_tableau_sptr const& tab)
 }
 
 //------------------------------------------------------------------------------
-//-- Add (or replace the tableau at the given position with) the given tableau
+//: Add (or replace the tableau at the given position with) the given tableau
 //   and adds the given tableau to the end of the vcl_list of tableaux.
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::add_at(vgui_tableau_sptr const& tab, unsigned col_pos, unsigned row_pos)
@@ -214,7 +214,7 @@ void vgui_grid_tableau::add_at(vgui_tableau_sptr const& tab, unsigned col_pos, u
 }
 
 //------------------------------------------------------------------------------
-//-- Removes the tableau at the given grid coordinates from the display
+//: Removes the tableau at the given grid coordinates from the display
 //   and from the vcl_list of tableau.  It is replaced in the grid by the default tableau.
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::remove_at(unsigned col_pos, unsigned row_pos)
@@ -235,7 +235,7 @@ void vgui_grid_tableau::remove_at(unsigned col_pos, unsigned row_pos)
 }
 
 //------------------------------------------------------------------------------
-//-- Returns a pointer to the tableau at the given position.
+//: Returns a pointer to the tableau at the given position.
 //------------------------------------------------------------------------------
 vgui_tableau_sptr vgui_grid_tableau::get_tableau_at(unsigned col_pos, unsigned row_pos)
 {
@@ -256,7 +256,7 @@ vgui_tableau_sptr vgui_grid_tableau::get_tableau_at(unsigned col_pos, unsigned r
 }
 
 //------------------------------------------------------------------------------
-//-- Returns the list of tableaux.
+//: Returns the list of tableaux.
 //------------------------------------------------------------------------------
 vcl_vector<vgui_tableau_sptr> vgui_grid_tableau::get_tableau_list()
 {
@@ -264,7 +264,7 @@ vcl_vector<vgui_tableau_sptr> vgui_grid_tableau::get_tableau_list()
 }
 
 //------------------------------------------------------------------------------
-//-- Returns the active tableau, this is the tableau with the mouse in.
+//: Returns the active tableau, this is the tableau with the mouse in.
 //   Note that there is only one active tableau, while there may be many
 //   selected tableaux.
 //------------------------------------------------------------------------------
@@ -295,7 +295,7 @@ void vgui_grid_tableau::get_active_position(unsigned* col_pos, unsigned* row_pos
 }
 
 //------------------------------------------------------------------------------
-//-- Returns the most recently selected column and row positions.
+//: Returns the most recently selected column and row positions.
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::get_last_selected_position(
   unsigned* col_pos, unsigned* row_pos)
@@ -317,7 +317,7 @@ void vgui_grid_tableau::set_selected(int r, int c, bool onoff)
 }
 
 //------------------------------------------------------------------------------
-//-- Gets the positions and times of selection of the selected tableaux.
+//: Gets the positions and times of selection of the selected tableaux.
 //   The number of selected tableau is returned.  Their positions are returned
 //   in the vcl_vectors passed in as parameters.
 //   Note, a tableau is selected if it has been clicked on by the left mouse
@@ -344,7 +344,7 @@ vcl_vector<int>* row_pos, vcl_vector<int>* times)
 }
 
 //------------------------------------------------------------------------------
-//-- Number of rows and columns in the grid is changeable if true is passed in
+//: Number of rows and columns in the grid is changeable if true is passed in
 //   (this is the default) otherwise if false is given then the number of rows
 //   and columns is fixed.
 //------------------------------------------------------------------------------
@@ -355,7 +355,7 @@ vcl_vector<int>* row_pos, vcl_vector<int>* times)
 // }
 
 //------------------------------------------------------------------------------
-//-- If true is passed in then this tableau will use PageUp and PageDown events
+//: If true is passed in then this tableau will use PageUp and PageDown events
 //   to 'flip' through the vcl_list of tableaux it holds (this is the default).
 //   Otherwise if false is given then the PageUp and PageDown events will be
 //   passed to the base tableau.  (This might be handy if you wanted to display
@@ -368,7 +368,7 @@ vcl_vector<int>* row_pos, vcl_vector<int>* times)
 // }
 
 //------------------------------------------------------------------------------
-//-- If false, any mouse down events will be ignored.
+//: If false, any mouse down events will be ignored.
 //------------------------------------------------------------------------------
 // void vgui_grid_tableau::set_frames_selectable(bool p)
 // {
@@ -376,7 +376,7 @@ vcl_vector<int>* row_pos, vcl_vector<int>* times)
 // }
 
 //------------------------------------------------------------------------------
-//-- Redraw the grid of tableaux keeping each tableau in its current row and column.
+//: Redraw the grid of tableaux keeping each tableau in its current row and column.
 //   If for example a new column had been added, using this would redraw the
 //   grid with that column empty.
 //------------------------------------------------------------------------------
@@ -393,7 +393,7 @@ void vgui_grid_tableau::layout_grid()
 }
 
 //------------------------------------------------------------------------------
-//-- Redraw the grid of tableaux packing them in without gaps, filling each
+//: Redraw the grid of tableaux packing them in without gaps, filling each
 //   row from top left downwards.
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::layout_grid2()
@@ -422,7 +422,7 @@ void vgui_grid_tableau::layout_grid2()
 }
 
 //------------------------------------------------------------------------------
-//-- Add an empty column to the RHS of the grid.
+//: Add an empty column to the RHS of the grid.
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::add_column()
 {
@@ -441,7 +441,7 @@ void vgui_grid_tableau::add_column()
 }
 
 //------------------------------------------------------------------------------
-//-- Remove last column on RHS of the grid.
+//: Remove last column on RHS of the grid.
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::remove_column()
 {
@@ -458,7 +458,7 @@ void vgui_grid_tableau::remove_column()
 }
 
 //------------------------------------------------------------------------------
-//-- Add an empty row to the bottom of the grid.
+//: Add an empty row to the bottom of the grid.
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::add_row()
 {
@@ -476,7 +476,7 @@ void vgui_grid_tableau::add_row()
 }
 
 //------------------------------------------------------------------------------
-//-- Remove last row on the bottom of the grid
+//: Remove last row on the bottom of the grid
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::remove_row()
 {
@@ -493,7 +493,7 @@ void vgui_grid_tableau::remove_row()
 }
 
 //------------------------------------------------------------------------------
-//-- Flip forwards through the list of tableaux.
+//: Flip forwards through the list of tableaux.
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::page_up()
 {
@@ -522,7 +522,7 @@ void vgui_grid_tableau::page_up()
 }
 
 //------------------------------------------------------------------------------
-//-- Flip backwards through the list of tableaux.
+//: Flip backwards through the list of tableaux.
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::page_down()
 {
@@ -551,7 +551,7 @@ void vgui_grid_tableau::page_down()
 }
 
 //------------------------------------------------------------------------------
-//-- Make the current tableau selected by saving the current time.
+//: Make the current tableau selected by saving the current time.
 //   Set the outline color to red.
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::select_current(int time)
@@ -572,7 +572,7 @@ void vgui_grid_tableau::select_current(int time)
 }
 
 //------------------------------------------------------------------------------
-//-- Mark the current table as deselected by setting the time to -1.
+//: Mark the current table as deselected by setting the time to -1.
 //   Set the outline color to white.
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::deselect_current()
@@ -588,7 +588,7 @@ void vgui_grid_tableau::deselect_current()
 }
 
 //------------------------------------------------------------------------------
-//-- Handle any events matching the {vgui_event_condition}s.
+//: Handle any events matching the {vgui_event_condition}s.
 // All other events go to the base class.
 //------------------------------------------------------------------------------
 bool vgui_grid_tableau::handle(const vgui_event &e)

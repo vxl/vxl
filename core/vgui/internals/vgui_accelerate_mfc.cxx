@@ -15,7 +15,7 @@ extern CDC *vgui_mfc_adaptor_global_dc;
 
 static bool debug = false;
 
-// -- Used to overcome switching to GL_BACK when
+//: Used to overcome switching to GL_BACK when
 // acceleration is on. Note that there is nothing wrong with glDrawBuffer(GL_BACK)
 // when we have a single buffer, as it will just get ignored. However,
 // vgui_macro_report errors will print warning messages->inherently slows the
@@ -324,33 +324,33 @@ bool vgui_accelerate_mfc::vgui_glDrawPixels( GLsizei width, GLsizei height, GLen
         DWORD     bmiColors[3];
       } binfo;
       assert(sizeof binfo.bmiColors[0] == 4);
-      binfo.bmiHeader.biSize		= sizeof binfo.bmiHeader;
-      binfo.bmiHeader.biWidth		= b_w;
-      binfo.bmiHeader.biHeight		= -b_h;
-      binfo.bmiHeader.biPlanes		= 1;
+      binfo.bmiHeader.biSize            = sizeof binfo.bmiHeader;
+      binfo.bmiHeader.biWidth           = b_w;
+      binfo.bmiHeader.biHeight          = -b_h;
+      binfo.bmiHeader.biPlanes          = 1;
       if        (format == GL_RGBA && type == GL_UNSIGNED_BYTE) {
-        binfo.bmiHeader.biBitCount	= 32;
-        binfo.bmiHeader.biCompression	= BI_RGB;
+        binfo.bmiHeader.biBitCount      = 32;
+        binfo.bmiHeader.biCompression   = BI_RGB;
       } else if (format == GL_RGB && type == GL_UNSIGNED_BYTE) {
-        binfo.bmiHeader.biBitCount	= 24;
-        binfo.bmiHeader.biCompression	= BI_RGB;
+        binfo.bmiHeader.biBitCount      = 24;
+        binfo.bmiHeader.biCompression   = BI_RGB;
       } else if (format == GL_RGB && type == GL_UNSIGNED_SHORT_5_6_5) {
-        binfo.bmiHeader.biBitCount	= 16;
-        binfo.bmiHeader.biCompression	= BI_RGB;
+        binfo.bmiHeader.biBitCount      = 16;
+        binfo.bmiHeader.biCompression   = BI_RGB;
       } else if (format == GL_RGB && type == GL_UNSIGNED_SHORT_5_5_5_1) {
-        binfo.bmiHeader.biBitCount	= 16;
-        binfo.bmiHeader.biCompression	= BI_BITFIELDS;
+        binfo.bmiHeader.biBitCount      = 16;
+        binfo.bmiHeader.biCompression   = BI_BITFIELDS;
         binfo.bmiColors[0] = 0x001fu;
         binfo.bmiColors[1] = 0x03e0u;
         binfo.bmiColors[2] = 0x7c00u;
       } else {
         vcl_cerr << "vgui_accelerate: unsupported format. Try running --with-no-mfc-acceleration\n";
       }
-      binfo.bmiHeader.biSizeImage	= 0;
-      binfo.bmiHeader.biXPelsPerMeter	= 0;
-      binfo.bmiHeader.biYPelsPerMeter	= 0;
-      binfo.bmiHeader.biClrUsed		= 0;
-      binfo.bmiHeader.biClrImportant	= 0;
+      binfo.bmiHeader.biSizeImage       = 0;
+      binfo.bmiHeader.biXPelsPerMeter   = 0;
+      binfo.bmiHeader.biYPelsPerMeter   = 0;
+      binfo.bmiHeader.biClrUsed         = 0;
+      binfo.bmiHeader.biClrImportant    = 0;
 
       //::SetDIBits(vgui_mfc_adaptor_global_dc->GetSafeHdc(), bitmap, 0, b_h, pixels, &binfo, DIB_RGB_COLORS);
       int n = ::SetDIBits(hdc, bitmap, 0, b_h, pixels, (BITMAPINFO*)&binfo, DIB_RGB_COLORS);

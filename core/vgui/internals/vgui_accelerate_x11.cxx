@@ -286,7 +286,7 @@ bool vgui_accelerate_x11::vgui_glDrawPixels( GLsizei width, GLsizei height,
         if (dest_x_min < window_x_min) {
           int dw = (int)ceil((window_x_min - dest_x_min)/abs_px_x);
           src_x_min += dw;
-          dest_x_min += dw * abs_px_x;	
+          dest_x_min += dw * abs_px_x;
         }
         if (dest_x_max > window_x_max) {
           int dw = (int)ceil((dest_x_max - window_x_max)/abs_px_x);

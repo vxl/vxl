@@ -13,7 +13,7 @@ void vbl_smart_ptr<T>::ref(T *p)
 
 template <class T>
 void vbl_smart_ptr<T>::unref(T *p)
-{ 							
+{
   if (p)
     p->unref();
 }

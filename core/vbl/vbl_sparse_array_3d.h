@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	vbl_sparse_array_3d - Sparse 3D array
-// .LIBRARY	vbl
-// .HEADER	vxl package
-// .INCLUDE	vbl/vbl_sparse_array_3d.h
-// .FILE	vbl_sparse_array_3d.txx
+// .NAME    vbl_sparse_array_3d - Sparse 3D array
+// .LIBRARY vbl
+// .HEADER  vxl package
+// .INCLUDE vbl/vbl_sparse_array_3d.h
+// .FILE    vbl_sparse_array_3d.txx
 //
 // .SECTION Description
 //    vbl_sparse_array_3d is a sparse 3D array allowing space efficient access of
@@ -31,7 +31,7 @@ class vbl_sparse_array_3d {
 public:
   typedef vcl_map<unsigned, T, vcl_less<unsigned> > Map;
 
-// -- Construct a vbl_sparse_array_3d which can hold a maximum of (n1 x n2 x n3) elements.
+//: Construct a vbl_sparse_array_3d which can hold a maximum of (n1 x n2 x n3) elements.
 // Currently (n1*n2*n3) must be representable in 32 bits, or about 1625 per dimension.
 // Powers of two might conceivably give better performance -- they won't be worse.
   vbl_sparse_array_3d(unsigned max_dim_1 = 1024, unsigned max_dim_2 = 1024, unsigned max_dim_3 = 1024);

@@ -8,7 +8,7 @@
 //  \file
 //  \brief Purpose: declare in a central place the list of symbols from netlib
 //  \author fsm@robots.ox.ac.uk
-//  
+//
 //  Modifications
 //  dac (Manchester) 28/03/2001: tidied up documentation
 //
@@ -18,7 +18,7 @@
 //  referenced from vnl-algo. This list was auto-generated, so it is
 //  exhaustive as of 16 March 2000 (10pm)
 //
-//  Note: the declarations are initially entered as "int f()", which 
+//  Note: the declarations are initially entered as "int f()", which
 //  will conflict with the actual prototype. If you get a conflict,
 //  enter the correct prototype in here.
 //
@@ -157,14 +157,14 @@ extern "C" {
   // cholesky
   int dpofa_(doublereal *m, const int& lda, const int& n, int* info);
   int dposl_(const doublereal *a, const int& lda, const int& n, doublereal *b);
-  int dpoco_(doublereal *a, const int& lda, const int& n, 
+  int dpoco_(doublereal *a, const int& lda, const int& n,
       doublereal* rcond, doublereal *z, int *info);
   int dpodi_(doublereal *a, const int& lda, const int& n,
       doublereal* det, const int& job);
 
   // roots of real polynomial
-  void rpoly_(const doublereal* op, int* degree, doublereal *zeror, 
-                doublereal *zeroi, int *fail);
+  void rpoly_(const doublereal* op, int* degree, doublereal *zeror,
+              doublereal *zeroi, int *fail);
 
   //
   int chscdf_();
@@ -173,30 +173,30 @@ extern "C" {
   int cg_();
 
   // lmdif() is used by vnl_levenberg_marquardt
-  int lmdif_(int fcn(int* m,          // I    Number of residuals
-                     int* n,          // I    Number of unknowns
+  int lmdif_(int fcn(int* m,      // I    Number of residuals
+                     int* n,      // I    Number of unknowns
                      doublereal const* x, // I    Solution vector, size n
                      doublereal* fx,      // O    Residual vector f(x)
-                     int* iflag       // IO   0 ==> print, -1 ==> terminate
+                     int* iflag   // IO   0 ==> print, -1 ==> terminate
                      ),
-             int *m,          // I     Number of residuals, must be > #unknowns
-             int *n,          // I     Number of unknowns
+             int *m,              // I     Number of residuals, must be > #unknowns
+             int *n,              // I     Number of unknowns
              doublereal *x,       // IO    Solution vector, size n
              doublereal *fvec,    // W m   Storage for residual vector
              doublereal *ftol,    // I     Termination tolerance on F (sum of squared residuals)
              doublereal *xtol,    // I     Termination tolerance on X (solution vector)
              doublereal *gtol,    // I     Termination tolerance on Grad(F)' * F = 0
-             int    *maxfev,  // I     Termination maximum number of iterations.
+             int    *maxfev,      // I     Termination maximum number of iterations.
              doublereal *epsfcn,  // I     Step length for FD Jacobian
              doublereal *diag,    // I     Multiplicative scale factors for variables
-             int    *mode,    // I     1 => Compute diag, 2 => user has set diag
+             int    *mode,        // I     1 => Compute diag, 2 => user has set diag
              doublereal *factor,  // I     Initial step bound.  Set to 100.
-             int    *nprint,  // I     +ive => print every nprint iters.
-             int    *info,    // O     See switch (info) below
-             int    *nfev,    // O     Number of function evaluations
+             int    *nprint,      // I     +ive => print every nprint iters.
+             int    *info,        // O     See switch (info) below
+             int    *nfev,        // O     Number of function evaluations
              doublereal *fjac,    // O m*n Upper n*n is P'J'JP = R'R
-             int    *ldfjac,  // I     Leading dimension of fdjac -- set to m
-             int    *ipvt,    // O n   Permutation indices P
+             int    *ldfjac,      // I     Leading dimension of fdjac -- set to m
+             int    *ipvt,        // O n   Permutation indices P
              doublereal *qtf,     // O n   Q'*f(x)
              doublereal *wa1,     // W n
              doublereal *wa2,     // W n
@@ -211,20 +211,20 @@ extern "C" {
                       doublereal* fx,      // O    Residual vector f(x), size m
                       doublereal* fJ,      // O    m * n Jacobian f(x)
                       int&,
-                      int* iflag       // I    1 -> calc fx, 2 -> calc fjac
-                      // O    0 ==> print, -1 ==> terminate
+                      int* iflag        // I    1 -> calc fx, 2 -> calc fjac
+                                        // O    0 ==> print, -1 ==> terminate
                       ),
-              int const& m,	// I    Number of residuals
-              int const& n,	// I    Number of unknowns
-              doublereal*    x,	// I    Solution vector, size n
-              doublereal*    fvec,	// O    Residual vector f(x), size m
-              doublereal*    fjac,	// O    m * n Jacobian f(x)
-              int const& ldfjac,	// I    LD of fjac
-              doublereal const& tol,	// I    x/ftol
-              int* info,          // O
-              int* ipvt,		// O length n
-              doublereal * wa,		// I work, length lwa
-              const int& lwa);	// I > 5*n+m
+              int const& m,             // I    Number of residuals
+              int const& n,             // I    Number of unknowns
+              doublereal*    x,         // I    Solution vector, size n
+              doublereal*    fvec,      // O    Residual vector f(x), size m
+              doublereal*    fjac,      // O    m * n Jacobian f(x)
+              int const& ldfjac,        // I    LD of fjac
+              doublereal const& tol,    // I    x/ftol
+              int* info,                // O
+              int* ipvt,                // O length n
+              doublereal * wa,          // I work, length lwa
+              const int& lwa);          // I > 5*n+m
 #undef integer
 #undef real
 #undef doublereal

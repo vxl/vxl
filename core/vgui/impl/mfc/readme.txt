@@ -33,11 +33,11 @@ A program (e.g. xcv) does the following:
                 dispatch event to (ultimately) methods on vgui_mfc_view.
               }
             }
-            
+
      vgui_mfc_doc contains
        base: CDocument
        tableau: vgui_tableau.
-       
+
      vgui_mfc_mainfrm contains
        base: CFrameWnd
        method: vgui_mfc_mainfrm
@@ -51,8 +51,8 @@ A program (e.g. xcv) does the following:
        base: vgui_mfc_adaptor
          base: CView, vgui_adaptor, vgui_adaptor_mixin
          pDC: CDC
-	 method: On/*Events*/
-                
+         method: On/*Events*/
+
 
 
 -----------------------------------------------------------------------------

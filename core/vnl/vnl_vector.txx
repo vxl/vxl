@@ -74,8 +74,8 @@ template<class T>
 vnl_vector<T>::vnl_vector (unsigned len, T const& value)
 {
   vnl_vector_alloc_blah(len);
-  for (unsigned i = 0; i < len; i ++)		// For each elmt
-    this->data[i] = value;			// Assign initial value
+  for (unsigned i = 0; i < len; i ++)           // For each elmt
+    this->data[i] = value;                      // Assign initial value
 }
 
 //: Creates a vector of specified length and initialize first n elements with values. O(n).
@@ -84,9 +84,9 @@ template<class T>
 vnl_vector<T>::vnl_vector (unsigned len, int n, T const values[])
 {
   vnl_vector_alloc_blah(len);
-  if (n > 0) {					// If user specified values
-    for (unsigned i = 0; i < len && n; i++, n--)	// Initialize first n elements
-      this->data[i] = values[i];		// with values
+  if (n > 0) {                                  // If user specified values
+    for (unsigned i = 0; i < len && n; i++, n--)        // Initialize first n elements
+      this->data[i] = values[i];                // with values
   }
 }
 
@@ -101,42 +101,42 @@ vnl_vector<T>::vnl_vector (T const& px, T const& py, T const& pz)
   this->data[2] = pz;
 }
 
-// Vector // Creates a vector of specified length and initialize first n
+#if 0 // commented out
+//: Creates a vector of specified length and initialize first n
 // elements with values in ... O(n).  Arguments in ... can only be pointers,
 // primitive types like int, and NOT OBJECTS passed by value, like vectors,
 // matrices, because constructors must be known and called at compile time!!!
 
-// template<class T> 
-// vnl_vector<T>::vnl_vector (unsigned len, int n, T v00, ...)
-// : num_elmts(len), data(vnl_c_vector<T>::allocate_T(len))
-// {
-//   cerr << "Please use automatic arrays instead variable arguments" << endl;
-//   if (n > 0) {					// If user specified values
-//     va_list argp;				// Declare argument list
-//     va_start (argp, v00);           		// Initialize macro
-//     for (int i = 0; i < len && n; i++, n--)	// For remaining values given
-//       if (i == 0)
-// 	this->data[0] = v00;			// Hack for v00 ...
-//       else
-// 	this->data[i] = va_arg(argp, T);	// Extract and assign
-//     va_end(argp);
-//   }
-// }
-
-#if 0 // commented out
 template<class T>
 vnl_vector<T>::vnl_vector (unsigned len, int n, T v00, ...)
 : num_elmts(len), data(vnl_c_vector<T>::allocate_T(len))
 {
   cerr << "Please use automatic arrays instead variable arguments" << endl;
-  if (n > 0) {					// If user specified values
-    va_list argp;				// Declare argument list
-    va_start (argp, v00);			// Initialize macro
-    for (int i = 0; i < len && n; i++, n--)	// For remaining values given
+  if (n > 0) {                               // If user specified values
+    va_list argp;                            // Declare argument list
+    va_start (argp, v00);                    // Initialize macro
+    for (int i = 0; i < len && n; i++, n--)  // For remaining values given
       if (i == 0)
-        this->data[0] = v00;			// Hack for v00 ...
+     this->data[0] = v00;                    // Hack for v00 ...
       else
-        this->data[i] = va_arg(argp, T);	// Extract and assign
+     this->data[i] = va_arg(argp, T);        // Extract and assign
+    va_end(argp);
+  }
+}
+
+template<class T>
+vnl_vector<T>::vnl_vector (unsigned len, int n, T v00, ...)
+: num_elmts(len), data(vnl_c_vector<T>::allocate_T(len))
+{
+  cerr << "Please use automatic arrays instead variable arguments" << endl;
+  if (n > 0) {                                  // If user specified values
+    va_list argp;                               // Declare argument list
+    va_start (argp, v00);                       // Initialize macro
+    for (int i = 0; i < len && n; i++, n--)     // For remaining values given
+      if (i == 0)
+        this->data[0] = v00;                    // Hack for v00 ...
+      else
+        this->data[i] = va_arg(argp, T);        // Extract and assign
     va_end(argp);
   }
 }
@@ -147,8 +147,8 @@ template<class T>
 vnl_vector<T>::vnl_vector (vnl_vector<T> const& v)
 {
   vnl_vector_alloc_blah(v.num_elmts);
-  for (unsigned i = 0; i < v.num_elmts; i ++)	// For each element in v
-    this->data[i] = v.data[i];			// Copy value
+  for (unsigned i = 0; i < v.num_elmts; i ++)   // For each element in v
+    this->data[i] = v.data[i];                  // Copy value
 }
 
 //: Creates a vector from a block array of data, stored row-wise.
@@ -158,7 +158,7 @@ template<class T>
 vnl_vector<T>::vnl_vector (T const* datablck, unsigned len)
 {
   vnl_vector_alloc_blah(len);
-  for (unsigned i = 0; i < len; ++i)	// Copy data from datablck
+  for (unsigned i = 0; i < len; ++i)    // Copy data from datablck
     this->data[i] = datablck[i];
 }
 
@@ -353,14 +353,14 @@ void vnl_vector<T>::copy_out (T *ptr) const {
 
 template<class T>
 vnl_vector<T>& vnl_vector<T>::operator= (vnl_vector<T> const& rhs) {
-  if (this != &rhs) {				// make sure *this != m
+  if (this != &rhs) {                           // make sure *this != m
     if (this->num_elmts != rhs.num_elmts) {
-      vnl_c_vector<T>::deallocate(this->data, this->num_elmts);	// Free up the data space
-      this->num_elmts = rhs.num_elmts;		// Copy index specification
-      this->data = vnl_c_vector<T>::allocate_T(this->num_elmts);	// Allocate the elements
+      vnl_c_vector<T>::deallocate(this->data, this->num_elmts); // Free up the data space
+      this->num_elmts = rhs.num_elmts;          // Copy index specification
+      this->data = vnl_c_vector<T>::allocate_T(this->num_elmts);        // Allocate the elements
     }
-    for (unsigned i = 0; i < this->num_elmts; i++)	// For each index
-      this->data[i] = rhs.data[i];		// Copy value
+    for (unsigned i = 0; i < this->num_elmts; i++)      // For each index
+      this->data[i] = rhs.data[i];              // Copy value
   }
   return *this;
 }
@@ -369,8 +369,8 @@ vnl_vector<T>& vnl_vector<T>::operator= (vnl_vector<T> const& rhs) {
 
 template<class T>
 vnl_vector<T>& vnl_vector<T>::operator+= (T value) {
-  for (unsigned i = 0; i < this->num_elmts; i++)	// For each index
-    this->data[i] += value;		// Add scalar
+  for (unsigned i = 0; i < this->num_elmts; i++) // For each index
+    this->data[i] += value;             // Add scalar
   return *this;
 }
 
@@ -378,8 +378,8 @@ vnl_vector<T>& vnl_vector<T>::operator+= (T value) {
 
 template<class T>
 vnl_vector<T>& vnl_vector<T>::operator*= (T value) {
-  for (unsigned i = 0; i < this->num_elmts; i++)	// For each index
-    this->data[i] *= value;			// Multiply by scalar
+  for (unsigned i = 0; i < this->num_elmts; i++) // For each index
+    this->data[i] *= value;                     // Multiply by scalar
   return *this;
 }
 
@@ -387,8 +387,8 @@ vnl_vector<T>& vnl_vector<T>::operator*= (T value) {
 
 template<class T>
 vnl_vector<T>& vnl_vector<T>::operator/= (T value) {
-  for (unsigned i = 0; i < this->num_elmts; i++)	// For each index
-    this->data[i] /= value;			// division by scalar
+  for (unsigned i = 0; i < this->num_elmts; i++) // For each index
+    this->data[i] /= value;                     // division by scalar
   return *this;
 }
 
@@ -397,11 +397,11 @@ vnl_vector<T>& vnl_vector<T>::operator/= (T value) {
 
 template<class T>
 vnl_vector<T>& vnl_vector<T>::operator+= (vnl_vector<T> const& rhs) {
-  if (this->num_elmts != rhs.num_elmts)		// Size?
+  if (this->num_elmts != rhs.num_elmts)         // Size?
     vnl_error_vector_dimension ("operator+=",
                            this->num_elmts, rhs.num_elmts);
-  for (unsigned i = 0; i < this->num_elmts; i++)	// For each index
-    this->data[i] += rhs.data[i];		// Add elements
+  for (unsigned i = 0; i < this->num_elmts; i++) // For each index
+    this->data[i] += rhs.data[i];               // Add elements
   return *this;
 }
 
@@ -410,7 +410,7 @@ vnl_vector<T>& vnl_vector<T>::operator+= (vnl_vector<T> const& rhs) {
 
 template<class T>
 vnl_vector<T>& vnl_vector<T>::operator-= (vnl_vector<T> const& rhs) {
-  if (this->num_elmts != rhs.num_elmts)		// Size?
+  if (this->num_elmts != rhs.num_elmts)         // Size?
     vnl_error_vector_dimension ("operator-=",
                            this->num_elmts, rhs.num_elmts);
   for (unsigned i = 0; i < this->num_elmts; i++)
@@ -423,20 +423,20 @@ vnl_vector<T>& vnl_vector<T>::operator-= (vnl_vector<T> const& rhs) {
 
 template<class T>
 vnl_vector<T>& vnl_vector<T>::pre_multiply (vnl_matrix<T> const& m) {
-  if (m.columns() != this->num_elmts)		// dimensions do not match?
+  if (m.columns() != this->num_elmts)           // dimensions do not match?
     vnl_error_vector_dimension ("operator*=",
                            this->num_elmts, m.columns());
-  T* temp= vnl_c_vector<T>::allocate_T(m.rows());		// Temporary
-  vnl_matrix<T>& mm = (vnl_matrix<T>&) m;	// Drop const for get()
-  for (unsigned i = 0; i < m.rows(); i++) {		// For each index
-    temp[i] = (T) 0.0;			// Initialize element value
-    for (unsigned k = 0; k < this->num_elmts; k++)	// Loop over column values
+  T* temp= vnl_c_vector<T>::allocate_T(m.rows()); // Temporary
+  vnl_matrix<T>& mm = (vnl_matrix<T>&) m;       // Drop const for get()
+  for (unsigned i = 0; i < m.rows(); i++) {     // For each index
+    temp[i] = (T) 0.0;                          // Initialize element value
+    for (unsigned k = 0; k < this->num_elmts; k++)      // Loop over column values
       temp[i] += (mm.get(i,k) * this->data[k]); // Multiply
   }
-  vnl_c_vector<T>::deallocate(this->data, this->num_elmts);	// Free up the data space
-  num_elmts = m.rows();				// Set new num_elmts
-  this->data = temp;				// Pointer to new storage
-  return *this;					// Return vector reference
+  vnl_c_vector<T>::deallocate(this->data, this->num_elmts); // Free up the data space
+  num_elmts = m.rows();                         // Set new num_elmts
+  this->data = temp;                            // Pointer to new storage
+  return *this;                                 // Return vector reference
 }
 
 //: Post-multiplies vector with matrix and stores result back in vector.
@@ -444,20 +444,19 @@ vnl_vector<T>& vnl_vector<T>::pre_multiply (vnl_matrix<T> const& m) {
 
 template<class T>
 vnl_vector<T>& vnl_vector<T>::post_multiply (vnl_matrix<T> const& m) {
-  if (this->num_elmts != m.rows())		// dimensions do not match?
-    vnl_error_vector_dimension ("operator*=",
-                           this->num_elmts, m.rows());
-  T* temp= vnl_c_vector<T>::allocate_T(m.columns());		// Temporary
-  vnl_matrix<T>& mm = (vnl_matrix<T>&) m;	// Drop const for get()
-  for (unsigned i = 0; i < m.columns(); i++) {	// For each index
-    temp[i] = (T) 0.0;			// Initialize element value
-    for (unsigned k = 0; k < this->num_elmts; k++)	// Loop over column values
+  if (this->num_elmts != m.rows())              // dimensions do not match?
+    vnl_error_vector_dimension ("operator*=", this->num_elmts, m.rows());
+  T* temp= vnl_c_vector<T>::allocate_T(m.columns()); // Temporary
+  vnl_matrix<T>& mm = (vnl_matrix<T>&) m;       // Drop const for get()
+  for (unsigned i = 0; i < m.columns(); i++) {  // For each index
+    temp[i] = (T) 0.0;                          // Initialize element value
+    for (unsigned k = 0; k < this->num_elmts; k++) // Loop over column values
       temp[i] += (this->data[k] * mm.get(k,i)); // Multiply
   }
-  vnl_c_vector<T>::deallocate(this->data, num_elmts);				// Free up the data space
-  num_elmts = m.columns();			// Set new num_elmts
-  this->data = temp;				// Pointer to new storage
-  return *this;					// Return vector reference
+  vnl_c_vector<T>::deallocate(this->data, num_elmts); // Free up the data space
+  num_elmts = m.columns();                      // Set new num_elmts
+  this->data = temp;                            // Pointer to new storage
+  return *this;                                 // Return vector reference
 }
 
 
@@ -467,7 +466,7 @@ template<class T>
 vnl_vector<T> vnl_vector<T>::operator- () const {
   vnl_vector<T> result(this->num_elmts);
   for (unsigned i = 0; i < this->num_elmts; i++)
-    result.data[i] = - this->data[i];		// negate element
+    result.data[i] = - this->data[i];           // negate element
   return result;
 }
 
@@ -477,15 +476,15 @@ vnl_vector<T> vnl_vector<T>::operator- () const {
 template<class T>
 vnl_vector<T> operator* (vnl_matrix<T> const& m, vnl_vector<T> const& v) {
 
-  if (m.columns() != v.size())		// dimensions do not match?
+  if (m.columns() != v.size())                  // dimensions do not match?
     vnl_error_vector_dimension ("operator*",
                                 m.columns(), v.size());
-  vnl_vector<T> result(m.rows());		// Temporary
-  vnl_matrix<T>& mm = (vnl_matrix<T>&) m;	// Drop const for get()
-  for (unsigned i = 0; i < m.rows(); i++) {		// For each index
-    result[i] = (T) 0.0;		// Initialize element value
-    for (unsigned k = 0; k < v.size(); k++)	// Loop over column values
-      result[i] += (mm.get(i,k) * v[k]); // Multiply
+  vnl_vector<T> result(m.rows());               // Temporary
+  vnl_matrix<T>& mm = (vnl_matrix<T>&) m;       // Drop const for get()
+  for (unsigned i = 0; i < m.rows(); i++) {     // For each index
+    result[i] = (T) 0.0;                        // Initialize element value
+    for (unsigned k = 0; k < v.size(); k++)     // Loop over column values
+      result[i] += (mm.get(i,k) * v[k]);        // Multiply
   }
   return result;
 }
@@ -503,13 +502,13 @@ vnl_vector<T> vnl_vector<T>::operator* (vnl_matrix<T> const&m) const {
   // also avoids the error.
   // template vnl_matrix<double > outer_product (const vnl_vector<double >&,const vnl_vector<dou
 
-  if (num_elmts != m.rows())			// dimensions do not match?
+  if (num_elmts != m.rows())                    // dimensions do not match?
     vnl_error_vector_dimension ("operator*", num_elmts, m.rows());
-  vnl_vector<T> result(m.columns());	// Temporary
-  vnl_matrix<T>& mm = (vnl_matrix<T>&) m;	// Drop const for get()
-  for (unsigned i = 0; i < m.columns(); i++) {	// For each index
-    result.data[i] = (T) 0.0;		// Initialize element value
-    for (unsigned k = 0; k < num_elmts; k++)	// Loop over column values
+  vnl_vector<T> result(m.columns());            // Temporary
+  vnl_matrix<T>& mm = (vnl_matrix<T>&) m;       // Drop const for get()
+  for (unsigned i = 0; i < m.columns(); i++) {  // For each index
+    result.data[i] = (T) 0.0;                   // Initialize element value
+    for (unsigned k = 0; k < num_elmts; k++)    // Loop over column values
       result.data[i] += (data[k] * mm.get(k,i)); // Multiply
   }
   return result;
@@ -629,7 +628,7 @@ template<class T>
 vnl_matrix<T> outer_product (vnl_vector<T> const& v1,
                              vnl_vector<T> const& v2) {
   vnl_matrix<T> out(v1.size(), v2.size());
-  for (unsigned i = 0; i < out.rows(); i++)		// v1.column() * v2.row()
+  for (unsigned i = 0; i < out.rows(); i++)             // v1.column() * v2.row()
     for (unsigned j = 0; j < out.columns(); j++)
       out[i][j] = v1[i] * v2[j];
   return out;
@@ -744,13 +743,13 @@ bool vnl_vector<T>::operator_eq (vnl_vector<T> const& rhs) const {
   if (this == &rhs)                               // same object => equal.
     return true;
 
-  if (this->size() != rhs.size())	          // Size different ?
-    return false;				  // Then not equal.
-  for (unsigned i = 0; i < size(); i++)		  // For each index
-    if (!(this->data[i] == rhs.data[i]))             // Element different ?
-      return false;				  // Then not equal.
+  if (this->size() != rhs.size())                 // Size different ?
+    return false;                                 // Then not equal.
+  for (unsigned i = 0; i < size(); i++)           // For each index
+    if (!(this->data[i] == rhs.data[i]))          // Element different ?
+      return false;                               // Then not equal.
 
-  return true;					  // Else same; return true.
+  return true;                                    // Else same; return true.
 }
 
 //--------------------------------------------------------------------------------
@@ -809,5 +808,5 @@ template T cross_2d(vnl_vector<T > const &, vnl_vector<T > const &); \
 template vnl_vector<T > cross_3d(vnl_vector<T > const &, vnl_vector<T > const &); \
 /* I/O */ \
 template vcl_ostream & operator<<(vcl_ostream &, vnl_vector<T > const &); \
-template vcl_istream & operator>>(vcl_istream &, vnl_vector<T >       &); \
-;
+template vcl_istream & operator>>(vcl_istream &, vnl_vector<T >       &)
+

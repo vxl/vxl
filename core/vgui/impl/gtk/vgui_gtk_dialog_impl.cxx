@@ -40,7 +40,7 @@ GtkWidget *color_entry;// Same for colors.
 vcl_string orig_color; // For when color chooser is cancelled.
 
 //--------------------------------------------------------------------------------
-// -- Constructor
+//: Constructor
 vgui_gtk_dialog_impl::vgui_gtk_dialog_impl(const char* name)
   : vgui_dialog_impl(name)
 {
@@ -49,7 +49,7 @@ vgui_gtk_dialog_impl::vgui_gtk_dialog_impl(const char* name)
 
 
 //--------------------------------------------------------------------------------
-// -- Destructor
+//: Destructor
 vgui_gtk_dialog_impl::~vgui_gtk_dialog_impl() {
 }
 
@@ -61,7 +61,7 @@ struct vgui_gtk_dialog_impl_choice {
 
 
 //--------------------------------------------------------------------------------
-// -- Make a choice widget
+//: Make a choice widget
 void* vgui_gtk_dialog_impl::choice_field_widget(const char* /*txt*/,
                                           const vcl_vector<vcl_string>& labels, int& val) {
 
@@ -104,7 +104,7 @@ void choose_cb(GtkWidget* /*widget*/,
 
 
 //--------------------------------------------------------------------------------
-//-- Changes the modality of the dialog.  True makes the dialog modal (i.e. the
+//: Changes the modality of the dialog.  True makes the dialog modal (i.e. the
 // dialog 'grabs' all events), this is the default.  False makes the dialog non-modal.
 void vgui_gtk_dialog_impl::modal(const bool m)
 {
@@ -123,18 +123,20 @@ void file_ok_sel(GtkWidget* /*w*/,
 
 //--------------------------------------------------------------------------------
 
+#if 0 // This static function is not used
 //: Display a file browser
 static void filebrowser_selection_class_init(GtkFileSelectionClass *klass)
 {
-  GtkObjectClass *object_class;
-
-  object_class = (GtkObjectClass*) klass;
+  GtkObjectClass *object_class = (GtkObjectClass*) klass;
 
   //parent_class = gtk_type_class (GTK_TYPE_WIDGET);
 
   object_class->destroy = NULL;
 }
+#endif
+
 extern void gtk_file_selection_init(GtkFileSelectionClass *klass);
+
 void browse_files(GtkWidget* /*w*/, gpointer data)
 {
   file_entry = (GtkWidget*)data;

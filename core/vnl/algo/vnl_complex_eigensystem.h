@@ -42,11 +42,11 @@ class vnl_complex_eigensystem {
 public:
 
   vnl_complex_eigensystem(const vnl_matrix<double> &A_real,
-          const vnl_matrix<double> &A_imag,
-		      bool right=true,bool left=false);
+                          const vnl_matrix<double> &A_imag,
+                          bool right=true, bool left=false);
 
   vnl_complex_eigensystem(const vnl_matrix<vcl_complex<double> > &A,
-                     bool right=true,bool left=false);
+                          bool right=true, bool left=false);
 
   ~vnl_complex_eigensystem();
 
@@ -58,9 +58,9 @@ public:
 
   // convenience methods
   vcl_complex<double> eigen_value(unsigned i) const { return W[i]; }
-  vnl_vector<vcl_complex<double> > left_eigen_vector(unsigned i) 
+  vnl_vector<vcl_complex<double> > left_eigen_vector(unsigned i)
       const { return L.get_row(i); }
-  vnl_vector<vcl_complex<double> > right_eigen_vector(unsigned i) 
+  vnl_vector<vcl_complex<double> > right_eigen_vector(unsigned i)
       const { return R.get_row(i); }
 
 private:

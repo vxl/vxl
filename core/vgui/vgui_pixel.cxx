@@ -31,24 +31,25 @@ static bool dummy = tunit_init();
 //            the 40 conversions.  It's not a template, because the
 //            bodies are different in each one.
 
-//
-//template <class S, class D>
-//void vgui_pixel_convert_span(S const *src, D *dst, unsigned size) {
-//  for (unsigned i=0; i<size; ++i) {
-//    copy_r(src+i, dst+i);
-//    copy_g(src+i, dst+i);
-//    copy_b(src+i, dst+i);
-//    copy_a(src+i, dst+i);
-//  }
-//}
-//#define VGUI_PIXEL_CONVERT_SPAN_INSTANTIATE(S, D) \ 
-//template void vgui_pixel_convert_span(S const *, D *, unsigned);
+#if 0 // commented out
+template <class S, class D>
+void vgui_pixel_convert_span(S const *src, D *dst, unsigned size) {
+  for (unsigned i=0; i<size; ++i) {
+    copy_r(src+i, dst+i);
+    copy_g(src+i, dst+i);
+    copy_b(src+i, dst+i);
+    copy_a(src+i, dst+i);
+  }
+}
+#define VGUI_PIXEL_CONVERT_SPAN_INSTANTIATE(S, D) \
+template void vgui_pixel_convert_span(S const *, D *, unsigned);
+#endif
 
 //: Set an int of unknown size to all-bits-one
 #define SET_FF(x) x = 0; x = ~x
 
 //: Clamp float to 0..255
-static inline 
+static inline
 unsigned int clamp(float f) {
   if (f > 255) return 255u;
   if (f < 0) return 0u;

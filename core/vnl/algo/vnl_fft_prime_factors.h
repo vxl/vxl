@@ -2,11 +2,11 @@
 #define vnl_fft_prime_factors_h_
 // -*- c++ -*-
 
-// .NAME	vnl_fft_prime_factors
-// .LIBRARY	vnl-algo
-// .HEADER	vxl Package
-// .INCLUDE	vnl/algo/vnl_fft_prime_factors.h
-// .FILE	vnl_fft_prime_factors.cxx
+// .NAME    vnl_fft_prime_factors
+// .LIBRARY vnl-algo
+// .HEADER  vxl Package
+// .INCLUDE vnl/algo/vnl_fft_prime_factors.h
+// .FILE    vnl_fft_prime_factors.cxx
 //
 // .SECTION Description
 // Helper class which hold prime factor information used
@@ -25,37 +25,37 @@ export template <class T>
 struct vnl_fft_prime_factors
 {
   vnl_fft_prime_factors();
-  
+
   //: constructor takes the size of the signal.
   vnl_fft_prime_factors(int N) { construct(N); }
-  
+
   ~vnl_fft_prime_factors () { destruct(); }
-  
+
   //: array of twiddle factors.
   T const *trigs () const { return trigs_; }
-  
+
   //: number which was factorized
   int number () const { return number_; }
-  
+
   //: exponents P, Q, R.
   int const *pqr () const { return pqr_; }
-  
+
   operator bool () const { return trigs_ && info_ >= 0; }
-  
+
   void resize(int N) {
     destruct();
     construct(N);
   }
-  
+
 private:
   T *trigs_;
   int number_;   // the number that is being split into prime-facs
   int pqr_[3];   // store P, Q and R
   int info_;
-  
+
   void construct(int N);
   void destruct();
-  
+
   // disallow copying
   vnl_fft_prime_factors (vnl_fft_prime_factors<T> const &) { }
   void operator= (vnl_fft_prime_factors<T> const &) { }

@@ -154,11 +154,11 @@ void test_int () {
         ((m1 = m.transpose()),
          (m1(0,0)==0 && m1(0,1)==2 && m1(1,0)==-2 && m1(1,1)==0)), true);
 //  TEST ("m.abs()",
-//	  ((m1 = m.abs()),
-//	   (m1(0,0)==0 && m1(0,1)==2 && m1(1,0)==2 && m1(1,1)==0)), true);
+//        ((m1 = m.abs()),
+//         (m1(0,0)==0 && m1(0,1)==2 && m1(1,0)==2 && m1(1,1)==0)), true);
 //  TEST ("m.sign()",
-//	  ((m1 = m.sign()),
-//	   (m1(0,0)==0 && m1(0,1)==-1 && m1(1,0)==1 && m1(1,1)==0)), true);
+//        ((m1 = m.sign()),
+//         (m1(0,0)==0 && m1(0,1)==-1 && m1(1,0)==1 && m1(1,1)==0)), true);
   TEST ("element_product(m,m)",
         ((m1 = element_product(m,m)),
          (m1(0,0)==0 && m1(0,1)==4 && m1(1,0)==4 && m1(1,1)==0)), true);
@@ -167,9 +167,9 @@ void test_int () {
          (m1 = element_quotient(m,m2)),
          (m1(0,0)==0 && m1(0,1)==-1 && m1(1,0)==1 && m1(1,1)==0)), true);
 //  TEST ("m.update(m.abs())",
-//	  ((m1 = m.abs()),
-//	   (m2.update(m1)),
-//	   (m2==m1)), true);
+//        ((m1 = m.abs()),
+//         (m2.update(m1)),
+//         (m2==m1)), true);
   TEST ("m.extract(1,1,1,1)",
         ((m1 = m.extract(1,1,1,1)),
          (m1.rows()==1 && m1.columns()==1 && m1(0,0)==m(1,1))), true);
@@ -294,12 +294,14 @@ void test_float () {
   TEST ("m.transpose()",
         ((m1 = m.transpose()),
          (m1(0,0)==0 && m1(0,1)==2 && m1(1,0)==-2 && m1(1,1)==0)), true);
-//  TEST ("m.abs()",
-//	  ((m1 = m.abs()),
-//	   (m1(0,0)==0 && m1(0,1)==2 && m1(1,0)==2 && m1(1,1)==0)), true);
-//  TEST ("m.sign()",
-//	  ((m1 = m.sign()),
-//	   (m1(0,0)==0 && m1(0,1)==-1 && m1(1,0)==1 && m1(1,1)==0)), true);
+#if 0
+  TEST ("m.abs()",
+        ((m1 = m.abs()),
+         (m1(0,0)==0 && m1(0,1)==2 && m1(1,0)==2 && m1(1,1)==0)), true);
+  TEST ("m.sign()",
+        ((m1 = m.sign()),
+         (m1(0,0)==0 && m1(0,1)==-1 && m1(1,0)==1 && m1(1,1)==0)), true);
+#endif
   TEST ("element_product(m,m)",
         ((m1 = element_product(m,m)),
          (m1(0,0)==0 && m1(0,1)==4 && m1(1,0)==4 && m1(1,1)==0)), true);
@@ -307,10 +309,12 @@ void test_float () {
         ((m2 = 2),
          (m1 = element_quotient(m,m2)),
          (m1(0,0)==0 && m1(0,1)==-1 && m1(1,0)==1 && m1(1,1)==0)), true);
-//  TEST ("m.update(m.abs())",
-//	  ((m1 = m.abs()),
-//	   (m2.update(m1)),
-//	   (m2==m1)), true);
+#if 0
+  TEST ("m.update(m.abs())",
+        ((m1 = m.abs()),
+         (m2.update(m1)),
+         (m2==m1)), true);
+#endif
   TEST ("m.extract(1,1,1,1)",
         ((m1 = m.extract(1,1,1,1)),
          (m1.rows()==1 && m1.columns()==1 && m1(0,0)==m(1,1))), true);
@@ -352,7 +356,6 @@ void test_float () {
 bool float_fuzz_equal2 (const float& d1, const float& d2) {
   return ((fabs(d1 - d2) < 1.0e-4) ? true : false);
 }
-
 
 
 void test_double () {
@@ -418,8 +421,8 @@ void test_double () {
 }
 
 
-void test_leak () {				// use top4.1 to watch memory usage.
-  for (;;) {					// remember to kill process.
+void test_leak () {   // use top4.1 to watch memory usage.
+  for (;;) {          // remember to kill process.
     test_int();
     test_float();
     test_double();

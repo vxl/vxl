@@ -201,7 +201,7 @@ vnl_vector<T> vnl_qr<T>::solve(const vnl_vector<T>& b) const
   return x;
 }
 
-//: Return residual vector d of M x = b -> d = Q'b 
+//: Return residual vector d of M x = b -> d = Q'b
 template <class T>
 vnl_vector<T> vnl_qr<T>::QtB(const vnl_vector<T>& b) const
 {
@@ -218,11 +218,11 @@ vnl_vector<T> vnl_qr<T>::QtB(const vnl_vector<T>& b) const
                    n, n, p,
                    qraux_.data_block(),
                    b_data,
-                   0,			// A: Qb
-                   QtB.data_block(),	// B: Q'b
-                   0,			// C: x
-                   0,			// D: residual
-                   0,			// E: Ax
+                   0,                   // A: Qb
+                   QtB.data_block(),    // B: Q'b
+                   0,                   // C: x
+                   0,                   // D: residual
+                   0,                   // E: Ax
                    JOB,
                    &info);
 

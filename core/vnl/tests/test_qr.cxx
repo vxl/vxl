@@ -18,18 +18,18 @@ void test_matrix(char const* name, const vnl_matrix<double>& A, double det = 0)
 
   if (det)
     AssertNear(n+ "Determinant", qr.determinant(), det, 1e-10);
-} 
+}
 
 void old_test()
 {
   double A_data[] = {
-    89,	   21,	  27,
-    62,	   71,	   0,
-    84,	   13,	  41,
-    16,	    9,	   3,
+    89,    21,    27,
+    62,    71,     0,
+    84,    13,    41,
+    16,     9,     3,
   };
   vnl_matrix<double> A(A_data, 4,3);
-  
+
   test_matrix("A", A);
   test_matrix("AT", A.transpose());
 
@@ -41,24 +41,24 @@ void old_test()
   double b_data[] = {
     68, 39, 39, 50
   };
-  
+
   vnl_vector<double> b(b_data, 4);
   vnl_qr<double> qr(A);
 
   vnl_matlab_print(vcl_cout, qr.Q(), "Q");
   vnl_matlab_print(vcl_cout, qr.R(), "R");
-  
+
   vnl_vector<double> x = qr.solve(b);
-  
+
   double res = (A * x - b).magnitude();
 
   AssertNear("Solve residual", res, 37.8841, 1e-3);
 
   {
     double S_data[] = {
-      89,	   21,	  27,
-      62,	   71,	   0,
-      84,	   13,	  41,
+      89,          21,    27,
+      62,          71,     0,
+      84,          13,    41,
     };
     vnl_matrix<double> S(S_data, 3,3);
     test_matrix("S", S, 66431);
@@ -71,34 +71,34 @@ void old_test()
 
 template <class T> class traits;
 
-VCL_DEFINE_SPECIALIZATION 
+VCL_DEFINE_SPECIALIZATION
 class traits<double> {
 public:
   static double eps() { return 1e-12; }
   static double rand(double const &) { return 2*double(::rand())/double(RAND_MAX) - 1; }
 };
 
-VCL_DEFINE_SPECIALIZATION 
+VCL_DEFINE_SPECIALIZATION
 class traits<float> {
 public:
   static float eps() { return 1e-5; }
   static float rand(float const &) { return float( traits<double>::rand(0) ); }
 };
 
-VCL_DEFINE_SPECIALIZATION 
+VCL_DEFINE_SPECIALIZATION
 class traits<vcl_complex<float> > {
 public:
   static float eps() { return traits<float>::eps(); }
-  static vcl_complex<float> rand(vcl_complex<float> const &) { 
+  static vcl_complex<float> rand(vcl_complex<float> const &) {
     return vcl_complex<float>(traits<float>::rand(0), traits<float>::rand(0));
   }
 };
 
-VCL_DEFINE_SPECIALIZATION 
+VCL_DEFINE_SPECIALIZATION
 class traits<vcl_complex<double> > {
 public:
   static double eps() { return traits<double>::eps(); }
-  static vcl_complex<double> rand(vcl_complex<double> const &) { 
+  static vcl_complex<double> rand(vcl_complex<double> const &) {
     return vcl_complex<double>(traits<double>::rand(0), traits<double>::rand(0));
   }
 };
@@ -107,7 +107,7 @@ template <class T>
 void new_test(T *) {
   unsigned m = 4;
   unsigned n = 5;
-  
+
   vnl_matrix<T> A(m, n);
   A = A.apply(traits<T>::rand);
   vnl_matlab_print(vcl_cout, A, "A");
@@ -124,10 +124,10 @@ void new_test(T *) {
   vnl_matlab_print(vcl_cout, Q, "Q");
   vnl_matlab_print(vcl_cout, R, "R");
   vnl_matlab_print(vcl_cout, x, "x");
-  
+
   vnl_matrix<T> QR(Q * R);
   vnl_matlab_print(vcl_cout, QR, "QR");
-  
+
   vnl_matrix<T> I(m, m); I.set_identity();
   vnl_test_assert_near("||Q'Q - 1||", (Q.conjugate_transpose()*Q - I).fro_norm(), 0, traits<T>::eps());
   vnl_test_assert_near("||A - QR||", (A - QR).fro_norm(), 0, traits<T>::eps());

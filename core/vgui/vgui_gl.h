@@ -6,12 +6,13 @@
 #ifdef VCL_WIN32
 // fix windows gl.h :
 # include <windows.h>
-# pragma warning (disable:4244)		/* disable bogus conversion warnings */
+# pragma warning (disable:4244) // disable bogus conversion warnings
 # include <GL/gl.h>
 # undef min
 # undef max
 #define glDrawBuffer mb_glDrawBufferWrapper
-void mb_glDrawBufferWrapper(GLuint); // -- Defined in vgui_accelerate_mfc.cxx
+//: Defined in vgui_accelerate_mfc.cxx
+void mb_glDrawBufferWrapper(GLuint);
 #else
 // no need to fix :
 # include <GL/gl.h>
@@ -24,7 +25,7 @@ void mb_glDrawBufferWrapper(GLuint); // -- Defined in vgui_accelerate_mfc.cxx
 // capes - Some defines for OpenGL < v1.2 implementations
 // The numbers are those in the GL 1.2 spec.
 // These are only used in mapping between GL formats and
-// accelerated renderers, so no harm done... 
+// accelerated renderers, so no harm done...
 #ifndef GL_ABGR_EXT
 #  define GL_ABGR_EXT 0x8000
 #endif
@@ -32,7 +33,7 @@ void mb_glDrawBufferWrapper(GLuint); // -- Defined in vgui_accelerate_mfc.cxx
 #  define GL_BGR 0x80E0
 #endif
 #ifndef GL_BGRA
-#  define GL_BGRA 0x80E1 
+#  define GL_BGRA 0x80E1
 #endif
 #ifndef GL_UNSIGNED_SHORT_5_6_5
 #  define GL_UNSIGNED_SHORT_5_6_5 0x8363
@@ -45,5 +46,5 @@ void mb_glDrawBufferWrapper(GLuint); // -- Defined in vgui_accelerate_mfc.cxx
 #ifndef GL_UNSIGNED_SHORT_1_5_5_5_REV
 #  define GL_UNSIGNED_SHORT_1_5_5_5_REV  0x8066
 #endif
-   
+
 #endif // vgui_gl_h

@@ -28,18 +28,18 @@
 
 /*
 #
-# FILE NAME:	cr_image.c
+# FILE NAME:    cr_image.c
 #
-# AUTHORS:	Ron E. Neher
+# AUTHORS:      Ron E. Neher
 #
-# DATE:		3/23/89
+# DATE:         3/23/89
 #
-# DESCRIPTION:	Create a generic image
+# DESCRIPTION:  Create a generic image
 #
 # MODIFICATIONS:  Added "map_scheme" to the parameter list.  The image's
-#		  map_scheme was hardwired to VFF_MS_NONE which meant that
-#		  no map space was being allocated.
-#			(Mark Young & John Rasure 7/23/89)
+#                 map_scheme was hardwired to VFF_MS_NONE which meant that
+#                 no map space was being allocated.
+#                       (Mark Young & John Rasure 7/23/89)
 #
 */
 
@@ -60,19 +60,19 @@ int vil_viff_imagesize(struct vil_viff_xvimage *image,int *dsize, int *dcount, i
 *
 *     PURPOSE: Create a generic image
 *
-*       INPUT:	col_size -- the size of a column
-*		row_size -- the size of a row
-*		data_storage_type -- the VFF_TYP_* define of image
-*		num_of_images -- # of images pointed to by imagedata
-*		num_data_bands -- # of bands/pixel, /image or dim vec data
-*		comment -- description of image
-*		map_row_size -- # of columns in map array
-*		map_col_size -- # of rows in map array
-*		map_storage_type -- Storage type of cells in the maps
-*		location_type -- implied or explicit location data
-*		location_dim -- explicit locations can be of any dimension
+*       INPUT:  col_size -- the size of a column
+*               row_size -- the size of a row
+*               data_storage_type -- the VFF_TYP_* define of image
+*               num_of_images -- # of images pointed to by imagedata
+*               num_data_bands -- # of bands/pixel, /image or dim vec data
+*               comment -- description of image
+*               map_row_size -- # of columns in map array
+*               map_col_size -- # of rows in map array
+*               map_storage_type -- Storage type of cells in the maps
+*               location_type -- implied or explicit location data
+*               location_dim -- explicit locations can be of any dimension
 *
-*      OUTPUT:	1.  returns a pointer to a vil_viff_xvimage with image defined
+*      OUTPUT:  1.  returns a pointer to a vil_viff_xvimage with image defined
 *
 * CALLED FROM:
 *
@@ -85,7 +85,7 @@ vil_viff_createimage(col_size, row_size, data_storage_type, num_of_images,
                 num_data_bands, comment, map_row_size, map_col_size,
                 map_scheme, map_storage_type, location_type, location_dim)
 unsigned
-long	col_size,
+long    col_size,
         row_size,
         data_storage_type,
         num_of_images,
@@ -96,21 +96,21 @@ long	col_size,
         map_storage_type,
         location_type,
         location_dim;
-char	*comment;
+char    *comment;
 {
 struct
 vil_viff_xvimage *image;
-char	*maps,
+char    *maps,
         *imagedata,
         tmp_comment[LENGTH];
-float	*location;
-size_t	cstrlen;
-int	image_data_size_bytes,		/* # data bytes */
-        image_data_count_pixels,	/* # data pixels */
-        map_size_bytes,			/* # map bytes */
-        map_count_cells,		/* # map cells */
-        location_size_bytes,		/* # location bytes */
-        location_count_objects;		/* # location objs */
+float   *location;
+size_t  cstrlen;
+int     image_data_size_bytes,          /* # data bytes */
+        image_data_count_pixels,        /* # data pixels */
+        map_size_bytes,                 /* # map bytes */
+        map_count_cells,                /* # map cells */
+        location_size_bytes,            /* # location bytes */
+        location_count_objects;         /* # location objs */
 
 /* malloc room for the vil_viff_xvimage structure */
 
@@ -173,14 +173,14 @@ int	image_data_size_bytes,		/* # data bytes */
 
 /* get the sizes for the image data, map data, and location data */
 
-    if (! vil_viff_imagesize(image,			/* vil_viff_xvimage */
-                        &image_data_size_bytes,	/* # data bytes */
-                        &image_data_count_pixels,	/* # data pixels */
-                        &map_size_bytes,		/* # map bytes */
-                        &map_count_cells,		/* # map cells */
-                        &location_size_bytes,	/* # location bytes */
-                        &location_count_objects	/* # location objs */
-                        ))
+    if (! vil_viff_imagesize(image,                     /* vil_viff_xvimage */
+                             &image_data_size_bytes,    /* # data bytes */
+                             &image_data_count_pixels,  /* # data pixels */
+                             &map_size_bytes,           /* # map bytes */
+                             &map_count_cells,          /* # map cells */
+                             &location_size_bytes,      /* # location bytes */
+                             &location_count_objects    /* # location objs */
+                            ))
     {
         fprintf(stderr, "vil_viff_createimage: Uninterpretable image \
 specificationa\n");
@@ -255,10 +255,10 @@ specificationa\n");
 *      PURPOSE: This routine frees an khoros xvimage structure.
 *
 *        INPUT: image --  a pointer to an khoros xvimage structure that
-*			  contains the image structure to be freed.
+*                         contains the image structure to be freed.
 *
 *       OUTPUT: (none)  since all we are doing is freeing as much of
-*		a image structure as we can.
+*               a image structure as we can.
 *
 *    CALLED BY: any routine that wishes to free an xvimage structure
 *

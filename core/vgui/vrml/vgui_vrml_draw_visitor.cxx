@@ -55,8 +55,6 @@
 #include "vgui_vrml_texture_map.h"
 
 
-
-
 static inline void GlVertex(const point3D& p)
 {
   glVertex3f(p.x, p.y, p.z);
@@ -76,11 +74,9 @@ static vgui_vrml_texture_map* gettexture(char const* filename)
   if (p != texturemaps.end())
     return (*p).second;
 
-
   vgui_vrml_texture_map* newmap = vgui_vrml_texture_map::create(filename);
 
   return texturemaps[filename] = newmap;
-
 }
 #else
 #include <vcl_cstdlib.h>
@@ -118,28 +114,28 @@ vgui_vrml_draw_visitor::~vgui_vrml_draw_visitor() {
 // GROUPS
 
 bool vgui_vrml_draw_visitor::Visit(QvSeparator* node) {
-  // Mask Bit				  Attribute Group
-  // GL_ACCUM_BUFFER_BIT			  accum-buffer
-  // GL_ALL_ATTRIB_BITS                           --
-  // GL_COLOR_BUFFER_BIT			  color-buffer
-  // GL_CURRENT_BIT				  current
-  // GL_DEPTH_BUFFER_BIT			  depth-buffer
-  // GL_ENABLE_BIT				  enable
-  // GL_EVAL_BIT				  eval
-  // GL_FOG_BIT                                   fog
-  // GL_HINT_BIT				  hint
-  // GL_LIGHTING_BIT				  lighting
-  // GL_LINE_BIT				  line
-  // GL_LIST_BIT				  list
-  // GL_PIXEL_MODE_BIT                            pixel
-  // GL_POINT_BIT				  point
-  // GL_POLYGON_BIT				  polygon
-  // GL_POLYGON_STIPPLE_BIT			  polygon-stipple
-  // GL_SCISSOR_BIT				  scissor
-  // GL_STENCIL_BUFFER_BIT			  stencil-buffer
-  // GL_TEXTURE_BIT				  texture
-  // GL_TRANSFORM_BIT	                          transform
-  // GL_VIEWPORT_BIT				  viewport
+  // Mask Bit                 Attribute Group
+  // GL_ACCUM_BUFFER_BIT      accum-buffer
+  // GL_ALL_ATTRIB_BITS       --
+  // GL_COLOR_BUFFER_BIT      color-buffer
+  // GL_CURRENT_BIT           current
+  // GL_DEPTH_BUFFER_BIT      depth-buffer
+  // GL_ENABLE_BIT            enable
+  // GL_EVAL_BIT              eval
+  // GL_FOG_BIT               fog
+  // GL_HINT_BIT              hint
+  // GL_LIGHTING_BIT          lighting
+  // GL_LINE_BIT              line
+  // GL_LIST_BIT              list
+  // GL_PIXEL_MODE_BIT        pixel
+  // GL_POINT_BIT             point
+  // GL_POLYGON_BIT           polygon
+  // GL_POLYGON_STIPPLE_BIT   polygon-stipple
+  // GL_SCISSOR_BIT           scissor
+  // GL_STENCIL_BUFFER_BIT    stencil-buffer
+  // GL_TEXTURE_BIT           texture
+  // GL_TRANSFORM_BIT         transform
+  // GL_VIEWPORT_BIT          viewport
   glPushAttrib(GL_CURRENT_BIT | GL_LIGHTING_BIT | GL_TEXTURE_BIT);
   glPushMatrix();
   QvVisitor::Visit(node);
@@ -157,7 +153,6 @@ bool vgui_vrml_draw_visitor::Visit(QvTransformSeparator* node) {
 
 #define QUADRIC_COMPLEXITY 24
 
-
 bool vgui_vrml_draw_visitor::Visit(QvShapeHints* /*node*/) {
   if (gl_mode == wireframe)
     return false;
@@ -172,19 +167,19 @@ bool vgui_vrml_draw_visitor::Visit(QvCube* node) {
 
   static GLfloat normals[6][3] = {
     {-1.0, 0.0, 0.0},
-      {0.0, 1.0, 0.0},
-        {1.0, 0.0, 0.0},
-          {0.0, -1.0, 0.0},
-            {0.0, 0.0, 1.0},
-              {0.0, 0.0, -1.0}
+    {0.0, 1.0, 0.0},
+    {1.0, 0.0, 0.0},
+    {0.0, -1.0, 0.0},
+    {0.0, 0.0, 1.0},
+    {0.0, 0.0, -1.0}
   };
   static GLint faces[6][4] = {
     {0, 1, 2, 3},
-      {3, 2, 6, 7},
-        {7, 6, 5, 4},
-          {4, 5, 1, 0},
-            {5, 6, 2, 1},
-              {7, 4, 0, 3}
+    {3, 2, 6, 7},
+    {7, 6, 5, 4},
+    {4, 5, 1, 0},
+    {5, 6, 2, 1},
+    {7, 4, 0, 3}
   };
 
   GLfloat vertices[8][3];
@@ -238,7 +233,6 @@ bool vgui_vrml_draw_visitor::Visit(QvCylinder* node) {
 
   glTranslatef(0,0,-h/2);
 
-
   if (gl_mode == wireframe)
     gluQuadricDrawStyle(quadric, GLenum(GLU_LINE));
   else
@@ -280,7 +274,6 @@ bool vgui_vrml_draw_visitor::Visit(QvCone* node) {
     gluQuadricDrawStyle(quadric, GLenum(GLU_LINE));
   else
     gluQuadricDrawStyle(quadric, GLenum(GLU_FILL));
-
 
   if (parts && (QvCone::SIDES | QvCone::ALL))
     gluCylinder(quadric, 0, r, h, QUADRIC_COMPLEXITY, 2);
@@ -340,10 +333,10 @@ bool vgui_vrml_draw_visitor::Visit(QvIndexedFaceSet* node) {
   //int numvertinds_;                   // no. of vertex indices
   //const int* vertindices_;            // vertex index list
   // Fields:
-  //     QvMFLong		coordIndex;		// Coordinate indices
-  //     QvMFLong		materialIndex;		// Material indices
-  //     QvMFLong		normalIndex;		// Surface normal indices
-  //     QvMFLong		textureCoordIndex;	// Texture Coordinate indices
+  //     QvMFLong               coordIndex;             // Coordinate indices
+  //     QvMFLong               materialIndex;          // Material indices
+  //     QvMFLong               normalIndex;            // Surface normal indices
+  //     QvMFLong               textureCoordIndex;      // Texture Coordinate indices
 
   const point3D* vertexlist = node->vertexlist_;   // vertex data
   int numvertinds = node->numvertinds_;            // no. of vertex indices
@@ -473,12 +466,12 @@ bool vgui_vrml_draw_visitor::Visit(QvTranslation* node) {
 bool vgui_vrml_draw_visitor::Visit(QvMaterial* node) {
 
   //// Fields
-  //QvMFColor		ambientColor;	// Ambient color
-  //QvMFColor		diffuseColor;	// Diffuse color
-  //QvMFColor		specularColor;	// Specular color
-  //QvMFColor		emissiveColor;	// Emissive color
-  //QvMFFloat		shininess;	// Shininess
-  //QvMFFloat		transparency;	// Transparency
+  //QvMFColor           ambientColor;   // Ambient color
+  //QvMFColor           diffuseColor;   // Diffuse color
+  //QvMFColor           specularColor;  // Specular color
+  //QvMFColor           emissiveColor;  // Emissive color
+  //QvMFFloat           shininess;      // Shininess
+  //QvMFFloat           transparency;   // Transparency
 
   glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, node->ambientColor.values);
   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, node->diffuseColor.values);
@@ -493,21 +486,21 @@ bool vgui_vrml_draw_visitor::Visit(QvMaterial* node) {
 
 bool vgui_vrml_draw_visitor::Visit(QvTexture2* node)
 {
-  //    enum Wrap {			// Texture wrap type
-  //	  REPEAT,			// Repeats texture outside 0-1
-  //					//  texture coordinate range
-  //	  CLAMP				// Clamps texture coordinates
-  //					//  to lie within 0-1 range
+  //    enum Wrap {                     // Texture wrap type
+  //      REPEAT,                       // Repeats texture outside 0-1
+  //                                    //  texture coordinate range
+  //      CLAMP                         // Clamps texture coordinates
+  //                                    //  to lie within 0-1 range
   //    };
   //
   //    // Fields.
-  //    QvSFString		filename;	// file to read texture from
-  //    QvSFImage		image;		// The texture
-  //    QvSFEnum		wrapS;
-  //    QvSFEnum		wrapT;
+  //    QvSFString              filename;       // file to read texture from
+  //    QvSFImage               image;          // The texture
+  //    QvSFEnum                wrapS;
+  //    QvSFEnum                wrapT;
   //
-  //    virtual QvBool	readInstance(QvInput *in);
-  //    QvBool		readImage();
+  //    virtual QvBool  readInstance(QvInput *in);
+  //    QvBool          readImage();
   //
   //    void setHandle (int handle, int alpha);  // mpichler, 19960506
 

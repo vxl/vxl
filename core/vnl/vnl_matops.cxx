@@ -83,24 +83,24 @@ double vnl_matops::homg_diff(vnl_matrix<double> const& A, vnl_matrix<double> con
 
 #define implement_converters(U,V)                           \
 vnl_matrix<U> make_matrix_ ## U(const vnl_matrix<V>& M)     \
-{							    \
-  unsigned m = M.rows();				    \
-  unsigned n = M.columns();				    \
-  vnl_matrix<U> ret(m, n);				    \
-  for(unsigned i = 0; i < m; ++i)			    \
-    for(unsigned j = 0; j < n; ++j)			    \
-      ret(i,j) = U(M(i,j));				    \
-  return ret;						    \
-}							    \
+{                                                           \
+  unsigned m = M.rows();                                    \
+  unsigned n = M.columns();                                 \
+  vnl_matrix<U> ret(m, n);                                  \
+  for(unsigned i = 0; i < m; ++i)                           \
+    for(unsigned j = 0; j < n; ++j)                         \
+      ret(i,j) = U(M(i,j));                                 \
+  return ret;                                               \
+}                                                           \
                                                             \
 vnl_vector<U> make_vector_ ## U(const vnl_vector<V>& v)     \
-{							    \
-  unsigned n = v.size();				    \
-  vnl_vector<U> ret(n);					    \
-  for(unsigned i = 0; i < n; ++i)			    \
-    ret[i] = U(v[i]);					    \
-  return ret;						    \
-}							    \
+{                                                           \
+  unsigned n = v.size();                                    \
+  vnl_vector<U> ret(n);                                     \
+  for(unsigned i = 0; i < n; ++i)                           \
+    ret[i] = U(v[i]);                                       \
+  return ret;                                               \
+}                                                           \
 
 implement_converters(double,float)
 

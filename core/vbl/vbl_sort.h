@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 
-// .NAME	vbl_sort - Collection of common predicates for sorting
-// .LIBRARY	vbl
-// .HEADER	vxl package
-// .INCLUDE	vbl/vbl_sort.h
-// .FILE	vbl_sort.txx
+// .NAME    vbl_sort - Collection of common predicates for sorting
+// .LIBRARY vbl
+// .HEADER  vxl package
+// .INCLUDE vbl/vbl_sort.h
+// .FILE    vbl_sort.txx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 19 Nov 97
 //

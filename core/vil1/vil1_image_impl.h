@@ -35,30 +35,30 @@ enum vil_component_format {
 // Representation of a generic image.
 //
 // \verbatim
-// 
-//                        Component   Cell     Pixel   	 get_section(plane=0,x0=0,y0=0,w=1,h=1)
+//
+//                        Component   Cell     Pixel     get_section(plane=0,x0=0,y0=0,w=1,h=1)
 //                        example     example  example
-// 
+//
 //  3 x W x H x 1
-//     +------+	          r           r	       r,g,b	 r
-//     |r     |		  g	      g
-//   +-|      |		  b	      b
+//     +------+           r           r        r,g,b     r
+//     |r     |           g           g
+//   +-|      |           b           b
 //   |g|      |
 // +-| +------+
 // |b|      |
 // | +------+
 // |      |
 // +------+
-// 
+//
 // 1 x W x H x 3
-// +------------+	  r 	      rgb     rgb	 rgb
+// +------------+         r           rgb     rgb        rgb
 // |rgb|rgb|    |
 // +---+---+    |
 // |            |
 // |            |
 // |            |
 // +------------+
-// 
+//
 // document relationship between :
 // Component: r, r
 // Cell: r, rgb
@@ -101,7 +101,7 @@ public:
   virtual vil_image get_plane(int ) const;
 
   //: Copy buffer of this to BUF.
-  // The buffer is stored like this for each pixel: 
+  // The buffer is stored like this for each pixel:
   // component0(plane0,plane1,plane2,...),component1(plane0,plane1,plane2,...),...
   // \verbatim
   //   total size of BUF in bytes should be (bits_per_component * components + 7) / 8
@@ -110,7 +110,7 @@ public:
   virtual bool get_section(void* buf, int x0, int y0, int width, int height) const = 0;
 
   //: Copy plane PLANE of BUF to this.
-  // The buffer should look like this for each pixel: 
+  // The buffer should look like this for each pixel:
   // component0(plane0,plane1,plane2,...),component1(plane0,plane1,plane2,...),...
   // \verbatim
   // total size of BUF in bytes should be (bits_per_component * components + 7) / 8

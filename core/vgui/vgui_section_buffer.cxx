@@ -2,9 +2,9 @@
   fsm@robots.ox.ac.uk
 */
 //  16-AUG-2000  Marko Bacic, Oxford RRG -- Added support for multiple textures
-//		 Many cheap graphics cards do not support texture
-//		 maps bigger than 256x256. To support images greater then 256x256
-//		 it was necessary to add support for multiple textures. Hence an
+//               Many cheap graphics cards do not support texture
+//               maps bigger than 256x256. To support images greater then 256x256
+//               it was necessary to add support for multiple textures. Hence an
 //               image is rendered by tiling together several textures containing
 //               different parts of it.
 //

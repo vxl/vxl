@@ -6,7 +6,7 @@
 
 //:
 // \file
-// \brief 
+// \brief
 // \author Andrew W. Fitzgibbon, Oxford RRG, 22 Aug 99
 //
 
@@ -72,7 +72,7 @@ void vnl_nonlinear_minimizer::report_iter()
 
 //: Return the name of the class
 //  Used by polymorphic IO
-vcl_string vnl_nonlinear_minimizer::is_a() const
+const vcl_string vnl_nonlinear_minimizer::is_a() const
 {
   return vcl_string("vnl_nonlinear_minimizer");
 }

@@ -36,12 +36,12 @@ public:
 
   //: cross product
   static void cross(const vgl_homg_point_2d<Type>& a,
-		    const vgl_homg_point_2d<Type>& b, 
-		    vgl_homg_line_2d<Type>& a_cross_b);
+                    const vgl_homg_point_2d<Type>& b,
+                    vgl_homg_line_2d<Type>& a_cross_b);
   //: cross product
   static void cross(const vgl_homg_line_2d<Type>& a,
-		    const vgl_homg_line_2d<Type>& b, 
-		    vgl_homg_point_2d<Type>& a_cross_b);
+                    const vgl_homg_line_2d<Type>& b,
+                    vgl_homg_point_2d<Type>& a_cross_b);
   static void unitize(vgl_homg_point_2d<Type>& a);
 
   static double angle_between_oriented_lines (const vgl_homg_line_2d<Type>& line1,

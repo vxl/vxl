@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	vbl_array_2d
-// .LIBRARY	vbl
-// .HEADER	vxl package
-// .INCLUDE	vbl/vbl_array_2d.h
-// .FILE	vbl_array_2d.txx
+// .NAME    vbl_array_2d
+// .LIBRARY vbl
+// .HEADER  vxl package
+// .INCLUDE vbl/vbl_array_2d.h
+// .FILE    vbl_array_2d.txx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 05 Aug 96
 //

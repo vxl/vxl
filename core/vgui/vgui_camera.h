@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	vgui_camera
-// .LIBRARY	vgui
-// .HEADER	vxl package
-// .INCLUDE	vgui/vgui_camera.h
-// .FILE	vgui_camera.cxx
+// .NAME    vgui_camera
+// .LIBRARY vgui
+// .HEADER  vxl package
+// .INCLUDE vgui/vgui_camera.h
+// .FILE    vgui_camera.cxx
 //
 // .SECTION Description
 //    vgui_camera is a utility class which allows 3D models to projected into

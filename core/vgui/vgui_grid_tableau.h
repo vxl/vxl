@@ -2,9 +2,9 @@
 #define vgui_grid_tableau_h_
 
 //------------------------------------------------------------------------------
-// .NAME	vgui_grid_tableau
-// .INCLUDE	vgui/vgui_grid_tableau.h
-// .FILE	vgui_grid_tableau.cxx
+// .NAME    vgui_grid_tableau
+// .INCLUDE vgui/vgui_grid_tableau.h
+// .FILE    vgui_grid_tableau.cxx
 // .SECTION Description
 //  Derived class from vgui_polytab. Tableaux are laid out in a rectagular grid.
 //  Can use (CTRL) + and - to add and remove (rows and) columns.  Can use
@@ -32,13 +32,13 @@ struct vgui_grid_tableau_data
 };
 
 bool operator==(vgui_grid_tableau_data const &a,
-		vgui_grid_tableau_data const &b);
+                vgui_grid_tableau_data const &b);
 
 class vgui_grid_tableau : public vgui_polytab
 {
 public:
   typedef vgui_grid_tableau_data grid_data;
-  
+
   vcl_string type_name() const;
 
   vgui_grid_tableau(unsigned initial_columns = 1, unsigned initial_rows = 1);

@@ -35,14 +35,14 @@ bool vil_save(vil_image const& i, char const* filename, char const* file_format)
 bool vil_save(vil_image const& i, vil_stream* os, char const* file_format)
 {
   vil_image out = vil_new(os, i.width(), i.height(), i, file_format);
-  
+
   if (!out) {
     vcl_cerr << "vil_save: Cannot save to type [" << file_format << "]\n";
     return false;
   }
 
   vil_copy(i, out);
-  
+
   return true;
 }
 
@@ -50,7 +50,7 @@ bool vil_save(vil_image const& i, vil_stream* os, char const* file_format)
 bool vil_save(vil_image const& i, char const* filename)
 {
   char const *file_format = 0;
-  
+
   // find last "."
   char const *dot = strrchr(filename, '.');
   if (!dot) {
@@ -116,7 +116,7 @@ void vil_save_gray(unsigned char const* p, int w, int h, vcl_string const& fn)
 }
 
 //: Save raw floats as gray.
-// No scaling is performed, so values whould be 0..255.
+// No scaling is performed, so values would be 0..255.
 // File format is deduced from filename.
 void vil_save_gray(float const* p, int w, int h, vcl_string const& fn)
 {
@@ -124,7 +124,7 @@ void vil_save_gray(float const* p, int w, int h, vcl_string const& fn)
 }
 
 //: Save raw doubles as gray.
-// No scaling is performed, so values whould be 0..255.
+// No scaling is performed, so values would be 0..255.
 // File format is deduced from filename.
 void vil_save_gray(double const* p, int w, int h, vcl_string const& fn)
 {

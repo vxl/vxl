@@ -36,12 +36,12 @@
 //#define fsm_OFFSET 0.5
 #define fsm_OFFSET 0.0
 
-// find minimum of a and b 
+// find minimum of a and b
 #ifndef MIN
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #endif
 
-// find maximum of a and b 
+// find maximum of a and b
 #ifndef MAX
 #define MAX(a,b) (((a)>(b))?(a):(b))
 #endif
@@ -53,10 +53,10 @@ typedef int (* Callback2)(void const*, void const*);
 static vgl_polygon::sheet_t* chs;
 
 //===============================================================
-// comparison routines for qsort 
+// comparison routines for qsort
 //===============================================================
-static int compare_vertind(vgl_polygon_scan_iterator::vertind *u, 
-                           vgl_polygon_scan_iterator::vertind *v) 
+static int compare_vertind(vgl_polygon_scan_iterator::vertind *u,
+                           vgl_polygon_scan_iterator::vertind *v)
 {
   return ( chs[u->chainnum][u->vertnum].y() <= chs[v->chainnum][v->vertnum].y() ) ? -1 : 1;
 }
@@ -88,8 +88,8 @@ vgl_polygon_scan_iterator::~vgl_polygon_scan_iterator()
 //===============================================================
 // Constructor - polygon & boundary flag
 //===============================================================
-vgl_polygon_scan_iterator::vgl_polygon_scan_iterator(vgl_polygon const& face, 
-						     bool boundaryp VCL_DEFAULT_VALUE(true)):
+vgl_polygon_scan_iterator::vgl_polygon_scan_iterator(vgl_polygon const& face,
+                                                     bool boundaryp VCL_DEFAULT_VALUE(true)):
   poly_(face)
 {
   boundp = boundaryp;
@@ -341,7 +341,7 @@ bool vgl_polygon_scan_iterator::next( )
 //    is returned through the parameter nextvert.  I get a syntax error
 //    when I tried to return an object of type vertind.  Compiler error
 //    says the default return type is int???
-void vgl_polygon_scan_iterator::get_next_vert( vertind v, vertind & nextvert ) 
+void vgl_polygon_scan_iterator::get_next_vert( vertind v, vertind & nextvert )
 {
         nextvert = v;
         nextvert.vertnum += 1;
@@ -353,7 +353,7 @@ void vgl_polygon_scan_iterator::get_next_vert( vertind v, vertind & nextvert )
 //    is returned through the parameter prevvert.  I get a syntax error
 //    when I tried to return an object of type vertind.  Compiler error
 //    says the default return type is int???
-void vgl_polygon_scan_iterator::get_prev_vert( vertind v, vertind & prevvert ) 
+void vgl_polygon_scan_iterator::get_prev_vert( vertind v, vertind & prevvert )
 {
         prevvert = v;
         prevvert.vertnum = prevvert.vertnum - 1;
@@ -374,8 +374,8 @@ void vgl_polygon_scan_iterator::display_chains()
         vcl_cout << "  Length: " << poly_[ c ].size() << vcl_endl;
         for (unsigned int v = 0; v < poly_[ c ].size(); v++ )
         {
-            vcl_cout << "  [ " << poly_[ c ][ v ].x() 
-            << " " << poly_[ c ][ v ].y() << " ]" << vcl_endl; 
+            vcl_cout << "  [ " << poly_[ c ][ v ].x()
+            << " " << poly_[ c ][ v ].y() << " ]" << vcl_endl;
         }
     }
     vcl_cout << vcl_flush;
@@ -398,5 +398,4 @@ void vgl_polygon_scan_iterator::display_crossedges()
     vcl_cout << "---------------------" << vcl_endl;
     vcl_cout << vcl_flush;
 }
-
 

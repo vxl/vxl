@@ -135,9 +135,7 @@ struct vil_tiff_structures {
   unsigned char* buf;
 };
 
-
-/*
-
+#if 0 // commented out
 typedef tsize_t (*TIFFReadWriteProc)(thandle_t, tdata_t, tsize_t);
 typedef toff_t (*TIFFSeekProc)(thandle_t, toff_t, int);
 typedef int (*TIFFCloseProc)(thandle_t);
@@ -149,7 +147,8 @@ TIFF* TIFFClientOpen(const char* filename, const char* mode, thandle_t clientdat
     TIFFReadWriteProc readproc, TIFFReadWriteProc writeproc, TIFFSeekProc seekproc,
     TIFFCloseProc closeproc, TIFFSizeProc sizeproc, TIFFMapFileProc mapproc,
     TIFFUnmapFileProc unmapproc)
-*/
+#endif
+
 static tsize_t vil_tiff_readproc(thandle_t h, tdata_t buf, tsize_t n)
 {
   vil_tiff_structures* p = (vil_tiff_structures*)h;
@@ -503,28 +502,28 @@ bool vil_tiff_generic_image::write_header()
   p->planar_config = PLANARCONFIG_CONTIG;
   TIFFSetField(p->tif, TIFFTAG_PLANARCONFIG, p->planar_config);
 
+#if 0 // commented out
+  int ncolors = GetColorNum();
+  if(ncolors && samplesperpixel==1)
+  {
+     int mapsize = 1<<bitspersample;
 
-  //  int ncolors = GetColorNum();
-  //  if(ncolors && samplesperpixel==1){
-  //		int mapsize = 1<<bitspersample;
-  //
-  //		unsigned short *cmap =
-  //			    new unsigned short[mapsize*3];
-  //		int** cm = GetColorMap();
-  //		for(int i=0; i<3; i++){
-  //		    register int j = 0;
-  //		    for(; j<ncolors; j++) *cmap++ = (unsigned short)SCALE(cm[i][j]);
-  //		    for(; j<mapsize; j++) *cmap++ = 0;
-  //		}
-  //		cmap -= mapsize*3;
-  //		TIFFSetField(p->tif, TIFFTAG_COLORMAP,
-  //		     cmap, cmap + mapsize, cmap + 2*mapsize);
-  //		delete cmap;
-  //
-  //		TIFFSetField(p->tif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_PALETTE);
-  //
-  //	    }
-  // else
+     unsigned short *cmap = new unsigned short[mapsize*3];
+     int** cm = GetColorMap();
+     for(int i=0; i<3; i++)
+     {
+       register int j = 0;
+       for(; j<ncolors; j++) *cmap++ = (unsigned short)SCALE(cm[i][j]);
+       for(; j<mapsize; j++) *cmap++ = 0;
+     }
+     cmap -= mapsize*3;
+     TIFFSetField(p->tif, TIFFTAG_COLORMAP, cmap, cmap+mapsize, cmap+2*mapsize);
+     delete cmap;
+
+     TIFFSetField(p->tif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_PALETTE);
+  }
+  else
+#endif
   {
     if (components_ == 3)
       p->photometric = PHOTOMETRIC_RGB;
@@ -549,15 +548,17 @@ bool vil_tiff_generic_image::write_header()
   p->tiled = false;
 
   // TODO: fix date
-  // time_t clock;
-  // struct tm *t_m;
-  // clock = time(NULL);
-  // t_m = localtime(&clock);
-  // char tmp[20];
-  // char datetime[20];
-  // strftime(tmp,sizeof(datetime),"%c",t_m);
-  // sprintf(datetime,"%19s",tmp);
-  // TIFFSetField(p->tif, TIFFTAG_DATETIME, datetime);
+#if 0 // commented out
+  time_t clock;
+  struct tm *t_m;
+  clock = time(NULL);
+  t_m = localtime(&clock);
+  char tmp[20];
+  char datetime[20];
+  strftime(tmp,sizeof(datetime),"%c",t_m);
+  sprintf(datetime,"%19s",tmp);
+  TIFFSetField(p->tif, TIFFTAG_DATETIME, datetime);
+#endif
 
   // Allocate tmp buf
   delete [] p->buf;

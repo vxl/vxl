@@ -4,11 +4,11 @@
 #pragma interface
 #endif
 //
-// .NAME	vgui_drag_tableau - Provide a functional interface to handle
-// .LIBRARY	vgui
-// .HEADER	vxl Package
-// .INCLUDE	vgui/vgui_drag_tableau.h
-// .FILE	vgui_drag_tableau.cxx
+// .NAME    vgui_drag_tableau - Provide a functional interface to handle
+// .LIBRARY vgui
+// .HEADER  vxl Package
+// .INCLUDE vgui/vgui_drag_tableau.h
+// .FILE    vgui_drag_tableau.cxx
 //
 // .SECTION Description
 //    A vgui_drag_tableau is a bare tableau which uses the vgui_drag_mixin.
