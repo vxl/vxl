@@ -24,12 +24,10 @@
 class pdf1d_test_gaussian_kernel_pdf_test_sample_inverse_cdf : public pdf1d_gaussian_kernel_pdf
 {
   virtual bool cdf_is_analytic() const {return false;}
-} ;
+};
 
 
-
-//: Generate losts of samples using pdf, build new pdf with builder
-//  and compare the two
+//: Generate lots of samples using pdf, build new pdf with builder and compare the two
 void test_gaussian_kernel_pdf()
 {
   vcl_cout << "\n\n***********************************" << vcl_endl;
@@ -122,7 +120,7 @@ void test_gaussian_kernel_pdf()
   pdf1d_sampler *p_sampler2 = p_pdf_built->new_sampler();
   unsigned pass, fail, sample_pass, sample_fail;
   double thresh, sample_thresh;
-  
+
   pdf1d_test_gaussian_kernel_pdf_test_sample_inverse_cdf test_sample_inverse_cdf;
 
 
@@ -142,11 +140,12 @@ void test_gaussian_kernel_pdf()
     if (x < sample_thresh) sample_pass ++;
     else sample_fail ++;
   }
-  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed using normal method." << vcl_endl;
+  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and "
+           << fail <<  " failed using normal method.\n";
   TEST("880 < pass < 920", pass > 880 && pass < 920, true);
-  vcl_cout << "In a sample of 1000 vectors " << sample_pass << " passed and " << sample_fail <<  " failed using sample method." << vcl_endl;
+  vcl_cout << "In a sample of 1000 vectors " << sample_pass << " passed and "
+           << sample_fail <<  " failed using sample method.\n";
   TEST("860 < pass < 930", sample_pass > 880 && sample_pass < 920, true);
-
 
 
   pass=0; fail=0; sample_pass=0; sample_fail=0;
@@ -162,11 +161,12 @@ void test_gaussian_kernel_pdf()
     if (x < sample_thresh) sample_pass ++;
     else sample_fail ++;
   }
-  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed using normal method." << vcl_endl;
+  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and "
+           << fail <<  " failed using normal method.\n";
   TEST("80 < pass < 120", pass > 80 && pass < 120, true);
-  vcl_cout << "In a sample of 1000 vectors " << sample_pass << " passed and " << sample_fail <<  " failed using sample method." << vcl_endl;
+  vcl_cout << "In a sample of 1000 vectors " << sample_pass << " passed and "
+           << sample_fail <<  " failed using sample method.\n";
   TEST("80 < pass < 120", sample_pass > 60 && sample_pass < 140, true);
-
 
 
   pass=0, fail=0;
@@ -198,9 +198,6 @@ void test_gaussian_kernel_pdf()
   TEST("70 < pass < 130", pass > 70 && pass < 130, true);
 
   delete p_sampler2;
-
-
-
   delete p_pdf_built;
   delete p_sampler;
   delete p_pdf_in;
