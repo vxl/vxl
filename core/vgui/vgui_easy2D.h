@@ -40,6 +40,7 @@ class vgui_easy2D : public vgui_displaylist2D
 public:
   vgui_easy2D(const char* n="unnamed");
   vgui_easy2D(vgui_image_tableau_sptr const&, const char* n="unnamed");
+  vgui_easy2D(vgui_tableau_sptr const&, const char* n="unnamed");
 
   bool handle(const vgui_event& e);
 
@@ -89,6 +90,9 @@ struct vgui_easy2D_new : public vgui_easy2D_sptr {
     vgui_easy2D_sptr(new vgui_easy2D(n)) { }
 
   vgui_easy2D_new(vgui_image_tableau_sptr const& i, char const* n="unnamed") :
+    vgui_easy2D_sptr(new vgui_easy2D(i, n)) { }
+
+  vgui_easy2D_new(vgui_tableau_sptr const& i, char const* n="unnamed") :
     vgui_easy2D_sptr(new vgui_easy2D(i, n)) { }
 };
 

@@ -55,6 +55,19 @@ vgui_easy2D::vgui_easy2D(vgui_image_tableau_sptr const& i, char const* n) :
 }
 
 
+vgui_easy2D::vgui_easy2D(vgui_tableau_sptr const& i, char const* n) :
+  image_slot(this,i),
+  name_(n)
+{
+  fg[0] = 1.0f;
+  fg[1] = 1.0f;
+  fg[2] = 0.0f;
+
+  line_width = 1;
+  point_size = 3;
+}
+
+
 bool vgui_easy2D::handle(vgui_event const& e) {
   if (image_slot) {
     if (e.type == vgui_DRAW && gl_mode == GL_SELECT) {
