@@ -67,6 +67,13 @@ is_good_enough() const
 
 bool
 rgrl_converge_status::
+is_good_and_should_terminate() const
+{
+  return status_ == good_and_terminate;
+}
+
+bool
+rgrl_converge_status::
 is_failed() const
 {
   return status_ == failed;

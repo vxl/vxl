@@ -60,6 +60,29 @@ compute_status( rgrl_converge_status_sptr               prev_status,
 }
 
 
+rgrl_converge_status_sptr 
+rgrl_convergence_tester::
+verify( rgrl_view           const& current_view,
+        rgrl_match_set_sptr const& current_match_set,
+        rgrl_scale_sptr     const& current_scale )const
+{
+  rgrl_set_of<rgrl_match_set_sptr> match_sets;
+  match_sets.push_back( current_match_set );
+  rgrl_set_of<rgrl_scale_sptr> scales;
+  scales.push_back( current_scale );
+  return this->verify( current_view, match_sets, scales );
+}
+
+rgrl_converge_status_sptr 
+rgrl_convergence_tester::
+verify( rgrl_view                        const& current_view,
+        rgrl_set_of<rgrl_match_set_sptr> const& current_match_sets,
+        rgrl_set_of<rgrl_scale_sptr>     const& current_scales )const
+{
+  assert( !"should never call rgrl_convergence_tester::verify()" );
+  return 0;
+}
+
 rgrl_converge_status_sptr
 rgrl_convergence_tester::
 initialize_status( rgrl_transformation_sptr                xform_estimate,

@@ -33,7 +33,7 @@ public:
 
   enum converge_type { conv_on_going, converged, stagnated };
   
-  enum status_type { status_on_going, good_enough, failed };
+  enum status_type { status_on_going, good_enough, failed, good_and_terminate };
 
   //:  Return true if the estimation has converged to a viable estimate.
   //
@@ -52,6 +52,10 @@ public:
   //
   bool is_failed() const;
 
+  //: return true is the current estimate is so good that registration can be terminated
+  //
+  bool is_good_and_should_terminate() const;
+  
   //: return converge enum
   converge_type current_converge() const;
   
