@@ -69,8 +69,14 @@ class vdgl_digital_region : public vsol_region_2d
   bool next() const;  //!< Increment to next pixel
   float X() const;    //!< The x pixel coordinate
   float Y() const;    //!< The y pixel coordinate
+  //:should deprecate the Z access since intensity face is strictly 2d
   float Z() const;    //!< The z pixel coordinate
   unsigned short I() const;//!< The pixel intensity
+
+  void set_X(float x);    //!< change x pixel coordinate
+  void set_Y(float y);    //!< change y pixel coordinate
+  void set_I(unsigned short I);    //!< change pixel intensity
+
   // The mean geometric and intensity values of the region
   float Xo() const; //!< The mean X value of the region
   float Yo() const; //!< The mean Y value of the region

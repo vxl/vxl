@@ -177,6 +177,33 @@ unsigned short vdgl_digital_region::I() const
     return 0;
   return pix_[pix_index_];
 }
+
+//-------------------------------------------------------
+//: Modify the X pixel coordinate
+void vdgl_digital_region::set_X(float x)
+{
+  if (pix_index_<0)
+    return;
+  xp_[pix_index_]=x;
+}
+
+//-------------------------------------------------------
+//: Modify the Y pixel coordinate
+void vdgl_digital_region::set_Y(float y)
+{
+  if (pix_index_<0)
+    return;
+  yp_[pix_index_]=y;
+}
+//-------------------------------------------------------
+//: Modify the pixel intensity
+void vdgl_digital_region::set_I(unsigned short I)
+{
+  if (pix_index_<0)
+    return;
+  pix_[pix_index_]=I;
+}
+
 //--------------------------------------------------------
 //:
 //  Initialize the region for accepting a stream of pixels
