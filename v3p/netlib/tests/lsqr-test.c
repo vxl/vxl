@@ -376,10 +376,10 @@ doublereal *damp;
 int main(void)
 {
     static doublereal zero = 0.f;
-    static doublereal damp1 = .1f;
+/*  static doublereal damp1 = .1f; */
     static doublereal damp2 = .01f;
-    static doublereal damp3 = .001f;
-    static doublereal damp4 = 1e-4f;
+/*  static doublereal damp3 = .001f; */
+/*  static doublereal damp4 = 1e-4f; */
     test_(&c__1, &c__1, &c__1, &c__1, &zero);
     test_(&c__2, &c__1, &c__1, &c__1, &zero);
     test_(&c__40, &c__40, &c__4, &c__4, &zero);
