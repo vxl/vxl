@@ -3,7 +3,7 @@
 Probability is the only calculus of uncertainty.
 @endchapsummary
 
-The vpdfl several classes for representing and using
+vpdfl contains several classes for representing and using
 multivariate probability density functions (@acronym{PDF}s).
 
 Each @acronym{PDF} comes as a builder-model-sampler triplet of objects.
