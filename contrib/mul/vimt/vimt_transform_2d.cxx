@@ -141,7 +141,7 @@ void vimt_transform_2d::set(const vnl_vector<double>& v, Form form)
             xx_ = v_data[0]; xy_ = v_data[1]; xt_ = v_data[2];
             yx_ = v_data[3]; yy_ = v_data[4]; yt_ = v_data[5];
             tx_ = v_data[6]; ty_ = v_data[7]; tt_ = v_data[8];
-            form_ = Affine;
+            form_ = Projective;
             inv_uptodate_=false;
             break;
         default:
