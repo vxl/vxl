@@ -103,6 +103,7 @@ class vvid_live_video_manager : public vgui_wrapper_tableau
   unsigned width_;
   unsigned height_;
   unsigned num_cameras_;
+  double min_msec_per_frame_;
   vgui_window* win_;
   vcl_vector <bgui_vtol2D_tableau_sptr> vt2Ds_;
   vcl_vector <vvid_live_video_tableau_sptr> vtabs_;

@@ -56,6 +56,7 @@ vvid_live_video_manager() :
   histogram_(false),
   width_(960),
   height_(480),
+  min_msec_per_frame_(1000.0/30.0),
   win_(0),
   video_process_(0),
   init_successful_(false)
@@ -158,6 +159,7 @@ void vvid_live_video_manager::set_camera_params()
        cit != valid_descrs.end(); cit++)
        choices.push_back(*cit);
   static int choice=0;
+  static double max_frame_rate=30.0;
   //Set up the dialog.
   vgui_dialog cam_dlg("Camera Parameters");
   cam_dlg.message(vtab->current_capability_desc().c_str());
@@ -170,6 +172,7 @@ void vvid_live_video_manager::set_camera_params()
   cam_dlg.field("exposure",cp_.exposure_);
   cam_dlg.field("gain",cp_.gain_);
   cam_dlg.field("Display Sample Interval", pix_sample_interval);
+  cam_dlg.field("Maximum Frame Rate", max_frame_rate);
   cam_dlg.checkbox("image capture(acquisition) ", cp_.capture_);
   cam_dlg.checkbox("RGB(monochrome) ", cp_.rgb_);
   if (!cam_dlg.ask())
@@ -182,6 +185,8 @@ void vvid_live_video_manager::set_camera_params()
     vtabs_[i]->set_pixel_sample_interval(pix_sample_interval);
     vtabs_[i]->set_camera_params(cp_);
   }
+
+  min_msec_per_frame_ = 1000.0/max_frame_rate;
 
   vcl_cout << "Current Camera Parameters\n" << cp_ << '\n';
 }
@@ -343,6 +348,8 @@ void vvid_live_video_manager::run_frames()
       vt2Ds_[i]->post_redraw();
     }
     vgui::run_till_idle();
+    // delay until the minimum time has passed for this frame
+    while(t.real()<min_msec_per_frame_);
     float ft = float(t.real())/1000.0, rate=0;
     if (ft)
       rate = 1.0/ft;
