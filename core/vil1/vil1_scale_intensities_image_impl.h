@@ -14,8 +14,8 @@
 class vil1_scale_intensities_image_impl : public vil1_image_impl
 {
  public:
-  vil1_scale_intensities_image_impl(vil1_image const& src, double scale, double shift) :
-    base(src), scale_(scale), shift_(shift) { }
+  vil1_scale_intensities_image_impl(vil1_image const& src, double scale, double shift)
+    : base(src), scale_(scale), shift_(shift) {}
 
   int planes() const { return base.planes(); }
   int width() const { return base.width(); }
@@ -29,11 +29,12 @@ class vil1_scale_intensities_image_impl : public vil1_image_impl
   bool get_section(void *buf, int x0, int y0, int w, int h) const;
   bool put_section(void const *buf, int x0, int y0, int w, int h);
 
-  //: Return the name of the class;
-  virtual vcl_string is_a() const;
+  //: Return the name of the class
+  virtual vcl_string is_a() const { return "vil1_scale_intensities_image_impl"; }
 
   //: Return true if the name of the class matches the argument
-  virtual bool is_class(vcl_string const&) const;
+  virtual bool is_class(vcl_string const& s) const
+  { return s==is_a() || vil1_image_impl::is_class(s); }
 
  private:
   vil1_image base;

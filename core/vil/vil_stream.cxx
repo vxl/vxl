@@ -28,12 +28,7 @@ vil_stream::~vil_stream()
 }
 
 
-void vil_stream::ref()
-{
-  ++refcount_; 
-}
-
-void vil_stream::unref() 
+void vil_stream::unref()
 {
   assert(refcount_ >= 0); // negative refcount is very serious
   if (--refcount_ == 0)

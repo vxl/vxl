@@ -9,17 +9,6 @@
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_clipon_binary_loader.txx>
 
-//: Constructor
-vil1_io_image_impl::vil1_io_image_impl()
-{
-}
-
-//: Destructor
-vil1_io_image_impl::~vil1_io_image_impl()
-{
-}
-
-
 //: Write derived class to os using vil1_image_impl reference
 void vil1_io_image_impl::b_write_by_base(vsl_b_ostream& os,
                                          const vil1_image_impl& base) const
@@ -39,18 +28,6 @@ void vil1_io_image_impl::print_summary_by_base(vcl_ostream& os,
                                                const vil1_image_impl& base) const
 {
   vsl_print_summary(os,base);
-}
-
-//: Return name of class for which this object provides IO
-vcl_string vil1_io_image_impl::target_classname() const
-{
-  return vcl_string("vil1_image_impl");
-}
-
-//: Return true if b is of class target_classname()
-bool vil1_io_image_impl::is_io_for(const vil1_image_impl& b) const
-{
-  return b.is_a()==target_classname();
 }
 
 //=========================================================================

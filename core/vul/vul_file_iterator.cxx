@@ -9,13 +9,14 @@
 
 #include <vul/vul_file.h>
 #include <vul/vul_reg_exp.h>
+//:
+// \file
+// \verbatim
+//  Modifications:
+//   Ian Scott 09/06/2003 Add filename general globbing support
+// \endverbatim
 
-// Modifications:
-//  Ian Scott 09/06/2003 Add filename general globbing support
-
-
-// Declare pimpl, reset, and iteration routines
-// for each OS
+//: Declare pimpl, reset, and iteration routines for each OS
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
 
 #if defined(VCL_BORLAND_56)
@@ -244,11 +245,6 @@ vul_file_iterator_data::vul_file_iterator_data(char const* glob)
 #endif // !defined(VCL_WIN32) || defined(__CYGWIN__)
 
 // -----------------------------------------------------------------------------
-vul_file_iterator::vul_file_iterator()
-{
-  p = 0;
-}
-
 vul_file_iterator::vul_file_iterator(char const* glob)
 {
   p = 0;

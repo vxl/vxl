@@ -23,13 +23,13 @@ class vil1_file_image : public vil1_image
     verbose
   };
 
-  //: Default constructor
-  vil1_file_image();
+  // Default constructor
+  vil1_file_image() {}
 
   //: Attempt to load named file
-  vil1_file_image(char const* filename, verbosity = verbose);
+  vil1_file_image(char const* filename, verbosity v=verbose) {load(filename,v);}
   //: Attempt to load named file
-  vil1_file_image(vcl_string const&, verbosity = verbose);
+  vil1_file_image(vcl_string const& f, verbosity v=verbose) { load(f, v); }
 
   //: Attempt to load named file
   bool load(char const* filename, verbosity = verbose);

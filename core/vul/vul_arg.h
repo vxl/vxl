@@ -69,7 +69,7 @@ class vul_arg_base
   vul_arg_base(vul_arg_info_list& l, char const* option_string,
                char const*helpstring);
   vul_arg_base(char const* option_string, char const*helpstring);
-  virtual ~vul_arg_base();
+  virtual ~vul_arg_base() {}
 
   virtual int parse(char ** argv) = 0;
 };
@@ -175,16 +175,26 @@ class vul_arg_info_list
     subset,
     all
   };
-  vul_arg_info_list(autonomy autonomy__ = subset);
-  ~vul_arg_info_list();
+  //: Construct an empty vul_arg_info_list.
+  vul_arg_info_list(autonomy autonomy__ = subset)
+    : help_("-?"), // default help operator!
+      verbose_(false), autonomy_(autonomy__) {}
+
+  ~vul_arg_info_list() {}
 
   void add(vul_arg_base* arg);
   void parse(int& argc, char **& argv, bool warn_about_unrecognized_arguments);
   void include(vul_arg_info_list& l);
-  void verbose(bool on);
+  void verbose(bool on) { verbose_ = on; }
+
   void set_help_option(char const* str);
-  void set_help_precis(char const* str);
-  void set_help_description(char const* str);
+
+  //: Set the (short) text used to describe the command
+  void set_help_precis(char const* str) { command_precis_ = str; }
+
+  //: Set the (possibly long) text used to document the command.
+  // It is displayed at the end of the help page.
+  void set_help_description(char const* str) { description_ = str; }
 
  public://protected:
   vcl_vector<vul_arg_base*> args_;
@@ -197,8 +207,8 @@ class vul_arg_info_list
   void display_help( char const* progname= 0);
 
  private:
-  vul_arg_info_list(vul_arg_info_list const &) { }
-  void operator=(vul_arg_info_list const &) { }
+  vul_arg_info_list(vul_arg_info_list const &) {}
+  void operator=(vul_arg_info_list const &) {}
 };
 
 #if defined(VCL_KAI) || defined(VCL_COMO) || defined(VCL_ICC)

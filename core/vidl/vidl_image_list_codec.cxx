@@ -61,11 +61,6 @@ vidl_image_list_codec::vidl_image_list_codec()
   // creates an instance of this class in bad shape
 }
 
-// Destructor
-vidl_image_list_codec::~vidl_image_list_codec()
-{
-}
-
 //: Initialize
 bool vidl_image_list_codec::init()
 {
@@ -90,7 +85,7 @@ bool vidl_image_list_codec::init()
 
 
 //: Return the resource to the image
-vil_image_resource_sptr 
+vil_image_resource_sptr
 vidl_image_list_codec::get_resource(int position) const
 {
   return images_[position];

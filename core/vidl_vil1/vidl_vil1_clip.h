@@ -50,7 +50,11 @@ class vidl_vil1_clip : public vbl_ref_count
                  int end = 0,
                  int increment = 1);
 
-  vidl_vil1_clip(vidl_vil1_clip const& x);
+  // Copy constructor.
+  vidl_vil1_clip(vidl_vil1_clip const& x)
+    : vbl_ref_count(), frames_(x.frames_),
+      startframe_(x.startframe_), endframe_(x.endframe_),
+      increment_(x.increment_), frame_rate_(x.frame_rate_), coder_(x.coder_) {}
 
   // Destructor
   ~vidl_vil1_clip() {}
@@ -66,7 +70,7 @@ class vidl_vil1_clip : public vbl_ref_count
   int height() const;
 
   //: Return the codec.
-  vidl_vil1_codec_sptr get_codec();
+  vidl_vil1_codec_sptr get_codec() { return coder_; }
 
  protected:
   void init(int start, int end, int increment);

@@ -6,11 +6,11 @@
 // \author awf@robots.ox.ac.uk 16 Feb 00
 //
 // \verbatim
-// Modifications
-// 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
-//  3 October 2001 Peter Vanroose - Implemented get_property("top_row_first")
-//  12 Sept. 2002 Peter Vanroose - Changed type of params_ from float to int
-//\endverbatim
+//  Modifications
+//   10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
+//   3 October 2001 Peter Vanroose - Implemented get_property("top_row_first")
+//   12 Sept. 2002 Peter Vanroose - Changed type of params_ from float to int
+// \endverbatim
 
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
@@ -36,7 +36,8 @@ class vil1_gen_file_format : public vil1_file_format
                                              vil1_component_format /*format*/) { return 0; }
 };
 
-enum vil1_gen_type {
+enum vil1_gen_type
+{
   vil1_gen_gray,
   vil1_gen_rgb
 };
@@ -53,9 +54,9 @@ class vil1_gen_generic_image : public vil1_image_impl
 
   friend class vil1_gen_file_format;
   void init(vcl_string const & s);
- public:
 
-  vil1_gen_generic_image(vcl_string const & s);
+ public:
+  vil1_gen_generic_image(vcl_string const & s) { init(s); }
   vil1_gen_generic_image(vcl_string const & s,
                          int planes,
                          int width,
@@ -63,7 +64,7 @@ class vil1_gen_generic_image : public vil1_image_impl
                          int components,
                          int bits_per_component,
                          vil1_component_format format);
-  ~vil1_gen_generic_image();
+  ~vil1_gen_generic_image() {}
 
   //: Dimensions:  planes x width x height x components
   virtual int planes() const { return 1; }

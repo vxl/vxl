@@ -29,7 +29,7 @@ class vidl_vil1_image_list_codec :  public vidl_vil1_codec
   vidl_vil1_image_list_codec(vcl_list<vil1_image>& images);
   vidl_vil1_image_list_codec(vcl_vector<vil1_image>& images);
   // Destructor
-  ~vidl_vil1_image_list_codec();
+  ~vidl_vil1_image_list_codec() {}
 
   // Operators-----------------------------------------------------------------
   // Safe cast to a parent from Image

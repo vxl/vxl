@@ -28,11 +28,11 @@ class vil_structuring_element
   int max_j_;
 
  public:
-  vil_structuring_element()
-    : min_i_(0),max_i_(-1),min_j_(0),max_j_(-1) {}
+  vil_structuring_element() : min_i_(0),max_i_(-1),min_j_(0),max_j_(-1) {}
 
   //: Define elements { (p_i[k],p_j[k]) }
-  vil_structuring_element(const vcl_vector<int>& p_i,const vcl_vector<int>& p_j);
+  vil_structuring_element(const vcl_vector<int>& p_i,const vcl_vector<int>& p_j)
+  { set(p_i,p_j); }
 
   //: Define elements { (p_i[k],p_j[k]) }
   void set(const vcl_vector<int>& p_i,const vcl_vector<int>& p_j);

@@ -37,10 +37,10 @@ class vil1_io_memory_image_impl : public vil1_io_image_impl
   virtual vil1_io_image_impl* clone() const;
 
   //: Return name of class for which this object provides IO
-  virtual vcl_string target_classname() const;
+  virtual vcl_string target_classname() const {return "vil1_memory_image_impl";}
 
   //: Return true if b is of class vil1_memory_image_impl
-  virtual bool is_io_for(const vil1_image_impl& b) const;
+  virtual bool is_io_for(const vil1_image_impl& b) const { return b.is_a()==target_classname(); }
 };
 
 

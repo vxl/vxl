@@ -52,7 +52,11 @@ class vidl_clip : public vbl_ref_count
             int end = 0,
             int increment = 1);
 
-  vidl_clip(vidl_clip const& x);
+  // Copy constructor.
+  vidl_clip(vidl_clip const& x)
+    : vbl_ref_count(), frames_(x.frames_),
+    startframe_(x.startframe_), endframe_(x.endframe_),
+    increment_(x.increment_), frame_rate_(x.frame_rate_), coder_(x.coder_) {}
 
   // Destructor
   ~vidl_clip() {}
@@ -63,12 +67,13 @@ class vidl_clip : public vbl_ref_count
   //: Return the number of frames
   int length() const { return (endframe_-startframe_)/increment_ + 1; }
 
-  // Get the size in pixels
+  //: Return the horizontal size of the frames in the clip
   int width() const;
+  //: Return the vertical size of the frames in the clip
   int height() const;
 
   //: Return the codec.
-  vidl_codec_sptr get_codec();
+  vidl_codec_sptr get_codec() { return coder_; }
 
  protected:
   void init(int start, int end, int increment);

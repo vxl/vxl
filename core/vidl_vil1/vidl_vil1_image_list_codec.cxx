@@ -64,11 +64,6 @@ vidl_vil1_image_list_codec::vidl_vil1_image_list_codec()
   // creates an instance of this class in bad shape
 }
 
-// Destructor
-vidl_vil1_image_list_codec::~vidl_vil1_image_list_codec()
-{
-}
-
 //: Initialize
 bool vidl_vil1_image_list_codec::init()
 {

@@ -22,9 +22,9 @@ class vidl_vil1_file_sequence
   typedef long offset_t;
 #endif
  public:
-  vidl_vil1_file_sequence(){}
-  vidl_vil1_file_sequence(vcl_string const& fmt);
-  ~vidl_vil1_file_sequence(){}
+  vidl_vil1_file_sequence() {}
+  vidl_vil1_file_sequence(vcl_string const& fmt) { open(fmt); }
+  ~vidl_vil1_file_sequence() {}
 
   bool open(vcl_string const& fmt);
   void close();

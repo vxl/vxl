@@ -11,9 +11,9 @@
 // \date   08 Apr 99
 //
 // \verbatim
-//    Modifications
-//     990408 AWF Initial version.
-//     010321 C. Beeston documentation changes
+//  Modifications
+//   990408 AWF Initial version.
+//   010321 C. Beeston documentation changes
 // \endverbatim
 //-----------------------------------------------------------------------------
 
@@ -36,15 +36,15 @@ class vul_user_info
 
   // Constructors/Destructors--------------------------------------------------
 
-//: Lookup info from numeric user-id
-  vul_user_info(uid_type uid);
-//: Lookup info from login name
-  vul_user_info(char const* name);
-//: Lookup info from login name
-  vul_user_info(vcl_string const& name);
-//: NYI
+  //: Lookup info from numeric user-id
+  vul_user_info(uid_type uid) { init(uid); }
+  //: Lookup info from login name
+  vul_user_info(char const* name) { init(name); }
+  //: Lookup info from login name
+  vul_user_info(vcl_string const& name) { init(name.c_str()); }
+  //: NYI
   void init(uid_type);
-//: initialise vul_user_info for given login name
+  //: initialise vul_user_info for given login name
   void init(char const* name);
 };
 

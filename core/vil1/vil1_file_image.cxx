@@ -8,20 +8,6 @@
 
 #include <vil1/vil1_load.h>
 
-vil1_file_image::vil1_file_image(char const* filename, verbosity v)
-{
-  load(filename, v);
-}
-
-vil1_file_image::vil1_file_image(vcl_string const& filename, verbosity v)
-{
-  load(filename, v);
-}
-
-vil1_file_image::vil1_file_image()
-{
-}
-
 bool vil1_file_image::load(vcl_string const& filename, verbosity)
 {
   return this->load(filename.c_str());

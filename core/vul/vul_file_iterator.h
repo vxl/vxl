@@ -11,10 +11,10 @@
 // \date 27 Nov 00
 //
 // \verbatim
-// Modifications
-// PDA (Manchester) 21/03/2001: Tidied up the documentation
-// Peter Vanroose   27/05/2001: Corrected the documentation
-// Ian Scott        12/06/2003: Added filen?m[abc].* notation to unix and dos version
+//  Modifications
+//   PDA (Manchester) 21/03/2001: Tidied up the documentation
+//   Peter Vanroose   27/05/2001: Corrected the documentation
+//   Ian Scott        12/06/2003: Added filen?m[abc].* notation to unix and dos version
 // \endverbatim
 
 #include <vcl_string.h>
@@ -45,7 +45,7 @@ class vul_file_iterator
   VCL_SAFE_BOOL_DEFINE;
  public:
 
-  vul_file_iterator();
+  vul_file_iterator() : p(0) {}
 
   //: Initialize, and scan to get first file from "glob"
   vul_file_iterator(char const* glob);

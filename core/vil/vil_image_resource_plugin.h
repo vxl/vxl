@@ -26,13 +26,13 @@ class vil_image_resource_plugin : public vil_image_resource
  public:
 
   //: Default constructor
-  vil_image_resource_plugin();
+  vil_image_resource_plugin() : filetype_(""), colour_(""), width_(-1), height_(-1) {}
 
   //: Destructor
-  virtual ~vil_image_resource_plugin();
+  virtual ~vil_image_resource_plugin() {}
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual vcl_string is_a() const { return "vil_image_resource_plugin"; }
 
   virtual vil_pixel_format pixel_format() const { return VIL_PIXEL_FORMAT_UNKNOWN; }
 
@@ -48,7 +48,8 @@ class vil_image_resource_plugin : public vil_image_resource
 
   //: Attempt to load image from named file.
   // \return  true if successful
-  virtual bool load_the_image(vil_image_view_base_sptr& image, const vcl_string & path);
+  virtual bool load_the_image(vil_image_view_base_sptr& image, const vcl_string & path)
+  { return load_the_image(image,path,filetype_,colour_); }
 
   //: Attempt to load image from named file.
   // \param filetype  String hinting at what image format is
@@ -67,16 +68,16 @@ class vil_image_resource_plugin : public vil_image_resource
   static void delete_all_plugins();
 
   //: Set the desired image size
-  virtual void set_size(int width, int height);
+  virtual void set_size(int width, int height) { width_=width; height_=height; }
 
   //: Check whether a filename is a potential candidate for loading and if it is available.
   virtual bool can_be_loaded(const vcl_string& filename);
 
   //: Set the colour options
-  void set_colour(const vcl_string& colour);
+  void set_colour(const vcl_string& colour) { colour_=colour; }
 
   //: Set the filetype options
-  void set_filetype(const vcl_string& filetype);
+  void set_filetype(const vcl_string& filetype) { filetype_=filetype; }
 
  protected:
 

@@ -46,16 +46,3 @@ bool vil1_scale_intensities_image_impl::get_section(void * buf, int x0, int y0, 
     return false;
   }
 }
-
-//: Return the name of the class;
-vcl_string vil1_scale_intensities_image_impl::is_a() const
-{
-  static const vcl_string class_name_="vil1_scale_intensities_image_impl";
-  return class_name_;
-}
-
-//: Return true if the name of the class matches the argument
-bool vil1_scale_intensities_image_impl::is_class(vcl_string const& s) const
-{
-  return s==vil1_scale_intensities_image_impl::is_a() || vil1_image_impl::is_class(s);
-}

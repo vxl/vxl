@@ -49,7 +49,7 @@ class vnl_least_squares_function
   // been implemented.
   vnl_least_squares_function(int number_of_unknowns, int number_of_residuals, UseGradient = use_gradient);
 
-  virtual ~vnl_least_squares_function();
+  virtual ~vnl_least_squares_function() {}
 
   // the virtuals may call this to signal a failure.
   void throw_failure();

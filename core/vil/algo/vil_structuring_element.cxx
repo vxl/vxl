@@ -9,13 +9,6 @@
 #include <vcl_iostream.h>
 
 //: Define elements { (p_i[k],p_j[k]) }
-vil_structuring_element::vil_structuring_element(const vcl_vector<int>& p_i,
-                                                 const vcl_vector<int>& p_j)
-{
-  set(p_i,p_j);
-}
-
-//: Define elements { (p_i[k],p_j[k]) }
 void vil_structuring_element::set(const vcl_vector<int>& p_i,const vcl_vector<int>& p_j)
 {
   assert(p_i.size()==p_j.size());

@@ -14,10 +14,10 @@
 // \author AWF
 // \date 17 Feb 2000
 //
-//\verbatim
+// \verbatim
 //  Modifications
-//     000216 AWF Initial version.
-//\endverbatim
+//   000216 AWF Initial version.
+// \endverbatim
 
 #include <vcl_cassert.h>
 #include <vcl_string.h>
@@ -87,8 +87,10 @@ const char* vil1_print(vil1_component_format f)
 class vil1_image_impl
 {
  public:
-  vil1_image_impl();
-  virtual ~vil1_image_impl();
+  //:
+  // the reference count starts at 0.
+  vil1_image_impl() : reference_count(0) {}
+  virtual ~vil1_image_impl() {}
 
   //: Dimensions:  Planes x W x H x Components
   virtual int planes() const = 0;
@@ -137,10 +139,10 @@ class vil1_image_impl
   virtual bool set_property(char const* tag, void const* property_value = 0) const;
 
   //: Return the name of the class;
-  virtual vcl_string is_a() const;
+  virtual vcl_string is_a() const { return "vil1_image_impl"; }
 
   //: Return true if the name of the class matches the argument
-  virtual bool is_class(vcl_string const&) const;
+  virtual bool is_class(vcl_string const& s) const { return s==is_a(); }
 
  private:
   friend class vil1_image;

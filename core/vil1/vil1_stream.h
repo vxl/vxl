@@ -35,7 +35,7 @@ class vil1_stream
   virtual void seek(vil1_streampos position) = 0;
 
   //: up/down the reference count
-  void ref();
+  void ref() { ++refcount_; }
   void unref();
 
  protected:

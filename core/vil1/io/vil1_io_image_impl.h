@@ -17,10 +17,10 @@ class vil1_io_image_impl
 {
  public:
   //: Constructor
-  vil1_io_image_impl();
+  vil1_io_image_impl() {}
 
   //: Destructor
-  virtual ~vil1_io_image_impl();
+  virtual ~vil1_io_image_impl() {}
 
   //: Create new object of type vil1_image_impl on heap
   virtual vil1_image_impl* new_object() const = 0;
@@ -41,12 +41,13 @@ class vil1_io_image_impl
   virtual vil1_io_image_impl* clone() const =0;
 
   //: Return name of class for which this object provides IO
-  virtual vcl_string target_classname() const;
+  virtual vcl_string target_classname() const { return "vil1_image_impl"; }
 
   //: Return true if b is of class target_classname()
   //  Typically this will just be "return b.is_a()==target_classname()"
   //  However, third party libraries may use a different system
-  virtual bool is_io_for(const vil1_image_impl& b) const;
+  virtual bool is_io_for(const vil1_image_impl& b) const
+  { return b.is_a()==target_classname(); }
 };
 
 //: Add example object to list of those that can be loaded

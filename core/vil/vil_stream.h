@@ -38,7 +38,8 @@ class vil_stream
   virtual vil_streampos file_size() const = 0;
 
   //: up/down the reference count
-  void ref();
+  void ref() { ++refcount_; }
+
   void unref();
 
  protected:

@@ -44,10 +44,6 @@ void vnl_least_squares_function::init(int number_of_unknowns,
   }
 }
 
-vnl_least_squares_function::~vnl_least_squares_function()
-{
-}
-
 void vnl_least_squares_function::throw_failure()
 {
   //vcl_cerr << "throw_failure()\n";

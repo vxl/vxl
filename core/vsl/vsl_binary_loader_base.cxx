@@ -34,18 +34,6 @@ struct vsl_binary_loader_base_auto_clearup
 static vsl_binary_loader_base_auto_clearup clearup_object;
 
 //=======================================================================
-
-vsl_binary_loader_base::vsl_binary_loader_base()
-{
-}
-
-//=======================================================================
-
-vsl_binary_loader_base::~vsl_binary_loader_base()
-{
-}
-
-//=======================================================================
 //: Register this, so it can be deleted by vsl_delete_all_loaders();
 void vsl_binary_loader_base::register_this()
 {

@@ -21,24 +21,6 @@
 
 #include <vcl_iostream.h>
 
-//: Lookup info from login name
-vul_user_info::vul_user_info(char const* name_)
-{
-  init(name_);
-}
-
-//: Lookup info from login name
-vul_user_info::vul_user_info(vcl_string const & name_)
-{
-  init(name_.c_str());
-}
-
-//: Lookup info from numeric user-id
-vul_user_info::vul_user_info(uid_type uid_)
-{
-  init(uid_);
-}
-
 //  uid_type uid;
 //  uid_type gid;
 //  vcl_string name; // login name

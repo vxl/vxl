@@ -15,11 +15,6 @@
 
 //--------------------------------------------------------------------------------
 
-//: the reference count starts at 0.
-vil1_image_impl::vil1_image_impl() : reference_count(0) { }
-
-vil1_image_impl::~vil1_image_impl() { }
-
 vil1_image vil1_image_impl::get_plane(unsigned int p) const
 {
   assert((int)p < planes());
@@ -44,17 +39,4 @@ bool vil1_image_impl::get_section(void* /*buf*/, int /*x0*/, int /*y0*/, int /*w
 bool vil1_image_impl::put_section(void const* /*buf*/, int /*x0*/, int /*y0*/, int /*width*/, int /*height*/)
 {
   return false;
-}
-
-//: Return the name of the class;
-vcl_string vil1_image_impl::is_a() const
-{
-  static const vcl_string class_name_="vil1_image_impl";
-  return class_name_;
-}
-
-//: Return true if the name of the class matches the argument
-bool vil1_image_impl::is_class(vcl_string const& s) const
-{
-  return s==vil1_image_impl::is_a();
 }

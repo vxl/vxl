@@ -52,11 +52,6 @@ char const* vil1_gen_file_format::tag() const
 
 /////////////////////////////////////////////////////////////////////////////
 
-vil1_gen_generic_image::vil1_gen_generic_image(vcl_string const& s)
-{
-  init(s);
-}
-
 char const* vil1_gen_generic_image::file_format() const
 {
   return vil1_gen_format_tag;
@@ -71,10 +66,6 @@ vil1_gen_generic_image::vil1_gen_generic_image(vcl_string const& /*s*/,
                                                vil1_component_format /*format*/)
 {
   vcl_abort();
-}
-
-vil1_gen_generic_image::~vil1_gen_generic_image()
-{
 }
 
 static int read_int(char const** p_inout)

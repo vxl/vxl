@@ -9,11 +9,6 @@
 #include <vul/vul_file.h>
 #include <vul/vul_sprintf.h>
 
-vidl_vil1_file_sequence::vidl_vil1_file_sequence(vcl_string const& fmt)
-{
-  open(fmt);
-}
-
 bool vidl_vil1_file_sequence::open(vcl_string const& fmt)
 {
   current_file_index = -1;

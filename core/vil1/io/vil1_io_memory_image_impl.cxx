@@ -50,18 +50,6 @@ vil1_io_image_impl* vil1_io_memory_image_impl::clone() const
   return new vil1_io_memory_image_impl(*this);
 }
 
-//: Return name of class for which this object provides IO
-vcl_string vil1_io_memory_image_impl::target_classname() const
-{
-  return vcl_string("vil1_memory_image_impl");
-}
-
-//: Return true if b is of class target_classname()
-bool vil1_io_memory_image_impl::is_io_for(const vil1_image_impl& b) const
-{
-  return b.is_a()==target_classname();
-}
-
 
 //========================================================================
 //: Binary save self to stream.

@@ -29,14 +29,6 @@ vidl_vil1_clip::vidl_vil1_clip(
   init(start, end, increment);
 }
 
-//: Copy constructor.
-vidl_vil1_clip::vidl_vil1_clip(vidl_vil1_clip const& x)
-  : vbl_ref_count(), frames_(x.frames_),
-    startframe_(x.startframe_), endframe_(x.endframe_),
-    increment_(x.increment_), frame_rate_(x.frame_rate_), coder_(x.coder_)
-{
-}
-
 //: Constructor. Create a clip from a vector of images. Start, end and increment frames are optional.
 vidl_vil1_clip::vidl_vil1_clip(vcl_vector<vil1_image> &images,
                                int start,
@@ -131,12 +123,12 @@ vidl_vil1_frame_sptr vidl_vil1_clip::get_frame(int n)
 
 //: Return the horizontal size of the frames in the clip
 int vidl_vil1_clip::width() const
-{ return coder_->width(); }
+{
+  return coder_->width();
+}
 
 //: Return the vertical size of the frames in the clip
 int vidl_vil1_clip::height() const
-{ return coder_->height(); }
-
-//: Return the codec.
-vidl_vil1_codec_sptr vidl_vil1_clip::get_codec()
-{ return coder_; }
+{
+  return coder_->height();
+}

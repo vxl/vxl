@@ -32,7 +32,7 @@ class vidl_image_list_codec :  public vidl_codec
   vidl_image_list_codec(vcl_list<vil_image_resource_sptr>& images);
   vidl_image_list_codec(vcl_vector<vil_image_resource_sptr>& images);
   // Destructor
-  ~vidl_image_list_codec();
+  ~vidl_image_list_codec() {}
 
   // Operators-----------------------------------------------------------------
   // Safe cast to a parent from Image
@@ -59,7 +59,7 @@ class vidl_image_list_codec :  public vidl_codec
   virtual void set_image_type(vcl_string const& type)
   { default_image_type_ = type; }
 
-  virtual vcl_string const& get_image_type() const {return default_image_type_;}
+  vcl_string get_image_type() const { return default_image_type_; }
   vcl_vector<vil_image_resource_sptr> get_images() const {return images_;}
 
   // Register image loaders

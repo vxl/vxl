@@ -36,11 +36,6 @@
 
 //------------------------------------------------------------------------------
 
-// class vul_arg_base
-vul_arg_base::~vul_arg_base()
-{
-}
-
 char const* vul_arg_base::option()
 { return option_.c_str(); }
 
@@ -144,23 +139,6 @@ vul_arg_base::vul_arg_base(char const* option_string, char const* helpstring)
 
 //------------------------------------------------------------------------------
 
-//: Construct an empty vul_arg_info_list.
-vul_arg_info_list::vul_arg_info_list(vul_arg_info_list::autonomy autonomy__):
-  help_("-?"), // default help operator!
-  verbose_(false),
-  autonomy_(autonomy__)
-{
-}
-
-void vul_arg_info_list::verbose(bool on)
-{ verbose_ = on; }
-
-
-//: Destructor.
-vul_arg_info_list::~vul_arg_info_list()
-{
-}
-
 //: Change the help operator (defaults to -?)
 void vul_arg_info_list::set_help_option(char const* str)
 {
@@ -175,19 +153,6 @@ void vul_arg_info_list::set_help_option(char const* str)
   help_ = str;
 }
 
-
-//: Set the (short) text used to describe the command
-void vul_arg_info_list::set_help_precis(char const* str)
-{
-  command_precis_ = str;
-}
-
-//: Set the (possibly long) text used to document the command.
-// It is displayed at the end of the help page.
-void vul_arg_info_list::set_help_description(char const* str)
-{
-  description_ = str;
-}
 
 //: Add an argument to the list.
 void vul_arg_info_list::add(vul_arg_base* argmt)

@@ -18,7 +18,7 @@ class vil1_skip_image_impl : public vil1_image_impl
 {
  public:
   vil1_skip_image_impl(vil1_image const &underlying, unsigned sx, unsigned sy);
-  ~vil1_skip_image_impl();
+  ~vil1_skip_image_impl() {}
 
   //: these inlines partly document the semantics of vil1_skip_image.
   int planes() const { return base.planes(); }
@@ -35,11 +35,12 @@ class vil1_skip_image_impl : public vil1_image_impl
 
   bool get_property(char const *tag, void *property_value_out = 0) const;
 
-  //: Return the name of the class;
-  virtual vcl_string is_a() const;
+  //: Return the name of the class
+  virtual vcl_string is_a() const { return "vil1_skip_image_impl"; }
 
   //: Return true if the name of the class matches the argument
-  virtual bool is_class(vcl_string const&) const;
+  virtual bool is_class(vcl_string const& s) const
+  { return s==is_a() || vil1_image_impl::is_class(s); }
 
  private:
   vil1_image base;

@@ -17,7 +17,7 @@ class vidl_file_sequence
   typedef unsigned long offset_t;
  public:
   vidl_file_sequence() {}
-  vidl_file_sequence(vcl_string const& fmt);
+  vidl_file_sequence(vcl_string const& fmt) { open(fmt); }
   ~vidl_file_sequence() { close(); }
 
   bool open(vcl_string const& fmt);
