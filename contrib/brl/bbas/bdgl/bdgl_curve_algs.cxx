@@ -14,7 +14,6 @@
 #include <vdgl/vdgl_interpolator_linear.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <bdgl/bdgl_curve_algs.h>
-#include <vil/algo/vil_gauss_filter.h>
 #include <vnl/algo/vnl_gaussian_kernel_1d.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator.h>
