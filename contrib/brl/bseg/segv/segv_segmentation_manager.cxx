@@ -56,8 +56,8 @@
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
 #include <strk/strk_epipolar_grouper.h>
-#include <strk/strk_info_tracker_params.h>
-#include <strk/strk_info_tracker.h>
+#include <strk/strk_region_info_params.h>
+#include <strk/strk_region_info.h>
 
 segv_segmentation_manager *segv_segmentation_manager::instance_ = 0;
 
@@ -1168,45 +1168,66 @@ void segv_segmentation_manager::display_epi_region_image()
   vcl_vector<vsol_polyline_2d_sptr> segs = eg.display_segs(0);
   this->draw_polylines(segs);
 }
+vtol_face_2d_sptr 
+segv_segmentation_manager::face_at(const int col, const int row)
+{
+  vtol_face_2d_sptr out;
+  bgui_vtol2D_tableau_sptr v2D;
+  vgui_tableau_sptr top_tab = grid_->get_tableau_at(col, row);
+  if(!top_tab)
+    return out;
+  v2D.vertical_cast(vgui_find_below_by_type_name(top_tab, 
+                     vcl_string("bgui_vtol2D_tableau")));
+  if (!v2D)
+    return out;
+
+  vtol_topology_object_sptr to = v2D->get_temp();
+  if (!to)
+      return out;
+  vtol_face_sptr f = to->cast_to_face();
+  out = f->cast_to_face_2d();
+  return out;
+}
 void segv_segmentation_manager::compute_mutual_info()
 {
-  static strk_info_tracker_params tp;
-  vgui_dialog tracker_dialog("Mutual Information");
-  tracker_dialog.field("Min Gradient Magnitude", tp.min_gradient_);
-  tracker_dialog.field("Parzen Sigma", tp.parzen_sigma_);
-  tracker_dialog.checkbox("Add Gradient Info", tp.gradient_info_);
-  tracker_dialog.checkbox("Add Color Info", tp.color_info_);
-  tracker_dialog.checkbox("Verbose", tp.verbose_);
-  tracker_dialog.checkbox("Debug", tp.debug_);
-  if (!tracker_dialog.ask())
+  static strk_region_info_params rip;
+  static bool mapped_ = false;
+  vgui_dialog info_dialog("Mutual Information");
+  info_dialog.field("Min Gradient Magnitude", rip.min_gradient_);
+  info_dialog.field("Parzen Sigma", rip.parzen_sigma_);
+  info_dialog.checkbox("Add Gradient Info", rip.gradient_info_);
+  info_dialog.checkbox("Add Color Info", rip.color_info_);
+  info_dialog.checkbox("Verbose", rip.verbose_);
+  info_dialog.checkbox("Debug", rip.debug_);
+  info_dialog.checkbox("Show Mapped Image", mapped_);
+  if (!info_dialog.ask())
     return;
-  vcl_cout << tp << '\n';
-  bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
-  if (!t2D)
+  vcl_cout << rip << '\n';
+  //Get the v2D tableau at each grid.  V2D0 is considered the model
+  unsigned row= 0, col=0, nrows = grid_->rows(), ncols = grid_->cols();
+  grid_->get_last_selected_position(&col, &row);
+  int other_row = nrows-1-row, other_col = ncols-1-col;
+  vtol_face_2d_sptr f0 = face_at(col, row);
+  vtol_face_2d_sptr fi = face_at(other_col, other_row);
+  if(!f0||!fi)
     return;
-  vtol_topology_object_sptr to = t2D->get_temp();
-  if (!to)
+  vil1_image img_0 = this->image_at(col, row);
+  vil1_image img_i = this->image_at(other_col, other_row);
+  if(!img_0||!img_i)
+    return;
+  strk_region_info ri(rip);
+  ri.set_face_0(f0);
+  ri.set_face_i(fi);
+  ri.set_image_0(img_0);
+  ri.set_image_i(img_i);
+  if(mapped_)
     {
-      vcl_cout << "In segv_segmentation_manager::compute_mutual_info() - no model\n";
-      return;
+      vil1_memory_image_of<unsigned char> im0 = ri.image_0();
+      this->set_image_at(col, row, im0);
+      vil1_memory_image_of<unsigned char> imi = ri.image_i();
+      this->set_image_at(other_col, other_row, imi);
     }
-  vtol_face_sptr f = to->cast_to_face();
-  vtol_face_2d_sptr f2d = f->cast_to_face_2d();
-  if (!f2d)
-    {
-      vcl_cout << "In segv_segmentation_manager::compute_mutual_info() - "
-               << " input is not a vtol_face_2d\n";
-      return;
-    }
-
-  vil1_image img_0 = this->image_at(col_, row_);
-  vil1_image img_i = this->image_at(col_, row_);
-  strk_info_tracker itrk(tp);
-  itrk. set_image_0(img_0);
-  itrk.set_initial_model(f2d);
-  itrk.init();
-  itrk.set_image_i(img_i);
-  itrk.evaluate_info();
+  ri.evaluate_info();
 }
 
 void segv_segmentation_manager::rotate_image()
@@ -1235,12 +1256,29 @@ void segv_segmentation_manager::create_box()
 {
   vgui_rubberband_tableau_sptr rubber = this->selected_rubber_tab();
   rubber->rubberband_box();
-  grid_->get_last_selected_position(&col_, &row_);
 }
 
 void segv_segmentation_manager::create_polygon()
 {
   vgui_rubberband_tableau_sptr rubber = this->selected_rubber_tab();
   rubber->rubberband_polygon();
-  grid_->get_last_selected_position(&col_, &row_);
+}
+bool segv_segmentation_manager::
+set_image_at(const unsigned col, const unsigned row, vil1_image& image)
+{
+  vgui_tableau_sptr top_tab = grid_->get_tableau_at(col, row);
+  if(!top_tab)
+    return false;
+  
+  bgui_image_tableau_sptr itab;
+  itab.vertical_cast(vgui_find_below_by_type_name(top_tab, 
+                     vcl_string("vgui_image_tableau")));
+  if (!itab)
+    {
+      vcl_cout << "Unable to get bgui_image_tableau at (" << col
+               << ", " << row << ")\n";
+      return false;
+    }  
+ itab->set_image(image);
+ return true;
 }

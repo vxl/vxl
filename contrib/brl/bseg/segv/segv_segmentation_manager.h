@@ -20,6 +20,7 @@
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vtol/vtol_intensity_face_sptr.h>
+#include <vtol/vtol_face_2d_sptr.h>
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_grid_tableau_sptr.h>
 #include <vgui/vgui_rubberband_tableau_sptr.h>
@@ -85,15 +86,16 @@ class segv_segmentation_manager : public vgui_wrapper_tableau
   void add_image(vil1_image& image);
   vil1_image selected_image();
   vil1_image image_at(const unsigned col, const unsigned row);
+  bool
+  set_image_at(const unsigned col, const unsigned row, vil1_image& image);
   bgui_image_tableau_sptr selected_image_tab();
   bgui_vtol2D_tableau_sptr selected_vtol2D_tab();
   bgui_picker_tableau_sptr selected_picker_tab();
   vgui_rubberband_tableau_sptr selected_rubber_tab();
+  vtol_face_2d_sptr face_at(const int col, const int row);
  private:
   //flags
   bool first_; //first image load
-  unsigned row_; //row where last box or polygon created
-  unsigned col_; //col where last box or polygon created
   vgui_window* win_;
   vgui_grid_tableau_sptr grid_;
   static segv_segmentation_manager *instance_;
