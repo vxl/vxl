@@ -700,16 +700,18 @@ homography_ransac(vcl_vector<vgl_point_3d<double> > const& world_points,
        pit != world_points.end(); pit++)
     h_world_points.push_back(vgl_homg_point_2d<double>((*pit).x(),(*pit).y()));
 
-  double max_outlier_frac = 0.5;
-  double desired_prob_good = 0.99;
-  int max_pops = 1;
   int trace_level = 0;
   rrel_homography2d_est hg( h_world_points, h_image_points);
   rrel_ransac_obj* ransac = new rrel_ransac_obj();
   hg.set_prior_scale(1.0);
   rrel_ran_sam_search* ransam = new rrel_ran_sam_search;
   ransam->set_trace_level(trace_level);
-  //ransam->set_sampling_params( max_outlier_frac, desired_prob_good, max_pops);
+#if 0
+  double max_outlier_frac = 0.5;
+  double desired_prob_good = 0.99;
+  int max_pops = 1;
+  ransam->set_sampling_params( max_outlier_frac, desired_prob_good, max_pops);
+#endif // 0
   ransam->set_gen_all_samples();
   if ( !ransam->estimate( &hg, ransac ) )
   {vcl_cout << "RANSAC failed!!\n";
