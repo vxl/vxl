@@ -15,9 +15,9 @@
 #include <vgui/vgui_glu.h>
 
 //--------------------------------------------------------------------------------
-  
+
 vgui_image_tableau::vgui_image_tableau()
-  : vgui_tableau() 
+  : vgui_tableau()
   , pixels_centered(true)
   , renderer(new vgui_image_renderer)
 { }
@@ -60,24 +60,24 @@ vcl_string vgui_image_tableau::pretty_name() const
 
 //--------------------------------------------------------------------------------
 
-vil_image vgui_image_tableau::get_image() const 
+vil_image vgui_image_tableau::get_image() const
 {
    return renderer->get_image();
 }
 
-void vgui_image_tableau::set_image(vil_image const &I) 
+void vgui_image_tableau::set_image(vil_image const &I)
 {
   //  // use the name of the image as the name of the tableau :
   renderer->set_image( I );
 }
 
 // derived :
-void vgui_image_tableau::set_image(char const *f) 
+void vgui_image_tableau::set_image(char const *f)
 {
-  set_image( vil_load(f ? f : "az32_10.tif") ); 
+  set_image( vil_load(f ? f : "az32_10.tif") );
 }
 
-void vgui_image_tableau::reread_image() 
+void vgui_image_tableau::reread_image()
 {
   renderer->reread_image();
 }
@@ -104,35 +104,36 @@ bool vgui_image_tableau::get_bounding_box(float low[3], float high[3]) const
 
 //--------------------------------------------------------------------------------
 
-bool vgui_image_tableau::handle(vgui_event const &e) 
+bool vgui_image_tableau::handle(vgui_event const &e)
 {
-
-  // If we allow this, programs which depend on it will fail as 
+  // If we allow this, programs which depend on it will fail as
   // soon as the image is put in another tableau.
-  //   // if GL matrices are zero, set them to something sensible :
-  //   if (vgui_matrix_state::gl_matrices_are_cleared()) {
-  //     GLint vp[4];
-  //     glGetIntegerv(GL_VIEWPORT, vp);
-  //     int width = vp[2];
-  //     int height = vp[3];
-  
-  //     glMatrixMode(GL_PROJECTION);
-  //     glLoadIdentity();
-  //     gluOrtho2D(0, width, height, 0);
-  
-  //     glMatrixMode(GL_MODELVIEW);
-  //     glLoadIdentity();
-  //   }
+#if 0
+  // if GL matrices are zero, set them to something sensible :
+  if (vgui_matrix_state::gl_matrices_are_cleared()) {
+    GLint vp[4];
+    glGetIntegerv(GL_VIEWPORT, vp);
+    int width = vp[2];
+    int height = vp[3];
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0, width, height, 0);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+  }
+#endif
 
   //
   if (e.type == vgui_DRAW) {
     // If blending is turned on, there is a severe performance penalty
     // when rendering an image. So, we turn off blending before calling
     // the renderer. In cases where two images are to be blended, a
-    // special tableau should be written, eg. vgui_image_blender. 
+    // special tableau should be written, eg. vgui_image_blender.
     // fsm@robots.ox.ac.uk
     GLboolean blend_on;
-    glGetBooleanv(GL_BLEND, &blend_on); 
+    glGetBooleanv(GL_BLEND, &blend_on);
     if (blend_on)
       glDisable(GL_BLEND);
 
@@ -143,7 +144,7 @@ bool vgui_image_tableau::handle(vgui_event const &e)
 
     if (pixels_centered)
       glTranslated(+0.5, +0.5, 0);
-    
+
     if (blend_on)
       glEnable(GL_BLEND);
 
@@ -151,7 +152,7 @@ bool vgui_image_tableau::handle(vgui_event const &e)
   }
 
   //
-  else 
+  else
     return false;
 }
 
