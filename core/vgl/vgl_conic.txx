@@ -1,4 +1,4 @@
-// This is ./vxl/vgl/vgl_conic.txx
+// This is vxl/vgl/vgl_conic.txx
 #ifndef vgl_conic_txx_
 #define vgl_conic_txx_
 //:
@@ -118,16 +118,16 @@ vgl_conic<T>::vgl_conic(vgl_homg_point_2d<T> const& c, T rx, T ry, T theta)
     rx = (rx < 0) ? (-rx*rx) : (rx > 0) ? (rx*rx) : 0;
     ry = (ry < 0) ? (-ry*ry) : (ry > 0) ? (ry*ry) : 0;
 
-    T ct = vcl_cos(-theta);
-    T st = vcl_sin(-theta);
+    double ct = vcl_cos(-theta);
+    double st = vcl_sin(-theta);
     T u = c.x();
     T v = c.y();
-    a_ = rx*st*st + ry*ct*ct;
-    b_ = 2*(rx-ry)*ct*st;
-    c_ = rx*ct*ct + ry*st*st;
-    d_ = -2*(rx*st*st + ry*ct*ct)*u - 2*(rx-ry)*ct*st*v;
-    e_ = -2*(rx-ry)*ct*st*u - 2*(rx*ct*ct + ry*st*st)*v;
-    f_ = (rx*st*st +ry*ct*ct)*u*u + 2*(rx-ry)*ct*st*u*v + (rx*ct*ct + ry*st*st)*v*v - rx*ry;
+    a_ = T(rx*st*st + ry*ct*ct);
+    b_ = T(2*(rx-ry)*ct*st);
+    c_ = T(rx*ct*ct + ry*st*st);
+    d_ = T(-2*(rx*st*st + ry*ct*ct)*u - 2*(rx-ry)*ct*st*v);
+    e_ = T(-2*(rx-ry)*ct*st*u - 2*(rx*ct*ct + ry*st*st)*v);
+    f_ = T((rx*st*st +ry*ct*ct)*u*u + 2*(rx-ry)*ct*st*u*v + (rx*ct*ct + ry*st*st)*v*v - rx*ry);
   }
   set_type_from_equation();
 }
