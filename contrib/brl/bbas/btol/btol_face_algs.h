@@ -20,9 +20,9 @@
 class btol_face_algs
 {
  public:
-  static bool vtol_to_vgl(vtol_face_2d_sptr const & face, vgl_polygon<double>& poly);
-  static bool edge_intersects(vtol_face_2d_sptr const & face,
-                              vtol_edge_2d_sptr const & edge);
+  static  bool vtol_to_vgl(vtol_face_2d_sptr const & face, vgl_polygon<double>& poly);
+  static  bool edge_intersects(vtol_face_2d_sptr const & face,
+                               vtol_edge_2d_sptr const & edge);
 
   static bool intersecting_edges(vtol_face_2d_sptr const & face,
                                  vcl_vector<vtol_edge_2d_sptr> const & edges,
