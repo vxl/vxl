@@ -14,8 +14,8 @@
 
 
 //: Constructor
-bmrf_node::bmrf_node( const bmrf_epi_seg_sptr& epi_seg, int frame_num, double probability )
-  : segment_(epi_seg), frame_num_(frame_num), probability_(probability),
+bmrf_node::bmrf_node( const bmrf_epi_seg_sptr& epi_seg, int frame_num)
+  : segment_(epi_seg), frame_num_(frame_num), probability_(-1.0),
     out_arcs_(), in_arcs_(), boundaries_(ALL+1, out_arcs_.end()), sizes_(ALL,0)
 {
 }
@@ -64,6 +64,9 @@ bmrf_node::purge()
     }
   }
 
+  // Invalidate the probability
+  this->probability_ = -1.0;
+
   return retval;
 }
 
@@ -72,7 +75,7 @@ bmrf_node::purge()
 double
 bmrf_node::probability()
 {
-  if (probability_ <= 0.0)
+  if (probability_ < 0.0)
     compute_probability();
 
   return probability_;
@@ -102,17 +105,26 @@ void
 bmrf_node::compute_probability()
 {
   probability_ = 0.0;
+  double sum = 0.0;
   for ( arc_iterator a_itr = this->begin(TIME);
         a_itr != this->end(TIME); ++a_itr )
   {
     bmrf_gamma_func_sptr gamma_func = new bmrf_const_gamma_func((*a_itr)->induced_gamma());
     (*a_itr)->probability_ = this->probability(gamma_func);
 
+    sum += (*a_itr)->probability_;
     // select the probability of the best neighbor
     if ( (*a_itr)->probability_ > probability_ ) {
       probability_ = (*a_itr)->probability_;
       gamma_ = gamma_func;
     }
+  }
+  probability_ /= sum;
+  // Normalize so probabilities sum to 1
+  for ( arc_iterator a_itr = this->begin(TIME);
+        a_itr != this->end(TIME); ++a_itr )
+  {
+    (*a_itr)->probability_ /= sum;
   }
 }
 
@@ -247,6 +259,9 @@ bmrf_node::add_neighbor( const bmrf_node_sptr& node, neighbor_type type )
   for (int t=type; t>=0 && (boundaries_[type+1] == boundaries_[t]); --t)
     --boundaries_[t];
 
+  // Invalidate the probability
+  this->probability_ = -1.0;
+
   return true;
 }
 
@@ -269,6 +284,9 @@ bmrf_node::add_arc( const bmrf_arc_sptr& arc, neighbor_type type )
   // adjust boundaries if necessary
   for (int t=type; t>=0 && (boundaries_[type+1] == boundaries_[t]); --t)
     --boundaries_[t];
+
+  // Invalidate the probability
+  this->probability_ = -1.0;
 
   return true;
 }
@@ -334,7 +352,7 @@ bmrf_node::remove_helper( arc_iterator& a_itr, neighbor_type type)
   arc->to_ = NULL;
   arc->from_ = NULL;
 
-  this->probability_ = 0.0;
+  this->probability_ = -1.0;
 
   return true;
 }
