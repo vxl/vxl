@@ -44,7 +44,7 @@ VNL_COPY_INSTANTIATE0(long double, double);
 VCL_DEFINE_SPECIALIZATION \
 void vnl_copy(vcl_complex<S> const *src, vcl_complex<D> *dst, unsigned n) \
 { \
-  for (int i=0; i<n; ++i) \
+  for (unsigned int i=0; i<n; ++i) \
     dst[i] = vcl_complex<D>(vcl_real(src[i]), vcl_imag(src[i])); \
 }
 macro(float, double);
