@@ -226,6 +226,6 @@ void bvgl_h_matrix_3d<T>::set (vnl_matrix_fixed<T,4,4> const& H)
 #define BVGL_H_MATRIX_3D_INSTANTIATE(T) \
 template class bvgl_h_matrix_3d<T >; \
 template vcl_ostream& operator << (vcl_ostream& s, const bvgl_h_matrix_3d<T >& h); \
-template vcl_istream& operator >> (vcl_istream& s, bvgl_h_matrix_3d<T >& h);
+template vcl_istream& operator >> (vcl_istream& s, bvgl_h_matrix_3d<T >& h)
 
 #endif // bvgl_h_matrix_3d_txx_
