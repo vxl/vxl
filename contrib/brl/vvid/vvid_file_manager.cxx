@@ -791,6 +791,7 @@ void vvid_file_manager::compute_info_tracking()
   tracker_dialog.checkbox("Add Color Info", tp.color_info_);
   tracker_dialog.checkbox("Output Track Data", output_track);
   tracker_dialog.checkbox("Verbose", tp.verbose_);
+  tracker_dialog.checkbox("Debug", tp.debug_);
   if (!tracker_dialog.ask())
     return;
   static vcl_string track_file;
