@@ -7,9 +7,9 @@
 
 void test_sample_profile_3d_float()
 {
-  vcl_cout << "*******************************\n";
-  vcl_cout << " Testing mil3d_sample_profile_3d\n";
-  vcl_cout << "*******************************\n";
+  vcl_cout << "*********************************\n"
+           << " Testing mil3d_sample_profile_3d\n"
+           << "*********************************\n";
 
   vcl_cout<< "One plane image"<<vcl_endl;
   mil3d_image_3d_of<float> image1;

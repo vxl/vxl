@@ -6,9 +6,9 @@
 
 void test_trilin_interp_3d_float()
 {
-  vcl_cout << "*****************************\n";
-  vcl_cout << " Testing mil3d_trilin_interp_3d\n";
-  vcl_cout << "*****************************\n";
+  vcl_cout << "********************************\n"
+           << " Testing mil3d_trilin_interp_3d\n"
+           << "********************************\n";
 
   int nx = 5;
   int ny = 5;

@@ -53,9 +53,9 @@ void test_data_wrapper_pair_mixer(unsigned n1, unsigned n2)
 
 void test_data_wrapper_mixer()
 {
-  vcl_cout << "******************************" << vcl_endl;
-  vcl_cout << " Testing mbl_data_wrapper_mixer " << vcl_endl;
-  vcl_cout << "*****************************" << vcl_endl;
+  vcl_cout << "********************************\n"
+           << " Testing mbl_data_wrapper_mixer\n"
+           << "********************************\n";
 
   test_data_wrapper_pair_mixer(3,7);
   test_data_wrapper_pair_mixer(1,7);

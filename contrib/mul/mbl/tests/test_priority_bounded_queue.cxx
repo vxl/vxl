@@ -6,9 +6,9 @@
 
 void test_priority_bounded_queue()
 {
-  vcl_cout << "\n\n************************************" << vcl_endl;
-  vcl_cout << " Testing mbl_priority_bounded_queue " << vcl_endl;
-  vcl_cout << "************************************" << vcl_endl;
+  vcl_cout << "************************************\n"
+           << " Testing mbl_priority_bounded_queue\n"
+           << "************************************\n";
 
   mbl_priority_bounded_queue<int, vcl_deque<int>, vcl_greater<int> > pq(3);
 

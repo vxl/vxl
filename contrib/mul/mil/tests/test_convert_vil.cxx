@@ -8,9 +8,9 @@
 
 void test_convert_vil()
 {
-  vcl_cout << "**********************" << vcl_endl;
-  vcl_cout << " Testing mil_convert_vil" << vcl_endl;
-  vcl_cout << "**********************" << vcl_endl;
+  vcl_cout << "*************************\n"
+           << " Testing mil_convert_vil\n"
+           << "*************************\n";
 
   // test grey conversions
 

@@ -5,9 +5,9 @@
 
 void test_stats_1d()
 {
-  vcl_cout << "******************************" << vcl_endl;
-  vcl_cout << " Testing mbl_stats_1d " << vcl_endl;
-  vcl_cout << "*****************************" << vcl_endl;
+  vcl_cout << "**********************\n"
+           << " Testing mbl_stats_1d\n"
+           << "**********************\n";
 
   mbl_stats_1d stats;
 

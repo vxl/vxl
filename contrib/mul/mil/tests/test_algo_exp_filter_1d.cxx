@@ -7,9 +7,9 @@
 
 void test_algo_exp_filter_1d_byte_float()
 {
-  vcl_cout << "***********************" << vcl_endl;
-  vcl_cout << " Testing mil_algo_exp_filter_1d byte-float" << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "*******************************************\n"
+           << " Testing mil_algo_exp_filter_1d byte-float\n"
+           << "*******************************************\n";
 
   int n = 100;
   vcl_vector<vil_byte> src(n);
@@ -46,9 +46,9 @@ void test_algo_exp_filter_1d_byte_float()
 
 void test_algo_exp_filter_1d_float_float()
 {
-  vcl_cout << "***********************" << vcl_endl;
-  vcl_cout << " Testing mil_algo_exp_filter_1d float-float" << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "********************************************\n"
+           << " Testing mil_algo_exp_filter_1d float-float\n"
+           << "********************************************\n";
 
   int n = 100;
   vcl_vector<float> src(n);

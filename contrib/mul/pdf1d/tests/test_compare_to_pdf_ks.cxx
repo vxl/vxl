@@ -19,9 +19,9 @@
 //: Generate lots of samples using pdf, build new pdf with builder and compare the two
 void test_compare_to_pdf_ks()
 {
-  vcl_cout << "\n\n*********************************\n";
-  vcl_cout << " Testing pdf1d_compare_to_pdf_ks\n";
-  vcl_cout << "*********************************\n";
+  vcl_cout << "*********************************\n"
+           << " Testing pdf1d_compare_to_pdf_ks\n"
+           << "*********************************\n";
 
 
   pdf1d_compare_to_pdf_ks comparator;

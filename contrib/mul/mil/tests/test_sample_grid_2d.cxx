@@ -8,9 +8,9 @@
 
 void test_sample_grid_2d_byte()
 {
-  vcl_cout << "*******************************\n";
-  vcl_cout << " Testing mil_sample_grid_2d\n";
-  vcl_cout << "*******************************\n";
+  vcl_cout << "****************************\n"
+           << " Testing mil_sample_grid_2d\n"
+           << "****************************\n";
 
   mil_image_2d_of<vil_byte> image0;
   image0.resize(10,10);

@@ -8,7 +8,7 @@ static unsigned char black = 0, white = 10;
 
 static void print_out(int n,
                       const char* s1, mil_image_2d_of<unsigned char> a,
-                      const char* s2, mil_image_2d_of<unsigned char> b, 
+                      const char* s2, mil_image_2d_of<unsigned char> b,
                       const char* s3, mil_image_2d_of<float> c)
 {
   vcl_cout << "\n";
@@ -32,9 +32,9 @@ static void print_out(int n,
 
 void test_algo_line_filter_byte()
 {
-  vcl_cout << "***********************" << vcl_endl;
-  vcl_cout << " Testing mil_algo_line_filter (byte)" << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "*************************************\n"
+           << " Testing mil_algo_line_filter (byte)\n"
+           << "*************************************\n";
 
   mil_algo_line_filter<unsigned char> filter;
 

@@ -5,9 +5,9 @@
 
 void test_sum_1d()
 {
-  vcl_cout << "******************************" << vcl_endl;
-  vcl_cout << " Testing mbl_sum_1d " << vcl_endl;
-  vcl_cout << "*****************************" << vcl_endl;
+  vcl_cout << "********************\n"
+           << " Testing mbl_sum_1d\n"
+           << "********************\n";
 
   mbl_sum_1d stats,stats2;
 

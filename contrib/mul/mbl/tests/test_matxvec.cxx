@@ -8,9 +8,9 @@
 
 void test_matxvec()
 {
-  vcl_cout << "******************************" << vcl_endl;
-  vcl_cout << " Testing mbl_matxvec " << vcl_endl;
-  vcl_cout << "*****************************" << vcl_endl;
+  vcl_cout << "*********************\n"
+           << " Testing mbl_matxvec\n"
+           << "*********************\n";
 
   vnl_matrix<double> A(4,5);
   for (unsigned int i=0;i<A.rows();++i)

@@ -6,9 +6,9 @@
 
 void test_histogram()
 {
-  vcl_cout << "******************************" << vcl_endl;
-  vcl_cout << " Testing mbl_histogram " << vcl_endl;
-  vcl_cout << "*****************************" << vcl_endl;
+  vcl_cout << "***********************\n"
+           << " Testing mbl_histogram\n"
+           << "***********************\n";
 
   mbl_histogram histo;
 
