@@ -12,8 +12,6 @@
 #include <vcl_cmath.h>
 
 #include <vnl/vnl_matrix.h>
-#include <vnl/vnl_matlab_print.h>
-#include <vnl/vnl_double_4.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_qr.h>
 #include <vgl/vgl_homg_plane_3d.h>
