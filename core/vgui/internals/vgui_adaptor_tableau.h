@@ -28,8 +28,8 @@ class vgui_adaptor_tableau : private vgui_tableau
   vgui_adaptor_tableau(vgui_adaptor *a);
   ~vgui_adaptor_tableau();
 
-  void set_child(vgui_tableau_sptr const & t) { slot.assign(t); }
-  vgui_tableau_sptr get_child() const { return slot; }
+  void set_child(vgui_tableau_sptr const& t) { slot.assign(t); }
+  vgui_parent_child_link get_child() const { return slot; }
   bool handle(vgui_event const &e) { return slot.handle(e); }
   vcl_string type_name() const { return "vgui_adaptor_tableau"; }
 
