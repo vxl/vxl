@@ -47,6 +47,7 @@ DECLARE( test_algo_find_peaks );
 DECLARE( test_algo_region_finder );
 DECLARE( test_algo_cartesian_differential_invariants );
 DECLARE( test_algo_corners );
+DECLARE( test_warp );
 
 void
 register_tests()
@@ -98,6 +99,7 @@ register_tests()
   REGISTER( test_algo_region_finder );
   REGISTER( test_algo_cartesian_differential_invariants );
   REGISTER( test_algo_corners );
+  REGISTER( test_warp );
 }
 
 DEFINE_MAIN;

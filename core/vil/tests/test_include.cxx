@@ -87,5 +87,6 @@
 #include <vil/vil_transform.h>
 #include <vil/vil_transpose.h>
 #include <vil/vil_view_as.h>
+#include <vil/vil_warp.h>
 
 int main() { return 0; }

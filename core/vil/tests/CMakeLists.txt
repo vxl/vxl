@@ -17,7 +17,8 @@ ADD_EXECUTABLE( vil_test_all
   test_image_view_maths.cxx
   test_convert.cxx
   test_rotate_image.cxx
-
+  test_warp.cxx
+  
   # Sampling Operations
   test_bilin_interp.cxx
   test_sample_profile_bilin.cxx

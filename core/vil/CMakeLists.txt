@@ -87,6 +87,7 @@ SET( vil_sources ${vil_sources}
   vil_copy.txx       vil_copy.cxx       vil_copy.h
   vil_new.cxx                           vil_new.h
   vil_print.cxx                         vil_print.h
+  vil_warp.txx							vil_warp.h
 
   # Bilinear Sampling Operations
   vil_bilin_interp.h
