@@ -1,6 +1,7 @@
 //:
 // \file
 #include <vcl_iostream.h>
+#include <vcl_cassert.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_style.h>
@@ -25,26 +26,28 @@
 #include <vgl/vgl_distance.h>
 #include <vgui/vgui_soview2D.h>
 
+#if 0
 //--------------------------------------------------------------------------
 //: vsol_point_2d view
 //--------------------------------------------------------------------------
-/*vcl_ostream& bgui_linked_vsol_soview2D_point::print(vcl_ostream& s) const
+vcl_ostream& bgui_linked_vsol_soview2D_point::print(vcl_ostream& s) const
 {
-  s << "[bgui_linked_vsol_soview2D_point " << x << "," << y << " ";
-  return bgui_soview2D::print(s) << "]";
+  s << "[bgui_linked_vsol_soview2D_point " << x << ',' << y << ' ';
+  return bgui_soview2D::print(s) << ']';
 }
-*/
+#endif // 0
+
 //--------------------------------------------------------------------------
 //: vsol_line_2d view
 //--------------------------------------------------------------------------
 
 vcl_ostream& bgui_linked_vsol_soview2D_line_seg::print(vcl_ostream& s) const
 {
-  s << "[bgui_linked_vsol_soview2D_line_seg " << sptr->p0()->x() << "," 
-                                        << sptr->p0()->y() << " -- " 
-                                        << sptr->p1()->x() << "," 
-                                        << sptr->p1()->y();
-  s << " "; return vgui_soview2D::print(s) << "]";
+  s << "[bgui_linked_vsol_soview2D_line_seg " << sptr->p0()->x() << ','
+                                              << sptr->p0()->y() << " -- "
+                                              << sptr->p1()->x() << ','
+                                              << sptr->p1()->y() << ' ';
+  return vgui_soview2D::print(s) << ']';
 }
 
 void bgui_linked_vsol_soview2D_line_seg::draw() const
@@ -60,8 +63,8 @@ void bgui_linked_vsol_soview2D_line_seg::draw() const
 
 float bgui_linked_vsol_soview2D_line_seg::distance_squared(float x, float y) const
 {
-  return vgl_distance2_to_linesegment(sptr->p0()->x(), sptr->p0()->y(), 
-                                      sptr->p1()->x(), sptr->p1()->y(), 
+  return vgl_distance2_to_linesegment(sptr->p0()->x(), sptr->p0()->y(),
+                                      sptr->p1()->x(), sptr->p1()->y(),
                                       x, y);
 }
 
@@ -84,6 +87,12 @@ void bgui_linked_vsol_soview2D_line_seg::translate(float tx, float ty)
 //: vsol_polyline_2d view
 //--------------------------------------------------------------------------
 
+
+bgui_linked_vsol_soview2D_polyline::bgui_linked_vsol_soview2D_polyline(vsol_polyline_2d_sptr const& pline)
+{
+  assert(!"TODO");
+}
+
 vcl_ostream& bgui_linked_vsol_soview2D_polyline::print(vcl_ostream& s) const
 {
   return s;
@@ -91,7 +100,7 @@ vcl_ostream& bgui_linked_vsol_soview2D_polyline::print(vcl_ostream& s) const
 
 void bgui_linked_vsol_soview2D_polyline::draw() const
 {
-  int n = sptr->size();
+  unsigned int n = sptr->size();
 
   glBegin( GL_LINE_STRIP );
   for (unsigned int i=0; i<n;i++)
@@ -99,14 +108,13 @@ void bgui_linked_vsol_soview2D_polyline::draw() const
     glVertex2f( sptr->vertex(i)->x() , sptr->vertex(i)->y() );
   }
   glEnd();
-
 }
 
 float bgui_linked_vsol_soview2D_polyline::distance_squared(float x, float y) const
 {
-  int n = sptr->size();
+  unsigned int n = sptr->size();
 
-  float* xptr = new float[n]; 
+  float* xptr = new float[n];
   float* yptr = new float[n];
   for (unsigned int i=0; i<n;i++)
   {
@@ -124,7 +132,7 @@ float bgui_linked_vsol_soview2D_polyline::distance_squared(float x, float y) con
 
 void bgui_linked_vsol_soview2D_polyline::get_centroid(float* x, float* y) const
 {
-  int n = sptr->size();
+  unsigned int n = sptr->size();
 
   *x = 0;
   *y = 0;
@@ -141,7 +149,7 @@ void bgui_linked_vsol_soview2D_polyline::get_centroid(float* x, float* y) const
 
 void bgui_linked_vsol_soview2D_polyline::translate(float tx, float ty)
 {
-  int n = sptr->size();
+  unsigned int n = sptr->size();
 
   for (unsigned int i=0; i<n;i++)
   {
@@ -149,7 +157,8 @@ void bgui_linked_vsol_soview2D_polyline::translate(float tx, float ty)
     sptr->vertex(i)->set_y( sptr->vertex(i)->y() + ty );
   }
 }
-/*
+
+#if 0
 //--------------------------------------------------------------------------
 //: vdgl_digital_curve dotted view
 //--------------------------------------------------------------------------
@@ -185,7 +194,8 @@ bgui_linked_vsol_soview2D_dotted_digital_curve(vdgl_digital_curve_sptr const& dc
     }
   return;
 }
-*/
+#endif // 0
+
 //--------------------------------------------------------------------------
 //: vdgl_digital_curve regular view
 //--------------------------------------------------------------------------
@@ -201,7 +211,7 @@ void bgui_linked_vsol_soview2D_digital_curve::draw() const
   vdgl_interpolator_sptr itrp = sptr->get_interpolator();
   vdgl_edgel_chain_sptr ech = itrp->get_edgel_chain();
 
-  int n = ech->size();
+  unsigned int n = ech->size();
 
   glBegin( GL_LINE_STRIP );
   for (unsigned int i=0; i<n;i++)
@@ -218,9 +228,9 @@ float bgui_linked_vsol_soview2D_digital_curve::distance_squared( float x , float
   vdgl_interpolator_sptr itrp = sptr->get_interpolator();
   vdgl_edgel_chain_sptr ech = itrp->get_edgel_chain();
 
-  int n = ech->size();
+  unsigned int n = ech->size();
 
-  float* xptr = new float[n]; 
+  float* xptr = new float[n];
   float* yptr = new float[n];
   for (unsigned int i=0; i<n;i++)
   {
@@ -243,7 +253,7 @@ void bgui_linked_vsol_soview2D_digital_curve::get_centroid( float* x, float* y )
   vdgl_interpolator_sptr itrp = sptr->get_interpolator();
   vdgl_edgel_chain_sptr ech = itrp->get_edgel_chain();
 
-  int n = ech->size();
+  unsigned int n = ech->size();
 
   *x = 0;
   *y = 0;
@@ -259,13 +269,13 @@ void bgui_linked_vsol_soview2D_digital_curve::get_centroid( float* x, float* y )
   *y *= s;
 }
 
-void bgui_linked_vsol_soview2D_digital_curve::translate( float x , float y ) 
+void bgui_linked_vsol_soview2D_digital_curve::translate( float x , float y )
 {
   //get the edgel chain
   vdgl_interpolator_sptr itrp = sptr->get_interpolator();
   vdgl_edgel_chain_sptr ech = itrp->get_edgel_chain();
 
-  int n = ech->size();
+  unsigned int n = ech->size();
 
   for (unsigned int i=0; i<n;i++)
   {
@@ -286,7 +296,7 @@ vcl_ostream& bgui_linked_vsol_soview2D_polygon::print(vcl_ostream& poly) const
 
 void bgui_linked_vsol_soview2D_polygon::draw() const
 {
-  int n = sptr->size();
+  unsigned int n = sptr->size();
 
   glBegin( GL_LINE_STRIP );
   for (unsigned int i=0; i<n;i++)
@@ -298,9 +308,9 @@ void bgui_linked_vsol_soview2D_polygon::draw() const
 
 float bgui_linked_vsol_soview2D_polygon::distance_squared( float x , float y ) const
 {
-  int n = sptr->size();
+  unsigned int n = sptr->size();
 
-  float* xptr = new float[n]; 
+  float* xptr = new float[n];
   float* yptr = new float[n];
   for (unsigned int i=0; i<n;i++)
   {
@@ -318,7 +328,7 @@ float bgui_linked_vsol_soview2D_polygon::distance_squared( float x , float y ) c
 
 void bgui_linked_vsol_soview2D_polygon::get_centroid( float* x, float* y ) const
 {
-  int n = sptr->size();
+  unsigned int n = sptr->size();
 
   *x = 0;
   *y = 0;
@@ -333,9 +343,9 @@ void bgui_linked_vsol_soview2D_polygon::get_centroid( float* x, float* y ) const
   *y *= s;
 }
 
-void bgui_linked_vsol_soview2D_polygon::translate( float x , float y ) 
+void bgui_linked_vsol_soview2D_polygon::translate( float x , float y )
 {
-  int n = sptr->size();
+  unsigned int n = sptr->size();
 
   for (unsigned int i=0; i<n;i++)
   {
@@ -344,10 +354,7 @@ void bgui_linked_vsol_soview2D_polygon::translate( float x , float y )
   }
 }
 
-
-
-
-/*
+#if 0
 //--------------------------------------------------------------------------
 //: vsol_line_2d group view
 //--------------------------------------------------------------------------
@@ -386,4 +393,5 @@ bgui_linked_vsol_soview2D_polygon_group(vcl_vector<vsol_polygon_2d_sptr>& polys)
       bgui_soview2D* sov = new bgui_linked_vsol_soview2D_polygon(*pit);
       ls.push_back(sov);
     }
-}*/
+}
+#endif // 0
