@@ -39,7 +39,7 @@ class kalman_filter
   vcl_vector<vgl_point_2d<double> > get_pre_observes();
   vcl_vector<vgl_point_2d<double> > get_cur_observes();
   vcl_vector<vgl_point_2d<double> > get_next_observes();
-  void read_data(char* fname);
+  void read_data(const char* fname);
   vcl_vector<vgl_point_3d<double> > get_local_pts();
 
   //: initialize the kalman filter states
@@ -52,7 +52,7 @@ class kalman_filter
   //: constructors
   //
   kalman_filter();
-  kalman_filter(char* fname);
+  kalman_filter(const char* fname);
   virtual ~kalman_filter();
 
  protected:

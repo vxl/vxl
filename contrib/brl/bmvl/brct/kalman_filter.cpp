@@ -32,7 +32,7 @@ kalman_filter::kalman_filter()
 {
 }
 
-kalman_filter::kalman_filter(char* fname)
+kalman_filter::kalman_filter(const char* fname)
 {
   // read data into the pool
   read_data(fname);
@@ -156,12 +156,7 @@ void kalman_filter::init_state_vector()
 
     vgl_line_2d<double> lr(FM.image2_epipolar_line(p1));
 
-    // get rid of any point whose gradient is perpendicule to the epipole line
-    double nx = lr.a(), ny = lr.b();
-    nx = nx / vcl_sqrt(nx*nx + ny*ny);
-    ny = ny / vcl_sqrt(nx*nx + ny*ny);
-    //if (vcl_fabs( nx*vcl_cos(angle0*vnl_math::pi/180) + ny*vcl_sin(angle0*vnl_math::pi/180) )< 0.95)
-    {
+    // get rid of any matching candidate point whose gradient is far away original gradient
       // getting the intersection point
       vgl_point_2d<double> p2;
       vcl_vector<vgl_point_2d<double> > pts;
@@ -178,8 +173,7 @@ void kalman_filter::init_state_vector()
         double angle1 = (*ec1)[x1_index].get_theta();
 
         double dist_p1p2 = vgl_homg_operators_2d<double>::distance_squared(p1, temp);
-        if (vcl_fabs(angle1-angle0)<90 && dist > dist_p1p2 &&
-            vcl_fabs(nx*vcl_cos(angle1*vnl_math::pi/180) + ny*vcl_sin(angle1*vnl_math::pi/180))<0.95 )
+        if (vcl_fabs(angle1-angle0)<12.5 && dist > dist_p1p2)
         { // make sure it filters out lines parallel to epipole lines.
           p2 = temp;
           flag = true;
@@ -198,7 +192,6 @@ void kalman_filter::init_state_vector()
         observes_[0].push_back(x1);
         observes_[1].push_back(x2);
       }
-    }
   }
 
 
@@ -488,7 +481,7 @@ void kalman_filter::inc()
   update_confidence();
 }
 
-void kalman_filter::read_data(char *fname)
+void kalman_filter::read_data(const char *fname)
 {
   vcl_ifstream fp(fname);
 
@@ -524,8 +517,8 @@ void kalman_filter::read_data(char *fname)
         vdgl_edgel e;
         e.set_x(x);
         e.set_y(y);
-        e.set_theta(0);
-        e.set_grad(0);
+        e.set_theta(dir);
+        e.set_grad(conf);
         ec->add_edgel(e);
         //add this edge to the current contour
       }
@@ -557,7 +550,10 @@ void kalman_filter::init_velocity()
   double trans_dist = 1.0; // 105mm
   vnl_double_3 T = vnl_inverse(K_) * e;
   T /= vcl_sqrt(T[0]*T[0] + T[1]*T[1] + T[2]*T[2]);
-  T *= trans_dist;
+  if(T[2]<0)
+    T *= trans_dist;
+  else
+    T *= -trans_dist;
 
   //initialize the state vector
   X_[0] = X_[3] = T[0];

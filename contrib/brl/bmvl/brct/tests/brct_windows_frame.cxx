@@ -74,7 +74,7 @@ void brct_windows_frame::init()
   tab_3d_->add_point(0,0,0);
 
     // Add a line in the xaxis:
-  tab_3d_->set_foreground(1,1,0);
+  tab_3d_->set_foreground(1,0,0);
   tab_3d_->add_line(1,0,0, 4,0,0);
 
   // Add a line in the yaxis:
@@ -112,7 +112,8 @@ void brct_windows_frame::init()
   this->add_child(shell);
 
   // set a kalman filter
-  kalman_ = new kalman_filter("data/curve28.txt");
+  data_file_name_ = "data/curve28.txt";
+  kalman_ = new kalman_filter(data_file_name_.c_str());
   e_ = 0;
 }
 
@@ -209,10 +210,14 @@ void brct_windows_frame::remove_curve3d()
 
 void brct_windows_frame::init_kalman()
 {
+
   vcl_vector<vgl_point_2d<double> > c2d;
   
-  assert(lines_.size()>=2);
-  init_epipole();
+  if(!e_)
+  {
+    assert(lines_.size()>=2); 
+    init_epipole();
+  }
   
   if (kalman_ == 0)
     vcl_cout<<"brct_windows_frame::kalman_ not created yet\n";
@@ -434,6 +439,10 @@ void brct_windows_frame::load_status()
     
     double x, y;
     in >> x >> y;
+    if(!e_)
+    {
+      e_ = new vgl_point_2d<double>;
+    }
     e_ -> set(x, y);
 
     kalman_->init_epipole(x, y);    

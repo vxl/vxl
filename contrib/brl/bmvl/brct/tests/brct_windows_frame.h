@@ -96,6 +96,7 @@ class brct_windows_frame : public vgui_wrapper_tableau
   vgui_rubberband_tableau_sptr tab_rubber_;
   vil1_image img_;
   vgui_grid_tableau_sptr grid_;
+  vcl_string data_file_name_;
 
   //: inital epipole
   vcl_vector<vgl_homg_line_2d<double> > lines_;
