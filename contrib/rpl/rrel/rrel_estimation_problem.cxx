@@ -44,6 +44,7 @@ rrel_estimation_problem::compute_weights( const vcl_vector<double>& residuals,
     break;
   case SINGLE:
     obj->wgt( residuals.begin(), residuals.end(), single_scale_, weights.begin() );
+    break;
   case MULTIPLE:
     obj->wgt( residuals.begin(), residuals.end(), multiple_scales_->begin(), weights.begin() );
     break;
