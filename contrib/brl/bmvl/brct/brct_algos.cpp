@@ -8,8 +8,6 @@
 #include <vnl/vnl_double_4.h>
 #include <vnl/vnl_double_4x4.h>
 #include <vnl/vnl_double_2x3.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_double_2x2.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vdgl/vdgl_interpolator.h>
@@ -55,9 +53,8 @@ vgl_point_2d<double> brct_algos::projection_3d_point(const vgl_point_3d<double> 
   return vgl_homg_point_2d<double>(t[0],t[1],t[2]);
 }
 
-bugl_gaussian_point_2d<double> brct_algos::project_3d_point(\
-      const vnl_double_3x4 &P, \
-      const bugl_gaussian_point_3d<double> & X)
+bugl_gaussian_point_2d<double> brct_algos::project_3d_point(const vnl_double_3x4 &P,
+                                                            const bugl_gaussian_point_3d<double> & X)
 {
   vnl_double_4 Y(X.x(),X.y(),X.z(),1.0);
   vnl_double_3 u = P*Y;
@@ -89,7 +86,6 @@ bugl_gaussian_point_2d<double> brct_algos::project_3d_point(\
   vgl_homg_point_2d<double> hp2d(u[0], u[1], u[2]);
   vgl_point_2d<double> p2d(hp2d);
   return bugl_gaussian_point_2d<double>(p2d, Sigma2d);
- 
 }
 
 vgl_point_3d<double> brct_algos::bundle_reconstruct_3d_point(vcl_vector<vnl_double_2> &pts, vcl_vector<vnl_double_3x4> &Ps)
@@ -143,7 +139,7 @@ vgl_point_2d<double> brct_algos::most_possible_point(vdgl_digital_curve_sptr dc,
   vdgl_interpolator_sptr interp = dc->get_interpolator();
   vdgl_edgel_chain_sptr ec = interp->get_edgel_chain();
 
-  if(!ec)
+  if (!ec)
   { 
     vcl_cout<<"In brct_algos::most_possible_point(...) - warning, null chain\n";
     return vgl_point_2d<double>();
@@ -153,7 +149,7 @@ vgl_point_2d<double> brct_algos::most_possible_point(vdgl_digital_curve_sptr dc,
   int N = ec->size();
   vgl_point_2d<double> pmax;
 
-  for(int i=0; i<N; i++)
+  for (int i=0; i<N; i++)
   {
     vgl_point_2d<double> p = (*ec)[i].get_pt();
     double d = pt.prob_at(p);
@@ -162,11 +158,9 @@ vgl_point_2d<double> brct_algos::most_possible_point(vdgl_digital_curve_sptr dc,
       maxd = d;
       pmax = p;
     }
-
   }
 
   return pmax;
- 
 }
  
 vnl_double_2 brct_algos::projection_3d_point(const vnl_double_3x4 &P, const vnl_double_3 &X)
@@ -189,4 +183,3 @@ vnl_double_2 brct_algos::projection_3d_point(const vnl_double_3x4 &P, const vnl_
 
     return z;
 }
-

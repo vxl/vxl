@@ -14,9 +14,6 @@
 //   06-AUG-2003 Amitha Perera -- Remove texture mapping.
 // \endverbatim
 
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
-
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_section_buffer.h>
