@@ -860,7 +860,6 @@ bool sdet_grid_finder::compute_affine_homography()
     print_lines(grid_lines0);
     vcl_cout << "\n\nGrid Lines 90\n";
     print_lines(grid_lines90);
-    vcl_cout << vcl_flush;
   }
   for (vcl_vector<vsol_line_2d_sptr>::iterator lit = grid_lines0.begin();
        lit != grid_lines0.end(); lit++)
@@ -1194,7 +1193,6 @@ bool sdet_grid_finder::compute_homography()
   if (verbose_)
   {
     vcl_cout << "The composite homography\n" << homography_ << '\n';
-    vcl_cout.flush();
   }
   homography_valid_=true;
 
@@ -1340,12 +1338,13 @@ bool sdet_grid_finder::write_image_points(vcl_ofstream & outstream)
      double image_y = thp.y() / thp.w();
      outstream << image_x <<" "<<image_y<<"\n";
    }
- }
- outstream << "\n" << vcl_flush;
+ } 
+ outstream << "\n";
+ 
  return true;
 }
 
-
+ 
 bool sdet_grid_finder::transform_grid_points(vnl_matrix_fixed<double,3,3> & K,
                                              vnl_matrix_fixed<double,3,4> & M,
                                              vcl_vector<vsol_point_2d_sptr> & points)
