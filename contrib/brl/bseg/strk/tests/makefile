@@ -6,6 +6,8 @@ TESTMAIN := test_driver.cxx
 TESTS += test_tracking_face_2d.cxx
 PARAMS_test_tracking_face_2d := image0005_left.bmp image0005_right.bmp
 
+MINI_PROG_SOURCES += test_include.cxx
+
 #########################################
 include ${IUEROOT}/config/static-tests.mk
 #########################################
