@@ -1,14 +1,14 @@
 // This is mul/vimt3d/vimt3d_load.cxx
-
+#include "vimt3d_load.h"
 //:
 // \file
 // \author Ian Scott
 
-#include "vimt3d_load.h"
 #include <vil3d/vil3d_property.h>
 
 //: Create a transform from the properties of image resource.
-// The transform will be from world co-ordinates in metres to image co-ordinates (or mm if requested)
+// The transform will be from world co-ordinates in metres to image co-ordinates (or mm if requested).
+// The image origin will be as specified by the image format (or (0,0,0) if requested).
 vimt3d_transform_3d vimt3d_load_transform(const vil3d_image_resource_sptr &im, bool use_millimetres, bool use_000_as_origin)
 {
   float width[3] = { 1.0f, 1.0f, 1.0f };
