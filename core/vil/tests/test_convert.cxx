@@ -8,6 +8,7 @@
 #include <vil2/vil2_load.h>
 
 
+static
 void test_convert1(const char * golden_data_dir)
 {
   vcl_cout << "*********************************************\n"
@@ -30,6 +31,39 @@ void test_convert1(const char * golden_data_dir)
   vil2_print_all(vcl_cout, image2);
 }
 
+static
+void test_convert_diff_types(const char * golden_data_dir)
+{
+  vcl_cout << "**************************************************************\n"
+           << " Testing vil2_convert_cast(vil2_image_base,vil2_image_view<T>)\n"
+           << "**************************************************************\n";
+
+  vcl_string datadir = golden_data_dir;
+  if (*golden_data_dir) datadir += "/";
+
+  testlib_test_begin( "Loading images" );
+  vil2_image_view<vxl_byte> image1 = vil2_load((datadir + "ff_grey8bit_raw.pgm").c_str());
+  vil2_image_view_base_sptr image_base1 = vil2_load((datadir + "ff_grey8bit_raw.pgm").c_str());
+  testlib_test_perform( image1 && image_base1 );
+
+  testlib_test_begin( "Converting explicitly 8bit to 16bit" );
+  vil2_image_view<vxl_uint_16> image_16_1;
+  vil2_convert_cast( image1, image_16_1 );
+  testlib_test_perform( image_16_1 && image_16_1(4,0) == vxl_uint_16( image1(4,0) ) );
+
+  testlib_test_begin( "Converting implicitly 8bit to 16bit" );
+  vil2_image_view<vxl_uint_16> image_16_2;
+  vil2_convert_cast( image_base1, image_16_2 );
+  testlib_test_perform( image_16_2 && image_16_2(4,0) == vxl_uint_16( image1(4,0) ) );
+
+  if( image_16_2 ) {
+    vil2_print_all(vcl_cout, image_16_2);
+  } else {
+    vcl_cout << "(no dump)\n";
+  }
+}
+
+static
 void test_convert_stretch_range()
 {
   vcl_cout<<"testing vil2_convert_stretch_range(src,dest):"<<vcl_endl;
@@ -56,6 +90,7 @@ MAIN( test_convert )
 
   test_convert1(argc>1 ? argv[1] : "file_read_data");
   test_convert_stretch_range();
+  test_convert_diff_types(argc>1 ? argv[1] : "file_read_data");
 
   SUMMARY();
 }

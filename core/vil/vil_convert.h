@@ -105,6 +105,64 @@ inline void vil2_convert_cast(const vil2_image_view<inP >&src, vil2_image_view<o
 }
 
 
+//: Cast the unknown pixel type to the known one, if possible.
+//
+// Will call the other vil2_convert_case to do the actual
+// conversion. For template instantiation reasons, this will only
+// convert to a scalar type, not a RGB or RGBA type. If you need a
+// multi-component view, then call this to get the corresponding
+// multi-planar view, and do a second (cheap) conversion.
+//
+// \relates vil2_image_view_base
+//
+template <class outP>
+inline void vil2_convert_cast(const vil2_image_view_base_sptr&src, vil2_image_view<outP >&dest)
+{
+#define docase(T) \
+   case T: \
+     vil2_convert_cast( vil2_image_view< vil2_pixel_format_type_of< T >::type >( src ), dest );\
+     break \
+
+  switch( src->pixel_format() ) {
+    docase( VIL2_PIXEL_FORMAT_UINT_32 );
+    docase( VIL2_PIXEL_FORMAT_INT_32 );
+    docase( VIL2_PIXEL_FORMAT_UINT_16 );
+    docase( VIL2_PIXEL_FORMAT_INT_16 );
+    docase( VIL2_PIXEL_FORMAT_BYTE );
+    docase( VIL2_PIXEL_FORMAT_SBYTE );
+    docase( VIL2_PIXEL_FORMAT_FLOAT );
+    docase( VIL2_PIXEL_FORMAT_DOUBLE );
+
+    docase( VIL2_PIXEL_FORMAT_BOOL );
+
+    // Skip the RGB type conversions because the vil2_convert_cast are
+    // not complete. For example, a cast from vxl_uint_16 to
+    // vil2_rgb<vxl_uint_32> is not defined.
+
+    //docase( VIL2_PIXEL_FORMAT_RGB_UINT_32 );
+    //docase( VIL2_PIXEL_FORMAT_RGB_INT_32 );
+    //docase( VIL2_PIXEL_FORMAT_RGB_UINT_16 );
+    //docase( VIL2_PIXEL_FORMAT_RGB_INT_16 );
+    //docase( VIL2_PIXEL_FORMAT_RGB_BYTE );
+    //docase( VIL2_PIXEL_FORMAT_RGB_SBYTE );
+    //docase( VIL2_PIXEL_FORMAT_RGB_FLOAT );
+    //docase( VIL2_PIXEL_FORMAT_RGB_DOUBLE );
+
+    //docase( VIL2_PIXEL_FORMAT_RGBA_UINT_32 );
+    //docase( VIL2_PIXEL_FORMAT_RGBA_INT_32 );
+    //docase( VIL2_PIXEL_FORMAT_RGBA_UINT_16 );
+    //docase( VIL2_PIXEL_FORMAT_RGBA_INT_16 );
+    //docase( VIL2_PIXEL_FORMAT_RGBA_BYTE );
+    //docase( VIL2_PIXEL_FORMAT_RGBA_SBYTE );
+    //docase( VIL2_PIXEL_FORMAT_RGBA_FLOAT );
+    //docase( VIL2_PIXEL_FORMAT_RGBA_DOUBLE );
+    default:
+      ;
+  }
+#undef docase
+}
+
+
 
 //: Performs rounding between different pixel types.
 template <class In, class Out>
