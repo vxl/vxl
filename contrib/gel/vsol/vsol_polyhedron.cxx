@@ -51,12 +51,12 @@ bool vsol_polyhedron::operator==(vsol_polyhedron const &other) const
 
   vsol_point_3d_sptr const& p=storage_[0]; // alias
 
-  int j=-1;
-  while (++j < storage_.size())
+  unsigned int j;
+  for (j=0; j < storage_.size(); ++j)
     if (p==other.storage_[j]) break;
   if (j == storage_.size()) return false;
 
-  for(int i=1; i < storage_.size(); ++i)
+  for (unsigned int i=1; i < storage_.size(); ++i)
   {
     if (++j >= storage_.size()) j=0;
     if (storage_[i]!=other.storage_[j])
@@ -88,7 +88,7 @@ void vsol_polyhedron::compute_bounding_box(void)
   double ymax=ymin;
   double zmax=zmin;
 
-  for (int i=0;i<storage_.size();++i)
+  for (unsigned int i=0;i<storage_.size();++i)
   {
     double x=storage_[i]->x();
     if      (x<xmin) xmin=x;

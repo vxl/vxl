@@ -112,7 +112,7 @@ public:
   //---------------------------------------------------------------------------
   //: Is `i' a valid index for the list of vertices ?
   //---------------------------------------------------------------------------
-  bool valid_index(int i) const { return i>=0 && i<storage_.size(); }
+  bool valid_index(unsigned int i) const { return i<storage_.size(); }
 
   //***************************************************************************
   // Basic operations

@@ -243,7 +243,7 @@ gevd_contour::FindNetwork(gevd_bufferxy& edgels,
     edges->push_end(edges2.value());
 #endif
 
-  for ( int i= 0; i< edges2.size(); i++)
+  for ( unsigned int i= 0; i< edges2.size(); i++)
     edges->push_back( edges2[i]);
 
 #if 0
@@ -251,7 +251,7 @@ gevd_contour::FindNetwork(gevd_bufferxy& edgels,
     vertices->push_end(vertices2.value());
 #endif
 
-  for ( int i=0; i< vertices2.size(); i++)
+  for ( unsigned int i=0; i< vertices2.size(); i++)
     vertices->push_back( vertices2[i]);
 
   return true;
@@ -398,8 +398,10 @@ gevd_contour::FindChains(gevd_bufferxy& edgels, const int njunction,
           xloc.reverse(), yloc.reverse(); // reverse collected pixels
 #endif
           vcl_vector<int> xloctemp( xloc.size()), yloctemp( yloc.size());
-          for ( int iii=0; iii< xloc.size(); iii++) xloctemp[iii]= xloc[xloc.size()-1-iii];
-          for ( int jjj=0; jjj< yloc.size(); jjj++) yloctemp[jjj]= yloc[yloc.size()-1-jjj];
+          for ( unsigned int iii=0; iii< xloc.size(); iii++)
+            xloctemp[iii]= xloc[xloc.size()-1-iii];
+          for ( unsigned int jjj=0; jjj< yloc.size(); jjj++)
+            yloctemp[jjj]= yloc[yloc.size()-1-jjj];
 
           while (NextPixel(x, y, edgels)) // trace along other dir
             RecordPixel(x, y, edgels, xloc, yloc);
@@ -904,7 +906,7 @@ NumConnectedRays(vtol_vertex_2d& v)
 {
   int nray = 0;
   vcl_vector<vtol_edge *>* segs = v.compute_edges();
-  for ( int i=0; i< segs->size(); i++)
+  for ( unsigned int i=0; i< segs->size(); i++)
   {
     if ((*segs)[i]->v1()->cast_to_vertex_2d() == &v) nray++; // 1 for 1-chain
     if ((*segs)[i]->v2()->cast_to_vertex_2d() == &v) nray++; // 2 for 1-cycle
@@ -1112,7 +1114,7 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
   // 1. Create end points or junctions, for all 1-chains.
   const float connect_fuzz = 2;
 
-  for ( int i=0; i< edges.size(); i++)
+  for ( unsigned int i=0; i< edges.size(); i++)
   {
     vtol_edge_2d * edge = edges[i];
     vdgl_digital_curve * dc = (vdgl_digital_curve*) edge->curve().ptr();
@@ -1161,7 +1163,7 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
   // touches another contour or itself at an interior point.
   int jcycle = 0, jchain = 0;   // number of junctions with cycle/chain
 
-  for ( int i=0; i< vertices.size(); i++)
+  for ( unsigned int i=0; i< vertices.size(); i++)
   {
     vtol_vertex_2d * end = vertices[i];
     vtol_edge_2d *weaker = NULL, *stronger = NULL; // weaker touches stronger
@@ -1215,7 +1217,7 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
   // 3. Merge touching end points, into a larger junction/chain.
   int dendpt = 0, dchain = 0;   // number of deleted endpt/chain
 
-  for ( int i=0; i< vertices.size(); i++){
+  for ( unsigned int i=0; i< vertices.size(); i++){
     vtol_vertex_2d * end1 = vertices[i]; // search from dangling end pt only
     if (end1 != NULL &&          // skip deleted vertices
         NumConnectedRays(*end1) == 1) { // end point of dangling 1-chain
@@ -1274,7 +1276,7 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
 
   // 4. Insert virtual junction for isolated 1-cycles
   int ncycle = 0;
-  for ( int i=0; i< edges.size(); i++)
+  for ( unsigned int i=0; i< edges.size(); i++)
   {
     vtol_edge_2d * edge = edges[i];
     if (!edge->v1()) {  // vertices not created from 1.
@@ -1319,7 +1321,7 @@ gevd_contour::SubPixelAccuracy(vcl_vector<vtol_edge_2d *>& edges,
     vcl_cout << "Insert subpixel accuracy into edges/vertices";
 
   // 1. Subpixel accurary for end points
-  for ( int i=0; i< vertices.size(); i++)
+  for ( unsigned int i=0; i< vertices.size(); i++)
   {
     vtol_vertex_2d * vert = vertices[i];
     int x = int(vert->x()), y = int(vert->y());
@@ -1328,7 +1330,7 @@ gevd_contour::SubPixelAccuracy(vcl_vector<vtol_edge_2d *>& edges,
   }
 
   // 2. Subpixel accurary for chain pixels
-  for ( int i=0; i< edges.size(); i++)
+  for ( unsigned int i=0; i< edges.size(); i++)
   {
     vtol_edge_2d * edge = edges[i];
     vdgl_digital_curve * dc = (vdgl_digital_curve*) edge->curve().ptr();
@@ -1813,7 +1815,7 @@ gevd_contour::EqualizeSpacing(vcl_vector<vtol_edge_2d *>& chains)
   if (talkative)
     vcl_cout << "Equalize the spacing between pixels in chains";
 
-  for ( int i= 0; i< chains.size(); i++)
+  for ( unsigned int i= 0; i< chains.size(); i++)
   {
     vtol_edge_2d * e = chains[i];
     vdgl_digital_curve * dc = (vdgl_digital_curve*) e->curve().ptr();
@@ -1950,7 +1952,7 @@ gevd_contour::Translate(vcl_vector<vtol_edge_2d *>& edges, // translate loc to c
 #if 0
   for (vertices.reset(); vertices.next(); ) {
 #endif
-  for ( int i=0; i< vertices.size(); i++) {
+  for ( unsigned int i=0; i< vertices.size(); i++) {
     vtol_vertex_2d * vert = vertices[i];
     vert->set_x(vert->x() + tx);
     vert->set_y(vert->y() + ty);
@@ -1958,7 +1960,7 @@ gevd_contour::Translate(vcl_vector<vtol_edge_2d *>& edges, // translate loc to c
 #if 0
   for (edges.reset(); edges.next(); ) {
 #endif
-  for ( int i=0; i< edges.size(); i++) {
+  for ( unsigned int i=0; i< edges.size(); i++) {
     vtol_edge_2d * edge = edges[i];
     vdgl_digital_curve * dc = (vdgl_digital_curve*) edge->curve().ptr();
 
@@ -2024,7 +2026,7 @@ gevd_contour::ClearNetwork(vcl_vector<vtol_edge_2d *>*& edges,
 #if 0
     for (edges->reset(); edges->next(); ) {
 #endif
-    for ( int i=0; i< edges->size(); i++) {
+    for ( unsigned int i=0; i< edges->size(); i++) {
 #if 0 // not (yet) converted
       vtol_edge_2d * edge = (*edges)[i];
       Curve* dc = NULL;        // retrieve digital chain dc
@@ -2058,7 +2060,7 @@ gevd_contour::CreateEdgeMap(vcl_vector<vtol_edge_2d *>& edges,
   gevd_bufferxy* map = new gevd_bufferxy(sizex, sizey, bits_per_ptr);
   map->Clear();
 
-  for ( int i= 0; i< edges.size(); i++) {
+  for ( unsigned int i= 0; i< edges.size(); i++) {
     vtol_edge_2d * e = edges[i];
     vdgl_digital_curve * dc = (vdgl_digital_curve*) e->curve().ptr();
     vdgl_edgel_chain * xy= dc->get_interpolator()->get_edgel_chain().ptr();
@@ -2105,7 +2107,7 @@ gevd_contour::MaskEdgels(const gevd_bufferxy& mask,
 void
 gevd_contour::SetEdgelData(gevd_bufferxy& grad_mag, gevd_bufferxy& angle, vcl_vector<vtol_edge_2d *>& edges)
 {
-  for ( int i=0; i< edges.size(); i++)
+  for ( unsigned int i=0; i< edges.size(); i++)
   {
     vtol_edge_2d * e = edges[i];
     vdgl_digital_curve *dc= ( vdgl_digital_curve *) e->curve().ptr();
@@ -2185,7 +2187,7 @@ gevd_contour::CreateLookupTable(vcl_vector<vtol_edge_2d *>& set)
   set2->set_growth_ratio(1.5);  // growth ratio for table
   for (set.reset(); set.next(); )
 #endif
-  for ( int i=0; i< set.size(); i++)
+  for ( unsigned int i=0; i< set.size(); i++)
     gevd_contour::LookupTableInsert(*set2, set[i]);
   return set2;
 }
@@ -2201,7 +2203,7 @@ gevd_contour::CreateLookupTable(vcl_vector<vtol_vertex_2d *>& set)
   set2->set_growth_ratio(1.5);  // growth ratio for table
   for (set.reset(); set.next(); )
 #endif
-  for ( int i=0; i< set.size(); i++)
+  for ( unsigned int i=0; i< set.size(); i++)
     gevd_contour::LookupTableInsert(*set2, set[i]);
   return set2;
 }
@@ -2373,17 +2375,17 @@ gevd_contour::CheckInvariants(vcl_vector<vtol_edge_2d *>& edges,
 #if 0
   for (edges.reset(); edges.next(); ) // unmark all network
 #endif
-  for ( int i=0; i< edges.size(); i++)
+  for ( unsigned int i=0; i< edges.size(); i++)
     edges[i]->set_id(unmark);
 #if 0
   for (vertices.reset(); vertices.next(); )
 #endif
-  for ( int i=0; i< edges.size(); i++)
+  for ( unsigned int i=0; i< edges.size(); i++)
     vertices[i]->set_id(unmark);
 #if 0
   for (edges.reset(); edges.next(); )   // check vs of all edges
 #endif
-  for ( int i=0; i< edges.size(); i++) {
+  for ( unsigned int i=0; i< edges.size(); i++) {
     vtol_edge_2d * e = edges[i];
     vtol_vertex * v1 = e->v1().ptr();
     if (v1->get_id() != unmark) {
@@ -2399,12 +2401,12 @@ gevd_contour::CheckInvariants(vcl_vector<vtol_edge_2d *>& edges,
 #if 0
   for (vertices.reset(); vertices.next(); )     // check es of all vertices
 #endif
-  for ( int i=0; i< vertices.size(); i++) {
+  for ( unsigned int i=0; i< vertices.size(); i++) {
     vcl_vector<vtol_edge *>* es = vertices[i]->compute_edges();
 #if 0
     for (es->reset(); es->next(); )
 #endif
-    for ( int j=0; j< es->size(); j++)
+    for ( unsigned int j=0; j< es->size(); j++)
       if ((*es)[j]->get_id() != unmark) {
         vcl_cout << (*es)[j] << ": e is not in edge list\n";
         nerror++;
@@ -2414,12 +2416,12 @@ gevd_contour::CheckInvariants(vcl_vector<vtol_edge_2d *>& edges,
 #if 0
   for (edges.reset(), id = 0; edges.next(); id++) // mark all network
 #endif
-  for ( int id=0; id< edges.size(); id++)
+  for ( unsigned int id=0; id< edges.size(); id++)
     edges[id]->set_id(id);
 #if 0
   for (vertices.reset(), id = 0; vertices.next(); id++)
 #endif
-  for ( int id=0; id< vertices.size(); id++)
+  for ( unsigned int id=0; id< vertices.size(); id++)
     vertices[id]->set_id(id);
 
   return nerror;

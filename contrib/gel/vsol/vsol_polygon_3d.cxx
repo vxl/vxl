@@ -97,7 +97,7 @@ bool vsol_polygon_3d::operator==(const vsol_polygon_3d &other) const
             result = (*p==*(*other.storage_)[i]);
           if(result)
             {
-              for(unsigned int j=1;j<size()&&result;++i,++j)
+              for (int j=1;j<size()&&result;++i,++j)
                 {
                   if(i>=storage_->size()) i=0;
                   result = ((*storage_)[i]==(*storage_)[j]);
@@ -239,14 +239,6 @@ bool vsol_polygon_3d::is_convex(void) const
        return false; // non-planar
    }
    return true;
-}
-
-//---------------------------------------------------------------------------
-//: Is `i' a valid index for the list of vertices ?
-//---------------------------------------------------------------------------
-bool vsol_polygon_3d::valid_index(const int i) const
-{
-  return (i>=0)&&(i<storage_->size());
 }
 
 //---------------------------------------------------------------------------

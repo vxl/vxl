@@ -86,7 +86,7 @@ bool vmal_multi_view_data<T>::get_next_track(vcl_map<int,T,vcl_less<int> > & tra
   if(MVM.size()>_matchnum)
   {
     track.clear();
-    for (int i=0;i <MVM[_matchnum].size();i++)
+    for (unsigned int i=0;i <MVM[_matchnum].size();i++)
     {
       int value=MVM[_matchnum][i];
       if (value !=NViewMatch::nomatch)
@@ -235,9 +235,9 @@ void vmal_multi_view_data<T>::remove(int view_num, T match)
 template <class T>
 vcl_ostream& vmal_multi_view_data<T>::print(vcl_ostream& str)
 {
-  for(int j=0;j<MVM.size();j++)
+  for (unsigned int j=0;j<MVM.size();j++)
   {
-    for(int i=0;i<_nbviews;i++)
+    for (int i=0;i<_nbviews;i++)
       if (MVM[j][i]<0)
       str<<"  "<<MVM[j][i];
       else if (MVM[j][i]<10)

@@ -115,7 +115,7 @@ public:
   //---------------------------------------------------------------------------
   //: Is `i' a valid index for the list of vertices ?
   //---------------------------------------------------------------------------
-  virtual bool valid_index(const int i) const;
+  virtual bool valid_index(unsigned int i) const { return i<storage_->size(); }
 
   //---------------------------------------------------------------------------
   //: Are `new_vertices' valid vertices ?

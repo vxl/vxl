@@ -22,16 +22,15 @@ vmal_track_lines::vmal_track_lines()
 {
 }
 
-
 vmal_track_lines::~vmal_track_lines()
 {
 }
 
-
 void vmal_track_lines::track_lines(const vcl_vector<vcl_vector<vtol_edge_2d_sptr>*>* fit_lines,
-                   const vcl_vector<vcl_vector<vtol_edge_2d_sptr>*>* transformed_lines,
-                   const vcl_vector<vil_image> &images, const vcl_vector<vnl_double_3x3> &homo,
-                     vmal_multi_view_data_edge_sptr matches)
+                                   const vcl_vector<vcl_vector<vtol_edge_2d_sptr>*>* transformed_lines,
+                                   const vcl_vector<vil_image> &images,
+                                   const vcl_vector<vnl_double_3x3> &homo,
+                                   vmal_multi_view_data_edge_sptr matches)
 {
   _theta=0.0873;//0.0873;
   _radius=5.0;
@@ -41,23 +40,20 @@ void vmal_track_lines::track_lines(const vcl_vector<vcl_vector<vtol_edge_2d_sptr
   if(fit_lines->size()==(transformed_lines->size()+1))
   {
     //int match_num=0;
-    int min_line=0;
-    int match_line=0;
+    unsigned int min_line=0;
     double min_dist=-1;
-    bool found;
     bool match=false;
     bool replace=false;
-    int view_num;
     vtol_edge_2d_sptr cur_fl;
     vtol_edge_2d_sptr cur_tl;
 
     for(unsigned int i=0;i<(*transformed_lines)[0]->size();i++)
     {
-      found=true;
-      match_line=i;
-      view_num=0;
+      bool found=true;
+      unsigned int match_line=i;
+      unsigned int view_num=0;
       tmp_matches->new_track();
-      while((view_num < transformed_lines->size()) && found)
+      while ((view_num < transformed_lines->size()) && found)
       {
         found=false;
         cur_tl=(*(*transformed_lines)[view_num])[match_line];
@@ -66,7 +62,7 @@ void vmal_track_lines::track_lines(const vcl_vector<vcl_vector<vtol_edge_2d_sptr
         //double tl1y=cur_tl->v1()->cast_to_vertex_2d()->y();
         //double tl2y=cur_tl->v2()->cast_to_vertex_2d()->y();
         vtol_edge_2d_sptr other_match;
-        for(int j=0;j<(*fit_lines)[view_num+1]->size();j++)
+        for(unsigned int j=0;j<(*fit_lines)[view_num+1]->size();j++)
         {
           cur_fl=(*(*fit_lines)[view_num+1])[j];
           //double fl1x=cur_fl->v1()->cast_to_vertex_2d()->x();
@@ -172,8 +168,6 @@ void vmal_track_lines::track_lines(const vcl_vector<vcl_vector<vtol_edge_2d_sptr
         tmp_matches->close_track();
       }
     }
-
-
   }
   sort_lines(tmp_matches,matches);
   matches->print(vcl_cerr);
@@ -181,13 +175,11 @@ void vmal_track_lines::track_lines(const vcl_vector<vcl_vector<vtol_edge_2d_sptr
 
 double vmal_track_lines::seg_angle(vtol_edge_2d_sptr trans_line,vtol_edge_2d_sptr fit_line)
 {
-
   double vect_tlx=(trans_line->v2()->cast_to_vertex_2d()->x())-(trans_line->v1()->cast_to_vertex_2d()->x());
   double vect_tly=(trans_line->v2()->cast_to_vertex_2d()->y())-(trans_line->v1()->cast_to_vertex_2d()->y());
 
   double vect_flx=(fit_line->v2()->cast_to_vertex_2d()->x())-(fit_line->v1()->cast_to_vertex_2d()->x());
   double vect_fly=(fit_line->v2()->cast_to_vertex_2d()->y())-(fit_line->v1()->cast_to_vertex_2d()->y());
-
 
   vnl_double_2 vect_tl(vect_tlx,vect_tly);
 
@@ -228,7 +220,6 @@ bool vmal_track_lines::belong(vtol_edge_2d_sptr trans_line,vtol_edge_2d_sptr fit
   double bound2_tl1y=tl1y+(-norma[0]*_radius);
   double bound2_tl2x=tl2x+(norma[1]*_radius);
   double bound2_tl2y=tl2y+(-norma[0]*_radius);
-
 
 
   if(vmal_operators::cross_seg(bound1_tl1x, bound1_tl1y, bound2_tl1x, bound2_tl1y,
@@ -399,9 +390,10 @@ double vmal_track_lines::dist(vtol_edge_2d_sptr trans_line,vtol_edge_2d_sptr fit
          vcl_sqrt((tl1x-tl2x)*(tl1x-tl2x)+(tl1y-tl2y)*(tl1y-tl2y));
   }
 
-
-  //double length=vcl_sqrt((tl1x-tl2x)*(tl1x-tl2x)+(tl1y-tl2y)*(tl1y-tl2y))+
-//        vcl_sqrt((fl1x-fl2x)*(fl1x-fl2x)+(fl1y-fl2y)*(fl1y-fl2y));
+#if 0
+  double length=vcl_sqrt((tl1x-tl2x)*(tl1x-tl2x)+(tl1y-tl2y)*(tl1y-tl2y))
+              + vcl_sqrt((fl1x-fl2x)*(fl1x-fl2x)+(fl1y-fl2y)*(fl1y-fl2y));
+#endif
 
   return (dist/distover);
 }
@@ -412,12 +404,12 @@ int vmal_track_lines::is_cur_best(vtol_edge_2d_sptr trans_line,vtol_edge_2d_sptr
   double tl2x=trans_line->v2()->cast_to_vertex_2d()->x();
   double tl1y=trans_line->v1()->cast_to_vertex_2d()->y();
   double tl2y=trans_line->v2()->cast_to_vertex_2d()->y();
-
-  //double fl1x=fit_line->v1()->cast_to_vertex_2d()->x();
-  //double fl2x=fit_line->v2()->cast_to_vertex_2d()->x();
-  //double fl1y=fit_line->v1()->cast_to_vertex_2d()->y();
-  //double fl2y=fit_line->v2()->cast_to_vertex_2d()->y();
-
+#if 0
+  double fl1x=fit_line->v1()->cast_to_vertex_2d()->x();
+  double fl2x=fit_line->v2()->cast_to_vertex_2d()->x();
+  double fl1y=fit_line->v1()->cast_to_vertex_2d()->y();
+  double fl2y=fit_line->v2()->cast_to_vertex_2d()->y();
+#endif
   double ol1x=other_line->v1()->cast_to_vertex_2d()->x();
   double ol2x=other_line->v2()->cast_to_vertex_2d()->x();
   double ol1y=other_line->v1()->cast_to_vertex_2d()->y();
@@ -427,7 +419,6 @@ int vmal_track_lines::is_cur_best(vtol_edge_2d_sptr trans_line,vtol_edge_2d_sptr
   double x2,y2;
   double x3,y3;
   double x4,y4;
-
 
   vmal_operators::project_point(tl1x,tl1y,ol1x,ol1y,ol2x,ol2y,&x1,&y1);
   vmal_operators::project_point(tl2x,tl2y,ol1x,ol1y,ol2x,ol2y,&x2,&y2);
@@ -447,7 +438,6 @@ int vmal_track_lines::is_cur_best(vtol_edge_2d_sptr trans_line,vtol_edge_2d_sptr
     else
       return -1;
   }
-
 }
 
 vtol_edge_2d_sptr vmal_track_lines::find_transfo(vtol_edge_2d_sptr line,
@@ -455,7 +445,6 @@ vtol_edge_2d_sptr vmal_track_lines::find_transfo(vtol_edge_2d_sptr line,
                          const vcl_vector<vtol_edge_2d_sptr>& transformed_lines
                          )
 {
-
   vcl_vector<vtol_edge_2d_sptr>::iterator iter;
   int i=0;
   for(iter=fit_lines.begin();iter!=fit_lines.end();iter++)
@@ -570,12 +559,12 @@ double vmal_track_lines::lines_correlation(vtol_edge_2d_sptr line0,
 
 
 void vmal_track_lines::cost_function(vtol_edge_2d_sptr line0,
-                   vtol_edge_2d_sptr t_line0,
-                   vtol_edge_2d_sptr line1,
-                   const vil_image &image0,
-                   const vil_image &image1,
-                   const vnl_double_3x3 homo,
-                   double &result)
+                                     vtol_edge_2d_sptr t_line0,
+                                     vtol_edge_2d_sptr line1,
+                                     const vil_image &image0,
+                                     const vil_image &image1,
+                                     const vnl_double_3x3 homo,
+                                     double &result)
 {
   vil_memory_image_of<vil_byte> i0;
   vil_memory_image_of<vil_byte> i1;

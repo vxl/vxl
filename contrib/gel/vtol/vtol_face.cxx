@@ -461,7 +461,7 @@ void vtol_face::describe(vcl_ostream &strm,
 {
   for (int j=0; j<blanking; ++j) strm << ' ';
   print();
-  for(int i=0;i<_inferiors.size();++i)
+  for (unsigned int i=0;i<_inferiors.size();++i)
     {
       if((_inferiors[i])->cast_to_one_chain()!=0)
         (_inferiors[i])->cast_to_one_chain()->describe(strm,blanking);
