@@ -181,4 +181,6 @@ public:
   virtual vcl_vector<vtol_block*> *compute_blocks(void);
 };
 
+inline bool operator!=(vtol_vertex const &a, vtol_vertex const &b) { return !(a == b); }
+
 #endif

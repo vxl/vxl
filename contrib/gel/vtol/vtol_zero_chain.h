@@ -145,4 +145,6 @@ protected:
 
 };
 
+inline bool operator!=(vtol_zero_chain const &a, vtol_zero_chain const &b) { return !(a == b); }
+
 #endif // #ifndef vtol_zero_chain_H
