@@ -141,6 +141,7 @@ double clsfy_test_error(const clsfy_classifier_base &classifier,
                         const vcl_vector<unsigned> & test_outputs)
 {
   assert(test_inputs.size() == test_outputs.size());
+  if (test_inputs.size()==0) return -1;
 
   vcl_vector<unsigned> results;
   classifier.classify_many(results, test_inputs);
