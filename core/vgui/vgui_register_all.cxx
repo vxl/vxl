@@ -1,7 +1,7 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+//
 // Toolkits are registered by registering a "tag function" at
 // library initialization time. That usually works fine with
 // shared builds on sane architectures, but it doesn't work
