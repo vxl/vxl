@@ -122,7 +122,7 @@ void vsrl_window_accumulator::next_column_sums(vnl_vector<double> &vec)
   // using the column sums from the previous calculation, update the vec
   // by going to the next region
 
-  if (current_row_ == (unsigned int)(-1)){
+  if (current_row_ < 0){
     // initialize the column vectors
     initial_column_sums(vec);
     return;
@@ -169,7 +169,7 @@ double vsrl_window_accumulator::initial_accumulation(vnl_vector<double> &vec)
 
 double vsrl_window_accumulator::next_accumulation(vnl_vector<double> &vec, double old_sum)
 {
-  if (current_col_==(unsigned int)(-1)){
+  if (current_col_ < 0){
     // initialize the accumulation
     return initial_accumulation(vec);
   }
