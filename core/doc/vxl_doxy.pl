@@ -47,6 +47,7 @@ while (<>)
     s/\bVCL_CAN_STATIC_CONST_INIT_(INT|FLOAT)\b/1/g;
     s/\bVCL_STATIC_CONST_INIT_(INT|FLOAT)\s*\(([^()]*)\)/= $2/g;
     s/\bVCL_DFL_TYPE_PARAM_STLDECL\s*\(([^,()]*),([^,()]*)\)/class $1 = $2 /g;
+    s/\bDECLARE_DYNCREATE\s*\([^()]*\)//g; # for MFC
 
     if ( $should_end_verbatim )
     {
