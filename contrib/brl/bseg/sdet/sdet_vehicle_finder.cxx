@@ -76,9 +76,9 @@ n_regions_closest_to_pick(vcl_vector<sdet_region_sptr> const& regions,
       if (found)
         continue;
       float x0 = (*rit)->Xo(), y0 = (*rit)->Yo();
-      float xp = pick_.x(), yp = pick_.y();
+      int xp = pick_.x(), yp = pick_.y();
       float d = vcl_sqrt((x0-xp)*(x0-xp) + (y0-yp)*(y0-yp));
-      float area = (*rit)->area();
+      double area = (*rit)->area();
       max_d = distance_scale_*vcl_sqrt(area);
 #ifdef DEBUG
       vcl_cout << "d " << d << '\n'

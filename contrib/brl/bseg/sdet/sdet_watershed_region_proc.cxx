@@ -127,7 +127,7 @@ void sdet_watershed_region_proc::scan_region_data(vbl_array_2d<unsigned int> con
       int index = lab-min_label_;
       //dangerous, might not be scaled properly (FIXME)
       unsigned short v =  (unsigned short) image_(imgc, imgr);
-      regions_[index]->IncrementMeans(imgc, imgr, v);
+      regions_[index]->IncrementMeans(float(imgc), float(imgr), v);
     }
   //fill the region data
   for (int i = 0; i<n_regions; i++)
@@ -148,7 +148,7 @@ void sdet_watershed_region_proc::scan_region_data(vbl_array_2d<unsigned int> con
       int index = lab-min_label_;
       //dangerous, might not be scaled properly (FIXME)
       unsigned short v = (unsigned short) image_(imgc, imgr);
-      regions_[index]->InsertInPixelArrays(imgc, imgr, v);
+      regions_[index]->InsertInPixelArrays(float(imgc), float(imgr), v);
       regions_[index]->ComputeIntensityStdev();
     }
 }
@@ -283,7 +283,9 @@ bool sdet_watershed_region_proc::merge_regions()
         continue;
       if (r->Npix()<min_area_||ar->Npix()<min_area_)
         continue;
-      //          vcl_cout << "R[" << r->label() <<"]:vs:[" << ar->label() << "]\n";
+#ifdef DEBUG
+      vcl_cout << "R[" << r->label() <<"]:vs:[" << ar->label() << "]\n";
+#endif
       if (bdgl_region_algs::
           earth_mover_distance(r->cast_to_digital_region(),
                               ar->cast_to_digital_region()) > merge_tol_)
@@ -314,9 +316,11 @@ bool sdet_watershed_region_proc::merge_regions()
       new_regions.push_back(rm);
       this->remove_adjacencies(r);
       rm->set_label(++max_label_);
-//       vcl_cout << "New Region[" << rm->label() << "](" << rm->Npix()
-//                << ")(Xo: " << rm->Xo() << " Yo: " << rm ->Yo()
-//                << " Io: " << rm ->Io() <<")\n" << vcl_flush;
+#ifdef DEBUG
+      vcl_cout << "New Region[" << rm->label() << "](" << rm->Npix()
+               << ")(Xo: " << rm->Xo() << " Yo: " << rm ->Yo()
+               << " Io: " << rm ->Io() <<')' << vcl_endl;
+#endif
       for (vcl_vector<sdet_region_sptr>::iterator arit = temp_adj.begin();
            arit != temp_adj.end(); arit++)
         this->add_adjacency(rm, *arit);
@@ -324,8 +328,8 @@ bool sdet_watershed_region_proc::merge_regions()
   }
   if (verbose_)
   {
-    vcl_cout << "# merged regions " << merged_regions.size() << '\n';
-    vcl_cout << "# new regions " << new_regions.size() << '\n';
+    vcl_cout << "# merged regions " << merged_regions.size() << '\n'
+             << "# new regions " << new_regions.size() << '\n';
   }
   //remove merged regions from the region_index
   vcl_vector<sdet_region_sptr> temp2;
@@ -477,8 +481,7 @@ void sdet_watershed_region_proc::print_region_info()
       continue;
     vcl_cout << "R[" << (*rit)->label() << "](Np:" << npix << " Io:"
              << (*rit)->Io() << " Xo:" << (*rit)->Xo()
-             << " Yo:" << (*rit)->Yo() << "):sd"<< (*rit)->Io_sd()
-             << "\n" << vcl_flush;
+             << " Yo:" << (*rit)->Yo() << "):sd"<< (*rit)->Io_sd() << vcl_endl;
   }
 }
 
