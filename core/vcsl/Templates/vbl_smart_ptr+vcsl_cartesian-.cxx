@@ -33,7 +33,7 @@ class X;
 
 void g(X *x)
 {
-  std::vector<wrap<X> > v;
+  vcl_vector<wrap<X> > v;
   v.push_back(x);
 };
 
