@@ -11,12 +11,15 @@
 # include <stddef.h>
 #elif defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
 # include <stddef.h>
+#elif defined(VCL_SGI_CC_720)
+# include <stddef.h>
 #elif defined(VCL_VC)
 # include <cstddef>
 #ifndef vcl_size_t
 #define vcl_size_t size_t
 #endif
 #else
+
 # include "iso/vcl_cstddef.h"
 using std::size_t;
 using std::ptrdiff_t;
