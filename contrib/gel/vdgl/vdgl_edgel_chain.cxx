@@ -7,7 +7,9 @@
 #include <vgl/vgl_distance.h>
 #include <vcl_cassert.h>
 #include <vcl_algorithm.h>
-#include <vcl_cmath.h>
+#include <vcl_cmath.h>   // for vcl_sqrt(float)
+#include <vcl_cstdlib.h> // for vcl_abs(int)
+
 vdgl_edgel_chain::vdgl_edgel_chain()
 {
 }
@@ -17,7 +19,7 @@ vdgl_edgel_chain::vdgl_edgel_chain( const vcl_vector<vdgl_edgel> edgels)
 {
 }
 
-vdgl_edgel_chain::vdgl_edgel_chain( const double x0, const double y0, 
+vdgl_edgel_chain::vdgl_edgel_chain( const double x0, const double y0,
                                     const double x1, const double y1)
 {
   bool init = true, done = false;//should be internal statics but seems not to work
