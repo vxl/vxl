@@ -134,20 +134,17 @@ void vdgl_interpolator_linear::recompute_length()
 {
   lengthcache_= 0;
 
-  for( int i=0; i< (chain_->size()-1); i++)
+  for( int i=0; i< chain_->size(); i++)
   {
-          vgl_point_2d<double> p1= chain_->edgel( i).get_pt();
-          vgl_point_2d<double> p2= chain_->edgel( i+1).get_pt();
+    int j = i==0 ? chain_->size()-1 : i-1;
+    vgl_point_2d<double> p1= chain_->edgel(j).get_pt();
+    vgl_point_2d<double> p2= chain_->edgel(i).get_pt();
 
-          // NOTE THERE IS A PROBLEM HERE UNDER WINDOWS
-          //   WHICH I WILL HAVE TO FIX AT SOME POINT
-          lengthcache_ += 1;
-
-          //vgl_point_2d<double> diff= p2-p1;
-
-          //lengthcache_ += (p1- p2;//.distance( p2);
+    // NOTE THERE IS A PROBLEM HERE UNDER WINDOWS
+    //   WHICH I WILL HAVE TO FIX AT SOME POINT
+    // Maybe solved now with the use of vgl_vector_2d<double> ? - PVr
+    lengthcache_ += length(p2-p1);
   }
-//    lengthcache_+= chain_->edgel( i).get_pt().distance( chain_->edgel( i+1).get_pt());
 }
 
 void vdgl_interpolator_linear::recompute_bbox()
@@ -165,5 +162,3 @@ void vdgl_interpolator_linear::recompute_bbox()
       if ( chain_->edgel( i).get_y()> maxycache_) maxycache_= chain_->edgel( i).get_y();
     }
 }
-
-
