@@ -42,7 +42,7 @@ SOURCES += vil_clamp_image.cxx # Helper specializations for vil_clamp_image_impl
 SOURCES += vil_scale_intensities_image_impl.cxx
 SOURCES += vil_scale_intensities_image.cxx # Helper specializations for vil_scale_intensities_image_impl.cxx
 
-# classes derived from vil_file_format 
+# file format readers/writers.
 SOURCES += file_formats/vil_pnm.cxx
 SOURCES += file_formats/vil_viff.cxx
 SOURCES += file_formats/vil_viff_support.c
