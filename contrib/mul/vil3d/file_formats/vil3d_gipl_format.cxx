@@ -202,6 +202,10 @@ bool vil3d_gipl_image::read_header(vil2_stream *is)
   vox_width2_ = vil2_stream_read_big_endian_float(is);
   vox_width3_ = vil2_stream_read_big_endian_float(is);
   // vcl_cout<<"Voxel widths: "<<vox_width1<<" x "<<vox_width2<<" x "<<vox_width3<<vcl_endl;
+
+  if (pixel_format_ == VIL2_PIXEL_FORMAT_UNKNOWN) return false;
+
+  return true;
 }
 
 
