@@ -58,8 +58,8 @@ inline void bigdecode(ulonglong v, unsigned& i, unsigned& j, unsigned& k)
   i = (v >> 42) & 0x3fffff; // 22 highest bits
 #else
   k = v & 0x7ff; // 11 lowest bits
-  j = (v >> 21) & 0x7ff; // "middle" 11 bits
-  i = (v >> 42) & 0x3ff; // 10 highest bits
+  j = (v >> 11) & 0x7ff; // "middle" 11 bits
+  i = (v >> 22) & 0x3ff; // 10 highest bits
 #endif
 }
 
