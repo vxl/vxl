@@ -27,7 +27,7 @@ vcl_string vgui_wrapper_tableau::type_name() const {
 }
 
 vcl_string vgui_wrapper_tableau::pretty_name() const {
-  return child ? (type_name() + "[" + child->pretty_name() + "]") : vcl_string("(null)");
+  return child ? vcl_string(type_name() + "[" + child->pretty_name() + "]") : vcl_string("(null)");
 }
 
 vcl_string vgui_wrapper_tableau::file_name() const {
