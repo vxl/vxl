@@ -24,6 +24,12 @@
 // For efficiency the elements are stored explicitly, rather than in a
 // vnl_matrix<double>, to avoid lots of copying of matrices with all the
 // attendant memory allocation.
+//
+// \verbatim
+//  Modifications
+//   11-Feb-2004 - Peter Vanroose - added "Projective" case (implemented inverse)
+//   11-Feb-2004 - Peter Vanroose - corrected and extended the implementation of delta()
+// \endverbatim
 
 #include <vsl/vsl_binary_io.h>
 #include <vgl/vgl_point_3d.h>
@@ -53,7 +59,8 @@ class mil3d_transform_3d
               ZoomOnly,
               RigidBody,
               Similarity,
-              Affine};
+              Affine,
+              Projective};
 
   //: Constructor
   mil3d_transform_3d() : form_(Undefined), inv_uptodate_(false) { set_identity(); }
@@ -144,6 +151,9 @@ class mil3d_transform_3d
   void set_affine(double s_x, double s_y, double s_z,
                   double r_x, double r_y, double r_z,
                   double t_x, double t_y, double t_z);
+
+  //: Sets the transformation to the given projective transformation matrix
+  void set_projective(vnl_matrix<double> const& M);
 
   //: Returns the coordinates of the origin
   vgl_point_3d<double>  origin() const
