@@ -213,6 +213,19 @@ read_value( vcl_istream& fin, signed char& pix )
   return bad;
 }
 
+// Specialization to make bool read as 0/1 integers
+// See comments on template for return value.
+VCL_DEFINE_SPECIALIZATION
+bool
+read_value( vcl_istream& fin, bool& pix )
+{
+  int x;
+  // use operator! to test the stream to avoid compiler warnings
+  bool bad = ! ( fin >> x );
+  if( !bad ) pix = ( x != 0 );
+  return bad;
+}
+
 
 // ===========================================================================
 // Check pixels
@@ -411,13 +424,11 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_begin( "  8-bit RGB (xv created)" );
   testlib_test_perform( CheckFile( ComparePlanes<vxl_byte,3>(), "ff_planar8bit_true.txt", "ff_rgb8bit_xv.bmp" ) );
 
-#if 0
   vcl_cout << "Portable Network Graphics [png]\n";
   testlib_test_begin( "  8-bit RGB uncompressed" );
   testlib_test_perform( CheckFile( CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit_uncompressed.png" ) );
   testlib_test_begin( "  8-bit RGB compressed" );
   testlib_test_perform( CheckFile( CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit_compressed.png" ) );
-#endif //0
 
   vcl_cout << "TIFF [tiff]\n";
   testlib_test_begin( "  8-bit RGB uncompressed" );
@@ -480,7 +491,6 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_begin( "  8-bit RGB" );
   testlib_test_perform( CheckFile( CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit.mit" ) );
 
-#if 0
   vcl_cout << "DICOM [dcm]\n";
   testlib_test_begin( "  16-bit greyscale uncompressed" );
   testlib_test_perform( CheckFile( CompareGrey<vxl_uint_16>(), "ff_grey16bit_true_for_dicom.txt", "ff_grey16bit_uncompressed.dcm" ) );
@@ -493,7 +503,6 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_begin( "  16-bit greyscale uncompressed 3" );
   testlib_test_perform( CheckFile( CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit_uncompressed3.dcm" ) );
 #endif // HAS_DCMTK
-#endif // 0
 
   vcl_cout << "NITF [NITF v2.0]\n";
   testlib_test_begin( "  8-bit grey" );
@@ -553,7 +562,7 @@ test_file_format_read_main( int argc, char* argv[] )
                                      "ff_grey8bit_uncompressed.dcm", ffmt ) );
     delete ffmt;
   }
-#endif HAS_DCMTK
+#endif //HAS_DCMTK
 
   return testlib_test_summary();
 }
