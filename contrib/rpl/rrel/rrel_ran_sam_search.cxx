@@ -9,6 +9,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
 #include <vcl_vector.h>
+#include <vcl_cstdlib.h>
 
 rrel_ran_sam_search::rrel_ran_sam_search( )
   : generate_all_(false),
@@ -76,7 +77,7 @@ rrel_ran_sam_search::estimate( const rrel_estimation_problem * problem,
   vcl_vector<int> point_indices;
   vnl_vector<double> new_params;
   vcl_vector<double> residuals;
-  double min_obj;
+  double min_obj = 0.0;
   bool  obj_set=false;
 
   scale_ = -1;
@@ -110,6 +111,10 @@ rrel_ran_sam_search::estimate( const rrel_estimation_problem * problem,
       case rrel_estimation_problem::MULTIPLE:
         new_obj = obj_fcn->fcn( residuals.begin(), residuals.end(), problem->prior_multiple_scales().begin(), &new_params );
         break;
+      default:
+
+        vcl_cerr << __FILE__ << ": unknown scale type" << vcl_endl;
+        vcl_abort();
       }
       if ( trace_level_ >= 1) vcl_cout << "Objective = " << new_obj << vcl_endl;
       if ( !obj_set || new_obj<min_obj ) {

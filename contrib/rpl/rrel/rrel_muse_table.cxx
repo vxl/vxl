@@ -6,7 +6,7 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 
-static const int max_allowed_to_store = 1000;
+static const unsigned int max_allowed_to_store = 1000;
 
 rrel_muse_table::rrel_muse_table( unsigned int max_n_stored )
 {
