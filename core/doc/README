@@ -3,7 +3,8 @@ An example of what the syntax for documentation looks like can be found
 in vxl_doc_rules.[h,cxx]
 
 
-To generate the entire documentation with doxygen:
+To generate the entire documentation with doxygen
+(http://www.stack.nl/~dimitri/doxygen):
 
 1. Look into Doxyfile and change the path to the source if needed
  (INPUT, EXCLUDE, STRIP_FROM_PATH)
