@@ -33,6 +33,10 @@ ifeq ($(HAS_QGL), 1)
 SUBDIRS += qt
 endif
 
+ifeq ($(HAS_MFC), 1)
+SUBDIRS += mfc
+endif
+
 ######################################
 include ${IUEROOT}/config/top-rules.mk
 ######################################
