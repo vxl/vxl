@@ -3,15 +3,6 @@
 // This is a first attempt at a <cstdlib> for the Borland compiler - PVr,Dec.2003.
 #include <cstdlib>
 
-extern "C" {
- void abort(); // where do these functions live with the Borland compiler?
- void qsort(void*, size_t, size_t, int(*)(const void*, const void*));
- void* malloc(size_t);
- void* calloc(size_t, size_t);
- void* realloc(void*, size_t);
- void free(void*);
-}
-
 // If we define vcl_abs, for example, to ::abs, we have conflicts
 // with std::abs(std::complex<T>) which *is* declared in the
 // std namespace. To avoid these issues, we inject the math
@@ -21,6 +12,13 @@ namespace std {
   //inline int abs(int x) { return x >= 0 ? x : -x; }
   inline long abs(long x) { return x >= 0 ? x : -x; }
   inline long labs(long x) { return x >= 0 ? x : -x; }
+  // where do these functions live with the Borland compiler?
+  void abort();
+  void qsort(void*, size_t, size_t, int(*)(const void*, const void*));
+  void* malloc(size_t);
+  void* calloc(size_t, size_t);
+  void* realloc(void*, size_t);
+  void free(void*);
 }
 
 #ifndef vcl_abs
