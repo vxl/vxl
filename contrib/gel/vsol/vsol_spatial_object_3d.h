@@ -262,18 +262,18 @@ public:
   // inline void get_min_location(vcl_vector<double>& min_loc);
   // inline void get_max_location(vcl_vector<double>& max_loc);
   void grow_minmax_bounds(vsol_box_3d & comp_box); //grow to the largest dimension of this and comp_box
-  inline float get_min_x(void);
-  inline float get_max_x(void);
-  inline float get_min_y(void);
-  inline float get_max_y(void);
-  inline float get_min_z(void);
-  inline float get_max_z(void);
-  virtual void set_min_x(float xmin);
-  virtual void set_max_x(float xmax);
-  virtual void set_min_y(float ymin);
-  virtual void set_max_y(float ymax);
-  virtual void set_min_z(float zmin);
-  virtual void set_max_z(float zmax);
+  inline double get_min_x(void);
+  inline double get_max_x(void);
+  inline double get_min_y(void);
+  inline double get_max_y(void);
+  inline double get_min_z(void);
+  inline double get_max_z(void);
+  virtual void set_min_x(double xmin);
+  virtual void set_max_x(double xmax);
+  virtual void set_min_y(double ymin);
+  virtual void set_max_y(double ymax);
+  virtual void set_min_z(double zmin);
+  virtual void set_max_z(double zmax);
 
   //: Operators
 
@@ -383,73 +383,73 @@ inline vsol_box_3d *vsol_spatial_object_3d::get_bounding_box(void)
 //  bounding_box_->get_max_location(max_loc);
 //}
 
-inline float vsol_spatial_object_3d::get_min_x(void)
+inline double vsol_spatial_object_3d::get_min_x(void)
 {
   this->check_update_bounding_box();
   return bounding_box_->get_min_x();
 }
 
 
-inline float vsol_spatial_object_3d::get_max_x(void)
+inline double vsol_spatial_object_3d::get_max_x(void)
 {
   this->check_update_bounding_box();
   return bounding_box_->get_max_x();
 }
 
 
-inline float vsol_spatial_object_3d::get_min_y(void)
+inline double vsol_spatial_object_3d::get_min_y(void)
 {
   this->check_update_bounding_box();
   return bounding_box_->get_min_y();
 }
 
-inline float vsol_spatial_object_3d::get_max_y(void)
+inline double vsol_spatial_object_3d::get_max_y(void)
 {
   this->check_update_bounding_box();
   return bounding_box_->get_max_y();
 }
 
-inline float vsol_spatial_object_3d::get_min_z(void)
+inline double vsol_spatial_object_3d::get_min_z(void)
 {
   this->check_update_bounding_box();
   return bounding_box_->get_min_z();
 }
 
-inline float vsol_spatial_object_3d::get_max_z(void)
+inline double vsol_spatial_object_3d::get_max_z(void)
 {
   this->check_update_bounding_box();
   return bounding_box_->get_max_z();
 }
 
-inline void vsol_spatial_object_3d::set_min_x(float xmin)
+inline void vsol_spatial_object_3d::set_min_x(double xmin)
 {
   if (bounding_box_==0)
     bounding_box_=new vsol_box_3d();
   bounding_box_->set_min_x(xmin);
 }
 
-inline void vsol_spatial_object_3d::set_max_x(float xmax)
+inline void vsol_spatial_object_3d::set_max_x(double xmax)
 {
   if (bounding_box_==0)
     bounding_box_=new vsol_box_3d();
   bounding_box_->set_max_x(xmax);
 }
 
-inline void vsol_spatial_object_3d::set_min_y(float ymin)
+inline void vsol_spatial_object_3d::set_min_y(double ymin)
 {
   if (bounding_box_==0)
     bounding_box_=new vsol_box_3d();
   bounding_box_->set_min_y(ymin);
 }
 
-inline void vsol_spatial_object_3d::set_max_y(float ymax)
+inline void vsol_spatial_object_3d::set_max_y(double ymax)
 {
   if (bounding_box_==0)
     bounding_box_=new vsol_box_3d();
   bounding_box_->set_max_y(ymax);
 }
 
-inline void vsol_spatial_object_3d::set_min_z(float zmin)
+inline void vsol_spatial_object_3d::set_min_z(double zmin)
 {
   if (bounding_box_==0)
     bounding_box_=new vsol_box_3d();
@@ -457,7 +457,7 @@ inline void vsol_spatial_object_3d::set_min_z(float zmin)
 }
 
 
-inline void vsol_spatial_object_3d::set_max_z(float zmax)
+inline void vsol_spatial_object_3d::set_max_z(double zmax)
 {
   if (bounding_box_==0)
     bounding_box_=new vsol_box_3d();

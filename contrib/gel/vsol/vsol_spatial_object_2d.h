@@ -257,14 +257,14 @@ public:
 
   inline void check_update_bounding_box(void);  // Test consistency of bound
   void grow_minmax_bounds(vsol_box_2d & comp_box);
-  inline float get_min_x(void);
-  inline float get_max_x(void);
-  inline float get_min_y(void);
-  inline float get_max_y(void);
-  inline virtual void set_min_x(float xmin);
-  inline virtual void set_max_x(float xmax);
-  inline virtual void set_min_y(float ymin);
-  inline virtual void set_max_y(float ymax);
+  inline double get_min_x(void);
+  inline double get_max_x(void);
+  inline double get_min_y(void);
+  inline double get_max_y(void);
+  inline virtual void set_min_x(double xmin);
+  inline virtual void set_max_x(double xmax);
+  inline virtual void set_min_y(double ymin);
+  inline virtual void set_max_y(double ymax);
 
   // operators
 
@@ -336,49 +336,49 @@ inline vsol_box_2d *vsol_spatial_object_2d::get_bounding_box(void)
   return bounding_box_;
 }
 
-inline float vsol_spatial_object_2d::get_min_x(void)
+inline double vsol_spatial_object_2d::get_min_x(void)
 {
   this->check_update_bounding_box();
   return bounding_box_->get_min_x();
 }
 
-inline float vsol_spatial_object_2d::get_max_x(void)
+inline double vsol_spatial_object_2d::get_max_x(void)
 {
   this->check_update_bounding_box();
   return bounding_box_->get_max_x();
 }
 
-inline float vsol_spatial_object_2d::get_min_y(void)
+inline double vsol_spatial_object_2d::get_min_y(void)
 {
   this->check_update_bounding_box();
   return bounding_box_->get_min_y();
 }
 
-inline float vsol_spatial_object_2d::get_max_y(void)
+inline double vsol_spatial_object_2d::get_max_y(void)
 {
   this->check_update_bounding_box();
   return bounding_box_->get_max_y();
 }
 
-inline void vsol_spatial_object_2d::set_min_x(float xmin)
+inline void vsol_spatial_object_2d::set_min_x(double xmin)
 {
   if (!bounding_box_) bounding_box_ = new vsol_box_2d;;
   bounding_box_->set_min_x(xmin);
 }
 
-inline void vsol_spatial_object_2d::set_max_x(float xmax)
+inline void vsol_spatial_object_2d::set_max_x(double xmax)
 {
   if (!bounding_box_) bounding_box_ = new vsol_box_2d;;
   bounding_box_->set_max_x(xmax);
 }
 
-inline void vsol_spatial_object_2d::set_min_y(float ymin)
+inline void vsol_spatial_object_2d::set_min_y(double ymin)
 {
   if (!bounding_box_) bounding_box_ = new vsol_box_2d;;
   bounding_box_->set_min_y(ymin);
 }
 
-inline void vsol_spatial_object_2d::set_max_y(float ymax)
+inline void vsol_spatial_object_2d::set_max_y(double ymax)
 {
   if (!bounding_box_) bounding_box_ = new vsol_box_2d;;
   bounding_box_->set_max_y(ymax);

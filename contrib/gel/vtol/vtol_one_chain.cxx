@@ -1,5 +1,5 @@
+// This is gel/vtol/vtol_one_chain.cxx
 #include "vtol_one_chain.h"
-
 //:
 //  \file
 
@@ -576,55 +576,40 @@ vcl_vector<vtol_block*> *vtol_one_chain::compute_blocks(void)
 
 void vtol_one_chain::compute_bounding_box(void)
 {
-  vcl_vector<vtol_edge_sptr> *edgs;
-  vcl_vector<vtol_edge_sptr>::iterator eit;
-  float max_float;
-  float xmin;
-  float ymin;
-  float xmax;
-  float ymax;
+  vcl_vector<vtol_edge_sptr> *edgs=edges();
+  vcl_vector<vtol_edge_sptr>::iterator eit=edgs->begin();
 
-  edgs=edges();
   if (edgs->size()==0)//default method, things are screwed up anyway
     {
       vtol_topology_object::compute_bounding_box();
       return;
     }
 
-  max_float=1000000; // do we have anything better?
-  xmin=max_float;
-  ymin=max_float;
-  xmax=-max_float;
-  ymax=-max_float;
-  // float  zmin = max_float, zmax = -max_float ;
-  for (eit=edgs->begin();eit!=edgs->end();++eit)
+  vsol_box_2d_sptr b = (*eit)->get_bounding_box();
+  double xmin=b->get_min_x();
+  double ymin=b->get_min_y();
+  double xmax=b->get_max_x();
+  double ymax=b->get_max_y();
+
+  while (++eit!=edgs->end())
+  {
+    vsol_box_2d_sptr b=(*eit)->get_bounding_box();
+    if (!b)
     {
-      vtol_edge_sptr e=(*eit);
-      vsol_box_2d_sptr b=e->get_bounding_box();
-      if (!b)
-        {
-          vcl_cout << "In vtol_one_chain::ComputeBoundingBox()"
-               << " - Edge has null bounding box"
-               << vcl_endl;
-          continue;
-        }
-      if (xmin>b->get_min_x())
-        xmin=b->get_min_x();
-      if (ymin>b->get_min_y())
-        ymin=b->get_min_y();
-      // if (zmin > b->get_min_z()) zmin = b->get_min_z();
-      if (xmax<b->get_max_x())
-        xmax=b->get_max_x();
-      if (ymax<b->get_max_y())
-        ymax=b->get_max_y();
-      // if (zmax < b->get_max_z()) zmax = b->get_max_z();
+      vcl_cout << "In vtol_one_chain::ComputeBoundingBox()"
+               << " - Edge has null bounding box\n";
+      continue;
     }
+    if (xmin>b->get_min_x()) xmin=b->get_min_x();
+    if (ymin>b->get_min_y()) ymin=b->get_min_y();
+    if (xmax<b->get_max_x()) xmax=b->get_max_x();
+    if (ymax<b->get_max_y()) ymax=b->get_max_y();
+  }
   delete edgs;
   set_min_x(xmin);
   set_max_x(xmax);
   set_min_y(ymin);
   set_max_y(ymax);
- // this->set_min_z(zmin); this->set_max_z(zmax);
 }
 
 //---------------------------------------------------------------------------
@@ -723,25 +708,20 @@ void vtol_one_chain::add_edge(vtol_edge &new_edge,
 //: Remove an edge
 //---------------------------------------------------------------------------
 void vtol_one_chain::remove_edge(vtol_edge &doomed_edge,
-                                    bool force_it)
+                                 bool force_it)
 {
   // require
   assert(force_it||!is_cycle());
 
-  int index;
-  vcl_vector<signed char>::iterator j;
-  vtol_topology_object_sptr t;
-
-  t=&doomed_edge;
+  vtol_topology_object_sptr t=&doomed_edge;
 
   // int index = inferiors()->position(doomed_edge);
   topology_list::const_iterator i=vcl_find(inferiors()->begin(),inferiors()->end(),t);
-  index=i-inferiors()->begin();
+  long index=i-inferiors()->begin();
 
   if (index>=0)
     {
-      j=_directions.begin();
-      j=j+index;
+      vcl_vector<signed char>::iterator j = _directions.begin() + index;
       _directions.erase(j);// get rid of the direction associated with the edge
       touch();
       unlink_inferior(doomed_edge);
