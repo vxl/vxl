@@ -9,7 +9,8 @@
 // Please think carefully before adding any new methods.
 // In particular any methods that provide new views (e.g. vil2_plane)
 // will be more usefully provided as external functions. - IMS.
-
+// In that case, use the "relates" keyword of Doxygen to link the documentation
+// of that function to the vil2_image_view class.
 
 #include "vil2_image_view.h"
 #include <vcl_string.h>
@@ -96,11 +97,11 @@ void vil2_image_view<T>::deep_copy(const vil2_image_view<T>& src)
   {
     T* row = data;
     const T* src_row = src_data;
-    for (unsigned j=0;j<nj_;++j)
+    for (unsigned int j=0;j<nj_;++j)
     {
       T* p = row;
       const T* sp = src_row;
-      for (int i=0;i<ni_;++i)
+      for (unsigned int i=0;i<ni_;++i)
       {
         *p = *sp;
         p+=istep_;
@@ -157,47 +158,47 @@ inline bool convert_components_from_planes(vil2_image_view<T> &lhs,
 
 VCL_DEFINE_SPECIALIZATION
 inline bool convert_components_from_planes(vil2_image_view<float> &lhs,
-                                         const vil2_image_view_base &rhs_base)
+                                           const vil2_image_view_base &rhs_base)
 {return false;}  // when lhs has scalar pixels, don't attempt conversion
 
 VCL_DEFINE_SPECIALIZATION
 inline bool convert_components_from_planes(vil2_image_view<double> &lhs,
-                                         const vil2_image_view_base &rhs_base)
+                                           const vil2_image_view_base &rhs_base)
 {return false;} 
 
 VCL_DEFINE_SPECIALIZATION
 inline bool convert_components_from_planes(vil2_image_view<bool> &lhs,
-                                         const vil2_image_view_base &rhs_base)
+                                           const vil2_image_view_base &rhs_base)
 {return false;} 
 
 VCL_DEFINE_SPECIALIZATION
 inline bool convert_components_from_planes(vil2_image_view<vxl_sbyte> &lhs,
-                                         const vil2_image_view_base &rhs_base)
+                                           const vil2_image_view_base &rhs_base)
 {return false;} 
 
 VCL_DEFINE_SPECIALIZATION
 inline bool convert_components_from_planes(vil2_image_view<vxl_byte> &lhs,
-                                         const vil2_image_view_base &rhs_base)
+                                           const vil2_image_view_base &rhs_base)
 {return false;} 
 
 VCL_DEFINE_SPECIALIZATION
 inline bool convert_components_from_planes(vil2_image_view<vxl_int_16> &lhs,
-                                         const vil2_image_view_base &rhs_base)
+                                           const vil2_image_view_base &rhs_base)
 {return false;} 
 
 VCL_DEFINE_SPECIALIZATION
 inline bool convert_components_from_planes(vil2_image_view<vxl_uint_16> &lhs,
-                                         const vil2_image_view_base &rhs_base)
+                                           const vil2_image_view_base &rhs_base)
 {return false;} 
 
 VCL_DEFINE_SPECIALIZATION
 inline bool convert_components_from_planes(vil2_image_view<vxl_int_32> &lhs,
-                                         const vil2_image_view_base &rhs_base)
+                                           const vil2_image_view_base &rhs_base)
 {return false;} 
 
 VCL_DEFINE_SPECIALIZATION
 inline bool convert_components_from_planes(vil2_image_view<vxl_uint_32> &lhs,
-                                         const vil2_image_view_base &rhs_base)
+                                           const vil2_image_view_base &rhs_base)
 {return false;} 
 
 

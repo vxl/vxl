@@ -1,4 +1,5 @@
 // This is mul/vil2/tests/test_save_load_image.cxx
+
 //:
 // \file
 // \author Peter.Vanroose@esat.kuleuven.ac.be
@@ -21,21 +22,21 @@
 //  2 Oct 2002 - Peter Vanroose - replaced image24 tests by image3p
 // \endverbatim
 
-#include <vcl_string.h>
-#include <vcl_cstring.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-
-#include <vxl_config.h>
-#include <testlib/testlib_test.h>
-#include <vul/vul_temp_filename.h>
-#include <vpl/vpl.h> // vpl_unlink()
-
 #include <vil2/vil2_save.h>
 #include <vil2/vil2_load.h>
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_pixel_format.h>
 #include <vil2/vil2_image_view_functions.h>
+
+#include <vcl_string.h>
+#include <vcl_cstring.h>
+#include <vcl_iostream.h>
+#include <vcl_fstream.h>
+
+#include <vul/vul_temp_filename.h>
+#include <vpl/vpl.h> // vpl_unlink()
+#include <vxl_config.h> // for vxl_byte
+#include <testlib/testlib_test.h>
 
 #ifndef LEAVE_IMAGES_BEHIND
 #define LEAVE_IMAGES_BEHIND 0
@@ -404,13 +405,13 @@ MAIN( test_save_load_image )
   int sizex = 253;
   int sizey = 155;
   vil2_image_view<bool>                image1 = CreateTest1bitImage(sizex, sizey);
-  vil2_image_view<vxl_byte>           image8 = CreateTest8bitImage(sizex, sizey);
+  vil2_image_view<vxl_byte>            image8 = CreateTest8bitImage(sizex, sizey);
   vil2_image_view<vxl_uint_16>         image16 = CreateTest16bitImage(sizex, sizey);
 #if 0 // read back pixel type will not match: ppm is always read in as 3-plane image
-  vil2_image_view<vil_rgb<vxl_byte> > image24 = CreateTest24bitImage(sizex, sizey);
+  vil2_image_view<vil_rgb<vxl_byte> >  image24 = CreateTest24bitImage(sizex, sizey);
 #endif
   vil2_image_view<vxl_uint_32>         image32 = CreateTest32bitImage(sizex, sizey);
-  vil2_image_view<vxl_byte>           image3p = CreateTest3planeImage(sizex, sizey);
+  vil2_image_view<vxl_byte>            image3p = CreateTest3planeImage(sizex, sizey);
 #if 0 // no float image support available yet
   vil2_image_view<float>               imagefloat = CreateTestfloatImage(sizex, sizey);
 #endif
