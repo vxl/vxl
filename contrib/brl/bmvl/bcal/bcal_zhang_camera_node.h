@@ -28,7 +28,8 @@ class bcal_zhang_camera_node : public bcal_camera_node
    bcal_zhang_camera_node(int id=0);
    virtual ~bcal_zhang_camera_node();
  public:
-  int removeData();
+	 int read_data(vcl_vector< vgl_homg_point_2d<double> > &ppts, int iframe);
+   int removeData();
 
   // set get function
   vcl_vector< vgl_homg_point_2d<double> >& getPoints(int iview)

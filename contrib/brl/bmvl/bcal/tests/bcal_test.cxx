@@ -3,6 +3,7 @@
 #include <bmvl/bcal/bcal_calibrate_plane.h>
 #include <bmvl/bcal/bcal_camera_graph.h>
 #include <bmvl/bcal/bcal_euclidean_transformation.h>
+#include <vgl/vgl_homg_point_2d.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 
@@ -67,12 +68,101 @@ void testing_linear_calibration(vcl_string const& directory)
   cg.print(vcl_cout);
 }
 
+void testing_brown_stereor_grid_camera(vcl_string const& fname)
+{
+  vcl_cout<<"\n--------------testing brown camera -------------\n";
+
+
+  //
+  // following block is used for reading the model data
+  //
+  vcl_ifstream  in(fname.c_str());
+
+  if (!in){
+    vcl_cerr<<"cannot open the file: "<<fname << vcl_endl;
+  }
+
+  int num_points = 0;
+  if(in.eof()){
+    vcl_cerr<<"wrong file! at least number of points in the calibration board are needed\n";
+  }
+
+  in >> num_points;
+  
+  vcl_vector<vgl_homg_point_2d<double> > pts(num_points);
+
+  for(int i=0; i<num_points; i++){
+    double u, v;
+    in>>u>>v;
+    vgl_homg_point_2d<double> pt(u, v);
+    pts[i] = pt;
+  }
+
+
+  //
+  // set up camera graph and calibrate it
+  //
+  //
+
+  bcal_camera_graph<bcal_calibrate_plane, bcal_zhang_camera_node, bcal_euclidean_transformation> cg;
+
+  // initialize the template plane
+  cg.get_source()->read_data(pts);
+  int camID = cg.add_vertex();
+  int source_id = cg.get_source_id();
+
+  // add a camera with 5 views into a graph
+  int nviews = 0;
+  in >> nviews;
+
+  vcl_vector<double> t_beats(nviews);
+  for(int i=0; i<nviews; i++)
+    t_beats[i] = i;
+
+  // set beats on camera node
+  cg.get_vertex(camID)->set_beat(t_beats);
+
+  // set beats on translation
+  bcal_euclidean_transformation *trans = cg.get_edge(source_id, camID);
+  assert(trans);
+  trans->set_beat(t_beats);
+
+  cg.print(vcl_cout);
+
+
+  //
+  // reading the feature point for each view
+  //
+
+  for(int i=0; i<nviews; i++){
+    vcl_vector<vgl_homg_point_2d<double> > features(num_points);
+    for(int j = 0; j<num_points; j++){
+      double u, v;
+      in>>u>>v;
+      vgl_homg_point_2d<double> pt(u, v);
+      features[j] = pt;
+    }
+    cg.get_vertex(camID)->read_data(features , i);
+  }
+
+  // do the calibration
+  vcl_cout<<"\n\nlinear calibration..............\n\n ";
+  bcal_zhang_linear_calibrate lc;
+  lc.setCameraGraph(&cg);
+  lc.calibrate();
+
+  cg.print(vcl_cout);
+
+}
+
 int main(int argc, char* argv[])
 {
   vcl_string directory = argc>1 ? argv[1] : ".";
   testing_graph();
+
   testing_linear_calibration(directory);
 
+  testing_brown_stereor_grid_camera(directory+"/data/point_correspondences.left");
   return 0;
 }
 

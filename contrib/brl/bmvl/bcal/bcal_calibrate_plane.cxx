@@ -40,3 +40,10 @@ int bcal_calibrate_plane::readData(const char *fname)
 
   return 0;
 }
+
+int bcal_calibrate_plane::read_data(vcl_vector<vgl_homg_point_2d<double> > &pts)
+{
+  pts_ = pts;
+
+  return 0;
+}

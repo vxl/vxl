@@ -78,3 +78,10 @@ int bcal_zhang_camera_node::removeData()
 
   return 0;
 }
+
+int bcal_zhang_camera_node::read_data(vcl_vector< vgl_homg_point_2d<double> > & plist, int iframe)
+{
+  point_lists_ptr_[iframe] = plist;
+
+  return 0;
+}
