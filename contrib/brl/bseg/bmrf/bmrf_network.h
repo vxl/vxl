@@ -17,7 +17,6 @@
 //  Modifications
 // \endverbatim
 
-
 #include <vcl_deque.h>
 #include <vcl_set.h>
 #include <vsl/vsl_binary_io.h>
@@ -77,7 +76,7 @@ class bmrf_network : public vbl_ref_count
   int num_frames() const;
 
   //: Returns the set of active frame numbers
-  //: \note frame_numbers().size() == num_frames() but the numbers do not start at zero in general
+  // \note frame_numbers().size() == num_frames() but the numbers do not start at zero in general
   vcl_set<int> frame_numbers() const;
 
   //: Returns the number of nodes in the network
@@ -89,7 +88,7 @@ class bmrf_network : public vbl_ref_count
 
   //: Remove all nodes and arcs with probability less than \p threshold
   void prune_by_probability(double threshold, bool relative = false);
-  
+
   //: Prune nodes with a mean gamma outside this range
   void prune_by_gamma(double min_gamma, double max_gamma);
 
