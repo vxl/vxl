@@ -87,10 +87,10 @@ class vgui_soview
   void get_observers(vcl_vector<vgui_observer*>&) const;
 
   //: Update all observers.
-  void notify() const;
+  virtual void notify() const;
 
   //: Send message to all observers.
-  void notify(vgui_message const &) const;
+  virtual void notify(vgui_message const &) const;
 
   // fsm. new old message model
   static vgui_DLLDATA const void * const msg_select;
