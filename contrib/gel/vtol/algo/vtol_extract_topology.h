@@ -233,7 +233,7 @@ class vtol_extract_topology
     void
     add( region_type_sptr new_region )
     {
-      typename vcl_vector<chain_tree_node*>::const_iterator itr;
+      typename vcl_vector<chain_tree_node*>::iterator itr;
 
       // First, determine if it should go further down the tree. If so,
       // add it to the appropriate child and exit immediately.
