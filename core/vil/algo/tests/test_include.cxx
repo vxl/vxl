@@ -1,3 +1,4 @@
+#include <vil/algo/vil_abs_shuffle_distance.h>
 #include <vil/algo/vil_binary_closing.h>
 #include <vil/algo/vil_binary_dilate.h>
 #include <vil/algo/vil_binary_erode.h>
