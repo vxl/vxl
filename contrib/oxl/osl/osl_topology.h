@@ -49,7 +49,7 @@ private:
 
 //: call ref() on every object pointed to by an element of C.
 template <class Container>
-inline 
+inline
 void osl_topology_ref(Container &C)
 {
   for (typename Container::iterator i=C.begin(); i!=C.end(); ++i)
@@ -59,7 +59,7 @@ void osl_topology_ref(Container &C)
 
 //: call unref() on every object pointed to by an element of C.
 template <class Container>
-inline 
+inline
 void osl_topology_unref(Container &C)
 {
   for (typename Container::iterator i=C.begin(); i!=C.end(); ++i)
@@ -69,6 +69,6 @@ void osl_topology_unref(Container &C)
 
 #define VSL_TOPOLOGY_REF_UNREF_INSTANTIATE(C) \
 VCL_INSTANTIATE_INLINE(void osl_topology_ref(C &)); \
-VCL_INSTANTIATE_INLINE(void osl_topology_unref(C &));
+VCL_INSTANTIATE_INLINE(void osl_topology_unref(C &))
 
 #endif // osl_topology_h_

@@ -40,7 +40,6 @@ void RadialLensCorrection::init(double cx, double cy, double sx, double sy, doub
   // Approximately scale to maintain image size
   _invsx /= (1 + _k2);
   _invsy /= (1 + _k2);
-
 }
 
 void RadialLensCorrection::implement_map(double x1, double y1, double* x2, double* y2)
@@ -75,14 +74,14 @@ void RadialLensCorrection::implement_inverse_map(double x2, double y2, double* x
     *y1 = y2;
     return;
   }
-  double rc = sqrt(r2c);
+  double rc = vcl_sqrt(r2c);
   // So rc = r (1 + k2 r^2)
   // Thf r = fsolve(k2 r^3 + r - rc = 0)
   // from Devernay and Faugeras:
   assert (_k4 == 0);
   double c =  1 / _k2;
   double d = -rc * c;
-  
+
   // r^3 + c * r + d = 0;
   double Q = -c / 3;
   double R = d / 2;
@@ -90,23 +89,24 @@ void RadialLensCorrection::implement_inverse_map(double x2, double y2, double* x
   double DELTA = R*R - Q*Q*Q;
   double r;
   if (DELTA < 0)  {
-    double S = vnl_math_cuberoot(sqrt(R*R-DELTA));
-    double T = atan(sqrt(-DELTA)/R) / 3.0;
-    r = -S * cos(T) + S * sqrt(3.0) * sin(T);
+    double S = vnl_math_cuberoot(vcl_sqrt(R*R-DELTA));
+    double T = vcl_atan(vcl_sqrt(-DELTA)/R) / 3.0;
+    r = -S * vcl_cos(T) + S * vcl_sqrt(3.0) * vcl_sin(T);
     r = -r;
     double res = (r*(1 + _k2 * r * r) - rc);
-    if (fabs(res) > 1e-11) {
+    if (vcl_fabs(res) > 1e-11) {
       vcl_cerr << "RES = " << res << " -- call awf!\n";
     }
   } else {
-    double t = -vnl_math_sgn(R) * vnl_math_cuberoot(fabs(R) + sqrt(DELTA));
-    
+    double t = -vnl_math_sgn(R) * vnl_math_cuberoot(vcl_fabs(R) + vcl_sqrt(DELTA));
+
     if (t == 0)
       r = 0;
     else
       r = t + Q / t;
-    //cerr <<  "+RES = " << (r*(1 + _k2 * r * r) - rc) << " " << (fabs(t*t*t) - (fabs(R)  + sqrt(DELTA))) << endl;
-  } 
+    //vcl_cerr <<  "+RES = " << (r*(1 + _k2 * r * r) - rc) << " "
+    //   << (vcl_fabs(t*t*t) - (vcl_fabs(R)  + vcl_sqrt(DELTA))) << vcl_endl;
+  }
   // end D & F
 
 

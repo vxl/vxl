@@ -5,7 +5,7 @@
 #include "FMPlanarNonLinFun.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h> // for abort()
+#include <vcl_cstdlib.h> // for vcl_abort()
 #include <vcl_iostream.h>
 
 #include <vnl/vnl_matrix.h>
@@ -75,9 +75,9 @@ bool FMPlanarNonLinFun::compute(FMatrixPlanar* F)
        return false;
 
   vcl_cout<<"FMPlanarNonLinFun: minimisation start error "
-      << lm.get_start_error() / sqrt(double(_data_size))
+      << lm.get_start_error() / vcl_sqrt(double(_data_size))
       <<" end error "
-      << lm.get_end_error() / sqrt(double(_data_size))
+      << lm.get_end_error() / vcl_sqrt(double(_data_size))
       <<vcl_endl;
 
   norm_F = params_to_fmatrix (f_params);
@@ -85,7 +85,7 @@ bool FMPlanarNonLinFun::compute(FMatrixPlanar* F)
   F->set(_denorm_matrix.transpose() * norm_F.get_matrix() * _denorm_matrix);
 
   vcl_cout << "fm_fmatrix_nagmin: accepted " << _data_size << '/' << _data_size
-       << " rms point-epipolar error " << lm.get_end_error() / sqrt(double(_data_size))
+       << " rms point-epipolar error " << lm.get_end_error() / vcl_sqrt(double(_data_size))
        << vcl_endl;;
 
   return true;
@@ -111,12 +111,11 @@ void FMPlanarNonLinFun::f(const vnl_vector<double>& f_params, vnl_vector<double>
           HomgLine2D l21 = F.image1_epipolar_line(p2);
           double r2 = _image_metric1.perp_dist_squared(p1, l21);
 
-          fx[i] = sqrt((r1 + r2) / 2.0);
-
+          fx[i] = vcl_sqrt((r1 + r2) / 2.0);
      }
-     // cout << "Err = " << sqrt (distance_squared / (_data_size * 2)) << endl;
+     // cout << "Err = " << vcl_sqrt (distance_squared / (_data_size * 2)) << endl;
 
-//   return sqrt (distance_squared / (_data_size * 2)); // void function cannot return
+//   return vcl_sqrt (distance_squared / (_data_size * 2)); // void function cannot return
 }
 
 void FMPlanarNonLinFun::fmatrix_to_params(const FMatrixPlanar& F,
@@ -155,36 +154,36 @@ void FMPlanarNonLinFun::fmatrix_to_params_mna(const FMatrixPlanar& F,
 
   if (eig0 > 0 || eig1 < 0) {
     vcl_cerr << "ERROR in FMPlanarNonLinFun: vnl_symmetric_eigensystem<double>  is unsorted: " << symm_eig.D << vcl_endl;
-    abort();
+    vcl_abort();
   }
 
-  if (fabs(symm_eig.D(1,1)) > 1e-12)
+  if (vcl_fabs(symm_eig.D(1,1)) > 1e-12)
     vcl_cerr << "FMPlanarNonLinFun: WARNING: middle eigenvalue not 0: " << symm_eig.D << vcl_endl;
 
 
   vnl_vector<double> v0(symm_eig.get_eigenvector(0));
   vnl_vector<double> v1(symm_eig.get_eigenvector(2));
 
-  vnl_double_3 f1 = sqrt(eig1)*v1 + sqrt(-eig0)*v0;
-  vnl_double_3 f2 = sqrt(eig1)*v1 - sqrt(-eig0)*v0;
+  vnl_double_3 f1 = vcl_sqrt(eig1)*v1 + vcl_sqrt(-eig0)*v0;
+  vnl_double_3 f2 = vcl_sqrt(eig1)*v1 - vcl_sqrt(-eig0)*v0;
 
   vnl_double_3 ls;
-  if (fabs(HomgOperator2D::dot(e1,f1)/e1.w()) + fabs(HomgOperator2D::dot(e2,f1)/e2.w()) >
-      fabs(HomgOperator2D::dot(e1,f2)/e1.w()) + fabs(HomgOperator2D::dot(e2,f2)/e2.w()) )
+  if (vcl_fabs(HomgOperator2D::dot(e1,f1)/e1.w()) + vcl_fabs(HomgOperator2D::dot(e2,f1)/e2.w()) >
+      vcl_fabs(HomgOperator2D::dot(e1,f2)/e1.w()) + vcl_fabs(HomgOperator2D::dot(e2,f2)/e2.w()) )
     ls = f1;
   else
     ls = f2;
 
   ls /= ls.magnitude();
 
-  double ls_thi = acos(ls.z());
+  double ls_thi = vcl_acos(ls.z());
   if (ls_thi < 0) ls_thi += vnl_math::pi;
 
   double ls_theta;
   if (ls.y() >= 0)
-    ls_theta =  acos(ls.x()/sin(ls_thi));
+    ls_theta =  vcl_acos(ls.x()/vcl_sin(ls_thi));
   else
-    ls_theta = -acos(ls.x()/sin(ls_thi));
+    ls_theta = -vcl_acos(ls.x()/vcl_sin(ls_thi));
 
   params[0] = ls_theta;
   params[1] = ls_thi;
@@ -205,7 +204,6 @@ void FMPlanarNonLinFun::fmatrix_to_params_mna(const FMatrixPlanar& F,
     }
   }
 #endif
-
 }
 
 //-----------------------------------------------------------------------------
@@ -214,9 +212,9 @@ void FMPlanarNonLinFun::fmatrix_to_params_mna(const FMatrixPlanar& F,
 //
 FMatrixPlanar FMPlanarNonLinFun::params_to_fmatrix_mna(const vnl_vector<double>& params)
 {
-     double ls1 = cos(params[0])*sin(params[1]);
-     double ls2 = sin(params[0])*sin(params[1]);
-     double ls3 = cos(params[1]);
+     double ls1 = vcl_cos(params[0])*vcl_sin(params[1]);
+     double ls2 = vcl_sin(params[0])*vcl_sin(params[1]);
+     double ls3 = vcl_cos(params[1]);
 
      double list1[9] = {0,              -1.0,           params[5],
                         1,              0,              -params[4],
@@ -246,22 +244,22 @@ void FMPlanarNonLinFun::fmatrix_to_params_awf(const FMatrixPlanar& F, vnl_vector
 
   if (eig0 > 0 || eig1 < 0) {
     vcl_cerr << "ERROR in FMPlanarNonLinFun: vnl_symmetric_eigensystem<double>  is unsorted: " << symm_eig.D << vcl_endl;
-    abort();
+    vcl_abort();
   }
 
-  if (fabs(symm_eig.D(1,1)) > 1e-12)
+  if (vcl_fabs(symm_eig.D(1,1)) > 1e-12)
     vcl_cerr << "FMPlanarNonLinFun: WARNING: middle eigenvalue not 0: " << symm_eig.D << vcl_endl;
 
 
   vnl_vector<double> v0(symm_eig.get_eigenvector(0));
   vnl_vector<double> v1(symm_eig.get_eigenvector(2));
 
-  vnl_double_3 f1 = sqrt(eig1)*v1 + sqrt(-eig0)*v0;
-  vnl_double_3 f2 = sqrt(eig1)*v1 - sqrt(-eig0)*v0;
+  vnl_double_3 f1 = vcl_sqrt(eig1)*v1 + vcl_sqrt(-eig0)*v0;
+  vnl_double_3 f2 = vcl_sqrt(eig1)*v1 - vcl_sqrt(-eig0)*v0;
 
   vnl_double_3 ls;
-  if (fabs(HomgOperator2D::dot(e1,f1)/e1.w()) + fabs(HomgOperator2D::dot(e2,f1)/e2.w()) >
-      fabs(HomgOperator2D::dot(e1,f2)/e1.w()) + fabs(HomgOperator2D::dot(e2,f2)/e2.w()) )
+  if (vcl_fabs(HomgOperator2D::dot(e1,f1)/e1.w()) + vcl_fabs(HomgOperator2D::dot(e2,f1)/e2.w()) >
+      vcl_fabs(HomgOperator2D::dot(e1,f2)/e1.w()) + vcl_fabs(HomgOperator2D::dot(e2,f2)/e2.w()) )
     ls = f1;
   else
     ls = f2;

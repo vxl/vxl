@@ -97,7 +97,7 @@ HomgOperator3D::angle_between_oriented_lines (const HomgLine3D& l1, const HomgLi
   double n = dir1.x()*dir1.x()+dir1.y()*dir1.y()+dir1.z()*dir1.z();
   n       *= dir2.x()*dir2.x()+dir2.y()*dir2.y()+dir2.z()*dir2.z();
   // dot product of unit direction vectors:
-  n = (dir1.x()*dir2.x()+dir1.y()*dir2.y()+dir1.z()*dir2.z())/sqrt(n);
+  n = (dir1.x()*dir2.x()+dir1.y()*dir2.y()+dir1.z()*dir2.z())/vcl_sqrt(n);
   return vcl_acos(n);
 }
 

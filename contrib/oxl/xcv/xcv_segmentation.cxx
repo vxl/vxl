@@ -340,7 +340,7 @@ void xcv_segmentation::detect_lines_ox()
       continue;
 
     // Now project the endpoints of the edge onto the fitted line:
-    double m = sqrt(a*a + b*b);
+    double m = vcl_sqrt(a*a + b*b);
     if (m == 0)
       continue;
 

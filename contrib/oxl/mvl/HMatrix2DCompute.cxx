@@ -57,7 +57,7 @@ HMatrix2DCompute::compute_pl(const PointArray&,
   vcl_cerr << "The derived class may have omitted to implement" << vcl_endl;
   vcl_cerr << "enough of the methods compute_p(),compute_l() and" << vcl_endl;
   vcl_cerr << "compute_pl()." << vcl_endl;
-  abort();
+  vcl_abort();
   return false;
 }
 

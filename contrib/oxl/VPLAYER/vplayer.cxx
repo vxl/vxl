@@ -79,7 +79,7 @@ vgui_rubberbander_sptr get_rubberbander_at(unsigned col, unsigned row)
   }
   else
   {
-    vgui_macro_warning << "Unable to get tableau at (" << col <<", "<<row<<")"<<endl;
+    vgui_macro_warning << "Unable to get tableau at (" << col <<", "<<row<<")\n";
     return NULL;
   }
 }
@@ -97,7 +97,7 @@ vgui_easy2D_sptr get_easy2D_at(unsigned col, unsigned row)
       rub, vcl_string("vgui_easy2D")));
     return ret;
   }
-  vgui_macro_warning << "Unable to get easy2D at (" << col << ", " << row << ")" << endl;
+  vgui_macro_warning << "Unable to get easy2D at (" << col << ", " << row << ")\n";
   return 0;
 }
 //-----------------------------------------------------------------------------
@@ -114,7 +114,7 @@ vgui_image_tableau_sptr get_image_tableau_at(unsigned col, unsigned row)
       tab, vcl_string("vgui_image_tableau")));
   }
   vgui_macro_warning << "Unable to get vgui_image_tableau at (" << col << ", "
-    << row << ")" << endl;
+    << row << ")\n";
   return 0;
 }
 vgui_menu vplayer_menubar;

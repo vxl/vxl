@@ -4,7 +4,7 @@
 
 #include "SequenceFileName.h"
 
-#include <vcl_cstdlib.h> // atoi()
+#include <vcl_cstddef.h> // for vcl_size_t()
 #include <vcl_iostream.h>
 #include <vbl/vbl_reg_exp.h>
 #include <vbl/vbl_file.h>
@@ -49,7 +49,7 @@ void SequenceFileName::init(char const* s, int start_frame, int step, char const
 
   {
     // Make any subdirectory if not an input_file
-    size_t i = fmt_.rfind('/');
+    vcl_size_t i = fmt_.rfind('/');
     // If no /, assume that the file is in CWD which exists
     if (i != vcl_string::npos) {
       vcl_string dir = fmt_.substr(0, i);

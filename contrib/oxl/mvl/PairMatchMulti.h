@@ -26,6 +26,7 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl_utility.h> //vxl_filter
+#include <vcl_cstdlib.h> // for vcl_abort()
 #include <vcl_functional.h>
 #include <vcl_map.h>
 #include <vcl_iosfwd.h>
@@ -126,7 +127,7 @@ inline PairMatchMultiIterator PairMatchMulti::get_match_12(int i1)
 
 //: This may be expensive.  If it is used a lot, it may be worth maintaining
 // forward and backward maps.  Right now it's not even implemented.
-inline PairMatchMultiIterator PairMatchMulti::get_match_21(int) { abort(); return iter(); }
+inline PairMatchMultiIterator PairMatchMulti::get_match_21(int) { vcl_abort(); return iter(); }
 
 //: Return the number of matches for i1.
 inline

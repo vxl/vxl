@@ -202,7 +202,7 @@ void vplayer_geometry::delete_all(const void*)
   vgui_easy2D_sptr easy_tab = get_easy2D_at(col, row);
   if (!easy_tab)
   {
-    vgui_macro_warning << "Unable to get current easy2D to delete te objects" << endl;
+    vgui_macro_warning << "Unable to get current easy2D to delete te objects\n";
     return;
   }
 
@@ -230,7 +230,7 @@ void vplayer_geometry::delete_points(const void *)
   vgui_easy2D_sptr easy_tab = get_easy2D_at(col,row);
   if (!easy_tab)
   {
-    vgui_macro_warning << "Unable to get current easy2D to delete  points" << endl;
+    vgui_macro_warning << "Unable to get current easy2D to delete  points\n";
     return;
   }
   vcl_vector<vgui_soview*> all_objs = easy_tab->get_all();
@@ -257,7 +257,7 @@ void vplayer_geometry::delete_lines(const void *)
   vgui_easy2D_sptr easy_tab = get_easy2D_at(col,row);
   if (!easy_tab)
   {
-    vgui_macro_warning << "Unable to get current easy2D to delete lines" << endl;
+    vgui_macro_warning << "Unable to get current easy2D to delete lines\n";
     return;
   }
   vcl_vector<vgui_soview*> all_objs = easy_tab->get_all();
@@ -284,7 +284,7 @@ void vplayer_geometry::delete_inf_lines(const void *)
   vgui_easy2D_sptr easy_tab = get_easy2D_at(col,row);
   if (!easy_tab)
   {
-    vgui_macro_warning << "Unable to get current easy2D to delete infinite lines?" << endl;
+    vgui_macro_warning << "Unable to get current easy2D to delete infinite lines?\n";
     return;
   }
   vcl_vector<vgui_soview*> all_objs = easy_tab->get_all();
@@ -311,7 +311,7 @@ void vplayer_geometry::delete_circles(const void *)
   vgui_easy2D_sptr easy_tab = get_easy2D_at(col,row);
   if (!easy_tab)
   {
-    vgui_macro_warning << "Unable to get current easy2D to delete circles?" << endl;
+    vgui_macro_warning << "Unable to get current easy2D to delete circles?\n";
     return;
   }
   vcl_vector<vgui_soview*> all_objs = easy_tab->get_all();
@@ -338,7 +338,7 @@ void vplayer_geometry::delete_linestrips(const void *)
   vgui_easy2D_sptr easy_tab = get_easy2D_at(col,row);
   if (!easy_tab)
   {
-    vgui_macro_warning << "Unable to get current easy2D to delete linestrips" << endl;
+    vgui_macro_warning << "Unable to get current easy2D to delete linestrips\n";
     return;
   }
   vcl_vector<vgui_soview*> all_objs = easy_tab->get_all();
@@ -429,31 +429,31 @@ void vplayer_geometry::save(const char *object_type,const char *dialog_name)
       vgui_soview* sv = (vgui_soview*)(*i);
       if (sv == NULL)
       {
-         vgui_macro_warning << "Object in soview list is null" << endl;
+         vgui_macro_warning << "Object in soview list is null\n";
          return;
       }
       if (sv->type_name() == "vgui_soview2D_point" && sv->type_name() == object_type)
       {
         vgui_soview2D_point* pt = (vgui_soview2D_point*)sv;
-        fs<<pt->x<<" "<<pt->y<<endl;
+        fs<<pt->x<<" "<<pt->y<<vcl_endl;
       }
       else if (sv->type_name() == "vgui_soview2D_circle" && sv->type_name() == object_type)
       {
         vgui_soview2D_circle* circ = (vgui_soview2D_circle*)sv;
-        fs<<circ->x<<" "<<circ->y<<" "<<circ->r<<endl;
+        fs<<circ->x<<" "<<circ->y<<" "<<circ->r<<vcl_endl;
       }
       else if (sv->type_name() == "vgui_soview2D_lineseg" && sv->type_name() == object_type)
       {
         vgui_soview2D_lineseg* line = (vgui_soview2D_lineseg*)sv;
-        fs<<line->x0<<" "<<line->y0<<" "<<line->x1<<" "<<line->y1<<endl;
+        fs<<line->x0<<" "<<line->y0<<" "<<line->x1<<" "<<line->y1<<vcl_endl;
       }
       else if(sv->type_name() == "vgui_soview2D_linestrip" && sv->type_name() == object_type)
       {
         vgui_soview2D_linestrip *linestrip = (vgui_soview2D_linestrip *)sv;
-        fs<<linestrip->n<<endl;
+        fs<<linestrip->n<<vcl_endl;
         for(int ii = 1; ii<linestrip->n; ++ii)
         {
-          fs<<linestrip->x[ii-1]<<" "<<linestrip->y[ii-1]<<" "<<linestrip->x[ii]<<" "<<linestrip->y[ii]<<endl;
+          fs<<linestrip->x[ii-1]<<" "<<linestrip->y[ii-1]<<" "<<linestrip->x[ii]<<" "<<linestrip->y[ii]<<vcl_endl;
         }
       }
     }

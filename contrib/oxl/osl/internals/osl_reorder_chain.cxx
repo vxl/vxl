@@ -7,6 +7,7 @@
 #include "osl_reorder_chain.h"
 
 #include <vcl_vector.h>
+#include <vnl/vnl_math.h>
 #include <osl/osl_edgel_chain.h>
 #include <osl/osl_OrthogRegress.h>
 
@@ -33,7 +34,7 @@ void osl_reorder_chain(osl_edgel_chain *dc)
 
   osl_OrthogRegress data;
   float a0,b0,a1,b1,dot,diff,max=0.0;
-  double MPIby2 = 3.1415926/2.0;
+  double MPIby2 = vnl_math::pi/2.0;
 
   // Add the first npts to the data set and fit.
   for (i=0; i<npts; ++i)
@@ -58,7 +59,7 @@ void osl_reorder_chain(osl_edgel_chain *dc)
       dot = -1.0;
     diff = vcl_acos(dot);
     if ( diff > MPIby2)
-      diff = 3.1415926 - diff;
+      diff = vnl_math::pi - diff;
     if ( diff > max ) {
       max = diff;
       start = j+mid;

@@ -5,6 +5,7 @@
 #include "NViewMatches.h"
 
 #include <vcl_cassert.h>
+#include <vcl_cstdlib.h> // for vcl_abort()
 #include <vcl_fstream.h>
 #include <vbl/vbl_awk.h>
 #include <vbl/vbl_printf.h>
@@ -198,7 +199,7 @@ int NViewMatches::incorporate(const NViewMatch& newtrack)
 {
   int nmatches = 0;
   iterator merged = end();
-  abort(); // This routine is untested.....
+  vcl_abort(); // This routine is untested.....
   for(iterator i = begin(); i != end(); ++i) {
     if ((*i).matches(newtrack,_min_overlap)) {
       if (nmatches == 0) {

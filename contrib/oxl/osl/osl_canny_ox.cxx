@@ -266,8 +266,8 @@ int osl_canny_ox::HysteresisOX(osl_EdgelChain *&edgels_NMS,
 
 
   // Perform Hysteresis part of canny.
-  float low  = (32.0/log(2.0)) * log(_low/100+1.0);     // compute lower threshold
-  float high = (32.0/log(2.0)) * log(_high/100+1.0);    // compute upper threshold
+  float low  = (32.0/vcl_log(2.0)) * vcl_log(_low/100+1.0);     // compute lower threshold
+  float high = (32.0/vcl_log(2.0)) * vcl_log(_high/100+1.0);    // compute upper threshold
   //formerly "Do_hysteresisOX(edgels_NMS,links,status,low,high);"
   for (int i=0; i<n_edgels_NMS; ++i)
     if (!status[i] && edgels_NMS->GetGrad(i)>high) {
@@ -854,7 +854,7 @@ void Set_intsOX(int& int1, int& int2, int val1, int val2) {
 //
 int osl_canny_ox::Join_dotsOX(int x, int y, int dx, int dy, int& xNew, int& yNew)
 {
-  if ((abs(dx) > 1) || (abs(dy) > 1)) {
+  if ((vcl_abs(dx) > 1) || (vcl_abs(dy) > 1)) {
     //  If dx or dy is too large (> 1), meaning the last
     //   point was found by jumping, then jumping again
     //   will be too unreliable
@@ -865,7 +865,7 @@ int osl_canny_ox::Join_dotsOX(int x, int y, int dx, int dy, int& xNew, int& yNew
   if ( (x<=1) || (x>=_xsize-2) || (y<=1) || (y>=_ysize-2) )
     return false;
 
-  if (!dx && (abs(dy) == 1)) {
+  if (!dx && (vcl_abs(dy) == 1)) {
     if      (_thin[x  ][y+2*dy] >= _edge_min_OX) Set_intsOX(xNew, yNew, x  , y+2*dy);
     else if (_thin[x+1][y+2*dy] >= _edge_min_OX) Set_intsOX(xNew, yNew, x+1, y+2*dy);
     else if (_thin[x-1][y+2*dy] >= _edge_min_OX) Set_intsOX(xNew, yNew, x-1, y+2*dy);
@@ -877,7 +877,7 @@ int osl_canny_ox::Join_dotsOX(int x, int y, int dx, int dy, int& xNew, int& yNew
     else if (_thin[x-2][y     ] >= _edge_min_OX) Set_intsOX(xNew, yNew, x-2, y     );
     else return false;
   }
-  else if ((abs(dx) == 1) && !dy) {
+  else if ((vcl_abs(dx) == 1) && !dy) {
     if      (_thin[x+2*dx][y  ] >= _edge_min_OX) Set_intsOX(xNew, yNew, x+2*dx, y  );
     else if (_thin[x+2*dx][y+1] >= _edge_min_OX) Set_intsOX(xNew, yNew, x+2*dx, y+1);
     else if (_thin[x+2*dx][y-1] >= _edge_min_OX) Set_intsOX(xNew, yNew, x+2*dx, y-1);
@@ -889,7 +889,7 @@ int osl_canny_ox::Join_dotsOX(int x, int y, int dx, int dy, int& xNew, int& yNew
     else if (_thin[x     ][y-2] >= _edge_min_OX) Set_intsOX(xNew, yNew, x     , y-2);
     else return false;
   }
-  else if (abs(dx*dy) == 1) {
+  else if (vcl_abs(dx*dy) == 1) {
     if      (_thin[x+2*dx][y+2*dy] >= _edge_min_OX) Set_intsOX(xNew, yNew, x+2*dx, y+2*dy);
     else if (_thin[x+2*dx][y+  dy] >= _edge_min_OX) Set_intsOX(xNew, yNew, x+2*dx, y+  dy);
     else if (_thin[x+  dx][y+2*dy] >= _edge_min_OX) Set_intsOX(xNew, yNew, x+  dx, y+2*dy);

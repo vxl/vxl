@@ -23,6 +23,7 @@
 //-----------------------------------------------------------------------------
 
 #include "PairMatchMulti.h"
+#include <vcl_cstdlib.h> // for vcl_abort()
 
 class PairMatchMulti;
 class PairMatchMultiIterator {
@@ -57,7 +58,7 @@ public:
   int get_i2() const { return (*_first).second; }
 
 private:
-  PairMatchMultiIterator& operator ++ (int /*postfix*/) {abort(); return *this;}
+  PairMatchMultiIterator& operator ++ (int /*postfix*/) {vcl_abort(); return *this;}
 };
 
 #endif // PairMatchMultiIterator_h_

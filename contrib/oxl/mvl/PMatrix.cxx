@@ -307,7 +307,7 @@ bool PMatrix::is_canonical(double tol) const
   for(int r = 0; r < 3; ++r)
     for(int c = 0; c < 4; ++c) {
       double d = (r == c) ? (_p_matrix(r,c) - 1) : _p_matrix(r,c);
-      if (fabs(d) > tol)
+      if (vcl_fabs(d) > tol)
         return false;
     }
   return true;
@@ -465,7 +465,7 @@ PMatrix::fix_cheirality()
   double scale = 1;
   // Used to scale by 1/det, but it's a bad idea if det is small
   if (0) {
-    if (fabs(det - 1) > 1e-8) {
+    if (vcl_fabs(det - 1) > 1e-8) {
       vcl_cerr << "PMatrix::fix_cheirality: Flipping, determinant is " << det << vcl_endl;
     }
 

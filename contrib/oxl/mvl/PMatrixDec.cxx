@@ -50,8 +50,8 @@ void PMatrixDec::Init()
       vcl_cout << "PMatrixDec WARNING: Incorrect projection matrix" << vcl_endl;
     else
     {
-      a_u = sqrt(a_u);
-      a_v = sqrt(a_v);
+      a_u = vcl_sqrt(a_u);
+      a_v = vcl_sqrt(a_v);
 
       // INTRINSIC parameters => J
       _j_matrix(0,0) = a_u;

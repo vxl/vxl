@@ -121,9 +121,9 @@ void HomgConic::closest_point(const HomgPoint2D& p, HomgPoint2D* pout, double *d
   double Ao = _matrix(2,2);
 
   // Rotate the conic
-  double theta = 0.5*atan2(Axy,Axx - Ayy);
-  double cost = cos(theta);
-  double sint = sin(theta);
+  double theta = 0.5*vcl_atan2(Axy,Axx - Ayy);
+  double cost = vcl_cos(theta);
+  double sint = vcl_sin(theta);
   double sin2 = vnl_math_sqr(sint);
   double cos2 = vnl_math_sqr(cost);
 
@@ -170,7 +170,7 @@ void HomgConic::closest_point(const HomgPoint2D& p, HomgPoint2D* pout, double *d
         ans[nsols++] = roots.real(i);
   }
 
-  // Find closest.  length = sqrt(lambda|G|)
+  // Find closest.  length = vcl_sqrt(lambda|G|)
   double minu=0,minv=0; // needs some initialisation, to make the compiler happy - PVR
   double distance = 1e20; // large enough to be sure it will be lowered
   for(int k = 0; k < nsols; k++) {
@@ -207,8 +207,8 @@ void HomgConic::closest_point(const HomgPoint2D& p, HomgPoint2D* pout, double *d
 
     // Display the distance, and check that the point is indeed on the conic
     double F = this->F(*pout);
-    if (fabs(F) > 1e-9) {
-      vcl_cerr << "HomgConic::get_closest_point() F = " << F << "  distance = " << sqrt(distance) << vcl_endl;
+    if (vcl_fabs(F) > 1e-9) {
+      vcl_cerr << "HomgConic::get_closest_point() F = " << F << "  distance = " << vcl_sqrt(distance) << vcl_endl;
       vcl_cerr << "WARNING: F = " << F << ".  It should be real tiny\n";
     }
   }
@@ -236,9 +236,9 @@ int HomgConic::closest_points(const HomgPoint2D& p, HomgPoint2D pout[4])
   double Ao = _matrix(2,2);
 
   // Rotate the conic
-  double theta = 0.5*atan2(Axy,Axx - Ayy);
-  double cost = cos(theta);
-  double sint = sin(theta);
+  double theta = 0.5*vcl_atan2(Axy,Axx - Ayy);
+  double cost = vcl_cos(theta);
+  double sint = vcl_sin(theta);
   double sin2 = vnl_math_sqr(sint);
   double cos2 = vnl_math_sqr(cost);
 
@@ -285,7 +285,7 @@ int HomgConic::closest_points(const HomgPoint2D& p, HomgPoint2D pout[4])
         ans[nsols++] = roots.real(i);
   }
 
-  // Find closest.  length = sqrt(lambda|G|)
+  // Find closest.  length = vcl_sqrt(lambda|G|)
   for(int k = 0; k < nsols; k++) {
     double lambda = ans[k];
 

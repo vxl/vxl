@@ -146,14 +146,14 @@ FMatrixSkew::find_nearest_perfect_match(const HomgPoint2D& point1,
           return;
      }
 
-     double ttheta1 = (-b_qd + sqrt(temp))/(2*a_qd);
-     double ttheta2 = (-b_qd - sqrt(temp))/(2*a_qd);
+     double ttheta1 = (-b_qd + vcl_sqrt(temp))/(2*a_qd);
+     double ttheta2 = (-b_qd - vcl_sqrt(temp))/(2*a_qd);
 
-     double theta1 = atan(ttheta1);
-     double theta2 = atan(ttheta2);
+     double theta1 = vcl_atan(ttheta1);
+     double theta2 = vcl_atan(ttheta2);
 
-     double ctheta1 = cos(theta1), stheta1 = sin(theta1);
-     double ctheta2 = cos(theta2), stheta2 = sin(theta2);
+     double ctheta1 = vcl_cos(theta1), stheta1 = vcl_sin(theta1);
+     double ctheta2 = vcl_cos(theta2), stheta2 = vcl_sin(theta2);
 
      double dist11 = stheta1*u1 - ctheta1*v1;
      double dist12 = stheta1*u2 - ctheta1*v2;
@@ -161,7 +161,7 @@ FMatrixSkew::find_nearest_perfect_match(const HomgPoint2D& point1,
      double dist22 = stheta2*u2 - ctheta2*v2;
 
      // find correct solution with minimum distance - set to theta1
-     if (fabs(dist11) + fabs(dist12) > fabs(dist21) + fabs(dist22))
+     if (vcl_fabs(dist11) + vcl_fabs(dist12) > vcl_fabs(dist21) + vcl_fabs(dist22))
      {
           stheta1 = stheta2;
           ctheta1 = ctheta2;

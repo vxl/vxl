@@ -3,6 +3,7 @@
 #include <osl/osl_kernel.h>
 #include <osl/osl_canny_smooth.h>
 #include <osl/osl_canny_gradient.h>
+#include <vnl/vnl_math.h>
 
 #include <vcl_list.h>
 #include <vcl_cmath.h>
@@ -21,7 +22,7 @@ osl_canny_rothwell::osl_canny_rothwell(osl_canny_rothwell_params const &params)
   // Determine the size of the largest convolution kernel
   _range = params.range;
   _gauss_tail = 0.01f;   // Canny uses 0.001
-  _width = int(_sigma*sqrt(2*log(1/_gauss_tail))+1); // round up to int
+  _width = int(_sigma*vcl_sqrt(2*vcl_log(1/_gauss_tail))+1); // round up to int
   _w0 = _width;
   _k_size = 2*_width+ 1;
   _kernel = new float[_k_size];
@@ -130,7 +131,7 @@ void osl_canny_rothwell::detect_edges(vil_image const &image, vcl_list<osl_Edge*
     // Do Canny around the remaining ends at smaller scales to improve
     // topology. We wish to do the adaptive Canny until the region of
     // influence is less than `range' pixels
-    float min_sigma = _range / sqrt(-2.0*log(_gauss_tail));
+    float min_sigma = _range / vcl_sqrt(-2.0*vcl_log(_gauss_tail));
     if (verbose) vcl_cerr << "\nadaptive Canny with smoothing sigma bound = " << min_sigma << vcl_endl;
 
     // Try to fix single pixel breaks in the edgel chains
@@ -189,7 +190,7 @@ void osl_canny_rothwell::detect_edges(vil_image const &image, vcl_list<osl_Edge*
 //
 void osl_canny_rothwell::Non_maximal_supression() {
   float h1,h2;
-  float k = 180.0f/3.1415926f;
+  float k = 180.0f/float(vnl_math::pi);
   int orient;
   float theta,grad;
   float fraction,newx,newy;
@@ -205,7 +206,7 @@ void osl_canny_rothwell::Non_maximal_supression() {
     for (int y=_w0+1; y<_ysize-_w0-1; ++y)  {
       // First check that we have an edge
       if ( g1[y] > _low ) {
-        theta = k*atan2(dy[y],dx[y]);
+        theta = k*vcl_atan2(dy[y],dx[y]);
 
         // Now work out which direction wrt the eight-way
         // neighbours the edge normal points
@@ -243,7 +244,7 @@ void osl_canny_rothwell::Non_maximal_supression() {
           break;
 
         default:
-          abort();
+          vcl_abort();
           //h1 = h2 = 0.0;  // Dummy values
           //cerr << "*** ERROR ON SWITCH IN NMS ***\n";
         }
@@ -275,7 +276,7 @@ void osl_canny_rothwell::Non_maximal_supression() {
             break;
 
           default:
-            abort();
+            vcl_abort();
             //newx = newy = 0.0; // Dummy values
             //cerr << "*** ERROR ON SWITCH IN NMS ***\n";
           }
@@ -349,7 +350,6 @@ void osl_canny_rothwell::Initial_hysteresis() {
     delete edgels;
   }
 }
-
 
 
 //-----------------------------------------------------------------------------
@@ -442,13 +442,13 @@ void osl_canny_rothwell::Final_hysteresis(vcl_list<osl_Edge*> *edges) {
             *(pg++) = 0.0;   // Mark the gradient as zero at a junction
           }
           if (_theta[tmpx][tmpy] == DUMMYTHETA) {
-            const float k = 180.0f/3.1415926f;
+            const float k = 180.0f/float(vnl_math::pi);
             float *dx = _dx[tmpx];
             float *dy = _dy[tmpx];
 
             // *** Bug fix, Samer Abdallah 5/10/95:  next line was
-            // _theta[tmpx][tmpy]  = k*atan2(dy[y],dx[y]);
-            _theta[tmpx][tmpy]  = k*atan2(dy[tmpy],dx[tmpy]);
+            // _theta[tmpx][tmpy]  = k*vcl_atan2(dy[y],dx[y]);
+            _theta[tmpx][tmpy]  = k*vcl_atan2(dy[tmpy],dx[tmpy]);
           }
 
           *(pt++) = _theta[tmpx][tmpy];
@@ -663,7 +663,7 @@ void osl_canny_rothwell::Adaptive_Canny(vil_image const &image) {
   // halfing the size of the smoothing sigma
   _old_sigma = _sigma;  _sigma /= 2.0;
   _old_width = _width;
-  _width = int(_sigma*sqrt(2*log(1/_gauss_tail))+1);
+  _width = int(_sigma*vcl_sqrt(2*vcl_log(1.0/_gauss_tail))+1);
   _old_k_size = _k_size;  _k_size = 2*_width+ 1;
   delete _kernel; _kernel = new float [_k_size];
   osl_kernel_DOG(_sigma, _kernel, _k_size, _width);

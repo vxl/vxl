@@ -58,7 +58,7 @@ void HomgOperator2D::unitize(Homg2D* a)
   double y = a->get_y();
   double z = a->get_w();
 
-  double norm = sqrt (vnl_math_sqr(x) + vnl_math_sqr(y) + vnl_math_sqr(z));
+  double norm = vcl_sqrt (vnl_math_sqr(x) + vnl_math_sqr(y) + vnl_math_sqr(z));
 
   if (norm == 0.0) {
     vcl_cerr << "HomgOperator2D::unitize() -- Zero length vector\n";
@@ -130,7 +130,7 @@ double HomgOperator2D::distance_squared(const HomgLineSeg2D& segment, const Homg
 //: Return distance between line segments.
 double HomgOperator2D::distance(const HomgLineSeg2D& ls, const HomgLineSeg2D& ll, double OVERLAP_THRESH)
 {
-  double norm = sqrt(ll.get_line().get_x()*ll.get_line().get_x()+ll.get_line().get_y()*ll.get_line().get_y());
+  double norm = vcl_sqrt(ll.get_line().get_x()*ll.get_line().get_x()+ll.get_line().get_y()*ll.get_line().get_y());
   HomgLine2D lll;
   lll.set(ll.get_line().x()/norm,ll.get_line().y()/norm,ll.get_line().w()/norm);
   double dist1 = ls.get_point1().get_x()/ls.get_point1().get_w() * lll.get_x() +
@@ -142,7 +142,7 @@ double HomgOperator2D::distance(const HomgLineSeg2D& ls, const HomgLineSeg2D& ll
 
   //  cout << "dist 1 is " <<dist1 << " dist 2 is " <<dist2 << endl;
 
-  double dist = (fabs(dist1) + fabs(dist2))/2;
+  double dist = (vcl_fabs(dist1) + vcl_fabs(dist2))/2;
 
   // compute overlap
   // if smaller than OVERLAP_THRESH then reject
@@ -182,9 +182,9 @@ double HomgOperator2D::distance(const HomgLineSeg2D& ls, const HomgLineSeg2D& ll
   if (r4 < 0)
     r4 =0;
 
-  double r = fabs(r3-r4);
+  double r = vcl_fabs(r3-r4);
 
-  r = r * sqrt(v1(0)*v1(0)+v1(1)*v1(1));
+  r = r * vcl_sqrt(v1(0)*v1(0)+v1(1)*v1(1));
 
   if (r < OVERLAP_THRESH)
     dist = 1000000;
@@ -210,7 +210,7 @@ double HomgOperator2D::distance_squared (const HomgLineSeg2D& lineseg, const Hom
   double dx = p2x - p1x;
   double dy = p2y - p1y;
 
-  double l = sqrt(dx*dx + dy*dy);
+  double l = vcl_sqrt(dx*dx + dy*dy);
 
   double px = p[0] / p[2];
   double py = p[1] / p[2];
@@ -230,7 +230,7 @@ double HomgOperator2D::distance_squared (const HomgLineSeg2D& lineseg, const Hom
 //: Get the anticlockwise angle between a line and the x axis.
 double HomgOperator2D::line_angle(const HomgLine2D& line)
 {
-  return atan2 (line.get_y(), line.get_x());
+  return vcl_atan2(line.get_y(), line.get_x());
 }
 
 //-----------------------------------------------------------------------------

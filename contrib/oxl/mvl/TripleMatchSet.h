@@ -34,6 +34,7 @@
 
 #include <mvl/MatchSet.h>
 #include <mvl/PairMatchSet.h>
+#include <vcl_cstdlib.h> // for vcl_abort()
 
 class TripleMatchSet : public MatchSet {
 protected:
@@ -90,7 +91,7 @@ public:
     bool isfull() const;
     operator bool () const;
   private:
-    iterator& operator ++ (int /*postfix*/) { abort(); return *this; }
+    iterator& operator ++ (int /*postfix*/) { vcl_abort(); return *this; }
 
   protected:
     const TripleMatchSet* _c;

@@ -198,7 +198,7 @@ double HomgMetric::homg_to_image_distance(double image_distance) const
 double HomgMetric::image_to_homg_distance_sqr(double image_distance_2) const
 {
   if (_metric)
-    return vnl_math_sqr(_metric->image_to_homg_distance(sqrt(image_distance_2)));
+    return vnl_math_sqr(_metric->image_to_homg_distance(vcl_sqrt(image_distance_2)));
   else
     return image_distance_2;
 }
@@ -207,7 +207,7 @@ double HomgMetric::image_to_homg_distance_sqr(double image_distance_2) const
 double HomgMetric::homg_to_image_distance_sqr(double image_distance) const
 {
   if (_metric)
-    return vnl_math_sqr(_metric->homg_to_image_distance(sqrt(image_distance)));
+    return vnl_math_sqr(_metric->homg_to_image_distance(vcl_sqrt(image_distance)));
   else
     return image_distance;
 }

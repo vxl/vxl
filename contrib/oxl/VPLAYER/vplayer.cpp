@@ -25,7 +25,7 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
         if (!AfxWinInit(::GetModuleHandle(NULL), NULL, ::GetCommandLine(), 0))
         {
                 // TODO: change error code to suit your needs
-                cerr << _T("Fatal Error: MFC initialization failed") << endl;
+                vcl_cerr << _T("Fatal Error: MFC initialization failed") << vcl_endl;
                 nRetCode = 1;
         }
         else
@@ -33,7 +33,7 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
                 // TODO: code your application's behavior here.
                 CString strHello;
                 strHello.LoadString(IDS_HELLO);
-                cout << (LPCTSTR)strHello << endl;
+                vcl_cout << (LPCTSTR)strHello << vcl_endl;
         }
 
         return nRetCode;

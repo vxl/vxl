@@ -79,7 +79,7 @@ void HomgNorm2D::normalize(const vcl_vector<HomgPoint2D>& points)
       if (w == 0) {
         /* average magnitude of finite points is root(3) after this stage - do the same for pts at infinity. */
 
-        double scaling = sqrt(3.0) / vnl_math_hypot(x, y);
+        double scaling = vcl_sqrt(3.0) / vnl_math_hypot(x, y);
         x *= scaling;
         y *= scaling;
       } else {
@@ -148,7 +148,7 @@ static void centre (const vcl_vector<HomgPoint2D>& in,
   }
 }
 
-// - Scale the x and y components so that the average bivec magnitude is sqrt(2).
+// - Scale the x and y components so that the average bivec magnitude is vcl_sqrt(2).
 // Scale x,y so that mean (x^2 + y^2) = 2 when z = 1.
 
 static double scale_xyroot2(const vcl_vector<HomgPoint2D>& in,
@@ -169,7 +169,7 @@ static double scale_xyroot2(const vcl_vector<HomgPoint2D>& in,
   double diameter = 1;
   if (numfinite > 0) {
     magnitude /= (double) numfinite;
-    diameter = magnitude / sqrt(2.0);
+    diameter = magnitude / vcl_sqrt(2.0);
   }
 
   // Scale the points
@@ -190,7 +190,7 @@ static double scale_xyroot2(const vcl_vector<HomgPoint2D>& in,
       }
     }
     if (numfinite > 0) magnitude /= numfinite;
-    const double expected = sqrt(2.0);
+    const double expected = vcl_sqrt(2.0);
     if (vnl_math_abs(expected - magnitude) > 1e-13) // 1e-14 gave false alarm -- fsm
       vcl_cerr << "HomgNorm2D: Expected magnitude " << expected << " computed magnitude " << magnitude << vcl_endl;
   }

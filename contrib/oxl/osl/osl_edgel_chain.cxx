@@ -17,18 +17,18 @@
 
 osl_edgel_chain::osl_edgel_chain() : n(0), x(0), y(0), grad(0), theta(0) { }
 
-osl_edgel_chain::osl_edgel_chain(int n_) 
+osl_edgel_chain::osl_edgel_chain(int n_)
   : n(n_)
   , x(new float[n fsm_pad])
-  , y(new float[n fsm_pad]) 
+  , y(new float[n fsm_pad])
   , grad(new float[n fsm_pad])
   , theta(new float[n fsm_pad])
 { }
 
-osl_edgel_chain::osl_edgel_chain(osl_edgel_chain const &that) 
+osl_edgel_chain::osl_edgel_chain(osl_edgel_chain const &that)
   : n(that.n)
   , x(new float[n fsm_pad])
-  , y(new float[n fsm_pad]) 
+  , y(new float[n fsm_pad])
   , grad(new float[n fsm_pad])
   , theta(new float[n fsm_pad])
 {
@@ -47,10 +47,10 @@ void osl_edgel_chain::operator=(osl_edgel_chain const &that) {
   }
 }
 
-osl_edgel_chain::~osl_edgel_chain() { 
-  n = 0; 
-  fsm_delete_array x; x = 0; 
-  fsm_delete_array y; y = 0; 
+osl_edgel_chain::~osl_edgel_chain() {
+  n = 0;
+  fsm_delete_array x; x = 0;
+  fsm_delete_array y; y = 0;
   fsm_delete_array grad; grad = 0;
   fsm_delete_array theta; theta = 0;
 }
@@ -73,7 +73,7 @@ void osl_edgel_chain::SetLength(int nn) {
   if (nn <= n)
     n = nn;
   else
-    abort();
+    vcl_abort();
 }
 
 void osl_edgel_chain::write_ascii(vcl_ostream &os) const {
@@ -94,14 +94,14 @@ void osl_edgel_chain::read_ascii(vcl_istream &is) {
     this->~osl_edgel_chain();       // destruct
     new (this) osl_edgel_chain(n_); // construct
   }
-  
+
   for (int i=0; i<n; ++i)
     is >> vcl_ws >> x[i] >> y[i] >> grad[i] >> theta[i];
   if (is.bad()) {
     vcl_cerr << __FILE__ ": stream bad before end of osl_edgel_chain" << vcl_endl;
     return;
   }
-  
+
   // if we get here, it's probably OK.
 }
 

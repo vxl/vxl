@@ -53,7 +53,7 @@ bool PairMatchSet::add_match(int i1, int i2)
 {
   if ((unsigned)i1 >= _matches.size()) {
     vcl_cerr << "PairMatchSet: add_match(" << i1 << ") greater than size " << _matches.size() << vcl_endl;
-    abort();
+    vcl_abort();
     return false;
   }
   bool had_nomatch = (_matches[i1] == NoMatch);
@@ -88,7 +88,7 @@ int PairMatchSet::get_match_12(int i1) const
 
   if ((unsigned)i1 >= _matches.size()) {
     vcl_cerr << "PairMatchSet::get_match_12() -- i1 = " << i1 << " >= _matches.size() = " << _matches.size() << vcl_endl;
-    abort();
+    vcl_abort();
     return -1;
   }
 
@@ -162,7 +162,7 @@ void PairMatchSet::update(const vcl_vector<bool>& inliers)
 {
   if (inliers.size() != count()) {
     vcl_cerr << "PairMatchSet::update() -- This matchset is not the same length as the inliers\n";
-    abort();
+    vcl_abort();
   }
 
   int n = 0;

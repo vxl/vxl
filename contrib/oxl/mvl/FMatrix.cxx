@@ -262,22 +262,22 @@ FMatrix::find_nearest_perfect_match(const HomgPoint2D& point1,
   //-s c y
   // 0 0 1
   vnl_double_3x3 p1_matrix;
-  p1_matrix(0, 0) = cos (angle1);
-  p1_matrix(0, 1) = sin (angle1);
+  p1_matrix(0, 0) = vcl_cos (angle1);
+  p1_matrix(0, 1) = vcl_sin (angle1);
   p1_matrix(0, 2) = x1;
-  p1_matrix(1, 0) = -sin (angle1);
-  p1_matrix(1, 1) = cos (angle1);
+  p1_matrix(1, 0)= -vcl_sin (angle1);
+  p1_matrix(1, 1) = vcl_cos (angle1);
   p1_matrix(1, 2) = y1;
   p1_matrix(2, 0) = 0;
   p1_matrix(2, 1) = 0;
   p1_matrix(2, 2) = 1;
 
   vnl_double_3x3 p2_matrix;
-  p2_matrix(0, 0) = cos (angle2);
-  p2_matrix(0, 1) = sin (angle2);
+  p2_matrix(0, 0) = vcl_cos (angle2);
+  p2_matrix(0, 1) = vcl_sin (angle2);
   p2_matrix(0, 2) = x2;
-  p2_matrix(1, 0) = -sin (angle2);
-  p2_matrix(1, 1) = cos (angle2);
+  p2_matrix(1, 0)= -vcl_sin (angle2);
+  p2_matrix(1, 1) = vcl_cos (angle2);
   p2_matrix(1, 2) = y2;
   p2_matrix(2, 0) = 0;
   p2_matrix(2, 1) = 0;
@@ -289,7 +289,7 @@ FMatrix::find_nearest_perfect_match(const HomgPoint2D& point1,
   double f2 = -special_f_matrix(2, 0) / special_f_matrix(2, 2);
   double g = -special_f_matrix(0, 1) / special_f_matrix(2, 1);
   double g2 = -special_f_matrix(0, 2) / special_f_matrix(2, 2);
-  if (fabs ((f-f2) / f) > 0.05 || fabs ((g-g2) / g) > 0.05)
+  if (vcl_fabs ((f-f2) / f) > 0.05 || vcl_fabs ((g-g2) / g) > 0.05)
     vcl_cerr << "F matrix isn't rank 2.\n";
 
   // section 4.2 of the paper.
@@ -456,8 +456,6 @@ bool FMatrix::set (const double *c_matrix)
 
 bool FMatrix::set (const vnl_matrix<double>& f_matrix)
 {
-
-
   _f_matrix = f_matrix;
   _ft_matrix = f_matrix.transpose();
 

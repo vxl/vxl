@@ -5,6 +5,7 @@
 #include "mvl_multi_view_matches.h"
 
 #include <vcl_cassert.h>
+#include <vcl_cstdlib.h> // for vcl_abort()
 #include <vcl_set.h>
 #include <vcl_functional.h>
 #include <vcl_fstream.h>
@@ -109,7 +110,7 @@ void mvl_multi_view_matches::add_track(vcl_vector<int> const& views, vcl_vector<
     Map_iterator m = view_to_internal_map_.find(views[i]);
     if (m == view_to_internal_map_.end()) {
       vcl_cerr << __FILE__ << " : view specified outside range!\n";
-      abort();
+      vcl_abort();
     }
     internal_frames[i] = (*m).second;  // holds the internal-frame index corresponding to given corner[i]
   }
@@ -128,7 +129,7 @@ void mvl_multi_view_matches::add_track(vcl_vector<int> const& views, vcl_vector<
         if ((*m).second >= tracks_.size()) {
           vcl_cerr << __FILE__ << " : URK!" << internal_frames[i] << " "
                    << corners[i] << " " << (*m).second << " " << tracks_.size() << vcl_endl;
-          abort();
+          vcl_abort();
         }
         friend_tracks.insert((*m).second);
       }
@@ -199,7 +200,7 @@ void mvl_multi_view_matches::add_track(vcl_vector<int> const& views, vcl_vector<
 void mvl_multi_view_matches::add_matches(mvl_multi_view_matches const& matches)
 {
   vcl_cerr << __FILE__ ": mvl_multi_view_matches::add_matches() not implemented\n";
-  abort();
+  vcl_abort();
 }
 
 void mvl_multi_view_matches::update_maps(int track_index)
@@ -251,7 +252,7 @@ vcl_istream& mvl_multi_view_matches::read(vcl_istream& s)
   tracks_.resize(20000);
   int max_track = 0;
   for (; awk; ++awk) {
-    if (awk.NF() != 3) abort();
+    if (awk.NF() != 3) vcl_abort();
     int track = atoi(awk[0]);
     int frame = atoi(awk[1]);
     int corner = atoi(awk[2]);

@@ -56,10 +56,10 @@ HomgPoint3D::check_infinity(void) const
 bool
 HomgPoint3D::check_infinity(double tol) const
 {
-  double hx = fabs(get_x());
-  double hy = fabs(get_y());
-  double hz = fabs(get_z());
-  double hw = fabs(get_w());
+  double hx = vcl_fabs(get_x());
+  double hy = vcl_fabs(get_y());
+  double hz = vcl_fabs(get_z());
+  double hw = vcl_fabs(get_w());
 
   double max = hx;
   if (hy > max) max = hy;

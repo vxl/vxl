@@ -3,6 +3,7 @@
 #endif
 
 #include <vnl/vnl_matops.h> // use vnl_matlab_print.h for pretty printing
+#include <vcl_cstdlib.h> // for vcl_abort()
 
 #include "TripleMatchSet.h"
 #include <mvl/PairMatchSet.h>
@@ -310,7 +311,7 @@ void TripleMatchSet::update_feature_match_data()
 #if 0
 TripleMatchSet::iterator::iterator(bool)
 {
-  abort();
+  vcl_abort();
 }
 #endif
 

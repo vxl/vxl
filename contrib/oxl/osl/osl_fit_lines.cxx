@@ -69,7 +69,7 @@ void osl_fit_lines::simple_fit_to_list(vcl_list<osl_edge *> *myedges,
         // or radians
         {for(int ii=0; ii<dc->size(); ii++) {
           if (dc->GetTheta(ii) > 3.2 || dc->GetTheta(ii) < -3.2) {
-            using_degrees = 3.1415926 / 180;
+            using_degrees = vnl_math::pi / 180;
             break;
           }
         }}
@@ -314,7 +314,7 @@ void osl_fit_lines::MeanIncrementalFit(vcl_list<osl_edgel_chain*> *_curves, osl_
           // currently fitted line
           distance =
             _data->GetA()*dc->GetX(finish) + _data->GetB()*dc->GetY(finish) + _data->GetC();
-          new_est_cost = (segment_length*new_est_cost + fabs(distance)) / (segment_length+1);
+          new_est_cost = (segment_length*new_est_cost + vcl_fabs(distance)) / (segment_length+1);
 
           // If this residual is low enough, include the point within
           // the orthogonal regression data class
@@ -679,12 +679,12 @@ void osl_fit_lines::MergeLines(vcl_list<osl_edgel_chain*> *_curves) {
   // We have problems later if either of the lines are vertical. Therefore
   // rotate all of the points by phi which is defined in the following way
   // (we have to undo this rotation later):
-  float xstart = min( min(x1[0],x1[1]), min(x2[0],x2[1]) );
-  float xfinish = max( max(x1[0],x1[1]), max(x2[0],x2[1]) );
-  float ystart = min( min(y1[0],y1[1]), min(y2[0],y2[1]) );
-  float yfinish = max( max(y1[0],y1[1]), max(y2[0],y2[1]) );
-  float phi = atan2(yfinish-ystart,xfinish-xstart);
-  double cp = cos(phi), sp = sin(phi);
+  float xstart = vcl_min( vcl_min(x1[0],x1[1]), vcl_min(x2[0],x2[1]) );
+  float xfinish= vcl_max( vcl_max(x1[0],x1[1]), vcl_max(x2[0],x2[1]) );
+  float ystart = vcl_min( vcl_min(y1[0],y1[1]), vcl_min(y2[0],y2[1]) );
+  float yfinish= vcl_max( vcl_max(y1[0],y1[1]), vcl_max(y2[0],y2[1]) );
+  float phi = vcl_atan2(yfinish-ystart,xfinish-xstart);
+  double cp = vcl_cos(phi), sp = vcl_sin(phi);
 
   for(int i=0;i<2;i++) {
     float x = x1[i]*cp + y1[i]*sp;
@@ -705,14 +705,14 @@ void osl_fit_lines::MergeLines(vcl_list<osl_edgel_chain*> *_curves) {
     b[i] = x2[i] - x1[i];
     c[i] = x1[i]*y2[i] - x2[i]*y1[i];
 
-    double m = sqrt(a[i]*a[i] + b[i]*b[i]);
+    double m = vcl_sqrt(a[i]*a[i] + b[i]*b[i]);
     if( b[i] > 0 ) m = -m;
 
     a[i] /= m;  b[i] /= m;  c[i] /= m;
   }
 
   // Check the angle between the lines, if it is too great return
-  double theta = 180.0*acos(a[0]*a[1]+b[0]*b[1])/M_PI;
+  double theta = 180.0*vcl_acos(a[0]*a[1]+b[0]*b[1])/M_PI;
   // Best we can do is eliminate cases that don't double
   // back on themselves
   if( theta > 90.0 )
@@ -759,20 +759,20 @@ void osl_fit_lines::MergeLines(vcl_list<osl_edgel_chain*> *_curves) {
       Si = (x2_3-x1_3)/3.0*S1i;
       Si += (x2_2-x1_2)*S2i;
       Si += (x2[i]-x1[i])*S3i;
-      double s = fabs(b[i]);
+      double s = vcl_fabs(b[i]);
       Si *= (1.0/s);
     }
     else {
       Si = ((x1_3-x2_3)*S1i/3.0+(x1_2-x2_2)*S2i+
             (x1[i]-x2[i])*S3i);
-      Si *= 1/fabs(b[i]);
+      Si *= 1/vcl_fabs(b[i]);
     }
 
     // and add this to the total scatter matrix
     S += Si;
 
     // Adjust the normaliser (denonimator of the algebraic distance)
-    normaliser += fabs((x2[i]-x1[i])/b[i]);
+    normaliser += vcl_fabs((x2[i]-x1[i])/b[i]);
   }
 
   // Form the sub-partitioned scatter matrices
@@ -814,13 +814,13 @@ void osl_fit_lines::MergeLines(vcl_list<osl_edgel_chain*> *_curves) {
     return;
   }
   else
-    WARN << "Lines merged with a cost " << sqrt(cost) << vcl_endl;
+    WARN << "Lines merged with a cost " << vcl_sqrt(cost) << vcl_endl;
 
   // We now have the parameters for the re-fitted line
   vec3 = - (1.0/S22) * S12.transpose() * eigenvector;
   double la,lb,lc;
   la = eigenvector.get(0,0);  lb = eigenvector.get(1,0);  lc = vec3(0,0);
-  double m = sqrt(la*la+lb*lb);
+  double m = vcl_sqrt(la*la+lb*lb);
   // Make sure that b >= 0 to be consistent with osl_OrthogRegress - though
   // we don't actually store {a,b,c}
   if( lb < 0.0 )
@@ -886,7 +886,7 @@ float osl_fit_lines::MyGetCost(osl_OrthogRegress const *fitter,
   float distance = 0;
 
   for(int i = start; i < finish; i ++)
-    distance += fabs(A*dc->GetX(i) + B*dc->GetY(i) + C);
+    distance += vcl_fabs(A*dc->GetX(i) + B*dc->GetY(i) + C);
 
   return distance / (finish - start);
 }

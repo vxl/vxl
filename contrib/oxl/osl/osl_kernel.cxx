@@ -6,13 +6,14 @@
 #endif
 #include "osl_kernel.h"
 #include <vcl_cmath.h>
+#include <vnl/vnl_math.h>
 
 // Construct one half of a Gaussian convolution kernel.
 //
 //   _kernel[i] = exp( (i-_width)^2/sigma^2 )/det
 void osl_kernel_DOG(float _sigma, float *_kernel, int _k_size, int _width) {
   float s2 = 2.0*_sigma*_sigma;
-  float det = _sigma*vcl_sqrt(2.0 * 3.1415926);
+  float det = _sigma*vcl_sqrt(2.0 * vnl_math::pi);
 
   for (int i=0,x=-_width; i<_k_size; ++i,++x)
     _kernel[i] = vcl_exp(-x*x/s2)/det;

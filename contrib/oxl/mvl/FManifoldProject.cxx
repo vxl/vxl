@@ -209,7 +209,7 @@ double FManifoldProject::correct(const HomgPoint2D& p1, const HomgPoint2D& p2, H
                                a3/vnl_math_sqr(b3 - lambda) +
                                a4/vnl_math_sqr(b4 - lambda));
 
-    if (fabs(RATPOLY_RESIDUAL) > 1e-8)
+    if (vcl_fabs(RATPOLY_RESIDUAL) > 1e-8)
       continue;
 
     vnl_diag_matrix<double> Dinv(1.0 - lambda * d_);
@@ -225,7 +225,7 @@ double FManifoldProject::correct(const HomgPoint2D& p1, const HomgPoint2D& p2, H
       if (0 && EPIDIST > 1e-12) {
         // This can happen in reasonable circumstances -- notably when one
         // epipole is at infinity.
-        vcl_cout << "FManifoldProject: A root has epidist = " << sqrt(EPIDIST) << vcl_endl;
+        vcl_cout << "FManifoldProject: A root has epidist = " << vcl_sqrt(EPIDIST) << vcl_endl;
         vcl_cout << "  coeffs: " << _coeffs << vcl_endl;
         vcl_cout << "  root = " << lambda << vcl_endl;
         vcl_cout << "  poly residual = " << poly.evaluate(lambda) << vcl_endl;

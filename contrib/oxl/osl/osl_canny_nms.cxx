@@ -6,13 +6,14 @@
 #endif
 #include "osl_canny_nms.h"
 #include <vcl_cmath.h>
+#include <vnl/vnl_math.h>
 
 //: returns number of edgels found [?]
 int osl_canny_nms(int _xsize, int _ysize,
                   float * const * _dx, float * const * _dy, float const * const * _grad,
                   float * const *_thick, float * const * _theta)
 {
-  const float k = float(180.0/3.1415926);
+  const float k = float(180.0/vnl_math::pi);
   int n_edgels_NMS = 0; // return value for this function
 
   for (int y=_ysize-2; y>0; --y) {

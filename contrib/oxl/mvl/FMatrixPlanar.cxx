@@ -207,12 +207,12 @@ void FMatrixPlanar::init(const FMatrix& F)
      vnl_vector<double> f1(3),f2(3);
 
      if (eig0 > 0 && eig1 < 0) {
-          f1 = sqrt(eig0)*v0 + sqrt(-eig1)*v1;
-          f2 = sqrt(eig0)*v0 - sqrt(-eig1)*v1;
+          f1 = vcl_sqrt(eig0)*v0 + vcl_sqrt(-eig1)*v1;
+          f2 = vcl_sqrt(eig0)*v0 - vcl_sqrt(-eig1)*v1;
      }
      else if (eig0 < 0 && eig1 > 0) {
-          f1 = sqrt(eig1)*v1 + sqrt(-eig0)*v0;
-          f2 = sqrt(eig1)*v1 - sqrt(-eig0)*v0;
+          f1 = vcl_sqrt(eig1)*v1 + vcl_sqrt(-eig0)*v0;
+          f2 = vcl_sqrt(eig1)*v1 - vcl_sqrt(-eig0)*v0;
      }
      else {
           vcl_cerr << "ERROR in FMatrix::init" << vcl_endl
@@ -221,28 +221,28 @@ void FMatrixPlanar::init(const FMatrix& F)
      }
 
      vnl_vector<double> ls;
-     if (fabs(HomgOperator2D::dot(e1,f1)/e1.w())+
-         fabs(HomgOperator2D::dot(e2,f1)/e2.w()) >
-         fabs(HomgOperator2D::dot(e1,f2)/e1.w())+
-         fabs(HomgOperator2D::dot(e2,f2)/e2.w()) )
+     if (vcl_fabs(HomgOperator2D::dot(e1,f1)/e1.w())+
+         vcl_fabs(HomgOperator2D::dot(e2,f1)/e2.w()) >
+         vcl_fabs(HomgOperator2D::dot(e1,f2)/e1.w())+
+         vcl_fabs(HomgOperator2D::dot(e2,f2)/e2.w()) )
           ls = f1;
      else
           ls = f2;
 
      ls /= ls.magnitude();
 
-     double ls_thi = acos(ls.z());
+     double ls_thi = vcl_acos(ls.z());
      if (ls_thi < 0) ls_thi += vnl_math::pi;
 
      double ls_theta;
      if (ls.y() >= 0)
-          ls_theta =  acos(ls.x()/sin(ls_thi));
+          ls_theta =  vcl_acos(ls.x()/vcl_sin(ls_thi));
      else
-          ls_theta = -acos(ls.x()/sin(ls_thi));
+          ls_theta = -vcl_acos(ls.x()/vcl_sin(ls_thi));
 
-     double ls1 = cos(ls_theta)*sin(ls_thi);
-     double ls2 = sin(ls_theta)*sin(ls_thi);
-     double ls3 = cos(ls_thi);
+     double ls1 = vcl_cos(ls_theta)*vcl_sin(ls_thi);
+     double ls2 = vcl_sin(ls_theta)*vcl_sin(ls_thi);
+     double ls3 = vcl_cos(ls_thi);
 
      double list1[9] = {0,-1.0,e1.y()/e1.w(),
                         1,0,-e1.x()/e1.w(),

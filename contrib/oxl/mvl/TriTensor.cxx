@@ -1412,7 +1412,7 @@ maxabs::maxabs(const TriTensor& T)
   for(int i = 0; i < 3; ++i)
     for(int j = 0; j < 3; ++j)
       for(int k = 0; k < 3; ++k) {
-        double v = fabs(T(i,j,k));
+        double v = vcl_fabs(T(i,j,k));
         if (v >= maxval) {
           maxval = v;
           this->i = i;
@@ -1425,7 +1425,7 @@ maxabs::maxabs(const TriTensor& T)
 static bool check_same(const TriTensor& T1, const TriTensor& T2) {
   maxabs m1(T1);
   double scale1 = 1/m1.maxval;
-  double scale2 = 1/fabs(T2(m1.i,m1.j,m1.k));
+  double scale2 = 1/vcl_fabs(T2(m1.i,m1.j,m1.k));
 
   double rms = 0;
   for(int i = 0; i < 3; ++i)

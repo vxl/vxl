@@ -233,8 +233,8 @@ void osl_harris::do_adaptive() {
   int col_max = window_str.col_end_index;
 
   // number of tiles to use in the x and y directions.
-  int n_tiles_x = (int) ceil(double(col_max-col_min) / TILE_WIDTH);
-  int n_tiles_y = (int) ceil(double(row_max-row_min) / TILE_WIDTH);
+  int n_tiles_x = (int) vcl_ceil(double(col_max-col_min) / TILE_WIDTH);
+  int n_tiles_y = (int) vcl_ceil(double(row_max-row_min) / TILE_WIDTH);
 
   double TILE_AREA = TILE_WIDTH*TILE_WIDTH;
 

@@ -9,7 +9,7 @@
 
 #include "osl_canny_smooth.h"
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h> // abort()
+#include <vcl_cstdlib.h> // vcl_abort()
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 #include <vil/vil_rgb.h>
@@ -49,7 +49,7 @@ void osl_canny_smooth_rothwell(vil_image const &image_in,
 #undef macro
   else {
     vcl_cerr << "Image must be either UBYTE, SHORT, RGB or FLOAT." << vcl_endl;
-    abort();
+    vcl_abort();
   }
 }
 
@@ -72,7 +72,7 @@ void osl_canny_smooth_rothwell_adaptive(vil_image const &image_in,
 #undef macro
   else {
     vcl_cerr << "Image must be either UBYTE, SHORT, RGB or FLOAT." << vcl_endl;
-    abort();
+    vcl_abort();
   }
 }
 
@@ -94,6 +94,6 @@ void osl_canny_smooth(vil_image const &image_in,
 #undef macro
   else {
     vcl_cerr << "Image must be either UBYTE, SHORT, RGB or FLOAT." << vcl_endl;
-    abort();
+    vcl_abort();
   }
 }

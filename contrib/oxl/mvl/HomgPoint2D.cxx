@@ -55,7 +55,7 @@ HomgPoint2D HomgPoint2D::get_unitized() const
   double y = get_y();
   double z = get_w();
 
-  double norm = sqrt (vnl_math_sqr(x) + vnl_math_sqr(y) + vnl_math_sqr(z));
+  double norm = vcl_sqrt (vnl_math_sqr(x) + vnl_math_sqr(y) + vnl_math_sqr(z));
 
   if (norm == 0.0) {
     vcl_cerr << "HomgPoint2D::get_unitized() -- Zero length vector\n";

@@ -16,7 +16,7 @@ float osl_compute_gauss_weight (float sigma, int mask_index) {
 
   for (int repeat = 0; repeat < 6; repeat++) {
     float x = mask_index-0.5 + 0.2*repeat;
-    sum += exp( - (x*x) / (2 * sigma * sigma));
+    sum += vcl_exp( - (x*x) / (2 * sigma * sigma));
   }
 
   return sum / 6;
@@ -62,6 +62,6 @@ void osl_create_gaussian (T gauss_sigma, osl_1d_half_kernel<T> *mask_ptr) {
 
 #define VSL_1D_HALF_KERNEL_INSTANTIATE(T) \
 template struct osl_1d_half_kernel<T >; \
-template void osl_create_gaussian(T , osl_1d_half_kernel<T> *);
+template void osl_create_gaussian(T , osl_1d_half_kernel<T> *)
 
 #endif

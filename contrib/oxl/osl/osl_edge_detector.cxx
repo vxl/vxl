@@ -14,6 +14,7 @@
 #include <osl/osl_canny_gradient.h>
 #include <osl/osl_chamfer.h>
 #include <osl/internals/osl_reorder_chain.h>
+#include <vnl/vnl_math.h>
 
 const float DUMMYTHETA = 10000.0f;
 const float ALPHA = 0.9f;
@@ -34,7 +35,7 @@ osl_edge_detector::osl_edge_detector(osl_edge_detector_params const &params)
   _gradient_histogram = false; //Do we need to compute a histogram?
   _histogram_resolution = 15; // The number of buckets
 
- _width = int(_sigma*sqrt(2*log(1/_gauss_tail))+1); // round up to int
+ _width = int(_sigma*vcl_sqrt(2*vcl_log(1.0/_gauss_tail))+1); // round up to int
   _k_size = 2*_width+ 1;
   _kernel = new float[_k_size];
   _max_gradient = _low;
@@ -173,7 +174,7 @@ void osl_edge_detector::detect_edges(vil_image const &image,
 //
 void osl_edge_detector::Sub_pixel_interpolation() {
   float h1,h2;
-  float k = 180.0f/3.1415926f;
+  float k = 180.0f/float(vnl_math::pi);
   int orient;
   float theta,grad;
   float fraction,dnewx,dnewy;
@@ -189,7 +190,7 @@ void osl_edge_detector::Sub_pixel_interpolation() {
     for (int y=_width+1; y<_ysize-_width-1; ++y)  {
       // First check that we have a potential edge
       if ( g1[y] > _low ) {
-        theta = k*atan2(dy[y],dx[y]);
+        theta = k*vcl_atan2(dy[y],dx[y]);
 
         // Now work out which direction wrt the eight-way
         // neighbours the edge normal points
@@ -227,7 +228,7 @@ void osl_edge_detector::Sub_pixel_interpolation() {
           break;
 
         default:
-          abort();
+          vcl_abort();
           //h1 = h2 = 0.0;  // Dummy values;
           //cerr << "*** ERROR ON SWITCH IN NMS ***\n";
         }
@@ -257,7 +258,7 @@ void osl_edge_detector::Sub_pixel_interpolation() {
           break;
 
         default:
-          abort();
+          vcl_abort();
           //dnewx = dnewy = 0.0; // Dummy values
           //cerr << "*** ERROR ON SWITCH IN NMS ***\n";
         }
@@ -269,7 +270,7 @@ void osl_edge_detector::Sub_pixel_interpolation() {
         // thresholds. The >= is used rather than > for reasons
         // involving non-generic images. Should this be interpolated
         // height -- = g1[y] + frac*(h2-h1)/4 ?
-        if ( (g1[y]>=h1) && (g1[y]>=h2) && (fabs(dnewx)<=0.5) && (fabs(dnewy)<=0.5) ) {
+        if ( (g1[y]>=h1) && (g1[y]>=h2) && (vcl_fabs(dnewx)<=0.5) && (vcl_fabs(dnewy)<=0.5) ) {
 
           if ( g1[y]*ALPHA > _low )
             _thresh[x][y] = ALPHA * g1[y]; // Use a ALPHA% bound
@@ -280,7 +281,7 @@ void osl_edge_detector::Sub_pixel_interpolation() {
         }
 
         // + 0.5 is to account for targetjr display offset
-        if ( (fabs(dnewx)<=0.5) && (fabs(dnewy)<=0.5) ) {
+        if ( (vcl_fabs(dnewx)<=0.5) && (vcl_fabs(dnewy)<=0.5) ) {
           dx[y] = x + dnewx + 0.5;
           dy[y] = y + dnewy + 0.5;
         }
@@ -423,7 +424,7 @@ void osl_edge_detector::Set_thresholds()
           break;
 
         default:
-          abort();
+          vcl_abort();
           //den = num = 1.0; // Dummy values
           //break;
         }
@@ -684,8 +685,8 @@ void osl_edge_detector::Follow_curves(vcl_list<osl_Edge*> *edges)
           *(pg++) = 0.0;   // Mark the gradient as zero at a junction
         }
         if (_theta[tmpx][tmpy] == DUMMYTHETA) {
-          const float k = 180.0f/3.1415926f;
-          _theta[tmpx][tmpy]  = k*atan2(_dy[tmpx][y],_dx[tmpx][y]);
+          const float k = 180.0f/float(vnl_math::pi);
+          _theta[tmpx][tmpy]  = k*vcl_atan2(_dy[tmpx][y],_dx[tmpx][y]);
         }
 
         *(pt++) = _theta[tmpx][tmpy];
@@ -927,7 +928,6 @@ void osl_edge_detector::Find_junction_clusters() {
 //
 void osl_edge_detector::Follow_junctions(int x, int y, vcl_list<int> *xc, vcl_list<int> *yc)
 {
-
   // Add the current junction to the coordinate lists, and delete from
   // the junction image
   xc->push_front(x);

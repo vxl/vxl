@@ -43,7 +43,7 @@ void vplayer_file::load_video_sequence()
   {
     vbl_sprintf name(image_filename.c_str(), i);
     img_filenames.push_back(name);
-    cerr<<"Registering image: "<<name<<endl;
+    vcl_cerr<<"Registering image: "<<name<<vcl_endl;
   }
   my_movie = vidl_io::load_movie(img_filenames);
   if (!my_movie) {
