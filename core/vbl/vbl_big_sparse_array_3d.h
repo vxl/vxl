@@ -55,9 +55,7 @@ typedef vxl_uint_32 ulonglong;
 #endif
 
 #include <vcl_functional.h>
-#include <vcl_utility.h>
 #include <vcl_map.h>
-
 #include <vcl_iostream.h>
 
 template <class T>
