@@ -126,7 +126,7 @@ inline void vil2_math_mean_and_variance(sumT& mean, sumT& var, const vil2_image_
   var = sum_sq/(im.ni()*im.nj()) - mean*mean;
 }
 
-//: Multiply values in image view by scale
+//: Multiply values inplace in image view by scale
 // \relates vil2_image_view
 template<class T>
 void vil2_math_scale_values(vil2_image_view<T>& image, double scale)
@@ -145,7 +145,7 @@ void vil2_math_scale_values(vil2_image_view<T>& image, double scale)
   }
 }
 
-//: Multiply values in image view by scale and add offset
+//: Multiply values inplace in image view by scale and add offset
 // \relates vil2_image_view
 template<class imT, class offsetT>
 void vil2_math_scale_and_offset_values(vil2_image_view<imT>& image, double scale, offsetT offset)

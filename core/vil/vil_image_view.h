@@ -283,7 +283,7 @@ vcl_ostream& operator<<(vcl_ostream& s, vil2_image_view<T> const& im) {
 //  O(size).
 // \relates vil2_image_view
 template<class T>
-bool vil2_deep_equality(const vil2_image_view<T> &lhs, const vil2_image_view<T> &rhs);
+bool vil2_image_view_deep_equality(const vil2_image_view<T> &lhs, const vil2_image_view<T> &rhs);
 
 
 #endif // vil_image_view_h_

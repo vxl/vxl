@@ -615,7 +615,8 @@ bool vil2_image_view<T>::operator==(const vil2_image_view<T> &other) const
 //  O(size).
 // \relates vil2_image_view
 template<class T>
-bool vil2_deep_equality(const vil2_image_view<T> &lhs, const vil2_image_view<T> &rhs)
+bool vil2_image_view_deep_equality(const vil2_image_view<T> &lhs,
+  const vil2_image_view<T> &rhs)
 {
   if (lhs.nplanes() != rhs.nplanes() ||
     lhs.nj() != rhs.nj() ||
@@ -632,7 +633,8 @@ bool vil2_deep_equality(const vil2_image_view<T> &lhs, const vil2_image_view<T> 
 
 #define VIL2_IMAGE_VIEW_INSTANTIATE(T) \
 template class vil2_image_view<T >; \
-template bool vil2_deep_equality(const vil2_image_view<T > &lhs, const vil2_image_view<T > &rhs);
+template bool vil2_image_view_deep_equality(const vil2_image_view<T > &lhs, \
+  const vil2_image_view<T > &rhs);
 
 
 #endif // vil2_image_view_txx_
