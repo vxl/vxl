@@ -14,7 +14,6 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_fstream.h>
 #include <vcl_string.h>
 
 #include <vil/vil_memory_image_of.h>

@@ -7,6 +7,7 @@
 
 #include "MovieFile.h"
 
+#include <vcl_fstream.h>
 #include <oxp/oxp_vidl_moviefile.h>
 #include <oxp/ImageSequenceMovieFile.h>
 #include <oxp/oxp_parse_seqname.h>
