@@ -7,6 +7,7 @@
 #include <vvid/bin/vidfpl_menus.h>
 #ifdef HAS_MPEG2
 #include <vidl/vidl_mpegcodec.h>
+#include <vidl/vidl_io.h>
 
 //define mpeg callback here
 //this dialog box queries the user for info
@@ -48,6 +49,10 @@ vidfpl_load_mpegcodec_callback(vidl_codec * vc)
 //Static munu callback functions
 void vidfpl_menus::load_video_callback()
 {
+#ifdef HAS_MPEG2
+   //need to define callbacks
+   vidl_io::load_mpegcodec_callback = &vidfpl_load_mpegcodec_callback;
+#endif
    vvid_file_manager::instance()->load_video_file();
 }
 
