@@ -1,26 +1,26 @@
-################################
-include ${IUEROOT}/config/usr_params.mk
-################################
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
 
 USES := vxl
 LIBRARY := vnl
 VERSION := 1.0
-IULIBS := -lvcl
+IMMEDIATE_LIBS := -lvcl
 DEFINES += -DBUILDING_VNL_DLL
 
 # template sources
-#MANPAGE_SOURCES += vnl_scalar_join_iterator.txx
-#MANPAGE_SOURCES += vnl_c_vector.txx
-#MANPAGE_SOURCES += vnl_vector.txx
-#MANPAGE_SOURCES += vnl_matrix.txx
-#MANPAGE_SOURCES += vnl_diag_matrix.txx
-#MANPAGE_SOURCES += vnl_fortran_copy.txx
-#MANPAGE_SOURCES += vnl_vector_fixed.txx
-#MANPAGE_SOURCES += vnl_matrix_fixed.txx
-#MANPAGE_SOURCES += vnl_file_vector.txx
-#MANPAGE_SOURCES += vnl_file_matrix.txx
-#MANPAGE_SOURCES += vnl_scatter_3x3.txx
-#MANPAGE_SOURCES += vnl_resize.txx
+MANPAGE_SOURCES += vnl_scalar_join_iterator.txx
+MANPAGE_SOURCES += vnl_c_vector.txx
+MANPAGE_SOURCES += vnl_vector.txx
+MANPAGE_SOURCES += vnl_matrix.txx
+MANPAGE_SOURCES += vnl_diag_matrix.txx
+MANPAGE_SOURCES += vnl_fortran_copy.txx
+MANPAGE_SOURCES += vnl_vector_fixed.txx
+MANPAGE_SOURCES += vnl_matrix_fixed.txx
+MANPAGE_SOURCES += vnl_file_vector.txx
+MANPAGE_SOURCES += vnl_file_matrix.txx
+MANPAGE_SOURCES += vnl_scatter_3x3.txx
+MANPAGE_SOURCES += vnl_resize.txx
 SOURCES += $(wildcard vnl_block.cxx)
 FLAGS_vnl_block.cxx += $(optimize)
 
@@ -41,9 +41,9 @@ SOURCES += vnl_real_npolynomial.cxx
 
 # ops
 SOURCES += vnl_fastops.cxx
-SOURCES += vnl_linear_operators_3.cxx
-#MANPAGE_SOURCES += vnl_complex_ops.txx
 FLAGS_vnl_fastops.cxx = $(optimize)
+SOURCES += vnl_linear_operators_3.cxx
+MANPAGE_SOURCES += vnl_complex_ops.txx
 
 # traits
 SOURCES += vnl_numeric_limits.cxx
@@ -87,7 +87,7 @@ ifndef NOTEST
 SUBDIRS += tests
 endif
 
-
+# examples
 ifndef NOTEST
 SUBDIRS += examples
 endif
@@ -103,9 +103,9 @@ FLAGS_Templates/vnl_c_vector+float_complex-.cxx += $(optimize)
 FLAGS_Templates/vnl_c_vector+double_complex-.cxx += $(optimize)
 FLAGS_Templates/vnl_sparse_matrix_instances.cxx += $(optimize)
 
-################################
-include ${IUEROOT}/config/usr_rules.mk
-################################
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################
 
 # on HP unix, this library has become too big, so it needs -fPIC
 ifeq "hpux" "$(findstring hpux,$(OS))"
