@@ -1,4 +1,4 @@
-USES += contrib/brl/bseg core
+USES += contrib/brl contrib/brl/bseg core
 
 LIBRARY := brip
 VERSION := 1.0
