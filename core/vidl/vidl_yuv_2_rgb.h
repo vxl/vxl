@@ -68,10 +68,9 @@ void vidl_yuv_2_rgb(unsigned char y, unsigned char u, unsigned char v, unsigned 
 inline
 void vidl_yuv_2_rgb(unsigned char y, unsigned char u, unsigned char v, vil_rgb<vxl_byte> &vrgb)
 {
-  unsigned char r = vidl_yuv_2_rgb_byte_clamp(c1164 * (y - 16) + c1596 * (v - 128));
-  unsigned char g = vidl_yuv_2_rgb_byte_clamp(c1164 * (y - 16) - c0813 * (v - 128) - c0391 * (u - 128));
-  unsigned char b = vidl_yuv_2_rgb_byte_clamp(c1164 * (y - 16) + c2018 * (u - 128));
-  vrgb = vil_rgb<vxl_byte>(r,g,b);
+  vrgb.r = vidl_yuv_2_rgb_byte_clamp(c1164 * (y - 16) + c1596 * (v - 128));
+  vrgb.g = vidl_yuv_2_rgb_byte_clamp(c1164 * (y - 16) - c0813 * (v - 128) - c0391 * (u - 128));
+  vrgb.b = vidl_yuv_2_rgb_byte_clamp(c1164 * (y - 16) + c2018 * (u - 128));
 }
 
 #endif // vidl_yuv_2_rgb_h_
