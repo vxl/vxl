@@ -23,7 +23,6 @@ const int mbl_mz_array_size = 37;
 // \author Aaron Kotcheff
 class mbl_mz_random
 {
- private:
     enum {linear_congruential_multiplier = 1664525, mz_previous1 = 24};
     unsigned long linear_congruential_previous;
     unsigned long mz_seed_array[mbl_mz_array_size];
@@ -69,8 +68,8 @@ class mbl_mz_random
     //  Initializes/sets the random number generator to exactly
     //  the same state as the argument, i.e. both will generate exactly
     //  the same series of random numbers from then on.
-
     mbl_mz_random& operator=(const mbl_mz_random&);
+
     //: Starts a new non-deterministic sequence from an already declared generator.
     void reseed();
 
