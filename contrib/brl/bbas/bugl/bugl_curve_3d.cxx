@@ -15,13 +15,6 @@ bugl_curve_3d::bugl_curve_3d(const int n)
 	num_neighbors_=n;
 }
 
-void bugl_curve_3d::add_point( vcl_vector<bugl_normal_point_3d_sptr > & seg)
-{
-  assert(seg.size() == 2*num_neighbors_ + 1);
-  data_.push_back(seg);
-	return;
-}
-
 bugl_normal_point_3d_sptr bugl_curve_3d::get_point(const int index) const
 {
 	return data_[index][num_neighbors_];
@@ -42,6 +35,8 @@ int bugl_curve_3d::add_curve(vcl_vector<bugl_normal_point_3d_sptr > & pts)
 {
   int size = pts.size();
   assert(size > 2*num_neighbors_ + 1);
+
+  int prev_total = data_.size();
 
   vcl_vector<bugl_normal_point_3d_sptr> seg(2*num_neighbors_+1);
   for(int i=0; i<size; i++){
@@ -64,10 +59,17 @@ int bugl_curve_3d::add_curve(vcl_vector<bugl_normal_point_3d_sptr > & pts)
       
   }//end of all the points
 
+  index_.push_back(prev_total);
+
   return 0;
 }
 
 int bugl_curve_3d::get_num_points() const
 {
   return data_.size();
+}
+
+int bugl_curve_3d::get_num_fragments() const
+{
+  return index_.size();
 }
