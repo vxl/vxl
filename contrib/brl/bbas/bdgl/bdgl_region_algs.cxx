@@ -135,13 +135,14 @@ float
 bdgl_region_algs::earth_mover_distance(vdgl_digital_region_sptr const& r1,
                                        vdgl_digital_region_sptr const& r2)
 {
-  unsigned int min_npts = 5;
+  const unsigned int min_npts = 5;
   if (!r1 || !r2)
     return -1.f;
-  unsigned int n1 = r1->Npix(), n2 = r2->Npix();
+  const unsigned int n1 = r1->Npix(), n2 = r2->Npix();
   if (n1<min_npts || n2<min_npts)
     return -1.f;
-  unsigned short I1[n1], I2[n2];
+  unsigned short *I1 = new unsigned short[n1],
+                 *I2 = new unsigned short[n2];
   vcl_memcpy(I1, r1->Ij(), n1*sizeof(unsigned short));
   vcl_memcpy(I2, r2->Ij(), n2*sizeof(unsigned short));
   //Sort the intensities in each region
@@ -158,6 +159,7 @@ bdgl_region_algs::earth_mover_distance(vdgl_digital_region_sptr const& r1,
     float d = I1[i] - I2[i];
     sum += vcl_sqrt(d*d);
   }
+  delete[] I1; delete[] I2;
   sum /= n_smaller;
 #ifdef DEBUG
   vcl_cout << "EarthMover Max Distance||(" << r1->Npix()
