@@ -7,6 +7,7 @@
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vcl_iostream.h>
 #include <vil/vil_load.h>
+#include <vil/vil_memory_image_of.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vdgl/vdgl_interpolator.h>
@@ -70,6 +71,7 @@ segv_segmentation_manager::segv_segmentation_manager():vgui_wrapper_tableau()
 segv_segmentation_manager::~segv_segmentation_manager()
 {
 }
+
 //: Set up the tableaux
 void segv_segmentation_manager::init()
 {
@@ -170,6 +172,7 @@ void segv_segmentation_manager::draw_regions(vcl_vector<vdgl_intensity_face_sptr
          }
      }
 }
+
 void segv_segmentation_manager::original_image()
 {
   if (img_)
@@ -198,6 +201,7 @@ void segv_segmentation_manager::gaussian()
   t2D_->get_image_tableau()->set_image(char_smooth);
   t2D_->post_redraw();
 }
+
 void segv_segmentation_manager::convolution()
 {
   vgui_dialog kernel_dlg("Load Kernel");
@@ -226,7 +230,7 @@ void segv_segmentation_manager::convolution()
 
 void segv_segmentation_manager::downsample()
 {
-  if(!img_)
+  if (!img_)
     {
       vcl_cout << "In segv_segmentation_manager::downsample) - no image\n";
       return;
@@ -238,16 +242,17 @@ void segv_segmentation_manager::downsample()
     return;
   vil_memory_image_of<unsigned char> input(img_);
   vil_memory_image_of<float> inputf = brip_float_ops::convert_to_float(input);
-   vil_memory_image_of<float> half_res = 
+   vil_memory_image_of<float> half_res =
      brip_float_ops::half_resolution(inputf, filter_factor);
   vil_memory_image_of<unsigned char> char_half_res =
     brip_float_ops::convert_to_byte(half_res);
   t2D_->get_image_tableau()->set_image(char_half_res);
   t2D_->post_redraw();
 }
+
 void segv_segmentation_manager::harris_measure()
 {
-  if(!img_)
+  if (!img_)
     {
       vcl_cout << "In segv_segmentation_manager::harris_measure) - no image\n";
       return;
@@ -266,16 +271,17 @@ void segv_segmentation_manager::harris_measure()
   hd.extract_corners();
   vcl_vector<vsol_point_2d_sptr>& points = hd.get_points();
   int N = points.size();
-  if(!N)
+  if (!N)
     return;
   t2D_->clear_all();
-  for(int i=0; i<N; i++)
+  for (int i=0; i<N; i++)
     t2D_->add_vsol_point_2d(points[i]);
   t2D_->post_redraw();
 }
+
 void segv_segmentation_manager::beaudet_measure()
 {
-  if(!img_)
+  if (!img_)
     {
       vcl_cout <<"In segv_segmentation_manager::beaudet_measure) - no image\n";
       return;
@@ -302,6 +308,7 @@ void segv_segmentation_manager::beaudet_measure()
   t2D_->get_image_tableau()->set_image(uchar_b);
   t2D_->post_redraw();
 }
+
 void segv_segmentation_manager::vd_edges()
 {
   this->clear_display();
@@ -462,6 +469,7 @@ void segv_segmentation_manager::test_face()
         t2D_->add_vertex(v);
       }
 }
+
 void segv_segmentation_manager::test_digital_lines()
 {
   t2D_->set_foreground(1.0, 1.0, 0.0);
