@@ -21,7 +21,7 @@ void distance_squared(const vcl_vector<vnl_vector<T> > &s1, const vcl_vector<vnl
                    vcl_vector<T> & d, int n_loops)
 {
   vnl_vector<double> stats(nstests);
-  for (int st=0;st<nstests;++st)
+  for (unsigned st=0;st<nstests;++st)
   {
     vcl_clock_t t0=vcl_clock();
     for (int l=0;l<n_loops;++l)
@@ -42,7 +42,7 @@ void dot_product(const vcl_vector<vnl_vector<T> > &s1, const vcl_vector<vnl_vect
                    vcl_vector<T> & d, int n_loops)
 {
   vnl_vector<double> stats(nstests);
-  for (int st=0;st<nstests;++st)
+  for (unsigned st=0;st<nstests;++st)
   {
     vcl_clock_t t0=vcl_clock();
     for (int l=0;l<n_loops;++l)
@@ -62,7 +62,7 @@ void mat_x_vec(const vnl_matrix<T> &s1, const vcl_vector<vnl_vector<T> > &s2,
                    vcl_vector<vnl_vector<T> > & d, int n_loops)
 {
   vnl_vector<double> stats(nstests);
-  for (int st=0;st<nstests;++st)
+  for (unsigned st=0;st<nstests;++st)
   {
     vcl_clock_t t0=vcl_clock();
     for (int l=0;l<n_loops;++l)
