@@ -13,7 +13,7 @@
 #include <vcl_iostream.h>
 #include <vil/vil_stream_core.h>
 
-#if defined(__unix__)
+#if defined(unix)
 
 # include <unistd.h>       // read(), write(), close()
 # include <netdb.h>        // gethostbyname(), sockaddr_in()
