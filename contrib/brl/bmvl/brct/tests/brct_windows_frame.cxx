@@ -180,7 +180,7 @@ void brct_windows_frame::add_curve3d(bugl_curve_3d& c3d)
     {
       bugl_normal_point_3d_sptr s = c3d.get_point(i);
       bugl_normal_point_3d_sptr e = c3d.get_neighbor(i, 1);
-      if(e.ptr()!=0){
+      if (e.ptr()!=0) {
         //vgui_soview3D* so = instance_->tab_3d_->add_line(s->x(), s->y(), s->z(), e->x(), e->y(), e->z());
         vgui_soview3D* so = instance_->tab_3d_->add_point(s->x(), s->y(), s->z());
         curves_3d_.push_back(so);
@@ -462,49 +462,49 @@ void brct_windows_frame::write_vrml_file()
   static vcl_string ext = "*.*";
   save_file_dlg.file("file name", ext, filename);
 
-  if(!save_file_dlg.ask())
-    return ;
+  if (!save_file_dlg.ask())
+    return;
 
-  if(filename != "")
+  if (filename != "")
   {
     vcl_ofstream out(filename.c_str());
 
     bugl_curve_3d c3d = kalman_->get_curve_3d();
     int size = c3d.get_num_points();
-    
-    //write to file
-    out <<  "#VRML V2.0 utf8\n";
-    out <<  "Background { \n";
-    out <<  "  skyColor [ 1 1 1 ]\n";
-    out <<  "  groundColor [ 1 1 1 ]\n";
-    out <<  "}\n";
-    out <<  "PointLight {\n";
-    out <<  "  on FALSE\n";
-    out <<  "  intensity 1 \n";
-    out <<  "ambientIntensity 0 \n";
-    out <<  "color 1 1 1 \n";
-    out <<  "location 0 0 0 \n";
-    out <<  "attenuation 1 0 0 \n";
-    out <<  "radius 100  \n";
-    out <<  "}\n";
-    out <<  "Shape {\n";
-    out <<  " #make the points white\n";
-    out <<  "  appearance Appearance {\n";
-    out <<  "   material Material { emissiveColor 1 0 0 }\n";
-    out <<  " } \n";
-    out <<  " geometry PointSet {\n";
-    out <<  "  coord Coordinate{\n";
-    out <<  "   point[\n";
 
-    for(int i=0; i<size; i++){
-      	out<<"\t\t\t"<<c3d.get_point(i)->x()<<" "<<c3d.get_point(i)->y()<<" "<<c3d.get_point(i)->z()<<",\n";
+    //write to file
+    out <<  "#VRML V2.0 utf8\n"
+        <<  "Background {\n"
+        <<  "  skyColor [ 1 1 1 ]\n"
+        <<  "  groundColor [ 1 1 1 ]\n"
+        <<  "}\n"
+        <<  "PointLight {\n"
+        <<  "  on FALSE\n"
+        <<  "  intensity 1\n"
+        <<  "ambientIntensity 0\n"
+        <<  "color 1 1 1\n"
+        <<  "location 0 0 0\n"
+        <<  "attenuation 1 0 0\n"
+        <<  "radius 100\n"
+        <<  "}\n"
+        <<  "Shape {\n"
+        <<  " #make the points white\n"
+        <<  "  appearance Appearance {\n"
+        <<  "   material Material { emissiveColor 1 0 0 }\n"
+        <<  " }\n"
+        <<  " geometry PointSet {\n"
+        <<  "  coord Coordinate{\n"
+        <<  "   point[\n";
+
+    for (int i=0; i<size; i++) {
+      out<<"\t\t\t"<<c3d.get_point(i)->x()<<" "<<c3d.get_point(i)->y()<<" "<<c3d.get_point(i)->z()<<",\n";
     }
-    out <<  "   ]\n";
-    out <<  "  }\n";
-    out <<  "      color Color { color [ 1 1 1 ] }\n";
-    out <<  " }\n";
-    out <<  "}\n";
+    out <<  "   ]\n"
+        <<  "  }\n"
+        <<  "      color Color { color [ 1 1 1 ] }\n"
+        <<  " }\n"
+        <<  "}\n";
   }
-  return ;
+  return;
 }
 
