@@ -179,13 +179,10 @@ add_spatial_object(vsol_spatial_object_2d_sptr const& sos,
                    const vgui_style_sptr& style)
 {
   if (sos->cast_to_point()) {
-  {
     vsol_point_2d_sptr p = sos->cast_to_point();
     this->add_vsol_point_2d(p , style );
   }
-  }
-
-  if (sos->cast_to_curve()) {
+  else if (sos->cast_to_curve()) {
     if (sos->cast_to_curve()->cast_to_digital_curve())
     {
       vsol_digital_curve_2d_sptr dc =
