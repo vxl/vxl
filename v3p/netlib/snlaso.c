@@ -10,7 +10,7 @@
 static integer c__0 = 0;
 static integer c__1 = 1;
 static doublereal c_b122 = 10.;
-static real c_b195 = (float)0.;
+static real c_b195 = 0.f;
 
 
 /* *********************************************************************** */
@@ -20,7 +20,7 @@ integer *n, *nband;
 real *a, *x, *y;
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    integer a_dim1, a_offset;
 
     /* Local variables */
     static real zero[1];
@@ -49,19 +49,16 @@ real *a, *x, *y;
     --y;
 
     /* Function Body */
-    zero[0] = (float)0.;
+    zero[0] = 0.f;
     scopy_(n, zero, &c__0, &y[1], &c__1);
-    i__1 = *n;
-    for (k = 1; k <= i__1; ++k) {
+    for (k = 1; k <= *n; ++k) {
         y[k] += a[k * a_dim1 + 1] * x[k];
 /* Computing MIN */
-        i__2 = *n - k + 1;
-        m = min(i__2,*nband);
+        m = min(*n-k+1,*nband);
         if (m < 2) {
             goto L20;
         }
-        i__2 = m;
-        for (i__ = 2; i__ <= i__2; ++i__) {
+        for (i__ = 2; i__ <= m; ++i__) {
             l = k + i__ - 1;
             y[l] += a[i__ + k * a_dim1] * x[k];
             y[k] += a[i__ + k * a_dim1] * x[l];
@@ -82,7 +79,7 @@ integer *lde;
 real *eigvec, *atol, *artol, *bound, *atemp, *d__, *vtemp;
 {
     /* System generated locals */
-    integer a_dim1, a_offset, eigvec_dim1, eigvec_offset, i__1, i__2, i__3;
+    integer a_dim1, a_offset, eigvec_dim1, eigvec_offset, i__1;
     real r__1, r__2;
 
     /* Local variables */
@@ -139,19 +136,17 @@ real *eigvec, *atol, *artol, *bound, *atemp, *d__, *vtemp;
     /* Function Body */
     nval = *nr - *nl + 1;
     flag__ = FALSE_;
-    i__1 = nval;
-    for (i__ = 1; i__ <= i__1; ++i__) {
+    for (i__ = 1; i__ <= nval; ++i__) {
         if (sdot_(n, &eigvec[i__ * eigvec_dim1 + 1], &c__1, &eigvec[i__ *
-                eigvec_dim1 + 1], &c__1) == (float)0.) {
+                eigvec_dim1 + 1], &c__1) == 0.f) {
             slaran_(n, &eigvec[i__ * eigvec_dim1 + 1]);
         }
     }
 
 /*  LOOP OVER EIGENVALUES */
 
-    sigma = bound[(nval + 1 << 1) + 2];
-    i__1 = nval;
-    for (j = 1; j <= i__1; ++j) {
+    sigma = bound[(nval << 1) + 4];
+    for (j = 1; j <= nval; ++j) {
         numl = j;
 
 /*  PREPARE TO COMPUTE FIRST RAYLEIGH QUOTIENT */
@@ -160,12 +155,12 @@ L10:
         slabax_(n, nband, &a[a_offset], &eigvec[j * eigvec_dim1 + 1], &vtemp[
                 1]);
         vnorm = snrm2_(n, &vtemp[1], &c__1);
-        if (vnorm == (float)0.) {
+        if (vnorm == 0.f) {
             goto L20;
         }
-        r__1 = (float)1. / vnorm;
+        r__1 = 1.f / vnorm;
         sscal_(n, &r__1, &vtemp[1], &c__1);
-        r__1 = (float)1. / vnorm;
+        r__1 = 1.f / vnorm;
         sscal_(n, &r__1, &eigvec[j * eigvec_dim1 + 1], &c__1);
         r__1 = -sigma;
         saxpy_(n, &r__1, &eigvec[j * eigvec_dim1 + 1], &c__1, &vtemp[1], &
@@ -177,7 +172,7 @@ L10:
 
 L20:
         vnorm = snrm2_(n, &eigvec[j * eigvec_dim1 + 1], &c__1);
-        if (vnorm != (float)0.) {
+        if (vnorm != 0.f) {
             goto L30;
         }
         slaran_(n, &eigvec[j * eigvec_dim1 + 1]);
@@ -192,13 +187,12 @@ L30:
 /* Computing MAX */
         r__1 = *atol, r__2 = snrm2_(n, &vtemp[1], &c__1) / vnorm;
         resid = dmax(r__1,r__2);
-        r__1 = (float)1. / vnorm;
+        r__1 = 1.f / vnorm;
         sscal_(n, &r__1, &eigvec[j * eigvec_dim1 + 1], &c__1);
 
 /*  ACCEPT EIGENVALUE IF THE INTERVAL IS SMALL ENOUGH */
 
-        if (bound[(j + 1 << 1) + 2] - bound[(j + 1 << 1) + 1] < *atol * (
-                float)3.) {
+        if (bound[(j << 1) + 4] - bound[(j << 1) + 3] < *atol * ( float)3.) {
             goto L300;
         }
 
@@ -206,7 +200,7 @@ L30:
 
         errb = resid;
 /* Computing MIN */
-        r__1 = bound[(j + 2 << 1) + 1] - rq, r__2 = rq - bound[(j << 1) + 2];
+        r__1 = bound[(j << 1) + 5] - rq, r__2 = rq - bound[(j << 1) + 2];
         gap = dmin(r__1,r__2);
         if (gap > resid) {
 /* Computing MAX */
@@ -216,29 +210,27 @@ L30:
 
 /*  TENTATIVE NEW SHIFT */
 
-        sigma = (bound[(j + 1 << 1) + 1] + bound[(j + 1 << 1) + 2]) * (float)
-                .5;
+        sigma = (bound[(j << 1) + 3] + bound[(j << 1) + 4]) * .5f;
 
 /*  CHECK FOR TERMINALTION */
 
-        if (resid > *atol * (float)2.) {
+        if (resid > *atol * 2.f) {
             goto L40;
         }
-        if (rq - errb > bound[(j << 1) + 2] && rq + errb < bound[(j + 2 << 1)
-                + 1]) {
+        if (rq - errb > bound[(j << 1) + 2] && rq + errb < bound[(j << 1) + 5]) {
             goto L310;
         }
 
 /*  RQ IS TO THE LEFT OF THE INTERVAL */
 
 L40:
-        if (rq >= bound[(j + 1 << 1) + 1]) {
+        if (rq >= bound[(j << 1) + 3]) {
             goto L50;
         }
         if (rq - errb > bound[(j << 1) + 2]) {
             goto L100;
         }
-        if (rq + errb < bound[(j + 1 << 1) + 1]) {
+        if (rq + errb < bound[(j << 1) + 3]) {
             slaran_(n, &eigvec[j * eigvec_dim1 + 1]);
         }
         goto L200;
@@ -246,21 +238,20 @@ L40:
 /*  RQ IS TO THE RIGHT OF THE INTERVAL */
 
 L50:
-        if (rq <= bound[(j + 1 << 1) + 2]) {
+        if (rq <= bound[(j << 1) + 4]) {
             goto L100;
         }
-        if (rq + errb < bound[(j + 2 << 1) + 1]) {
+        if (rq + errb < bound[(j << 1) + 5]) {
             goto L100;
         }
 
 /*  SAVE THE REJECTED VECTOR IF INDICATED */
 
-        if (rq - errb <= bound[(j + 1 << 1) + 2]) {
+        if (rq - errb <= bound[(j << 1) + 4]) {
             goto L200;
         }
-        i__2 = nval;
-        for (i__ = j; i__ <= i__2; ++i__) {
-            if (bound[(i__ + 1 << 1) + 2] > rq) {
+        for (i__ = j; i__ <= nval; ++i__) {
+            if (bound[(i__ << 1) + 4] > rq) {
                 goto L70;
             }
         }
@@ -277,39 +268,32 @@ L80:
 /*  PERTURB RQ TOWARD THE MIDDLE */
 
 L100:
-        if (sigma < rq) {
-/* Computing MAX */
-            r__1 = sigma, r__2 = rq - errb;
-            sigma = dmax(r__1,r__2);
+        if (sigma < rq-errb) {
+            sigma = rq-errb;
         }
-        if (sigma > rq) {
-/* Computing MIN */
-            r__1 = sigma, r__2 = rq + errb;
-            sigma = dmin(r__1,r__2);
+        if (sigma > rq+errb) {
+            sigma = rq+errb;
         }
 
 /*  FACTOR AND SOLVE */
 
 L200:
-        i__2 = nval;
-        for (i__ = j; i__ <= i__2; ++i__) {
-            if (sigma < bound[(i__ + 1 << 1) + 1]) {
+        for (i__ = j; i__ <= nval; ++i__) {
+            if (sigma < bound[(i__ << 1) + 3]) {
                 goto L220;
             }
         }
         i__ = nval + 1;
 L220:
         numvec = i__ - j;
-/* Computing MIN */
-        i__2 = numvec, i__3 = *nband + 2;
-        numvec = min(i__2,i__3);
+        numvec = min(numvec,*nband+2);
         if (resid < *artol) {
             numvec = min(1,numvec);
         }
         scopy_(n, &eigvec[j * eigvec_dim1 + 1], &c__1, &vtemp[1], &c__1);
-        i__2 = (*nband << 1) - 1;
+        i__1 = (*nband << 1) - 1;
         slabfc_(n, nband, &a[a_offset], &sigma, &numvec, lde, &eigvec[j *
-                eigvec_dim1 + 1], &numl, &i__2, &atemp[1], &d__[1], atol);
+                eigvec_dim1 + 1], &numl, &i__1, &atemp[1], &d__[1], atol);
 
 /*  PARTIALLY SCALE EXTRA VECTORS TO PREVENT UNDERFLOW OR OVERFLOW */
 
@@ -317,10 +301,9 @@ L220:
             goto L227;
         }
         l = numvec - 1;
-        i__2 = l;
-        for (i__ = 1; i__ <= i__2; ++i__) {
+        for (i__ = 1; i__ <= l; ++i__) {
             m = j + i__;
-            r__1 = (float)1. / vnorm;
+            r__1 = 1.f / vnorm;
             sscal_(n, &r__1, &eigvec[m * eigvec_dim1 + 1], &c__1);
         }
 
@@ -331,22 +314,21 @@ L227:
         if (numl >= 0) {
             bound[4] = dmin(bound[4],sigma);
         }
-        i__2 = nval;
-        for (i__ = j; i__ <= i__2; ++i__) {
-            if (sigma < bound[(i__ + 1 << 1) + 1]) {
+        for (i__ = j; i__ <= nval; ++i__) {
+            if (sigma < bound[(i__ << 1) + 3]) {
                 goto L20;
             }
             if (numl < i__) {
-                bound[(i__ + 1 << 1) + 1] = sigma;
+                bound[(i__ << 1) + 3] = sigma;
             }
             if (numl >= i__) {
-                bound[(i__ + 1 << 1) + 2] = sigma;
+                bound[(i__ << 1) + 4] = sigma;
             }
         }
         if (numl < nval + 1) {
 /* Computing MAX */
-            r__1 = sigma, r__2 = bound[(nval + 2 << 1) + 1];
-            bound[(nval + 2 << 1) + 1] = dmax(r__1,r__2);
+            r__1 = sigma, r__2 = bound[(nval << 1) + 5];
+            bound[(nval << 1) + 5] = dmax(r__1,r__2);
         }
         goto L20;
 
@@ -359,13 +341,12 @@ L300:
 
 L305:
         flag__ = FALSE_;
-        rq = (bound[(j + 1 << 1) + 1] + bound[(j + 1 << 1) + 2]) * (float).5;
-        i__2 = (*nband << 1) - 1;
-        slabfc_(n, nband, &a[a_offset], &rq, &numvec, lde, &eigvec[j *
-                eigvec_dim1 + 1], &numl, &i__2, &atemp[1], &d__[1], atol);
+        rq = (bound[(j << 1) + 3] + bound[(j << 1) + 4]) * .5f;
+        i__1 = (*nband << 1) - 1;
+        slabfc_(n, nband, &a[a_offset], &rq, &numvec, lde, &eigvec[j * eigvec_dim1 + 1], &numl, &i__1, &atemp[1], &d__[1], atol);
         vnorm = snrm2_(n, &eigvec[j * eigvec_dim1 + 1], &c__1);
-        if (vnorm != (float)0.) {
-            r__1 = (float)1. / vnorm;
+        if (vnorm != 0.f) {
+            r__1 = 1.f / vnorm;
             sscal_(n, &r__1, &eigvec[j * eigvec_dim1 + 1], &c__1);
         }
 
@@ -377,8 +358,7 @@ L310:
             goto L330;
         }
         m = j - 1;
-        i__2 = m;
-        for (i__ = 1; i__ <= i__2; ++i__) {
+        for (i__ = 1; i__ <= m; ++i__) {
             r__1 = -sdot_(n, &eigvec[i__ * eigvec_dim1 + 1], &c__1, &eigvec[j
                     * eigvec_dim1 + 1], &c__1);
             saxpy_(n, &r__1, &eigvec[i__ * eigvec_dim1 + 1], &c__1, &eigvec[j
@@ -386,10 +366,10 @@ L310:
         }
 L330:
         vnorm = snrm2_(n, &eigvec[j * eigvec_dim1 + 1], &c__1);
-        if (vnorm == (float)0.) {
+        if (vnorm == 0.f) {
             goto L305;
         }
-        r__1 = (float)1. / vnorm;
+        r__1 = 1.f / vnorm;
         sscal_(n, &r__1, &eigvec[j * eigvec_dim1 + 1], &c__1);
 
 /*   ORTHOGONALIZE LATER VECTORS AGAINST THE CONVERGED ONE */
@@ -401,8 +381,7 @@ L330:
             return;
         }
         m = j + 1;
-        i__2 = nval;
-        for (i__ = m; i__ <= i__2; ++i__) {
+        for (i__ = m; i__ <= nval; ++i__) {
             r__1 = -sdot_(n, &eigvec[j * eigvec_dim1 + 1], &c__1, &eigvec[i__
                     * eigvec_dim1 + 1], &c__1);
             saxpy_(n, &r__1, &eigvec[j * eigvec_dim1 + 1], &c__1, &eigvec[i__
@@ -425,7 +404,7 @@ real *atemp, *d__, *atol;
 {
     /* System generated locals */
     integer a_dim1, a_offset, eigvec_dim1, eigvec_offset, atemp_dim1,
-            atemp_offset, d_dim1, d_offset, i__1, i__2, i__3;
+            atemp_offset, d_dim1, d_offset, i__1;
     real r__1, r__2;
 
     /* Builtin functions */
@@ -473,7 +452,7 @@ real *atemp, *d__, *atol;
     atemp -= atemp_offset;
 
     /* Function Body */
-    zero[0] = (float)0.;
+    zero[0] = 0.f;
     nb1 = *nband - 1;
     *numl = 0;
     i__1 = *ldad * *nband;
@@ -481,8 +460,7 @@ real *atemp, *d__, *atol;
 
 /*   LOOP OVER COLUMNS OF A */
 
-    i__1 = *n;
-    for (k = 1; k <= i__1; ++k) {
+    for (k = 1; k <= *n; ++k) {
 
 /*   ADD A COLUMN OF A TO D */
 
@@ -491,8 +469,7 @@ real *atemp, *d__, *atol;
         if (m == 0) {
             goto L20;
         }
-        i__2 = m;
-        for (i__ = 1; i__ <= i__2; ++i__) {
+        for (i__ = 1; i__ <= m; ++i__) {
             la = k - i__;
             ld = *nband - i__;
             d__[ld + *nband * d_dim1] = a[i__ + 1 + la * a_dim1];
@@ -500,13 +477,11 @@ real *atemp, *d__, *atol;
 
 L20:
 /* Computing MIN */
-        i__2 = *n - k;
-        m = min(i__2,nb1);
+        m = min(*n-k,nb1);
         if (m == 0) {
             goto L40;
         }
-        i__2 = m;
-        for (i__ = 1; i__ <= i__2; ++i__) {
+        for (i__ = 1; i__ <= m; ++i__) {
             ld = *nband + i__;
             d__[ld + *nband * d_dim1] = a[i__ + 1 + k * a_dim1];
         }
@@ -518,34 +493,28 @@ L40:
         if (nb1 == 0) {
             goto L70;
         }
-        i__2 = nb1;
-        for (i__ = 1; i__ <= i__2; ++i__) {
+        for (i__ = 1; i__ <= nb1; ++i__) {
             l = k - *nband + i__;
-            if (d__[i__ + *nband * d_dim1] == (float)0.) {
+            if (d__[i__ + *nband * d_dim1] == 0.f) {
                 goto L60;
             }
-            if ((r__1 = d__[i__ + i__ * d_dim1], dabs(r__1)) >= (r__2 = d__[
-                    i__ + *nband * d_dim1], dabs(r__2))) {
+            if (dabs(d__[i__ + i__ * d_dim1]) >= dabs(d__[i__ + *nband * d_dim1])) {
                 goto L50;
             }
-            if (d__[i__ + *nband * d_dim1] < (float)0. && d__[i__ + i__ *
-                    d_dim1] < (float)0. || d__[i__ + *nband * d_dim1] > (
-                    float)0. && d__[i__ + i__ * d_dim1] >= (float)0.) {
+            if (d__[i__ + *nband * d_dim1] < 0.f && d__[i__ + i__ *
+                    d_dim1] < 0.f || d__[i__ + *nband * d_dim1] > (
+                    float)0. && d__[i__ + i__ * d_dim1] >= 0.f) {
                 lpm = -lpm;
             }
-            i__3 = *ldad - i__ + 1;
-            sswap_(&i__3, &d__[i__ + i__ * d_dim1], &c__1, &d__[i__ + *nband *
-                     d_dim1], &c__1);
-            sswap_(number, &eigvec[l + eigvec_dim1], lde, &eigvec[k +
-                    eigvec_dim1], lde);
+            i__1 = *ldad - i__ + 1;
+            sswap_(&i__1, &d__[i__ + i__ * d_dim1], &c__1, &d__[i__ + *nband * d_dim1], &c__1);
+            sswap_(number, &eigvec[l + eigvec_dim1], lde, &eigvec[k + eigvec_dim1], lde);
 L50:
-            i__3 = *ldad - i__;
+            i__1 = *ldad - i__;
             r__1 = -d__[i__ + *nband * d_dim1] / d__[i__ + i__ * d_dim1];
-            saxpy_(&i__3, &r__1, &d__[i__ + 1 + i__ * d_dim1], &c__1, &d__[
-                    i__ + 1 + *nband * d_dim1], &c__1);
+            saxpy_(&i__1, &r__1, &d__[i__ + 1 + i__ * d_dim1], &c__1, &d__[i__ + 1 + *nband * d_dim1], &c__1);
             r__1 = -d__[i__ + *nband * d_dim1] / d__[i__ + i__ * d_dim1];
-            saxpy_(number, &r__1, &eigvec[l + eigvec_dim1], lde, &eigvec[k +
-                    eigvec_dim1], lde);
+            saxpy_(number, &r__1, &eigvec[l + eigvec_dim1], lde, &eigvec[k + eigvec_dim1], lde);
 L60:
             ;
         }
@@ -553,7 +522,7 @@ L60:
 /*  UPDATE STURM SEQUENCE COUNT */
 
 L70:
-        if (d__[*nband + *nband * d_dim1] < (float)0.) {
+        if (d__[*nband + *nband * d_dim1] < 0.f) {
             lpm = -lpm;
         }
         if (lpm < 0) {
@@ -577,12 +546,10 @@ L70:
             goto L100;
         }
 L80:
-        i__2 = nb1;
-        for (i__ = 1; i__ <= i__2; ++i__) {
-            i__3 = *ldad - i__;
-            scopy_(&i__3, &d__[i__ + 1 + (i__ + 1) * d_dim1], &c__1, &d__[i__
-                    + i__ * d_dim1], &c__1);
-            d__[*ldad + i__ * d_dim1] = (float)0.;
+        for (i__ = 1; i__ <= nb1; ++i__) {
+            i__1 = *ldad - i__;
+            scopy_(&i__1, &d__[i__ + 1 + (i__ + 1) * d_dim1], &c__1, &d__[i__ + i__ * d_dim1], &c__1);
+            d__[*ldad + i__ * d_dim1] = 0.f;
         }
 L100:
         ;
@@ -591,12 +558,10 @@ L100:
 /*  TRANSFER D TO ATEMP */
 
 L110:
-    i__1 = *nband;
-    for (i__ = 1; i__ <= i__1; ++i__) {
+    for (i__ = 1; i__ <= *nband; ++i__) {
         l = *n - *nband + i__;
-        i__2 = *nband - i__ + 1;
-        scopy_(&i__2, &d__[i__ + i__ * d_dim1], &c__1, &atemp[l * atemp_dim1
-                + 1], &c__1);
+        i__1 = *nband - i__ + 1;
+        scopy_(&i__1, &d__[i__ + i__ * d_dim1], &c__1, &atemp[l * atemp_dim1 + 1], &c__1);
     }
 
 /*   BACK SUBSTITUTION */
@@ -604,23 +569,20 @@ L110:
     if (*number == 0) {
         return;
     }
-    i__1 = *n;
-    for (kk = 1; kk <= i__1; ++kk) {
+    for (kk = 1; kk <= *n; ++kk) {
         k = *n - kk + 1;
-        if ((r__1 = atemp[k * atemp_dim1 + 1], dabs(r__1)) <= *atol) {
+        if (dabs(atemp[k * atemp_dim1 + 1]) <= *atol) {
             atemp[k * atemp_dim1 + 1] = r_sign(atol, &atemp[k * atemp_dim1 +
                     1]);
         }
 
-        i__2 = *number;
-        for (i__ = 1; i__ <= i__2; ++i__) {
+        for (i__ = 1; i__ <= *number; ++i__) {
             eigvec[k + i__ * eigvec_dim1] /= atemp[k * atemp_dim1 + 1];
             m = min(*ldad,k) - 1;
             if (m == 0) {
                 goto L150;
             }
-            i__3 = m;
-            for (j = 1; j <= i__3; ++j) {
+            for (j = 1; j <= m; ++j) {
                 l = k - j;
                 eigvec[l + i__ * eigvec_dim1] -= atemp[j + 1 + l * atemp_dim1]
                          * eigvec[k + i__ * eigvec_dim1];
@@ -639,7 +601,7 @@ integer *lde;
 real *eigvec, *bound, *atemp, *d__, *vtemp, *eps, *tmin, *tmax;
 {
     /* System generated locals */
-    integer a_dim1, a_offset, eigvec_dim1, eigvec_offset, i__1;
+    integer a_dim1, a_offset, eigvec_dim1, eigvec_offset;
     real r__1, r__2;
 
     /* Builtin functions */
@@ -690,30 +652,28 @@ real *eigvec, *bound, *atemp, *d__, *vtemp, *eps, *tmin, *tmax;
         goto L30;
     }
     eigval[1] = a[a_dim1 + 1];
-    eigvec[eigvec_dim1 + 1] = (float)1.;
+    eigvec[eigvec_dim1 + 1] = 1.f;
     return;
 
 /*   SET UP INITIAL EIGENVALUE BOUNDS */
 
 L30:
     m = nval + 1;
-    i__1 = m;
-    for (i__ = 2; i__ <= i__1; ++i__) {
+    for (i__ = 2; i__ <= m; ++i__) {
         bound[(i__ << 1) + 1] = *tmin;
         bound[(i__ << 1) + 2] = *tmax;
     }
     bound[4] = *tmax;
-    bound[(nval + 2 << 1) + 1] = *tmin;
+    bound[(nval << 1) + 5] = *tmin;
     if (*nl == 1) {
         bound[4] = *tmin;
     }
     if (*nr == *n) {
-        bound[(nval + 2 << 1) + 1] = *tmax;
+        bound[(nval << 1) + 5] = *tmax;
     }
 
-    slabcm_(n, nband, nl, nr, &a[a_offset], &eigval[1], lde, &eigvec[
-            eigvec_offset], &atol, &artol, &bound[3], &atemp[1], &d__[1], &
-            vtemp[1]);
+    slabcm_(n, nband, nl, nr, &a[a_offset], &eigval[1], lde, &eigvec[eigvec_offset],
+            &atol, &artol, &bound[3], &atemp[1], &d__[1], &vtemp[1]);
 } /* slaeig_ */
 
 
@@ -724,7 +684,7 @@ integer *n, *nband, *nstart;
 real *a, *tmin, *tmax;
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    integer a_dim1, a_offset;
     real r__1, r__2;
 
     /* Local variables */
@@ -747,21 +707,18 @@ real *a, *tmin, *tmax;
     a -= a_offset;
 
     /* Function Body */
-    i__1 = *n;
-    for (k = *nstart; k <= i__1; ++k) {
-        temp = (float)0.;
-        i__2 = *nband;
-        for (i__ = 2; i__ <= i__2; ++i__) {
-            temp += (r__1 = a[i__ + k * a_dim1], dabs(r__1));
+    for (k = *nstart; k <= *n; ++k) {
+        temp = 0.f;
+        for (i__ = 2; i__ <= *nband; ++i__) {
+            temp += dabs(a[i__ + k * a_dim1]);
         }
         l = min(k,*nband);
         if (l == 1) {
             goto L40;
         }
-        i__2 = l;
-        for (i__ = 2; i__ <= i__2; ++i__) {
+        for (i__ = 2; i__ <= l; ++i__) {
             m = k - i__ + 1;
-            temp += (r__1 = a[i__ + m * a_dim1], dabs(r__1));
+            temp += dabs(a[i__ + m * a_dim1]);
         }
 L40:
 /* Computing MIN */
@@ -783,9 +740,6 @@ real *x;
     /* Initialized data */
 
     static integer iurand = 0;
-
-    /* System generated locals */
-    integer i__1;
 
     /* Local variables */
     static integer i__;
@@ -810,9 +764,8 @@ real *x;
 
     /* Function Body */
 
-    i__1 = *n;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-        x[i__] = urand_(&iurand) - (float).5;
+    for (i__ = 1; i__ <= *n; ++i__) {
+        x[i__] = urand_(&iurand) - .5f;
     }
 } /* slaran_ */
 
@@ -829,7 +782,7 @@ integer *number;
 real *resnrm, *orthcf, *rv;
 {
     /* System generated locals */
-    integer bet_dim1, bet_offset, s_dim1, s_offset, i__1, i__2;
+    integer bet_dim1, bet_offset, s_dim1, s_offset;
     real r__1, r__2, r__3;
 
     /* Local variables */
@@ -857,17 +810,15 @@ real *resnrm, *orthcf, *rv;
 
     /* Function Body */
     m = *j - *nblock + 1;
-    i__1 = *number;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-        i__2 = *nblock;
-        for (k = 1; k <= i__2; ++k) {
+    for (i__ = 1; i__ <= *number; ++i__) {
+        for (k = 1; k <= *nblock; ++k) {
             rv[k] = sdot_(nblock, &s[m + i__ * s_dim1], &c__1, &bet[k +
                     bet_dim1], nblock);
             if (k == 1) {
-                orthcf[i__] = (r__1 = rv[k], dabs(r__1));
+                orthcf[i__] = dabs(rv[k]);
             }
 /* Computing MIN */
-            r__2 = orthcf[i__], r__3 = (r__1 = rv[k], dabs(r__1));
+            r__2 = orthcf[i__], r__3 = dabs(rv[k]);
             orthcf[i__] = dmin(r__2,r__3);
         }
         resnrm[i__] = snrm2_(nblock, &rv[1], &c__1);
@@ -1151,8 +1102,7 @@ integer *ind, *ierr;
     if (small) {
         goto L20;
     }
-    i__1 = *nperm;
-    for (i__ = 1; i__ <= i__1; ++i__) {
+    for (i__ = 1; i__ <= *nperm; ++i__) {
         val[i__ + val_dim1] = -val[i__ + val_dim1];
     }
 
@@ -1165,10 +1115,8 @@ L20:
 /* THIS STORES THE NORMS OF THE VECTORS FOR LATER COMPARISON. */
 /* IT ALSO INSURES THAT THE RESIDUAL NORMS ARE POSITIVE. */
 
-    i__1 = *nperm;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-        val[i__ + (val_dim1 << 1)] = (r__1 = val[i__ + (val_dim1 << 1)], dabs(
-                r__1));
+    for (i__ = 1; i__ <= *nperm; ++i__) {
+        val[i__ + (val_dim1 << 1)] = dabs(val[i__ + (val_dim1 << 1)]);
         val[i__ + val_dim1 * 3] = snrm2_(n, &vec[i__ * vec_dim1 + 1], &c__1);
     }
 
@@ -1177,11 +1125,9 @@ L20:
     m = *n * *nblock + 1;
     sortqr_(nmvec, n, nperm, &vec[vec_offset], &work[m]);
     m = *n * *nblock - *nperm;
-    i__1 = *nperm;
-    for (i__ = 1; i__ <= i__1; ++i__) {
+    for (i__ = 1; i__ <= *nperm; ++i__) {
         m = m + *nperm + 1;
-        if ((r__1 = work[m], dabs(r__1)) > val[i__ + val_dim1 * 3] * (float)
-                .9) {
+        if (dabs(work[m]) > val[i__ + val_dim1 * 3] * .9f) {
             goto L70;
         }
         *ierr = -1;
@@ -1203,11 +1149,11 @@ L70:
 /* ***IN A PRODUCTION CODE */
 
 L110:
-    eps = (float)1.;
+    eps = 1.f;
     for (i__ = 1; i__ <= 1000; ++i__) {
-        eps *= (float).5;
-        temp = eps + (float)1.;
-        if (temp == (float)1.) {
+        eps *= .5f;
+        temp = eps + 1.f;
+        if (temp == 1.f) {
             goto L130;
         }
     }
@@ -1285,7 +1231,7 @@ integer *ierr;
     /* System generated locals */
     integer vec_dim1, vec_offset, p0_dim1, p0_offset, p1_dim1, p1_offset,
             p2_dim1, p2_offset, t_dim1, t_offset, alp_dim1, alp_offset,
-            bet_dim1, bet_offset, s_dim1, s_offset, i__1, i__2, i__3, i__4;
+            bet_dim1, bet_offset, s_dim1, s_offset, i__1;
     real r__1, r__2, r__3;
     doublereal d__1;
 
@@ -1420,8 +1366,8 @@ integer *ierr;
     --ind;
 
     /* Function Body */
-    zero[0] = (float)0.;
-    rnorm = (float)0.;
+    zero[0] = 0.f;
+    rnorm = 0.f;
     if (*nperm != 0) {
 /* Computing MAX */
         r__1 = -val[1], r__2 = val[*nperm];
@@ -1445,20 +1391,18 @@ integer *ierr;
 /* ANY ITERATION OF THE ALGORITHM BEGINS HERE. */
 
 L30:
-    i__1 = *nblock;
-    for (i__ = 1; i__ <= i__1; ++i__) {
+    for (i__ = 1; i__ <= *nblock; ++i__) {
         temp = snrm2_(n, &p1[i__ * p1_dim1 + 1], &c__1);
-        if (temp == (float)0.) {
+        if (temp == 0.f) {
             slaran_(n, &p1[i__ * p1_dim1 + 1]);
         }
     }
     if (*nperm == 0) {
         goto L70;
     }
-    i__1 = *nperm;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-        tau[i__] = (float)1.;
-        otau[i__] = (float)0.;
+    for (i__ = 1; i__ <= *nperm; ++i__) {
+        tau[i__] = 1.f;
+        otau[i__] = 0.f;
     }
 L70:
     i__1 = *n * *nblock;
@@ -1468,8 +1412,7 @@ L70:
     i__1 = j * *nband;
     scopy_(&i__1, zero, &c__0, &t[t_offset], &c__1);
     mtemp = *nval + 1;
-    i__1 = mtemp;
-    for (i__ = 1; i__ <= i__1; ++i__) {
+    for (i__ = 1; i__ <= mtemp; ++i__) {
         scopy_(&j, zero, &c__0, &s[i__ * s_dim1 + 1], &c__1);
     }
     ngood = 0;
@@ -1477,7 +1420,7 @@ L70:
     tmax = (float)-1e30;
     test = TRUE_;
     enough = FALSE_;
-    betmax = (float)0.;
+    betmax = 0.f;
     j = 0;
 
 /* ------------------------------------------------------------------ */
@@ -1492,18 +1435,16 @@ L80:
     if (number == 0) {
         goto L110;
     }
-    i__1 = number;
-    for (i__ = 1; i__ <= i__1; ++i__) {
+    for (i__ = 1; i__ <= number; ++i__) {
         if (tau[i__] < epsrt) {
             goto L100;
         }
         test = TRUE_;
-        tau[i__] = (float)0.;
-        if (otau[i__] != (float)0.) {
-            otau[i__] = (float)1.;
+        tau[i__] = 0.f;
+        if (otau[i__] != 0.f) {
+            otau[i__] = 1.f;
         }
-        i__2 = *nblock;
-        for (k = 1; k <= i__2; ++k) {
+        for (k = 1; k <= *nblock; ++k) {
             temp = -sdot_(n, &vec[i__ * vec_dim1 + 1], &c__1, &p1[k * p1_dim1
                     + 1], &c__1);
             saxpy_(n, &temp, &vec[i__ * vec_dim1 + 1], &c__1, &p1[k * p1_dim1
@@ -1513,8 +1454,7 @@ L80:
 /* NEW LANCZOS VECTOR AND A GOOD RITZ VECTOR.  THE ALGORITHM IS */
 /* TERMINATED IF TOO MUCH ORTHOGONALITY IS LOST. */
 
-            if ((r__1 = temp * bet[k + k * bet_dim1], dabs(r__1)) > (real) (*
-                    n) * epsrt * anorm && i__ > *nperm) {
+            if (dabs(temp * bet[k + k * bet_dim1]) > (*n) * epsrt * anorm && i__ > *nperm) {
                 goto L380;
             }
         }
@@ -1533,15 +1473,13 @@ L110:
     if (j == *nblock) {
         goto L160;
     }
-    i__1 = *nblock;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-        if (alp[i__ + i__ * alp_dim1] > (float)0.) {
+    for (i__ = 1; i__ <= *nblock; ++i__) {
+        if (alp[i__ + i__ * alp_dim1] > 0.f) {
             goto L130;
         }
         m = j - (*nblock << 1) + i__;
         l = *nblock + 1;
-        i__2 = *nblock;
-        for (k = i__; k <= i__2; ++k) {
+        for (k = i__; k <= *nblock; ++k) {
             bet[i__ + k * bet_dim1] = -bet[i__ + k * bet_dim1];
             t[l + m * t_dim1] = -t[l + m * t_dim1];
             --l;
@@ -1560,10 +1498,8 @@ L160:
 
 /* THIS COMPUTES P2=P2-P0*BET(TRANSPOSE) */
 
-    i__1 = *nblock;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-        i__2 = *nblock;
-        for (k = i__; k <= i__2; ++k) {
+    for (i__ = 1; i__ <= *nblock; ++i__) {
+        for (k = i__; k <= *nblock; ++k) {
             r__1 = -bet[i__ + k * bet_dim1];
             saxpy_(n, &r__1, &p0[k * p0_dim1 + 1], &c__1, &p2[i__ * p2_dim1 +
                     1], &c__1);
@@ -1572,10 +1508,8 @@ L160:
 
 /* THIS COMPUTES ALP AND P2=P2-P1*ALP. */
 
-    i__1 = *nblock;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-        i__2 = i__;
-        for (k = 1; k <= i__2; ++k) {
+    for (i__ = 1; i__ <= *nblock; ++i__) {
+        for (k = 1; k <= i__; ++k) {
             ii = i__ - k + 1;
             alp[ii + k * alp_dim1] = sdot_(n, &p1[i__ * p1_dim1 + 1], &c__1, &
                     p2[k * p2_dim1 + 1], &c__1);
@@ -1595,10 +1529,8 @@ L160:
     if (j != *nblock) {
         goto L220;
     }
-    i__1 = *nblock;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-        i__2 = i__;
-        for (k = 1; k <= i__2; ++k) {
+    for (i__ = 1; i__ <= *nblock; ++i__) {
+        for (k = 1; k <= i__; ++k) {
             temp = sdot_(n, &p1[i__ * p1_dim1 + 1], &c__1, &p2[k * p2_dim1 +
                     1], &c__1);
             r__1 = -temp;
@@ -1621,16 +1553,13 @@ L220:
 
 /* THIS STORES ALP AND BET IN T. */
 
-    i__1 = *nblock;
-    for (i__ = 1; i__ <= i__1; ++i__) {
+    for (i__ = 1; i__ <= *nblock; ++i__) {
         m = j - *nblock + i__;
-        i__2 = *nblock;
-        for (k = i__; k <= i__2; ++k) {
+        for (k = i__; k <= *nblock; ++k) {
             l = k - i__ + 1;
             t[l + m * t_dim1] = alp[l + i__ * alp_dim1];
         }
-        i__2 = i__;
-        for (k = 1; k <= i__2; ++k) {
+        for (k = 1; k <= i__; ++k) {
             l = *nblock - i__ + k + 1;
             t[l + m * t_dim1] = bet[k + i__ * bet_dim1];
         }
@@ -1642,10 +1571,8 @@ L220:
         goto L280;
     }
     m = j - *nblock + 1;
-    i__1 = j;
-    for (i__ = m; i__ <= i__1; ++i__) {
-        i__2 = l;
-        for (k = 1; k <= i__2; ++k) {
+    for (i__ = m; i__ <= j; ++i__) {
+        for (k = 1; k <= l; ++k) {
             t[k + i__ * t_dim1] = -t[k + i__ * t_dim1];
         }
     }
@@ -1682,13 +1609,11 @@ L280:
 /* THIS COMPUTES ALP = BET(TRANSPOSE)*BET. */
 
 L305:
-    i__1 = *nblock;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-        i__2 = i__;
-        for (k = 1; k <= i__2; ++k) {
+    for (i__ = 1; i__ <= *nblock; ++i__) {
+        for (k = 1; k <= i__; ++k) {
             l = i__ - k + 1;
-            i__3 = *nblock - i__ + 1;
-            alp[l + k * alp_dim1] = sdot_(&i__3, &bet[i__ + i__ * bet_dim1],
+            i__1 = *nblock - i__ + 1;
+            alp[l + k * alp_dim1] = sdot_(&i__1, &bet[i__ + i__ * bet_dim1],
                     nblock, &bet[k + i__ * bet_dim1], nblock);
         }
     }
@@ -1707,8 +1632,7 @@ L305:
 
 /* THIS UPDATES TAU AND OTAU. */
 
-    i__1 = number;
-    for (i__ = 1; i__ <= i__1; ++i__) {
+    for (i__ = 1; i__ <= number; ++i__) {
 /* Computing MAX */
         r__1 = alpmax - val[i__], r__2 = val[i__] - alpmin;
         temp = (tau[i__] * dmax(r__1,r__2) + otau[i__] * betmax + *eps *
@@ -1763,8 +1687,7 @@ L390:
     test = TRUE_;
 L400:
 /* Computing MIN */
-    i__1 = j / 2, i__2 = nleft + 1;
-    ntheta = min(i__1,i__2);
+    ntheta = min(j/2,nleft+1);
     slaeig_(&j, nband, &c__1, &ntheta, &t[t_offset], &val[number + 1], maxj, &
             s[s_offset], &bound[1], &atemp[1], &d__[1], &vtemp[1], eps, &tmin,
              &tmax);
@@ -1812,7 +1735,7 @@ L430:
         goto L80;
     }
     ntheta = nleft;
-    vtemp[ntheta + 1] = (float)1.;
+    vtemp[ntheta + 1] = 1.f;
 
 /* ------------------------------------------------------------------ */
 
@@ -1831,8 +1754,7 @@ L430:
     pnorm = dmax(r__1,r__2);
     tola = utol * pnorm;
     nstart = 0;
-    i__1 = ntheta;
-    for (i__ = 1; i__ <= i__1; ++i__) {
+    for (i__ = 1; i__ <= ntheta; ++i__) {
         m = number + i__;
 /* Computing MIN */
         r__1 = atemp[i__] * atemp[i__] / (*delta - val[m]), r__2 = atemp[i__];
@@ -1855,8 +1777,7 @@ L460:
 
 /*  COPY VALUES OF IND INTO VTEMP */
 
-    i__1 = ntheta;
-    for (i__ = 1; i__ <= i__1; ++i__) {
+    for (i__ = 1; i__ <= ntheta; ++i__) {
         vtemp[i__] = (real) ind[i__];
     }
     goto L500;
@@ -1865,17 +1786,16 @@ L460:
 
 L470:
     ng = 0;
-    i__1 = ntheta;
-    for (i__ = 1; i__ <= i__1; ++i__) {
+    for (i__ = 1; i__ <= ntheta; ++i__) {
         if (vtemp[i__] > tolg) {
             goto L480;
         }
         ++ng;
-        vtemp[i__] = (float)-1.;
+        vtemp[i__] = -1.f;
         goto L490;
 
 L480:
-        vtemp[i__] = (float)1.;
+        vtemp[i__] = 1.f;
 L490:
         ;
     }
@@ -1926,16 +1846,14 @@ L530:
 /*  FIND MINIMUM ATEMP VALUE TO AVOID POSSIBLE OVERFLOW */
 
     temp = atemp[1];
-    i__1 = nstart;
-    for (i__ = 1; i__ <= i__1; ++i__) {
+    for (i__ = 1; i__ <= nstart; ++i__) {
 /* Computing MIN */
         r__1 = temp, r__2 = atemp[i__];
         temp = dmin(r__1,r__2);
     }
     m = ngood + 1;
     l = ngood + min(nstart,*nblock);
-    i__1 = l;
-    for (i__ = m; i__ <= i__1; ++i__) {
+    for (i__ = m; i__ <= l; ++i__) {
         r__1 = temp / atemp[i__];
         sscal_(&j, &r__1, &s[i__ * s_dim1 + 1], &c__1);
     }
@@ -1944,10 +1862,8 @@ L530:
         goto L570;
     }
     l = ngood + *nblock;
-    i__1 = m;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-        i__2 = *nblock;
-        for (k = 1; k <= i__2; ++k) {
+    for (i__ = 1; i__ <= m; ++i__) {
+        for (k = 1; k <= *nblock; ++k) {
             ++l;
             if (l > ntheta) {
                 goto L570;
@@ -1967,8 +1883,7 @@ L580:
     if (ngood == 0 || ! (test || enough)) {
         goto L600;
     }
-    i__1 = ngood;
-    for (i__ = 1; i__ <= i__1; ++i__) {
+    for (i__ = 1; i__ <= ngood; ++i__) {
         m = *nperm + i__;
         res[m] = atemp[i__];
     }
@@ -1986,23 +1901,18 @@ L600:
         goto L620;
     }
     m = *nperm + 1;
-    i__1 = number;
-    for (i__ = m; i__ <= i__1; ++i__) {
+    for (i__ = m; i__ <= number; ++i__) {
         scopy_(n, zero, &c__0, &vec[i__ * vec_dim1 + 1], &c__1);
     }
 L620:
-    i__1 = j;
-    i__2 = *nblock;
-    for (i__ = *nblock; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2) {
+    for (i__ = *nblock; *nblock < 0 ? i__ >= j : i__ <= j; i__ += *nblock) {
         (*iovect)(n, nblock, &p2[p2_offset], &i__, &c__1);
-        i__3 = *nblock;
-        for (k = 1; k <= i__3; ++k) {
+        for (k = 1; k <= *nblock; ++k) {
             m = i__ - *nblock + k;
             if (nstart == 0) {
                 goto L640;
             }
-            i__4 = nstart;
-            for (l = 1; l <= i__4; ++l) {
+            for (l = 1; l <= nstart; ++l) {
                 i1 = ngood + l;
                 saxpy_(n, &s[m + i1 * s_dim1], &p2[k * p2_dim1 + 1], &c__1, &
                         p1[l * p1_dim1 + 1], &c__1);
@@ -2011,8 +1921,7 @@ L640:
             if (ngood == 0) {
                 goto L660;
             }
-            i__4 = ngood;
-            for (l = 1; l <= i__4; ++l) {
+            for (l = 1; l <= ngood; ++l) {
                 i1 = l + *nperm;
                 saxpy_(n, &s[m + l * s_dim1], &p2[k * p2_dim1 + 1], &c__1, &
                         vec[i1 * vec_dim1 + 1], &c__1);
@@ -2029,12 +1938,11 @@ L660:
 /* TAU RECURRENCE. */
 
     m = *nperm + 1;
-    i__2 = number;
-    for (i__ = m; i__ <= i__2; ++i__) {
-        temp = (float)1. / snrm2_(n, &vec[i__ * vec_dim1 + 1], &c__1);
+    for (i__ = m; i__ <= number; ++i__) {
+        temp = 1.f / snrm2_(n, &vec[i__ * vec_dim1 + 1], &c__1);
         sscal_(n, &temp, &vec[i__ * vec_dim1 + 1], &c__1);
-        tau[i__] = (float)1.;
-        otau[i__] = (float)1.;
+        tau[i__] = 1.f;
+        otau[i__] = 1.f;
     }
 
 /*  SHIFT S VECTORS TO ALIGN FOR LATER CALL TO SLAEIG */
@@ -2060,15 +1968,14 @@ L690:
 
 /* THIS ORTHONORMALIZES THE VECTORS */
 
-    i__2 = *nperm + ngood;
-    sortqr_(nmvec, n, &i__2, &vec[vec_offset], &s[s_offset]);
+    i__1 = *nperm + ngood;
+    sortqr_(nmvec, n, &i__1, &vec[vec_offset], &s[s_offset]);
 
 /* THIS SORTS THE VALUES AND VECTORS. */
 
     if (*nperm != 0) {
-        i__2 = *nperm + ngood;
-        svsort_(&i__2, &val[1], &res[1], &c__0, &temp, nmvec, n, &vec[
-                vec_offset]);
+        i__1 = *nperm + ngood;
+        svsort_(&i__1, &val[1], &res[1], &c__0, &temp, nmvec, n, &vec[vec_offset]);
     }
     *nperm += ngood;
     nleft -= ngood;
@@ -2095,8 +2002,7 @@ L690:
     if (m <= 0) {
         return;
     }
-    i__2 = m;
-    for (i__ = 1; i__ <= i__2; ++i__) {
+    for (i__ = 1; i__ <= m; ++i__) {
         l = i__ + *nblock - 1;
         if (val[l] - val[i__] < tola) {
             goto L30;
@@ -2111,8 +2017,7 @@ L790:
     if (m <= 0) {
         return;
     }
-    i__2 = m;
-    for (i__ = 1; i__ <= i__2; ++i__) {
+    for (i__ = 1; i__ <= m; ++i__) {
         l = i__ + *nblock;
         if (val[l] - val[i__] >= tola) {
             goto L800;
@@ -2151,8 +2056,7 @@ real *eps;
 {
     /* System generated locals */
     integer val_dim1, val_offset, vec_dim1, vec_offset, h_dim1, h_offset,
-            hv_dim1, hv_offset, p_dim1, p_offset, q_dim1, q_offset, i__1,
-            i__2, i__3, i__4;
+            hv_dim1, hv_offset, p_dim1, p_offset, q_dim1, q_offset, i__1;
     real r__1;
 
     /* Local variables */
@@ -2194,7 +2098,7 @@ real *eps;
     --d__;
 
     /* Function Body */
-    zero[0] = (float)0.;
+    zero[0] = 0.f;
     if (! (*raritz)) {
         goto L190;
     }
@@ -2208,26 +2112,23 @@ real *eps;
 
     i__1 = *nperm * *nperm;
     scopy_(&i__1, zero, &c__0, &h__[h_offset], &c__1);
-    temp = (float)-1.;
+    temp = -1.f;
     if (*small) {
-        temp = (float)1.;
+        temp = 1.f;
     }
     m = *nperm % *nblock;
     if (m == 0) {
         goto L40;
     }
-    i__1 = m;
-    for (i__ = 1; i__ <= i__1; ++i__) {
+    for (i__ = 1; i__ <= m; ++i__) {
         scopy_(n, &vec[i__ * vec_dim1 + 1], &c__1, &p[i__ * p_dim1 + 1], &
                 c__1);
     }
     (*iovect)(n, &m, &p[p_offset], &m, &c__0);
     (*op)(n, &m, &p[p_offset], &q[q_offset]);
     ++(*nop);
-    i__1 = m;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-        i__2 = *nperm;
-        for (j = i__; j <= i__2; ++j) {
+    for (i__ = 1; i__ <= m; ++i__) {
+        for (j = i__; j <= *nperm; ++j) {
             jj = j - i__ + 1;
             h__[jj + i__ * h_dim1] = temp * sdot_(n, &vec[j * vec_dim1 + 1], &
                     c__1, &q[i__ * q_dim1 + 1], &c__1);
@@ -2238,11 +2139,8 @@ real *eps;
     }
 L40:
     m += *nblock;
-    i__1 = *nperm;
-    i__2 = *nblock;
-    for (i__ = m; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2) {
-        i__3 = *nblock;
-        for (j = 1; j <= i__3; ++j) {
+    for (i__ = m; *nblock < 0 ? i__ >= *nperm : i__ <= *nperm; i__ += *nblock) {
+        for (j = 1; j <= *nblock; ++j) {
             l = i__ - *nblock + j;
             scopy_(n, &vec[l * vec_dim1 + 1], &c__1, &p[j * p_dim1 + 1], &
                     c__1);
@@ -2250,11 +2148,9 @@ L40:
         (*iovect)(n, nblock, &p[p_offset], &i__, &c__0);
         (*op)(n, nblock, &p[p_offset], &q[q_offset]);
         ++(*nop);
-        i__3 = *nblock;
-        for (j = 1; j <= i__3; ++j) {
+        for (j = 1; j <= *nblock; ++j) {
             l = i__ - *nblock + j;
-            i__4 = *nperm;
-            for (k = l; k <= i__4; ++k) {
+            for (k = l; k <= *nperm; ++k) {
                 kk = k - l + 1;
                 h__[kk + l * h_dim1] = temp * sdot_(n, &vec[k * vec_dim1 + 1],
                          &c__1, &q[j * q_dim1 + 1], &c__1);
@@ -2275,8 +2171,7 @@ L90:
 /* THIS COMPUTES THE RITZ VECTORS--THE COLUMNS OF */
 /* Y = QS WHERE S IS THE MATRIX OF EIGENVECTORS OF H. */
 
-    i__2 = *nperm;
-    for (i__ = 1; i__ <= i__2; ++i__) {
+    for (i__ = 1; i__ <= *nperm; ++i__) {
         scopy_(n, zero, &c__0, &vec[i__ * vec_dim1 + 1], &c__1);
     }
     m = *nperm % *nblock;
@@ -2284,10 +2179,8 @@ L90:
         goto L150;
     }
     (*iovect)(n, &m, &p[p_offset], &m, &c__1);
-    i__2 = m;
-    for (i__ = 1; i__ <= i__2; ++i__) {
-        i__1 = *nperm;
-        for (j = 1; j <= i__1; ++j) {
+    for (i__ = 1; i__ <= m; ++i__) {
+        for (j = 1; j <= *nperm; ++j) {
             saxpy_(n, &hv[i__ + j * hv_dim1], &p[i__ * p_dim1 + 1], &c__1, &
                     vec[j * vec_dim1 + 1], &c__1);
         }
@@ -2297,15 +2190,11 @@ L90:
     }
 L150:
     m += *nblock;
-    i__2 = *nperm;
-    i__1 = *nblock;
-    for (i__ = m; i__1 < 0 ? i__ >= i__2 : i__ <= i__2; i__ += i__1) {
+    for (i__ = m; *nblock < 0 ? i__ >= *nperm : i__ <= *nperm; i__ += *nblock) {
         (*iovect)(n, nblock, &p[p_offset], &i__, &c__1);
-        i__3 = *nblock;
-        for (j = 1; j <= i__3; ++j) {
+        for (j = 1; j <= *nblock; ++j) {
             l = i__ - *nblock + j;
-            i__4 = *nperm;
-            for (k = 1; k <= i__4; ++k) {
+            for (k = 1; k <= *nperm; ++k) {
                 saxpy_(n, &hv[l + k * hv_dim1], &p[j * p_dim1 + 1], &c__1, &
                         vec[k * vec_dim1 + 1], &c__1);
             }
@@ -2325,20 +2214,15 @@ L190:
     if (m == 0) {
         goto L220;
     }
-    i__1 = m;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-        scopy_(n, &vec[i__ * vec_dim1 + 1], &c__1, &p[i__ * p_dim1 + 1], &
-                c__1);
+    for (i__ = 1; i__ <= m; ++i__) {
+        scopy_(n, &vec[i__ * vec_dim1 + 1], &c__1, &p[i__ * p_dim1 + 1], &c__1);
     }
     (*op)(n, &m, &p[p_offset], &q[q_offset]);
     ++(*nop);
-    i__1 = m;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-        val[i__ + val_dim1] = sdot_(n, &p[i__ * p_dim1 + 1], &c__1, &q[i__ *
-                q_dim1 + 1], &c__1);
+    for (i__ = 1; i__ <= m; ++i__) {
+        val[i__ + val_dim1] = sdot_(n, &p[i__ * p_dim1 + 1], &c__1, &q[i__ * q_dim1 + 1], &c__1);
         r__1 = -val[i__ + val_dim1];
-        saxpy_(n, &r__1, &p[i__ * p_dim1 + 1], &c__1, &q[i__ * q_dim1 + 1], &
-                c__1);
+        saxpy_(n, &r__1, &p[i__ * p_dim1 + 1], &c__1, &q[i__ * q_dim1 + 1], &c__1);
         val[i__ + (val_dim1 << 1)] = snrm2_(n, &q[i__ * q_dim1 + 1], &c__1);
     }
     if (*nperm < *nblock) {
@@ -2346,19 +2230,15 @@ L190:
     }
 L220:
     ++m;
-    i__1 = *nperm;
-    i__2 = *nblock;
-    for (i__ = m; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2) {
-        i__3 = *nblock;
-        for (j = 1; j <= i__3; ++j) {
+    for (i__ = m; *nblock < 0 ? i__ >= *nperm : i__ <= *nperm; i__ += *nblock) {
+        for (j = 1; j <= *nblock; ++j) {
             l = i__ - 1 + j;
             scopy_(n, &vec[l * vec_dim1 + 1], &c__1, &p[j * p_dim1 + 1], &
                     c__1);
         }
         (*op)(n, nblock, &p[p_offset], &q[q_offset]);
         ++(*nop);
-        i__3 = *nblock;
-        for (j = 1; j <= i__3; ++j) {
+        for (j = 1; j <= *nblock; ++j) {
             l = i__ - 1 + j;
             val[l + val_dim1] = sdot_(n, &p[j * p_dim1 + 1], &c__1, &q[j *
                     q_dim1 + 1], &c__1);
@@ -2383,8 +2263,8 @@ L270:
     if (! (*small)) {
         temp = -temp;
     }
-    val[i__ + (val_dim1 << 2)] = (float)0.;
-    if (temp > (float)0.) {
+    val[i__ + (val_dim1 << 2)] = 0.f;
+    if (temp > 0.f) {
         val[i__ + (val_dim1 << 2)] = val[i__ + (val_dim1 << 1)] / temp;
     }
     val[i__ + val_dim1 * 3] = val[i__ + (val_dim1 << 2)] * val[i__ + (
@@ -2401,7 +2281,7 @@ integer *nz, *n, *nblock;
 real *z__, *b;
 {
     /* System generated locals */
-    integer z_dim1, z_offset, b_dim1, b_offset, i__1, i__2;
+    integer z_dim1, z_offset, b_dim1, b_offset;
     real r__1;
 
     /* Builtin functions */
@@ -2431,8 +2311,7 @@ real *z__, *b;
     b -= b_offset;
 
     /* Function Body */
-    i__1 = *nblock;
-    for (i__ = 1; i__ <= i__1; ++i__) {
+    for (i__ = 1; i__ <= *nblock; ++i__) {
 
 /* THIS FORMS THE ITH REFLECTION. */
 
@@ -2449,9 +2328,8 @@ real *z__, *b;
 
 /* THIS APPLIES THE ROTATION TO THE REST OF THE COLUMNS. */
 
-        i__2 = *nblock;
-        for (k = j; k <= i__2; ++k) {
-            if (tau == (float)0.) {
+        for (k = j; k <= *nblock; ++k) {
+            if (tau == 0.f) {
                 goto L10;
             }
             temp = -sdot_(&length, &z__[i__ + i__ * z_dim1], &c__1, &z__[i__
@@ -2460,7 +2338,7 @@ real *z__, *b;
                     + k * z_dim1], &c__1);
 L10:
             b[i__ + k * b_dim1] = z__[i__ + k * z_dim1];
-            z__[i__ + k * z_dim1] = (float)0.;
+            z__[i__ + k * z_dim1] = 0.f;
         }
 L30:
         ;
@@ -2468,15 +2346,14 @@ L30:
 
 /* THIS ACCUMULATES THE REFLECTIONS IN REVERSE ORDER. */
 
-    i__1 = *nblock;
-    for (m = 1; m <= i__1; ++m) {
+    for (m = 1; m <= *nblock; ++m) {
 
 /* THIS RECREATES THE ITH = NBLOCK-M+1)TH REFLECTION. */
 
         i__ = *nblock + 1 - m;
         sigma = -b[i__ + i__ * b_dim1];
         tau = z__[i__ + i__ * z_dim1] * sigma;
-        if (tau == (float)0.) {
+        if (tau == 0.f) {
             goto L60;
         }
         length = *n - *nblock + m;
@@ -2487,18 +2364,17 @@ L30:
 
 /* THIS APPLIES IT TO THE LATER COLUMNS. */
 
-        i__2 = *nblock;
-        for (k = j; k <= i__2; ++k) {
+        for (k = j; k <= *nblock; ++k) {
             temp = -sdot_(&length, &z__[i__ + i__ * z_dim1], &c__1, &z__[i__
                     + k * z_dim1], &c__1) / tau;
             saxpy_(&length, &temp, &z__[i__ + i__ * z_dim1], &c__1, &z__[i__
                     + k * z_dim1], &c__1);
         }
 L50:
-        r__1 = (float)-1. / sigma;
+        r__1 = -1.f / sigma;
         sscal_(&length, &r__1, &z__[i__ + i__ * z_dim1], &c__1);
 L60:
-        z__[i__ + i__ * z_dim1] += (float)1.;
+        z__[i__ + i__ * z_dim1] += 1.f;
     }
     return;
 } /* sortqr_ */
@@ -2515,7 +2391,7 @@ integer *nmvec, *n;
 real *vec;
 {
     /* System generated locals */
-    integer vec_dim1, vec_offset, i__1, i__2;
+    integer vec_dim1, vec_offset;
 
     /* Local variables */
     static real temp;
@@ -2536,11 +2412,9 @@ real *vec;
     if (*num <= 1) {
         return;
     }
-    i__1 = *num;
-    for (i__ = 2; i__ <= i__1; ++i__) {
+    for (i__ = 2; i__ <= *num; ++i__) {
         m = *num - i__ + 1;
-        i__2 = m;
-        for (k = 1; k <= i__2; ++k) {
+        for (k = 1; k <= m; ++k) {
             if (val[k] <= val[k + 1]) {
                 goto L10;
             }
