@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "mvl_three_view_six_point_structure"
+#pragma implementation
 #endif
 #include "mvl_three_view_six_point_structure.h"
 

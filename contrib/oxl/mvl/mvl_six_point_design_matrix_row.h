@@ -1,7 +1,7 @@
 #ifndef mvl_six_point_design_matrix_row_h_
 #define mvl_six_point_design_matrix_row_h_
 #ifdef __GNUC__
-#pragma interface "mvl_six_point_design_matrix_row"
+#pragma interface
 #endif
 /*
   fsm@robots.ox.ac.uk

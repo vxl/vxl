@@ -1,7 +1,7 @@
 #ifndef gtrl_vertex_h_
 #define gtrl_vertex_h_
 #ifdef __GNUC__
-#pragma interface "gtrl_vertex"
+#pragma interface
 #endif
 /*
   crossge@crd.ge.com

@@ -1,7 +1,7 @@
 #ifndef gst_vertex_2d_h_
 #define gst_vertex_2d_h_
 #ifdef __GNUC__
-#pragma interface "gst_vertex_2d"
+#pragma interface
 #endif
 /*
   crossge@crd.ge.com
@@ -42,4 +42,4 @@ protected:
 bool operator==( const gst_vertex_2d& a, const gst_vertex_2d& b);
 ostream &operator <<( ostream &os, const gst_vertex_2d &v);
 
-#endif
+#endif // gst_vertex_2d_h_

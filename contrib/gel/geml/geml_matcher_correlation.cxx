@@ -1,12 +1,12 @@
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
-#pragma implementation "geml_matcher_correlation.h"
+#pragma implementation
 #endif
 //
-// Class: geml_matcher_correlation
+// .NAME geml_matcher_correlation
 // Author: Geoffrey Cross, Oxford RRG
 // Created: ${DATE}
-// Modifications:
+// .SECTION Modifications:
 //   @(eval (strftime "%y%m%d")) Geoff Initial version.
 //
 //-----------------------------------------------------------------------------

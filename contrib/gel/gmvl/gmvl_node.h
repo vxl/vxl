@@ -1,17 +1,10 @@
 #ifndef gmvl_node_h_
 #define gmvl_node_h_
 #ifdef __GNUC__
-#pragma interface "gmvl_node"
+#pragma interface
 #endif
 /*
   crossge@crd.ge.com
-*/
-
-/* Types of node:
-        images
-        image features (points, lines, conics...)
-        transformations (homographies, projection matrices...)
-        coordinate systems (?)
 */
 
 #include <vcl_iostream.h>
@@ -20,6 +13,13 @@
 
 class gmvl_node_cache;
 class gmvl_connection_cache;
+
+//:
+// Types of node:
+//      images
+//      image features (points, lines, conics...)
+//      transformations (homographies, projection matrices...)
+//      coordinate systems (?)
 
 class gmvl_node : public vbl_ref_count
 {

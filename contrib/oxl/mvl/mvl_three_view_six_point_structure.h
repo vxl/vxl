@@ -1,12 +1,13 @@
 #ifndef mvl_three_view_six_point_structure_h_
 #define mvl_three_view_six_point_structure_h_
 #ifdef __GNUC__
-#pragma interface "mvl_three_view_six_point_structure"
+#pragma interface
 #endif
 /*
   fsm@robots.ox.ac.uk
 */
 
+//:
 // Code for computing projective structure from 3 views of 6 points.
 //
 // The six points are assumed to be:

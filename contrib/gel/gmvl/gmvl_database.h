@@ -1,7 +1,7 @@
 #ifndef gmvl_database_h_
 #define gmvl_database_h_
 #ifdef __GNUC__
-#pragma interface "gmvl_database"
+#pragma interface
 #endif
 /*
   crossge@crd.ge.com

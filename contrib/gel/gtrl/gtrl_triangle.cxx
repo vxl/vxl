@@ -2,7 +2,7 @@
   crossge@crd.ge.com
 */
 #ifdef __GNUC__
-#pragma implementation "gtrl_triangle"
+#pragma implementation
 #endif
 #include "gtrl_triangle.h"
 

@@ -1,7 +1,7 @@
 #ifndef gtrl_polygon_h_
 #define gtrl_polygon_h_
 #ifdef __GNUC__
-#pragma interface "gtrl_polygon"
+#pragma interface
 #endif
 /*
   crossge@crd.ge.com

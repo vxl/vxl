@@ -1,7 +1,7 @@
 #ifndef gmvl_image_node_h_
 #define gmvl_image_node_h_
 #ifdef __GNUC__
-#pragma interface "gmvl_image_node"
+#pragma interface
 #endif
 /*
   crossge@crd.ge.com

@@ -1,21 +1,22 @@
 #ifndef vil_colour_space_h_
 #define vil_colour_space_h_
 #ifdef __GNUC__
-#pragma interface "vil_colour_space"
+#pragma interface
 #endif
 /*
   fsm@robots.ox.ac.uk
 */
 
-// Functions to convert between different colour spaces.
+//: Functions to convert between different colour spaces.
 // See Foley and van Dam, "Computer Graphics, Principles and Practice".
 
 
-// This is a linear transformation.
+//: This is a linear transformation.
 template <class T>
 void vil_colour_space_RGB_to_YIQ(T const in[3], T out[3]);
 
 
+//:
 // The input RGB values must lie in [0, L], for some positive L. Usually
 // L=1 or 255.
 //

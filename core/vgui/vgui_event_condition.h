@@ -1,20 +1,20 @@
 #ifndef vgui_event_condition_h_
 #define vgui_event_condition_h_
 #ifdef __GNUC__
-#pragma interface "vgui_event_condition"
+#pragma interface
 #endif
 /*
   fsm@robots.ox.ac.uk
 */
-
-// Purpose: Represent and recognise simple event conditions. This
-// makes it easy to change the key/mouse combination that causes
-// one's tableau to do something.
 #include <vcl_string.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_button.h>
 #include <vgui/vgui_modifier.h>
 class vgui_event;
+
+//: Represent and recognise simple event conditions.
+// This makes it easy to change the key/mouse combination that causes
+// one's tableau to do something.
 
 struct vgui_event_condition
 {

@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vgui_find"
+#pragma implementation
 #endif
 #include "vgui_find.h"
 

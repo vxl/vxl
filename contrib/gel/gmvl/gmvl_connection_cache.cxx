@@ -2,7 +2,7 @@
   crossge@crd.ge.com
 */
 #ifdef __GNUC__
-#pragma implementation "gmvl_connection_cache"
+#pragma implementation
 #endif
 #include "gmvl_connection_cache.h"
 

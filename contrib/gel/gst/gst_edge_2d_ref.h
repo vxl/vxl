@@ -1,7 +1,7 @@
 #ifndef gst_edge_2d_ref_h_
 #define gst_edge_2d_ref_h_
 #ifdef __GNUC__
-#pragma interface "gst_edge_2d_ref"
+#pragma interface
 #endif
 /*
   crossge@crd.ge.com

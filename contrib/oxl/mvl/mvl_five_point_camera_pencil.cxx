@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "mvl_five_point_camera_pencil"
+#pragma implementation
 #endif
 #include "mvl_five_point_camera_pencil.h"
 

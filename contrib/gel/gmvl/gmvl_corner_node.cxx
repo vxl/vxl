@@ -2,7 +2,7 @@
   crossge@crd.ge.com
 */
 #ifdef __GNUC__
-#pragma implementation "gmvl_corner_node"
+#pragma implementation
 #endif
 #include "gmvl_corner_node.h"
 

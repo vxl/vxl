@@ -2,7 +2,7 @@
   crossge@crd.ge.com
 */
 #ifdef __GNUC__
-#pragma implementation "gmvl_image_node"
+#pragma implementation
 #endif
 #include "gmvl_image_node.h"
 

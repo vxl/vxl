@@ -1,7 +1,7 @@
 #ifndef gst_polygon_2d_h_
 #define gst_polygon_2d_h_
 #ifdef __GNUC__
-#pragma interface "gst_polygon_2d"
+#pragma interface
 #endif
 /*
   crossge@crd.ge.com
@@ -16,7 +16,7 @@ class gst_polygon_2d : public vbl_ref_count
 {
 public:
 
-  // constructors and desctructors
+  // constructors and destructors
   gst_polygon_2d() {}
   ~gst_polygon_2d() {}
 
@@ -25,7 +25,7 @@ public:
   gst_edge_2d_ref operator[]( const int i) const { return edges_[i]; }
   void add( const gst_edge_2d_ref edge) { edges_.push_back( edge); }
 
-  // check closure of edges
+  //: check closure of edges
   //   returns false if the edges are not closed or
   //                 if there is more than one possible cycle
   bool check_validity() const;
@@ -44,7 +44,7 @@ public:
 
 protected:
 
-  // unordered, but oriented, list of edges
+  //: unordered, but oriented, list of edges
   vcl_vector<gst_edge_2d_ref> edges_;
 
 };

@@ -1,16 +1,16 @@
 #ifndef gtrl_triangulation_h_
 #define gtrl_triangulation_h_
 #ifdef __GNUC__
-#pragma interface "gtrl_triangulation"
+#pragma interface
 #endif
 /*
   crossge@crd.ge.com
 */
 
-// triangulates holeless polygons 
-
 #include <gtrl/gtrl_polygon.h>
 #include <gtrl/gtrl_triangle.h>
+
+//: triangulates holeless polygons 
 
 class gtrl_triangulation
 {

@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vil_colour_space"
+#pragma implementation
 #endif
 #include "vil_colour_space.h"
 #include <vcl_cstdlib.h>

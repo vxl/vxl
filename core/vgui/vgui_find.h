@@ -1,7 +1,7 @@
 #ifndef vgui_find_h_
 #define vgui_find_h_
 #ifdef __GNUC__
-#pragma interface "vgui_find"
+#pragma interface
 #endif
 /*
   fsm@robots.ox.ac.uk
@@ -10,7 +10,7 @@
 #include <vcl_string.h>
 #include <vgui/vgui_tableau_ref.h>
 
-// Searching for tableaux in the hiararchy.
+//: Searching for tableaux in the hierarchy.
 
 vgui_tableau_ref vgui_find_by_type_name(vgui_tableau_ref const& start, vcl_string const &tn, bool direction_down);
 

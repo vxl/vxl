@@ -2,7 +2,7 @@
   crossge@crd.ge.com
 */
 #ifdef __GNUC__
-#pragma implementation "gst_vertex_2d"
+#pragma implementation
 #endif
 
 

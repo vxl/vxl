@@ -2,7 +2,7 @@
   crossge@crd.ge.com
 */
 #ifdef __GNUC__
-#pragma implementation "gst_polygon_2d_operators"
+#pragma implementation
 #endif
 #include "gst_polygon_2d_operators.h"
 

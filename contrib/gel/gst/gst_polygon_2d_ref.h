@@ -1,7 +1,7 @@
 #ifndef gst_polygon_2d_ref_h_
 #define gst_polygon_2d_ref_h_
 #ifdef __GNUC__
-#pragma interface "gst_polygon_2d_ref"
+#pragma interface
 #endif
 /*
   crossge@crd.ge.com
@@ -12,5 +12,4 @@
 
 typedef vbl_smart_ptr<gst_polygon_2d> gst_polygon_2d_ref;
 
-
-#endif
+#endif // gst_polygon_2d_ref_h_

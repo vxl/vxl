@@ -1,7 +1,7 @@
 #ifndef mvl_psi_h_
 #define mvl_psi_h_
 #ifdef __GNUC__
-#pragma interface "mvl_psi"
+#pragma interface
 #endif
 /*
   fsm@robots.ox.ac.uk

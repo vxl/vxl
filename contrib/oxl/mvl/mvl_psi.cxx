@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "mvl_psi"
+#pragma implementation
 #endif
 #include "mvl_psi.h"
 

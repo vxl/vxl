@@ -2,7 +2,7 @@
   crossge@crd.ge.com
 */
 #ifdef __GNUC__
-#pragma implementation "gmvl_helpers"
+#pragma implementation
 #endif
 #include "gmvl_helpers.h"
 

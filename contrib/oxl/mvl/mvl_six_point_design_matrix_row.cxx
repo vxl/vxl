@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "mvl_six_point_design_matrix_row"
+#pragma implementation
 #endif
 #include "mvl_six_point_design_matrix_row.h"
 

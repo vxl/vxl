@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation "vgui_event_condition"
+#pragma implementation
 #endif
 
 #include "vgui_event_condition.h"

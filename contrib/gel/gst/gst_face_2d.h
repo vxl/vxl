@@ -1,20 +1,17 @@
 #ifndef gst_face_2d_h_
 #define gst_face_2d_h_
 #ifdef __GNUC__
-#pragma interface "gst_face_2d"
+#pragma interface
 #endif
 /*
   crossge@crd.ge.com
 */
-
-/* 
-This class defines a simplified topology structure in 2D.  It
-is light weight, and all interfacing should be done through the
-face class
-*/
-
 #include <vcl_vector.h>
 #include <gst/gst_polygon_2d_ref.h>
+
+//: This class defines a simplified topology structure in 2D.
+// It is light weight, and all interfacing should be done through the
+// face class
 
 class gst_face_2d
 {

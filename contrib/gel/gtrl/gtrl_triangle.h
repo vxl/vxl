@@ -1,7 +1,7 @@
 #ifndef gtrl_triangle_h_
 #define gtrl_triangle_h_
 #ifdef __GNUC__
-#pragma interface "gtrl_triangle"
+#pragma interface
 #endif
 /*
   crossge@crd.ge.com

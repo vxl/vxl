@@ -1,5 +1,5 @@
 #ifdef __GNUC__
-#pragma implementation "vcl_tree.h"
+#pragma implementation
 #endif
 
 #include <vcl_compiler.h>

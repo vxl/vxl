@@ -1,7 +1,7 @@
 #ifndef mvl_five_point_camera_pencil_h_
 #define mvl_five_point_camera_pencil_h_
 #ifdef __GNUC__
-#pragma interface "mvl_five_point_camera_pencil"
+#pragma interface
 #endif
 /*
   fsm@robots.ox.ac.uk
@@ -9,6 +9,7 @@
 
 #include <vnl/vnl_matrix.h>
 
+//:
 // Given 5 image points, compute the pencil of 
 // cameras which map the canonical projective
 // basis onto those points.

@@ -1,7 +1,7 @@
 #ifndef gmvl_connection_cache_h_
 #define gmvl_connection_cache_h_
 #ifdef __GNUC__
-#pragma interface "gmvl_connection_cache"
+#pragma interface
 #endif
 /*
   crossge@crd.ge.com
