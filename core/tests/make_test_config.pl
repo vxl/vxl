@@ -41,7 +41,7 @@ MAIN( test_config )
   // This test does not actually test anything.  Instead, it prints
   // configuration macros so they can be viewed through Dart.
 
-  vcl_cout << "All macro definitions are shown inside parenthesis\n";
+  vcl_cout << "All macro definitions are shown inside parenthesis\\n";
 
 EOF
 
@@ -220,6 +220,12 @@ for $var_exp (
   'VCL_KAI',
   'VCL_METRO_WORKS',
   'GNU_LIBSTDCXX_V3',
+
+  # from VXL CMake configuration files
+  'DART_BUILD',
+  'VXL_WARN_DEPRECATED',
+  'VXL_WARN_DEPRECATED_ONCE',
+  'VXL_WARN_DEPRECATED_ABORT',
 
   # language related
   '__cplusplus',

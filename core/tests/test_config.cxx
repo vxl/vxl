@@ -21,7 +21,7 @@ MAIN( test_config )
   // This test does not actually test anything.  Instead, it prints
   // configuration macros so they can be viewed through Dart.
 
-  vcl_cout << "All macro definitions are shown inside parenthesis" << vcl_endl;
+  vcl_cout << "All macro definitions are shown inside parenthesis\n";
 
   vcl_cout << "VCL_HAS_BOOL ";
 #ifdef VCL_HAS_BOOL
@@ -1247,17 +1247,17 @@ MAIN( test_config )
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VCL_VC71 ";
-#ifdef VCL_VC71
-  vcl_cout << "is set to " << quote(VCL_VC71);
+  vcl_cout << "VCL_VC70 ";
+#ifdef VCL_VC70
+  vcl_cout << "is set to " << quote(VCL_VC70);
 #else
   vcl_cout << "is not set";
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VCL_VC70 ";
-#ifdef VCL_VC70
-  vcl_cout << "is set to " << quote(VCL_VC70);
+  vcl_cout << "VCL_VC71 ";
+#ifdef VCL_VC71
+  vcl_cout << "is set to " << quote(VCL_VC71);
 #else
   vcl_cout << "is not set";
 #endif
@@ -1298,6 +1298,38 @@ MAIN( test_config )
   vcl_cout << "GNU_LIBSTDCXX_V3 ";
 #ifdef GNU_LIBSTDCXX_V3
   vcl_cout << "is set to " << quote(GNU_LIBSTDCXX_V3);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "DART_BUILD ";
+#ifdef DART_BUILD
+  vcl_cout << "is set to " << quote(DART_BUILD);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VXL_WARN_DEPRECATED ";
+#ifdef VXL_WARN_DEPRECATED
+  vcl_cout << "is set to " << quote(VXL_WARN_DEPRECATED);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VXL_WARN_DEPRECATED_ONCE ";
+#ifdef VXL_WARN_DEPRECATED_ONCE
+  vcl_cout << "is set to " << quote(VXL_WARN_DEPRECATED_ONCE);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VXL_WARN_DEPRECATED_ABORT ";
+#ifdef VXL_WARN_DEPRECATED_ABORT
+  vcl_cout << "is set to " << quote(VXL_WARN_DEPRECATED_ABORT);
 #else
   vcl_cout << "is not set";
 #endif
