@@ -85,25 +85,39 @@ transform( rgrl_transformation const& xform ) const
   face_ptr->error_proj_ = outer_product( face_ptr->normal_, face_ptr->normal_ );
 
   // transform scale
+  if( this->scale_ > 0.0 )
+    face_ptr->scale_ = this->transform_scale( xform );
+
+  return result_sptr;
+}
+
+double
+rgrl_feature_face_pt::
+transform_scale( rgrl_transformation const& xform ) const
+{
+  // transform scale
   vnl_vector<double> const& scaling = xform.scaling_factors();
   const unsigned dim = this->location_.size();
-  if ( this->scale_ && scaling.size() == dim ) {
-    // average them
+  double scale = 0.0;
+  
+  if ( this->scale_ > 0.0 && scaling.size() == dim ) {
+    // "average" them
     if ( dim == 2 )
-      face_ptr->scale_ = vcl_sqrt( scaling[0]*scaling[1] ) * this->scale_;
+      scale = vcl_sqrt( scaling[0]*scaling[1] ) * this->scale_;
     else {
       double prod_scale=1;
       for ( unsigned i=0; i < dim; ++i )
         prod_scale *= scaling[i];
-      face_ptr->scale_ = vcl_exp( vcl_log(prod_scale) / double(dim) ) * this->scale_;
+      scale = vcl_exp( vcl_log(prod_scale) / double(dim) ) * this->scale_;
     }
-  } else if ( this-> scale_ ) {
+  } else if ( this-> scale_ > 0.0 ) {
     WarningMacro( "This feature has non-zero scale value, but transformation has no scaling factors."
                   << "The scale of transformed features is NOT set." );
   }
 
-  return result_sptr;
+  return scale;
 }
+
 
 //:  Compute the signature weight between two features.
 double
@@ -124,7 +138,7 @@ absolute_signature_weight( rgrl_feature_sptr other ) const
     else
       scale_wgt = this->scale_ / face_ptr->scale_;
     // the weight change is too gradual, make it more steep
-    scale_wgt = scale_wgt * scale_wgt;
+    // scale_wgt = scale_wgt * scale_wgt;
   }
 
   return  dir_wgt* scale_wgt;

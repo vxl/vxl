@@ -51,6 +51,11 @@ class rgrl_feature_face_pt
   // Create an uninitialized face_pt of dimension dim
   //
   rgrl_feature_face_pt( );
+  
+  //: Apply transformation to the scale property
+  virtual double  
+  transform_scale( rgrl_transformation const& xform ) const;
+  
   //:  The location, the normal, and the error projector.
   vnl_vector<double> location_;
   vnl_vector<double> normal_;

@@ -76,7 +76,7 @@ transform( rgrl_transformation const& xform ) const
   //
   xform.map_location( this->location_, result->location_ );
   if( this->scale_ > 0.0 )
-    result->transform_scale( xform );
+    result->scale_ = this->transform_scale( xform );
   
   return result_sptr;
 }
@@ -126,7 +126,7 @@ absolute_signature_weight( rgrl_feature_sptr other ) const
     else
       scale_wgt = this->scale_ / pt_ptr->scale_;
     // the weight change is too gradual, make it more steep
-    scale_wgt = scale_wgt * scale_wgt;
+    // scale_wgt = scale_wgt * scale_wgt;
   }
 
   return  scale_wgt;
