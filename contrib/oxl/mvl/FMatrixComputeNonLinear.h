@@ -18,10 +18,7 @@
 
 #include <vcl_vector.h>
 #include <vnl/vnl_least_squares_function.h>
-#include <mvl/HomgPoint2D.h>
-#if defined(VCL_GCC_27)
-# include <mvl/HomgLine2D.h>
-#endif
+#include <vgl/vgl_homg_point_2d.h>
 #include <mvl/AffineMetric.h>
 #include <mvl/HomgNorm2D.h>
 #include <mvl/PairMatchSetCorner.h>
@@ -51,10 +48,10 @@ class FMatrixComputeNonLinear : public vnl_least_squares_function
   int p_, q_, r_;
   FMatrix F_orig_;
   bool one_;
-  vcl_vector<HomgPoint2D> basis1_;
-  vcl_vector<HomgPoint2D> basis2_;
-  vcl_vector<HomgPoint2D> points1_;
-  vcl_vector<HomgPoint2D> points2_;
+  vcl_vector<vgl_homg_point_2d<double> > basis1_;
+  vcl_vector<vgl_homg_point_2d<double> > basis2_;
+  vcl_vector<vgl_homg_point_2d<double> > points1_;
+  vcl_vector<vgl_homg_point_2d<double> > points2_;
 
   // Helpers-------------------------------------------------------------------
   void fmatrix_to_params(const FMatrix& F, vnl_vector<double>& params);

@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //:
-//  \file
+// \file
 
 #include "FMPlanarNonLinFun.h"
 
@@ -18,6 +18,7 @@
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 
+#include <vgl/vgl_homg_line_2d.h>
 #include <mvl/ImageMetric.h>
 #include <mvl/HomgOperator2D.h>
 #include <mvl/FMatrixPlanar.h>
@@ -30,16 +31,44 @@ const int FMPlanarNonLinFun_nparams = 9;
 FMPlanarNonLinFun::FMPlanarNonLinFun(const ImageMetric* image_metric1,
                                      const ImageMetric* image_metric2,
                                      double /*outlier_distance_squared*/,
+                                     vcl_vector<vgl_homg_point_2d<double> >& points1,
+                                     vcl_vector<vgl_homg_point_2d<double> >& points2)
+: vnl_least_squares_function(FMPlanarNonLinFun_nparams, points1.size(), no_gradient)
+, data_size_(points1.size())
+, points1_(points1)
+, points2_(points2)
+, normalized_(2*data_size_)
+, image_metric1_(image_metric1)
+, image_metric2_(image_metric2)
+{
+  // Form single array from both points1 and points2
+  vcl_vector<vgl_homg_point_2d<double> > points(points1);
+  for (unsigned i = 0; i < points2.size(); ++i)
+    points.push_back(points2[i]);
+
+  // Condition points
+  normalized_.normalize(points);
+
+  // Set up contitioning matrices
+  denorm_matrix_     = normalized_.get_C();
+  denorm_matrix_inv_ = normalized_.get_C_inverse();
+}
+
+FMPlanarNonLinFun::FMPlanarNonLinFun(const ImageMetric* image_metric1,
+                                     const ImageMetric* image_metric2,
+                                     double /*outlier_distance_squared*/,
                                      vcl_vector<HomgPoint2D>& points1,
                                      vcl_vector<HomgPoint2D>& points2):
    vnl_least_squares_function(FMPlanarNonLinFun_nparams, points1.size(), no_gradient),
   data_size_(points1.size()),
-  points1_(points1),
-  points2_(points2),
   normalized_(2*data_size_),
   image_metric1_(image_metric1),
   image_metric2_(image_metric2)
 {
+  for (unsigned i = 0; i < points1.size(); ++i)
+    points1_.push_back(vgl_homg_point_2d<double>(points1[i].x(),points1[i].y(),points1[i].w()));
+  for (unsigned i = 0; i < points2.size(); ++i)
+    points2_.push_back(vgl_homg_point_2d<double>(points2[i].x(),points2[i].y(),points2[i].w()));
   // Form single array
   vcl_vector<HomgPoint2D> points(points1);
   for (unsigned i = 0; i < points2.size(); ++i)
@@ -86,7 +115,7 @@ bool FMPlanarNonLinFun::compute(FMatrixPlanar* F)
 
   vcl_cerr << "fm_fmatrix_nagmin: accepted " << data_size_ << '/' << data_size_
            << " rms point-epipolar error " << lm.get_end_error() / vcl_sqrt(double(data_size_))
-           << vcl_endl;;
+           << vcl_endl;
 
   return true;
 }
@@ -101,13 +130,13 @@ void FMPlanarNonLinFun::f(vnl_vector<double> const& f_params, vnl_vector<double>
      FMatrixPlanar F(denorm_matrix_.transpose() * norm_F.get_matrix() * denorm_matrix_);
 
      for (int i = 0; i < data_size_; ++i) {
-          const HomgPoint2D& p1 = points1_[i];
-          const HomgPoint2D& p2 = points2_[i];
+          const vgl_homg_point_2d<double>& p1 = points1_[i];
+          const vgl_homg_point_2d<double>& p2 = points2_[i];
 
-          HomgLine2D l12 = F.image2_epipolar_line(p1);
+          vgl_homg_line_2d<double> l12 = F.image2_epipolar_line(p1);
           double r1 = image_metric2_.perp_dist_squared(p2, l12);
 
-          HomgLine2D l21 = F.image1_epipolar_line(p2);
+          vgl_homg_line_2d<double> l21 = F.image1_epipolar_line(p2);
           double r2 = image_metric1_.perp_dist_squared(p1, l21);
 
           fx[i] = vcl_sqrt((r1 + r2) / 2.0);
@@ -159,7 +188,6 @@ void FMPlanarNonLinFun::fmatrix_to_params_mna(const FMatrixPlanar& F,
   if (vcl_fabs(symm_eig.D(1,1)) > 1e-12)
     vcl_cerr << "FMPlanarNonLinFun: WARNING: middle eigenvalue not 0: " << symm_eig.D << vcl_endl;
 
-
   vnl_vector<double> v0(symm_eig.get_eigenvector(0));
   vnl_vector<double> v1(symm_eig.get_eigenvector(2));
 
@@ -197,9 +225,9 @@ void FMPlanarNonLinFun::fmatrix_to_params_mna(const FMatrixPlanar& F,
     FMatrixPlanar back = params_to_fmatrix_mna(params);
     double norm = vnl_matops::homg_diff(back.get_matrix(), F.get_matrix());
     if (norm > 1e-12) {
-      vcl_cerr << "FMPlanarNonLinFun: WARNING! deparameterization diff = " << norm << vcl_endl;
-      vcl_cerr << "b = [" << back << "];\n";
-      vcl_cerr << "n = [" << F << "];\n";
+      vcl_cerr << "FMPlanarNonLinFun: WARNING! deparameterization diff = " << norm << vcl_endl
+               << "b = [" << back << "];\n"
+               << "n = [" << F << "];\n";
     }
   }
 #endif
@@ -249,7 +277,6 @@ void FMPlanarNonLinFun::fmatrix_to_params_awf(const FMatrixPlanar& F, vnl_vector
   if (vcl_fabs(symm_eig.D(1,1)) > 1e-12)
     vcl_cerr << "FMPlanarNonLinFun: WARNING: middle eigenvalue not 0: " << symm_eig.D << vcl_endl;
 
-
   vnl_vector<double> v0(symm_eig.get_eigenvector(0));
   vnl_vector<double> v1(symm_eig.get_eigenvector(2));
 
@@ -282,9 +309,9 @@ void FMPlanarNonLinFun::fmatrix_to_params_awf(const FMatrixPlanar& F, vnl_vector
     FMatrixPlanar back = params_to_fmatrix_awf(params);
     double norm = vnl_matops::homg_diff(back.get_matrix().as_ref(), F.get_matrix().as_ref());
     if (norm > 1e-12) {
-      vcl_cerr << "FMPlanarNonLinFun: WARNING! deparameterization diff = " << norm << vcl_endl;
-      vcl_cerr << "b = [" << back << "];\n";
-      vcl_cerr << "n = [" << F << "];\n";
+      vcl_cerr << "FMPlanarNonLinFun: WARNING! deparameterization diff = " << norm << vcl_endl
+               << "b = [" << back << "];\n"
+               << "n = [" << F << "];\n";
     }
   }
 }

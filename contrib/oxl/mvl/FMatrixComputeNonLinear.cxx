@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //:
-//  \file
+// \file
 
 #include "FMatrixComputeNonLinear.h"
 
@@ -14,9 +14,9 @@
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>
 #include <mvl/HomgNorm2D.h>
+#include <mvl/HomgPoint2D.h>
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgInterestPointSet.h>
-#include <mvl/HomgOperator2D.h>
 #include <mvl/FMatrix.h>
 #include <mvl/FManifoldProject.h>
 #include <mvl/FMatrixCompute7Point.h>
@@ -49,13 +49,13 @@ FMatrixComputeNonLinear::FMatrixComputeNonLinear(PairMatchSetCorner* matches) :
   for (int a = 0; a < data_size_; a++) {
     vnl_double_2 temp1;
     temp1 = points1->get_2d(point1_int[a]);
-    points1_[a] = HomgPoint2D(temp1[0], temp1[1], 1.0);
+    points1_[a] = vgl_homg_point_2d<double>(temp1[0], temp1[1], 1.0);
   }
 
   for (int a = 0; a < data_size_; a++) {
     vnl_double_2 temp2;
     temp2 = points2->get_2d(point2_int[a]);
-    points2_[a] = HomgPoint2D(temp2[0], temp2[1], 1.0);
+    points2_[a] = vgl_homg_point_2d<double>(temp2[0], temp2[1], 1.0);
   }
 }
 
@@ -64,7 +64,7 @@ FMatrixComputeNonLinear::FMatrixComputeNonLinear(PairMatchSetCorner* matches) :
 
 bool FMatrixComputeNonLinear::compute_basis(FMatrix* F, vcl_vector<int> basis) {
   one_ = false;
-  vcl_vector<HomgPoint2D> basis1(7), basis2(7);
+  vcl_vector<vgl_homg_point_2d<double> > basis1(7), basis2(7);
   for (int i = 0; i < 7; i++) {
     int other = matches_.get_match_12(basis[i]);
     if (other == -1)
@@ -72,8 +72,8 @@ bool FMatrixComputeNonLinear::compute_basis(FMatrix* F, vcl_vector<int> basis) {
     else {
       vnl_double_2 p1 = matches_.get_corners1()->get_2d(basis[i]);
       vnl_double_2 p2 = matches_.get_corners2()->get_2d(other);
-        basis1[i] = HomgPoint2D(p1[0], p1[1], 1.0);
-        basis2[i] = HomgPoint2D(p2[0], p2[1], 1.0);
+        basis1[i] = vgl_homg_point_2d<double>(p1[0], p1[1], 1.0);
+        basis2[i] = vgl_homg_point_2d<double>(p2[0], p2[1], 1.0);
     }
   }
   basis1_ = basis1;
@@ -134,14 +134,9 @@ bool FMatrixComputeNonLinear::compute(FMatrix* F)
             vcl_cerr << "so_far : " << so_far << vcl_endl;
             norm_F = params_to_fmatrix(f_params);
             F_final->set(norm_F);
-            HomgPoint2D e1, e2;
-            F_final->get_epipoles(&e1, &e2);
-            double x1, y1, x2, y2;
-            e1.get_nonhomogeneous(x1, y1);
-            e2.get_nonhomogeneous(x2, y2);
-            HomgPoint2D c1(x1, y1, 1.0);
-            HomgPoint2D c2(x2, y2, 1.0);
-            vcl_cerr << "Epipole locations 1 : " << c1 << " 2 : " << c2 << vcl_endl;
+            vgl_homg_point_2d<double> e1, e2;
+            F_final->get_epipoles(e1, e2);
+            vcl_cerr << "Epipole locations 1 : " << e1 << " 2 : " << e2 << '\n';
           }
         }
       }
@@ -173,14 +168,9 @@ bool FMatrixComputeNonLinear::compute(FMatrix* F)
       norm_F = params_to_fmatrix(f_params);
       F_final->set(norm_F);
       lm.diagnose_outcome();
-      HomgPoint2D e1, e2;
-      F_final->get_epipoles(&e1, &e2);
-      double x1, y1, x2, y2;
-      e1.get_nonhomogeneous(x1, y1);
-      e2.get_nonhomogeneous(x2, y2);
-      HomgPoint2D c1(x1, y1, 1.0);
-      HomgPoint2D c2(x2, y2, 1.0);
-      vcl_cerr << "Epipole locations 1 : " << c1 << " 2 : " << c2 << vcl_endl;
+      vgl_homg_point_2d<double> e1, e2;
+      F_final->get_epipoles(e1, e2);
+      vcl_cerr << "Epipole locations 1 : " << e1 << " 2 : " << e2 << '\n';
     }
   }
   F = F_final;
@@ -225,9 +215,9 @@ void FMatrixComputeNonLinear::fmatrix_to_params(const FMatrix& F, vnl_vector<dou
       c = -F.get(r2, c1);
       break;
   }
-  HomgPoint2D one, two;
+  vgl_homg_point_2d<double> one, two;
   vnl_double_2 e1, e2;
-  F.get_epipoles(&one, &two);
+  F.get_epipoles(one, two);
   vnl_double_3 e1h(one.x(), one.y(), one.w());
   vnl_double_3 e2h(two.x(), two.y(), two.w());
   e1h = e1h.normalize();
@@ -336,19 +326,18 @@ FMatrix FMatrixComputeNonLinear::params_to_fmatrix(const vnl_vector<double>& par
     ret.set(ref);
     return ret;
   } else {
-    vcl_vector<HomgPoint2D> new_points1(7), new_points2(7);
-    HomgPoint2D e1, e2;
-    F_orig_.get_epipoles(&e1, &e2);
-    vnl_double_2 e1n = e1.get_double2();
-    vnl_double_2 e2n = e2.get_double2();
-    double grads1, grads2;
+    vcl_vector<vgl_homg_point_2d<double> > new_points1(7);
+    vgl_homg_point_2d<double> e1, e2;
+    F_orig_.get_epipoles(e1, e2);
+    double e1nx = e1.x()/e1.w(), e1ny = e1.y()/e1.w();
+//  double e2nx = e2.x()/e2.w(), e2ny = e2.y()/e2.w();
     for (int i = 0; i < 7; i++) {
-      vnl_double_2 t1 = basis1_[i].get_double2();
-      vnl_double_2 t2 = basis2_[i].get_double2();
-      grads1 = -(e1n[1] - t1[1])/(e1n[0] - t1[0]);
-      grads2 = -(e2n[1] - t2[1])/(e2n[0] - t2[0]);
-      new_points1[i] = HomgPoint2D(params[i]*(1/grads1) + t1[0], params[i]*grads1 + t1[1], 1.0);
-      new_points2[i] = HomgPoint2D(params[i]*(1/grads2) + t2[0], params[i]*grads2 + t2[1], 1.0);
+      double t1x = basis1_[i].x()/basis1_[i].w(), t1y = basis1_[i].y()/basis1_[i].w();
+//    double t2x = basis2_[i].x()/basis2_[i].w(), t2y = basis2_[i].y()/basis2_[i].w();
+      double grads1 = -(e1ny - t1y)/(e1nx - t1x);
+//    double grads2 = -(e2ny - t2y)/(e2nx - t2x);
+      new_points1[i] = vgl_homg_point_2d<double>(params[i]/grads1 + t1x, params[i]*grads1 + t1y, 1.0);
+//    new_points2[i] = vgl_homg_point_2d<double>(params[i]/grads2 + t2x, params[i]*grads2 + t2y, 1.0);
     }
     FMatrixCompute7Point* computor = new FMatrixCompute7Point(true, true);
     vcl_vector<FMatrix*> ref;
@@ -403,7 +392,17 @@ void FMatrixComputeNonLinear::get_plan(int &r1, int &c1, int &r2, int &c2) {
   }
 }
 
-vnl_vector<double> FMatrixComputeNonLinear::calculate_residuals(FMatrix* F) {
+static double perp_dist_squared(vgl_homg_point_2d<double> const& p,
+                                vgl_homg_line_2d <double> const& l)
+{
+  double r = l.a()*p.x() + l.b()*p.y() + l.c()*p.w();
+  if (r == 0) return 0.0;
+  r /= p.w();
+  return r * r / (l.a()*l.a() + l.b()*l.b());
+}
+
+vnl_vector<double> FMatrixComputeNonLinear::calculate_residuals(FMatrix* F)
+{
   vnl_vector<double> fx(data_size_);
   vnl_matrix<double> f(3, 3, 0.0);
   F->get(&f);
@@ -416,20 +415,19 @@ vnl_vector<double> FMatrixComputeNonLinear::calculate_residuals(FMatrix* F) {
   vnl_matrix<double> pre2 = f*z*ft;
 #endif
 
-  for (int i = 0; i < data_size_; i++) {
-    HomgPoint2D one = points1_[i], two = points2_[i];
+  for (int i = 0; i < data_size_; i++)
+  {
+    vgl_homg_point_2d<double> one = points1_[i], two = points2_[i];
     double t = 0.0;
-    HomgLine2D l1 = F->image2_epipolar_line(one);
-    HomgLine2D l2 = F->image1_epipolar_line(two);
-    t += HomgOperator2D::perp_dist_squared(two, l1);
-    t += HomgOperator2D::perp_dist_squared(one, l2);
+    vgl_homg_line_2d<double> l1 = F->image2_epipolar_line(one);
+    vgl_homg_line_2d<double> l2 = F->image1_epipolar_line(two);
+    t += perp_dist_squared(two, l1);
+    t += perp_dist_squared(one, l2);
 #if 0
-    vnl_double_2 od = one.get_double2();
-    vnl_double_2 td = two.get_double2();
-    vnl_vector<double> oi(3, 1.0); oi[0]=od[0]; oi[1]=od[1];
-    vnl_vector<double> ti(3, 1.0); ti[0]=td[0]; ti[1]=td[1];
-    vnl_vector<double> p1 = ti*pre1;
-    vnl_vector<double> p2 = oi*pre2;
+    vnl_double_3 oi(1.0); oi[0]=one.x()/one.w(); oi[1]=one.y()/one.w();
+    vnl_double_3 ti(1.0); ti[0]=two.x()/two.w(); ti[1]=two.x()/two.w();
+    vnl_double_3 p1 = ti*pre1;
+    vnl_double_3 p2 = oi*pre2;
     double p11 = p1[0]*oi[0] + p1[1]*oi[1] + p1[2]*oi[2];
     double p21 = p2[0]*ti[0] + p2[1]*ti[1] + p2[2]*ti[2];
     double factor = 1.0/ p11 + 1.0/ p21;
