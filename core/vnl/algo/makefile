@@ -67,6 +67,7 @@ MANPAGE_SOURCES += vnl_fft_prime_factors.txx
 # stuff
 MANPAGE_SOURCES += vnl_convolve.txx
 MANPAGE_SOURCES += vnl_determinant.txx
+SOURCES += vnl_determinant.cxx
 SOURCES += vnl_chi_squared.cxx
 SOURCES += vnl_gaussian_kernel_1d.cxx
 MANPAGE_SOURCES += vnl_adjugate.txx
