@@ -16,6 +16,7 @@ ADD_EXECUTABLE( vil2_test_driver
   test_resample_bilin.cxx
   test_algo_gauss_reduce.cxx
   test_algo_convolve_1d.cxx
+  test_algo_correlate_1d.cxx
   test_algo_convolve_2d.cxx
   test_algo_exp_filter_1d.cxx
   test_algo_gauss_filter.cxx
@@ -91,4 +92,5 @@ ADD_TEST( vil2_mil_gauss_general_timings vil2_mil_gauss_general_timings )
 ADD_EXECUTABLE( vil2_vil_compare_function_timings vil2_vil_compare_function_timings.cxx)
 TARGET_LINK_LIBRARIES( vil2_vil_compare_function_timings vil2 mbl vcl )
 ADD_TEST( vil2_vil_compare_function_timings vil2_vil_compare_function_timings )
+
 

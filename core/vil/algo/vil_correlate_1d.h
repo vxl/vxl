@@ -1,16 +1,10 @@
-// This is mul/vil2/algo/vil2_convolve_1d.h
-#ifndef vil2_convolve_1d_h_
-#define vil2_convolve_1d_h_
+// This is mul/vil2/algo/vil2_correlate_1d.h
+#ifndef vil2_correlate_1d_h_
+#define vil2_correlate_1d_h_
 //:
 //  \file
 //  \brief 1D Convolution with cunning boundary options
-//  \author Tim Cootes, Ian Scott (based on work by fsm)
-// Note. The convolution operation is defined by
-//    (f*g)(x) = \int f(x-y) g(y) dy,
-// i.e. the kernel is reflected before the integration is performed.
-// If you don't want this to happen, the behaviour you want is not
-// called "convolution". So don't break the convolution routines in
-// that particular way.
+//  \author Tim Cootes (based on work by fsm)
 
 #include <vcl_compiler.h>
 #include <vcl_algorithm.h>
@@ -20,64 +14,12 @@
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_image_resource.h>
 #include <vil2/vil2_property.h>
+#include <vil2/algo/vil2_convolve_1d.h>
 
-
-//: Available options for boundary behavior
-// When convolving a finite signal the boundaries may be
-// treated in various ways which can often be expressed in terms
-// of ways to extend the signal outside its original range.
-enum vil2_convolve_boundary_option
-{
-  // Do not fill destination edges at all
-  // i.e. leave them unchanged.
-  vil2_convolve_ignore_edge, //!< Do not fill destination edges at all.
-  // Do not to extend the signal, but pad with zeros.
-  //     |                               |
-  // K                       ----*-------
-  // in   ... ---------------------------
-  // out  ... --------------------0000000
-  vil2_convolve_no_extend, //!< Do not to extend the signal, but pad with zeros.
-
-  // Zero-extend the input signal beyond the boundary.
-  //     |                               |
-  // K                              ----*--------
-  // in   ... ---------------------------000000000000...
-  // out  ... ---------------------------
-  vil2_convolve_zero_extend, //!< Zero-extend the input signal beyond the boundary.
-
-  // Extend the signal to be constant beyond the boundary
-  //     |                               |
-  // K                              ----*--------
-  // in   ... --------------------------aaaaaaaaaaaaa...
-  // out  ... ---------------------------
-  vil2_convolve_constant_extend, //!< Extend the signal to be constant beyond the boundary.
-
-  // Extend the signal periodically beyond the boundary.
-  //     |                               |
-  // K                              ----*--------
-  // in   abc...-------------------------abc...------..
-  // out  ... ---------------------------
-  vil2_convolve_periodic_extend, //!< Extend the signal periodically beyond the boundary.
-
-  // Extend the signal by reflection about the boundary.
-  //     |                               |
-  // K                               ----*--------
-  // in   ... -------------------...edcbabcde...
-  // out  ... ---------------------------
-  vil2_convolve_reflect_extend, //!< Extend the signal by reflection about the boundary.
-
-  // This one is slightly different. The input signal is not
-  // extended in any way, but the kernel is trimmed to allow
-  // convolution to proceed up to the boundary and reweighed
-  // to keep the total area the same.
-  // *** may not work with kernels which take negative values.
-  vil2_convolve_trim //!< Kernel is trimmed and reweighed, to allow convolution up to boundary.
-};
-
-//: Convolve edge with kernel[x*kstep] x in [k_lo,k_hi] (k_hi>=0)
-//  Fills only edge: dest[i], i=0..(k_hi-1)
+//: correlate edge with kernel[x*kstep] x in [k_lo,k_hi] (k_lo<=0)
+//  Fills only edge: dest[i], i=0..(-k_lo-1)
 template <class srcT, class destT, class kernelT, class accumT>
-inline void vil2_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_step,
+inline void vil2_correlate_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_step,
                                   destT* dest, vcl_ptrdiff_t d_step,
                                   const kernelT* kernel,
                                   vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
@@ -88,18 +30,18 @@ inline void vil2_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_s
   if (option==vil2_convolve_no_extend)
   {
     // Initialise first elements of row to zero
-    for (int i=-k_hi;i<0;++i,dest+=d_step)
+    for (int i=k_lo;i<0;++i,dest+=d_step)
       *dest = 0;
   }
   else if (option==vil2_convolve_zero_extend)
   {
     // Assume src[i]==0 for i<0
-    for (int i=-k_hi+1;i<=0;++i,dest+=d_step,src+=s_step)
+    for (int i=k_lo+1;i<=0;++i,dest+=d_step,src+=s_step)
     {
       accumT sum = 0;
       const srcT* s = src;
-      const kernelT* k = kernel-i*kstep;
-      for (int j=i;j<=-k_lo;++j,s+=s_step,k-=kstep)
+      const kernelT* k = kernel+i*kstep;
+      for (int j=i;j<=k_hi;++j,s+=s_step,k+=kstep)
         sum+= (accumT)((*s)*(*k));
       *dest=(destT)sum;
     }
@@ -107,42 +49,42 @@ inline void vil2_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_s
   else if (option==vil2_convolve_constant_extend)
   {
     // Assume src[i]=src[0] for i<0
-    int i_max = 1+k_hi;
+    int i_max = 1-k_lo;
     for (int i=0;i<=i_max;++i)
     {
       accumT sum=0;
-      for (int j=-k_hi;j<=-k_lo;++j)
+      for (int j=k_lo;j<=k_hi;++j)
       {
-        if ((i+j)<0) sum+=(accumT)(src[0]*kernel[j*(-kstep)]);
-        else         sum+=(accumT)(src[(i+j)*s_step]*kernel[j*(-kstep)]);
-      }
-      dest[i*d_step]=(destT)sum;
-    }
-  }
-  else if (option==vil2_convolve_reflect_extend)
-  {
-    // Assume src[i]=src[0] for i<0
-    int i_max = -1+k_hi;
-    for (int i=0;i<=i_max;++i)
-    {
-      accumT sum=0;
-      for (int j=-k_hi;j<=-k_lo;++j)
-      {
-        if ((i+j)<0) sum+=(accumT)(src[0]*kernel[j*(-kstep)]);
-        else         sum+=(accumT)(src[(i+j)*s_step]*kernel[j*(-kstep)]);
+        if ((i+j)<0) sum+=(accumT)(src[0]*kernel[j*kstep]);
+        else         sum+=(accumT)(src[(i+j)*s_step]*kernel[j*kstep]);
       }
       dest[i*d_step]=(destT)sum;
     }
   }
   else if (option==vil2_convolve_periodic_extend)
   {
-    // Assume src[i]=src[n+i] for i<0
-    int i_max = -1+k_hi;
+    // Assume src[i]=src[0] for i<0
+    int i_max = -1-k_lo;
     for (int i=0;i<=i_max;++i)
     {
       accumT sum=0;
-      for (int j=k_hi;j<=k_lo;--j)
-        sum+=(accumT)(src[((i-j+n)%n)*s_step]*kernel[j*kstep]);
+      for (int j=k_lo;j<=k_hi;++j)
+      {
+        if ((i+j)<0) sum+=(accumT)(src[0]*kernel[j*kstep]);
+        else         sum+=(accumT)(src[(i+j)*s_step]*kernel[j*kstep]);
+      }
+      dest[i*d_step]=(destT)sum;
+    }
+  }
+  else if (option==vil2_convolve_reflect_extend)
+  {
+    // Assume src[i]=src[n+i] for i<0
+    int i_max = -1-k_lo;
+    for (int i=0;i<=i_max;++i)
+    {
+      accumT sum=0;
+      for (int j=k_lo;j<=k_hi;++j)
+        sum+=(accumT)(src[((i+j+n)%n)*s_step]*kernel[j*kstep]);
       dest[i*d_step]=(destT)sum;
     }
   }
@@ -150,35 +92,35 @@ inline void vil2_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_s
   {
     // Truncate and reweigh kernel
     accumT k_sum_all=0;
-    for (int j=-k_hi;j<=-k_lo;++j) k_sum_all+=(accumT)(kernel[j*(-kstep)]);
+    for (int j=k_lo;j<=k_hi;++j) k_sum_all+=(accumT)(kernel[j*kstep]);
 
-    int i_max = -1+k_hi;
+    int i_max = -1-k_lo;
     for (int i=0;i<=i_max;++i)
     {
       accumT sum=0;
       accumT k_sum=0;
       // Sum elements which overlap src
       // ie i+j>=0  (so j starts at -i)
-      for (int j=-i;j<=-k_lo;++j)
+      for (int j=-i;j<=k_hi;++j)
       {
-        sum+=(accumT)(src[(i+j)*s_step]*kernel[j*(-kstep)]);
-        k_sum += (accumT)(kernel[j*(-kstep)]);
+        sum+=(accumT)(src[(i+j)*s_step]*kernel[j*kstep]);
+        k_sum += (accumT)(kernel[j*kstep]);
       }
       dest[i*d_step]=(destT)(sum*k_sum_all/k_sum);
     }
   }
   else
   {
-    vcl_cout<<"vil2_convolve_edge_1d: ";
+    vcl_cout<<"vil2_correlate_edge_1d: ";
     vcl_cout<<"Sorry, can't deal with supplied edge option.\n";
     vcl_abort();
   }
 }
 
-//: Convolve kernel[x] (x in [k_lo,k_hi]) with srcT
+//: correlate kernel[x] (x in [k_lo,k_hi]) with srcT
 // Assumes dest and src same size (nx)
 template <class srcT, class destT, class kernelT, class accumT>
-inline void vil2_convolve_1d(const srcT* src0, unsigned nx, vcl_ptrdiff_t s_step,
+inline void vil2_correlate_1d(const srcT* src0, unsigned nx, vcl_ptrdiff_t s_step,
                              destT* dest0, vcl_ptrdiff_t d_step,
                              const kernelT* kernel,
                              vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
@@ -186,11 +128,11 @@ inline void vil2_convolve_1d(const srcT* src0, unsigned nx, vcl_ptrdiff_t s_step
                              vil2_convolve_boundary_option start_option,
                              vil2_convolve_boundary_option end_option)
 {
-  // Deal with start (fill elements 0..1+k_hi of dest)
-  vil2_convolve_edge_1d(src0,nx,s_step,dest0,d_step,kernel,k_lo,k_hi,1,ac,start_option);
+  // Deal with start (fill elements 0..1-k_lo of dest)
+  vil2_correlate_edge_1d(src0,nx,s_step,dest0,d_step,kernel,k_lo,k_hi,1,ac,start_option);
 
-  const kernelT* k_rbegin = kernel+k_hi;
-  const kernelT* k_rend   = kernel+k_lo-1;
+  const kernelT* k_begin = kernel+k_lo;
+  const kernelT* k_end   = kernel+k_hi+1;
   const srcT* src = src0;
 
   destT* end_dest = dest0 + d_step*(int(nx)-k_hi);
@@ -198,23 +140,23 @@ inline void vil2_convolve_1d(const srcT* src0, unsigned nx, vcl_ptrdiff_t s_step
   {
     accumT sum = 0;
     const srcT* s= src;
-    for (const kernelT *k = k_rbegin;k!=k_rend;--k,s+=s_step) sum+= (accumT)((*k)*(*s));
+    for (const kernelT *k = k_begin;k!=k_end; ++k,s+=s_step) sum+= (accumT)((*k)*(*s));
     *dest = destT(sum);
   }
 
   // Deal with end  (reflect data and kernel!)
-  vil2_convolve_edge_1d(src0+(nx-1)*s_step,nx,-s_step,
+  vil2_correlate_edge_1d(src0+(nx-1)*s_step,nx,-s_step,
                         dest0+(nx-1)*d_step,-d_step,
                         kernel,-k_hi,-k_lo,-1,ac,end_option);
 }
 
-//: Convolve kernel[i] (i in [k_lo,k_hi]) with srcT in i-direction
-// On exit dest_im(i,j) = sum src(i-x,j)*kernel(x)  (x=k_lo..k_hi)
+//: correlate kernel[i] (i in [k_lo,k_hi]) with srcT in i-direction
+// On exit dest_im(i,j) = sum src(i+x,j)*kernel(x)  (x=k_lo..k_hi)
 // \param kernel should point to tap 0.
 // \param dest_im will be resized to size of src_im.
 // \relates vil2_image_view
 template <class srcT, class destT, class kernelT, class accumT>
-inline void vil2_convolve_1d(const vil2_image_view<srcT>& src_im,
+inline void vil2_correlate_1d(const vil2_image_view<srcT>& src_im,
                              vil2_image_view<destT>& dest_im,
                              const kernelT* kernel,
                              vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
@@ -237,13 +179,13 @@ inline void vil2_convolve_1d(const vil2_image_view<srcT>& src_im,
 
     // Apply convolution to each row in turn
     for (unsigned int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
-      vil2_convolve_1d(src_row,ni,s_istep,  dest_row,d_istep,
+      vil2_correlate_1d(src_row,ni,s_istep,  dest_row,d_istep,
                        kernel,k_lo,k_hi,ac,start_option,end_option);
   }
 }
 
 template <class destT, class kernelT, class accumT>
-inline vil2_image_resource_sptr vil2_convolve_1d(
+inline vil2_image_resource_sptr vil2_correlate_1d(
                const vil2_image_resource_sptr& src_im,
                const destT dt,
                const kernelT* kernel, int k_lo, int k_hi,
@@ -251,13 +193,13 @@ inline vil2_image_resource_sptr vil2_convolve_1d(
                vil2_convolve_boundary_option start_option,
                vil2_convolve_boundary_option end_option);
 
-//: A resource adaptor that behaves like a convolved version of its input
+//: A resource adaptor that behaves like a correlated version of its input
 template <class kernelT, class accumT, class destT>
-class vil2_convolve_1d_resource : public vil2_image_resource
+class vil2_correlate_1d_resource : public vil2_image_resource
 {
-  //: Construct a convolve filter.
-  // You can't create one of these directly, use vil2_convolve_1d instead
-  vil2_convolve_1d_resource(const vil2_image_resource_sptr& src,
+  //: Construct a correlate filter.
+  // You can't create one of these directly, use vil2_correlate_1d instead
+  vil2_correlate_1d_resource(const vil2_image_resource_sptr& src,
                             const kernelT* kernel, int k_lo, int k_hi,
                             vil2_convolve_boundary_option start_option,
                             vil2_convolve_boundary_option end_option)  :
@@ -269,7 +211,7 @@ class vil2_convolve_1d_resource : public vil2_image_resource
               end_option != vil2_convolve_periodic_extend);
     }
 
-  friend vil2_image_resource_sptr vil2_convolve_1d VCL_NULL_TMPL_ARGS (
+  friend vil2_image_resource_sptr vil2_correlate_1d VCL_NULL_TMPL_ARGS (
     const vil2_image_resource_sptr& src_im, const destT dt, const kernelT* kernel,
     int k_lo, int k_hi, const accumT ac,
     vil2_convolve_boundary_option start_option,
@@ -290,7 +232,7 @@ class vil2_convolve_1d_resource : public vil2_image_resource
     {
 #define macro( F , T ) \
       case F : \
-        vil2_convolve_1d(static_cast<vil2_image_view<T >&>(*vs),dest, \
+        vil2_correlate_1d(static_cast<vil2_image_view<T >&>(*vs),dest, \
           kernel_, klo_, khi_, accumT(), start_option_, end_option_); \
         return new vil2_image_view<destT>(vil2_crop(dest, lboundary, ni, 0, nj));
 
@@ -320,8 +262,8 @@ class vil2_convolve_1d_resource : public vil2_image_resource
   //: Put the data in this view back into the image source.
   virtual bool put_view(const vil2_image_view_base& im, unsigned i0, unsigned j0)
   {
-    vcl_cerr << "WARNING: vil2_convolve_1d_resource::put_back\n"
-             << "\tYou can't push data back into a convolve filter.\n";
+    vcl_cerr << "WARNING: vil2_correlate_1d_resource::put_back\n"
+             << "\tYou can't push data back into a correlate filter.\n";
     return false;
   }
 
@@ -341,11 +283,11 @@ class vil2_convolve_1d_resource : public vil2_image_resource
   vil2_convolve_boundary_option start_option_, end_option_;
 };
 
-//: Create an image_resource object which convolve kernel[x] x in [k_lo,k_hi] with srcT
+//: Create an image_resource object which correlate kernel[x] x in [k_lo,k_hi] with srcT
 // \param kernel should point to tap 0.
 // \relates vil2_image_resource
 template <class destT, class kernelT, class accumT>
-inline vil2_image_resource_sptr vil2_convolve_1d(
+inline vil2_image_resource_sptr vil2_correlate_1d(
                          const vil2_image_resource_sptr& src_im,
                          const destT dt,
                          const kernelT* kernel, int k_lo, int k_hi,
@@ -353,9 +295,8 @@ inline vil2_image_resource_sptr vil2_convolve_1d(
                          vil2_convolve_boundary_option start_option,
                          vil2_convolve_boundary_option end_option)
 {
-  return new vil2_convolve_1d_resource<kernelT, accumT, destT>(src_im,
+  return new vil2_correlate_1d_resource<kernelT, accumT, destT>(src_im,
                               kernel, k_lo, k_hi, start_option, end_option);
 }
 
-#endif // vil2_convolve_1d_h_
-
+#endif // vil2_correlate_1d_h_
