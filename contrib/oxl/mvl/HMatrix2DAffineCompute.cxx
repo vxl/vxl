@@ -19,12 +19,6 @@
 #include "HMatrix2DAffineCompute.h"
 
 //
-// constructor and destructor.
-//
-HMatrix2DAffineCompute::HMatrix2DAffineCompute(void) : HMatrix2DCompute() { }
-HMatrix2DAffineCompute::~HMatrix2DAffineCompute() { }
-
-//
 //
 //
 #include <mvl/PairMatchSetCorner.h>

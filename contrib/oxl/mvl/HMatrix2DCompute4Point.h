@@ -27,10 +27,12 @@
 #include "HMatrix2DCompute.h"
 
 class HMatrix2DCompute4Point : public HMatrix2DCompute {
-//--------------------------------------------------------------------------------
+public:
+  int minimum_number_of_correspondences() const { return 4; }
+  
 protected:
-  bool compute_p(const PointArray &,
-                 const PointArray &,
+  bool compute_p(PointArray const &,
+                 PointArray const &,
                  HMatrix2D *);
 };
 
