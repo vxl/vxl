@@ -27,23 +27,9 @@ class vgl_homg_point_3d;
 //: Represents a homogeneous 3D plane
 template <class Type>
 class vgl_homg_plane_3d {
-  
-  // PUBLIC INTERFACE--------------------------------------------------------
-  
 public:
+  vgl_homg_plane_3d () {}
   
-  // Constructors/Initializers/Destructors-----------------------------------
-  
-  // Default constructor  
-  // vgl_homg_plane_3d () {}
-  
-  // Default copy constructor  
-  // vgl_homg_plane_3d (const vgl_homg_plane_3d<Type>& that) {
-  //   set(that.nx(),that.ny(),that.nz(),that.d());
-  // }
-  
-//unimp  vgl_homg_plane_3d<Type> (vgl_plane_3d<Type> const& p);
-
   // -- Construct from four Types.
   vgl_homg_plane_3d (Type nx, Type ny, Type nz, Type d) { set(nx,ny,nz,d); }
   
@@ -58,15 +44,6 @@ public:
   // -- Construct from Normal and a point
   vgl_homg_plane_3d (const Type normal[3], const vgl_homg_point_3d<Type>& p);
 
-  // Default destructor
-  // ~vgl_homg_plane_3d () {}
-  
-  // Default assignment operator
-  // vgl_homg_plane_3d<Type>& operator=(const vgl_homg_plane_3d<Type>& that){
-  //   set(that.nx(),that.ny(),that.nz(),that.d());
-  //   return *this;
-  // }
-  
   // Data Access-------------------------------------------------------------
   
   inline Type nx() const {return data_[0];}
@@ -74,8 +51,7 @@ public:
   inline Type nz() const {return data_[2];}
   inline Type d() const {return data_[3];}
 
-  // iterators. suggest spinning off a vgl_homg4 base class for mixing
-  // into homg_plane and homg_point. fsm.
+  // iterators.
   typedef Type*       iterator;
   typedef Type const* const_iterator;
   iterator begin() { return (Type*)data_; }
@@ -96,11 +72,9 @@ public:
   bool ideal(Type tol) const {
     return vcl_max(vcl_max(vcl_abs(nx()),vcl_abs(ny())),vcl_abs(nz())) < tol * vcl_abs(d());
   }
-  
-  // INTERNALS---------------------------------------------------------------
 
 protected:
-  // the data associated with this point 
+  // the four homogenenous coordinates of the point.
   Type data_[4];
 };
 
