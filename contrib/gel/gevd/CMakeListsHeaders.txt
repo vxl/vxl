@@ -1,5 +1,6 @@
 SOURCE_FILES( gevd_sources
   gevd_bufferxy.h
+  gevd_clean_edgels.h
   gevd_contour.h
   gevd_detector.h
   gevd_detector_params.h
