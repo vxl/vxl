@@ -98,6 +98,9 @@ endif
 
 ifneq (,$(findstring Linux,$(uname_output)))
   OS := Linux2
+  ifeq (x86_64,$(shell uname -p))
+    OS := Linux64
+  endif
 endif
 
 # I am not sure about this as we only have B.11.00 and
