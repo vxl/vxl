@@ -33,13 +33,12 @@
 #include <sdet/sdet_grid_finder_params.h>
 #include <vil1/vil1_image.h>
 
-#if 0
-//:
-// this helper class does a distance transform on the perpendicular
-// distance of parallel lines from the origin (-l.c());
-// offsets into the distance array corresponding to each line
-// are provided.
+//this helper class does a distance transform on the perpendicular
+//distance of parallel lines from the origin (-l.c());
+//offsets into the distance array corresponding to each line
+//are provided.
 
+#if 0
 class line_chamfer_1d
 {
  public:
@@ -65,7 +64,6 @@ class line_chamfer_1d
   double dmax_;
 };
 #endif
-
 
 class grid_profile_matcher
 {
@@ -129,9 +127,9 @@ class sdet_grid_finder : public sdet_grid_finder_params
 
 
   //:test camera parameter matrices
-  bool transform_grid_points(vnl_matrix_fixed<double,3,3> & K,
-                             vnl_matrix_fixed<double,3,4> & M,
-                             vcl_vector<vsol_point_2d_sptr> & points);
+  bool sdet_grid_finder::transform_grid_points(vnl_matrix_fixed<double,3,3> & K,
+                                               vnl_matrix_fixed<double,3,4> & M,
+                                               vcl_vector<vsol_point_2d_sptr> & points);
   //:write transformed grid points to a file
   bool init_output_file(vcl_ofstream & outstream);
   bool write_image_points(vcl_ofstream & outstream);
@@ -140,12 +138,15 @@ class sdet_grid_finder : public sdet_grid_finder_params
   bool check_grid_match(vil1_image img);
 
  protected:
+  // protected methods
+
 
   //:transform a vsol line by transforming the end points
   vsol_line_2d_sptr transform_line(vgl_h_matrix_2d<double> const& h,
                                    vsol_line_2d_sptr const & l);
 
   //:the vanishing point of a line bundle
+
   bool get_vanishing_point(vcl_vector<vsol_line_2d_sptr> const & para_lines,
                            vgl_homg_point_2d<double>& vp);
 
