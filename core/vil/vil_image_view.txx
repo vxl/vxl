@@ -1,6 +1,5 @@
 #ifndef vil2_image_view_txx_
 #define vil2_image_view_txx_
-
 //:
 //  \file
 //  \brief Represent images of one or more planes of Ts.
@@ -8,6 +7,7 @@
 
 #include "vil2_image_view.h"
 #include <vcl_cstdlib.h>
+#include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vil2/vil2_smart_ptr.h>
