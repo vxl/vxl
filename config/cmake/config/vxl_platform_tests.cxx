@@ -471,9 +471,55 @@ int main() { return 0; }
 
 #ifdef VCL_CAN_DO_IMPLICIT_TEMPLATES
 
+# ifdef _MSC_VER
+// Use template typing to figure out correct method, because
+// several MSVC versions can't cope with overloaded return types
+template <class S> struct ims_what;
+
+template <>
+struct ims_what<double *> {
+  typedef double type; };
+
+template <class S>
+struct ims_what {
+  typedef int type; };
+
+
+template <class I, class T>
+void fsm_plop(I b, I e, T x, int)
+{
+  for (I p=b; p!=e; ++p)
+    *p = x;
+}
+
+template <class T>
+void fsm_plop(double *b, double *e, T x, double)
+{
+  for (double *p=b; p<e; ++p)
+    *p = x;
+}
+
+template <class I, class T>
+inline void fsm_plip(I b, I e, T x)
+{
+  if (b != e)
+    fsm_plop(b, e, x, ims_what<I>::type());
+}
+
+# else
+// FSM: The code is imitating the way the gcc STL chooses (or did choose, way
+// back) between algorithms for different iterator types. A very brief look
+// at the 3.2.2 <algorithm> header suggests they no longer use that mechanism
+// so maybe it was deemed non-standard and abandoned.
+
 struct fsm_plap_normal {};
+
 template <class I>
 inline fsm_plap_normal fsm_plap(I) { return fsm_plap_normal(); }
+
+struct fsm_plap_double_star {};
+inline fsm_plap_double_star fsm_plap(double *) { return fsm_plap_double_star(); }
+
 
 template <class I, class T>
 void fsm_plop(I b, I e, T x, fsm_plap_normal)
@@ -481,9 +527,6 @@ void fsm_plop(I b, I e, T x, fsm_plap_normal)
   for (I p=b; p!=e; ++p)
     *p = x;
 }
-
-struct fsm_plap_double_star {};
-inline fsm_plap_double_star fsm_plap(double *) { return fsm_plap_double_star(); }
 
 template <class T>
 void fsm_plop(double *b, double *e, T x, fsm_plap_double_star)
@@ -498,6 +541,8 @@ inline void fsm_plip(I b, I e, T x)
   if (b != e)
     fsm_plop(b, e, x, fsm_plap(b));
 }
+
+# endif
 
 void f()
 {
