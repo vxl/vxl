@@ -30,16 +30,16 @@ test_gevd_bufferxy()
   //GetBuffer tested in base class test
 
   for (int i=0;i<3;i++)
-    {
-      char * dataddr = (char *) gbxy1->GetElementAddr(i,1);
-      vcl_memcpy(dataddr,"n",2);
-    }
+  {
+    char * dataddr = (char *) gbxy1->GetElementAddr(i,1);
+    vcl_memcpy(dataddr,"n",2);
+  }
 
   char * dat = (char*) gbxy1->GetElementAddr(2,1);
   vcl_string strdat = dat;
   TEST("GetElementAddr",strdat,"n");
 
-//test second type of constructor
+  //test second type of constructor
   gevd_bufferxy * gbxy2 = new gevd_bufferxy(3,5,8,gbxy1->GetBuffer());
 
   TEST("GetBitsPixel2",gbxy2->GetBitsPixel(),8);
@@ -53,7 +53,7 @@ test_gevd_bufferxy()
   strdat = dat;
   TEST("GetElementAddr2",strdat,"n");
 
-//test third type of constructor
+  //test third type of constructor
   gevd_bufferxy * gbxy3 = new gevd_bufferxy(*gbxy2);
 
   TEST("GetBitsPixel3",gbxy3->GetBitsPixel(),8);
@@ -70,7 +70,7 @@ test_gevd_bufferxy()
   const char * fn = "gevd_bufferxy_dump_file.tmp";
   gbxy1->dump(fn);
   vpl_unlink (fn);
-  vcl_cout << "the following is a dump of a bufferxy." << (*gbxy1) << vcl_endl;
+  vcl_cout << "the following is a dump of a bufferxy. " << (*gbxy1) << vcl_endl;
 
   delete gbxy1;
   delete gbxy2;
