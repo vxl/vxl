@@ -35,7 +35,7 @@ inline void vil2_clamp(vil2_image_view<T >&src, vil2_image_view<T >&dest, T lo, 
 vil2_image_resource_sptr vil2_clamp(const vil2_image_resource_sptr &src, double low, double hi);
 
 
-//: A generic_image adaptor that behaves like a clampped version of its input
+//: A generic_image adaptor that behaves like a clamped version of its input
 // For implementation use only - use vil2_clamp() to create one.
 class vil2_clamp_image_resource : public vil2_image_resource
 {
