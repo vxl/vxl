@@ -5,8 +5,6 @@ INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake)
 # Build here only if OpenGL (vgui) is available:
 IF (HAS_OPENGL)
 
-INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_PATH})
-
 ADD_EXECUTABLE(xcv xcv_sources)
 
 # This is needed for xcv_geometry.cxx

@@ -9,8 +9,6 @@ INCLUDE(${allvxl_SOURCE_DIR}/config.cmake/Modules/FindQv.cmake)
 # Build here only if OpenGL is available:
 IF (HAS_OPENGL)
 
-INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_PATH})
- 
 ADD_LIBRARY(vgui vgui_sources)
 
 SOURCE_FILES(vgui_sources
@@ -125,7 +123,6 @@ SOURCE_FILES(vgui_sources
 )
 
 IF (HAS_QV)
-  INCLUDE_DIRECTORIES(${QV_INCLUDE_PATH})
   SOURCE_FILES(vgui_sources
    vrml/vgui_vrml_draw_visitor.cxx  vrml/vgui_vrml_draw_visitor.h
    vrml/vgui_vrml_tableau.cxx       vrml/vgui_vrml_tableau.h
@@ -140,14 +137,12 @@ IF (HAS_MFC)
 ENDIF (HAS_MFC)
 
 IF (HAS_X11)
-  INCLUDE_DIRECTORIES(${X11_INCLUDE_PATH})
   SOURCE_FILES(vgui_sources
    internals/vgui_accelerate_x11.cxx internals/vgui_accelerate_x11.h
   )
 ENDIF (HAS_X11)
 
 IF (HAS_GLUT)
-  INCLUDE_DIRECTORIES(${GLUT_INCLUDE_PATH})
   SOURCE_FILES(vgui_sources
    vgui_glut.cxx vgui_glut.h
   )
