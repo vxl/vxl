@@ -61,20 +61,21 @@ class strk_info_tracker : public strk_info_tracker_params
   //: Evalutate the information at the initial region
   void evaluate_info();
  protected:
-  //protected methods
   //:random choice to refresh the intensity data of a sample
   bool refresh_sample();
-
   //: Generate a new tracking face
   strk_tracking_face_2d_sptr
   generate_randomly_positioned_sample(strk_tracking_face_2d_sptr const& seed);
   //: Generate a new tracking face with refreshed data
   strk_tracking_face_2d_sptr
   clone_and_refresh_data(strk_tracking_face_2d_sptr const& sample);
+#if 0
   //: Construct a multiply connected background face
-  //  bool construct_background_face(vtol_face_2d_sptr& face);
+  bool construct_background_face(vtol_face_2d_sptr& face);
 
-  //  void refine_best_sample();
+  void refine_best_sample();
+#endif
+
   //members
   vil1_memory_image_of<float> image_0_;  //frame 0 intensity
   vil1_memory_image_of<float> image_i_;  //frame i intensity
