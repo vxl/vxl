@@ -593,7 +593,7 @@ double FMatrix::get (unsigned int row_index, unsigned int col_index) const
 
 //----------------------------------------------------------------
 //
-//: Copy the fundamental matrix into a 2D array of doubles for `C' compatibilty.
+//: Copy the fundamental matrix into a 2D array of doubles for `C' compatibility.
 void FMatrix::get (double *c) const
 {
   for (int row_index = 0; row_index < 3; row_index++)
