@@ -5,9 +5,18 @@
 // \brief Container for tabulated data suitable for reading/writing to delimited text files
 
 
-#include "mbl_table.h"
+#include <mbl/mbl_table.h>
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
+#include <vcl_cmath.h>
+
+
+// Tolerance used to determine whether table entries are equal
+static double tolerance_ = 1e-15;
+
+
+// Level of verbosity used for error output.
+static int verbosity_ = 0;
 
 
 //========================================================================
@@ -316,19 +325,100 @@ bool mbl_table::read_delimited_string(vcl_istream& is,
 //========================================================================
 bool mbl_table::operator==(const mbl_table& rhs) const
 {
+  // Are both tables the same object - do they occupy the same memory location?
+  if (this == &rhs) 
+  {
+    if (verbosity_>0)
+      vcl_cout << "Both tables are actually the same memory object!" << vcl_endl;      
+    return true;
+  }
+  
   // Is the delimiter the same?
-  if (delimiter_ != rhs.delimiter_) return false;
+  if (delimiter_ != rhs.delimiter_) 
+  {
+    if (verbosity_>0)
+      vcl_cout << "Tables have different delimiter characters" << vcl_endl;      
+    return false;
+  }
 
   // Is the column headers vector the same?
-  if (column_headers_ != rhs.column_headers_) return false;
+  if (column_headers_ != rhs.column_headers_)   
+  {
+    if (verbosity_>0)
+      vcl_cout << "Tables have different column headers" << vcl_endl;      
+    return false;
+  }
 
   // Is the header to index map the same?
-  if (header_to_column_index_ != rhs.header_to_column_index_) return false;
+  if (header_to_column_index_ != rhs.header_to_column_index_) 
+  {
+    if (verbosity_>0)
+      vcl_cout << "Tables have different header-to-column index map" << vcl_endl;      
+    return false;
+  }
 
-  // Is the table data the same?
-  if (columns_ != rhs.columns_) return false;
+  // Are the numbers of columns the same?
+  unsigned ncols = columns_.size();
+  if (ncols != rhs.columns_.size())
+  {
+    if (verbosity_>0)
+      vcl_cout << "Tables have different number of columns" << vcl_endl;      
+    return false;
+  }
+  
+  // Is the table data the same (within the current tolerance)?
+  for (unsigned c=0; c<ncols; ++c)
+  {
+    // Are the numbers of rows in this column the same?
+    unsigned nrows = columns_[c].size();  
+    if (nrows != rhs.columns_[c].size())
+    {
+      if (verbosity_>0)
+        vcl_cout << "Tables have different number of elements in some columns" << vcl_endl;      
+      return false;
+    }
+
+    // Compare all data values in this column
+    for (unsigned r=0; r<nrows; ++r)
+    {
+      double diff = columns_[c][r] - rhs.columns_[c][r];
+      if (vcl_fabs(diff) > tolerance_) 
+      {
+        if (verbosity_>0)
+          vcl_cout << "Tables have different values in column " << c 
+            << " (" << column_headers_[c] << "), row " << r << vcl_endl;      
+        return false;
+      }
+    }
+  }
 
   // Passed all tests, table is identical to this one.
   return true;
 }
 
+
+//========================================================================
+// Is another table different from this one?
+//========================================================================
+bool mbl_table::operator!=(const mbl_table& rhs) const
+{
+  return !(*this==rhs);
+}
+
+
+//========================================================================
+// Set the tolerance used to determine whether table entries are equal.
+//========================================================================
+void mbl_table::set_tolerance(const double& tol)
+{
+  tolerance_ = tol;
+}
+
+
+//========================================================================
+// Set the level of verbosity used for error output.
+//========================================================================
+void mbl_table::set_verbosity(const int& v)
+{
+  verbosity_ = v;
+}

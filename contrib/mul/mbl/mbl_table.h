@@ -90,6 +90,23 @@ public:
   //: Is another table identical to this one?
   bool operator==(const mbl_table& rhs) const;
 
+  
+  //: Is another table different from this one?
+  bool operator!=(const mbl_table& rhs) const;
+
+
+  //: Set the tolerance used to determine whether table entries are equal.
+  // \param tol The tolerance should be a small positive number, eg 1e-19.
+  static void set_tolerance(const double& tol);
+
+
+  //: Set the level of verbosity used for error output.
+  // \param v The verbosity should be a small integer, eg -3 to 3. 
+  // Larger values cause more detailed output.
+  // Default level is 0. 
+  // \note Currently only level 1 is defined.
+  static void set_verbosity(const int& v);
+
 
 protected:
 
@@ -115,6 +132,7 @@ protected:
 
   //: The table data, arranged as column vectors of double data.
   vcl_vector<vcl_vector<double> > columns_;
+
 };
 
 #endif // mbl_table_h

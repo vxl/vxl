@@ -56,6 +56,63 @@ void test_table1()
 
 
 //========================================================================
+// Test equality operations 
+//========================================================================
+void test_table2()
+{
+  vcl_cout << "------------------------------- \n"
+           << " Testing equality operations    \n"
+           << "------------------------------- \n";
+   
+  char delim = '\t';
+  vcl_vector<vcl_string> headers(3);
+  headers[0] = "x coord";
+  headers[1] = "y coord";
+  headers[2] = "z coord";
+
+  mbl_table table0(delim, headers);
+  vcl_vector<double> row0(3);
+  row0[0] = 1.23;
+  row0[1] = 3.45;
+  row0[2] = 6.78;
+  table0.append_row(row0);
+  vcl_vector<double> row1(3);
+  row1[0] = -1.23;
+  row1[1] = -3.45;
+  row1[2] = -6.78;
+  table0.append_row(row1);
+
+  mbl_table table1 = table0;
+  bool equal01 = table0 == table1;
+  TEST("Copied tables equal", equal01, true);
+
+  mbl_table table2(delim, headers);
+  table2.append_row(row0);
+  vcl_vector<double> row1_mod(3);
+  row1_mod[0] = -1.23;
+  row1_mod[1] = -3.45;
+  row1_mod[2] = -6.78 + 1e-16;
+  table2.append_row(row1_mod);
+  bool equal02 = table0 == table2;
+  TEST("Similar tables equal", equal02, true);
+
+  mbl_table table3(delim, headers);
+  table3.append_row(row0);
+  vcl_vector<double> row1_mod2(3);
+  row1_mod2[0] = -1.23;
+  row1_mod2[1] = -3.45;
+  row1_mod2[2] = -6.78 + 1e-14;
+  table3.append_row(row1_mod2);
+  bool equal03 = table0 == table3;
+  TEST("Dissimilar tables not equal", equal03, false);
+
+  mbl_table::set_tolerance(1e-12);
+  equal03 = table0 == table3;
+  TEST("Dissimilar tables equal within tolerance", equal03, true);
+}
+
+
+//========================================================================
 // Run a series of tests
 //========================================================================
 void test_table()
@@ -64,7 +121,10 @@ void test_table()
            << " Testing mbl_table                      \n"
            << "========================================\n";
   
+  mbl_table::set_verbosity(9);
   test_table1();
+
+  test_table2();
 }
 
 
