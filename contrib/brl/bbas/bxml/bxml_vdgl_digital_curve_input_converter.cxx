@@ -1,5 +1,4 @@
 #include <vcl_iostream.h>
-#include <vcl_string.h>
 #include <dom/DOM_Element.hpp>
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_interpolator_linear.h>
@@ -56,7 +55,7 @@ bool bxml_vdgl_digital_curve_input_converter::extract_from_dom(DOM_Node& node) {
         }
         xs_.push_back(pt->x());
         ys_.push_back(pt->y());
-  vcl_string& s = conv.id();
+        //vcl_string& s = conv.id();
         num_children++;
       }
       else {
