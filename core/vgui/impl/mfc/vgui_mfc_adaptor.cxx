@@ -445,8 +445,8 @@ int mfc_key(UINT nChar, UINT nFlags)
   } else {
     unsigned short buf[1024];
     unsigned char lpKeyState[256];
-    memset(lpKeyState, 0, 256);
-    memset(buf, 0, 256);
+    vcl_memset(lpKeyState, 0, 256);
+    vcl_memset(buf, 0, 256);
 
     lpKeyState[VK_SHIFT] = GetKeyState(VK_SHIFT);
     lpKeyState[VK_CONTROL] = GetKeyState(VK_CONTROL);

@@ -197,7 +197,7 @@ bool vgui_mfc_dialog_impl::ask()
     if(l.type == bool_elem)
     {
       vgui_bool_field *field = static_cast<vgui_bool_field*>(l.field);
-      int field_length = strlen(field->label.c_str());
+      int field_length = vcl_strlen(field->label.c_str());
       if(max_length<field_length)
         max_length = field_length;
       height += 45;
@@ -220,7 +220,7 @@ bool vgui_mfc_dialog_impl::ask()
     {
       // Add 40 extra characters to the length to leave space for
       // the user response box:
-      int field_length = strlen(field->label.c_str()) + 40;
+      int field_length = vcl_strlen(field->label.c_str()) + 40;
       if(max_length<field_length)
         max_length = field_length;
       height += 45;
@@ -253,7 +253,7 @@ bool vgui_mfc_dialog_impl::ask()
   ShowWindow(SW_SHOW);
 
   // determine default font for document
-  memset(&m_logfont, 0, sizeof m_logfont);
+  vcl_memset(&m_logfont, 0, sizeof m_logfont);
   m_logfont.lfHeight = -8;
   lstrcpy(m_logfont.lfFaceName, _T("Microsoft Sans Serif Regular"));
   m_logfont.lfOutPrecision = OUT_TT_PRECIS;

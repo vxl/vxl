@@ -10,6 +10,7 @@
 
 #include <vcl_cassert.h>
 #include <vcl_cstddef.h> // for size_t
+#include <vcl_cstring.h> // for memcpy()
 #include <mbl/mbl_lda.h>
 #include <mbl/mbl_matxvec.h>
 #include <mbl/mbl_matrix_products.h>
@@ -202,7 +203,7 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
   vcl_size_t bytes_per_row = t * sizeof(double);
   for (int i=0;i<m;++i)
   {
-    memcpy(b[i],E[i],bytes_per_row);
+    vcl_memcpy(b[i],E[i],bytes_per_row);
   }
 
   evals_.resize(t);

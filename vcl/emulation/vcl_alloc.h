@@ -180,7 +180,7 @@ public:
   static void*  reallocate(void *p, vcl_size_t old_sz, vcl_size_t new_sz) {
     void* result = allocate(new_sz);
     vcl_size_t copy_sz = new_sz > old_sz? old_sz : new_sz;
-    memcpy(result, p, copy_sz);
+    vcl_memcpy(result, p, copy_sz);
     deallocate(p, old_sz);
     return result;
   }
@@ -633,7 +633,7 @@ typedef vcl_malloc_alloc multithreaded_alloc;
             if (ROUND_UP(old_sz) == ROUND_UP(new_sz)) return(p);
             result = allocate(new_sz);
             copy_sz = new_sz > old_sz? old_sz : new_sz;
-            memcpy(result, p, copy_sz);
+            vcl_memcpy(result, p, copy_sz);
             deallocate(p, old_sz);
             return(result);
     }

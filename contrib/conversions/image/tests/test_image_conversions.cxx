@@ -43,13 +43,13 @@ void test_image_conversions()
   TEST("vil_to_Image height", ht, im2->GetSizeY());
   char* buf2 = new char[size];
   im2->GetSection(buf2, 0, 0, wd, ht);
-  TEST("vil_to_Image data", 0, memcmp(buf1, buf2, size));
+  TEST("vil_to_Image data", 0, vcl_memcmp(buf1, buf2, size));
 
   vil_image im3 = Image_to_vil(im2);
   TEST("Image_to_vil width", im3.width(), im2->GetSizeX())
   TEST("Image_to_vil height", im3.height(), im2->GetSizeY())
   im3.get_section(buf1, 0, 0, wd, ht);
-  TEST("Image_to_vil data", 0, memcmp(buf1, buf2, size))
+  TEST("Image_to_vil data", 0, vcl_memcmp(buf1, buf2, size))
 
   delete[] buf1; delete[] buf2;
 }

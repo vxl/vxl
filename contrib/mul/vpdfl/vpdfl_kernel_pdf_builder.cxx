@@ -224,7 +224,7 @@ void vpdfl_kernel_pdf_builder::build_width_from_separation(vpdfl_kernel_pdf& kpd
       if (j!=i)
       {
         double d2 = vnl_vector_ssd(data[i],data[j]);
-        
+
         if (d2<min_diff)
           n_repeats++;
         else
@@ -234,7 +234,7 @@ void vpdfl_kernel_pdf_builder::build_width_from_separation(vpdfl_kernel_pdf& kpd
     }
 
     // Width set to distance to k-th nearest neighbour
-    // w[i] = sqrt(d_sq.top());
+    // w[i] = vcl_sqrt(d_sq.top());
 
     //: Width to nearest neighbour, allowing for repeats
     if (min_d2<min_var_) min_d2=min_var_;

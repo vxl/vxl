@@ -18,6 +18,7 @@
 #include <vcl_cstdio.h>
 #include <vcl_cstdlib.h>
 #include <vcl_algorithm.h> // vcl_min() & vcl_max()
+#include <vcl_cstring.h> // vcl_strlen()
 
 #include <vul/vul_file.h>
 #include <vul/vul_printf.h>
@@ -319,8 +320,8 @@ bool drawframe(int frame)
     float fps = 1000.0 / tic.real();
 
     vcl_sprintf(msg, "Frame[%d] FPS %4.1f ", moviefile->get_frame(frame)->get_real_frame_index(), fps);
-    vcl_sprintf(msg + strlen(msg), "Zoom %g ", pixel_zoom);
-    vcl_sprintf(msg + strlen(msg), "(%7.2f, %7.2f)",
+    vcl_sprintf(msg + vcl_strlen(msg), "Zoom %g ", pixel_zoom);
+    vcl_sprintf(msg + vcl_strlen(msg), "(%7.2f, %7.2f)",
                 (mouse_x - pixel_zoom_tx) / pixel_zoom,
                 (mouse_y - pixel_zoom_ty) / pixel_zoom);
 

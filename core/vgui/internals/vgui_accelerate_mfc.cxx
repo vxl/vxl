@@ -77,7 +77,7 @@ vidfmt::vidfmt()
     const int dib_size = sizeof(BITMAPINFOHEADER) + 256 * sizeof (RGBQUAD);
     unsigned char buf[dib_size];
     LPBITMAPINFOHEADER dib_hdr = (LPBITMAPINFOHEADER) buf;
-    memset(dib_hdr, 0, dib_size);
+    vcl_memset(dib_hdr, 0, dib_size);
     dib_hdr->biSize = sizeof(BITMAPINFOHEADER);
 
     // Get a device-dependent bitmap that's compatible with the
@@ -148,7 +148,7 @@ vidfmt::vidfmt()
 
       // Make a bitmap in 24-bit RGB format
       BITMAPINFO binfo;
-      memset(&binfo, 0, sizeof binfo);
+      vcl_memset(&binfo, 0, sizeof binfo);
       binfo.bmiHeader.biSize = sizeof binfo.bmiHeader;
       binfo.bmiHeader.biWidth = 1;
       binfo.bmiHeader.biHeight = 1;
@@ -193,17 +193,17 @@ vidfmt::vidfmt()
 #if 0
       for(int component = 0; component < 3; ++component) {
         unsigned char rgb[3 * width];
-        memset(rgb, 0, sizeof rgb);
+        vcl_memset(rgb, 0, sizeof rgb);
         for (int p = 0; p < width; ++p)
           rgb[p*3 + component] = 0xff;
 
         SetDIBits(vgui_mfc_adaptor_global_dc->GetSafeHdc(), bitmap, 0, 1, &rgb, &binfo, DIB_RGB_COLORS);
 
         unsigned char opx[256];
-        memset(opx, 0, sizeof opx);
+        vcl_memset(opx, 0, sizeof opx);
 
         BITMAP b;
-        memset(&b, 0, sizeof b);
+        vcl_memset(&b, 0, sizeof b);
         b.bmBits = opx;
         bitmap.GetBitmap(&b);
         vul_printf(vcl_cerr, "BITMAP: w %d, h %d, bytesperline %d, bitsPixel %d, bits %p\n",

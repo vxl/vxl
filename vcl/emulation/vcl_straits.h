@@ -131,15 +131,15 @@ struct vcl_char_traits <char> {
   static bool is_del(char_type a) { return isspace(a) != 0; } // awf cast for VC5
 
   static int compare (const char_type* s1, const char_type* s2, vcl_size_t n)
-    { return memcmp (s1, s2, n); }
+    { return vcl_memcmp (s1, s2, n); }
   static vcl_size_t length (const char_type* s)
-    { return s?strlen (s):0; }
+    { return s?vcl_strlen (s):0; }
   static char_type* copy (char_type* s1, const char_type* s2, vcl_size_t n)
-    { return (char_type*) memcpy (s1, s2, n); }
+    { return (char_type*) vcl_memcpy (s1, s2, n); }
   static char_type* move (char_type* s1, const char_type* s2, vcl_size_t n)
-    { return (char_type*) memmove (s1, s2, n); }
+    { return (char_type*) vcl_memmove (s1, s2, n); }
   static char_type* set (char_type* s1, const char_type& c, vcl_size_t n)
-    { return (char_type*) memset (s1, c, n); }
+    { return (char_type*) vcl_memset (s1, c, n); }
 };
 
 } // extern "C++"

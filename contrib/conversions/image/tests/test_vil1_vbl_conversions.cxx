@@ -40,13 +40,13 @@ void test_image_conversions()
   TEST("vil_to_vbl_array width", wd, im2.columns());
   TEST("vil_to_vbl_array height", ht, im2.rows());
   const unsigned char* buf2 = im2.begin();
-  TEST("vil_to_vbl_array data", 0, memcmp(buf1, buf2, size));
+  TEST("vil_to_vbl_array data", 0, vcl_memcmp(buf1, buf2, size));
 
   vil_image im3 = vbl_array_to_vil(im2);
   TEST("vbl_array_to_vil width", im3.width(), im2.columns())
   TEST("vbl_array_to_vil height", im3.height(), im2.rows())
   im3.get_section(buf1, 0, 0, wd, ht);
-  TEST("vbl_array_to_vil data", 0, memcmp(buf1, buf2, size))
+  TEST("vbl_array_to_vil data", 0, vcl_memcmp(buf1, buf2, size))
 
   delete[] buf1;
 }
