@@ -130,8 +130,7 @@ rgrl_transformation_sptr
 rgrl_trans_translation::
 inverse_transform( ) const
 {
-  vnl_matrix<double> dummy_covar(covar_.rows(), covar_.cols(), 0.0);
-  return new rgrl_trans_translation( -t(), dummy_covar );
+  return new rgrl_trans_translation( -t() );
 }
 
 
