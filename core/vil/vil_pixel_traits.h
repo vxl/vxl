@@ -7,7 +7,6 @@
 
 #include <vil/vil_rgb.h>
 #include <vil2/vil2_byte.h>
-#include <vnl/vnl_complex.h>
 
 template <class T>
 class vil2_pixel_traits
