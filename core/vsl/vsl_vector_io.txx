@@ -79,7 +79,7 @@ void vsl_print_summary(vcl_ostream& os, const vcl_vector<T> &v)
 }
 
 
-#define VSL_VECTOR_INSTANTIATE(T) \
+#define VSL_VECTOR_IO_INSTANTIATE(T) \
 template void vsl_print_summary(vcl_ostream& s, const vcl_vector<T >& v); \
 template void vsl_b_write(vsl_b_ostream& s, const vcl_vector<T >& v); \
 template void vsl_b_read(vsl_b_istream& s, vcl_vector<T >& v)
