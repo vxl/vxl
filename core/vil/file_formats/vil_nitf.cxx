@@ -36,8 +36,6 @@
 #include <vil/vil_save.h>
 #include <vil/vil_stream.h>
 
-#include <vul/vul_file.h>
-
 #include "vil_nitf.h"
 #include "vil_nitf_message_header_v20.h"
 #include "vil_nitf_image_subheader_v20.h"
@@ -250,10 +248,11 @@ vil_nitf_image::vil_nitf_image(
     unsigned nj,
     unsigned nplanes,
     vil_pixel_format format)
-: in_stream_(is), out_stream_(0), ni_(ni), nj_(nj), nplanes_(nplanes)
+: ni_(ni), nj_(nj), nplanes_(nplanes),
+  bits_per_component_(8*vil_pixel_format_sizeof_components(format)),
+  in_stream_(is), out_stream_(0)
 {
   // BELOW IS NOT CORRECT.
-  bits_per_component_ = 8*vil_pixel_format_sizeof_components(format);
   in_stream_->ref();
   write_header();
 }
@@ -993,8 +992,7 @@ bool vil_nitf_image::construct_pyramid_images(
              << "    pixel_format = " << image_view->pixel_format()
              << "  bits_per_component from get_property = " << bits_per_component
              << vcl_endl
-             << method_name << "current directory = " << vul_file::get_cwd()
-             << vcl_endl;
+             << method_name << vcl_endl;
     vcl_size_t dot_pos = file_name.rfind(".");
     vcl_cout << method_name << "file_name = <" << file_name
              << ">  dot_pos = " << dot_pos << vcl_endl;
