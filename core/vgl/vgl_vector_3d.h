@@ -137,7 +137,7 @@ template <class T>        bool parallel(v const& a, v const& b, double eps=0.0);
 //  Note that the return type is double, not Type, since the ratio of e.g.
 //  two vgl_vector_3d<int> need not be an int.
 template <class T> inline double operator/(v const& a, v const& b) {
-  return (a.x()*b.x()+a.y()*b.y()+a.z()*b.z())/double(b.x()*b.x()+b.y()*b.y()+b.z()*b.z()); }
+  return dot_product(a,b)/(double)dot_product(b,b); }
 
 //: Normalise by dividing through by the length, thus returning a length 1 vector.
 template <class T> inline v&     normalize(v& a) { return a /= a.length(); }
