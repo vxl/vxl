@@ -37,6 +37,7 @@ ifeq ($(OS),OSF1V4) # with optimisation, the is_finite etc functions fail for lo
 FLAGS_vnl_math.cxx += -O0
 FLAGS_Templates/vnl_matrix+long-.cxx += -O0
 FLAGS_Templates/vnl_matrix+ulong-.cxx += -O0
+FLAGS_Templates/vnl_matrix+vcl_complex+double--.cxx += -O0
 FLAGS_Templates/vnl_matrix+vcl_complex+long_double--.cxx += -O0
 endif
 SOURCES += vnl_copy.cxx
