@@ -23,9 +23,9 @@
 //:calc the weighted mean and var of kernels.
 // w is expected to sum to n.
 void pdf1d_weighted_kernel_pdf::pdf1d_weighted_kernel_mean_var(double& mean, double& var,
-                                                               const vnl_vecd& centres,
-                                                               const vnl_vecd& widths,
-                                                               const vnl_vecd& weights)
+                                                               const vnl_vector<double>& centres,
+                                                               const vnl_vector<double>& widths,
+                                                               const vnl_vector<double>& weights)
 {
   const unsigned n = centres.size();
   assert(n > 1 && widths.size() == n && weights.size() ==n);

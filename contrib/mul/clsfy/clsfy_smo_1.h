@@ -16,40 +16,40 @@
 // Uses linear kernel operator.
 class clsfy_smo_1_lin: public clsfy_smo_base
 {
-protected:
+ protected:
 
-//: upper bound on Lagrange multipliers
+  //: upper bound on Lagrange multipliers
   double C_;
 
-//: Attempt to jointly optimise Lagrange multipliers i1, and i2.
-// \param i1 first Lagrange multiplier.
-// \param i2 second Lagrange multiplier.
-// \param E1 The amount by which i1 violates KKT conditions.
+  //: Attempt to jointly optimise Lagrange multipliers i1, and i2.
+  // \param i1 first Lagrange multiplier.
+  // \param i2 second Lagrange multiplier.
+  // \param E1 The amount by which i1 violates KKT conditions.
   virtual int take_step(int i1, int i2, double E1);
 
-//: Attempt to optimise sample i1.
-// This attempts to find another value i2,
-// in order to jointly optimise both.
+  //: Attempt to optimise sample i1.
+  // This attempts to find another value i2,
+  // in order to jointly optimise both.
   virtual int examine_example(int i1);
 
-//: Calculate the kernel for data items i1 and i2.
+  //: Calculate the kernel for data items i1 and i2.
   virtual double kernel(int i1, int i2);
 
-public:
+ public:
 
-//: Takes a copy of the data wrapper, but not the data.
-// Be careful not to destroy the underlying data while using this object.
-  void set_data(const mbl_data_wrapper<vnl_vecd> &data, const vcl_vector<int> & targets);
+  //: Takes a copy of the data wrapper, but not the data.
+  // Be careful not to destroy the underlying data while using this object.
+  void set_data(const mbl_data_wrapper<vnl_vector<double> >& data, const vcl_vector<int>& targets);
 
-// Upper bounds on each parameter.
+  // Upper bounds on each parameter.
   double C() const;
 
-//: Set the upper bound on the Lagrange multipliers
+  //: Set the upper bound on the Lagrange multipliers
   void set_C( double C);
 
   clsfy_smo_1_lin();
 
-//: Run the optimisation
+  //: Run the optimisation
   virtual int calc();
 };
 
@@ -60,26 +60,26 @@ public:
 // Uses RBF kernel operator.
 class clsfy_smo_1_rbf: public clsfy_smo_1_lin
 {
-protected:
+ protected:
 
-//: -0.5 sigma^-2, where sigma is the width of the Gaussian kernel
+  //: -0.5 sigma^-2, where sigma is the width of the Gaussian kernel
   double gamma_;
 
-//: Calculate the kernel for data items i1 and i2
+  //: Calculate the kernel for data items i1 and i2
   virtual double kernel(int i1, int i2);
 
-public:
+ public:
 
-//: -0.5 sigma^-2, where sigma is the width of the Gaussian kernel
+  //: -0.5 sigma^-2, where sigma is the width of the Gaussian kernel
   double gamma() const;
 
-//: Control sigma, the width of the Gaussian kernel.
-// gamma = -0.5 sigma^-2
+  //: Control sigma, the width of the Gaussian kernel.
+  // gamma = -0.5 sigma^-2
   void set_gamma(double gamma);
 
   clsfy_smo_1_rbf();
 
-//: Run the optimisation
+  //: Run the optimisation
   virtual int calc();
 };
 

@@ -34,10 +34,10 @@ class pdf1d_weighted_kernel_pdf : public pdf1d_kernel_pdf
 
   //:calc the weighted mean and var of kernels.
   // w is expected to sum to n.
-  static void pdf1d_weighted_kernel_mean_var(
-    double& mean, double& var,
-    const vnl_vecd& centres, const vnl_vecd& widths, const vnl_vecd& weights);
-
+  static void pdf1d_weighted_kernel_mean_var(double& mean, double& var,
+                                             const vnl_vector<double>& centres,
+                                             const vnl_vector<double>& widths,
+                                             const vnl_vector<double>& weights);
 
   //: Set the weights.
   // The weights will be scaled to sum to 1.0

@@ -46,7 +46,7 @@ double clsfy_smo_1_rbf::kernel(int i1, int i2)
 
 //: Takes a copy of the data wrapper, but not the data.
 // Be careful not to destroy the underlying data while using this object.
-void clsfy_smo_1_lin::set_data(const mbl_data_wrapper<vnl_vecd> &data, const vcl_vector<int> & targets)
+void clsfy_smo_1_lin::set_data(const mbl_data_wrapper<vnl_vector<double> >& data, const vcl_vector<int>& targets)
 {
   const unsigned N = data.size();
   data_ = data.clone();

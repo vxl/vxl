@@ -40,11 +40,11 @@ void test_weighted_epanech_kernel_pdf()
   {
     pdf1d_weighted_epanech_kernel_pdf p1(2,1.0,1.0);
     double d1 [] = {0.0, 1.0};
-    p1.set_weight(vnl_vecd(2, 2, d1));
+    p1.set_weight(vnl_vector<double>(2, 2, d1));
     pdf1d_weighted_epanech_kernel_sampler s1;
     s1.set_model(p1);
     const unsigned ns = 10000;
-    vnl_vecd x(ns), p(ns), ks1(ns);
+    vnl_vector<double> x(ns), p(ns), ks1(ns);
     s1.regular_samples(x);
     for (unsigned i=0; i<ns; ++i)
     {
@@ -62,11 +62,11 @@ void test_weighted_epanech_kernel_pdf()
   {
     pdf1d_weighted_epanech_kernel_pdf p1(4,1.0,1.0);
     double d1 [] = {0.01, 0.1, 0.1, 1.0};
-    p1.set_weight(vnl_vecd(4, 4, d1));
+    p1.set_weight(vnl_vector<double>(4, 4, d1));
     pdf1d_weighted_epanech_kernel_sampler s1;
     s1.set_model(p1);
     const unsigned ns = 10000;
-    vnl_vecd x(ns), p(ns), ks1(ns);
+    vnl_vector<double> x(ns), p(ns), ks1(ns);
     s1.get_samples(x);
     for (unsigned i=0; i<ns; ++i)
     {
