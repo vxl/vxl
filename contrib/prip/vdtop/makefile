@@ -29,7 +29,6 @@ MANPAGE_SOURCES += vdtop_set_structure_from_digital_graph.h
 MANPAGE_SOURCES += vdtop_set_structure_from_digital_graph.txx
 MANPAGE_SOURCES += vdtop_well_composed_lower_leveling_kernel.h
 MANPAGE_SOURCES += vil_canny_deriche_grad_filter.h
-MANPAGE_SOURCES += vil_clamp.h
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
