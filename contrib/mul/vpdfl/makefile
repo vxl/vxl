@@ -33,6 +33,7 @@ SOURCES += vpdfl_gaussian_kernel_pdf_sampler.cxx
 SOURCES += vpdfl_kernel_pdf.cxx
 SOURCES += vpdfl_kernel_pdf_builder.cxx
 SOURCES += vpdfl_resample.cxx
+SOURCES += vpdfl_add_all_binary_loaders.cxx
 
 # Additional files to document: (none for the moment)
 MANPAGE_SOURCES += 
