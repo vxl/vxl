@@ -10,10 +10,8 @@ SOURCE_FILES(octree_sources
 BaseCube
 Cube
 VoxmapImagePoints
-BigSparseArray3D
 OctreeLevel
 VoxmapPoints
-BitArray3D
 ConvexHull
 Voxel
 main
