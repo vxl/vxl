@@ -7,7 +7,6 @@
 //:
 // \file
 // \brief Represents a 2D digital_curve
-//
 // \author  Geoff Cross
 //
 // \verbatim
@@ -71,6 +70,11 @@ class vdgl_digital_curve : public vsol_curve_2d
   //***************************************************************************
   // Replaces dynamic_cast<T>
   //***************************************************************************
+
+  //---------------------------------------------------------------------------
+  //: Return the curve type
+  //---------------------------------------------------------------------------
+  virtual vsol_curve_2d_type curve_type() const { return vsol_curve_2d::DIGITAL_CURVE; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a digital_curve, 0 otherwise
