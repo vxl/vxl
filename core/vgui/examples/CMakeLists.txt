@@ -29,8 +29,8 @@ ADD_EXECUTABLE( example_blender_tableau example_blender_tableau.cxx)
 ADD_EXECUTABLE( example_enhance_tableau example_enhance_tableau.cxx)
 ADD_EXECUTABLE( example_poly_tableau example_poly_tableau.cxx)
 
-SET(basic_sources 
-    basic_app.cxx		  
+SET(basic_sources
+    basic_app.cxx
     basic_manager.cxx  basic_manager.h
     basic_menus.cxx    basic_menus.h)
 ADD_EXECUTABLE(basic_app ${basic_sources})
