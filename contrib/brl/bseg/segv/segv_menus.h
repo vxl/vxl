@@ -15,8 +15,12 @@
 // \endverbatim
 //----------------------------------------------------------------------------
 #include <segv/dll.h>
+class vgui_menu;
+
 class segv_menus
 {
+  //: inaccessible default constructor: all methods are static
+  segv_menus() {}
  public:
   SEGV_DLL_DATA static void quit_callback();
   SEGV_DLL_DATA static void load_image_callback();
@@ -45,8 +49,6 @@ class segv_menus
   SEGV_DLL_DATA static void compute_parallel_coverage_callback();
   SEGV_DLL_DATA static void compute_watershed_regions_callback();
   SEGV_DLL_DATA static void find_vehicle_callback();
-#endif
-#if 0
 #ifdef HAS_XERCES
   SEGV_DLL_DATA static void read_xml_edges_callback();
 #endif
@@ -54,7 +56,6 @@ class segv_menus
   SEGV_DLL_DATA static void test_face_callback();
   SEGV_DLL_DATA static void test_digital_lines_callback();
   SEGV_DLL_DATA static vgui_menu get_menu();
- private:
-  segv_menus() {}
 };
+
 #endif // segv_menus_h_
