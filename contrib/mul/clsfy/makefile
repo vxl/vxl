@@ -23,6 +23,7 @@ SOURCES += clsfy_smo_1.cxx
 SOURCES += clsfy_rbf_svm.cxx
 SOURCES += clsfy_rbf_svm_smo_1_builder.cxx
 SOURCES += clsfy_adaboost_sorted_trainer.cxx
+SOURCES += clsfy_adaboost_sorted_trainer2.cxx
 SOURCES += clsfy_adaboost_trainer.cxx
 SOURCES += clsfy_binary_threshold_1d_builder.cxx
 SOURCES += clsfy_binary_threshold_1d_sorted_builder.cxx

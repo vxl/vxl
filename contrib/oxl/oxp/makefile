@@ -35,16 +35,15 @@ ifeq "$(TJ_GCC30)" "1"
 FLAGS_SGIMovieFile.cxx += -O1 # otherwise gcc 3.0 needs too much virtual memory
 endif
 else
-TEMPLATE_SOURCES := $(subst Templates/vector+SGIMV_Variables-.cxx,,$(TEMPLATE_SOURCES))
+TEMPLATE_SOURCES := $(subst Templates/vcl_vector+SGIMV_FrameIndex-.cxx,,$(TEMPLATE_SOURCES))
+TEMPLATE_SOURCES := $(subst Templates/vcl_vector+SGIMV_FrameIndexArray-.cxx,,$(TEMPLATE_SOURCES))
+TEMPLATE_SOURCES := $(subst Templates/vcl_vector+SGIMV_Variables-.cxx,,$(TEMPLATE_SOURCES))
 endif
 SOURCES += ImageSequenceMovieFile.cxx
 
-#SOURCES += vsl_conic_as_params.cxx
-#SOURCES += vsl_conic_as_matrix.cxx
-#SOURCES += vsl_conic_points.cxx
-
 SOURCES += oxp_bunch_of_files.cxx
 SOURCES += oxp_vidl_moviefile.cxx
+SOURCES += oxp_vob_frame_index.cxx
 
 ifeq ($(HAS_MPEG),1)
 SOURCES += oxp_mpeg_codec.cxx

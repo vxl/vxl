@@ -41,6 +41,8 @@ MANPAGE_SOURCES += mbl_lru_cache.h
 MANPAGE_SOURCES += mbl_print.h
 MANPAGE_SOURCES += mbl_priority_bounded_queue.h
 MANPAGE_SOURCES += mbl_stl.h
+MANPAGE_SOURCES += mbl_file_data_collector.txx
+MANPAGE_SOURCES += mbl_file_data_wrapper.txx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
