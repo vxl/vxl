@@ -244,6 +244,8 @@ foreach $f (@FILES)
     elsif ($j eq "vcl_valarray.h") { $i="vcl_(valarray|slice|slice_array|gslice|gslice_array|mask_array|indirect_array|abs|acos|asin|atan|atan2|cos|cosh|exp|log|log10|pow|sin|sinh|sqrt|tan|tanh)"; }
     elsif ($j eq "vcl_vector.h") { $i="vcl_(vector|swap)"; }
     elsif ($j =~ m"bdgl/bdgl_curve_(tracker|matcher|matching|tracking|clustering)\.h$") { $i="$i(|_params)"; }
+    elsif ($j eq "bdgl/bdgl_tracker_curve.h") { $i="$i|match_data|[sg]et_best_match_(prev|next)\(\)"; }
+    elsif ($j eq "bdgl/utils.h") { $i="fixAngleMPiPi|fixAngleZTPi|angleDiff"; }
     elsif ($j eq "gevd/gevd_pixel.h") { $i="(byte|char|short|float|ptr)Pixel"; }
     elsif ($j eq "mbl/mbl_cloneable_ptr.h") { $i="($i|MBL_CLONEABLE_PTR_INSTANTIATE)"; }
     elsif ($j eq "mbl/mbl_combination.h") { $i="$i(_begin|_next)"; }
@@ -258,8 +260,8 @@ foreach $f (@FILES)
     elsif ($j eq "vbl/vbl_qsort.h") { $i="($i)_[a-z_]+"; }
     elsif ($j eq "vbl/vbl_sort.h") { $i="($i)_[a-z_]+"; }
     elsif ($j eq "vdgl/vdgl_digital_curve.h") { $i="$i|cast_to_digital_curve\(\)"; }
-    elsif ($j eq "vdgl/vdgl_edgel_chain.h") { $i="$i|get_edgel_chain\(\)"; }
-    elsif ($j eq "vdgl/vdgl_interpolator.h") { $i="$i|get_interpolator\(\)"; }
+    elsif ($j eq "vdgl/vdgl_edgel_chain.h") { $i="$i|get_edgel_chain\(\)|vbl_smart_ptr.txx"; }
+    elsif ($j eq "vdgl/vdgl_interpolator.h") { $i="$i|get_interpolator\(\)|vbl_smart_ptr.txx"; }
     elsif ($j eq "vepl/vepl_monadic.h") { $i="$i(|_[a-z_]+)"; }
     elsif ($j eq "vepl/vepl_dyadic.h") { $i="$i(|_[a-z_]+)"; }
     elsif ($j eq "vepl2/vepl2_monadic.h") { $i="$i(|_[a-z_]+)"; }
@@ -292,6 +294,7 @@ foreach $f (@FILES)
     elsif ($j eq "vil1/vil1_colour_space.h") { $i="($i)_(RGB|HSV)_to_(YIQ|HSV|RGB)"; }
     elsif ($j eq "vil/vil_convert.h") { $i="($i)_((cast|round)(_pixel)\?|(rgb|planes)_to_grey|stretch_range|to_[a-z_]+)"; }
     elsif ($j eq "vil1/vil1_convolve.h") { $i="$i(|_[a-z_]+)"; }
+    elsif ($j eq "vil/algo/vil_cartesian_differential_invariants.h") { $i="($i)_3"; }
     elsif ($j eq "vil/algo/vil_convolve_1d.h") { $i="vil_convolve_(1d|edge_1d|boundary_option)"; }
     elsif ($j eq "vil/algo/vil_find_peaks.h") { $i="vil_(find_peaks_3x3|is_peak_3x3)"; }
     elsif ($j eq "vil/algo/vil_histogram.h") { $i="$i(|_byte)"; }
@@ -300,7 +303,7 @@ foreach $f (@FILES)
     elsif ($j eq "vil/algo/vil_exp_grad_filter_1d.h") { $i="vil_exp_grad_filter_(1d|i|j)"; }
     elsif ($j eq "vil/vil_fill.h") { $i="($i)_(line|row|col|mask)"; }
     elsif ($j eq "vil/vil_flip.h") { $i="($i)_(ud|lr)"; }
-    elsif ($j eq "vil/algo/vil_gauss_filter.h") { $i="($i)_(5tap(_params)\?)"; }
+    elsif ($j eq "vil/algo/vil_gauss_filter.h") { $i="($i)_(5tap(_params)\?|gen_ntap)"; }
     elsif ($j eq "vil/algo/vil_gauss_reduce.h") { $i="$i(|_params|_general|_121)"; }
     elsif ($j eq "vil/algo/vil_fft.h") { $i="$i(|_2d_fwd|_2d_bwd)"; }
     elsif ($j eq "vil/algo/vil_suppress_non_max.h") { $i="vil_(is_peak|suppress_non_max)_3x3"; }
@@ -340,6 +343,7 @@ foreach $f (@FILES)
     elsif ($j eq "vnl/algo/vnl_fft.h") { $i="$i(|_(|set)gpfa)"; }
     elsif ($j eq "vnl/algo/vnl_netlib.h") { $i="(zgeev|rpoly|dchscdf|dpofa|dposl|dpoco|dpodi|dgpfa|rsg|dgges|lbfgs|lmdif|lsqr|qrdc|qrsl|rs|rg|dnlaso|svdc)_"; }
     elsif ($j eq "vnl/algo/vnl_symmetric_eigensystem.h") { $i="$i(|_compute)"; }
+    elsif ($j eq "vnl/algo/vnl_discrete_diff.h") { $i="$i(_sym|_fwd|_test_lsf)"; }
     elsif ($j eq "vnl/vnl_bignum_traits.h") { $i="vnl_bignum"; }
     elsif ($j eq "vnl/vnl_rational_traits.h") { $i="vnl_rational"; }
     elsif ($j eq "vnl/vnl_complex.h") { $i="vcl_complex"; }
@@ -637,6 +641,7 @@ foreach $f (@FILES)
         "$f.$wd" !~ m/\bgel\/vgel\/kl\/base\.h\.(min|max)$/ &&
         "$f.$wd" !~ m/\bmul\/mbl\/mbl_stats_1d\.h\.(min|max)$/ &&
         "$f.$wd" !~ m/\boxl\/mvl\/HomgConic\.(h|cxx)\.polar$/ &&
+        "$f.$wd" !~ m/\bbrl\/bbas\/bdgl\/bdgl_curve_clustering\.h\.min$/ &&
         "$f.$wd" !~ m/\bvnl\/algo\/vnl_rn?poly_(solve|roots)\.h\.(real|imag)$/ &&
         $file_s =~ m/[^.\005\006]\b$wd(\s*)\(/) # \005 is :: and \006 is ->
     {
@@ -695,6 +700,7 @@ foreach $f (@FILES)
          ($f !~ m/\bpdf1d\/pdf1d_pdf\.cxx$/ &&
           $f !~ m/\bvnl\/(vnl_matrix(|_fixed(|_ref))\.txx|algo\/vnl_complex_eigensystem\.cxx)$/ &&
           $f !~ m/\b(oxl\/oxp\/vsl_conic_points\.cxx|gel\/gevd\/gevd_float_operators\.cxx)$/ &&
+          $f !~ m/\bgel\/vtol\/algo\/vtol_extract_topology\.(h|cxx)$/ &&
           $f !~ m/\bvcsl\/examples\/vcsl_tutor\.cxx$/ &&
           $f !~ m/\brsdl\/rsdl_(bins_2d|kd_tree)\.h$/ &&
           $f !~ m/\brsdl\/(rsdl_kd_tree|tests\/test_bins_2d|tests\/test_kd_tree)\.cxx$/ ) ) &&
