@@ -19,13 +19,7 @@ vbl_bit_array_2d::vbl_bit_array_2d(vbl_bit_array_2d const& that)
   if ( that.data_)
   {
     construct(that.num_rows_, that.num_cols_);
-
-    unsigned long byteindex;
-    unsigned int bitindex;
-    index( num_rows_-1, num_cols_-1, byteindex, bitindex);
-
-    for (unsigned int i=0; i<= byteindex; i++)
-      data_[i] = that.data_[i];
+    vcl_memcpy(data_, that.data_, this->size());
   }
 }
 
@@ -44,13 +38,7 @@ vbl_bit_array_2d& vbl_bit_array_2d::operator=(vbl_bit_array_2d const& that)
       num_cols_ != that.num_cols_)
     resize(that.num_rows_, that.num_cols_);
 
-  unsigned long byteindex;
-  unsigned int bitindex;
-  index(num_rows_-1, num_cols_-1, byteindex, bitindex);
-
-  for (unsigned int i=0;i< byteindex;i++)
-    data_[i]= that.data_[i];
-
+  vcl_memcpy(data_, that.data_, this->size());
   return *this;
 }
 
@@ -64,7 +52,7 @@ void vbl_bit_array_2d::enlarge( unsigned int num_rows, unsigned int num_cols)
   unsigned int tempn= num_cols_;
 
   construct( num_rows, num_cols);
-  fill( false);
+  fill(false); // fill with zeros
 
   if (tempdata)
   {
@@ -76,11 +64,10 @@ void vbl_bit_array_2d::enlarge( unsigned int num_rows, unsigned int num_cols)
       index( i, 0, byteindex, bitindex);
 
       // find start of old column
-      unsigned long idx= i* tempn;
-      unsigned long oldbyteindex= (unsigned long)(double(idx)/CHAR_BIT);
+      unsigned long oldbyteindex= (unsigned long)(double(i*tempn)/CHAR_BIT);
 
-      for (unsigned int j=0; j< tempn/CHAR_BIT; ++j)
-        data_[byteindex+j] = tempdata[oldbyteindex+j];
+      // copy i-th column
+      vcl_memcpy(data_+byteindex, tempdata+oldbyteindex, (tempn+CHAR_BIT-1)/CHAR_BIT);
     }
     delete[] tempdata;
   }
@@ -89,20 +76,8 @@ void vbl_bit_array_2d::enlarge( unsigned int num_rows, unsigned int num_cols)
 //: Fill with value
 void vbl_bit_array_2d::fill(bool value)
 {
-  unsigned long byteindex;
-  unsigned int bitindex;
-  index( num_rows_-1, num_cols_-1, byteindex, bitindex);
-
-  register unsigned char v = 0;
-
-  for (int i=0; i< CHAR_BIT; i++)
-  {
-    v <<= 1;
-    if (value) v |= 1;
-  }
-
-  for (unsigned int i=0;i<= byteindex;i++)
-    data_[i]= v;
+  register unsigned char v = value ? ~(unsigned char)0 : 0;
+  vcl_memset(data_, v, this->size());
 }
 
 unsigned long vbl_bit_array_2d::size() const
@@ -116,7 +91,8 @@ void vbl_bit_array_2d::construct(unsigned int num_rows, unsigned int num_cols)
   if (num_rows==0 || num_cols==0) { num_rows_=num_cols_=0; data_ = 0; return; }
   num_rows_ = num_rows;
   num_cols_ = num_cols;
-  data_ = new unsigned char [size() + 1];
+  data_ = new unsigned char [this->size()];
+  data_[this->size()-1]=0; // avoids uninitialized data problems in operator==()
 }
 
 void vbl_bit_array_2d::index( unsigned int x, unsigned int y, unsigned long &byteindex, unsigned int &bitindex) const
@@ -131,7 +107,7 @@ bool vbl_bit_array_2d::operator==(vbl_bit_array_2d const &a) const
 {
   if (rows() != a.rows() || cols() != a.cols())
     return false;
-  return 0 == vcl_memcmp(data_, a.data_, size());
+  return 0 == vcl_memcmp(data_, a.data_, this->size());
 }
 
 bool vbl_bit_array_2d::operator() (unsigned int i, unsigned int j) const
@@ -186,4 +162,3 @@ vcl_ostream& operator<< (vcl_ostream &os, const vbl_bit_array_2d &array)
   }
   return os;
 }
-
