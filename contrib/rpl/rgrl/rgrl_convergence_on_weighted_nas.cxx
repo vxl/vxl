@@ -57,10 +57,7 @@ compute_status( rgrl_converge_status_sptr               prev_status,
   rgrl_converge_status::converge_type converge = base_status_sptr->current_converge();
   rgrl_converge_status::status_type   status   = base_status_sptr->current_status();
 
-  int iter = 0;
-  if ( prev_nas_ptr ) {
-    iter = prev_nas_ptr->iteration() + 1 ;
-  }
+  int iter = prev_nas_ptr ? prev_nas_ptr->iteration() + 1 : 0;
 
   vnl_vector<double> const& current_scaling = current_view.xform_estimate()->scaling_factors();
   vnl_vector<double> const& init_scaling = prev_nas_ptr->init_scaling_factors();
@@ -94,7 +91,6 @@ compute_status( rgrl_converge_status_sptr               prev_status,
   if ( failure )
     status = rgrl_converge_status::failed;
 
-
   rgrl_converge_status_nas* new_status = new rgrl_converge_status_nas( *base_status_sptr );
   new_status->set_iteration( iter );
   new_status->set_current_converge( converge );
@@ -112,8 +108,6 @@ init_status( rgrl_view       const& init_view,
              rgrl_scale_sptr const& prior_scale,
              bool                   penalize_scaling ) const
 {
-  int iter = 0;
-
   rgrl_converge_status_nas* status_ptr
     = new rgrl_converge_status_nas( false, false, false, false, 1e5, 0, 1e5 );
 
@@ -130,4 +124,3 @@ init_status( rgrl_view       const& init_view,
 
   return status_ptr;
 }
-
