@@ -14,6 +14,11 @@
 #include <vil/vil_print.h>
 #include <vil/vil_config.h>
 
+// For testing specific file formats
+#include <vil/vil_stream_fstream.h>
+#include <vil/file_formats/vil_dicom.h>
+#include <vil/file_formats/vil_dicom2.h>
+
 #define DEBUG
 
 // Amitha Perera
@@ -24,206 +29,205 @@
 
 vcl_string image_base;
 
-// Set to "double", which is the only type that can (roughly) represent all data types
-typedef double TruePixelType;
 
-class CheckPixel
+// A comparator interface to check if the pixels match. It will be
+// called with all the components at a single location (given by i, j
+// and p).
+//
+template<class TruePixelType, class ImgPixelType>
+struct Compare
 {
- public:
-  virtual ~CheckPixel() {}
-  virtual bool operator() ( int p, int i, int j, const vcl_vector<TruePixelType>& pixel ) const = 0;
+  virtual bool operator() ( vil_image_view<ImgPixelType> const&,
+                            int p, int i, int j,
+                            const vcl_vector<TruePixelType>& pixel ) const = 0;
 };
 
-template<class T>
-class CheckRGB : public CheckPixel
+
+// Below are various "real" comparators
+
+
+template<class PixelType>
+struct CompareRGB
+  : public Compare<PixelType, vil_rgb<PixelType> >
 {
- public:
-  CheckRGB( const char* file )
-  {
-    vil_image_resource_sptr ir = vil_load_image_resource((image_base + file).c_str());
-    if ( !ir )
-      vcl_cout << "[ couldn't read header from " << file << "]\n" << vcl_flush;
-    else
+  virtual bool operator() ( vil_image_view< vil_rgb<PixelType> > const& img,
+                            int p, int i, int j,
+                            const vcl_vector<PixelType>& pixel ) const
     {
-      vil_image_view_base_sptr im = ir->get_copy_view(0,ir->ni(),0,ir->nj());
-      if ( !im )
-        vcl_cout << "[ couldn't read image data from " << file << "]\n" << vcl_flush;
-      else
-      {
-        img_ = im;
-#ifdef DEBUG
-        vcl_cout << '\n' << vcl_flush; vil_print_all(vcl_cout, img_);
-#endif
+      return ( p==0 && pixel.size() == 3 &&
+               img(i,j).r == pixel[0] &&
+               img(i,j).g == pixel[1] &&
+               img(i,j).b == pixel[2] );
+    }
+};
+
+
+template<class PixelType>
+struct CompareRGBNear
+  : public Compare<PixelType, vil_rgb<PixelType> >
+{
+  virtual bool operator() ( vil_image_view< vil_rgb<PixelType> > const& img,
+                            int p, int i, int j,
+                            const vcl_vector<PixelType>& pixel ) const
+    {
+      if( p == 0 && pixel.size() == 3 ) {
+        // Find difference in two values whilst avoiding unsigned underflow
+        PixelType diff_A = pixel[0]*pixel[0] + img(i,j).r * img(i,j).r +
+                           pixel[1]*pixel[1] + img(i,j).g * img(i,j).g +
+                           pixel[2]*pixel[2] + img(i,j).b * img(i,j).b;
+
+        PixelType diff_B = 2 * pixel[0] * img(i,j).r + tol_sq_ +
+                           2 * pixel[1] * img(i,j).g + tol_sq_ +
+                           2 * pixel[2] * img(i,j).b + tol_sq_ ;
+        return diff_A < diff_B;
+      } else {
+        return false;
       }
     }
-  }
 
-  bool operator() ( int p, int i, int j, const vcl_vector<TruePixelType>& pixel ) const
-  {
-    assert( p == 0 );
-    return img_ && pixel.size() == 3 && pixel[0] == img_(i,j).r && pixel[1] == img_(i,j).g && pixel[2] == img_(i,j).b;
-  }
- protected:
-  vil_image_view< vil_rgb<T> > img_;
+  CompareRGBNear( PixelType tol )
+    : tol_sq_( tol*tol )
+    { }
+
+  PixelType tol_sq_;
 };
 
-template<class T>
-class CheckRGBNear : public CheckRGB<T>
+
+template<class PixelType, int num_planes>
+struct ComparePlanes
+  : public Compare<PixelType, PixelType >
 {
- public:
-  CheckRGBNear( const char* file, TruePixelType tol):
-    CheckRGB<T>(file), tol_sq_(tol*tol) {}
-
-  bool operator() ( int p, int i, int j, const vcl_vector<TruePixelType>& pixel ) const
-  {
-    assert( p == 0 );
-    if (!( img_ && pixel.size() == 3)) return false;
-    // Find difference in two values whilst avoiding unsigned underflow
-    const TruePixelType diff_A = pixel[0]*pixel[0] +
-      (TruePixelType)img_(i,j).r * (TruePixelType)img_(i,j).r + pixel[1]*pixel[1] +
-      (TruePixelType)img_(i,j).g * (TruePixelType)img_(i,j).g + pixel[2]*pixel[2] +
-      (TruePixelType)img_(i,j).b * (TruePixelType)img_(i,j).b;
-
-    const TruePixelType diff_B =
-      2 * pixel[0] * (TruePixelType)img_(i,j).r + (TruePixelType)tol_sq_ +
-      2 * pixel[1] * (TruePixelType)img_(i,j).g + (TruePixelType)tol_sq_ +
-      2 * pixel[2] * (TruePixelType)img_(i,j).b + (TruePixelType)tol_sq_ ;
-    return diff_A < diff_B;
-  }
- private:
-  TruePixelType tol_sq_;
-};
-
-template<class T>
-class CheckColourPlanes : public CheckPixel
-{
- public:
-  CheckColourPlanes( const char* file )
-  {
-    vil_image_resource_sptr ir = vil_load_image_resource((image_base + file).c_str());
-    if ( !ir )
-      vcl_cout << "[ couldn't read header from " << file << "]\n" << vcl_flush;
-    else
+  virtual bool operator() ( vil_image_view<PixelType> const& img,
+                            int p, int i, int j,
+                            const vcl_vector<PixelType>& pixel ) const
     {
-      vil_image_view_base_sptr im = ir->get_copy_view(0,ir->ni(),0,ir->nj());
-      if ( !im )
-        vcl_cout << "[ couldn't read image data from " << file << "]\n" << vcl_flush;
-      else
-      {
-        img_ = im;
-#ifdef DEBUG
-        vcl_cout << '\n' << vcl_flush; vil_print_all(vcl_cout, img_);
-#endif
+      return 0 <= p && p < num_planes && pixel.size() == 1 && img(i,j,p) == pixel[0];
+    }
+};
+
+
+// Greyscale is simply planar with 1 plane.
+template<class PixelType>
+struct CompareGrey
+  : public ComparePlanes<PixelType, 1>
+{
+};
+
+
+template<class PixelType>
+struct CompareGreyFloat
+  : public Compare<PixelType,PixelType>
+{
+  virtual bool operator() ( vil_image_view<PixelType> const& img,
+                            int p, int i, int j,
+                            const vcl_vector<PixelType>& pixel ) const
+    {
+      return ( p==0 && pixel.size() == 1 &&
+               vcl_fabs( pixel[0] - img(i,j) ) <= 1e-6 * vcl_fabs( pixel[0] ) );
+    }
+};
+
+
+template<class PixelType>
+struct CompareGreyNear
+  : public Compare<PixelType,PixelType>
+{
+  virtual bool operator() ( vil_image_view<PixelType> const& img,
+                            int p, int i, int j,
+                            const vcl_vector<PixelType>& pixel ) const
+    {
+      if( p==0 && pixel.size() == 1 ) {
+        // Find difference in two values whilst avoiding unsigned underflow
+        PixelType diff_A = pixel[0] * pixel[0] + img(i,j) * img(i,j);
+        PixelType diff_B = 2 * pixel[0] * img(i,j) + tol_sq_ ;
+        return diff_A <= diff_B;
+      } else {
+        return false;
       }
     }
-  }
 
-  bool operator() ( int p, int i, int j, const vcl_vector<TruePixelType>& pixel ) const
-  {
-    assert( p==0 || p==1 || p==2 );
-    return img_ && pixel.size() == 1 && pixel[0] == img_(i,j,p);
-  }
- private:
-  vil_image_view< T > img_;
+  CompareGreyNear( PixelType tol )
+    : tol_sq_( tol*tol )
+    { }
+
+  PixelType tol_sq_;
 };
 
-template<class T>
-class CheckGrey : public CheckPixel
-{
- public:
-  CheckGrey( const char* file )
-  {
-    vil_image_resource_sptr ir = vil_load_image_resource((image_base + file).c_str());
-    if ( !ir )
-      vcl_cout << "[ couldn't read header from " << file << "]\n" << vcl_flush;
-    else
-    {
-      vil_image_view_base_sptr im = ir->get_copy_view(0,ir->ni(),0,ir->nj());
-      if ( !im )
-        vcl_cout << "[ couldn't read image data from " << file << "]\n" << vcl_flush;
-      else
-      {
-        img_ = im;
-#ifdef DEBUG
-	// FOR NOW, DIFFICULT TO GENERATE 5 COLUMN X 3 ROW NITF FILES FOR TESTING.
-        // USING TRUNCATED EXISTING NITF FILES, SO ADD CHECK ON FILE SIZE.  MAL 2004jan13
-	if (img_.size() < 100) {
-          vcl_cout << '\n' << vcl_flush; vil_print_all(vcl_cout, img_);
-	}
-	else {
-	  vcl_cout << "Image size = " << img_.size() << ".  Too large to display all pixels."
-		   << vcl_endl ;
-	}
-#endif
-      }
-    }
-  };
-
-  bool operator() ( int p, int i, int j, const vcl_vector<TruePixelType>& pixel ) const
-  {
-    assert( p == 0 );
-    return img_
-      && pixel.size() == 1 &&
-      pixel[0] == (TruePixelType)img_(i,j);
-  }
- protected:
-  vil_image_view< T > img_;
-};
-
-template<class T>
-class CheckGreyNear : public CheckGrey<T>
-{
- public:
-  CheckGreyNear( const char* file, TruePixelType Tol)
-    : CheckGrey<T>(file), tol_sq_(Tol*Tol) {}
-
-  bool operator() ( int p, int i, int j, const vcl_vector<TruePixelType>& pixel ) const
-  {
-    assert( p == 0 );
-    if (!( img_
-      && pixel.size() == 1)) return false;
-    // Find difference in two values whilst avoiding unsigned underflow
-    const TruePixelType diff_A = pixel[0]*pixel[0] +
-      (TruePixelType)img_(i,j) * (TruePixelType)img_(i,j);
-    const TruePixelType diff_B = 2 * pixel[0] * (TruePixelType)img_(i,j) + (TruePixelType)tol_sq_ ;
-    return diff_A <= diff_B;
-  }
- private:
-  TruePixelType tol_sq_;
-};
-
-template<class T>
-class CheckGreyFloat : public CheckGrey<T>
-{
- public:
-  CheckGreyFloat( const char* file) : CheckGrey<T>(file) {}
-
-  bool operator() ( int p, int i, int j, const vcl_vector<TruePixelType>& pixel ) const
-  {
-    assert( p == 0 );
-    if (!img_ || pixel.size() != 1) return false;
-    TruePixelType diff = vcl_fabs(pixel[0] - (TruePixelType)img_(i,j));
-    return diff <= 1e-6*vcl_fabs(pixel[0]);
-  }
-};
-
-template class CheckRGB< vxl_byte >;
-template class CheckRGB< vxl_uint_16 >;
-template class CheckColourPlanes< vxl_byte >;
-template class CheckColourPlanes< vxl_uint_16 >;
-template class CheckGrey< vxl_uint_32 >;
-template class CheckGrey< vxl_uint_16 >;
-template class CheckGrey< vxl_byte >;
-template class CheckGrey< bool >;
-template class CheckGreyNear< vxl_byte >;
-template class CheckGreyFloat< float >;
-template class CheckGreyFloat< double >;
 
 
+// ===========================================================================
+// read value
+
+// To read the true pixel data, we can't just do a fin >> x when x is
+// a char, because that would read in a character, not a small
+// integer. The following function and its specializations are to
+// solve this issue.
+
+// Read in a number from the stream into pix.
+// Return value is true if the read FAILED.
+template<class TruePixelType>
 bool
-test( const char* true_data_file, const CheckPixel& check )
+read_value( vcl_istream& fin, TruePixelType& pix )
 {
-  // The true data is a ASCII file consisting of a sequence of numbers. The first set of numbers are:
+  return ! (fin >> pix);
+}
+
+// Specialization to make char read as small integers and not characters
+// See comments on template for return value.
+VCL_DEFINE_SPECIALIZATION
+bool
+read_value( vcl_istream& fin, char& pix )
+{
+  int x;
+  // use operator! to test the stream to avoid compiler warnings
+  bool bad = ! ( fin >> x );
+  if( !bad ) pix = x;
+  return bad;
+}
+
+
+// Specialization to make char read as small integers and not characters
+// See comments on template for return value.
+VCL_DEFINE_SPECIALIZATION
+bool
+read_value( vcl_istream& fin, unsigned char& pix )
+{
+  int x;
+  // use operator! to test the stream to avoid compiler warnings
+  bool bad = ! ( fin >> x );
+  if( !bad ) pix = x;
+  return bad;
+}
+
+
+// Specialization to make char read as small integers and not characters
+// See comments on template for return value.
+VCL_DEFINE_SPECIALIZATION
+bool
+read_value( vcl_istream& fin, signed char& pix )
+{
+  int x;
+  // use operator! to test the stream to avoid compiler warnings
+  bool bad = ! ( fin >> x );
+  if( !bad ) pix = x;
+  return bad;
+}
+
+
+// ===========================================================================
+// Check pixels
+//
+// Compare the pixels in an already loaded image resource against the true
+// pixel values with the given pixel comparator.
+//
+template<class TruePixelType, class ImgPixelType>
+bool
+CheckPixels( Compare<TruePixelType,ImgPixelType> const& check,
+             char const* true_data_file,
+             vil_image_resource_sptr ir )
+{
+  // The true data is a ASCII file consisting of a sequence of
+  // numbers. The first set of numbers are:
   //    number of planes (P)
   //    number of components (C)
   //    width (in pixels, not components)
@@ -243,6 +247,35 @@ test( const char* true_data_file, const CheckPixel& check )
     return false;
   }
 
+
+  // Get the pixels from the loaded image
+  //
+  vil_image_view_base_sptr im = ir->get_copy_view(0,ir->ni(),0,ir->nj());
+  if ( !im ) {
+    vcl_cout << "[ couldn't read image data from " << ir << "]\n" << vcl_flush;
+    return false;
+  }
+  vil_image_view<ImgPixelType> img = im;
+  if( !img ) {
+    vcl_cout << "[ couldn't read image data of the expected format from "
+             << ir << "]" << vcl_endl;
+    return false;
+  }
+#ifdef DEBUG
+  // FOR NOW, DIFFICULT TO GENERATE 5 COLUMN X 3 ROW NITF FILES FOR TESTING.
+  // USING TRUNCATED EXISTING NITF FILES, SO ADD CHECK ON FILE SIZE.  MAL 2004jan13
+  if (img.size() < 100) {
+    vcl_cout << '\n'; vil_print_all(vcl_cout, img); vcl_cout.flush();
+  }
+  else {
+    vcl_cout << "Image size = " << img.size() << ".  Too large to display all pixels."
+             << vcl_endl;
+  }
+#endif
+
+  // Compare pixels
+  //
+
   vcl_vector<TruePixelType> pixel( num_comp );
 
   for ( int p=0; p < num_planes; ++p ) {
@@ -250,14 +283,12 @@ test( const char* true_data_file, const CheckPixel& check )
       for ( int i=0; i < width; ++i ) {
         for ( int c=0; c < num_comp; ++c )
         {
-          if ( !( fin >> pixel[c] ) )
+          if ( read_value( fin, pixel[c] ) )
           {
-            vcl_cout << "[couldn't read value at " << p << ',' << i << ',' << j << ',' << c
-                     << " from " << true_data_file << ']' << vcl_flush;
             return false;
           }
         }
-        if ( !check( p, i, j, pixel ) )
+        if ( !check( img, p, i, j, pixel ) )
           return false;
       }
     }
@@ -265,6 +296,64 @@ test( const char* true_data_file, const CheckPixel& check )
 
   return true;
 }
+
+
+// ===========================================================================
+// Check file
+//
+// Load the given image file in the standard way and compare the
+// pixels against the true pixel values with the given pixel
+// comparator.
+//
+template<class TruePixelType, class ImgPixelType>
+bool
+CheckFile( Compare<TruePixelType,ImgPixelType> const& check,
+           char const* true_data_file,
+           char const* img_data_file )
+{
+  vil_image_resource_sptr ir = vil_load_image_resource((image_base + img_data_file).c_str());
+  if( !ir ) {
+    vcl_cout << "[ couldn't load image file " << img_data_file << " ]" << vcl_endl;
+    return false;
+  } else {
+    return CheckPixels( check, true_data_file, ir );
+  }
+}
+
+// ===========================================================================
+// Check format
+//
+// Load the given image file using the given file format and compare
+// the pixels against the true pixel values with the given pixel
+// comparator.
+//
+template<class TruePixelType, class ImgPixelType>
+bool
+CheckFormat( Compare<TruePixelType,ImgPixelType> const& check,
+           char const* true_data_file,
+           char const* img_data_file,
+           vil_file_format* ffmt )
+{
+  bool result;
+  vil_stream* is = new vil_stream_fstream( (image_base + img_data_file).c_str(), "r" );
+  is->ref();
+  if( is->ok() ) {
+    vil_image_resource_sptr ir = ffmt->make_input_image( is );
+    if( !ir ) {
+      vcl_cout << "[ couldn't load image file " << img_data_file << " ]" << vcl_endl;
+      result = false;
+    } else {
+      result = CheckPixels( check, true_data_file, ir );
+    }
+  } else {
+    vcl_cout << "[ couldn't open file " << img_data_file << " for reading ]" << vcl_endl;
+    result = false;
+  }
+  is->unref();
+  return result;
+}
+
+
 
 int
 test_file_format_read_main( int argc, char* argv[] )
@@ -280,142 +369,191 @@ test_file_format_read_main( int argc, char* argv[] )
 
   testlib_test_start(" file format read");
 
+  // Test generic file loads
+
+  vcl_cout << "GENERIC FILE LOAD\n\n";
+  
   vcl_cout << "Portable aNy Map [pnm]: pbm, pgm, ppm)\n";
   testlib_test_begin( "  1-bit pbm ascii" );
-  testlib_test_perform( test( "ff_grey1bit_true.txt", CheckGrey<bool>( "ff_grey1bit_ascii.pbm" ) ) );
+  testlib_test_perform( CheckFile( CompareGrey<bool>(), "ff_grey1bit_true.txt", "ff_grey1bit_ascii.pbm" ) );
   testlib_test_begin( "  1-bit pbm raw" );
-  testlib_test_perform( test( "ff_grey1bit_true.txt", CheckGrey<bool>( "ff_grey1bit_raw.pbm" ) ) );
+  testlib_test_perform( CheckFile( CompareGrey<bool>(), "ff_grey1bit_true.txt", "ff_grey1bit_raw.pbm" ) );
   testlib_test_begin( "  8-bit pgm ascii" );
-  testlib_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_byte>( "ff_grey8bit_ascii.pgm" ) ) );
+  testlib_test_perform( CheckFile( CompareGrey<vxl_byte>(), "ff_grey8bit_true.txt", "ff_grey8bit_ascii.pgm" ) );
   testlib_test_begin( "  8-bit pgm raw" );
-  testlib_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_byte>( "ff_grey8bit_raw.pgm" ) ) );
+  testlib_test_perform( CheckFile( CompareGrey<vxl_byte>(), "ff_grey8bit_true.txt", "ff_grey8bit_raw.pgm" ) );
   testlib_test_begin( " 16-bit pgm ascii" );
-  testlib_test_perform( test( "ff_grey16bit_true.txt", CheckGrey<vxl_uint_16>( "ff_grey16bit_ascii.pgm" ) ) );
+  testlib_test_perform( CheckFile( CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit_ascii.pgm" ) );
   testlib_test_begin( " 16-bit pgm raw" );
-  testlib_test_perform( test( "ff_grey16bit_true.txt", CheckGrey<vxl_uint_16>( "ff_grey16bit_raw.pgm" ) ) );
+  testlib_test_perform( CheckFile( CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit_raw.pgm" ) );
   testlib_test_begin( "  8-bit ppm ascii" );
-  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_ascii.ppm" ) ) );
+  testlib_test_perform( CheckFile( CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit_ascii.ppm" ) );
   testlib_test_begin( "  8-bit ppm ascii as planar" );
-  testlib_test_perform( test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_byte>( "ff_rgb8bit_ascii.ppm" ) ) );
+  testlib_test_perform( CheckFile( ComparePlanes<vxl_byte,3>(), "ff_planar8bit_true.txt", "ff_rgb8bit_ascii.ppm" ) );
   testlib_test_begin( "  8-bit ppm raw" );
-  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_raw.ppm" ) ) );
+  testlib_test_perform( CheckFile( CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit_raw.ppm" ) );
   testlib_test_begin( "  8-bit ppm raw as planar" );
-  testlib_test_perform( test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_byte>( "ff_rgb8bit_raw.ppm" ) ) );
+  testlib_test_perform( CheckFile( ComparePlanes<vxl_byte,3>(), "ff_planar8bit_true.txt", "ff_rgb8bit_raw.ppm" ) );
   testlib_test_begin( " 16-bit ppm ascii" );
-  testlib_test_perform( test( "ff_rgb16bit_true.txt", CheckRGB<vxl_uint_16>( "ff_rgb16bit_ascii.ppm" ) ) );
+  testlib_test_perform( CheckFile( CompareRGB<vxl_uint_16>(), "ff_rgb16bit_true.txt", "ff_rgb16bit_ascii.ppm" ) );
   testlib_test_begin( " 16-bit ppm raw" );
-  testlib_test_perform( test( "ff_rgb16bit_true.txt", CheckRGB<vxl_uint_16>( "ff_rgb16bit_raw.ppm" ) ) );
+  testlib_test_perform( CheckFile( CompareRGB<vxl_uint_16>(), "ff_rgb16bit_true.txt", "ff_rgb16bit_raw.ppm" ) );
 
   vcl_cout << "JPEG [jpg]\n";
   testlib_test_begin( "  8-bit grey, normal image to 4 quanta" );
-  testlib_test_perform( test( "ff_grey8bit_true.txt", CheckGreyNear<vxl_byte>( "ff_grey8bit_compressed.jpg", 4 ) ) );
+  testlib_test_perform( CheckFile( CompareGreyNear<vxl_byte>(4), "ff_grey8bit_true.txt", "ff_grey8bit_compressed.jpg" ) );
   testlib_test_begin( "  8-bit RGB, easy image accurate to 3 quanta" );
-  testlib_test_perform( test( "ff_rgb8biteasy_true.txt", CheckRGBNear<vxl_byte>( "ff_rgb8biteasy_compressed.jpg", 3 ) ) );
+  testlib_test_perform( CheckFile( CompareRGBNear<vxl_byte>(3), "ff_rgb8biteasy_true.txt", "ff_rgb8biteasy_compressed.jpg" ) );
 
   vcl_cout << "Windows bitmap [bmp]\n";
   testlib_test_begin( "  8-bit greyscale (xv created)" );
-  testlib_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_byte>( "ff_grey8bit.bmp" ) ) );
+  testlib_test_perform( CheckFile( CompareGrey<vxl_byte>(), "ff_grey8bit_true.txt", "ff_grey8bit.bmp" ) );
   testlib_test_begin( "  8-bit RGB (xv created)" );
-  testlib_test_perform( test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_byte>( "ff_rgb8bit_xv.bmp" ) ) );
+  testlib_test_perform( CheckFile( ComparePlanes<vxl_byte,3>(), "ff_planar8bit_true.txt", "ff_rgb8bit_xv.bmp" ) );
 
+#if 0
   vcl_cout << "Portable Network Graphics [png]\n";
   testlib_test_begin( "  8-bit RGB uncompressed" );
-  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_uncompressed.png" ) ) );
+  testlib_test_perform( CheckFile( CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit_uncompressed.png" ) );
   testlib_test_begin( "  8-bit RGB compressed" );
-  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_compressed.png" ) ) );
+  testlib_test_perform( CheckFile( CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit_compressed.png" ) );
+#endif //0
 
   vcl_cout << "TIFF [tiff]\n";
   testlib_test_begin( "  8-bit RGB uncompressed" );
-  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_uncompressed.tif" ) ) );
+  testlib_test_perform( CheckFile( CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit_uncompressed.tif" ) );
   testlib_test_begin( "  8-bit RGB packbits" );
-  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_packbits.tif" ) ) );
+  testlib_test_perform( CheckFile( CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit_packbits.tif" ) );
 
   vcl_cout << "Sun raster [ras]\n";
   testlib_test_begin( "  8-bit grey, no colourmap" );
-  testlib_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_byte>( "ff_grey8bit_nocol.ras" ) ) );
+  testlib_test_perform( CheckFile( CompareGrey<vxl_byte>(), "ff_grey8bit_true.txt", "ff_grey8bit_nocol.ras" ) );
   testlib_test_begin( "  8-bit RGB, no colourmap" );
-  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_raw.ras" ) ) );
+  testlib_test_perform( CheckFile( CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit_raw.ras" ) );
   testlib_test_begin( "  8-bit indexed RGB" );
-  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_indexed.ras" ) ) );
+  testlib_test_perform( CheckFile( CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit_indexed.ras" ) );
 
   vcl_cout << "Khoros VIFF [viff]\n";
   testlib_test_begin( "  8-bit grey big endian" );
-  testlib_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_uint_8>( "ff_grey8bit_bigendian.viff" ) ) );
+  testlib_test_perform( CheckFile( CompareGrey<vxl_uint_8>(), "ff_grey8bit_true.txt", "ff_grey8bit_bigendian.viff" ) );
   testlib_test_begin( "  8-bit RGB big endian" );
-  testlib_test_perform( test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_uint_8>( "ff_rgb8bit_bigendian.viff" ) ) );
+  testlib_test_perform( CheckFile( ComparePlanes<vxl_uint_8,3>(), "ff_planar8bit_true.txt", "ff_rgb8bit_bigendian.viff" ) );
   testlib_test_begin( "  16-bit grey big endian" );
-  testlib_test_perform( test( "ff_grey16bit_true.txt", CheckGrey<vxl_uint_16>( "ff_grey16bit_bigendian.viff" ) ) );
+  testlib_test_perform( CheckFile( CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit_bigendian.viff" ) );
   testlib_test_begin( "  16-bit RGB big endian" );
-  testlib_test_perform( test( "ff_planar16bit_true.txt", CheckColourPlanes<vxl_uint_16>( "ff_rgb16bit_bigendian.viff" ) ) );
+  testlib_test_perform( CheckFile( ComparePlanes<vxl_uint_16,3>(), "ff_planar16bit_true.txt", "ff_rgb16bit_bigendian.viff" ) );
   testlib_test_begin( "  32-bit grey big endian" );
-  testlib_test_perform( test( "ff_grey32bit_true.txt", CheckGrey<vxl_uint_32>( "ff_grey32bit_bigendian.viff" ) ) );
+  testlib_test_perform( CheckFile( CompareGrey<vxl_uint_32>(), "ff_grey32bit_true.txt", "ff_grey32bit_bigendian.viff" ) );
   testlib_test_begin( "  32-bit float grey big endian" );
-  testlib_test_perform( test( "ff_grey_float_true.txt", CheckGreyFloat<float>( "ff_grey_float_bigendian.viff" ) ) );
+  testlib_test_perform( CheckFile( CompareGreyFloat<float>(), "ff_grey_float_true.txt", "ff_grey_float_bigendian.viff" ) );
   testlib_test_begin( "  64-bit float grey big endian" );
-  testlib_test_perform( test( "ff_grey_float_true.txt", CheckGreyFloat<double>( "ff_grey_double_bigendian.viff" ) ) );
+  testlib_test_perform( CheckFile( CompareGreyFloat<double>(), "ff_grey_float_true.txt", "ff_grey_double_bigendian.viff" ) );
 
   testlib_test_begin( "  8-bit grey little endian" );
-  testlib_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_uint_8>( "ff_grey8bit_littleendian.viff" ) ) );
+  testlib_test_perform( CheckFile( CompareGrey<vxl_uint_8>(), "ff_grey8bit_true.txt", "ff_grey8bit_littleendian.viff" ) );
   testlib_test_begin( "  8-bit RGB little endian" );
-  testlib_test_perform( test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_uint_8>( "ff_rgb8bit_littleendian.viff" ) ) );
+  testlib_test_perform( CheckFile( ComparePlanes<vxl_uint_8,3>(), "ff_planar8bit_true.txt", "ff_rgb8bit_littleendian.viff" ) );
   testlib_test_begin( "  16-bit grey little endian" );
-  testlib_test_perform( test( "ff_grey16bit_true.txt", CheckGrey<vxl_uint_16>( "ff_grey16bit_littleendian.viff" ) ) );
+  testlib_test_perform( CheckFile( CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit_littleendian.viff" ) );
   testlib_test_begin( "  16-bit RGB little endian" );
-  testlib_test_perform( test( "ff_planar16bit_true.txt", CheckColourPlanes<vxl_uint_16>( "ff_rgb16bit_littleendian.viff" ) ) );
+  testlib_test_perform( CheckFile( ComparePlanes<vxl_uint_16,3>(), "ff_planar16bit_true.txt", "ff_rgb16bit_littleendian.viff" ) );
   testlib_test_begin( "  32-bit grey little endian" );
-  testlib_test_perform( test( "ff_grey32bit_true.txt", CheckGrey<vxl_uint_32>( "ff_grey32bit_littleendian.viff" ) ) );
+  testlib_test_perform( CheckFile( CompareGrey<vxl_uint_32>(), "ff_grey32bit_true.txt", "ff_grey32bit_littleendian.viff" ) );
   testlib_test_begin( "  32-bit float grey little endian" );
-  testlib_test_perform( test( "ff_grey_float_true.txt", CheckGreyFloat<float>( "ff_grey_float_littleendian.viff" ) ) );
+  testlib_test_perform( CheckFile( CompareGreyFloat<float>(), "ff_grey_float_true.txt", "ff_grey_float_littleendian.viff" ) );
   testlib_test_begin( "  64-bit float grey little endian" );
-  testlib_test_perform( test( "ff_grey_float_true.txt", CheckGreyFloat<double>( "ff_grey_double_littleendian.viff" ) ) );
+  testlib_test_perform( CheckFile( CompareGreyFloat<double>(), "ff_grey_float_true.txt", "ff_grey_double_littleendian.viff" ) );
 
   vcl_cout << "SGI IRIS [iris]\n";
   testlib_test_begin( "  8-bit grey rle" );
-  testlib_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_byte>( "ff_grey8bit.iris" ) ) );
+  testlib_test_perform( CheckFile( CompareGrey<vxl_byte>(), "ff_grey8bit_true.txt", "ff_grey8bit.iris" ) );
   testlib_test_begin( "  16-bit grey verbatim" );
-  testlib_test_perform( test( "ff_grey16bit_true.txt", CheckGrey<vxl_uint_16>( "ff_grey16bit.iris" ) ) );
+  testlib_test_perform( CheckFile( CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit.iris" ) );
   testlib_test_begin( "  8-bit RGB rle" );
-  testlib_test_perform( test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_byte>( "ff_rgb8bit.iris" ) ) );
+  testlib_test_perform( CheckFile( ComparePlanes<vxl_byte,3>(), "ff_planar8bit_true.txt", "ff_rgb8bit.iris" ) );
 
   vcl_cout << "MIT [mit]\n";
   testlib_test_begin( "  8-bit grey" );
-  testlib_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_byte>( "ff_grey8bit.mit" ) ) );
+  testlib_test_perform( CheckFile( CompareGrey<vxl_byte>(), "ff_grey8bit_true.txt", "ff_grey8bit.mit" ) );
   testlib_test_begin( "  16-bit grey" );
-  testlib_test_perform( test( "ff_grey16bit_true.txt", CheckGrey<vxl_uint_16>( "ff_grey16bit.mit" ) ) );
+  testlib_test_perform( CheckFile( CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit.mit" ) );
   testlib_test_begin( "  8-bit RGB" );
-  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit.mit" ) ) );
+  testlib_test_perform( CheckFile( CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit.mit" ) );
 
+#if 0
   vcl_cout << "DICOM [dcm]\n";
   testlib_test_begin( "  16-bit greyscale uncompressed" );
-  testlib_test_perform( test( "ff_grey16bit_true_for_dicom.txt", CheckGrey<vxl_uint_16>( "ff_grey16bit_uncompressed.dcm" ) ) );
+  testlib_test_perform( CheckFile( CompareGrey<vxl_uint_16>(), "ff_grey16bit_true_for_dicom.txt", "ff_grey16bit_uncompressed.dcm" ) );
   // These only pass if the DCMTK-based DICOM loader is available
-#if HAS_DCMTK
   testlib_test_begin( "  16-bit greyscale uncompressed 2" );
-  testlib_test_perform( test( "ff_grey16bit_true.txt", CheckGrey<vxl_uint_16>( "ff_grey16bit_uncompressed2.dcm" ) ) );
-  testlib_test_begin( "  16-bit greyscale uncompressed 3" );
-  testlib_test_perform( test( "ff_grey16bit_true.txt", CheckGrey<vxl_uint_16>( "ff_grey16bit_uncompressed3.dcm" ) ) );
+  testlib_test_perform( CheckFile( CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit_uncompressed2.dcm" ) );
   testlib_test_begin( "  8-bit greyscale uncompressed" );
-  testlib_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_uint_8>( "ff_grey8bit_uncompressed.dcm" ) ) );
+  testlib_test_perform( CheckFile( CompareGrey<vxl_uint_8>(), "ff_grey8bit_true.txt", "ff_grey8bit_uncompressed.dcm" ) );
+#if HAS_DCMTK
+  testlib_test_begin( "  16-bit greyscale uncompressed 3" );
+  testlib_test_perform( CheckFile( CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit_uncompressed3.dcm" ) );
 #endif // HAS_DCMTK
+#endif // 0
 
   vcl_cout << "NITF [NITF v2.0]\n";
   testlib_test_begin( "  8-bit grey" );
-  testlib_test_perform( test( "ff_grey8bit_true_for_nitf.txt", CheckGrey<vxl_uint_8>( "ff_grey8bit_uncompressed.nitf" ) ) );
+  testlib_test_perform( CheckFile( CompareGrey<vxl_uint_8>(), "ff_grey8bit_true_for_nitf.txt", "ff_grey8bit_uncompressed.nitf" ) );
   testlib_test_begin( "  16-bit grey (actually 11-bit)" );
-  testlib_test_perform( test( "ff_grey16bit_true_for_nitf.txt", CheckGrey<vxl_uint_16>( "ff_grey16bit_uncompressed.nitf" ) ) );
+  testlib_test_perform( CheckFile( CompareGrey<vxl_uint_16>(), "ff_grey16bit_true_for_nitf.txt", "ff_grey16bit_uncompressed.nitf" ) );
   // ONLY 8 BIT AND 16 BIT GREY ARE VALID TESTS FOR NITF NOW.
 #if 0
   testlib_test_begin( "  8-bit RGB" );
-  testlib_test_perform( test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_uint_8>( "ff_rgb8bit_uncompressed.nitf" ) ) );
+  testlib_test_perform( CheckFile( ComparePlanes<vxl_uint_,38>(), "ff_planar8bit_true.txt", "ff_rgb8bit_uncompressed.nitf" ) );
   testlib_test_begin( "  16-bit RGB" );
-  testlib_test_perform( test( "ff_planar16bit_true.txt", CheckColourPlanes<vxl_uint_16>( "ff_rgb16bit_uncompressed.nitf" ) ) );
+  testlib_test_perform( CheckFile( ComparePlanes<vxl_uint_16,3>(), "ff_planar16bit_true.txt", "ff_rgb16bit_uncompressed.nitf" ) );
   testlib_test_begin( "  32-bit grey" );
-  testlib_test_perform( test( "ff_grey32bit_true.txt", CheckGrey<vxl_uint_32>( "ff_grey32bit.nitf" ) ) );
+  testlib_test_perform( CheckFile( CompareGrey<vxl_uint_32>(), "ff_grey32bit_true.txt", "ff_grey32bit.nitf" ) );
   testlib_test_begin( "  32-bit float grey" );
-  testlib_test_perform( test( "ff_grey_float_true.txt", CheckGreyFloat<float>( "ff_grey_float.nitf" ) ) );
+  testlib_test_perform( CheckFile( CompareGreyFloat<float>(), "ff_grey_float_true.txt", "ff_grey_float.nitf" ) );
   testlib_test_begin( "  64-bit float grey" );
-  testlib_test_perform( test( "ff_grey_float_true.txt", CheckGreyFloat<double>( "ff_grey_double.nitf" ) ) );
+  testlib_test_perform( CheckFile( CompareGreyFloat<double>(), "ff_grey_float_true.txt", "ff_grey_double.nitf" ) );
 #endif
+
+  // Test specific file formats. This is only useful when we have
+  // multiple readers for the same format.
+
+  vcl_cout << "\nSPECIFIC IMAGE LOADERS\n\n";
+
+  {
+    vcl_cout << "\n\nvil_dicom\n\n";
+    vil_file_format* ffmt = new vil_dicom_file_format;
+    testlib_test_begin( "  16-bit greyscale uncompressed" );
+    testlib_test_perform( CheckFormat( CompareGrey<vxl_uint_16>(), "ff_grey16bit_true_for_dicom.txt",
+                                       "ff_grey16bit_uncompressed.dcm", ffmt ) );
+    testlib_test_begin( "  16-bit greyscale uncompressed 2" );
+    testlib_test_perform( CheckFormat( CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt",
+                                       "ff_grey16bit_uncompressed2.dcm", ffmt ) );
+    testlib_test_begin( "  8-bit greyscale uncompressed" );
+    testlib_test_perform( CheckFormat( CompareGrey<vxl_uint_8>(), "ff_grey8bit_true.txt",
+                                     "ff_grey8bit_uncompressed.dcm", ffmt ) );
+    delete ffmt;
+  }
+
+
+#if HAS_DCMTK
+  {
+    vcl_cout << "\n\nvil_dicom2\n\n";
+    vil_file_format* ffmt = new vil_dicom2_file_format;
+    testlib_test_begin( "  16-bit greyscale uncompressed" );
+    testlib_test_perform( CheckFormat( CompareGrey<vxl_uint_16>(), "ff_grey16bit_true_for_dicom.txt",
+                                       "ff_grey16bit_uncompressed.dcm", ffmt ) );
+    testlib_test_begin( "  16-bit greyscale uncompressed 2" );
+    testlib_test_perform( CheckFormat( CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt",
+                                       "ff_grey16bit_uncompressed2.dcm", ffmt ) );
+    testlib_test_begin( "  16-bit greyscale uncompressed 3" );
+    testlib_test_perform( CheckFormat( CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt",
+                                       "ff_grey16bit_uncompressed3.dcm", ffmt ) );
+    testlib_test_begin( "  8-bit greyscale uncompressed" );
+    testlib_test_perform( CheckFormat( CompareGrey<vxl_uint_8>(), "ff_grey8bit_true.txt",
+                                     "ff_grey8bit_uncompressed.dcm", ffmt ) );
+    delete ffmt;
+  }
+#endif HAS_DCMTK
 
   return testlib_test_summary();
 }
