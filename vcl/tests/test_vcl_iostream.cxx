@@ -124,5 +124,5 @@ int test_vcl_iostream_main()
 
   vcl_stringstream s(vcl_ios_in | vcl_ios_out | vcl_ios_binary);
 
-  return s==0;
+  return bool(s) ? 0 : 1;
 }
