@@ -140,15 +140,6 @@
 
 //--------------------------------------------------------------------------------
 
-// Decide at configuration time whether you want to use double instead
-// of long double. On most machines it's too slow, but the default is
-// to use it because turning it off by default would be weird.
-#if VCL_USE_LONG_DOUBLE
-typedef long double vcl_long_double;
-#else
-typedef double vcl_long_double;
-#endif
-
 #if VCL_FOR_SCOPE_HACK
 # undef for
 # define for if (false) { } else for
