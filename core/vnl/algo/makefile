@@ -1,11 +1,7 @@
-################################
-include ${IUEROOT}/config/usr_params.mk
-################################
-
 USES := vxl
 LIBRARY := vnl-algo
 VERSION := 1.0
-IULIBS := -lvnl -lvcl -lnetlib
+IMMEDIATE_LIBS := -lvnl -lvcl -lnetlib
 DEFINES += -DBUILDING_VNL_ALGO_DLL
 
 # matrix decompositions
@@ -34,8 +30,8 @@ SOURCES += vnl_rnpoly_solve.cxx
 
 # fft
 SOURCES += vnl_fftxd_prime_factors.cxx
-MANPAGE_SOURCES += vnl_fft1d.cxx
-MANPAGE_SOURCES += vnl_fft2d.cxx
+MANPAGE_SOURCES += vnl_fft1d.txx
+MANPAGE_SOURCES += vnl_fft2d.txx
 
 # stuff
 SOURCES += vnl_determinant.cxx
@@ -43,5 +39,5 @@ SOURCES += vnl_chi_squared.cxx
 SOURCES += vnl_gaussian_kernel_1d.cxx
 
 ################################
-include ${IUEROOT}/config/usr_rules.mk
+include ${IUEROOT}/config/top.mk
 ################################

@@ -1,10 +1,5 @@
-#######################################
-include ${IUEROOT}/config/usr_params.mk
-#######################################
-
 USES += vxl
-include $(IUEROOT)/vxl/vbl/client.mk
-include $(IUEROOT)/vxl/vsl/client.mk
+IULIBS += -lvsl -lvil -lvnl-algo -lvnl -lvbl -lvcl
 
 # Harris corner detector
 MINI_PROG_SOURCES += run_vsl_harris.cxx
@@ -16,6 +11,9 @@ MINI_PROG_SOURCES += break_lines.cxx
 
 ald_libs := vsl vbl vil
 
-######################################
-include ${IUEROOT}/config/usr_rules.mk
-######################################
+####################################
+include $(IUEROOT)/vxl/vbl/client.mk
+include $(IUEROOT)/vxl/vsl/client.mk
+####################################
+include ${IUEROOT}/config/top.mk
+################################
