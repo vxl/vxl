@@ -13,16 +13,13 @@
 
 // Comments re-written by Tim Cootes, for his sins.
 
-#ifndef NDEBUG
-#include <vcl_iostream.h>
-#endif
 
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
 #include <vnl/vnl_tag.h>
 #include <vnl/vnl_error.h>
 #include <vnl/vnl_c_vector.h>
-#include <vcl_cstdlib.h>
+#include <vcl_cassert.h>
 
 export template <class T> class vnl_vector;
 export template <class T> class vnl_matrix;
@@ -141,28 +138,14 @@ public:
   // There are assert style boundary checks - use NDEBUG to turn them off.
   T       & operator() (unsigned int i)
   {
-#ifndef NDEBUG
-    if (i >= size())
-    {
-      vcl_cerr << "ERROR: vnl_vector::operator() called with index " <<i<<".\n";
-      vcl_cerr << "Valid range is 0.."<<size()-1<<vcl_endl;
-      vcl_abort();
-    }
-#endif
+    assert(i<size());   // Check the index is valid.
     return data[i];
   }
   //: Return reference to the element at specified index. No range checking.
   // There are assert style boundary checks - use NDEBUG to turn them off.
   T const & operator() (unsigned int i) const
   {
-#ifndef NDEBUG
-    if (i >= size())
-    {
-      vcl_cerr << "ERROR: vnl_vector::operator() called with index " <<i<<".\n";
-      vcl_cerr << "Valid range is 0.."<<size()-1<<vcl_endl;
-      vcl_abort();
-    }
-#endif
+    assert(i<size());   // Check the index is valid
     return data[i];
   }
 

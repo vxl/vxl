@@ -12,9 +12,6 @@
 //
 //
 
-#ifndef NDEBUG
-#include <vcl_iostream.h>
-#endif
 
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
@@ -22,7 +19,6 @@
 #include <vnl/vnl_error.h>
 #include <vnl/vnl_c_vector.h>
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h>
 
 export template <class T> class vnl_vector;
 export template <class T> class vnl_matrix;
@@ -191,14 +187,8 @@ public:
   // There are assert style boundary checks - use NDEBUG to turn them off.
   T       & operator() (unsigned r, unsigned c)
   {
-#ifndef NDEBUG
-    if (r >= rows() || c>=cols())
-    {
-      vcl_cerr << "ERROR: vnl_vector::operator() called with (r,c) = (" <<r<<','<<c<<").\n";
-      vcl_cerr << "Valid range is (0.."<<rows()-1<<", "<<cols()-1<<")." << vcl_endl;
-      vcl_abort();
-    }
-#endif
+    assert(r<rows());   // Check the row index is valid
+    assert(c<cols());   // Check the column index is valid
     return this->data[r][c];
   }
 
@@ -206,14 +196,8 @@ public:
   // There are assert style boundary checks - use NDEBUG to turn them off.
   T const & operator() (unsigned r, unsigned c) const
   {
-#ifndef NDEBUG
-    if (r >= rows() || c>=cols())
-    {
-      vcl_cerr << "ERROR: vnl_vector::operator() called with (r,c) = (" <<r<<','<<c<<").\n";
-      vcl_cerr << "Valid range is (0.."<<rows()-1<<", "<<cols()-1<<")." << vcl_endl;
-      vcl_abort();
-    }
-#endif
+    assert(r<rows());   // Check the row index is valid
+    assert(c<cols());   // Check the column index is valid
     return this->data[r][c];
   }
 
