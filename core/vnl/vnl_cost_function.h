@@ -13,7 +13,7 @@
 // \verbatim
 // Modifications
 //  971023 AWF Initial version.
-//  LSB (Manchester) 26/3/01 Tidied documnetation
+//  LSB (Manchester) 26/3/01 Tidied documentation
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
