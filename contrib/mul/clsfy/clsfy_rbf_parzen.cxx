@@ -7,7 +7,7 @@
 
 #include <vcl_string.h>
 #include <vcl_algorithm.h>
-
+#include <vcl_cmath.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
@@ -57,7 +57,8 @@ void clsfy_rbf_parzen::set(const vcl_vector<vnl_vector<double> > &inputs,
 //=======================================================================
 //: Return a probability like value that the input being in each class.
 // output(i) i<<nClasses, contains the probability that the input is in class i
-void clsfy_rbf_parzen::class_probabilities(vcl_vector<double> &outputs, const vnl_vector<double> &input) const
+void clsfy_rbf_parzen::class_probabilities(vcl_vector<double>& outputs,
+                                           vnl_vector<double>const& input) const
 {
   const unsigned nTrainingVecs = trainInputs_.size();
   double sumWeightings=0.0, sumPredictions=0.0, weight;
@@ -125,7 +126,7 @@ double clsfy_rbf_parzen::log_l(const vnl_vector<double> &input) const
   vcl_vector<double> outputs(1);
   class_probabilities(outputs, input);
   double prob = outputs[0];
-  return vcl_log(prob/(1-prob));
+  return vcl_log(prob/(1.0-prob));
 }
 
 //=======================================================================
@@ -185,7 +186,7 @@ clsfy_classifier_base* clsfy_rbf_parzen::clone() const
 void clsfy_rbf_parzen::print_summary(vcl_ostream& os) const
 {
   os << trainInputs_.size() << " training samples, "
-     << "Gaussian Width=" << rbf_width() << ", power=" << power_;
+     << "Gaussian Width=" << rbf_width() << ", power=" << power_ << '\n';
 }
 
 //=======================================================================
