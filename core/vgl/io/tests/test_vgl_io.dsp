@@ -87,8 +87,61 @@ LINK32=link.exe
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
-
-SOURCE=.\test_vgl_io.cxx
+SOURCE=.\test_driver.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\golden_test_vgl_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_box_2d_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_box_3d_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_conic_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_homg_line_2d_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_homg_line_3d_2_points_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_homg_plane_3d_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_homg_point_2d_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_homg_point_3d_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_includes.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_line_2d_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_line_segment_2d_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_line_segment_3d_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_point_2d_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_point_3d_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_polygon_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_vector_2d_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_vector_3d_io.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
