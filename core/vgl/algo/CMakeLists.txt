@@ -20,6 +20,7 @@ SET( vgl_algo_sources
   vgl_h_matrix_2d_compute_4point.cxx   vgl_h_matrix_2d_compute_4point.h
   vgl_line_2d_regression.txx           vgl_line_2d_regression.h
   vgl_fit_lines_2d.txx                 vgl_fit_lines_2d.h
+  vgl_convex_hull_2d.txx               vgl_convex_hull_2d.h
 )
 AUX_SOURCE_DIRECTORY(Templates vgl_algo_sources)
 

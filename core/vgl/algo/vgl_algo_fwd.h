@@ -9,6 +9,7 @@ template <class T> class vgl_h_matrix_2d;
 template <class T> class vgl_h_matrix_3d;
 template <class T> class vgl_p_matrix;
 template <class T> class vgl_norm_trans_2d;
+template <class T> class vgl_convex_hull_2d;
 class vgl_h_matrix_1d_compute;
 class vgl_h_matrix_1d_compute_3point;
 class vgl_h_matrix_1d_compute_linear;
