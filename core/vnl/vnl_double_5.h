@@ -1,10 +1,6 @@
+// This is vxl/vnl/vnl_double_5.h
 #ifndef vnl_double_5_h_
 #define vnl_double_5_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-// This is vxl/vnl/vnl_double_5.h
-
 //: \file
 //  \brief
 //  \author Geoffrey Cross
@@ -12,7 +8,7 @@
 //
 // \verbatim
 //  Modifications:
-
+//
 // \endverbatim
 
 #include <vnl/vnl_T_n.h>
