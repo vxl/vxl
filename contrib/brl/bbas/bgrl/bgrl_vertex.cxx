@@ -15,6 +15,18 @@ bgrl_vertex::bgrl_vertex()
 }
 
 
+//: Copy Constructor
+bgrl_vertex::bgrl_vertex(const bgrl_vertex& vertex)
+{
+  for ( vcl_set<bgrl_edge_sptr>::const_iterator itr = vertex.out_edges_.begin();
+        itr != vertex.out_edges_.end();  ++itr ){
+    bgrl_edge_sptr edge_copy((*itr)->clone());
+    edge_copy->from_ = this;
+    out_edges_.insert(edge_copy);
+  }
+}
+
+
 //: Strip all of the edges from this vertex
 void
 bgrl_vertex::strip()
@@ -145,6 +157,23 @@ bgrl_vertex::end()
 }
 
 
+//: Return a platform independent string identifying the class
+vcl_string 
+bgrl_vertex::is_a() const 
+{ 
+  return "bgrl_vertex"; 
+}
+
+
+//: Create a copy of the object on the heap.
+// The caller is responsible for deletion
+bgrl_vertex* 
+bgrl_vertex::clone() const
+{
+  return new bgrl_vertex(*this);
+}
+
+
 //: Binary save self to stream.
 void
 bgrl_vertex::b_write( vsl_b_ostream& os ) const
@@ -247,7 +276,7 @@ vsl_b_read(vsl_b_istream &is, bgrl_vertex* &v)
 
 //: Print an ASCII summary to the stream
 void
-vsl_print_summary(vcl_ostream &os, bgrl_vertex_sptr v)
+vsl_print_summary(vcl_ostream &os, bgrl_vertex* v)
 {
   os << "bgrl_vertex{ ";
   v->print_summary(os);

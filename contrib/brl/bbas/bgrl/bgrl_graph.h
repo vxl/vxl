@@ -37,6 +37,10 @@ class bgrl_graph : public vbl_ref_count
   //: Constructor
   bgrl_graph();
 
+  //: Copy Constructor
+  // \note this provides a deep copy of the graph
+  bgrl_graph(const bgrl_graph& graph);
+
   //: Destructor
   ~bgrl_graph(){}
 
@@ -69,6 +73,13 @@ class bgrl_graph : public vbl_ref_count
 
   //: Returns the end iterator to the set of vertices
   vertex_iterator end();
+
+  //: Return a platform independent string identifying the class
+  virtual vcl_string is_a() const;
+
+  //: Create a copy of the object on the heap.
+  // The caller is responsible for deletion
+  virtual bgrl_graph* clone() const;
 
   //: Binary save self to stream.
   void b_write(vsl_b_ostream &os) const;
@@ -162,13 +173,13 @@ class bgrl_graph : public vbl_ref_count
 
 
 //: Binary save bgrl_graph to stream.
-void vsl_b_write(vsl_b_ostream &os, const bgrl_graph* n);
+void vsl_b_write(vsl_b_ostream &os, const bgrl_graph* g);
 
 //: Binary load bgrl_graph from stream.
-void vsl_b_read(vsl_b_istream &is, bgrl_graph* &n);
+void vsl_b_read(vsl_b_istream &is, bgrl_graph* &g);
 
 //: Print an ASCII summary to the stream
-void vsl_print_summary(vcl_ostream &os, bgrl_graph_sptr n);
+void vsl_print_summary(vcl_ostream &os, bgrl_graph* g);
 
 
 #endif // bgrl_graph_h_

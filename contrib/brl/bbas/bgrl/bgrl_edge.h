@@ -24,6 +24,7 @@ class bgrl_edge : public vbl_ref_count
 {
  public:
   friend class bgrl_vertex;
+  friend class bgrl_graph;
 
   //: Constructor
   bgrl_edge() : from_(NULL), to_(NULL) {}
@@ -32,17 +33,24 @@ class bgrl_edge : public vbl_ref_count
   //: Destructor
   ~bgrl_edge() {}
 
-  //: Binary save self to stream.
-  void b_write(vsl_b_ostream &os) const;
-
-  //: Binary load self from stream.
-  void b_read(vsl_b_istream &is);
-
   //: Smart pointer to the vertex where this edge originates
   bgrl_vertex_sptr from() const { return from_; }
 
   //: Smart pointer to the vertex where this edge ends
   bgrl_vertex_sptr to() const { return to_; }
+
+  //: Return a platform independent string identifying the class
+  virtual vcl_string is_a() const;
+
+  //: Create a copy of the object on the heap.
+  // The caller is responsible for deletion
+  virtual bgrl_edge* clone() const;
+
+  //: Binary save self to stream.
+  void b_write(vsl_b_ostream &os) const;
+
+  //: Binary load self from stream.
+  void b_read(vsl_b_istream &is);
 
   //: Print an ascii summary to the stream
   void print_summary(vcl_ostream &os) const;
@@ -65,7 +73,7 @@ void vsl_b_read(vsl_b_istream &is, bgrl_edge* &e);
 
 //: Print an ASCII summary to the stream
 //  \relates bgrl_edge
-void vsl_print_summary(vcl_ostream &os, bgrl_edge_sptr e);
+void vsl_print_summary(vcl_ostream &os, bgrl_edge* e);
 
 
 #endif // bgrl_edge_h_

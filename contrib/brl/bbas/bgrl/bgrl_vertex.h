@@ -34,6 +34,9 @@ class bgrl_vertex : public vbl_ref_count
   //: Constructor
   bgrl_vertex();
 
+  //: Copy Constructor
+  bgrl_vertex(const bgrl_vertex& vertex);
+
   //: Destructor
   ~bgrl_vertex(){}
 
@@ -51,6 +54,13 @@ class bgrl_vertex : public vbl_ref_count
 
   //: Returns the number of outgoing edges to this vertex 
   unsigned int out_degree() const { return out_edges_.size(); }
+  
+  //: Return a platform independent string identifying the class
+  virtual vcl_string is_a() const;
+
+  //: Create a copy of the object on the heap.
+  // The caller is responsible for deletion
+  virtual bgrl_vertex* clone() const;
 
   //: Binary save self to stream.
   void b_write(vsl_b_ostream &os) const;
@@ -100,7 +110,7 @@ void vsl_b_write(vsl_b_ostream &os, const bgrl_vertex* v);
 void vsl_b_read(vsl_b_istream &is, bgrl_vertex* &v);
 
 //: Print an ASCII summary to the stream
-void vsl_print_summary(vcl_ostream &os, bgrl_vertex_sptr v);
+void vsl_print_summary(vcl_ostream &os, bgrl_vertex* v);
 
 
 #endif // bgrl_vertex_h_

@@ -6,10 +6,44 @@
 #include "bgrl_edge.h"
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsl/vsl_set_io.h>
+#include <vcl_iostream.h>
 
 //: Constructor
 bgrl_graph::bgrl_graph()
 {
+}
+
+//: Copy Constructor
+// \note this provides a deep copy of the graph
+bgrl_graph::bgrl_graph(const bgrl_graph& graph)
+{
+  vcl_map<bgrl_vertex_sptr, bgrl_vertex_sptr> old_to_new;
+
+  // copy vertices and outgoing edges
+  for ( vcl_set<bgrl_vertex_sptr>::const_iterator itr = graph.vertices_.begin();
+        itr != graph.vertices_.end();  ++itr )
+  {
+    bgrl_vertex_sptr vertex_copy((*itr)->clone());
+    old_to_new[*itr] = vertex_copy;
+    vertices_.insert(vertex_copy);
+  }
+
+  // link up new edges to new vertices
+  for ( vcl_set<bgrl_vertex_sptr>::const_iterator v_itr = vertices_.begin();
+        v_itr != vertices_.end();  ++v_itr )
+  {
+    for ( vcl_set<bgrl_edge_sptr>::const_iterator e_itr = (*v_itr)->out_edges_.begin();
+          e_itr != (*v_itr)->out_edges_.end();  ++e_itr )
+    {
+      vcl_map<bgrl_vertex_sptr, bgrl_vertex_sptr>::iterator find_new = old_to_new.find((*e_itr)->to());
+      if ( find_new != old_to_new.end() ){
+        (*e_itr)->to_ = find_new->second.ptr();
+        find_new->second->in_edges_.insert(*e_itr);
+      }
+      else
+        vcl_cerr << "Error copying graph: vertex not found in graph" << vcl_endl;
+    }
+  }
 }
 
 
@@ -117,6 +151,23 @@ bgrl_graph::vertex_iterator
 bgrl_graph::end()
 {
   return vertices_.end();
+}
+
+
+//: Return a platform independent string identifying the class
+vcl_string 
+bgrl_graph::is_a() const 
+{ 
+  return "bgrl_graph"; 
+}
+
+
+//: Create a copy of the object on the heap.
+// The caller is responsible for deletion
+bgrl_graph* 
+bgrl_graph::clone() const
+{
+  return new bgrl_graph(*this);
 }
 
 
@@ -228,40 +279,40 @@ bgrl_graph::breadth_iterator::next_vertex()
 
 //: Binary save bgrl_graph to stream.
 void
-vsl_b_write(vsl_b_ostream &os, const bgrl_graph* n)
+vsl_b_write(vsl_b_ostream &os, const bgrl_graph* g)
 {
-  if (!n) {
+  if (!g) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
   else {
     vsl_b_write(os,true); // Indicate non-null pointer stored
-    n->b_write(os);
+    g->b_write(os);
   }
 }
 
 
 //: Binary load bgrl_graph from stream.
 void
-vsl_b_read(vsl_b_istream &is, bgrl_graph* &n)
+vsl_b_read(vsl_b_istream &is, bgrl_graph* &g)
 {
-  delete n;
+  delete g;
   bool not_null_ptr;
   vsl_b_read(is, not_null_ptr);
   if (not_null_ptr) {
-    n = new bgrl_graph();
-    n->b_read(is);
+    g = new bgrl_graph();
+    g->b_read(is);
   }
   else
-    n = 0;
+    g = 0;
 }
 
 
 //: Print an ASCII summary to the stream
 void
-vsl_print_summary(vcl_ostream &os, bgrl_graph_sptr n)
+vsl_print_summary(vcl_ostream &os, bgrl_graph* g)
 {
   os << "bgrl_graph{";
-  n->print_summary(os);
+  g->print_summary(os);
   os << '}';
 }
 
