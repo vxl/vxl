@@ -97,7 +97,7 @@ void vil_gen_generic_image::init(vcl_string const& s)
   // 2. Get size
   width_ = -1;
   height_ = -1;
-  sscanf(p, "%dx%d:", &width_, &height_);
+  vcl_sscanf(p, "%dx%d:", &width_, &height_);
   if (height_ == -1) {
     vcl_cerr << "vil_gen_generic_image: bad height, should be gen:WxH:\n";
     width_ = 0;

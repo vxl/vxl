@@ -64,7 +64,7 @@ vcl_string NewString()
 {
   static int i = 0;
   char buf[20];
-  sprintf(buf,"%d",++i);
+  vcl_sprintf(buf,"%d",++i);
   vcl_string s(buf);
   return s;
 }

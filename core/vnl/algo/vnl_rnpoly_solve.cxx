@@ -649,7 +649,7 @@ static int Perform_Distributed_Task(int points,vnl_rnpoly_solve_cmplx sols[LEN][
   }
 
 #ifdef DEBUG
-  if (F != stderr) fclose(F);
+  if (F != stderr) vcl_fclose(F);
   vcl_cout<< vcl_endl;
 #endif
 
