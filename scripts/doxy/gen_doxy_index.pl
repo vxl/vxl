@@ -51,7 +51,7 @@ sub do_dirs
   my($vxlsrc,$library_list)=@_;
   my $label;
 
-	my $firstpackage=1;
+    my $firstpackage=1;
 
   print OF  "<h2>Library Documentation</h2>\n";
 
@@ -69,19 +69,19 @@ sub do_dirs
     chomp;
     @bits = split /\s/;
 
-		if ($bits[0] eq "package:")
-		{
-		  # Get package name and description
-		  ($label,$package,@descrip) = split /\s/;
-			if (!$firstpackage)
-			{
-			  print OF "</blockquote>\n";
+        if ($bits[0] eq "package:")
+        {
+          # Get package name and description
+          ($label,$package,@descrip) = split /\s/;
+            if (!$firstpackage)
+            {
+              print OF "</blockquote>\n";
       }
       print OF "<h3>$package : @descrip</h3>\n";
-			print OF "<blockquote>\n";
-			$firstpackage=0;
+            print OF "<blockquote>\n";
+            $firstpackage=0;
       next;
-		}
+        }
 
     $package = $bits[0];
     $library = $bits[1];
@@ -136,7 +136,8 @@ sub print_book_index_links
   print OF "<h2>Overview Documentation</h2>\n";
 
   print_link("VXL Homepage","http://vxl.sourceforge.net/");
-  print OF "<br>\n";
+  print OF "<br><br>\n";
+  print OF "<p>Overviews are compiled from the doc/book directories of each package.</p>\n";
 
   # Read in list of books
   open(BOOKS, $book_list) || die "can't open $book_list\n";
@@ -159,8 +160,7 @@ sub print_book_index_links
   }
   close(BOOKS);
 
-  print OF "<p>Overviews are stored in the doc/book directories of each package.</p>\n";
-  print OF "<hr>";
+  print OF "<br><hr>";
 }
 
 sub print_tail()
