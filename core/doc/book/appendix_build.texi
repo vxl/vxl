@@ -158,9 +158,9 @@ SET( vfbl_sources
 # if ZLIB is available.  Notice how vfbl_sources is set to its current
 # value, plus the new source file "vfbl_zip.cxx".
 
-IF( HAS_ZLIB )
+IF( ZLIB_FOUND )
   SET( vfbl_sources ${vfbl_sources} vfbl_zip.cxx )
-ENDIF( HAS_ZLIB )
+ENDIF( ZLIB_FOUND )
 
 # The ADD_LIBRARY command configures a new library.  The first
 # argument is again the target name, i.e., the name of the library to
@@ -174,24 +174,27 @@ ADD_LIBRARY( vfbl ${vfbl_sources} )
 
 # In general, include FindXXX.cmake to determine whether package XXX
 # is available.  In this example, XXX is ZLIB.  VXL has its own
-# specialized version of many of the FindXXX.cmake Module files that
-# come with CMake.  These VXL versions of the Module files do not
-# actually add include paths or link libraries.  Instead, the variable
-# HAS_XXX is set to "yes" if the package is available and "no" if it
-# is not.  If the package is available, XXX_INCLUDE_PATH and
+# specialised version of some of the FindXXX.cmake Module files
+# instead of the ones that come with the current version of CMake.
+# These specialised versions are there to deal with v3p, or copies of the
+# files in the CMake CVS snapshot, but not available in the current
+# release of CMake.
+
+# The variable
+# XXX_FOUND is set to "YES" if the package is available and undefined
+# or "NO" if it is not.
+# If the package is available, XXX_INCLUDE_DIR and
 # XXX_LIBRARIES variables are set, and you must use them in
 # INCLUDE_DIRECTORIES and TARGET_LINK_LIBRARIES commands as shown
 # below.
 
-# Most FindXXX.cmake files set the C/C++ preprocessor macro HAS_XXX,
-# which is true if and only if the package can be used.  Note that
-# this is in addition to the CMake variable with the same name, which
-# is always set.
 
-IF( HAS_ZLIB )
-  INCLUDE_DIRECTORIES( ${ZLIB_INCLUDE_PATH} )
+
+IF( ZLIB_FOUND )
+  INCLUDE_DIRECTORIES( ${ZLIB_INCLUDE_DIR} )
+  ADD_DEFINITIONS( $(ZLIB_DEFINITIONS})
   TARGET_LINK_LIBRARIES( vfbl ${ZLIB_LIBRARIES} )
-ENDIF( HAS_ZLIB )
+ENDIF( ZLIB_FOUND )
 
 # Use AUX_SOURCE_DIRECTORY when there are .cxx files in a Templates
 # directory that instantiate templates in .txx files.  This command
@@ -202,14 +205,16 @@ AUX_SOURCE_DIRECTORY( Templates foobar_sources )
 
 # Just as in example 1, use the TARGET_LINK_LIBRARIES command to
 # specify each library that is directly used by this library.  CMake
-# will remember that vfbl needs these libraries.  When an application
+# will remember that vfbl needs these libraries. When an application
 # links with vfbl, CMake will automatically make sure it is linked
-# with each of these libraries.
+# with each of these libraries. This linking is
+# recursive, so that for example, the vcl in the line below is
+# unnecessary - using vul and vil will ensure that vcl is used.
 
 TARGET_LINK_LIBRARIES( vfbl vnl_algo vul vil vcl )
 
 # The LINK_LIBRARIES command should not be used when configuring a
-# library.  This would not propogate library dependencies to
+# library.  This would not propagate library dependencies to
 # applications that use this library.
 
 # Tests go in the tests subdirectory.  Whether the tests are built
@@ -232,7 +237,7 @@ ENDIF( BUILD_EXAMPLES )
 @cindex Preprocessor macros, build related
 
 Listed below are CMake variables commonly used in VXL CMake files and
-associated preprocessor macros.  The CMake variable are prefixed by
+similar preprocessor macros.  The CMake variable are prefixed by
 ``CMake:'' and the equivalent (usually identically named) C/C++
 preprocessor macros (for @code{#ifdef}, etc.) are prefixed by
 ``Preprocessor:''.  The means by which each variable is set is given in
@@ -247,7 +252,7 @@ are in @file{$VXLSRC/config.cmake/Modules/}.
 @itemx @bullet{} Preprocessor: @code{VCL_WIN32} (vcl_compiler.h, included by each vcl_*.h file)
 The Windows API is available.  Keep in mind that @code{WIN32} is
 defined under Cygwin, so it does not imply use of MSVC++.  Make sure
-you don't really want @code{HAS_MFC}, or @code{VCL_VC60}.
+you don't really want @code{HAS_MFC}, or @code{VCL_VC60} instead.
 
 @item  @bullet{} CMake: @code{UNIX} (defined by CMake, not in a file)
 @itemx @bullet{} Preprocessor: system dependent
@@ -262,7 +267,7 @@ The Cygwin API is present.
 @itemx @bullet{} Preprocessor: [???]
 The Borland C++ compiler is being used.
 
-@item  @bullet{} CMake: @code{SOLARIS} (VXL top level @file{CMakeLists.txt} file)
+@item  @bullet{} CMake: @code{SOLARIS} (VXL top level @file{UseVXL.cmake} file)
 @itemx @bullet{} Preprocessor: [???]
 The OS is Solaris.  This variable is set in the top level
 @file{CMakeLists.txt} file.
@@ -271,56 +276,56 @@ The OS is Solaris.  This variable is set in the top level
 @itemx @bullet{} Preprocessor: (none)
 Directory holding the VXL versions of the @file{FindXXX.cmake} files.
 
-@item  @bullet{} CMake: @code{HAS_MFC} (VXL top level @file{CMakeLists.txt} file)
-@itemx @bullet{} Preprocessor: @code{HAS_MFC} (VXL top level @file{CMakeLists.txt} file)
+@item  @bullet{} CMake: @code{MFC_FOUND} (Module file @file{FindMFC.cmake})
+@itemx @bullet{} Preprocessor: @code{HAS_MFC} (Occasionally defined where needed)
 Microsoft Foundation Classes are available.
 
-@item  @bullet{} CMake: @code{HAS_GLUT} (Module file @file{FindGLUT.cmake})
-@itemx @bullet{} Preprocessor: @code{HAS_GLUT} (Module file @file{FindGLUT.cmake})
+@item  @bullet{} CMake: @code{GLUT_FOUND} (Module file @file{FindGLUT.cmake})
+@itemx @bullet{} Preprocessor: @code{HAS_GLUT} (Occasionally defined where needed)
 The GLUT library is available.
 
-@item  @bullet{} CMake: @code{HAS_GTK} (Module file @file{FindGTK.cmake})
-@itemx @bullet{} Preprocessor: @code{HAS_GTK} (Module file @file{FindGTK.cmake})
+@item  @bullet{} CMake: @code{GTK_FOUND} (Module file @file{FindGTK.cmake})
+@itemx @bullet{} Preprocessor: @code{HAS_GTK} (Occasionally defined where needed)
 The GTK library is available.
 
-@item  @bullet{} CMake: @code{HAS_JPEG} (Module file @file{FindJPEG.cmake})
-@itemx @bullet{} Preprocessor: @code{HAS_JPEG} (Module file @file{FindJPEG.cmake})
+@item  @bullet{} CMake: @code{JPEG_FOUND} (Module file @file{FindJPEG.cmake})
+@itemx @bullet{} Preprocessor: @code{HAS_JPEG} (Occasionally defined where needed)
 The JPEG library is available.
 
-@item  @bullet{} CMake: @code{HAS_MPEG} (Module file @file{FindMPEG.cmake})
-@itemx @bullet{} Preprocessor: @code{HAS_MPEG} (Module file @file{FindMPEG.cmake})
+@item  @bullet{} CMake: @code{MPEG_FOUND} (Module file @file{FindMPEG.cmake})
+@itemx @bullet{} Preprocessor: @code{HAS_MPEG} (Occasionally defined where needed)
 The MPEG library is available.
 
-@item  @bullet{} CMake: @code{HAS_NETLIB} (Module file @file{FindNetlib.cmake})
-@itemx @bullet{} Preprocessor: none (could easily be added if needed)
+@item  @bullet{} CMake: @code{NETLIB_FOUND} (Module file @file{FindNetlib.cmake})
+@itemx @bullet{} Preprocessor: none (could easily be added if and where needed)
 The NetLib library is available.
 
-@item  @bullet{} CMake: @code{HAS_OPENGL} (Module file @file{FindOpenGL.cmake})
-@itemx @bullet{} Preprocessor: @code{HAS_OPENGL} (Module file @file{FindOpenGL.cmake})
+@item  @bullet{} CMake: @code{OPENGL_FOUND} (Module file @file{FindOpenGL.cmake})
+@itemx @bullet{} Preprocessor: @code{HAS_OPENGL} (Occasionally defined where needed)
 The OpenGL library is available.
 
-@item  @bullet{} CMake: @code{HAS_PNG} (Module file @file{FindPNG.cmake})
-@itemx @bullet{} Preprocessor: @code{HAS_PNG} (Module file @file{FindPNG.cmake})
+@item  @bullet{} CMake: @code{PNG_FOUND} (Module file @file{FindPNG.cmake})
+@itemx @bullet{} Preprocessor: @code{HAS_PNG} (Occasionally defined where needed)
 The PNG library is available.
 
-@item  @bullet{} CMake: @code{HAS_QT} (Module file @file{FindQt.cmake})
-@itemx @bullet{} Preprocessor: none (could easily be added if needed)
+@item  @bullet{} CMake: @code{QT_FOUND} (Module file @file{FindQt.cmake})
+@itemx @bullet{} Preprocessor: none (could easily be added if and where needed)
 The Qt library is available.
 
-@item  @bullet{} CMake: @code{HAS_QV} (Module file @file{FindQv.cmake})
-@itemx @bullet{} Preprocessor: @code{HAS_QV} (Module file @file{FindQv.cmake})
+@item  @bullet{} CMake: @code{QV_FOUND} (Module file @file{FindQv.cmake})
+@itemx @bullet{} Preprocessor: @code{HAS_QV} (Occasionally defined where needed)
 The Qv library is available.
 
-@item  @bullet{} CMake: @code{HAS_TIFF} (Module file @file{FindTIFF.cmake})
-@itemx @bullet{} Preprocessor: @code{HAS_TIFF} (Module file @file{FindTIFF.cmake})
+@item  @bullet{} CMake: @code{TIFF_FOUND} (Module file @file{FindTIFF.cmake})
+@itemx @bullet{} Preprocessor: @code{HAS_TIFF} (Occasionally defined where needed)
 The TIFF library is available.
 
-@item  @bullet{} CMake: @code{HAS_X11} (Module file @file{FindX11.cmake})
-@itemx @bullet{} Preprocessor: @code{HAS_X11} (Module file @file{FindX11.cmake})
+@item  @bullet{} CMake: @code{X11_FOUND} (Module file @file{FindX11.cmake})
+@itemx @bullet{} Preprocessor: @code{HAS_X11} (Occasionally defined where needed)
 The X11 library is available.
 
-@item  @bullet{} CMake: @code{HAS_ZLIB} (Module file @file{FindZLIB.cmake})
-@itemx @bullet{} Preprocessor: @code{HAS_ZLIB} (Module file @file{FindZLIB.cmake})
+@item  @bullet{} CMake: @code{ZLIB_FOUND} (Module file @file{FindZLIB.cmake})
+@itemx @bullet{} Preprocessor: @code{HAS_ZLIB} (Occasionally defined where needed)
 The ZLIB library is available.
 @end table
 
