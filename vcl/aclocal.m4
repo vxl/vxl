@@ -578,10 +578,10 @@ public:
 //  return A::x;
 //}
 ],,[
-VCL_STATIC_CONST_INIT_INT=" = x";
+VCL_STATIC_CONST_INIT_INT="1";
 AC_MSG_RESULT(yes)
 ],[
-VCL_STATIC_CONST_INIT_INT="/* = x */";
+VCL_STATIC_CONST_INIT_INT="0";
 AC_MSG_RESULT(no)
 ])
 AC_LANG_RESTORE
@@ -605,10 +605,10 @@ public:
   static const double y = 27.0;
 };
 ],,[
-VCL_STATIC_CONST_INIT_FLOAT=" = x";
+VCL_STATIC_CONST_INIT_FLOAT="1";
 AC_MSG_RESULT(yes)
 ],[
-VCL_STATIC_CONST_INIT_FLOAT="/* = x */";
+VCL_STATIC_CONST_INIT_FLOAT="0";
 AC_MSG_RESULT(no)
 ])
 AC_LANG_RESTORE
