@@ -14,12 +14,10 @@
 //  Searches for the boundary pixels and runs around until it gets back to beginning.
 //  On exit the boundary points are given by (bi[k],bj[k])
 //
-// Known problems: If (i0,j0) is in the middle of a 1 pixel wide line connecting
-// two regions, then only one of the regions will be explored, and the algorithm
-// will terminate when it gets back to the `neck'.  This can be avoided by
-// ensuring (i0,j0) is at an extremal part of the object before calling this
-// function.  When used in the standard raster scan of the image looking for
-// regions, this will not arise.
+// Point to note: If (i0,j0) is in the middle of a 1 pixel wide line connecting
+// two regions, then the point will occur twice in the list, once as the first
+// point, then once in the middle of the list as we trace through it to get
+// to the other side of the blob.
 void vil_trace_4con_boundary(vcl_vector<int>& bi, vcl_vector<int>& bj,
                              const vil_image_view<bool>& image,
                              int i0, int j0);

@@ -59,13 +59,13 @@ class vil_blob_finder
   //  Return false if no more regions
   bool next_4con_region(vcl_vector<int>& bi, vcl_vector<int>& bj);
 
-  //: Get largest blob in current image
+  //: Get longest blob boundary in current image
   //  Assumes image has been initialised, and that next_4con_region not
   //  yet called.  Erases internal image during this call, so any
   //  subsequent calls will not work.
   //
   //  bi,bj empty if no blobs found.
-  void largest_4con_region(vcl_vector<int>& bi, vcl_vector<int>& bj);
+  void longest_4con_boundary(vcl_vector<int>& bi, vcl_vector<int>& bj);
 
   //: Get number of blobs in given image
   //  Overrides any internal state

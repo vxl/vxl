@@ -74,11 +74,11 @@ bool vil_blob_finder::next_4con_region(vcl_vector<int>& bi, vcl_vector<int>& bj)
   return false;  // Reached end of image without finding another blob
 }
 
-//: Get largest blob in current image
+//: Get longest blob boundary in current image
 //  Assumes image has been initialised, and that next_4con_region not
 //  yet called.  Erases internal image during this call, so any
 //  subsequent calls will not work.
-void vil_blob_finder::largest_4con_region(vcl_vector<int>& bi, vcl_vector<int>& bj)
+void vil_blob_finder::longest_4con_boundary(vcl_vector<int>& bi, vcl_vector<int>& bj)
 {
   bi.resize(0); bj.resize(0);
   vcl_vector<int> tmp_bi,tmp_bj;

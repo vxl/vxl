@@ -53,6 +53,7 @@ ADD_EXECUTABLE( vil_test_all
   test_algo_histogram.cxx
   test_algo_histogram_equalise.cxx
   test_algo_distance_transform.cxx
+  test_algo_blob_finder.cxx
 )
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
@@ -111,6 +112,7 @@ ADD_TEST( vil_test_suppress_non_max vil_test_all test_suppress_non_max )
 ADD_TEST( vil_test_algo_histogram vil_test_all test_algo_histogram )
 ADD_TEST( vil_test_algo_histogram_equalise vil_test_all test_algo_histogram_equalise )
 ADD_TEST( vil_test_algo_distance_transform vil_test_all test_algo_distance_transform )
+ADD_TEST( vil_test_algo_blob_finder vil_test_all test_algo_blob_finder )
 
 # To run timing tests
 #ADD_EXECUTABLE( vil_test_access_timings vil_test_access_timings.cxx)

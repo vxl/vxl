@@ -69,4 +69,25 @@ void vil_trace_4con_boundary(vcl_vector<int>& bi, vcl_vector<int>& bj,
     vil_next_4con_boundary_point(i,j,dir,p,ni1,nj1,istep,jstep);
   }
   while (i!=i0 || j!=j0);
+
+  if (bi.size()==1) return;  // Isolated pixel (how sad).
+
+  // Got back to start.
+  // However, if start is part of a 1 pixel wide line, we need to 
+  // investigate the other side of the line
+  // To check for this, find the next boundary point and check that it
+  // is the same as was found during the first pass
+  vil_next_4con_boundary_point(i,j,dir,p,ni1,nj1,istep,jstep);
+  if (i!=bi[1] || j!=bj[1])
+  {
+    // Second pass is different from first
+    // Investigate the other side of the blob
+    bi.push_back(i0); bj.push_back(j0);
+    do
+    {
+      bi.push_back(i); bj.push_back(j);
+      vil_next_4con_boundary_point(i,j,dir,p,ni1,nj1,istep,jstep);
+    }
+    while (i!=i0 || j!=j0);
+  }
 }
