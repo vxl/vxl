@@ -58,14 +58,17 @@ vil2_image_view<T>::vil2_image_view(const vil2_smart_ptr<vil2_memory_chunk>& mem
 {
 #ifndef NDEBUG
   // check view and chunk are in rough agreement
-  assert(mem_chunk->size() >= n_planes*n_i*n_j*sizeof(T));
-  if (top_left < (const T*)mem_chunk->data() ||
-      top_left >= (const T*)mem_chunk->data() + mem_chunk->size())
-    vcl_cerr << "top_left at " << (const void*)top_left << ", memory_chunk at "
-             << (const void*)mem_chunk->data() << ", size " << mem_chunk->size()
-             << ", size of data type " << sizeof(T) << '\n';
-  assert(top_left >= (const T*)mem_chunk->data() &&
-         top_left  < (const T*)mem_chunk->data() + mem_chunk->size());
+  if (mem_chunk) // if we are doing a view transform on a non-owned image, then mem_chunk will be 0.
+  {
+    assert(mem_chunk->size() >= n_planes*n_i*n_j*sizeof(T));
+    if (top_left < (const T*)mem_chunk->data() ||
+        top_left >= (const T*)mem_chunk->data() + mem_chunk->size())
+      vcl_cerr << "top_left at " << (const void*)top_left << ", memory_chunk at "
+               << (const void*)mem_chunk->data() << ", size " << mem_chunk->size()
+               << ", size of data type " << sizeof(T) << '\n';
+    assert(top_left >= (const T*)mem_chunk->data() &&
+           top_left  < (const T*)mem_chunk->data() + mem_chunk->size());
+  }
 #endif
 }
 
