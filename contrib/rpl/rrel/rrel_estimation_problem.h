@@ -84,8 +84,8 @@ public:
   virtual unsigned int num_unique_samples( ) const { return num_samples(); }
 
   //: Generate a parameter vector from a minimal sample set.
-  // The \a point_indices vector are indicies into the data set, and
-  // must be filled in with num_samples_to_instantiate() indicies.
+  // The \a point_indices vector are indices into the data set, and
+  // must be filled in with num_samples_to_instantiate() indices.
   // Returns true if and only if the points resulted in a unique
   // parameter vector.
   virtual bool fit_from_minimal_set( const vcl_vector<int>& /* point_indices */,
