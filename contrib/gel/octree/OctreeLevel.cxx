@@ -12,13 +12,13 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_iostream.h>
-#include <vcl/vcl_cmath.h>
+#include <vcl_iostream.h>
+#include <vcl_cmath.h>
 
 #include "OctreeLevel.h"
 
 // Default ctor
-OctreeLevel::OctreeLevel( const int d= 0) :
+OctreeLevel::OctreeLevel( const int d) :
   depth( d),
   size( d<0 ? 0 : (1<<d)),
   color( size, size, size),
@@ -40,7 +40,7 @@ OctreeLevel::OctreeLevel( OctreeLevel *p) :
   vcl_cout << "Size = " << size << vcl_endl;
 }
 
-void Octree::InheritFromAbove()
+void OctreeLevel::InheritFromAbove()
 {
   if( !prev)
     {

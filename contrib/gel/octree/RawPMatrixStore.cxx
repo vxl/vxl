@@ -13,10 +13,8 @@
 //-----------------------------------------------------------------------------
 
 #include "RawPMatrixStore.h"
-#include <cool/String.h>
-#include <cool/List.h>
-#include <vcl/vcl_fstream.h>
-#include <vcl/vcl_compiler.h>
+#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <MViewBasics/PMatrix.h>
 
 #include <MViewDatabase/FileNameGenerator.h>
@@ -52,7 +50,7 @@ bool RawPMatrixStore::Load(int image_index)
   if( !check_index( image_index))
     return false;
 
-  CoolString filename = fng_.frame_name( image_index);
+  vcl_string = fng_.frame_name( image_index);
 
   vcl_ifstream fin( filename);
 

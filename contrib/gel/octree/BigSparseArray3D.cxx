@@ -43,7 +43,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_cassert.h>
+#include <vcl_cassert.h>
 #include "BigSparseArray3D.h"
 
 // Default ctor

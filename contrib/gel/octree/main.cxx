@@ -9,6 +9,8 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl_cassert.h>
+#include <vcl_cmath.h> // for sqrt()
+#include <vcl_cstdlib.h> // for exit()
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_list.h>
@@ -79,7 +81,7 @@ void computeborgefors( const vbl_array_2d<bool> &edges, vbl_array_2d<short> &dis
   assert( edges.rows()== distance.rows());
   assert( edges.columns()== distance.columns());
 
-  distance.fill( short(vcl_sqrt(distance.rows()*distance.rows()+ distance.columns()*distance.columns())+1));
+  distance.fill( short(vcl_sqrt((double)distance.rows()*distance.rows()+ distance.columns()*distance.columns())+1));
 
   for( int i=1; i< (edges.rows()-1); i++)
     {
@@ -403,7 +405,7 @@ int main(int argc, char ** argv)
                       double disttoim= vnl_double_2( double(xsize)/2-centre[0], double(ysize)/2-centre[1]).magnitude();
 
                       // cube does actually look 'close' to the image
-                      if( disttoim< (radius+(vcl_sqrt(xsize*xsize/4+ysize*ysize/4))))
+                      if( disttoim< (radius+(vcl_sqrt((double)xsize*xsize/4+ysize*ysize/4))))
                         {
                           cubetest_t t= DoScan( voxmap, voxels[i], *it);
 
