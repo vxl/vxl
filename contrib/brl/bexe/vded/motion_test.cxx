@@ -1,3 +1,5 @@
+//:
+// \file
 #include <vcl_string.h>
 #include <vcl_fstream.h>
 #include <vcl_sstream.h>
@@ -36,7 +38,7 @@ bool print_xml_performance( vcl_string output_file,
                             const vcl_vector< double >& scores );
 
 void write_status(vcl_string output_file, int iframe, int nframes);
-                       
+
 
 int main(int argc, char** argv)
 {
@@ -71,9 +73,9 @@ int main(int argc, char** argv)
     print_xml_params(parameter_output_file(), arg_list, "motion_test_params");
   if ( print_params_only() )
     return 0;
-  
 
-  
+
+
   // Open the movie
   vidl_movie_sptr video = vidl_io::load_movie(input_video_file().c_str());
   if (!video) {
@@ -81,7 +83,7 @@ int main(int argc, char** argv)
     return -1;
   }
 
-  
+
 
 
   // Load each frame of the movie, convert to greyscale, cast to float
@@ -91,14 +93,12 @@ int main(int argc, char** argv)
         f_itr != video->end();  ++f_itr ){
     vil_image_view<float> input_image, grey_image, smooth_image;
     input_image = vil_convert_stretch_range((float)0.0, f_itr->get_view());
-    if( input_image.nplanes() == 3 ) {
+    if ( input_image.nplanes() == 3 )
       vil_convert_planes_to_grey( input_image , grey_image );
-    } 
-    else if ( input_image.nplanes() == 1 ) {
+    else if ( input_image.nplanes() == 1 )
       grey_image = input_image;
-    }
-    else{
-      vcl_cerr << "Error: can't deal with an image with " 
+    else {
+      vcl_cerr << "Error: can't deal with an image with "
                << input_image.nplanes() << " planes."<< vcl_endl;
       return -1;
     }
@@ -111,10 +111,10 @@ int main(int argc, char** argv)
   vcl_vector< vil_image_resource_sptr > results;
   for ( vcl_vector< vil_image_view<float> >::iterator itr = images.begin()+1;
         itr != images.end();  ++itr ){
-          
+
     vil_image_view<float> sing_img;
     brip_sqrt_grad_singular_values(*itr, sing_img, 1);
-    
+
     vil_image_view<float> diff_img;
     vil_math_image_abs_difference(*itr, *(itr-1), diff_img);
 
@@ -124,11 +124,11 @@ int main(int argc, char** argv)
     vil_math_value_range(motion_img, min_val, max_val);
     vil_math_scale_values(motion_img, 1.0/max_val);
     vcl_cout << "min: " << min_val << " max: "<< max_val<<vcl_endl;
-    
+
     vil_image_view<bool> bool_img;
-    vil_threshold_above<float>( motion_img, bool_img, thresh2());
+    vil_threshold_above( motion_img, bool_img, thresh2());
     vil_math_truncate_range( motion_img, 0.0f, thresh1());
-    
+
     int sum = 0;
     vil_math_sum(sum, bool_img, 0);
     int total = bool_img.ni()*bool_img.nj();
@@ -142,20 +142,19 @@ int main(int argc, char** argv)
     img_sptr->put_view(byte_img);
     results.push_back(img_sptr);
 
-    if(status_block_file() != "")
+    if (status_block_file() != "")
       write_status(status_block_file(), results.size(), images.size()-1);
   }
-  if(performance_output_file() != "")
+  if (performance_output_file() != "")
     print_xml_performance( performance_output_file(), input_video_file(), scores );
- 
+
   vidl_movie_sptr result_movie = new vidl_movie(new vidl_clip(results, 0, results.size()));
   vidl_io::save(result_movie.ptr(), output_directory().c_str(), "ImageList");
-     
+
   vcl_cout << "done!" << vcl_endl;
 
   return 0;
 }
-
 
 
 //: print the performance to an XML file
@@ -178,12 +177,12 @@ bool print_xml_performance( vcl_string output_file,
   for (unsigned int i=0; i<scores.size(); ++i){
     outstream << "        <frame index=\""<<i<<"\" score=\""<<scores[i]<<"\"/>\n";
   }
-          
+
   outstream << "      </category>\n"
             << "    </video>\n"
             << "  </frames>\n"
             << "</performance>" <<vcl_endl;
-  
+
   return true;
 }
 
