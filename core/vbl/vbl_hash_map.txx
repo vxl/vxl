@@ -3,8 +3,9 @@
 #define vbl_hash_map_txx_
 
 #include "vbl_hash_map.h"
+#include <vcl_compiler.h>
 
-#ifndef WIN32
+#ifndef VCL_WIN32
 #undef VBL_HASHTABLE_INSTANTIATE
 #define VBL_HASHTABLE_INSTANTIATE(K, T) \
 template class vbl_hash_map<K, T >

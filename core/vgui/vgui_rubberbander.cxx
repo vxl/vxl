@@ -7,6 +7,7 @@
 
 #include "vgui_rubberbander.h"
 
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
@@ -53,7 +54,7 @@ void vgui_rubberbander::init(vgui_rubberbander_client* the_client)
   client_ = the_client;
   active = false;
   obj_type = none_enum;
-#ifdef WIN32
+#ifdef VCL_WIN32
   // Until somebody implements overlays for mfc, this
   // is the default for windows.
   use_overlays = false;

@@ -2,9 +2,11 @@
 #define vnl_dll_h_
 // This is vxl/vnl/dll.h
 
+#include <vcl_compiler.h>
+
 #define VNL_DLL_DATA
 
-#if defined(WIN32) && !defined(BUILDING_VNL_DLL)
+#if defined(VCL_WIN32) && !defined(BUILDING_VNL_DLL)
 
 // if win32 and not buiding the DLL then you need a dllimport
 // Only if you are building a DLL linked application.
@@ -12,6 +14,6 @@
 #  undef VNL_DLL_DATA
 #  define VNL_DLL_DATA _declspec(dllimport)
 # endif // BUILD_DLL
-#endif // WIN32 and !Building_*_dll
+#endif // VCL_WIN32 and !Building_*_dll
 
 #endif // vnl_dll_h_

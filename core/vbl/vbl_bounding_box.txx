@@ -12,6 +12,7 @@
 
 #include "vbl_bounding_box.h"
 
+#include <vcl_compiler.h>
 #include <vcl_iostream.h>
 
 template <class T, class DIM_>
@@ -28,7 +29,7 @@ vcl_ostream& vbl_bounding_box_base<T, DIM_>::print(vcl_ostream& s) const
 }
 
 // VC can't do the <<, luckily it inlines it.
-#ifdef WIN32
+#ifdef VCL_WIN32
 # define vbl_bbox_inst_inline(x) /* template x */
 #else
 # define vbl_bbox_inst_inline(x) template x

@@ -45,10 +45,11 @@
 // \author
 //   Peter Vanroose, ESAT/KULeuven, december 1996.
 
+#include <vcl_compiler.h>
 #include <vcl_cstddef.h>  // for size_t
 #include <vcl_cassert.h>
 
-#ifdef WIN32
+#ifdef VCL_WIN32
 #include <vcl_memory.h> // for memcpy
 #else
 #include <vcl_cstring.h>  // for memcpy where did it get it...

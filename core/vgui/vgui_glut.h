@@ -3,10 +3,11 @@
 
 // See vgui_glu.h
 
+#include <vcl_compiler.h>
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>
 
-#ifdef xxxWIN32
+#ifdef xxxVCL_WIN32
 # define VGUI_GLUT_PRESENT 0
 #else
 # define VGUI_GLUT_PRESENT 1

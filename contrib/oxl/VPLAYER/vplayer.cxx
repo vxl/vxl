@@ -1,6 +1,7 @@
 //:
 //  \file
 
+#include <vcl_compiler.h>
 #include <vcl_vector.h>
 
 #include <vil/vil_image.h>
@@ -27,7 +28,7 @@
 #include "vplayer_geometry.h"
 #include "vplayer_video.h"
 
-#ifdef WIN32
+#ifdef VCL_WIN32
 # include <vgui/impl/mfc/vgui_mfc_app_init.h>
 vgui_mfc_app_init theAppinit;
 #endif
@@ -148,7 +149,7 @@ int main(int argc, char** argv)
 #ifdef HAS_MESA
   vgui_accelerate_x11_tag_function();
 #endif
-#ifdef WIN32
+#ifdef VCL_WIN32
   vgui_mfc_tag_function();
   vgui_accelerate_mfc_tag_function();
 #endif

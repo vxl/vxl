@@ -55,6 +55,7 @@
 // vcl_hash_set, vcl_hash_map, vcl_hash_multiset, and vcl_hash_multimap.
 
 
+#include <vcl_compiler.h>
 #include <vcl_cstdlib.h>
 
 #include <vcl_iostream.h>
@@ -223,7 +224,7 @@ struct vcl_hashtable_const_iterator
 // fbp: try to avoid intances in every module
 enum { VCL_num_primes = 28 };
 
-#if ( __STL_STATIC_TEMPLATE_DATA > 0 ) && ! defined (WIN32)
+#if ( __STL_STATIC_TEMPLATE_DATA > 0 ) && ! defined (VCL_WIN32)
 #  define VCL_prime_list VCL_prime<false>::list_
    template <bool dummy>
    struct VCL_prime {
@@ -473,7 +474,7 @@ public:
       insert_equal_noresize(*f++);
   }
 
-#if defined(WIN32)
+#if defined(VCL_WIN32)
   static void vcl_distance(const_iterator f, const_iterator l, size_type& n) {
     while (f != l) { ++f; ++n; }
   }

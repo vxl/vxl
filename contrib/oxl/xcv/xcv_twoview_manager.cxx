@@ -8,6 +8,8 @@
 
 #include "xcv_twoview_manager.h"
 
+#include <vcl_compiler.h>
+
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_text_graph.h>
 #include <vgui/vgui_projection_inspector.h>
@@ -31,7 +33,7 @@ xcv_twoview_manager::xcv_twoview_manager()
   , transfer_index(0)
   , dragging(false)
 {
-#ifdef WIN32
+#ifdef VCL_WIN32
   // Until somebody implements overlays for mfc, this
   // is the default for windows (see also vgui_rubberbander).
   use_overlays = false;

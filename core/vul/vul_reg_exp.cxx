@@ -120,6 +120,7 @@
 //
 
 #include "vul_reg_exp.h"
+#include <vcl_compiler.h>
 #include <vcl_iostream.h>
 #include <vcl_cstring.h>
 
@@ -402,7 +403,7 @@ void vul_reg_exp::compile (char const* exp) {
     }
 
     // Allocate space.
-//#ifndef WIN32
+//#ifndef VCL_WIN32
     if (this->program != NULL) delete [] this->program;
 //#endif
     this->program = new char[regsize];

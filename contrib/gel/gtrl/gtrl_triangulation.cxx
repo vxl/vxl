@@ -6,9 +6,10 @@
 #endif
 #include "gtrl_triangulation.h"
 
+#include <vcl_compiler.h>
 
 // UNIX specific timer close
-#ifdef WIN32
+#ifdef VCL_WIN32
 #define NO_TIMER
 #endif
 
