@@ -35,6 +35,7 @@ class vdgl_interpolator_cubic : public vdgl_interpolator
   double get_y(double index);
 
   //: interpolation 1st degree
+  double get_grad(double index);
   double get_theta(double index);
   double get_tangent_angle(double index);
 

@@ -27,7 +27,7 @@ class vdgl_interpolator_linear : public vdgl_interpolator
   double get_y(double index);
 
   // interpolation 1st degree
-
+  double get_grad(double index);
   //: the image gradient direction
   double get_theta(double index);
   //:  the geometric tangent angle

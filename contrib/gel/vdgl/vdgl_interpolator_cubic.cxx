@@ -92,6 +92,38 @@ double vdgl_interpolator_cubic::get_y(double index)
   return P(0) * index * index * index  + P(1) *  index * index + P(2) * index  + P(3);
 }
 
+double vdgl_interpolator_cubic::get_grad(double index)
+{
+  const int N = chain_->size();
+  int a= int(index)-1;
+  if (index == N-2) --a; // take previous interval if we are on edgel N-2
+  int b= a+1;
+  int c= b+1;
+  int d= c+1;
+  assert(a >= 0 && d < N);
+
+  vdgl_edgel ae(chain_->edgel(a));
+  vdgl_edgel be(chain_->edgel(b));
+  vdgl_edgel ce(chain_->edgel(c));
+  vdgl_edgel de(chain_->edgel(d));
+
+  vnl_vector_fixed<double,4> A;
+  vnl_matrix_fixed<double,4,4> M;
+
+  A(0) = ae.get_grad(); A(1) = be.get_grad();
+  A(2) = ce.get_grad(); A(3) = de.get_grad();
+
+  M(0,0)=  a*a*a; M(0,1)= a*a; M(0,2)= a; M(0,3)= 1;
+  M(1,0)=  b*b*b; M(1,1)= b*b; M(1,2)= b; M(1,3)= 1;
+  M(2,0)=  c*c*c; M(2,1)= c*c; M(2,2)= c; M(2,3)= 1;
+  M(3,0)=  d*d*d; M(3,1)= d*d; M(3,2)= d; M(3,3)= 1;
+
+  //  Solving A = M * P for P
+  vnl_vector_fixed<double,4> P = vnl_inverse(M) * A;
+
+  return P(0) * index * index * index  + P(1) *  index * index + P(2) * index + P(3);
+}
+
 double vdgl_interpolator_cubic::get_theta(double index)
 {
   const int N = chain_->size();

@@ -55,6 +55,7 @@ class vdgl_digital_curve : public vsol_curve_2d
   // note that the index here runs from 0 to 1
   double get_x( const double s) const;
   double get_y( const double s) const;
+  double get_grad( const double s) const;
   double get_theta(const double s) const;
   double get_tangent_angle(const double s) const;
   int n_pts() const; //the number of discrete points underlying the curve

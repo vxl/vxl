@@ -72,6 +72,21 @@ double vdgl_interpolator_linear::get_y( const double index)
   return be*d+ae*(1-d);
 }
 
+//: linearly interpolate the gradient magnitude
+//
+double vdgl_interpolator_linear::get_grad( const double index)
+{
+  assert(index >= 0 && index < chain_->size());
+  int a = int(index); // round down
+  double d = index-a;
+
+  double ae = chain_->edgel(a).get_grad();
+  if (d==0) return ae; // exactly at an edgel
+  double be = chain_->edgel(a+1).get_grad();
+
+  return be*d+ae*(1-d);
+}
+
 //: linearly interpolate the gradient direction
 //
 double vdgl_interpolator_linear::get_theta( const double index)

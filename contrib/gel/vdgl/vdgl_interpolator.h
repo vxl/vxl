@@ -39,7 +39,9 @@ class vdgl_interpolator : public vul_timestamp,
   virtual double get_x(double index)= 0;
   virtual double get_y(double index)= 0;
 
+
   // interpolation 1st degree
+  virtual double get_grad(double index) = 0;
   virtual double get_theta(double index)= 0;
   virtual double get_tangent_angle(double index)= 0;
 
