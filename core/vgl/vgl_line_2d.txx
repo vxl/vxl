@@ -1,3 +1,5 @@
+// This is vxl/vgl/vgl_line_2d.txx
+
 #include <vgl/vgl_line_2d.h>
 
 #include <vgl/vgl_point_2d.h>
@@ -15,4 +17,11 @@ void vgl_line_2d<Type>::get_two_points(vgl_point_2d<Type> &p1, vgl_point_2d<Type
   else if ( c() == 0) p2.set(b(), -a());
   else                p2.set(-c()/a(), 0);
 }
+
+
+#define VGL_LINE_2D_INSTANTIATE(T) \
+template class vgl_line_2d<T>; \
+template vcl_ostream& operator<<(vcl_ostream&, const vgl_line_2d<T>&); \
+template vcl_istream& operator>>(vcl_istream&, vgl_line_2d<T>&); \
+;
 

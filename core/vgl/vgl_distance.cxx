@@ -1,3 +1,5 @@
+// This is vxl/vgl/vgl_distance.cxx
+
 /*
   fsm@robots.ox.ac.uk
 */
@@ -10,8 +12,8 @@ static inline float square(float x) { return x*x; }
 static inline double square(double x) { return x*x; }
 
 double vgl_distance2_to_linesegment(double x0, double y0,
-                                    double x1, double y1,
-                                    double x, double y)
+            double x1, double y1,
+            double x, double y)
 {
   // squared distance between endpoints :
   double ddh = square(x1-x0) + square(y1-y0);
@@ -37,20 +39,20 @@ double vgl_distance2_to_linesegment(double x0, double y0,
 }
 
 double vgl_distance_to_linesegment(double x1, double y1,
-                                   double x2, double y2,
-                                   double x, double y)
+           double x2, double y2,
+           double x, double y)
 {
   return sqrt(vgl_distance2_to_linesegment(x1, y1, x2, y2, x, y));
 }
 
 double vgl_distance_to_non_closed_polygon(float const px[], float const py[], unsigned n,
-                                          double x, double y)
+            double x, double y)
 {
   double dd = -1;
   for (unsigned i=0; i<n-1; ++i) {
-    double nd = vgl_distance_to_linesegment(px[i  ], py[i  ],
-                                            px[i+1], py[i+1],
-                                            x, y);
+    double nd = vgl_distance_to_linesegment(px[i  ], py[i  ], 
+              px[i+1], py[i+1],
+              x, y);
     if (dd<0 || nd<dd)
       dd = nd;
   }
@@ -58,19 +60,19 @@ double vgl_distance_to_non_closed_polygon(float const px[], float const py[], un
 }
 
 double vgl_distance_to_closed_polygon(float const px[], float const py[], unsigned n,
-                                      double x, double y)
+              double x, double y)
 {
   double dd = -1;
   for (unsigned i=0; i<n-1; ++i) {
-    double nd = vgl_distance_to_linesegment(px[i  ], py[i  ],
-                                            px[i+1], py[i+1],
-                                            x, y);
+    double nd = vgl_distance_to_linesegment(px[i  ], py[i  ], 
+              px[i+1], py[i+1],
+              x, y);
     if (dd<0 || nd<dd)
       dd = nd;
   }
-  double nd = vgl_distance_to_linesegment(px[n-1], py[n-1],
-                                          px[0  ], py[0  ],
-                                          x, y);
+  double nd = vgl_distance_to_linesegment(px[n-1], py[n-1], 
+            px[0  ], py[0  ],
+            x, y);
   if (dd<0 || nd<dd)
     dd = nd;
 

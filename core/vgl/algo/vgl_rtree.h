@@ -3,11 +3,15 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vgl_rtree
-// .LIBRARY vgl-algo
-// .INCLUDE vgl/algo/vgl_rtree.h
-// .FILE vgl_rtree.txx
-// @author fsm@robots.ox.ac.uk
+
+// This is vgl_tree.h
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+// \brief Templated rtree class and associated classes and functions
+
+
 //
 // .SECTION Description
 // Templated rtree class. The rtree is templated over the element
@@ -62,6 +66,7 @@
 // The volume() method is used by the rtree to make decisions
 // about where to put new elements.
 
+
 //--------------------------------------------------------------------------------
 
 #include <vcl_vector.h>
@@ -73,7 +78,7 @@ template <class V, class B, class C> class vgl_rtree_iterator;
 template <class V, class B, class C> class vgl_rtree_const_iterator;
 template <class V, class B, class C> class vgl_rtree;
 
-//: this is a function predicate object for querying the tree.
+//: Function predicate object for querying the tree.
 template <class V, class B, class C>
 class vgl_rtree_probe {
 public:
@@ -91,7 +96,7 @@ public:
 // should be a template argument?
 #define vgl_rtree_MAX_CHILDREN (8)
 
-//: class to represent a node in the rtree.
+//: Represent a node in the rtree.
 template <class V, class B, class C>
 class vgl_rtree_node {
 public:
@@ -161,7 +166,7 @@ private:
 
 //--------------------------------------------------------------------------------
 
-//: base class for both rtree iterators.
+//: Base class for both rtree iterators.
 template <class V, class B, class C>
 class vgl_rtree_iterator_base {
 public:
@@ -185,7 +190,7 @@ inline bool operator!=(vgl_rtree_iterator_base<V, B, C> const &a,
                        vgl_rtree_iterator_base<V, B, C> const &b)
 { return !( a == b ); }
 
-//: iterator for rtree.
+//: Iterator for rtree.
 template <class V, class B, class C>
 class vgl_rtree_iterator : public vgl_rtree_iterator_base<V, B, C> {
 public:
@@ -226,7 +231,66 @@ public:
 
 //--------------------------------------------------------------------------------
 
-//: definition of vgl_rtree<V, B, C> :
+//: Templated rtree class.
+// The rtree is templated over the element
+// type V, the type B of the bounding region used (e.g.
+// axis-aligned bounding boxes are common but there are other
+// possibilities such as boxes which are axis-aligned ones or even
+// bounding ellipsoids) and a type C which is used as a namespace
+// for some functionality needed by the rtree.
+//
+// The rtree is a container of Vs which may contain multiple
+// copies of the same element. The container for client use is
+// called vgl_rtree<V, B, C> and is defined at the bottom of the
+// file.
+//
+// Note that the iterators are bidirectional but only forward
+// advancement has been implement so far (it's tedious work).
+// Moreover, beware that changing an element through an iterator
+// will not update the rtree, so may lead to the data structure
+// being corrupted.
+//
+// \verbatim
+// V : element type
+// B : bounds type
+// C : mystery type
+// \endverbatim
+//
+// The C-device makes it possible to have an rtree of Vs using Bs
+// without having to modify the class definitions of V or B. It
+// may be better to have C's signatures non-static and store a C
+// on every tree node, but I don't know about this.
+//
+// It is assumed that the cost of copying (e.g. by assignment) Vs
+// and Bs is not too high. In any case, I suggest you inline and
+// optimize heavily when compiling this source file.
+//
+// V must have the following signatures:
+// \verbatim
+//   V::V();
+//   V::V(V const &);
+//   V::operator==(V const &) or operator==(V const &, V const &);
+// \endverbatim
+//
+// B must have the following signatures :
+// \verbatim
+//   B::B();
+//   B::B(const &);
+//   B::operator==(V const &) or operator==(B const &, B const &);
+// \endverbatim
+//
+// C must have the following (static method) signatures :
+// \verbatim
+//   void  C::init  (B &, V const &);
+//   void  C::update(B &, V const &);
+//   void  C::update(B &, B const &);
+//   bool  C::meet  (B const &, V const &) const;
+//   bool  C::meet  (B const &, B const &) const;
+//   float C::volume(B const &) const;
+// \endverbatim
+//
+// The volume() method is used by the rtree to make decisions
+// about where to put new elements.
 template <class V, class B, class C>
 class vgl_rtree {
 public:

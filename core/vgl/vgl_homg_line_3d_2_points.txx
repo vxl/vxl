@@ -1,13 +1,14 @@
+// This is vxl/vgl/vgl_homg_line_3d_2_points.txx
+
 #include <vgl/vgl_homg_line_3d_2_points.h>
 
 //***************************************************************************
 // Initialization
 //***************************************************************************
 
-//---------------------------------------------------------------------------
-// -- Construct from two points. Initialise using the specified distinct
+
+//: Construct from two points. Initialise using the specified distinct
 //       points on the line.
-//---------------------------------------------------------------------------
 template <class Type>
 vgl_homg_line_3d_2_points<Type>::vgl_homg_line_3d_2_points(vgl_homg_point_3d<Type> const& start,
                                                            vgl_homg_point_3d<Type> const& end)
@@ -37,9 +38,8 @@ vgl_homg_line_3d_2_points<Type>::vgl_homg_line_3d_2_points(vgl_homg_point_3d<Typ
 //***************************************************************************
 // Utility methods
 //***************************************************************************
-//---------------------------------------------------------------------------
-// -- force the point point_infinite_ to infinity, without changing the line
-//---------------------------------------------------------------------------
+
+//: force the point point_infinite_ to infinity, without changing the line
 template <class Type>
 void vgl_homg_line_3d_2_points<Type>::force_point2_infinite(void)
 {

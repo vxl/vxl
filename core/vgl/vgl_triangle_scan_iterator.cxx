@@ -1,3 +1,5 @@
+// This is vxl/vgl/vgl_triangle_scan_iterator.cxx
+
 /*
   fsm@robots.ox.ac.uk
 */
@@ -19,9 +21,9 @@ void min_n_max(T a, T b, T c, T *min, T *max)
     if (a < c) {
       *min = a;
       if (b < c)  // a b c
-        *max = c;
+  *max = c;
       else        // a c b
-        *max = b;
+  *max = b;
     }
     else {        // c a b
       *min = c;
@@ -32,9 +34,9 @@ void min_n_max(T a, T b, T c, T *min, T *max)
     if (b < c) {
       *min = b;
       if (a < c) // b a c
-        *max = c;
+  *max = c;
       else       // b c a
-        *max = a;
+  *max = a;
     }
     else {       // c b a
       *min = c;
@@ -138,10 +140,10 @@ bool vgl_triangle_scan_iterator::next()
 #else
   if (++scany_ > y1)
     return false;
-
+  
   double minx = x0 - g.x;
   double maxx = x1 - g.x;
-
+  
   //cerr << "minx maxx = " << minx << ' ' << maxx << endl;
   for (int i=0; i<3; ++i) {
     double a_ = data[i][0];
@@ -163,10 +165,10 @@ bool vgl_triangle_scan_iterator::next()
     }
     //cerr << "minx maxx = " << minx << ' ' << maxx << endl;
   }
-
+  
   startx_ = (int) ceil (minx + g.x);
   endx_   = (int) floor(maxx + g.x);
-
+  
   return (scany_ == y0) || (startx_ <= endx_);
 #endif
 }

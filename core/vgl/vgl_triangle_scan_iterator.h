@@ -3,20 +3,22 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vgl_triangle_scan_iterator
-// .INCLUDE vgl/vgl_triangle_scan_iterator.h
-// .FILE vgl_triangle_scan_iterator.cxx
-// @author fsm@robots.ox.ac.uk
 
-// Optimized polygon scan iterator for triangles.
+// This is vxl/vgl/vgl_triangle_scan_iterator.h
+
+// :
+// \file
+// \author fsm@robots.ox.ac.uk
+
 
 #include <vgl/vgl_region_scan_iterator.h>
 
 #define use_polygon_scan_iterator 0
 
+//: Optimized polygon scan iterator for triangles.
 struct vgl_triangle_scan_iterator : public vgl_region_scan_iterator
 {
-  // vertices of triangle
+  //: Vertices of triangle
   struct pt { double x; double y; } a, b, c;
 
 #if use_polygon_scan_iterator  

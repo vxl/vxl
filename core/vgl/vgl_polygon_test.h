@@ -3,10 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vgl_polygon_test
-// .INCLUDE vgl/vgl_polygon_test.h
-// .FILE vgl_polygon_test.cxx
-// @author fsm@robots.ox.ac.uk
+// This is vxl/vgl/vgl_polygon_test.h
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
 
 //: return true iff (x, y) is inside (or on boundary of) the given n-gon.
 template <class T>

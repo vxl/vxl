@@ -1,17 +1,14 @@
-// vgl/vgl_line_segment_2d.h
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vgl_line_segment_2d_h_
 #define vgl_line_segment_2d_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vgl_line_segment_2d - Represents a 2D line segment using two points
-// .LIBRARY vgl
-// .INCLUDE vgl/vgl_line_segment_2d.h
-// .FILE    vgl_line_segment_2d.txx
-// .SECTION Author
-//    mccane@cs.otago.ac.nz: but copied from vgl_line_segment_3d
-// Created: Dec 5 2000
+
+// This is vxl/vgl/vgl_line_segment_2d.h
+
+//:
+// \file
+// \author mccane@cs.otago.ac.nz: but copied from vgl_line_segment_3d
 
 #include <vcl_iosfwd.h>
 
@@ -21,26 +18,32 @@
 template <class Type>
 class vgl_line_segment_2d {
 public:
-  
+
+  //: Default constructor
   vgl_line_segment_2d() {}
+
+  //: Copy constructor
   vgl_line_segment_2d(vgl_line_segment_2d<Type> const& that);
   vgl_line_segment_2d(vgl_point_2d<Type> const &, vgl_point_2d<Type> const &);
  ~vgl_line_segment_2d();
 
   vgl_point_2d<Type> const & get_point1() const { return point1_; }
   vgl_point_2d<Type>       & get_point1() { return point1_; }
-  vgl_point_2d<Type> const & get_point2() const { return point2_; } 
+  vgl_point_2d<Type> const & get_point2() const { return point2_; }
   vgl_point_2d<Type>       & get_point2() { return point2_; }
-  
+
 private:
+  //: One end of line segment
   vgl_point_2d<Type> point1_;
+  //: The other end of the line segment
   vgl_point_2d<Type> point2_;
 };
 
-// stream operators 
-template <class Type> 
+//: Write to stream
+template <class Type>
 vcl_ostream&  operator<<(vcl_ostream& s, const vgl_line_segment_2d<Type>& p);
 
+//: Read from stream
 template <class Type>
 vcl_istream&  operator>>(vcl_istream& is,  vgl_line_segment_2d<Type>& p);
 

@@ -1,3 +1,3 @@
 // Instantiation of vgl_line_2d<double>
 #include <vgl/vgl_line_2d.txx>
-template class vgl_line_2d<double>;
+VGL_LINE_2D_INSTANTIATE(double);

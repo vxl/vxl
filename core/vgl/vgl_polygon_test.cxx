@@ -1,3 +1,5 @@
+// This is vxl/vgl/vgl_polygon_test.cxx
+
 /*
   fsm@robots.ox.ac.uk
 */

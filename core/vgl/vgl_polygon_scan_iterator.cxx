@@ -1,3 +1,11 @@
+// This is vxl/vgl/vgl_polygon_scan_iterator.cxx
+
+//--------------------------------------------------------------
+//
+// Class : vgl_polygon_scan_iterator
+//
+//--------------------------------------------------------------
+
 #include "vgl_polygon_scan_iterator.h"
 
 #include <vcl_list.h>
@@ -24,30 +32,31 @@
 //
 // fsm@robots.ox.ac.uk
 //
+
 //#define fsm_OFFSET 0.5
 #define fsm_OFFSET 0.0
 
-
-
+// find minimum of a and b 
 #ifndef MIN
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #endif
 
-/* find maximum of a and b */
+// find maximum of a and b 
 #ifndef MAX
 #define MAX(a,b) (((a)>(b))?(a):(b))
 #endif
 
-//
 //JLM Dec. 95: Changed name to avoid conflict with defintion in Basics/types.h
 typedef int (* Callback2)(void const*, void const*);
 
 // file global used by compare functions of qsort
 static vgl_polygon::sheet_t* chs;
 
-// comparison routines for qsort
-static int compare_vertind(vgl_polygon_scan_iterator::vertind *u,
-                           vgl_polygon_scan_iterator::vertind *v)
+//===============================================================
+// comparison routines for qsort 
+//===============================================================
+static int compare_vertind(vgl_polygon_scan_iterator::vertind *u, 
+                           vgl_polygon_scan_iterator::vertind *v) 
 {
   return ( chs[u->chainnum][u->vertnum].y() <= chs[v->chainnum][v->vertnum].y() ) ? -1 : 1;
 }
@@ -58,23 +67,29 @@ static int compare_crossedges(vgl_polygon_scan_iterator::crossedge *u,
   return u->x <= v->x ? -1 : 1;
 }
 
+//===============================================================
+// Print routine for vertind
+//===============================================================
 void vgl_polygon_scan_iterator::vertind::display( char const* str)
 {
   vcl_cout << str << " chainnum = " << chainnum << "   vertnum = " << vertnum << vcl_endl;
 }
 
 
-//---------------------------------------------------------------------
-//
-//
+//===============================================================
+// Destructor
+//===============================================================
 vgl_polygon_scan_iterator::~vgl_polygon_scan_iterator()
 {
   delete [] crossedges;
   delete [] yverts;
 }
 
-vgl_polygon_scan_iterator::vgl_polygon_scan_iterator(vgl_polygon const& face,
-                                                     bool boundaryp):
+//===============================================================
+// Constructor - polygon & boundary flag
+//===============================================================
+vgl_polygon_scan_iterator::vgl_polygon_scan_iterator(vgl_polygon const& face, 
+						     bool boundaryp VCL_DEFAULT_VALUE(true)):
   poly_(face)
 {
   boundp = boundaryp;
@@ -82,6 +97,9 @@ vgl_polygon_scan_iterator::vgl_polygon_scan_iterator(vgl_polygon const& face,
   init();
 }
 
+ //===============================================================
+// Constructor - polygon, boundary flag and viewing area
+//===============================================================
 vgl_polygon_scan_iterator::vgl_polygon_scan_iterator(vgl_polygon const& face, bool boundaryp, vgl_box_2d<float> const& window):
   poly_(face)
 {
@@ -91,11 +109,11 @@ vgl_polygon_scan_iterator::vgl_polygon_scan_iterator(vgl_polygon const& face, bo
   init();
 }
 
-//--------------------------------------------------------------------
-// -- Initializes data structures necessary for the scan line
+//===============================================================
+// Init - data structures necessary for the scan line
 //    conversion.  These initializations are common to all 3
 //    constructors.
-//
+//===============================================================
 void vgl_polygon_scan_iterator::init()
 {
   // count total numverts
@@ -158,9 +176,9 @@ void vgl_polygon_scan_iterator::init()
   }
 }
 
-//--------------------------------------------------------------------
-// -- Deletes edge (v,get_next_vert(v)) from the crossedge array
-//
+//===============================================================
+// Deletes edge (v,get_next_vert(v)) from the crossedge array
+//===============================================================
 void vgl_polygon_scan_iterator::delete_edge( vertind v )
 {
     int j;
@@ -176,9 +194,9 @@ void vgl_polygon_scan_iterator::delete_edge( vertind v )
             (numcrossedges-j)*sizeof( crossedges[0] ));
 }
 
-//--------------------------------------------------------------------
-// -- Inserts edge (v,get_next_vert(v)) into the crossedge array
-//
+//===============================================================
+// Inserts edge (v,get_next_vert(v)) into the crossedge array
+//===============================================================
 void vgl_polygon_scan_iterator::insert_edge( vertind v )
 {
      vertind nextvert;
@@ -204,10 +222,10 @@ void vgl_polygon_scan_iterator::insert_edge( vertind v )
      numcrossedges++;
 }
 
-//--------------------------------------------------------------------
-// -- Resets the iterator so that when next() is called, it will
+//===============================================================
+// Resets the iterator so that when next() is called, it will
 //    store the first scan segment
-//
+//===============================================================
 void vgl_polygon_scan_iterator::reset()
 {
   y = y0;               // first interior scan line
@@ -220,18 +238,21 @@ void vgl_polygon_scan_iterator::reset()
   fxr = 0;
 }
 
+//===============================================================
+// Round the double to the neaest int
+//===============================================================
 static inline int irnd(double x)
 {
   return (int) floor(x + 0.5); //(x + ((x<0) ? -0.5 : 0.5));
 }
 
-//----------------------------------------------------------------------
-// -- Moves iterator to the next scan segment.
+//===============================================================
+// Moves iterator to the next scan segment.
 // Scanline y is at y+fsm_OFFSET.
 //
 //??? Check vertices between previous scanline and current one, if any to simplify.
 //??? If pt.y=y+0.5,  pretend it's above invariant: y-0.5 < pt[i].y <= y+.5.
-//
+//===============================================================
 bool vgl_polygon_scan_iterator::next( )
 {
   // Find next segment on current scan line
@@ -315,13 +336,12 @@ bool vgl_polygon_scan_iterator::next( )
     return false;
 }
 
-//----------------------------------------------------------------------
-// -- Returns the vertex following v in v's chain.  The vertex
+//===============================================================
+//: Returns the vertex following v in v's chain.  The vertex
 //    is returned through the parameter nextvert.  I get a syntax error
 //    when I tried to return an object of type vertind.  Compiler error
 //    says the default return type is int???
-//
-void vgl_polygon_scan_iterator::get_next_vert( vertind v, vertind & nextvert )
+void vgl_polygon_scan_iterator::get_next_vert( vertind v, vertind & nextvert ) 
 {
         nextvert = v;
         nextvert.vertnum += 1;
@@ -329,13 +349,11 @@ void vgl_polygon_scan_iterator::get_next_vert( vertind v, vertind & nextvert )
             nextvert.vertnum = 0; // wrap around to first vertex
 }
 
-//----------------------------------------------------------------------
-// -- Returns the vertex preceeding v in v's chain.  The vertex
+//: Returns the vertex preceeding v in v's chain.  The vertex
 //    is returned through the parameter prevvert.  I get a syntax error
 //    when I tried to return an object of type vertind.  Compiler error
 //    says the default return type is int???
-//
-void vgl_polygon_scan_iterator::get_prev_vert( vertind v, vertind & prevvert )
+void vgl_polygon_scan_iterator::get_prev_vert( vertind v, vertind & prevvert ) 
 {
         prevvert = v;
         prevvert.vertnum = prevvert.vertnum - 1;
@@ -343,9 +361,9 @@ void vgl_polygon_scan_iterator::get_prev_vert( vertind v, vertind & prevvert )
             prevvert.vertnum = poly_[prevvert.chainnum].size() - 1;
 }
 
-// ---------------------------------------------------------------------------//
+//===============================================================
 // For debugging purposes.
-//
+//===============================================================
 void vgl_polygon_scan_iterator::display_chains()
 {
     vcl_cout << "Number of Chains: " << poly_.num_sheets() << vcl_endl;
@@ -356,16 +374,16 @@ void vgl_polygon_scan_iterator::display_chains()
         vcl_cout << "  Length: " << poly_[ c ].size() << vcl_endl;
         for (unsigned int v = 0; v < poly_[ c ].size(); v++ )
         {
-            vcl_cout << "  [ " << poly_[ c ][ v ].x()
-                 << " " << poly_[ c ][ v ].y() << " ]" << vcl_endl;
+            vcl_cout << "  [ " << poly_[ c ][ v ].x() 
+            << " " << poly_[ c ][ v ].y() << " ]" << vcl_endl; 
         }
     }
     vcl_cout << vcl_flush;
 }
 
-// ---------------------------------------------------------------------------//
+//===============================================================
 // For debugging purposes.
-//
+//===============================================================
 void vgl_polygon_scan_iterator::display_crossedges()
 {
     int i;
@@ -380,4 +398,5 @@ void vgl_polygon_scan_iterator::display_crossedges()
     vcl_cout << "---------------------" << vcl_endl;
     vcl_cout << vcl_flush;
 }
+
 

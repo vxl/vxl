@@ -4,17 +4,15 @@
 #pragma interface
 #endif
 
-// .NAME vgl_plane_3d
-// .INCLUDE vgl/vgl_plane_3d.h
-// .FILE vgl_plane_3d.txx
-// .SECTION Author
-//    Don Hamilton, Peter Tu
-// Created: Feb 15 2000
-// .SECTION Modifications:
-//  Peter Vanroose, 29 Feb 2000: several minor fixes
+// This is vxl/vgl/vgl_plane_3d.h
+
+//:
+//  \file
+//  \author Don Hamilton, Peter Tu
+//  Created: Feb 15 2000
 
 #include <vcl_iostream.h>
-#include <vcl_algorithm.h>
+//#include <vcl_algorithm.h>
 #include <vgl/vgl_point_3d.h> // necessary for some inline functions
 
 template <class Type>
@@ -44,24 +42,24 @@ public:
   
   vgl_plane_3d<Type> (vgl_homg_plane_3d<Type> const& p);
 
-  // -- Construct a vgl_plane_3d from its equation, four Types.
+  //: Construct a vgl_plane_3d from its equation, four Types.
   vgl_plane_3d (Type nx, Type ny, Type nz, Type d) { set(nx,ny,nz,d); }
   
-  // -- Construct from its equation, a 4-vector.
+  //: Construct from its equation, a 4-vector.
   vgl_plane_3d (const Type v[4]) { set(v[0],v[1],v[2],v[3]); }
   
-  // -- Construct from Normal and d
+  //: Construct from Normal and d
   vgl_plane_3d (const Type normal[3], Type d) {
     set(normal[0],normal[1],normal[2],d);
   }
   
-  // -- Construct from Normal and a point
+  //: Construct from Normal and a point
   vgl_plane_3d (const Type normal[3], const vgl_point_3d<Type>& p) {
     set(normal[0],normal[1],normal[2],
         -(normal[0]*p.x() + normal[1]*p.y() + normal[2]*p.z()));
   }
   
-  // -- Construct from three non-collinear points
+  //: Construct from three non-collinear points
   vgl_plane_3d (vgl_point_3d<Type> const& p1,
                 vgl_point_3d<Type> const& p2,
                 vgl_point_3d<Type> const& p3);

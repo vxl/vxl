@@ -3,14 +3,13 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vgl_region_scan_iterator
-// .INCLUDE vgl/vgl_region_scan_iterator.h
-// .FILE vgl_region_scan_iterator.cxx
-// @author fsm@robots.ox.ac.uk
+// This is vxl/vgl/vgl_region_scan_iterator.h
 
-// Abstract base class for iterating over the pixels in
-// a region of image.
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
 
+//: Abstract base class for iterating over the pixels in a region of image.
 struct vgl_region_scan_iterator
 {
   vgl_region_scan_iterator() { }

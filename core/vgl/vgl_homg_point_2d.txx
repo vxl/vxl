@@ -1,3 +1,5 @@
+// This is vxl/vgl/vgl_homg_point_2d.txx
+
 // Author: Don Hamilton, Peter Tu
 // Copyright:
 // Created: Feb 15 2000

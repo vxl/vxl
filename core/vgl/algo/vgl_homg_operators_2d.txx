@@ -47,7 +47,7 @@ vnl_vector<Type> vgl_homg_operators_2d<Type>::get_vector(vgl_homg_line_2d<Type> 
 }
 
 
-// -- Cross product of two vgl_homg_point_2d<Type>s
+//: Cross product of two vgl_homg_point_2d<Type>s
 template <class Type>
 void vgl_homg_operators_2d<Type>::cross(const vgl_homg_point_2d<Type>& a,
                                         const vgl_homg_point_2d<Type>& b,
@@ -85,7 +85,7 @@ void vgl_homg_operators_2d<Type>::cross(const vgl_homg_line_2d<Type>& a,
 }
 
 //-----------------------------------------------------------------------------
-// -- Dot product of two vgl_homg_point_2d<Type>s
+//: Dot product of two vgl_homg_point_2d<Type>s
 template <class Type>
 double
 vgl_homg_operators_2d<Type>::dot(const vgl_homg_point_2d<Type>& a,
@@ -111,7 +111,7 @@ vgl_homg_operators_2d<Type>::dot(vgl_homg_line_2d<Type> const&l,
 }
 
 //-----------------------------------------------------------------------------
-// -- Normalize vgl_homg_point_2d<Type> to unit magnitude
+//: Normalize vgl_homg_point_2d<Type> to unit magnitude
 
 template <class Type>
 void vgl_homg_operators_2d<Type>::unitize(vgl_homg_point_2d<Type>& a)
@@ -136,7 +136,7 @@ void vgl_homg_operators_2d<Type>::unitize(vgl_homg_point_2d<Type>& a)
 
 // @{ DISTANCE MEASUREMENTS IN IMAGE COORDINATES @}
 
-// -- Get the square of the 2D distance between the two points.
+//: Get the square of the 2D distance between the two points.
 template <class Type>
 double
 vgl_homg_operators_2d<Type>::distance_squared(
@@ -165,8 +165,8 @@ vgl_homg_operators_2d<Type>::distance_squared(
 
 //-----------------------------------------------------------------------------
 //
-// -- Get the square of the perpendicular distance to a line.
-// This is just the homogeneous form of the familiar
+//: Get the square of the perpendicular distance to a line.
+// This is just the homogeneous form of the familiar 
 // @{ $ \frac{a x + b y + c}{\sqrt{a^2+b^2}} $ @}:
 // @{ \[ d = \frac{(l^\top p)}{p_z\sqrt{l_x^2 + l_y^2}} \] @}
 // If either the point or the line are at infinity an error message is
@@ -195,7 +195,7 @@ vgl_homg_operators_2d<Type>::perp_dist_squared(
 // @{ ANGLES @}
 
 //-----------------------------------------------------------------------------
-// -- Get the anticlockwise angle between a line and the x axis.
+//: Get the anticlockwise angle between a line and the x axis.
 template <class Type>
 double
 vgl_homg_operators_2d<Type>::line_angle(const vgl_homg_line_2d<Type>& line)
@@ -204,7 +204,7 @@ vgl_homg_operators_2d<Type>::line_angle(const vgl_homg_line_2d<Type>& line)
 }
 
 //-----------------------------------------------------------------------------
-// -- Get the 0 to pi/2 angle between two lines
+//: Get the 0 to pi/2 angle between two lines
 template <class Type>
 double
 vgl_homg_operators_2d<Type>::abs_angle(const vgl_homg_line_2d<Type>& line1,
@@ -226,7 +226,7 @@ vgl_homg_operators_2d<Type>::abs_angle(const vgl_homg_line_2d<Type>& line1,
 
 //-----------------------------------------------------------------------------
 //
-// -- Get the angle between two lines.  Although homogeneous coordinates are
+//: Get the angle between two lines.  Although homogeneous coordinates are
 // only defined up to scale, here it is assumed that a line with homogeneous
 // coordinates (m) is at 180 degrees to a line (-m), and this is why the term
 // "oriented_line" is used.  However, the overall scale (apart from sign) is
@@ -257,8 +257,8 @@ vgl_homg_operators_2d<Type>::angle_between_oriented_lines(
 
 //-----------------------------------------------------------------------------
 //
-// -- Get the line through two points (the cross-product).
-//
+//: Get the line through two points (the cross-product).
+// 
 
 template <class Type>
 vgl_homg_line_2d<Type>
@@ -272,7 +272,7 @@ vgl_homg_operators_2d<Type>::join (const vgl_homg_point_2d<Type>& point1,
 
 //-----------------------------------------------------------------------------
 //
-// -- Get the line through two points (the cross-product).  In this case, we assume
+//: Get the line through two points (the cross-product).  In this case, we assume
 // that the points are oriented, and ensure the cross is computed with positive point
 // omegas.
 //
@@ -300,8 +300,8 @@ vgl_homg_operators_2d<Type>::join_oriented(const vgl_homg_point_2d<Type>&point1,
 
 //-----------------------------------------------------------------------------
 //
-// -- Get the intersection point of two lines (the cross-product).
-//
+//: Get the intersection point of two lines (the cross-product).
+// 
 
 template <class Type>
 vgl_homg_point_2d<Type>
@@ -315,7 +315,7 @@ vgl_homg_operators_2d<Type>::intersection ( const vgl_homg_line_2d<Type>& line1,
 
 //-----------------------------------------------------------------------------
 //
-// -- @{ Get the perpendicular line to line which passes through point.
+//: @{ Get the perpendicular line to line which passes through point.
 // Params are line $(a,b,c)$ and point $(x,y,1)$.
 // Then the cross product of $(x,y,1)$ and the line's direction $(a,b,0)$,
 // called $(p,q,r)$ satisfies
@@ -339,8 +339,8 @@ vgl_homg_operators_2d<Type>::perp_line_through_point ( const vgl_homg_line_2d<Ty
 
 //-----------------------------------------------------------------------------
 //
-// -- Get the perpendicular projection of point onto line.
-//
+//: Get the perpendicular projection of point onto line.
+// 
 
 template <class Type>
 vgl_homg_point_2d<Type> vgl_homg_operators_2d<Type>::perp_projection(
@@ -354,7 +354,7 @@ vgl_homg_point_2d<Type> vgl_homg_operators_2d<Type>::perp_projection(
   return answer;
 }
 
-// -- Return the midpoint of the line joining two homogeneous points
+//: Return the midpoint of the line joining two homogeneous points
 template <class Type>
 vgl_homg_point_2d<Type>
 vgl_homg_operators_2d<Type>::midpoint( const vgl_homg_point_2d<Type>& p1,
@@ -434,7 +434,7 @@ double vgl_homg_operators_2d<Type>::perp_distance_squared(const vgl_homg_line_2d
 }
 
 //-----------------------------------------------------------------------------
-// -- Calculates the crossratio of four collinear points p1, p2, p3 and p4.
+//: Calculates the crossratio of four collinear points p1, p2, p3 and p4.
 // This number is projectively invariant, and it is the coordinate of p4
 // in the reference frame where p2 is the origin (coordinate 0), p3 is
 // the unity (coordinate 1) and p1 is the point at infinity.
@@ -469,7 +469,7 @@ double vgl_homg_operators_2d<Type>::CrossRatio(const vgl_homg_point_2d<Type>& a,
   return n/m;
 }
 
-// -- Conjugate point of three given colinear points.
+//: Conjugate point of three given colinear points.
 // If cross ratio cr is given (default: -1), the generalized conjugate point
 // returned is such that ((x1,x2;x3,answer)) = cr.
 template <class Type>

@@ -1,17 +1,14 @@
+// This is vxl/vgl/vgl_line_segment_3d.h
+
 //-*- c++ -*-------------------------------------------------------------------
 #ifndef vgl_line_segment_3d_h_
 #define vgl_line_segment_3d_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vgl_line_segment_3d - Represents a 3D line segment using two points
-// .LIBRARY vgl
-// .INCLUDE vgl/vgl_line_segment_3d.h
-// .FILE    vgl_line_segment_3d.txx
-// .SECTION Author
-//    awf@robots.ox.ac.uk
-// Created: 19 Mar 00
-// Created: Feb 15 2000
+//: 
+// \file
+// \author  awf@robots.ox.ac.uk
 
 #include <vcl_iosfwd.h>
 

@@ -1,3 +1,5 @@
+// This is vxl/vgl/vgl_window_scan_iterator.cxx
+
 /*
   fsm@robots.ox.ac.uk
 */

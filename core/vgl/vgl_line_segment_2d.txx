@@ -1,3 +1,5 @@
+// This is vxl/vgl/vgl_line_segment_2d.txx
+
 // vgl/vgl_line_segment_2d.txx
 
 #include "vgl_line_segment_2d.h"
@@ -10,9 +12,9 @@ vgl_line_segment_2d<Type>::vgl_line_segment_2d(vgl_line_segment_2d<Type> const& 
 }
 
 template <class Type> 
-vgl_line_segment_2d<Type>::vgl_line_segment_2d(vgl_point_2d<Type> const & point1, vgl_point_2d<Type> const & point2):
-  point1_(point1),
-  point2_(point2)
+vgl_line_segment_2d<Type>::vgl_line_segment_2d(vgl_point_2d<Type> const & point1,
+                                               vgl_point_2d<Type> const & point2)
+  : point1_(point1), point2_(point2)
 {
 }
 
@@ -25,7 +27,7 @@ vgl_line_segment_2d<Type>::~vgl_line_segment_2d()
 template <class Type> 
 vcl_ostream& operator<<(vcl_ostream& s, vgl_line_segment_2d<Type> const & p)
 {
-  return s << p.get_point1() << " " << p.get_point2() << "\n";
+  return s << p.get_point1() << " " << p.get_point2() << vcl_endl;
 }
 
 template <class Type>
@@ -37,4 +39,6 @@ vcl_istream& operator>>(vcl_istream& is, vgl_line_segment_2d<Type>& p)
 #define VGL_LINE_SEGMENT_2D_INSTANTIATE(Type) \
 template class vgl_line_segment_2d<Type >;\
 template vcl_istream& operator>>(vcl_istream&, vgl_line_segment_2d<Type >&);\
-template vcl_ostream& operator<<(vcl_ostream&, vgl_line_segment_2d<Type > const&);
+template vcl_ostream& operator<<(vcl_ostream&, vgl_line_segment_2d<Type > const&); \
+;
+

@@ -1,23 +1,12 @@
 #ifndef vgl_homg_point_3d_h_
 #define vgl_homg_point_3d_h_
-//-----------------------------------------------------------------------------
+
+// This is vxl/vgl/vgl_homg_point_3d.h
+
+//:
+// \file
+// \author Don HAMILTON Peter TU
 //
-// .NAME vgl_homg_point_3d - Represents a homogeneous 3D point
-// .LIBRARY vgl
-// .INCLUDE vgl/vgl_homg_point_3d.h
-// .FILE    vgl_homg_point_3d.txx
-//
-// .SECTION Author
-// Don HAMILTON
-// Peter TU
-// Peter VANROOSE
-// François BERTEL
-//
-// .SECTION Modifications
-// 2000/05/05 François BERTEL Add default constructor
-// 2000/02/29 Peter VANROOSE  Several minor fixes
-// 2000/02/15 Don HAMILTON, Peter TU Creation
-//-----------------------------------------------------------------------------
 
 template <class Type>
 class vgl_point_3d;
@@ -26,6 +15,8 @@ class vgl_point_3d;
 #include <vcl_algorithm.h>
 #include <vcl_cmath.h> // for vcl_abs()
 
+
+//: Represents a homogenious 3D point
 template <class Type>
 class vgl_homg_point_3d
 {
@@ -34,9 +25,7 @@ class vgl_homg_point_3d
   //***************************************************************************
 public:
 
-  //---------------------------------------------------------------------------
   //: Default constructor with (0,0,0,1)
-  //---------------------------------------------------------------------------
   explicit vgl_homg_point_3d(void);
 
   // Default copy constructor
@@ -46,9 +35,7 @@ public:
 
 //unimp  vgl_homg_point_3d(vgl_point_3d<Type> const& p);
 
-  //---------------------------------------------------------------------------
   //: Constructor from four Types
-  //---------------------------------------------------------------------------
   vgl_homg_point_3d(Type px,
                     Type py,
                     Type pz,
@@ -57,9 +44,7 @@ public:
     set(px,py,pz,pw);
   }
 
-  //---------------------------------------------------------------------------
   //: Constructor from three Types
-  //---------------------------------------------------------------------------
   vgl_homg_point_3d(Type px,
                     Type py,
                     Type pz)
@@ -67,9 +52,7 @@ public:
     set(px,py,pz);
   }
 
-  //---------------------------------------------------------------------------
   //: Construct from 4-vector.
-  //---------------------------------------------------------------------------
   vgl_homg_point_3d(const Type v[4])
   {
     set(v[0],v[1],v[2],v[3]);
@@ -97,7 +80,7 @@ public:
   inline Type& z() { return data_[2]; }
   inline Type& w() { return data_[3]; } 
 
-  // Set x,y,z,w
+  //: Set x,y,z,w
   inline void set(Type px,
                   Type py,
                   Type pz,
@@ -109,7 +92,11 @@ public:
     data_[3]=pw;
   }
 
-  // test for point at infinity
+  //: the equality operator
+  bool operator==(const vgl_homg_point_3d<Type> &other) const;
+
+
+  //: Test for point at infinity
   // Return true when |w| < tol * min(|x|, |y|, |z|)
   bool ideal(Type tol)
   {

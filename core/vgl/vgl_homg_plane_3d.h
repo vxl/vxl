@@ -4,19 +4,23 @@
 #pragma interface
 #endif
 
-// .NAME vgl_homg_plane_3d
-// .INCLUDE vgl/vgl_homg_plane_3d.h
-// .FILE vgl_homg_plane_3d.txx
-// .SECTION Author
-//    Don Hamilton, Peter Tu
-// Created: Feb 15 2000
-// .SECTION Modifications:
-//  Peter Vanroose, 29 Feb 2000: several minor fixes and additions
+// This is vxl/vgl/vgl_homg_plane_3d.h
+
+//:
+// \file 
+// \author Don HAMILTON Peter TU
+// \brief Class for a 3D homogeneous plane.
+//
+// \verbatim
+// Modifications
+// CJB (Manchester) 16/03/2001: Tidied up the documentation
+// \endverbatim
 
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
 #include <vcl_cmath.h>   // vcl_abs()
 #include <vcl_cstdlib.h> // vcl_abs()
+#include <vcl_string.h>
 
 template <class Type>
 class vgl_plane_3d;
@@ -30,25 +34,30 @@ class vgl_homg_plane_3d {
 public:
   vgl_homg_plane_3d () {}
   
-  // -- Construct from four Types.
+  //: Construct from four Types.
   vgl_homg_plane_3d (Type nx, Type ny, Type nz, Type d) { set(nx,ny,nz,d); }
   
-  // -- Construct from 4-vector.
+  //: Construct from 4-vector.
   vgl_homg_plane_3d (const Type v[4]) { set(v[0],v[1],v[2],v[3]); }
   
-  // -- Construct from Normal and d
+  //: Construct from Normal and d
   vgl_homg_plane_3d (const Type normal[3], Type d) {
     set(normal[0],normal[1],normal[2],d);
   }
 
-  // -- Construct from Normal and a point
+  //: Construct from Normal and a point
   vgl_homg_plane_3d (const Type normal[3], const vgl_homg_point_3d<Type>& p);
 
   // Data Access-------------------------------------------------------------
   
+  //: Return x component
   inline Type nx() const {return data_[0];}
+  //: Return y component
   inline Type ny() const {return data_[1];}
+  //: Return z component
   inline Type nz() const {return data_[2];}
+
+  //: Return homogenous scaling component
   inline Type d() const {return data_[3];}
 
   // iterators.
@@ -59,7 +68,7 @@ public:
   const_iterator begin() const { return (Type const*)data_; }
   const_iterator end() const { return (Type const*)(data_+4); }
   
-  // -- Set nx ny nz d
+  //: Set nx ny nz d
   inline void set (Type nx, Type ny, Type nz, Type d){
     data_[0] = nx;
     data_[1] = ny;
@@ -67,7 +76,10 @@ public:
     data_[3] = d;
   }
 
-  // -- Return true iff the plane is the plane at infinity.
+  //: the equality operator
+  bool operator==( vgl_homg_plane_3d<Type> const & other) const;
+
+  //: Return true iff the plane is the plane at infinity.
   // The method checks that max(|nx|,|ny|,|nz|) < tol * |d|
   bool ideal(Type tol) const {
     return vcl_max(vcl_max(vcl_abs(nx()),vcl_abs(ny())),vcl_abs(nz())) < tol * vcl_abs(d());

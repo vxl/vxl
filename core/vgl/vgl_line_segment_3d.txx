@@ -1,4 +1,6 @@
 
+// This is vxl/vgl/vgl_line_segment_3d.txx
+
 #include "vgl_line_segment_3d.h"
 
 #include <vcl_iostream.h>

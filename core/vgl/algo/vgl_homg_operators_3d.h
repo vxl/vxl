@@ -3,15 +3,16 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vgl_homg_operators_3d
-// .LIBRARY vgl-algo
-// .INCLUDE vgl/algo/vgl_homg_operators_3d.h
-// .FILE vgl_homg_operators_3d.txx
-// .SECTION Author
-//    Don Hamilton, Peter Tu
+
+//:
+// \file
+// \author Don Hamilton, Peter Tu
+
+//
 // Created: Feb 16 2000
-// .SECTION Modifications
+// Modifications
 //   31-oct-00 Peter Vanroose - implementations fixed, and vgl_homg_line_3d typedef'd
+//   16-Mar-01 Tim Cootes - Tidied up documentation
 
 #include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
@@ -30,8 +31,10 @@ public:
 
   // method to get a vnl_vector rep of a homogeneous object
 
-  static vnl_vector<Type > get_vector(vgl_homg_point_3d<Type > const& p);
-  static vnl_vector<Type > get_vector(vgl_homg_plane_3d<Type > const& p);
+  //: Get vnl_vector rep of a homogeneous object
+  static vnl_vector<Type> get_vector(vgl_homg_point_3d<Type> const& p);
+  //: Get vnl_vector rep of a homogeneous object
+  static vnl_vector<Type> get_vector(vgl_homg_plane_3d<Type> const& p);
 
   static double angle_between_oriented_lines (const vgl_homg_line_3d& line1,
                                               const vgl_homg_line_3d& line2);

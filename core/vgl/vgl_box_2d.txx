@@ -1,14 +1,10 @@
+// This is vxl/vgl/vgl_box_2d.txx
+
 // Author: Don Hamilton, Peter Tu
 // Copyright:
 // Created: Feb 15 2000
 //: Represents a cartesian 2D box.
 
-
-//--------------------------------------------------------------
-//
-// .NAME vgl_box_2d
-//
-//--------------------------------------------------------------
 
 #include "vgl_box_2d.h"
 
@@ -212,24 +208,24 @@ template <class Type>
 vcl_ostream& vgl_box_2d<Type>::print(vcl_ostream& s) const
 {
   return s << "<vgl_box_2d "
-           << min_pos_[0] << "," << min_pos_[1]
+       << min_pos_[0] << "," << min_pos_[1]
            << " to "
-           << max_pos_[0] << "," << max_pos_[1]
-           << ">";
+       << max_pos_[0] << "," << max_pos_[1]
+       << ">";
 }
 
 template <class Type>
 vcl_ostream& vgl_box_2d<Type>::write(vcl_ostream& s) const
 {
   return s << min_pos_[0] << " " << min_pos_[1] << " "
-           << max_pos_[0] << " " << max_pos_[1] << "\n";
+       << max_pos_[0] << " " << max_pos_[1] << "\n";
 }
 
 template <class Type>
 vcl_istream& vgl_box_2d<Type>::read(vcl_istream& s)
 {
   return s >> min_pos_[0] >> min_pos_[1]
-           >> max_pos_[0] >> max_pos_[1];
+       >> max_pos_[0] >> max_pos_[1];
 }
 
 template <class Type>
@@ -248,16 +244,22 @@ vgl_box_2d<Type> intersect(vgl_box_2d<Type> const& a, vgl_box_2d<Type> const& b)
   // capes - replaced this wrong code
   /*
   return vgl_box_2d<Type>(vcl_max(a.get_min_x(), b.get_min_x()),
-                          vcl_min(a.get_max_x(), b.get_max_x()),
-                          vcl_max(a.get_min_y(), b.get_min_y()),
-                          vcl_min(a.get_max_y(), b.get_max_y())
-                          );
+              vcl_min(a.get_max_x(), b.get_max_x()),
+              vcl_max(a.get_min_y(), b.get_min_y()),
+              vcl_min(a.get_max_y(), b.get_max_y())
+              );
   */
 }
+
+
+
+
 
 #undef VGL_BOX_2D_INSTANTIATE
 #define VGL_BOX_2D_INSTANTIATE(Type)\
 template class vgl_box_2d<Type >;\
 template vcl_istream& operator>>(vcl_istream&, vgl_box_2d<Type >&);\
 template vcl_ostream& operator<<(vcl_ostream&, vgl_box_2d<Type > const&);\
-template vgl_box_2d<Type > intersect(vgl_box_2d<Type > const&, vgl_box_2d<Type > const&);
+template vgl_box_2d<Type > intersect(vgl_box_2d<Type > const&, vgl_box_2d<Type > const&);\
+;
+

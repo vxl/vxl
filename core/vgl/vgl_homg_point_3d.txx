@@ -1,8 +1,9 @@
+// This is vxl/vgl/vgl_homg_point_3d.txx
+
 #include <vgl/vgl_homg_point_3d.h>
 
 //---------------------------------------------------------------------------
-// -- Default constructor with (0,0,0,1)
-//---------------------------------------------------------------------------
+//: Default constructor with (0,0,0,1)
 template <class Type>
 vgl_homg_point_3d<Type>::vgl_homg_point_3d(void)
 {
@@ -11,6 +12,21 @@ vgl_homg_point_3d<Type>::vgl_homg_point_3d(void)
   data_[2]=0;
   data_[3]=1;
 }
+
+
+template <class Type>
+bool vgl_homg_point_3d<Type>::operator==(const vgl_homg_point_3d<Type> &other) const
+{
+  bool result;
+
+  result=this==&other;
+  if(!result)
+    result=((this->x()==other.x()) && (this->y()==other.y())
+      && (this->z()==other.z()) &&  (this->w()==other.w()));
+  return result;
+
+}
+
 
 #define VGL_HOMG_POINT_3D_INSTANTIATE(T) \
 template class vgl_homg_point_3d<T>; \

@@ -4,20 +4,15 @@
 #pragma interface
 #endif
 
-// .NAME vgl_homg_line_2d
-// .INCLUDE vgl/vgl_homg_line_2d.h
-// .FILE vgl_homg_line_2d.txx
-// .SECTION Author
-//    Don Hamilton, Peter Tu
-// Created: Feb 15 2000
-// .SECTION Modifications:
-//  Peter Vanroose, May  9 2000: implemented dist_origin() and get_two_points()
-//                               and added constructor from two points
-//  Peter Vanroose, Feb 28 2000: lots of minor corrections
-//  Peter Vanroose, Dec 1 2000: moved dist_origin() to vgl_distance.h
+// This is vxl/vgl/vgl_homg_line_2d.h
+
+//:
+// \file
+// \author Don Hamilton, Peter Tu
+//
 
 #include <vcl_iostream.h>
-#include <vcl_algorithm.h> // for vcl_min
+//#include <vcl_algorithm.h> // for vcl_min
 #include <vcl_cmath.h> // for vcl_abs
 
 template <class Type>
@@ -36,7 +31,7 @@ public:
  
   // Constructors/Initializers/Destructors-----------------------------------
 
-  // Default constructor  
+  //: Default constructor (leaves line undefined)
   vgl_homg_line_2d () {}
   
   // Default copy constructor  
@@ -44,13 +39,13 @@ public:
 
 //unimp  vgl_homg_line_2d<Type> (vgl_line_2d<Type> const& p);
 
-  // -- Construct from three Types.
+  //: Construct from three Types.
   vgl_homg_line_2d (Type const& a_, Type const& b_, Type const& c_) { set(a_,b_,c_); }
 
-  // -- Construct from 3-vector.
+  //: Construct from 3-vector.
   vgl_homg_line_2d (const Type v[3]) { set(v[0],v[1],v[2]); }
 
-  // -- Construct from two points (join)
+  //: Construct from two points (join)
   vgl_homg_line_2d (vgl_homg_point_2d<Type> const& p1, vgl_homg_point_2d<Type> const& p2);
 
   // Default destructor
@@ -71,45 +66,53 @@ public:
   Type diry() const { return b(); }  // TODO
   Type nx() const { return -b(); } // TODO
   Type ny() const { return a(); } // TODO
-  
+
   Type a() const {return pos_[0];}
   Type b() const {return pos_[1];}
   Type c() const {return pos_[2];}
 
-  // -- Set a b c.
+  //: Set a b c.
   void set (Type const& a_, Type const& b_, Type const& c_){
     pos_[0] = a_;
     pos_[1] = b_;
     pos_[2] = c_;
   }
 
-  // -- Return true iff the point is the point at infinity
+  //: Return true iff the point is the point at infinity
   //    This version checks (min(|a|,|b|) < tol * c
-//win32 fails  bool ideal(Type tol) const { return vcl_min(vcl_abs(a()),vcl_abs(b())) < tol * vcl_abs(c()); }   
+  //win32 fails  bool ideal(Type tol) const { return vcl_min(vcl_abs(a()),vcl_abs(b())) < tol * vcl_abs(c()); }
   
-  // get two points on the line 
-  
+  //:get two points on the line
+  // These two points are normally the intersections
+  // with the Y axis and X axis, respectively.  When the line is parallel to one
+  // of these, the point with y=1 or x=1, resp. are taken.  When the line goes
+  // through the origin, the second point is (b, -a, 1).  Finally, when the line
+  // is the line at infinity, the returned points are (1,0,0) and (0,1,0).
+  // Thus, whenever possible, the returned points are not at infinity.
   void get_two_points(vgl_homg_point_2d<Type> &p1, vgl_homg_point_2d<Type> &p2);
-  
+
   // INTERNALS---------------------------------------------------------------
 
 protected:
-  // the data associated with this line 
+  //: the data associated with this line
   Type pos_[3];
 };
 
-//: stream operators 
-  
+//: Print line equation to stream
 template <class Type>
 vcl_ostream&  operator<<(vcl_ostream& s, const vgl_homg_line_2d<Type>& p) {
   return s << " <vgl_homg_line_2d "
-           << p->pos_[0] << " x + " << p->pos_[1] << " y + "
-           << p->pos_[2] << " z = 0>";
+           << p.a() << " x + " << p.b() << " y + "
+           << p.c() << " z = 0>";
 }
 
+//: Load in line parameters from stream
 template <class Type>
 vcl_istream&  operator>>(vcl_istream& is,  vgl_homg_line_2d<Type>& p) {
-  return is >> p->pos_[0] >> p->pos_[1] >> p->pos_[2];
+  Type a,b,c;
+  is >> a >> b >> c;
+  p.set(a,b,c);
+  return is;
 }
 
 #endif //  vgl_homg_line_2d_h

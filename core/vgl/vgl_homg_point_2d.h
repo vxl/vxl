@@ -4,15 +4,12 @@
 #pragma interface
 #endif
 
-// .NAME vgl_homg_point_2d
-// .INCLUDE vgl/vgl_homg_point_2d.h
-// .FILE vgl_homg_point_2d.txx
-// .SECTION Author
-//    Don Hamilton, Peter Tu
-// Created: Feb 15 2000
-// .SECTION Modifications:
-//  Peter Vanroose,  9 May 2000: added intersection constructor
-//  Peter Vanroose, 29 Feb 2000: several minor fixes and additions
+// This is vxl/vgl/vgl_homg_point_2d.h
+
+//:
+// \file
+// \author Don HAMILTON Peter TU
+//
 
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
@@ -44,16 +41,16 @@ public:
 
 //unimp  vgl_homg_point_2d<Type> (vgl_point_2d<Type> const& p);
 
-  // -- Construct from two Types (nonhomogeneous interface)
+  //: Construct from two Types (nonhomogeneous interface)
   vgl_homg_point_2d (Type px, Type py) { set(px,py); }
 
-  // -- Construct from three Types.
+  //: Construct from three Types.
   vgl_homg_point_2d (Type px, Type py, Type pw) { set(px,py,pw); }
 
-  // -- Construct from homogeneous 3-vector.
-  vgl_homg_point_2d (const Type v[3]) { set(v[0],v[1],v[3]); }
+  //: Construct from homogeneous 3-vector.
+  vgl_homg_point_2d (const Type v[3]) { set(v[0],v[1],v[2]); }
 
-  // -- Construct from 2 lines (intersection).
+  //: Construct from 2 lines (intersection).
   vgl_homg_point_2d (vgl_homg_line_2d<Type> const& l1,
                      vgl_homg_line_2d<Type> const& l2);
 
@@ -75,14 +72,14 @@ public:
   inline Type& y() {return data_[1];}
   inline Type& w() {return data_[2];}
 
-  // -- Set x,y,w.
+  //: Set x,y,w.
   void set (Type px, Type py, Type pw = (Type)1) {
     data_[0] = px,
     data_[1] = py,
     data_[2] = pw;
   }
 
-  // -- Return true iff the point is at infinity (an ideal point).
+  //: Return true iff the point is at infinity (an ideal point).
   // The method checks that |w| < tol * min(|x|,|y|)
   bool ideal(Type tol) {
     return vcl_abs(w()) < tol * vcl_min(vcl_abs(x()),vcl_abs(y()));

@@ -1,15 +1,4 @@
-// Author: Don Hamilton, Peter Tu
-// Copyright:
-// Created: Feb 15 2000
-//: Represents a homogeneous 2d line.
-
-
-//--------------------------------------------------------------
-//
-// .NAME vgl_homg_line_2d
-//
-//--------------------------------------------------------------
-
+// This is vxl/vgl/vgl_homg_line_2d.txx
 
 #include <vgl/vgl_homg_line_2d.h> 
 #include <vgl/vgl_homg_point_2d.h> 
@@ -64,3 +53,8 @@ vgl_homg_line_2d<Type>::vgl_homg_line_2d (vgl_homg_point_2d<Type> const& l1,
       l1.x()*l2.y()-l1.y()*l2.x());
 }
 
+#define VGL_HOMG_LINE_2D_INSTANTIATE(T) \
+template class vgl_homg_line_2d<T>; \
+template vcl_ostream& operator<<(vcl_ostream&, const vgl_homg_line_2d<T>&); \
+template vcl_istream& operator>>(vcl_istream&, vgl_homg_line_2d<T>&); \
+; 

@@ -1,15 +1,8 @@
-// Author: Don Hamilton, Peter Tu
-// Created: Feb 15 2000
+// This is vxl/vgl/vgl_box_3d.txx
 
-
-//--------------------------------------------------------------
-//
-// .NAME vgl_box_3d
-//
-//--------------------------------------------------------------
 
 #include <vgl/vgl_box_3d.h> 
-#include <vgl/vgl_point_3d.h> 
+#include <vgl/vgl_point_3d.h>
 
 // Constructors/Destructors--------------------------------------------------
 
@@ -169,3 +162,34 @@ void vgl_box_3d<Type>::set_centroid(vgl_point_3d<Type> const& centroid)
   set_centroid_y(centroid.y());
   set_centroid_z(centroid.z());
 }
+
+template <class Type>
+vcl_ostream& vgl_box_3d<Type>::print(vcl_ostream& s) const
+{
+  return s << "<vgl_box_3d " << min_pos_[0]
+  << "," << min_pos_[1] << "," << min_pos_[2]
+  << " to "
+  << max_pos_[0] << "," << max_pos_[1] << "," << max_pos_[2]
+  << ">";
+ 
+}
+
+template <class Type>
+vcl_ostream& vgl_box_3d<Type>::write(vcl_ostream& s) const
+{
+  return s << min_pos_[0] << " " << min_pos_[1] << " " << min_pos_[2] << " "
+       << max_pos_[0] << " " << max_pos_[1] << " " << max_pos_[2] << "\n";
+}
+
+template <class Type>
+vcl_istream& vgl_box_3d<Type>::read(vcl_istream& s)
+{
+  return s >> min_pos_[0] >> min_pos_[1] >> min_pos_[2]
+       >> max_pos_[0] >> max_pos_[1] >> max_pos_[2];
+}
+
+
+#define VGL_BOX_3D_INSTANTIATE(Type) \
+template class vgl_box_3d<Type>;
+
+

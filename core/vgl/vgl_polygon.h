@@ -3,15 +3,21 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// awf@robots.ox.ac.uk
+// This is vxl/vgl/vgl_polygon.h
+
+//:
+// \file
+// \author awf@robots.ox.ac.uk
 // Created: 02 Apr 00
+// Binary IO added and documentation tidied up NPC, 20/03/01
 
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vgl/vgl_point_2d.h>
+#include <vcl_string.h>
 
 //: Store a polygon.
-// May have holes or multiple sections.  The polygon is stored as a list 
+// May have holes or multiple sections.  The polygon is stored as a list
 // of "sheets", each sheet is a list of 2d points.
 // Iterate through all points using
 //
@@ -26,35 +32,65 @@ public:
   typedef vcl_vector<point_t> sheet_t;
 
   // Constructors/Destructors--------------------------------------------------
+
+  //: Default constructor
   vgl_polygon();
+
+  //: Construct setting number of sheets or regions
   vgl_polygon(int num_sheets);
+
+  //: Construct setting the points in the first sheet
+  // n is the number of points
   vgl_polygon(float const* x, float const* y, int n);
+
+  //: Construct setting single sheet of points
   vgl_polygon(vcl_vector<point_t> const& points);
+
+  //: Construct setting a number of sheets
   vgl_polygon(vcl_vector<sheet_t> const& sheets);
+
+  //: Copy constructor
   vgl_polygon(vgl_polygon const&);
+
+  //: Destructor
   ~vgl_polygon();
-  
+
+  //: Returns true if x,y is inside the polyon, else false
   bool contains(float x, float y);
 
   // creation
+
+  //: Set the number of sheets to zero
+  void clear();
+
+  //: Add a new sheet to the polygon
   void new_sheet();
+
+  //: Add a new point to the current sheet
   void push_back(float x, float y);
+
+  //: Add a new point to the current sheet
   void push_back(point_t const&);
-  
+
+  //: Add a pre-existing sheet to the ploygon
   void push_back(sheet_t const&);
-  
+
   int num_sheets() const { return sheets_.size(); }
-  
+
+  //: Get the ith sheet
   sheet_t & operator[](int i) { return sheets_[i]; }
+
+  //: Get the ith sheet
   sheet_t const& operator[](int i) const { return sheets_[i]; }
 
   //: Pretty print
   vcl_ostream& print(vcl_ostream&) const;
 
 protected:
+
   // Data Members--------------------------------------------------------------
   vcl_vector<sheet_t> sheets_;
-  
+
   // Helpers-------------------------------------------------------------------
 };
 
@@ -64,13 +100,18 @@ struct vgl_polygon_sheet_as_array {
   float* x;
   float* y;
 
+  //: Constructor
   vgl_polygon_sheet_as_array(vgl_polygon::sheet_t const& p);
+
+  //: Destructor
   ~vgl_polygon_sheet_as_array();
 };
+
 
 inline
 vcl_ostream& operator<< (vcl_ostream& os, vgl_polygon const& p) {
   return p.print(os);
 }
-  
+
+
 #endif // vgl_polygon_h_

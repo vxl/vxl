@@ -14,8 +14,8 @@
 #include <vgl/algo/vgl_homg_operators_3d.h>
 
 //-----------------------------------------------------------------------------
-//
-// -- Return the angle between the (oriented) lines (in radians)
+
+//: Return the angle between the (oriented) lines (in radians)
 //
 template <class Type>
 double vgl_homg_operators_3d<Type>::angle_between_oriented_lines (const vgl_homg_line_3d& l1,
@@ -32,9 +32,9 @@ double vgl_homg_operators_3d<Type>::angle_between_oriented_lines (const vgl_homg
 
 
 //-----------------------------------------------------------------------------
-//
-// -- Return the squared distance between the points
-//
+
+//: Return the squared distance between the points
+// 
 template <class Type>
 Type vgl_homg_operators_3d<Type>::distance_squared (const vgl_homg_point_3d<Type>& point1,
                                                     const vgl_homg_point_3d<Type>& point2)
@@ -57,8 +57,8 @@ Type vgl_homg_operators_3d<Type>::distance_squared (const vgl_homg_point_3d<Type
 
 //-----------------------------------------------------------------------------
 //
-// -- Return the Eucidean distance between the points
-//
+//: Return the Eucidean distance between the points
+// 
 template <class Type>
 Type vgl_homg_operators_3d<Type>::distance(const vgl_homg_point_3d<Type>&point1,
                                            const vgl_homg_point_3d<Type>&point2)
@@ -68,8 +68,8 @@ Type vgl_homg_operators_3d<Type>::distance(const vgl_homg_point_3d<Type>&point1,
 
 //-----------------------------------------------------------------------------
 //
-// -- Return the intersection point of the line and plane
-//
+//: Return the intersection point of the line and plane
+// 
 template <class Type>
 vgl_homg_point_3d<Type> vgl_homg_operators_3d<Type>::intersect_line_and_plane (
                                   const vgl_homg_line_3d &line,
@@ -130,8 +130,8 @@ vgl_homg_operators_3d<Type>::lines_to_point (const vcl_vector<vgl_homg_line_3d >
 
 //-----------------------------------------------------------------------------
 //
-// -- Return the squared perpendicular distance between the line and point
-//
+//: Return the squared perpendicular distance between the line and point
+// 
 template <class Type>
 double
 vgl_homg_operators_3d<Type>::perp_distance_squared (const vgl_homg_line_3d& l,
@@ -143,8 +143,8 @@ vgl_homg_operators_3d<Type>::perp_distance_squared (const vgl_homg_line_3d& l,
 
 //-----------------------------------------------------------------------------
 //
-// -- Return the line which is perpendicular to l and passes through p.
-//
+//: Return the line which is perpendicular to l and passes through p.
+// 
 template <class Type>
 vgl_homg_operators_3d<Type>::vgl_homg_line_3d
 vgl_homg_operators_3d<Type>::perp_line_through_point (const vgl_homg_line_3d& l,
@@ -159,8 +159,8 @@ vgl_homg_operators_3d<Type>::perp_line_through_point (const vgl_homg_line_3d& l,
 
 //-----------------------------------------------------------------------------
 //
-// -- Compute the perpendicular projection point of p onto l.
-//
+//: Compute the perpendicular projection point of p onto l.
+// 
 template <class Type>
 vgl_homg_point_3d<Type>
 vgl_homg_operators_3d<Type>::perp_projection (const vgl_homg_line_3d& l,
@@ -180,8 +180,8 @@ vgl_homg_operators_3d<Type>::perp_projection (const vgl_homg_line_3d& l,
 
 //-----------------------------------------------------------------------------
 //
-// -- Return the intersection line of the planes
-//
+//: Return the intersection line of the planes
+// 
 template <class Type>
 vgl_homg_operators_3d<Type>::vgl_homg_line_3d
 vgl_homg_operators_3d<Type>::planes_to_line (const vgl_homg_plane_3d<Type>& plane1,
@@ -276,7 +276,7 @@ vgl_homg_operators_3d<Type>::points_to_plane (const vcl_vector<vgl_homg_point_3d
 }
 #endif
 
-// -- Compute best-fit intersection of planes in a point.
+//: Compute best-fit intersection of planes in a point.
 
 template <class Type>
 vgl_homg_point_3d<Type>
@@ -323,7 +323,7 @@ vgl_homg_operators_3d<Type>::intersection_point (const vcl_vector<vgl_homg_plane
 }
 
 //-----------------------------------------------------------------------------
-// -- Calculates the crossratio of four collinear points p1, p2, p3 and p4.
+//: Calculates the crossratio of four collinear points p1, p2, p3 and p4.
 // This number is projectively invariant, and it is the coordinate of p4
 // in the reference frame where p2 is the origin (coordinate 0), p3 is
 // the unity (coordinate 1) and p1 is the point at infinity.
