@@ -9,7 +9,6 @@ MANPAGE_SOURCES += rgrl_object_sptr.h
 
 SOURCES += rgrl_mask.cxx
 MANPAGE_SOURCES += rgrl_mask_sptr.h
-MANPAGE_SOURCES += rgrl_image_convert.txx
 
 MANPAGE_SOURCES += rgrl_cast.h
 MANPAGE_SOURCES += rgrl_set_of.txx
