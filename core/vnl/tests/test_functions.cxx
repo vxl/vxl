@@ -64,7 +64,6 @@ float cdf_baseline[] =
       0.630331814289093F, 0.9508233070373535F, 0.9977140426635742F, 0.9999545812606812F, 0.9999995231628418F
 };
 
-extern "C"
 int test_functions()
 {
   int n;
@@ -116,4 +115,4 @@ int test_functions()
   return 0;
 }
 
-TESTMAIN(test_functions);
+TESTMAIN(test_functions)
