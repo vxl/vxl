@@ -9,7 +9,7 @@
 //  \brief Contains class for symmetric matrices
 //  \author Ian Scott (Manchester ISBE)
 //  \date   6/12/2001
-// 
+//
 #include <vcl_cassert.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
@@ -36,14 +36,14 @@ public:
   //: Construct a symmetric matrix with elements equal to data
   // value should be stored row-wise, and contrain the
   // n*(n+1)/2 diagonal and lower triangular elements
-  vnl_sym_matrix(T const * data, unsigned nn);
+  inline vnl_sym_matrix(T const * data, unsigned nn);
 
   //: Construct a symmetric matrix with all elements equal to value
-  vnl_sym_matrix(unsigned nn, const T & value);
+  inline vnl_sym_matrix(unsigned nn, const T & value);
 
   //: Construct a symmetric matrix from a full matrix.
   // If NDEBUG is set, the symmetry of the matrix will be asserted.
-  explicit vnl_sym_matrix(vnl_matrix<T> const& that);
+  inline explicit vnl_sym_matrix(vnl_matrix<T> const& that);
   ~vnl_sym_matrix()
   { vnl_c_vector<T>::deallocate(data_, size());
     vnl_c_vector<T>::deallocate(index_, nn_);}
@@ -73,21 +73,21 @@ public:
   //: fast access, however i >= j
   T fast (unsigned i, unsigned j) const {
     assert (i >= j);
-    return index_[i][j]; 
+    return index_[i][j];
   }
 
   //: fast access, however i >= j
   T& fast (unsigned i, unsigned j) {
     assert (i >= j);
-    return index_[i][j]; 
+    return index_[i][j];
   }
 
   // iterators
 
-  typedef typename T* iterator;
+  typedef T* iterator;
   inline iterator begin() { return data_; }
   inline iterator end() { return data_ + size(); }
-  typedef typename const T * const_iterator;
+  typedef const T* const_iterator;
   inline const_iterator begin() const { return data_; }
   inline const_iterator end() const { return data_ + size(); }
 
@@ -99,7 +99,7 @@ public:
   // Need this until we add a vnl_sym_matrix ctor to vnl_matrix;
   inline vnl_matrix<T> as_matrix() const;
 
-  void resize(int n);
+  inline void resize(int n);
 
   //: Return pointer to the lower triangular elements as a contiguous 1D C array;
   T*       data_block()       { return data_; }
@@ -107,30 +107,18 @@ public:
 
 protected:
 //: Set up the index array
-  setup_index();
+  inline void setup_index() {
+    T * data = data_;
+    for (unsigned i=0; i< nn_; ++i) { index_[i] = data; data += i+1; }
+  }
 
-  
   T* data_;
   T** index_;
   unsigned nn_;
 };
 
 
-
 template <class T> vcl_ostream& operator<< (vcl_ostream&, vnl_sym_matrix<T> const&);
-
-
-template <class T>
-inline vnl_sym_matrix<T>::setup_index()
-{
-  T * data = data_;
-  unsigned i =0;
-  while ( i< nn_)
-  {
-    index_[i] = data;
-    data += ++i;
-  }
-}
 
 
 template <class T>
@@ -143,7 +131,6 @@ inline vnl_sym_matrix<T>::vnl_sym_matrix(T const * data, unsigned nn):
   for(unsigned i = 0; i < nn_; ++i)
     for(unsigned j = 0; j <= i; ++j)
       fast(i,j) = *(data++);
-  
 }
 
 template <class T>
@@ -155,7 +142,7 @@ inline vnl_sym_matrix<T>::vnl_sym_matrix(unsigned nn, const T & value):
   setup_index();
   vnl_c_vector<T>::fill(data_, size(), value);
 }
-  
+
 
 template <class T>
 inline vnl_sym_matrix<T>::vnl_sym_matrix(vnl_matrix<T> const& that):
@@ -186,7 +173,7 @@ inline vnl_matrix<T> vnl_sym_matrix<T>::as_matrix() const
 
 
 template <class T>
-void vnl_sym_matrix<T>::resize(int n)
+inline void vnl_sym_matrix<T>::resize(int n)
 {
   if (n == nn_) return;
 
