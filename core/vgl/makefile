@@ -38,13 +38,13 @@ MANPAGE_SOURCES += vgl_plane_3d.txx
 MANPAGE_SOURCES += vgl_homg_plane_3d.txx
 
 # Functions
+SOURCES += vgl_closest_point.cxx
 SOURCES += vgl_distance.cxx
 SOURCES += vgl_clip.cxx
 SOURCES += vgl_area.cxx
 SOURCES += vgl_lineseg_test.cxx
 SOURCES += vgl_triangle_test.cxx
 SOURCES += vgl_polygon_test.cxx
-#SOURCES += vgl_test.cxx
 
 SOURCES += vgl_region_scan_iterator.cxx
 SOURCES += vgl_triangle_scan_iterator.cxx
