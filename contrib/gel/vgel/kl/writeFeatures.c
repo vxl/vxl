@@ -158,7 +158,7 @@ static KLT_BOOL _isCharInString(
   char c,
   char *str)
 {
-  int width = strlen(str);
+  int width = (int)strlen(str);
   int i;
 
   for (i = 0 ; i < width ; i++)
@@ -181,7 +181,7 @@ static int _findStringWidth(
 {
   int width = 0;
   int add;
-  int maxi = strlen(str) - 1;
+  int maxi = (int)strlen(str) - 1;
   int i = 0;
 
   while (str[i] != '\0')  {
