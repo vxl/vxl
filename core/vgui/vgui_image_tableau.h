@@ -60,6 +60,10 @@ public:
   virtual void set_image_view( vil_image_view_base const& img );
 
   //: Make image loaded from the given file, the image rendered by this tableau.
+  //
+  // The image will be stored as a vil1_image, and thus can be
+  // retrieved with get_image() but not with get_image_view().
+  //
   virtual void set_image( char const* filename );
 
   //: Reread the image from file.
@@ -101,7 +105,7 @@ protected:
 
   //: Constructor - don't use this, use vgui_image_tableau_new.
   //  Creates a tableau which loads and displays an image from
-  //  the given file.
+  //  the given file. File loaded as a vil1_image.
   vgui_image_tableau( char const* filename );
 
 protected:
@@ -128,6 +132,10 @@ struct vgui_image_tableau_new : public vgui_image_tableau_sptr {
     { }
 
   //: Creates a tableau which loads and displays an image from the given file.
+  //
+  // The image will be stored as a vil1_image, and thus can be
+  // retrieved with get_image() but not with get_image_view().
+  //
   vgui_image_tableau_new(char const *f)
     : vgui_image_tableau_sptr( new vgui_image_tableau(f) )
     { }

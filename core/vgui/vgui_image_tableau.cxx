@@ -14,7 +14,7 @@
 #include <vcl_string.h>
 
 #include <vil/vil_image_view_base.h>
-#include <vil/vil_load.h>
+#include <vil1/vil1_load.h>
 
 #include <vgui/vgui_image_renderer.h>
 #include <vgui/vgui_vil_image_renderer.h>
@@ -160,9 +160,9 @@ void
 vgui_image_tableau::
 set_image(char const *f)
 {
-  vil_image_view_base_sptr img = vil_load( f );
+  vil1_image img = vil1_load( f );
   if( img )
-    set_image_view( *img );
+    set_image( img );
 }
 
 //-----------------------------------------------------------------------------
