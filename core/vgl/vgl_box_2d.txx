@@ -548,8 +548,6 @@ vcl_istream& operator>>(vcl_istream& is, vgl_box_2d<Type>& p) {
 template class vgl_box_2d<Type >;\
 template vcl_istream& operator>>(vcl_istream&, vgl_box_2d<Type >&);\
 template vcl_ostream& operator<<(vcl_ostream&, vgl_box_2d<Type > const&);\
-template vgl_box_2d<Type > intersect(vgl_box_2d<Type > const&, vgl_box_2d<Type > const&);\
-template vgl_box_2d<Type > vgl_bounding_box_2d(vgl_point_2d<Type > const& p1,\
-                                               vgl_point_2d<Type > const& p2)
+template vgl_box_2d<Type > intersect(vgl_box_2d<Type > const&, vgl_box_2d<Type > const&)
 
 #endif // vgl_box_2d_txx_
