@@ -297,6 +297,9 @@ SOURCE=.\dscal.c
 SOURCE=.\dsetgpfa.c
 # End Source File
 # Begin Source File
+SOURCE=.\dsrc2c.c
+# End Source File
+# Begin Source File
 SOURCE=.\dsvdc.c
 # End Source File
 # Begin Source File
