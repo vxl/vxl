@@ -387,7 +387,7 @@ void vtol_topology_hierarchy_node_3d::remove(topology_list_3d &list,
 
 //:
 // print the node
-void vtol_topology_hierarchy_node_3d::print(ostream& strm)
+void vtol_topology_hierarchy_node_3d::print(ostream& strm) const
 {
   strm << "<vtol_topology_hierarchy_node_3d " << (void *)this << ">" << endl;
   strm << "number of inferiors " << numinf() << endl;
@@ -426,17 +426,9 @@ void vtol_topology_hierarchy_node_3d::describe_superiors(ostream& strm,int blank
 }
 
 
-void vtol_topology_hierarchy_node_3d::describe(ostream& strm,int blanking)
+void vtol_topology_hierarchy_node_3d::describe(ostream& strm,int blanking) const
 {
-  describe_inferiors(strm, blanking);
-  describe_superiors(strm, blanking);
+  ((vtol_topology_hierarchy_node_3d*)this)->describe_inferiors(strm, blanking);
+  ((vtol_topology_hierarchy_node_3d*)this)->describe_superiors(strm, blanking);
 }
-
-
-
-
-
-
-
-
 

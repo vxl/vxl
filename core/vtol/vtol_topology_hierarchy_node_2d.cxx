@@ -399,6 +399,7 @@ void vtol_topology_hierarchy_node_2d::print(ostream& strm)
 void vtol_topology_hierarchy_node_2d::describe_inferiors(ostream& strm,int blanking)
 {
 
+  for (int j=0; j<blanking; ++j) strm << ' ';
   if (_inferiors.size()==0)
     strm << "**INFERIORS:  Empty" << endl;
   else  strm << "**INFERIORS:" << endl;
@@ -406,6 +407,7 @@ void vtol_topology_hierarchy_node_2d::describe_inferiors(ostream& strm,int blank
   
   for (topology_list_2d::iterator ii=_inferiors.begin();ii!= _inferiors.end();ii++)
     {
+      for (int j=0; j<blanking; ++j) strm << ' ';
       (*ii)->print();
     }
 }
@@ -415,12 +417,14 @@ void vtol_topology_hierarchy_node_2d::describe_inferiors(ostream& strm,int blank
 void vtol_topology_hierarchy_node_2d::describe_superiors(ostream& strm,int blanking)
 {
 
+  for (int j=0; j<blanking; ++j) strm << ' ';
   if (_superiors.size()==0)
     strm << "**SUPERIORS:  Empty" << endl;
   else  strm << "**SUPERIORS:" << endl;
 
   for (topology_list_2d::iterator ii=_superiors.begin();ii!= _superiors.end();ii++)
     {
+      for (int j=0; j<blanking; ++j) strm << ' ';
       (*ii)->print();
     }
 }

@@ -547,15 +547,15 @@ bool vtol_block_3d::remove_two_chain(vtol_two_chain_3d* doomed_face_loop)
 //:
 // print data 
  
-void vtol_block_3d::print(ostream& strm)
+void vtol_block_3d::print(ostream& strm) const
 {
   strm << "<vtol_block_3d " << _inferiors.size() << "  " << (void *)this << ">"  << endl;
 }
 
-void vtol_block_3d::describe(ostream& strm, int blanking)
+void vtol_block_3d::describe(ostream& strm, int blanking) const
 {
   print(strm);
-  describe_inferiors(strm, blanking);
-  describe_superiors(strm, blanking);
+  ((vtol_block_3d*)this)->describe_inferiors(strm, blanking);
+  ((vtol_block_3d*)this)->describe_superiors(strm, blanking);
 }
 

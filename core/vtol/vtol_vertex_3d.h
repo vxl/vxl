@@ -120,9 +120,8 @@ public:
   //  void calculate_average_normal(IUE_vector<double>&);
 
 
-  void print(ostream &strm=cout);
-  void describe(ostream &strm=cout,
-                int blanking=0);
+  void print(ostream &strm=cout) const;
+  void describe(ostream &strm=cout, int blanking=0) const;
 
   void deep_remove(topology_list_3d &removed);
   virtual vtol_topology_object_3d *shallow_copy_with_no_links(void);

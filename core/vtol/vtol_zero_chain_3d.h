@@ -81,8 +81,8 @@ public:
   inline bool remove_vertex(vtol_vertex_3d *v){this->touch(); return unlink_inferior(v);}
 
   
-  void print (ostream& strm =cout);
-  void describe (ostream& strm =cout, int blanking = 0);
+  void print (ostream& strm =cout) const;
+  void describe (ostream& strm =cout, int blanking = 0) const;
 
 
   bool operator==(const vsol_spatial_object_3d& ) const;

@@ -503,6 +503,7 @@ void vtol_block_2d::print(ostream &strm) const
 void vtol_block_2d::describe(ostream &strm,
                              int blanking) const
 {
+  for (int i=0; i<blanking; ++i) strm << ' ';
   print(strm);
   describe_inferiors(strm,blanking);
   describe_superiors(strm,blanking);

@@ -735,16 +735,15 @@ void vtol_edge_2d::compute_bounding_box(void)
 void vtol_edge_2d::describe(ostream &strm,
                             int blanking) const
 {
-  //  BLANK_DESCRIBE;
+  for (int i1=0; i1<blanking; ++i1) strm << ' ';
   print(strm);
-  blanking++;
-  //  REBLANK_DESCRIBE;
+  for (int i2=0; i2<blanking; ++i2) strm << ' ';
   if(_v1) {
     _v1->print(strm);
   } else {
     strm << "Null vertex 1" << endl;
   }
-//  REBLANK_DESCRIBE;
+  for (int i3=0; i3<blanking; ++i3) strm << ' ';
   if(_v2) {
     _v2->print(strm);
   } else {

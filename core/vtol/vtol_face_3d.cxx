@@ -885,7 +885,7 @@ void vtol_face_3d::compute_bounding_box()
 // Inferiors.  The blanking argument is used to indent the output in
 // a clear fashion.
 
-void vtol_face_3d::describe(ostream& strm,int blanking)
+void vtol_face_3d::describe(ostream& strm,int blanking) const
 {
 //  BLANK_DESCRIBE;
   print();
@@ -906,10 +906,10 @@ void vtol_face_3d::describe(ostream& strm,int blanking)
 // includes its address in memory.
 
 
-void vtol_face_3d::print(ostream& strm)
+void vtol_face_3d::print(ostream& strm) const
 {
   strm << "<vtol_face_3d  ";
-  topology_list_3d::iterator ii;
+  topology_list_3d::const_iterator ii;
 
   for(ii=_inferiors.begin();ii!= _inferiors.end();ii++)
     {

@@ -233,7 +233,7 @@ vsol_spatial_object_3d *vtol_vertex_3d::spatial_copy(void)
 // void vtol_vertex_3d::Print(ostream& strm) --
 // This method outputs a simple text representation of the vertex including its
 // address in memory.
-void vtol_vertex_3d::print(ostream &strm)
+void vtol_vertex_3d::print(ostream &strm) const
 {
   strm<<"<vtol_vertex_3d "<<x()<<","<<y()<<"," << z() << "," <<(void *)this<<"> with id ";
   strm<<get_id()<<endl;
@@ -245,11 +245,11 @@ void vtol_vertex_3d::print(ostream &strm)
 // This method outputs a detailed description of the vertex including the
 // inferiors and superiors.
 void vtol_vertex_3d::describe(ostream &strm,
-                              int blanking)
+                              int blanking) const
 {
   print(strm);
-  describe_inferiors(strm, blanking);
-  describe_superiors(strm, blanking);
+  ((vtol_vertex_3d*)this)->describe_inferiors(strm, blanking);
+  ((vtol_vertex_3d*)this)->describe_superiors(strm, blanking);
 }
 
 

@@ -279,7 +279,8 @@ void vtol_zero_chain_2d::print(ostream &strm) const
 void vtol_zero_chain_2d::describe(ostream &strm,
                                   int blanking) const
 {
+  for (int j=0; j<blanking; ++j) strm << ' ';
   print(strm);
-   describe_inferiors(strm, blanking);
-   describe_superiors(strm, blanking);
+  describe_inferiors(strm, blanking);
+  describe_superiors(strm, blanking);
 }

@@ -272,7 +272,7 @@ vtol_vertex_2d::valid_superior_type(const vtol_topology_object_2d &superior) con
 // void vtol_vertex_2d::Print(ostream& strm) --
 // This method outputs a simple text representation of the vertex including its
 // address in memory.
-void vtol_vertex_2d::print(ostream &strm)
+void vtol_vertex_2d::print(ostream &strm) const
 {
   strm<<"<vtol_vertex_2d "<<x()<<","<<y()<<","<<(void *)this<<"> with id ";
   strm<<get_id()<<endl;
@@ -284,8 +284,9 @@ void vtol_vertex_2d::print(ostream &strm)
 // This method outputs a detailed description of the vertex including the
 // inferiors and superiors.
 void vtol_vertex_2d::describe(ostream &strm,
-                              int blanking)
+                              int blanking) const
 {
+  for (int i=0; i<blanking; ++i) strm << ' ';
   print(strm);
   describe_inferiors(strm, blanking);
   describe_superiors(strm, blanking);

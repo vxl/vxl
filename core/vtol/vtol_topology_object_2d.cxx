@@ -544,26 +544,33 @@ void vtol_topology_object_2d::describe_inferiors(ostream &strm,
 {
   vcl_vector<vtol_topology_object_2d_ref>::const_iterator i;
 
+  for (int n=0; n<blanking; ++n) strm << ' ';
   if(_inferiors.size()==0)
     strm<<"**INFERIORS:  Empty"<<endl;
   else
     strm<<"**INFERIORS:"<<endl;
   
-  for(i=_inferiors.begin();i!=_inferiors.end();i++)
+  for(i=_inferiors.begin();i!=_inferiors.end();i++) {
+    for (int n=0; n<blanking; ++n) strm << ' ';
     (*i)->print();
+  }
 }
 
 void vtol_topology_object_2d::describe_superiors(ostream &strm,
                                                  int blanking) const
 {
   vcl_list<vtol_topology_object_2d_ref>::const_iterator i;
+
+  for (int n=0; n<blanking; ++n) strm << ' ';
   if(_superiors.size()==0)
     strm<<"**SUPERIORS:  Empty"<<endl;
   else
     strm<<"**SUPERIORS:"<<endl;
   
-  for(i=_superiors.begin();i!= _superiors.end();i++)
+  for(i=_superiors.begin();i!= _superiors.end();i++) {
+    for (int n=0; n<blanking; ++n) strm << ' ';
     (*i)->print();
+  }
 }
 
 void vtol_topology_object_2d::describe(ostream &strm,

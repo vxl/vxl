@@ -855,9 +855,10 @@ void vtol_two_chain_2d::print(ostream &strm) const
 }
 
 void vtol_two_chain_2d::describe_directions(ostream &strm,
-                                            int) const
+                                            int blanking) const
 {
   vcl_vector<signed char>::const_iterator di;
+  for (int j=0; j<blanking; ++j) strm << ' ';
   strm << "<Dirs [" << _directions.size() << "]: ";
   
   for (di=_directions.begin();di!=_directions.end();di++)
@@ -868,6 +869,7 @@ void vtol_two_chain_2d::describe_directions(ostream &strm,
 void vtol_two_chain_2d::describe(ostream &strm,
                                  int blanking) const
 {
+  for (int j=0; j<blanking; ++j) strm << ' ';
   print(strm);
   describe_inferiors(strm,blanking);
   describe_directions(strm,blanking);

@@ -748,16 +748,14 @@ void vtol_face_2d::compute_bounding_box()
 void vtol_face_2d::describe(ostream &strm,
                             int blanking) const
 {
-  int i;
-  //  BLANK_DESCRIBE;
+  for (int j=0; j<blanking; ++j) strm << ' ';
   print();
-  ++blanking;
-  for(i=0;i<_inferiors.size();i++)
+  for(int i=0;i<_inferiors.size();i++)
     {
       if((_inferiors[i])->cast_to_one_chain()!=0)
         (_inferiors[i])->cast_to_one_chain()->describe(strm,blanking);
       else
-        cout << "Odd inferior for a face" << endl;
+        cout << "*** Odd inferior for a face" << endl;
     }
 }
 

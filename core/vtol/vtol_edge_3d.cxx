@@ -917,7 +917,7 @@ void vtol_edge_3d::compute_bounding_box(void)
 // This method outputs all edge information to the ostream, strm.  It
 // indents various levels of output by the number given in blanking.
 void vtol_edge_3d::describe(ostream &strm,
-                            int blanking)
+                            int blanking) const
 {
   //  BLANK_DESCRIBE;
   print(strm);
@@ -939,7 +939,7 @@ void vtol_edge_3d::describe(ostream &strm,
 //:
 // print(ostream& strm) --
 // This method outputs a brief vtol_edge_3d info with vtol_edge_3d object address.
-void vtol_edge_3d::print(ostream &strm)
+void vtol_edge_3d::print(ostream &strm) const
 {
    strm<<"<vtol_edge_3d  "<<"  "<<(void *)this <<"> with id "<<get_id()<<endl;
 }
