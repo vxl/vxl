@@ -12,13 +12,15 @@
 
 #include <vcl_iostream.h>
 
-#include <vil1/vil1_load.h>
+#include <vil/vil_load.h>
+#include <vil/vil_new.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_matrix_state.h>
 #include <vgui/vgui_image_renderer.h>
+#include <vgui/vgui_vil_image_renderer.h>
 #if 0
 # include <vgui/vgui.h>
 # define debug vgui::out
@@ -28,37 +30,69 @@
 
 //-----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_blender_tableau_new.
-//  Creates a blender with the given image and alpha value.
+//  Creates a blender with the given image and alpha_ value.
 vgui_blender_tableau::vgui_blender_tableau(char const* file, float a)
-  : alpha(a)
+  : renderer_(0),
+    vil_renderer_(0),
+    alpha_(a)
 {
-  renderer = new vgui_image_renderer;
-  renderer->set_image(vil1_load(file));
-  filename = vcl_string(file);
+  vil_renderer_ = new vgui_vil_image_renderer;
+  vil_renderer_->set_image_resource(vil_load_image_resource(file));
+  filename_ = vcl_string(file);
 }
 
 //-----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_blender_tableau_new.
-//  Creates a blender with the given image and alpha value.
+//  Creates a blender with the given image and alpha_ value.
 vgui_blender_tableau::vgui_blender_tableau(vil1_image const& img, float a)
-  : alpha(a)
+  : renderer_(0),
+    vil_renderer_(0),
+    alpha_(a)
 {
-  renderer = new vgui_image_renderer;
-  renderer->set_image(img);
-  filename = vcl_string("unknown");
+  renderer_ = new vgui_image_renderer;
+  renderer_->set_image(img);
+  filename_ = vcl_string("unknown");
+}
+
+//-----------------------------------------------------------------------------
+//: Constructor - don't use this, use vgui_blender_tableau_new.
+//  Creates a blender with the given image and alpha_ value.
+vgui_blender_tableau::vgui_blender_tableau(vil_image_resource_sptr const& img, float a)
+  : renderer_(0),
+    vil_renderer_(0),
+    alpha_(a)
+{
+  vil_renderer_ = new vgui_vil_image_renderer;
+  vil_renderer_->set_image_resource(img);
+  filename_ = vcl_string("unknown");
+}
+
+//-----------------------------------------------------------------------------
+//: Constructor - don't use this, use vgui_blender_tableau_new.
+//  Creates a blender with the given image and alpha_ value.
+vgui_blender_tableau::vgui_blender_tableau(vil_image_view_base const& img, float a)
+  : renderer_(0),
+    vil_renderer_(0),
+    alpha_(a)
+{
+  vil_renderer_ = new vgui_vil_image_renderer;
+  vil_renderer_->set_image_resource( vil_new_image_resource_of_view( img ) );
+  filename_ = vcl_string("unknown");
 }
 
 //-----------------------------------------------------------------------------
 //: Destructor - called by vgui_blender_tableau_sptr.
 vgui_blender_tableau::~vgui_blender_tableau()
 {
+  delete renderer_;
+  delete vil_renderer_;
 }
 
 //-----------------------------------------------------------------------------
-//: Returns the filename of the loaded image (if it was loaded from file).
+//: Returns the filename_ of the loaded image (if it was loaded from file).
 vcl_string vgui_blender_tableau::file_name() const
 {
-  return filename.c_str();
+  return filename_.c_str();
 }
 
 //-----------------------------------------------------------------------------
@@ -72,13 +106,14 @@ vcl_string vgui_blender_tableau::type_name() const
 //: Tell the blender that the image pixels have been changed.
 void vgui_blender_tableau::reread_image()
 {
-  renderer->reread_image();
+  if ( renderer_ )      renderer_->reread_image();
+  if ( vil_renderer_ )  vil_renderer_->reread_image();
 }
 
 //-----------------------------------------------------------------------------
 //: Handle all events sent to this tableau.
 //  In particular, use draw events to draw the blended image.
-//  Use '_' and '+' key-press events to change alpha.
+//  Use '*' and '/' key-press events to change alpha_.
 bool vgui_blender_tableau::handle(vgui_event const &e)
 {
   if (vgui_matrix_state::gl_matrices_are_cleared()) {
@@ -101,9 +136,10 @@ bool vgui_blender_tableau::handle(vgui_event const &e)
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glPixelTransferf(GL_ALPHA_SCALE, alpha);
+    glPixelTransferf(GL_ALPHA_SCALE, alpha_);
 
-    renderer->render();
+    if ( renderer_ )     renderer_->render();
+    if ( vil_renderer_ ) vil_renderer_->render();
 
     glPixelTransferf(GL_ALPHA_SCALE, 1.0);
     glBlendFunc(GL_ONE, GL_ZERO);
@@ -115,16 +151,16 @@ bool vgui_blender_tableau::handle(vgui_event const &e)
   if (e.type == vgui_KEY_PRESS) {
     switch (e.key)
     {
-     case '_':
-      alpha -= 0.1f;
-      if (alpha <= 0.0f) alpha = 0.0f;
-      debug << "blender : alpha = " << alpha << vcl_endl;
+     case '/':
+      alpha_ -= 0.1f;
+      if (alpha_ <= 0.0f) alpha_ = 0.0f;
+      debug << "blender : alpha_ = " << alpha_ << vcl_endl;
       post_redraw();
       return true;
-     case '+':
-      alpha += 0.1f;
-      if (alpha >= 1.0f) alpha = 1.0f;
-      debug << "blender : alpha = " << alpha << vcl_endl;
+     case '*':
+      alpha_ += 0.1f;
+      if (alpha_ >= 1.0f) alpha_ = 1.0f;
+      debug << "blender : alpha_ = " << alpha_ << vcl_endl;
       post_redraw();
       return true;
      default:
