@@ -8,14 +8,13 @@
 CONFIGURE_FILE(
       ${allvxl_SOURCE_DIR}/vcl/vcl_where_root_dir.h.in
       ${allvxl_BINARY_DIR}/vcl/vcl_where_root_dir.h ESCAPE_QUOTES)
-ADD_DEFINITIONS(-DWHERE_ROOT_DIR_H_EXISTS)
+
 
 SOURCE_FILES( vcl_sources
 vcl_cmath
 vcl_cassert
 vcl_cstdlib
 vcl_deprecated
-vcl_root_dir
 emulation/vcl_string_instances
 emulation/vcl_straits
 emulation/vcl_rbtree_instances

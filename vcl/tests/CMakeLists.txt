@@ -36,4 +36,4 @@ ADD_EXECUTABLE( test_vcl_set test_vcl_set.cxx)
 ADD_EXECUTABLE( test_vcl_stlfwd test_vcl_stlfwd.cxx)
 ADD_EXECUTABLE( test_vcl_string test_vcl_string.cxx)
 ADD_EXECUTABLE( test_vcl_vector test_vcl_vector.cxx)
-ADD_EXECUTABLE( test_vcl_root_dir test_vcl_root_dir.cxx)
+

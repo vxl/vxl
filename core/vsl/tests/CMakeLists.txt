@@ -5,6 +5,7 @@
 #
 
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vsl/CMakeListsLink.txt )
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )
 
 ADD_EXECUTABLE( test_indent test_indent.cxx )
 ADD_EXECUTABLE( test_vsl_io test_vsl_io.cxx )
