@@ -11,7 +11,7 @@
 #include <vcl_cstdlib.h>
 #include <vil2/vil2_byte.h>
 #include <vil2/vil2_image_view.h>
-#include <vil2/vil2_image_view_functions.h>
+#include <vil2/vil2_copy.h>
 #include <vil2/vil2_pixel_format.h>
 
 class vil2_image_view_base;
@@ -77,7 +77,7 @@ vil2_image_view_base_sptr vil2_memory_image::get_copy_view(unsigned i0, unsigned
       vil2_image_view<vil2_byte> w(v.memory_chunk(), &v(i0,j0),
                                    ni, nj, v.nplanes(),
                                    v.istep(), v.jstep(), v.planestep());
-      return new vil2_image_view<vil2_byte>(vil2_deep_copy(w));
+      return new vil2_image_view<vil2_byte>(vil2_copy_deep(w));
     }
   case  VIL2_PIXEL_FORMAT_INT_8:
     {
@@ -86,7 +86,7 @@ vil2_image_view_base_sptr vil2_memory_image::get_copy_view(unsigned i0, unsigned
       vil2_image_view<vxl_int_8> w(v.memory_chunk(), &v(i0,j0),
                                    ni, nj, v.nplanes(),
                                    v.istep(), v.jstep(), v.planestep());
-      return new vil2_image_view<vxl_int_8>(vil2_deep_copy(w));
+      return new vil2_image_view<vxl_int_8>(vil2_copy_deep(w));
     }
   case  VIL2_PIXEL_FORMAT_UINT_16:
     {
@@ -95,7 +95,7 @@ vil2_image_view_base_sptr vil2_memory_image::get_copy_view(unsigned i0, unsigned
       vil2_image_view<vxl_uint_16> w(v.memory_chunk(), &v(i0,j0),
                                      ni, nj, v.nplanes(),
                                      v.istep(), v.jstep(), v.planestep());
-      return new vil2_image_view<vxl_uint_16>(vil2_deep_copy(w));
+      return new vil2_image_view<vxl_uint_16>(vil2_copy_deep(w));
     }
   case  VIL2_PIXEL_FORMAT_INT_16:
     {
@@ -104,7 +104,7 @@ vil2_image_view_base_sptr vil2_memory_image::get_copy_view(unsigned i0, unsigned
       vil2_image_view<vxl_int_16> w(v.memory_chunk(), &v(i0,j0),
                                     ni, nj, v.nplanes(),
                                     v.istep(), v.jstep(), v.planestep());
-      return new vil2_image_view<vxl_int_16>(vil2_deep_copy(w));
+      return new vil2_image_view<vxl_int_16>(vil2_copy_deep(w));
     }
   case  VIL2_PIXEL_FORMAT_UINT_32:
     {
@@ -113,7 +113,7 @@ vil2_image_view_base_sptr vil2_memory_image::get_copy_view(unsigned i0, unsigned
       vil2_image_view<vxl_uint_32> w(v.memory_chunk(), &v(i0,j0),
                                      ni, nj, v.nplanes(),
                                      v.istep(), v.jstep(), v.planestep());
-      return new vil2_image_view<vxl_uint_32>(vil2_deep_copy(w));
+      return new vil2_image_view<vxl_uint_32>(vil2_copy_deep(w));
     }
   case  VIL2_PIXEL_FORMAT_INT_32:
     {
@@ -122,7 +122,7 @@ vil2_image_view_base_sptr vil2_memory_image::get_copy_view(unsigned i0, unsigned
       vil2_image_view<vxl_int_32> w(v.memory_chunk(), &v(i0,j0),
                                     ni, nj, v.nplanes(),
                                     v.istep(), v.jstep(), v.planestep());
-      return new vil2_image_view<vxl_int_32>(vil2_deep_copy(w));
+      return new vil2_image_view<vxl_int_32>(vil2_copy_deep(w));
     }
   case  VIL2_PIXEL_FORMAT_FLOAT:
     {
@@ -131,7 +131,7 @@ vil2_image_view_base_sptr vil2_memory_image::get_copy_view(unsigned i0, unsigned
       vil2_image_view<float> w(v.memory_chunk(), &v(i0,j0),
                                ni, nj, v.nplanes(),
                                v.istep(), v.jstep(), v.planestep());
-      return new vil2_image_view<float>(vil2_deep_copy(w));
+      return new vil2_image_view<float>(vil2_copy_deep(w));
     }
   case  VIL2_PIXEL_FORMAT_DOUBLE:
     {
@@ -140,7 +140,7 @@ vil2_image_view_base_sptr vil2_memory_image::get_copy_view(unsigned i0, unsigned
       vil2_image_view<double> w(v.memory_chunk(), &v(i0,j0),
                                 ni, nj, v.nplanes(),
                                 v.istep(), v.jstep(), v.planestep());
-      return new vil2_image_view<double>(vil2_deep_copy(w));
+      return new vil2_image_view<double>(vil2_copy_deep(w));
     }
   case  VIL2_PIXEL_FORMAT_BOOL:
     {
@@ -149,7 +149,7 @@ vil2_image_view_base_sptr vil2_memory_image::get_copy_view(unsigned i0, unsigned
       vil2_image_view<bool> w(v.memory_chunk(), &v(i0,j0),
                               ni, nj, v.nplanes(),
                               v.istep(), v.jstep(), v.planestep());
-      return new vil2_image_view<bool>(vil2_deep_copy(w));
+      return new vil2_image_view<bool>(vil2_copy_deep(w));
     }
   default:
     return 0;

@@ -23,22 +23,6 @@ vil2_image_view<T> vil2_window(const vil2_image_view<T> &im, unsigned i0,
 template<class T>
 vil2_image_view<T> vil2_plane(const vil2_image_view<T> &im, unsigned p);
 
-//: Copy src to dest, without changing dest's view parameters.
-// This is useful if you want to copy on image into a window on another image.
-// src and dest must have identical sizes, and types.
-//  O(size).
-// \relates vil2_image_view
-template<class T>
-void vil2_reformat_copy(const vil2_image_view<T> &src, vil2_image_view<T> &dest);
-
-//: Copy src to window in dest.
-// Size of window is defined by src.
-//  O(src.size).
-// \relates vil2_image_view
-template<class T>
-void vil2_copy_to_window(const vil2_image_view<T> &src, vil2_image_view<T> &dest,
-                         unsigned i0, unsigned j0);
-
 //: True if the actual images are identical.
 // $\bigwedge_{i,j,p} {\textstyle src}(i,j,p) == {\textstyle dest}(i,j,p)$
 // The data may be formatted differently in each memory chunk. O(n).
@@ -46,12 +30,6 @@ void vil2_copy_to_window(const vil2_image_view<T> &src, vil2_image_view<T> &dest
 // \relates vil2_image_view
 template<class T>
 bool vil2_deep_equality(const vil2_image_view<T> &lhs, const vil2_image_view<T> &rhs);
-
-//: Create a copy of an image, with completly new underlying memory.
-//  O(size).
-// \relates vil2_image_view
-template<class T>
-vil2_image_view<T> vil2_deep_copy(const vil2_image_view<T> &rhs);
 
 //: Return a 3-plane view of an RGB image
 //  O(1).
@@ -71,7 +49,7 @@ vil2_image_view<vil_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& plane_vi
 //  O(1).
 // \relates vil2_image_view
 template<class T>
-vil2_image_view<T> vil2_transpose(const vil2_image_view<T>& view);
+vil2_image_view<T> vil2_flip_transpose(const vil2_image_view<T>& view);
 
 //: Create a reflected view in which i -> ni-1-i.
 //  i.e vil2_flip_lr(view)(i,j,p) = view(ni-1-i,j,p)

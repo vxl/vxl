@@ -1,6 +1,7 @@
 // This is mul/vil2/tests/test_image_view.cxx
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_image_view_functions.h>
+#include <vil2/vil2_copy.h>
 #include <vil2/vil2_byte.h>
 #include <vcl_iostream.h>
 #include <testlib/testlib_test.h>
@@ -119,7 +120,7 @@ void test_image_view_byte()
   image5(0,1) = vil_rgb<vil2_byte>(25,35,45);
   image0 = image5;
 
-  vil2_reformat_copy(image0, image_win);
+  vil2_copy_reformat(image0, image_win);
   vil2_print_all(vcl_cout, image2);
   vil2_image_view<vil2_byte> test_image(5,4,3);
   test_image.fill(0);

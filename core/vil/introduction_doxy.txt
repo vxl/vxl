@@ -61,9 +61,11 @@ rgb_image2 = vil2_view_as_rgb(three_plane_image);
 * a chunk of memory that the view does not have direct control of, such as a video
 * buffer). This view copying will work between different types of view
 * if it is possible to reconfigure the view very cheaply.
-* If you wish to copy the image data itself, then use the deep_copy()
-* function.  This copies the raw data into a newly created space, and returns
-* a new view of it.  Alternatively, use the function vil2_copy(dest_im,src_im);
+* If you wish to copy the image data itself, then use the vil2_copy_deep(src_im),
+* function. This copies the raw data into a newly created space, and returns
+* a new view of it.  Alternatively, use the method deep_copy(dest_im), or the
+* function vil2_copy_reformat(src_im, dest_im).
+*
 *
 * Example of loading, copying then processing:
 * \verbatim
@@ -128,15 +130,15 @@ src_image = *vil2_load("image_file.jpg");
 vil2_image_view<vil2_byte> tmp_image1,tmp_image2;
 vil2_algo_exp_filter_1d(tmp_image1,src_image,k,double());  // Apply filter to rows of src_image
 vil2_algo_exp_filter_1d(tmp_image2,tmp_image1.tranpose(),k,double());  // Apply filter to cols of tmp_image1
-vil2_image_view<vil2_byte> filtered_image = vil2_transpose(tmp_image2);
-// Note that vil2_filter_rows(vil2_transpose(filtered_image),vil2_transpose(tmp_image1))
+vil2_image_view<vil2_byte> filtered_image = vil2_flip_transpose(tmp_image2);
+// Note that vil2_filter_rows(vil2_flip_transpose(filtered_image),vil2_flip_transpose(tmp_image1))
 // would only work correctly if filtered_image was already the correct size.
-// If it isn't, then the view created by vil2_transpose(filtered_image) would be resized,
+// If it isn't, then the view created by vil2_flip_transpose(filtered_image) would be resized,
 // and disconnected from filtered_image itself, which would remain unchanged.
 \endverbatim
 *
 * View manipulations include:
-* - vil2_transpose : Return transposed view
+* - vil2_flip_transpose : Return transposed view
 * - vil2_flip_lr : View which reflects along i (ie i -> (ni-1)-i) (left/right)
 * - vil2_flip_ud : View which reflects along j (ie j -> (nj-1)-j) (up/down)
 * - vil2_view_as_planes : View rgb<T> data as planes of T
@@ -157,6 +159,7 @@ vil2_image_view<vil2_byte> filtered_image = vil2_transpose(tmp_image2);
 * - vil2_filetype_image: Representing an image in a file
 * - vil2_memory_image: Representing an image in memory (essentially a wrapper around a view)
 * - vil2_filter_image_data: Representing a filtered (e.g. cropped) version of an image in a file.
+*
 * Most instances of vil2_image_data objects will be through smart pointers. So expect to see
 * lots of references to vil2_image_data_sptr types. vil2_image_data objects in most cases
 * only deal with scalar-type pixels. Of course once you get a view of real image data in memory, you

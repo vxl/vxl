@@ -12,32 +12,6 @@
 #include <vil/vil_rgb.h>
 
 
-
-//: Create a copy of the data viewed by this, and return a view of copy.
-template<class T>
-vil2_image_view<T> vil2_deep_copy(const vil2_image_view<T> &rhs)
-{
-  vil2_image_view<T> cpy;
-  cpy.deep_copy(rhs);
-  return cpy;
-}
-
-
-//: Copy src to dest, without changing dest's view parameters.
-// This is useful if you want to copy on image into a window on another image.
-// src and dest must have identical sizes, and types.
-template<class T>
-void vil2_reformat_copy(const vil2_image_view<T> &src, vil2_image_view<T> &dest)
-{
-  assert (src.nplanes() == dest.nplanes() &&
-    src.nj() == dest.nj() &&
-    src.ni() == dest.ni());
-  for (unsigned p = 0; p < dest.nplanes(); ++p)
-    for (unsigned j = 0; j < dest.nj(); ++j)
-      for (unsigned i = 0; i < dest.ni(); ++i)
-        dest(i,j,p) = src(i,j,p);
-}
-
 //: True if the actual images are identical.
 // $\bigwedge_{i,j,p} {\textstyle src}(i,j,p) == {\textstyle dest}(i,j,p)$
 // The data may be formatted differently in each memory chunk.
@@ -53,24 +27,6 @@ bool vil2_deep_equality(const vil2_image_view<T> &lhs, const vil2_image_view<T> 
       for (unsigned i = 0; i < rhs.ni(); ++i)
         if (!(rhs(i,j,p) == lhs(i,j,p))) return false;
   return true;
-}
-
-
-//: Copy src to window in dest.
-// Size of window is defined by src.
-//  O(window.size).
-template<class T>
-void vil2_copy_to_window(const vil2_image_view<T> &src, vil2_image_view<T> &dest,
-                         unsigned i0, unsigned j0)
-{
-  // check window is within dest's bounds
-  assert(i0+src.ni() <= dest.ni() && j0+src.nj() <= dest.nj());
-  assert (src.nplanes() == dest.nplanes());
-
-  for (unsigned p = 0; p < dest.nplanes(); ++p)
-    for (unsigned j = 0; j < src.nj(); ++j)
-      for (unsigned i = 0; i < src.ni(); ++i)
-        dest(i+i0,j+j0,p) = src(i,j,p);
 }
 
 //: Return an ni x nj window of this data with offset (i0,j0)
@@ -127,7 +83,7 @@ vil2_image_view<vil_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& v)
 //: Create a view which appears as the transpose of this view.
 //  i.e transpose(i,j,p) = view(j,i,p)
 template<class T>
-vil2_image_view<T> vil2_transpose(const vil2_image_view<T>& v)
+vil2_image_view<T> vil2_flip_transpose(const vil2_image_view<T>& v)
 {
   // Create view with i and j switched
   return vil2_image_view<T>(v.memory_chunk(),v.top_left_ptr(),
@@ -283,12 +239,12 @@ template void vil2_value_range(T& min_value, T& max_value,const vil2_image_view<
 template void vil2_copy_to_window(const vil2_image_view<T > &src, vil2_image_view<T > &dest, \
   unsigned i0, unsigned j0); \
 template bool vil2_deep_equality(const vil2_image_view<T > &lhs, const vil2_image_view<T > &rhs); \
-template void vil2_reformat_copy(const vil2_image_view<T > &src, vil2_image_view<T > &dest); \
-template vil2_image_view<T > vil2_deep_copy(const vil2_image_view<T > &rhs); \
+template void vil2_copy_reformat(const vil2_image_view<T > &src, vil2_image_view<T > &dest); \
+template vil2_image_view<T > vil2_copy_deep(const vil2_image_view<T > &rhs); \
 template vil2_image_view<T > vil2_window(const vil2_image_view<T > &im, \
   unsigned i0, unsigned ni, unsigned j0, unsigned nj); \
 template vil2_image_view<T > vil2_plane(const vil2_image_view<T > &im, unsigned p); \
-template vil2_image_view<T > vil2_transpose(const vil2_image_view<T >& v); \
+template vil2_image_view<T > vil2_flip_transpose(const vil2_image_view<T >& v); \
 template vil2_image_view<T > vil2_flip_lr(const vil2_image_view<T >& view); \
 template vil2_image_view<T > vil2_flip_ud(const vil2_image_view<T >& view); \
 template void vil2_print_all(vcl_ostream& os,const vil2_image_view<T >& view); \
