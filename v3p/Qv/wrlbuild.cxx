@@ -676,7 +676,12 @@ void QvMatrixTransform::build (QvState*)
 //   mat_[0], mat_[1], mat_[2], mat_[3], mat_[4], mat_[5], mat_[6], mat_[7],
 //   mat_[8], mat_[9], mat_[10], mat_[11], mat_[12], mat_[13], mat_[14], mat_[15]);
 
+#ifdef VCL_VC
+  copymatrix ((float (* const)[4]) mat_, invmat_);  // cast for cxx
+#else
   copymatrix ((const float (*)[4]) mat_, invmat_);  // cast for cxx
+
+#endif
   invertmatrix (invmat_);
 
   copymatrix (invmat_, invtranspmat3D_);
