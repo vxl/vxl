@@ -28,6 +28,9 @@ vidl_avicodec::vidl_avicodec()
   avi_get_frame_ = NULL;
   avi_stream_ = NULL;
   avi_file_ = NULL;
+  encoder_type = ASKUSER;
+  _fmemset(&opts, 0, sizeof(AVICOMPRESSOPTIONS));
+  encoder_options_valid=false;
 }
 
 
@@ -362,15 +365,41 @@ bool vidl_avicodec::save(vidl_movie* movie, const char* fname)
     return false;
   }
 
-
-  // Compression mode
-  AVICOMPRESSOPTIONS opts;
-  AVICOMPRESSOPTIONS FAR * aopts[1] = {&opts};
-  if (!AVISaveOptions(NULL, 0, 1, &avi_stream, (LPAVICOMPRESSOPTIONS FAR *) &aopts))
+  if(encoder_type==ASKUSER)
   {
-    vcl_cerr << "vidl_avicodec : AVI Saving Cancelled.\n";
-    return false;
+    // Compression mode
+    AVICOMPRESSOPTIONS FAR * aopts[1] = {&opts};
+
+    if (!AVISaveOptions(NULL, 0, 1, &avi_stream, (LPAVICOMPRESSOPTIONS FAR *) &aopts))
+    {
+      vcl_cerr << "vidl_avicodec : AVI Saving Cancelled.\n";
+      return false;
+    }
+
+    encoder_options_valid=true;
   }
+
+  char *fcc=(char *)&(opts.fccHandler);
+
+  vcl_cout << "Compressor options:" << vcl_endl;
+  vcl_cout << "fccHandler       = " << fcc[0] << "','" << fcc[1] << "','" << fcc[2] << "','" << fcc[3] << "'" << vcl_endl;
+  vcl_cout << "key frame every  = " << opts.dwKeyFrameEvery << vcl_endl;
+  vcl_cout << "quality          = " << opts.dwQuality << vcl_endl;
+  vcl_cout << "flags            = " << opts.dwFlags  << vcl_endl;
+  if(opts.dwFlags & AVICOMPRESSF_DATARATE)
+  vcl_cout << "                   AVICOMPRESSF_DATARATE" << vcl_endl;
+  if(opts.dwFlags & AVICOMPRESSF_INTERLEAVE)
+  vcl_cout << "                   AVICOMPRESSF_INTERLEAVE" << vcl_endl;
+  if(opts.dwFlags & AVICOMPRESSF_KEYFRAMES)
+  vcl_cout << "                   AVICOMPRESSF_KEYFRAMES" << vcl_endl;
+  if(opts.dwFlags & AVICOMPRESSF_VALID)
+  vcl_cout << "                   AVICOMPRESSF_VALID" << vcl_endl;
+  vcl_cout << "lpFormat         = " << opts.lpFormat << vcl_endl;
+  vcl_cout << "cbFormat         = " << opts.cbFormat << vcl_endl;
+  vcl_cout << "lpParms          = " << opts.lpParms << vcl_endl;
+  vcl_cout << "cbParms          = " << opts.cbParms << vcl_endl;
+  vcl_cout << "dwInterleaveEvery= " << opts.dwInterleaveEvery << vcl_endl;
+
   PAVISTREAM avi_stream_compressed = NULL;
   hr = AVIMakeCompressedStream(&avi_stream_compressed, avi_stream, &opts, NULL);
   if (hr != AVIERR_OK)
@@ -442,6 +471,86 @@ bool vidl_avicodec::save(vidl_movie* movie, const char* fname)
   return true;
 }
 
+/*
+//: Converts a microsoft four cc code to a 32 bit unsigned int.
+unsigned int vidl_avicodec::fccHandlerCoder(char c0, char c1, char c2, char c3)
+{
+  unsigned int code;
+
+  char *codeStr=(char *)(&code);
+  codeStr[0]=c0;
+  codeStr[1]=c1;
+  codeStr[2]=c2;
+  codeStr[3]=c3;
+
+  return code
+}
+*/
+
+//: This function sets the encoder that is internally used to create the
+//  AVI. Using this function avoids the windows dialog asking
+//  the user for the compressor.
+//  Depending on the choosen encoder, the parameters of opts are set by this
+//  function.
+//
+//  @param encoder
+//     if encoder==ASKUSER      a windows dialog is used to choose the encoder
+//     if encoder==USEPREVIOUS  the options previously obtained from a call
+//                              to choose_encoder() with or without ASKUSER is used.
+//                              If not valid options have been obtained, UNCOMPRESSED is used.
+//     if encoder==UNCOMPRESSED Video is saved uncompressed.
+void vidl_avicodec::choose_encoder(AVIEncoderType encoder)
+{
+  encoder_type=encoder;
+
+  if(encoder_type==ASKUSER || 
+    (encoder_type==USEPREVIOUS && encoder_options_valid)) return;
+
+  encoder_options_valid=true;
+
+  switch(encoder_type)
+  {
+  case USEPREVIOUS:
+  case UNCOMPRESSED:
+    {
+      opts.fccType=streamtypeVIDEO;
+      opts.fccHandler=mmioFOURCC('D','I','B',' ');
+      opts.dwKeyFrameEvery=0;
+      opts.dwQuality=0;
+      opts.dwFlags=AVICOMPRESSF_VALID;
+      opts.lpFormat=0;
+      opts.cbFormat=0;
+      opts.lpParms=0;
+      opts.cbParms=0;
+      opts.dwInterleaveEvery=0;
+      break;
+    }
+  case CINEPACK:
+    {
+      opts.fccType=streamtypeVIDEO;
+      opts.fccHandler=mmioFOURCC('c','v','i','d');
+      opts.dwKeyFrameEvery=0;
+      opts.dwQuality=10000;
+      opts.dwFlags=AVICOMPRESSF_VALID;
+      opts.lpFormat=0;
+      opts.cbFormat=0;
+      //The pointer to lpParms should actually point to four bytes of
+      //memory containing the data 0x726c6f63, however, it seems to
+      //work with all zeros also.
+      //opts.lpParms = (LPVOID *)GlobalAlloc(NULL, 4);
+	  //opts.cbParms = 4;
+      //*((long*)opts.lpParms) = 0x726c6f63;
+      opts.lpParms=0;
+      opts.cbParms=0;
+      opts.dwInterleaveEvery=0;
+      break;
+    }
+  default:
+    {
+      encoder_options_valid=false;
+    }
+  }
+}
 
 //: Create a DIB (Device Independent Bitmap) from a frame.
 // (Note : make_dib is not guaranteed to work with bits!=24 for the moment)
