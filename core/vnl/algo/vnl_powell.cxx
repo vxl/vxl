@@ -2,15 +2,16 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
+//:
+// \file
 #include "vnl_powell.h"
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-
-#include <vnl/algo/vnl_brent.h>
-#include <vnl/vnl_matlab_print.h>
 #include <vnl/vnl_math.h>
+#include <vnl/algo/vnl_brent.h>
+#ifdef DEBUG
+#include <vnl/vnl_matlab_print.h>
+#endif
 
 class vnl_powell_1dfun : public vnl_cost_function
 {
@@ -32,21 +33,24 @@ class vnl_powell_1dfun : public vnl_cost_function
   {
   }
 
-  void init(vnl_vector<double> const& x0, vnl_vector<double> const& dx) {
+  void init(vnl_vector<double> const& x0, vnl_vector<double> const& dx)
+  {
     x0_ = x0;
     dx_ = dx;
     assert(x0.size() == n_);
     assert(dx.size() == n_);
   }
 
-  double f(const vnl_vector<double>& x) {
+  double f(const vnl_vector<double>& x)
+  {
     uninit(x[0], tmpx_);
     double e = f_->f(tmpx_);
     powell_->pub_report_eval(e);
     return e;
   }
 
-  void uninit(double lambda, vnl_vector<double>& out) {
+  void uninit(double lambda, vnl_vector<double>& out)
+  {
     for (unsigned int i = 0; i < n_; ++i)
       out[i] = x0_[i] + lambda * dx_[i];
   }
@@ -84,12 +88,14 @@ vnl_powell::minimize(vnl_vector<double>& p)
   double fret = functor_->f(p);
   report_eval(fret);
   vnl_vector<double> pt = p;
-  for (;;) {
+  for (;;)
+  {
     double fp = fret;
     int ibig=0;
     double del=0.0;
 
-    for (int i=0;i<n;i++) {
+    for (int i=0;i<n;i++)
+    {
       // xit = ith column of xi
       for (int j = 0; j < n; ++j)
         xit[j] = xi[j][i];
@@ -112,16 +118,19 @@ vnl_powell::minimize(vnl_vector<double>& p)
       }
     }
 
-    if (2.0*vcl_fabs(fp-fret) <= ftol*(vcl_fabs(fp)+vcl_fabs(fret))) {
-//      vnl_matlab_print(vcl_cerr, xi, "xi");
+    if (2.0*vcl_fabs(fp-fret) <= ftol*(vcl_fabs(fp)+vcl_fabs(fret)))
+    {
+#ifdef DEBUG
+      vnl_matlab_print(vcl_cerr, xi, "xi");
+#endif
       return CONVERGED_FTOL;
     }
 
-    if (num_iterations_ == unsigned(maxfev)) {
+    if (num_iterations_ == unsigned(maxfev))
       return FAILED_TOO_MANY_ITERATIONS;
-    }
 
-    for (int j=0;j<n;++j) {
+    for (int j=0;j<n;++j)
+    {
       ptt[j]=2.0*p[j]-pt[j];
       xit[j]=p[j]-pt[j];
       pt[j]=p[j];
@@ -129,9 +138,11 @@ vnl_powell::minimize(vnl_vector<double>& p)
 
     double fptt = functor_->f(ptt);
     report_eval(fret);
-    if (fptt < fp) {
+    if (fptt < fp)
+    {
       double t=2.0*(fp-2.0*fret+fptt)*vnl_math_sqr(fp-fret-del)-del*vnl_math_sqr(fp-fptt);
-      if (t < 0.0) {
+      if (t < 0.0)
+      {
         f1d.init(p, xit);
         vnl_brent brent(&f1d);
         double ax = 0.0;
