@@ -31,6 +31,7 @@ SOURCES += bgui_histogram_tableau.cxx
 MANPAGE_SOURCES += bgui_histogram_tableau_sptr.h
 SOURCES += bgui_selector_tableau.cxx
 MANPAGE_SOURCES += bgui_selector_tableau_sptr.h
+SOURCES += bgui_bmrf_soview2D.cxx
 
 ################################
 include ${IUEROOT}/config/top.mk
