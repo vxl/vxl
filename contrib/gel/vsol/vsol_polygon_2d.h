@@ -141,6 +141,12 @@ class vsol_polygon_2d : public vsol_region_2d
   //: Is `this' convex ?
   //---------------------------------------------------------------------------
   virtual bool is_convex(void) const;
+ 
+  //---------------------------------------------------------------------------
+  //: Is testpt inside the region bounded by `this'  ?
+  //---------------------------------------------------------------------------
+
+  bool is_inside( const vsol_point_2d_sptr testpt);
 
   //---------------------------------------------------------------------------
   //: Is `i' a valid index for the list of vertices ?
@@ -174,6 +180,9 @@ class vsol_polygon_2d : public vsol_region_2d
   //: Return true if the argument matches the string identifying the class or any parent class
   virtual bool is_class(vcl_string const& cls) const
   { return cls==is_a() || vsol_region_2d::is_class(cls); }
+
+ 
+
 
   //---------------------------------------------------------------------------
   //: output description to stream
