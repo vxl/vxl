@@ -14,7 +14,6 @@
 // \endverbatim
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h> // for vcl_sqrt
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vgl/vgl_homg_point_2d.h>
