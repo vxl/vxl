@@ -34,10 +34,10 @@ main()
   double x1, x2, y1, y2, w1, w2;
 
   while (vcl_cin >> x1 >> y1 >> w1 >> x2 >> y2 >> w2 ) {
-    p.x() = x1; p.y() = y1; p.z() = w1;
+    p[0] = x1; p[1] = y1; p[2] = w1;
     from_pts.push_back(p);
 
-    p.x() = x2; p.y() = y2; p.z()=w2;
+    p[0] = x2; p[1] = y2; p[2] = w2;
     to_pts.push_back(p);
   }
 

@@ -38,7 +38,7 @@ main( )
   double x, y;
 
   while ( vcl_cin >> x >> y ) {
-    p.x() = x; p.y() = y;
+    p[0] = x; p[1] = y;
     pts.push_back(p);
   }
 
