@@ -7,21 +7,7 @@
 #include <vnl/vnl_math.h>
 
 template<class T>
-bugl_gaussian_point_3d<T>::bugl_gaussian_point_3d(T vx, T vy, T vz, vnl_matrix_fixed<T, 3, 3> & s)
-: bugl_uncertainty_point_3d<T>(vx, vy, vz)
-{
-  set_covariant_matrix(s);
-}
-
-template<class T>
-bugl_gaussian_point_3d<T>::bugl_gaussian_point_3d(vgl_point_3d<T> &p, vnl_matrix_fixed<T, 3, 3> &s)
-: bugl_uncertainty_point_3d<T>(p)
-{
-  set_covariant_matrix(s);
-}
-
-template<class T>
-void bugl_gaussian_point_3d<T>::set_covariant_matrix(vnl_matrix_fixed<T, 3, 3> &s)
+void bugl_gaussian_point_3d<T>::set_covariant_matrix(vnl_matrix_fixed<T, 3, 3> const& s)
 {
   sigma_ = s;
   sigma_inv_ = vnl_inverse(s);
@@ -29,13 +15,7 @@ void bugl_gaussian_point_3d<T>::set_covariant_matrix(vnl_matrix_fixed<T, 3, 3> &
 }
 
 template<class T>
-bugl_gaussian_point_3d<T>::bugl_gaussian_point_3d()
-: bugl_uncertainty_point_3d<T>()
-{
-}
-
-template<class T>
-T bugl_gaussian_point_3d<T>::prob_at(vgl_point_3d<T> &p)
+T bugl_gaussian_point_3d<T>::prob_at(vgl_point_3d<T> const& p) const
 {
  if (!this->exists_)
   return 0;
@@ -47,7 +27,7 @@ T bugl_gaussian_point_3d<T>::prob_at(vgl_point_3d<T> &p)
 
 #if 0
 template<class T>
-bugl_gaussian_point_3d<T>& bugl_gaussian_point_3d<T>::operator=(bugl_gaussian_point_3d<T> &p)
+bugl_gaussian_point_3d<T>& bugl_gaussian_point_3d<T>::operator=(bugl_gaussian_point_3d<T> const& p)
 {
   vnl_matrix_fixed<T, 3, 3> t = p.get_covariant_matrix();
   set_covariant_matrix(t);

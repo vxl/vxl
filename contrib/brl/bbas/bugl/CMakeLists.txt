@@ -3,12 +3,12 @@
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas)
 
 SET(bugl_sources
-    bugl_uncertainty_point_2d.h  bugl_uncertainty_point_2d.txx
+    bugl_uncertainty_point_2d.h
     bugl_gaussian_point_2d.h     bugl_gaussian_point_2d.txx
     bugl_normal_point_2d.h
     bugl_normal_point_2d_sptr.h
 
-    bugl_uncertainty_point_3d.h bugl_uncertainty_point_3d.txx
+    bugl_uncertainty_point_3d.h
     bugl_gaussian_point_3d.h     bugl_gaussian_point_3d.txx
     bugl_normal_point_3d.h
     bugl_normal_point_3d_sptr.h
