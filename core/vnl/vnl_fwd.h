@@ -21,10 +21,10 @@ template <class T> class vnl_matrix_ref;
 #ifdef VCL_VC60
 // VC 6.0 can't forward declare these without barfing.
 // Thereby missing the whole point....
-# include <vnl/vnl_vector_fixed_ref.h>
-# include <vnl/vnl_matrix_fixed_ref.h>
 # include <vnl/vnl_vector_fixed.h>
 # include <vnl/vnl_matrix_fixed.h>
+# include <vnl/vnl_vector_fixed_ref.h>
+# include <vnl/vnl_matrix_fixed_ref.h>
 #else
   template <class T, unsigned int n> class vnl_vector_fixed;
   template <class T, unsigned int num_rows, unsigned int num_cols> class vnl_matrix_fixed;
