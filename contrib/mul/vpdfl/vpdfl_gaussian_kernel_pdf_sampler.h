@@ -22,7 +22,8 @@ class vpdfl_gaussian_kernel_pdf;
 //: Samples from an axis aligned Gaussian PDF
 class vpdfl_gaussian_kernel_pdf_sampler :public vpdfl_sampler_base {
 protected:
-  mbl_mz_random rng_; //!< The random number generator
+  //: The random number generator
+  mbl_mz_random rng_; 
 public:
 
   // Dflt ctor
