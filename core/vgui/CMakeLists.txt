@@ -199,6 +199,7 @@ IF (MFC_FOUND)
 ENDIF (MFC_FOUND)
 
 IF (X11_FOUND)
+  ADD_DEFINITIONS(-DHAS_X11)
   INCLUDE_DIRECTORIES(${X11_INCLUDE_DIR})
   SET(vgui_sources ${vgui_sources}
     internals/vgui_accelerate_x11.cxx internals/vgui_accelerate_x11.h
