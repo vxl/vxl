@@ -24,8 +24,8 @@
 //: Return the angle between the (oriented) lines (in radians)
 //
 template <class Type>
-double vgl_homg_operators_3d<Type>::angle_between_oriented_lines (const vgl_homg_line_3d& l1,
-                                                                  const vgl_homg_line_3d& l2)
+double vgl_homg_operators_3d<Type>::angle_between_oriented_lines(const vgl_homg_line_3d& l1,
+                                                                 const vgl_homg_line_3d& l2)
 {
   vgl_homg_point_3d<Type> const& dir1 = l1.point_infinite();
   vgl_homg_point_3d<Type> const& dir2 = l2.point_infinite();
@@ -42,8 +42,8 @@ double vgl_homg_operators_3d<Type>::angle_between_oriented_lines (const vgl_homg
 //: Return the squared distance between the points
 //
 template <class Type>
-Type vgl_homg_operators_3d<Type>::distance_squared (const vgl_homg_point_3d<Type>& point1,
-                                                    const vgl_homg_point_3d<Type>& point2)
+Type vgl_homg_operators_3d<Type>::distance_squared(const vgl_homg_point_3d<Type>& point1,
+                                                   const vgl_homg_point_3d<Type>& point2)
 {
   Type mag = 0;
   Type d;
@@ -76,7 +76,7 @@ Type vgl_homg_operators_3d<Type>::distance(const vgl_homg_point_3d<Type>&point1,
 //: Return the intersection point of the line and plane
 //
 template <class Type>
-vgl_homg_point_3d<Type> vgl_homg_operators_3d<Type>::intersect_line_and_plane (
+vgl_homg_point_3d<Type> vgl_homg_operators_3d<Type>::intersect_line_and_plane(
                                   const vgl_homg_line_3d &line,
                                   const vgl_homg_plane_3d<Type>& plane)
 {
@@ -91,8 +91,8 @@ vgl_homg_point_3d<Type> vgl_homg_operators_3d<Type>::intersect_line_and_plane (
 
   // FIXME: this works for double and smaller, but not complex. it might happen.
 
-  double numerator = -dot_product (x1, p);  // find out if dot_product is ok
-  double denominator = dot_product (x2, p);
+  double numerator = -dot_product(x1, p);  // find out if dot_product is ok
+  double denominator = dot_product(x2, p);
 
   // Scale for conditioning
   double scale;
@@ -115,8 +115,8 @@ vgl_homg_point_3d<Type> vgl_homg_operators_3d<Type>::intersect_line_and_plane (
 #if 0 // linker error better than run-time error.
 template <class Type>
 vgl_homg_point_3d<Type>
-vgl_homg_operators_3d<Type>::lines_to_point (const vgl_homg_line_3d& ,
-                                             const vgl_homg_line_3d& )
+vgl_homg_operators_3d<Type>::lines_to_point(const vgl_homg_line_3d& ,
+                                            const vgl_homg_line_3d& )
 {
   vcl_cerr << "Warning: vgl_homg_operators_3d<Type>::lines_to_point() not yet implemented\n";
   return vgl_homg_point_3d<Type>();
@@ -130,7 +130,7 @@ vgl_homg_operators_3d<Type>::lines_to_point (const vgl_homg_line_3d& ,
 #if 0 // linker error better than run-time error.
 template <class Type>
 vgl_homg_point_3d<Type>
-vgl_homg_operators_3d<Type>::lines_to_point (const vcl_vector<vgl_homg_line_3d >& )
+vgl_homg_operators_3d<Type>::lines_to_point(const vcl_vector<vgl_homg_line_3d >& )
 {
   vcl_cerr << "Warning: vgl_homg_operators_3d<Type>::lines_to_point() not yet implemented\n";
   return vgl_homg_point_3d<Type>();
@@ -143,8 +143,8 @@ vgl_homg_operators_3d<Type>::lines_to_point (const vcl_vector<vgl_homg_line_3d >
 //
 template <class Type>
 double
-vgl_homg_operators_3d<Type>::perp_distance_squared (const vgl_homg_line_3d& l,
-                                                    const vgl_homg_point_3d<Type>& p)
+vgl_homg_operators_3d<Type>::perp_distance_squared(const vgl_homg_line_3d& l,
+                                                   const vgl_homg_point_3d<Type>& p)
 {
   vgl_homg_point_3d<Type> q = vgl_homg_operators_3d<Type>::perp_projection(l, p); // foot point
   return vgl_homg_operators_3d<Type>::distance_squared(p,q);
@@ -156,8 +156,8 @@ vgl_homg_operators_3d<Type>::perp_distance_squared (const vgl_homg_line_3d& l,
 //
 template <class Type>
 typename vgl_homg_operators_3d<Type>::vgl_homg_line_3d
-vgl_homg_operators_3d<Type>::perp_line_through_point (const vgl_homg_line_3d& l,
-                                                      const vgl_homg_point_3d<Type>& p)
+vgl_homg_operators_3d<Type>::perp_line_through_point(const vgl_homg_line_3d& l,
+                                                     const vgl_homg_point_3d<Type>& p)
 {
   vgl_homg_point_3d<Type> q = vgl_homg_operators_3d<Type>::perp_projection(l,p);
   if (get_vector(p)==get_vector(q))
@@ -172,8 +172,8 @@ vgl_homg_operators_3d<Type>::perp_line_through_point (const vgl_homg_line_3d& l,
 //
 template <class Type>
 vgl_homg_point_3d<Type>
-vgl_homg_operators_3d<Type>::perp_projection (const vgl_homg_line_3d& l,
-                                              const vgl_homg_point_3d<Type>& p)
+vgl_homg_operators_3d<Type>::perp_projection(const vgl_homg_line_3d& l,
+                                             const vgl_homg_point_3d<Type>& p)
 {
   vgl_homg_point_3d<Type> const& q = l.point_finite();
   Type a[3]  = { q.x()/q.w(), q.y()/q.w(), q.z()/q.w() };
@@ -193,8 +193,8 @@ vgl_homg_operators_3d<Type>::perp_projection (const vgl_homg_line_3d& l,
 //
 template <class Type>
 typename vgl_homg_operators_3d<Type>::vgl_homg_line_3d
-vgl_homg_operators_3d<Type>::planes_to_line (const vgl_homg_plane_3d<Type>& plane1,
-                                             const vgl_homg_plane_3d<Type>& plane2)
+vgl_homg_operators_3d<Type>::planes_to_line(const vgl_homg_plane_3d<Type>& plane1,
+                                            const vgl_homg_plane_3d<Type>& plane2)
 {
   // TODO need equivilent of get_vector
   vnl_matrix<Type> M(2,4);
@@ -217,7 +217,7 @@ vgl_homg_operators_3d<Type>::planes_to_line (const vgl_homg_plane_3d<Type>& plan
 #if 0 // linker error better than run-time error.
 template <class Type>
 vgl_homg_operators_3d<Type>::vgl_homg_line_3d
-vgl_homg_operators_3d<Type>::planes_to_line (const vcl_vector<vgl_homg_plane_3d<Type> >&)
+vgl_homg_operators_3d<Type>::planes_to_line(const vcl_vector<vgl_homg_plane_3d<Type> >&)
 {
   vcl_cerr << "Warning: vgl_homg_operators_3d<Type>::planes_to_line() not yet implemented\n";
   return vgl_homg_line_3d<Type>();
@@ -232,8 +232,8 @@ vgl_homg_operators_3d<Type>::planes_to_line (const vcl_vector<vgl_homg_plane_3d<
 #if 0 // linker error better than run-time error.
 template <class Type>
 vgl_homg_operators_3d<Type>::vgl_homg_line_3d
-vgl_homg_operators_3d<Type>::points_to_line (const vgl_homg_point_3d<Type>&,
-                                             const vgl_homg_point_3d<Type>&)
+vgl_homg_operators_3d<Type>::points_to_line(const vgl_homg_point_3d<Type>&,
+                                            const vgl_homg_point_3d<Type>&)
 {
   vcl_cerr << "Warning: vgl_homg_operators_3d<Type>::points_to_line() not yet implemented\n";
   return vgl_homg_line_3d<Type>();
@@ -247,7 +247,7 @@ vgl_homg_operators_3d<Type>::points_to_line (const vgl_homg_point_3d<Type>&,
 #if 0 // linker error better than run-time error.
 template <class Type>
 vgl_homg_operators_3d<Type>::vgl_homg_line_3d
-vgl_homg_operators_3d<Type>::points_to_line (const vcl_vector<vgl_homg_point_3d<Type> >&)
+vgl_homg_operators_3d<Type>::points_to_line(const vcl_vector<vgl_homg_point_3d<Type> >&)
 {
   vcl_cerr << "Warning: vgl_homg_operators_3d<Type>::points_to_line() not yet implemented\n";
   return vgl_homg_line_3d<Type>();
@@ -261,9 +261,9 @@ vgl_homg_operators_3d<Type>::points_to_line (const vcl_vector<vgl_homg_point_3d<
 #if 0 // linker error better than run-time error.
 template <class Type>
 vgl_homg_plane_3d<Type>
-vgl_homg_operators_3d<Type>::points_to_plane (const vgl_homg_point_3d<Type>&,
-                                              const vgl_homg_point_3d<Type>&,
-                                              const vgl_homg_point_3d<Type>&)
+vgl_homg_operators_3d<Type>::points_to_plane(const vgl_homg_point_3d<Type>&,
+                                             const vgl_homg_point_3d<Type>&,
+                                             const vgl_homg_point_3d<Type>&)
 {
   vcl_cerr << "Warning: vgl_homg_operators_3d<Type>::points_to_plane() not yet implemented\n";
   return vgl_homg_plane_3d<Type>();
@@ -278,7 +278,7 @@ vgl_homg_operators_3d<Type>::points_to_plane (const vgl_homg_point_3d<Type>&,
 #if 0 // linker error better than run-time error.
 template <class Type>
 vgl_homg_plane_3d<Type>
-vgl_homg_operators_3d<Type>::points_to_plane (const vcl_vector<vgl_homg_point_3d<Type> >&)
+vgl_homg_operators_3d<Type>::points_to_plane(const vcl_vector<vgl_homg_point_3d<Type> >&)
 {
   vcl_cerr << "Warning: vgl_homg_operators_3d<Type>::points_to_plane() not yet implemented\n";
   return vgl_homg_plane_3d<Type>();
@@ -289,9 +289,9 @@ vgl_homg_operators_3d<Type>::points_to_plane (const vcl_vector<vgl_homg_point_3d
 
 template <class Type>
 vgl_homg_point_3d<Type>
-vgl_homg_operators_3d<Type>::intersection_point (const vgl_homg_plane_3d<Type>& plane1,
-                                                 const vgl_homg_plane_3d<Type>& plane2,
-                                                 const vgl_homg_plane_3d<Type>& plane3)
+vgl_homg_operators_3d<Type>::intersection_point(const vgl_homg_plane_3d<Type>& plane1,
+                                                const vgl_homg_plane_3d<Type>& plane2,
+                                                const vgl_homg_plane_3d<Type>& plane3)
 {
   vnl_matrix_fixed<Type,3,4> A;
   A(0,0) = plane1.nx();
@@ -315,7 +315,7 @@ vgl_homg_operators_3d<Type>::intersection_point (const vgl_homg_plane_3d<Type>& 
 
 template <class Type>
 vgl_homg_point_3d<Type>
-vgl_homg_operators_3d<Type>::intersection_point (const vcl_vector<vgl_homg_plane_3d<Type> >& planes)
+vgl_homg_operators_3d<Type>::intersection_point(const vcl_vector<vgl_homg_plane_3d<Type> >& planes)
 {
   int n = planes.size();
   vnl_matrix<Type> A(planes.size(), 4);
@@ -381,6 +381,30 @@ double vgl_homg_operators_3d<Type>::cross_ratio(const vgl_homg_point_3d<Type>& a
                             (z1*w4-z4*w1)*(z2*w3-z3*w2);
   if (n == 0 && m == 0)
     vcl_cerr << "cross ratio not defined: three of the given points coincide\n";
+  return n/m;
+}
+
+template <class Type>
+double vgl_homg_operators_3d<Type>::cross_ratio(const vgl_homg_plane_3d<Type>& a,
+                                                const vgl_homg_plane_3d<Type>& b,
+                                                const vgl_homg_plane_3d<Type>& c,
+                                                const vgl_homg_plane_3d<Type>& d)
+{
+  double x1 = a.a(), y1 = a.b(), z1 = a.c(), w1 = a.d();
+  double x2 = b.a(), y2 = b.b(), z2 = b.c(), w2 = b.d();
+  double x3 = c.a(), y3 = c.b(), z3 = c.c(), w3 = c.d();
+  double x4 = d.a(), y4 = d.b(), z4 = d.c(), w4 = d.d();
+  double x = x1 - x2; if (x<0) x = -x; // assuming a != b ;-)
+  double y = y1 - y2; if (y<0) y = -y;
+  double z = z1 - z2; if (z<0) z = -z;
+  double n = (x>y && x>z) ? (x1*w3-x3*w1)*(x2*w4-x4*w2) :
+             (y>z)        ? (y1*w3-y3*w1)*(y2*w4-y4*w2) :
+                            (z1*w3-z3*w1)*(z2*w4-z4*w2);
+  double m = (x>y && x>z) ? (x1*w4-x4*w1)*(x2*w3-x3*w2) :
+             (y>z)        ? (y1*w4-y4*w1)*(y2*w3-y3*w2) :
+                            (z1*w4-z4*w1)*(z2*w3-z3*w2);
+  if (n == 0 && m == 0)
+    vcl_cerr << "cross ratio not defined: three of the given planes coincide\n";
   return n/m;
 }
 
