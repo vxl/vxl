@@ -70,7 +70,7 @@ vil2_image_view_base_sptr vil2_decimate_image_resource::get_copy_view(unsigned i
   else // do large image case.
   {
     if ((i0+ni)*i_factor_ > src_->ni() || (j0+nj)*j_factor_ > src_->nj())
-      return false;
+      return 0;
 
     switch (src_->pixel_format())
     {
@@ -173,7 +173,7 @@ bool vil2_decimate_image_resource::put_view(const vil2_image_view_base& im, unsi
         macro(VIL2_PIXEL_FORMAT_FLOAT , float )
         macro(VIL2_PIXEL_FORMAT_DOUBLE , double )
 
-  #undef macro
+#undef macro
     default:
       return false;
     }
@@ -185,20 +185,26 @@ bool vil2_decimate_image_resource::put_view(const vil2_image_view_base& im, unsi
 
     switch (src_->pixel_format())
     {
-//#define macro( F , T ) 
-    case VIL2_PIXEL_FORMAT_FLOAT : 
-      {
-        const vil2_image_view<float > &view = static_cast<const vil2_image_view<float > &>(im);
-        for (unsigned j = 0; j < im.nj(); ++j)
-          for (unsigned i = 0; i < im.ni(); ++i)
-          {
-            vil2_image_view<float > pixel=vil2_crop(view,i,1,j,1);
-            assert ((bool)pixel);
-            if (!src_->put_view(pixel, (i0+i)*i_factor_, (j0+j)*j_factor_))
-              return false;
-          }
-        return true;
-      }
+#define macro( F , T )  \
+    case F : { \
+        const vil2_image_view<T > &view = static_cast<const vil2_image_view<T > &>(im); \
+        for (unsigned j = 0; j < im.nj(); ++j) \
+          for (unsigned i = 0; i < im.ni(); ++i) { \
+            vil2_image_view<T > pixel=vil2_crop(view,i,1,j,1); \
+            assert ((bool)pixel); \
+            if (!src_->put_view(pixel, (i0+i)*i_factor_, (j0+j)*j_factor_)) \
+              return false; } \
+        return true; }
+
+        macro(VIL2_PIXEL_FORMAT_BYTE , vxl_byte )
+        macro(VIL2_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+        macro(VIL2_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+        macro(VIL2_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+        macro(VIL2_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+        macro(VIL2_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+        macro(VIL2_PIXEL_FORMAT_FLOAT , float )
+        macro(VIL2_PIXEL_FORMAT_DOUBLE , double )
+#undef macro
     default: return false;
     }
     

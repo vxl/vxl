@@ -102,13 +102,23 @@ vil2_image_view_base_sptr vil2_vil1_image_resource::get_copy_view(unsigned i0,
 
   switch (pixel_format())
   {
-  case VIL2_PIXEL_FORMAT_BYTE:
-    {
-      vil2_memory_chunk_sptr chunk = new
-        vil2_memory_chunk(ni*nj*nplanes()*sizeof(vxl_byte ), VIL2_PIXEL_FORMAT_BYTE );
-      src_.get_section(chunk->data(), i0, j0, ni, nj);
-      return new vil2_image_view<vxl_byte >(chunk, (const unsigned char*)chunk->data(), ni, nj, nplanes(), nplanes(), ni*nplanes(), 1) ;
-    }
+#define macro( F , T ) \
+  case F: { \
+      vil2_memory_chunk_sptr chunk = new \
+        vil2_memory_chunk(ni*nj*nplanes()*sizeof(T ), F ); \
+      src_.get_section(chunk->data(), i0, j0, ni, nj); \
+      return new vil2_image_view<T >(chunk, (const T *)chunk->data(), \
+        ni, nj, nplanes(), nplanes(), ni*nplanes(), 1); }
+
+      macro(VIL2_PIXEL_FORMAT_BYTE , vxl_byte )
+      macro(VIL2_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+      macro(VIL2_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+      macro(VIL2_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+      macro(VIL2_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+      macro(VIL2_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+      macro(VIL2_PIXEL_FORMAT_FLOAT , float )
+      macro(VIL2_PIXEL_FORMAT_DOUBLE , double )
+#undef macro
   default: return 0;
   }
 }
@@ -122,12 +132,22 @@ bool vil2_vil1_image_resource::put_view (const vil2_image_view_base &im, unsigne
 
   switch (pixel_format())
   {
-  case VIL2_PIXEL_FORMAT_BYTE:
-    {
-      const vil2_image_view<vxl_byte > &view = static_cast<const vil2_image_view<vxl_byte > &>(im);
-      assert(nplanes()==1 || view.planestep() == 1);
-      src_.put_section(view.top_left_ptr(), i0, j0, im.ni(), im.nj());
-    }
+#define macro( F , T ) \
+  case F: { \
+      const vil2_image_view<T > &view = \
+        static_cast<const vil2_image_view<T > &>(im); \
+      assert(nplanes()==1 || view.planestep() == 1); \
+      src_.put_section(view.top_left_ptr(), i0, j0, im.ni(), im.nj()); }
+
+      macro(VIL2_PIXEL_FORMAT_BYTE , vxl_byte )
+      macro(VIL2_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+      macro(VIL2_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+      macro(VIL2_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+      macro(VIL2_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+      macro(VIL2_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+      macro(VIL2_PIXEL_FORMAT_FLOAT , float )
+      macro(VIL2_PIXEL_FORMAT_DOUBLE , double )
+#undef macro
   default: return false;
   }
 }
