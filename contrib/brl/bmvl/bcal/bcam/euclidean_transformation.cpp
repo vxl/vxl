@@ -65,10 +65,10 @@ void euclidean_transformation::set_transformations(vcl_vector<vgl_h_matrix_3d<do
 }
 
 
-void euclidean_transformation::print()
+void euclidean_transformation::print(vcl_ostream& os)
 {
   int size = trans_.size();
-  for(int i=0; i<size; i++){
-    vcl_cerr << "\n the "<<i<<"-th transformation is: \n"<< trans_[i];
+  for (int i=0; i<size; i++){
+    os << "\n the "<<i<<"-th transformation is: \n"<< trans_[i];
   }
 }

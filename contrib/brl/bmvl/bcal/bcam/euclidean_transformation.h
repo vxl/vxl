@@ -23,17 +23,18 @@ class euclidean_transformation : public vcsl_spatial_transformation
   virtual ~euclidean_transformation();
 
  public: // operators
-	 void set_transformations(vcl_vector<vgl_h_matrix_3d<double> > &trans);
+  void set_transformations(vcl_vector<vgl_h_matrix_3d<double> > &trans);
   vnl_vector<double> inverse(const vnl_vector<double> &v, double time) const;
   virtual vnl_vector<double> execute(const vnl_vector<double> &v, double tims) const;
   virtual bool is_invertible(double time) const; // for abstract interface
   virtual void set_beat(vcl_vector<double> const& new_beat);
 
   // for debugging
-  void print();
+  // print information
+  void print(vcl_ostream& os = vcl_cerr);
 
  protected:
-   // print information
+  // clear trans_
   int remove();
 };
 
