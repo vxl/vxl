@@ -1,0 +1,10 @@
+USES = vxl gel
+
+TESTS += test_vertex_2d.cxx
+TESTS += test_zero_chain.cxx
+TESTS += test_edge_2d.cxx
+TESTS += test_one_chain.cxx
+
+IULIBS += -lvtol -lvsol -lvnl -lvbl -lvgl -lvcl
+
+include ${IUEROOT}/config/static-tests.mk
