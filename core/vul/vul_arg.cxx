@@ -1,5 +1,7 @@
 // This is vxl/vul/vul_arg.cxx
-
+#ifdef __GNUC__
+#pragma implementation
+#endif
 //:
 // \file
 // Note that even though this file defines instances of a templated
@@ -14,20 +16,16 @@
 // -  int  parse(vul_arg<T>*, char**);
 // and then instantiate the class vul_arg<T> as usual (in myarg.cxx).
 
-#ifdef __GNUC__
-#pragma implementation
-#endif
-
 #include "vul_arg.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstdio.h>
+#include <vcl_cstdio.h> // sprintf()
+#include <vcl_iostream.h>
 #include <vcl_cstring.h>
 #include <vcl_cstdlib.h> // exit()
 #include <vcl_cmath.h>   // floor()
 #include <vcl_vector.h>
 #include <vcl_list.h>
-#include <vcl_iostream.h>
 
 #include <vul/vul_string.h>
 #include <vul/vul_reg_exp.h>
@@ -45,7 +43,7 @@ char const* vul_arg_base::option()
 
 //: Parse the list of arguments....
 void vul_arg_parse(int& argc, char **& argv,
-                          bool warn_about_unrecognized_arguments)
+                   bool warn_about_unrecognized_arguments)
 {
   vul_arg_base::parse_deprecated(argc, argv,
                                  warn_about_unrecognized_arguments);
@@ -155,7 +153,7 @@ vul_arg_info_list::~vul_arg_info_list()
 void vul_arg_info_list::set_help_option(char const* str)
 {
   // check that the operator isn't already being used
-  for (int i=0; i<args.size(); i++) {
+  for (unsigned int i=0; i<args.size(); i++) {
     if (vcl_strcmp(args[i]->option(),str) == 0) {
       vcl_cerr << "vul_arg_info_list: WARNING: requested help operator already assigned\n";
       return;
@@ -180,7 +178,7 @@ void vul_arg_info_list::include(vul_arg_info_list& l)
 {
   assert(&l != this);
 
-  for(int i = 0; i < l.args.size(); ++i)
+  for (unsigned int i = 0; i < l.args.size(); ++i)
     add(l.args[i]);
 }
 
@@ -194,7 +192,7 @@ void vul_arg_info_list::display_help( char const*progname)
     vcl_cerr << "Usage: aprog ";
 
   // Print "prog [-a int] string string"
-  for ( int i=0; i< args.size(); i++) {
+  for (unsigned int i=0; i< args.size(); i++) {
     if (args[i]->option()) {
       vcl_cerr << "[" << args[i]->option();
       if (vcl_strlen(args[i]->type_)> 0)
@@ -212,16 +210,14 @@ void vul_arg_info_list::display_help( char const*progname)
   int maxl_option  = 8; // Length of "REQUIRED"
   int maxl_type    = 0; // Length of "Type"
   //  int maxl_default = 0;
-  for (int i=0; i< args.size(); i++)
+  for (unsigned int i=0; i< args.size(); i++)
     if (args[i]->help_) {
       if (args[i]->option()) {
         int l = vcl_strlen(args[i]->option());
-        if (l > maxl_option)
-          maxl_option = l;
+        if (l > maxl_option) maxl_option = l;
       }
       int l = vcl_strlen(args[i]->type_);
-      if (l > maxl_type)
-        maxl_type = l;
+      if (l > maxl_type) maxl_type = l;
     }
 
   // Print long form of args
@@ -230,7 +226,7 @@ void vul_arg_info_list::display_help( char const*progname)
 
   // Do required args first
   vul_printf(vcl_cerr, "REQUIRED:\n");
-  for (int i=0; i< args.size(); i++)
+  for (unsigned int i=0; i< args.size(); i++)
     if (args[i]->help_)
       if (args[i]->option() == 0) {
         vul_printf(vcl_cerr, fmtbuf, "", args[i]->type_, args[i]->help_);
@@ -241,7 +237,7 @@ void vul_arg_info_list::display_help( char const*progname)
   // Then others
   vul_printf(vcl_cerr, "Optional:\n");
   vul_printf(vcl_cerr, fmtbuf, "Switch", "Type", "Help [default value]") << vcl_endl << vcl_endl;
-  for (int i=0; i< args.size(); i++)
+  for (unsigned int i=0; i< args.size(); i++)
     if (args[i]->help_)
       if (args[i]->option() != 0) {
         vul_printf(vcl_cerr, fmtbuf, args[i]->option(), args[i]->type_, args[i]->help_);
@@ -256,16 +252,16 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
   vcl_vector<bool> done_once(args.size(), false);
 
   // 0. Check that there are no duplicate switches, O(n^2) as n is tiny.
-  for (int i = 0; i < args.size(); ++i)
+  for (unsigned int i = 0; i < args.size(); ++i)
     if (args[i]->option_)
-      for (int j = i+1; j < args.size(); ++j)
+      for (unsigned int j = i+1; j < args.size(); ++j)
         if (args[j]->option_)
           if (0==vcl_strcmp(args[i]->option_, args[j]->option_))
             vcl_cerr << "vul_arg_info_list: WARNING: repeated switch ["
                      << args[j]->option_ << "]\n";
 
   // 0a. Clear "set" flags on args
-  for (int i = 0; i < args.size(); ++i)
+  for (unsigned int i = 0; i < args.size(); ++i)
     args[i]->set_ = false;
 
   // 1. Collect option arguments (i.e. ones with "-"),
@@ -276,7 +272,7 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
   while (*my_argv) {
     char* argmt = *my_argv;
     bool eaten = false;
-    for (int i = 0; i < args.size(); ++i)
+    for (unsigned int i = 0; i < args.size(); ++i)
       if (args[i]->option_) {
         if ( help == argmt ) { // look for the '-?' operator (i.e. HELP)
           display_help(argv[0]);
@@ -289,7 +285,7 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
           args[i]->set_ = true;
           if (advance >= 0) {
             // Pull down remaining args
-            for(char ** av = my_argv; *(av + advance); ++av)
+            for (char ** av = my_argv; *(av + advance); ++av)
               *av = *(av + advance + 1);
 
             eaten = true;
@@ -303,7 +299,7 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
 
   if (verbose_) {
     vcl_cerr << "args remaining:";
-    for(char ** av = argv; *av; ++av)
+    for (char ** av = argv; *av; ++av)
       vcl_cerr << " [" << *av << "]";
     vcl_cerr << vcl_endl;
   }
@@ -311,7 +307,7 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
   // 2. Just take from the list to fill the non-option arguments
   my_argv = argv + 1;
   int num_satisfied = 0;
-  for (int i = 0; i < args.size(); ++i)
+  for (unsigned int i = 0; i < args.size(); ++i)
     if (!args[i]->option_)
       if (*my_argv) {
         done_once[i] = true;
@@ -329,9 +325,9 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
 
   // 3. Move my_argv down to first unused arg, and reset argc
   argc = 1;
-  for(char ** av = my_argv; *av; ++av)
+  for (char ** av = my_argv; *av; ++av)
     ++argc;
-  for(int i = 1; i < argc; ++i)
+  for (int i = 1; i < argc; ++i)
     argv[i] = my_argv[i-1];
   argv[argc] = 0;
 
@@ -340,7 +336,7 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
   // 4.2 Sometimes it's bad if all args weren't used (i.e. trailing args)
   if (autonomy_ == all) {
     vcl_cerr << "vul_arg_info_list: Some arguments were unused: ";
-    for(char ** av = argv; *av; ++av)
+    for (char ** av = argv; *av; ++av)
       vcl_cerr << " " << *av;
     vcl_cerr << vcl_endl;
     display_help(argv[0]);
@@ -348,18 +344,17 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
 
   // 4.3 It's often bad if a switch was not recognized.
   if (warn_about_unrecognized_arguments)
-    for(char ** av = argv; *av; ++av)
+    for (char ** av = argv; *av; ++av)
       if (**av == '-') {
         display_help(argv[0]);
         vcl_cerr << "vul_arg_info_list: WARNING: Unparsed switch [" << *av << "]\n";
       }
 
   // 5. Some people like a chatty program.
-#if 0
-  //fsm: do not print outcome -- it looks like an error message.
+#ifdef DEBUG //fsm: do not print outcome - it looks like an error message.
   if (verbose_) {
     // Print outcome
-    for (int i = 0; i < args.size(); ++i)
+    for (unsigned int i = 0; i < args.size(); ++i)
       if (args[i]->option_) {
         vcl_cerr << "Switch " << args[i]->option_ << ": "
                  << (!done_once[i]? "not ":"") << "done, value [";
@@ -367,7 +362,7 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
         vcl_cerr << "]\n";
       }
 
-    for (int i = 0; i < args.size(); ++i)
+    for (unsigned int i = 0; i < args.size(); ++i)
       if (!args[i]->option_) {
         vcl_cerr << "Trailer: ";
         args[i]->print_value(vcl_cerr);
@@ -375,7 +370,7 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
       }
 
     vcl_cerr << "args remaining [argc = " << argc << "]:";
-    for(char ** av = argv; *av; ++av)
+    for (char ** av = argv; *av; ++av)
       vcl_cerr << " " << *av;
     vcl_cerr << "\n--------------\n";
   }
@@ -394,12 +389,15 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
 //   complete ranges can be written as 1:2:5 or 1-2-5 (=1,3,5)
 //   negative numbers are handled 'transparently'
 //   (e.g. -1:-3 or -1--3 or even -1--1--3 ...:).
+//
+// Returns 1 on success and 0 on failure.
+//
 static int list_parse(vcl_list<int> &out, char ** argv)
 {
   out.clear();
 
   // Empty list specified as the last argument.
-  if( !argv[0] ) return 0;
+  if ( !argv[0] ) return 0; // failure
 
   vcl_string str(argv[0]);
 
@@ -410,8 +408,6 @@ static int list_parse(vcl_list<int> &out, char ** argv)
                            "([:-]" REGEXP_INTEGER ")?" // :int [optional]
                           );
 
-  bool error= false;
-
   while (str.length() > 0 && range_regexp.find(str)) {
     // the start/end positions (ref from 0) of the
     //    current ',' separated token.
@@ -419,7 +415,7 @@ static int list_parse(vcl_list<int> &out, char ** argv)
     long endp = range_regexp.end(0);
     if (start != 0) {
       vcl_cerr << "vul_arg<vcl_list<int> >: Bad argument [" << argv[0] << "]\n";
-      return 0;
+      return 0; // failure
     }
 
     // this is the current token.
@@ -465,19 +461,19 @@ static int list_parse(vcl_list<int> &out, char ** argv)
         vcl_cerr << "WARNING: d < 0\n";
         d = -d;
       }
-      for(int i = s; i <= e; i += d)
+      for (int i = s; i <= e; i += d)
         out.push_back(i);
     } else {
       if (d > 0) {
         vcl_cerr << "WARNING: d > 0\n";
         d = -d;
       }
-      for(int i = s; i >= e; i += d)
+      for (int i = s; i >= e; i += d)
         out.push_back(i);
     }
   }
 
-  return error ? 0 : 1;
+  return 1; // success
 }
 
 //------------------------------------------------------------------------------
@@ -624,7 +620,7 @@ template class vul_arg<vcl_list<int> >;
 //: vcl_vector<int>
 VDS void settype(vul_arg<vcl_vector<int> > &argmt) { argmt.type_ = "integer list"; }
 VDS void print_value(vcl_ostream &s, vul_arg<vcl_vector<int> > const &argmt) {
-  for (unsigned i=0; i<argmt().size(); ++i)
+  for (unsigned int i=0; i<argmt().size(); ++i)
     s << ' ' << argmt()[i];
 }
 VDS int parse(vul_arg<vcl_vector<int> >* argmt, char ** argv) {
@@ -641,7 +637,7 @@ template class vul_arg<vcl_vector<int> >;
 //: vcl_vector<unsigned>
 VDS void settype(vul_arg<vcl_vector<unsigned> > &argmt){argmt.type_="integer list";}
 VDS void print_value(vcl_ostream &s, vul_arg<vcl_vector<unsigned> > const &argmt) {
-  for (unsigned i=0; i<argmt().size(); ++i)
+  for (unsigned int i=0; i<argmt().size(); ++i)
     s << ' ' << argmt()[i];
 }
 VDS int parse(vul_arg<vcl_vector<unsigned> >* argmt, char ** argv) {

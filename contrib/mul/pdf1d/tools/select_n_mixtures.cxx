@@ -36,7 +36,7 @@ void test_form(vcl_vector<double>& B,
   unsigned int n = builder.size();
   if (B.size()!=n) B.resize(n);
   vnl_vector<double> b;
-  for (int i=0;i<n;++i)
+  for (unsigned int i=0;i<n;++i)
   {
 //    B[i] = comparitor.compare_form(x.data_block(),x.size(),*builder[i]);
     B[i] = comparitor.bootstrap_compare_form(b,x.data_block(),x.size(),*builder[i],10);
@@ -73,7 +73,7 @@ void select_form(vnl_vector<int>& histo,
 
     int best_j=0;
     double best_B = B[0];
-    for (int j=1;j<n;++j)
+    for (unsigned int j=1;j<n;++j)
       if (B[j]>best_B)
       {
         best_B=B[j];
