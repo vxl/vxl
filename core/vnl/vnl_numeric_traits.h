@@ -188,12 +188,15 @@ public:
 
 // G++ barfs if the specializations are themselves templated
 // declaring the statics "const" crashes 2.7.2
+#ifdef VCL_GCC_272
+#define const
+#endif
 
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits< vcl_complex<float> > {
 public:
-  static vcl_complex<float> zero;
-  static vcl_complex<float> one;
+  static const vcl_complex<float> zero;
+  static const vcl_complex<float> one;
   typedef float abs_t;
   typedef vcl_complex<vnl_numeric_traits<float>::double_t> double_t;
   typedef vcl_complex<float> real_t;
@@ -202,11 +205,12 @@ public:
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits< vcl_complex<double> > {
 public:
-  static vcl_complex<double> zero;
-  static vcl_complex<double> one;
+  static const vcl_complex<double> zero;
+  static const vcl_complex<double> one;
   typedef double abs_t;
   typedef vcl_complex<vnl_numeric_traits<double>::double_t> double_t;
   typedef vcl_complex<double> real_t;
 };
+#undef const
 
 #endif // vnl_numeric_traits_h_

@@ -107,7 +107,7 @@ float vnl_numeric_limits<float>::signaling_NaN()
   return quiet_NaN();
 }
 
-#if VCL_IMPLEMENT_STATIC_CONSTS
+#if !VCL_CAN_STATIC_CONST_INIT_INT
 // float
 const bool vnl_numeric_limits<float>::is_specialized = true;
 const int  vnl_numeric_limits<float>::digits   = 24;
