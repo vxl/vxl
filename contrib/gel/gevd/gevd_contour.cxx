@@ -43,6 +43,8 @@
 // #include <cool/ListP.h>
 // #include <iostream.h>
 #include <vcl_cmath.h> // for fabs()
+#include <vcl_cassert.h>
+#include <vcl_vector.h>
 #include <vcl_algorithm.h> // for vcl_max()
 
 #include <vil/vil_byte.h>
@@ -1730,8 +1732,8 @@ gevd_contour::EqualizeSpacing(vcl_vector<vtol_edge_2d *>& chains)
     {	// not necessary for short chains
       vtol_vertex_2d *v1 = e->v1().ptr(), *v2 = e->v2().ptr();
 
-      float cx[len];
-      float cy[len];
+      vcl_vector<float> cx(len);
+      vcl_vector<float> cy(len);
 
       for ( int qq=0; qq<len; qq++)
       {
@@ -1740,8 +1742,8 @@ gevd_contour::EqualizeSpacing(vcl_vector<vtol_edge_2d *>& chains)
         cy[qq]= e.y();
       }
 
-      EqualizeElements(cx, len, v1->x(), v2->x());
-      EqualizeElements(cy, len, v1->y(), v2->y());
+      EqualizeElements(&cx[0], len, v1->x(), v2->x());
+      EqualizeElements(&cy[0], len, v1->y(), v2->y());
 
       for ( int qq=0; qq<len; qq++)
       {
