@@ -67,7 +67,7 @@
 
 extern "C++" {
 
-template <class charT, VCL_DFL_TYPE_PARAM_STLDECL( traits, vcl_string_char_traits<charT> ) >
+template <class charT, VCL_DFL_TYPE_PARAM_STLDECL( traits, vcl_char_traits<charT> ) >
 class vcl_basic_string
 {
 private:
@@ -158,6 +158,9 @@ public:
   template<class InputIterator>
     vcl_basic_string(InputIterator begin, InputIterator end,
 		 Allocator& = Allocator());
+#else
+  vcl_basic_string (const charT* s, const charT* e) 
+    : data_(0),strlen_(0),current_size_(0) { assign(s, e-s); }
 #endif
 
   ~vcl_basic_string ()
@@ -667,8 +670,8 @@ getline (vcl_istream&, vcl_basic_string <charT, traits>&, charT delim ='\n');
 
 #define VCL_STRING_IS_TYPEDEF 0
 // For short typenames:
-struct vcl_string : public vcl_basic_string <char, vcl_string_char_traits <char> > {
-  typedef vcl_basic_string <char, vcl_string_char_traits <char> > super;
+struct vcl_string : public vcl_basic_string <char, vcl_char_traits <char> > {
+  typedef vcl_basic_string <char, vcl_char_traits <char> > super;
 
   explicit vcl_string () { }
   vcl_string (const vcl_string& str): super(str) {}
@@ -685,7 +688,7 @@ struct vcl_string : public vcl_basic_string <char, vcl_string_char_traits <char>
 #else
 
 #define VCL_STRING_IS_TYPEDEF 1
-typedef vcl_basic_string <char, vcl_string_char_traits <char> > vcl_string;
+typedef vcl_basic_string <char, vcl_char_traits <char> > vcl_string;
 #endif
 
 // KYM: moved to vcl/vcl_string.h to match others

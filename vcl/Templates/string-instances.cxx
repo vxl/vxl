@@ -1,33 +1,31 @@
 #include <vcl/vcl_string.txx>
-
-//template class basic_string<char, string_char_traits<char> >;
-VCL_BASIC_STRING_INSTANTIATE(char, vcl_string_char_traits<char> );
-
-
 #include <vcl/vcl_iostream.h>
 
-#if defined(VCL_GCC_27)
+VCL_BASIC_STRING_INSTANTIATE(char, vcl_char_traits<char> );
 
-#elif defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
-// gcc2.95 needs implicit templates tickled to link strings....
-
-template ostream& operator<<(ostream&, vcl_string const&);
-
-# define concat(x, y) x##y
-namespace {
-  void f(ostream& os) {
-    char a;
-    string_char_traits<char>::eq(a,a);
-    concat(str,ing) s;
-    os << s;
-
-    vcl_string("foo", "bar");
-  }
-}
-
+#if defined(VCL_EGCS)
+# define bs basic_string<char, string_char_traits<char>, __default_alloc_template<1, 0> >
+template bs &bs::replace(char *, char *, char *, char *);
+template bs &bs::replace(char *, char *, char const *, char const *);
+template bs &bs::replace(unsigned, unsigned, bs const &, unsigned, unsigned);
+template bs &bs::replace(unsigned, unsigned, char const *, unsigned);
+template bs &bs::replace(unsigned, unsigned, unsigned, char);
+# undef bs
 #endif
 
-#ifdef VCL_GCC_295
-template
-basic_string<char, string_char_traits<char>, __default_alloc_template<0, 0> > & basic_string<char, string_char_traits<char>, __default_alloc_template<0, 0> >::replace<char *>(char *, char *, char *, char *);
+#if defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
+void vcl_string_instance_tickler(ostream &os)
+{
+  char a;
+  vcl_char_traits<char>::eq(a,a);
+  vcl_string s("foo", "bar");
+  os << s;
+}
+# define bs basic_string<char, string_char_traits<char>, __default_alloc_template<false, 0> >
+template bs &bs::replace(char *, char *, char *, char *);
+template bs &bs::replace(char *, char *, char const *, char const *);
+template bs &bs::replace(unsigned, unsigned, bs const &, unsigned, unsigned);
+template bs &bs::replace(unsigned, unsigned, char const *, unsigned);
+template bs &bs::replace(unsigned, unsigned, unsigned, char);
+# undef bs
 #endif

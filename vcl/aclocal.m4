@@ -251,6 +251,45 @@ void h() {
   A::i++;              // A::unique::i
   j++;                 // A::unique::j
 }
+
+extern "C" double sqrt(double);
+
+namespace foo {
+  template <class T>
+  struct complex {
+    T re, im;
+  };
+  template <class T>
+  T abs(complex<T> const &z) { return T(::sqrt(double(z.re*z.re + z.im+z.im))); }
+}
+
+namespace bar {
+  int abs(int);
+  long abs(long);
+  float abs(float);
+  double abs(double);
+}
+
+namespace diced {
+  using foo::complex; // <-- I'm told vc60 fails here.
+  using foo::abs;
+  using bar::abs;
+}
+
+extern "C" int printf(char const *, ...);
+
+void flegg() { 
+  int a = -1;
+  long b = -2;
+  float c = -3;
+  double d = -4;
+  diced::complex<double> e = { 3, 4 };
+  printf("%d\n",  diced::abs(a)); // 1
+  printf("%ld\n", diced::abs(b)); // 2
+  printf("%f\n",  diced::abs(c)); // 3
+  printf("%lf\n", diced::abs(d)); // 4
+  printf("%lf\n", diced::abs(e)); // 5
+}
 ],,ac_cxx_has_namespaces=yes,ac_cxx_has_namespaces=no)
 AC_LANG_RESTORE
 ])

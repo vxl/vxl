@@ -31,7 +31,7 @@
 #include "vcl_stlconf.h"
 
 #ifdef __GNUG__
-// For vcl_string_char_traits <char>
+// For vcl_char_traits <char>
 #pragma interface "vcl_straits.h"
 #endif
 
@@ -43,12 +43,12 @@
 
 // Make shorter name for basic_string if STL is using short names
 # if defined ( __STL_USE_ABBREVS )
-#  define vcl_string_char_traits vcl_sCt
+#  define vcl_char_traits vcl_sCt
 # endif
 
 extern "C++" {
 template <class charT>
-struct vcl_string_char_traits {
+struct vcl_char_traits {
   typedef charT char_type; // for users to acquire the basic character type
 
   // constraints
@@ -113,7 +113,7 @@ struct vcl_string_char_traits {
     }
 };
 
-struct vcl_string_char_traits <char> {
+struct vcl_char_traits <char> {
   typedef char char_type;
 
   static void assign (char_type& c1, const char_type& c2)

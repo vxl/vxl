@@ -8,6 +8,7 @@
 
 #undef VCL_BASIC_STRING_INSTANTIATE
 #define VCL_BASIC_STRING_INSTANTIATE(charT, Traits) \
+template class basic_string<charT, Traits >; \
 template ostream& operator<<(ostream&, basic_string<charT, Traits > const &);
 
 #endif

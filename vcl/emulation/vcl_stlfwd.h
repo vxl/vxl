@@ -68,7 +68,7 @@
 # define __rb_tree_base            vcl_rbTB
 
 // from vcl_string.h:
-# define vcl_string_char_traits vcl_sCt
+# define vcl_char_traits vcl_sCt
 # define vcl_basic_string vcl_bS
 
 #endif //__STL_USE_ABBREVS
