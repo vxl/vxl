@@ -40,4 +40,4 @@ book.info: book.texi
 	makeinfo.exe book --force -o book.info
 
 publish:
-	 rcp book*.html volumnia.awf:WWW/vxl/book
+	 rcp index.html book*.html volumnia.robots.ox.ac.uk.awf:WWW/vxl/book

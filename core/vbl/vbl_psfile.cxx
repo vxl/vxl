@@ -761,7 +761,7 @@ void vbl_psfile::reset_postscript_header()
 //-----------------------------------------------------------------------------
 // sobj_rgb_params() -- 
 //-----------------------------------------------------------------------------
-void vbl_psfile::sobj_rgb_params(char const* obj_str)
+void vbl_psfile::sobj_rgb_params(char const* obj_str, bool filled)
 {
   print_graphics_prolog();
   output_filestream << "\nBegin %I " << obj_str << "\n";
@@ -769,7 +769,7 @@ void vbl_psfile::sobj_rgb_params(char const* obj_str)
   output_filestream << fg_r << " " << fg_g << " " << fg_b << " SetCFg\n";
   output_filestream << bg_r << " " << bg_g << " " << bg_b << " SetCBg\n";
   output_filestream << line_width << " setlinewidth\n";
-  output_filestream << "none SetP %I p n\n";
+  output_filestream << (filled ? "0": "none") << " SetP %I p n\n";
 }
 
 //-----------------------------------------------------------------------------
@@ -783,7 +783,7 @@ void vbl_psfile::line(float x1, float y1, float x2, float y2)
   compute_bounding_box();
   
   print_graphics_prolog();
-  sobj_rgb_params("Line");
+  sobj_rgb_params("Line", false);
   
   output_filestream << (int) x1 << " " << (int) y1 << " "
 	             << (int) x2 << " " << (int) y2 << " Line\n";
@@ -793,16 +793,16 @@ void vbl_psfile::line(float x1, float y1, float x2, float y2)
 //-----------------------------------------------------------------------------
 //: Add a point at the given coordinates to the Postscript file.
 //-----------------------------------------------------------------------------
-void vbl_psfile::point(float x, float y)
+void vbl_psfile::point(float x, float y, float point_size)
 {
   print_graphics_prolog();
   set_min_max_xy(x,y);
   compute_bounding_box();
   
-  this->sobj_rgb_params("Point");
-    
-  output_filestream << (int) x << " " << (int) y << " "
-	  << (int) 1 << " " << (int) 1 << " Elli\nEnd\n";
+  this->sobj_rgb_params("Point", true);
+
+  point_size /= 2;
+  output_filestream << x << " " << y << " " << point_size << " " << point_size << " Elli\nEnd\n";
 }
 
 //-----------------------------------------------------------------------------
@@ -821,7 +821,7 @@ void vbl_psfile::ellipse(float x, float y, float a_axis, float b_axis, int angle
   compute_bounding_box();
 
   print_graphics_prolog();
-  sobj_rgb_params("Ellipse");
+  sobj_rgb_params("Ellipse", false);
   if (angle)
   {
     output_filestream << (int) x << " " << (int) y << " translate \n";
@@ -851,7 +851,7 @@ void vbl_psfile::circle(float x, float y, float radius)
   compute_bounding_box();
 
   print_graphics_prolog();
-  sobj_rgb_params("Circle");
+  sobj_rgb_params("Circle", false);
   ellipse(x,y,radius,radius);
   output_filestream << "End\n";
 }
@@ -956,7 +956,7 @@ void vbl_psfile::print_graphics_prolog()
   output_filestream << "restore\n";
   output_filestream << "} def\n";
   output_filestream << "\n";
-  output_filestream << "/SetB {\n";
+  output_filestream << "/SetB { % width leftarrow rightarrow DashArray DashOffset SetB\n";
   output_filestream << "dup type /nulltype eq {\n";
   output_filestream << "pop\n";
   output_filestream << "false /brushRightArrow idef\n";
@@ -989,7 +989,7 @@ void vbl_psfile::print_graphics_prolog()
   output_filestream << "/printFont idef\n";
   output_filestream << "} def\n";
   output_filestream << "\n";
-  output_filestream << "/SetP {\n";
+  output_filestream << "/SetP {  % string -1 SetP  OR gray SetP\n";
   output_filestream << "dup type /nulltype eq {\n";
   output_filestream << "pop true /patternNone idef\n";
   output_filestream << "} {\n";

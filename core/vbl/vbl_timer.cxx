@@ -61,12 +61,22 @@ struct vbl_timer_data
 #undef CLK_TCK
 #define CLK_TCK sysconf(_SC_CLK_TCK)
 
-vbl_timer::vbl_timer() : data(new vbl_timer_data) { mark(); }
-vbl_timer::~vbl_timer() { delete data; data = 0; }
+vbl_timer::vbl_timer() 
+  : data(new vbl_timer_data)
+{ 
+  mark(); 
+}
+
+vbl_timer::~vbl_timer() 
+{ 
+  delete data; 
+  data = 0; 
+}
 
 // -- Sets the reference time to now.
 
-void vbl_timer::mark () {
+void vbl_timer::mark()
+{
 #ifndef WIN32
   times(&data->usage0);		// user/system time
 #ifndef SYSV
@@ -88,7 +98,8 @@ void vbl_timer::mark () {
 
 // -- Returns the number of milliseconds of wall clock time, since last mark().
 
-long vbl_timer::real () {
+long vbl_timer::real()
+{
  long s;
 
 #ifndef WIN32
@@ -129,7 +140,8 @@ long vbl_timer::real () {
 
 // -- 
 
-long vbl_timer::user () {
+long vbl_timer::user()
+{
 #ifndef WIN32
   tms usage;
   times(&usage);		// new user/system time
@@ -143,20 +155,22 @@ long vbl_timer::user () {
 // -- Returns the number of milliseconds spent in user-process or
 // operating system respectively, since last mark().
 
-long vbl_timer::system () {
+long vbl_timer::system()
+{
 #ifndef WIN32
   tms usage;
   times(&usage);		// new user/system time
   return (usage.tms_stime - data->usage0.tms_stime) * 1000 / CLK_TCK;
 #else
-    return 0L;
+  return 0L;
 #endif
 }
 
 // Returns the number of milliseconds spent in user-process AND
 // operating system, since last mark().
 
-long vbl_timer::all () {
+long vbl_timer::all()
+{
 #ifndef WIN32
   tms usage;
   times(&usage);		// new user/system time

@@ -53,10 +53,10 @@ public:
   void postscript_header();
   void graphic_header();
   void print_graphics_prolog();
-  void sobj_rgb_params(char const* str);
+  void sobj_rgb_params(char const* str, bool filled);
 
   void line(float x1, float y1, float x2, float y2);
-  void point(float x, float y);
+  void point(float x, float y, float point_size = 0);
   void ellipse(float x, float y, float a_axis, float b_axis, int angle = 0);
   void circle(float x, float y, float radius); 
 
