@@ -31,7 +31,7 @@ class clsfy_binary_hyperplane : public clsfy_classifier_base
 
   //: Classify the input vector.
   // Returns a number between 0 and nClasses-1 inclusive to represent the most likely class
-  unsigned virtual classify(const vnl_vector<double> &input) const;
+  virtual unsigned classify(const vnl_vector<double> &input) const;
 
   //: Log likelihood of being in the positive class.
   // Class probability = 1 / (1+exp(-log_l))
@@ -50,11 +50,11 @@ class clsfy_binary_hyperplane : public clsfy_classifier_base
   double bias() const { return bias_; }
 
   //: The dimensionality of input vectors.
-  unsigned virtual n_dims() const { return weights_.size();}
+  virtual unsigned n_dims() const { return weights_.size();}
 
   //: The number of possible output classes.
   // 1 indicates a binary classifier
-  unsigned virtual n_classes() const { return 1;}
+  virtual unsigned n_classes() const { return 1;}
 
   //: Version number for I/O
   short version_no() const;

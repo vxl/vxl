@@ -45,11 +45,11 @@ class clsfy_rbf_parzen : public clsfy_classifier_base
   clsfy_rbf_parzen() { set_rbf_width(1.0); set_power(2.0);}
 
   //: Return the classification of the given probe vector.
-  unsigned virtual classify(const vnl_vector<double> &input) const;
+  virtual unsigned classify(const vnl_vector<double> &input) const;
 
   //: Provides a probability-like value that the input being in each class.
   // output(i) i<nClasses, contains the probability that the input is in class i
-  void virtual class_probabilities(vcl_vector<double> &outputs, const vnl_vector<double> &input) const;
+  virtual void class_probabilities(vcl_vector<double> &outputs, const vnl_vector<double> &input) const;
 
   //: Return the number of proximate training vectors, weighted by the windowing function.
   double weightings(const vnl_vector<double> &input) const;
@@ -93,10 +93,10 @@ class clsfy_rbf_parzen : public clsfy_classifier_base
   {return trainOutputs_;}
 
   //: The number of possible output classes.
-  unsigned virtual n_classes() const {return 1;}
+  virtual unsigned n_classes() const {return 1;}
 
   //: The dimensionality of input vectors.
-  unsigned virtual n_dims() const;
+  virtual unsigned n_dims() const;
 
   //: Storage version number
   virtual short version_no() const;

@@ -84,21 +84,21 @@ class clsfy_direct_boost : public clsfy_classifier_base
 
   //: Classify the input vector.
   // Returns a number between 0 and nClasses-1 inclusive to represent the most likely class
-  unsigned virtual classify(const vnl_vector<double> &input) const;
+  virtual unsigned classify(const vnl_vector<double> &input) const;
 
   //: Log likelihood of being in the positive class.
   // Class probability = 1 / (1+exp(-log_l))
   virtual double log_l(const vnl_vector<double> &input) const;
 
   //: The dimensionality of input vectors.
-  unsigned virtual n_dims() const { return n_dims_;}
+  virtual unsigned n_dims() const { return n_dims_;}
 
    //: Set number of classifiers used (when applying strong classifier)
   void set_n_dims(unsigned x) {n_dims_ = x;}
 
   //: The number of possible output classes.
   // 1 indicates a binary classifier
-  unsigned virtual n_classes() const { return 1;}
+  virtual unsigned n_classes() const { return 1;}
 
   //: Set parameters.  Clones taken of *classifier[i]
   void set_parameters(const vcl_vector<clsfy_classifier_1d*>& classifier,

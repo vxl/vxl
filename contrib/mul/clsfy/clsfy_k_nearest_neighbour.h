@@ -32,11 +32,11 @@ class clsfy_k_nearest_neighbour : public clsfy_classifier_base
   clsfy_k_nearest_neighbour():k_(1) {}
 
   //: Return the classification of the given probe vector.
-  unsigned virtual classify(const vnl_vector<double> &input) const;
+  virtual unsigned classify(const vnl_vector<double> &input) const;
 
   //: Provides a probability-like value that the input being in each class.
   // output(i) i<nClasses, contains the probability that the input is in class i
-  void virtual class_probabilities(vcl_vector<double> &outputs, const vnl_vector<double> &input) const;
+  virtual void class_probabilities(vcl_vector<double> &outputs, const vnl_vector<double> &input) const;
 
   //: This value has properties of a Log likelihood of being in class (binary classifiers only)
   // class probability = exp(logL) / (1+exp(logL))
@@ -62,10 +62,10 @@ class clsfy_k_nearest_neighbour : public clsfy_classifier_base
   const vcl_vector<unsigned >& training_classes() const {return trainOutputs_;}
 
   //: The number of possible output classes.
-  unsigned virtual n_classes() const {return 1;}
+  virtual unsigned n_classes() const {return 1;}
 
   //: The dimensionality of input vectors.
-  unsigned virtual n_dims() const;
+  virtual unsigned n_dims() const;
 
   //: Storage version number
   virtual short version_no() const;

@@ -39,7 +39,7 @@ class clsfy_random_classifier : public clsfy_classifier_base
 
   //: Return the probability the input being in each class.
   // output(i) i<nClasses, contains the probability that the input is in class i
-  void virtual class_probabilities(vcl_vector<double> &outputs, const vnl_vector<double> &input) const;
+  virtual void class_probabilities(vcl_vector<double> &outputs, const vnl_vector<double> &input) const;
 
   //: Log likelihood of being in class (binary classifiers only)
   // class probability = 1 / (1+exp(-log_l))
@@ -47,10 +47,10 @@ class clsfy_random_classifier : public clsfy_classifier_base
   virtual double log_l(const vnl_vector<double> &input) const;
 
   //: The number of possible output classes.
-  unsigned virtual n_classes() const;
+  virtual unsigned n_classes() const;
 
   //: The dimensionality of input vectors.
-  unsigned virtual n_dims() const;
+  virtual unsigned n_dims() const;
 
   //: Name of the class
   virtual vcl_string is_a() const;

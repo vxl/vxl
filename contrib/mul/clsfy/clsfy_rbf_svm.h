@@ -51,14 +51,14 @@ class clsfy_rbf_svm : public clsfy_classifier_base
 
   //: Classify the input vector
   // returns 0 to indicate out of (or negative) class and one to indicate in class (or positive.)
-  unsigned virtual classify(const vnl_vector<double> &input) const;
+  virtual unsigned classify(const vnl_vector<double> &input) const;
 
   //: Return the probability the input being in each class.
   // output(i) i<<nClasses, contains the probability that the input
   // is in class i;
   // This are not strict probability values, since SVMs do not give Bayesian
   // outputs. However their properties fit the requirements of a probability.
-  void virtual class_probabilities(vcl_vector<double> &outputs,
+  virtual void class_probabilities(vcl_vector<double> &outputs,
                                    const vnl_vector<double> &input) const;
 
   //: Log likelihood of being in class (binary classifiers only)
@@ -101,10 +101,10 @@ class clsfy_rbf_svm : public clsfy_classifier_base
 
 
   //: The number of possible output classes.
-  unsigned virtual n_classes() const {return 1;}
+  virtual unsigned n_classes() const {return 1;}
 
   //: The dimensionality of input vectors.
-  unsigned virtual n_dims() const {return supports_[0].size();}
+  virtual unsigned n_dims() const {return supports_[0].size();}
 
   //: Return the class's IO version number
   short version_no() const;

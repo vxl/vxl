@@ -39,11 +39,11 @@ class clsfy_binary_pdf_classifier : public clsfy_classifier_base
 
   //: Classify the input vector
   // Returns either class1 (Inside PDF mode) or class 0 (Outside PDF mode).
-  unsigned virtual classify(const vnl_vector<double> &input) const;
+  virtual unsigned classify(const vnl_vector<double> &input) const;
 
   //: Return the probability the input being in class 0.
   // output(0) contains the probability that the input is in class 1
-  void virtual class_probabilities(vcl_vector<double> &outputs, const vnl_vector<double> &input) const;
+  virtual void class_probabilities(vcl_vector<double> &outputs, const vnl_vector<double> &input) const;
 
   //: Log likelihood of being in class 0, i.e. const + log(P(class=0|data)).
   // The constant is chosen such that the decision boundary is at logL ==0;
@@ -86,10 +86,10 @@ class clsfy_binary_pdf_classifier : public clsfy_classifier_base
   }
 
   //: The dimensionality of input vectors.
-  unsigned virtual n_dims() const { assert(pdf_!=0); return pdf_->n_dims();}
+  virtual unsigned n_dims() const { assert(pdf_!=0); return pdf_->n_dims();}
 
   //: The number of possible output classes.
-  unsigned virtual n_classes() const {return 1;}
+  virtual unsigned n_classes() const {return 1;}
 
   //: Produce a deep copy.
   // client has responsibility for deletion.
