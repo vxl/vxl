@@ -161,7 +161,7 @@ int main(int, char **)
   edges.push_back(e0);   edges.push_back(e1);   edges.push_back(e2);
   vtol_one_chain_sptr onch = new vtol_one_chain(edges, true);
   vcl_cout << "one chain bounds (" << onch->get_min_x() << " " << onch->get_min_y()
-       << "|" << onch->get_max_x() << " " << onch->get_max_y() << ")" << vcl_endl;
+           << "|" << onch->get_max_x() << " " << onch->get_max_y() << ")\n";
   Assert(onch->get_max_x()==5&&onch->get_max_y()==5);
   vcl_cout << "Finished testing one chain\n\n";
   vcl_cout << "Test Summary: " << success << " tests succeeded, "
