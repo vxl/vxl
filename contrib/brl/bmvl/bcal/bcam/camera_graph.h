@@ -60,7 +60,7 @@ class camera_graph
         vertex_node* v_; // recode which vertex attached with this edge
         Trans* e_;
       public:
-        edge_node(vertex_node* v) { v_ = v; e_ = 0;}
+        edge_node(vertex_node* v) { v_ = v; e_ = new Trans;}
         virtual ~edge_node() {  if(e_) delete e_;   }
       };
       
@@ -97,10 +97,10 @@ class camera_graph
     class iterator{
     public:
       iterator() :pos_ (0), _Ptr(0) {}
-      iterator(vcl_vector<vertex_node*>* _P, int pos = 0) : _Ptr(_P), pos_(pos) {}
+      iterator(vcl_vector<vertex_node*> *_P, int pos = 0) : _Ptr(_P), pos_(pos) {}
       iterator(const iterator& _X) : _Ptr(_X._Ptr), pos_(_X.pos_) {}
       CameraNode& operator*() const {return *((*_Ptr)[pos_]->v_); }
-      CameraNode* operator->() const {return &(**this); }
+      CameraNode* operator->() const {return &(* *this); }
 
       iterator& operator=(iterator& _X)
       {
@@ -128,7 +128,7 @@ class camera_graph
         return (*this); 
       }
       
-      iterator operator--(int)
+      iterator operator--(int t)
       {
         const_iterator _Tmp = *this;
         --*this;
@@ -167,7 +167,8 @@ class camera_graph
       }
       
     public: // operations
-      ObjectNode* getSource() {  return source_;}
+      ObjectNode* get_source() {  return source_;}
+      int get_source_id() { return 0;}
       
       // add a new vertex and edge from the neighbour v to it
       // it return the position of the new vertex in the array
@@ -223,7 +224,7 @@ class camera_graph
           assert(v != 0); // no single edge exist
           
           if(v->id_ == v2){
-            return v->e_;
+            return e->e_;
           }
           else
             continue;
@@ -231,12 +232,7 @@ class camera_graph
         
         return 0; // cannot find edge
       }
-      
-      Trans* getEdge(int v1, int v2)
-      {
-        return get_edge(v1, v2);
-      }
-      
+            
       int num_vertice() { return vertice_.size() - 1; }
       
       
