@@ -29,7 +29,6 @@ void test_static_const_definition()
   check_pointer( &vnl_math::sqrteps );
 }
 
-
 void test_math()
 {
   // Call it to avoid compiler warnings
@@ -42,20 +41,20 @@ void test_math()
   vcl_complex<double> z(-1,2);
   vcl_complex<double> e_ipi = vcl_exp(d*i);
 
-  vcl_cout << "n=" << n << vcl_endl
-           << "f=" << f << vcl_endl
-           << "d=" << d << vcl_endl
-           << "i=" << i << vcl_endl
-           << "z=" << z << vcl_endl
-           << "exp(d*i)=" << e_ipi << vcl_endl
+  vcl_cout << "n = " << n << vcl_endl
+           << "f = " << f << vcl_endl
+           << "d = " << d << vcl_endl
+           << "i = " << i << vcl_endl
+           << "z = " << z << vcl_endl
+           << "exp(d*i) = " << e_ipi << vcl_endl
            << vcl_endl
 
-           << "abs(n)=" << vnl_math_abs(n) << vcl_endl
-           << "abs(f)=" << vnl_math_abs(f) << vcl_endl
-           << "abs(d)=" << vnl_math_abs(d) << vcl_endl
-           << "abs(i)=" << vnl_math_abs(i) << vcl_endl
-           << "abs(z)=" << vnl_math_abs(z) << vcl_endl
-           <<"norm(z)=" << vnl_math_squared_magnitude(z) << vcl_endl
+           << "abs(n) = " << vnl_math_abs(n) << vcl_endl
+           << "abs(f) = " << vnl_math_abs(f) << vcl_endl
+           << "abs(d) = " << vnl_math_abs(d) << vcl_endl
+           << "abs(i) = " << vnl_math_abs(i) << vcl_endl
+           << "abs(z) = " << vnl_math_abs(z) << vcl_endl
+           <<"norm(z) = " << vnl_math_squared_magnitude(z) << vcl_endl
            << vcl_endl;
 
   testlib_test_assert("abs(n) == 11", vnl_math_abs(n) == 11);
@@ -67,59 +66,70 @@ void test_math()
   testlib_test_assert_near("exp(d*i) ~= -1", vnl_math_abs(e_ipi+1.0), 0);
   vcl_cout << vcl_endl;
 
-  // Create Inf and -Inf:
-  float a1 = vnl_numeric_limits<float>::infinity();
-  float a2 = -vnl_numeric_limits<float>::infinity();
-  double a3 = vnl_numeric_limits<double>::infinity();
-  double a4 = -vnl_numeric_limits<double>::infinity();
-  long double a5 = vnl_numeric_limits<long double>::infinity();
-  long double a6 = -vnl_numeric_limits<long double>::infinity();
-
-  // Create NaN
-  float b1 = vnl_numeric_limits<float>::quiet_NaN();
-  double b2 = vnl_numeric_limits<double>::quiet_NaN();
-  long double b3 = vnl_numeric_limits<long double>::quiet_NaN();
-
   testlib_test_assert(" isfinite(f)    ",  vnl_math_isfinite(f));
   testlib_test_assert(" isfinite(d)    ",  vnl_math_isfinite(d));
   testlib_test_assert(" isfinite(i)    ",  vnl_math_isfinite(i));
   testlib_test_assert(" isfinite(z)    ",  vnl_math_isfinite(z));
-#ifndef __alpha__ // on alpha, infinity() == max()
-  testlib_test_assert("!isfinite(1/0f) ", !vnl_math_isfinite(a1));
-  testlib_test_assert(" isinf(1/0f)    ",  vnl_math_isinf(a1));
-  testlib_test_assert("!isfinite(-1/0f)", !vnl_math_isfinite(a2));
-  testlib_test_assert(" isinf(-1/0f)   ",  vnl_math_isinf(a2));
-#endif
-  testlib_test_assert("!isnan(1/0f)    ", !vnl_math_isnan(a1));
-  testlib_test_assert("!isnan(-1/0f)   ", !vnl_math_isnan(a2));
-  testlib_test_assert("!isfinite(0/0f) ", !vnl_math_isfinite(b1));
-  testlib_test_assert("!isinf(0/0f)    ", !vnl_math_isinf(b1));
-  testlib_test_assert(" isnan(0/0f)    ",  vnl_math_isnan(b1));
+
+  // Create Inf and -Inf:
+  float pinf_f =   vnl_numeric_limits<float>::infinity();
+  float ninf_f = - vnl_numeric_limits<float>::infinity();
+  double pinf_d =   vnl_numeric_limits<double>::infinity();
+  double ninf_d = - vnl_numeric_limits<double>::infinity();
+  long double pinf_q =   vnl_numeric_limits<long double>::infinity();
+  long double ninf_q = - vnl_numeric_limits<long double>::infinity();
+
+  // Create NaN
+  float qnan_f = vnl_numeric_limits<float>::quiet_NaN();
+  double qnan_d = vnl_numeric_limits<double>::quiet_NaN();
+  long double qnan_q = vnl_numeric_limits<long double>::quiet_NaN();
+
+  vcl_cout << "pinf_f = " << pinf_f << vcl_endl
+           << "ninf_f = " << ninf_f << vcl_endl
+           << "pinf_d = " << pinf_d << vcl_endl
+           << "ninf_d = " << ninf_d << vcl_endl
+           << "pinf_q = " << pinf_q << vcl_endl
+           << "ninf_q = " << ninf_q << vcl_endl
+           << "qnan_f = " << qnan_f << vcl_endl
+           << "qnan_d = " << qnan_d << vcl_endl
+           << "qnan_q = " << qnan_q << vcl_endl
+           << vcl_endl;
 
 #ifndef __alpha__ // on alpha, infinity() == max()
-  testlib_test_assert("!isfinite(1/0d) ", !vnl_math_isfinite(a3));
-  testlib_test_assert(" isinf(1/0d)    ",  vnl_math_isinf(a3));
-  testlib_test_assert("!isfinite(-1/0d)", !vnl_math_isfinite(a4));
-  testlib_test_assert(" isinf(-1/0d)   ",  vnl_math_isinf(a4));
+  testlib_test_assert("!isfinite(pinf_f)", !vnl_math_isfinite(pinf_f));
+  testlib_test_assert(" isinf(pinf_f)   ",  vnl_math_isinf(pinf_f));
+  testlib_test_assert("!isfinite(ninf_f)", !vnl_math_isfinite(ninf_f));
+  testlib_test_assert(" isinf(ninf_f)   ",  vnl_math_isinf(ninf_f));
 #endif
-  testlib_test_assert("!isnan(1/0d)    ", !vnl_math_isnan(a3));
-  testlib_test_assert("!isnan(-1/0d)   ", !vnl_math_isnan(a4));
-  testlib_test_assert("!isfinite(0/0d) ", !vnl_math_isfinite(b2));
-  testlib_test_assert("!isinf(0/0d)    ", !vnl_math_isinf(b2));
-  testlib_test_assert(" isnan(0/0d)    ",  vnl_math_isnan(b2));
+  testlib_test_assert("!isnan(pinf_f)   ", !vnl_math_isnan(pinf_f));
+  testlib_test_assert("!isnan(ninf_f)   ", !vnl_math_isnan(ninf_f));
+  testlib_test_assert("!isfinite(qnan_f)", !vnl_math_isfinite(qnan_f));
+  testlib_test_assert("!isinf(qnan_f)   ", !vnl_math_isinf(qnan_f));
+  testlib_test_assert(" isnan(qnan_f)   ",  vnl_math_isnan(qnan_f));
 
 #ifndef __alpha__ // on alpha, infinity() == max()
-  testlib_test_assert("!isfinite(1/0l) ", !vnl_math_isfinite(a5));
-  testlib_test_assert(" isinf(1/0l)    ",  vnl_math_isinf(a5));
-  testlib_test_assert("!isfinite(-1/0l)", !vnl_math_isfinite(a6));
-  testlib_test_assert(" isinf(-1/0l)   ",  vnl_math_isinf(a6));
+  testlib_test_assert("!isfinite(pinf_d)", !vnl_math_isfinite(pinf_d));
+  testlib_test_assert(" isinf(pinf_d)   ",  vnl_math_isinf(pinf_d));
+  testlib_test_assert("!isfinite(ninf_d)", !vnl_math_isfinite(ninf_d));
+  testlib_test_assert(" isinf(ninf_d)   ",  vnl_math_isinf(ninf_d));
 #endif
-  testlib_test_assert("!isnan(1/0l)    ", !vnl_math_isnan(a5));
-  testlib_test_assert("!isnan(-1/0l)   ", !vnl_math_isnan(a6));
-  testlib_test_assert("!isfinite(0/0l) ", !vnl_math_isfinite(b3));
-  testlib_test_assert("!isinf(0/0l)    ", !vnl_math_isinf(b3));
-  testlib_test_assert(" isnan(0/0l)    ",  vnl_math_isnan(b3));
+  testlib_test_assert("!isnan(pinf_d)   ", !vnl_math_isnan(pinf_d));
+  testlib_test_assert("!isnan(ninf_d)   ", !vnl_math_isnan(ninf_d));
+  testlib_test_assert("!isfinite(qnan_d)", !vnl_math_isfinite(qnan_d));
+  testlib_test_assert("!isinf(qnan_d)   ", !vnl_math_isinf(qnan_d));
+  testlib_test_assert(" isnan(qnan_d)   ",  vnl_math_isnan(qnan_d));
+
+#ifndef __alpha__ // on alpha, infinity() == max()
+  testlib_test_assert("!isfinite(pinf_q)", !vnl_math_isfinite(pinf_q));
+  testlib_test_assert(" isinf(pinf_q)   ",  vnl_math_isinf(pinf_q));
+  testlib_test_assert("!isfinite(ninf_q)", !vnl_math_isfinite(ninf_q));
+  testlib_test_assert(" isinf(ninf_q)   ",  vnl_math_isinf(ninf_q));
+#endif
+  testlib_test_assert("!isnan(pinf_q)   ", !vnl_math_isnan(pinf_q));
+  testlib_test_assert("!isnan(ninf_q)   ", !vnl_math_isnan(ninf_q));
+  testlib_test_assert("!isfinite(qnan_q)", !vnl_math_isfinite(qnan_q));
+  testlib_test_assert("!isinf(qnan_q)   ", !vnl_math_isinf(qnan_q));
+  testlib_test_assert(" isnan(qnan_q)   ",  vnl_math_isnan(qnan_q));
 }
 
 TESTMAIN(test_math);
-
