@@ -167,6 +167,9 @@ SOURCE=.\Templates/vil2_median+float-.cxx
 # Begin Source File
 SOURCE=.\Templates/vil2_sobel_3x3+double.double-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_line_filter+byte-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -247,6 +250,12 @@ SOURCE=.\vil2_normalised_correlation_2d.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_exp_grad_filter_1d.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_line_filter.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_line_filter.txx
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
