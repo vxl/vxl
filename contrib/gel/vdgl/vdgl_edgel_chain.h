@@ -23,7 +23,8 @@
 #include "vdgl_edgel.h"
 
 class vdgl_edgel_chain : public vul_timestamp,
-                         public vbl_ref_count {
+                         public vbl_ref_count
+{
    // PUBLIC INTERFACE----------------------------------------------------------
  public:
 
@@ -74,4 +75,4 @@ class vdgl_edgel_chain : public vul_timestamp,
 
 vcl_ostream& operator<<(vcl_ostream& s, const vdgl_edgel_chain& p);
 
-#endif // _blank_file_h
+#endif // vdgl_edgel_chain_h

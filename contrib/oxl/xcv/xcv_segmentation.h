@@ -24,7 +24,7 @@ class osl_edge;
 
 class xcv_segmentation
 {
-public:
+ public:
   //: Make and display a dialog box to get Harris parameters.
   static bool get_harris_params(osl_harris_params*);
   //: Perform Harris corner detection.
@@ -34,10 +34,11 @@ public:
 
   //: Draw the given edges onto the given location.
   static void draw_edges(vcl_list<osl_edge*> detected_edges,
-    unsigned col, unsigned row);
+                         unsigned col, unsigned row);
   //: Draw straight lines onto the given location.
   static void draw_straight_lines(vcl_vector<float>, vcl_vector<float>,
-    vcl_vector<float>, vcl_vector<float>, unsigned, unsigned);
+                                  vcl_vector<float>, vcl_vector<float>,
+                                  unsigned, unsigned);
   //: Display a dialog box to get the parameters needed for Oxford Canny.
   static bool get_canny_ox_params(osl_canny_ox_params*);
   //: Perform Oxford canny edge detection.
@@ -50,16 +51,16 @@ public:
   static void break_lines_ox();
   //: Get parameters from user required for detect_lines_ox.
   static bool get_detect_lines_ox_params(float* high, int* edge_min,
-    int* min_lenth, int* min_fit_length);
+                                         int* min_length, int* min_fit_length);
   //: Detect straight lines in the edges computed by Canny.
   static void detect_lines_ox();
 
   //: Creates a menu containing all the functions in this file.
   static vgui_menu create_segmentation_menu();
 
-private:
+ private:
   //: List of edges detected by Oxford canny.
   static vcl_list<osl_edge*> detected_edges;
 };
 
-#endif // xcv_segmentation_
+#endif // xcv_segmentation_h_

@@ -1,5 +1,5 @@
-#ifndef vcl_emulation_algorithm_h
-#define vcl_emulation_algorithm_h
+#ifndef vcl_emulation_algorithm_h_
+#define vcl_emulation_algorithm_h_
 /*
  *
  * Copyright (c) 1994
@@ -1552,7 +1552,7 @@ inline ForwardIterator vcl_lower_bound(ForwardIterator first, ForwardIterator la
                                        const T& value) {
     __stl_debug_check(__check_range(first, last));
     return __lower_bound(first, last, value, distance_type(first),
-                            iterator_category(first));
+                         iterator_category(first));
 }
 
 template <class ForwardIterator, class T, class Compare, class Distance>
@@ -1615,7 +1615,7 @@ inline ForwardIterator vcl_lower_bound(ForwardIterator first, ForwardIterator la
                                        const T& value, Compare comp) {
   __stl_debug_check(__check_range(first, last));
   return __lower_bound(first, last, value, comp, distance_type(first),
-                          iterator_category(first));
+                       iterator_category(first));
 }
 
 template <class ForwardIterator, class T, class Distance>
@@ -2841,4 +2841,4 @@ bool vcl_is_sorted(ForwardIterator first, ForwardIterator last,
 
 # undef __stl_threshold
 
-#endif // vcl_emulation_algo_h
+#endif // vcl_emulation_algorithm_h_

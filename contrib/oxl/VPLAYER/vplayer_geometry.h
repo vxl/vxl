@@ -1,22 +1,20 @@
 #ifndef vplayer_geometry_h_
 #define vplayer_geometry_h_
-
 //--------------------------------------------------------------------------------
-// .NAME    vplayer_geometry
-// .SECTION Description:
-//
-// .SECTION Author
+//:
+// \file
+// \author
 //   Marko Bacic, Oxford RRG
-// .SECTION Modifications:
-//   Marko Bacic    05-SEP-2000    Initial version.
+// \date
+//   05-SEP-2000
 //--------------------------------------------------------------------------------
 
 class vgui_menu;
-class vplayer_geometry {
-
+class vplayer_geometry
+{
   static void save(const char *,const char *);
   static void load(const char *,const char *);
-public:
+ public:
   static void create_point();
   static void create_line();
   static void create_infinite_line();
@@ -54,4 +52,4 @@ public:
   static vgui_menu create_geometry_menu();
 };
 
-#endif // vplayer_file_
+#endif // vplayer_geometry_h_

@@ -1,6 +1,5 @@
 #ifndef mvl2_video_writer_linux_h_
 #define mvl2_video_writer_linux_h_
-
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -78,4 +77,4 @@ class mvl2_video_writer
   bool firstcall_;
 };
  
-#endif // mvl2_video_writer_h_
+#endif // mvl2_video_writer_linux_h_

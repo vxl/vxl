@@ -9,7 +9,6 @@
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_explicit_io.h>
 
-
 // IMS Hack: MSVC6.0 has the annoying habit of occasionally forgetting that inline implies static.
 #ifdef VCL_VC60
 #define VCL_VC60_STATIC static
@@ -505,4 +504,4 @@ VCL_VC60_STATIC inline void vsl_block_binary_read(vsl_b_istream &is, T* begin, u
     vsl_b_read(is, *(begin++));
 }
 
-#endif // vsl_binary_complex_io_h_
+#endif // vsl_block_binary_io_h_

@@ -60,4 +60,4 @@ unsigned mbl_k_means_weighted(mbl_data_wrapper<vnl_vector<double> > &data, unsig
                               vcl_vector<vnl_vector<double> >* cluster_centres,
                               vcl_vector<unsigned> * partition =0);
 
-#endif // mbl_gamma_h
+#endif // mbl_k_means_h

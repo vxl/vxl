@@ -18,9 +18,9 @@ class vgui_menu;
 
 class xcv_processing
 {
-public:
+ public:
   static void xcv_processing_dup();
   static vgui_menu create_processing_menu();
 };
 
-#endif // xcv_processing_
+#endif // xcv_processing_h_

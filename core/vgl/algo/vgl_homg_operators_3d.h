@@ -1,6 +1,6 @@
 // This is core/vgl/algo/vgl_homg_operators_3d.h
-#ifndef vgl_homg_operators_3d_h
-#define vgl_homg_operators_3d_h
+#ifndef vgl_homg_operators_3d_h_
+#define vgl_homg_operators_3d_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -130,4 +130,4 @@ vgl_homg_plane_3d<T> operator*(vnl_matrix_fixed<T,4,3> const& m,
 #define VGL_HOMG_OPERATORS_3D_INSTANTIATE(T) \
         "Please #include <vgl/algo/vgl_homg_operators_3d.txx>"
 
-#endif // _vgl_homg_operators_3d_h
+#endif // vgl_homg_operators_3d_h_

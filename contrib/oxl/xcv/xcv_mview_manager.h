@@ -24,4 +24,4 @@ class xcv_mview_manager
   virtual void handle_tjunction_event(vgui_event const& e, vgui_tableau_sptr const& child_tab) = 0;
 };
 
-#endif // xcv_mview_manager_
+#endif // xcv_mview_manager_h_

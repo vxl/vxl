@@ -1,8 +1,7 @@
-#ifndef VTOL_TOPOLOGY_CACHE_H
-#define VTOL_TOPOLOGY_CACHE_H
-
+#ifndef vtol_topology_cache_h_
+#define vtol_topology_cache_h_
 //:
-//  \file
+// \file
 // \brief Cache inferiors of TopologyObject
 //
 //  The vtol_topology_cache is a class used to cache vertices, edges, faces, blocks, etc.
@@ -32,44 +31,41 @@ class vtol_topology_object;
 
 class vtol_topology_cache : public vul_timestamp
 {
-private:
-
-  //: \brief constructor
+  //: private default constructor
   vtol_topology_cache();
-  //: \brief constructor
+  //: private constructor
   vtol_topology_cache(vtol_topology_object* to_be_cached);
-  //: \brief destructor
+  //: private destructor
   ~vtol_topology_cache();
 
   //accessors
+
   //: set the source
   void set_source(vtol_topology_object *to_be_cached);
 
-
-  //: \brief get the vertices
+  //: get the vertices
   void vertices(vertex_list&);
-  //: \brief get the zero chains
+  //: get the zero chains
   void zero_chains(zero_chain_list&);
-  //: \brief get the edges
+  //: get the edges
   void edges(edge_list&);
-  //: \brief get the one chains
+  //: get the one chains
   void one_chains(one_chain_list&);
-  //: \brief get the faces
+  //: get the faces
   void faces(face_list&);
-  //: \brief get the two chains
+  //: get the two chains
   void two_chains(two_chain_list&);
-  //: \brief get the blocks
+  //: get the blocks
   void blocks(block_list&);
-
 
   // cache utilities
 
-  //: \brief validate the cache
+  //: validate the cache
   void validate_cache();
-  //: \brief clear the cache
+  //: clear the cache
   void clear_cache();
 
-private:
+ private:
 
   //members
   vtol_topology_object* source_;
@@ -82,7 +78,6 @@ private:
   vcl_vector<vtol_two_chain*>*  twochains_;
   vcl_vector<vtol_block*>*  blocks_;
 
-
   //friend classes
   friend class vtol_vertex;
   friend class vtol_zero_chain;
@@ -94,4 +89,4 @@ private:
   friend class vtol_topology_object;
 };
 
-#endif //TOPOLOGY_CACHE_H
+#endif // vtol_topology_cache_h_

@@ -23,4 +23,4 @@ void vsl_b_read(vsl_b_istream &is, vgl_polygon & v);
 void vsl_print_summary(vcl_ostream& os,const vgl_polygon & b);
 
 
-#endif // vgl_polygon_h
+#endif // vgl_io_polygon_h

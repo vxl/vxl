@@ -45,4 +45,4 @@ class ComputeGRIC
   bool degenerate_;
 };
 
-#endif // ComputeGRIC
+#endif // ComputeGRIC_h

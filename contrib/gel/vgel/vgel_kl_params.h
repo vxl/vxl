@@ -70,4 +70,4 @@ class vgel_kl_params
   bool verbose;
 };
 
-#endif // vgel_kl_params
+#endif // vgel_kl_params_h_

@@ -40,4 +40,4 @@ class xcv_file
   static vgui_menu create_file_menu(void);
 };
 
-#endif // xcv_file_
+#endif // xcv_file_h_

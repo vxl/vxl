@@ -66,4 +66,4 @@ class pdf1d_exponential_sampler :public pdf1d_sampler
   virtual pdf1d_sampler* clone() const;
 };
 
-#endif // pdf1d_pdf_sampler_h
+#endif // pdf1d_exponential_sampler_h

@@ -84,4 +84,4 @@ class xcv_multiview
   static vcl_vector<xcv_threeview_manager*> threeview_mgrs;
 };
 
-#endif // xcv_multiview_h
+#endif // xcv_multiview_h_

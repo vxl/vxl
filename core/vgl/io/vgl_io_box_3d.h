@@ -21,4 +21,4 @@ void vsl_b_read(vsl_b_istream &is, vgl_box_3d<T> & v);
 template <class T>
 void vsl_print_summary(vcl_ostream& os,const vgl_box_3d<T> & b);
 
-#endif // vgl_box_3d_h
+#endif // vgl_io_box_3d_h

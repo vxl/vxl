@@ -62,4 +62,4 @@ inline CDocument* vgui_mfc_view::GetDocument()
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
-#endif // AFX_AWFMFCVIEW_H__E03278BF_9B92_4B98_A4EF_43C38014407A__INCLUDED_
+#endif // AFX_VGUIMFCVIEW_H__E03278BF_9B92_4B98_A4EF_43C38014407A__INCLUDED_

@@ -9,5 +9,4 @@
 //  derived class must be added to the binary loader.
 void mbl_add_all_loaders();
 
-#endif // mbl_add_all_loaders
-
+#endif // mbl_add_all_loaders_h_

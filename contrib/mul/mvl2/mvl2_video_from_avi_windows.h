@@ -1,6 +1,5 @@
 #ifndef mvl2_video_from_avi_windows_h_
 #define mvl2_video_from_avi_windows_h_
-
 //:
 // \file
 // \brief A class to get video input from file
@@ -69,4 +68,4 @@ class mvl2_video_from_avi: public mvl2_video_reader
    void getVideoFormat(BITMAPINFO& bmp_info); 
 };
 
-#endif // mvl2_video_from_avi_linux_h_
+#endif // mvl2_video_from_avi_windows_h_

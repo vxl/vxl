@@ -17,4 +17,4 @@
 
 vsol_line_2d_sptr vdgl_fit_line(vdgl_edgel_chain &chain);
 
-#endif // vdgl_fit_lines_h
+#endif // vdgl_fit_line_h

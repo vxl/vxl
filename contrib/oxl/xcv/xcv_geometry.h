@@ -89,4 +89,4 @@ class xcv_geometry
   static void load(const char *,const char *);
 };
 
-#endif // xcv_geometry_
+#endif // xcv_geometry_h_

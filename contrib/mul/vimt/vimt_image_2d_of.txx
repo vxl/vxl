@@ -1,9 +1,9 @@
 #ifndef vimt_image_2d_of_txx_
 #define vimt_image_2d_of_txx_
 //:
-//  \file
-//  \brief Container for vil_image_view<T> + transform
-//  \author Tim Cootes
+// \file
+// \brief Container for vil_image_view<T> + transform
+// \author Tim Cootes
 
 #include <vcl_string.h>
 #include <vsl/vsl_indent.h>
@@ -115,8 +115,8 @@ void vimt_image_2d_of<T>::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,world2im_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vimt_image_2d_of<T>::b_read(vsl_b_istream&) \n"
-             << "           Unknown version number "<< version << "\n";
+    vcl_cerr << "I/O ERROR: vimt_image_2d_of<T>::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< version << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -138,4 +138,4 @@ VCL_DEFINE_SPECIALIZATION vcl_string vimt_image_2d_of<T >::is_a() const \
 { return vcl_string("vimt_image_2d_of<" #T ">"); }\
 template class vimt_image_2d_of<T >
 
-#endif // mil_image_2d_of_txx_
+#endif // vimt_image_2d_of_txx_

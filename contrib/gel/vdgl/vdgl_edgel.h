@@ -4,17 +4,12 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-// .NAME vdgl_edgel - Represents a 2D edgel
-// .INCLUDE vgl/vdgl_edgel.h
-// .FILE vdgl_edgel.txx
+//:
+// \file
+// \brief Represents a 2D image edgel
 //
-// .SECTION Description
-//  A 2d image edgel
-//
-// .SECTION Author
+// \author
 //    Geoff Cross
-// Created: xxx xx xxxx
 
 #include <vcl_iostream.h>
 #include <vgl/vgl_point_2d.h>
@@ -65,4 +60,4 @@ class vdgl_edgel
 bool operator==( const vdgl_edgel &e1, const vdgl_edgel &e2);
 vcl_ostream& operator<<(vcl_ostream& s, const vdgl_edgel& p);
 
-#endif // _vdgl_edgel_h
+#endif // vdgl_edgel_h

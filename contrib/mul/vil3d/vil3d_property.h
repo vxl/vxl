@@ -30,14 +30,14 @@
 // begin with "vil3d_property_" and that chunk of the namespace is reserved.
 //
 // An example
-// \verbatim
+// \code
 // float vs[3];
 // vcl_cout << "Volume of image is ";
 // if (image.get_property(vil3d_property_voxel_size, &voxel_size))
 //   vcl_cout << vs[0]*vs[1]*vs[2]*im.ni()*im.nj()*im.nk() << vcl_endl;
 // else
-//   vcl_cout << "unknown" << vcl_endl;
-// \endverbatim
+//   vcl_cout << "unknown\n";
+// \endcode
 //
 // \author Ian Scott - Copied from fsm's design in vil.
 
@@ -66,4 +66,4 @@
 // Type is float[3].
 #define vil3d_property_origin_offset "origin_offset"
 
-#endif // vil_property_h_
+#endif // vil3d_property_h_

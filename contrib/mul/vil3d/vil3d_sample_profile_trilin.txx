@@ -2,9 +2,9 @@
 #ifndef vil3d_sample_profile_trilin_txx_
 #define vil3d_sample_profile_trilin_txx_
 //:
-//  \file
-//  \brief Profile sampling functions for 3D images
-//  \author Tim Cootes
+// \file
+// \brief Profile sampling functions for 3D images
+// \author Tim Cootes
 
 #include <vil3d/vil3d_sample_profile_trilin.h>
 #include <vil3d/vil3d_trilin_interp.h>
@@ -95,9 +95,9 @@ void vil3d_sample_profile_trilin(vecType* v,
 
 #define VIL3D_SAMPLE_PROFILE_TRILIN_INSTANTIATE( imType, vecType ) \
 template void vil3d_sample_profile_trilin(vecType* v, \
-                                        const vil3d_image_view<imType >& image, \
-                                        double x0, double y0, double z0,\
-                                        double dx, double dy, double dz,\
-                                        unsigned n)
+                                          const vil3d_image_view<imType >& image, \
+                                          double x0, double y0, double z0,\
+                                          double dx, double dy, double dz,\
+                                          unsigned n)
 
-#endif // vil3d_sample_profile_trilin
+#endif // vil3d_sample_profile_trilin_txx_

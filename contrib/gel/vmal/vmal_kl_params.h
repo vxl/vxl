@@ -65,4 +65,4 @@ class vmal_kl_params
   bool verbose;
 };
 
-#endif // vmal_kl_params
+#endif // vmal_kl_params_h_

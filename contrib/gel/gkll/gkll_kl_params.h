@@ -67,4 +67,4 @@ class gkll_kl_params
   bool verbose;
 };
 
-#endif // gkll_kl_params
+#endif // gkll_kl_params_h_

@@ -41,28 +41,28 @@ vcl_vector<vcl_vector<vtol_edge_2d_sptr>*>* convert_array_edge_2d(vcl_list<vcl_l
 void convert_pointarray(vcl_vector<vtol_vertex_2d_sptr>& in,vcl_vector<HomgPoint2D> & out);
 
 void convert_lines_double_3(vcl_vector<vtol_edge_2d_sptr> in,
-              vnl_double_3 * &outp,
-              vnl_double_3 * &outq);
+                            vnl_double_3 * &outp,
+                            vnl_double_3 * &outq);
 
 void convert_points_vect_double_3(vcl_vector<vtol_vertex_2d_sptr> & in,
-                  vcl_vector<vnl_double_3> & out);
+                                  vcl_vector<vnl_double_3> & out);
 
 void convert_points_double_3(vcl_vector<vtol_vertex_2d_sptr> in,
-               vnl_double_3 * &out);
+                             vnl_double_3 * &out);
 
 //Convert a vtol_edge_2d to two vnl_double_3 representing its end-points.
 void convert_line_double_3(vtol_edge_2d_sptr in,
-               vnl_double_3 &outp,
-               vnl_double_3 &outq);
+                           vnl_double_3 &outp,
+                           vnl_double_3 &outq);
 
 void convert_line_double_2(vtol_edge_2d_sptr in,
-               vnl_double_2 &outp,
-               vnl_double_2 &outq);
+                           vnl_double_2 &outp,
+                           vnl_double_2 &outq);
 
 void convert_point_double_3(vtol_vertex_2d_sptr in,
-              vnl_double_3 &out);
+                            vnl_double_3 &out);
 
 void convert_grey_memory_image(const vil1_image & image,
-                 vil1_memory_image_of<vil1_byte> &ima_mono);
+                               vil1_memory_image_of<vil1_byte> &ima_mono);
 
-#endif // vmal_convert
+#endif // vmal_convert_h_

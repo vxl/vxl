@@ -101,4 +101,4 @@ class xcv_twoview_manager : public xcv_mview_manager
   void draw_overlay_corner_matches(vgui_tableau_sptr const& child_tab);
 };
 
-#endif // xcv_twoview_manager_
+#endif // xcv_twoview_manager_h_

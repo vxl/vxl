@@ -1,6 +1,6 @@
 // This is vcl/emulation/vcl_stlfwd.h
-#ifndef vcl_emulation_stdfwd_h
-#define vcl_emulation_stdfwd_h
+#ifndef vcl_emulation_stlfwd_h
+#define vcl_emulation_stlfwd_h
 // include vcl_compiler.h to get the settings for this system and compiler
 #include <vcl_compiler.h>
 

@@ -703,4 +703,4 @@ struct vcl_string : public vcl_basic_string <char, vcl_char_traits <char> >
 typedef vcl_basic_string <char, vcl_char_traits <char> > vcl_string;
 #endif
 
-#endif // vcl_emulation_string_h
+#endif // vcl_emulation_string_h_

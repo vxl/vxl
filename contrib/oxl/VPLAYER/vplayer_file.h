@@ -1,15 +1,14 @@
 #ifndef vplayer_file_h_
 #define vplayer_file_h_
-
 //--------------------------------------------------------------------------------
-// .NAME    vplayer_file
-// .SECTION Description:
-//   File menu implementation
+//:
+// \file
+// \brief File menu implementation
 //
-// .SECTION Author
+// \author
 //   Marko Bacic, Oxford RRG
-// .SECTION Modifications:
-//   Marko Bacic    05-SEP-2000    Initial version.
+// \date
+//   05-SEP-2000
 //--------------------------------------------------------------------------------
 
 class vgui_menu;
@@ -17,7 +16,7 @@ class vgui_menu;
 class vplayer_file
 {
   static void show_frame(int frame);
-public:
+ public:
   static void load_video_sequence();
   static void load_video_file();
   static void save_video_sequence();
@@ -25,7 +24,7 @@ public:
   static void save_geometry_sequence();
   static void exit_vplayer();
   static vgui_menu create_file_menu();
-private:
+ private:
 };
 
-#endif // vplayer_file_
+#endif // vplayer_file_h_

@@ -57,4 +57,4 @@ class xcv_threeview_manager : public xcv_mview_manager
   void draw_tri_tensor(vgui_event const& e, vgui_tableau_sptr const& child_tab, bool make_permanent);
 };
 
-#endif // xcv_threeview_manager_
+#endif // xcv_threeview_manager_h_

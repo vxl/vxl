@@ -2,7 +2,7 @@
 #ifndef mbl_stochastic_data_collector_txx_
 #define mbl_stochastic_data_collector_txx_
 //:
-//  \file
+// \file
 
 #include "mbl_stochastic_data_collector.h"
 #include <vcl_string.h>
@@ -170,8 +170,8 @@ mbl_data_collector_base* mbl_stochastic_data_collector<T>::clone() const
 template <class T>
 void mbl_stochastic_data_collector<T>::print_summary(vcl_ostream& os) const
 {
-  os << "number stored: " << samples_.size() << " number presented: " <<
-    nPresented_ << vcl_endl;
+  os << "number stored: " << samples_.size()
+     << ", number presented: " << nPresented_ << vcl_endl;
 }
 
 //=======================================================================
@@ -201,8 +201,8 @@ void mbl_stochastic_data_collector<T>::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs, nPresented_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: mbl_stochastic_data_collector<T::b_read(vsl_b_istream&) \n";
-    vcl_cerr << "           Unknown version number "<< version << "\n";
+    vcl_cerr << "I/O ERROR: mbl_stochastic_data_collector<T::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< version << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -213,4 +213,4 @@ VCL_DEFINE_SPECIALIZATION vcl_string mbl_stochastic_data_collector<T >::is_a() c
 {  return vcl_string("mbl_stochastic_data_collector<" #T ">"); }\
 template class mbl_stochastic_data_collector< T >
 
-#endif // mbl_data_collector_txx_
+#endif // mbl_stochastic_data_collector_txx_
