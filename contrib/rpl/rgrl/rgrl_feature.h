@@ -60,7 +60,15 @@ class rgrl_feature
   unsigned int num_constraints() const = 0;
 
   //:  Compute the geometric error distance between two features.
-  virtual double geometric_error( rgrl_feature const& other ) const;
+  virtual 
+  double geometric_error( rgrl_feature const& mapped_other ) const;
+
+  //:  Compute the geometric error distance between two features.
+  //   Use this function for efficiency. 
+  //   If a mapped feature is created, use the other function
+  virtual 
+  double geometric_error( rgrl_transformation const& xform, 
+                          rgrl_feature const& other ) const;
 
   //:  Compute the signature error vector between two features.
   //
