@@ -9,8 +9,8 @@ SET(mvl2_sources
   mvl2_video_from_sequence.h mvl2_video_from_sequence.cxx
 )
 
-ADD_LIBRARY(mvl2 ${mvl2_sources})
-    
+
+
 IF (NOT WIN32)
   INCLUDE(${MODULE_PATH}/NewCMake/FindAVIFile.cmake)
   IF(AVIFILE_FOUND)
@@ -29,6 +29,7 @@ ELSE (NOT WIN32)
     SET(AVIFILE_LIBRARIES "vfw32")
   ENDIF (CYGWIN)
 ENDIF (NOT WIN32)
+
 
 IF (AVIFILE_FOUND)
   SET(mvl2_sources ${mvl2_sources}
@@ -51,8 +52,11 @@ ELSE (AVIFILE_FOUND)
   SET(AVIFILE_LIBRARIES "")
 ENDIF (AVIFILE_FOUND)
 
-TARGET_LINK_LIBRARIES( mvl2 
-                       vimt mbl vul ${AVIFILE_LIBRARIES} 
+
+ADD_LIBRARY(mvl2 ${mvl2_sources})
+
+TARGET_LINK_LIBRARIES( mvl2
+                       vimt mbl vul ${AVIFILE_LIBRARIES}
                      )
 
 IF (AVIFILE_FOUND)
