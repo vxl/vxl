@@ -157,6 +157,9 @@ class mbl_lda
   //: Project d fron discriminant space into original space
   void d_to_x(vnl_vector<double>& x, const vnl_vector<double>& d) const;
 
+  //: find out how many id in the label vector
+  int nDistinctIDs(const int* id, const int n);
+
   //: Version number for I/O
   short version_no() const;
 

@@ -10,6 +10,7 @@
 
 #include "mbl_lda.h"
 
+#include <vcl_algorithm.h>  // for vcl_find
 #include <vcl_cassert.h>
 #include <vcl_cstddef.h> // for size_t
 #include <vcl_cstring.h> // for memcpy()
