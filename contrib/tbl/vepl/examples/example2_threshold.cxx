@@ -28,8 +28,6 @@ main(int argc, char** argv) {
   // The input image:
   vil_image in = vil_load(argv[1]);
   if (vil_pixel_format(in) != VIL_BYTE) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
-  int xs = in.width();
-  int ys = in.height();
 
   // The threshold value:
   ubyte threshold = (argc < 4) ? 10 : atoi(argv[3]);
