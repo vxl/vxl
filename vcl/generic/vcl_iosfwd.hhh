@@ -1,3 +1,4 @@
+@streamoff
 @char_traits
 @allocator
 @basic_ios

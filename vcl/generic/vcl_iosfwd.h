@@ -3,6 +3,10 @@
 
 // THIS IS A GENERATED FILE. DO NOT EDIT! -- Edit the source .hhh and run make instead
 
+// streamoff
+#ifndef vcl_streamoff
+#define vcl_streamoff vcl_generic_ios_STD :: streamoff
+#endif
 // char_traits
 #ifndef vcl_char_traits
 #define vcl_char_traits vcl_generic_iosfwd_STD :: char_traits
