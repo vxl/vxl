@@ -420,10 +420,14 @@ text { return ret; }
 
 // VCL_DFL_TYPE_PARAM_STLDECL(A, a) and VCL_DFL_TMPL_PARAM_STLDECL(A, a)
 // EGCS doesn't like definition of default types, viz:
+// \code
 //   template <class A = default> class vector;
 //   template <class A = default> class vector { ... };
+// \endcode
 // This macro is used to say "define if not previously defined, like
+// \code
 //   template <VCL_DFL_TYPE_PARAM_STLDECL(A,a)> class vector { ... };
+// \endcode
 
 //#define VCL_DFL_TYPE_PARAM_STLDECL(A,a) A = a
 //#define VCL_DFL_TYPE_PARAM_STLDECL(A,a) A /* = a */
@@ -441,7 +445,9 @@ text { return ret; }
 // template argument, some compilers don't like the redeclaration of
 // that argument, while others insist on it.
 // In such cases, specify the default argument as follows:
+// \code
 //   template class vector <int VCL_DFL_TMPL_ARG(default_iterator) >;
+// \endcode
 // (Note the missing comma after int: it is inside the macro.)
 
 //#define VCL_DFL_TMPL_ARG(classname) , classname
