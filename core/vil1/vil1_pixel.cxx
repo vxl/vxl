@@ -23,6 +23,8 @@ vil_pixel_format vil_pixel_type(vil_image const &I)
   if (c == 1 && b == 32 && f == VIL_COMPONENT_FORMAT_IEEE_FLOAT) return VIL_FLOAT;
   if (c == 1 && b == 64 && f == VIL_COMPONENT_FORMAT_IEEE_FLOAT) return VIL_DOUBLE;
   if (c == 1 && b == 64 && f == VIL_COMPONENT_FORMAT_COMPLEX) return VIL_COMPLEX;
+  if (c == 3 && b == 32 && f == VIL_COMPONENT_FORMAT_IEEE_FLOAT) return VIL_RGB_FLOAT;
+  if (c == 3 && b == 64 && f == VIL_COMPONENT_FORMAT_IEEE_FLOAT) return VIL_RGB_DOUBLE;
 
   return VIL_PIXEL_FORMAT_UNKNOWN;
 }

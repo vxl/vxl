@@ -133,7 +133,7 @@ public:
 //unimp  inline bool operator== (vil_rgba<T> const&) const;
 };
 
-#define VBL_RGBA_INSTANTIATE \
+#define VIL_RGBA_INSTANTIATE \
 extern "please include vil/vil_rgba.txx instead"
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_rgba.

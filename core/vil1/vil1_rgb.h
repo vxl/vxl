@@ -220,6 +220,8 @@ vil_rgb<double> operator/(vil_rgb<T> const& a, double b)
   return vil_rgb<double>(a.R_ / b, a.G_ / b, a.B_ / b);
 }
 
+// capes@robots : These vil_clamp functions are deprecated. See vil_clamp.h
+/*
 inline
 vil_rgb<unsigned char> vil_clamp(vil_rgb<double> const & d, vil_rgb<unsigned char>* dummy)
 {
@@ -235,10 +237,10 @@ vil_rgb<unsigned char> vil_clamp(vil_rgb<float> const& d, vil_rgb<unsigned char>
 				vil_clamp(d.G_, &dummy->G_),
 				vil_clamp(d.B_, &dummy->B_));
 }
-
-#define VBL_RGB_INSTANTIATE(T) \
+*/
+#define VIL_RGB_INSTANTIATE(T) \
 extern "you must include vil/vil_rgb.txx first."
-#define VBL_RGB_INSTANTIATE_LS(T) \
+#define VIL_RGB_INSTANTIATE_LS(T) \
 extern "you must include vil/vil_rgb.txx first."
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vil_rgb<>.

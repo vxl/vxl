@@ -11,6 +11,6 @@
 
 #include "vil_rgba.h"
 
-#undef VBL_RGBA_INSTANTIATE
-#define VBL_RGBA_INSTANTIATE(T)\
+#undef VIL_RGBA_INSTANTIATE
+#define VIL_RGBA_INSTANTIATE(T)\
 template struct vil_rgba<T >;

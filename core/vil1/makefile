@@ -36,6 +36,10 @@ SOURCES += vil_skip_image_impl.cxx
 SOURCES += vil_resample_image_impl.cxx
 SOURCES += vil_flipud_impl.cxx
 SOURCES += vil_block_cache_image_impl.cxx
+SOURCES += vil_clamp_image_impl.cxx
+SOURCES += vil_clamp_image.cxx # Helper specializations for vil_clamp_image_impl.cxx
+SOURCES += vil_scale_intensities_image_impl.cxx
+SOURCES += vil_scale_intensities_image.cxx # Helper specializations for vil_scale_intensities_image_impl.cxx
 
 # classes derived from vil_file_format 
 SOURCES += file_formats/vil_pnm.cxx
@@ -73,10 +77,11 @@ SOURCES += vil_resample.cxx
 SOURCES += vil_flipud.cxx
 MANPAGE_SOURCES += vil_convolve.txx
 SOURCES += vil_smooth.cxx
+SOURCES += vil_clamp.cxx
+SOURCES += vil_scale_intensities.cxx
 
 # Stuff
 SOURCES += vil_pyramid.cxx
-SOURCES += vil_clamp.cxx
 SOURCES += vil_rgb_byte.cxx
 SOURCES += vil_memory_image_window.cxx
 

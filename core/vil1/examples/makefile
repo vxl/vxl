@@ -16,6 +16,8 @@ MINI_PROG_SOURCES += vil_info.cxx
 MINI_PROG_SOURCES += vil_print_section.cxx
 MINI_PROG_SOURCES += vil_scale.cxx
 MINI_PROG_SOURCES += vil_flipud.cxx
+MINI_PROG_SOURCES += vil_clamp_example.cxx
+MINI_PROG_SOURCES += vil_scale_intensities_example.cxx
 
 include ../vil_config.mk
 

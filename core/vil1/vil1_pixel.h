@@ -15,6 +15,8 @@ enum vil_pixel_format {
   VIL_BYTE,       /*!< 1 x W x H x 1 of UINT x 8*/
   VIL_RGB_BYTE,   /*!< 1 x W x H x 3 of UINT x 8*/
   VIL_RGBA_BYTE,  /*!< 1 x W x H x 4 of UINT x 8*/
+  VIL_RGB_FLOAT,  /*!< 1 x W x H x 3 of IEEE_FLOAT x 32*/
+  VIL_RGB_DOUBLE, /*!< 1 x W x H x 3 of IEEE_DOUBLE x 64*/
   VIL_UINT16,     /*!< 1 x W x H x 1 of UINT x 16*/
   VIL_UINT32,     /*!< 1 x W x H x 1 of UINT x 32*/
   VIL_FLOAT,      /*!< 1 x W x H x 1 of IEEE_FLOAT x 32*/
