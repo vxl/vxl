@@ -23,7 +23,7 @@ class DPMatch
           vcl_vector<vcl_pair<double,double> > v2,
           vnl_double_2 & e);
   void init();
-  ~DPMatch(){};
+  ~DPMatch(){}
   //access functions
   double finalCost(){return finalCost_;}
   double normfinalCost();
