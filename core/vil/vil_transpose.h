@@ -34,6 +34,7 @@ vil2_image_resource_sptr vil2_transpose(const vil2_image_resource_sptr &src);
 //: A generic_image adaptor that behaves like a transposed version of its input
 class vil2_transpose_image_resource : public vil2_image_resource
 {
+  //: You can't construct one of these directly, use vil2_transpose() instead.
   vil2_transpose_image_resource(vil2_image_resource_sptr const&);
   friend vil2_image_resource_sptr vil2_transpose(const vil2_image_resource_sptr &src);
  public:
@@ -59,13 +60,6 @@ class vil2_transpose_image_resource : public vil2_image_resource
   //: Extra property information
   virtual bool get_property(char const* tag, void* property_value = 0) const {
     return src_->get_property(tag, property_value); }
-
-
-  //: Return the name of the class;
-  virtual vcl_string is_a() const;
-
-  //: Return true if the name of the class matches the argument
-  virtual bool is_class(vcl_string const&) const;
 
  protected:
   //: Reference to underlying image source

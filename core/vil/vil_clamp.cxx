@@ -28,20 +28,6 @@ vil2_clamp_image_resource::vil2_clamp_image_resource(vil2_image_resource_sptr co
   assert (lo <= hi);
 }
 
-
-//: Return the name of the class;
-vcl_string vil2_clamp_image_resource::is_a() const
-{
-  static const vcl_string class_name_="vil2_clamp_image_resource";
-  return class_name_;
-}
-
-//: Return true if the name of the class matches the argument
-bool vil2_clamp_image_resource::is_class(vcl_string const& s) const
-{
-  return s==vil2_clamp_image_resource::is_a() || vil2_image_resource::is_class(s);
-}
-
   //: Extra property information
 bool vil2_clamp_image_resource::get_property(char const* tag, void* property_value) const
 {

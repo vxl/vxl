@@ -324,19 +324,6 @@ class vil2_algo_convolve_1d_resource : public vil2_image_resource
     return src_->get_property(tag, property_value);
   }
 
-  //: Return the name of the class;
-  virtual vcl_string is_a() const
-  {
-    static const vcl_string class_name_="vil2_algo_convolve_1d_resource";
-    return class_name_;
-  }
-
-  //: Return true if the name of the class matches the argument
-  virtual bool is_class(vcl_string const&s) const
-  {
-    return s==vil2_algo_convolve_1d_resource::is_a() || vil2_image_resource::is_class(s);
-  }
-
  protected:
   vil2_image_resource_sptr src_;
   const kernelT* kernel_;
@@ -346,6 +333,7 @@ class vil2_algo_convolve_1d_resource : public vil2_image_resource
 
 //: Create an image_resource object which convolve kernel[x] x in [k_lo,k_hi] with srcT
 // \param kernel should point to tap 0.
+// \relates vil2_image_resource
 template <class destT, class kernelT, class accumT>
 inline vil2_image_resource_sptr vil2_algo_convolve_1d(
   const vil2_image_resource_sptr& src_im,

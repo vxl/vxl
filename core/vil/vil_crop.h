@@ -73,12 +73,6 @@ class vil2_crop_image_resource : public vil2_image_resource
     return src_->get_property(tag, property_value);
   }
 
-  //: Return the name of the class;
-  virtual vcl_string is_a() const;
-
-  //: Return true if the name of the class matches the argument
-  virtual bool is_class(vcl_string const&) const;
-
  protected:
   vil2_image_resource_sptr src_;
   int i0_;

@@ -59,12 +59,6 @@ class vil2_plane_image_resource : public vil2_image_resource
   virtual bool get_property(char const* tag, void* property_value = 0) const {
     return src_->get_property(tag, property_value); }
 
-  //: Return the name of the class;
-  virtual vcl_string is_a() const;
-
-  //: Return true if the name of the class matches the argument
-  virtual bool is_class(vcl_string const&) const;
-
  protected:
   //: Reference to underlying image source
   vil2_image_resource_sptr src_;

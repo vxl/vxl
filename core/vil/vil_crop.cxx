@@ -31,16 +31,3 @@ vil2_crop_image_resource::vil2_crop_image_resource(vil2_image_resource_sptr cons
   assert (i0+n_i <= src_->ni() && j0 + n_j <= src_->nj());
 }
 
-
-//: Return the name of the class;
-vcl_string vil2_crop_image_resource::is_a() const
-{
-  static const vcl_string class_name_="vil2_crop_image_resource";
-  return class_name_;
-}
-
-//: Return true if the name of the class matches the argument
-bool vil2_crop_image_resource::is_class(vcl_string const& s) const
-{
-  return s==vil2_crop_image_resource::is_a() || vil2_image_resource::is_class(s);
-}

@@ -61,7 +61,7 @@ public:
   virtual void print(vcl_ostream&) const =0;
 
   //: Return class name
-  virtual vcl_string is_a() const;
+  virtual vcl_string is_a() const =0;
 
   //: Return a description of the concrete data pixel type.
   // For example if the value is VIL2_PIXEL_FORMAT_VIL_BYTE,

@@ -22,19 +22,6 @@ vil2_transpose_image_resource::vil2_transpose_image_resource(vil2_image_resource
 {
 }
 
-//: Return the name of the class;
-vcl_string vil2_transpose_image_resource::is_a() const
-{
-  static const vcl_string class_name_="vil2_transpose_image_resource";
-  return class_name_;
-}
-
-//: Return true if the name of the class matches the argument
-bool vil2_transpose_image_resource::is_class(vcl_string const& s) const
-{
-  return s==vil2_transpose_image_resource::is_a() || vil2_image_resource::is_class(s);
-}
-
 vil2_image_view_base_sptr vil2_transpose_image_resource::get_copy_view(unsigned i0, unsigned ni, 
                                                                        unsigned j0, unsigned nj) const
 {

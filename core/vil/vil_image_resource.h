@@ -91,12 +91,6 @@ class vil2_image_resource
   //: Extra property information
   virtual bool get_property(char const* tag, void* property_value = 0) const =0;
 
-  //: Return the name of the class;
-  virtual vcl_string is_a() const ;
-
-  //: Return true if the name of the class matches the argument
-  virtual bool is_class(vcl_string const&) const;
-
  private:
   // You probably should not use a vil2_image_resource in a vbl_smart_ptr, so the
   // ref functions are private
