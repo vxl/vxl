@@ -1400,6 +1400,46 @@ MAIN( test_config )
 #endif
   vcl_cout << vcl_endl;
 
+  vcl_cout << "CMAKE_DEFINES_VARIABLE_UNIX ";
+#ifdef CMAKE_DEFINES_VARIABLE_UNIX
+  vcl_cout << "is set to " << quote(CMAKE_DEFINES_VARIABLE_UNIX);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "CMAKE_DEFINES_VARIABLE_CYGWIN ";
+#ifdef CMAKE_DEFINES_VARIABLE_CYGWIN
+  vcl_cout << "is set to " << quote(CMAKE_DEFINES_VARIABLE_CYGWIN);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "CMAKE_DEFINES_VARIABLE_MINGW ";
+#ifdef CMAKE_DEFINES_VARIABLE_MINGW
+  vcl_cout << "is set to " << quote(CMAKE_DEFINES_VARIABLE_MINGW);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "CMAKE_DEFINES_VARIABLE_WIN32 ";
+#ifdef CMAKE_DEFINES_VARIABLE_WIN32
+  vcl_cout << "is set to " << quote(CMAKE_DEFINES_VARIABLE_WIN32);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "CMAKE_DEFINES_VARIABLE_APPLE ";
+#ifdef CMAKE_DEFINES_VARIABLE_APPLE
+  vcl_cout << "is set to " << quote(CMAKE_DEFINES_VARIABLE_APPLE);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
   vcl_cout << "__cplusplus ";
 #ifdef __cplusplus
   vcl_cout << "is set to " << quote(__cplusplus);

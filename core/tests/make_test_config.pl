@@ -237,6 +237,13 @@ for $var_exp (
   'VXL_WARN_DEPRECATED_ONCE',
   'VXL_WARN_DEPRECATED_ABORT',
 
+  # from core/tests/CMakeLists.txt (defines derived from CMake variables)
+  'CMAKE_DEFINES_VARIABLE_UNIX',
+  'CMAKE_DEFINES_VARIABLE_CYGWIN',
+  'CMAKE_DEFINES_VARIABLE_MINGW',
+  'CMAKE_DEFINES_VARIABLE_WIN32',
+  'CMAKE_DEFINES_VARIABLE_APPLE',
+
   # language related
   '__cplusplus',
   '__STDC__',

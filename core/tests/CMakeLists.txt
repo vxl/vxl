@@ -9,6 +9,24 @@ CONFIGURE_FILE( ${CMAKE_CURRENT_SOURCE_DIR}/test_build_info.h.in
 # needed for generated test_build_info.h
 INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_BINARY_DIR} )
 
+# these defines are set (possibly) so the core_test_config test can
+# report whether CMake has set these CMake variables
+IF( UNIX )
+  ADD_DEFINITIONS( -DCMAKE_DEFINES_VARIABLE_UNIX )
+ENDIF( UNIX )
+IF( CYGWIN )
+  ADD_DEFINITIONS( -DCMAKE_DEFINES_VARIABLE_CYGWIN )
+ENDIF( CYGWIN )
+IF( MINGW )
+  ADD_DEFINITIONS( -DCMAKE_DEFINES_VARIABLE_MINGW )
+ENDIF( MINGW )
+IF( WIN32 )
+  ADD_DEFINITIONS( -DCMAKE_DEFINES_VARIABLE_WIN32 )
+ENDIF( WIN32 )
+IF( APPLE )
+  ADD_DEFINITIONS( -DCMAKE_DEFINES_VARIABLE_APPLE )
+ENDIF( APPLE )
+
 ADD_EXECUTABLE( core_test_all
   test_driver.cxx
   test_config.cxx
