@@ -1235,6 +1235,8 @@ sdet_contour::DetectTouch(vtol_vertex_2d_sptr const& endv,
         bx = x; by = y; //best detected location, for debug purposes
       }
     }
+    if (sdet_contour::debug_)
+      vcl_cout << "(bx,by) = (" << bx << ' ' << by << ")\n";
     if (max_edges)
       return best_neighbor;
   }
@@ -1604,6 +1606,14 @@ MergeEndPtTouchingJunction(vtol_vertex_2d_sptr const& endpt,
   for (int i = N; i<(N+nedgls)&&!self_intersects; i++)
     {
       int x = int((*cxy)[i].x()), y = int((*cxy)[i].y());
+#define WARN(x,y) vcl_cerr << "Warning: edgel "<<i<<" is at ("<<x<<','<<y\
+                           <<") which is outside of edge map of size "\
+                           <<edgeMap->rows()<<'x'<<edgeMap->cols()<<"\n"
+      if (x < 0) { WARN(x,y); x = 0; }
+      if (y < 0) { WARN(x,y); y = 0; }
+      if (x >= edgeMap->rows()) { WARN(x,y); x = edgeMap->rows()-1; }
+      if (y >= edgeMap->cols()) { WARN(x,y); y = edgeMap->cols()-1; }
+#undef WARN
 
       if (sdet_contour::debug_)
         vcl_cout << " intersecting (" << i << ")(" << vnl_math_abs(x-xe)
