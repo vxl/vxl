@@ -1552,6 +1552,8 @@ void test_homography2d()
       for (int j=0;j<3;j++)
         est_param[i*3+j] = est_H(i,j);
     est_param /= est_param.two_norm();
+    if ( est_param[0] < 0 ) est_param *= -1;
+
     vcl_cout<<"Estimated H = "<<est_param<<vcl_endl;
     TEST("Estimation of Projective xform", (est_param-true_param).two_norm() <tol ||
                                            (est_param+true_param).two_norm() <tol, true);
