@@ -306,6 +306,9 @@ SOURCE=.\vidfpl.cxx
 SOURCE=.\vidfpl_menus.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\command_line_grid_finder.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\videx.cxx
 # End Source File
 # Begin Source File
