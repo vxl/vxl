@@ -352,7 +352,7 @@ pointer to zero.
 @subsection Future Work
 
 @enumerate
-@item Currently, a few error checks in the IO still result in a error message and @code{std::abort()}. Since
+@item Currently, a few error checks in the IO still result in an error message and @code{std::abort()}. Since
 IO code is error prone for reasons often beyond the control of the programmer, this behaviour should be
 replaced with a standard error message a setting of the stream's fail flag, and return.
 @item Design a format for @code{long double} and add it @code{to vsl_binary_io.h}.
