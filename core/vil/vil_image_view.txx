@@ -4,19 +4,17 @@
 //  \file
 //  \brief Represent images of one or more planes of Ts.
 //  \author Ian Scott
-
+//
 // Note: To keep down size of vil2_image_view
 // Please think carefully before adding any new methods.
 // In particular any methods that provide new views (e.g. vil2_plane)
-// will be more usefully provided as external functions.) IMS.
-
+// will be more usefully provided as external functions. - IMS.
 
 
 #include "vil2_image_view.h"
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vcl_ostream.h>
-#include <vil/vil_rgb.h>
 #include <vil2/vil2_smart_ptr.h>
 #include <vil2/vil2_pixel_format.h>
 #include <vil2/vil2_image_view_functions.h>
@@ -155,7 +153,6 @@ inline bool convert_components_from_planes(vil2_image_view<T> &lhs,
   else
     return false;
 } 
-
 
 
 VCL_DEFINE_SPECIALIZATION
@@ -433,7 +430,6 @@ const vil2_image_view<T> & vil2_image_view<T>::operator= (const vil2_image_view_
 
   set_to_memory(0, 0, 0, 0, 0, 0, 0);
   return *this;
-
 }
 
 
