@@ -3,6 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "bcal_zhang_camera_node.h"
+#include "bcal_camera.h"
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 
