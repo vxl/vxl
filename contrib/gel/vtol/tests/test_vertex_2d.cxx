@@ -105,7 +105,7 @@ static void test_vertex_2d()
 
   // checking the vertex side of things
 
-  TEST("vtol_vertex_2d::topology_type()", v1->topology_type(), vtol_topology_object::VERTEX);
+  TEST("vtol_vertex_2d::cast_to_vertex()", v1->cast_to_vertex()==0, false);
 
   vtol_edge_sptr new_edge = v1->new_edge(v2);
   edge_list e_list; v1->edges(e_list);

@@ -49,8 +49,6 @@ static void test_two_chain()
 
   TEST("vtol_two_chain::clone()", *tc2, *tc2_clone);
 
-  TEST("vtol_two_chain::topology_type()", tc1->topology_type(), vtol_topology_object::TWOCHAIN);
-
   TEST("vtol_two_chain::direction()", tc1->direction(*f1), 1);
   TEST("vtol_two_chain::direction()", tc1->direction(*f2), 1);
   TEST("vtol_two_chain::direction()", tc2->direction(*f1), -1);

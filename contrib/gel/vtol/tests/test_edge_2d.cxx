@@ -21,7 +21,7 @@ static void test_edge_2d()
   e1a->describe(vcl_cout,8);
 
   TEST("vtol_edge_2d equality", *e1, *e1a);
-  TEST("vtol_edge_2d::topology_type()", e1->topology_type(), vtol_topology_object::EDGE);
+  TEST("vtol_edge_2d::cast_to_edge()", e1->cast_to_edge()==0, false);
 
   vtol_zero_chain_sptr zc2 = new vtol_zero_chain(v2,v3);
   zc2->describe(vcl_cout,8);
