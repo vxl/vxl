@@ -1,0 +1,5 @@
+
+@chapsummary
+General utilities used by several mul libraries.
+@endchapsummary
+
