@@ -115,14 +115,12 @@ bool strk_feature_capture_process::set_input_file(vcl_string const& file_name)
     }
   vcl_vector<vgl_point_2d<double> > tracked_cogs;
   unsigned int n_frames = 0;
-  unsigned int n_verts =0;
   if(!strk_io::read_track_data(str, start_frame_, n_frames,
                                tracked_cogs, tracked_faces_))
     {
       str.close();
       return false;
     }
-  start_frame_;
   end_frame_ = start_frame_+n_frames -1;
   str.close();
   return true;

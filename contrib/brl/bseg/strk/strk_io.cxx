@@ -85,12 +85,12 @@ write_track_data(const unsigned int start_frame,
   vnl_matrix<double> cog(n_frames, 2);
   vnl_matrix<double> X(n_frames, n_verts);
   vnl_matrix<double> Y(n_frames, n_verts);
-  for (int i = 0; i<n_frames; i++)
+  for (unsigned int i = 0; i<n_frames; i++)
     {
       verts.clear();
       double cog_x = 0, cog_y = 0;
       tracked_faces[i]->vertices(verts);
-      for (int j = 0; j<n_verts; j++)
+      for (unsigned int j = 0; j<n_verts; j++)
         {
           vtol_vertex_2d_sptr v = verts[j]->cast_to_vertex_2d();
           if (!v)
@@ -220,10 +220,10 @@ bool strk_io::read_track_data(vcl_ifstream& strm,
   if (y!="Y:")
     return false;
   strm>> Y;
-  for (int i = 0; i<n_frames; i++)
+  for (unsigned int i = 0; i<n_frames; i++)
   {
     vcl_vector<vtol_vertex_sptr> verts;
-    for (int j = 0; j<n_verts; j++)
+    for (unsigned int j = 0; j<n_verts; j++)
     {
       vtol_vertex* v2d  = new vtol_vertex_2d(X[i][j], Y[i][j]);
       verts.push_back(v2d);

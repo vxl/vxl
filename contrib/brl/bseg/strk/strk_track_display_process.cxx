@@ -79,7 +79,6 @@ bool strk_track_display_process::set_input_file(vcl_string const& file_name)
     return false;
   }
   unsigned int n_frames = 0;
-  unsigned int n_verts =0;
   if(!strk_io::read_track_data(str, start_frame_, n_frames,
                            tracked_cogs_, tracked_faces_))
     {
