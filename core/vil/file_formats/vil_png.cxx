@@ -1,10 +1,10 @@
-// This is mul/vil3/file_formats/vil2_png.cxx
+// This is mul/vil2/file_formats/vil2_png.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
 // \file
-// http://www.mirror.ac.uk/sites/ftp.cdrom.com/pub/png/libpng.html
+// http://www.libpng.org/pub/png/libpng.html
 
 #include "vil2_png.h"
 
@@ -52,10 +52,10 @@ vil2_image_resource_sptr vil2_png_file_format::make_input_image(vil_stream* is)
 }
 
 vil2_image_resource_sptr vil2_png_file_format::make_output_image(vil_stream* vs,
-                                           unsigned nx,
-                                           unsigned ny,
-                                           unsigned nplanes,
-                                           enum vil2_pixel_format format)
+                                                                 unsigned nx,
+                                                                 unsigned ny,
+                                                                 unsigned nplanes,
+                                                                 enum vil2_pixel_format format)
 {
   if (format != VIL2_PIXEL_FORMAT_BYTE &&
       format != VIL2_PIXEL_FORMAT_UINT_16)
@@ -84,7 +84,7 @@ static void user_write_data(png_structp png_ptr, png_bytep data, png_size_t leng
   f->write(data, length);
 }
 
-static void user_flush_data(png_structp png_ptr)
+static void user_flush_data(png_structp /*png_ptr*/)
 {
   // IOFile* f = (IOFile*)png_get_io_ptr(png_ptr);
   // urk.  how to flush?
@@ -92,7 +92,7 @@ static void user_flush_data(png_structp png_ptr)
 
 struct vil2_jmpbuf_wrapper {
   jmp_buf jmpbuf;
-} jmpbuf_wrapper;
+};
 static vil2_jmpbuf_wrapper pngtopnm_jmpbuf_struct;
 static bool jmpbuf_ok = false;
 
@@ -259,7 +259,7 @@ vil2_png_image::vil2_png_image(vil_stream* is):
   read_header();
 }
 
-bool vil2_png_image::get_property(char const *tag, void *prop) const
+bool vil2_png_image::get_property(char const* /*tag*/, void* /*prop*/) const
 {
   return false;
 }
@@ -517,4 +517,3 @@ bool vil2_png_image::put_view(const vil2_image_view_base &view,
 
   return true;
 }
-
