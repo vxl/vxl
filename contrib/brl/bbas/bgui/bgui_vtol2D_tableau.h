@@ -27,6 +27,7 @@
 #include <vsol/vsol_spatial_object_2d_sptr.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
+#include <vdgl/vdgl_edgel_chain_sptr.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
@@ -41,6 +42,7 @@
 
 class bgui_vtol_soview2D_point;
 class bgui_vtol_soview2D_digital_curve;
+class bgui_vtol_soview2D_edgel_chain;
 class bgui_vtol_soview2D_vertex;
 class bgui_vtol_soview2D_edge;
 class bgui_vtol_soview2D_edge_group;
@@ -69,6 +71,10 @@ class bgui_vtol2D_tableau : public vgui_easy2D_tableau
   //: display for digital_curve (not vtol but often useful)
   bgui_vtol_soview2D_digital_curve* 
     add_digital_curve(vdgl_digital_curve_sptr const& dc);
+
+  //: display for edgel_chain (not vtol but often useful)
+  bgui_vtol_soview2D_edgel_chain* 
+    add_edgel_chain(vdgl_edgel_chain_sptr const& ec);
 
   //: the vtol display methods for individual topology classes
   bgui_vtol_soview2D_vertex* add_vertex(vtol_vertex_2d_sptr const& v);
@@ -101,6 +107,8 @@ class bgui_vtol2D_tableau : public vgui_easy2D_tableau
   void set_vsol_point_2d_style(const float r, const float g, const float b,
                                const float point_radius);
   void set_digital_curve_style(const float r, const float g, const float b,
+                               const float line_width);
+  void set_edgel_chain_style(const float r, const float g, const float b,
                                const float line_width);
   void set_vertex_style(const float r, const float g, const float b,
                                const float point_radius);

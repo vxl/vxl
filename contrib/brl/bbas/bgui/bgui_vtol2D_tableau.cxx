@@ -56,6 +56,7 @@ void bgui_vtol2D_tableau::init()
   //
    this->set_vsol_point_2d_style(0.0f, 1.0f, 0.0f, 5.0f);
    this->set_digital_curve_style(0.8f, 0.0f, 0.8f, 3.0f);
+   this->set_edgel_chain_style(0.8f, 0.0f, 0.8f, 3.0f);
    this->set_vertex_style(1.0f, 0.0f, 0.0f, 3.0f);
    this->set_edge_style(0.0f, 1.0f, 0.0f, 3.0f);
    this->set_edge_group_style(0.0f, 1.0f, 0.0f, 3.0f);
@@ -128,6 +129,22 @@ bgui_vtol2D_tableau::add_digital_curve(vdgl_digital_curve_sptr const& dc)
       int id = obj->get_id();
       if (highlight_)
       obj_map_[id]=dc->cast_to_topology_object();
+    }
+  return obj;
+}
+
+bgui_vtol_soview2D_edgel_chain*
+bgui_vtol2D_tableau::add_edgel_chain(vdgl_edgel_chain_sptr const& ec)
+{
+  bgui_vtol_soview2D_edgel_chain* obj =
+    new bgui_vtol_soview2D_edgel_chain(ec);
+  //set the default style
+  bgui_style_sptr sty = style_map_[obj->type_name()];
+  add(obj);
+  if (obj)
+    {
+      sty->clone_style(obj->get_style());
+      int id = obj->get_id();
     }
   return obj;
 }
@@ -341,6 +358,15 @@ void bgui_vtol2D_tableau::set_digital_curve_style(const float r, const float g,
   bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
   bgui_vtol_soview2D_digital_curve dc;
   style_map_[dc.type_name()]=sty;
+}
+
+void bgui_vtol2D_tableau::set_edgel_chain_style(const float r, const float g,
+                                                  const float b, 
+                                                  const float point_radius)
+{
+  bgui_style_sptr sty = new bgui_style(r, g, b, point_radius, 0.0f);
+  bgui_vtol_soview2D_edgel_chain ec;
+  style_map_[ec.type_name()]=sty;
 }
 
 void bgui_vtol2D_tableau::set_vertex_style(const float r, const float g,
