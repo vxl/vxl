@@ -1,5 +1,15 @@
-// Polygon scan iterator tests
-// Amitha Perera, Apr 2002
+//:
+// \file
+// \brief  Polygon scan iterator tests.
+// \author Amitha Perera
+// \date   Apr 2002
+//
+// \verbatim
+//  Modifications
+//   25-SEP-2003 Michal Sofka - Adding test case for iterating polygon including its boundary.
+//                              Iteration has been fixed, so conditions were corrected to test
+//                              the exact number points inside the polygon (not just range).
+// \endverbatim
 
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_polygon.h>
@@ -10,7 +20,7 @@ typedef vgl_polygon                Polygon_type;
 typedef vgl_polygon_scan_iterator  Polygon_scan;
 
 void
-test_basic_iteration()
+test_without_boundary()
 {
   Polygon_type poly;
   poly.new_sheet();
@@ -18,20 +28,38 @@ test_basic_iteration()
   poly.push_back( Point_type( 2.3f, 2.6f) );
   poly.push_back( Point_type( 2.3f,-0.4f) );
 
-  testlib_test_begin("iteration");
+  testlib_test_begin("iteration without boundary");
+  unsigned int count=0;
+  Polygon_scan scan_itr(poly, false);
+  for ( scan_itr.reset(); scan_itr.next(); ) {
+    count += scan_itr.endx() - scan_itr.startx() + 1;
+  }
+  // There are 6 points with integer-valued coordinates
+  // within the polygon
+  testlib_test_perform( count == 6 );
+}
+
+void
+test_with_boundary()
+{
+  Polygon_type poly;
+  poly.new_sheet();
+  poly.push_back( Point_type( 10.5f, 20.5f ) );
+  poly.push_back( Point_type( 12.5f, 20.5f) );
+  poly.push_back( Point_type( 12.5f, 22.5f) );
+  poly.push_back( Point_type( 10.5f, 22.5f) );
+
+  testlib_test_begin("iteration with boundary");
   unsigned int count=0;
   Polygon_scan scan_itr(poly);
   for ( scan_itr.reset(); scan_itr.next(); ) {
     count += scan_itr.endx() - scan_itr.startx() + 1;
   }
-  // There are only 6 points with integer-valued coordinates within
-  // the polygon, but the scan iterator returns 12, probably from its
-  // graphics derivation. I haven't done a detailed analysis of the
-  // algorithm to determine what the correct count should be, so I'll
-  // just leave it at non-zero is good.
-  testlib_test_perform( count != 0 );
+  // There are points within the polygon. This includes points with
+  // integer valued coordinates and the ones at the boundary
+  // (each scan line begins at the boundary of the polygon).
+  testlib_test_perform( count == 16  );
 }
-
 
 void
 test_denegrate_polygon()
@@ -50,10 +78,9 @@ test_denegrate_polygon()
     for ( scan_itr.reset(); scan_itr.next(); ) {
       count += scan_itr.endx() - scan_itr.startx() + 1;
     }
-    // See comment above. True count should be 465. Current
-    // implementation returns 464, probably because the singleton point
-    // at the top isn't being counted.
-    testlib_test_perform( count > 460 );
+    // There are 465 points with integer-valued coordinates
+    // within the polygon.
+    testlib_test_perform( count == 465 );
   }
 
   {
@@ -74,7 +101,8 @@ MAIN( test_polygon_scan_iterator )
 {
   START("vgl_polygon_scan_iterator");
 
-  test_basic_iteration();
+  test_without_boundary();
+  test_with_boundary();
   test_denegrate_polygon();
 
   SUMMARY();
