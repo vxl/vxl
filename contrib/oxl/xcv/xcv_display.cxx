@@ -271,7 +271,8 @@ void xcv_display::show_line_slice()
     return;
 
   int num_points
-    = (int)(vnl_math_rnd(vcl_sqrt((double)((fx1-fx0)*(fx1-fx0)+ (fy1-fy0)*(fy1-fy0)))));
+    = (int)(vnl_math_rnd(vcl_sqrt((double)((fx1-fx0)*(fx1-fx0)
+    + (fy1-fy0)*(fy1-fy0)))));
 
   // Avoid divide by zero
   if (!num_points) num_points = 10;

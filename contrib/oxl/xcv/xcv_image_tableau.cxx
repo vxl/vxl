@@ -1,9 +1,17 @@
 // This is oxl/xcv/xcv_image_tableau.cxx
-#include "xcv_image_tableau.h"
+
 //:
 // \file
-// See xcv_image_tableau.h for a description of this file.
-// \author  Marko Bacic (u97mb@robots.ox.ac.uk)
+// \author Marko Bacic (u97mb@robots.ox.ac.uk)
+// \brief  See xcv_image_tableau.h for a description of this file.
+//
+// \verbatim
+//  Modifications:
+//    05-AUG-2002 K.Y.McGaul - Print mouse position on status bar.
+//    06-AUG-2002 K.Y.McGaul - Print RGB value on status bar.
+// \endverbatim
+
+#include "xcv_image_tableau.h"
 
 #include <vcl_string.h>
 #include <vcl_cmath.h>
@@ -11,6 +19,8 @@
 
 #include <vil/vil_crop.h>
 #include <vil/vil_image.h>
+#include <vil/vil_rgb.h>
+#include <vil/vil_rgba.h>
 
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_gl.h>
@@ -122,30 +132,50 @@ bool xcv_image_tableau::handle(vgui_event const &e)
   {
     button_down = true;
     post_to_status_bar(" ");
-    return base::handle(e);
   }
   else if (e.type == vgui_BUTTON_UP)
   {
     button_down = false;
-    return base::handle(e);
   }
   else if (e.type == vgui_MOTION && button_down == false)
   {
-    // Display X,Y position on status bar:
+    // Get X,Y position to display on status bar:
     float pointx, pointy;
     vgui_projection_inspector p_insp;
     p_insp.window_to_image_coordinates(e.wx, e.wy, pointx, pointy);
-    int intx = int(vcl_floor(pointx));
-    int inty = int(vcl_floor(pointy));
+    int intx = vcl_floor(pointx), inty = vcl_floor(pointy);
 
+    // Get RGB value to display on status bar:
+
+    // It's easier to get the buffer in vil_rgba format and then convert to
+    // RGB, because that avoids alignment problems with glReadPixels.
+    vil_rgba<GLubyte> pixel;
+    //
+    glPixelZoom(1,1);
+    glPixelTransferi(GL_MAP_COLOR,0);
+    glPixelTransferi(GL_RED_SCALE,1);   glPixelTransferi(GL_RED_BIAS,0);
+    glPixelTransferi(GL_GREEN_SCALE,1); glPixelTransferi(GL_GREEN_BIAS,0);
+    glPixelTransferi(GL_BLUE_SCALE,1);  glPixelTransferi(GL_BLUE_BIAS,0);
+
+    glPixelStorei(GL_PACK_ALIGNMENT,1);   // byte alignment.
+    glPixelStorei(GL_PACK_ROW_LENGTH,0);  // use default value (the arg to pixel routine).
+    glPixelStorei(GL_PACK_SKIP_PIXELS,0); //
+    glPixelStorei(GL_PACK_SKIP_ROWS,0);   //
+
+    glReadPixels(e.wx, e.wy,             //
+                 1, 1,             // height and width (only one pixel)
+                 GL_RGBA,          // format
+                 GL_UNSIGNED_BYTE, // type
+                 &pixel);
+
+    // Display on status bar:
     char msg[100];
-    vcl_sprintf(msg, "(%d, %d)", intx, inty);
+    vcl_sprintf(msg, "(%d, %d)   R=%d,G=%d,B=%d", intx, inty,
+      (int)pixel.r, (int)pixel.g, (int)pixel.b);
     post_to_status_bar(msg);
-
-    return base::handle(e);
   }
-  else
-    return base::handle(e);
+
+  return base::handle(e);
 }
 
 vgui_roi_tableau_make_roi::vgui_roi_tableau_make_roi(xcv_image_tableau_sptr const& imt)

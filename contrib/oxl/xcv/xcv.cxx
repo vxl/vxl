@@ -45,6 +45,8 @@
 #include "xcv_image_tableau.h"
 #include "xcv_picker_tableau.h"
 
+#define MENUBAR_HEIGHT  70
+
 class xcv_tableau : public vgui_grid_tableau
 {
 public:
@@ -359,7 +361,8 @@ void add_image_at(vcl_string image_filename, unsigned col, unsigned row)
   vgui_composite_new c(easy,rubber);
   vgui_viewer2D_new view(c);
 //xcv_tab->add_at(view, col, row); // - u97mb This didn't work for some reason
-  xcv_tab->add_next(view); // - u97mb
+  //xcv_tab->add_next(view); // - u97mb
+  xcv_tab->add_at(view, col, row);
 }
 
 
@@ -410,11 +413,7 @@ void xcv_window_size_traditional(int rows, int cols,
                                  unsigned *window_w, unsigned *window_h,
                                  double *viewer_scale)
 {
-  // kym - don't add the assert below - it is OK for xcv to
-  // start empty (eg. to load images from the menu bar):
-#if 0
   assert(rows > 0 && cols > 0);
-#endif
 
   assert(window_w && window_h && viewer_scale);
   *window_w = 0;
@@ -422,9 +421,11 @@ void xcv_window_size_traditional(int rows, int cols,
   *viewer_scale = 1;
 
   // set width of window
-  for (int i=0; i<rows; ++i) {
+  for (int i=0; i<rows; ++i) 
+  {
     unsigned int winnie = 0;
-    for (int j=0; j<cols; ++j) {
+    for (int j=0; j<cols; ++j) 
+    {
       unsigned int d = i*cols + j;
       if (d < images.size())
         winnie += images[d]->width();
@@ -434,9 +435,11 @@ void xcv_window_size_traditional(int rows, int cols,
   }
 
   // set height of window
-  for (int j=0; j<cols; ++j) {
+  for (int j=0; j<cols; ++j) 
+  {
     unsigned int winnie = 0;
-    for (int i=0; i<rows; ++i) {
+    for (int i=0; i<rows; ++i) 
+    {
       unsigned int d = i*cols + j;
       if (d < images.size())
         winnie += images[d]->height();
@@ -444,6 +447,8 @@ void xcv_window_size_traditional(int rows, int cols,
     if (winnie > *window_h)
       *window_h = winnie;
   }
+  // Add a bit to the height for the menu and status bars:
+  *window_h += MENUBAR_HEIGHT;
 }
 
 //: This function tries to resize the window to fill some proportion of the screen.
@@ -486,14 +491,16 @@ int main(int argc, char** argv)
 {
   // Select the toolkit: command line or environment variable
   // can override, but the default is 'gtk' or 'mfc'.
-  if (! vgui::select(argc, argv)) {
+  if (! vgui::select(argc, argv)) 
+  {
     if      (vgui::exists("gtk"))
       vgui::select("gtk");
     else if (vgui::exists("mfc"))
       vgui::select("mfc");
     else if (vgui::exists("qt"))
       vgui::select("qt");
-    else {
+    else 
+    {
       // ??
     }
   }
@@ -508,13 +515,18 @@ int main(int argc, char** argv)
   vul_arg_parse(argc, argv);
 
   int rows, cols;
-  if (a_rows() && a_cols()) {
+  if (a_rows() && a_cols()) 
+  {
     rows = a_rows();
     cols = a_cols();
   }
-  else {
+  else 
+  {
     rows = 1;
-    cols = argc-1;
+    if (argc-1 > 0)
+      cols = argc-1;
+    else
+      cols = 1;
   }
   xcv_tab = new xcv_tableau(rows, cols);
 
@@ -546,10 +558,9 @@ int main(int argc, char** argv)
       xcv_window_size_adaptive(rows, cols, images, &window_width, &window_height, &viewer_scale);
     else
       xcv_window_size_traditional(rows, cols, images, &window_width, &window_height, &viewer_scale);
-    vcl_cerr << "window_width  = " << window_width << vcl_endl;
-    vcl_cerr << "window_height = " << window_height << vcl_endl;
 
-    for (unsigned int i=0; i<viewers.size(); ++i) {
+    for (unsigned int i=0; i<viewers.size(); ++i) 
+    {
       vgui_viewer2D_sptr v; v.vertical_cast(viewers[i]);
       v->token.scaleX *= viewer_scale;
       v->token.scaleY *= viewer_scale;
@@ -565,9 +576,11 @@ int main(int argc, char** argv)
 
   if (window_width <= 0)
     window_width = 512;
-  if (window_height <= 0)
+  if (window_height <= MENUBAR_HEIGHT)
     window_height = 512;
-
+    
+  vcl_cerr << "window_width  = " << window_width << vcl_endl;
+  vcl_cerr << "window_height = " << window_height << vcl_endl;
 
   // Create a window, add the tableau and show it on screen:
   vgui_window *win = vgui::produce_window(window_width, window_height,

@@ -75,7 +75,7 @@ void xcv_axes_tableau::add_point(float x, float y)
 void xcv_axes_tableau::compute_axes()
 {
   // Decide the offset, height & width of the graph:
-  int left_offset = 130; //KYM - this should change depending on width of y-label
+  int left_offset = 130; //kym - this should change depending on width of y-label
   int graph_width = 650 - left_offset;
   int top_offset = 50;
   int graph_height = 360;

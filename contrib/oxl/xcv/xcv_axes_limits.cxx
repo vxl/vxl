@@ -1,11 +1,11 @@
 // This is oxl/xcv/xcv_axes_limits.cxx
 #include "xcv_axes_limits.h"
 //:
-//  \file
-// See xcv_axes_limits.h for a description of this file.
+// \file
 //
-// \author   Andrew Fitzgibbon <andrewfg@ed.ac.uk>
-// \date     23 Apr 96
+// \author  Andrew Fitzgibbon <andrewfg@ed.ac.uk>
+// \date    23 Apr 96
+// \brief   See xcv_axes_limits.h for a description of this file.
 //
 // \verbatim
 //   Modifications:
