@@ -31,24 +31,24 @@
 //   2003/01/09 Peter Vanroose deprecated set_min_x() etc. and replaced with
 //                       more safe set_bounding_box() and add_to_bounding_box().
 //                     (The old setup only worked correctly when (0,0) in bbox.)
+//   2004/09/06 Peter Vanroose  Added safe cast methods to surface_3d
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-//*****************************************************************************
-// External declarations for values
-//*****************************************************************************
 #include <vsol/vsol_spatial_object_3d_sptr.h>
 
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vul/vul_timestamp.h>
 #include <vbl/vbl_ref_count.h>
+#include <vsl/vsl_fwd.h>
 #include <vsol/vsol_box_3d_sptr.h>
-#include <vsol/vsol_box_3d.h>
+
+class vsol_box_3d;
 class vsol_point_3d;
 class vsol_curve_3d;
+class vsol_surface_3d;
 class vsol_group_3d;
-class vsol_region_3d;
 class vsol_volume_3d;
 class vtol_topology_object;
 class vsol_spatial_object_3d;
@@ -102,10 +102,13 @@ class vsol_spatial_object_3d : public vul_timestamp, public vbl_ref_count
 
   // Constructors/Destructors--------------------------------------------------
 
- protected:
   virtual ~vsol_spatial_object_3d();
-  inline vsol_spatial_object_3d(void);
-  inline vsol_spatial_object_3d(vsol_spatial_object_3d const& s);
+
+ protected:
+  //: constructor initializes basic vsol_spatial_object_3d attributes.
+  //   bounding_box is set to NULL.
+  vsol_spatial_object_3d();
+  vsol_spatial_object_3d(vsol_spatial_object_3d const& other);
   void not_applicable(vcl_string const& message) const
   { vcl_cerr<<message<<"() function call not applicable\tfor spatial object "
             <<get_name()<<" !\n";
@@ -120,10 +123,9 @@ class vsol_spatial_object_3d : public vul_timestamp, public vbl_ref_count
   const char *get_name() const; // derived from spatial_type()
 
   //: compute bounding box, do nothing in this case except touching the box
-  inline virtual void compute_bounding_box(void) const
-  { if (!bounding_box_) bounding_box_=new vsol_box_3d();bounding_box_->touch();}
+  virtual void compute_bounding_box() const;
 
-  vsol_box_3d_sptr get_bounding_box(void) const { check_update_bounding_box(); return bounding_box_; }
+  vsol_box_3d_sptr get_bounding_box() const { check_update_bounding_box(); return bounding_box_; }
 
   //: get id of object
   int get_id() const { return id_; }
@@ -137,7 +139,21 @@ class vsol_spatial_object_3d : public vul_timestamp, public vbl_ref_count
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d_sptr clone(void) const=0;
+  virtual vsol_spatial_object_3d* clone() const=0;
+
+  // Binary I/O------------------------------------------------------------------
+
+  //: Return a platform independent string identifying the class
+  virtual vcl_string is_a() const=0;
+
+  //: Return IO version number;
+  short version() const;
+
+  //: Binary save self to stream.
+  virtual void b_write(vsl_b_ostream &os) const;
+
+  //: Binary load self from stream.
+  virtual void b_read(vsl_b_istream &is);
 
   // Tag Flag and ID methods
 
@@ -154,33 +170,30 @@ class vsol_spatial_object_3d : public vul_timestamp, public vbl_ref_count
   // Data Control--------------------------------------------------------------
 
  public:
-
   void protected_destroy();
 
   // bounding box accessors
 
-  inline void check_update_bounding_box(void) const;  // Test consistency of bound
+  void check_update_bounding_box() const;  // Test consistency of bound
   //: grow to the largest dim. of this and comp_box, i.e., take the convex union
   void grow_minmax_bounds(vsol_box_3d & comp_box) const; // mutable const
 
-  inline double get_min_x(void) const { check_update_bounding_box(); return bounding_box_->get_min_x(); }
-  inline double get_max_x(void) const { check_update_bounding_box(); return bounding_box_->get_max_x(); }
-  inline double get_min_y(void) const { check_update_bounding_box(); return bounding_box_->get_min_y(); }
-  inline double get_max_y(void) const { check_update_bounding_box(); return bounding_box_->get_max_y(); }
-  inline double get_min_z(void) const { check_update_bounding_box(); return bounding_box_->get_min_z(); }
-  inline double get_max_z(void) const { check_update_bounding_box(); return bounding_box_->get_max_z(); }
+  double get_min_x() const;
+  double get_max_x() const;
+  double get_min_y() const;
+  double get_max_y() const;
+  double get_min_z() const;
+  double get_max_z() const;
 
   //: set the bounding box to a single point, discarding the old bounding box
   // This is a "const" method since the bounding box is a "mutable" data member:
   // calculating the bounding box does not change the object.
-  inline void set_bounding_box(double x, double y, double z) const
-  { bounding_box_=new vsol_box_3d; bounding_box_->add_point(x,y,z); }
+  void set_bounding_box(double x, double y, double z) const;
 
   //: add a point to the bounding box and take the convex union
   // This is a "const" method since the bounding box is a "mutable" data member:
   // calculating the bounding box does not change the object.
-  inline void add_to_bounding_box(double x, double y, double z) const
-  { if (!bounding_box_) bounding_box_=new vsol_box_3d; bounding_box_->add_point(x,y,z); }
+  void add_to_bounding_box(double x, double y, double z) const;
 
   // Operators
 
@@ -193,16 +206,16 @@ class vsol_spatial_object_3d : public vul_timestamp, public vbl_ref_count
   //: The same behavior than dynamic_cast<>.
   // Needed because VXL is not necessarily compiled with -frtti
   //---------------------------------------------------------------------------
-  vsol_spatial_object_3d* cast_to_spatial_object() { return this; }
-  vsol_spatial_object_3d const* cast_to_spatial_object() const { return this; }
+  vsol_spatial_object_3d* cast_to_spatial_object_3d() { return this; }
+  vsol_spatial_object_3d const* cast_to_spatial_object_3d() const{return this;}
   virtual vtol_topology_object* cast_to_topology_object() {return 0;}
   virtual vtol_topology_object const* cast_to_topology_object()const{return 0;}
   virtual vsol_point_3d* cast_to_point() { return 0;}
   virtual vsol_point_3d const* cast_to_point() const { return 0;}
   virtual vsol_curve_3d *cast_to_curve() {return 0;}
   virtual vsol_curve_3d const* cast_to_curve() const {return 0;}
-  virtual vsol_region_3d* cast_to_region() { return 0; }
-  virtual vsol_region_3d const* cast_to_region() const { return 0; }
+  virtual vsol_surface_3d* cast_to_surface() { return 0; }
+  virtual vsol_surface_3d const* cast_to_surface() const { return 0; }
   virtual vsol_volume_3d* cast_to_volume() { return 0;}
   virtual vsol_volume_3d const* cast_to_volume() const { return 0;}
   virtual vsol_group_3d *cast_to_group() {return 0;}
@@ -221,41 +234,6 @@ inline void vsol_spatial_object_3d::set_tag_id(int id)
 {
   //     ( set the new id bits)  or (save just the flag bits from the tag_)
   tag_ = ( (id & VSOL_DEXID_BITS)     |  ( tag_ & VSOL_FLAG_BITS ));
-}
-
-//: constructor initialize basic vsol_spatial_object_3d attributes.
-//   bounding_box is set to NULL.
-inline vsol_spatial_object_3d::vsol_spatial_object_3d(void)
-  : vul_timestamp(), vbl_ref_count(), bounding_box_(0), tag_(0), id_(0)
-{
-  set_tag_id(++tagcount_);
-}
-
-inline vsol_spatial_object_3d::vsol_spatial_object_3d(vsol_spatial_object_3d const &s)
-  : vul_timestamp(), vbl_ref_count(), bounding_box_(0), tag_(0), id_(s.get_id())
-{
-  set_tag_id(++tagcount_);
-}
-
-//: Bounds Accessors:  min_ and max_ are provided as methods on vsol_spatial_object_3d
-//                    to be consistent with the previous interface
-//                    Additional bounds accessors are available directly
-//                    on vsol_box_3d.  - JLM
-
-inline void vsol_spatial_object_3d::check_update_bounding_box(void) const
-{
-  if (!bounding_box_)
-  {
-    bounding_box_=new vsol_box_3d;
-    this->compute_bounding_box();
-    bounding_box_->touch();
-    return;
-  }
-  if (bounding_box_->older(this))
-  { // NOTE: first touch then compute, to avoid infinite loop!! - PVr
-    bounding_box_->touch();
-    this->compute_bounding_box();
-  }
 }
 
 //: set a flag for a spatial object; flag can be VSOL_FLAG[1-6]
@@ -313,5 +291,22 @@ inline vcl_ostream &operator<<(vcl_ostream &strm, vsol_spatial_object_3d const* 
     strm << "NULL Spatial Object.\n";
   return strm;
 }
+
+//: Stream output operator for class pointer
+inline void vsl_print_summary(vcl_ostream& os, vsol_spatial_object_3d const* so)
+{
+  os << so;
+}
+
+//: Allows derived class to be loaded by base-class pointer
+//  A loader object exists which is invoked by calls
+//  of the form "vsl_b_read(os,base_ptr)".  This loads derived class
+//  objects from the disk, places them on the heap and
+//  returns a base class pointer.
+//  In order to work the loader object requires
+//  an instance of each derived class that might be
+//  found.  This function gives the model class to
+//  the appropriate loader.
+void vsl_add_to_binary_loader(vsol_spatial_object_3d const& b);
 
 #endif // vsol_spatial_object_3d_h_
