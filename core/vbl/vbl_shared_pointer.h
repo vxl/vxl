@@ -87,8 +87,8 @@ struct vbl_shared_pointer
     { return (data != 0)? &safe_bool_dummy::dummy : 0; }
 
   // inverse conversion to bool
-  safe_bool operator!() const
-    { return (data != 0)? 0 : &safe_bool_dummy::dummy; }
+  bool operator!() const
+    { return (data != 0)? false : true; }
 
   // conversion to pointer
 #if !defined VBL_SHARED_POINTER_OF_NON_COMPOUND // Get rid of warning with vbl_shared_pointer<int>

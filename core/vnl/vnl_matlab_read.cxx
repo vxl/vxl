@@ -69,9 +69,9 @@ vnl_matlab_readhdr::operator vnl_matlab_readhdr::safe_bool () const
   return (s.good() && !s.eof())? &safe_bool_dummy::dummy : 0; // FIXME
 }
 
-vnl_matlab_readhdr::safe_bool vnl_matlab_readhdr::operator!() const
+bool vnl_matlab_readhdr::operator!() const
 {
-  return (s.good() && !s.eof())? 0 : &safe_bool_dummy::dummy; // FIXME
+  return (s.good() && !s.eof())? false : true; // FIXME
 }
 
 bool vnl_matlab_readhdr::is_single() const

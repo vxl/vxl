@@ -76,9 +76,9 @@ class vul_awk
   operator safe_bool () const
     { return (!done_)? &safe_bool_dummy::dummy : 0; }
 
-//: Inverse boolean value
-  safe_bool operator!() const
-    { return (!done_)? 0 : &safe_bool_dummy::dummy; }
+//: Return false if this line is not the last.
+  bool operator!() const
+    { return done_; }
 
 //: Advance to the next line
   vul_awk& operator ++ () { next(); return *this; }

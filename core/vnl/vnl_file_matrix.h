@@ -31,8 +31,8 @@ class vnl_file_matrix : public vnl_matrix<T>
 
   operator safe_bool () const
     { return (ok_)? &safe_bool_dummy::dummy : 0; }
-  safe_bool operator!() const
-    { return (ok_)? 0 : &safe_bool_dummy::dummy; }
+  bool operator!() const
+    { return !ok_; }
 
  private:
   bool ok_;

@@ -62,7 +62,7 @@ class vul_file_iterator
   operator safe_bool() const;
 
   //: Inverse boolean value
-  safe_bool operator!() const;
+  bool operator!() const;
 
   //: Return the currently pointed-to pathname.
   // Won't spin the disk

@@ -337,7 +337,7 @@ PairMatchSet::iterator::operator PairMatchSet::iterator::safe_bool () const
 }
 
 //: Return false if the iterator has not yet enumerated all matches.
-PairMatchSet::iterator::safe_bool PairMatchSet::iterator::operator!() const
+bool PairMatchSet::iterator::operator!() const
 {
-  return (match_index_ < c_->size())? 0 : &safe_bool_dummy::dummy;
+  return (match_index_ < c_->size())? false : true;
 }

@@ -98,8 +98,8 @@ class vnl_scalar_join_iterator
     { return (!done())? &safe_bool_dummy::dummy : 0; }
 
   //: Return false if all pairs have been seen.
-  safe_bool operator!() const
-    { return (!done())? 0 : &safe_bool_dummy::dummy; }
+  bool operator!() const
+    { return (!done())? false : true; }
 
   //: Advance to the next pair.  This is prefix ++.
   inline vnl_scalar_join_iterator<T>& operator ++ () { next(); return *this; }

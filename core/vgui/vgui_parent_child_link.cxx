@@ -299,9 +299,9 @@ vgui_parent_child_link::operator vgui_parent_child_link::safe_bool() const
   return (pimpl && (pimpl->child() != 0))? &safe_bool_dummy::dummy : 0;
 }
 
-vgui_parent_child_link::safe_bool vgui_parent_child_link::operator!() const
+bool vgui_parent_child_link::operator!() const
 {
-  return (pimpl && (pimpl->child() != 0))? 0 : &safe_bool_dummy::dummy;
+  return (pimpl && (pimpl->child() != 0))? false : true;
 }
 
 vgui_parent_child_link::operator vgui_tableau_sptr() const

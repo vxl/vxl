@@ -50,7 +50,7 @@ class vnl_matlab_readhdr
   ~vnl_matlab_readhdr();
 
   operator safe_bool () const;
-  safe_bool operator!() const;
+  bool operator!() const;
   void read_next(); // skip to next header in file
 
   bool is_single() const;

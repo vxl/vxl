@@ -93,7 +93,7 @@ class PairMatchSet : public MatchSet
     iterator& operator ++ (/*prefix*/) { next(); return *this; }
     bool isfull() const;
     operator safe_bool () const;
-    safe_bool operator!() const;
+    bool operator!() const;
 
    private:
     iterator& operator ++ (int /*postfix*/);// { abort(); return *this; }
