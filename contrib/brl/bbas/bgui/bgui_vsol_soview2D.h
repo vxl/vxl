@@ -192,9 +192,9 @@ class bgui_vsol_soview2D_digital_curve : public vgui_soview2D
 
   //: Smart pointer to vdgl_digital_curve
   vdgl_digital_curve_sptr sptr;
-  
+
  protected:
   bool draw_dotted_;
 };
 
-#endif // bgui_linked_vsol_soview2D_h_
+#endif // bgui_vsol_soview2D_h_
