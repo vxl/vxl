@@ -210,7 +210,7 @@ void brip_para_cvrg::avg(int x, int y, vil1_memory_image_of<float> const& smooth
       sum += smooth(x+i, y+j);
     }
 
-  avg[x][y] = sum/49.0;
+  avg[x][y] = sum/49.0f;
 }
 
 
@@ -218,11 +218,11 @@ void brip_para_cvrg::avg(int x, int y, vil1_memory_image_of<float> const& smooth
 //: Compute a gradient operator at x,y along the x axis
 void brip_para_cvrg::grad0(int x, int y, vil1_memory_image_of<float> const& smooth, float** grad0)
 {
-  float plus = 0.5*smooth(x+1,y+3) + smooth(x+1,y+2) + smooth(x+1,y+1) +
+  float plus = 0.5f*smooth(x+1,y+3) + smooth(x+1,y+2) + smooth(x+1,y+1) +
     smooth(x+1,y) + smooth(x+1,y-1) + smooth(x+1,y-2)
-    + 0.5*smooth(x+1,y-3);
-  float minus = 0.5*smooth(x-1,y+3) + smooth(x-1,y+2) + smooth(x-1,y+1) +
-    smooth(x-1,y) + smooth(x-1,y-1) + smooth(x-1,y-2) + 0.5*smooth(x-1,y-3);
+    + 0.5f*smooth(x+1,y-3);
+  float minus = 0.5f*smooth(x-1,y+3) + smooth(x-1,y+2) + smooth(x-1,y+1) +
+    smooth(x-1,y) + smooth(x-1,y-1) + smooth(x-1,y-2) + 0.5f*smooth(x-1,y-3);
   grad0[x][y] = (plus-minus);
 }
 
@@ -236,7 +236,7 @@ void brip_para_cvrg::grad45(int x, int y, vil1_memory_image_of<float> const& smo
   float minus = smooth(x-3,y+2) + smooth(x-2,y+1) + smooth(x-1,y)
     + smooth(x,y-1) + smooth(x+1,y-2) + smooth(x+2,y-3);
 
-  grad45[x][y] = 1.30*(plus-minus);
+  grad45[x][y] = 1.30f*(plus-minus);
 }
 
 
@@ -244,10 +244,10 @@ void brip_para_cvrg::grad45(int x, int y, vil1_memory_image_of<float> const& smo
 //: Compute a gradient operator at x,y at 90 degrees
 void brip_para_cvrg::grad90(int x, int y, vil1_memory_image_of<float> const& smooth, float** grad90)
 {
-  float plus = 0.5*smooth(x+3,y+1) + smooth(x+2,y+1) + + smooth(x+1,y+1) +
-    smooth(x,y+1) + smooth(x-1,y+1) + smooth(x-2,y+1) + 0.5*smooth(x-3,y+1);
-  float minus =0.5*smooth(x+3,y-1) + smooth(x+2,y-1)+ smooth(x+1,y-1) +
-    smooth(x,y-1) + smooth(x-1,y-1) + smooth(x-2,y-1) + 0.5*smooth(x-3,y-1);
+  float plus = 0.5f*smooth(x+3,y+1) + smooth(x+2,y+1) + + smooth(x+1,y+1) +
+    smooth(x,y+1) + smooth(x-1,y+1) + smooth(x-2,y+1) + 0.5f*smooth(x-3,y+1);
+  float minus =0.5f*smooth(x+3,y-1) + smooth(x+2,y-1)+ smooth(x+1,y-1) +
+    smooth(x,y-1) + smooth(x-1,y-1) + smooth(x-2,y-1) + 0.5f*smooth(x-3,y-1);
   grad90[x][y] = (plus-minus);
 }
 
@@ -261,7 +261,7 @@ void brip_para_cvrg::grad135(int x, int y, vil1_memory_image_of<float> const& sm
   float minus = smooth(x+2,y+3) + smooth(x+1,y+2) + smooth(x,y+1)
     + smooth(x-1,y) + smooth(x-2,y-1) + smooth(x-3,y-2);
 
-  grad135[x][y] = 1.3*(plus-minus);
+  grad135[x][y] = 1.3f*(plus-minus);
 }
 
 

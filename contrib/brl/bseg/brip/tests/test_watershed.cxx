@@ -50,10 +50,12 @@ static void test_watershed()
   {
     for (int c = 0; c<w; c++)
     {
-      input(c,r) = parabola(2, 0, 255, 4, 4, c, r)+parabola(2, 0, 255, 7, 7, c, r)+parabola(2, 0, 255, 3, 8, c, r);
+      input(c,r) = parabola(2.f, 0.f, 255.f, 4.f, 4.f, float(c), float(r))
+                 + parabola(2.f, 0.f, 255.f, 7.f, 7.f, float(c), float(r))
+                 + parabola(2.f, 0.f, 255.f, 3.f, 8.f, float(c), float(r));
       vcl_cout << ' ' << input(c,r);
     }
-    vcl_cout << '\n'<< vcl_flush;
+    vcl_cout << vcl_endl;
   }
   brip_watershed_params wp;
   brip_watershed ws(wp);
