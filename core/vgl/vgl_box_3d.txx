@@ -75,7 +75,7 @@ vgl_box_3d<Type>::vgl_box_3d(vgl_point_3d<Type> const& centroid,
 {
   min_pos_[0] = Type(centroid.x()-0.5*width);
   min_pos_[1] = Type(centroid.y()-0.5*height);
-  max_pos_[2] = Type(centroid.z()-0.5*depth);
+  min_pos_[2] = Type(centroid.z()-0.5*depth);
 
   max_pos_[0] = Type(centroid.x()+0.5*width);
   max_pos_[1] = Type(centroid.y()+0.5*height);
