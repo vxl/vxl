@@ -4,11 +4,14 @@
 
 #include "vil_load.h"
 
+#include <vcl_cstdio.h>   // sprintf()
+#include <vcl_cstdlib.h>  // atoi()
 #include <vcl_cstring.h>
 
 #include <vil/vil_file_format.h>
 #include <vil/vil_stream_fstream.h>
 #include <vil/vil_stream_core.h>
+#include <vil/vil_stream_url.h>
 #include <vil/vil_image.h>
 
 vil_image vil_load_raw(vil_stream *is)
@@ -39,14 +42,15 @@ vil_image vil_load_raw(char const* filename)
   // check for null pointer or empty strings.
   if (!filename || !*filename)
     return 0;
-
+  
   vil_stream *is = new vil_stream_fstream(filename, "r");
   is->ref();
   // current block scope is owner of stream.
-
+  
   if (!is->ok()) {
-    // hacked check for filenames beginning "gen:".
     int l = vcl_strlen(filename);
+    
+    // hacked check for filenames beginning "gen:".
     if (l > 4 && vcl_strncmp(filename, "gen:", 4) == 0) {
       is->unref();
       // Make an in-core stream...
@@ -55,8 +59,24 @@ vil_image vil_load_raw(char const* filename)
       cis->m_transfer((char*)filename, 0, l+1, false/*write*/);
       is = cis;
     }
+    
+    // maybe it's a URL?
+    if (l > 4 && vcl_strncmp(filename, "http://", 7) == 0) {
+      is->unref();
+      is = new vil_stream_url(filename);
+      is->ref();
+    }
+    
+    // or a picture of a pig?
+    if (l > 4 && vcl_strncmp(filename, "pig:", 4) == 0) {
+      is->unref();
+      char buf[4096];
+      vcl_sprintf(buf, "http://www.robots.ox.ac.uk/~vxl/images/pig%d.jpg", vcl_atoi(filename+4));
+      is = new vil_stream_url(buf);
+      is->ref();
+    }
   }
-
+  
   if (!is->ok()) {
     is->unref();
     // end of block scope coming up.
