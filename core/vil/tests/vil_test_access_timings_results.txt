@@ -159,6 +159,7 @@ Method 2) Mean: 11987us  +/-105us
 Method 3) Mean: 7311us  +/-5us
 Method 4) Mean: 2844us  +/-50us
 Method 5) Mean: 2844us  +/-55us
+Method 6) Mean: 3285us  +/-55us
 
 Optimisation with specified inlining (with debug info added) (RelwithDebInfo)
 Method 1) Mean: 3535us  +/-50us
@@ -166,6 +167,7 @@ Method 2) Mean: 3214us  +/-50us
 Method 3) Mean: 1392us  +/-100us
 Method 4) Mean: 1192us  +/-55us
 Method 5) Mean: 761us  +/-55us
+Method 6) Mean: 721us  +/-50us
 
 Optimisation with optimiser controlled inlining (with debug info added)
 Method 1) Mean: 3545us  +/-55us
