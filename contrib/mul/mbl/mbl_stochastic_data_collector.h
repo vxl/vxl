@@ -67,7 +67,7 @@ public:
     //: Set number of samples to be stored
     // If not set, the value defaults to 1000.
     // Calling this function implicity calls clean().
-  virtual void setNSamples(int n);
+  virtual void set_n_samples(int n);
 
     //: Record given value
   virtual void record(const T& v);

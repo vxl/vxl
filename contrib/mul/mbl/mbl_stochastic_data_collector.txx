@@ -46,7 +46,7 @@ void mbl_stochastic_data_collector<T>::clean()
 // If not set, the value defaults to 1000.
 // Calling this function implicity calls clean().
 template <class T>
-void mbl_stochastic_data_collector<T>::setNSamples(int n)
+void mbl_stochastic_data_collector<T>::set_n_samples(int n)
 {
   nPresented_ = 0;
   samples_.resize(n);

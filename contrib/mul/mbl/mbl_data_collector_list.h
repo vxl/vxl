@@ -29,7 +29,7 @@ public:
   virtual void clean();
 
   //: Hint about how many examples to expect
-  virtual void setNSamples(int n);
+  virtual void set_n_samples(int n);
 
   //: Record given object
   virtual void record(const T& v);

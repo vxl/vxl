@@ -1,9 +1,10 @@
 #ifndef mbl_data_collector_txx_
 #define mbl_data_collector_txx_
 
+#include <mbl/mbl_data_collector.h>
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
-#include <mbl/mbl_data_collector.h>
+#include <vcl_algorithm.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 
@@ -28,7 +29,7 @@ mbl_data_collector<T>::~mbl_data_collector()
 
 //: Copy all the data from a mbl_data_wrapper<T> into a mbl_data_collector<T>
 template<class T>
-unsigned long CopyAllData(mbl_data_collector<T> &dest, mbl_data_wrapper<T> &src)
+unsigned long mbl_data_collector_copy_all(mbl_data_collector<T> &dest, mbl_data_wrapper<T> &src)
 {
   if (src.size() == 0) return 0;
   unsigned long i = 1;
@@ -43,49 +44,78 @@ unsigned long CopyAllData(mbl_data_collector<T> &dest, mbl_data_wrapper<T> &src)
   return i;
 }
 
-//: Merge all the data from two mbl_data_wrapper-s into one mbl_data_collector<T>
+//: Merge all the data from the two mbl_data_wrapper-s into one mbl_data_collector<T>
 template<class T>
-unsigned long MergeAllData(mbl_data_collector<T> &dest,
-                              mbl_data_wrapper<T > &src1,
-                mbl_data_wrapper<T > &src2)
+unsigned long mbl_data_collector_merge_all(mbl_data_collector<T> &dest,
+                             mbl_data_wrapper<T > &src0,
+                             mbl_data_wrapper<T > &src1,
+                             vcl_vector<unsigned> *order /*=0*/)
 {
+  long n0 = src0.size();
   long n1 = src1.size();
-  long n2 = src2.size();
 // Deal with special cases
-  if (n1 == 0) return CopyAllData(dest, src2);
-  if (n2 == 0) return CopyAllData(dest, src1);
+
+
+  if (n0 == 0) 
+  {
+    if (order)
+    {
+      order->resize(n1);
+      vcl_fill(order->begin(), order->end(), 1);
+    }
+    return mbl_data_collector_copy_all(dest, src1);
+  }
+  if (n1 == 0)
+  {
+    if (order)
+    {
+      order->resize(n0);
+      vcl_fill(order->begin(), order->end(), 0);
+    }
+    return mbl_data_collector_copy_all(dest, src0);
+  }
+
+  
+  if (order)
+  {
+    order->clear();
+    order->reserve(n0+n1);
+  }
 
   long remainder=0;
+  src0.reset();
   src1.reset();
-  src2.reset();
-  for(long i=0; i < n1+n2; i++)
+  for(long i=0; i < n0+n1; i++)
   {
     if (remainder <= 0)
     {
-      // Take from src1;
-      dest.record(src1.current());
-      remainder += n2;
-      src1.next();
+      // Take from src0;
+      dest.record(src0.current());
+      remainder += n1;
+      src0.next();
+      if (order) order->push_back(0);
     }
     else
     {
-      // Take from src2;
-      dest.record(src2.current());
-      remainder -= n1;
-      src2.next();
+      // Take from src1;
+      dest.record(src1.current());
+      remainder -= n0;
+      src1.next();
+      if (order) order->push_back(1);
     }
   }
 
-  assert ((!src1.next()) && (!src2.next())); // check that we have reached the end.
-  return n1 + n2;
+  assert ((!src0.next()) && (!src1.next())); // check that we have reached the end.
+  return n0 + n1;
 }
 
 #define MBL_DATA_COLLECTOR_INSTANTIATE(T) \
 template class mbl_data_collector< T >; \
-template unsigned long CopyAllData(mbl_data_collector<T > &dest, \
+template unsigned long mbl_data_collector_copy_all(mbl_data_collector<T > &dest, \
                                     mbl_data_wrapper<T > &src);\
-template unsigned long MergeAllData(mbl_data_collector<T > &dest,\
+template unsigned long mbl_data_collector_merge_all(mbl_data_collector<T > &dest,\
                                     mbl_data_wrapper<T > &src1,\
-                                    mbl_data_wrapper<T > &src2)
+                                    mbl_data_wrapper<T > &src2,\
+                                    vcl_vector<unsigned> *order);
 
 #endif // mbl_data_collector_txx_

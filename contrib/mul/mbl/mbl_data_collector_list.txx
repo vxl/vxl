@@ -35,7 +35,7 @@ void mbl_data_collector_list<T>::clean()
 
 //: Hint about how many examples to expect
 template<class T>
-void mbl_data_collector_list<T>::setNSamples(int)
+void mbl_data_collector_list<T>::set_n_samples(int)
 {
   // ignored.
 }
