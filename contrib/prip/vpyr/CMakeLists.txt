@@ -7,7 +7,7 @@ SET(vpyr_sources
    vpyr_2_pyramid.txx            vpyr_2_pyramid.h
    vpyr_2_pyramid_base.cxx       vpyr_2_pyramid_base.h
 
-   vpyr_2_pyramid_level_elts.cxx vpyr_2_pyramid_level_elts.h
+   vpyr_2_pyramid_level_elts.h
    vpyr_2_pyramid_level.txx      vpyr_2_pyramid_level.h
 
     # 2-topological pyramid
