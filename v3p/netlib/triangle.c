@@ -176,6 +176,10 @@
 /*  Disclaimer:  Neither I nor Carnegie Mellon warrant this code in any way  */
 /*    whatsoever.  This code is provided "as-is".  Use at your own risk.     */
 /*                                                                           */
+/*  Modifications: Ian Scott 10 Jan 2003 - attempt to quash 64 bit
+/*                 conversion warnings. Replaced most (unsigned long) with
+/*                 (ptr_sized_int).
+/*                                                                           */
 /*****************************************************************************/
 
 /* For single precision (which will save some memory and reduce paging),     */
@@ -743,9 +747,9 @@ struct triedge recenttri;
 /* Deal with point types that anre not unsigned long                         */
 /* The conditional test could be improved to be more cross platform          */
 #ifdef VCL_VC70
-# define ptr_sized_int __w64 int
+typedef __w64 int ptr_sized_int;
 #else
-# define ptr_sized_int unsigned long
+typedef unsigned long ptr_sized_int;
 #endif
 
 /*****************************************************************************/
