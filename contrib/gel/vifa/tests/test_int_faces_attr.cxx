@@ -30,14 +30,14 @@ static void test_int_faces_attr()
     // Get a vil-compatible version of the greyscale image
     // (for normalization)
     vil1_memory_image_of<vil1_byte>  test_img_mem(test_img);
-    vil_image_view<vil1_byte>    vil_test_img =
-      vil1_to_vil_image_view(test_img_mem);
+    vil_image_view_base* vil_test_img
+      = new vil_image_view<vil1_byte>(vil1_to_vil_image_view(test_img_mem));
 
     // Set up the image's normalization
     vifa_norm_params  np(0, 0.05, 0, 0.95);
-    np.get_norm_bounds(&vil_test_img,
-                       np._plow, np._phigh,
-                       np._ilow, np._ihigh);
+    np.get_norm_bounds(vil_test_img,
+                       np.plow, np.phigh,
+                       np.ilow, np.ihigh);
     np.recompute();
 
     vcl_cout << "Normalization params:\n";
@@ -90,19 +90,13 @@ static void test_int_faces_attr()
       vcl_vector<vcl_string>::iterator  ani = attr_names.begin();
       vcl_vector<float>::iterator      ai = attrs.begin();
       for (; (ai != attrs.end()) && (ani != attr_names.end()); ai++, ani++)
-      {
         vcl_cout << (*ani) << ": " << (*ai) << vcl_endl;
-      }
     }
     else
-    {
       vcl_cout << "vifa_int_faces_attr::ComputeAttributes() failed!\n";
-    }
   }
   else
-  {
     vcl_cout << "Could not load image -- aborting!\n";
-  }
 }
 
 
