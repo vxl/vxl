@@ -181,12 +181,13 @@
 //: VCL_NULL_TMPL_ARGS
 //
 // Define to <> for compilers that require them in friend template function
-// declarations (i.e., EGCS).
+// declarations (i.e., EGCS, VC C++.NET 2003).
 
-//#define VCL_NULL_TMPL_ARGS /* <> */
-//#define VCL_NULL_TMPL_ARGS <>
+#ifdef VCL_VC71                 // If C++.NET 2003 Version 7.1
+#define VCL_NULL_TMPL_ARGS <>
+#else
 #define VCL_NULL_TMPL_ARGS /* <> */
-
+#endif
 
 //----------------------------------------------------------------------
 // template instantiation
