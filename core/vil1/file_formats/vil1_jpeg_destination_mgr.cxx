@@ -10,20 +10,19 @@
 #include <vil/vil_stream.h>
 
 #define STATIC /*static*/
-/*
- * In ANSI C, and indeed any rational implementation, size_t is also the
- * type returned by sizeof().  However, it seems there are some irrational
- * implementations out there, in which sizeof() returns an int even though
- * size_t is defined as long or unsigned long.  To ensure consistent results
- * we always use this SIZEOF() macro in place of using sizeof() directly.
- */
+
+// In ANSI C, and indeed any rational implementation, size_t is also the
+// type returned by sizeof().  However, it seems there are some irrational
+// implementations out there, in which sizeof() returns an int even though
+// size_t is defined as long or unsigned long.  To ensure consistent results
+// we always use this SIZEOF() macro in place of using sizeof() directly.
 
 #define SIZEOF(object) ((size_t) sizeof(object))
 
 // Implement a jpeg_destination_manager for vil_stream *.
 // Adapted by fsm from the FILE * version in jdatadst.c
 
-#define vil_jpeg_OUTPUT_BUF_SIZE  4096 /* choose an efficiently fwrite'able size */
+#define vil_jpeg_OUTPUT_BUF_SIZE  4096 // choose an efficiently fwrite'able size
 typedef vil_jpeg_stream_destination_mgr *vil_jpeg_dstptr;
 
 
@@ -34,7 +33,7 @@ void
 vil_jpeg_init_destination (j_compress_ptr cinfo) {
   vil_jpeg_dstptr dest = (vil_jpeg_dstptr) cinfo->dest; // cast to derived class
 
-  /* Allocate the output buffer --- it will be released when done with image */
+  // Allocate the output buffer --- it will be released when done with image
   dest->buffer = (JOCTET *)
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo,
                                 JPOOL_IMAGE,
@@ -90,7 +89,7 @@ vil_jpeg_term_destination (j_compress_ptr cinfo) {
   vil_jpeg_dstptr dest = (vil_jpeg_dstptr) cinfo->dest; // cast to derived class
   size_t datacount = vil_jpeg_OUTPUT_BUF_SIZE - dest->base.free_in_buffer;
 
-  /* Write any data remaining in the buffer */
+  // Write any data remaining in the buffer
   if (datacount > 0) {
     if (dest->stream->write(dest->buffer, datacount) != datacount)
       ERREXIT(cinfo, JERR_FILE_WRITE);
@@ -103,12 +102,12 @@ vil_jpeg_term_destination (j_compress_ptr cinfo) {
 //  * for closing it after finishing compression.
 void
 vil_jpeg_stream_dst_set (j_compress_ptr cinfo, vil_stream *vs) {
-  /* The destination object is made permanent so that multiple JPEG images
-   * can be written to the same file without re-executing jpeg_stdio_dest.
-   * This makes it dangerous to use this manager and a different destination
-   * manager serially with the same JPEG object, because their private object
-   * sizes may be different.  Caveat programmer.
-   */
+  // The destination object is made permanent so that multiple JPEG images
+  // can be written to the same file without re-executing jpeg_stdio_dest.
+  // This makes it dangerous to use this manager and a different destination
+  // manager serially with the same JPEG object, because their private object
+  // sizes may be different.  Caveat programmer.
+  //
   assert(! cinfo->dest); // call this routine only once.
 
   // allocate
