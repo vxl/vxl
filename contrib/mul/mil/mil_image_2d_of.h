@@ -150,7 +150,7 @@ public:
 
         //: Access to pointer to T planes.
         //  planes()[i] is pointer to i'th image
-    T** planes() { return planes_.begin(); }
+    T** planes() { return &planes_[0]; }
 
         //: Access to (x,y) pixel in plane i
     T& operator()(int x, int y, int i)
