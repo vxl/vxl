@@ -20,7 +20,8 @@ class segv_menus
   static void load_image_callback();
   static void clear_display_callback();
   static void vd_edges_callback();
-  static void clean_vd_edges_callback();
+  static void regions_callback();
+  static void read_xml_edges_callback();
   static vgui_menu get_menu();
  private:
   segv_menus(){};

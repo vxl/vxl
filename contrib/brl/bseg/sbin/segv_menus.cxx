@@ -28,10 +28,16 @@ void segv_menus::vd_edges_callback()
   segv_segmentation_manager::instance()->vd_edges();
 }
 
-void segv_menus::clean_vd_edges_callback()
+void segv_menus::regions_callback()
 {
-  segv_segmentation_manager::instance()->clean_vd_edges();
+  segv_segmentation_manager::instance()->regions();
 }
+void segv_menus::read_xml_edges_callback()
+{
+  segv_segmentation_manager::instance()->read_xml_edges();
+}
+
+
 //segv_menus definition
 vgui_menu segv_menus::get_menu()
 {
@@ -42,11 +48,12 @@ vgui_menu segv_menus::get_menu()
   //file menu entries
   menufile.add( "Quit", quit_callback,(vgui_key)'q', vgui_CTRL);
   menufile.add( "Load Image", load_image_callback,(vgui_key)'l', vgui_CTRL);
+  menufile.add( "Load XML Edges", read_xml_edges_callback);
   //view menu entries
   menuview.add("Clear Display", clear_display_callback);
   //edit menu entries
   menuedit.add("VD Edges", vd_edges_callback);
-  menuedit.add("Clean VD Edges", clean_vd_edges_callback);
+  menuedit.add("Regions", regions_callback);
   //Top level menu layout
   menubar.add( "File", menufile);
   menubar.add( "View", menuview);
