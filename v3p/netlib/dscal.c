@@ -10,24 +10,15 @@ integer *n;
 doublereal *da, *dx;
 integer *incx;
 {
-    /* System generated locals */
-    integer i__1, i__2;
-
     /* Local variables */
-    static integer i, m, nincx, mp1;
+    static integer i, m, nincx;
 
+/*     scales a vector by a constant.					*/
+/*     uses unrolled loops for increment equal to one.			*/
+/*     jack dongarra, linpack, 3/11/78.					*/
+/*     modified 3/93 to return if incx .le. 0.				*/
+/*     modified 12/3/93, array(1) declarations changed to array(*)	*/
 
-/*     scales a vector by a constant. */
-/*     uses unrolled loops for increment equal to one. */
-/*     jack dongarra, linpack, 3/11/78. */
-/*     modified 3/93 to return if incx .le. 0. */
-/*     modified 12/3/93, array(1) declarations changed to array(*) */
-
-
-    /* Parameter adjustments */
-    --dx;
-
-    /* Function Body */
     if (*n <= 0 || *incx <= 0) {
         return;
     }
@@ -38,15 +29,12 @@ integer *incx;
 /*        code for increment not equal to 1 */
 
     nincx = *n * *incx;
-    i__1 = nincx;
-    i__2 = *incx;
-    for (i = 1; i__2 < 0 ? i >= i__1 : i <= i__1; i += i__2) {
+    for (i = 0; i < nincx; i += *incx) {
         dx[i] = *da * dx[i];
     }
     return;
 
 /*        code for increment equal to 1 */
-
 
 /*        clean-up loop */
 
@@ -55,22 +43,19 @@ L20:
     if (m == 0) {
         goto L40;
     }
-    i__2 = m;
-    for (i = 1; i <= i__2; ++i) {
+    for (i = 0; i < m; ++i) {
         dx[i] = *da * dx[i];
     }
     if (*n < 5) {
         return;
     }
 L40:
-    mp1 = m + 1;
-    i__2 = *n;
-    for (i = mp1; i <= i__2; i += 5) {
+    for (i = m; i < *n; i += 5) {
         dx[i] = *da * dx[i];
-        dx[i + 1] = *da * dx[i + 1];
-        dx[i + 2] = *da * dx[i + 2];
-        dx[i + 3] = *da * dx[i + 3];
-        dx[i + 4] = *da * dx[i + 4];
+        dx[i+1] = *da * dx[i+1];
+        dx[i+2] = *da * dx[i+2];
+        dx[i+3] = *da * dx[i+3];
+        dx[i+4] = *da * dx[i+4];
     }
 } /* dscal_ */
 
