@@ -6,7 +6,6 @@
 
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
-#include <vcl_sstream.h>
 #include <vil/vil_load.h>
 #include <vil/vil_image_view.h>
 #include <vgui/vgui.h>
@@ -22,8 +21,10 @@
 
 // Make a test tableau which catches the vgui_DESTROY event.
 
-class example_flim_tableau : public vgui_tableau {
-  bool handle(vgui_event const& e) {
+class example_flim_tableau : public vgui_tableau
+{
+  bool handle(vgui_event const& e)
+  {
     if (e.type == vgui_DESTROY) {
       vgui_dialog dialog("Farewell!");
       dialog.message("I am about to die!\nLast chance to save data would go here...");
@@ -39,7 +40,8 @@ class example_flim_tableau : public vgui_tableau {
 
 typedef vgui_tableau_sptr_t<example_flim_tableau> example_flim_tableau_sptr;
 
-struct example_flim_tableau_new : public example_flim_tableau_sptr {
+struct example_flim_tableau_new : public example_flim_tableau_sptr
+{
   typedef example_flim_tableau_sptr base;
   example_flim_tableau_new() : base(new example_flim_tableau()) { }
 };
