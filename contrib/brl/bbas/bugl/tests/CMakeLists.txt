@@ -1,0 +1,8 @@
+# ./brl/bbas/bugl/tests/CMakeLists.txt
+
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas)
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas/bugl)
+
+LINK_LIBRARIES(bugl)
+ADD_EXECUTABLE(bugl_test test_bugl.cxx)
