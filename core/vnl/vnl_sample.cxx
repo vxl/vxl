@@ -9,18 +9,20 @@
 #include <vcl/vcl_cmath.h>
 #include <vcl/vcl_cstdlib.h>
 
+// -- return a random number uniformly drawn on [a, b)
 double vnl_sample_uniform(double a, double b) 
 {
-  double u = // uniform on [0, 1]
 #ifdef VCL_NO_DRAND48
-    // rand() is not always a good random number generator.
-    rand()/double(RAND_MAX)
+    // rand() is not always a good random number generator,
+    // so use the following congruential random number generator - PVr
+  static unsigned long seed = 12345;
+  seed = (seed*16807)%2147483647L;
+  double u = seed/2147483711;
 #else
     // If you don't have drand48() you must define 
     // the macro VCL_NO_DRAND48 somewhere.
-    drand48()
+  double u = drand48(); // uniform on [0, 1)
 #endif
-    ;
   return (1-u)*a + u*b;
 }
 

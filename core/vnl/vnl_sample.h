@@ -3,13 +3,10 @@
 #ifdef __GNUC__
 #pragma interface "vnl_sample"
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
 
-// Purpose: easy ways to sample from various probability distributions.
+// .NAME  vnl_sample - easy ways to sample from various probability distributions
 
-// uniform on [a, b]
+// uniform on [a, b)
 double vnl_sample_uniform(double a, double b); 
 
 // normal distribution with given mean and standard deviation
