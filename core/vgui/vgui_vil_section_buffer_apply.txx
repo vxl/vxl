@@ -100,10 +100,20 @@ vgui_vil2_section_buffer_apply( vgui_vil2_section_buffer& sec_buf,
 // optimizer will aggressively remove unused functions, and hence
 // will not instantiate.
 //
+
+// VC6 Release version has problem with this tickler function. 
+// For VC6, the solution is to instantiate it explicitly.
+#if VCL_VC60
+#define INSTANTIATE_VGUI_VIL2_SECTION_BUFFER( T ) \
+  template void                                   \
+  vgui_vil2_section_buffer_apply( vgui_vil2_section_buffer& sec_buf, \
+                                  vil2_image_view<T> const& image_in); 
+
+#else
 #define INSTANTIATE_VGUI_VIL2_SECTION_BUFFER( T ) \
   void vgui_vil2_section_buffer_tickler( vgui_vil2_section_buffer& sec_buf, vil2_image_view< T >& view ) \
   { \
 	vgui_vil2_section_buffer_apply( sec_buf, view ); \
   }
-
+#endif
 #endif // vgui_vil2_section_buffer_apply_txx_
