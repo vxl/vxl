@@ -75,12 +75,12 @@ vtol_face_2d::vtol_face_2d(const vtol_face_2d &other)
       c=(e->curve()) ? (vsol_curve_2d*)e->curve()->clone().ptr() : 0;
 
 
-      V1=newverts[e->v1()->get_id()];
-      V2=newverts[e->v2()->get_id()];
-      if(!(V1&&V2))
+      vtol_topology_object_2d* V1 = newverts[e->v1()->get_id()];
+      vtol_topology_object_2d* V2 = newverts[e->v2()->get_id()];
+      if(!V1 || !V2)
         {
- 	  cerr << "Inconsistent Topology in vtol_edge_2d vtol_face_2d(& face) Constructor" << endl;
- 	  inf=new vtol_one_chain_2d();
+ 	  cerr << "Inconsistent topology in vtol_face_2d copy constructor\n";
+ 	  vtol_one_chain_2d *inf = new vtol_one_chain_2d();
           link_inferior(*inf);
           return;
  	}

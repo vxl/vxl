@@ -62,7 +62,7 @@ vtol_face_3d::vtol_face_3d(const vtol_face_3d &other)
       vtol_topology_object_3d* V2 = newverts[e->get_v2()->get_id()];
       if(!(V1&&V2))
         {
- 	  cerr << "Inconsistent Topology in vtol_edge_3d vtol_face_3d(& face) Constructor" << endl;
+ 	  cerr << "Inconsistent topology in vtol_face_3d copy constructor\n";
  	  vtol_one_chain_3d *inf = new vtol_one_chain_3d();
           link_inferior(inf);
           return;
