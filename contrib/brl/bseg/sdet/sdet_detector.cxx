@@ -254,7 +254,7 @@ bool sdet_detector::DoFold()
 //
 gevd_bufferxy* sdet_detector::GetBufferFromImage()
 {
-  static gevd_bufferxy* image_float_buf = 0;
+  gevd_bufferxy* image_float_buf = 0;
 
   if (image_float_buf) return image_float_buf;
 
@@ -264,6 +264,7 @@ gevd_bufferxy* sdet_detector::GetBufferFromImage()
       return 0;
     }
 
+
   //  RectROI* roi = image->GetROI(); // find user-selected region of interest
   //  int sizex = roi->GetSizeX();
   //  int sizey = roi->GetSizeY();
@@ -271,6 +272,7 @@ gevd_bufferxy* sdet_detector::GetBufferFromImage()
   int sizex= image.cols();
 
   image_float_buf = new gevd_bufferxy(sizex, sizey,8*sizeof(float));
+
 
 #if 0 // commented out
   if (image->GetPixelType() == Image::FLOAT)
@@ -297,7 +299,7 @@ gevd_bufferxy* sdet_detector::GetBufferFromImage()
        delete image_float_buf;
        image_float_buf = 0;
      }
-
+    
    return image_float_buf;
 }
 
