@@ -2,12 +2,14 @@
 #define vcl_cmath_h_
 //: 
 // \file
-// \brief Templated version of the C math library
+// \brief Templated version of the C math library.
+//
 // [26.5.6] In addition to the signatures from the C header
 // <math.h>, the C++ header <cmath> adds certain overloaded
 // forms of the usual double-precision functions.
 // The following signatures should be available for float, 
 // double and long double :
+//
 // \verbatim
 //  T abs(T );
 //  T acos(T );
