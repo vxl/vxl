@@ -6,6 +6,7 @@
 
 #include "vgl_norm_trans_2d.h"
 #include <vgl/vgl_point_2d.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vcl_iostream.h>
 
 //--------------------------------------------------------------

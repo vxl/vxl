@@ -9,6 +9,7 @@
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vnl/vnl_matrix_fixed.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 
 static void test_identity_transform()

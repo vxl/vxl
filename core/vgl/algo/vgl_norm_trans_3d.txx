@@ -6,6 +6,7 @@
 
 #include "vgl_norm_trans_3d.h"
 #include <vgl/vgl_point_3d.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vcl_iostream.h>
 
 //--------------------------------------------------------------
@@ -76,7 +77,7 @@ compute_from_points(vcl_vector<vgl_homg_point_3d<T> > const& points)
   T cx, cy, cz, radius;
   this->center_of_mass(points, cx, cy, cz);
   this->t12_matrix_.set_identity();
-  this->t12_matrix_.put(0,3, -cx);    
+  this->t12_matrix_.put(0,3, -cx);
   this->t12_matrix_.put(1,3, -cy);
   this->t12_matrix_.put(2,3, -cz);
   vcl_vector<vgl_homg_point_3d<T> > temp;

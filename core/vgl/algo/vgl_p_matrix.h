@@ -21,7 +21,7 @@
 //     221002 Peter Vanroose - added vgl_homg_point_2d interface
 //     231002 Peter Vanroose - using fixed 3x4 matrices throughout
 //     250503 J.L.M. converted to pure vgl infrastructure and templated
-//            also made the interface a bit more consistent with 
+//            also made the interface a bit more consistent with
 //            plane projective transformations
 //     270603 Peter Vanroose - moved doc from .txx to .h
 //                           - implemented 3 NYI methods (get, set, set_rows)
@@ -33,6 +33,7 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix_fixed.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_homg_line_2d.h>
@@ -43,7 +44,7 @@
 #include <vgl/algo/vgl_h_matrix_3d.h>
 
 template <class T>
-class vgl_p_matrix 
+class vgl_p_matrix
 {
  public:
 
