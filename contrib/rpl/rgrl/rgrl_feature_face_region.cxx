@@ -101,11 +101,12 @@ transform_region( rgrl_transformation const& xform ) const
   double sum_radii = 0;
 
   for( unsigned int i=0; i< this -> location_ . size() - 1; ++i )
-    {
-      point_along_dir = this -> location_ + this->radius_ * nullspace . get_column( i );
-      xform . map_location( point_along_dir, end_point );
-      sum_radii += ( end_point - face_ptr -> location_ ) . magnitude();
-    }
+  {
+    point_along_dir = this -> location_;
+    point_along_dir += this->radius_ * nullspace . get_column( i );
+    xform . map_location( point_along_dir, end_point );
+    sum_radii += ( end_point - face_ptr -> location_ ) . magnitude();
+  }
 
   face_ptr -> radius_ = sum_radii / ( this -> location_ . size() - 1 );
 
