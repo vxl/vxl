@@ -53,6 +53,8 @@ vil2_image_data_sptr vil2_load_raw(char const* filename)
 vil2_image_data_sptr vil2_load(char const* filename)
 {
   vil2_image_data_sptr i = vil2_load_raw(filename);
+  if (!i) return i; // leave early if it hasn't loaded.
+
   bool top_first=true, bgr=false;
   i->get_property(vil_property_top_row_first, &top_first);
   if (i->nplanes() == 3)
