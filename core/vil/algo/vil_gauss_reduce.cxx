@@ -1,22 +1,23 @@
 // This is mul/vil2/algo/vil2_gauss_reduce.cxx
 #include "vil2_gauss_reduce.h"
-#include "vcl_cmath.h"
-#include <vnl/vnl_gamma.h>
-
 //:
 //  \file
 //  \brief Functions to smooth and sub-sample image in one direction
 //  \author Tim Cootes
 
+#include <vcl_cmath.h>
+#include <vcl_cassert.h>
+#include <vxl_config.h> // for vxl_byte
+#include <vnl/vnl_gamma.h> // for vnl_erf()
 
 //: Smooth and subsample single plane src_im in x to produce dest_im
 //  Applies 1-5-8-5-1 filter in x, then samples
 //  every other pixel.  Fills [0,(ni+1)/2-1][0,nj-1] elements of dest
 void vil2_gauss_reduce(const vxl_byte* src_im,
-                            int src_ni, int src_nj,
-                            int s_x_step, int s_y_step,
-                            vxl_byte* dest_im,
-                            int d_x_step, int d_y_step)
+                       int src_ni, int src_nj,
+                       int s_x_step, int s_y_step,
+                       vxl_byte* dest_im,
+                       int d_x_step, int d_y_step)
 {
     vxl_byte* d_row = dest_im;
     const vxl_byte* s_row = src_im;
@@ -50,9 +51,9 @@ void vil2_gauss_reduce(const vxl_byte* src_im,
 //  Applies 1-5-8-5-1 filter in x, then samples
 //  every other pixel.  Fills [0,(ni+1)/2-1][0,nj-1] elements of dest
 void vil2_gauss_reduce(const float* src_im,
-                            int src_ni, int src_nj,
-                            int s_x_step, int s_y_step,
-                            float* dest_im,int d_x_step, int d_y_step)
+                       int src_ni, int src_nj,
+                       int s_x_step, int s_y_step,
+                       float* dest_im,int d_x_step, int d_y_step)
 {
     float* d_row = dest_im;
     const float* s_row = src_im;
@@ -86,10 +87,10 @@ void vil2_gauss_reduce(const float* src_im,
 //  Applies 1-5-8-5-1 filter in x, then samples
 //  every other pixel.  Fills [0,(ni+1)/2-1][0,nj-1] elements of dest
 void vil2_gauss_reduce(const int* src_im,
-                            int src_ni, int src_nj,
-                            int s_x_step, int s_y_step,
-                            int* dest_im,
-                            int d_x_step, int d_y_step)
+                       int src_ni, int src_nj,
+                       int s_x_step, int s_y_step,
+                       int* dest_im,
+                       int d_x_step, int d_y_step)
 {
     int* d_row = dest_im;
     const int* s_row = src_im;
@@ -104,9 +105,9 @@ void vil2_gauss_reduce(const int* src_im,
         for (int x=0;x<ni2;++x)
         {
             // The 0.5 offset in the following ensures rounding
-            *d = int(0.5+ 0.05*s[-sxs2] +0.05 *s[sxs2]
-                          +0.25*s[-s_x_step]+0.25*s[s_x_step]
-                          +0.4*s[0]);
+            *d = int(0.5 +0.05*s[-sxs2] +0.25*s[-s_x_step]
+                         +0.05*s[ sxs2] +0.25*s[ s_x_step]
+                         +0.4 *s[0]);
 
             d += d_x_step;
             s += sxs2;
@@ -123,9 +124,9 @@ void vil2_gauss_reduce(const int* src_im,
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
 //  Smoothes with a 3x3 filter and subsamples
 void vil2_gauss_reduce_121(const vxl_byte* src_im,
-                                int src_ni, int src_nj,
-                                int s_x_step, int s_y_step,
-                                vxl_byte* dest_im,int d_x_step, int d_y_step)
+                           int src_ni, int src_nj,
+                           int s_x_step, int s_y_step,
+                           vxl_byte* dest_im,int d_x_step, int d_y_step)
 {
   int sxs2 = s_x_step*2;
   int sys2 = s_y_step*2;
@@ -157,7 +158,7 @@ void vil2_gauss_reduce_121(const vxl_byte* src_im,
           s3 += sxs2;
       }
       // Set last elements of row
-      if (src_ni%2==1)
+      if (src_ni&1)
         *d = *s2;
 
       d_row += d_y_step;
@@ -177,7 +178,7 @@ void vil2_gauss_reduce_121(const vxl_byte* src_im,
     s0+=sxs2;
   }
 
-  if (src_nj%2==1)
+  if (src_nj&1)
   {
     int yhi = (src_nj-1)/2;
     vxl_byte* dest_last_row = dest_im + yhi*d_y_step;
@@ -190,13 +191,14 @@ void vil2_gauss_reduce_121(const vxl_byte* src_im,
   }
 }
 
+
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
 //  Smoothes with a 3x3 filter and subsamples
 void vil2_gauss_reduce_121(const float* src_im,
-                                int src_ni, int src_nj,
-                                int s_x_step, int s_y_step,
-                                float* dest_im,
-                                int d_x_step, int d_y_step)
+                           int src_ni, int src_nj,
+                           int s_x_step, int s_y_step,
+                           float* dest_im,
+                           int d_x_step, int d_y_step)
 {
   int sxs2 = s_x_step*2;
   int sys2 = s_y_step*2;
@@ -227,7 +229,7 @@ void vil2_gauss_reduce_121(const float* src_im,
           s3 += sxs2;
       }
       // Set last elements of row
-      if (src_ni%2==1)
+      if (src_ni&1)
         *d = *s2;
 
       d_row += d_y_step;
@@ -247,7 +249,7 @@ void vil2_gauss_reduce_121(const float* src_im,
     s0+=sxs2;
   }
 
-  if (src_nj%2==1)
+  if (src_nj&1)
   {
     int yhi = (src_nj-1)/2;
     float* dest_last_row = dest_im + yhi*d_y_step;
@@ -264,10 +266,10 @@ void vil2_gauss_reduce_121(const float* src_im,
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
 //  Smoothes with a 3x3 filter and subsamples
 void vil2_gauss_reduce_121(const int* src_im,
-                                int src_ni, int src_nj,
-                                int s_x_step, int s_y_step,
-                                int* dest_im,
-                                int d_x_step, int d_y_step)
+                           int src_ni, int src_nj,
+                           int s_x_step, int s_y_step,
+                           int* dest_im,
+                           int d_x_step, int d_y_step)
 {
   int sxs2 = s_x_step*2;
   int sys2 = s_y_step*2;
@@ -299,7 +301,7 @@ void vil2_gauss_reduce_121(const int* src_im,
           s3 += sxs2;
       }
       // Set last elements of row
-      if (src_ni%2==1)
+      if (src_ni&1)
         *d = *s2;
 
       d_row += d_y_step;
@@ -319,7 +321,7 @@ void vil2_gauss_reduce_121(const int* src_im,
     s0+=sxs2;
   }
 
-  if (src_nj%2==1)
+  if (src_nj&1)
   {
     int yhi = (src_nj-1)/2;
     int* dest_last_row = dest_im + yhi*d_y_step;
@@ -333,23 +335,24 @@ void vil2_gauss_reduce_121(const int* src_im,
 }
 
 
-
 vil2_gauss_reduce_params::vil2_gauss_reduce_params(double scaleStep)
 {
   assert(scaleStep> 1.0  && scaleStep<=2.0);
   scale_step_ = scaleStep;
-// This arrangement gives close to a 1-5-8-5-1 filter for scalestep of 2.0;
-// and 0-0-1-0-0 for a scale step close to 1.0;
+  // This arrangement gives close to a 1-5-8-5-1 filter for scalestep of 2.0;
+  // and 0-0-1-0-0 for a scale step close to 1.0;
   double z = 1/vcl_sqrt(2.0*(scaleStep-1.0));
   filt0_ = vnl_erf(0.5 * z) - vnl_erf(-0.5 * z);
   filt1_ = vnl_erf(1.5 * z) - vnl_erf(0.5 * z);
   filt2_ = vnl_erf(2.5 * z) - vnl_erf(1.5 * z);
 
   double five_tap_total = 2*(filt2_ + filt1_) + filt0_;
-//  double four_tap_total = filt2_ + 2*(filt1_) + filt0_;
-//  double three_tap_total = filt2_ + filt1_ + filt0_;
+#if 0
+  double four_tap_total = filt2_ + 2*(filt1_) + filt0_;
+  double three_tap_total = filt2_ + filt1_ + filt0_;
+#endif
 
-//  Calculate 3 tap half Gaussian filter assuming constant edge extension
+  //  Calculate 3 tap half Gaussian filter assuming constant edge extension
   filt_edge0_ = (filt0_ + filt1_ + filt2_) / five_tap_total;
   filt_edge1_ = filt1_ / five_tap_total;
   filt_edge2_ = filt2_ / five_tap_total;
@@ -358,19 +361,17 @@ vil2_gauss_reduce_params::vil2_gauss_reduce_params(double scaleStep)
   filt_edge1_ = 0.0;
   filt_edge2_ = 0.0;
 #endif
-//  Calculate 4 tap skewed Gaussian filter assuming constant edge extension
+  //  Calculate 4 tap skewed Gaussian filter assuming constant edge extension
   filt_pen_edge_n1_ = (filt1_+filt2_) / five_tap_total;
   filt_pen_edge0_ = filt0_ / five_tap_total;
   filt_pen_edge1_ = filt1_ / five_tap_total;
   filt_pen_edge2_ = filt2_ / five_tap_total;
 
-//  Calculate 5 tap Gaussian filter
+  //  Calculate 5 tap Gaussian filter
   filt0_ = filt0_ / five_tap_total;
   filt1_ = filt1_ / five_tap_total;
   filt2_ = filt2_ / five_tap_total;
 
-
   assert(filt_edge0_ > filt_edge1_);
   assert(filt_edge1_ > filt_edge2_);
-};
-
+}
