@@ -15,7 +15,7 @@ double vnl_fastops_dot(const double* a, const double* b, int n);
 #define METHOD 4
 #endif
 
-main()
+int main()
 {
   vcl_vector<double> x(1000000), y(1000000);
   for(int i = 0; i < 1000000; ++i)
@@ -27,6 +27,8 @@ main()
   vcl_cerr << "Method = " << METHOD << ", Optimized = " << OPTIMIZED << ", "
        << "Result = " << vnl_fastops_dot(&x[0], &y[0], x.size()) << ", ";
   t.print(vcl_cerr);
+  
+  return 0;
 }
 
 double vnl_fastops_dot(const double* a, const double* b, int n)
