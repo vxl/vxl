@@ -53,12 +53,18 @@ const float vnl_numeric_traits<float>::one = 1.0F;
 const double vnl_numeric_traits<double>::zero = 0.0;
 const double vnl_numeric_traits<double>::one = 1.0;
 
+const long double vnl_numeric_traits<long double>::zero = 0.0;
+const long double vnl_numeric_traits<long double>::one = 1.0;
+
 #endif
 
 //--------------------------------------------------------------------------------
 
+const vcl_complex<float> vnl_numeric_traits<vcl_complex<float> >::zero = 0.0;
+const vcl_complex<float> vnl_numeric_traits<vcl_complex<float> >::one = 1.0;
+
 const vcl_complex<double> vnl_numeric_traits<vcl_complex<double> >::zero = 0.0;
 const vcl_complex<double> vnl_numeric_traits<vcl_complex<double> >::one = 1.0;
 
-const vcl_complex<float> vnl_numeric_traits<vcl_complex<float> >::zero = 0.0;
-const vcl_complex<float> vnl_numeric_traits<vcl_complex<float> >::one = 1.0;
+const vcl_complex<long double> vnl_numeric_traits<vcl_complex<long double> >::zero = 0.0;
+const vcl_complex<long double> vnl_numeric_traits<vcl_complex<long double> >::one = 1.0;
