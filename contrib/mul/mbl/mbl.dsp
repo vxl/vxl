@@ -251,6 +251,11 @@ SOURCE=.\mbl_stats_1d.cxx
 SOURCE=.\mbl_sum_1d.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\mbl_lda.cxx
+
+# End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
