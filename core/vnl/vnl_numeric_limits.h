@@ -8,9 +8,9 @@
 // \file
 // \brief Standard limits for numeric datatypes
 //
-//  Implementation of the May 96 ANSI Draft Working Paper (DWP)
-//  numeric_limits class.  Numbering in
-//  the documentation below refers to section 18.2 of the DWP.
+// Implementation of the May 96 ANSI Draft Working Paper (DWP)
+// numeric_limits class.  Numbering in
+// the documentation below refers to section 18.2 of the DWP.
 //
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   28 Aug 96
@@ -56,7 +56,6 @@ template<class T>
 class vnl_numeric_limits
 {
  public:
-
   //: Distinguishes between scalar types, which have specialisations, and non-scalar types, which don't.
   static const bool is_specialized;
 

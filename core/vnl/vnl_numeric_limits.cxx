@@ -8,8 +8,8 @@
 // Created: 28 Aug 96
 // \deprecated in favour of vcl_limits.
 // \verbatim
-// Modifications
-// IMS (Manchester) 21/10/2003: Deprecated - Can be deleted after VXL-1.1
+//  Modifications
+//   IMS (Manchester) 21/10/2003: Deprecated - Can be deleted after VXL-1.1
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
