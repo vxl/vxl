@@ -217,7 +217,7 @@ void vgl_h_matrix_3d<T>::set_identity ()
 
 //: Set to translation
 template <class T>
-void vgl_h_matrix_3d<T>::set_translation(T tx = 0, T ty = 0, T tz =0)
+void vgl_h_matrix_3d<T>::set_translation(T tx, T ty, T tz)
 {
   //not implemented yet
 }

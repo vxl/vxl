@@ -59,13 +59,13 @@ class vgl_h_matrix_3d
   const vnl_matrix_fixed<T,4,4>& get_matrix() const { return t12_matrix_; }
   vgl_h_matrix_3d get_inverse() const;
 
-    void set(const T *t_matrix);
-    void set(vnl_matrix_fixed<T,4,4> const& t_matrix);
-    void set_identity();
-    void set_translation(T tx, T ty, T tz);
-    void set_rotation_about_axis(vnl_vector_fixed<T,3> axis, T angle);
-    void set_rotation_roll_pitch_yaw(T rx, T ry, T rz);
-    void set_rotation_euler(T rz1, T ry, T rz2);
+  void set(const T *t_matrix);
+  void set(vnl_matrix_fixed<T,4,4> const& t_matrix);
+  void set_identity();
+  void set_translation(T tx=0, T ty=0, T tz=0);
+  void set_rotation_about_axis(vnl_vector_fixed<T,3> axis, T angle);
+  void set_rotation_roll_pitch_yaw(T rx, T ry, T rz);
+  void set_rotation_euler(T rz1, T ry, T rz2);
 };
 
 // stream I/O
@@ -73,6 +73,6 @@ template <class T> vcl_ostream& operator<<(vcl_ostream& s, vgl_h_matrix_3d<T> co
 template <class T> vcl_istream& operator>>(vcl_istream& s, vgl_h_matrix_3d<T>&       h);
 
 
-#define VGL_H_MATRIX_3D_INSTANTIATE(T) extern "please include vgl/vgl_h_matrix_3d.txx first"
+#define VGL_H_MATRIX_3D_INSTANTIATE(T) extern "please include vgl/algo/vgl_h_matrix_3d.txx first"
 
 #endif // vgl_h_matrix_3d_h_
