@@ -1,5 +1,8 @@
 # brl/bbas/bxml/tests/CMakeLists.txt
 
+INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/find_xerces.cmake )
+IF(HAS_XERCES)
+
 LINK_LIBRARIES( bxml vtol vsol testlib )
 
 ADD_EXECUTABLE( bxml_test_all
@@ -30,3 +33,5 @@ ADD_TEST(bxml_test_map bxml_test_all
 
 ADD_EXECUTABLE( bxml_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bxml_test_include bxml )
+
+ENDIF(HAS_XERCES)
