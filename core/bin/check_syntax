@@ -352,6 +352,7 @@ foreach $f (@FILES)
     elsif ($j eq "vnl/vnl_erf.h") { $i="vnl_erfc\?"; }
     elsif ($j eq "vnl/vnl_error.h") { $i="$i(|_[a-z_]+)"; }
     elsif ($j eq "vnl/vnl_finite.h") { $i="($i)_int(|_poly)"; }
+    elsif ($j eq "vnl/vnl_inverse.h") { $i="$i(|_transpose)"; }
     elsif ($j eq "vnl/vnl_gamma.h") { $i="vnl_((|log_)gamma(|_[pq])|cum_prob_chi2)"; }
     elsif ($j eq "vnl/vnl_math.h") { $i="vnl_(math(|_[a-z_]+)|huge_val)"; }
     elsif ($j eq "vnl/vnl_matlab_print.h") { $i="($i|MATLABPRINT)"; }
