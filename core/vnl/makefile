@@ -4,7 +4,7 @@ VERSION := 1.0
 DEFINES += -DBUILDING_VNL_DLL
 
 MANPAGE_SOURCES += vnl_fwd.h
-MANPAGE_SOURCES += vnl_config.h
+MANPAGE_SOURCES += vnl_config.h.in
 MANPAGE_SOURCES += vnl_tag.h
 
 # vector and matrix
@@ -185,3 +185,6 @@ FLAGS_Templates/vnl_matrix_fixed+vnl_bignum.3.3-.cxx := -O0
 FLAGS_Templates/vnl_vector+vnl_rational-.cxx := -O0
 FLAGS_Templates/vnl_vector_fixed+vnl_rational.3-.cxx := -O0
 endif
+
+$(IUELOCALROOT)/core/vnl/vnl_config.h: vnl_config.h.in
+	perl -p -e 's/\@VNL_CONFIG_CHECK_BOUNDS\@/1/;s/\@VNL_CONFIG_LEGACY_METHODS\@/0/;s/\@VNL_CONFIG_THREAD_SAFE\@/1/;' $^ > $@
