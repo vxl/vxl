@@ -107,6 +107,9 @@ inline void vsl_swap_bytes_to_buffer( const char * source, char * dest, int nbyt
 #if VXL_LITTLE_ENDIAN
   memcpy(dest, source, nbyte * nelem);
 #else
+
+  assert(source != dest);  
+  
   // If the byte order of the file
   // does not match the intel byte order
   // then the bytes should be swapped
@@ -702,7 +705,7 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const double* begin, unsigned n
 inline void vsl_b_read_block(vsl_b_istream &is, double* begin, unsigned nelems)
 {
   is.is().read((char*) begin, (unsigned long)nelems*(unsigned long)sizeof(double));
-  vsl_swap_bytes_to_buffer((const char *)begin, (char *)begin, sizeof(double), nelems);
+  vsl_swap_bytes((char *)begin, sizeof(double), nelems);
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -726,7 +729,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, float* begin, unsigned nelems)
 {
   is.is().read((char*) begin, (unsigned long)nelems*(unsigned long)sizeof(float));
 
-  vsl_swap_bytes_to_buffer((const char *)begin, (char *)begin, sizeof(float), nelems);
+  vsl_swap_bytes((char *)begin, sizeof(float), nelems);
 }
 
 /////////////////////////////////////////////////////////////////////////
