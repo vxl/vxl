@@ -21,8 +21,8 @@ vtol_edge_2d::vtol_edge_2d(vtol_vertex_2d_sptr const& new_v1,
                            vtol_vertex_2d_sptr const& new_v2,
                            vsol_curve_2d_sptr const& new_curve)
 {
-  assert(!new_v1==false); v1_=new_v1->cast_to_vertex();
-  assert(!new_v2==false); v2_=new_v2->cast_to_vertex();
+  assert(new_v1); v1_=new_v1->cast_to_vertex();
+  assert(new_v2); v2_=new_v2->cast_to_vertex();
   if (!new_curve)
     curve_=new vsol_line_2d(new_v1->point(),new_v2->point());
   else
@@ -123,25 +123,25 @@ vtol_edge_2d::vtol_edge_2d(const vtol_edge_2d &other)
 
   set_vertices_from_zero_chains();
   if (other.curve())
+  {
+    curve_ = other.curve()->clone()->cast_to_curve();
+    // make sure the geometry and Topology are in sync
+    if (v1_)
     {
-      curve_ = other.curve()->clone()->cast_to_curve();
-      // make sure the geometry and Topology are in sync
-      if (v1_)
-        {
-          if (v1_->cast_to_vertex_2d()){
-            curve_->set_p0(v1_->cast_to_vertex_2d()->point());
-            curve_->touch();
-          }
-        }
-      if (v2_)
-        {
-          if (v1_->cast_to_vertex_2d())
-          {
-            curve_->set_p1(v2_->cast_to_vertex_2d()->point());
-            curve_->touch();
-          }
-        }
+      if (v1_->cast_to_vertex_2d()){
+        curve_->set_p0(v1_->cast_to_vertex_2d()->point());
+        curve_->touch();
+      }
     }
+    if (v2_)
+    {
+      if (v1_->cast_to_vertex_2d())
+      {
+        curve_->set_p1(v2_->cast_to_vertex_2d()->point());
+        curve_->touch();
+      }
+    }
+  }
   touch();
 }
 #endif
@@ -377,31 +377,31 @@ bool vtol_edge_2d::compare_geometry(const vtol_edge &other) const
 void vtol_edge_2d::compute_bounding_box(void) const
 {
   if (!this->bounding_box_)
-    {
-      vcl_cout << "In void vtol_edge_2d::compute_bounding_box() - shouldn't happen\n";
-      return;
-    }
+  {
+    vcl_cout << "In void vtol_edge_2d::compute_bounding_box() - shouldn't happen\n";
+    return;
+  }
   vsol_curve_2d_sptr c = this->curve();
   if (!c)
+  {
+    vcl_cout << "In vtol_edge_2d::compute_bounding_box() - null curve\n";
+    vtol_topology_object::compute_bounding_box();
+    return;
+  }
+  if (c->cast_to_digital_curve())
+  {
+    vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
+    vsol_box_2d_sptr dc_box = dc->get_bounding_box();
+    if (!dc_box)
     {
-      vcl_cout << "In vtol_edge_2d::compute_bounding_box() - null curve\n";
+      vcl_cout << "In vtol_edge_2d::compute_bounding_box() - curve has null bounding_box\n";
       vtol_topology_object::compute_bounding_box();
       return;
     }
-  if (c->cast_to_digital_curve())
-    {
-      vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
-      vsol_box_2d_sptr dc_box = dc->get_bounding_box();
-      if (!dc_box)
-        {
-          vcl_cout << "In vtol_edge_2d::compute_bounding_box() - curve has null bounding_box\n";
-          vtol_topology_object::compute_bounding_box();
-          return;
-        }
-      this->bounding_box_->reset_bounds();
-      this->bounding_box_->grow_minmax_bounds(*dc_box);
-      return;
-    }
+    this->bounding_box_->reset_bounds();
+    this->bounding_box_->grow_minmax_bounds(*dc_box);
+    return;
+  }
   //the geometry is either a line segment or unknown so use the generic method
   vtol_topology_object::compute_bounding_box();
 }
