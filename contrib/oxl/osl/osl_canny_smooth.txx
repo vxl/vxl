@@ -1,3 +1,5 @@
+#ifndef osl_canny_smooth_txx_
+#define osl_canny_smooth_txx_
 /*
   fsm@robots.ox.ac.uk
 */
@@ -61,7 +63,7 @@ void osl_canny_smooth_rothwell(T const * const *image_in, int _xsize, int _ysize
 
 
 //
-// -- Computes the gradient images with the origin at (x0,y0) and of square
+//: Computes the gradient images with the origin at (x0,y0) and of square
 // size image_size.
 //
 template <class T>
@@ -98,14 +100,14 @@ void osl_canny_smooth_rothwell_adaptive(T const * const *_image, int /*_xsize*/,
   // and grad
   for (int x=_width; x<image_size-_width; ++x)
     for (int y=_width; y<image_size-_width; ++y)
-      grad[x][y] = sqrt(dx[x][y]*dx[x][y] + dy[x][y]*dy[x][y]);
+      grad[x][y] = vcl_sqrt(dx[x][y]*dx[x][y] + dy[x][y]*dy[x][y]);
 }
 
 
 //--------------------------------------------------------------------------------
 
 //
-// -- Convolves the image with the smoothing kernel.
+//: Convolves the image with the smoothing kernel.
 //  _sub_area is used to smooth pixels lying in a border of size _width.
 //
 //  Meaning of _sub_area[x] :
@@ -171,7 +173,6 @@ void osl_canny_smooth(T const * const * image_in, int _xsize, int _ysize,
   }
 
 
-
   // y direction
   for (int x=0; x < _xsize; ++x) {
     // Top border of size _width
@@ -221,4 +222,6 @@ template void osl_canny_smooth_rothwell_adaptive(T const * const *in, int _xsize
                                                  float * unpro_const *dx, float * unpro_const *dy, float * unpro_const *grad); \
 template void osl_canny_smooth(T const * const *image_in, int _xsize, int _ysize, \
                                float const *_kernel, int _width, float const *_sub_area, \
-                               float * unpro_const * image_out);
+                               float * unpro_const * image_out)
+
+#endif // osl_canny_smooth_txx_
