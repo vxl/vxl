@@ -4,8 +4,8 @@
 #include <DigitalGeometry/DigitalCurve.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator_linear.h>
-//#include <vdgl/vdgl_edgel_chain.h>
-//#include <vdgl/vdgl_edgel.h>
+#include <vdgl/vdgl_edgel_chain.h>
+#include <vdgl/vdgl_edgel.h>
 #include <vcl_cassert.h>
 
 inline vdgl_digital_curve DigitalCurve_to_vdgl(DigitalCurve const& dc)
