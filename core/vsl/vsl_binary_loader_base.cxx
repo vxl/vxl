@@ -14,6 +14,12 @@
 // Create on heap so that it can be cleaned up itself
 static vcl_vector<vsl_binary_loader_base*> *loader_list_ = 0;
 
+
+typedef void (*clear_func_ptr) ();
+// List of all extra loaders clear funcs registered()'ed
+// Create on heap so that it can be cleaned up itself
+static vcl_vector<clear_func_ptr> *extra_loader_clear_list_ = 0;
+
 //=======================================================================
 
 vsl_binary_loader_base::vsl_binary_loader_base()
@@ -34,20 +40,48 @@ void vsl_binary_loader_base::register_this()
   loader_list_->push_back(this);
 }
 
+
+//: Allows other loader scheme to piggy back on the clearing of vsl loaders
+// This is useful for getting rid of spurious memory leaks.
+void vsl_register_new_loader_clear_func(clear_func_ptr func)
+{
+  if (extra_loader_clear_list_ ==0)
+    extra_loader_clear_list_ = new vcl_vector<clear_func_ptr>;
+
+  extra_loader_clear_list_->push_back(func);
+}
+
+
 //=======================================================================
 //: Deletes all the loaders
 //  Deletes every loader for which register_this() has been called
 void vsl_delete_all_loaders()
 {
-  if (loader_list_==0) return;
-  int n = loader_list_->size();
-  for (int i=0;i<n;++i)
-    delete loader_list_->operator[](i);
-  loader_list_->resize(0);
+//  Deletes every vsl loader for which register_this() has been called
+  if (loader_list_!=0)
+  {
+    const unsigned n = loader_list_->size();
+    for (unsigned i=0;i<n;++i)
+      delete loader_list_->operator[](i);
+    loader_list_->clear();
 
-  // Clean up the list itself
-  delete loader_list_;
-  loader_list_=0;
+    // Clean up the list itself
+    delete loader_list_;
+    loader_list_=0;
+  }
+
+  // Call any piggybacking clear functions
+  if (extra_loader_clear_list_!=0)
+  {
+    const unsigned n = extra_loader_clear_list_->size();
+    for (unsigned i=0;i<n;++i)
+      (extra_loader_clear_list_->operator[](i))();
+
+    // Clean up the list itself
+    extra_loader_clear_list_->clear();
+    delete extra_loader_clear_list_;
+    extra_loader_clear_list_=0;
+  }
 
   // Clear all indent data
   vsl_indent_clear_all_data();

@@ -25,6 +25,11 @@ class vsl_binary_loader_base
   void register_this();
 };
 
+
+//: Allows other loader scheme to piggy back on the clearing of vsl loaders
+// This is useful for getting rid of spurious memory leaks.
+void vsl_register_new_loader_clear_func(void (*func)());
+
 //: Deletes all the loaders derived from this class
 //  Deletes every loader for which register_this() has been called
 //  This is mainly called when tidying up the heap to ensure memory
