@@ -1949,14 +1949,14 @@ static bool output_cc_row(const int r0,  vbl_array_1d<float> const& cc,
 }
 
   
-vil_image_view<float> brip_vil_float_ops::
+bool brip_vil_float_ops::
 cross_correlate(vil_image_view<float> const & image1,
-                     vil_image_view<float> const & image2,
+                vil_image_view<float> const & image2,
+                vil_image_view<float>& out,
                      const int radius, 
                      const float intensity_thresh)
 {
   vul_timer t;
-  vil_image_view<float> out;
   int w = image1.ni(), h = image1.nj();
   int w2 = image2.ni(), h2 = image2.nj();
   //sizes must match
@@ -1998,7 +1998,7 @@ cross_correlate(vil_image_view<float> const & image1,
                          dSI1, dSI2, dSI1I1, dSI2I2, dSI1I2))
         return false;
       if(!output_cc_row(r0, cc, out))
-		return false;
+		return out;
     }
   //handle the last row
   //  vcl_cout << "r0 " << r0 << "\n";
@@ -2010,5 +2010,5 @@ cross_correlate(vil_image_view<float> const & image1,
 		return false;
   vcl_cout << "RunningSumCrossCorrelation for " << w*h/1000.0f << " k pixels in " 
            << t.real() << " msecs\n"<< vcl_flush;
-  return out;
+  return true;
 }

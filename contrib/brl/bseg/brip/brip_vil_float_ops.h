@@ -237,9 +237,10 @@ static bool chip(vil_image_view<float> const & input,
                   const float intensity_thresh=25.0);
 
   //:cross_correlate two images using running sums
-  static vil_image_view<float> 
+  static bool
   cross_correlate(vil_image_view<float> const & image1,
                   vil_image_view<float> const & image2,
+				  vil_image_view<float>& out, 
                   const int radius = 5, 
                   const float intensity_thresh=25.0);
 

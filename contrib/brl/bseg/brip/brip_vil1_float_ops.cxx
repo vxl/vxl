@@ -1885,14 +1885,14 @@ static bool output_cc_row(const int r0,  vbl_array_1d<float> const& cc,
 }
 
   
-vil1_memory_image_of<float> brip_vil1_float_ops::
+bool brip_vil1_float_ops::
 cross_correlate(vil1_memory_image_of<float> const & image1,
-                     vil1_memory_image_of<float> const & image2,
-                     const int radius, 
-                     const float intensity_thresh)
+                vil1_memory_image_of<float> const & image2,
+                vil1_memory_image_of<float>& out,
+                const int radius, 
+                const float intensity_thresh)
 {
   vul_timer t;
-  vil1_memory_image_of<float> out;
   int w = image1.width(), h = image1.height();
   int w2 = image2.width(), h2 = image2.height();
   //sizes must match
@@ -1900,7 +1900,7 @@ cross_correlate(vil1_memory_image_of<float> const & image1,
     {
       vcl_cout << "In brip_vil1_float_ops::fast_cross_correlate(..) -"
                << " image sizes don't match\n";
-      return out;
+      return false;
     }
   out.resize(w, h);
   out.fill(0.0);
@@ -1929,7 +1929,7 @@ cross_correlate(vil1_memory_image_of<float> const & image1,
       advance_rows(SI2I2); advance_rows(SI1I2);
       if(!update_row(image1, image2, r0+radius+1, 2*radius,
                      SI1, SI2, SI1I1, SI2I2, SI1I2))
-        return false;
+        return out;
       if(!collapse_slice(SI1, SI2, SI1I1, SI2I2, SI1I2,
                          dSI1, dSI2, dSI1I1, dSI2I2, dSI1I2))
         return false;
@@ -1946,6 +1946,6 @@ cross_correlate(vil1_memory_image_of<float> const & image1,
 		return false;
   vcl_cout << "RunningSumCrossCorrelation for " << w*h/1000.0f << " k pixels in " 
            << t.real() << " msecs\n"<< vcl_flush;
-  return out;
+  return true;
 }
   

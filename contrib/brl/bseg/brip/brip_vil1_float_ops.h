@@ -239,9 +239,10 @@ class brip_vil1_float_ops
                   const float intensity_thresh=25.0);
 
   //:Cross-correlate two images using faster running sums
-  static vil1_memory_image_of<float> 
+  static bool 
   cross_correlate(vil1_memory_image_of<float> const & image1,
                   vil1_memory_image_of<float> const & image2,
+                  vil1_memory_image_of<float>& out,
                   const int radius = 5, 
                   const float intensity_thresh=25.0);
 
