@@ -8,18 +8,18 @@
 // \file
 // \brief Set of pairs of integers
 //
-//    PairMatchMulti is a binary relationship between integers
-//    $i_1 \rightarrow i_2$ where there may be multiple $i_2$ for
-//    each $i_1$.
+//  PairMatchMulti is a binary relationship between integers
+//  $i_1 \rightarrow i_2$ where there may be multiple $i_2$ for
+//  each $i_1$.
 //
-//    The current implementation uses an STL multimap.
+//  The current implementation uses an STL multimap.
 //
 // \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 16 Sep 96
 //
 // \verbatim
 //  Modifications:
-//    June 97 - Peter Vanroose - operator==() added
+//   June 97 - Peter Vanroose - operator==() added
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 //-----------------------------------------------------------------------------
@@ -79,10 +79,10 @@ class PairMatchMulti
 
   //: Return an iterator which will run through the list of matches for feature index i1.
   //  Example usage: to print all matches for "target"
-  // \verbatim
+  // \code
   //   for (PairMatchMultiIterator p = mm.get_match_12(target); !p.done(); p.next())
   //     vcl_cout << p.get_i1() << " " << p.get_i2() << vcl_endl;
-  // \endverbatim
+  // \endcode
   // Complexity is O(log n).
   PairMatchMultiIterator get_match_12(int i1)
   {

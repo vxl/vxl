@@ -51,9 +51,9 @@ PMatrix::PMatrix ():
 //--------------------------------------------------------------
 //
 //: Construct by loading from vcl_istream.
-// \verbatim
+// \code
 //   PMatrix P(cin);
-// \endverbatim
+// \endcode
 PMatrix::PMatrix (vcl_istream& i) :
   svd_(0)
 {
@@ -219,9 +219,9 @@ vcl_istream& operator>>(vcl_istream& i, PMatrix& p)
 static bool ok(vcl_istream& f) { return f.good() || f.eof(); }
 
 //: Load from file.
-// \verbatim
+// \code
 // P.read_ascii("file.P");
-// \endverbatim
+// \endcode
 bool PMatrix::read_ascii(vcl_istream& f)
 {
   vnl_matrix<double> hold(3,4);
@@ -243,9 +243,9 @@ bool PMatrix::read_ascii(vcl_istream& f)
 
 //: Load from file.
 // Static method, so you can say
-// \verbatim
+// \code
 // PMatrix P = PMatrix::read("file.P");
-// \endverbatim
+// \endcode
 PMatrix PMatrix::read(const char* filename)
 {
   vcl_ifstream f(filename);
@@ -297,7 +297,7 @@ void PMatrix::clear_svd() const
 vgl_homg_point_3d<double> PMatrix::get_focal() const
 {
   if (svd()->singularities() > 1) {
-    vcl_cerr << "PMatrix::get_focal: "
+    vcl_cerr << "PMatrix::get_focal:\n"
              << "  Nullspace dimension is " << svd()->singularities()
              << "\n  Returning an invalid point (a vector of zeros)\n";
     return vgl_homg_point_3d<double>(0,0,0,0);
@@ -312,9 +312,9 @@ HomgPoint3D PMatrix::get_focal_point() const
 {
   // From st_compute_focal_point
   if (svd()->singularities() > 1) {
-    vcl_cerr << "PMatrix::get_focal_point: "
-             << "  Nullspace dimension is " << svd()->singularities() << vcl_endl
-             << "  Returning a vector of zeros\n";
+    vcl_cerr << "PMatrix::get_focal_point:\n"
+             << "  Nullspace dimension is " << svd()->singularities()
+             << "\n  Returning a vector of zeros\n";
     return HomgPoint3D(0,0,0,0);
   }
 
