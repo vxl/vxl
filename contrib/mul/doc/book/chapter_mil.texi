@@ -4,7 +4,7 @@ Set of image classes which use pointers to act as views of other images.
 
 @section Introduction
 
-mil contains a set of image classes, derived from mil_image, which can be
+mil and mil3d contains a set of image classes, derived from @code{mil_image}, which can be
 used as `views' on actual image data.
 
 The images use pointer arithmetic to get at the pixel values, so store
@@ -37,8 +37,8 @@ The advantages of this approach are
    x_step_=3, y_step_=3*nx, we can access the R, G and B planes of the
    image separately.
 @item One can use it to wrap up other image classes transparently.  Thus
-   one can create an image which points to the data in a thirdparty image
-   class and apply algorithms without having to explictly copy the data.
+   one can create an image which points to the data in a third-party image
+   class and apply algorithms without having to explicitly copy the data.
    A particularly interesting case is when you use a live
    video camera input, which puts image data in a particular block of
    memory. One can create a wrapper around it and treat it as an ordinary image,
@@ -53,12 +53,12 @@ The image hierarchy is (or will be) as follows:
 @smallexample
  mil_image
     - mil_image_2d
-    - mil_image_2d_of<T>
-    - mil_image_2d
-    - mil_image_3d_of<T>
+       - mil_image_2d_of<T>
+    - mil_image_3d
+       - mil_image_3d_of<T>
 @end smallexample
 
-mil_image_2d classes contain a transformation object, mil_transform_2d, which gives
+mil_image_2d classes contain a transformation object, @code{mil_transform_2d}, which gives
 the transformation from a notional `world' co-ordinate frame to the image pixel
 frame.  Though in certain cases this can be used when the images are calibrated,
 the most useful application is in image pyramids.  In these the levels above
@@ -135,8 +135,8 @@ It can probably be tweaked to go even faster, but at the expense of readability.
 
 The default copy operator takes a SHALLOW copy of an image.
 However, as long as the image isn't a view of some external data (see below)
-the actual data is stored in a mil_image_data<T> object, to which a
-vbl_smart_ptr is retained.  Thus the data will hang around as long as
+the actual data is stored in a @code{mil_image_data<T>} object, to which a
+@code{vbl_smart_ptr} is retained.  Thus the data will hang around as long as
 something is looking at it.
 
 Thus the following will work efficiently
@@ -176,10 +176,16 @@ image.
   window.setToWindow(full_image,5,10,  8,32);
 @end smallexample
 
-Note that if we save the two images to the same file with vsl_b_write(), then load them
-with vsl_b_read(), this relationship will be retained.  That's due to
-the use of vbl_smart_ptr, and the awesome power of the serialisation in the binary IO code
+Note that if we save the two images to the same file with @code{vsl_b_write()}, then load them
+with @code{vsl_b_read()}, this relationship will be retained.  That's due to
+the use of @code{vbl_smart_ptr}, and the awesome power of the serialisation in the binary IO code
 (thanks to Ian Scott for that.)
+
+@subsecton mil3d: 3D Images
+3D images can be found in the mil3d library.
+Their design and use is exactly equivalent to the 2D images described above.
+
+@section Algorithms
 
 @subsection Sampling along profiles
 
@@ -194,6 +200,5 @@ To sample along a profile (points p+i.u, where i=[0..n-1]) use
   mil_sample_profile_2d(vec,image,p,u,n);
 @end smallexample
 
-Here p and u are in world co-ordinates.  The image.world2im()
+Here p and u are in world co-ordinates.  The @code{image.world2im()}
 deals with the transformation into the image frame.
-

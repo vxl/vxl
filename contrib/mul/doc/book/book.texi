@@ -225,6 +225,8 @@ class my_class @{
 @};
 @end smallexample
 
+You can find the doxygen output at
+@uref{http://www.isbe.man.ac.uk/public_vxl_doc/index.html, The Public VXL Documentation site}.
 
 @section The Design and Evolution of mul
 
@@ -238,6 +240,10 @@ Design goals:
 @item uniform naming -- of course.
 @end itemize
 
+Large parts of MUL came from RADIAL a C++ Computer Vision Library developed at
+Manchester. Tim Cootes and Ian Scott were principally responsible for this
+conversion and the design of the rest.
+
 @comment ------------------------------------------------------------------
 @node    mbl, mil, Introduction, Top
 @comment node-name, next, previous,     up
@@ -250,7 +256,7 @@ Design goals:
 @comment ------------------------------------------------------------------
 @node    mil, vpdfl, mbl, Top
 @comment node-name, next, previous,     up
-@chapter mil: Manchester Image library.
+@chapter mil and mil3d: Manchester Image library.
 @cindex mil
 
 @include chapter_mil.texi
@@ -268,7 +274,7 @@ Design goals:
 @include chapter_vpdfl.texi
 
 @comment ------------------------------------------------------------------
-@node    clsfy, Conclusion, vpdfl, Top
+@node    clsfy, Index, vpdfl, Top
 @comment node-name, next, previous,     up
 @chapter clsfy: Statistical Classification
 @cindex probability
@@ -277,13 +283,6 @@ Design goals:
 
 @include chapter_clsfy.texi
 
-
-
-
-@comment ------------------------------------------------------------------
-@node    Conclusion, Index, vpdfl, Top
-@comment node-name, next,    previous, up
-@chapter Conclusion
 
 
 @comment ------------------------------------------------------------------
@@ -296,6 +295,7 @@ The directory structure of mul is below
               /mbl
               /mil
               /vpdfl
+              /clsfy
 @end example
 
 @comment ------------------------------------------------------------------
@@ -310,7 +310,7 @@ include avoiding being forced to use member functions with additional
 template parameters, confusion for users.
 
 @comment ------------------------------------------------------------------
-@node    Index,  , Conclusion, Top
+@node    Index,  , clsfy, Top
 @c        node-name,    next, previous,        up
 @unnumbered Index
 

@@ -101,7 +101,7 @@ The downside of mbl_mz_random is that it is about 5 times slower than some other
 pseudo-random number generators. For a discussion on speed/randomness trade-off see
 @cite{Press et al. Numerical Recipes in C, Cambridge, 1992.}
 
-@subsection The randomness of mbl_mz_random
+@subsection The randomness of mbl_mz_random (Advanced Topic)
 
 
 I was using a @code{vpdfl_axis_gaussian_sampler} to produce some test data, and
