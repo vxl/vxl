@@ -369,12 +369,11 @@ vil3d_gipl_image::vil3d_gipl_image(vil_stream* os,
                    double origin3,
                    float interslice_gap
                    ) : os_(os), dim1_(ni), dim2_(nj), dim3_(nk), nplanes_(nplanes),
-                   pixel_format_(format), vox_width1_(vox_width1),
-                   vox_width2_(vox_width2), vox_width3_(vox_width3),
-                   orientation_flag_(orientation_flag),
+                   vox_width1_(vox_width1), vox_width2_(vox_width2), vox_width3_(vox_width3),
+                   pixel_format_(format), orientation_flag_(orientation_flag),
                    min_val_(min_val), max_val_(max_val),
-                   origin1_(origin1), origin2_(origin2),
-                   origin3_(origin3), interslice_gap_(interslice_gap)
+                   origin1_(origin1), origin2_(origin2), origin3_(origin3),
+                   interslice_gap_(interslice_gap)
 {
   os_->ref();
 
