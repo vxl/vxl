@@ -29,7 +29,7 @@ AffineMetric::AffineMetric(const vnl_matrix<double>& A):
   assert(A(2,1) == 0);
 }
 
-void AffineMetric::set(const vnl_matrix<double>& A)
+void AffineMetric::set(vnl_matrix<double> const& A)
 {
   A_ = A;
   A_inverse_ = vnl_svd<double>(A).inverse();
