@@ -13,7 +13,6 @@ else
   as_expr=false
 fi
 
-
 ## --------------------- ##
 ## M4sh Initialization.  ##
 ## --------------------- ##
@@ -59,7 +58,6 @@ fi
     { $as_unset LC_MESSAGES || test "${LC_MESSAGES+set}" != set; } ||
       { LC_MESSAGES=C; export LC_MESSAGES; }
 
-
 # Name of the executable.
 as_me=`(basename "$0") 2>/dev/null ||
 $as_expr X/"$0" : '.*/\([^/][^/]*\)/*$' \| \
@@ -92,7 +90,6 @@ if test "${PATH_SEPARATOR+set}" != set; then
   fi
   rm -f conftest.sh
 fi
-
 
   as_lineno_1=$LINENO
   as_lineno_2=$LINENO
@@ -178,7 +175,6 @@ done
   exit
 }
 
-
 case `echo "testing\c"; echo 1,2,3`,`echo -n testing; echo 1,2,3` in
   *c*,-n*) ECHO_N= ECHO_C='
 ' ECHO_T='	' ;;
@@ -218,7 +214,6 @@ as_tr_cpp="sed y%*$as_cr_letters%P$as_cr_LETTERS%;s%[^_$as_cr_alnum]%_%g"
 # Sed expression to map a string onto a valid variable name.
 as_tr_sh="sed y%*+%pp%;s%[^_$as_cr_alnum]%_%g"
 
-
 # IFS
 # We need space, tab and new line, in precisely that order.
 as_nl='
@@ -227,7 +222,6 @@ IFS=" 	$as_nl"
 
 # CDPATH.
 $as_unset CDPATH || test "${CDPATH+set}" != set || { CDPATH=$PATH_SEPARATOR; export CDPATH; }
-
 
 # Name of the host.
 # hostname on some systems (SVR3.2, Linux) returns a bogus exit status,
@@ -294,7 +288,6 @@ ac_includes_default="\
 #if HAVE_UNISTD_H
 # include <unistd.h>
 #endif"
-
 
 # Initialize some variables set by options.
 ac_init_help=
@@ -685,7 +678,6 @@ test -n "$host_alias" && ac_tool_prefix=$host_alias-
 
 test "$silent" = yes && exec 6>/dev/null
 
-
 # Find the source files, if location was not specified.
 if test -z "$srcdir"; then
   ac_srcdir_defaulted=yes
@@ -835,7 +827,6 @@ Optional Features:
   --enable-implicit-templates        enable implicit template instantiation (default)
   --disable-implicit-templates       disable implicit template instantiation
 
-
 Some influential environment variables:
   CC          C compiler command
   CFLAGS      C compiler flags
@@ -968,13 +959,11 @@ done
 
 cat >&5 <<_ACEOF
 
-
 ## ----------- ##
 ## Core tests. ##
 ## ----------- ##
 
 _ACEOF
-
 
 # Keep a trace of the command line.
 # Strip out --no-create and --no-recursion so they do not pile up.
@@ -1065,26 +1054,21 @@ cat >>confdefs.h <<_ACEOF
 #define PACKAGE_NAME "$PACKAGE_NAME"
 _ACEOF
 
-
 cat >>confdefs.h <<_ACEOF
 #define PACKAGE_TARNAME "$PACKAGE_TARNAME"
 _ACEOF
-
 
 cat >>confdefs.h <<_ACEOF
 #define PACKAGE_VERSION "$PACKAGE_VERSION"
 _ACEOF
 
-
 cat >>confdefs.h <<_ACEOF
 #define PACKAGE_STRING "$PACKAGE_STRING"
 _ACEOF
 
-
 cat >>confdefs.h <<_ACEOF
 #define PACKAGE_BUGREPORT "$PACKAGE_BUGREPORT"
 _ACEOF
-
 
 # Let the site file select an alternate cache file if it wants to.
 # Prefer explicitly selected file to automatically selected ones.
@@ -1177,24 +1161,6 @@ ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # blurb
 echo "vcl configure: CC=$CC"
@@ -1519,7 +1485,6 @@ done
 fi
 
 fi
-
 
 test -z "$CC" && { { echo "$as_me:$LINENO: error: no acceptable C compiler found in \$PATH" >&5
 echo "$as_me: error: no acceptable C compiler found in \$PATH" >&2;}
@@ -1968,7 +1933,6 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-
 # check the Fortran compiler
 F77="g77" # FIXME:autoconf 2.12 doesn't recognise AC_PROG_F77
 
@@ -2064,7 +2028,6 @@ test -n "$ac_ct_CXX" || ac_ct_CXX="g++"
 
   CXX=$ac_ct_CXX
 fi
-
 
 # Provide some information about the compiler.
 echo "$as_me:$LINENO:" \
@@ -2297,7 +2260,6 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-
 # check the C++ preprocessor
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -2495,7 +2457,6 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-
 # remember these
 given_CXXFLAGS="$CXXFLAGS"; export given_CXXFLAGS
 given_TXXFLAGS="$TXXFLAGS"; export given_TXXFLAGS
@@ -2507,13 +2468,10 @@ given_TXXFLAGS="$TXXFLAGS"; export given_TXXFLAGS
 #FMK_CXX_IS_SUNPRO50
 #FMK_CXX_IS_NATIVE_SGI7
 
-
-
 #===========================================================================
 # VXL STUFF
 
 # from vcl/configure.in
-
 
 #--------------------------------------------------------------------------------
 # MANUAL OPTIONS
@@ -2582,13 +2540,11 @@ echo "${ECHO_T}$compiler version $version " >&6
 
 ## syntax
 
-
 echo "$as_me:$LINENO: checking whether the C++ compiler supports the keyword 'bool'" >&5
 echo $ECHO_N "checking whether the C++ compiler supports the keyword 'bool'... $ECHO_C" >&6
 if test "${vcl_cv_cxx_has_bool+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -2596,11 +2552,8 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-
 CXXFLAGS=$given_CXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -2647,7 +2600,6 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-
 fi
 echo "$as_me:$LINENO: result: $vcl_cv_cxx_has_bool" >&5
 echo "${ECHO_T}$vcl_cv_cxx_has_bool" >&6
@@ -2657,15 +2609,11 @@ else
   VCL_HAS_BOOL=0;
 fi
 
-
-
 echo "$as_me:$LINENO: checking whether the C++ compiler supports the keyword 'typename'" >&5
 echo $ECHO_N "checking whether the C++ compiler supports the keyword 'typename'... $ECHO_C" >&6
 if test "${vcl_cv_cxx_has_typename+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -2673,11 +2621,8 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-
 CXXFLAGS=$given_CXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -2728,7 +2673,6 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-
 fi
 echo "$as_me:$LINENO: result: $vcl_cv_cxx_has_typename" >&5
 echo "${ECHO_T}$vcl_cv_cxx_has_typename" >&6
@@ -2738,15 +2682,11 @@ else
   VCL_HAS_TYPENAME=0;
 fi;
 
-
-
 echo "$as_me:$LINENO: checking whether the C++ compiler accepts the keyword 'export'" >&5
 echo $ECHO_N "checking whether the C++ compiler accepts the keyword 'export'... $ECHO_C" >&6
 if test "${vcl_cv_cxx_has_export+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -2754,11 +2694,8 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-
 CXXFLAGS=$given_CXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -2820,7 +2757,6 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-
 fi
 echo "$as_me:$LINENO: result: $vcl_cv_cxx_has_export" >&5
 echo "${ECHO_T}$vcl_cv_cxx_has_export" >&6
@@ -2830,15 +2766,11 @@ else
   VCL_HAS_EXPORT=0;
 fi;
 
-
-
 echo "$as_me:$LINENO: checking whether the C++ compiler supports the keyword 'mutable'" >&5
 echo $ECHO_N "checking whether the C++ compiler supports the keyword 'mutable'... $ECHO_C" >&6
 if test "${vcl_cv_cxx_has_mutable+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -2846,11 +2778,8 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-
 CXXFLAGS=$given_CXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -2900,7 +2829,6 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-
 fi
 echo "$as_me:$LINENO: result: $vcl_cv_cxx_has_mutable" >&5
 echo "${ECHO_T}$vcl_cv_cxx_has_mutable" >&6
@@ -2910,15 +2838,11 @@ else
   VCL_HAS_MUTABLE=0;
 fi;
 
-
-
 echo "$as_me:$LINENO: checking whether the C++ compiler supports the keyword 'explicit'" >&5
 echo $ECHO_N "checking whether the C++ compiler supports the keyword 'explicit'... $ECHO_C" >&6
 if test "${vcl_cv_cxx_has_explicit+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -2926,11 +2850,8 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-
 CXXFLAGS=$given_CXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -2980,7 +2901,6 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-
 fi
 echo "$as_me:$LINENO: result: $vcl_cv_cxx_has_explicit" >&5
 echo "${ECHO_T}$vcl_cv_cxx_has_explicit" >&6
@@ -2990,15 +2910,11 @@ else
   VCL_HAS_EXPLICIT=0;
 fi;
 
-
-
 echo "$as_me:$LINENO: checking whether the C++ compiler supports the keyword 'dynamic_cast'" >&5
 echo $ECHO_N "checking whether the C++ compiler supports the keyword 'dynamic_cast'... $ECHO_C" >&6
 if test "${vcl_cv_cxx_has_dynamic_cast+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -3006,11 +2922,8 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-
 CXXFLAGS=$given_CXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -3059,7 +2972,6 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-
 fi
 echo "$as_me:$LINENO: result: $vcl_cv_cxx_has_dynamic_cast" >&5
 echo "${ECHO_T}$vcl_cv_cxx_has_dynamic_cast" >&6
@@ -3069,15 +2981,11 @@ else
   VCL_HAS_DYNAMIC_CAST=0;
 fi;
 
-
-
 echo "$as_me:$LINENO: checking whether the C++ compiler supports ISO for scope" >&5
 echo $ECHO_N "checking whether the C++ compiler supports ISO for scope... $ECHO_C" >&6
 if test "${vcl_cv_cxx_check_for_scope+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -3085,11 +2993,8 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-
 CXXFLAGS=$given_CXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -3140,7 +3045,6 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-
 fi
 echo "$as_me:$LINENO: result: $vcl_cv_cxx_check_for_scope" >&5
 echo "${ECHO_T}$vcl_cv_cxx_check_for_scope" >&6
@@ -3150,15 +3054,11 @@ else
   VCL_FOR_SCOPE_HACK=1;
 fi;
 
-
-
 echo "$as_me:$LINENO: checking whether the C++ compiler needs default values in second definition" >&5
 echo $ECHO_N "checking whether the C++ compiler needs default values in second definition... $ECHO_C" >&6
 if test "${vcl_cv_cxx_default_value+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -3166,11 +3066,8 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-
 CXXFLAGS=$given_CXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -3230,16 +3127,11 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-
-
-
 echo "$as_me:$LINENO: checking whether the C++ compiler supports member templates" >&5
 echo $ECHO_N "checking whether the C++ compiler supports member templates... $ECHO_C" >&6
 if test "${vcl_cv_cxx_has_member_templates+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -3247,11 +3139,8 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-
 CXXFLAGS=$given_CXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -3310,7 +3199,6 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-
 fi
 echo "$as_me:$LINENO: result: $vcl_cv_cxx_has_member_templates" >&5
 echo "${ECHO_T}$vcl_cv_cxx_has_member_templates" >&6
@@ -3320,15 +3208,11 @@ else
   VCL_HAS_MEMBER_TEMPLATES=0;
 fi;
 
-
-
 echo "$as_me:$LINENO: checking whether the C++ compiler supports partial specialization" >&5
 echo $ECHO_N "checking whether the C++ compiler supports partial specialization... $ECHO_C" >&6
 if test "${vcl_cv_cxx_can_do_partial_specialization+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -3336,11 +3220,8 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-
 CXXFLAGS=$given_CXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -3419,7 +3300,6 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-
 fi
 echo "$as_me:$LINENO: result: $vcl_cv_cxx_can_do_partial_specialization" >&5
 echo "${ECHO_T}$vcl_cv_cxx_can_do_partial_specialization" >&6
@@ -3429,15 +3309,11 @@ else
   VCL_CAN_DO_PARTIAL_SPECIALIZATION=0
 fi
 
-
-
 echo "$as_me:$LINENO: checking whether the C++ compiler understands the 'template <>' specialization syntax" >&5
 echo $ECHO_N "checking whether the C++ compiler understands the 'template <>' specialization syntax... $ECHO_C" >&6
 if test "${vcl_cv_cxx_define_specialization+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -3445,11 +3321,8 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-
 CXXFLAGS=$given_CXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -3508,7 +3381,6 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-
 fi
 echo "$as_me:$LINENO: result: $vcl_cv_cxx_define_specialization" >&5
 echo "${ECHO_T}$vcl_cv_cxx_define_specialization" >&6
@@ -3518,11 +3390,8 @@ else
   VCL_DEFINE_SPECIALIZATION="/* template <> */"
 fi
 
-
-
 echo "$as_me:$LINENO: checking whether the C++ compiler allows explicit instantiation of inline templates" >&5
 echo $ECHO_N "checking whether the C++ compiler allows explicit instantiation of inline templates... $ECHO_C" >&6
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -3530,11 +3399,8 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-
 CXXFLAGS=$given_TXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -3599,12 +3465,10 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 export VCL_ALLOWS_INLINE_INSTANTIATION
 
-
 if test "$VCL_ALLOWS_INLINE_INSTANTIATION" = "1"; then
 
 echo "$as_me:$LINENO: checking whether the C++ compiler needs explicit instantiation of inline function templates" >&5
 echo $ECHO_N "checking whether the C++ compiler needs explicit instantiation of inline function templates... $ECHO_C" >&6
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -3612,13 +3476,11 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
 # _CXX, not _TXX as we're trying to find out if inlines are
 # expanded when compiling non-template code.
 
 CXXFLAGS=$given_CXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -3708,14 +3570,11 @@ fi
 
 #AC_SUBST(VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION)
 
-
 echo "$as_me:$LINENO: checking whether the C++ compiler allows initialization of static const int" >&5
 echo $ECHO_N "checking whether the C++ compiler allows initialization of static const int... $ECHO_C" >&6
 if test "${vcl_cv_cxx_static_const_init_int+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -3723,11 +3582,8 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-
 CXXFLAGS=$given_CXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -3781,7 +3637,6 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-
 fi
 echo "$as_me:$LINENO: result: $vcl_cv_cxx_static_const_init_int" >&5
 echo "${ECHO_T}$vcl_cv_cxx_static_const_init_int" >&6
@@ -3790,10 +3645,6 @@ if test "$vcl_cv_cxx_static_const_init_int" = "yes" ; then
 else
   VCL_STATIC_CONST_INIT_INT=0
 fi
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -3804,10 +3655,8 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 echo "$as_me:$LINENO: checking whether the C++ compiler allows initialization of static const floats" >&5
 echo $ECHO_N "checking whether the C++ compiler allows initialization of static const floats... $ECHO_C" >&6
 
-
 CXXFLAGS=$given_CXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -3868,10 +3717,6 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 export VCL_STATIC_CONST_INIT_FLOAT
 
-
-
-
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -3881,10 +3726,8 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 echo "$as_me:$LINENO: checking whether the C++ compiler requires implementation of static consts" >&5
 echo $ECHO_N "checking whether the C++ compiler requires implementation of static consts... $ECHO_C" >&6
 
-
 CXXFLAGS=$given_CXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -3959,11 +3802,8 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 export VCL_IMPLEMENT_STATIC_CONSTS
 
-
-
 echo "$as_me:$LINENO: checking whether the C++ compiler accepts templated definitions of static class template members" >&5
 echo $ECHO_N "checking whether the C++ compiler accepts templated definitions of static class template members... $ECHO_C" >&6
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -3971,11 +3811,8 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-
 CXXFLAGS=$given_CXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -3999,7 +3836,6 @@ char *A<T>::fmt = 0;
 int
 main ()
 {
-
 
   ;
   return 0;
@@ -4034,11 +3870,8 @@ fi
 rm -f conftest.$ac_objext conftest.$ac_ext
 export VCL_CAN_DO_STATIC_TEMPLATE_MEMBER
 
-
-
 echo "$as_me:$LINENO: checking whether the C++ compiler accepts non-type template parameters to function templates" >&5
 echo $ECHO_N "checking whether the C++ compiler accepts non-type template parameters to function templates... $ECHO_C" >&6
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -4046,11 +3879,8 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-
 CXXFLAGS=$given_CXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -4081,7 +3911,6 @@ template void splok_that_splek(splek<double, 3> &);
 int
 main ()
 {
-
 
   ;
   return 0;
@@ -4116,10 +3945,6 @@ fi
 rm -f conftest.$ac_objext conftest.$ac_ext
 export VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER
 
-
-
-
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -4129,10 +3954,8 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 echo "$as_me:$LINENO: checking whether the C++ compiler needs friend declarations for proper template function overloading" >&5
 echo $ECHO_N "checking whether the C++ compiler needs friend declarations for proper template function overloading... $ECHO_C" >&6
 
-
 CXXFLAGS=$given_CXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -4220,10 +4043,6 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 export VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD
 
-
-
-
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -4233,10 +4052,8 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 echo "$as_me:$LINENO: checking whether the C++ compiler requires explicit casts where it should not" >&5
 echo $ECHO_N "checking whether the C++ compiler requires explicit casts where it should not... $ECHO_C" >&6
 
-
 CXXFLAGS=$given_CXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -4337,10 +4154,6 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 export VCL_OVERLOAD_CAST
 
-
-
-
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -4350,10 +4163,8 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 echo "$as_me:$LINENO: checking whether the C++ compiler requires <> in templated forward/friend declarations" >&5
 echo $ECHO_N "checking whether the C++ compiler requires <> in templated forward/friend declarations... $ECHO_C" >&6
 
-
 CXXFLAGS=$given_CXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -4442,11 +4253,8 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 export VCL_NULL_TMPL_ARGS
 
-
-
 echo "$as_me:$LINENO: checking whether the C++ compiler allows static data members" >&5
 echo $ECHO_N "checking whether the C++ compiler allows static data members... $ECHO_C" >&6
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -4454,11 +4262,8 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-
 CXXFLAGS=$given_TXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -4521,10 +4326,6 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 export VCL_NO_STATIC_DATA_MEMBERS
 
-
-
-
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -4534,10 +4335,8 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 echo "$as_me:$LINENO: checking whether the C++ compiler distinguishes templated and non-templated functions" >&5
 echo $ECHO_N "checking whether the C++ compiler distinguishes templated and non-templated functions... $ECHO_C" >&6
 
-
 CXXFLAGS=$given_CXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -4607,11 +4406,8 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 export VCL_HAS_TEMPLATE_SYMBOLS
 
-
-
 echo "$as_me:$LINENO: checking whether the C++ compiler instantiates templates implicitly" >&5
 echo $ECHO_N "checking whether the C++ compiler instantiates templates implicitly... $ECHO_C" >&6
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -4619,16 +4415,12 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-
 CXXFLAGS=$given_CXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
 #include "confdefs.h"
-
 
 struct fsm_plap_normal { };
 template <class I>
@@ -4641,7 +4433,6 @@ void fsm_plop(I b, I e, T x, fsm_plap_normal)
     *p = x;
 }
 
-
 struct fsm_plap_double_star { };
 inline fsm_plap_double_star fsm_plap(double *) { return fsm_plap_double_star(); }
 
@@ -4652,14 +4443,12 @@ void fsm_plop(double *b, double *e, T x, fsm_plap_double_star)
     *p = x;
 }
 
-
 template <class I, class T>
 inline void fsm_plip(I b, I e, T x)
 {
   if (b != e)
     fsm_plop(b, e, x, fsm_plap(b));
 }
-
 
 void f()
 {
@@ -4670,7 +4459,6 @@ void f()
   fsm_plip(darray, darray+20, 2718);
 }
 
-
 #ifdef F77_DUMMY_MAIN
 #  ifdef __cplusplus
      extern "C"
@@ -4680,7 +4468,6 @@ void f()
 int
 main ()
 {
-
 
   ;
   return 0;
@@ -4727,18 +4514,14 @@ fi
 echo "$as_me:$LINENO: checking whether the C++ compiler accepts complete types as default template parameters" >&5
 echo $ECHO_N "checking whether the C++ compiler accepts complete types as default template parameters... $ECHO_C" >&6
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-
 CXXFLAGS=$given_CXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -4772,7 +4555,6 @@ X<int, less<short> > b;
 int
 main ()
 {
-
 
   ;
   return 0;
@@ -4812,18 +4594,14 @@ if test "$VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER" = "1"; then
 echo "$as_me:$LINENO: checking whether the C++ compiler accepts default template type parameters templated over earlier parameters" >&5
 echo $ECHO_N "checking whether the C++ compiler accepts default template type parameters templated over earlier parameters... $ECHO_C" >&6
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-
 CXXFLAGS=$given_CXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -4847,7 +4625,6 @@ X<int, less<short> > b;
 int
 main ()
 {
-
 
   ;
   return 0;
@@ -4888,10 +4665,8 @@ export VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER;
 fi
 #VCL_CXX_DEFAULT_TMPL_ARG
 
-
 echo "$as_me:$LINENO: checking whether the C++ compiler needs the SunPro class scope hack" >&5
 echo $ECHO_N "checking whether the C++ compiler needs the SunPro class scope hack... $ECHO_C" >&6
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -4899,11 +4674,8 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-
 CXXFLAGS=$given_CXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -4987,15 +4759,11 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 export VCL_SUNPRO_CLASS_SCOPE_HACK
 
-
-
 echo "$as_me:$LINENO: checking whether the C++ compiler has working exceptions" >&5
 echo $ECHO_N "checking whether the C++ compiler has working exceptions... $ECHO_C" >&6
 if test "${vcl_cv_cxx_has_exceptions+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -5003,16 +4771,12 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-
 CXXFLAGS=$given_CXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
 #include "confdefs.h"
-
 
 struct bizop { };
 
@@ -5086,7 +4850,6 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
 fi
 echo "$as_me:$LINENO: result: $vcl_cv_cxx_has_exceptions" >&5
 echo "${ECHO_T}$vcl_cv_cxx_has_exceptions" >&6
@@ -5096,15 +4859,11 @@ else
   VCL_HAS_EXCEPTIONS=0;
 fi;
 
-
-
 echo "$as_me:$LINENO: checking whether the C++ compiler has working namespaces" >&5
 echo $ECHO_N "checking whether the C++ compiler has working namespaces... $ECHO_C" >&6
 if test "${vcl_cv_cxx_has_namespaces+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -5112,11 +4871,8 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-
 CXXFLAGS=$given_CXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -5233,7 +4989,6 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
 fi
 echo "$as_me:$LINENO: result: $vcl_cv_cxx_has_namespaces" >&5
 echo "${ECHO_T}$vcl_cv_cxx_has_namespaces" >&6
@@ -5243,15 +4998,11 @@ else
   VCL_HAS_NAMESPACES=0;
 fi;
 
-
-
 echo "$as_me:$LINENO: checking whether the C++ compiler allows std:: for the standard library" >&5
 echo $ECHO_N "checking whether the C++ compiler allows std:: for the standard library... $ECHO_C" >&6
 if test "${vcl_cv_cxx_allows_namespace_std+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -5259,11 +5010,8 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-
 CXXFLAGS=$given_CXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -5318,7 +5066,6 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
 fi
 echo "$as_me:$LINENO: result: $vcl_cv_cxx_allows_namespace_std" >&5
 echo "${ECHO_T}$vcl_cv_cxx_allows_namespace_std" >&6
@@ -5328,7 +5075,6 @@ else
   VCL_ALLOWS_NAMESPACE_STD=0;
 fi;
 
-
 if test "$VCL_ALLOWS_NAMESPACE_STD" = "1"; then
 
 echo "$as_me:$LINENO: checking whether the C++ compiler needs std:: for the standard library" >&5
@@ -5337,19 +5083,14 @@ if test "${vcl_cv_cxx_needs_namespace_std+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
 
-
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-
 CXXFLAGS=$given_CXXFLAGS
 export CXXFLAGS
-
 
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
@@ -5404,7 +5145,6 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
 fi
 echo "$as_me:$LINENO: result: $vcl_cv_cxx_needs_namespace_std" >&5
 echo "${ECHO_T}$vcl_cv_cxx_needs_namespace_std" >&6
@@ -5417,7 +5157,6 @@ fi;
 else
 VCL_NEEDS_NAMESPACE_STD="0"; export VCL_NEEDS_NAMESPACE_STD
 fi
-
 
 ## architecture
 echo "$as_me:$LINENO: checking whether byte ordering is bigendian" >&5
@@ -5632,10 +5371,6 @@ fi
 export VCL_BIG_ENDIAN
 export VCL_LITTLE_ENDIAN
 
-
-
-
-
 ## standard header files.
 
 echo "$as_me:$LINENO: checking for ANSI C header files" >&5
@@ -5779,14 +5514,6 @@ fi
 
 # On IRIX 5.3, sys/types and inttypes.h are conflicting.
 
-
-
-
-
-
-
-
-
 for ac_header in sys/types.h sys/stat.h stdlib.h string.h memory.h strings.h \
                   inttypes.h stdint.h unistd.h
 do
@@ -5833,10 +5560,6 @@ _ACEOF
 fi
 
 done
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -5951,16 +5674,11 @@ else
   VCL_CXX_HAS_HEADER_CASSERT=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -6075,16 +5793,11 @@ else
   VCL_CXX_HAS_HEADER_CISO646=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -6199,16 +5912,11 @@ else
   VCL_CXX_HAS_HEADER_CSETJMP=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -6323,16 +6031,11 @@ else
   VCL_CXX_HAS_HEADER_CSTDIO=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -6447,16 +6150,11 @@ else
   VCL_CXX_HAS_HEADER_CTIME=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -6571,16 +6269,11 @@ else
   VCL_CXX_HAS_HEADER_CCTYPE=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -6695,16 +6388,11 @@ else
   VCL_CXX_HAS_HEADER_CLIMITS=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -6819,16 +6507,11 @@ else
   VCL_CXX_HAS_HEADER_CSIGNAL=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -6943,16 +6626,11 @@ else
   VCL_CXX_HAS_HEADER_CSTDLIB=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -7067,16 +6745,11 @@ else
   VCL_CXX_HAS_HEADER_CWCHAR=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -7191,16 +6864,11 @@ else
   VCL_CXX_HAS_HEADER_CERRNO=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -7315,16 +6983,11 @@ else
   VCL_CXX_HAS_HEADER_CLOCALE=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -7439,16 +7102,11 @@ else
   VCL_CXX_HAS_HEADER_CSTDARG=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -7563,16 +7221,11 @@ else
   VCL_CXX_HAS_HEADER_CSTRING=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -7687,16 +7340,11 @@ else
   VCL_CXX_HAS_HEADER_CWCTYPE=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -7811,16 +7459,11 @@ else
   VCL_CXX_HAS_HEADER_CFLOAT=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -7935,16 +7578,11 @@ else
   VCL_CXX_HAS_HEADER_CMATH=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -8059,16 +7697,11 @@ else
   VCL_CXX_HAS_HEADER_CSTDDEF=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -8183,16 +7816,11 @@ else
   VCL_CXX_HAS_HEADER_ALGORITHM=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -8307,16 +7935,11 @@ else
   VCL_CXX_HAS_HEADER_IOMANIP=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -8431,16 +8054,11 @@ else
   VCL_CXX_HAS_HEADER_LIST=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -8555,16 +8173,11 @@ else
   VCL_CXX_HAS_HEADER_OSTREAM=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -8679,16 +8292,11 @@ else
   VCL_CXX_HAS_HEADER_STREAMBUF=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -8803,16 +8411,11 @@ else
   VCL_CXX_HAS_HEADER_BITSET=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -8927,16 +8530,11 @@ else
   VCL_CXX_HAS_HEADER_IOS=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -9051,16 +8649,11 @@ else
   VCL_CXX_HAS_HEADER_LOCALE=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -9175,16 +8768,11 @@ else
   VCL_CXX_HAS_HEADER_QUEUE=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -9299,16 +8887,11 @@ else
   VCL_CXX_HAS_HEADER_STRING=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -9423,16 +9006,11 @@ else
   VCL_CXX_HAS_HEADER_COMPLEX=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -9547,16 +9125,11 @@ else
   VCL_CXX_HAS_HEADER_IOSFWD=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -9671,16 +9244,11 @@ else
   VCL_CXX_HAS_HEADER_MAP=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -9795,16 +9363,11 @@ else
   VCL_CXX_HAS_HEADER_SET=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -9919,16 +9482,11 @@ else
   VCL_CXX_HAS_HEADER_TYPEINFO=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -10043,16 +9601,11 @@ else
   VCL_CXX_HAS_HEADER_DEQUE=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -10167,16 +9720,11 @@ else
   VCL_CXX_HAS_HEADER_IOSTREAM=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -10291,16 +9839,11 @@ else
   VCL_CXX_HAS_HEADER_MEMORY=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -10415,16 +9958,11 @@ else
   VCL_CXX_HAS_HEADER_SSTREAM=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -10539,16 +10077,11 @@ else
   VCL_CXX_HAS_HEADER_UTILITY=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -10663,16 +10196,11 @@ else
   VCL_CXX_HAS_HEADER_EXCEPTION=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -10787,16 +10315,11 @@ else
   VCL_CXX_HAS_HEADER_ISTREAM=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -10911,16 +10434,11 @@ else
   VCL_CXX_HAS_HEADER_NEW=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -11035,16 +10553,11 @@ else
   VCL_CXX_HAS_HEADER_STACK=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -11159,16 +10672,11 @@ else
   VCL_CXX_HAS_HEADER_VALARRAY=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -11283,16 +10791,11 @@ else
   VCL_CXX_HAS_HEADER_FSTREAM=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -11407,16 +10910,11 @@ else
   VCL_CXX_HAS_HEADER_ITERATOR=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -11531,16 +11029,11 @@ else
   VCL_CXX_HAS_HEADER_NUMERIC=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -11655,16 +11148,11 @@ else
   VCL_CXX_HAS_HEADER_STDEXCEPT=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -11779,16 +11267,11 @@ else
   VCL_CXX_HAS_HEADER_VECTOR=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -11903,16 +11386,11 @@ else
   VCL_CXX_HAS_HEADER_FUNCTIONAL=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -12027,16 +11505,11 @@ else
   VCL_CXX_HAS_HEADER_LIMITS=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -12151,122 +11624,32 @@ else
   VCL_CXX_HAS_HEADER_STRSTREAM=0
 fi
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-
-
 #--------------------------------------------------------------------------------
 # SUBSTITUTIONS
 
 # manual
 
-
-
-
 # compiler
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #AC_SUBST(VCL_DO_NOT_INSTANTIATE)
 #AC_SUBST(VCL_UNINSTANTIATE_SPECIALIZATION)
 #AC_SUBST(VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION) # dubious
 
-
-
-
-
-
-
-
+#
 
 #
 
-
-
-
 #
-
-
-
-
-#
-
-
 
 # standard header files.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # from vxl/configure.in
-
-
 
 # fsm@robots. after running glimpse, I can't find anywhere but
 # vxl/vbl/vbl_timer.cxx which uses TWO_ARG_GETTIME. Can someone
@@ -12387,7 +11770,6 @@ else
   VXL_HAS_PTHREAD_H=0
 fi
 
-
 if test "${ac_cv_header_semaphore_h+set}" = set; then
   echo "$as_me:$LINENO: checking for semaphore.h" >&5
 echo $ECHO_N "checking for semaphore.h... $ECHO_C" >&6
@@ -12494,8 +11876,6 @@ if test $ac_cv_header_semaphore_h = yes; then
 else
   VXL_HAS_SEMAPHORE_H=0
 fi
-
-
 
 echo "checking <unistd.h>..."
 
@@ -12985,9 +12365,6 @@ else
   VXL_UNISTD_HAS_TELL=0
 fi
 
-
-
-
 echo "$as_me:$LINENO: checking for machine word sizes " >&5
 echo $ECHO_N "checking for machine word sizes ... $ECHO_C" >&6
 cat > check_vxl_words.cc <<EOF
@@ -13009,10 +12386,10 @@ cat > check_vxl_words.cc <<EOF
 #define QUOTE 34
 
 #define macro(NAME, n, cand, cnd2) \
-  if (CHAR_BIT==8 && sizeof(cand)==n) \
-    printf("VXL_" #NAME "=%c" #cand "%c;\nVXL_HAS_" #NAME "=%c1%c;\n" , QUOTE, QUOTE, QUOTE, QUOTE); \
-  else if (CHAR_BIT==8 && sizeof(cnd2)==n) \
+  if (CHAR_BIT==8 && sizeof(cnd2)==n) \
     printf("VXL_" #NAME "=%c" #cnd2 "%c;\nVXL_HAS_" #NAME "=%c1%c;\n" , QUOTE, QUOTE, QUOTE, QUOTE); \
+  else if (CHAR_BIT==8 && sizeof(cand)==n) \
+    printf("VXL_" #NAME "=%c" #cand "%c;\nVXL_HAS_" #NAME "=%c1%c;\n" , QUOTE, QUOTE, QUOTE, QUOTE); \
   else \
     printf("VXL_" #NAME "=%c" "void" "%c;\nVXL_HAS_" #NAME "=%c0%c;\n" , QUOTE, QUOTE, QUOTE, QUOTE); \
   printf("export VXL_" #NAME ";\nexport VXL_HAS_" #NAME ";\n" )
@@ -13039,15 +12416,11 @@ echo "${ECHO_T}error " >&6
 fi
 rm -f ./check_vxl_words.*
 
-
-
 echo "$as_me:$LINENO: checking whether we have a working qsort" >&5
 echo $ECHO_N "checking whether we have a working qsort... $ECHO_C" >&6
 if test "${ac_vxl_has_qsort+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-
-
 
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -13105,7 +12478,6 @@ ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
 
 fi
 echo "$as_me:$LINENO: result: $ac_vxl_has_qsort" >&5
@@ -13224,8 +12596,6 @@ else
   VXL_HAS_IEEEFP_H=0
 fi
 
-
-
 # these math functions are probably defined in libm, so make sure the
 # library can be found before trying to link against it.
 
@@ -13293,15 +12663,11 @@ _ACEOF
 
 fi
 
-
-
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
 
   echo "$as_me:$LINENO: checking whether <math.h> provides finite()" >&5
 echo $ECHO_N "checking whether <math.h> provides finite()... $ECHO_C" >&6
@@ -13361,16 +12727,11 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-
-
-
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
 
   echo "$as_me:$LINENO: checking whether <math.h> provides sqrtf()" >&5
 echo $ECHO_N "checking whether <math.h> provides sqrtf()... $ECHO_C" >&6
@@ -13430,16 +12791,11 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-
-
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
 
   echo "$as_me:$LINENO: checking whether <ieeefp.h> provides finite()" >&5
 echo $ECHO_N "checking whether <ieeefp.h> provides finite()... $ECHO_C" >&6
@@ -13499,16 +12855,11 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-
-
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
 
   echo "$as_me:$LINENO: checking whether <stdlib.h> provides lrand48()" >&5
 echo $ECHO_N "checking whether <stdlib.h> provides lrand48()... $ECHO_C" >&6
@@ -13561,7 +12912,6 @@ echo "${ECHO_T}no" >&6
 
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
-
 
   echo "$as_me:$LINENO: checking whether <stdlib.h> provides drand48()" >&5
 echo $ECHO_N "checking whether <stdlib.h> provides drand48()... $ECHO_C" >&6
@@ -13620,10 +12970,6 @@ ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 # check for bigendian
 echo "$as_me:$LINENO: checking whether byte ordering is bigendian" >&5
@@ -13841,50 +13187,12 @@ fi
 
 # ...
 
-
-
 # libraries
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # architecture
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 CXXFLAGS=$given_CXXFLAGS
 TXXFLAGS=$given_TXXFLAGS
-
 
 ac_config_files="$ac_config_files vcl/vcl_config_manual.h~:vcl/vcl_config_manual.h.in vcl/vcl_config_compiler.h~:vcl/vcl_config_compiler.h.in vcl/vcl_config_headers.h~:vcl/vcl_config_headers.h.in vxl/vxl_config.h~:vxl/vxl_config.h.in"
 cat >confcache <<\_ACEOF
@@ -13993,8 +13301,6 @@ ac_LF_and_DOT=`echo; echo .`
 DEFS=`sed -n -f confdef2opt.sed confdefs.h | tr "$ac_LF_and_DOT" ' .'`
 rm -f confdef2opt.sed
 
-
-
 : ${CONFIG_STATUS=./config.status}
 ac_clean_files_save=$ac_clean_files
 ac_clean_files="$ac_clean_files $CONFIG_STATUS"
@@ -14058,7 +13364,6 @@ fi
     { $as_unset LC_MESSAGES || test "${LC_MESSAGES+set}" != set; } ||
       { LC_MESSAGES=C; export LC_MESSAGES; }
 
-
 # Name of the executable.
 as_me=`(basename "$0") 2>/dev/null ||
 $as_expr X/"$0" : '.*/\([^/][^/]*\)/*$' \| \
@@ -14091,7 +13396,6 @@ if test "${PATH_SEPARATOR+set}" != set; then
   fi
   rm -f conftest.sh
 fi
-
 
   as_lineno_1=$LINENO
   as_lineno_2=$LINENO
@@ -14179,7 +13483,6 @@ echo "$as_me: error: cannot create $as_me.lineno; rerun with a POSIX shell" >&2;
   exit
 }
 
-
 case `echo "testing\c"; echo 1,2,3`,`echo -n testing; echo 1,2,3` in
   *c*,-n*) ECHO_N= ECHO_C='
 ' ECHO_T='	' ;;
@@ -14218,7 +13521,6 @@ as_tr_cpp="sed y%*$as_cr_letters%P$as_cr_LETTERS%;s%[^_$as_cr_alnum]%_%g"
 
 # Sed expression to map a string onto a valid variable name.
 as_tr_sh="sed y%*+%pp%;s%[^_$as_cr_alnum]%_%g"
-
 
 # IFS
 # We need space, tab and new line, in precisely that order.
@@ -14373,10 +13675,6 @@ Try \`$0 --help' for more information." >&2;}
 done
 
 _ACEOF
-
-
-
-
 
 cat >>$CONFIG_STATUS <<\_ACEOF
 for ac_config_target in $ac_config_targets
@@ -14724,8 +14022,6 @@ ac_abs_top_builddir=`cd "$ac_dir" && cd $ac_top_builddir && pwd`
 ac_abs_srcdir=`cd "$ac_dir" && cd $ac_srcdir && pwd`
 ac_abs_top_srcdir=`cd "$ac_dir" && cd $ac_top_srcdir && pwd`
 
-
-
   if test x"$ac_file" != x-; then
     { echo "$as_me:$LINENO: creating $ac_file" >&5
 echo "$as_me: creating $ac_file" >&6;}
@@ -14805,7 +14101,6 @@ _ACEOF
 chmod +x $CONFIG_STATUS
 ac_clean_files=$ac_clean_files_save
 
-
 # configure is writing to config.log, and then calls config.status.
 # config.status does its own redirection, appending to config.log.
 # Unfortunately, on DOS this fails, as config.log is still kept open
@@ -14823,7 +14118,6 @@ if test "$no_create" != yes; then
   # would make configure fail if this is the last instruction.
   $ac_cs_success || { (exit 1); exit 1; }
 fi
-
 
 # only touch files that actually change.
 for f in "vcl/vcl_config_manual.h" "vcl/vcl_config_compiler.h" "vcl/vcl_config_headers.h" "vxl/vxl_config.h"; do

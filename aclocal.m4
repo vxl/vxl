@@ -97,8 +97,6 @@ fi;
 ])
 
 
-
-
 ### Check whether the compiler supports "export"
 AC_DEFUN(VCL_CXX_HAS_EXPORT,[
 AC_CACHE_CHECK([whether the C++ compiler accepts the keyword 'export'],vcl_cv_cxx_has_export,[
@@ -136,8 +134,6 @@ fi;
 ])
 
 
-
-
 ### Check whether the compiler supports "mutable"
 AC_DEFUN(VCL_CXX_HAS_MUTABLE,[
 AC_CACHE_CHECK([whether the C++ compiler supports the keyword 'mutable'],vcl_cv_cxx_has_mutable,[
@@ -163,8 +159,6 @@ fi;
 ])
 
 
-
-
 ### Check whether the compiler supports "explicit"
 AC_DEFUN(VCL_CXX_HAS_EXPLICIT,[
 AC_CACHE_CHECK([whether the C++ compiler supports the keyword 'explicit'],vcl_cv_cxx_has_explicit,[
@@ -188,8 +182,6 @@ else
   VCL_HAS_EXPLICIT=0;
 fi;
 ])
-
-
 
 
 ### Check whether the compiler supports exceptions
@@ -458,7 +450,6 @@ fi;
 dnl
 
 
-
 ### Check whether the compiler supports partial specialization
 AC_DEFUN(VCL_CXX_CAN_DO_PARTIAL_SPECIALIZATION,[
 AC_CACHE_CHECK(whether the C++ compiler supports partial specialization,vcl_cv_cxx_can_do_partial_specialization,[
@@ -524,7 +515,6 @@ AC_LANG_RESTORE
 dnl
 
 
-
 ### Check whether the compiler needs values in definitions
 # of functions taking default values.
 AC_DEFUN(VCL_CXX_DEFAULT_VALUE,[
@@ -550,7 +540,6 @@ fi
 AC_LANG_RESTORE
 ])
 dnl
-
 
 
 ###
@@ -752,9 +741,6 @@ export VCL_OVERLOAD_CAST
 dnl
 
 
-
-
-
 ###
 AC_DEFUN(VCL_CXX_NULL_TMPL_ARGS,[
 AC_LANG_SAVE
@@ -810,9 +796,6 @@ export VCL_NULL_TMPL_ARGS
 dnl
 
 
-
-
-
 ###
 AC_DEFUN(VCL_CXX_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD,[
 AC_LANG_SAVE
@@ -865,7 +848,6 @@ AC_LANG_RESTORE
 export VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD
 ])
 dnl
-
 
 
 ### Check whether the compiler mangles function templates differently
@@ -949,7 +931,6 @@ export VCL_ALLOWS_INLINE_INSTANTIATION
 dnl
 
 
-
 ### Check whether the compiler allows static data members
 AC_DEFUN(VCL_CXX_NO_STATIC_DATA_MEMBERS,[
 AC_MSG_CHECKING(whether the C++ compiler allows static data members)
@@ -977,7 +958,6 @@ AC_LANG_RESTORE
 export VCL_NO_STATIC_DATA_MEMBERS
 ])
 dnl
-
 
 
 ### Check whether the compiler needs explicit instantiation of inline function templates.
@@ -1025,9 +1005,6 @@ AC_LANG_RESTORE
 export VCL_NEEDS_INLINE_INSTANTIATION
 ])
 dnl
-
-
-
 
 
 ### Check whether the compiler needs the SunPro class scope hack.
@@ -1080,8 +1057,6 @@ export VCL_SUNPRO_CLASS_SCOPE_HACK
 dnl
 
 
-
-
 ### Check whether the compiler needs default template arguments repeated.
 AC_DEFUN(VCL_CXX_DEFAULT_TMPL_ARG,[
 AC_MSG_CHECKING(whether the C++ compiler needs default template arguments repeated)
@@ -1118,22 +1093,6 @@ AC_LANG_RESTORE
 export VCL_DEFAULT_TMPL_ARG
 ])
 dnl
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ### Check whether the compiler accepts (complete) default template type parameters.
@@ -1175,9 +1134,6 @@ export VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER
 ])
 
 
-
-
-
 ### Check whether the default template type parameters can be templated over earlier parameters.
 AC_DEFUN(VCL_CXX_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER,[
 AC_MSG_CHECKING(whether the C++ compiler accepts default template type parameters templated over earlier parameters)
@@ -1207,8 +1163,6 @@ export VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER
 ])
 
 
-
-
 ###
 AC_DEFUN(VCL_CXX_CAN_DO_STATIC_TEMPLATE_MEMBER,[
 AC_MSG_CHECKING(whether the C++ compiler accepts templated definitions of static class template members)
@@ -1236,7 +1190,6 @@ VCL_CAN_DO_STATIC_TEMPLATE_MEMBER="0"
 ])
 export VCL_CAN_DO_STATIC_TEMPLATE_MEMBER
 ])
-
 
 
 ###
@@ -1273,11 +1226,6 @@ VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER="0"
 ])
 export VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER
 ])
-
-
-
-
-
 
 
 ### 
@@ -1342,10 +1290,8 @@ export VCL_CAN_DO_IMPLICIT_TEMPLATES
 ])
 
 
-
 #===========================================================================
 # from vxl/aclocal.m4
-
 
 dnl ----------------------------------------------------------------------------
 dnl  VXL_CXX_UNISTD
@@ -1418,10 +1364,10 @@ cat > check_vxl_words.cc <<EOF
 #define QUOTE 34
 
 #define macro(NAME, n, cand, cnd2) \
-  if (CHAR_BIT==8 && sizeof(cand)==n) \
-    printf("VXL_" #NAME "=%c" #cand "%c;\nVXL_HAS_" #NAME "=%c1%c;\n" , QUOTE, QUOTE, QUOTE, QUOTE); \
-  else if (CHAR_BIT==8 && sizeof(cnd2)==n) \
+  if (CHAR_BIT==8 && sizeof(cnd2)==n) \
     printf("VXL_" #NAME "=%c" #cnd2 "%c;\nVXL_HAS_" #NAME "=%c1%c;\n" , QUOTE, QUOTE, QUOTE, QUOTE); \
+  else if (CHAR_BIT==8 && sizeof(cand)==n) \
+    printf("VXL_" #NAME "=%c" #cand "%c;\nVXL_HAS_" #NAME "=%c1%c;\n" , QUOTE, QUOTE, QUOTE, QUOTE); \
   else \
     printf("VXL_" #NAME "=%c" "void" "%c;\nVXL_HAS_" #NAME "=%c0%c;\n" , QUOTE, QUOTE, QUOTE, QUOTE); \
   printf("export VXL_" #NAME ";\nexport VXL_HAS_" #NAME ";\n" )
@@ -1575,7 +1521,6 @@ AC_LANG_CPLUSPLUS
 VXL_CXX_CHECK_PROVIDES([ieeefp.h],[finite],[4.0],[VXL_IEEEFP_HAS_FINITE])
 AC_LANG_RESTORE
 ])
-
 
 
 dnl ------------------------------------------------------------
