@@ -85,10 +85,7 @@ bool vgui_listmanager2D::is_visible(int v) {
 }
 
 bool vgui_listmanager2D::index_ok(int v) {
-  if (v < 0 || v >= children.size())
-    return false;
-
-  return true;
+  return v >= 0 && v < int(children.size());
 }
 
 bool vgui_listmanager2D::help() {

@@ -123,7 +123,7 @@ void next_style()
   if (!set_style(the_style++))
     the_style = 0;
 
-  for(int i = 0; i < thevrmls.size(); ++i)
+  for (unsigned int i = 0; i < thevrmls.size(); ++i)
     thevrmls[i]->invalidate_vrml();
 }
 
@@ -157,7 +157,7 @@ int main(int argc, char **argv)
 
   vgui_deck_tableau_new deck;
   thedeck = deck;
-  for(int i = 1; i < argc; ++i) {
+  for (int i = 1; i < argc; ++i) {
     vgui_tableau_sptr tab3d = make_3d_tableau(argv[i]);
     thedeck->add(tab3d);
   }

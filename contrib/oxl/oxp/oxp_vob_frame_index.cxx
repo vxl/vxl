@@ -23,7 +23,7 @@ bool oxp_vob_frame_index::load(char const* filename)
     vcl_cerr << "oxp_vob_frame_index: Cannot read IDX file ["<< filename <<"]\n";
     return false;
   }
-  for(vul_awk awk(f); awk; ++awk) {
+  for (vul_awk awk(f); awk; ++awk) {
     // Skip comment and ----- lines
     oxp_vob_frame_index_entry e;
     if (vcl_sscanf(awk.line(), " %x | %d", &e.lba, &e.frame) == 2)
@@ -32,8 +32,8 @@ bool oxp_vob_frame_index::load(char const* filename)
   l = tmp;
 
   // assert that l is sorted by frame
-  for(int i = 1; i < l.size(); ++i)
-    assert(l[i].frame > l[i-1].frame);
+  for (unsigned int i = 0; i+1 < l.size(); ++i)
+    assert(l[i+1].frame > l[i].frame);
   vcl_fprintf(stderr, "Loaded %d entries from [%s]\n", l.size(), filename);
   if (l.size() == 0) {
     vcl_fprintf(stderr, "WARNING: No index entries -- all seeks from start\n");

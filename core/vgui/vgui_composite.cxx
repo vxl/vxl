@@ -64,7 +64,7 @@ vgui_composite::vgui_composite(vgui_tableau_sptr const& child0, vgui_tableau_spt
 vgui_composite::vgui_composite(vcl_vector<vgui_tableau_sptr> const& the_children)
   : c_enable_key_bindings(default_c_enable_key_bindings)
 {
-  for(unsigned int i = 0; i < the_children.size(); ++i)
+  for (unsigned int i = 0; i < the_children.size(); ++i)
     add(the_children[i]);
   enable_key_bindings = false;
 }
@@ -153,8 +153,7 @@ void vgui_composite::notify() const {
   for (vcl_vector<vgui_slot>::const_iterator t_iter = children.begin();
        t_iter != children.end(); ++t_iter) {
     vgui_tableau_sptr t = *t_iter;
-    if(t)
-      t->notify();
+    if (t) t->notify();
   }
 #endif
 }
@@ -221,10 +220,7 @@ bool vgui_composite::remove_child(vgui_tableau_sptr const &t) {
 
 
 bool vgui_composite::index_ok(int v) {
-  if (v < 0 || v >= children.size())
-    return false;
-
-  return true;
+  return v >= 0 && v < int(children.size());
 }
 
 

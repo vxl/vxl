@@ -85,9 +85,9 @@ public:
 
   // These fields describe where in the image the section comes from,
   // how big it is and its resolution.
-  int x, y;                   // starting position in original image.
-  unsigned w, h;              // no of columns and rows (in the section).
-  int allocw, alloch;         // actual width and height allocated
+  unsigned int x, y;          // starting position in original image.
+  unsigned int w, h;          // no of columns and rows (in the section).
+  unsigned int allocw, alloch;// actual width and height allocated
   int image_id_;
 
   // Pointer to pixel buffer, as given to glDrawPixels() or glTexImage2D().

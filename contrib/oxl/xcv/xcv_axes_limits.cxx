@@ -76,7 +76,7 @@ double xcv_axes_limits::calc_tick_spacing()
   exp_n = (int)vcl_floor(vcl_log10(l));
   exp = vcl_pow(10.0, exp_n);
 
-  for (int i = 0; i < sizeof trythese / sizeof trythese[0]; ++i) {
+  for (unsigned int i = 0; i < sizeof trythese / sizeof trythese[0]; ++i) {
     double tickspacing = (trythese[i] * exp);
     double num_ticks_at_this_spacing = l / tickspacing;
     if (5.0 < num_ticks_at_this_spacing && num_ticks_at_this_spacing < 15.0)

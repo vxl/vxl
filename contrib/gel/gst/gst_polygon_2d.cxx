@@ -1,6 +1,6 @@
-/*
-  crossge@crd.ge.com
-*/
+//:
+// \file
+// \author crossge@crd.ge.com
 #ifdef __GNUC__
 #pragma implementation
 #endif
@@ -12,7 +12,7 @@
 bool gst_polygon_2d::check_validity() const
 {
   // no edge list
-  if( edges_.size()<1)
+  if (edges_.size()<1)
     return false;
 
   // cycle through edges, looking for a completed polygon
@@ -20,32 +20,30 @@ bool gst_polygon_2d::check_validity() const
   gst_vertex_2d_sptr end  = edges_[0]->get_end();
 
   // length of cycle
-  int clen= 1;
+  unsigned int clen= 1;
 
-  while( end.ptr()!= start.ptr())
-    {
+  while (end.ptr()!= start.ptr())
+  {
       // next edge
       bool found= false;
 
-      for( unsigned int i=0; i < edges_.size() && !found; i++)
-        {
-          if( edges_[i]->get_start().ptr()== end.ptr())
-            {
+      for (unsigned int i=0; i < edges_.size() && !found; i++)
+      {
+          if (edges_[i]->get_start().ptr()== end.ptr())
+          {
               found= true;
               end= edges_[i]->get_end();
-            }
-        }
+          }
+      }
 
       // if !found then the cycle isn't closed
-      if( !found) return false;
+      if (!found) return false;
 
       clen++;
-    }
+  }
 
   // check we have looked at all the edges
-  if( clen== edges_.size()) return true;
-
-  return false;
+  return clen == edges_.size();
 }
 
 // returns the centroid
@@ -53,10 +51,8 @@ double gst_polygon_2d::get_centroid_x() const
 {
   double xsum= 0;
 
-  for( int i=0; i< edges_.size(); i++)
-    {
-      xsum+= edges_[i]->get_start()->get_x();
-    }
+  for (unsigned int i=0; i< edges_.size(); ++i)
+    xsum+= edges_[i]->get_start()->get_x();
 
   return xsum/edges_.size();
 }
@@ -65,10 +61,8 @@ double gst_polygon_2d::get_centroid_y() const
 {
   double ysum= 0;
 
-  for( int i=0; i< edges_.size(); i++)
-    {
-      ysum+= edges_[i]->get_start()->get_y();
-    }
+  for (unsigned int i=0; i< edges_.size(); ++i)
+    ysum+= edges_[i]->get_start()->get_y();
 
   return ysum/edges_.size();
 }
@@ -80,7 +74,7 @@ double gst_polygon_2d::area() const
 {
   double a= 0;
 
-  for( int i=0; i< edges_.size(); i++)
+  for (unsigned int i=0; i< edges_.size(); ++i)
     {
       int ip1=((i+1)==edges_.size())?0:(i+1);
 
@@ -90,7 +84,7 @@ double gst_polygon_2d::area() const
       a+= dp;
     }
 
-  return (a/2);
+  return a/2;
 }
 
 
@@ -102,7 +96,7 @@ bool gst_polygon_2d::inside( const double x, const double y) const
 {
   bool c= false;
 
-  for( int i=0, j= edges_.size()-1; i< edges_.size(); j= i++)
+  for (unsigned int i=0, j= edges_.size()-1; i< edges_.size(); j= i++)
     {
       if ((((edges_[i]->get_start()->get_y()<= y) &&
             (y< edges_[j]->get_start()->get_y())) ||
@@ -116,7 +110,6 @@ bool gst_polygon_2d::inside( const double x, const double y) const
         {
           c=!c;
         }
-
     }
 
   return c;
@@ -130,10 +123,8 @@ bool gst_polygon_2d::inside( const gst_vertex_2d_sptr v) const
 
 vcl_ostream &operator<<( vcl_ostream &os, gst_polygon_2d &p)
 {
-  for( int i=0; i< p.edges_.size(); i++)
-    {
-      os << (*p.edges_[i]) << " ";
-    }
+  for (unsigned int i=0; i< p.edges_.size(); i++)
+    os << (*p.edges_[i]) << " ";
 
   return os << vcl_endl;
 }

@@ -89,12 +89,12 @@ bool oxp_bunch_of_files::open(char const* fmt)
   // Fill start_bytes
   start_byte.resize(n);
   start_byte[0] = 0;
-  for (int i = 1; i < filenames.size(); ++i)
+  for (unsigned int i = 1; i < filenames.size(); ++i)
     start_byte[i] = (vxl_int_64)start_byte[i-1] + (vxl_int_64)filesizes[i-1];
 
   // Open them all
   fps.resize(n);
-  for (int i = 0; i < filenames.size(); ++i) {
+  for (unsigned int i = 0; i < filenames.size(); ++i) {
     char const* fn = filenames[i].c_str();
     fps[i] = vcl_fopen(fn, "rb");
     if (!fps[i]) {
@@ -105,7 +105,7 @@ bool oxp_bunch_of_files::open(char const* fmt)
   }
 
   // Summarize:
-  vcl_fprintf(stderr, "files: sizeof offset_t = %ld\n", sizeof(offset_t));
+  vcl_fprintf(stderr, "files: sizeof offset_t = %d\n", (int)sizeof(offset_t));
   for (unsigned int i = 0; i < n; ++i)
     vcl_fprintf(stderr, "   %s  %g\n", filenames[i].c_str(), (double)start_byte[i]);
   vcl_fprintf(stderr, "\n");
@@ -116,7 +116,7 @@ bool oxp_bunch_of_files::open(char const* fmt)
 void oxp_bunch_of_files::seek(offset_t to)
 {
   int newindex = -1;
-  for (int i = 1; i < filesizes.size(); ++i)
+  for (unsigned int i = 1; i < filesizes.size(); ++i)
     if (start_byte[i] > to) {
       newindex = i-1;
       break;
@@ -130,7 +130,7 @@ void oxp_bunch_of_files::seek(offset_t to)
   }
 
   if (newindex == -1) {
-    vcl_fprintf(stderr, "ERROR: Could not seek to [%ul]\n", (unsigned long)to);
+    vcl_fprintf(stderr, "ERROR: Could not seek to [%lu]\n", (unsigned long)to);
     return;
   }
 
@@ -167,7 +167,7 @@ int oxp_bunch_of_files::read(void* buf, unsigned int len)
   if (n1 < bytes_from_curr)
     // First read stopped short, don't even bother with next one
     return n1;
-  if (current_file_index == fps.size()-1)
+  if ((unsigned int)(current_file_index+1) == fps.size())
     // First was OK, and we've run out of files
     return n1;
 
@@ -179,7 +179,7 @@ int oxp_bunch_of_files::read(void* buf, unsigned int len)
 
 oxp_bunch_of_files::~oxp_bunch_of_files()
 {
-  for (int i = 0; i < fps.size(); ++i)
+  for (unsigned int i = 0; i < fps.size(); ++i)
     vcl_fclose(fps[i]);
 }
 

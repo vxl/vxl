@@ -170,11 +170,11 @@ void xcv_axes_tableau::compute_axes()
   // Re-calibrate points and add them to the graph:
   vcl_vector<float> xcalib, ycalib;
   float xscaling = graph_width/(xlimits_.tick_end - xlimits_.tick_start);
-  for (int i=0; i<xpoints_.size(); i++)
+  for (unsigned int i=0; i<xpoints_.size(); i++)
     xcalib.push_back(left_offset + (xpoints_[i] - xlimits_.tick_start)*xscaling);
 
   float yscaling = graph_height/(ylimits_.tick_end - ylimits_.tick_start);
-  for (int i=0; i<ypoints_.size(); i++)
+  for (unsigned int i=0; i<ypoints_.size(); i++)
   {
     ycalib.push_back(
       top_offset + graph_height - ((ypoints_[i]-ylimits_.tick_start)*yscaling));

@@ -22,6 +22,7 @@
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_style.h>
 #include <vgui/vgui_projection_inspector.h>
+#include <vgui/internals/vgui_draw_line.h>
 
 vgui_soview2D::vgui_soview2D() {
 }
@@ -98,8 +99,8 @@ void vgui_soview2D_lineseg::translate(float tx, float ty)
 
 void vgui_soview2D_group::set_style(vgui_style *s)
 {
-  for( unsigned int i=0; i< ls.size(); i++)
-    if( !ls[i]->get_style())
+  for (unsigned int i=0; i< ls.size(); i++)
+    if (!ls[i]->get_style())
       ls[i]->set_style(s);
 
   vgui_soview::set_style( s);
@@ -108,25 +109,28 @@ void vgui_soview2D_group::set_style(vgui_style *s)
 vcl_ostream& vgui_soview2D_group::print(vcl_ostream& s) const {
   s << "[vgui_soview2D_group ";
 
-  for( unsigned int i=0; i< ls.size(); i++)
+  for (unsigned int i=0; i< ls.size(); i++)
     ls[i]->print(s);
 
   return vgui_soview2D::print(s) << "]";
 }
 
 void vgui_soview2D_group::draw() {
-  for( unsigned int i=0; i< ls.size(); i++)
+  for (unsigned int i=0; i< ls.size(); i++)
     ls[i]->draw();
 }
 
-float vgui_soview2D_group::distance_squared(float x, float y) {
-  float min= -1;
+float vgui_soview2D_group::distance_squared(float x, float y)
+{
+  if (ls.size() == 0)
+    return -1e30f;
 
-  for( unsigned int i=0; i< ls.size(); i++) {
+  float min= ls[0]->distance_squared( x, y);
+
+  for (unsigned int i=1; i< ls.size(); i++)
+  {
     float d= ls[i]->distance_squared( x, y);
-
-    if(( min== -1) || ( d< min))
-      min= d;
+    if ( d< min ) min= d;
   }
 
   return min;
@@ -138,23 +142,21 @@ void vgui_soview2D_group::get_centroid(float* x, float* y)
   *y = 0;
   int n = ls.size();
 
-  for( int i=0; i < n; i++) {
+  for (int i=0; i < n; i++) {
     float cx, cy;
     ls[i]->get_centroid(&cx, &cy);
     *x += cx;
     *y += cy;
   }
 
-  float s = 1.0f/float(n);
+  float s = 1.0f/n;
   *x *= s;
   *y *= s;
 }
 
 void vgui_soview2D_group::translate(float tx, float ty)
 {
-  int n = ls.size();
-
-  for( unsigned int i=0; i < n; i++)
+  for (unsigned int i=0; i < ls.size(); i++)
     ls[i]->translate(tx, ty);
 }
 
@@ -164,9 +166,6 @@ vcl_ostream& vgui_soview2D_infinite_line::print(vcl_ostream& s) const {
   s << "[vgui_soview2D_infinite_line " << a << "," << b << "," << c;
   s << " "; return vgui_soview2D::print(s) << "]";
 }
-
-
-extern bool vgui_draw_line(double a, double b, double c);
 
 void vgui_soview2D_infinite_line::draw() {
 #if 0
@@ -220,7 +219,7 @@ const int vgui__CIRCLE2D_LIST = 1;
 void vgui_soview2D_circle::compile() {
   glNewList(vgui__CIRCLE2D_LIST, GL_COMPILE);
   glBegin(GL_LINE_LOOP); // <--- should be GL_LINE_LOOP?
-  for(int i=0;i<100;i++){
+  for (unsigned int i=0;i<100;i++){
     double angle = i*(2*vnl_math::pi/100);
     glVertex2d(vcl_cos(angle), vcl_sin(angle));
   }
@@ -236,7 +235,7 @@ vcl_ostream& vgui_soview2D_circle::print(vcl_ostream& s) const {
 
 void vgui_soview2D_circle::draw() {
   glBegin(GL_LINE_LOOP);
-  for(int i=0;i<100;i++){
+  for (unsigned int i=0;i<100;i++){
     double angle = i*(2*vnl_math::pi/100);
     glVertex2d(x+r*vcl_cos(angle), y+r*vcl_sin(angle));
   }

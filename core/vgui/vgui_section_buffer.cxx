@@ -65,6 +65,7 @@ vgui_section_buffer::vgui_section_buffer(int x_, int y_,
   //
   , tList(0)
 {
+  assert(x_>=0 && y_>=0);
   assert(w>0 && h>0);
 
   texture_size = 256;
@@ -130,10 +131,10 @@ vgui_section_buffer::vgui_section_buffer(int x_, int y_,
 
 //: destructor. casts pixel pointer and calls operator delete [] on it
 vgui_section_buffer::~vgui_section_buffer() {
-  assert(the_rasters);
+  assert(the_rasters!=0);
   delete [] the_rasters; the_rasters=0;
 
-  assert(the_pixels);
+  assert(the_pixels!=0);
   switch (type) {
 #define fsm_dealloc_buffer(GLtype) { delete [] static_cast<GLtype*>(the_pixels); }
   case GL_UNSIGNED_BYTE:
@@ -372,7 +373,7 @@ void vgui_section_buffer::apply(vil_image const& image_in) {
   // dunno.
   else
     {
-      vcl_cerr << "pixel_format == " << pixel_format << " which is unknown..." << vcl_endl;
+      vcl_cerr << "pixel_format == " << vil_print(pixel_format) << " which is unknown..." << vcl_endl;
       assert(false);
     }
 
@@ -579,7 +580,7 @@ bool vgui_section_buffer::load_image_as_textures()
   // Inquire about maximum texture size
   glGetIntegerv(GL_MAX_TEXTURE_SIZE, &texture_size);
   vcl_cerr << "Max texture size: " << texture_size << vcl_endl;
-  if (texture_size>allocw)
+  if (texture_size>(int)allocw)
     texture_size = allocw;
 
   // release old texture names.
@@ -606,18 +607,18 @@ bool vgui_section_buffer::load_image_as_textures()
   // now do each tile in turn.
   for (int i = 0;i<counth;i++) {
     int resty; // number of rows to include in this tile.
-    if ((i+1)*texture_size>h)
+    if ((i+1)*texture_size>(int)h)
       resty = h%texture_size;
     else
       resty = texture_size;
 
     op_image = orig_image;
     for (int j = 0;j<countw;j++) {
-      if(debug)
+      if (debug)
         vcl_cerr << "Copying quadrant (" << i << "," << j << ")" << vcl_endl;
 
       int restx; // number of cols to include in this tile.
-      if ((j+1)*texture_size>w)
+      if ((j+1)*texture_size>(int)w)
         restx = w%texture_size;
       else
         restx = texture_size;
@@ -703,7 +704,7 @@ bool vgui_section_buffer::draw_image_as_textures() const
   for (int i = 0;i<counth;i++) {
     for (int j = 0;j<countw;j++) {
       // Activate the texture provided its not already in memory
-      if (last != tList[i*countw+j]) {
+      if (last != (int)tList[i*countw+j]) {
         glBindTexture(GL_TEXTURE_2D, tList[i*countw+j]);
         last = tList[i*countw+j];
       }
@@ -712,11 +713,11 @@ bool vgui_section_buffer::draw_image_as_textures() const
       int y = i*texture_size;
 
       int tw,th;
-      if ((j+1)*texture_size<w)
+      if ((j+1)*texture_size<(int)w)
         tw = texture_size;
       else
         tw = w-j*texture_size;
-      if ((i+1)*texture_size<h)
+      if ((i+1)*texture_size<(int)h)
         th = texture_size;
       else
         th = h-i*texture_size;

@@ -150,14 +150,14 @@ void mvl_multi_view_matches::add_track(vcl_vector<int> const& views, vcl_vector<
       Map& friend_track = tracks_[(*t)];
       // See if friend_track[t] is consistent with the new track
       for (Map_iterator i = new_track.begin(); i != new_track.end() && consistency_okay; ++i) {
-        int frame = (*i).first;
-        int corner = (*i).second;
+        unsigned int frame = (*i).first;
+        unsigned int corner = (*i).second;
         Map_iterator m = friend_track.find(frame);
         if (m != friend_track.end() && (*m).second != corner) consistency_okay = false;
       }
       if (consistency_okay) {
         // Okay, we're good to merge friend_track[t] into the new track
-        for(Map_iterator tp = friend_track.begin(); tp != friend_track.end(); ++tp)
+        for (Map_iterator tp = friend_track.begin(); tp != friend_track.end(); ++tp)
           new_track.insert(*tp);
       }
     }

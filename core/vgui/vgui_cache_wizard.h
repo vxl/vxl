@@ -65,7 +65,7 @@ private:
   // Maximum number of textures(limited by memory size - driver dependent,
   // as some drivers will do their one caching so that the number of textures
   // is only limited by the size of virtual memory
-  int max_texture_num_;
+  unsigned int max_texture_num_;
   GLuint *texture_names_;
   //: Cache queue
   vcl_list <GLuint> cache_queue_;

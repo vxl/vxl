@@ -25,8 +25,7 @@
 
 static bool debug=false;
 
-vgui_deck_tableau::vgui_deck_tableau() : index_(-1) {
-}
+vgui_deck_tableau::vgui_deck_tableau() : index_(-1) {}
 
 vgui_deck_tableau::vgui_deck_tableau(vgui_tableau_sptr const& child0,
                      vgui_tableau_sptr const& child1) : index_(-1)
@@ -44,8 +43,7 @@ vgui_deck_tableau::vgui_deck_tableau(vgui_tableau_sptr const& child0,
   add(child2);
 }
 
-vgui_deck_tableau::~vgui_deck_tableau() {
-}
+vgui_deck_tableau::~vgui_deck_tableau() {}
 
 bool vgui_deck_tableau::handle(const vgui_event& event) {
 
@@ -70,8 +68,8 @@ bool vgui_deck_tableau::help() {
 }
 
 
-bool vgui_deck_tableau::key_press(int x, int y, vgui_key key, vgui_modifier) {
-
+bool vgui_deck_tableau::key_press(int x, int y, vgui_key key, vgui_modifier)
+{
   if (debug) vcl_cerr << "vgui_deck_tableau::key_press " << key << vcl_endl;
 
   switch(key) {
@@ -100,12 +98,14 @@ bool vgui_deck_tableau::key_press(int x, int y, vgui_key key, vgui_modifier) {
   }
 }
 
-void vgui_deck_tableau::add(vgui_tableau_sptr const& t) {
+void vgui_deck_tableau::add(vgui_tableau_sptr const& t)
+{
   add_child(t);
 }
 
 // override virtual base class method
-bool vgui_deck_tableau::add_child(vgui_tableau_sptr const& t) {
+bool vgui_deck_tableau::add_child(vgui_tableau_sptr const& t)
+{
   children.push_back( vgui_slot(this,t) );
   index_ = size()-1;
   observers.notify();
@@ -113,13 +113,15 @@ bool vgui_deck_tableau::add_child(vgui_tableau_sptr const& t) {
   return true;
 }
 
-void vgui_deck_tableau::remove(vgui_tableau_sptr const& t) {
+void vgui_deck_tableau::remove(vgui_tableau_sptr const& t)
+{
   if (!remove_child(t))
     vcl_cerr << __FILE__ " no such child tableau : " << t << vcl_endl;
 }
 
 // override virtual base class  method
-bool vgui_deck_tableau::remove_child(vgui_tableau_sptr const& t) {
+bool vgui_deck_tableau::remove_child(vgui_tableau_sptr const& t)
+{
   for (vcl_vector<vgui_slot>::iterator i = children.begin() ; i!=children.end() ; ++i)
     if ( (*i) == t ) {
       children.erase(i);
@@ -132,30 +134,35 @@ bool vgui_deck_tableau::remove_child(vgui_tableau_sptr const& t) {
 }
 
 
-vgui_tableau_sptr vgui_deck_tableau::current() {
+vgui_tableau_sptr vgui_deck_tableau::current()
+{
   if (index_ok(index_))
     return children[index_];
 
   return 0;
 }
 
-vgui_tableau_sptr vgui_deck_tableau::get_tableau_at(int tab_pos) {
+vgui_tableau_sptr vgui_deck_tableau::get_tableau_at(int tab_pos)
+{
   if (index_ok(tab_pos))
     return children[tab_pos];
   return 0;
 }
 
-int vgui_deck_tableau::size() {
+int vgui_deck_tableau::size()
+{
   return children.size();
 }
 
-void vgui_deck_tableau::index(int v) {
+void vgui_deck_tableau::index(int v)
+{
   if (index_ok(v)) index_ = v;
   if (debug) vcl_cerr << "vgui_deck_tableau::index " << index_ << vcl_endl;
   observers.notify();
 }
 
-void vgui_deck_tableau::begin() {
+void vgui_deck_tableau::begin()
+{
   if (index_ok(0))
     index_ = 0;
 
@@ -163,7 +170,8 @@ void vgui_deck_tableau::begin() {
   observers.notify();
 }
 
-void vgui_deck_tableau::next() {
+void vgui_deck_tableau::next()
+{
   unsigned int tmp = index_;
 
   if (tmp+1 >= children.size())
@@ -178,7 +186,8 @@ void vgui_deck_tableau::next() {
   observers.notify();
 }
 
-void vgui_deck_tableau::prev() {
+void vgui_deck_tableau::prev()
+{
   int tmp = index_;
 
   if (tmp == 0)
@@ -191,19 +200,17 @@ void vgui_deck_tableau::prev() {
 
   if (debug) vcl_cerr << "vgui_deck_tableau::prev " << index_ << vcl_endl;
   observers.notify();
-
 }
 
-bool vgui_deck_tableau::index_ok(int v) const {
-  if (v < 0 || v >= children.size())
-    return false;
-
-  return true;
+bool vgui_deck_tableau::index_ok(int v) const
+{
+  return v >= 0 && v < int(children.size());
 }
 
 vcl_string vgui_deck_tableau::type_name() const { return "vgui_deck_tableau"; }
 
-vcl_string vgui_deck_tableau::file_name() const {
+vcl_string vgui_deck_tableau::file_name() const
+{
   if (index_ok(index_)) {
     return children[index_]->file_name();
   }
@@ -211,7 +218,8 @@ vcl_string vgui_deck_tableau::file_name() const {
 }
 
 
-vcl_string vgui_deck_tableau::pretty_name() const {
+vcl_string vgui_deck_tableau::pretty_name() const
+{
   vcl_string name;
   if (index_ok(index_)) {
     name += "[current = ";
@@ -222,13 +230,11 @@ vcl_string vgui_deck_tableau::pretty_name() const {
 }
 
 
-class vgui_deck_switch_command : public vgui_command {
-public:
+class vgui_deck_switch_command : public vgui_command
+{
+ public:
   vgui_deck_switch_command(vgui_deck_tableau* d, int i) : deck(d), index(i) {}
-  void execute() {
-    deck->index(index);
-    deck->post_redraw();
-  }
+  void execute() { deck->index(index); deck->post_redraw(); }
 
   vgui_deck_tableau *deck;
   int index;

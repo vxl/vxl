@@ -95,7 +95,7 @@ private:
 
   vcl_vector< rsdl_point > points_;
 
-  int Nc_, Na_;       // number of cartesian and angular dimensions
+  unsigned int Nc_, Na_; // number of cartesian and angular dimensions
   double min_angle_;
 
   int leaf_count_;

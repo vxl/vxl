@@ -35,7 +35,7 @@ vgui_cache_wizard *vgui_cache_wizard::instance_ = 0;
 vgui_cache_wizard::vgui_cache_wizard(int quadrant_width,
                                      int quadrant_height)
 {
-  if(debug) vcl_cerr << __FILE__": this is the constructor" << vcl_endl;
+  if (debug) vcl_cerr << __FILE__": this is the constructor" << vcl_endl;
   //*(int*)0 = 1;
 
   //: Get the maximum texture size.
@@ -43,19 +43,19 @@ vgui_cache_wizard::vgui_cache_wizard(int quadrant_width,
   // i.e. assumes the texture is 4bpp... So we are on the safe ground
   GLint max_texture_size;
   glGetIntegerv(GL_MAX_TEXTURE_SIZE, &max_texture_size);
-  if(max_texture_size>256)
+  if (max_texture_size>256)
     max_texture_size = 256;
 
-  if(quadrant_width<max_texture_size)
+  if (quadrant_width<max_texture_size)
     quadrant_width_ = quadrant_width;
   else
     quadrant_width_ = max_texture_size;
-  if(quadrant_height<max_texture_size)
+  if (quadrant_height<max_texture_size)
     quadrant_height_ = quadrant_height;
   else
     quadrant_height_ = max_texture_size;
   // Assume 8M for now
-  max_texture_num_ = int(float(8388608.0)/float(quadrant_width_*quadrant_height_*4))*3;
+  max_texture_num_ = (unsigned int)(8388608.0f/(quadrant_width_*quadrant_height_*4.0f))*3;
   // Generate the names for those textures
   texture_names_ = new GLuint[max_texture_num_];
   glGenTextures(max_texture_num_,texture_names_);
@@ -64,9 +64,8 @@ vgui_cache_wizard::vgui_cache_wizard(int quadrant_width,
 //: Destructor
 vgui_cache_wizard::~vgui_cache_wizard()
 {
-  vcl_list<GLuint>::iterator i;
-  int j;
-  for(i = cache_queue_.begin(),j = 0;i!=cache_queue_.end();i++,j++)
+  vcl_list<GLuint>::iterator i = cache_queue_.begin();
+  for (int j=0; i!=cache_queue_.end(); ++i,++j)
     texture_names_[j] = *i;
   glDeleteTextures(cache_queue_.size(),texture_names_);
   delete texture_names_;
@@ -74,7 +73,7 @@ vgui_cache_wizard::~vgui_cache_wizard()
 
 vgui_cache_wizard *vgui_cache_wizard::Instance()
 {
-  if(!instance_)
+  if (!instance_)
     instance_ = new vgui_cache_wizard(DEFAULT_QUADRANT_WIDTH, DEFAULT_QUADRANT_HEIGHT);
   return instance_;
 }
@@ -83,27 +82,26 @@ vgui_cache_wizard *vgui_cache_wizard::Instance()
 int vgui_cache_wizard::load_image(vil_image img)
 {
   // Check whether the image pointer is already in memory
-  int j = 0;
-  for(vcl_vector<wizard_image *>::iterator i = images_.begin();i!=images_.end();i++,j++)
-    if((*i)->first == img)
+  vcl_vector<wizard_image *>::iterator i = images_.begin();
+  for (int j = 0; i!=images_.end(); ++i,++j)
+    if ((*i)->first == img)
       return j;
 
   // Find out the size of image in quadrants
-  int cx,cy;
-  cx = mb_jigerry_pokery(img.width(),quadrant_width_);
-  cy = mb_jigerry_pokery(img.height(),quadrant_height_);
+  int cx = mb_jigerry_pokery(img.width(),quadrant_width_);
+  int cy = mb_jigerry_pokery(img.height(),quadrant_height_);
 
   dimension *dim = new dimension(cx,cy);
   dimensions_.push_back(dim);
   // Initialize
   image_cache_quadrants *mapping = new image_cache_quadrants;
-  for(int i = 0;i<cy;i++)
-    for(int j = 0;j<cx;j++)
+  for (int i = 0;i<cy;i++)
+    for (int j = 0;j<cx;j++)
       mapping->push_back(unsigned(INVALID_TEXTURE_NAME));
 
   wizard_image *wz = new wizard_image(img,mapping);
   images_.push_back(wz);
-  return (images_.size()-1);
+  return images_.size()-1;
 }
 
 //: Returns the texture names associated with the specified image region
@@ -134,22 +132,23 @@ bool vgui_cache_wizard::get_section(int id,int x,int y,int width,int height,
   glEnable(GL_TEXTURE_2D);
   vgui_macro_report_errors;
 
-  for(int i = 0;i<=qh_c;i++)
-    for(int j = 0;j<=qw_c;j++)
+  for (int i = 0;i<=qh_c;i++)
+    for (int j = 0;j<=qw_c;j++)
       {
         // (i,j) relative to the upper left corner of the section
         // needs to be translated into image coordinates
         int index = ul_q+i*d->first+j;
         // Check to see whether the quadrant is in cache
-        if (index<0 || index>=icq->size()) { // fsm
-                vcl_cerr << __FILE__ ": index out of range" << vcl_endl;
-                return false;
+        if (index<0 || index>=int(icq->size()))
+        {
+          vcl_cerr << __FILE__ ": index out of range\n";
+          return false;
         }
-        if(mb_is_valid((*icq)[index]))
+        if (mb_is_valid((*icq)[index]))
           {
             quadrants->push_back((*icq)[index]);
             vcl_list<GLuint>::iterator i;
-            for(i = cache_queue_.begin();i!=cache_queue_.end() &&
+            for (i = cache_queue_.begin();i!=cache_queue_.end() &&
                   (*i)!=(*icq)[index];i++);
             cache_queue_.erase(i);
             cache_queue_.push_back((*icq)[index]);
@@ -158,7 +157,7 @@ bool vgui_cache_wizard::get_section(int id,int x,int y,int width,int height,
           // If the quadrant is not in cache load it by dumping least recently used
           // texture block if necessary
           GLuint texture_name;
-          if(cache_queue_.size() == max_texture_num_)
+          if (cache_queue_.size() == max_texture_num_)
             {
               // Time to dump LRU texture and use it for the quadrant of this image section
               texture_name = cache_queue_.front();
@@ -166,19 +165,17 @@ bool vgui_cache_wizard::get_section(int id,int x,int y,int width,int height,
               cache_queue_.pop_front();
               // Find the image where texture_name has been used and invalidate
               // that qudrangle
-              for(vcl_vector<wizard_image *>::iterator i = images_.begin();
-                  i!=images_.end();i++)
-                for(image_cache_quadrants::iterator k = (*i)->second->begin();
-                    k!=(*i)->second->end();k++)
-                  if((*k) == texture_name)
+              for (vcl_vector<wizard_image *>::iterator i = images_.begin(); i!=images_.end();i++)
+                for (image_cache_quadrants::iterator k = (*i)->second->begin(); k!=(*i)->second->end();k++)
+                  if ((*k) == texture_name)
                     {
                       *k = GLuint(INVALID_TEXTURE_NAME);
                       vcl_cerr<<"Invalidated!"<<vcl_endl;
                     }
             }
           else {
-            int k;
-            for(k = 0;k<max_texture_num_ && texture_names_[k] == -1u;k++);
+            unsigned int k = 0;
+            while (k<max_texture_num_ && texture_names_[k] == -1u) ++k;
             texture_name = texture_names_[k];
             texture_names_[k] = GLuint(-1);
           }
