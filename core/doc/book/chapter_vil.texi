@@ -323,3 +323,180 @@ There are also algorithms to perform image arithmetic,
 smoothing, general 1D and 2D
 convolution, morphological operations, interpolation,
 and much more.
+
+
+@section Optimising Image Processing Algorithms
+The design of vil2_image_view (being more flexible than the design of vil,)
+and the state of modern optimising compilers (no near as good as they
+could be,) means that naive use of vil2 images may not be as fast as it
+should be.
+
+The following example shows the original implementation of
+the image fill method.
+@example
+template<class T>
+void vil2_image_view<T>::fill(T value)
+@{
+  for (unsigned p=0;p<nplanes_;++p)
+    for (unsigned j=0;j<nj_;++j)
+      for (unsigned i=0;i<ni_;++i)
+        (*this)(i,j,p)= v;
+@}
+@end example
+This implementation has the advantage of being simple, and easy to test.
+
+
+
+The first rule of optimisation is to concentrate your effort where most
+time is spent, in this case the inner-most loop.
+
+In an ideal world the compiler would realise that it doesn't
+have to recalculate the location of each pixel each step. (Of course, in
+an ideal world we would be programing using natural language and
+a microphone.)
+We can make this optimisation explicit.
+
+
+@example
+template<class T>
+void vil2_image_view<T>::fill(T value)
+@{
+  T* plane = top_left_;
+  for (unsigned int p=0;p<nplanes_;++p,plane += planestep_)
+  @{
+    T* row = plane;
+    for (unsigned int j=0;j<nj_;++j,row += jstep_)
+    @{
+      T* p = row;
+      for (unsigned int i=0;i<ni_;++i,p+=istep_) *p = value;
+    @}
+  @}
+@}
+@end example
+This can halve the run time on some compilers.
+
+One important approach in code optimisation is to observe how the code
+behaves in real life, and concentrate your efforts on where the code
+spends most of its time. In our example, this means the inner most loop
+It turns out that in many cases, @code{istep_==1}, because of the
+default image layout in memory. Because of this common case it would
+be worth having the compiler generate machine-code for the inner-most
+loop in this special case. We can do this by explicitly testing for
+such a special case.
+
+
+@example
+template<class T>
+void vil2_image_view<T>::fill(T value)
+@{
+  T* plane = top_left_;
+
+  if (istep_==1)
+  @{
+    for (unsigned int p=0;p<nplanes_;++p,plane += planestep_)
+    @{
+      T* row = plane-1;
+      for (unsigned int j=0;j<nj_;++j,row += jstep_)
+      @{
+        int i = ni_ ;
+        while (i>=0) { row[i--]=value; }
+      @}
+    @}
+    return;
+  @}
+
+  for (unsigned int p=0;p<nplanes_;++p,plane += planestep_)
+  @{
+    T* row = plane;
+    for (unsigned int j=0;j<nj_;++j,row += jstep_)
+    @{
+      T* p = row;
+      for (unsigned int i=0;i<ni_;++i,p+=istep_) *p = value;
+    @}
+  @}
+@}
+@end example
+
+
+There are two other optimisations going on here. The first is that
+we are using the pointer indexing operator @code{[]}. Most compilers
+treat @code{while(i<n)@{*(ptr++)=v;@} } differently from
+@code{while(i<n)@{ptr[i++]=v;@} }, with the latter often
+being significantly faster. This is especially true when ptr is a pointer
+to a character sized type.
+The other optimisation makes use of the fact that it is faster to count down to
+0 than count up to n. This is because it is faster to test against a constant, 0,
+than against a variable. Sometimes a compiler figures this out itself,
+but by no means always. One useful refinement that may be possible is to
+decrement the index counter right at the end of the loop. This allows the
+compiler to avoid issuing a separate test instruction, since this sort
+of test is automatically performed by the processor after a decrement
+or other arithmetic operation.
+
+
+Since we are performing the same operation on every pixel independent
+of its absolute or relative position, there is one further optimisation
+that can be performed. In many cases an image will be stored as a
+contiguous block of memory. If this is the case, it may make sense
+just to operate on this block of memory as a single dimensional array.
+In the case of fill, this may even allow a compiler to issue
+a specialised single machine instruction which performs the whole
+fill very very fast. This gives us our final implementation.
+
+
+
+@example
+template<class T>
+void vil2_image_view<T>::fill(T value)
+@{
+  T* plane = top_left_;
+
+  if (is_contiguous())
+  @{
+    vil2_image_view<T>::iterator it = begin();
+    vil2_image_view<T>::const_iterator end_it = end();
+    while (it!=end_it) {*it = value; ++it; }
+    return;
+  @}
+
+  if (istep_==1)
+  @{
+    for (unsigned int p=0;p<nplanes_;++p,plane += planestep_)
+    @{
+      T* row = plane-1;
+      for (unsigned int j=0;j<nj_;++j,row += jstep_)
+      @{
+        int i = ni_;
+        while (i>=0) { row[i--]=value; }
+      @}
+    @}
+    return;
+  @}
+
+  for (unsigned int p=0;p<nplanes_;++p,plane += planestep_)
+  @{
+    T* row = plane;
+    for (unsigned int j=0;j<nj_;++j,row += jstep_)
+    @{
+      T* p = row;
+      for (unsigned int i=0;i<ni_;++i,p+=istep_) *p = value;
+    @}
+  @}
+@}
+@end example
+
+
+This optimised version was between two and ten times faster than the original
+depending on the compiler, image structure, and pixel type.
+
+
+It should always be born in mind that there is a trade-off in testing for
+special cases. Each test takes time, and this slows the function down
+for the non-special cases. Limit yourself to only testing for very common
+cases that have very significant potential speed improvements.
+
+Finally as with all optimisation - be rigorous in comparing the actual
+times for your original and optimised code. Run enough experiments to
+measure the statiscal spread to see if your improvements are significant.
+It is quite common for compiler or processor
+quirks to make your optimised code slower than the original.
