@@ -1,17 +1,12 @@
-// This is brl/bbas/bvgl/tests/bvgl_test_h_matrix_2d.cxx
+// This is brl/bbas/bvgl/tests/bvgl_test_h_matrix_2d_compute_linear.cxx
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
 #include <vcl_vector.h>
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_inverse.h>
 #include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_homg_line_2d.h>
-#include <vgl/vgl_line_2d.h>
 #include <bvgl/bvgl_h_matrix_2d.h>
 #include <bvgl/bvgl_norm_trans_2d.h>
 #include <bvgl/bvgl_h_matrix_2d_compute_linear.h>
-bool near_eq(double a, double b){return (fabs(a-b)<1.0e-4);}
+bool near_eq(double a, double b){return vcl_fabs(a-b)<1e-4;}
 
 #define Assert(x) { vcl_cout << #x "\t\t\t test "; \
   if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
@@ -39,8 +34,8 @@ int main(int, char **)
 
   bvgl_h_matrix_2d_compute_linear hmcl;
   bvgl_h_matrix_2d<double> H = hmcl.compute(points1, points2);
-  vcl_cout << "The resulting transform \n" << H << "\n";
-  vcl_cout << "Test Summary: " << success << " tests succeeded, "
+  vcl_cout << "The resulting transform \n" << H << '\n'
+           << "Test Summary: " << success << " tests succeeded, "
            << failures << " tests failed" << (failures?"\t***\n":"\n");
   return failures;
 }
