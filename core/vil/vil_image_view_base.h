@@ -30,7 +30,7 @@ protected:
 
   //: Default is an empty one plane image
   //  Don't set nplanes_ to zero as it confuses resize(nx,ny) later
-  vil2_image_view_base(): ni_(0), nj_(0), nplanes_(1) {}
+  vil2_image_view_base(): ni_(0), nj_(0), nplanes_(1), reference_count_(0) {}
 
 public:
   // The destructor must be virtual so that the memory chunk is destroyed.
