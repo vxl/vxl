@@ -478,7 +478,19 @@ void kalman_filter::inc()
     }
     
     vgl_point_3d<double> X3d = brct_algos::bundle_reconstruct_3d_point(pts, Ps);
+    // update covariant matrix
+    vnl_double_3 dX(X3d.x() - curve_3d_[i].x(), X3d.y() - curve_3d_[i].y(), X3d.z() - curve_3d_[i].z());
+    vnl_double_3x3 Sigma3d = curve_3d_[i].get_covariant_matrix();
+    Sigma3d = Sigma3d*(cur_pos_-1.0)/(double)cur_pos_;
+    for(int m = 0; m<3; m++)
+      for(int n = 0; n<3; n++)
+        Sigma3d[m][n] += dX[m]*dX[n] /(cur_pos_);
+  
+//    vcl_cout<<Sigma3d<<"\n i = "<<i<<"--------------\n";
+
     curve_3d_[i].set_point(X3d);
+    curve_3d_[i].set_covariant_matrix(Sigma3d);
+
 #if 0
     brct_structure_estimator se(Ps[cur_pos_%queue_size_]); 
     bugl_gaussian_point_3d<double> X = se.forward(curve_3d_[i], observes_[cur_pos_%queue_size_][i]);
