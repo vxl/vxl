@@ -116,7 +116,7 @@
 
 /* image structure definition */
 
-struct xvimage	{
+struct vil_viff_xvimage	{
 
 /*  Administrative or file management information */
 

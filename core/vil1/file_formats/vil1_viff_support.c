@@ -51,7 +51,7 @@
 
 #define LENGTH 512
 
-int vil_viff_imagesize(struct xvimage *image,int *dsize, int *dcount, int *msize,
+int vil_viff_imagesize(struct vil_viff_xvimage *image,int *dsize, int *dcount, int *msize,
 		  int *mcount, int *lsize,int *lcount);
 
 /**************************************************************
@@ -72,14 +72,14 @@ int vil_viff_imagesize(struct xvimage *image,int *dsize, int *dcount, int *msize
 *		location_type -- implied or explicit location data
 *		location_dim -- explicit locations can be of any dimension
 *
-*      OUTPUT: 	1.  returns a pointer to an xvimage with image defined
+*      OUTPUT: 	1.  returns a pointer to a vil_viff_xvimage with image defined
 *
 * CALLED FROM: 
 *
 * ROUTINES CALLED: 
 *
 **************************************************************/
-struct xvimage *
+struct vil_viff_xvimage *
 vil_viff_createimage(col_size, row_size, data_storage_type, num_of_images,
 		num_data_bands, comment, map_row_size, map_col_size,
 		map_scheme, map_storage_type, location_type, location_dim)
@@ -98,7 +98,7 @@ long	col_size,
 char	*comment;
 {
 struct
-xvimage *image;
+vil_viff_xvimage *image;
 char	*maps, 
 	*imagedata, 
 	tmp_comment[LENGTH];
@@ -111,9 +111,9 @@ int	image_data_size_bytes,		/* # data bytes */
 	location_size_bytes,		/* # location bytes */
 	location_count_objects;		/* # location objs */
 
-/* malloc room for the xvimage structure */
+/* malloc room for the vil_viff_xvimage structure */
 
-    if ((image=(struct xvimage *)malloc(sizeof(struct xvimage)))== NULL)
+    if ((image=(struct vil_viff_xvimage *)malloc(sizeof(struct vil_viff_xvimage)))== NULL)
     {
          fprintf(stderr,"vil_viff_createimage: No space for image \
 - malloc failed!\n");
@@ -172,7 +172,7 @@ int	image_data_size_bytes,		/* # data bytes */
 
 /* get the sizes for the image data, map data, and location data */
 
-    if (! vil_viff_imagesize(image, 			/* xvimage */
+    if (! vil_viff_imagesize(image, 			/* vil_viff_xvimage */
 			&image_data_size_bytes,	/* # data bytes */
 			&image_data_count_pixels,	/* # data pixels */
 			&map_size_bytes,		/* # map bytes */
@@ -268,7 +268,7 @@ specificationa\n");
 *
 *************************************************************/
 
-void vil_viff_freeimage(struct xvimage *image)
+void vil_viff_freeimage(struct vil_viff_xvimage *image)
 {
 	unsigned char id1,id2;
 
@@ -355,7 +355,7 @@ unsigned long vil_viff_getmachsize(unsigned long mtype,unsigned long dtype)
        }
 */
 
-int vil_viff_imagesize(struct xvimage *image,int *dsize, int *dcount, int *msize,
+int vil_viff_imagesize(struct vil_viff_xvimage *image,int *dsize, int *dcount, int *msize,
 		  int *mcount, int *lsize,int *lcount)
 {
     long rows,cols;

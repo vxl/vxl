@@ -4,7 +4,8 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// Author: Peter.Vanroose@esat.kuleuven.ac.be
+// .SECTION Author
+//    Peter.Vanroose@esat.kuleuven.ac.be
 // Created: 17 Feb 2000
 
 #include <vil/vil_file_format.h>
@@ -40,7 +41,7 @@ class vil_viff_generic_image : public vil_image_impl {
   enum vil_component_format format_;
 
   bool endian_consistent_;
-  xvimage header_;
+  vil_viff_xvimage header_;
 
   bool read_header();
   bool write_header();

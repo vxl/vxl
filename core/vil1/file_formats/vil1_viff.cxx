@@ -13,12 +13,12 @@ char const* vil_viff_format_tag = "viff";
 #include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>
 
-extern "C" xvimage *vil_viff_createimage
+extern "C" vil_viff_xvimage *vil_viff_createimage
 (long col_size, long row_size, long data_storage_type, long num_of_images,
  long num_data_bands, char * comment, long map_row_size, long map_col_size,
  long map_scheme, long map_storage_type, long location_type, 
  long location_dim);
-extern "C" void vil_viff_freeimage (xvimage *);
+extern "C" void vil_viff_freeimage (vil_viff_xvimage *);
 
 static inline void swap(void* p,int length)
 {
@@ -217,10 +217,9 @@ bool vil_viff_generic_image::write_header()
   }
 
   //create header
-  xvimage *imagep = vil_viff_createimage ( height_, width_, 
-					   type,1,planes_,
-					   "TargetJr VIFF image writer output",0,0,
-					   VFF_MS_NONE,VFF_MAPTYP_NONE,VFF_LOC_IMPLICIT,0);
+  vil_viff_xvimage *imagep = vil_viff_createimage ( height_, width_, 
+	type,1,planes_, "TargetJr VIFF image writer output",0,0,
+	VFF_MS_NONE,VFF_MAPTYP_NONE,VFF_LOC_IMPLICIT,0);
 
   //make local copy of header
   memcpy(&header_, imagep, sizeof(header_));
