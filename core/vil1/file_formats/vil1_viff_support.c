@@ -140,7 +140,7 @@ int     image_data_size_bytes,          /* # data bytes */
 /* Load the image header with the values. These can be over-ridden by
    giving them a different value after returning to the calling routine.
  */
-    image->identifier = XV_FILE_MAGIC_NUM;
+    image->identifier = (char)XV_FILE_MAGIC_NUM;
     image->file_type = XV_FILE_TYPE_XVIFF;
     image->release = XV_IMAGE_REL_NUM;
     image->version = XV_IMAGE_VER_NUM;
