@@ -164,7 +164,6 @@ vil2_image_view_base_sptr vil2_flip_ud_image_resource::get_copy_view(unsigned i0
 #define macro( F , T ) \
   case F : \
     return new vil2_image_view<T > (vil2_flip_ud(static_cast<const vil2_image_view<T >&>(*vs)));
-    break;
 
       macro(VIL2_PIXEL_FORMAT_BYTE , vxl_byte )
       macro(VIL2_PIXEL_FORMAT_SBYTE , vxl_sbyte )
@@ -193,7 +192,6 @@ vil2_image_view_base_sptr vil2_flip_ud_image_resource::get_view(unsigned i0, uns
 #define macro( F , T ) \
   case F : \
     return new vil2_image_view<T > (vil2_flip_ud(static_cast<const vil2_image_view<T >&>(*vs)));
-    break;
 
       macro(VIL2_PIXEL_FORMAT_BYTE , vxl_byte )
       macro(VIL2_PIXEL_FORMAT_SBYTE , vxl_sbyte )
@@ -220,7 +218,6 @@ bool vil2_flip_ud_image_resource::put_view(const vil2_image_view_base& im, unsig
 #define macro( F , T ) \
   case F : \
     return src_->put_view(vil2_flip_ud(static_cast<const vil2_image_view<T >&>(im)), i0, src_->nj()-j0-im.nj()); \
-    break;
 
       macro(VIL2_PIXEL_FORMAT_BYTE , vxl_byte )
       macro(VIL2_PIXEL_FORMAT_SBYTE , vxl_sbyte )
