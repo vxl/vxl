@@ -36,9 +36,12 @@ bsol_point_index_2d::bsol_point_index_2d(int nrows, int ncols,
   for (int r = 0; r<nrows; r++)
     point_array_[r].resize(ncols);
   b_box_ = bb;
-  double w = b_box_->width(), h = b_box_->height();
   row_spacing_ = 1;
   col_spacing_ = 1;
+  if(!bb)
+	  return;
+  double w = b_box_->width(), h = b_box_->height();
+  
   if (nrows)
     row_spacing_ = h/nrows;
   if (ncols)
