@@ -7,23 +7,23 @@
 
 //:
 // \file
-// \brief Sparse 3d array.
+// \brief a space efficient 3d array
 // \author Andrew W. Fitzgibbon, Oxford RRG, 02 Oct 96
 // Description
 //    vbl_sparse_array_3d is a sparse 3D array allowing space 
-//    efficient access of the form s(300,700,900) = 2;
+//    efficient access of the form s(300,700,900) = 2.
 // \verbatim
 // Modifications:
 // 26 March 01 cjb updated documentation
 // 10 April 01 IMS (Manchester ISBE) modified to use vbl_sparse_array_base
+// 11 April 01 Peter Vanroose - vbl_index_3d moved to separate file
 // \endverbatim
+//---------------------------------------------------------------------------
 
 
 #include <vcl_iosfwd.h>
 #include <vbl/vbl_sparse_array_base.h>
 #include <vbl/vbl_index_3d.h>
-
-
 
 
 //: Sparse 3d array allowing space efficient access 
@@ -33,33 +33,33 @@ class vbl_sparse_array_3d : public vbl_sparse_array_base<T, vbl_index_3d>
 {
 public:
 
-    //: Put a value into location (i,j).
+  //: Put a value into location (i,j).
   bool put(unsigned i, unsigned j, unsigned k, const T& t)
   {
     return vbl_sparse_array_base<T, vbl_index_3d>::put(vbl_index_3d(i, j, k), t);
   }
 
-    //: Return contents of location (i,j,k).
-    //  Returns an undefined value (in fact 
-    //  a T()) if location (i,j,k) has not been filled with a value.
+  //: Return contents of location (i,j,k).
+  //  Returns an undefined value (in fact 
+  //  a T()) if location (i,j,k) has not been filled with a value.
   T& operator () (unsigned i, unsigned j, unsigned k)
   {
     return vbl_sparse_array_base<T, vbl_index_3d>::operator() (vbl_index_3d(i, j, k));
   }
 
-    //: Return contents of (i,j,k).  Assertion failure if not yet filled.
+  //: Return contents of (i,j,k).  Assertion failure if not yet filled.
   const T& operator () (unsigned i, unsigned j, unsigned k) const
   {
     return vbl_sparse_array_base<T, vbl_index_3d>::operator() (vbl_index_3d(i, j, k));
   }
 
-    //: Return true if location (i,j,k) has been filled.
+  //: Return true if location (i,j,k) has been filled.
   bool fullp(unsigned i, unsigned j, unsigned k) const
   {
     return vbl_sparse_array_base<T, vbl_index_3d>::fullp(vbl_index_3d(i, j, k));
   }
 
-    //: Return the address of location (i,j,k).  0 if not yet filled.
+  //: Return the address of location (i,j,k).  0 if not yet filled.
   T* get_addr(unsigned i, unsigned j, unsigned k)
   {
     return vbl_sparse_array_base<T, vbl_index_3d>::get_addr(vbl_index_3d(i, j, k));
@@ -67,11 +67,10 @@ public:
 
   //: Print the Array to a stream in "(i,j,k): value" format.
   vcl_ostream& print(vcl_ostream&) const;
-
 };
 
+//: Stream operator - print the Array to a stream in "(i,j,k): value" format.
 template <class T>
-  //: Stream operator - print the Array to a stream in "(i,j,k): value" format.
 inline vcl_ostream& operator << 
 (vcl_ostream& s, const vbl_sparse_array_3d<T>& a)
 {
