@@ -1,6 +1,7 @@
 # vxl/vgl/algo/CMakeLists.txt
 
 SET( vgl_algo_sources
+  vgl_algo_fwd.h
   vgl_rtree.txx                        vgl_rtree.h
   vgl_homg_operators_1d.txx            vgl_homg_operators_1d.h
   vgl_homg_operators_2d.txx            vgl_homg_operators_2d.h

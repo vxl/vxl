@@ -1,4 +1,5 @@
 #include <vgl/vgl_fwd.h>
+#include <vgl/algo/vgl_algo_fwd.h>
 
 #include <vgl/vgl_1d_basis.h>
 #include <vgl/vgl_area.h>
