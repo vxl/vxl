@@ -545,6 +545,26 @@ SOURCE=.\lmdif.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\enorm.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\fdjac2.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\lmpar.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\qrfac.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\qrsolv.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\lsame.c
 # End Source File
 # Begin Source File
