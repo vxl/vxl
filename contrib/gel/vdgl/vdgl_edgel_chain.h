@@ -13,9 +13,10 @@
 //  Modifications:
 //   10-Apr-2002 Peter Vanroose - Added & implemented split(), extract_subchain()
 //   17-May-2004 Joseph Mundy - Added digital I/O
+//   10-Sep-2004 Peter Vanroose Added copy ctor with explicit vbl_ref_count init
 // \endverbatim
 
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <vcl_vector.h>
 #include <vul/vul_timestamp.h>
 #include <vbl/vbl_ref_count.h>
@@ -26,7 +27,7 @@
 class vdgl_edgel_chain : public vul_timestamp,
                          public vbl_ref_count
 {
-   // PUBLIC INTERFACE----------------------------------------------------------
+  // PUBLIC INTERFACE----------------------------------------------------------
  public:
 
   // Constructors/Destructors--------------------------------------------------
@@ -34,8 +35,9 @@ class vdgl_edgel_chain : public vul_timestamp,
   vdgl_edgel_chain( const vcl_vector<vdgl_edgel> edgels);
   //: make a straight edgel chain from p0 to p1.
   //  Useful for boundary filling and debugging
-  vdgl_edgel_chain( const double x0, const double y0, 
+  vdgl_edgel_chain( const double x0, const double y0,
                     const double x1, const double y1);
+  vdgl_edgel_chain(vdgl_edgel_chain const& x) : vbl_ref_count(), es_(x.es_) {}
   ~vdgl_edgel_chain();
 
   // Operators----------------------------------------------------------------

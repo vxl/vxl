@@ -16,6 +16,11 @@
 //  Based on the TargetJr design by R. Kaucic
 // \endverbatim
 //
+// \verbatim
+//  Modifications
+//   10-sep-2004 Peter Vanroose Added copy ctor with explicit vbl_ref_count init
+// \endverbatim
+//
 //-----------------------------------------------------------------------------
 #include <vbl/vbl_ref_count.h>
 #include <vcl_string.h>
@@ -28,6 +33,10 @@ class bxml_input_converter : public vbl_ref_count
 {
  public:
   bxml_input_converter();
+  bxml_input_converter(bxml_input_converter const& x)
+    : vbl_ref_count(), debug_(x.debug_), null_id_(x.null_id_),
+      class_name_(x.class_name_), tag_name_(x.tag_name_),
+      ref_tag_name_(x.ref_tag_name_) {}
   ~bxml_input_converter();
 
   //:specific sub_class string names

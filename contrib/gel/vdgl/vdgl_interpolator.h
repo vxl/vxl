@@ -9,15 +9,17 @@
 // \brief Represents a 2D interpolator for a vdgl_edgel_chain
 // \author Geoff Cross
 //
-// \verbatim
-//  Modifications
-//   J.L. Mundy December 01, 2002
-// \endverbatim
 // introduced new method get_tangent_angle, which is based on the actual
 // curve geometry.  The old method get_theta strictly refers to the
 // stored gradient directions and shouldn't be used for geometric operations.
 // In this regard, curvature is not a valid computation of geometric curvature
 // and should be changed.  Currently it is the rate of change of gradient direction
+//
+// \verbatim
+//  Modifications
+//   01-dec-2003 J.L. Mundy
+//   10-sep-2004 Peter Vanroose Added copy ctor with explicit vbl_ref_count init
+// \endverbatim
 
 #include <vdgl/vdgl_interpolator_sptr.h>
 #include <vul/vul_timestamp.h>
@@ -33,7 +35,9 @@ class vdgl_interpolator : public vul_timestamp,
 
   // Constructors/Destructors--------------------------------------------------
 
-  vdgl_interpolator( vdgl_edgel_chain_sptr chain) : chain_(chain) {};
+  vdgl_interpolator(vdgl_edgel_chain_sptr chain) : chain_(chain) {}
+
+  vdgl_interpolator(vdgl_interpolator const& x) : vbl_ref_count(), chain_(x.chain_) {}
 
   // Operators----------------------------------------------------------------
 

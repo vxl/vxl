@@ -11,6 +11,7 @@
 //
 // \verbatim
 //  Modifications
+//   10-sep-2004 Peter Vanroose Added copy ctor with explicit vbl_ref_count init
 // \endverbatim
 
 #include <vbl/vbl_ref_count.h>
@@ -26,9 +27,11 @@ class bgrl_edge : public vbl_ref_count
   friend class bgrl_vertex;
   friend class bgrl_graph;
 
-  //: Constructor
+  // Constructor
   bgrl_edge() : from_(NULL), to_(NULL) {}
-  //: Destructor
+  // Copy constructor
+  bgrl_edge(bgrl_edge const& e) : vbl_ref_count(), from_(e.from_), to_(e.to_) {}
+  // Destructor
   virtual ~bgrl_edge() {}
 
   //: Smart pointer to the vertex where this edge originates
@@ -60,7 +63,7 @@ class bgrl_edge : public vbl_ref_count
   // The following pointers are only used to point back to the vertices
   // which own them.  The vertices are responsible for keeping these
   // pointers valid.
-  
+
   //: The starting vertex
   // \note This must not be a smart pointer to prevent memory leaks
   bgrl_vertex* from_;
@@ -82,7 +85,7 @@ class bgrl_edge : public vbl_ref_count
 void vsl_add_to_binary_loader(const bgrl_edge& e);
 
 //: Print an ASCII summary to the stream
-//  \relates bgrl_edge
+// \relates bgrl_edge
 void vsl_print_summary(vcl_ostream &os, const bgrl_edge* e);
 
 #endif // bgrl_edge_h_

@@ -32,7 +32,6 @@
 // <end copyright notice>
 #ifndef bsol_hough_line_index_h_
 #define bsol_hough_line_index_h_
-
 //-----------------------------------------------------------------------------
 //:
 // \file
@@ -85,29 +84,36 @@
 //
 //  Typical usage:
 // - Create a new index for a 100x100 coordinate space with 5 degree angular res.
-//
+//   \code
 //      index = new bsol_hough_line_index(0.0, 0.0, 100.0, 100.0, 180.0, 5.0)
-//
+//   \endcode
 // - Add a line to the index
-//
+//   \code
 //      ...
 //      vsol_line_2d_sptr l(p1, p2);
 //      index->index(l);
-//
+//   \endcode
 // - find collinear lines (lines in a 2-d region in Hough space centered on the
 //                         parameters defined by line l)
-//
+//   \code
 //      ...
 //      vcl_vector<vsol_line_2d_sptr> lines;
 //      index->lines_in_interval(lines, l, 1.0, 5.0);//dr = 1.0, dtheta = 5.0
 //                                                   //i.e. +- 1.0 and +- 5.0
-//
+//   \endcode
 // - find lines at a particular orientation
-//
+//   \code
 //      index->parallel_lines(lines, 45.0, 5.0); //Lines parallel to 45 deg.
 //                                               //+- 5 deg.
+//   \endcode
 //
-// \author J.L. Mundy December 1997, ported to VXL April 11, 2003
+// \author J.L. Mundy December 1997
+// \date   ported to VXL April 11, 2003
+//
+// \verbatim
+//  Modifications
+//   10-sep-2004 Peter Vanroose Added copy ctor with explicit vbl_ref_count init
+// \endverbatim
 //-----------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vbl/vbl_ref_count.h>
@@ -133,6 +139,12 @@ class bsol_hough_line_index :  public vbl_ref_count
                         const float angle_range=180.0,
                         const float angle_increment=5.0);
 
+  bsol_hough_line_index(bsol_hough_line_index const& i)
+    : vbl_ref_count(), xo_(i.xo_), yo_(i.yo_),
+      xsize_(i.xsize_), ysize_(i.ysize_),
+      angle_range_(i.angle_range_), angle_increment_(i.angle_increment_),
+      r_dim_(i.r_dim_), th_dim_(i.th_dim_), index_(i.index_) {}
+
   ~bsol_hough_line_index();
 
   // Data Access---------------------------------------------------------------
@@ -143,7 +155,7 @@ class bsol_hough_line_index :  public vbl_ref_count
   int get_r_dimension() const {return r_dim_;}
   int get_theta_dimension() const {return th_dim_;}
 
-  //:Get the bsol_hough_line_index array location of a line segment
+  //: Get the bsol_hough_line_index array location of a line segment
   void array_loc(vsol_line_2d_sptr const& line, float& r, float& theta);
   void array_loc(vsol_line_2d_sptr const& line, int& r, int& theta);
 
@@ -151,7 +163,7 @@ class bsol_hough_line_index :  public vbl_ref_count
   int trans_loc(const int transx, const int transy,
                 const int ry, const int theta);
 
-  //:Get line count at a particular location in bsol_hough_line_index space
+  //: Get line count at a particular location in bsol_hough_line_index space
   int count(const int r, const int theta);
 
   //: Insert a new line into the index
@@ -160,20 +172,20 @@ class bsol_hough_line_index :  public vbl_ref_count
   //: Insert a unique new line into the index
   bool index_new(vsol_line_2d_sptr const& line);
 
-  //:find if a line is in the index
+  //: find if a line is in the index
   bool find(vsol_line_2d_sptr const& line);
 
-  //:remove a line
+  //: remove a line
   bool remove(vsol_line_2d_sptr const& line);
 
-  //:Lines in a line index bin at integer r and theta bin indices.
+  //: Lines in a line index bin at integer r and theta bin indices.
   void lines_at_index(const int r, const int theta,
                       vcl_vector<vsol_line_2d_sptr>& lines);
 
   vcl_vector<vsol_line_2d_sptr > lines_at_index(const int r,
                                                 const int theta);
 
-  //:Lines in a tolerance box around the r and theta of a given line.
+  //: Lines in a tolerance box around the r and theta of a given line.
   // r is in distance units and theta is in degrees.
   void lines_in_interval(vsol_line_2d_sptr const& l,
                          const float r_dist, const float theta_dist,
@@ -192,7 +204,7 @@ class bsol_hough_line_index :  public vbl_ref_count
   vcl_vector<vsol_line_2d_sptr> parallel_lines(const float angle,
                                                const float angle_dist);
 
-  //:Lines at an angle to a given line (angle is in degrees)
+  //: Lines at an angle to a given line (angle is in degrees)
   void lines_at_angle(vsol_line_2d_sptr const &l,
                       const float angle, const float angle_dist,
                       vcl_vector<vsol_line_2d_sptr >& lines);
@@ -201,7 +213,7 @@ class bsol_hough_line_index :  public vbl_ref_count
     lines_at_angle(vsol_line_2d_sptr const &l,
                    const float angle, const float angle_dist);
 
-  //:Lines parallel to a given line with angle_dist in degrees
+  //: Lines parallel to a given line with angle_dist in degrees
   void parallel_lines(vsol_line_2d_sptr const &l,
                       const float angle_dist,
                       vcl_vector<vsol_line_2d_sptr>& lines);
@@ -213,15 +225,15 @@ class bsol_hough_line_index :  public vbl_ref_count
   //: Angle histogram - projection of hough space onto theta axis
   vcl_vector<int> angle_histogram();
 
-  //:Dominant line directions found by non-maximum suppression above thresh
-  int dominant_directions(const int thresh, const float angle_tol, 
+  //: Dominant line directions found by non-maximum suppression above thresh
+  int dominant_directions(const int thresh, const float angle_tol,
                           vcl_vector<int>& dirs);
 
-  //:Dominant parallel line groups
+  //: Dominant parallel line groups
   int dominant_line_groups(const int thresh, const float angle_tol,
                            vcl_vector<vcl_vector<vsol_line_2d_sptr> >& groups);
 
-  //:An image of the hough space
+  //: An image of the hough space
   vbl_array_2d<unsigned char> get_hough_image();
 
   // Data Control--------------------------------------------------------------
@@ -240,19 +252,19 @@ class bsol_hough_line_index :  public vbl_ref_count
 
  private:
 
-  float xo_; // X Origin of the Cartiesian Space
-  float yo_; // Y Origin of the Cartiesian Space
+  float xo_; //!< X Origin of the Cartesian Space
+  float yo_; //!< Y Origin of the Cartesian Space
 
-  float xsize_; // Dimensions of the Cartesian space
+  float xsize_; //!< Dimensions of the Cartesian space
   float ysize_;
 
-  float angle_range_; //Granularity of the line index
+  float angle_range_; //!< Granularity of the line index
   float angle_increment_;
 
-  int   r_dim_;  // The dimensions of the index space
+  int   r_dim_;  //!< The dimensions of the index space
   int   th_dim_;
 
-  // The index space for lines. An array of vectors of line indices
+  //: The index space for lines. An array of vectors of line indices
   vbl_array_2d<vcl_vector<vsol_line_2d_sptr>* > index_;
 };
 

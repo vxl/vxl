@@ -22,22 +22,33 @@
 //
 // \verbatim
 //  Modifications
-//   <none>
+//   10-sep-2004 Peter Vanroose Added copy ctor with explicit vbl_ref_count init
 // \endverbatim
 //
 //-------------------------------------------------------------------------
 #include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <vbl/vbl_ref_count.h>
 #include <strk/strk_epi_point_sptr.h>
 #include <strk/strk_epi_seg_sptr.h>
 
-class strk_epi_seg :  public vbl_ref_count
+class strk_epi_seg : public vbl_ref_count
 {
  public:
-
   strk_epi_seg();
   strk_epi_seg(vcl_vector<strk_epi_point_sptr> const & points);
+  strk_epi_seg(strk_epi_seg const& s)
+    : vbl_ref_count(), limits_valid_(s.limits_valid_), int_valid_(s.int_valid_),
+      min_index_(s.min_index_), max_index_(s.max_index_),
+      min_alpha_(s.min_alpha_), max_alpha_(s.max_alpha_),
+      min_s_(s.min_s_), max_s_(s.max_s_), avg_tan_ang_(s.avg_tan_ang_),
+      min_tan_ang_(s.min_tan_ang_), max_tan_ang_(s.max_tan_ang_),
+      seg_(s.seg_), int_alpha_(s.int_alpha_), left_ds_(s.left_ds_),
+      left_int_(s.left_int_), right_ds_(s.right_ds_), right_int_(s.right_int_),
+      avg_left_int_(s.avg_left_int_), avg_right_int_(s.avg_right_int_),
+      left_int_sd_(s.left_int_sd_), right_int_sd_(s.right_int_sd_),
+      min_left_int_(s.min_left_int_), max_left_int_(s.max_left_int_),
+      min_right_int_(s.min_right_int_) , max_right_int_(s.max_right_int_) {}
   virtual ~strk_epi_seg() {}
 
   //: accessors
@@ -109,8 +120,8 @@ class strk_epi_seg :  public vbl_ref_count
   void compute_limits();
   void compute_int_values();
 
-  bool limits_valid_;//up to date coordinate geometry
-  bool int_valid_;//up to date intensity values
+  bool limits_valid_;//!< up to date coordinate geometry
+  bool int_valid_;//!< up to date intensity values
   int min_index_;
   int max_index_;
 
@@ -123,11 +134,11 @@ class strk_epi_seg :  public vbl_ref_count
   double max_tan_ang_;
   //:points are in original digital curve order but also monotonic in alpha
   vcl_vector<strk_epi_point_sptr> seg_;
-  vcl_vector<double> int_alpha_;//the alphas for intensity samples
+  vcl_vector<double> int_alpha_;//!< the alphas for intensity samples
   vcl_vector<double> left_ds_;
-  vcl_vector<double> left_int_; // left intensity average
+  vcl_vector<double> left_int_; //!< left intensity average
   vcl_vector<double> right_ds_;
-  vcl_vector<double> right_int_;// right intensity average
+  vcl_vector<double> right_int_;//!< right intensity average
   double avg_left_int_;
   double avg_right_int_;
   double left_int_sd_;

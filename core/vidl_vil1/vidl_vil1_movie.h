@@ -5,9 +5,10 @@
 // \author Nicolas Dano, september 1999
 //
 // \verbatim
-//   Modifications
-//    Julien ESTEVE, June 2000 -   Ported from TargetJr
-//    10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
+//  Modifications
+//   June 2000 Julien ESTEVE          Ported from TargetJr
+//   10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
+//   10/9/2004 Peter Vanroose Added copy ctor with explicit vbl_ref_count init
 // \endverbatim
 
 #include <vbl/vbl_ref_count.h>
@@ -30,7 +31,8 @@ class vidl_vil1_movie : public vbl_ref_count
   vidl_vil1_movie ();
   vidl_vil1_movie(vidl_vil1_clip_sptr clip);
   ~vidl_vil1_movie();
-  vidl_vil1_movie(const vidl_vil1_movie&);
+  vidl_vil1_movie(vidl_vil1_movie const& x)
+    : vbl_ref_count(), frame_rate_(x.frame_rate_), clip_(x.clip_) {}
 
   // Operators
   vidl_vil1_movie& operator=(const vidl_vil1_movie&);

@@ -37,6 +37,7 @@
 //                       This extension permits the propagation of region labels
 //                       across junctions.
 //   March 7, 1999 - JLM Allowed more than two regions per edge.
+//   Sept 10, 2004 - PVr Added copy ctor with explicit vbl_ref_count init
 // \endverbatim
 //-----------------------------------------------------------------------------
 
@@ -49,30 +50,20 @@ class gevd_region_edge : public vbl_ref_count
  public:
   //Constructors/Destructors
   gevd_region_edge(vtol_edge_2d_sptr e);
+  gevd_region_edge(gevd_region_edge const& e)
+    : vbl_ref_count(), edge_(e.edge_), labels_(e.labels_) {}
   ~gevd_region_edge();
-  //Accessors
-#if 0 // now obsolete - JLM, March 1999
-  unsigned int GetLeftRegion() const {return left_region_;}
-  void SetLeftRegion(unsigned int region);
-  unsigned int GetRightRegion() const {return right_region_;}
-  void SetRightRegion(unsigned int region);
-#endif
   void Prop(gevd_region_edge const* re, unsigned int label);
   vtol_edge_2d_sptr get_edge() const {return edge_;}
   bool is_vertex() const;
   unsigned int NumLabels() const {return labels_.size();}
   unsigned int GetLabel(unsigned int i) const {return i<NumLabels() ? labels_[i] : 0;}
 
-  //Utitities (especially for testing)
  protected:
-  //Utilities
+  //Utilities (especially for testing)
   bool SetNewLabel(unsigned int label);
   //members
   vtol_edge_2d_sptr edge_;
-#if 0 // now obsolete - JLM, March 1999
-  unsigned int left_region_;
-  unsigned int right_region_;
-#endif
   vcl_vector<unsigned int> labels_;
 };
 

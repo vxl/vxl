@@ -37,6 +37,7 @@
 //                       This extension permits the propagation of region labels
 //                       across junctions.
 //   March 7, 1999 - JLM Allowed more than two regions per edge.
+//   Sept 10, 2004 - PVr Added copy ctor with explicit vbl_ref_count init
 // \endverbatim
 //-----------------------------------------------------------------------------
 
@@ -51,6 +52,8 @@ class sdet_region_edge : public vbl_ref_count
  public:
   //Constructors/Destructors
   sdet_region_edge(vtol_edge_2d_sptr e);
+  sdet_region_edge(sdet_region_edge const& e)
+    : vbl_ref_count(), edge_(e.edge_), labels_(e.labels_) {}
   ~sdet_region_edge();
   //Accessors
 
@@ -61,8 +64,8 @@ class sdet_region_edge : public vbl_ref_count
 
   bool is_vertex() const;
   unsigned int NumLabels(unsigned int max_label) const;
-  unsigned int GetLabel(unsigned int i, unsigned int max_label) const 
-  {return i<NumLabels(max_label) ? labels_[i] : 0;}
+  unsigned int GetLabel(unsigned int i, unsigned int max_label) const
+  { return i<NumLabels(max_label) ? labels_[i] : 0; }
 
   //Utitities (especially for testing)
  protected:

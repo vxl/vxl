@@ -1,4 +1,3 @@
-//--*-c++-*--tells emacs this is c++
 #ifndef gauss_cylinder_h_
 #define gauss_cylinder_h_
 //-----------------------------------------------------------------------------
@@ -8,24 +7,26 @@
 //
 // \author
 //   J.L. Mundy
+// \date  March 04, 2003    Initial version.
 //
 // Intrinsic parameters
-//             xy_sigma_     - the in-slice Gaussian std-dev.
-//             z_sigma_      - the across-slice Gaussian std-dev.
-//             length_sigma_ - truncation of the cylinder axis.
+//  - xy_sigma_     - the in-slice Gaussian std-dev.
+//  - z_sigma_      - the across-slice Gaussian std-dev.
+//  - length_sigma_ - truncation of the cylinder axis.
 //
 // Extrinsic parameters are:
-//             x_origin_     - x coordinate of the cylinder origin
-//             y_origin_     - y coordinate of the cylinder origin
-//             z_origin_     - z coordinate of the cylinder origin
-//             elevation_    - elevation orientation of cylinder axis (deg)
-//             azimuth_      - azimuth orientation of the cylinder axis (deg)
+//  - x_origin_     - x coordinate of the cylinder origin
+//  - y_origin_     - y coordinate of the cylinder origin
+//  - z_origin_     - z coordinate of the cylinder origin
+//  - elevation_    - elevation orientation of cylinder axis (deg)
+//  - azimuth_      - azimuth orientation of the cylinder axis (deg)
+//
 // \verbatim
-//  Modifications:
-//   J.L. Mundy March 04, 2003    Initial version.
+//  Modifications
+//   10-sep-2004 Peter Vanroose Added copy ctor with explicit vbl_ref_count init
 // \endverbatim
 //-----------------------------------------------------------------------------
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <vbl/vbl_ref_count.h>
 
 class btom_gauss_cylinder : public vbl_ref_count
@@ -38,6 +39,11 @@ class btom_gauss_cylinder : public vbl_ref_count
                       float length_sigma=10.0, float density=1.0,
                       float x_origin=0.0, float y_origin=0.0, float z_position=0.0,
                       float elevation=0.0, float azimuth=0.0);
+  btom_gauss_cylinder(btom_gauss_cylinder const& c)
+    : vbl_ref_count(), xy_sigma_(c.xy_sigma_), z_sigma_(c.z_sigma_),
+      length_sigma_(c.length_sigma_), density_(c.density_),
+      x_origin_(c.x_origin_), y_origin_(c.y_origin_), z_position_(c.z_position_),
+      elevation_(c.elevation_), azimuth_(c.azimuth_) {}
   ~btom_gauss_cylinder();
 
   // Data Access---------------------------------------------------------------
@@ -67,11 +73,9 @@ class btom_gauss_cylinder : public vbl_ref_count
   float radon_transform(float theta, float t);
   // print params
   friend
-    vcl_ostream& operator << (vcl_ostream& os, const btom_gauss_cylinder& gc);
+    vcl_ostream& operator<<(vcl_ostream& os, const btom_gauss_cylinder& gc);
 
  protected:
-  // Utilities
-
   // Data Members--------------------------------------------------------------
   float xy_sigma_;
   float z_sigma_;

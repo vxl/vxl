@@ -90,7 +90,7 @@ strk_tracking_face_2d(vtol_face_2d_sptr const& face,
   trans_ = ident();
 }
 
-strk_tracking_face_2d::strk_tracking_face_2d (vtol_intensity_face_sptr const& intf)
+strk_tracking_face_2d::strk_tracking_face_2d(vtol_intensity_face_sptr const& intf)
 {
   if (!intf)
     return;
@@ -173,6 +173,64 @@ strk_tracking_face_2d::strk_tracking_face_2d(strk_tracking_face_2d_sptr const& t
   min_gradient_ = tf->min_gradient_;
   parzen_sigma_ = tf->parzen_sigma_;
   trans_ = tf->trans_;
+}
+
+strk_tracking_face_2d::strk_tracking_face_2d(strk_tracking_face_2d const& tf)
+  : vbl_ref_count()
+{
+  vtol_intensity_face_sptr intf = tf.face();
+  vtol_face_2d_sptr f2d = new vtol_face_2d(intf->cast_to_face_2d());
+  intf_= new vtol_intensity_face(f2d, intf->Npix(),
+                                 intf->Xj(), intf->Yj(),
+                                 intf->Ij());
+
+  Ix_ = 0;
+  Iy_ = 0;
+  gradient_info_ = tf.gradient_info_;
+  if (gradient_info_)
+  {
+    int n = intf_->Npix();
+    Ix_ = new float[n];
+    Iy_ = new float[n];
+    for (int i =0; i<n; i++)
+    {
+      Ix_[i]=tf.Ix(i);
+      Iy_[i]=tf.Iy(i);
+    }
+  }
+  hue_ = 0;
+  sat_ = 0;
+  color_info_ = tf.color_info_;
+  if (color_info_)
+  {
+    int n = intf_->Npix();
+    hue_ = new float[n];
+    sat_ = new float[n];
+    for (int i =0; i<n; i++)
+    {
+      hue_[i]=tf.hue(i);
+      sat_[i]=tf.sat(i);
+    }
+  }
+  renyi_joint_entropy_ = tf.renyi_joint_entropy_;
+  intensity_mi_ = tf.int_mutual_info();
+  gradient_dir_mi_ = tf.grad_mutual_info();
+  color_mi_ = tf.color_mutual_info();
+  model_intensity_entropy_=tf.model_intensity_entropy_;
+  model_gradient_dir_entropy_=tf.model_gradient_dir_entropy_;
+  model_color_entropy_=tf.model_color_entropy_;
+  intensity_entropy_=tf.intensity_entropy_;
+  gradient_dir_entropy_=tf.gradient_dir_entropy_;
+  color_entropy_=tf.color_entropy_;
+  intensity_joint_entropy_=tf.intensity_joint_entropy_;
+  model_intensity_joint_entropy_=tf.model_intensity_joint_entropy_;
+  gradient_joint_entropy_=tf.gradient_joint_entropy_;
+  color_joint_entropy_=tf.color_joint_entropy_;
+  intensity_info_diff_ = tf.intensity_info_diff_;
+  color_info_diff_ = tf.color_info_diff_;
+  min_gradient_ = tf.min_gradient_;
+  parzen_sigma_ = tf.parzen_sigma_;
+  trans_ = tf.trans_;
 }
 
 strk_tracking_face_2d::~strk_tracking_face_2d()
@@ -801,8 +859,7 @@ compute_model_intensity_joint_entropy(strk_tracking_face_2d_sptr const& other)
 //: randomly select a set of pixels from the interior
 bool strk_tracking_face_2d::random_colors(int& n_pix,
                                           vcl_vector<float>& hue,
-                                          vcl_vector<float>& sat
-                                          )
+                                          vcl_vector<float>& sat)
 {
   hue.clear();
   sat.clear();

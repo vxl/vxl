@@ -1,4 +1,3 @@
-
 //:
 // \file
 
@@ -22,23 +21,27 @@ vidl_vil1_clip::vidl_vil1_clip(
         vidl_vil1_codec_sptr codec,
         int start,
         int end,
-        int increment) : frames_(codec->length())
+        int increment) : frames_(codec->length()), coder_(codec)
 {
   for (unsigned int i=0; i<frames_.size(); i++)
     frames_[i] = new vidl_vil1_frame(i, codec);
 
-  coder_ = codec;
-
   init(start, end, increment);
 }
 
+//: Copy constructor.
+vidl_vil1_clip::vidl_vil1_clip(vidl_vil1_clip const& x)
+  : vbl_ref_count(), frames_(x.frames_),
+    startframe_(x.startframe_), endframe_(x.endframe_),
+    increment_(x.increment_), frame_rate_(x.frame_rate_), coder_(x.coder_)
+{
+}
+
 //: Constructor. Create a clip from a vector of images. Start, end and increment frames are optional.
-vidl_vil1_clip::vidl_vil1_clip(
-        vcl_vector<vil1_image> &images,
-        int start,
-        int end,
-        int increment
-       )
+vidl_vil1_clip::vidl_vil1_clip(vcl_vector<vil1_image> &images,
+                               int start,
+                               int end,
+                               int increment)
 {
   int position = 0; // Could not cast the iterator i into (int)
                     // but that would be better
@@ -57,12 +60,10 @@ vidl_vil1_clip::vidl_vil1_clip(
 }
 
 //: Constructor. Create a clip from a list of images. Start, end and increment frames are optional.
-vidl_vil1_clip::vidl_vil1_clip(
-                     vcl_list<vil1_image> &images,
-                     int start,
-                     int end,
-                     int increment
-                    )
+vidl_vil1_clip::vidl_vil1_clip(vcl_list<vil1_image> &images,
+                               int start,
+                               int end,
+                               int increment)
 {
   int position = 0; // Could not cast the iterator i into (int)
                     // but that would be better
@@ -113,12 +114,6 @@ void vidl_vil1_clip::init(int start, int end, int increment)
 }
 
 
-//: Destructor
-vidl_vil1_clip::~vidl_vil1_clip()
-{
-}
-
-
 //: Get the frame numbered n inside the range defined by startframe, endframe and increment.
 // So, the returned frame is startframe_+n*increment_
 vidl_vil1_frame_sptr vidl_vil1_clip::get_frame(int n)
@@ -132,12 +127,6 @@ vidl_vil1_frame_sptr vidl_vil1_clip::get_frame(int n)
 
   // return the frame
   return frames_[startframe_+n*increment_];
-}
-
-//: Return the number of frames
-int vidl_vil1_clip::length()
-{
-  return (endframe_-startframe_)/increment_ + 1;
 }
 
 //: Return the horizontal size of the frames in the clip

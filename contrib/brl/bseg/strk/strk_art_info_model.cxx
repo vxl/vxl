@@ -20,11 +20,11 @@ strk_art_info_model::strk_art_info_model()
 //------------------------------------------------------------------------
 // Accessors
 //
-strk_tracking_face_2d_sptr strk_art_info_model::face(int i) { return faces_[i]; }
-strk_tracking_face_2d_sptr strk_art_info_model::stem() { return faces_[STEM]; }
-strk_tracking_face_2d_sptr strk_art_info_model::left_tip() { return faces_[LONG_TIP]; }
-strk_tracking_face_2d_sptr strk_art_info_model::right_tip() { return faces_[SHORT_TIP]; }
-vsol_point_2d_sptr strk_art_info_model::stem_pivot() { return stem_pivot_; }
+strk_tracking_face_2d_sptr strk_art_info_model::face(int i) const { return faces_[i]; }
+strk_tracking_face_2d_sptr strk_art_info_model::stem() const { return faces_[STEM]; }
+strk_tracking_face_2d_sptr strk_art_info_model::left_tip() const { return faces_[LONG_TIP]; }
+strk_tracking_face_2d_sptr strk_art_info_model::right_tip() const { return faces_[SHORT_TIP]; }
+vsol_point_2d_sptr strk_art_info_model::stem_pivot() const { return stem_pivot_; }
 
 double strk_art_info_model::arm_radius(strk_tracking_face_2d_sptr const& face)
 {
@@ -79,8 +79,15 @@ strk_art_info_model::strk_art_info_model(strk_art_info_model_sptr const& im)
   short_arm_radius_ = im->short_arm_radius_;
 }
 
-strk_art_info_model::~strk_art_info_model()
+strk_art_info_model::strk_art_info_model(strk_art_info_model const& im)
+  : vbl_ref_count(), stem_pivot_(im.stem_pivot_),
+    long_arm_radius_(im.long_arm_radius_), short_arm_radius_(im.short_arm_radius_)
+{
+  for (int i = 0; i<im.n_faces(); i++)
+    faces_.push_back(new strk_tracking_face_2d(im.face(i)));
+}
 
+strk_art_info_model::~strk_art_info_model()
 {
 }
 
@@ -174,10 +181,10 @@ bool strk_art_info_model::transform(const double stem_tx,
   return true;
 }
 
-vcl_vector<vtol_face_2d_sptr> strk_art_info_model::vtol_faces()
+vcl_vector<vtol_face_2d_sptr> strk_art_info_model::vtol_faces() const
 {
   vcl_vector<vtol_face_2d_sptr> vtol_faces;
-  for (vcl_vector<strk_tracking_face_2d_sptr>::iterator fit = faces_.begin();
+  for (vcl_vector<strk_tracking_face_2d_sptr>::const_iterator fit = faces_.begin();
        fit != faces_.end(); fit++)
   {
     vtol_face_2d_sptr f = (*fit)->face()->cast_to_face_2d();
@@ -193,7 +200,7 @@ compute_mutual_information(vil1_memory_image_of<float> const& image)
     return false;
   vil1_memory_image_of<float> null;//dummy args (replace with deflts)
   double model_info = 0.0;
-  for (vcl_vector<strk_tracking_face_2d_sptr>::iterator fit =  faces_.begin();
+  for (vcl_vector<strk_tracking_face_2d_sptr>::const_iterator fit =  faces_.begin();
        fit != faces_.end(); fit++)
   {
     if (!(*fit)->compute_mutual_information(image, null, null, null, null))
@@ -213,7 +220,7 @@ compute_mutual_information(vil1_memory_image_of<float> const& image,
     return false;
   vil1_memory_image_of<float> null;
   double model_info = 0.0;
-  for (vcl_vector<strk_tracking_face_2d_sptr>::iterator fit =  faces_.begin();
+  for (vcl_vector<strk_tracking_face_2d_sptr>::const_iterator fit =  faces_.begin();
        fit != faces_.end(); fit++)
   {
     if (!(*fit)->compute_mutual_information(image, Ix, Iy, null, null))

@@ -23,6 +23,11 @@
 //    Joseph L. Mundy - November 05, 2003
 //    Brown University
 //
+// \verbatim
+//  Modifications
+//   10-sep-2004 Peter Vanroose Added copy ctor with explicit vbl_ref_count init
+// \endverbatim
+//
 //-----------------------------------------------------------------------------
 #include<vcl_vector.h>
 #include<vbl/vbl_ref_count.h>
@@ -49,18 +54,20 @@ class strk_art_info_model : public vbl_ref_count
 
   strk_art_info_model(strk_art_info_model_sptr const& im);
 
+  strk_art_info_model(strk_art_info_model const& im);
+
   ~strk_art_info_model();
 
   // accessors
-  int n_faces() { return faces_.size(); }
-  strk_tracking_face_2d_sptr face(int i);
-  strk_tracking_face_2d_sptr stem();
-  strk_tracking_face_2d_sptr left_tip();
-  strk_tracking_face_2d_sptr right_tip();
-  vsol_point_2d_sptr stem_pivot();
-  vcl_vector<vtol_face_2d_sptr> vtol_faces();
+  unsigned int n_faces() const { return faces_.size(); }
+  strk_tracking_face_2d_sptr face(int i) const;
+  strk_tracking_face_2d_sptr stem() const;
+  strk_tracking_face_2d_sptr left_tip() const;
+  strk_tracking_face_2d_sptr right_tip() const;
+  vsol_point_2d_sptr stem_pivot() const;
+  vcl_vector<vtol_face_2d_sptr> vtol_faces() const;
   // information
-  double total_model_info() { return total_model_info_; }
+  double total_model_info() const { return total_model_info_; }
   // utility methods
   bool transform(const double stem_tx, const double stem_ty,
                  const double stem_angle,

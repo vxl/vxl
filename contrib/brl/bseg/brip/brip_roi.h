@@ -1,4 +1,3 @@
-//-*-c++-*-
 // This is brl/bseg/brip/brip_roi.h
 #ifndef brip_roi_h_
 #define brip_roi_h_
@@ -8,15 +7,13 @@
 // \author J.L. Mundy
 // \brief A composite region of interest class for image processing operations
 //
-// \verbatim
 // Provides a set of rectangular regions for processing in a larger image.
-// 
-// 
-// 
-// 
+//
+// \verbatim
 //  Modifications
 //   Initial version October 6, 2003
 //   Actual implementation July 12, 2004
+//   10-sep-2004 Peter Vanroose Added copy ctor with explicit vbl_ref_count init
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -29,6 +26,9 @@ class brip_roi : public vbl_ref_count
  public:
   //:should initialize with image bounds on construction
   brip_roi(const int n_image_cols = 0, const int n_image_rows = 0);
+  brip_roi(brip_roi const& r)
+    : vbl_ref_count(), n_image_cols_(r.n_image_cols_),
+      n_image_rows_(r.n_image_rows_), regions_(r.regions_) {}
   ~brip_roi() {}
   //:replace existing image bounds
   void set_image_bounds(const int n_image_cols,

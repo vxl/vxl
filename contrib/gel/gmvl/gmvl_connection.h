@@ -7,8 +7,13 @@
 //:
 // \file
 // \author crossge@crd.ge.com
+//
+// \verbatim
+//  Modifications
+//   10-sep-2004 Peter Vanroose Added copy ctor with explicit vbl_ref_count init
+// \endverbatim
 
-#include <vcl_iostream.h>
+#include <vcl_iosfwd.h>
 #include <vbl/vbl_ref_count.h>
 #include <gmvl/gmvl_node_sptr.h>
 
@@ -18,6 +23,8 @@ class gmvl_connection : public vbl_ref_count
   // constructors / destructors
 
   gmvl_connection( const gmvl_node_sptr node1, const gmvl_node_sptr node2);
+  gmvl_connection(gmvl_connection const& x)
+    : vbl_ref_count(), n1_(x.n1_), n2_(x.n2_) {}
   ~gmvl_connection();
 
   // accessors
