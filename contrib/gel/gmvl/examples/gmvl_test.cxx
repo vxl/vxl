@@ -5,7 +5,7 @@
 #pragma implementation "main"
 #endif
 
-#include <vcl/vcl_fstream.h>
+#include <vcl_fstream.h>
 
 #include <vil/vil_image.h>
 #include <vil/vil_load.h>
