@@ -21,7 +21,6 @@
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
-#include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_interpolator_sptr.h>
 
 class vdgl_digital_curve : public vsol_curve_2d
@@ -38,7 +37,7 @@ class vdgl_digital_curve : public vsol_curve_2d
                      vsol_point_2d_sptr const& p1);
 
   // Operators----------------------------------------------------------------
-  short order() const {return interpolator_->order();}
+  short order() const;
   // these must be defined as they are virtual in vsol_curve_2d
   vsol_point_2d_sptr p0() const;
   vsol_point_2d_sptr p1() const;
@@ -124,6 +123,5 @@ void vsl_b_read(vsl_b_istream &is, vdgl_digital_curve* &dc);
 
 //: Print human readable summary of vdgl_digital_curve* to a stream.
 void vsl_print_summary(vcl_ostream &os, const vdgl_digital_curve* dc);
-
 
 #endif // vdgl_digital_curve_h_

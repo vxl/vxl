@@ -10,9 +10,9 @@
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsol/vsol_point_2d.h>
 #include <vdgl/vdgl_edgel_chain.h>
+#include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_interpolator_linear.h>
 #include <vdgl/vdgl_interpolator_cubic.h>
-
 
 vdgl_digital_curve::vdgl_digital_curve()
   : interpolator_(new vdgl_interpolator_linear(new vdgl_edgel_chain))
@@ -44,6 +44,11 @@ vdgl_digital_curve::vdgl_digital_curve(vsol_point_2d_sptr const& p0,
 vsol_spatial_object_2d* vdgl_digital_curve::clone(void) const
 {
   return new vdgl_digital_curve(interpolator_);
+}
+
+short vdgl_digital_curve::order() const
+{
+  return interpolator_->order();
 }
 
 double vdgl_digital_curve::get_x( const double s) const
@@ -196,7 +201,7 @@ void vdgl_digital_curve::b_read(vsl_b_istream &is)
    default:
     assert(!"vdgl_digital_curve I/O: version should be 1");
    case 1:
-    short order; 
+    short order;
     vsl_b_read(is, order);
     vdgl_edgel_chain_sptr ec;
     vsl_b_read(is, ec);
@@ -279,7 +284,5 @@ void vsl_print_summary(vcl_ostream &os, const vdgl_digital_curve* dc)
 //: Stream operator
 vcl_ostream& operator<<(vcl_ostream& s, const vdgl_digital_curve& dc)
 {
-  s << "[order: " << dc.order() << ' ' << *(dc.get_interpolator()->get_edgel_chain())
-    << "]";
-  return s;
+  return s << "[order: " << dc.order() << ' ' << *(dc.get_interpolator()->get_edgel_chain()) << ']';
 }
