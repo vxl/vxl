@@ -2,7 +2,7 @@
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
-SUBDIRS += vsl
+SUBDIRS += osl
 
 SUBDIRS += mvl
 SUBDIRS += oxp
