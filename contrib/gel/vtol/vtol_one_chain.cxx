@@ -526,8 +526,8 @@ void vtol_one_chain::compute_bounding_box(void) const
   {
     if (!(*eit)->get_bounding_box())
     {
-      vcl_cout << "In vtol_one_chain::compute_bounding_box()"
-               << " - edge has null bounding box\n";
+      vcl_cout << "In vtol_one_chain::compute_bounding_box() -"
+               << " edge has null bounding box\n";
       continue;
     }
     bounding_box_->grow_minmax_bounds(*(*eit)->get_bounding_box());
@@ -786,8 +786,7 @@ void vtol_one_chain::reverse_directions(void)
   inferiors()->clear();
   //  vcl_copy(inf_tmp.begin(),inf_tmp.end(),inferiors()->begin());
 
-  topology_list::iterator ti;
-  for (ti=inf_tmp.begin();ti!=inf_tmp.end();ti++)
+  for (topology_list::iterator ti=inf_tmp.begin();ti!=inf_tmp.end();ti++)
     inferiors()->push_back(*ti);
 
   vcl_vector<signed char> dir_tmp(directions_.size());
@@ -801,12 +800,11 @@ void vtol_one_chain::reverse_directions(void)
   directions_.clear();
   // vcl_copy(dir_tmp.begin(),dir_tmp.end(),directions_.begin());
 
-  vcl_vector<signed char>::iterator di;
-  for (di=dir_tmp.begin();di!=dir_tmp.end();di++)
+  for (vcl_vector<signed char>::iterator di=dir_tmp.begin();di!=dir_tmp.end();++di)
     directions_.push_back(*di);
 
-  chain_list::iterator hi;
-  for (hi=chain_inferiors_.begin();hi!=chain_inferiors_.end();++hi )
+  for (chain_list::iterator hi=chain_inferiors_.begin();
+       hi!=chain_inferiors_.end();++hi)
     (*hi)->cast_to_one_chain()->reverse_directions();
 }
 

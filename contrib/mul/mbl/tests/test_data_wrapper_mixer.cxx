@@ -45,10 +45,10 @@ void test_data_wrapper_pair_mixer(unsigned n1, unsigned n2)
     TEST("n+1-th element",vcl_fabs(mixer.current()[0]-n1-1)<1e-6,true);
   }
 
-  unsigned i=1;
+  unsigned n=1;
   mixer.reset();
-  while (mixer.next()) ++i;
-  TEST("Correct number of valid elements in loop",i,n1+n2);
+  while (mixer.next()) ++n;
+  TEST("Correct number of valid elements in loop",n,n1+n2);
 }
 
 void test_data_wrapper_mixer()

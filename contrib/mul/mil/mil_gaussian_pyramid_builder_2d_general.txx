@@ -56,7 +56,7 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
 
   // Reduce plane-by-plane
 
-  // use n-1 because we are trying to align inter-pixel spaces, so that the 
+  // use n-1 because we are trying to align inter-pixel spaces, so that the
   // centre pixel is most accurately registered despite buildup of rounding errors.
   double init_x = 0.5 * (src_nx - 1 - (dest_nx-1)*scale_step());
   double init_y = 0.5 * (src_ny - 1 - (dest_ny-1)*scale_step());
@@ -226,7 +226,7 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
     workb_row_next_bottom[x] = l_round( that->filt_pen_edge2_ * worka_row_bottom_4[x]
                                       + that->filt_pen_edge1_ * worka_row_bottom_3[x]
                                       + that->filt_pen_edge0_ * worka_row_bottom_2[x]
-                                      + that->filt_pen_edge_n1_ * worka_row_bottom_1[x], (T)0); 
+                                      + that->filt_pen_edge_n1_ * worka_row_bottom_1[x], (T)0);
 
     workb_row_bottom[x] = l_round( that->filt_edge2_ * worka_row_bottom_3[x]
                                  + that->filt_edge1_ * worka_row_bottom_2[x]
@@ -240,17 +240,17 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
 //  assert (dest_nx*scale_step() <= src_nx && dest_ny*that->scale_step() <= src_ny);
 
   const double init_x = 0.5 * (src_nx-1 - (dest_nx-1)*that->scale_step());
-  double y = 0.5 * (src_ny -1 - (dest_ny-1)*that->scale_step());
+  double dy = 0.5 * (src_ny -1 - (dest_ny-1)*that->scale_step());
   for (int yi=0; yi<dest_ny; yi++)
   {
-    double x=init_x;
+    double dx=init_x;
     for (int xi=0; xi<dest_nx; xi++)
     {
-      dest_row[xi] = l_round (mil_safe_extend_bilin_interp_2d(x, y,
+      dest_row[xi] = l_round (mil_safe_extend_bilin_interp_2d(dx, dy,
                               workb_im,  src_nx, src_ny, work_ystep), (T)0);
-      x += that->scale_step_;
+      dx += that->scale_step_;
     }
-    y+= that->scale_step_;
+    dy+= that->scale_step_;
     dest_row += dest_ystep;
   }
 }

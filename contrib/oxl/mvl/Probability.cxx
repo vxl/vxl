@@ -83,8 +83,8 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
 
   // ********************* //
 
-  unsigned int i = 0;
-  while (i < (unsigned int)samples) {
+  for (unsigned int i=0; i < (unsigned int)samples; )
+  {
     int random;
     if (buckets > 1) {
       random  = (int)((float)(no_buckets - 1)*rand()/(RAND_MAX+1.0));

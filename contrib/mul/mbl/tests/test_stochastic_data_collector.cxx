@@ -36,9 +36,6 @@ void test_stochastic_data_collector()
 
   configure();
 
-  vnl_vector<double> v(1);
-  int i;
-
   mbl_stochastic_data_collector<vnl_vector<double> > collector(100);
   collector.reseed(14545);
 
@@ -47,25 +44,27 @@ void test_stochastic_data_collector()
   const int n_expts = 50;
   for (int i=0;i<n_expts;++i)
   {
+    vnl_vector<double> v(1);
+
     collector.clear();
-    for (v(0) = 0.0; v(0) < 5000.0; v(0)++)
+    for (v(0) = 0.0; v(0) < 5000.0; v(0) += 1.0)
     {
       if (collector.store_next()) collector.force_record(v);
     }
 //    collector.record(v);
 
-  mbl_data_wrapper<vnl_vector<double> > &data = collector.data_wrapper();
-  data.reset();
-  do
-  {
-    v = data.current();
-    hist[((int)(v(0))) / 500] ++;
-  }
-  while (data.next());
+    mbl_data_wrapper<vnl_vector<double> > &data = collector.data_wrapper();
+    data.reset();
+    do
+    {
+      v = data.current();
+      hist[((int)(v(0))) / 500] ++;
+    }
+    while (data.next());
   }
 
   vcl_cout << "Histogram output, over " << n_expts << "experiments\n";
-  for (i = 0; i < 10; i++)
+  for (int i=0; i < 10; i++)
     vul_printf(vcl_cout, "From %4d to %4d there were on average %4f items stored.\n",
                i * 500, i*500 + 499, ((double)hist[i])/((double)n_expts))  ;
 

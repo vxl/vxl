@@ -375,8 +375,8 @@ float vdgl_digital_region::Diameter() const
   if (svd.rank()!=2)
     return float(vcl_sqrt(this->area()));
   //The factor of two is to estimate the extreme limit of the distribution
-  double r = 2*vcl_sqrt(vcl_fabs(svd.W(0))+ vcl_fabs(svd.W(1)));
-  return float(2*r);//diameter
+  double radius = 2*vcl_sqrt(vcl_fabs(svd.W(0))+ vcl_fabs(svd.W(1)));
+  return float(2*radius);//diameter
 }
 
 //------------------------------------------------------------
@@ -430,9 +430,9 @@ void vdgl_digital_region::PrincipalOrientation(vcl_vector<float>& major_axis)
     }
   vnl_matrix<double> v = svd.V();
   //2 sigma gives a good estimate of axis length (sigma = principal eigenvalue)
-  double r = 2*vcl_sqrt(vcl_fabs(svd.W(0)));
-  major_axis.x()=float(v(0,0)*r);
-  major_axis.y()=float(v(1,0)*r);
+  double radius = 2*vcl_sqrt(vcl_fabs(svd.W(0)));
+  major_axis.x()=float(v(0,0)*radius);
+  major_axis.y()=float(v(1,0)*radius);
 }
 
 #endif
@@ -567,14 +567,11 @@ void vdgl_digital_region::PrintFit() const
     this->DoPlaneFit();
   vcl_cout << "IntensityFit(In Plane Coordinates): "
            << "Number of Points =" <<  npts_ << vcl_endl
-           << "Scatter Matrix: \n"
-           << "X2 Y2 I2 " << this->X2() << " " << this->Y2()
-           << " " << this->I2() << vcl_endl
-           << "XY XI YI " << this->XY() << " " << this->XI()
-           << " " << this->YI() << vcl_endl
-           << "Xo Yo Io " << this->Xo() << " " << this->Yo()
-           << " " << this->Io() << vcl_endl
-           << "fitted Plane: \n"
+           << "Scatter Matrix:\n"
+           << "X2 Y2 I2   " << X2() << ' ' << Y2() << ' ' << I2() << vcl_endl
+           << "XY XI YI = " << XY() << ' ' << XI() << ' ' << YI() << vcl_endl
+           << "Xo Yo Io   " << Xo() << ' ' << Yo() << ' ' << Io() << vcl_endl
+           << "fitted Plane:\n"
            << "di/dx " << this->Ix() << vcl_endl
            << "di/dy " << this->Iy() << vcl_endl
            << "sample variance: " << this->Var()<< vcl_endl

@@ -51,8 +51,8 @@ static void print_vertices(vcl_vector<vtol_vertex_sptr>& verts)
 {
   for (vcl_vector<vtol_vertex_sptr>::iterator vit = verts.begin();
        vit != verts.end(); vit++)
-    vcl_cout << *vit <<"("
-             << (*vit)->cast_to_vertex_2d()->x()<< " "
+    vcl_cout << *vit << '('
+             << (*vit)->cast_to_vertex_2d()->x()<< ' '
              << (*vit)->cast_to_vertex_2d()->y()<< ")\n\n";
 }
 
@@ -62,10 +62,10 @@ static void print_edges(vcl_vector<vtol_edge_2d_sptr>& edges)
 {
   for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
        eit != edges.end(); eit++)
-    vcl_cout << *eit <<"("
-             << (*eit)->v1()->cast_to_vertex_2d()->x()<< " "
+    vcl_cout << *eit << '('
+             << (*eit)->v1()->cast_to_vertex_2d()->x()<< ' '
              << (*eit)->v1()->cast_to_vertex_2d()->y()<< " |"
-             << (*eit)->v2()->cast_to_vertex_2d()->x()<< " "
+             << (*eit)->v2()->cast_to_vertex_2d()->x()<< ' '
              << (*eit)->v2()->cast_to_vertex_2d()->y()<< ")\n\n";
 }
 
@@ -75,10 +75,10 @@ static void print_edges(vcl_vector<vtol_edge_sptr>& edges)
 {
   for (vcl_vector<vtol_edge_sptr>::iterator eit = edges.begin();
        eit != edges.end(); eit++)
-    vcl_cout << *eit <<"("
-             << (*eit)->v1()->cast_to_vertex_2d()->x()<< " "
+    vcl_cout << *eit << '('
+             << (*eit)->v1()->cast_to_vertex_2d()->x()<< ' '
              << (*eit)->v1()->cast_to_vertex_2d()->y()<< " |"
-             << (*eit)->v2()->cast_to_vertex_2d()->x()<< " "
+             << (*eit)->v2()->cast_to_vertex_2d()->x()<< ' '
              << (*eit)->v2()->cast_to_vertex_2d()->y()<< ")\n\n";
 }
 
@@ -695,7 +695,7 @@ void vtol_cycle_processor::print_edge(vtol_edge_2d_sptr& e)
   if (!e)
     return;
   vcl_cout << e << " :[(" << e->v1()->cast_to_vertex_2d()->x()
-           << " " << e->v1()->cast_to_vertex_2d()->y()<< "), ("
+           << ' ' << e->v1()->cast_to_vertex_2d()->y()<< "), ("
            << e->v2()->cast_to_vertex_2d()->x() << ' '
            << e->v2()->cast_to_vertex_2d()->y() << ")]\n";
 }
@@ -756,8 +756,8 @@ void vtol_cycle_processor::compute_cycles()
           add_edge_to_path();
         if (debug1_)
             vcl_cout << "========checking for cycle ===========\n"
-                     << " last_ " << last_ <<"("
-                     << last_->cast_to_vertex_2d()->x()<< " "
+                     << " last_ " << last_ << '('
+                     << last_->cast_to_vertex_2d()->x()<< ' '
                      << last_->cast_to_vertex_2d()->y()<< ")\n";
         cycle_ = vcl_find(v_stack_.begin(), v_stack_.end(), last_) != v_stack_.end();
         if (debug1_&&cycle_)
@@ -807,7 +807,7 @@ void vtol_cycle_processor::compute_cycles()
                  eit != edges_.end(); eit++)
               if (touched(*eit)&&used(*eit))
                 removed_edges.push_back(*eit);
-            for (vcl_vector<vtol_edge_2d_sptr>::iterator 
+            for (vcl_vector<vtol_edge_2d_sptr>::iterator
                  eit = removed_edges.begin(); eit != removed_edges.end();
                  ++eit)
               edge_2d_erase(edges_,*eit);
@@ -860,7 +860,6 @@ void vtol_cycle_processor::sort_one_cycles()
                << " Shouldn't happen that there is no outer chain\n"
                << "N cycles = " << chains_.size() << vcl_endl;
       for (one_chain_list::iterator cit = chains_.begin();
-
            cit != chains_.end(); cit++)
         {
           vcl_cout << " is chain ccw?  " << ccw(*cit) << vcl_endl
@@ -1041,9 +1040,7 @@ bool vtol_cycle_processor::corrupt_boundary(vcl_vector<vtol_edge_2d_sptr>& edges
 {
   bool bad = false;
   //Initialize Markers
-  vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
-  vtol_edge_2d_sptr first_e = (*eit);
-  if (!first_e)
+  if (! edges.front())
     {
       vcl_cout << "In cycle_processor::corrupt_boundary - null edge\n";
       return false;
@@ -1051,75 +1048,76 @@ bool vtol_cycle_processor::corrupt_boundary(vcl_vector<vtol_edge_2d_sptr>& edges
   //setup vertex flags
   unsigned int f1=VSOL_FLAG4, f2=VSOL_FLAG5, f3=VSOL_FLAG6;
   //Initialize Flags
-  for (;eit != edges.end(); eit++)
-    {
-      vtol_vertex_sptr v1 = (*eit)->v1();
-      vtol_vertex_sptr v2 = (*eit)->v2();
-      v1->unset_user_flag(f1);
-      v1->unset_user_flag(f2);
-      v1->unset_user_flag(f3);
-      v2->unset_user_flag(f1);
-      v2->unset_user_flag(f2);
-      v2->unset_user_flag(f3);
-    }
-  eit = edges.begin();
+  for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
+       eit != edges.end(); eit++)
+  {
+    vtol_vertex_sptr v1 = (*eit)->v1();
+    vtol_vertex_sptr v2 = (*eit)->v2();
+    v1->unset_user_flag(f1);
+    v1->unset_user_flag(f2);
+    v1->unset_user_flag(f3);
+    v2->unset_user_flag(f1);
+    v2->unset_user_flag(f2);
+    v2->unset_user_flag(f3);
+  }
   //Mark using flags that a vertex is incident on two edges
   //Flags f1 and f2 act as a counter
-  for (;eit != edges.end(); eit++)
-    {
-      vtol_vertex_sptr v1 = (*eit)->v1();
-      vtol_vertex_sptr v2 = (*eit)->v2();
-      if (!v1->get_user_flag(f1))
-        v1->set_user_flag(f1);
-      else
-        v1->set_user_flag(f2);
-      if (!v2->get_user_flag(f1))
-        v2->set_user_flag(f1);
-      else
-        v2->set_user_flag(f2);
-    }
-  eit = edges.begin();
-  for (;eit != edges.end(); eit++)
-    {
-      vtol_vertex_sptr v1 = (*eit)->v1();
-      vtol_vertex_sptr v2 = (*eit)->v2();
-      if ((v1!=v2)&&*v1==*v2)
-        vcl_cout << "Improper Loop(\n" << *v1 << *v2 << ")\n\n";
-      bool bad1 = !v1->get_user_flag(f2);
-      bool bad2 = !v2->get_user_flag(f2);
-      // flag f3 keeps track that we have already put the vertex onto the bad list
-      if (bad1)
-        {
-          if (!v1->get_user_flag(f3))
-            {
-              bad_verts.push_back(v1);
-              v1->set_user_flag(f3);
-            }
-          bad = true;
-        }
-      if (bad2)
-        {
-          if (!v2->get_user_flag(f3))
-            {
-              bad_verts.push_back(v2);
-              v2->set_user_flag(f3);
-            }
-          bad = true;
-        }
-    }
+  for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
+       eit != edges.end(); eit++)
+  {
+    vtol_vertex_sptr v1 = (*eit)->v1();
+    vtol_vertex_sptr v2 = (*eit)->v2();
+    if (!v1->get_user_flag(f1))
+      v1->set_user_flag(f1);
+    else
+      v1->set_user_flag(f2);
+    if (!v2->get_user_flag(f1))
+      v2->set_user_flag(f1);
+    else
+      v2->set_user_flag(f2);
+  }
+  for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
+       eit != edges.end(); eit++)
+  {
+    vtol_vertex_sptr v1 = (*eit)->v1();
+    vtol_vertex_sptr v2 = (*eit)->v2();
+    if ((v1!=v2)&&*v1==*v2)
+      vcl_cout << "Improper Loop(\n" << *v1 << *v2 << ")\n\n";
+    bool bad1 = !v1->get_user_flag(f2);
+    bool bad2 = !v2->get_user_flag(f2);
+    // flag f3 keeps track that we have already put the vertex onto the bad list
+    if (bad1)
+      {
+        if (!v1->get_user_flag(f3))
+          {
+            bad_verts.push_back(v1);
+            v1->set_user_flag(f3);
+          }
+        bad = true;
+      }
+    if (bad2)
+      {
+        if (!v2->get_user_flag(f3))
+          {
+            bad_verts.push_back(v2);
+            v2->set_user_flag(f3);
+          }
+        bad = true;
+      }
+  }
   //release the flags
-  eit = edges.begin();
-  for (;eit != edges.end(); eit++)
-    {
-      vtol_vertex_sptr v1 = (*eit)->v1();
-      vtol_vertex_sptr v2 = (*eit)->v2();
-      v1->unset_user_flag(f1);
-      v1->unset_user_flag(f2);
-      v1->unset_user_flag(f3);
-      v2->unset_user_flag(f1);
-      v2->unset_user_flag(f2);
-      v2->unset_user_flag(f3);
-    }
+  for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
+       eit != edges.end(); eit++)
+  {
+    vtol_vertex_sptr v1 = (*eit)->v1();
+    vtol_vertex_sptr v2 = (*eit)->v2();
+    v1->unset_user_flag(f1);
+    v1->unset_user_flag(f2);
+    v1->unset_user_flag(f3);
+    v2->unset_user_flag(f1);
+    v2->unset_user_flag(f2);
+    v2->unset_user_flag(f3);
+  }
   return bad;
 }
 
@@ -1142,8 +1140,7 @@ bool vtol_cycle_processor::connect_paths(vcl_vector<vtol_edge_2d_sptr>& edges,
 
   //Clear the bad vertex flags
   vcl_vector<vtol_vertex_sptr> temp;//temporary bad_verts array
-  vcl_vector<vtol_vertex_sptr>::iterator vit = bad_verts.begin();
-  vtol_vertex_sptr first_v = *vit;
+
   //
   //Establish flags
   //flag1 defines the state of a vertex in the search for a connecting edge
@@ -1151,14 +1148,15 @@ bool vtol_cycle_processor::connect_paths(vcl_vector<vtol_edge_2d_sptr>& edges,
   //that is there should be no duplicate vertices
   unsigned int flag1 = VSOL_FLAG5, flag2=VSOL_FLAG6;
   //here we assume that all vertices are uniform in flag use.
-  if (!first_v)
+  if (! bad_verts.front())
     return false;
   //make a copy of bad_verts
-  for (; vit != bad_verts.end(); vit++)
-    {
-      (*vit)->unset_user_flag(flag1);
-      temp.push_back(*vit);
-    }
+  for (vcl_vector<vtol_vertex_sptr>::iterator vit = bad_verts.begin();
+       vit != bad_verts.end(); vit++)
+  {
+    (*vit)->unset_user_flag(flag1);
+    temp.push_back(*vit);
+  }
   //Collect the vertices from edges
   //Initialize the flags.
   for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
@@ -1172,84 +1170,85 @@ bool vtol_cycle_processor::connect_paths(vcl_vector<vtol_edge_2d_sptr>& edges,
   //flag1 keeps track of vertices added to edge_verts
   vcl_vector<vtol_vertex_sptr> edge_verts;
   for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
-      eit != edges.end(); eit++)
-    {
-      vtol_vertex_sptr v1 = (*eit)->v1(), v2 = (*eit)->v2();
-      if (!v1->get_user_flag(flag1))
-        {edge_verts.push_back(v1); v1->set_user_flag(flag1);}
-      if (!v2->get_user_flag(flag1))
-        {edge_verts.push_back(v2); v2->set_user_flag(flag1);}
-    }
+       eit != edges.end(); eit++)
+  {
+    vtol_vertex_sptr v1 = (*eit)->v1(), v2 = (*eit)->v2();
+    if (!v1->get_user_flag(flag1))
+      {edge_verts.push_back(v1); v1->set_user_flag(flag1);}
+    if (!v2->get_user_flag(flag1))
+      {edge_verts.push_back(v2); v2->set_user_flag(flag1);}
+  }
 
   //search through the list of bad verts and attempt to connect them
   //repaired_verts allows the successfully connected vertices to be
   //removed from the bad_verts set.  flag2 marks vertices as used.
   vcl_vector<vtol_vertex_sptr> repaired_verts;
-  for (vit=bad_verts.begin(); vit != bad_verts.end(); vit++)
-    {
-      if ((*vit)->get_user_flag(flag2))//skip used vertices
-        continue;
-      bool found_edge = false;
-      //find edges attached to each bad vert
-      vcl_vector<vtol_edge_sptr>* vedges = (*vit)->edges();
-      //scan through vedges to find a connecting edge
-      for (vcl_vector<vtol_edge_sptr>::iterator eit = vedges->begin();
-          (eit != vedges->end())&&!found_edge; eit++)
-        {
-          vtol_edge_sptr e = *eit;
-          vtol_vertex_sptr v = (*eit)->other_endpoint(*(*vit));
-          //Continue if:
-          //  1)the vertex v has been used;
-          //  2)v can't be found in bad_verts;
-          //  3)v can't be found in edge_verts;
-          //  4)e is already in the input edge set.
-          if (v->get_user_flag(flag2))
-            continue; //condition 1)
-          bool found_in_bad_verts =
-            vcl_find(temp.begin(), temp.end(), v) != temp.end();
-          bool found_in_edge_verts = false;
-          if (!found_in_bad_verts) //condition 2)
-            found_in_edge_verts=
-              vcl_find(edge_verts.begin(), edge_verts.end(), v) != edge_verts.end();
-          if (!(found_in_bad_verts||found_in_edge_verts)) // condition 3)
-            continue;
-          if ( vcl_find(edges.begin(), edges.end(), e) != edges.end())
-            continue; //condition 4)
+  for (vcl_vector<vtol_vertex_sptr>::iterator vit=bad_verts.begin();
+       vit != bad_verts.end(); vit++)
+  {
+    if ((*vit)->get_user_flag(flag2))//skip used vertices
+      continue;
+    bool found_edge = false;
+    //find edges attached to each bad vert
+    vcl_vector<vtol_edge_sptr>* vedges = (*vit)->edges();
+    //scan through vedges to find a connecting edge
+    for (vcl_vector<vtol_edge_sptr>::iterator eit = vedges->begin();
+         eit != vedges->end()&&!found_edge; eit++)
+      {
+        vtol_edge_sptr e = *eit;
+        vtol_vertex_sptr v = (*eit)->other_endpoint(*(*vit));
+        //Continue if:
+        //  1)the vertex v has been used;
+        //  2)v can't be found in bad_verts;
+        //  3)v can't be found in edge_verts;
+        //  4)e is already in the input edge set.
+        if (v->get_user_flag(flag2))
+          continue; //condition 1)
+        bool found_in_bad_verts =
+          vcl_find(temp.begin(), temp.end(), v) != temp.end();
+        bool found_in_edge_verts = false;
+        if (!found_in_bad_verts) //condition 2)
+          found_in_edge_verts=
+            vcl_find(edge_verts.begin(), edge_verts.end(), v) != edge_verts.end();
+        if (!(found_in_bad_verts||found_in_edge_verts)) // condition 3)
+          continue;
+        if ( vcl_find(edges.begin(), edges.end(), e) != edges.end())
+          continue; //condition 4)
 
-          //Found a connecting edge, so add it to the input edges
-          edges.push_back(e->cast_to_edge_2d());
-          found_edge = true;
-          v->set_user_flag(flag2);
-          (*vit)->set_user_flag(flag2);
-          //record the successes
-          repaired_verts.push_back(*vit);
-          repaired_verts.push_back(v);//should also be in bad_verts
-        }
-      delete vedges;
-      paths_connected =
-        paths_connected&&(*vit)->get_user_flag(flag2);
-    }
+        //Found a connecting edge, so add it to the input edges
+        edges.push_back(e->cast_to_edge_2d());
+        found_edge = true;
+        v->set_user_flag(flag2);
+        (*vit)->set_user_flag(flag2);
+        //record the successes
+        repaired_verts.push_back(*vit);
+        repaired_verts.push_back(v);//should also be in bad_verts
+      }
+    delete vedges;
+    paths_connected =
+      paths_connected&&(*vit)->get_user_flag(flag2);
+  }
   //Clear the flags
   for (vcl_vector<vtol_vertex_sptr>::iterator vit = bad_verts.begin();
        vit!=bad_verts.end(); vit++)
-    {
-      (*vit)->unset_user_flag(flag1);
-      (*vit)->unset_user_flag(flag2);
-    }
+  {
+    (*vit)->unset_user_flag(flag1);
+    (*vit)->unset_user_flag(flag2);
+  }
   for (vcl_vector<vtol_vertex_sptr>::iterator vit = edge_verts.begin();
        vit!=edge_verts.end(); vit++)
-    {
-      (*vit)->unset_user_flag(flag1);
-      (*vit)->unset_user_flag(flag2);
-    }
+  {
+    (*vit)->unset_user_flag(flag1);
+    (*vit)->unset_user_flag(flag2);
+  }
   //Remove the successful vertex connections
-  for (vit = repaired_verts.begin();
+  for (vcl_vector<vtol_vertex_sptr>::iterator vit = repaired_verts.begin();
        vit != repaired_verts.end(); vit++)
-    {
-      vcl_vector<vtol_vertex_sptr>::iterator erit;
-      erit = vcl_find(bad_verts.begin(), bad_verts.end(), *vit);
-      if (erit != bad_verts.end())
-        bad_verts.erase(erit);
-    }
+  {
+    vcl_vector<vtol_vertex_sptr>::iterator erit;
+    erit = vcl_find(bad_verts.begin(), bad_verts.end(), *vit);
+    if (erit != bad_verts.end())
+      bad_verts.erase(erit);
+  }
   return paths_connected;
 }
