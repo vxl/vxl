@@ -11,7 +11,7 @@
 // \brief  Namespace with a singleton vgui_toolkit instance.
 //
 // \verbatim
-//  Modifications:
+//  Modifications
 //   30-SEP-1999  P.Pritchett - Initial version.
 //   26 Oct 1999  fsm. various changes to facilitate the port of old impl code.
 //   30-AUG-2000  Marko Bacic, Oxford RRG -- Added flags to support MFC accel.
@@ -35,7 +35,7 @@ struct vgui_tableau_sptr;
 //
 // vgui is a namespace with a singleton vgui_toolkit instance
 // which acts as an abstract factory. The static methods on
-// vgui simply despatch the call to the selected toolkit.
+// vgui simply dispatch the call to the selected toolkit.
 //
 // Order of things :
 // 1. Registration. Toolkits available to the application are registered
