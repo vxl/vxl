@@ -39,7 +39,7 @@ gevd_bufferxy::gevd_bufferxy(int x, int y, int b) : gevd_memory_mixin(x*y*(int)(
   Init(x, y, b);
 }
 
-//: Construct a gevd_bufferxy of width x, height y, and b bits per entry, and load data from memptr.  The object will not free memptr.
+//: Construct a gevd_bufferxy of width x, height y, and b bits per entry, and load data from memptr.  Object will not free memptr.
 gevd_bufferxy::gevd_bufferxy(int x, int y, int b, void* memptr) : gevd_memory_mixin(x*y*(int)((b+7)/8),memptr)
 {
   Init(x, y, b);
@@ -130,4 +130,3 @@ gevd_bufferxy::gevd_bufferxy(const char* filename) : gevd_memory_mixin(read_from
   else
     vcl_cerr<< "ERROR: This should not happen in gevd_bufferxy::gevd_bufferxy(char const*)\n";
 }
-
