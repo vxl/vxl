@@ -113,20 +113,29 @@ extern "C" {
 
  */
 
+#if defined(__GNUC__) && (__GNUC_MINOR__ >= 97)
+# define VPL_THROW(args) throw args
+#else
+# define VPL_THROW(args) /* */
+#endif
+// /data/az5/fsm/GCC3.0/target/vxl/vpl/os_unix/vpl_unistd.cxx:135: declaration of 
+//    'int brk(void*)' throws different exceptions
+// /usr/include/unistd.h:860: than previous declaration 'int brk(void*) throw ()'
+
 PASSTHRU(int, chmod, (const char *  a0,vpl_mode_t  a1), (a0, a1))
 PASSTHRU(int, fchmod, ( int  a0, vpl_mode_t  a1 ), (a0, a1))
 PASSTHRU(int, fstat, (int  a0,vpl_stat_t *  a1), (a0, a1))
 PASSTHRU(int, lstat, (const char *  a0,vpl_stat_t *  a1), (a0, a1))
 PASSTHRU(int, mkdir, (const char * s, vpl_mode_t mode), (s, mode))
 PASSTHRU(int, mkfifo, ( const char *  a0, vpl_mode_t  a1 ), (a0, a1))
-extern "C" int mknod (const char*, vpl_mode_t, vpl_dev_t);
+    extern "C" int mknod (const char*, vpl_mode_t, vpl_dev_t) VPL_THROW(());
 PASSTHRU(int, mknod, (const char *  a0,vpl_mode_t  a1,vpl_dev_t  a2), (a0, a1, a2))
 PASSTHRU(int, stat, (const char *  a0,vpl_stat_t *  a1), (a0, a1))
 PASSTHRU(mode_t, umask, (vpl_mode_t  a0), (a0))
 
 PASSTHRU(int, access, (const char *  a0,int  a1), (a0, a1));
 PASSTHRU(unsigned int, alarm, (unsigned int  a0), (a0));
-extern "C" int brk (void*);
+extern "C" int brk (void*) VPL_THROW(());
 PASSTHRU(int, brk, (void *  a0), (a0));
 PASSTHRU(int, chdir, (const char * s), (s));
 PASSTHRU(int, chown, (const char *  a0,vpl_uid_t  a1,vpl_gid_t  a2), (a0, a1, a2));
@@ -165,7 +174,7 @@ PASSTHRU(int, execv, (const char *  a0,char *const a1[]), (a0, a1));
 PASSTHRU(int, execve, (const char *  a0,char *const a1[],char *const a2[]), (a0, a1, a2));
 PASSTHRU(int, execvp, (const char *  a0,char *const a1[]), (a0, a1));
 PASSTHRU(int, fchown, (int  a0,vpl_uid_t  a1,vpl_gid_t  a2), (a0, a1, a2));
-extern "C" int fchdir (int);
+extern "C" int fchdir (int) VPL_THROW(());
 PASSTHRU(int, fchdir, (int  a0), (a0));
 // PASSTHRU(int, fdatasync, (  int  a0  ), (a0));
 PASSTHRU(vpl_pid_t, fork, (), ());
@@ -275,7 +284,7 @@ PASSTHRU(int, unlink, (const char * s), (s));
 // Error: Only one of a set of overloaded functions can be extern "C".
 // Error: usleep(unsigned), returning void, was previously declared returning int.
 // Error: Overloading ambiguity between "usleep(unsigned)" and "usleep(unsigned)".
-extern "C" void usleep (vpl_useconds_t);
+extern "C" void usleep (vpl_useconds_t) VPL_THROW(());
 #endif
 int vpl_usleep(vpl_useconds_t s) { ::usleep(s); return 0; }
 # else
