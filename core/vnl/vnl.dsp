@@ -230,6 +230,11 @@ SOURCE=.\Templates/vnl_c_vector+double-.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vnl_bignum.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/vnl_c_vector+double_complex-.cxx
 
 # End Source File
@@ -1194,6 +1199,11 @@ SOURCE=.\vnl_alloc.h
 # Begin Source File
 
 SOURCE=.\vnl_block.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_bignum.h
 
 # End Source File
 # Begin Source File
