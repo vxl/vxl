@@ -2,7 +2,7 @@
 # Find the native MPEG2 includes and library
 #
 # This module defines
-# MPEG2_INCLUDE_DIR, where to find mpeg2.h, etc.
+# MPEG2_INCLUDE_DIR, where to find mpeg2dec/mpeg2.h, etc.
 # MPEG2_LIBRARIES, the libraries to link against to use MPEG2.
 # MPEG2_FOUND, If false, do not try to use MPEG2.
 
