@@ -14,17 +14,20 @@
 // This allows the loaders to be used with any type of stream.
 class vil_stream {
 public:
+  //: Return false if the stream is broken.
+  virtual bool ok() = 0;
+  
   //: Write n bytes from buf. returns number of bytes written.
   //  the return value is less than n only in case of device failure.
   virtual int write(void const* buf, int n) = 0;
-
+  
   //: Read n bytes into buf
   //  the return value is less than n only at eof.
   virtual int read(void* buf, int n) = 0;
-
+  
   //: Return file pointer
   virtual int  tell() = 0;
-
+  
   //: Goto file pointer
   virtual void seek(int position) = 0;
 

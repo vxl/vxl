@@ -45,6 +45,11 @@ vil_stream_section::~vil_stream_section()
   u->unref();
 }
 
+bool vil_stream_section::ok()
+{
+  return underlying->ok();
+}
+
 int vil_stream_section::write(void const* buf, int n)
 {
   assert(n >= 0); // wouldn't you want to be told?
@@ -109,7 +114,7 @@ void vil_stream_section::seek(int position)
   assert(position >= 0); // I would want to be told about this.
  
   if (end != -1  &&  begin + position > end) {
-    cerr << __FILE__ << ": attempt to seek past given section (failed)." << endl;
+    vcl_cerr << __FILE__ << ": attempt to seek past given section (failed)." << vcl_endl;
     return;
   }
   else

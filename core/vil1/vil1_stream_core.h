@@ -17,10 +17,9 @@
 #include <vcl/vcl_vector.h>
 #include <vil/vil_stream.h>
 
-class vil_stream_core : public vil_stream {
-public:
+struct vil_stream_core : vil_stream
+{
   vil_stream_core(unsigned block_size = 16384);
-  ~vil_stream_core();
 
   //: get current file size
   unsigned size() const;
@@ -29,10 +28,14 @@ public:
   int m_transfer(char *buf, int pos, int n, bool read);
   
   //: implement virtual interface
-  int read (void       *buf, int n);
-  int write(void const *buf, int n);
-  int tell();
+  bool ok();
+  int  read (void       *buf, int n);
+  int  write(void const *buf, int n);
+  int  tell();
   void seek(int position);
+
+protected:
+  ~vil_stream_core();
 
 private:
   int curpos;       // current file pointer.

@@ -16,7 +16,6 @@
 class vil_stream_fstream : public vil_stream {
 public:
   vil_stream_fstream(char const* filename, char const* mode);
-  ~vil_stream_fstream();
 
   bool ok();
   
@@ -24,6 +23,9 @@ public:
   int read(void* buf, int n);
   int tell();
   void seek(int position);
+
+protected:
+  ~vil_stream_fstream();
   
 private:
   int flags_;

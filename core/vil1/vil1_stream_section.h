@@ -20,7 +20,7 @@
 
 #include <vil/vil_stream.h>
 
-struct vil_stream_section : public vil_stream
+struct vil_stream_section : vil_stream
 {
   // skip to position 'begin' in underlying stream and translate seeks,
   // reads and writes relative to that position into seeks, reads and
@@ -30,12 +30,14 @@ struct vil_stream_section : public vil_stream
   // as above, but will not allow seeks, reads or writes past 'end'.
   vil_stream_section(vil_stream *underlying, int begin, int end);
 
-  ~vil_stream_section();
-
+  bool ok();
   int write(void const* buf, int n);
   int read(void* buf, int n);
   int  tell();
   void seek(int position);
+
+protected:
+  ~vil_stream_section();
 
 private:
   vil_stream *underlying;

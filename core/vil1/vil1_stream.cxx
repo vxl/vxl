@@ -16,14 +16,14 @@ vil_stream::vil_stream()
 {
   refcount = 0;
 #if log_xtor
-  cerr << __FILE__ ", vil_stream ctor : this = " << (void*)this << endl;
+  vcl_cerr << __FILE__ ", vil_stream ctor : this = " << (void*)this << vcl_endl;
 #endif
 }
 
 vil_stream::~vil_stream()
 {
 #if log_xtor
-  cerr << __FILE__ ", vil_stream dtor : this = " << (void*)this << endl;
+  vcl_cerr << __FILE__ ", vil_stream dtor : this = " << (void*)this << vcl_endl;
 #endif
 }
 

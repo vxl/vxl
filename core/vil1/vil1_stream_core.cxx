@@ -15,7 +15,8 @@ vil_stream_core::vil_stream_core(unsigned block_size VCL_DEFAULT_VALUE(16384))
 {
 }
 
-vil_stream_core::~vil_stream_core() {
+vil_stream_core::~vil_stream_core()
+{
   for (unsigned i=0; i<block.size(); ++i)
     delete [] block[i];
   block.clear();
@@ -23,35 +24,46 @@ vil_stream_core::~vil_stream_core() {
 
 //--------------------------------------------------------------------------------
 
-int vil_stream_core::read (void       *buf, int n) {
+bool vil_stream_core::ok()
+{
+  return true;
+}
+
+int vil_stream_core::read (void       *buf, int n)
+{
   assert(n>=0);
   int rv = m_transfer((char*)buf, curpos, n, true );
   curpos += rv;
   return rv;
 }
 
-int vil_stream_core::write(void const *buf, int n) {
+int vil_stream_core::write(void const *buf, int n)
+{
   assert(n>=0);
   int rv = m_transfer((char*)buf, curpos, n, false);
   curpos += rv;
   return rv;
 }
 
-int vil_stream_core::tell() {
+int vil_stream_core::tell()
+{
   return curpos;
 }
 
-void vil_stream_core::seek(int position) {
+void vil_stream_core::seek(int position)
+{
   curpos = position;
 }
 
 //--------------------------------------------------------------------------------
 
-unsigned vil_stream_core::size() const {
+unsigned vil_stream_core::size() const
+{
   return tailpos;
 }
 
-int vil_stream_core::m_transfer(char *buf, int pos, int n, bool read) {
+int vil_stream_core::m_transfer(char *buf, int pos, int n, bool read)
+{
   assert(n>=0);
   assert(pos>=0);
   

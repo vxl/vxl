@@ -17,11 +17,11 @@ static int modeflags(char const* mode)
   if (*mode == 'w')
     return vcl_ios_out | modeflags(mode+1);
 
-  cerr << "DODGY MODE " << mode << endl;
+  vcl_cerr << "DODGY MODE " << mode << vcl_endl;
   return 0;
 }
 
-#define xerr if (true) ; else (cerr << "fstream#" << id_ << ": ")
+#define xerr if (true) ; else (vcl_cerr << "fstream#" << id_ << ": ")
 
 static int id = 0;
 
@@ -36,7 +36,7 @@ vil_stream_fstream::vil_stream_fstream(char const* fn, char const* mode):
   id_ = ++id;
   xerr << "vil_stream_fstream(\"" << fn << "\", \""<<mode<<"\") = " << id_ << "\n";
   if (!f_.good()) {
-    cerr << "vil_stream_fstream::Could not open [" << fn << "]\n";
+    vcl_cerr << "vil_stream_fstream::Could not open [" << fn << "]\n";
   }
 }
 
@@ -62,7 +62,7 @@ int vil_stream_fstream::write(void const* buf, int n)
     return 0;
 
   vcl_streampos a = tell();
-  xerr << "write " << n << endl;
+  xerr << "write " << n << vcl_endl;
   f_.write((char const*)buf, n);
   vcl_streampos b = tell();
   f_.flush();
@@ -78,7 +78,7 @@ int vil_stream_fstream::read(void* buf, int n)
     return 0;
 
   vcl_streampos a = tell();
-  xerr << "read " << n << endl;
+  xerr << "read " << n << vcl_endl;
   f_.read((char *)buf, n);
   vcl_streampos b = tell();
 
@@ -91,8 +91,8 @@ int vil_stream_fstream::read(void* buf, int n)
     f_.clear(); // allows subsequent operations
 
   int numread = b-a;
-  if (numread < 0) { xerr << "urgh!" << endl; return -1; }
-  if (numread != n) xerr << "only read " << numread << endl;
+  if (numread < 0) { xerr << "urgh!" << vcl_endl; return -1; }
+  if (numread != n) xerr << "only read " << numread << vcl_endl;
   return numread;
 }
 
@@ -120,7 +120,7 @@ void vil_stream_fstream::seek(int position)
   bool fo = (flags_ & vcl_ios_out) != 0;
   
   if (fi && fo) {
-    xerr << "seekg and seekp to " << position << endl;
+    xerr << "seekg and seekp to " << position << vcl_endl;
     if (position != f_.tellg()) {
       f_.seekg(position);
       f_.seekp(position);
@@ -129,7 +129,7 @@ void vil_stream_fstream::seek(int position)
   }
   
   else if (fi) {
-    xerr << "seek to " << position << endl;
+    xerr << "seek to " << position << vcl_endl;
     if (position != f_.tellg()) {
       f_.seekg(position);
       assert(f_.good());
@@ -137,10 +137,10 @@ void vil_stream_fstream::seek(int position)
   }
 
   else if (fo) {
-    xerr << "seekp to " << position << endl;
+    xerr << "seekp to " << position << vcl_endl;
     int at = f_.tellp();
     if (position != at) {
-      xerr << "seekp to " << position << ", at " << f_.tellp() << endl;
+      xerr << "seekp to " << position << ", at " << f_.tellp() << vcl_endl;
       f_.seekp(position);
       assert(f_.good());
     }
