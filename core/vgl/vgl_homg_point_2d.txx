@@ -21,6 +21,13 @@ vgl_homg_point_2d<Type>::vgl_homg_point_2d (vgl_homg_line_2d<Type> const& l1,
       l1.a()*l2.b()-l1.b()*l2.a());
 }
 
+template <class Type>
+bool vgl_homg_point_2d<Type>::operator==(vgl_homg_point_2d<Type> const& other) const
+{
+  return (this==&other) ||
+         (   this->x()*other.w() == this->w()*other.x()
+          && this->y()*other.w() == this->w()*other.y());
+}
 #define VGL_HOMG_POINT_2D_INSTANTIATE(T) \
 template class vgl_homg_point_2d<T >; \
 template vcl_ostream& operator<<(vcl_ostream&, vgl_homg_point_2d<T >const&); \

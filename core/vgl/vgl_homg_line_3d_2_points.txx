@@ -42,9 +42,30 @@ vgl_homg_line_3d_2_points<Type>::vgl_homg_line_3d_2_points(vgl_homg_point_3d<Typ
 // Utility methods
 //***************************************************************************
 
+template <class Type>
+bool vgl_homg_line_3d_2_points<Type>::operator==(vgl_homg_line_3d_2_points<Type> const& other) const
+{
+  if (this==&other)
+    return true;
+  force_point2_infinite(); other.force_point2_infinite();
+  if (get_point_infinite() != other.get_point_infinite())
+    return false;
+  // Now it suffices to check that the three points are collinear:
+  vgl_homg_point_3d<Type> const& p1 = get_point_infinite();
+  vgl_homg_point_3d<Type> const& p2 = get_point_finite();
+  vgl_homg_point_3d<Type> const& p3 = other.get_point_finite();
+  Type d1x = p1.x()*p2.w()*p3.w()-p1.w()*p2.x()*p3.w();
+  Type d2x = p1.x()*p2.w()*p3.w()-p1.w()*p2.w()*p3.x();
+  Type d1y = p1.y()*p2.w()*p3.w()-p1.w()*p2.y()*p3.w();
+  Type d2y = p1.y()*p2.w()*p3.w()-p1.w()*p2.w()*p3.y();
+  Type d1z = p1.z()*p2.w()*p3.w()-p1.w()*p2.z()*p3.w();
+  Type d2z = p1.z()*p2.w()*p3.w()-p1.w()*p2.w()*p3.z();
+  return d1x*d2y == d1y*d2x && d1x*d2z == d1z*d2x;
+}
+
 //: force the point point_infinite_ to infinity, without changing the line
 template <class Type>
-void vgl_homg_line_3d_2_points<Type>::force_point2_infinite(void)
+void vgl_homg_line_3d_2_points<Type>::force_point2_infinite(void) const
 {
   if (point_infinite_.w() == 0) return; // already OK
   else if (point_finite_.w() == 0) // interchange the points

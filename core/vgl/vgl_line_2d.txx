@@ -19,6 +19,14 @@ void vgl_line_2d<Type>::get_two_points(vgl_point_2d<Type> &p1, vgl_point_2d<Type
   else                p2.set(-c()/a(), 0);
 }
 
+template <class Type>
+bool vgl_line_2d<Type>::operator==(vgl_line_2d<Type> const& other) const
+{
+  return (this==&other) ||
+         (   this->a()*other.c() == this->c()*other.a()
+          && this->b()*other.c() == this->c()*other.b());
+}
+
 
 #define VGL_LINE_2D_INSTANTIATE(T) \
 template class vgl_line_2d<T >; \

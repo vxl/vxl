@@ -12,6 +12,7 @@
 //
 // \verbatim
 // Modifications :
+// 2001/06/27 Peter Vanroose         Added operator==
 // 2001/03/19 Franck Bettinger       added Manchester binary IO code
 // 2000/12/01 Peter Vanroose         moved dist_origin() to vgl_distance.h
 // 2000/05/09 Peter VANROOSE         dist_origin() re-implemented
@@ -73,6 +74,10 @@ public:
     return *this;
   }
 #endif
+
+  //: the equality operator
+  bool operator==(vgl_line_2d<Type> const& other) const;
+  bool operator!=(vgl_line_2d<Type> const& other) const { return ! operator==(other); }
 
   // Data Access-------------------------------------------------------------
 

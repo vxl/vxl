@@ -10,6 +10,11 @@
 // \file
 // \brief line in projective 2D space
 // \author Don Hamilton, Peter Tu
+//
+// \verbatim
+// Modifications
+// Peter Vanroose - 27 June 2001 - Added operator==
+// \endverbatim
 
 #include <vcl_iostream.h>
 #include <vcl_cmath.h> // for vcl_abs(double) etc
@@ -61,6 +66,10 @@ public:
   }
 #endif
 
+  //: the equality operator
+  bool operator==(vgl_homg_line_2d<Type> const& other) const;
+  bool operator!=(vgl_homg_line_2d<Type> const& other) const { return ! operator==(other); }
+
   // Data Access-------------------------------------------------------------
 
 #if 0 // TODO
@@ -86,9 +95,9 @@ public:
 
   //: Return true iff this line is the line at infinity
   //  This version checks (max(|a|,|b|) < tol * c
-  bool ideal(Type tol) const {
-    return vcl_abs(a()) < tol*vcl_abs(c()) &&
-           vcl_abs(b()) < tol*vcl_abs(c());
+  bool ideal(Type tol = Type(0)) const {
+    return vcl_abs(a()) <= tol*vcl_abs(c()) &&
+           vcl_abs(b()) <= tol*vcl_abs(c());
   }
 
   //:get two points on the line

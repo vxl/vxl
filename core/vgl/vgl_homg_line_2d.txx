@@ -52,6 +52,14 @@ vgl_homg_line_2d<Type>::vgl_homg_line_2d (vgl_homg_point_2d<Type> const& l1,
       l1.x()*l2.y()-l1.y()*l2.x());
 }
 
+template <class Type>
+bool vgl_homg_line_2d<Type>::operator==(vgl_homg_line_2d<Type> const& other) const
+{
+  return (this==&other) ||
+         (   this->a()*other.c() == this->c()*other.a()
+          && this->b()*other.c() == this->c()*other.b());
+}
+
 #define VGL_HOMG_LINE_2D_INSTANTIATE(T) \
 template class vgl_homg_line_2d<T >; \
 template vcl_ostream& operator<<(vcl_ostream&, const vgl_homg_line_2d<T >&); \

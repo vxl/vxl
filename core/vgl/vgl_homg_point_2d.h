@@ -10,6 +10,11 @@
 // \file
 // \brief point in projective 2D space
 // \author Don HAMILTON, Peter TU
+//
+// \verbatim
+// Modifications
+// Peter Vanroose - 27 June 2001 - Added operator==
+// \endverbatim
 
 #include <vcl_iostream.h>
 #include <vcl_cmath.h> // for vcl_abs(double) etc
@@ -69,6 +74,10 @@ public:
   }
 #endif
 
+  //: the equality operator
+  bool operator==(vgl_homg_point_2d<Type> const& other) const;
+  bool operator!=(vgl_homg_point_2d<Type> const& other) const { return ! operator==(other); }
+
   // Data Access-------------------------------------------------------------
 
   inline Type x() const {return data_[0];}
@@ -87,9 +96,9 @@ public:
 
   //: Return true iff the point is at infinity (an ideal point).
   // The method checks that |w| < tol * max(|x|,|y|)
-  bool ideal(Type tol) {
-    return vcl_abs(w()) < tol * vcl_abs(x()) ||
-           vcl_abs(w()) < tol * vcl_abs(y());
+  bool ideal(Type tol = Type(0)) {
+    return vcl_abs(w()) <= tol * vcl_abs(x()) ||
+           vcl_abs(w()) <= tol * vcl_abs(y());
   }
 
   // INTERNALS---------------------------------------------------------------

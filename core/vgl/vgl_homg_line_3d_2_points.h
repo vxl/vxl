@@ -7,6 +7,11 @@
 // \file
 // \author Don HAMILTON Peter TU François BERTEL
 //
+// \verbatim
+// Modifications
+// Peter Vanroose - 27 June 2001 - Added operator==
+// \endverbatim
+//
 
 #ifdef __GNUC__
 #pragma interface
@@ -40,6 +45,10 @@ public:
   //: Destructor (does nothing)
   ~vgl_homg_line_3d_2_points() {}
 
+  //: the equality operator
+  bool operator==(vgl_homg_line_3d_2_points<Type> const& other) const;
+  bool operator!=(vgl_homg_line_3d_2_points<Type> const& other) const { return ! operator==(other); }
+
   // Data access
 
   //: Finite point
@@ -54,16 +63,16 @@ public:
   // Utility methods
 
   //: force the point point_infinite_ to infinity, without changing the line
-  void force_point2_infinite(void);
+  void force_point2_infinite(void) const; // mutable const
 
   // Internals
-protected:
+private:
   // Data Members------------------------------------------------------------
 
   //: Any finite point on the line
-  vgl_homg_point_3d<Type> point_finite_;
+  mutable vgl_homg_point_3d<Type> point_finite_;
   //: the (unique) point at infinity
-  vgl_homg_point_3d<Type> point_infinite_;
+  mutable vgl_homg_point_3d<Type> point_infinite_;
 };
 
 //+****************************************************************************
