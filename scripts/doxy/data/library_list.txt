@@ -38,6 +38,7 @@ package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl mul Manchester 
 mul mbl   mbl_   build
 mul mil   mil_   build
 mul mil3d mil3d_ build
+mul pdf1d pdf1d_ build
 mul vpdfl vpdfl_ build
 mul clsfy clsfy_ build
 
