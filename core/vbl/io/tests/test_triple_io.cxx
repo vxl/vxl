@@ -2,6 +2,7 @@
 #include <vcl_iostream.h>
 #include <vbl/io/vbl_io_triple.h>
 #include <vsl/vsl_binary_io.h>
+#include <vsl/vsl_indent.h>
 #include <testlib/testlib_test.h>
 #include <vpl/vpl.h>
 
@@ -31,6 +32,7 @@ void test_triple_io()
 
   vsl_print_summary(vcl_cout, v_in);
   vcl_cout << vcl_endl;
+  vsl_indent_clear_all_data ();
 }
 
 TESTMAIN(test_triple_io);

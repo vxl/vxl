@@ -3,6 +3,7 @@
 #include <vbl/vbl_bounding_box.h>
 #include <vbl/io/vbl_io_bounding_box.h>
 #include <vsl/vsl_binary_io.h>
+#include <vsl/vsl_indent.h>
 #include <testlib/testlib_test.h>
 #include <vpl/vpl.h>
 
@@ -43,6 +44,7 @@ void test_bounding_box_double_io()
 
   vsl_print_summary(vcl_cout, p_out);
   vcl_cout << vcl_endl;
+  vsl_indent_clear_all_data ();
 }
 
 

@@ -2,6 +2,7 @@
 #include <vcl_iostream.h>
 #include <vbl/io/vbl_io_array_1d.h>
 #include <vsl/vsl_binary_io.h>
+#include <vsl/vsl_indent.h>
 #include <testlib/testlib_test.h>
 #include <vpl/vpl.h>
 
@@ -55,6 +56,7 @@ void test_array_1d_io()
 
   vsl_print_summary(vcl_cout, v_in);
   vcl_cout << vcl_endl;
+  vsl_indent_clear_all_data();
 }
 
 TESTMAIN(test_array_1d_io);
