@@ -1,4 +1,4 @@
-/* 
+/*
     bt848.h - Bt848 register offsets
 
     Copyright (C) 1996,97 Ralph Metzler (rjkm@thp.uni-koeln.de)
@@ -42,7 +42,7 @@
 #define BT848_DSTATUS_LOF      (1<<1)
 #define BT848_DSTATUS_COF      (1<<0)
 
-#define BT848_IFORM            0x004  
+#define BT848_IFORM            0x004
 #define BT848_IFORM_HACTIVE    (1<<7)
 #define BT848_IFORM_MUXSEL     (3<<5)
 #define BT848_IFORM_MUX0       (2<<5)
@@ -61,7 +61,7 @@
 #define BT848_IFORM_AUTO       0
 #define BT848_IFORM_NORM       7
 
-#define BT848_TDEC             0x008  
+#define BT848_TDEC             0x008
 #define BT848_TDEC_DEC_FIELD   (1<<7)
 #define BT848_TDEC_FLDALIGN    (1<<6)
 #define BT848_TDEC_DEC_RAT     (0x3f)  /* was 1f in original */
@@ -264,7 +264,7 @@
 #define BT848_I2C              0x110
 #define BT848_I2C_DIV          (0xf<<4)
 #define BT848_I2C_SYNC         (1<<3)
-#define BT848_I2C_W3B	       (1<<2)
+#define BT848_I2C_W3B          (1<<2)
 #define BT848_I2C_SCL          (1<<1)
 #define BT848_I2C_SDA          (1<<0)
 
