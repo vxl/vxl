@@ -17,15 +17,14 @@
 //  Initial version.
 // \endverbatim
 //-----------------------------------------------------------------------------
-#include <vcl_list.h>
+
 #include <vcl_vector.h>
-#include <vcl_string.h>
 #include <vil/vil_memory_image_of.h>
 #include <vvid/vvid_video_process.h>
 
 class vvid_lucas_kanade_process : public vvid_video_process
 {
-public:
+ public:
   enum state_symbol {NO_IMAGE=0, FIRST_IMAGE, IN_PROCESS};
   vvid_lucas_kanade_process();
   ~vvid_lucas_kanade_process();
@@ -33,14 +32,14 @@ public:
   //: compute lucas_kanade
   virtual bool execute();
   virtual bool finish();
-private:
+ private:
   //local methods
   void compute_lucas_kanade(vil_memory_image_of<float>& image);
   void update_queue(vil_image ix);
   //members
   state_symbol state_;
   bool first_frame_;
-  vcl_vector<vil_image > queue_;
+  vcl_vector<vil_image> queue_;
 };
 
 
