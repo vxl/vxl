@@ -1,7 +1,7 @@
 #ifndef vnl_matlab_print2_h_
 #define vnl_matlab_print2_h_
 #ifdef __GNUC__
-#pragma interface
+#pragma interface "vnl_matlab_print2"
 #endif
 /*
   fsm@robots.ox.ac.uk
@@ -28,10 +28,10 @@ struct vnl_matlab_print_proxy
 {
   T const &obj;
   char const *name;
-  vnl_matlab_Format format;
+  vnl_matlab_print_format format;
   vnl_matlab_print_proxy(T const &obj_,
 			 char const *name_, 
-			 vnl_matlab_Format format_)
+			 vnl_matlab_print_format format_)
     : obj(obj_), name(name_), format(format_) { }
   ~vnl_matlab_print_proxy() { }
 };
@@ -52,7 +52,7 @@ inline
 vnl_matlab_print_proxy<T>
 vnl_matlab_print(T const &obj, 
 		 char const *name = 0, 
-		 vnl_matlab_Format format = vnl_matlab_fmt_default)
+		 vnl_matlab_print_format format = vnl_matlab_print_format_default)
 {
   return vnl_matlab_print_proxy<T>(obj, name, format);
 }
@@ -63,6 +63,6 @@ VCL_INSTANTIATE_INLINE(ostream &operator<<(ostream &, \
                                            vnl_matlab_print_proxy<T > const &)); \
 VCL_INSTANTIATE_INLINE(vnl_matlab_print_proxy<T > vnl_matlab_print(T const &, \
                                                                    char const *, \
-                                                                   vnl_matlab_Format));
+                                                                   vnl_matlab_print_format));
 
 #endif

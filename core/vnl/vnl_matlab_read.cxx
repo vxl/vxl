@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #ifdef __GNUC__
-#pragma implementation
+#pragma implementation "vnl_matlab_read"
 #endif
 #include "vnl_matlab_read.h"
 #include <vcl/vcl_iostream.h>
@@ -29,34 +29,29 @@ VCL_DEFINE_SPECIALIZATION
 void vnl_matlab_read_data(istream &s, double *p, unsigned n)
 { ::vnl_read_bytes(s, p, n*sizeof(*p)); }
 
-#if VCL_CAN_DO_PARTIAL_SPECIALIZATION
-template <class T> 
-void vnl_matlab_read_data(istream &s, vnl_complex<T> *ptr, unsigned n) {
-  // complex<float> or complex<double>
-  T *re = vnl_c_vector<T>::allocate_T(n);
-  T *im = vnl_c_vector<T>::allocate_T(n);
-  ::vnl_read_bytes(s, re, n*sizeof(T));
-  ::vnl_read_bytes(s, im, n*sizeof(T));
-  for (unsigned i=0; i<n; ++i)
-    ptr[i] = vnl_complex<T>(re[i], im[i]);
-  delete [] re;
-  delete [] im;
+#define implement_read_complex_data(T) \
+VCL_DEFINE_SPECIALIZATION \
+void vnl_matlab_read_data(istream &s, vnl_complex<T > *ptr, unsigned n) { \
+  T *re = vnl_c_vector<T >::allocate_T(n); \
+  T *im = vnl_c_vector<T >::allocate_T(n); \
+  ::vnl_read_bytes(s, re, n*sizeof(T)); \
+  ::vnl_read_bytes(s, im, n*sizeof(T)); \
+  for (unsigned i=0; i<n; ++i) \
+    ptr[i] = vnl_complex<T >(re[i], im[i]); \
+  vnl_c_vector<T >::deallocate(re, n); \
+  vnl_c_vector<T >::deallocate(im, n); \
 }
-template void vnl_matlab_read_data(istream &, vnl_complex<float> *, unsigned);
-template void vnl_matlab_read_data(istream &, vnl_complex<double> *, unsigned);
-#else
-# if defined(VCL_GCC)
-#  warning "abort()"
-# endif
-// too bad
-VCL_DEFINE_SPECIALIZATION
-void vnl_matlab_read_data(istream &, vnl_complex<float> *, unsigned)
-{ abort(); }
 
-VCL_DEFINE_SPECIALIZATION
-void vnl_matlab_read_data(istream &, vnl_complex<double> *, unsigned)
-{ abort(); }
-#endif
+//#if VCL_CAN_DO_PARTIAL_SPECIALIZATION
+//template <class T> implement_read_complex_data(T)
+//template void vnl_matlab_read_data(istream &, vnl_complex<float > *, unsigned);
+//template void vnl_matlab_read_data(istream &, vnl_complex<double> *, unsigned);
+//#else
+implement_read_complex_data(float )
+implement_read_complex_data(double)
+//#endif
+
+#undef implement_read_complex_data
 
 //--------------------------------------------------------------------------------
 

@@ -12,19 +12,19 @@ template <class T> class vnl_diag_matrix;
 #include <vcl/vcl_iosfwd.h>
 
 //: pretty-printing matlab formats
-enum vnl_matlab_Format {
-  vnl_matlab_fmt_default,
-  vnl_matlab_fmt_short,
-  vnl_matlab_fmt_long,
-  vnl_matlab_fmt_short_e,
-  vnl_matlab_fmt_long_e
+enum vnl_matlab_print_format {
+  vnl_matlab_print_format_default,
+  vnl_matlab_print_format_short,
+  vnl_matlab_print_format_long,
+  vnl_matlab_print_format_short_e,
+  vnl_matlab_print_format_long_e
 };
 
 //: print real or complex scalar into character buffer.
 template <class T> 
 void vnl_matlab_print_scalar(T const &v, 
 			     char *buf,
-			     vnl_matlab_Format =vnl_matlab_fmt_default);
+			     vnl_matlab_print_format =vnl_matlab_print_format_default);
 
 //: Print in nice MATLAB format.
 // If a variable name (e.g. "foo") is given, the raw data will be preceded by
@@ -37,32 +37,36 @@ template <class T>
 ostream &vnl_matlab_print(ostream &, 
 			  T const *row, 
 			  unsigned length,
-			  vnl_matlab_Format =vnl_matlab_fmt_default);
+			  vnl_matlab_print_format =vnl_matlab_print_format_default);
 
 template <class T>
 ostream &vnl_matlab_print(ostream &, 
 			  vnl_diag_matrix<T> const &, 
 			  char const *variable_name =0,
-			  vnl_matlab_Format =vnl_matlab_fmt_default);
+			  vnl_matlab_print_format =vnl_matlab_print_format_default);
 
 template <class T>
 ostream &vnl_matlab_print(ostream &, 
 			  vnl_matrix<T> const &, 
 			  char const *variable_name =0,
-			  vnl_matlab_Format =vnl_matlab_fmt_default);
+			  vnl_matlab_print_format =vnl_matlab_print_format_default);
 
 template <class T>
 ostream &vnl_matlab_print(ostream &, 
 			  vnl_vector<T> const &, 
 			  char const *variable_name =0,
-			  vnl_matlab_Format =vnl_matlab_fmt_default);
+			  vnl_matlab_print_format =vnl_matlab_print_format_default);
 
 // -------------------- Setting the default format.
 
+//: get top of stack :
+vnl_matlab_print_format vnl_matlab_print_format_top();
+
 //: set new, get old format at top of stack :
-vnl_matlab_Format vnl_matlab_print_format(vnl_matlab_Format);
+vnl_matlab_print_format vnl_matlab_print_format_set(vnl_matlab_print_format);
+
 //: push/pop the top of the stack :
-void vnl_matlab_print_format_push(vnl_matlab_Format);
+void vnl_matlab_print_format_push(vnl_matlab_print_format);
 void vnl_matlab_print_format_pop ();
 
 
