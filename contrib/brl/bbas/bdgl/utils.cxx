@@ -1,51 +1,36 @@
-#include <bdgl/utils.h>
+#include "utils.h"
+#include <vcl_cmath.h>
 #include <vnl/vnl_math.h>
 
 #define ARCLENSAMPLE 0.1
 #define SMALL_VALUE 1E-5
 
-double maxof(double a, double b,double c)
+double maxof(double a, double b, double c)
 {
   if (a>b && a>c)
     return a;
-  else if (b>c && b>a)
+  else if (b>c)
     return b;
-  else if (c>b && c>a)
+  else
     return c;
-  else
-    return a;
 }
 
-double minof(double a, double b)
+bool almostEqual(double a, double b, double eps)
 {
-  if (a<b )
-    return a;
-  else
-    return b;
-
+  return vcl_fabs(a-b)<eps;
 }
 
-int almostEqual(double a, double b,double c)
+bool almostEqual(double a, double b)
 {
-  if (vcl_fabs(a-b)<c)
-    return 1;
-  else
-    return 0;
-}
-
-int almostEqual(double a, double b)
-{
-  if (vcl_fabs(a-b)<SMALL_VALUE)
-    return 1;
-  else
-    return 0;
+  return vcl_fabs(a-b)<SMALL_VALUE;
 }
 
 double fixAngleMPiPi(double a)
 {
+  a = vcl_fmod(a,2*vnl_math::pi);
   if (a < -vnl_math::pi)
     return a+2*vnl_math::pi;
-  else if (a > vnl_math::pi)
+  else if (a >= vnl_math::pi)
     return a-2*vnl_math::pi;
   else
     return a;
@@ -53,51 +38,14 @@ double fixAngleMPiPi(double a)
 
 double fixAngleZTPi(double a)
 {
+  a = vcl_fmod(a,2*vnl_math::pi);
   if (a < 0)
     return a+2*vnl_math::pi;
-  else if (a > 2*vnl_math::pi)
-    return a-2*vnl_math::pi;
   else
     return a;
 }
 
-//Does a1-a2
-double angleDiff(double a1, double  a2)
-{
-  a1=fixAngleMPiPi(a1);
-  a2=fixAngleMPiPi(a2);
-  if (a1 > a2)
-    if (a1-a2 > vnl_math::pi)
-      return a1-a2-2*vnl_math::pi;
-    else
-      return a1-a2;
-  else if (a2 > a1)
-    if (a1-a2 < -vnl_math::pi)
-      return a1-a2+2*vnl_math::pi;
-    else
-      return a1-a2;
-  return 0.0;
-}
-
-
-double angleAdd(double a1, double  a2)
-{
-  double a=a1+a2;
-
-  if (a > vnl_math::pi)
-    return a-2*vnl_math::pi;
-  if (a < -vnl_math::pi)
-    return a+2*vnl_math::pi;
-  else
-    return a;
-}
-
-double pointDist(vgl_point_2d<double> a ,vgl_point_2d<double> b)
-{
-  return vcl_sqrt(vcl_pow(a.x()-b.x(),2.0)+vcl_pow(a.y()-b.y(),2.0));
-}
-
-
+#if 0 // unused function
 vcl_vector<double> smoothVector(vcl_vector<double> a, vcl_vector<double> kernel)
 {
   int N=kernel.size();
@@ -121,7 +69,8 @@ vcl_vector<double> smoothVector(vcl_vector<double> a, vcl_vector<double> kernel)
         b=angleFixForAdd(a[i],a[M-1]);
         sa[i]+=(kernel[j+mid]*b);
       }
-      else{
+      else
+      {
         b=angleFixForAdd(a[i],a[i-j]);
         sa[i]+=(kernel[j+mid]*b);
       }
@@ -129,17 +78,16 @@ vcl_vector<double> smoothVector(vcl_vector<double> a, vcl_vector<double> kernel)
   }
   return sa;
 }
+#endif
 
-double angleFixForAdd(double ref, double  a)
+double angleFixForAdd(double ref, double a)
 {
   double d=a-ref;
-  double b=a;
 
   if (d > vnl_math::pi)
-    b=a-2*vnl_math::pi;
-  else if (d<-vnl_math::pi)
-    b=a+2*vnl_math::pi;
+    return a-2*vnl_math::pi;
+  else if (d < -vnl_math::pi)
+    return a+2*vnl_math::pi;
   else
-    b=a;
-  return b;
+    return a;
 }
