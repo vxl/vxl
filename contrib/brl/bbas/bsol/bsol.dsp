@@ -116,6 +116,9 @@ SOURCE=.\bsol_point_index_3d.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bsol_hough_line_index-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_array_2d+vcl_vector+vcl_vector+vsol_point_3d_sptr--~-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
