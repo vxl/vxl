@@ -30,6 +30,7 @@ MANPAGE_SOURCES += vnl_sym_matrix.txx
 
 MANPAGE_SOURCES += vnl_fortran_copy.txx
 MANPAGE_SOURCES += vnl_det.txx
+MANPAGE_SOURCES += vnl_inverse.h
 MANPAGE_SOURCES += vnl_quaternion.txx
 MANPAGE_SOURCES += vnl_scalar_join_iterator.txx
 
