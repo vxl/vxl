@@ -1,15 +1,12 @@
+// This is vxl/vgl/io/vgl_io_box_3d.h
 #ifndef vgl_io_box_3d_h
 #define vgl_io_box_3d_h
 #ifdef __GNUC__
 #pragma interface
 #endif
 
-// This is vxl/vgl/io/vgl_io_box_3d.h
-
-
-
 //:
-// \file 
+// \file
 // \author Louise Bucther
 // \date 20-Mar-2001
 

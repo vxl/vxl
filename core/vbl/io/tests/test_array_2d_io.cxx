@@ -9,7 +9,7 @@ void test_array_2d_io()
 {
   vcl_cout << "***********************" << vcl_endl;
   vcl_cout << "Testing vbl_array_2d<float> io" << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;  
+  vcl_cout << "***********************" << vcl_endl;
 
   //// test constructors, accessors
   const int array_rows = 8;
@@ -21,7 +21,7 @@ void test_array_2d_io()
     for (int j=0; j< array_cols; j++)
       v_out(i,j) = i*j*j;
   }
-  
+
   vsl_b_ofstream bfs_out("vbl_array_2d_test_io.bvl.tmp");
   TEST ("Created vbl_array_2d_test_io.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out, v_out);
@@ -56,7 +56,7 @@ void test_array_2d_io()
   vsl_print_summary(vcl_cout, v_in);
   vcl_cout << vcl_endl;
 }
-   
+
 void test_array_2d_prime()
 {
   test_array_2d_io();

@@ -12,7 +12,7 @@ int main(int, char **)
   ti.a.x = x[0]; ti.a.y = y[0];
   ti.b.x = x[1]; ti.b.y = y[1];
   ti.c.x = x[2]; ti.c.y = y[2];
-  
+
   vgl_polygon p(x, y, 3);
   vgl_polygon_scan_iterator pi(p, false);
 

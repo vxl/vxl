@@ -11,8 +11,8 @@
 #include <vcl_algorithm.h> // for swap
 
 bool vgl_clip_lineseg_to_line(double &x1, double &y1,
-            double &x2, double &y2,
-            double a,double b,double c) 
+                              double &x2, double &y2,
+                              double a,double b,double c)
 {
   double f1 = a*x1+b*y1+c;
   double f2 = a*x2+b*y2+c;
@@ -35,10 +35,10 @@ bool vgl_clip_lineseg_to_line(double &x1, double &y1,
 }
 
 bool vgl_clip_line_to_box(double a, double b, double c, // coefficients.
-        double x1,double y1,  // bounding
-        double x2,double y2,  // box.
-        double &bx, double &by,  // start and 
-        double &ex, double &ey)  // end points.
+                          double x1,double y1,  // bounding
+                          double x2,double y2,  // box.
+                          double &bx, double &by,  // start and
+                          double &ex, double &ey)  // end points.
 {
   if (x1>x2)
     vcl_swap(x1,x2);

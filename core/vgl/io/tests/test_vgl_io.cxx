@@ -8,7 +8,7 @@
 
 #include <vgl/io/tests/test_homg_plane_3d_io.cxx>
 #include <vgl/io/tests/test_point_2d_io.cxx>
-#include <vgl/io/tests/test_point_3d_io.cxx> 
+#include <vgl/io/tests/test_point_3d_io.cxx>
 #include <vgl/io/tests/test_line_segment_2d_io.cxx>
 #include <vgl/io/tests/test_line_segment_3d_io.cxx>
 #include <vgl/io/tests/test_line_2d_io.cxx>
@@ -42,7 +42,6 @@ void run_test_vgl_io()
   test_box_2d_double_io();
   test_polygon_io();
   golden_test_vgl_io();
-
 }
 
 

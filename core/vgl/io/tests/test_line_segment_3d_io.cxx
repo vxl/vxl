@@ -27,7 +27,7 @@ void test_line_segment_3d_double_io()
   vsl_b_read(bfs_in, p_in);
   bfs_in.close();
 
-  TEST ("p_out == p_in", p_out.point1() == p_in.point1() 
+  TEST ("p_out == p_in", p_out.point1() == p_in.point1()
                       && p_out.point2() == p_in.point2(), true);
 
   vsl_print_summary(vcl_cout, p_out);

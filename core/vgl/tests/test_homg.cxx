@@ -29,7 +29,7 @@ static void test_homg_point_1d()
 
   TEST("+=", (p2+=d1), p1);
   TEST("+=", p2, p1);
-  
+
   p2.set(4,1);
   p3.set(-13,-2);
   double r = ratio(p1,p2,p3);
@@ -70,7 +70,7 @@ static void test_homg_point_2d()
 
   TEST("+=", (p2+=d1), p1);
   TEST("+=", p2, p1);
-  
+
   p2.set(4,5,1);
   p3.set(7,-1,1);
   bool b = collinear(p1,p2,p3);
@@ -119,7 +119,7 @@ static void test_homg_point_3d()
 
   TEST("+=", (p2+=d1), p1);
   TEST("+=", p2, p1);
-  
+
   p2.set(4,5,2,1);
   p3.set(7,-1,11,1);
   bool b = collinear(p1,p2,p3);

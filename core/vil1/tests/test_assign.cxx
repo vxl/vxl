@@ -9,6 +9,6 @@ int main(int argc, char **argv)
     vcl_cerr << "tmp = " << tmp << vcl_endl;
     image = tmp;
   }
-    
+
   return 0;
 }

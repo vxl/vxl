@@ -76,11 +76,11 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
       // for this the SVD algorithm failed to converge. The condition is
       // not bogus. Even if the returned singular values are sensible, 
       // the singular vectors can be utterly wrong.
-      
+
       // It is possible the failure was due to NaNs or infinities in the
       // matrix. Check for that now.
       M.assert_finite();
-      
+
       // If we get here it might be because the scalar type has such 
       // extreme precision that too few iterations were performed to
       // converge to within machine precision (that is the svdc criterion).

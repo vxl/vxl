@@ -321,7 +321,6 @@ vgl_point_2d<Type> vgl_box_2d<Type>::get_centroid_point() const
 // ---END DEPRECATED BLOCK---
 
 
-
 #undef VGL_BOX_2D_INSTANTIATE
 #define VGL_BOX_2D_INSTANTIATE(Type) \
 template class vgl_box_2d<Type >;\

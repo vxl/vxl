@@ -33,9 +33,9 @@ void test_polygon_io()
   vsl_b_read(bfs_in, p_in);
   bfs_in.close();
 
-  TEST ("p_out == p_in", 
-        p_out.num_sheets()==p_in.num_sheets() && 
-        p_out[0]==p_in[0] && 
+  TEST ("p_out == p_in",
+        p_out.num_sheets()==p_in.num_sheets() &&
+        p_out[0]==p_in[0] &&
         p_out[1]==p_in[1] , true);
 
   vsl_print_summary(vcl_cout, p_out);

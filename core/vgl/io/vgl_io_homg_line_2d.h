@@ -8,7 +8,7 @@
 
 //:
 // \file
-// \date 21 Mar 2001 
+// \date 21 Mar 2001
 // \author Franck Bettinger
 //
 // \verbatim

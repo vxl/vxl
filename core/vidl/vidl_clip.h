@@ -2,7 +2,7 @@
 #define vidl_clip_h
 
 //:
-// \file 
+// \file
 // \author Nicolas Dano, september 1999
 // Modifications
 // \verbatim

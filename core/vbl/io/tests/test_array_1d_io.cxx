@@ -9,7 +9,7 @@ void test_array_1d_io()
 {
   vcl_cout << "***********************" << vcl_endl;
   vcl_cout << "Testing vbl_array_1d<float> io" << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;  
+  vcl_cout << "***********************" << vcl_endl;
 
   //// test constructors, accessors
   const int n = 50;
@@ -20,7 +20,7 @@ void test_array_1d_io()
   {
     v_out.push_back(i*i);
   }
-  
+
   vsl_b_ofstream bfs_out("vbl_array_1d_test_io.bvl.tmp");
   TEST ("Created vbl_array_1d_test_io.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out, v_out);
@@ -52,9 +52,8 @@ void test_array_1d_io()
 
   vsl_print_summary(vcl_cout, v_in);
   vcl_cout << vcl_endl;
-
 }
-   
+
 void test_array_1d_prime()
 {
   test_array_1d_io();

@@ -35,7 +35,7 @@ void vsl_b_read(vsl_b_istream &is, vbl_sparse_array_base<T, Index> & p)
   case 1: {
     unsigned size;
     vsl_b_read(is, size);
-    
+
 #ifdef VCL_SUNPRO_CC_50
     // SunPro 5.0 (CC -g -c) generates wrong code (duplicate symbols).
     Index value_first;
@@ -53,7 +53,7 @@ void vsl_b_read(vsl_b_istream &is, vbl_sparse_array_base<T, Index> & p)
     }
 #endif
   } break;
-  
+
   default:
     vcl_cerr << "vsl_b_read() Unknown version number "<< v << vcl_endl;
     vcl_abort();

@@ -9,7 +9,7 @@ void test_array_3d_io()
 {
   vcl_cout << "***********************" << vcl_endl;
   vcl_cout << "Testing vbl_array_3d<float> io" << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;  
+  vcl_cout << "***********************" << vcl_endl;
 
   //// test constructors, accessors
   const int array_row1 = 8;
@@ -19,9 +19,9 @@ void test_array_3d_io()
 
   for (int i=0; i<array_row1; i++)
     for (int j=0; j< array_row2; j++)
-      for (unsigned k=0; k<array_row3; k++)   
+      for (unsigned k=0; k<array_row3; k++)
         v_out(i,j,k) = i*j*j*k;
-  
+
   vsl_b_ofstream bfs_out("vbl_array_3d_test_io.bvl.tmp");
   TEST ("Created vbl_array_3d_test_io.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out, v_out);
@@ -58,7 +58,7 @@ void test_array_3d_io()
   vsl_print_summary(vcl_cout, v_in);
   vcl_cout << vcl_endl;
 }
-   
+
 void test_array_3d_prime()
 {
   test_array_3d_io();

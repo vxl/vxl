@@ -7,7 +7,7 @@
 // This is vxl/vgl/io/vgl_io_point_3d.h
 
 //:
-// \file 
+// \file
 // \author Tim Cootes
 // \date 19-Mar-2001
 

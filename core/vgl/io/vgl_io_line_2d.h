@@ -7,7 +7,7 @@
 // This is vxl/vgl/io/vgl_line_2d.h
 
 //:
-// \file 
+// \file
 // \date 16 Mar 2001
 // \author Franck Bettinger
 //

@@ -6,12 +6,11 @@ int main (int argc, char** argv)
   if (argc > 1) {
     // Initialize a vul_sequence_filename_map with the pattern
     vul_sequence_filename_map map(argv[1]);
-    
+
     // Print out all the files that are specified by that pattern.
     for(int i = 0; i < map.get_nviews(); ++i) {
       vcl_cout << map.name(i) << vcl_endl;
     }
-    
   } else {
     // Capes' examples
     {

@@ -11,7 +11,7 @@
 // \author P D Allen
 // \date 20-Mar-2001
 
-#include <vgl/vgl_homg_point_3d.h> 
+#include <vgl/vgl_homg_point_3d.h>
 #include <vsl/vsl_binary_io.h>
 
 //: Binary save vgl_homg_point_3d to stream.
