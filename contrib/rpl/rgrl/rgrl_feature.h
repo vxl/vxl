@@ -1,13 +1,10 @@
-
 #ifndef rgrl_feature_h_
 #define rgrl_feature_h_
-
 //:
 // \file
 // \brief Base class for feature in generalized registration library
 // \author Chuck Stewart
 // \date 12 Nov 2002
-
 
 #include <vcl_cassert.h>
 #include <vnl/vnl_vector.h>
@@ -23,7 +20,7 @@ class rgrl_transformation;
 class rgrl_feature
   : public rgrl_object
 {
-public:  
+ public:
   //:
   virtual ~rgrl_feature() { };
 
@@ -52,7 +49,6 @@ public:
   //: Number of constraints provided when another feature matches to it
   virtual
   unsigned int num_constraints() const = 0;
-  
 
   //:  Compute the geometric error distance between two features.
   virtual double geometric_error( rgrl_feature const& other ) const;
@@ -80,7 +76,7 @@ public:
 
   //:  If non-zero, the dimensions of the signature error vector.
   //
-  // The dimension depends on the \a other feature type. Defaults to 0. 
+  // The dimension depends on the \a other feature type. Defaults to 0.
   //
   virtual unsigned signature_error_dimension( const vcl_type_info& other_feature_type ) const;
 
@@ -98,7 +94,7 @@ public:
   // Defines type-related functions
   rgrl_type_macro( rgrl_feature, rgrl_object );
 
-private:
+ private:
   // disabled
   rgrl_feature& operator=( rgrl_feature const& );
 };
@@ -117,18 +113,13 @@ private:
 template<class CastTo>
 class rgrl_feature_caster
 {
-public:
-  rgrl_feature_caster( rgrl_feature_sptr f )
-      : data_( dynamic_cast<CastTo*>( f.as_pointer() ) )
-    {
-      assert( data_ );
-    }
+ public:
+  rgrl_feature_caster( rgrl_feature_sptr f );
 
   operator CastTo*() const { return data_; }
   CastTo* operator ->() const { return data_; }
-private:
+ private:
   CastTo* data_;
 };
-
 
 #endif
