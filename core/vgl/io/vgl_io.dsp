@@ -222,10 +222,13 @@ SOURCE=.\Templates/vsl_vector_io+vgl_point_2d+double--.cxx
 SOURCE=.\Templates/vsl_vector_io+vgl_box_2d+int--.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vgl_box_2d+double--.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vsl_vector_io+vcl_vector+vgl_point_2d+double---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vsl_vector_io+vcl_vector+vgl_point_3d+double---.cxx
+SOURCE=.\Templates/vsl_vector_io+vgl_point_3d+double--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vsl_vector_io+vgl_vector_2d+double--.cxx
@@ -346,4 +349,3 @@ SOURCE=.\vgl_io_vector_3d.txx
 # End Group
 # End Target
 # End Project
-
