@@ -116,7 +116,7 @@ double
 rrel_kernel_density_obj::bandwidth(vect_const_iter res_begin, vect_const_iter res_end,
                                    double prior_scale) const
 {
-  unsigned long n = res_end - res_begin;
+  vcl_vector<double>::difference_type n = res_end - res_begin;
   double scale = 1.0;
 
   switch ( scale_type_ ) {
@@ -133,7 +133,7 @@ rrel_kernel_density_obj::bandwidth(vect_const_iter res_begin, vect_const_iter re
     double res_median = *loc;
     vcl_vector<double> abs_res_median;
     abs_res_median.reserve( n );
-    for (unsigned int i=0; i<n; i++ ) {
+    for (vcl_vector<double>::difference_type i=0; i<n; ++i ) {
       abs_res_median.push_back( vnl_math_abs( residuals[i] - res_median ) );
     }
     loc = abs_res_median.begin() + n / 2;
