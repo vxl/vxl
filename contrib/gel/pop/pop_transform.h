@@ -1,4 +1,4 @@
-// This is core/vgl/pop_transform.h
+// This is gel/pop/pop_transform.h
 #ifndef pop_transform_h_
 #define pop_transform_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -7,7 +7,6 @@
 //:
 // \file
 // \brief this is a vertex/coordinate system in a coordinate system graph
-//
 //
 // \author
 //            Peter Tu April 2003
@@ -30,24 +29,22 @@ class pop_transform:public pop_object
  public:
   //: constructor
   pop_transform(vcl_vector<pop_parameter*> params,
-		pop_vertex *cs1, pop_vertex *cs2);
-  
+                pop_vertex *cs1, pop_vertex *cs2);
+
   //: destructor
-  ~pop_transform();
-  
+  virtual ~pop_transform();
+
   //: transform a geometric object
   virtual pop_geometric_object* transform(pop_geometric_object *obj)=0;
-  
 
-   virtual void update() = 0;
+  virtual void update() = 0;
 
  protected:
   // the source coordinate system
   pop_vertex *cs1_;
-  
-  // the target coordinate suystem 
+
+  // the target coordinate suystem
   pop_vertex *cs2_;
-    
 };
 
 #endif // pop_transform_h_
