@@ -175,24 +175,24 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
 
   vcl_cout<<"d= "<<d<<vcl_endl;
   int b=0;
-  while ( b<(d-1) )
+  while ( b+1<d )
   {
     int r= vcl_min ( bs_, (d-b) );
     assert(r>0);
 
     vcl_cout<<"sorting weak classifiers = "<<b<<" to "
-                          <<(b+r)-1<<" of "<<d<<vcl_endl;
+            <<(b+r)-1<<" of "<<d<<vcl_endl;
 
 
     // have to resize all vectors
-    for (unsigned int i=0; i< bs_; ++i)
+    for (int i=0; i< bs_; ++i)
       vec[i].resize(0);
 
     // add data for both classes
     inputs.reset();
     for (unsigned int j=0;j<n;++j)
     {
-      for (unsigned int i=0; i< r; ++i)
+      for (int i=0; i< r; ++i)
       {
         t.first=inputs.current()[b+i];
         t.second=outputs[j];
@@ -203,7 +203,7 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
     }
 
 
-    for (unsigned int i=0; i< r; ++i)
+    for (int i=0; i< r; ++i)
     {
       // sort training data for each individual weak classifier
       assert (vec[i].size() == n);
@@ -226,7 +226,7 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
   // now actually apply ADABoost algorithm
   wrapper.reset();
   assert ( wrapper.current().size() == n );
-  assert ( d == wrapper.size() );
+  assert ( d == (int)wrapper.size() );
 
 
    // initialize weights
@@ -264,9 +264,9 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
   }
 
 
-  // clear classifier 
+  // clear classifier
   // nb maybe shouldn't do this if going to build incrementally
-  // ie by rebuilding the training set from false positives of the 
+  // ie by rebuilding the training set from false positives of the
   // current classifier
   strong_classifier.clear();
   strong_classifier.set_n_dims(d);
@@ -347,29 +347,26 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
       return clsfy_test_error(strong_classifier, inputs, outputs);
     }
 
-    // update the classifier 
+    // update the classifier
     beta = min_error/(1.0-min_error);
     alpha  = -1.0*vcl_log(beta);
     strong_classifier.add_classifier( best_c1d, alpha, best_i);
-    
-    
+
+
     // extract the best weak classifier results
     wrapper.set_index(best_i);
     const vcl_vector< vbl_triple<double,int,int> >& vec = wrapper.current();
 
     // update the wts using the best weak classifier
     for (unsigned int j=0;j<n;++j)
-      if (
-
-              best_c1d-> classify( vec[j].first )
+      if ( best_c1d-> classify( vec[j].first )
             ==
-              (unsigned) vec[j].second
-          )
+           (unsigned) vec[j].second
+         )
       wts[vec[j].third]*=beta;
 
     double w_sum= wts.mean()*n;
     wts/=w_sum;
-    
   }
 
   delete c1d;
@@ -393,8 +390,8 @@ clsfy_classifier_base* clsfy_adaboost_sorted_builder::new_classifier() const
 
 //=======================================================================
 
+#if 0
     // required if data stored on the heap is present in this derived class
-#if (0)
 clsfy_adaboost_sorted_builder::clsfy_adaboost_sorted_builder(const clsfy_adaboost_sorted_builder& new_b):
   data_ptr_(0)
 {
@@ -420,7 +417,7 @@ clsfy_adaboost_sorted_builder& clsfy_adaboost_sorted_builder::operator=(const cl
 
   return *this;
 }
-#endif
+#endif // 0
 
 //=======================================================================
 
@@ -457,7 +454,7 @@ void clsfy_adaboost_sorted_builder::b_write(vsl_b_ostream& bfs) const
 void clsfy_adaboost_sorted_builder::b_read(vsl_b_istream& bfs)
 {
   vcl_cerr << "clsfy_adaboost_sorted_builder::b_read() NYI" << vcl_endl;
-#if (0)
+#if 0
   if (!bfs) return;
 
   short version;
@@ -474,5 +471,5 @@ void clsfy_adaboost_sorted_builder::b_read(vsl_b_istream& bfs)
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
-#endif
+#endif // 0
 }
