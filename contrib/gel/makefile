@@ -48,11 +48,6 @@ SUBDIRS += vmal
 # GUI
 SUBDIRS += vace
 
-# general examples
-ifndef NOTEST
-SUBDIRS += examples
-endif
-
 ######################################
 include ${IUEROOT}/config/top-rules.mk
 ######################################
