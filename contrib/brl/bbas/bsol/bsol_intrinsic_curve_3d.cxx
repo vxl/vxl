@@ -2,7 +2,6 @@
 #include "bsol_intrinsic_curve_3d.h"
 //:
 // \file
-
 #include <vsol/vsol_point_3d.h>
 #include <vcl_cassert.h>
 #include <vcl_cstdio.h>
@@ -97,11 +96,8 @@ bool bsol_intrinsic_curve_3d::operator==(const bsol_intrinsic_curve_3d &other) c
 //: spatial object equality
 bool bsol_intrinsic_curve_3d::operator==(const vsol_spatial_object_3d& obj) const
 {
-  return
-    obj.spatial_type() == vsol_spatial_object_3d::CURVE &&
-    ((vsol_curve_3d const&)obj).curve_type() == vsol_curve_3d::DIGITAL_CURVE
-    ? *this == static_cast<bsol_intrinsic_curve_3d const&>(obj)
-    : false;
+  return obj.is_a() == "bsol_intrinsic_curve_3d" &&
+    operator==(static_cast<bsol_intrinsic_curve_3d const&>(obj));
 }
 
 //***************************************************************************

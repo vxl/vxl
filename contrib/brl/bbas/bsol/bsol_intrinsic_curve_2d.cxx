@@ -2,17 +2,11 @@
 #include "bsol_intrinsic_curve_2d.h"
 //:
 // \file
-
 #include <vsol/vsol_point_2d.h>
-
-//*****************************************************************************
-// External declarations for implementation
-//*****************************************************************************
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vcl_fstream.h>
 #include <vnl/vnl_math.h>
-
 
 //***************************************************************************
 // Initialization
@@ -63,34 +57,6 @@ vsol_spatial_object_2d* bsol_intrinsic_curve_2d::clone(void) const
   return new bsol_intrinsic_curve_2d(*this);
 }
 
-
-//: Return a platform independent string identifying the class
-vcl_string bsol_intrinsic_curve_2d::is_a() const
-{
-  return vcl_string("bsol_intrinsic_curve_2d");
-}
-
-
-//***************************************************************************
-// Access
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-//: Return the first point of `this'
-//---------------------------------------------------------------------------
-vsol_point_2d_sptr bsol_intrinsic_curve_2d::p0(void) const
-{
-  return p0_;
-}
-
-//---------------------------------------------------------------------------
-//: Return the last point of `this'
-//---------------------------------------------------------------------------
-vsol_point_2d_sptr bsol_intrinsic_curve_2d::p1(void) const
-{
-  return p1_;
-}
-
 //***************************************************************************
 // Comparison
 //***************************************************************************
@@ -129,11 +95,8 @@ bool bsol_intrinsic_curve_2d::operator==(const bsol_intrinsic_curve_2d &other) c
 
 bool bsol_intrinsic_curve_2d::operator==(const vsol_spatial_object_2d& obj) const
 {
-  return
-    obj.spatial_type() == vsol_spatial_object_2d::CURVE &&
-    ((vsol_curve_2d const&)obj).curve_type() == vsol_curve_2d::POLYLINE
-    ? operator==(static_cast<bsol_intrinsic_curve_2d const&>(static_cast<bsol_intrinsic_curve_2d const&>(obj)))
-    : false;
+  return obj.is_a() == "bsol_intrinsic_curve_2d" &&
+    operator==(static_cast<bsol_intrinsic_curve_2d const&>(obj));
 }
 
 //***************************************************************************
@@ -154,15 +117,6 @@ void bsol_intrinsic_curve_2d::clear(void)
 //***************************************************************************
 // Status report
 //***************************************************************************
-
-//---------------------------------------------------------------------------
-//: Return the real type of a conic. It is a CURVE
-//---------------------------------------------------------------------------
-vsol_spatial_object_2d::vsol_spatial_object_2d_type
-bsol_intrinsic_curve_2d::spatial_type(void) const
-{
-  return CURVE;
-}
 
 //---------------------------------------------------------------------------
 //: Return the curvature of the vertex `i'
