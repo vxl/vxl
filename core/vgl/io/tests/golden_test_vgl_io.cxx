@@ -139,14 +139,12 @@ void golden_test_vgl_io(bool save_file)
   double double_homg_pos[3]={2.3, 4.7, 6.7};
   float float_homg_pos[3]={2.3f, 4.7f, 5.6f};
 
-  vgl_homg_point_2d<double> double_homg_point_2d_out(
-    double_homg_pos[0], double_homg_pos[1], double_homg_pos[2]);
+  vgl_homg_point_2d<double> double_homg_point_2d_out(double_homg_pos);
   vgl_homg_point_2d<double> double_homg_point_2d_in;
   vgl_homg_point_2d<double> double_homg_point_2d_out2(4.6,7.8,9.1);
   vgl_homg_point_2d<double> double_homg_point_2d_in2;
 
-  vgl_homg_point_2d<float> float_homg_point_2d_out(
-    float_homg_pos[0], float_homg_pos[1], float_homg_pos[2]);
+  vgl_homg_point_2d<float> float_homg_point_2d_out(float_homg_pos);
   vgl_homg_point_2d<float> float_homg_point_2d_in;
   vgl_homg_point_2d<float> float_homg_point_2d_out2(4.6f,7.8f,9.1f);
   vgl_homg_point_2d<float> float_homg_point_2d_in2;
@@ -233,11 +231,14 @@ void golden_test_vgl_io(bool save_file)
 
   // vgl_homg_plane_3d
 
+  vgl_vector_3d<double> double_homg_normal(2.3, 4.7, 6.7);
+  vgl_vector_3d<float> float_homg_normal(2.3f, 4.7f, 5.6f);
+
   vgl_homg_plane_3d<double>
-      double_homg_plane_3d_out(double_homg_pos,double_homg_point_3d_out),
+      double_homg_plane_3d_out(double_homg_normal,double_homg_point_3d_out),
       double_homg_plane_3d_in;
   vgl_homg_plane_3d<float>
-      float_homg_plane_3d_out(float_homg_pos,float_homg_point_3d_out),
+      float_homg_plane_3d_out(float_homg_normal,float_homg_point_3d_out),
       float_homg_plane_3d_in;
 
   // vgl_polygon
@@ -441,43 +442,57 @@ void golden_test_vgl_io(bool save_file)
         true);
   TEST ("double_homg_line_3d_2_points_out == double_homg_line_3d_2_points_in",
         almost_equal(
-          double_homg_line_3d_2_points_out.get_point_finite().x(),
-          double_homg_line_3d_2_points_in.get_point_finite().x()) &&
+          double_homg_line_3d_2_points_out.point_finite().x()
+          *double_homg_line_3d_2_points_in.point_finite().w(),
+          double_homg_line_3d_2_points_out.point_finite().w()
+          *double_homg_line_3d_2_points_in.point_finite().x()) &&
         almost_equal(
-          double_homg_line_3d_2_points_out.get_point_finite().y(),
-          double_homg_line_3d_2_points_in.get_point_finite().y()) &&
+          double_homg_line_3d_2_points_out.point_finite().y()
+          *double_homg_line_3d_2_points_in.point_finite().w(),
+          double_homg_line_3d_2_points_out.point_finite().w()
+          *double_homg_line_3d_2_points_in.point_finite().y()) &&
         almost_equal(
-          double_homg_line_3d_2_points_out.get_point_finite().z(),
-          double_homg_line_3d_2_points_in.get_point_finite().z()) &&
+          double_homg_line_3d_2_points_out.point_finite().z()
+          *double_homg_line_3d_2_points_in.point_finite().w(),
+          double_homg_line_3d_2_points_out.point_finite().w()
+          *double_homg_line_3d_2_points_in.point_finite().z()) &&
         almost_equal(
-          double_homg_line_3d_2_points_out.get_point_infinite().x(),
-          double_homg_line_3d_2_points_in.get_point_infinite().x()) &&
+          double_homg_line_3d_2_points_out.point_infinite().x()
+          *double_homg_line_3d_2_points_in.point_infinite().z(),
+          double_homg_line_3d_2_points_out.point_infinite().z()
+          *double_homg_line_3d_2_points_in.point_infinite().x()) &&
         almost_equal(
-          double_homg_line_3d_2_points_out.get_point_infinite().y(),
-          double_homg_line_3d_2_points_in.get_point_infinite().y()) &&
-        almost_equal(
-          double_homg_line_3d_2_points_out.get_point_infinite().z(),
-          double_homg_line_3d_2_points_in.get_point_infinite().z()),
+          double_homg_line_3d_2_points_out.point_infinite().y()
+          *double_homg_line_3d_2_points_in.point_infinite().z(),
+          double_homg_line_3d_2_points_out.point_infinite().z()
+          *double_homg_line_3d_2_points_in.point_infinite().y()),
         true);
   TEST ("float_homg_line_3d_2_points_out == float_homg_line_3d_2_points_in",
         almost_equal(
-          float_homg_line_3d_2_points_out.get_point_finite().x(),
-          float_homg_line_3d_2_points_in.get_point_finite().x()) &&
+          float_homg_line_3d_2_points_out.point_finite().x()
+          *float_homg_line_3d_2_points_in.point_finite().w(),
+          float_homg_line_3d_2_points_out.point_finite().w()
+          *float_homg_line_3d_2_points_in.point_finite().x()) &&
         almost_equal(
-          float_homg_line_3d_2_points_out.get_point_finite().y(),
-          float_homg_line_3d_2_points_in.get_point_finite().y()) &&
+          float_homg_line_3d_2_points_out.point_finite().y()
+          *float_homg_line_3d_2_points_in.point_finite().w(),
+          float_homg_line_3d_2_points_out.point_finite().w()
+          *float_homg_line_3d_2_points_in.point_finite().y()) &&
         almost_equal(
-          float_homg_line_3d_2_points_out.get_point_finite().z(),
-          float_homg_line_3d_2_points_in.get_point_finite().z()) &&
+          float_homg_line_3d_2_points_out.point_finite().z()
+          *float_homg_line_3d_2_points_in.point_finite().w(),
+          float_homg_line_3d_2_points_out.point_finite().w()
+          *float_homg_line_3d_2_points_in.point_finite().z()) &&
         almost_equal(
-          float_homg_line_3d_2_points_out.get_point_infinite().x(),
-          float_homg_line_3d_2_points_in.get_point_infinite().x()) &&
+          float_homg_line_3d_2_points_out.point_infinite().x()
+          *float_homg_line_3d_2_points_in.point_infinite().z(),
+          float_homg_line_3d_2_points_out.point_infinite().z()
+          *float_homg_line_3d_2_points_in.point_infinite().x()) &&
         almost_equal(
-          float_homg_line_3d_2_points_out.get_point_infinite().y(),
-          float_homg_line_3d_2_points_in.get_point_infinite().y()) &&
-        almost_equal(
-          float_homg_line_3d_2_points_out.get_point_infinite().z(),
-          float_homg_line_3d_2_points_in.get_point_infinite().z()),
+          float_homg_line_3d_2_points_out.point_infinite().y()
+          *float_homg_line_3d_2_points_in.point_infinite().z(),
+          float_homg_line_3d_2_points_out.point_infinite().z()
+          *float_homg_line_3d_2_points_in.point_infinite().y()),
         true);
   TEST ("double_line_segment_2d_out == double_line_segment_2d_in",
         almost_equal(double_line_segment_2d_out.get_point1().x(),
@@ -556,17 +571,20 @@ void golden_test_vgl_io(bool save_file)
         almost_equal(float_box_3d_out.get_max_z(), float_box_3d_in.get_max_z()),
         true);
   TEST ("double_homg_plane_3d_out == double_homg_plane_3d_in",
-        almost_equal(double_homg_plane_3d_out.nx(), double_homg_plane_3d_in.nx()) &&
-        almost_equal(double_homg_plane_3d_out.ny(), double_homg_plane_3d_in.ny()) &&
-        almost_equal(double_homg_plane_3d_out.nz(), double_homg_plane_3d_in.nz()) &&
-        almost_equal(double_homg_plane_3d_out.d(), double_homg_plane_3d_in.d()),
+        almost_equal(double_homg_plane_3d_out.nx()*double_homg_plane_3d_in.d(),
+                     double_homg_plane_3d_out.d()*double_homg_plane_3d_in.nx()) &&
+        almost_equal(double_homg_plane_3d_out.ny()*double_homg_plane_3d_in.d(),
+                     double_homg_plane_3d_out.d()*double_homg_plane_3d_in.ny()) &&
+        almost_equal(double_homg_plane_3d_out.nz()*double_homg_plane_3d_in.d(),
+                     double_homg_plane_3d_out.d()*double_homg_plane_3d_in.nz()),
         true);
   TEST ("float_homg_plane_3d_out == float_homg_plane_3d_in",
-        almost_equal(float_homg_plane_3d_out.nx(),
-          float_homg_plane_3d_in.nx()) &&
-        almost_equal(float_homg_plane_3d_out.ny(), float_homg_plane_3d_in.ny()) &&
-        almost_equal(float_homg_plane_3d_out.nz(), float_homg_plane_3d_in.nz()) &&
-        almost_equal(float_homg_plane_3d_out.d(), float_homg_plane_3d_in.d()),
+        almost_equal(float_homg_plane_3d_out.nx()*float_homg_plane_3d_in.d(),
+                     float_homg_plane_3d_out.d()*float_homg_plane_3d_in.nx()) &&
+        almost_equal(float_homg_plane_3d_out.ny()*float_homg_plane_3d_in.d(),
+                     float_homg_plane_3d_out.d()*float_homg_plane_3d_in.ny()) &&
+        almost_equal(float_homg_plane_3d_out.nz()*float_homg_plane_3d_in.d(),
+                     float_homg_plane_3d_out.d()*float_homg_plane_3d_in.nz()),
         true);
   bool poly_is_equal;
   poly_is_equal = (polygon_out.num_sheets() == polygon_in.num_sheets());
