@@ -107,13 +107,6 @@ ADD_TEST( registration_retina_no_view_test  registration_retina_no_view
           ${rpi_SOURCE_DIR}/publ/rgrl/examples/IMG0004.pgm.landmarks.invariant.txt
           ${rpi_SOURCE_DIR}/publ/rgrl/examples/mask.png)
 
-ADD_TEST( registration_retina_test  registration_retina
-          ${rpi_SOURCE_DIR}/publ/rgrl/examples/IMG0002.pgm.txt
-          ${rpi_SOURCE_DIR}/publ/rgrl/examples/IMG0002.pgm.landmarks.invariant.txt
-          ${rpi_SOURCE_DIR}/publ/rgrl/examples/IMG0004.pgm.txt
-          ${rpi_SOURCE_DIR}/publ/rgrl/examples/IMG0004.pgm.landmarks.invariant.txt
-          ${rpi_SOURCE_DIR}/publ/rgrl/examples/mask.png)
-
 ADD_TEST( registration_range_data_test  registration_range_data
           ${rpi_SOURCE_DIR}/publ/rgrl/examples/bun000.txt.out
           ${rpi_SOURCE_DIR}/publ/rgrl/examples/bun045.txt.out )
