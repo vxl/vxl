@@ -105,21 +105,21 @@ vgl_point_2d<Type> vgl_box_2d<Type>::max_point() const
 template <class Type>
 vgl_point_2d<Type> vgl_box_2d<Type>::centroid_point() const
 {
-  return vgl_point_2d<Type>(get_centroid_x(),get_centroid_y());
+  return vgl_point_2d<Type>(centroid_x(),centroid_y());
 }
 
 template <class Type>
-void vgl_box_2d<Type>::set_centroid_x(Type centroid_x)
+void vgl_box_2d<Type>::set_centroid_x(Type cent_x)
 {
-  Type delta = centroid_x - get_centroid_x();
+  Type delta = cent_x - centroid_x();
   min_pos_[0]= min_pos_[0] + delta;
   max_pos_[0]= max_pos_[0] + delta;
 }
 
 template <class Type>
-void vgl_box_2d<Type>::set_centroid_y(Type centroid_y)
+void vgl_box_2d<Type>::set_centroid_y(Type cent_y)
 {
-  Type delta = centroid_y - get_centroid_y();
+  Type delta = cent_y - centroid_y();
   min_pos_[1]= min_pos_[1] + delta;
   max_pos_[1]= max_pos_[1] + delta;
 }
@@ -127,7 +127,7 @@ void vgl_box_2d<Type>::set_centroid_y(Type centroid_y)
 template <class Type>
 void vgl_box_2d<Type>::set_width(Type width)
 {
-  Type x = get_centroid_x();
+  Type x = centroid_x();
   min_pos_[0] = x-width/2;
   max_pos_[0] = x+width/2;
 }
@@ -135,7 +135,7 @@ void vgl_box_2d<Type>::set_width(Type width)
 template <class Type>
 void vgl_box_2d<Type>::set_height(Type height)
 {
-  Type y = get_centroid_y();
+  Type y = centroid_y();
   min_pos_[1] = y-height/2;
   max_pos_[1] = y+height/2;
 }
@@ -234,10 +234,10 @@ vcl_istream& vgl_box_2d<Type>::read(vcl_istream& s)
 template <class Type>
 vgl_box_2d<Type> intersect(vgl_box_2d<Type> const& a, vgl_box_2d<Type> const& b)
 {
-  Type x0 = vcl_max(a.get_min_x(), b.get_min_x());
-  Type y0 = vcl_max(a.get_min_y(), b.get_min_y());
-  Type x1 = vcl_min(a.get_max_x(), b.get_max_x());
-  Type y1 = vcl_min(a.get_max_y(), b.get_max_y());
+  Type x0 = vcl_max(a.min_x(), b.min_x());
+  Type y0 = vcl_max(a.min_y(), b.min_y());
+  Type x1 = vcl_min(a.max_x(), b.max_x());
+  Type y1 = vcl_min(a.max_y(), b.max_y());
 
   if (x1 > x0 && y1 > y0)
     return vgl_box_2d<Type> (x0, x1, y0, y1);
