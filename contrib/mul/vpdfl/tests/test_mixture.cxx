@@ -49,6 +49,7 @@ void test_mixture()
   // Initialise builder for 2 gaussian components
   vpdfl_mixture_builder builder;
   builder.init(g_builder,n_comp);
+	builder.set_weights_fixed(false);
 
   // Initialise default pdf using 2 5D gaussians
   vpdfl_mixture pdf;
@@ -188,7 +189,7 @@ void test_mixture()
       fail ++;
   }
   vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed." << vcl_endl;
-  TEST("70 < pass < 130", pass > 70 && pass < 130, true);
+  TEST("70 <= pass <= 130", pass >= 70 && pass <= 130, true);
 
   delete p_pdf;
   delete p_sampler;

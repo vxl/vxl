@@ -9,6 +9,8 @@
 ADD_LIBRARY(vpdfl vpdfl_sources)
 
 SOURCE_FILES(vpdfl_sources
+vpdfl_resample.cxx
+vpdfl_calc_mean_var.cxx
 vpdfl_axis_gaussian.cxx
 vpdfl_axis_gaussian_builder.cxx
 vpdfl_axis_gaussian_sampler.cxx
@@ -25,6 +27,11 @@ vpdfl_sampler_base.cxx
 vpdfl_mixture.cxx
 vpdfl_mixture_builder.cxx
 vpdfl_mixture_sampler.cxx
+vpdfl_kernel_pdf.cxx
+vpdfl_kernel_pdf_builder.cxx
+vpdfl_gaussian_kernel_pdf.cxx
+vpdfl_gaussian_kernel_pdf_sampler.cxx
+vpdfl_gaussian_kernel_pdf_builder.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vpdfl_sources)

@@ -33,6 +33,7 @@ void vpdfl_mixture_builder::init()
 {
   min_var_ = 1.0e-6;
   max_its_ = 10;
+	weights_fixed_ = false;
 }
 
 //=======================================================================
@@ -63,6 +64,8 @@ vpdfl_mixture_builder& vpdfl_mixture_builder::operator=(const vpdfl_mixture_buil
     builder_[i] = b.builder_[i]->clone();
 
   min_var_ = b.min_var_;
+	max_its_ = b.max_its_;
+	weights_fixed_ = b.weights_fixed_;
 
   return *this;
 }
@@ -86,9 +89,10 @@ vpdfl_mixture_builder::~vpdfl_mixture_builder()
 
 //: Initialise n builders of type builder
 //  Clone taken of builder
-void vpdfl_mixture_builder::init(vpdfl_builder_base& builder, int n)
+void vpdfl_mixture_builder::init(const vpdfl_builder_base& builder, int n)
 {
   delete_stuff();
+	init();
   builder_.resize(n);
   for (int i=0;i<n;++i)
     builder_[i] = builder.clone();
@@ -100,6 +104,11 @@ void vpdfl_mixture_builder::init(vpdfl_builder_base& builder, int n)
 void vpdfl_mixture_builder::set_max_iterations(int n)
 {
   max_its_ = n;
+}
+//: Define whether weights on components can change or not
+void vpdfl_mixture_builder::set_weights_fixed(bool b)
+{
+  weights_fixed_ = b;
 }
 
 //=======================================================================
@@ -240,6 +249,8 @@ void vpdfl_mixture_builder::initialise(vpdfl_mixture& model,
   for (int i=1;i<n_samples;++i)
     UpdateRange(min_v,max_v,data[i]);
 
+  double mean_sep = vnl_vector_ssd(max_v,min_v)/n_samples;
+
   // Create means along diagonal of bounding box
   vcl_vector<vnl_vector<double> > mean(n_comp);
   for (int i=0;i<n_comp;++i)
@@ -257,7 +268,7 @@ void vpdfl_mixture_builder::initialise(vpdfl_mixture& model,
     double w_sum = 0.0;
     for (int j=0;j<n_samples;++j)
     {
-      wts_i[j] = 1.0/(1.0+ vnl_vector_ssd(data[j], mean[i]));
+      wts_i[j] = mean_sep/(mean_sep+ vnl_vector_ssd(data[j], mean[i]));
       w_sum+=wts_i[j];
     }
 
@@ -288,8 +299,10 @@ void vpdfl_mixture_builder::e_step(vpdfl_mixture& model,
     if (probs[i].size()!=n_egs) probs[i].resize(n_egs);
     double *p_data = probs[i].begin();
 
+		double log_wt_i = vcl_log(model.weights()[i]);
+
     for (int j=0;j<n_egs;++j)
-      p_data[j] = model.components()[i]->log_p(data[j]);
+      p_data[j] = log_wt_i+model.components()[i]->log_p(data[j]);
   }
 
   // Turn into probabilities and normalise.
@@ -345,6 +358,13 @@ double vpdfl_mixture_builder::m_step(vpdfl_mixture& model,
     builder_[i]->weighted_build(*(model.components()[i]), data_array, wts_i);
 
     move += vnl_vector_ssd(old_mean, model.components()[i]->mean());
+  }
+
+	if (!weights_fixed_)
+	{
+	  // update the model weights
+	  for (int i=0;i<n_comp;++i)
+	    model.weights()[i]=probs[i].mean();
   }
 
   return move;
@@ -449,6 +469,8 @@ void vpdfl_mixture_builder::b_write(vsl_b_ostream& bfs) const
   vsl_b_write(bfs,is_a());
   vsl_b_write(bfs,version_no());
   vsl_b_write(bfs,builder_);
+  vsl_b_write(bfs,max_its_);
+  vsl_b_write(bfs,weights_fixed_);
 }
 
 //=======================================================================
@@ -476,6 +498,8 @@ void vpdfl_mixture_builder::b_read(vsl_b_istream& bfs)
   {
     case (1):
       vsl_b_read(bfs,builder_);
+      vsl_b_read(bfs,max_its_);
+      vsl_b_read(bfs,weights_fixed_);
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_mixture_builder &) \n";

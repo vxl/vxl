@@ -144,7 +144,8 @@ bool vpdfl_mixture::is_valid_pdf() const
     // the number of components should be consistent
   if (weight_.size() != n || component_.size() != n || n < 1) return false;
     // weights should sum to 1.
-  if (vcl_fabs(1.0 - vnl_c_vector<double>::sum(&weight_[0]/*.begin()*/, n)) > 1e-20 ) return false;
+  double sum =vnl_c_vector<double>::sum(&weight_[0]/*.begin()*/, n);
+  if (vcl_fabs(1.0 - sum) > 1e-10 ) return false;
     // the number of dimensions should be consistent
   for (unsigned i=0; i<n; ++i)
   {

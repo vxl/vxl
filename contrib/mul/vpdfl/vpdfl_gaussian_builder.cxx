@@ -177,6 +177,7 @@ void vpdfl_gaussian_builder::meanCovar(vnl_vector<double>& mean, vnl_matrix<doub
 
   assert(n_samples!=0);
 
+  data.reset();
   int n_dims = data.current().size();
   vnl_vector<double> sum(n_dims);
   sum.fill(0);
@@ -209,6 +210,7 @@ void vpdfl_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
 
   assert(n_samples>=2); // Need enough samples
 
+	data.reset();
   int n_dims = data.current().size();
   vnl_vector<double> sum(n_dims);
   sum.fill(0);

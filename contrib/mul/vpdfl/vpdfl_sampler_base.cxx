@@ -44,6 +44,41 @@ const vpdfl_pdf_base& vpdfl_sampler_base::model() const
   return *pdf_model_;
 }
 
+
+//: Fill x with samples drawn from distribution
+void vpdfl_sampler_base::get_samples(vcl_vector<vnl_vector<double>>& x)
+{
+  int n = x.size();
+  vnl_vector<double>* x_data = &x[0];
+  for (int i=0;i<n;++i)
+    sample(x_data[i]);
+}
+
+//: Fill x with samples possibly chosen so as to represent the distribution
+void vpdfl_sampler_base::regular_samples(vcl_vector<vnl_vector<double>>& x)
+{
+  int n = x.size();
+  vnl_vector<double>* x_data = &x[0];
+  for (int i=0;i<n;++i)
+    sample(x_data[i]);
+}
+
+//: Fill x with samples possibly chosen so as to represent the distribution
+//  As regular_samples(x), but p[i] is set to p(x[i])
+void vpdfl_sampler_base::regular_samples_and_prob(
+                              vcl_vector<vnl_vector<double>>& x,
+                              vnl_vector<double>& p)
+{
+  regular_samples(x);
+  int n = x.size();
+  p.resize(n);
+  double* p_data = p.data_block();
+  vnl_vector<double>* x_data = &x[0];
+
+  for (int i=0;i<n;++i)
+    p_data[i] = pdf_model_->operator()(x_data[i]);
+}
+
 //=======================================================================
 // Method: is_a
 //=======================================================================

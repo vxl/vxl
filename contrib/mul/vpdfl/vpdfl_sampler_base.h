@@ -13,6 +13,7 @@
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vcl_string.h>
+#include <vcl_vector.h>
 
 //=======================================================================
 
@@ -44,7 +45,26 @@ public:
     //: Draw random sample from distribution
   virtual void sample(vnl_vector<double>& x)=0;
 
-    //: Reseeds the internal random number generator
+	  //: Fill x with samples drawn from distribution
+  virtual void get_samples(vcl_vector<vnl_vector<double> >& x);
+
+  //: Fill x with samples possibly chosen so as to represent the distribution
+	//  Generate a set of pseudo-random samples, chosen so as to be suitable
+	//  to represent the distribution.  This is meant to be used for estimating
+	//  continuous integrals with sampled approximations.  Where there are
+	//  multiple peaks (eg kernel or mixture models), it is preferred that
+	//  the number of samples from each component is roughly proportional
+	//  to the weight for the component.  When small numbers are requested,
+	//  this can be done explicitly.
+	//  The default is simply to call sample() for each element of x
+  virtual void regular_samples(vcl_vector<vnl_vector<double> >& x);
+
+    //: Fill x with samples possibly chosen so as to represent the distribution
+	//  As regular_samples(x), but p[i] is set to p(x[i])
+  virtual void regular_samples_and_prob(vcl_vector<vnl_vector<double> >& x,
+	                                      vnl_vector<double>& p);
+
+		//: Reseeds the internal random number generator
     // To achieve quasi-random initialisation use;
     // \verbatim
     // #include <vcl_ctime.h>
