@@ -13,15 +13,16 @@ static void test_point()
   const unsigned int Na = 3;
 
   testlib_test_begin( "default ctor, num_cartesian and num_angular" );
-  rsdl_point pt0;
-  testlib_test_perform( pt0.num_cartesian() == 0 && pt0.num_angular() == 0 );
+  {
+    rsdl_point pt0;
+    testlib_test_perform( pt0.num_cartesian() == 0 && pt0.num_angular() == 0 );
+  }
 
   testlib_test_begin( "ctor setting size only, num_cartesian and num_angular" );
-  rsdl_point pt1( Nc, Na );
-  testlib_test_perform( pt1.num_cartesian() == Nc && pt1.num_angular() == Na );
-
-  bool ok=true;
-  unsigned int i;
+  {
+    rsdl_point pt1( Nc, Na );
+    testlib_test_perform( pt1.num_cartesian() == Nc && pt1.num_angular() == Na );
+  }
 
   vcl_vector<double> cart(Nc);
   cart[0] = 2.5; cart[1] = -3.0;
@@ -29,34 +30,42 @@ static void test_point()
   ang[0] = -vnl_math::pi/2; ang[1] = vnl_math::pi/4; ang[2] = vnl_math::pi;
 #if 0
   testlib_test_begin( "ctor from two arrays" );
-  rsdl_point pt2( cart, cart+Nc, ang, ang+Na );
-  ok=true;
-  for ( i=0; ok && i<Nc; ++i ) ok = ok && close(pt2.cartesian(i), cart[i]);
-  for ( i=0; ok && i<Na; ++i ) ok = ok && close(pt2.angular(i), ang[i]);
-  testlib_test_perform( ok );
+  {
+    rsdl_point pt2( cart, cart+Nc, ang, ang+Na );
+    bool ok=true;
+    for ( unsigned int i=0; ok && i<Nc; ++i ) ok = ok && close(pt2.cartesian(i), cart[i]);
+    for ( unsigned int i=0; ok && i<Na; ++i ) ok = ok && close(pt2.angular(i), ang[i]);
+    testlib_test_perform( ok );
+  }
 #endif
   testlib_test_begin( "ctor from two vnl_vectors" );
-  vnl_vector<double> cv(2, 1.5,2.1);
-  vnl_vector<double> av(3, -3.0,-1.5,3.1);
-  rsdl_point pt_from_2v( cv, av );
-  ok=true;
-  for ( i=0; ok && i<Nc; ++i ) ok = ok && close(pt_from_2v.cartesian(i), cv[i]);
-  for ( i=0; ok && i<Na; ++i ) ok = ok && close(pt_from_2v.angular(i), av[i]);
-  testlib_test_perform( ok );
+  {
+    vnl_vector<double> cv(2, 1.5,2.1);
+    vnl_vector<double> av(3, -3.0,-1.5,3.1);
+    rsdl_point pt_from_2v( cv, av );
+    bool ok=true;
+    for ( unsigned int i=0; ok && i<Nc; ++i ) ok = ok && close(pt_from_2v.cartesian(i), cv[i]);
+    for ( unsigned int i=0; ok && i<Na; ++i ) ok = ok && close(pt_from_2v.angular(i), av[i]);
+    testlib_test_perform( ok );
+  }
 
   testlib_test_begin( "ctor from two vector ptrs" );
   rsdl_point pt3( cart.begin(), cart.end(), ang.begin(), ang.end() );
-  ok=true;
-  for ( i=0; ok && i<Nc; ++i ) ok = ok && close(pt3.cartesian(i), cart[i]);
-  for ( i=0; ok && i<Na; ++i ) ok = ok && close(pt3.angular(i), ang[i]);
-  testlib_test_perform( ok );
+  {
+    bool ok=true;
+    for ( unsigned int i=0; ok && i<Nc; ++i ) ok = ok && close(pt3.cartesian(i), cart[i]);
+    for ( unsigned int i=0; ok && i<Na; ++i ) ok = ok && close(pt3.angular(i), ang[i]);
+    testlib_test_perform( ok );
+  }
 
   testlib_test_begin( "copy ctor" );
-  rsdl_point pt4( pt3 );
-  ok=true;
-  for ( i=0; ok && i<Nc; ++i ) ok = ok && close(pt4.cartesian(i), cart[i]);
-  for ( i=0; ok && i<Na; ++i ) ok = ok && close(pt4.angular(i), ang[i]);
-  testlib_test_perform( ok );
+  {
+    rsdl_point pt4( pt3 );
+    bool ok=true;
+    for ( unsigned int i=0; ok && i<Nc; ++i ) ok = ok && close(pt4.cartesian(i), cart[i]);
+    for ( unsigned int i=0; ok && i<Na; ++i ) ok = ok && close(pt4.angular(i), ang[i]);
+    testlib_test_perform( ok );
+  }
 
   testlib_test_begin( "ctor all angles" );
   vcl_vector<double> a(6);
@@ -66,12 +75,14 @@ static void test_point()
   testlib_test_perform( true );
 
   testlib_test_begin( "angular" );
-  ok = true;
-  for ( i=0; ok && i<6; ++i ) {
-    pt_no_cart.angular(i) += i / 10.0;
-    ok = ok && close( pt_no_cart.angular(i), a[i] + i / 10.0 );
+  {
+    bool ok = true;
+    for ( unsigned int i=0; ok && i<6; ++i ) {
+      pt_no_cart.angular(i) += i / 10.0;
+      ok = ok && close( pt_no_cart.angular(i), a[i] + i / 10.0 );
+    }
+    testlib_test_perform( ok && pt_no_cart.num_cartesian() == 0 && pt_no_cart.num_angular() == 6 );
   }
-  testlib_test_perform( ok && pt_no_cart.num_cartesian() == 0 && pt_no_cart.num_angular() == 6 );
 
   testlib_test_begin( "ctor all cartesian" );
   vcl_vector<double> c(2);
@@ -80,12 +91,14 @@ static void test_point()
   testlib_test_perform( true );
 
   testlib_test_begin( "cartesian" );
-  ok = true;
-  for ( i=0; ok && i<2; ++i ) {
-    pt_no_ang.cartesian(i) += i * 5.0;
-    ok = ok && close( pt_no_ang.cartesian(i), c[i] + i * 5.0 );
+  {
+    bool ok = true;
+    for ( unsigned int i=0; ok && i<2; ++i ) {
+      pt_no_ang.cartesian(i) += i * 5.0;
+      ok = ok && close( pt_no_ang.cartesian(i), c[i] + i * 5.0 );
+    }
+    testlib_test_perform( ok );
   }
-  testlib_test_perform( ok );
 
   testlib_test_begin( "ctor from single vnl_vector" );
   vnl_vector<double> from_v(5);
@@ -105,43 +118,51 @@ static void test_point()
   rsdl_point q( cart.begin(), cart.end(), ang.begin(), ang.end() );
 
   testlib_test_begin( "set_cartesian from vnl_vector" );
-  q.set_cartesian( new_c );
-  ok = true;
-  for ( i=0; ok && i<Nc; ++i )
-    ok = close( q.cartesian(i), new_c[i] );
-  for ( i=0; ok && i<Na; ++i )
-    ok = close( q.angular(i), ang[i] );
-  testlib_test_perform( ok );
+  {
+    q.set_cartesian( new_c );
+    bool ok = true;
+    for ( unsigned int i=0; ok && i<Nc; ++i )
+      ok = close( q.cartesian(i), new_c[i] );
+    for ( unsigned int i=0; ok && i<Na; ++i )
+      ok = close( q.angular(i), ang[i] );
+    testlib_test_perform( ok );
+  }
 
   testlib_test_begin( "set_cartesian from array" );
-  cart[0] = 80; cart[1]=58.7;
-  q.set_cartesian( cart.begin() );
-  ok = true;
-  for ( i=0; ok && i<Nc; ++i )
-    ok = close( q.cartesian(i), cart[i] );
-  for ( i=0; ok && i<Na; ++i )
-    ok = close( q.angular(i), ang[i] );
-  testlib_test_perform( ok );
+  {
+    cart[0] = 80; cart[1]=58.7;
+    q.set_cartesian( cart.begin() );
+    bool ok = true;
+    for ( unsigned int i=0; ok && i<Nc; ++i )
+      ok = close( q.cartesian(i), cart[i] );
+    for ( unsigned int i=0; ok && i<Na; ++i )
+      ok = close( q.angular(i), ang[i] );
+    testlib_test_perform( ok );
+  }
 
   testlib_test_begin( "set_angular from vnl_vector" );
-  vnl_vector<double> avect(3, -1.0,-1.4,2.0);
-  q.set_angular( avect );
-  ok = true;
-  for ( i=0; ok && i<Nc; ++i )
-    ok = close( q.cartesian(i), cart[i] );
-  for ( i=0; ok && i<Na; ++i )
-    ok = close( q.angular(i), avect[i] );
-  testlib_test_perform( ok );
+  {
+    vnl_vector<double> avect(3, -1.0,-1.4,2.0);
+    q.set_angular( avect );
+    bool ok = true;
+    for ( unsigned int i=0; ok && i<Nc; ++i )
+      ok = close( q.cartesian(i), cart[i] );
+    for ( unsigned int i=0; ok && i<Na; ++i )
+      ok = close( q.angular(i), avect[i] );
+    testlib_test_perform( ok );
+  }
 
   testlib_test_begin( "set_angular from vcl_vector" );
-  ang[0] = -1.5; ang[1] = 2.1; ang[2] = 0.6;
-  q.set_angular( ang.begin() );
-  ok = true;
-  for ( i=0; ok && i<Nc; ++i )
-    ok = close( q.cartesian(i), cart[i] );
-  for ( i=0; ok && i<Na; ++i )
-    ok = close( q.angular(i), ang[i] );
-  testlib_test_perform( ok );
+  {
+    ang[0] = -1.5; ang[1] = 2.1; ang[2] = 0.6;
+    q.set_angular( ang.begin() );
+    bool ok = true;
+    for ( unsigned int i=0; ok && i<Nc; ++i )
+      ok = close( q.cartesian(i), cart[i] );
+    for ( unsigned int i=0; ok && i<Na; ++i )
+      ok = close( q.angular(i), ang[i] );
+    testlib_test_perform( ok );
+  }
 }
 
 TESTMAIN(test_point);
