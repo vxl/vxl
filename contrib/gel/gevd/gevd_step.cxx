@@ -35,7 +35,7 @@
 //#include <ImageProcessing/gevd_float_operators.h>
 //#include <ImageProcessing/pixel.h>
 
-#include <vbl/vbl_array.h>
+#include <vcl_vector.h>
 #include <vnl/vnl_math.h>
 
 #include "gevd_step.h"
@@ -397,10 +397,10 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
   const int length0 = xmax/kmax*ymax/kmax/4;// 25% size
   const float growth = 2;	// growth ratio of the arrays
 
-  vbl_array<int> ndir;
+  vcl_vector<int> ndir;
   //  CoolArray<int> ndir(length0);
-  vbl_array<int> xloc;
-  vbl_array<int> yloc;
+  vcl_vector<int> xloc;
+  vcl_vector<int> yloc;
   //  CoolArray<int> xloc(length0), yloc(length0);
   //  ndir.set_growth_ratio(growth);
   //  xloc.set_growth_ratio(growth); // dynamic array instead of long lists
