@@ -20,6 +20,8 @@ SOURCES += vgl_h_matrix_1d_compute_optimize.cxx
 SOURCES += vgl_h_matrix_2d_compute.cxx
 SOURCES += vgl_h_matrix_2d_compute_4point.cxx
 SOURCES += vgl_h_matrix_2d_compute_linear.cxx
+MANPAGE_SOURCES += vgl_fit_lines_2d.txx
+MANPAGE_SOURCES += vgl_line_2d_regression.txx
 
 ################################
 include ${IUEROOT}/config/top.mk

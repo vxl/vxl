@@ -17,6 +17,7 @@ TESTS += test_area.cxx
 TESTS += test_clip.cxx
 TESTS += test_h_matrix_2d.cxx
 TESTS += test_h_matrix_3d.cxx
+TESTS += test_fit_lines_2d.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
