@@ -177,14 +177,14 @@ vil_image_view<vxl_byte> filtered_image = vil_transpose(tmp_image2);
 * objects.
 * The types of derived classes, and means of creating them are
 * - Representing an image in a file: e.g. vil_pnm_image, vil_jpeg_image. These are
-*   created using vil_load_image_data(), and vil_new_image_resource()
+*   created using vil_load_image_resource(), and vil_new_image_resource()
 * - vil_memory_image: Representing an image in memory (essentially a wrapper around a view.)
-*   This is created using vil_new_image_resource().
+*   This is created using vil_new_image_resource() or vil_new_image_resource_of_view().
 * - Representing a filtered version of an image in a file (without loading in memory): e.g.
 *   vil_crop_image_resource and vil_decimate_image_resource. These are created using the
 *   equivalent functions: vil_crop(), vil_decimate(), etc.
 * - Representing the outcome of an image processing algorithm (see next section)
-*   e.g. vil_convolve_1d_resource. These are creates using the equivalent functions
+*   e.g. vil_convolve_1d_resource. These are created using the equivalent functions
 *   vil_convolve_1d().
 *
 * vil_image_resource objects in most cases only deal with scalar-type pixels.
