@@ -8,7 +8,7 @@
 #endif
 #include "vul_get_timestamp.h"
 
-#ifdef WIN32
+#ifdef VCL_WIN32
 #include <direct.h>
 #include <sys/timeb.h>
 #else
@@ -18,7 +18,7 @@
 //#include <vcl_ctime.h> // for struct timezone
 #include <vcl_sys/time.h> // for gettimeofday()
 
-#ifndef WIN32
+#ifndef VCL_WIN32
 // POSIX
 void vul_get_timestamp(int &secs, int &msecs)
 {
@@ -30,7 +30,7 @@ void vul_get_timestamp(int &secs, int &msecs)
   msecs = timestamp.tv_usec/1000;
 }
 #else
-// WIN32
+// VCL_WIN32
 void vul_get_timestamp(int &secs, int &msecs)
 {
   struct _timeb real;

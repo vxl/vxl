@@ -13,7 +13,7 @@
 #include "vul_user_info.h"
 
 
-#ifdef WIN32
+#ifdef VCL_WIN32
 #include <direct.h>
 #else
 #include <unistd.h>
@@ -55,7 +55,7 @@ void vul_user_info::init(uid_type /*uid*/)
 
 void vul_user_info::init(char const* name_)
 {
-#ifndef WIN32
+#ifndef VCL_WIN32
   struct passwd* pw = getpwnam(name_);
   if (!pw) {
 #endif
@@ -63,7 +63,7 @@ void vul_user_info::init(char const* name_)
     this->uid = 0;
     this->gid = 0;
     this->name = name_;
-#ifndef WIN32
+#ifndef VCL_WIN32
   } else {
     this->ok = true;
     this->uid = pw->pw_uid;
