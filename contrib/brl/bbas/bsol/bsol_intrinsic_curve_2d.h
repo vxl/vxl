@@ -178,7 +178,7 @@ class bsol_intrinsic_curve_2d : public vsol_curve_2d
   virtual void set_p1 (const vsol_point_2d_sptr &new_p1);
   //: Compute intrinsic properties.
   //  Note that if you even call the other modifying function with the
-  //  flag bRecomputeProterties set to false, remember to call this function
+  //  flag bRecomputeProperties set to false, remember to call this function
   //  to recompute intrinsic properties of this curve.
   void computeProperties();
   //: Delete all points of the intrinsic curve
