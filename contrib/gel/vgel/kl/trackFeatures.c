@@ -402,7 +402,7 @@ void KLTTrackFeatures(
                       int nrows,
                       KLT_FeatureList featurelist)
 {
-  _KLT_FloatImage tmpimg, floatimg1, floatimg2;
+  _KLT_FloatImage tmpimg, floatimg1=0, floatimg2;
   _KLT_Pyramid pyramid1, pyramid1_gradx, pyramid1_grady,
     pyramid2, pyramid2_gradx, pyramid2_grady;
   int subsampling = tc->subsampling;
