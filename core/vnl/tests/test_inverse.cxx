@@ -21,6 +21,11 @@ void test_inverse() {
     TEST_NEAR("2x2 vnl_inverse", residue.array_inf_norm(), 0.0, eps);
     residue = m2i*m2 - id2;
     TEST_NEAR("2x2 vnl_inverse", residue.array_inf_norm(), 0.0, eps);
+
+    vnl_matrix<double> M(m2);
+    vnl_matrix<double> Mi = vnl_inverse(M);
+    residue = m2*Mi - id2;
+    TEST_NEAR("2x2 vnl_inverse", residue.array_inf_norm(), 0.0, eps);
   }
 
   {
