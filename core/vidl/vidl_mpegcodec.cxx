@@ -159,7 +159,7 @@ vidl_mpegcodec::vidl_mpegcodec()
 vidl_mpegcodec::~vidl_mpegcodec()
 {
   vcl_cout << "vidl_mpegcodec::~vidl_mpegcodec. entering" << vcl_endl;
-  decoder_->print();
+  if (decoder_) decoder_->print();
   buffers_->print();
   vcl_cout << "first frame number in memory is: " << buffers_->first_frame_num() << vcl_endl;
   delete buffers_;
