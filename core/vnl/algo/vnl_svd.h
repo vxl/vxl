@@ -62,7 +62,7 @@ template <class T> class vnl_svd;
 template <class T> vcl_ostream& operator<<(vcl_ostream&, 
                                            vnl_svd<T> const& svd);
 
-template <class T>
+export template <class T>
 class vnl_svd {
 public:
   // The singular values of a matrix of complex<T> are of type T,not complex<T>
@@ -169,14 +169,5 @@ vnl_matrix<T> vnl_svd_inverse(vnl_matrix<T> const& m)
 {
   return vnl_svd<T>(m).inverse();
 }
-
-#if 0
-#include <vcl_complex_fwd.h>
-VCL_DEFINE_SPECIALIZATION
-class vnl_svd<vcl_complex<float> > {
-  // This instance should be poisoned because the relevant netlib
-  // routine appears to be broken.
-};
-#endif
 
 #endif // vnl_svd_h_
