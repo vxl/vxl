@@ -107,6 +107,7 @@ vgl_point_2d<Type> vgl_closest_point(vgl_line_2d<Type> const& l,
                                      vgl_point_2d<Type> const& p)
 {
   Type d = l.a()*l.a()+l.b()*l.b();
+  assert(d!=0); // line should not be the line at infinity
   return vgl_point_2d<Type>((l.b()*l.b()*p.x()-l.a()*l.b()*p.y()-l.a()*l.c())/d,
                             (l.a()*l.a()*p.y()-l.a()*l.b()*p.x()-l.b()*l.c())/d);
 }
@@ -120,9 +121,11 @@ template <class Type>
 vgl_homg_point_2d<Type> vgl_closest_point(vgl_homg_line_2d<Type> const& l,
                                           vgl_homg_point_2d<Type> const& p)
 {
+  Type d = l.a()*l.a()+l.b()*l.b();
+  assert(d!=0); // line should not be the line at infinity
   return vgl_homg_point_2d<Type>(l.b()*l.b()*p.x()-l.a()*l.b()*p.y()-l.a()*l.c(),
                                  l.a()*l.a()*p.y()-l.a()*l.b()*p.x()-l.b()*l.c(),
-                                 l.a()*l.a()+l.b()*l.b());
+                                 d);
 }
 
 template vgl_homg_point_2d<float> vgl_closest_point(vgl_homg_line_2d<float> const&, vgl_homg_point_2d<float> const&);
