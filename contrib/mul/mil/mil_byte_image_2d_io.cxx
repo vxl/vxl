@@ -180,7 +180,8 @@ bool mil_byte_image_2d_io::saveImage(const mil_image& image,
             const vcl_string& path,
             const vcl_string& f_type) const
 {
-  assert(image.is_a()=="mil_image_2d_of<vil_byte>");
+  // Strictly should over-ride the is_a() so this is mil_image_2d_of<vil_byte>
+  assert(image.is_a()=="mil_image_2d_of<T>");
 
   vcl_string filetype = f_type;
   if (f_type=="")
