@@ -9,6 +9,16 @@ vcl_ostream &delim(vcl_ostream &os)
   return os << ", ";
 }
 
+int frurk(vcl_vector<int> const &a,
+          vcl_vector<int> const &b)
+{
+  if (a == b)
+    return 0;
+  if (a != b)
+    return 1;
+  return 2;
+}
+
 int main()
 {  
   {
