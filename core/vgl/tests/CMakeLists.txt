@@ -21,6 +21,7 @@ ADD_EXECUTABLE( vgl_test_all
   test_h_matrix_3d.cxx
   test_fit_lines_2d.cxx
   test_p_matrix.cxx
+  test_convex_hull_2d.cxx
 )
 TARGET_LINK_LIBRARIES( vgl_test_all vgl_algo vgl testlib )
 
@@ -42,6 +43,7 @@ ADD_TEST( vgl_test_h_matrix_2d                  vgl_test_all test_h_matrix_2d )
 ADD_TEST( vgl_test_h_matrix_3d                  vgl_test_all test_h_matrix_3d )
 ADD_TEST( vgl_test_fit_lines_2d                 vgl_test_all test_fit_lines_2d)
 ADD_TEST( vgl_test_p_matrix                     vgl_test_all test_p_matrix)
+ADD_TEST( vgl_test_convex_hull_2d               vgl_test_all test_convex_hull_2d)
 
 ADD_EXECUTABLE( vgl_test_include test_include.cxx )
 
