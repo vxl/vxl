@@ -12,6 +12,9 @@ SUBDIRS += mil mil3d
 # Manchester classifier
 SUBDIRS += clsfy
 
+# New vil
+SUBDIRS += vil2 vimt vil3d
+
 ################################
 include ${IUEROOT}/config/top.mk
 ################################

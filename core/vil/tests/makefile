@@ -24,6 +24,11 @@ TESTS += test_pixel_format.cxx
 TESTS += test_image_view_maths.cxx
 TESTS += test_memory_chunk.cxx
 TESTS += test_convert.cxx
+TESTS += test_binary_dilate.cxx
+TESTS += test_binary_erode.cxx
+TESTS += test_resample_bilin.cxx
+TESTS += test_vil1.cxx
+PARAMS_test_vil1 := file_read_data
 
 include ${IUEROOT}/config/identify-os.mk
 ifeq ($(OS),OSF1V4) # with optimisation, gcc 3.x runs out of memory

@@ -39,6 +39,9 @@ SOURCES += file_formats/vil2_jpeg_decompressor.cxx
 SOURCES += file_formats/vil2_jpeg_destination_mgr.cxx
 SOURCES += file_formats/vil2_jpeg_source_mgr.cxx
 MANPAGE_SOURCES += file_formats/vil2_jpeglib.h
+SOURCES += vil2_decimate.cxx
+SOURCES += vil2_vil1.cxx
+MANPAGE_SOURCES += vil2_resample_bilin.txx
 
 SUBDIRS += algo io
 
