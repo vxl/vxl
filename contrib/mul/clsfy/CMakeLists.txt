@@ -20,6 +20,9 @@ clsfy_knn_builder.cxx
 clsfy_parzen_builder.cxx
 clsfy_random_builder.cxx
 clsfy_random_classifier.cxx
+clsfy_classifier_1d.cxx
+clsfy_binary_threshold_1d.cxx
+clsfy_builder_1d.cxx
 )
 
 
@@ -37,6 +40,9 @@ IF (WIN32)
     clsfy_parzen_builder.h
     clsfy_random_builder.h
     clsfy_random_classifier.h
+    clsfy_classifier_1d.h
+    clsfy_binary_threshold_1d.h
+    clsfy_builder_1d.h
     )
   ENDIF (NOT CYGWIN)
 ENDIF(WIN32)
