@@ -2037,7 +2037,7 @@ sdet_contour::SetEdgelData(gevd_bufferxy& grad_mag, gevd_bufferxy& angle, vcl_ve
 //:
 // Fix the edgel chains to be consistent with the edge topology
 // Currently there are no digital curve samples corresponding to
-// the vertices. Initally just add an edgel at each vertex.  Later
+// the vertices. Initially just add an edgel at each vertex.  Later
 // we may have to interpolate
 //
 void
