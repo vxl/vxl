@@ -4,6 +4,7 @@
 #undef TESTMAIN
 #define TESTMAIN(x)
 
+#include <mil/tests/test_normalise_image_2d.cxx> 
 #include <mil/tests/test_convert_vil.cxx> 
 #include <mil/tests/test_byte_image_2d_io.cxx>
 #include <mil/tests/test_transform_2d.cxx>
@@ -23,6 +24,7 @@
 
 void run_test_mil()
 {
+  test_normalise_image_2d();
   test_convert_vil();
   test_byte_image_2d_io();
   test_sample_profile_2d();
