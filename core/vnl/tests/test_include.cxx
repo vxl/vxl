@@ -33,7 +33,6 @@
 #include <vnl/vnl_double_4.h>
 #include <vnl/vnl_double_4x3.h>
 #include <vnl/vnl_double_4x4.h>
-#include <vnl/vnl_double_5.h>
 #include <vnl/vnl_error.h>
 #include <vnl/vnl_fastops.h>
 #include <vnl/vnl_file_matrix.h>

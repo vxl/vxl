@@ -38,7 +38,6 @@ class vnl_cross_product_matrix;
 class vnl_double_2;
 class vnl_double_3;
 class vnl_double_4;
-class vnl_double_5;
 class vnl_double_2x3;
 class vnl_double_3x2;
 typedef vnl_matrix_fixed<double,1,2> vnl_double_1x2;
