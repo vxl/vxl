@@ -69,7 +69,7 @@ EXTRACT_PRIVATE      = NO
 
 HIDE_UNDOC_MEMBERS   = NO
 
-# If the HIDE_UNDOC_CLASSESS tag is set to YES, Doxygen will hide all
+# If the HIDE_UNDOC_CLASSES tag is set to YES, Doxygen will hide all
 # undocumented classes.
 
 HIDE_UNDOC_CLASSES   = NO
@@ -105,11 +105,11 @@ FULL_PATH_NAMES      = YES
 # only done if one of the specified strings matches the left-hand part of
 # the path.
 
-STRIP_FROM_PATH      = "/awf/src/target/vxl/"
+STRIP_FROM_PATH      = "$IUEROOT/vxl/" "$IUEROOT/v3p/" "$IUEROOT/oxl/"
 
 # The INTERNAL_DOCS tag determines if documentation
 # that is typed after a \internal command is included. If the tag is set 
-# to NO (the default) then the documentation will be excluded.
+# to NO (the default) then the documentation will not be excluded.
 # Set it to YES to include the internal documentation.
 
 INTERNAL_DOCS        = NO
@@ -123,7 +123,7 @@ CLASS_DIAGRAMS       = YES
 # If the SOURCE_BROWSER tag is set to YES then a list of source files will
 # be generated. Documented entities will be cross-referenced with these sources.
 
-SOURCE_BROWSER       = NO
+SOURCE_BROWSER       = YES
 
 # Setting the INLINE_SOURCES tag to YES will include the body
 # of functions and classes directly in the documentation.
@@ -149,7 +149,7 @@ VERBATIM_HEADERS     = YES
 # comment as the brief description. If set to NO, the Javadoc-style will
 # behave just like the Qt-style comments.
 
-JAVADOC_AUTOBRIEF    = YES
+JAVADOC_AUTOBRIEF    = NO
 
 # if the INHERIT_DOCS tag is set to YES (the default) then an undocumented
 # member inherits the documentation from any documented member that it
@@ -176,7 +176,7 @@ TAB_SIZE             = 8
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
 
-INPUT                = "/awf/src/target/vxl"
+INPUT                = "$IUEROOT/vxl"
 
 # If the value of the INPUT tag contains directories, you can use the 
 # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 
@@ -195,14 +195,14 @@ RECURSIVE            = YES
 # excluded from the INPUT source files. This way you can easily exclude a 
 # subdirectory from a directory tree whose root is specified with the INPUT tag.
 
-EXCLUDE              = "/awf/src/target/vxl/vcl/emulation" "/awf/src/target/vxl/vcl/tmp"
+EXCLUDE              = "doc" "vcl"
 
 # If the value of the INPUT tag contains directories, you can use the
 # EXCLUDE_PATTERNS tag to specify one or more wildcard patterns to exclude
 # certain files from those directories.
 
-EXCLUDE_PATTERNS     =
-
+EXCLUDE_PATTERNS     = "/Templates/" "*test*" "*example*" "*config*" # "*impl*"
+    
 # The EXAMPLE_PATH tag can be used to specify one or more files or 
 # directories that contain example code fragments that are included (see 
 # the \include command).
@@ -214,7 +214,7 @@ EXAMPLE_PATH         =
 # and *.h) to filter out the source-files in the directories. If left 
 # blank all files are included.
 
-EXAMPLE_PATTERNS     =
+EXAMPLE_PATTERNS     = "*.cxx"
 
 # The IMAGE_PATH tag can be used to specify one or more files or 
 # directories that contain image that are included in the documentation (see 
@@ -229,7 +229,7 @@ IMAGE_PATH           =
 # input file. Doxygen will then use the output that the filter program writes
 # to standard output.
 
-INPUT_FILTER         = "./vxl_doxy.pl"
+INPUT_FILTER         = "$IUEROOT/vxl/doc/vxl_doxy.pl"
 
 #---------------------------------------------------------------------------
 # configuration options related to the HTML output
@@ -288,7 +288,7 @@ ALPHABETICAL_INDEX   = YES
 # the COLS_IN_ALPHA_INDEX tag can be used to specify the number of columns
 # in which this list will be split (can be a number in the range [1..20])
 
-COLS_IN_ALPHA_INDEX  = 3
+COLS_IN_ALPHA_INDEX  = 2
 
 #---------------------------------------------------------------------------
 # configuration options related to the LaTeX output
@@ -297,7 +297,7 @@ COLS_IN_ALPHA_INDEX  = 3
 # If the GENERATE_LATEX tag is set to YES (the default) Doxygen will
 # generate Latex output.
 
-GENERATE_LATEX       = YES
+GENERATE_LATEX       = NO
 
 # The LATEX_OUTPUT tag is used to specify where the LaTeX docs will be put.
 # If a relative path is entered the value of OUTPUT_DIRECTORY will be
@@ -317,7 +317,7 @@ COMPACT_LATEX        = NO
 
 PAPER_TYPE           = a4wide
 
-# The EXTRA_PACKAGES tag can be to specify one or more names of LaTeX
+# The EXTRA_PACKAGES tag can be used to specify one or more names of LaTeX
 # packages that should be included in the LaTeX output.
 
 EXTRA_PACKAGES       =
@@ -370,7 +370,7 @@ ENABLE_PREPROCESSING = YES
 # names in the source code. If set to NO (the default) only conditional 
 # compilation will be performed.
 
-MACRO_EXPANSION      = NO
+MACRO_EXPANSION      = YES
 
 # If the SEARCH_INCLUDES tag is set to YES (the default) the includes files
 # in the INCLUDE_PATH (see below) will be search if a #include is found.
@@ -381,7 +381,7 @@ SEARCH_INCLUDES      = YES
 # contain include files that are not input files but should be processed by
 # the preprocessor.
 
-INCLUDE_PATH         =
+INCLUDE_PATH         = "$IUEROOT/vxl" "$IUEROOT/v3p"
 
 # The PREDEFINED tag can be used to specify one or more macro names that
 # are defined before the preprocessor is started (similar to the -D option of
@@ -389,7 +389,7 @@ INCLUDE_PATH         =
 # or name=definition (no spaces). If the definition and the = are 
 # omitted =1 is assumed.
 
-PREDEFINED           =
+PREDEFINED           = "FREEVERSION"
 
 # If the EXPAND_ONLY_PREDEF and MACRO_EXPANSION tags are both set to YES
 # then the macro expansion is limited to the macros specified with the
