@@ -117,9 +117,16 @@ void pattern_grey (unsigned char* data) {
 void pattern_RGB16 (unsigned char* data, bool little_endian) {
   unsigned short r,g,b;
   unsigned short* my_data = (unsigned short *)data;
-  r = 0xf800;
-  g = 0x07e0;
-  b = 0x001f;
+  if (little_endian) {
+    r = 0x001f;
+    g = 0x07e0;
+    b = 0xf800;
+  }
+  else {
+    r = 0xf800;
+    g = 0x07e0;
+    b = 0x001f;
+  }
   for (int y = 0; y < 512; ++y) {
     for (int x = 0; x < 170; ++x) {
       my_data[y*512 +     x] = r;
@@ -129,7 +136,7 @@ void pattern_RGB16 (unsigned char* data, bool little_endian) {
   }
 }
 
-void pattern_RGB24 (unsigned char* data, bool little_endian) {
+void pattern_RGB24 (unsigned char* data, bool /*little_endian*/) {
 
   for (int n=0; n < 512*512*3; ++n) data[n] = 0;
 
@@ -209,14 +216,13 @@ int main (int argc, char** argv)
   glXMakeCurrent(display, window, context);
 
   bool little_endian = (ImageByteOrder(display) == LSBFirst);
-  vcl_cerr << "GL_VERSION : " <<  (const char*) glGetString(GL_VERSION) << '\n';
-  vcl_cerr << "GL_RENDERER : " << (const char*) glGetString(GL_RENDERER)<< '\n';
-  vcl_cerr << vcl_endl;
-  vcl_cerr << "X Display - \n";
-  vcl_cerr << "      byte-order : " << (little_endian ? "little-endian" : "big-endian") << vcl_endl;
-  vcl_cerr << vcl_endl;
-  vcl_cerr << "XVisualInfo - \n";
-  vcl_cerr << "           depth : " << visualinfo->depth << vcl_endl;
+  vcl_cerr << "GL_VERSION : " <<  (const char*) glGetString(GL_VERSION) << '\n'
+           << "GL_RENDERER : " << (const char*) glGetString(GL_RENDERER)<< "\n\n"
+           << "X Display - \n"
+           << "      byte-order : "
+           << (little_endian ? "little-endian\n\n" : "big-endian\n\n")
+           << "XVisualInfo - \n"
+           << "           depth : " << visualinfo->depth << vcl_endl;
   vul_printf(vcl_cerr,"        red-mask : %08x\n", visualinfo->red_mask);
   vul_printf(vcl_cerr,"      green-mask : %08x\n", visualinfo->green_mask);
   vul_printf(vcl_cerr,"       blue-mask : %08x\n", visualinfo->blue_mask);
@@ -240,11 +246,11 @@ int main (int argc, char** argv)
     XImage* backbuffer;
     XMesaGetBackBuffer(mesabuf, &p, &backbuffer);
 
-    vcl_cerr << "Mesa backbuffer XImage - \n";
-    vcl_cerr << "           depth : " << backbuffer->depth << vcl_endl;
-    vcl_cerr << "  bits-per-pixel : " << backbuffer->bits_per_pixel << vcl_endl;
-    vcl_cerr << "      byte_order : "
-             << ((backbuffer->byte_order == LSBFirst) ? "little-endian" : "big-endian") << vcl_endl;
+    vcl_cerr << "Mesa backbuffer XImage - \n"
+             << "           depth : " << backbuffer->depth << vcl_endl
+             << "  bits-per-pixel : " << backbuffer->bits_per_pixel << vcl_endl
+             << "      byte_order : "
+             << ((backbuffer->byte_order == LSBFirst) ? "little-endian\n" : "big-endian\n");
     vcl_cerr << "  bytes-per-line : " << backbuffer->bytes_per_line << vcl_endl;
     vul_printf(vcl_cerr,"        red-mask : %08x\n", backbuffer->red_mask);
     vul_printf(vcl_cerr,"      green-mask : %08x\n", backbuffer->green_mask);
@@ -315,24 +321,24 @@ int main (int argc, char** argv)
     vcl_cerr << 512*512*draws / (elapsed / 1000.0) << " pixels per second\n";
   }
   {
-    vcl_cerr << vcl_endl << "glDrawPixels - \n";
+    vcl_cerr << "\nglDrawPixels - \n";
     double fps;
-    vcl_cerr << "source -"; for (int i=0; i<ft_size; ++i) vcl_cerr << "    " << ft_tab[i].nfixed; vcl_cerr << vcl_endl;
-    //vul_printf(cerr,"source -    LUM       RGB565    RGB       BGR       RGBA      BGRA      ABGR\n");
+    vcl_cerr << "source -";
+    for (int i=0; i<ft_size; ++i) vcl_cerr << "    " << ft_tab[i].nfixed;
+    vcl_cerr << vcl_endl;
+    vul_printf(vcl_cerr,"source -    LUM       RGB565    RGB       BGR       RGBA      BGRA      ABGR\n");
     vcl_cerr << "zoom 1.00x  ";
     for (int i=0; i<ft_size; ++i) {
       fps = fps_gl(ft_tab[i].format, ft_tab[i].type);
       vul_printf(vcl_cerr,"%1.1e   ",512*512*fps);
     }
-    vcl_cerr << vcl_endl;
-    vcl_cerr << "zoom 1.90x  ";
+    vcl_cerr << "\nzoom 1.90x  ";
     glPixelZoom(1.9,1.9);
     for (int i=0; i<ft_size; ++i) {
       fps = fps_gl(ft_tab[i].format, ft_tab[i].type);
       vul_printf(vcl_cerr,"%1.1e   ",512*512*fps);
     }
-    vcl_cerr << vcl_endl;
-    vcl_cerr << "zoom 0.51x  ";
+    vcl_cerr << "\nzoom 0.51x  ";
     glPixelZoom(0.51,0.51);
     for (int i=0; i<ft_size; ++i) {
       fps = fps_gl(ft_tab[i].format, ft_tab[i].type);
@@ -367,7 +373,7 @@ int main (int argc, char** argv)
     Hermes_ClearerReturn(clearer);
   }
   {
-    vcl_cerr << vcl_endl << "HermesConverter - \n";
+    vcl_cerr << "\nHermesConverter - \n";
     HermesFormat* src_format;
     double fps;
     vul_printf(vcl_cerr,"source -    LUM      OxRGB565 OxRGB    OxBGR    Ox_RGB   0x_BGR\n");
