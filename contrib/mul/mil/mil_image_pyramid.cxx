@@ -136,3 +136,13 @@ vcl_ostream& operator<<(vcl_ostream& os, const mil_image_pyramid* im_pyr)
         os<<"NULL";
     return os;
 }
+
+void vsl_print_summary(vcl_ostream& os, const mil_image_pyramid& im_pyr)
+{
+  os << im_pyr;
+}
+
+void vsl_print_summary(vcl_ostream& os, const mil_image_pyramid* im_pyr)
+{
+  os << im_pyr;
+}
