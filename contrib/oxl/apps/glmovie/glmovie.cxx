@@ -38,6 +38,8 @@
 
 #ifdef VCL_WIN32
 #include <vidl/vidl_avicodec.h>
+#endif
+#ifdef HAS_MPEG
 #include <oxp/oxp_vidl_mpeg_codec.h>
 #endif
 
@@ -741,6 +743,8 @@ int main(int argc, char ** argv)
   // Register video codec
 #ifdef VCL_WIN32
   vidl_io::register_codec(new vidl_avicodec);
+#endif
+#if HAS_MPEG
   vidl_io::register_codec(new oxp_vidl_mpeg_codec);
 #endif
 
