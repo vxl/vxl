@@ -5,7 +5,7 @@
 
 // streamoff
 #ifndef vcl_streamoff
-#define vcl_streamoff vcl_generic_ios_STD :: streamoff
+#define vcl_streamoff vcl_generic_iosfwd_STD :: streamoff
 #endif
 // char_traits
 #ifndef vcl_char_traits
