@@ -44,7 +44,7 @@ void vsrl_dynamic_program::set_tokens(token_list &l1,
   // set the tokens for the assignments
   if (l1.empty() || l2.empty())
   {
-    vcl_cout << "warning empty list" << vcl_endl;
+    vcl_cout << "warning empty list\n";
     return;
   }
 
@@ -139,12 +139,12 @@ void vsrl_dynamic_program::set_search_range(int range)
 
 bool vsrl_dynamic_program::allocate_cost_matrix()
 {
-  // we wish to make a two dimensional of assignement_nodes
+  // we wish to make a two dimensional of assignment_nodes
   // to keep track of the assignment costs
 
   if (!num_row_ || !num_col_)
   {
-    vcl_cout << "must set new token lists" << vcl_endl;
+    vcl_cout << "must set new token lists\n";
     cost_matrix_ = 0;
     return false;
   }
@@ -185,7 +185,7 @@ void vsrl_dynamic_program::deallocate_cost_matrix()
 
 double vsrl_dynamic_program::execute()
 {
-  // we can now perfrom the dynamic program
+  // we can now perform the dynamic program
 
   // allocate the cost matrix
 
@@ -271,7 +271,7 @@ void vsrl_dynamic_program::compute_cost(int i, int j)
   if (i>0)
   {
     // determine the upper search limit on list 2
-    // the key is that since the assignements must
+    // the key is that since the assignments must
     // be increasing, we must have an assignment below
     // j there for
 
@@ -342,7 +342,7 @@ void vsrl_dynamic_program::compute_cost(int i, int j)
 
 
       // if there is a gap between k and j then all these
-      // tokens in list will get the null assignement so  this
+      // tokens in list will get the null assignment so  this
       // must be compensated for. We must also penalize the second
       // kind of gap
 
@@ -386,7 +386,7 @@ double vsrl_dynamic_program::optimum_assignment()
 {
   // we can now compute the optimum assignment
   // this is pretty easy we just find the lowest
-  // cost assignement for the last token in list 2
+  // cost assignment for the last token in list 2
   // and then follow the path back.
   // start by setting the assigned tokens of all lists to null;
 
@@ -479,7 +479,6 @@ void vsrl_dynamic_program::print_cost(int i, int j)
 void vsrl_dynamic_program::print_direct_costs(int i)
 {
   // print all the direct costs for token i on list1
-
   vcl_cout << "Direct costs for token " << i << vcl_endl;
   for (int j=lower_search_range_[i];j<upper_search_range_[i];j++)
     print_direct_cost(i,j);
@@ -488,7 +487,6 @@ void vsrl_dynamic_program::print_direct_costs(int i)
 void vsrl_dynamic_program::print_costs(int i)
 {
   // print all the costs for token i on list1
-
   vcl_cout << "Printing the costs for token " << i << " in the range " << lower_search_range_[i]
            << " to " << upper_search_range_[i] << vcl_endl;
 
@@ -505,11 +503,10 @@ void vsrl_dynamic_program::print_assignment_nodes(int i)
 
 void vsrl_dynamic_program::print_assignment_node(int i, int j)
 {
-  vcl_cout << " assignement for node " << i << " -> " << j << vcl_endl;
-  vcl_cout << "   prior assignment: " << cost_matrix_[i][j].prior_index1 << " -> ";
-  vcl_cout << cost_matrix_[i][j].prior_index2 << vcl_endl;
-  vcl_cout << "   cost: " << cost_matrix_[i][j].cost << vcl_endl;
-  vcl_cout << vcl_endl;
+  vcl_cout << " assignment for node " << i << " -> " << j << vcl_endl
+           << "   prior assignment: " << cost_matrix_[i][j].prior_index1 << " -> "
+           << cost_matrix_[i][j].prior_index2 << vcl_endl
+           << "   cost: " << cost_matrix_[i][j].cost << vcl_endl << vcl_endl;
 }
 
 void vsrl_dynamic_program::print_assignment(int i)
@@ -522,7 +519,7 @@ void vsrl_dynamic_program::print_assignment(int i)
   if (tok2)
     vcl_cout << "token " << tok2->get_x() << vcl_endl;
   else
-    vcl_cout << "the null token" << vcl_endl;
+    vcl_cout << "the null token\n";
 }
 
 void vsrl_dynamic_program::print_assignments()
