@@ -42,6 +42,14 @@ void vil_resample_bilin(const vil_image_view<sType>& src_image,
                       && vil_grid_corner_in_image(x0+(n2-1)*dx2,y0+(n2-1)*dy2,src_image)
                       && vil_grid_corner_in_image(x0+(n1-1)*dx1+(n2-1)*dx2,
                                                   y0+(n1-1)*dy1+(n2-1)*dy2,src_image);
+#ifdef DEBUG
+  // corners
+  vcl_cout<<"src_image= "<<src_image<<vcl_endl;
+  vcl_cout<<"x0="<<x0<<vcl_endl;
+  vcl_cout<<"y0="<<y0<<vcl_endl;
+  vcl_cout<<"x0+(n1-1)*dx1+(n2-1)*dx2="<<x0+(n1-1)*dx1+(n2-1)*dx2<<vcl_endl;
+  vcl_cout<<"y0+(n1-1)*dy1+(n2-1)*dy2="<<y0+(n1-1)*dy1+(n2-1)*dy2<<vcl_endl;
+#endif
 
   const unsigned ni = src_image.ni();
   const unsigned nj = src_image.nj();
@@ -130,10 +138,10 @@ void vil_resample_bilin(const vil_image_view<sType>& src_image,
 {
   double x0=0;
   double y0=0;
-  double dx1=src_image.ni()/n1;
+  double dx1=(src_image.ni()-1)*1.0/(n1-1);
   double dy1=0;
   double dx2=0;
-  double dy2=src_image.nj()/n2;
+  double dy2=(src_image.nj()-1)*1.0/(n2-1);
   vil_resample_bilin( src_image, dest_image, x0, y0, dx1, dy1, dx2, dy2, n1, n2 );
 }
 

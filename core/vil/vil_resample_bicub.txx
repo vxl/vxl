@@ -127,12 +127,12 @@ void vil_resample_bicub(const vil_image_view<sType>& src_image,
                          vil_image_view<dType>& dest_image,
                          int n1, int n2)
 {
-  double x0=0;
+   double x0=0;
   double y0=0;
-  double dx1=src_image.ni()/n1;
+  double dx1=(src_image.ni()-1)*1.0/(n1-1);
   double dy1=0;
   double dx2=0;
-  double dy2=src_image.nj()/n2;
+  double dy2=(src_image.nj()-1)*1.0/(n2-1);
   vil_resample_bicub( src_image, dest_image, x0, y0, dx1, dy1, dx2, dy2, n1, n2 );
 }
 
