@@ -55,7 +55,6 @@ vsol_point_2d_sptr bgui_vsol_soview2D_point::sptr() const
 
 void bgui_vsol_soview2D_point::draw() const
 {
-  style->apply_point_size();
   glBegin(GL_POINTS);
   glVertex2f(sptr()->x(),sptr()->y());
   glEnd();
@@ -97,9 +96,6 @@ vsol_line_2d_sptr bgui_vsol_soview2D_line_seg::sptr() const
 
 void bgui_vsol_soview2D_line_seg::draw() const
 {
-  //vcl_cerr << "line id : " << id << vcl_endl;
-
-  //glLineWidth(style->line_width);
   glBegin(GL_LINES);
   glVertex2f(sptr()->p0()->x(),sptr()->p0()->y());
   glVertex2f(sptr()->p1()->x(),sptr()->p1()->y());
