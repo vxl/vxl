@@ -71,7 +71,6 @@ MANPAGE_SOURCES += vnl_linear_operators_3.h
 MANPAGE_SOURCES += vnl_complex_ops.txx vnl_complexify.h vnl_imag.h vnl_real.h
 
 # traits
-SOURCES += vnl_numeric_limits.cxx
 SOURCES += vnl_numeric_traits.cxx
 MANPAGE_SOURCES += vnl_complex_traits.h
 SOURCES += vnl_bignum_traits.cxx
@@ -132,7 +131,7 @@ MANPAGE_SOURCES += vnl_cross.h
 SOURCES += vnl_erf.cxx
 SOURCES += vnl_gamma.cxx
 SOURCES += vnl_sample.cxx
-MANPAGE_SOURCES += vnl_unary_function.h
+MANPAGE_SOURCES += vnl_unary_function.txx
 MANPAGE_SOURCES += vnl_identity.h
 
 # algo
