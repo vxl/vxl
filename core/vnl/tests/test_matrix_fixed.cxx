@@ -47,11 +47,13 @@ void testvnl_matrix_fixed()
   verbose_malloc = false;  
 }
 
-#if !defined(VCL_SUNPRO_CC_50)
-// For SunPro5.0, these functions produce compiler
-// warnings and cause runtime segfault.
+
 void* operator new(size_t s)
-#ifdef VCL_KAI
+#if defined(VCL_SUNPRO_CC_50)
+  throw (std::bad_alloc)
+#elif defined(__GNUC__) && (__GNUC_MINOR__ >= 97)
+  throw (std::bad_alloc)
+#elif defined(VCL_KAI)
   // [18.4.1] lib.new.delete
   throw (std::bad_alloc)
 #endif
@@ -67,11 +69,13 @@ void* operator new(size_t s)
 }
  
 void operator delete(void* s)
+#if defined(__GNUC__) && (__GNUC_MINOR__ >= 97)
+  throw ()
+#endif
 {
   if (verbose_malloc)
     vcl_cout << "delete: " << s << vcl_endl;
   free(s);
 }
-#endif
 
 TESTMAIN(testvnl_matrix_fixed);
