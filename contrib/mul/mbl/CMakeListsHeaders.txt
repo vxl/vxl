@@ -20,5 +20,6 @@ mbl_priority_bounded_queue.h
 mbl_lda.h
 mbl_screen_counter.h
 mbl_rbf_network.cxx
+mbl_index_sort.h
 )
 
