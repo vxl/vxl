@@ -50,14 +50,14 @@ struct vil1_image_proxy_impl : public vil1_image_impl
   vil1_image get_plane(unsigned int p) const { return vil1_load(filename.c_str()).get_plane(p); }
 
   bool get_section(void       *buf, int x0, int y0, int width, int height) const
-    { return vil1_load(filename.c_str()).get_section(buf, x0, y0, width, height); }
+  { return vil1_load(filename.c_str()).get_section(buf, x0, y0, width, height); }
   bool put_section(void const *buf, int x0, int y0, int width, int height)
-    { return vil1_load(filename.c_str()).put_section(buf, x0, y0, width, height); }
+  { return vil1_load(filename.c_str()).put_section(buf, x0, y0, width, height); }
 
   bool get_property(char const *tag, void       *property_value) const
-    { return vil1_load(filename.c_str()).get_property(tag, property_value); }
+  { return vil1_load(filename.c_str()).get_property(tag, property_value); }
   bool set_property(char const *tag, void const *property_value) const
-    { return vil1_load(filename.c_str()).set_property(tag, property_value); }
+  { return vil1_load(filename.c_str()).set_property(tag, property_value); }
 
   //: Return the name of the class;
   virtual vcl_string is_a() const;

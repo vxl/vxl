@@ -17,26 +17,26 @@ inline void vil_next_8con_boundary_point(int& i, int& j, int& dir, const bool* &
   {
     switch ((dir+k)%8)
     {
-      case (0):   // Try at (i+1,j)
-        if (i<ni1 && p[istep]) { ++i; p+=istep; dir=5; return; }
-      case (1):   // Try at (i+1,j+1)
-        if (i<ni1 && j<nj1 && p[istep+jstep])
-          { ++i; ++j; p+=(istep+jstep); dir=6; return; }
-      case (2):   // Try at (i,j+1)
-        if (j<nj1 && p[jstep]) { ++j; p+=jstep; dir=7; return; }
-      case (3):   // Try at (i-1,j+1)
-        if (i>0 && j<nj1 && p[jstep-istep])
-          { --i; ++j; p+=(jstep-istep); dir=0; return; }
-      case (4):   // Try at (i-1,j)
-        if (i>0 && p[-istep])  { --i; p-=istep; dir=1; return; }
-      case (5):   // Try at (i-1,j-1)
-        if (i>0 && j>0 && p[-jstep-istep])
-          { --i; --j; p+=(-jstep-istep); dir=2; return; }
-      case (6):   // Try at (i,j-1)
-        if (j>0 && p[-jstep])  { --j; p-=jstep; dir=3; return; }
-      case (7):   // Try at (i+1,j-1)
-        if (i<ni1 && j>0 && p[istep-jstep])
-          { ++i; --j; p+=(istep-jstep); dir=4; return; }
+     case 0:   // Try at (i+1,j)
+      if (i<ni1 && p[istep]) { ++i; p+=istep; dir=5; return; }
+     case 1:   // Try at (i+1,j+1)
+      if (i<ni1 && j<nj1 && p[istep+jstep]) {
+        ++i; ++j; p+=(istep+jstep); dir=6; return; }
+     case 2:   // Try at (i,j+1)
+      if (j<nj1 && p[jstep]) { ++j; p+=jstep; dir=7; return; }
+     case 3:   // Try at (i-1,j+1)
+      if (i>0 && j<nj1 && p[jstep-istep]) {
+        --i; ++j; p+=(jstep-istep); dir=0; return; }
+     case 4:   // Try at (i-1,j)
+      if (i>0 && p[-istep])  { --i; p-=istep; dir=1; return; }
+     case 5:   // Try at (i-1,j-1)
+      if (i>0 && j>0 && p[-jstep-istep]) {
+        --i; --j; p+=(-jstep-istep); dir=2; return; }
+     case 6:   // Try at (i,j-1)
+      if (j>0 && p[-jstep])  { --j; p-=jstep; dir=3; return; }
+     case 7:   // Try at (i+1,j-1)
+      if (i<ni1 && j>0 && p[istep-jstep]) {
+        ++i; --j; p+=(istep-jstep); dir=4; return; }
     }
   }
 }

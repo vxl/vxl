@@ -58,8 +58,7 @@ struct vgui_glut_menu_hack_bind_entry
   int menu_id;
 };
 
-static vgui_glut_menu_hack_bind_entry default_entries[] =
-{
+static vgui_glut_menu_hack_bind_entry default_entries[] = {
   {GLUT_LEFT_BUTTON  ,0                ,0},
   {GLUT_LEFT_BUTTON  ,GLUT_ACTIVE_SHIFT,0},
   {GLUT_LEFT_BUTTON  ,GLUT_ACTIVE_CTRL ,0},
@@ -73,6 +72,7 @@ static vgui_glut_menu_hack_bind_entry default_entries[] =
   {GLUT_RIGHT_BUTTON ,GLUT_ACTIVE_CTRL ,0},
   {GLUT_RIGHT_BUTTON ,GLUT_ACTIVE_ALT  ,0},
 };
+
 const unsigned int table_size = sizeof(default_entries)/sizeof(default_entries[0]);
 
 struct vgui_glut_menu_hack::per_window_record
@@ -95,7 +95,9 @@ static vgui_glut_menu_hack::per_window_record * get_current_record()
     records.push_back( (vgui_glut_menu_hack::per_window_record*)0 ); // gcc 2.7 needs this cast
 
   if (records[win] == 0) {
-    //vcl_cerr << __FILE__ " : create record for window " << win << vcl_endl;
+#ifdef DEBUG
+    vcl_cerr << __FILE__ " : create record for window " << win << vcl_endl;
+#endif
     records[win] = new vgui_glut_menu_hack::per_window_record;
   }
 
@@ -112,7 +114,7 @@ int vgui_glut_menu_hack::find_index(int button, int mods)
   for (unsigned i=0; i<table_size; i++)
     if (button==rec->entries[i].button && mods==rec->entries[i].mods)
       return i;
-  vcl_cerr << __FILE__ " : invalid button/modifier combination " << button << " " << mods << vcl_endl;
+  vcl_cerr << __FILE__ " : invalid button/modifier combination " << button << ' ' << mods << vcl_endl;
   return -1;
 }
 
@@ -141,7 +143,9 @@ bool vgui_glut_menu_hack::mouse(int button, int state, int x, int y)
 
   active = true;
   glut_button = button;
-  //vcl_cerr << "active" << vcl_endl;
+#ifdef DEBUG
+  vcl_cerr << "active\n";
+#endif
 
   // attach the required button to the menu
   {
@@ -187,7 +191,9 @@ void vgui_glut_menu_hack::menustatus(int status,int /*x*/,int /*y*/)
 {
   if (active  &&  status == GLUT_MENU_NOT_IN_USE) {
     glutDetachMenu(glut_button);
-    //vcl_cerr << "purged" << vcl_endl;
+#ifdef DEBUG
+    vcl_cerr << "purged\n";
+#endif
     active = false;
   }
 }
@@ -203,7 +209,9 @@ void vgui_glut_menu_hack::bind  (int button, int mods, int menu_id)
     per_window_record *rec = get_current_record();
     if (!rec)
       return;
-    //vcl_cerr << "bind : " << glutGetWindow() << " " <<  button << " " << mods << " " << menu_id <<  vcl_endl;
+#ifdef DEBUG
+    vcl_cerr << "bind : " << glutGetWindow() << ' ' <<  button << ' ' << mods << ' ' << menu_id <<  vcl_endl;
+#endif
     rec->entries[index].menu_id = menu_id;
   }
 }

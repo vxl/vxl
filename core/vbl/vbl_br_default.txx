@@ -41,30 +41,30 @@ vbl_br_default_iter<T1,T2,T3,T4,T5>::vbl_br_default_iter(vbl_br_default<T1,T2,T3
 
   // Set up the appropriate list.
   if (key == 1)
-    {
-      if (impl->i1.cool_find(where->GetFirst()))
-        tlist = &(impl->i1.value());
-    }
+  {
+    if (impl->i1.cool_find(where->GetFirst()))
+      tlist = &(impl->i1.value());
+  }
   else if (key == 2)
-    {
-      if (impl->i2.cool_find(where->GetSecond()))
-        tlist = &(impl->i2.value());
-    }
+  {
+    if (impl->i2.cool_find(where->GetSecond()))
+      tlist = &(impl->i2.value());
+  }
   else if (!vbl_basic_optional_traits<T3>::IsOptional && (key == 3))
-    {
-      if (impl->i3.cool_find(where->GetThird()))
-        tlist = &(impl->i3.value());
-    }
+  {
+    if (impl->i3.cool_find(where->GetThird()))
+      tlist = &(impl->i3.value());
+  }
   else if (!vbl_basic_optional_traits<T4>::IsOptional && (key == 4))
-    {
-      if (impl->i4.cool_find(where->GetFourth()))
-        tlist = &(impl->i4.value());
-    }
+  {
+    if (impl->i4.cool_find(where->GetFourth()))
+      tlist = &(impl->i4.value());
+  }
   else if (!vbl_basic_optional_traits<T5>::IsOptional && (key == 5))
-    {
-      if (impl->i5.cool_find(where->GetFifth()))
-        tlist = &(impl->i5.value());
-    }
+  {
+    if (impl->i5.cool_find(where->GetFifth()))
+      tlist = &(impl->i5.value());
+  }
 
   if (tlist) iter = tlist->begin();
 
@@ -164,11 +164,11 @@ vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::vbl_br_default_wild_iter(vbl_br_defaul
   : vbl_br_iter_impl<T1,T2,T3,T4,T5>()
 {
   if (w)
-    {
-      // This iterator is only to be used when the where clause has all
-      // wild attributes.
-      assert(w->PrimaryKey() == 0);
-    }
+  {
+    // This iterator is only to be used when the where clause has all
+    // wild attributes.
+    assert(w->PrimaryKey() == 0);
+  }
 
   impl = init_impl;
   impl->ref();
@@ -177,11 +177,11 @@ vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::vbl_br_default_wild_iter(vbl_br_defaul
   impl->i1.reset();
   // If first index is not empty...
   if (impl->i1.next())
-    {
-      // ...set second iterators to second list bounds.
-      i2 = (impl->i1.value()).begin();
-      i2_end = (impl->i1.value()).end();
-    }
+  {
+    // ...set second iterators to second list bounds.
+    i2 = (impl->i1.value()).begin();
+    i2_end = (impl->i1.value()).end();
+  }
 
   // Save position in first index.
   i1 = impl->i1.current_position();
@@ -231,24 +231,24 @@ void vbl_br_default_wild_iter<T1,T2,T3,T4,T5>::incr()
 {
   // Check that we are not already at end.
   if (i1 != impl->i1.end())
+  {
+    // Increment list iterator.
+    ++i2;
+    // Have we reached the end of the current list?
+    if (i2 == i2_end)
     {
-      // Increment list iterator.
-      ++i2;
-      // Have we reached the end of the current list?
-      if (i2 == i2_end)
-        {
-          // Yes, so move to next list.
-          impl->i1.current_position() = i1;
-          if (impl->i1.next())
-            {
-              // ...set second iterators to second list bounds.
-              i2 = (impl->i1.value()).begin();
-              i2_end = (impl->i1.value()).end();
-            }
-          // Save position in first index.
-          i1 = impl->i1.current_position();
-        }
+      // Yes, so move to next list.
+      impl->i1.current_position() = i1;
+      if (impl->i1.next())
+      {
+        // ...set second iterators to second list bounds.
+        i2 = (impl->i1.value()).begin();
+        i2_end = (impl->i1.value()).end();
+      }
+      // Save position in first index.
+      i1 = impl->i1.current_position();
     }
+  }
 }
 
 //------------------------------------------------------------
@@ -288,13 +288,13 @@ vbl_br_default<T1,T2,T3,T4,T5>::vbl_br_default(vbl_br_default<T1,T2,T3,T4,T5> co
   // Have to cast away const here.
   first_map* map = (first_map*)&(i.i1);
   for (map->reset(); map->next();)
-    {
-      const tuple_list& tlist = map->value();
+  {
+    const tuple_list& tlist = map->value();
 
-      // Search for tuple.
-      for (tuple_list::const_iterator j = tlist.begin(); j != tlist.end(); j++)
-        DoInsert(*(tuple*)(*j));
-    }
+    // Search for tuple.
+    for (tuple_list::const_iterator j = tlist.begin(); j != tlist.end(); j++)
+      DoInsert(*(tuple*)(*j));
+  }
 }
 
 //------------------------------------------------------------
@@ -330,12 +330,12 @@ bool vbl_br_default<T1,T2,T3,T4,T5>::Remove(vbl_basic_tuple<T1,T2,T3,T4,T5> cons
     for (tuple_list::iterator i = tlist.begin(); i != tlist.end(); i++)
       // In this case test for tuple equality.
       if (*(tuple*)(*i) == t)
-        {
-          // Found tuple, so erase it.
-          found = (tuple*)*i;
-          tlist.erase(i);
-          break;
-        }
+      {
+        // Found tuple, so erase it.
+        found = (tuple*)*i;
+        tlist.erase(i);
+        break;
+      }
 
     // Was the exact tuple found.
     if (!found) return false;
@@ -356,37 +356,37 @@ bool vbl_br_default<T1,T2,T3,T4,T5>::Remove(vbl_basic_tuple<T1,T2,T3,T4,T5> cons
   }
 
   if (!vbl_basic_optional_traits<T3>::IsOptional)
-    {
-      // Find tuple in third index.
-      third_map::iterator fp3 = i3.find(t.GetThird());
-      tuple_list& tlist = (*fp3).second;
-      for (tuple_list::iterator i = tlist.begin(); i != tlist.end(); i++)
-        if (*i == found) { tlist.erase(i); break; }
-      // Remove the key if the list is empty.
-      if (tlist.empty()) i3.erase(fp3);
-    }
+  {
+    // Find tuple in third index.
+    third_map::iterator fp3 = i3.find(t.GetThird());
+    tuple_list& tlist = (*fp3).second;
+    for (tuple_list::iterator i = tlist.begin(); i != tlist.end(); i++)
+      if (*i == found) { tlist.erase(i); break; }
+    // Remove the key if the list is empty.
+    if (tlist.empty()) i3.erase(fp3);
+  }
 
   if (!vbl_basic_optional_traits<T4>::IsOptional)
-    {
-      // Find tuple in fourth index.
-      fourth_map::iterator fp4 = i4.find(t.GetFourth());
-      tuple_list& tlist = (*fp4).second;
-      for (tuple_list::iterator i = tlist.begin(); i != tlist.end(); i++)
-        if (*i == found) { tlist.erase(i); break; }
-      // Remove the key if the list is empty.
-      if (tlist.empty()) i4.erase(fp4);
-    }
+  {
+    // Find tuple in fourth index.
+    fourth_map::iterator fp4 = i4.find(t.GetFourth());
+    tuple_list& tlist = (*fp4).second;
+    for (tuple_list::iterator i = tlist.begin(); i != tlist.end(); i++)
+      if (*i == found) { tlist.erase(i); break; }
+    // Remove the key if the list is empty.
+    if (tlist.empty()) i4.erase(fp4);
+  }
 
   if (!vbl_basic_optional_traits<T5>::IsOptional)
-    {
-      // Find tuple in fifth index.
-      fourth_map::iterator fp5 = i5.find(t.GetFifth());
-      tuple_list& tlist = (*fp5).second;
-      for (tuple_list::iterator i = tlist.begin(); i != tlist.end(); i++)
-        if (*i == found) { tlist.erase(i); break; }
-      // Remove the key if the list is empty.
-      if (tlist.empty()) i5.erase(fp5);
-    }
+  {
+    // Find tuple in fifth index.
+    fourth_map::iterator fp5 = i5.find(t.GetFifth());
+    tuple_list& tlist = (*fp5).second;
+    for (tuple_list::iterator i = tlist.begin(); i != tlist.end(); i++)
+      if (*i == found) { tlist.erase(i); break; }
+    // Remove the key if the list is empty.
+    if (tlist.empty()) i5.erase(fp5);
+  }
 
   // Delete the tuple found.
   delete found;
@@ -404,21 +404,21 @@ bool vbl_br_default<T1,T2,T3,T4,T5>::Remove(vbl_basic_relation_where<T1,T2,T3,T4
 
   bool done = false;
   while (!done)
+  {
+    iterator* iter = begin(w);
+    if (!iter->deref()) done = true;
+    else
     {
-      iterator* iter = begin(w);
-      if (!iter->deref()) done = true;
-      else
-        {
-          vbl_basic_tuple<T1,T2,T3,T4,T5>* t = (tuple*)iter->deref();
+      vbl_basic_tuple<T1,T2,T3,T4,T5>* t = (tuple*)iter->deref();
 
-          // Remove the matching tuple.
-          removed_tuples = true;
+      // Remove the matching tuple.
+      removed_tuples = true;
 
-          // *t also gets deleted in here, but that's fine.
-          Remove(*t);
-        }
-      delete iter;
+      // *t also gets deleted in here, but that's fine.
+      Remove(*t);
     }
+    delete iter;
+  }
 
   // Return true if we removed at least one tuple.
   return removed_tuples;
@@ -455,10 +455,10 @@ int vbl_br_default<T1,T2,T3,T4,T5>::size(vbl_basic_relation_where<T1,T2,T3,T4,T5
 
   int count = 0;
   while (!iter->compare(*iter_end))
-    {
-      count++;
-      iter->incr();
-    }
+  {
+    count++;
+    iter->incr();
+  }
 
   delete iter;
   delete iter_end;
@@ -513,10 +513,10 @@ bool vbl_br_default<T1,T2,T3,T4,T5>::DoInsert(vbl_basic_tuple<T1,T2,T3,T4,T5> co
   // not already there.
   {
     if (!i1.cool_find(t.GetFirst()))
-      {
-        tuple_list new_tlist;
-        i1.insert(t.GetFirst(),new_tlist);
-      }
+    {
+      tuple_list new_tlist;
+      i1.insert(t.GetFirst(),new_tlist);
+    }
     tuple_list& tlist = i1.value();
     bool found = false;
     for (tuple_list::iterator i = tlist.begin(); !(found || (i == tlist.end())); i++)
@@ -529,10 +529,10 @@ bool vbl_br_default<T1,T2,T3,T4,T5>::DoInsert(vbl_basic_tuple<T1,T2,T3,T4,T5> co
   // Now we can safely insert into all the other indices.
   {
     if (!i2.cool_find(t.GetSecond()))
-      {
-        tuple_list new_tlist;
-        i2.insert(t.GetSecond(),new_tlist);
-      }
+    {
+      tuple_list new_tlist;
+      i2.insert(t.GetSecond(),new_tlist);
+    }
     tuple_list& tlist = i2.value();
     tlist.push_front(tr);
   }
@@ -540,10 +540,10 @@ bool vbl_br_default<T1,T2,T3,T4,T5>::DoInsert(vbl_basic_tuple<T1,T2,T3,T4,T5> co
   if (!vbl_basic_optional_traits<T3>::IsOptional)
   {
     if (!i3.cool_find(t.GetThird()))
-      {
-        tuple_list new_tlist;
-        i3.insert(t.GetThird(),new_tlist);
-      }
+    {
+      tuple_list new_tlist;
+      i3.insert(t.GetThird(),new_tlist);
+    }
     tuple_list& tlist = i3.value();
     tlist.push_front(tr);
   }
@@ -551,10 +551,10 @@ bool vbl_br_default<T1,T2,T3,T4,T5>::DoInsert(vbl_basic_tuple<T1,T2,T3,T4,T5> co
   if (!vbl_basic_optional_traits<T4>::IsOptional)
   {
     if (!i4.cool_find(t.GetFourth()))
-      {
-        tuple_list new_tlist;
-        i4.insert(t.GetFourth(),new_tlist);
-      }
+    {
+      tuple_list new_tlist;
+      i4.insert(t.GetFourth(),new_tlist);
+    }
     tuple_list& tlist = i4.value();
     tlist.push_front(tr);
   }
@@ -562,10 +562,10 @@ bool vbl_br_default<T1,T2,T3,T4,T5>::DoInsert(vbl_basic_tuple<T1,T2,T3,T4,T5> co
   if (!vbl_basic_optional_traits<T5>::IsOptional)
   {
     if (!i5.cool_find(t.GetFifth()))
-      {
-        tuple_list new_tlist;
-        i5.insert(t.GetFifth(),new_tlist);
-      }
+    {
+      tuple_list new_tlist;
+      i5.insert(t.GetFifth(),new_tlist);
+    }
     tuple_list& tlist = i5.value();
     tlist.push_front(tr);
   }
@@ -581,10 +581,10 @@ template <class T1, class T2, class T3, class T4, class T5>
 vbl_br_default_factory<T1,T2,T3,T4,T5>::~vbl_br_default_factory()
 {
   for (existing_map::iterator p = existing.begin(); p != existing.end(); ++p)
-    {
-      implementation* impl = (implementation*)(*p).second;
-      CheckEmpty(impl);
-    }
+  {
+    implementation* impl = (implementation*)(*p).second;
+    CheckEmpty(impl);
+  }
 }
 
 //------------------------------------------------------------
@@ -616,15 +616,15 @@ void vbl_br_default_factory<T1,T2,T3,T4,T5>::CheckEmpty(vbl_br_impl<T1,T2,T3,T4,
 
   // Are we the only ones protecting this implementation?
   if (impl->get_references() == 1)
+  {
+    vbl_basic_relation_where<T1,T2,T3,T4,T5> w;
+    if (impl->empty(w))
     {
-      vbl_basic_relation_where<T1,T2,T3,T4,T5> w;
-      if (impl->empty(w))
-        {
-          // Yes, so erase it and unprotect it.
-          existing.erase(fp);
-          impl->unref();
-        }
+      // Yes, so erase it and unprotect it.
+      existing.erase(fp);
+      impl->unref();
     }
+  }
 }
 
 #endif // vbl_br_default_txx_

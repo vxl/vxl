@@ -53,16 +53,16 @@ void vgui_loader_tableau::unset_modelview()
 bool vgui_loader_tableau::handle( vgui_event const &e)
 {
   if (projectionmatrixloaded)
-    {
-      glMatrixMode(GL_PROJECTION);
-      glLoadMatrixd( projectionmatrixt );
-    }
+  {
+    glMatrixMode(GL_PROJECTION);
+    glLoadMatrixd( projectionmatrixt );
+  }
 
   if (modelviewmatrixloaded)
-    {
-      glMatrixMode(GL_MODELVIEW);
-      glLoadMatrixd( modelviewmatrixt );
-    }
+  {
+    glMatrixMode(GL_MODELVIEW);
+    glLoadMatrixd( modelviewmatrixt );
+  }
 
   return child && child->handle(e);
 }

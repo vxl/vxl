@@ -113,31 +113,32 @@ void vgui_mfc_mainfrm::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar
   ASSERT(pScrollBar == NULL);
   vgui_event e(vgui_HSCROLL);
 
-  switch(nSBCode)
-    {
-    case SB_THUMBTRACK:
-    case SB_THUMBPOSITION:
-      SetScrollPos(SB_HORZ,nPos);
-      e.data = &nPos;
-      adaptor->dispatch_to_tableau(e);
-      adaptor->service_redraws();
-      break;
-    case SB_LINELEFT:
-      SetScrollPos(SB_HORZ,GetScrollPos(SB_HORZ)-1);
-      nPos = GetScrollPos(SB_HORZ);
-      e.data = &nPos;
-      adaptor->dispatch_to_tableau(e);
-      adaptor->service_redraws();
-      break;
-    case SB_LINERIGHT:
-      SetScrollPos(SB_HORZ,GetScrollPos(SB_HORZ)+1);
-      nPos = GetScrollPos(SB_HORZ);
-      e.data = &nPos;
-      adaptor->dispatch_to_tableau(e);
-      adaptor->service_redraws();
-      break;
-    }
+  switch (nSBCode)
+  {
+   case SB_THUMBTRACK:
+   case SB_THUMBPOSITION:
+    SetScrollPos(SB_HORZ,nPos);
+    e.data = &nPos;
+    adaptor->dispatch_to_tableau(e);
+    adaptor->service_redraws();
+    break;
+   case SB_LINELEFT:
+    SetScrollPos(SB_HORZ,GetScrollPos(SB_HORZ)-1);
+    nPos = GetScrollPos(SB_HORZ);
+    e.data = &nPos;
+    adaptor->dispatch_to_tableau(e);
+    adaptor->service_redraws();
+    break;
+   case SB_LINERIGHT:
+    SetScrollPos(SB_HORZ,GetScrollPos(SB_HORZ)+1);
+    nPos = GetScrollPos(SB_HORZ);
+    e.data = &nPos;
+    adaptor->dispatch_to_tableau(e);
+    adaptor->service_redraws();
+    break;
+  }
 }
+
 //: Called when ON_WM_VSCROLL message is received
 void vgui_mfc_mainfrm::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar )
 {
@@ -153,30 +154,30 @@ void vgui_mfc_mainfrm::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar
 
   ASSERT(pScrollBar == NULL);
   vgui_event e(vgui_VSCROLL);
-  switch(nSBCode)
-    {
-    case SB_THUMBTRACK:
-    case SB_THUMBPOSITION:
-      SetScrollPos(SB_VERT,nPos);
-      e.data = &nPos;
-      adaptor->dispatch_to_tableau(e);
-      adaptor->service_redraws();
-      break;
-    case SB_LINEUP:
-      SetScrollPos(SB_VERT,GetScrollPos(SB_VERT)-1);
-      nPos = GetScrollPos(SB_VERT);
-      e.data = &nPos;
-      adaptor->dispatch_to_tableau(e);
-      adaptor->service_redraws();
-      break;
-    case SB_LINEDOWN:
-      SetScrollPos(SB_VERT,GetScrollPos(SB_VERT)+1);
-      nPos = GetScrollPos(SB_VERT);
-      e.data = &nPos;
-      adaptor->dispatch_to_tableau(e);
-      adaptor->service_redraws();
-      break;
-    }
+  switch (nSBCode)
+  {
+   case SB_THUMBTRACK:
+   case SB_THUMBPOSITION:
+    SetScrollPos(SB_VERT,nPos);
+    e.data = &nPos;
+    adaptor->dispatch_to_tableau(e);
+    adaptor->service_redraws();
+    break;
+   case SB_LINEUP:
+    SetScrollPos(SB_VERT,GetScrollPos(SB_VERT)-1);
+    nPos = GetScrollPos(SB_VERT);
+    e.data = &nPos;
+    adaptor->dispatch_to_tableau(e);
+    adaptor->service_redraws();
+    break;
+   case SB_LINEDOWN:
+    SetScrollPos(SB_VERT,GetScrollPos(SB_VERT)+1);
+    nPos = GetScrollPos(SB_VERT);
+    e.data = &nPos;
+    adaptor->dispatch_to_tableau(e);
+    adaptor->service_redraws();
+    break;
+  }
 }
 
 void vgui_mfc_mainfrm::OnUpdateStatusBar(CCmdUI *sbar)

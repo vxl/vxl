@@ -68,11 +68,11 @@ vnl_vector<double> vcsl_displacement::execute(const vnl_vector<double> &v,
   vnl_vector<double> result(3);
 
   if (mode_2d_)
-    {
-      result.put(0,v.get(0)-translation.get(0));
-      result.put(1,v.get(1)-translation.get(1));
-      result.put(2,0);
-    }
+  {
+    result.put(0,v.get(0)-translation.get(0));
+    result.put(1,v.get(1)-translation.get(1));
+    result.put(2,0);
+  }
   else
     result=v-translation;
 
@@ -80,12 +80,12 @@ vnl_vector<double> vcsl_displacement::execute(const vnl_vector<double> &v,
   result = q.rotate(result);
 
   if (mode_2d_)
-    {
-      vnl_vector<double> tmp(2);
-      tmp.put(0,result.get(0)+translation.get(0));
-      tmp.put(1,result.get(1)+translation.get(1));
-      return tmp;
-    }
+  {
+    vnl_vector<double> tmp(2);
+    tmp.put(0,result.get(0)+translation.get(0));
+    tmp.put(1,result.get(1)+translation.get(1));
+    return tmp;
+  }
   else
     return result+translation;
 }
@@ -108,11 +108,11 @@ vnl_vector<double> vcsl_displacement::inverse(const vnl_vector<double> &v,
   vnl_vector<double> result(3);
 
   if (mode_2d_)
-    {
-      result.put(0,v.get(0)-translation.get(0));
-      result.put(1,v.get(1)-translation.get(1));
-      result.put(2,0);
-    }
+  {
+    result.put(0,v.get(0)-translation.get(0));
+    result.put(1,v.get(1)-translation.get(1));
+    result.put(2,0);
+  }
   else
     result=v-translation;
 
@@ -120,12 +120,12 @@ vnl_vector<double> vcsl_displacement::inverse(const vnl_vector<double> &v,
   result = q.conjugate().rotate(result);
 
   if (mode_2d_)
-    {
-      vnl_vector<double> tmp(2);
-      tmp.put(0,result.get(0)+translation.get(0));
-      tmp.put(1,result.get(1)+translation.get(1));
-      return tmp;
-    }
+  {
+    vnl_vector<double> tmp(2);
+    tmp.put(0,result.get(0)+translation.get(0));
+    tmp.put(1,result.get(1)+translation.get(1));
+    return tmp;
+  }
   else
     return result+translation;
 }
@@ -138,22 +138,22 @@ vnl_vector<double> vcsl_displacement::vector_value(double time) const
   if (beat_.size()==0) // static
     return point_[0];
   else
+  {
+    int i=matching_interval(time);
+    switch (interpolator_[i])
     {
-      int i=matching_interval(time);
-      switch(interpolator_[i])
-        {
-        case vcsl_linear:
-          return lvi(point_[i],point_[i+1],i,time);
-        case vcsl_cubic:
-          assert(!"vcsl_cubic net yet implemented");
-          break;
-        case vcsl_spline:
-          assert(!"vcsl_spline net yet implemented");
-          break;
-        default:
-          assert(!"This is impossible");
-          break;
-        }
+     case vcsl_linear:
+      return lvi(point_[i],point_[i+1],i,time);
+     case vcsl_cubic:
+      assert(!"vcsl_cubic net yet implemented");
+      break;
+     case vcsl_spline:
+      assert(!"vcsl_spline net yet implemented");
+      break;
+     default:
+      assert(!"This is impossible");
+      break;
     }
+  }
   return vnl_vector<double>(); // never reached if asserts are in effect
 }

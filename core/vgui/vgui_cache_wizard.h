@@ -45,12 +45,10 @@ class vgui_cache_wizard
   void TexImage2D_Brownie(vil1_image img);
 
   //: Get the image quadrant width
-  int get_quadrant_width() const
-    {return quadrant_width_;}
+  int get_quadrant_width() const { return quadrant_width_; }
 
   //: Get the image quadrant height
-  int get_quadrant_height() const
-    {return quadrant_height_;}
+  int get_quadrant_height() const { return quadrant_height_; }
 
   //: Get the class instance
   static vgui_cache_wizard *Instance();

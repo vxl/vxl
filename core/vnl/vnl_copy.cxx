@@ -49,6 +49,7 @@ void vnl_copy(vcl_complex<S> const *src, vcl_complex<D> *dst, unsigned n) \
   for (unsigned int i=0; i<n; ++i) \
     dst[i] = vcl_complex<D>((D)vcl_real(src[i]), (D)vcl_imag(src[i])); \
 }
+
 macro(float, double);
 macro(double, float);
 macro(double, long double);

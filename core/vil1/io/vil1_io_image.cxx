@@ -61,42 +61,42 @@ void vsl_b_read(vsl_b_istream &is,  vil1_image& p)
 
   short v;
   vsl_b_read(is, v);
-  switch(v)
+  switch (v)
   {
-  case 1:
+   case 1:
+   {
+    bool first_time;
+    vsl_b_read(is, first_time);
+
+    unsigned long id;
+    vsl_b_read(is, id);
+
+
+    vil1_image_impl * impl = (vil1_image_impl *)
+                             is.get_serialisation_pointer(id);
+    if (first_time != (impl == 0))
     {
-      bool first_time;
-      vsl_b_read(is, first_time);
-
-      unsigned long id;
-      vsl_b_read(is, id);
-
-
-      vil1_image_impl * impl = (vil1_image_impl *)
-                               is.get_serialisation_pointer(id);
-      if (first_time != (impl == 0))
-      {
-        // This checks that the saving stream and reading stream
-        // both agree on whether or not this is the first time they
-        // have seen this object.
-        vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil1_image&)\n"
-                 << "           De-serialisation failure\n";
-        is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-        return;
-      }
-
-      if (impl == 0)
-      {
-        vsl_b_read(is, impl);
-        is.add_serialisation_record(id, impl);
-      }
-
-      p = impl; // This operator method will set the internal pointer in
-                // vil1_image to the impl.
+      // This checks that the saving stream and reading stream
+      // both agree on whether or not this is the first time they
+      // have seen this object.
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil1_image&)\n"
+               << "           De-serialisation failure\n";
+      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      return;
     }
-    break;
 
-  default:
+    if (impl == 0)
+    {
+      vsl_b_read(is, impl);
+      is.add_serialisation_record(id, impl);
+    }
+
+    p = impl; // This operator method will set the internal pointer in
+              // vil1_image to the impl.
+    break;
+   }
+
+   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil1_image&)\n"
              << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
@@ -109,5 +109,5 @@ void vsl_b_read(vsl_b_istream &is,  vil1_image& p)
 //: Output a human readable summary to the stream
 void vsl_print_summary(vcl_ostream& os,const vil1_image & p)
 {
-    vsl_print_summary(os, p.impl());
+  vsl_print_summary(os, p.impl());
 }

@@ -16,8 +16,9 @@
 // The gl commands all relate to double buffering. This is a debugging
 // tool.
 
-class front_back_wibbler : public vgui_tableau {
-public:
+class front_back_wibbler : public vgui_tableau
+{
+ public:
   front_back_wibbler();
 
   bool handle(vgui_event const &);
@@ -25,12 +26,14 @@ public:
     return "front_back_wibbler";
   }
   void print_help_message() const;
-  };
+};
 
-front_back_wibbler::front_back_wibbler() {
+front_back_wibbler::front_back_wibbler()
+{
 }
 
-void front_back_wibbler::print_help_message() const {
+void front_back_wibbler::print_help_message() const
+{
   vcl_cerr<< __FILE__ " : the amazing front-back wibbler\n"
           << "'f' : draw into front buffer\n"
           << "'b' : draw into back buffer\n"
@@ -41,14 +44,13 @@ void front_back_wibbler::print_help_message() const {
           << "'<' : copy front buffer into back buffer\n"
           << "'>' : copy back buffer into front buffer\n"
           << "'s' : swap front and back buffers\n"
-          << "' ' : print some stuff\n"
-          << vcl_endl;
-  vcl_cerr<< "NB. Mesa SwapBuffers will simply blit the last back buffer into\n"
-          << "the current front buffer, rather than actually perform a swap.\n"
-          << vcl_endl;
+          << "' ' : print some stuff\n\n"
+          << "NB. Mesa SwapBuffers will simply blit the last back buffer into\n"
+          << "the current front buffer, rather than actually perform a swap.\n\n";
 }
 
-bool front_back_wibbler::handle(const vgui_event &e)  {
+bool front_back_wibbler::handle(const vgui_event &e) 
+{
   vgui_adaptor *ct = e.origin;
   if (!ct) {
     vcl_cerr << "null adaptor\n";
@@ -59,34 +61,35 @@ bool front_back_wibbler::handle(const vgui_event &e)  {
     return false;
 
   ct->make_current();
-  switch (e.key) {
-  case '?':
+  switch (e.key)
+  {
+   case '?':
     print_help_message();
     break;
 
-  case 'f':
+   case 'f':
     vcl_cerr << "front buffer\n";
     glDrawBuffer(GL_FRONT);
     break;
 
-  case 'b':
+   case 'b':
     vcl_cerr << "back buffer\n";
     glDrawBuffer(GL_BACK);
     break;
 
-  case '/':
+   case '/':
     vcl_cerr << "flush\n";
     glFlush();
     glFinish();
     break;
 
-  case 'c':
+   case 'c':
     vcl_cerr << "clear\n";
     glClearColor(0,0,0,0);
     glClear(GL_COLOR_BUFFER_BIT);
     break;
 
-  case 'l':
+   case 'l':
     vcl_cerr << "line\n";
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -99,7 +102,7 @@ bool front_back_wibbler::handle(const vgui_event &e)  {
     glEnd();
     break;
 
-  case 'p':
+   case 'p':
     vcl_cerr << "point\n";
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -112,29 +115,28 @@ bool front_back_wibbler::handle(const vgui_event &e)  {
     glEnd();
     break;
 
-  case '>':
+   case '>':
     vcl_cerr << "copy back -> front\n";
     vgui_utils::copy_back_to_front();
     break;
 
-  case '<':
+   case '<':
     vcl_cerr << "copy front -> back\n";
     vgui_utils::copy_front_to_back();
     break;
 
-  case 's':
+   case 's':
     vcl_cerr << "swap\n";
     ct->swap_buffers();
     break;
 
-  case ' ':
+   case ' ':
+    vcl_cerr << "some stuff :\n"
+             << "   vendor : " << glGetString(GL_VENDOR) << vcl_endl
+             << "   renderer : " << glGetString(GL_RENDERER) << vcl_endl
+             << "   version : " << glGetString(GL_VERSION) << vcl_endl
+             << "   extensions : " << glGetString(GL_EXTENSIONS) << vcl_endl;
     {
-      vcl_cerr << "some stuff :\n";
-      vcl_cerr << "   vendor : " << glGetString(GL_VENDOR) << vcl_endl
-               << "   renderer : " << glGetString(GL_RENDERER) << vcl_endl
-               << "   version : " << glGetString(GL_VERSION) << vcl_endl
-               << "   extensions : " << glGetString(GL_EXTENSIONS) << vcl_endl;
-
       GLboolean bool_v;
       GLint int_v;
 
@@ -171,7 +173,7 @@ bool front_back_wibbler::handle(const vgui_event &e)  {
     }
     break;
 
-  default:
+   default:
     break;
   }
   return true;
@@ -179,7 +181,8 @@ bool front_back_wibbler::handle(const vgui_event &e)  {
 
 //------------------------------------------------------------------------------
 
-int main(int argc,char **argv) {
+int main(int argc,char **argv)
+{
   vgui::init(argc, argv);
   return vgui::run(new front_back_wibbler, 256, 256, __FILE__);
 }

@@ -119,9 +119,9 @@ bool vgui_draw_line(double const T[4][4], double a, double b, double c)
   double l[3] = { a, b, c };
 
   double M[3][3] = { // M = T([0 1 3], [0 1 3]);
-    {T[0][0], T[0][1], T[0][3]},
-    {T[1][0], T[1][1], T[1][3]},
-    {T[3][0], T[3][1], T[3][3]}
+    { T[0][0], T[0][1], T[0][3] },
+    { T[1][0], T[1][1], T[1][3] },
+    { T[3][0], T[3][1], T[3][3] }
   };
 
   double M0_l[3]; cross3(M[0], l, M0_l);
@@ -137,12 +137,12 @@ bool vgui_draw_line(double const T[4][4], double a, double b, double c)
     double y_dev = dot3(M[1], tmp);
     double w_dev = dot3(M[2], tmp);
     if (w_dev>0) {
-      if (-w_dev<=y_dev && y_dev<=w_dev)
-        { trace("x=-1"); glVertex4d( tmp[0],  tmp[1],  0,  tmp[2]); }
+      if (-w_dev<=y_dev && y_dev<=w_dev) {
+        trace("x=-1"); glVertex4d( tmp[0],  tmp[1],  0,  tmp[2]); }
     }
     else if (w_dev<0) {
-      if (-w_dev>=y_dev && y_dev>=w_dev)
-        { trace("x=-1"); glVertex4f(-tmp[0], -tmp[1],  0, -tmp[2]); }
+      if (-w_dev>=y_dev && y_dev>=w_dev) {
+        trace("x=-1"); glVertex4f(-tmp[0], -tmp[1],  0, -tmp[2]); }
     }
     else {
     }
@@ -154,12 +154,12 @@ bool vgui_draw_line(double const T[4][4], double a, double b, double c)
     double y_dev = dot3(M[1], tmp);
     double w_dev = dot3(M[2], tmp);
     if (w_dev>0) {
-      if (-w_dev<=y_dev && y_dev<=w_dev)
-        { trace("x=+1"); glVertex4d( tmp[0],  tmp[1],  0,  tmp[2]); }
+      if (-w_dev<=y_dev && y_dev<=w_dev) {
+        trace("x=+1"); glVertex4d( tmp[0],  tmp[1],  0,  tmp[2]); }
     }
     else if (w_dev<0) {
-      if (-w_dev>=y_dev && y_dev>=w_dev)
-        { trace("x=+1"); glVertex4f(-tmp[0], -tmp[1],  0, -tmp[2]); }
+      if (-w_dev>=y_dev && y_dev>=w_dev) {
+        trace("x=+1"); glVertex4f(-tmp[0], -tmp[1],  0, -tmp[2]); }
     }
     else {
     }
@@ -171,12 +171,12 @@ bool vgui_draw_line(double const T[4][4], double a, double b, double c)
     double x_dev = dot3(M[0], tmp);
     double w_dev = dot3(M[2], tmp);
     if (w_dev>0) {
-      if (-w_dev<=x_dev && x_dev<=w_dev)
-        { trace("y=-1"); glVertex4d( tmp[0],  tmp[1],  0,  tmp[2]); }
+      if (-w_dev<=x_dev && x_dev<=w_dev) {
+        trace("y=-1"); glVertex4d( tmp[0],  tmp[1],  0,  tmp[2]); }
     }
     else if (w_dev<0) {
-      if (-w_dev>=x_dev && x_dev>=w_dev)
-        { trace("y=-1"); glVertex4f(-tmp[0], -tmp[1],  0, -tmp[2]); }
+      if (-w_dev>=x_dev && x_dev>=w_dev) {
+        trace("y=-1"); glVertex4f(-tmp[0], -tmp[1],  0, -tmp[2]); }
     }
     else {
     }
@@ -188,12 +188,12 @@ bool vgui_draw_line(double const T[4][4], double a, double b, double c)
     double x_dev = dot3(M[0], tmp);
     double w_dev = dot3(M[2], tmp);
     if (w_dev>0) {
-      if (-w_dev<=x_dev && x_dev<=w_dev)
-        { trace("y=+1"); glVertex4d( tmp[0],  tmp[1],  0,  tmp[2]); }
+      if (-w_dev<=x_dev && x_dev<=w_dev) {
+        trace("y=+1"); glVertex4d( tmp[0],  tmp[1],  0,  tmp[2]); }
     }
     else if (w_dev<0) {
-      if (-w_dev>=x_dev && x_dev>=w_dev)
-        { trace("y=+1"); glVertex4f(-tmp[0], -tmp[1],  0, -tmp[2]); }
+      if (-w_dev>=x_dev && x_dev>=w_dev) {
+        trace("y=+1"); glVertex4f(-tmp[0], -tmp[1],  0, -tmp[2]); }
     }
     else {
     }

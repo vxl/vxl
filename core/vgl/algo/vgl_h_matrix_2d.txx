@@ -118,6 +118,7 @@ vgl_conic<T> vgl_h_matrix_2d<T>::operator() (vgl_conic<T> const& C) const
   return   vgl_conic<T>(Mp(0,0),(Mp(0,1)+Mp(1,0)),Mp(1,1),(Mp(0,2)+Mp(2,0)),
                         (Mp(1,2)+Mp(2,1)), Mp(2,2));
 }
+
 template <class T>
 vgl_homg_point_2d<T>
 vgl_h_matrix_2d<T>::preimage(vgl_homg_point_2d<T> const& p) const

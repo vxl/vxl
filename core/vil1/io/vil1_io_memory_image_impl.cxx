@@ -92,10 +92,10 @@ void vsl_b_read(vsl_b_istream &is, vil1_memory_image_impl & p)
 
   short v;
   vsl_b_read(is, v);
-  switch(v)
+  switch (v)
   {
-  case 1:
-    {
+   case 1:
+   {
     int planes, height, width;
     int components, bits_per_component, component_format;
     vsl_b_read(is, planes);
@@ -114,8 +114,8 @@ void vsl_b_read(vsl_b_istream &is, vil1_memory_image_impl & p)
     p.put_section(buf,0,0,width,height);
     delete[] buf;
     break;
-    }
-  default:
+   }
+   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil1_memory_image_impl&)\n"
              << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
@@ -135,22 +135,22 @@ void vsl_print_summary(vcl_ostream& os,const vil1_memory_image_impl & p)
     <<" Component format ";
   switch (p.component_format())
   {
-  case VIL1_COMPONENT_FORMAT_UNKNOWN:
+   case VIL1_COMPONENT_FORMAT_UNKNOWN:
     os << "VIL1_COMPONENT_FORMAT_UNKNOWN";
     break;
-  case VIL1_COMPONENT_FORMAT_UNSIGNED_INT:
+   case VIL1_COMPONENT_FORMAT_UNSIGNED_INT:
     os << "VIL1_COMPONENT_FORMAT_UNSIGNED_INT";
     break;
-  case VIL1_COMPONENT_FORMAT_SIGNED_INT:
+   case VIL1_COMPONENT_FORMAT_SIGNED_INT:
     os << "VIL1_COMPONENT_FORMAT_SIGNED_INT";
     break;
-  case VIL1_COMPONENT_FORMAT_IEEE_FLOAT:
+   case VIL1_COMPONENT_FORMAT_IEEE_FLOAT:
     os << "VIL1_COMPONENT_FORMAT_IEEE_FLOAT";
     break;
-  case VIL1_COMPONENT_FORMAT_COMPLEX:
+   case VIL1_COMPONENT_FORMAT_COMPLEX:
     os << "VIL1_COMPONENT_FORMAT_COMPLEX";
     break;
-  default:
+   default:
     os << "unknown";
     break;
   }

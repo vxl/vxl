@@ -135,65 +135,68 @@ bool vgui_cache_wizard::get_section(int id,int x,int y,int width,int height,
 
   for (int i = 0;i<=qh_c;i++)
     for (int j = 0;j<=qw_c;j++)
+    {
+      // (i,j) relative to the upper left corner of the section
+      // needs to be translated into image coordinates
+      int index = ul_q+i*d->first+j;
+      // Check to see whether the quadrant is in cache
+      if (index<0 || index>=int(icq->size()))
       {
-        // (i,j) relative to the upper left corner of the section
-        // needs to be translated into image coordinates
-        int index = ul_q+i*d->first+j;
-        // Check to see whether the quadrant is in cache
-        if (index<0 || index>=int(icq->size()))
-        {
-          vcl_cerr << __FILE__ ": index out of range\n";
-          return false;
-        }
-        if (mb_is_valid((*icq)[index]))
-          {
-            quadrants->push_back((*icq)[index]);
-            vcl_list<GLuint>::iterator i;
-            for (i = cache_queue_.begin();i!=cache_queue_.end() && (*i)!=(*icq)[index]; i++)
-              ;
-            cache_queue_.erase(i);
-            cache_queue_.push_back((*icq)[index]);
-          }
-        else {
-          // If the quadrant is not in cache load it by dumping least recently used
-          // texture block if necessary
-          GLuint texture_name;
-          if (cache_queue_.size() == max_texture_num_)
-            {
-              // Time to dump LRU texture and use it for the quadrant of this image section
-              texture_name = cache_queue_.front();
-              vcl_cerr<<"Texture name: "<<texture_name<<vcl_endl;
-              cache_queue_.pop_front();
-              // Find the image where texture_name has been used and invalidate
-              // that qudrangle
-              for (vcl_vector<wizard_image *>::iterator i = images_.begin(); i!=images_.end();i++)
-                for (image_cache_quadrants::iterator k = (*i)->second->begin(); k!=(*i)->second->end();k++)
-                  if ((*k) == texture_name)
-                    {
-                      *k = GLuint(INVALID_TEXTURE_NAME);
-                      vcl_cerr<<"Invalidated!\n";
-                    }
-            }
-          else {
-            unsigned int k = 0;
-            while (k<max_texture_num_ && texture_names_[k] == -1u) ++k;
-            texture_name = texture_names_[k];
-            texture_names_[k] = GLuint(-1);
-          }
-
-          glBindTexture(GL_TEXTURE_2D,texture_name);
-          TexImage2D_Brownie(vil1_crop(img,pos->first*quadrant_width_+j*quadrant_width_,
-                                      pos->second*quadrant_height_+i*quadrant_height_,
-                                      quadrant_width_,
-                                      quadrant_height_));
-          quadrants->push_back(texture_name);
-          cache_queue_.push_back(texture_name);
-          // Validate the appropriate quadrangle
-          (*icq)[index] = texture_name;
-        }
+        vcl_cerr << __FILE__ ": index out of range\n";
+        return false;
       }
+      if (mb_is_valid((*icq)[index]))
+      {
+        quadrants->push_back((*icq)[index]);
+        vcl_list<GLuint>::iterator i;
+        for (i = cache_queue_.begin();i!=cache_queue_.end() && (*i)!=(*icq)[index]; i++)
+          ;
+        cache_queue_.erase(i);
+        cache_queue_.push_back((*icq)[index]);
+      }
+      else
+      {
+        // If the quadrant is not in cache load it by dumping least recently used
+        // texture block if necessary
+        GLuint texture_name;
+        if (cache_queue_.size() == max_texture_num_)
+        {
+          // Time to dump LRU texture and use it for the quadrant of this image section
+          texture_name = cache_queue_.front();
+          vcl_cerr<<"Texture name: "<<texture_name<<vcl_endl;
+          cache_queue_.pop_front();
+          // Find the image where texture_name has been used and invalidate
+          // that qudrangle
+          for (vcl_vector<wizard_image *>::iterator i = images_.begin(); i!=images_.end();i++)
+            for (image_cache_quadrants::iterator k = (*i)->second->begin(); k!=(*i)->second->end();k++)
+              if ((*k) == texture_name)
+              {
+                *k = GLuint(INVALID_TEXTURE_NAME);
+                vcl_cerr<<"Invalidated!\n";
+              }
+        }
+        else
+        {
+          unsigned int k = 0;
+          while (k<max_texture_num_ && texture_names_[k] == -1u) ++k;
+          texture_name = texture_names_[k];
+          texture_names_[k] = GLuint(-1);
+        }
+
+        glBindTexture(GL_TEXTURE_2D,texture_name);
+        TexImage2D_Brownie(vil1_crop(img,pos->first*quadrant_width_+j*quadrant_width_,
+                                    pos->second*quadrant_height_+i*quadrant_height_,
+                                    quadrant_width_,
+                                    quadrant_height_));
+        quadrants->push_back(texture_name);
+        cache_queue_.push_back(texture_name);
+        // Validate the appropriate quadrangle
+        (*icq)[index] = texture_name;
+      }
+    }
   return true;
 }
+
 //--------------------------------------------------------------------------------
 //
 // pixel format conversions
@@ -219,7 +222,7 @@ if (format==fmt && type==typ) { \
   if (!the_pixels) \
     the_pixels = new sto[img.width()*img.height()]; \
   vgui_pixel_convert_span(data, static_cast<sto*>(the_pixels), \
-  img.width()*img.height()); \
+                          img.width()*img.height()); \
 }
 
 // you *must* call this -- to deallocate the temp buffer.
@@ -240,7 +243,8 @@ void vgui_cache_wizard::TexImage2D_Brownie(vil1_image img)
 
   vil1_pixel_format_t pixel_format = vil1_pixel_format(img);
 
-  if (pixel_format == VIL1_BYTE) {
+  if (pixel_format == VIL1_BYTE)
+  {
     fsm_macro_begin(GLubyte, "8 bit greyscale");
     fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
     fsm_macro_magic(GL_RGBA,     GL_UNSIGNED_BYTE,        vgui_pixel_rgba8888);
@@ -257,7 +261,8 @@ void vgui_cache_wizard::TexImage2D_Brownie(vil1_image img)
   }
 
   // 24bit rgb
-  else if (pixel_format == VIL1_RGB_BYTE) {
+  else if (pixel_format == VIL1_RGB_BYTE)
+  {
     fsm_macro_begin(vgui_pixel_rgb888, "24 bit RGB");
     fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
     fsm_macro_magic(GL_RGBA,     GL_UNSIGNED_BYTE,        vgui_pixel_rgba8888);
@@ -274,7 +279,8 @@ void vgui_cache_wizard::TexImage2D_Brownie(vil1_image img)
   }
 
   // 32bit rgba
-  else if (pixel_format == VIL1_RGBA_BYTE) {
+  else if (pixel_format == VIL1_RGBA_BYTE)
+  {
     fsm_macro_begin(vgui_pixel_rgba8888, "32 bit RGBA");
     fsm_macro_magic(GL_RGB,      GL_UNSIGNED_BYTE,        vgui_pixel_rgb888);
     fsm_macro_magic(GL_RGBA,     GL_UNSIGNED_BYTE,        vgui_pixel_rgba8888);

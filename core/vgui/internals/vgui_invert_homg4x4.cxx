@@ -8,8 +8,8 @@
 
 #include "vgui_invert_homg4x4.h"
 
-
-static bool is_diagonal(double const * const *M) {
+static bool is_diagonal(double const * const *M)
+{
   for (unsigned i=0; i<4; ++i)
     for (unsigned j=0; j<4; ++j)
       if ( (i != j) && (M[i][j] != 0) )
@@ -18,7 +18,8 @@ static bool is_diagonal(double const * const *M) {
 }
 
 // Translation plus scale
-static bool is_trans_scale(double const * const *M) {
+static bool is_trans_scale(double const * const *M)
+{
   return                  M[0][1] == 0 && M[0][2] == 0 &&
           M[1][0] == 0 &&                 M[1][2] == 0 &&
           M[2][0] == 0 && M[2][1] == 0 &&
@@ -26,7 +27,8 @@ static bool is_trans_scale(double const * const *M) {
 }
 
 // return pointer to static data
-static double const * const * detA_inverseA(double const * const *A/*4x4*/) {
+static double const * const * detA_inverseA(double const * const *A/*4x4*/)
+{
   static double data[4][4]={
     { A[1][1]*A[2][2]*A[3][3]-A[1][1]*A[2][3]*A[3][2]-A[2][1]*A[1][2]*A[3][3]
      +A[2][1]*A[1][3]*A[3][2]+A[3][1]*A[1][2]*A[2][3]-A[3][1]*A[1][3]*A[2][2],
@@ -65,7 +67,8 @@ static double const * const * detA_inverseA(double const * const *A/*4x4*/) {
   return out;
 }
 
-bool vgui_invert_homg4x4(double const * const *M, double **Mi) {
+bool vgui_invert_homg4x4(double const * const *M, double **Mi)
+{
   if (is_diagonal(M)) {
     // * 0 0 0
     // 0 * 0 0
@@ -106,7 +109,8 @@ bool vgui_invert_homg4x4(double const * const *M, double **Mi) {
   return true;
 }
 
-bool vgui_invert_homg4x4(double const A[4][4], double B[4][4]) {
+bool vgui_invert_homg4x4(double const A[4][4], double B[4][4])
+{
   double const *A_[4] = {A[0], A[1], A[2], A[3]};
   double       *B_[4] = {B[0], B[1], B[2], B[3]};
   return vgui_invert_homg4x4(A_, B_);

@@ -115,13 +115,13 @@ void vul_timer::mark()
 
 long vul_timer::real()
 {
- long s;
+  long s;
 
 #if !defined(VCL_WIN32) || defined(__CYGWIN__)
- struct timeval  real_time;    // new real time
+  struct timeval  real_time;    // new real time
 #ifndef SYSV
- struct timezone tz;
- gettimeofday(&real_time, &tz);  // wall clock time
+  struct timezone tz;
+  gettimeofday(&real_time, &tz);  // wall clock time
 #else
 #if VXL_TWO_ARG_GETTIME
   gettimeofday(&real_time, (struct timezone*)0);
@@ -129,32 +129,26 @@ long vul_timer::real()
   gettimeofday(&real_time);
 #endif
 #endif
- s  = real_time.tv_sec    - data->real0.tv_sec;
- long us = real_time.tv_usec - data->real0.tv_usec;
+  s  = real_time.tv_sec    - data->real0.tv_sec;
+  long us = real_time.tv_usec - data->real0.tv_usec;
 
- if (us < 0)
-   {us += 1000000;
-    s--;
-   }
- return long(1000.0*s + us / 1000.0 + 0.5);
+  if (us < 0) { us += 1000000; --s; }
+  return long(1000.0*s + us / 1000.0 + 0.5);
 
 #else
- // Win32 section
+  // Win32 section
 # if defined(VCL_BORLAND)
- struct timeb real_time;
- ftime(&real_time);
+  struct timeb real_time;
+  ftime(&real_time);
 # else
- struct _timeb real_time;
- _ftime(&real_time);
+  struct _timeb real_time;
+  _ftime(&real_time);
 # endif
- s = long(real_time.time - data->real0.time);
- long ms = real_time.millitm - data->real0.millitm;
+  s = long(real_time.time - data->real0.time);
+  long ms = real_time.millitm - data->real0.millitm;
 
- if (ms < 0) {
-   ms += 1000;
-   s--;
- }
- return 1000*s + ms;
+  if (ms < 0) { ms += 1000; --s; }
+  return 1000*s + ms;
 #endif
 }
 

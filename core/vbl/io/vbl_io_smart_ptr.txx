@@ -92,62 +92,63 @@ void vsl_b_read(vsl_b_istream &is, vbl_smart_ptr<T> &p)
 
   short ver;
   vsl_b_read(is, ver);
-  switch(ver)
+  switch (ver)
   {
-  case 1:
-  case 2:
-    {
-      bool is_protected; // true if the smart_ptr is to be
-                         //responsible for the object
-      vsl_b_read(is, is_protected);
+   case 1:
+   case 2:
+   {
+    bool is_protected; // true if the smart_ptr is to be
+                       //responsible for the object
+    vsl_b_read(is, is_protected);
 
-      bool first_time; // true if the object is about to be loaded
-      vsl_b_read(is, first_time);
+    bool first_time; // true if the object is about to be loaded
+    vsl_b_read(is, first_time);
 
-      if (first_time && !is_protected)  // This should have been
-      {                                  //checked during saving
-        vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_smart_ptr<T>&)\n"
-                 << "           De-serialisation failure of non-protected smart_ptr\n";
-        is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-        return;
-      }
-      unsigned long id; // Unique serial number indentifying object
-      vsl_b_read(is, id);
-
-      if (id == 0) // Deal with Null pointers first.
-      {
-        p = 0;
-        return;
-      }
-
-      T * pointer = static_cast<T *>( is.get_serialisation_pointer(id));
-      if (first_time != (pointer == 0))
-      {
-        // This checks that the saving stream and reading stream
-        // both agree on whether or not this is the first time they
-        // have seen this object.
-        vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_smart_ptr<T>&)\n"
-                 << "           De-serialisation failure\n";
-        is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-        return;
-      }
-
-      if (pointer == 0)
-      {
-// If you get an error in the next line, it could be because your type T
-// has no vsl_b_read(vsl_b_istream&,T*&)  defined on it.
-// See the documentation in the .h file to see how to add it.
-        vsl_b_read(is, pointer);
-        is.add_serialisation_record(id, pointer);
-      }
-
-      p = pointer; // This operator method will set the internal
-                   //pointer in vbl_smart_ptr.
-      if (!is_protected)
-        p.unprotect();
+    if (first_time && !is_protected)  // This should have been
+    {                                  //checked during saving
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_smart_ptr<T>&)\n"
+               << "           De-serialisation failure of non-protected smart_ptr\n";
+      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      return;
     }
+    unsigned long id; // Unique serial number indentifying object
+    vsl_b_read(is, id);
+
+    if (id == 0) // Deal with Null pointers first.
+    {
+      p = 0;
+      return;
+    }
+
+    T * pointer = static_cast<T *>( is.get_serialisation_pointer(id));
+    if (first_time != (pointer == 0))
+    {
+      // This checks that the saving stream and reading stream
+      // both agree on whether or not this is the first time they
+      // have seen this object.
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_smart_ptr<T>&)\n"
+               << "           De-serialisation failure\n";
+      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      return;
+    }
+
+    if (pointer == 0)
+    {
+      // If you get an error in the next line, it could be because your type T
+      // has no vsl_b_read(vsl_b_istream&,T*&)  defined on it.
+      // See the documentation in the .h file to see how to add it.
+      vsl_b_read(is, pointer);
+      is.add_serialisation_record(id, pointer);
+    }
+
+    p = pointer; // This operator method will set the internal
+                 //pointer in vbl_smart_ptr.
+    if (!is_protected)
+      p.unprotect();
+
     break;
-  default:
+   }
+   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_smart_ptr<T>&)\n"
              << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
@@ -173,7 +174,6 @@ void vsl_print_summary(vcl_ostream & os,const vbl_smart_ptr<T> & p)
   else
     os << "NULL";
 }
-
 
 
 #undef VBL_IO_SMART_PTR_INSTANTIATE

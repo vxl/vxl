@@ -965,7 +965,9 @@ void gpc_free_polygon(gpc_polygon *p)
   int c;
 
   for (c= 0; c < p->num_contours; c++)
-    { FREE(p->contour[c].vertex); p->contour[c].vertex = 0; }
+  {
+    FREE(p->contour[c].vertex); p->contour[c].vertex = 0;
+  }
   FREE(p->hole); p->hole = 0;
   FREE(p->contour); p->contour = 0;
   p->num_contours= 0;
@@ -1123,8 +1125,8 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
         /* Determine contributing status and quadrant occupancies */
         switch (op)
         {
-        case GPC_DIFF:
-        case GPC_INT:
+         case GPC_DIFF:
+         case GPC_INT:
           contributing= (exists[CLIP] && (parity[SUBJ] || horiz[SUBJ])) ||
                         (exists[SUBJ] && (parity[CLIP] || horiz[CLIP])) ||
                         (exists[CLIP] && exists[SUBJ] && parity[CLIP] == parity[SUBJ]);
@@ -1137,7 +1139,7 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
           tl= (parity[CLIP] ^ (horiz[CLIP]!=NH) ^ edge->bundle[BELOW][CLIP])
            && (parity[SUBJ] ^ (horiz[SUBJ]!=NH) ^ edge->bundle[BELOW][SUBJ]);
           break;
-        case GPC_XOR:
+         case GPC_XOR:
           contributing= exists[CLIP] || exists[SUBJ];
           br= (parity[CLIP])
             ^ (parity[SUBJ]);
@@ -1148,7 +1150,7 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
           tl= (parity[CLIP] ^ (horiz[CLIP]!=NH) ^ edge->bundle[BELOW][CLIP])
             ^ (parity[SUBJ] ^ (horiz[SUBJ]!=NH) ^ edge->bundle[BELOW][SUBJ]);
           break;
-        case GPC_UNION:
+         case GPC_UNION:
           contributing= (exists[CLIP] && (!parity[SUBJ] || horiz[SUBJ])) ||
                         (exists[SUBJ] && (!parity[CLIP] || horiz[CLIP])) ||
                         (exists[CLIP] && exists[SUBJ] && parity[CLIP] == parity[SUBJ]);
@@ -1185,13 +1187,13 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
 
           switch (vclass)
           {
-          case EMN:
-          case IMN:
+           case EMN:
+           case IMN:
             add_local_min(&out_poly, edge, xb, yb);
             px= xb;
             cf= edge->outp[ABOVE];
             break;
-          case ERI:
+           case ERI:
             if (xb != px)
             {
               add_right(cf, xb, yb);
@@ -1200,12 +1202,12 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
             edge->outp[ABOVE]= cf;
             cf= NULL;
             break;
-          case ELI:
+           case ELI:
             add_left(edge->outp[BELOW], xb, yb);
             px= xb;
             cf= edge->outp[BELOW];
             break;
-          case EMX:
+           case EMX:
             if (xb != px)
             {
               add_left(cf, xb, yb);
@@ -1214,7 +1216,7 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
             merge_right(cf, edge->outp[BELOW], out_poly);
             cf= NULL;
             break;
-          case ILI:
+           case ILI:
             if (xb != px)
             {
               add_left(cf, xb, yb);
@@ -1223,13 +1225,13 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
             edge->outp[ABOVE]= cf;
             cf= NULL;
             break;
-          case IRI:
+           case IRI:
             add_right(edge->outp[BELOW], xb, yb);
             px= xb;
             cf= edge->outp[BELOW];
             edge->outp[BELOW]= NULL;
             break;
-          case IMX:
+           case IMX:
             if (xb != px)
             {
               add_right(cf, xb, yb);
@@ -1239,7 +1241,7 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
             cf= NULL;
             edge->outp[BELOW]= NULL;
             break;
-          case IMM:
+           case IMM:
             if (xb != px)
             {
               add_right(cf, xb, yb);
@@ -1250,7 +1252,7 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
             add_local_min(&out_poly, edge, xb, yb);
             cf= edge->outp[ABOVE];
             break;
-          case EMM:
+           case EMM:
             if (xb != px)
             {
               add_left(cf, xb, yb);
@@ -1261,19 +1263,19 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
             add_local_min(&out_poly, edge, xb, yb);
             cf= edge->outp[ABOVE];
             break;
-          case LED:
+           case LED:
             if (edge->bot.y == yb)
               add_left(edge->outp[BELOW], xb, yb);
             edge->outp[ABOVE]= edge->outp[BELOW];
             px= xb;
             break;
-          case RED:
+           case RED:
             if (edge->bot.y == yb)
               add_right(edge->outp[BELOW], xb, yb);
             edge->outp[ABOVE]= edge->outp[BELOW];
             px= xb;
             break;
-          default:
+           default:
             break;
           } /* End of switch */
         } /* End of contributing conditional */
@@ -1349,8 +1351,8 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
           /* Determine quadrant occupancies */
           switch (op)
           {
-          case GPC_DIFF:
-          case GPC_INT:
+           case GPC_DIFF:
+           case GPC_INT:
             tr= (in[CLIP])
              && (in[SUBJ]);
             tl= (in[CLIP] ^ e1->bundle[ABOVE][CLIP])
@@ -1360,7 +1362,7 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
             bl= (in[CLIP] ^ e1->bundle[ABOVE][CLIP] ^ e0->bundle[ABOVE][CLIP])
              && (in[SUBJ] ^ e1->bundle[ABOVE][SUBJ] ^ e0->bundle[ABOVE][SUBJ]);
             break;
-          case GPC_XOR:
+           case GPC_XOR:
             tr= (in[CLIP])
               ^ (in[SUBJ]);
             tl= (in[CLIP] ^ e1->bundle[ABOVE][CLIP])
@@ -1370,7 +1372,7 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
             bl= (in[CLIP] ^ e1->bundle[ABOVE][CLIP] ^ e0->bundle[ABOVE][CLIP])
               ^ (in[SUBJ] ^ e1->bundle[ABOVE][SUBJ] ^ e0->bundle[ABOVE][SUBJ]);
             break;
-          case GPC_UNION:
+           case GPC_UNION:
             tr= (in[CLIP])
              || (in[SUBJ]);
             tl= (in[CLIP] ^ e1->bundle[ABOVE][CLIP])
@@ -1386,11 +1388,11 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
 
           switch (vclass)
           {
-          case EMN:
+           case EMN:
             add_local_min(&out_poly, e0, ix, iy);
             e1->outp[ABOVE]= e0->outp[ABOVE];
             break;
-          case ERI:
+           case ERI:
             if (p)
             {
               add_right(p, ix, iy);
@@ -1398,7 +1400,7 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
               e0->outp[ABOVE]= NULL;
             }
             break;
-          case ELI:
+           case ELI:
             if (q)
             {
               add_left(q, ix, iy);
@@ -1406,7 +1408,7 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
               e1->outp[ABOVE]= NULL;
             }
             break;
-          case EMX:
+           case EMX:
             if (p && q)
             {
               add_left(p, ix, iy);
@@ -1415,11 +1417,11 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
               e1->outp[ABOVE]= NULL;
             }
             break;
-          case IMN:
+           case IMN:
             add_local_min(&out_poly, e0, ix, iy);
             e1->outp[ABOVE]= e0->outp[ABOVE];
             break;
-          case ILI:
+           case ILI:
             if (p)
             {
               add_left(p, ix, iy);
@@ -1427,7 +1429,7 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
               e0->outp[ABOVE]= NULL;
             }
             break;
-          case IRI:
+           case IRI:
             if (q)
             {
               add_right(q, ix, iy);
@@ -1435,7 +1437,7 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
               e1->outp[ABOVE]= NULL;
             }
             break;
-          case IMX:
+           case IMX:
             if (p && q)
             {
               add_right(p, ix, iy);
@@ -1444,7 +1446,7 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
               e1->outp[ABOVE]= NULL;
             }
             break;
-          case IMM:
+           case IMM:
             if (p && q)
             {
               add_right(p, ix, iy);
@@ -1453,7 +1455,7 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
               e1->outp[ABOVE]= e0->outp[ABOVE];
             }
             break;
-          case EMM:
+           case EMM:
             if (p && q)
             {
               add_left(p, ix, iy);
@@ -1462,7 +1464,7 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
               e1->outp[ABOVE]= e0->outp[ABOVE];
             }
             break;
-          default:
+           default:
             break;
           } /* End of switch */
         } /* End of contributing intersection conditional */
@@ -1745,7 +1747,9 @@ void gpc_free_tristrip(gpc_tristrip *t)
   int s;
 
   for (s= 0; s < t->num_strips; s++)
-    { FREE(t->strip[s].vertex); t->strip[s].vertex = 0; }
+  {
+    FREE(t->strip[s].vertex); t->strip[s].vertex = 0;
+  }
   FREE(t->strip); t->strip = 0;
   t->num_strips= 0;
 }
@@ -1906,8 +1910,8 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
         /* Determine contributing status and quadrant occupancies */
         switch (op)
         {
-        case GPC_DIFF:
-        case GPC_INT:
+         case GPC_DIFF:
+         case GPC_INT:
           contributing= (exists[CLIP] && (parity[SUBJ] || horiz[SUBJ])) ||
                         (exists[SUBJ] && (parity[CLIP] || horiz[CLIP])) ||
                         (exists[CLIP] && exists[SUBJ] && parity[CLIP] == parity[SUBJ]);
@@ -1920,7 +1924,7 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
           tl= (parity[CLIP] ^ (horiz[CLIP]!=NH) ^ edge->bundle[BELOW][CLIP])
            && (parity[SUBJ] ^ (horiz[SUBJ]!=NH) ^ edge->bundle[BELOW][SUBJ]);
           break;
-        case GPC_XOR:
+         case GPC_XOR:
           contributing= exists[CLIP] || exists[SUBJ];
           br= (parity[CLIP])
             ^ (parity[SUBJ]);
@@ -1931,7 +1935,7 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
           tl= (parity[CLIP] ^ (horiz[CLIP]!=NH) ^ edge->bundle[BELOW][CLIP])
             ^ (parity[SUBJ] ^ (horiz[SUBJ]!=NH) ^ edge->bundle[BELOW][SUBJ]);
           break;
-        case GPC_UNION:
+         case GPC_UNION:
           contributing= (exists[CLIP] && (!parity[SUBJ] || horiz[SUBJ])) ||
                         (exists[SUBJ] && (!parity[CLIP] || horiz[CLIP])) ||
                         (exists[CLIP] && exists[SUBJ] && parity[CLIP] == parity[SUBJ]);
@@ -1968,28 +1972,28 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
 
           switch (vclass)
           {
-          case EMN:
+           case EMN:
             new_tristrip(&tlist, edge, xb, yb);
             cf= edge;
             break;
-          case ERI:
+           case ERI:
             edge->outp[ABOVE]= cf->outp[ABOVE];
             if (xb != cf->xb)
               VERTEX(edge, ABOVE, RIGHT, xb, yb);
             cf= NULL;
             break;
-          case ELI:
+           case ELI:
             VERTEX(edge, BELOW, LEFT, xb, yb);
             edge->outp[ABOVE]= NULL;
             cf= edge;
             break;
-          case EMX:
+           case EMX:
             if (xb != cf->xb)
               VERTEX(edge, BELOW, RIGHT, xb, yb);
             edge->outp[ABOVE]= NULL;
             cf= NULL;
             break;
-          case IMN:
+           case IMN:
             if (cft == LED)
             {
               if (cf->bot.y != yb)
@@ -1999,12 +2003,12 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
             edge->outp[ABOVE]= cf->outp[ABOVE];
             VERTEX(edge, ABOVE, RIGHT, xb, yb);
             break;
-          case ILI:
+           case ILI:
             new_tristrip(&tlist, edge, xb, yb);
             cf= edge;
             cft= ILI;
             break;
-          case IRI:
+           case IRI:
             if (cft == LED)
             {
               if (cf->bot.y != yb)
@@ -2014,32 +2018,32 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
             VERTEX(edge, BELOW, RIGHT, xb, yb);
             edge->outp[ABOVE]= NULL;
             break;
-          case IMX:
+           case IMX:
             VERTEX(edge, BELOW, LEFT, xb, yb);
             edge->outp[ABOVE]= NULL;
             cft= IMX;
             break;
-          case IMM:
+           case IMM:
             VERTEX(edge, BELOW, LEFT, xb, yb);
             edge->outp[ABOVE]= cf->outp[ABOVE];
             if (xb != cf->xb)
               VERTEX(cf, ABOVE, RIGHT, xb, yb);
             cf= edge;
             break;
-          case EMM:
+           case EMM:
             VERTEX(edge, BELOW, RIGHT, xb, yb);
             edge->outp[ABOVE]= NULL;
             new_tristrip(&tlist, edge, xb, yb);
             cf= edge;
             break;
-          case LED:
+           case LED:
             if (edge->bot.y == yb)
               VERTEX(edge, BELOW, LEFT, xb, yb);
             edge->outp[ABOVE]= edge->outp[BELOW];
             cf= edge;
             cft= LED;
             break;
-          case RED:
+           case RED:
             edge->outp[ABOVE]= cf->outp[ABOVE];
             if (cft == LED)
             {
@@ -2063,7 +2067,7 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
             }
             cf= NULL;
             break;
-          default:
+           default:
             break;
           } /* End of switch */
         } /* End of contributing conditional */
@@ -2139,8 +2143,8 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
           /* Determine quadrant occupancies */
           switch (op)
           {
-          case GPC_DIFF:
-          case GPC_INT:
+           case GPC_DIFF:
+           case GPC_INT:
             tr= (in[CLIP])
              && (in[SUBJ]);
             tl= (in[CLIP] ^ e1->bundle[ABOVE][CLIP])
@@ -2150,7 +2154,7 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
             bl= (in[CLIP] ^ e1->bundle[ABOVE][CLIP] ^ e0->bundle[ABOVE][CLIP])
              && (in[SUBJ] ^ e1->bundle[ABOVE][SUBJ] ^ e0->bundle[ABOVE][SUBJ]);
             break;
-          case GPC_XOR:
+           case GPC_XOR:
             tr= (in[CLIP])
               ^ (in[SUBJ]);
             tl= (in[CLIP] ^ e1->bundle[ABOVE][CLIP])
@@ -2160,7 +2164,7 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
             bl= (in[CLIP] ^ e1->bundle[ABOVE][CLIP] ^ e0->bundle[ABOVE][CLIP])
               ^ (in[SUBJ] ^ e1->bundle[ABOVE][SUBJ] ^ e0->bundle[ABOVE][SUBJ]);
             break;
-          case GPC_UNION:
+           case GPC_UNION:
             tr= (in[CLIP])
              || (in[SUBJ]);
             tl= (in[CLIP] ^ e1->bundle[ABOVE][CLIP])
@@ -2176,11 +2180,11 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
 
           switch (vclass)
           {
-          case EMN:
+           case EMN:
             new_tristrip(&tlist, e1, ix, iy);
             e0->outp[ABOVE]= e1->outp[ABOVE];
             break;
-          case ERI:
+           case ERI:
             if (p)
             {
               P_EDGE(prev_edge, e0, ABOVE, px, iy);
@@ -2190,7 +2194,7 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
               e0->outp[ABOVE]= NULL;
             }
             break;
-          case ELI:
+           case ELI:
             if (q)
             {
               N_EDGE(next_edge, e1, ABOVE, nx, iy);
@@ -2200,7 +2204,7 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
               e1->outp[ABOVE]= NULL;
             }
             break;
-          case EMX:
+           case EMX:
             if (p && q)
             {
               VERTEX(e0, ABOVE, LEFT, ix, iy);
@@ -2208,7 +2212,7 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
               e1->outp[ABOVE]= NULL;
             }
             break;
-          case IMN:
+           case IMN:
             P_EDGE(prev_edge, e0, ABOVE, px, iy);
             VERTEX(prev_edge, ABOVE, LEFT, px, iy);
             N_EDGE(next_edge, e1, ABOVE, nx, iy);
@@ -2220,7 +2224,7 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
             next_edge->outp[ABOVE]= e0->outp[ABOVE];
             VERTEX(next_edge, ABOVE, RIGHT, nx, iy);
             break;
-          case ILI:
+           case ILI:
             if (p)
             {
               VERTEX(e0, ABOVE, LEFT, ix, iy);
@@ -2230,7 +2234,7 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
               e0->outp[ABOVE]= NULL;
             }
             break;
-          case IRI:
+           case IRI:
             if (q)
             {
               VERTEX(e1, ABOVE, RIGHT, ix, iy);
@@ -2240,7 +2244,7 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
               e1->outp[ABOVE]= NULL;
             }
             break;
-          case IMX:
+           case IMX:
             if (p && q)
             {
               VERTEX(e0, ABOVE, RIGHT, ix, iy);
@@ -2256,7 +2260,7 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
               VERTEX(next_edge, ABOVE, RIGHT, nx, iy);
             }
             break;
-          case IMM:
+           case IMM:
             if (p && q)
             {
               VERTEX(e0, ABOVE, RIGHT, ix, iy);
@@ -2273,7 +2277,7 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
               VERTEX(next_edge, ABOVE, RIGHT, nx, iy);
             }
             break;
-          case EMM:
+           case EMM:
             if (p && q)
             {
               VERTEX(e0, ABOVE, LEFT, ix, iy);
@@ -2281,7 +2285,7 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
               e0->outp[ABOVE]= e1->outp[ABOVE];
             }
             break;
-          default:
+           default:
             break;
           } /* End of switch */
         } /* End of contributing intersection conditional */

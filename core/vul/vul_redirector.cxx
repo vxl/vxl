@@ -74,12 +74,12 @@ int vul_redirector_streambuf::overflow (int ch)
   if (n && sync ())
     return EOF;
   if (ch != EOF)
-    {
-      char cbuf[1];
-      cbuf[0] = ch;
-      if (p->owner->putchunk ( cbuf, 1) != 1)
-        return EOF;
-    }
+  {
+    char cbuf[1];
+    cbuf[0] = ch;
+    if (p->owner->putchunk ( cbuf, 1) != 1)
+      return EOF;
+  }
   pbump (-n);  // Reset pptr().
   return 0;
 }

@@ -106,6 +106,7 @@ top_left_(0), istep_(0), jstep_(0), planestep_(0), ptr_(0)
 {
   operator=(that);
 }
+
 //: Perform deep copy of the src image, placing in this image
 template<class T>
 void vil_image_view<T>::deep_copy(const vil_image_view<T>& src)
@@ -563,38 +564,38 @@ bool vil_image_view<T>::is_contiguous() const
   unsigned n1, n2;
   if ( istep_ < jstep_ )
     if ( jstep_ < planestep_ )
-      {
-        s1 = istep_; s2 = jstep_; s3 = planestep_;
-        n1 = ni_;    n2 = nj_;  //  n3 = nplanes_;
-      }
+    {
+      s1 = istep_; s2 = jstep_; s3 = planestep_;
+      n1 = ni_;    n2 = nj_;  //  n3 = nplanes_;
+    }
     else // planestep_ < jstep_
       if ( istep_ < planestep_ )
-        {
-          s1 = istep_; s2 = planestep_; s3 = jstep_;
-          n1 = ni_;    n2 = nplanes_; //  n3 = nj_;
-        }
+      {
+        s1 = istep_; s2 = planestep_; s3 = jstep_;
+        n1 = ni_;    n2 = nplanes_; //  n3 = nj_;
+      }
       else // planestep_ < istep_
-        {
-          s1 = planestep_; s2 = istep_; s3 = jstep_;
-          n1 = nplanes_;   n2 = ni_;  //  n3 = nj_;
-        }
+      {
+        s1 = planestep_; s2 = istep_; s3 = jstep_;
+        n1 = nplanes_;   n2 = ni_;  //  n3 = nj_;
+      }
   else // jstep < istep_
     if ( jstep_ < planestep_ )
       if ( istep_ < planestep_ )
-        {
-          s1 = jstep_; s2 = istep_; s3 = planestep_;
-          n1 = nj_;    n2 = ni_;  //  n3 = nplanes_;
-        }
-      else // planestep_ < istep_
-        {
-          s1 = jstep_; s2 = planestep_; s3 = istep_;
-          n1 = nj_;    n2 = nplanes_;  // n3 = ni_;
-        }
-    else // planestep_ < jstep_
       {
-        s1 = planestep_; s2 = jstep_; s3 = istep_;
-        n1 = nplanes_;   n2 = nj_;  //  n3 = ni_;
+        s1 = jstep_; s2 = istep_; s3 = planestep_;
+        n1 = nj_;    n2 = ni_;  //  n3 = nplanes_;
       }
+      else // planestep_ < istep_
+      {
+        s1 = jstep_; s2 = planestep_; s3 = istep_;
+        n1 = nj_;    n2 = nplanes_;  // n3 = ni_;
+      }
+    else // planestep_ < jstep_
+    {
+      s1 = planestep_; s2 = jstep_; s3 = istep_;
+      n1 = nplanes_;   n2 = nj_;  //  n3 = ni_;
+    }
 
   return s1 == 1 &&
          s2 > 0 && unsigned(s2) == n1 &&

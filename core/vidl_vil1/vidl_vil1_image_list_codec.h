@@ -50,10 +50,10 @@ class vidl_vil1_image_list_codec :  public vidl_vil1_codec
 
   // Specific to vidl_vil1_image_list_codec
   static void set_default_image_type(const char* type)
-        {vcl_strcpy(default_initialization_image_type_,type);}
+  { vcl_strcpy(default_initialization_image_type_,type); }
 
   virtual void set_image_type(const char* type)
-        {vcl_strcpy(default_image_type_,type);}
+  { vcl_strcpy(default_image_type_,type); }
 
   virtual const char* get_image_type() const {return default_image_type_;}
   vcl_vector<vil1_image> get_images() const {return images_;}

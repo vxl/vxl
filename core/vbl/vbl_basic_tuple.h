@@ -107,20 +107,20 @@ with wrong number of arguments.");
     second = tuple.second;
     vbl_protection_traits<T2>::protect(second);
     if (!vbl_basic_optional_traits<T3>::IsOptional)
-      {
-        third = tuple.third;
-        vbl_protection_traits<T3>::protect(third);
-      }
+    {
+      third = tuple.third;
+      vbl_protection_traits<T3>::protect(third);
+    }
     if (!vbl_basic_optional_traits<T4>::IsOptional)
-      {
-        fourth = tuple.fourth;
-        vbl_protection_traits<T4>::protect(fourth);
-      }
+    {
+      fourth = tuple.fourth;
+      vbl_protection_traits<T4>::protect(fourth);
+    }
     if (!vbl_basic_optional_traits<T5>::IsOptional)
-      {
-        fifth = tuple.fifth;
-        vbl_protection_traits<T5>::protect(fifth);
-      }
+    {
+      fifth = tuple.fifth;
+      vbl_protection_traits<T5>::protect(fifth);
+    }
   }
 
   // Destructor.
@@ -153,28 +153,28 @@ with wrong number of arguments.");
     vbl_protection_traits<T2>::unprotect(t2);
 
     if (!vbl_basic_optional_traits<T3>::IsOptional)
-      {
-        T3 t3 = third;
-        third = tuple.third;
-        vbl_protection_traits<T3>::protect(third);
-        vbl_protection_traits<T3>::unprotect(t3);
-      }
+    {
+      T3 t3 = third;
+      third = tuple.third;
+      vbl_protection_traits<T3>::protect(third);
+      vbl_protection_traits<T3>::unprotect(t3);
+    }
 
     if (!vbl_basic_optional_traits<T4>::IsOptional)
-      {
-        T4 t4 = fourth;
-        fourth = tuple.fourth;
-        vbl_protection_traits<T4>::protect(fourth);
-        vbl_protection_traits<T4>::unprotect(t4);
-      }
+    {
+      T4 t4 = fourth;
+      fourth = tuple.fourth;
+      vbl_protection_traits<T4>::protect(fourth);
+      vbl_protection_traits<T4>::unprotect(t4);
+    }
 
     if (!vbl_basic_optional_traits<T5>::IsOptional)
-      {
-        T5 t5 = fifth;
-        fifth = tuple.fifth;
-        vbl_protection_traits<T5>::protect(fifth);
-        vbl_protection_traits<T5>::unprotect(t5);
-      }
+    {
+      T5 t5 = fifth;
+      fifth = tuple.fifth;
+      vbl_protection_traits<T5>::protect(fifth);
+      vbl_protection_traits<T5>::unprotect(t5);
+    }
 
     return *this;
   }
@@ -185,14 +185,14 @@ with wrong number of arguments.");
   // Print the tuple on cerr.
   void Dump(vcl_ostream& str = vcl_cerr) const
   {
-    str << "<" << first << "," << second;
+    str << '<' << first << ',' << second;
     if (!vbl_basic_optional_traits<T3>::IsOptional)
-      str << "," << third;
+      str << ',' << third;
     if (!vbl_basic_optional_traits<T4>::IsOptional)
-      str << "," << fourth;
+      str << ',' << fourth;
     if (!vbl_basic_optional_traits<T5>::IsOptional)
-      str << "," << fifth;
-    str << ">";
+      str << ',' << fifth;
+    str << '>';
   }
 
   inline T1 GetFirst() const { return first; }
@@ -220,43 +220,43 @@ with wrong number of arguments.");
   inline void SetThird(T3 t)
   {
     if (!vbl_basic_optional_traits<T3>::IsOptional)
-      {
-        T3 t3 = third;
-        third = t;
-        vbl_protection_traits<T3>::protect(third);
-        vbl_protection_traits<T3>::unprotect(t3);
-      }
+    {
+      T3 t3 = third;
+      third = t;
+      vbl_protection_traits<T3>::protect(third);
+      vbl_protection_traits<T3>::unprotect(t3);
+    }
   }
 
   inline void SetFourth(T4 t)
   {
     if (!vbl_basic_optional_traits<T4>::IsOptional)
-      {
-        T4 t4 = fourth;
-        fourth = t;
-        vbl_protection_traits<T4>::protect(fourth);
-        vbl_protection_traits<T4>::unprotect(t4);
-      }
+    {
+      T4 t4 = fourth;
+      fourth = t;
+      vbl_protection_traits<T4>::protect(fourth);
+      vbl_protection_traits<T4>::unprotect(t4);
+    }
   }
 
   inline void SetFifth(T5 t)
   {
     if (!vbl_basic_optional_traits<T3>::IsOptional)
-      {
-        T5 t5 = fifth;
-        fifth = t;
-        vbl_protection_traits<T5>::protect(fifth);
-        vbl_protection_traits<T5>::unprotect(t5);
-      }
+    {
+      T5 t5 = fifth;
+      fifth = t;
+      vbl_protection_traits<T5>::protect(fifth);
+      vbl_protection_traits<T5>::unprotect(t5);
+    }
   }
 };
 
 template
 <class T1,
-  class T2,
-  class T3,
-  class T4,
-  class T5>
+ class T2,
+ class T3,
+ class T4,
+ class T5>
 inline bool operator==(const vbl_basic_tuple<T1,T2,T3,T4,T5>& x,
                        const vbl_basic_tuple<T1,T2,T3,T4,T5>& y)
 {
@@ -273,10 +273,10 @@ inline bool operator==(const vbl_basic_tuple<T1,T2,T3,T4,T5>& x,
 
 template
 <class T1,
-  class T2,
-  class T3,
-  class T4,
-  class T5>
+ class T2,
+ class T3,
+ class T4,
+ class T5>
 inline vcl_ostream& operator<<(vcl_ostream& str,
                                const vbl_basic_tuple<T1,T2,T3,T4,T5>& tuple)
 {

@@ -68,8 +68,9 @@ vil1_memory_image_of<vil1_rgb<GLubyte> > vgui_utils::get_image()
   delete [] pixels;
   return colour_buffer;
 }
+
 // return a memory image corresponding to the GL buffer
-vil1_memory_image_of<vil1_rgb<unsigned char> > 
+vil1_memory_image_of<vil1_rgb<unsigned char> >
 vgui_utils::colour_buffer_to_image()
 {
   vil1_memory_image_of<vil1_rgb<GLubyte> > colour_buffer =
@@ -79,15 +80,16 @@ vgui_utils::colour_buffer_to_image()
 }
 
 // write the GL buffer to a file
-void vgui_utils::dump_colour_buffer(char const *file) {
+void vgui_utils::dump_colour_buffer(char const *file)
+{
   vil1_memory_image_of<vil1_rgb<GLubyte> > colour_buffer =
     vgui_utils::get_image();
   vil1_save(colour_buffer, file);
-} 
+}
 
 //------------------------------------------------------------------------------
 // copy the buffer into a vil image view
-vil_image_view<GLubyte> 
+vil_image_view<GLubyte>
 vgui_utils::get_view()
 {
   // get viewport size
@@ -137,22 +139,23 @@ vgui_utils::get_view()
   return view;
 }
 
-  
+
 //: Get an image view corresponding to the OpenGL area
-vil_image_view<vxl_byte> 
+vil_image_view<vxl_byte>
 vgui_utils::colour_buffer_to_view()
-{  
+{
   vil_image_view<GLubyte> buffer = vgui_utils::get_view();
   vil_image_view<vxl_byte> temp(buffer);
   return temp;
 }
- 
+
 
 //------------------------------------------------------------------------------
 
 // Copies the contents of the current read colour buffer into the current draw
 // colour buffer.
-void vgui_utils::do_copy() {
+void vgui_utils::do_copy()
+{
   //void glCopyPixels( GLint x, GLint y, GLsizei width, GLsizei height, GLenum type )
 
   GLint vp[4]; // x,y,w,h
@@ -191,7 +194,8 @@ void vgui_utils::do_copy() {
                GL_COLOR);   // copy colour values.
 }
 
-void vgui_utils::copy_front_to_back() {
+void vgui_utils::copy_front_to_back()
+{
   GLint old_read,old_draw;
   glGetIntegerv(GL_READ_BUFFER,&old_read);
   glGetIntegerv(GL_DRAW_BUFFER,&old_draw);
@@ -204,7 +208,8 @@ void vgui_utils::copy_front_to_back() {
   glDrawBuffer(GLenum(old_draw));
 }
 
-void vgui_utils::copy_back_to_front() {
+void vgui_utils::copy_back_to_front()
+{
   GLint old_read,old_draw;
   glGetIntegerv(GL_READ_BUFFER,&old_read);
   glGetIntegerv(GL_DRAW_BUFFER,&old_draw);
@@ -221,13 +226,15 @@ void vgui_utils::copy_back_to_front() {
 
 static GLint gl_old_buffer = -1;
 
-void vgui_utils::begin_sw_overlay() {
+void vgui_utils::begin_sw_overlay()
+{
   glGetIntegerv(GL_DRAW_BUFFER, &gl_old_buffer);
   if (gl_old_buffer != GL_NONE)
     glDrawBuffer(GL_FRONT);
 }
 
-void vgui_utils::end_sw_overlay() {
+void vgui_utils::end_sw_overlay()
+{
   if (gl_old_buffer == -1) {
     vcl_cerr << "WARNING :  end_sw_overlay called before begin_sw_overlay\n";
     return;
@@ -243,8 +250,8 @@ void vgui_utils::end_sw_overlay() {
 
 static bool in_pick_mode = false;
 
-GLuint* vgui_utils::enter_pick_mode(float x,float y,float w,float h) {
-
+GLuint* vgui_utils::enter_pick_mode(float x,float y,float w,float h)
+{
   assert(!in_pick_mode); in_pick_mode = true;
 
   if (h==0) h=w;
@@ -281,7 +288,8 @@ GLuint* vgui_utils::enter_pick_mode(float x,float y,float w,float h) {
 }
 
 // return number of hits.
-unsigned vgui_utils::leave_pick_mode() {
+unsigned vgui_utils::leave_pick_mode()
+{
   assert(in_pick_mode); in_pick_mode = false;
 
   // restore viewing volume and render mode
@@ -290,8 +298,8 @@ unsigned vgui_utils::leave_pick_mode() {
   return glRenderMode(GL_RENDER);
 }
 
-void vgui_utils::process_hits(int num_hits, GLuint* ptr, vcl_vector<vcl_vector<unsigned> >& hits) {
-
+void vgui_utils::process_hits(int num_hits, GLuint* ptr, vcl_vector<vcl_vector<unsigned> >& hits)
+{
 #ifdef DEBUG
     vcl_cerr << "hits = " << num_hits << vcl_endl;
 #endif
@@ -319,7 +327,7 @@ void vgui_utils::process_hits(int num_hits, GLuint* ptr, vcl_vector<vcl_vector<u
      for (unsigned int j = 0; j < num_names; j++) {
        names.push_back(*ptr);
 #ifdef DEBUG
-         vcl_cerr << *ptr << " ";
+         vcl_cerr << *ptr << ' ';
 #endif
        ptr++;
      }

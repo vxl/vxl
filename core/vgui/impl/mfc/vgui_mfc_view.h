@@ -54,7 +54,9 @@ class vgui_mfc_view : public vgui_mfc_adaptor
 
 #ifndef _DEBUG  // debug version in awfmfcView.cpp
 inline CDocument* vgui_mfc_view::GetDocument()
-   { return (CDocument*)m_pDocument; }
+{
+  return (CDocument*)m_pDocument;
+}
 #endif
 
 /////////////////////////////////////////////////////////////////////////////

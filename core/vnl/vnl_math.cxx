@@ -118,7 +118,8 @@ static inline unsigned int bMp(void*x,unsigned int y,int p=0){return ((((unsigne
 static inline bool bMe(void*x,unsigned int y,int p=0){return ((((unsigned int*)x)[p])&y)==y;}
 # else
 # include <vcl_iostream.h>
-static inline unsigned int bMp(void* x, unsigned int y, int p=0) {
+static inline unsigned int bMp(void* x, unsigned int y, int p=0)
+{
   unsigned char* v=(unsigned char*)x;
   vcl_cout<<int(v[4*p])<<' '<<int(v[4*p+1])<<' '<<int(v[4*p+2])<<' '<<int(v[4*p+3])<<" & ";
   v=(unsigned char*)(&y);
@@ -130,6 +131,7 @@ static inline unsigned int bMp(void* x, unsigned int y, int p=0) {
   vcl_cout << '\n';
   return z;
 }
+
 static inline bool bMe(void* x, unsigned int y, int p=0) { return bMp(x,y,p) == y; }
 # endif
 # if VXL_BIG_ENDIAN
@@ -144,7 +146,8 @@ static const int sz_l = sizeof(long double)/sizeof(int) -1;
 // Assume IEEE floating point number representation
 bool vnl_math_isnan( float x){return bMe(&x,0x7f800000L,sz_f)&&bMp(&x,0x007fffffL,sz_f);}
 bool vnl_math_isnan(double x){return bMe(&x,0x7ff00000L,sz_d)&&bMp(&x,0x000fffffL,sz_d);}
-bool vnl_math_isnan(long double x) {
+bool vnl_math_isnan(long double x)
+{
   if (sizeof(long double) == 8) return bMe(&x,0x7ff00000L,sz_l) && bMp(&x,0x000fffffL,sz_l);
   else if (sizeof(long double) <= 12)
 # if defined LDBL_MANT_DIG && LDBL_MANT_DIG<=53
@@ -190,7 +193,8 @@ bool vnl_math_isfinite(long double x) { return finite(x) != 0; }
 // Assume IEEE floating point number representation
 bool vnl_math_isfinite(float x) { return !bMe(&x,0x7f800000L,sz_f) && bMp(&x,0x7fffffffL,sz_f) != 0x7f7fffffL; }
 bool vnl_math_isfinite(double x) { return !bMe(&x,0x7ff00000L,sz_d); }
-bool vnl_math_isfinite(long double x) {
+bool vnl_math_isfinite(long double x)
+{
   if (sizeof(long double) == 8) return !bMe(&x,0x7ff00000L,sz_l);
   else if (sizeof(long double) <= 12) return !bMe(&x,0xbfff7fffL,sz_l) && !bMe(&x,0x4001ffffL,sz_l);
   else return !bMe(&x,0x7ff70000L,sz_l);
@@ -216,7 +220,8 @@ bool vnl_math_isinf(long double x) { return !finite(x) && !isnan(x); }
 // Assume IEEE floating point number representation
 bool vnl_math_isinf(float x) {return(bMe(&x,0x7f800000L,sz_f)&&!bMp(&x,0x007fffffL,sz_f))||bMp(&x,0x7fffffffL,sz_f)==0x7f7fffffL;}
 bool vnl_math_isinf(double x) { return bMe(&x,0x7ff00000L,sz_d) && !bMp(&x,0x000fffffL,sz_d); }
-bool vnl_math_isinf(long double x) {
+bool vnl_math_isinf(long double x)
+{
   if (sizeof(long double) == 8) return bMe(&x,0x7ff00000L,sz_l) && !bMp(&x,0x000fffffL,sz_l);
   else if (sizeof(long double) <= 12) return (bMe(&x,0xbfff7fffL,sz_l)||bMe(&x,0x4001ffffL,sz_l))&&!bMp(&x,0x40000000,sz_l-4);
   else return bMe(&x,0x7ff70000L,sz_l) && !bMp(&x,0x0008ffffL,sz_l);

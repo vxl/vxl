@@ -18,6 +18,7 @@ void vsl_b_write(vsl_b_ostream &os, vgl_polygon<T> const& p)
             vsl_b_write(os, p[i][j]);
     }
 }
+
 template void vsl_b_write(vsl_b_ostream&, vgl_polygon<float> const&);
 template void vsl_b_write(vsl_b_ostream&, vgl_polygon<double> const&);
 
@@ -30,27 +31,27 @@ void vsl_b_read(vsl_b_istream &is, vgl_polygon<T> & p)
 
   short v;
   vsl_b_read(is, v);
-  switch(v)
+  switch (v)
   {
-  case 1:
+   case 1:
     unsigned int num_sheets;
     vsl_b_read(is, num_sheets);
     p.clear();
     for (unsigned int i=0;i<num_sheets;i++)
     {
-        p.new_sheet();
-        int npoints;
-        vsl_b_read(is, npoints);
-        vgl_point_2d<T> point;
-        for (int j=0;j<npoints;j++)
-        {
-            vsl_b_read(is, point);
-            p.push_back(point);
-        }
+      p.new_sheet();
+      int npoints;
+      vsl_b_read(is, npoints);
+      vgl_point_2d<T> point;
+      for (int j=0;j<npoints;j++)
+      {
+        vsl_b_read(is, point);
+        p.push_back(point);
+      }
     }
     break;
 
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_polygon<T>&)\n"
              << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream

@@ -41,31 +41,30 @@ class vgui_shell_tableau_bindings
  public:
   //:
   vgui_shell_tableau_bindings()
-    : quit( default_quit ), close( default_close ), graph( default_graph )
-    { }
+    : quit( default_quit ), close( default_close ), graph( default_graph ) {}
 
   //:
   vgui_shell_tableau_bindings& set_quit( vgui_event_condition cond )
-    { quit = cond; return *this; }
+  { quit = cond; return *this; }
 
   //:
   vgui_shell_tableau_bindings& set_close( vgui_event_condition cond )
-    { close = cond; return *this; }
+  { close = cond; return *this; }
 
   vgui_shell_tableau_bindings& set_graph( vgui_event_condition cond )
-    { graph = cond; return *this; }
+  { graph = cond; return *this; }
 
   //:
   static void set_default_quit( vgui_event_condition cond )
-    { default_quit = cond; }
+  { default_quit = cond; }
 
   //:
   static void set_default_close( vgui_event_condition cond )
-    { default_close = cond; }
+  { default_close = cond; }
 
   //:
   static void set_default_graph( vgui_event_condition cond )
-    { default_graph = cond; }
+  { default_graph = cond; }
 
   vgui_event_condition quit;
   vgui_event_condition close;

@@ -20,8 +20,8 @@
 
 const bool debug = 0;
 
-static
-struct {
+static struct
+{
   char const * image_dir;
   char const * extension;
 } dir_ext_pairs[] = { {"pgm/",".pgm"},
@@ -78,6 +78,7 @@ vcl_string vul_sequence_filename_map::pair_name (int i, int j)
   vcl_string index_str = vul_sprintf((index_format_ + "." + index_format_).c_str(), indices_[i], indices_[j]);
   return basename_ + index_str;
 }
+
 vcl_string vul_sequence_filename_map::triplet_name (int i, int j, int k)
 {
   vcl_string index_str = vul_sprintf((index_format_ + "." +

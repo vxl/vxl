@@ -45,11 +45,11 @@ vidl_clip::vidl_clip(
   vidl_image_list_codec_sptr codec = new vidl_image_list_codec(images);
 
   for (vcl_vector<vil_image_resource_sptr>::iterator i=images.begin(); i!= images.end(); ++i)
-    {
-      vidl_frame_sptr f = new vidl_frame(position, codec.ptr());
-      frames_.push_back(f);
-      position++;
-    }
+  {
+    vidl_frame_sptr f = new vidl_frame(position, codec.ptr());
+    frames_.push_back(f);
+    position++;
+  }
 
   coder_ = codec.ptr();
 
@@ -57,23 +57,21 @@ vidl_clip::vidl_clip(
 }
 
 //: Constructor. Create a clip from a list of images. Start, end and increment frames are optional.
-vidl_clip::vidl_clip(
-                     vcl_list<vil_image_resource_sptr> &images,
+vidl_clip::vidl_clip(vcl_list<vil_image_resource_sptr> &images,
                      int start,
                      int end,
-                     int increment
-                    )
+                     int increment)
 {
   int position = 0; // Could not cast the iterator i into (int)
                     // but that would be better
   vidl_image_list_codec_sptr codec = new vidl_image_list_codec(images);
 
   for (vcl_list<vil_image_resource_sptr>::iterator i=images.begin(); i!= images.end(); ++i)
-    {
-      vidl_frame_sptr f = new vidl_frame(position, codec.ptr());
-      frames_.push_back(f);
-      position++;
-    }
+  {
+    vidl_frame_sptr f = new vidl_frame(position, codec.ptr());
+    frames_.push_back(f);
+    position++;
+  }
 
   coder_ = codec.ptr();
 
@@ -125,10 +123,10 @@ vidl_frame_sptr vidl_clip::get_frame(int n)
 {
   // Check that the asked frame is in the clip
   if (n>=length() || n < 0)
-    {
-      vcl_cerr << "vidl_clip::get_frame Frame number " << n << " does not exist." << vcl_endl;
-      return 0;
-    }
+  {
+    vcl_cerr << "vidl_clip::get_frame Frame number " << n << " does not exist.\n";
+    return 0;
+  }
 
   // return the frame
   return frames_[startframe_+n*increment_];
@@ -151,4 +149,3 @@ int vidl_clip::height() const
 //: Return the codec.
 vidl_codec_sptr vidl_clip::get_codec()
 { return coder_; }
-

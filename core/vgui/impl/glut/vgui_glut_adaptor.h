@@ -38,7 +38,7 @@ struct vgui_glut_adaptor : vgui_adaptor
   unsigned get_height() const;
 
   void get_popup_bindings(vgui_modifier &m, vgui_button &b) const
-    { m = popup_modifier; b = popup_button; }
+  { m = popup_modifier; b = popup_button; }
 
  private:
   int id;

@@ -450,7 +450,8 @@ void vil_nitf_image_subheader::Copy (const vil_nitf_image_subheader* h)
     FilledCopy (IC, h->IC);
     FilledCopy (COMRAT, h->COMRAT);
 
-    if (version_.length() == 0 || h->NBANDS < 1) {
+    if (version_.length() == 0 || h->NBANDS < 1)
+    {
         unsigned int i;
         for (i = 0; i < NBANDS; i++) {
             if (bands[i]) {
@@ -468,7 +469,8 @@ void vil_nitf_image_subheader::Copy (const vil_nitf_image_subheader* h)
         delete [] bands;
         bands = 0;
     }
-    else {
+    else
+    {
         vil_nitf_image_subheader_band** newbands = new vil_nitf_image_subheader_band*[h->NBANDS];
 
         // Copy over h->NBANDS of the existing vil_nitf_image_subheader_band structs.
@@ -485,8 +487,8 @@ void vil_nitf_image_subheader::Copy (const vil_nitf_image_subheader* h)
         }
         // Free up any structures we are not reusing...
         //
-        for (; j < NBANDS; j++) {
-
+        for (; j < NBANDS; j++)
+        {
             if (!bands[j]) continue;
             delete []bands[j]->ITYPE;
             delete []bands[j]->IFC;
@@ -503,7 +505,7 @@ void vil_nitf_image_subheader::Copy (const vil_nitf_image_subheader* h)
         NBANDS = h->NBANDS;
         bands  = newbands;
         for (i=0; i<NBANDS; i++)
-            {
+        {
             vil_nitf_image_subheader_band* band = newbands[i];
             if (h->bands[i]==0 || band==0) continue;
 
@@ -515,7 +517,8 @@ void vil_nitf_image_subheader::Copy (const vil_nitf_image_subheader* h)
                 delete []band->LUTD[j];
             delete []band->LUTD;
             band->LUTD = 0;
-            if (h->bands[i]->NLUTS>0 && h->bands[i]->NELUT>0) {
+            if (h->bands[i]->NLUTS>0 && h->bands[i]->NELUT>0)
+            {
                 band->NLUTS = h->bands[i]->NLUTS;
                 band->NELUT = h->bands[i]->NELUT;
                 band->LUTD  = new unsigned char*[band->NLUTS];
@@ -525,11 +528,11 @@ void vil_nitf_image_subheader::Copy (const vil_nitf_image_subheader* h)
                 }
             }
             else
-                {
+            {
                 band->NLUTS = band->NELUT = 0;
-                }
             }
         }
+    }
 
     NBPR   = h->NBPR;
     NBPC   = h->NBPC;
@@ -852,8 +855,8 @@ bool vil_nitf_image_subheader::get_rational_camera_data(
 
   // Before diving in whole-hog, check if the RPC data is valid.
 
-  if (this->RPC_present == false) {
-
+  if (this->RPC_present == false)
+  {
       vcl_string err_msg = "RPC data not present for this image.";
 
 #ifdef WITH_SAR_RPC_EXTRACT
@@ -901,8 +904,8 @@ bool vil_nitf_image_subheader::get_rational_camera_data(
   // [where X is longitude, Y is latitude, Z is height]
   //
 
-  if (this->RPC_present == true) {
-
+  if (this->RPC_present == true)
+  {
       // this maps from NITF RPC00A order to CARMEN order
       int NITF_index_RPC00A[20] = { 11 , 12 , 13 ,  8 , 14 , 7 ,  4 , 17 , 5 , 1 ,
                                     15 , 16 ,  9 , 18 ,  6 , 2 , 19 , 10 , 3 , 0 };
@@ -912,21 +915,22 @@ bool vil_nitf_image_subheader::get_rational_camera_data(
                                     15 , 18 ,  8 , 16 ,  6 , 2 , 19 ,  9 , 3 , 0 };
 
       int* NITF_index; // Point this to the right indexing array for the tag (A/B)
-      switch (RPC_TYPE) {
-      case RPC00A:
+      switch (RPC_TYPE)
+      {
+       case RPC00A:
         NITF_index = NITF_index_RPC00A;
         if (debug_level > 1) {
           vcl_cout << "Switching to RPC00A mode\n";
         }
         break;
-      case RPC00B:
+       case RPC00B:
         NITF_index = NITF_index_RPC00B;
         if (debug_level > 1) {
           vcl_cout << "Switching to RPC00B mode\n";
         }
         break;
-      case UNDEFINED:
-      default:
+       case UNDEFINED:
+       default:
         // Should NEVER get here!
         vcl_cout << "UNKNOWN RPC tag present in this image!\n"
                  << "RPC_TYPE = " << RPC_TYPE << vcl_endl
@@ -935,8 +939,8 @@ bool vil_nitf_image_subheader::get_rational_camera_data(
       }
 
       // Copy (and scramble) all four polynomials.
-      for (int index = 0; index < 20; index++) {
-
+      for (int index = 0; index < 20; index++)
+      {
           samp_num[index] = this->SAMP_NUM[NITF_index[index]];
           samp_denom[index] = this->SAMP_DEN[NITF_index[index]];
           line_num[index] = this->LINE_NUM[NITF_index[index]];
@@ -1207,8 +1211,8 @@ void vil_nitf_image_subheader::display_size_attributes (vcl_string caller) const
     unsigned long image_size = this->NCOLS * this->NROWS * bytes_per_pixel * this->NBANDS;
     vcl_cout << "calculated image data size using NCOLS X NROWS X bytes_per_pixel X NBANDS = "
              << image_size << vcl_endl;
-    if (image_size != this->get_data_length()) {
-
+    if (image_size != this->get_data_length())
+    {
         long diff = (long)image_size - (long)this->get_data_length();
         vcl_cout << "WARNING: calculated image size using pixels != image size in header.\n"
                  << "Difference = " << diff << vcl_endl;
@@ -1218,8 +1222,8 @@ void vil_nitf_image_subheader::display_size_attributes (vcl_string caller) const
     }
 
     // CHECK IMAGE SIZE = bytes per block X blocks per row X blocks per column X NBANDS
-    if ((this->NBPR > 0) || (this->NBPC > 0)) {
-
+    if ((this->NBPR > 0) || (this->NBPC > 0))
+    {
       unsigned long bytes_per_block = NPPBH * NPPBV * bytes_per_pixel;
       image_size = bytes_per_block * NBPR * NBPC;
 

@@ -34,8 +34,8 @@ inline T vil_greyscale_dilate(const vil_image_view<T>& image, unsigned plane,
     unsigned int j = j0+element.p_j()[k];
     if (i<image.ni() && j<image.nj())
     {
-      if  (first || image(i,j,plane) > max_v)
-        { max_v=image(i,j,plane); first=false; }
+      if  (first || image(i,j,plane) > max_v) {
+        max_v=image(i,j,plane); first=false; }
     }
   }
   return max_v;

@@ -79,6 +79,7 @@ double copy(vil1_memory_image_of<T>& image, int n_loops, bool print)
   vcl_time_t t1=vcl_clock();
   return 1000000*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC);
 }
+
 template <class T>
 double force_to_rgb_byte(vil_image_view<T>& image, int n_loops, bool print)
 {
@@ -198,11 +199,11 @@ double method(int i, imT& image, int n_loops, bool print)
   double t;
   switch (i)
   {
-    case 1 : t=fill(image,n_loops, print); break;
-    case 2 : t=copy(image,n_loops, print); break;
-    case 3 : t=conv1d(image,n_loops, print); break;
-    case 4 : t=force_to_rgb_byte(image,n_loops, print); break;
-    default: t=-1;
+   case 1 : t=fill(image,n_loops, print); break;
+   case 2 : t=copy(image,n_loops, print); break;
+   case 3 : t=conv1d(image,n_loops, print); break;
+   case 4 : t=force_to_rgb_byte(image,n_loops, print); break;
+   default: t=-1;
   }
   return t;
 }

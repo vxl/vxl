@@ -52,19 +52,19 @@ vgui_gtk2_adaptor::vgui_gtk2_adaptor(vgui_gtk2_window* win)
                                                                      GDK_GL_MODE_DEPTH |
                                                                      GDK_GL_MODE_DOUBLE));
   if (glconfig == 0)
-    {
-      g_print ("*** Cannot find the double-buffered visual.\n");
-      g_print ("*** Trying single-buffered visual.\n");
+  {
+    g_print ("*** Cannot find the double-buffered visual.\n");
+    g_print ("*** Trying single-buffered visual.\n");
 
-      // Try single-buffered visual
-      glconfig = gdk_gl_config_new_by_mode (GdkGLConfigMode(GDK_GL_MODE_RGB |
-                                                            GDK_GL_MODE_DEPTH));
-      if (glconfig == 0)
-      {
-        g_print ("*** No appropriate OpenGL-capable visual found.\n");
-          vcl_abort();
-      }
+    // Try single-buffered visual
+    glconfig = gdk_gl_config_new_by_mode(GdkGLConfigMode(GDK_GL_MODE_RGB |
+                                                         GDK_GL_MODE_DEPTH));
+    if (glconfig == 0)
+    {
+      g_print ("*** No appropriate OpenGL-capable visual found.\n");
+      vcl_abort();
     }
+  }
 
   widget = gtk_drawing_area_new ();
   //gtk_widget_set_size_request (drawing_area, 300, 300);
@@ -76,11 +76,11 @@ vgui_gtk2_adaptor::vgui_gtk2_adaptor(vgui_gtk2_window* win)
   }
 
   // Set OpenGL-capability to the widget.
-  if ( !gtk_widget_set_gl_capability (widget,
-                                      glconfig,
-                                      0 /*NULL*/,
-                                      TRUE,
-                                      GDK_GL_RGBA_TYPE) )
+  if ( !gtk_widget_set_gl_capability(widget,
+                                     glconfig,
+                                     0 /*NULL*/,
+                                     TRUE,
+                                     GDK_GL_RGBA_TYPE) )
   {
     vcl_cerr << __FILE__ << " : Could not set GL capability!\n";
     vcl_abort();
@@ -92,15 +92,15 @@ vgui_gtk2_adaptor::vgui_gtk2_adaptor(vgui_gtk2_window* win)
   gtk_object_ref( GTK_OBJECT(widget) );
 
   gtk_widget_set_events(widget,
-                         GDK_EXPOSURE_MASK |
-                         GDK_POINTER_MOTION_MASK |
-                         GDK_POINTER_MOTION_HINT_MASK |
-                         GDK_BUTTON_PRESS_MASK |
-                         GDK_BUTTON_RELEASE_MASK |
-                         GDK_KEY_PRESS_MASK |
-                         GDK_KEY_RELEASE_MASK |
-                         GDK_ENTER_NOTIFY_MASK |
-                         GDK_LEAVE_NOTIFY_MASK);
+                        GDK_EXPOSURE_MASK |
+                        GDK_POINTER_MOTION_MASK |
+                        GDK_POINTER_MOTION_HINT_MASK |
+                        GDK_BUTTON_PRESS_MASK |
+                        GDK_BUTTON_RELEASE_MASK |
+                        GDK_KEY_PRESS_MASK |
+                        GDK_KEY_RELEASE_MASK |
+                        GDK_ENTER_NOTIFY_MASK |
+                        GDK_LEAVE_NOTIFY_MASK);
 
   gtk_signal_connect(GTK_OBJECT(widget), "event", GTK_SIGNAL_FUNC(handle), this);
 
@@ -197,8 +197,8 @@ vgui_menu vgui_gtk2_adaptor::get_popup()
 }
 
 gint vgui_gtk2_adaptor::handle(GtkWidget *widget,
-                              GdkEvent *gev,
-                              gpointer context)
+                               GdkEvent *gev,
+                               gpointer context)
 {
   vgui_gtk2_adaptor* adaptor = (vgui_gtk2_adaptor*) context;
 

@@ -271,12 +271,12 @@ void vil_viff_freeimage(struct vil_viff_xvimage *image)
            id1 = image->identifier;
            id2 = XV_FILE_MAGIC_NUM;
            if (id1 != id2)
-             {
-               fprintf(stderr, "vil_viff_freeimage: Attempt to free an object that is not a VIFF image.\n");
-               fprintf(stderr, "vil_viff_freeimage: Object may be a VIFF image that has already been free'd.\n");
-               fprintf(stderr, "vil_viff_freeimage: Attempt aborted.\n");
-               return;
-             }
+           {
+             fprintf(stderr, "vil_viff_freeimage: Attempt to free an object that is not a VIFF image.\n");
+             fprintf(stderr, "vil_viff_freeimage: Object may be a VIFF image that has already been free'd.\n");
+             fprintf(stderr, "vil_viff_freeimage: Attempt aborted.\n");
+             return;
+           }
 
            /*  free image data */
            if (image->imagedata != NULL && (image->row_size *
@@ -301,19 +301,17 @@ void vil_viff_freeimage(struct vil_viff_xvimage *image)
 static vxl_uint_32 vil_viff_getmachsize(vxl_uint_32 mtype,vxl_uint_32 dtype)
 {
    vxl_uint_32 tmp = (mtype==VFF_DEP_CRAYORDER) + 1;
-   switch(dtype){
-      case VFF_TYP_BIT     : return (vxl_uint_32)0;
-      case VFF_TYP_1_BYTE  : return (vxl_uint_32)1;
-      case VFF_TYP_2_BYTE  : if (mtype==VFF_DEP_CRAYORDER)
-                                return (vxl_uint_32)8;
-                             else
-                                return (vxl_uint_32)2;
-      case VFF_TYP_4_BYTE  : return (vxl_uint_32)4*tmp;
-      case VFF_TYP_FLOAT   : return (vxl_uint_32)4*tmp;
-      case VFF_TYP_DOUBLE  : return (vxl_uint_32)8;
-      case VFF_TYP_COMPLEX : return (vxl_uint_32)8*tmp;
-      case VFF_TYP_DCOMPLEX: return (vxl_uint_32)16;
-      default: return (vxl_uint_32)255;
+   switch (dtype)
+   {
+    case VFF_TYP_BIT     : return (vxl_uint_32)0;
+    case VFF_TYP_1_BYTE  : return (vxl_uint_32)1;
+    case VFF_TYP_2_BYTE  : return mtype==VFF_DEP_CRAYORDER ? (vxl_uint_32)8 : (vxl_uint_32)2;
+    case VFF_TYP_4_BYTE  : return (vxl_uint_32)4*tmp;
+    case VFF_TYP_FLOAT   : return (vxl_uint_32)4*tmp;
+    case VFF_TYP_DOUBLE  : return (vxl_uint_32)8;
+    case VFF_TYP_COMPLEX : return (vxl_uint_32)8*tmp;
+    case VFF_TYP_DCOMPLEX: return (vxl_uint_32)16;
+    default:               return (vxl_uint_32)255;
    }
 }
 
@@ -366,33 +364,23 @@ int vil_viff_imagesize(struct vil_viff_xvimage *image,int *dsize, int *dcount, i
     /*
     ** Compute number of MAP data objects
     */
-    switch(image->map_scheme)
-      {
-        case VFF_MS_NONE:
-          mapcount = 0;
-          break;
-        case VFF_MS_ONEPERBAND:
-        case VFF_MS_CYCLE:
-          mapcount = image->num_data_bands*image->map_row_size*image->map_col_size;
-          break;
-        case VFF_MS_SHARED:
-        case VFF_MS_GROUP:
-          mapcount = image->map_row_size*image->map_col_size;
-          break;
-        default:
-          fprintf(stderr,"\nvil_viff_imagesize: Unknown mapping scheme:");
-          fprintf(stderr," %u\n",image->map_scheme);
-          return 0;
-          /* break; */
-      }
+    switch (image->map_scheme)
+    {
+     case VFF_MS_NONE: mapcount = 0; break;
+     case VFF_MS_ONEPERBAND:
+     case VFF_MS_CYCLE: mapcount = image->num_data_bands*image->map_row_size*image->map_col_size; break;
+     case VFF_MS_SHARED:
+     case VFF_MS_GROUP: mapcount = image->map_row_size*image->map_col_size; break;
+     default: fprintf(stderr,"\nvil_viff_imagesize: Unknown mapping scheme: %u\n",image->map_scheme); return 0;
+    }
 
     /*
     ** mapcount now contains the number of CELLS, so convert to bytes
     */
     if (image->map_storage_type==VFF_MAPTYP_NONE)
-       mapsize = 0;
+      mapsize = 0;
     else
-       mapsize = mapcount*vil_viff_getmachsize(mach, image->map_storage_type);
+      mapsize = mapcount*vil_viff_getmachsize(mach, image->map_storage_type);
 
     /*
     ** Compute size of LOCATION data in bytes and floats

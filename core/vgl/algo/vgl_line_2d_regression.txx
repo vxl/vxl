@@ -62,10 +62,10 @@ template <class T>
 bool vgl_line_2d_regression<T>::fit()
 {
   if (npts_<2)
-    {
-      vcl_cout << "In vgl_line_2d_regression<T>::fit() - less than 2 points\n";
-      return false;
-    }
+  {
+    vcl_cout << "In vgl_line_2d_regression<T>::fit() - less than 2 points\n";
+    return false;
+  }
   vnl_matrix_fixed<T, 2, 2> M;
   M(0, 0) = Sxx_-Sx_*Sx_/npts_;
   M(0, 1) = M(1, 0) = Sxy_-Sx_*Sy_/npts_;
@@ -84,10 +84,10 @@ template <class T>
 bool vgl_line_2d_regression<T>::fit_constrained(T x, T y)
 {
   if (npts_<1)
-    {
-      vcl_cout << "In vgl_line_2d_regression<T>::fit_constrained() - less than 1 point\n";
-      return false;
-    }
+  {
+    vcl_cout << "In vgl_line_2d_regression<T>::fit_constrained() - less than 1 point\n";
+    return false;
+  }
   vnl_matrix_fixed<T, 2, 2> M;
   M(0, 0) = Sxx_-2*Sx_*x +npts_*x*x;
   M(0, 1) = M(1, 0) = Sxy_-Sx_*y-x*Sy_+npts_*x*y;

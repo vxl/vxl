@@ -568,7 +568,7 @@ inline void vil_math_integral_image(const vil_image_view<aT>& imA,
   sumT* rowS     = im_sum.top_left_ptr();
   sumT* pixelS = rowS;
   for (unsigned i=0;i<ni1;++i,pixelS+=istepS)
-    { *pixelS=0; }
+    *pixelS=0;
 
   // Now sum from original image (imA)
   vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep();
@@ -623,12 +623,12 @@ inline void vil_math_integral_sqr_image(const vil_image_view<aT>& imA,
   // im_sum
   sumT* pixelS = rowS;
   for (unsigned i=0;i<ni1;++i,pixelS+=istepS)
-    { *pixelS=0; }
+    *pixelS=0;
 
   // im_sum_sq
   sumT* pixelS2 = rowS2;
   for (unsigned i=0;i<ni1;++i,pixelS2+=istepS2)
-    { *pixelS2=0; }
+    *pixelS2=0;
 
   // Now sum from original image (imA)
   vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep();

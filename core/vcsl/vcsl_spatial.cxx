@@ -160,40 +160,40 @@ bool vcsl_spatial::recursive_path_from_local_to_cs_exists(const vcsl_spatial_spt
 
   // If 'this' has no parent or its parent is not 'other':
   if (!result)
+  {
+    // Check if 'other' can be reached through parent
+    if (!is_absolute(time)) // if 'this' has a parent
+      // If parent has not already been checked
+      if (!parent_[i]->reached())
+        // Check if 'other' can be reached from it
+        result=parent_[i]->recursive_path_from_local_to_cs_exists(other, time);
+    // If 'other' not found, check if 'other' can be reached through children of 'this'
+    if (!result)
     {
-      // Check if 'other' can be reached through parent
-      if (!is_absolute(time)) // if 'this' has a parent
-        // If parent has not already been checked
-        if (!parent_[i]->reached())
-          // Check if 'other' can be reached from it
-          result=parent_[i]->recursive_path_from_local_to_cs_exists(other, time);
-      // If 'other' not found, check if 'other' can be reached through children of 'this'
-      if (!result)
+      if (potential_children_.size()!=0)
+      {
+        for (child=potential_children_.begin();
+             !result && child!=potential_children_.end();
+             ++child)
         {
-          if (potential_children_.size()!=0)
-            {
-              for (child=potential_children_.begin();
-                   !result && child!=potential_children_.end();
-                  ++child)
-                {
-                  result=!(*child)->reached();
-                  if (result)
-                    {
-                      int j=(*child)->matching_interval(time);
-                      result=(*child)->parent_[j].ptr()==this;
-                      if (result)
-                        result=(*child)->motion_[j]->is_invertible(time);
-                    }
-                  if (result)
-                    {
-                      result=(*child)==other;
-                      if (!result)
-                        result=(*child)->recursive_path_from_local_to_cs_exists(other, time);
-                    }
-                }
-            }
+          result=!(*child)->reached();
+          if (result)
+          {
+            int j=(*child)->matching_interval(time);
+            result=(*child)->parent_[j].ptr()==this;
+            if (result)
+              result=(*child)->motion_[j]->is_invertible(time);
+          }
+          if (result)
+          {
+            result=(*child)==other;
+            if (!result)
+              result=(*child)->recursive_path_from_local_to_cs_exists(other, time);
+          }
         }
+      }
     }
+  }
   return result;
 }
 
@@ -314,11 +314,11 @@ bool vcsl_spatial::is_absolute(double time) const
   if (parent_.size()==0)
     return true;
   else
-    {
-      // If parent at given interval is NULL, 'this' must be absolute
-      int i=matching_interval(time);
-      return parent_[i].ptr()==0;
-    }
+  {
+    // If parent at given interval is NULL, 'this' must be absolute
+    int i=matching_interval(time);
+    return parent_[i].ptr()==0;
+  }
 }
 
 //---------------------------------------------------------------------------
@@ -347,12 +347,12 @@ vcsl_spatial::from_local_to_cs(const vnl_vector<double> &v,
   j=sens.begin();
 
   for (i=path.begin();i!=path.end();++i,++j)
-    {
-      if (*j)
-        tmp=(*i)->inverse(tmp,time);
-      else
-        tmp=(*i)->execute(tmp,time);
-    }
+  {
+    if (*j)
+      tmp=(*i)->inverse(tmp,time);
+    else
+      tmp=(*i)->execute(tmp,time);
+  }
   return other->from_standard_units_to_cs(tmp);
 }
 

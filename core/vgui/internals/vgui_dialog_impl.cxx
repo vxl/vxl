@@ -37,7 +37,8 @@ vgui_dialog_impl::~vgui_dialog_impl()
 
 //------------------------------------------------------------------------------
 //: Add a boolean field to the dialog box.
-void vgui_dialog_impl::bool_field(const char* txt, bool& val) {
+void vgui_dialog_impl::bool_field(const char* txt, bool& val)
+{
   vgui_bool_field *field = new vgui_bool_field(txt, val);
 
   element l;
@@ -50,7 +51,8 @@ void vgui_dialog_impl::bool_field(const char* txt, bool& val) {
 
 //------------------------------------------------------------------------------
 //: Add an integer field to the dialog box.
-void vgui_dialog_impl::int_field(const char* txt, int& val) {
+void vgui_dialog_impl::int_field(const char* txt, int& val)
+{
   vgui_int_field *field = new vgui_int_field(txt, val);
 
   element l;
@@ -63,7 +65,8 @@ void vgui_dialog_impl::int_field(const char* txt, int& val) {
 
 //------------------------------------------------------------------------------
 //: Add a long field to the dialog box.
-void vgui_dialog_impl::long_field(const char* txt, long& val) {
+void vgui_dialog_impl::long_field(const char* txt, long& val)
+{
   vgui_long_field *field = new vgui_long_field(txt, val);
 
   element l;
@@ -76,7 +79,8 @@ void vgui_dialog_impl::long_field(const char* txt, long& val) {
 
 //------------------------------------------------------------------------------
 //: Add a float field to the dialog box.
-void vgui_dialog_impl::float_field(const char* txt, float& val) {
+void vgui_dialog_impl::float_field(const char* txt, float& val)
+{
   vgui_float_field *field = new vgui_float_field(txt, val);
 
   element l;
@@ -89,7 +93,8 @@ void vgui_dialog_impl::float_field(const char* txt, float& val) {
 
 //------------------------------------------------------------------------------
 //: Add a double field to the dialog box.
-void vgui_dialog_impl::double_field(const char* txt, double& val) {
+void vgui_dialog_impl::double_field(const char* txt, double& val)
+{
   vgui_double_field *field = new vgui_double_field(txt, val);
 
   element l;
@@ -102,8 +107,8 @@ void vgui_dialog_impl::double_field(const char* txt, double& val) {
 
 //------------------------------------------------------------------------------
 //: Add a vcl_string field to the dialog box.
-void vgui_dialog_impl::string_field(const char* txt, vcl_string& val) {
-
+void vgui_dialog_impl::string_field(const char* txt, vcl_string& val)
+{
   vgui_string_field *field = new vgui_string_field(txt, val);
 
   element l;
@@ -166,7 +171,8 @@ void vgui_dialog_impl::color_chooser(const char* txt, vcl_string& val)
   elements.push_back(l);
 }
 
-void vgui_dialog_impl::inline_color_chooser(const char* txt, vcl_string& val) {
+void vgui_dialog_impl::inline_color_chooser(const char* txt, vcl_string& val)
+{
   vgui_string_field *field = new vgui_string_field(txt, val);
 
   element l;
@@ -207,51 +213,26 @@ void vgui_dialog_impl::text_message(const char* txt)
   elements.push_back(l);
 }
 
-void* vgui_dialog_impl::bool_field_widget(const char*, bool&) {
-  return 0;
-}
-void* vgui_dialog_impl::int_field_widget(const char*, int&) {
-  return 0;
-}
-void* vgui_dialog_impl::long_field_widget(const char*, long&) {
-  return 0;
-}
-void* vgui_dialog_impl::float_field_widget(const char*, float&) {
-  return 0;
-}
-void* vgui_dialog_impl::double_field_widget(const char*, double&) {
-  return 0;
-}
-void* vgui_dialog_impl::string_field_widget(const char*, vcl_string&) {
-  return 0;
-}
-void* vgui_dialog_impl::choice_field_widget(const char*, const vcl_vector<vcl_string>&, int&) {
-  return 0;
-}
-void* vgui_dialog_impl::text_message_widget(const char*) {
-  return 0;
-}
-void* vgui_dialog_impl::file_browser_widget(const char*, vcl_string&, vcl_string&) {
-  return 0;
-}
-void* vgui_dialog_impl::inline_file_browser_widget(const char*, vcl_string&, vcl_string&) {
-  return 0;
-}
-void* vgui_dialog_impl::color_chooser_widget(const char* txt, vcl_string& val) {
-  return string_field_widget(txt, val);
-}
-void* vgui_dialog_impl::inline_color_chooser_widget(const char* txt, vcl_string& val) {
-  return string_field_widget(txt, val);
-}
-void* vgui_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr /*tab*/, unsigned /*width*/, unsigned /*height*/) {
-  return 0;
-}
+void* vgui_dialog_impl::bool_field_widget(const char*, bool&) { return 0; }
+void* vgui_dialog_impl::int_field_widget(const char*, int&) { return 0; }
+void* vgui_dialog_impl::long_field_widget(const char*, long&) { return 0; }
+void* vgui_dialog_impl::float_field_widget(const char*, float&) { return 0; }
+void* vgui_dialog_impl::double_field_widget(const char*, double&) { return 0; }
+void* vgui_dialog_impl::string_field_widget(const char*, vcl_string&) { return 0; }
+void* vgui_dialog_impl::choice_field_widget(const char*, const vcl_vector<vcl_string>&, int&) { return 0; }
+void* vgui_dialog_impl::text_message_widget(const char*) { return 0; }
+void* vgui_dialog_impl::file_browser_widget(const char*, vcl_string&, vcl_string&) { return 0; }
+void* vgui_dialog_impl::inline_file_browser_widget(const char*, vcl_string&, vcl_string&) { return 0; }
+void* vgui_dialog_impl::color_chooser_widget(const char* txt, vcl_string& val) { return string_field_widget(txt, val); }
+void* vgui_dialog_impl::inline_color_chooser_widget(const char* txt, vcl_string& val) { return string_field_widget(txt, val); }
+void* vgui_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr, unsigned /*width*/, unsigned /*height*/) { return 0; }
 
 //------------------------------------------------------------------------------
 //: Changes the modality of the dialog.  True makes the dialog modal
 // (i.e. the dialog 'grabs' all events), this is the default.
 // False makes the dialog non-modal.
-void vgui_dialog_impl::modal(const bool) {
+void vgui_dialog_impl::modal(const bool)
+{
   vcl_cerr << "No function defined to change dialog modality, by default dialogs are modal\n";
 }
 

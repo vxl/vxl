@@ -297,34 +297,42 @@ inline vnl_bignum operator*(vnl_bignum const& r1, vnl_bignum const& r2)
 {
   vnl_bignum result(r1); return result *= r2;
 }
+
 inline vnl_bignum operator*(vnl_bignum const& r1, long r2)
 {
   vnl_bignum result(r1); return result *= vnl_bignum(r2);
 }
+
 inline vnl_bignum operator*(vnl_bignum const& r1, int r2)
 {
   vnl_bignum result(r1); return result *= (long)r2;
 }
+
 inline vnl_bignum operator*(vnl_bignum const& r1, double r2)
 {
   vnl_bignum result(r1); return result *= (vnl_bignum)r2;
 }
+
 inline vnl_bignum operator*(vnl_bignum const& r1, long double r2)
 {
   vnl_bignum result(r1); return result *= (vnl_bignum)r2;
 }
+
 inline vnl_bignum operator*(long r2, vnl_bignum const& r1)
 {
   vnl_bignum result(r1); return result *= r2;
 }
+
 inline vnl_bignum operator*(int r2, vnl_bignum const& r1)
 {
   vnl_bignum result(r1); return result *= (long)r2;
 }
+
 inline vnl_bignum operator*(double r2, vnl_bignum const& r1)
 {
   vnl_bignum result(r1); return result *= (vnl_bignum)r2;
 }
+
 inline vnl_bignum operator*(long double r2, vnl_bignum const& r1)
 {
   vnl_bignum result(r1); return result *= (vnl_bignum)r2;
@@ -336,34 +344,42 @@ inline vnl_bignum operator/(vnl_bignum const& r1, vnl_bignum const& r2)
 {
   vnl_bignum result(r1); return result /= r2;
 }
+
 inline vnl_bignum operator/(vnl_bignum const& r1, long r2)
 {
   vnl_bignum result(r1); return result /= r2;
 }
+
 inline vnl_bignum operator/(vnl_bignum const& r1, int r2)
 {
   vnl_bignum result(r1); return result /= (long)r2;
 }
+
 inline vnl_bignum operator/(vnl_bignum const& r1, double r2)
 {
   vnl_bignum result(r1); return result /= (vnl_bignum)r2;
 }
+
 inline vnl_bignum operator/(vnl_bignum const& r1, long double r2)
 {
   vnl_bignum result(r1); return result /= (vnl_bignum)r2;
 }
+
 inline vnl_bignum operator/(long r1, vnl_bignum const& r2)
 {
   vnl_bignum result(r1); return result /= r2;
 }
+
 inline vnl_bignum operator/(int r1, vnl_bignum const& r2)
 {
   vnl_bignum result((long)r1); return result /= r2;
 }
+
 inline vnl_bignum operator/(double r1, vnl_bignum const& r2)
 {
   vnl_bignum result(r1); return result /= r2;
 }
+
 inline vnl_bignum operator/(long double r1, vnl_bignum const& r2)
 {
   vnl_bignum result(r1); return result /= r2;
@@ -375,18 +391,22 @@ inline vnl_bignum operator%(vnl_bignum const& r1, vnl_bignum const& r2)
 {
   vnl_bignum result(r1); return result %= r2;
 }
+
 inline vnl_bignum operator%(vnl_bignum const& r1, long r2)
 {
   vnl_bignum result(r1); return result %= vnl_bignum(r2);
 }
+
 inline vnl_bignum operator%(vnl_bignum const& r1, int r2)
 {
   vnl_bignum result(r1); return result %= vnl_bignum((long)r2);
 }
+
 inline vnl_bignum operator%(long r1, vnl_bignum const& r2)
 {
   vnl_bignum result(r1); return result %= r2;
 }
+
 inline vnl_bignum operator%(int r1, vnl_bignum const& r2)
 {
   vnl_bignum result((long)r1); return result %= r2;

@@ -16,6 +16,7 @@ static void create_line()
 {
   rubber->rubberband_line();
 }
+
 static void create_circle()
 {
   rubber->rubberband_circle();

@@ -27,6 +27,7 @@ static void test_identity_transform()
            << "p =" << p << " , Id(p) = pp =" << pp << '\n';
   TEST_NEAR("identity", length(p-pp), 0.0, 1e-06);
 }
+
 static void test_perspective_transform()
 {
   vcl_cout << "\n=== Testing perspective transform on point ===\n";

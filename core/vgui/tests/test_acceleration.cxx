@@ -26,7 +26,8 @@ unsigned char data[512*512*4];
   return (e->type == MapNotify) && (e->xmap.window == (Window)arg);
 }
 
-void pattern_RGB16 (unsigned char* data) {
+void pattern_RGB16 (unsigned char* data)
+{
   unsigned short* my_data = (unsigned short *)data;
   unsigned short r = 0xf800;
   unsigned short g = 0x07e0;
@@ -46,8 +47,8 @@ void pattern_RGB16 (unsigned char* data) {
       my_data[y*512 + x] = ((x << 7) & r) + ((y << 2) & g);
 }
 
-void pattern_RGB24 (unsigned char* data) {
-
+void pattern_RGB24 (unsigned char* data)
+{
   for (int n=0; n < 512*512*3; ++n) data[n] = 0;
 
   for (int y = 0; y < 512; ++y) {
@@ -59,7 +60,8 @@ void pattern_RGB24 (unsigned char* data) {
   }
 }
 
-void pattern_RGB32 (unsigned char* data, bool little_endian) {
+void pattern_RGB32 (unsigned char* data, bool little_endian)
+{
   unsigned long r,g,b;
   unsigned long* my_data = (unsigned long *)data;
   if (little_endian) {
@@ -80,7 +82,7 @@ void pattern_RGB32 (unsigned char* data, bool little_endian) {
   }
 }
 
-int main (int /*argc*/, char** /*argv*/)
+int main()
 {
   GLenum format;
   GLenum type;
@@ -157,19 +159,21 @@ int main (int /*argc*/, char** /*argv*/)
   glPixelZoom(1.0,1.0);
   glDrawBuffer(GL_BACK_LEFT);
 
-#if 0
+  if (false)
   {
     vcl_cerr << "\nvgui_glClear - ";
     int draws=0;
     int elapsed;
     vul_timer timer;
     do {
-      vgui_glClear(GL_COLOR_BUFFER_BIT);
+      vgui_accelerate::instance()->vgui_glClear(GL_COLOR_BUFFER_BIT);
       elapsed = timer.real();
       ++draws;
     } while (elapsed < 3000);
     vcl_cerr << 512*512*draws / (elapsed / 1000.0) << " pixels per second\n";
   }
+
+  if (false)
   {
     vcl_cerr << "\nglClear - ";
     int draws=0;
@@ -182,8 +186,8 @@ int main (int /*argc*/, char** /*argv*/)
     } while (elapsed < 3000);
     vcl_cerr << 512*512*draws / (elapsed / 1000.0) << " pixels per second\n";
   }
-#endif
 
+  if (true)
   {
     vcl_cerr << "\nUsing default (RGBA) format with glDrawPixels - ";
     int draws=0;
@@ -196,6 +200,7 @@ int main (int /*argc*/, char** /*argv*/)
     } while (elapsed < 3000);
     vcl_cerr << 512*512*draws / (elapsed / 1000.0) << " pixels per second\n";
   }
+  if (true)
   {
     vcl_cerr << "\nUsing recommended format with glDrawPixels - ";
     int draws=0;
@@ -208,6 +213,7 @@ int main (int /*argc*/, char** /*argv*/)
     } while (elapsed < 3000);
     vcl_cerr << 512*512*draws / (elapsed / 1000.0) << " pixels per second\n";
   }
+  if (true)
   {
     vcl_cerr << "\nUsing recommended format with vgui_accelerate::instance()->vgui_glDrawPixels - ";
     int draws=0;

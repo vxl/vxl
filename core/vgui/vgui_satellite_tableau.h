@@ -115,7 +115,7 @@ struct vgui_satellite_tableau_t : public vgui_tableau
   bool handle(vgui_event const &e) { return (p && m) && (p->*m)(e, d); }
 
   vcl_string type_name() const
-    { return vcl_string("vgui_satellite_tableau_t[") + n + vcl_string("]"); }
+  { return vcl_string("vgui_satellite_tableau_t[") + n + vcl_string("]"); }
 
   vgui_menu a_menu;
   void add_popup(vgui_menu &m) { m.include(a_menu); }
@@ -150,7 +150,7 @@ struct vgui_satellite_tableau : public vgui_tableau
   bool handle(vgui_event const &e) { return (p && m) && (p->*m)(e); }
 
   vcl_string type_name() const
-    { return vcl_string("vgui_satellite_tableau[") + n + vcl_string("]"); }
+  { return vcl_string("vgui_satellite_tableau[") + n + vcl_string("]"); }
 
  protected:
   ~vgui_satellite_tableau() { p = 0; m = 0; }

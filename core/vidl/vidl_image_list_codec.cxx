@@ -111,21 +111,21 @@ vidl_codec_sptr vidl_image_list_codec::load(const char* fname, char mode)
   assert(mode == 'r');
 
   for ( int i=0; true; i++)
-    {
-      const char *name = vul_sprintf( fname, i).c_str();
-      vil_image_resource_sptr img= vil_load_image_resource(name);
+  {
+    const char *name = vul_sprintf( fname, i).c_str();
+    vil_image_resource_sptr img= vil_load_image_resource(name);
 
-      if (img)
-        images_.push_back(img);
-      else
-        break;
-    }
+    if (img)
+      images_.push_back(img);
+    else
+      break;
+  }
 
   if (!init())
-    {
-      vcl_cerr << "Failed to initialize the ImageList Codec.\n";
-      return NULL;
-    }
+  {
+    vcl_cerr << "Failed to initialize the ImageList Codec.\n";
+    return NULL;
+  }
 
   return this;
 }
@@ -140,21 +140,21 @@ vidl_codec_sptr vidl_image_list_codec::load(const vcl_list<vcl_string> &fnames, 
   assert(mode == 'r');
 
   for (vcl_list<vcl_string>::const_iterator i = fnames.begin(); i!=fnames.end(); ++i)
+  {
+    const char* name = (*i).c_str();
+    vil_image_resource_sptr img =  vil_load_image_resource(name);
+    if (img)
     {
-      const char* name = (*i).c_str();
-      vil_image_resource_sptr img =  vil_load_image_resource(name);
-      if (img)
-      {
-        images_.push_back(img);
-      }
+      images_.push_back(img);
     }
+  }
 
   // Initialize the codec
   if (!init())
-    {
-      vcl_cerr << "Failed to initialize the ImageList Codec.\n";
-      return NULL;
-    }
+  {
+    vcl_cerr << "Failed to initialize the ImageList Codec.\n";
+    return NULL;
+  }
 
   // Every thing was all right,
   // return myself
@@ -171,20 +171,20 @@ vidl_codec_sptr vidl_image_list_codec::load(const vcl_vector<vcl_string> &fnames
   assert(mode == 'r');
 
   for (vcl_vector<vcl_string>::const_iterator i = fnames.begin(); i!=fnames.end(); ++i)
-    {
-      const char* name = (*i).c_str();
-      vil_image_resource_sptr img =  vil_load_image_resource(name);
+  {
+    const char* name = (*i).c_str();
+    vil_image_resource_sptr img =  vil_load_image_resource(name);
 
-      if (img)
-        images_.push_back(img);
-    }
+    if (img)
+      images_.push_back(img);
+  }
 
   // Initialize the codec
   if (!init())
-    {
-      vcl_cerr << "Failed to initialize the ImageList Codec.\n";
-      return NULL;
-    }
+  {
+    vcl_cerr << "Failed to initialize the ImageList Codec.\n";
+    return NULL;
+  }
 
   // Every thing was all right,
   // return myself
@@ -217,7 +217,7 @@ bool vidl_image_list_codec::save(
         vidl_movie* movie,
         const char* fname,
         const char* type
-        )
+       )
 {
   // The value to be returned
   bool ret = true;
@@ -229,20 +229,20 @@ bool vidl_image_list_codec::save(
   for (vidl_movie::frame_iterator pframe = movie->begin();
        pframe <= movie->last();
        ++pframe)
-    {
-      // Get the image from the frame
-      vil_image_view_base_sptr image = pframe->get_view();
+  {
+    // Get the image from the frame
+    vil_image_view_base_sptr image = pframe->get_view();
 
-      // Create a name for the current image to be saved
-      const char *currentname = vul_sprintf("%s%05d.%s", fname,
-                                            pframe.current_frame_number(),
-                                            extension.c_str()).c_str();
+    // Create a name for the current image to be saved
+    const char *currentname = vul_sprintf("%s%05d.%s", fname,
+                                          pframe.current_frame_number(),
+                                          extension.c_str()).c_str();
 
-      bool saved_image = vil_save(*image, currentname, type);
+    bool saved_image = vil_save(*image, currentname, type);
 
-      if (!saved_image)
-        ret = false;
-    }
+    if (!saved_image)
+      ret = false;
+  }
 
   return ret;
 }

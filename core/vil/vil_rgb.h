@@ -138,6 +138,7 @@ vil_rgb<T>& vil_rgb<T>::operator=(vil_rgb<S > const& that) { \
   b=T(that.b); \
   return *this; \
 }
+
 vil_rgb_call(macro)
 # undef macro
 #endif

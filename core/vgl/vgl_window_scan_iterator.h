@@ -42,18 +42,18 @@ class vgl_window_scan_iterator : public vgl_region_scan_iterator
 
   //: Define rectangular region to be [x-w, x+w] x [y-h, y+h]
   inline void set_window(T x, T y, T w, T h)
-    { set_window_corners(x - w, y - h, x + w, y + h); }
+  { set_window_corners(x - w, y - h, x + w, y + h); }
 
   //: Define rectangular region to be [x-r, x+r] x [y-r, y+r]
   inline void set_window(T x, T y, T r)
-    { set_window_corners(x - r, y - r, x + r, y + r); }
+  { set_window_corners(x - r, y - r, x + r, y + r); }
 
   //: makes uninitialized iterator.
   inline vgl_window_scan_iterator() {}
 
   //: region is [x1, x2] x [y1, y2].  No assumption about x1<x2 or y1<y2.
   inline vgl_window_scan_iterator(T x1_, T y1_, T x2_, T y2_)
-    { set_window_corners(x1_, y1_, x2_, y2_); }
+  { set_window_corners(x1_, y1_, x2_, y2_); }
 
   int current_y;
 

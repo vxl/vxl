@@ -49,13 +49,13 @@ int vcsl_spatial_transformation::matching_interval(double time) const
   int inf=0;
   int sup=beat_.size()-1;
   while (sup-inf > 1)
-    {
-      int mid=(inf+sup)/2;
-      if (beat_[mid]>time)
-        sup=mid;
-      else
-        inf=mid;
-    }
+  {
+    int mid=(inf+sup)/2;
+    if (beat_[mid]>time)
+      sup=mid;
+    else
+      inf=mid;
+  }
   return inf;
 }
 

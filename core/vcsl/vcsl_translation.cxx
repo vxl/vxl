@@ -104,22 +104,22 @@ vnl_vector<double> vcsl_translation::vector_value(double time) const
   if (beat_.size()==0) // static
     return vector_[0];
   else
+  {
+    int i=matching_interval(time);
+    switch (interpolator_[i])
     {
-      int i=matching_interval(time);
-      switch(interpolator_[i])
-        {
-        case vcsl_linear:
-          return lvi(vector_[i],vector_[i+1],i,time);
-        case vcsl_cubic:
-          assert(!"vcsl_cubic net yet implemented");
-          break;
-        case vcsl_spline:
-          assert(!"vcsl_spline net yet implemented");
-          break;
-        default:
-          assert(!"This is impossible");
-          break;
-        }
+     case vcsl_linear:
+      return lvi(vector_[i],vector_[i+1],i,time);
+     case vcsl_cubic:
+      assert(!"vcsl_cubic net yet implemented");
+      break;
+     case vcsl_spline:
+      assert(!"vcsl_spline net yet implemented");
+      break;
+     default:
+      assert(!"This is impossible");
+      break;
     }
+  }
   return vnl_vector<double>(); // never reached if asserts are in effect
 }

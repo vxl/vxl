@@ -13,48 +13,47 @@
 
 class example_CExample_mfcView : public vgui_mfc_adaptor
 {
-protected: // create from serialization only
-        example_CExample_mfcView();
-        DECLARE_DYNCREATE(example_CExample_mfcView)
+ protected: // create from serialization only
+  example_CExample_mfcView();
+  DECLARE_DYNCREATE(example_CExample_mfcView)
 
 // Attributes
-public:
-        example_CExample_mfcDoc* GetDocument();
+ public:
+#ifdef _DEBUG  // debug version in example_mfcView.cpp
+  example_CExample_mfcDoc* GetDocument();
+#else
+  example_CExample_mfcDoc* GetDocument() { return (example_CExample_mfcDoc*)m_pDocument; }
+#endif
 
 // Operations
-public:
+ public:
 
 // Overrides
-        // ClassWizard generated virtual function overrides
-        //{{AFX_VIRTUAL(example_CExample_mfcView)
-        public:
-        virtual void OnDraw(CDC* pDC);  // overridden to draw this view
-        virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-        protected:
-        //}}AFX_VIRTUAL
+  // ClassWizard generated virtual function overrides
+  //{{AFX_VIRTUAL(example_CExample_mfcView)
+ public:
+  virtual void OnDraw(CDC* pDC);  // overridden to draw this view
+  virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+ protected:
+  //}}AFX_VIRTUAL
 
 // Implementation
-public:
-        virtual ~example_CExample_mfcView();
+ public:
+  virtual ~example_CExample_mfcView();
 #ifdef _DEBUG
-        virtual void AssertValid() const;
-        virtual void Dump(CDumpContext& dc) const;
+  virtual void AssertValid() const;
+  virtual void Dump(CDumpContext& dc) const;
 #endif
 
-protected:
+ protected:
 
 // Generated message map functions
-protected:
-        //{{AFX_MSG(example_CExample_mfcView)
-        afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-        //}}AFX_MSG
-        DECLARE_MESSAGE_MAP()
+ protected:
+  //{{AFX_MSG(example_CExample_mfcView)
+  afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+  //}}AFX_MSG
+  DECLARE_MESSAGE_MAP()
 };
-
-#ifndef _DEBUG  // debug version in example_mfcView.cpp
-inline example_CExample_mfcDoc* example_CExample_mfcView::GetDocument()
-   { return (example_CExample_mfcDoc*)m_pDocument; }
-#endif
 
 /////////////////////////////////////////////////////////////////////////////
 

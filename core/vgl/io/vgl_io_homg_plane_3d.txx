@@ -19,6 +19,7 @@ void vsl_b_write(vsl_b_ostream &os, const vgl_homg_plane_3d<T> & p)
   vsl_b_write(os, p.nz());
   vsl_b_write(os, p.d());
 }
+
 //============================================================================
 //: Binary load self from stream.
 template<class T>
@@ -28,18 +29,18 @@ void vsl_b_read(vsl_b_istream &is, vgl_homg_plane_3d<T> & p)
 
   short v;
   vsl_b_read(is, v);
-  switch(v)
+  switch (v)
   {
-  case 1:
+   case 1:
     T x,y,z,d;
     vsl_b_read(is, x);
     vsl_b_read(is, y);
     vsl_b_read(is, z);
     vsl_b_read(is, d);
     p.set(x,y,z,d);
-   break;
+    break;
 
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_homg_plane_3d<T>&)\n"
              << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream

@@ -254,63 +254,59 @@ vil1_viff_createimage(vxl_uint_32 col_size, vxl_uint_32 row_size,
 
 void vil1_viff_freeimage(struct vil1_viff_xvimage *image)
 {
-        unsigned char id1,id2;
+  unsigned char id1,id2;
 
-        /*
-         *  Free as much of the xvimage structure as we can.  But first check to
-         *  make sure the image pointer is not NULL.
-         */
-        if (image != NULL)
-        {
-           /* Now see of the image itself is legal. This catches accidental
-              attempts to free an image already turned loose by vil1_viff_freeimage(). */
-           id1 = image->identifier;
-           id2 = XV_FILE_MAGIC_NUM;
-           if (id1 != id2)
-             {
-               fprintf(stderr, "vil1_viff_freeimage: Attempt to free an object that is not a VIFF image.\n");
-               fprintf(stderr, "vil1_viff_freeimage: Object may be a VIFF image that has already been free'd.\n");
-               fprintf(stderr, "vil1_viff_freeimage: Attempt aborted.\n");
-               return;
-             }
+  /*
+   *  Free as much of the xvimage structure as we can.  But first check to
+   *  make sure the image pointer is not NULL.
+   */
+  if (image != NULL)
+  {
+     /* Now see of the image itself is legal. This catches accidental
+        attempts to free an image already turned loose by vil1_viff_freeimage(). */
+     id1 = image->identifier;
+     id2 = XV_FILE_MAGIC_NUM;
+     if (id1 != id2)
+     {
+       fprintf(stderr, "vil1_viff_freeimage: Attempt to free an object that is not a VIFF image.\n");
+       fprintf(stderr, "vil1_viff_freeimage: Object may be a VIFF image that has already been free'd.\n");
+       fprintf(stderr, "vil1_viff_freeimage: Attempt aborted.\n");
+       return;
+     }
 
-           /*  free image data */
-           if (image->imagedata != NULL && (image->row_size *
-               image->col_size) > 0)
-              free ((char *) image->imagedata);
+     /*  free image data */
+     if (image->imagedata != NULL && (image->row_size * image->col_size) > 0)
+       free ((char *) image->imagedata);
 
-           /*  free map data */
-           if (image->maps != NULL && image->map_row_size > 0)
-              free ((char *) image->maps);
+     /*  free map data */
+     if (image->maps != NULL && image->map_row_size > 0)
+       free ((char *) image->maps);
 
-           /*  free location data */
-           if (image->location != NULL && image->row_size *
-               image->col_size > 0 &&
-               image->location_type == VFF_LOC_EXPLICIT)
-              free ((char *) image->location);
+     /*  free location data */
+     if (image->location != NULL && image->row_size * image->col_size > 0 &&
+         image->location_type == VFF_LOC_EXPLICIT)
+       free ((char *) image->location);
 
-           free((char *) image);
-        }
+     free((char *) image);
+  }
 }
 
 
 static vxl_uint_32 vil1_viff_getmachsize(vxl_uint_32 mtype,vxl_uint_32 dtype)
 {
-   vxl_uint_32 tmp = (mtype==VFF_DEP_CRAYORDER) + 1;
-   switch(dtype){
-      case VFF_TYP_BIT     : return (vxl_uint_32)0;
-      case VFF_TYP_1_BYTE  : return (vxl_uint_32)1;
-      case VFF_TYP_2_BYTE  : if (mtype==VFF_DEP_CRAYORDER)
-                                return (vxl_uint_32)8;
-                             else
-                                return (vxl_uint_32)2;
-      case VFF_TYP_4_BYTE  : return (vxl_uint_32)4*tmp;
-      case VFF_TYP_FLOAT   : return (vxl_uint_32)4*tmp;
-      case VFF_TYP_DOUBLE  : return (vxl_uint_32)8;
-      case VFF_TYP_COMPLEX : return (vxl_uint_32)8*tmp;
-      case VFF_TYP_DCOMPLEX: return (vxl_uint_32)16;
-      default: return (vxl_uint_32)255;
-   }
+  vxl_uint_32 tmp = (mtype==VFF_DEP_CRAYORDER) + 1;
+  switch (dtype)
+  {
+   case VFF_TYP_BIT     : return (vxl_uint_32)0;
+   case VFF_TYP_1_BYTE  : return (vxl_uint_32)1;
+   case VFF_TYP_2_BYTE  : return mtype==VFF_DEP_CRAYORDER ? (vxl_uint_32)8 : (vxl_uint_32)2;
+   case VFF_TYP_4_BYTE  : return (vxl_uint_32)4*tmp;
+   case VFF_TYP_FLOAT   : return (vxl_uint_32)4*tmp;
+   case VFF_TYP_DOUBLE  : return (vxl_uint_32)8;
+   case VFF_TYP_COMPLEX : return (vxl_uint_32)8*tmp;
+   case VFF_TYP_DCOMPLEX: return (vxl_uint_32)16;
+   default              : return (vxl_uint_32)255;
+  }
 }
 
 /*
@@ -338,70 +334,59 @@ static vxl_uint_32 vil1_viff_getmachsize(vxl_uint_32 mtype,vxl_uint_32 dtype)
 int vil1_viff_imagesize(struct vil1_viff_xvimage *image,int *dsize, int *dcount, int *msize,
                         int *mcount, int *lsize,int *lcount)
 {
-    vxl_uint_32 rows = image->col_size;
-    vxl_uint_32 cols = image->row_size;
-    vxl_uint_32 mach = image->machine_dep;
-    vxl_uint_32 datasize,datacount;
-    vxl_uint_32 mapsize,mapcount;
-    vxl_uint_32 locsize,loccount;
+  vxl_uint_32 rows = image->col_size;
+  vxl_uint_32 cols = image->row_size;
+  vxl_uint_32 mach = image->machine_dep;
+  vxl_uint_32 datasize,datacount;
+  vxl_uint_32 mapsize,mapcount;
+  vxl_uint_32 locsize,loccount;
 
-    /*
-    ** Compute total size of DATA in bytes
-    */
-    if (image->data_storage_type==VFF_TYP_BIT){
-       datasize = ((cols+7)/8)*rows;
-       datacount = datasize;
-    }else{
-       datasize = cols*rows * vil1_viff_getmachsize(mach, image->data_storage_type);
-       datacount = cols*rows;
-    }
+  /*
+  ** Compute total size of DATA in bytes
+  */
+  if (image->data_storage_type==VFF_TYP_BIT){
+     datasize = ((cols+7)/8)*rows;
+     datacount = datasize;
+  }else{
+     datasize = cols*rows * vil1_viff_getmachsize(mach, image->data_storage_type);
+     datacount = cols*rows;
+  }
 
-    datasize *= image->num_of_images*image->num_data_bands;
-    datacount *= image->num_of_images*image->num_data_bands;
+  datasize *= image->num_of_images*image->num_data_bands;
+  datacount *= image->num_of_images*image->num_data_bands;
 
-    /*
-    ** Compute number of MAP data objects
-    */
-    switch(image->map_scheme)
-      {
-        case VFF_MS_NONE:
-          mapcount = 0;
-          break;
-        case VFF_MS_ONEPERBAND:
-        case VFF_MS_CYCLE:
-          mapcount = image->num_data_bands*image->map_row_size*image->map_col_size;
-          break;
-        case VFF_MS_SHARED:
-        case VFF_MS_GROUP:
-          mapcount = image->map_row_size*image->map_col_size;
-          break;
-        default:
-          fprintf(stderr,"\nvil1_viff_imagesize: Unknown mapping scheme:");
-          fprintf(stderr," %u\n",image->map_scheme);
-          return 0;
-          /* break; */
-      }
+  /*
+  ** Compute number of MAP data objects
+  */
+  switch (image->map_scheme)
+  {
+   case VFF_MS_NONE: mapcount = 0; break;
+   case VFF_MS_ONEPERBAND:
+   case VFF_MS_CYCLE: mapcount = image->num_data_bands*image->map_row_size*image->map_col_size; break;
+   case VFF_MS_SHARED:
+   case VFF_MS_GROUP: mapcount = image->map_row_size*image->map_col_size; break;
+   default: fprintf(stderr,"\nvil1_viff_imagesize: Unknown mapping scheme: %u\n", image->map_scheme); return 0;
+  }
 
-    /*
-    ** mapcount now contains the number of CELLS, so convert to bytes
-    */
-    if (image->map_storage_type==VFF_MAPTYP_NONE)
-       mapsize = 0;
-    else
-       mapsize = mapcount*vil1_viff_getmachsize(mach, image->map_storage_type);
+  /*
+  ** mapcount now contains the number of CELLS, so convert to bytes
+  */
+  if (image->map_storage_type==VFF_MAPTYP_NONE)
+    mapsize = 0;
+  else
+    mapsize = mapcount*vil1_viff_getmachsize(mach, image->map_storage_type);
 
-    /*
-    ** Compute size of LOCATION data in bytes and floats
-    */
-    loccount = rows*cols*image->location_dim;
-    locsize  = loccount*vil1_viff_getmachsize(mach, VFF_TYP_FLOAT);
+  /*
+  ** Compute size of LOCATION data in bytes and floats
+  */
+  loccount = rows*cols*image->location_dim;
+  locsize  = loccount*vil1_viff_getmachsize(mach, VFF_TYP_FLOAT);
 
-    *dsize = datasize;
-    *dcount = datacount;
-    *msize = mapsize;
-    *mcount = mapcount;
-    *lsize = locsize;
-    *lcount = loccount;
-    return 1;
+  *dsize = datasize;
+  *dcount = datacount;
+  *msize = mapsize;
+  *mcount = mapcount;
+  *lsize = locsize;
+  *lcount = loccount;
+  return 1;
 }
-

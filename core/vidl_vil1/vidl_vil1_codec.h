@@ -27,42 +27,42 @@ class vidl_vil1_avicodec;
 //   See also vidl_vil1_io and vidl_vil1_image_list_codec and vidl_vil1_avicodec
 class vidl_vil1_codec :  public vbl_ref_count
 {
-public:
+ public:
 
   // Constructors/Initializers/Destructors-------------------------------------
-  vidl_vil1_codec() {clear_strings();}
+  vidl_vil1_codec() { clear_strings(); }
   virtual ~vidl_vil1_codec() {}
 
   //=====================================================
   // Casting methods -- lets use a standard form for these, namely
   // CastToXXX, where XXX is the subclass
   virtual vidl_vil1_image_list_codec* castto_vidl_vil1_image_list_codec() { return 0; }
-  virtual vidl_vil1_mpegcodec* castto_vidl_vil1_mpegcodec(){return 0;}
-  virtual vidl_vil1_avicodec* castto_vidl_vil1_avicodec(){return 0;}
+  virtual vidl_vil1_mpegcodec* castto_vidl_vil1_mpegcodec() { return 0; }
+  virtual vidl_vil1_avicodec* castto_vidl_vil1_avicodec() { return 0; }
   // Data Control--------------------------------------------------------------
 
-  inline void set_number_frames(int n = 0) { numberframes = n;}
+  inline void set_number_frames(int n = 0) { numberframes = n; }
   inline void set_name(const char* n = "") { delete[] name;name=new char[vcl_strlen(n)+1];vcl_strcpy(name,n); }
   inline void set_description(const char* d = "")
-    { delete[] description;description=new char[vcl_strlen(d)+1];vcl_strcpy(description,d); }
+  { delete[] description;description=new char[vcl_strlen(d)+1];vcl_strcpy(description,d); }
   inline void set_format(char f = '\0') { format = f; }
   inline void set_image_class(char t = 'M') { Class = t; }
   inline void set_bits_pixel(int d = 0) { B = d; }
-  inline void set_width(int x = 0) { X = x; }
+  inline void set_width(int x = 0)  { X = x; }
   inline void set_height(int y = 0) { Y = y; }
   inline void set_size_z(int z = 1) { Z = z; }
   inline void set_size_t(int t = 1) { T = t; }
 
   // Data Access---------------------------------------------------------------
 
-  inline int length() const {return numberframes; }
+  inline int length() const { return numberframes; }
   inline const char* get_name() const  { return (name)?name:""; }
   inline const char* get_description() const { return (description)?description:""; }
 
   inline char get_image_class()const { return Class; }
   inline char get_format() const     { return format; }
   inline int  width() const          { return X; }
-  inline int  height() const     { return Y; }
+  inline int  height() const         { return Y; }
   inline int  get_bits_pixel() const { return B; }
   inline int  get_bytes_pixel()const { return (B+7)/8; }
 
@@ -99,7 +99,7 @@ public:
   // This will typically be called just before program exit.
   virtual void close() {};
 
-private:
+ private:
 
   inline void clear_strings() { name = description = date_time = NULL; }
 

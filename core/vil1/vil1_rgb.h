@@ -140,6 +140,7 @@ vil1_rgb<T>& vil1_rgb<T>::operator=(vil1_rgb<S > const& that) { \
   b=T(that.b); \
   return *this; \
 }
+
 vil1_rgb_call(macro)
 # undef macro
 #endif
@@ -181,8 +182,8 @@ inline
 vil1_rgb<T> max(vil1_rgb<T> const& a, vil1_rgb<T> const& b)
 {
   return vil1_rgb<T>((a.r>b.r)?a.r:b.r,
-                    (a.g>b.g)?a.g:b.g,
-                    (a.b>b.b)?a.b:b.b);
+                     (a.g>b.g)?a.g:b.g,
+                     (a.b>b.b)?a.b:b.b);
 }
 
 template <class T>
@@ -190,8 +191,8 @@ inline
 vil1_rgb<T> min(vil1_rgb<T> const& a, vil1_rgb<T> const& b)
 {
   return vil1_rgb<T>((a.r<b.r)?a.r:b.r,
-                    (a.g<b.g)?a.g:b.g,
-                    (a.b<b.b)?a.b:b.b);
+                     (a.g<b.g)?a.g:b.g,
+                     (a.b<b.b)?a.b:b.b);
 }
 #endif
 

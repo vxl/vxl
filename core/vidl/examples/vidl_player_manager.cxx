@@ -24,10 +24,10 @@ vidl_player_manager *vidl_player_manager::instance_ = 0;
 vidl_player_manager *vidl_player_manager::instance()
 {
   if (!instance_)
-    {
-      instance_ = new vidl_player_manager();
-      instance_->init();
-    }
+  {
+    instance_ = new vidl_player_manager();
+    instance_->init();
+  }
   return vidl_player_manager::instance_;
 }
 

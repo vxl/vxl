@@ -35,7 +35,7 @@ enum vil_convolve_boundary_option
   vil_convolve_ignore_edge,
 
   //: Do not to extend the signal, but pad with zeros.
-  // \verbatim     
+  // \verbatim
   //     |                               |
   // K                       ----*-------
   // in   ... ---------------------------
@@ -44,7 +44,7 @@ enum vil_convolve_boundary_option
   vil_convolve_no_extend,
 
   //: Zero-extend the input signal beyond the boundary.
-  // \verbatim     
+  // \verbatim
   //     |                               |
   // K                              ----*--------
   // in   ... ---------------------------000000000000...
@@ -53,7 +53,7 @@ enum vil_convolve_boundary_option
   vil_convolve_zero_extend,
 
   //: Extend the signal to be constant beyond the boundary.
-  // \verbatim     
+  // \verbatim
   //     |                               |
   // K                              ----*--------
   // in   ... --------------------------aaaaaaaaaaaaa...
@@ -62,7 +62,7 @@ enum vil_convolve_boundary_option
   vil_convolve_constant_extend,
 
   //: Extend the signal periodically beyond the boundary.
-  // \verbatim     
+  // \verbatim
   //     |                               |
   // K                              ----*--------
   // in   abc...-------------------------abc...------..
@@ -71,7 +71,7 @@ enum vil_convolve_boundary_option
   vil_convolve_periodic_extend,
 
   //: Extend the signal by reflection about the boundary.
-  // \verbatim     
+  // \verbatim
   //     |                               |
   // K                               ----*--------
   // in   ... -------------------...edcbabcde...
@@ -85,7 +85,7 @@ enum vil_convolve_boundary_option
   // convolution to proceed up to the boundary and reweighed
   // to keep the total area the same.
   // \note may not work with kernels which take negative values.
-  vil_convolve_trim 
+  vil_convolve_trim
 };
 
 //: Convolve edge with kernel[x*kstep] x in [k_lo,k_hi] (k_hi>=0)
@@ -100,14 +100,14 @@ inline void vil_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_st
 {
   switch (option)
   {
-  case vil_convolve_ignore_edge:
+   case vil_convolve_ignore_edge:
     return;
-  case vil_convolve_no_extend:
+   case vil_convolve_no_extend:
     // Initialise first elements of row to zero
     for (vcl_ptrdiff_t i=-k_hi;i<0;++i,dest+=d_step)
       *dest = 0;
     return;
-  case vil_convolve_zero_extend:
+   case vil_convolve_zero_extend:
     // Assume src[i]==0 for i<0
     for (vcl_ptrdiff_t i=-k_hi+1;i<=0;++i,dest+=d_step,src+=s_step)
     {
@@ -119,74 +119,74 @@ inline void vil_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_st
       *dest=(destT)sum;
     }
     return;
-  case vil_convolve_constant_extend:
+   case vil_convolve_constant_extend:
+   {
+    // Assume src[i]=src[0] for i<0
+    vcl_ptrdiff_t i_max = k_hi-1;
+    for (vcl_ptrdiff_t i=0;i<=i_max;++i)
     {
-      // Assume src[i]=src[0] for i<0
-      vcl_ptrdiff_t i_max = k_hi-1;
-      for (vcl_ptrdiff_t i=0;i<=i_max;++i)
+      accumT sum=0;
+      for (vcl_ptrdiff_t j=-k_hi;j<=-k_lo;++j)
       {
-        accumT sum=0;
-        for (vcl_ptrdiff_t j=-k_hi;j<=-k_lo;++j)
-        {
-          if ((i+j)<0) sum+=(accumT)(src[0]*kernel[j*(-kstep)]);
-          else         sum+=(accumT)(src[(i+j)*s_step]*kernel[j*(-kstep)]);
-        }
-        dest[i*d_step]=(destT)sum;
+        if ((i+j)<0) sum+=(accumT)(src[0]*kernel[j*(-kstep)]);
+        else         sum+=(accumT)(src[(i+j)*s_step]*kernel[j*(-kstep)]);
       }
-      return;
+      dest[i*d_step]=(destT)sum;
     }
-  case vil_convolve_reflect_extend:
+    return;
+   }
+   case vil_convolve_reflect_extend:
+   {
+    // Assume src[i]=src[0] for i<0
+    vcl_ptrdiff_t i_max = k_hi-1;
+    for (vcl_ptrdiff_t i=0;i<=i_max;++i)
     {
-      // Assume src[i]=src[0] for i<0
-      vcl_ptrdiff_t i_max = k_hi-1;
-      for (vcl_ptrdiff_t i=0;i<=i_max;++i)
+      accumT sum=0;
+      for (vcl_ptrdiff_t j=-k_hi;j<=-k_lo;++j)
       {
-        accumT sum=0;
-        for (vcl_ptrdiff_t j=-k_hi;j<=-k_lo;++j)
-        {
-          if ((i+j)<0) sum+=(accumT)(src[-(i+j)*s_step]*kernel[j*(-kstep)]);
-          else         sum+=(accumT)(src[(i+j)*s_step]*kernel[j*(-kstep)]);
-        }
-        dest[i*d_step]=(destT)sum;
+        if ((i+j)<0) sum+=(accumT)(src[-(i+j)*s_step]*kernel[j*(-kstep)]);
+        else         sum+=(accumT)(src[(i+j)*s_step]*kernel[j*(-kstep)]);
       }
-      return;
+      dest[i*d_step]=(destT)sum;
     }
-  case vil_convolve_periodic_extend:
+    return;
+   }
+   case vil_convolve_periodic_extend:
+   {
+    // Assume src[i]=src[n+i] for i<0
+    vcl_ptrdiff_t i_max = k_hi-1;
+    for (int i=0;i<=i_max;++i)
     {
-      // Assume src[i]=src[n+i] for i<0
-      vcl_ptrdiff_t i_max = k_hi-1;
-      for (int i=0;i<=i_max;++i)
-      {
-        accumT sum=0;
-        for (vcl_ptrdiff_t j=k_hi;j>=k_lo;--j)
-          sum+=(accumT)(src[((i-j+n)%n)*s_step]*kernel[j*kstep]);
-        dest[i*d_step]=(destT)sum;
-      }
-      return;
+      accumT sum=0;
+      for (vcl_ptrdiff_t j=k_hi;j>=k_lo;--j)
+        sum+=(accumT)(src[((i-j+n)%n)*s_step]*kernel[j*kstep]);
+      dest[i*d_step]=(destT)sum;
     }
-  case vil_convolve_trim:
-    {
-      // Truncate and reweigh kernel
-      accumT k_sum_all=0;
-      for (vcl_ptrdiff_t j=-k_hi;j<=-k_lo;++j) k_sum_all+=(accumT)(kernel[j*(-kstep)]);
+    return;
+   }
+   case vil_convolve_trim:
+   {
+    // Truncate and reweigh kernel
+    accumT k_sum_all=0;
+    for (vcl_ptrdiff_t j=-k_hi;j<=-k_lo;++j) k_sum_all+=(accumT)(kernel[j*(-kstep)]);
 
-      vcl_ptrdiff_t i_max = k_hi-1;
-      for (vcl_ptrdiff_t i=0;i<=i_max;++i)
+    vcl_ptrdiff_t i_max = k_hi-1;
+    for (vcl_ptrdiff_t i=0;i<=i_max;++i)
+    {
+      accumT sum=0;
+      accumT k_sum=0;
+      // Sum elements which overlap src
+      // ie i+j>=0  (so j starts at -i)
+      for (vcl_ptrdiff_t j=-i;j<=-k_lo;++j)
       {
-        accumT sum=0;
-        accumT k_sum=0;
-        // Sum elements which overlap src
-        // ie i+j>=0  (so j starts at -i)
-        for (vcl_ptrdiff_t j=-i;j<=-k_lo;++j)
-        {
-          sum+=(accumT)(src[(i+j)*s_step]*kernel[j*(-kstep)]);
-          k_sum += (accumT)(kernel[j*(-kstep)]);
-        }
-        dest[i*d_step]=(destT)(sum*k_sum_all/k_sum);
+        sum+=(accumT)(src[(i+j)*s_step]*kernel[j*(-kstep)]);
+        k_sum += (accumT)(kernel[j*(-kstep)]);
       }
-      return;
+      dest[i*d_step]=(destT)(sum*k_sum_all/k_sum);
     }
-  default:
+    return;
+   }
+   default:
     vcl_cout<<"ERROR: vil_convolve_edge_1d: "
             <<"Sorry, can't deal with supplied edge option.\n";
     vcl_abort();
@@ -336,10 +336,10 @@ class vil_convolve_1d_resource : public vil_image_resource
     switch (vs->pixel_format())
     {
 #define macro( F , T ) \
-      case F : \
-        vil_convolve_1d(static_cast<vil_image_view<T >&>(*vs),dest, \
-                        kernel_, klo_, khi_, accumT(), start_option_, end_option_); \
-        return new vil_image_view<destT>(vil_crop(dest, lboundary, n_i, 0, n_j));
+     case F : \
+      vil_convolve_1d(static_cast<vil_image_view<T >&>(*vs),dest, \
+                      kernel_, klo_, khi_, accumT(), start_option_, end_option_); \
+      return new vil_image_view<destT>(vil_crop(dest, lboundary, n_i, 0, n_j));
 
       macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
       macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
@@ -353,8 +353,8 @@ class vil_convolve_1d_resource : public vil_image_resource
 // complex<float> should work - but causes all manner of compiler template errors.
 // maybe need a better compiler, maybe there is a code fix - IMS
 #undef macro
-      default:
-        return 0;
+     default:
+      return 0;
     }
   }
 

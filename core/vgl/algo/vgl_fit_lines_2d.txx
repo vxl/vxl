@@ -60,11 +60,11 @@ template <class T>
 bool vgl_fit_lines_2d<T>::fit()
 {
   if (curve_.size()<min_length_)
-    {
-      vcl_cout << "In vgl_fit_lines_2d<T>::fit() - number of points < min_length "
-               << min_length_ << '\n';
-      return false;
-    }
+  {
+    vcl_cout << "In vgl_fit_lines_2d<T>::fit() - number of points < min_length "
+             << min_length_ << '\n';
+    return false;
+  }
   //A helper to hold points and do the linear regression
   vgl_line_2d_regression<T> reg;
   // Start at the beginning of the curve with
@@ -74,67 +74,67 @@ bool vgl_fit_lines_2d<T>::fit()
     reg.increment_partial_sums(curve_[i].x(), curve_[i].y());
   //The main loop
   while (nf<=cur_len)
+  {
+    reg.fit();
+    reg.init_rms_error_est();
+    if (reg.get_rms_error()<tol_)
     {
-      reg.fit();
-      reg.init_rms_error_est();
-      if (reg.get_rms_error()<tol_)
+      if (nf==cur_len)
+      {
+        output(ns, nf);
+        return true;
+      }
+      bool below_error_tol = true;
+      bool data_added = false;
+      while (nf<cur_len&&below_error_tol)
+      {
+        vgl_point_2d<T>& p = curve_[nf];
+        //if the point can be added without exeeding the threshold, do so
+        double error = reg.get_rms_error_est(p);
+        below_error_tol = error<tol_;
+        if (below_error_tol)
         {
-          if (nf==cur_len)
-            {
-              output(ns, nf);
-              return true;
-            }
-          bool below_error_tol = true;
-          bool data_added = false;
-          while (nf<cur_len&&below_error_tol)
-            {
-              vgl_point_2d<T>& p = curve_[nf];
-              //if the point can be added without exeeding the threshold, do so
-              double error = reg.get_rms_error_est(p);
-              below_error_tol = error<tol_;
-              if (below_error_tol)
-                {
-                  reg.increment_partial_sums(p.x(), p.y());
-                  data_added = true;
-                  nf++;
-                }
-            }
-           //if no points were added output the line
-           //and initialize a new fit
-          if (!data_added)
-            {
-              output(ns, nf);
-              ns = nf-1; nf=ns+min_length_;
-              if (nf<=cur_len)
-                {
-                  reg.clear();
-                  for (unsigned int i = ns; i<nf; i++)
-                    reg.increment_partial_sums(curve_[i].x(), curve_[i].y());
-                }
-            }
+          reg.increment_partial_sums(p.x(), p.y());
+          data_added = true;
+          nf++;
         }
-      // Else the fit is not good enough. We therefore remove the first
-      // point and add or delete points from the end of the current line
-      // segment until the resulting segment length is _min_fit_length
-      else
+      }
+       //if no points were added output the line
+       //and initialize a new fit
+      if (!data_added)
+      {
+        output(ns, nf);
+        ns = nf-1; nf=ns+min_length_;
+        if (nf<=cur_len)
         {
-          reg.decrement_partial_sums(curve_[ns].x(), curve_[ns].y());
-          ns++;
-          if (reg.get_n_pts()>min_length_)
-            while (reg.get_n_pts()>min_length_+1)
-              {
-                reg.decrement_partial_sums(curve_[nf].x(), curve_[nf].y());
-                nf--;
-              }
-          else if (nf<cur_len)
-            {
-              reg.increment_partial_sums(curve_[nf].x(), curve_[nf].y());
-              nf++;
-            }
-          else
-            nf++;
+          reg.clear();
+          for (unsigned int i = ns; i<nf; i++)
+            reg.increment_partial_sums(curve_[i].x(), curve_[i].y());
         }
+      }
     }
+    // Else the fit is not good enough. We therefore remove the first
+    // point and add or delete points from the end of the current line
+    // segment until the resulting segment length is _min_fit_length
+    else
+    {
+      reg.decrement_partial_sums(curve_[ns].x(), curve_[ns].y());
+      ns++;
+      if (reg.get_n_pts()>min_length_)
+        while (reg.get_n_pts()>min_length_+1)
+        {
+          reg.decrement_partial_sums(curve_[nf].x(), curve_[nf].y());
+          nf--;
+        }
+      else if (nf<cur_len)
+      {
+        reg.increment_partial_sums(curve_[nf].x(), curve_[nf].y());
+        nf++;
+      }
+      else
+        nf++;
+    }
+  }
   return true;
 }
 

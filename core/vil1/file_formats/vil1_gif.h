@@ -115,10 +115,10 @@ struct vil1_gif_loader_saver_proxy : public vil1_image_impl
   enum vil1_component_format component_format() const { return other->component_format(); }
 
   bool get_section(void *buf, int x0, int y0, int w, int h) const
-    { return other->get_section(image, buf, x0, y0, w, h); }
+  { return other->get_section(image, buf, x0, y0, w, h); }
 
   bool put_section(void const *buf, int x0, int y0, int w, int h)
-    { return other->put_section(image, buf, x0, y0, w, h); }
+  { return other->put_section(image, buf, x0, y0, w, h); }
 
   char const *file_format() const { return other->file_format(); }
 };

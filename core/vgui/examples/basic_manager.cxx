@@ -15,10 +15,10 @@ basic_manager *basic_manager::instance_ = 0;
 basic_manager *basic_manager::instance()
 {
   if (!instance_)
-    {
-      instance_ = new basic_manager();
-      instance_->init();
-    }
+  {
+    instance_ = new basic_manager();
+    instance_->init();
+  }
   return basic_manager::instance_;
 }
 

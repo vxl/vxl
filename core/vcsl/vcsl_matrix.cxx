@@ -102,23 +102,23 @@ vnl_matrix<double> vcsl_matrix::matrix_value(double time, bool type) const
     return param_to_matrix(matrix_[0],type);
 
   else
+  {
+    int i=matching_interval(time);
+    switch (interpolator_[i])
     {
-      int i=matching_interval(time);
-      switch(interpolator_[i])
-        {
-        case vcsl_linear:
-          return lmi(param_to_matrix(matrix_[i],type),param_to_matrix(matrix_[i+1],type),i,time);
-        case vcsl_cubic:
-          assert(!"vcsl_cubic not yet implemented");
-          break;
-        case vcsl_spline:
-          assert(!"vcsl_spline not yet implemented");
-          break;
-        default:
-          assert(!"This is impossible");
-          break;
-        }
+     case vcsl_linear:
+      return lmi(param_to_matrix(matrix_[i],type),param_to_matrix(matrix_[i+1],type),i,time);
+     case vcsl_cubic:
+      assert(!"vcsl_cubic not yet implemented");
+      break;
+     case vcsl_spline:
+      assert(!"vcsl_spline not yet implemented");
+      break;
+     default:
+      assert(!"This is impossible");
+      break;
     }
+  }
   return vnl_matrix<double>(); // never reached if asserts are in effect
 }
 

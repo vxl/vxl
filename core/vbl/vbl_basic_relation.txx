@@ -80,10 +80,10 @@ vbl_basic_relation<T1,T2,T3,T4,T5>::vbl_basic_relation(vbl_basic_relation<T1,T2,
   : impl(erel.impl), where(0)
 {
   if (!impl)
-    {
-      vcl_cerr << "Copy constructor called with invalid easy relation\n";
-      vcl_abort();
-    }
+  {
+    vcl_cerr << "Copy constructor called with invalid easy relation\n";
+    vcl_abort();
+  }
   impl->ref();
 
   where = new where_clause(*erel.where);
@@ -248,7 +248,7 @@ void vbl_basic_relation<T1,T2,T3,T4,T5>::dump_relation(vcl_ostream& str)
   str << "Relation " << get_name() << ":\n";
   where->Dump(str);
   for (iterator i = begin(); i != end(); i++)
-    str << "\t" << *i << vcl_endl;
+    str << '\t' << *i << vcl_endl;
 }
 
 //------------------------------------------------------------

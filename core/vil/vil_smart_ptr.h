@@ -142,6 +142,7 @@ inline bool operator== (T const* p, vil_smart_ptr<T> const& a)
 {
   return a.as_pointer() == p;
 }
+
 template <class T>
 inline bool operator!= (T const* p, vil_smart_ptr<T> const& a)
 {

@@ -69,9 +69,9 @@ class decode_request
 {
  public:
   enum request_type
-    {
-      SEEK, FILE_GRAB, SKIP, REWIND
-    };
+  {
+    SEEK, FILE_GRAB, SKIP, REWIND
+  };
   //seek seeks from the current file pointer
   //position until it gets frame position
   //file grab does a single fread from the
@@ -88,30 +88,30 @@ class frame_buffer
  public:
 
   frame_buffer()
-    {
-      buffers_ = new vcl_map<int,unsigned char *>;
-    }
+  {
+    buffers_ = new vcl_map<int,unsigned char *>;
+  }
 
   void init(int width, int height, int bits_pixel)
+  {
+    //allocate mem 4 ring buffer
+    for (int i=1; i<30 ; i++)
     {
-      //allocate mem 4 ring buffer
-      for (int i=1; i<30 ; i++)
-        {
-          unsigned char * buf = new unsigned char[width*height*(bits_pixel/8)];
-          (*buffers_)[-i] = buf;
-        }
-      return;
+      unsigned char * buf = new unsigned char[width*height*(bits_pixel/8)];
+      (*buffers_)[-i] = buf;
     }
+    return;
+  }
 
   ~frame_buffer()
-    {
-      vcl_cout << "frame_buffer DTOR. entering.\n";
-      vcl_map<int,unsigned char *>::iterator vmiuit = buffers_->begin();
-      for (;vmiuit != buffers_->end(); vmiuit++)
-        delete[] (*vmiuit).second;
-      delete buffers_;
-      vcl_cout << "frame_buffer DTOR. exiting.\n";
-    }
+  {
+    vcl_cout << "frame_buffer DTOR. entering.\n";
+    vcl_map<int,unsigned char *>::iterator vmiuit = buffers_->begin();
+    for (;vmiuit != buffers_->end(); vmiuit++)
+      delete[] (*vmiuit).second;
+    delete buffers_;
+    vcl_cout << "frame_buffer DTOR. exiting.\n";
+  }
 
   unsigned char * get_buff(int i) {return (*buffers_)[i];}
   unsigned char * next(int framenum)
@@ -129,29 +129,29 @@ class frame_buffer
   }
 
   void print()
-    {
-      vcl_map<int,unsigned char *>::const_iterator vmiucit = buffers_->begin();
-      for (;vmiucit != buffers_->end(); vmiucit++)
-        vcl_cout << (*vmiucit).first << vcl_endl;
-    }
+  {
+    vcl_map<int,unsigned char *>::const_iterator vmiucit = buffers_->begin();
+    for (;vmiucit != buffers_->end(); vmiucit++)
+      vcl_cout << (*vmiucit).first << vcl_endl;
+  }
 
   int first_frame_num() { return (*buffers_->begin()).first;}
 
   bool reset()
+  {
+    vcl_map<int,unsigned char *>::iterator vmit = buffers_->begin();
+    for (int i=-30; vmit != buffers_->end(); vmit++,i++)
     {
-      vcl_map<int,unsigned char *>::iterator vmit = buffers_->begin();
-      for (int i=-30; vmit != buffers_->end(); vmit++,i++)
-        {
-          unsigned char * buf = (*vmit).second;
+      unsigned char * buf = (*vmit).second;
 
-          //remove it from the map
-          buffers_->erase(vmit);
+      //remove it from the map
+      buffers_->erase(vmit);
 
-          //use the memory for the new frame
-          (*buffers_)[i] = buf;
-        }
-      return true;
+      //use the memory for the new frame
+      (*buffers_)[i] = buf;
     }
+    return true;
+  }
 
  private:
   vcl_map<int,unsigned char *> * buffers_;
@@ -161,9 +161,9 @@ struct vidl_mpegcodec_data : public vo_instance_t
 {
  public:
   enum output_format_t
-    {
-      GREY, RGB
-    };
+  {
+    GREY, RGB
+  };
 
   int prediction_index;
   vo_frame_t * frame_ptr[3]; //legacy code

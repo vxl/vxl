@@ -43,9 +43,9 @@ class vgui_gtk_adaptor : public vgui_adaptor, public vgui_adaptor_mixin
   unsigned get_width() const {return mixin::width;}
   unsigned get_height() const {return mixin::height;}
   void bind_popups(vgui_modifier m, vgui_button b)
-    { mixin::popup_modifier = m; mixin::popup_button = b; }
+  { mixin::popup_modifier = m; mixin::popup_button = b; }
   void get_popup_bindings(vgui_modifier &m, vgui_button &b) const
-    { m = mixin::popup_modifier; b = mixin::popup_button; }
+  { m = mixin::popup_modifier; b = mixin::popup_button; }
 
   void set_default_popup(vgui_menu);
   vgui_menu get_popup();

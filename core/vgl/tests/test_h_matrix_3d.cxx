@@ -27,6 +27,7 @@ static void test_identity_transform()
                              (xp.z()-xpp.z())*(xp.z()-xpp.z()));
   TEST_NEAR("identity", distance, 0.0, 1e-06);
 }
+
 static void test_perspective_transform()
 {
   vcl_cout << "Testing perspective transform on point\n";

@@ -187,18 +187,18 @@ bool vgui_viewer2D_tableau::handle(const vgui_event& e)
   //and the event is not passed into the key_press method.
   if (e.type ==vgui_KEY_PRESS)
     if (e.key=='c')
-      {
-        vgui_adaptor* adap = e.origin;
-        vgui_window* win = adap->get_window();
-        //current scroll pos range is [0,100]
-        //eventually we would want to get the range
-        //from the window to insure consistency
-        int cpos = 50;
-        win->set_hscrollbar(cpos);
-        win->set_vscrollbar(cpos);
-        npos_x = cpos;
-        npos_y = cpos;
-      }
+    {
+      vgui_adaptor* adap = e.origin;
+      vgui_window* win = adap->get_window();
+      //current scroll pos range is [0,100]
+      //eventually we would want to get the range
+      //from the window to insure consistency
+      int cpos = 50;
+      win->set_hscrollbar(cpos);
+      win->set_vscrollbar(cpos);
+      npos_x = cpos;
+      npos_y = cpos;
+    }
   //We really want to be able to scroll the entire
   //image through the viewport.  The token offset should be
   //adjusted proportionally to the size of the image
@@ -478,6 +478,7 @@ bool vgui_viewer2D_tableau::help()
            << "--------------------------\n\n";
   return false;
 }
+
 bool vgui_viewer2D_tableau::image_size(int& width, int& height)
 {
   vgui_tableau_sptr t = vgui_find_below_by_type_name(this,"vgui_image_tableau");
@@ -497,6 +498,7 @@ bool vgui_viewer2D_tableau::image_size(int& width, int& height)
   }
   return false;
 }
+
 void vgui_viewer2D_tableau::center_event()
 {
   int width=0, height=0;
@@ -510,37 +512,38 @@ bool vgui_viewer2D_tableau::key_press(int /*x*/, int /*y*/, vgui_key key, vgui_m
   vcl_cerr << "vgui_viewer2D_tableau_handler::key_press " << key << '\n';
 #endif
   if (modifier & vgui_CTRL) vgui::out << "CTRL+" << char(key) << " pressed: CTRL ignored\n";
-  switch(key) {
-  case 'x':
+  switch (key)
+  {
+   case 'x':
     vgui::out << "viewer2D : resizing image\n";
     this->token.scaleX = 1;
     this->token.scaleY = 1;
     center_event();
     this->post_redraw();
     return true;
-  case 'c':
+   case 'c':
     vgui::out << "viewer2D : centering image\n";
     center_event();
     return true;
-  case '-':
+   case '-':
     zoom_factor -= 0.1f;
     vgui::out << "viewer2D : zoom_factor = " << zoom_factor << '\n';
     return true;
-  case '=':
+   case '=':
     zoom_factor += 0.1f;
     vgui::out << "viewer2D : zoom_factor = " << zoom_factor << '\n';
     return true;
-  case 'n':
+   case 'n':
     this->nice_points = !this->nice_points;
     this->nice_lines = !this->nice_lines;
     vgui::out << "viewer2D : antialiased points & lines "
               << vbl_bool_ostream::on_off(this->nice_points) << '\n';
     this->post_redraw();
     return true;
-  case 'd':
+   case 'd':
     sweep_next = true;
     return true;
-  case 'z':
+   case 'z':
     if (this->zoom_type == vgui_viewer2D_tableau::normal_zoom)
     {
       this->zoom_type = vgui_viewer2D_tableau::smooth_zoom;
@@ -552,7 +555,7 @@ bool vgui_viewer2D_tableau::key_press(int /*x*/, int /*y*/, vgui_key key, vgui_m
       vgui::out << "viewer2D : normal zoom\n";
     }
     return true;
-  default:
+   default:
     return false;
   }
 }

@@ -26,28 +26,27 @@ class vnl_rnpoly_solve_cmplx
   vnl_rnpoly_solve_cmplx(double a=0, double b=0) : R(a), C(b) {}
   inline double norm() const { return R*R+C*C; }
   inline vnl_rnpoly_solve_cmplx operator-() const
-            { return vnl_rnpoly_solve_cmplx(-R, -C); }
+  { return vnl_rnpoly_solve_cmplx(-R, -C); }
   inline vnl_rnpoly_solve_cmplx operator+(vnl_rnpoly_solve_cmplx const& Y) const
-            { return vnl_rnpoly_solve_cmplx(R+Y.R, C+Y.C); }
+  { return vnl_rnpoly_solve_cmplx(R+Y.R, C+Y.C); }
   inline vnl_rnpoly_solve_cmplx operator-(vnl_rnpoly_solve_cmplx const& Y) const
-            { return vnl_rnpoly_solve_cmplx(R-Y.R, C-Y.C); }
+  { return vnl_rnpoly_solve_cmplx(R-Y.R, C-Y.C); }
   inline vnl_rnpoly_solve_cmplx& operator+=(vnl_rnpoly_solve_cmplx const& Y)
-            { R+=Y.R; C+=Y.C; return *this; }
+  { R+=Y.R; C+=Y.C; return *this; }
   inline vnl_rnpoly_solve_cmplx& operator-=(vnl_rnpoly_solve_cmplx const& Y)
-            { R-=Y.R; C-=Y.C; return *this; }
+  { R-=Y.R; C-=Y.C; return *this; }
   inline vnl_rnpoly_solve_cmplx operator*(vnl_rnpoly_solve_cmplx const& Y) const
-            { return vnl_rnpoly_solve_cmplx(R*Y.R-C*Y.C, R*Y.C+C*Y.R); }
+  { return vnl_rnpoly_solve_cmplx(R*Y.R-C*Y.C, R*Y.C+C*Y.R); }
   inline vnl_rnpoly_solve_cmplx operator/(vnl_rnpoly_solve_cmplx const& Y) const
-            { double N=1.0/Y.norm();
-              return vnl_rnpoly_solve_cmplx((R*Y.R+C*Y.C)*N, (C*Y.R-R*Y.C)*N); }
+  { double N=1.0/Y.norm(); return vnl_rnpoly_solve_cmplx((R*Y.R+C*Y.C)*N, (C*Y.R-R*Y.C)*N); }
   inline vnl_rnpoly_solve_cmplx operator*(double T) const
-            { return vnl_rnpoly_solve_cmplx(R*T, C*T); }
+  { return vnl_rnpoly_solve_cmplx(R*T, C*T); }
   inline vnl_rnpoly_solve_cmplx& operator*=(double T)
-            { R*=T; C*=T; return *this; }
+  { R*=T; C*=T; return *this; }
   inline vnl_rnpoly_solve_cmplx& operator*=(vnl_rnpoly_solve_cmplx const& Y)
-            { double r=R*Y.R-C*Y.C; C=R*Y.C+C*Y.R; R=r; return *this; }
+  { double r=R*Y.R-C*Y.C; C=R*Y.C+C*Y.R; R=r; return *this; }
   inline vnl_rnpoly_solve_cmplx& operator/=(vnl_rnpoly_solve_cmplx const& Y)
-            { return *this = operator/(Y); }
+  { return *this = operator/(Y); }
 };
 
 static const double twopi = 6.2831853071795864769;

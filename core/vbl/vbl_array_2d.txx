@@ -10,12 +10,12 @@ template<class T>
 vcl_ostream& operator<<(vcl_ostream &os, vbl_array_2d<T> const &array)
 {
   for ( int i=0; i< array.rows(); i++)
-    {
-      for ( int j=0; j< array.columns(); j++)
-        os << array(i,j) << ' ';
+  {
+    for ( int j=0; j< array.columns(); j++)
+      os << array(i,j) << ' ';
 
-      os << vcl_endl;
-    }
+    os << vcl_endl;
+  }
 
   return os;
 }

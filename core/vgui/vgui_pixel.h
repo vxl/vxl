@@ -34,8 +34,8 @@ struct vgui_pixel_rgb<8,8,8>
   GLubyte G;
   GLubyte B;
   vgui_pixel_rgb<8,8,8>() { }
-  vgui_pixel_rgb<8,8,8>( vxl_byte red, vxl_byte green, vxl_byte blue, vxl_byte /*alpha*/ )
-    { R = red; G = green; B = blue; }
+  vgui_pixel_rgb<8,8,8>( vxl_byte red, vxl_byte green, vxl_byte blue, vxl_byte /*alpha*/ = 0 )
+  : R(red), G(green), B(blue) {}
 };
 typedef vgui_pixel_rgb<8,8,8> vgui_pixel_rgb888;
 
@@ -57,8 +57,8 @@ struct vgui_pixel_rgb<5,6,5>
   GLushort B : 5;
 #endif
   vgui_pixel_rgb<5,6,5>() { }
-  vgui_pixel_rgb<5,6,5>( vxl_byte red, vxl_byte green, vxl_byte blue, vxl_byte /*alpha*/ )
-    { R = red>>3; G = green>>2; B = blue>>3; }
+  vgui_pixel_rgb<5,6,5>( vxl_byte red, vxl_byte green, vxl_byte blue, vxl_byte /*alpha*/ = 0 )
+  : R(red>>3), G(green>>2), B(blue>>3) {}
 };
 typedef vgui_pixel_rgb<5,6,5> vgui_pixel_rgb565;
 
@@ -75,8 +75,8 @@ struct vgui_pixel_bgr<5,6,5>
   GLushort R : 5;
 #endif
   vgui_pixel_bgr<5,6,5>() { }
-  vgui_pixel_bgr<5,6,5>( vxl_byte red, vxl_byte green, vxl_byte blue, vxl_byte /*alpha*/ )
-    { R = red>>3; G = green>>2; B = blue>>3; }
+  vgui_pixel_bgr<5,6,5>( vxl_byte red, vxl_byte green, vxl_byte blue, vxl_byte /*alpha*/ = 0 )
+  : R(red>>3), G(green>>2), B(blue>>3) {}
 };
 typedef vgui_pixel_bgr<5,6,5> vgui_pixel_bgr565;
 
@@ -86,9 +86,9 @@ struct vgui_pixel_bgr<8,8,8>
   GLubyte B;
   GLubyte G;
   GLubyte R;
-  vgui_pixel_bgr<8,8,8>() { }
-  vgui_pixel_bgr<8,8,8>( vxl_byte red, vxl_byte green, vxl_byte blue, vxl_byte /*alpha*/ )
-    { R = red; G = green; B = blue; }
+  vgui_pixel_bgr<8,8,8>() {}
+  vgui_pixel_bgr<8,8,8>( vxl_byte red, vxl_byte green, vxl_byte blue, vxl_byte /*alpha*/ = 0 )
+  : R(red), G(green), B(blue) {}
 };
 typedef vgui_pixel_bgr<8,8,8> vgui_pixel_bgr888;
 
@@ -101,7 +101,7 @@ struct vgui_pixel_rgba<5,5,5,1>
   GLushort A:1;
   vgui_pixel_rgba<5,5,5,1>() { }
   vgui_pixel_rgba<5,5,5,1>( vxl_byte red, vxl_byte green, vxl_byte blue, vxl_byte alpha )
-    { R = red>>3; G = green>>3; B = blue>>3; A=alpha; }
+  : R(red>>3), G(green>>3), B(blue>>3), A(alpha) {}
 };
 typedef vgui_pixel_rgba<5,5,5,1> vgui_pixel_bgra5551;
 
@@ -114,7 +114,7 @@ struct vgui_pixel_rgba<8,8,8,8>
   GLubyte A;
   vgui_pixel_rgba<8,8,8,8>() { }
   vgui_pixel_rgba<8,8,8,8>( vxl_byte red, vxl_byte green, vxl_byte blue, vxl_byte alpha )
-    { R = red; G = green; B = blue; A=alpha; }
+  : R(red), G(green), B(blue), A(alpha) {}
 };
 typedef vgui_pixel_rgba<8,8,8,8> vgui_pixel_rgba8888;
 
@@ -127,7 +127,7 @@ struct vgui_pixel_abgr<8,8,8,8>
   GLubyte R;
   vgui_pixel_abgr<8,8,8,8>() { }
   vgui_pixel_abgr<8,8,8,8>( vxl_byte red, vxl_byte green, vxl_byte blue, vxl_byte alpha )
-    { R = red; G = green; B = blue; A=alpha; }
+  : R(red), G(green), B(blue), A(alpha) {}
 };
 typedef vgui_pixel_abgr<8,8,8,8> vgui_pixel_abgr8888;
 
@@ -140,7 +140,7 @@ struct vgui_pixel_bgra<8,8,8,8>
   GLubyte A;
   vgui_pixel_bgra<8,8,8,8>() { }
   vgui_pixel_bgra<8,8,8,8>( vxl_byte red, vxl_byte green, vxl_byte blue, vxl_byte alpha )
-    { R = red; G = green; B = blue; A=alpha; }
+  : R(red), G(green), B(blue), A(alpha) {}
 };
 typedef vgui_pixel_bgra<8,8,8,8> vgui_pixel_bgra8888;
 

@@ -131,10 +131,10 @@ compute_p(vcl_vector<vgl_homg_point_2d<double> > const& points1,
     return false;
   vcl_vector<vgl_homg_point_2d<double> > tpoints1, tpoints2;
   for (int i = 0; i<n; i++)
-    {
-      tpoints1.push_back(tr1(points1[i]));
-      tpoints2.push_back(tr2(points2[i]));
-    }
+  {
+    tpoints1.push_back(tr1(points1[i]));
+    tpoints2.push_back(tr2(points2[i]));
+  }
   vgl_h_matrix_2d<double> hh;
   if (!solve_linear_problem(equ_count, tpoints1, tpoints2, hh))
     return false;
@@ -223,7 +223,8 @@ compute_pl(vcl_vector<vgl_homg_point_2d<double> > const& points1,
   int nl = lines1.size();
 
   int equ_count = np * (allow_ideal_points_ ? 3 : 2) + 2*nl;
-  if ((np+nl)*2+1 < TM_UNKNOWNS_COUNT) {
+  if ((np+nl)*2+1 < TM_UNKNOWNS_COUNT)
+  {
     vcl_cerr << "vgl_h_matrix_2d_compute_linear: Need at least 4 matches.\n";
     if (np+nl == 0) vcl_cerr << "Could be vcl_vector setlength idiosyncrasies!\n";
     return false;
@@ -285,10 +286,10 @@ solve_weighted_least_squares(vcl_vector<vgl_homg_line_2d<double> > const& l1,
   vnl_vector<double> two_w(2*Nc);
   int j =0;
   for (int i = 0; i<Nc; i++, j+=2)
-    {
-      two_w[j]=w[i];
-      two_w[j+1]=w[i];
-    }
+  {
+    two_w[j]=w[i];
+    two_w[j+1]=w[i];
+  }
   vnl_diag_matrix<double> W(two_w);
 
   //Form the design matrix, D
@@ -296,7 +297,8 @@ solve_weighted_least_squares(vcl_vector<vgl_homg_line_2d<double> > const& l1,
   vnl_matrix<double> M(TM_UNKNOWNS_COUNT, TM_UNKNOWNS_COUNT);
 
   int row = 0;
-  for (int i = 0; i < Nc; i++) {
+  for (int i = 0; i < Nc; i++)
+  {
     D(row, 0) =  l1[i].a() * l2[i].c();
     D(row, 1) =  l1[i].b() * l2[i].c();
     D(row, 2) =  l1[i].c() * l2[i].c();
@@ -355,17 +357,17 @@ compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
   vcl_vector<vgl_homg_line_2d<double> > tlines1, tlines2;
   for (vcl_vector<vgl_homg_line_2d<double> >::const_iterator
        lit = lines1.begin(); lit != lines1.end(); lit++)
-    {
-      // transform the lines according to the normalizing transform
-      vgl_homg_line_2d<double> l = tr1(*lit);
-      tlines1.push_back(l);
-    }
+  {
+    // transform the lines according to the normalizing transform
+    vgl_homg_line_2d<double> l = tr1(*lit);
+    tlines1.push_back(l);
+  }
   for (vcl_vector<vgl_homg_line_2d<double> >::const_iterator
        lit = lines2.begin(); lit != lines2.end(); lit++)
-    {
-      // transform the lines according to the normalizing transform
-      vgl_homg_line_2d<double> l = tr2(*lit);
-      tlines2.push_back(l);
+  {
+    // transform the lines according to the normalizing transform
+    vgl_homg_line_2d<double> l = tr2(*lit);
+    tlines2.push_back(l);
   }
 
   vgl_h_matrix_2d<double> hl,hp,tr2inv;

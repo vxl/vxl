@@ -51,16 +51,16 @@ static void test_fit_simple_chain()
   vgl_fit_lines_2d<double> fitter;
   //A segment with a slope of 2
   for (int i = 0; i<npts; i++)
-    {
-      vgl_point_2d<double> p(i,2*i);
-      fitter.add_point(p);
-    }
+  {
+    vgl_point_2d<double> p(i,2*i);
+    fitter.add_point(p);
+  }
   //A segment with a slope of -1
   for (int i = 0; i<npts; i++)
-    {
-      vgl_point_2d<double> p(i+npts,(2*(npts-1)-i));
-      fitter.add_point(p);
-    }
+  {
+    vgl_point_2d<double> p(i+npts,(2*(npts-1)-i));
+    fitter.add_point(p);
+  }
   //Add a segment with a slope of +1 but too short
   vgl_point_2d<double> p0(2*npts, npts);
   vgl_point_2d<double> p1(2*npts+1, npts+1);

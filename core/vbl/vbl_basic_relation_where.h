@@ -120,27 +120,27 @@ class vbl_basic_relation_where : public vbl_basic_tuple<T1,T2,T3,T4,T5>
   //: Print the where clause on cerr or stream.
   void Dump(vcl_ostream& str = vcl_cerr) const
   {
-    str << "<";
-    if (first_wild) str << "*";
+    str << '<';
+    if (first_wild) str << '*';
     else str << GetFirst();
     if (second_wild) str << ",*";
-    else str << "," << GetSecond();
+    else str << ',' << GetSecond();
     if (!vbl_basic_optional_traits<T3>::IsOptional)
-      {
-        if (third_wild) str << ",*";
-        else str << "," << GetThird();
-      }
+    {
+      if (third_wild) str << ",*";
+      else str << ',' << GetThird();
+    }
     if (!vbl_basic_optional_traits<T4>::IsOptional)
-      {
-        if (fourth_wild) str << ",*";
-        else str << "," << GetFourth();
-      }
+    {
+      if (fourth_wild) str << ",*";
+      else str << ',' << GetFourth();
+    }
     if (!vbl_basic_optional_traits<T5>::IsOptional)
-      {
-        if (fifth_wild) str << ",*";
-        else str << "," << GetFifth();
-      }
-    str << ">";
+    {
+      if (fifth_wild) str << ",*";
+      else str << ',' << GetFifth();
+    }
+    str << '>';
   }
 
   inline bool FirstWild() { return first_wild; }

@@ -20,6 +20,7 @@ vcl_istream& operator>>(vcl_istream& s, vgl_line_segment_2d<Type>& p)
   p.set(p1, p2);
   return s;
 }
+
 template <class Type>
 Type vgl_line_segment_2d<Type>::a() const
 {

@@ -22,6 +22,7 @@ void vsl_b_write(vsl_b_ostream &os, const vul_user_info & p)
   vsl_b_write(os, p.shell);
   vsl_b_write(os, p.passwd);
 }
+
 //=========================================================================
 //: Binary load self from stream.
 void vsl_b_read(vsl_b_istream &is, vul_user_info & p)
@@ -30,19 +31,19 @@ void vsl_b_read(vsl_b_istream &is, vul_user_info & p)
 
   short v;
   vsl_b_read(is, v);
-  switch(v)
+  switch (v)
   {
-  case 1:
-  vsl_b_read(is, p.uid);
-  vsl_b_read(is, p.gid);
-  vsl_b_read(is, p.name);
-  vsl_b_read(is, p.home_directory);
-  vsl_b_read(is, p.full_name);
-  vsl_b_read(is, p.shell);
-  vsl_b_read(is, p.passwd);
-   break;
+   case 1:
+    vsl_b_read(is, p.uid);
+    vsl_b_read(is, p.gid);
+    vsl_b_read(is, p.name);
+    vsl_b_read(is, p.home_directory);
+    vsl_b_read(is, p.full_name);
+    vsl_b_read(is, p.shell);
+    vsl_b_read(is, p.passwd);
+    break;
 
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vul_user_info&)\n"
              << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream

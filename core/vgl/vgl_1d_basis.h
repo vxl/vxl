@@ -113,7 +113,7 @@ class vgl_1d_basis
   //
   inline vgl_1d_basis(T const& o, T const& u, T const& i)
     : origin_(o), unity_(u), inf_pt_(i), affine_(false)
-      { assert(collinear(o,i,u) && o!=i && o!=u && i!=u); }
+  { assert(collinear(o,i,u) && o!=i && o!=u && i!=u); }
 
   //: Construct from two points (affine basis).
   // It will serve as origin (0,1) and unity point (1,1).
