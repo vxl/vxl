@@ -27,7 +27,11 @@
 #elif defined(SYSV) && !defined(hppa)
 // needed on platforms with finite() declared in strange places, e.g. on alpha
 extern "C" int finite(double);
+# ifdef __alpha__ // on Alpha, finitef() must be used for float args instead of finite()
 extern "C" int finitef(float);
+# else
+#  define finitef finite
+# endif
 
 #else
 #warning finite() is not declared on this platform
