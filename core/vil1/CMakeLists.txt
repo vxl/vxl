@@ -52,6 +52,11 @@ vil_warp
 vil_test
 )
 
+# vil_file_formats.cxx uses -DTIFF, etc, so we need to do this here.
+#
+INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindJPEG.cmake)
+INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindPNG.cmake)
+INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindTIFF.cmake)
 
 AUX_SOURCE_DIRECTORY(Templates vil_sources)
 
