@@ -30,11 +30,11 @@ vsol_spatial_object_2d_sptr vdgl_digital_region::clone() const
 void vdgl_digital_region::init()
 {
   npts_ = 0;
-  pixel_size_=1.0;
+  pixel_size_=1.0f;
   max_ = 0;
   min_ = (unsigned short)(-1);
   xp_ = NULL; yp_ = NULL; zp_ = NULL; pix_ = NULL;
-  xo_ = 0; yo_ = 0; zo_ = 0; io_ = 0; io_stdev_ = 0.0;
+  xo_ = yo_ = zo_ = io_ = io_stdev_ = 0.0f;
   X2_ = 0;  Y2_ = 0;  I2_ = 0;
   XY_ = 0;  XI_ = 0;  YI_ = 0;
   error_ = 0; sigma_sq_ = 0;
@@ -188,7 +188,7 @@ void vdgl_digital_region::ResetPixelData()
   delete [] yp_; yp_ = NULL;
   delete [] zp_; zp_ = NULL;
   delete [] pix_; pix_ = NULL;
-  xo_ = 0; yo_ = 0; zo_ = 0; io_ = 0; io_stdev_=0.0;
+  xo_ = yo_ = zo_ = io_ = io_stdev_=0.0f;
 }
 //---------------------------------------------------------
 //: The 2-d version
@@ -218,12 +218,12 @@ void vdgl_digital_region::IncrementMeans(float x, float y, float z,
 //
 float vdgl_digital_region::ComputeIntensityStdev()
 {
-  io_stdev_ = 0.0; // start from scratch each time
+  io_stdev_ = 0.0f; // start from scratch each time
   float mean = this->Io(); // get the mean.
   for (int i=0; i<npts_; i++) {
     io_stdev_ += (pix_[i]-mean)*(pix_[i]-mean);
   }
-  io_stdev_ = io_stdev_ * 1.0/(npts_ - 1.0);
+  io_stdev_ = io_stdev_ * 1.0f/(npts_ - 1.0f);
   return io_stdev_;
 }
 //-----------------------------------------------------------------
@@ -337,7 +337,7 @@ float vdgl_digital_region::Diameter() const
   if (!scatter_matrix_valid_)
     this->ComputeScatterMatrix();
   if (this->Npix()<4)
-    return 1.0;
+    return 1.0f;
   // construct the lower right 2x2 matrix of S, s.
   vnl_matrix<double> s(2, 2, 0.0);
   for (int r = 1; r<=2; r++)
@@ -360,7 +360,7 @@ float vdgl_digital_region::AspectRatio() const
   if (!scatter_matrix_valid_)
     this->ComputeScatterMatrix();
   if (this->Npix()<4)
-    return 1.0;
+    return 1.0f;
   // construct the lower right 2x2 matrix of S, s.
   vnl_matrix<double> s(2, 2, 0.0);
   for (int r = 1; r<=2; r++)
@@ -369,7 +369,7 @@ float vdgl_digital_region::AspectRatio() const
   //Compute SVD of s to get aspect ratio
   vnl_svd<double> svd(s);
   if (svd.rank()!=2)
-    return 1.0;
+    return 1.0f;
   return (float)vcl_sqrt(svd.W(0)/svd.W(1));
 }
 
@@ -539,20 +539,20 @@ void vdgl_digital_region::PrintFit() const
   if (!fit_valid_)
     this->DoPlaneFit();
   vcl_cout << "IntensityFit(In Plane Coordinates): "
-       << "Number of Points =" <<  npts_ << vcl_endl
-       << "Scatter Matrix: \n"
-       << "X2 Y2 I2 " << this->X2() << " " << this->Y2()
-       << " " << this->I2() << vcl_endl
-       << "XY XI YI " << this->XY() << " " << this->XI()
-       << " " << this->YI() << vcl_endl
-       << "Xo Yo Io " << this->Xo() << " " << this->Yo()
-       << " " << this->Io() << vcl_endl
-       << "fitted Plane: \n"
-       << "di/dx " << this->Ix() << vcl_endl
-       << "di/dy " << this->Iy() << vcl_endl
-       << "sample variance: " << this->Var()<< vcl_endl
-       << "squared cost: " << error_ << vcl_endl
-       << "average cost: " << vcl_sqrt(error_) << vcl_endl << vcl_endl;
+           << "Number of Points =" <<  npts_ << vcl_endl
+           << "Scatter Matrix: \n"
+           << "X2 Y2 I2 " << this->X2() << " " << this->Y2()
+           << " " << this->I2() << vcl_endl
+           << "XY XI YI " << this->XY() << " " << this->XI()
+           << " " << this->YI() << vcl_endl
+           << "Xo Yo Io " << this->Xo() << " " << this->Yo()
+           << " " << this->Io() << vcl_endl
+           << "fitted Plane: \n"
+           << "di/dx " << this->Ix() << vcl_endl
+           << "di/dy " << this->Iy() << vcl_endl
+           << "sample variance: " << this->Var()<< vcl_endl
+           << "squared cost: " << error_ << vcl_endl
+           << "average cost: " << vcl_sqrt(error_) << vcl_endl << vcl_endl;
 }
 
 #if 0
@@ -574,10 +574,10 @@ IntensityCoef_ref vdgl_digital_region::GetIntCoef() const
 float vdgl_digital_region::Ir() const
 {
   if (pix_index_<0)
-    return 0.0;
-  if(npts_<4)
-    return 0.0;
-  
+    return 0.0f;
+  if (npts_<4)
+    return 0.0f;
+
     if (!fit_valid_)
     {
       int initial_pix_index = pix_index_;//Save the current pix_index_ state
