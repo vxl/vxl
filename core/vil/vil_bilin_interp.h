@@ -13,7 +13,7 @@
 //  Image is nx * ny array of Ts. x,y element is data[xstep*x+ystep*y]
 //  No bound checks are done.
 template<class T>
-inline double vil2_bilin_interp_quick(double x, double y, const T* data,
+inline double vil2_bilin_interp_unsafe(double x, double y, const T* data,
                                     vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
 {
     int p1x=int(x);
