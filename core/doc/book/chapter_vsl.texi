@@ -22,6 +22,7 @@ NOTE: The vsl library, and the io/v?l libraries currently live in the Manchester
 University package - mul.  They will be moved to the core vxl once they've been
 tested at more than one site.
 
+
 @subsection Supported Platforms
 
 The binary I/O code is known to work across the following hardware/OS/compiler combinations:
@@ -111,6 +112,7 @@ vsl_binary_save_to_file("my_object.bvl",my_object);
 vsl_binary_load_from_file("my_object.bvl",my_new_object);
 @end example
 
+
 @subsection Saving multiple objects
 One can use exactly the same approach to save a set of objects
 
@@ -143,7 +145,6 @@ precisely mirror the input.
 @end quotation
 
 
-
 @subsection Advanced Topics: Loading by baseclass pointer
 
 When using polymorphism, there are frequently times when one needs to
@@ -172,7 +173,7 @@ class vxl_my_class : public vxl_baseclass
   virtual void b_write(vsl_b_ostream&) const;
   virtual void b_read(vsl_b_ostream&);
   virtual vcl_string is_a() const;
-  virtual bool is_a(vcl_string const&) const;
+  virtual bool is_class(vcl_string const&) const;
   virtual vxl_baseclass* clone() const;
 @};
 
@@ -203,7 +204,7 @@ void demonstrate_load(vsl_b_istream& is)
     vsl_b_read(is,base_ptr);
 
     // Show the object
-    cout<<"Loaded object: "<<base_ptr<<endl;
+    vcl_cout<<"Loaded object: "<<base_ptr<<vcl_endl;
 
     // Tidy up
     delete base_ptr;
@@ -268,7 +269,7 @@ public:
   virtual vcl_string target_classname() const;
 
     //: Return true if b is of class target_classname()
-    //  Typically this will just be "return b.is_a(target_classname())"
+    //  Typically this will just be "return b.is_class(target_classname())"
     //  However, third party libraries may use a different system
   virtual bool is_io_for(const vxl_baseclass& b) const;
 @};
@@ -350,6 +351,7 @@ The last must be considered because various classes in vxl are derived
 from plain classes.  The base classes in these cases are kept as
 plain classes to improve memory efficiency.
 
+
 @subsection Non-polymorphic (Plain) Classes
 For plain classes (those with no virtual functions), and those derived from plain classes,
 you need to add the following functions to the class definition in the .h file.
@@ -367,10 +369,10 @@ you need to add the following functions to the class definition in the .h file.
   void print_summary(vcl_ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  const vcl_string is_a() const;
+  vcl_string is_a() const;
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  bool is_a(vcl_string const&) const;
+  bool is_class(vcl_string const&) const;
 
 @end example
 You will also need to add the following global scope helper function
@@ -385,6 +387,7 @@ void vsl_b_read(vsl_b_istream &is, vnl_my_class & b);
 @end example
 
 NOTE: YOU SHOULD ALSO ADD APPROPRIATE TEST PROGRAMS : See below
+
 
 @subsection Base Classes
 For base classes (those classes at the base of a polymorphic hierarchy, with virtual functions),
@@ -404,10 +407,10 @@ you need to add the following functions to the class definition in the .h file.
   virtual void print_summary(vcl_ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  virtual const vcl_string is_a() const;
+  virtual vcl_string is_a() const;
 
   //: Return true if the argument matches the string identifying the class
-  virtual bool is_a(vcl_string const&) const;
+  virtual bool is_class(vcl_string const&) const;
 
   //: Create a copy of the object on the heap.
   // The caller is responsible for deletion
@@ -444,6 +447,7 @@ You will also need to add the following global scope helper function declaration
 
 NOTE: YOU SHOULD ALSO ADD APPROPRIATE TEST PROGRAMS : See below
 
+
 @subsection Derived Classes
 For derived classes in a polymorphic hierarchy, which include virtual functions,
 you need to add the following functions to the class definition in the .h file.
@@ -462,12 +466,12 @@ you need to add the following functions to the class definition in the .h file.
   virtual void print_summary(vcl_ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  virtual const vcl_string is_a() const;    // This function is not strictly necessary
-                                            // if the class is not part of an inheritance
-                                            // hierarchy
+  virtual vcl_string is_a() const;   // This function is not strictly necessary
+                                     // if the class is not part of an inheritance
+                                     // hierarchy
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  bool is_a(vcl_string const&) const;
+  bool is_class(vcl_string const&) const;
 
   //: Create a copy of the object on the heap.
   // The caller is responsible for deletion
@@ -592,16 +596,16 @@ pointer, the @code{is_a()} method is not necessary and can be left out.
 @example
 //=======================================
 //: Return a platform independent string identifying the class
-const vcl_string vanyl_my_class::is_a() const
+vcl_string vanyl_my_class::is_a() const
 @{
     return vcl_string("vanyl_my_class");
 @}
 
 //=======================================
 //: Return true if the argument matches the string identifying the class or any parent class
-bool vanyl_my_class::is_a(vcl_string const& s) const
+bool vanyl_my_class::is_class(vcl_string const& s) const
 @{
-    return s=="vanyl_my_class" || vanyl_parent_class::is_a(s);
+    return s=="vanyl_my_class" || vanyl_parent_class::is_class(s);
 @}
 @end example
 
@@ -1030,9 +1034,10 @@ void vsl_print_summary(vcl_ostream &os, const vgl_point_2d<T>& p)
 #define VGL_IO_LINE_2D_INSTANTIATE(T) \
 template void vsl_print_summary(vcl_ostream &, const vgl_point_2d<T >&); \
 template void vsl_b_read(vsl_b_istream &, vgl_point_2d<T >&); \
-template void vsl_b_write(vsl_b_ostream &, const vgl_point_2d<T >&); \
-;
+template void vsl_b_write(vsl_b_ostream &, const vgl_point_2d<T >&)
+
 @end example
+
 
 @subsection `Clip-On' IO for Polymorphic Hierarchies
 
@@ -1084,7 +1089,7 @@ public:
   virtual vcl_string target_classname() const;
 
     //: Return true if b is of class target_classname()
-    //  Typically this will just be "return b.is_a(target_classname())"
+    //  Typically this will just be "return b.is_class(target_classname())"
     //  However, third party libraries may use a different system
   virtual bool is_io_for(const BaseClass& b) const;
 @};
@@ -1241,7 +1246,7 @@ void vsl_b_read(vsl_b_istream &is, BaseClass* &b)
 
 
 // Explicitly instantiate loader
-VSL_CLIPON_BINARY_LOADER_INSTANTIATE(BaseClass, BaseClassIO)
+VSL_CLIPON_BINARY_LOADER_INSTANTIATE(BaseClass, BaseClassIO);
 
 
 @end example
@@ -1292,7 +1297,7 @@ public:
   virtual vcl_string target_classname() const;
 
     //: Return true if b is of class target_classname()
-    //  Typically this will just be "return b.is_a(target_classname())"
+    //  Typically this will just be "return b.is_class(target_classname())"
     //  However, third party libraries may use a different system
   virtual bool is_io_for(const BaseClass& b) const;
 @};
@@ -1610,6 +1615,7 @@ When one runs make (under Unix) all the programs are compiled and the
 tests automatically run.  A message will be output giving a summary of
 how many were successful/unsuccessful.
 
+
 @subsection Summary
 
 To summarise, when adding a test program to v?l you need to
@@ -1623,6 +1629,7 @@ To summarise, when adding a test program to v?l you need to
 @section Binary IO Design Notes
 The aim of the binary IO is to provide a consistent mechanism for saving and
 restoring all VXL objects to streams/files, in a cross platform manner.
+
 
 @subsection Structure
 
@@ -1653,6 +1660,7 @@ The simplest solution is to write the code as `clip-on' libraries, as has been d
 However, for level-2 libraries, in general, neither of these problems will arise.
 In this case it is strongly recommended by this author that IO be built into the
 class.
+
 
 @subsection Format of Fundamental types
 
@@ -1767,7 +1775,6 @@ Pointers are used to uniquely identify each shared object within each computer, 
 is generated to be saved on the stream. Since there is now a record for each pair
 (stream, shared object) there will not be any clashes when saving to multiple streams. It also
 avoids having to modify the shared object.
-
 
 
 @section Credits

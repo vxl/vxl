@@ -10,18 +10,18 @@
 #include "vil_rgb.h"
 #include "vil_byte.h"
 
-vil_image vil_clamp_image_impl::get_plane(int p) const 
+vil_image vil_clamp_image_impl::get_plane(int p) const
 {
   vil_image_impl *i = new vil_clamp_image_impl(base.get_plane(p), low_, high_);
   return i;
 }
 
-bool vil_clamp_image_impl::put_section(void const * , int, int, int, int) 
+bool vil_clamp_image_impl::put_section(void const * , int, int, int, int)
 {
   return false;
 }
 
-bool vil_clamp_image_impl::get_section(void * buf, int x0, int y0, int w, int h) const 
+bool vil_clamp_image_impl::get_section(void * buf, int x0, int y0, int w, int h) const
 {
   switch (vil_pixel_format(base) ) {
   case VIL_BYTE:
@@ -45,10 +45,17 @@ bool vil_clamp_image_impl::get_section(void * buf, int x0, int y0, int w, int h)
 /* START_MANCHESTER_BINARY_IO_CODE */
 
   //: Return the name of the class;
-const vcl_string& vil_clamp_image_impl::is_a() const
+vcl_string vil_clamp_image_impl::is_a() const
 {
   static const vcl_string class_name_="vil_clamp_image_impl";
   return class_name_;
+}
+
+  //: Return true if the name of the class matches the argument
+bool vil_clamp_image_impl::is_class(vcl_string const& s) const
+{
+  static const vcl_string class_name_="vil_clamp_image_impl";
+  return s==class_name_ || vil_image_impl::is_class(s);
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */

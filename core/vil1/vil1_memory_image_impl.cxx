@@ -130,7 +130,7 @@ vil_memory_image_impl::~vil_memory_image_impl()
 
 
 void vil_memory_image_impl::resize(int planes, int width, int height,
-                                   int components, 
+                                   int components,
                                    int bits_per_component,
                                    vil_component_format format)
 {
@@ -139,7 +139,6 @@ void vil_memory_image_impl::resize(int planes, int width, int height,
         component_format_ = format;
         resize(planes, width, height);
 }
-
 
 
 void vil_memory_image_impl::resize(int planes, int width, int height)
@@ -175,7 +174,7 @@ bool vil_memory_image_impl::get_section(void* obuf, int x0, int y0,
     }
     obuf = (void*)((char*)obuf + bytes_per_pixel_*width_*height_);
   }
-  
+
   return true;
 }
 
@@ -197,7 +196,7 @@ bool vil_memory_image_impl::put_section(void const* ibuf, int x0,
     }
     ibuf = (void const*)((char const*)ibuf + byte_in_width * ys);
   }
-  
+
   return true;
 }
 
@@ -261,10 +260,17 @@ vil_memory_image_impl::vil_memory_image_impl(void *buf, int w, int h,
 /* START_MANCHESTER_BINARY_IO_CODE */
 
   //: Return the name of the class;
-const vcl_string& vil_memory_image_impl::is_a() const
+vcl_string vil_memory_image_impl::is_a() const
 {
   static const vcl_string class_name_="vil_memory_image_impl";
   return class_name_;
+}
+
+  //: Return true if the name of the class matches the argument
+bool vil_memory_image_impl::is_class(vcl_string const& s) const
+{
+  static const vcl_string class_name_="vil_memory_image_impl";
+  return s==class_name_ || vil_image_impl::is_class(s);
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */

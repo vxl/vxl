@@ -38,7 +38,10 @@ public:
 /* START_MANCHESTER_BINARY_IO_CODE */
 
   //: Return the name of the class;
-  virtual const vcl_string& is_a() const;
+  virtual vcl_string is_a() const;
+
+  //: Return true if the name of the class matches the argument
+  virtual bool is_class(vcl_string const&) const;
 
 /* END_MANCHESTER_BINARY_IO_CODE */
 

@@ -28,7 +28,7 @@ public:
 
   int bits_per_component() const { return gi_.bits_per_component(); }
   enum vil_component_format component_format() const { return gi_.component_format(); }
-  
+
   bool get_section(void* buf, int x0, int y0, int width, int height) const {
     return gi_.get_section(buf, x0 + x0_, y0 + y0_, width, height);
   }
@@ -41,7 +41,10 @@ public:
 /* START_MANCHESTER_BINARY_IO_CODE */
 
   //: Return the name of the class;
-  virtual const vcl_string& is_a() const;
+  virtual vcl_string is_a() const;
+
+  //: Return true if the name of the class matches the argument
+  virtual bool is_class(vcl_string const&) const;
 
 /* END_MANCHESTER_BINARY_IO_CODE */
 

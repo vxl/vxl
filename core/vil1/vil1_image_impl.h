@@ -39,10 +39,10 @@ enum vil_component_format {
 // Representation of a generic image.
 //
 // \verbatim
-// 
+//
 //                        Component   Cell     Pixel      get_section(plane=0,
 //                        example     example  example      x0=0,y0=0,w=1,h=1)
-// 
+//
 //  3 x W x H x 1
 //     +------+           r           r        r,g,b      r
 //     |r     |           g           g
@@ -134,7 +134,10 @@ public:
 /* START_MANCHESTER_BINARY_IO_CODE */
 
   //: Return the name of the class;
-  virtual const vcl_string& is_a() const;
+  virtual vcl_string is_a() const;
+
+  //: Return true if the name of the class matches the argument
+  virtual bool is_class(vcl_string const&) const;
 
 /* END_MANCHESTER_BINARY_IO_CODE */
 
@@ -143,9 +146,9 @@ private:
   // You probably should not use a vil_image_impl in a vbl_smart_ptr, so the
   // ref counting methods are called by the unusual up_ref() and down_ref().
   void up_ref() { ++reference_count; }
-  void down_ref() { 
-  assert(reference_count>0); 
-  if (--reference_count<=0) delete this; 
+  void down_ref() {
+  assert(reference_count>0);
+  if (--reference_count<=0) delete this;
   }
   int reference_count;
 };

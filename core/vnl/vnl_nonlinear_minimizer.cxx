@@ -72,8 +72,17 @@ void vnl_nonlinear_minimizer::report_iter()
 
 //: Return the name of the class
 //  Used by polymorphic IO
-const vcl_string vnl_nonlinear_minimizer::is_a() const
+vcl_string vnl_nonlinear_minimizer::is_a() const
 {
-  return vcl_string("vnl_nonlinear_minimizer");
+  static const vcl_string class_name_="vnl_nonlinear_minimizer";
+  return class_name_;
+}
+
+//: Return true if the name of the class matches the argument
+//  Used by polymorphic IO
+bool vnl_nonlinear_minimizer::is_class(vcl_string const& s) const
+{
+  static const vcl_string class_name_="vnl_nonlinear_minimizer";
+  return s==class_name_;
 }
 

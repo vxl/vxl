@@ -99,11 +99,11 @@ public:
 
   //: Return the name of the class
   //  Used by polymorphic IO
-  virtual const vcl_string is_a() const;
+  virtual vcl_string is_a() const;
 
   //: Return true if the name of the class matches the argument
   //  Used by polymorphic IO
-  virtual bool is_a(vcl_string const& s) const { return s=="vnl_nonlinear_minimizer"; }
+  virtual bool is_class(vcl_string const& s) const;
 
 //:Some generic return codes that apply to all minimizers.
   enum ReturnCodes {
@@ -148,7 +148,5 @@ protected:
   void report_eval(double f);
   void report_iter();
 };
-
-
 
 #endif // vnl_nonlinear_minimizer_h_

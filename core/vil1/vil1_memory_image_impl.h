@@ -52,18 +52,21 @@ public:
   virtual bool get_property(char const *tag, void *property_value = 0) const;
 
   void resize(int planes, int width, int height);
-  void resize(int planes, int width, int height, int components, int bits_per_component, 
+  void resize(int planes, int width, int height, int components, int bits_per_component,
     vil_component_format format);
 
 
 /* START_MANCHESTER_BINARY_IO_CODE */
 
   //: Return the name of the class;
-  virtual const vcl_string& is_a() const;
+  virtual vcl_string is_a() const;
+
+  //: Return true if the name of the class matches the argument
+  virtual bool is_class(vcl_string const&) const;
 
 /* END_MANCHESTER_BINARY_IO_CODE */
 
-  
+
   // added by Brendan McCane
   // Constructors from previously allocated memory. This memory is not deallocated on destruction.
   vil_memory_image_impl(void *buf, int planes, int w, int h,

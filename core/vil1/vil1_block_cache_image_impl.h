@@ -6,7 +6,7 @@
 //This is vxl/vil/vil_block_cache_image_impl.h
 
 //:
-// \file 
+// \file
 // \author fsm@robots.ox.ac.uk
 
 
@@ -42,8 +42,8 @@ public:
 
   //: Component format
   vil_component_format component_format() const { return base.component_format(); }
-  
-  //: Access to image-plane 
+
+  //: Access to image-plane
   vil_image get_plane(int ) const;
 
   //: Write nominated section of image to buf
@@ -51,16 +51,18 @@ public:
 
   //: Write buf to mininated section of image
   bool put_section(void const *buf, int x0, int y0, int w, int h); // write-through
-  
-  //: Get info about block-characteristics 
+
+  //: Get info about block-characteristics
   bool get_property(char const *tag, void *property_value_out = 0) const;
 
-  
 
 /* START_MANCHESTER_BINARY_IO_CODE */
 
   //: Return the name of the class;
-  virtual const vcl_string& is_a() const;
+  virtual vcl_string is_a() const;
+
+  //: Return true if the name of the class matches the argument
+  virtual bool is_class(vcl_string const&) const;
 
 /* END_MANCHESTER_BINARY_IO_CODE */
 

@@ -60,10 +60,12 @@ struct vil_image_as_impl : vil_image_impl, vil_memory_image_of_format<T>
 /* START_MANCHESTER_BINARY_IO_CODE */
 
   //: Return the name of the class;
-  virtual const vcl_string& is_a() const;
+  virtual vcl_string is_a() const;
+
+  //: Return true if the name of the class matches the argument
+  virtual bool is_class(vcl_string const&) const;
 
 /* END_MANCHESTER_BINARY_IO_CODE */
-
 };
 
 //--------------------------------------------------------------------------------
@@ -129,16 +131,22 @@ bool vil_image_as_impl<int>::get_section(void *buf, int x0, int y0, int width, i
     assert(false/* implement for your image type as needed */);
     return false;
   }
-  
 }
 
 /* START_MANCHESTER_BINARY_IO_CODE */
 
 VCL_DEFINE_SPECIALIZATION
-const vcl_string& vil_image_as_impl<int>::is_a() const 
-{ 
-  static const vcl_string class_name_="vil_image_as_impl<int>"; 
-  return class_name_; 
+vcl_string vil_image_as_impl<int>::is_a() const
+{
+  static const vcl_string class_name_="vil_image_as_impl<int>";
+  return class_name_;
+}
+
+VCL_DEFINE_SPECIALIZATION
+bool vil_image_as_impl<int>::is_class(vcl_string const& s) const
+{
+  static const vcl_string class_name_="vil_image_as_impl<int>";
+  return s==class_name_ || vil_image_impl::is_class(s);
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */
@@ -212,10 +220,17 @@ bool vil_image_as_impl<vil_byte>::get_section(void *buf, int x0, int y0, int wid
 /* START_MANCHESTER_BINARY_IO_CODE */
 
 VCL_DEFINE_SPECIALIZATION
-const vcl_string& vil_image_as_impl<vil_byte>::is_a() const 
-{ 
-  static const vcl_string class_name_="vil_image_as_impl<vil_byte>"; 
-  return class_name_; 
+vcl_string vil_image_as_impl<vil_byte>::is_a() const
+{
+  static const vcl_string class_name_="vil_image_as_impl<vil_byte>";
+  return class_name_;
+}
+
+VCL_DEFINE_SPECIALIZATION
+bool vil_image_as_impl<vil_byte>::is_class(vcl_string const& s) const
+{
+  static const vcl_string class_name_="vil_image_as_impl<vil_byte>";
+  return s==class_name_ || vil_image_impl::is_class(s);
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */
@@ -286,16 +301,22 @@ bool vil_image_as_impl<float>::get_section(void *buf, int x0, int y0, int width,
     assert(false/* implement for your image type as needed */);
     return false;
   }
-  
 }
 
 /* START_MANCHESTER_BINARY_IO_CODE */
 
 VCL_DEFINE_SPECIALIZATION
-const vcl_string& vil_image_as_impl<float>::is_a() const 
-{ 
-  const static vcl_string class_name_="vil_image_as_impl<float>"; 
-  return class_name_; 
+vcl_string vil_image_as_impl<float>::is_a() const
+{
+  const static vcl_string class_name_="vil_image_as_impl<float>";
+  return class_name_;
+}
+
+VCL_DEFINE_SPECIALIZATION
+bool vil_image_as_impl<float>::is_class(vcl_string const& s) const
+{
+  static const vcl_string class_name_="vil_image_as_impl<float>";
+  return s==class_name_ || vil_image_impl::is_class(s);
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */
@@ -352,17 +373,23 @@ bool vil_image_as_impl<double>::get_section(void *buf, int x0, int y0, int width
     assert(false/* implement for your image type as needed */);
     return false;
   }
-  
 }
 
 
 /* START_MANCHESTER_BINARY_IO_CODE */
 
 VCL_DEFINE_SPECIALIZATION
-const vcl_string& vil_image_as_impl<double>::is_a() const 
-{ 
-  const static vcl_string class_name_="vil_image_as_impl<double>"; 
-  return class_name_; 
+vcl_string vil_image_as_impl<double>::is_a() const
+{
+  const static vcl_string class_name_="vil_image_as_impl<double>";
+  return class_name_;
+}
+
+VCL_DEFINE_SPECIALIZATION
+bool vil_image_as_impl<double>::is_class(vcl_string const& s) const
+{
+  static const vcl_string class_name_="vil_image_as_impl<double>";
+  return s==class_name_ || vil_image_impl::is_class(s);
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */
@@ -427,7 +454,6 @@ bool vil_image_as_impl<vil_rgb<unsigned char> >::get_section(void *buf,
   }
 
 
-
   // byte rgb
   else if (vil_pixel_format(image) == VIL_RGB_BYTE)
     return image.get_section(buf, x0, y0, width, height);
@@ -438,15 +464,21 @@ bool vil_image_as_impl<vil_rgb<unsigned char> >::get_section(void *buf,
     assert(false/* implement for your image type as needed */);
     return false;
   }
-  
 }
 /* START_MANCHESTER_BINARY_IO_CODE */
 
 VCL_DEFINE_SPECIALIZATION
-const vcl_string& vil_image_as_impl<vil_rgb<unsigned char> >::is_a() const 
-{ 
-  const static vcl_string class_name_="vil_image_as_impl<vil_rgb<unsigned char> >"; 
-  return class_name_; 
+vcl_string vil_image_as_impl<vil_rgb<unsigned char> >::is_a() const
+{
+  const static vcl_string class_name_="vil_image_as_impl<vil_rgb<unsigned char> >";
+  return class_name_;
+}
+
+VCL_DEFINE_SPECIALIZATION
+bool vil_image_as_impl<vil_rgb<unsigned char> >::is_class(vcl_string const& s) const
+{
+  static const vcl_string class_name_="vil_image_as_impl<vil_rgb<unsigned char> >";
+  return s==class_name_ || vil_image_impl::is_class(s);
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */
@@ -504,17 +536,23 @@ bool vil_image_as_impl<vil_rgb<float> >::get_section(void *buf,
     assert(false/* implement for your image type as needed */);
     return false;
   }
-  
 }
 
 
 /* START_MANCHESTER_BINARY_IO_CODE */
 
 VCL_DEFINE_SPECIALIZATION
-const vcl_string& vil_image_as_impl<vil_rgb<float> >::is_a() const 
-{ 
-  const static vcl_string class_name_="vil_image_as_impl<vil_rgb<float> >"; 
-  return class_name_; 
+vcl_string vil_image_as_impl<vil_rgb<float> >::is_a() const
+{
+  const static vcl_string class_name_="vil_image_as_impl<vil_rgb<float> >";
+  return class_name_;
+}
+
+VCL_DEFINE_SPECIALIZATION
+bool vil_image_as_impl<vil_rgb<float> >::is_class(vcl_string const& s) const
+{
+  static const vcl_string class_name_="vil_image_as_impl<vil_rgb<float> >";
+  return s==class_name_ || vil_image_impl::is_class(s);
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */
@@ -525,5 +563,4 @@ template struct vil_image_as_impl<vil_rgb<float> >;
 vil_image vil_image_as_rgb_float(vil_image const &image) {
   return vil_image(new vil_image_as_impl<vil_rgb<float> >(image));
 }
-
 

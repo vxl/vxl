@@ -25,7 +25,7 @@ struct vil_image_proxy_impl : public vil_image_impl
   int bits_per_component_;
   vil_component_format component_format_;
   vcl_string file_format_;
-  
+
   vil_image_proxy_impl(char const *file) : filename(file) {
     // cache some stuff
     vil_image I = vil_load(filename.c_str());
@@ -39,7 +39,7 @@ struct vil_image_proxy_impl : public vil_image_impl
 #undef macro
     file_format_ = I.file_format();
   }
-  
+
   // cached stuff
   int planes() const { return planes_; }
   int width() const { return width_; }
@@ -48,10 +48,10 @@ struct vil_image_proxy_impl : public vil_image_impl
   int bits_per_component() const { return bits_per_component_; }
   enum vil_component_format component_format() const { return component_format_; }
   char const *file_format() const { return file_format_.c_str(); }
-  
+
   // non-cached stuff
   vil_image get_plane(int i) const { return vil_load(filename.c_str()).get_plane(i); }
-  
+
   bool get_section(void       *buf, int x0, int y0, int width, int height) const
     { return vil_load(filename.c_str()).get_section(buf, x0, y0, width, height); }
   bool put_section(void const *buf, int x0, int y0, int width, int height)
@@ -65,10 +65,12 @@ struct vil_image_proxy_impl : public vil_image_impl
 /* START_MANCHESTER_BINARY_IO_CODE */
 
   //: Return the name of the class;
-  virtual const vcl_string& is_a() const;
+  virtual vcl_string is_a() const;
+
+  //: Return true if the name of the class matches the argument
+  virtual bool is_class(vcl_string const&) const;
 
 /* END_MANCHESTER_BINARY_IO_CODE */
-
 };
 
 vil_image_proxy::vil_image_proxy(char const *file)
@@ -79,10 +81,16 @@ vil_image_proxy::vil_image_proxy(char const *file)
 /* START_MANCHESTER_BINARY_IO_CODE */
 
   //: Return the name of the class;
-const vcl_string& vil_image_proxy_impl::is_a() const
+vcl_string vil_image_proxy_impl::is_a() const
 {
   static const vcl_string class_name_="vil_image_proxy_impl";
   return class_name_;
+}
+
+bool vil_image_proxy_impl::is_class(vcl_string const& s) const
+{
+  static const vcl_string class_name_="vil_image_proxy_impl";
+  return s==class_name_ || vil_image_impl::is_class(s);
 }
 
 /* END_MANCHESTER_BINARY_IO_CODE */
