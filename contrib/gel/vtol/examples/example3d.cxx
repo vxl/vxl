@@ -34,23 +34,27 @@ class example_vertex_3d; // forward declaration
 class example_edge_3d : public vtol_edge
 {
 #define T example_edge_3d
+#define S vsol_spatial_object_2d
 #define V vbl_smart_ptr<example_vertex_3d>
-#define W vtol_vertex
+#define E vtol_edge
  public:
   T(V const& v1, V const& v2);
   T(vtol_vertex_sptr const& v1, vtol_vertex_sptr const& v2);
   virtual vsol_spatial_object_2d_sptr clone() const {return new T(v1_,v2_); }
 
-  bool operator==(T const& v) const { return v1_==v.v1() && v2_==v.v2(); }
-  T& operator=(T const& v) { v1_=v.v1(); v2_=v.v2(); return *this; }
+  bool operator==(T const& e) const { return v1_==e.v1() && v2_==e.v2(); }
+  bool operator==(E const& e) const { return !e.cast_to_edge_2d() && operator==((T const&)e); }
+  bool operator==(S const&  ) const { return false; } // could be worked out better; see vtol_edge_2d.cxx
+  T& operator=(T const& e) { v1_=e.v1(); v2_=e.v2(); return *this; }
 
   virtual void print(vcl_ostream &strm=vcl_cout) const { strm<<"<example_edge_3d> with id "<<get_id()<<'\n'; }
   virtual void describe(vcl_ostream &strm=vcl_cout,int=0) const { print(strm); v1_->print(strm); v2_->print(strm); }
   virtual void copy_geometry(vtol_edge const& e) { v1()->copy_geometry(*e.v1()); v2()->copy_geometry(*e.v2()); }
   virtual bool compare_geometry(vtol_edge const& e) const { return e.cast_to_edge_2d() == 0 && operator==(*(T const*)(&e)); }
 #undef T
+#undef S
 #undef V
-#undef W
+#undef E
 };
 
 // Since there is no vtol_vertex_3d, create one here:
@@ -60,6 +64,8 @@ class example_vertex_3d : public vtol_vertex
   double y_;
   double z_;
 #define T example_vertex_3d
+#define V vtol_vertex
+#define S vsol_spatial_object_2d
  public:
   T(double x, double y, double z) : x_(x), y_(y), z_(z) {}
 
@@ -68,7 +74,10 @@ class example_vertex_3d : public vtol_vertex
   double z() const { return z_; }
 
   bool operator==(T const& v) const { return x_==v.x()&&y_==v.y()&&z_==v.z(); }
+  bool operator==(V const& v) const { return !v.cast_to_vertex_2d() && operator==((T const&)v); }
+  bool operator==(S const&  ) const { return false; } // could be worked out better; see vtol_vertex_2d.cxx
   T& operator=(T const& v) { x_=v.x();y_=v.y();z_=v.z(); return *this; }
+  V& operator=(V const& v) { if (!v.cast_to_vertex_2d()) return operator=((T const&)v); else return *this; }
 
   virtual vtol_edge_sptr new_edge(vtol_vertex_sptr const& v)
   {
@@ -91,9 +100,11 @@ class example_vertex_3d : public vtol_vertex
   virtual void copy_geometry(const vtol_vertex&v) { assert(v.cast_to_vertex_2d()==0); operator=(*(T const*)(&v)); }
   virtual bool compare_geometry(const vtol_vertex&v) const { return v.cast_to_vertex_2d()==0 && operator==(*(T const*)(&v)); }
 
-  void print(vcl_ostream &strm=vcl_cout) const { strm<<"<vertex "<<x()<<","<<y()<<","<<z()<<"> with id "<<get_id()<<'\n'; }
+  void print(vcl_ostream &strm=vcl_cout) const { strm<<"<vertex "<<x()<<','<<y()<<','<<z()<<"> with id "<<get_id()<<'\n'; }
   void describe(vcl_ostream &strm=vcl_cout,int b=0) const { print(strm);describe_inferiors(strm,b);describe_superiors(strm,b); }
 #undef T
+#undef V
+#undef S
 };
 
 #define T example_edge_3d
@@ -113,6 +124,8 @@ T::T(vtol_vertex_sptr const& v1, vtol_vertex_sptr const& v2)
 class example_face_3d : public vtol_face
 {
 #define T example_face_3d
+#define F vtol_face
+#define S vsol_spatial_object_2d
  public:
   T(vertex_list &vl) {
     assert(vl.size()>2);
@@ -133,6 +146,8 @@ class example_face_3d : public vtol_face
   virtual vsol_spatial_object_2d_sptr clone() const {vertex_list* vl=(const_cast<T*>(this))->vertices();
                                                      T* f=new T(*vl);delete vl;return f;}
   bool operator==(T const&) const { return false; }
+  bool operator==(F const&) const { return false; }
+  bool operator==(S const&) const { return false; }
   virtual void print(vcl_ostream &strm=vcl_cout) const { strm << "<example_face_3d>"; }
   virtual void describe(vcl_ostream &strm=vcl_cout, int=0) const { print(strm); }
   virtual void copy_geometry(vtol_face const& /*f*/) { /* edge(0)->copy_geometry(f.edge(0)); */ } // NYI
@@ -140,6 +155,7 @@ class example_face_3d : public vtol_face
   virtual vtol_face* copy_with_arrays(topology_list&, topology_list&) const { return new T(*this); } // NYI
   virtual vtol_face* shallow_copy_with_no_links() const { return new T(*this); }
 #undef T
+#undef S
 };
 
 int main()
