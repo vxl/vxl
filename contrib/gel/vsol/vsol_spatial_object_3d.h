@@ -291,6 +291,8 @@ public:
   //: The same behavior than dynamic_cast<>.
   // Needed because VXL is not compiled with -frtti :-(
   //---------------------------------------------------------------------------
+  vsol_spatial_object_3d* cast_to_spatial_object() { return this; }
+  const vsol_spatial_object_3d* cast_to_spatial_object() const { return this; }
   virtual vtol_topology_object* cast_to_topology_object() {return 0;}
   virtual const vtol_topology_object* cast_to_topology_object()const{return 0;}
   virtual vsol_group_3d *cast_to_group(void) {return 0;}
