@@ -32,7 +32,7 @@ void vsl_b_read(vsl_b_istream &is, vgl_vector_2d<T> & v)
     break;
 
   default:
-    vcl_cerr << "vsl_b_read() Unknown version number "<< v << vcl_endl;
+    vcl_cerr << "vsl_b_read() Unknown version number "<< ver << vcl_endl;
     vcl_abort();
   }
 }
