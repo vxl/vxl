@@ -22,7 +22,7 @@ int main(int argc, char** argv)
   vcl_cout<<"View as image:"<<vcl_endl;
   image.print_all(vcl_cout);
 
-  vcl_cout<<endl;
+  vcl_cout<<vcl_endl;
   vcl_cout<<"Note that if the raw data gets destroyed "<<vcl_endl;
   vcl_cout<<"then the view could be left pointing at nothing!"<<vcl_endl;
   vcl_cout<<"You have been warned."<<vcl_endl;
