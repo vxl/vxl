@@ -239,11 +239,11 @@ vgl_p_matrix<T> vgl_p_matrix<T>::read(vcl_istream& s)
 //
 //: Compute the svd of this P and cache it, so that future operations that require it need not recompute it.
 template <class T>
-vnl_svd<double>* vgl_p_matrix<T>::svd() const
+vnl_svd<T>* vgl_p_matrix<T>::svd() const
 {
   if (svd_ == 0) {
     // Need to make svd_ volatile for SGI g++ 2.7.2 optimizer bug.
-    svd_ = new vnl_svd<double>(p_matrix_); // mutable const
+    svd_ = new vnl_svd<T>(p_matrix_); // mutable const
   }
   return svd_;
 }
