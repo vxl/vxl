@@ -313,6 +313,6 @@ endif
 ifeq "$(HAS_XERCES)" "1"
 # XERCESLIB   := $(XERCESHOME)/lib
 # XERCESINCS  := $(XERCESHOME)/include
-# XERCES_LIBS := -lxerces-c1_4 -lpthread
+# XERCES_LIBS := -lxerces-c1_4
 endif
 
