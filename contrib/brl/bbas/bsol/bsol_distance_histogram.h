@@ -6,12 +6,12 @@
 // \author J.L. Mundy
 // \brief A distance histogram for vsol geometry (currently lines only)
 //
-// \verbatim
-//
 //  This histogram is for detecting distance patterns in vsol geometry.
 //  At present it implements only vsol_line_2d machinery.
 //
-// Initial version May 15, 2002
+// \verbatim
+//  Modifications
+//   Initial version May 15, 2002
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -19,6 +19,7 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vsol/vsol_line_2d_sptr.h>
+
 class bsol_distance_histogram
 {
  public:
