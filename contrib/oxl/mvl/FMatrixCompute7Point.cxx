@@ -1,13 +1,10 @@
 // This is oxl/mvl/FMatrixCompute7Point.cxx
-
+#include "FMatrixCompute7Point.h"
 //:
-//  \file
+// \file
 // \author David N. McKinnon, UQ I.R.I.S
 // \date   25 Nov 00
-//
 //-----------------------------------------------------------------------------
-
-#include "FMatrixCompute7Point.h"
 
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
@@ -50,8 +47,8 @@ bool FMatrixCompute7Point::compute (vcl_vector<vgl_homg_point_2d<double> >& poin
                                     vcl_vector<FMatrix*>& F)
 {
   if (points1.size() < 7 || points2.size() < 7) {
-    vcl_cerr << "FMatrixCompute7Point: Need at least 7 point pairs.\n";
-    vcl_cerr << "Number in each set: " << points1.size() << ", " << points2.size() << vcl_endl;
+    vcl_cerr << "FMatrixCompute7Point: Need at least 7 point pairs.\n"
+             << "Number in each set: " << points1.size() << ", " << points2.size() << vcl_endl;
     return false;
   }
 
@@ -67,8 +64,10 @@ bool FMatrixCompute7Point::compute (vcl_vector<vgl_homg_point_2d<double> >& poin
 
     // De-condition F
     for (unsigned int i = 0; i < F.size(); i++) {
+      FMatrix* oldF = F[i];
       F[i] = new FMatrix(HomgMetric::homg_to_image_F(*F[i], &conditioned1,
                                                             &conditioned2));
+      delete oldF;
     }
   } else
     if (!compute_preconditioned(points1, points2, F))
@@ -78,13 +77,13 @@ bool FMatrixCompute7Point::compute (vcl_vector<vgl_homg_point_2d<double> >& poin
 }
 
 //-----------------------------------------------------------------------------
-bool FMatrixCompute7Point::compute (vcl_vector<HomgPoint2D>& points1,
-                                    vcl_vector<HomgPoint2D>& points2,
-                                    vcl_vector<FMatrix*>& F)
+bool FMatrixCompute7Point::compute(vcl_vector<HomgPoint2D>& points1,
+                                   vcl_vector<HomgPoint2D>& points2,
+                                   vcl_vector<FMatrix*>& F)
 {
   if (points1.size() < 7 || points2.size() < 7) {
-    vcl_cerr << "FMatrixCompute7Point: Need at least 7 point pairs.\n";
-    vcl_cerr << "Number in each set: " << points1.size() << ", " << points2.size() << vcl_endl;
+    vcl_cerr << "FMatrixCompute7Point: Need at least 7 point pairs.\n"
+             << "Number in each set: " << points1.size() << ", " << points2.size() << vcl_endl;
     return false;
   }
 
@@ -100,8 +99,10 @@ bool FMatrixCompute7Point::compute (vcl_vector<HomgPoint2D>& points1,
 
     // De-condition F
     for (unsigned int i = 0; i < F.size(); i++) {
+      FMatrix* oldF = F[i];
       F[i] = new FMatrix(HomgMetric::homg_to_image_F(*F[i], &conditioned1,
                                                             &conditioned2));
+      delete oldF;
     }
   } else
     if (!compute_preconditioned(points1, points2, F))
@@ -136,6 +137,9 @@ bool FMatrixCompute7Point::compute_preconditioned(vcl_vector<vgl_homg_point_2d<d
   // find the real roots of the cubic equation that satisfy
   vcl_vector<double> a = FMatrixCompute7Point::GetCoef(F1, F2);
   vcl_vector<double> roots = FMatrixCompute7Point::solve_cubic(a);
+
+  if (roots.empty())
+    return false;
 
   for (unsigned int i = 0; i < roots.size(); i++) {
     vnl_matrix<double> F_temp =
@@ -230,7 +234,7 @@ vcl_vector<double> FMatrixCompute7Point::GetCoef(FMatrix const& F1, FMatrix cons
 //-------------------
 vcl_vector<double> FMatrixCompute7Point::solve_quadratic (vcl_vector<double> v)
 {
-   double a = v[1], b = v[2], c = v[3]; 
+   double a = v[1], b = v[2], c = v[3];
    double s = (b > 0.0) ? 1.0 : -1.0;
    double d = b * b - 4 * a * c;
 
