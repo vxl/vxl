@@ -13,6 +13,9 @@
 #ifndef JPEGLIB_H
 #define JPEGLIB_H
 
+#include <stddef.h> /* for size_t */
+#include <stdio.h> /* for FILE */
+
 /*
  * First we include the configuration files that record how this
  * installation of the JPEG library is set up.  jconfig.h can be
