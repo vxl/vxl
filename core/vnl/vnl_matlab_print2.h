@@ -11,18 +11,18 @@
 // \verbatim
 //   vnl_matrix<double> foo(3, 14);
 //  ....
-//   cerr << "and the blasted matrix is :" << endl
-//        << vnl_matlab_print(foo)
-//        << vnl_matlab_print(foo, "foo")
-//        << vnl_matlab_print(foo, 0, vnl_matlab_fmt_long);
+//   vcl_cerr << "and the blasted matrix is :" << endl
+//            << vnl_matlab_print(foo)
+//            << vnl_matlab_print(foo, "foo")
+//            << vnl_matlab_print(foo, 0, vnl_matlab_fmt_long);
 // \endverbatim
 // instead of
 // \verbatim
 //  ....
-//   cerr << "and the blasted matrix is :" << endl;
-//        vnl_matlab_print(cerr, foo);
-//        vnl_matlab_print(cerr, foo, "foo");
-//        vnl_matlab_print(cerr, foo, 0, vnl_matlab_fmt_long);
+//   vcl_cerr << "and the blasted matrix is :" << endl;
+//   vnl_matlab_print(vcl_cerr, foo);
+//   vnl_matlab_print(vcl_cerr, foo, "foo");
+//   vnl_matlab_print(vcl_cerr, foo, 0, vnl_matlab_fmt_long);
 // \endverbatim
 //
 //  \author fsm@robots.ox.ac.uk

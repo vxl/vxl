@@ -8,6 +8,7 @@
 
 //:
 // \file
+// \brief a point in 3D nonhomogeneous space
 // \author Don Hamilton, Peter Tu
 
 #include <vcl_iostream.h>
@@ -18,13 +19,13 @@ class vgl_plane_3d;
 //: Represents a cartesian 3D point
 template <class Type>
 class vgl_point_3d {
-  
+
   // PUBLIC INTERFACE--------------------------------------------------------
-  
+
 public:
-  
+
   // Constructors/Initializers/Destructors-----------------------------------
-  
+
   //: Default constructor
   vgl_point_3d () {}
 
@@ -62,9 +63,6 @@ public:
   //: Test for equality
   bool operator==(const vgl_point_3d<Type> &other) const;
 
-
-
-
   // Data Access-------------------------------------------------------------
 
   inline Type x() const {return data_[0];}
@@ -88,16 +86,16 @@ public:
   vcl_ostream& write(vcl_ostream& s) const {
     return s << x() << " " << y() << " " << z();
   }
-  
+
   // INTERNALS---------------------------------------------------------------
-  
+
 protected:
-  // the data associated with this point 
-  
+  // the data associated with this point
+
   Type data_[3];
 };
 
-// stream operators 
+// stream operators
 
 //: Write "<vgl_point_3d x,y,z>" to stream
 template <class Type>
@@ -109,7 +107,7 @@ vcl_ostream&  operator<<(vcl_ostream& s, const vgl_point_3d<Type>& p) {
 //: Read x y z from stream
 template <class Type>
 vcl_istream&  operator>>(vcl_istream& is,  vgl_point_3d<Type>& p) {
-  return is >> p.x() >> p.y() >> p.z(); 
+  return is >> p.x() >> p.y() >> p.z();
 }
 
 #endif // vgl_point_3d_h

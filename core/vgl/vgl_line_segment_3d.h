@@ -6,8 +6,9 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//: 
+//:
 // \file
+// \brief line segment in 3D nonhomogeneous space
 // \author  awf@robots.ox.ac.uk
 
 #include <vcl_iosfwd.h>
@@ -18,7 +19,7 @@
 template <class Type>
 class vgl_line_segment_3d {
 public:
-  
+
   vgl_line_segment_3d() {}
   vgl_line_segment_3d(vgl_line_segment_3d<Type> const& that);
   vgl_line_segment_3d(vgl_point_3d<Type> const &, vgl_point_3d<Type> const &);
@@ -26,16 +27,16 @@ public:
 
   vgl_point_3d<Type> const & get_point1() const { return point1_; }
   vgl_point_3d<Type>       & get_point1() { return point1_; }
-  vgl_point_3d<Type> const & get_point2() const { return point2_; } 
+  vgl_point_3d<Type> const & get_point2() const { return point2_; }
   vgl_point_3d<Type>       & get_point2() { return point2_; }
-  
+
 private:
   vgl_point_3d<Type> point1_;
   vgl_point_3d<Type> point2_;
 };
 
-// stream operators 
-template <class Type> 
+// stream operators
+template <class Type>
 vcl_ostream&  operator<<(vcl_ostream& s, const vgl_line_segment_3d<Type>& p);
 
 template <class Type>

@@ -7,16 +7,18 @@
 //:
 // \file
 // \brief Image in MIT format
-// \author  Alison Noble, Oxford University. Joris Schouteden, vil version
+// \author  Alison Noble, Oxford University.
+//          Joris Schouteden, vil version
+//
 //   vil_mit is a simple image format consisting of a header
 //   of 4 shorts (type,bits_per_pixel,width,height) and the raw data.
 //   The full specification defines a number of image/edge types (see header
 //   for details). Currently only 8-bit images can be read.
 //
-//\verbatim
+// \verbatim
 //  Modifications
 //     000218 JS  Initial version, header info from MITImage.C
-//\endverbatim
+// \endverbatim
 
 // TYPES:
 // 1 unsigned (grayscale)

@@ -27,18 +27,14 @@ extern float vnl_chi_squared_cumulative(float chisq, int dof);
 //  be implicitly normalized (so as to sum to 1) before the
 //  statistic is calculated :
 //
-//  a[i] = A[i] / \sum_j A[j]
+//  $a[i] = A[i] / \sum_j A[j]$
 //
-//  b[i] = B[i] / \sum_j B[j]
+//  $b[i] = B[i] / \sum_j B[j]$
 //
 //  *DO NOT* add scale factors to these functions or you will break
 //  the code written by those who read the documentation. fsm.
 //
-//\verbatim
-//      (a[i] - b[i])^2
-// \sum ---------------
-//   i       a[i]
-//\endverbatim
+// $\displaystyle   \sum_i \frac{ (a[i] - b[i])^2 }{ a[i] } $
 //
 
 template <class T>
@@ -46,21 +42,13 @@ double vnl_chi_squared_statistic_1 (T const *A, T const *B,
                                     int n, bool normalize);
 
 //:
-//\verbatim
-//      (a[i] - b[i])^2
-// \sum ---------------
-//   i       b[i]
-//\endverbatim
+// $\displaystyle   \sum_i \frac{ (a[i] - b[i])^2 }{ b[i] } $
 template <class T>
 double vnl_chi_squared_statistic_2 (T const *A, T const *B,
                                     int n, bool normalize);
 
 //:
-//\verbatim
-//      (a[i] - b[i])^2
-// \sum ---------------
-//   i    a[i] + b[i]
-//\endverbatim
+// $\displaystyle   \sum_i \frac{ (a[i] - b[i])^2 }{ a[i] + b[i] } $
 template <class T>
 double vnl_chi_squared_statistic_12(T const *A, T const *B,
                                     int n, bool normalize);

@@ -22,9 +22,8 @@
 
 //:  Calculates the 3x3 skew symmetric cross product matrix from a vector.
 //
-// \verbatim
 // vnl_cross_product_matrix(e) is the matrix [e]_ x:
-//
+// \verbatim
 //     0    -e_3   e_2
 //     e_3   0    -e_1
 //    -e_2   e_1   0

@@ -5,19 +5,18 @@
 #endif
 // This is vxl/vil/vil_colour_space.h
 
-
 //:
 // \file
 // \brief Functions to convert between different colour spaces.
-// \author fsm@robots.ox.ac.uk
+//
 // Functions to convert between different colour spaces.
 // See Foley and van Dam, "Computer Graphics, Principles and Practice".
-
+//
+// \author fsm@robots.ox.ac.uk
 
 //: Linear transformation from RGB to YIQ colour spaces
 template <class T>
 void vil_colour_space_RGB_to_YIQ(T const in[3], T out[3]);
-
 
 
 //: Transform from RGB to HSV colour spaces

@@ -18,7 +18,9 @@
 //  \verbatim
 //    join  1 3 and  3 5 on columns 2 and 1 respectively
 //          2 3      3 6
+//  \endverbatim
 //    should give
+//  \verbatim
 //          1 3 3 5
 //          1 3 3 6
 //          2 3 3 5

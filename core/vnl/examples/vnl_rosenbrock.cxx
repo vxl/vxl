@@ -17,14 +17,12 @@
 #include <vnl/algo/vnl_lbfgs.h>
 
 // Make a compute object for the "banana" function
-// \verbatim
-//          f(x, y) = {10*(y-x*x), 1-x}
-// \endverbatim
+// $        f(x, y) = \{ 10*(y-x*x), 1-x \}        $
+//
 // It is called the banana function because of the way the
 // curvature bends around the origin. It is notorious in
 // optimization examples because of the slow convergence
 // of most methods.
-//
 
 class vnl_rosenbrock : public vnl_least_squares_function {
 public:
@@ -53,7 +51,6 @@ public:
     g[0] = 2 * a * (-20*x[0]) - 2 * b;
     g[1] = 20 * a;
   }
-
 };
 
 int main()

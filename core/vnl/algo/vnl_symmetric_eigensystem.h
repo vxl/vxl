@@ -9,12 +9,12 @@
 // \brief Find eigenvalues of a symmetric matrix
 //
 //    vnl_symmetric_eigensystem_compute()
-//    solves the eigenproblem \f$A x = \lambda x\f$, with \f$A\f$ symmetric.
+//    solves the eigenproblem $A x = \lambda x$, with $A$ symmetric.
 //    The resulting eigenvectors and values are sorted in increasing order
 //    so <CODE> V.column(0) </CODE> is the eigenvector corresponding to the smallest
 //    the smallest eigenvalue.
 //
-//    As a matrix decomposition, this is \f$A = V D V^t\f$
+//    As a matrix decomposition, this is $A = V D V^t$
 //
 //    Uses the EISPACK routine RS, which in turn calls TRED2 to reduce A
 //    to tridiagonal form, followed by TQL2, to find the eigensystem.
@@ -68,7 +68,7 @@ bool vnl_symmetric_eigensystem_compute(vnl_matrix<double> const & A,
 export template <class T>
 class vnl_symmetric_eigensystem {
 public:
-  //: Solve real symmetric eigensystem \f$A x = \lambda x\f$
+  //: Solve real symmetric eigensystem $A x = \lambda x$
   vnl_symmetric_eigensystem(vnl_matrix<T> const & M);
 
 protected:
@@ -97,8 +97,8 @@ public:
   // It is deliberate that the signature is the same as on vnl_svd<T>.
   vnl_vector<T> nullvector() const { return get_eigenvector(0); }
 
-  //: Return the matrix \f$V  D  V^\top\f$.  This can be useful if you've
-  // modified \f$D\f$.  So an inverse is obtained using
+  //: Return the matrix $V  D  V^\top$.  This can be useful if you've
+  // modified $D$.  So an inverse is obtained using
   // \verbatim
   //   vnl_symmetric_eigensystem} eig(A);
   //   eig.D.invert_in_place}();

@@ -6,10 +6,10 @@
 #endif
 
 //:
-// \file 
+// \file
 // \author awf@robots.ox.ac.uk 16 Feb 00
-// Modifications
 // \verbatim
+// Modifications
 // 10/4/2001 Ian Scott (Manchester) Coverted perceps header to doxygen
 // \endverbatim
 

@@ -7,11 +7,13 @@
 
 //:
 // \file
-// \brief vil_32bit - read/write integers to/from vil_stream
-// \author    fsm
+// \brief read/write integers to/from vil_stream
+//
 // Functions to read and write integers to and from a vil_stream.
 // The endianness refers to the format in the stream, not the
 // native format of the compiler or execution environment.
+//
+// \author    fsm
 
 class vil_stream;
 

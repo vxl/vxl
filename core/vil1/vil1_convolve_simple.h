@@ -21,12 +21,11 @@ template <class T> class vil_memory_image_of;
 // The dummy parameter is just for dumb compilers that do not allow
 // the use of vil_convolve_simple<...> to specify the accumulator type.
 //
-// \verbatim
-// I1 : input image type
-// I2 : input image type
-// AC : accumulator pixel type
-// O  : output image type
-// \endverbatim
+// -  I1 : input image type
+// -  I2 : input image type
+// -  AC : accumulator pixel type
+// -  O  : output image type
+
 template <class I1, class I2, class AC, class O>
 void vil_convolve_simple(I1 const* const*  in1, unsigned w1, unsigned h1, // input 1
                          I2 const* const*  in2, unsigned w2, unsigned h2, // input 2

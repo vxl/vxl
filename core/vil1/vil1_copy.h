@@ -11,11 +11,11 @@
 // \brief Image copy function
 // \author awf@robots.ox.ac.uk
 // \date 16 Feb 00
-
-
+// \verbatim
 // Modifications
 //     000216 AWF Initial version.
 //     000217 JS  components*planes because get_section returns RGBRGB
+// \endverbatim
 
 #include <vil/vil_fwd.h>
 

@@ -14,8 +14,7 @@
 #include <vcl_vector.h>
 #include <vil/vil_stream.h>
 
-//:
-// An in-core vil_stream implementation.
+//: An in-core vil_stream implementation.
 // This is an infinite stream - reads past the last point
 // written will succeed but will return garbage data.
 struct vil_stream_core : vil_stream
@@ -28,7 +27,7 @@ struct vil_stream_core : vil_stream
   // this does not change the current position
   int m_transfer(char *buf, int pos, int n, bool read);
 
-  //: implement virtual interface
+  // implement virtual interface:
   bool ok();
   int  read (void       *buf, int n);
   int  write(void const *buf, int n);

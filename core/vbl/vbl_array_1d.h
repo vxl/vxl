@@ -13,7 +13,7 @@
 // \verbatim
 // Modifications
 //    Peter Vanroose 5apr2001 added operator==
-// \verbatim
+// \endverbatim
 
 #include <vcl_new.h>
 #include <vcl_cassert.h>

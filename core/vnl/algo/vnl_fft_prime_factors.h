@@ -19,7 +19,7 @@
 // Helper class used by the vnl_fft_xd<> FFT routines
 //
 // Given an integer N of the form
-//   \f$N = 2^P 3^Q 5^R\f$
+//   $N = 2^P 3^Q 5^R$
 // split N into its primefactors (2, 3, 5)
 
 export template <class T>

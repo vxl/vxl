@@ -7,8 +7,8 @@
 
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
 // \brief Turn an image upside-down.
+// \author fsm@robots.ox.ac.uk
 
 #include <vil/vil_image.h>
 

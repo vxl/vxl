@@ -34,7 +34,7 @@
 //    with the N coefficients (vnl_vector<double>), and (2) a matrix with
 //    N rows, the i-th row representing the exponents of term i, as follows:
 //    (vnl_matrix<int>) column k contains the (integer) exponent of variable
-//    k.  Example: the polynomial \f$A*X^3 + B*X*Y + C*Y^2 + D*X*Y^2\f$ is
+//    k.  Example: the polynomial $A*X^3 + B*X*Y + C*Y^2 + D*X*Y^2$ is
 //    represented by the coefficients vector [A B C D] and the exponents
 //    matrix
 //  \verbatim

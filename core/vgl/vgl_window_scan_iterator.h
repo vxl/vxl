@@ -5,8 +5,8 @@
 #endif
 // This is vxl/vgl/vgl_window_scan_iterator.h
 
-//:
-// \file
+//: \file
+// \brief Iterator to scan rectangular windows
 // \author fsm@robots.ox.ac.uk
 
 #include <vcl_cmath.h>
@@ -26,11 +26,11 @@ struct vgl_window_scan_iterator : vgl_region_scan_iterator
   }
 
   //: Define rectangular region to be [x-w, x+w] x [y-h, y+h]
-  void set_window(float x, float y, float w, float h) 
+  void set_window(float x, float y, float w, float h)
     { set_window_corners(x - w, y - w, x + w, y + w); }
 
   //: Define rectangular region to be [x-r, x+r] x [y-r, y+r]
-  void set_window(float x, float y, float r) 
+  void set_window(float x, float y, float r)
     { set_window_corners(x - r, y - r, x + r, y + r); }
 
 
@@ -40,7 +40,7 @@ struct vgl_window_scan_iterator : vgl_region_scan_iterator
   //: assumes x1<=x2, y1<=y2, so region is [x1, x2] x [y1, y2].
   vgl_window_scan_iterator(float x1_, float y1_, float x2_, float y2_)
     { set_window_corners(x1_, y1_, x2_, y2_); }
-  
+
   int current_y;
 
   void reset() { current_y = y1-1; }

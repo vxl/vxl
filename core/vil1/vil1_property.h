@@ -7,15 +7,14 @@
 
 //:
 // \file
-// \author  fsm@robots.ox.ac.uk
 //
 // There is no class called vil_property.
 //
 // The image class vil_image has the methods :
-//
+// \verbatim
 //   bool get_property(char const *tag, void *property_value = 0) const;
 //   bool set_property(char const *tag, void const *property_value = 0)
-//
+// \endverbatim
 // which allow format extensions to be added without cluttering the
 // interface to vil_image. The idea is that properties can be
 // identified by a "tag" (some name or other textual description)
@@ -37,16 +36,18 @@
 // begin with "vil_property_" and that chunk of the namespace is reserved.
 //
 // packing of rgb(a) colours in the data produced by get_section().
-// tags: "vil_property_r_packing"
-//       "vil_property_g_packing"
-//       "vil_property_b_packing"
-//       "vil_property_a_packing"
+// tags:
+//   -   "vil_property_r_packing"
+//   -   "vil_property_g_packing"
+//   -   "vil_property_b_packing"
+//   -   "vil_property_a_packing"
 // type: three ints
+//
 // If supported, the returned values describe the index of the
 // red/green/blue/alpha part of the pixel in plane p, row i, column j
 // of the whole image. E.g. to fill a 256x256 3-plane memory image from
 // a 256x256 disk image which supports r,g,b packing:
-//
+// \verbatim
 //   char buf[3][256][256]
 //   char bif[3*256*256];
 //   image.get_section(bif, 0, 0, 256, 256);
@@ -62,14 +63,17 @@
 //       for (int j=0; j<256; ++j)
 //         buf[p][i][j] = bif[ a[0]*p + a[1]*i + a[2]*j ];
 //   }
-//
+// \endverbatim
 // preferred direction for access.
-// tags: "vil_property_preferred_x_direction"
-//       "vil_property_preferred_y_direction"
+// tags:
+//   -   "vil_property_preferred_x_direction"
+//   -   "vil_property_preferred_y_direction"
 // type: int
 // If supported, the returned property value is
-//  -1 if the preferred direction is decreasing.
-//   0 if there is no preferred direction.
-//  +1 if the preferred direction is increasing.
+// -  -1 if the preferred direction is decreasing.
+// -   0 if there is no preferred direction.
+// -  +1 if the preferred direction is increasing.
+//
+// \author  fsm@robots.ox.ac.uk
 
 #endif // vil_property_h_

@@ -14,12 +14,13 @@
 #include <vcl_fstream.h>
 #include <vil/vil_stream.h>
 
+//: A vil_stream implementation using fstream
 class vil_stream_fstream : public vil_stream {
 public:
   vil_stream_fstream(char const* filename, char const* mode);
 
   bool ok();
-  
+
   int write(void const* buf, int n);
   int read(void* buf, int n);
   int tell();
@@ -27,7 +28,7 @@ public:
 
 protected:
   ~vil_stream_fstream();
-  
+
 private:
   vcl_ios_openmode flags_;
   vcl_fstream f_;

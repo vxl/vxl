@@ -32,11 +32,8 @@
 //  of the member 'L'. When eigenvectors are not requested, the corre-
 //  sponding matrices L and R will be empty.
 //
-// \verbatim
-//  The ith right eigenvector v satisfies A*v = W[i]*v
+//  The ith right eigenvector v satisfies A*v = W[i]*v   \n
 //  The ith left  eigenvector u satisfies u*A = W[i]*u (no conjugation)
-// \endverbatim
-//
 
 class vnl_complex_eigensystem {
 public:

@@ -12,7 +12,11 @@
 //:
 // \file
 // \author Adapted from FillPolygon by J.L. Mundy
-// Binary IO added and documentation tidied up NPC, 20/03/01
+//
+// \verbatim
+// Modifications:
+//  Binary IO added and documentation tidied up NPC, 20/03/01
+// \endverbatim
 
 #include <vgl/vgl_region_scan_iterator.h>
 
@@ -63,11 +67,11 @@ public:
     //: Construct with a ploygon and bool indicating whether bondary included
   vgl_polygon_scan_iterator(vgl_polygon const& face, bool boundaryp = true);
 
-    //: Construct with a ploygon, bool indicating whether bondary included 
+    //: Construct with a ploygon, bool indicating whether bondary included
     // and window (area visble)
-  vgl_polygon_scan_iterator(vgl_polygon const& face, bool boundaryp, 
+  vgl_polygon_scan_iterator(vgl_polygon const& face, bool boundaryp,
     vgl_box_2d<float> const& window);
- 
+
   //: Destructor
   ~vgl_polygon_scan_iterator();
 
@@ -102,13 +106,13 @@ public:
   struct vertind {
     int chainnum;    // which chain the vertex is part of
     int vertnum;     // which vertex in the chain
-    void display( char const * str ); // Print the 
+    void display( char const * str ); // Print the
   };
 
   //: Describes an edge crossing the current scan line
   struct crossedge {
     float x;  // x coord of edge's intersection with current scanline
-    float dx; // change in x with respect to y 
+    float dx; // change in x with respect to y
     vertind v;      // edge goes from vertex v.vertnum to v.vertnum + 1
   };
 
@@ -164,7 +168,6 @@ private:
   // For debugging purposes
   void display_chains();
   void display_crossedges();
-
 };
 
 #endif // vgl_polygon_scan_iterator_h

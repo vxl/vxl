@@ -5,8 +5,8 @@
 
 //:
 // \file
+// \brief Testing software
 // \author Tim Cootes
-// Testing software
 
 #include <vcl_string.h>
 

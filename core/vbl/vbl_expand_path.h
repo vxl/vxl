@@ -10,12 +10,11 @@
 // \brief Contains two functions to compute expanded form of a given path.
 //
 // Given a path in the file system, compute an expanded form.
-// An expanded path is one which does not \verbatim
+// An expanded path is one which does not
 //  - involve any symbolic links
 //  - involve any . or ..
 //  - begin with a ~
 //  - contain any trailing or repeated /
-// \endverbatim
 //
 // The result of each query is cached so that a subsequent
 // query on the same path will be much faster and will not

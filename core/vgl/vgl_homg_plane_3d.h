@@ -7,9 +7,9 @@
 // This is vxl/vgl/vgl_homg_plane_3d.h
 
 //:
-// \file 
+// \file
+// \brief homogeneous plane in 3D projective space
 // \author Don HAMILTON Peter TU
-// \brief Class for a 3D homogeneous plane.
 //
 // \verbatim
 // Modifications
@@ -33,13 +33,13 @@ template <class Type>
 class vgl_homg_plane_3d {
 public:
   vgl_homg_plane_3d () {}
-  
+
   //: Construct from four Types.
   vgl_homg_plane_3d (Type nx, Type ny, Type nz, Type d) { set(nx,ny,nz,d); }
-  
+
   //: Construct from 4-vector.
   vgl_homg_plane_3d (const Type v[4]) { set(v[0],v[1],v[2],v[3]); }
-  
+
   //: Construct from Normal and d
   vgl_homg_plane_3d (const Type normal[3], Type d) {
     set(normal[0],normal[1],normal[2],d);
@@ -49,7 +49,7 @@ public:
   vgl_homg_plane_3d (const Type normal[3], const vgl_homg_point_3d<Type>& p);
 
   // Data Access-------------------------------------------------------------
-  
+
   //: Return x component
   inline Type nx() const {return data_[0];}
   //: Return y component
@@ -67,7 +67,7 @@ public:
   iterator end() { return (Type*)(data_+4); }
   const_iterator begin() const { return (Type const*)data_; }
   const_iterator end() const { return (Type const*)(data_+4); }
-  
+
   //: Set nx ny nz d
   inline void set (Type nx, Type ny, Type nz, Type d){
     data_[0] = nx;
@@ -90,7 +90,7 @@ protected:
   Type data_[4];
 };
 
-// stream operators 
+// stream operators
 
 template <class Type>
 inline vcl_ostream&  operator<<(vcl_ostream& s, const vgl_homg_plane_3d<Type>& p) {

@@ -8,8 +8,12 @@
 //:
 // \file
 // \author awf@robots.ox.ac.uk
-// Created: 02 Apr 00
+// \date   02 Apr 00
+//
+// \verbatim
+// Modifications:
 // Binary IO added and documentation tidied up NPC, 20/03/01
+// \endverbatim
 
 #include <vcl_iostream.h>
 #include <vcl_vector.h>

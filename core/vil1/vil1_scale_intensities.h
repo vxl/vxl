@@ -14,7 +14,9 @@
 
 //: Adaptor which returns a vil_image with pixel components scaled/shifted
 // i.e. performs a contrast/brightness operation.
+//
 //  (I_new = scale * I_old  + shift)
+
 vil_image vil_scale_intensities(vil_image src, double scale, double shift);
 
 #endif // vil_scale_intensities_h_

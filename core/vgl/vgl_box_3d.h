@@ -10,13 +10,12 @@
 // \file
 // \brief Describe a 3D box.
 // \author Don Hamilton, Peter Tu
-
 //
-//  Modifications
+// \verbatim
+// Modifications
 //  Peter Vanroose, Feb 28 2000: lots of minor corrections
 //  NPC (Manchester) 14/03/2001: Tidied up the documentation + added binary_io
-//  
-
+// \endverbatim
 
 #include <vcl_iostream.h>
 #include <vcl_string.h>
@@ -24,14 +23,13 @@
 template <class Type>
 class vgl_point_3d;
 
-
 //: Represents a 3D box
-//  A 3d box with sides aligned with x, y and z axes. Supports operations 
+//  A 3d box with sides aligned with x, y and z axes. Supports operations
 //  required of a bounding box for geometric volume tests.
 //
 //  \verbatim
 //                                 MaxPosition
-//                       |<--width-->| 
+//                       |<--width-->|
 //                       O-----------O  ---
 //                      /           /|   ^
 //                     /           / |   |
@@ -41,11 +39,11 @@ class vgl_point_3d;
 //                    |     o     |  O  ---
 //     Z              |           | /   /_____height
 //     |   Y          |           |/   /
-//     |  /           O-----------O  --- 
+//     |  /           O-----------O  ---
 //     | /         MinPosition
 //     O-----X
 // \endverbatim
-//
+
 template <class Type>
 class vgl_box_3d {
 

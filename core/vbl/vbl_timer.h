@@ -14,7 +14,7 @@
 // express or implied warranty.
 //:
 // \file
-// \brief vbl_timer - A timing facility for C++.
+// \brief A timing facility for C++
 //
 // The Timer class and provides an interface to system timing.
 // It allows a C++ program to record the time between  a  reference
@@ -34,14 +34,9 @@
 // specific notes.
 //
 // The Timer class provides timing code for performance evaluation.
-// \verbatim
-//  User time:
-//    time cpu spends in user mode on behalf of the program.
-//  System time:
-//    time cpu spends in system mode on behalf of the program.
-//  Real time:
-//    what you get from a stop watch timer.
-// \endverbatim
+//  - User time:   time cpu spends in user mode on behalf of the program.
+//  - System time: time cpu spends in system mode on behalf of the program.
+//  - Real time:   what you get from a stop watch timer.
 //
 // \author This code was originally written by Joe Rahmeh at UT Austin.
 //

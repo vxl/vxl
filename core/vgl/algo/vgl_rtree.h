@@ -10,10 +10,6 @@
 // \file
 // \author fsm@robots.ox.ac.uk
 // \brief Templated rtree class and associated classes and functions
-
-
-
-
 //--------------------------------------------------------------------------------
 
 #include <vcl_vector.h>
@@ -197,11 +193,9 @@ public:
 // will not update the rtree, so may lead to the data structure
 // being corrupted.
 //
-// \verbatim
-// V : element type
-// B : bounds type
-// C : mystery type
-// \endverbatim
+// -  V : element type
+// -  B : bounds type
+// -  C : mystery type
 //
 // The C-device makes it possible to have an rtree of Vs using Bs
 // without having to modify the class definitions of V or B. It

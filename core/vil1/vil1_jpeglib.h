@@ -7,8 +7,8 @@
 
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
 // \brief Stuff for jpeg I/O
+// \author fsm@robots.ox.ac.uk
 
 #include <vcl_cstdio.h>
 #include <vcl_cstdlib.h>

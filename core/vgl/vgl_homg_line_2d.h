@@ -8,8 +8,8 @@
 
 //:
 // \file
+// \brief line in projective 2D space
 // \author Don Hamilton, Peter Tu
-//
 
 #include <vcl_iostream.h>
 //#include <vcl_algorithm.h> // for vcl_min
@@ -26,15 +26,15 @@ template <class Type>
 class vgl_homg_line_2d {
 
   // PUBLIC INTERFACE--------------------------------------------------------
-  
+
 public:
- 
+
   // Constructors/Initializers/Destructors-----------------------------------
 
   //: Default constructor (leaves line undefined)
   vgl_homg_line_2d () {}
-  
-  // Default copy constructor  
+
+  // Default copy constructor
   // vgl_homg_line_2d (const vgl_homg_line_2d<Type>& that) { *this = that; }
 
 //unimp  vgl_homg_line_2d<Type> (vgl_line_2d<Type> const& p);
@@ -81,7 +81,7 @@ public:
   //: Return true iff the point is the point at infinity
   //    This version checks (min(|a|,|b|) < tol * c
   //win32 fails  bool ideal(Type tol) const { return vcl_min(vcl_abs(a()),vcl_abs(b())) < tol * vcl_abs(c()); }
-  
+
   //:get two points on the line
   // These two points are normally the intersections
   // with the Y axis and X axis, respectively.  When the line is parallel to one

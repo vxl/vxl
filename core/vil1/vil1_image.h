@@ -7,8 +7,8 @@
 
 //:
 // \file
-// \author fsm@robots.ox.ac.uk
 // \brief A reference-counted image object.
+// \author fsm@robots.ox.ac.uk
 
 #include <vcl_iosfwd.h>
 #include <vil/vil_image_impl.h>

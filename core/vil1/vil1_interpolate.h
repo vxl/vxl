@@ -9,8 +9,8 @@
 
 //:
 // \file
-// \author awf@robots.ox.ac.uk
 // \brief Interpolation methods
+// \author awf@robots.ox.ac.uk
 // \date 02 Apr 00
 
 #include <vil/vil_memory_image_of.h>

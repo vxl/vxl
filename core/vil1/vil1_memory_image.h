@@ -6,10 +6,10 @@
 // This is vxl/vil/vil_memory_image.h
 
 //:
-// \file:
+// \file
+// \brief vil_image, stored entirely in RAM
 // \author awf@robots.ox.ac.uk
 // \date 16 Feb 00
-// vil_image, stored entirely in RAM
 //
 //\verbatim
 //  Modifications

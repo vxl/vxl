@@ -12,8 +12,7 @@
 
 #include <vil/vil_stream.h>
 
-//:
-// Purpose: make a section of a vil_stream behave like a vil_stream.
+//: make a section of a vil_stream behave like a vil_stream.
 //
 // It is possible to have multiple vil_stream_sections using the same
 // underlying stream simultaneously. This is accomplished by keeping

@@ -9,10 +9,10 @@
 // \file
 // \author    fsm@robots.ox.ac.uk
 // \date 17 Feb 2000
-//\verbatim
+// \verbatim
 //  Modifications:
 // Adapted from geoff's code in ImageClasses/JPEGImage.*
-//\endverbatim
+// \endverbatim
 
 #include <vil/vil_file_format.h>
 #include <vil/vil_image_impl.h>

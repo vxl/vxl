@@ -4,17 +4,17 @@
 #pragma interface
 #endif
 
-
 //:
 //  \file
 //  \brief Contains class to implement a bounding box.
-//  \author Don Hamilton 15/2/2000
-//  \author Peter Tu
-
+//  \author Don Hamilton
+//          Peter Tu
+//  \date   15/2/2000
 //
+// \verbatim
 //  Modifications
 //  IMS (Manchester) 14/03/2001: Tidied up the documentation + added binary_io
-//
+// \endverbatim
 
 #include <vcl_iostream.h>
 

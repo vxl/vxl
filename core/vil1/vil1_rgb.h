@@ -7,19 +7,17 @@
 
 //:
 // \file
-// \author Peter Vanroose, K.U.Leuven
-// \brief This is the appropriate pixel type for 24-bit colour images.
+// \brief Pixel type for 24 bit images
 //
-//\verbatim
-//    Currently also includes the following `utilities':
-//    (1) conversion to ubyte (luminance of vil_rgb: weights (0.299,0.587,0.114)).
-//    (2) min and max of vil_rgbcell values, useful for morphological operations.
-//    (3) arithmetic operations
-//\endverbatim
+//  Currently also includes the following `utilities':
+//   -# conversion to ubyte (luminance of vil_rgb: weights (0.299,0.587,0.114)).
+//   -# min and max of vil_rgbcell values, useful for morphological operations.
+//   -# arithmetic operations
 //
+// \author Peter Vanroose, K.U.Leuven, ESAT/VISICS
+// \date   15 nov. 1997
 //\verbatim
-//  Modification:
-//    Peter Vanroose, K.U.Leuven, ESAT/VISICS, 15 nov. 1997
+//  Modifications:
 //    250198 AWF Templated.
 //    250198 AWF Modified to make POD struct until gcc inlines when debugging.
 //    160298 PCP Removed underscore from public members.
@@ -27,8 +25,7 @@
 //    220598 PVr moved instantiations files to Templates subdirectory.
 //    050598 PVr added several operators ( + += - -= (T) ).
 //    140898 David Capel added clamping functions to ensure 0-255 range on bytes and vil_rgb<byte>
-//    090600 David Capel made clamping functions inline and removed all that partial specialization
-//           nonsense from the .txx file.
+//    090600 David Capel made clamping functions inline and removed all that partial specialization nonsense from the .txx file.
 //\endverbatim
 
 #include <vcl_iostream.h>
@@ -40,24 +37,18 @@
 # define InLine
 #endif
 
-//: Pixel type for 24 bit images
+//: This is the appropriate pixel type for 24-bit colour images.
+//
+//    Currently also includes the following `utilities':
+//    -#  conversion to ubyte (luminance of vil_rgb: weights (0.299,0.587,0.114)).
+//    -#  min and max of vil_rgbcell values, useful for morphological operations.
+//    -#  arithmetic operations
 template <class T>
 struct vil_rgb
 {
   typedef T value_type;
 
-#if 0
-  //:Create (0,0,0) vil_rgb cell. We need the default ctor to do this as the STL
-  // effectively mandates that T() produces a nil value.
-  vil_rgb():
-    r(0), g(0), b(0) {}
-#else
-  // No, it doesn't mandate that. It merely says there
-  // must be a default constructor. When allocating big
-  // buffers of vil_rgb<T>s we don't want to pay for
-  // unnecessary initialization. -- fsm.
-  vil_rgb() { }
-#endif
+  inline vil_rgb() { }
 
   //:Create grey (v,v,v) vil_rgb cell from value v.  This provides a conversion
   // from T to vil_rgb<T>, needed by e.g. two constructors in vil_filter.h.
@@ -78,15 +69,12 @@ struct vil_rgb
   //:Convert vil_rgb to gray using standard (.299, .587, .114) weighting.
   T grey() const { return T(r*0.299+0.587*g+0.114*b); }
 
-  // This was wrong because it doesn't work with vil_rgb<double> where the
-  // dynamic range is [0, 1]. Even if the dynamic range were [0, 255] it still
-  // shouldn't cast the result to an int. fsm@robots.ox.ac.uk
-  //  T grey() const { return int(0.5+r*0.299+0.587*g+0.114*b); }
-
   // Who wants this? It's a pain in the ass.
   // ImageProcessing/IIFOperators use this a lot!
   // Why can we not use .gray()?  This adds ambiguities.
-  // operator T() const { return int(0.5+r*0.299+0.587*g+0.114*b); }
+#if 0
+  operator T() const { return T(0.5+r*0.299+0.587*g+0.114*b); }
+#endif
 
   //:equality
   inline bool operator== (vil_rgb<T> const&) const;

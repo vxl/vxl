@@ -25,14 +25,14 @@
 //:Evaluation of real polynomials at real and complex points.
 //    vnl_real_polynomial represents a univariate polynomial with real
 //    coefficients, stored as a vector of doubles.  This allows
-//    evaluation of the polynomial \f$p(x)\f$ at given values of \f$x\f$,
-//    or of its derivative \f$p'(x)\f$.
+//    evaluation of the polynomial $p(x)$ at given values of $x$,
+//    or of its derivative $p'(x)$.
 //
 //    Roots may be extracted using the roots() method.
 class vnl_real_polynomial {
 public:
   //: Initialize polynomial.
-  // The polynomial is \f$ a[0] x^d + a[1] x^{d-1} + \cdots + a[d] = 0 \f$.
+  // The polynomial is $ a[0] x^d + a[1] x^{d-1} + \cdots + a[d] = 0 $.
   vnl_real_polynomial(vnl_vector<double> const & a): coeffs_(a) {}
 
   //: Initialize polynomial from C vector.

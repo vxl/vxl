@@ -3,10 +3,9 @@
 
 // This is vxl/vgl/vgl_test.h
 
-//:
-// \file
+//: \file
+// \brief Testing software
 // \author Tim Cootes
-// Testing software
 
 #include <vcl_string.h>
 

@@ -22,11 +22,11 @@
 //: vnl_nonlinear_minimizer is a base class for nonlinear optimization.
 // It defines a few common abilities such as get_num_evaluations.
 // Known derived classes are:
-//   vnl_levenberg_marquardt
-//   vnl_lbfgs
-//   vnl_conjugate_gradient
-//   vnl_brent
-//   vnl_powell
+// -  vnl_levenberg_marquardt
+// -  vnl_lbfgs
+// -  vnl_conjugate_gradient
+// -  vnl_brent
+// -  vnl_powell
 class vnl_nonlinear_minimizer {
 public:
   vnl_nonlinear_minimizer();

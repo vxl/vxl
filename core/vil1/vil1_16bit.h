@@ -5,18 +5,17 @@
 #endif
 // This is vxl/vil/vil_16bit.h
 
-
 //:
 // \file
-// \brief vil_16bit - read/write integers to/from vil_stream
-// \author  fsm
+// \brief read/write integers to/from vil_stream
 //
 // Functions to read and write integers to and from a vil_stream.
 // The endianness refers to the format in the stream, not the
 // native format of the compiler or execution environment.
 //
-// Modifications
+// \author  fsm
 // \verbatim
+// Modifications
 // Peter Vanroose, July 2000: corrected serious bug: VXL_LITTLE_ENDIAN not needed
 //                    (implementation was wrong for VXL_BIG_ENDIAN machines)
 // \endverbatim

@@ -9,12 +9,13 @@
 //:
 // \file
 // \brief Representation of a generic image
-// \author AWF
-// \date 17 Feb 2000
-//\verbatim
+//
 // A vil_image_impl is reference counted (see below).
 // For a smart-pointer version, use class vil_image.
 //
+// \author AWF
+// \date 17 Feb 2000
+//\verbatim
 //  Modifications
 //     000216 AWF Initial version.
 //\endverbatim
@@ -39,7 +40,6 @@ enum vil_component_format {
 // Representation of a generic image.
 //
 // \verbatim
-//
 //                        Component   Cell     Pixel      get_section(plane=0,
 //                        example     example  example      x0=0,y0=0,w=1,h=1)
 //
@@ -62,13 +62,14 @@ enum vil_component_format {
 // |            |
 // |            |
 // +------------+
+// \endverbatim
 //
 // document relationship between :
-// Component: r, r
-// Cell: r, rgb
-// Pixel : spatial location,
-// Plane
-// \endverbatim
+// - Component: r, r
+// - Cell: r, rgb
+// - Pixel : spatial location,
+// - Plane
+
 class vil_image_impl {
 public:
   vil_image_impl();
@@ -84,21 +85,17 @@ public:
   virtual int components() const = 0;
 
   //: Format.
-  // \verbatim
-  //   A standard RGB RGB RGB image has
-  //   components() == 3
-  //   bits_per_component() == 8
-  //   component_format() == VIL_COMPONENT_FORMAT_UNSIGNED_INT
-  //   \endverbatim
+  //  A standard RGB RGB RGB image has
+  // - components() == 3
+  // - bits_per_component() == 8
+  // - component_format() == VIL_COMPONENT_FORMAT_UNSIGNED_INT
   virtual int bits_per_component() const = 0;
 
   //: Format.
-  // \verbatim
-  //   A standard RGB RGB RGB image has
-  //   components() == 3
-  //   bits_per_component() == 8
-  //   component_format() == VIL_COMPONENT_FORMAT_UNSIGNED_INT
-  //   \endverbatim
+  //  A standard RGB RGB RGB image has
+  // - components() == 3
+  // - bits_per_component() == 8
+  // - component_format() == VIL_COMPONENT_FORMAT_UNSIGNED_INT
   virtual enum vil_component_format component_format() const = 0;
 
   //: return the ith plane.
@@ -106,20 +103,16 @@ public:
 
   //: Copy buffer of this to BUF.
   // The buffer is stored like this for each pixel:
-  // component0(plane0,plane1,plane2,...),component1(plane0,plane1,plane2,...),...
-  // \verbatim
+  // component0(plane0,plane1,plane2,...),component1(plane0,plane1,plane2,...),... \n
   //   total size of BUF in bytes should be (bits_per_component * components + 7) / 8
   //   i.e. rounding to the next multiple of 8 bits (only correct if 1 byte = 8 bits)
-  // \endverbatim
   virtual bool get_section(void* buf, int x0, int y0, int width, int height) const = 0;
 
   //: Copy plane PLANE of BUF to this.
   // The buffer should look like this for each pixel:
-  // component0(plane0,plane1,plane2,...),component1(plane0,plane1,plane2,...),...
-  // \verbatim
+  // component0(plane0,plane1,plane2,...),component1(plane0,plane1,plane2,...),... \n
   // total size of BUF in bytes should be (bits_per_component * components + 7) / 8
   // i.e. rounding to the next multiple of 8 bits (only correct if 1 byte = 8 bits)
-  // \endverbatim
   virtual bool put_section(void const* buf, int x0, int y0, int width, int height) = 0;
 
   //: Return a string describing the file format.

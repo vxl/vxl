@@ -86,30 +86,30 @@ public:
 
   //: Construct a matrix of size r rows by c columns
   // Contents are unspecified.
-  // Complexity /f$O(1)/f$
+  // Complexity $O(1)$
   vnl_matrix(unsigned r, unsigned c);                           // r rows, c cols.
 
   //: Construct a matrix of size r rows by c columns, and all emelemnts equal to v0
-  // Complexity /f$O(r c)/f$
+  // Complexity $O(r c)$
   vnl_matrix(unsigned r, unsigned c, T const& v0);              // r rows, c cols, value v0.
 
   //: Construct a matrix of size r rows by c columns, with a special type
   // Contents are specified by t
-   // Complexity /f$O(r.c)/f$
+   // Complexity $O(r.c)$
  vnl_matrix(unsigned r, unsigned c, vnl_matrix_type t);        // r rows, c cols, special type
 
   //: Construct a matrix of size r rows by c columns, initialised by an automatic array
   // The first n elements, are initialised row-wise, to values.
-  // Complexity /f$O(n)/f$
+  // Complexity $O(n)$
   vnl_matrix(unsigned r, unsigned c, unsigned n, T const values[]);  // use automatic arrays.
 
   //: Construct a matrix of size r rows by c columns, initialised by a memory block
   // The values are initialise row wise from the data.
-  // Complexity /f$O(r.c)/f$
+  // Complexity $O(r.c)$
   vnl_matrix(T const* data_block, unsigned r, unsigned c);      // fill row-wise.
 
   //: Copy construct a matrix
-   // Complexity /f$O(r.c)/f$
+   // Complexity $O(r.c)$
   vnl_matrix(vnl_matrix<T> const&);                             // from another matrix.
 
 #ifndef VXL_DOXYGEN_SHOULD_SKIP_THIS
@@ -189,11 +189,11 @@ public:
 // Filling and copying------------------------------------------------
 
   //: Set all elements of matrix to specified value.
-  // Complexity /f$O(r.c)/f$
+  // Complexity $O(r.c)$
   void fill (T const&);
 
   //: Set all diagonal elements of matrix to specified value.
-  // Complexity /f$O(min(r,c))/f$
+  // Complexity $O(min(r,c))$
   void fill_diagonal (T const&);
 
   //: Fill (laminate) this matrix with the given data.
@@ -212,11 +212,11 @@ public:
 
 
   //: Set all elements to value v
-  // Complexity /f$O(r.c)/f$
+  // Complexity $O(r.c)$
   vnl_matrix<T>& operator= (T const&v) { fill(v); return *this; }
 
   //: Copies all elements of rhs matrix into lhs matrix.
-  // Complexity /f$O(min(r,c))/f$
+  // Complexity $O(min(r,c))$
   vnl_matrix<T>& operator= (vnl_matrix<T> const&);
 
 // Arithmetic ----------------------------------------------------

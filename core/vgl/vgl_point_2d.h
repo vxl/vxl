@@ -8,6 +8,7 @@
 
 //:
 // \file
+// \brief a point in 2D nonhomogeneous space
 // \author Don Hamilton, Peter Tu
 
 #include <vcl_iostream.h>
@@ -102,7 +103,7 @@ public:
   // INTERNALS---------------------------------------------------------------
 
 protected:
-  // the data associated with this point 
+  // the data associated with this point
   Type data_[2];
 };
 

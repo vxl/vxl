@@ -12,11 +12,9 @@
 #include <vnl/algo/vnl_fftxd_prime_factors.h>
 
 //: Templated 1D FFT class based on Temperton FFT routines
-// \verbatim
-//  C TEMPERTON
-//  A GENERALIZED PRIME FACTOR FFT ALGORITHM FOR ANY $N = 2^P 3^Q 5^R$
+//  C TEMPERTON \n
+//  A GENERALIZED PRIME FACTOR FFT ALGORITHM FOR ANY $N = 2^P 3^Q 5^R$ \n
 //  SIAM J. SCI. STAT. COMP., MAY 1992.)
-// \endverbatim
 //
 //  original temperton-code (fortran) converted using f2c with -C++
 //  option. Two versions created: float and double.

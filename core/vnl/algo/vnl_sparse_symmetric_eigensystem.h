@@ -19,7 +19,7 @@
 #include <vcl_vector.h>
 
 //: Find the eigenvalues of a sparse symmetric matrix
-//  Solve the eigenproblem \f$A x = \lambda x\f$, with \f$A\f$ symmetric and
+//  Solve the eigenproblem $A x = \lambda x$, with $A$ symmetric and
 //  sparse.  The block Lanczos algorithm is used to allow the
 //  recovery of a number of eigenvale/eigenvector pairs from either
 //  end of the spectrum, to a required accuracy.

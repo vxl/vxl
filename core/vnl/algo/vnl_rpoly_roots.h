@@ -37,7 +37,8 @@ public:
 
 //: The constructor calculates the roots.  This is the most efficient interface
 // as all the result variables are initialized to the correct size.
-// @{The polynomial is $ a[0] x^d + a[1] x^{d-1} + \cdots + a[d] = 0 $.@}
+// The polynomial is $ a[0] x^d + a[1] x^{d-1} + \cdots + a[d] = 0 $.
+
   vnl_rpoly_roots(const vnl_vector<double>& a);
 
 //: Calculate roots of RealPolynomial.

@@ -14,6 +14,7 @@
 #include <vil/vil_image.h>
 #include <vcl_string.h>
 
+//: Adaptor which produces a new image by skipping rows and columns
 class vil_skip_image_impl : public vil_image_impl {
 public:
   vil_skip_image_impl(vil_image const &underlying, unsigned sx, unsigned sy);

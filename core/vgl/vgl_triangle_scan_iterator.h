@@ -6,10 +6,9 @@
 
 // This is vxl/vgl/vgl_triangle_scan_iterator.h
 
-// :
-// \file
+//: \file
+// \brief Optimized polygon scan iterator for triangles
 // \author fsm@robots.ox.ac.uk
-
 
 #include <vgl/vgl_region_scan_iterator.h>
 
@@ -21,7 +20,7 @@ struct vgl_triangle_scan_iterator : public vgl_region_scan_iterator
   //: Vertices of triangle
   struct pt { double x; double y; } a, b, c;
 
-#if use_polygon_scan_iterator  
+#if use_polygon_scan_iterator
   vgl_triangle_scan_iterator() : data(0) { }
   ~vgl_triangle_scan_iterator();
 #endif
@@ -31,7 +30,7 @@ struct vgl_triangle_scan_iterator : public vgl_region_scan_iterator
   int  scany() const { return scany_; }
   int  startx() const { return startx_; }
   int  endx() const { return endx_; }
-  
+
 private:
   int scany_;
   int startx_;

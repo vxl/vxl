@@ -8,8 +8,8 @@
 
 //:
 // \file
-// \author Don HAMILTON Peter TU
-//
+// \brief point in projective 2D space
+// \author Don HAMILTON, Peter TU
 
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
@@ -26,15 +26,15 @@ template <class Type>
 class vgl_homg_point_2d {
 
   // PUBLIC INTERFACE--------------------------------------------------------
-  
+
 public:
- 
+
   // Constructors/Initializers/Destructors-----------------------------------
 
-  // Default constructor  
+  // Default constructor
   vgl_homg_point_2d () {}
-  
-  // Default copy constructor  
+
+  // Default copy constructor
   // vgl_homg_point_2d (const vgl_homg_point_2d<Type>& that) {
   //   set(that.x(),that.y(),that.w());
   // }
@@ -88,11 +88,11 @@ public:
   // INTERNALS---------------------------------------------------------------
 
 protected:
-  // the data associated with this point 
+  // the data associated with this point
   Type data_[3];
 };
 
-// stream operators 
+// stream operators
 template <class Type>
 vcl_ostream&  operator<<(vcl_ostream& s, const vgl_homg_point_2d<Type>& p) {
   return s << " <vgl_homg_point_2d ("
