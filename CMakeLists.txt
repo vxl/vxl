@@ -3,6 +3,13 @@
 #
 #   geoff.cross@crd.ge.com
 
+OPTION(CYGWIN_UNSET_WIN32 "Should WIN32 be unset under Cygwin?" NO)
+IF(CYGWIN_UNSET_WIN32)
+  IF(CYGWIN)
+    SET(WIN32 0)
+  ENDIF(CYGWIN)
+ENDIF(CYGWIN_UNSET_WIN32)
+
 PROJECT(allvxl)
 
 INCLUDE (${CMAKE_ROOT}/Modules/Dart.cmake)
