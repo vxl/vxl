@@ -42,11 +42,15 @@ LD_UNDEFS += vgui_Xm_tag
 ald_libs += vgui-Xm
 endif
 
+ifeq ($(strip $(HAS_X11)),1)
+USE_X11 := 1
+DEFINES += -DHAS_X11
+endif
+
 ifneq (,$(strip $(wildcard $(IUEROOT)/oxl/vgui/impl/glX)))
 ## Just having X11 on my system, doesn't imply that
 ## I want to compile or link against vgui-glX.
 ifeq ($(strip $(HAS_X11)),1)
-USE_X11 := 1
 LD_UNDEFS += vgui_glX_tag
 ald_libs += vgui-glX vgui-X
 endif
