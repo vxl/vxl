@@ -7,8 +7,8 @@
 #include <sdet/sdet_fit_lines_params.h>
 #include <vdgl/vdgl_intensity_face_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
-#include <vtol/vtol_edge_sptr.h>
-#include <vtol/vtol_face_sptr.h>
+#include <vtol/vtol_edge.h>
+#include <vtol/vtol_face.h>
 #include <vifa/vifa_imp_line.h>
 
 
