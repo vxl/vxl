@@ -1,11 +1,3 @@
-/******************************************************************************************
-FileName		: E:\...\bcal\bcam\CameraNode.h
-Author			: your name here
-Purpose		    : This is a wrap class for vcsl_graph which provide some functions not supported by vcl_graph yet
-Date Of Creation: 3/25/2003
-Modification History :
-Date             Modifications
-******************************************************************************************/
 
 // CameraNode.h: interface for the CameraNode class.
 //
