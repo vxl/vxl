@@ -137,7 +137,7 @@ bool bsol_point_index_2d::in_radius(const double radius,
   this->trans(x, y, row, col);
   //get points from surrounding cells
   int row_radius = (int)(radius/row_spacing_),
-    (int)(col_radius = radius/col_spacing_);
+		col_radius = (int)(radius/col_spacing_);
   //include points near cell boundaries
   row_radius++; col_radius++;
   for(int ro = -row_radius; ro<=row_radius; ro++)
