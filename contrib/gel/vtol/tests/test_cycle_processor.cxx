@@ -187,7 +187,7 @@ int main(int, char **)
                ceit != cedges->end(); ceit++)
             vcl_cout << (*ceit)->cast_to_edge_2d() << vcl_endl;
           vcl_cout << vcl_endl;
-          delete cedges;
+           delete cedges;
         }
         Assert(nested_chains.size()==2);
   }
