@@ -10,6 +10,12 @@
 static integer c__1 = 1;
 static doublereal c_b44 = -1.;
 
+// Calling this ensures that the operands are spilled to
+// memory and thus avoids excessive precision when compiling
+// for x86 with heavy optimization (gcc). It is better to do
+// this than to turn on -ffloat-store.
+static int fsm_ieee_doubles_differ(double *x, double *y);
+
 /* Subroutine */ void dsvdc_(x, ldx, n, p, s, e, u, ldu, v, ldv, work, job,
         info)
 doublereal *x;
@@ -431,7 +437,7 @@ L360:
         }
         test = abs(s[l]) + abs(s[l + 1]);
         ztest = test + abs(e[l]);
-        if (ztest != test) {
+        if (fsm_ieee_doubles_differ(&ztest, &test)) {
             goto L380;
         }
         e[l] = 0.;
@@ -461,7 +467,7 @@ L410:
             test += abs(e[ls - 1]);
         }
         ztest = test + abs(s[ls]);
-        if (ztest != test) {
+        if (fsm_ieee_doubles_differ(&ztest, &test)) {
             goto L420;
         }
         s[ls] = 0.;
@@ -638,3 +644,7 @@ L600:
     goto L360;
 } /* dsvdc_ */
 
+int fsm_ieee_doubles_differ(double *x, double *y)
+{
+  return *x != *y;
+}
