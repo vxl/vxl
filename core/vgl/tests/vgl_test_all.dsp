@@ -123,6 +123,9 @@ SOURCE=.\test_h_matrix_2d.cxx
 SOURCE=.\test_h_matrix_3d.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_p_matrix.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_triangle_scan_iterator.cxx
 # End Source File
 # Begin Source File
