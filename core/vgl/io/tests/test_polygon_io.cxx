@@ -1,0 +1,54 @@
+#include <vcl_iostream.h>
+#include <vcl_fstream.h>
+#include <vcl_utility.h>
+
+#include <vgl/vgl_test.h>
+#include <vgl/vgl_polygon.h>
+#include <vgl/io/vgl_io_polygon.h>
+
+
+void test_polygon_io()
+{
+  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "Testing vgl_polygon io" << vcl_endl;
+  vcl_cout << "***********************" << vcl_endl;
+  //// test constructors, accessors
+  vgl_polygon p_out(1), p_in;
+  p_out.push_back(1.1f, 1.2f);
+  p_out.push_back(2.1f, 2.2f);
+  p_out.push_back(3.1f, 3.2f);
+  p_out.new_sheet();
+  p_out.push_back(1.3f, 1.4f);
+  p_out.push_back(2.3f, 2.4f);
+  p_out.push_back(3.3f, 3.4f);
+
+
+  vsl_b_ofstream bfs_out("vgl_polygon_test_io.bvl.tmp");
+  TEST ("Created vgl_polygon_test_io.bvl.tmp for writing",
+        (!bfs_out), false);
+  vsl_b_write(bfs_out, p_out);
+  bfs_out.close();
+
+  vsl_b_ifstream bfs_in("vgl_polygon_test_io.bvl.tmp");
+  TEST ("Opened vgl_polygon_test_io.bvl.tmp for reading", (!bfs_in), false);
+  vsl_b_read(bfs_in, p_in);
+  bfs_in.close();
+
+  TEST ("p_out == p_in", 
+    p_out.num_sheets()==p_in.num_sheets() && 
+    p_out[0]==p_in[0] && 
+    p_out[1]==p_in[1] , true);
+
+  vsl_print_summary(vcl_cout, p_out);
+  vcl_cout << vcl_endl;
+
+}
+
+
+void test_polygon_prime()
+{
+  test_polygon_io();
+}
+
+
+TESTMAIN(test_polygon_prime);
