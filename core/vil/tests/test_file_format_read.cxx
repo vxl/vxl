@@ -39,15 +39,21 @@ class CheckRGB : public CheckPixel
  public:
   CheckRGB( const char* file )
   {
-    vil2_image_view_base_sptr im = vil2_load( (image_base + file).c_str() );
-    if ( !im )
-      vcl_cout << "[ couldn't load " << file << "]\n";
+    vil2_image_resource_sptr ir = vil2_load_image_resource((image_base + file).c_str());
+    if ( !ir )
+      vcl_cout << "[ couldn't read header from " << file << "]\n";
     else
     {
-      img_ = im;
+      vil2_image_view_base_sptr im = ir->get_copy_view(0,ir->ni(),0,ir->nj());
+      if ( !im )
+        vcl_cout << "[ couldn't read image data from " << file << "]\n";
+      else
+      {
+        img_ = im;
 #ifdef DEBUG
-      vcl_cout << '\n' << vcl_flush; vil2_print_all(vcl_cout, img_);
+        vcl_cout << '\n' << vcl_flush; vil2_print_all(vcl_cout, img_);
 #endif
+      }
     }
   }
 
@@ -94,15 +100,21 @@ class CheckColourPlanes : public CheckPixel
  public:
   CheckColourPlanes( const char* file )
   {
-    vil2_image_view_base_sptr im = vil2_load( (image_base + file).c_str() );
-    if ( !im )
-      vcl_cout << "[ couldn't load " << file << "]\n";
+    vil2_image_resource_sptr ir = vil2_load_image_resource((image_base + file).c_str());
+    if ( !ir )
+      vcl_cout << "[ couldn't read header from " << file << "]\n";
     else
     {
-      img_ = im;
+      vil2_image_view_base_sptr im = ir->get_copy_view(0,ir->ni(),0,ir->nj());
+      if ( !im )
+        vcl_cout << "[ couldn't read image data from " << file << "]\n";
+      else
+      {
+        img_ = im;
 #ifdef DEBUG
-      vcl_cout << '\n' << vcl_flush; vil2_print_all(vcl_cout, img_);
+        vcl_cout << '\n' << vcl_flush; vil2_print_all(vcl_cout, img_);
 #endif
+      }
     }
   }
 
@@ -120,15 +132,21 @@ class CheckGrey : public CheckPixel
  public:
   CheckGrey( const char* file )
   {
-    vil2_image_view_base_sptr im = vil2_load( (image_base + file).c_str() );
-    if ( !im )
-      vcl_cout << "[ couldn't load " << file << "]\n";
+    vil2_image_resource_sptr ir = vil2_load_image_resource((image_base + file).c_str());
+    if ( !ir )
+      vcl_cout << "[ couldn't read header from " << file << "]\n";
     else
     {
-      img_ = im;
+      vil2_image_view_base_sptr im = ir->get_copy_view(0,ir->ni(),0,ir->nj());
+      if ( !im )
+        vcl_cout << "[ couldn't read image data from " << file << "]\n";
+      else
+      {
+        img_ = im;
 #ifdef DEBUG
-      vcl_cout << '\n' << vcl_flush; vil2_print_all(vcl_cout, img_);
+        vcl_cout << '\n' << vcl_flush; vil2_print_all(vcl_cout, img_);
 #endif
+      }
     }
   };
 
@@ -201,8 +219,10 @@ test( const char* true_data_file, const CheckPixel& check )
   for ( int p=0; p < num_planes; ++p ) {
     for ( int j=0; j < height; ++j ) {
       for ( int i=0; i < width; ++i ) {
-        for ( int c=0; c < num_comp; ++c ) {
-          if ( !( fin >> pixel[c] ) ) {
+        for ( int c=0; c < num_comp; ++c )
+        {
+          if ( !( fin >> pixel[c] ) )
+          {
             vcl_cout << "[couldn't read value at " << p << "," << i << "," << j << "," << c
                      << " from " << true_data_file << "]";
             return false;
@@ -283,9 +303,6 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_begin( "  8-bit RGB packbits" );
   testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_packbits.tif" ) ) );
 
-  testlib_test_begin( "  8-bit indexed RGB" );
-  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_indexed.ras" ) ) );
-
   vcl_cout << "Sun raster [ras]\n";
   testlib_test_begin( "  8-bit grey, no colourmap" );
   testlib_test_perform( test( "ff_grey8bit_true.txt", CheckGrey<vxl_byte>( "ff_grey8bit_nocol.ras" ) ) );
@@ -295,15 +312,13 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_indexed.ras" ) ) );
 
 #if 0
-   vcl_cout << "SGI IRIS [iris]\n";
-   testlib_test_begin( "  8-bit RGB rle" );
-   testlib_test_perform( test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_byte>( "ff_rgb8bit.iris" ) ) );
+  vcl_cout << "DICOM [dcm]\n";
+  testlib_test_begin( "  16-bit greyscale uncompressed" );
+  testlib_test_perform( test( "ff_grey16bit_true.txt", CheckGrey<vxl_int_32>( "ff_grey16bit_uncompressed.dcm" ) ) );
 
-  vcl_cout << "Portable Network Graphics [png]\n";
-  testlib_test_begin( "  8-bit RGB uncompressed" );
-  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_uncompressed.png" ) ) );
-  testlib_test_begin( "  8-bit RGB compressed" );
-  testlib_test_perform( test( "ff_rgb8bit_true.txt", CheckRGB<vxl_byte>( "ff_rgb8bit_compressed.png" ) ) );
+  vcl_cout << "SGI IRIS [iris]\n";
+  testlib_test_begin( "  8-bit RGB rle" );
+  testlib_test_perform( test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_byte>( "ff_rgb8bit.iris" ) ) );
 #endif
   return testlib_test_summary();
 }
