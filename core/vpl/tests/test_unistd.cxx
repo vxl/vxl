@@ -27,12 +27,12 @@ MAIN( test_unistd )
     vcl_ifstream f(ROOT_PATH "/vpltest/file");
     int s;
     f >> s;
-    Assert(s == 1234);
+    Assert("Create file in directory", s == 1234);
   }
   vpl_unlink("file");
   {
     vcl_ifstream f(ROOT_PATH "/vpltest/file");
-    Assert(!f.good());
+    Assert("Unlink", !f.good());
   }
 
   vpl_chdir(ROOT_PATH);
@@ -44,7 +44,7 @@ MAIN( test_unistd )
   vcl_string value("GOOD");
 
   vpl_putenv((var + "=" + value).c_str());
-  Assert(vcl_strcmp(vcl_getenv("VPL_PUTENV_TEST"), "GOOD") == 0);
+  Assert("putenv", vcl_strcmp(vcl_getenv("VPL_PUTENV_TEST"), "GOOD") == 0);
 
   return 0;
 }

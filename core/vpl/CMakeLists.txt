@@ -4,7 +4,7 @@ ADD_LIBRARY(vpl vpl_sources)
 
 SOURCE_FILES( vpl_sources
   vpl.h         vpl.cxx
-  vpl_mutex.h   vpl_mutex.cxx
+  vpl_mutex.h
 )
 
 IF( BUILD_TESTING)
