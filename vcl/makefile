@@ -195,6 +195,7 @@ MANPAGE_SOURCES += gcc-295/vcl_functional.txx # without corresponding .h
 MANPAGE_SOURCES += gcc-295/vcl_iterator.txx # without corresponding .h
 MANPAGE_SOURCES += gcc-295/vcl_list.txx # without corresponding .h
 MANPAGE_SOURCES += gcc-295/vcl_map.txx # without corresponding .h
+MANPAGE_SOURCES += gcc-295/vcl_memory.h
 MANPAGE_SOURCES += gcc-295/vcl_queue.txx # without corresponding .h
 MANPAGE_SOURCES += gcc-295/vcl_set.txx # without corresponding .h
 MANPAGE_SOURCES += gcc-295/vcl_string.txx # without corresponding .h
