@@ -46,11 +46,11 @@ class vgl_homg_operators_3d
                                const vgl_homg_point_3d<Type>& point2);
   static vgl_homg_point_3d<Type> intersect_line_and_plane(const vgl_homg_line_3d&,
                                                           const vgl_homg_plane_3d<Type>&);
- private: // not yet implemented
+#if 0 // not yet implemented
   static vgl_homg_point_3d<Type> lines_to_point(const vgl_homg_line_3d& line1,
                                                 const vgl_homg_line_3d& line2);
   static vgl_homg_point_3d<Type> lines_to_point(const vcl_vector<vgl_homg_line_3d>& line_list);
- public:
+#endif // 0
   static double perp_distance_squared(const vgl_homg_line_3d& line,
                                       const vgl_homg_point_3d<Type>& point);
   static vgl_homg_line_3d perp_line_through_point(const vgl_homg_line_3d& line,
@@ -59,7 +59,7 @@ class vgl_homg_operators_3d
                                                  const vgl_homg_point_3d<Type>& point);
   static vgl_homg_line_3d planes_to_line(const vgl_homg_plane_3d<Type>& plane1,
                                          const vgl_homg_plane_3d<Type>& plane2);
- private: // not yet implemented
+#if 0 // not yet implemented
   static vgl_homg_line_3d planes_to_line(const vcl_vector<vgl_homg_plane_3d<Type> >& plane_list);
   static vgl_homg_line_3d points_to_line(const vgl_homg_point_3d<Type>& point1,
                                          const vgl_homg_point_3d<Type>& point2);
@@ -69,7 +69,7 @@ class vgl_homg_operators_3d
                                                  const vgl_homg_point_3d<Type>&,
                                                  const vgl_homg_point_3d<Type>& );
   static vgl_homg_plane_3d<Type> points_to_plane(const vcl_vector<vgl_homg_point_3d<Type> >& point_list);
- public:
+#endif // 0
   static vgl_homg_point_3d<Type> intersection_point(const vgl_homg_plane_3d<Type>&,
                                                     const vgl_homg_plane_3d<Type>&,
                                                     const vgl_homg_plane_3d<Type>&);
