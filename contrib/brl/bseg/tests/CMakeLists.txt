@@ -14,4 +14,4 @@ ADD_TEST(sdet_test_region_proc sdet_test_region_proc ${BRL_INCLUDE_DIR}/bseg/tes
 ADD_EXECUTABLE( bseg_test_include test_include.cxx )
 
 ADD_EXECUTABLE(brip_test_lucas_kanade brip_test_lucas_kanade.cxx)
-ADD_TEST(brip_test_lucas_kanade)
+ADD_TEST(brip_test_lucas_kanade brip_test_lucas_kanade)
