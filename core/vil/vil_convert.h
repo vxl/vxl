@@ -92,9 +92,17 @@ VCL_DEFINE_SPECIALIZATION \
 inline void vil_convert_cast_pixel<vil_rgba<out >, in >::operator () (vil_rgba<out > v, in& d) const \
 { d = (in)(0.2125*v.r+0.7154*v.g+0.0721*v.b); }
 macro( vxl_byte , vxl_byte )
+macro( vxl_int_16 , vxl_byte )
+macro( vxl_uint_16 , vxl_byte )
+macro( vxl_int_32 , vxl_byte )
+macro( vxl_uint_32 , vxl_byte )
 macro( float , vxl_byte )
 macro( double , vxl_byte )
-macro( vxl_sbyte , vxl_sbyte )
+macro( vxl_byte , vxl_sbyte )
+macro( vxl_int_16 , vxl_sbyte )
+macro( vxl_uint_16 , vxl_sbyte )
+macro( vxl_int_32 , vxl_sbyte )
+macro( vxl_uint_32 , vxl_sbyte )
 macro( float , vxl_sbyte )
 macro( double , vxl_sbyte )
 macro( vxl_int_16 , vxl_int_16 )
