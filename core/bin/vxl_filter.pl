@@ -369,6 +369,8 @@ sub process_headers {
       s/<math\/DiagMatrix\.h>/<vnl\/vnl_diag_matrix.h>/;
       s/<math\/math\.h>/<vnl\/vnl_math.h>/;
       s/<math\/c_vector\.h>/<vnl\/vnl_c_vector.h>/;
+      s/<cool\/Vector\.h>/<vnl\/vnl_vector.h>/;
+      s/<cool\/Matrix\.h>/<vnl\/vnl_matrix.h>/;
 
       s/<Numerics\/Math\.h>/<vnl\/vnl_math.h>/;
       s/<Numerics\/RPolyRoots\.h>/<vnl\/algo\/vnl_rpoly_roots.h>/;
@@ -763,7 +765,9 @@ sub process_lines {
       s/\bCPolyRoots\b/vnl_cpoly_roots/g;
       s/\bIUE_c_vector\b/vnl_c_vector/g;
       s/\bIUE_vector\b/vnl_vector/g;
+      s/\bCoolVector\b/vnl_vector/g;
       s/\bIUE_matrix\b/vnl_matrix/g;
+      s/\bCoolMatrix\b/vnl_matrix/g;
       s/\bDiagMatrix\b/vnl_diag_matrix/g;
       s/IUE_math/vnl_math/g;
       s/\bMath\b/vnl_math/g;
