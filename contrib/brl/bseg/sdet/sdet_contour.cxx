@@ -1216,9 +1216,9 @@ sdet_contour::DetectTouch(vtol_vertex_2d_sptr const& endv,
                           const int maxSpiral)
 {
   const int jx = int(endv->x()), jy = int(endv->y());
-  int bx, by;
   for (int l = 0, n = 0; l < maxSpiral; l++)    // increasing radius of spiral
   {
+    int bx=0, by=0;
     vtol_vertex_2d_sptr  best_neighbor = NULL;  // prefer junction over endpt
     int max_edges = 0;             // max number of edges
     for ( ; n < RNS[l]; n++)    // 4- then 8-connected
