@@ -48,9 +48,11 @@ bool bxml_vtol_edge_2d_input_converter::extract_from_dom(DOM_Node& node)
 
   int num_children=0;
   DOM_Node child = node.getFirstChild();
-  while (child != 0) {
+  while (child != 0)
+  {
     int cnode_type = child.getNodeType();
-    if (cnode_type == DOM_Node::ELEMENT_NODE) {
+    if (cnode_type == DOM_Node::ELEMENT_NODE)
+    {
       bxml_vtol_zero_chain_2d_input_converter conv;
       bxml_vdgl_digital_curve_input_converter conv2;
       if (conv.extract_from_dom(child)) {
@@ -91,7 +93,8 @@ bool bxml_vtol_edge_2d_input_converter::extract_from_dom(DOM_Node& node)
 
 bxml_generic_ptr bxml_vtol_edge_2d_input_converter::construct_object()
 {
-  if (new_or_ref == 1) {
+  if (new_or_ref == 1)
+  {
     if (!zc_) {
       vcl_cout << "bxml_vtol_edge_2d: Note, no zero_chain, constructing edge with one vertex, id=" << id_ << '\n';
 
