@@ -8,6 +8,7 @@
 #include "PairMatchSetCorner.h"
 
 #include <vcl_cassert.h>
+#include <vcl_cstdlib.h>
 #include <vcl_vector.h>
 #include <mvl/HomgInterestPointSet.h>
 
@@ -77,7 +78,7 @@ void PairMatchSetCorner::extract_matches(vcl_vector<HomgPoint2D>& points1,
     ++i;
     if (i > n) {
       vcl_cerr << "ERRRRRK!";
-      abort();
+      vcl_abort();
     }
   }
   assert(i == n);
