@@ -26,7 +26,7 @@
 //  The region edges are then used to collect the input edges which are
 //  adjacent to a given region.  The set of edges adjacent to a region
 //  are used to construct a multiply-connected sub-class of vtol_face_2d, the
-//  vtol_intensity_face.  The vtol_intensity_face contains a 
+//  vtol_intensity_face.  The vtol_intensity_face contains a
 //  vdgl_digtial_region which holds arrays of pixel coordinates and values
 //  within the face boundaries.
 //
@@ -59,7 +59,7 @@
 
 class sdet_edgel_regions
 {
-public:
+ public:
   enum RegionLabel {UNLABELED=0, EDGE, LABEL};
   //Constructors/Destructors
   sdet_edgel_regions(int array_scale=2, bool verbose = false,
@@ -74,34 +74,36 @@ public:
                              vcl_vector<vtol_edge_2d_sptr>& sgrp,
                              vcl_vector<vtol_intensity_face_sptr>& faces);
   //Acessors
-  void SetVerbose() {verbose_ = true;}
-  void ClearVerbose() {verbose_ = false;}
-  void SetDebug() {debug_ = true;}
-  void ClearDebug() {debug_ = false;}
-  //void set_magnification(float magnification){magnification_=magnification;}
+  void SetVerbose() { verbose_ = true; }
+  void ClearVerbose() { verbose_ = false; }
+  void SetDebug() { debug_ = true; }
+  void ClearDebug() { debug_ = false; }
+#if 0
+  void set_magnification(float magnification) { magnification_=magnification; }
+#endif // 0
   unsigned int BaseLabel(unsigned int label);
-  unsigned int GetMaxRegionLabel(){return max_region_label_;}
-  void SetMaxRegionLabel(unsigned int label){max_region_label_ = label;}
-  vbl_array_2d<unsigned int> const& GetRegionArray(){return region_label_array_;}
-  int GetXSize(){return xend_ - xo_ + 1;}
-  int GetYSize(){return yend_ - yo_ + 1;}
+  unsigned int GetMaxRegionLabel() const { return max_region_label_; }
+  void SetMaxRegionLabel(unsigned int label) { max_region_label_ = label; }
+  vbl_array_2d<unsigned int> const& GetRegionArray() const { return region_label_array_; }
+  int GetXSize() const { return xend_ - xo_ + 1; }
+  int GetYSize() const { return yend_ - yo_ + 1; }
 
   vil1_image GetEdgeImage(vcl_vector<vtol_edge_2d_sptr>& edgels);
-#if 0
-  topo_debug_data_ref get_topo_debug_data(){return debug_data_;};
+#ifdef DEBUG
+  topo_debug_data_ref get_topo_debug_data() { return debug_data_; }
 #endif
   //Utitities (especially for testing)
   bool InsertRegionEquivalence(unsigned int label_b, unsigned int label_a);
   void GrowEquivalenceClasses();
   void PropagateEquivalence();
-  unsigned int GetLabel(vtol_edge_2d_sptr e, unsigned int nr);
+  unsigned int GetLabel(vtol_edge_2d_sptr e, unsigned int nr) const;
   //Debug print methods
   void print_region_array();
   void print_region_equivalence();
   void print_reverse_region_equivalence();
   void print_base_equivalence();
   void print_intensity_data();
-protected:
+ protected:
   //Utilities
   bool GroupContainsEdges(vcl_vector<vtol_edge_2d_sptr>& sg);
   bool InitRegionArray(vcl_vector<vtol_edge_2d_sptr>& sg);
@@ -181,7 +183,7 @@ protected:
   vtol_intensity_face_sptr* intensity_face_index_;
   vcl_vector<vtol_edge_2d_sptr>** face_edge_index_;
   vcl_vector<vtol_edge_2d_sptr>* failed_insertions_; //Short edges that fail
-#if 0
+#ifdef DEBUG
   topo_debug_data_ref debug_data_;
 #endif
   unsigned char* ubuf_;
