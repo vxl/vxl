@@ -5,12 +5,11 @@
 //
 
 #include "rgrl_data_manager.h"
-
-#include "rgrl_matcher_k_nearest.h"
-#include "rgrl_scale_est_all_weights.h"
-#include "rgrl_scale_est_closest.h"
-#include "rgrl_weighter_m_est.h"
-#include "rgrl_convergence_on_median_error.h"
+#include <rgrl/rgrl_matcher_k_nearest.h>
+#include <rgrl/rgrl_scale_est_all_weights.h>
+#include <rgrl/rgrl_scale_est_closest.h>
+#include <rgrl/rgrl_weighter_m_est.h>
+#include <rgrl/rgrl_convergence_on_median_error.h>
 
 #include <rrel/rrel_lms_obj.h>
 #include <rrel/rrel_tukey_obj.h>

@@ -6,18 +6,17 @@
 // \author Charlene Tsai
 // \date   Feb 2004
 
-#include "rgrl_estimator_sptr.h"
-#include "rgrl_feature_set_sptr.h"
-#include "rgrl_matcher_sptr.h"
-#include "rgrl_scale_estimator_sptr.h"
-
-#include "rgrl_weighter_sptr.h"
-#include "rgrl_estimator.h"
-#include "rgrl_feature_set.h"
-#include "rgrl_matcher.h"
-#include "rgrl_scale_estimator.h"
-#include "rgrl_weighter.h"
-#include "rgrl_object.h"
+#include <rgrl/rgrl_estimator_sptr.h>
+#include <rgrl/rgrl_feature_set_sptr.h>
+#include <rgrl/rgrl_matcher_sptr.h>
+#include <rgrl/rgrl_scale_estimator_sptr.h>
+#include <rgrl/rgrl_weighter_sptr.h>
+#include <rgrl/rgrl_estimator.h>
+#include <rgrl/rgrl_feature_set.h>
+#include <rgrl/rgrl_matcher.h>
+#include <rgrl/rgrl_scale_estimator.h>
+#include <rgrl/rgrl_weighter.h>
+#include <rgrl/rgrl_object.h>
 
 #include <vcl_vector.h>
 #include <vcl_map.h>
