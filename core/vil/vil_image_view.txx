@@ -271,20 +271,6 @@ vil2_image_view<T> vil2_image_view<T>::plane(int p) const
   return p_view;
 }
 
-//: Create a view which appears as the transpose of this view.
-//  I.e transpose()(x,y,p) = this(y,x,p)
-template<class T>
-vil2_image_view<T> vil2_image_view<T>::transpose() const
-{
-  vil2_image_view<T> t = *this;
-  // Swap x and y
-  t.nx_    = ny_;
-  t.xstep_ = ystep_;
-  t.ny_    = nx_;
-  t.ystep_ = xstep_;
-  return t;
-}
-
 //: Fill view with given value
 template<class T>
 void vil2_image_view<T>::fill(T value)

@@ -156,10 +156,6 @@ public:
   //: Create a copy of the data viewed by this, and return a view of copy.
   vil2_image_view<T> deep_copy() const;
 
-  //: Create a view which appears as the transpose of this view.
-  //  I.e transpose()(x,y,p) = this(y,x,p)
-  vil2_image_view<T> transpose() const;
-
   //: Disconnect this view from the underlying data.
   void release_data();
 

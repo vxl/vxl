@@ -114,10 +114,10 @@ vil2_load(src_image,"image_file.jpg");
 vil2_image_view<vil2_byte> tmp_image1,tmp_image2;
 vil2_filter_rows(tmp_image1,src_image);  // Apply filter to rows of src_image
 vil2_filter_rows(tmp_image2,tmp_image1.tranpose());  // Apply filter to cols of tmp_image1
-vil2_image_view<vil2_byte> filtered_image = tmp_image2.transpose();
-// Note that vil2_filter_rows(filtered_image.transpose(),tmp_image1.tranpose())
+vil2_image_view<vil2_byte> filtered_image = vil2_transpose(tmp_image2);
+// Note that vil2_filter_rows(vil2_transpose(filtered_image),vil2_transpose(tmp_image1))
 // would only work correctly if filtered_image was already the correct size.
-// If it isn't, then the view created by filtered_image.transpose() would be resized,
+// If it isn't, then the view created by vil2_transpose(filtered_image) would be resized,
 // and disconnected from filtered_image itself, which would remain unchanged.
 \endverbatim
 *
