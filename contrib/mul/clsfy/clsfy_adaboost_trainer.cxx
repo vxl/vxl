@@ -122,6 +122,7 @@ void clsfy_adaboost_trainer::build_strong_classifier(
       if (j==0 || error<min_error)
       {
         min_error = error;
+        delete best_c1d;
         best_c1d= c1d->clone();
         best_j = j;
       }
