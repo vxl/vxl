@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE=.\"$(IUEROOT)/tbl/vepl/CMakeLists.txt"
+SOURCE=.\CMakeLists.txt
 
 !IF  "$(CFG)" == "vepl - Win32 Release"
 USERDEP__HACK=\

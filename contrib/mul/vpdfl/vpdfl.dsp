@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE=.\"$(IUEROOT)/mul/vpdfl/CMakeLists.txt"
+SOURCE=.\CMakeLists.txt
 
 !IF  "$(CFG)" == "vpdfl - Win32 Release"
 USERDEP__HACK=\

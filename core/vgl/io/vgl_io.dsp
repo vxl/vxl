@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE=.\"$(IUEROOT)/vxl/vgl/io/CMakeLists.txt"
+SOURCE=.\CMakeLists.txt
 
 !IF  "$(CFG)" == "vgl_io - Win32 Release"
 USERDEP__HACK=\

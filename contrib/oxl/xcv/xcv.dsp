@@ -592,7 +592,7 @@ LINK32=link.exe
 
 # Begin Source File
 
-SOURCE=.\"$(IUEROOT)/oxl/xcv/CMakeLists.txt"
+SOURCE=.\CMakeLists.txt
 
 !IF  "$(CFG)" == "xcv - Win32 Release"
 USERDEP__HACK=\

@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 
 # Begin Source File
 
-SOURCE=.\"$(IUEROOT)/gel/gtrl/CMakeLists.txt"
+SOURCE=.\CMakeLists.txt
 
 !IF  "$(CFG)" == "gtrl - Win32 Release"
 USERDEP__HACK=\

@@ -200,7 +200,7 @@ LINK32=link.exe
 
 # Begin Source File
 
-SOURCE=.\"$(IUEROOT)/oxl/VPLAYER/CMakeLists.txt"
+SOURCE=.\CMakeLists.txt
 
 !IF  "$(CFG)" == "VPLAYER - Win32 Release"
 USERDEP__HACK=\

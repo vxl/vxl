@@ -240,7 +240,7 @@ LINK32=link.exe
 
 # Begin Source File
 
-SOURCE=.\"$(IUEROOT)/vxl/examples/vnl_calc/CMakeLists.txt"
+SOURCE=.\CMakeLists.txt
 
 !IF  "$(CFG)" == "vnl_calc - Win32 Release"
 USERDEP__HACK=\

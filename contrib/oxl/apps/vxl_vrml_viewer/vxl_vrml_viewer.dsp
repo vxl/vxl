@@ -556,7 +556,7 @@ LINK32=link.exe
 
 # Begin Source File
 
-SOURCE=.\"$(IUEROOT)/oxl/apps/vxl_vrml_viewer/CMakeLists.txt"
+SOURCE=.\CMakeLists.txt
 
 !IF  "$(CFG)" == "vxl_vrml_viewer - Win32 Release"
 USERDEP__HACK=\
