@@ -15,9 +15,9 @@ template <class DataType> DataType getpixel(vil_image_view_base const& i, int x,
 template <class DataType> void setpixel(vil_image_view_base& i, int x, int y, DataType const e);
 #define VIPL_DECLARE_ACCESSORS(T) \
 T fgetpixel(vil_image_view_base const& i, int x, int y, T); \
-void fsetpixel(vil_image_view_base& i, int x, int y, T e); \
+void fsetpixel(vil_image_view_base& i, int x, int y, T const e); \
 T getpixel(vil_image_view_base const& i, int x, int y, T); \
-void setpixel(vil_image_view_base& i, int x, int y, T e)
+void setpixel(vil_image_view_base& i, int x, int y, T const e)
 
 #ifdef INSTANTIATE_TEMPLATES
 #include "vipl_accessors_vil_image_view_base.txx"

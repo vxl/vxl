@@ -50,7 +50,7 @@ inline vil_rgb<DataType> fgetpixel(vil_image_view_base const& i, int x, int y, v
   }
 }
 template <class DataType>
-inline void fsetpixel(vil_image_view_base& i, int x, int y, vil_rgb<DataType> e)
+inline void fsetpixel(vil_image_view_base& i, int x, int y, vil_rgb<DataType> const e)
 {
   if (i.nplanes() == 3)
   {
@@ -79,7 +79,7 @@ inline vil_rgb<DataType> getpixel(vil_image_view_base const& i, int x, int y, vi
   }
 }
 template <class DataType>
-inline void setpixel(vil_image_view_base& i, int x, int y, vil_rgb<DataType> e)
+inline void setpixel(vil_image_view_base& i, int x, int y, vil_rgb<DataType> const e)
 {
   if (x<0 || y<0 || x>=(int)i.ni() || y>=(int)i.nj()) return;
   if (i.nplanes() == 3)
@@ -107,7 +107,7 @@ inline vil_rgb<vxl_byte> fgetpixel(vil_image_view_base const& i, int x, int y, v
     return im(x,y);
   }
 }
-inline void fsetpixel(vil_image_view_base& i, int x, int y, vil_rgb<vxl_byte> e)
+inline void fsetpixel(vil_image_view_base& i, int x, int y, vil_rgb<vxl_byte> const e)
 {
   if (i.nplanes() == 3)
   {
@@ -134,7 +134,7 @@ inline vil_rgb<vxl_byte> getpixel(vil_image_view_base const& i, int x, int y, vi
     return im(x,y);
   }
 }
-inline void setpixel(vil_image_view_base& i, int x, int y, vil_rgb<vxl_byte> e)
+inline void setpixel(vil_image_view_base& i, int x, int y, vil_rgb<vxl_byte> const e)
 {
   if (x<0 || y<0 || x>=i.ni() || y>=i.nj()) return;
   if (i.nplanes() == 3)
