@@ -70,6 +70,9 @@ class mbl_cloneable_ptr
   //: Return actual pointer
   const BaseClass* ptr() const { return ptr_; }
 
+  //: Return actual pointer
+  BaseClass* ptr() { return ptr_; }
+
   //: Cast to allow object to look like thing pointed to
   operator BaseClass&() { assert(ptr_!=0); return *ptr_; }
 
