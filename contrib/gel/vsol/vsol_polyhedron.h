@@ -24,6 +24,7 @@ class vsol_polyhedron;
 #include "vsol_polyhedron_sptr.h"
 #include "vsol_volume_3d.h"
 
+#include "vsol_point_3d.h"
 #include "vsol_point_3d_sptr.h"
 #include "vsol_box_3d_sptr.h"
 #include <vcl_vector.h>
