@@ -92,7 +92,11 @@ HomgLine2D HMatrix2D::transform_to_plane1(const HomgLine2D& l2) const
 
 HomgPoint2D HMatrix2D::transform_to_plane1(const HomgPoint2D& x2) const
 {
-  vcl_cerr << "HMatrix2D::transform_to_plane1(HomgPoint2D): Warning: calculating inverse matrix\n";
+  static bool warned = false;
+  if (! warned) {
+    vcl_cerr << "HMatrix2D::transform_to_plane1(HomgPoint2D): Warning: calculating inverse matrix\n";
+    warned = true;
+  }
   vnl_double_3x3 _t21_matrix = this->get_inverse().get_matrix();
   return HomgPoint2D(_t21_matrix * x2.get_vector());
 }
