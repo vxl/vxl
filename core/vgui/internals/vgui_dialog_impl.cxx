@@ -243,7 +243,7 @@ void* vgui_dialog_impl::color_chooser_widget(const char* txt, vcl_string& val) {
 void* vgui_dialog_impl::inline_color_chooser_widget(const char* txt, vcl_string& val) {
   return string_field_widget(txt, val);
 }
-void* vgui_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr tab, unsigned width, unsigned height){
+void* vgui_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr /*tab*/, unsigned /*width*/, unsigned /*height*/) {
   return 0;
 }
 

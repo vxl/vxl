@@ -27,7 +27,7 @@ static inline void fsm_debug(char const *, ...) { }
 
 //
 bool vgui_section_render(void const *pixels,
-                         unsigned w, unsigned h,
+                         unsigned w, unsigned /*h*/,
                          float x0, float y0,
                          float x1, float y1,
                          GLenum format,
