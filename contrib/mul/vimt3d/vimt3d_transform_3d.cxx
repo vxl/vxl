@@ -428,7 +428,7 @@ vgl_point_3d<double> vimt3d_transform_3d::operator()(double x, double y, double 
 // Method: delta
 //=======================================================================
 
-vgl_vector_3d<double> vimt3d_transform_3d::delta(vgl_point_3d<double> p, vgl_vector_3d<double> dp) const
+vgl_vector_3d<double> vimt3d_transform_3d::delta(vgl_point_3d<double> , vgl_vector_3d<double> dp) const
 {
   switch (form_)
   {
