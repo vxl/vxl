@@ -13,6 +13,10 @@
 
 // Comments re-written by Tim Cootes, for his sins.
 
+#ifndef NDEBUG
+#include <vcl_iostream.h>
+#endif
+
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
 #include <vnl/vnl_tag.h>
