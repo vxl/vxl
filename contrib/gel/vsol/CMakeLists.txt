@@ -12,6 +12,7 @@ SET(vsol_sources
  vsol_line_2d.cxx           vsol_line_2d.h           vsol_line_2d_sptr.h
  vsol_conic_2d.cxx          vsol_conic_2d.h          vsol_conic_2d_sptr.h
  vsol_polyline_2d.cxx       vsol_polyline_2d.h       vsol_polyline_2d_sptr.h
+ vsol_digital_curve_2d.cxx  vsol_digital_curve_2d.h  vsol_digital_curve_2d_sptr.h
  # 2-D
  vsol_region_2d.cxx         vsol_region_2d.h         vsol_region_2d_sptr.h
  vsol_polygon_2d.cxx        vsol_polygon_2d.h        vsol_polygon_2d_sptr.h

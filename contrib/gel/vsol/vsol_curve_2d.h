@@ -25,6 +25,7 @@ class vdgl_digital_curve;
 class vsol_line_2d;
 class vsol_conic_2d;
 class vsol_polyline_2d;
+class vsol_digital_curve_2d;
 
 class vsol_curve_2d
   :public vsol_spatial_object_2d
@@ -35,6 +36,7 @@ public:
     LINE,
     CONIC,
     POLYLINE,
+    DIGITAL,
     DIGITAL_CURVE,
     NUM_CURVE_TYPES
   };
@@ -91,7 +93,13 @@ public:
   virtual vsol_polyline_2d *cast_to_polyline_2d(void) {return 0;}
 
   //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an digital_curve, 0 otherwise
+  //: Return `this' if `this' is an digital_curve_2d, 0 otherwise
+  //---------------------------------------------------------------------------
+  virtual vsol_digital_curve_2d const*cast_to_digital_curve_2d(void)const{return 0;}
+  virtual vsol_digital_curve_2d *cast_to_digital_curve_2d(void) {return 0;}
+
+  //---------------------------------------------------------------------------
+  //: Return `this' if `this' is a vdgl_digital_curve, 0 otherwise
   //---------------------------------------------------------------------------
   virtual vdgl_digital_curve const*cast_to_digital_curve(void)const{return 0;}
   virtual vdgl_digital_curve *cast_to_digital_curve(void) {return 0;}
