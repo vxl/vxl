@@ -40,8 +40,10 @@
 
 // pilou's line
 #include <bdgl/bdgl_curve_description.h>
-#include <bdgl/bdgl_curve_tracker.h>
-#include <bdgl/bdgl_curve_matcher.h>
+#include <bdgl/bdgl_curve_tracking.h>
+#include <bdgl/bdgl_curve_matching.h>
+#include <bdgl/bdgl_curve_clustering.h>
+#include <bdgl/bdgl_curve_algs.h>
 
 //static live_video_manager instance
 bmvv_multiview_manager *bmvv_multiview_manager::instance_ = 0;
@@ -457,122 +459,157 @@ void bmvv_multiview_manager::select_curve_corres()
 //-----------------------------------------------------------
 void bmvv_multiview_manager::track_edges()
 {
-  // get parameters
+  
+	// get parameters
   this->clear_display();
-  static bdgl_curve_matcher_params mp(1.0, 10.0, 0.31416);
-  static bdgl_curve_tracker_params tp(1e6);
+  static int track_window;
+  //static bool track;
+  bdgl_curve_tracking_params tp_;
+  
+  static bdgl_curve_clustering_params cp;
+  static bdgl_curve_matching_params mp;
+  static double ex,ey;
+  static int third=1;
+  //static bdgl_curve_tracking_params tp;
+ 
+  vgui_dialog* tr_dialog = new vgui_dialog("Curve Tracking");
+  tr_dialog->checkbox("Matching", tp_.mp.matching_);
+  tr_dialog->checkbox("Transitive closure", tp_.transitive_closure);
+  tr_dialog->field("Window size", tp_.window_size);
+  tr_dialog->field("Estimated Motion", tp_.mp.motion_in_pixels);
+  tr_dialog->field("No of Top matches",tp_.mp.no_of_top_choices);
+  tr_dialog->field("Min Length of curves",tp_.min_length_of_curves);
+  tr_dialog->field("epipole x",ex);
+  tr_dialog->field("epipole y",ey);
+  // clustering params
+  tr_dialog->checkbox("Clustering", tp_.clustering_);
+  tr_dialog->field("No of clusters ",tp_.cp.no_of_clusters);
+  tr_dialog->field("Min Euc Distance",tp_.cp.min_cost_threshold);
+  tr_dialog->field("Fg and Bg Threshold",tp_.cp.foreg_backg_threshold);
 
-  vgui_dialog tr_dialog("Edge Tracking");
-  tr_dialog.field("Matching threshold", tp.match_thres_);
-  tr_dialog.field("Pixel scale", mp.image_scale_);
-  tr_dialog.field("Gradient scale", mp.grad_scale_);
-  tr_dialog.field("Angle scale", mp.angle_scale_);
-  if (!tr_dialog.ask())
-    return;
-  tp.match_params_ = mp;
-  bdgl_curve_tracker tracker(tp);
 
-  // embedded VD edges computations
-  // VD parameters
-  static bool agr = true;
+  // edge detecttor params
   static sdet_detector_params dp;
-  vgui_dialog vd_dialog("VD Edges");
-  vd_dialog.field("Gaussian sigma", dp.smooth);
-  vd_dialog.field("Noise Threshold", dp.noise_multiplier);
-  vd_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
-  vd_dialog.checkbox("Agressive Closure", agr);
-  if (!vd_dialog.ask())
+  static bool agr = true;
+  vgui_dialog* dp_dialog = new vgui_dialog("Edge Detection");
+  dp_dialog->field("Gaussian sigma", dp.smooth);
+  dp_dialog->field("Noise Threshold", dp.noise_multiplier);
+  dp_dialog->checkbox("Automatic Threshold", dp.automatic_threshold);
+  dp_dialog->checkbox("Compute Junctions", dp.junctionp);
+  dp_dialog->checkbox("Agressive Closure", agr);
+  if (!tr_dialog->ask())
+    return;
+  if (!dp_dialog->ask())
     return;
   if (agr)
     dp.aggressive_junction_closure=1;
   else
     dp.aggressive_junction_closure=0;
+
   sdet_detector det1(dp);
   sdet_detector det2(dp);
-
+  
+  bdgl_curve_tracking tracks (tp_);
   // passing types
-  vcl_vector<vtol_edge_2d_sptr>* edges;
+  vcl_vector<vtol_edge_2d_sptr> * edges;
+  vil1_image img =this->get_image_at(0,0);
+   vil1_memory_image_of<unsigned char> cimg;
+	if (img.components()==3)
+    {
+      vil1_memory_image_of<float> fimg = brip_float_ops::convert_to_float(img);
+      //convert a color image to grey
+      cimg = brip_float_ops::convert_to_byte(fimg);
+    }
+	else
+		cimg = vil1_memory_image_of<unsigned char>(img);
+
+  img =this->get_image_at(0,0);
   vsol_curve_2d_sptr c;
   vdgl_digital_curve_sptr dc;
   vdgl_interpolator_sptr interp;
   vdgl_edgel_chain_sptr  ec;
-  vcl_vector< vdgl_edgel_chain_sptr > ecl;
-  bgui_vtol2D_tableau_sptr btab;
-
+  vcl_vector<vtol_edge_2d_sptr> ecl;
+  
+  
   // first image
-  det1.SetImage(this->get_image_at(0,0));
+  det1.SetImage(cimg);//this->get_image_at(0,0));
   det1.DoContour();
   edges = det1.GetEdges();
-  //display the edges
-#if 0
-  btab = this->get_vtol2D_tableau_at(0,0);
-  if (btab)
-    btab->add_edges(*edges, true);
-  else
-  {
-    vcl_cout << "In bmvv_multiview_manager::track_edges() - null tableau\n";
-    return;
-  }
-#endif // 0
-  // pass the edges
   ecl.clear();
-  for (unsigned int i=0;i<edges->size();i++)
-  {
-    c = (*edges)[i]->curve();
-    dc = c->cast_to_digital_curve();
-    interp = dc->get_interpolator();
-    ec = interp->get_edgel_chain();
-    ecl.push_back(ec);
-  }
-  tracker.input_curve_.push_back(ecl);
 
-  // second image
-  det2.SetImage(this->get_image_at(1,0));
+  for (unsigned int i=0;i<(*edges).size();i++){
+    c  = (*edges)[i]->curve();
+    dc = c->cast_to_digital_curve();
+	if(dc->length()>tp_.min_length_of_curves)
+	{
+	ecl.push_back((*edges)[i]);
+	}
+  }
+  tracks.input_curves_.push_back(ecl);
+  
+  ecl.clear();
+
+
+  //  edges from 2nd image
+  img =this->get_image_at(1,0);
+  //img = vil1_load("c:\\data\\minivan\\00071.tiff");
+  if (img.components()==3)
+    {
+      vil1_memory_image_of<float> fimg = brip_float_ops::convert_to_float(img);
+      //convert a color image to grey
+      cimg = brip_float_ops::convert_to_byte(fimg);
+    }
+	else
+		cimg = vil1_memory_image_of<unsigned char>(img);
+
+  det2.SetImage(cimg);
   det2.DoContour();
   edges = det2.GetEdges();
-  //display the edges
-#if 0
-  btab = this->get_vtol2D_tableau_at(1,0);
-  if (btab)
-    btab->add_edges(*edges, true);
-  else
-    {
-      vcl_cout << "In bmvv_multiview_manager::track_edges() - null tableau\n";
-      return;
-    }
-#endif // 0
-  ecl.clear();
-  for (unsigned int i=0;i<edges->size();i++)
-  {
-    c = (*edges)[i]->curve();
+  
+  for (unsigned int i=0;i<(*edges).size();i++){
+    c  = (*edges)[i]->curve();
     dc = c->cast_to_digital_curve();
-    interp = dc->get_interpolator();
-    ec = interp->get_edgel_chain();
-    ecl.push_back(ec);
+	if(dc->length()>tp_.min_length_of_curves)
+	{
+		ecl.push_back((*edges)[i]);
+	}
   }
-  tracker.input_curve_.push_back(ecl);
+  tracks.input_curves_.push_back(ecl);
+  // second image
+  
+ 
 
   // compute the tracking/matching
-  tracker.track();
+  tracks.track();
+  return;
+	
+  // display curves
 
-  //display the edges
-  // frame 0
-  for (int i=0;i<tracker.get_output_size_at(0);++i)
+   for (int i=0;i<tracks.get_output_size_at(0);++i)
   {
     //vcl_cout<<'.';
-    vdgl_interpolator_sptr  intp = new vdgl_interpolator_linear( tracker.get_output_curve_at(0,i) );
-    vdgl_digital_curve_sptr dc = new vdgl_digital_curve(intp);
-    draw_colored_digital_curve(0,0, dc, tracker.get_output_id_at(0,i) );
+	bdgl_tracker_curve_sptr test_curve1=tracks.get_output_curve(0,i);
+	vdgl_digital_curve_sptr dc = bdgl_curve_algs::create_digital_curves
+								(test_curve1->desc->points_);
+
+    draw_colored_digital_curve(0,0, dc, test_curve1->match_id_ );
   }
   // frame 1
-  for (int i=0;i<tracker.get_output_size_at(1);i++)
+  
+ for (int i=0;i<tracks.get_output_size_at(1);++i)
   {
     //vcl_cout<<'.';
-    vdgl_interpolator_sptr  intp = new vdgl_interpolator_linear( tracker.get_output_curve_at(1,i) );
-    vdgl_digital_curve_sptr dc = new vdgl_digital_curve(intp);
-    draw_colored_digital_curve(1,0, dc, tracker.get_output_id_at(1,i) );
+	bdgl_tracker_curve_sptr test_curve1=tracks.get_output_curve(0,i);
+	vdgl_digital_curve_sptr dc = bdgl_curve_algs::create_digital_curves
+								(test_curve1->desc->points_);
+
+    draw_colored_digital_curve(1,0, dc, test_curve1->match_id_ );
   }
-  return;
+
+
+
+	
+
 }
 
 //-----------------------------------------------------------------------------
