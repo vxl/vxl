@@ -183,7 +183,11 @@ class brip_vil1_float_ops
 
   //: converts a generic image to greyscale (RGB<unsigned char>)
   static vil1_memory_image_of<unsigned char>
-    convert_to_grey(vil1_image const& img);
+  convert_to_grey(vil1_image const& img);
+
+  //: converts a vnl_matrix<float> to a float image
+  static vil1_memory_image_of<float>
+  convert_to_float(vnl_matrix<float> const & matrix);
 
   //: loads a 2n+1 x 2n+1 convolution kernel (see .cxx for file format)
   static vbl_array_2d<float> load_kernel(vcl_string const & file);

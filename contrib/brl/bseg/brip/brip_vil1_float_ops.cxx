@@ -824,6 +824,16 @@ brip_vil1_float_ops::convert_to_float(vil1_memory_image_of<vil1_rgb<unsigned cha
       output(x,y) = (float)image(x,y).grey();
   return output;
 }
+vil1_memory_image_of<float>
+brip_vil1_float_ops::convert_to_float(vnl_matrix<float> const & matrix)
+{
+  unsigned int nr = matrix.rows(), nc = matrix.cols();
+  vil1_memory_image_of<float> out(nc, nr);
+  for(unsigned int r = 0; r<nr; ++r)
+    for(unsigned int c = 0; c<nc; ++c)
+      out(c,r)=matrix[r][c];
+  return out;
+}
 
 static void rgb_to_ihs(vil1_rgb<unsigned char> const & rgb,
                        float& i, float& h, float& s)
