@@ -15,7 +15,7 @@ LIBRARY := TIFF
 VERSION := 1.0
 
 ##########################################
-include ${SYS_IUPACKAGES}/config/top-params.mk
+include ${IUEROOT}/config/top-params.mk
 ##########################################
 
 SOURCES += tif_aux.c
@@ -152,5 +152,5 @@ endif
 IULIBS += -lJPEG
 
 ##########################################
-include ${SYS_IUPACKAGES}/config/top-rules.mk
+include ${IUEROOT}/config/top-rules.mk
 ##########################################

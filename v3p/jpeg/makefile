@@ -54,7 +54,7 @@ SOURCES += jmemansi.c
 
 
 ##########################################
-include ${SYS_IUPACKAGES}/config/top.mk
+include ${IUEROOT}/config/top.mk
 ##########################################
 
 ifeq ($(OS),win32)
