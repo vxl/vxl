@@ -2,10 +2,11 @@ USES += vxl
 include ${IUEROOT}/vxl/vsl/config.mk
 include ${IUEROOT}/vxl/testlib/config.mk
 
-TESTS += vsl_test_all.cxx
+TESTMAIN := test_driver.cxx
+
+SOURCES += vsl_test_all.cxx
 
 TESTS += test_indent.cxx
-TESTS += test_vsl_io.cxx
 TESTS += test_binary_io.cxx
 
 TESTS += test_arbitrary_length_int_conversion.cxx
@@ -25,7 +26,6 @@ include ${IUEROOT}/config/top-params.mk
 #######################################
 
 ifeq "$(TJ_GCC30)" "1" # otherwise gcc 3.0 needs too much virtual memory
-FLAGS_test_vsl_io.cxx += -O0
 FLAGS_test_map_io.cxx += -O0
 endif
 
