@@ -21,6 +21,8 @@
 //    -#  min and max of vil1_rgba<byte>  values, useful for morphological operations.
 //    -#  arithmetic operations
 
+#include <vcl_config_compiler.h>
+
 template <class T>
 struct vil1_rgba
 {
