@@ -96,3 +96,7 @@ test_vcl_string test_vcl_string
 ADD_EXECUTABLE(
 test_vcl_vector test_vcl_vector
 )
+
+ADD_EXECUTABLE(
+test_vcl_root_dir test_vcl_root_dir
+)
