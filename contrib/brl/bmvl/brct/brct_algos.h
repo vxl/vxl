@@ -14,7 +14,7 @@
 #if defined(_MSC_VER) && ( _MSC_VER > 1000 )
 #pragma once
 #endif // _MSC_VER > 1000
-
+#include <vcl_fstream.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vnl/vnl_double_2.h>
@@ -22,6 +22,7 @@
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3x4.h>
 #include <vsol/vsol_box_3d_sptr.h>
+#include <vsol/vsol_point_3d_sptr.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <bugl/bugl_gaussian_point_2d.h>
 #include <bugl/bugl_gaussian_point_3d.h>
@@ -32,7 +33,7 @@ struct brct_error_index
   ~brct_error_index(){};
   int i(){return i_;}
   double error(){return e_;}
- private:
+private:
   int i_;
   double e_;
 };
@@ -40,12 +41,12 @@ struct brct_error_index
 
 class brct_algos
 {
- public:
+public:
   brct_algos();
   virtual ~brct_algos();
 
   //operators
- public:
+public:
   static void add_box_vrml(double xmin, double ymin, double zmin, double xmax, double ymax, double zmax);
   static vsol_box_3d_sptr get_bounding_box(vcl_vector<vgl_point_3d<double> > &pts_3d);
   static vgl_point_3d<double> bundle_reconstruct_3d_point(vcl_vector<vnl_double_2> &pts,
@@ -93,10 +94,21 @@ class brct_algos
 
   static double motion_constant(vnl_double_2 const& image_epipole,
                                 int i,
-                                vnl_double_2& p_i,
-                                vnl_double_2& p_i1);
-
+                                vnl_double_2& p_i, 
+                                vnl_double_2& p_i1); 
+                               
   static void print_motion_array(vnl_matrix<double>& H);
+  static void read_vrml_points(vcl_ifstream& str, 
+                               vcl_vector<vsol_point_3d_sptr>& pts3d);
+  
+  static void write_vrml_header(vcl_ofstream& str);
+  static void write_vrml_trailer(vcl_ofstream& str);
+  static void write_vrml_points(vcl_ofstream& str, 
+                                vcl_vector<vsol_point_3d_sptr> const& pts3d);
+  static void write_vrml_box(vcl_ofstream& str, vsol_box_3d_sptr const& box,
+                             const float r = 1.0, const float g = 1.0,
+                             const float b = 1.0, 
+                             const float transparency = 0.0);
 };
 
 
