@@ -8,6 +8,7 @@
 #include <mil/tests/test_transform_2d.cxx>
 #include <mil/tests/test_image_2d_of.cxx>
 #include <mil/tests/test_bilin_interp_2d.cxx>
+#include <mil/tests/test_sample_profile_2d.cxx>
 #include <mil/tests/test_gauss_reduce_2d.cxx>
 #include <mil/tests/test_gaussian_pyramid_builder_2d.cxx>
 #include <mil/tests/test_gaussian_pyramid_builder_2d_general.cxx>
@@ -18,6 +19,7 @@
 
 void run_test_mil()
 {
+  test_sample_profile_2d();
   test_transform_2d();
   test_image_2d_of();
   test_bilin_interp_2d();
