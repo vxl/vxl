@@ -31,7 +31,8 @@
 // ---------------------------------------------------------------------------
 // <end copyright notice>
 
-#include <vcl_memory.h>
+#include <vcl_cstring.h>   // memset() and memcpy() live here
+//#include <vcl_memory.h>
 #include <vcl_algorithm.h>
 
 #include "gevd_memory_mixin.h"
@@ -60,7 +61,7 @@ gevd_memory_mixin::gevd_memory_mixin(int s, void* ib, unsigned int type)
 	    //
             if (GetStatusCode() & MM_CLEAR)
                 {
-                memset(buffer, 0, size); // corrected by PVr.
+                vcl_memset(buffer, 0, size); // corrected by PVr.
                 touched = size;
                 }
 
@@ -91,7 +92,7 @@ gevd_memory_mixin::gevd_memory_mixin(gevd_memory_mixin const& m)
  : size(m.GetSize()), touched(size), curr_into(0), offset(0)
         {
         buffer  = new unsigned char[size];
-        memcpy(buffer, m.GetBufferPtr(), size);
+        vcl_memcpy(buffer, m.GetBufferPtr(), size);
 	current = buffer;
         SetStatus((m.Stat()&MM_CREATION_FLAGS));
         ClearStatus(MM_PROTECTED);
@@ -119,7 +120,7 @@ gevd_memory_mixin::ReadBytes(void* ib, int b)
             SetStatus(MM_DATA_OVERFLOW);
           else
             ClearStatus(MM_ERROR|MM_WARN);
-	memcpy(ib, current,num_b);
+	vcl_memcpy(ib, current,num_b);
 	current   += num_b;
 	curr_into += num_b;
 	return(num_b);
@@ -153,7 +154,7 @@ gevd_memory_mixin::ReadBytes(void* ib, int b, int loc)
               else
                 ClearStatus(MM_ERROR|MM_WARN);
             }
-        memcpy(ib, buffer+loc,num_b);
+        vcl_memcpy(ib, buffer+loc,num_b);
         current = buffer + (curr_into += num_b);
 	return(num_b);
         }
@@ -243,7 +244,7 @@ gevd_memory_mixin::SetMemoryPtr(int s, void* ib)
             // flag to indicate that all data is valid.
             if (GetStatusCode() & MM_CLEAR)
                 {
-                memset(buffer, 0, size); // corrected by PVr.
+                vcl_memset(buffer, 0, size); // corrected by PVr.
                 touched = size;
                 }
 
@@ -276,7 +277,7 @@ gevd_memory_mixin::WriteBytes(const void* ib, int b)
         {
         if (!(GetStatusCode()&MM_WRITE)) return(0);
 	int num_b = vcl_min(b, size-curr_into);
-	memcpy(current, ib,num_b);
+	vcl_memcpy(current, ib,num_b);
         if (num_b<b)
             SetStatus(MM_OVERFLOW);
           else
@@ -316,7 +317,7 @@ gevd_memory_mixin::WriteBytes(const void* ib, int b, int loc)
         if (num_b<b) SetStatus(MM_OVERFLOW);
 	if (loc<size && !(MM_UNDERFLOW & GetStatusCode()))
           {
-          memcpy(buffer+loc,ib,num_b);
+          vcl_memcpy(buffer+loc,ib,num_b);
           curr_into = vcl_min(loc+num_b,size);
           current   = buffer + curr_into;
           }
@@ -333,6 +334,6 @@ gevd_memory_mixin::Clear()
 	curr_into = 0;
 	current = buffer;
 	offset = 0;
-	memset((char*)buffer,0,size);
+	vcl_memset((char*)buffer,0,size);
 }
 
