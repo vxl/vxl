@@ -8,9 +8,9 @@
 
 void test_image_view_maths_byte()
 {
-  vcl_cout << "*******************************\n"
+  vcl_cout << "******************************\n"
            << " Testing vil_image_view_maths\n"
-           << "*******************************\n";
+           << "******************************\n";
 
   int n=10, m=8;
 
@@ -70,7 +70,7 @@ void test_image_view_maths_byte()
             im_ratio(5,7),float(imA(5,7))/float(imB(5,7)),1e-6);
 
   vil_image_view<float> im3(5,6,3),im_rms;
-  im3.fill(1.7);
+  im3.fill(1.7f);
   im3(2,3,0)=2.0;
   im3(2,3,1)=3.0;
   im3(2,3,2)=4.0;
