@@ -252,11 +252,12 @@ void segv_segmentation_manager::harris_measure()
       vcl_cout << "In segv_segmentation_manager::harris_measure) - no image\n";
       return;
     }
-  static sdet_harris_detector_params hdp(1.0f, 100.0f, 2);
+  static sdet_harris_detector_params hdp;
   vgui_dialog harris_dialog("harris");
   harris_dialog.field("sigma", hdp.sigma_);
   harris_dialog.field("thresh", hdp.thresh_);
   harris_dialog.field("N = 2n+1, (n)", hdp.n_);
+  harris_dialog.field("Max No Corners", hdp.n_corners_);
   harris_dialog.field("scale_factor", hdp.scale_factor_);
   if (!harris_dialog.ask())
     return;
