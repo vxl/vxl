@@ -1,6 +1,6 @@
 # vxl/vidl/CMakeLists.txt
 
-INCLUDE( ${MODULE_PATH}/FindMPEG.cmake )
+INCLUDE( ${MODULE_PATH}/NewCMake/FindMPEG.cmake )
 
 SET(vidl_sources
   vidl_test.cxx
@@ -14,14 +14,15 @@ SET(vidl_sources
   vidl_io.cxx    vidl_io.h
 )
 
-IF( HAS_MPEG )
-  INCLUDE_DIRECTORIES(${MPEG_INCLUDE_PATH})
+IF( MPEG_FOUND )
+  INCLUDE_DIRECTORIES(${MPEG_INCLUDE_DIR})
+  ADD_DEFINITIONS(-DHAS_MPEG)
   SET(vidl_sources ${vidl_sources}
     vidl_mpegcodec.cxx vidl_mpegcodec.h vidl_mpegcodec_sptr.h
     vidl_mpegcodec_helper.cxx vidl_mpegcodec_helper.h
     vidl_yuv_2_rgb.cxx vidl_yuv_2_rgb.h
   )
-ENDIF( HAS_MPEG )
+ENDIF( MPEG_FOUND )
 
 AUX_SOURCE_DIRECTORY(Templates vidl_sources)
 
@@ -35,9 +36,9 @@ ENDIF(WIN32)
 
 ADD_LIBRARY(vidl ${vidl_sources})
 TARGET_LINK_LIBRARIES( vidl vbl vul vil vcl )
-IF( HAS_MPEG )
+IF( MPEG_FOUND )
   TARGET_LINK_LIBRARIES( vidl ${MPEG_LIBRARIES} )
-ENDIF( HAS_MPEG )
+ENDIF( MPEG_FOUND )
 
 IF (WIN32)
   IF (NOT CYGWIN)
