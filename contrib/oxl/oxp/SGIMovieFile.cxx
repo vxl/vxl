@@ -6,7 +6,7 @@
 #include "SGIMovieFilePrivates.h"
 
 #include <vcl_fstream.h>
-#include <vcl_strstream.h>
+#include <vcl_sstream.h>
 #include <vcl_cstdio.h>
 #include <vcl_cstring.h>
 
@@ -409,9 +409,8 @@ int SGIMV_Variables::get_int(vcl_string const& s)
   const vcl_string& v = data[s];
   if (v.size() == 0)
     return -1;
-  vcl_istrstream vs((const char*)v.data(), v.size());
-  int x;
-  vs >> x;
+  vcl_stringstream vs(v);
+  int x; vs >> x;
   return x;
 }
 
@@ -420,9 +419,8 @@ double SGIMV_Variables::get_double(vcl_string const& s)
   const vcl_string& v = data[s];
   if (v.size() == 0)
     return -1.0;
-  vcl_istrstream vs((const char*)v.data(), v.size());
-  double x;
-  vs >> x;
+  vcl_stringstream vs(v);
+  double x; vs >> x;
   return x;
 }
 
