@@ -157,6 +157,12 @@ SOURCE=.\test_matrix_exp.cxx
 SOURCE=.\test_matrix_fixed.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_matrix_fixed_ref.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_vector_fixed_ref.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_minimizers.cxx
 # End Source File
 # Begin Source File
