@@ -1,6 +1,5 @@
 #ifndef rsdl_kd_tree_h_
 #define rsdl_kd_tree_h_
-
 //:
 // \file
 
@@ -9,8 +8,9 @@
 #include <rsdl/rsdl_bounding_box.h>
 #include <vbl/vbl_ref_count.h>
 
-class rsdl_kd_node {
-public:
+class rsdl_kd_node
+{
+ public:
   //: ctor for internal node
   rsdl_kd_node( const rsdl_bounding_box& outer_box,
                 const rsdl_bounding_box& inner_box,
@@ -41,8 +41,9 @@ public:
 };
 
 
-class rsdl_kd_heap_entry {
-public:
+class rsdl_kd_heap_entry
+{
+ public:
   rsdl_kd_heap_entry() {}
   rsdl_kd_heap_entry( double dist, rsdl_kd_node* p )
     : dist_(dist), p_(p) {}
@@ -56,14 +57,14 @@ public:
 
 class rsdl_kd_tree : public vbl_ref_count
 {
-private:
+ private:
     //: \brief copy ctor is private, for now, to prevent its use
-  rsdl_kd_tree( const rsdl_kd_tree& old ) {}
+  rsdl_kd_tree( const rsdl_kd_tree& /*old*/ ) {}
 
     //: \brief operator= is private, for now, to prevent its use
-  rsdl_kd_tree& operator=( const rsdl_kd_tree& old ) { return *this; }
+  rsdl_kd_tree& operator=( const rsdl_kd_tree& /*old*/ ) { return *this; }
 
-public:
+ public:
     //: \brief ctor requires the points and values associated with the tree;
   rsdl_kd_tree( const vcl_vector< rsdl_point >& points,
                 double min_angle = 0,
@@ -90,7 +91,7 @@ public:
                          vcl_vector< rsdl_point >& points,
                          vcl_vector< int >& indices );
 
-private:
+ private:
   rsdl_kd_node* root_;
 
   vcl_vector< rsdl_point > points_;
@@ -103,7 +104,7 @@ private:
   int internal_count_;
   int internal_examined_;
 
-private:
+ private:
   void destroy_tree( rsdl_kd_node*& p );
 
   rsdl_kd_node* build_kd_tree( int points_per_leaf,
@@ -151,4 +152,4 @@ private:
                               vcl_vector< int >& indices );
 };
 
-#endif
+#endif // rsdl_kd_tree_h_
