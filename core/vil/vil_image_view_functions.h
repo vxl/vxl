@@ -9,6 +9,22 @@
 #include <vil2/vil2_image_view.h>
 #include <vil/vil_rgb.h>
 
+
+//: Return an ni x nj window of im with offset (x0,y0)
+// \relates vil2_image_view
+template<class T>
+vil2_image_view<T> vil2_window(const vil2_image_view<T> &im, unsigned i0, unsigned ni, unsigned j0, unsigned nj);
+
+//: Return a view of im's plane p 
+// \relates vil2_image_view
+template<class T>
+vil2_image_view<T> vil2_plane(const vil2_image_view<T> &im, unsigned p);
+
+//: Create a copy of an image, with completly new underlying memory.
+// \relates vil2_image_view
+template<class T>
+vil2_image_view<T> vil2_deep_copy(const vil2_image_view<T> &rhs);
+
 //: Return a 3-plane view of an RGB image
 // \relates vil2_image_view
 template<class T>

@@ -17,6 +17,7 @@
 #include <vil2/vil2_memory_chunk.h>
 #include <vil2/vil2_pixel_format.h>
 
+
 //: Concrete view of image data of type T held in memory
 //  Views nplanes() planes of data each of size ni() x nj().
 //  The with the (i,j) element of the p'th plane is given by
@@ -64,15 +65,26 @@ public:
                   const T* top_left, unsigned ni, unsigned nj, unsigned nplanes,
                   int istep, int jstep, int planestep);
 
-    //: Sort of copy constructor
-    // If this view cannot set itself to view the other data (e.g. because the
-    // types are incompatible) it will set itself to empty.
-  vil2_image_view(const vil2_image_view_base& );
+    //: Construct from various vil2_image_view types.
+    // The new object will point to the same underlying image as the rhs
+    // You can assign a vil2_image_view<compound_type<T>> to a vil2_image_view<T>
+    // in all reasonable cases - the lhs will have as many planes as the rhs has
+    // components. You can assign a vil2_image_view<T> to a vil2_image_view<compound_type<T>>
+    // when the underlying data is formatted appropriately and the lhs has
+    // as many components as the rhs has planes. O(1).
+    // If the view types are not compatible this object will be set to empty.
+  vil2_image_view(const vil2_image_view_base& rhs);
 
-    //: Sort of copy constructor
-    // If this view cannot set itself to view the other data (e.g. because the
-    // types are incompatible) it will set itself to empty.
-  vil2_image_view(const vil2_image_view_base_sptr& );
+    //: Construct from various vil2_image_view types.
+    // The new object will point to the same underlying image as the rhs.
+    //
+    // You can assign a vil2_image_view<compound_type<T>> to a vil2_image_view<T>
+    // in all reasonable cases - the lhs will have as many planes as the rhs has
+    // components. You can assign a vil2_image_view<T> to a vil2_image_view<compound_type<T>>
+    // when the underlying data is formatted appropriately and the lhs has
+    // as many components as the rhs has planes. O(1).
+    // If the view types are not compatible this object will be set to empty.
+  vil2_image_view(const vil2_image_view_base_sptr& rhs);
 
     //  Destructor
   virtual ~vil2_image_view();
@@ -166,9 +178,6 @@ public:
   //: Make a copy of the data in src and set this to view it
   void deep_copy(const vil2_image_view<T>& src);
 
-  //: Create a copy of the data viewed by this, and return a view of copy.
-  vil2_image_view<T> deep_copy() const;
-
   //: Disconnect this view from the underlying data.
   void release_data();
 
@@ -190,12 +199,6 @@ public:
   //: Arrange that this is window on all planes of given image.
   void set_to_window(const vil2_image_view& im,
                      unsigned i0, unsigned ni, unsigned j0, unsigned nj);
-
-  //: Return an ni x nj window of this data with offset (x0,y0)
-  vil2_image_view<T> window(unsigned i0, unsigned ni, unsigned j0, unsigned nj) const;
-
-  //: Return a view of plane p
-  vil2_image_view<T> plane(unsigned p) const;
 
   //: Fill view with given value
   void fill(T value);
@@ -223,8 +226,22 @@ public:
     //  the result will still be false.
   bool operator==(const vil2_image_view<T> &other) const;
 
+  //: Copy a view. The rhs and lhs will point to the same image data.
+  // You can assign a vil2_image_view<compound_type<T>> to a vil2_image_view<T>
+  // in all reasonable cases - the lhs will have as many planes as the rhs has
+  // components. You can assign a vil2_image_view<T> to a vil2_image_view<compound_type<T>>
+  // when the underlying data is formatted appropriately and the lhs has
+  // as many components as the rhs has planes. O(1).
+  // If the view types are not compatible this object will be set to empty.
   const vil2_image_view<T> & operator = (const vil2_image_view_base & rhs);
 
+  //: Copy a view. The rhs and lhs will point to the same image data.
+  // You can assign a vil2_image_view<compound_type<T>> to a vil2_image_view<T>
+  // in all reasonable cases - the lhs will have as many planes as the rhs has
+  // components. You can assign a vil2_image_view<T> to a vil2_image_view<compound_type<T>>
+  // when the underlying data is formatted appropriately and the lhs has
+  // as many components as the rhs has planes. O(1).
+  // If the view types are not compatible this object will be set to empty.
   const vil2_image_view<T> & operator = (const vil2_image_view_base_sptr & rhs)
   { *this = *rhs; return *this; }
 

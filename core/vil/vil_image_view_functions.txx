@@ -11,6 +11,39 @@
 #include <vil2/vil2_byte.h>
 #include <vil/vil_rgb.h>
 
+
+
+//: Create a copy of the data viewed by this, and return a view of copy.
+template<class T>
+vil2_image_view<T> vil2_deep_copy(const vil2_image_view<T> &rhs)
+{
+  vil2_image_view<T> cpy;
+  cpy.deep_copy(rhs);
+  return cpy;
+}
+
+//: Return an ni x nj window of this data with offset (i0,j0)
+template<class T>
+vil2_image_view<T> vil2_window(const vil2_image_view<T> &im,
+                               unsigned i0, unsigned ni, unsigned j0, unsigned nj)
+{
+  assert(i0<im.ni()); assert(i0+ni<=im.ni());
+  assert(j0<im.nj()); assert(j0+nj<=im.nj());
+  return vil2_image_view<T>(im.memory_chunk(),im.top_left_ptr()+ i0*im.istep() + j0*im.jstep(),
+    ni,nj,im.nplanes(),im.istep(),im.jstep(),im.planestep());
+}
+
+//: Return a view of plane p
+template<class T>
+vil2_image_view<T> vil2_plane(const vil2_image_view<T> &im, unsigned p)
+{
+  assert(p<im.nplanes());
+  return vil2_image_view<T>(im.memory_chunk(),im.top_left_ptr()+p*im.planestep(),im.ni(),im.nj(),1,
+    im.istep(),im.jstep(),im.planestep());
+}
+
+
+
 //: Return a 3-plane view of an RGB image
 // \return an empty view if it can't do the conversion
 // (because it is already a multiplane image.)
@@ -196,6 +229,10 @@ template void vil2_value_range(T& min_value, T& max_value,const vil2_image_view<
 
 // For everything else
 #define VIL2_IMAGE_VIEW_FUNCTIONS_INSTANTIATE(T) \
+template vil2_image_view<T > vil2_deep_copy(const vil2_image_view<T > &rhs); \
+template vil2_image_view<T > vil2_window(const vil2_image_view<T > &im, \
+  unsigned i0, unsigned ni, unsigned j0, unsigned nj); \
+template vil2_image_view<T > vil2_plane(const vil2_image_view<T > &im, unsigned p); \
 template vil2_image_view<T > vil2_transpose(const vil2_image_view<T >& v); \
 template vil2_image_view<T > vil2_flip_lr(const vil2_image_view<T >& view); \
 template vil2_image_view<T > vil2_flip_ud(const vil2_image_view<T >& view); \

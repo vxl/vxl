@@ -5,6 +5,13 @@
 //  \brief Represent images of one or more planes of Ts.
 //  \author Ian Scott
 
+// Note: To keep down size of vil2_image_view
+// Please think carefully before adding any new methods.
+// In particular any methods that provide new views (e.g. vil2_plane)
+// will be more usefully provided as external functions.) IMS.
+
+
+
 #include "vil2_image_view.h"
 #include <vcl_string.h>
 #include <vcl_cassert.h>
@@ -109,16 +116,19 @@ void vil2_image_view<T>::deep_copy(const vil2_image_view<T>& src)
   }
 }
 
+// Notes on convert_components_from_planes() and convert_planes_from_components()
+// These are used by the operator= to provide the appropriate smart conversion
+// behaviour for the various types.
+// I don't think that C++ templates support full pattern matching,
+// so we have to provide one template instantiation to cover the general
+// compound pixel case (the range of which is possibly infinite)
+// We then specialise for all the scalar pixel cases (there are only so
+// many scalar types).
+// I guess someone could merge all the scalar specialisations using
+// macros and substantially reduce the length of this code.
 
-//: Create a copy of the data viewed by this, and return a view of copy.
-template<class T>
-vil2_image_view<T> vil2_image_view<T>::deep_copy() const
-{
-  vil2_image_view<T> cpy;
-  cpy.deep_copy(*this);
-  return cpy;
-}
 
+//: Convert planes to components from planes, or do nothing if types are wrong.
 template <class T>
 inline bool convert_components_from_planes(vil2_image_view<T> &lhs,
                                            const vil2_image_view_base &rhs_base)
@@ -135,7 +145,7 @@ inline bool convert_components_from_planes(vil2_image_view<T> &lhs,
   {
     const vil2_image_view<comp_type> &rhs = static_cast<const vil2_image_view<comp_type>&>(rhs_base);
     // Check that the steps are suitable for viewing as components
-    if (rhs.planestep() != 1 && rhs.istep()%ncomp ==0 && rhs.jstep()%ncomp ==0 ) return false;
+    if (rhs.planestep() != 1 || rhs.istep()%ncomp !=0 || rhs.jstep()%ncomp !=0 ) return false;
     lhs = vil2_image_view<T >(rhs.memory_chunk(),
                               (T const*) rhs.top_left_ptr(),
                               rhs.ni(),rhs.nj(),1,
@@ -151,7 +161,7 @@ inline bool convert_components_from_planes(vil2_image_view<T> &lhs,
 VCL_DEFINE_SPECIALIZATION
 inline bool convert_components_from_planes(vil2_image_view<float> &lhs,
                                          const vil2_image_view_base &rhs_base)
-{return false;} 
+{return false;}  // when lhs has scalar pixels, don't attempt conversion
 
 VCL_DEFINE_SPECIALIZATION
 inline bool convert_components_from_planes(vil2_image_view<double> &lhs,
@@ -194,6 +204,205 @@ inline bool convert_components_from_planes(vil2_image_view<vxl_uint_32> &lhs,
 {return false;} 
 
 
+//: Convert components to planes from planes, or do nothing if types are wrong.
+template <class T>
+inline bool convert_planes_from_components(vil2_image_view<T> &lhs,
+                                           const vil2_image_view_base &rhs_base)
+{ return false;} // when lhs has non-scalar pixels, don't attempt conversion
+
+VCL_DEFINE_SPECIALIZATION
+inline bool convert_planes_from_components(vil2_image_view<vil2_byte> &lhs,
+                                           const vil2_image_view_base &rhs_base)
+{
+  const unsigned ncomp =
+    vil2_pixel_format_num_components(rhs_base.pixel_format());
+
+  if (// rhs has just 1 plane
+      rhs_base.nplanes() == 1 &&
+      // both sides have equal component types
+      vil2_pixel_format_component_format(rhs_base.pixel_format()) == VIL2_PIXEL_FORMAT_BYTE)
+  {
+    // cheat by casting to component type, not pixel type (because we don't know full pixel type at compile time.)
+    const vil2_image_view<vil2_byte> &rhs = static_cast<const vil2_image_view<vil2_byte>&>(rhs_base);
+
+    lhs = vil2_image_view<vil2_byte>(rhs.memory_chunk(), rhs.top_left_ptr(),
+                                      rhs.ni(),rhs.nj(),ncomp,
+                                      rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
+    return true;
+  }
+  else
+    return false;
+} 
+
+VCL_DEFINE_SPECIALIZATION
+inline bool convert_planes_from_components(vil2_image_view<vxl_int_8> &lhs,
+                                           const vil2_image_view_base &rhs_base)
+{
+  const unsigned ncomp =
+    vil2_pixel_format_num_components(rhs_base.pixel_format());
+
+  if (// rhs has just 1 plane
+      rhs_base.nplanes() == 1 &&
+      // both sides have equal component types
+      vil2_pixel_format_component_format(rhs_base.pixel_format()) == VIL2_PIXEL_FORMAT_INT_8)
+  {
+    // cheat by casting to component type, not pixel type (because we don't know full pixel type at compile time.)
+    const vil2_image_view<vxl_int_8> &rhs = static_cast<const vil2_image_view<vxl_int_8>&>(rhs_base);
+
+    lhs = vil2_image_view<vxl_int_8>(rhs.memory_chunk(), rhs.top_left_ptr(),
+                                      rhs.ni(),rhs.nj(),ncomp,
+                                      rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
+    return true;
+  }
+  else
+    return false;
+} 
+
+VCL_DEFINE_SPECIALIZATION
+inline bool convert_planes_from_components(vil2_image_view<vxl_uint_16> &lhs,
+                                           const vil2_image_view_base &rhs_base)
+{
+  const unsigned ncomp =
+    vil2_pixel_format_num_components(rhs_base.pixel_format());
+
+  if (// rhs has just 1 plane
+      rhs_base.nplanes() == 1 &&
+      // both sides have equal component types
+      vil2_pixel_format_component_format(rhs_base.pixel_format()) == VIL2_PIXEL_FORMAT_UINT_16)
+  {
+    // cheat by casting to component type, not pixel type (because we don't know full pixel type at compile time.)
+    const vil2_image_view<vxl_uint_16> &rhs = static_cast<const vil2_image_view<vxl_uint_16>&>(rhs_base);
+
+    lhs = vil2_image_view<vxl_uint_16>(rhs.memory_chunk(), rhs.top_left_ptr(),
+                                      rhs.ni(),rhs.nj(),ncomp,
+                                      rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
+    return true;
+  }
+  else
+    return false;
+} 
+
+VCL_DEFINE_SPECIALIZATION
+inline bool convert_planes_from_components(vil2_image_view<vxl_int_16> &lhs,
+                                           const vil2_image_view_base &rhs_base)
+{
+  const unsigned ncomp =
+    vil2_pixel_format_num_components(rhs_base.pixel_format());
+
+  if (// rhs has just 1 plane
+      rhs_base.nplanes() == 1 &&
+      // both sides have equal component types
+      vil2_pixel_format_component_format(rhs_base.pixel_format()) == VIL2_PIXEL_FORMAT_INT_16)
+  {
+    // cheat by casting to component type, not pixel type (because we don't know full pixel type at compile time.)
+    const vil2_image_view<vxl_int_16> &rhs = static_cast<const vil2_image_view<vxl_int_16>&>(rhs_base);
+
+    lhs = vil2_image_view<vxl_int_16>(rhs.memory_chunk(), rhs.top_left_ptr(),
+                                      rhs.ni(),rhs.nj(),ncomp,
+                                      rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
+    return true;
+  }
+  else
+    return false;
+} 
+
+VCL_DEFINE_SPECIALIZATION
+inline bool convert_planes_from_components(vil2_image_view<vxl_uint_32> &lhs,
+                                           const vil2_image_view_base &rhs_base)
+{
+  const unsigned ncomp =
+    vil2_pixel_format_num_components(rhs_base.pixel_format());
+
+  if (// rhs has just 1 plane
+      rhs_base.nplanes() == 1 &&
+      // both sides have equal component types
+       vil2_pixel_format_component_format(rhs_base.pixel_format()) == VIL2_PIXEL_FORMAT_UINT_32)
+  {
+    // cheat by casting to component type, not pixel type (because we don't know full pixel type at compile time.)
+    const vil2_image_view<vxl_uint_32> &rhs = static_cast<const vil2_image_view<vxl_uint_32>&>(rhs_base);
+
+    lhs = vil2_image_view<vxl_uint_32>(rhs.memory_chunk(), rhs.top_left_ptr(),
+                                      rhs.ni(),rhs.nj(),ncomp,
+                                      rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
+    return true;
+  }
+  else
+    return false;
+} 
+
+VCL_DEFINE_SPECIALIZATION
+inline bool convert_planes_from_components(vil2_image_view<vxl_int_32> &lhs,
+                                           const vil2_image_view_base &rhs_base)
+{
+  const unsigned ncomp =
+    vil2_pixel_format_num_components(rhs_base.pixel_format());
+
+  if (// rhs has just 1 plane
+      rhs_base.nplanes() == 1 &&
+      // both sides have equal component types
+      vil2_pixel_format_component_format(rhs_base.pixel_format()) == VIL2_PIXEL_FORMAT_INT_32)
+  {
+    // cheat by casting to component type, not pixel type (because we don't know full pixel type at compile time.)
+    const vil2_image_view<vxl_int_32> &rhs = static_cast<const vil2_image_view<vxl_int_32>&>(rhs_base);
+
+    lhs = vil2_image_view<vxl_int_32>(rhs.memory_chunk(), rhs.top_left_ptr(),
+                                      rhs.ni(),rhs.nj(),ncomp,
+                                      rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
+    return true;
+  }
+  else
+    return false;
+} 
+
+VCL_DEFINE_SPECIALIZATION
+inline bool convert_planes_from_components(vil2_image_view<float> &lhs,
+                                           const vil2_image_view_base &rhs_base)
+{
+  const unsigned ncomp =
+    vil2_pixel_format_num_components(rhs_base.pixel_format());
+
+  if (// rhs has just 1 plane
+      rhs_base.nplanes() == 1 &&
+      // both sides have equal component types
+      vil2_pixel_format_component_format(rhs_base.pixel_format()) == VIL2_PIXEL_FORMAT_FLOAT)
+  {
+    // cheat by casting to component type, not pixel type (because we don't know full pixel type at compile time.)
+    const vil2_image_view<float> &rhs = static_cast<const vil2_image_view<float>&>(rhs_base);
+
+    lhs = vil2_image_view<float>(rhs.memory_chunk(), rhs.top_left_ptr(),
+                                      rhs.ni(),rhs.nj(),ncomp,
+                                      rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
+    return true;
+  }
+  else
+    return false;
+} 
+
+VCL_DEFINE_SPECIALIZATION
+inline bool convert_planes_from_components(vil2_image_view<double> &lhs,
+                                           const vil2_image_view_base &rhs_base)
+{
+  const unsigned ncomp =
+    vil2_pixel_format_num_components(rhs_base.pixel_format());
+
+  if (// rhs has just 1 plane
+      rhs_base.nplanes() == 1 &&
+      // both sides have equal component types
+      vil2_pixel_format_component_format(rhs_base.pixel_format()) == VIL2_PIXEL_FORMAT_DOUBLE)
+  {
+    // cheat by casting to component type, not pixel type (because we don't know full pixel type at compile time.)
+    const vil2_image_view<double> &rhs = static_cast<const vil2_image_view<double>&>(rhs_base);
+
+    lhs = vil2_image_view<double>(rhs.memory_chunk(), rhs.top_left_ptr(),
+                                      rhs.ni(),rhs.nj(),ncomp,
+                                      rhs.istep()*ncomp,rhs.jstep()*ncomp,1);
+    return true;
+  }
+  else
+    return false;
+} 
+
+
 //: Create a copy of the data viewed by this, and return a view of copy.
 // This function can be made a lot more powerful - to automatically convert between pixel types.
 template<class T>
@@ -216,18 +425,10 @@ const vil2_image_view<T> & vil2_image_view<T>::operator= (const vil2_image_view_
     return *this;
   }
 
-#ifdef VIL2_TO_BE_FIXED
-  if (this is a scalar pixel type and rhs is a compound pixel of the
-      same type)
-  {
-    vil2_image_view<T> that = vil2_view_as_planes(
-      (const vil2_image_view<vil_rgb<T> &)(rhs));
-    this->operator=(that);
-    return *this
-  }
-#endif
-
   if (convert_components_from_planes(*this, rhs))
+    return *this;
+
+  if (convert_planes_from_components(*this, rhs))
     return *this;
 
   set_to_memory(0, 0, 0, 0, 0, 0, 0);
@@ -355,25 +556,6 @@ void vil2_image_view<T>::set_to_window(const vil2_image_view& im,
                                        unsigned i0, unsigned ni, unsigned j0, unsigned nj)
 {
   set_to_window(im,i0,nj,j0,nj,0,im.nplanes());
-}
-
-//: Return an ni x nj window of this data with offset (i0,j0)
-template<class T>
-vil2_image_view<T> vil2_image_view<T>::window(unsigned i0, unsigned ni, unsigned j0, unsigned nj) const
-{
-  assert(i0<ni_); assert(i0+ni<=ni_);
-  assert(j0<nj_); assert(j0+nj<=nj_);
-  return vil2_image_view<T>(ptr_,top_left_+ i0*istep_ + j0*jstep_,
-    ni,nj,nplanes_,istep_,jstep_,planestep_);
-}
-
-//: Return a view of plane p
-template<class T>
-vil2_image_view<T> vil2_image_view<T>::plane(unsigned p) const
-{
-  assert(p<nplanes_);
-  return vil2_image_view<T>(ptr_,top_left_+p*planestep_,ni_,nj_,1,
-    istep_,jstep_,planestep_);
 }
 
 //: Fill view with given value

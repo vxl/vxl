@@ -1,5 +1,6 @@
 // This is mul/vil2/tests/test_image_view.cxx
 #include <vil2/vil2_image_view.h>
+#include <vil2/vil2_image_view_functions.h>
 #include <vil/vil_byte.h>
 #include <vcl_iostream.h>
 #include <testlib/testlib_test.h>
@@ -93,6 +94,26 @@ void test_image_view_byte()
 
   vcl_cout<<image0.is_a()<<vcl_endl;
   TEST("is_a() specialisation for vil_byte",image0.is_a(),"vil2_image_view<vil2_byte>");
+
+
+  vil2_image_view<vil_rgb<vil_byte> > image5;
+  image5.resize(5,4);
+  image5.fill(vil_rgb<vil2_byte>(25,35,45));
+  image5(2,2).b = 50;
+  vil2_print_all(vcl_cout, image5);
+    
+  image2 = image5;
+  vil2_print_all(vcl_cout, image2);
+  TEST("Can assign rgb images to 3 plane view", image2, true);
+  TEST("Pixels are correct", image2(2,2,1) == 35 && image2(2,2,2) == 50, true);
+
+  image5 = image2;
+  TEST("Can assign 3 planes suitable image to rgb view", image5, true);
+
+  vil2_image_view<vil_rgba<vil_byte> > image6 = image2;
+  TEST("Can't assign a 3 plane images to rgba view", image6, false);
+
+
 }
 
 #if 0 // commented out

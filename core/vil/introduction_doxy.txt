@@ -36,13 +36,20 @@
 * byte image (using vil2_image_view<vil2_byte> with nplanes() == 3).
 * \verbatim
 vil2_image_view<vil_rgb<vil2_byte> > rgb_image;
-rgb_image = *vil2_load("my_image.jpg");
+rgb_image = vil2_load("my_image.jpg");
 
-// Create a 3 plane view of rgb
-vil2_image_view<vil2_byte > three_plane_image =  vil2_view_as_planes(rgb_image);
+  // Create a 3 plane view of rgb
+vil2_image_view<vil2_byte > three_plane_image =  rgb_image;
+  // or explicitly
+three_plane_image =  vil2_view_as_planes(rgb_image);
+  // or with less typing
+three_plane_image = vil2_load("my_image.jpg");
 
- // Now create rgb view of 3 plane image (note: will abort if not possible)
-vil2_image_view<vil_rgb<vil2_byte> > rgb_image2 = vil2_view_as_rgb(three_plane_image);
+  // Now create rgb view of 3 plane image (note: will set view to empty if not possible)
+vil2_image_view<vil_rgb<vil2_byte> > rgb_image2 = three_plane_image;
+  // or explicitly
+rgb_image2 = vil2_view_as_rgb(three_plane_image);
+
 \endverbatim
 *
 * \subsection copying Copying
@@ -52,7 +59,9 @@ vil2_image_view<vil_rgb<vil2_byte> > rgb_image2 = vil2_view_as_rgb(three_plane_i
 * that the actual data remains as long as a valid view is looking at
 * it.  (Note that this may not always be the case, since the view can be of
 * a chunk of memory that the view does not have direct control of, such as a video
-* buffer).  If you wish to copy the image data itself, then use the deep_copy()
+* buffer). This view copying will work between different types of view
+* if it is possible to reconfigure the view very cheaply.
+* If you wish to copy the image data itself, then use the deep_copy()
 * function.  This copies the raw data into a newly created space, and returns
 * a new view of it.  Alternatively, use the function vil2_copy(dest_im,src_im);
 *
@@ -67,32 +76,32 @@ vil2_save(image2,"output_image.jpg");
 *
 * Example of creating an image in memory
 * \verbatim
-int nx=256;
-int ny=256;
-int nplanes=3;
-vil2_image_view<vil2_byte> image(nx,ny,nplanes);
+unsigned ni=256;
+unsigned nj=256;
+unsigned nplanes=3;
+vil2_image_view<vil2_byte> image(ni,nj,nplanes);
 vil2_byte* plane_data = image.top_left_ptr();
-for (int i=0;i<nplanes;++i)
-  for (int y=0;y<ny;++y)
-    for (int x=0;x<nx;++x)
-      image(x,y,i) = vil2_byte(x+y+i);
+for (unsigned p=0;p<nplanes;++p)
+  for (unsigned j=0;j<nj;++j)
+    for (unsigned i=0;i<ni;++i)
+      image(i,j,p) = vil2_byte(i+j+p);
 \endverbatim
 *
 * Example of creating an image in memory, using fast pointer arithmetic
 * \verbatim
-  int nx=256;
-  int ny=256;
-  int nplanes=3;
-  vil2_image_view<vil2_byte> image(nx,ny,nplanes);
+  unsigned ni=256;
+  unsigned nj=256;
+  unsigned nplanes=3;
+  vil2_image_view<vil2_byte> image(ni,nj,nplanes);
   vil2_byte* plane = image.top_left_ptr();
-  for (unsigned int p=0;p<nplanes;++p,plane += image.planestep())
+  for (unsigned p=0;p<nplanes;++p,plane += image.planestep())
   {
     vil2_byte* row = plane;
-    for (int y=0;y<ny;++y,row += image.jstep())
+    for (unsigned j=0;j<nj;++j,row += image.jstep())
     {
       vil2_byte* pixel = row;
-      for (int x=0;x<nx;++x,pixel+=image.istep())
-        *pixel = vil2_byte(x+10*y+100*p);
+      for (unsigned i=0;i<ni;++i,pixel+=image.istep())
+        *pixel = vil2_byte(i+10*j+100*p);
     }
   }
 \endverbatim
@@ -109,7 +118,7 @@ for (int i=0;i<nplanes;++i)
 * There are a variety of ways one can view the same data, allowing one to appear to
 * change the data simply by changing ones view of it.
 *
-* For instance one can obtain a transposed view of an image simply by swapping nx-ny and
+* For instance one can obtain a transposed view of an image simply by swapping ni-nj and
 * istep-jstep.  This is particularly useful when implementing decomposable filters, as
 * one need only write it for one direction, then can apply it to the original image and
 * its transpose.
@@ -128,8 +137,8 @@ vil2_image_view<vil2_byte> filtered_image = vil2_transpose(tmp_image2);
 *
 * View manipulations include:
 * - vil2_transpose : Return transposed view
-* - vil2_reflect_x : View which reflects along x (ie x -> (nx-1)-x) (left/right)
-* - vil2_reflect_y : View which reflects along y (ie y -> (ny-1)-y) (up/down)
+* - vil2_flip_lr : View which reflects along i (ie i -> (ni-1)-i) (left/right)
+* - vil2_flip_ud : View which reflects along j (ie j -> (nj-1)-j) (up/down)
 * - vil2_view_as_planes : View rgb<T> data as planes of T
 * - vil2_view_as_rgb : View plane data as rgb<T> pixels
 *
@@ -137,8 +146,8 @@ vil2_image_view<vil2_byte> filtered_image = vil2_transpose(tmp_image2);
 * Useful simple operations on views include
 * - vil2_print_all(os,view) : Prints out view in a grid
 * - vil2_fill(view,value)   : Fills view with value
-* - vil2_fill_row(view,y,value) : Fills row y with value
-* - vil2_fill_col(view,x,value) : Fills col x with value
+* - vil2_fill_row(view,j,value) : Fills row j with value
+* - vil2_fill_col(view,i,value) : Fills col i with value
 * - vil2_value_range(minv,maxv,view) : Gets range of values in view
 *
 * \section image_src Image sources

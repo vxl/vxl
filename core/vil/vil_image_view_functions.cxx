@@ -125,9 +125,9 @@ void vil2_value_range(vil_rgb<vil2_byte>& min_value, vil_rgb<vil2_byte>& max_val
 {
   vil2_image_view<vil2_byte> plane_view = vil2_view_as_planes(rgb_view);
   // Get range for each plane in turn
-  vil2_value_range(min_value.r,max_value.r,plane_view.plane(0));
-  vil2_value_range(min_value.g,max_value.g,plane_view.plane(1));
-  vil2_value_range(min_value.b,max_value.b,plane_view.plane(2));
+  vil2_value_range(min_value.r,max_value.r,vil2_plane(plane_view,0));
+  vil2_value_range(min_value.g,max_value.g,vil2_plane(plane_view,1));
+  vil2_value_range(min_value.b,max_value.b,vil2_plane(plane_view,2));
 }
 
 //: Compute minimum and maximum values over view
@@ -137,8 +137,8 @@ void vil2_value_range(vil_rgb<float>& min_value, vil_rgb<float>& max_value,
 {
   vil2_image_view<float> plane_view = vil2_view_as_planes(rgb_view);
   // Get range for each plane in turn
-  vil2_value_range(min_value.r,max_value.r,plane_view.plane(0));
-  vil2_value_range(min_value.g,max_value.g,plane_view.plane(1));
-  vil2_value_range(min_value.b,max_value.b,plane_view.plane(2));
+  vil2_value_range(min_value.r,max_value.r,vil2_plane(plane_view,0));
+  vil2_value_range(min_value.g,max_value.g,vil2_plane(plane_view,1));
+  vil2_value_range(min_value.b,max_value.b,vil2_plane(plane_view,2));
 }
 

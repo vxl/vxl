@@ -28,5 +28,6 @@ macro(vil_rgb<vxl_uint_32> )
 macro(vil_rgb<vxl_int_16> )
 macro(vil_rgb<vxl_uint_16> )
 macro(vil_rgb<float> )
+macro(vil_rgba<vil2_byte> )
 
 #undef macro
