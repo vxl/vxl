@@ -1,7 +1,6 @@
 // This is core/vul/tests/test_sleep_timer.cxx
 #include <vcl_iostream.h>
 #include <vul/vul_timer.h>
-#include <vul/vul_temp_filename.h>
 #include <vpl/vpl.h>
 #include <testlib/testlib_test.h>
 
