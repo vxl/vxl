@@ -45,7 +45,7 @@ public:
 //unimp  vgl_homg_point_2d<Type> (vgl_point_2d<Type> const& p);
 
   // -- Construct from two Types (nonhomogeneous interface)
-  vgl_homg_point_2d (Type px, Type py) { set(px,py,1.0); }
+  vgl_homg_point_2d (Type px, Type py) { set(px,py); }
 
   // -- Construct from three Types.
   vgl_homg_point_2d (Type px, Type py, Type pw) { set(px,py,pw); }
@@ -73,7 +73,7 @@ public:
   inline Type w() const {return data_[2];}
 
   // -- Set x,y,w.
-  void set (Type px, Type py, Type pw) {
+  void set (Type px, Type py, Type pw = (Type)1) {
     data_[0] = px,
     data_[1] = py,
     data_[2] = pw;

@@ -64,7 +64,7 @@ public:
                     Type py,
                     Type pz)
   {
-    set(px,py,pz,1.0);
+    set(px,py,pz);
   }
 
   //---------------------------------------------------------------------------
@@ -108,7 +108,7 @@ public:
   inline void set(Type px,
                   Type py,
                   Type pz,
-                  Type pw)
+                  Type pw = (Type)1)
   {
     data_[0]=px;
     data_[1]=py;
