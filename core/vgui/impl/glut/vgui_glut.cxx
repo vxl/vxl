@@ -55,6 +55,7 @@ vgui_window *vgui_glut::produce_window(int width, int height,
 
 //----------------------------------------------------------------------
 
+#include <vcl_cstring.h> // memcpy()
 #include <vcl_csetjmp.h>
 #include <vcl_iostream.h>
 #include <vgui/vgui_macro.h>
@@ -79,14 +80,14 @@ vgui_window *vgui_glut::produce_window(int width, int height,
 //       [user code]
 //       ...
 
-static int const internal_label = 1234;
-static jmp_buf   internal_buf;
+static int const   internal_label = 1234;
+static vcl_jmp_buf internal_buf;
 
 // This function is the idle callback used
 // to longjmp() out of the GLUT event loop.
 static void internal_longjmp_idler()
 {
-  longjmp(internal_buf, internal_label);
+  vcl_longjmp(internal_buf, internal_label);
 }
 
 // This function lets the GLUT event loop run till it becomes
@@ -95,17 +96,17 @@ static void internal_longjmp_idler()
 static void internal_run_till_idle()
 {
   // save the current jmp_buf;
-  jmp_buf saved_buf;
-  memcpy(&saved_buf, &internal_buf, sizeof internal_buf);
+  vcl_jmp_buf saved_buf;
+  vcl_memcpy(&saved_buf, &internal_buf, sizeof internal_buf);
   
   // record current state/accept control after longjmp().
-  int t = setjmp(internal_buf);
+  int t = vcl_setjmp(internal_buf);
   
   // if we got back control after a longjmp(), restore
   // the previous jmp_buf and return to the caller now.
   if (t != 0) {
     assert(t == internal_label);
-    memcpy(&internal_buf, &saved_buf, sizeof internal_buf);
+    vcl_memcpy(&internal_buf, &saved_buf, sizeof internal_buf);
     return;
   }
   
