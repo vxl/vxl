@@ -1734,7 +1734,6 @@ vil_dicom_header_endian vil_dicom_header_format::determineMetaInfo(vil_stream &f
   // Read the next group
   fs.read((char *)&group,sizeof(vxl_uint_16));
   group = shortSwap(group);
-  unsigned i = 0;
   while (fs.ok() && group <= VIL_DICOM_HEADER_METAFILEGROUP)
   {
     // Read the element
