@@ -1,3 +1,2 @@
-# ./mul/mbl/CMakeListsLink.txt
-
-LINK_LIBRARIES( mbl )
+ERROR("Don't include this file, use the following line in your CMakeLists.txt file")
+LINK_LIBRARIES(mbl)

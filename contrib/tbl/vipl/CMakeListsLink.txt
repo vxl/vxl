@@ -1,3 +1,2 @@
-# ./tbl/vipl/CMakeListsLink.txt
-
-LINK_LIBRARIES( vipl )
+ERROR("Don't include this file, use the following line in your CMakeLists.txt file")
+LINK_LIBRARIES(vipl)

@@ -1,3 +1,2 @@
-# ./vxl/vcsl/CMakeListsLink.txt
-
-LINK_LIBRARIES( vcsl )
+ERROR("Don't include this file, use the following line in your CMakeLists.txt file")
+LINK_LIBRARIES(vcsl)

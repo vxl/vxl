@@ -1,3 +1,2 @@
-# ./vxl/vul/io/CMakeListsLink.txt
-
-LINK_LIBRARIES( vul_io )
+ERROR("Don't include this file, use the following line in your CMakeLists.txt file")
+LINK_LIBRARIES(vul_io)

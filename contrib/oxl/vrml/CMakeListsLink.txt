@@ -1,3 +1,2 @@
-# ./oxl/vrml/CMakeListsLink.txt
-
-LINK_LIBRARIES( vrml )
+ERROR("Don't include this file, use the following line in your CMakeLists.txt file")
+LINK_LIBRARIES(vrml)

@@ -1,3 +1,2 @@
-# ./gel/jvid/CMakeListsLink.txt
-
-LINK_LIBRARIES( jvid )
+ERROR("Don't include this file, use the following line in your CMakeLists.txt file")
+LINK_LIBRARIES(jvid)

@@ -1,1 +1,2 @@
 # This file will be phased out, and should be empty.
+ERROR("Don't include this file")

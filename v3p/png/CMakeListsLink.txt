@@ -1,3 +1,2 @@
-# ./v3p/png/CMakeListsLink.txt
-
-LINK_LIBRARIES( png )
+ERROR("Don't include this file, use the following line in your CMakeLists.txt file")
+LINK_LIBRARIES(png)

@@ -1,3 +1,2 @@
-# ./v3p/zlib/CMakeListsLink.txt
-
-LINK_LIBRARIES( zlib )
+ERROR("Don't include this file, use the following line in your CMakeLists.txt file")
+LINK_LIBRARIES(zlib)
