@@ -19,7 +19,6 @@ SOURCE_FILES( vgl_sources
   vgl_test.cxx
   vgl_window_scan_iterator.cxx
   vgl_1d_basis.cxx
-  vgl_homg.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vgl_sources)

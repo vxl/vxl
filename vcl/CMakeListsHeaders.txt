@@ -56,7 +56,6 @@ SOURCE_FILES( vcl_sources
   vcl_utility.h
   vcl_valarray.h
   vcl_vector.h
-  vcl_where_root_dir.h
   vcl_sys/time.h
   vcl_sys/types.h
 
