@@ -53,9 +53,8 @@
 // .LIBRARY     MViewBasics
 // .HEADER	MultiView Package
 // .INCLUDE     mvl/ProjectiveBasis2D.h
-// .FILE        ProjectiveBasis2D.h
-// .FILE        ProjectiveBasis2D.C
-// .EXAMPLE     ../Examples/exampleProjectiveBasis2D.C
+// .FILE        ProjectiveBasis2D.cxx
+// .EXAMPLE     ../examples/exampleProjectiveBasis2D.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 26 Sep 96
 //

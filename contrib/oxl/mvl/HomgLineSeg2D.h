@@ -41,7 +41,7 @@
 // .LIBRARY MViewBasics
 // .HEADER  MultiView package
 // .INCLUDE mvl/HomgLineSeg2D.h
-// .FILE    HomgLineSeg2D.C
+// .FILE    HomgLineSeg2D.cxx
 //
 // .SECTION Description:
 //

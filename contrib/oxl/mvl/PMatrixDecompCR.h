@@ -15,8 +15,7 @@
 // .LIBRARY     MViewBasics
 // .HEADER	MultiView Package
 // .INCLUDE     mvl/PMatrixDecompCR.h
-// .FILE        PMatrixDecompCR.h
-// .FILE        PMatrixDecompCR.C
+// .FILE        PMatrixDecompCR.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 08 Jun 98
 //

@@ -4,7 +4,7 @@
 // .LIBRARY MViewBasics
 // .HEADER MultiView package
 // .INCLUDE mvl/HomgPoint2D.h
-// .FILE HomgPoint2D.C
+// .FILE HomgPoint2D.cxx
 //
 // .SECTION Description:
 //

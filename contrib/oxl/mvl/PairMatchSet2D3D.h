@@ -13,9 +13,8 @@
 // .NAME        PairMatchSet2D3D - Undocumented class FIXME
 // .LIBRARY     MViewDatabase
 // .HEADER	MultiView Package
-// .INCLUDE     MViewDatabase/PairMatchSet2D3D.h
-// .FILE        PairMatchSet2D3D.h
-// .FILE        PairMatchSet2D3D.C
+// .INCLUDE     mvl/PairMatchSet2D3D.h
+// .FILE        PairMatchSet2D3D.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 19 Sep 96
 //

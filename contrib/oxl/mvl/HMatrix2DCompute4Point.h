@@ -50,7 +50,7 @@
 // .LIBRARY MViewCompute
 // .HEADER MultiView package
 // .INCLUDE mvl/HMatrix2DCompute4Point.h
-// .FILE HMatrix2DCompute4Point.C
+// .FILE HMatrix2DCompute4Point.cxx
 //
 // .SECTION Modifications:
 //      08-02-98 FSM obsoleted bool compute(HMatrix2D *)

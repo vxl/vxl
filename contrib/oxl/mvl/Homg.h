@@ -49,8 +49,7 @@
 // .LIBRARY	MViewBasics
 // .HEADER	MultiView Package
 // .INCLUDE	mvl/Homg.h
-// .FILE	Homg.h
-// .FILE	Homg.C
+// .FILE	Homg.cxx
 //
 // .SECTION Author:
 //             Paul Beardsley, 29.03.96

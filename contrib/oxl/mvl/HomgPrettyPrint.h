@@ -14,8 +14,7 @@
 // .LIBRARY     MViewBasics
 // .HEADER	MultiView Package
 // .INCLUDE     mvl/HomgPrettyPrint.h
-// .FILE        HomgPrettyPrint.h
-// .FILE        HomgPrettyPrint.C
+// .FILE        HomgPrettyPrint.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 12 Oct 97
 //

@@ -47,8 +47,7 @@
 // .LIBRARY MViewBasics
 // .HEADER MultiView package
 // .INCLUDE mvl/TripleMatchSetCorner.h
-// .FILE        TripleMatchSetCorner.h
-// .FILE        TripleMatchSetCorner.C
+// .FILE        TripleMatchSetCorner.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 09 Aug 96
 //

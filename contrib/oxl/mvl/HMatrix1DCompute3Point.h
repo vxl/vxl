@@ -44,7 +44,7 @@
 // .LIBRARY MViewCompute
 // .HEADER MultiView package
 // .INCLUDE mvl/HMatrix1DCompute3Point.h
-// .FILE HMatrix1DCompute3Point.C
+// .FILE HMatrix1DCompute3Point.cxx
 //
 // .SECTION Author
 // F. Schaffalitzky, RRG

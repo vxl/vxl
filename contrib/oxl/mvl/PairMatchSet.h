@@ -27,8 +27,7 @@
 // .LIBRARY     MViewBasics
 // .HEADER	MultiView Package
 // .INCLUDE     mvl/PairMatchSet.h
-// .FILE        PairMatchSet.h
-// .FILE        PairMatchSet.C
+// .FILE        PairMatchSet.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 09 Aug 96
 //

@@ -41,8 +41,7 @@
 // .LIBRARY     MViewBasics
 // .HEADER	MultiView Package
 // .INCLUDE     mvl/HomgPoint1D.h
-// .FILE        HomgPoint1D.h
-// .FILE        HomgPoint1D.C
+// .FILE        HomgPoint1D.cxx
 //
 // .SECTION Description:
 //

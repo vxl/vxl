@@ -20,8 +20,7 @@
 // .LIBRARY     MViewBasics
 // .HEADER	MultiView Package
 // .INCLUDE     mvl/HomgMetric.h
-// .FILE        HomgMetric.h
-// .FILE        HomgMetric.C
+// .FILE        HomgMetric.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 28 Jan 97
 //

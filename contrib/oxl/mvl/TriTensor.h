@@ -46,7 +46,7 @@
 // .LIBRARY MViewBasics
 // .HEADER MultiView package
 // .INCLUDE mvl/TriTensor.h
-// .FILE TriTensor.C
+// .FILE TriTensor.cxx
 //
 // .SECTION Author:
 //             Paul Beardsley, 29.03.96

@@ -14,9 +14,8 @@
 // .NAME        FMPlanarNonLinFun 
 // .LIBRARY     MViewCompute
 // .HEADER      MultiView Package
-// .INCLUDE     FMPlanarNonLinFun.h
-// .FILE        FMPlanarNonLinFun.h
-// .FILE        FMPlanarNonLinFun.C
+// .INCLUDE     mvl/FMPlanarNonLinFun.h
+// .FILE        FMPlanarNonLinFun.cxx
 // .SECTION Author
 //     Martin Armstrong, Oxford 21/11/96
 //

@@ -10,7 +10,7 @@
 // .LIBRARY MViewBasics
 // .HEADER  MultiView package
 // .INCLUDE mvl/PMatrix.h
-// .FILE PMatrix.C
+// .FILE PMatrix.cxx
 //
 // .SECTION Description:
 //

@@ -55,8 +55,7 @@
 // .LIBRARY     MViewBasics
 // .HEADER	MultiView Package
 // .INCLUDE     mvl/NViewMatches.h
-// .FILE        NViewMatches.h
-// .FILE        NViewMatches.C
+// .FILE        NViewMatches.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 17 May 97
 // .SECTION Modifications:

@@ -43,7 +43,7 @@
 // .LIBRARY MViewBasics
 // .HEADER MultiView package
 // .INCLUDE mvl/HomgLine3D.h
-// .FILE HomgLine3D.C
+// .FILE HomgLine3D.cxx
 //
 // .SECTION Modifications:
 //   Peter Vanroose - 11 Mar 97 - added operator==

@@ -15,8 +15,7 @@
 // .LIBRARY     MViewBasics
 // .HEADER	MultiView Package
 // .INCLUDE     mvl/FManifoldProject.h
-// .FILE        FManifoldProject.h
-// .FILE        FManifoldProject.C
+// .FILE        FManifoldProject.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 22 Jan 97
 //

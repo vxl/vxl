@@ -13,8 +13,8 @@
 // .NAME FMatrixPlanar - planar fundamental matrix.
 // .LIBRARY MViewBasics
 // .HEADER MultiView package
-// .INCLUDE FMatrixPlanar.h 
-// .FILE FMatrixPlanar.C
+// .INCLUDE mvl/FMatrixPlanar.h 
+// .FILE FMatrixPlanar.cxx
 //
 
 #ifndef _FMatrixPlanar_h

@@ -16,8 +16,7 @@
 // .LIBRARY MViewBasics
 // .HEADER MultiView package
 // .INCLUDE mvl/PairMatchSetLineSeg.h
-// .FILE        PairMatchSetLineSeg.h
-// .FILE        PairMatchSetLineSeg.C
+// .FILE        PairMatchSetLineSeg.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 09 Aug 96
 //

@@ -41,8 +41,8 @@
 // .LIBRARY     MViewBasics
 // .HEADER      MultiView Package
 // .INCLUDE     mvl/HomgConic.h
-// .FILE        HomgConic.C
-// .EXAMPLE     ../Examples/conic_closest_pt.cc
+// .FILE        HomgConic.cxx
+// .EXAMPLE     ../examples/conic_closest_pt.cxx
 //
 // .SECTION Description:
 //

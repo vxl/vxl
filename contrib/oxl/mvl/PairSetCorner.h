@@ -47,8 +47,7 @@
 // .LIBRARY MViewBasics
 // .HEADER MultiView package
 // .INCLUDE mvl/PairSetCorner.h
-// .FILE        PairSetCorner.h
-// .FILE        PairSetCorner.C
+// .FILE        PairSetCorner.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 15 Sep 96
 //

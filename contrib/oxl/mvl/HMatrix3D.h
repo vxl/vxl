@@ -16,7 +16,7 @@
 // .LIBRARY MViewBasics
 // .HEADER MultiView package
 // .INCLUDE mvl/HMatrix3D.h
-// .FILE HMatrix3D.C
+// .FILE HMatrix3D.cxx
 //
 #include <vnl/vnl_double_4x4.h>
 #include <mvl/HomgPoint3D.h>    

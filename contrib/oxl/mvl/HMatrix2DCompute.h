@@ -11,7 +11,7 @@
 // .LIBRARY MViewCompute
 // .HEADER MultiView package
 // .INCLUDE mvl/HMatrix2DCompute.h
-// .FILE HMatrix2DCompute.C
+// .FILE HMatrix2DCompute.cxx
 //
 // .SECTION Modifications:
 //      08-02-98 FSM

@@ -20,7 +20,7 @@
 // .LIBRARY MViewCompute
 // .HEADER MultiView package
 // .INCLUDE mvl/HMatrix2DSimilarityCompute.h
-// .FILE HMatrix2DSimilarityCompute.C
+// .FILE HMatrix2DSimilarityCompute.cxx
 // .SECTION Author
 //     David Capel, Oxford RRG, 13 May 98
 // .SECTION Modifications:

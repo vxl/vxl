@@ -23,8 +23,8 @@
 // .LIBRARY     mvl
 // .HEADER      MultiView Package
 // .INCLUDE     mvl/mvl_multi_view_matches.h
-// .FILE        mvl_multi_view_matches.h
-// .FILE        mvl_multi_view_matches.C
+// .FILE        mvl_multi_view_matches.cxx
+// .EXAMPLE     ../examples/mvl_multi_view_matches_example.cxx
 // .SECTION Author
 //     David Capel, Oxford RRG, 16 April 2000
 // .SECTION Modifications:

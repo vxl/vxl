@@ -42,7 +42,7 @@
 // .LIBRARY MViewBasics
 // .HEADER MultiView package
 // .INCLUDE mvl/HomgPlane3D.h
-// .FILE HomgPlane3D.C
+// .FILE HomgPlane3D.cxx
 //
 // .SECTION Description:
 //

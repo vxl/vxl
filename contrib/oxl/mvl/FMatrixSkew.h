@@ -49,8 +49,8 @@
 // .NAME FMatrixSkew - Skew fundamental matrix.
 // .LIBRARY MViewBasics
 // .HEADER MultiView package
-// .INCLUDE FMatrixSkew.h 
-// .FILE FMatrixSkew.C
+// .INCLUDE mvl/FMatrixSkew.h 
+// .FILE FMatrixSkew.cxx
 //
   
 #include <vnl/vnl_matrix.h>

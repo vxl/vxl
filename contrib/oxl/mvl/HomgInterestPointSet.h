@@ -18,8 +18,7 @@
 // .LIBRARY     MViewBasics
 // .HEADER	MultiView Package
 // .INCLUDE     mvl/HomgInterestPointSet.h
-// .FILE        HomgInterestPointSet.h
-// .FILE        HomgInterestPointSet.C
+// .FILE        HomgInterestPointSet.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 17 Aug 96
 //

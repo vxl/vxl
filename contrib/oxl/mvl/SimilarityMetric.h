@@ -48,8 +48,7 @@
 // .LIBRARY     MViewBasics
 // .HEADER	MultiView Package
 // .INCLUDE     mvl/SimilarityMetric.h
-// .FILE        SimilarityMetric.h
-// .FILE        SimilarityMetric.C
+// .FILE        SimilarityMetric.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 04 Feb 97
 //

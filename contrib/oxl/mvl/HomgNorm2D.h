@@ -50,9 +50,8 @@
 // .LIBRARY     MViewCompute
 // .HEADER	MultiView Package
 // .INCLUDE     mvl/HomgNorm2D.h
-// .FILE        HomgNorm2D.h
-// .FILE        HomgNorm2D.C
-// .EXAMPLE     ../Examples/exampleHomgNorm2D.C
+// .FILE        HomgNorm2D.cxx
+// .EXAMPLE     ../Examples/exampleHomgNorm2D.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 18 Aug 96
 //

@@ -47,8 +47,7 @@
 // .LIBRARY MViewBasics
 // .HEADER MultiView package
 // .INCLUDE mvl/TripleMatchSetLineSeg.h
-// .FILE        TripleMatchSetLineSeg.h
-// .FILE        TripleMatchSetLineSeg.C
+// .FILE        TripleMatchSetLineSeg.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 09 Aug 96
 //

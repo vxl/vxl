@@ -50,7 +50,7 @@
 // .LIBRARY MViewCompute
 // .HEADER MultiView package
 // .INCLUDE mvl/HMatrix2DComputeLinear.h
-// .FILE HMatrix2DComputeLinear.C
+// .FILE HMatrix2DComputeLinear.cxx
 //
 // .SECTION Modifications:
 //     200598 FSM added checks for degenerate or coincident points.

@@ -52,9 +52,8 @@
 // .NAME        FMPlanarComputeNonLinear - Nonlinear least squares planar fundamental matrix fit.
 // .LIBRARY     MViewCompute
 // .HEADER	MultiView Package
-// .INCLUDE     FMPlanarComputeNonLinear.h
-// .FILE        FMPlanarComputeNonLinear.h
-// .FILE        FMPlanarComputeNonLinear.C
+// .INCLUDE     mvl/FMPlanarComputeNonLinear.h
+// .FILE        FMPlanarComputeNonLinear.cxx
 // .SECTION Author
 //     Martin Armstrong, Oxford 21/11/96
 //

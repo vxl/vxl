@@ -9,8 +9,7 @@
 // .LIBRARY MViewBasics
 // .HEADER MultiView package
 // .INCLUDE mvl/HomgOperator2D.h
-// .FILE HomgOperator2D.h
-// .FILE HomgOperator2D.C
+// .FILE HomgOperator2D.cxx
 //
 // .SECTION Description:
 // Useful operators for the 2D homogeneous primitive classes.

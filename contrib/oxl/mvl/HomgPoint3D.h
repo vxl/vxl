@@ -42,7 +42,7 @@
 // .LIBRARY MViewBasics
 // .HEADER MultiView package
 // .INCLUDE mvl/HomgPoint3D.h
-// .FILE HomgPoint3D.C
+// .FILE HomgPoint3D.cxx
 //
 // .SECTION Description:
 //

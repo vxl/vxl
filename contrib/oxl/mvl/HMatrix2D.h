@@ -43,7 +43,7 @@
 // .LIBRARY MViewBasics
 // .HEADER MultiView package
 // .INCLUDE mvl/HMatrix2D.h
-// .FILE HMatrix2D.C
+// .FILE HMatrix2D.cxx
 //
 #ifndef _HMatrix2D_h
 #define _HMatrix2D_h

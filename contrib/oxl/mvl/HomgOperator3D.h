@@ -36,8 +36,7 @@
 // .LIBRARY MViewBasics
 // .HEADER MultiView package
 // .INCLUDE mvl/HomgOperator3D.h
-// .FILE HomgOperator3D.h
-// .FILE HomgOperator3D.C
+// .FILE HomgOperator3D.cxx
 //
 // .SECTION Description:
 // Useful operators for the 3D homogeneous primitive classes.

@@ -20,7 +20,7 @@
 // .LIBRARY MViewCompute
 // .HEADER MultiView package
 // .INCLUDE mvl/HMatrix2DEuclideanCompute.h
-// .FILE HMatrix2DEuclideanCompute.C
+// .FILE HMatrix2DEuclideanCompute.cxx
 // .SECTION Author
 //     David Capel, Oxford RRG, 13 May 98
 // .SECTION Modifications:

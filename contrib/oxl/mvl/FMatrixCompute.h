@@ -29,7 +29,7 @@
 // .LIBRARY MViewCompute
 // .HEADER MultiView package
 // .INCLUDE mvl/FMatrixCompute.h
-// .FILE FMatrixCompute.C
+// .FILE FMatrixCompute.cxx
 //
 
 #include <vcl/vcl_vector.h>

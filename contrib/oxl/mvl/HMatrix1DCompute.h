@@ -11,7 +11,7 @@
 // .LIBRARY MViewCompute
 // .HEADER MultiView package
 // .INCLUDE mvl/HMatrix1DCompute.h
-// .FILE HMatrix1DCompute.C
+// .FILE HMatrix1DCompute.cxx
 //
 // .SECTION Author
 //  Frederik Schaffalitzky , Robotic Research Group

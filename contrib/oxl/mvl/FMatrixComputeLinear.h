@@ -55,9 +55,8 @@
 // .LIBRARY MViewCompute
 // .HEADER  MultiView Package
 // .INCLUDE mvl/FMatrixComputeLinear.h
-// .FILE    FMatrixComputeLinear.h
-// .FILE    FMatrixComputeLinear.C
-// .EXAMPLE ../Examples/exampleFMatrixCompute.C
+// .FILE    FMatrixComputeLinear.cxx
+// .EXAMPLE ../examples/exampleFMatrixCompute.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 21 Aug 96
 //

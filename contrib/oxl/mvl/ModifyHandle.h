@@ -47,8 +47,7 @@
 // .LIBRARY     MViewBasics
 // .HEADER	MultiView Package
 // .INCLUDE     mvl/ModifyHandle.h
-// .FILE        ModifyHandle.h
-// .FILE        ModifyHandle.C
+// .FILE        ModifyHandle.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 03 Aug 96
 //

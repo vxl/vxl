@@ -44,7 +44,7 @@
 // .LIBRARY MViewCompute
 // .HEADER MultiView package
 // .INCLUDE mvl/HMatrix2DCompute4Line.h
-// .FILE HMatrix2DCompute4Line.C
+// .FILE HMatrix2DCompute4Line.cxx
 // .SECTION Author
 //     Frederik Schaffalitzky, Oxford RRG, 8 February 1998
 //

@@ -25,8 +25,7 @@
 // .LIBRARY     MViewBasics
 // .HEADER	MultiView Package
 // .INCLUDE     mvl/ImageMetric.h
-// .FILE        ImageMetric.h
-// .FILE        ImageMetric.C
+// .FILE        ImageMetric.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 17 Aug 96
 //

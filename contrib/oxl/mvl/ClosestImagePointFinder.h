@@ -15,8 +15,7 @@
 // .LIBRARY     MViewBasics
 // .HEADER	MultiView Package
 // .INCLUDE     mvl/ClosestImagePointFinder.h
-// .FILE        ClosestImagePointFinder.h
-// .FILE        ClosestImagePointFinder.C
+// .FILE        ClosestImagePointFinder.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 21 Jan 97
 //

@@ -36,7 +36,7 @@
 // .LIBRARY MViewBasics
 // .HEADER MultiView package
 // .INCLUDE mvl/HomgLineSeg3D.h
-// .FILE HomgLineSeg3D.C
+// .FILE HomgLineSeg3D.cxx
 //
 // .SECTION Description:
 //

@@ -46,8 +46,7 @@
 // .LIBRARY     MViewBasics
 // .HEADER	MultiView Package
 // .INCLUDE     mvl/AffineMetric.h
-// .FILE        AffineMetric.h
-// .FILE        AffineMetric.C
+// .FILE        AffineMetric.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 24 Feb 97
 //

@@ -48,8 +48,7 @@
 // .LIBRARY MViewBasics
 // .HEADER MultiView package
 // .INCLUDE mvl/FMatrix.h 
-// .FILE FMatrix.h
-// .FILE FMatrix.C
+// .FILE FMatrix.cxx
 //
 //
 

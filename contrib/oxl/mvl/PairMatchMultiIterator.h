@@ -14,8 +14,7 @@
 // .LIBRARY     MViewBasics
 // .HEADER	MultiView Package
 // .INCLUDE     mvl/PairMatchMultiIterator.h
-// .FILE        PairMatchMultiIterator.h
-// .FILE        PairMatchMultiIterator.C
+// .FILE        PairMatchMultiIterator.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 17 Sep 96
 //

@@ -43,8 +43,7 @@
 // .LIBRARY MViewBasics
 // .HEADER MultiView package
 // .INCLUDE mvl/LineSeg.h
-// .FILE        LineSeg.h
-// .FILE        LineSeg.C
+// .FILE        LineSeg.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 01 Aug 96
 //

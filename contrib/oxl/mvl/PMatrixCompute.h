@@ -43,7 +43,7 @@
 // .LIBRARY MViewCompute
 // .HEADER MultiView package
 // .INCLUDE mvl/PMatrixCompute.h
-// .FILE PMatrixCompute.C
+// .FILE PMatrixCompute.cxx
 //
 
 #ifndef _PMatrixCompute_h

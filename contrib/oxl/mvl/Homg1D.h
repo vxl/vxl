@@ -41,8 +41,7 @@
 // .LIBRARY     MViewBasics
 // .HEADER	MultiView Package
 // .INCLUDE     mvl/Homg1D.h
-// .FILE        Homg1D.h
-// .FILE        Homg1D.C
+// .FILE        Homg1D.cxx
 //
 // .SECTION Description:
 // Homg1D is the base class for one-dimensional homogeneous primitives.

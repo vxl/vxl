@@ -15,8 +15,7 @@
 // .LIBRARY MViewBasics
 // .HEADER MultiView package
 // .INCLUDE mvl/Homg2D.h
-// .FILE Homg2D.h
-// .FILE Homg2D.C
+// .FILE Homg2D.cxx
 //
 // .SECTION Description:
 //

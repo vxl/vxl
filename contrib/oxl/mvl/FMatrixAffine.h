@@ -44,7 +44,7 @@
 // .LIBRARY MViewBasics
 // .HEADER MultiView package
 // .INCLUDE mvl/FMatrixAffine.h 
-// .FILE FMatrixAffine.C
+// .FILE FMatrixAffine.cxx
 //
 
 

@@ -41,8 +41,7 @@
 // .LIBRARY     MViewBasics
 // .HEADER	MultiView Package
 // .INCLUDE     mvl/HomgOperator1D.h
-// .FILE        HomgOperator1D.h
-// .FILE        HomgOperator1D.C
+// .FILE        HomgOperator1D.cxx
 //
 // .SECTION Description:
 // HomgOperator1D implements one-dimensional homogeneous functions.

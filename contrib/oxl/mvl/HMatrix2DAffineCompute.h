@@ -20,7 +20,7 @@
 // .LIBRARY MViewCompute
 // .HEADER MultiView package
 // .INCLUDE mvl/HMatrix2DAffineCompute.h
-// .FILE HMatrix2DAffineCompute.C
+// .FILE HMatrix2DAffineCompute.cxx
 // .SECTION Author
 //     David Capel, Oxford RRG, 13 May 98
 // .SECTION Modifications:

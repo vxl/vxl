@@ -46,9 +46,8 @@
 // .LIBRARY     MViewBasics
 // .HEADER	MultiView Package
 // .INCLUDE     mvl/PMatrixDecompAa.h
-// .FILE        PMatrixDecompAa.h
-// .FILE        PMatrixDecompAa.C
-// .EXAMPLE     ../Examples/examplePMatrixDecompAa.cc
+// .FILE        PMatrixDecompAa.cxx
+// .EXAMPLE     ../examples/examplePMatrixDecompAa.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 14 Feb 97
 

@@ -51,8 +51,7 @@
 // .LIBRARY     MViewCompute
 // .HEADER	MultiView Package
 // .INCLUDE     mvl/FDesignMatrix.h
-// .FILE        FDesignMatrix.h
-// .FILE        FDesignMatrix.C
+// .FILE        FDesignMatrix.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 21 Aug 96
 //
