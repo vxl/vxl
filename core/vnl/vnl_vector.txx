@@ -481,9 +481,11 @@ vnl_vector<T> vnl_vector<T>::operator- () const {
 template<class T>
 vnl_vector<T> operator* (vnl_matrix<T> const& m, vnl_vector<T> const& v) {
 
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (m.columns() != v.size())                  // dimensions do not match?
     vnl_error_vector_dimension ("operator*",
                                 m.columns(), v.size());
+#endif
   vnl_vector<T> result(m.rows());               // Temporary
   vnl_matrix<T>& mm = (vnl_matrix<T>&) m;       // Drop const for get()
   for (unsigned i = 0; i < m.rows(); i++) {     // For each index
@@ -507,8 +509,10 @@ vnl_vector<T> vnl_vector<T>::operator* (vnl_matrix<T> const&m) const {
   // also avoids the error.
   // template vnl_matrix<double > outer_product (const vnl_vector<double >&,const vnl_vector<dou
 
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (num_elmts != m.rows())                    // dimensions do not match?
     vnl_error_vector_dimension ("operator*", num_elmts, m.rows());
+#endif
   vnl_vector<T> result(m.columns());            // Temporary
   vnl_matrix<T>& mm = (vnl_matrix<T>&) m;       // Drop const for get()
   for (unsigned i = 0; i < m.columns(); i++) {  // For each index
@@ -525,9 +529,11 @@ vnl_vector<T> vnl_vector<T>::operator* (vnl_matrix<T> const&m) const {
 
 template<class T>
 vnl_vector<T>& vnl_vector<T>::update (vnl_vector<T> const& v, unsigned start) {
- unsigned end = start + v.size();
+  unsigned end = start + v.size();
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (this->num_elmts < end)
     vnl_error_vector_dimension ("update", end-start, v.size());
+#endif
   for (unsigned i = start; i < end; i++)
     this->data[i] = v.data[i-start];
   return *this;
@@ -539,8 +545,10 @@ vnl_vector<T>& vnl_vector<T>::update (vnl_vector<T> const& v, unsigned start) {
 template<class T>
 vnl_vector<T> vnl_vector<T>::extract (unsigned len, unsigned start) const {
   unsigned end = start + len;
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (this->num_elmts < end)
     vnl_error_vector_dimension ("extract", end-start, len);
+#endif
   vnl_vector<T> result(len);
   for (unsigned i = 0; i < len; i++)
     result.data[i] = data[start+i];
@@ -551,8 +559,10 @@ vnl_vector<T> vnl_vector<T>::extract (unsigned len, unsigned start) const {
 
 template<class T>
 vnl_vector<T> element_product (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (v1.size() != v2.size())
     vnl_error_vector_dimension ("element_product", v1.size(), v2.size());
+#endif
   vnl_vector<T> result(v1.size());
   for (unsigned i = 0; i < v1.size(); i++)
     result[i] = v1[i] * v2[i];
@@ -563,9 +573,11 @@ vnl_vector<T> element_product (vnl_vector<T> const& v1, vnl_vector<T> const& v2)
 
 template<class T>
 vnl_vector<T> element_quotient (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (v1.size() != v2.size())
     vnl_error_vector_dimension ("element_quotient",
                         v1.size(), v2.size());
+#endif
   vnl_vector<T> result(v1.size());
   for (unsigned i = 0; i < v1.size(); i++)
     result[i] = v1[i] / v2[i];
@@ -592,9 +604,11 @@ vnl_vector<T> vnl_vector<T>::apply(T (*f)(T)) const {
 
 template<class T>
 T dot_product (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (v1.size() != v2.size())
     vnl_error_vector_dimension ("dot_product",
                                 v1.size(), v2.size());
+#endif
   return vnl_c_vector<T>::dot_product(v1.begin(),
                                       v2.begin(),
                                       v1.size());
@@ -604,9 +618,11 @@ T dot_product (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
 
 template<class T>
 T inner_product (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (v1.size() != v2.size())
     vnl_error_vector_dimension ("inner_product",
                                 v1.size(), v2.size());
+#endif
   return vnl_c_vector<T>::inner_product(v1.begin(),
                                         v2.begin(),
                                         v1.size());
@@ -616,10 +632,12 @@ T inner_product (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
 
 template<class T>
 T bracket(vnl_vector<T> const &u, vnl_matrix<T> const &A, vnl_vector<T> const &v) {
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (u.size() != A.rows())
     vnl_error_vector_dimension("bracket",u.size(),A.rows());
   if (A.columns() != v.size())
     vnl_error_vector_dimension("bracket",A.columns(),v.size());
+#endif
   T brak(0);
   for (unsigned i=0; i<u.size(); ++i)
     for (unsigned j=0; j<v.size(); ++j)
@@ -644,9 +662,10 @@ vnl_matrix<T> outer_product (vnl_vector<T> const& v1,
 
 template<class T>
 T cross_2d (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (v1.size() < 2 || v2.size() < 2)
     vnl_error_vector_dimension ("cross_2d", v1.size(), v2.size());
-
+#endif
   return v1[0] * v2[1] - v1[1] * v2[0];
 }
 
@@ -654,8 +673,10 @@ T cross_2d (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
 
 template<class T>
 vnl_vector<T> cross_3d (vnl_vector<T> const& v1, vnl_vector<T> const& v2) {
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
   if (v1.size() != 3 || v2.size() != 3)
     vnl_error_vector_dimension ("cross_3d", v1.size(), v2.size());
+#endif
   vnl_vector<T> result(v1.size());
 
   result.x() = v1.y() * v2.z() - v1.z() * v2.y(); // work for both col/row
