@@ -48,6 +48,7 @@ MANPAGE_SOURCES += vil_cartesian_differential_invariants.txx
 MANPAGE_SOURCES += vil_dog_filter_5tap.h
 MANPAGE_SOURCES += vil_dog_pyramid.h
 MANPAGE_SOURCES += vil_tile_images.h
+SOURCES += vil_orientations.cxx
 
 ################################
 include ${IUEROOT}/config/top.mk
