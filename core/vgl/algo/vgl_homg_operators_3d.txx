@@ -9,6 +9,7 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_cmath.h> // for vcl_sqrt(), vcl_acos()
+#include <vcl_cassert.h>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matrix_fixed.h>
@@ -506,8 +507,6 @@ vgl_homg_operators_3d<T>::perp_dist_squared(const vgl_homg_point_3d<T>& point,
   double denominator = plane.a()*plane.a() + plane.b()*plane.b() + plane.c()*plane.c();
   return numerator * numerator / denominator;
 }
-
-#include <vnl/algo/vnl_svd.h>
 
 template <class T>
 vnl_vector<T>
