@@ -22,6 +22,7 @@ SOURCES += vgl_h_matrix_2d_compute_linear.cxx
 MANPAGE_SOURCES += vgl_fit_lines_2d.txx
 MANPAGE_SOURCES += vgl_line_2d_regression.txx
 MANPAGE_SOURCES += vgl_p_matrix.txx
+MANPAGE_SOURCES += vgl_algo_fwd.h
 
 ################################
 include ${IUEROOT}/config/top.mk
