@@ -68,13 +68,11 @@ f_x( vnl_vector<double> const& point ) const
   assert( point.size() == m_.size() );
 
   for ( unsigned i=0; i<m_.size(); ++i ) {
-//    assert( point[i] >= 0 && point[i] <= m_[i] );
-  // check if it's in the valid region
-  if ( point[i] < 0 || point[i] > m_[i] )
-
-//      // if it's out of the support region of control points, don't need
-//      // to calculate the value.
-//      if ( point[i] < -3 || point[i] >= m_[i]+3 )
+    // assert( point[i] >= 0 && point[i] <= m_[i] );
+    // check if it's in the valid region
+    if ( point[i] < 0 || point[i] > m_[i] ) // was: ( point[i] < -3 || point[i] >= m_[i]+3 )
+      // if it's out of the support region of control points, don't need
+      // to calculate the value.
       return 0;
   }
 
@@ -95,13 +93,13 @@ jacobian( vnl_vector< double > const& point ) const
 
   // check if it's in the valid region
   for ( unsigned i=0; i<m_.size(); ++i ) {
-//    assert( point[i] >= 0 && point[i] <= m_[i] );
+    // assert( point[i] >= 0 && point[i] <= m_[i] );
     if ( point[i] < 0 || point[i] > m_[i] )
       return vnl_vector< double >(m_.size(), 0.0);
   }
 
   unsigned num_control_pts = 1;
-  unsigned dim = m_.size();
+  const unsigned dim = m_.size();
   for (unsigned n=0; n<dim; ++n)
     num_control_pts *= m_[n]+3;
 
@@ -185,7 +183,7 @@ rgrl_spline::
 basis_response_helper( vnl_vector<double> const& point, vnl_vector<double>& br, func_type basis_func ) const
 {
   unsigned num_element = 1;
-  unsigned dim = m_.size();
+  const unsigned dim = m_.size();
   for (unsigned n=0; n<dim; ++n)
     num_element *= m_[n]+3;
 
@@ -249,14 +247,14 @@ element_1d_thin_plate(unsigned i, unsigned j) const
   int a1 = i - 1;
   int b1 = j - 1;
 
-  if ( vnl_math_abs( a1 - b1 ) > 3 ) return 0;
-
-//  double gx = g( delta_[0], a1, b1, m_[0] ) * delta_[0];
-//  double gx_prime = g_prime( delta_[0], a1, b1, m_[0] ) * delta_[0];
-//    double gx_double_prime = g_double_prime( delta_[0], a1, b1, m_[0] ) * delta_[0];
-    double gx_double_prime = g_double_prime( a1, b1, m_[0] );
-
-  return gx_double_prime;
+  if ( vnl_math_abs( a1 - b1 ) > 3 )
+    return 0;
+#if 0
+  return g( delta_[0], a1, b1, m_[0] ) * delta_[0];
+  return g_prime( delta_[0], a1, b1, m_[0] ) * delta_[0];
+  return g_double_prime( delta_[0], a1, b1, m_[0] ) * delta_[0];
+#endif // 0
+  return g_double_prime( a1, b1, m_[0] );
 }
 
 double
@@ -271,8 +269,10 @@ element_2d_thin_plate(unsigned i, unsigned j) const
   int b1 = j % ( m_[0] + 3 ) - 1;
   int b2 = ( j / ( m_[0] + 3 ) ) - 1;
 
-  if ( vnl_math_abs( a1 - b1 ) > 3 ) return 0;
-  if ( vnl_math_abs( a2 - b2 ) > 3 ) return 0;
+  if ( vnl_math_abs( a1 - b1 ) > 3 )
+    return 0;
+  if ( vnl_math_abs( a2 - b2 ) > 3 )
+    return 0;
 
 //    double gx = g( delta_[0], a1, b1, m_[0] ) * delta_[0];
 //    double gx_prime = g_prime( delta_[0], a1, b1, m_[0] ) * delta_[0];
@@ -309,9 +309,12 @@ element_3d_thin_plate(unsigned i, unsigned j) const
   int b2 = ( j / ( m_[0] + 3 ) ) % ( m_[1] + 3 ) - 1;
   int b3 = ( j / ( m_[0] + 3 ) ) / ( m_[1] + 3 ) - 1;
 
-  if ( vnl_math_abs( a1 - b1 ) > 3 ) return 0;
-  if ( vnl_math_abs( a2 - b2 ) > 3 ) return 0;
-  if ( vnl_math_abs( a3 - b3 ) > 3 ) return 0;
+  if ( vnl_math_abs( a1 - b1 ) > 3 )
+    return 0;
+  if ( vnl_math_abs( a2 - b2 ) > 3 )
+    return 0;
+  if ( vnl_math_abs( a3 - b3 ) > 3 )
+    return 0;
 
 //    double gx = g( delta_[0], a1, b1, m_[0] ) * delta_[0];
 //    double gx_prime = g_prime( delta_[0], a1, b1, m_[0] ) * delta_[0];
@@ -347,12 +350,11 @@ void
 rgrl_spline::
 thin_plate_regularization(vnl_matrix<double>& regularization) const
 {
-  unsigned dim = m_.size();
+  const unsigned dim = m_.size();
   // The volume
   double vol = 1;
   for ( unsigned i=0; i<dim; ++i ) {
-//    vol *= m_[i]*delta_[i];
-    vol *= m_[i];
+    vol *= m_[i]; // was: *= m_[i]*delta_[i];
   }
   // The number of control points
   unsigned num = 1;
@@ -430,8 +432,7 @@ bspline_basis_prime_function( int i, double u )
 
 static
 double
-//g( double u, int a1, int a2, int m )
-g( int a1, int a2, int m )
+g( int a1, int a2, int m ) // was: g( double u, int a1, int a2, int m )
 {
   int min_a, max_a;
   if ( a1 < a2 ) {
@@ -451,19 +452,19 @@ g( int a1, int a2, int m )
   if ( diff_a == 0 ) {
     double ans = 0;
     if ( max_a <= m-2 ) {
-      // \int [b_0(x)*b_0(x)] dx = \int [(1-u)^6 / 36] dx
+      // $\int [b_0(x)*b_0(x)] \, dx = \int [(1-u)^6 / 36] \, dx$
       ans += 1.0 / 252 ;
     }
     if ( min_a >= 0 && max_a <= m-1 ) {
-      // \int [b_1(x)*b_1(x)] dx = \int [(3u^3-6u^2+4)^2 / 36] dx
+      // $\int [b_1(x)*b_1(x)] \, dx = \int [(3u^3-6u^2+4)^2 / 36] \, dx$
       ans += 0.2 + 1.0 / 28;
     }
     if ( min_a >= 1 && max_a <= m ) {
-      // \int [b_2(x)*b_2(x)] dx = \int [b_1(x)*b_1(x)] dx
+      // $\int [b_2(x)*b_2(x)] \, dx = \int [b_1(x)*b_1(x)] \, dx$
       ans += 0.2 + 1.0 / 28;
     }
     if ( min_a >= 2 ) {
-      // \int [b_3(x)*b_3(x)] dx = \int [b_0(x)*b_0(x)] dx
+      // $\int [b_3(x)*b_3(x)] \, dx = \int [b_0(x)*b_0(x)] \, dx$
       ans += 1.0 / 252;
     }
     return ans;
@@ -471,15 +472,15 @@ g( int a1, int a2, int m )
 
   if ( diff_a == 1 ) {
     if ( max_a <= m-1 ) {
-      // \int [b_0(u)*b_1(u)] du = \int [-3u^6 + 15u^5 - 27u^4 + 17u^3 + 6u^2 - 12u + 4]/36 du
+      // $\int [b_0(u)*b_1(u)] \, du = \int [-3u^6 + 15u^5 - 27u^4 + 17u^3 + 6u^2 - 12u + 4]/36 \, du$
       ans += 0.0375 - 1.0 / 84;
     }
     if ( min_a >= 0 && max_a <= m ) {
-      // \int [b_1(u)*b_2(u)] du = \int [-9u^6 + 27u^5 - 9u^4 -27u^3 + 6u^2 + 12u + 4]/36 du
+      // $\int [b_1(u)*b_2(u)] \, du = \int [-9u^6 + 27u^5 - 9u^4 -27u^3 + 6u^2 + 12u + 4]/36 \, du$
       ans += -0.1125 - 1.0 / 28 + 1.0 / 3;
     }
     if ( min_a >= 1 ) {
-      // \int [b_2(u)*b_3(u)] du = \int [b_0(u)*b_1(u)] du
+      // $\int [b_2(u)*b_3(u)] \, du = \int [b_0(u)*b_1(u)] \, du$
       ans += 0.0375 - 1.0 / 84;
     }
     return ans;
@@ -487,18 +488,18 @@ g( int a1, int a2, int m )
 
   if ( diff_a == 2 ) {
     if ( max_a <= m ) {
-      // \int [b_0(u)*b_2(u)] du = \int [3u^6 - 12u^5 + 15u^4 - 4u^3 - 3u^2 + 1]/36 du
+      // $\int [b_0(u)*b_2(u)] \, du = \int [3u^6 - 12u^5 + 15u^4 - 4u^3 - 3u^2 + 1]/36 \, du$
       ans += 1.0 / 84;
     }
     if ( min_a >= 0 ) {
-      // \int [b_1(u)*b_3(u)] du = \int [b_0(u)*b_2(u)] du
+      // $\int [b_1(u)*b_3(u)] \, du = \int [b_0(u)*b_2(u)] \, du$
       ans += 1.0 / 84;
     }
     return ans;
   }
 
   if ( diff_a == 3 ) {
-    // \int [b_0(u)*b_3(u)] du = \int [-u^6 + 3u^5 -3u^4 + u3]/36 du
+    // $\int [b_0(u)*b_3(u)] \, du = \int [-u^6 + 3u^5 -3u^4 + u3]/36 \, du$
     ans += 1.0 / 240 - 1.0 / 252;
     return ans;
   }
@@ -508,8 +509,7 @@ g( int a1, int a2, int m )
 
 static
 double
-//g_prime(double u, int a1, int a2, int m )
-g_prime( int a1, int a2, int m )
+g_prime( int a1, int a2, int m ) // was: g_prime(double u, int a1, int a2, int m )
 {
   int min_a = (a1 < a2) ? a1 : a2;
   int max_a = (a1 < a2) ? a2 : a1;
@@ -520,19 +520,19 @@ g_prime( int a1, int a2, int m )
   double ans = 0;
   if ( diff_a == 0 ) {
     if ( max_a <= m-2 ) {
-      // \int [b'_0(x)*b'_0(x)] dx = \int [(1-u)^4]/4 dx = (1-u^2+u^3/3)/4
+      // $\int [b'_0(x)*b'_0(x)] \, dx = \int [(1-u)^4]/4 \, dx = (1-u^2+u^3/3)/4$
       ans += 0.05;
     }
     if ( min_a >= 0 && max_a <= m-1 ) {
-      // \int [b'_1(x)*b'_1(x)] dx = \int [9u^4 -24u^3+16u^2]/4 dx
+      // $\int [b'_1(x)*b'_1(x)] \, dx = \int [9u^4 -24u^3+16u^2]/4 \, dx$
       ans += 0.2 + 1.0 / 12;
     }
     if ( min_a >= 1 && max_a <= m ) {
-      // \int [b'_2(x)*b'_2(x)] dx = \int [b'_1(x)*b'_1(x)] dx
+      // $\int [b'_2(x)*b'_2(x)] \, dx = \int [b'_1(x)*b'_1(x)] \, dx$
       ans += 0.2 + 1.0 / 12;
     }
     if ( min_a >= 2 ) {
-      // \int [b_3(x)*b_3(x)] dx = \int [b'_0(x)*b'_0(x)] dx
+      // $\int [b_3(x)*b_3(x)] \, dx = \int [b'_0(x)*b'_0(x)] \, dx$
       ans += 0.05;
     }
     return ans;
@@ -540,15 +540,15 @@ g_prime( int a1, int a2, int m )
 
   if ( diff_a == 1 ) {
     if ( max_a <= m-1 ) {
-      // \int [b'_0(u)*b'_1(u)] du = \int [-3u^4 + 10u^3 - 11u^2 + 4u]/4 du
+      // $\int [b'_0(u)*b'_1(u)] \, du = \int [-3u^4 + 10u^3 - 11u^2 + 4u]/4 \, du$
       ans += -0.025 + 1.0 / 12;
     }
     if ( min_a >= 0 && max_a <= m) {
-      // \int [b'_1(u)*b'_2(u)] du = \int [- 9u^4 + 18u^3 - 5u^2 - 4u]/4 du
+      // $\int [b'_1(u)*b'_2(u)] \, du = \int [- 9u^4 + 18u^3 - 5u^2 - 4u]/4 \, du$
       ans += 0.175 - 5.0 / 12;
     }
     if ( min_a >= 1 ) {
-      // \int [b'_2(u)*b'_3(u)] du = \int [b'_0(u)*b'_1(u)] du
+      // $\int [b'_2(u)*b'_3(u)] \, du = \int [b'_0(u)*b'_1(u)] \, du$
       ans += -0.025 + 1.0 / 12;
     }
     return ans;
@@ -556,18 +556,18 @@ g_prime( int a1, int a2, int m )
 
   if ( diff_a == 2 ) {
     if ( max_a <= m ) {
-      // \int [b'_0(u)*b'_2(u)] du = \int [3u^4 - 8u^3 + 6u^2 - 1]/4 du
+      // $\int [b'_0(u)*b'_2(u)] \, du = \int [3u^4 - 8u^3 + 6u^2 - 1]/4 \, du$
       ans += -0.1;
     }
     if ( min_a >= 0 ) {
-      // \int [b'_1(u)*b'_3(u)] du = \int [b'_0(u)*b'_2(u)] du
+      // $\int [b'_1(u)*b'_3(u)] \, du = \int [b'_0(u)*b'_2(u)] \, du$
       ans += -0.1;
     }
     return ans;
   }
 
   if ( diff_a == 3 ) {
-    // \int [b'_0(u)*b'_3(u)] du = \int [-u^4 + 2u^3 - u^2]/4 du
+    // $\int [b'_0(u)*b'_3(u)] \, du = \int [-u^4 + 2u^3 - u^2]/4 \, du$
     ans += 0.075 - 1.0 / 12;
     return ans;
   }
@@ -577,8 +577,7 @@ g_prime( int a1, int a2, int m )
 
 static
 double
-//g_double_prime( double u, int a1, int a2, int m )
-g_double_prime( int a1, int a2, int m )
+g_double_prime( int a1, int a2, int m ) // was: g_double_prime( double u, int a1, int a2, int m )
 {
   int min_a = (a1 < a2) ? a1 : a2;
   int max_a = (a1 < a2) ? a2 : a1;
@@ -589,19 +588,19 @@ g_double_prime( int a1, int a2, int m )
   double ans = 0;
   if ( diff_a == 0 ) {
     if ( max_a <= m-2 ) {
-      // \int [b"_0(x)*b"_0(x)] dx = \int [(1-u)^2] dx = (u-u^2+u^3/3)
+      // $\int [b"_0(x)*b"_0(x)] \, dx = \int [(1-u)^2] \, dx = (u-u^2+u^3/3)$
       ans += 1.0 / 3;
     }
     if ( min_a >= 0 && max_a <= m-1 ) {
-      // \int [b"_1(x)*b"_1(x)] dx = \int [9u^2 - 12u + 4] dx = 3u^3 -6u + 4
+      // $\int [b"_1(x)*b"_1(x)] \, dx = \int [9u^2 - 12u + 4] \, dx = 3u^3 -6u + 4$
       ans += 1.0;
     }
     if ( min_a >= 1 && max_a <= m ) {
-      // \int [b"_2(x)*b"_2(x)] dx = \int [b"_1(x)*b"_1(x)] dx
+      // $\int [b"_2(x)*b"_2(x)] \, dx = \int [b"_1(x)*b"_1(x)] \, dx$
       ans += 1.0;
     }
     if ( min_a >= 2 ) {
-      // \int [b"_3(x)*b"_3(x)] dx = \int [b"_0(x)*b"_0(x)] dx
+      // $\int [b"_3(x)*b"_3(x)] \, dx = \int [b"_0(x)*b"_0(x)] \, dx$
       ans += 1.0 / 3;
     }
     return ans;
@@ -609,15 +608,15 @@ g_double_prime( int a1, int a2, int m )
 
   if ( diff_a == 1 ) {
     if ( max_a <= m-1 ) {
-      // \int [b"_0(u)*b"_1(u)] du = \int [-3u^2 + 5u - 2] du
+      // $\int [b"_0(u)*b"_1(u)] \, du = \int [-3u^2 + 5u - 2] \, du$
       ans += -0.5;
     }
     if ( min_a >= 0 && max_a <= m) {
-      // \int [b"_1(u)*b"_2(u)] du = \int [- 9u^2 + 9u - 2] du
+      // $\int [b"_1(u)*b"_2(u)] \, du = \int [- 9u^2 + 9u - 2] \, du$
       ans += -0.5;
     }
     if ( min_a >= 1 ) {
-      // \int [b"_2(u)*b"_3(u)] du = \int [b"_0(u)*b"_1(u)] du
+      // $\int [b"_2(u)*b"_3(u)] \, du = \int [b"_0(u)*b"_1(u)] \, du$
       ans += -0.5;
     }
     return ans;
@@ -625,14 +624,14 @@ g_double_prime( int a1, int a2, int m )
 
   if ( diff_a == 2 ) {
     // if ( max_a <= m )
-      // \int [b"_0(u)*b"_2(u)] du = 0
+      // $\int [b"_0(u)*b"_2(u)] du \, = 0$
     // if ( min_a >= 0 )
-      // \int [b"_1(u)*b"_3(u)] du = 0
+      // $\int [b"_1(u)*b"_3(u)] du \, = 0$
     return ans;
   }
 
   if ( diff_a == 3 ) {
-    // \int [b"_0(u)*b"_3(u)] du = \int [-u^4 + 2u3 - u^2]/4 du
+    // $\int [b"_0(u)*b"_3(u)] \, du = \int [-u^4 + 2u3 - u^2]/4 \, du$
     ans += 0.5 - 1.0 / 3;
     return ans;
   }
@@ -660,15 +659,15 @@ rgrl_spline_sptr
 rgrl_spline::
 refinement( vnl_vector< unsigned > const& m ) const
 {
-  unsigned dim = m_.size();
+  const unsigned dim = m_.size();
 //  vnl_vector< unsigned > m = m_ * 2;
   rgrl_spline_sptr refined_spline = new rgrl_spline( m );
   vnl_vector< double > w( refined_spline->num_of_control_points() );
 
   // 0--1--2--3 ==> -0-1-2-3-4-
-  if ( dim == 1 ) {
-    unsigned i = 0;
-    for ( ; i<m_[0]+2; ++i ) {
+  if ( dim == 1 )
+  {
+    for ( unsigned i = 0; i<m_[0]+2; ++i ) {
       // 2*i
       if ( 2*i < m[0]+3 )
       w[2*i] = refine_helper_f1( c_[i], c_[i+1] );
@@ -677,22 +676,22 @@ refinement( vnl_vector< unsigned > const& m ) const
         w[2*i+1] = refine_helper_f2( c_[i], c_[i+1], c_[i+2] );
     }
   }
-  else if ( dim == 2 ) {
+  else if ( dim == 2 )
+  {
     vcl_vector< double > tmp( m_[1] + 3, 0.0 );
     vcl_vector< vcl_vector< double > > v2( m_[0] + 1, tmp );
     vcl_vector< vcl_vector< double > > v1( m_[0] + 2, tmp );
     unsigned a = m_[0]+3;
-    unsigned i=0, j=0, n=0;
 
-    for ( i=0; i<m_[0]+2; ++i ) {
-      for ( j=0, n=i; j<m_[1]+3; ++j, n+=a ) {
+    for ( unsigned i=0; i<m_[0]+2; ++i ) {
+      for ( unsigned j=0, n=i; j<m_[1]+3; ++j, n+=a ) {
         v1[i][j] = refine_helper_f1( c_[n], c_[n+1] );
         if ( i!=m_[0]+1 )
           v2[i][j] = refine_helper_f2( c_[n], c_[n+1], c_[n+2] );
       }
     }
-    for ( i=0; i<m_[0]+2; ++i ) {
-      for ( j=0; j<m_[1]+2; ++j ) {
+    for ( unsigned i=0; i<m_[0]+2; ++i ) {
+      for ( unsigned j=0; j<m_[1]+2; ++j ) {
         // 2*j
         if ( 2*i < m[0]+3 && 2*j < m[1]+3 ) {
           w[2*i + 2*j*(m[0]+3)] = refine_helper_f1( v1[i][j], v1[i][j+1] );
@@ -710,7 +709,8 @@ refinement( vnl_vector< unsigned > const& m ) const
       }
     }
   }
-  else if ( dim == 3 ) {
+  else if ( dim == 3 )
+  {
     vcl_vector< double > tmp( m_[2] + 3, 0.0 );
     vcl_vector< vcl_vector< double > > tmp1( m_[1] + 3, tmp );
     vcl_vector< vcl_vector< double > > tmp2( m_[1] + 1, tmp );
@@ -864,7 +864,7 @@ rgrl_spline::
 is_support( vnl_vector< double > const& pt, unsigned index )
 {
   assert( pt.size() == m_.size() );
-  unsigned dim = pt.size();
+  const unsigned dim = pt.size();
 
   for ( unsigned i=0; i<m_.size(); ++i )
     if ( pt[i] < -3 || pt[i] >= m_[i]+3 )
