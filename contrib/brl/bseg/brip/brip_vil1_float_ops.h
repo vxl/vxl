@@ -135,15 +135,19 @@ class brip_vil1_float_ops
     convert_to_byte(vil1_memory_image_of<float> const & image,
                     const float min_val, const float max_val);
 
-  //: converts an float image to an unsigned short image within a range
+  //: converts a float image to an unsigned short image within a range
   static vil1_memory_image_of<unsigned short>
     convert_to_short(vil1_memory_image_of<float> const & image,
                      const float min_val, const float max_val);
 
-  //: converts an float image to a color rgb image with all equal planes
+  //: converts a float image to a color rgb image with all equal planes
+  static vil1_memory_image_of<vil1_rgb<unsigned char> >
+    convert_to_rgb(vil1_memory_image_of<float> const & image);
+
+  //: converts a float image with specified range to a color rgb image with all equal planes
   static vil1_memory_image_of<vil1_rgb<unsigned char> >
     convert_to_rgb(vil1_memory_image_of<float> const & image,
-                     const float min_val, const float max_val);
+                   const float min_val, const float max_val);
 
 
   //: converts a vil1_image to a float image
@@ -159,7 +163,7 @@ class brip_vil1_float_ops
     convert_to_float(vil1_memory_image_of<vil1_rgb<unsigned char> > const& image);
   //: convert a color image to float IHS images
   static void
-    convert_to_IHS(vil1_memory_image_of<vil1_rgb<unsigned char> >const& image, 
+    convert_to_IHS(vil1_memory_image_of<vil1_rgb<unsigned char> >const& image,
                    vil1_memory_image_of<float>& I,
                    vil1_memory_image_of<float>& H,
                    vil1_memory_image_of<float>& S);
@@ -179,37 +183,37 @@ class brip_vil1_float_ops
   static vbl_array_2d<float> load_kernel(vcl_string const & file);
 
   //:compute basis images for a set of input images
-  static 
+  static
     void basis_images(vcl_vector<vil1_memory_image_of<float> > const & input_images,
                       vcl_vector<vil1_memory_image_of<float> > & basis);
 
   //:compute the Fourier transform using the vnl FFT algorithm
-  static bool fourier_transform(vil1_memory_image_of<float> const & input, 
+  static bool fourier_transform(vil1_memory_image_of<float> const & input,
                                 vil1_memory_image_of<float>& mag,
                                 vil1_memory_image_of<float>& phase);
 
   //:compute the inverse Fourier transform using the vnl FFT algorithm
-  static 
+  static
     bool inverse_fourier_transform(vil1_memory_image_of<float> const& mag,
                                    vil1_memory_image_of<float> const& phase,
                                    vil1_memory_image_of<float>& output);
 
   //:resize to specified dimensions, fill with zeros if output is larger
-  static 
-    void resize(vil1_memory_image_of<float> const & input, 
+  static
+    void resize(vil1_memory_image_of<float> const & input,
                 const int width, const int height,
                 vil1_memory_image_of<float>& output);
 
 
-  //:resize to closest power of two larger dimensions than the input 
-  static 
-    bool resize_to_power_of_two(vil1_memory_image_of<float> const & input, 
+  //:resize to closest power of two larger dimensions than the input
+  static
+    bool resize_to_power_of_two(vil1_memory_image_of<float> const & input,
                                 vil1_memory_image_of<float>& output);
 
   //:filter the input image with a Gaussian blocking filter
-  static bool 
+  static bool
     spatial_frequency_filter(vil1_memory_image_of<float> const & input,
-                             const float dir_fx, const float dir_fy, 
+                             const float dir_fx, const float dir_fy,
                              const float f0, const float radius,
                              const bool output_fourier_mag,
                              vil1_memory_image_of<float> & output);
@@ -218,7 +222,7 @@ class brip_vil1_float_ops
     bilinear_interpolation(vil1_memory_image_of<float> const & input,
                             const double x, const double y);
   //:map the input to the output by a homography.
-  // \note if the output size is fixed then only the corresponding 
+  // \note if the output size is fixed then only the corresponding
   // input image space is transformed.
   static bool homography(vil1_memory_image_of<float> const & input,
                          vgl_h_matrix_2d<double>const& H,
@@ -226,19 +230,18 @@ class brip_vil1_float_ops
                          bool output_size_fixed = false,
                          float output_fill_value = 0.0);
 
-  //:rotate the input image counter-clockwise about the image origin        
-  static 
+  //:rotate the input image counter-clockwise about the image origin
+  static
   vil1_memory_image_of<float> rotate(vil1_memory_image_of<float> const & input,
                                      const double theta_deg);
 
   static bool chip(vil1_memory_image_of<float> const & input,
                    vsol_box_2d_sptr const& roi,
                    vil1_memory_image_of<float>& chip);
-  
+
   static bool chip(vil1_image const & input,
                    brip_roi_sptr const& roi,
                    vil1_image& chip);
-  
 
   static vil1_image insert_chip_in_image(vil1_image const & image,
                                          vil1_image const & chip,
@@ -249,15 +252,15 @@ class brip_vil1_float_ops
   cross_correlate(vil1_memory_image_of<float> const & image1,
                   vil1_memory_image_of<float> const & image2,
                   const float x, const float y,
-                  const int radius = 5, 
+                  const int radius = 5,
                   const float intensity_thresh=25.0);
 
   //:Cross-correlate two images using faster running sums
-  static bool 
+  static bool
   cross_correlate(vil1_memory_image_of<float> const & image1,
                   vil1_memory_image_of<float> const & image2,
                   vil1_memory_image_of<float>& out,
-                  const int radius = 5, 
+                  const int radius = 5,
                   const float intensity_thresh=25.0);
 
  private:
@@ -275,18 +278,18 @@ class brip_vil1_float_ops
                                  const float k0, const float k1,
                                  const float k2, float* output);
 
-  //:One dimensional fft 
+  //:One dimensional fft
   static bool fft_1d(int dir, int m, double* x, double* y);
 
   //:Two dimensonal fft
   static bool fft_2d(vnl_matrix<vcl_complex<double> >& c, int nx,int ny,int dir);
   //: Transform the fft coefficients from/to fft/frequency order(self inverse).
-  static 
+  static
     void ftt_fourier_2d_reorder(vnl_matrix<vcl_complex<double> > const& F1,
                                 vnl_matrix<vcl_complex<double> > & F2);
   //: Blocking filter function
   static float gaussian_blocking_filter(const float dir_fx,
-                                        const float dir_fy, 
+                                        const float dir_fy,
                                         const float f0, const float radius,
                                         const float fx, const float fy);
   //: Default constructor is private

@@ -730,10 +730,22 @@ brip_vil1_float_ops::convert_to_short(vil1_memory_image_of<float> const & image,
 }
 
 vil1_memory_image_of<vil1_rgb<unsigned char> >
+brip_vil1_float_ops::convert_to_rgb(vil1_memory_image_of<float> const & image)
+{
+  vil1_memory_image_of<unsigned char> temp = brip_vil1_float_ops::convert_to_byte(image);
+  const int w = temp.width(), h = temp.height();
+  vil1_memory_image_of<vil1_rgb<unsigned char> > out(w, h);
+  for (int r = 0; r<h; r++)
+    for (int c = 0; c<w; c++)
+      out(c,r).r = out(c,r).g = out(c,r).b = temp(c,r);
+  return out;
+}
+
+vil1_memory_image_of<vil1_rgb<unsigned char> >
 brip_vil1_float_ops::convert_to_rgb(vil1_memory_image_of<float> const & image,
                                     const float min_val, const float max_val)
 {
-  vil1_memory_image_of<unsigned char> temp = brip_vil1_float_ops::convert_to_byte(image);
+  vil1_memory_image_of<unsigned char> temp = brip_vil1_float_ops::convert_to_byte(image,min_val,max_val);
   const int w = temp.width(), h = temp.height();
   vil1_memory_image_of<vil1_rgb<unsigned char> > out(w, h);
   for (int r = 0; r<h; r++)
