@@ -4,8 +4,8 @@
 //:
 // \file
 // \verbatim
-// Modifications
-// 05/13/98  RIH replaced append by insert_after to avoid n^2 behavior
+//  Modifications
+//   05/13/98  RIH replaced append by insert_after to avoid n^2 behavior
 // \endverbatim
 
 #include <vcl_vector.h>
@@ -65,16 +65,15 @@
   return newlist
 
 #define LIST_SELF(selftype)\
-  selftype* v = (selftype*)this;\
   vcl_vector<selftype*> * new_list = new vcl_vector<selftype*>();\
-  new_list->push_back(v);\
+  new_list->push_back(this);\
   return new_list
 
 #define COPY_SUP(suptype)\
   vcl_vector<suptype*> *new_list = new vcl_vector<suptype*>();\
   vcl_list<vtol_topology_object*>::const_iterator i;\
   for (i=superiors_.begin(); i!=superiors_.end(); ++i)\
-    new_list->push_back((suptype*)(*i));\
+    new_list->push_back(static_cast<suptype*>(*i));\
   return new_list
 
 #define COPY_INF(inftype)\
