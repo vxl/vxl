@@ -1,12 +1,11 @@
-//this-sets-emacs-to-*-c++-*-mode
+// This is brl/vvid/vvid_live_video_manager.h
 #ifndef vvid_live_video_manager_h_
 #define vvid_live_video_manager_h_
 //
 //-----------------------------------------------------------------------------
 //:
 // \file
-// \brief A manager for displaying a live video sequence and 
-//        live segmentation and processing overlays
+// \brief A manager for displaying a live video sequence and live segmentation and processing overlays
 // \author
 //   J.L. Mundy
 //
@@ -16,7 +15,6 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_vector.h>
 #include <vil/vil_memory_image_of.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_shell_tableau.h>

@@ -1,4 +1,4 @@
-//this-sets-emacs-to-*-c++-*-mode
+// This is brl/vvid/vvid_edge_process.h
 #ifndef vvid_edge_process_h_
 #define vvid_edge_process_h_
 //--------------------------------------------------------------------------------
@@ -7,7 +7,6 @@
 // \brief live vvid_edge_process
 //   Computes edges on each video frame
 //
-// \endbrief
 // \author
 //   J.L. Mundy
 //
@@ -16,23 +15,20 @@
 //   J.L. Mundy October 11, 2002    Initial version.
 // \endverbatim
 //--------------------------------------------------------------------------------
-#include <vcl_vector.h>
-#include <vtol/vtol_edge_2d_sptr.h>
 #include <sdet/sdet_detector_params.h>
 #include <vvid/vvid_video_process.h>
 
 class vvid_edge_process : public vvid_video_process, public sdet_detector_params
 {
-public:
+ public:
   vvid_edge_process(sdet_detector_params & dp);
   ~vvid_edge_process();
 
   //: compute edges on the input image
   virtual bool execute();
 
-private:
+ private:
   //members
-
 };
 
 

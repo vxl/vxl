@@ -1,12 +1,11 @@
-//this-sets-emacs-to-*-c++-*-mode
-
+// This is brl/vvid/vvid_live_video_manager.cxx
+#include "vvid_live_video_manager.h"
 //:
 // \file
 // \author J.L. Mundy
 
-#include "vvid_live_video_manager.h"
-#include <math.h>
 #include <vcl_cstdlib.h> // for vcl_exit()
+#include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vul/vul_timer.h>
 #include <vil/vil_memory_image_of.h>
@@ -48,7 +47,7 @@ vvid_live_video_manager *vvid_live_video_manager::instance()
 // constructors/destructor
 //
 vvid_live_video_manager::
-vvid_live_video_manager() : 
+vvid_live_video_manager() :
   cp_(cmu_1394_camera_params())
 {
   width_ = 960;
@@ -130,11 +129,11 @@ void vvid_live_video_manager::set_detection_params()
     }
   //cache the live video state to restore
   bool live = vtab_->get_video_live();
-  if(live)
+  if (live)
     this->stop_live_video();
   static bool agr = false;
   static sdet_detector_params dp;
-	static float max_gap = 0;
+  static float max_gap = 0;
   vgui_dialog det_dialog("Video Edges");
   det_dialog.field("Gaussian sigma", dp.smooth);
   det_dialog.field("Noise Threshold", dp.noise_multiplier);
@@ -150,19 +149,19 @@ void vvid_live_video_manager::set_detection_params()
     dp.aggressive_junction_closure=-1;
   dp.maxGap = max_gap;
 
-  if(edges_)
+  if (edges_)
     video_process_  = new vvid_edge_process(dp);
   else
     video_process_  = new vvid_region_process(dp);
-  if(live)
+  if (live)
     this->start_live_video();
 }
-    
+
 void vvid_live_video_manager::run_frames()
 {
   if (!init_successful_)
     return;
-  while (live_capture_){
+  while (live_capture_) {
     vul_timer t;
     vtab_->update_frame();
     if (!cp_._rgb&&video_process_)//i.e. grey scale
@@ -176,29 +175,29 @@ void vvid_live_video_manager::run_frames()
         if (video_process_->execute())
           {
             vt2D_->clear_all();
-              vcl_vector<vtol_topology_object_sptr> const & seg = 
-             video_process_->get_segmentation();
+            vcl_vector<vtol_topology_object_sptr> const & seg =
+                                             video_process_->get_segmentation();
 
-            for(vcl_vector<vtol_topology_object_sptr>::const_iterator ti=seg.begin();
-               ti != seg.end(); ti++)
-              if(edges_)
+            for (vcl_vector<vtol_topology_object_sptr>::const_iterator ti=seg.begin();
+                 ti != seg.end(); ti++)
+              if (edges_)
                 {
                   vtol_edge_2d_sptr e=(*ti)->cast_to_edge()->cast_to_edge_2d();
-                  if(e)
-                 vt2D_->add_edge(e);
+                  if (e)
+                    vt2D_->add_edge(e);
                 }
               else
                 {
                   vtol_face_2d_sptr f=(*ti)->cast_to_face()->cast_to_face_2d();
-                  if(f)
+                  if (f)
                     vt2D_->add_face(f);
                 }
           }
-      }  
+      }
     vt2D_->post_redraw();
     vgui::run_till_idle();
     float ft = float(t.real())/1000.0, rate=0;
-    if(ft)
+    if (ft)
       rate = 1.0/ft;
     vgui::out << "Tf = " << ft << " sec/frame  = " << rate << " frs/sec\n";
   }

@@ -1,6 +1,8 @@
+// This is brl/vvid/vvid_edge_process.cxx
 #include <vcl_iostream.h>
+#include <vcl_vector.h>
 #include <vil/vil_memory_image_of.h>
-#include <vil/vil_rgb.h>
+#include <vtol/vtol_edge_2d_sptr.h>
 #include <vtol/vtol_edge_2d.h>
 #include <sdet/sdet_detector.h>
 #include <vvid/vvid_edge_process.h>
@@ -8,7 +10,6 @@
 vvid_edge_process::vvid_edge_process(sdet_detector_params & dp)
   : sdet_detector_params(dp)
 {
-  
 }
 
 vvid_edge_process::~vvid_edge_process()
@@ -21,7 +22,7 @@ bool vvid_edge_process::execute()
     {
       vcl_cout << "In vvid_edge_process::execute() - not exactly one"
                << " input image \n";
-    return false;
+      return false;
     }
   topo_objs_.clear();
   //assume the input images are grey scale (should really check)
@@ -31,11 +32,11 @@ bool vvid_edge_process::execute()
   detector.DoContour();
   vcl_vector<vtol_edge_2d_sptr> * edges = detector.GetEdges();
 
-  if(!edges)
-    return false; 
-  
-  for(vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges->begin();
-      eit != edges->end(); eit++)
+  if (!edges)
+    return false;
+
+  for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges->begin();
+       eit != edges->end(); eit++)
     topo_objs_.push_back((*eit)->cast_to_topology_object());
 
   output_image_ = 0;
