@@ -15,13 +15,16 @@ MANPAGE_SOURCES += vil3d_switch_axes.h
 MANPAGE_SOURCES += vil3d_math.h
 SOURCES += vil3d_file_format.cxx
 SOURCES += vil3d_header_data.cxx
-SOURCES += file_formats/vil3d_gipl_format.cxx
 SOURCES += vil3d_load.cxx
 MANPAGE_SOURCES += vil3d_transform.h
 SOURCES += vil3d_image_resource.cxx
 SOURCES += vil3d_memory_image.cxx
 SOURCES += vil3d_new.cxx
 MANPAGE_SOURCES += vil3d_copy.txx
+
+SOURCES += file_formats/vil3d_gipl_format.cxx
+SOURCES += file_formats/vil3d_dicom.cxx
+SOURCES += file_formats/vil3d_slice_list.cxx
 
 SUBDIRS += algo io
 

@@ -18,6 +18,7 @@ TESTS += test_algo_grad_1x3.cxx
 TESTS += test_math.cxx
 TESTS += test_image_resource.cxx
 TESTS += test_algo_normalised_correlation_3d.cxx
+TESTS += test_file_format_read.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
