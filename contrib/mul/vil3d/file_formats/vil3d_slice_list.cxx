@@ -7,13 +7,10 @@
 // \author Ian Scott - Manchester
 
 #include "vil3d_slice_list.h"
-#include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
 #include <vul/vul_file.h>
 #include <vil2/vil2_load.h>
 #include <vil2/vil2_copy.h>
-//#include <vil2/vil2_stream_16bit.h>
-//#include <vil2/vil2_stream_32bit.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_slice.h>
 #include <vil3d/file_formats/vil3d_slice_list.h>
@@ -27,7 +24,7 @@ vil3d_slice_list_format::~vil3d_slice_list_format()
 
 
 void parse_multiple_filenames(const vcl_string & input,
-  vcl_vector<vcl_string> &filenames)
+                              vcl_vector<vcl_string> &filenames)
 {
   filenames.clear();
   unsigned start=0;
@@ -42,8 +39,8 @@ void parse_multiple_filenames(const vcl_string & input,
   filenames.push_back(input.substr(start, input.size() - start));
 }
 
-vil3d_image_resource_sptr vil3d_slice_list_format::make_input_image(
-  const char * filename) const
+vil3d_image_resource_sptr
+vil3d_slice_list_format::make_input_image(const char * filename) const
 {
   vcl_vector<vcl_string> filenames;
   parse_multiple_filenames(filename, filenames);
@@ -76,8 +73,8 @@ vil3d_image_resource_sptr vil3d_slice_list_format::make_input_image(
 }
 
 
-vil3d_image_resource_sptr vil3d_slice_list_to_volume(
-  const vcl_vector<vil2_image_resource_sptr> & images)
+vil3d_image_resource_sptr
+vil3d_slice_list_to_volume(const vcl_vector<vil2_image_resource_sptr> & images)
 {
   if (!images.empty() && !images.front()) return 0;
   for (unsigned i=1; i<images.size(); ++i)
@@ -101,9 +98,11 @@ vil3d_image_resource_sptr vil3d_slice_list_to_volume(
 // The file may bo openned immediately for writing so that a header can be written.
 // The width/height etc are explicitly specified, so that file_format implementors
 // know what they need to do...
-vil3d_image_resource_sptr vil3d_slice_list_format::make_output_image
-                   (const char* filename, unsigned ni, unsigned nj,
-                    unsigned nk, unsigned nplanes, enum vil2_pixel_format) const
+vil3d_image_resource_sptr
+vil3d_slice_list_format::make_output_image(const char* filename,
+                                           unsigned ni, unsigned nj,
+                                           unsigned nk, unsigned nplanes,
+                                           enum vil2_pixel_format) const
 {
   vcl_cerr <<"vil3d_slice_list_format::make_output_image() NYI\n";
   vcl_abort();
@@ -111,8 +110,7 @@ vil3d_image_resource_sptr vil3d_slice_list_format::make_output_image
 }
 
 
-vil3d_slice_list_image::vil3d_slice_list_image(
-  const vcl_vector<vil2_image_resource_sptr>& images):
+vil3d_slice_list_image::vil3d_slice_list_image(const vcl_vector<vil2_image_resource_sptr>& images):
 slices_(images)
 {
 }
@@ -160,9 +158,10 @@ bool vil3d_slice_list_image::get_property(char const *key, void * value) const
 }
 
 //: Get some oor all of the volume.
-vil3d_image_view_base_sptr vil3d_slice_list_image::get_copy_view(
-  unsigned i0, unsigned ni, unsigned j0, unsigned nj,
-  unsigned k0, unsigned nk) const
+vil3d_image_view_base_sptr
+vil3d_slice_list_image::get_copy_view(unsigned i0, unsigned ni,
+                                      unsigned j0, unsigned nj,
+                                      unsigned k0, unsigned nk) const
 {
   if (i0+ni > this->ni() || j0+nj > this->nj() || k0+nk > this->nk()) return 0;
 
@@ -173,7 +172,7 @@ vil3d_image_view_base_sptr vil3d_slice_list_image::get_copy_view(
     vil2_image_view< type > dest(vil3d_slice_ij(vv, k)); \
     vil2_copy_reformat(src, dest); } \
   return new vil3d_image_view< type >(vv); \
-  break; }
+}
 
   switch (pixel_format())
   {
@@ -193,7 +192,7 @@ vil3d_image_view_base_sptr vil3d_slice_list_image::get_copy_view(
     macro( float );
   case VIL2_PIXEL_FORMAT_DOUBLE:
     macro( double );
-#if 0 // Several miising templates needed before these can be used
+#if 0 // Several missing templates needed before these can be used
   case VIL2_PIXEL_FORMAT_COMPLEX_FLOAT:
     macro( vcl_complex<float> );
   case VIL2_PIXEL_FORMAT_COMPLEX_DOUBLE:
@@ -201,15 +200,15 @@ vil3d_image_view_base_sptr vil3d_slice_list_image::get_copy_view(
 #endif
   default:
     vcl_cerr << "ERROR: vil3d_slice_list_image::get_copy_view\n"
-      "       Can't deal with pixel_format " << pixel_format() << vcl_endl;
+             << "       Can't deal with pixel_format " << pixel_format() << vcl_endl;
     return 0;
   }
 }
 
 //: Set the contents of the volume.
 bool vil3d_slice_list_image::put_view(const vil3d_image_view_base& vv,
-  unsigned i0, unsigned j0, unsigned k0)
+                                      unsigned i0, unsigned j0, unsigned k0)
 {
-  vcl_cerr << "ERROR: vil3d_slice_list_image::put_view NYI\n" << vcl_endl;
+  vcl_cerr << "ERROR: vil3d_slice_list_image::put_view NYI\n\n";
   return false;
 }

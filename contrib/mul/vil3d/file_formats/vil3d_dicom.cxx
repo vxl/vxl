@@ -7,22 +7,15 @@
 // \author Ian Scott, Chris Wolstenholme - Manchester
 
 #include "vil3d_dicom.h"
-#include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
 #include <vul/vul_file.h>
 #include <vil2/vil2_stream_fstream.h>
-//#include <vil2/vil2_stream_16bit.h>
-//#include <vil2/vil2_stream_32bit.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil2/file_formats/vil2_dicom_header.h>
-#include <vil2/file_formats/vil2_dicom.h>
 
 vil3d_dicom_format::vil3d_dicom_format() {}
 
-// The destructor must be virtual so that the memory chunk is destroyed.
-vil3d_dicom_format::~vil3d_dicom_format()
-{
-}
+vil3d_dicom_format::~vil3d_dicom_format() {}
 
 
 vil3d_image_resource_sptr vil3d_dicom_format::make_input_image(const char * filename) const
@@ -37,7 +30,7 @@ vil3d_image_resource_sptr vil3d_dicom_format::make_input_image(const char * file
   dhi = dhf.readHeader(*is);
   is->unref();
   if (dhf.headerValid())
-  ;//    return new vil3d_dicom_image(filename);
+    ; // return new vil3d_dicom_image(filename);
 
   return 0;
 }

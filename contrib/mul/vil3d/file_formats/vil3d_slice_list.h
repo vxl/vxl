@@ -9,7 +9,6 @@
 // \author Ian Scott - Manchester
 
 #include <vcl_vector.h>
-#include <vil2/vil2_stream.h>
 #include <vil3d/vil3d_file_format.h>
 #include <vil3d/vil3d_image_resource.h>
 #include <vil2/vil2_image_resource.h>
@@ -17,7 +16,7 @@
 //: Format class for a volume made up of a list of images.
 class vil3d_slice_list_format : public vil3d_file_format
 {
-public:
+ public:
   vil3d_slice_list_format();
   //: The destructor must be virtual so that the memory chunk is destroyed.
   virtual ~vil3d_slice_list_format();
@@ -41,8 +40,8 @@ public:
 //: Create a volume from a list of matching 2D slices.
 // If the slices do not match (in size, type etc) a null ptr will
 // be returned.
-vil3d_image_resource_sptr vil3d_slice_list_to_volume(
-  const vcl_vector<vil2_image_resource_sptr> &);
+vil3d_image_resource_sptr
+vil3d_slice_list_to_volume(const vcl_vector<vil2_image_resource_sptr> &);
 
 //: Format class for a volume made up of a list of images.
 // You can't create one of these yourself.
@@ -52,8 +51,8 @@ class vil3d_slice_list_image: public vil3d_image_resource
   //: All the 2d image slice resources that make up this volume
   vcl_vector<vil2_image_resource_sptr> slices_;
 
-  friend vil3d_image_resource_sptr vil3d_slice_list_to_volume(
-    const vcl_vector<vil2_image_resource_sptr> &);
+  friend vil3d_image_resource_sptr
+    vil3d_slice_list_to_volume(const vcl_vector<vil2_image_resource_sptr> &);
   friend class vil3d_slice_list_format;
  
  protected:
@@ -105,6 +104,4 @@ class vil3d_slice_list_image: public vil3d_image_resource
   virtual bool get_property(char const* tag, void* property_value = 0) const;
 };
 
-
-
-#endif
+#endif // vil3d_slice_list_h_
