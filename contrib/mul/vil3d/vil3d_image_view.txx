@@ -90,10 +90,17 @@ vil3d_image_view<T>::vil3d_image_view(const vil3d_image_view_base_sptr& base_spt
   operator=(base_sptr);
 }
 
+//: Create shallow copy of image with same type image
+template<class T>
+const vil3d_image_view<T>& vil3d_image_view<T>::operator=(const vil3d_image_view<T>& rhs)
+{
+  return operator=( static_cast<vil3d_image_view_base const&>(rhs) );
+}
+
 //: Create shallow copy of image with given base reference
 //  Sets to empty image if target is of different pixel type
 template<class T>
-vil3d_image_view<T>& vil3d_image_view<T>::operator=(const vil3d_image_view_base& base_ref)
+const vil3d_image_view<T>& vil3d_image_view<T>::operator=(const vil3d_image_view_base& base_ref)
 {
   if (static_cast<const vil3d_image_view_base*>(this) == &base_ref)
     return *this;
