@@ -49,8 +49,6 @@ vil_gauss_filter_5tap_params::vil_gauss_filter_5tap_params(double sigma)
 }
 
 
-
-
 //: Generate an n-tap FIR filter from a Gaussian function.
 // The filter uses the equation $k D^d \exp -\frac{x^2}{2\sigma^2} $,
 // where D is the differential operator, and k is a normalising constant.
@@ -64,12 +62,12 @@ vil_gauss_filter_5tap_params::vil_gauss_filter_5tap_params(double sigma)
 // be much point in having filter.size() >> sd*3, since the outer taps
 // will be very small.
 void vil_gauss_filter_gen_ntap(double sd, unsigned diff,
-                                vcl_vector<double> &filter)
+                               vcl_vector<double> &filter)
 {
   unsigned centre = filter.size()/2; // or just past centre if even length
   double sum=0.0; // area under sampled curve.
   double tap; // workspace
-  
+
   if (diff==0)
   {
     const double z = 1/(vcl_sqrt(2.0)*sd);
@@ -97,12 +95,12 @@ void vil_gauss_filter_gen_ntap(double sd, unsigned diff,
       filter[centre] = tap;
     }
   }
-  else 
+  else
   {
     const double offset = filter.size() % 2 == 0 ? 0.0 : -0.5;
     vnl_real_polynomial poly(1.0);
     const double eta = -0.5/(sd*sd);
-    const vnl_real_polynomial d_gauss(vnl_vecd(2, eta, 0.0));
+    const vnl_real_polynomial d_gauss(vnl_vector<double>(2, eta, 0.0));
     for (unsigned i=1; i<diff; ++i)
       // Evaluate d/dx (poly * gauss) where gauss = exp(-0.5*x^2/sd^2)
       // n.b. d/dx gauss = d_gauss * gauss
@@ -121,6 +119,5 @@ void vil_gauss_filter_gen_ntap(double sd, unsigned diff,
   assert(sum >= 0.0);
   double norm = 1.0 / sum;
   vcl_transform(filter.begin(), filter.end(), filter.begin(),
-    vcl_bind2nd(vcl_multiplies<double>(), norm));
-  
+                vcl_bind2nd(vcl_multiplies<double>(), norm));
 }
