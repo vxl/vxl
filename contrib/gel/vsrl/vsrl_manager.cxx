@@ -63,10 +63,10 @@ vsrl_manager* vsrl_manager::instance_=0;
 vsrl_manager *vsrl_manager::instance()
 {
   if (!instance_)
-    {
-      instance_ = new vsrl_manager();
-      instance_->init();
-    }
+  {
+    instance_ = new vsrl_manager();
+    instance_->init();
+  }
   return vsrl_manager::instance_;
 }
 
@@ -289,32 +289,32 @@ bool vsrl_manager::put_points()
   vgl_point_2d<float> pos;
   // Point Picked in Left Pane
   if (c==0)
-    {
-      pos = vpicker0_->get_point();  // get the last point picked
-      vcl_cout << "put_points: pos = " << pos << vcl_endl;
-      if (!validate_point(pos)) return true;
-      int disp = get_disparity(pos);
-      vpicker1_->put_point(pos.x()+disp,pos.y());
-      vpicker2_->put_point(pos.x(),     pos.y());
-    }
+  {
+    pos = vpicker0_->get_point();  // get the last point picked
+    vcl_cout << "put_points: pos = " << pos << vcl_endl;
+    if (!validate_point(pos)) return true;
+    int disp = get_disparity(pos);
+    vpicker1_->put_point(pos.x()+disp,pos.y());
+    vpicker2_->put_point(pos.x(),     pos.y());
+  }
   // Point Picked in Right Pane
   if (c==1)
-    {
-      pos = vpicker1_->get_point();  // get the last point picked
-      if (!validate_point(pos)) return true;
-      int disp = get_disparity(pos);
-      vpicker0_->put_point(pos.x()-disp,pos.y());
-      vpicker2_->put_point(pos.x(),     pos.y());
-    }
+  {
+    pos = vpicker1_->get_point();  // get the last point picked
+    if (!validate_point(pos)) return true;
+    int disp = get_disparity(pos);
+    vpicker0_->put_point(pos.x()-disp,pos.y());
+    vpicker2_->put_point(pos.x(),     pos.y());
+  }
   // Point Picked in Disparity Pane
   if (c==2)
-    {
-      pos = vpicker2_->get_point();  // get the last point picked
-      if (!validate_point(pos)) return true;
-      int disp = get_disparity(pos);
-      vpicker0_->put_point(pos.x(),     pos.y());
-      vpicker1_->put_point(pos.x()+disp,pos.y());
-    }
+  {
+    pos = vpicker2_->get_point();  // get the last point picked
+    if (!validate_point(pos)) return true;
+    int disp = get_disparity(pos);
+    vpicker0_->put_point(pos.x(),     pos.y());
+    vpicker1_->put_point(pos.x()+disp,pos.y());
+  }
   this->post_redraw();
   return true;
 }
@@ -328,25 +328,25 @@ bool vsrl_manager::put_lines()
   vgl_point_2d<float> pos;
   // Point Picked in Left Pane
   if (c==0)
-    {
-      pos = vpicker0_->get_point();  // get the last point picked
-      vpicker1_->put_H_line(pos.x(),pos.y());
-      vpicker2_->put_H_line(pos.x(),pos.y());
-    }
+  {
+    pos = vpicker0_->get_point();  // get the last point picked
+    vpicker1_->put_H_line(pos.x(),pos.y());
+    vpicker2_->put_H_line(pos.x(),pos.y());
+  }
   // Point Picked in Right Pane
   if (c==1)
-    {
-      pos = vpicker1_->get_point();  // get the last point picked
-      vpicker0_->put_H_line(pos.x(),pos.y());
-      vpicker2_->put_H_line(pos.x(),pos.y());
-    }
+  {
+    pos = vpicker1_->get_point();  // get the last point picked
+    vpicker0_->put_H_line(pos.x(),pos.y());
+    vpicker2_->put_H_line(pos.x(),pos.y());
+  }
   // Point Picked in Disparity Pane
   if (c==2)
-    {
-      pos = vpicker2_->get_point();  // get the last point picked
-      vpicker0_->put_H_line(pos.x(),pos.y());
-      vpicker1_->put_H_line(pos.x(),pos.y());
-    }
+  {
+    pos = vpicker2_->get_point();  // get the last point picked
+    vpicker0_->put_H_line(pos.x(),pos.y());
+    vpicker1_->put_H_line(pos.x(),pos.y());
+  }
   this->post_redraw();
   return true;
 }
@@ -492,33 +492,33 @@ void vsrl_manager::find_regions()
   rp.set_image(imgL_);
   rp.extract_regions();
   if (debug)
+  {
+    vil1_image ed_img = rp.get_edge_image();
+    vgui_image_tableau_sptr itab =  e2d0_->get_image_tableau();
+    if (!itab)
     {
-      vil1_image ed_img = rp.get_edge_image();
-      vgui_image_tableau_sptr itab =  e2d0_->get_image_tableau();
-      if (!itab)
-        {
-          vcl_cout << "In segv_segmentation_manager::regions() - null image tableau\n";
-          return;
-        }
-      itab->set_image(ed_img);
+      vcl_cout << "In segv_segmentation_manager::regions() - null image tableau\n";
+      return;
     }
+    itab->set_image(ed_img);
+  }
   if (!debug)
-    {
-      vcl_vector<vtol_intensity_face_sptr>& regions = rp.get_regions();
-      this->find_shadows(regions);
-      this->draw_regions(regions, true);
-    }
+  {
+    vcl_vector<vtol_intensity_face_sptr>& regions = rp.get_regions();
+    this->find_shadows(regions);
+    this->draw_regions(regions, true);
+  }
   if (residual)
+  {
+    vil1_image res_img = rp.get_residual_image();
+    vgui_image_tableau_sptr itab =  e2d0_->get_image_tableau();
+    if (!itab)
     {
-      vil1_image res_img = rp.get_residual_image();
-      vgui_image_tableau_sptr itab =  e2d0_->get_image_tableau();
-      if (!itab)
-        {
-          vcl_cout << "In segv_segmentation_manager::regions() - null image tableau\n";
-          return;
-        }
-      itab->set_image(res_img);
+      vcl_cout << "In segv_segmentation_manager::regions() - null image tableau\n";
+      return;
     }
+    itab->set_image(res_img);
+  }
 }
 
 void vsrl_manager::draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions,
@@ -526,68 +526,65 @@ void vsrl_manager::draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions,
 {
   // This segment of code is ripped from various places in brl...bgui.
 
-  vcl_vector<float>::iterator sm = shadow_metric_->begin();
+  for (vcl_vector<vtol_intensity_face_sptr>::iterator rit = regions.begin();
+       rit != regions.end(); rit++)
+  {
+    vtol_face_2d_sptr f = (*rit)->cast_to_face_2d();
+    edge_list* edges = f->edges();
 
-   for (vcl_vector<vtol_intensity_face_sptr>::iterator rit = regions.begin();
-        rit != regions.end(); rit++)
-     {
-       vtol_face_2d_sptr f = (*rit)->cast_to_face_2d();
-       edge_list* edges = f->edges();
+    vgui_soview2D_group* vsovg = new vgui_soview2D_group();
 
-       vgui_soview2D_group* vsovg = new vgui_soview2D_group();
+    for (edge_list::iterator eit = edges->begin(); eit != edges->end(); eit++)
+    {
+      vtol_edge_2d_sptr e = (*eit)->cast_to_edge_2d();
 
-       for (edge_list::iterator eit = edges->begin(); eit != edges->end(); eit++) {
+      vgui_soview2D_linestrip* e_line = new vgui_soview2D_linestrip();
 
-         vtol_edge_2d_sptr e = (*eit)->cast_to_edge_2d();
+      vsol_curve_2d_sptr c = e->curve();
 
-         vgui_soview2D_linestrip* e_line = new vgui_soview2D_linestrip();
+      if (!c) {
+        vcl_cout << "vsrl_manager::draw_regions - null curve.\n";
+        return;
+      }
+      if (c->cast_to_digital_curve())
+      {
+        vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
+        //get the edgel chain
+        vdgl_interpolator_sptr itrp = dc->get_interpolator();
+        vdgl_edgel_chain_sptr ech = itrp->get_edgel_chain();
 
-         vsol_curve_2d_sptr c = e->curve();
+        //n, x, and y are in the parent class vgui_soview2D_linestrip
+        e_line->n = ech->size();
+        //offset the coordinates for display (may not be needed)
+        e_line->x = new float[e_line->n], e_line->y = new float[e_line->n];
+        for (unsigned int i=0; i<e_line->n;i++)
+        {
+          vdgl_edgel ed = (*ech)[i];
+          e_line->x[i]=ed.get_x();
+          e_line->y[i]=ed.get_y();
+        }
+      }
+      else
+        vcl_cout << "vsrl_manager::draw_regions -"
+                 << " attempt to draw an edge with unknown curve geometry\n";
 
-         if (!c) {
-           vcl_cout << "vsrl_manager::draw_regions - null curve.\n";
-           return;
-         }
-         if (c->cast_to_digital_curve())
-           {
-             vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
-             //get the edgel chain
-             vdgl_interpolator_sptr itrp = dc->get_interpolator();
-             vdgl_edgel_chain_sptr ech = itrp->get_edgel_chain();
+      vsovg->ls.push_back(e_line);
+    }
 
-             //n, x, and y are in the parent class vgui_soview2D_linestrip
-             e_line->n = ech->size();
-             //offset the coordinates for display (may not be needed)
-             e_line->x = new float[e_line->n], e_line->y = new float[e_line->n];
-             for (unsigned int i=0; i<e_line->n;i++)
-               {
-                 vdgl_edgel ed = (*ech)[i];
-                 e_line->x[i]=ed.get_x();
-                 e_line->y[i]=ed.get_y();
-               }
-           }
-         else {
-           vcl_cout << "vsrl_manager::draw_regions -"
-                    << " attempt to draw an edge with unknown curve geometry\n";
-         }
+    e2d0_->add(vsovg);
 
-         vsovg->ls.push_back(e_line);
-       }
-
-       e2d0_->add(vsovg);
-
-       if (verts)
-         {
-           vcl_vector<vtol_vertex_sptr>* vts = f->vertices();
-           for (vcl_vector<vtol_vertex_sptr>::iterator vit = vts->begin();
-                vit != vts->end(); vit++)
-             {
-               vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
-               e2d0_->add_point(v->x(),v->y());
-             }
-           delete vts;
-         }
-     }
+    if (verts)
+    {
+      vcl_vector<vtol_vertex_sptr>* vts = f->vertices();
+      for (vcl_vector<vtol_vertex_sptr>::iterator vit = vts->begin();
+           vit != vts->end(); vit++)
+      {
+        vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
+        e2d0_->add_point(v->x(),v->y());
+      }
+      delete vts;
+    }
+  }
 }
 
 void
@@ -797,25 +794,23 @@ void vsrl_manager::find_shadows(vcl_vector<vdgl_digital_region*> regions)
   e2d1_->set_point_radius(5);
 
   int i=0;
-
   vcl_vector<float>::iterator sm = shadow_metric_->begin();
   vcl_cout << "Shadow Threshold: " << shadow_mean_ << vcl_endl;
 
   for (vcl_vector<vdgl_digital_region*>::iterator rit = regions.begin();
-       rit != regions.end(); rit++) {
-
-    if ((*rit)->Npix() > 0) {
+       rit != regions.end(); ++rit,++i,++sm)
+  {
+    if ((*rit)->Npix() > 0)
+    {
       (*rit)->ComputeIntensityStdev();
       vcl_cout << "Intensity Face: " << i << "  Io = " << (*rit)->Io()
                << "  I_stdev = " << (*rit)->Io_sd();
-      if ((*rit)->Io() == 0) {
+      if ((*rit)->Io() == 0)
         *sm=0.0;
-      }
-      else if ((*rit)->Io() < shadow_mean_) {
+      else if ((*rit)->Io() < shadow_mean_)
         *sm=1.0;
-      }
-      else {
-
+      else
+      {
         // This segment of code is taken from the HistEntropy class
         // in TargetJr, GeneralUtility/Basics.  It is used to mimic
         // the operation of the shadow detection used in the DDB
@@ -830,25 +825,18 @@ void vsrl_manager::find_shadows(vcl_vector<vdgl_digital_region*> regions)
         float m2 = shadow_mean_; // m2 is the reference shadow mean.
         float v2 = 1.0; // v2 is the reference shadow stdev.
 
-        if (m1==0 || m2==0) {
+        if (m1==0 || m2==0)
           *sm=0.0;
-        }
-        else if ( (v1 < 1e-6 ) || (v2 < 1e-6) ) {
-          *sm=0;
-        }
-        else {
+        else if ( v1 < 1e-6 || v2 < 1e-6 )
+          *sm=0.0;
+        else
           *sm = vcl_exp(- vcl_fabs(0.693 * (m1-m2) * vcl_sqrt(1.0/(v1*v1) + 1.0/(v2*v2))));
-        }
       }
       vcl_cout << "  Shadow = " << *sm << vcl_endl;
     }
 
-    if (*sm ==1) {
+    if (*sm ==1)
       e2d1_->add_point((*rit)->Xo(),(*rit)->Yo());
-    }
-
-    sm++; // move to the next face
-    i++;
   }
   e2d1_->set_foreground(1,0,0);
   e2d1_->set_point_radius(5);
