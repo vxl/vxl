@@ -1,3 +1,5 @@
+// This is vxl/vil/vil_resample.cxx
+
 /*
   fsm@robots.ox.ac.uk
 */

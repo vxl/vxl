@@ -2,6 +2,8 @@
 #pragma implementation
 #endif
 
+// This is vxl/vil/vil_scale_intensities_image_impl.cxx
+
 #include "vil_scale_intensities_image_impl.h"
 #include "vil_scale_intensities_image.h"
 #include "vil_pixel.h"
@@ -40,3 +42,15 @@ bool vil_scale_intensities_image_impl::get_section(void * buf, int x0, int y0, i
     return false;
   }
 }
+
+/* START_MANCHESTER_BINARY_IO_CODE */
+
+  //: Return the name of the class;
+const vcl_string& vil_scale_intensities_image_impl::is_a() const
+{
+  const static vcl_string class_name_="vil_scale_intensities_image_impl";
+  return class_name_;
+}
+
+/* END_MANCHESTER_BINARY_IO_CODE */
+

@@ -1,6 +1,8 @@
 #ifndef vil_resample_image_txx_
 #define vil_resample_image_txx_
 
+// This is vxl/vil/vil_resample_image.txx
+
 #include "vil_resample_image.h"
 #include <vcl_vector.h>
 #include <vil/vil_image.h>

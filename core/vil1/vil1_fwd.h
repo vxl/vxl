@@ -1,3 +1,5 @@
+// This is vxl/vil/vil_fwd.h
+
 //-*- c++ -*-------------------------------------------------------------------
 #ifndef vil_fwd_h_
 #define vil_fwd_h_

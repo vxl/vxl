@@ -1,3 +1,5 @@
+// This is vxl/vil/vil_ssd.txx
+
 /*
   fsm@robots.ox.ac.uk
 */

@@ -3,12 +3,14 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_scale_intensities_image_impl
-// .INCLUDE vil/vil_scale_intensities_image_impl.h
-// .FILE vil_scale_intensities_image_impl.cxx
+// This is vxl/vil/vil_scale_intensities_image_impl.h
+
+//:
+// \file
 
 #include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>
+#include <vcl_string.h>
 
 class vil_scale_intensities_image_impl : public vil_image_impl {
 public:
@@ -26,6 +28,14 @@ public:
 
   bool get_section(void *buf, int x0, int y0, int w, int h) const;
   bool put_section(void const *buf, int x0, int y0, int w, int h);
+
+
+/* START_MANCHESTER_BINARY_IO_CODE */
+
+  //: Return the name of the class;
+  virtual const vcl_string& is_a() const;
+
+/* END_MANCHESTER_BINARY_IO_CODE */
 
 private:
   vil_image base;

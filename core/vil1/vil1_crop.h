@@ -3,15 +3,12 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_crop
-// .INCLUDE vil/vil_crop.h
-// .FILE vil_crop.cxx
-// .SECTION Author
-//    awf@robots.ox.ac.uk
-// Created: 16 Feb 00
-//
-// .SECTION Modifications
-//     000216 AWF Initial version.
+// This is vxl/vil/vil_crop.h
+
+//:
+// \file
+// \author awf@robots.ox.ac.uk
+// \date 16 Feb 00
 
 #include <vil/vil_fwd.h>
 

@@ -3,12 +3,13 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_file_image
-// .INCLUDE vil/vil_file_image.h
-// .FILE vil_file_image.cxx
-// .SECTION Author
-//    awf@robots.ox.ac.uk
-// Created: 15 Mar 00
+// This is vxl/vil/vil_file_image.h
+
+//:
+// \file
+// \brief Class to load an image from disk
+// \author awf@robots.ox.ac.uk
+// \date 15 Mar 00
 
 #include <vcl_string.h>
 #include <vil/vil_image.h>
@@ -21,12 +22,18 @@ public:
     laconic,
     verbose
   };
-  
-  vil_file_image();
-  vil_file_image(char const* filename, verbosity = verbose);
-  vil_file_image(vcl_string const&, verbosity = verbose);
 
+    //: Default constructor
+  vil_file_image();
+
+    //: Attempt to load named file
+  vil_file_image(char const* filename, verbosity = verbose);
+     //: Attempt to load named file
+ vil_file_image(vcl_string const&, verbosity = verbose);
+
+    //: Attempt to load named file
   bool load(char const* filename, verbosity = verbose);
+    //: Attempt to load named file
   bool load(vcl_string const&, verbosity = verbose);
 };
 

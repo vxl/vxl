@@ -3,9 +3,12 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// This is vxl/vil/vil_jpeglib.h
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+// \brief Stuff for jpeg I/O
 
 #include <vcl_cstdio.h>
 #include <vcl_cstdlib.h>

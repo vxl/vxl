@@ -1,16 +1,17 @@
+// This is vxl/vil/vil_interpolate.h
+
 //-*- c++ -*-------------------------------------------------------------------
 #ifndef vil_interpolate_h_
 #define vil_interpolate_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_interpolate
-// .LIBRARY vil
-// .INCLUDE vil/vil_interpolate.h
-// .FILE    vil_interpolate.txx
-// .SECTION Author
-//    awf@robots.ox.ac.uk
-// Created: 02 Apr 00
+
+//:
+// \file
+// \author awf@robots.ox.ac.uk
+// \brief Interpolation methods
+// \date 02 Apr 00
 
 #include <vil/vil_memory_image_of.h>
 

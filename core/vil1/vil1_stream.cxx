@@ -1,3 +1,5 @@
+// This is vxl/vil/vil_stream.cxx
+
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation

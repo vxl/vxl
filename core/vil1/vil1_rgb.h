@@ -3,19 +3,22 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME    vil_rgb - Templated three-value colour cell
-// .LIBRARY vil
-// .INCLUDE vil/vil_rgb.h
-// .FILE    vil_rgb.txx
+// This is vxl/vil/vil_rgb.h
+
+//:
+// \file
+// \author Peter Vanroose, K.U.Leuven
+// \brief This is the appropriate pixel type for 24-bit colour images.
 //
-// .SECTION Description
-//    This is the appropriate pixel type for 24-bit colour images.
+//\verbatim
 //    Currently also includes the following `utilities':
 //    (1) conversion to ubyte (luminance of vil_rgb: weights (0.299,0.587,0.114)).
 //    (2) min and max of vil_rgbcell values, useful for morphological operations.
 //    (3) arithmetic operations
+//\endverbatim
 //
-// .SECTION Author
+//\verbatim
+//  Modification:
 //    Peter Vanroose, K.U.Leuven, ESAT/VISICS, 15 nov. 1997
 //    250198 AWF Templated.
 //    250198 AWF Modified to make POD struct until gcc inlines when debugging.
@@ -26,6 +29,7 @@
 //    140898 David Capel added clamping functions to ensure 0-255 range on bytes and vil_rgb<byte>
 //    090600 David Capel made clamping functions inline and removed all that partial specialization
 //           nonsense from the .txx file.
+//\endverbatim
 
 #include <vcl_iostream.h>
 #include <vil/vil_clamp.h>
@@ -36,13 +40,14 @@
 # define InLine
 #endif
 
+//: Pixel type for 24 bit images
 template <class T>
 struct vil_rgb
 {
   typedef T value_type;
 
 #if 0
-  // -- Create (0,0,0) vil_rgb cell. We need the default ctor to do this as the STL
+  //:Create (0,0,0) vil_rgb cell. We need the default ctor to do this as the STL
   // effectively mandates that T() produces a nil value.
   vil_rgb():
     r(0), g(0), b(0) {}
@@ -54,23 +59,23 @@ struct vil_rgb
   vil_rgb() { }
 #endif
 
-  // -- Create grey (v,v,v) vil_rgb cell from value v.  This provides a conversion
+  //:Create grey (v,v,v) vil_rgb cell from value v.  This provides a conversion
   // from T to vil_rgb<T>, needed by e.g. two constructors in vil_filter.h.
 
   vil_rgb(T v):
     r(v), g(v), b(v) {}
 
-  // -- Construct an vil_rgb value.
+  //:Construct an vil_rgb value.
   vil_rgb(T red, T green, T blue):
     r(red), g(green), b(blue) {}
 
-  // -- The rgb values
+  // The rgb values
   T r, g, b;
   inline T R() const { return r; }
   inline T G() const { return g; }
   inline T B() const { return b; }
 
-  // -- Convert vil_rgb to gray using standard (.299, .587, .114) weighting.
+  //:Convert vil_rgb to gray using standard (.299, .587, .114) weighting.
   T grey() const { return T(r*0.299+0.587*g+0.114*b); }
 
   // This was wrong because it doesn't work with vil_rgb<double> where the
@@ -83,10 +88,10 @@ struct vil_rgb
   // Why can we not use .gray()?  This adds ambiguities.
   // operator T() const { return int(0.5+r*0.299+0.587*g+0.114*b); }
 
-  // -- equality
+  //:equality
   inline bool operator== (vil_rgb<T> const&) const;
 
-  // -- operators
+  // operators
   vil_rgb<T>  operator+  (vil_rgb<T> const& A) const { return vil_rgb<T>(r+A.r,g+A.g,b+A.b); }
   vil_rgb<T>  operator-  (vil_rgb<T> const& A) const { return vil_rgb<T>(r-A.r,g-A.g,b-A.b); }
   vil_rgb<T>  operator/  (vil_rgb<T> const& A) const { return vil_rgb<T>(r/A.r,g/A.g,b/A.b);}

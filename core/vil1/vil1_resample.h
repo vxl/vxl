@@ -3,9 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_resample
-// .INCLUDE vil/vil_resample.h
-// .FILE vil_resample.cxx
+// This is vxl/vil/vil_resample.h
+
+//:
+// \file
 // \author fsm@robots.ox.ac.uk
 
 #include <vil/vil_image.h>

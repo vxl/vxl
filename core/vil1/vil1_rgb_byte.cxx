@@ -1,9 +1,11 @@
+// This is vxl/vil/vil_rgb_byte.cxx
+
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation
 #endif
 //
-// .NAME vil_rgb_byte
+// vil_rgb_byte
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 17 Feb 00
 //

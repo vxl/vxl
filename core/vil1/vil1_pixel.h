@@ -3,12 +3,15 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_pixel_format - Convenient descriptions of format combinations
-// .INCLUDE vil/vil_pixel.h
-// .FILE vil_pixel.cxx
+// This is vxl/vil/vil_pixel.h
+
+//:
+// \file
+// \brief Convenient descriptions of format combinations
 // \author awf@robots.ox.ac.uk
 
-// Common combinations of component format, bits, planes and components.
+
+//: Common combinations of component format, bits, planes and components.
 enum vil_pixel_format_t {
   VIL_PIXEL_FORMAT_UNKNOWN,
   VIL_BYTE,       /*!< 1 x W x H x 1 of UINT x 8*/
@@ -25,7 +28,7 @@ enum vil_pixel_format_t {
 
 class vil_image;
 
-//: Returns one of the `vil_pixel_format's. 
+//: Returns one of the `vil_pixel_format's.
 // A standard RGB RGB RGB image has pixel_type() == VIL_RGB_BYTE
 vil_pixel_format_t vil_pixel_format(vil_image const &);
 

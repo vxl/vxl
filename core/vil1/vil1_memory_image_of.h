@@ -3,15 +3,14 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_memory_image_of
-// .INCLUDE vil/vil_memory_image_of.h
-// .FILE vil_memory_image_of.txx
-// .FILE vil_memory_image_of_format.txx
-// .SECTION Author
-//    awf@robots.ox.ac.uk
-// Created: 16 Feb 00
-//
-// .SECTION Modifications
+// This is vxl/vil/vil_memory_image_of.h
+
+//:
+// \file
+// \author awf@robots.ox.ac.uk
+// \date 16 Feb 00
+//\verbatim
+// Modifications
 //     960916 AWF Added save_pgm and more comments.
 //     961209 Peter Vanroose added operator=() and copy constructor
 //     980710 FSM Changed constructor to take a const Image *, not Image *
@@ -21,6 +20,7 @@
 //     010126 BJM (mccane@cs.otago.ac.nz) added constructor from
 //            previously allocated memory. This memory is not deallocated on
 //            destruction.
+//\endverbatim
 
 #include <vil/vil_byte.h>
 #include <vil/vil_image.h>
@@ -39,9 +39,8 @@
 //  CAVEAT PROGRAMMER:
 //    Each raster (row) is stored in a contiguous chunk of memory and the
 //    operator [] method gives a pointer to the beginning of a raster.
-//    Thus image[i][j] is the element in the ith row and jth column.
-//    However, image(x, y) is the element in the xth column and yth row.
-
+//    Thus image[i][j] is the element in the i-th row and j-th column.
+//    However, image(x, y) is the element in the x-th column and y-th row.
 template <class T>
 class vil_memory_image_of : public vil_memory_image {
 public:

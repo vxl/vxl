@@ -1,3 +1,5 @@
+// This is vxl/vil/vil_skip.cxx
+
 /*
   fsm@robots.ox.ac.uk
 */

@@ -170,7 +170,7 @@ bool vil_bmp_generic_image::read_header()
   else if (info_hdr.colormapsize == 256 && core_hdr.bitsperpixel == 8) {
     // In this case I know how to read the colormap because I have hexdumped an example.
     // But I ignore the color map in the get_section() routine because I don't care.
-    // -- fsm
+    // fsm
     typedef unsigned char uchar;
     freds_colormap = new uchar *[4];
     freds_colormap[0] = new uchar[256];

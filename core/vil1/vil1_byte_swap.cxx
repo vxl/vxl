@@ -1,3 +1,5 @@
+// This is vxl/vil/vil_byte_swap.cxx
+
 /*
   fsm@robots.ox.ac.uk
 */

@@ -3,12 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_byte_swap
-// .INCLUDE vil/vil_byte_swap.h
-// .FILE vil_byte_swap.cxx
-// .SECTION Author
-//  fsm@robots.ox.ac.uk
-//
+// This is vxl/vil/vil_byte_swap.h
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
 
 void vil_byte_swap(void *, void *);
 

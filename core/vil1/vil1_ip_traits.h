@@ -3,11 +3,13 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_ip_traits - Describe image types
-// .INCLUDE vil/vil_ip_traits.h
-// .SECTION Author
-//    awf@robots.ox.ac.uk
-// Created: 02 Mar 00
+// This is vxl/vil/vil_ip_traits.h
+
+//:
+// \file
+// \brief Describe image types
+// \author   awf@robots.ox.ac.uk
+// \date 02 Mar 00
 
 struct vil_ip_traits_null_type {};
 
@@ -16,7 +18,7 @@ template <class T>
 struct vil_ip_traits {
   //: The return type of operator[][]
   typedef vil_ip_traits pixel_type;
-  
+
   //: The return type of operator[]
   typedef vil_ip_traits row_type;
 };

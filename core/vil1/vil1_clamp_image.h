@@ -4,11 +4,13 @@
 #pragma interface
 #endif
 
-#include <vcl_compiler.h>
+// This is vxl/vil/vil_clamp_image.h
 
-// .NAME vil_clamp_image - Support function for vil_clamp_image_impl
-// .INCLUDE vil/vil_clamp_image.h
-// .FILE vil_clamp_image.cxx
+//:
+// \file
+// \brief Support function for vil_clamp_image_impl
+
+#include <vcl_compiler.h>
 
 class vil_image;
 

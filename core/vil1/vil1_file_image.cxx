@@ -1,6 +1,8 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
+// This is vxl/vil/vil_file_image.cxx
+
 #include "vil_file_image.h"
 #include <vcl_iostream.h>
 

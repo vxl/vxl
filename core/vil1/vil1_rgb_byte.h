@@ -3,16 +3,17 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_rgb_byte
-// .INCLUDE vil/vil_rgb_byte.h
-// .FILE vil_rgb_byte.cxx
-// .SECTION Author
-//    awf@robots.ox.ac.uk
-// Created: 17 Feb 00
-//
-// .SECTION Modifications
+// This is vxl/vil/vil_rgb_byte.h
+
+//:
+// \file
+// \author   awf@robots.ox.ac.uk
+// \date 17 Feb 00
+//\verbatim
+//  Modifications
 //     000217 AWF Initial version.
 //     001206 FSM make this identical to vil_rgb<vil_byte> to avoid confusion
+//\endverbatim
 
 #include <vil/vil_byte.h>
 #include <vil/vil_rgb.h>

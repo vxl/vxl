@@ -3,15 +3,17 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_image - A reference-counted image object
-// .INCLUDE vil/vil_image.h
-// .FILE vil_image.cxx
-// @author fsm@robots.ox.ac.uk
+// This is vxl/vil/vil_image.h
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+// \brief A reference-counted image object.
 
 #include <vcl_iosfwd.h>
 #include <vil/vil_image_impl.h>
 
-//:
+//: A smart pointer to an actual image.
 // All operations are delegated to the vil_image_impl object,
 // which uses class inheritance to make various file images etc.
 // For fuller documentation on any method, see vil_image_impl
@@ -23,7 +25,6 @@
 
 // You should not derive from vil_image to make a new image type.
 // Derive from vil_image_impl instead.
-
 class vil_image {
 public:
 // use this delegation macro for consistency, not convenience.
@@ -74,8 +75,9 @@ public:
 #undef vil_image_delegate
   // -------------------- convenience --------------------
 
-  //
+  //: Number of rows
   int rows() const { return height(); }
+  //: Number of columns
   int cols() const { return width(); }
 
   //: return size in bytes.
@@ -97,6 +99,7 @@ public:
       ptr->up_ref();
   }
 
+  //: Destructor
   ~vil_image() {
     if (ptr)
       ptr->down_ref();
@@ -118,25 +121,26 @@ public:
     if (ptr)
       ptr->down_ref();
     ptr = p;
+    ptr->up_ref();
     return *this;
   }
 
-  // equality means equality of implementation, not pixels.
+  //: equality means equality of implementation, not pixels.
   bool operator==(vil_image const &that) const {
     return ptr == that.ptr;
   }
 
-  // needed for sorted containers of images.
+  //: needed for sorted containers of images.
   bool operator< (vil_image const &that) const {
     return ptr <  that.ptr;
   }
 
-  // conversion to bool
+  //: conversion to bool
   operator bool () const {
     return ptr != 0;
   }
 
-  // use "sptr.impl()" to get a pointer to the impl object.
+  //: use "sptr.impl()" to get a pointer to the impl object.
   vil_image_impl *impl() const {
     return ptr;
   }

@@ -1,3 +1,5 @@
+// This is vxl/vil/vil_convolve_simple.txx
+
 /*
   fsm@robots.ox.ac.uk
 */

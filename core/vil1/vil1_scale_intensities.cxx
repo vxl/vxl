@@ -1,8 +1,10 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
+// This is vxl/vil/vil_scale_intensities.cxx
+
 //
-// .NAME vil_scale_intensities
+// vil_scale_intensities
 // Author: David Capel, Oxford RRG
 // Created: 26 Jul 2000
 //

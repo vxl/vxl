@@ -1,5 +1,7 @@
 #ifndef vil_convolve_1d_txx_
 #define vil_convolve_1d_txx_
+// This is vxl/vil/vil_convolve_1d.txx
+
 /*
   fsm@robots.ox.ac.uk
 */

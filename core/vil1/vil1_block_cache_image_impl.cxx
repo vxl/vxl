@@ -1,16 +1,28 @@
+//--------------------------------------------------------------
+//
+// Class : vxl/vil/vil_block_cache_image_impl.cxx
+// 
+//
+//--------------------------------------------------------------
+
 /*
   fsm@robots.ox.ac.uk
 */
+
 #ifdef __GNUC__
 #pragma implementation
 #endif
 #include "vil_block_cache_image_impl.h"
 #include <vcl_cstring.h>  // strcmp()
 
-vil_block_cache_image_impl::vil_block_cache_image_impl(vil_image i_, unsigned bx, unsigned by)
-  : base(i_)
-  , block_size_x(bx)
-  , block_size_y(by)
+// Constructors/Destructors--------------------------------------------------
+
+//---------------------------------------------------------------------------
+// Default constructor
+//---------------------------------------------------------------------------
+vil_block_cache_image_impl::vil_block_cache_image_impl(vil_image i_, unsigned bx, 
+													   unsigned by)
+  : base(i_),block_size_x(bx),block_size_y(by)
 {
 }
 
@@ -47,6 +59,19 @@ bool vil_block_cache_image_impl::get_property(char const *tag,
     if (out) *(unsigned *)out = block_size_y;
     return true;
   }
-
+  
   return false;
 }
+
+
+/* START_MANCHESTER_BINARY_IO_CODE */
+
+  //: Return the name of the class;
+const vcl_string& vil_block_cache_image_impl::is_a() const
+{
+  const static vcl_string class_name_="vil_block_cache_image_impl";
+  return class_name_;
+}
+
+/* END_MANCHESTER_BINARY_IO_CODE */
+

@@ -3,13 +3,14 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME    vil_clamp - Functions to ensure value is in a range appropriate for the data type (e.g. 0-255 for bytes)
-// .LIBRARY vil
-// .INCLUDE vil/vil_clamp.h
-// .FILE    vil_clamp.cxx
-//
-// .SECTION Author
-//    Andrew Fitzgibbon and David Capel
+// This is vxl/vil/vil_clamp.h
+
+//:
+// \file
+// \brief Templated vil_clamping functions
+// \author Andrew Fitzgibbon and David Capel
+// To ensure value is in
+// a range appropriate for the data type (e.g. 0-255 for bytes).
 
 #include <vil/vil_image.h>
 

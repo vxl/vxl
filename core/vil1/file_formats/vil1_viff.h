@@ -4,12 +4,12 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_viff - Loader for 1-banded Khoros 1.0 images
-// .INCLUDE vil/file_formats/vil_viff.h
-// .FILE file_formats/vil_viff.cxx
-// .SECTION Author
-//    Peter.Vanroose@esat.kuleuven.ac.be
-// Created: 17 Feb 2000
+
+//:
+// \file
+// \brief Loader for 1-banded Khoros 1.0 images
+// \author    Peter.Vanroose@esat.kuleuven.ac.be
+// \date 17 Feb 2000
 
 #include <vil/vil_file_format.h>
 #include <vil/vil_image_impl.h>

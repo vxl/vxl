@@ -3,13 +3,15 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_image_proxy
-// .INCLUDE vil/vil_image_proxy.h
-// .FILE vil_image_proxy.cxx
+// This is vxl/vil/vil_image_proxy.h
+
+//:
+// \file
 // \author fsm@robots.ox.ac.uk
 
 #include <vil/vil_image.h>
 
+//: Proxy for an image
 struct vil_image_proxy : public vil_image
 {
   vil_image_proxy(char const *file);

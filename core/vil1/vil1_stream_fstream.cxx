@@ -2,6 +2,8 @@
 #pragma implementation
 #endif
 
+// This is vxl/vil/vil_stream_fstream.cxx
+
 #include <vcl_cassert.h>
 #include <vcl_cstdio.h>    // perror()
 #include <vcl_iostream.h>

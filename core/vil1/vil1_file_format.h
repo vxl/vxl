@@ -4,11 +4,12 @@
 #pragma interface
 #endif
 
-// .NAME vil_file_format
-// .INCLUDE vil/vil_file_format.h
-// .FILE vil_file_format.cxx
-// .SECTION Author
-//    awf
+// This is vxl/vil/vil_file_format.h
+
+//:
+// \file
+// \brief Base class for image formats
+// \author awf
 
 #include <vil/vil_fwd.h>
 #include <vil/vil_image_impl.h>

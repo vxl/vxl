@@ -1,15 +1,16 @@
+// This is vxl/vil/vil_warp.h
+
 //-*- c++ -*-------------------------------------------------------------------
 #ifndef vil_warp_h_
 #define vil_warp_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_warp
-// .INCLUDE vil/vil_warp.h
-// .FILE vil_warp.txx
-// .FILE vil_warp.cxx
-// Author: awf@robots.ox.ac.uk
-// Created: 04 Dec 00
+
+//:
+// \file
+// \author awf@robots.ox.ac.uk
+// \date 04 Dec 00
 
 #include <vil/vil_image.h>
 #include <vil/vil_memory_image_of.h>

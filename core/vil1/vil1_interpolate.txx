@@ -1,3 +1,5 @@
+// This is vxl/vil/vil_interpolate.txx
+
 //-*- c++ -*-------------------------------------------------------------------
 #ifndef vil_interpolate_txx_
 #define vil_interpolate_txx_

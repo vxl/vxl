@@ -1,16 +1,14 @@
 #ifndef vil_convolve_h_
 #define vil_convolve_h_
-// .NAME vil_convolve
-// .INCLUDE vil/vil_convolve.h
-// .FILE vil_convolve.txx
-// .FILE vil_convolve_1d.txx
-// .FILE vil_convolve_1d_x.txx
-// .FILE vil_convolve_1d_y.txx
-// @author fsm@robots.ox.ac.uk
+// This is vxl/vil/vil_convolve.h
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
 
 #include <vcl_compiler.h>
 
-//:
+//: Available options for boundary behavior
 // When convolving a finite signal the boundaries may be
 // treated in various ways which can often be expressed in terms
 // of ways to extend the signal outside its original range.
@@ -58,6 +56,7 @@ enum vil_convolve_boundary_option {
   vil_convolve_trim
 };
 
+//: Parameters for convolution
 // These structs exist purely to group the parameters to the
 // convolution routines. It is not intended that they be
 // expressive or even useful in any other context.
@@ -74,6 +73,7 @@ struct vil_convolve_signal_1d {
     : array(a), begin(b), origin(o), end(e) { }
 };
 
+//: Parameters for convolution
 template <class T>
 struct vil_convolve_signal_2d {
   T * const *array;

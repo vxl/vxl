@@ -3,20 +3,23 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// This is vxl/vil/vil_16bit.h
 
-// .NAME vil_16bit - read/write integers to/from vil_stream
-// .INCLUDE vil/vil_16bit.h
-// .FILE vil_16bit.cxx
-// .SECTION Description
+
+//:
+// \file
+// \brief vil_16bit - read/write integers to/from vil_stream
+// \author  fsm
+//
 // Functions to read and write integers to and from a vil_stream.
 // The endianness refers to the format in the stream, not the
 // native format of the compiler or execution environment.
 //
-// .SECTION Author
-//    fsm
-// .SECTION Modifications
-// Peter Vanroose, July 2000: corrected serious bug:
-//      VXL_LITTLE_ENDIAN not needed (implementation was wrong for VXL_BIG_ENDIAN machines)
+// Modifications
+// \verbatim
+// Peter Vanroose, July 2000: corrected serious bug: VXL_LITTLE_ENDIAN not needed
+//                    (implementation was wrong for VXL_BIG_ENDIAN machines)
+// \endverbatim
 
 class vil_stream;
 

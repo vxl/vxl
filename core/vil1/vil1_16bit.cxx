@@ -1,3 +1,5 @@
+// This is vxl/vil/vil_16bit.cxx
+
 /*
   fsm@robots.ox.ac.uk
 */

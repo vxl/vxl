@@ -1,15 +1,16 @@
 #ifndef vil_resample_image_h_
 #define vil_resample_image_h_
+// This is vxl/vil/vil_resample_image.h
 
-// .NAME vil_resample_image - Adaptor which produces an image by resampling
-// .LIBRARY vil
-// .INCLUDE vil/vil_resample_image.h
-// .FILE    vil_resample_image.txx
-// .SECTION Description
-//  Support function for vil_resample_image_impl.
+
+//:
+// \file
+// \brief Adaptor which produces an image by resampling
 
 class vil_image;
 
+//:
+// Support function for vil_resample_image_impl.
 // T: pixel type
 // A: accumulator type
 template <class T, class A>

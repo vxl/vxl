@@ -3,14 +3,12 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME    vil_scale_intensities - Templated functions to scale/shift image pixel values
-// .HEADER  vxl package
-// .LIBRARY vil
-// .INCLUDE vil/vil_scale_intensities.h
-// .FILE    vil_scale_intensities.cxx
-//
-// .SECTION Author
-//    David Capel
+// This is vxl/vil/vil_scale_intensities.h
+
+//:
+// \file
+// \brief Templated functions to scale/shift image pixel values
+// \author    David Capel
 
 #include <vil/vil_image.h>
 

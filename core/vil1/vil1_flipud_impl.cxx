@@ -1,3 +1,5 @@
+// This is vxl/vil/vil_flipud_impl.cxx
+
 /*
   fsm@robots.ox.ac.uk
 */
@@ -26,3 +28,15 @@ bool vil_flipud_impl::put_section(void const *buf, int x0, int y0, int w, int h)
       return false;
   return true;
 }
+
+/* START_MANCHESTER_BINARY_IO_CODE */
+
+  //: Return the name of the class;
+const vcl_string& vil_flipud_impl::is_a() const
+{
+  const static vcl_string class_name_="vil_flipud_impl";
+  return class_name_;
+}
+
+/* END_MANCHESTER_BINARY_IO_CODE */
+

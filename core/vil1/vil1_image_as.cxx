@@ -1,3 +1,5 @@
+// This is vxl/vil/vil_image_as.cxx
+
 /*
   fsm@robots.ox.ac.uk
 */
@@ -9,6 +11,7 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
+#include <vcl_string.h>
 
 #include <vil/vil_byte.h>
 #include <vil/vil_pixel.h>
@@ -38,6 +41,14 @@ struct vil_image_as_impl : vil_image_impl, vil_memory_image_of_format<T>
 
   // This always fails, even if the underlying image is an image-of-T
   bool put_section(void const *, int, int, int, int) { return false; }
+
+/* START_MANCHESTER_BINARY_IO_CODE */
+
+  //: Return the name of the class;
+  virtual const vcl_string& is_a() const;
+
+/* END_MANCHESTER_BINARY_IO_CODE */
+
 };
 
 //--------------------------------------------------------------------------------
@@ -103,8 +114,19 @@ bool vil_image_as_impl<int>::get_section(void *buf, int x0, int y0, int width, i
     assert(false/* implement for your image type as needed */);
     return false;
   }
-
+  
 }
+
+/* START_MANCHESTER_BINARY_IO_CODE */
+
+const vcl_string& vil_image_as_impl<int>::is_a() const 
+{ 
+  const static vcl_string class_name_="vil_image_as_impl<int>"; 
+  return class_name_; 
+}
+
+/* END_MANCHESTER_BINARY_IO_CODE */
+
 // instantiate for int.
 template struct vil_image_as_impl<int>;
 
@@ -171,6 +193,16 @@ bool vil_image_as_impl<vil_byte>::get_section(void *buf, int x0, int y0, int wid
   }
   }
 }
+/* START_MANCHESTER_BINARY_IO_CODE */
+
+const vcl_string& vil_image_as_impl<vil_byte>::is_a() const 
+{ 
+  const static vcl_string class_name_="vil_image_as_impl<vil_byte>"; 
+  return class_name_; 
+}
+
+/* END_MANCHESTER_BINARY_IO_CODE */
+
 // instantiate for byte.
 template struct vil_image_as_impl<vil_byte>;
 
@@ -237,8 +269,19 @@ bool vil_image_as_impl<float>::get_section(void *buf, int x0, int y0, int width,
     assert(false/* implement for your image type as needed */);
     return false;
   }
-
+  
 }
+
+/* START_MANCHESTER_BINARY_IO_CODE */
+
+const vcl_string& vil_image_as_impl<float>::is_a() const 
+{ 
+  const static vcl_string class_name_="vil_image_as_impl<float>"; 
+  return class_name_; 
+}
+
+/* END_MANCHESTER_BINARY_IO_CODE */
+
 // instantiate for float.
 template struct vil_image_as_impl<float>;
 
@@ -291,8 +334,20 @@ bool vil_image_as_impl<double>::get_section(void *buf, int x0, int y0, int width
     assert(false/* implement for your image type as needed */);
     return false;
   }
-
+  
 }
+
+
+/* START_MANCHESTER_BINARY_IO_CODE */
+
+const vcl_string& vil_image_as_impl<double>::is_a() const 
+{ 
+  const static vcl_string class_name_="vil_image_as_impl<double>"; 
+  return class_name_; 
+}
+
+/* END_MANCHESTER_BINARY_IO_CODE */
+
 // instantiate for double.
 template struct vil_image_as_impl<double>;
 
@@ -364,8 +419,18 @@ bool vil_image_as_impl<vil_rgb<unsigned char> >::get_section(void *buf,
     assert(false/* implement for your image type as needed */);
     return false;
   }
-
+  
 }
+/* START_MANCHESTER_BINARY_IO_CODE */
+
+const vcl_string& vil_image_as_impl<vil_rgb<unsigned char> >::is_a() const 
+{ 
+  const static vcl_string class_name_="vil_image_as_impl<vil_rgb<unsigned char> >"; 
+  return class_name_; 
+}
+
+/* END_MANCHESTER_BINARY_IO_CODE */
+
 // instantiate for vil_rgb_byte .
 template struct vil_image_as_impl<vil_rgb<unsigned char> >;
 
@@ -419,12 +484,25 @@ bool vil_image_as_impl<vil_rgb<float> >::get_section(void *buf,
     assert(false/* implement for your image type as needed */);
     return false;
   }
-
+  
 }
+
+
+/* START_MANCHESTER_BINARY_IO_CODE */
+
+const vcl_string& vil_image_as_impl<vil_rgb<float> >::is_a() const 
+{ 
+  const static vcl_string class_name_="vil_image_as_impl<vil_rgb<float> >"; 
+  return class_name_; 
+}
+
+/* END_MANCHESTER_BINARY_IO_CODE */
+
 // instantiate for vil_rgb_float .
 template struct vil_image_as_impl<vil_rgb<float> >;
 
 vil_image vil_image_as_rgb_float(vil_image const &image) {
   return vil_image(new vil_image_as_impl<vil_rgb<float> >(image));
 }
+
 

@@ -1,8 +1,10 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
+// This is vxl/vil/vil_clamp.cxx
+
 //
-// .NAME vil_clamp
+// vil_clamp
 // Author: David Capel, Oxford RRG
 // Created: 14 Aug 98
 //

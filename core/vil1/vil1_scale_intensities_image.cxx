@@ -2,6 +2,8 @@
 #pragma implementation
 #endif
 
+// This is vxl/vil/vil_scale_intensities_image.cxx
+
 #include "vil_scale_intensities_image.h"
 #include <vil/vil_image.h>
 #include <vil/vil_rgb.h>

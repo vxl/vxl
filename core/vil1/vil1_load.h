@@ -3,20 +3,22 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_load
-// .INCLUDE vil/vil_load.h
-// .FILE vil_load.cxx
-// .SECTION Author
-//    awf@robots.ox.ac.uk
-// Created: 16 Feb 00
+// This is vxl/vil/vil_load.h
+
+//:
+// \file
+// \author awf@robots.ox.ac.uk
+//\verbatim
+// vil_load*() returns a vil_image which will "read an image from a file". In practice
+// it may or may not read the image on creation, but a disk read will take place at
+// some point before get_section() returns.
+//\endverbatim
+
 
 #include <vcl_iosfwd.h>
 #include <vil/vil_fwd.h>
 #include <vil/vil_image.h>
 
-// vil_load*() returns a vil_image which will "read an image from a file". In practice
-// it may or may not read the image on creation, but a disk read will take place at
-// some point before get_section() returns.
 
 //: Load an image from a file, possibly performing expected conversions.
 vil_image vil_load(char const* filename);

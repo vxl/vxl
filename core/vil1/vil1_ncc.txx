@@ -1,3 +1,5 @@
+// This is vxl/vil/vil_ncc.txx
+
 /*
   capes@robots.ox.ac.uk
 */

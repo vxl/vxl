@@ -1,3 +1,5 @@
+// This is vxl/vil/vil_colour_space.cxx
+
 /*
   fsm@robots.ox.ac.uk
 */

@@ -3,15 +3,16 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_flipud_impl
-// .INCLUDE vil/vil_flipud_impl.h
-// .FILE vil_flipud_impl.cxx
-// .SECTION Author
-//  fsm@robots.ox.ac.uk
-//
+// This is vxl/vil/vil_flipud_impl.h
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
 
 #include <vil/vil_image.h>
+#include <vcl_string.h>
 
+//: A view of an image which is flipped up/down (ie top row becomes bottom)
 class vil_flipud_impl : public vil_image_impl {
 public:
   vil_flipud_impl(vil_image const &base_) : base(base_) { }
@@ -27,6 +28,14 @@ public:
 
   bool get_section(void *buf, int x0, int y0, int w, int h) const;
   bool put_section(void const *buf, int x0, int y0, int w, int h);
+
+
+/* START_MANCHESTER_BINARY_IO_CODE */
+
+  //: Return the name of the class;
+  virtual const vcl_string& is_a() const;
+
+/* END_MANCHESTER_BINARY_IO_CODE */
 
 private:  
   vil_image base;

@@ -3,19 +3,25 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_memory_image_impl
-// .INCLUDE vil/vil_memory_image_impl.h
-// .FILE vil_memory_image_impl.cxx
-// .SECTION Author
-//    awf@robots.ox.ac.uk
-// Created: 16 Mar 00
-// .SECTION Modifications
-//   010126 BJM (mccane@cs.otago.ac.nz) added constructors from previously allocated memory.
+// This is vxl/vil/vil_memory_image_impl.h
+
+
+//:
+// \file
+// \author awf@robots.ox.ac.uk
+// \date 16 Mar 00
+//\verbatim
+// Modifications
+//     010126 BJM (mccane@cs.otago.ac.nz) added constructor from
+//            previously allocated memory. This memory is not deallocated on
+//            destruction.
+//\endverbatim
 
 #include <vil/vil_image_impl.h>
 #include <vil/vil_memory_image.h>
+#include <vcl_string.h>
 
-//: implementation class for vil_memory_image.
+//: Implementation class for vil_memory_image.
 class vil_memory_image_impl : public vil_image_impl {
 public:
   vil_memory_image_impl(int planes, int w, int h,
@@ -46,7 +52,19 @@ public:
   virtual bool get_property(char const *tag, void *property_value = 0) const;
 
   void resize(int planes, int width, int height);
+  void resize(int planes, int width, int height, int components, int bits_per_component, 
+    vil_component_format format);
 
+
+/* START_MANCHESTER_BINARY_IO_CODE */
+
+  //: Return the name of the class;
+  virtual const vcl_string& is_a() const;
+
+/* END_MANCHESTER_BINARY_IO_CODE */
+
+  
+  // added by Brendan McCane
   // Constructors from previously allocated memory. This memory is not deallocated on destruction.
   vil_memory_image_impl(void *buf, int planes, int w, int h,
                         vil_memory_image_format const& format);
@@ -62,8 +80,10 @@ public:
 protected:
   friend class vil_memory_image;
 
-  void init(void *buf, int planes,int w,int h, vil_pixel_format_t pixel_format);
-  void init(void *buf, int planes,int w,int h, int components, int bits_per_component, vil_component_format);
+  void init(void *buf, int planes, int w, int h,
+            vil_pixel_format_t pixel_format);
+  void init(void *buf, int planes, int w, int h, int components,
+            int bits_per_component, vil_component_format);
 
   int planes_;
   int width_;

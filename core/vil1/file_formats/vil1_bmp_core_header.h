@@ -3,10 +3,13 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_bmp_core_header
-// .INCLUDE vil/file_formats/vil_bmp_core_header.h
-// .FILE file_formats/vil_bmp_core_header.cxx
-// @author fsm@robots.ox.ac.uk
+//This is vxl/vil/vil_bmp_core_header.h
+
+//:
+// \file vgl/vil_block_cache_image_impl.h
+// \author fsm@robots.ox.ac.uk
+//          Nick Costen added Manchester IO 16/3/01
+
 
 class vil_stream;
 #include <vcl_iosfwd.h>

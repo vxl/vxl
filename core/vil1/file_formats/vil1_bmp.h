@@ -4,14 +4,15 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_bmp
-// .INCLUDE vil/file_formats/vil_bmp.h
-// .FILE file_formats/vil_bmp.cxx
-// .SECTION Author
-//    Don Hamilton \and Peter Tu
-// Created: 17 Feb 2000
-// .SECTION Modifications
+
+//:
+// \file
+// \author Don Hamilton, Peter Tu
+// \date 17 Feb 2000
+//\verbatim
+//  Modifications
 // 27 May 2000 fsm@robots.ox.ac.uk Numerous endianness and structure-packing bugs fixed.
+//\endverbatim
 
 #include <vcl_iosfwd.h>
 class vil_stream;

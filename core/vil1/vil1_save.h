@@ -3,15 +3,16 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_save
-// .INCLUDE vil/vil_save.h
-// .FILE vil_save.cxx
-// .SECTION Author
-//    awf@robots.ox.ac.uk
-// Created: 16 Feb 00
-//
-// .SECTION Modifications
+// This is vxl/vil/vil_save.h
+
+//:
+// \file
+// \author    awf@robots.ox.ac.uk
+// \date 16 Feb 00
+//\verbatim
+//  Modifications
 //     000216 AWF Initial version.
+//\endverbatim
 
 #include <vcl_string.h>
 class vil_stream;

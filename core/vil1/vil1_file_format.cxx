@@ -2,6 +2,8 @@
 #pragma implementation
 #endif
 
+// This is vxl/vil/vil_file_format.cxx
+
 #include "vil_file_format.h"
 
 vil_file_format::~vil_file_format()

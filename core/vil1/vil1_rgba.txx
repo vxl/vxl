@@ -1,6 +1,8 @@
+// This is vxl/vil/vil_rgba.txx
+
 //-*- c++ -*-------------------------------------------------------------------
 //
-// .NAME vil_rgba
+// vil_rgba
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 12 Nov 99
 //

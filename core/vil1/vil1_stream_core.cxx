@@ -1,3 +1,5 @@
+// This is vxl/vil/vil_stream_core.cxx
+
 /*
   fsm@robots.ox.ac.uk
 */

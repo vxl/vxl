@@ -3,13 +3,15 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_resample_image_impl
-// .INCLUDE vil/vil_resample_image_impl.h
-// .FILE vil_resample_image_impl.cxx
+// This is vxl/vil/vil_resample_image_impl.h
+
+//:
+// \file
 // \author fsm@robots.ox.ac.uk
 
 #include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>
+#include <vcl_string.h>
 
 //: Adaptor which produces an image by resampling.
 class vil_resample_image_impl : public vil_image_impl {
@@ -32,6 +34,14 @@ public:
   
   bool get_property(char const *tag, void *property_value_out = 0) const;
   
+
+/* START_MANCHESTER_BINARY_IO_CODE */
+
+  //: Return the name of the class;
+  virtual const vcl_string& is_a() const;
+
+/* END_MANCHESTER_BINARY_IO_CODE */
+
 private:
   vil_image base;
   unsigned new_width, new_height;

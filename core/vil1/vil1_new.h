@@ -3,15 +3,16 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_new
-// .INCLUDE vil/vil_new.h
-// .FILE vil_new.cxx
-// .SECTION Author
-//    awf@robots.ox.ac.uk
-// Created: 26 Feb 00
-//
-// .SECTION Modifications
+// This is vxl/vil/vil_new.h
+
+//:
+// \file
+// \author awf@robots.ox.ac.uk
+// \date 26 Feb 00
+//\verbatim
+//  Modifications
 //     000216 AWF Initial version.
+//\endverbatim
 
 #include <vil/vil_fwd.h>
 #include <vil/vil_image_impl.h>

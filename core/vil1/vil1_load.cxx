@@ -2,6 +2,8 @@
 #pragma implementation
 #endif
 
+// This is vxl/vil/vil_load.cxx
+
 #include "vil_load.h"
 
 #include <vcl_cstdio.h>   // sprintf()

@@ -4,9 +4,11 @@
 #pragma interface
 #endif
 
-// .NAME vil_scale_intensities_image - Support function for vil_scale_intensities_image_impl
-// .INCLUDE vil/vil_scale_intensities_image.h
-// .FILE vil_scale_intensities_image.cxx
+// This is vxl/vil/vil_scale_intensities_image.h
+
+//:
+// \file
+// \brief Support function for vil_scale_intensities_image_impl
 
 #include <vcl_compiler.h>
 

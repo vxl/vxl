@@ -3,12 +3,13 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_stream_fstream - A vil_stream implementation using fstream
-// .INCLUDE vil/vil_stream_fstream.h
-// .FILE vil_stream_fstream.cxx
-// .SECTION Author
-//    awf@robots.ox.ac.uk
-// Created: 16 Feb 00
+// This is vxl/vil/vil_stream_fstream.h
+
+//:
+// \file
+// \brief A vil_stream implementation using fstream
+// \author    awf@robots.ox.ac.uk
+// \date 16 Feb 00
 
 #include <vcl_fstream.h>
 #include <vil/vil_stream.h>

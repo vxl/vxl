@@ -3,9 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_memory_image_window
-// .INCLUDE vil/vil_memory_image_window.h
-// .FILE vil_memory_image_window.cxx
+// This is vxl/vil/vil_memory_image_window.h
+
+//:
+// \file
+// \brief Operations on a small region of an image
 
 #include "vil_memory_image_of.h"
 
@@ -25,7 +27,8 @@ public:
   // Computations--------------------------------------------------------------
   int sum_squared_differences(const vil_memory_image_of<vil_byte>& image2,
                               int centre2_x, int centre2_y,
-                              int early_exit_level = vil_memory_image_window_maxint);
+                              int early_exit_level =
+                                  vil_memory_image_window_maxint);
 
   double normalised_cross_correlation(const vil_memory_image_of<vil_byte>& image2,
                                       int centre2_x, int centre2_y);

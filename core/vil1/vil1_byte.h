@@ -3,12 +3,15 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// This is vxl/vil/vil_byte.h
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
 
 #include <vcl_compiler.h>
 
+//: A byte (8 bits)
 typedef unsigned char vil_byte;
 
 #endif // vil_byte_h_

@@ -3,17 +3,15 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// This is vxl/vil/vil_32bit.h
 
-// .NAME vil_32bit - read/write integers to/from vil_stream
-// .INCLUDE vil/vil_32bit.h
-// .FILE vil_32bit.cxx
-// .SECTION Description
+//:
+// \file
+// \brief vil_32bit - read/write integers to/from vil_stream
+// \author    fsm
 // Functions to read and write integers to and from a vil_stream.
 // The endianness refers to the format in the stream, not the
 // native format of the compiler or execution environment.
-//
-// .SECTION Author
-//     fsm
 
 class vil_stream;
 

@@ -2,6 +2,8 @@
 #pragma implementation
 #endif
 
+// This is vxl/vil/vil_memory_image.cxx
+
 #include "vil_memory_image.h"
 
 #include <vcl_cassert.h>
@@ -32,7 +34,8 @@ vil_memory_image::vil_memory_image()
   cache_from_impl;
 }
 
-vil_memory_image::vil_memory_image(int planes, int w, int h, vil_memory_image_format const& format)
+vil_memory_image::vil_memory_image(int planes, int w, int h,
+                                   vil_memory_image_format const& format)
   : vil_image(new vil_memory_image_impl(planes, w, h, format))
 {
   cache_from_impl;
@@ -167,6 +170,14 @@ vil_memory_image::vil_memory_image(void *buf, int w, int h,
 vil_memory_image::vil_memory_image(void *buf, int w, int h,
                                    vil_pixel_format_t pixel_format)
   : vil_image(new vil_memory_image_impl(buf, 1, w, h, pixel_format))
+{
+  cache_from_impl;
+}
+
+
+//: Reset this class's member variables from the image implementation
+// This is is useful if the impl object has been modified outside the control of this object.
+void vil_memory_image::recache_from_impl()
 {
   cache_from_impl;
 }

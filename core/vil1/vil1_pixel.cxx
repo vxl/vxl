@@ -1,3 +1,5 @@
+// This is vxl/vil/vil_pixel.cxx
+
 /*
   awf@robots.ox.ac.uk
 */

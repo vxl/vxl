@@ -3,11 +3,17 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME    vil_rgba - Templated four-value colour cell
-// .LIBRARY vil
-// .INCLUDE vil/vil_rgba.h
-// .FILE    vil_rgba.txx
-// .SECTION Description
+// This is vxl/vil/vil_rgba.h
+
+//:
+// \file
+// \brief Templated four-value colour cell
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date 12 Nov 99
+
+#include <vcl_iosfwd.h>
+
+//:
 //    This is the appropriate pixel type for RGBA colour images.
 // The purpose of rgba<T> is to provide an object which consists of four Ts arranged
 // in order and which can be referred to as 'R', 'G', 'B' and 'A'. Thus, if win32
@@ -18,36 +24,29 @@
 //    (1) conversion to ubyte (luminance of vil_rgba: weights (0.299, 0.587, 0.114, 0)).
 //    (2) min and max of vil_rgba<byte>  values, useful for morphological operations.
 //    (3) arithmetic operations
-//
-// .SECTION Author
-//              Philip C. Pritchett, 12 Nov 99
-//              Robotics Research Group, University of Oxford
-//
-#include <vcl_iosfwd.h>
-
 template <class T>
 struct vil_rgba {
 public:
   typedef T value_type;
   
-  // -- The values.
+  // The values.
   T  r; T g; T b; T a;
   inline T R() const { return r; }
   inline T G() const { return g; }
   inline T B() const { return b; }
   inline T A() const { return a; }
   
-  // -- Create (0,0,0,0) vil_rgba cell. We need the default ctor to do this as the STL
+  //:Create (0,0,0,0) vil_rgba cell. We need the default ctor to do this as the STL
   // effectively mandates that T() produces a nil value.
   vil_rgba():
     r(0), g(0), b(0), a(0) {}
   
-  // -- Create grey (v,v,v,1) vil_rgba cell from value v.  This provides a conversion
+  //:Create grey (v,v,v,1) vil_rgba cell from value v.  This provides a conversion
   // from T to vil_rgba<T>, needed by e.g. two constructors in IUE_filter.h.
   vil_rgba(T v):
     r(v), g(v), b(v), a(1) {}
   
-  // -- Construct from four values.
+  //:Construct from four values.
   vil_rgba(T red, T green, T blue, T alpha):
     r(red), g(green), b(blue), a(alpha) {}
 
@@ -124,14 +123,14 @@ public:
 #endif
 
  
-  // -- Convert vil_rgba to gray using standard (.299, .587, .114) weighting.
+  //:Convert vil_rgba to gray using standard (.299, .587, .114) weighting.
   T grey() const { return int(0.5+r*0.299+0.587*g+0.114*b); }
   
   // Who wants this? It's a pain in the ass.
   // ImageProcessing/IIFOperators use this a lot!
   operator T() const { return int(0.5+r*0.299+0.587*g+0.114*b); }
   
-  // -u- equality
+  //:equality
 //unimp  inline bool operator== (vil_rgba<T> const&) const;
 };
 

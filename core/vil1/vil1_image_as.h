@@ -3,11 +3,13 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_image_as
-// .INCLUDE vil/vil_image_as.h
-// .FILE vil_image_as.cxx
-// .FILE vil_memory_image_of_format.txx
-// @author fsm@robots.ox.ac.uk
+// This is vxl/vil/vil_image_as.h
+
+
+//:
+// \file
+// \brief Set of vil_image_as functions
+// \author fsm@robots.ox.ac.uk
 
 #include <vil/vil_image.h>
 #include <vil/vil_byte.h>

@@ -3,37 +3,67 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_block_cache_image_impl
-// .INCLUDE vil/vil_block_cache_image_impl.h
-// .FILE vil_block_cache_image_impl.cxx
-// .SECTION Author
-//  fsm@robots.ox.ac.uk
-//
+//This is vxl/vil/vil_block_cache_image_impl.h
+
+//:
+// \file 
+// \author fsm@robots.ox.ac.uk
+
 
 #include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>
+#include <vcl_iostream.h>
+#include <vcl_string.h>
 
-//: adaptor which caches the given image in blocks of given size.
+//: vil_block_cache_image_impl - adaptor which caches the given image in blocks of given size.
 class vil_block_cache_image_impl : public vil_image_impl {
 public:
+
+ //: Constructor with image and x and y bock-size
   vil_block_cache_image_impl(vil_image , unsigned blocksizex, unsigned blocksizey);
+
+  //: Destructor
   ~vil_block_cache_image_impl();
 
-  //:
+  //: Number of image planes
   int planes() const { return base.planes(); }
+
+  //: Image width
   int width() const { return base.width(); }
+
+  //: Image height
   int height() const { return base.height(); }
+
+  //: Number of measures per pixel
   int components() const { return base.components(); }
+
+  //: Number of bits per component
   int bits_per_component() const { return base.bits_per_component(); }
+
+  //: Component format
   vil_component_format component_format() const { return base.component_format(); }
   
+  //: Access to image-plane 
   vil_image get_plane(int ) const;
 
+  //: Write nominated section of image to buf
   bool get_section(void *buf, int x0, int y0, int w, int h) const;
+
+  //: Write buf to mininated section of image
   bool put_section(void const *buf, int x0, int y0, int w, int h); // write-through
   
+  //: Get info about block-characteristics 
   bool get_property(char const *tag, void *property_value_out = 0) const;
+
   
+
+/* START_MANCHESTER_BINARY_IO_CODE */
+
+  //: Return the name of the class;
+  virtual const vcl_string& is_a() const;
+
+/* END_MANCHESTER_BINARY_IO_CODE */
+
 private:
   // the underlying, uncached image.
   vil_image base;
@@ -42,5 +72,7 @@ private:
   unsigned block_size_x;
   unsigned block_size_y;
 };
+
+// Helpers-------------------------------------------------------------------
 
 #endif // vil_block_cache_image_impl_h_

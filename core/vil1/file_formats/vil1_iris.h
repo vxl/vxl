@@ -3,15 +3,16 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_iris
-// .INCLUDE vil/file_formats/vil_iris.h
-// .FILE file_formats/vil_iris.cxx
-// .SECTION Author
-// joris.schouteden@esat.kuleuven.ac.be
-// Created: 17 Feb 2000
-// .SECTION Modifications
+
+//:
+// \file
+// \author joris.schouteden@esat.kuleuven.ac.be
+// \date 17 Feb 2000
+//\verbatim
+//  Modifications
 //  17-Feb-2000 JS - Initial version, copied from IrisRGBImage.C
 //     Jul-2000 Peter Vanroose - bug fixed in write_header() by adding extra argument to constructor to pass imagename_ member
+//\endverbatim
 
 #include <vil/vil_file_format.h>
 #include <vil/vil_image_impl.h>

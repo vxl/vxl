@@ -1,4 +1,6 @@
 #ifndef fsm_dont_croak
+// This is vxl/vil/vil_convolve_1d_y.txx
+
 croak
 #endif
 

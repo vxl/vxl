@@ -29,76 +29,73 @@
 #ifndef _viff_h_
 #define _viff_h_
 
-/* >>>>>>>>>>>>>>>>>>>>>>>>>>>>> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-   >>>>                                                                   <<<<
-   >>>>      file: viff.h                                                 <<<<
-   >>>>                                                                   <<<<
-   >>>>      contains:  Khoros Visualization/Image File Format.           <<<<
-   >>>>                 Design considerations included the need           <<<<
-   >>>>                 for portability, expandability and simplicity.    <<<<
-   >>>>                                                                   <<<<
-   >>>>      written by: John Rasure                                      <<<<
-   >>>>                                                                   <<<<
-   >>>>      date: 5/5/88                                                 <<<<
-   >>>>                                                                   <<<<
-   >>>>      modifications:  Scott R. Wilson 1/13/88                      <<<<
-   >>>>                      Scott R. Wilson 5/3/88 - Version 2, Release 0<<<<
-   >>>>                      Scott Wilson, John Rasure, Tom Sauer, and    <<<<
-   >>>>                      Mark Young:  2/18/89 - Version 3 Release 0   <<<<
-   >>>>                      Scott Wilson - Version 3.1                   <<<<
-   >>>>                      Tom Sauer - 7/12/89 removed the #defines for <<<<
-   >>>>                      location dimension                           <<<<
-   >>>>                      Scott Wilson - Correct comment for           <<<<
-   >>>>                      subrow_size 5/9/90                           <<<<
-   >>>>                      Scott Wilson - Deleted unneeded include of   <<<<
-   >>>>                      vdefines.h 18-Jan-91                         <<<<
-   >>>>                                                                   <<<<
-   >>>>                                                                   <<<<
-   >>>>>>>>>>>>>>>>>>>>>>>>>>>>> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
+ 
+//:
+// \file
+// \brief  Khoros Visualization/Image File Format. 
+// \author John Rassure
+// \date 5/5/88
+// Design considerations included the need 
+// for portability, expandability and simplicity.    
+//
+// Modifications 
+// \verbatim
+// Scott R. Wilson 1/13/88		          
+// Scott R. Wilson 5/3/88 - Version 2, Release 0
+// Scott Wilson, John Rasure, Tom Sauer, and    
+// Mark Young:  2/18/89 - Version 3 Release 0   
+// Scott Wilson - Version 3.1                   
+// Tom Sauer - 7/12/89 removed the #defines for 
+// location dimension				  
+// Scott Wilson - Correct comment for           
+// subrow_size 5/9/90 		          
+// Scott Wilson - Deleted unneeded include of   
+// vdefines.h 18-Jan-91                         
+// \endverbatim
+//
+// \verbatim
+//******************************************************************
+//	Khoros Visualization/Image File Format		         
+//							         
+//	A Khoros data file is organized as a 1Kbyte header     
+//	followed by additional information.  The first two       
+//	bytes of the header tell what kind of stuff the          
+//	additional information is.  For Khoros image files,     
+//	the additional information consists of the maps,   
+//	the location data, and then the image or vector data.    
+//                                                                
+//	There is a supporting document for this file called      
+//	"The Khoros Visualization/Image File Format" that will help to        
+//	expalin the various fields, see $KHOROS_HOME/manual/viff_format.
+//
+//	The header fields where carefully selected to            
+//	prevent contradictions between categories, i.e. they     
+//	were chosen to be orthogonal to each other.  However,
+//	in several situations this causes the fields to supply
+//	redundant information.
+//								 
+//	Note that the structure contains pointers to the various 
+//	chunks of data.  These will make sense ONLY when the 
+//	data is in memory.  
+//
+//	*imagedata - points to a sequence of images, an image is
+//	made up of bands, and the bands are in a sequence; or
+//	it can point to vectors, where the vector dimension is
+//	the number of bands.
+//
+//	*maps - points to a sequence of 2-dimensional maps, a map 
+//	is organized as stacked columns.  A data value indexes map rows.
+//
+//	*location - points to bands of coordinate values, ie if
+//	two dimensional locations, then there would be a band
+//	of x's followed by a band of y's.
+//								 
+//	The Khoros convention for the image orientarion is	 
+//	with the image origin in the upper left hand corner.     
+//							         
+//******************************************************************
+// \endverbatim
 
-
-/*
-******************************************************************
-        Khoros Visualization/Image File Format
-
-        A Khoros data file is organized as a 1Kbyte header
-        followed by additional information.  The first two
-        bytes of the header tell what kind of stuff the
-        additional information is.  For Khoros image files,
-        the additional information consists of the maps,
-        the location data, and then the image or vector data.
-
-        There is a supporting document for this file called
-        "The Khoros Visualization/Image File Format" that will help to
-        expalin the various fields, see $KHOROS_HOME/manual/viff_format.
-
-        The header fields where carefully selected to
-        prevent contradictions between categories, i.e. they
-        were chosen to be orthogonal to each other.  However,
-        in several situations this causes the fields to supply
-        redundant information.
-
-        Note that the structure contains pointers to the various
-        chunks of data.  These will make sense ONLY when the
-        data is in memory.
-
-        *imagedata - points to a sequence of images, an image is
-        made up of bands, and the bands are in a sequence; or
-        it can point to vectors, where the vector dimension is
-        the number of bands.
-
-        *maps - points to a sequence of 2-dimensional maps, a map
-        is organized as stacked columns.  A data value indexes map rows.
-
-        *location - points to bands of coordinate values, ie if
-        two dimensional locations, then there would be a band
-        of x's followed by a band of y's.
-
-        The Khoros convention for the image orientarion is
-        with the image origin in the upper left hand corner.
-
-******************************************************************
-*/
 
 
 /*

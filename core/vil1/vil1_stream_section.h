@@ -3,13 +3,16 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_stream_section - make a section of a vil_stream behave like a vil_stream
-// .INCLUDE vil/vil_stream_section.h
-// .FILE vil_stream_section.cxx
-// .SECTION Author
-//  fsm@robots.ox.ac.uk
-//
-// .SECTION Description
+// This is vxl/vil/vil_stream_section.h
+
+//:
+// \file
+// \brief make a section of a vil_stream behave like a vil_stream
+// \author  fsm@robots.ox.ac.uk
+
+#include <vil/vil_stream.h>
+
+//:
 // Purpose: make a section of a vil_stream behave like a vil_stream.
 //
 // It is possible to have multiple vil_stream_sections using the same
@@ -17,9 +20,6 @@
 // a note of the current position and seeking a lot.
 //
 // Note however that this is *not* threadsafe.
-
-#include <vil/vil_stream.h>
-
 struct vil_stream_section : vil_stream
 {
   // skip to position 'begin' in underlying stream and translate seeks,

@@ -130,7 +130,8 @@ vil_gif_loader_saver::vil_gif_loader_saver(vil_stream *s_) : s(s_)
     if (b == ';')   // terminator
       break;
     if (b != ',') { // separator
-      vcl_cerr << "unexpected character \'" << char(b) << "\' (0x" << vcl_hex << int(b) << vcl_dec << ") in GIF stream" << vcl_endl;
+      vcl_cerr << "unexpected character \'" << char(b) << "\' (0x" << vcl_hex
+               << int(b) << vcl_dec << ") in GIF stream" << vcl_endl;
       assert(false);
     }
 

@@ -1,9 +1,10 @@
+// This is vxl/vil/vil_image_impl.cxx
+
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vil_image_impl
+// vil_image_impl
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 16 Feb 00
 //
@@ -47,3 +48,15 @@ bool vil_image_impl::put_section(void const* /*buf*/, int /*x0*/, int /*y0*/, in
 {
   return false;
 }
+
+/* START_MANCHESTER_BINARY_IO_CODE */
+
+  //: Return the name of the class;
+const vcl_string& vil_image_impl::is_a() const
+{
+  const static vcl_string class_name_="vil_image_impl";
+  return class_name_;
+}
+
+/* END_MANCHESTER_BINARY_IO_CODE */
+

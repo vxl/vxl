@@ -1,9 +1,11 @@
+// This is vxl/vil/vil_memory_image_window.cxx
+
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation
 #endif
 //
-// .NAME vil_memory_image_window
+// vil_memory_image_window
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 19 Aug 96
 //
@@ -13,8 +15,8 @@
 #include <vcl_cmath.h>
 
 vil_memory_image_window::vil_memory_image_window(
-                                  const vil_memory_image_of<vil_byte>& image,
-                                  int centre_x, int centre_y, int mask_size):
+           const vil_memory_image_of<vil_byte>& image,
+           int centre_x, int centre_y, int mask_size):
   image1_(image)
 {
   init(centre_x, centre_y, mask_size);
@@ -40,7 +42,7 @@ float vil_memory_image_window::mean_intensity()
 
 inline int labs(int x) { return (x > 0) ? x : -x; }
 
-// -- Return early if difference becomes greater than early_exit_level.
+//:Return early if difference becomes greater than early_exit_level.
 // This is a useful check to have anyway as the default arg of MAXINT avoids
 // accumulator overflow which can easily happen on certain medical and range
 // images.
@@ -85,7 +87,6 @@ int vil_memory_image_window::sum_squared_differences(const vil_memory_image_of<v
 }
 
 
-// --
 int vil_memory_image_window::ncc(const vil_memory_image_of<vil_byte>& image2,
                                  int centre2_x, int centre2_y,
                                  double normalise_ratio,

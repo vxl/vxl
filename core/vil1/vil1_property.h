@@ -3,13 +3,12 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// This is vxl/vil/vil_property.h
 
-// .NAME vil_property
+//:
+// \file
+// \author  fsm@robots.ox.ac.uk
 //
-// .SECTION Description
 // There is no class called vil_property.
 //
 // The image class vil_image has the methods :
@@ -36,8 +35,8 @@
 // the general sense of the word. We only have one namespace, so try
 // not to clutter it. All property tags described in this file should
 // begin with "vil_property_" and that chunk of the namespace is reserved.
-
-//: packing of rgb(a) colours in the data produced by get_section().
+//
+// packing of rgb(a) colours in the data produced by get_section().
 // tags: "vil_property_r_packing"
 //       "vil_property_g_packing"
 //       "vil_property_b_packing"
@@ -63,8 +62,8 @@
 //       for (int j=0; j<256; ++j)
 //         buf[p][i][j] = bif[ a[0]*p + a[1]*i + a[2]*j ];
 //   }
-
-//: preferred direction for access.
+//
+// preferred direction for access.
 // tags: "vil_property_preferred_x_direction"
 //       "vil_property_preferred_y_direction"
 // type: int

@@ -1,3 +1,5 @@
+// This is vxl/vil/vil_image_proxy.cxx
+
 /*
   fsm@robots.ox.ac.uk
 */
@@ -9,6 +11,7 @@
 #include <vcl_string.h>
 #include <vcl_cstring.h>
 #include <vil/vil_load.h>
+#include <vcl_string.h>
 
 struct vil_image_proxy_impl : public vil_image_impl
 {
@@ -58,9 +61,29 @@ struct vil_image_proxy_impl : public vil_image_impl
     { return vil_load(filename.c_str()).get_property(tag, property_value); }
   bool set_property(char const *tag, void const *property_value) const
     { return vil_load(filename.c_str()).set_property(tag, property_value); }
+
+/* START_MANCHESTER_BINARY_IO_CODE */
+
+  //: Return the name of the class;
+  virtual const vcl_string& is_a() const;
+
+/* END_MANCHESTER_BINARY_IO_CODE */
+
 };
 
 vil_image_proxy::vil_image_proxy(char const *file)
   : vil_image(new vil_image_proxy_impl(file))
 {
 }
+
+/* START_MANCHESTER_BINARY_IO_CODE */
+
+  //: Return the name of the class;
+const vcl_string& vil_image_proxy_impl::is_a() const
+{
+  const static vcl_string class_name_="vil_image_proxy_impl";
+  return class_name_;
+}
+
+/* END_MANCHESTER_BINARY_IO_CODE */
+

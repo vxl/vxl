@@ -1,3 +1,5 @@
+// This is vxl/vil/vil_resample_image_impl.cxx
+
 /*
   fsm@robots.ox.ac.uk
 */
@@ -81,3 +83,15 @@ bool vil_resample_image_impl::get_section(void *buf, int x0, int y0, int w, int 
     return false;
   }
 }
+
+/* START_MANCHESTER_BINARY_IO_CODE */
+
+  //: Return the name of the class;
+const vcl_string& vil_resample_image_impl::is_a() const
+{
+  const static vcl_string class_name_="vil_resample_image_impl";
+  return class_name_;
+}
+
+/* END_MANCHESTER_BINARY_IO_CODE */
+

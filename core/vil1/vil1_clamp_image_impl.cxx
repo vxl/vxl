@@ -2,6 +2,8 @@
 #pragma implementation
 #endif
 
+// This is vxl/vil/vil_clamp_image_impl.cxx
+
 #include "vil_clamp_image_impl.h"
 #include "vil_clamp_image.h"
 #include "vil_pixel.h"
@@ -39,3 +41,15 @@ bool vil_clamp_image_impl::get_section(void * buf, int x0, int y0, int w, int h)
     return false;
   }
 }
+
+/* START_MANCHESTER_BINARY_IO_CODE */
+
+  //: Return the name of the class;
+const vcl_string& vil_clamp_image_impl::is_a() const
+{
+  const static vcl_string class_name_="vil_clamp_image_impl";
+  return class_name_;
+}
+
+/* END_MANCHESTER_BINARY_IO_CODE */
+

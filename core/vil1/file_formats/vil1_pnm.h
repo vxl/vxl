@@ -4,12 +4,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_pnm
-// .INCLUDE vil/file_formats/vil_pnm.h
-// .FILE file_formats/vil_pnm.cxx
-// .SECTION Author
-//    awf@robots.ox.ac.uk
-// Created: 16 Feb 00
+
+//:
+// \file
+// \author awf@robots.ox.ac.uk
+// \date 16 Feb 00
 
 #include <vil/vil_file_format.h>
 #include <vil/vil_image_impl.h>

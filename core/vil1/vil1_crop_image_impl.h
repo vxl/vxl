@@ -3,15 +3,17 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_crop_image_impl
-// .INCLUDE vil/vil_crop_image_impl.h
-// .FILE vil_crop_image_impl.cxx
-// .SECTION Author
-//    awf@robots.ox.ac.uk
-// Created: 16 Feb 00
+// This is vxl/vil/vil_crop_image_impl.h
+
+//:
+// \file
+// \brief A generic_image adaptor that behaves like a cropped version of its input
+// \author awf@robots.ox.ac.uk
+// \date 16 Feb 00
 
 #include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>
+#include <vcl_string.h>
 
 //: A generic_image adaptor that behaves like a cropped version of its input
 class vil_crop_image_impl : public vil_image_impl {
@@ -34,6 +36,14 @@ public:
     return gi_.put_section(buf, x0 + x0_, y0 + y0_, width, height);
   }
   //  vil_image get_plane(int ) const;
+
+
+/* START_MANCHESTER_BINARY_IO_CODE */
+
+  //: Return the name of the class;
+  virtual const vcl_string& is_a() const;
+
+/* END_MANCHESTER_BINARY_IO_CODE */
 
 protected:
   vil_image gi_;

@@ -4,19 +4,23 @@
 #pragma interface
 #endif
 
-// .NAME vil_image_impl - Representation of a generic image
-// .INCLUDE vil/vil_image_impl.h
-// .FILE vil_image_impl.cxx
-//
-// .SECTION Description
+// This is vxl/vil/vil_image_impl.h
+
+//:
+// \file
+// \brief Representation of a generic image
+// \author AWF
+// \date 17 Feb 2000
+//\verbatim
 // A vil_image_impl is reference counted (see below).
 // For a smart-pointer version, use class vil_image.
 //
-// \author AWF
-// \date 17 Feb 2000
-//
-// .SECTION Modifications
+//  Modifications
 //     000216 AWF Initial version.
+//\endverbatim
+
+#include <vcl_cassert.h>
+#include <vcl_string.h>
 
 class vil_image;
 
@@ -35,12 +39,12 @@ enum vil_component_format {
 // Representation of a generic image.
 //
 // \verbatim
-//
-//                        Component   Cell     Pixel     get_section(plane=0,x0=0,y0=0,w=1,h=1)
-//                        example     example  example
-//
+// 
+//                        Component   Cell     Pixel      get_section(plane=0,
+//                        example     example  example      x0=0,y0=0,w=1,h=1)
+// 
 //  3 x W x H x 1
-//     +------+           r           r        r,g,b     r
+//     +------+           r           r        r,g,b      r
 //     |r     |           g           g
 //   +-|      |           b           b
 //   |g|      |
@@ -51,7 +55,7 @@ enum vil_component_format {
 // +------+
 //
 // 1 x W x H x 3
-// +------------+         r           rgb     rgb        rgb
+// +------------+         r           rgb       rgb       rgb
 // |rgb|rgb|    |
 // +---+---+    |
 // |            |
@@ -126,12 +130,23 @@ public:
   virtual bool get_property(char const* tag, void* property_value = 0) const;
   virtual bool set_property(char const* tag, void const* property_value = 0) const;
 
+
+/* START_MANCHESTER_BINARY_IO_CODE */
+
+  //: Return the name of the class;
+  virtual const vcl_string& is_a() const;
+
+/* END_MANCHESTER_BINARY_IO_CODE */
+
 private:
   friend class vil_image;
   // You probably should not use a vil_image_impl in a vbl_smart_ptr, so the
   // ref counting methods are called by the unusual up_ref() and down_ref().
   void up_ref() { ++reference_count; }
-  void down_ref() { if (--reference_count<=0) delete this; }
+  void down_ref() { 
+  assert(reference_count>0); 
+  if (--reference_count<=0) delete this; 
+  }
   int reference_count;
 };
 

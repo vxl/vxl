@@ -4,14 +4,15 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_jpeg
-// .INCLUDE vil/file_formats/vil_jpeg.h
-// .FILE file_formats/vil_jpeg.cxx
-// .SECTION Author
-//    fsm@robots.ox.ac.uk
-// Created: 17 Feb 2000
-// .SECTION Modifications:
+
+//:
+// \file
+// \author    fsm@robots.ox.ac.uk
+// \date 17 Feb 2000
+//\verbatim
+//  Modifications:
 // Adapted from geoff's code in ImageClasses/JPEGImage.*
+//\endverbatim
 
 #include <vil/vil_file_format.h>
 #include <vil/vil_image_impl.h>

@@ -3,20 +3,24 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+// This is vxl/vil/vil_colour_space.h
 
-//: Functions to convert between different colour spaces.
+
+//:
+// \file
+// \brief Functions to convert between different colour spaces.
+// \author fsm@robots.ox.ac.uk
+// Functions to convert between different colour spaces.
 // See Foley and van Dam, "Computer Graphics, Principles and Practice".
 
 
-//: This is a linear transformation.
+//: Linear transformation from RGB to YIQ colour spaces
 template <class T>
 void vil_colour_space_RGB_to_YIQ(T const in[3], T out[3]);
 
 
-//:
+
+//: Transform from RGB to HSV colour spaces
 // The input RGB values must lie in [0, L], for some positive L. Usually
 // L=1 or 255.
 //

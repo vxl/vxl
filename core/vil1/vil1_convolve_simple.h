@@ -1,13 +1,15 @@
 #ifndef vil_convolve_simple_h_
 #define vil_convolve_simple_h_
-// .NAME vil_convolve_simple
-// .LIBRARY vil
-// .INCLUDE vil/vil_convolve_simple.h
-// .FILE    vil_convolve_simple.txx
-// .SECTION Author
-//  fsm@robots.ox.ac.uk
-//
-// .SECTION Description
+// This is vxl/vil/vil_convolve_simple.h
+
+//:
+// \file
+// \brief Simple convolution functions
+// \author awf@robots.ox.ac.uk
+
+template <class T> class vil_memory_image_of;
+
+//: Convolution
 // This function assumes that the image types provide operator[] to
 // return a pointer (or something which behaves like one) to the y'th
 // raster.
@@ -19,26 +21,28 @@
 // The dummy parameter is just for dumb compilers that do not allow
 // the use of vil_convolve_simple<...> to specify the accumulator type.
 //
+// \verbatim
 // I1 : input image type
 // I2 : input image type
 // AC : accumulator pixel type
 // O  : output image type
-
-template <class T> class vil_memory_image_of;
-
+// \endverbatim
 template <class I1, class I2, class AC, class O>
 void vil_convolve_simple(I1 const* const*  in1, unsigned w1, unsigned h1, // input 1
                          I2 const* const*  in2, unsigned w2, unsigned h2, // input 2
                          AC *, // dummy
                          O       * const*  out);                          // ouput
 
+//: Convolution
 // This function performs some bounds checks on the given memory images
 // and the dispatches the convolution itself to the above function.
 //
-// I1 : input pixel type
-// I2 : input pixel type
+// \verbatim
+// I1 : input image type
+// I2 : input image type
 // AC : accumulator pixel type
-// O  : output pixel type
+// O  : output image type
+// \endverbatim
 //
 // out_{off+k} = \sum_{i+j = k} a_{off+i} b_{off+j}
 template <class I1, class I2, class AC, class O>
@@ -51,8 +55,16 @@ void vil_convolve_simple(// input 1
                          vil_memory_image_of<O>        &OUT, // output
                          int xo, int yo);
 
+//: Convolution
 // Like the previous function, except without bounds checking and
 // specified regions.
+//
+// \verbatim
+// I1 : input image type
+// I2 : input image type
+// AC : accumulator pixel type
+// O  : output image type
+// \endverbatim
 //
 // out_{off+k} = \sum_{i+j = k} a_{off+i} b_{off+j}
 template <class I1, class I2, class AC, class O>

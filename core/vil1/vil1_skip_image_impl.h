@@ -3,13 +3,16 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_skip_image_impl - Adaptor which produces a new image by skipping rows and columns
-// .INCLUDE vil/vil_skip_image_impl.h
-// .FILE vil_skip_image_impl.cxx
+// This is vxl/vil/vil_skip_image_impl.h
+
+//:
+// \file
+// \brief Adaptor which produces a new image by skipping rows and columns
 // \author fsm@robots.ox.ac.uk
 
 #include <vil/vil_image_impl.h>
 #include <vil/vil_image.h>
+#include <vcl_string.h>
 
 class vil_skip_image_impl : public vil_image_impl {
 public:
@@ -30,6 +33,14 @@ public:
   bool put_section(void const *buf, int x0, int y0, int w, int h); // <- will fail
 
   bool get_property(char const *tag, void *property_value_out = 0) const;
+
+
+/* START_MANCHESTER_BINARY_IO_CODE */
+
+  //: Return the name of the class;
+  virtual const vcl_string& is_a() const;
+
+/* END_MANCHESTER_BINARY_IO_CODE */
 
 private:
   vil_image base;

@@ -3,12 +3,12 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_smooth
-// .INCLUDE vil/vil_smooth.h
-// .FILE vil_smooth.cxx
-// .SECTION Author
-//  fsm@robots.ox.ac.uk
-//
+// This is vxl/vil/vil_smooth.h
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 
 #include <vil/vil_image.h>
 

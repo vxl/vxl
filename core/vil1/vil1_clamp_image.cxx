@@ -2,6 +2,8 @@
 #pragma implementation
 #endif
 
+// This is vxl/vil/vil_clamp_image.cxx
+
 #include "vil_clamp_image.h"
 #include <vil/vil_image.h>
 #include <vil/vil_rgb.h>

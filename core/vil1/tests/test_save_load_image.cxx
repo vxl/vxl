@@ -19,7 +19,7 @@ int nr_failures = 0;
 
 //#define ww cout << "reached " __FILE__ ":" << __LINE__ << endl
 
-// -- this function tests to see if all the pixels in two images are equal
+//: Test to see if all the pixels in two images are equal
 bool test_image_equal(char const* test,
                       char const* type_name,
                       vil_image const & image,
@@ -132,8 +132,7 @@ bool test_image_equal(char const* test,
   }
 }
 
-// -- this function tests the read and write for the given image into the
-//    image type specified in type.
+//: Test the read and write for the given image into the image type specified in type.
 
 void vil_test_image_type(char const* type_name, // type for image to read and write
                          vil_image const & image, // test image to save and restore

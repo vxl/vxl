@@ -4,14 +4,16 @@
 #pragma interface
 #endif
 
-// .NAME vil_copy
-// .INCLUDE vil/vil_copy.h
-// .FILE vil_copy.cxx
-// .SECTION Author
-//    awf@robots.ox.ac.uk
-// Created: 16 Feb 00
-//
-// .SECTION Modifications
+// This is vxl/vil/vil_copy.h
+
+//:
+// \file
+// \brief Image copy function
+// \author awf@robots.ox.ac.uk
+// \date 16 Feb 00
+
+
+// Modifications
 //     000216 AWF Initial version.
 //     000217 JS  components*planes because get_section returns RGBRGB
 

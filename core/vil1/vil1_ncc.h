@@ -4,18 +4,21 @@
 #pragma interface
 #endif
 
-// .NAME vil_ncc - Routines to compute normalized cross-correlation between two images
-// .INCLUDE vil/vil_ncc.h
-// .FILE vil_ncc.txx
-// .SECTION Author
-//  capes@robots.ox.ac.uk
+// This is vxl/vil/vil_ncc.h
+
+//:
+// \file
+// \brief Routines to compute normalized cross-correlation between two images
+// \author capes@robots.ox.ac.uk
 
 #include <vil/vil_memory_image_of.h>
 
-//: normalized cross correlation for in-core images.
-// I1 : input pixel type 1
-// I2 : input pixel type 2
+//: Normalized cross correlation for in-core images.
+// \verbatim
+// I1: input pixel type 1
+// I2: input pixel type 2
 // O  : accumulator type
+// \endverbatim
 template <class I1, class I2, class O>
 O vil_ncc(vil_memory_image_of<I1> const &,
           vil_memory_image_of<I2> const &,

@@ -3,21 +3,20 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_pyramid
-// .INCLUDE vil/vil_pyramid.h
-// .FILE vil_pyramid.cxx
-//
-// .SECTION Description
-// vil_pyramid is *not* an image. It is like an array of images, with
-// the 0th element as the given image and the ith element a subsampled
-// version of the (i-1)th element. The subsampled images are computed
-// on demand and cached for later use.
-//
+// This is vxl/vil/vil_pyramid.h
+
+//:
+// \file
 // \author fsm@robots.ox.ac.uk
 
 #include <vil/vil_image.h>
 #include <vcl_vector.h>
 
+//:
+// vil_pyramid is *not* an image. It is like an array of images, with
+// the 0th element as the given image and the ith element a subsampled
+// version of the (i-1)th element. The subsampled images are computed
+// on demand and cached for later use.
 struct vil_pyramid 
 {
   enum cache_strategy {

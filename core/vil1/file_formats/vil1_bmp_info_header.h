@@ -3,10 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vil_bmp_info_header
-// .INCLUDE vil/file_formats/vil_bmp_info_header.h
-// .FILE file_formats/vil_bmp_info_header.cxx
-// @author fsm@robots.ox.ac.uk
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
 
 class vil_stream;
 #include <vcl_iosfwd.h>

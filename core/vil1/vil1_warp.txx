@@ -1,6 +1,8 @@
+// This is vxl/vil/vil_warp.txx
+
 //-*- c++ -*-------------------------------------------------------------------
 //
-// .NAME ImageWarp
+// ImageWarp
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 23 Jan 99
 // Modifications:
