@@ -34,18 +34,33 @@ public:
   int maxiter;
   double X_tolerance;
   double F_tolerance;
+
+	  //: Scaling used to select starting verticies relative to intial x0
+		//  ie the i'th vertex has x[i] = x0[i]*(1+relative_diameter)
   double relative_diameter;
 
+	  //: Construct and supply function to be minimized
   vnl_amoeba(vnl_cost_function& f);
 
   void set_delta(vnl_vector<double> const& delta_x);
+
+	  //: Modify x to minimise function supplied in constructor
   void minimize(vnl_vector<double>& x);
+
+	  //: Number of evaluations used in last call to minimize
   int get_num_evaluations() const { return num_evaluations_; }
 
 public:
+    //: Modify x so as to minimise f(x)
   static void minimize(vnl_cost_function& f, vnl_vector<double>& x);
+
+    //: Modify x so as to minimise f(x)
+		//  delta defines relative size of initial simplex
+		//  ie the i'th vertex has xi[i] = x[i]*(1+delta)
   static void minimize(vnl_cost_function& f, vnl_vector<double>& x,
-        double delta);
+                       double delta);
+
+    //: Modify x so as to minimise f(x)
   static void minimize(vnl_least_squares_function& f, vnl_vector<double>& x);
 
   static bool default_verbose;
