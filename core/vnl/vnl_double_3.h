@@ -1,4 +1,4 @@
-// This is vxl/vnl/vnl_double_3.h
+// This is core/vnl/vnl_double_3.h
 #ifndef vnl_double_3_h_
 #define vnl_double_3_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -23,8 +23,11 @@ vnl_T_n_impl(double,3);
 inline
 vnl_double_3 cross_3d (vnl_double_3 const& v1, vnl_double_3 const& v2)
 {
-  // Need this template as will not automatically match the base one.
-  return cross_3d(v1, v2);
+  vnl_double_3 result;
+  result[0] = v1[1] * v2[2] - v1[2] * v2[1];
+  result[1] = v1[2] * v2[0] - v1[0] * v2[2];
+  result[2] = v1[0] * v2[1] - v1[1] * v2[0];
+  return result;
 }
 
 #endif // vnl_double_3_h_
