@@ -24,58 +24,59 @@ enum vil2_convolve_boundary_option
 {
   // Do not fill destination edges at all
   // i.e. leave them unchanged.
-  vil2_convolve_ignore_edge, /**< Do not fill destination edges at all. */
+  vil2_convolve_ignore_edge, //!< Do not fill destination edges at all.
   // Do not to extend the signal, but pad with zeros.
   //     |                               |
   // K                       ----*-------
   // in   ... ---------------------------
   // out  ... --------------------0000000
-  vil2_convolve_no_extend, /**< Do not to extend the signal, but pad with zeros. */
+  vil2_convolve_no_extend, //!< Do not to extend the signal, but pad with zeros.
 
   // Zero-extend the input signal beyond the boundary.
   //     |                               |
   // K                              ----*--------
   // in   ... ---------------------------000000000000...
   // out  ... ---------------------------
-  vil2_convolve_zero_extend, /**< Zero-extend the input signal beyond the boundary. */
+  vil2_convolve_zero_extend, //!< Zero-extend the input signal beyond the boundary.
 
   // Extend the signal to be constant beyond the boundary
   //     |                               |
   // K                              ----*--------
   // in   ... --------------------------aaaaaaaaaaaaa...
   // out  ... ---------------------------
-  vil2_convolve_constant_extend, /**< Extend the signal to be constant beyond the boundary. */
+  vil2_convolve_constant_extend, //!< Extend the signal to be constant beyond the boundary.
 
   // Extend the signal periodically beyond the boundary.
   //     |                               |
   // K                              ----*--------
   // in   abc...-------------------------abc...------..
   // out  ... ---------------------------
-  vil2_convolve_periodic_extend, /**< Extend the signal periodically beyond the boundary. */
+  vil2_convolve_periodic_extend, //!< Extend the signal periodically beyond the boundary.
 
   // Extend the signal by reflection about the boundary.
   //     |                               |
   // K                               ----*--------
   // in   ... -------------------...edcbabcde...
   // out  ... ---------------------------
-  vil2_convolve_reflect_extend, /**< Extend the signal by reflection about the boundary. */
+  vil2_convolve_reflect_extend, //!< Extend the signal by reflection about the boundary.
 
   // This one is slightly different. The input signal is not
   // extended in any way, but the kernel is trimmed to allow
   // convolution to proceed up to the boundary and reweighed
   // to keep the total area the same.
   // *** may not work with kernels which take negative values.
-  vil2_convolve_trim /**< Kernel is trimmed and reweighed, to allow convolution up to boundary. */
+  vil2_convolve_trim //!< Kernel is trimmed and reweighed, to allow convolution up to boundary.
 };
 
 //: Convolve edge with kernel[x*kstep] x in [k_lo,k_hi] (k_lo<=0)
 //  Fills only edge: dest[i], i=0..(-k_lo-1)
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil2_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
-                                       destT* dest, int d_step,
-                                       const kernelT* kernel, int k_lo, int k_hi, int kstep,
-                                       accumT,
-                                       vil2_convolve_boundary_option option)
+                                  destT* dest, int d_step,
+                                  const kernelT* kernel,
+                                  int k_lo, int k_hi, int kstep,
+                                  accumT,
+                                  vil2_convolve_boundary_option option)
 {
   if (option==vil2_convolve_ignore_edge) return;
   if (option==vil2_convolve_no_extend)
@@ -92,7 +93,8 @@ inline void vil2_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
       accumT sum = 0;
       const srcT* s = src;
       const kernelT* k = kernel+i*kstep;
-      for (int j=i;j<=k_hi;++j,s+=s_step,k+=kstep) sum+= (accumT)((*s)*(*k));
+      for (int j=i;j<=k_hi;++j,s+=s_step,k+=kstep)
+        sum+= (accumT)((*s)*(*k));
       *dest=sum;
     }
   }
@@ -172,11 +174,11 @@ inline void vil2_convolve_edge_1d(const srcT* src, unsigned n, int s_step,
 // \relates vil2_image_view
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil2_convolve_1d(const srcT* src0, unsigned nx, int s_step,
-                                  destT* dest0, int d_step,
-                                  const kernelT* kernel, int k_lo, int k_hi,
-                                  accumT ac,
-                                  vil2_convolve_boundary_option start_option,
-                                  vil2_convolve_boundary_option end_option)
+                             destT* dest0, int d_step,
+                             const kernelT* kernel, int k_lo, int k_hi,
+                             accumT ac,
+                             vil2_convolve_boundary_option start_option,
+                             vil2_convolve_boundary_option end_option)
 {
   // Deal with start (fill elements 0..1-k_lo of dest)
   vil2_convolve_edge_1d(src0,nx,s_step,dest0,d_step,kernel,k_lo,k_hi,1,ac,start_option);
@@ -196,8 +198,8 @@ inline void vil2_convolve_1d(const srcT* src0, unsigned nx, int s_step,
 
   // Deal with end  (reflect data and kernel!)
   vil2_convolve_edge_1d(src0+(nx-1)*s_step,nx,-s_step,
-                             dest0+(nx-1)*d_step,-d_step,
-                             kernel,-k_hi,-k_lo,-1,ac,end_option);
+                        dest0+(nx-1)*d_step,-d_step,
+                        kernel,-k_hi,-k_lo,-1,ac,end_option);
 }
 
 //: Convolve kernel[i] (i in [k_lo,k_hi]) with srcT in i-direction
@@ -206,11 +208,11 @@ inline void vil2_convolve_1d(const srcT* src0, unsigned nx, int s_step,
 // dest_im resized to size of src_im.
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vil2_convolve_1d(const vil2_image_view<srcT>& src_im,
-                                  vil2_image_view<destT>& dest_im,
-                                  const kernelT* kernel, int k_lo, int k_hi,
-                                  accumT ac,
-                                  vil2_convolve_boundary_option start_option,
-                                  vil2_convolve_boundary_option end_option)
+                             vil2_image_view<destT>& dest_im,
+                             const kernelT* kernel, int k_lo, int k_hi,
+                             accumT ac,
+                             vil2_convolve_boundary_option start_option,
+                             vil2_convolve_boundary_option end_option)
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
@@ -228,7 +230,7 @@ inline void vil2_convolve_1d(const vil2_image_view<srcT>& src_im,
     // Apply convolution to each row in turn
     for (unsigned int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
       vil2_convolve_1d(src_row,ni,s_istep,  dest_row,d_istep,
-                            kernel,k_lo,k_hi,ac,start_option,end_option);
+                       kernel,k_lo,k_hi,ac,start_option,end_option);
   }
 }
 
@@ -241,18 +243,18 @@ inline vil2_image_resource_sptr vil2_convolve_1d(
                vil2_convolve_boundary_option start_option,
                vil2_convolve_boundary_option end_option);
 
-//: A resource adaptor that behaves like a algo_convolve_1d'ed version of its input
+//: A resource adaptor that behaves like a convolved version of its input
 template <class kernelT, class accumT, class destT>
 class vil2_convolve_1d_resource : public vil2_image_resource
 {
   //: Construct a convolve filter.
   // You can't create one of these directly, use vil2_convolve_1d instead
   vil2_convolve_1d_resource(const vil2_image_resource_sptr& src,
-                                 const kernelT* kernel, int k_lo, int k_hi,
-                                 vil2_convolve_boundary_option start_option,
-                                 vil2_convolve_boundary_option end_option):
-                        src_(src), kernel_(kernel), klo_(k_lo), khi_(k_hi),
-                        start_option_(start_option), end_option_(end_option)
+                            const kernelT* kernel, int k_lo, int k_hi,
+                            vil2_convolve_boundary_option start_option,
+                            vil2_convolve_boundary_option end_option)  :
+      src_(src), kernel_(kernel), klo_(k_lo), khi_(k_hi),
+      start_option_(start_option), end_option_(end_option)
     {
       // Can't do period extension yet.
       assert (start_option != vil2_convolve_periodic_extend ||
@@ -339,7 +341,7 @@ inline vil2_image_resource_sptr vil2_convolve_1d(
                          const vil2_image_resource_sptr& src_im,
                          const destT dt,
                          const kernelT* kernel, int k_lo, int k_hi,
-                         const accumT ac,
+                         const accumT,
                          vil2_convolve_boundary_option start_option,
                          vil2_convolve_boundary_option end_option)
 {

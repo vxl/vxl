@@ -39,10 +39,10 @@ void vgui_rubberband_client::add_infinite_line(float,float,float) {
 void vgui_rubberband_client::add_circle(float,float,float) {
   vcl_cerr << function_macro << " not implemented!\n";
 }
-void vgui_rubberband_client::add_linestrip(int n,float const *,float const *) {
+void vgui_rubberband_client::add_linestrip(int /*n*/,float const *,float const *) {
   vcl_cerr << function_macro << " not implemented!\n";
 }
-void vgui_rubberband_client::add_polygon(int n,float const*,float const*) {
+void vgui_rubberband_client::add_polygon(int /*n*/,float const*,float const*) {
   vcl_cerr << function_macro << " not implemented!\n";
 }
 void vgui_rubberband_client::add_box(float,float,float,float) {
@@ -172,7 +172,7 @@ void vgui_rubberband_tableau::draw_line(float x0, float y0, float x1, float y1)
 void vgui_rubberband_tableau::draw_infinite_line(float a, float b, float c)
 {
   // Compute the bounding box.
-  // This will be the viewport but in the coords of the image.
+  // This will be the viewport but in the coordinates of the image.
   vgui_projection_inspector pi;
   float x0, y0, x1, y1;
   pi.image_viewport(x0,y0,x1,y1);

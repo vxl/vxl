@@ -8,7 +8,6 @@
 
 #include <vil2/algo/vil2_convolve_1d.h>
 #include <vcl_compiler.h>
-#include <vcl_cstdlib.h> // for vcl_abort()
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>  // for vcl_sqrt()
 
@@ -88,7 +87,7 @@ inline void vil2_normalised_correlation_2d(const vil2_image_view<srcT>& src_im,
     const srcT* sp = src_row;
     destT* dp = dest_row;
     for (int i=0;i<ni;++i, sp += s_istep, dp += d_istep)
-      *dp = (destT) vil2_norm_corr_2d_at_pt(sp,s_istep,s_jstep,s_pstep,kernel,accumT());
+      *dp =(destT)vil2_norm_corr_2d_at_pt(sp,s_istep,s_jstep,s_pstep,kernel,ac);
     // Convolve at src(i,j)
   }
 }

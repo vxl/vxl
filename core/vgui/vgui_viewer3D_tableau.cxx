@@ -252,7 +252,7 @@ bool vgui_viewer3D_tableau::handle(const vgui_event& e)
   }
 }
 
-bool vgui_viewer3D_tableau::mouse_down(int x, int y, vgui_button button, vgui_modifier /*modifier*/)
+bool vgui_viewer3D_tableau::mouse_down(int x, int y, vgui_button /*button*/, vgui_modifier /*modifier*/)
 {
   if (c_mouse_rotate(event) || c_mouse_translate(event) || c_mouse_zoom(event)) {
     beginx = x;
@@ -266,8 +266,8 @@ bool vgui_viewer3D_tableau::mouse_down(int x, int y, vgui_button button, vgui_mo
   return false;
 }
 
-bool vgui_viewer3D_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifier modifier) {
-
+bool vgui_viewer3D_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifier modifier)
+{
   // SPINNING
   if (c_mouse_rotate(button, modifier)) {
     if (debug) vcl_cerr << "vgui_trackball_handler::left \n";
@@ -382,26 +382,24 @@ bool vgui_viewer3D_tableau::mouse_up(int x, int y, vgui_button button, vgui_modi
 }
 
 bool vgui_viewer3D_tableau::help() {
-  vcl_cerr << vcl_endl;
   // awfawf fixme
-  vcl_cerr << "-- vgui_viewer3D_tableau ---------\n";
-  vcl_cerr << "|     mouse              |\n";
-  vcl_cerr << "| shift+left        zoom |\n";
-  vcl_cerr << "| shift+middle    rotate |\n";
-  vcl_cerr << "| shift+right  translate |\n";
-  vcl_cerr << "|                        |\n";
-  vcl_cerr << "|     keys               |\n";
-  vcl_cerr << "| `D'         lock dolly |\n";
-  vcl_cerr << "| `Z'          lock zoom |\n";
-  vcl_cerr << "| `l'           lighting |\n";
-  vcl_cerr << "| `s'            shading |\n";
-  vcl_cerr << "| `p'           spinning |\n";
-  vcl_cerr << "| `n'           niceness |\n";
-  vcl_cerr << "| `h'          headlight |\n";
-  vcl_cerr << "| `>'          save home |\n";
-  vcl_cerr << "| `<'       restore home |\n";
-  vcl_cerr << "--------------------------\n";
-  vcl_cerr << vcl_endl;
+  vcl_cerr << "\n-- vgui_viewer3D_tableau ---------\n"
+           << "|     mouse              |\n"
+           << "| shift+left        zoom |\n"
+           << "| shift+middle    rotate |\n"
+           << "| shift+right  translate |\n"
+           << "|                        |\n"
+           << "|     keys               |\n"
+           << "| `D'         lock dolly |\n"
+           << "| `Z'          lock zoom |\n"
+           << "| `l'           lighting |\n"
+           << "| `s'            shading |\n"
+           << "| `p'           spinning |\n"
+           << "| `n'           niceness |\n"
+           << "| `h'          headlight |\n"
+           << "| `>'          save home |\n"
+           << "| `<'       restore home |\n"
+           << "--------------------------\n\n";
 
   return false;
 }

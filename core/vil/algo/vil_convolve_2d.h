@@ -8,7 +8,6 @@
 
 #include <vil2/algo/vil2_convolve_1d.h>
 #include <vcl_compiler.h>
-#include <vcl_cstdlib.h> // for vcl_abort()
 #include <vcl_cassert.h>
 
 
@@ -17,9 +16,9 @@
 // \relates vil2_image_view
 template <class srcT, class kernelT, class accumT>
 inline accumT vil2_convolve_2d_at_pt(const srcT *src_im,
-                                          int s_istep, int s_jstep, int s_pstep,
-                                          const vil2_image_view<kernelT>& kernel,
-                                          accumT)
+                                     int s_istep, int s_jstep, int s_pstep,
+                                     const vil2_image_view<kernelT>& kernel,
+                                     accumT)
 {
   unsigned ni = kernel.ni();
   unsigned nj = kernel.nj();
@@ -75,7 +74,7 @@ inline void vil2_convolve_2d(const vil2_image_view<srcT>& src_im,
     const srcT* sp = src_row;
     destT* dp = dest_row;
     for (int i=0;i<ni;++i, sp += s_istep, dp += d_istep)
-      *dp = (destT) vil2_convolve_2d_at_pt(sp,s_istep,s_jstep,s_pstep,kernel,accumT());
+      *dp = (destT)vil2_convolve_2d_at_pt(sp,s_istep,s_jstep,s_pstep,kernel,ac);
       // Convolve at src(i,j)
   }
 }
