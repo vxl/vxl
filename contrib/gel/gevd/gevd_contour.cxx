@@ -242,7 +242,6 @@ NextPixel(int& i, int& j, const gevd_bufferxy& edgels)
 int
 next_pixel(int& i, int& j, const vbl_array_2d<vtol_vertex_2d_sptr>& vertexMap)
 {
-  float maxpix = 0;
   int maxdir = 0, dir;
   for (dir = 0; dir < TWOPI; dir += HALFPI) // 4-connected first
     if (vertexMap.get(i+DIS[dir], j+DJS[dir])) {
