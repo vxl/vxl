@@ -222,6 +222,9 @@ SOURCE=.\test_stats_nd.cxx
 SOURCE=.\test_table.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_cloneables_factory.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group
