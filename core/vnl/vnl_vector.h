@@ -413,7 +413,6 @@ class vnl_vector
  protected:
   unsigned num_elmts;           // Number of elements
   T* data;                      // Pointer to the vnl_vector
-  // float const *get_x_drawing_samples() { return (x_drawing_samples_);};
 
   void assert_size_internal(unsigned sz) const;
   void assert_finite_internal() const;
