@@ -12,7 +12,7 @@
 //   6 May 2004 Jocelyn Marchadier
 // \endverbatim
 
-#include <vmap/vmap_types.h>
+#include <vmap/vmap_types.h> // for vmap_dart_index
 #include "vpyr_2_pyramid_base.h"
 
 //: The dart class of a pyramid.

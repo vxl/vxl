@@ -8,10 +8,12 @@
 // \date 06/05/2004
 //
 // \verbatim
-//  06 May 2004 Jocelyn Marchadier
+//  Modifications
+//   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
 #include "vpyr_2_pyramid_base.h"
+#include <vmap/vmap_types.h> // for vmap_dart_index
 #include <vmap/vmap_2_tmap_elts.h>
 
 class vpyr_2_tpyramid_base_dart ;

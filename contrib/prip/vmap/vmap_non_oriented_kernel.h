@@ -13,7 +13,8 @@
 //   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
-#include "vmap_kernel.h"
+#include "vmap_types.h" // for vmap_dart_index
+#include <vcl_vector.h>
 
 //: A wrapper to an existing kernel which manage darts in an non oriented mananer and avoids aving loops in the resulting kernel.
 // The darts added to the kernel using the function "add" are added if the resulting edge graph is a tree.
@@ -31,7 +32,8 @@ class vmap_non_oriented_kernel : public TKernel
 
   //:
   typedef typename Base_::dart_iterator dart_iterator ;
-#if 0
+
+#if 0 // vmap_dart_index is typedef'd in vmap_types.h
   typedef typename map_type::vmap_dart_index vmap_dart_index ;
 #endif // 0
 

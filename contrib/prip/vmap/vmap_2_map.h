@@ -8,10 +8,12 @@
 // \date 06/05/2004
 //
 // \verbatim
-//  06 May 2004 Jocelyn Marchadier
+//  Modifications
+//   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
 #include <vcl_iosfwd.h>
+#include "vmap_types.h" // for vmap_dart_index
 #include "vmap_ptr_sequences.h"
 #include "vmap_kernel.h"
 

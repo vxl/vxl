@@ -13,6 +13,8 @@
 // \endverbatim
 
 #include "vpyr_2_pyramid_level.h"
+#include <vmap/vmap_types.h> // for vmap_dart_index
+#include <vmap/vmap_kernel.h>
 #include <vmap/vmap_2_tmap.h>
 #include "vpyr_2_tpyramid_level_elts.h"
 

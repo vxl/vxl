@@ -6,10 +6,13 @@
 // \brief provides the class for handling/defining levels of a combinatorial pyramid.
 // \author Jocelyn Marchadier
 // \date 06/05/2004
+//
 // \verbatim
-//  06 May 2004 Jocelyn Marchadier
+//  Modifications
+//   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
+#include <vmap/vmap_types.h> // for vmap_dart_index
 #include <vmap/vmap_kernel.h>
 #include "vpyr_2_pyramid_level_elts.h"
 
