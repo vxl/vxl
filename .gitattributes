@@ -7,6 +7,7 @@
 check_dsp        crlf=input
 check_syntax     crlf=input
 configure        crlf=input
+install-sh       crlf=input
 script           crlf=input
 time_fastops.mk  crlf=input
 vxl_demangle     crlf=input
