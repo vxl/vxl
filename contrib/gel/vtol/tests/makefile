@@ -1,5 +1,6 @@
 USES = vxl gel
-USE_NETLIB := 1
+include $(IUEROOT)/vxl/vnl/algo/config.mk
+include ${IUEROOT}/vxl/vul/config.mk
 
 TESTS += test_vertex_2d.cxx
 TESTS += test_zero_chain.cxx

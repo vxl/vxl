@@ -1,5 +1,6 @@
 USES += vxl gel
 include ${IUEROOT}/vxl/vnl/algo/config.mk
+include ${IUEROOT}/vxl/vul/config.mk
 
 IULIBS := -lvdgl -lvtol -lvsol -lvgl-algo -lvgl -lvnl-algo -lvnl -lvbl -lvul
 

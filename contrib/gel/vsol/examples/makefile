@@ -8,7 +8,8 @@
 ###############################################################################
 
 USES := vxl gel
-USE_NETLIB := 1
+include ${IUEROOT}/vxl/vnl/algo/config.mk
+include ${IUEROOT}/vxl/vul/config.mk
 
 IULIBS += -lvsol -lvgl-algo -lvgl -lvnl-algo -lvnl -lvbl -lvul
 
