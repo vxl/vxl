@@ -26,6 +26,8 @@
 #include <vsol/vsol_polygon_3d_sptr.h>
 #include <vsol/vsol_polyhedron.h>
 #include <vsol/vsol_polyhedron_sptr.h>
+#include <vsol/vsol_polyline_2d.h>
+#include <vsol/vsol_polyline_2d_sptr.h>
 #include <vsol/vsol_rectangle_2d.h>
 #include <vsol/vsol_rectangle_2d_sptr.h>
 #include <vsol/vsol_rectangle_3d.h>
