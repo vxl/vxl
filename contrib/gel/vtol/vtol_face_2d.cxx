@@ -80,7 +80,7 @@ vtol_face_2d::vtol_face_2d(const vtol_face_2d &other)
   delete edgs;
   delete verts;
   set_surface(0);
-  if(oldf->_surface!=0)
+  if(oldf->_surface)
     set_surface((vsol_region_2d*)(oldf->_surface->clone().ptr()));
 }
 
@@ -158,7 +158,7 @@ vtol_face *vtol_face_2d::shallow_copy_with_no_links(void) const
   vtol_face_2d *result;
   result=new vtol_face_2d;
   result->set_surface(0);
-  if(_surface!=0)
+  if(_surface)
     result->set_surface((vsol_region_2d*)(_surface->clone().ptr()));
   return result;
 }
