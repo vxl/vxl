@@ -483,7 +483,7 @@ Level:   0         1         2          3
          vcl       vbl       vnl_algo   v**l
                    vnl       vil_algo
                    vil       vgl_algo
-                   vgl
+                   vgl       v*l_io
                    vul
                    vsl
 @end example
@@ -498,6 +498,12 @@ common utilities can be available to level 1?  The problem of course is
 that everything will end up in the level 0.5 library.  We could impose the
 rule that nothing goes in vul unless it is used in at least two level 1
 libraries.  I don't know whether that would help or not...
+
+There have been two significant propositions to accept
+a level 0.5 library - for smart pointers, and binary IO. In both cases
+it turned out to be relatively straight forward to provide the required
+functionality without the 0.5 library, and indeed the proposers have
+found the alternative implementations superior in many ways.
 
 
 @comment ------------------------------------------------------------------
