@@ -1,55 +1,93 @@
 #
 # ./vxl/vil/CMakeLists.txt
 #
-#   geoff.cross@crd.ge.com
-#
 
 ADD_LIBRARY(vil vil_sources)
 
 SOURCE_FILES( vil_sources
+
+# basic things
+vil_pixel
+vil_image_impl
+vil_image
+vil_stream
+vil_file_format
+vil_byte_swap
 vil_16bit
 vil_32bit
+vil_test
+
+# various vil_stream classes
+vil_stream_fstream      # from a file
+vil_stream_core         # in-core vil_stream
+vil_stream_section      # present a section of a vil_stream
+vil_stream_url          # load image from URL
+
+# classes derived from vil_image
+vil_file_image
+vil_memory_image
+#vil_memory_image_of
+#vil_memory_image_of_format
+vil_image_proxy
+
+# image adaptors
+vil_memory_image_impl
+vil_crop_image_impl
+vil_skip_image_impl
+vil_resample_image_impl
+vil_flipud_impl
 vil_block_cache_image_impl
-vil_byte_swap
-vil_clamp
-vil_clamp_image
 vil_clamp_image_impl
-vil_colour_space
+vil_clamp_image # Helper specializations for vil_clamp_image_impl
+vil_scale_intensities_image_impl
+vil_scale_intensities_image # Helper specializations for vil_scale_intensities_image_impl
+
+# file format readers/writers (see below for conditional ones)
+file_formats/vil_gen
+file_formats/vil_pnm
+file_formats/vil_viff
+file_formats/vil_viff_support
+file_formats/vil_iris
+file_formats/vil_mit
+file_formats/vil_bmp_file_header
+file_formats/vil_bmp_core_header
+file_formats/vil_bmp_info_header
+file_formats/vil_bmp
+file_formats/vil_gif
+
+# Operations
+vil_image_as
+vil_new
+vil_load
+vil_save
 vil_copy
 vil_crop
-vil_crop_image_impl
-vil_file_format
-vil_file_image
-vil_flipud
-vil_flipud_impl
-vil_image
-vil_image_as
-vil_image_impl
-vil_image_proxy
-vil_load
-vil_memory_image
-vil_memory_image_impl
-vil_memory_image_window
-vil_new
-vil_pixel
-vil_pyramid
-vil_resample
-vil_resample_image_impl
-vil_rgb_byte
-vil_save
-vil_scale_intensities
-vil_scale_intensities_image
-vil_scale_intensities_image_impl
 vil_skip
-vil_skip_image_impl
-vil_smooth
-vil_stream
-vil_stream_core
-vil_stream_fstream
-vil_stream_section
-vil_stream_url
+vil_resample
 vil_warp
-vil_test
+#vil_warp
+vil_flipud
+#vil_convolve
+#vil_convolve_simple
+#vil_convolve_1d
+#vil_convolve_1d_x
+#vil_convolve_1d_y
+vil_smooth
+vil_clamp
+vil_scale_intensities
+#vil_interpolate
+#vil_resample_image
+#vil_ncc
+#vil_ssd
+
+# Stuff
+vil_pyramid
+#vil_rgb
+#vil_rgba
+vil_rgb_byte
+vil_colour_space
+vil_memory_image_window
+
 )
 
 # vil_file_formats.cxx uses -DTIFF, etc, so we need to do this here.
@@ -58,11 +96,33 @@ INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindJPEG.cmake)
 INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindPNG.cmake)
 INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindTIFF.cmake)
 
+IF(HAS_PNG)
+  SOURCE_FILES( vil_sources
+    file_formats/vil_png
+  )
+ENDIF(HAS_PNG)
+
+IF(HAS_JPEG)
+  SOURCE_FILES( vil_sources
+    file_formats/vil_jpeg 
+    file_formats/vil_jpeg_source_mgr
+    file_formats/vil_jpeg_decompressor
+    file_formats/vil_jpeg_destination_mgr
+    file_formats/vil_jpeg_compressor )
+ENDIF(HAS_JPEG)
+
+IF(HAS_TIFF)
+  SOURCE_FILES( vil_sources
+    file_formats/vil_tiff
+  )
+ENDIF(HAS_TIFF)
+
 AUX_SOURCE_DIRECTORY(Templates vil_sources)
 
-SUBDIRS(file_formats)
+#SUBDIRS(algo)
 SUBDIRS(io)
 
 IF( BUILD_TESTS)
   SUBDIRS(tests)
+  SUBDIRS(examples)
 ENDIF( BUILD_TESTS)
