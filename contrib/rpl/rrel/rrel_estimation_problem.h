@@ -128,7 +128,7 @@ public:
   virtual void set_prior_multiple_scales( const vcl_vector<double>& scales );
 
   //: Sets the scale for homoscedastic data.
-  //  Side effect: set scale_type() = MULTIPLE.
+  //  Side effect: set scale_type() = SINGLE.
   virtual void set_prior_scale( double scale );
 
   //: Removes the scale information for the problem.
