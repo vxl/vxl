@@ -10,7 +10,12 @@
 # define VGUI_GLUT_PRESENT 0
 #else
 # define VGUI_GLUT_PRESENT 1
-# if 1 // fsm@robots
+# if 0 // fsm@robots
+// It seems that this hack is no longer necessary. For Glut 3.7(.2) under
+// Windows, the comments indicate that they do a work around for the exit
+// fiasco. The hack seems to be unnecessary for new Linux boxen, and is
+// unnessary for FreeBSD. I suspect it is unnessary on other, relatively
+// recent Unixen - perera@cs.rpi.edu
 
 // It looks like the original #ifdef below had its condition reversed.
 // Also, it looks like Windows needs some serious hacking here, which
