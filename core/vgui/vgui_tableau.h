@@ -222,4 +222,6 @@ class vgui_tableau : public vgui_parent_child_link_data
 //: Print some indication of what the tableau is.
 vcl_ostream &operator<<(vcl_ostream &os, vgui_tableau_sptr const &t);
 
+#include "vgui_tableau_sptr.h"
+
 #endif // vgui_tableau_h_
