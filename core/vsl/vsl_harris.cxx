@@ -58,12 +58,10 @@ void vsl_harris::compute_gradients(vil_image const &image)
   vil_image_as_byte(image).get_section(image_buf.get_buffer(), 0, 0, image_w, image_h);
   
   // compute gradients
-  if (params_.verbose)
-    cerr << " gradient" << flush;
-
-  cerr << endl;
-  for(int i = 0; i < 10; ++i) {
-    cerr << i << ": " << (int)image_buf(i,i+4) << endl;
+  if (params_.verbose) {
+    cerr << " gradient" << flush << endl;
+    for(int i = 0; i < 10; ++i)
+      cerr << i << ": " << (int)image_buf(i,i+4) << endl;
   }
 
   // trim the window
@@ -127,9 +125,10 @@ void vsl_harris::compute_cornerness()
 					  params_.scale_factor,
 					  &image_cornerness_buf);
   //
-  cerr << "------\n";
-  for(int i = 0; i < 10; ++i) {
-    cerr << i << ": " << (float)image_cornerness_buf(i,i+4) << endl;
+  if (params_.verbose) {
+    cerr << "------\n";
+    for(int i = 0; i < 10; ++i)
+      cerr << i << ": " << (float)image_cornerness_buf(i,i+4) << endl;
   }
 
   if (params_.verbose)
@@ -245,7 +244,7 @@ void vsl_harris::do_adaptive() {
     IDEAL_NUM_PER_TILE = params_.corner_count_low;
 
   cerr << "Tiles " << n_tiles_x << " x " << n_tiles_y 
-       << ", NUM_PER_TILE " << IDEAL_NUM_PER_TILE << endl;
+       << ", NUM_PER_TILE " << IDEAL_NUM_PER_TILE;
   
   vcl_vector<double> cornerness(maxima_count, 0.0);
 
@@ -255,7 +254,8 @@ void vsl_harris::do_adaptive() {
   // Do two passes, overlapping tiles by 1/2
   for(int pass = 0; pass < 2; ++pass) {
     int win_offset = pass * TILE_WIDTH / 2;
-    cerr << "pass " << pass << endl;
+    if (params_.verbose)
+      cerr << endl << "pass " << pass;
     for(int tile_y = 0; tile_y < n_tiles_y; ++tile_y) {
       int window_row_start_index = tile_y * TILE_WIDTH + row_min + win_offset;
       int window_row_end_index = vcl_min(window_row_start_index+TILE_WIDTH, row_max);
@@ -272,7 +272,8 @@ void vsl_harris::do_adaptive() {
 	  for(int col = window_col_start_index; col < window_col_end_index; col++)
 	    if (corner_present[row][col])
 	      cornerness[n++] = corner_strength[row][col];
-	cerr << setw(3) << n << ' ';
+        if (params_.verbose)
+	  cerr << endl << setw(3) << n << ' ';
 
 	//
 	double THIS_TILE_AREA = 
@@ -298,9 +299,9 @@ void vsl_harris::do_adaptive() {
               if (corner_strength[row][col] >= thresh)
                 keep[row][col] = true;
       }
-      cerr << endl;
     }
   }
+  cerr << endl;
 
   // Copy keep to present
   vil_copy(keep,image_cornermax_buf);
