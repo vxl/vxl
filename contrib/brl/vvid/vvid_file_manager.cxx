@@ -679,13 +679,18 @@ void vvid_file_manager::compute_curve_tracking()
 
 void vvid_file_manager::compute_corr_tracking()
 {
-  static sdet_tracker_params tp;
-  vgui_dialog tracker_dialog("Correlation Tracker");
+  static bool new_box = true;
+  static sdet_tracker_params tp;  
+  vgui_dialog tracker_dialog("Mutual Information Tracker");
   tracker_dialog.field("Number of Samples", tp.n_samples_);
   tracker_dialog.field("Search Radius", tp.search_radius_);
-  tracker_dialog.field("Match Threshold", tp.match_thresh_);
+  tracker_dialog.field("Angle Range (radians)", tp.angle_range_);
+  tracker_dialog.field("Scale Range (1+-s)", tp.scale_range_);
+  tracker_dialog.field("Smooth Sigma", tp.sigma_);
+  tracker_dialog.checkbox("Add Gradient Info", tp.gradient_info_);
   if (!tracker_dialog.ask())
     return;
+  vcl_cout << tp << "\n";
   vtol_topology_object_sptr to = easy0_->get_temp();
   if (!to)
     vcl_cout << "In vvid_file_manager::compute_corr_tracking() - no model\n";
