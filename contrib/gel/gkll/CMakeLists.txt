@@ -11,4 +11,4 @@ SET(gkll_sources
 
 ADD_LIBRARY(gkll ${gkll_sources})
 
-TARGET_LINK_LIBRARIES(gkll vgel vtol mvl vidl vil1 vbl)
+TARGET_LINK_LIBRARIES(gkll vgel vtol mvl vidl_vil1 vil1 vbl)

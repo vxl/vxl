@@ -15,7 +15,7 @@ extern "C" {
 #include <vil1/vil1_image.h>
 #include <vcl_vector.h>
 #include <vgel/vgel_multi_view_data_vertex_sptr.h>
-#include <vidl/vidl_movie_sptr.h>
+#include <vidl_vil1/vidl_vil1_movie_sptr.h>
 
 
 class vgel_kl
@@ -38,7 +38,7 @@ class vgel_kl
 
   virtual void match_sequence(vcl_vector<vil1_image> &,vgel_multi_view_data_vertex_sptr);
 
-  virtual void match_sequence(vidl_movie_sptr,vgel_multi_view_data_vertex_sptr);
+  virtual void match_sequence(vidl_vil1_movie_sptr,vgel_multi_view_data_vertex_sptr);
 
   virtual vcl_vector<vtol_vertex_2d_sptr> * extract_points(vil1_image &);
 

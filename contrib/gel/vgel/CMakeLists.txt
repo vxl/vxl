@@ -10,7 +10,7 @@ SET(vgel_sources
 AUX_SOURCE_DIRECTORY(Templates vgel_sources)
 
 ADD_LIBRARY(vgel ${vgel_sources})
-TARGET_LINK_LIBRARIES(vgel vgel_kl vtol vil1 vidl mvl)
+TARGET_LINK_LIBRARIES(vgel vgel_kl vtol vil1 vidl_vil1 mvl)
 
 INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR})
 

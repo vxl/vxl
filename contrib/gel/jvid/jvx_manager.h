@@ -18,10 +18,10 @@
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_viewer2D_tableau_sptr.h>
 #include <vgui/vgui_dialog.h>
-#include <vidl/vidl_movie.h>
+#include <vidl_vil1/vidl_vil1_movie.h>
 
 #ifdef HAS_MPEG2
-#include <vidl/vidl_mpegcodec.h>
+#include <vidl_vil1/vidl_vil1_mpegcodec.h>
 
 //define mpeg callback here
 //this dialog box queries the user for info
@@ -29,7 +29,7 @@
 //would be done by reading the header, but that is
 //not implemented here.
 inline void
-jvid_load_mpegcodec_callback(vidl_codec * vc)
+jvid_load_mpegcodec_callback(vidl_vil1_codec * vc)
 {
   vgui_dialog dialog( "MPEG player setup");
 
@@ -46,7 +46,7 @@ jvid_load_mpegcodec_callback(vidl_codec * vc)
   if ( !dialog.ask())
     vcl_cout << "jvid_load_mpegcodec_callback. did not initialize codec.\n";
 
-  vidl_mpegcodec * mpegcodec = vc->castto_vidl_mpegcodec();
+  vidl_vil1_mpegcodec * mpegcodec = vc->castto_vidl_vil1_mpegcodec();
   if (!mpegcodec) return;
 
   mpegcodec->set_grey_scale(grey_scale);
@@ -79,7 +79,7 @@ class jvx_manager : public vgui_grid_tableau
  private:
   unsigned width_;
   unsigned height_;
-  vidl_movie_sptr my_movie_;
+  vidl_vil1_movie_sptr my_movie_;
   vcl_vector<vgui_viewer2D_tableau_sptr> tabs_;
 };
 

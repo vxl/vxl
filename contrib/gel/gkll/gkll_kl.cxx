@@ -7,8 +7,8 @@
 #include <vil1/vil1_image_as.h>
 #include <gkll/gkll_multi_view_data.h>
 #include <vtol/vtol_vertex_2d.h>
-#include <vidl/vidl_frame.h>
-#include <vidl/vidl_movie.h>
+#include <vidl_vil1/vidl_vil1_frame.h>
+#include <vidl_vil1/vidl_vil1_movie.h>
 
 #include <vcl_iostream.h>
 
@@ -108,10 +108,10 @@ void gkll_kl::match_sequence(vcl_vector<vil1_image> &image_list,gkll_multi_view_
 }
 
 
-void gkll_kl::match_sequence(vidl_movie_sptr movie,gkll_multi_view_data_vertex_sptr matches)
+void gkll_kl::match_sequence(vidl_vil1_movie_sptr movie,gkll_multi_view_data_vertex_sptr matches)
 {
   vcl_vector<vil1_image> image_list;
-  for (vidl_movie::frame_iterator pframe = movie->first();
+  for (vidl_vil1_movie::frame_iterator pframe = movie->first();
        pframe <= movie->last();
        ++pframe)
   {

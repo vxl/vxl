@@ -19,7 +19,7 @@ IF(HAS_VGUI)
   AUX_SOURCE_DIRECTORY(Templates jvid_sources)
 
   ADD_LIBRARY(jvid ${jvid_sources})
-  TARGET_LINK_LIBRARIES( jvid vgui vidl vul vil1 )
+  TARGET_LINK_LIBRARIES( jvid vgui vidl_vil1 vul vil1 )
   IF(MPEG2_FOUND)
     TARGET_LINK_LIBRARIES( jvid ${MPEG2_LIBRARIES} )
   ENDIF(MPEG2_FOUND)

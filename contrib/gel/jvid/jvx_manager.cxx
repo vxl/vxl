@@ -18,8 +18,8 @@
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 
-#include <vidl/vidl_io.h>
-#include <vidl/vidl_frame.h>
+#include <vidl_vil1/vidl_vil1_io.h>
+#include <vidl_vil1/vidl_vil1_frame.h>
 
 //-----------------------------------------------------------
 // constructors/destructor
@@ -28,7 +28,7 @@ jvx_manager::jvx_manager()
 {
   width_ = 512;
   height_ = 512;
-  my_movie_=(vidl_movie*)0;
+  my_movie_=(vidl_vil1_movie*)0;
 }
 
 jvx_manager::~jvx_manager()
@@ -61,16 +61,16 @@ void jvx_manager::load_video_file()
 
 #ifdef HAS_MPEG2
   //need to define callbacks
-  vidl_io::load_mpegcodec_callback = &jvid_load_mpegcodec_callback;
+  vidl_vil1_io::load_mpegcodec_callback = &jvid_load_mpegcodec_callback;
 #endif
-  my_movie_ = vidl_io::load_movie(image_filename.c_str());
+  my_movie_ = vidl_vil1_io::load_movie(image_filename.c_str());
   if (!my_movie_) {
     vgui_error_dialog("Failed to load movie file");
     return;
   }
   tabs_.clear();
 
-  vidl_movie::frame_iterator pframe(my_movie_);
+  vidl_vil1_movie::frame_iterator pframe(my_movie_);
   pframe = my_movie_->first();
 
   vil1_image img = pframe->get_image();

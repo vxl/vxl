@@ -22,4 +22,4 @@ AUX_SOURCE_DIRECTORY(Templates vmal_sources)
 
 ADD_LIBRARY(vmal ${vmal_sources})
 
-TARGET_LINK_LIBRARIES(vmal vgel vtol vsol osl mvl vidl vil1 vnl vbl)
+TARGET_LINK_LIBRARIES(vmal vgel vtol vsol osl mvl vidl_vil1 vil1 vnl vbl)

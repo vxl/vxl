@@ -8,11 +8,11 @@
 #include <vgui/vgui_command.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/internals/vgui_accelerate.h>
-#include <vidl/vidl_io.h>
+#include <vidl_vil1/vidl_vil1_io.h>
 #include <jvid/jvx_manager.h>
 
 #ifdef HAS_MPEG2
-# include <vidl/vidl_mpegcodec.h>
+# include <vidl_vil1/vidl_vil1_mpegcodec.h>
 #endif
 
 #ifdef HAS_X11
@@ -20,7 +20,7 @@
 #endif
 
 #ifdef VCL_WIN32
-#include <vidl/vidl_avicodec.h>
+#include <vidl_vil1/vidl_vil1_avicodec.h>
 #endif
 
 
@@ -43,11 +43,11 @@ int main(int argc, char** argv)
 {
   // Register video codecs
 #ifdef VCL_WIN32
-  vidl_io::register_codec(new vidl_avicodec);
+  vidl_vil1_io::register_codec(new vidl_vil1_avicodec);
 #endif
 
 #ifdef HAS_MPEG2
-  vidl_io::register_codec(new vidl_mpegcodec);
+  vidl_vil1_io::register_codec(new vidl_vil1_mpegcodec);
 #endif
 
    // turn off the mfc acceleration since this seems to stop
