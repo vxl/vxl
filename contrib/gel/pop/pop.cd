@@ -141,7 +141,7 @@ in a vector of residuals.
 5
 Each transform must be able to 
 generate and reveive a  parameteriszation
-such as euler angles, translation
+such as Euler angles, translation
 vector,  intrinsic parameters etc. The
 transform can be over parameterised.
 1069 596
