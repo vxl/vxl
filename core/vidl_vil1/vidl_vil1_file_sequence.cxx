@@ -97,7 +97,7 @@ bool vidl_vil1_file_sequence::open(vcl_string const& fmt)
   // Summarize:
   vcl_cerr << "files: sizeof offset_t = " << sizeof(offset_t) << '\n';
   for (unsigned int i = 0; i < n; ++i)
-    vcl_cerr << "   " << (int) filenames[i].c_str() << "  " << (int) start_byte[i] << '\n';
+    vcl_cerr << "   " << filenames[i].c_str() << "  " << (int) start_byte[i] << '\n';
   vcl_cerr << '\n';
 
   return true;
