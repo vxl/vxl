@@ -36,8 +36,10 @@ main(int argc, char** argv) {
   vil_image_resource_sptr out = vepl2_x_gradient(in);
 
   // Write output:
-  vil_save(*out->get_view(), argv[2], "pnm");
-  vcl_cout << "Written image of type PNM to " << argv[2] << vcl_endl;
+  if (vil_save_image_resource(out, argv[2], "pnm"))
+    vcl_cout << "Written x-gradient image to PNM image "<< argv[2]<< '\n';
+  else
+    vcl_cout << "Could not write x-gradient image as PNM to " << argv[2] << '\n';
 
   return 0;
 }

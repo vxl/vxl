@@ -52,8 +52,10 @@ main(int argc, char** argv)
 
   // vepl2_convert to ubyte and write to PGM file:
   out = vepl2_convert(out, (vxl_byte)0);
-  vil_save(*(out->get_view()), argv[2], "pnm");
-  vcl_cout << "Written image of type PGM to " << argv[2] << vcl_endl;
+  if (vil_save_image_resource(out, argv[2], "pnm"))
+    vcl_cout << "Written standard-deviation image to PNM image "<< argv[2]<< '\n';
+  else
+    vcl_cout << "Could not write standard-deviation image as PNM to " << argv[2] << '\n';
 
   return 0;
 }

@@ -32,22 +32,20 @@ main(int argc, char** argv)
   if (in->nplanes() == 1 && in->pixel_format() == vil_pixel_format_component_format(in->pixel_format()))
   { // monochrome
     if (vil_pixel_format_sizeof_components(in->pixel_format()) == 1)
-      vcl_cerr<<"Warning: no conversion necessary\n";
+      vcl_cerr << "Warning: no conversion necessary\n";
     vil_image_resource_sptr out = vepl2_convert(in, (vxl_byte)0);
-    vil_save(*out->get_view(), argv[2], "pnm");
-    vcl_cout << "vepl2_convert()ed grey image to PGM image " << argv[2] << vcl_endl;
+    if (vil_save_image_resource(out, argv[2], "pnm"))
+      vcl_cout << "vepl2_convert()ed grey image to PGM image "<< argv[2]<< '\n';
+    else
+      vcl_cout << "Could not convert grey image as PGM to " << argv[2] << '\n';
   }
-  else if (in->nplanes() == 1) // colour (RGB)
+  else if (in->nplanes() == 1 || in->nplanes() == 3) // colour (RGB)
   {
     vil_image_resource_sptr out = vepl2_convert(in,rgbcell());
-    vil_save(*out->get_view(), argv[2], "pnm");
-    vcl_cout << "vepl2_convert()ed RGB image to PPM image " << argv[2] << vcl_endl;
-  }
-  else if (in->nplanes() == 3) // colour (RGB)
-  {
-    vil_image_resource_sptr out = vepl2_convert(in,rgbcell());
-    vil_save(*out->get_view(), argv[2], "pnm");
-    vcl_cout << "vepl2_convert()ed RGB image to PPM image " << argv[2] << vcl_endl;
+    if (vil_save_image_resource(out, argv[2], "pnm"))
+      vcl_cout << "vepl2_convert()ed RGB image to PPM image "<< argv[2] << '\n';
+    else
+      vcl_cout << "Could not convert RGB image as PPM to " << argv[2] << '\n';
   }
   else vcl_cerr << "Cannot handle image with "<< in->nplanes() <<" planes and format "<< in->pixel_format() << '\n';
 

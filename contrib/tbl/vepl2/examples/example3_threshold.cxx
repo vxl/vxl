@@ -32,8 +32,10 @@ main(int argc, char** argv) {
   vil_image_resource_sptr out = vepl2_threshold(in,threshold,0,255);
 
   // Write output:
-  vil_save(*out->get_view(), argv[2], "pnm");
-  vcl_cout << "Written image of type PGM to " << argv[2] << vcl_endl;
+  if (vil_save_image_resource(out, argv[2], "pnm"))
+    vcl_cout << "Written thresholded image of type PNM to " << argv[2] << '\n';
+  else
+    vcl_cout << "Could not write thresholded image as PNM to "<< argv[2]<<'\n';
 
   return 0;
 }
