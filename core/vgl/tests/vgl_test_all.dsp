@@ -117,6 +117,12 @@ SOURCE=.\test_polygon.cxx
 SOURCE=.\test_polygon_scan_iterator.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_h_matrix_2d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_h_matrix_3d.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_triangle_scan_iterator.cxx
 # End Source File
 # End Group
@@ -125,9 +131,6 @@ SOURCE=.\test_triangle_scan_iterator.cxx
 # Begin Source File
 SOURCE=.\test_driver.h
 # End Source File
-# End Group
-# Begin Group "Resource Files"
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
