@@ -2,7 +2,7 @@
 #define vcl_cmath_h_
 
 #ifdef __GNUG__
-#pragma interface "vcl_cmath.h"
+#pragma interface "vcl_cstdlib.h"
 #endif
 
 // [26.5.6] In addition to the signatures from the C header
@@ -70,7 +70,7 @@
 # if defined(VCL_EGCS) || defined(VCL_GCC_295)
 #  define vcl_abs abs
 
-# elif defined(VCL_GCC_27) || defined(VCL_SGI_CC_720)
+# elif defined(VCL_GCC_27) || defined(VCL_SGI_CC_720) || defined(VCL_VC60)
 inline float       vcl_abs (float  x) { return (x >= 0.0f) ? x : -x; }
 inline double      vcl_abs (double x) { return fabs (x); }
 inline long double vcl_abs (long double x) { return fabs (x); }
@@ -82,21 +82,7 @@ inline long double vcl_abs (long double x) { return fabs (x); }
 #endif
 
 
-// vcl_min/vcl_max do not belong in this file. They should be
-// in vcl_algorithm.h, even for win32.
-#ifdef WIN32
-template <class T>
-inline T vcl_max(T const& a, T const& b)
-{
-  return (a > b) ? a : b;
-}
-
-template <class T>
-inline T vcl_min(T const& a, T const& b)
-{
-  return (a < b) ? a : b;
-}
-#endif
+// vcl_min/vcl_max moved to vcl_algorithm.h
 
 
 // 3. extensions.

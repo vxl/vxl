@@ -9,10 +9,6 @@ vcl_compiler.h
   if you include <vcl/vcl_iostream.h> you *don't* need to include 
   <vcl/vcl_compiler.h> even if you need the macros defined in there.
 
-vcl_rtti.h
-  Under construction. For rtti emulation with compilers that don't support
-  rtti.
-
 vcl_complex_fwd.h
   In ISO C++, the complex template class can be forward declared with
     namespace std { template <class T> class complex; }
@@ -27,6 +23,10 @@ vcl_rel_ops.h
   using std::rel_ops::operator> ;
   using std::rel_ops::operator<=;
   using std::rel_ops::operator>=;
+
+vcl_rtti.h
+  Under construction. For rtti emulation with compilers that don't support
+  rtti.
 
 vcl_stlfwd.h
   Forward declare the most commonly used parts of the STL, if possible.

@@ -26,7 +26,7 @@
 # if defined(VCL_EGCS) || defined(VCL_GCC_295)
 #  define vcl_abs abs
 
-# elif defined(VCL_GCC_27) || defined(VCL_SGI_CC_720)
+# elif defined(VCL_GCC_27) || defined(VCL_SGI_CC_720) || defined(VCL_VC60)
 inline int vcl_abs(int x) { return x >= 0 ? x : -x; }
 inline int vcl_abs(long x) { return x >= 0 ? x : -x; }
 # else

@@ -34,7 +34,7 @@ class ofstream;
 # define vcl_iosfwd_USE 
 
 #elif defined(VCL_WIN32)
-#  include <iosfwd>
+# include <iosfwd>
 # define vcl_iosfwd_STD std::
 # define vcl_iosfwd_USE 
 

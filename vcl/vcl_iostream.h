@@ -40,7 +40,7 @@
 
 // ------------------------------------------------------------
 
-#if defined(VCL_GCC_27) || defined(VCL_SGI_CC_720) || (defined(VCL_EGCS) || defined(VCL_GCC_295)) && !defined(GNU_LIBSTDCXX_V3)
+#if defined(VCL_GCC_27) || defined(VCL_SGI_CC_720) || ((defined(VCL_EGCS) || defined(VCL_GCC_295)) && !defined(GNU_LIBSTDCXX_V3))
 # include <iostream.h>
 # define vcl_ios          ios
 # define vcl_ios_in       ios::in

@@ -14,10 +14,14 @@ int main(int, char **)
 
   vcl_streampos a = cin.tellg();
   vcl_streampos b = cout.tellp();
+  a = b; b = a; // quell warning about unused vars. compilers are sooo gullible.
 
   vcl_streambuf *ptr = 0;
-
+  if (ptr) // quell warning.
+    ++ ptr;
+  
   vcl_streamsize size = 3141;
+  ++ size; // quell warning.
 
   if (false) {
     ofstream f("dont_worry_this_file_is_not_created", 
