@@ -1,8 +1,7 @@
 #ifndef vgui_gl_h
 #define vgui_gl_h
-
 //:
-//  \file
+// \file
 
 #include <vcl_compiler.h>
 
@@ -16,8 +15,6 @@
 # undef min
 # undef max
 // #define glDrawBuffer mb_glDrawBufferWrapper
-// //: Defined in vgui_accelerate_mfc.cxx
-// void mb_glDrawBufferWrapper(GLuint);
 #else
 // no need to fix :
 # include <GL/gl.h>
