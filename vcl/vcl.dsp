@@ -55,7 +55,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\Release\vcl.lib"
+# ADD LIB32 /nologo /out:".\Release\vcl.lib"
 
 !ELSEIF  "$(CFG)" == "vcl - Win32 Debug"
 
@@ -79,7 +79,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\Debug\vcl.lib"
+# ADD LIB32 /nologo /out:".\Debug\vcl.lib"
 
 !ELSEIF  "$(CFG)" == "vcl - Win32 StaticDebug"
 
@@ -102,8 +102,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\Debug\vcl.lib"
-# ADD LIB32 /nologo /out:"..\StaticDebug\vcl.lib"
+# ADD BASE LIB32 /nologo /out:".\Debug\vcl.lib"
+# ADD LIB32 /nologo /out:".\StaticDebug\vcl.lib"
 
 !ELSEIF  "$(CFG)" == "vcl - Win32 StaticRelease"
 
@@ -128,8 +128,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\Release\vcl.lib"
-# ADD LIB32 /nologo /out:"..\StaticRelease\vcl.lib"
+# ADD BASE LIB32 /nologo /out:".\Release\vcl.lib"
+# ADD LIB32 /nologo /out:".\StaticRelease\vcl.lib"
 
 !ELSEIF  "$(CFG)" == "vcl - Win32 DebugSTLPort"
 
@@ -152,8 +152,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\Debug\vcl.lib"
-# ADD LIB32 /nologo /out:"..\Debug-STLPort\vcl.lib"
+# ADD BASE LIB32 /nologo /out:".\Debug\vcl.lib"
+# ADD LIB32 /nologo /out:".\Debug-STLPort\vcl.lib"
 
 !ELSEIF  "$(CFG)" == "vcl - Win32 ReleaseSTLPort"
 
@@ -178,8 +178,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\Release\vcl.lib"
-# ADD LIB32 /nologo /out:"..\Release-STLPort\vcl.lib"
+# ADD BASE LIB32 /nologo /out:".\Release\vcl.lib"
+# ADD LIB32 /nologo /out:".\Release-STLPort\vcl.lib"
 
 !ENDIF 
 
