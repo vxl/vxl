@@ -66,22 +66,22 @@ void vnl_least_squares_function::clear_failure()
   failure = false;
 }
 
-void vnl_least_squares_function::gradf(vnl_vector<double> const&   /*x*/,
-				       vnl_matrix<double>  &      /*jacobian*/)
+void vnl_least_squares_function::gradf(vnl_vector<double> const& /*x*/,
+                                       vnl_matrix<double>& /*jacobian*/)
 {
 }
 
 //: Compute fd gradient
 void vnl_least_squares_function::fdgradf(vnl_vector<double> const& x,
-					 vnl_matrix<double> & jacobian,
-					 double stepsize )
+                                         vnl_matrix<double>& jacobian,
+                                         double stepsize)
 {
   int dim = x.size();
   int n = jacobian.rows();
   assert(dim == get_number_of_unknowns());
   assert(n == get_number_of_residuals());
   assert(dim == jacobian.columns());
-  
+
   vnl_vector<double> tx = x;
   vnl_vector<double> fplus(n);
   vnl_vector<double> fminus(n);
@@ -105,12 +105,12 @@ void vnl_least_squares_function::fdgradf(vnl_vector<double> const& x,
 }
 
 void vnl_least_squares_function::trace(int /* iteration */,
-				       vnl_vector<double> const&  /*x*/,
-				       vnl_vector<double> const&  /*fx*/)
+                                       vnl_vector<double> const& /*x*/,
+                                       vnl_vector<double> const& /*fx*/)
 {
 }
 
-double vnl_least_squares_function::rms(vnl_vector<double> const&  x)
+double vnl_least_squares_function::rms(vnl_vector<double> const& x)
 {
   vnl_vector<double> fx(n_);
   f(x, fx);

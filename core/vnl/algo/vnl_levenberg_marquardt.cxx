@@ -24,7 +24,7 @@
 
 // see header
 vnl_vector<double> vnl_levenberg_marquardt_minimize(vnl_least_squares_function& f, 
-						    vnl_vector<double> const& initial_estimate)
+                                                    vnl_vector<double> const& initial_estimate)
 {
   vnl_vector<double> x = initial_estimate;
   vnl_levenberg_marquardt lm(f);

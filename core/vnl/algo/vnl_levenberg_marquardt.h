@@ -44,9 +44,9 @@ public:
   vnl_levenberg_marquardt(vnl_least_squares_function& f) { init(&f); }
 
   //: Initialize as above, and then run minimization.
-
+  //
   // obsolete, as virtuals in base class vnl_nonlinear_minimizer not valid...
-  // i.e. if minimize() calls base::get_covariance(), it will call the 
+  // i.e. if minimize() calls base::get_covariance(), it will call the
   // base version rather than any overridden here or in classes derived
   // from this.  This is an argument against computation in constructors.
   // You should replace code like
@@ -56,13 +56,15 @@ public:
   //    lm.minimize(x);
   // Or
   //    x = vnl_levenberg_marquardt_minimize(f, x);
-  
-  //  vnl_levenberg_marquardt(vnl_least_squares_function& f,
-  //			     vnl_vector<double>& x)
-  //  {
-  //    init(&f);
-  //    minimize(x);
-  //  }
+
+#if 0
+  vnl_levenberg_marquardt(vnl_least_squares_function& f,
+                          vnl_vector<double>& x)
+  {
+    init(&f);
+    minimize(x);
+  }
+#endif
 
   ~vnl_levenberg_marquardt();
 
@@ -111,8 +113,8 @@ protected:
 };
 
 //: Find minimum of "f", starting at "initial_estimate", and return.
-vnl_vector<double> vnl_levenberg_marquardt_minimize(vnl_least_squares_function& f, 
-						    vnl_vector<double> const& initial_estimate);
+vnl_vector<double> vnl_levenberg_marquardt_minimize(vnl_least_squares_function& f,
+                                                    vnl_vector<double> const& initial_estimate);
 
 
 #endif // vnl_levenberg_marquardt_h_
