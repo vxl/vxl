@@ -14,7 +14,7 @@ AUX_SOURCE_DIRECTORY(Templates brip_sources)
 
 ADD_LIBRARY(brip ${brip_sources})
 
-TARGET_LINK_LIBRARIES(brip vil1 vil vnl vbl vul)
+TARGET_LINK_LIBRARIES(brip vil1 vil vnl_algo vnl vbl vul)
 
 
 IF(BUILD_TESTING)
