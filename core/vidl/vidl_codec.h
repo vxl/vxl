@@ -102,6 +102,9 @@ public:
   // This will typically be called just before program exit.
   virtual void close() {};
 
+  //: Access to a static array of all available codecs
+  static vidl_codec_sptr* all_codecs();
+
 private:
 
   inline void clear_strings() { name = description = date_time = NULL; }

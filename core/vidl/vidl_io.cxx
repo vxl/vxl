@@ -33,7 +33,6 @@
 void (* vidl_io::load_mpegcodec_callback)(vidl_codec*) = 0;
 #endif
 
-vcl_list<vidl_codec_sptr> vidl_io::supported_types_;
 
 static bool looks_like_a_file_list(char const* fname);
 static vidl_clip_sptr load_from_file_list(char const* fname);
@@ -159,11 +158,7 @@ vidl_clip_sptr  vidl_io::load_clip(
   // The file is not a directory,
   // Let us try all the known video formats,
   // hoping to find the good one
-  vcl_list<vidl_codec_sptr>::iterator i = supported_types_.begin();
-  if (i == supported_types_.end())
-    vcl_cerr << "vidl_io: warning: no codecs installed\n";
-
-  while (i != supported_types_.end())
+  for (vidl_codec_sptr* i = vidl_codec::all_codecs(); *i; ++i) 
   {
     if ((*i)->probe(fname))
       {
@@ -185,8 +180,6 @@ vidl_clip_sptr  vidl_io::load_clip(
         vcl_cout << "vidl_io::load_move. just got a new clip.\n";
         return clip;
       }
-
-    ++i;
   }
 
   // We did not find a codec corresponding
@@ -286,9 +279,8 @@ bool vidl_io::save(vidl_movie_sptr movie, const char* fname, const char* type)
 {
   // Go along the vcl_list of supported videoCODECs,
   // find the one of the type asked if it does exist.
-  vcl_list<vidl_codec_sptr>::iterator i = supported_types_.begin();
-
-  while ((i != supported_types_.end()) && (vcl_strcmp((*i)->type(), type)))
+  vidl_codec_sptr* i = vidl_codec::all_codecs();
+  while ((*i) && (vcl_strcmp((*i)->type(), type)))
     {
       // const char* debug = (*i)->type();
       // vcl_cout << "debug : " << debug << " type : " << type << vcl_endl;
@@ -297,7 +289,7 @@ bool vidl_io::save(vidl_movie_sptr movie, const char* fname, const char* type)
 
   // Check if the type asked really exists in the context
   // If it does not, Try the vcl_list of images mode.
-  if (i==supported_types_.end())
+  if (!(*i))
     return save_images(movie, fname, type);//return false;
 
 
@@ -322,27 +314,13 @@ vcl_list<vcl_string> vidl_io::supported_types()
 {
   // Create the vcl_list with type() for all the codecs
   vcl_list<vcl_string> ret;
-  for (vcl_list<vidl_codec_sptr>::iterator i=supported_types_.begin(); i!=supported_types_.end(); ++i)
+  for (vidl_codec_sptr* i = vidl_codec::all_codecs(); *i; ++i) 
     ret.push_back((*i)->type());
 
   // Return the vcl_list of type supported codecs
   return ret;
 }
 
-//: register a new coder
-void vidl_io::register_codec(vidl_codec* codec)
-{
-  supported_types_.push_back(codec);
-}
-
-//: Destroy codecs.
-// Must call this before the MPEG library is deleted, i.e. on exit.
-void vidl_io::close()
-{
-  for (vcl_list<vidl_codec_sptr>::iterator i=supported_types_.begin(); i!=supported_types_.end(); ++i)
-    (*i)->close();
-  supported_types_.erase(supported_types_.begin(), supported_types_.end());
-}
 
 static bool looks_like_a_file_list(char const* fname)
 {

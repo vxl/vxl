@@ -8,35 +8,20 @@
 #include "vidl_player_menus.h"
 #include "vidl_player_manager.h"
 
-#include <vidl/vidl_image_list_codec.h>
-
-#ifdef HAS_MPEG2
-# include <vidl/vidl_mpegcodec.h>
-#endif
-
-#ifdef HAS_AVI
-#include <vidl/vidl_avicodec.h>
-#endif
 
 int main(int argc, char** argv)
 {
-  // Register video codecs
-  vidl_io::register_codec(new vidl_image_list_codec);
-
-#ifdef HAS_AVI
-  vcl_cout << " Has AVI" << vcl_endl;
-  vidl_io::register_codec(new vidl_avicodec);
-#endif
-
-#ifdef HAS_MPEG2
-  vcl_cout << " Has MPEG" << vcl_endl;
-  vidl_io::register_codec(new vidl_mpegcodec);
-#endif
-
    // Initialize the toolkit.
   vgui::init(argc, argv);
   vgui_menu menubar = vidl_player_menus::get_menu();
   unsigned w = 640, h = 480;
+
+  vcl_cout << "-- Registered codecs --\n";
+  vcl_list<vcl_string> types = vidl_io::supported_types();
+  for( vcl_list<vcl_string>::iterator t = types.begin();
+       t != types.end(); ++t )
+    vcl_cout << *t << '\n';
+  vcl_cout << "-----------------------" << vcl_endl;
 
   vcl_string title = "VIDL Video Player";
   vgui_window* win = vgui::produce_window(w, h, menubar, title);

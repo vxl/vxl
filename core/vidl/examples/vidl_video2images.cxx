@@ -22,9 +22,6 @@
 #if defined(HAS_MPEG2) || defined(VCL_WIN32)
 #include <vidl/vidl_mpegcodec.h>
 #endif
-#ifdef HAS_AVI
-#include <vidl/vidl_avicodec.h>
-#endif
 
 // assert t is true, otherwise print message m and exit if e is true
 #define CHECK_BASE(t,e,m) \
@@ -183,16 +180,6 @@ main (int argc, char **argv)
   callback_demux_video = demux_video();
   callback_pid = pid();
   callback_numframes = -1;
-#endif
-
-// windows does not seem to get the -DHAS_MPEG2 option from CMake
-#if defined(HAS_MPEG2) || defined(VCL_WIN32)
-  vidl_io::register_codec (new vidl_mpegcodec);
-  V1( "registered MPEG2 codec" );
-#endif
-#ifdef HAS_AVI
-  vidl_io::register_codec (new vidl_avicodec);
-  V1( "registered AVI codec" );
 #endif
 
 #if defined(HAS_MPEG2) || defined(VCL_WIN32)

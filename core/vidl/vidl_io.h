@@ -133,12 +133,7 @@ class vidl_io
   // returns vcl_string names  for supported types
   static vcl_list<vcl_string> supported_types();
 
-  static void register_codec(vidl_codec* codec); // adds to supported_types list
-
-  static void close(); // Must call this before the MPEG library is deleted, i.e. on exit.
-
  public:
-  static vcl_list<vidl_codec_sptr> supported_types_;
 
   // Helpers-------------------------------------------------------------------
 

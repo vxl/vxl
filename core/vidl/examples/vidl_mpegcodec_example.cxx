@@ -38,9 +38,7 @@ int main(int argc, char* argv[])
              << "The middle frame will then be saved to a file named test.ppm\n";
     return 1;
   }
-  vidl_io::register_codec(new vidl_mpegcodec);
-  vidl_mpegcodec *mpegcodec=new vidl_mpegcodec;
-  vidl_io::register_codec(mpegcodec);
+
   vidl_io::load_mpegcodec_callback=&my_load_mpegcodec_callback;
 
   vidl_movie_sptr movie = vidl_io::load_movie(argv[1]);
@@ -64,8 +62,6 @@ int main(int argc, char* argv[])
   //random frame access
   vil_image_view_base_sptr im=movie->get_view(movie->length()/2);
   vil_save(*im,"test.ppm");
-
-  mpegcodec->close();
 
   vcl_exit (0);
   return 0;
