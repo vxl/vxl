@@ -2,6 +2,10 @@
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_complex.h>
 #include <vnl/vnl_test.h>
+#ifdef VCL_VC
+// This only seems to work if placed right near the top
+# pragma warning ( disable : 4756)
+#endif
 
 void test_math() {
   int n = -11;
@@ -40,7 +44,7 @@ void test_math() {
 
 #ifdef VCL_VC
 # pragma warning ( push )
-# pragma warning ( disable : 4056 4756)
+# pragma warning ( disable : 4056)
 // can't seem to disable warning 4756
 #endif
   // Create Inf and -Inf:
