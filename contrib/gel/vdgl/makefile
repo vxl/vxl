@@ -4,7 +4,7 @@ include ${IUEROOT}/config/top-params.mk
 
 USES := vxl gel
 
-IMMEDIATE_LIBS := -lvsol -lvgl -lvbl -lvnl -lvcl
+IMMEDIATE_LIBS := -lvsol -lvgl -lvbl -lvnl
 
 LIBRARY := vdgl
 VERSION := 1.0

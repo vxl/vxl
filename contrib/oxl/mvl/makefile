@@ -4,7 +4,7 @@ USES += oxl vxl
 LIBRARY := mvl
 VERSION := 1.0
 
-IMMEDIATE_LIBS += -lvnl-algo -lvnl -lvbl -lvcl
+IMMEDIATE_LIBS += -lvnl-algo -lvnl -lvbl
 
 SUBDIRS = tests examples
 
