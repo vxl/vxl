@@ -293,6 +293,7 @@ apply( vil1_image const& image )
           conversion_ok = convert_image( view, 0, 0, w_, h_,                 \
                                          buffer_, allocw_, format_, type_ ); \
         }                                                                    \
+        delete[] temp_buffer;                                                \
         break;                                                               \
       }
 
