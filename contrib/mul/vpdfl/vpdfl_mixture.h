@@ -1,10 +1,10 @@
 #ifndef vpdfl_mixture_h_
 #define vpdfl_mixture_h_
-/*=======================================================================
-
-	Copyright: (C) 2000 Victoria University of Manchester
-    
-=======================================================================*/
+//=======================================================================
+//
+//  Copyright: (C) 2000 Victoria University of Manchester
+//
+//=======================================================================
 
 //:
 // \file
@@ -15,129 +15,114 @@
 //    IMS   Converted to VXL 12 May 2000
 // \endverbatim
 
-
-
-
 //=======================================================================
 
 #include <vpdfl/vpdfl_pdf_base.h>
 #include <vcl_vector.h>
 #include <mbl/mbl_mz_random.h>
+
 //=======================================================================
 
 //: Represents a mixture model (a set of individual pdfs + weights)
 class vpdfl_mixture : public vpdfl_pdf_base {
 private:
-	vcl_vector<vpdfl_pdf_base*> component_;
-	vcl_vector<double>        weight_;
-	
-	void init();
-	void delete_stuff();
+  vcl_vector<vpdfl_pdf_base*> component_;
+  vcl_vector<double>          weight_;
+
+  void init();
+  void delete_stuff();
 public:
 
-		//: Dflt ctor
-	vpdfl_mixture();
-	
-		//: Copy ctor
-	vpdfl_mixture(const vpdfl_mixture&);
-	
-		//: Copy operator
-	vpdfl_mixture& operator=(const vpdfl_mixture&);
+  //: Dflt ctor
+  vpdfl_mixture();
 
-		//: Destructor
-	virtual ~vpdfl_mixture();
+  //: Copy ctor
+  vpdfl_mixture(const vpdfl_mixture&);
 
-    //: Probability density at x
-	virtual double operator()(const vnl_vector<double>& x) const;
-	
-		//: Log of probability density at x
-	virtual double log_p(const vnl_vector<double>& x) const;
-	
-		//: Gradient of PDF at x
-	virtual void gradient(vnl_vector<double>& g,
-								const vnl_vector<double>& x, double& p) const;
+  //: Copy operator
+  vpdfl_mixture& operator=(const vpdfl_mixture&);
 
-	
-    //: Not Yet Implemented
-    // Compute nearest point to x which has a density above a threshold
-    //  If log_p(x)>log_p_min then x unchanged.  Otherwise x is moved
-    //  (typically up the gradient) until log_p(x)>=log_p_min.
-    // \param x This may be modified to the nearest plausible position.
+  //: Destructor
+  virtual ~vpdfl_mixture();
+
+  //: Probability density at x
+  virtual double operator()(const vnl_vector<double>& x) const;
+
+  //: Log of probability density at x
+  virtual double log_p(const vnl_vector<double>& x) const;
+
+  //: Gradient of PDF at x
+  virtual void gradient(vnl_vector<double>& g,
+                        const vnl_vector<double>& x, double& p) const;
+
+  //: Not Yet Implemented
+  // Compute nearest point to x which has a density above a threshold
+  //  If log_p(x)>log_p_min then x unchanged.  Otherwise x is moved
+  //  (typically up the gradient) until log_p(x)>=log_p_min.
+  // \param x This may be modified to the nearest plausible position.
   virtual void nearest_plausible(vnl_vector<double>& x, double log_p_min) const;
 
-		//: Initialise to use n components of type comp_type
-		//  Clones taken by comp_type
-	void init(const vpdfl_pdf_base& comp_type, int n);
-		
-		//: Return instance object for this PDF
-		//  Object is created on heap. Caller responsible for deletion.
-	virtual vpdfl_sampler_base * new_sampler() const;
-	
-		//: Number of components in mixture
-	unsigned n_components() const { return component_.size(); }
-		
-		//: Array of weights
-	const vcl_vector<double>& weights() const { return weight_; }
-	
-		//: Array of weights
-	vcl_vector<double>& weights() { return weight_; }
-	
-		//: Return index of component nearest to x
-	unsigned nearest_comp(const vnl_vector<double>& x) const;
+  //: Initialise to use n components of type comp_type
+  //  Clones taken by comp_type
+  void init(const vpdfl_pdf_base& comp_type, int n);
 
-		//: Add a component to current model
-		//  Clone taken of comp
-	void add_component(const vpdfl_pdf_base& comp);
-	
-		//: Remove all components cleanly
-	void clear();
+  //: Return instance object for this PDF
+  //  Object is created on heap. Caller responsible for deletion.
+  virtual vpdfl_sampler_base * new_sampler() const;
 
-		//: Access to components - for use by builders
-		//  Care must be taken to ensure consistency when modifying
-	vcl_vector<vpdfl_pdf_base*>& components() { return component_; }
+  //: Number of components in mixture
+  unsigned n_components() const { return component_.size(); }
 
-  	//: Access to components - for use by builders
-		//  Care must be taken to ensure consistency when modifying
-	const vcl_vector<vpdfl_pdf_base*>& components() const { return component_; }
+  //: Array of weights
+  const vcl_vector<double>& weights() const { return weight_; }
 
-	
+  //: Array of weights
+  vcl_vector<double>& weights() { return weight_; }
 
-    //: Return true if the object represents a valid PDF.
-    // This will return false, if n_dims() is 0, for example just ofter
-    // default construction.
+  //: Return index of component nearest to x
+  unsigned nearest_comp(const vnl_vector<double>& x) const;
+
+  //: Add a component to current model
+  //  Clone taken of comp
+  void add_component(const vpdfl_pdf_base& comp);
+
+  //: Remove all components cleanly
+  void clear();
+
+  //: Access to components - for use by builders
+  //  Care must be taken to ensure consistency when modifying
+  vcl_vector<vpdfl_pdf_base*>& components() { return component_; }
+
+  //: Access to components - for use by builders
+  //  Care must be taken to ensure consistency when modifying
+  const vcl_vector<vpdfl_pdf_base*>& components() const { return component_; }
+
+  //: Return true if the object represents a valid PDF.
+  // This will return false, if n_dims() is 0, for example just ofter
+  // default construction.
   virtual bool is_valid_pdf() const;
 
-		//: Version number for I/O
-	short version_no() const;
+  //: Version number for I/O
+  short version_no() const;
 
-		//: Name of the class
-	virtual vcl_string is_a() const;
+  //: Name of the class
+  virtual vcl_string is_a() const;
 
-		//: Create a copy on the heap and return base class pointer
-	virtual	vpdfl_pdf_base*	clone()	const;
+  //: Create a copy on the heap and return base class pointer
+  virtual vpdfl_pdf_base* clone() const;
 
-		//: Print class to os
-	virtual void print_summary(vcl_ostream& os) const;
-		
-		//: Save class to binary file stream
-		//!in: bfs: Target binary file stream
-	virtual void b_write(vsl_b_ostream& bfs) const;
+  //: Print class to os
+  virtual void print_summary(vcl_ostream& os) const;
 
-	/*========== methods which change state (non-const) ============*/
+  //: Save class to binary file stream
+  //!in: bfs: Target binary file stream
+  virtual void b_write(vsl_b_ostream& bfs) const;
 
-		//: Load class from binary file stream
-		//!out: bfs: Target binary file stream
-	virtual void b_read(vsl_b_istream& bfs);
+  /*========== methods which change state (non-const) ============*/
 
-protected:
-
-private:
-
-
-
+  //: Load class from binary file stream
+  //!out: bfs: Target binary file stream
+  virtual void b_read(vsl_b_istream& bfs);
 };
-//=======================================================================
-#endif
-//==================< end of vpdfl_mixture.h >====================
 
-
+#endif // vpdfl_mixture_h_
