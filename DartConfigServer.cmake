@@ -49,7 +49,7 @@ SET (BUILD_MONITORS "\\
 
 SET (PROJECT_URL http://vxl.sourceforge.net/)
 SET (EXPECTED_BUILDS "\\
-  {crd.ge.com Cygwin-1.5.11_gcc-3.3.3_-Wall_-O2_static} \\
+  {crd.ge.com Cygwin-1.5.12_gcc-3.3.3_-Wall_-O2_static} \\
   {cs.rpi.edu FreeBSD-4.9-gcc-2.95.4} \\
   {cs.rpi.edu FreeBSD-4.9-gcc-2.95.4-static} \\
   {cs.rpi.edu FreeBSD-4.9-gcc-3.3} \\
@@ -60,7 +60,7 @@ SET (EXPECTED_BUILDS "\\
   {crd.ge.com Linux-2.4.9_icc-8.0_-w1_-O2_shared} \\
   {esat.kuleuven.ac.be Linux-2.6-gcc-3.4-O3} \\
   {esat.kuleuven.ac.be Linux64-2.6-gcc-3.4-O3} \\
-  {crd.ge.com MinGW-3.5_gcc-3.3.3_-Wall_-O2_static} \\
+  {crd.ge.com MinGW-3.7_gcc-3.3.3_-Wall_-O2_static} \\
   {esat.kuleuven.ac.be OSF1-V5.1-gcc-3.4} \\
   {crd.ge.com Playstation2-Linux-2.2.1_gcc-2.95.2_-Wall_static} \\
   {crd.ge.com Solaris-2.8_gcc-3.4.3_static} \\
