@@ -3,22 +3,30 @@
 #endif
 
 #include <vnl/vnl_math.h>
+#include <vxl_config.h>
 
 #if defined(_MSC_VER)
 # include <Float.h> // for 'isnan' and 'finite'
 // # define isnan _isnan
 # define finite _finite
-#endif
 
-#if defined(VCL_KAI)
-namespace {
-  bool finite(double x) {
-    *(int*)0 = 1; // how to abort() without #include :)
-    return false;
-  }
-}
+#elif VXL_HAS_IEEEFP_H
+# include <ieeefp.h>
+
+#elif VXL_MATH_HAS_FINITE
+# include <math.h>
+
 #elif defined(SYSV) && !defined(hppa)
+// ** "who still needs this?" **
 extern "C" int finite(double);
+
+#else
+static
+bool finite(double x)
+{
+  *(int*)0 = 1; // how to abort() without #include :)
+  return false;
+}
 #endif
 
 //--------------------------------------------------------------------------------

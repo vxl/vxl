@@ -8,22 +8,30 @@
 
 #include <vcl/vcl_cmath.h>
 #include <vcl/vcl_cstdlib.h>
+#include <vxl_config.h>
+#if VXL_STDLIB_HAS_DRAND48
+// On SunPro 5.0, <cstdlib> does not
+// declare drand48() but <stdlib.h> does.
+# include <stdlib.h>
+#endif
 
 // -- return a random number uniformly drawn on [a, b)
 double vnl_sample_uniform(double a, double b) 
 {
-#ifdef VCL_NO_DRAND48
-    // rand() is not always a good random number generator,
-    // so use the following congruential random number generator - PVr
+#if VXL_STDLIB_HAS_DRAND48
+  // it's your lucky day.
+  double u = drand48(); // uniform on [0, 1)
+#else
+  // unlucky! perhaps your luck will change if you try
+  // a different random number generator.
+
+  // rand() is not always a good random number generator,
+  // so use the following congruential random number generator - PVr
   static unsigned long seed = 12345;
   seed = (seed*16807)%2147483647L;
-  double u = (double)seed/2147483711.0;
-#else
-    // If you don't have drand48() you must define 
-    // the macro VCL_NO_DRAND48 somewhere.
-  double u = drand48(); // uniform on [0, 1)
+  double u = double(seed)/2147483711L;
 #endif
-  return (1-u)*a + u*b;
+  return (1.0-u)*a + u*b;
 }
 
 double vnl_sample_normal(double mean, double sigma) 

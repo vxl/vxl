@@ -135,11 +135,13 @@ dnl ---------------------------------------------------------------------------
 
 
 AC_DEFUN(AC_TWO_ARG_TIMEOFDAY,[
-AC_CACHE_CHECK( gettimeofday one or two arguments,ac_twoarg_timeofday,
-  [AC_LANG_SAVE
-AC_LANG_CPLUSPLUS
+# these must go first or the msg_result will get clobbered.
 AC_HEADER_TIME
 AC_STRUCT_TM
+
+AC_CACHE_CHECK( whether gettimeofday takes two arguments,ac_twoarg_timeofday,
+[AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
 AC_TRY_RUN([
 #if TIME_WITH_SYS_TIME
 # include <sys/time.h>
@@ -157,13 +159,65 @@ int main()
   struct timezone tz;
   gettimeofday(&real0, &tz);
   return 0;
-}], ac_twoarg_timeofday=yes, ac_twoarg_timeofday=no)
+}],[
+ac_twoarg_timeofday=yes
+],[
+ac_twoarg_timeofday=no
+])
 AC_LANG_RESTORE])
 
+])
 
-if test $ac_twoarg_timeofday = yes; then
-AC_MSG_RESULT( using two arguments to gettimeofday )
-else
-AC_MSG_RESULT( using one argument to gettimofday )
-fi
+
+dnl ------------------------------------------------------------
+AC_DEFUN(AC_VXL_MATH_HAS_FINITE,[
+AC_MSG_CHECKING([whether <math.h> provides finite()])
+AC_LANG_CPLUSPLUS
+AC_TRY_COMPILE([
+#include <math.h>
+int vxl_finite(double x) { return finite(x); }
+],,[
+VXL_MATH_HAS_FINITE=1
+AC_MSG_RESULT(yes)
+],[
+VXL_MATH_HAS_FINITE=0
+AC_MSG_RESULT(no)
+])
+AC_LANG_RESTORE
+export VXL_STDLIB_HAS_QSORT
+])
+
+
+
+dnl ------------------------------------------------------------
+AC_DEFUN(AC_VXL_STDLIB_RAND48,[
+AC_LANG_CPLUSPLUS
+
+AC_MSG_CHECKING([whether <stdlib.h> provides lrand48()])
+AC_TRY_COMPILE([
+#include <stdlib.h>
+int vxl_lrand48() { return lrand48(); }
+],,[
+VXL_STDLIB_HAS_LRAND48=1
+AC_MSG_RESULT(yes)
+],[
+VXL_STDLIB_HAS_LRAND48=0
+AC_MSG_RESULT(no)
+])
+export VXL_STDLIB_HAS_LRAND48
+
+AC_MSG_CHECKING([whether <stdlib.h> provides drand48()])
+AC_TRY_COMPILE([
+#include <stdlib.h>
+double vxl_drand48() { return drand48(); }
+],,[
+VXL_STDLIB_HAS_DRAND48=1
+AC_MSG_RESULT(yes)
+],[
+VXL_STDLIB_HAS_DRAND48=0
+AC_MSG_RESULT(no)
+])
+export VXL_STDLIB_HAS_DRAND48
+
+AC_LANG_RESTORE
 ])
