@@ -1,10 +1,11 @@
+#include "rgrl_weighter_m_est.h"
 //:
+// \file
 // \author Chuck Stewart
 // \date   Feb 2003
 
-#include "rgrl_weighter_m_est.h"
-
 #include <vcl_cmath.h>
+#include <vcl_cassert.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_svd.h>
 #include <rrel/rrel_m_est_obj.h>
@@ -14,8 +15,8 @@
 
 rgrl_weighter_m_est::
 rgrl_weighter_m_est( vcl_auto_ptr<rrel_m_est_obj>  m_est,
-		     bool                          use_signature_error,
-		     bool                          use_precomputed_signature_wgt )
+                     bool                          use_signature_error,
+                     bool                          use_precomputed_signature_wgt )
   : m_est_( m_est ),
     use_signature_error_( use_signature_error ),
     signature_precomputed_( use_precomputed_signature_wgt )
@@ -38,39 +39,39 @@ compute_weights( rgrl_scale const&  scales,
   //  errors are used.  Be careful of null entries.
 
   vnl_matrix<double> signature_inv_covar;
-  if( use_signature_error_ && !signature_precomputed_ ) {
-    assert( scales.has_signature_covar() );
+  if ( use_signature_error_ && !signature_precomputed_ ) {
+    assert ( scales.has_signature_covar() );
     vnl_svd<double> svd( scales.signature_covar() );
     svd.zero_out_absolute();
     signature_inv_covar = svd.inverse();   // pseudo-inverse at this point
   }
 
-  //  cache the geometric scale. 
-  assert( scales.has_geometric_scale() );
+  //  cache the geometric scale.
+  assert ( scales.has_geometric_scale() );
   double geometric_scale = scales.geometric_scale();
 
   typedef rgrl_match_set::from_iterator from_iter;
   typedef from_iter::to_iterator        to_iter;
 
-  DebugMacro(1,"\n");
-  DebugMacro_abv(1, "Matched points : from\t to\t geo_err\t geo_wgt\t cum_wgt: \n" );
+  DebugMacro(1,'\n');
+  DebugMacro_abv(1, "Matched points : from\t to\t geo_err\t geo_wgt\t cum_wgt:\n" );
 
   //  for each from image feature being matched
-  for( from_iter fitr = match_set.from_begin();
+  for ( from_iter fitr = match_set.from_begin();
        fitr != match_set.from_end(); ++fitr ) {
 
-    DebugMacro_abv(1, fitr.from_feature()->location() << "\t");
-    if ( fitr.empty() ) DebugMacro_abv(2, "\n" );
+    DebugMacro_abv(1, fitr.from_feature()->location() << '\t');
+    if ( fitr.empty() ) DebugMacro_abv(2, '\n' );
 
-    if( fitr.size() == 0 )  continue;
+    if ( fitr.size() == 0 )  continue;
 
     double sum_weights = 0; // for normalizing, later
     rgrl_feature_sptr mapped_from = fitr.mapped_from_feature();
 
-    for( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
-      
+    for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr )
+    {
       DebugMacro_abv( 1, titr.to_feature()->location() << "\t " );
-      
+
       //  for each match with a "to" image feature
       rgrl_feature_sptr to_feature = titr.to_feature();
       //double geometric_err = mapped_from->geometric_error( *to_feature );
@@ -80,8 +81,8 @@ compute_weights( rgrl_scale const&  scales,
       DebugMacro_abv(1, geometric_err << "\t " << geometric_wgt << "\t " );
 
       double signature_wgt = 1.0;
-      if( signature_precomputed_ ) {
-	signature_wgt = titr . signature_weight( );
+      if ( signature_precomputed_ ) {
+        signature_wgt = titr . signature_weight( );
       }
       else if ( use_signature_error_ ) {
         vnl_vector<double> error_vector = to_feature->signature_error_vector( *mapped_from );
@@ -110,7 +111,7 @@ compute_weights( rgrl_scale const&  scales,
     // affected at all.
 
     if ( sum_weights > 1e-16 ) { //sum_weights not approaching 0
-      for( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
+      for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
         double wgt = titr.cumulative_weight();
         titr.set_cumulative_weight( wgt*wgt / sum_weights );
       }

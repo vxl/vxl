@@ -3,6 +3,7 @@
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
 #include <vcl_cmath.h>
+#include <vcl_cassert.h>
 
 #include "rgrl_match_set.h"
 #include "rgrl_set_of.h"
@@ -17,7 +18,7 @@ rgrl_convergence_on_median_error( double tol )
 }
 
 
-rgrl_converge_status_sptr 
+rgrl_converge_status_sptr
 rgrl_convergence_on_median_error::
 compute_status( rgrl_converge_status_sptr               prev_status,
                 rgrl_view                        const& prev_view,
@@ -34,12 +35,12 @@ compute_status( rgrl_converge_status_sptr               prev_status,
   //rgrl_transformation_sptr current_xform = current_view.xform_estimate();
   vcl_vector<double> errors;
 
-  for( unsigned ds=0; ds < current_match_sets.size(); ++ds ) {
+  for ( unsigned ds=0; ds < current_match_sets.size(); ++ds ) {
     rgrl_match_set const& ms = *current_match_sets[ds];
-    for( from_iter fitr = ms.from_begin(); fitr != ms.from_end(); ++fitr ) {
+    for ( from_iter fitr = ms.from_begin(); fitr != ms.from_end(); ++fitr ) {
       //rgrl_feature_sptr mapped = fitr.from_feature()->transform( *current_xform );
       rgrl_feature_sptr mapped = fitr.mapped_from_feature();
-      for( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
+      for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
         errors.push_back( titr.to_feature()->geometric_error( *mapped ) );
       }
     }
@@ -50,45 +51,45 @@ compute_status( rgrl_converge_status_sptr               prev_status,
   //        transformation, the error is scaled by the scaling of the spread
   //        of the transformed data points
   //
-  assert( errors.size() > 0 );
+  assert ( errors.size() > 0 );
   vcl_vector<double>::iterator middle = errors.begin() + errors.size()/2;
   vcl_nth_element( errors.begin(), middle, errors.end() );
 
   double scaling = 1;
   if ( penalize_scaling ) {
     scaling =  rgrl_util_geometric_error_scaling( current_match_sets );
-    DebugMacro(1, "geometric_error_scaling = "<<scaling<<"\n");
+    DebugMacro(1, "geometric_error_scaling = "<<scaling<<'\n');
   }
 
   double new_error = *middle * scaling;
   bool good = new_error < tolerance_;
 
   // Step3: First check if the regions in the view have converged. If yes,
-  //        check the convergence of the transform estimate by comparing to 
-  //        the previous status. The oscillation count is incremented if the 
+  //        check the convergence of the transform estimate by comparing to
+  //        the previous status. The oscillation count is incremented if the
   //        error_diff changes the sign.
   //
   bool converged;
   bool stagnated = false;
   unsigned int oscillation_count = 0;
   double error_diff = 0.0;
-  if (new_error == 0.0 ) 
+  if (new_error == 0.0 )
     converged = true;
-  else if( prev_status && current_view.regions_converged_to(prev_view) ) {
-    double old_error = prev_status->error(); 
+  else if ( prev_status && current_view.regions_converged_to(prev_view) ) {
+    double old_error = prev_status->error();
     error_diff = new_error-old_error;
     double diff = (new_error-old_error) / new_error ;
     converged = vcl_abs( diff ) < 1e-3;
-    if( !converged ) {
+    if ( !converged ) {
       // look for oscillation
-      if( error_diff * prev_status->error_diff() < 0.0 ) {
+      if ( error_diff * prev_status->error_diff() < 0.0 ) {
         oscillation_count = prev_status->oscillation_count() + 1;
-        DebugMacro_abv(1, "Oscillation. Count="<<oscillation_count<<"\n" );
+        DebugMacro_abv(1, "Oscillation. Count="<<oscillation_count<<'\n' );
       } else {
-        if( prev_status->oscillation_count() > 0 )
+        if ( prev_status->oscillation_count() > 0 )
           oscillation_count = prev_status->oscillation_count() - 1;
       }
-      if( oscillation_count > 10 ) {
+      if ( oscillation_count > 10 ) {
         stagnated = true;
       }
     }
