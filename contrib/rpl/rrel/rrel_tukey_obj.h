@@ -1,10 +1,9 @@
 #ifndef rrel_tukey_obj_h_
 #define rrel_tukey_obj_h_
-
 //:
 // \file
 // \author Amitha Perera (perera@cs.rpi.edu)
-// Beaton-Tukey loss functon.
+// \brief Beaton-Tukey loss function.
 
 #include <rrel/rrel_m_est_obj.h>
 
@@ -30,8 +29,9 @@
 //  In this implementation, the constant \f$ \frac{B^2}{6} \f$ in \f$
 //  \rho \f$ is ignored, since it doesn't affect the minimum.
 
-class rrel_tukey_obj : public rrel_m_est_obj {
-public:
+class rrel_tukey_obj : public rrel_m_est_obj
+{
+ public:
   //: Constructor.
   //  \a B is the normalised residual value at which the cost becomes
   //  constant.
@@ -46,7 +46,7 @@ public:
   //: The weight of the residual.
   virtual double wgt( double u ) const;
 
-private:
+ private:
   double B_;
 };
 
