@@ -76,11 +76,11 @@ class bmrf_network : public vbl_ref_count
   //: Returns the probability that the entire network is correct
   double probability();
 
-  //: Returns the beginning const iterator to the nodes in frame \param frame
+  //: Returns the beginning const iterator to the map of nodes in frame \param frame
   // \note if \param frame is negative the iterator will cover all frames
   seg_node_map::const_iterator begin(int frame = -1) const;
 
-  //: Returns the end const iterator to the nodes in frame \param frame
+  //: Returns the end const iterator to the map of nodes in frame \param frame
   // \note if \param frame is negative the iterator will cover all frames
   seg_node_map::const_iterator end(int frame = -1) const;
 
