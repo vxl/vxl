@@ -25,6 +25,8 @@ SET(strk_sources
     strk_epipolar_grouper_params.cxx strk_epipolar_grouper_params.h
     strk_epipolar_grouper.cxx        strk_epipolar_grouper.h
     strk_epipolar_grouper_process.cxx  strk_epipolar_grouper_process.h
+    strk_region_info_params.cxx      strk_region_info_params.h
+    strk_region_info.cxx             strk_region_info.h
 )
 AUX_SOURCE_DIRECTORY(Templates strk_sources)
 

@@ -12,7 +12,7 @@
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 #include <vcl_cmath.h> // for log(), exp() ..
-
+#define DEBUG
 static double strk_gaussian(const double x, const double sigma)
 {
   double x_on_sigma = x / sigma;
@@ -689,6 +689,10 @@ compute_intensity_mutual_information(vil1_memory_image_of<float> const& image)
     float Im = intf_->I();
     image_hist.upcount(Ii, 1.0f);//JLM
     joint_hist.upcount(Im, 1.0f, Ii, 1.0f); //JLM
+#ifdef DEBUG
+    vcl_cout << "(" << x << " " << y << "):[" << Im << " " 
+             << Ii << "]\n" << vcl_flush;
+#endif
     n++;
   }
   if (n<0.9*npix)
@@ -800,7 +804,7 @@ compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
   gradient_joint_entropy_ = jent;
   float mi = float(model_gradient_dir_entropy_) + enti - jent;
 #ifdef DEBUG
-  vcl_cout << "Dir Entropies:(M,I,J, MI)=(" << model_intensity_entropy_ << ' '
+  vcl_cout << "Dir Entropies:(M,I,J, MI)=(" << model_gradient_dir_entropy_ << ' '
            << enti << ' ' << jent << ' ' << mi <<")\n";
 #endif
   return mi;
