@@ -100,15 +100,17 @@ void DPMatch::detect_tail(vcl_vector<int> &tail1 , vcl_vector<int> &tail2)
 }
 
 double DPMatch::normfinalCost()
-{
-  double alpha =0;
-  double R=0;
-  if (curve1_.Tcurvature()>=curve2_.Tcurvature())
-      alpha=curve2_.Tcurvature();
-  if (curve1_.Tcurvature()<curve2_.Tcurvature())
-      alpha=curve1_.Tcurvature();
 
-  return finalCost_/((1+R*alpha)*(matched_len1+matched_len2))/2;
+{   
+ 	double alpha =0;
+	double R=0;
+	if(curve1_.Tcurvature()>=curve2_.Tcurvature())
+			alpha=curve2_.Tcurvature();
+	if(curve1_.Tcurvature()<curve2_.Tcurvature())
+			alpha=curve1_.Tcurvature();
+	
+	return finalCost_/((1+R*alpha)*((double)matched_len1+(double)matched_len2))/2;
+
 }
 
 vcl_map <int,int> DPMatch::refine_mapping()
@@ -225,6 +227,7 @@ DPMatch::DPMatch(Curve &c1, Curve &c2)
   finalMap_.clear();
   finalMapCost_.clear();
   finalCost_ = DP_VERY_LARGE_COST;
+  ep_pt.set(-1e6,-1e6);
 }
 
 DPMatch::DPMatch(Curve &c1, Curve &c2,vgl_point_2d<double> & e)
@@ -253,8 +256,9 @@ DPMatch::DPMatch(Curve &c1, Curve &c2,vgl_point_2d<double> & e)
 }
 
 DPMatch::DPMatch(vcl_vector<vcl_pair<double,double> > v1,
-                 vcl_vector<vcl_pair<double,double> > v2,
+                  vcl_vector<vcl_pair<double,double> > v2,
                  vnl_double_2 & e)
+
 {
   curve1_.readDataFromVector(v1);
   curve2_.readDataFromVector(v2);
@@ -553,19 +557,25 @@ double DPMatch::computeIntervalCost(int i, int ip, int j, int jp)
   curve2_.stretchCost(j,jp,ds2_);
   curve1_.bendCost(i,ip,dt1_);
   curve2_.bendCost(j,jp,dt2_);
-  double w=0.2;
-//double C=0.01;
+  double C=0.0;
+  double w=0.2;/*0.2;*/
+  if(ep_pt.x()<-1e4)
+	C=0.0;
+  else
+	C=0.4;
+
   double delta=1;
   double dE=computeEpipolarCost(i,ip, j,  jp);
   double dF = vcl_fabs(ds1_ - ds2_);
   double dK = vcl_fabs(dt1_ - dt2_);
-  double cost = dF + R1_*dK +R1_*vcl_pow(vcl_sqrt(dE)/delta,5)/(1+vcl_pow(vcl_sqrt(dE)/delta,5));
+
+  double cost = 0.0*dF + 0.0*R1_*dK +C*R1_*pow(vcl_sqrt(dE)/delta,5)/(1+pow(vcl_sqrt(dE)/delta,5));//C*vcl_
+
   if (ip==0 || jp==0)
     cost*=w;
   if (i==n_-1|| j==m_-1)
     cost*=w;
-  if (cost<0)
-    vcl_cout<<'\t'<<cost<<'\t'<<dE;
+
   return cost;
 }
 
@@ -588,11 +598,13 @@ void DPMatch::findDPCorrespondence()
   {
     ip=map_[i][j].first;
     jp=map_[i][j].second;
+
 #ifdef DEBUG
     vcl_cout<< '\n' << i << '\t' << ip << '\t' << j << '\t' << jp << '\t'
             << vcl_sqrt(computeEpipolarCost2(i,ip, j,  jp)) << '\t'
             << computeIntervalCost(i,ip,j,jp);
 #endif
+
     vcl_pair<int,int> p(ip,jp);
     finalMap_.push_back(p);
     finalMapCost_.push_back(cost_[p.first][p.second]);
