@@ -373,8 +373,14 @@ void vnl_amoebaFit::amoeba(vnl_vector<double>& x,
       char buf[16383];
       vcl_sprintf(buf, "iter %5d: %s ", cnt, how);
       vcl_cerr << buf;
+      if (verbose ==2)
+        vcl_cerr << "\nFirst corner: " << simplex[0].v;
       if (verbose > 1)
+      {
+        vcl_streamsize a = vcl_cerr.width(10);
         vcl_cerr << vcl_endl << simplex << vcl_endl;
+        vcl_cerr.width(a);
+      }
       else if (verbose)
         vcl_cerr << simplex << vcl_endl;
     }
