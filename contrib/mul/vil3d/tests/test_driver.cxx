@@ -6,6 +6,9 @@ DECLARE( test_sample_profile_trilin );
 DECLARE( test_gauss_reduce );
 DECLARE( test_algo_threshold );
 DECLARE( test_algo_structuring_element );
+DECLARE( test_algo_binary_dilate );
+DECLARE( test_algo_binary_erode );
+
 void
 register_tests()
 {
@@ -15,6 +18,8 @@ register_tests()
   REGISTER( test_gauss_reduce );
   REGISTER( test_algo_threshold );
   REGISTER( test_algo_structuring_element );
+  REGISTER( test_algo_binary_dilate );
+  REGISTER( test_algo_binary_erode );
 }
 
 DEFINE_MAIN;

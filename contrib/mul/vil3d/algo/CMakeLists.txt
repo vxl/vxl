@@ -5,6 +5,8 @@ SET(vil3d_algo_sources
   vil3d_threshold.h vil3d_threshold.txx
   vil3d_grad_1x3.h vil3d_grad_1x3.cxx vil3d_grad_1x3.txx
   vil3d_structuring_element.h vil3d_structuring_element.cxx
+  vil3d_binary_dilate.h vil3d_binary_dilate.cxx
+  vil3d_binary_erode.h vil3d_binary_erode.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vil3d_algo_sources)
