@@ -17,8 +17,9 @@ template<class T>
 inline void test_memory_chunk_io_as(T value)
 {
   vcl_cout<<"Testing IO as type "<<vil_pixel_format_of(T())<<vcl_endl;
+  vil_pixel_format fmt = vil_pixel_format_of(T());
   vil_memory_chunk chunk1(35*sizeof(T),
-                          vil_pixel_format_component_format(vil_pixel_format_of(T())));
+                          vil_pixel_format_component_format(fmt));
   T* data1 = reinterpret_cast<T*>(chunk1.data());
   vcl_memset(data1,0,35*sizeof(T)); // avoid "UMR" on subsequent vsl_b_write()
   data1[3]= value;

@@ -170,8 +170,9 @@ inline bool convert_components_from_planes(vil_image_view<T> &lhs,
   const int ncomp =
     vil_pixel_format_num_components(vil_pixel_format_of(T()));
 
+  vil_pixel_format fmt = vil_pixel_format_of(T());
   if (// both sides have equal component types and rhs has scalar pixels and
-      rhs_base.pixel_format() == vil_pixel_format_component_format(vil_pixel_format_of(T()) ) &&
+      rhs_base.pixel_format() == vil_pixel_format_component_format(fmt) &&
       // lhs has number of components equal to rhs's number of planes.
       ncomp == (int)rhs_base.nplanes() )
   {
