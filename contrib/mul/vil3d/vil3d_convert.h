@@ -149,23 +149,22 @@ inline void vil3d_convert_stretch_range(const vil3d_image_view<inP>& src,
 }
 
 
-//: Convert src image<inP> to dest image<double> by stretching 
-// input range [src_lo, src_hi] to output range [dest_lo, dest_hi].
+//: Convert src image<inP> to dest image<double> by stretching input range [src_lo, src_hi] to output range [dest_lo, dest_hi].
 // Inputs < src_lo are mapped to dest_lo, and inputs > src_hi to dest_hi.
 template <class inP>
 inline void vil3d_convert_stretch_range_limited(const vil3d_image_view<inP>& src,
                                                 vil3d_image_view<double>& dest,
-                                                const inP src_lo, 
+                                                const inP src_lo,
                                                 const inP src_hi,
-                                                const double dest_lo, 
+                                                const double dest_lo,
                                                 const double dest_hi)
 {
   double b = 0.0;
 
   double ddest = dest_hi - dest_lo;
-  double dsrc = static_cast<double>(src_hi - src_lo);  
+  double dsrc = static_cast<double>(src_hi - src_lo);
   double dds = ddest / dsrc;
-  
+
   dest.set_size(src.ni(), src.nj(), src.nk(), src.nplanes());
   for (unsigned p = 0; p < src.nplanes(); ++p)
     for (unsigned k = 0; k < src.nk(); ++k)
@@ -185,8 +184,7 @@ inline void vil3d_convert_stretch_range_limited(const vil3d_image_view<inP>& src
 // This function is designed to be used with vil3d_load or
 // vil3d_image_resource::get_view()
 // where you do not know the pixel type in advance.
-// If you need a
-// multi-component view, then call this to get the corresponding
+// If you need a multi-component view, then call this to get the corresponding
 // multi-planar view, and do a second (cheap) conversion.
 // The input image's storage arrangement may not be preserved.
 template <class outP>
@@ -198,12 +196,12 @@ inline vil3d_image_view_base_sptr vil3d_convert_cast(outP /*dummy*/,
   vil3d_image_view_base_sptr dest = new vil3d_image_view<outP>;
   vil3d_image_view<outP> & dest_ref = static_cast<vil3d_image_view<outP> &>(*dest);
 
-  switch( vil_pixel_format_component_format(src->pixel_format()) )
+  switch ( vil_pixel_format_component_format(src->pixel_format()) )
   {
 #define macro(F , T) \
    case F: \
-     vil3d_convert_cast( vil3d_image_view<T >( src ), dest_ref );\
-     break;
+    vil3d_convert_cast( vil3d_image_view<T >( src ), dest_ref );\
+    break;
 
     macro( VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32 )
     macro( VIL_PIXEL_FORMAT_INT_32, vxl_int_32 )
@@ -215,8 +213,7 @@ inline vil3d_image_view_base_sptr vil3d_convert_cast(outP /*dummy*/,
     macro( VIL_PIXEL_FORMAT_DOUBLE, double )
     macro( VIL_PIXEL_FORMAT_BOOL, bool )
 #undef macro
-    default:
-      dest = 0;
+    default: dest=0;
   }
   return dest;
 }
@@ -249,13 +246,14 @@ inline vil3d_image_view_base_sptr vil3d_convert_round(
   vil3d_image_view_base_sptr dest = new vil3d_image_view<outP >;
   vil3d_image_view<outP > &dest_ref = static_cast<vil3d_image_view<outP >&>(*dest);
 
-  switch(vil_pixel_format_component_format(src->pixel_format()))
+  switch (vil_pixel_format_component_format(src->pixel_format()))
   {
 #define macro( F , T ) \
    case F: { \
     vil3d_image_view<T > src1 = src; \
     vil3d_transform2(src1, dest_ref, vil_convert_round_pixel<T , outP>()); \
     break; }
+
     macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
     macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
     macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
@@ -300,6 +298,7 @@ inline vil3d_image_view_base_sptr vil3d_convert_to_grey_using_average(
     vil3d_image_view<T > src1 = *src; \
     vil3d_math_mean_over_planes(src1, dest, double()); \
     return vil3d_image_view_base_sptr(new vil3d_image_view<T >(dest)); }
+
     macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
     macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
     macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
@@ -417,6 +416,7 @@ inline vil3d_image_view_base_sptr vil3d_convert_stretch_range(
     vil3d_convert_stretch_range(src_ref, inter, lo, hi); \
     vil3d_convert_cast(inter, dest_ref); \
     break; }
+
     macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
     macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
     macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
