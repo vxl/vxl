@@ -2,7 +2,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_CALIBRATIONOBJECT_H__FDECCBAC_345C_4A9A_BB15_3975763F8F2F__INCLUDED_)
+#ifndef AFX_CALIBRATIONOBJECT_H__FDECCBAC_345C_4A9A_BB15_3975763F8F2F__INCLUDED_
 #define AFX_CALIBRATIONOBJECT_H__FDECCBAC_345C_4A9A_BB15_3975763F8F2F__INCLUDED_
 
 #if _MSC_VER > 1000
@@ -11,12 +11,11 @@
 
 #include <vcsl/vcsl_spatial.h>
 
-class CalibrationObject : public vcsl_spatial  
+class CalibrationObject : public vcsl_spatial
 {
-public:
-	CalibrationObject();
-	virtual ~CalibrationObject();
-
+ public:
+  CalibrationObject();
+  virtual ~CalibrationObject();
 };
 
-#endif // !defined(AFX_CALIBRATIONOBJECT_H__FDECCBAC_345C_4A9A_BB15_3975763F8F2F__INCLUDED_)
+#endif // AFX_CALIBRATIONOBJECT_H__FDECCBAC_345C_4A9A_BB15_3975763F8F2F__INCLUDED_

@@ -10,7 +10,7 @@
 
 ZhangLinearCalibrate::ZhangLinearCalibrate()
 {
-	camGraph_ = 0;
+  camGraph_ = 0;
 }
 
 ZhangLinearCalibrate::~ZhangLinearCalibrate()
@@ -19,5 +19,5 @@ ZhangLinearCalibrate::~ZhangLinearCalibrate()
 
 void ZhangLinearCalibrate::setCameraGraph(CameraGraph *pG)
 {
-	camGraph_ = pG;
+  camGraph_ = pG;
 }
