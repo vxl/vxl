@@ -1,8 +1,10 @@
-//: \file
+//:
+//  \file
 //  \brief Perform binary dilation on images
 //  \author Tim Cootes
 
-#include <vil2/algo/vil2_binary_dilate.h>
+#include "vil2_binary_dilate.h"
+#include <vcl_cassert.h>
 
 //: Dilates src_image to produce dest_image (assumed single plane)
 void vil2_binary_dilate(const vil2_image_view<bool>& src_image,
@@ -32,19 +34,19 @@ void vil2_binary_dilate(const vil2_image_view<bool>& src_image,
   // Deal with left edge
   for (int i=0;i<ilo;++i)
     for (int j=0;j<nj;++j)
-	  dest_image(i,j,0)=vil2_binary_dilate(src_image,0,element,i,j);
+      dest_image(i,j,0)=vil2_binary_dilate(src_image,0,element,i,j);
   // Deal with right edge
   for (int i=ihi+1;i<ni;++i)
     for (int j=0;j<nj;++j)
-	  dest_image(i,j,0)=vil2_binary_dilate(src_image,0,element,i,j);
+      dest_image(i,j,0)=vil2_binary_dilate(src_image,0,element,i,j);
   // Deal with bottom edge
   for (int i=ilo;i<=ihi;++i)
     for (int j=0;j<jlo;++j)
-	  dest_image(i,j,0)=vil2_binary_dilate(src_image,0,element,i,j);
+      dest_image(i,j,0)=vil2_binary_dilate(src_image,0,element,i,j);
   // Deal with top edge
   for (int i=ilo;i<=ihi;++i)
     for (int j=jhi+1;j<nj;++j)
-	  dest_image(i,j,0)=vil2_binary_dilate(src_image,0,element,i,j);
+      dest_image(i,j,0)=vil2_binary_dilate(src_image,0,element,i,j);
 
   for (int j=jlo;j<=jhi;++j)
   {
@@ -52,9 +54,8 @@ void vil2_binary_dilate(const vil2_image_view<bool>& src_image,
     bool* dest_p = dest_row0 + j*d_jstep + ilo * d_istep;
 
     for (int i=ilo;i<=ihi;++i,src_p+=s_istep,dest_p+=d_istep)
-	{
-	  *dest_p=vil2_binary_dilate(src_p,&offset[0],offset.size());
+    {
+      *dest_p=vil2_binary_dilate(src_p,&offset[0],offset.size());
     }
   }
-
 }

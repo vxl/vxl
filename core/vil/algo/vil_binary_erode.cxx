@@ -1,14 +1,16 @@
-//: \file
+//:
+//  \file
 //  \brief Perform binary erosion on images
 //  \author Tim Cootes
 
-#include <vil2/algo/vil2_binary_erode.h>
+#include "vil2_binary_erode.h"
+#include <vcl_cassert.h>
 #include <vil2/vil2_fill.h>
 
 //: Erodes src_image to produce dest_image (assumed single plane)
 void vil2_binary_erode(const vil2_image_view<bool>& src_image,
-                        vil2_image_view<bool>& dest_image,
-                        const vil2_structuring_element& element)
+                       vil2_image_view<bool>& dest_image,
+                       const vil2_structuring_element& element)
 {
   assert(src_image.nplanes()==1);
   unsigned ni = src_image.ni();
@@ -45,9 +47,8 @@ void vil2_binary_erode(const vil2_image_view<bool>& src_image,
     bool* dest_p = dest_row0 + j*d_jstep + ilo * d_istep;
 
     for (int i=ilo;i<=ihi;++i,src_p+=s_istep,dest_p+=d_istep)
-	{
-	  *dest_p=vil2_binary_erode(src_p,&offset[0],offset.size());
+    {
+      *dest_p=vil2_binary_erode(src_p,&offset[0],offset.size());
     }
   }
-
 }

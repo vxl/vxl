@@ -1,4 +1,5 @@
-//: \file
+//:
+//  \file
 //  \brief Structuring element for morphology represented as a list of non-zero pixels
 //  \author Tim Cootes
 
@@ -7,7 +8,7 @@
 
 //: Define elements { (p_i[k],p_j[k]) }
 vil2_structuring_element::vil2_structuring_element(const vcl_vector<int>& p_i,
-                                                  const vcl_vector<int>& p_j)
+                                                   const vcl_vector<int>& p_j)
 {
   set(p_i,p_j);
 }
@@ -25,10 +26,10 @@ void vil2_structuring_element::set(const vcl_vector<int>& p_i,const vcl_vector<i
   for (int k=1;k<p_i.size();++k)
   {
     if (p_i[k]<min_i_) min_i_=p_i[k];
-	else if (p_i[k]>max_i_) max_i_=p_i[k];
+    else if (p_i[k]>max_i_) max_i_=p_i[k];
 
     if (p_j[k]<min_j_) min_j_=p_j[k];
-	else if (p_j[k]>max_j_) max_j_=p_j[k];
+    else if (p_j[k]>max_j_) max_j_=p_j[k];
   }
 }
 
@@ -41,7 +42,7 @@ void vil2_structuring_element::set_to_disk(double r)
   int r0 = int(r+1);
   for (int j=-r0;j<=r0;++j)
     for (int i=-r0;i<=r0;++i)
-	  if (i*i+j*j<r2) { px.push_back(i); py.push_back(j); }
+      if (i*i+j*j<r2) { px.push_back(i); py.push_back(j); }
   set(px,py);
 }
 
@@ -76,10 +77,11 @@ void vil2_structuring_element::set_to_line_j(int jlo, int jhi)
 //: Write details to stream
 vcl_ostream& operator<<(vcl_ostream& os, const vil2_structuring_element& element)
 {
-  os<<"Bounds ["<<element.min_i()<<","<<element.max_i()<<"]["
-                <<element.min_j()<<","<<element.max_j()<<"] Points: ";
+  os<<"Bounds ["
+    <<element.min_i()<<","<<element.max_i()<<"]["
+    <<element.min_j()<<","<<element.max_j()<<"] Points: ";
   for (int k=0;k<element.p_i().size();++k)
-    os<<"("<<element.p_i()[k]<<","<<element.p_j()[k]<<")";
+    os<<'('<<element.p_i()[k]<<','<<element.p_j()[k]<<") ";
   return os;
 }
 
