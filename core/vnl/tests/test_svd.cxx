@@ -181,10 +181,10 @@ void test_svd_recomposition(char const *type, double maxres, T* /* tag */, vnl_r
   testlib_test_assert("vnl_svd<float> recomposition residual", residual < maxres);
 }
 
-template void test_svd_recomposition(char const *, double, float *);
-template void test_svd_recomposition(char const *, double, double *);
-template void test_svd_recomposition(char const *, double, vcl_complex<float> *);
-template void test_svd_recomposition(char const *, double, vcl_complex<double> *);
+template void test_svd_recomposition(char const *, double, float *, vnl_random &rng);
+template void test_svd_recomposition(char const *, double, double *, vnl_random &rng);
+template void test_svd_recomposition(char const *, double, vcl_complex<float> *, vnl_random &rng);
+template void test_svd_recomposition(char const *, double, vcl_complex<double> *, vnl_random &rng);
 
 #include <vnl/vnl_matlab_print.h>
 template <class T>
@@ -202,10 +202,10 @@ void test_nullvector(char const *type, T *, vnl_random &rng)
            << __FILE__ ": ||Ax|| = " << Ax.two_norm() << vcl_endl;
 }
 
-template void test_nullvector(char const *, float *);
-template void test_nullvector(char const *, double *);
-template void test_nullvector(char const *, vcl_complex<float> *);
-template void test_nullvector(char const *, vcl_complex<double> *);
+template void test_nullvector(char const *, float *, vnl_random &rng);
+template void test_nullvector(char const *, double *, vnl_random &rng);
+template void test_nullvector(char const *, vcl_complex<float> *, vnl_random &rng);
+template void test_nullvector(char const *, vcl_complex<double> *, vnl_random &rng);
 
 // Driver
 void test_svd()
