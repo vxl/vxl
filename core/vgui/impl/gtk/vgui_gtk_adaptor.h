@@ -89,6 +89,8 @@ private:
   // so that it doesn't go out of scope while the popup is on screen.
   static vgui_menu last_popup;
 
+  // last position where mouse was seen.
+  int last_mouse_x, last_mouse_y;
 };
 
 #endif // vgui_gtk_adaptor_h_
