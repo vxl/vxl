@@ -24,12 +24,9 @@ int main(int argc, char** argv)
 
   // This is how we get some image pixels from it.
 
-  vil2_image_view_base* view= data->get_view(0,0,data->ni(), data->nj());
-  vil2_image_view<unsigned char> uc_view = static_cast<vil2_image_view<unsigned char> >(*view);
+  vil2_image_view<unsigned char> uc_view = data->get_view(0,0,data->ni(), data->nj());
 
   vil2_print_all(vcl_cout,uc_view);
-
-  delete view;
 
   return 0;
 }

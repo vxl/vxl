@@ -31,16 +31,12 @@ int main(int argc, char** argv)
 
   // An then get the image pixels from it.
 
-  vil2_image_view_base * view = cropped_data->get_view(0,0,cropped_data->ni(), cropped_data->nj());
+  vil2_image_view<unsigned char> uc_view = cropped_data->get_view(0,0,cropped_data->ni(), cropped_data->nj());
 
-  vcl_cout << "Created a view of type " << view->is_a() << vcl_endl;
+  vcl_cout << "Created a view of type " << uc_view.is_a() << vcl_endl;
 
-  vil2_image_view<unsigned char> uc_view= *view;
 
   vil2_print_all(vcl_cout,uc_view);
-
-  // don't forget to delete view.
-  delete view;
 
   return 0;
 }

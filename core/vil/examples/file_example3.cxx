@@ -19,8 +19,7 @@ int main(int argc, char** argv)
 
   // This is how we quickly load an image view.
 
-  vil2_image_view_base* im= vil2_load(filename.c_str());
-  vil2_image_view<vil2_byte> b_im = static_cast<vil2_image_view<vil2_byte> >(*im);
+  vil2_image_view<vil2_byte> b_im = vil2_load(filename.c_str());
 
   vil2_print_all(vcl_cout, b_im);
 
@@ -30,9 +29,6 @@ int main(int argc, char** argv)
 
   vil2_save(b_im, "test.pbm");
 
-  //don't forget to delete created view,
-
-  delete im;
 
   return 0;
 }
