@@ -218,13 +218,13 @@ void vgui_easy2D::print_psfile(vcl_string filename, int reduction_factor, bool p
   psfile.set_parameters(img.width(), img.height());
   psfile.set_reduction_factor(reduction_factor);
   psfile.postscript_header(); 
-  if (vil_pixel_type(img) == VIL_BYTE)
+  if (vil_pixel_format(img) == VIL_BYTE)
   {
     if (debug) vcl_cerr << "vgui_easy2D::print_psfile printing greyscale image to" 
       <<  filename.c_str() << vcl_endl;
     psfile.print_greyscale_image(data, img.width(), img.height());  
   }
-  else if (vil_pixel_type(img) == VIL_RGB_BYTE)
+  else if (vil_pixel_format(img) == VIL_RGB_BYTE)
   {
     if (debug) vcl_cerr << "vgui_easy2D::print_psfile printing color image to " 
       << filename.c_str() << vcl_endl;

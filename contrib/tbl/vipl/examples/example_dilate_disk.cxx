@@ -38,7 +38,7 @@ main(int argc, char** argv) {
 
   // The input image:
   vil_image in = vil_load(argv[1]);
-  if (!vil_pixel_type(in) == VIL_RGB_BYTE) { vcl_cerr << "Please use a colour image as input\n"; return 2; }
+  if (!vil_pixel_format(in) == VIL_RGB_BYTE) { vcl_cerr << "Please use a colour image as input\n"; return 2; }
 
   // The output image:
   vil_memory_image_of<rgbcell> out(in);

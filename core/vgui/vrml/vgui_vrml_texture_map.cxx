@@ -73,7 +73,7 @@ vgui_vrml_texture_map* vgui_vrml_texture_map::create(char const* filename)
     vbl_printf(vcl_cerr, "Rescale from %dx%d to %dx%d, ", w, h, tex_w, tex_h);
 
   // Rescale and flip Y
-  if (vil_pixel_type(fileimage) == VIL_RGB_BYTE) {
+  if (vil_pixel_format(fileimage) == VIL_RGB_BYTE) {
     vgui_vrml_texture_map* newmap = new vgui_vrml_texture_map(filename, tex_w, tex_h);
     vil_memory_image_of<vil_rgb<unsigned char> > rgb(fileimage.width(), fileimage.height()); 
     fileimage.get_section(rgb.get_buffer(), 0,0, fileimage.width(), fileimage.height());
@@ -84,7 +84,7 @@ vgui_vrml_texture_map* vgui_vrml_texture_map::create(char const* filename)
     }
     vcl_cerr << "Done.\n";
     return newmap;
-  } else if (vil_pixel_type(fileimage) == VIL_BYTE) {
+  } else if (vil_pixel_format(fileimage) == VIL_BYTE) {
     vgui_vrml_texture_map* newmap = new vgui_vrml_texture_map(filename, tex_w, tex_h);
     //vil_memory_image_of<byte> gray( fileimage.get_image_ptr() ); //im8);
     vil_memory_image_of<vil_byte> gray(fileimage.width(), fileimage.height()); 

@@ -45,7 +45,7 @@ main(int argc, char** argv) {
   section<int,2> dst(1,256);
 
   // set the input image:
-  if (vil_pixel_type(in) != VIL_BYTE) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
+  if (vil_pixel_format(in) != VIL_BYTE) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
   in.get_section(src.buffer,0,0,in.width(),in.height());
 
   // The filter:
