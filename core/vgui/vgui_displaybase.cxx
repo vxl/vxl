@@ -195,6 +195,7 @@ void vgui_displaybase::draw_soviews_select() {
     vgui_soview *so = *so_iter;
     
     // only highlight if the so is selectable
+    vgui_soview* so = *so_iter;
     if( so->get_selectable())
       {
 	vgui_soview *so = *so_iter;
