@@ -13,6 +13,10 @@
 
 #include <testlib/testlib_test.h>
 
+static long double zerold = 0.0L;
+static double zerod = 0.0;
+static float zerof = 0.0f;
+
 static void run_constructor_tests() {
   vcl_cout << "\nbignum constructor tests:\n";
 
@@ -167,7 +171,7 @@ static void run_conversion_operator_tests() {
   TEST("float(vnl_bignum(-vnl_numeric_traits<float>::maxval)) == -vnl_numeric_traits<float>::maxval",
        (-vnl_numeric_traits<float>::maxval), float(vnl_bignum(-vnl_numeric_traits<float>::maxval)));
 #ifndef __alpha__ // On Alpha, compiler runs out of memory
-  TEST("float(vnl_bignum(\"+Inf\")) == +Inf", (float) vnl_bignum("+Inf"), 1.0f/0.0f);
+  TEST("float(vnl_bignum(\"+Inf\")) == +Inf", (float) vnl_bignum("+Inf"), 1.0f/zerof);
 #endif
 
   b = vnl_numeric_traits<double>::maxval;
@@ -191,7 +195,7 @@ static void run_conversion_operator_tests() {
   TEST("double(vnl_bignum(-vnl_numeric_traits<double>::maxval)) == -vnl_numeric_traits<double>::maxval",
        (double) vnl_bignum(-vnl_numeric_traits<double>::maxval), -vnl_numeric_traits<double>::maxval);
 #ifndef __alpha__ // On Alpha, compiler runs out of memory
-  TEST("double(vnl_bignum(\"+Inf\")) == +Inf", (double) vnl_bignum("+Inf"), 1.0/0.0);
+  TEST("double(vnl_bignum(\"+Inf\")) == +Inf", (double) vnl_bignum("+Inf"), 1.0/zerod);
 #endif
 }
 

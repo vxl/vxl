@@ -3,6 +3,9 @@
 #include <vnl/vnl_rational.h>
 #include <vnl/vnl_rational_traits.h>
 #include <vcl_complex.h>
+#ifdef NEED_COMPLEX_RATIONAL
+# include <vnl/vnl_complex.h>
+#endif
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix_fixed.h>
@@ -149,6 +152,7 @@ void test_rational() {
     vcl_cout << "one  = " << u << '\n';
     TEST("one", u, 1L);
   }
+#ifdef NEED_COMPLEX_RATIONAL // see vnl_complex.h
   {
     vcl_complex<vnl_rational> c(0L,1L);
     vnl_rational cc(-1L);
@@ -166,6 +170,7 @@ void test_rational() {
     vcl_cout << "one  = " << u << '\n';
     TEST("one", u, vcl_complex<vnl_rational>(1L,0L));
   }
+#endif
 }
 
 TESTMAIN(test_rational);
