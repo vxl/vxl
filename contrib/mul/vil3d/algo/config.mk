@@ -1,2 +1,2 @@
 IULIBS += -lvil3d-algo
-include ../config.mk
+include ${IUEROOT}/contrib/mul/vil3d/config.mk
