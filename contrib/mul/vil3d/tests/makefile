@@ -9,6 +9,11 @@ TESTS += test_image_view.cxx
 TESTS += test_sample_profile_trilin.cxx
 TESTS += test_trilin_interp.cxx
 TESTS += test_algo_threshold.cxx
+TESTS += test_algo_binary_dilate.cxx
+TESTS += test_algo_binary_erode.cxx
+TESTS += test_algo_structuring_element.cxx
+TESTS += test_algo_exp_filter.cxx
+TESTS += test_switch_axes.cxx
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
