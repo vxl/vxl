@@ -6,9 +6,10 @@
 
 #include "vnl_qr.h"
 #include <vcl_iostream.h>
+#include <vcl_complex.h>
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_complex.h>  // vnl_math_squared_magnitude()
 #include <vnl/vnl_matlab_print.h>
-#include <vnl/vnl_complex.h>
 #include <vnl/vnl_complex_traits.h>
 #include <vnl/algo/vnl_netlib.h>
 

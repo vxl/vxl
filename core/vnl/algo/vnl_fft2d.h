@@ -34,17 +34,17 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vnl/vnl_complex.h>
+#include <vcl_complex.h>
 #include <vnl/vnl_matrix.h>
 #include "vnl_fftxd_prime_factors.h"
 
 template<class T>
-class vnl_fft2d : public vnl_matrix<vnl_complex<T> > {
+class vnl_fft2d : public vnl_matrix<vcl_complex<T> > {
 public:
-  typedef vnl_matrix<vnl_complex<T> > base;
+  typedef vnl_matrix<vcl_complex<T> > base;
 
   vnl_fft2d (const vnl_matrix<T> &real); // always forward
-  vnl_fft2d (const vnl_matrix<vnl_complex<T> > &z, int dir); // both forw and backw
+  vnl_fft2d (const vnl_matrix<vcl_complex<T> > &z, int dir); // both forw and backw
   
   // (real,imag)-constructors
   vnl_fft2d (const vnl_matrix<T> &r, const vnl_matrix<T> &i,
@@ -62,16 +62,16 @@ public:
 
 #ifndef VCL_VC60
   // complex-constructors
-  vnl_fft2d (const vnl_matrix<vnl_complex<T> > &c, 
+  vnl_fft2d (const vnl_matrix<vcl_complex<T> > &c, 
 	     const vnl_fftxd_prime_factors<T> &oPFx,
 	     const vnl_fftxd_prime_factors<T> &oPFy, int dir);          //  complex vnl_matrix
-  vnl_fft2d (const vnl_complex<T> *cdata, unsigned int iRows, unsigned int iCols, 
+  vnl_fft2d (const vcl_complex<T> *cdata, unsigned int iRows, unsigned int iCols, 
 	     const vnl_fftxd_prime_factors<T> &oPFx,
 	     const vnl_fftxd_prime_factors<T> &oPFy, int dir);  // 'raw' complex data
 #endif
 
   // static member function: avoid copy-overhead
-  static int doFFT_IP (vnl_complex<T> *cdata, unsigned int rows, unsigned int cols, 
+  static int doFFT_IP (vcl_complex<T> *cdata, unsigned int rows, unsigned int cols, 
 		       const vnl_fftxd_prime_factors<T> &oPFx,
 		       const vnl_fftxd_prime_factors<T> &oPFy, int dir);  
   

@@ -6,8 +6,8 @@
 
 #include <vcl_fstream.h>
 #include <vcl_strstream.h>
+#include <vcl_complex.h>
 
-#include <vnl/vnl_complex.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matlab_write.h>
@@ -44,7 +44,7 @@ void vnl_matlab_filewrite::write(vnl_vector<double> const& v, char const* variab
   vnl_matlab_write(out_, v.data_block(), v.size(), make_var_name(variable_name).c_str());
 }
 
-void vnl_matlab_filewrite::write(vnl_vector<vnl_double_complex> const& v, char const* variable_name) {
+void vnl_matlab_filewrite::write(vnl_vector<vcl_complex<double> > const& v, char const* variable_name) {
   vnl_matlab_write(out_, v.data_block(), v.size(), make_var_name(variable_name).c_str());
 }
 
@@ -57,11 +57,11 @@ void vnl_matlab_filewrite::write(vnl_matrix<double> const& M, char const* variab
   vnl_matlab_write(out_, M.data_array(), M.rows(), M.cols(), make_var_name(variable_name).c_str());
 }
 
-void vnl_matlab_filewrite::write(vnl_matrix<vnl_float_complex> const& M, char const* variable_name) {
+void vnl_matlab_filewrite::write(vnl_matrix<vcl_complex<float> > const& M, char const* variable_name) {
   vnl_matlab_write(out_, M.data_array(), M.rows(), M.cols(), make_var_name(variable_name).c_str());
 }
 
-void vnl_matlab_filewrite::write(vnl_matrix<vnl_double_complex> const& M, char const* variable_name) {
+void vnl_matlab_filewrite::write(vnl_matrix<vcl_complex<double> > const& M, char const* variable_name) {
   vnl_matlab_write(out_, M.data_array(), M.rows(), M.cols(), make_var_name(variable_name).c_str());
 }
 

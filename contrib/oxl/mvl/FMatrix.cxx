@@ -2,24 +2,22 @@
 #pragma implementation
 #endif
 
+#include "FMatrix.h"
+
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
+#include <vcl_complex.h>
 
 #include <vbl/vbl_printf.h>
 
-#include <vnl/vnl_complex.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3.h>
 
-// explanation ??
-//#undef vnl_svd_h_
-
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_rpoly_roots.h>
 
-#include <mvl/FMatrix.h>
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgOperator2D.h>
 #include <mvl/HomgPoint2D.h>

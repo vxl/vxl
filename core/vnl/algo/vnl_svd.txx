@@ -2,12 +2,12 @@
 
 #include <vcl_fstream.h>
 #include <vcl_cstdlib.h> // abort()
+#include <vcl_complex.h>
 #ifdef VCL_SGI_CC_720
 # include <vcl_rel_ops.h> // operator!=(complex)
 #endif
 
 #include <vnl/vnl_math.h>
-#include <vnl/vnl_complex.h>
 #include <vnl/vnl_fortran_copy.h>
 #include <vnl/algo/vnl_netlib.h>
 
@@ -89,7 +89,7 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
     }
 
     for(int j = 0; j < mm; ++j)
-      W_(j, j) = vnl_math_abs(wspace(j)); // we get rid of complexness here.
+      W_(j, j) = vcl_abs(wspace(j)); // we get rid of complexness here.
     
     for(int j = mm; j < n_; ++j)
       W_(j, j) = 0;
@@ -104,8 +104,8 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
 
   if (test_heavily) {
     // Test that recomposed matrix == M
-    double recomposition_residual = vnl_math_abs((recompose() - M).fro_norm());
-    double n = vnl_math_abs(M.fro_norm());
+    double recomposition_residual = vcl_abs((recompose() - M).fro_norm());
+    double n = vcl_abs(M.fro_norm());
     double thresh = m_ * vnl_math::eps * n;
     if (recomposition_residual > thresh) {
       vcl_cerr << "vnl_svd<T>::vnl_svd<T>() -- Warning, recomposition_residual = "
@@ -200,7 +200,7 @@ vnl_svd<T>::zero_out_absolute(double tol)
   rank_ = W_.n();
   for (unsigned k = 0; k < W_.n(); k++) {
     singval_t& weight = W_(k, k);
-    if (vnl_math_abs(weight) <= tol) {
+    if (vcl_abs(weight) <= tol) {
       Winverse_(k,k) = 0;
       weight = 0;
       --rank_;
@@ -213,7 +213,7 @@ vnl_svd<T>::zero_out_absolute(double tol)
 // -- find weights below tol*max(w) and zero them out
 template <class T> void vnl_svd<T>::zero_out_relative(double tol) // sqrt(machine epsilon)
 {
-  zero_out_absolute(tol * vnl_math_abs(sigma_max()));
+  zero_out_absolute(tol * vcl_abs(sigma_max()));
 }
 
 
@@ -259,7 +259,7 @@ vnl_svd<T>::singval_t vnl_svd<T>::determinant_magnitude() const
 template <class T>
 vnl_svd<T>::singval_t vnl_svd<T>::norm() const
 {
-  return vnl_math_abs(sigma_max());
+  return vcl_abs(sigma_max());
 }
 
 // -- Recompose SVD to U*W*V'
