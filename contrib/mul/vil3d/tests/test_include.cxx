@@ -1,3 +1,4 @@
+#include <vil3d/algo/vil3d_anisotropic_filter.h>
 #include <vil3d/algo/vil3d_binary_closing.h>
 #include <vil3d/algo/vil3d_binary_dilate.h>
 #include <vil3d/algo/vil3d_binary_erode.h>
