@@ -17,13 +17,14 @@ $filename = $ARGV[0];
 # patterns to be matched
 $verbpatt = '\\\\verbatim';
 $endverbpatt = '\\\\endverbatim';
-$namepatt = '\\.NAME';
-$authorpatt = '\\.SECTION Author';
-$modificationpatt = '\\.SECTION Modifications';
-$descriptionpatt = '\\.SECTION Description';
-$slashslashpatt = '^//';
-$slashslashcolonpatt = '^//:';
-$slashslashspacedashdashpatt = '^// --';
+$namepatt = '^\s*// \\.NAME';
+$authorpatt = '^\s*// \\.SECTION Author';
+$modificationpatt = '^\s*// \\.SECTION Modifications?';
+$descriptionpatt = '^\s*// \\.SECTION Description';
+$headerpatt = '^\s*// \\.[A-Z]+\s';
+$slashslashpatt = '^\s*//';
+$slashslashcolonpatt = '^\s*//:';
+$slashslashspacedashdashpatt = '^\s*// --';
 $slashstarstarpatt = '/**';
 $spacespacepatt = '  ';
 $starpatt = '*';
@@ -65,31 +66,44 @@ while (<>)
     # found endverbatim ?
     if ( m/$endverbpatt/ ) { $verbatim = 0; };
     
+    # in header and found end ( "//---------eol") -> stop header
+    if ( $weareinfile && ( m/^\s*\/\/\s*-+$/ || ( ! m/^\s*\/\// && ! m/^\s*$/ ) || m!$slashslashcolonpatt! || m!$slashslashspacedashdashpatt! ) )
+      {
+	print " *\/ \n";
+	$weareinfile = 0;
+	$gotonextlinemod = 0;
+	$gotonextlineauthor = 0;
+	$gotonextlinedescription = 0;
+      }	
+
     # found start of comment: either "//:" or "// --" ?
     if ( s!$slashslashcolonpatt!$slashstarstarpatt! || s!$slashslashspacedashdashpatt!$slashstarstarpatt! )
       {
-	chomp; print; print ".\n";
+	chomp;
+	# escape all dots, and add a dot at the end:
+	s/\./\\\./g; s/\\\.\s*$//; s/$/.\n/;
 	$comment = 1;
-	next;
+	if ($weareinfile) { $weareinfile = 0; print " *\/ \n"; }
+	print; next;
       }
     
     # found continuation of comment WITH verbatim -> no "*"
-    if ( m!$slashslashpatt! && $verbatim && $comment)
+    if ( ( m!$slashslashpatt! || m/^\s*$/ ) && $verbatim && $comment)
       {
 	s!$slashslashpatt!$spacespacepatt!;
 	print; next;
       }
     
     # found continuation of comment WITHOUT verbatim -> start line with "*"
-    if ( m!$slashslashpatt! && $comment )
+    if ( ( m!$slashslashpatt! || m/^\s*$/ ) && $comment )
       {
+	s!^!$starpatt\n! if (m/^\s*$/);
 	s!$slashslashpatt!$starpatt!;
-	print;
-	next;
+	print; next;
       }
     
     # found end of comment -> start line with */
-    if ( $comment && ! m!$slashslashpatt!  )
+    if ( $comment && ! m!$slashslashpatt! && ! m/^\s*$/ )
       {
 	print "$starslashpatt\n";
 	$comment = 0;
@@ -109,7 +123,7 @@ while (<>)
 	    $brief .= "$name ";
 	  }
 	print "/** \\file \"$filename\"\n";
-	print " * \\brief $brief\n";
+	print " * \\brief $brief\n" unless ($brief =~ m/^\s*$/);
 	next;
       }
 
@@ -124,7 +138,7 @@ while (<>)
     if ($gotonextlineauthor)
       {
 	# end of authors by "//eol" -> print authors
-	if (/\/\/\s*$/)
+	if (m/^\s*\/\/\s*$/)
 	  {
 	    foreach $name ( @authornames )
 	      {
@@ -161,7 +175,7 @@ while (<>)
 	  }
 	
 	# get authorname(s) on this line and add to authornamelist
-	if (($f,$authorname) = ($_ =~ /^\s*(\S+)\s+(.*)/))
+	if (($f,$authorname) = ($_ =~ m/^\s*(\S+)\s+(.*)/))
 	  {
 	    $f = ""; # to avoid warning of unused variable
 	    push (@authornames,$authorname);
@@ -181,7 +195,7 @@ while (<>)
     if ($gotonextlinemod)
       {
 	# end of modifications because "//---eol" -> print */ and end header
-	if (/\/\/\s*-*$/)
+	if (m/^\s*\/\/\s*-*$/)
 	  {
 	    print " *\/ \n";
 	    $gotonextlinemod = 0;
@@ -198,7 +212,7 @@ while (<>)
 	  }
       }
     
-    # .SESCTION Description found
+    # .SECTION Description found
     if ( $weareinfile && m/$descriptionpatt/)
       {
       	$gotonextlinedescription = 1;
@@ -237,7 +251,7 @@ while (<>)
 	  }
 	
 	# get description on this line and add to descriptionlist
-	if (($f,$des) = ($_ =~ /^\s*(\S+)\s+(.*)/))
+	if (($f,$des) = ($_ =~ m/^\s*(\S+)\s+(.*)/))
 	  {
 	    $f = ""; # to avoid warning of unused variable
 	    push (@descriptions,$des);
@@ -255,19 +269,10 @@ while (<>)
 
     # scan lines for modifications
 
+    # ignore other lines of the form // .SOMETHING
+    next if (m/$headerpatt/);
 
-    # in header and found end ( "//---------eol") -> stop header
-    if ( $weareinfile && /\/\/\s*-+$/)
-      {
-	print " *\/ \n";
-	$weareinfile = 0;
-	$gotonextlinemod = 0;
-	$gotonextlineauthor = 0;
-	$gotonextlinedescription = 0;
-	next;
-      }	
-    
     # just print line if not in comment or in file
-    if ( !$comment && !$weareinfile) { print;}
+    print; # if ( !$comment && !$weareinfile);
 
   }
