@@ -39,7 +39,7 @@ vnl_real_npolynomial::vnl_real_npolynomial(const vnl_vector<double>& c, const vn
   simplify();
 }
 
-//: Combine terms with idential exponents (i.e., identical rows in polyn_).
+//: Combine terms with identical exponents (i.e., identical rows in polyn_).
 // Remove terms with zero coefficient.
 void vnl_real_npolynomial::simplify()
 {
