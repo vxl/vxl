@@ -145,7 +145,7 @@ write( vcl_ostream& os ) const
   os << location_.size() << vcl_endl;
   
   // atributes
-  os << location_ << '    ' << scale_ << vcl_endl;
+  os << location_ << "    " << scale_ << vcl_endl;
 }
 
 //: read in feature

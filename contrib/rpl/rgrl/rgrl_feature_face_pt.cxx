@@ -151,7 +151,7 @@ write( vcl_ostream& os ) const
   os << location_.size() << vcl_endl;
   
   // atributes
-  os << location_ << '    ' << scale_ << "\n"
+  os << location_ << "    " << scale_ << "\n"
      << normal_ << "\n" 
      << error_proj_ << vcl_endl;
 }
