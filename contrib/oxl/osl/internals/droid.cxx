@@ -443,7 +443,7 @@ int droid::find_local_maxima(float min,int winsize,
   //
   for (int i=x1;i<x2;i++)
     for (int j=y1;j<y2;j++)
-      (*max_p)[i][j]=(*bitmap)[i][j]>=min ? true:false;
+      (*max_p)[i][j] = (*bitmap)[i][j]>=min;
 
   //
   // k is the step size.
