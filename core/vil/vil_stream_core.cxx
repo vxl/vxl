@@ -30,7 +30,7 @@ vil2_streampos vil2_stream_core::read (void *buf, vil2_streampos n)
 vil2_streampos vil2_stream_core::write(void const *buf, vil2_streampos n)
 {
   assert(n>=0);
-  vil2_streampos rv = m_transfer((char*)buf, curpos_, n, false); // const violation!
+  vil2_streampos rv = m_transfer(const_cast<char*>(const_cast<void *>(buf)), curpos_, n, false); // const violation!
   curpos_ += rv;
   return rv;
 }
