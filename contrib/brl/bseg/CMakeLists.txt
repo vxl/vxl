@@ -7,5 +7,8 @@ SUBDIRS(sdet)
 # segmentation view library
 SUBDIRS(segv)
 
-# segmentation test executables
+# segmentation applicationexecutables
 SUBDIRS(sbin)
+
+# segmentation tests
+SUBDIRS(tests)
