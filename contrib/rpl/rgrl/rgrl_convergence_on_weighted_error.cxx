@@ -1,13 +1,15 @@
 #include "rgrl_convergence_on_weighted_error.h"
-
+//:
+// \file
 #include <vcl_vector.h>
 #include <vcl_cmath.h>
+#include <vcl_cassert.h>
 
-#include "rgrl_match_set.h"
-#include "rgrl_set_of.h"
-#include "rgrl_converge_status.h"
-#include "rgrl_view.h"
-#include "rgrl_util.h"
+#include <rgrl/rgrl_match_set.h>
+#include <rgrl/rgrl_set_of.h>
+#include <rgrl/rgrl_converge_status.h>
+#include <rgrl/rgrl_view.h>
+#include <rgrl/rgrl_util.h>
 
 rgrl_convergence_on_weighted_error::
 rgrl_convergence_on_weighted_error( double tol )
@@ -29,7 +31,6 @@ compute_status( rgrl_converge_status_sptr               prev_status,
                 rgrl_set_of<rgrl_scale_sptr>     const& /*current_scales*/,
                 bool                                    penalize_scaling) const
 {
-
   // Step2: Take the weighted average of errors as the objective
   //        value.  To avoid the low error given by an infeasible
   //        transformation, the error is scaled by the scaling of
@@ -65,18 +66,18 @@ compute_alignment_error( rgrl_set_of<rgrl_match_set_sptr> const& current_match_s
     for ( from_iter fitr = ms.from_begin(); fitr != ms.from_end(); ++fitr ) {
       //rgrl_feature_sptr mapped = fitr.from_feature()->transform( *current_xform );
       rgrl_feature_sptr mapped = fitr.mapped_from_feature();
-      for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
-
+      for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr )
+      {
         error = titr.to_feature()->geometric_error( *mapped );
         weight = titr.cumulative_weight(); //take the precomputed wgt
-        
+
         error_sum += error * weight;
         weight_sum += weight;
       }
     }
   }
 
-  return error_sum/weight_sum;  
+  return error_sum/weight_sum;
 }
 
 
@@ -85,7 +86,7 @@ rgrl_convergence_on_weighted_error::
 compute_alignment_error( rgrl_match_set_sptr const& current_match_set ) const
 {
   assert( current_match_set );
-  
+
   typedef rgrl_match_set::const_from_iterator from_iter;
   typedef from_iter::to_iterator              to_iter;
 
@@ -98,41 +99,41 @@ compute_alignment_error( rgrl_match_set_sptr const& current_match_set ) const
   for ( from_iter fitr = ms.from_begin(); fitr != ms.from_end(); ++fitr ) {
     //rgrl_feature_sptr mapped = fitr.from_feature()->transform( *current_xform );
     rgrl_feature_sptr mapped = fitr.mapped_from_feature();
-    for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
-
+    for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr )
+    {
       error = titr.to_feature()->geometric_error( *mapped );
       weight = titr.cumulative_weight(); //take the precomputed wgt
-      
+
       error_sum += error * weight;
       weight_sum += weight;
     }
   }
 
-  return error_sum/weight_sum;  
+  return error_sum/weight_sum;
 }
 
-rgrl_converge_status_sptr 
+rgrl_converge_status_sptr
 rgrl_convergence_on_weighted_error::
   //: verify the final alignment
 verify( rgrl_transformation_sptr         const& xform_estimate,
         rgrl_set_of<rgrl_match_set_sptr> const& current_match_sets,
         rgrl_set_of<rgrl_scale_sptr>     const& current_scales )const
 {
-  // 
+  //
   // this should be penalized by the scaling as well.
-  // However, I don't like current implementation that 
+  // However, I don't like current implementation that
   // bool penalize_scaling is passed on every function.
-  // I think it should be made a member variable at construction 
+  // I think it should be made a member variable at construction
   // time.
   // GY
 
   double error = compute_alignment_error( current_match_sets );
-  
+
   bool good_enough = error < tolerance_;
   rgrl_converge_status_sptr status = new rgrl_converge_status( true, false, good_enough, !good_enough, error, 0, 0 );
-  if( good_enough ) {
+  if ( good_enough ) {
     status -> set_current_status( rgrl_converge_status::good_and_terminate );
   }
-  
+
   return status;
-}                                     
+}
