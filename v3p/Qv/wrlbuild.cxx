@@ -153,7 +153,7 @@ void QvSeparator::build (QvState* state)
   // set object boundig to union of children's world boundings
   QvGroup::build (state);
 
-  //vcl_cerr << "QvSeparator::build: pop ()" << vcl_endl;
+  //vcl_cerr << "QvSeparator::build: pop ()\n";
   ge3d_pop_matrix ();
   state->pop ();  // pop stacks (cleans up)
 
@@ -323,8 +323,8 @@ void QvMaterial::build (QvState* state)
   mats.num_shininess = shininess.num;
   mats.num_transparency = transparency.num;
 
-  if (mats.num_ambient > 1 || mats.num_specular > 1
-    || mats.num_emissive > 1 || mats.num_shininess > 1)
+  if (mats.num_ambient  > 1 || mats.num_specular  > 1 ||
+      mats.num_emissive > 1 || mats.num_shininess > 1)
   {
     // multiple diffuse values can be handled efficiently in OpenGL and
     // are the only ones allowed in VRML 2.0
@@ -350,7 +350,7 @@ void QvMaterial::build (QvState* state)
 //float alpha = 1.0;
 //if (transparency.num)
 //  alpha -= *transparency.values;
-//vcl_cerr << "material transparency: " << 1.0 - alpha << " (alpha: " << alpha << ")" << vcl_endl;
+//vcl_cerr << "material transparency: " << 1.0 - alpha << " (alpha: " << alpha << ")\n";
 
   // compute modified materials (for highlighting)
   // copy and modify diffuse and emissive color (complete arrays)
@@ -635,7 +635,7 @@ void QvTransform::build (QvState*)
   copymatrix (mat_, invmat_);
   invertmatrix (invmat_);
 
-// vcl_cerr << "inverse transformation matrix: " << vcl_endl;
+// vcl_cerr << "inverse transformation matrix:\n";
 // for (int i = 0;  i < 4;  i++)
 //   printf ("%13f %12f %12f %12f\n", invmat_ [i][0], invmat_ [i][1], invmat_ [i][2], invmat_ [i][3]);
 
@@ -943,10 +943,10 @@ void QvSphere::build (QvState*)
 
 void QvIndexedFaceSet::build (QvState* state)
 {
-//vcl_cerr << "QvIndexedFaceSet::build" << vcl_endl;
+//vcl_cerr << "QvIndexedFaceSet::build\n";
   QvElement* attr = state->getTopElement (QvState::Coordinate3Index);
   if (!attr)
-  { vcl_cerr << "QvIndexedFaceSet. error: no vertices" << vcl_endl;
+  { vcl_cerr << "QvIndexedFaceSet. error: no vertices\n";
     numvertinds_ = nummatinds_ = numnormalinds_ = numtextureinds_ = 0;
     numvertices_ = 0;
     return;
@@ -969,6 +969,7 @@ void QvIndexedFaceSet::build (QvState* state)
   // Georg Meszaros
   numvertices_ = verts.num;
 
+#if 0
   // find no. of faces
   unsigned numfaces = 0;
   unsigned nv = numvertinds_;
@@ -979,13 +980,12 @@ void QvIndexedFaceSet::build (QvState* state)
   { if (*cind++ < 0)
       numfaces++;
   }
-  //if (!build_font)  // do not count font polygons
-  //  vrmlscene_->increaseNumFaces (numfaces);
+  if (!build_font)  // do not count font polygons
+    vrmlscene_->increaseNumFaces (numfaces);
 
   // should store this number to do no update when build is called
   // another time after fetching inline nodes
 
-#if 0
   // *** face normals ***
   // TODO: range check (poss. incomplete last face)
   if (!facenormals_ && numfaces)  // only once on multiple instances
@@ -1193,11 +1193,11 @@ void QvIndexedFaceSet::build (QvState* state)
 
 void QvIndexedLineSet::build (QvState* state)
 {
-//vcl_cerr << "QvIndexedLineSet::build" << vcl_endl;
+//vcl_cerr << "QvIndexedLineSet::build\n";
 
   QvElement* attr = state->getTopElement (QvState::Coordinate3Index);
   if (!attr)
-  { vcl_cerr << "QvIndexedLineSet. error: no vertices" << vcl_endl;
+  { vcl_cerr << "QvIndexedLineSet. error: no vertices\n";
     numvertinds_ = 0;
     return;
   }
@@ -1237,7 +1237,7 @@ void QvPointSet::build (QvState* state)
 {
   QvElement* attr = state->getTopElement (QvState::Coordinate3Index);
   if (!attr)
-  { vcl_cerr << "QvPointSet. error: no vertices" << vcl_endl;
+  { vcl_cerr << "QvPointSet. error: no vertices\n";
     num_ = 0;
     return;
   }
@@ -1268,7 +1268,7 @@ void QvPointSet::build (QvState* state)
   points_ += start;  // true beginning
 
 // vcl_cerr << "QvPointSet::build: startIndex " << start
-// << ", number: " << num_ << " (originally " << numPoints.value << ")" << vcl_endl;
+// << ", number: " << num_ << " (originally " << numPoints.value << ")\n";
 
 } // QvPointSet
 
@@ -1322,7 +1322,7 @@ void QvWWWInline::build (QvState* state)
 
   if (state_ == s_completed)  // children already read: use their bounding box
   {
-    // vcl_cerr << "QvWWWInline::build: children already fetched. using their bounding box." << vcl_endl;
+    // vcl_cerr << "QvWWWInline::build: children already fetched. using their bounding box.\n";
     hasextent_ = 0;  // possibly no geometry
     QvGroup::build (state);
   }
@@ -1405,7 +1405,7 @@ void QvLabel::build (QvState*)
 {
   if (newinstance_)
   { QvDebugError::post ("Label", "invalid VRML 1.0 node (ignored)\n"
-      "        (further occurances will not be reported)");
+                        "        (further occurances will not be reported)");
     newinstance_ = 0;
   }
 }
@@ -1415,7 +1415,7 @@ void QvLightModel::build (QvState*)
 {
   if (newinstance_)
   { QvDebugError::post ("LightModel", "warning: extension to VRML 1.0 standard\n"
-      "        (further occurances will not be reported)");
+                        "        (further occurances will not be reported)");
     newinstance_ = 0;
   }
 
