@@ -1,0 +1,35 @@
+#-*-makefile-*---------------------------------------------------------
+#
+#  Makefile for a single source-file application.
+#  Use iuecreatepackage to create directories for applications using
+#  multiple source files or application libraries.
+#
+#  List the source file for each executable you want in MINI_PROG_SOURCES.
+#  Edit USES and IULIBS if you want to restrict what libraries you
+#  link against.
+#
+#  Do not touch other lines, particularly the include line.
+#
+#-------------------------
+#  Copied from template $IUEROOT/config/templates/makefile.simpleapp
+#----------------------------------------------------------------------
+
+USES += $(IUE_USES)
+
+IULIBS += $(IUE_LIBS)
+
+USE_TMPLCLOSURE = 1
+
+#--------------------------------------------------
+#  List of files, each to be compiled into an exectable.
+#  (edit the following lines accordingly)
+#--------------------------------------------------
+MINI_PROG_SOURCES += simple-app.cc
+
+
+##########################################
+include ${IUEROOT}/config/top.mk
+##########################################
+
+no_implicit_templates := ${implicit_templates} # allow implicit template instantiation
+

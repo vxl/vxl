@@ -1,0 +1,34 @@
+//-*-c++-*--------------------------------------------------------------
+//  Example library source file from $IUEROOT/config/templates/source-h.pkglib
+//
+//  Modify this description and the copyright as required (look at
+//  Users Manual for suggestions and coding conventions).
+//----------------------------------------------------------------------
+// Copyright (c) 1993 - 1998 Amerinex Applied Imaging, Inc.
+// 29 Industrial Drive East, Northampton, MA 01060 All Rights Reserved
+// Reproduction rights limited as described in the COPYRIGHT file.
+//----------------------------------------------------------------------
+
+#ifndef ##LIBRARY-CNAME##_test__h_INCLUDED
+#define ##LIBRARY-CNAME##_test__h_INCLUDED 1
+
+
+//----------------------------------------------------------------------
+//: A simple example IUE class
+//
+// This class provides an example of a simple IUE class.
+// This class can be used to contain test driver code.
+//
+// .status template code
+// .author AAI
+// .library ##LIBRARY-NAME##
+//----------------------------------------------------------------------
+class ##LIBRARY-CNAME##_test
+{
+
+ public:
+  static int main (int argc, char** argv);
+
+};
+
+#endif /* !##LIBRARY-CNAME##_test__h_INCLUDED */

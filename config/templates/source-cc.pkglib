@@ -1,0 +1,33 @@
+//-*-c++-*--------------------------------------------------------------
+//  Example library source file from $IUEROOT/config/templates/source-cc.pkglib
+//
+//  Modify this description and the copyright as required (look at
+//  Users Manual for suggestions and coding conventions).
+//----------------------------------------------------------------------
+// Copyright (c) 1993 - 1998 Amerinex Applied Imaging, Inc.
+// 29 Industrial Drive East, Northampton, MA 01060 All Rights Reserved
+// Reproduction rights limited as described in the COPYRIGHT file.
+//----------------------------------------------------------------------
+
+#include <##LIBRARY-NAME##/##LIBRARY-CNAME##_test.h>
+#include <iostream.h>
+
+
+//----------------------------------------------------------------------
+//: Run test code
+//
+// A method that runs some code.
+//
+// .param argc:	number of command line arguments
+// .param argv: array of argument strings
+// .ret 0
+//
+// .status template code
+// .author AAI
+//----------------------------------------------------------------------
+int ##LIBRARY-CNAME##_test::main (int /* argc */, char** /* argv */)
+{
+  cout << "Hello from ##LIBRARY-CNAME##_test::test\n";
+
+  return 0;
+}

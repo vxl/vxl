@@ -1,0 +1,26 @@
+#-*-makefile-*---------------------------------------------------------
+#
+#  Makefile for root directory of a package.
+#  Lists the directories to compile.
+#
+#  Do not touch the include lines.
+#
+#-------------------------
+#  Copied from template $IUEROOT/config/templates/makefile.pkgroot
+#----------------------------------------------------------------------
+
+##########################################
+include ${IUEROOT}/config/top-params.mk
+##########################################
+
+
+SUBDIRS := 		# list of sub-directories to compile
+
+ifndef NOTEST
+SUBDIRS += Tests
+endif
+
+
+##########################################
+include ${IUEROOT}/config/top-rules.mk
+##########################################

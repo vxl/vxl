@@ -1,0 +1,35 @@
+#-*-makefile-*---------------------------------------------------------
+#
+#  Makefile for an application directory within a package.
+#
+#  List the source file for each executable you want in MINI_PROG_SOURCES.
+#  Edit USES and IULIBS if you want to restrict what libraries you
+#  link against.
+#
+#  Do not touch other lines, particularly the include line.
+#
+#-------------------------
+#  Copied from template $IUEROOT/config/templates/makefile.pkgapp
+#----------------------------------------------------------------------
+
+USES += ##PACKAGE-NAME##
+USES += $(IUE_USES)
+
+IULIBS += -l##LIBRARY-NAME##
+IULIBS += $(IUE_LIBS)
+
+USE_TMPLCLOSURE = 1
+
+#--------------------------------------------------
+#  List of files, each to be compiled into an exectable.
+#  (edit the following lines accordingly)
+#--------------------------------------------------
+MINI_PROG_SOURCES += testdriver.cc
+
+
+##########################################
+include ${IUEROOT}/config/top.mk
+##########################################
+
+no_implicit_templates := ${implicit_templates} # allow implicit template instantiation
+

@@ -1,0 +1,36 @@
+#-*-makefile-*---------------------------------------------------------
+#
+#  Makefile for a library directory within a package.
+#
+#  Specifies the name of the library and the source files that make up
+#  the library.  Edit USES if you want to restrict what you use.
+#
+#  Do not touch other lines, particularly the include line.
+#
+#-------------------------
+#  Copied from template $IUEROOT/config/templates/makefile.pkglib
+#----------------------------------------------------------------------
+
+USES += ##PACKAGE-NAME##
+USES += $(IUE_USES)
+
+# Libraries for link closure (needed by Win32 and Template Instantiator)
+IULIBS += $(IUE_LIBS)
+
+LIBRARY := ##LIBRARY-NAME##
+VERSION := 2.0
+
+#--------------------------------------------------
+#  List of source files in library.
+#  (uncomment and edit the following lines accordingly)
+#--------------------------------------------------
+SOURCES += ##LIBRARY-CNAME##_test.cc
+#SOURCES += source2.cc
+
+
+##########################################
+include ${IUEROOT}/config/top.mk
+##########################################
+
+no_implicit_templates := ${implicit_templates} # allow implicit template instantiation
+

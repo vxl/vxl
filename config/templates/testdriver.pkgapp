@@ -1,0 +1,28 @@
+//-*-c++-*--------------------------------------------------------------
+//  Example driver file from $IUEROOT/config/templates/testdriver.pkgapp
+//
+//  Modify this description and the copyright as required (look at
+//  Users Manual for suggestions and coding conventions).
+//----------------------------------------------------------------------
+// Copyright (c) 1993 - 1998 Amerinex Applied Imaging, Inc.
+// 29 Industrial Drive East, Northampton, MA 01060 All Rights Reserved
+// Reproduction rights limited as described in the COPYRIGHT file.
+//----------------------------------------------------------------------
+
+#include <iostream.h>
+#include <IUE-Root/IUE_object.h>
+#include <##LIBRARY-NAME##/##LIBRARY-CNAME##_test.h>
+
+int main (int argc, char** argv)
+{
+  if (&argc == 0) ;	// avoid unused argument warning
+
+  cout << "Starting " << argv[0] << endl;
+
+  int stat;
+  stat = ##LIBRARY-CNAME##_test::main(argc,argv);
+
+  cout << "Done." << endl;
+
+  return stat;
+}
