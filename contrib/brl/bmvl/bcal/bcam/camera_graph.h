@@ -94,64 +94,65 @@ class camera_graph
         }
         
   public:
+
 #if 0
     class iterator{
     public:
-      iterator() :pos_ (0), _Ptr(0) {}
-      iterator(vcl_vector<vertex_node*> *_P, int pos = 0) : _Ptr(_P), pos_(pos) {}
-      iterator(const iterator& _X) : _Ptr( _X._Ptr ), pos_(_X.pos_) {}
-      V& operator*() const {return *((*_Ptr)[pos_]->v_); }
+      iterator() :pos_ (0), ptr_(0) {}
+      iterator(vcl_vector<vertex_node*> *p, int pos = 0) : ptr_(p), pos_(pos) {}
+      iterator(const iterator& x) : ptr_( x.ptr_ ), pos_(x.pos_) {}
+      V& operator*() const {return *((*ptr_)[pos_]->v_); }
       V* operator->() const {return &(* *this); }
 
-      iterator& operator=(iterator& _X)
+      iterator& operator=(iterator& x)
       {
-        pos_ = _X.pos_;
-        _Ptr = _X._Ptr;
+        pos_ = x.pos_;
+        ptr_ = x.ptr_;
         return *this;
       }
 
       iterator& operator++() 
       {
-        _Inc();
+        inc();
         return (*this); 
       }
       
       iterator operator++(int)
       {
-        iterator _Tmp = *this;
+        iterator t = *this;
         ++ *this;
-        return (_Tmp); 
+        return (t); 
       }
       
       iterator& operator--()
       {
-        _Dec();
+        dec();
         return (*this); 
       }
       
-      iterator operator--(int t)
+      iterator operator--(int)
       {
-        iterator _Tmp = *this;
+        iterator t = *this;
         -- *this;
-        return (_Tmp); 
+        return (t); 
       }
       
-      bool operator==(const iterator& _X) const
-      {return (_Ptr == _X._Ptr && pos_ = _X.pos_); }
+      bool operator==(const iterator& x) const
+      {return (ptr_ == x.ptr_ && pos_ = x.pos_); }
       
-      bool operator!=(const iterator& _X) const
-      {return (!(*this == _X)); }
+      bool operator!=(const iterator& x) const
+      {return (!(*this == x)); }
       
-      void _Dec() { if(pos_>=0)  pos_--; }
-      void _Inc() { pos_ ++; }
+      void dec() { if(pos_>=0)  pos_--; }
+      void inc() { pos_ ++; }
       
       vertex_node* node() const
-      {return (*_Ptr)[pos]; }
+      {return (*ptr_)[pos]; }
       
-      int get_vertex_id() const {return (*_Ptr)[pos_]->id_;}
+      int get_vertex_id() const {return (*ptr_)[pos_]->id_;}
       
     protected:
-      vcl_vector<vertex_node*>* _Ptr;
+      vcl_vector<vertex_node*>* ptr_;
       int pos_;
     };
 #endif

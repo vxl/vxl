@@ -6,13 +6,13 @@ camera::camera(int id) : id_(id)
 }
 
 
-void camera::setLensModel(vcl_vector<bool> flags)
+void camera::set_lens_model(vcl_vector<bool> flags)
 {
   assert(flags.size()==7);
   for (int i=0; i<7; i++) {
     if (flags[i])
-      lm_.turnOn(i);
+      lm_.turn_on(i);
     else
-      lm_.turnOff(i);
+      lm_.turn_off(i);
   }
 }

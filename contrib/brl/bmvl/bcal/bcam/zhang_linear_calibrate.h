@@ -56,7 +56,7 @@ class zhang_linear_calibrate
   int clear();
 
  private:
-  camera_graph<calibrate_plane, zhang_camera_node, euclidean_transformation>* camGraph_;
+  camera_graph<calibrate_plane, zhang_camera_node, euclidean_transformation>* cam_graph_ptr_;
   vcl_vector<vgl_h_matrix_2d<double> *> h_matrice_;
   vcl_vector<int> num_views_;
 };

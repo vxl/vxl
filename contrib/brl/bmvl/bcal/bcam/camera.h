@@ -27,19 +27,19 @@
 class lens_model
 {
   double kc_[7];
-  bool bFlags_[7]; // to show which distortion is used
+  bool flags_[7]; // to show which distortion is on
  public:
   lens_model() {
     for (int i=0; i<7; i++) {
       kc_[i] = 0;
-      bFlags_[i] = false;
+      flags_[i] = false;
     }
   }
 
   double& operator[](int i) {return kc_[i];}
-  bool isValid(int i) { return bFlags_[i];}
-  inline void turnOn(int i) { bFlags_[i] = true;}
-  inline void turnOff(int i) { bFlags_[i] = false;}
+  bool is_on(int i) { return flags_[i];}
+  inline void turn_on(int i) { flags_[i] = true;}
+  inline void turn_off(int i) { flags_[i] = false;}
 };
 
 
@@ -52,10 +52,10 @@ class camera
   lens_model lm_;
  public:
    int getID() { return id_;}
-  vnl_double_3x3 getIntrisicMatrix(){ return k_;}
-  void setLensModel(vcl_vector<bool> flags);
+  vnl_double_3x3 get_intrisic_matrix(){ return k_;}
+  void set_lens_model(vcl_vector<bool> flags);
 
-  void setIntrisicMatrix(vnl_double_3x3 k) {k_ = k;}
+  void set_intrisic_matrix(vnl_double_3x3 k) {k_ = k;}
 
   camera(int id);
   ~camera(){}

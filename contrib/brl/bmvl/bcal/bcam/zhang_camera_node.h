@@ -22,7 +22,7 @@
 class zhang_camera_node : public camera_node
 {
  private:
-   vcl_vector< vgl_homg_point_2d<double> > *pPointLists_;
+   vcl_vector< vgl_homg_point_2d<double> > *point_lists_ptr_;
 
  public: // constructor and deconstructor
    zhang_camera_node(int id=0);
@@ -31,12 +31,12 @@ class zhang_camera_node : public camera_node
   int removeData();
 
   // set get function
-  vcl_vector< vgl_homg_point_2d<double> >& getPoints(int iView)
+  vcl_vector< vgl_homg_point_2d<double> >& getPoints(int iview)
   {
-    return pPointLists_[iView];
+    return point_lists_ptr_[iview];
   }
 
-  int readData(char* fname, int iView);  // for debugging
+  int readData(char* fname, int iview);  // for debugging
 
   virtual void set_beat(vcl_vector<double> const& new_beats);
 };
