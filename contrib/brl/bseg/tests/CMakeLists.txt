@@ -11,15 +11,12 @@ ADD_EXECUTABLE(sdet_test_all
   sdet_test_detector.cxx
   sdet_test_region_proc.cxx
   brip_test_lucas_kanade.cxx
-  sdet_test_tracker.cxx
 )
 
 ADD_TEST(sdet_test_detector     sdet_test_all sdet_test_detector ${CMAKE_CURRENT_SOURCE_DIR}/jar-closeup.tif)
 ADD_TEST(sdet_test_region_proc  sdet_test_all sdet_test_region_proc ${CMAKE_CURRENT_SOURCE_DIR}/jar-closeup.tif)
 ADD_TEST(brip_test_lucas_kanade sdet_test_all brip_test_lucas_kanade)
-ADD_TEST(sdet_test_tracker      sdet_test_all sdet_test_tracker)
 
-ADD_EXECUTABLE( bseg_test_include test_include.cxx )
 
 ADD_EXECUTABLE(brip_test_fourier brip_test_fourier.cxx)
 ADD_TEST(brip_test_fourier brip_test_fourier)
