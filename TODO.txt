@@ -1,0 +1,85 @@
+VXL To Do List
+--------------
+
+This file lists ideas for enhancements that would be helpful to VXL
+and is essentially a simple bug and feature request tracker.
+
+Maintainers should feel free to add new items and to add comments or
+suggestions to any of these items.  Make sure you keep the file well
+organized.
+
+When someone works on or completes one of these tasks, make a note of
+that in this file.  If that marks a significant improvement, make an
+entry in the CHANGES.txt file as well.
+
+############################################################################
+
+* vnl_numeric_limits specializations seem to be wrong
+
+From Brad King: Several values in vnl_numeric_limits specializations
+seem to be wrong.  For example, unsigned short has a min_exponent of
+-31 and a max_exponent of 31.  The return types from min/max methods
+are also inconsistent with the numeric type.
+
+############################################################################
+
+* vnl specializations for char
+
+From Brad King: There no specializations for char types in vnl.
+
+############################################################################
+
+* vnl, mix of static methods and static constants for constants
+
+From Brad King: In vnl Some of the constants are static methods and
+some are static constants.  I do not see any reason for the
+inconsistency.
+
+############################################################################
+
+* vnl min/max values for long types are hardcoded to assume 32-bits
+
+From Brad King: In vnl, min/max values for long types are hardcoded to
+assume 32-bits.  It should be possible to construct almost all the
+values with try-run programs during the configuration process, but
+that may be overkill for now.
+
+############################################################################
+
+* vnl, test_math and test_numeric_limits access the NaN values
+
+From Brad King: In vnl, another problem is that test_math and
+test_numeric_limits access the NaN values.  There is nothing wrong
+with this, but Borland throws floating-point exceptions by default.
+I've fixed my local copy to use the _control87 function to disable
+exceptions for those tests on that compiler, but I haven't committed
+it yet.  Is this something we want to abstract and add to testlib?
+
+From Peter Vanroose: A similar problem on Alpha (OSF).  I've commented
+out the affected tests, but that's not really the best way to proceed.
+So it's not just Borland C++, and it would indeed be nice to have an
+elegant solution for this.
+
+From Brad King: We could just put the floating point exception disable
+code in the top of testlib_main just like the crtdbg stuff for getting
+rid of the MSVC popup dialogs.  Once we get it working everywhere with
+a bunch of #ifdef lines then we could consider making it a function
+somewhere useful outside testing.
+
+############################################################################
+
+* vcl and CMake try-compile
+
+Bill Hoffman has suggested that a lot of the compiler version based
+#ifdefs in vcl could be replaced by the CMake try-compile mechanism.
+
+############################################################################
+
+* CVS server file execute permissions wrong
+
+At the CVS server, remove execute permission from files that should
+not have it.  There is not way to do this with CVS commands, except
+possibly a remove and add, which we should avoid.  This could be done
+at the same time as any other direct repository modification.
+
+############################################################################
