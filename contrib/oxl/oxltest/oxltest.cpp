@@ -6,7 +6,7 @@
 #include <mvl/HomgOperator3D.h>
 #include <vcl_iostream.h>
 
-int main(int argc, char* argv[])
+int main()
 {
   HomgOperator3D::sort_points(0,0);
 
