@@ -34,10 +34,10 @@ vil2_image_view<vil_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& v)
   if ((v.nplanes()!=3) || (v.planestep()!=1) || (v.istep()!=3 && v.jstep()!=3))
     return vil2_image_view<vil_rgb<T> >();
 
-  return vil2_image_view<vil_rgb<vil2_byte> >(v.memory_chunk(),
-                                             (vil_rgb<vil2_byte>*) v.top_left_ptr(),
-                                             v.ni(),v.nj(),1,
-                                             v.istep()/3,v.jstep()/3,1);
+  return vil2_image_view<vil_rgb<T> >(v.memory_chunk(),
+                                      (vil_rgb<T>*) v.top_left_ptr(),
+                                      v.ni(),v.nj(),1,
+                                      v.istep()/3,v.jstep()/3,1);
 }
 
 //: Create a view which appears as the transpose of this view.
