@@ -439,8 +439,8 @@ StatusCode vil_nitf_image_subheader_v20::Read(vil_stream* file)
             }
         }
 
-        int tmp;
-        if (!GetInt(buffer, &tmp, 5, file))
+        int tmp = 0 ;
+        if (!GetInt (buffer, &tmp, 5, file))
         {
             error = true;
             break;
@@ -1151,7 +1151,7 @@ void vil_nitf_image_subheader_v20::init()
 
     vcl_memset(initstr,' ',80);
 
-    STRNCPY(IM,  "IM",     2);
+    nitf_strncpy (IM, "IM", 2) ;
     STRNCPY(IID, initstr, 10);
 
     // We must fool SCCS, otherwise it will try to
@@ -1184,7 +1184,7 @@ void vil_nitf_image_subheader_v20::init()
 
     ICOM_.clear();
 
-    STRNCPY(IC,     "NC",     2);
+    nitf_strncpy (IC, "NC", 2) ;
     STRNCPY(COMRAT, initstr,  4);
 
     for (unsigned int n = 0; n < NBANDS; n++)
@@ -1809,7 +1809,7 @@ StatusCode vil_nitf_image_subheader_v20::extract_piaimc_extension()
 // Added support for STDIDx extension
 StatusCode vil_nitf_image_subheader_v20::extract_stdid_extension()
 {
-    bool status = false;
+    bool status = true ;
     char work[101];
     char temp[101];
 
@@ -1978,8 +1978,8 @@ StatusCode vil_nitf_image_subheader_v20::extract_stdid_extension()
       if (START_COLUMN != 1) SAMP_OFF -= ((START_COLUMN-1) * NPPBH);
     }
 
-    status = true;
-    return status;
+    return status ;
+
 }  // end method extract_stdid_extension
 
 //----------------------------------------------------------------
