@@ -16,6 +16,11 @@
 #include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_soview2D.h>
 #include <vsrl/vsrl_parameters.h>
+#include <vdgl/vdgl_digital_curve.h>
+#include <vdgl/vdgl_digital_region.h>
+#include <vdgl/vdgl_digital_curve_sptr.h>
+#include <vdgl/vdgl_interpolator.h>
+#include <vdgl/vdgl_edgel_chain.h>
 #include <vtol/vtol_intensity_face_sptr.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_2d.h>
@@ -46,13 +51,25 @@ class vsrl_manager : public vgui_wrapper_tableau
   void draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions, bool verts);
   void set_params();
   void draw_north_arrow();
-  void test_func();
+  void test_left_func();
+  void test_right_func();
+  void find_shadows(vcl_vector<vtol_intensity_face_sptr>& faces);
+  void find_shadows(vcl_vector<vdgl_digital_region*> regions);
   vgui_soview2D_lineseg* draw_vector_at(vgl_vector_2d<float>* vec, float x, float y, float theta);
   vil1_image scale_image(vil1_memory_image_of<unsigned char> img);
   vil1_image scale_image(vil1_memory_image_of<double> img);
   vil1_image show_gradient_mag(vil1_image* im_in);
   vil1_image show_gradient_dir(vil1_memory_image_of<double> im_in);
   vil1_memory_image_of<double> make_3d();
+  vcl_vector<vdgl_digital_region*> run_jseg(vil1_image image_in);
+  void show_jseg_boundaries(vil1_memory_image_of<unsigned char>* jseg_out, vgui_easy2D_tableau_sptr tab);
+  float* show_correlations(int x, int y);
+  inline vil1_image get_left_image() {return imgL_;}
+  inline vil1_image get_right_image() {return imgR_;}
+  inline vil1_image get_disparity_image() {return disp_img_;}
+  void raw_correlation();
+  vil1_image* make_jseg_image(vil1_memory_image_of<unsigned char>* jseg_out);
+  void boundary_matching();
 
  private:
   vsrl_manager(); // default constructor is private: only one instance allowed
@@ -75,6 +92,9 @@ class vsrl_manager : public vgui_wrapper_tableau
   vgl_vector_2d<float> sun_el_; // sun elevation expressed as a vector
   static vsrl_manager *instance_;
   int disparity_bias_;
+  float shadow_mean_;
+  bool shadows_only_;
+  vcl_vector<float>* shadow_metric_; // vector to hold shadow saliency measure
 };
 
 #endif // vsrl_manager_h_
