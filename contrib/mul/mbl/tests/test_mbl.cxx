@@ -11,6 +11,7 @@
 #include <mbl/tests/test_matrix_products.cxx>
 #include <mbl/tests/test_matxvec.cxx>
 #include <mbl/tests/test_stats_1d.cxx>
+#include <mbl/tests/test_sum_1d.cxx>
 
 #undef TESTMAIN
 #define TESTMAIN(x) int main() \
@@ -24,6 +25,7 @@ void run_test_mbl()
   test_matrix_products();
   test_matxvec();
   test_stats_1d();
+  test_sum_1d();
 }
 
 
