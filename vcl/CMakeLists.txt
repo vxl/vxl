@@ -264,6 +264,7 @@ SET( vcl_sources
   egcs/vcl_vector.txx
 
   sgi/vcl_algorithm.txx
+  sgi/vcl_bitset.h
   sgi/vcl_cmath.h
   sgi/vcl_complex.txx sgi/vcl_complex.h
   sgi/vcl_cstdlib.h
