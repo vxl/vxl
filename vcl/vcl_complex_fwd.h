@@ -40,6 +40,9 @@ template <class T> class complex;
 #elif defined(VCL_SUNPRO_CC)
 # include "sunpro/vcl_complex_fwd.h"
 
+#elif defined(VCL_SGI_CC)
+# include "iso/vcl_complex.h"
+
 // ---------- ISO
 #else
 namespace std {

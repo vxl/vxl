@@ -21,6 +21,13 @@
 // this header is wrong. v2 of the GNU library is wrong wrong wrong.
 # include "vcl_functional.h"
 
+#elif defined(VCL_SGI_CC)
+# include "vcl_utility.h"
+using std::operator!=;
+using std::operator> ;
+using std::operator<=;
+using std::operator>=;
+
 #else // -------------------- ISO
 # include "vcl_utility.h"
 using std::rel_ops::operator!=;

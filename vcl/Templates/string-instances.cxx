@@ -52,3 +52,10 @@ inst;
 inst;
 # endif
 #endif
+
+#if defined(VCL_SGI_CC) && VCL_USE_NATIVE_STL
+template class std::__string_base<char,std::__default_alloc_template<true,0> >;
+//template class std::basic_string<char,std::char_traits<char>,std::alloc>;
+template class std::basic_string<char,std::char_traits<char>,std::__default_alloc_template<true,0> >;
+template vcl_ostream& std::operator<<(vcl_ostream&,const std::basic_string<char,std::char_traits<char>,std::alloc>&);
+#endif
