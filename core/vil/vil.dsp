@@ -210,9 +210,6 @@ SOURCE=.\Templates/vil2_image_view+vil_rgb+byte--.cxx
 SOURCE=.\Templates/vil2_image_view+vil_rgb+uint_16--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil2_image_view+vil_rgb+vxl_int_32--.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vil2_image_view_functions+uint_16-.cxx
 # End Source File
 # Begin Source File
