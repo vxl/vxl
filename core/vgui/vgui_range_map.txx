@@ -87,7 +87,7 @@ map_pixel_float(const Type pix, const Type min, const Type max,
   // if gamma >0 && !=1 make the gamma correction
   if (gamma > 0 && gamma!=1)
     y = vcl_pow((long double)y, (long double)1/gamma);
-  return y;
+  return (float)y;
 }
 
 template <class Type>
@@ -103,8 +103,8 @@ compute_byte_table(const Type min, const Type max, const float gamma,
   else
   {
     //The values have to be shifted by min
-    int mint = vil_pixel_traits<Type>::minval();
-    int maxt = vil_pixel_traits<Type>::maxval();
+    int mint = (int)vil_pixel_traits<Type>::minval();
+    int maxt = (int)vil_pixel_traits<Type>::maxval();
     for (int i = mint; i <= maxt; i++)
     {
       Type arg = (Type)i;//eliminate warnings
@@ -124,7 +124,7 @@ compute_float_table(const Type min, const Type max, const float gamma,
   if (vil_pixel_traits<Type>::is_signed())
     return null;
   vcl_vector<float> fmap(size_);
-  unsigned maxt = vil_pixel_traits<Type>::maxval();
+  unsigned maxt = (unsigned)vil_pixel_traits<Type>::maxval();
   for (int i = 0; i <= maxt; i++)
   {
     Type arg = (Type)i;//eliminate warnings
