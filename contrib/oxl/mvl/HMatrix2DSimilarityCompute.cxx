@@ -30,34 +30,34 @@ HMatrix2DSimilarityCompute::~HMatrix2DSimilarityCompute() { }
 //
 //
 HMatrix2D
-HMatrix2DSimilarityCompute::compute(const PairMatchSetCorner &matches)
+HMatrix2DSimilarityCompute::compute(PairMatchSetCorner const& matches)
 {
- vcl_vector<HomgPoint2D> pts1(matches.count());
- vcl_vector<HomgPoint2D> pts2(matches.count());
+ PointArray pts1(matches.count());
+ PointArray pts2(matches.count());
  matches.extract_matches(pts1, pts2);
  HMatrix2D H;
  tmp_fun(pts1,pts2,&H);
  return H;
 }
 HMatrix2D
-HMatrix2DSimilarityCompute::compute(const vcl_vector<HomgPoint2D>&p1,
-                                    const vcl_vector<HomgPoint2D>&p2)
+HMatrix2DSimilarityCompute::compute(PointArray const& p1,
+                                    PointArray const& p2)
 {
   HMatrix2D H;
   tmp_fun(p1,p2,&H);
   return H;
 }
 bool
-HMatrix2DSimilarityCompute::compute_p(const PointArray &pts1,
-                                      const PointArray &pts2,
+HMatrix2DSimilarityCompute::compute_p(PointArray const& pts1,
+                                      PointArray const& pts2,
                                       HMatrix2D *H)
 {
   return tmp_fun(pts1,pts2,H);
 }
 
 bool
-HMatrix2DSimilarityCompute::tmp_fun(vcl_vector<HomgPoint2D> const &pts1,
-                                    vcl_vector<HomgPoint2D> const &pts2,
+HMatrix2DSimilarityCompute::tmp_fun(PointArray const& pts1,
+                                    PointArray const& pts2,
                                     HMatrix2D *H)
 {
 

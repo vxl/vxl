@@ -24,8 +24,8 @@
 //
 //
 HMatrix2DEuclideanCompute::HMatrix2DEuclideanCompute(void) : HMatrix2DCompute() { }
-HMatrix2DEuclideanCompute::~HMatrix2DEuclideanCompute() { }
 
+HMatrix2DEuclideanCompute::~HMatrix2DEuclideanCompute() { }
 
 //
 //
@@ -33,21 +33,23 @@ HMatrix2DEuclideanCompute::~HMatrix2DEuclideanCompute() { }
 HMatrix2D
 HMatrix2DEuclideanCompute::compute(PairMatchSetCorner const& matches)
 {
- vcl_vector<HomgPoint2D> pts1(matches.count());
- vcl_vector<HomgPoint2D> pts2(matches.count());
+ PointArray pts1(matches.count());
+ PointArray pts2(matches.count());
  matches.extract_matches(pts1, pts2);
  HMatrix2D H;
  tmp_fun(pts1,pts2,&H);
  return H;
 }
+
 HMatrix2D
-HMatrix2DEuclideanCompute::compute(vcl_vector<HomgPoint2D>const&p1,
-                                   vcl_vector<HomgPoint2D>const&p2)
+HMatrix2DEuclideanCompute::compute(PointArray const& p1,
+                                   PointArray const& p2)
 {
   HMatrix2D H;
   tmp_fun(p1,p2,&H);
   return H;
 }
+
 bool
 HMatrix2DEuclideanCompute::compute_p(PointArray const& pts1,
                                      PointArray const& pts2,
@@ -57,8 +59,8 @@ HMatrix2DEuclideanCompute::compute_p(PointArray const& pts1,
 }
 
 bool
-HMatrix2DEuclideanCompute::tmp_fun(vcl_vector<HomgPoint2D> const& pts1,
-                                   vcl_vector<HomgPoint2D> const& pts2,
+HMatrix2DEuclideanCompute::tmp_fun(PointArray const& pts1,
+                                   PointArray const& pts2,
                                    HMatrix2D *H)
 {
   assert(pts1.size() == pts2.size());

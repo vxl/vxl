@@ -26,21 +26,17 @@ class HomgPoint2D;
 
 class HMatrix2DSimilarityCompute : public HMatrix2DCompute {
 protected:
-  bool compute_p(const vcl_vector<HomgPoint2D>&,
-                 const vcl_vector<HomgPoint2D>&,
-                 HMatrix2D *);
+  bool compute_p(PointArray const&, PointArray const&, HMatrix2D *);
 public:
   HMatrix2DSimilarityCompute(void);
   ~HMatrix2DSimilarityCompute();
 
   // left in for capes :
-  static HMatrix2D compute (const PairMatchSetCorner &matches);
-  static HMatrix2D compute (const vcl_vector<HomgPoint2D>&p1, const vcl_vector<HomgPoint2D>&p2);
+  static HMatrix2D compute(PairMatchSetCorner const& matches);
+  static HMatrix2D compute(PointArray const& p1, PointArray const& p2);
   int minimum_number_of_correspondences() const { return 2; }
 private:
-  static bool tmp_fun(const PointArray&,
-                       const PointArray&,
-                       HMatrix2D*);
+  static bool tmp_fun(PointArray const&, PointArray const&, HMatrix2D*);
 };
 
 #endif // HMatrix2DSimilarityCompute_h_
