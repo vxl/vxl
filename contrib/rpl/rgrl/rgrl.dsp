@@ -392,6 +392,9 @@ SOURCE=.\rgrl_feature_region.cxx
 # Begin Source File
 SOURCE=.\rgrl_feature_trace_region.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\rgrl_feature_reader.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -709,6 +712,9 @@ SOURCE=.\rgrl_matcher_pseudo_int_3d.h
 # End Source File
 # Begin Source File
 SOURCE=.\rgrl_matcher_pseudo_int_3d.txx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_feature_reader.h
 # End Source File
 # End Group
 # End Target
