@@ -20,7 +20,7 @@ SUBDIRS += vnl
 SUBDIRS += vgl
 
 # image
-SUBDIRS += vil vil1
+SUBDIRS += vil vil1 vil/algo
 
 # stream I/O
 SUBDIRS += vsl vul/io vbl/io vnl/io vgl/io vil/io vil1/io
