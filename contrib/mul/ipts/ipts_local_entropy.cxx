@@ -1,13 +1,14 @@
 //:
-//  \file
-//  \brief Compute entropy in region around each image pixel
-//  \author Tim Cootes
+// \file
+// \brief Compute entropy in region around each image pixel
+// \author Tim Cootes
 
 #include "ipts_local_entropy.h"
 #include <vcl_vector.h>
+#include <vcl_cassert.h>
 
 inline double histo_entropy_sum(const vcl_vector<int>& histo,
-                    unsigned min_v, unsigned max_v)
+                                unsigned min_v, unsigned max_v)
 {
   double sum = 0.0;
   for (unsigned k=min_v;k<=max_v;++k)
@@ -25,7 +26,7 @@ inline double histo_entropy_sum(const vcl_vector<int>& histo,
 //  Any values outside that range will be ignored in the entropy calculation.
 void ipts_local_entropy(const vil_image_view<vxl_byte>& image,
                         vil_image_view<float>& entropy,
-                        int h, unsigned min_v, unsigned max_v)
+                        unsigned h, unsigned min_v, unsigned max_v)
 {
   vcl_vector<int> histo(256);
   const unsigned ni=image.ni(),nj=image.nj();
@@ -34,12 +35,11 @@ void ipts_local_entropy(const vil_image_view<vxl_byte>& image,
   entropy.set_size(eni,enj);
 
   unsigned h2 = 2*h+1;
-  int n = h2*h2;
+  unsigned n = h2*h2;
   double logn = vcl_log(double(n));
 
-  const vcl_ptrdiff_t istep=image.istep(),jstep=image.jstep();
-//  const vcl_ptrdiff_t eistep=entropy.istep(),ejstep=entropy.jstep();
-
+  const vcl_ptrdiff_t istep=image.istep(),   jstep=image.jstep();
+//const vcl_ptrdiff_t eistep=entropy.istep(),ejstep=entropy.jstep();
 
   for (unsigned i=0;i<eni;++i)
   {

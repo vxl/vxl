@@ -20,6 +20,6 @@
 //  Local peaks are interesting points (see work of S.Gilles and that of T.Kadir).
 void ipts_local_entropy(const vil_image_view<vxl_byte>& image,
                         vil_image_view<float>& entropy,
-                        int h, unsigned min_v = 0, unsigned max_v = 255);
+                        unsigned h, unsigned min_v = 0, unsigned max_v = 255);
 
 #endif // ipts_local_entropy_h_
