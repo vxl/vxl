@@ -10,5 +10,6 @@
 // If we supply a default vul_where_vxl.h, it would be changed by cmake, and
 // may get checked back into the repository by accident.
 
+#ifndef VXL_SOURCE_ROOT_DIR // file guard
 #define VXL_SOURCE_ROOT_DIR "${allvxl_SOURCE_DIR}"
-
+#endif
