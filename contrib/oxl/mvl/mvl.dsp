@@ -810,9 +810,6 @@ SOURCE=.\mvl_six_point_design_matrix_row.h
 SOURCE=.\mvl_three_view_six_point_structure.h
 # End Source File
 # Begin Source File
-SOURCE=.\FMSkewComputeLinear.h
-# End Source File
-# Begin Source File
 SOURCE=.\FMatrixCompute8Point.h
 # End Source File
 # Begin Source File
