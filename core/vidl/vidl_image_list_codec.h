@@ -1,15 +1,13 @@
 #ifndef vidl_image_list_codec_h
 #define vidl_image_list_codec_h
-
 //:
 // \file
 // \author Nicolas Dano, september 1999
 //
 // \verbatim
-// Modifications
-// Julien ESTEVE, June 2000
-//     Ported from TargetJr
-// 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
+//  Modifications
+//   Julien ESTEVE, June 2000 -  Ported from TargetJr
+//   10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
 
 #include <vcl_string.h>
@@ -25,7 +23,7 @@
 class vidl_image_list_codec :  public vidl_codec
 {
   // PUBLIC INTERFACE----------------------------------------------------------
-public:
+ public:
 
   // Constructors
   vidl_image_list_codec();
@@ -63,13 +61,13 @@ public:
   // Register image loaders
   //virtual void register_image_loaders ();
 
-protected:
+ protected:
   virtual bool init();
 
   // Data Members--------------------------------------------------------------
   vcl_vector<vil1_image> images_;
 
-private:
+ private:
   char* default_image_type_;
   static char* default_initialization_image_type_;
 };

@@ -1,15 +1,13 @@
 #ifndef vidl_io_h
 #define vidl_io_h
-
 //:
 // \file
 // \author Nicolas Dano, september 1999
 //
 // \verbatim
-// Modifications
-// Julien ESTEVE, June 2000
-//     Ported from TargetJr
-// 10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
+//  Modifications
+//   Julien ESTEVE, June 2000 -  Ported from TargetJr
+//   10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
 
 
@@ -32,11 +30,11 @@ class vidl_io
 {
   // PUBLIC INTERFACE----------------------------------------------------------
 
-public:
-//-----------------------------------------------------
-//   Callbacks for initializing codecs
-//-------------------------------------------------------
-VIDL_DLL_DATA static void (* load_mpegcodec_callback)( vidl_codec*);
+ public:
+  //-----------------------------------------------------
+  //   Callbacks for initializing codecs
+  //-------------------------------------------------------
+  VIDL_DLL_DATA static void (* load_mpegcodec_callback)( vidl_codec*);
 
 
   //---------------------------------------------------------
@@ -137,8 +135,7 @@ VIDL_DLL_DATA static void (* load_mpegcodec_callback)( vidl_codec*);
 
   static void close(); // Must call this before the MPEG library is deleted, i.e. on exit.
 
-public:
-
+ public:
   static vcl_list<vidl_codec_sptr> supported_types_;
 
   // Helpers-------------------------------------------------------------------
