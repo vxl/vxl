@@ -22,7 +22,6 @@ SOURCE_FILES( vnl_algo_sources
   vnl_cpoly_roots.cxx
   vnl_rnpoly_solve.cxx
   vnl_fft.cxx
-  vnl_fftxd_prime_factors.cxx
   vnl_chi_squared.cxx
   vnl_gaussian_kernel_1d.cxx
 )

@@ -3,7 +3,6 @@
 #define vnl_algo_fwd_h_
 
 
-template <class T> class vnl_fftxd_prime_factors;
 template <class T> struct vnl_matrix_inverse;
 template <class T> class vnl_svd;
 template <class T> class vnl_qr;

@@ -13,13 +13,10 @@ SOURCE_FILES( vnl_algo_sources
   vnl_determinant.h
   vnl_discrete_diff.h
   vnl_fft.h
-  vnl_fft1d.h
-  vnl_fft2d.h
   vnl_fft_1d.h
   vnl_fft_2d.h
   vnl_fft_base.h
   vnl_fft_prime_factors.h
-  vnl_fftxd_prime_factors.h
   vnl_gaussian_kernel_1d.h
   vnl_generalized_eigensystem.h
   vnl_generalized_schur.h
