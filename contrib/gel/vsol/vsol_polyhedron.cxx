@@ -79,36 +79,15 @@ bool vsol_polyhedron::operator==(vsol_spatial_object_3d const& obj) const
 //---------------------------------------------------------------------------
 //: Compute the bounding box of `this'
 //---------------------------------------------------------------------------
-void vsol_polyhedron::compute_bounding_box(void)
+void vsol_polyhedron::compute_bounding_box(void) const
 {
-  double xmin=storage_[0]->x();
-  double ymin=storage_[0]->y();
-  double zmin=storage_[0]->z();
-  double xmax=xmin;
-  double ymax=ymin;
-  double zmax=zmin;
-
+  set_bounding_box(storage_[0]->x(),
+                   storage_[0]->y(),
+                   storage_[0]->z());
   for (unsigned int i=1;i<storage_.size();++i)
-  {
-    double x=storage_[i]->x();
-    if      (x<xmin) xmin=x;
-    else if (x>xmax) xmax=x;
-    double y=storage_[i]->y();
-    if      (y<ymin) ymin=y;
-    else if (y>ymax) ymax=y;
-    double z=storage_[i]->z();
-    if      (z<zmin) zmin=z;
-    else if (z>zmax) zmax=z;
-  }
-
-  if (!bounding_box_)
-    bounding_box_ = new vsol_box_3d;
-  bounding_box_->set_min_x(xmin);
-  bounding_box_->set_max_x(xmax);
-  bounding_box_->set_min_y(ymin);
-  bounding_box_->set_max_y(ymax);
-  bounding_box_->set_min_z(zmin);
-  bounding_box_->set_max_z(zmax);
+    add_to_bounding_box(storage_[i]->x(),
+                        storage_[i]->y(),
+                        storage_[i]->z());
 }
 
 //---------------------------------------------------------------------------

@@ -55,7 +55,7 @@ vsol_spatial_object_2d_sptr vsol_group_2d::clone(void) const
 //: Return the object `i'
 // Require: i>=0 and i<size()
 //---------------------------------------------------------------------------
-vsol_spatial_object_2d_sptr vsol_group_2d::object(const int i) const
+vsol_spatial_object_2d_sptr vsol_group_2d::object(int i) const
 {
   // require
   assert((i>=0)&&(i<size()));
@@ -86,43 +86,25 @@ vsol_group_2d::spatial_type(void) const
 //: Compute the bounding box of `this'
 // Require: size()>0
 //---------------------------------------------------------------------------
-void vsol_group_2d::compute_bounding_box(void)
+void vsol_group_2d::compute_bounding_box(void) const
 {
   // require
   assert(size()>0);
 
   vcl_list<vsol_spatial_object_2d_sptr>::iterator i = storage_->begin();
-  double xmin = (*i)->get_min_x();
-  double ymin = (*i)->get_min_y();
-  double xmax = (*i)->get_max_x();
-  double ymax = (*i)->get_max_y();
+  set_bounding_box(   (*i)->get_min_x(), (*i)->get_min_y());
+  add_to_bounding_box((*i)->get_max_x(), (*i)->get_max_y());
   for (++i; i!=storage_->end(); ++i)
   {
-    if ((*i)->get_min_x()<xmin) xmin=(*i)->get_min_x();
-    if ((*i)->get_min_y()<ymin) ymin=(*i)->get_min_y();
-    if ((*i)->get_max_x()>xmax) xmax=(*i)->get_max_x();
-    if ((*i)->get_max_y()>ymax) ymax=(*i)->get_max_y();
+    add_to_bounding_box((*i)->get_min_x(), (*i)->get_min_y());
+    add_to_bounding_box((*i)->get_max_x(), (*i)->get_max_y());
   }
-  if (!bounding_box_)
-    bounding_box_=new vsol_box_2d;
-  bounding_box_->set_min_x(xmin);
-  bounding_box_->set_max_x(xmax);
-  bounding_box_->set_min_y(ymin);
-  bounding_box_->set_max_y(ymax);
-}
-
-//---------------------------------------------------------------------------
-//: Return the number of direct children of the group
-//---------------------------------------------------------------------------
-int vsol_group_2d::size(void) const
-{
-  return storage_->size();
 }
 
 //---------------------------------------------------------------------------
 //: Return the number of objects of the group
 //---------------------------------------------------------------------------
-int vsol_group_2d::deep_size(void) const
+unsigned int vsol_group_2d::deep_size(void) const
 {
   int result = 0;
   vcl_list<vsol_spatial_object_2d_sptr>::iterator i;

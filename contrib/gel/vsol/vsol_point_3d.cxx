@@ -66,16 +66,9 @@ vsol_point_3d::spatial_type(void) const
 //---------------------------------------------------------------------------
 //: Compute the bounding box of `this'
 //---------------------------------------------------------------------------
-void vsol_point_3d::compute_bounding_box(void)
+void vsol_point_3d::compute_bounding_box(void) const
 {
-  if (!bounding_box_)
-    bounding_box_=new vsol_box_3d;
-  bounding_box_->set_min_x(p_.x());
-  bounding_box_->set_max_x(p_.x());
-  bounding_box_->set_min_y(p_.y());
-  bounding_box_->set_max_y(p_.y());
-  bounding_box_->set_min_z(p_.z());
-  bounding_box_->set_max_z(p_.z());
+  set_bounding_box(p_.x(),p_.y(),p_.z());
 }
 
 //***************************************************************************

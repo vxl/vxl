@@ -1,22 +1,23 @@
-#ifndef vsol_point_3d_h
-#define vsol_point_3d_h
+// This is gel/vsol/vsol_point_3d.h
+#ifndef vsol_point_3d_h_
+#define vsol_point_3d_h_
 //*****************************************************************************
 //:
-//  \file
-// \brief Point of a 3D space
+// \file
+// \brief Point in 3D space
 //
-// \author
-// François BERTEL
+// \author François BERTEL
+// \date   2000/05/03
 //
 // \verbatim
-// Modifications
-// 2001/07/03 Peter Vanroose  Replaced new/delete by vgl_point_3d as member
-// 2001/07/03 Peter Vanroose  Replaced vnl_double_3 by vgl_vector_3d
-// 2001/06/30 Peter Vanroose  Added constructor from vgl_point_3d
-// 2000/09/18 Peter Tu        connected to vgl
-// 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-// 2000/05/12 François BERTEL Replacement of vnl_vector_fixed<double,3> by vnl_double_3
-// 2000/05/03 François BERTEL Creation
+//  Modifications
+//   2000/05/03 François BERTEL Creation
+//   2000/05/12 François BERTEL Replacement of vnl_vector_fixed<double,3> by vnl_double_3
+//   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
+//   2000/09/18 Peter Tu        connected to vgl
+//   2001/06/30 Peter Vanroose  Added constructor from vgl_point_3d
+//   2001/07/03 Peter Vanroose  Replaced vnl_double_3 by vgl_vector_3d
+//   2001/07/03 Peter Vanroose  Replaced new/delete by vgl_point_3d as member
 // \endverbatim
 //*****************************************************************************
 
@@ -30,13 +31,22 @@ class vsol_point_3d;
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_point_3d.h>
 
-class vsol_point_3d
-  :public vsol_spatial_object_3d
+class vsol_point_3d : public vsol_spatial_object_3d
 {
+  //***************************************************************************
+  // Data members
+  //***************************************************************************
+
+  //---------------------------------------------------------------------------
+  //Description: Coordinates of the point
+  //---------------------------------------------------------------------------
+  vgl_point_3d<double> p_;
+
+ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
-public:
+
   //---------------------------------------------------------------------------
   //: Constructor from vgl_point_3d (automatic cast)
   //---------------------------------------------------------------------------
@@ -109,7 +119,7 @@ public:
   //---------------------------------------------------------------------------
   //: Compute the bounding box of `this'
   //---------------------------------------------------------------------------
-  virtual void compute_bounding_box(void);
+  virtual void compute_bounding_box(void) const;
 
   //***************************************************************************
   // Status setting
@@ -153,22 +163,12 @@ public:
   //---------------------------------------------------------------------------
   //: Add `v' and `this'
   //---------------------------------------------------------------------------
-  virtual vsol_point_3d_sptr
-  plus_vector(const vgl_vector_3d<double> &v) const;
+  virtual vsol_point_3d_sptr plus_vector(const vgl_vector_3d<double> &v) const;
 
   //---------------------------------------------------------------------------
   //: Return the vector `this',`other'.
   //---------------------------------------------------------------------------
   virtual vgl_vector_3d<double> to_vector(const vsol_point_3d &other) const;
-
-  //***************************************************************************
-  // Implementation
-  //***************************************************************************
-private:
-  //---------------------------------------------------------------------------
-  //Description: Coordinates of the point
-  //---------------------------------------------------------------------------
-  vgl_point_3d<double> p_;
 };
 
-#endif // vsol_point_3d_h
+#endif // vsol_point_3d_h_

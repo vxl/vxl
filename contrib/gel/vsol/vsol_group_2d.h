@@ -1,17 +1,18 @@
-#ifndef vsol_group_2d_h
-#define vsol_group_2d_h
+// This is gel/vsol/vsol_group_2d.h
+#ifndef vsol_group_2d_h_
+#define vsol_group_2d_h_
 //*****************************************************************************
 //:
-//  \file
-// \brief Group of Spatial object in a 2D space
+// \file
+// \brief Group of spatial objects in a 2D space
 //
-// \author
-// François BERTEL
+// \author François BERTEL
+// \date   2000/04/14
 //
 // \verbatim
-// Modifications
-//  2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-//  2000/04/14 François BERTEL Creation
+//  Modifications
+//   2000/04/14 François BERTEL Creation
+//   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 // \endverbatim
 //*****************************************************************************
 
@@ -21,17 +22,26 @@
 #include <vsol/vsol_spatial_object_2d.h>
 #include <vcl_list.h>
 
-class vsol_group_2d
-  :public vsol_spatial_object_2d
+class vsol_group_2d : public vsol_spatial_object_2d
 {
+  //***************************************************************************
+  // Data members
+  //***************************************************************************
+
+  //---------------------------------------------------------------------------
+  //: Set of objects that `this' contains
+  //---------------------------------------------------------------------------
+  vcl_list<vsol_spatial_object_2d_sptr> *storage_;
+
+ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
-public:
+
   //---------------------------------------------------------------------------
   //: Default Constructor: group with no child
   //---------------------------------------------------------------------------
-  explicit vsol_group_2d(void);
+  vsol_group_2d(void);
 
   //---------------------------------------------------------------------------
   //: Copy constructor.
@@ -59,7 +69,7 @@ public:
   //: Return the object `i'
   //  REQUIRE: i>=0 and i<size()
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d_sptr object(const int i) const;
+  vsol_spatial_object_2d_sptr object(int i) const;
 
   //***************************************************************************
   // Status report
@@ -74,22 +84,22 @@ public:
   //: Compute the bounding box of `this'
   //  REQUIRE: size()>0
   //---------------------------------------------------------------------------
-  virtual void compute_bounding_box(void);
+  virtual void compute_bounding_box(void) const; // virtual of vsol_spatial_object_2d
 
   //---------------------------------------------------------------------------
   //: Return the number of direct children of the group
   //---------------------------------------------------------------------------
-  virtual int size(void) const;
+  unsigned int size(void) const { return storage_->size(); }
 
   //---------------------------------------------------------------------------
   //: Return the number of objects of the group
   //---------------------------------------------------------------------------
-  virtual int deep_size(void) const;
+  unsigned int deep_size(void) const;
 
   //---------------------------------------------------------------------------
   //: Is `new_object' a child (direct or not) of `this' ?
   //---------------------------------------------------------------------------
-  virtual bool is_child(const vsol_spatial_object_2d_sptr &new_object) const;
+  bool is_child(const vsol_spatial_object_2d_sptr &new_object) const;
 
   //***************************************************************************
   // Element change
@@ -98,7 +108,7 @@ public:
   //---------------------------------------------------------------------------
   //: Add an object `new_object'to `this'
   //---------------------------------------------------------------------------
-  virtual void add_object(const vsol_spatial_object_2d_sptr &new_object);
+  void add_object(const vsol_spatial_object_2d_sptr &new_object);
 
   //***************************************************************************
   // Removal
@@ -108,7 +118,7 @@ public:
   //: Remove object `i' of `this' (not delete it)
   //  REQUIRE: i>=0 and i<size()
   //---------------------------------------------------------------------------
-  virtual void remove_object(const int i);
+  void remove_object(const int i);
 
   //---------------------------------------------------------------------------
   //: The same behavior than dynamic_cast<>.
@@ -116,15 +126,6 @@ public:
   //---------------------------------------------------------------------------
   virtual const vsol_group_2d *cast_to_group(void) const { return this; }
   virtual vsol_group_2d *cast_to_group(void) { return this; }
-
-  //***************************************************************************
-  // Implementation
-  //***************************************************************************
-private:
-  //---------------------------------------------------------------------------
-  // Description: Set of objects that `this' contains
-  //---------------------------------------------------------------------------
-  vcl_list<vsol_spatial_object_2d_sptr> *storage_;
 };
 
-#endif // vsol_group_2d_h
+#endif // vsol_group_2d_h_

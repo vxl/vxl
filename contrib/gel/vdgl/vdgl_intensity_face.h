@@ -1,6 +1,6 @@
+// This is gel/vdgl/vdgl_intensity_face.h
 #ifndef vdgl_intensity_face_h_
 #define vdgl_intensity_face_h_
-
 //:
 // \file
 // \brief A face with intensity attributes
@@ -18,12 +18,14 @@
 //  a projected linear Face, the projected boundaries of a set of Faces
 //  are used to tesselate the image for region analysis.
 //
-// \author Author J.L. Mundy - November 21, 1999
+// \author J.L. Mundy
+// \date   November 21, 1999
 //
 // \verbatim
-// Modifications
-//  8-May-2002 - Peter Vanroose - no longer inherits from vdgl_digital_region:
-//               dependency changed to "has_a", but with cast_to semantics
+//  Modifications
+//   8-May-2002 - Peter Vanroose - no longer inherits from vdgl_digital_region:
+//                dependency changed to "has_a", but with cast_to semantics
+//   8-Jan-2003 - Peter Vanroose - moved compute_bounding_box() to vtol_face
 // \endverbatim
 //
 //-------------------------------------------------------------------------
@@ -36,8 +38,11 @@
 
 class vdgl_intensity_face : public vtol_face_2d
 {
-public:
-  //Constructors
+ protected:
+  // Data Members--------------------------------------------------------------
+  vdgl_digital_region* region_;
+ public:
+  //Constructors---------------------------------------------------------------
   vdgl_intensity_face(vcl_vector<vtol_edge_sptr>* edges);
   vdgl_intensity_face(one_chain_list& one_chains);
   //  vdgl_intensity_face(vcl_vector<vtol_edge_sptr>* edges, vdgl_digital_region& dr);
@@ -70,7 +75,7 @@ public:
   float const* Yj() const { return region_->Yj(); }
   float const* Zj() const { return region_->Zj(); }
   unsigned short const* Ij() const { return region_->Ij(); }
-  
+
   int Npix()const {return region_->Npix(); }
   float X() const { return region_->X(); }
   float Y() const { return region_->Y(); }
@@ -99,30 +104,22 @@ public:
   double Var() const { return region_->Var(); }
 
   //Accessors
-  //The Face moment matrix
+  // The Face moment matrix
   virtual vnl_matrix<double> MomentMatrix();
-  //UtilityMethods
+  //Utility Methods
 #if 0
-  //The projection of the face onto a given orientation
+  // The projection of the face onto a given orientation
   virtual void extrema(vcl_vector<float>& orientation, float& min, float& max);
-#endif
-  //this method is tailored to the DigitalCurve boundary of the vdgl_intensity_face
-  virtual void compute_bounding_box();
 
-#if 0
-  //Only TaggedTransform can handle the shared geometry.
+  // Only TaggedTransform can handle the shared geometry.
   virtual bool TaggedTransform(CoolTransform const& t);
-#endif
-  //no callers for perimeter()
-  //float perimeter();
-#if 0
-  //Computations on the adjacent Face(s)
+
+  float perimeter();
+
+  // Computations on the adjacent Face(s)
   Histogram_ref GetAdjacentRegionHistogram();
 #endif
   float GetAdjacentRegionMean();
- protected:
-  //members
-  vdgl_digital_region* region_;
 };
 
 #endif // vdgl_intensity_face_h_

@@ -1,6 +1,6 @@
 // This is gel/vdgl/vdgl_digital_curve.h
-#ifndef vdgl_digital_curve_h
-#define vdgl_digital_curve_h
+#ifndef vdgl_digital_curve_h_
+#define vdgl_digital_curve_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -11,9 +11,9 @@
 // \author  Geoff Cross
 //
 // \verbatim
-// Modifications:
-//  10-Apr-2002 Peter Vanroose - Implemented split()
-//  30-Nov-2002 J.L. Mundy added constructor from end points
+//  Modifications:
+//   10-Apr-2002 Peter Vanroose - Implemented split()
+//   30-Nov-2002 J.L. Mundy added constructor from end points
 // \endverbatim
 
 #include <vdgl/vdgl_digital_curve_sptr.h>
@@ -23,8 +23,11 @@
 
 class vdgl_digital_curve : public vsol_curve_2d
 {
- public:
+ protected:
+  // Data Members--------------------------------------------------------------
+  vdgl_interpolator_sptr interpolator_;
 
+ public:
   // Constructors/Destructors--------------------------------------------------
   vdgl_digital_curve( vdgl_interpolator_sptr interpolator);
   vdgl_digital_curve(vsol_point_2d_sptr const& p0,
@@ -45,7 +48,7 @@ class vdgl_digital_curve : public vsol_curve_2d
   //  the curve is selected.  If the point is outside the curve bounds, then
   //  only dc1 is returned, as the entire curve. dc2 is NULL.
   bool split(vsol_point_2d_sptr const& v,
-             vdgl_digital_curve_sptr& dc1, vdgl_digital_curve_sptr& dc2); 
+             vdgl_digital_curve_sptr& dc1, vdgl_digital_curve_sptr& dc2);
 
   // Data Access---------------------------------------------------------------
 
@@ -65,13 +68,9 @@ class vdgl_digital_curve : public vsol_curve_2d
   //---------------------------------------------------------------------------
   virtual vdgl_digital_curve const*cast_to_digital_curve(void)const{return this;}
   virtual vdgl_digital_curve *cast_to_digital_curve(void) {return this;}
-  //: bounding box
-  virtual void compute_bounding_box(void);
-  // INTERNALS-----------------------------------------------------------------
- protected:
-  // Data Members--------------------------------------------------------------
 
-  vdgl_interpolator_sptr interpolator_;
+  //: bounding box
+  virtual void compute_bounding_box(void) const;
 };
 
-#endif // vdgl_digital_curve_h
+#endif // vdgl_digital_curve_h_

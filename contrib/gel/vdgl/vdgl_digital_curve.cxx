@@ -23,8 +23,8 @@ vdgl_digital_curve::vdgl_digital_curve( vdgl_interpolator_sptr interpolator)
 vdgl_digital_curve::vdgl_digital_curve(vsol_point_2d_sptr const& p0,
                                        vsol_point_2d_sptr const& p1)
 {
-  if(!p0||!p1)
-    {    
+  if (!p0||!p1)
+    {
       vdgl_edgel_chain_sptr ec = new vdgl_edgel_chain();
       interpolator_ = new vdgl_interpolator_linear(ec);
       return;
@@ -105,11 +105,8 @@ bool vdgl_digital_curve::split(vsol_point_2d_sptr const& v,
 }
 
 //: scan all the points on the curve and compute the bounds.
-//  Calling routine must insure that the box exists.
-void vdgl_digital_curve::compute_bounding_box(void)
+void vdgl_digital_curve::compute_bounding_box(void) const
 {
-  bounding_box_->set_min_x(interpolator_->get_min_x());
-  bounding_box_->set_max_x(interpolator_->get_max_x());
-  bounding_box_->set_min_y(interpolator_->get_min_y());
-  bounding_box_->set_max_y(interpolator_->get_max_y());
+  set_bounding_box(   interpolator_->get_min_x(), interpolator_->get_min_y());
+  add_to_bounding_box(interpolator_->get_max_x(), interpolator_->get_max_y());
 }

@@ -501,7 +501,7 @@ vcl_vector<vtol_block*> *vtol_one_chain::compute_blocks(void)
 //    dimension.
 //---------------------------------------------------------------------------
 
-void vtol_one_chain::compute_bounding_box(void)
+void vtol_one_chain::compute_bounding_box(void) const
 {
   if (!this->bounding_box_)
     {
@@ -509,7 +509,7 @@ void vtol_one_chain::compute_bounding_box(void)
       return;
     }
 
-  edge_list *edgs= this->edges();
+  edge_list *edgs= const_cast<vtol_one_chain*>(this)->edges();
 
   if (edgs->size()==0)//default method, things are screwed up anyway
     {

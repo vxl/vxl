@@ -129,40 +129,6 @@ bool vsol_rectangle_2d::operator==(const vsol_spatial_object_2d& obj) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-//: Compute the bounding box of `this'
-//---------------------------------------------------------------------------
-void vsol_rectangle_2d::compute_bounding_box(void)
-{
-  double xmin=(*storage_)[0]->x();
-  double ymin=(*storage_)[0]->y();
-  double xmax=xmin;
-  double ymax=ymin;
-
-  for (unsigned int i=1;i<3;++i)
-  {
-    double x=(*storage_)[i]->x();
-    if      (x<xmin) xmin=x;
-    else if (x>xmax) xmax=x;
-    double y=(*storage_)[i]->y();
-    if      (y<ymin) ymin=y;
-    else if (y>ymax) ymax=y;
-  }
-  double x=p3()->x();
-  if      (x<xmin) xmin=x;
-  else if (x>xmax) xmax=x;
-  double y=p3()->y();
-  if      (y<ymin) ymin=y;
-  else if (y>ymax) ymax=y;
-
-  if (!bounding_box_)
-    bounding_box_=new vsol_box_2d;
-  bounding_box_->set_min_x(xmin);
-  bounding_box_->set_max_x(xmax);
-  bounding_box_->set_min_y(ymin);
-  bounding_box_->set_max_y(ymax);
-}
-
-//---------------------------------------------------------------------------
 //: Return the width
 //---------------------------------------------------------------------------
 double vsol_rectangle_2d::width(void) const

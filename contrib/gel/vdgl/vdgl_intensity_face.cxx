@@ -1,8 +1,9 @@
+// This is gel/vdgl/vdgl_intensity_face.cxx
+#include "vdgl_intensity_face.h"
 //:
 // \file
 
 #include <vcl_vector.h>
-#include "vdgl_intensity_face.h"
 #include <vcl_iostream.h>
 #include <vnl/vnl_matrix.h>
 #include <vdgl/vdgl_digital_region.h>
@@ -265,24 +266,4 @@ float vdgl_intensity_face::GetAdjacentRegionMean()
   mean/=area;
   return mean;
 }
-#endif
-
-//-------------------------------------------------------------
-//: Update the bounding box, a member of SpatialObject.
-//    The algorithm uses the bounding boxes of the vtol_edge(s) forming
-//    the boundary of the Face.  Maybe this should be done at the
-//    Face level.. but for now.
-void vdgl_intensity_face::compute_bounding_box()
-{
-  vcl_vector<vtol_edge_sptr>* edges = this->edges();
-  vtol_edge_sptr e;
-  this->set_min_x(0); this->set_max_x(0);
-  this->set_min_y(0); this->set_max_y(0);
-
-  for (vcl_vector<vtol_edge_sptr>::iterator eit = edges->begin();eit != edges->end(); eit++)
-  {
-    e = (*eit);
-    this->grow_minmax_bounds(*(e->get_bounding_box()));
-  }
-  delete edges;
-}
+#endif // 0

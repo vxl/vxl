@@ -152,24 +152,10 @@ vsol_line_2d::spatial_type(void) const
 //---------------------------------------------------------------------------
 //: Compute the bounding box of `this'
 //---------------------------------------------------------------------------
-void vsol_line_2d::compute_bounding_box(void)
+void vsol_line_2d::compute_bounding_box(void) const
 {
-  double xmin=p0_->x();
-  double ymin=p0_->y();
-  double xmax=xmin;
-  double ymax=ymin;
-
-  if      (p1_->x()<xmin) xmin=p1_->x();
-  else if (p1_->x()>xmax) xmax=p1_->x();
-  if      (p1_->y()<ymin) ymin=p1_->y();
-  else if (p1_->y()>ymax) ymax=p1_->y();
-
-  if (!bounding_box_)
-    bounding_box_=new vsol_box_2d;
-  bounding_box_->set_min_x(xmin);
-  bounding_box_->set_max_x(xmax);
-  bounding_box_->set_min_y(ymin);
-  bounding_box_->set_max_y(ymax);
+  set_bounding_box(   p0_->x(), p0_->y());
+  add_to_bounding_box(p1_->x(), p1_->y());
 }
 
 //---------------------------------------------------------------------------

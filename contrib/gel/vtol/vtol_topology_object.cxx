@@ -400,7 +400,7 @@ vcl_vector<vtol_block *> *vtol_topology_object::compute_blocks(void)
 //: compute the bounding box from the set of vertices.
 //  A generic method that applies to all topology_object(s)
 //---------------------------------------------------------------------------
-void vtol_topology_object::compute_bounding_box()
+void vtol_topology_object::compute_bounding_box() const
 {
   if (!this->bounding_box_)
   {
@@ -408,7 +408,7 @@ void vtol_topology_object::compute_bounding_box()
              << " shouldn't happen\n";
     return;
   }
-  vertex_list *verts= this->vertices();
+  vertex_list *verts= const_cast<vtol_topology_object*>(this)->vertices();
   if (!verts->size())
   {
     vcl_cout << "In void vtol_topology_object::compute_bounding_box() -"

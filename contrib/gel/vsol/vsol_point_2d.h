@@ -1,22 +1,23 @@
-#ifndef vsol_point_2d_h
-#define vsol_point_2d_h
+// This is gel/vsol/vsol_point_2d.h
+#ifndef vsol_point_2d_h_
+#define vsol_point_2d_h_
 //*****************************************************************************
 //:
-//  \file
-// \brief Point of a 2D space
+// \file
+// \brief Point in 2D space
 //
-// \author
-// François BERTEL
+// \author François BERTEL
+// \date   2000/04/14
 //
 // \verbatim
-// Modifications
-// 2001/07/03 Peter Vanroose  Replaced new/delete by vgl_point_2d as member
-// 2001/07/03 Peter Vanroose  Replaced vnl_double_2 by vgl_vector_2d
-// 2001/06/30 Peter Vanroose  Added constructor from vgl_point_2d
-// 2000/09/18 Peter Tu        using vgl_point_2d instead of vnl_vector
-// 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-// 2000/05/12 François BERTEL Replacement of vnl_vector_fixed<double,2> by vnl_double_2
-// 2000/04/14 François BERTEL Creation
+//  Modifications
+//   2000/04/14 François BERTEL Creation
+//   2000/05/12 François BERTEL Replacement of vnl_vector_fixed<double,2> by vnl_double_2
+//   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
+//   2000/09/18 Peter Tu        using vgl_point_2d instead of vnl_vector
+//   2001/06/30 Peter Vanroose  Added constructor from vgl_point_2d
+//   2001/07/03 Peter Vanroose  Replaced vnl_double_2 by vgl_vector_2d
+//   2001/07/03 Peter Vanroose  Replaced new/delete by vgl_point_2d as member
 // \endverbatim
 //*****************************************************************************
 
@@ -30,13 +31,22 @@ class vsol_point_2d;
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_2d.h>
 
-class vsol_point_2d
-  :public vsol_spatial_object_2d
+class vsol_point_2d : public vsol_spatial_object_2d
 {
+  //***************************************************************************
+  // Data members
+  //***************************************************************************
+
+  //---------------------------------------------------------------------------
+  //: Coordinates of the point
+  //---------------------------------------------------------------------------
+  vgl_point_2d<double> p_;
+
+ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
-public:
+
   //---------------------------------------------------------------------------
   //: Constructor from vgl_point_2d (automatic cast)
   //---------------------------------------------------------------------------
@@ -104,7 +114,7 @@ public:
   //---------------------------------------------------------------------------
   //: Compute the bounding box of `this'
   //---------------------------------------------------------------------------
-  virtual void compute_bounding_box(void);
+  virtual void compute_bounding_box(void) const;
 
   //***************************************************************************
   // Status setting
@@ -154,15 +164,6 @@ public:
   //: Return the vector `this',`other'.
   //---------------------------------------------------------------------------
   virtual vgl_vector_2d<double> to_vector(const vsol_point_2d &other) const;
-
-  //***************************************************************************
-  // Implementation
-  //***************************************************************************
-private:
-  //---------------------------------------------------------------------------
-  //: Coordinates of the point
-  //---------------------------------------------------------------------------
-  vgl_point_2d<double> p_;
 };
 
-#endif // vsol_point_2d_h
+#endif // vsol_point_2d_h_

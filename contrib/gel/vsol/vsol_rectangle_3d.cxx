@@ -130,50 +130,6 @@ bool vsol_rectangle_3d::operator==(const vsol_spatial_object_3d& obj) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-//: Compute the bounding box of `this'
-//---------------------------------------------------------------------------
-void vsol_rectangle_3d::compute_bounding_box(void)
-{
-  double xmin=(*storage_)[0]->x();
-  double ymin=(*storage_)[0]->y();
-  double zmin=(*storage_)[0]->z();
-  double xmax=xmin;
-  double ymax=ymin;
-  double zmax=zmin;
-
-  for (unsigned int i=1;i<3;++i)
-  {
-    double x=(*storage_)[i]->x();
-    if      (x<xmin) xmin=x;
-    else if (x>xmax) xmax=x;
-    double y=(*storage_)[i]->y();
-    if      (y<ymin) ymin=y;
-    else if (y>ymax) ymax=y;
-    double z=(*storage_)[i]->z();
-    if      (z<zmin) zmin=z;
-    else if (z>zmax) zmax=z;
-  }
-  double x=p3()->x();
-  if      (x<xmin) xmin=x;
-  else if (x>xmax) xmax=x;
-  double y=p3()->y();
-  if      (y<ymin) ymin=y;
-  else if (y>ymax) ymax=y;
-  double z=p3()->z();
-  if      (z<zmin) zmin=z;
-  else if (z>zmax) zmax=z;
-
-  if (!bounding_box_)
-    bounding_box_=new vsol_box_3d;
-  bounding_box_->set_min_x(xmin);
-  bounding_box_->set_max_x(xmax);
-  bounding_box_->set_min_y(ymin);
-  bounding_box_->set_max_y(ymax);
-  bounding_box_->set_min_z(zmin);
-  bounding_box_->set_max_z(zmax);
-}
-
-//---------------------------------------------------------------------------
 //: Return the width
 //---------------------------------------------------------------------------
 double vsol_rectangle_3d::width(void) const

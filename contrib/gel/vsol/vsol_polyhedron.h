@@ -1,17 +1,19 @@
+// This is gel/vsol/vsol_polyhedron.h
 #ifndef vsol_polyhedron_h_
 #define vsol_polyhedron_h_
 //*****************************************************************************
 //:
-//  \file
+// \file
 // \brief Polyhedral volume in 3D space
 //
-//   Representation of an arbitrary polyhedral volume, i.e., a volume that
-//   is bounded by any set of flat polygons.
-//   A sufficient minimal representation for this is the set of corner points
-//   together with the polygonal faces they form.
+//  Representation of an arbitrary polyhedral volume, i.e., a volume that
+//  is bounded by any set of flat polygons.
 //
-// \author
-//   Peter Vanroose, 5 July 2000.
+//  A sufficient minimal representation for this is the set of corner points
+//  together with the polygonal faces they form.
+//
+// \author Peter Vanroose
+// \date   5 July 2000.
 //*****************************************************************************
 
 class vsol_polyhedron;
@@ -26,13 +28,23 @@ class vsol_polyhedron;
 #include "vsol_box_3d_sptr.h"
 #include <vcl_vector.h>
 
-class vsol_polyhedron
-  :public vsol_volume_3d
+class vsol_polyhedron : public vsol_volume_3d
 {
+ protected:
+  //***************************************************************************
+  // Data members
+  //***************************************************************************
+
+  //---------------------------------------------------------------------------
+  // Description: List of vertices
+  //---------------------------------------------------------------------------
+  vcl_vector<vsol_point_3d_sptr> storage_;
+
+ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
-public:
+
   //---------------------------------------------------------------------------
   //: Constructor from a vcl_vector (i.e., a list of points)
   //  REQUIRE: new_vertices.size()>=4
@@ -92,7 +104,7 @@ public:
   //---------------------------------------------------------------------------
   //: Compute the bounding box of `this'
   //---------------------------------------------------------------------------
-  virtual void compute_bounding_box(void);
+  virtual void compute_bounding_box(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the number of vertices
@@ -123,19 +135,11 @@ public:
   //---------------------------------------------------------------------------
   virtual bool in(vsol_point_3d const& p) const;
 
-  //***************************************************************************
-  // Implementation
-  //***************************************************************************
-protected:
+ protected:
   //---------------------------------------------------------------------------
   //: Default constructor. Do nothing. Just to enable inherance.
   //---------------------------------------------------------------------------
   vsol_polyhedron(void) {}
-
-  //---------------------------------------------------------------------------
-  // Description: List of vertices
-  //---------------------------------------------------------------------------
-  vcl_vector<vsol_point_3d_sptr> storage_;
 };
 
 #endif // vsol_polyhedron_h_
