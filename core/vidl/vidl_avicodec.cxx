@@ -439,7 +439,10 @@ bool vidl_avicodec::save(vidl_movie* movie, const char* fname)
 HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
 {
   // 1st, Get the datas from the video frame
-  byte* TjSection = (byte*) frame->get_section(NULL, 0, 0, frame->width(), frame->height());
+
+  byte* TjSection = new byte[frame->width() * frame->height() * frame->get_bytes_pixel()];
+  if(!frame->get_section(TjSection, 0, 0, frame->width(), frame->height()) )
+    vcl_cerr << "vidl_avicodec::make_dib--Could not read get section" << vcl_endl;
 
   // 2nd, Copy the array of bytes (and transform it),
   // so it is usable by a 'windows' BitMap
@@ -499,7 +502,7 @@ HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
     } // end switch byte per pixel
 
   // Get rid of the original datas
-  delete TjSection;
+  delete[] TjSection;
 
   // 3st, Create the Bitmap and stick the datas in it
   HDC hdc = GetDC(NULL);
