@@ -5,6 +5,9 @@
 // \brief Interface for Multi-variate principal Component gaussian PDF sampler.
 // Modifications
 // 23 April 2001 IMS - Ported to VXL
+#ifdef __GNUC__
+#pragma implementation
+#endif
 
 #include <mbl/mbl_matxvec.h>
 #include <vcl_string.h>
