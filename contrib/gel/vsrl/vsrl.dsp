@@ -152,6 +152,12 @@ SOURCE=.\vsrl_token_saliency.cxx
 # Begin Source File
 SOURCE=.\vsrl_window_accumulator.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vsrl_point_picker.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vsrl_manager.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -215,8 +221,6 @@ SOURCE=.\vsrl_point_picker.h
 # Begin Source File
 SOURCE=.\vsrl_point_picker_sptr.h
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
