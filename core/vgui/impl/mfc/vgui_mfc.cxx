@@ -32,6 +32,7 @@
 #endif // _AFX_NO_AFXCMN_SUPPORT
 
 #include <vcl_cassert.h>
+#include <vcl_iostream.h>
 #include <vgui/vgui_gl.h>
 
 static bool debug = false;

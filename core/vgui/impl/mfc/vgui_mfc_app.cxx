@@ -118,12 +118,13 @@ BOOL vgui_mfc_app::Run()
   // for tracking the idle time state
   BOOL bIdle = TRUE;
   LONG lIdleCount = 0;
+  MSG msgCur;
 
   // acquire and dispatch messages until a WM_QUIT message is received.
   for (;;)
   {
     // phase1: check to see if we can do idle work
-    while (bIdle && !::PeekMessage(&m_msgCur, NULL, NULL, NULL, PM_NOREMOVE))
+    while (bIdle && !::PeekMessage(&msgCur, NULL, NULL, NULL, PM_NOREMOVE))
     {
       // call OnIdle while in bIdle state
       if (!OnIdle(lIdleCount++))
@@ -177,12 +178,12 @@ BOOL vgui_mfc_app::Run()
         return ExitInstance();
 
       // reset "no idle" state after pumping "normal" message
-      if (IsIdleMessage(&m_msgCur))
+      if (IsIdleMessage(&msgCur))
       {
         bIdle = TRUE;
         lIdleCount = 0;
       }
-    } while (::PeekMessage(&m_msgCur, NULL, NULL, NULL, PM_NOREMOVE));
+    } while (::PeekMessage(&msgCur, NULL, NULL, NULL, PM_NOREMOVE));
   }
   ASSERT(FALSE);  // not reachable
 }

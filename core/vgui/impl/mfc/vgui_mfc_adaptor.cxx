@@ -12,6 +12,7 @@
 // \endverbatim
 
 #include <vcl_cmath.h>
+#include <vcl_iostream.h>
 #include <vcl_cstring.h>
 
 #include <vgui/vgui_gl.h>

@@ -16,6 +16,7 @@
 
 #include <vgui/impl/mfc/vgui_mfc_utils.h>
 #include <vgui/vgui_command.h>
+#include <vcl_iostream.h>
 static bool debug = false;
 vgui_mfc_utils *vgui_mfc_utils::instance_ = NULL;
 
