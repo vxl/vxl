@@ -18,7 +18,7 @@ vidl_test
 
 IF(WIN32)
   SOURCE_FILES(vidl_sources
-    vidl_avicodec.cxx
+    vidl_avicodec
   )
 ENDIF(WIN32)
 
