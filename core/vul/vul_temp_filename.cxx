@@ -41,14 +41,18 @@
     }
     static int random_seed_trigger = init_randomizer();
 
+    char random_letter()
+    {
+      // Make sure the random character is a letter.
+      int r = vcl_rand() % (26+26); // 26 uppercase and 26 lowercase letters
+      return (r<26) ? char('A'+r) : char('a'+r-26);
+    }
+
     char random_char()
     {
-      // Make sure the random character is not a "no-no" character.
-      char c;
-      do {
-        c = char( vcl_rand() % (126-33) + 33 );
-      } while( c=='/' || c=='\\' );
-      return c;
+      // Make sure the random character is a letter or number.
+      int r = vcl_rand() % (26+26+10); // 2x26 letters, 10 digits
+      return (r<26) ? char('A'+r) : (r<52) ? char('a'+r-26) : char('0'+r-52);
     }
   }
 #else
@@ -73,10 +77,11 @@ vul_temp_filename( )
   if( file == 0 )
     return "";
   return file;
+
 #else
   // Don't use tmpnam, since it causes linker warnings (and sometimes
   // linker errors). Instead reimplement. Sigh.
-  const unsigned int num_char_in_filename = 8;
+  const unsigned int num_char_in_filename = 7+1; // should always be at least 1
   vcl_string filename;
   vcl_string tempdir;
   unsigned int count = 0;
@@ -93,7 +98,8 @@ vul_temp_filename( )
 
   while( !okay && count < 10 ) {
     char buf[ num_char_in_filename+1 ];
-    for( unsigned int i=0; i < num_char_in_filename; ++i )
+    buf[0] = random_letter(); // make sure first char is a letter
+    for( unsigned int i=1; i < num_char_in_filename; ++i )
       buf[i] = random_char();
     buf[num_char_in_filename] = '\0';
     filename = tempdir + buf;
