@@ -12,6 +12,7 @@ ${allvxl_BINARY_DIR}/oxl/osl/internals
 )
 
 INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake)
-IF(OPENGL_LIBRARY)
+
+IF(HAS_OPENGL)
   INCLUDE(${allvxl_SOURCE_DIR}/oxl/vgui/CMakeListsLink.txt)
-ENDIF(OPENGL_LIBRARY)
+ENDIF(HAS_OPENGL)

@@ -5,6 +5,8 @@
 
 PROJECT(allvxl)
 
+SET(BUILD_TESTS "NO")
+
 SUBDIRS(vcl v3p vxl oxl gel)
 
 # For out of place builds, the configure generated headers are in the

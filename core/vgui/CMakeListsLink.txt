@@ -1,12 +1,13 @@
+
 INCLUDE( ${allvxl_SOURCE_DIR}/oxl/vgui/internals/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/oxl/vgui/impl/CMakeListsLink.txt )
 
 LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/oxl/vgui )
 LINK_LIBRARIES( vgui )
 
-LINK_DIRECTORIES( ${OPENGL_LIB_PATH} )
-LINK_LIBRARIES( ${OPENGL_LIBRARY} )
-
+INCLUDE( ${allvxl_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vil/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vbl/CMakeListsLink.txt )
+
+

@@ -13,10 +13,7 @@ SUBDIRS(mvl oxp vrml osl)
 
 INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake)
 
-
-IF(OPENGL_LIBRARY)
-
+IF(HAS_OPENGL)
   SUBDIRS(vgui)
-
-ENDIF(OPENGL_LIBRARY)
+ENDIF(HAS_OPENGL)
 

@@ -56,5 +56,7 @@ vil_test
 AUX_SOURCE_DIRECTORY(Templates vil_sources)
 
 SUBDIRS(file_formats)
-SUBDIRS(tests)
 
+IF( BUILD_TESTS)
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTS)
