@@ -36,33 +36,41 @@ inline bool vil2_is_peak_3x3(const T* im, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_
 //  negative values)
 //
 //  Note that where there are neighbouring pixels with identical values
-//  on a raised plateau, then the pixel with the largest i,j will not be
-//  suppressed (because the algorithm works in place).  Thus plateaus
-//  can occasionally give spurious responses.
-//  The alternative approach, to fill a new destination image, will not
-//  return any pixels if there are two or more identically valued pixels
-//  at a peak.
+//  on a raised plateau, then all the pixels on the plateau will be
+//  suppressed.  This can cause some peaks to be missed.  The effect
+//  can be reduced by using float images and pre-smoothing slightly.
 template <class T>
-inline void vil2_suppress_non_max_3x3(vil2_image_view<T>& image,
+inline void vil2_suppress_non_max_3x3(const vil2_image_view<T>& src_im,
+                                      vil2_image_view<T>& dest_im,
                                       T threshold=0, T non_max_value=0)
 {
-  unsigned ni=image.ni(),nj=image.nj();
-  assert(image.nplanes()==1);
-  vcl_ptrdiff_t istep = image.istep(),jstep=image.jstep();
-  T* row = image.top_left_ptr()+istep+jstep;
-  for (unsigned j=1;j<nj-1;++j,row+=jstep)
+  unsigned ni=src_im.ni(),nj=src_im.nj();
+  assert(src_im.nplanes()==1);
+
+  dest_im.set_size(ni,nj,1);
+
+  vcl_ptrdiff_t istep = src_im.istep(),jstep=src_im.jstep();
+  vcl_ptrdiff_t distep = dest_im.istep(),djstep=dest_im.jstep();
+  const T* row = src_im.top_left_ptr()+istep+jstep;
+  T* drow = dest_im.top_left_ptr()+distep+djstep;
+  for (unsigned j=1;j<nj-1;++j,row+=jstep,drow+=djstep)
   {
-    T* pixel = row;
-    for (unsigned i=1;i<ni-1;++i,pixel+=istep)
-      if (*pixel<threshold || !vil2_is_peak_3x3(pixel,istep,jstep)) 
-        *pixel = non_max_value;
+    const T* pixel = row;
+    T* dpixel = drow;
+    for (unsigned i=1;i<ni-1;++i,pixel+=istep,dpixel+=distep)
+    {
+      if (*pixel<threshold || !vil2_is_peak_3x3(pixel,istep,jstep))
+        *dpixel = non_max_value;
+      else
+        *dpixel = *pixel;
+    }
   }
 
   // Border pixels assumed not to be local maxima
-  vil2_fill_row(image,0,non_max_value);
-  vil2_fill_row(image,nj-1,non_max_value);
-  vil2_fill_col(image,0,non_max_value);
-  vil2_fill_col(image,ni-1,non_max_value);
+  vil2_fill_row(dest_im,0,non_max_value);
+  vil2_fill_row(dest_im,nj-1,non_max_value);
+  vil2_fill_col(dest_im,0,non_max_value);
+  vil2_fill_col(dest_im,ni-1,non_max_value);
 }
 
 #endif

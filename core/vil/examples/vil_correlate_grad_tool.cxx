@@ -71,7 +71,12 @@ int main(int argc, char** argv)
 
   vil2_math_image_sum(dest_x,dest_y,dest_image);
 
-  if (suppress_non_max()) vil2_suppress_non_max_3x3(dest_image);
+  if (suppress_non_max())
+  {
+    vil2_image_view<float> snm_image;
+    vil2_suppress_non_max_3x3(dest_image,snm_image);
+    dest_image=snm_image;
+  }
 
   // Stretch range to [0,255]
   float min_v,max_v;
