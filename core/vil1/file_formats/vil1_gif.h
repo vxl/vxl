@@ -103,7 +103,7 @@ struct vil_gif_loader_saver_proxy : /*public*/ vil_image_impl
   int width() const { return other->width(); }
   int height() const { return other->height(); }
   int components() const { return other->components(); }
-  int bits_per_component() const { other->bits_per_component(); }
+  int bits_per_component() const { return other->bits_per_component(); }
 
   enum vil_component_format component_format() const { return other->component_format(); }
 
