@@ -4,10 +4,9 @@
 //:
 // \file
 // \author J.L. Mundy
-// \brief Miscelaneous vsol algorithms
+// \brief Miscellaneous vsol algorithms
 // This is essentially a namespace for static methods;
 // there is no public constructor
-//
 //
 // \verbatim
 //  Modifications
