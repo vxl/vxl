@@ -15,6 +15,8 @@ IULIBS += -lImageClasses -lBasics -lNumerics
 TESTS += test_image_conversions.cxx
 endif
 
+MINI_PROG_SOURCES += test_include.cxx
+
 #########################################
 include ${IUEROOT}/config/static-tests.mk
 #########################################

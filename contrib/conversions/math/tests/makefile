@@ -19,6 +19,8 @@ IULIBS += -lNumerics
 TESTS += test_IUE_matrix_conversions.cxx
 endif
 
+MINI_PROG_SOURCES += test_include.cxx
+
 #########################################
 include ${IUEROOT}/config/static-tests.mk
 #########################################

@@ -4,7 +4,7 @@ USES += contrib/conversions core
 
 TESTS += 
 
-IULIBS += 
+MINI_PROG_SOURCES += test_include.cxx
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk

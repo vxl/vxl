@@ -13,6 +13,8 @@ IULIBS += -lDigitalGeometry -lCompGeom -lTopology -lGroups -lGeometry -lSpatialB
 TESTS += test_DigitalCurve_to_vdgl.cxx
 endif
 
+MINI_PROG_SOURCES += test_include.cxx
+
 #########################################
 include ${IUEROOT}/config/static-tests.mk
 #########################################

@@ -12,6 +12,8 @@ IULIBS += -lTJCOOL -liue-math
 TESTS += test_COOL_container.cxx
 endif
 
+MINI_PROG_SOURCES += test_include.cxx
+
 #########################################
 include ${IUEROOT}/config/static-tests.mk
 #########################################
