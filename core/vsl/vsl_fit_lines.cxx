@@ -866,7 +866,7 @@ void vsl_fit_lines::MergeLines(vcl_list<vsl_edgel_chain*> *_curves) {
   
   // and remove the old ones
   
-  IUDelete(l1);  IUDelete(l2);
+  vsl_IUDelete(l1);  vsl_IUDelete(l2);
 #endif
 }
 

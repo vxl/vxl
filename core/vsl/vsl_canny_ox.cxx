@@ -665,16 +665,15 @@ void vsl_canny_ox::FollowerOX(vcl_list<vsl_Edge*> *edges) {
 	    float dy = dc->GetY(0) - dc->GetY(dc->size()-1);
 	    if (dc->size() < 1 || dx*dx+dy*dy < 4) {// ie. dist < 2 pixels it is closed
 	      //edge = new vsl_Edge(v1,v1);
-	      //IUDelete(v2);
-	      delete v2;
+	      delete v2; // vsl_IUDelete(v2);
 	      v2 = v1;
 	      single_chain = true;
 	    }
 	  }
 	  
 	  if (!single_chain) {
-	    if (V1) { delete v1; v1 = V1; }//IUDelete (v1); v1 = V1; }
-	    if (V2) { delete v2; v2 = V2; }//IUDelete (v2); v2 = V2; }
+	    if (V1) { delete v1; v1 = V1; }//was: { vsl_IUDelete(v1); v1 = V1; }
+	    if (V2) { delete v2; v2 = V2; }//was: { vsl_IUDelete(v2); v2 = V2; }
 	    //edge = new vsl_Edge(v1,v2);
 	  }
 	}
@@ -685,8 +684,7 @@ void vsl_canny_ox::FollowerOX(vcl_list<vsl_Edge*> *edges) {
 	  float dy = dc->GetY(0) - dc->GetY(dc->size()-1);
 	  if ((dx*dx+dy*dy) < 4.0) {// ie. dist < 2 pixels it is closed
 	    //edge = new vsl_Edge(v1,v1);
-	    //IUDelete(v2);
-	    delete v2;
+	    delete v2; // vsl_IUDelete(v2);
 	    v2 = v1;
 	  }
 	  //else

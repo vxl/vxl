@@ -9,7 +9,7 @@
 // \author fsm@robots.ox.ac.uk
 
 // FIXME FIXME FIXME FIXME FIXME
-#define IUDelete(p) /* delete p */
+#define vsl_IUDelete(p) /* delete p */
 
 //#define fsm_delete 0 == 
 #define fsm_delete delete

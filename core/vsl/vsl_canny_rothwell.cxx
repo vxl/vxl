@@ -463,7 +463,7 @@ void vsl_canny_rothwell::Final_hysteresis(vcl_list<vsl_Edge*> *edges) {
       if ( (dc->size()==2) && 
 	   (dc->GetX(0)==dc->GetX(1)) &&
 	   (dc->GetY(0)==dc->GetY(1)) ) {
-	delete dc; //IUDelete(dc);
+	delete dc; // vsl_IUDelete(dc);
 	continue;
       }
 
@@ -487,7 +487,7 @@ void vsl_canny_rothwell::Final_hysteresis(vcl_list<vsl_Edge*> *edges) {
 	  if ( dx*dx+dy*dy < 4 ) { //  if dist < 2 pixels, it is closed
 	    V1 = v1;
 	    V2 = v1;
-	    IUDelete(v2);
+	    vsl_IUDelete(v2);
 	    single_chain = true;
 	  }
 	}
@@ -495,11 +495,11 @@ void vsl_canny_rothwell::Final_hysteresis(vcl_list<vsl_Edge*> *edges) {
 	  if ( !V1 )
 	    V1 = v1;
 	  else
-	    IUDelete (v1);
+	    vsl_IUDelete (v1);
 	  if ( !V2 )
 	    V2 = v2;
 	  else
-	    IUDelete(v2);
+	    vsl_IUDelete(v2);
 	}
 	
 	// Note that the edge can start and end in the same place.

@@ -727,8 +727,8 @@ void vsl_edge_detector::Follow_curves(vcl_list<vsl_Edge*> *edges)
 	  float dy = dc->GetY(0) - dc->GetY(dc->size()-1);
 	  if ( dx*dx+dy*dy<4 )  { //  ie. dist < 2 pixels it is closed 
 	    vsl_reorder_chain(dc);
-	    IUDelete(v1);  
-	    IUDelete(v2);
+	    vsl_IUDelete(v1);  
+	    vsl_IUDelete(v2);
 	    v1 = new vsl_Vertex(dc->GetX(0),dc->GetY(0));
 	    v1->SetId(_vertidcount++);
 	    V1 = v1;  V2 = v1;
@@ -739,11 +739,11 @@ void vsl_edge_detector::Follow_curves(vcl_list<vsl_Edge*> *edges)
 	  if ( !V1 )
 	    V1 = v1;
 	  else
-	    IUDelete (v1);
+	    vsl_IUDelete (v1);
 	  if ( !V2 )
 	    V2 = v2;
 	  else
-	    IUDelete(v2);
+	    vsl_IUDelete(v2);
 	}
 	//edge = new vsl_Edge(V1,V2);
 	
