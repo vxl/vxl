@@ -29,7 +29,8 @@ T vnl_c_vector<T>::sum(T const* v, unsigned n)
 template <class T>
 void vnl_c_vector<T>::normalize(T* v, unsigned n)
 {
-  typedef typename vnl_numeric_traits<T>::real_t real_t;
+  typedef typename vnl_numeric_traits<T>::abs_t abs_t;
+  typedef typename vnl_numeric_traits<abs_t>::real_t real_t;
   real_t tmp(0);
   for(unsigned i = 0; i < n; ++i)
     tmp += vnl_math_squared_magnitude(v[i]);
