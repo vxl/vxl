@@ -1,33 +1,32 @@
-IF(BUILD_TESTS)
-  # test
-  ADD_EXECUTABLE( test_meter test_meter.cxx )
-  # test
-  ADD_EXECUTABLE( test_radian test_radian.cxx )
-  # test
-  ADD_EXECUTABLE( test_degree test_degree.cxx )
-  # test
-  ADD_EXECUTABLE( test_cartesian_2d test_cartesian_2d.cxx )
-  # test
-  ADD_EXECUTABLE( test_cartesian_3d test_cartesian_3d.cxx )
-  # test
-  ADD_EXECUTABLE( test_polar test_polar.cxx )
-  # test
-  ADD_EXECUTABLE( test_cylindrical test_cylindrical.cxx )
-  # test
-  ADD_EXECUTABLE( test_spherical test_spherical.cxx )
-  # test
-  ADD_EXECUTABLE( test_transformation_graph test_transformation_graph.cxx )
-  # test
-  ADD_EXECUTABLE( test_composition test_composition.cxx )
-  # test
-  ADD_EXECUTABLE( test_scale test_scale.cxx )
-  # test
-  ADD_EXECUTABLE( test_translation test_translation.cxx )
-  # test
-  ADD_EXECUTABLE( test_rotation test_rotation.cxx )
-  # test
-  ADD_EXECUTABLE( test_displacement test_displacement.cxx )
-ENDIF(BUILD_TESTS)
+ADD_EXECUTABLE( test_meter test_meter.cxx )
+ADD_EXECUTABLE( test_radian test_radian.cxx )
+ADD_EXECUTABLE( test_degree test_degree.cxx )
+ADD_EXECUTABLE( test_cartesian_2d test_cartesian_2d.cxx )
+ADD_EXECUTABLE( test_cartesian_3d test_cartesian_3d.cxx )
+ADD_EXECUTABLE( test_polar test_polar.cxx )
+ADD_EXECUTABLE( test_cylindrical test_cylindrical.cxx )
+ADD_EXECUTABLE( test_spherical test_spherical.cxx )
+ADD_EXECUTABLE( test_transformation_graph test_transformation_graph.cxx )
+ADD_EXECUTABLE( test_composition test_composition.cxx )
+ADD_EXECUTABLE( test_scale test_scale.cxx )
+ADD_EXECUTABLE( test_translation test_translation.cxx )
+ADD_EXECUTABLE( test_rotation test_rotation.cxx )
+ADD_EXECUTABLE( test_displacement test_displacement.cxx )
+
+ADD_TEST( test_meter test_meter )
+ADD_TEST( test_radian test_radian )
+ADD_TEST( test_degree test_degree )
+ADD_TEST( test_cartesian_2d test_cartesian_2d )
+ADD_TEST( test_cartesian_3d test_cartesian_3d )
+ADD_TEST( test_polar test_polar )
+ADD_TEST( test_cylindrical test_cylindrical )
+ADD_TEST( test_spherical test_spherical )
+ADD_TEST( test_transformation_graph test_transformation_graph )
+ADD_TEST( test_composition test_composition )
+ADD_TEST( test_scale test_scale )
+ADD_TEST( test_translation test_translation )
+ADD_TEST( test_rotation test_rotation )
+ADD_TEST( test_displacement test_displacement )
 
 
 # Immediate dependencies
