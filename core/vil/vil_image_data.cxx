@@ -27,6 +27,11 @@ bool vil2_image_data::get_property(char const *, void *) const
   return false;
 }
 
+vil2_image_view_base* vil2_image_data::new_view(bool planewise)
+{
+  // TODO - to be implemented
+  return 0;
+}
 
 
 //: Return the name of the class;

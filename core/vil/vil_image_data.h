@@ -58,7 +58,7 @@ class vil2_image_data
 {
  public:
   vil2_image_data();
- ~vil2_image_data();
+  virtual ~vil2_image_data();
 
   //: Dimensions:  Planes x W x H x Components
   virtual int planes() const = 0;
