@@ -187,7 +187,7 @@ int mbl_mz_random::lrand32(int lower, int upper)
   unsigned long denom = 0xffffffff/range;
   unsigned long ran;
   while ((ran=lrand32()) >= denom*range) ;
-  return lower + ran/denom;
+  return lower + int(ran/denom);
 }
 
 
@@ -205,7 +205,7 @@ int mbl_mz_random::lrand32(int lower, int upper, int &count)
   unsigned long ran;
   count = 1;
   while ((ran=lrand32())>=denom*range) ++count;
-  return lower + ran/denom;
+  return lower + int(ran/denom);
 }
 
 double mbl_mz_random::drand32(double lower, double upper)

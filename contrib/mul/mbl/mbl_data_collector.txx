@@ -54,12 +54,12 @@ unsigned long mbl_data_collector_merge_all(mbl_data_collector<T> &dest,
                              mbl_data_wrapper<T > &src1,
                              vcl_vector<unsigned> *order /*=0*/)
 {
-  long n0 = src0.size();
-  long n1 = src1.size();
+  unsigned long n0 = src0.size();
+  unsigned long n1 = src1.size();
 
 // Deal with special cases
 
-  if (n0 == 0)
+  if (n0 == 0L)
   {
     if (order)
     {
@@ -68,7 +68,7 @@ unsigned long mbl_data_collector_merge_all(mbl_data_collector<T> &dest,
     }
     return mbl_data_collector_copy_all(dest, src1);
   }
-  if (n1 == 0)
+  if (n1 == 0L)
   {
     if (order)
     {
@@ -87,9 +87,9 @@ unsigned long mbl_data_collector_merge_all(mbl_data_collector<T> &dest,
   long remainder=0;
   src0.reset();
   src1.reset();
-  for(long i=0; i < n0+n1; i++)
+  for(unsigned long i=0; i < n0+n1; i++)
   {
-    if (remainder <= 0)
+    if (remainder <= 0L)
     {
       // Take from src0;
       dest.record(src0.current());

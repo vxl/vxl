@@ -46,8 +46,8 @@ mbl_arb_length_int& mbl_arb_length_int::operator*= (unsigned char rhs)
   while (i < val_.size() )
   {
     unsigned long v = rhs * val_[i] + carry;
-    carry = v >> 8;
-    val_[i++] = v & 0xff;
+    carry = (unsigned char)(v >> 8);
+    val_[i++] = (unsigned char)(v & 0xff);
   }
   if (carry != 0) val_.push_back(carry);
   return *this;
@@ -61,7 +61,7 @@ mbl_arb_length_int& mbl_arb_length_int::operator/= (unsigned char rhs)
   while (i-- >0)
   {
     remainder += val_[i];
-    val_[i] = remainder / rhs;
+    val_[i] = (unsigned char)(remainder / rhs);
     remainder %= rhs;
     remainder <<= 8;
   }
@@ -219,7 +219,7 @@ unsigned char mbl_arb_length_int::operator %  (unsigned char rhs)const
     remainder += val_[i];
     remainder %= rhs;
   }
-  return remainder;
+  return (unsigned char)remainder;
 }
 
 //: Pre-increment (++r).  No-op when +-Inf.
@@ -357,8 +357,8 @@ bool mbl_arb_length_int::operator> (unsigned long rhs) const
   rhs = vnl_math_abs(rhs);
   while (i-->0)
   {
-    const int k = ((val_.size() <= i)?0:val_[i]);
-    const int l = (rhs>>(i*8))&0xff;
+    const unsigned long k = ((val_.size() <= i)?0:val_[i]);
+    const unsigned long l = (rhs>>(i*8))&0xff;
     if ( k > l) return true;
     if ( k < l) return false;
   }
