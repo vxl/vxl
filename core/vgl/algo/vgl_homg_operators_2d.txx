@@ -14,6 +14,7 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_conic.h>
 #include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_homg.h>
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
@@ -115,9 +116,8 @@ void vgl_homg_operators_2d<T>::unitize(vgl_homg_point_2d<T>& a)
 //: Get the square of the 2D distance between the two points.
 template <class T>
 double
-vgl_homg_operators_2d<T>::distance_squared(
-                                  const vgl_homg_point_2d<T>& p1,
-                                  const vgl_homg_point_2d<T>& p2)
+vgl_homg_operators_2d<T>::distance_squared(const vgl_homg_point_2d<T>& p1,
+                                           const vgl_homg_point_2d<T>& p2)
 {
   if (p1 == p2) return 0.0; // quick return if possible
 
@@ -138,23 +138,20 @@ vgl_homg_operators_2d<T>::distance_squared(
 // \f$ \frac{a x + b y + c}{\sqrt{a^2+b^2}} \f$ :
 // \f[ d = \frac{(l^\top p)}{p_z\sqrt{l_x^2 + l_y^2}} \f]
 // If either the point or the line are at infinity an error message is
-// printed and Homg::infinity is returned.
+// printed and vgl_homg::infinity is returned.
 template <class T>
 double
-vgl_homg_operators_2d<T>::perp_dist_squared(
-                                  const vgl_homg_point_2d<T>& point,
-                                  const vgl_homg_line_2d<T>& line)
+vgl_homg_operators_2d<T>::perp_dist_squared(const vgl_homg_point_2d<T>& point,
+                                            const vgl_homg_line_2d<T>& line)
 {
   if ((line.a()==0 && line.b()== 0) || point.w()==0) {
-    vcl_cerr << "vgl_homg_operators_2d<T>::perp_dist_squared() -- line or point at infinity";
-    // return Homg::infinity;
-    return 10000000; // TODO make an infinity for homg operators
+    vcl_cerr << "vgl_homg_operators_2d<T>::perp_dist_squared() -- line or point at infinity\n";
+    return vgl_homg<T>::infinity;
   }
 
-  double numerator = vnl_math_sqr (dot(line, point));
+  double numerator = vnl_math_sqr (dot(line,point) / point.w());
   if (numerator == 0) return 0.0; // efficiency
-  double denominator = (vnl_math_sqr (line.a()) + vnl_math_sqr(line.b()))
-                       * vnl_math_sqr (point.w());
+  double denominator = line.a()*line.a() + line.b()*line.b();
 
   return numerator / denominator;
 }
@@ -178,23 +175,19 @@ double
 vgl_homg_operators_2d<T>::abs_angle(const vgl_homg_line_2d<T>& line1,
                                     const vgl_homg_line_2d<T>& line2)
 {
-  double angle1 = line_angle (line1);
-  double angle2 = line_angle (line2);
+  double angle1 = line_angle(line1);
+  double angle2 = line_angle(line2);
 
-  double diff = vnl_math_abs(angle2 - angle1);
+  double diff = angle2 - angle1;
+  if (diff >  vnl_math::pi_over_2) diff -= vnl_math::pi;
+  if (diff < -vnl_math::pi_over_2) diff += vnl_math::pi;
 
-  if (diff > vnl_math::pi)
-    diff -= vnl_math::pi;
-
-  if (diff > vnl_math::pi/2)
-    return vnl_math::pi - diff;
-  else
-    return diff;
+  return vcl_fabs(diff);
 }
 
 //-----------------------------------------------------------------------------
 //
-//: Get the angle between two lines.
+//: Get the angle between two lines, a number between -PI and PI.
 // Although homogeneous coordinates are
 // only defined up to scale, here it is assumed that a line with homogeneous
 // coordinates (m) is at 180 degrees to a line (-m), and this is why the term
@@ -202,25 +195,13 @@ vgl_homg_operators_2d<T>::abs_angle(const vgl_homg_line_2d<T>& line1,
 // not significant.
 template <class T>
 double
-vgl_homg_operators_2d<T>::angle_between_oriented_lines(
-                                  const vgl_homg_line_2d<T>& line1,
-                                  const vgl_homg_line_2d<T>& line2)
+vgl_homg_operators_2d<T>::angle_between_oriented_lines(const vgl_homg_line_2d<T>& line1,
+                                                       const vgl_homg_line_2d<T>& line2)
 {
-  double angle1 = line_angle (line1);
-  double angle2 = line_angle (line2);
-
-  double diff = angle2 - angle1;
-
-  if (diff > vnl_math::pi)
-    return diff - 2.0 * vnl_math::pi;
-
-  if (diff < -vnl_math::pi)
-    return diff + 2.0 * vnl_math::pi;
-
-  return diff;
+  return vcl_fmod(line_angle(line2)-line_angle(line1), 2*vnl_math::pi);
 }
 
-//  JOINS/INTERSECTIONS 
+//  JOINS/INTERSECTIONS
 
 //-----------------------------------------------------------------------------
 //
@@ -229,8 +210,8 @@ vgl_homg_operators_2d<T>::angle_between_oriented_lines(
 
 template <class T>
 vgl_homg_line_2d<T>
-vgl_homg_operators_2d<T>::join (const vgl_homg_point_2d<T>& p1,
-                                const vgl_homg_point_2d<T>& p2)
+vgl_homg_operators_2d<T>::join(const vgl_homg_point_2d<T>& p1,
+                               const vgl_homg_point_2d<T>& p2)
 {
   return cross(p1,p2);
 }
@@ -259,8 +240,8 @@ vgl_homg_operators_2d<T>::join_oriented(const vgl_homg_point_2d<T>&p1,
 //: Get the intersection point of two lines (the cross-product).
 template <class T>
 vgl_homg_point_2d<T>
-vgl_homg_operators_2d<T>::intersection ( const vgl_homg_line_2d<T>& l1,
-                                         const vgl_homg_line_2d<T>& l2)
+vgl_homg_operators_2d<T>::intersection(const vgl_homg_line_2d<T>& l1,
+                                       const vgl_homg_line_2d<T>& l2)
 {
   return cross(l1,l2);
 }
@@ -275,8 +256,8 @@ vgl_homg_operators_2d<T>::intersection ( const vgl_homg_line_2d<T>& l1,
 // - \f$px+qy+r=0\f$ (incidence condition).
 template <class T>
 vgl_homg_line_2d<T>
-vgl_homg_operators_2d<T>::perp_line_through_point ( const vgl_homg_line_2d<T>& l,
-                                                    const vgl_homg_point_2d<T>& p)
+vgl_homg_operators_2d<T>::perp_line_through_point(const vgl_homg_line_2d<T>& l,
+                                                  const vgl_homg_point_2d<T>& p)
 {
   vgl_homg_point_2d<T> d(l.a(), l.b(), 0);
   return cross(d, p);
@@ -286,9 +267,9 @@ vgl_homg_operators_2d<T>::perp_line_through_point ( const vgl_homg_line_2d<T>& l
 //
 //: Get the perpendicular projection of point onto line.
 template <class T>
-vgl_homg_point_2d<T> vgl_homg_operators_2d<T>::perp_projection(
-                                  const vgl_homg_line_2d<T>& line,
-                                  const vgl_homg_point_2d<T>& point)
+vgl_homg_point_2d<T>
+vgl_homg_operators_2d<T>::perp_projection(const vgl_homg_line_2d<T>& line,
+                                          const vgl_homg_point_2d<T>& point)
 {
   vgl_homg_line_2d<T> perpline = perp_line_through_point (line, point);
   vgl_homg_point_2d<T> answer = cross(line, perpline);
@@ -301,11 +282,9 @@ vgl_homg_point_2d<T> vgl_homg_operators_2d<T>::perp_projection(
 //  When both points are at infinity, the invalid point (0,0,0) is returned.
 template <class T>
 vgl_homg_point_2d<T>
-vgl_homg_operators_2d<T>::midpoint( const vgl_homg_point_2d<T>& p1,
-                                    const vgl_homg_point_2d<T>& p2)
+vgl_homg_operators_2d<T>::midpoint(const vgl_homg_point_2d<T>& p1,
+                                   const vgl_homg_point_2d<T>& p2)
 {
-  // return p1 * (1/(2*p1[2])) + p2*(1/(2*p2[2]));
-
   T x = p1.x() * p2.w() + p2.x() * p1.w();
   T y = p1.y() * p2.w() + p2.y() * p1.w();
   T w = p1.w() * p2.w() + p2.w() * p1.w();
@@ -368,12 +347,13 @@ vgl_homg_operators_2d<T>::lines_to_point(const vcl_list<vgl_homg_line_2d<T> >& l
   return vgl_homg_point_2d<T>(mov[0], mov[1], mov[2]);
 }
 
-//  MISCELLANEOUS 
+//  MISCELLANEOUS
 
 
 template <class T>
-double vgl_homg_operators_2d<T>::perp_distance_squared(const vgl_homg_line_2d<T>& line,
-                                                       const vgl_homg_point_2d<T>& point)
+double
+vgl_homg_operators_2d<T>::perp_distance_squared(const vgl_homg_line_2d<T>& line,
+                                                const vgl_homg_point_2d<T>& point)
 {
   vcl_cerr << "vgl_homg_operators_2d<T>::perp_distance_squared should be replaced by perp_dist_squared\n";
   return perp_dist_squared(point, line);
@@ -418,11 +398,11 @@ double vgl_homg_operators_2d<T>::cross_ratio(const vgl_homg_point_2d<T>& a,
 // If cross ratio cr is given (default: -1), the generalized conjugate point
 // returned is such that ((x1,x2;x3,answer)) = cr.
 template <class T>
-vgl_homg_point_2d<T> vgl_homg_operators_2d<T>::conjugate(
-                                  const vgl_homg_point_2d<T>& a,
-                                  const vgl_homg_point_2d<T>& b,
-                                  const vgl_homg_point_2d<T>& c,
-                                  double cr)
+vgl_homg_point_2d<T>
+vgl_homg_operators_2d<T>::conjugate(const vgl_homg_point_2d<T>& a,
+                                    const vgl_homg_point_2d<T>& b,
+                                    const vgl_homg_point_2d<T>& c,
+                                    double cr)
 // Default for cr is -1.
 {
   T x1 = a.x(), y1 = a.y(), w1 = a.w();
@@ -441,9 +421,8 @@ vgl_homg_point_2d<T> vgl_homg_operators_2d<T>::conjugate(
 // \endverbatim
 template <class T>
 vgl_conic<T>
-vgl_homg_operators_2d<T>::vgl_conic_from_matrix(vnl_matrix<T> const& mat)
+vgl_homg_operators_2d<T>::vgl_conic_from_matrix(vnl_matrix_fixed<T,3,3> const& mat)
 {
-  assert ( mat.rows() == 3 && mat.columns() == 3 );
   return vgl_conic<T>(mat[0][0], mat[1][0]+mat[0][1], mat[1][1], mat[0][2]+mat[2][0], mat[1][2]+mat[2][1], mat[2][2]);
 }
 
@@ -455,10 +434,10 @@ vgl_homg_operators_2d<T>::vgl_conic_from_matrix(vnl_matrix<T> const& mat)
 // \endverbatim
 //
 template <class T>
-vnl_matrix<T>
+vnl_matrix_fixed<T,3,3>
 vgl_homg_operators_2d<T>::matrix_from_conic(vgl_conic<T> const& c)
 {
-  vnl_matrix<T> mat = vnl_matrix<T>(3,3);
+  vnl_matrix_fixed<T,3,3> mat;
   T A = c.a(), B = c.b()/2, C = c.c(), D = c.d()/2, E = c.e()/2, F = c.f();
 
   mat[0][0] = A; mat[0][1] = B; mat[0][2] = D;
@@ -474,10 +453,10 @@ vgl_homg_operators_2d<T>::matrix_from_conic(vgl_conic<T> const& c)
 // I.e., the inverse matrix (up to a scale factor) of the conic matrix.
 
 template <class T>
-vnl_matrix<T>
+vnl_matrix_fixed<T,3,3>
 vgl_homg_operators_2d<T>::matrix_from_dual_conic(vgl_conic<T> const& c)
 {
-  vnl_matrix<T> mat = vnl_matrix<T>(3,3);
+  vnl_matrix_fixed<T,3,3> mat;
   T A = c.a(), B = c.b()/2, C = c.c(), D = c.d()/2, E = c.e()/2, F = c.f();
 
   mat[0][0] = C*F-E*E; mat[0][1] = E*D-B*F; mat[0][2] = B*E-C*D;
@@ -802,7 +781,7 @@ vgl_homg_operators_2d<T>::closest_point(vgl_conic<T> const& c,
 
   // And find the intersection point closest to the given location:
   vgl_homg_point_2d<T> p = candidates.front();
-  double dist = 1e31; // vnl_numeric_limits<T>::infinity();
+  double dist = vgl_homg<double>::infinity;
   typename vcl_list<vgl_homg_point_2d<T> >::iterator it = candidates.begin();
   for (; it != candidates.end(); ++it) {
     if ((*it).w() == 0) continue;
