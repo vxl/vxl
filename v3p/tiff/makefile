@@ -9,7 +9,8 @@
 #
 #   DEPENDENCIES:  libm libc
 
-USES = Image
+USES := # nothing
+USE_JPEG := 1
 
 LIBRARY := tiff
 VERSION := 1.0

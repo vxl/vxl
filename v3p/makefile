@@ -1,3 +1,7 @@
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
 ifneq (1,$(strip $(HAS_NATIVE_NETLIB)))
 SUBDIRS += netlib
 endif
@@ -10,6 +14,6 @@ ifneq (1,$(strip $(HAS_NATIVE_TIFF)))
 SUBDIRS += tiff
 endif
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################

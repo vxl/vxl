@@ -1,4 +1,4 @@
-USES = # completely independent!
+USES = # nothing
 
 LIBRARY := jpeg
 VERSION := 1.0
