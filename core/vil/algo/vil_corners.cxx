@@ -77,7 +77,7 @@ void vil_corners(const vil_image_view<float>& grad_i,
       // Compute gradient in j
       float dydy = 0.125f*(pgj[oj1]+pgj[oj3] - (pgj[oj6]+pgj[oj8])) + 0.25f*(pgj[oj2]-pgj[oj7]);
 
-      float detH = dxdx*dydy + dxdy*dxdy;
+      float detH = dxdx*dydy - dxdy*dxdy;
       float traceH = dxdx+dydy;
 
       *d = detH - float(k) * traceH * traceH;
