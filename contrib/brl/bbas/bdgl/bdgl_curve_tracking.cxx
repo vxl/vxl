@@ -8,8 +8,6 @@
 bdgl_curve_tracking ::bdgl_curve_tracking(bdgl_curve_tracking_params &tp)
 {
   clustering_=tp.clustering_;
-  mp_=tp.mp;
-  cp_=tp.cp;
   min_len_of_curves_=tp.min_length_of_curves;
 }
 void bdgl_curve_tracking ::track()
@@ -48,8 +46,8 @@ void bdgl_curve_tracking ::get_reliable_curves(int frame_no,int window){
 	  }
 	else
 	{
-	  bdgl_curve_matching_params mp_tc=mp_;
-	  mp_tc.motion_in_pixels=(window+1)*mp_.motion_in_pixels;
+	  bdgl_curve_matching_params mp_tc=tp_.mp;
+	  mp_tc.motion_in_pixels=(window+1)*tp_.mp.motion_in_pixels;
 	  bdgl_curve_matching	matcher_alternative(mp_tc);
 	  matcher_alternative.match(&output_curves_[frame_no],&output_curves_tc_[frame_no-window]);
 	  int prev_frame=frame_no-window;
@@ -147,7 +145,7 @@ void bdgl_curve_tracking ::track_frame(unsigned int frame)
   bdgl_tracker_curve_sptr								  primitive1;
   vcl_vector< bdgl_tracker_curve_sptr >				  primitive_list1;
 
-  bdgl_curve_matching							matcher(mp_);
+  bdgl_curve_matching							matcher(tp_.mp);
 
   vsol_curve_2d_sptr c;
   vdgl_digital_curve_sptr dc;
@@ -196,10 +194,14 @@ void bdgl_curve_tracking ::track_frame(unsigned int frame)
     
     // give the new and old curves to matcher to do the matching
     matcher.match(&output_curves_[frame],&output_curves_[frame-1]);
+	vcl_vector<vcl_vector<bdgl_tracker_curve_sptr> > groups;
 	if(clustering_)
 	{
-		bdgl_curve_clustering cl(cp_);
+		bdgl_curve_clustering cl(tp_.cp);
+		vcl_cout<<"\n the no of clusters is "<<tp_.cp.no_of_clusters;
 		cl.cluster_curves(&output_curves_[frame]);
+		cl.get_moving_objects(frame,groups);
+		vcl_cout<<"\n size of groups is "<<groups.size();
 	}
   }
    
