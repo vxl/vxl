@@ -16,6 +16,7 @@
 //    3-Oct-2001 Peter Vanroose - Implemented get_property("top_row_first")
 //    5-Jun-2003 Peter Vanroose - bug fix in get_section & put_section: storage is planar, not RGB
 //   16-Jun-2003 Peter Vanroose - ported from vil1
+//   17-Jun-2003 Peter Vanroose - bug fix: data is big-endian; byte-swap added
 //\endverbatim
 
 #include <vil/vil_file_format.h>
