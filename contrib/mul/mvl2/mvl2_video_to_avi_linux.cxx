@@ -109,7 +109,7 @@ void mvl2_video_to_avi::set_frame_rate(double frame_rate)
 
 void mvl2_video_to_avi::write_frame(vil_image_view<vxl_byte>& image)
 {
-  if (width_==image.ni() && height_==image.nj() &&
+  if (width_==(int)image.ni() && height_==(int)image.nj() &&
       image.pixel_format()==VIL_PIXEL_FORMAT_RGB_BYTE )
   {
     BitmapInfo bi=BitmapInfo(width_,height_,24);
@@ -125,11 +125,11 @@ void mvl2_video_to_avi::write_frame(vil_image_view<vxl_byte>& image)
 
     vil_image_view<vxl_byte> resampled_image(width_,height_,image.nplanes());
     vil_resample_bilin(image,resampled_image,0.0,0.0,
-        ratio,0.0,0.0,ratio,width_,height_);
+                       ratio,0.0,0.0,ratio,width_,height_);
 
     vcl_cout << "write frame "<< current_frame_+1 << " ... "
-             << image.ni()<<"x"<<image.nj()<<" -> "
-             << width_<<"x"<<height_<< vcl_endl;
+             << image.ni()<<'x'<<image.nj()<<" -> "
+             << width_<<'x'<<height_<< vcl_endl;
 
     uint8_t data[width_*height_*3];
     vcl_memset(data,0,width_*height_*3*sizeof(uint8_t));

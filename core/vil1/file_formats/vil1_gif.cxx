@@ -305,7 +305,7 @@ char const *vil1_gif_loader_saver::file_format() const { return "gif"; }
 
 vil1_image vil1_gif_loader_saver::get_plane(unsigned int p) const
 {
-  if (p<int(images.size()))
+  if (p<images.size())
     return new vil1_gif_loader_saver_proxy(p, const_cast<vil1_gif_loader_saver*>(this));
   else
     return 0;

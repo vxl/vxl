@@ -24,7 +24,7 @@ vil1_block_cache_image_impl::~vil1_block_cache_image_impl() {
 }
 
 vil1_image vil1_block_cache_image_impl::get_plane(unsigned int p) const {
-  assert(p < base.planes());
+  assert((int)p < base.planes());
   return base.get_plane(p);
 }
 

@@ -22,7 +22,7 @@ vil1_image_impl::~vil1_image_impl() { }
 
 vil1_image vil1_image_impl::get_plane(unsigned int p) const
 {
-  assert(p < planes());
+  assert((int)p < planes());
   return 0; // since this function has to be overloaded
 }
 
