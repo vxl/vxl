@@ -165,6 +165,11 @@ SOURCE=.\Templates/vbl_array_3d+void~-.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vbl_bit_array_2d.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\vbl_bit_array_3d.cxx
 
 # End Source File
