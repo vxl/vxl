@@ -213,9 +213,12 @@ correct.
 
 ----------------------------------------------------------------------------
 
-11. NITF support in vil
+11. NITF (National Imagery Transmission Format) support in vil
 
-GE is doing this now.  It is OK to put this vil2 so long as it does
+http://164.214.2.51/ntb/
+http://www.fas.org/irp/program/core/nitfs.htm
+
+GE is adding NITF support now.  It is OK to put this vil2 so long as it does
 not break other parts of vil2.  Ian suggests checking the code in, but
 not having it link in so he can have a look at how it is integrated
 into vil2.  Ian also recommends the use of sample images and tests.
