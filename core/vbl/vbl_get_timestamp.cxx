@@ -10,7 +10,7 @@
 #include <direct.h>
 #include <sys/timeb.h>
 #else
-#include <vcl/vcl_unistd.h> // for struct timeval
+#include <unistd.h> // for struct timeval
 #endif
 
 //#include <vcl/vcl_ctime.h> // for struct timezone

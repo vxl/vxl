@@ -6,7 +6,7 @@ VXL := 1
 USES = v3p vxl
 
 # Examples may use vbl....
-IULIBS = -lvil -lvbl -lvcl
+IULIBS = -lvil -lvbl -lvpl -lvcl
 
 MINI_PROG_SOURCES += vil_convolve_1d.cxx
 MINI_PROG_SOURCES += vil_convolve.cxx

@@ -51,4 +51,4 @@ Type vgl_point_2d<Type>::distance(const vgl_point_2d<Type>& p) const
   vgl_point_2d<Type> dif= (*this)-p;
   Type dist = sqrt(dif.x()*dif.x() + dif.y()*dif.y());
   return dist;
-}	 
+}

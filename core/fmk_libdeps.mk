@@ -5,6 +5,7 @@
 fmk_libdeps += fmk_libC:fmk_libc,fmk_libm
 fmk_libdeps += vcl:fmk_libC
 
+fmk_libdeps += vpl:vcl
 fmk_libdeps += vbl:vcl
 fmk_libdeps += vtl:vcl
 fmk_libdeps += vgl:vcl
@@ -24,9 +25,9 @@ fmk_libdeps += vnl:vcl
 fmk_libdeps += vnl-algo:vnl,netlib
 fmk_libdeps += netlib:fmk_libc,fmk_libm
 
-fmk_libdeps += vsl:vcl,vil,vbl,vnl-algo
+fmk_libdeps += vsl:vil,vbl,vnl-algo
 
-fmk_libdeps += vgui:vcl,vbl,vnl-algo,vil,vgl
+fmk_libdeps += vgui:vpl,vbl,vnl-algo,vil,vgl
 fmk_libdeps += vgui:glut
 ifeq (1,$(tpp_HASPKG_HERMES))
 fmk_libdeps += vgui:Hermes

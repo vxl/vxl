@@ -1,5 +1,6 @@
 #include <vcl/vcl_fstream.h>
-#include <vcl/vcl_unistd.h>
+
+#include <vpl/vpl_unistd.h>
 
 #include <vil/vil_load.h>
 #include <vil/vil_image_impl.h>
@@ -27,7 +28,7 @@ void test(char const* magic, int comps, int bits)
   AssertEq(i.components(), comps);
   AssertEq(i.bits_per_component(), bits);
 
-  vcl_unlink(FNAME);
+  vpl_unlink(FNAME);
   
 }  
 

@@ -2,9 +2,10 @@
 // Date: 17 February, 2000
 #include <vcl/vcl_string.h> // C++ specific includes first
 #include <vcl/vcl_cstdio.h> // tmpnam()
-#include <vcl/vcl_unistd.h> // vcl_unlink()
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_vector.h>
+
+#include <vpl/vpl_unistd.h> // vpl_unlink()
 
 #include <vil/vil_rgb_byte.h>
 #include <vil/vil_load.h>
@@ -187,7 +188,7 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
     ++nr_failures;
 
 #if !LEAVE_IMAGES_BEHIND
-  vcl_unlink(fname.data());
+  vpl_unlink(fname.data());
 #endif
   cout << "done\n";
   return;

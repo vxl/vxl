@@ -18,12 +18,11 @@
 // Peter Vanroose, July 2000: corrected serious bug: VXL_LITTLE_ENDIAN not needed (implementation was wrong for VXL_BIG_ENDIAN machines)
 
 class vil_stream;
-#include <vxl_misc_config.h>
 
-vxl_uint16 vil_16bit_read_big_endian(vil_stream *);
-vxl_uint16 vil_16bit_read_little_endian(vil_stream *);
+unsigned vil_16bit_read_big_endian(vil_stream *);
+unsigned vil_16bit_read_little_endian(vil_stream *);
 
-void vil_16bit_write_big_endian(vil_stream *, vxl_uint16);
-void vil_16bit_write_little_endian(vil_stream *, vxl_uint16);
+void vil_16bit_write_big_endian(vil_stream *, unsigned);
+void vil_16bit_write_little_endian(vil_stream *, unsigned);
 
 #endif

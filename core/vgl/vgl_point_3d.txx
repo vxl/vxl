@@ -1,5 +1,6 @@
 #include <vgl/vgl_point_3d.h>
 
+#include <vcl/vcl_cmath.h>
 
 template <class Type>
 bool vgl_point_3d<Type>::operator==(const vgl_point_3d &other) const
@@ -34,6 +35,6 @@ template <class Type>
 Type vgl_point_3d<Type>::distance(const vgl_point_3d<Type>& p) const
 {	
   vgl_point_3d<Type> dif= (*this)-p;
-  Type dist = sqrt(dif.x()*dif.x() + dif.y()*dif.y() + dif.z()*dif.z());
+  Type dist = /*vcl_*/sqrt(dif.x()*dif.x() + dif.y()*dif.y() + dif.z()*dif.z());
   return dist;
-}	 
+}

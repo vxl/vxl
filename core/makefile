@@ -5,6 +5,9 @@ include ${IUEROOT}/config/top-params.mk
 # standard C/C++
 SUBDIRS += vcl
 
+# POSIX layer
+SUBDIRS += vpl
+
 # abstract
 SUBDIRS += val
 

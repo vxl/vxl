@@ -7,6 +7,6 @@ vbl_client_mk := 1
 #FIXME: IUELOCALROOT ?
 include $(IUEROOT)/vxl/vcl/client.mk
 
-ald_libdeps += vbl:vcl
+ald_libdeps += vbl:vpl,vcl
 
 endif

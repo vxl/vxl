@@ -21,7 +21,7 @@ TESTS += test_memory_image_of.cxx
 TESTS += test_write_endian.cxx
 TESTS += test_interpolate.cxx
 
-IULIBS = -lvil -lvcl
+IULIBS = -lvil -lvpl -lvcl
 
 include ../vil_config.mk
 

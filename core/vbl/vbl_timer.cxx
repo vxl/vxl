@@ -29,7 +29,7 @@
 
 #include "vbl_timer.h"
 
-#include <vxl_misc_config.h> // VXL_TWO_ARG_GETTIME
+#include <vxl_config.h> // VXL_TWO_ARG_GETTIME
 
 #include <vcl/vcl_climits.h>   // for CLK_TCK
 #include <vcl/vcl_ctime.h>

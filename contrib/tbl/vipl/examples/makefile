@@ -48,7 +48,7 @@ IULIBS += -lvipl_with_vbl_array_2d -lvbl # for C.
 ifneq (,$(wildcard $(IUEROOT)/Image/ImageProcessingBasics))
 IULIBS += -lvipl_with_section            # for D.
 endif
-IULIBS += -lvipl -lvil -lvcl             # for all
+IULIBS += -lvipl -lvil -lvpl -lvcl       # for all
 
 ################################
 include ${IUEROOT}/config/top.mk

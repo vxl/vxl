@@ -14,13 +14,13 @@
 // .SECTION Modifications
 //     971119 AWF Initial version.
 
-#include <vxl_misc_config.h> // VXL_HAS_QSORT
+#include <vxl_config.h> // VXL_STDLIB_HAS_QSORT
 
 //: Collection of common predicates for library sort routines
 
 #include <vcl/vcl_cstdlib.h>
 #include <vcl/vcl_algorithm.h>
-#if !VXL_HAS_QSORT
+#if !VXL_STDLIB_HAS_QSORT
 #include <vcl/vcl_functional.h>
 #endif
 #include <vcl/vcl_vector.h>
@@ -55,7 +55,7 @@ template <class T>
 inline
 void vbl_qsort_ascending(T* base, int n)
 {
-#if VXL_HAS_QSORT
+#if VXL_STDLIB_HAS_QSORT
   qsort(base, n, sizeof base[0], vbl_qsort_helper<T>::ascend);
 #else
   vcl_sort(base, base+n, vcl_less<T>());
@@ -68,7 +68,7 @@ template <class T>
 inline
 void vbl_qsort_descending(T* base, int n)
 {
-#if VXL_HAS_QSORT
+#if VXL_STDLIB_HAS_QSORT
   qsort(base, n, sizeof base[0], vbl_qsort_helper<T>::ascend);
 #else
   vcl_sort(base, base+n, vcl_less<T>());
@@ -82,7 +82,7 @@ template <class T>
 inline
 void vbl_qsort_ascending(vcl_vector<T>& v)
 {
-#if VXL_HAS_QSORT
+#if VXL_STDLIB_HAS_QSORT
   qsort(v.begin(), v.size(), sizeof v[0], vbl_qsort_helper<T>::ascend);
 #else
   vcl_sort(v.begin(), v.end(), vcl_less<T>());
@@ -95,7 +95,7 @@ template <class T>
 inline
 void vbl_qsort_descending(vcl_vector<T>& v)
 {
-#if VXL_HAS_QSORT
+#if VXL_STDLIB_HAS_QSORT
   qsort(v.begin(), v.size(), sizeof v[0], vbl_qsort_helper<T>::descend);
 #else
   vcl_sort(v.begin(), v.end(), vcl_greater<T>());
@@ -107,7 +107,7 @@ template <class T>
 inline
 void vbl_qsort(vcl_vector<T>& v, int (*compare)(T const& a, T const& b))
 {
-#if VXL_HAS_QSORT
+#if VXL_STDLIB_HAS_QSORT
   qsort(v.begin(), v.size(), sizeof v[0], (vbl_qsort_compare_t)compare);
 #else
   cerr << "Sorry, this type of qsort has not been implemented\n";

@@ -2,7 +2,7 @@
   fsm@robots.ox.ac.uk
 */
 #include <vcl/vcl_fstream.h>
-#include <vcl/vcl_unistd.h>
+#include <vpl/vpl_unistd.h>
 #include <vnl/vnl_test.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
@@ -75,7 +75,7 @@ void test_matlab() {
       //vnl_matlab_print(cout, M, "M");
       //vnl_matlab_print(cout, M_, "M_");
     }
-    vcl_unlink(file);
+    vpl_unlink(file);
   }
 }
 
