@@ -56,23 +56,26 @@ public:
   void throw_failure();
   void clear_failure();
 
-  // Computations--------------------------------------------------------------
-
   //: The main function.
   //  Given the parameter vector x, compute the vector of residuals fx.
   //  Fx has been sized appropriately before the call.
-  virtual void f(vnl_vector<double> const & x, vnl_vector<double>& fx) = 0;
+  virtual void f(vnl_vector<double> const& x, vnl_vector<double>& fx) = 0;
 
   //: Calculate the Jacobian, given the parameter vector x.
-  virtual void gradf(vnl_vector<double> const & x, vnl_matrix<double>& jacobian);
+  virtual void gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian);
 
+  //: Use this to compute a finite-difference gradient other than lmdif
+  void vnl_least_squares_function::fdgradf(vnl_vector<double> const& x,
+					   vnl_matrix<double>& jacobian,
+					   double stepsize);
+  
   //: Called after each LM iteration to print debugging etc.
-  virtual void trace(int iteration, vnl_vector<double> const & x, vnl_vector<double> const & fx);
+  virtual void trace(int iteration, 
+		     vnl_vector<double> const& x, 
+		     vnl_vector<double> const& fx);
 
   //: Compute the rms error at x by calling f and returning the norm of the residual vector.
-  double rms(vnl_vector<double> const & x);
-
-  // Data Access---------------------------------------------------------------
+  double rms(vnl_vector<double> const& x);
 
   //: Return the number of unknowns
   int get_number_of_unknowns() const { return p_; }
@@ -84,7 +87,6 @@ public:
   bool has_gradient() const { return use_gradient_; }
 
 protected:
-  // Data Members--------------------------------------------------------------
   int p_;
   int n_;
   bool use_gradient_;
