@@ -16,7 +16,6 @@
 #include <vcl_map.h>
 #include <vcl_multimap.h>
 #include <vcl_set.h>
-#include <vcl_stack.h>
 #include <vcl_queue.h>
 #endif
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS vcl_stlfwd.

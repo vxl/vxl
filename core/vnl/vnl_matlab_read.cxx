@@ -161,7 +161,6 @@ fsm_define_methods(vnl_double_complex);
 
 //--------------------------------------------------------------------------------
 
-#include <vcl/vcl_cstdlib.h>
 #include <vcl/vcl_new.h>
 #include <vcl/vcl_algorithm.h>
 #include <vnl/vnl_vector.h>
