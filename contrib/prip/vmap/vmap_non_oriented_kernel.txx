@@ -3,7 +3,7 @@
 #define vmap_non_oriented_kernel_txx_
 
 #include "vmap_non_oriented_kernel.h"
-#include "vcl_list.h"
+#include <vcl_list.h>
 
 template <class vmap_kernel>
 void
