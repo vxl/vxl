@@ -1,15 +1,15 @@
+#include "vnl_alloc.h"
 
-#include <vnl/vnl_alloc.h>
-
-#include <memory.h>
+//#include <vcl/vcl_memory.h>
+#include <vcl/vcl_cstring.h>  // this is where ISO memcpy() lives. no, really, it's true.
 #include <vcl/vcl_cstdlib.h>
 
 char*
-vnl_alloc::chunk_alloc(size_t size, int& nobjs)
+vnl_alloc::chunk_alloc(vcl_size_t size, int& nobjs)
 {
   char * result;
-  size_t total_bytes = size * nobjs;
-  size_t bytes_left = end_free - start_free;
+  vcl_size_t total_bytes = size * nobjs;
+  vcl_size_t bytes_left = end_free - start_free;
     
   if (bytes_left >= total_bytes) {
     result = start_free;
@@ -22,7 +22,7 @@ vnl_alloc::chunk_alloc(size_t size, int& nobjs)
     start_free += total_bytes;
     return(result);
   } else {
-    size_t bytes_to_get = 2 * total_bytes + ROUND_UP(heap_size >> 4);
+    vcl_size_t bytes_to_get = 2 * total_bytes + ROUND_UP(heap_size >> 4);
     // Try to make use of the left-over piece.
     if (bytes_left > 0) {
       obj *  * my_free_list =
@@ -65,7 +65,7 @@ vnl_alloc::chunk_alloc(size_t size, int& nobjs)
 /* Returns an object of size n, and optionally adds to size n free vcl_list.*/
 /* We assume that n is properly aligned.                                */
 /* We hold the allocation lock.                                         */
-void* vnl_alloc::refill(size_t n)
+void* vnl_alloc::refill(vcl_size_t n)
 {
   int nobjs = 20;
   char * chunk = chunk_alloc(n, nobjs);
@@ -95,11 +95,11 @@ void* vnl_alloc::refill(size_t n)
     
 void*
 vnl_alloc::reallocate(void *p,
-		      size_t old_sz,
-		      size_t new_sz)
+		      vcl_size_t old_sz,
+		      vcl_size_t new_sz)
 {
   void * result;
-  size_t copy_sz;
+  vcl_size_t copy_sz;
     
   if (old_sz > VNL_ALLOC_MAX_BYTES && new_sz > VNL_ALLOC_MAX_BYTES) {
     return(realloc(p, new_sz));
@@ -114,7 +114,7 @@ vnl_alloc::reallocate(void *p,
 
 char *vnl_alloc::start_free = 0;
 char *vnl_alloc::end_free = 0;
-size_t vnl_alloc::heap_size = 0;
+vcl_size_t vnl_alloc::heap_size = 0;
 
 vnl_alloc::obj * 
 vnl_alloc::free_list[VNL_ALLOC_NFREELISTS]
@@ -124,8 +124,8 @@ vnl_alloc::free_list[VNL_ALLOC_NFREELISTS]
 // space for the array.
 
 #ifdef TEST
-#include <iostream.h>
-#include <string.h>
+#include <vcl/vcl_iostream.h>
+#include <vcl/vcl_cstring.h>
 int main()
 {
   char* p = (char*)vnl_alloc::allocate(10);

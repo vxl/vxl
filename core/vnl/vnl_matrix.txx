@@ -79,7 +79,7 @@
 #include <vcl/vcl_cstring.h>  // strcpy()
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_vector.h>
-#include <vcl/vcl_functional.h> // for the operator!= inline template
+#include <vcl/vcl_rel_ops.h>  // inline operator!= function template
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
@@ -1339,12 +1339,12 @@ void vnl_matrix<T>::inplace_transpose()
   this->num_cols = m;
 }
 
-//--------------------------------------------------------------------------------
-
-#if defined (VCL_SUNPRO_CC)
-# undef VCL_INSTANTIATE_INLINE
-# define VCL_INSTANTIATE_INLINE(fn_decl) template  fn_decl
+#if VCL_CAN_DO_STATIC_TEMPLATE_MEMBER
+template <class T>
+char * vnl_matrix<T>::print_format = 0;
 #endif
+
+//--------------------------------------------------------------------------------
 
 // complain to fsm@robots.ox.ac.uk about this.
 #if defined(__sgi) && (_COMPILER_VERSION == 721)

@@ -37,19 +37,12 @@
 //   very weird things happen. G++ 2.7.2 compiles it and instantiates it fine,
 //   but barfs when an vnl_vector<int> is declared nearby.
 
-#include <vcl/vcl_compiler.h>
 #include <vcl/vcl_iosfwd.h>
 #include <vnl/vnl_error.h>
 #include <vnl/vnl_c_vector.h>
 
 template <class T> class vnl_vector;
 template <class T> class vnl_matrix;
-
-// // define which makes life easy for the IUE
-// #define IUE_diagonal_matrix DiagMatrix
-
-// // forward declare ObjectStore support class
-// template <class T> class vnl_matrix_HelperObjectStore;
 
 //--------------------------------------------------------------------------------
 
@@ -74,7 +67,7 @@ public:
   vnl_matrix(unsigned r, unsigned c, T const& v0);              // r rows, c cols, value v0.
   vnl_matrix(unsigned r, unsigned c, int n, T const values[]);	// use automatic arrays.
   vnl_matrix(T const* data_block, unsigned r, unsigned c);      // fill row-wise.
-  vnl_matrix(vnl_matrix<T> const&);                                     // from another matrix.
+  vnl_matrix(vnl_matrix<T> const&);                             // from another matrix.
   //vnl_matrix(const DiagMatrix<T>&); this confuses g++ 2.7.2 When an vnl_vector<int> is declared nearby...
   ~vnl_matrix();
 
@@ -93,10 +86,6 @@ public:
   T const * operator[] (unsigned r) const { return data[r]; }
 
   // no boundary checks here. meant to be fast.
-protected: // fsm: who uses these?
-  T       & operator() (unsigned r) { return this->data[r][0]; }
-  T const & operator() (unsigned r) const { return this->data[r][0]; }
-public:
   T       & operator() (unsigned r, unsigned c) { return this->data[r][c]; }
   T const & operator() (unsigned r, unsigned c) const { return this->data[r][c]; }
 
@@ -220,18 +209,6 @@ public:
   const_iterator begin() const { return data[0]; }
   const_iterator end() const { return data[0]+num_rows*num_cols; }
 
-  ////--------------------------- Vector ---------------------------------------
-  
-  // using a 2d matrix to represent a 1d vector is less efficient in time and space.
-  T      & x ()       { return data[0][0]; }
-  T      & y ()       { return data[1][0]; }
-  T      & z ()       { return data[2][0]; }
-  T      & t ()       { return data[3][0]; }
-  T const& x () const { return data[0][0]; }
-  T const& y () const { return data[1][0]; }
-  T const& z () const { return data[2][0]; }
-  T const& t () const { return data[3][0]; }
-  
   //--------------------------------------------------------------------------------
 
   // comparison
@@ -268,8 +245,6 @@ protected:
 # undef m
 # undef t
 #endif
-  //   // give ObjectStore support class access to data
-  //   friend class vnl_matrix_HelperObjectStore<T>;
 };
 //
 
@@ -351,8 +326,6 @@ inline vnl_matrix<T> vnl_matrix<T>::operator- (vnl_matrix<T> const& rhs) const {
   return result;
 }
 
-////--------------------------- Inline friends ---------------------------------------
-
 // -- Returns new matrix with elements of matrix m added with
 // value. O(m*n).
 
@@ -369,21 +342,5 @@ template<class T>
 inline vnl_matrix<T> operator* (T const& value, vnl_matrix<T> const& m) {
   return m * value;
 }
-
-//--------------------------------------------------------------------------------
-
-#if defined(VCL_GCC_27)
-// The emulation STL provides operator!= in vcl_functional.h; it's wrong, but
-// these compilers are old so let them be.
-#else // ISO:
-template <class T>
-inline bool operator!=(vnl_matrix<T> const &a, vnl_matrix<T> const &b)
-{ return !(a == b); }
-#endif
-
-// #ifdef IUE
-// // Overloads of global IUEg_getTypeId, etc. (if using the full IUE)
-// #include<MathDex/matrix_Helper.h>
-// #endif
 
 #endif

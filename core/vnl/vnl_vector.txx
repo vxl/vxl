@@ -31,7 +31,7 @@
 
 #include <vcl/vcl_vector.h>
 #include <vcl/vcl_iostream.h>
-#include <vcl/vcl_functional.h> // for instantiating inline operator!=
+#include <vcl/vcl_rel_ops.h> // inline operator!= function template
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix.h>
@@ -674,14 +674,7 @@ istream& operator>>(istream& s, vnl_vector<T>& M) {
 
 //--------------------------------------------------------------------------------
 
-// fsm: shouldn't this be set in vcl_compiler.h?
-#if defined(VCL_SUNPRO_CC)
-# undef VCL_INSTANTIATE_INLINE
-# define VCL_INSTANTIATE_INLINE(fn_decl)  template  fn_decl
-#endif
-
-
-#define VNL_VECTOR_INSTANTIATE_internal(T) \
+#define VNL_VECTOR_INSTANTIATE(T) \
 template class vnl_vector<T >; \
 /* arithmetic, comparison etc */ \
 VCL_INSTANTIATE_INLINE(vnl_vector<T > operator+(T const, vnl_vector<T > const &)); \
@@ -706,12 +699,3 @@ template vnl_vector<T > cross_3d(vnl_vector<T > const &, vnl_vector<T > const &)
 template ostream & operator<<(ostream &, vnl_vector<T > const &); \
 template istream & operator>>(istream &, vnl_vector<T >       &); \
 ;
-
-#define VNL_VECTOR_INSTANTIATE_floating_real(T) \
-VNL_VECTOR_INSTANTIATE_internal(T)
-
-#define VNL_VECTOR_INSTANTIATE_floating_complex(T) \
-VNL_VECTOR_INSTANTIATE_internal(T)
-
-#define VNL_VECTOR_INSTANTIATE_integral(T) \
-VNL_VECTOR_INSTANTIATE_internal(T)

@@ -41,7 +41,6 @@
 //-----------------------------------------------------------------------------
 
 #include "vnl_matrix_inverse.h"
-#include <vcl/vcl_compiler.h>
 
 #undef VNL_MATRIX_INVERSE_INSTANTIATE
 #define VNL_MATRIX_INVERSE_INSTANTIATE(T) \

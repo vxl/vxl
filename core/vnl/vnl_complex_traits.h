@@ -21,7 +21,6 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_compiler.h>
 #include <vnl/vnl_complex.h>
 
 // default is real.

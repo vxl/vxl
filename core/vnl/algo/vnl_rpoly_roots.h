@@ -49,15 +49,11 @@ public:
 
   // Operations----------------------------------------------------------------
 
-//#define VNL_USED_COMPLEX
-//#ifdef VNL_COMPLEX_AVAILABLE
-
 // -- Return i'th complex root
   vnl_double_complex operator [] (int i) const { return vnl_double_complex(r_[i], i_[i]); }
 
 // -- Complex vector of all roots.
   vnl_vector<vnl_double_complex> roots() const;
-//#endif
 
 // -- Real part of root I.
   const double& real(int i) const { return r_[i]; }

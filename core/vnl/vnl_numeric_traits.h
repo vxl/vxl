@@ -28,7 +28,6 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl/vcl_compiler.h>
 #include <vcl/vcl_complex_fwd.h>
 
 template <class T>

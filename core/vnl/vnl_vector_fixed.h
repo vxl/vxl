@@ -22,25 +22,6 @@
 //     Andrew W. Fitzgibbon, Oxford RRG, 04 Aug 96
 
 //: fixed length  stack-stored vnl_vector.
-template <class T, int n> class vnl_vector_fixed;
-
-// SunPro 5.0 does not allow non-type template parameters in function templates.
-#ifndef VCL_SUNPRO_CC_50
-// declare templated friends.
-template <class T, int n> inline
-vnl_vector_fixed<T,n> operator+(T const, vnl_vector_fixed<T,n> const &);
-template <class T, int n> inline
-vnl_vector_fixed<T,n> operator-(T const, vnl_vector_fixed<T,n> const &);
-template <class T, int n> inline
-vnl_vector_fixed<T,n> operator*(T const, vnl_vector_fixed<T,n> const &);
-template <class T, int n> inline
-vnl_vector_fixed<T,n> element_product (vnl_vector_fixed<T,n> const&,
-				       vnl_vector_fixed<T,n> const&);
-template <class T, int n> inline
-vnl_vector_fixed<T,n> element_quotient (vnl_vector_fixed<T,n> const&,
-					vnl_vector_fixed<T,n> const&);
-#endif
-
 template <class T, int n>
 class vnl_vector_fixed : public vnl_vector_ref<T> {
   typedef vnl_vector_ref<T> Base;
@@ -145,14 +126,6 @@ public:
   vnl_vector_fixed<T,n>& normalize()	 // v /= sqrt(dot(v,v))
     { return (vnl_vector_fixed<T,n>&) vnl_vector<T>::normalize(); }
 
-#if 0
-#ifndef VCL_SUNPRO_CC_50 // see above
-  friend vnl_vector_fixed<T,n> operator+ VCL_STL_NULL_TMPL_ARGS (T const, vnl_vector_fixed<T,n> const &);
-  friend vnl_vector_fixed<T,n> operator- VCL_STL_NULL_TMPL_ARGS (T const, vnl_vector_fixed<T,n> const &);
-  friend vnl_vector_fixed<T,n> operator* VCL_STL_NULL_TMPL_ARGS (T const, vnl_vector_fixed<T,n> const &);
-#endif
-#endif
-
   friend vnl_vector_fixed<T,n> element_product VCL_STL_NULL_TMPL_ARGS (vnl_vector_fixed<T,n> const&,
 								       vnl_vector_fixed<T,n> const&);
   friend vnl_vector_fixed<T,n> element_quotient VCL_STL_NULL_TMPL_ARGS (vnl_vector_fixed<T,n> const&,
@@ -169,39 +142,38 @@ private:
   T space[n];
 };
 
-#ifndef VCL_SUNPRO_CC_50
+#ifndef VCL_SUNPRO_CC_50 // does not allow funtions templated over non-types.
 // define inline friends.
 template <class T, int n>
-vnl_vector_fixed<T,n> operator+(T const t, vnl_vector_fixed<T,n> const & rhs)
+inline vnl_vector_fixed<T,n> operator+(T const t, vnl_vector_fixed<T,n> const & rhs)
 { return  (vnl_vector_fixed<T,n> (rhs) += t); }
 
 template <class T, int n>
-vnl_vector_fixed<T,n> operator-(T const t, vnl_vector_fixed<T,n> const & rhs)
+inline vnl_vector_fixed<T,n> operator-(T const t, vnl_vector_fixed<T,n> const & rhs)
 { return  (( - vnl_vector_fixed<T,n> (rhs)) += t); }
 
 template <class T, int n>
-vnl_vector_fixed<T,n> operator*(T const t, vnl_vector_fixed<T,n> const& rhs)
+inline vnl_vector_fixed<T,n> operator*(T const t, vnl_vector_fixed<T,n> const& rhs)
 { return  (vnl_vector_fixed<T,n> (rhs) *= t); }
 
 template <class T, int n>
-vnl_vector_fixed<T,n> element_product (vnl_vector_fixed<T,n> const& a,
+inline vnl_vector_fixed<T,n> element_product (vnl_vector_fixed<T,n> const& a,
 				       vnl_vector_fixed<T,n> const& b)
 {
   vnl_vector_fixed<T,n> ret (a);
-  for (int i=0; i<n; i++) ret.space[i] *= b.space[i];
+  for (int i=0; i<n; i++) ret[i] *= b[i];
   return ret;
 }
 
 template <class T, int n>
-vnl_vector_fixed<T,n> element_quotient (vnl_vector_fixed<T,n> const& a,
+inline vnl_vector_fixed<T,n> element_quotient (vnl_vector_fixed<T,n> const& a,
 					vnl_vector_fixed<T,n> const& b)
 { 
   vnl_vector_fixed<T,n> ret (a);
-  for (int i=0; i<n; i++) ret.space[i] /= b.space[i];
+  for (int i=0; i<n; i++) ret[i] /= b[i];
   return ret;
 }
 #endif
-
 
 #if defined(VCL_GCC_27) || defined(VCL_SGI_CC_7)
 template <class T, int n>

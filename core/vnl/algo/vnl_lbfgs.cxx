@@ -155,7 +155,7 @@ bool vnl_lbfgs::minimize(vnl_vector<double>& x)
 	  cerr.form("%6d %20g %20g %20g %20g\n", i, x[i], g[i], fdg[i], g[i] - fdg[i]);
       }
 #endif
-      cerr << "   ERROR = " << (fdg - g).squared_magnitude() / sqrt((double)n) << "\n";
+      cerr << "   ERROR = " << (fdg - g).squared_magnitude() / sqrt(double(n)) << "\n";
     }
 
     iprint[0] = trace ? 1 : -1; // -1 no o/p, 0 start and end, 1 every iter.

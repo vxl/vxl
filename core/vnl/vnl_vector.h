@@ -19,12 +19,8 @@
 template <class T> class vnl_vector;
 template <class T> class vnl_matrix;
 
-// // forward declare ObjectStore support class
-// template <class T> class vnl_vector_HelperObjectStore;
-
 //--------------------------------------------------------------------------------
 
-// forward declare templated functions
 template <class T> T             dot_product (vnl_vector<T> const&, vnl_vector<T> const&);
 template <class T> T             inner_product (vnl_vector<T> const&, vnl_vector<T> const&);
 template <class T> T             bracket (vnl_vector<T> const &,
@@ -61,8 +57,6 @@ public:
   
   // -- Return the length, number of elements, dimension of this vector.
   unsigned size() const { return num_elmts; }
-  //?int dimension () const { return size(); };
-  //?int length() const { return num_elmts; }     // Deprecated, use STL-like "size" instead.
   
   //
   inline void put (unsigned int i, T const&);                  // assign value
@@ -111,7 +105,7 @@ public:
 
   // -- access the contiguous block storing the elements in the vector. O(1).
   inline T const* data_block () const { return data; }
-  inline       T* data_block () { return data; }
+  inline T      * data_block () { return data; }
 
   // iterators
   typedef T element_type;
@@ -163,19 +157,13 @@ public:
   void assert_finite() const;
   bool is_finite() const;
 
-  //--------------------------------------------------------------------------------
-
   // comparison
   bool operator== (vnl_vector<T> const& that) const { return this->operator_eq(that); }
   bool operator_eq (vnl_vector<T> const&) const;
 
-  //--------------------------------------------------------------------------------
-
   // I/O
   bool read_ascii(istream& s);
   static vnl_vector<T> read(istream& s);
-
-  //--------------------------------------------------------------------------------
 
 protected:
   unsigned num_elmts;           // Number of elements
@@ -203,8 +191,6 @@ protected:
 # undef m
 # undef t
 #endif
-  //   // give ObjectStore support class access to data
-  //   friend class vnl_vector_HelperObjectStore<T>;
 };
 
 //--------------------------------------------------------------------------------
@@ -317,21 +303,5 @@ inline void vnl_vector<T>::set_t(T const& tt){
 // -- Read/write vector from/to an istream :
 template <class T> vcl_ostream& operator<< (vcl_ostream &, vnl_vector<T> const&);
 template <class T> vcl_istream& operator>> (vcl_istream &, vnl_vector<T>      &);
-
-#if  defined(VCL_GCC_27)
-// The emulation STL provides operator!= in vcl_functional.h; it's wrong, but
-// these compilers are old so let them be.
-#else // ISO:
-template <class T>
-inline bool operator!=(vnl_vector<T> const &a, vnl_vector<T> const &b)
-{ return !(a == b); }
-#endif
-
-//--------------------------------------------------------------------------------
-
-// #ifdef IUE
-// // Overloads of global IUEg_getTypeId, etc. (if using the full IUE)
-// #include<MathDex/vector_Helper.h>
-// #endif
 
 #endif

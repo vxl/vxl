@@ -76,10 +76,10 @@ int vnl_lsqr::aprod_(int* mode, int* m, int* n, double* x, double* y, int* leniw
     active->ls_->transpose_multiply(y_ref, tmp);
     x_ref += tmp;
   }
-#if defined(VCL_SGI_CC) || defined(VCL_SUNPRO_CC_50) || defined(_MSC_VER)
-  return 0;
-#elif defined __GNUC__
+#ifdef __GNUC__
 # warning "no return value"
+#else
+  return 0;
 #endif
 }
 
@@ -131,10 +131,10 @@ int vnl_lsqr::minimize(vnl_vector<double>& result)
   cerr << "x norm estimate          = " << xnorm << endl;
 #endif
 
-#if defined(VCL_SGI_CC) || defined(VCL_SUNPRO_CC_50) || defined(_MSC_VER)
-  return 0;
-#elif defined __GNUC__
+#ifdef __GNUC__
 # warning "no return value"
+#else
+  return 0;
 #endif
 }
 

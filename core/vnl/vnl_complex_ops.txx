@@ -38,7 +38,7 @@ vnl_vector<T> abs(vnl_vector<vnl_complex<T> > const & C)
 {
   vnl_vector<T> ret(C.size());
   for (unsigned i = 0; i < C.size(); ++i)
-    ret[i] = std::abs(C[i]);
+    ret[i] = vcl_abs(C[i]);
   return ret;
 }
 
@@ -83,7 +83,7 @@ vnl_matrix<T> abs(vnl_matrix<vnl_complex<T> > const& C)
   vnl_matrix<T> ret(C.rows(), C.columns());
   for(unsigned i = 0; i < C.rows(); ++i)
     for(unsigned j = 0; j < C.columns(); ++j)
-      ret(i,j) = std::abs(C(i,j));
+      ret(i,j) = vcl_abs(C(i,j));
   return ret;
 }
 

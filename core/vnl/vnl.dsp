@@ -359,6 +359,18 @@ SOURCE=.\vnl_matlab_print.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vnl_matlab_print2.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_matlab_print_format.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_matlab_print_scalar.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\vnl_matlab_read.cxx
 # End Source File
 # Begin Source File
@@ -516,10 +528,6 @@ SOURCE=.\vnl_rotation_matrix.cxx
 # Begin Source File
 
 SOURCE=.\vnl_sample.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=".\Templates\vnl_scatter_3x3+double-.cxx"
 # End Source File
 # Begin Source File
 

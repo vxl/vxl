@@ -1,3 +1,2 @@
-#include <vnl/vnl_vector.h>
 #include <vnl/vnl_vector.txx>
-VNL_VECTOR_INSTANTIATE_integral(signed char);
+VNL_VECTOR_INSTANTIATE(signed char);

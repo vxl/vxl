@@ -184,6 +184,10 @@ SOURCE=..\algo\vnl_rpoly_roots.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=".\Templates\vnl_scatter_3x3+double-.cxx"
+# End Source File
+# Begin Source File
+
 SOURCE=..\algo\vnl_sparse_symmetric_eigensystem.cxx
 # End Source File
 # Begin Source File

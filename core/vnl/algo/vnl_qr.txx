@@ -1,4 +1,6 @@
 //-*- c++ -*-------------------------------------------------------------------
+#ifndef vnl_qr_txx_
+#define vnl_qr_txx_
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 08 Dec 96
 
@@ -236,3 +238,4 @@ vnl_vector<T> vnl_qr<T>::QtB(const vnl_vector<T>& b) const
  template class vnl_qr<T >;\
  VCL_INSTANTIATE_INLINE(T vnl_qr_determinant(vnl_matrix<T > const&));
 
+#endif

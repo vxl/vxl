@@ -35,7 +35,7 @@ const int VNL_ALLOC_NFREELISTS = VNL_ALLOC_MAX_BYTES/VNL_ALLOC_ALIGN;
 class vnl_alloc {
   
 private:
-  static size_t ROUND_UP(size_t bytes) {
+  static vcl_size_t ROUND_UP(vcl_size_t bytes) {
     return (((bytes) + VNL_ALLOC_ALIGN-1) & ~(VNL_ALLOC_ALIGN - 1));
   }
 private:
@@ -52,20 +52,20 @@ private:
 # else
   static obj * free_list[VNL_ALLOC_NFREELISTS]; 
 # endif
-  static  size_t FREELIST_INDEX(size_t bytes) {
+  static  vcl_size_t FREELIST_INDEX(vcl_size_t bytes) {
     return (((bytes) + VNL_ALLOC_ALIGN-1)/VNL_ALLOC_ALIGN - 1);
   }
     
   // Returns an object of size n, and optionally adds to size n free li*st.
-  static void *refill(size_t n);
+  static void *refill(vcl_size_t n);
   // Allocates a chunk for nobjs of size size.  nobjs may be reduced
   // if it is inconvenient to allocate the requested number.
-  static char *chunk_alloc(size_t size, int &nobjs);
+  static char *chunk_alloc(vcl_size_t size, int &nobjs);
   
   // Chunk allocation state.
   static char *start_free;
   static char *end_free;
-  static size_t heap_size;
+  static vcl_size_t heap_size;
 
   class lock {
   public:
@@ -79,7 +79,7 @@ public:
   typedef char value_type;
     
   /* n must be > 0      */
-  static void * allocate(size_t n) {
+  static void * allocate(vcl_size_t n) {
     obj * * my_free_list;
     obj *  result;
     
@@ -100,7 +100,7 @@ public:
   };
     
   /* p may not be 0 */
-  static void deallocate(void *p, size_t n)
+  static void deallocate(void *p, vcl_size_t n)
   {
     obj *q = (obj *)p;
     obj *  * my_free_list;
@@ -114,7 +114,7 @@ public:
     *my_free_list = q;
   }
     
-  static void * reallocate(void *p, size_t old_sz, size_t new_sz);
+  static void * reallocate(void *p, vcl_size_t old_sz, vcl_size_t new_sz);
 };
     
 # endif // vnl_alloc_h_

@@ -65,7 +65,7 @@ void vnl_complex_eigensystem::compute(vnl_matrix<vnl_double_complex> const & A,
     // conjugate all elements of R :
     for (int i=0;i<N;i++)
       for (int j=0;j<N;j++)
-	R(i,j) = std::conj( R(i,j) );
+	R(i,j) = vcl_conj( R(i,j) );
   }
 
   if (info == 0) {
