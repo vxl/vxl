@@ -1,8 +1,4 @@
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
-USES := vxl
+USES += core
 LIBRARY := vnl-io
 VERSION := 1.0
 IMMEDIATE_LIBS := -lvnl-io -lvnl -lvsl
@@ -22,9 +18,9 @@ MANPAGE_SOURCES += vnl_io_vector.txx
 MANPAGE_SOURCES += vnl_io_matrix_fixed.txx
 MANPAGE_SOURCES += vnl_io_vector_fixed.txx
 
-ifeq ($(COMPILER),gcc)
-FLAGS_Templates/vsl_vector_io+vcl_vector+vcl_vector+vnl_vector+double----.cxx += -ftemplate-depth-25
-endif
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
 
 ifndef NOTEST
 SUBDIRS += tests
@@ -33,3 +29,7 @@ endif
 ######################################
 include ${IUEROOT}/config/top-rules.mk
 ######################################
+
+ifeq ($(COMPILER),gcc)
+FLAGS_Templates/vsl_vector_io+vcl_vector+vcl_vector+vnl_vector+double----.cxx := -ftemplate-depth-25
+endif

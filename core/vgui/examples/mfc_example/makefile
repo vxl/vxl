@@ -1,7 +1,10 @@
-USES = vxl oxl
-include ${IUELOCALROOT}/oxl/vgui/config.mk
+USES += core
+include ../../config.mk
 
+include ${IUEROOT}/config/identify-os.mk
 ifeq ($(OS),win32)
+ IULIBS += -lnafxcw -lopengl32 -lglu32
+
  PROGRAM := mfc_example
 
  SOURCES += MainFrm.cpp
@@ -10,11 +13,8 @@ ifeq ($(OS),win32)
  SOURCES += example_mfcDoc.cpp
  SOURCES += example_mfcView.cpp
  MANPAGE_SOURCES += example_mfc.rc
-
- IULIBS = -lnafxcw -lopengl32 -lglu32
 endif
 
 ################################
 include ${IUEROOT}/config/top.mk
 ################################
-

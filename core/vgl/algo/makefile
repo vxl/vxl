@@ -1,4 +1,5 @@
-USES := vxl
+USES += core
+
 LIBRARY := vgl-algo
 VERSION := 1.0
 IMMEDIATE_LIBS := -lvnl-algo -lvnl

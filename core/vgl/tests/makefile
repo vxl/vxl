@@ -1,7 +1,7 @@
-USES += vxl
-include ${IUEROOT}/vxl/vgl/algo/config.mk
-include ${IUEROOT}/vxl/vnl/algo/config.mk
-include ${IUEROOT}/vxl/testlib/config.mk
+USES += core
+include ../algo/config.mk
+include ${IUEROOT}/core/vnl/algo/config.mk
+include ${IUEROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 

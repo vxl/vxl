@@ -1,7 +1,7 @@
-USES = vxl
-include ${IUEROOT}/vxl/vil/config.mk
-include ${IUEROOT}/vxl/vul/config.mk
-include ${IUEROOT}/vxl/vpl/config.mk
+USES += core
+include ../config.mk
+include ${IUEROOT}/core/vul/config.mk
+include ${IUEROOT}/core/vpl/config.mk
 
 MINI_PROG_SOURCES += vil_convolve_1d.cxx
 MINI_PROG_SOURCES += vil_convolve.cxx

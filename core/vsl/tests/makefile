@@ -1,6 +1,6 @@
-USES += vxl
-include ${IUEROOT}/vxl/vsl/config.mk
-include ${IUEROOT}/vxl/testlib/config.mk
+USES += core
+include ../config.mk
+include ${IUEROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 
@@ -21,14 +21,10 @@ TESTS += test_stack_io.cxx
 TESTS += test_string_io.cxx
 TESTS += test_vector_io.cxx
 
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
-ifeq "$(TJ_GCC30)" "1" # otherwise gcc 3.0 needs too much virtual memory
-FLAGS_test_map_io.cxx += -O0
-endif
-
 #########################################
 include ${IUEROOT}/config/static-tests.mk
 #########################################
+
+ifeq "$(TJ_GCC30)" "1" # otherwise gcc 3.0 needs too much virtual memory
+FLAGS_test_map_io.cxx := -O0
+endif

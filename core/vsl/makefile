@@ -1,12 +1,7 @@
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
-USES := vxl
+USES += core
 
 LIBRARY := vsl
 VERSION := 1.0
-
 
 SOURCES += vsl_indent.cxx
 SOURCES += vsl_binary_io.cxx
@@ -27,6 +22,10 @@ MANPAGE_SOURCES += vsl_stack_io.txx
 MANPAGE_SOURCES += vsl_string_io.txx
 MANPAGE_SOURCES += vsl_vector_io.txx
 MANPAGE_SOURCES += vsl_quick_file.h
+
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
 
 ifndef NOTEST
  SUBDIRS += tests

@@ -1,11 +1,4 @@
-# This needs to come before the use of $(optimize).
-# Why not just leave it up here always so we don't
-# have to keep moving it around?
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
-USES := vxl
+USES += core
 LIBRARY := vnl
 VERSION := 1.0
 DEFINES += -DBUILDING_VNL_DLL
@@ -40,15 +33,6 @@ MANPAGE_SOURCES += vnl_real.h
 SOURCES += vnl_alloc.cxx
 SOURCES += vnl_block.cxx
 SOURCES += vnl_math.cxx
-ifeq ($(OS),OSF1V4) # with optimisation, the is_finite etc functions fail for long double
-FLAGS_vnl_math.cxx += -O0
-                    # and these need too much memory with gcc 3.0
-FLAGS_Templates/vnl_matrix+long-.cxx += -O0
-FLAGS_Templates/vnl_matrix+ulong-.cxx += -O0
-FLAGS_Templates/vnl_matrix+vcl_complex+double--.cxx += -O0
-FLAGS_Templates/vnl_matrix+vcl_complex+long_double--.cxx += -O0
-FLAGS_Templates/vnl_matrix_fixed+vnl_bignum.3.3-.cxx += -O0
-endif
 SOURCES += vnl_copy.cxx
 SOURCES += vnl_complex.cxx
 SOURCES += vnl_error.cxx
@@ -140,19 +124,15 @@ SOURCES += vnl_sample.cxx
 SOURCES += vnl_unary_function.cxx
 SOURCES += vnl_transpose.cxx
 
-FLAGS_vnl_fastops.cxx = $(optimize)
-FLAGS_Templates/vnl_c_vector+float-.cxx += $(optimize)
-FLAGS_Templates/vnl_c_vector+double-.cxx += $(optimize)
-FLAGS_Templates/vnl_c_vector+float_complex-.cxx += $(optimize)
-FLAGS_Templates/vnl_c_vector+double_complex-.cxx += $(optimize)
-FLAGS_Templates/vnl_sparse_matrix_instances.cxx += $(optimize)
-FLAGS_Templates/vnl_vector+vnl_rational-.cxx += -O0
-
 # algo
 SUBDIRS += algo
 
 # stream I/O
 SUBDIRS += io
+
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
 
 # tests
 ifndef NOTEST
@@ -172,3 +152,21 @@ debug=$(debug_for_optimize) # needed for using $(optimize) on some files
 
 # on HP unix and Solaris, this library has become too big, so it needs -fPIC
 pic = $(PIC)
+
+FLAGS_vnl_fastops.cxx := $(optimize)
+FLAGS_Templates/vnl_c_vector+float-.cxx := $(optimize)
+FLAGS_Templates/vnl_c_vector+double-.cxx := $(optimize)
+FLAGS_Templates/vnl_c_vector+float_complex-.cxx := $(optimize)
+FLAGS_Templates/vnl_c_vector+double_complex-.cxx := $(optimize)
+FLAGS_Templates/vnl_sparse_matrix_instances.cxx := $(optimize)
+
+ifeq ($(OS),OSF1V4) # with optimisation, the is_finite etc functions fail for long double
+FLAGS_vnl_math.cxx := -O0
+                    # and these need too much memory with gcc 3.0
+FLAGS_Templates/vnl_matrix+long-.cxx := -O0
+FLAGS_Templates/vnl_matrix+ulong-.cxx := -O0
+FLAGS_Templates/vnl_matrix+vcl_complex+double--.cxx := -O0
+FLAGS_Templates/vnl_matrix+vcl_complex+long_double--.cxx := -O0
+FLAGS_Templates/vnl_matrix_fixed+vnl_bignum.3.3-.cxx := -O0
+FLAGS_Templates/vnl_vector+vnl_rational-.cxx := -O0
+endif

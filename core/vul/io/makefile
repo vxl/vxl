@@ -1,4 +1,4 @@
-USES += vxl
+USES += core
 
 LIBRARY := vul-io
 VERSION := 1.0

@@ -1,8 +1,4 @@
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
-USES := vxl
+USES += core
 
 LIBRARY := vgl
 VERSION := 1.0
@@ -61,6 +57,10 @@ SOURCES += internals/gpc.c
 
 SUBDIRS += algo
 SUBDIRS += io
+
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
 
 ifndef NOTEST
 SUBDIRS += tests examples

@@ -1,7 +1,7 @@
-USES += vxl
-include ${IUEROOT}/vxl/vul/config.mk
-include ${IUEROOT}/vxl/vgl/io/config.mk
-include ${IUEROOT}/vxl/testlib/config.mk
+USES += core
+include ../config.mk
+include ${IUEROOT}/core/vul/config.mk
+include ${IUEROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 
@@ -26,7 +26,6 @@ TESTS += test_box_3d_io.cxx
 TESTS += test_polygon_io.cxx
 TESTS += golden_test_vgl_io.cxx
 
-################################
-#include ${IUEROOT}/config/top.mk
+#########################################
 include ${IUEROOT}/config/static-tests.mk
-################################
+#########################################

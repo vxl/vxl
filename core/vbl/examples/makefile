@@ -1,6 +1,6 @@
-USES := vxl
-IULIBS := -lvbl-examples
-include ${IUEROOT}/vxl/vbl/config.mk
+USES += core
+IULIBS += -lvbl-examples
+include ../config.mk
 
 LIBRARY := vbl-examples
 

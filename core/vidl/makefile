@@ -5,11 +5,11 @@
 #
 #   DEPENDENCIES: vbl vil vidl
 
+USES += core
+TRY_MPEG2 := 1
+
 LIBRARY := vidl
 VERSION := 1.0
-
-USES += vxl
-TRY_MPEG2 := 1
 
 #######################################
 include ${IUEROOT}/config/top-params.mk

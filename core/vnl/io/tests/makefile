@@ -1,6 +1,6 @@
-USES += vxl 
-include ${IUEROOT}/vxl/vnl/io/config.mk
-include ${IUEROOT}/vxl/testlib/config.mk
+USES += core
+include ../config.mk
+include ${IUEROOT}/core/testlib/config.mk
 
 TESTMAIN = test_driver.cxx
 TESTS += golden_test_vnl_io.cxx
@@ -18,14 +18,10 @@ TESTS += test_sym_matrix_io.cxx
 TESTS += test_vector_fixed_io.cxx
 TESTS += test_vector_io.cxx
 
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
+################################
+include ${IUEROOT}/config/top.mk
+################################
 
-ifeq "$(TJ_GCC30)" "1"
-FLAGS_test_vnl_io.cxx += -O0 # otherwise gcc 3.0 needs too much virtual memory
+ifeq "$(TJ_GCC30)" "1"# otherwise gcc 3.0 needs too much virtual memory
+FLAGS_test_vnl_io.cxx := -O0
 endif
-
-#########################################
-include ${IUEROOT}/config/static-tests.mk
-#########################################

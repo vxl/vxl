@@ -1,11 +1,11 @@
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
-USES += vxl
+USES += core
 
 LIBRARY := vul
 VERSION := 1.0
+
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
 
 MANPAGE_SOURCES += vul_fwd.h
 
@@ -45,11 +45,11 @@ SUBDIRS += tests
 SUBDIRS += examples
 endif
 
-ifeq "$(TJ_GCC30)$(optimize)" "1-O2"
-# gcc 3.0 needs too much virtual memory with -O2 or -O1
-FLAGS_vul_sequence_filename_map.cxx += -O0
-endif
-
 ######################################
 include ${IUEROOT}/config/top-rules.mk
 ######################################
+
+ifeq "$(TJ_GCC30)$(optimize)" "1-O2"
+# gcc 3.0 needs too much virtual memory with -O2 or -O1
+FLAGS_vul_sequence_filename_map.cxx := -O0
+endif

@@ -1,5 +1,5 @@
-USES := vxl
-include ${IUEROOT}/vxl/vul/config.mk
+USES += core
+include ../config.mk
 
 MINI_PROG_SOURCES += vul_sequence_filename_example.cxx
 MINI_PROG_SOURCES += expand_path.cxx

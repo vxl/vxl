@@ -1,6 +1,6 @@
-USES += vxl
-include ${IUEROOT}/vxl/vnl/algo/config.mk
-include ${IUEROOT}/vxl/vul/config.mk
+USES += core
+include ${IUEROOT}/core/vnl/algo/config.mk
+include ${IUEROOT}/core/vul/config.mk
 
 MINI_PROG_SOURCES += time_fastops.cxx
 MINI_PROG_SOURCES += vnl_amoeba.cxx

@@ -1,3 +1,3 @@
 IULIBS += -lvgl-io
-include ${IUEROOT}/vxl/vgl/config.mk
-include ${IUEROOT}/vxl/vsl/config.mk
+include ${IUEROOT}/core/vgl/config.mk
+include ${IUEROOT}/core/vsl/config.mk

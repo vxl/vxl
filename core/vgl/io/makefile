@@ -1,8 +1,4 @@
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
-USES := vxl
+USES += core
 LIBRARY := vgl-io
 VERSION := 1.0
 IMMEDIATE_LIBS := -lvgl-io -lvgl -lvsl
@@ -26,6 +22,10 @@ MANPAGE_SOURCES += vgl_io_point_3d.txx
 MANPAGE_SOURCES += vgl_io_vector_2d.txx
 MANPAGE_SOURCES += vgl_io_vector_3d.txx
 MANPAGE_SOURCES += vgl_io_conic.txx
+
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
 
 ifndef NOTEST
 SUBDIRS += tests

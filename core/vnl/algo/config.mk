@@ -2,4 +2,4 @@
 USE_NETLIB := 1
 
 IULIBS += -lvnl-algo
-include ${IUEROOT}/vxl/vnl/config.mk
+include ${IUEROOT}/core/vnl/config.mk

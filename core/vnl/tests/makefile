@@ -1,8 +1,8 @@
-USES := vxl
-include ${IUEROOT}/vxl/vnl/algo/config.mk
-include ${IUEROOT}/vxl/vul/config.mk # vul_timer used
-include ${IUEROOT}/vxl/vpl/config.mk # vpl_unlink used in test_matlab
-include ${IUEROOT}/vxl/testlib/config.mk
+USES += core
+include ../algo/config.mk
+include ${IUEROOT}/core/vul/config.mk # vul_timer used
+include ${IUEROOT}/core/vpl/config.mk # vpl_unlink used in test_matlab
+include ${IUEROOT}/core/testlib/config.mk
 
 TESTMAIN = test_driver.cxx
 SOURCES += test_util.cxx
@@ -54,17 +54,13 @@ TESTS += test_cholesky.cxx
 
 MANPAGE_SOURCES += test_arithmetic_body.h
 
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
+################################
+include ${IUEROOT}/config/top.mk
+################################
 
 ifeq "$(TJ_GCC30)" "1"
 # gcc 3.0 needs too much virtual memory with optimisation
-FLAGS_test_rational.cxx += -O1
-FLAGS_test_bignum.cxx += -O1
-FLAGS_test_finite.cxx += -O0
+FLAGS_test_rational.cxx := -O1
+FLAGS_test_bignum.cxx := -O1
+FLAGS_test_finite.cxx := -O0
 endif
-
-#########################################
-include ${IUEROOT}/config/static-tests.mk
-#########################################

@@ -1,13 +1,5 @@
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
-USES := vxl
-
-TRY_TIFF := 1
-TRY_JPEG := 1
-TRY_PNG  := 1 
-USE_SOCKETS := 1
+USES += core
+include ${IUEROOT}/core/vil/config.mk
 
 LIBRARY := vil-io
 VERSION := 1.0
@@ -22,6 +14,10 @@ SOURCES += vil_io_memory_image_impl.cxx
 MANPAGE_SOURCES += vil_io_rgb.txx
 MANPAGE_SOURCES += vil_io_rgba.txx
 MANPAGE_SOURCES += vil_io_memory_image_of.txx
+
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
 
 ifndef NOTEST
 SUBDIRS += tests

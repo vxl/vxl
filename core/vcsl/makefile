@@ -7,10 +7,12 @@
 # 1.0     |2000/06/27| François BERTEL          |Creation
 ###############################################################################
 
-USES := vxl
+USES += core
 
 LIBRARY := vcsl
 VERSION := 1.0
+
+IMMEDIATE_LIBS += -lvbl -lvnl
 
 SOURCES += vcsl_dimension.cxx
 SOURCES += vcsl_length.cxx
@@ -97,17 +99,15 @@ MANPAGE_SOURCES += vcsl_translation_sptr.h
 MANPAGE_SOURCES += vcsl_unit_sptr.h
 MANPAGE_SOURCES += vcsl_utm_sptr.h
 
-IMMEDIATE_LIBS += -lvbl -lvnl
-
-###############################################################################
+#######################################
 include ${IUEROOT}/config/top-params.mk
-###############################################################################
+#######################################
 
 ifndef NOTEST
 SUBDIRS += tests
 SUBDIRS += examples
 endif
 
-###############################################################################
+######################################
 include ${IUEROOT}/config/top-rules.mk
-###############################################################################
+######################################

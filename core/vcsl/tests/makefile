@@ -8,9 +8,9 @@
 # 1.1     |2002/11/13| Peter Vanroose           |Now using TESTMAIN
 ###############################################################################
 
-USES := vxl
-include ${IUEROOT}/vxl/vcsl/config.mk
-include ${IUEROOT}/vxl/testlib/config.mk
+USES += core
+include ../config.mk
+include ${IUEROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 

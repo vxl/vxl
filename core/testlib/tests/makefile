@@ -1,5 +1,5 @@
-USES = vxl
-include ${IUEROOT}/vxl/testlib/config.mk
+USES += core
+include ../config.mk
 
 TESTMAIN = test_driver.cxx
 TESTS += test_assert.cxx

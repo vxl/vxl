@@ -1,11 +1,11 @@
-######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
-USES += vxl
+USES += core
 
 LIBRARY := vil
 VERSION := 1.0
+
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
 
 MANPAGE_SOURCES += vil_fwd.h
 
@@ -115,9 +115,22 @@ SOURCES += vil_memory_image_window.cxx
 MANPAGE_SOURCES += vil_jpeglib.h
 MANPAGE_SOURCES += vil_ip_traits.h
 
+# subdirectories
+#SUBDIRS += algo
+SUBDIRS += io
+
+ifndef NOTEST
+SUBDIRS += tests
+SUBDIRS += examples
+endif
+
 ifeq ($(OS),Linux2)
   optimize := -O3 -ffast-math -fstrict-aliasing -march=pentiumpro
 endif
+
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################
 
 # turn on optimization for the convolution code
 FLAGS_Templates/vil_convolve_1d.cxx := $(optimize)
@@ -142,16 +155,3 @@ FLAGS_Templates/vil_interpolate+vil_rgb+uchar-.vil_rgb+uchar-.cxx := $(optimize)
 ifeq ($(OS),OSF1V4)
 FLAGS_vil_image_as.cxx := -O0
 endif
-
-# subdirectories
-#SUBDIRS += algo
-SUBDIRS += io
-
-ifndef NOTEST
-SUBDIRS += tests
-SUBDIRS += examples
-endif
-
-######################################
-include ${IUEROOT}/config/top-rules.mk
-######################################

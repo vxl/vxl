@@ -1,15 +1,6 @@
-## this little rule overrides the "all: tests" rule
-## found in config/static-tests.mk and is necessary
-## to get the vbl-test library built before the test
-## programs are linked. the vbl-test library is needed
-## in order that the instantiations for it can be put
-## in the Templates/ directory.
-orl: xall tests
-
-USES = vxl
-include ${IUEROOT}/vxl/vbl/config.mk
-include ${IUEROOT}/vxl/testlib/config.mk
-
+USES += core
+include ../config.mk
+include ${IUEROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 

@@ -1,10 +1,5 @@
-USES += vxl oxl
-TRY_X11 := 1
-TRY_OPENGL := 1
-
-##########################################
-include ${IUELOCALROOT}/oxl/vgui/config.mk
-##########################################
+USES += core
+include ../config.mk
 
 MINI_PROG_SOURCES += test_popup.cxx      #TESTS += test_popup.cxx
 MINI_PROG_SOURCES += test_timer.cxx      #TESTS += test_timer.cxx

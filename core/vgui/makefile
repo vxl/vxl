@@ -1,4 +1,4 @@
-USES += vxl oxl
+USES += core
 USE_OPENGL:=1
 TRY_GLUT := 1 # vgui_text needs glut. fsm.
 TRY_X11 := 1
@@ -45,7 +45,7 @@ SOURCES += vgui_event_condition.cxx
 # images
 SOURCES += internals/vgui_rasterpos.cxx
 SOURCES += vgui_pixel.cxx
-FLAGS_vgui_pixel.cxx += $(optimize)
+FLAGS_vgui_pixel.cxx := $(optimize)
 SOURCES += vgui_section_render.cxx
 SOURCES += vgui_section_buffer.cxx
 SOURCES += vgui_section_buffer_of.cxx

@@ -1,8 +1,4 @@
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
-USES += vxl
+USES += core
 
 LIBRARY := vbl
 VERSION := 1.0
@@ -50,6 +46,10 @@ DEFINES += -DBUILDING_VBL_DLL
 
 # stream I/O
 SUBDIRS += io
+
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
 
 ifndef NOTEST
 SUBDIRS += tests
