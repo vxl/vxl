@@ -12,6 +12,7 @@
 #include <vcl_ios.h>
 #include <vcl_string.h>
 #include <vpl/vpl.h> // vpl_unlink()
+#include <vsl/vsl_binary_loader.h>
 
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <clsfy/clsfy_binary_pdf_classifier.h>
@@ -108,6 +109,8 @@ void test_binary_pdf_classifier()
        classifier.log_l(probe1) == classifier2.log_l(probe1),
        true);
   vcl_cout << vcl_setprecision(6) << vcl_resetiosflags(vcl_ios_floatfield);
+  vsl_delete_all_loaders();
+
 }
 
 TESTLIB_DEFINE_MAIN(test_binary_pdf_classifier);

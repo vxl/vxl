@@ -233,6 +233,7 @@ void test_adaboost()
 
   delete b_thresh_clsfr;
   delete classifier_in;
+  vsl_delete_all_loaders();
 }
 
 TESTLIB_DEFINE_MAIN(test_adaboost);

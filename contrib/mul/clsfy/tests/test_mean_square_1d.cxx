@@ -186,6 +186,7 @@ void test_adaboost()
   delete mean_square_clsfr2;
   delete mean_square_clsfr;
   delete classifier_in;
+  vsl_delete_all_loaders();
 }
 
 TESTLIB_DEFINE_MAIN(test_adaboost);

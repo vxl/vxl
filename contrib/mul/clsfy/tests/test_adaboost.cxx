@@ -271,6 +271,9 @@ void test_adaboost()
   TEST("saved classifier == loaded classifier", *pClassifier, classifier_in);
 
   delete pClassifier;
+
+  vsl_delete_all_loaders();
+
 }
 
 TESTLIB_DEFINE_MAIN(test_adaboost);
