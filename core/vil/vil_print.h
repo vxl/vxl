@@ -20,21 +20,21 @@ void vil2_print_value(vcl_ostream& s, const T& value);
 template<class T>
 inline void vil2_print_all(vcl_ostream& os,const vil2_image_view<T>& view)
 {
-  os<<view.is_a()<<" "<<view.nplanes()<<" planes, each "<<view.ni()<<" x "<<view.nj();
-  os<<" istep: "<<view.istep()<<" ";
-  os<<" jstep: "<<view.jstep()<<" ";
-  os<<" planestep: "<<view.planestep()<<'\n';
+  os<<view.is_a()<<" "<<view.nplanes()<<" planes, each "<<view.ni()<<" x "<<view.nj()
+    <<" istep: "<<view.istep()<<' '
+    <<" jstep: "<<view.jstep()<<' '
+    <<" planestep: "<<view.planestep()<<'\n' << vcl_flush;
   for (unsigned int p=0;p<view.nplanes();++p)
   {
-    if (view.nplanes()>1) os<<"Plane "<<p<<":\n";
+    if (view.nplanes()>1) os<<"Plane "<<p<<":\n" << vcl_flush;
     for (unsigned int j=0;j<view.nj();++j)
     {
       for (unsigned int i=0;i<view.ni();++i)
       {
+        os<<' ';
         vil2_print_value(os,view(i,j,p));
-        os<<" ";
       }
-      os<<'\n';
+      os<<'\n'<<vcl_flush;
     }
   }
 }
