@@ -43,12 +43,10 @@ void vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T> &p)
     if (!p.is_protected())
     {
         vcl_cerr << "vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T>:"
-                    << " You cannot\n"
-                    << "save unprotected smart pointers before saving "
-                    << "a protected smart pointer\n"
-                    << "to the same object. Either do not save unprotected "
-                    << "smart pointers, or\n"
-                    << "be very careful about the order." <<vcl_endl;
+                 << " You cannot\nsave unprotected smart pointers before saving"
+                 << " a protected smart pointer\nto the same object. Either do"
+                 << " not save unprotected smart pointers, or\nbe very careful"
+                 << " about the order.\n";
         vcl_abort();
     }
 
