@@ -4,4 +4,4 @@ INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vcl)
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/vxl)
 INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/mul)
 
-SUBDIRS(mbl mil vpdfl clsfy)
+SUBDIRS(mbl mil mil3d vpdfl clsfy)
