@@ -52,6 +52,10 @@ ifeq ($(OS),win32)
 SOURCES += vidl_avicodec.cxx
 endif # win32
 
+ifndef NOTEST
+SUBDIRS += examples
+endif
+
 ######################################
 include ${IUEROOT}/config/top-rules.mk
 ######################################
