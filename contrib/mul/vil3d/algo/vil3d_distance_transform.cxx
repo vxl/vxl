@@ -39,12 +39,12 @@ void vil3d_signed_distance_transform(vil3d_image_view<float>& image)
   float *p0 = image.origin_ptr();
   bool *p1 = image2.origin_ptr();
 
-  for (int k=0; k<nk; k++)
-    for (int j=0; j<nj; j++)
-      for (int i=0; i<ni; i++,p0+=istep0,p1+=istep2)
+  for (unsigned int k=0; k<nk; ++k)
+    for (unsigned int j=0; j<nj; ++j)
+      for (unsigned int i=0; i<ni; ++i,p0+=istep0,p1+=istep2)
       {
         if (*p1)
-          *p0=-1.0f*(*p0);
+          *p0 *= -1.0f;
       }
 }
 
@@ -112,10 +112,10 @@ void vil3d_signed_distance_transform(const vil3d_image_view<bool>& mask,
   float *p0 = image.origin_ptr();
   float *p1 = image_inverse.origin_ptr();
 
-  for (int k=0; k<nk; k++)
-    for (int j=0; j<nj; j++)
-      for (int i=0; i<ni; i++,p0+=image.istep(),p1+=image_inverse.istep())
-        *p0= *p0 - *p1;
+  for (unsigned int k=0; k<nk; ++k)
+    for (unsigned int j=0; j<nj; ++j)
+      for (unsigned int i=0; i<ni; ++i,p0+=image.istep(),p1+=image_inverse.istep())
+        *p0 -= *p1;
 }
 
 //: Compute distance transform in 3d from zeros in original image.

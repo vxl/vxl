@@ -26,7 +26,7 @@ void vil3d_fill_boundary(vil3d_image_view<bool>& bool_image)
   vil3d_image_view<int> image(ni,nj,nk,nplanes);
   vil3d_convert_cast(bool_image,image);
 
-  vcl_ptrdiff_t istep = image.istep(), jstep = image.jstep(), kstep = image.kstep();
+  vcl_ptrdiff_t istep = image.istep();
 
   // scan the image and look for a boundary pixel
   int *page0 = image.origin_ptr();
@@ -35,12 +35,12 @@ void vil3d_fill_boundary(vil3d_image_view<bool>& bool_image)
 
   int boundary_label;
   int background_label = 2;
-  for (int k = 0; k < nk; k++)
+  for (unsigned int k = 0; k < nk; ++k)
   {
     boundary_label = 3;
-    for (int j = 0; j < nj; j++)
+    for (unsigned int j = 0; j < nj; ++j)
     {
-      for (int i = 0; i < ni; i++, p0+=istep)
+      for (unsigned int i = 0; i < ni; ++i, p0+=istep)
       {
         if (*p0 == 1)
         {
@@ -121,8 +121,8 @@ void fill_boundary(vil3d_image_view<int> &image, int *p0, int boundary_label, in
   vcl_vector<vcl_ptrdiff_t> neighbourhood(8);
 
   // push all boundary pixels onto stack. Needed for degenerate cases
-  for (;row<image.nj();row++,col=0)
-    for (;col<image.ni();col++,p0+=istep)
+  for (;row<(int)image.nj();++row,col=0)
+    for (;col<(int)image.ni();++col,p0+=istep)
     {
       if (*p0 == boundary_label)
         pixel_stack.push(p0);
