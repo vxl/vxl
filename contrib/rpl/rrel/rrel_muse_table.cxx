@@ -12,8 +12,8 @@ static const unsigned int max_allowed_to_store = 1000;
 rrel_muse_table::rrel_muse_table( unsigned int max_n_stored )
 {
   if ( max_n_stored > max_allowed_to_store ) {
-    vcl_cerr << "WARNING: Requested rrel_muse_table size is larger than max allowed.\n"
-             << "         Larger entries will be not be precomputed.\n";
+    //WARNING: Requested rrel_muse_table size is larger than max
+    //allowed. Larger entries will be not be precomputed.
     max_n_stored_ = max_allowed_to_store;
   }
   else
