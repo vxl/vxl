@@ -1,13 +1,12 @@
+// This is vxl/vnl/io/vnl_io_diag_matrix.h
 #ifndef vnl_io_diag_matrix_h
 #define vnl_io_diag_matrix_h
 #ifdef __GNUC__
 #pragma interface
 #endif
 
-//#include <vsl/vsl_binary_io.h>
+#include <vsl/vsl_binary_io.h>
 #include <vnl/vnl_diag_matrix.h>
-
-// This is vxl/vnl/io/vnl_io_diag_matrix.h
 
 //:
 // \file 
