@@ -12,7 +12,7 @@
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 #include <vcl_cmath.h> // for log(), exp() ..
-#define DEBUG
+//#define DEBUG
 static double strk_gaussian(const double x, const double sigma)
 {
   double x_on_sigma = x / sigma;
@@ -637,8 +637,7 @@ void strk_tracking_face_2d::set_color_mutual_info(float mi)
   total_info_= mi + intensity_mi_+ gradient_dir_mi_;
 }
 
-void strk_tracking_face_2d::transform(double tx, double ty,
-                                      double theta, double scale)
+void strk_tracking_face_2d::transform(double tx, double ty, double theta, double scale)
 {
   double xo = 0, yo =0;
   this->centroid(xo, yo);
@@ -663,6 +662,50 @@ void strk_tracking_face_2d::transform(double tx, double ty,
     this->set_X(float(xp*c - yp*s + xo + tx));
     this->set_Y(float(xp*s + yp*c + yo + ty));
   }
+
+  // tranform gradient vectors by theta
+  if (gradient_info_ ) {
+    this->transform_gradients(theta);
+  }
+}
+
+// rotate gradients and recompute gradient mutual information
+void strk_tracking_face_2d::transform_gradients(double theta)
+{
+  double deg_rad = 180.0/vnl_math::pi;
+  double c = vcl_cos(theta), s = vcl_sin(theta);
+
+  strk_hist<float> model_gradient_dir_hist;
+  gradient_dir_hist_bins_ = model_gradient_dir_hist.nbins();
+
+  // step through points in face
+  int i=0;
+  for (this->reset(); this->next();)
+  {
+    float Ix0 = Ix_[i];
+    float Iy0 = Iy_[i];
+    Ix_[i] = (float) Ix0*c - Iy0*s;
+    Iy_[i] = (float) Ix0*s + Iy0*c;
+    float ang = float(deg_rad*vcl_atan2(Iy_[i],Ix_[i]))+180.f;
+    float mag = vcl_abs(Ix_[i])+vcl_abs(Iy_[i]);
+    if (mag>min_gradient_)
+      model_gradient_dir_hist.upcount(ang, mag);
+    i++;
+  }
+
+  //apply parzen window to histogram
+  model_gradient_dir_hist.parzen(parzen_sigma_);
+
+  //compute the gradient direction entropy
+  float ent = 0;
+  for (unsigned int m = 0; m<gradient_dir_hist_bins_; m++)
+  {
+    float pm = model_gradient_dir_hist.p(m);
+    if (!pm)
+      continue;
+    ent -= pm*vcl_log(pm);
+  }
+  model_gradient_dir_entropy_= float(ent/vcl_log(2.0));
 }
 
 float strk_tracking_face_2d::

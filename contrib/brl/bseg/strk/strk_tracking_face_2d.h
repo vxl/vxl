@@ -157,8 +157,7 @@ class strk_tracking_face_2d : public vbl_ref_count
   unsigned short I() const { return intf_->I(); }
 
   //: transformation: translate by (tx,ty), rotate by theta, zoom by scale
-  void transform(double tx, double ty,
-                 double theta, double scale);
+  void transform(double tx, double ty, double theta, double scale);
 
  private:
   // local functions
@@ -187,6 +186,10 @@ class strk_tracking_face_2d : public vbl_ref_count
   float
     compute_color_mutual_information(vil1_memory_image_of<float> const& hue,
                                      vil1_memory_image_of<float> const& sat);
+
+  //: helper function for transform(): transformation: rotate gradients by theta
+  void transform_gradients(double theta);
+
 
   // members
   float min_gradient_;
