@@ -48,6 +48,9 @@ SOURCES += oxp_mpeg_codec.cxx
 SOURCES += oxp_vidl_mpeg_codec.cxx
 endif
 
+MANPAGE_SOURCES += MapInverter.h
+MANPAGE_SOURCES += POX.h
+
 ######################################
 include $(IUEROOT)/config/top-rules.mk
 ######################################
