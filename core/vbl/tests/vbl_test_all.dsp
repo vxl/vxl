@@ -90,6 +90,9 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\vbl_test_classes.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vbl_test_array_x.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vbl_test_all.cxx
 # End Source File
 # Begin Source File
@@ -109,6 +112,9 @@ SOURCE=.\vbl_test_sparse_array_3d.cxx
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 SOURCE=.\vbl_test_classes.h
+# End Source File
+# Begin Source File
+SOURCE=.\vbl_test_array_x.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
