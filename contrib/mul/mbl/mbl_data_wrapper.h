@@ -34,6 +34,9 @@
 //
 //  Note: It should be fairly simple to provide an iterator type object
 //  which steps through the examples in a standard STL way by using this class.
+
+#include <vcl_string.h>
+
 template<class T>
 class mbl_data_wrapper {
 public:
@@ -65,6 +68,10 @@ public:
 
   //: Create copy on heap and return base pointer
   virtual mbl_data_wrapper< T >* clone() const = 0;
+
+  //: Name of the class
+  virtual vcl_string is_a() const =0;
+
 };
 
 #endif // mbl_data_wrapper_h

@@ -44,6 +44,10 @@ public:
   //: Number of objects available
   virtual unsigned size() const;
 
+	//: Return pointer to start of data array
+	const T* data() const { return data_; }
+
+
   //: Reset so that current() returns first object
   virtual void reset();
 
@@ -63,6 +67,10 @@ public:
 
   //: Create copy on heap and return base pointer
   virtual mbl_data_wrapper< T >* clone() const;
+
+  //: Name of the class
+  virtual vcl_string is_a() const;
+
 };
 
 #endif // mbl_data_array_wrapper_h

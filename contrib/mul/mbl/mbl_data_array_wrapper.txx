@@ -112,6 +112,13 @@ void mbl_data_array_wrapper<T>::set_index(unsigned n)
   index_=n;
 }
 
+template <class T>
+vcl_string mbl_data_array_wrapper<T>::is_a() const
+{
+  return vcl_string("mbl_data_array_wrapper<T>");
+}
+
+
 #define MBL_DATA_ARRAY_WRAPPER_INSTANTIATE(T) \
 template class mbl_data_array_wrapper< T >
 
