@@ -10,17 +10,20 @@
 
 #include <vcl_compiler.h>
 
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
 #include <direct.h>
 #include <sys/timeb.h>
 #else
 #include <unistd.h> // for struct timeval
+#ifdef __CYGWIN__
+#include <sys/time.h>
+#endif
 #endif
 
 //#include <vcl_ctime.h> // for struct timezone
 #include <vcl_sys/time.h> // for gettimeofday()
 
-#ifndef VCL_WIN32
+#if !defined(VCL_WIN32) || defined(__CYGWIN__)
 // POSIX
 void vul_get_timestamp(int &secs, int &msecs)
 {
@@ -32,7 +35,7 @@ void vul_get_timestamp(int &secs, int &msecs)
   msecs = timestamp.tv_usec/1000;
 }
 #else
-// VCL_WIN32
+// VCL_WIN32 and not __CYGWIN__
 void vul_get_timestamp(int &secs, int &msecs)
 {
   struct _timeb real;

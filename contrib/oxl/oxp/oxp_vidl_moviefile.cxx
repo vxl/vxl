@@ -16,7 +16,7 @@
 #include <vidl/vidl_movie.h>
 #include <vidl/vidl_io.h>
 
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
 #include <vidl/vidl_avicodec.h>
 #endif
 #if HAS_MPEG
@@ -36,7 +36,7 @@ void ensure_initialized()
   if (init) return;
 
   // Register video codec
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
   vidl_io::register_codec(new vidl_avicodec);
 #endif
 #if HAS_MPEG

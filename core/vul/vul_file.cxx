@@ -17,7 +17,7 @@
 #include <vcl_cstring.h>
 #include <vcl_cstdlib.h>
 
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
 #include <direct.h> // for getcwd, mkdir
 #else
 #include <unistd.h>
@@ -35,7 +35,7 @@ vcl_string vul_file::get_cwd()
 
 bool vul_file::make_directory(char const* name)
 {
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
   return -1 != mkdir(name);
 #else
   return -1 != mkdir(name, 0755);
@@ -129,7 +129,7 @@ vcl_string vul_file::basename(char const* fn, char const * suffix)
 }
 
 
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
 //: replace instances of 'from' in 's' with 'to'
 static unsigned replace(char from, char to, vcl_string &s)
 {
@@ -151,7 +151,7 @@ static unsigned replace(char from, char to, vcl_string &s)
 bool vul_file::delete_file_glob(char const* file_glob)
 {
   vcl_string command = file_glob;
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
   replace('/', '\\', command);
   command = "del " + command;
 #else
@@ -166,7 +166,7 @@ vcl_string vul_file::expand_tilde(char const* vul_filename)
   if (!vul_filename || (vcl_strlen(vul_filename) == 0))
     return "";
 
-#ifdef VCL_WIN32
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
   // ~ meaningless on win32
   return vcl_string(vul_filename);
 #else
