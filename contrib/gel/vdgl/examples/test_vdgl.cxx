@@ -7,7 +7,7 @@
 
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator_linear.h>
-#include <vdgl/vdgl_digital_curve_sptr.h>
+#include <vdgl/vdgl_digital_curve.h>
 //#include <vdgl/vdgl_digital_region.h>
 
 int main()
