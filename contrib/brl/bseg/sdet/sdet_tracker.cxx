@@ -956,10 +956,10 @@ void sdet_tracker::correlate_face(sdet_correlated_face* cf)
   float corr_thresh = 10.f;
   double tx=0, ty=0, theta = 0;
   double sx=0, sy=0;//total translations
-  float c = (float)vcl_sqrt(this->compute_correlation(cf));
+  double c = vcl_sqrt(this->compute_correlation(cf));
   if (c>corr_thresh)
   {
-    cf->set_correlation(c);
+    cf->set_correlation(float(c));
     return;
   }
 
