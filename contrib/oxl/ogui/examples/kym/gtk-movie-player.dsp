@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /Yu"stdafx.h" /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /I "$(VXLROOT)\vcl\config.win32-vc60" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vxl" /I "$(VXLROOT)\oxl" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\oxl" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /Yu"stdafx.h" /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -49,7 +49,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 vgui_mfc.lib vgui_glut.lib vgui.lib vnl_algo.lib netlib.lib vnl.lib vbl.lib vil.lib vul.lib vgl.lib Qv.lib vcl.lib glut32.lib glu32.lib glaux.lib opengl32.lib /nologo /subsystem:windows /machine:I386 /nodefaultlib:"nafxcwd.lib" /libpath:"$(VXLROOT)\oxl\vgui\impl\mfc\Release" /libpath:"$(VXLROOT)\oxl\vgui\impl\glut\Release" /libpath:"$(VXLROOT)\oxl\vgui\Release" /libpath:"$(VXLROOT)\vxl\vnl\algo\Release" /libpath:"$(VXLROOT)\v3p\netlib\Release" /libpath:"$(VXLROOT)\vxl\vnl\Release" /libpath:"$(VXLROOT)\vxl\vbl\Release" /libpath:"$(VXLROOT)\vxl\vil\Release" /libpath:"$(VXLROOT)\vxl\vul\Release" /libpath:"$(VXLROOT)\vxl\vgl\Release" /libpath:"$(VXLROOT)\v3p\Qv\Release" /libpath:"$(VXLROOT)\vcl\Release" /libpath:"$(GLUT)\lib" /libpath:"$(GLUT)\lib\Release" /libpath:"$(GLUT)\lib\glut" /libpath:"$(GLUT)\lib\glut\Release"
+# ADD LINK32 vgui_mfc.lib vgui_glut.lib vgui.lib vnl_algo.lib netlib.lib vnl.lib vbl.lib vil.lib vul.lib vgl.lib Qv.lib vcl.lib glut32.lib glu32.lib glaux.lib opengl32.lib /nologo /subsystem:windows /machine:I386 /nodefaultlib:"nafxcwd.lib" /libpath:"$(VXLROOT)\lib\Release"
 
 !ELSEIF  "$(CFG)" == "gtk_movie_player - Win32 Debug"
 
@@ -64,7 +64,7 @@ LINK32=link.exe
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "$(VXLROOT)\vcl\config.win32-vc60" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vxl" /I "$(VXLROOT)\oxl" /D "WIN32" /D "_DEBUG" /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\oxl" /D "WIN32" /D "_DEBUG" /FD /GZ /c
 # SUBTRACT CPP /YX
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -75,7 +75,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 vgui_mfc.lib vgui_glut.lib vgui.lib vnl_algo.lib netlib.lib vnl.lib vbl.lib vil.lib vul.lib vgl.lib Qv.lib vcl.lib glut32.lib glu32.lib glaux.lib opengl32.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:"nafxcwd.lib" /pdbtype:sept /libpath:"$(VXLROOT)\oxl\vgui\impl\mfc\Debug" /libpath:"$(VXLROOT)\oxl\vgui\impl\glut\Debug" /libpath:"$(VXLROOT)\oxl\vgui\Debug" /libpath:"$(VXLROOT)\vxl\vnl\algo\Debug" /libpath:"$(VXLROOT)\v3p\netlib\Debug" /libpath:"$(VXLROOT)\vxl\vnl\Debug" /libpath:"$(VXLROOT)\vxl\vbl\Debug" /libpath:"$(VXLROOT)\vxl\vil\Debug" /libpath:"$(VXLROOT)\vxl\vul\Debug" /libpath:"$(VXLROOT)\vxl\vgl\Debug" /libpath:"$(VXLROOT)\v3p\Qv\Debug" /libpath:"$(VXLROOT)\vcl\Debug" /libpath:"$(GLUT)\lib" /libpath:"$(GLUT)\lib\Debug" /libpath:"$(GLUT)\lib\glut" /libpath:"$(GLUT)\lib\glut\Debug"
+# ADD LINK32 vgui_mfc.lib vgui_glut.lib vgui.lib vnl_algo.lib netlib.lib vnl.lib vbl.lib vil.lib vul.lib vgl.lib Qv.lib vcl.lib glut32.lib glu32.lib glaux.lib opengl32.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:"nafxcwd.lib" /pdbtype:sept /libpath:"$(VXLROOT)\lib\Debug"
 
 !ENDIF 
 

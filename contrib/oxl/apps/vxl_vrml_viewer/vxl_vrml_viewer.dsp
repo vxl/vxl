@@ -10,11 +10,11 @@
 
 # variables to REPLACE
 # 
-# /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vcl/config.win32-VC60" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/oxl" /I "$(VXLROOT)/v3p" /I "$(VXLROOT)/v3p/jpeg" /I "$(VXLROOT)/v3p/png" /I "$(VXLROOT)/v3p/zlib" /I "$(VXLROOT)/v3p/tiff"  == include path
+# /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/core" /I "$(VXLROOT)/contrib/oxl" /I "$(VXLROOT)/v3p" /I "$(VXLROOT)/v3p/jpeg" /I "$(VXLROOT)/v3p/png" /I "$(VXLROOT)/v3p/zlib" /I "$(VXLROOT)/v3p/tiff" == include path
 #  == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -DHAS_QV -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF -D_AFXDLL == compiler defines
 # vxl_vrml_viewer  == name of output library
-# /libpath:"$(VXLROOT)/v3p/Qv/$(IntDir)" /libpath:"$(VXLROOT)/oxl/osl/$(IntDir)" /libpath:"$(VXLROOT)/vxl/vnl/$(IntDir)" /libpath:"$(VXLROOT)/vcl/$(IntDir)" /libpath:"$(VXLROOT)/vxl/vnl/algo/$(IntDir)" /libpath:"$(VXLROOT)/v3p/netlib/$(IntDir)" /libpath:"$(VXLROOT)/vxl/vil/$(IntDir)" /libpath:"$(VXLROOT)/vxl/vpl/$(IntDir)" /libpath:"$(VXLROOT)/v3p/jpeg/$(IntDir)" /libpath:"$(VXLROOT)/v3p/png/$(IntDir)" /libpath:"$(VXLROOT)/v3p/zlib/$(IntDir)" /libpath:"$(VXLROOT)/v3p/tiff/$(IntDir)" /libpath:"$(VXLROOT)/vxl/vbl/$(IntDir)" /libpath:"$(VXLROOT)/oxl/mvl/$(IntDir)" /libpath:"$(VXLROOT)/oxl/vgui/impl/mfc/$(IntDir)" /libpath:"$(VXLROOT)/oxl/vgui/$(IntDir)" /libpath:"$(VXLROOT)/vxl/vgl/$(IntDir)" /libpath:"$(VXLROOT)/vxl/vul/$(IntDir)" /libpath:"$(VXLROOT)/oxl/vrml/$(IntDir)"  "opengl32.lib" "glu32.lib" "Qv.lib" "osl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "mvl.lib" "vgui_mfc.lib" "vgui.lib" "vnl_algo.lib" "netlib.lib" "vgl.lib" "vil.lib" "vnl.lib" "vul.lib" "vpl.lib" "vcl.lib" "vbl.lib" "vrml.lib" /STACK:10000000  == libraries linked in 
+# /libpath:"$(VXLROOT)/v3p/Qv/$(IntDir)" /libpath:"$(VXLROOT)/contrib/oxl/osl/$(IntDir)" /libpath:"$(VXLROOT)/core/vnl/$(IntDir)" /libpath:"$(VXLROOT)/vcl/$(IntDir)" /libpath:"$(VXLROOT)/core/vnl/algo/$(IntDir)" /libpath:"$(VXLROOT)/v3p/netlib/$(IntDir)" /libpath:"$(VXLROOT)/core/vil/$(IntDir)" /libpath:"$(VXLROOT)/core/vpl/$(IntDir)" /libpath:"$(VXLROOT)/v3p/jpeg/$(IntDir)" /libpath:"$(VXLROOT)/v3p/png/$(IntDir)" /libpath:"$(VXLROOT)/v3p/zlib/$(IntDir)" /libpath:"$(VXLROOT)/v3p/tiff/$(IntDir)" /libpath:"$(VXLROOT)/core/vbl/$(IntDir)" /libpath:"$(VXLROOT)/contrib/oxl/mvl/$(IntDir)" /libpath:"$(VXLROOT)/contrib/oxl/vgui/impl/mfc/$(IntDir)" /libpath:"$(VXLROOT)/contrib/oxl/vgui/$(IntDir)" /libpath:"$(VXLROOT)/core/vgl/$(IntDir)" /libpath:"$(VXLROOT)/core/vul/$(IntDir)" /libpath:"$(VXLROOT)/contrib/oxl/vrml/$(IntDir)" "opengl32.lib" "glu32.lib" "Qv.lib" "osl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "mvl.lib" "vgui_mfc.lib" "vgui.lib" "vnl_algo.lib" "netlib.lib" "vgl.lib" "vil.lib" "vnl.lib" "vul.lib" "vpl.lib" "vcl.lib" "vbl.lib" "vrml.lib" /STACK:10000000  == libraries linked in 
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
 CFG=vxl_vrml_viewer - Win32 Debug
@@ -54,9 +54,9 @@ RSC=rc.exe
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vcl/config.win32-VC60" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/oxl" /I "$(VXLROOT)/v3p" /I "$(VXLROOT)/v3p/jpeg" /I "$(VXLROOT)/v3p/png" /I "$(VXLROOT)/v3p/zlib" /I "$(VXLROOT)/v3p/tiff"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -DHAS_QV -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF -D_AFXDLL /D "vxl_vrml_viewer_EXPORTS"
+# ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /FD /c
+# ADD CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /FD /c
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/core" /I "$(VXLROOT)/contrib/oxl" /I "$(VXLROOT)/v3p" /I "$(VXLROOT)/v3p/jpeg" /I "$(VXLROOT)/v3p/png" /I "$(VXLROOT)/v3p/zlib" /I "$(VXLROOT)/v3p/tiff" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -DHAS_QV -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF -D_AFXDLL /D "vxl_vrml_viewer_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -69,24 +69,24 @@ LINK32=link.exe
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/Qv/$(IntDir)"
-# ADD LINK32 /libpath:"$(VXLROOT)/oxl/osl/$(IntDir)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vnl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/contrib/oxl/osl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vnl/$(IntDir)"
 # ADD LINK32 /libpath:"$(VXLROOT)/vcl/$(IntDir)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vnl/algo/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vnl/algo/$(IntDir)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/netlib/$(IntDir)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vil/$(IntDir)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vpl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vil/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vpl/$(IntDir)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/jpeg/$(IntDir)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/png/$(IntDir)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/zlib/$(IntDir)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/tiff/$(IntDir)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vbl/$(IntDir)"
-# ADD LINK32 /libpath:"$(VXLROOT)/oxl/mvl/$(IntDir)"
-# ADD LINK32 /libpath:"$(VXLROOT)/oxl/vgui/impl/mfc/$(IntDir)"
-# ADD LINK32 /libpath:"$(VXLROOT)/oxl/vgui/$(IntDir)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vgl/$(IntDir)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vul/$(IntDir)"
-# ADD LINK32 /libpath:"$(VXLROOT)/oxl/vrml/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vbl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/contrib/oxl/mvl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/contrib/oxl/vgui/impl/mfc/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/contrib/oxl/vgui/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vgl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vul/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/contrib/oxl/vrml/$(IntDir)"
 # ADD LINK32 "opengl32.lib" "glu32.lib" "Qv.lib" "osl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "mvl.lib" "vgui_mfc.lib" "vgui.lib" "vnl_algo.lib" "netlib.lib" "vgl.lib" "vil.lib" "vnl.lib" "vul.lib" "vpl.lib" "vcl.lib" "vbl.lib" "vrml.lib" /STACK:10000000 
 
 
@@ -102,9 +102,9 @@ LINK32=link.exe
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
-# ADD BASE CPP   /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
-# ADD CPP /nologo  /D "WIN32"  /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vcl/config.win32-VC60" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/oxl" /I "$(VXLROOT)/v3p" /I "$(VXLROOT)/v3p/jpeg" /I "$(VXLROOT)/v3p/png" /I "$(VXLROOT)/v3p/zlib" /I "$(VXLROOT)/v3p/tiff"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -DHAS_QV -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF -D_AFXDLL /D "vxl_vrml_viewer_EXPORTS"
+# ADD BASE CPP   /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FD /GZ /c
+# ADD CPP /nologo  /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FD /GZ /c
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/core" /I "$(VXLROOT)/contrib/oxl" /I "$(VXLROOT)/v3p" /I "$(VXLROOT)/v3p/jpeg" /I "$(VXLROOT)/v3p/png" /I "$(VXLROOT)/v3p/zlib" /I "$(VXLROOT)/v3p/tiff" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -DHAS_QV -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF -D_AFXDLL /D "vxl_vrml_viewer_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -119,24 +119,24 @@ LINK32=link.exe
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
 
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/Qv/$(IntDir)"
-# ADD LINK32 /libpath:"$(VXLROOT)/oxl/osl/$(IntDir)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vnl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/contrib/oxl/osl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vnl/$(IntDir)"
 # ADD LINK32 /libpath:"$(VXLROOT)/vcl/$(IntDir)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vnl/algo/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vnl/algo/$(IntDir)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/netlib/$(IntDir)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vil/$(IntDir)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vpl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vil/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vpl/$(IntDir)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/jpeg/$(IntDir)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/png/$(IntDir)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/zlib/$(IntDir)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/tiff/$(IntDir)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vbl/$(IntDir)"
-# ADD LINK32 /libpath:"$(VXLROOT)/oxl/mvl/$(IntDir)"
-# ADD LINK32 /libpath:"$(VXLROOT)/oxl/vgui/impl/mfc/$(IntDir)"
-# ADD LINK32 /libpath:"$(VXLROOT)/oxl/vgui/$(IntDir)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vgl/$(IntDir)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vul/$(IntDir)"
-# ADD LINK32 /libpath:"$(VXLROOT)/oxl/vrml/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vbl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/contrib/oxl/mvl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/contrib/oxl/vgui/impl/mfc/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/contrib/oxl/vgui/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vgl/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vul/$(IntDir)"
+# ADD LINK32 /libpath:"$(VXLROOT)/contrib/oxl/vrml/$(IntDir)"
 # ADD LINK32 "opengl32.lib" "glu32.lib" "Qv.lib" "osl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "mvl.lib" "vgui_mfc.lib" "vgui.lib" "vnl_algo.lib" "netlib.lib" "vgl.lib" "vil.lib" "vnl.lib" "vul.lib" "vpl.lib" "vcl.lib" "vbl.lib" "vrml.lib" /STACK:10000000 
 
 !ENDIF 

@@ -10,11 +10,11 @@
 
 # variables to REPLACE
 # 
-# /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/vcl/config.win32-VC60" /I "$(VXLROOT)/conversions" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/gel" /I "$(VXLROOT)/SpatialObjects" /I "$(VXLROOT)/GeneralUtility" /I "$(VXLROOT)/Numerics" /I "$(VXLROOT)/COOL" == include path
+# /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/conversions" /I "$(VXLROOT)/contrib/gel" /I "$(VXLROOT)/SpatialObjects" /I "$(VXLROOT)/GeneralUtility" /I "$(VXLROOT)/Numerics" /I "$(VXLROOT)/COOL" == include path
 # $(VXLROOT)/bin/ == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 # test_DigitalCurve_to_vdgl  == name of output library
-#  /libpath:"$(VXLROOT)/vxl/vnl/$(OUTDIR)" /libpath:"$(VXLROOT)/vxl/vnl/$(OUTDIR)" /libpath:"$(VXLROOT)/vcl/$(OUTDIR)" /libpath:"$(VXLROOT)/vcl/$(OUTDIR)"  "vnl.lib" "vcl.lib" /STACK:10000000  == libraries linked in 
+#  /libpath:"$(VXLROOT)/core/$(OUTDIR)" /libpath:"$(VXLROOT)/vcl/$(OUTDIR)" "vnl.lib" "vcl.lib" /STACK:10000000  == libraries linked in 
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
 CFG=test_DigitalCurve_to_vdgl - Win32 Debug
@@ -54,9 +54,9 @@ RSC=rc.exe
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/vcl/config.win32-VC60" /I "$(VXLROOT)/conversions" /I "$(VXLROOT)/gel" /I "$(VXLROOT)/SpatialObjects" /I "$(VXLROOT)/GeneralUtility" /I "$(VXLROOT)/Numerics" /I "$(VXLROOT)/COOL" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "test_DigitalCurve_to_vdgl_EXPORTS"
+# ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /FD /c
+# ADD CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /FD /c
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/conversions" /I "$(VXLROOT)/contrib/gel" /I "$(VXLROOT)/SpatialObjects" /I "$(VXLROOT)/GeneralUtility" /I "$(VXLROOT)/Numerics" /I "$(VXLROOT)/COOL" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "test_DigitalCurve_to_vdgl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -70,7 +70,7 @@ LINK32=link.exe
 # ADD LINK32 /libpath:"$(VXLROOT)/COOL/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/Numerics/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/GeneralUtility/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vnl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/vcl/$(OUTDIR)"
 # ADD LINK32 "vnl.lib" "vcl.lib" /STACK:10000000 
 
@@ -86,9 +86,9 @@ LINK32=link.exe
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
-# ADD BASE CPP   /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
-# ADD CPP /nologo  /D "WIN32"  /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/vcl/config.win32-VC60" /I "$(VXLROOT)/conversions" /I "$(VXLROOT)/gel" /I "$(VXLROOT)/SpatialObjects" /I "$(VXLROOT)/GeneralUtility" /I "$(VXLROOT)/Numerics" /I "$(VXLROOT)/COOL" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "test_DigitalCurve_to_vdgl_EXPORTS"
+# ADD BASE CPP   /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FD /GZ /c
+# ADD CPP /nologo  /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FD /GZ /c
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/conversions" /I "$(VXLROOT)/contrib/gel" /I "$(VXLROOT)/SpatialObjects" /I "$(VXLROOT)/GeneralUtility" /I "$(VXLROOT)/Numerics" /I "$(VXLROOT)/COOL" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "test_DigitalCurve_to_vdgl_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -104,7 +104,7 @@ LINK32=link.exe
 # ADD LINK32 /libpath:"$(VXLROOT)/COOL/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/Numerics/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/GeneralUtility/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vnl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/vcl/$(OUTDIR)"
 # ADD LINK32 "vnl.lib" "vcl.lib" /STACK:10000000 
 

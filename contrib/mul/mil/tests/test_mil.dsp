@@ -10,11 +10,11 @@
 
 # variables to REPLACE
 # 
-# /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vcl/config.win32-VC60" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/mul" /I "$(VXLROOT)/v3p/jpeg" /I "$(VXLROOT)/v3p/png" /I "$(VXLROOT)/v3p/zlib" /I "$(VXLROOT)/v3p/tiff"  == include path
+# /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" /I "$(VXLROOT)/v3p/jpeg" /I "$(VXLROOT)/v3p/png" /I "$(VXLROOT)/v3p/zlib" /I "$(VXLROOT)/v3p/tiff" == include path
 # $(VXLROOT)/bin/ == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF == compiler defines
 # test_mil  == name of output library
-# /libpath:"$(VXLROOT)/mul/mil/$(OUTDIR)" /libpath:"$(VXLROOT)/mul/mbl/$(OUTDIR)" /libpath:"$(VXLROOT)/vxl/vnl/io/$(OUTDIR)" /libpath:"$(VXLROOT)/vxl/vnl/$(OUTDIR)" /libpath:"$(VXLROOT)/vcl/$(OUTDIR)" /libpath:"$(VXLROOT)/vxl/vsl/$(OUTDIR)" /libpath:"$(VXLROOT)/vxl/vnl/algo/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/netlib/$(OUTDIR)" /libpath:"$(VXLROOT)/vxl/vbl/io/$(OUTDIR)" /libpath:"$(VXLROOT)/vxl/vbl/$(OUTDIR)" /libpath:"$(VXLROOT)/vxl/vgl/io/$(OUTDIR)" /libpath:"$(VXLROOT)/vxl/vgl/$(OUTDIR)" /libpath:"$(VXLROOT)/vxl/vil/io/$(OUTDIR)" /libpath:"$(VXLROOT)/vxl/vil/$(OUTDIR)" /libpath:"$(VXLROOT)/vxl/vpl/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/jpeg/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/png/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/zlib/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/tiff/$(OUTDIR)"  "mil.lib" "mbl.lib" "vnl_io.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vbl_io.lib" "vbl.lib" "vgl_io.lib" "vgl.lib" "vil_io.lib" "vil.lib" "vpl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vsl.lib" "vcl.lib" /STACK:10000000  == libraries linked in 
+# /libpath:"$(VXLROOT)/contrib/mul/mil/$(OUTDIR)" /libpath:"$(VXLROOT)/contrib/mul/mbl/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vnl/io/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vnl/$(OUTDIR)" /libpath:"$(VXLROOT)/vcl/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vsl/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vnl/algo/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/netlib/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vbl/io/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vbl/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vgl/io/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vgl/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vil/io/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vil/$(OUTDIR)" /libpath:"$(VXLROOT)/core/vpl/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/jpeg/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/png/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/zlib/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/tiff/$(OUTDIR)" "mil.lib" "mbl.lib" "vnl_io.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vbl_io.lib" "vbl.lib" "vgl_io.lib" "vgl.lib" "vil_io.lib" "vil.lib" "vpl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vsl.lib" "vcl.lib" /STACK:10000000  == libraries linked in 
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
 CFG=test_mil - Win32 Debug
@@ -54,9 +54,9 @@ RSC=rc.exe
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vcl/config.win32-VC60" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/mul" /I "$(VXLROOT)/v3p/jpeg" /I "$(VXLROOT)/v3p/png" /I "$(VXLROOT)/v3p/zlib" /I "$(VXLROOT)/v3p/tiff"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "test_mil_EXPORTS"
+# ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /FD /c
+# ADD CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /FD /c
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" /I "$(VXLROOT)/v3p/jpeg" /I "$(VXLROOT)/v3p/png" /I "$(VXLROOT)/v3p/zlib" /I "$(VXLROOT)/v3p/tiff" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "test_mil_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -68,21 +68,21 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 
-# ADD LINK32 /libpath:"$(VXLROOT)/mul/mil/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/mul/mbl/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vnl/io/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vnl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/contrib/mul/mil/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/contrib/mul/mbl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vnl/io/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vnl/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/vcl/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vsl/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vnl/algo/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vsl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vnl/algo/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/netlib/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vbl/io/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vbl/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vgl/io/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vgl/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vil/io/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vil/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vpl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vbl/io/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vbl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vgl/io/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vgl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vil/io/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vil/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vpl/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/jpeg/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/png/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/zlib/$(OUTDIR)"
@@ -102,9 +102,9 @@ LINK32=link.exe
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
-# ADD BASE CPP   /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
-# ADD CPP /nologo  /D "WIN32"  /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vcl/config.win32-VC60" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/mul" /I "$(VXLROOT)/v3p/jpeg" /I "$(VXLROOT)/v3p/png" /I "$(VXLROOT)/v3p/zlib" /I "$(VXLROOT)/v3p/tiff"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "test_mil_EXPORTS"
+# ADD BASE CPP   /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FD /GZ /c
+# ADD CPP /nologo  /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FD /GZ /c
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" /I "$(VXLROOT)/v3p/jpeg" /I "$(VXLROOT)/v3p/png" /I "$(VXLROOT)/v3p/zlib" /I "$(VXLROOT)/v3p/tiff" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "test_mil_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -118,21 +118,21 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
 
-# ADD LINK32 /libpath:"$(VXLROOT)/mul/mil/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/mul/mbl/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vnl/io/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vnl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/contrib/mul/mil/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/contrib/mul/mbl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vnl/io/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vnl/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/vcl/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vsl/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vnl/algo/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vsl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vnl/algo/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/netlib/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vbl/io/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vbl/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vgl/io/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vgl/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vil/io/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vil/$(OUTDIR)"
-# ADD LINK32 /libpath:"$(VXLROOT)/vxl/vpl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vbl/io/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vbl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vgl/io/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vgl/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vil/io/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vil/$(OUTDIR)"
+# ADD LINK32 /libpath:"$(VXLROOT)/core/vpl/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/jpeg/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/png/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/zlib/$(OUTDIR)"
