@@ -1,7 +1,9 @@
-//-----------------------------------------------------------------------------
-// .DESCRIPTION:
-//   See xcv_segmentation.h.
-//-----------------------------------------------------------------------------
+//
+// This is xcv/xcv_segmentation.cxx
+// See xcv_segmentation.h for a description of this file.
+//
+// \author K.Y.McGaul
+//
 
 #include "xcv_segmentation.h"
 

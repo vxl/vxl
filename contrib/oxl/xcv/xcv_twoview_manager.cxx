@@ -1,7 +1,9 @@
-//-----------------------------------------------------------------------------
-// .DESCRIPTION:
-//   See xcv_twoview_manager.h.
-//-----------------------------------------------------------------------------
+//
+// This is xcv/xcv_twoview_manager.cxx
+// See xcv_twoview_manager.h for a description of this file.
+//
+// \author  K.Y.McGaul
+//
 
 #include "xcv_twoview_manager.h"
 
@@ -326,7 +328,7 @@ void xcv_twoview_manager::draw_overlay_corner_matches(vgui_tableau_sptr const&)
 }
 
 //-----------------------------------------------------------------------------
-//: Handle any events we are interested in.
+//: Handle all events sent to this manager.
 //-----------------------------------------------------------------------------
 void xcv_twoview_manager::handle_tjunction_event(vgui_event const& e, vgui_tableau_sptr const& child_tab)
 {

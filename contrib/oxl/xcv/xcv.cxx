@@ -1,12 +1,16 @@
-//--------------------------------------------------------------------------------
-// .NAME xcv
-// .SECTION Description:
-//   Demonstrates the functionality of vxl.
-// .SECTION Author
-//   K.Y.McGaul
-// .SECTION Modifications:
+//
+// This is xcv/xcv.cxx
+//
+//: This contains the main function for xcv, a program designed to demonstrate 
+//  the functionality of vxl.
+//
+// \file
+// \author  K.Y.McGaul
+// \verbatim
+//  Modifications:
 //   K.Y.McGaul     27-JAN-2000    Initial version.
-//--------------------------------------------------------------------------------
+// \endverbatim
+//
 
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
@@ -37,6 +41,7 @@
 #include "xcv_segmentation.h"
 #include "xcv_multiview.h"
 #include "xcv_image_tableau.h"
+#include "xcv/xcv_picker_tableau.h"
 
 #include <vgui/vgui_linker_hack.h>
 
@@ -290,8 +295,8 @@ vgui_easy2D_sptr get_current_easy2D()
 }
 
 //-----------------------------------------------------------------------------
-//:  Gets the image tableau from the tableau at the given position.
-//   This function returns NULL if it fails.
+//:  Gets the image tableau at the given position.
+//   This function returns a new image tableau if it fails.
 //-----------------------------------------------------------------------------
 xcv_image_tableau_sptr get_image_tableau_at(unsigned col, unsigned row)
 {
@@ -302,9 +307,27 @@ xcv_image_tableau_sptr get_image_tableau_at(unsigned col, unsigned row)
     tt.vertical_cast(vgui_find_below_by_type_name(tab, vcl_string("xcv_image_tableau")));
     return tt;
   }
-  vgui_macro_warning << "Unable to get xcv_image_tableau at (" << col << ", "
+  vgui_macro_warning << "Unable to get xcv_image_tableau at (" << col << ", " 
     << row << ")" << vcl_endl;
   return xcv_image_tableau_sptr();
+}
+
+//-----------------------------------------------------------------------------
+//: Gets the picker tableau at the given position.
+//  Returns a new picker_tableau if it fails.
+//-----------------------------------------------------------------------------
+xcv_picker_tableau_sptr get_picker_tableau_at(unsigned col, unsigned row)
+{
+  vgui_tableau_sptr top_tab = xcv_tab->get_tableau_at(col, row);
+  if (top_tab)
+  {
+    xcv_picker_tableau_sptr tt;
+    tt.vertical_cast(vgui_find_below_by_type_name(top_tab, vcl_string("xcv_picker_tableau")));
+    return tt;
+  }
+  vgui_macro_warning << "Unable to get xcv_picker_tableau at (" << col << ", "
+    << row << ")" << vcl_endl;
+  return xcv_picker_tableau_sptr();
 }
 
 //-----------------------------------------------------------------------------
@@ -501,12 +524,12 @@ int main(int argc, char** argv)
     xcv_tab->set_grid_size_changeable(false);
     for (int argcount=1; argcount<argc && strcmp(argv[argcount], "-d"); ++argcount)
     {
-      xcv_image_tableau_new image (argv[argcount]);
-      vgui_easy2D_new       easy  (image);
-      vgui_rubberbander_new rubber(new vgui_rubberbander_easy2D_client(easy));
-      vgui_composite_new c(easy,rubber);
-      //vgui_rubberbander_new rubber(easy);
-      vgui_viewer2D_new     view  (c);
+      xcv_image_tableau_new   image (argv[argcount]);
+      vgui_easy2D_new         easy  (image);
+      vgui_rubberbander_new   rubber(new vgui_rubberbander_easy2D_client(easy));
+      vgui_composite_new      comp(easy,rubber);
+      xcv_picker_tableau_new  picker(comp); 
+      vgui_viewer2D_new       view  (picker);
       xcv_tab->add_next(view);
 
       images.push_back(image);
