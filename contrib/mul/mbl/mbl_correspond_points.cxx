@@ -78,13 +78,14 @@ void mbl_correspond_points::correspond(const vcl_vector<vgl_point_2d<double> >& 
 
   // Compute eigen structure of each proximity
   vnl_matrix<double> P1(n1,n1),P2(n2,n2);
-  vnl_vector<double> evals1(n1),evals2(n2);
-  vnl_symmetric_eigensystem_compute(H1,P1,evals1);
-  vnl_symmetric_eigensystem_compute(H2,P2,evals2);
+  evals1_.set_size(n1);
+  evals2_.set_size(n2);
+  vnl_symmetric_eigensystem_compute(H1,P1,evals1_);
+  vnl_symmetric_eigensystem_compute(H2,P2,evals2_);
 
   // Arrange that values/vectors ordered with largest first
-  P1.fliplr(); evals1.flip();
-  P2.fliplr(); evals2.flip();
+  P1.fliplr(); evals1_.flip();
+  P2.fliplr(); evals2_.flip();
 
   // Directions of eigenvectors are ambiguous.
   // Ensure they're all facing the same way.

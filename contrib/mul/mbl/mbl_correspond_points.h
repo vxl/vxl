@@ -7,6 +7,7 @@
 
 #include <vcl_string.h>
 #include <vcl_vector.h>
+#include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vgl/vgl_point_2d.h>
 
@@ -20,6 +21,11 @@
 class mbl_correspond_points
 {
 private:
+  //: Eigenvalues of proximity matrix 1
+	vnl_vector<double> evals1_;
+  //: Eigenvalues of proximity matrix 2
+	vnl_vector<double> evals2_;
+
   //: Return index of row in H2 most similar to row i of H1
   unsigned closest_row(const vnl_matrix<double>& H1,
                        const vnl_matrix<double>& H2,
@@ -49,6 +55,13 @@ public:
     //  where d_ij is the distance between points i and j
   void proximity_by_tanh(const vcl_vector<vgl_point_2d<double> >& points,
                          vnl_matrix<double>& H, double sigma);
+
+  //: Eigenvalues of proximity matrix 1 in last call to correspond
+	const vnl_vector<double>& evals1() const { return evals1_; }
+
+  //: Eigenvalues of proximity matrix 2 in last call to correspond
+	const vnl_vector<double>& evals2() const { return evals2_; }
+
 
 };
 
