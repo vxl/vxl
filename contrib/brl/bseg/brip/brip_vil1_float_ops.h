@@ -25,6 +25,7 @@
 #include <vcl_complex.h>
 #include <vnl/vnl_matrix.h>
 #include <vbl/vbl_array_2d.h>
+#include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_rgb.h>
@@ -209,8 +210,18 @@ class brip_vil1_float_ops
   static double 
     bilinear_interpolation(vil1_memory_image_of<float> const & input,
                             const double x, const double y);
+  //:map the input to the output by a homography.
+  // \note if the output size is fixed then only the corresponding 
+  // input image space is transformed.
+  static bool homography(vil1_memory_image_of<float> const & input,
+                         vgl_h_matrix_2d<double>const& H,
+                         vil1_memory_image_of<float>& output,
+                         bool output_size_fixed = false);
 
-    
+  //:rotate the input image counter-clockwise about the image origin        
+  static 
+  vil1_memory_image_of<float> rotate(vil1_memory_image_of<float> const & input,
+                                     const double theta_deg);
  private:
 
   //: find if the center pixel of a neighborhood is the maximum value

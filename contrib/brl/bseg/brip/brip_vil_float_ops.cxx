@@ -12,6 +12,7 @@
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_transpose.h>
 #include <vil/algo/vil_convolve_1d.h>
+ 
 
 //------------------------------------------------------------
 //:  Convolve with a kernel
@@ -1535,4 +1536,3 @@ double brip_vil_float_ops::
   double s01 = (1-x+xr)*(y-yr)*int01, s11 = (x-xr)*(y-yr)*int11;
   return s00+s01+s10+s11;
 }
-
