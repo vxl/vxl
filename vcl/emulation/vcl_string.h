@@ -155,7 +155,7 @@ public:
 #if 0
   template<class InputIterator>
     vcl_basic_string(InputIterator begin, InputIterator end,
-                 Allocator& = Allocator());
+                     Allocator& = Allocator());
 #else
   vcl_basic_string (const charT* s, const charT* e)
     : data_(0),strlen_(0),current_size_(0) { assign(s, e-s); }
@@ -170,7 +170,7 @@ public:
 
 //: append str[pos..pos+n] etc.
   vcl_basic_string& append (const vcl_basic_string& str, size_type pos = 0,
-                        size_type n = npos)
+                            size_type n = npos)
     { return replace (length (), 0, str, pos, n); }
   vcl_basic_string& append (const charT* s, size_type n)
     { return replace (length (), 0, s, n); }
@@ -186,7 +186,7 @@ public:
 
 //: assign str[pos..pos+n] etc.
   vcl_basic_string& assign (const vcl_basic_string& str, size_type pos = 0,
-                        size_type n = npos)
+                            size_type n = npos)
     { return replace (0, npos, str, pos, n); }
   vcl_basic_string& assign (const charT* s, size_type n)
     { return replace (0, npos, s, n); }
@@ -216,7 +216,7 @@ public:
 
 //: insert str[pos2..pos2+n] after position pos1.
   vcl_basic_string& insert (size_type pos1, const vcl_basic_string& str,
-                        size_type pos2 = 0, size_type n = npos)
+                            size_type pos2 = 0, size_type n = npos)
     { return replace (pos1, 0, str, pos2, n); }
 
 //: insert s[0..n] after position pos.
@@ -266,11 +266,11 @@ public:
 
 //: replace this[pos1..pos1+n1] with str[pos2..pos2+n2].
   vcl_basic_string& replace (size_type pos1, size_type n1, const vcl_basic_string& str,
-                         size_type pos2 = 0, size_type n2 = npos);
+                             size_type pos2 = 0, size_type n2 = npos);
 
 //: replace this[pos1..pos1+n1] with s[0..n2].
   vcl_basic_string& replace (size_type pos1, size_type n1, const charT* s,
-                         size_type n2);
+                             size_type n2);
 
 //: replace this[pos1..pos1+n1] with s.
   vcl_basic_string& replace (size_type pos1, size_type n1, const charT* s)
@@ -546,7 +546,7 @@ operator!= (const vcl_basic_string <charT, traits>& lhs, const charT* rhs)
 template <class charT, class traits>
 inline bool
 operator< (const vcl_basic_string <charT, traits>& lhs,
-            const vcl_basic_string <charT, traits>& rhs)
+           const vcl_basic_string <charT, traits>& rhs)
 {
   return (lhs.compare (rhs) < 0);
 }

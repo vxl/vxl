@@ -18,7 +18,7 @@ int main()
     float  xf = 13.14159265358979323846;
     double xd = 23.14159265358979323846;
     long double ld = xd;
-    
+
 #define macro(var, type) \
 do { \
   if (vcl_abs(var) == var && vcl_abs(- var) == var) \
@@ -33,9 +33,9 @@ do { \
     macro(ld, long double);
 #undef macro
   }
-  
+
   {
-    // This shows why 
+    // This shows why
     //   #define vcl_cos cos
     // isn't good enough. It has to be
     //   #define vcl_cos ::cos
@@ -47,7 +47,7 @@ do { \
     double tan = vcl_tan(theta);
     if (theta==0.0) theta = cos + sin + tan; // quell 'unused variable' warning.
   }
-  
+
 #define macro(T, eps) \
   do { \
     T x = 2; \
@@ -63,6 +63,6 @@ do { \
   macro(long double, 1e-16);
 #endif
 #undef macro
-  
+
   return 0;
 }

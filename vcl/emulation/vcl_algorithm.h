@@ -1807,8 +1807,7 @@ __equal_range(RandomAccessIterator first, RandomAccessIterator last,
         else {
             left = vcl_lower_bound(first, middle, value);
             right = vcl_upper_bound(++middle, first + len, value);
-            return vcl_pair<RandomAccessIterator, RandomAccessIterator>(left,
-                                                                    right);
+            return vcl_pair<RandomAccessIterator, RandomAccessIterator>(left, right);
         }
     }
     return vcl_pair<RandomAccessIterator, RandomAccessIterator>(first, first);
@@ -1881,8 +1880,7 @@ __equal_range(RandomAccessIterator first, RandomAccessIterator last,
         else {
             left = vcl_lower_bound(first, middle, value, comp);
             right = vcl_upper_bound(++middle, first + len, value, comp);
-            return vcl_pair<RandomAccessIterator, RandomAccessIterator>(left,
-                                                                    right);
+            return vcl_pair<RandomAccessIterator, RandomAccessIterator>(left, right);
         }
     }
     return vcl_pair<RandomAccessIterator, RandomAccessIterator>(first, first);
