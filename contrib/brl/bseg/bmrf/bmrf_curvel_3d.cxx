@@ -8,16 +8,19 @@
 
 //: Constructor
 bmrf_curvel_3d::bmrf_curvel_3d()
+ : bugl_gaussian_point_3d<double>()
 {
 }
 
 //: Constructor
 bmrf_curvel_3d::bmrf_curvel_3d(vgl_point_3d<double> &p, vnl_double_3x3 &s)
+ : bugl_gaussian_point_3d<double>(p, s)
 {
 }
 
 //: Constructor
 bmrf_curvel_3d::bmrf_curvel_3d(double x, double y, double z, vnl_double_3x3 & s)
+ : bugl_gaussian_point_3d<double>(x, y, z, s)
 {
 }
 
