@@ -5,7 +5,6 @@
 
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
-#include <vcl_ios.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_save.h>
@@ -103,7 +102,7 @@ main (int argc, char** argv)
       // if we are lined up on an original pixel value, print that too
       if (0 == (k % fact)) {
           int ki = k / fact;
-          if (ki >= 0 && ki < ni && ki < nj) {
+          if (ki >= 0 && ki < int(ni) && ki < int(nj)) {
               double v_orig = image_orig (ki, ki);
               vcl_cout << "orig: " << vcl_setw(3) << v_orig << "  ";
           }
