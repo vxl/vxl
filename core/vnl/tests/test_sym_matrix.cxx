@@ -1,15 +1,14 @@
-#include <vcl_cmath.h>
+// This is vxl/vnl/tests/test_sym_matrix.cxx
 #include <vcl_iostream.h>
-
-#include <testlib/testlib_test.h>
 #include <vnl/vnl_sym_matrix.h>
+#include <testlib/testlib_test.h>
 
 static
 void test_int ()
 {
-  vcl_cout << "*****************************" << vcl_endl;
-  vcl_cout << "Testing Symmetric Matrix<int>" << vcl_endl;
-  vcl_cout << "*****************************" << vcl_endl;
+  vcl_cout << "*****************************\n"
+           << "Testing Symmetric Matrix<int>\n"
+           << "*****************************\n";
   vnl_sym_matrix<int> sm1(2);
   TEST ("\n\nvnl_sym_matrix<int> m1(2)", (sm1.rows()==2 && sm1.columns()==2), true);
   vnl_sym_matrix<int> sm2(2,2);

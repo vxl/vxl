@@ -1,3 +1,4 @@
+// This is vxl/vnl/tests/test_generalized_eigensystem.cxx
 
 //:
 // \file
@@ -8,10 +9,8 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl_iostream.h>
-#include <vcl_cmath.h>
-
-#include <testlib/testlib_test.h>
 #include <vnl/algo/vnl_generalized_eigensystem.h>
+#include <testlib/testlib_test.h>
 
 void test_generalized_eigensystem()
 {

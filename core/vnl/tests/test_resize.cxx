@@ -1,12 +1,11 @@
+// This is vxl/vnl/tests/test_resize.cxx
 /*
   fsm@robots.ox.ac.uk
 */
 #include <vcl_iostream.h>
-#include <vcl_cmath.h>
-
-#include <testlib/testlib_test.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
+#include <testlib/testlib_test.h>
 #if 0
 # include <vnl/vnl_resize.h>
 # define vnl_resize_v vnl_resize

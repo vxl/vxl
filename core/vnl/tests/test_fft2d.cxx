@@ -1,4 +1,4 @@
-// This is ./vxl/vnl/tests/test_fft2d.cxx
+// This is vxl/vnl/tests/test_fft2d.cxx
 
 //:
 // \file
@@ -18,7 +18,6 @@
 //-----------------------------------------------------------------------------
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
-#include <vcl_cmath.h>
 #include <vcl_complex.h>
 
 #include <vnl/vnl_complexify.h>

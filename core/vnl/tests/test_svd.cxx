@@ -1,7 +1,9 @@
-#include <vcl_cstdlib.h>
+// This is vxl/vnl/tests/test_svd.cxx
+
+//:
+// \file
 #include <vcl_iostream.h>
 #include <vcl_complex.h>
-#include <vcl_cmath.h> // for vcl_sqrt(double)
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_double_3.h>
@@ -31,7 +33,7 @@ void test_hilbert(T /*dummy*/, char const* type, S residual)
   vnl_matrix<T> H(5,5);
   for (int i = 0; i < 5; ++i)
     for (int j = 0; j < 5; ++j)
-      H(i,j) = 1.0 / (i+j+1); // sic, because i,j are zero based
+      H(i,j) = T( 1.0 / (i+j+1) ); // sic, because i,j are zero based
 
   vcl_cout << "H = <"<<type<<">[ " << H << "]\n";
 
@@ -54,7 +56,7 @@ void test_hilbert(T /*dummy*/, char const* type, S residual)
   testlib_test_assert("Hilbert recomposition residual", res.fro_norm() < residual);
 }
 
-// Test recovery of parameters of least-squares parabola fit.
+//: Test recovery of parameters of least-squares parabola fit.
 void test_ls()
 {
   double a = 0.15;
@@ -107,10 +109,10 @@ double test_fmatrix()
 
   vcl_cout << "P * null(P) = " << P*N << vcl_endl;
 
-  return vcl_sqrt(dot_product(P*N, P*N));
+  return dot_product(P*N, P*N);
 }
 
-// Test nullspace extraction of rank=2 3x4 matrix.
+//: Test nullspace extraction of rank=2 3x4 matrix.
 void test_pmatrix()
 {
   double pdata[] = {

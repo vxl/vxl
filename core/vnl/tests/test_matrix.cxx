@@ -1,14 +1,13 @@
-#include <vcl_cmath.h>
+// This is vxl/vnl/tests/test_matrix.cxx
 #include <vcl_iostream.h>
-
-#include <testlib/testlib_test.h>
 #include <vnl/vnl_matrix.h>
+#include <testlib/testlib_test.h>
 
 static
 void test_int () {
-  vcl_cout << "***********************" << vcl_endl;
-  vcl_cout << "Testing Matrix<int>" << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "*******************\n"
+           << "Testing Matrix<int>\n"
+           << "*******************\n";
   vnl_matrix<int> m0(2,2);
   TEST ("vnl_matrix<int> m0(2,2)", (m0.rows()==2 && m0.columns()==2), true);
   vnl_matrix<int> m1(3,4);
@@ -217,9 +216,9 @@ void test_int () {
 
 
 void test_float () {
-  vcl_cout << "***********************" << vcl_endl;
-  vcl_cout << "Testing Matrix<float>" << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "*********************\n"
+           << "Testing Matrix<float>\n"
+           << "*********************\n";
   vnl_matrix<float> d0(2,2);
   TEST ("vnl_matrix<float> d0(2,2)", (d0.rows()==2 && d0.columns()==2), true);
   vnl_matrix<float> d1(3,4);
@@ -347,9 +346,9 @@ void test_float () {
 }
 
 void test_double () {
-  vcl_cout << "***********************" << vcl_endl;
-  vcl_cout << "Testing Matrix<double>" << vcl_endl;
-  vcl_cout << "***********************" << vcl_endl;
+  vcl_cout << "**********************\n"
+           << "Testing Matrix<double>\n"
+           << "**********************\n";
   vnl_matrix<double> d0(2,2);
   TEST ("vnl_matrix<double> d0(2,2)", (d0.rows()==2 && d0.columns()==2), true);
   vnl_matrix<double> d1(3,4);

@@ -1,3 +1,5 @@
+// This is vxl/vnl/tests/test_symmetric_eigensystem.cxx
+
 //:
 // \file
 // \brief test program for symmetric eigensystem routines.
@@ -7,11 +9,9 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl_iostream.h>
-#include <vcl_cmath.h>
-
-#include <testlib/testlib_test.h>
 #include <vnl/vnl_sample.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
+#include <testlib/testlib_test.h>
 
 //extern "C"
 void test_symmetric_eigensystem()

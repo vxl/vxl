@@ -1,7 +1,7 @@
+// This is vxl/vnl/tests/test_fft.cxx
 /*
   fsm@robots.ox.ac.uk
 */
-#include <vcl_cmath.h>
 #include <vcl_iostream.h>
 
 #include <vnl/vnl_vector.h>
