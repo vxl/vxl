@@ -48,6 +48,8 @@ class vsol_box_3d : public vbl_ref_count , public vul_timestamp
 
   vsol_box_3d(vsol_box_3d const& b);
 
+  vsol_box_3d(vbl_bounding_box<double,3> const &b){box_=b;}
+
   ~vsol_box_3d() {}
 
   // accessors
