@@ -10,5 +10,5 @@ template unsigned *unique(unsigned *, unsigned *);
 #endif
 
 #if defined(VCL_GCC_295) && !defined(GNU_LIBSTDCXX_V3)
-template unsigned* fill_n(unsigned*, int, int const &);
+template unsigned int* fill_n(unsigned int*, int, int const &);
 #endif
