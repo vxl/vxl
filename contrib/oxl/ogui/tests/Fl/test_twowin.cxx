@@ -10,8 +10,6 @@
 #include <FL/Fl_Output.H>
 #include <FL/Fl_Roller.H>
 
-#include <vcl_cmath.h>
-
 #include <vgui/vgui.h>
 #include <vgui/vgui_deck_tableau.h>
 #include <vgui/vgui_easy2D.h>

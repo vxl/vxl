@@ -9,8 +9,6 @@
 #include <vgui/vgui_zoomer.h>
 #include <vgui/vgui.h>
 
-#include <vcl_cstdlib.h>
-
 //////////////////////////////////////////
 #include <vgui/impl/gtk/vgui_gtk_adaptor.h>
 
