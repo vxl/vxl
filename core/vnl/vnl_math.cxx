@@ -92,6 +92,10 @@ bool vnl_math_isnan(long double x) { return x != x; }
 #if defined(_MSC_VER)
 //: Return true if x is neither NaN nor Inf.
 bool vnl_math_isfinite(double x) { return finite(x) != 0; } // quell performance warning -- fsm
+//: Return true if x is neither NaN nor Inf.
+bool vnl_math_isfinite(float x) { return finite(x) != 0; } // quell performance warning -- fsm
+//: Return true if x is neither NaN nor Inf.
+bool vnl_math_isfinite(long double x) { return finite(x) != 0; } // quell performance warning -- fsm
 #else
 //: Return true if x is neither NaN nor Inf.
 bool vnl_math_isfinite(float x) { return finite(x); }
