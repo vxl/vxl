@@ -24,7 +24,7 @@
 #include <vdgl/vdgl_interpolator_linear.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
-#include <bbas/bdgl/bdgl_curve_algs.h>
+#include <bdgl/bdgl_curve_algs.h>
 #include "brct_structure_estimator.h"
 #include "brct_algos.h"
 
@@ -483,18 +483,18 @@ void brct_epi_reconstructor::print_motion_array()
     temp_i = get_cur_joe_observes(i);
     temp_i1 = get_cur_joe_observes(i+1);
     for (unsigned int j = 0; j<temp_0.size(); ++j)
-      {
-        bugl_gaussian_point_2d<double>& gp_0 = temp_0[j], gp_i = temp_i[j],
-          gp_i1 = temp_i1[j];
-        if (!gp_0.exists()||!gp_i.exists()||!gp_i1.exists())
-          continue;
-        vnl_double_2 p_i(gp_i.x(), gp_i.y());
-        vnl_double_2 p_i1(gp_i1.x(), gp_i1.y());
-        double gamma = brct_algos::motion_constant(*e_, i, p_i, p_i1);
-        vcl_cout << "gamma[" << i << "][" << j << "]("
-                 << gp_0.x() << ' ' << gp_0.y() << ") = " << gamma << '\n';
-        H.put(i, j, gamma);
-      }
+    {
+      bugl_gaussian_point_2d<double>& gp_0 = temp_0[j], gp_i = temp_i[j],
+        gp_i1 = temp_i1[j];
+      if (!gp_0.exists()||!gp_i.exists()||!gp_i1.exists())
+        continue;
+      vnl_double_2 p_i(gp_i.x(), gp_i.y());
+      vnl_double_2 p_i1(gp_i1.x(), gp_i1.y());
+      double gamma = brct_algos::motion_constant(*e_, i, p_i, p_i1);
+      vcl_cout << "gamma[" << i << "][" << j << "]("
+               << gp_0.x() << ' ' << gp_0.y() << ") = " << gamma << '\n';
+      H.put(i, j, gamma);
+    }
     brct_algos::print_motion_array(H);
   }
 }
@@ -552,8 +552,8 @@ void brct_epi_reconstructor::update_confidence()
     prob_[i] = 1.0/vnl_det(curve_3d_.get_point(i)->get_covariant_matrix());
 #endif
 }
-//original inc
-#if 0
+
+#if 0 //original inc()
 void brct_epi_reconstructor::inc()
 {
   if ((unsigned)(cur_pos_+1) >= tracks_[0].size()){ // end of the data
@@ -677,10 +677,9 @@ void brct_epi_reconstructor::inc()
   // update confidence level for each points
   update_confidence();
 }
-#endif
-//end of original inc
-//start of joe version of inc
-#if 1
+#else //end of original inc()
+
+//start of joe version of inc()
 void brct_epi_reconstructor::inc()
 {
   if ((unsigned)(cur_pos_+1) >= tracks_[0].size()){ // end of the data
@@ -801,8 +800,8 @@ void brct_epi_reconstructor::inc()
     }
   }
 }
-#endif
-//end of joe inc 2
+#endif //end of joe version of inc()
+
 void brct_epi_reconstructor::read_data(const char *fname)
 {
   vcl_ifstream fin(fname);

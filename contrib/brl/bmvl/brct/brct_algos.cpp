@@ -22,7 +22,7 @@
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
 #include <vdgl/vdgl_digital_curve.h>
-#include <bbas/bdgl/bdgl_curve_algs.h>
+#include <bdgl/bdgl_curve_algs.h>
 #include <vsol/vsol_box_3d.h>
 #include <vsol/vsol_point_3d.h>
 #include <vcl_cassert.h>
@@ -95,6 +95,7 @@ bugl_gaussian_point_2d<double> brct_algos::project_3d_point(const vnl_double_3x4
   vgl_point_2d<double> p2d(hp2d);
   return bugl_gaussian_point_2d<double>(p2d, Sigma2d);
 }
+
 //:  Given a set of perspective views of a point reconstruct the point according to least squares (SVD).
 //   The cameras for each view are given.
 //
@@ -191,11 +192,10 @@ vnl_double_2 brct_algos::projection_3d_point(const vnl_double_3x4 &P, const vnl_
 
   return z;
 }
+
 //Gives a sort on mutual information decreasing order
 static bool error_compare(brct_error_index* const e1,
                           brct_error_index* const e2)
-
-
 {
   if (!e1||!e2)
     return false;
@@ -348,7 +348,7 @@ robust_camera_translation(const vnl_double_3x3& K,
   //just to print new errors
   brct_algos::filter_outliers(K, trans, p2d, p3d);
 }
-//
+
 //:solve for the world translation given three points on a projective line.
 // epi corresponds to -infinity, p0 == 0, p1 == 1 in world coordinates
 // image epipolar location is taken to be zero on the epipolar line
@@ -365,6 +365,7 @@ static double line_trans(const double p0,
   double pw = (p1*(p0-p))/(p*(p0-p1));
   return pw;
 }
+
 //: get the distance along a line from point0  to p
 static double line_distance(vgl_line_segment_2d<double> const& seg,
                             vgl_point_2d<double> p)
@@ -378,7 +379,7 @@ static double line_distance(vgl_line_segment_2d<double> const& seg,
   double length = dot_product(dv,dir);
   return length;
 }
-//
+
 //: compute camera translation using two corresponding points on a bundle of epipolar lines passing through the epipole.
 //  The epipole, points_0 and points_1 define the projective transform
 //  between the image and the world. We assume the translation magnitude
@@ -424,6 +425,7 @@ brct_algos::camera_translation(vnl_double_3x3 const & K,
     T *= sumt;
   vcl_cout << "Camera Trans " << T << vcl_endl;
 }
+
 double brct_algos::motion_constant(vnl_double_2 const& image_epipole,
                                    int i,
                                    vnl_double_2& p_i,
@@ -467,9 +469,11 @@ void brct_algos::write_vrml_header(vcl_ofstream& str)
       << "radius 100\n"
       << "}\n";
 }
+
 void brct_algos::write_vrml_trailer(vcl_ofstream& str)
 {
 }
+
 void brct_algos::write_vrml_points(vcl_ofstream& str,
                                    vcl_vector<vsol_point_3d_sptr> const& pts3d)
 {
@@ -487,6 +491,7 @@ void brct_algos::write_vrml_points(vcl_ofstream& str,
       << " }\n"
       << "}\n";
 }
+
 void brct_algos::write_vrml_box(vcl_ofstream& str, vsol_box_3d_sptr const& box,
                                 const float r, const float g, const float b,
                                 const float transparency)

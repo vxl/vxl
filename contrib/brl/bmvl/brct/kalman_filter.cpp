@@ -22,7 +22,7 @@
 #include <vdgl/vdgl_interpolator_linear.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
-#include <bbas/bdgl/bdgl_curve_algs.h>
+#include <bdgl/bdgl_curve_algs.h>
 #include "brct_structure_estimator.h"
 #include "brct_algos.h"
 
@@ -770,8 +770,8 @@ vnl_matrix<double> kalman_filter::get_predicted_curve()
 
 vcl_vector<vnl_matrix<double> > kalman_filter::get_back_projection() const
 {
- vcl_vector<vnl_matrix<double> > res(memory_size_);
- for (int f=0; f<memory_size_; f++)
+  vcl_vector<vnl_matrix<double> > res(memory_size_);
+  for (int f=0; f<memory_size_; f++)
   {
     vnl_double_3x4 P = get_projective_matrix(motions_[f]);
 

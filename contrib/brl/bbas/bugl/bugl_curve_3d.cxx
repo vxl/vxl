@@ -1,6 +1,6 @@
 #include "bugl_curve_3d.h"
-#include <bbas/bugl/bugl_normal_point_3d_sptr.h>
-#include <bbas/bugl/bugl_normal_point_2d_sptr.h>
+#include <bugl/bugl_normal_point_2d_sptr.h>
+#include <bugl/bugl_normal_point_3d_sptr.h>
 #include <bugl/bugl_normal_point_2d.h>
 #include <bugl/bugl_normal_point_3d.h>
 #include <vcl_cassert.h>
