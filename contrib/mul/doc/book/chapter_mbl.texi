@@ -3,3 +3,61 @@
 General utilities used by several mul libraries.
 @endchapsummary
 
+@section Random Number Generator
+@cindex mbl_mz_random
+@cindex mz_random
+@subsection The randomness of mbl_mz_random
+
+
+I was using a vpdfl_axis_gaussian_sampler to produce some test data, and
+there seemed to be too many outliers. I was worried about the randomness
+of the mbl_mz_random::normal(), so I ran some tests.
+
+@subsubsection Tim's rank diagram test
+@itemize
+@item Sort the samples
+@item plot rank vs @math{P(x' < x)}
+@item i.e. plot i vs @math{0.5*(1+erf(x/sqrt(2))}
+@enditemize
+
+@image (mbl_mz_random_graph1)
+
+This seems normal.
+
+@subsubsection Testing specifically for outliers.
+
+For a seed of 123456, the numbers of outliers at 1, 2, 3, and 4 s.d.
+were all greater than the expected value. This bias was reduced
+but still evident when the number of samples was increased from 10^4 to 10^5 and 10^6.
+
+The results for a key of  9667566 are
+Got 3183 samples outside 1 sd- expected3174
+Got 463 samples outside 2 sd- expected455
+Got 28 samples outside 3 sd- expected27.5
+Got 0 samples outside 4 sd- expected0.6
+
+These seem @emph{more normal}.
+
+@subsubsection Testing distribution of outliers separations.
+
+One further possibility is that there might be correlation between adjacent samples. So
+I counted the separations (number of samples) between outliers (those that exceeded 2 standard deviations), and plotted the distribution of intervals, along with the expected distribution.
+The first graph is for a seed of 123456, and the second for a seed of 9667566.
+(Note: The key on the following two graphs is reversed.)
+
+@image (mbl_mz_random_graph2)
+@image (mbl_mz_random_graph3)
+
+@subsubsection Conclusions
+
+There does not appear to be a persistent bias in the number of outliers as
+the seed is modified.
+
+A seed of 123456 does seem to give more outliers than expected, and in particular
+gives more adjacent outliers that expected - which can have significant effects
+on 2-D test data set generation.
+
+Use a different seed 9667566
+
+Ian Scott
+29 November 2000
