@@ -1,3 +1,13 @@
+//
+// This is xcv_multiview_create_multiview_menu.cxx.
+// See xcv_multiview.h for a description of this file.
+//
+// \author  Andrew Fitzgibbon
+// \verbatim
+//   Modifications:
+//
+// \endverbatim
+//
 
 #include <vgui/vgui_menu.h>
 
