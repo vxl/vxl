@@ -8,7 +8,7 @@ include ${IUEROOT}/config/top-params.mk
 LIBRARY := mvl2
 VERSION := 1.0
 
-SOURCES += mvl2_video_writer.cxx
+MANPAGE_SOURCES += mvl2_video_writer.h
 SOURCES += mvl2_video_reader.cxx
 SOURCES += mvl2_video_from_sequence.cxx
 

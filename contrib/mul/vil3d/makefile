@@ -4,7 +4,7 @@ LIBRARY := vil3d
 VERSION := 1.0
 
 MANPAGE_SOURCES += vil3d_property.h
-SOURCES += vil3d_image_view_base.cxx
+MANPAGE_SOURCES += vil3d_image_view_base.h
 MANPAGE_SOURCES += vil3d_image_view.txx
 MANPAGE_SOURCES += vil3d_plane.h
 MANPAGE_SOURCES += vil3d_print.h

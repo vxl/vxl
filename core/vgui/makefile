@@ -25,8 +25,8 @@ SOURCES += vgui_modifier.cxx
 SOURCES += vgui_event.cxx
 SOURCES += vgui_command.cxx
 SOURCES += vgui_menu.cxx
-SOURCES += vgui_popup_params.cxx
-SOURCES += vgui_message.cxx
+MANPAGE_SOURCES += vgui_popup_params.h
+MANPAGE_SOURCES += vgui_message.h
 SOURCES += vgui_observer.cxx
 SOURCES += vgui_observable.cxx
 MANPAGE_SOURCES += vgui_satellite_tableau.txx
@@ -70,7 +70,7 @@ MANPAGE_SOURCES += vgui_grid_tableau_sptr.h
 SOURCES += vgui_drag_mixin.cxx
 SOURCES += vgui_active_tableau.cxx
 MANPAGE_SOURCES += vgui_active_tableau_sptr.h
-SOURCES += vgui_drag_tableau.cxx
+MANPAGE_SOURCES += vgui_drag_tableau.h
 MANPAGE_SOURCES += vgui_drag_tableau_sptr.h
 SOURCES += vgui_clear_tableau.cxx
 MANPAGE_SOURCES += vgui_clear_tableau_sptr.h
@@ -129,15 +129,15 @@ MANPAGE_SOURCES += vgui_viewer3D_tableau_sptr.h
 
 # dialog classes
 SOURCES += vgui_dialog.cxx
-SOURCES += internals/vgui_dialog_field.cxx
+MANPAGE_SOURCES += internals/vgui_dialog_field.h
 SOURCES += internals/vgui_simple_field.cxx
-SOURCES += internals/vgui_string_field.cxx
-SOURCES += internals/vgui_file_field.cxx
+MANPAGE_SOURCES += internals/vgui_string_field.h
+MANPAGE_SOURCES += internals/vgui_file_field.h
 SOURCES += internals/vgui_dialog_impl.cxx
 
 # statusbar classes
 SOURCES += vgui_statusbuf.cxx
-SOURCES += vgui_statusbar.cxx
+MANPAGE_SOURCES += vgui_statusbar.h
 
 # vil2 support
 SOURCES += vgui_vil_image_renderer.cxx
@@ -147,8 +147,8 @@ SOURCES += internals/vgui_invert_homg4x4.cxx
 SOURCES += internals/vgui_back_project.cxx
 SOURCES += internals/vgui_un_project.cxx
 SOURCES += internals/vgui_adaptor_tableau.cxx
-SOURCES += internals/vgui_parent_child_link_data.cxx
-SOURCES += internals/vgui_adaptor_mixin.cxx
+MANPAGE_SOURCES += internals/vgui_parent_child_link_data.h
+MANPAGE_SOURCES += internals/vgui_adaptor_mixin.h
 SOURCES += internals/vgui_overlay_helper.cxx
 SOURCES += internals/vgui_multiply_4x4.cxx
 SOURCES += internals/vgui_transpose_4x4.cxx

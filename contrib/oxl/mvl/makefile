@@ -19,13 +19,13 @@ SOURCES += mvl_three_view_six_point_structure.cxx
 
 SOURCES += Homg.cxx
 
-SOURCES += Homg2D.cxx
+MANPAGE_SOURCES += Homg2D.h
 SOURCES += HomgLine2D.cxx
 SOURCES += HomgLineSeg2D.cxx
 SOURCES += HomgPoint2D.cxx
 SOURCES += HomgOperator2D.cxx
 
-SOURCES += Homg3D.cxx
+MANPAGE_SOURCES += Homg3D.h
 SOURCES += HomgLine3D.cxx
 SOURCES += HomgLineSeg3D.cxx
 SOURCES += HomgPoint3D.cxx
@@ -56,8 +56,8 @@ SOURCES += PMatrix.cxx
 SOURCES += PMatrixDecompAa.cxx
 SOURCES += PMatrixDec.cxx
 SOURCES += PMatrixDecompCR.cxx
-SOURCES += PMatrixAffine.cxx
-SOURCES += PMatrixEuclidean.cxx
+MANPAGE_SOURCES += PMatrixAffine.h
+MANPAGE_SOURCES += PMatrixEuclidean.h
 
 SOURCES += TriTensor.cxx
 SOURCES += ProjectiveBasis2D.cxx
@@ -71,7 +71,7 @@ SOURCES += PairMatchSetCorner.cxx
 SOURCES += PairMatchSet2D3D.cxx
 SOURCES += PairMatchMulti.cxx
 SOURCES += PairMatchMultiIterator.cxx
-SOURCES += MatchSet.cxx
+MANPAGE_SOURCES += MatchSet.h
 SOURCES += TripleMatchSet.cxx
 SOURCES += TripleMatchSetCorner.cxx
 SOURCES += TripleMatchSetLineSeg.cxx
@@ -117,7 +117,7 @@ SOURCES += HMatrix2DAffineCompute.cxx
 SOURCES += HMatrix2DSimilarityCompute.cxx
 SOURCES += HMatrix2DEuclideanCompute.cxx
 
-SOURCES += PMatrixCompute.cxx
+MANPAGE_SOURCES += PMatrixCompute.h
 SOURCES += PMatrixComputeLinear.cxx
 MANPAGE_SOURCES += PMatrixCompute6Point.h
 
@@ -128,7 +128,7 @@ SOURCES += TriTensorCompute.cxx
 SOURCES += ComputeGRIC.cxx
 SOURCES += Probability.cxx
 SOURCES += FileNameGeneratorBase.cxx
-SOURCES += FileNameGenerator.cxx
+MANPAGE_SOURCES += FileNameGenerator.h
 SOURCES += RawPMatrixStore.cxx
 
 MANPAGE_SOURCES += HomgMap2D.h

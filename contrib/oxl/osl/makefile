@@ -15,7 +15,7 @@ MANPAGE_SOURCES += osl_1d_half_kernel.txx
 # Harris corner detector
 SOURCES += osl_harris_params.cxx
 SOURCES += osl_harris.cxx
-SOURCES += osl_roi_window.cxx
+MANPAGE_SOURCES += osl_roi_window.h
 SOURCES += osl_convolve.cxx
 SOURCES += internals/droid.cxx
 
@@ -31,7 +31,7 @@ SOURCES += osl_save_topology.cxx
 SOURCES += osl_load_topology.cxx
 
 # canny utilities
-SOURCES += osl_canny_port.cxx
+MANPAGE_SOURCES += osl_canny_port.h
 SOURCES += osl_canny_base.cxx
 SOURCES += osl_canny_smooth.cxx
 MANPAGE_SOURCES += osl_canny_smooth.txx
@@ -40,7 +40,7 @@ SOURCES += osl_canny_nms.cxx
 SOURCES += osl_chamfer.cxx
 SOURCES += internals/osl_reorder_chain.cxx
 # rothwell canny 1
-SOURCES += osl_canny_rothwell_params.cxx
+MANPAGE_SOURCES += osl_canny_rothwell_params.h
 SOURCES += osl_canny_rothwell.cxx
 # oxford canny
 SOURCES += osl_canny_ox_params.cxx
@@ -56,7 +56,7 @@ SOURCES += osl_easy_canny.cxx
 # Fitting
 
 SOURCES += osl_ortho_regress.cxx
-SOURCES += osl_OrthogRegress.cxx # to be deprecated.
+MANPAGE_SOURCES += osl_OrthogRegress.h # to be deprecated.
 SOURCES += osl_fit_lines.cxx
 SOURCES += osl_fit_lines_params.cxx
 SOURCES += osl_fit_circle.cxx
@@ -69,7 +69,7 @@ include ${IUEROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
-SUBDIRS += tests 
+SUBDIRS += tests
 SUBDIRS += examples
 endif
 

@@ -7,7 +7,7 @@ SOURCES += gtrl_triangulation.cxx
 
 # helpers
 SOURCES += gtrl_triangle.cxx
-SOURCES += gtrl_vertex.cxx
+MANPAGE_SOURCES += gtrl_vertex.h
 SOURCES += gtrl_polygon.cxx
 
 #######################################

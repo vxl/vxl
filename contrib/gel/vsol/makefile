@@ -25,7 +25,7 @@ SOURCES += vsol_line_2d.cxx
 SOURCES += vsol_conic_2d.cxx
 SOURCES += vsol_polyline_2d.cxx
 # 2-D
-SOURCES += vsol_region_2d.cxx
+MANPAGE_SOURCES += vsol_region_2d.h
 SOURCES += vsol_polygon_2d.cxx
 SOURCES += vsol_triangle_2d.cxx
 SOURCES += vsol_rectangle_2d.cxx
@@ -37,16 +37,16 @@ SOURCES += vsol_group_3d.cxx
 # 0-D
 SOURCES += vsol_point_3d.cxx
 # 1-D
-SOURCES += vsol_curve_3d.cxx
+MANPAGE_SOURCES += vsol_curve_3d.h
 SOURCES += vsol_line_3d.cxx
 # 2-D
-SOURCES += vsol_surface_3d.cxx
-SOURCES += vsol_region_3d.cxx
+MANPAGE_SOURCES += vsol_surface_3d.h
+MANPAGE_SOURCES += vsol_region_3d.h
 SOURCES += vsol_polygon_3d.cxx
 SOURCES += vsol_triangle_3d.cxx
 SOURCES += vsol_rectangle_3d.cxx
 # 3-D
-SOURCES += vsol_volume_3d.cxx
+MANPAGE_SOURCES += vsol_volume_3d.h
 SOURCES += vsol_polyhedron.cxx
 SOURCES += vsol_tetrahedron.cxx
 

@@ -22,7 +22,7 @@ SOURCES += vdgl_fit_line.cxx
 SOURCES += vdgl_fit_lines.cxx
 SOURCES += vdgl_fit_lines_params.cxx
 SOURCES += vdgl_ortho_regress.cxx
-SOURCES += vdgl_OrthogRegress.cxx
+MANPAGE_SOURCES += vdgl_OrthogRegress.h
 
 MANPAGE_SOURCES += vdgl_digital_curve_sptr.h
 MANPAGE_SOURCES += vdgl_edgel_chain_sptr.h

@@ -9,9 +9,9 @@ SOURCES += VoxmapPoints.cxx
 SOURCES += VoxmapImagePoints.cxx
 SOURCES += Voxel.cxx
 SOURCES += OctreeLevel.cxx
-SOURCES += Cube.cxx
 SOURCES += ConvexHull.cxx
-SOURCES += BaseCube.cxx
+MANPAGE_SOURCES += BaseCube.h
+MANPAGE_SOURCES += Cube.h
 
 ################################
 include ${IUEROOT}/config/top.mk

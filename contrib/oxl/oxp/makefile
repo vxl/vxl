@@ -11,7 +11,7 @@ include $(IUEROOT)/config/top-params.mk
 #######################################
 
 SOURCES += oxp_parse_seqname.cxx
-SOURCES += Mapping_2d_2d.cxx
+MANPAGE_SOURCES += Mapping_2d_2d.h
 SOURCES += RadialLensCorrection.cxx
 SOURCES += MedianReduceImage.cxx
 SOURCES += ByteConvertImage.cxx
@@ -49,7 +49,7 @@ SOURCES += oxp_mpeg_codec.cxx
 SOURCES += oxp_vidl_mpeg_codec.cxx
 endif
 
-SOURCES += oxp_yuv_to_rgb.cxx
+MANPAGE_SOURCES += oxp_yuv_to_rgb.h
 MANPAGE_SOURCES += MapInverter.h
 
 ######################################

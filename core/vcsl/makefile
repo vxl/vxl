@@ -14,12 +14,12 @@ VERSION := 1.0
 
 IMMEDIATE_LIBS += -lvbl -lvnl
 
-SOURCES += vcsl_dimension.cxx
+MANPAGE_SOURCES += vcsl_dimension.h
 SOURCES += vcsl_length.cxx
 
 SOURCES += vcsl_angle.cxx
 
-SOURCES += vcsl_unit.cxx
+MANPAGE_SOURCES += vcsl_unit.h
 SOURCES += vcsl_length_unit.cxx
 SOURCES += vcsl_meter.cxx
 
@@ -30,7 +30,7 @@ SOURCES += vcsl_degree.cxx
 SOURCES += vcsl_axis.cxx
 SOURCES += vcsl_coordinate_system.cxx
 
-SOURCES += vcsl_cartesian.cxx
+MANPAGE_SOURCES += vcsl_cartesian.h
 
 SOURCES += vcsl_spatial.cxx
 SOURCES += vcsl_graph.cxx
@@ -46,7 +46,7 @@ SOURCES += vcsl_spheroid.cxx
 SOURCES += vcsl_geographic.cxx
 SOURCES += vcsl_utm.cxx
 SOURCES += vcsl_geocentric.cxx
-SOURCES += vcsl_geodetic.cxx
+MANPAGE_SOURCES += vcsl_geodetic.h
 SOURCES += vcsl_lambertian.cxx
 
 SOURCES += vcsl_spatial_transformation.cxx

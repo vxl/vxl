@@ -10,10 +10,10 @@ SOURCES += gmvl_connection.cxx
 SOURCES += gmvl_connection_cache.cxx
 
 # node implementations
-SOURCES += gmvl_topology_node.cxx
-SOURCES += gmvl_image_node.cxx
-SOURCES += gmvl_corner_node.cxx
-SOURCES += gmvl_tag_node.cxx
+MANPAGE_SOURCES += gmvl_topology_node.h
+MANPAGE_SOURCES += gmvl_image_node.h
+MANPAGE_SOURCES += gmvl_corner_node.h
+MANPAGE_SOURCES += gmvl_tag_node.h
 
 # helpers
 SOURCES += gmvl_helpers.cxx
