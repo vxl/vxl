@@ -6,17 +6,11 @@
 // \file
 
 #include "vil2_load.h"
-
 #include <vcl_iostream.h>
-
 #include <vil/vil_open.h>
 #include <vil2/vil2_file_format.h>
 #include <vil/vil_stream.h>
 #include <vil2/vil2_property.h>
-#ifdef VIL2_TO_BE_FIXED
-#include <vil/vil_flipud.h>
-#include <vil/vil_flip_components.h>
-#endif
 #include <vil2/vil2_image_resource.h>
 
 
