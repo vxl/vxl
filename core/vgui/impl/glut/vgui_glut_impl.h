@@ -27,6 +27,7 @@ struct vgui_glut_impl : vgui_toolkit
   void run_one_event();
   void run_till_idle();
   void quit();
+  void flush();
 
 private:
   static int count;

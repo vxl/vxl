@@ -218,4 +218,10 @@ void vgui_glut_impl::run_till_idle()
   vgui_glut_impl_process_command_queue();
 }
 
+void vgui_glut_impl::flush()
+{
+  glFlush();
+  run_till_idle();
+}
+
 //--------------------------------------------------------------------------------
