@@ -337,8 +337,8 @@ void vil_dicom_header_format::readHeaderElements(vil_stream &fs)
     return;
   data_block_size = intSwap(data_block_size);
   if (data_block_size > 0x1000000)
-    vcl_cerr << __FILE__ << ": " << __LINE__ << " : WARNING \n"
-            <<"data_block_size=" << data_block_size << " is most probably too large\n";
+    vcl_cerr << __FILE__ << ": " << __LINE__ << " : WARNING\n"
+             <<"data_block_size=" << data_block_size << " is most probably too large\n";
   else
     convertValueRepresentation(data_block_size, fs);
 }
@@ -524,7 +524,6 @@ void vil_dicom_header_format::readImageElements(short element,
                                                 int dblock_size,
                                                 vil_stream &fs)
 {
-
     // Pointer to any data read
   char *data_p = 0;
 
@@ -646,7 +645,7 @@ bool vil_dicom_header_format::convertValueRepresentation(unsigned int &dblock_si
              last == VIL_DICOM_HEADER_OTHERWORD)
     {
       fs.read(&dblock_size, sizeof(int));
-      dblock_size = intSwap(dblock_size); 
+      dblock_size = intSwap(dblock_size);
       result = true;
     } // End of else if (first...)
     else if (dblock_size == VIL_DICOM_HEADER_ALLSET)
@@ -928,7 +927,7 @@ vil_dicom_header_endian vil_dicom_header_format::determineMetaInfo(vil_stream &f
         // Now see what it is
 
         vcl_string temp = tfx_type;
-        delete [] tfx_type; tfx_type=0;
+        delete [] tfx_type;
 
         if (temp == VIL_DICOM_HEADER_IMPLICITLITTLE ||
             temp == VIL_DICOM_HEADER_EXPLICITLITTLE)
