@@ -2,7 +2,7 @@
 # include ${IUELOCALROOT}/config/usr_params.mk
 ##########################################
 
-USES := gel vxl v3p
+USES := gel vxl oxl v3p
 # the following 5 are needed in conjunction with libvil:
 USE_JPEG := 1
 USE_TIFF := 1
