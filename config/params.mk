@@ -11,10 +11,10 @@
 #
 # Notes:
 #
-# * Most makefiles assume sourcefile can be inferred from object file, but 
+# * Most makefiles assume sourcefile can be inferred from object file, but
 #   often this leads to great complexity.  In this, you generally supply the
 #   sources that will do something, rather than the objects.
-# 
+#
 # * This makefile should be included after all variables have been set,
 #   i.e. generally at the end of the makefile.  This is to make it somewhat
 #   easier to debug, by using := instead of = for the variables.
@@ -29,7 +29,7 @@
 #
 # * ":=" variables are expanded once
 #   "="  variables are more like macros -- any $.. references are evaluated as late as possible.
-# 
+#
 # * I would strongly recommmend font-lock-mode on this file.
 #
 # * A good way to debug make is to
@@ -42,7 +42,7 @@
 #             INCLUDED MAKEFILES
 #            ####################
 #  * Please keep this section up to date *
-#  
+#
 #  top.mk  # 2 lines, defines $(configdir)
 #    generic.mk
 #      identify-os.mk    # No user-servicable parts inside, just sets $(OS)
@@ -52,7 +52,6 @@
 #      user.mk           # Even more local preferences
 #      build-$(BUILD).mk # Sets code-generation flags for different build types.
 #      makevars.mk	 # defines variables users makefiles may use
-
 
 ########################################################################
 #  If users makefiles want to set these variables, the setting must occur
@@ -103,7 +102,7 @@ QUIET=@
 #    this will be overridden, as will calling make native.target
 #    or make photon.target  make sure this is first so that
 #    it can be overriden in identify-os.mk  (see win32 stuff)
-#    
+#
 # Option: COMPILER
 # Set the name of the compiler to use.  This will be the name passed
 # to the toplevel "configure" with any spaces stripped, and will be
@@ -124,7 +123,7 @@ endif
 # 1. Set the OS variable
 include $(configdir)/identify-os.mk
 
-# MACRO "sys_or_iu_macro": 
+# MACRO "sys_or_iu_macro":
 # Use this macro as $(foreach file,XXX,$(sys_or_iu_macro)), where XXX is a
 # list of top-level package names, to obtain a list of full paths to the
 # given packages. The macro selects the one from the IUELOCALROOT if it
@@ -164,7 +163,7 @@ MKDIR_P := mkdir -p
 IUE_PERL := perl
 TJWD := $(IUE_PERL) $(sys_or_iu_Scripts)/Perl/tjwd
 SEARCH := grep
-RM := rm -f 
+RM := rm -f
 STRIP := true #strip
 LN := ln -f -s
 
@@ -192,7 +191,6 @@ EXESUFFIX :=
 
 # This is appended to the end of each library. It's "" for unix and ".lib" for windows.
 LINK_POSTFIX :=
-
 
 
 # Handy make vars
@@ -227,11 +225,11 @@ iue-no-print-directory := --no-print
 # $(C++) $(LIB_PATH)/usr/local/lib ...etc...
 LIB_PATH := -L
 
-# This is used at the begining of each library. E.g. for unix, libm.{a,so} is given as -lm
+# This is used at the beginning of each library. E.g. for unix, libm.{a,so} is given as -lm
 LINK_PREFIX := -l
 LINK_LIB_FLAG := -l
 
-# This is used to tell the compiler the name of the object file. 
+# This is used to tell the compiler the name of the object file.
 # To do "-o OBJECT" with microsoft is "/FoOBJECT"  file.C
 # The flag is /Fo and file.o must touch it!
 # Use OUTPUT_OPTION as that has precedent in SunOS make.
@@ -254,7 +252,7 @@ USE_LIB_VERSION := 0
 
 # Config: MAKE_EXE
 # The command used to generate executables. On most platforms this is $(PURIFY) $(C++)
-MAKE_EXE = $(PURIFY) $(C++) 
+MAKE_EXE = $(PURIFY) $(C++)
 
 # Config: MAKE_SHLIB
 # The command used to generate shared libraries. On most platforms this is $(C++) -shared
@@ -263,7 +261,7 @@ MAKE_SHLIB := $(C++) -shared
 # Config: MAKE_ARLIB
 # Command used to generate archive libraries. To be used in a rule where the target
 # is the library to make.
-MAKE_ARLIB = rm -f $@ && ar qcv $@ 
+MAKE_ARLIB = rm -f $@ && ar qcv $@
 
 ######################### including config.mk.in #########################
 ## Include config.mk.in as modified by the configure script
@@ -426,14 +424,14 @@ include $(configdir)/build-$(BUILD).mk
 ### include site-specific defines.
 include $(configdir)/site.mk
 
-# fsm : linux gmake sometimes says "no rule to make target xxx.mk" for 
+# fsm : linux gmake sometimes says "no rule to make target xxx.mk" for
 # the -includes below. It is usually caused by a double-inclusion of the
 # referring makefile.
 
 ### include any auto generated defines
 -include $(IUELOCALROOT)/config/config-auto.mk
 
-### include user specific defines if they are there 
+### include user specific defines if they are there
 # The user defines re-override site.mk definitions if supplied.
 -include $(IUELOCALROOT)/etc/user.mk
 
@@ -452,13 +450,13 @@ PKGWD := $(shell $(TJWD))
 #(fsm:not used anywhere)PWD := $(IUELOCALROOT)$/$(PKGWD)
 #(fsm:not used anywhere)PWD.. := $(IUELOCALROOT)$/$(PKGWD..)
 
-# Rick@aai - PKGDIR is the USES entry (i.e. package name) that forms a prefix of 
+# Rick@aai - PKGDIR is the USES entry (i.e. package name) that forms a prefix of
 # the current tjwd.
 # E.g. if in $IUEROOT/vxl/vgui/impl, this will be "vxl"
 #
 # Use this for location of libs if not using a central libdir. Do not use PKGWD..
 # because that won't work for packages with deep library directories and
-# multi-directory package names (e.g., 
+# multi-directory package names (e.g.,
 #   CoordSys-IUE/IUE-CS/CartesianSystem in package CoordSys-IUE and
 #   Examples-IUE/GUIExample/IUE-GUIExample in Examples-IUE/GUIExample)
 PKGDIR := $(foreach use,$(USES),$(findstring $(use),$(filter $(use)/%,$(PKGWD)/)))
@@ -469,7 +467,7 @@ ifeq ($(strip $(PKGDIR)),)
 endif
 
 
-# If $(PKGWD) is empty we are outside the targetjr build tree. There are 
+# If $(PKGWD) is empty we are outside the targetjr build tree. There are
 # three kinds of makefiles :
 #   1. makefile in IUEROOT
 #   2. makefile in IUELOCALROOT
@@ -480,7 +478,6 @@ ifneq "$(PKGWD)" ""
 else
   PWD_INSIDE_IUE:=0
 endif
-
 
 
 # Internal: CENTRAL_LIBDIR
@@ -519,6 +516,8 @@ endif
 ############################################################
 # check for configure defined stuff here
 
+DEFINES += -DVXL_WARN_DEPRECATED
+
 # This macro expands package name 'file' to the correct library directory :
 sys_or_iu_macro_lib = $(firstword $(wildcard $(IUELOCALROOT_libbase)/$(file) $(IUEROOT_libbase)/$(file)))
 
@@ -541,7 +540,7 @@ endif
 
 
 #check to see if the system has IUE-Root files, if
-# not assume HAS_IUE:= 
+# not assume HAS_IUE:=
 sys_or_iu_IUERoot := $(foreach file,Basics-IUE/IUE-Root/makefile ,$(sys_or_iu_macro))
 ifeq (,$(sys_or_iu_IUERoot))
 HAS_IUE :=
@@ -565,8 +564,6 @@ endif
 ifeq ($(GNU_LIBSTDCXX_V3),1)
   DEFINES += -DGNU_LIBSTDCXX_V3
 endif
-
-
 
 
 ################################################################################
@@ -595,7 +592,7 @@ ifeq ($(PWD_INSIDE_IUE),1)
   endif
 endif
 
-# FIXME: using only OBJBASE and not SYS_OBJBASE, i.e. assumes we're 
+# FIXME: using only OBJBASE and not SYS_OBJBASE, i.e. assumes we're
 # compiling in the IUELOCALROOT, but not the IUEROOT.
 # FIXME: the ABSOBJDIR is never in IUELOCALROOT if the sources aren't.
 ifdef IUE_send_to_objbase
@@ -612,7 +609,7 @@ endif
 # Default final resting place of libraries
 
 # If we are outside a targetjr build tree we want to place
-# libraries relative to the currect directory, unless we are 
+# libraries relative to the currect directory, unless we are
 # using a central libdir.
 ifdef CENTRAL_LIBDIR
   #FIXME: what if we have an IUELOCALROOT, but are building in the IUEROOT?
