@@ -79,13 +79,19 @@ void testlib_test_assert(const vcl_string& msg, bool expr)
 void testlib_test_assert_near(const vcl_string& msg, double expr, double target, double tol)
 {
   vcl_cout << msg << " should be " << target << ", is " << expr << ", ";
-  testlib_test_perform(vcl_abs(expr - target) < tol);
+  double diff = vcl_abs(expr - target);
+  if ( ! diff < tol)
+    vcl_cout << "difference " << diff << ", ";
+  testlib_test_perform(diff < tol);
 }
 
 void testlib_test_assert_near(const vcl_string& msg, vcl_complex<double> expr, vcl_complex<double> target, double tol)
 {
   vcl_cout << msg << " should be " << target << ", is " << expr << ", ";
-  testlib_test_perform(vcl_abs(expr - target) < tol);
+  double diff = vcl_abs(expr - target);
+  if ( ! diff < tol)
+    vcl_cout << "difference " << diff << ", ";
+  testlib_test_perform(diff < tol);
 }
 
 void testlib_test_assert_far(const vcl_string& msg, double expr, double target, double tol)
