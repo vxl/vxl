@@ -4,19 +4,15 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-// .NAME vdgl_interpolator_cubic - Represents a 2D interpolator_cubic for a vdgl_edgel_chain
-// .INCLUDE vgl/vdgl_interpolator_cubic.h
-// .FILE vdgl_interpolator_cubic.txx
-//
-// .SECTION Description
-//  A 2d edgel chain interpolator_cubic
-//
-// .SECTION Author
+//:
+// \file
+// \brief Represents a 2D interpolator_cubic for a vdgl_edgel_chain
+// \author
 //    Geoff Cross
-// Created: xxx xx xxxx
 
 #include <vdgl/vdgl_interpolator.h>
+
+//: Represents a 2D interpolator_cubic for a vdgl_edgel_chain
 
 class vdgl_interpolator_cubic : public vdgl_interpolator
 {
@@ -29,21 +25,21 @@ class vdgl_interpolator_cubic : public vdgl_interpolator
 
   // Operators----------------------------------------------------------------
 
-  // interpolation 0th degree
+  //: interpolation 0th degree
   double get_x( const double index);
   double get_y( const double index);
 
-  // interpolation 1st degree
+  //: interpolation 1st degree
   double get_theta( const double index);
   double get_tangent_angle( const double index);
 
-  // interpolation 2nd degree
+  //: interpolation 2nd degree
   double get_curvature( const double index);
 
-  // integral
+  //: integral
   double get_length();
 
-  // bounding box
+  //: bounding box
   double get_min_x();
   double get_max_x();
   double get_min_y();
@@ -67,4 +63,4 @@ class vdgl_interpolator_cubic : public vdgl_interpolator
   void recompute_bbox();
 };
 
-#endif // _vdgl_interpolator_cubic_h
+#endif // vdgl_interpolator_cubic_h
