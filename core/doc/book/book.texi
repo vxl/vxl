@@ -171,14 +171,28 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 @include appendix_build.texi
 
 @comment ------------------------------------------------------------------
-@node    templates, Concept Index, build,    top
+@node    templates, Adding To vnl, build,    top
 @comment node-name, next,          previous, up
 @appendix  On The Use of Templates
 
 @include appendix_templates.texi
 
 @comment ------------------------------------------------------------------
-@node    Concept Index,  top,  templates, top
+@node    Adding To vnl, vsl for developers, build,    top
+@comment node-name, next,          previous, up
+@appendix Adding to vnl_algo
+
+@include appendix_adding_to_vnl_algo.texi
+
+@comment ------------------------------------------------------------------
+@node    vsl for developers, Concept Index, Adding To vnl,    top
+@comment node-name, next,          previous, up
+@appendix vsl Developer Topics
+
+@include appendix_vsl_for_developers.texi
+
+@comment ------------------------------------------------------------------
+@node    Concept Index,  top,  vsl for developers, top
 @comment node-name,      next, previous,  up
 @unnumbered Concept Index
 

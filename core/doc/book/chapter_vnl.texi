@@ -695,7 +695,3 @@ and of alternative implementations.
 @item Many classes are defined as double-only rather than templated.
 I will use default template arguments when the compilers support them.
 @end itemize
-
-@section Adding to vnl_algo (Developer Topic)
-
-@include appendix_adding_to_vnl_algo.texi
