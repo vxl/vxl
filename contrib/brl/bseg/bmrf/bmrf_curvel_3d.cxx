@@ -85,7 +85,7 @@ bmrf_curvel_3d::num_projections() const
   int count = 0;
   for ( vcl_vector<vcl_pair<double,bmrf_node_sptr> >::const_iterator itr = projs_2d_.begin();
         itr != projs_2d_.end();  ++itr )
-    if(!itr->second == NULL)
+    if(itr->second)
       ++count;
   
   return count;
