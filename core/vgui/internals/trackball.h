@@ -86,4 +86,4 @@ axis_to_quat(float a[3], float phi, float q[4]);
 }
 #endif
 
-#endif // vgui_internals_trackball_h_
+#endif /* vgui_internals_trackball_h_ */
