@@ -185,6 +185,9 @@ void test_mixture()
   delete p_builder2;
   delete p_pdf2;
   delete p_pdf3;
+
+  vsl_delete_all_loaders();
+
 }
 
 

@@ -181,6 +181,9 @@ void test_weighted_epanech_kernel_pdf()
   delete p_pdf_built;
   delete p_pdf_in;
   delete p_builder_in;
+
+  vsl_delete_all_loaders();
+
 }
 
 TESTLIB_DEFINE_MAIN(test_gaussian_kernel_pdf);
