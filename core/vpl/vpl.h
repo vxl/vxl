@@ -28,10 +28,9 @@ unsigned int    vpl_sleep( unsigned int t );
 //: Sleep for t microseconds.
 int             vpl_usleep( unsigned int t );
 
-//: Set Environment variable
-// \param envar should contain the environment variable name and value
+//: Set environment variable
+// \param envvar should contain the environment variable name and value
 // separated by an equals sign, e.g. "VARNAME=VALUE"
 int             vpl_putenv ( const char * envvar );
 
-
-#endif // vpl_vpl_h_
+#endif // vpl_h_
