@@ -13,6 +13,7 @@
 
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
+#include <vcl_cassert.h>
 
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
@@ -125,8 +126,8 @@ bool mil_byte_image_2d_io::loadImage(const vcl_string& path,
 // \param filetype  String defining what format to save in
 // \return true if successful
 bool mil_byte_image_2d_io::saveImage(const mil_image& image,
-	                     const vcl_string& path,
-                         const vcl_string& filetype) const
+                                     const vcl_string& path,
+                                     const vcl_string& filetype) const
 {
   assert(image.is_a()=="mil_image_2d_of<vil_byte>");
   return saveTheImage((const mil_image_2d_of<vil_byte>&) image,path,filetype);
