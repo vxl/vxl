@@ -34,7 +34,11 @@ SET( MODULE_PATH ${vxl_SOURCE_DIR}/config/cmake/Modules CACHE STATIC "VXL module
 SET (VXL_LIBRARY_PATH ${LIBRARY_OUTPUT_PATH} CACHE STATIC "Where all the vxl libraries are, for clients to use." )
 
 # Build the core vxl + support libraries
-SUBDIRS(vcl v3p core)
+
+OPTION(BUILD_CORE "Should the core vxl Libraries be built?" YES)
+IF (BUILD_CORE)
+    SUBDIRS(vcl v3p core)
+ENDIF(BUILD_CORE)
 
 # Optionally build the contributed libraries
 IF( EXISTS ${vxl_SOURCE_DIR}/contrib/CMakeLists.txt )
