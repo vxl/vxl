@@ -17,7 +17,7 @@
 #include <vcl_vector.h>
 #include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_ref_count.h>
-
+#include <bmrf/bmrf_epi_seg_sptr.h>
 
 //: A Markov Random Field (MRF) node
 class bmrf_node : public vbl_ref_count
@@ -76,7 +76,7 @@ private:
   double probability_;
   
   //: A smart pointer to the underlying epi-segment data
-  //brmf_epi_seg_sptr segment_;
+  bmrf_epi_seg_sptr segment_;
   
   //: The pointers to neighboring nodes
   // \note these are not smart pointer because there will be many cycles in the network

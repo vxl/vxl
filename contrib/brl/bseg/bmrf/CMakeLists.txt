@@ -7,6 +7,8 @@ INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
 
 SET(bmrf_sources
     bmrf_node.cxx              bmrf_node.h               bmrf_node_sptr.h
+    bmrf_epi_point.cxx         bmrf_epi_point.h          bmrf_epi_point_sptr.h
+    bmrf_epi_seg.cxx           bmrf_epi_seg.h            bmrf_epi_seg_sptr.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates bmrf_sources)
