@@ -61,5 +61,6 @@ main()
     vcl_cout << double(x) << "  " << y << vcl_endl;
   }
   vcl_cerr << "outlier frac = " << outliers / double(inliers+outliers) << vcl_endl;
-}
 
+  return 0;
+}

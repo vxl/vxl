@@ -257,4 +257,6 @@ main( )
   }
 
   delete lr;
+
+  return 0;
 }
