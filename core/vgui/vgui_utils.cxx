@@ -74,7 +74,7 @@ void vgui_utils::dump_colour_buffer(char const *file) {
   delete [] pixels;
 
   //
-  vil_save(colour_buffer, file, "pnm");
+  vil_save(colour_buffer, file);
 }
 
 //--------------------------------------------------------------------------------
