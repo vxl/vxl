@@ -135,7 +135,7 @@ void vpdfl_kernel_pdf_builder::build_from_array(vpdfl_pdf_base& model,
 
 void vpdfl_kernel_pdf_builder::build(vpdfl_pdf_base& model, mbl_data_wrapper<vnl_vector<double> >& data) const
 {
-  vpdfl_kernel_pdf& kpdf = kernel_pdf(model);
+  /* vpdfl_kernel_pdf& kpdf = */ kernel_pdf(model);
 
   int n = data.size();
 

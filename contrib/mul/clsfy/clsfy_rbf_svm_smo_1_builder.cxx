@@ -37,7 +37,6 @@ clsfy_rbf_svm_smo_1_builder::clsfy_rbf_svm_smo_1_builder()
   rbf_width_ = 1.0;
 }
 
-
 //=======================================================================
 
 inline int class_to_svm_target (unsigned v) {return v==1?1:-1;};
@@ -50,8 +49,8 @@ double clsfy_rbf_svm_smo_1_builder::build(clsfy_classifier_base& classifier,
   const vcl_vector<unsigned> &outputs) const
 {
   inputs.reset();
-  const int nDims = inputs.current().size();
-  const int nSamples = inputs.size();
+//const unsigned int nDims = inputs.current().size(); // unused variable
+  const unsigned int nSamples = inputs.size();
   assert(outputs.size() == nSamples);
   assert(*vcl_max_element(outputs.begin(), outputs.end()) <= 1);
 
@@ -74,7 +73,6 @@ double clsfy_rbf_svm_smo_1_builder::build(clsfy_classifier_base& classifier,
 
 
   // Get the SVM description, and build an SVM machine
-  double sumAlphas = 0.0;
   {
     vcl_vector<vnl_vector<double> > supportVectors;
     const vnl_vecd &allAlphas = svAPI.lagrange_mults();
@@ -156,6 +154,7 @@ void clsfy_rbf_svm_smo_1_builder::print_summary(vcl_ostream& os) const
   // os << data_; // example of data output
   os << "RBF width = " << rbf_width_ << ", bounds = " << boundC_;
 }
+
 //=======================================================================
 
 void clsfy_rbf_svm_smo_1_builder::b_write(vsl_b_ostream& bfs) const
