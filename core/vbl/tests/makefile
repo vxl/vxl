@@ -16,6 +16,7 @@ TESTS += vbl_test_bounding_box.cxx
 TESTS += vbl_test_quadruple.cxx
 TESTS += vbl_test_triple.cxx
 TESTS += vbl_test_qsort.cxx
+TESTS += vbl_test_ref_count.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
