@@ -42,6 +42,7 @@ SOURCES += vil_blob_finder.cxx
 SOURCES += vil_trace_4con_boundary.cxx
 SOURCES += vil_trace_8con_boundary.cxx
 SOURCES += vil_corners.cxx
+MANPAGE_SOURCES += vil_find_peaks.h
 
 ################################
 include ${IUEROOT}/config/top.mk
