@@ -1,0 +1,3 @@
+@chapsummary
+Geometric entities, like points and lines, should be kept simple.
+@endchapsummary

@@ -1,0 +1,15 @@
+The directory structure of VXL is below
+@example
+  $IUEROOT/vcl
+           vcl/config.$BUILD
+           vxl/vnl
+              /vul
+              /vbl
+              /vil
+              /vgl
+              /vsl
+          /config
+          /Scripts
+@end example
+The last two directories are part of the IUE/TargetJr makefiles so are
+not needed by those using Visual Studio or their own build systems.

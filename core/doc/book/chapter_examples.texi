@@ -1,0 +1,65 @@
+Before anything else, let's look at some VXL example programs.
+
+@subsection Hello world
+Here's one to print "Hello world":
+@example
+// Include standard C++ input/output library
+#include <vcl_iostream.h>
+
+// main is the first function to be called
+int main()
+@{
+  // send string "hello world" to the standard
+  // output stream cout.
+  vcl_cout << "Hello world\n";
+
+  // Must return something from main
+  return 0;
+@}
+@end example
+This is the same example that one might see in any C++ book, but for the
+include line at the start.  C++ books assume that your C++ compiler works,
+which is not true of any C++ compiler in the year 2000.  Chapter 3 goes
+into more detail, but for the moment, include standard headers such as
+@code{<cstdio>} using @code{<vcl_cstdio.h>}.
+
+@subsection Loading an image
+
+Because most vxl programs use images in some form, here's an example of
+loading an image, and printing the pixel value at (100,100).  It assumes
+the image is greyscale, and does no error checking.
+
+@example
+#include <vcl_iostream.h>
+#include <vil/vil_load.h>
+#include <vil/vil_memory_image_of.h>
+
+int main()
+@{
+  // Load image information from disk, don't load image yet.
+  vil_image img = vil_load("foo.ppm");
+
+  // Load image into 2D array of bytes in memory.
+  vil_memory_image_of<unsigned char> buf(img);
+
+  // Access pixel (100,100) and print its value as an int.
+  vcl_cerr << "Pixel 100,100 = " << (int) buf(100,100) << vcl_endl;
+@}
+@end example
+
+@section Debugging
+
+@subsection What kind of class is @code{*p}?
+
+If printing p shows it has a vptr, then you can figure out its type
+using
+
+@example
+(gdb) p p
+$16 = (vil_file_format *) 0x80ea460
+(gdb) p *p
+$17 = @{_vptr. = 0x80e9100@}
+(gdb) p (int (*)())(*p).'_vptr.'[1].__pfn
+$15 = (int (*)(void)) 0x80c5578 <vil_tiff_file_format::~vil_tiff_file_format(void)>
+@end example
+

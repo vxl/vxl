@@ -1,0 +1,116 @@
+The strategy adopted for converting and wrapping the fortran files is a
+little involved.  Some routines are simple to do, others very tricky.  The
+general procedure is as follows.  These steps are elaborated upon in the
+example below.
+@section Overview
+@enumerate
+@item Use GAMS to find the module name, in SLATEC if possible, although
+CMLIB and TOMS routines are also public domain and good.
+
+@item Convert the fortran to C using f2c
+
+@item Add the routine to the Imakefile in the netlib library.
+
+@item Encapsulate the routine in a class in Numerics, after determining a
+suitable interface.
+
+@item Read the module documentation and determine the calling sequence.
+
+@item In the calling method, create all necessary workspace arrays and
+temporary variables that the call requires, call the external routine, and
+convert the results into the classes that VXL expects.
+
+@item After the call, interpret the error code, and handle accordingly.
+@end enumerate
+
+@section Problems
+There are a few potential sources of difficulty, mostly in item 5, but in
+general I find that gritting one's teeth and guessing is a surprisingly good
+strategy.  The main points to remember are:
+@enumerate
+@item All scalar variables are passed by reference.  This means that you
+need to store all constants in variables and pass their addresses or
+declare the routines as accepting references.  I do the latter for input
+variables, and the former for outputs.
+
+@item Fortran arrays start from 1 rather than 0.  This is actually a
+non-problem, as f2c generates code which interfaces zero-based to one-based
+arrays using the Numerical Recipes trick of decrementing the pointer, but
+is mentioned here for the benefit of fortran programmers.
+
+@item Fortran arrays are stored column-wise rather than row-wise.  Class
+@code{vnl_fortran_copy} provides an easy and efficient way to transpose
+matrices before calling.
+@end enumerate
+
+In addition to these fortran specifics, it is important to be aware of the
+sorts of design patterns seen in numerical code.  Many routines are coded
+for maximum generality and efficiency, which can make reading the
+descriptions heavy going.  Common conventions are:
+@itemize @bullet
+@item An array is passed with three dimensions: number of rows in the physical
+array, number of rows to use for computation and number of columns.  This
+allows the routines to be used on any submatrix of a larger matrix.
+
+@item Output results overwrite the input matrix.
+
+@item Output results are stored in some compact form, which must be decoded
+before use.  Note however that in many cases routines are supplied to
+perform further computations using the encoded representation for time and
+space efficiency.  The new QR class will demonstrate how to take advantage
+of this.
+
+@item The results of pivoting are generally returned in vectors of
+integers (say @code{ipvt}), where @code{ipvt[i]} is the position to which
+row/column @code{i} has been moved. These permutations which must be
+applied to the results in order to complete the process.
+@end itemize
+
+@section Example conversion -- QR decomposition
+Given the need for an algorithm that is not yet included in the Numerics
+package, say a routine to compute the QR decomposition, your first stop is
+the GAMS decision tree.  Class ``D'' is Linear Algebra, and class ``D5'' is
+QR decomposition.  The SLATEC implementation is called DQRDC (Double
+precision QR DeComposition).  Download the source, or obtain it from a
+local SLATEC distribution.  Convert it to a C source file and a prototype
+file using
+@example
+   f2c -P dqrdc.f
+@end example
+and from the prototype file @code{dqrdc.P} we find that the function
+prototype is
+@example
+   int dqrdc_(doublereal *x, integer *ldx, integer *n, integer *p,
+              doublereal *qraux, integer *jpvt, doublereal *work,
+              integer *job);
+@end example
+
+At this point, the header of the fortran file @code{dqrdc.f} is examined in
+order to determine the meaning of the parameters.  Considering parameter
+@code{X}, we find
+@example
+   X     DOUBLE PRECISION(LDX,P), where LDX .GE. N.
+         X contains the matrix whose decomposition is to be computed.
+@end example
+This means that X is a LDX row by P column matrix, and that we require a
+decomposition of the first N rows.  This is a common convention in fortran
+programs which allows computation on subblocks of matrices.  In general, we
+will assume that we wish to work on the full matrix, and therefore that LDX
+= N.  To create the required transformed copy of the matrix, use class
+@code{vnl_fortran_copy}:
+@example
+   vnl_fortran_copy Xtranspose(X);
+@end example
+Now, the function may be called as
+@example
+   int n = X.rows();
+   int p = X.columns();
+   vnl_vector<int> jpvt(p);
+   jpvt.fill(0); // Mark all columns as pivotable
+   vnl_vector<double> work(p);
+   int do_pivoting = 1;
+   vnl_vector<double> qraux(p);
+   dqrdc_(Xtranspose, &n, &n, &p,
+          qraux.data_block(), jpvt.data_block(), w.data_block(),
+          &do_pivoting);
+@end example

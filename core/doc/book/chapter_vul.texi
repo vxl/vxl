@@ -1,0 +1,324 @@
+@chapsummary
+General utilities are often handy.  vul has a few.
+@endchapsummary
+
+
+All C++ programs need a few basic utilities, and all C++ programmers write
+their own at some point.  The things included in vbl are not considered any
+better or worse than the several other libraries available, but they are
+consistently named and lightweight.  The key elements of this library
+are
+
+@deffn class @code{vul_file}
+@deffnx class @code{vul_directory}
+File handling utilities, directory reading
+@end deffn
+
+@deffn {class template} @code{vul_arg}
+Parse command-line arguments conveniently.
+@end deffn
+
+@deffn class @code{vul_redirector}
+Simplify redirection of standard output/error
+@end deffn
+
+@deffn class @code{vul_awk}
+Read text files, breaking each line into fields.
+@end deffn
+
+@deffn class @code{vul_reg_exp}
+Regular expression matching.
+@end deffn
+
+@section Redirecting standard output: @code{vul_redirector}
+@cindex cerr
+@cindex cout
+@cindex redirecting ostreams
+@cindex vul_redirector
+@anchor{vul_redirector}
+
+The class @code{vul_redirector} is provided to simplify the task of
+filtering the output of @code{vcl_cerr} and @code{vcl_cout}, a common requirement
+in graphical applications.  This encapsulates some of the subtleties of
+deriving from @code{vcl_streambuf}, providing a simpler interface.
+
+The basic usage is to subclass from @code{vul_redirector}, implementing the
+@code{putchunk} method, which is then called whenever characters are ready
+for output.  The @code{vul_redirector} constructor takes care of attaching
+the new buffer to the stream, and of restoring the original behaviour on
+destruction.  Here is a simple example, which switches output on or off
+depending on the value of a global flag;
+@example
+
+#include <vul/vul_redirector.h>
+
+bool on = true;
+
+struct my_redirector : vul_redirector @{
+  my_redirector(vcl_ostream& s): vul_redirector(s) @{@}
+  int putchunk(char const* buf, int n) @{
+    if (on)
+      return vul_redirector::put_passthru(buf, n);
+    else
+      return n;
+  @}
+@};
+@end example
+and here is a calling program which exercises the example.
+@example
+int main(int argc, char* argv[])
+@{
+  vcl_cerr << "hi\n";
+  @{
+    my_redirector redir(vcl_cerr);
+    on = false;
+    vcl_cerr << "magic\n";
+  @}
+  vcl_cerr << "what did I miss?\n";
+  return 0;
+@}
+@end example
+
+When this program is run, the word @code{magic} is not displayed, because
+@code{my_redirector::putchunk} finds that @code{on == false}.  Question,
+what to you think @code{put_passthru} does?  What happens if you set
+@code{on = true} on line 6?
+
+
+
+@section Complex output formatting: @code{vul_printf}
+@cindex vcl_printf
+@cindex vul_printf
+
+While it is possible to achieve all of the functionality
+of the C @code{printf} function in C++, it is very very difficult.
+There are many times when programs can be made clearer by the use
+of printf formatting, rather than the standard iostream operators.
+On the other hand, one needs iostreams for type-safe (and convenient)
+output of user-defined objects.  Thus vul provides a stream-aware
+version, @code{vul_printf}:
+@smallexample
+vcl_ostream& vul_printf(vcl_ostream&, char const* format, ...);
+@end smallexample
+so that one can say, for example,
+@smallexample
+vul_printf(vcl_cerr, "Line %05d, Code %-30s\n", __LINE__, code);
+@end smallexample
+
+
+
+
+@section Reading command-line arguments: @code{vul_arg}
+@cindex argc, argv
+@cindex vul_arg
+@cindex command-line arguments, reading
+@cindex ArgParse, new name vul_arg
+@cindex Arg, new name vul_arg
+
+My favourite bit of vul is the @code{vul_arg} header which provides the
+easiest way to parse command-line arguments that I've seen.  The basic idea
+is that a minimal specification for a command-line argument includes: the
+argument's type, a variable to hold it, its flag, and possibly some
+descriptive text and a default value.
+
+In the default, easy to use (and a bit naughty) form, each argument is
+declared anywhere in the program, like so:
+@smallexample
+   vul_arg<double> my_threshold("-fudge", "Twiddle fudge", 1.7);
+   //     Type     Variable     Flag      Help text        Default
+@end smallexample
+and when @code{vul_arg_parse} is called, all the arguments are gathered,
+and extracted from the command line.  To use an argument anywhere in the
+program, use its @code{()} operator:
+@example
+   vcl_cerr << "The threshold = " << my_threshold() << vcl_endl;
+@end example
+To check if an argument was changed from its default value, one can check
+@code{bool my_naughty_threshold.set()}.
+
+Here is a complete example which uses @code{vul_arg}.  I tend to give these
+argument variables names beginning with @code{a_}, but don't let that put
+you off.
+@example
+#include <vcl_iostream.h>
+#include <vul/vul_arg.h>
+
+vul_arg<double> a_naughty_global_arg("-hack", "Fudge", 1.2);
+
+void main(int argc, char* argv[])
+@{
+  vul_arg<char const*>     a_filename(0, "Input filename");
+  vul_arg<bool>            a_fast("-fast", "Go fast", false);
+  vul_arg_parse(argc, argv);
+
+  vcl_cerr << "Filename [" << a_filename() << "]\n";
+@}
+@end example
+Passing a @code{0} as the flag string means that the argument is
+obligatory, and will be taken as the first unparsed word on the command
+line.
+
+@subsection Help text
+The help text supplied with each argument is used to provide a summary of
+options when the special argument @code{-?} is seen.  Running this example
+with the @code{-?} flag produces the output.
+
+@smallexample
+Usage: ./example_vul_arg.exe [-hack float] string [-fast bool]
+
+REQUIRED:
+         string       Input filename  ['-']
+
+Optional:
+  Switch Type         Help [value]
+
+   -hack float        Quick hack factor  [1.2]
+   -fast bool         Go fast  [not set]
+@end smallexample
+
+@subsection Lists of numbers
+A very useful specialization also exists to read ranges of numbers.
+Imagine a program called makemovie which operates on a list of frames,
+specified on the command line:
+@example
+makemovie -frames 1:10,9:-1:1,0,0,0,0
+@end example
+These can be easily read into a @code{vcl_list<int>}:
+@example
+#include <vcl_list.h>
+vul_arg<vcl_list<int> >  a_frame_list("-frames", "List of indices");
+@end example
+The list will preserve the order specified on the command line, so in the
+above example, the result of printing the list would be
+@smallexample
+1 2 3 4 5 6 7 8 9 10 9 8 7 6 5 4 3 2 1 0 0 0 0
+@end smallexample
+As a gratuitous STL example, here is the code that printed that list
+@cindex STL: copy example
+@smallexample
+vcl_copy(a_frame_list().begin(), a_frame_list().end(),
+         vcl_ostream_iterator<int>(vcl_cout, " "));
+@end smallexample
+
+
+@subsection More structured argument handling
+Of course, it's disgraceful programming practice to throw args around ones
+program higgledy piggledy, so one can collect arguments in objects of type
+@code{vul_arg_list}.
+
+
+@section Timing operations: vul_timer
+@cindex time, measuring elapsed
+@cindex vul_timer
+@cindex cpu time
+
+If you want to measure elapsed time, for example to find out how long a
+section of your program takes to run, use the @code{vul_timer} class.  When
+a @code{vul_timer} is initialized, like so, it records the current time.
+@example
+   vul_timer mytimer;
+@end example
+Later, you can find out the elapsed time using the @code{real()} method:
+@example
+   vcl_cerr << "That took " << mytimer.real() << " milliseconds\n";
+@end example
+If you want to reset the timer to make a new measurement, use the
+@code{mark()} method.
+@example
+   mytimer.mark();  // Reset and start counting from zero again.
+@end example
+
+If you are running other jobs on your computer, you might like to know how
+much time was used by your program alone.  For that, one would use the
+@code{user()} method.
+@example
+   vcl_cerr << "Of which " << mytimer.user() << "ms was actually me\n";
+@end example
+In general, it is better to use the @code{real}, ``wall-clock'' elapsed
+time, as the CPU time returned by user can fail to include work carried out
+on your program's behalf by the operating system.  For example, if you're
+using a lot of memory, the system will swap pages in and out of virtual
+memory, and your program will run slowly, but @code{user()} will not report
+it.
+
+Finally, there's a super-convenient @code{print} method, which is used
+to just print the real and user times to a stream without any
+formatting, for quick testing purposes.  Here's an example
+@example
+  vul_timer tic; // Start timing
+  // do stuff
+  tic.print(vcl_cerr); // Print times to vcl_cerr.
+@end example
+
+
+
+@section Reading ASCII files: @code{vul_awk}
+@cindex awk
+@cindex perl-like operations: vul_awk
+@cindex file handling: vul_awk
+
+It is often convenient to read text files a line at a time, and split each
+line into space-separated fields.  The @code{vul_awk} class is an easy way
+to do this.  It also adds a few handy extras like stripping comments, and
+remembering the line number for error messages.  It is used like this:
+@smallexample
+   vcl_ifstream thefile("myfile.txt");
+   vul_awk awk(thefile); // initialize and read 1st line
+   for(;awk; ++awk) @{
+     vcl_cerr << "Field 0 = " << awk[0] << vcl_endl;
+     vcl_cerr << "Field 2 = " << awk[2] << vcl_endl;
+   @}
+@end smallexample
+If @code{myfile.txt} contained the text
+@smallexample
+  dapple dawn-drawn falcon,
+  solihull 1  grimsby 3
+@end smallexample
+the above program would print
+@smallexample
+  Field 0 = dapple
+  Field 2 = falcon,
+  Field 0 = solihull
+  Field 2 = grimsby
+@end smallexample
+
+@section Regular expression parsing: @code{vul_reg_exp}
+@cindex regular expressions
+@cindex vul_reg_exp
+A regular expression allows a programmer to specify complex patterns that
+can be searched for and matched against the character string of a string
+object. In its simplest form, a regular expression is a sequence of
+characters used to search for exact character matches. However, many times
+the exact sequence to be found is not known, or only a match at the
+beginning or end of a string is desired. The vul regular expression class
+implements regular expression pattern matching as is found and implemented
+in many UNIX commands and utilities, notably perl.  The perl code
+@example
+   $filename =~ m"([a-z]+)\.h";
+   print $1;
+@end example
+is written as follows in @vxl{}
+@example
+   vul_reg_exp re("([a-z]+)\\.h");
+   re.find(filename);
+   vcl_cerr << re.match(1);
+@end example
+
+The vul syntax is similar to perl's, although not quite as clean.  Here are
+the metacharacters:
+@example
+ ^        Matches at beginning of a line
+ $        Matches at end of a line
+ .        Matches any single character
+[ ]       Matches any character(s) inside the brackets
+[^ ]      Matches any character(s) not inside the brackets
+ -        Matches any character in range on either side of a dash
+ *        Matches preceding pattern zero or more times
+ +        Matches preceding pattern one or more times
+ ?        Matches preceding pattern zero or once only
+()        Saves a matched expression and uses it in a later match.
+@end example
+Note that more than one of these metacharacters can be used in a single
+regular expression in order to create complex search patterns. For example,
+the pattern @code{[^ab1-9]} says to match any character sequence that does
+not begin with the characters "ab" followed by numbers in the series 1-9.
