@@ -351,7 +351,9 @@ vil_image_view<vil_rgb<vxl_byte> > CreateTest24bitImage(int wd, int ht)
   vil_image_view<vil_rgb<vxl_byte> > image(wd, ht);
   for (int i = 0; i < wd; i++)
     for (int j = 0; j < ht; j++)
-      image(i,j) = vil_rgb<vxl_byte>(i%(1<<8), ((i-wd/2)*(j-ht/2)/16) % (1<<8), ((j/3)%(1<<8)));
+      image(i,j).r = i%(1<<8),
+      image(i,j).g = ((i-wd/2)*(j-ht/2)/16) % (1<<8),
+      image(i,j).b = ((j/3)%(1<<8));
   return image;
 }
 
