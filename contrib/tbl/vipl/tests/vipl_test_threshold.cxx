@@ -7,8 +7,6 @@
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   12 Sept. 2000
 
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_rgb_byte.h>
 #include <vipl/accessors/vipl_accessors_vil_image.h>
 #include <vipl/vipl_threshold.h>
 #include <vcl_cmath.h>

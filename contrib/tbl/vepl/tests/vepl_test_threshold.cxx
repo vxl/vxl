@@ -7,9 +7,8 @@
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   12 Sept. 2000
 
-#include <vil/vil_memory_image_of.h>
-#include <vil/vil_rgb_byte.h>
 #include <vepl/vepl_threshold.h>
+//#include <vil/vil_rgb_byte.h>
 #include <vcl_cmath.h>
 #include <vcl_cstdlib.h>
 #include "test_driver.h"
