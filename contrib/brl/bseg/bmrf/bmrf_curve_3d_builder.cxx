@@ -154,7 +154,7 @@ bmrf_curve_3d_builder::compute_bounding_box(double inlier_fraction)
     return false;
 
   vgl_vector_3d<double> base_axis(1.0, 0.0, 0.0);
-  vgl_vector_3d<double> rot_axis = normalize(cross_product(direction_,base_axis));
+  vgl_vector_3d<double> rot_axis = normalized(cross_product(direction_,base_axis));
   double angle = vcl_acos(dot_product(direction_,base_axis));
   rot_axis *= angle;
   vnl_vector<double> v(3);
@@ -166,10 +166,10 @@ bmrf_curve_3d_builder::compute_bounding_box(double inlier_fraction)
 
   vcl_vector<vnl_double_3> pts_x;
 
-  for ( vcl_set<vcl_list<bmrf_curvel_3d_sptr> >::iterator itr1 = curves_.begin();
+  for ( vcl_set<vcl_list<bmrf_curvel_3d_sptr> >::const_iterator itr1 = curves_.begin();
         itr1 != curves_.end();  ++itr1)
   {
-    for ( vcl_list<bmrf_curvel_3d_sptr>::iterator itr2 = itr1->begin();
+    for ( vcl_list<bmrf_curvel_3d_sptr>::const_iterator itr2 = itr1->begin();
           itr2 != itr1->end();  ++itr2)
     {
       bmrf_curvel_3d_sptr curvel = *itr2;
@@ -186,8 +186,8 @@ bmrf_curve_3d_builder::compute_bounding_box(double inlier_fraction)
   vcl_sort(pts_z.begin(), pts_z.end(), bmrf_cmp_z);
 
   const double fraction_out = (1.0 - inlier_fraction)/2.0;
-  const int min_ind = (pts_x.size()-1)*fraction_out;
-  const int max_ind = (pts_x.size()-1)*(1.0 - fraction_out);
+  const int min_ind = int((pts_x.size()-1)*fraction_out);
+  const int max_ind = int((pts_x.size()-1)*(1.0 - fraction_out));
   vnl_double_3 min_point(pts_x[min_ind][0], pts_y[min_ind][1], pts_z[min_ind][2]);
   vnl_double_3 max_point(pts_x[max_ind][0], pts_y[max_ind][1], pts_z[max_ind][2]);
 
