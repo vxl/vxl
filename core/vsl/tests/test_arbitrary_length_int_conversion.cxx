@@ -173,7 +173,7 @@ void test_explicit_int_io()
   vcl_cout << "Testing explicit length integer io" << vcl_endl;
   vcl_cout << "**********************************" << vcl_endl;
 
-  int i;
+  unsigned long i;
 
   vsl_b_ofstream bfs_out("vsl_explicit_int_io_test.bvl.tmp");
   TEST ("Created vsl_explicit_int_io_test.bvl.tmp for writing",
@@ -192,8 +192,8 @@ void test_explicit_int_io()
     if (n != i) break;
   }
 
-// Commented out because stringstream not yet properly supported on gcc-2.95.2
-#if 0
+// stringstream not yet properly supported on gcc-2.95.2 (see vcl/vcl_sstream.h)
+#if (!defined(VCL_GCC) || defined(GNU_LIBSTDCXX_V3)) && !defined(VCL_SGI_CC_720)
   vcl_stringstream ss(vcl_ios_in | vcl_ios_out | vcl_ios_binary);
   const char *b= ss.str().c_str();
   {

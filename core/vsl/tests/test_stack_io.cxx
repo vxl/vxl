@@ -39,7 +39,7 @@ void test_stack_io()
     test_result = false;
   else
   {
-    for (int i=0; i<s_int_out.size(); i++)
+    for (unsigned int i=0; i<s_int_out.size(); i++)
     {
       if (s_int_out.top() != s_int_in.top())
          test_result = false;

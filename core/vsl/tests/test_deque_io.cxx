@@ -40,7 +40,7 @@ void test_deque_io()
     test_result=false;
   else
   {
-    for (int i=0;  i< d_int_out.size(); i++)
+    for (unsigned int i=0; i< d_int_out.size(); i++)
     {
       if (d_int_out[i] != d_int_in[i])
         test_result=false;
