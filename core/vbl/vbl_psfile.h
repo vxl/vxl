@@ -5,7 +5,7 @@
 #include <vcl/vcl_iostream.h>
 #include <vcl/vcl_string.h>
 
-class vbl_psfile: public ofstream
+class vbl_psfile: public vcl_ofstream
 {
 public:
   enum paper_type {
@@ -62,7 +62,7 @@ private:
   void object_translate_and_scale();
   void done();
 
-  ofstream output_filestream;
+  vcl_ofstream output_filestream;
 
   float fg_r, fg_g, fg_b;
   float bg_r, bg_g, bg_b;
