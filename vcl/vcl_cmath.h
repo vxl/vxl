@@ -3,7 +3,7 @@
 //: 
 // \file
 // \brief Templated version of the C math library.
-//
+// \date 23 Feb 2000
 // [26.5.6] In addition to the signatures from the C header
 // <math.h>, the C++ header <cmath> adds certain overloaded
 // forms of the usual double-precision functions.
