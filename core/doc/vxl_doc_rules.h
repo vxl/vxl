@@ -4,13 +4,35 @@
 #pragma interface
 #endif
 
-// This is vxl_doc_rules.h
-//            (The above line indicates the file name
-//             the \file command below tells Doxygen which
-//             file the comments correspond to, so should
-//             be left blank in general to minimise the
-//             risks of mistakes)
-//             Don't forget to leave an empty line after this one.
+//            (This is an example of how to code document your    ) 
+//            ( file. Comments with brackets, like this one,      )
+//            ( should be read but not copied into your file.     )                       
+
+
+//            (The style used here is specific to VXL             )
+//            ( It is based on doxygen, with modifications.       )
+//            ( So rather than use                                )
+//            (        /** Brief comment                          )
+//            (        */                                         )
+//            ( notation, we instead use                          )
+//            (         //: Brief comment                         )
+//            (The main reason for this is that /* */ comment     )
+//            ( markers do not nest, so making it hard to quickly )
+//            ( comment out sections of code.                     )
+//            (Apart from this, you can use full doxygen notation.)
+//            (A simple perl script converts this notation        )
+//            ( to full doxygen format on the fly.                )
+
+
+
+// This is vxl_doc_rules.h 
+
+//            (The above line indicates the file name             )
+//            ( the \file command below tells Doxygen which       )
+//            ( file the comments correspond to, so should        )
+//            ( be left blank in general to minimise the          )
+//            ( risks of mistakes                                 )
+//            (Don't forget to leave an empty line after this one.)
 
 //:
 // \file
@@ -30,13 +52,12 @@
 // \verbatim
 // Everything between these tags is not formatted but kept "as is".
 // This is similar to the \verbatim command in LaTeX.
-// Only for Doxygen
 // \endverbatim
 // The long description ends here
 class my_class {
 public:
 
-  //: Brief description don't forget the colon
+  //: Brief description of method don't forget the colon
   // Do not leave any blank lines with out the //, or doxygen
   // will think you have ended the documentation comment, and
   // started an ordinary code comment.
