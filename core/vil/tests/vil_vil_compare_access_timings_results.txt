@@ -1,0 +1,44 @@
+Directly compare using naive (operator()) pixel access on vil_memory_image_of<T> and vil2_image_view<T>.
+
+
+850Mhz P3 Windows 2000, using MSVC 6.0 SP5
+------------------------------------------
+Debug
+vil_memory_image_of Images of BYTE
+Method 1) Mean: 3845us  +/-55us
+Method 2) Mean: 1893us  +/-105us
+vil2_image_view Images of BYTE
+Method 1) Mean: 4927us  +/-55us
+Method 2) Mean: 3054us  +/-55us
+vil_memory_image_of Images of FLOAT
+Method 1) Mean: 4777us  +/-55us
+Method 2) Mean: 3004us  +/-155us
+vil2_image_view Images of FLOAT
+Method 1) Mean: 5779us  +/-55us
+Method 2) Mean: 3925us  +/-55us
+vil_memory_image_of Images of RGB<BYTE>
+Method 1) Mean: 5979us  +/-50us
+Method 2) Mean: 3826us  +/-55us
+vil2_image_view Images of RGB<BYTE>
+Method 1) Mean: 7310us  +/-0us
+Method 2) Mean: 5338us  +/-55us
+
+RelwithDebInfo 
+vil_memory_image_of Images of BYTE
+Method 1) Mean: 500us  +/-0us
+Method 2) Mean: 551us  +/-50us
+vil2_image_view Images of BYTE
+Method 1) Mean: 1021us  +/-50us
+Method 2) Mean: 832us  +/-55us
+vil_memory_image_of Images of FLOAT
+Method 1) Mean: 1702us  +/-5us
+Method 2) Mean: 1502us  +/-5us
+vil2_image_view Images of FLOAT
+Method 1) Mean: 1763us  +/-55us
+Method 2) Mean: 1602us  +/-5us
+vil_memory_image_of Images of RGB<BYTE>
+Method 1) Mean: 1382us  +/-55us
+Method 2) Mean: 1372us  +/-55us
+vil2_image_view Images of RGB<BYTE>
+Method 1) Mean: 1432us  +/-50us
+Method 2) Mean: 1442us  +/-55us

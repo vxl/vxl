@@ -1,0 +1,46 @@
+Compare various pixel access techniques in single plane images
+
+Inner loops of different methods:
+Method1: for (unsigned i=0;i<image.ni();++i) image(i,j) = vxl_byte(i+j);
+Method2: for (unsigned i=0;i<ni;++i) image(i,j) = vxl_byte(i+j);
+Method3: for (unsigned i=0;i<image.ni();++i,pixel+=image.istep()) *pixel = vxl_byte(i+j);
+Method4: for (unsigned i=0;i<ni;++i,pixel+=istep) *pixel = vxl_byte(i+j);
+Method5: for (unsigned i=ni;i;--i,pixel-=istep) *pixel = vxl_byte(i-1+j);
+Method6: for (unsigned i=0;i<ni;++i) row[i] = vxl_byte(i+j);
+  // Method 6 simulates partial lookup method of original vil
+Method7: for (unsigned i=0;i<ni;++i) im_data[p][j][i] = vxl_byte(i+j);
+  // Method 7 simulates complete lookup method of original vil
+Method8: for (unsigned i=0;i<ni;++i) row[i*istep] = vxl_byte(i+j);
+
+
+850Mhz P3 Windows 2000, using MSVC 6.0 SP5
+------------------------------------------
+RelwithDebInfo
+Times to fill a 256 x 256 image of 1 plane (in microsecs) [Range= 0.5(max-min)]
+Images of BYTE
+Method 1) Mean: 1001us  +/-5us
+Method 2) Mean: 781us  +/-55us
+Method 3) Mean: 391us  +/-55us
+Method 4) Mean: 240us  +/-50us
+Method 5) Mean: 320us  +/-50us
+Method 6) Mean: 241us  +/-55us
+Method 7) Mean: 230us  +/-50us
+Method 8) Mean: 240us  +/-50us
+Images of FLOAT
+Method 1) Mean: 1773us  +/-55us
+Method 2) Mean: 1682us  +/-45us
+Method 3) Mean: 1673us  +/-55us
+Method 4) Mean: 1752us  +/-55us
+Method 5) Mean: 1653us  +/-55us
+Method 6) Mean: 1602us  +/-5us
+Method 7) Mean: 1612us  +/-50us
+Method 8) Mean: 1753us  +/-50us
+Images of RGB<BYTE>
+Method 1) Mean: 1442us  +/-50us
+Method 2) Mean: 1372us  +/-55us
+Method 3) Mean: 1362us  +/-55us
+Method 4) Mean: 1332us  +/-55us
+Method 5) Mean: 1232us  +/-50us
+Method 6) Mean: 1241us  +/-50us
+Method 7) Mean: 1282us  +/-55us
+Method 8) Mean: 1232us  +/-50us
