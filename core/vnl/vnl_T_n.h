@@ -1,20 +1,18 @@
 // This is vxl/vnl/vnl_T_n.h
 #ifndef vnl_T_n_h_
 #define vnl_T_n_h_
-
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
-
-#include <vnl/vnl_vector_fixed.h>
-//:
-// \file
+//
 // Purpose: the vnl_vector_fixed<T,n> template class provides
 // non-mallocing vectors of given size, but it has no constructor
 // from n Ts. This macro declares a class vnl_T_n which is derived
 // directly from vnl_vector_fixed<T,n> and has such a constructor.
 //
 // Inspired by the numerous double-3, int-2 things lying around.
+
+#include <vnl/vnl_vector_fixed.h>
 
 //: cpp traits!
 #define vnl_T_n_aux_1(T) (T x) { data[0] = x; }
