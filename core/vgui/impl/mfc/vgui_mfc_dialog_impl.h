@@ -46,7 +46,8 @@ class vgui_mfc_dialog_impl : public CWnd,public vgui_dialog_impl
   // True makes the dialog modal (i.e. the dialog 'grabs' all events), this is
   // the default.  False makes the dialog non-modal. WARNING: It is dangerous to
   // make a dialog that changes data nonmodal, only messages should be nonmodal.
-  void modal(bool m);
+  // NOTE: currently a no-op
+  void modal(bool ) {}
   //: Display the dialog box.
   bool ask();
  protected:

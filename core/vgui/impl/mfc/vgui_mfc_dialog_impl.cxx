@@ -23,7 +23,6 @@
 #include <winuser.h>
 
 static bool debug = false;
-static bool is_modal = true;
 vcl_string title;
 vcl_string orig_color; // For when color chooser is cancelled.
 CString TempsNewClass;
@@ -95,16 +94,17 @@ void* vgui_mfc_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr tab,
   return (void*)tab_data;
 }
 
-static int loop_flag = 0;
-
+#if 0 // is_modal is not used anywhere
 //: Sets the modality of the dialog box.
 //  True makes the dialog modal (i.e. the dialog 'grabs' all events), this is
 //  the default.  False makes the dialog non-modal.  WARNING: It is dangerous to
 //  make a dialog that changes data non-modal, only messages should be non-modal.
+static bool is_modal = true;
 void vgui_mfc_dialog_impl::modal(bool m)
 {
   is_modal = m;
 }
+#endif // 0
 
 //: Called by MFC when the user clicks the OK button.
 void vgui_mfc_dialog_impl::OnOk()
