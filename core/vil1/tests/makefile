@@ -17,6 +17,7 @@ TESTS += test_write_endian.cxx
 TESTS += test_interpolate.cxx
 TESTS += test_flipud.cxx
 TESTS += test_colour_space.cxx
+TESTS += test_copy.cxx
 
 IULIBS = -lvil -lvpl -lvul
 
