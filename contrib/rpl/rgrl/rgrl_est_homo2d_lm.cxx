@@ -180,7 +180,7 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
         base_jac = jg * jf;
 
         for ( TIter ti=fi.begin(); ti!=fi.end(); ++ti ) {
-          to = ti.to_feature()->location();
+          //to = ti.to_feature()->location();
           error_proj = ti.to_feature()->error_projector();
           double const wgt = vcl_sqrt(ti.cumulative_weight());
           jac = error_proj * base_jac;
@@ -285,7 +285,8 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   }
   from_centre /= sum_wgt;
   to_centre /= sum_wgt;
-
+  DebugMacro( 3, "From center: " << from_centre 
+               <<"  To center: " << to_centre << vcl_endl );
   // make the init homography as a CENTERED one
   {
     // centered H_ = to_matrix * H * from_matrix^-1
@@ -301,21 +302,21 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     init_H = to_trans * init_H * from_inv;
   }
   // convert to vector form
-  vnl_vector<double> initp;
-  H2h( init_H, initp );
+  vnl_vector<double> p;
+  H2h( init_H, p );
 
   // construct least square cost function
   rgrl_homo2d_func homo_func( matches, tot_num, with_grad_ );
   homo_func.set_centres( from_centre, to_centre );
   
   vnl_levenberg_marquardt lm( homo_func );
-  // lm.set_trace( true );
-  // lm.set_check_derivatives( 10 );
+  //lm.set_trace( true );
+  //lm.set_check_derivatives( 10 );
   bool ret;
   if ( with_grad_ )
-    ret = lm.minimize_using_gradient(initp);
+    ret = lm.minimize_using_gradient(p);
   else
-    ret = lm.minimize_without_gradient(initp);
+    ret = lm.minimize_without_gradient(p);
   if ( !ret ) {
     WarningMacro( "Levenberg-Marquatt failed" );
     return 0;
@@ -323,9 +324,9 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // lm.diagnose_outcome(vcl_cout);
 
   // normalize H
-  initp /= initp.two_norm();
+  p /= p.two_norm();
   // convert parameters back into matrix form
-  h2H( initp, init_H );
+  h2H( p, init_H );
   vnl_vector<double> centre(2,0.0);
   
   // compute covariance
@@ -335,10 +336,18 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // scale in homography parameter vector
   // Thus, use the nomalized p vector to compute Jacobian again
   vnl_matrix<double> jac(tot_num, 9), jtj(9, 9);
-  homo_func.gradf( initp, jac );
+  homo_func.gradf( p, jac );
+  // 
+  //vnl_matrix<double>  proj(9, 9, vnl_matrix_identity);
+  //proj -= outer_product( p, p );
+  //jac *= proj;
   vnl_fastops::AtA( jtj, jac );
-  vnl_svd<double> svd( jtj, 1e-4 );
-  // vcl_cout << "Singular values: " << svd.W() << vcl_endl;
+  // vcl_cout << "Jacobian:\n" << jac << "\n\nJtJ:\n" << jtj << "\n\nReal JtJ:\n" << jac.transpose() * jac << vcl_endl;
+
+  // compute inverse
+  //
+  vnl_svd<double> svd( jtj, 1e-6 );
+  DebugMacro(3, "SVD of JtJ: " << svd << vcl_endl);
   // the second least singular value shall be greater than 0
   // or Rank 8
   if( svd.rank() < 8 ) {
@@ -346,6 +355,24 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   }
   // pseudo inverse only use first 8 singular values
   vnl_matrix<double> covar ( svd.pinverse(8) );
+  DebugMacro(3, "Covariance: " << covar << vcl_endl );
+  
+  //vnl_vector<double> tmp_f(tot_num,-1.0);
+  //homo_func.f( svd.nullvector(), tmp_f );
+  //vcl_cout << "using null vector: " << tmp_f.two_norm() << vcl_endl;
+  //homo_func.f( p, tmp_f );
+  //vcl_cout << "using estimate   : " << tmp_f.two_norm() << vcl_endl;
+  double abs_dot = vcl_abs( dot_product( p, svd.nullvector() ) );
+  if( abs_dot < 0.9 ) {
+    WarningMacro("The null vector of covariance matrix of homography is too DIFFERENT\n"
+                 << "compared to estimate of homography: dot_product=" << abs_dot << vcl_endl );
+    // it is considered as failure
+    return 0;
+  }
+  
+  DebugMacro(2, "null vector: " << svd.nullvector() 
+              <<"   estimate: " << p << vcl_endl );
+  
   return new rgrl_trans_homography2d( init_H, covar, from_centre, to_centre );
 }
 
