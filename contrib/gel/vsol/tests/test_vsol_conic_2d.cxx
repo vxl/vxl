@@ -108,10 +108,31 @@ int main(int argc,
   q->set_central_parameters(vsol_point_2d(cx,cy), width, height, phi);
   assert(*q == *p);
 
+  p=new vsol_conic_2d(5,6,5,-16,-16,8); // ellipse: centre 1,1; axes 2,1; dir -45 degrees
+  f(p->real_type());
+  assert(p->is_real_ellipse());
+  p->ellipse_parameters(cx,cy,phi,width,height);
+  q->set_central_parameters(vsol_point_2d(cx,cy), width, height, phi);
+  // Ignore rounding errors:
+  if (vcl_abs(q->a()-2.5) < 1e-12 && vcl_abs(q->b()-3) < 1e-12 && vcl_abs(q->d()+8) < 1e-12 &&
+      vcl_abs(q->c()-2.5) < 1e-12 && vcl_abs(q->f()-4) < 1e-12 && vcl_abs(q->e()+8) < 1e-12)
+    q->set(2.5, 3, 2.5, -8, -8, 4); 
+  assert(*q == *p);
+
+  p=new vsol_conic_2d(52,-72,73,0,0,-100); // ellipse: centre 0,0; axes 2,1; dir atan(3/4)
+  f(p->real_type());
+  assert(p->is_real_ellipse());
+  p->ellipse_parameters(cx,cy,phi,width,height);
+  q->set_central_parameters(vsol_point_2d(cx,cy), width, height, phi);
+  // Ignore rounding errors:
+  if (vcl_abs(q->a()-2.08) < 1e-12 && vcl_abs(q->b()+2.88) < 1e-12 &&
+      vcl_abs(q->c()-2.92) < 1e-12 && vcl_abs(q->f()+4.0) < 1e-12)
+    q->set(52, -72, 73, 25*q->d(), 25*q->e(), -100); 
+  assert(*q == *p);
+
   p=new vsol_conic_2d(1,0,0,0,-1,0); // parabola: y=x^2, x^2-y=0
   f(p->real_type());
   assert(p->is_parabola());
-
   p->parabola_parameters(cx,cy,cosphi,sinphi);
   phi = -0.5;
   q->set_parabola_parameters(vgl_vector_2d<double>(cosphi,sinphi), vsol_point_2d(cx,cy), phi);
@@ -126,6 +147,32 @@ int main(int argc,
   assert(p->is_hyperbola());
   p->hyperbola_parameters(cx,cy,phi,width,height);
   q->set_central_parameters(vsol_point_2d(cx,cy), width, height, phi);
+  // Ignore rounding errors:
+  if (vcl_abs(q->a()) < 1e-12 && vcl_abs(q->b()+4) < 1e-12 &&
+      vcl_abs(q->c()) < 1e-12 && vcl_abs(q->f()-4) < 1e-12)
+    q->set(0.0, -4.0, 0.0, q->d(), q->e(), 4.0); 
+  assert(*q == *p);
+
+  p=new vsol_conic_2d(11,-24,4,0,0,20); // hyperbola: centre 0,0; axes 2,-1; dir atan(4/3)
+  f(p->real_type());
+  assert(p->is_hyperbola());
+  p->hyperbola_parameters(cx,cy,phi,width,height);
+  q->set_central_parameters(vsol_point_2d(cx,cy), width, height, phi);
+  // Ignore rounding errors:
+  if (vcl_abs(q->a()-2.2) < 1e-12 && vcl_abs(q->b()+4.8) < 1e-12 &&
+      vcl_abs(q->c()-0.8) < 1e-12 && vcl_abs(q->f()-4.0) < 1e-12)
+    q->set(11, -24, 4, 5*q->d(), 5*q->e(), 20); 
+  assert(*q == *p);
+
+  p=new vsol_conic_2d(4,-24,11,16,2,-29); // hyperbola: centre 1,1; axes 1,-2; dir atan(-4/3)
+  f(p->real_type());
+  assert(p->is_hyperbola());
+  p->hyperbola_parameters(cx,cy,phi,width,height);
+  q->set_central_parameters(vsol_point_2d(cx,cy), width, height, phi);
+  // Ignore rounding errors:
+  if (vcl_abs(q->a()+0.8) < 1e-12 && vcl_abs(q->b()-4.8) < 1e-12 && vcl_abs(q->d()+3.2) < 1e-12 &&
+      vcl_abs(q->c()+2.2) < 1e-12 && vcl_abs(q->f()-5.8) < 1e-12 && vcl_abs(q->e()+0.4) < 1e-12)
+    q->set(-4, 24, -11, -16, -2, 29); 
   assert(*q == *p);
 
   return result;
