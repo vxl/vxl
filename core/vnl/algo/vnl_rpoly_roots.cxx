@@ -15,10 +15,11 @@
 #include <vcl_complex.h>
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_netlib.h> // rpoly_()
+#include <vnl/vnl_real_polynomial.h>
 
 // - The constructor calculates the roots.  This is the most efficient interface
 // as all the result variables are initialized to the correct size.
-// The polynomial is @{$ a[0] x^d + a[1] x^{d-1} + \cdots + a[d] = 0 $@}.
+// The polynomial is $ a[0] x^d + a[1] x^{d-1} + \cdots + a[d] = 0 $.
 // Note that if the routine fails, not all roots will be found.  In this case,
 // the "realroots" and "roots" functions will return fewer than n roots.
 vnl_rpoly_roots::vnl_rpoly_roots(const vnl_vector<double>& a)
@@ -36,6 +37,25 @@ vnl_rpoly_roots::vnl_rpoly_roots(const vnl_vector<double>& a)
     vcl_cerr << __FILE__ " these coefficients are invalid :" << vcl_endl;
     for (unsigned i=0;i<a.size();i++)
       vcl_cerr << i << ' ' << a(i) << vcl_endl;
+    vcl_abort();
+  }
+
+  compute();
+}
+
+vnl_rpoly_roots::vnl_rpoly_roots(const vnl_real_polynomial& poly)
+  : coeffs_(poly.coefficients()), r_(poly.degree()), i_(poly.degree())
+{
+  bool has_nans=false;
+  unsigned size = poly.degree() + 1;
+  for (unsigned i=0;i< size ;i++)
+    if (vnl_math_isnan(poly[i]))
+      has_nans=true;
+
+  if (has_nans) {
+    vcl_cerr << __FILE__ " these coefficients are invalid :" << vcl_endl;
+    for (unsigned i=0;i< size;i++)
+      vcl_cerr << i << ' ' << poly[i] << vcl_endl;
     vcl_abort();
   }
 

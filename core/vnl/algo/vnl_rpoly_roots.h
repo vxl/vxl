@@ -14,6 +14,7 @@
 //  Modifications
 //  23 may 97, Peter Vanroose - "NO_COMPLEX" option added (until "complex" type is standardised)
 //  dac (Manchester) 28/03/2001: tidied up documentation
+//  Joris Van den Wyngaerd - June 2001 - impl for vnl_real_polynomial constr added
 //  \endverbatim
 
 #include <vcl_complex.h>
@@ -35,13 +36,17 @@ class vnl_rpoly_roots {
 public:
 // Constructors/Destructors--------------------------------------------------
 
-//: The constructor calculates the roots.  This is the most efficient interface
+//: The constructor calculates the roots.
+// This is the most efficient interface
 // as all the result variables are initialized to the correct size.
 // The polynomial is $ a[0] x^d + a[1] x^{d-1} + \cdots + a[d] = 0 $.
+//
+// Note that if the routine fails, not all roots will be found.  In this case,
+// the "realroots" and "roots" functions will return fewer than n roots.
 
   vnl_rpoly_roots(const vnl_vector<double>& a);
 
-//: Calculate roots of RealPolynomial.
+//: Calculate roots of a vnl_real_polynomial. Same comments apply.
   vnl_rpoly_roots(const vnl_real_polynomial& poly);
 
   // Operations----------------------------------------------------------------
