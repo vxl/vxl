@@ -402,6 +402,7 @@ SET( dcmtk_sources
   dcmdata/libsrc/dcchrstr.cxx
   dcmdata/libsrc/dccodec.cxx
   dcmdata/libsrc/dcdatset.cxx
+  dcmdata/libsrc/dcdebug.cxx
   dcmdata/libsrc/dcdicent.cxx
   dcmdata/libsrc/dcdict.cxx
   dcmdata/libsrc/dcdictzz.cxx
@@ -412,12 +413,14 @@ SET( dcmtk_sources
   dcmdata/libsrc/dchashdi.cxx
   dcmdata/libsrc/dcistrma.cxx
   dcmdata/libsrc/dcistrmf.cxx
+  dcmdata/libsrc/dcistrmz.cxx
   dcmdata/libsrc/dcitem.cxx
   dcmdata/libsrc/dclist.cxx
   dcmdata/libsrc/dcmetinf.cxx
   dcmdata/libsrc/dcobject.cxx
   dcmdata/libsrc/dcostrma.cxx
   dcmdata/libsrc/dcostrmf.cxx
+  dcmdata/libsrc/dcostrmz.cxx
   dcmdata/libsrc/dcpcache.cxx
   dcmdata/libsrc/dcpixel.cxx
   dcmdata/libsrc/dcpixseq.cxx
