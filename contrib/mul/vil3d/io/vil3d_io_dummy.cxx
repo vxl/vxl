@@ -5,5 +5,7 @@
 // This file merely creates some code so that MSVC and other compilers will actually produce a library.
 
 
+#ifdef _MSC_VER
 static char * dummy = "dummy";
+#endif
 
