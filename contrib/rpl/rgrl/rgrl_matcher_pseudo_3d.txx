@@ -507,7 +507,7 @@ match_mapped_region( rgrl_feature_sptr         mapped_feature,
 
     // assert( responses[ index ] != max_response_value );
 
-    if ( index >0 && index+1 < responses.size() &&
+    if ( index > 0 && index+1 < (int)responses.size() &&
          responses[ index ] != max_response_value &&
          index + 1 <= 2*max_offset &&
          index - 1 >= -2*max_offset &&
