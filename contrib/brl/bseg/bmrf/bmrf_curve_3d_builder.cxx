@@ -347,7 +347,7 @@ bmrf_curve_3d_builder::best_match( const bmrf_curvel_3d_sptr& curvel,
            (neighbor->epi_seg()->max_alpha() < alpha) )
         continue;
 
-      if (curvel->is_projection(neighbor)) {
+      if (curve  l->is_projection(neighbor)) {
         matches.push_back(c_itr);
         arcs.push_back(*itr);
         break;
@@ -357,23 +357,23 @@ bmrf_curve_3d_builder::best_match( const bmrf_curvel_3d_sptr& curvel,
 #endif // 0
   if (matches.empty())
     return choices.end();
-
-  int best_index = 0;
+  if (matches.size() == 1)
+    return matches[0];
+#if 1 // test to see if this stuff matters
+  return choices.end();
+#else
   double max_prob = 0.0;
-  if (matches.size() > 1)
-  {
-    return choices.end(); // test to see if this stuff matters
-
-    vcl_cout << "warning: "<< matches.size() <<" matches" << vcl_endl;
-    for (unsigned int i=0; i<matches.size(); ++i) {
-      if (arcs[i]->probability() > max_prob) {
-        best_index = i;
-        max_prob = arcs[i]->probability();
-      }
-      vcl_cout << "   prob: " << arcs[i]->probability()<< vcl_endl;
+  unsigned int best_index = 0;
+  vcl_cout << "warning: "<< matches.size() <<" matches" << vcl_endl;
+  for (unsigned int i=0; i<matches.size(); ++i) {
+    if (arcs[i]->probability() > max_prob) {
+      best_index = i;
+      max_prob = arcs[i]->probability();
     }
+    vcl_cout << "   prob: " << arcs[i]->probability() << vcl_endl;
   }
   return matches[best_index];
+#endif // 1
 }
 
 
