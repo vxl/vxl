@@ -53,8 +53,21 @@ class vnl_powell_1dfun : public vnl_cost_function
 };
 
 vnl_powell::vnl_powell(vnl_cost_function* functor):
-  functor_(functor)
+  functor_(functor),linmin_xtol_(1e-4),initial_step_(1.0)
 {
+}
+
+//: Set tolerance on line search parameter step
+void vnl_powell::set_linmin_xtol(double tol)
+{
+  linmin_xtol_ = tol;
+}
+
+//: Set initial step when bracketting minima along a line
+//  Default value is 1.0
+void vnl_powell::set_initial_step(double step)
+{
+  initial_step_ = step;
 }
 
 vnl_nonlinear_minimizer::ReturnCodes
@@ -64,8 +77,6 @@ vnl_powell::minimize(vnl_vector<double>& p)
  // verbose_ = true;
   int n = p.size();
   vnl_powell_1dfun f1d(n, functor_, this);
-
-  double linmin_ftol = 1e-4;
 
   vnl_matrix<double> xi(n,n, vnl_matrix_identity);
   vnl_vector<double> ptt(n);
@@ -88,10 +99,10 @@ vnl_powell::minimize(vnl_vector<double>& p)
       f1d.init(p, xit);
       vnl_brent brent(&f1d);
       double ax = 0.0;
-      double xx = 1.0;
+      double xx = initial_step_;
       double bx;
       brent.bracket_minimum(&ax, &xx, &bx);
-      fret = brent.minimize_given_bounds(bx, xx, ax, linmin_ftol, &xx);
+      fret = brent.minimize_given_bounds(bx, xx, ax, linmin_xtol_, &xx);
       f1d.uninit(xx, p);
       // Now p is minimizer along xi
 
@@ -102,7 +113,7 @@ vnl_powell::minimize(vnl_vector<double>& p)
     }
 
     if (2.0*vcl_fabs(fp-fret) <= ftol*(vcl_fabs(fp)+vcl_fabs(fret))) {
-      vnl_matlab_print(vcl_cerr, xi, "xi");
+//      vnl_matlab_print(vcl_cerr, xi, "xi");
       return CONVERGED_FTOL;
     }
 
@@ -127,7 +138,7 @@ vnl_powell::minimize(vnl_vector<double>& p)
         double xx = 1.0;
         double bx;
         brent.bracket_minimum(&ax, &xx, &bx);
-        fret = brent.minimize_given_bounds(bx, xx, ax, linmin_ftol, &xx);
+        fret = brent.minimize_given_bounds(bx, xx, ax, linmin_xtol_, &xx);
         f1d.uninit(xx, p);
 
         for (int j=0;j<n;j++) {

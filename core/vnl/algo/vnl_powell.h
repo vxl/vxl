@@ -27,6 +27,14 @@ class vnl_powell : public vnl_nonlinear_minimizer
   //: Run minimization, place result in x.
   ReturnCodes minimize(vnl_vector<double>& x);
 
+		  //: Set tolerance on line search parameter step
+			//  Default value is 0.0001
+	void set_linmin_xtol(double tol);
+
+	  //: Set initial step when bracketting minima along a line
+		//  Default value is 1.0
+  void set_initial_step(double step);
+
  protected:
   vnl_cost_function* functor_;
 
@@ -34,6 +42,12 @@ class vnl_powell : public vnl_nonlinear_minimizer
   void pub_report_eval(double e) {
     report_eval(e);
   }
+
+	  //: Tolerance on line search parameter step
+	double linmin_xtol_;
+
+	  //: Initial step when bracketting minima along a line
+  double initial_step_;
 };
 
 #endif // vnl_powell_h_
