@@ -64,9 +64,8 @@ public:
   typedef vnl_vector<T> Base;
 
   // Constructors/Destructors--------------------------------------------------
-  // This assumes vnl_vector has been modified to do nothing in a char* ctor.
-  vnl_vector_ref(int n, T *space) : vnl_vector<T>( /*(char*)0, (char*)("hack")*/ ) {
-    //delete data; // Add this, and remove  ^^^^^^^ for stock COOL. Costs a new[0]/delete
+  // Do *not* call anything else than the default constructor of vnl_vector<T>
+  vnl_vector_ref(int n, T *space) : vnl_vector<T>() {
     Base::data = space;
     Base::num_elmts = n;
   }
