@@ -199,7 +199,7 @@ L10:
 /*     subdiagonal element has become negligible. */
 
     l = *ilo-1;
-    for (its = 0; its <= itn; ++its) {
+    for (its = 0; /*fsm*/ 1 /*its <= itn*/; ++its) {
 
 /*        Look for a single small subdiagonal element. */
 
