@@ -29,14 +29,14 @@ bgui_vtol_soview2D_digital_curve(vdgl_digital_curve_sptr const& dc)
       vcl_cout << "In bgui_vtol_soview2D_digital_curve(..) - null input dc\n";
       return;
     }
-  
+
   //get the edgel chain
   vdgl_interpolator_sptr itrp = dc->get_interpolator();
   vdgl_edgel_chain_sptr ech = itrp->get_edgel_chain();
 
   //n, x, and y are in the parent class vgui_soview2D_linestrip
-  int n = ech->size();
- 
+  unsigned int n = ech->size();
+
   float x = 0, y=0;
   for (unsigned int i=0; i<n;i++)
     {

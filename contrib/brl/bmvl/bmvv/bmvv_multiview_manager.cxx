@@ -139,7 +139,7 @@ bgui_vtol2D_tableau_sptr bmvv_multiview_manager::get_vtol2D_tableau_at(unsigned 
   if (row!=0)
     return 0;
   bgui_vtol2D_tableau_sptr btab = 0;
-  if(col==0||col==1)
+  if (col==0||col==1)
     btab = vtol_tabs_[col];
   return btab;
 }
@@ -200,9 +200,9 @@ void bmvv_multiview_manager::clear_display()
 //===================================================================
 void bmvv_multiview_manager::clear_selected()
 {
-  for(vcl_vector<bgui_vtol2D_tableau_sptr>::iterator bit = vtol_tabs_.begin();
-      bit != vtol_tabs_.end(); bit++)
-    if(*bit)
+  for (vcl_vector<bgui_vtol2D_tableau_sptr>::iterator bit = vtol_tabs_.begin();
+       bit != vtol_tabs_.end(); bit++)
+    if (*bit)
       (*bit)->deselect_all();
 }
 
@@ -384,17 +384,18 @@ void bmvv_multiview_manager::show_epipolar_line()
       v2D->post_redraw();
     }
 }
+
 //===================================================================
 //: capture corresponding curves in left and right image
 //===================================================================
 void bmvv_multiview_manager::select_curve_corres()
 {
-  for(vcl_vector<bgui_vtol2D_tableau_sptr>::iterator bit = vtol_tabs_.begin();
-      bit != vtol_tabs_.end(); bit++)
-    if(*bit)
+  for (vcl_vector<bgui_vtol2D_tableau_sptr>::iterator bit = vtol_tabs_.begin();
+       bit != vtol_tabs_.end(); bit++)
+    if (*bit)
       {
         vcl_vector<vgui_soview*> sovs = (*bit)->get_selected_soviews();
-        for(int i = 0; i<sovs.size(); i++)
+        for (unsigned int i = 0; i<sovs.size(); i++)
           {
             vgui_soview* sov = sovs[i];
             int id = sov->get_id();
@@ -402,7 +403,7 @@ void bmvv_multiview_manager::select_curve_corres()
             vtol_edge_2d_sptr e = (*bit)->get_mapped_edge(id);
             vsol_curve_2d_sptr c = e->curve();
             vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
-            if(dc)
+            if (dc)
               (*bit)->add_digital_curve(dc);
           }
       }

@@ -1,15 +1,15 @@
 //:
-//  \file
-//  \brief Perform binary dilation on 3D images
-//  \author Tim Cootes
+// \file
+// \brief Perform binary dilation on 3D images
+// \author Tim Cootes
 
 #include "vil3d_binary_dilate.h"
 #include <vcl_cassert.h>
 
 //: Dilates src_image to produce dest_image (assumed single plane)
 void vil3d_binary_dilate(const vil3d_image_view<bool>& src_image,
-                        vil3d_image_view<bool>& dest_image,
-                        const vil3d_structuring_element& element)
+                         vil3d_image_view<bool>& dest_image,
+                         const vil3d_structuring_element& element)
 {
   assert(src_image.nplanes()==1);
   unsigned ni = src_image.ni();
@@ -19,11 +19,7 @@ void vil3d_binary_dilate(const vil3d_image_view<bool>& src_image,
 
   vcl_ptrdiff_t s_istep = src_image.istep(),  s_jstep = src_image.jstep();
   vcl_ptrdiff_t s_kstep = src_image.kstep();
-  vcl_ptrdiff_t d_istep = dest_image.istep(), d_jstep = dest_image.jstep();
-  vcl_ptrdiff_t d_kstep = dest_image.kstep();
-
-  const bool* src_row0 = src_image.origin_ptr();
-  bool* dest_row0 = dest_image.origin_ptr();
+  vcl_ptrdiff_t d_istep = dest_image.istep();
 
   vcl_vector<vcl_ptrdiff_t> offset;
   vil3d_compute_offsets(offset,element,s_istep,s_jstep,s_kstep);
@@ -57,7 +53,7 @@ void vil3d_binary_dilate(const vil3d_image_view<bool>& src_image,
       for (unsigned int k=0;k<nk;++k)
         dest_image(i,j,k,0)=vil3d_binary_dilate(src_image,0,element,i,j,k);
   // Deal with low k side
-  for (unsigned int k=0;k<klo;++k)
+  for (int k=0;k<klo;++k)
     for (int i=ilo;i<=ihi;++i)
       for (int j=jlo;j<=jhi;++j)
         dest_image(i,j,k,0)=vil3d_binary_dilate(src_image,0,element,i,j,k);
@@ -74,8 +70,6 @@ void vil3d_binary_dilate(const vil3d_image_view<bool>& src_image,
       bool* dest_p = &dest_image(ilo,j,k);
 
       for (int i=ilo;i<=ihi;++i,src_p+=s_istep,dest_p+=d_istep)
-      {
         *dest_p=vil3d_binary_dilate(src_p,&offset[0],offset.size());
-      }
     }
 }
