@@ -16,6 +16,7 @@
 
 #include <vil1/vil1_memory_image.h>
 #include <vil1/vil1_rgb.h>
+#include <vil1/vil1_rgba.h>
 
 #include <vxl_config.h>
 
@@ -178,6 +179,17 @@ struct vil1_memory_image_of_format<vil1_rgb<float> > : public vil1_memory_image_
   vil1_memory_image_of_format()
   {
     components = 3;
+    bits_per_component = 32;
+    component_format = VIL1_COMPONENT_FORMAT_IEEE_FLOAT;
+  }
+};
+
+VCL_DEFINE_SPECIALIZATION
+struct vil1_memory_image_of_format<vil1_rgba<float> > : public vil1_memory_image_format
+{
+  vil1_memory_image_of_format()
+  {
+    components = 4;
     bits_per_component = 32;
     component_format = VIL1_COMPONENT_FORMAT_IEEE_FLOAT;
   }
