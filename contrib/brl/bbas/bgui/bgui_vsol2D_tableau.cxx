@@ -4,7 +4,6 @@
 #include <bgui/bgui_vsol_soview2D.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_style.h>
-
 #include <vsol/vsol_spatial_object_2d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
@@ -17,11 +16,11 @@ bgui_vsol2D_tableau::bgui_vsol2D_tableau(const char* n) :
   vgui_easy2D_tableau(n) { this->init(); }
 
 bgui_vsol2D_tableau::bgui_vsol2D_tableau(vgui_image_tableau_sptr const& it,
-                                                       const char* n) :
+                                         const char* n) :
   vgui_easy2D_tableau(it, n) { this->init(); }
 
 bgui_vsol2D_tableau::bgui_vsol2D_tableau(vgui_tableau_sptr const& t,
-                                                       const char* n) :
+                                         const char* n) :
   vgui_easy2D_tableau(t, n) { this->init(); }
 
 bgui_vsol2D_tableau::~bgui_vsol2D_tableau()
@@ -30,7 +29,6 @@ bgui_vsol2D_tableau::~bgui_vsol2D_tableau()
 
 void bgui_vsol2D_tableau::init()
 {
-
   //define default soview styles
   //these can be overridden by later set_*_syle commands prior to drawing.
   //
@@ -181,45 +179,52 @@ add_spatial_object(vsol_spatial_object_2d_sptr const& sos,
                    const vgui_style_sptr& style)
 {
   if (sos->cast_to_point()) {
-    {
-      vsol_point_2d_sptr p = sos->cast_to_point();
-      this->add_vsol_point_2d(p , style );
-    }
+  {
+    vsol_point_2d_sptr p = sos->cast_to_point();
+    this->add_vsol_point_2d(p , style );
+  }
   }
 
   if (sos->cast_to_curve()) {
     if (sos->cast_to_curve()->cast_to_digital_curve())
-      {
-        vsol_digital_curve_2d_sptr dc =
-          sos->cast_to_curve()->cast_to_digital_curve();
-        this->add_digital_curve(dc , style);
-      }
-    if (sos->cast_to_curve()->cast_to_digital_curve())
-      {
-        vdgl_digital_curve_sptr dc =
-          sos->cast_to_curve()->cast_to_vdgl_digital_curve();
-        this->add_edgel_curve(dc , style);
-      }
-    if (sos->cast_to_curve()->cast_to_line())
-      {
-        vsol_line_2d_sptr line =
-          sos->cast_to_curve()->cast_to_line();
-        this->add_vsol_line_2d(line, style);
-     }
-    if (sos->cast_to_curve()->cast_to_polyline())
-      {
-        vsol_polyline_2d_sptr pline =
-          sos->cast_to_curve()->cast_to_polyline();
-        this->add_vsol_polyline_2d(pline , style);
-     }
+    {
+      vsol_digital_curve_2d_sptr dc =
+        sos->cast_to_curve()->cast_to_digital_curve();
+      this->add_digital_curve(dc , style);
+    }
+    else if (sos->cast_to_curve()->cast_to_vdgl_digital_curve())
+    {
+      vdgl_digital_curve_sptr dc =
+        sos->cast_to_curve()->cast_to_vdgl_digital_curve();
+      this->add_edgel_curve(dc , style);
+    }
+    else if (sos->cast_to_curve()->cast_to_line())
+    {
+      vsol_line_2d_sptr line =
+        sos->cast_to_curve()->cast_to_line();
+      this->add_vsol_line_2d(line, style);
+    }
+    else if (sos->cast_to_curve()->cast_to_polyline())
+    {
+      vsol_polyline_2d_sptr pline =
+        sos->cast_to_curve()->cast_to_polyline();
+      this->add_vsol_polyline_2d(pline , style);
+    }
+    else
+      assert(!"unknown curve type in bgui_vsol2D_tableau::add_spatial_object()");
   }
-  if (sos->cast_to_region()) {
-    if (sos->cast_to_region()->cast_to_polygon()) {
+  else if (sos->cast_to_region()) {
+    if (sos->cast_to_region()->cast_to_polygon())
+    {
       vsol_polygon_2d_sptr pline =
-          sos->cast_to_region()->cast_to_polygon();
+        sos->cast_to_region()->cast_to_polygon();
       this->add_vsol_polygon_2d(pline, style);
     }
+    else
+      assert(!"unknown region type in bgui_vsol2D_tableau::add_spatial_object()");
   }
+  else
+    assert(!"unknown spatial object type in bgui_vsol2D_tableau::add_spatial_object()");
   return;
 }
 
@@ -283,7 +288,6 @@ void bgui_vsol2D_tableau::set_dotted_digital_curve_style(const vgui_style_sptr& 
   dotted_digital_curve_style_->point_size = style->point_size;
   dotted_digital_curve_style_->line_width = style->line_width;
 }
-
 
 
 void bgui_vsol2D_tableau::set_edgel_curve_style(const vgui_style_sptr& style)

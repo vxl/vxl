@@ -1,3 +1,4 @@
+#include "vsrl_manager.h"
 //:
 // \file
 // \brief This program was written to test the Dense Matching software
@@ -36,7 +37,6 @@
 #include <vepl/vepl_gaussian_convolution.h>
 #include <vepl/vepl_threshold.h>
 #include <vsrl/vsrl_menus.h>
-#include <vsrl/vsrl_manager.h>
 #include <vsrl/vsrl_point_picker.h>
 #include <vsrl/vsrl_results_dense_matcher.h>
 #include <vsrl/vsrl_3d_output.h>
@@ -545,7 +545,7 @@ void vsrl_manager::draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions,
         vcl_cout << "vsrl_manager::draw_regions - null curve.\n";
         return;
       }
-      if (c->cast_to_digital_curve())
+      if (c->cast_to_vdgl_digital_curve())
       {
         vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
         //get the edgel chain

@@ -826,7 +826,7 @@ ConfirmJunctionOnCycle(int index, float threshold,
 #if 1 // JLM
   return true;
 #else
-  vdgl_digital_curve_sptr dc = cycle.curve()->cast_to_digital_curve();
+  vdgl_digital_curve_sptr dc = cycle.curve()->cast_to_vdgl_digital_curve();
   const int len = dc->get_interpolator()->get_edgel_chain()->size();
   const int wrap = 10*len;      // for positive index
   const int radius = 3;         // gap < 3, around junction pixel
@@ -930,7 +930,7 @@ ConfirmJunctionOnChain(int index, float threshold,
 #if 1 // JLM
   return true;
 #else
-  vdgl_digital_curve_sptr dc = chain.curve()->cast_to_digital_curve();
+  vdgl_digital_curve_sptr dc = chain.curve()->cast_to_vdgl_digital_curve();
   const int len = dc->get_interpolator()->get_edgel_chain()->size()-1;
 
   if (len < 2*MINLENGTH-1) // will merge vertices instead of

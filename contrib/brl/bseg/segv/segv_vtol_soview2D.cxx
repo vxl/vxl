@@ -1,13 +1,12 @@
+#include "segv_vtol_soview2D.h"
 //:
 // \file
 #include <vcl_iostream.h>
-
 #include <vgui/vgui_gl.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vtol/vtol_face_2d.h>
-#include <segv/segv_vtol_soview2D.h>
 
 //--------------------------------------------------------------------------
 //: vtol_vertex_2d view
@@ -15,7 +14,7 @@
 vcl_ostream& segv_vtol_soview2D_vertex::print(vcl_ostream& s) const
 {
   s << "[segv_vtol_soview2D_vertex " << x << ',' << y << ' ';
-  return vgui_soview2D::print(s) << "]";
+  return vgui_soview2D::print(s) << ']';
 }
 
 //--------------------------------------------------------------------------
@@ -41,7 +40,7 @@ segv_vtol_soview2D_edge::segv_vtol_soview2D_edge(vtol_edge_2d_sptr& e)
     vcl_cout << "In segv_vtol_soview2D_edge(..) - null curve\n";
     return;
   }
-  if (c->cast_to_digital_curve())
+  if (c->cast_to_vdgl_digital_curve())
   {
     vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
     //get the edgel chain

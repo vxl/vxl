@@ -1,7 +1,6 @@
 #include "bgui_vtol2D_tableau.h"
 //:
 // \file
-
 #include <bgui/bgui_vtol_soview2D.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_style.h>
@@ -31,7 +30,7 @@ static void print_edgels(vtol_edge_2d_sptr const & e)
 {
   vsol_curve_2d_sptr c = e->curve();
   if (!c) return;
-  vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
+  vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
   if (!dc) return;
   vdgl_interpolator_sptr trp = dc->get_interpolator();
   if (!trp) return;

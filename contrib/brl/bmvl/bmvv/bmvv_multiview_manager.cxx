@@ -438,7 +438,7 @@ void bmvv_multiview_manager::select_curve_corres()
         vcl_cout << "id = " << id << '\n';
         vtol_edge_2d_sptr e = (*bit)->get_mapped_edge(id);
         vsol_curve_2d_sptr c = e->curve();
-        vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
+        vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
         // pilou's code
         vdgl_interpolator_sptr interp = dc->get_interpolator();
         vdgl_edgel_chain_sptr  ec = interp->get_edgel_chain();
@@ -524,7 +524,7 @@ void bmvv_multiview_manager::track_edges()
   for (unsigned int i=0;i<(*edges).size();i++)
   {
     vsol_curve_2d_sptr c  = (*edges)[i]->curve();
-    vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
+    vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
     if (dc->length()>tp_.min_length_of_curves)
       ecl.push_back((*edges)[i]);
   }
@@ -550,7 +550,7 @@ void bmvv_multiview_manager::track_edges()
   for (unsigned int i=0;i<(*edges).size();i++)
   {
     vsol_curve_2d_sptr c  = (*edges)[i]->curve();
-    vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
+    vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
     if (dc->length()>tp_.min_length_of_curves)
       ecl.push_back((*edges)[i]);
   }
