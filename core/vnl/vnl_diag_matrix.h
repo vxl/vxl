@@ -84,12 +84,12 @@ class vnl_diag_matrix
 
   //: set element with boundary checks.
   void put (unsigned r, unsigned c, T const& v) {
-    assert(r == c); assert(r>=0); assert (r<size()); diagonal_[r] = v;
+    assert(r == c); assert (r<size()); diagonal_[r] = v;
   }
 
   //: get element with boundary checks.
   T get (unsigned r, unsigned c) const {
-    assert(r == c); assert(r>=0); assert (r<size()); return diagonal_[r];
+    assert(r == c); assert (r<size()); return diagonal_[r];
   }
 
   //: Set all diagonal elements of matrix to specified value.
