@@ -128,7 +128,7 @@ bool FMatrixComputeNonLinear::compute(FMatrix* F)
           lm.set_max_function_evals(200);
           lm.set_f_tolerance(1e-6);
           lm.set_x_tolerance(1e-6);
-  //        lm.set_epsilon_function(1e-6);
+//        lm.set_epsilon_function(1e-6);
           lm.minimize(f_params);
 
           if(lm.get_end_error() < so_far) {
@@ -136,15 +136,13 @@ bool FMatrixComputeNonLinear::compute(FMatrix* F)
             vcl_cout << "so_far : " << so_far << vcl_endl;
             norm_F = params_to_fmatrix(f_params);
             F_final->set(norm_F);
-            HomgPoint2D *e1 = new HomgPoint2D(), *e2 = new HomgPoint2D();
-            F_final->get_epipoles(e1, e2);
-            double *x1 = new double, *y1 = new double, *x2 = new double, *y2 = new double;
-            e1->get_nonhomogeneous(*x1, *y1);
-            e2->get_nonhomogeneous(*x2, *y2);
-            HomgPoint2D c1(*x1, *y1, 1.0);
-            HomgPoint2D c2(*x2, *y2, 1.0);
-            delete x1; delete x2; delete y1; delete y2;
-            delete e1; delete e2;
+            HomgPoint2D e1, e2;
+            F_final->get_epipoles(&e1, &e2);
+            double x1, y1, x2, y2;
+            e1.get_nonhomogeneous(x1, y1);
+            e2.get_nonhomogeneous(x2, y2);
+            HomgPoint2D c1(x1, y1, 1.0);
+            HomgPoint2D c2(x2, y2, 1.0);
             vcl_cout << "Epipole locations 1 : " << c1 << " 2 : " << c2 << vcl_endl;
           }
         }
@@ -177,15 +175,13 @@ bool FMatrixComputeNonLinear::compute(FMatrix* F)
       norm_F = params_to_fmatrix(f_params);
       F_final->set(norm_F);
       lm.diagnose_outcome();
-      HomgPoint2D *e1 = new HomgPoint2D(), *e2 = new HomgPoint2D();
-      F_final->get_epipoles(e1, e2);
-      double *x1 = new double, *y1 = new double, *x2 = new double, *y2 = new double;
-      e1->get_nonhomogeneous(*x1, *y1);
-      e2->get_nonhomogeneous(*x2, *y2);
-      HomgPoint2D c1(*x1, *y1, 1.0);
-      HomgPoint2D c2(*x2, *y2, 1.0);
-      delete x1; delete x2; delete y1; delete y2;
-      delete e1; delete e2;
+      HomgPoint2D e1, e2;
+      F_final->get_epipoles(&e1, &e2);
+      double x1, y1, x2, y2;
+      e1.get_nonhomogeneous(x1, y1);
+      e2.get_nonhomogeneous(x2, y2);
+      HomgPoint2D c1(x1, y1, 1.0);
+      HomgPoint2D c2(x2, y2, 1.0);
       vcl_cout << "Epipole locations 1 : " << c1 << " 2 : " << c2 << vcl_endl;
     }
   }

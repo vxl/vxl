@@ -72,13 +72,12 @@ bool FMatrixComputeRobust::compute(PairMatchSetCorner& matches, FMatrix *F)
 
     // Set up a new FMatrix 7 point Computor
     // Note the conditioning and de-conditioning is done internally
-    FMatrixCompute7Point *Computor = new FMatrixCompute7Point(true, rank2_truncate_);
+    FMatrixCompute7Point Computor(true, rank2_truncate_);
 
     // Compute F
     vcl_vector<FMatrix*> F_temp;
-    if(!Computor->compute(seven1, seven2, F_temp))
+    if(!Computor.compute(seven1, seven2, F_temp))
       vcl_cout << "Seven point failure" << vcl_endl;
-    delete Computor;
 
     for(int k = 0; k < F_temp.size(); k++) {
       int temp_count = 0;
