@@ -68,6 +68,16 @@ void vsrl_menus::set_params_callback()
   vsrl_manager::instance()->set_params();
 }
 
+void vsrl_menus::draw_north_callback()
+{
+  vsrl_manager::instance()->draw_north_arrow();
+}
+
+void vsrl_menus::test_func_callback()
+{
+  vsrl_manager::instance()->test_func();
+}
+
 
 // vsrl_menus definitions
 
@@ -89,6 +99,8 @@ vgui_menu vsrl_menus::get_menus()
   menuops.add("Clear all 2D objects", clear_all_callback, (vgui_key)'x', vgui_CTRL);
   menuops.add("Set Dense Matching Parameters...", set_params_callback);
   menuops.add("Perform Dense Matching", do_dense_matching_callback);
+  menuops.add("Draw North Arrow", draw_north_callback);
+  menuops.add("Test Function", test_func_callback);
   menuops.add("Region Segmentation...", find_regions_callback);
 
   // Main menu bar
