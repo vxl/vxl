@@ -1,10 +1,11 @@
 #include "testlib_register.h"
 
 #include <vcl_iostream.h>
+#include <vcl_string.h>
 #include <vcl_vector.h>
 
 vcl_vector<TestMainFunction> testlib_test_func_;
-vcl_vector<string>           testlib_test_name_;
+vcl_vector<vcl_string>       testlib_test_name_;
 
 void
 list_test_names( vcl_ostream& ostr )

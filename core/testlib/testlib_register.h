@@ -28,7 +28,7 @@
 typedef int (*TestMainFunction)( int, char*[] );
 
 extern vcl_vector<TestMainFunction> testlib_test_func_;
-extern vcl_vector<string>           testlib_test_name_;
+extern vcl_vector<vcl_string>       testlib_test_name_;
 
 //: Declare the existence of the test.
 // If you DECLARE( x ), then you will need to define a function int x_main(int,char*[]).
