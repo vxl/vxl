@@ -26,7 +26,7 @@ bool oxp_vob_frame_index::load(char const* filename)
   for(vul_awk awk(f); awk; ++awk) {
     // Skip comment and ----- lines
     oxp_vob_frame_index_entry e;
-    if (sscanf(awk.line(), " %x | %d", &e.lba, &e.frame) == 2)
+    if (vcl_sscanf(awk.line(), " %x | %d", &e.lba, &e.frame) == 2)
       tmp.push_back(e);
   }
   l = tmp;

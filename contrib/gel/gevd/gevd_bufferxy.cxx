@@ -134,7 +134,7 @@ gevd_bufferxy::gevd_bufferxy(const char* filename) : gevd_memory_mixin(read_from
     char l[1024];
     f.get(l, 1024); // read single line
     int x=-1, y=-1, b=-1;
-    sscanf(l, "BUFFERXYDUMP %d %d %d", &x, &y, &b);
+    vcl_sscanf(l, "BUFFERXYDUMP %d %d %d", &x, &y, &b);
     f.get(l[0]); // read end-of-line
     Init(x, y, b);
     iostream_char* buf = (iostream_char*)GetBuffer();

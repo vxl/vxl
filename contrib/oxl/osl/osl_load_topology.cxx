@@ -39,7 +39,7 @@ void osl_load_topology(vcl_istream &f, vcl_list<osl_edge*> &es, vcl_list<osl_ver
   f >> vcl_ws;
   f.getline(buf, sizeof(buf));
   int numverts = -1;
-  if (sscanf(buf, "%d%[ ]vertices", &numverts, tmp) != 2) {
+  if (vcl_sscanf(buf, "%d%[ ]vertices", &numverts, tmp) != 2) {
     vcl_cerr << __FILE__ ": error reading number of vertices" << vcl_endl;
     return;
   }
@@ -64,7 +64,7 @@ void osl_load_topology(vcl_istream &f, vcl_list<osl_edge*> &es, vcl_list<osl_ver
   f >> vcl_ws;
   f.getline(buf, sizeof(buf));
   int numedges = -1;
-  if (sscanf(buf, "%d%[ ]edges", &numedges, tmp) != 2) {
+  if (vcl_sscanf(buf, "%d%[ ]edges", &numedges, tmp) != 2) {
     vcl_cerr << __FILE__ ": error reading number of edges" << vcl_endl;
     return;
   }

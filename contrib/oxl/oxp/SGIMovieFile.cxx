@@ -212,7 +212,7 @@ bool SGIMovieFile::GetFrame(int frame_index, void* buffer)
   int s = p->video_indices[0][frame_index].offset;
 
   // Need to open file every time...
-  FILE * fp = fopen(p->filename.c_str(), "r");
+  FILE * fp = vcl_fopen(p->filename.c_str(), "r");
   if (!fp) {
     vcl_cerr << "SGIMovieFile: File has disappeared\n";
     return false;
@@ -239,7 +239,7 @@ bool SGIMovieFile::GetFrame(int frame_index, void* buffer)
     for (int i=0; i < interlace_factor; ++i) {
       if (MovieFileInterface::verbose) vul_printf(vcl_cerr, "fld %d ", i);
       for (int y=h-1; y >= 0; --y) {
-        fread(row_buf, 1, inrowsize, fp);
+        vcl_fread(row_buf, 1, inrowsize, fp);
         char* buf_ptr = (char*)buffer + (interlace_factor * y + i) * outrowsize;
         char* row_ptr = row_buf;
         for (int x=0; x < w; ++x) {
@@ -255,7 +255,7 @@ bool SGIMovieFile::GetFrame(int frame_index, void* buffer)
     }
 
     if (MovieFileInterface::verbose) vul_printf(vcl_cerr, "] ");
-    fclose(fp);
+    vcl_fclose(fp);
     delete[] row_buf;
   }
   else if (p->compression == "10") {
@@ -297,7 +297,7 @@ bool SGIMovieFile::GetFrame(int frame_index, void* buffer)
         p->field_indices[0][frame_index * 2 + 1] = jpeg.GetFilePosition();
     }
     if (MovieFileInterface::verbose) vul_printf(vcl_cerr, "] ");
-    fclose(fp);
+    vcl_fclose(fp);
   }
 
   return true;

@@ -51,18 +51,18 @@ void vsrl_diffusion::write_image(char *file_name,int it_num, vnl_matrix<double> 
   char new_name[512];
 
   if(it_num < 10){
-    sprintf(&(new_name[0]),"%s00%d.ppm",file_name,it_num);
+    vcl_sprintf(&(new_name[0]),"%s00%d.ppm",file_name,it_num);
     write_image(&(new_name[0]),mat);
     return;
   }
 
   if(it_num < 100){
-    sprintf(&(new_name[0]),"%s0%d.ppm",file_name,it_num);
+    vcl_sprintf(&(new_name[0]),"%s0%d.ppm",file_name,it_num);
     write_image(&(new_name[0]),mat);
     return;
   }
 
-  sprintf(&(new_name[0]),"%s%d.ppm",file_name,it_num);
+  vcl_sprintf(&(new_name[0]),"%s%d.ppm",file_name,it_num);
   write_image(&(new_name[0]),mat);
   return;
 }

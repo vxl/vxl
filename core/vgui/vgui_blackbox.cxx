@@ -107,7 +107,7 @@ bool vgui_blackbox::handle(const vgui_event& event) {
             // Save frames
             {
               char buf[1024];
-              sprintf(buf, "/tmp/vgui_blackbox.%03d.ppm", frame_number);
+              vcl_sprintf(buf, "/tmp/vgui_blackbox.%03d.ppm", frame_number);
               if (do_save)  vgui_utils::dump_colour_buffer(buf);
               if (old_e) {
                 double d = (dt * 1e-3);

@@ -30,7 +30,7 @@ inline int ROUNDUP(int x)
 
 void send4(FILE* fp, unsigned int val)
 {
-  fwrite(&val, 4, 1, fp);
+  vcl_fwrite(&val, 4, 1, fp);
 }
 
 struct Vars {
@@ -61,11 +61,11 @@ struct Vars {
       int l = names[i].size();
       vcl_strncpy(buf, names[i].c_str(), l);
       while (l < 16) buf[l++] = 0;
-      fwrite(buf, 16, 1, fp);
+      vcl_fwrite(buf, 16, 1, fp);
       // Send values
       l = values[i].size();
       send4(fp, l + 1);
-      fwrite(values[i].c_str(), l+1, 1, fp);
+      vcl_fwrite(values[i].c_str(), l+1, 1, fp);
     }
   }
 };
@@ -79,7 +79,6 @@ struct SGIMovieFileWriteData {
   void PutFrame(int i);
   void Finish();
 
-public:
   int w,h,l;
   vcl_vector<unsigned> frame_ends;
 
@@ -94,10 +93,7 @@ public:
   jpeg_compress_struct cinfo;
   jpeg_error_mgr jerr;
 
-  void send4(unsigned int val) {
-    fwrite(&val, 4, 1, fp);
-  }
-
+  void send4(unsigned int val) { vcl_fwrite(&val, 4, 1, fp); }
 };
 
 SGIMovieFileWriteData::SGIMovieFileWriteData(char const* filename,
@@ -109,7 +105,7 @@ SGIMovieFileWriteData::SGIMovieFileWriteData(char const* filename,
   buffer(w_, h_),
   rows(h_)
 {
-  fp = fopen(filename, "w");
+  fp = vcl_fopen(filename, "w");
   if (!fp) {
     vul_printf(vcl_cerr, "SGIMovieFileWriteData: Can't open %s\n", filename);
     return;
@@ -197,11 +193,11 @@ void SGIMovieFileWriteData::Finish()
     f.size = end - start;
     f.pad = 0;
     f.frame = 0;
-    fwrite(&f, 4, 4, fp);
+    vcl_fwrite(&f, 4, 4, fp);
   }
 
   jpeg_destroy_compress(&cinfo);
-  fclose(fp);
+  vcl_fclose(fp);
 }
 
 extern unsigned long jpeg_stdio_ftell(jpeg_compress_struct*);

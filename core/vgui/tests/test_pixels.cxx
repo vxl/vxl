@@ -71,7 +71,7 @@ int main(int, char **) {
   vcl_cerr << "               p[3]     p[2]     p[1]     p[0] |     p[0]     p[1]     p[2]     p[3]" << vcl_endl;
 
   for (int i=0; i<32; ++i) {
-    char buf[64]; sprintf(buf, "0x1<<%3d", i);
+    char buf[64]; vcl_sprintf(buf, "0x1<<%3d", i);
     GLuint  w = (0x1 << i);
     print_binary(buf, &w, sizeof(w));
   }
