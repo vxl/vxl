@@ -263,7 +263,7 @@ SOURCE=".\Templates\vbl_bounding_box+int-.cxx"
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_canonical_path.cxx
+SOURCE=.\vbl_expand_path.cxx
 # End Source File
 # Begin Source File
 
@@ -431,7 +431,7 @@ SOURCE=.\vbl_br_impl.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_canonical_path.h
+SOURCE=.\vbl_expand_path.h
 # End Source File
 # Begin Source File
 
