@@ -13,11 +13,10 @@
 #include <vil1/vil1_load.h>
 #include <vil1/vil1_save.h>
 
-
-static void test_region_proc()
+static void test_region_proc(int argc, char* argv[])
 {
   // Get the image
-  vil1_image  test_img_raw = vil1_load("testimg.tif");
+  vil1_image  test_img_raw = vil1_load(argc<2 ? "testimg.tif" : argv[1]);
 
   if (test_img_raw)
   {
@@ -41,9 +40,11 @@ static void test_region_proc()
     vil1_image  edge_img = rp.get_edge_image();
     vil1_image  res_img = rp.get_residual_image();
 
+#ifdef LEAVE_IMAGES_BEHIND
     // Save the debug output images for external viewing
     vil1_save(edge_img, "testimg_edges.tif");
     vil1_save(res_img, "testimg_residual.tif");
+#endif
 
     // Dump the intensity regions
     vcl_cout << region_list.size() << " intensity faces found:\n";
@@ -106,4 +107,4 @@ static void test_region_proc()
 }
 
 
-TESTMAIN(test_region_proc);
+TESTMAIN_ARGS(test_region_proc);

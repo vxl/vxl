@@ -17,10 +17,10 @@
 #include <vil1/vil1_vil.h>
 
 
-static void test_int_faces_attr()
+static void test_int_faces_attr(int argc, char* argv[])
 {
   // Get the image
-  vil1_image  test_img_raw = vil1_load("testimg.tif");
+  vil1_image  test_img_raw = vil1_load(argc<2 ? "testimg.tif" : argv[1]);
 
   if (test_img_raw)
   {
@@ -100,4 +100,4 @@ static void test_int_faces_attr()
 }
 
 
-TESTMAIN(test_int_faces_attr);
+TESTMAIN_ARGS(test_int_faces_attr);
