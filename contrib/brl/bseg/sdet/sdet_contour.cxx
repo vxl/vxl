@@ -4,12 +4,11 @@
 // \file
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>   // for vcl_abs(int)
-#include <vcl_cassert.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h> // for vcl_max()
 #include <vul/vul_timer.h>
 #include <vil/vil_byte.h>
-#include <vnl/vnl_math.h> // for sqrt(2)
+#include <vnl/vnl_math.h> // for sqrt2
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator.h>
@@ -21,8 +20,8 @@
 #include <bdgl/bdgl_curve_algs.h>
 #include <gevd/gevd_float_operators.h>
 #include <gevd/gevd_pixel.h>
-bool sdet_contour::talkative_ = true;    // By default contour is not silent.
 
+bool sdet_contour::talkative_ = true;    // By default contour is not silent.
 const int INVALID = -1;
 
 // Use 8 directions, with 45 degree angle in between them.
@@ -68,8 +67,6 @@ const float RGS[] = { 1.f, 1.414213f, 2.f, 2.236067f, 2.828427f, // values of ga
 // - win32 - moved to here for MSVC++
 const int MINLENGTH = 3;        // minimum number of pixels for a chain
 const int FRAME = 4;            // border of image
-
-
 
 
 //: Save parameters and create workspace for detecting contours.
@@ -289,9 +286,7 @@ sdet_contour::FindChains(gevd_bufferxy& edgels, const int njunction,
                          const int* junctionx, const int* junctiony,
                          vcl_vector<vtol_edge_2d_sptr>& edges)
 {
-
   vul_timer t;
-
 
   // 1. Save away detected junctions from extending at end points of
   // contours, without linking these contours up. This avoids random
@@ -530,11 +525,12 @@ DetectJunction(vtol_vertex_2d& end, int& index,
   vdgl_digital_curve_sptr dc2 =(stronger->curve()->cast_to_digital_curve());
   vdgl_edgel_chain_sptr ec = dc2->get_interpolator()->get_edgel_chain();
   index = bdgl_curve_algs::closest_point(ec, end.x(), end.y());
-
-  //if(debug_)
-  //  vcl_cout << "Closest index to (" << end.x() << " " 
-   //          << end.y() << ") is " << index
-    //         << " corresponding to " << ec->edgel(index) << vcl_endl;
+#ifdef DEBUG
+  if (debug_)
+    vcl_cout << "Closest index to (" << end.x() << " "
+             << end.y() << ") is " << index
+             << " corresponding to " << ec->edgel(index) << vcl_endl;
+#endif
   return true;
 }
 
@@ -546,8 +542,10 @@ bool
 ConfirmJunctionOnCycle(int index, float threshold,
                        vtol_edge_2d& cycle, const gevd_bufferxy& edgels)
 {
- // if(debug_)
-   // vcl_cerr << "ConfirmJunctionOnCycle() returning 'TRUE'\n";
+#ifdef DEBUG
+ if (debug_)
+   vcl_cerr << "ConfirmJunctionOnCycle() not run: returning 'TRUE'\n";
+#endif
   return true;//JLM
 
   vdgl_digital_curve_sptr dc = cycle.curve()->cast_to_digital_curve();
@@ -626,8 +624,10 @@ bool
 ConfirmJunctionOnChain(int index, float threshold,
                        vtol_edge_2d& chain, const gevd_bufferxy& edgels)
 {
-//  if(debug_)
-   // vcl_cerr << "ConfirmJunctionOnChain() returning 'TRUE'\n";
+#ifdef DEBUG
+  if (debug_)
+    vcl_cerr << "ConfirmJunctionOnChain() not run: returning 'TRUE'\n";
+#endif
   return true; //JLM
 
   vdgl_digital_curve_sptr dc = chain.curve()->cast_to_digital_curve();
@@ -760,10 +760,7 @@ BreakChain(vtol_vertex_2d& junction, const int index,
            vtol_edge_2d_sptr& longer, vtol_edge_2d_sptr& shorter,
            vbl_array_2d<vtol_edge_2d_sptr>& edgeMap, vbl_array_2d<vtol_vertex_2d_sptr>& vertexMap)
 {
-  vtol_vertex_sptr v1= stronger.v1()->cast_to_vertex();
-  vtol_vertex_sptr v2 = stronger.v2()->cast_to_vertex();
   vdgl_digital_curve_sptr dc = stronger.curve()->cast_to_digital_curve();
-  vdgl_edgel_chain_sptr cxy= dc->get_interpolator()->get_edgel_chain();
 
   const int l0 = dc->get_interpolator()->get_edgel_chain()->size();
   const int l1 = index+1, l2 = l0-index;
@@ -786,6 +783,7 @@ BreakChain(vtol_vertex_2d& junction, const int index,
 
   edge1->set_curve(*dc1);
 
+  vdgl_edgel_chain_sptr cxy= dc->get_interpolator()->get_edgel_chain();
   vdgl_edgel_chain *cxy1= ec;
 
   for (int k = 0; k < l1; k++)
@@ -795,12 +793,11 @@ BreakChain(vtol_vertex_2d& junction, const int index,
       edgeMap.put( int((*cxy1)[k].x()), int((*cxy1)[k].y()),  edge1);
     }
 
-  //vtol_vertex_2d_sptr  v1 = stronger.v1().ptr()->cast_to_vertex_2d();
-
+  vtol_vertex_sptr v1= stronger.v1()->cast_to_vertex();
 
   if (v1->numsup() == 1)        // dangling chain with end pt at v1
     edgeMap.put( int((*cxy1)[0].x()), int((*cxy1)[0].y()), NULL);
-  edge1->set_v1(v1.ptr());            // link both directions v-e
+  edge1->set_v1(v1);            // link both directions v-e
   edge1->set_v2(&junction);     // unlink when stronger.UnProtect()
 
   // 3. Create second subchain from and including junction pixel.
@@ -821,14 +818,13 @@ BreakChain(vtol_vertex_2d& junction, const int index,
       edgeMap.put( int((*cxy2)[k].x()), int((*cxy2)[k].y()), edge2);
     }
 
-  //vtol_vertex_2d_sptr  v2 = stronger.v2().ptr()->cast_to_vertex_2d();
-
+  vtol_vertex_sptr v2 = stronger.v2()->cast_to_vertex();
 
   if (v2->numsup() == 1)        // dangling chain with end pt at v2
     edgeMap.put( int((*cxy2)[l2-1].x()), int((*cxy2)[l2-1].y()), NULL);
 
   edge2->set_v1(&junction);     // link both directions v-e
-  edge2->set_v2(v2.ptr());            // unlink when stronger.UnProtect()
+  edge2->set_v2(v2);            // unlink when stronger.UnProtect()
 
   if (l1 >= l2)                 // sort longer/shorter chains
     longer = edge1, shorter = edge2;
@@ -903,7 +899,7 @@ LoopChain(vtol_vertex_2d& junction, const int index,
         }
 
       straight->set_v1(&junction);
-      straight->set_v2(chain.v2().ptr());
+      straight->set_v2(chain.v2());
     }
   else
     {                     // first subchain is straight
@@ -928,7 +924,7 @@ LoopChain(vtol_vertex_2d& junction, const int index,
           edgeMap.put( int((*xy)[0].x()), int((*xy)[0].y()), NULL);
         }
 
-      straight->set_v1(chain.v1().ptr());
+      straight->set_v1(chain.v1());
       straight->set_v2(&junction);
 
 
@@ -955,8 +951,10 @@ LoopChain(vtol_vertex_2d& junction, const int index,
 int
 NumConnectedRays(vtol_vertex_2d& v)
 {
-//  if(debug_)
- //   vcl_cerr << "NumConnectedRays() returning 0\n";
+#ifdef DEBUG
+  if (debug_)
+    vcl_cerr << "NumConnectedRays() not run: returning 0\n";
+#endif
   return 0; //JLM prevents seg faults
 
   int nray = 0;
@@ -977,7 +975,6 @@ vtol_vertex_2d_sptr
 DetectTouch(const vtol_vertex_2d& end, const int maxSpiral,
             vbl_array_2d<vtol_vertex_2d_sptr>& vertexMap)
 {
-
   const int jx = int(end.x()), jy = int(end.y());
   for (int l = 0, n = 0; l < maxSpiral; l++) {  // increasing radius of spiral
     vtol_vertex_2d_sptr  other = NULL;      // prefer junction over endpt
@@ -1080,7 +1077,7 @@ MergeEndPtTouchingEndPt(vtol_vertex_2d& end1, vtol_vertex_2d& end2,
       }
     v1 = edge1->v2();
   }
-  merge->set_v1(v1.ptr());
+  merge->set_v1(v1);
 
   vdgl_edgel_chain_sptr cxy2= dc2->get_interpolator()->get_edgel_chain();
 
@@ -1091,7 +1088,6 @@ MergeEndPtTouchingEndPt(vtol_vertex_2d& end1, vtol_vertex_2d& end2,
           cxy->add_edgel ( (*cxy2)[i] );
           (*cxy)[k] = (*cxy2)[i];//, cy[k] = cy2[i];
         }
-      //    v2 = edge2->v2().ptr()->cast_to_vertex_2d();
       v2 = edge2->v2()->cast_to_vertex_2d();
     } else {
       // reverse collection
@@ -1102,7 +1098,7 @@ MergeEndPtTouchingEndPt(vtol_vertex_2d& end1, vtol_vertex_2d& end2,
         }
       v2 = edge2->v1()->cast_to_vertex_2d();
     }
-  merge->set_v2(v2.ptr());
+  merge->set_v2(v2);
 
   // 3. Update global maps
   vertexMap.put(int(end1.x()), int(end1.y()), NULL);
@@ -1156,7 +1152,6 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
                             vcl_vector<vtol_edge_2d_sptr>& edges,
                             vcl_vector<vtol_vertex_2d_sptr >& vertices)
 {
-
   vul_timer t;
 
   if (!edges.size())
@@ -1174,7 +1169,7 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
   // We see that the vertices are not considered points on the
   //  digital curve, which they should be.
   const float connect_fuzz = 2;
-  if(debug_)
+  if (debug_)
     test_verts_.clear();
   for ( unsigned int i=0; i< edges.size(); i++)
     {
@@ -1204,7 +1199,7 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
             }
 
           edge->set_v1(v1->cast_to_vertex());         // link both directions v-e
-          if(debug_){
+          if (debug_){
           test_verts_.push_back(new vtol_vertex_2d(x, y));
           vcl_cout << "adding vertex (" << x << " " << y << ")\n";
           }
@@ -1226,16 +1221,16 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
             }
 
           edge->set_v2(v2->cast_to_vertex());         // link both directions v-e
-          if(debug_){
+          if (debug_){
           test_verts_.push_back(new vtol_vertex_2d(x, y));
           vcl_cout << "adding vertex (" << x << " " << y << ")\n";
           }
         }
-      if(debug_)
+      if (debug_)
         {
           vcl_vector<vtol_topology_object_sptr>* infs = edge->inferiors();
-          for (vcl_vector<vtol_topology_object_sptr>::iterator tot = 
-                 infs->begin(); tot != infs->end(); tot++)
+          for (vcl_vector<vtol_topology_object_sptr>::iterator tot =
+               infs->begin(); tot != infs->end(); tot++)
             {
               vtol_topology_object_sptr link;
               link = (*tot);
@@ -1257,7 +1252,7 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
                          weaker, stronger, maxSpiral,
                          edgels, *edgeMap)) {
 
-        if(debug_){
+        if (debug_){
           vcl_cout << "detected junction near (" << end->x() << " " << end->y()
                    << ")\n";
         test_verts_.push_back(get_vertex_at_index(stronger, index));
@@ -1273,9 +1268,9 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
                        *edgeMap, *vertexMap);     // mutate v-e links
             LookupTableReplace(edges, stronger, split);
 
-            if(debug_){
-               vcl_cout << "new position on cycle (" << end->x() << " " 
-               << end->y() << ")\n";
+            if (debug_){
+               vcl_cout << "new position on cycle (" << end->x() << " "
+                        << end->y() << ")\n";
             }
 
             jcycle++;             // remove original edge
@@ -1292,7 +1287,7 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
               LookupTableReplace(edges, stronger, straight);
               LookupTableInsert(edges, curled);
 
-              if(debug_)
+              if (debug_)
                 vcl_cout << "new position on loop chain (" << end->x()
                          << " " << end->y()<< ")\n";
 
@@ -1308,7 +1303,7 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
 
               LookupTableInsert(edges, shorter);
 
-              if(debug_)
+              if (debug_)
                 vcl_cout << "new position on chain (" << end->x()
                          << " " << end->y()<< ")\n";
 
@@ -1319,7 +1314,7 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
       }
     }
 
-  if(talkative_)
+  if (talkative_)
     vcl_cout << "Find junctions with "
              << jcycle << " cycles and " << jchain << " chains,"
              << " with jump > " << minJump << " and maxSpiral " << maxSpiral
@@ -1344,7 +1339,7 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
             dendpt++;
           } else {              // end points of 2 distinct 1-chains
 
-            if(debug_)
+            if (debug_)
               vcl_cout << "endpt1=" << *end1 << vcl_endl
                        << "endpt2=" << *end2 << vcl_endl;
 
@@ -1352,7 +1347,7 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
             MergeEndPtTouchingEndPt(*end1, *end2, // merge 2 subchains
                                     merge, longer, shorter, // deleting
                                     *edgeMap, *vertexMap); // end points
-            if(debug_)
+            if (debug_)
               vcl_cout << "merge=" << *merge << vcl_endl
                        << "longer=" << *longer << vcl_endl
                        << "shorter=" << *shorter << vcl_endl
@@ -1367,7 +1362,7 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
           }
         } else {                // merge into another junction
 
-          if(debug_)
+          if (debug_)
             vcl_cout << "endpt1=" << *end1 << vcl_endl
                      << "junction2=" << *end2 << vcl_endl;
 
@@ -1379,10 +1374,10 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
       }
     }
   }
-  if(debug_)
+  if (debug_)
     vcl_cout << "Merge and delete " << dendpt
              << " end points and " << dchain << " edges\n";
-  
+
   if (dchain)                   // eliminate holes in global arrays
     LookupTableCompress(edges);
   if (dendpt)
@@ -1405,7 +1400,7 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
         ncycle++;
       }
     }
-  if(debug_)
+  if (debug_)
     vcl_cout << "Create " << ncycle
              << " virtual end points for isolated cycles.\n";
 
@@ -1427,7 +1422,6 @@ sdet_contour::SubPixelAccuracy(vcl_vector<vtol_edge_2d_sptr>& edges,
                                const gevd_bufferxy& locationx,
                                const gevd_bufferxy& locationy)
 {
-
   vul_timer t;
 
   if (talkative_)
@@ -1469,7 +1463,6 @@ sdet_contour::SubPixelAccuracy(vcl_vector<vtol_edge_2d_sptr>& edges,
 
   if (talkative_)
     vcl_cout << ", in " << t.real() << " msecs.\n";
-
 }
 
 
@@ -1511,7 +1504,6 @@ void
 sdet_contour::InsertBorder(vcl_vector<vtol_edge_2d_sptr>& edges,
                            vcl_vector<vtol_vertex_2d_sptr >& vertices)
 {
-
   vul_timer t;
 
   //1.00 Save Edges along the border
@@ -1824,7 +1816,6 @@ sdet_contour::InsertBorder(vcl_vector<vtol_edge_2d_sptr>& edges,
 
   if (talkative_)
     vcl_cout << ", in " << t.real() << " msecs.\n";
-
 }
 
 
@@ -1896,7 +1887,6 @@ sdet_contour::EqualizeSpacing(vcl_vector<vtol_edge_2d_sptr>& chains)
     }
   if (talkative_)
     vcl_cout << ", in " << t.real() << " msecs.\n";
-
 }
 
 
