@@ -1,7 +1,7 @@
 # brl\bmvl\bcal
 
 # camera model
-SUBDIRS(bcam)
+#SUBDIRS(bcam)
 
 # calibration binary
 # SUBDIRS(cbin)
