@@ -114,6 +114,9 @@ SOURCE=.\bgui_picker_tableau.cxx
 SOURCE=.\bgui_vtol2D_tableau.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bgui_vtol2D_rubberband_client.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\bgui_vtol_soview2D.cxx
 # End Source File
 # Begin Source File
@@ -150,6 +153,9 @@ SOURCE=.\bgui_vtol2D_tableau.h
 SOURCE=.\bgui_vtol2D_tableau_sptr.h
 # End Source File
 # Begin Source File
+SOURCE=.\bgui_vtol2D_rubberband_client.h
+# End Source File
+# Begin Source File
 SOURCE=.\bgui_vtol_soview2D.h
 # End Source File
 # Begin Source File
@@ -157,6 +163,9 @@ SOURCE=.\bgui_image_tableau.h
 # End Source File
 # Begin Source File
 SOURCE=.\bgui_image_tableau_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bgui_roi_tableau_make_roi.h
 # End Source File
 # Begin Source File
 SOURCE=.\bgui_vsol_camera_tableau.h
