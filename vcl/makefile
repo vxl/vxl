@@ -1,5 +1,5 @@
 #######################################
-include ${IUEROOT}/config/usr_params.mk
+include ${IUEROOT}/config/top-params.mk
 #######################################
 
 USES := vxl
@@ -27,5 +27,5 @@ endif
 DEFINES += -DBUILDING_VCL_DLL
 
 ######################################
-include ${IUEROOT}/config/usr_rules.mk
+include ${IUEROOT}/config/top-rules.mk
 ######################################
