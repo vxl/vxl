@@ -13,11 +13,8 @@
 #include <vnl/vnl_diag_matrix.h>
 #include <vnl/vnl_resize.h>
 
-#if defined(VCL_SGI_CC_720) || defined(VCL_SUNPRO_CC_50)
-# define stream_cast (char*)
-#else
-# define stream_cast /*   */
-#endif
+// KAI C++ wants char*, so it must be correct....
+#define stream_cast (char*)
 
 // -------------------- vnl_vector
 

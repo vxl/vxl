@@ -2,11 +2,23 @@
 #define vil_scale_intensities_image_h_
 
 // Purpose: Support function for vil_scale_intensities_image_impl.
+#include <vcl/vcl_compiler.h>
 
 class vil_image;
 
-template <class T>
-bool vil_scale_intensities_image(vil_image const &base, double scale, double shift, 
-				 T *buf, int x0, int y0, int w, int h);
+#define vil_decl(T) \
+bool vil_scale_intensities_image(vil_image const &base, double scale, double shift, \
+				 T *buf, int x0, int y0, int w, int h)
+
+template <class T> vil_decl(T);
+
+#ifdef VCL_KAI
+template <typename T> struct vil_rgb;
+template <> vil_decl(vil_rgb<unsigned char>);
+template <> vil_decl(vil_rgb<float>);
+template <> vil_decl(vil_rgb<double>);
+#endif
+
+#undef vil_decl
 
 #endif

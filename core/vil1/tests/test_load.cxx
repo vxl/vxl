@@ -10,7 +10,11 @@ cout << "TEST [" << fred << "] == [" << x << "] : "; bool b = (fred) == (x); cou
 void test(char const* magic, int comps, int bits)
 {
   char const* FNAME = "/tmp/t.pgm";
-  ofstream(FNAME) << magic << "\n2\n3\n255\nABCDEF";
+  {
+    ofstream f(FNAME);
+    // reference to rvalue not allowed.
+    f << magic << "\n2\n3\n255\nABCDEF";
+  }
 
   vil_image i = vil_load(FNAME);
   

@@ -79,11 +79,14 @@ void testvnl_matrix_fixed()
   verbose_malloc = false;  
 }
 
-#ifndef VCL_SUNPRO_CC_50
-// fsm@robots : for SunPro5.0, these functions produce compiler
+#if !defined(VCL_SUNPRO_CC_50)
+// For SunPro5.0, these functions produce compiler
 // warnings and cause runtime segfault.
-// I suppose the whole test program is pointless without them...
 void* operator new(size_t s)
+#ifdef VCL_KAI
+  // [18.4.1] lib.new.delete
+  throw (std::bad_alloc)
+#endif
 {
   void *r = malloc(s);
   

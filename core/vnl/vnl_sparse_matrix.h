@@ -67,12 +67,14 @@ template <class T>
 class vnl_sparse_matrix {
 public:
   typedef vnl_sparse_matrix_pair<T> pair_t;
-#if defined(VCL_GCC_295) || defined(VCL_EGCS) || defined(VCL_GCC_27) || defined(VCL_SGI_CC)// it barfs -- fsm
-  typedef vcl_vector < /*typename*/ pair_t > row ; 
-  typedef vcl_vector < /*typename*/ row > vnl_sparse_matrix_elements;
-#else
+#if defined(VCL_SUNPRO_CC)
   typedef vcl_vector < typename pair_t > row ; 
   typedef vcl_vector < typename row > vnl_sparse_matrix_elements;
+#else
+  //#if defined(VCL_GCC_295) || defined(VCL_EGCS) || defined(VCL_GCC_27) || defined(VCL_SGI_CC)// it barfs -- fsm
+  // also KAI C++ 4.0
+  typedef vcl_vector < pair_t > row ; 
+  typedef vcl_vector < row > vnl_sparse_matrix_elements;
 #endif
 
   // typedef vcl_vector<typename pair_t> row;

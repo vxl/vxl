@@ -1,12 +1,25 @@
 #ifndef vil_clamp_image_h_
 #define vil_clamp_image_h_
 
+#include <vcl/vcl_compiler.h>
+
 // Purpose: Support function for vil_clamp_image_impl.
 
 class vil_image;
 
-template <class T>
-bool vil_clamp_image(vil_image const &base, double low, double high, 
-		     T *buf, int x0, int y0, int w, int h);
+#define vil_decl(T) \
+bool vil_clamp_image(vil_image const &base, double low, double high, \
+		     T *buf, int x0, int y0, int w, int h)
+
+template <class T> vil_decl(T);
+
+#ifdef VCL_KAI
+template <typename T> struct vil_rgb;
+template <> vil_decl(vil_rgb<unsigned char>);
+template <> vil_decl(vil_rgb<float>);
+template <> vil_decl(vil_rgb<double>);
+#endif
+
+#undef vil_decl
 
 #endif

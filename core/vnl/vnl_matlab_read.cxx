@@ -111,8 +111,7 @@ void vnl_matlab_readhdr::read_next() {
 
     if (is_complex())
       n *= 2;
-
-    s.seekg(n, ios::cur);
+    s.seekg(n, vcl_ios::cur);
   }
   
   read_hdr();

@@ -12,7 +12,14 @@
 # define finite _finite
 #endif
 
-#if defined(SYSV) && !defined(hppa)
+#if defined(VCL_KAI)
+namespace {
+  bool finite(double x) {
+    *(int*)0 = 1; // how to abort() without #include :)
+    return false;
+  }
+}
+#elif defined(SYSV) && !defined(hppa)
 extern "C" int finite(double);
 #endif
 

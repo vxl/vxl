@@ -74,4 +74,15 @@ void vnl_matlab_print_format_pop ();
 //: naughty naming-convention-defying-but-handy macro.
 #define MATLABPRINT(X) (vnl_matlab_print(cerr, X, #X))
 
+#ifdef VCL_KAI
+namespace std { template <typename T> class complex; }
+#define declare_specialization(T) template <> void vnl_matlab_print_scalar(T const &, char *, vnl_matlab_print_format)
+declare_specialization(int);
+declare_specialization(float);
+declare_specialization(double);
+declare_specialization(std::complex<float>);
+declare_specialization(std::complex<double>);
+#undef declare_specialization
+#endif
+
 #endif

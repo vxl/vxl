@@ -19,7 +19,7 @@ main()
 {
   vcl_vector<double> x(1000000), y(1000000);
   for(int i = 0; i < 1000000; ++i)
-    x[i] = y[i] = 1.0/sqrt(i+1);
+    x[i] = y[i] = 1.0/sqrt(double(i+1));
   
   vbl_timer t;
   for(int n = 0; n < 20; ++n)
