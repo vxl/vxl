@@ -26,17 +26,17 @@ s << " "; return vgui_soview2D::print(s) << "]";
 //--------------------------------------------------------------------------
 //: vdgl_digital_curve view
 //--------------------------------------------------------------------------
-vcl_ostream& bgui_vtol_soview2D_digital_curve::print(vcl_ostream& s) const
+vcl_ostream& bgui_vtol_soview2D_dotted_digital_curve::print(vcl_ostream& s) const
 {
   return s;
 }
 
-bgui_vtol_soview2D_digital_curve::
-bgui_vtol_soview2D_digital_curve(vdgl_digital_curve_sptr const& dc)
+bgui_vtol_soview2D_dotted_digital_curve::
+bgui_vtol_soview2D_dotted_digital_curve(vdgl_digital_curve_sptr const& dc)
 {
   if (!dc)
     {
-      vcl_cout << "In bgui_vtol_soview2D_digital_curve(..) - null input dc\n";
+      vcl_cout << "In bgui_vtol_soview2D_dotted_digital_curve(..) - null input dc\n";
       return;
     }
 
@@ -59,35 +59,37 @@ bgui_vtol_soview2D_digital_curve(vdgl_digital_curve_sptr const& dc)
   return;
 }
 
-//--------------------------------------------------------------------------
 //: vdgl_digital_curve view
 //--------------------------------------------------------------------------
-vcl_ostream& bgui_vtol_soview2D_edgel_chain::print(vcl_ostream& s) const
+vcl_ostream& bgui_vtol_soview2D_digital_curve::print(vcl_ostream& s) const
 {
   return s;
 }
 
-bgui_vtol_soview2D_edgel_chain::
-bgui_vtol_soview2D_edgel_chain(vdgl_edgel_chain_sptr const& ec)
+bgui_vtol_soview2D_digital_curve::
+bgui_vtol_soview2D_digital_curve(vdgl_digital_curve_sptr const& dc)
 {
-  if (!ec)
+  if (!dc)
     {
-      vcl_cout << "In bgui_vtol_soview2D_edgel_chain(..) - null input ec\n";
+      vcl_cout << "In bgui_vtol_soview2D_digital_curve(..) - null input dc\n";
       return;
     }
 
-  //n, x, and y are in the parent class vgui_soview2D_linestrip
-  unsigned int n = ec->size();
+  //get the edgel chain
+  vdgl_interpolator_sptr itrp = dc->get_interpolator();
+  vdgl_edgel_chain_sptr ech = itrp->get_edgel_chain();
 
-  float x = 0, y=0;
+  //n, x, and y are in the parent class vgui_soview2D_linestrip
+  n = ech->size();
+
+  x = new float[n], y = new float[n];
   for (unsigned int i=0; i<n;i++)
     {
-      vdgl_edgel ed = (*ec)[i];
-      x=ed.get_x();
-      y=ed.get_y();
-      vgui_soview2D* p = new vgui_soview2D_point(x, y);
-      ls.push_back(p);
+      vdgl_edgel ed = (*ech)[i];
+      x[i]=ed.get_x();
+      y[i]=ed.get_y();
     }
+
   return;
 }
 

@@ -40,8 +40,26 @@ class bgui_vtol_soview2D_point : public vgui_soview2D_point
 
 };
 
+//: vdgl_dotted_digital_curve (maybe later move to a geometry tableau)
+// This one displays points
+class bgui_vtol_soview2D_dotted_digital_curve : public vgui_soview2D_group 
+{
+ public:
+  //: Constructor - creates a default vdgl_digital_curve view
+  bgui_vtol_soview2D_dotted_digital_curve() {;}
+
+  //: Constructor - creates a view of a vdgl_digital_curve
+  bgui_vtol_soview2D_dotted_digital_curve(vdgl_digital_curve_sptr const& e);
+
+  //: Print details about this vdgl_digital_curve to the given stream.
+  virtual vcl_ostream& print(vcl_ostream&) const;
+
+  //: Returns the type of this class ('bgui_vtol_soview2D_dotted_digital_curve').
+  vcl_string type_name() const { return "bgui_vtol_soview2D_dotted_digital_curve"; }
+};
+
 //: vdgl_digital_curve (maybe later move to a geometry tableau)
-class bgui_vtol_soview2D_digital_curve : public vgui_soview2D_group 
+class bgui_vtol_soview2D_digital_curve : public vgui_soview2D_linestrip
 {
  public:
   //: Constructor - creates a default vdgl_digital_curve view
@@ -55,23 +73,6 @@ class bgui_vtol_soview2D_digital_curve : public vgui_soview2D_group
 
   //: Returns the type of this class ('bgui_vtol_soview2D_digital_curve').
   vcl_string type_name() const { return "bgui_vtol_soview2D_digital_curve"; }
-};
-
-//: vdgl_edgel_chain (maybe later move to a geometry tableau)
-class bgui_vtol_soview2D_edgel_chain : public vgui_soview2D_group 
-{
- public:
-  //: Constructor - creates a default vdgl_edgel_chain view
-  bgui_vtol_soview2D_edgel_chain() {;}
-
-  //: Constructor - creates a view of a vdgl_edgel_chain
-  bgui_vtol_soview2D_edgel_chain(vdgl_edgel_chain_sptr const& ec);
-
-  //: Print details about this vdgl_edgel_chain to the given stream.
-  virtual vcl_ostream& print(vcl_ostream&) const;
-
-  //: Returns the type of this class ('bgui_vtol_soview2D_edgel_chain').
-  vcl_string type_name() const { return "bgui_vtol_soview2D_edgel_chain"; }
 };
 
 //: vtol_vertex_2d

@@ -56,7 +56,7 @@ void bgui_vtol2D_tableau::init()
   //
    this->set_vsol_point_2d_style(0.0f, 1.0f, 0.0f, 5.0f);
    this->set_digital_curve_style(0.8f, 0.0f, 0.8f, 3.0f);
-   this->set_edgel_chain_style(0.8f, 0.0f, 0.8f, 3.0f);
+   this->set_dotted_digital_curve_style(0.8f, 0.0f, 0.8f, 3.0f, 3.0f);
    this->set_vertex_style(1.0f, 0.0f, 0.0f, 3.0f);
    this->set_edge_style(0.0f, 1.0f, 0.0f, 3.0f);
    this->set_edge_group_style(0.0f, 1.0f, 0.0f, 3.0f);
@@ -128,16 +128,16 @@ bgui_vtol2D_tableau::add_digital_curve(vdgl_digital_curve_sptr const& dc)
       sty->clone_style(obj->get_style());
       int id = obj->get_id();
       if (highlight_)
-      obj_map_[id]=dc->cast_to_topology_object();
+				obj_map_[id]=dc->cast_to_topology_object();
     }
   return obj;
 }
 
-bgui_vtol_soview2D_edgel_chain*
-bgui_vtol2D_tableau::add_edgel_chain(vdgl_edgel_chain_sptr const& ec)
+bgui_vtol_soview2D_dotted_digital_curve*
+bgui_vtol2D_tableau::add_dotted_digital_curve(vdgl_digital_curve_sptr const& dc)
 {
-  bgui_vtol_soview2D_edgel_chain* obj =
-    new bgui_vtol_soview2D_edgel_chain(ec);
+  bgui_vtol_soview2D_dotted_digital_curve* obj =
+    new bgui_vtol_soview2D_dotted_digital_curve(dc);
   //set the default style
   bgui_style_sptr sty = style_map_[obj->type_name()];
   add(obj);
@@ -145,6 +145,8 @@ bgui_vtol2D_tableau::add_edgel_chain(vdgl_edgel_chain_sptr const& ec)
     {
       sty->clone_style(obj->get_style());
       int id = obj->get_id();
+      if (highlight_)
+      obj_map_[id]=dc->cast_to_topology_object();
     }
   return obj;
 }
@@ -226,19 +228,27 @@ add_spatial_objects(vcl_vector<vsol_spatial_object_2d_sptr> const& sos)
   for (vcl_vector<vsol_spatial_object_2d_sptr>::const_iterator sit = sos.begin();
        sit != sos.end(); sit++)
     {
-      if ((*sit)->cast_to_point())
-        {
-          vsol_point_2d_sptr p = (*sit)->cast_to_point();
-          this->add_vsol_point_2d(p);
-        }
-      if ((*sit)->cast_to_curve())
-        if ((*sit)->cast_to_curve()->cast_to_digital_curve())
-          {
-            vdgl_digital_curve_sptr dc =
-              (*sit)->cast_to_curve()->cast_to_digital_curve();
-            this->add_digital_curve(dc);
-          }
+			add_spatial_object( (*sit) );
+		}
+}
+
+void bgui_vtol2D_tableau::
+add_spatial_object(vsol_spatial_object_2d_sptr const& sos)
+{
+  if (sos->cast_to_point()) {
+    {
+      vsol_point_2d_sptr p = sos->cast_to_point();
+      this->add_vsol_point_2d(p);
     }
+  } else if (sos->cast_to_curve()) {
+    if (sos->cast_to_curve()->cast_to_digital_curve())
+      {
+        vdgl_digital_curve_sptr dc =
+          sos->cast_to_curve()->cast_to_digital_curve();
+        this->add_digital_curve(dc);
+      }
+	}
+	return;
 }
 //--------------------------------------------------------------
 // Add a list of generic topology objects
@@ -249,30 +259,35 @@ add_topology_objects(vcl_vector<vtol_topology_object_sptr> const& tos)
   for (vcl_vector<vtol_topology_object_sptr>::const_iterator tot = tos.begin();
        tot != tos.end(); tot++)
     {
-      if ((*tot)->cast_to_vertex())
-        if((*tot)->cast_to_vertex()->cast_to_vertex_2d())
-          {
-            vtol_vertex_2d_sptr v = 
-              (*tot)->cast_to_vertex()->cast_to_vertex_2d();
-            this->add_vertex(v);
-            continue;
-          }
-      if ((*tot)->cast_to_edge())
-        if((*tot)->cast_to_edge()->cast_to_edge_2d())
-          {
-            vtol_edge_2d_sptr e = 
-              (*tot)->cast_to_edge()->cast_to_edge_2d();
-            this->add_edge(e);
-            continue;
-          }
-      if ((*tot)->cast_to_face())
-        if((*tot)->cast_to_face()->cast_to_face_2d())
-          {
-            vtol_face_2d_sptr f = 
-              (*tot)->cast_to_face()->cast_to_face_2d();
-            this->add_face(f);
-          }
+      add_topology_object((*tot));
     }
+}
+
+void bgui_vtol2D_tableau::
+add_topology_object(vtol_topology_object_sptr const& tos)
+{
+  if (tos->cast_to_vertex()) {
+    if(tos->cast_to_vertex()->cast_to_vertex_2d())
+      {
+        vtol_vertex_2d_sptr v = 
+          tos->cast_to_vertex()->cast_to_vertex_2d();
+        this->add_vertex(v);
+      }
+	} else if (tos->cast_to_edge()) {
+    if(tos->cast_to_edge()->cast_to_edge_2d())
+      {
+        vtol_edge_2d_sptr e = 
+          tos->cast_to_edge()->cast_to_edge_2d();
+        this->add_edge(e);
+      }
+  } else if (tos->cast_to_face()) {
+    if(tos->cast_to_face()->cast_to_face_2d())
+      {
+        vtol_face_2d_sptr f = 
+          tos->cast_to_face()->cast_to_face_2d();
+        this->add_face(f);
+      }
+	}
 }
 
 void bgui_vtol2D_tableau::add_edges(vcl_vector<vtol_edge_2d_sptr> const& edges,
@@ -342,6 +357,18 @@ void bgui_vtol2D_tableau::clear_all()
   this->post_redraw();
 }
 
+void bgui_vtol2D_tableau::set_vsol_spatial_object_2d_style(vsol_spatial_object_2d_sptr sos, 
+																									const float r, const float g, const float b,
+																									const float line_width,
+                                                  const float point_radius)
+{
+  if (sos->cast_to_point()) {
+    set_vsol_point_2d_style(r,g,b, point_radius);
+  } else if (sos->cast_to_curve()) {
+		set_digital_curve_style(r,g,b, line_width);
+	}
+}
+
 void bgui_vtol2D_tableau::set_vsol_point_2d_style(const float r, const float g,
                                                   const float b, 
                                                   const float point_radius)
@@ -360,13 +387,28 @@ void bgui_vtol2D_tableau::set_digital_curve_style(const float r, const float g,
   style_map_[dc.type_name()]=sty;
 }
 
-void bgui_vtol2D_tableau::set_edgel_chain_style(const float r, const float g,
+void bgui_vtol2D_tableau::set_dotted_digital_curve_style(const float r, const float g,
                                                   const float b, 
+                                                  const float line_width, const float point_radius)
+{
+  bgui_style_sptr sty = new bgui_style(r, g, b, point_radius, line_width);
+  bgui_vtol_soview2D_dotted_digital_curve dc;
+  style_map_[dc.type_name()]=sty;
+}
+
+void bgui_vtol2D_tableau::set_vtol_topology_object_style(vtol_topology_object_sptr tos,
+																									const float r, const float g, const float b,
+																									const float line_width,
                                                   const float point_radius)
 {
-  bgui_style_sptr sty = new bgui_style(r, g, b, point_radius, 0.0f);
-  bgui_vtol_soview2D_edgel_chain ec;
-  style_map_[ec.type_name()]=sty;
+  if (tos->cast_to_vertex()) {
+		set_vertex_style(r,g,b, point_radius);
+	} else if (tos->cast_to_edge()) {
+		set_edge_style(r,g,b, line_width);
+		set_edge_group_style(r,g,b, line_width);
+  } else if (tos->cast_to_face()) {
+		set_face_style(r,g,b, line_width);
+	}
 }
 
 void bgui_vtol2D_tableau::set_vertex_style(const float r, const float g,
