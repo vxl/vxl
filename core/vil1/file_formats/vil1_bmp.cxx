@@ -564,20 +564,11 @@ bool vil_bmp_generic_image::put_section(void const *ib, int x0, int y0, int xs, 
    // file->SkipToByte(skip);
    is_->seek(skip);
 
-#ifndef hpux
-   //   intPoint2D ro = ir.get_orig() - r.get_orig();  // origin of ir relative to r
-   //   uchar* sp    = (uchar*) ib + (r.get_size_x() * ro.X() + ro.Y());
-   uchar* sp    = (uchar*) ib + (r.get_size_x() * (ir.get_orig_x() -r.get_orig_x()) 
-                                 + (ir.get_orig_y() -r.get_orig_y()) );
-
-
-#else
    int roX = ir.get_orig_x() - r.get_orig_x();
    int roY = ir.get_orig_y() - r.get_orig_y();
 
-   uchar* sp    = (uchar*) buf + (r.get_size_x() * roX + roY);
+   uchar* sp    = (uchar*) ib + (r.get_size_x() * roX + roY);
 
-#endif
    int spinc	= r.get_size_x();
        skip	= (rowbytes - ir.get_size_x()) * pixsize;
    int nshorts	= ir.get_size_x();
