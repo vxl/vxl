@@ -42,7 +42,7 @@ class vsrl_dynamic_program
 
   double execute();
 
- private:
+ protected:
 
  // this structure will keep track of posible assignments
   struct assignment_node{
