@@ -36,7 +36,7 @@
 class vnl_lsqr {
 public:
   vnl_lsqr(vnl_linear_system& ls) :
-    ls_(&ls), max_iter_(ls.get_number_of_unknowns()) {}
+    ls_(&ls), max_iter_(4*ls.get_number_of_unknowns()) {}
 
   ~vnl_lsqr();
 
@@ -63,8 +63,8 @@ protected:
   double result_norm_;
   int return_code_;
 
-  static int aprod_(int* mode, int* m, int* n, double* x,
-    double* y, int* leniw, int* lenrw, int* iw, double* rw );
+  static void aprod_(int* mode, int* m, int* n, double* x, double* y,
+                    int* leniw, int* lenrw, int* iw, double* rw );
 
   friend class vnl_lsqr_Activate;
 };
