@@ -23,8 +23,8 @@ else {
     print STDERR "IUEROOT is not defined, and no command line arguments were given\n";
     exit 0;
   }
-  $DIRS = `find $IUEROOT/vcl $IUEROOT/v3p $IUEROOT/vxl $IUEROOT/mul $IUEROOT/oxl $IUEROOT/gel $IUEROOT/tbl $IUEROOT/conversions -type d -print | /bin/fgrep -v /CVS/`;
-  @DIRS = sort(split(' ', $DIRS));
+  $DIRS = `find \$IUEROOT/vcl \$IUEROOT/v3p \$IUEROOT/vxl \$IUEROOT/mul \$IUEROOT/oxl \$IUEROOT/gel \$IUEROOT/tbl \$IUEROOT/conversions -type d -print`;
+  @DIRS = grep {!/(\/CVS|\.new(\/\S+)?)$/} sort split ' ', $DIRS;
 }
 
 foreach $dir (@DIRS)
@@ -46,7 +46,8 @@ foreach $dir (@DIRS)
       if (m/^SOURCE=\"?\.\\([^\s\"]+)/) {
         $file = "$1";
         $file =~ s/\\/\//g;
-        @source = (@source, $file);
+        push @source, $file
+          unless ($file eq "CMakeLists.txt");
       }
     }
     close FILE;
@@ -59,7 +60,7 @@ foreach $dir (@DIRS)
   if (open(MAKEFILE, $makef)) {
     @aux_sources = ("Templates");
     while(<MAKEFILE>) {
-      s/\$\(wildcard (.*)\)/$1/g; s/\#.*//;
+      s/\$\(wildcard (.*)\)/$1/g; s/\#.*//; s/\$\([^()]+\)//;
       if (m/^\s*(SOURCES|MINI_PROG_SOURCES|TESTS)\s*\:?\=\s*(\S+)/) {
         $file = "$2";
         @sources = ($file);
@@ -71,26 +72,26 @@ foreach $dir (@DIRS)
           @tmp_list = readdir(TMP);
           closedir(TMP);
           foreach $x (@tmp_list) {
-            @sources = (@sources, "$x") if ($x =~ m/_mocced\.cxx$/);
+            push @sources,"$x" if ($x =~ m/_mocced\.cxx$/);
           }
         }
-        else { @sources = (@sources, $file); }
+        else { push @sources, $file; }
       }
       if (m/^\s*SUBDIRS\s*\:?\=\s*(.+)/) {
         $file = "$1";
-        @subdirs = (split(/\s+/,"$file"));
+        @subdirs = split(/\s+/,"$file");
       }
       if (m/^\s*SUBDIRS\s*\+\=\s*(.+)/) {
         $file = "$1";
-        @subdirs = (@subdirs, split(/\s+/,"$file"));
+        push @subdirs, split(/\s+/,"$file");
       }
       if (m/^\s*AUX_SOURCE_DIRECTORY\s*\+\=\s*(.+)/) {
         $file = "$1";
-        @aux_sources = (@aux_sources, split(/\s+/,"$file"));
+        push @aux_sources, split(/\s+/,"$file");
       }
       if (m/^\s*AUX_SOURCE_DIRECTORY\s*\:?\=\s*(.+)/) {
         $file = "$1";
-        @aux_sources = (split(/\s+/,"$file"));
+        @aux_sources = split(/\s+/,"$file");
       }
     }
     close MAKEFILE;
@@ -101,7 +102,7 @@ foreach $dir (@DIRS)
         closedir(TMPL);
   #     @tmpl_list = grep(/\.cxx$/, @tmpl_list);
         foreach $x (@tmpl_list) {
-          @sources = (@sources, "$subd/$x")
+          push @sources, "$subd/$x"
             unless ($x eq "." || $x eq ".." || $x eq "CVS");
         }
       }
@@ -121,29 +122,29 @@ foreach $dir (@DIRS)
   }
   $cmakefile =~ s/\#.*\n//g;
   while ($cmakefile =~ s/\bSOURCE_FILES\s*\(\s*\S+sources\s*([^()]+)\)//) {
-    @tmpl_list = split(/\s+/, "$1");
+    @tmpl_list = split /\s+/, "$1";
     foreach $x (@tmpl_list) {
-      if (-f "$dir/$x") { @source_files = (@source_files, "$x"); }
-      elsif (-f "$dir/$x.cxx") { @source_files = (@source_files, "$x.cxx"); }
-      elsif (-f "$dir/$x.c") { @source_files = (@source_files, "$x.c"); }
-      elsif (-f "$dir/$x.C") { @source_files = (@source_files, "$x.C"); }
-      elsif (-f "$dir/$x.cpp") { @source_files = (@source_files, "$x.cpp"); }
+      if (-f "$dir/$x") { push @source_files, "$x"; }
+      elsif (-f "$dir/$x.cxx") { push @source_files, "$x.cxx"; }
+      elsif (-f "$dir/$x.c") { push @source_files, "$x.c"; }
+      elsif (-f "$dir/$x.C") { push @source_files, "$x.C"; }
+      elsif (-f "$dir/$x.cpp") { push @source_files, "$x.cpp"; }
       else { printf "No source file $x.* found in $dir\n"; }
     }
   }
   while ($cmakefile =~ s/\bADD_EXECUTABLE\s*\(\s*\S+\s+(\S+)\s*\)//) {
     $x = "$1";
     next if ($x =~ m/_sources$/);
-    if (-f "$dir/$x") { @source_files = (@source_files, "$x"); }
-    elsif (-f "$dir/$x.cxx") { @source_files = (@source_files, "$x.cxx"); }
-    elsif (-f "$dir/$x.c") { @source_files = (@source_files, "$x.c"); }
-    elsif (-f "$dir/$x.C") { @source_files = (@source_files, "$x.C"); }
-    elsif (-f "$dir/$x.cpp") { @source_files = (@source_files, "$x.cpp"); }
+    if (-f "$dir/$x") { push @source_files, "$x"; }
+    elsif (-f "$dir/$x.cxx") { push @source_files, "$x.cxx"; }
+    elsif (-f "$dir/$x.c") { push @source_files, "$x.c"; }
+    elsif (-f "$dir/$x.C") { push @source_files, "$x.C"; }
+    elsif (-f "$dir/$x.cpp") { push @source_files, "$x.cpp"; }
     else { printf "No source file $x.* found in $dir\n"; }
   }
   while ($cmakefile =~ s/\bSUBDIRS\s*\(\s*([^()]+)\)//) {
-    @tmpl_list = split(/\s+/, "$1");
-    @subdirs2 = (@subdirs2, @tmpl_list);
+    @tmpl_list = split /\s+/, "$1";
+    push @subdirs2, @tmpl_list;
   }
   # add Templates to source_files, if asked
   while ($cmakefile =~ s/\bAUX_SOURCE_DIRECTORY\s*\(\s*(\S+)\s+\S+sources\s*\)//) {
@@ -153,7 +154,7 @@ foreach $dir (@DIRS)
       closedir(TMPL);
 #     @tmpl_list = grep(/\.cxx$/, @tmpl_list);
       foreach $x (@tmpl_list) {
-        @source_files = (@source_files, "$file/$x")
+        push @source_files, "$file/$x"
           unless ($x eq "." || $x eq ".." || $x eq "CVS");
       }
     }
@@ -164,51 +165,74 @@ foreach $dir (@DIRS)
   print STDOUT "File $makef does not exist\n" unless (-f $makef);
   print STDOUT "File $cmakef does not exist\n" unless (-f $cmakef);
 
-  @source = sort(@source); @source = (" END ", @source);
-  @sources = sort(@sources); @sources = (" END ", @sources);
-  @source_files = sort(@source_files); @source_files = (" END ", @source_files);
+  @source = sort(@source); push @source, "~END";
+  @sources = sort(@sources); push @sources, "~END";
+  @source_files = sort(@source_files); push @source_files, "~END";
+  next if ("@source" eq "@sources" && "@source" eq "@source_files");
+  
   $source=""; $sources=""; $source_files="";
-  # Note that pop() removes the *last* element from the list, so we run through
-  # the lists in reverse alphabetic order.
-  # Hence " END " is certainly alphabetically first, and is popped off last.
+  # Note that shift() removes the *first* element from the list, so we run through
+  # the lists in alphabetical order.
+  # Hence "~END" is popped off last, and is also alphabetically last.
 
   # compare file lists
   while (@source || @sources || @source_files) {
-    $source = pop(@source) unless ($source eq " END ");
-    $sources = pop(@sources) unless ($sources eq " END ");
-    $source_files = pop(@source_files) unless ($source_files eq " END ");
-    last if ($source eq " END " && $sources eq " END " && $source_files eq " END ");
+    unless ($source eq "~END") {
+      $s = shift(@source);
+      while ($s eq $source) {
+        print STDOUT "multiple occurrence of $s in $f\n";
+        $s = shift(@source);
+      }
+      $source = $s;
+    }
+    unless ($sources eq "~END") {
+      $s = shift(@sources);
+      while ($s eq $sources) {
+        print STDOUT "multiple occurrence of $s in $makef\n";
+        $s = shift(@sources);
+      }
+      $sources = $s;
+    }
+    unless ($source_files eq "~END") {
+      $s = shift(@source_files);
+      while ($s eq $source_files) {
+        print STDOUT "multiple occurrence of $s in $cmakef\n";
+        $s = shift(@source_files);
+      }
+      $source_files = $s;
+    }
+    last if ($source eq "~END" && $sources eq "~END" && $source_files eq "~END");
     next if ($source eq $sources && $source eq $source_files);
-    while ($source gt $sources) {
+    while ($source lt $sources) {
       if (-f "$dir/$source") {
         print STDOUT "SOURCES += $source\tis missing from $makef\n";
       } else {
         print STDOUT "SOURCE=.\\$source\tmust be removed from $f\n";
       }
-      $source = pop(@source);
+      $source = shift(@source);
     }
-    last if ($source eq " END " && $sources eq " END " && $source_files eq " END ");
+    last if ($source eq "~END" && $sources eq "~END" && $source_files eq "~END");
     next if ($source eq $sources && $source eq $source_files);
-    while ($source_files gt $sources) {
+    while ($source_files lt $sources) {
       if (-f "$dir/$source_files") {
         print STDOUT "SOURCES += $source_files\tis missing from $makef\n";
       } else {
         $source_files =~ s/\.(cxx|c|C|cpp)$//;
         print STDOUT "SOURCES($source_files)\tmust be removed from $cmakef\n";
       }
-      $source_files = pop(@source_files);
+      $source_files = shift(@source_files);
     }
-    last if ($source eq " END " && $sources eq " END " && $source_files eq " END ");
+    last if ($source eq "~END" && $sources eq "~END" && $source_files eq "~END");
     next if ($source eq $sources && $source eq $source_files);
-    while ($sources gt $source || $sources gt $source_files) {
+    while ($sources lt $source || $sources lt $source_files) {
       if (-f "$dir/$sources") {
-        if ($sources gt $source) {
+        if ($sources lt $source) {
           print STDOUT "SOURCE=.\\$sources\tis missing from $f\n"
             unless ($sources eq "tif_unix.c" ||
                     $sources eq "menu_hack_X11.cxx" ||
                     $sources eq "internals/vgui_accelerate_x11.cxx");
         }
-        if ($sources gt $source_files) {
+        if ($sources lt $source_files) {
           $sources =~ s/\.(cxx|c|C|cpp)$//;
           print STDOUT "SOURCE_FILES($sources)\tis missing from $cmakef\n";
         }
@@ -216,38 +240,38 @@ foreach $dir (@DIRS)
         print STDOUT "SOURCES += $sources\tmust be removed from $makef\n"
           unless ($sources eq "\${MOCSOURCES}");
       }
-      $source = pop(@source) if ($sources eq $source);
-      $source_files = pop(@source_files) if ($sources eq $source_files);
-      $sources = pop(@sources);
+      $source = shift(@source) if ($sources eq $source);
+      $source_files = shift(@source_files) if ($sources eq $source_files);
+      $sources = shift(@sources);
     }
   }
 
   # compare SUBDIRS lists
-  @subdirs = sort(@subdirs); @subdirs = (" END ", @subdirs);
-  @subdirs2 = sort(@subdirs2); @subdirs2 = (" END ", @subdirs2);
+  @subdirs = sort(@subdirs); push @subdirs, "~END";
+  @subdirs2 = sort(@subdirs2); push @subdirs2, "~END";
   $subdirs=""; $subdirs2="";
   while (@subdirs || @subdirs2) {
-    $subdirs = pop(@subdirs) unless ($subdirs eq " END ");
-    $subdirs2 = pop(@subdirs2) unless ($subdirs2 eq " END ");
-    last if ($subdirs eq " END " && $subdirs2 eq " END ");
+    $subdirs = shift(@subdirs) unless ($subdirs eq "~END");
+    $subdirs2 = shift(@subdirs2) unless ($subdirs2 eq "~END");
+    last if ($subdirs eq "~END" && $subdirs2 eq "~END");
     next if ($subdirs eq $subdirs2);
-    while ($subdirs gt $subdirs2) {
+    while ($subdirs lt $subdirs2) {
       if (-d "$dir/$subdirs") {
         print STDOUT "SUBDIRS($subdirs)\tis missing from $cmakef\n";
       } else {
         print STDOUT "SUBDIRS += $subdirs\tmust be removed from $makef\n";
       }
-      $subdirs = pop(@subdirs);
+      $subdirs = shift(@subdirs);
     }
-    last if ($subdirs eq " END " && $subdirs2 eq " END ");
+    last if ($subdirs eq "~END" && $subdirs2 eq "~END");
     next if ($subdirs eq $subdirs2);
-    while ($subdirs2 gt $subdirs) {
+    while ($subdirs2 lt $subdirs) {
       if (-d "$dir/$subdirs2") {
         print STDOUT "SUBDIRS += $subdirs2\tis missing from $makef\n";
       } else {
         print STDOUT "SUBDIRS($subdirs2)\tmust be removed from $cmakef\n";
       }
-      $subdirs2 = pop(@subdirs2);
+      $subdirs2 = shift(@subdirs2);
     }
   }
 }
