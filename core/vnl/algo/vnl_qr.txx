@@ -13,13 +13,15 @@
 #include <vnl/vnl_complex_traits.h>
 #include <vnl/algo/vnl_netlib.h>
 
+#ifndef vnl_qr_fsm
 #define vnl_qr_fsm 0
+#endif
 
 #if vnl_qr_fsm
-template <typename T> int fsm_qrdc(vnl_netlib_qrdc_proto(T));
-template <typename T> int fsm_qrsl(vnl_netlib_qrsl_proto(T));
-# define vnl_linpack_qrdc fsm_qrdc
-# define vnl_linpack_qrsl fsm_qrsl
+template <typename T> int fsm_qrdc_cxx(vnl_netlib_qrdc_proto(T));
+template <typename T> int fsm_qrsl_cxx(vnl_netlib_qrsl_proto(T));
+# define vnl_linpack_qrdc fsm_qrdc_cxx
+# define vnl_linpack_qrsl fsm_qrsl_cxx
 
 #else
 // use C++ overloading to call the right linpack routine from the template code :
@@ -37,9 +39,9 @@ macro(z, vcl_complex<double>);
 
 template <class T>
 vnl_qr<T>::vnl_qr(vnl_matrix<T> const& M):
-  qrdc_out_(M.columns(), M.rows(), 999),
-  qraux_(M.columns(), 0),
-  jpvt_(M.rows(), 1234),
+  qrdc_out_(M.columns(), M.rows()),
+  qraux_(M.columns()),
+  jpvt_(M.rows()),
   Q_(0),
   R_(0)
 {
@@ -108,8 +110,8 @@ vnl_matrix<T>& vnl_qr<T>::Q()
     Q_->set_identity();
     vnl_matrix<T>& Q = *Q_;
 
-    vnl_vector<T> v(m, 0.0);
-    vnl_vector<T> w(m, 0.0);
+    vnl_vector<T> v(m, T(0));
+    vnl_vector<T> w(m, T(0));
 
     // Golub and vanLoan, p199.  backward accumulation of householder matrices
     // Householder vector k is [zeros(1,k-1) qraux_[k] qrdc_out_[k,:]]
@@ -133,7 +135,7 @@ vnl_matrix<T>& vnl_qr<T>::Q()
         abs_t scale = 2.0/sq;
         // w = (2/v'*v) v' Q
         for(int i = k; i < m; ++i) {
-          w[i] = 0;
+          w[i] = T(0);
           for(int j = k; j < m; ++j)
             w[i] += scale * c(v[j]) * Q(j, i);
         }
@@ -163,7 +165,7 @@ vnl_matrix<T>& vnl_qr<T>::R()
     for(int i = 0; i < m; ++i)
       for(int j = 0; j < n; ++j)
         if (i > j)
-          R(i, j) = 0;
+          R(i, j) = T(0);
         else
           R(i, j) = qrdc_out_(j,i);
   }
