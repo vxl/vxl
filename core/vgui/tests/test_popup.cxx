@@ -109,7 +109,7 @@ int main(int argc, char **argv)
   // window 1
   joe_tab Joe1("Joe1");
   //vgui_shell_tableau shell1(&Joe1);
-  vgui_tableau &shell1(Joe1);
+  vgui_tableau &shell1 = Joe1;
   vgui_window *win1 = vgui::adapt(&shell1, 256,256, get_fault_menu(), "Joe1");
   win1->get_adaptor()->bind_popups(vgui_CTRL, vgui_RIGHT);
   win1->show();
@@ -118,7 +118,7 @@ int main(int argc, char **argv)
   // window 2
   joe_tab Joe2("Joe2");
   //vgui_shell_tableau shell2(&Joe2);
-  vgui_tableau &shell2(Joe2);
+  vgui_tableau &shell2 = Joe2;
   vgui_window *win2 = vgui::adapt(&shell2, 256,256, get_file_menu(), "Joe2");
   win2->get_adaptor()->bind_popups(vgui_SHIFT, vgui_LEFT);
   win2->show();
