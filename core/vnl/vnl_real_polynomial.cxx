@@ -157,17 +157,17 @@ vnl_real_polynomial operator*(const vnl_real_polynomial& f1, const vnl_real_poly
 }
 
 //: Returns RMS difference between f1 and f2 over range [x1,x2]
-//  $\sqrt{1/|x2-x1|\int_{x1}^{x2}(f1(x)-f2(x))^2dx}$
+// $\frac1{\sqrt{|x2-x1|}}\,\sqrt{\int_{x1}^{x2}\left(f1(x)-f2(x)\right)^2\,dx}$
 double vnl_rms_difference(const vnl_real_polynomial& f1, const vnl_real_polynomial& f2,
                           double x1, double x2)
 {
   double dx = vcl_fabs(x2-x1);
   if (dx==0.0) return 0;
 
-  vnl_real_polynomial df(f2-f1);
-  vnl_real_polynomial df2(df*df);
-  double area = vcl_fabs(df2.evaluate_integral(x2-x1));
-  return sqrt(area/dx);
+  vnl_real_polynomial df = f2-f1;
+  vnl_real_polynomial df2 = df*df;
+  double area = vcl_fabs(df2.evaluate_integral(x1,x2));
+  return vcl_sqrt(area/dx);
 }
 
 //: Return derivative of this polynomial
@@ -197,21 +197,19 @@ vnl_real_polynomial vnl_real_polynomial::primitive() const
 void vnl_real_polynomial::print(vcl_ostream& os) const
 {
   int d = degree();
-  for (int i=0; i<d-1; ++i) {
-    if (coeffs_[i] < 0)
-      os << coeffs_[i] << " X^" << d-i << ' ';
-    else if (coeffs_[i] > 0)
-      os << '+' << coeffs_[i] << " X^" << d-i << ' ';
-  }
-  if (coeffs_[d-1] < 0)
-    os << coeffs_[d-1] << " X ";
-  else if (coeffs_[d-1] > 0)
-    os << '+' << coeffs_[d-1] << " X ";
-  if (coeffs_[d] < 0)
-    os << coeffs_[d];
-  else if (coeffs_[d] > 0)
-    os << '+' << coeffs_[d];
+  int i = 0;
+  while (i <= d && coeffs_[i] == 0) ++i;
+  if (i > d) { os << "0 "; return; }
+  bool b = (coeffs_[i+1] > 0); // to avoid '+' in front of equation
 
-  if (d == 0 && coeffs_[0] == 0.0) os << '0';
-  os << vcl_endl;
+  for (; i <= d; ++i) {
+    if (coeffs_[i] == 0) continue;
+    if (coeffs_[i] > 0 && !b) os << '+';
+    b = false;
+    if (coeffs_[i] == -1)     os << '-';
+    else if (coeffs_[i] != 1) os << coeffs_[i];
+
+    if (i < d-1)              os << " X^" << d-i << ' ';
+    else if (i == d-1)        os << " X ";
+  }
 }
