@@ -171,10 +171,8 @@ void gevd_region_proc::extract_regions()
   detector.borderp = 1;
 
   detector.DoContour();
-  gevd_detector det(dp_);
 
-  vcl_vector<vtol_edge_2d_sptr> * edgels, clean_edgels, broken_edgels;
-  edgels = detector.GetEdges();
+  vcl_vector<vtol_edge_2d_sptr> * edgels = detector.GetEdges();
 
   if (!edgels->size())
     {
@@ -189,10 +187,13 @@ void gevd_region_proc::extract_regions()
       (*eit)->describe(vcl_cout,2);
     }
 
+  gevd_detector det(dp_);
+  vcl_vector<vtol_edge_2d_sptr> broken_edgels;
   det.DoBreakCorners(edgels, broken_edgels);
 #endif
 
   gevd_clean_edgels cl;
+  vcl_vector<vtol_edge_2d_sptr> clean_edgels;
   cl.DoCleanEdgelChains(*edgels, clean_edgels);
   if (!clean_edgels.size())
     {

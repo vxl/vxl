@@ -1,6 +1,5 @@
 #include <vcl_vector.h>
 #include <vnl/vnl_math.h>
-#include <vul/vul_timer.h>
 #include "gevd_step.h"
 #include "gevd_noise.h"
 #include "gevd_float_operators.h"
@@ -349,7 +348,9 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
                        gevd_bufferxy& locationx, gevd_bufferxy& locationy,
                        int*& junctionx, int*& junctiony)
 {
+#if DEBUG
   vul_timer t;
+#endif
   if (image.GetBitsPixel() != bits_per_float) {
     vcl_cerr << "gevd_step::RecoverJunction requires float image" << vcl_endl;
     return false;
@@ -449,7 +450,7 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
       junctiony[j] = yloc[i];
       j++;
     }
-#if 0
+#if DEBUG
   vcl_cout << "Find " << length << " end points, and "
            << njunction << " junctions.\n"
            << "Recover " << 100.0*njunction/length

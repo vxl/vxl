@@ -6,7 +6,6 @@
 #include <vcl_vector.h>
 #include <vcl_algorithm.h> // for vcl_max()
 #include "gevd_contour.h"
-#include <vul/vul_timer.h>
 #include <vil/vil_byte.h>
 #include <vnl/vnl_math.h> // for sqrt(2)
 #include <vdgl/vdgl_digital_curve.h>
@@ -1014,7 +1013,9 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
                             vcl_vector<vtol_edge_2d_sptr>& edges,
                             vcl_vector<vtol_vertex_2d_sptr >& vertices)
 {
+#ifdef DEBUG
   vul_timer t;
+#endif
   if (!edges.size())
   {
     vcl_cerr << "gevd_contour::FindChains must precede gevd_contour::FindJunctions.\n";
