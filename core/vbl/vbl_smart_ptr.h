@@ -19,15 +19,6 @@
 
 #include <vcl_iosfwd.h>
 
-// See the documentation in the .txx file about these functions.
-
-template<class T>
-void vbl_smart_ptr_ref  (T *p);
-
-template<class T>
-void vbl_smart_ptr_unref(T *p);
-
-
 //: A templated smart pointer class
 // This class requires that the class being templated over has
 // the following signatures (methods) :
@@ -73,37 +64,51 @@ class vbl_smart_ptr
     : protected_(true), ptr_(0) { }
 
   vbl_smart_ptr (vbl_smart_ptr<T> const &p)
-    : protected_(true), ptr_(p.as_pointer()) { if (ptr_) vbl_smart_ptr_ref(ptr_); }
+    : protected_(true), ptr_(p.as_pointer()) { if (ptr_) ref(ptr_); }
 
   vbl_smart_ptr (T *p)
-    : protected_(true), ptr_(p) { if (ptr_) vbl_smart_ptr_ref(ptr_); }
+    : protected_(true), ptr_(p) { if (ptr_) ref(ptr_); }
 
   ~vbl_smart_ptr ()
   {
-    // Note that calls to unref will never cause *this to be
-    // deleted. It may cause *ptr_ to be deleted.
+    // the strange order of events in this function is to avoid
+    // heap corruption if unref() causes *this to be deleted.
     if (protected_)
     {
-      if (ptr_)
-        vbl_smart_ptr_unref(ptr_);
+      T *old_ptr = ptr_;
+      ptr_ = 0;
+      if (old_ptr)
+        unref(old_ptr);
     }
+    else
+      ptr_ = 0;
   }
 
   //: Assignment
-  vbl_smart_ptr &operator = (vbl_smart_ptr const &r)
+  vbl_smart_ptr<T> &operator = (vbl_smart_ptr<T> const &r)
   {
     return operator=(r.as_pointer());
   }
 
-  vbl_smart_ptr &operator = (T *r)
+  vbl_smart_ptr<T> &operator = (T *r)
   {
-    vbl_smart_ptr_ref(r);
-    if (protected_) {
-      vbl_smart_ptr_unref(ptr_);
-    }
-    ptr_ = r; // this must be valid since we incremented the ref count
-    protected_ = true;
+    if (ptr_ != r)
+    {
+      // If there are circular references, calling unref() may
+      // cause *this to be destroyed and so assigning to 'ptr_'
+      // would be ill-formed and could cause heap corruption.
+      // Hence perform the unref() only at the very end.
+      T *old_ptr = ptr_;
+      ptr_ = r;
 
+      if (ptr_)
+        ref(ptr_);
+
+      // *this might get deleted now, but that's ok.
+      if (old_ptr && protected_)
+        unref(old_ptr);
+    }
+    protected_ = true;
     return *this;
   }
 
@@ -133,7 +138,7 @@ class vbl_smart_ptr
   //: Used for breaking circular references (see above).
   void unprotect() {
     if (protected_ && ptr_)
-      vbl_smart_ptr_unref(ptr_);
+      unref(ptr_);
     protected_ = false;
   }
 
@@ -146,7 +151,7 @@ class vbl_smart_ptr
   void protect()
   {
     if (!protected_ && ptr_)
-      vbl_smart_ptr_ref(ptr_);
+      ref(ptr_);
     protected_ = true;
   }
 #endif
@@ -173,6 +178,14 @@ class vbl_smart_ptr
   bool operator> (vbl_smart_ptr<T>const&p)const{return ptr_ >  p.as_pointer();}
   bool operator<=(vbl_smart_ptr<T>const&p)const{return ptr_ <= p.as_pointer();}
   bool operator>=(vbl_smart_ptr<T>const&p)const{return ptr_ >= p.as_pointer();}
+
+ private:
+  // These two methods should not be inlined as they call T's ref()
+  // and unref() or are specializations. The big gain from that is
+  // that vbl_smart_ptr<T> can be forward declared even if T is still
+  // an incomplete type.
+  static void ref  (T *p);
+  static void unref(T *p);
 };
 
 
