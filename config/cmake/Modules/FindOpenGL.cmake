@@ -25,7 +25,16 @@ IF(NOT HAS_OPENGL)
   
     SET( HAS_OPENGL "NO" )
   
+    # The first line below is to make sure that the proper headers
+    # are used on a Linux machine with the NVidia drivers installed.
+    # They replace Mesa with NVidia's own library but normally do not
+    # install headers and that causes the linking of parts of vgui to
+    # fail since the compiler finds the Mesa headers but NVidia's library.
+    # Make sure the NVIDIA directory comes BEFORE the others.
+    #  - Atanas Georgiev <atanas@cs.columbia.edu>
+
     FIND_PATH(OPENGL_INCLUDE_PATH GL/gl.h 
+      /usr/share/doc/NVIDIA_GLX-1.0/include
       /usr/include 
       /usr/local/include 
       /usr/openwin/share/include 
@@ -34,7 +43,7 @@ IF(NOT HAS_OPENGL)
     )
   
     FIND_LIBRARY(OPENGL_gl_LIBRARY
-      NAMES GL MesaGL
+      NAMES MesaGL GL
       PATHS /usr/lib 
             /usr/local/lib 
             /opt/graphics/OpenGL/lib 
@@ -43,7 +52,7 @@ IF(NOT HAS_OPENGL)
     )
   
     FIND_LIBRARY(OPENGL_glu_LIBRARY
-      NAMES GLU MesaGLU
+      NAMES MesaGLU GLU
       PATHS /usr/lib 
             /usr/local/lib 
             /opt/graphics/OpenGL/lib 
@@ -59,7 +68,7 @@ IF(NOT HAS_OPENGL)
       ADD_DEFINITIONS( -DHAS_OPENGL )
   
       INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_PATH})
-      LINK_LIBRARIES( ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY} )
+      LINK_LIBRARIES( ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY} -lpthread )
   
     ENDIF(OPENGL_glu_LIBRARY)
     ENDIF(OPENGL_gl_LIBRARY)
