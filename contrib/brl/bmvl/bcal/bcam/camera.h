@@ -58,7 +58,7 @@ public:
 	}
 	
 	Camera();
-	~Camera();
+	~Camera(){};
 };
 
 #endif

@@ -5,8 +5,8 @@ INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
 
 SET(cam_sources
 camera.h	camera.cpp
-ZhangCamera.h zhangCamera.cpp
 CameraNode.h CameraNode.cpp
+ZhangCameraNode.h zhangCameraNode.cpp
 cam_test.cpp
 )
 

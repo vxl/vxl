@@ -9,12 +9,15 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+
 #include "CameraNode.h"
+#include <vcl_list.h>
+#include <vgl/vgl_point_2d.h>
 
 class ZhangCameraNode : public CameraNode  
 {
 private:
-	vcl_list<HomePoint2D> *_pImageLists; 
+	vcl_list< vgl_point_2d<double> > *_pImageLists; 
 public:
 	ZhangCameraNode(int nViews);
 	virtual ~ZhangCameraNode();
