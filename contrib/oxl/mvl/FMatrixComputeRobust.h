@@ -1,5 +1,5 @@
-#ifndef FMatrixComputeRobust_h
-#define FMatrixComputeRobust_h
+#ifndef FMatrixComputeRobust_h_
+#define FMatrixComputeRobust_h_
 //:
 // \file
 // \brief Robust FMatrix computation
@@ -12,8 +12,8 @@
 //     David N. McKinnon, UQ I.R.I.S., 17.05.2001
 //
 // \verbatim
-// Modifications
-//    22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
+//  Modifications
+//   22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -66,18 +66,19 @@ class FMatrixComputeRobust : public FMatrixCompute
                                          vcl_vector<vgl_homg_point_2d<double> >& two,
                                          FMatrix* F);
   double stdev(vcl_vector<double>& residuals);
-
+ protected:
   bool rank2_truncate_;
+  double inthresh_;
+  double std_;
+ private:
   int row_;
   int col_;
-  double std_;
   vcl_vector<int> basis_;
   HomgPoint2D epipole1_;
   HomgPoint2D epipole2_;
   int data_size_;
   vcl_vector<double> residuals_;
   vcl_vector<bool> inliers_;
-  double inthresh_;
 };
 
-#endif // FMatrixComputeRobust_h
+#endif // FMatrixComputeRobust_h_
