@@ -88,8 +88,8 @@ void osl_fit_lines::simple_fit_to_list(vcl_list<osl_edge *> *myedges,
             angle_ok = false;
         }}
         data_->Fit();
-        double mean_cost = MyGetCost(data_, 0, dc->size(), dc);
-        double ls_cost = data_->GetCost();
+        float mean_cost = MyGetCost(data_, 0, dc->size(), dc);
+        float ls_cost = data_->GetCost();
         if (use_square_fit_ && ls_cost < threshold_ ||
             !use_square_fit_ && mean_cost < threshold_ && angle_ok)
           {
@@ -267,7 +267,7 @@ void osl_fit_lines::incremental_fit_to_list(vcl_list<osl_edge *> *myedges,
 void osl_fit_lines::MeanIncrementalFit(vcl_list<osl_edgel_chain*> *curves_, osl_edge *edge)
 {
   //vcl_cerr << "MeanIncrementalFit()\n";
-  double new_cost, new_est_cost;
+  float new_cost, new_est_cost;
   // Get the digital curve
   osl_edgel_chain *dc = edge;//->GetCurve()->CastToDigitalCurve();
   assert(dc!=0);
