@@ -1,4 +1,4 @@
-// This is vxl/vnl/tests/test_matrix_fixed.cxx
+// This is core/vnl/tests/test_matrix_fixed.cxx
 #if TEST_MALLOC // see note below, at the other #if TEST_MALLOC
 #include <vcl_new.h>
 #endif
@@ -62,7 +62,7 @@ test_multiply()
 
   testlib_test_begin( "Matrix-vector multiply" );
   vnl_vector_fixed<double,3> vr = m1*v1;
-  testlib_test_perform( vr(0) = 23 && vr(1) == 53 && vr(2) == 83 );
+  testlib_test_perform( vr(0) == 23 && vr(1) == 53 && vr(2) == 83 );
 }
 
 void test_matrix_fixed()
