@@ -165,7 +165,6 @@ MANPAGE_SOURCES += QvWWWInline.h
 MANPAGE_SOURCES += Qv_pi.h
 MANPAGE_SOURCES += color.h
 MANPAGE_SOURCES += mtl.h
-MANPAGE_SOURCES += stdafx.h
 MANPAGE_SOURCES += vectors.h
 
 ifndef NOTEST
