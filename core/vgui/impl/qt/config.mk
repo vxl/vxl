@@ -1,0 +1,1 @@
+IULIBS += -lvgui-qt
