@@ -1,11 +1,10 @@
+// This is mul/clsfy/clsfy_direct_boost.h
 #ifndef clsfy_direct_boost_h_
 #define clsfy_direct_boost_h_
-
 //:
 // \file
 // \brief Classifier using adaboost on combinations of simple 1D classifiers
 // \author Tim Cootes
-
 
 #include <clsfy/clsfy_classifier_base.h>
 #include <clsfy/clsfy_classifier_1d.h>
@@ -15,8 +14,9 @@
 //: Classifier using adaboost on combinations of simple 1D classifiers
 //  Uses a weighted combination of 1D classifiers applied to the
 //  elements of the input vector.
-class clsfy_direct_boost : public clsfy_classifier_base {
-protected:
+class clsfy_direct_boost : public clsfy_classifier_base
+{
+ protected:
 
   //: The classifiers in order
   vcl_vector<clsfy_classifier_1d*> classifier_1d_;
@@ -27,14 +27,14 @@ protected:
   //: Index of input vector appropriate for each classifier
   vcl_vector<int> index_;
 
-  //: Thresholds given variable number of weak classifiers
-  // ie threshes[nc-1] is the threshold when using nc weak classifiers 
+  //: Thresholds given variable number of weak classifiers.
+  // ie threshes[nc-1] is the threshold when using nc weak classifiers
   vcl_vector<double> threshes_;
 
-  //: number of classfiers used
+  //: number of classifiers used
   int n_clfrs_used_;
 
-  //: dimensionality of data
+  //: dimensionality of data.
   // (ie size of input vectors v, ie the total number of different features)
   int n_dims_;
 
@@ -43,10 +43,7 @@ protected:
   //: Delete objects on heap
   void delete_stuff();
 
-
- 
-
-public:
+ public:
 
   //: Default constructor
   clsfy_direct_boost();
@@ -78,10 +75,8 @@ public:
    //: Add one threshold
   void add_one_threshold(double thresh);
 
-
   //: Add final threshold
   void add_final_threshold(double thresh);
-
 
   //: Find the posterior probability of the input being in the positive class.
   // The result is outputs(0)
@@ -115,11 +110,9 @@ public:
   const vcl_vector<clsfy_classifier_1d*>& classifiers() const
     {return classifier_1d_;}
 
-  const vcl_vector<double>& wts() const
-    {return wts_;}
+  const vcl_vector<double>& wts() const {return wts_;}
 
-  const vcl_vector<int>& index() const
-    {return index_;}
+  const vcl_vector<int>& index() const {return index_;}
 
   const vcl_vector<double>& threshes() const
     {return threshes_;}
