@@ -26,15 +26,19 @@
 //              Robotics Research Group, University of Oxford
 //
 // .SECTION Modifications:
-// 18 Sept 00 capes@robots. Added set_enable_key_bindings. Key bindings are OFF by default.
+// 18 Sep 00 capes@robots. Added set_enable_key_bindings. Key bindings are OFF by default.
+//  9 Feb 01 awf@robots. Add Alt-C to re-enable key bindings.
 //
 //-----------------------------------------------------------------------------
 
-#include <vgui/vgui_composite_ref.h>
 #include <vcl_vector.h>
+
+#include <vgui/vgui_composite_ref.h>
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_slot.h>
+#include <vgui/vgui_event_condition.h>
 #include <vgui/vgui_observable.h>
+
 class vgui_event;
 
 class vgui_composite : public vgui_tableau {
@@ -62,6 +66,8 @@ public:
   bool is_active(int);
 
   void set_enable_key_bindings(bool on) { enable_key_bindings = on; }
+
+  vgui_event_condition c_enable_key_bindings;
 
 protected:
   virtual ~vgui_composite();
