@@ -19,8 +19,31 @@ gmvl_node_cache::~gmvl_node_cache()
 // trivial accessors
 void gmvl_node_cache::add( const gmvl_node_ref node)
 {
-  nodes_.push_back( node);
   node->ref_= nodes_.size();
+  nodes_.push_back( node);
+
+  // add to cache
+  bool found= false;
+  
+  for( int j=0; (j< typecache_.size()) && ( !found); j++)
+    {
+      if( typecache_[j].first== node->type_)
+	{
+	  typecache_[j].second.push_back( node);
+	  found= true;
+	}
+    }
+  
+  if( !found)
+    {
+      vcl_pair<vcl_string,vcl_vector<gmvl_node_ref> > pair;
+      
+      pair.first= node->type_;
+      pair.second.push_back( node);
+
+      typecache_.push_back( pair);
+    }
+
 }
 
 void gmvl_node_cache::remove( const gmvl_node_ref node)
@@ -31,12 +54,14 @@ void gmvl_node_cache::remove( const gmvl_node_ref node)
     {
       if( nodes_[i].ptr()!= node.ptr())
 	{
-	  newnodes.push_back( nodes_[i]);
 	  nodes_[i]->ref_= newnodes.size();
+	  newnodes.push_back( nodes_[i]);
 	}
     }
 
   nodes_= newnodes;
+
+  rebuild();
 }
 
 bool gmvl_node_cache::cached( const gmvl_node_ref node) const
@@ -47,7 +72,52 @@ bool gmvl_node_cache::cached( const gmvl_node_ref node) const
   return true;
 }
 
-// clevel accessors
+// clever accessors
+
+vcl_vector<gmvl_node_ref> gmvl_node_cache::get( const vcl_string type) const
+{
+  vcl_vector<gmvl_node_ref> empty;
+
+  for( int i=0; i< typecache_.size(); i++)
+    {
+      if( typecache_[i].first== type)
+	{
+	  return typecache_[i].second;
+	}
+    }
+
+  return empty;
+}
+
+void gmvl_node_cache::rebuild()
+{
+  typecache_.clear();
+
+  for( int i=0; i< nodes_.size(); i++)
+    {
+      bool found= false;
+
+      for( int j=0; (j< typecache_.size()) && ( !found); j++)
+	{
+	  if( typecache_[j].first== nodes_[i]->type_)
+	    {
+	      typecache_[j].second.push_back( nodes_[i]);
+	      found= true;
+	    }
+	}
+
+      if( !found)
+	{
+	  vcl_pair<vcl_string,vcl_vector<gmvl_node_ref> > pair;
+
+	  pair.first= nodes_[i]->type_;
+	  pair.second.push_back( nodes_[i]);
+
+	  typecache_.push_back( pair);
+	}
+    }
+
+}
 
 // input and output
 ostream &operator<<( ostream &os, const gmvl_node_cache &c)

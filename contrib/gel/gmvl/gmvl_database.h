@@ -29,6 +29,12 @@ public:
   void add_connection( const gmvl_node_ref node1, const gmvl_node_ref node2);
   void add_connections( const gmvl_node_ref node1, vcl_vector<gmvl_node_ref> nodes);
 
+  // clever accessors
+  vcl_vector<gmvl_node_ref> get_nodes( const vcl_string type) const;
+  vcl_vector<gmvl_node_ref> get_connected_nodes( const gmvl_node_ref node) const;
+  vcl_vector<gmvl_node_ref> get_connected_nodes( const gmvl_node_ref node1, const gmvl_node_ref node2) const;
+  vcl_vector<gmvl_node_ref> get_connected_nodes( const gmvl_node_ref node1, const gmvl_node_ref node2, const gmvl_node_ref node3) const;
+
   // output
   friend ostream &operator<<( ostream &os, const gmvl_database db);
 

@@ -21,6 +21,10 @@ SOURCES += gmvl_connection_cache.cxx
 # node implementations
 SOURCES += gmvl_image_node.cxx
 SOURCES += gmvl_corner_node.cxx
+SOURCES += gmvl_tag_node.cxx
+
+# helpers
+SOURCES += gmvl_helpers.cxx
 
 ######################################
 include ${IUEROOT}/config/top-rules.mk

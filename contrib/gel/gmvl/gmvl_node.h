@@ -19,6 +19,7 @@
 #include <vbl/vbl_ref_count.h>
 
 class gmvl_node_cache;
+class gmvl_connection_cache;
 
 class gmvl_node : public vbl_ref_count
 {
@@ -32,6 +33,7 @@ public:
 
   // to allow the cache to access ref 
   friend gmvl_node_cache;
+  friend gmvl_connection_cache;
 
 protected:
 
