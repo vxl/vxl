@@ -750,7 +750,7 @@ foreach $f (@FILES)
   {
     &msg(1, "$wd must be vcl_ios_$wd")
       if ($cpp_file &&
-          ($f !~ m!\bvpdfl/vpdfl_pc_gaussian_builder\.! || $wd !~ m!^fixed$!) &&
+          ($f !~ m!\b(vpdfl/vpdfl_pc_gaussian_builder|bgui_bargraph_clipon_tableau)\.! || $wd !~ m!^fixed$!) &&
           $file_s =~ m!\b$wd\s*[|),]!);
     &msg(1, "vcl_ios_$wd must be used together with vcl_ios_floatfield")
       if ($cpp_file && $file_s =~ m!\bvcl_ios_$wd\s*[^ ,]! &&
