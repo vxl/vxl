@@ -16,6 +16,7 @@ INCLUDE_DIRECTORIES( ${OXL_INCLUDE_DIR} )
 
 # sources that don't depend on the camera being present
 SET(vvid_sources
+    vvid_frame_trail.cxx           vvid_frame_trail.h	
     vvid_video_process.cxx           vvid_video_process.h  vvid_video_process_sptr.h
     vvid_region_process.cxx          vvid_region_process.h   
     vvid_capture_process.cxx         vvid_capture_process.h   

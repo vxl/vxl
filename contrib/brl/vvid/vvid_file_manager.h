@@ -23,8 +23,8 @@
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_window.h>
 #include <vidl/vidl_movie.h>
-
-//: A singleton manager class for playing videos.
+#include <vvid/vvid_frame_trail.h>
+//:A singleton manager class for playing videos.
 // A vector of images with
 // enclosing image and easy2D tableaux is cached so that computed overlays
 // such as Harris corners can be played back quickly. The cache option can be
@@ -130,7 +130,8 @@ class vvid_file_manager : public vgui_wrapper_tableau
   bool pause_video_;
   bool next_frame_;
   bool prev_frame_;
-  bool track_;
+  bool track_;//keep trail of display items
+  int window_;//frame trail time window
   float time_interval_;
   unsigned width_;
   unsigned height_;
@@ -145,6 +146,7 @@ class vvid_file_manager : public vgui_wrapper_tableau
   vgui_image_tableau_sptr itab1_;
   vvid_video_process_sptr video_process_;
   vgui_grid_tableau_sptr grid_;
+  vvid_frame_trail frame_trail_;
   static vvid_file_manager *instance_;
 };
 

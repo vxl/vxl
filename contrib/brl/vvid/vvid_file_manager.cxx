@@ -50,6 +50,7 @@ vvid_file_manager *vvid_file_manager::instance()
 //======================================================================
 void vvid_file_manager::init()
 {
+  
   grid_ = vgui_grid_tableau_new(2,1);
   grid_->set_grid_size_changeable(true);
 
@@ -76,6 +77,8 @@ vvid_file_manager::vvid_file_manager(): vgui_wrapper_tableau()
   width_ = 512;
   height_ = 512;
   track_ = false;
+  window_ = 0;
+  frame_trail_.clear();
   my_movie_=(vidl_movie*)0;
   win_ = 0;
   cache_frames_ = false;
@@ -119,9 +122,17 @@ void vvid_file_manager::display_spatial_objects()
     video_process_->get_spatial_objects();
   if (easy0_)
   {
-    if(!track_)
-      easy0_->clear_all();
-    easy0_->add_spatial_objects(sos);
+    easy0_->clear_all();
+    //If tracking is on then we maintain a queue of points
+    if(track_)
+      {
+        frame_trail_.add_spatial_objects(sos);
+        vcl_vector<vsol_spatial_object_2d_sptr> temp;
+        frame_trail_.get_spatial_objects(temp);
+        easy0_->add_spatial_objects(temp);
+      }
+    else
+      easy0_->add_spatial_objects(sos);
   }
 }
 //-------------------------------------------------------------
@@ -132,9 +143,21 @@ void vvid_file_manager::display_topology()
   easy0_->clear_all();
   vcl_vector<vtol_topology_object_sptr> const & topos = 
     video_process_->get_segmentation();
-  easy0_->add_topology_objects(topos);
+  if (easy0_)
+  {
+    easy0_->clear_all();
+    //If tracking is on then we maintain a queue of points
+    if(track_)
+      {
+        frame_trail_.add_topology_objects(topos);
+        vcl_vector<vtol_topology_object_sptr> temp;
+        frame_trail_.get_topology_objects(temp);
+        easy0_->add_topology_objects(temp);
+      }
+    else
+      easy0_->add_topology_objects(topos);
+  }
 }
-
 //-----------------------------------------------------------------------------
 //: Loads a video file, e.g. avi into the viewer
 //-----------------------------------------------------------------------------
@@ -145,6 +168,7 @@ void vvid_file_manager::load_video_file()
   next_frame_ = false;
   prev_frame_ = false;
   video_process_ = 0;
+  frame_trail_.clear();
   vgui_dialog load_video_dlg("Load video file");
   static vcl_string image_filename = "";
   static vcl_string ext = "";
@@ -242,11 +266,12 @@ void vvid_file_manager::un_cached_play()
         {
           if (next_frame_&&pframe!=my_movie_->last()-2)
             {
-              ++pframe;++pframe;
+              ++pframe;
               next_frame_ = false;
             }
           if (prev_frame_&&pframe!=my_movie_->first()+2)
             {
+              --pframe;
               prev_frame_ = false;
             }
           --pframe;
@@ -269,6 +294,7 @@ void vvid_file_manager::un_cached_play()
                 display_topology();
             }
         }
+      vgui::out << "frame["<< pframe->get_real_frame_index()<<"]\n";
       grid_->post_redraw();
       vgui::run_till_idle();
     }
@@ -279,6 +305,7 @@ void vvid_file_manager::play_video()
   pause_video_ = false;
   time_interval_ = 10.0;
   easy0_->clear_all();
+  frame_trail_.clear();
   //return the display to the first frame after the play is finished
   if (cache_frames_)
     {
@@ -381,6 +408,7 @@ void vvid_file_manager::compute_lucas_kanade()
 
 void vvid_file_manager::compute_harris_corners()
 {
+  static int track_window;
   static sdet_harris_detector_params hdp;
   vgui_dialog harris_dialog("harris");
   harris_dialog.field("sigma", hdp.sigma_);
@@ -389,14 +417,21 @@ void vvid_file_manager::compute_harris_corners()
   harris_dialog.field("Max No.Corners(percent)", hdp.percent_corners_);
   harris_dialog.field("scale_factor", hdp.scale_factor_);
   harris_dialog.checkbox("Tracks", track_);
+  harris_dialog.field("Window", track_window);
+
   if (!harris_dialog.ask())
     return;
 
   video_process_ = new vvid_harris_corner_process(hdp);
+  if(track_)
+    {
+      frame_trail_.clear();
+      frame_trail_.set_window(track_window);
+    }
 }
-
 void vvid_file_manager::compute_vd_edges()
 {
+  static int track_window;
   static bool agr = false;
   static sdet_detector_params dp;
   vgui_dialog det_dialog("Video Edges");
@@ -405,6 +440,9 @@ void vvid_file_manager::compute_vd_edges()
   det_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
   det_dialog.checkbox("Agressive Closure", agr);
   det_dialog.checkbox("Compute Junctions", dp.junctionp);
+  det_dialog.checkbox("Tracks", track_);
+  det_dialog.field("Window", track_window);
+
   if (!det_dialog.ask())
     return;
 
@@ -414,4 +452,9 @@ void vvid_file_manager::compute_vd_edges()
     dp.aggressive_junction_closure=-1;
 
   video_process_  = new vvid_edge_process(dp);
+  if(track_)
+    {
+      frame_trail_.clear();
+      frame_trail_.set_window(track_window);
+    }
 }
