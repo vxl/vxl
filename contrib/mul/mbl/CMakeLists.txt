@@ -58,6 +58,10 @@ SET(mbl_sources
 )
 AUX_SOURCE_DIRECTORY(Templates mbl_sources)
 
+IF(CMAKE_COMPILER_IS_GNUCXX)
+  SET_SOURCE_FILES_PROPERTIES(Templates/mbl_data_wrapper_mixer+vnl_vector+double--.cxx PROPERTIES COMPILE_FLAGS -O0)
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
 ADD_LIBRARY(mbl ${mbl_sources})
 TARGET_LINK_LIBRARIES(mbl vnl_io vnl_algo vgl_io vsl)
 
