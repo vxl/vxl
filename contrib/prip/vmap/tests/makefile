@@ -1,7 +1,7 @@
 USES += contrib/prip core
 include ../config.mk
 
-TESTS += vmap_test.cxx
+MINI_PROG_SOURCES += vmap_test.cxx
 MANPAGE_SOURCES += my_map.h
 MANPAGE_SOURCES += my_map_functions.txx
 

@@ -6,8 +6,8 @@ SOURCES += my_pyramid.cxx
 SOURCES += my_top_level.cxx
 MANPAGE_SOURCES += my_pyramid_functions.txx
 
-TESTS += vpyr_test.cxx
-TESTS += vpyr_test2.cxx
+MINI_PROG_SOURCES += vpyr_test.cxx
+MINI_PROG_SOURCES += vpyr_test2.cxx
 IULIBS += -lvpyr_tests
 
 MINI_PROG_SOURCES += test_include.cxx
