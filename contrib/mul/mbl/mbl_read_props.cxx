@@ -48,16 +48,17 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
 
   vcl_string label, str1;
 
-  while (afs>>vcl_ws, !afs.eof())
+  while ( afs>>vcl_ws, !afs.eof() )
   {
-    afs>>label;
+    afs >> label;
     if (label.substr(0,2) =="//")
     {
       // Comment line, so read to end
-      vcl_getline(afs, str1);
+      vcl_getline( afs, str1 );
     }
     else break;
   }
+
   bool need_closing_brace = false;
 
   if (label[0] == '{')
@@ -68,7 +69,8 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
 
   mbl_read_props_type props;
 
-  if (label.empty()) {
+  if ( label.empty() ) 
+  {
     afs >> vcl_ws;
 
     // Several tests with Borland 5.5.1 fail because this next
@@ -88,36 +90,39 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
 
   do
   {
-    if (label.substr(0,2) =="//")
+    if ( label.substr(0,2) =="//" )
     {
       // Comment line, so read to end
       vcl_getline(afs, str1);
     }
-    else if (need_closing_brace && label[0] == '}')
+    else if ( need_closing_brace && label[0] == '}' )
     {
       // Strip rest of line
       return props;
     }
-    else if (!label.empty())
+    else if ( !label.empty() )
     {
-      if (label.size() > 1 && label[label.size() -1] == ':')
+      if ( label.size() > 1 && 
+           label[label.size() -1] == ':' )
       {
-        label.erase(label.size() -1, 1);
+        label.erase( label.size() -1, 1 );
         afs >> vcl_ws;
         vcl_getline(afs, str1);
-        if (str1=="{")
+        
+        if ( str1.substr(0,1) == "{" )
         {
           afs.putback('\n');
           str1 = mbl_parse_block(afs, true);
         }
+        
         strip_trailing_ws(str1);
         props[label] = str1;
         last_label = label;
       }
-      else if ( label == "{" )
+      else if ( label.substr(0,1) == "{" )
       {
         vcl_string block = mbl_parse_block( afs, true );
-        if ( block != "{}" )
+        if ( block.substr(0,2) != "{}" )
         {
           vcl_string prop = props[ last_label ];
           prop += "\n";
@@ -130,6 +135,7 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
         char c;
         afs >> vcl_ws;
         afs >> c;
+
         if (c != ':')
         {
           vcl_getline(afs, str1);
@@ -140,11 +146,15 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
           for (int i=-1; i<256; ++i)
           {
             char c= i<0 ? '&' : char(i); vcl_string s(1,c); // first do '&'
-            if (i>=32 && i<127 && c!='<') continue; // keep "normal" chars
+            if (i>=32 && i<127 && c!='<') 
+              continue; // keep "normal" chars
+            
             vcl_ostringstream os; os << "&#" << (i<0?int(c):i) << ';';
             vcl_string::size_type pos;
+            
             while ((pos=str1.find(s)) != vcl_string::npos)
               str1.replace(pos,1,os.str());
+            
             while ((pos=label.find(s)) != vcl_string::npos)
               label.replace(pos,1,os.str());
           }
@@ -155,12 +165,16 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
         }
       }
     }
+
     afs >> vcl_ws >> label;
   }
-  while (!afs.eof());
-  if (need_closing_brace && label != "}")
+
+  while ( !afs.eof() );
+  
+  if ( need_closing_brace && label != "}" )
     vcl_cerr << "ERROR: mbl_read_props. Unexpected end of file while "
              << "looking for '}'. Last read string = \"" << label << "\"\n";
+  
   return props;
 }
 
