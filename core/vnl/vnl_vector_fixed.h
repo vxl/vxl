@@ -24,6 +24,9 @@
 #include <vcl_cassert.h>
 #include "vnl_vector.h"
 #include "vnl_vector_ref.h"
+#include "vnl_matrix.h" // outerproduct
+
+
 
 //: Fixed length  stack-stored, space-efficient vector.
 // vnl_vector_fixed is a fixed-length, stack storage vector. It has
@@ -669,6 +672,20 @@ inline T dot_product( const vnl_vector<T>& a, const vnl_vector_fixed<T,n>& b ) {
   return dot_product( a, b.as_ref() );
 }
 
+template<class T, unsigned int n>
+inline vnl_matrix<T> outer_product( const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b ) {
+  return outer_product( a.as_ref(), b.as_ref());
+}
+
+template<class T, unsigned int n>
+inline vnl_matrix<T> outer_product( const vnl_vector<T>& a, const vnl_vector_fixed<T,n>& b ) {
+  return outer_product( a, b.as_ref());
+}
+
+template<class T, unsigned int n>
+inline vnl_matrix<T> outer_product( const vnl_vector_fixed<T,n>& a, const vnl_vector<T>& b ) {
+  return outer_product( a.as_ref(), b);
+}
 
 template<class T, unsigned n>
 inline T angle( const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b ) {
