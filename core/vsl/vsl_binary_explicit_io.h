@@ -685,7 +685,7 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const double* begin, unsigned n
   vsl_swap_bytes_to_buffer((const char *)begin, (char *)block, sizeof(double), nelems);
 
   os.os().write((const char*) block, (unsigned long)nelems*(unsigned long)sizeof(double));
-  delete block;
+  delete [] block;
 }
 
 //: Read a block of doubles from a vsl_b_istream
@@ -708,7 +708,7 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const float* begin, unsigned ne
   vsl_swap_bytes_to_buffer((const char *)begin, (char *)block, sizeof(float), nelems);
 
   os.os().write((const char*) block, (unsigned long)nelems*(unsigned long)sizeof(float));
-  delete block;
+  delete [] block;
 }
 
 //: Read a block of floats from a vsl_b_istream
@@ -733,7 +733,7 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const signed int* begin, unsign
   vsl_b_write(os, nbytes);
 
   os.os().write( block, nbytes);
-  delete block;
+  delete [] block;
 }
 
 //: Read a block of signed ints from a vsl_b_istream
@@ -751,7 +751,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, signed int* begin, unsigned nele
     is.is().read(block, nbytes);
     unsigned long n_bytes_converted =
     vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
-    delete block;
+    delete [] block;
     if (n_bytes_converted != nbytes)
     {
       vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., signed int*,..)"
@@ -776,7 +776,7 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const unsigned int* begin, unsi
   vsl_b_write(os, nbytes);
 
   os.os().write( block, nbytes);
-  delete block;
+  delete [] block;
 }
 
 //: Read a block of unsigned ints from a vsl_b_istream
@@ -793,7 +793,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, unsigned int* begin, unsigned ne
     is.is().read(block, nbytes);
     unsigned long n_bytes_converted =
     vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
-    delete block;
+    delete [] block;
     if (n_bytes_converted != nbytes)
     {
       vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., unsigned int*,..)"
@@ -818,7 +818,7 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const signed short* begin, unsi
   vsl_b_write(os, nbytes);
 
   os.os().write( block, nbytes);
-  delete block;
+  delete [] block;
 }
 
 //: Read a block of signed shorts from a vsl_b_istream
@@ -835,7 +835,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, signed short* begin, unsigned ne
     is.is().read(block, nbytes);
     unsigned long n_bytes_converted =
     vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
-    delete block;
+    delete [] block;
     if (n_bytes_converted != nbytes)
     {
       vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., signed short*,..)"
@@ -860,7 +860,7 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const unsigned short* begin, un
   vsl_b_write(os, nbytes);
 
   os.os().write( block, nbytes);
-  delete block;
+  delete [] block;
 }
 
 //: Read a block of unsigned shorts from a vsl_b_istream
@@ -877,7 +877,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, unsigned short* begin, unsigned 
     is.is().read(block, nbytes);
     unsigned long n_bytes_converted =
     vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
-    delete block;
+    delete [] block;
     if (n_bytes_converted != nbytes)
     {
       vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., unsigned short*,..)"
@@ -902,7 +902,7 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const signed long* begin, unsig
   vsl_b_write(os, nbytes);
 
   os.os().write( block, nbytes);
-  delete block;
+  delete [] block;
 }
 
 //: Read a block of signed longs from a vsl_b_istream
@@ -919,7 +919,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, signed long* begin, unsigned nel
     is.is().read(block, nbytes);
     unsigned long n_bytes_converted =
     vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
-    delete block;
+    delete [] block;
     if (n_bytes_converted != nbytes)
     {
       vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., signed long*,..)"
@@ -944,7 +944,7 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const unsigned long* begin, uns
   vsl_b_write(os, nbytes);
 
   os.os().write( block, nbytes);
-  delete block;
+  delete [] block;
 }
 
 //: Read a block of unsigned longs from a vsl_b_istream
@@ -961,7 +961,7 @@ inline void vsl_b_read_block(vsl_b_istream &is, unsigned long* begin, unsigned n
     is.is().read(block, nbytes);
     unsigned long n_bytes_converted =
     vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
-    delete block;
+    delete [] block;
     if (n_bytes_converted != nbytes)
     {
       vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., unsigned long*,..)"
