@@ -521,11 +521,3 @@ void vsl_b_ifstream::close()
   clear_serialisation_records();
 }
 
-
-// Explicit instantiation of map
-typedef vcl_pair<unsigned long, int > vcl_pair_ulong_int;
-typedef vcl_pair<void*, int > vcl_pair_vstar_int;
-VCL_MAP_INSTANTIATE(void*, vcl_pair_ulong_int, vcl_less<void* > );
-VCL_MAP_INSTANTIATE(unsigned long, vcl_pair_vstar_int,\
-                    vcl_less<unsigned long > );
-
