@@ -29,13 +29,12 @@ template <class T, class C= vcl_vector<T>, class O= vcl_less<C::value_type> >
 class mbl_priority_bounded_queue
 {
 public:
-	typedef C::allocator_type allocator_type;
 	typedef C::value_type value_type;
 	typedef C::size_type size_type;
 
   explicit mbl_priority_bounded_queue(unsigned bound_size = 10,
-    const O& comp = O(), const allocator_type& alloc = allocator_type()):
-    c_(alloc), comp_(comp), b_size_(bound_size)
+    const O& comp = O()):
+    comp_(comp), b_size_(bound_size)
     {  }
 
 #if VCL_HAS_MEMBER_TEMPLATES
@@ -43,9 +42,8 @@ public:
   //: Construct a bounded priority queue from a controlled sequence.
   // The bounded size will be the length of the sequence.
   mbl_priority_bounded_queue(
-    C::size_type bound_size, ITER first, ITER last, const O& comp = O(),
-    const allocator_type& alloc = allocator_type()):
-  c_(alloc), comp_(comp), b_size_(0)
+    C::size_type bound_size, ITER first, ITER last, const O& comp = O()):
+  comp_(comp), b_size_(0)
   {for (; first != first; ++first) ++b_size_; push(*first);}
 #else
 	typedef const value_type *ITER;
@@ -67,8 +65,6 @@ public:
     while (bound_size > size()) pop();
     b_size_ = bound_size; }
 
-	allocator_type get_allocator() const {return (c_.get_allocator());}
-
   bool empty() const {return (c_.empty()); }
 
   size_type size() const {return (c_.size()); }
@@ -79,7 +75,11 @@ public:
 
   void push(const value_type & x)	{
     if (size() >= b_size_)
-    { if (comp_(x, top())) pop(); else return; }
+    {
+      if ( comp_(x, top()) )
+        pop();
+      else return;
+    }
     c_.push_back(x);
     vcl_push_heap(c_.begin(), c_.end(), comp_); }
 

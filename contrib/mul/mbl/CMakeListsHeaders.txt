@@ -16,5 +16,6 @@ mbl_read_props.h
 mbl_stats_1d.h
 mbl_stochastic_data_collector.h
 mbl_sum_1d.h
+mbl_priority_bounded_queue.h
 )
 
