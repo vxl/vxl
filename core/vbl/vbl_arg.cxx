@@ -364,10 +364,6 @@ void vbl_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
 //                              or -1--3 or even -1--1--3 ...:).
 static int list_parse(vcl_list<int> &out, char ** argv)
 {
-  // sorry geoff (or whoever wrote this), your indentation style made the function
-  // twice as long as it need to be and that's annoying when one is trying to read
-  // it. it is a truly marvellous function, though.
-
   out.clear();
   vcl_string str(argv[0]);
   
@@ -613,3 +609,33 @@ VDS int parse(vbl_arg<vcl_vector<unsigned> >* arg, char ** argv) {
   return retval;
 }
 template class vbl_arg<vcl_vector<unsigned> >;
+
+//: vcl_vector<double>
+VDS void settype(vbl_arg<vcl_vector<double> > &arg) { arg.type_ = "double list"; }
+VDS void print_value(ostream &s, vbl_arg<vcl_vector<double> > const &arg) {
+  for (int i=0; i<arg().size(); ++i)
+    s << ' ' << arg()[i];
+}
+VDS int parse(vbl_arg<vcl_vector<double> >* arg, char ** argv) {
+  int sucked = 0;
+  while (argv[0]) {
+    char* endptr = 0;
+    double tmp = strtod(argv[0], &endptr);
+    //arg->value_
+    if (*endptr == '\0') {
+      arg->value_.push_back(tmp);
+      ++ sucked;
+      ++ argv;
+    }
+    else if (endptr == argv[0])
+      break; // OK. end of list of doubles.
+    else {
+      // There is junk after the number, or no number was found
+      vcl_cerr << "vbl_arg_parse: WARNING: Attempt to parse " << *argv << " as double\n";
+      return -1;
+    }
+  }
+  return sucked;
+}
+
+template class vbl_arg<vcl_vector<double> >;

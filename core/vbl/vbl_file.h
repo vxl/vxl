@@ -56,7 +56,7 @@ struct vbl_file {
     return dirname(filename.c_str());
   }
 
-  // -- Return extension
+  // -- Return extension (including the '.').
   static vcl_string extension(char const* filename);
 
   // -- Return basename
