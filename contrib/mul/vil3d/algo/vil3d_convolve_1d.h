@@ -1,4 +1,4 @@
-// This is mul/vil3d/algo/vil_convolve_1d.h
+// This is mul/vil3d/algo/vil3d_convolve_1d.h
 #ifndef vil3d_algo_convolve_1d_h_
 #define vil3d_algo_convolve_1d_h_
 //:
@@ -15,8 +15,6 @@
 #include <vcl_cassert.h>
 #include <vil/algo/vil_convolve_1d.h>
 
-
-
 //: Convolve kernel[i] (i in [k_lo,k_hi]) with srcT in i-direction
 // On exit dest_im(i,j) = sum src_m(i-x,j)*kernel(x)  (x=k_lo..k_hi)
 // \note  This function reverses the kernel. If you don't want the
@@ -31,7 +29,7 @@
 //
 //  vil3d_convolve_1d(vil3d_switch_axes_jki(smoothed1), smoothed2, ... );
 //  smoothed2_im = vil3d_switch_axes_kij(smoothed2);
-//  
+//
 //  vil3d_convolve_1d(vil3d_switch_axes_kij(smoothed2), smoothed3, ... );
 //  smoothed3_im = vil3d_switch_axes_jki(smoothed3);
 //
@@ -58,7 +56,7 @@ inline void vil3d_convolve_1d(const vil3d_image_view<srcT>& src_im,
                     s_pstep = src_im.planestep();
 
   dest_im.set_size(n_i, n_j, n_k, n_p);
-  
+
   const vcl_ptrdiff_t d_istep = dest_im.istep(),
                       d_jstep = dest_im.jstep(),
                       d_kstep = dest_im.kstep(),
@@ -74,12 +72,11 @@ inline void vil3d_convolve_1d(const vil3d_image_view<srcT>& src_im,
     destT*     dest_slice = dest_plane;
     for (unsigned k=0; k<n_k; ++k, src_slice+=s_kstep, dest_slice+=d_kstep)
     {
-  
       // Apply convolution to each row in turn
       // First check if either istep is 1 for speed optimisation.
       const srcT* src_row = src_slice;
       destT*     dest_row = dest_slice;
-  
+
       if (s_istep == 1)
       {
         if (d_istep == 1)
@@ -105,7 +102,6 @@ inline void vil3d_convolve_1d(const vil3d_image_view<srcT>& src_im,
     }
   }
 }
-
 
 #endif // vil3d_algo_convolve_1d_h_
 
