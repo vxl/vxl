@@ -220,8 +220,10 @@ vcl_ostream & operator << (vcl_ostream &os, vil_pixel_format f)
   switch(f) {
     case VIL_PIXEL_FORMAT_UNKNOWN: os << "VIL_PIXEL_FORMAT_UNKNOWN";  break;
 
+#if VXL_HAS_INT_64
     case VIL_PIXEL_FORMAT_UINT_64: os << "vxl_uint_64";  break;
     case VIL_PIXEL_FORMAT_INT_64:  os << "vxl_int_64";  break;
+#endif
     case VIL_PIXEL_FORMAT_UINT_32: os << "vxl_uint_32";  break;
     case VIL_PIXEL_FORMAT_INT_32:  os << "vxl_int_32";  break;
     case VIL_PIXEL_FORMAT_UINT_16: os << "vxl_uint_16";  break;
@@ -232,8 +234,10 @@ vcl_ostream & operator << (vcl_ostream &os, vil_pixel_format f)
     case VIL_PIXEL_FORMAT_DOUBLE:  os << "double";  break;
     case VIL_PIXEL_FORMAT_BOOL:    os << "bool";  break;
 
+#if VXL_HAS_INT_64
     case VIL_PIXEL_FORMAT_RGB_INT_64:  os << "vil_rgb<vxl_int_64>";  break;
     case VIL_PIXEL_FORMAT_RGB_UINT_64: os << "vil_rgb<vxl_uint_64>";  break;
+#endif
     case VIL_PIXEL_FORMAT_RGB_INT_32:  os << "vil_rgb<vxl_int_32>";  break;
     case VIL_PIXEL_FORMAT_RGB_UINT_32: os << "vil_rgb<vxl_uint_32>";  break;
     case VIL_PIXEL_FORMAT_RGB_INT_16:  os << "vil_rgb<vxl_int_16>";  break;
@@ -243,8 +247,10 @@ vcl_ostream & operator << (vcl_ostream &os, vil_pixel_format f)
     case VIL_PIXEL_FORMAT_RGB_FLOAT:   os << "vil_rgb<float>";  break;
     case VIL_PIXEL_FORMAT_RGB_DOUBLE:  os << "vil_rgb<double>";  break;
 
+#if VXL_HAS_INT_64
     case VIL_PIXEL_FORMAT_RGBA_INT_64:  os << "vil_rgba<vxl_int_64>";  break;
     case VIL_PIXEL_FORMAT_RGBA_UINT_64: os << "vil_rgba<vxl_uint_64>";  break;
+#endif
     case VIL_PIXEL_FORMAT_RGBA_INT_32:  os << "vil_rgba<vxl_int_32>";  break;
     case VIL_PIXEL_FORMAT_RGBA_UINT_32: os << "vil_rgba<vxl_uint_32>";  break;
     case VIL_PIXEL_FORMAT_RGBA_INT_16:  os << "vil_rgba<vxl_int_16>";  break;
