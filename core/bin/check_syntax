@@ -179,10 +179,45 @@ foreach $f (@FILES)
     print "$f\t\# definition of $1 has no space before > in $2\n";
     $printed = 1;
   }
-# Presence of VCL_*_INSTANTIATE inside *.cxx files
-  if ($f !~ m+/Templates/+ && $file_s =~ m+\n\s*(VCL_[_A-Z]*INSTANTIATE[_A-Z]*)+) {
+# Presence of VCL_*_INSTANTIATE in *.cxx files outside Templates directories
+  if ($f !~ m+/Templates/+ &&
+      $f !~ m+vcl/tests/test_vcl_rel_ops.cxx$+ &&
+      $f !~ m+oxl/vgui/examples/awf/glmovie.cxx$+ &&
+      $file_s =~ m+\n\s*(VCL_[_A-Z]*INSTANTIATE[_A-Z]*)+) {
     print "$f\t\# $1 may only be used in Templates subdirectories\n";
     $printed = 1;
+  }
+# Check correct file name of *.cxx files in Templates directories
+  $file_s =~ s/VCL_DO_NOT_INSTANTIATE/VCL_do_not_INSTANTIATE/g;
+  if ($f =~ m+/Templates/+ &&
+      $f !~ m+vcl/Templates/(complex|string)-instances\.cxx$+ &&
+      $f !~ m+vxl/vnl/algo/Templates/fsm_pack\.cxx$+ &&
+      $f !~ m+vxl/vbl/examples/Templates/smartptr-instances\.cxx$+ &&
+      $f !~ m+vxl/vnl/Templates/vnl_matrix_fixed_pairwise_ops\.cxx$+ &&
+      $file_s =~ m/\b([_A-Z0-9]*)_INSTANTIATE\s*\((.*)\)/) {
+    $class=$1; $class =~ tr/A-Z/a-z/; $class="$class<$2>";
+    $class =~ s/\bvcl_swap\s*\</vcl_algorithm\</g;
+    $class =~ s/\bvcl_sort\s*\<[^,]+\,/vcl_algorithm\</g;
+    $class =~ s/\bvcl_find_if\s*\<\s*vcl_vector\s*\<([^\005]+)\005\s*iterator.+/vcl_algorithm\<$1/g;
+    while ($file_s =~ m/\btypedef\s+([^;]*)\s(\S+)\s*\;/)
+    { $A=$1; $B=$2; $class =~ s/\b$B\b/$A/g; $file_s =~ s/\btypedef\s[^;]*\;//; }
+#   $class =~ s/\bconst\b//g;
+    $class =~ s/\s//g;
+    $class =~ s/\bconstchar/const_char/g; $class =~ s/(\w)const/$1_const/g;
+    $class =~ s/\,vcl_less\<[^<>]+\<[^<>]+\>[^<>]*\>//g;
+    $class =~ s/\,vcl_less\<[^<>]+\>//g;
+    $class =~ s/(vbl_io_sparse_array)_base\</$1\</g;
+    $class =~ s/\005/+-/g; $class =~ tr/<,*>/+.~-/; # \005 is ::
+    $class_q = $class; $class_q =~ s/([.+~-])/\\$1/g;
+    $class =~ s/unsigned/u/g; $class =~ s/signed/s/g; $class =~ s/longd/long_d/g;
+    $class_r = $class; $class_r =~ s/([.+~-])/\\$1/g;
+    $class_s = $class_q; $class_s =~ s/signed/signed_/g; $class_s =~ s/long/long_/g;
+    if ($f !~ m/\/$class_q\.cxx$/ &&
+        $f !~ m/\/$class_r\.cxx$/ &&
+        $f !~ m/\/$class_s\.cxx$/) {
+      print "$f\t\# should be renamed to $class.cxx\n";
+      $printed = 1;
+    }
   }
 
 # 14. Missing vcl_
