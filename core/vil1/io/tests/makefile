@@ -10,7 +10,7 @@ TESTS += test_memory_image_impl_io.cxx
 TESTS += test_memory_image_of_io.cxx
 TESTS += test_rgb_io.cxx
 TESTS += test_rgba_io.cxx
-TESTS += golden_test_vil_io.cxx
+TESTS += golden_test_vil1_io.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

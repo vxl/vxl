@@ -9,6 +9,10 @@ TESTMAIN = test_driver.cxx
 # general reader/saver tester
 TESTS += test_save_load_image.cxx
 
+# interface with vil:
+TESTS += test_vil.cxx
+PARAMS_test_vil := file_read_data
+
 # specific testers:
 
 # pnm:

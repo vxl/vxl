@@ -1,3 +1,3 @@
-IULIBS += -lvil2-algo
-include ${IUEROOT}/core/vil2/config.mk
+IULIBS += -lvil-algo
+include ${IUEROOT}/core/vil/config.mk
 include ${IUEROOT}/core/vnl/algo/config.mk

@@ -34,11 +34,7 @@ TESTS += test_sample_profile_bicub.cxx
 TESTS += test_sample_grid_bicub.cxx
 TESTS += test_resample_bicub.cxx
 
-# Conversion to/from vil1 images
-TESTS += test_vil1.cxx
-PARAMS_test_vil1 := file_read_data
-
-# vil2/algo
+# vil/algo
 TESTS += test_algo_gauss_filter.cxx
 TESTS += test_algo_gauss_reduce.cxx
 TESTS += test_algo_convolve_1d.cxx
@@ -60,13 +56,13 @@ TESTS += test_algo_find_4con_boundary.cxx
 TESTS += test_algo_fft.cxx
 TESTS += test_suppress_non_max.cxx
 
-#MINI_PROG_SOURCES += vil2_mil_gauss_general_timings.cxx
-#MINI_PROG_SOURCES += vil2_vil_compare_access_timings.cxx
-#MINI_PROG_SOURCES += vil2_test_access_timings.cxx
-#MINI_PROG_SOURCES += vil2_test_random_access_timings.cxx
-#MINI_PROG_SOURCES += vil2_test_access_timings_noplanes.cxx
-#MINI_PROG_SOURCES += vil2_test_pair_access_timings.cxx
-#MINI_PROG_SOURCES += vil2_vil_compare_function_timings.cxx
+#MINI_PROG_SOURCES += vil_mil_gauss_general_timings.cxx
+#MINI_PROG_SOURCES += vil_vil_compare_access_timings.cxx
+#MINI_PROG_SOURCES += vil_test_access_timings.cxx
+#MINI_PROG_SOURCES += vil_test_random_access_timings.cxx
+#MINI_PROG_SOURCES += vil_test_access_timings_noplanes.cxx
+#MINI_PROG_SOURCES += vil_test_pair_access_timings.cxx
+#MINI_PROG_SOURCES += vil_vil_compare_function_timings.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
