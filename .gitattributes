@@ -8,6 +8,7 @@
 *.png           -crlf
 *.sh             crlf=input
 *.tif           -crlf
+*.tiff          -crlf
 check_dsp        crlf=input
 check_syntax     crlf=input
 configure        crlf=input

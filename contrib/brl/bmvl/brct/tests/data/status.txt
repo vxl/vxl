@@ -1,0 +1,2 @@
+D:\projects\builds\contrib\brl\bmvl\brct\tests\data\minivan.tiff
+-475.863 191.584
