@@ -74,6 +74,9 @@ public:
   T& operator() (unsigned i) { return diagonal_[i]; }
   T const& operator() (unsigned i) const { return diagonal_[i]; }
 
+  T& operator[] (unsigned i) { return diagonal_[i]; }
+  T const& operator[] (unsigned i) const { return diagonal_[i]; }
+
   // iterators
 
   typedef typename vnl_vector<T>::iterator iterator;
