@@ -51,8 +51,8 @@ class vsrl_3d_output
 
   // the image buffers
 
-  vil_byte_buffer _buffer1;
-  vil_byte_buffer _buffer2;
+  vil_memory_image_of<int> _buffer1;
+  vil_memory_image_of<int> _buffer2;
 
   // the projective transform used to convert the initial values
   // of X into the true values of X

@@ -58,7 +58,7 @@ void vsrl_3d_output::write_output(char *filename)
   // implies an interpretation of (x,y,d,1)
   // is a valid reconstruction which should look pretty decent
 
-  if(!_matcher){
+  if (!_matcher){
     return;
   }
 
@@ -124,19 +124,19 @@ void vsrl_3d_output::write_output(char *filename)
   point_index.fill(-1);
   int index=0;
 
-  for(x=0;x<width;x++){
-    for(y=0;y<height;y++){
+  for (x=0;x<width;x++){
+    for (y=0;y<height;y++){
       // get the disparity
 
       difuse_d = step_diffusion.get_disparity(x,y);
       // difuse_d = sal_diffusion.get_disparity(x,y);
 
-      if(non_valid_point(x,y)){
+      if (non_valid_point(x,y)){
         difuse_d=0.0;
       }
 
       // d = _matcher->get_disparity(x,y);
-      if(difuse_d > 0-999){
+      if (difuse_d > 0-999){
 
         input(0,0)=x;
         input(1,0)=y;
@@ -153,8 +153,7 @@ void vsrl_3d_output::write_output(char *filename)
 
         W=output(3,0);
 
-        if(W){
-
+        if (W){
           // the normalized coordinates
 
           X=output(0,0)/W;
@@ -199,7 +198,7 @@ void vsrl_3d_output::write_output(char *filename)
   itx =tx_out.begin();
   ity = ty_out.begin();
 
-  for(iX=X_out.begin();iX!=X_out.end();iX++, iY++, iZ++,itx++, ity++)
+  for (iX=X_out.begin();iX!=X_out.end();iX++, iY++, iZ++,itx++, ity++)
     {
       file << (*iX) << " " << (*iY) << " " << (*iZ) << " " << *itx << " " << *ity <<
         vcl_endl;
@@ -220,9 +219,9 @@ void vsrl_3d_output::write_output(char *filename)
 
   // make all posible triangles
 
-  for(y=0;y<height-1;y++){
+  for (y=0;y<height-1;y++){
     y2=y+1;
-    for(x=0;x<width-1;x++){
+    for (x=0;x<width-1;x++){
       x2=x+1;
 
       in1=point_index(x,y);
@@ -232,7 +231,7 @@ void vsrl_3d_output::write_output(char *filename)
 
       // the first triangle
 
-      if(in1>=0 && in2 >=0 && in3>=0){
+      if (in1>=0 && in2 >=0 && in3>=0){
         vert1.push_back(in1);
         vert2.push_back(in2);
         vert3.push_back(in3);
@@ -240,7 +239,7 @@ void vsrl_3d_output::write_output(char *filename)
 
       // the second triangle
 
-      if(in1>=0 && in3 >=0 && in4>=0){
+      if (in1>=0 && in3 >=0 && in4>=0){
         vert1.push_back(in1);
         vert2.push_back(in3);
         vert3.push_back(in4);
@@ -256,7 +255,7 @@ void vsrl_3d_output::write_output(char *filename)
 
   vcl_vector<int>::iterator v1,v2,v3;
 
-  for(v1=vert1.begin(), v2=vert2.begin(), v3=vert3.begin(); v1<vert1.end();
+  for (v1=vert1.begin(), v2=vert2.begin(), v3=vert3.begin(); v1<vert1.end();
       v1++,v2++,v3++){
 
     file << *v1 << " " << *v2 << " " << *v3 << vcl_endl;
@@ -292,19 +291,19 @@ void vsrl_3d_output::read_projective_transform(char *filename)
   int row,col;
   double value;
 
-  for(row=0;row<4;row++){
-    for(col=0;col<4;col++){
+  for (row=0;row<4;row++){
+    for (col=0;col<4;col++){
       file >> value;
       vcl_cout << "Point r c " << value << " " << row << " " << col << vcl_endl;
 
-      if(col==2 || col==3){
+      if (col==2 || col==3){
         H(row,col)=value;
       }
 
-      if(col==1){
+      if (col==1){
         H(row,0)=value;
       }
-      if(col==0){
+      if (col==0){
         H(row,1)=value;
       }
     }
@@ -319,14 +318,14 @@ void vsrl_3d_output::read_projective_transform(char *filename)
 
 bool vsrl_3d_output::non_valid_point(int x, int y)
 {
-  if(x>=0 && x < _buffer1.width() && y>=0 && y <_buffer1.height()){
-    if(_buffer1(x,y)==3){
+  if (x>=0 && x < _buffer1.width() && y>=0 && y <_buffer1.height()){
+    if (_buffer1(x,y)==3){
       return true;
     }
   }
 
-  if(x>=0 && x < _buffer2.width() && y>=0 && y <_buffer2.height()){
-    if(_buffer2(x,y)==3){
+  if (x>=0 && x < _buffer2.width() && y>=0 && y <_buffer2.height()){
+    if (_buffer2(x,y)==3){
       return true;
     }
   }
@@ -341,29 +340,29 @@ void vsrl_3d_output::write_disparity_image(char *filename,vsrl_diffusion *diff)
 
   // make a buffer which has the size of image1
 
-  vil_byte_buffer buffer(_image1);
+  vil_memory_image_of<int> buffer(_image1);
 
   int x,y;
   int disparity;
   int value;
 
 
-  for(x=0;x<buffer.width();x++)
-    for(y=0;y<buffer.height();y++)
+  for (x=0;x<buffer.width();x++)
+    for (y=0;y<buffer.height();y++)
       buffer(x,y)=0;
 
   // go through each point, get the disparity and save it into the buffer
 
   int correlation_range = vsrl_parameters::instance()->correlation_range;
 
-  for(y=0;y<buffer.height();y++)
-    for(x=0;x<buffer.width();x++){
+  for (y=0;y<buffer.height();y++)
+    for (x=0;x<buffer.width();x++){
       disparity = (int)(diff->get_disparity(x,y));
       value = disparity + correlation_range+1;
-      if(value < 0)
+      if (value < 0)
         value = 0;
 
-      if(value>2*correlation_range+1)
+      if (value>2*correlation_range+1)
         value=0;
 
       buffer(x,y)=value;

@@ -31,7 +31,7 @@ class vsrl_results_dense_matcher : public vsrl_dense_matcher
 
  protected:
 
-  vil_byte_buffer _disparity; //!< memory images of the disparities
+  vil_memory_image_of<int> _disparity; //!< memory images of the disparities
 };
 
 #endif
