@@ -13,7 +13,8 @@
 #include <vcl_fstream.h>
 #include <vcl_vector.h>
 
-void osl_load_topology(char const *f, vcl_list<osl_edge*> &e, vcl_list<osl_vertex*> &v) {
+void osl_load_topology(char const *f, vcl_list<osl_edge*> &e, vcl_list<osl_vertex*> &v)
+{
   vcl_ifstream file(f);
   osl_load_topology(file, e, v);
 }
@@ -21,7 +22,8 @@ void osl_load_topology(char const *f, vcl_list<osl_edge*> &e, vcl_list<osl_verte
 #define streamok \
 { if (f.bad()) { vcl_cerr << __FILE__ ":" << __LINE__ << " stream bad at this point\n"; return; } }
 
-void osl_load_topology(vcl_istream &f, vcl_list<osl_edge*> &es, vcl_list<osl_vertex*> &vs) {
+void osl_load_topology(vcl_istream &f, vcl_list<osl_edge*> &es, vcl_list<osl_vertex*> &vs)
+{
   es.clear();
   vs.clear();
 
@@ -54,7 +56,7 @@ void osl_load_topology(vcl_istream &f, vcl_list<osl_edge*> &es, vcl_list<osl_ver
     unsigned int stashid;
     int id;
     float x, y;
-    f >> vcl_ws >> stashid >> id >> x >> y;
+    f >> vcl_ws >> vcl_hex >> stashid >> vcl_dec >> id >> x >> y;
     assert(stashid<vert.size() && !vert[stashid]);
     vert[stashid] = new osl_vertex(x, y, id);
 
@@ -76,7 +78,7 @@ void osl_load_topology(vcl_istream &f, vcl_list<osl_edge*> &es, vcl_list<osl_ver
   vcl_cerr << "reading " << numedges << " edges...\n";
   for (int i=0; i<numedges; ++i) {
     unsigned int stashid1 = vert.size(), stashid2 = vert.size();
-    f >> vcl_ws >> stashid1 >> stashid2;
+    f >> vcl_ws >> vcl_hex >> stashid1 >> stashid2 >> vcl_dec;
     assert(stashid1<vert.size() && vert[stashid1]);
     assert(stashid2<vert.size() && vert[stashid2]);
 
