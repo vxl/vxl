@@ -3,7 +3,7 @@
 // \brief A class to perform some of the functions of a Radial Basis Function Network
 //  Given a set of n training vectors, x_i (i=0..n-1), a set of internal weights are computed.
 //  Given a new vector, x, a vector of weights, w, are computed such that
-//  if x = x_i then w(i+1) = 1, w(j !=i+1) = 0  The sum of the weights 
+//  if x = x_i then w(i+1) = 1, w(j !=i+1) = 0  The sum of the weights
 //  should always be unity.
 //  If x is not equal to any training vector, the vector of weights varies
 //  smoothly.  This is useful for interpolation purposes.
@@ -16,7 +16,7 @@
 //  the basis of thin-plate spline warping.
 //
 //  I'm not sure if this is exactly an RBF network in the original
-//  definition. I'll check one day.  
+//  definition. I'll check one day.
 //
 // \author tfc
 
@@ -57,16 +57,16 @@ void mbl_rbf_network::build(const vnl_vector<double>* x, int n, double s)
 {
   // Copy training examples
   if (x_.size()!=n) x_.resize(n);
-  for (int i=0;i<n;++i) 
+  for (int i=0;i<n;++i)
     x_[i] = x[i];
-  
+
   // Compute distances
   vnl_matrix<double> D(n,n);
   double **D_data = D.data_array();
-  
+
   mbl_stats_1d d2_stats;
-  
-  for (int i=0;i<n;++i) 
+
+  for (int i=0;i<n;++i)
     D(i,i)=0.0;
 
   for (int i=1;i<n;++i)
@@ -77,14 +77,14 @@ void mbl_rbf_network::build(const vnl_vector<double>* x, int n, double s)
       D_data[j][i] = d2;
       d2_stats.obs(d2);
     }
-    
+
   if (s<=0)
   {
     s2_ = d2_stats.min();
   }
   else
     s2_ = s*s;
-  
+
   // Apply rbf() to elements of D
   for (int i=1;i<=n;++i)
     for (int j=1;j<=n;++j)
@@ -103,7 +103,7 @@ double mbl_rbf_network::distSqr(const vnl_vector<double>& x, const vnl_vector<do
     vcl_cerr<<"mbl_rbf_network::distSqr() x and y different sizes."<<vcl_endl;
     vcl_abort();
   }
-  
+
   const double *x_data = x.begin();
   const double *y_data = y.begin();
   double sum = 0.0;
@@ -112,7 +112,7 @@ double mbl_rbf_network::distSqr(const vnl_vector<double>& x, const vnl_vector<do
     double dx = x_data[i]-y_data[i];
     sum += dx*dx;
   }
-  
+
   return sum;
 }
 
@@ -134,18 +134,18 @@ void mbl_rbf_network::calcWts(vnl_vector<double>& w, const vnl_vector<double>& n
 {
   int n = x_.size();
   if (w.size()!=n) w.resize(n);
-  
+
   if (v_.size()!=n) v_.resize(n);
-  
+
   double* v_data = v_.begin();
   const vnl_vector<double>* x_data = x_.begin();
-  
+
   if (n==1)
   {
     w(1)=1.0;
     return;
   }
-  
+
   if (n==2)
   {
     // Use linear interpolation based on distance.
@@ -155,20 +155,20 @@ void mbl_rbf_network::calcWts(vnl_vector<double>& w, const vnl_vector<double>& n
     w(2) = 1.0 - w(1);
     return;
   }
-  
+
   for (int i=0;i<n;++i)
   {
     double v_i = rbf(new_x,x_data[i]);
     v_data[i+1] = v_i;
   }
-  
+
   mbl_matxvec_prod_mv(W_,v_,w);
-  
+
   if (sum_to_one_)
   {
     double* w_data = w.begin();
     double sum = 0.0;
-    for (int i=0;i<n;++i) 
+    for (int i=0;i<n;++i)
       sum+=w_data[i];
     if (sum!=0) w/=sum;
   }
@@ -178,9 +178,9 @@ void mbl_rbf_network::calcWts(vnl_vector<double>& w, const vnl_vector<double>& n
 // Method: version_no
 //=======================================================================
 
-short mbl_rbf_network::version_no() const 
-{ 
-  return 1; 
+short mbl_rbf_network::version_no() const
+{
+  return 1;
 }
 
 //=======================================================================
@@ -216,10 +216,10 @@ void mbl_rbf_network::b_write(vsl_b_ostream& bfs) const
   vsl_b_write(bfs,x_);
   vsl_b_write(bfs,W_);
   vsl_b_write(bfs,s2_);
-  
+
   if (sum_to_one_)
     vsl_b_write(bfs,short(1));
-  else 
+  else
     vsl_b_write(bfs,short(0));
 }
 
@@ -228,10 +228,10 @@ void mbl_rbf_network::b_write(vsl_b_ostream& bfs) const
 //=======================================================================
 
 // required if data is present in this class
-void mbl_rbf_network::b_read(vsl_b_istream& bfs) 
+void mbl_rbf_network::b_read(vsl_b_istream& bfs)
 {
   if (!bfs) return;
-  
+
   short version;
   short flag;
   vsl_b_read(bfs,version);
@@ -253,27 +253,25 @@ void mbl_rbf_network::b_read(vsl_b_istream& bfs)
 
 
 //=======================================================================
-// Associated function: operator<< 
+// Associated function: operator<<
 //=======================================================================
 
 void vsl_b_write(vsl_b_ostream& bfs, const mbl_rbf_network& b)
 {
   b.b_write(bfs);
-  
 }
 
 //=======================================================================
-// Associated function: operator>> 
+// Associated function: operator>>
 //=======================================================================
 
 void vsl_b_read(vsl_b_istream& bfs, mbl_rbf_network& b)
 {
   b.b_read(bfs);
-  
 }
 
 //=======================================================================
-// Associated function: operator<< 
+// Associated function: operator<<
 //=======================================================================
 
 vcl_ostream& operator<<(vcl_ostream& os,const mbl_rbf_network& b)
@@ -285,4 +283,3 @@ vcl_ostream& operator<<(vcl_ostream& os,const mbl_rbf_network& b)
   return os;
 }
 
-//==================< end of mbl_rbf_network.cxx >====================
