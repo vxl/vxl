@@ -6,6 +6,7 @@
 #include <vdgl/vdgl_interpolator_linear.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
+#include <vdgl/vdgl_digital_curve.h>
 #include <vsol/vsol_point_2d.h>
 #include <bxml/bxml_vsol_point_2d_input_converter.h>
 #include <bxml/bxml_vdgl_digital_curve_input_converter.h>
@@ -28,13 +29,13 @@ bool bxml_vdgl_digital_curve_input_converter::extract_from_dom(DOM_Node& node) {
   }
   else if (new_or_ref == 2) {
     // ref node
-    return extract_ref_object_atrs(node);
+    return (extract_ref_object_atrs(node));
   }
   else {
     extract_object_atrs(node);
   }
 
-  if (debug_)
+  if(debug_)
     vcl_cout << "discrete_curve_3d: id_=" << id_ << " n_points_=" << n_points_ << vcl_endl;;
 
   xs_.clear();
@@ -44,22 +45,22 @@ bool bxml_vdgl_digital_curve_input_converter::extract_from_dom(DOM_Node& node) {
   DOM_Node child = node.getFirstChild();
   while (child != 0) {
     int cnode_type = child.getNodeType();
-    if (cnode_type == DOM_Node::ELEMENT_NODE) {
+    if (cnode_type == DOM_Node::ELEMENT_NODE) {   
       bxml_vsol_point_2d_input_converter conv;
       if (conv.extract_from_dom(child)) {
-        bxml_generic_ptr gp_pt = conv.construct_object();
-        vsol_point_2d* pt = (vsol_point_2d*) gp_pt.get_vsol_spatial_object();
-        if (!pt) {
-          vcl_cout << "vdgl_digital_curve:Error,  unable to read point_2d" << vcl_endl;;
-          return false;
-        }
-        xs_.push_back(pt->x());
-        ys_.push_back(pt->y());
-        vcl_string& s = conv.id();
-        num_children++;
+	bxml_generic_ptr gp_pt = conv.construct_object();
+	vsol_point_2d* pt = (vsol_point_2d*) gp_pt.get_vsol_spatial_object();
+	if (!pt) {
+	  vcl_cout << "vdgl_digital_curve:Error,  unable to read point_2d" << vcl_endl;;
+	  return false;
+	}
+	xs_.push_back(pt->x());
+	ys_.push_back(pt->y());
+  vcl_string& s = conv.id();
+	num_children++;
       }
       else {
-        vcl_cout << "something wrong, no point_2d" << vcl_endl;;
+	vcl_cout << "something wrong, no point_2d" << vcl_endl;;
       }
     }
     child = child.getNextSibling();
@@ -84,6 +85,7 @@ bxml_generic_ptr bxml_vdgl_digital_curve_input_converter::construct_object()
     bxml_generic_ptr gp(dc);
     if ( !(id_ == null_id_) ) {
      obj_table_[id_] = gp;
+     //     vsol_curve_2d* c = dc->cast_to_curve();
      dc->ref();
     }
     return gp;
@@ -96,13 +98,13 @@ bxml_generic_ptr bxml_vdgl_digital_curve_input_converter::construct_object()
 
 bool bxml_vdgl_digital_curve_input_converter::extract_ref_object_atrs(DOM_Node& node) {
   id_ = get_string_attr(node,"id");
-
+  
   return true;
 }
 
 bool bxml_vdgl_digital_curve_input_converter::extract_object_atrs(DOM_Node& node) {
   id_ = get_string_attr(node,"id");
   n_points_ = get_int_attr(node,"n_points");
-
+  
   return true;
 }

@@ -1,8 +1,8 @@
-//:
-// \file
 #include <vcl_iostream.h> //cout
+#include <vcl_string.h>
 #include <dom/DOM_Element.hpp>
 #include <vsol/vsol_point_2d.h>
+#include <vsol/vsol_spatial_object_2d.h>
 #include <bxml/bxml_vsol_point_2d_input_converter.h>
 
 
@@ -38,7 +38,7 @@ bool bxml_vsol_point_2d_input_converter::extract_from_dom(DOM_Node& node) {
     return false;
   }
   else if (new_or_ref == 2) {
-    return extract_ref_object_atrs(node);
+    return (extract_ref_object_atrs(node));
   }
   else {
     extract_object_atrs(node);
@@ -63,6 +63,7 @@ bxml_generic_ptr bxml_vsol_point_2d_input_converter::construct_object()
      obj_table_[id_] = gp;
      p->ref();//Keep the point alive until it is used
     }
+    
     return gp;
   }
   else {

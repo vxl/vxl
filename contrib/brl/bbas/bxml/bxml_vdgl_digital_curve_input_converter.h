@@ -38,7 +38,6 @@ class bxml_vdgl_digital_curve_input_converter : public bxml_input_converter
   int n_points_;
   vcl_vector<float> xs_;
   vcl_vector<float> ys_;
-  vcl_vector<float> zs_;
 };
 
 #endif

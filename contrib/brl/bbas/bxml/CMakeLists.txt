@@ -4,12 +4,10 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 # find the path to the xerces libraries and includes
-INCLUDE(${BRL_INCLUDE_DIR}/bbas/bxml/find_xerces.cmake)
+INCLUDE(${BRL_INCLUDE_DIR}/bmods/find_xerces.cmake)
 
                                        
 IF(HAS_XERCES)
-
-ADD_DEFINITIONS(-DHAS_XERCES)
 
 # sources that depend on xerces being present
 SET(bxml_sources
