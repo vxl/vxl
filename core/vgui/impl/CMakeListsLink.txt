@@ -5,14 +5,14 @@
 #
 
 IF(WIN32)
-  SUBDIRS(mfc)
+  INCLUDE(${allvxl_SOURCE_DIR}/oxl/vgui/impl/mfc/CMakeListsLink.txt)
 ELSE(WIN32)
 
   INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindGTK.cmake)
 
   IF(GTK_LIBRARY)
 
-    SUBDIRS(gtk)
+    INCLUDE(${allvxl_SOURCE_DIR}/oxl/vgui/impl/gtk/CMakeListsLink.txt)
 
   ENDIF(GTK_LIBRARY)
 
@@ -20,10 +20,9 @@ ELSE(WIN32)
 
   IF(GLUT_LIBRARY)
 
-    SUBDIRS(glut)
+    INCLUDE(${allvxl_SOURCE_DIR}/oxl/vgui/impl/glut/CMakeListsLink.txt)
 
   ENDIF(GLUT_LIBRARY)
 
 
 ENDIF(WIN32)
-
