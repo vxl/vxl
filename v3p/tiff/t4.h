@@ -1,6 +1,8 @@
+/* ##Id */
+
 /*
- * Copyright (c) 1988, 1989, 1990, 1991, 1992 Sam Leffler
- * Copyright (c) 1991, 1992 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -27,7 +29,7 @@
 /*
  * CCITT T.4 1D Huffman runlength codes and
  * related definitions.  Given the small sizes
- * of these tables it might does not seem
+ * of these tables it does not seem
  * worthwhile to make code & length 8 bits.
  */
 typedef struct tableentry {
@@ -39,10 +41,10 @@ typedef struct tableentry {
 #define	EOL	0x001	/* EOL code value - 0000 0000 0000 1 */
 
 /* status values returned instead of a run length */
-#define	G3CODE_INVALID	-1
-#define	G3CODE_INCOMP	-2
-#define	G3CODE_EOL	-3
-#define	G3CODE_EOF	-4
+#define	G3CODE_EOL	-1	/* NB: ACT_EOL - ACT_WRUNT */
+#define	G3CODE_INVALID	-2	/* NB: ACT_INVALID - ACT_WRUNT */
+#define	G3CODE_EOF	-3	/* end of input data */
+#define	G3CODE_INCOMP	-4	/* incomplete run code */
 
 /*
  * Note that these tables are ordered such that the
@@ -53,11 +55,7 @@ typedef struct tableentry {
  *     during state generation (see mkg3states.c).
  */
 #ifdef G3CODES
-#if defined(__STDC__) || defined(__EXTENDED__) || USE_CONST
 const tableentry TIFFFaxWhiteCodes[] = {
-#else
-tableentry TIFFFaxWhiteCodes[] = {
-#endif
     { 8, 0x35, 0 },	/* 0011 0101 */
     { 6, 0x7, 1 },	/* 0001 11 */
     { 4, 0x7, 2 },	/* 0111 */
@@ -169,11 +167,7 @@ tableentry TIFFFaxWhiteCodes[] = {
     { 12, 0x0, G3CODE_INVALID },	/* 0000 0000 0000 */
 };
 
-#if defined(__STDC__) || defined(__EXTENDED__) || USE_CONST
 const tableentry TIFFFaxBlackCodes[] = {
-#else
-tableentry TIFFFaxBlackCodes[] = {
-#endif
     { 10, 0x37, 0 },	/* 0000 1101 11 */
     { 3, 0x2, 1 },	/* 010 */
     { 2, 0x3, 2 },	/* 11 */
@@ -285,12 +279,7 @@ tableentry TIFFFaxBlackCodes[] = {
     { 12, 0x0, G3CODE_INVALID },	/* 0000 0000 0000 */
 };
 #else
-#if defined(__STDC__) || defined(__EXTENDED__) || USE_CONST
 extern	const tableentry TIFFFaxWhiteCodes[];
 extern	const tableentry TIFFFaxBlackCodes[];
-#else
-extern	tableentry TIFFFaxWhiteCodes[];
-extern	tableentry TIFFFaxBlackCodes[];
-#endif /* !__STDC__ */
 #endif
 #endif /* _T4_ */

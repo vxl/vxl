@@ -1,6 +1,8 @@
+/* ##Header */
+
 /*
- * Copyright (c) 1988, 1989, 1990, 1991, 1992 Sam Leffler
- * Copyright (c) 1991, 1992 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -25,10 +27,10 @@
 /*
  * TIFF Library.
  */
-#include "tiffioP.h"
+#include "tiffiop.h"
 
-TIFFFlush(tif)
-	TIFF *tif;
+int
+TIFFFlush(TIFF* tif)
 {
 
 	if (tif->tif_mode != O_RDONLY) {
@@ -44,14 +46,14 @@ TIFFFlush(tif)
 /*
  * Flush buffered data to the file.
  */
-TIFFFlushData(tif)
-	TIFF *tif;
+int
+TIFFFlushData(TIFF* tif)
 {
 	if ((tif->tif_flags & TIFF_BEENWRITING) == 0)
 		return (0);
 	if (tif->tif_flags & TIFF_POSTENCODE) {
 		tif->tif_flags &= ~TIFF_POSTENCODE;
-		if (tif->tif_postencode && !(*tif->tif_postencode)(tif))
+		if (!(*tif->tif_postencode)(tif))
 			return (0);
 	}
 	return (TIFFFlushData1(tif));

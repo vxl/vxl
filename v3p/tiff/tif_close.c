@@ -1,6 +1,8 @@
+/* ##Header */
+
 /*
- * Copyright (c) 1988, 1989, 1990, 1991, 1992 Sam Leffler
- * Copyright (c) 1991, 1992 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -25,32 +27,24 @@
 /*
  * TIFF Library.
  */
-#include "tiffioP.h"
-
-#if USE_PROTOTYPES
-extern	int TIFFFreeDirectory(TIFF*);
-#else
-extern	int TIFFFreeDirectory();
-#endif
+#include "tiffiop.h"
 
 void
-TIFFClose(tif)
-	TIFF *tif;
+TIFFClose(TIFF* tif)
 {
 	if (tif->tif_mode != O_RDONLY)
 		/*
 		 * Flush buffered data and directory (if dirty).
 		 */
 		TIFFFlush(tif);
-	if (tif->tif_cleanup)
-		(*tif->tif_cleanup)(tif);
+	(*tif->tif_cleanup)(tif);
 	TIFFFreeDirectory(tif);
 	if (tif->tif_rawdata && (tif->tif_flags&TIFF_MYBUFFER))
-		free(tif->tif_rawdata);
-#ifdef MMAP_SUPPORT
+		_TIFFfree(tif->tif_rawdata);
 	if (isMapped(tif))
-		TIFFUnmapFileContents(tif->tif_base, tif->tif_size);
-#endif
-	(void) close(tif->tif_fd);
-	free((char *)tif);
+		TIFFUnmapFileContents(tif, tif->tif_base, tif->tif_size);
+	(void) TIFFCloseFile(tif);
+	if (tif->tif_fieldinfo)
+		_TIFFfree(tif->tif_fieldinfo);
+	_TIFFfree(tif);
 }

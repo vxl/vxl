@@ -1,6 +1,8 @@
+/* ##Header */
+
 /*
- * Copyright (c) 1991, 1992 Sam Leffler
- * Copyright (c) 1991, 1992 Silicon Graphics, Inc.
+ * Copyright (c) 1991-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -27,27 +29,24 @@
  *
  * Strip-organized Image Support Routines.
  */
-#include "tiffioP.h"
+#include "tiffiop.h"
 
 /*
  * Compute which strip a (row,sample) value is in.
  */
-u_int
-TIFFComputeStrip(tif, row, sample)
-	TIFF *tif;
-	u_long row;
-	u_int sample;
+tstrip_t
+TIFFComputeStrip(TIFF* tif, uint32 row, tsample_t sample)
 {
 	TIFFDirectory *td = &tif->tif_dir;
-	u_int strip;
+	tstrip_t strip;
 
 	strip = row / td->td_rowsperstrip;
 	if (td->td_planarconfig == PLANARCONFIG_SEPARATE) {
 		if (sample >= td->td_samplesperpixel) {
 			TIFFError(tif->tif_name,
-			    "%d: Sample out of range, max %d",
+			    "%u: Sample out of range, max %u",
 			    sample, td->td_samplesperpixel);
-			return (0);
+			return ((tstrip_t) 0);
 		}
 		strip += sample*td->td_stripsperimage;
 	}
@@ -57,32 +56,34 @@ TIFFComputeStrip(tif, row, sample)
 /*
  * Compute how many strips are in an image.
  */
-u_int
-TIFFNumberOfStrips(tif)
-	TIFF *tif;
+tstrip_t
+TIFFNumberOfStrips(TIFF* tif)
 {
 	TIFFDirectory *td = &tif->tif_dir;
+	tstrip_t nstrips;
 
-	return (td->td_rowsperstrip == 0xffffffff ?
+	nstrips = (td->td_rowsperstrip == (uint32) -1 ?
 	     (td->td_imagelength != 0 ? 1 : 0) :
-	     howmany(td->td_imagelength, td->td_rowsperstrip));
+	     TIFFhowmany(td->td_imagelength, td->td_rowsperstrip));
+	if (td->td_planarconfig == PLANARCONFIG_SEPARATE)
+		nstrips *= td->td_samplesperpixel;
+	return (nstrips);
 }
 
 /*
  * Compute the # bytes in a variable height, row-aligned strip.
  */
-u_long
-TIFFVStripSize(tif, nrows)
-	TIFF *tif;
-	u_long nrows;
+tsize_t
+TIFFVStripSize(TIFF* tif, uint32 nrows)
 {
 	TIFFDirectory *td = &tif->tif_dir;
 
-	if (nrows == (u_long)-1)
+	if (nrows == (uint32) -1)
 		nrows = td->td_imagelength;
 #ifdef YCBCR_SUPPORT
 	if (td->td_planarconfig == PLANARCONFIG_CONTIG &&
-	    td->td_photometric == PHOTOMETRIC_YCBCR) {
+	    td->td_photometric == PHOTOMETRIC_YCBCR &&
+	    !isUpSampled(tif)) {
 		/*
 		 * Packed YCbCr data contain one Cb+Cr for every
 		 * HorizontalSampling*VerticalSampling Y values.
@@ -91,25 +92,101 @@ TIFFVStripSize(tif, nrows)
 		 * horizontal/vertical subsampling area include
 		 * YCbCr data for the extended image.
 		 */
-		u_long w =
-		    roundup(td->td_imagewidth, td->td_ycbcrsubsampling[0]);
-		u_long scanline = howmany(w*td->td_bitspersample, 8);
-		u_long samplingarea =
+		tsize_t w =
+		    TIFFroundup(td->td_imagewidth, td->td_ycbcrsubsampling[0]);
+		tsize_t scanline = TIFFhowmany(w*td->td_bitspersample, 8);
+		tsize_t samplingarea =
 		    td->td_ycbcrsubsampling[0]*td->td_ycbcrsubsampling[1];
-		nrows = roundup(nrows, td->td_ycbcrsubsampling[1]);
-		/* NB: don't need howmany here 'cuz everything is rounded */
-		return (nrows*scanline + 2*(nrows*scanline / samplingarea));
+		nrows = TIFFroundup(nrows, td->td_ycbcrsubsampling[1]);
+		/* NB: don't need TIFFhowmany here 'cuz everything is rounded */
+		return ((tsize_t)
+		    (nrows*scanline + 2*(nrows*scanline / samplingarea)));
 	} else
 #endif
-		return (nrows * TIFFScanlineSize(tif));
+		return ((tsize_t)(nrows * TIFFScanlineSize(tif)));
 }
 
 /*
  * Compute the # bytes in a (row-aligned) strip.
+ *
+ * Note that if RowsPerStrip is larger than the
+ * recorded ImageLength, then the strip size is
+ * truncated to reflect the actual space required
+ * to hold the strip.
  */
-u_long
-TIFFStripSize(tif)
-	TIFF *tif;
+tsize_t
+TIFFStripSize(TIFF* tif)
 {
-	return (TIFFVStripSize(tif, tif->tif_dir.td_rowsperstrip));
+	TIFFDirectory* td = &tif->tif_dir;
+	uint32 rps = td->td_rowsperstrip;
+	if (rps > td->td_imagelength)
+		rps = td->td_imagelength;
+	return (TIFFVStripSize(tif, rps));
+}
+
+/*
+ * Compute a default strip size based on the image
+ * characteristics and a requested value.  If the
+ * request is <1 then we choose a strip size according
+ * to certain heuristics.
+ */
+uint32
+TIFFDefaultStripSize(TIFF* tif, uint32 request)
+{
+	return (*tif->tif_defstripsize)(tif, request);
+}
+
+uint32
+_TIFFDefaultStripSize(TIFF* tif, uint32 s)
+{
+	if ((int32) s < 1) {
+		/*
+		 * If RowsPerStrip is unspecified, try to break the
+		 * image up into strips that are approximately 8Kbytes.
+		 */
+		tsize_t scanline = TIFFScanlineSize(tif);
+		s = (uint32)(8*1024) / (scanline == 0 ? 1 : scanline);
+		if (s == 0)		/* very wide images */
+			s = 1;
+	}
+	return (s);
+}
+
+/*
+ * Return the number of bytes to read/write in a call to
+ * one of the scanline-oriented i/o routines.  Note that
+ * this number may be 1/samples-per-pixel if data is
+ * stored as separate planes.
+ */
+tsize_t
+TIFFScanlineSize(TIFF* tif)
+{
+	TIFFDirectory *td = &tif->tif_dir;
+	tsize_t scanline;
+	
+	scanline = td->td_bitspersample * td->td_imagewidth;
+	if (td->td_planarconfig == PLANARCONFIG_CONTIG)
+		scanline *= td->td_samplesperpixel;
+	return ((tsize_t) TIFFhowmany(scanline, 8));
+}
+
+/*
+ * Return the number of bytes required to store a complete
+ * decoded and packed raster scanline (as opposed to the
+ * I/O size returned by TIFFScanlineSize which may be less
+ * if data is store as separate planes).
+ */
+tsize_t
+TIFFRasterScanlineSize(TIFF* tif)
+{
+	TIFFDirectory *td = &tif->tif_dir;
+	tsize_t scanline;
+	
+	scanline = td->td_bitspersample * td->td_imagewidth;
+	if (td->td_planarconfig == PLANARCONFIG_CONTIG) {
+		scanline *= td->td_samplesperpixel;
+		return ((tsize_t) TIFFhowmany(scanline, 8));
+	} else
+		return ((tsize_t)
+		    TIFFhowmany(scanline, 8)*td->td_samplesperpixel);
 }

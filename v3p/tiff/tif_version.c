@@ -1,6 +1,7 @@
+/* ##Header */
 /*
- * Copyright (c) 1992 Sam Leffler
- * Copyright (c) 1992 Silicon Graphics, Inc.
+ * Copyright (c) 1992-1997 Sam Leffler
+ * Copyright (c) 1992-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -21,10 +22,13 @@
  * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
  * OF THIS SOFTWARE.
  */
-#include "tiffcompat.h"
+#include "tiffiop.h"
+#include "version.h"
 
-const char TIFFVersion[] = "\
-LIBTIFF, Version 3.0\n\
-Copyright (c) 1988, 1989, 1990, 1991, 1992 Sam Leffler\n\
-Copyright (c) 1991, 1992 Silicon Graphics, Inc.\
-";
+static const char TIFFVersion[] = VERSION;
+
+const char*
+TIFFGetVersion(void)
+{
+	return (TIFFVersion);
+}

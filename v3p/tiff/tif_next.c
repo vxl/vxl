@@ -1,6 +1,8 @@
+/* ##Header */
+
 /*
- * Copyright (c) 1988, 1989, 1990, 1991, 1992 Sam Leffler
- * Copyright (c) 1991, 1992 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -22,27 +24,13 @@
  * OF THIS SOFTWARE.
  */
 
+#include "tiffiop.h"
+#ifdef NEXT_SUPPORT
 /*
  * TIFF Library.
  *
  * NeXT 2-bit Grey Scale Compression Algorithm Support
  */
-#include "tiffioP.h"
-
-#if USE_PROTOTYPES
-static	int NeXTDecode(TIFF *, u_char *, int, u_int);
-#else
-static	int NeXTDecode();
-#endif
-
-TIFFInitNeXT(tif)
-	TIFF *tif;
-{
-	tif->tif_decoderow = NeXTDecode;
-	tif->tif_decodestrip = NeXTDecode;
-	tif->tif_decodetile = NeXTDecode;
-	return (1);
-}
 
 #define SETPIXEL(op, v) {			\
 	switch (npixels++ & 3) {		\
@@ -58,17 +46,15 @@ TIFFInitNeXT(tif)
 #define WHITE   	((1<<2)-1)
 
 static int
-NeXTDecode(tif, buf, occ, s)
-	TIFF *tif;
-	u_char *buf;
-	int occ;
-	u_int s;
+NeXTDecode(TIFF* tif, tidata_t buf, tsize_t occ, tsample_t s)
 {
 	register u_char *bp, *op;
-	register int cc, n;
-	u_char *row;
-	int scanline;
+	register tsize_t cc;
+	register int n;
+	tidata_t row;
+	tsize_t scanline;
 
+	(void) s;
 	/*
 	 * Each scanline is assumed to start off as all
 	 * white (we assume a PhotometricInterpretation
@@ -80,7 +66,7 @@ NeXTDecode(tif, buf, occ, s)
 	bp = (u_char *)tif->tif_rawcp;
 	cc = tif->tif_rawcc;
 	scanline = tif->tif_scanlinesize;
-	for (row = buf; occ > 0; occ -= scanline, row += scanline) {
+	for (row = buf; (long)occ > 0; occ -= scanline, row += scanline) {
 		n = *bp++, cc--;
 		switch (n) {
 		case LITERALROW:
@@ -89,7 +75,7 @@ NeXTDecode(tif, buf, occ, s)
 			 */
 			if (cc < scanline)
 				goto bad;
-			bcopy(bp, row, scanline);
+			_TIFFmemcpy(row, bp, scanline);
 			bp += scanline;
 			cc -= scanline;
 			break;
@@ -103,14 +89,14 @@ NeXTDecode(tif, buf, occ, s)
 			n = (bp[2] * 256) + bp[3];
 			if (cc < 4+n)
 				goto bad;
-			bcopy(bp+4, row+off, n);
+			_TIFFmemcpy(row+off, bp+4, n);
 			bp += 4+n;
 			cc -= 4+n;
 			break;
 		}
 		default: {
 			register int npixels = 0, grey;
-			int imagewidth = tif->tif_dir.td_imagewidth;
+			u_long imagewidth = tif->tif_dir.td_imagewidth;
 
 			/*
 			 * The scanline is composed of a sequence
@@ -135,11 +121,22 @@ NeXTDecode(tif, buf, occ, s)
 		}
 		}
 	}
-	tif->tif_rawcp = (char *)bp;
+	tif->tif_rawcp = (tidata_t) bp;
 	tif->tif_rawcc = cc;
 	return (1);
 bad:
-	TIFFError(tif->tif_name, "NeXTDecode: Not enough data for scanline %d",
-	    tif->tif_row);
+	TIFFError(tif->tif_name, "NeXTDecode: Not enough data for scanline %ld",
+	    (long) tif->tif_row);
 	return (0);
 }
+
+int
+TIFFInitNeXT(TIFF* tif, int scheme)
+{
+	(void) scheme;
+	tif->tif_decoderow = NeXTDecode;
+	tif->tif_decodestrip = NeXTDecode;
+	tif->tif_decodetile = NeXTDecode;
+	return (1);
+}
+#endif /* NEXT_SUPPORT */

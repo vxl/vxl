@@ -1,6 +1,8 @@
+/* ##Header */
+
 /*
- * Copyright (c) 1988, 1989, 1990, 1991, 1992 Sam Leffler
- * Copyright (c) 1991, 1992 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -22,12 +24,13 @@
  * OF THIS SOFTWARE.
  */
 
+#include "tiffiop.h"
+#ifdef THUNDER_SUPPORT
 /*
  * TIFF Library.
  *
  * ThunderScan 4-bit Compression Algorithm Support
  */
-#include "tiffioP.h"
 
 /*
  * ThunderScan uses an encoding scheme designed for
@@ -61,18 +64,20 @@ static const int threebitdeltas[8] = { 0, 1, 2, 3, 0, -3, -2, -1 };
 }
 
 static int
-ThunderDecode(tif, op, maxpixels)
-	TIFF *tif;
-	register u_char *op;
-	int maxpixels;
+ThunderDecode(TIFF* tif, tidata_t op, tsize_t maxpixels)
 {
 	register u_char *bp;
-	register int n, cc, lastpixel, npixels, delta;
+	register tsize_t cc;
+	u_int lastpixel;
+	tsize_t npixels;
 
 	bp = (u_char *)tif->tif_rawcp;
 	cc = tif->tif_rawcc;
-	lastpixel = npixels = 0;
+	lastpixel = 0;
+	npixels = 0;
 	while (cc > 0 && npixels < maxpixels) {
+		int n, delta;
+
 		n = *bp++, cc--;
 		switch (n & THUNDER_CODE) {
 		case THUNDER_RUN:		/* pixel run */
@@ -111,28 +116,25 @@ ThunderDecode(tif, op, maxpixels)
 			break;
 		}
 	}
-	tif->tif_rawcp = (char *)bp;
+	tif->tif_rawcp = (tidata_t) bp;
 	tif->tif_rawcc = cc;
 	if (npixels != maxpixels) {
 		TIFFError(tif->tif_name,
-		    "ThunderDecode: %s data at scanline %d (%d != %d)",
+		    "ThunderDecode: %s data at scanline %ld (%lu != %lu)",
 		    npixels < maxpixels ? "Not enough" : "Too much",
-		    tif->tif_row, npixels, maxpixels);
+		    (long) tif->tif_row, (long) npixels, (long) maxpixels);
 		return (0);
 	}
 	return (1);
 }
 
 static int
-ThunderDecodeRow(tif, buf, occ, s)
-	TIFF *tif;
-	u_char *buf;
-	int occ;
-	u_int s;
+ThunderDecodeRow(TIFF* tif, tidata_t buf, tsize_t occ, tsample_t s)
 {
-	u_char *row = buf;
+	tidata_t row = buf;
 	
-	while (occ > 0) {
+	(void) s;
+	while ((long)occ > 0) {
 		if (!ThunderDecode(tif, row, tif->tif_dir.td_imagewidth))
 			return (0);
 		occ -= tif->tif_scanlinesize;
@@ -141,10 +143,12 @@ ThunderDecodeRow(tif, buf, occ, s)
 	return (1);
 }
 
-TIFFInitThunderScan(tif)
-	TIFF *tif;
+int
+TIFFInitThunderScan(TIFF* tif, int scheme)
 {
+	(void) scheme;
 	tif->tif_decoderow = ThunderDecodeRow;
 	tif->tif_decodestrip = ThunderDecodeRow;
 	return (1);
 }
+#endif /* THUNDER_SUPPORT */

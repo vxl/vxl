@@ -1,6 +1,8 @@
+/* ##Header */
+
 /*
- * Copyright (c) 1988, 1989, 1990, 1991, 1992 Sam Leffler
- * Copyright (c) 1991, 1992 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -40,10 +42,37 @@
 #define	TIFF_BIGENDIAN		0x4d4d
 #define	TIFF_LITTLEENDIAN	0x4949
 
+#ifndef _TIFF_DATA_TYPEDEFS_
+#define _TIFF_DATA_TYPEDEFS_
+/*
+ * Intrinsic data types required by the file format:
+ *
+ * 8-bit quantities	int8/uint8
+ * 16-bit quantities	int16/uint16
+ * 32-bit quantities	int32/uint32
+ * strings		unsigned char*
+ */
+#ifdef __STDC__
+typedef	signed char int8;	/* NB: non-ANSI compilers may not grok */
+#else
+typedef	char int8;
+#endif
+typedef	unsigned char uint8;
+typedef	short int16;
+typedef	unsigned short uint16;	/* sizeof (uint16) must == 2 */
+#if defined(__alpha) || (defined(_MIPS_SZLONG) && _MIPS_SZLONG == 64)
+typedef	int int32;
+typedef	unsigned int uint32;	/* sizeof (uint32) must == 4 */
+#else
+typedef	long int32;
+typedef	unsigned long uint32;	/* sizeof (uint32) must == 4 */
+#endif
+#endif /* _TIFF_DATA_TYPEDEFS_ */
+
 typedef	struct {
-	unsigned short tiff_magic;	/* magic number (defines byte order) */
-	unsigned short tiff_version;	/* TIFF version number */
-	unsigned long  tiff_diroff;	/* byte offset to first directory */
+	uint16	tiff_magic;	/* magic number (defines byte order) */
+	uint16	tiff_version;	/* TIFF version number */
+	uint32	tiff_diroff;	/* byte offset to first directory */
 } TIFFHeader;
 
 /*
@@ -60,16 +89,17 @@ typedef	struct {
  * offset field.
  */
 typedef	struct {
-	unsigned short tdir_tag;	/* see below */
-	unsigned short tdir_type;	/* data type; see below */
-	unsigned long  tdir_count;	/* number of items; length in spec */
-	unsigned long  tdir_offset;	/* byte offset to field data */
+	uint16	tdir_tag;	/* see below */
+	uint16	tdir_type;	/* data type; see below */
+	uint32  tdir_count;	/* number of items; length in spec */
+	uint32  tdir_offset;	/* byte offset to field data */
 } TIFFDirEntry;
 
 /*
  * NB: In the comments below,
  *  - items marked with a + are obsoleted by revision 5.0,
  *  - items marked with a ! are introduced in revision 6.0.
+ *  - items marked with a % are introduced post revision 6.0.
  *  - items marked with a $ are obsoleted by revision 6.0.
  */
 
@@ -114,11 +144,26 @@ typedef	enum {
 #define	    COMPRESSION_CCITTFAX3	3	/* CCITT Group 3 fax encoding */
 #define	    COMPRESSION_CCITTFAX4	4	/* CCITT Group 4 fax encoding */
 #define	    COMPRESSION_LZW		5	/* Lempel-Ziv  & Welch */
-#define	    COMPRESSION_JPEG		6	/* !JPEG compression */
+#define	    COMPRESSION_OJPEG		6	/* !6.0 JPEG */
+#define	    COMPRESSION_JPEG		7	/* %JPEG DCT compression */
 #define	    COMPRESSION_NEXT		32766	/* NeXT 2-bit RLE */
 #define	    COMPRESSION_CCITTRLEW	32771	/* #1 w/ word alignment */
 #define	    COMPRESSION_PACKBITS	32773	/* Macintosh RLE */
 #define	    COMPRESSION_THUNDERSCAN	32809	/* ThunderScan RLE */
+/* codes 32895-32898 are reserved for ANSI IT8 TIFF/IT <dkelly@etsinc.com) */
+#define	    COMPRESSION_IT8CTPAD	32895   /* IT8 CT w/padding */
+#define	    COMPRESSION_IT8LW		32896   /* IT8 Linework RLE */
+#define	    COMPRESSION_IT8MP		32897   /* IT8 Monochrome picture */
+#define	    COMPRESSION_IT8BL		32898   /* IT8 Binary line art */
+/* compression codes 32908-32911 are reserved for Pixar */
+#define     COMPRESSION_PIXARFILM	32908   /* Pixar companded 10bit LZW */
+#define	    COMPRESSION_PIXARLOG	32909   /* Pixar companded 11bit ZIP */
+#define	    COMPRESSION_DEFLATE		32946	/* Deflate compression */
+/* compression code 32947 is reserved for Oceana Matrix <dev@oceana.com> */
+#define     COMPRESSION_DCS             32947   /* Kodak DCS encoding */
+#define	    COMPRESSION_JBIG		34661	/* ISO JBIG */
+#define     COMPRESSION_SGILOG		34676	/* SGI Log Luminance RLE */
+#define     COMPRESSION_SGILOG24	34677	/* SGI Log 24-bit packed */
 #define	TIFFTAG_PHOTOMETRIC		262	/* photometric interpretation */
 #define	    PHOTOMETRIC_MINISWHITE	0	/* min value is white */
 #define	    PHOTOMETRIC_MINISBLACK	1	/* min value is black */
@@ -128,6 +173,8 @@ typedef	enum {
 #define	    PHOTOMETRIC_SEPARATED	5	/* !color separations */
 #define	    PHOTOMETRIC_YCBCR		6	/* !CCIR 601 */
 #define	    PHOTOMETRIC_CIELAB		8	/* !1976 CIE L*a*b* */
+#define     PHOTOMETRIC_LOGL		32844	/* CIE Log2(L) */
+#define     PHOTOMETRIC_LOGLUV		32845	/* CIE Log2(L) (u',v') */
 #define	TIFFTAG_THRESHHOLDING		263	/* +thresholding used on data */
 #define	    THRESHHOLD_BILEVEL		1	/* b&w art scan */
 #define	    THRESHHOLD_HALFTONE		2	/* or dithered scan */
@@ -210,9 +257,11 @@ typedef	enum {
 #define	    CLEANFAXDATA_REGENERATED	1	/* receiver regenerated lines */
 #define	    CLEANFAXDATA_UNCLEAN	2	/* uncorrected errors exist */
 #define	TIFFTAG_CONSECUTIVEBADFAXLINES	328	/* max consecutive bad lines */
+#define	TIFFTAG_SUBIFD			330	/* subimage descriptors */
 #define	TIFFTAG_INKSET			332	/* !inks in separated image */
 #define	    INKSET_CMYK			1	/* !cyan-magenta-yellow-black */
 #define	TIFFTAG_INKNAMES		333	/* !ascii names of inks */
+#define	TIFFTAG_NUMBEROFINKS		334	/* !number of inks */
 #define	TIFFTAG_DOTRANGE		336	/* !0% and 100% dot codes */
 #define	TIFFTAG_TARGETPRINTER		337	/* !separation target */
 #define	TIFFTAG_EXTRASAMPLES		338	/* !info about extra samples */
@@ -220,12 +269,17 @@ typedef	enum {
 #define	    EXTRASAMPLE_ASSOCALPHA	1	/* !associated alpha data */
 #define	    EXTRASAMPLE_UNASSALPHA	2	/* !unassociated alpha data */
 #define	TIFFTAG_SAMPLEFORMAT		339	/* !data sample format */
-#define	    SAMPLEFORMAT_INT		1	/* !signed integer data */
-#define	    SAMPLEFORMAT_UINT		2	/* !unsigned integer data */
+#define	    SAMPLEFORMAT_UINT		1	/* !unsigned integer data */
+#define	    SAMPLEFORMAT_INT		2	/* !signed integer data */
 #define	    SAMPLEFORMAT_IEEEFP		3	/* !IEEE floating point data */
 #define	    SAMPLEFORMAT_VOID		4	/* !untyped data */
 #define	TIFFTAG_SMINSAMPLEVALUE		340	/* !variable MinSampleValue */
 #define	TIFFTAG_SMAXSAMPLEVALUE		341	/* !variable MaxSampleValue */
+#define	TIFFTAG_JPEGTABLES		347	/* %JPEG table stream */
+/*
+ * Tags 512-521 are obsoleted by Technical Note #2
+ * which specifies a revised JPEG-in-TIFF scheme.
+ */
 #define	TIFFTAG_JPEGPROC		512	/* !JPEG processing algorithm */
 #define	    JPEGPROC_BASELINE		1	/* !baseline sequential */
 #define	    JPEGPROC_LOSSLESS		14	/* !Huffman coded lossless */
@@ -243,9 +297,122 @@ typedef	enum {
 #define	    YCBCRPOSITION_CENTERED	1	/* !as in PostScript Level 2 */
 #define	    YCBCRPOSITION_COSITED	2	/* !as in CCIR 601-1 */
 #define	TIFFTAG_REFERENCEBLACKWHITE	532	/* !colorimetry info */
+/* tags 32952-32956 are private tags registered to Island Graphics */
+#define TIFFTAG_REFPTS			32953	/* image reference points */
+#define TIFFTAG_REGIONTACKPOINT		32954	/* region-xform tack point */
+#define TIFFTAG_REGIONWARPCORNERS	32955	/* warp quadrilateral */
+#define TIFFTAG_REGIONAFFINE		32956	/* affine transformation mat */
 /* tags 32995-32999 are private tags registered to SGI */
 #define	TIFFTAG_MATTEING		32995	/* $use ExtraSamples */
 #define	TIFFTAG_DATATYPE		32996	/* $use SampleFormat */
 #define	TIFFTAG_IMAGEDEPTH		32997	/* z depth of image */
 #define	TIFFTAG_TILEDEPTH		32998	/* z depth/data tile */
+/* tags 33300-33309 are private tags registered to Pixar */
+/*
+ * TIFFTAG_PIXAR_IMAGEFULLWIDTH and TIFFTAG_PIXAR_IMAGEFULLLENGTH
+ * are set when an image has been cropped out of a larger image.  
+ * They reflect the size of the original uncropped image.
+ * The TIFFTAG_XPOSITION and TIFFTAG_YPOSITION can be used
+ * to determine the position of the smaller image in the larger one.
+ */
+#define TIFFTAG_PIXAR_IMAGEFULLWIDTH    33300   /* full image size in x */
+#define TIFFTAG_PIXAR_IMAGEFULLLENGTH   33301   /* full image size in y */
+/* tag 33405 is a private tag registered to Eastman Kodak */
+#define TIFFTAG_WRITERSERIALNUMBER      33405   /* device serial number */
+/* tag 33432 is listed in the 6.0 spec w/ unknown ownership */
+#define	TIFFTAG_COPYRIGHT		33432	/* copyright string */
+/* 34016-34029 are reserved for ANSI IT8 TIFF/IT <dkelly@etsinc.com) */
+#define TIFFTAG_IT8SITE			34016	/* site name */
+#define TIFFTAG_IT8COLORSEQUENCE	34017	/* color seq. [RGB,CMYK,etc] */
+#define TIFFTAG_IT8HEADER		34018	/* DDES Header */
+#define TIFFTAG_IT8RASTERPADDING	34019	/* raster scanline padding */
+#define TIFFTAG_IT8BITSPERRUNLENGTH	34020	/* # of bits in short run */
+#define TIFFTAG_IT8BITSPEREXTENDEDRUNLENGTH 34021/* # of bits in long run */
+#define TIFFTAG_IT8COLORTABLE		34022	/* LW colortable */
+#define TIFFTAG_IT8IMAGECOLORINDICATOR	34023	/* BP/BL image color switch */
+#define TIFFTAG_IT8BKGCOLORINDICATOR	34024	/* BP/BL bg color switch */
+#define TIFFTAG_IT8IMAGECOLORVALUE	34025	/* BP/BL image color value */
+#define TIFFTAG_IT8BKGCOLORVALUE	34026	/* BP/BL bg color value */
+#define TIFFTAG_IT8PIXELINTENSITYRANGE	34027	/* MP pixel intensity value */
+#define TIFFTAG_IT8TRANSPARENCYINDICATOR 34028	/* HC transparency switch */
+#define TIFFTAG_IT8COLORCHARACTERIZATION 34029	/* color character. table */
+/* tags 34232-34236 are private tags registered to Texas Instruments */
+#define TIFFTAG_FRAMECOUNT              34232   /* Sequence Frame Count */
+/* tag 34750 is a private tag registered to Adobe? */
+#define TIFFTAG_ICCPROFILE		34675	/* ICC profile data */
+/* tag 34750 is a private tag registered to Pixel Magic */
+#define	TIFFTAG_JBIGOPTIONS		34750	/* JBIG options */
+/* tags 34908-34914 are private tags registered to SGI */
+#define	TIFFTAG_FAXRECVPARAMS		34908	/* encoded Class 2 ses. parms */
+#define	TIFFTAG_FAXSUBADDRESS		34909	/* received SubAddr string */
+#define	TIFFTAG_FAXRECVTIME		34910	/* receive time (secs) */
+/* tags 37439-37443 are registered to SGI <gregl@sgi.com> */
+#define TIFFTAG_STONITS			37439	/* Sample value to Nits */
+/* tag 34929 is a private tag registered to FedEx */
+#define	TIFFTAG_FEDEX_EDR		34929	/* unknown use */
+/* tag 65535 is an undefined tag used by Eastman Kodak */
+#define TIFFTAG_DCSHUESHIFTVALUES       65535   /* hue shift correction data */
+
+/*
+ * The following are ``pseudo tags'' that can be
+ * used to control codec-specific functionality.
+ * These tags are not written to file.  Note that
+ * these values start at 0xffff+1 so that they'll
+ * never collide with Aldus-assigned tags.
+ *
+ * If you want your private pseudo tags ``registered''
+ * (i.e. added to this file), send mail to sam@sgi.com
+ * with the appropriate C definitions to add.
+ */
+#define	TIFFTAG_FAXMODE			65536	/* Group 3/4 format control */
+#define	    FAXMODE_CLASSIC	0x0000		/* default, include RTC */
+#define	    FAXMODE_NORTC	0x0001		/* no RTC at end of data */
+#define	    FAXMODE_NOEOL	0x0002		/* no EOL code at end of row */
+#define	    FAXMODE_BYTEALIGN	0x0004		/* byte align row */
+#define	    FAXMODE_WORDALIGN	0x0008		/* word align row */
+#define	    FAXMODE_CLASSF	FAXMODE_NORTC	/* TIFF Class F */
+#define	TIFFTAG_JPEGQUALITY		65537	/* Compression quality level */
+/* Note: quality level is on the IJG 0-100 scale.  Default value is 75 */
+#define	TIFFTAG_JPEGCOLORMODE		65538	/* Auto RGB<=>YCbCr convert? */
+#define	    JPEGCOLORMODE_RAW	0x0000		/* no conversion (default) */
+#define	    JPEGCOLORMODE_RGB	0x0001		/* do auto conversion */
+#define	TIFFTAG_JPEGTABLESMODE		65539	/* What to put in JPEGTables */
+#define	    JPEGTABLESMODE_QUANT 0x0001		/* include quantization tbls */
+#define	    JPEGTABLESMODE_HUFF	0x0002		/* include Huffman tbls */
+/* Note: default is JPEGTABLESMODE_QUANT | JPEGTABLESMODE_HUFF */
+#define	TIFFTAG_FAXFILLFUNC		65540	/* G3/G4 fill function */
+#define	TIFFTAG_PIXARLOGDATAFMT		65549	/* PixarLogCodec I/O data sz */
+#define	    PIXARLOGDATAFMT_8BIT	0	/* regular u_char samples */
+#define	    PIXARLOGDATAFMT_8BITABGR	1	/* ABGR-order u_chars */
+#define	    PIXARLOGDATAFMT_11BITLOG	2	/* 11-bit log-encoded (raw) */
+#define	    PIXARLOGDATAFMT_12BITPICIO	3	/* as per PICIO (1.0==2048) */
+#define	    PIXARLOGDATAFMT_16BIT	4	/* signed short samples */
+#define	    PIXARLOGDATAFMT_FLOAT	5	/* IEEE float samples */
+/* 65550-65556 are allocated to Oceana Matrix <dev@oceana.com> */
+#define TIFFTAG_DCSIMAGERTYPE           65550   /* imager model & filter */
+#define     DCSIMAGERMODEL_M3           0       /* M3 chip (1280 x 1024) */
+#define     DCSIMAGERMODEL_M5           1       /* M5 chip (1536 x 1024) */
+#define     DCSIMAGERMODEL_M6           2       /* M6 chip (3072 x 2048) */
+#define     DCSIMAGERFILTER_IR          0       /* infrared filter */
+#define     DCSIMAGERFILTER_MONO        1       /* monochrome filter */
+#define     DCSIMAGERFILTER_CFA         2       /* color filter array */
+#define     DCSIMAGERFILTER_OTHER       3       /* other filter */
+#define TIFFTAG_DCSINTERPMODE           65551   /* interpolation mode */
+#define     DCSINTERPMODE_NORMAL        0x0     /* whole image, default */
+#define     DCSINTERPMODE_PREVIEW       0x1     /* preview of image (384x256) */
+#define TIFFTAG_DCSBALANCEARRAY         65552   /* color balance values */
+#define TIFFTAG_DCSCORRECTMATRIX        65553   /* color correction values */
+#define TIFFTAG_DCSGAMMA                65554   /* gamma value */
+#define TIFFTAG_DCSTOESHOULDERPTS       65555   /* toe & shoulder points */
+#define TIFFTAG_DCSCALIBRATIONFD        65556   /* calibration file desc */
+/* Note: quality level is on the ZLIB 1-9 scale. Default value is -1 */
+#define	TIFFTAG_ZIPQUALITY		65557	/* compression quality level */
+#define	TIFFTAG_PIXARLOGQUALITY		65558	/* PixarLog uses same scale */
+/* 65559 is allocated to Oceana Matrix <dev@oceana.com> */
+#define TIFFTAG_DCSCLIPRECTANGLE	65559	/* area of image to acquire */
+#define TIFFTAG_SGILOGDATAFMT		65560	/* SGILog user data format */
+#define     SGILOGDATAFMT_FLOAT		0	/* IEEE float samples */
+#define     SGILOGDATAFMT_16BIT		1	/* 16-bit samples */
+#define     SGILOGDATAFMT_RAW		2	/* uninterpreted data */
+#define     SGILOGDATAFMT_8BIT		3	/* 8-bit RGB monitor values */
 #endif /* _TIFF_ */

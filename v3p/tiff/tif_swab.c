@@ -1,6 +1,8 @@
+/* ##Header */
+
 /*
- * Copyright (c) 1988, 1989, 1990, 1991, 1992 Sam Leffler
- * Copyright (c) 1991, 1992 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -27,14 +29,13 @@
  *
  * XXX We assume short = 16-bits and long = 32-bits XXX
  */
-
-#include "tiffio.h"
+#include "tiffiop.h"
 
 #ifndef TIFFSwabShort
-void TIFFSwabShort(wp)
-	unsigned short *wp;
+void
+TIFFSwabShort(uint16* wp)
 {
-	register unsigned char *cp = (unsigned char *)wp;
+	register u_char* cp = (u_char*) wp;
 	int t;
 
 	t = cp[1]; cp[1] = cp[0]; cp[0] = t;
@@ -42,10 +43,10 @@ void TIFFSwabShort(wp)
 #endif
 
 #ifndef TIFFSwabLong
-void TIFFSwabLong(lp)
-	unsigned long *lp;
+void
+TIFFSwabLong(uint32* lp)
 {
-	register unsigned char *cp = (unsigned char *)lp;
+	register u_char* cp = (u_char*) lp;
 	int t;
 
 	t = cp[3]; cp[3] = cp[0]; cp[0] = t;
@@ -54,16 +55,15 @@ void TIFFSwabLong(lp)
 #endif
 
 #ifndef TIFFSwabArrayOfShort
-void TIFFSwabArrayOfShort(wp, n)
-	unsigned short *wp;
-	register int n;
+void
+TIFFSwabArrayOfShort(uint16* wp, register u_long n)
 {
-	register unsigned char *cp;
+	register u_char* cp;
 	register int t;
 
 	/* XXX unroll loop some */
 	while (n-- > 0) {
-		cp = (unsigned char *)wp;
+		cp = (u_char*) wp;
 		t = cp[1]; cp[1] = cp[0]; cp[0] = t;
 		wp++;
 	}
@@ -71,9 +71,8 @@ void TIFFSwabArrayOfShort(wp, n)
 #endif
 
 #ifndef TIFFSwabArrayOfLong
-void TIFFSwabArrayOfLong(lp, n)
-	register unsigned long *lp;
-	register int n;
+void
+TIFFSwabArrayOfLong(register uint32* lp, register u_long n)
 {
 	register unsigned char *cp;
 	register int t;
@@ -88,6 +87,33 @@ void TIFFSwabArrayOfLong(lp, n)
 }
 #endif
 
+#ifndef TIFFSwabDouble
+void
+TIFFSwabDouble(double *dp)
+{
+        register uint32* lp = (uint32*) dp;
+        uint32 t;
+
+	TIFFSwabArrayOfLong(lp, 2);
+	t = lp[0]; lp[0] = lp[1]; lp[1] = t;
+}
+#endif
+
+#ifndef TIFFSwabArrayOfDouble
+void
+TIFFSwabArrayOfDouble(double* dp, register u_long n)
+{
+	register uint32* lp = (uint32*) dp;
+        register uint32 t;
+
+	TIFFSwabArrayOfLong(lp, n + n);
+        while (n-- > 0) {
+		t = lp[0]; lp[0] = lp[1]; lp[1] = t;
+                lp += 2;
+        }
+}
+#endif
+
 /*
  * Bit reversal tables.  TIFFBitRevTable[<byte>] gives
  * the bit reversed value of <byte>.  Used in various
@@ -97,11 +123,7 @@ void TIFFSwabArrayOfLong(lp, n)
  * for algorithms that want an equivalent table that
  * do not reverse bit values.
  */
-#if defined(__STDC__) || defined(__EXTENDED__) || USE_CONST
-const unsigned char TIFFBitRevTable[256] = {
-#else
-unsigned char TIFFBitRevTable[256] = {
-#endif
+static const unsigned char TIFFBitRevTable[256] = {
     0x00, 0x80, 0x40, 0xc0, 0x20, 0xa0, 0x60, 0xe0,
     0x10, 0x90, 0x50, 0xd0, 0x30, 0xb0, 0x70, 0xf0,
     0x08, 0x88, 0x48, 0xc8, 0x28, 0xa8, 0x68, 0xe8,
@@ -135,11 +157,7 @@ unsigned char TIFFBitRevTable[256] = {
     0x0f, 0x8f, 0x4f, 0xcf, 0x2f, 0xaf, 0x6f, 0xef,
     0x1f, 0x9f, 0x5f, 0xdf, 0x3f, 0xbf, 0x7f, 0xff
 };
-#if defined(__STDC__) || defined(__EXTENDED__) || USE_CONST
-const unsigned char TIFFNoBitRevTable[256] = {
-#else
-unsigned char TIFFNoBitRevTable[256] = {
-#endif
+static const unsigned char TIFFNoBitRevTable[256] = {
     0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 
     0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 
     0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 
@@ -174,9 +192,14 @@ unsigned char TIFFNoBitRevTable[256] = {
     0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff, 
 };
 
-void TIFFReverseBits(cp, n)
-	register unsigned char *cp;
-	register int n;
+const unsigned char*
+TIFFGetBitRevTable(int reversed)
+{
+	return (reversed ? TIFFBitRevTable : TIFFNoBitRevTable);
+}
+
+void
+TIFFReverseBits(register u_char* cp, register u_long n)
 {
 	for (; n > 8; n -= 8) {
 		cp[0] = TIFFBitRevTable[cp[0]];

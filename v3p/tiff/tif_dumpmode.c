@@ -1,6 +1,8 @@
+/* ##Header */
+
 /*
- * Copyright (c) 1988, 1989, 1990, 1991, 1992 Sam Leffler
- * Copyright (c) 1991, 1992 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -27,71 +29,27 @@
  *
  * "Null" Compression Algorithm Support.
  */
-#include "tiffioP.h"
-#include <stdio.h>
-#include <assert.h>
-
-#if USE_PROTOTYPES
-static	int DumpModeEncode(TIFF *, u_char *, int, u_int);
-static	int DumpModeDecode(TIFF *, u_char *, int, u_int);
-static	int DumpModeSeek(TIFF *, int);
-#else
-static	int DumpModeEncode(), DumpModeDecode(), DumpModeSeek();
-#endif
-
-/*
- * Initialize dump mode.
- */
-TIFFInitDumpMode(tif)
-	register TIFF *tif;
-{
-	tif->tif_decoderow = DumpModeDecode;
-	tif->tif_decodestrip = DumpModeDecode;
-	tif->tif_decodetile = DumpModeDecode;
-	tif->tif_encoderow = DumpModeEncode;
-	tif->tif_encodestrip = DumpModeEncode;
-	tif->tif_encodetile = DumpModeEncode;
-	tif->tif_seek = DumpModeSeek;
-	return (1);
-}
+#include "tiffiop.h"
 
 /*
  * Encode a hunk of pixels.
  */
 static int
-DumpModeEncode(tif, pp, cc, s)
-	register TIFF *tif;
-	u_char *pp;
-	int cc;
-	u_int s;
+DumpModeEncode(TIFF* tif, tidata_t pp, tsize_t cc, tsample_t s)
 {
-	/*
-	 * This may be overzealous, but avoids having to
-	 * worry about byte alignment for the (potential)
-	 * byte-swapping work below.
-	 */
-	if (tif->tif_rawcc + cc > tif->tif_rawdatasize)
-		if (!TIFFFlushData1(tif))
-			return (-1);
+	(void) s;
 	while (cc > 0) {
-		int n;
-		if ((n = cc) > tif->tif_rawdatasize)
-			n = tif->tif_rawdatasize;
-		bcopy(pp, tif->tif_rawcp, n);
-		if (tif->tif_flags & TIFF_SWAB) {
-			switch (tif->tif_dir.td_bitspersample) {
-			case 16:
-				assert((n & 3) == 0);
-				TIFFSwabArrayOfShort((u_short *)tif->tif_rawcp,
-				    n/2);
-				break;
-			case 32:
-				assert((n & 15) == 0);
-				TIFFSwabArrayOfLong((u_long *)tif->tif_rawcp,
-				    n/4);
-				break;
-			}
-		}
+		tsize_t n;
+
+		n = cc;
+		if (tif->tif_rawcc + n > tif->tif_rawdatasize)
+			n = tif->tif_rawdatasize - tif->tif_rawcc;
+		/*
+		 * Avoid copy if client has setup raw
+		 * data buffer to avoid extra copy.
+		 */
+		if (tif->tif_rawcp != pp)
+			_TIFFmemcpy(tif->tif_rawcp, pp, n);
 		tif->tif_rawcp += n;
 		tif->tif_rawcc += n;
 		pp += n;
@@ -107,12 +65,9 @@ DumpModeEncode(tif, pp, cc, s)
  * Decode a hunk of pixels.
  */
 static int
-DumpModeDecode(tif, buf, cc, s)
-	register TIFF *tif;
-	u_char *buf;
-	int cc;
-	u_int s;
+DumpModeDecode(TIFF* tif, tidata_t buf, tsize_t cc, tsample_t s)
 {
+	(void) s;
 	if (tif->tif_rawcc < cc) {
 		TIFFError(tif->tif_name,
 		    "DumpModeDecode: Not enough data for scanline %d",
@@ -123,20 +78,8 @@ DumpModeDecode(tif, buf, cc, s)
 	 * Avoid copy if client has setup raw
 	 * data buffer to avoid extra copy.
 	 */
-	if (tif->tif_rawcp != (char*) buf)
-		bcopy(tif->tif_rawcp, buf, cc);
-	if (tif->tif_flags & TIFF_SWAB) {
-		switch (tif->tif_dir.td_bitspersample) {
-		case 16:
-			assert((cc & 3) == 0);
-			TIFFSwabArrayOfShort((u_short *)buf, cc/2);
-			break;
-		case 32:
-			assert((cc & 15) == 0);
-			TIFFSwabArrayOfLong((u_long *)buf, cc/4);
-			break;
-		}
-	}
+	if (tif->tif_rawcp != buf)
+		_TIFFmemcpy(buf, tif->tif_rawcp, cc);
 	tif->tif_rawcp += cc;
 	tif->tif_rawcc -= cc;
 	return (1);
@@ -146,11 +89,26 @@ DumpModeDecode(tif, buf, cc, s)
  * Seek forwards nrows in the current strip.
  */
 static int
-DumpModeSeek(tif, nrows)
-	register TIFF *tif;
-	int nrows;
+DumpModeSeek(TIFF* tif, uint32 nrows)
 {
 	tif->tif_rawcp += nrows * tif->tif_scanlinesize;
 	tif->tif_rawcc -= nrows * tif->tif_scanlinesize;
+	return (1);
+}
+
+/*
+ * Initialize dump mode.
+ */
+int
+TIFFInitDumpMode(TIFF* tif, int scheme)
+{
+	(void) scheme;
+	tif->tif_decoderow = DumpModeDecode;
+	tif->tif_decodestrip = DumpModeDecode;
+	tif->tif_decodetile = DumpModeDecode;
+	tif->tif_encoderow = DumpModeEncode;
+	tif->tif_encodestrip = DumpModeEncode;
+	tif->tif_encodetile = DumpModeEncode;
+	tif->tif_seek = DumpModeSeek;
 	return (1);
 }

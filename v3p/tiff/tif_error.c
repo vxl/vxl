@@ -1,6 +1,8 @@
+/* ##Header */
+
 /*
- * Copyright (c) 1988, 1989, 1990, 1991, 1992 Sam Leffler
- * Copyright (c) 1991, 1992 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -25,46 +27,23 @@
 /*
  * TIFF Library.
  */
-#define rename rename_foo
-#include <stdio.h>
-#undef rename
-#include "tiffioP.h"
-#include "prototypes.h"
-
-static void
-DECLARE3(defaultHandler, char*, module, char*, fmt, va_list, ap)
-{
-	if (module != NULL)
-		fprintf(stderr, "%s: ", module);
-	vfprintf(stderr, fmt, ap);
-	fprintf(stderr, ".\n");
-}
-
-static TIFFErrorHandler _errorHandler = defaultHandler;
+#include "tiffiop.h"
 
 TIFFErrorHandler
-DECLARE1(TIFFSetErrorHandler, TIFFErrorHandler, handler)
+TIFFSetErrorHandler(TIFFErrorHandler handler)
 {
-	TIFFErrorHandler prev = _errorHandler;
-	_errorHandler = handler;
+	TIFFErrorHandler prev = _TIFFerrorHandler;
+	_TIFFerrorHandler = handler;
 	return (prev);
 }
 
 void
-#if USE_PROTOTYPES
-TIFFError(char *module, char *fmt, ...)
-#else
-/*VARARGS2*/
-TIFFError(module, fmt, va_alist)
-	char *module;
-	char *fmt;
-	va_dcl
-#endif
+TIFFError(const char* module, const char* fmt, ...)
 {
-	if (_errorHandler) {
+	if (_TIFFerrorHandler) {
 		va_list ap;
-		VA_START(ap, fmt);
-		(*_errorHandler)(module, fmt, ap);
+		va_start(ap, fmt);
+		(*_TIFFerrorHandler)(module, fmt, ap);
 		va_end(ap);
 	}
 }

@@ -1,6 +1,8 @@
+/* ##Header */
+
 /*
- * Copyright (c) 1988, 1989, 1990, 1991, 1992 Sam Leffler
- * Copyright (c) 1991, 1992 Silicon Graphics, Inc.
+ * Copyright (c) 1988-1997 Sam Leffler
+ * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and 
  * its documentation for any purpose is hereby granted without fee, provided
@@ -25,227 +27,273 @@
 /*
  * TIFF Library.
  *
- * Known Directory Tag Support.
+ * Core Directory Tag Support.
  */
-#include "tiffioP.h"
-#include "prototypes.h"
-
-#ifndef TRUE
-#define	TRUE	1
-#define	FALSE	0
-#endif
+#include "tiffiop.h"
+#include <stdlib.h>
 
 /*
- * NB: THIS ARRAY IS ASSUMED TO BE SORTED BY TAG.
- *     Also, if a tag can have both LONG and SHORT types
+ * NB: NB: THIS ARRAY IS ASSUMED TO BE SORTED BY TAG.
+ *     If a tag can have both LONG and SHORT types
  *     then the LONG must be placed before the SHORT for
  *     writing to work properly.
  */
-const TIFFFieldInfo tiffFieldInfo[] = {
+static const TIFFFieldInfo tiffFieldInfo[] = {
     { TIFFTAG_SUBFILETYPE,	 1, 1, TIFF_LONG,	FIELD_SUBFILETYPE,
-      TRUE,	"SubfileType" },
+      TRUE,	FALSE,	"SubfileType" },
 /* XXX SHORT for compatibility w/ old versions of the library */
     { TIFFTAG_SUBFILETYPE,	 1, 1, TIFF_SHORT,	FIELD_SUBFILETYPE,
-      TRUE,	"SubfileType" },
+      TRUE,	FALSE,	"SubfileType" },
     { TIFFTAG_OSUBFILETYPE,	 1, 1, TIFF_SHORT,	FIELD_SUBFILETYPE,
-      TRUE,	"OldSubfileType" },
+      TRUE,	FALSE,	"OldSubfileType" },
     { TIFFTAG_IMAGEWIDTH,	 1, 1, TIFF_LONG,	FIELD_IMAGEDIMENSIONS,
-      FALSE,	"ImageWidth" },
+      FALSE,	FALSE,	"ImageWidth" },
     { TIFFTAG_IMAGEWIDTH,	 1, 1, TIFF_SHORT,	FIELD_IMAGEDIMENSIONS,
-      FALSE,	"ImageWidth" },
+      FALSE,	FALSE,	"ImageWidth" },
     { TIFFTAG_IMAGELENGTH,	 1, 1, TIFF_LONG,	FIELD_IMAGEDIMENSIONS,
-      TRUE,	"ImageLength" },
+      TRUE,	FALSE,	"ImageLength" },
     { TIFFTAG_IMAGELENGTH,	 1, 1, TIFF_SHORT,	FIELD_IMAGEDIMENSIONS,
-      TRUE,	"ImageLength" },
+      TRUE,	FALSE,	"ImageLength" },
     { TIFFTAG_BITSPERSAMPLE,	-1,-1, TIFF_SHORT,	FIELD_BITSPERSAMPLE,
-      FALSE,	"BitsPerSample" },
+      FALSE,	FALSE,	"BitsPerSample" },
     { TIFFTAG_COMPRESSION,	-1, 1, TIFF_SHORT,	FIELD_COMPRESSION,
-      FALSE,	"Compression" },
+      FALSE,	FALSE,	"Compression" },
     { TIFFTAG_PHOTOMETRIC,	 1, 1, TIFF_SHORT,	FIELD_PHOTOMETRIC,
-      FALSE,	"PhotometricInterpretation" },
+      FALSE,	FALSE,	"PhotometricInterpretation" },
     { TIFFTAG_THRESHHOLDING,	 1, 1, TIFF_SHORT,	FIELD_THRESHHOLDING,
-      TRUE,	"Threshholding" },
+      TRUE,	FALSE,	"Threshholding" },
     { TIFFTAG_CELLWIDTH,	 1, 1, TIFF_SHORT,	FIELD_IGNORE,
-      TRUE,	"CellWidth" },
+      TRUE,	FALSE,	"CellWidth" },
     { TIFFTAG_CELLLENGTH,	 1, 1, TIFF_SHORT,	FIELD_IGNORE,
-      TRUE,	"CellLength" },
+      TRUE,	FALSE,	"CellLength" },
     { TIFFTAG_FILLORDER,	 1, 1, TIFF_SHORT,	FIELD_FILLORDER,
-      FALSE,	"FillOrder" },
+      FALSE,	FALSE,	"FillOrder" },
     { TIFFTAG_DOCUMENTNAME,	-1,-1, TIFF_ASCII,	FIELD_DOCUMENTNAME,
-      TRUE,	"DocumentName" },
+      TRUE,	FALSE,	"DocumentName" },
     { TIFFTAG_IMAGEDESCRIPTION,	-1,-1, TIFF_ASCII,	FIELD_IMAGEDESCRIPTION,
-      TRUE,	"ImageDescription" },
+      TRUE,	FALSE,	"ImageDescription" },
     { TIFFTAG_MAKE,		-1,-1, TIFF_ASCII,	FIELD_MAKE,
-      TRUE,	"Make" },
+      TRUE,	FALSE,	"Make" },
     { TIFFTAG_MODEL,		-1,-1, TIFF_ASCII,	FIELD_MODEL,
-      TRUE,	"Model" },
+      TRUE,	FALSE,	"Model" },
     { TIFFTAG_STRIPOFFSETS,	-1,-1, TIFF_LONG,	FIELD_STRIPOFFSETS,
-      FALSE,	"StripOffsets" },
+      FALSE,	FALSE,	"StripOffsets" },
     { TIFFTAG_STRIPOFFSETS,	-1,-1, TIFF_SHORT,	FIELD_STRIPOFFSETS,
-      FALSE,	"StripOffsets" },
+      FALSE,	FALSE,	"StripOffsets" },
     { TIFFTAG_ORIENTATION,	 1, 1, TIFF_SHORT,	FIELD_ORIENTATION,
-      FALSE,	"Orientation" },
+      FALSE,	FALSE,	"Orientation" },
     { TIFFTAG_SAMPLESPERPIXEL,	 1, 1, TIFF_SHORT,	FIELD_SAMPLESPERPIXEL,
-      FALSE,	"SamplesPerPixel" },
+      FALSE,	FALSE,	"SamplesPerPixel" },
     { TIFFTAG_ROWSPERSTRIP,	 1, 1, TIFF_LONG,	FIELD_ROWSPERSTRIP,
-      FALSE,	"RowsPerStrip" },
+      FALSE,	FALSE,	"RowsPerStrip" },
     { TIFFTAG_ROWSPERSTRIP,	 1, 1, TIFF_SHORT,	FIELD_ROWSPERSTRIP,
-      FALSE,	"RowsPerStrip" },
+      FALSE,	FALSE,	"RowsPerStrip" },
     { TIFFTAG_STRIPBYTECOUNTS,	-1,-1, TIFF_LONG,	FIELD_STRIPBYTECOUNTS,
-      FALSE,	"StripByteCounts" },
+      FALSE,	FALSE,	"StripByteCounts" },
     { TIFFTAG_STRIPBYTECOUNTS,	-1,-1, TIFF_SHORT,	FIELD_STRIPBYTECOUNTS,
-      FALSE,	"StripByteCounts" },
+      FALSE,	FALSE,	"StripByteCounts" },
     { TIFFTAG_MINSAMPLEVALUE,	-2,-1, TIFF_SHORT,	FIELD_MINSAMPLEVALUE,
-      TRUE,	"MinSampleValue" },
+      TRUE,	FALSE,	"MinSampleValue" },
     { TIFFTAG_MAXSAMPLEVALUE,	-2,-1, TIFF_SHORT,	FIELD_MAXSAMPLEVALUE,
-      TRUE,	"MaxSampleValue" },
+      TRUE,	FALSE,	"MaxSampleValue" },
     { TIFFTAG_XRESOLUTION,	 1, 1, TIFF_RATIONAL,	FIELD_RESOLUTION,
-      FALSE,	"XResolution" },
+      FALSE,	FALSE,	"XResolution" },
     { TIFFTAG_YRESOLUTION,	 1, 1, TIFF_RATIONAL,	FIELD_RESOLUTION,
-      FALSE,	"YResolution" },
+      FALSE,	FALSE,	"YResolution" },
     { TIFFTAG_PLANARCONFIG,	 1, 1, TIFF_SHORT,	FIELD_PLANARCONFIG,
-      FALSE,	"PlanarConfiguration" },
+      FALSE,	FALSE,	"PlanarConfiguration" },
     { TIFFTAG_PAGENAME,		-1,-1, TIFF_ASCII,	FIELD_PAGENAME,
-      TRUE,	"PageName" },
+      TRUE,	FALSE,	"PageName" },
     { TIFFTAG_XPOSITION,	 1, 1, TIFF_RATIONAL,	FIELD_POSITION,
-      TRUE,	"XPosition" },
+      TRUE,	FALSE,	"XPosition" },
     { TIFFTAG_YPOSITION,	 1, 1, TIFF_RATIONAL,	FIELD_POSITION,
-      TRUE,	"YPosition" },
+      TRUE,	FALSE,	"YPosition" },
     { TIFFTAG_FREEOFFSETS,	-1,-1, TIFF_LONG,	FIELD_IGNORE,
-      FALSE,	"FreeOffsets" },
+      FALSE,	FALSE,	"FreeOffsets" },
     { TIFFTAG_FREEBYTECOUNTS,	-1,-1, TIFF_LONG,	FIELD_IGNORE,
-      FALSE,	"FreeByteCounts" },
+      FALSE,	FALSE,	"FreeByteCounts" },
     { TIFFTAG_GRAYRESPONSEUNIT,	 1, 1, TIFF_SHORT,	FIELD_IGNORE,
-      TRUE,	"GrayResponseUnit" },
+      TRUE,	FALSE,	"GrayResponseUnit" },
     { TIFFTAG_GRAYRESPONSECURVE,-1,-1, TIFF_SHORT,	FIELD_IGNORE,
-      TRUE,	"GrayResponseCurve" },
-    { TIFFTAG_GROUP3OPTIONS,	 1, 1, TIFF_LONG,	FIELD_GROUP3OPTIONS,
-      FALSE,	"Group3Options" },
-    { TIFFTAG_GROUP4OPTIONS,	 1, 1, TIFF_LONG,	FIELD_GROUP4OPTIONS,
-      FALSE,	"Group4Options" },
+      TRUE,	FALSE,	"GrayResponseCurve" },
     { TIFFTAG_RESOLUTIONUNIT,	 1, 1, TIFF_SHORT,	FIELD_RESOLUTIONUNIT,
-      FALSE,	"ResolutionUnit" },
+      FALSE,	FALSE,	"ResolutionUnit" },
     { TIFFTAG_PAGENUMBER,	 2, 2, TIFF_SHORT,	FIELD_PAGENUMBER,
-      TRUE,	"PageNumber" },
+      TRUE,	FALSE,	"PageNumber" },
     { TIFFTAG_COLORRESPONSEUNIT, 1, 1, TIFF_SHORT,	FIELD_IGNORE,
-      TRUE,	"ColorResponseUnit" },
+      TRUE,	FALSE,	"ColorResponseUnit" },
 #ifdef COLORIMETRY_SUPPORT
     { TIFFTAG_TRANSFERFUNCTION,	-1,-1, TIFF_SHORT,	FIELD_TRANSFERFUNCTION,
-      TRUE,	"TransferFunction" },
+      TRUE,	FALSE,	"TransferFunction" },
 #endif
     { TIFFTAG_SOFTWARE,		-1,-1, TIFF_ASCII,	FIELD_SOFTWARE,
-      TRUE,	"Software" },
+      TRUE,	FALSE,	"Software" },
     { TIFFTAG_DATETIME,		20,20, TIFF_ASCII,	FIELD_DATETIME,
-      TRUE,	"DateTime" },
+      TRUE,	FALSE,	"DateTime" },
     { TIFFTAG_ARTIST,		-1,-1, TIFF_ASCII,	FIELD_ARTIST,
-      TRUE,	"Artist" },
+      TRUE,	FALSE,	"Artist" },
     { TIFFTAG_HOSTCOMPUTER,	-1,-1, TIFF_ASCII,	FIELD_HOSTCOMPUTER,
-      TRUE,	"HostComputer" },
-    { TIFFTAG_PREDICTOR,	 1, 1, TIFF_SHORT,	FIELD_PREDICTOR,
-      FALSE,	"Predictor" },
+      TRUE,	FALSE,	"HostComputer" },
 #ifdef COLORIMETRY_SUPPORT
     { TIFFTAG_WHITEPOINT,	 2, 2, TIFF_RATIONAL,FIELD_WHITEPOINT,
-      TRUE,	"WhitePoint" },
+      TRUE,	FALSE,	"WhitePoint" },
     { TIFFTAG_PRIMARYCHROMATICITIES,6,6,TIFF_RATIONAL,FIELD_PRIMARYCHROMAS,
-      TRUE,	"PrimaryChromaticities" },
+      TRUE,	FALSE,	"PrimaryChromaticities" },
 #endif
     { TIFFTAG_COLORMAP,		-1,-1, TIFF_SHORT,	FIELD_COLORMAP,
-      TRUE,	"ColorMap" },
+      TRUE,	FALSE,	"ColorMap" },
     { TIFFTAG_HALFTONEHINTS,	 2, 2, TIFF_SHORT,	FIELD_HALFTONEHINTS,
-      TRUE,	"HalftoneHints" },
+      TRUE,	FALSE,	"HalftoneHints" },
     { TIFFTAG_TILEWIDTH,	 1, 1, TIFF_LONG,	FIELD_TILEDIMENSIONS,
-      FALSE,	"TileWidth" },
+      FALSE,	FALSE,	"TileWidth" },
     { TIFFTAG_TILEWIDTH,	 1, 1, TIFF_SHORT,	FIELD_TILEDIMENSIONS,
-      FALSE,	"TileWidth" },
+      FALSE,	FALSE,	"TileWidth" },
     { TIFFTAG_TILELENGTH,	 1, 1, TIFF_LONG,	FIELD_TILEDIMENSIONS,
-      FALSE,	"TileLength" },
+      FALSE,	FALSE,	"TileLength" },
     { TIFFTAG_TILELENGTH,	 1, 1, TIFF_SHORT,	FIELD_TILEDIMENSIONS,
-      FALSE,	"TileLength" },
+      FALSE,	FALSE,	"TileLength" },
     { TIFFTAG_TILEOFFSETS,	-1, 1, TIFF_LONG,	FIELD_STRIPOFFSETS,
-      FALSE,	"TileOffsets" },
+      FALSE,	FALSE,	"TileOffsets" },
     { TIFFTAG_TILEBYTECOUNTS,	-1, 1, TIFF_LONG,	FIELD_STRIPBYTECOUNTS,
-      FALSE,	"TileByteCounts" },
+      FALSE,	FALSE,	"TileByteCounts" },
     { TIFFTAG_TILEBYTECOUNTS,	-1, 1, TIFF_SHORT,	FIELD_STRIPBYTECOUNTS,
-      FALSE,	"TileByteCounts" },
-    { TIFFTAG_BADFAXLINES,	 1, 1, TIFF_LONG,	FIELD_BADFAXLINES,
-      TRUE,	"BadFaxLines" },
-    { TIFFTAG_BADFAXLINES,	 1, 1, TIFF_SHORT,	FIELD_BADFAXLINES,
-      TRUE,	"BadFaxLines" },
-    { TIFFTAG_CLEANFAXDATA,	 1, 1, TIFF_SHORT,	FIELD_CLEANFAXDATA,
-      TRUE,	"CleanFaxData" },
-    { TIFFTAG_CONSECUTIVEBADFAXLINES,1,1, TIFF_LONG,FIELD_BADFAXRUN,
-      TRUE,	"ConsecutiveBadFaxLines" },
-    { TIFFTAG_CONSECUTIVEBADFAXLINES,1,1, TIFF_SHORT,FIELD_BADFAXRUN,
-      TRUE,	"ConsecutiveBadFaxLines" },
+      FALSE,	FALSE,	"TileByteCounts" },
+#ifdef TIFFTAG_SUBIFD
+    { TIFFTAG_SUBIFD,		-1,-1, TIFF_LONG,	FIELD_SUBIFD,
+      TRUE,	TRUE,	"SubIFD" },
+#endif
 #ifdef CMYK_SUPPORT		/* 6.0 CMYK tags */
     { TIFFTAG_INKSET,		 1, 1, TIFF_SHORT,	FIELD_INKSET,
-      FALSE,	"InkSet" },
+      FALSE,	FALSE,	"InkSet" },
     { TIFFTAG_INKNAMES,		-1,-1, TIFF_ASCII,	FIELD_INKNAMES,
-      TRUE,	"InkNames" },
+      TRUE,	TRUE,	"InkNames" },
+    { TIFFTAG_NUMBEROFINKS,	 1, 1, TIFF_SHORT,	FIELD_NUMBEROFINKS,
+      TRUE,	FALSE,	"NumberOfInks" },
     { TIFFTAG_DOTRANGE,		 2, 2, TIFF_SHORT,	FIELD_DOTRANGE,
-      FALSE,	"DotRange" },
+      FALSE,	FALSE,	"DotRange" },
     { TIFFTAG_DOTRANGE,		 2, 2, TIFF_BYTE,	FIELD_DOTRANGE,
-      FALSE,	"DotRange" },
+      FALSE,	FALSE,	"DotRange" },
     { TIFFTAG_TARGETPRINTER,	-1,-1, TIFF_ASCII,	FIELD_TARGETPRINTER,
-      TRUE,	"TargetPrinter" },
+      TRUE,	FALSE,	"TargetPrinter" },
 #endif
-    { TIFFTAG_EXTRASAMPLES,	-1,-1, TIFF_SHORT,	FIELD_MATTEING,
-      FALSE,	"ExtraSamples" },
+    { TIFFTAG_EXTRASAMPLES,	-1,-1, TIFF_SHORT,	FIELD_EXTRASAMPLES,
+      FALSE,	FALSE,	"ExtraSamples" },
+/* XXX for bogus Adobe Photoshop v2.5 files */
+    { TIFFTAG_EXTRASAMPLES,	-1,-1, TIFF_BYTE,	FIELD_EXTRASAMPLES,
+      FALSE,	FALSE,	"ExtraSamples" },
     { TIFFTAG_SAMPLEFORMAT,	-1,-1, TIFF_SHORT,	FIELD_SAMPLEFORMAT,
-      FALSE,	"SampleFormat" },
-#ifdef notdef
+      FALSE,	FALSE,	"SampleFormat" },
     { TIFFTAG_SMINSAMPLEVALUE,	-2,-1, TIFF_ANY,	FIELD_SMINSAMPLEVALUE,
-      TRUE,	"SMinSampleValue" },
+      TRUE,	FALSE,	"SMinSampleValue" },
     { TIFFTAG_SMAXSAMPLEVALUE,	-2,-1, TIFF_ANY,	FIELD_SMAXSAMPLEVALUE,
-      TRUE,	"SMaxSampleValue" },
-#endif
-#ifdef JPEG_SUPPORT		/* 6.0 JPEG tags */
-    { TIFFTAG_JPEGPROC,		 1, 1, TIFF_SHORT,	FIELD_JPEGPROC,
-      FALSE,	"JPEGProc" },
-    { TIFFTAG_JPEGIFOFFSET,	 1, 1, TIFF_LONG,	FIELD_IGNORE,
-      FALSE,	"JPEGInterchangeFormat" },
-    { TIFFTAG_JPEGIFBYTECOUNT,	 1, 1, TIFF_LONG,	FIELD_IGNORE,
-      FALSE,	"JPEGInterchangeFormatLength" },
-    { TIFFTAG_JPEGRESTARTINTERVAL,1,1, TIFF_SHORT,FIELD_JPEGRESTARTINTERVAL,
-      FALSE,	"JPEGRestartInterval" },
-    { TIFFTAG_JPEGQTABLES,	-2,-1, TIFF_LONG,	FIELD_JPEGQTABLES,
-      FALSE,	"JPEGQTables" },
-    { TIFFTAG_JPEGDCTABLES,	-2,-1, TIFF_LONG,	FIELD_JPEGDCTABLES,
-      FALSE,	"JPEGDCTables" },
-    { TIFFTAG_JPEGACTABLES,	-2,-1, TIFF_LONG,	FIELD_JPEGACTABLES,
-      FALSE,	"JPEGACTables" },
-#endif
+      TRUE,	FALSE,	"SMaxSampleValue" },
 #ifdef YCBCR_SUPPORT		/* 6.0 YCbCr tags */
     { TIFFTAG_YCBCRCOEFFICIENTS, 3, 3, TIFF_RATIONAL,	FIELD_YCBCRCOEFFICIENTS,
-      FALSE,	"YCbCrCoefficients" },
+      FALSE,	FALSE,	"YCbCrCoefficients" },
     { TIFFTAG_YCBCRSUBSAMPLING,	 2, 2, TIFF_SHORT,	FIELD_YCBCRSUBSAMPLING,
-      FALSE,	"YCbCrSubsampling" },
+      FALSE,	FALSE,	"YCbCrSubsampling" },
     { TIFFTAG_YCBCRPOSITIONING,	 1, 1, TIFF_SHORT,	FIELD_YCBCRPOSITIONING,
-      FALSE,	"YCbCrPositioning" },
+      FALSE,	FALSE,	"YCbCrPositioning" },
 #endif
 #ifdef COLORIMETRY_SUPPORT
-    { TIFFTAG_REFERENCEBLACKWHITE,-1,-1,TIFF_RATIONAL,	FIELD_REFBLACKWHITE,
-      FALSE,	"ReferenceBlackWhite" },
+    { TIFFTAG_REFERENCEBLACKWHITE,6,6,TIFF_RATIONAL,	FIELD_REFBLACKWHITE,
+      TRUE,	FALSE,	"ReferenceBlackWhite" },
 /* XXX temporarily accept LONG for backwards compatibility */
-    { TIFFTAG_REFERENCEBLACKWHITE,-1,-1,TIFF_LONG,	FIELD_REFBLACKWHITE,
-      FALSE,	"ReferenceBlackWhite" },
+    { TIFFTAG_REFERENCEBLACKWHITE,6,6,TIFF_LONG,	FIELD_REFBLACKWHITE,
+      TRUE,	FALSE,	"ReferenceBlackWhite" },
 #endif
 /* begin SGI tags */
-    { TIFFTAG_MATTEING,		 1, 1, TIFF_SHORT,	FIELD_MATTEING,
-      FALSE,	"Matteing" },
+    { TIFFTAG_MATTEING,		 1, 1, TIFF_SHORT,	FIELD_EXTRASAMPLES,
+      FALSE,	FALSE,	"Matteing" },
     { TIFFTAG_DATATYPE,		-2,-1, TIFF_SHORT,	FIELD_SAMPLEFORMAT,
-      FALSE,	"DataType" },
+      FALSE,	FALSE,	"DataType" },
     { TIFFTAG_IMAGEDEPTH,	 1, 1, TIFF_LONG,	FIELD_IMAGEDEPTH,
-      FALSE,	"ImageDepth" },
+      FALSE,	FALSE,	"ImageDepth" },
     { TIFFTAG_IMAGEDEPTH,	 1, 1, TIFF_SHORT,	FIELD_IMAGEDEPTH,
-      FALSE,	"ImageDepth" },
+      FALSE,	FALSE,	"ImageDepth" },
     { TIFFTAG_TILEDEPTH,	 1, 1, TIFF_LONG,	FIELD_TILEDEPTH,
-      FALSE,	"TileDepth" },
+      FALSE,	FALSE,	"TileDepth" },
     { TIFFTAG_TILEDEPTH,	 1, 1, TIFF_SHORT,	FIELD_TILEDEPTH,
-      FALSE,	"TileDepth" },
+      FALSE,	FALSE,	"TileDepth" },
 /* end SGI tags */
-    { 0 }
+#ifdef ICC_SUPPORT
+    { TIFFTAG_ICCPROFILE,	-1,-3, TIFF_UNDEFINED,	FIELD_ICCPROFILE,
+      FALSE,	TRUE,	"ICC Profile" },
+#endif
+    { TIFFTAG_STONITS,		 1, 1, TIFF_DOUBLE,	FIELD_STONITS,
+      FALSE,	FALSE,	"StoNits" },
 };
+#define	N(a)	(sizeof (a) / sizeof (a[0]))
+
+void
+_TIFFSetupFieldInfo(TIFF* tif)
+{
+	if (tif->tif_fieldinfo) {
+		_TIFFfree(tif->tif_fieldinfo);
+		tif->tif_nfields = 0;
+	}
+	_TIFFMergeFieldInfo(tif, tiffFieldInfo, N(tiffFieldInfo));
+}
+
+static int
+tagCompare(const void* a, const void* b)
+{
+	const TIFFFieldInfo* ta = *(const TIFFFieldInfo**) a;
+	const TIFFFieldInfo* tb = *(const TIFFFieldInfo**) b;
+	/* NB: be careful of return values for 16-bit platforms */
+	if (ta->field_tag != tb->field_tag)
+		return (ta->field_tag < tb->field_tag ? -1 : 1);
+	else
+		return (tb->field_type < ta->field_type ? -1 : 1);
+}
+
+void
+_TIFFMergeFieldInfo(TIFF* tif, const TIFFFieldInfo info[], int n)
+{
+	TIFFFieldInfo** tp;
+	int i;
+
+	if (tif->tif_nfields > 0) {
+		tif->tif_fieldinfo = (TIFFFieldInfo**)
+		    _TIFFrealloc(tif->tif_fieldinfo,
+			(tif->tif_nfields+n) * sizeof (TIFFFieldInfo*));
+	} else {
+		tif->tif_fieldinfo = (TIFFFieldInfo**)
+		    _TIFFmalloc(n * sizeof (TIFFFieldInfo*));
+	}
+	tp = &tif->tif_fieldinfo[tif->tif_nfields];
+	for (i = 0; i < n; i++)
+		tp[i] = (TIFFFieldInfo*) &info[i];	/* XXX */
+	/*
+	 * NB: the core tags are presumed sorted correctly.
+	 */
+	if (tif->tif_nfields > 0)
+		qsort(tif->tif_fieldinfo, (size_t) (tif->tif_nfields += n),
+		    sizeof (TIFFFieldInfo*), tagCompare);
+	else
+		tif->tif_nfields += n;
+}
+
+void
+_TIFFPrintFieldInfo(TIFF* tif, FILE* fd)
+{
+	int i;
+
+	fprintf(fd, "%s: \n", tif->tif_name);
+	for (i = 0; i < tif->tif_nfields; i++) {
+		const TIFFFieldInfo* fip = tif->tif_fieldinfo[i];
+		fprintf(fd, "field[%2d] %5lu, %2d, %2d, %d, %2d, %5s, %5s, %s\n"
+			, i
+			, (unsigned long) fip->field_tag
+			, fip->field_readcount, fip->field_writecount
+			, fip->field_type
+			, fip->field_bit
+			, fip->field_oktochange ? "TRUE" : "FALSE"
+			, fip->field_passcount ? "TRUE" : "FALSE"
+			, fip->field_name
+		);
+	}
+}
 
 const int tiffDataWidth[] = {
     1,	/* nothing */
@@ -263,30 +311,61 @@ const int tiffDataWidth[] = {
     8,	/* TIFF_DOUBLE */
 };
 
-TIFFFieldInfo const *
-DECLARE2(TIFFFindFieldInfo, u_short, tag, TIFFDataType, dt)
+/*
+ * Return nearest TIFFDataType to the sample type of an image.
+ */
+TIFFDataType
+_TIFFSampleToTagType(TIFF* tif)
 {
-	static TIFFFieldInfo const *last = NULL;
-	register TIFFFieldInfo const *fip;
+	int bps = (int) TIFFhowmany(tif->tif_dir.td_bitspersample, 8);
+
+	switch (tif->tif_dir.td_sampleformat) {
+	case SAMPLEFORMAT_IEEEFP:
+		return (bps == 4 ? TIFF_FLOAT : TIFF_DOUBLE);
+	case SAMPLEFORMAT_INT:
+		return (bps <= 1 ? TIFF_SBYTE :
+		    bps <= 2 ? TIFF_SSHORT : TIFF_SLONG);
+	case SAMPLEFORMAT_UINT:
+		return (bps <= 1 ? TIFF_BYTE :
+		    bps <= 2 ? TIFF_SHORT : TIFF_LONG);
+	case SAMPLEFORMAT_VOID:
+		return (TIFF_UNDEFINED);
+	}
+	/*NOTREACHED*/
+	return (TIFF_UNDEFINED);
+}
+
+const TIFFFieldInfo*
+_TIFFFindFieldInfo(TIFF* tif, ttag_t tag, TIFFDataType dt)
+{
+	static const TIFFFieldInfo *last = NULL;
+	int i, n;
 
 	if (last && last->field_tag == tag &&
 	    (dt == TIFF_ANY || dt == last->field_type))
 		return (last);
 	/* NB: if table gets big, use sorted search (e.g. binary search) */
-	for (fip = tiffFieldInfo; fip->field_tag; fip++)
+	for (i = 0, n = tif->tif_nfields; i < n; i++) {
+		const TIFFFieldInfo* fip = tif->tif_fieldinfo[i];
 		if (fip->field_tag == tag &&
 		    (dt == TIFF_ANY || fip->field_type == dt))
 			return (last = fip);
-	return ((TIFFFieldInfo *)0);
+	}
+	return ((const TIFFFieldInfo *)0);
 }
 
-TIFFFieldInfo const *
-DECLARE1(TIFFFieldWithTag, u_short, tag)
+#include <assert.h>
+#include <stdio.h>
+
+const TIFFFieldInfo*
+_TIFFFieldWithTag(TIFF* tif, ttag_t tag)
 {
-	TIFFFieldInfo const *fip = TIFFFindFieldInfo(tag, TIFF_ANY);
-	if (fip)
-		return (fip);
-	TIFFError("TIFFFieldWithTag", "Internal error, unknown tag 0x%x", tag);
-	exit(-1);
-	/*NOTREACHED*/
+	const TIFFFieldInfo* fip = _TIFFFindFieldInfo(tif, tag, TIFF_ANY);
+	if (!fip) {
+		TIFFError("TIFFFieldWithTag",
+		    "Internal error, unknown tag 0x%x", (u_int) tag);
+		assert(fip != NULL);
+		/*NOTREACHED*/
+	}
+	return (fip);
 }
