@@ -58,7 +58,7 @@ bool vpro_grid_finder_process::execute()
   vpro_line_fit_process lfp(*((sdet_fit_lines_params*)this));
   lfp.add_input_topology(ep.get_output_topology());
   if (!lfp.execute())
-  { 
+  {
     this->clear_input();
     frame_scores_.push_back(0.0);
     return false;
@@ -77,7 +77,7 @@ bool vpro_grid_finder_process::execute()
   sdet_grid_finder gf(*((sdet_grid_finder_params*)this));
   gf.unset_verbose();
 
-  if (!gf.set_lines(img.width(), img.height(), lines))
+  if (!gf.set_lines(float(img.width()), float(img.height()), lines))
   {
     this->clear_input();
     frame_scores_.push_back(0.0);
@@ -85,7 +85,7 @@ bool vpro_grid_finder_process::execute()
   }
   //Get the backprojected grid
   vcl_vector<vsol_line_2d_sptr> mapped_lines;
-  if(!gf.compute_homography())
+  if (!gf.compute_homography())
     {
       vcl_cout << "compute_homography() failed\n";
       this->clear_input();
@@ -124,7 +124,7 @@ bool vpro_grid_finder_process::execute()
 
     gf.write_image_points(outstream);
     ++view_count;
-    
+
     vcl_cout << "total of "<<view_count<<" views written.\n";
   }
   this->clear_input();

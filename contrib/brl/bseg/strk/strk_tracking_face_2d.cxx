@@ -82,7 +82,7 @@ strk_joint_histf<T>::strk_joint_histf(unsigned int nbins)
 {
   if (nbins>0)
   {
-    delta_ = 256/nbins;
+    delta_ = T(256)/nbins;
     counts_.resize(nbins, nbins);
     counts_.fill(T(0));
   }
@@ -154,7 +154,7 @@ strk_double_histf<T>::strk_double_histf(unsigned int nbins)
 {
   if (nbins>0)
   {
-    delta_ = 360/nbins;
+    delta_ = T(360)/nbins;
     counts_.resize(nbins, T(0));
   }
 }
@@ -209,7 +209,7 @@ strk_double_joint_histf<T>::strk_double_joint_histf(unsigned int nbins)
 {
   if (nbins>0)
   {
-    delta_ = 360/nbins;
+    delta_ = T(360)/nbins;
     counts_.resize(nbins, nbins);
     counts_.fill(T(0));
   }
@@ -426,8 +426,8 @@ strk_tracking_face_2d::init_face_info(vil1_memory_image_of<float> const& image,
       if (use_grad)
       {
         float Ixi = Ix(x,y), Iyi = Iy(x,y);
-        double ang = (deg_rad*vcl_atan2(Iyi, Ixi))+180.0;
-        double mag = vcl_fabs(Ixi)+vcl_fabs(Iyi);
+        float ang = float(deg_rad*vcl_atan2(Iyi, Ixi))+180.f;
+        float mag = vcl_abs(Ixi)+vcl_abs(Iyi);
         model_gradient_dir_hist.upcount(ang, mag);
       }
     }
@@ -585,9 +585,9 @@ compute_intensity_mutual_information(vil1_memory_image_of<float> const& image)
         jent -= jp*(float)vcl_log(jp);
     }
   }
-  enti /= vcl_log(2.0);
-  jent /= vcl_log(2.0);
-  mi = model_intensity_entropy_ + enti - jent;
+  enti /= (float)vcl_log(2.0);
+  jent /= (float)vcl_log(2.0);
+  mi = float(model_intensity_entropy_) + enti - jent;
 #ifdef DEBUG
   vcl_cout << "Entropies:(M,I,J, MI)=(" << model_intensity_entropy_ << ' '
            << enti << ' ' << jent << ' ' << mi <<")\n";
@@ -611,17 +611,17 @@ compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
     return 0;
   double deg_rad = 180.0/vnl_math::pi;
   int i = 0, n = 0;
-  for (intf_->reset(); intf_->next(); i++)
+  for (intf_->reset(); intf_->next(); ++i, ++n)
   {
     int x = int(intf_->X()), y = int(intf_->Y());
     if (x<0||x>=width||y<0||y>=height)
       continue;
     float Ix0 = this->Ix(i), Iy0 = this->Iy(i);
-    double ang0 = (deg_rad*vcl_atan2(Iy0, Ix0))+180.0;
-    double mag0 = vcl_fabs(Ix0)+vcl_fabs(Iy0); // was: vcl_sqrt(Ix0*Ix0 + Iy0*Iy0);
+    float ang0 = float(deg_rad*vcl_atan2(Iy0, Ix0))+180.f;
+    float mag0 = vcl_abs(Ix0)+vcl_abs(Iy0); // was: vcl_sqrt(Ix0*Ix0 + Iy0*Iy0);
     float Ixi = Ix(x,y), Iyi = Iy(x,y);
-    double angi = (deg_rad*vcl_atan2(Iyi, Ixi))+180.0;
-    double magi = vcl_fabs(Ixi)+vcl_fabs(Iyi); // was: vcl_sqrt(Ixi*Ixi + Iyi*Iyi);
+    float angi = float(deg_rad*vcl_atan2(Iyi, Ixi))+180.f;
+    float magi = vcl_abs(Ixi)+vcl_abs(Iyi); // was: vcl_sqrt(Ixi*Ixi + Iyi*Iyi);
 #ifdef DEBUG
     vcl_cout << "ang0, mag0 " << ang0 << ' ' << mag0 << '\n'
              << "Ixi, Iyi " << Ixi << ' ' << Iyi << '\n'
@@ -629,7 +629,6 @@ compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
 #endif
     image_dir_hist.upcount(angi, magi);
     joint_dir_hist.upcount(ang0,mag0,angi,magi);
-    n++;
   }
   float npixf = (float)npix, nf = (float)n;
   float frac = nf/npixf;
@@ -656,9 +655,9 @@ compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
         jent -= jp*(float)vcl_log(jp);
     }
   }
-  enti /= vcl_log(2.0);
-  jent /= vcl_log(2.0);
-  mi = model_gradient_dir_entropy_ + enti - jent;
+  enti /= (float)vcl_log(2.0);
+  jent /= (float)vcl_log(2.0);
+  mi = float(model_gradient_dir_entropy_) + enti - jent;
 #ifdef DEBUG
   vcl_cout << "Dir Entropies:(M,I,J, MI)=(" << model_intensity_entropy_ << ' '
            << enti << ' ' << jent << ' ' << mi <<")\n";
