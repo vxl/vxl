@@ -64,7 +64,7 @@ bool operator==( const gst_vertex_2d& a, const gst_vertex_2d& b)
 
 
 // output
-ostream &operator <<( ostream &os, const gst_vertex_2d &v)
+vcl_ostream &operator <<( vcl_ostream &os, const gst_vertex_2d &v)
 {
   return os << v.x_ << " " << v.y_;
 }

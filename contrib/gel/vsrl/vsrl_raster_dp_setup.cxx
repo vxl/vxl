@@ -165,7 +165,7 @@ double vsrl_raster_dp_setup::execute()
   
   double total_cost = dyn_prog.execute();
   
-  cout << " Total cost is " << total_cost << endl;
+  vcl_cout << " Total cost is " << total_cost << vcl_endl;
 
   // dyn_prog.print_direct_costs(375);
   // dyn_prog.print_costs(375);

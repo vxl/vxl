@@ -16,7 +16,7 @@
 int main(int argc, char ** argv)
 {
   if(argc<2){
-    cout << "gui_dense_matcher im1 im2 disparity_file (params_file)" << endl;
+    vcl_cout << "gui_dense_matcher im1 im2 disparity_file (params_file)" << vcl_endl;
     return 0;
   }
   

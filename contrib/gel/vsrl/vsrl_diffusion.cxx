@@ -82,7 +82,7 @@ void vsrl_diffusion::write_image(char *file_name,vnl_matrix<double> *mat)
 
   // make a buffer which has the size of image1 
  
-  cout << "Writing file " << file_name << endl;
+  vcl_cout << "Writing file " << file_name << vcl_endl;
 
   vil_memory_image_of<vil_byte> buffer(_width,_height);
     

@@ -32,7 +32,7 @@ public:
   vcl_vector<gmvl_node_ref> get( const vcl_string type) const; 
 
   // input / output
-  friend ostream &operator<<( ostream &os, const gmvl_node_cache &c);
+  friend vcl_ostream &operator<<( vcl_ostream &os, const gmvl_node_cache &c);
 
 protected:
 
@@ -44,6 +44,6 @@ protected:
   void rebuild();
 };
 
-ostream &operator<<( ostream &os, const gmvl_node_cache &c);
+vcl_ostream &operator<<( vcl_ostream &os, const gmvl_node_cache &c);
 
 #endif

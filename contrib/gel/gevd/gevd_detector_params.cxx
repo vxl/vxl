@@ -1,6 +1,6 @@
 #include "gevd_detector_params.h"
 
-#include <strstream.h>
+#include <vcl_strstream.h>
 //#include <Basics/types.h>	// Gets AttributeValuePair
 
 //------------------------------------------------------------------------
@@ -102,88 +102,88 @@ bool gevd_detector_params::SanityCheck()
       minJump = 1.0;
     }
 
-  strstream msg;
+  vcl_strstream msg;
   bool valid = true;
   if (smooth <= 0)  	// Standard deviation of the smoothing kernel
   {
-    msg << "ERROR: Value of gaussian smoothing sigma is too low <=0" << ends;
+    msg << "ERROR: Value of gaussian smoothing sigma is too low <=0" << vcl_ends;
     smooth = 1.0;
     valid = false;
   }
   if (noise_weight < 0 || noise_weight > 1.0)  	// Noise weighting factor
   {
-    msg << "ERROR: Value of noise weight must be [0 1.0]" << ends;
+    msg << "ERROR: Value of noise weight must be [0 1.0]" << vcl_ends;
     noise_weight = .5;
     valid = false;
   }
   if (noise_multiplier <= 0)	// The over all noise scale factor
   {
-    msg << "ERROR: Value of noise scale factor is too low <=" << ends;
+    msg << "ERROR: Value of noise scale factor is too low <=" << vcl_ends;
     noise_multiplier = 1.0;
     valid = false;
   }
 
   if (minLength <= 3)	// Edgel chain length
   {
-    msg << "ERROR: Value of minimum chain length is too low <= 3" << ends;
+    msg << "ERROR: Value of minimum chain length is too low <= 3" << vcl_ends;
     minLength = 3;
     valid = false;
   }
 
   if (maxGap <= 0)	// Chain gaps to jump
   {
-    msg << "ERROR: Value of maximum gap is too low <0" << ends;
+    msg << "ERROR: Value of maximum gap is too low <0" << vcl_ends;
     maxGap = 2.2;
     valid = false;
   }
 
   if (minJump <= 0)	// Jump to close a junction
   {
-    msg << "ERROR: Value of min jump junction is too low <0" << ends;
+    msg << "ERROR: Value of min jump junction is too low <0" << vcl_ends;
     maxGap = 1.0;
     valid = false;
   }
 
   if (contourFactor <= 0)	// Threshold in following a contour
   {
-    msg << "ERROR: Value of contour factor is too low <0" << ends;
+    msg << "ERROR: Value of contour factor is too low <0" << vcl_ends;
     contourFactor = 1.0;
     valid = false;
   }
 
   if (junctionFactor<= 0)	// Threshold in following a junction
   {
-    msg << "ERROR: Value of junction factor is too low <0" << ends;
+    msg << "ERROR: Value of junction factor is too low <0" << vcl_ends;
     maxGap = 1.5;
     valid = false;
   }
   if(corner_angle < 5.0)
     {
-      msg << "ERROR: Value of corner angle is too low <5" << ends;
+      msg << "ERROR: Value of corner angle is too low <5" << vcl_ends;
     }
 
   if(separation < 1.0)
     {
-      msg << "ERROR: Value of corner separation is too low <1" << ends;
+      msg << "ERROR: Value of corner separation is too low <1" << vcl_ends;
     }
 
   if(min_corner_length < 5)
     {
-      msg << "ERROR: Value of minimum chain length too low <5" << ends;
+      msg << "ERROR: Value of minimum chain length too low <5" << vcl_ends;
     }
 
   if(cycle > 10)
     {
       msg << "ERROR: Value of number of corners in a 1-cycle is too "
-	   << "high > 10" << ends;
+	   << "high > 10" << vcl_ends;
     }
 
   if(ndimension > 3)
     {
       msg << "ERROR: Value of corner spatial dimension is too large >3" 
-	   << ends;
+	   << vcl_ends;
     }
-  msg << ends;
+  msg << vcl_ends;
   SetErrorMsg(msg.str());
   delete [] msg.str();
   return valid;

@@ -28,6 +28,6 @@ int main(void)
 
   //Here check for the length of the line
 
-  cout<<"Length: "<< myline->length();
+  vcl_cout<<"Length: "<< myline->length();
   return 0;
 }

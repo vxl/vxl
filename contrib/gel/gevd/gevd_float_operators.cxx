@@ -204,7 +204,7 @@ gevd_float_operators::CorrelationAlongAxis(const gevd_bufferxy& from,
 gevd_bufferxy* 
 gevd_float_operators::Read2dKernel(const char* filename)
 {
-  ifstream infile (filename, ios::in); // open the file
+  vcl_ifstream infile (filename, vcl_ios_in); // open the file
   if (!infile) 
     return NULL;
   int width, height;
@@ -584,7 +584,7 @@ bool
 gevd_float_operators::Read1dKernel(const char* filename,
 			     float*& kernel, int& radius, bool& evenp)
 {
-  ifstream infile (filename, ios::in); // open the file
+  vcl_ifstream infile (filename, vcl_ios_in); // open the file
   if (!infile) 
     return false;
   int width;
@@ -1852,10 +1852,10 @@ PrintAllPipes( float * y_s[],
 	       int length )
 {
   for ( int i=0; i<5; i++ ) {
-    cout << "\nPipe " << i << endl;
+    vcl_cout << "\nPipe " << i << vcl_endl;
     for ( int j=0; j<length; j++ ) {
-      cout << j << ",  yline[j] = " << y_s[i][j] << ",  wline[j] = "
-	   << w_s[i][j] << endl;
+      vcl_cout << j << ",  yline[j] = " << y_s[i][j] << ",  wline[j] = "
+	       << w_s[i][j] << vcl_endl;
     }
   }
 }
@@ -1989,8 +1989,8 @@ gevd_float_operators::ShrinkBy2_D (const gevd_bufferxy& from,
 void
 PrintPipe( float values[] )
 {
-  for ( int i=0; i<4; i++ ) cout << values[i] << ", ";
-  cout << values[4];
+  for ( int i=0; i<4; i++ ) vcl_cout << values[i] << ", ";
+  vcl_cout << values[4];
 }
 
 // // Create a smoothed and subsampled array of x values in the given
@@ -2390,7 +2390,7 @@ gevd_float_operators::FindWavelet (const int waveletno,
   default:
     ncof = 0;
     lo_filter = hi_filter = NULL;
-    cerr << "Unknown wavelet: " << waveletno << endl;
+    vcl_cerr << "Unknown wavelet: " << waveletno << vcl_endl;
     return false;
   }
   // find hi-filter wavelet, dual of the lo-filter wavelet
@@ -2410,7 +2410,7 @@ gevd_float_operators::FindWavelet (const int waveletno,
 	hi_filter[ctr-k] = sign * lo_filter[ctr+k];
 	sign = - sign;
       }
-      cerr << "Scale factor need to be fixed up too!!!" << endl;
+      vcl_cerr << "Scale factor need to be fixed up too!!!" << vcl_endl;
     }
     // find area of lo_filter and hi_filter
     float lo_area = 0;
@@ -2870,7 +2870,7 @@ gevd_float_operators::TestWavelets ()
 #endif
   
   {
-    cout << "Testing wavelet transforms on nd buffers" << endl;
+    vcl_cout << "Testing wavelet transforms on nd buffers" << vcl_endl;
     for (int ndim = 1; ndim <= 4; ndim++) {
       for (int s = 3; s <= 8; s++)
 	{
@@ -2893,10 +2893,10 @@ gevd_float_operators::TestWavelets ()
 	      if (err > max_err)
 		max_err = err;
 	    }
-	    cout << "  |dims| = " << ndim
+	    vcl_cout << "  |dims| = " << ndim
 	      << "  |data| = " << ntot
 		<< "  |wavelet| = " << k
-		  << "  |error| = " << max_err << endl;
+		  << "  |error| = " << max_err << vcl_endl;
 	  }
 	  delete [] data;
 	}
@@ -3789,7 +3789,7 @@ gevd_float_operators::BufferToFloat (const gevd_bufferxy& from, gevd_bufferxy& t
     break;
   case 3*sizeof(unsigned char): // assume RGB, and take luminance
     {
-      cerr << "gevd_float_operators::BufferToFloat: taking luminance of RGB buffer\n";
+      vcl_cerr << "gevd_float_operators::BufferToFloat: taking luminance of RGB buffer\n";
       const unsigned char* frombuf = (const unsigned char*) from.GetBuffer();
       float* tobuf = (float*) to.GetBuffer();
       for (int i = 0; i < size; i++)
@@ -3805,7 +3805,7 @@ gevd_float_operators::BufferToFloat (const gevd_bufferxy& from, gevd_bufferxy& t
     }
     break;
   default:
-    cerr << "Can only convert unsigned char/short/int/RGB buffer to float" << endl;
+    vcl_cerr << "Can only convert unsigned char/short/int/RGB buffer to float" << vcl_endl;
     return false;
   }
   return true;
@@ -3845,7 +3845,7 @@ gevd_float_operators::FloatToBuffer (const gevd_bufferxy& from, gevd_bufferxy& t
     }
     break;
   default:
-    cerr << "Can only convert float to unsigned char/short/RGB buffer" << endl;
+    vcl_cerr << "Can only convert float to unsigned char/short/RGB buffer" << vcl_endl;
     return false;
   }
   return true;

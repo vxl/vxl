@@ -15,7 +15,7 @@
 
 
 // input output
-ostream &operator<<( ostream &os, const vcl_vector<gmvl_node_ref> &r)
+vcl_ostream &operator<<( vcl_ostream &os, const vcl_vector<gmvl_node_ref> &r)
 {
   for( unsigned int i=0; i< r.size(); ++i) os << *r[i];
   return os;
@@ -28,7 +28,7 @@ vcl_vector<gmvl_node_ref> gmvl_load_raw_corners( const vcl_string filename)
 {
   vcl_vector<gmvl_node_ref> corners;
 
-  ifstream fin( filename.c_str());
+  vcl_ifstream fin( filename.c_str());
 
   while( fin.good() && !fin.eof())
     {
@@ -39,7 +39,7 @@ vcl_vector<gmvl_node_ref> gmvl_load_raw_corners( const vcl_string filename)
       if( fin.good()) corners.push_back( new gmvl_corner_node( x, y));
     }
 
-  cerr << "gmvl_load_raw_corners: loaded " << corners.size() << " corners from " << filename << endl;
+  vcl_cerr << "gmvl_load_raw_corners: loaded " << corners.size() << " corners from " << filename << vcl_endl;
   
   return corners;
 }
@@ -50,9 +50,9 @@ gmvl_node_ref gmvl_load_image( const vcl_string filename)
   gmvl_image_node *node= new gmvl_image_node( image);
 
   if( image)
-    cerr << "gmvl_load_image: load image from " << filename << endl;
+    vcl_cerr << "gmvl_load_image: load image from " << filename << vcl_endl;
   else
-    cerr << "gmvl_load_image: failed to load image from " << filename << endl;
+    vcl_cerr << "gmvl_load_image: failed to load image from " << filename << vcl_endl;
 
   return gmvl_node_ref( node);
 }

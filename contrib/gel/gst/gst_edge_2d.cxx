@@ -33,7 +33,7 @@ void gst_edge_2d::flip()
 }
 
 // output
-ostream &operator<<( ostream &os, gst_edge_2d &e)
+vcl_ostream &operator<<( vcl_ostream &os, gst_edge_2d &e)
 {
   return os << "<" << e.start_.ptr() << "," << e.end_.ptr() << ">";
 }

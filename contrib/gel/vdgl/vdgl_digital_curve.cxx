@@ -58,11 +58,11 @@ double vdgl_digital_curve::length() const
 
 void vdgl_digital_curve::set_p0(const vsol_point_2d_ref &)
 {
-  cerr << "vdgl_digital_curve::set_p0() not allowed and ignored..." << endl;
+  vcl_cerr << "vdgl_digital_curve::set_p0() not allowed and ignored..." << vcl_endl;
 }
 
 void vdgl_digital_curve::set_p1(const vsol_point_2d_ref &)
 {
-  cerr << "vdgl_digital_curve::set_p1() not allowed and ignored..." << endl;
+  vcl_cerr << "vdgl_digital_curve::set_p1() not allowed and ignored..." << vcl_endl;
 }
 

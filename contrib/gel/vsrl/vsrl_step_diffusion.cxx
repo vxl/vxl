@@ -147,7 +147,7 @@ void vsrl_step_diffusion::difuse_disparaty()
   // We then start the diffusion process to smooth things
   // out.
 
-  cout << "Starting to diffuse" << endl;
+  vcl_cout << "Starting to diffuse" << vcl_endl;
 
   vnl_matrix<double> mat1= (*_disparaty_matrix);
   vnl_matrix<double> T1 = mat1;
@@ -180,7 +180,7 @@ void vsrl_step_diffusion::difuse_disparaty()
   double low,hi;
 
    for(dif_num=0;dif_num<100;dif_num++){
-     cout << "Iteration " << dif_num << endl;
+     vcl_cout << "Iteration " << dif_num << vcl_endl;
 
      for(x=1;x<_width -1;x++){
       
@@ -224,7 +224,7 @@ void vsrl_step_diffusion::difuse_disparaty()
    // copy the new results 
    (*_disparaty_matrix)=(*mstar1);
    
-   cout << "Finished the diffusion " << endl;
+   vcl_cout << "Finished the diffusion " << vcl_endl;
 
 }
 

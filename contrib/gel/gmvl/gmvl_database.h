@@ -37,7 +37,7 @@ public:
   gmvl_node_ref find_tag( const vcl_string &string) const;
 
   // output
-  friend ostream &operator<<( ostream &os, const gmvl_database &db);
+  friend vcl_ostream &operator<<( vcl_ostream &os, const gmvl_database &db);
 
 protected:
 
@@ -45,7 +45,7 @@ protected:
   gmvl_connection_cache connectioncache_;
 };
 
-ostream &operator<<( ostream &os, const gmvl_database &db);
+vcl_ostream &operator<<( vcl_ostream &os, const gmvl_database &db);
 
 
 #endif
