@@ -7,7 +7,10 @@
 #include <vipl/section/vipl_section_iterator.h>
 #include <vipl/section/vipl_section_container.h>
 #include <vipl/section/vipl_section_descriptor.h>
-#include <vcl_cstdio.h> // for error message stuff
+#include <vipl/filter/vipl_filter_abs.h> // for default def of FILTER_IMPTR_INC_REFCOUNT
+#if 0
+#include <vcl_iostream.h> // for error message stuff
+#endif
 
 // Assigns the pointer directly. Does not deep copy them.
 template < class DataType >
@@ -45,7 +48,9 @@ template < class DataType >
 {
   if (ref_container()) FILTER_IMPTR_DEC_REFCOUNT(ref_container());
   if (ref_real_descriptor()) FILTER_IMPTR_DEC_REFCOUNT(ref_real_descriptor());
-  //vcl_cerr << "Warning: called unimplemented destructor\n";
+#if 0
+  vcl_cerr << "Warning: called unimplemented destructor\n";
+#endif
 }
 
 template < class DataType >

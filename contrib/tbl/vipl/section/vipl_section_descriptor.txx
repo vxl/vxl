@@ -6,8 +6,8 @@
 
 #include "vipl_section_descriptor.h"
 #include <vipl/section/vipl_section_container.h>
-#include <vcl_cstdio.h> // for some of the error messages
-#include <vcl_iostream.h>
+#include <vipl/filter/vipl_filter_abs.h> // for default def of FILTER_IMPTR_INC_REFCOUNT
+#include <vcl_iostream.h> // for error message stuff
 
 //: Assigns the pointers directly. Does not attempt to deep copy them.
 template < class DataType >
