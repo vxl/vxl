@@ -27,10 +27,10 @@ rgrl_initializer_prior( rgrl_mask_box              const& from_image_roi,
   : prior_scale_( prior_scale ),
     xform_index_( 0 )
 {
-  init_view_ = new rgrl_view( from_image_roi, to_image_roi, 
-                              initial_from_image_roi, 
-                              from_image_roi, xform_estimator, 
-                              xform_estimate, 
+  init_view_ = new rgrl_view( from_image_roi, to_image_roi,
+                              initial_from_image_roi,
+                              from_image_roi, xform_estimator,
+                              xform_estimate,
                               initial_resolution );
   xforms_.push_back( xform_estimate );
 }
@@ -45,8 +45,8 @@ rgrl_initializer_prior( rgrl_mask_box              const& from_image_roi,
   : prior_scale_( prior_scale ),
     xform_index_( 0 )
 {
-  init_view_ = new rgrl_view( from_image_roi, to_image_roi, from_image_roi, 
-                              from_image_roi, xform_estimator, xform_estimate, 
+  init_view_ = new rgrl_view( from_image_roi, to_image_roi, from_image_roi,
+                              from_image_roi, xform_estimator, xform_estimate,
                               initial_resolution );
   xforms_.push_back( xform_estimate );
 }
@@ -60,13 +60,13 @@ rgrl_initializer_prior( rgrl_mask_box              const& from_image_roi,
   : prior_scale_( prior_scale ),
     xform_index_( 0 )
 {
-  init_view_ = new rgrl_view( from_image_roi, from_image_roi, from_image_roi, 
-                              from_image_roi, xform_estimator, xform_estimate, 
+  init_view_ = new rgrl_view( from_image_roi, from_image_roi, from_image_roi,
+                              from_image_roi, xform_estimator, xform_estimate,
                               initial_resolution );
   xforms_.push_back( xform_estimate );
 }
 
-void 
+void
 rgrl_initializer_prior::add_prior_xform( rgrl_transformation_sptr   xform_estimate )
 {
   xforms_.push_back( xform_estimate );
@@ -77,7 +77,7 @@ rgrl_initializer_prior::
 next_initial( rgrl_view_sptr           & view,
               rgrl_scale_sptr          & prior_scale )
 {
-  if ( xform_index_ == xforms_.size())
+  if ( xform_index_ >= xforms_.size())
     return false;
 
   view = new rgrl_view( init_view_->from_image_roi(),
