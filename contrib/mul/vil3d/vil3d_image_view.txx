@@ -614,7 +614,9 @@ bool vil3d_image_view_deep_equality(const vil3d_image_view<T> &lhs,
 
 #define VIL3D_IMAGE_VIEW_INSTANTIATE(T) \
 template class vil3d_image_view<T >; \
+VCL_DEFINE_SPECIALIZATION vcl_string vil3d_image_view<T >::is_a() const \
+{  return vcl_string("vil3d_image_view<" #T ">"); } \
 template bool vil3d_image_view_deep_equality(const vil3d_image_view<T >&, \
-                                            const vil3d_image_view<T >&)
+                                            const vil3d_image_view<T >&);
 
 #endif // vil3d_image_view_txx_

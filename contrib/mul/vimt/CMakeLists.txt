@@ -4,7 +4,7 @@ SET(vimt_sources
   vimt_image.cxx vimt_image.h
   vimt_transform_2d.cxx vimt_transform_2d.h
   vimt_image_2d.h
-  vimt_image_2d_of.cxx vimt_image_2d_of.txx vimt_image_2d_of.h
+  vimt_image_2d_of.txx vimt_image_2d_of.h
   vimt_crop.h
   vimt_image_pyramid.cxx vimt_image_pyramid.txx vimt_image_pyramid.h
   vimt_image_pyramid_builder.cxx vimt_image_pyramid_builder.h
