@@ -22,6 +22,7 @@ ADD_EXECUTABLE( test_vcl_set test_vcl_set.cxx)
 ADD_EXECUTABLE( test_vcl_stlfwd test_vcl_stlfwd.cxx)
 ADD_EXECUTABLE( test_vcl_string test_vcl_string.cxx)
 ADD_EXECUTABLE( test_vcl_vector test_vcl_vector.cxx)
+ADD_EXECUTABLE( test_vcl_cctype test_vcl_cctype.cxx)
 
 ADD_TEST( vcl_tests vcl_tests)
 ADD_TEST( vcl_test_vcl_algorithm test_vcl_algorithm)
@@ -43,4 +44,5 @@ ADD_TEST( vcl_test_vcl_set test_vcl_set)
 ADD_TEST( vcl_test_vcl_stlfwd test_vcl_stlfwd)
 ADD_TEST( vcl_test_vcl_string test_vcl_string)
 ADD_TEST( vcl_test_vcl_vector test_vcl_vector)
+ADD_TEST( vcl_test_vcl_cctype test_vcl_cctype)
 

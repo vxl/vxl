@@ -13,6 +13,10 @@
 # include <ctype.h>
 # define vcl_generic_cctype_STD /* */
 # include "generic/vcl_cctype.h"
+#elif defined(VCL_WIN32)
+  // VC doesn't put the cctype in STD
+# define vcl_generic_cctype_STD /* */
+# include "generic/vcl_cctype.h"   
 #else
 # include "iso/vcl_cctype.h"
 #endif
