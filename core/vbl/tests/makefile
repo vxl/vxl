@@ -18,7 +18,7 @@ TESTS += vbl_test_sparse_array_2d.cxx
 TESTS += vbl_test_sparse_array_3d.cxx
 TESTS += vbl_test_sprintf.cxx
 TESTS += vbl_test_smart_ptr.cxx
-#TESTS += vbl_test_basic_relation.cxx # FIXME
+#TESTS += vbl_test_basic_relation.cxx # FIXME - vcl_hash_map does not exist
 
 IULIBS := -lvbl-test -lvbl
 
