@@ -24,8 +24,8 @@
 //  im.top_left_ptr()[i*im.istep() + j*im.jstep() + p*im.planestep]
 //  The actual image data is either allocated by the class
 //  (using resize), in which case it is deleted
-//  only when it has no views observing it, or is allocated outside (and is not deleted on
-//  destruction).  This allows external images to be accessed
+//  only when it has no views observing it, or is allocated outside (and is not
+//  deleted on destruction).  This allows external images to be accessed
 //  without a deep copy.
 //
 //  Note that copying one vil2_image_view<T> to another takes a shallow
@@ -35,7 +35,7 @@
 template <class T>
 class vil2_image_view : public vil2_image_view_base
 {
-protected:
+ protected:
   //: Pointer to pixel at origin.
   T * top_left_;
   //: Add this to a pixel pointer to move one column left.
@@ -49,56 +49,54 @@ protected:
   vil2_memory_chunk_sptr ptr_;
 
   //: Disconnect this view from the underlying data,
-  void release_memory()
-  { ptr_ = 0; }
+  void release_memory() { ptr_ = 0; }
 
 
+ public:
 
-public:
-
-    //: Dflt ctor
-    //  Creates an empty one plane image.
+  //: Dflt ctor
+  //  Creates an empty one plane image.
   vil2_image_view();
 
-    //: Create a n_plane plane image of ni x nj pixels
+  //: Create a n_plane plane image of ni x nj pixels
   vil2_image_view(unsigned ni, unsigned nj, unsigned n_planes=1);
 
-    //: Set this view to look at someone else's memory data.
-    //  If the data goes out of scope then this view could be invalid, and
-    //  there's no way of knowing until its too late - so take care!
+  //: Set this view to look at someone else's memory data.
+  //  If the data goes out of scope then this view could be invalid, and
+  //  there's no way of knowing until its too late - so take care!
   vil2_image_view(const T* top_left, unsigned ni, unsigned nj, unsigned nplanes,
                   int istep, int jstep, int planestep);
 
-    //: Set this view to look at another view's data
-    //  Typically used by functions which generate a manipulated view of
-    //  another's image data.
-    //  Need to pass the memory chunk to set up the internal smart ptr appropriately
+  //: Set this view to look at another view's data
+  //  Typically used by functions which generate a manipulated view of
+  //  another's image data.
+  //  Need to pass the memory chunk to set up the internal smart ptr appropriately
   vil2_image_view(const vil2_smart_ptr<vil2_memory_chunk>& mem_chunk,
                   const T* top_left, unsigned ni, unsigned nj, unsigned nplanes,
                   int istep, int jstep, int planestep);
 
-    //: Construct from various vil2_image_view types.
-    // The new object will point to the same underlying image as the rhs
-    // You can assign a vil2_image_view<compound_type<T>> to a vil2_image_view<T>
-    // in all reasonable cases - the lhs will have as many planes as the rhs has
-    // components. You can assign a vil2_image_view<T> to a vil2_image_view<compound_type<T>>
-    // when the underlying data is formatted appropriately and the lhs has
-    // as many components as the rhs has planes. O(1).
-    // If the view types are not compatible this object will be set to empty.
+  //: Construct from various vil2_image_view types.
+  // The new object will point to the same underlying image as the rhs
+  // You can assign a vil2_image_view<compound_type<T>> to a vil2_image_view<T>
+  // in all reasonable cases - the lhs will have as many planes as the rhs has
+  // components. You can assign a vil2_image_view<T> to a vil2_image_view<compound_type<T>>
+  // when the underlying data is formatted appropriately and the lhs has
+  // as many components as the rhs has planes. O(1).
+  // If the view types are not compatible this object will be set to empty.
   vil2_image_view(const vil2_image_view_base& rhs);
 
-    //: Construct from various vil2_image_view types.
-    // The new object will point to the same underlying image as the rhs.
-    //
-    // You can assign a vil2_image_view<compound_type<T>> to a vil2_image_view<T>
-    // in all reasonable cases - the lhs will have as many planes as the rhs has
-    // components. You can assign a vil2_image_view<T> to a vil2_image_view<compound_type<T>>
-    // when the underlying data is formatted appropriately and the lhs has
-    // as many components as the rhs has planes. O(1).
-    // If the view types are not compatible this object will be set to empty.
+  //: Construct from various vil2_image_view types.
+  // The new object will point to the same underlying image as the rhs.
+  //
+  // You can assign a vil2_image_view<compound_type<T>> to a vil2_image_view<T>
+  // in all reasonable cases - the lhs will have as many planes as the rhs has
+  // components. You can assign a vil2_image_view<T> to a vil2_image_view<compound_type<T>>
+  // when the underlying data is formatted appropriately and the lhs has
+  // as many components as the rhs has planes. O(1).
+  // If the view types are not compatible this object will be set to empty.
   vil2_image_view(const vil2_image_view_base_sptr& rhs);
 
-    //  Destructor
+  //  Destructor
   virtual ~vil2_image_view();
 
   // Standard container stuff
@@ -120,7 +118,7 @@ public:
   inline const_iterator begin() const { assert(is_contiguous()); return top_left_; }
   inline const_iterator end  () const { assert(is_contiguous()); return top_left_ + size(); }
 
-  // aritmetic indexing stuff
+  // arithmetic indexing stuff
 
   //: Pointer to the first (top left in plane 0) pixel;
   T * top_left_ptr() { return top_left_; }  // Make origin explicit
@@ -140,18 +138,18 @@ public:
   //: The number of bytes in the data
   inline unsigned size_bytes() const { return size() * sizeof(T); }
 
-    //: Smart pointer to the object holding the data for this view
-    // Will be a null pointer if this view looks at `third-party' data,
-    // eg using set_to_memory.
-    //
-    // Typically used when creating new views of the data
+  //: Smart pointer to the object holding the data for this view
+  // Will be a null pointer if this view looks at `third-party' data,
+  // eg using set_to_memory.
+  //
+  // Typically used when creating new views of the data
   const vil2_memory_chunk_sptr& memory_chunk() const { return ptr_; }
 
-    //: Smart pointer to the object holding the data for this view
-    // Will be a null pointer if this view looks at `third-party' data,
-    // eg using set_to_memory
-    //
-    // Typically used when creating new views of the data
+  //: Smart pointer to the object holding the data for this view
+  // Will be a null pointer if this view looks at `third-party' data,
+  // eg using set_to_memory
+  //
+  // Typically used when creating new views of the data
   vil2_memory_chunk_sptr& memory_chunk() { return ptr_; }
 
   // Ordinary image indexing stuff.
@@ -168,16 +166,16 @@ public:
 
   //: Return read-only reference to pixel at (i,j) in plane p.
   const T& operator()(unsigned i, unsigned j, unsigned p) const {
-  assert(i<ni_); assert(j<nj_);
-   return top_left_[planestep_*p + jstep_*j + i*istep_]; }
+    assert(i<ni_); assert(j<nj_); assert(p<nplanes_);
+    return top_left_[p*planestep_ + j*jstep_ + i*istep_]; }
 
   //: Return read-only reference to pixel at (i,j) in plane p.
   T&       operator()(unsigned i, unsigned j, unsigned p) {
-  assert(i<ni_); assert(j<nj_);
-   return top_left_[planestep_*p + jstep_*j + i*istep_]; }
+    assert(i<ni_); assert(j<nj_); assert(p<nplanes_);
+    return top_left_[p*planestep_ + j*jstep_ + i*istep_]; }
 
 
-// image stuff
+  // image stuff
 
   //: resize current planes to ni x nj
   // If already correct size, this function returns quickly
@@ -201,12 +199,12 @@ public:
 
   //: Set this view to look at someone else's memory data.
   //  If the data goes out of scope then this view could be invalid, and
-  //  there's no way of knowing until its too late - so take care!
+  //  there's no way of knowing until it's too late -- so take care!
   //
   //  Note that though top_left is passed in as const, the data may be manipulated
   //  through the view.
   void set_to_memory(const T* top_left, unsigned ni, unsigned nj, unsigned nplanes,
-              int istep, int jstep, int planestep);
+                     int istep, int jstep, int planestep);
 
   //: Arrange that this is window on some planes of given image.
   //  i.e. plane(i) points to im.plane(i+p0) + offset
@@ -224,25 +222,25 @@ public:
   //: Print a 1-line summary of contents
   virtual void print(vcl_ostream&) const;
 
-    //: print all image data to os in a grid (rounds output to int)
+  //: print all image data to os in a grid (rounds output to int)
   virtual void print_all(vcl_ostream& os) const;
 
-    //: Return class name
+  //: Return class name
   virtual vcl_string is_a() const;
 
-    //: True if this is (or is derived from) class s
+  //: True if this is (or is derived from) class s
   virtual bool is_class(vcl_string const& s) const;
 
-    //: Return a description of the concrete data pixel type.
-    // The value corresponds directly to pixel_type.
+  //: Return a description of the concrete data pixel type.
+  // The value corresponds directly to pixel_type.
   virtual enum vil2_pixel_format pixel_format() const
   { return vil2_pixel_format_of(T()); }
 
-    //: True if they share same view of same image data.
-    //  This does not do a deep equality on image data. If the images point
-    //  to different image data objects that contain identical images, then
-    //  the result will still be false.
-  bool operator==(const vil2_image_view<T> &other) const;
+  //: True if they share same view of same image data.
+  //  This does not do a deep equality on image data. If the images point
+  //  to different image data objects that contain identical images, then
+  //  the result will still be false.
+  bool operator==(const vil2_image_view<T>& other) const;
 
   //: Copy a view. The rhs and lhs will point to the same image data.
   // You can assign a vil2_image_view<compound_type<T>> to a vil2_image_view<T>
@@ -251,7 +249,7 @@ public:
   // when the underlying data is formatted appropriately and the lhs has
   // as many components as the rhs has planes. O(1).
   // If the view types are not compatible this object will be set to empty.
-  const vil2_image_view<T> & operator = (const vil2_image_view_base & rhs);
+  const vil2_image_view<T>& operator= (const vil2_image_view_base & rhs);
 
   //: Copy a view. The rhs and lhs will point to the same image data.
   // You can assign a vil2_image_view<compound_type<T>> to a vil2_image_view<T>
@@ -266,7 +264,6 @@ public:
     else *this = *rhs;
     return *this;
   }
-
 };
 
 //: Print a 1-line summary of contents
@@ -274,7 +271,6 @@ template <class T>
 inline
 vcl_ostream& operator<<(vcl_ostream& s, vil2_image_view<T> const& im) {
   im.print(s); return s; }
-
 
 
 //: True if the actual images are identical.
@@ -286,4 +282,4 @@ template<class T>
 bool vil2_image_view_deep_equality(const vil2_image_view<T> &lhs, const vil2_image_view<T> &rhs);
 
 
-#endif // vil_image_view_h_
+#endif // vil2_image_view_h_
