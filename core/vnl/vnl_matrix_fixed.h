@@ -19,6 +19,7 @@
 //   Oct.2002 - Amitha Perera  - separated vnl_matrix and vnl_matrix_fixed,
 //                               removed necessity for vnl_matrix_fixed_ref
 //   26Oct.2002 - Peter Vanroose - added inplace_transpose() method
+//   July.2003 - Paul Smyth - fixed end() bug, made op*=() more general
 // \endverbatim
 //-----------------------------------------------------------------------------
 
@@ -29,6 +30,7 @@
 #include "vnl_matrix_ref.h"
 #include "vnl_vector.h"
 #include "vnl_vector_fixed.h"
+#include "vnl_c_vector.h"
 
 // This mess is for a MSVC6 workaround.
 //
@@ -313,15 +315,14 @@ class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
   }
 
   //:
-  vnl_matrix_fixed& operator*= (vnl_matrix_fixed const& s)
+  vnl_matrix_fixed& operator*= (vnl_matrix_fixed<T,num_cols,num_cols> const& s)
   {
-    assert(num_rows == num_cols); // operator*= only works for square matrices
-    vnl_matrix_fixed<T, num_rows, num_rows> out;
+    vnl_matrix_fixed<T, num_rows, num_cols> out;
     for (unsigned i = 0; i < num_rows; ++i)
-      for (unsigned j = 0; j < num_rows; ++j)
+      for (unsigned j = 0; j < num_cols; ++j)
       {
         T accum = this->data_[i][0] * s(0,j);
-        for (unsigned k = 1; k < num_rows; ++k)
+        for (unsigned k = 1; k < num_cols; ++k)
           accum += this->data_[i][k] * s(k,j);
         out(i,j) = accum;
       }
@@ -559,14 +560,14 @@ class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
   //: Iterator pointing to start of data
   iterator       begin() { return data_[0]; }
   //: Iterator pointing to element beyond end of data
-  iterator       end() { return data_[0]; }
+  iterator       end() { return begin() + size(); }
 
   //: Const iterators
   typedef T const *const_iterator;
   //: Iterator pointing to start of data
   const_iterator begin() const { return data_[0]; }
   //: Iterator pointing to element beyond end of data
-  const_iterator end() const { return data_[0]; }
+  const_iterator end() const { return begin() + size(); }
 
   //--------------------------------------------------------------------------------
 
