@@ -129,6 +129,9 @@ SOURCE=.\Templates/vcl_vector+bmrf_epi_seg_sptr-.cxx
 SOURCE=.\Templates/vbl_io_smart_ptr+bmrf_network-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bmrf_epi_transform-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\bmrf_epi_point.cxx
 # End Source File
 # Begin Source File
@@ -145,6 +148,12 @@ SOURCE=.\bmrf_network_builder.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\bmrf_network_builder_params.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bmrf_epi_transform.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bmrf_epipole.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -178,6 +187,15 @@ SOURCE=.\bmrf_network_builder.h
 # End Source File
 # Begin Source File
 SOURCE=.\bmrf_network_builder_params.h
+# End Source File
+# Begin Source File
+SOURCE=.\bmrf_epi_transform.h
+# End Source File
+# Begin Source File
+SOURCE=.\bmrf_epi_transform_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bmrf_epipole.h
 # End Source File
 # End Group
 # End Target
