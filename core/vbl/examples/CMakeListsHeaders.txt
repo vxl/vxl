@@ -1,0 +1,3 @@
+SOURCE_FILES(vbl_smart_ptr_example_sources
+ vbl_smart_ptr_example.h
+)
