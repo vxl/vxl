@@ -1,11 +1,7 @@
 # library for tomography
 # brl/bmvl/btom/CMakeLists.txt
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bmvl )
+INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )
 
 SET(btom_sources
     btom_gauss_cylinder.cxx         btom_gauss_cylinder.h  btom_gauss_cylinder_sptr.h
@@ -16,4 +12,4 @@ AUX_SOURCE_DIRECTORY(Templates btom_sources)
 
 ADD_LIBRARY(btom ${btom_sources})
 
-TARGET_LINK_LIBRARIES(btom gevd vil1 vnl vbl vcl)
+TARGET_LINK_LIBRARIES(btom gevd vil1 vnl vbl)
