@@ -253,6 +253,11 @@ SOURCE=.\mbl_sum_1d.cxx
 SOURCE=.\mbl_lda.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\mbl_thin_plate_spline_2d.cxx
+
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -439,6 +444,11 @@ SOURCE=.\mbl_selected_data_wrapper.h
 # Begin Source File
 
 SOURCE=.\mbl_selected_data_wrapper.txx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_thin_plate_spline_2d.h
 
 # End Source File
 # End Group
