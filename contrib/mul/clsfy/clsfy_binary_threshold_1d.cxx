@@ -14,6 +14,7 @@
 #include <vcl_cmath.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_indent.h>
+#include <vnl/vnl_double_2.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
 
@@ -41,7 +42,7 @@ double clsfy_binary_threshold_1d::log_l(double input) const
 //: Return parameters defining classifier in a vector (format depends on classifier)
 vnl_vector<double> clsfy_binary_threshold_1d::params() const
 {
-  return vnl_vector<double>(2, s_,threshold_);
+  return vnl_double_2(s_,threshold_).as_vector();
 }
 
 //: Set parameters defining classifier with a vector (format depends on classifier)
@@ -114,7 +115,7 @@ void clsfy_binary_threshold_1d::b_read(vsl_b_istream& bfs)
       break;
     default:
       vcl_cerr << "I/O ERROR: clsfy_binary_threshold_1d::b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << "\n";
+               << "           Unknown version number "<< version << '\n';
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
   }
 }

@@ -1,7 +1,8 @@
 // This is rpl/rrel/tests/test_ran_sam_search.cxx
 #include <vcl_iostream.h>
 
-#include <vnl/vnl_vector.h>
+#include <vnl/vnl_double_3.h>
+#include <vnl/vnl_double_4.h>
 #include <vnl/vnl_math.h>
 
 #include <rrel/rrel_linear_regression.h>
@@ -50,40 +51,40 @@ static void test_ran_sam_search()
 
   double x = 1.0, y=-0.5; error[0]=-0.001;
   double z= a[0] + a[1]*x + a[2]*y + error[0];
-  pts[0]=vnl_vector<double>(3, x,y,z);
+  pts[0]=vnl_double_3(x,y,z).as_vector();
 
   x = 2.0;  y=4.0;  error[1]=0; z = a[0] + a[1]*x + a[2]*y + error[1];
-  pts[1]=vnl_vector<double>(3, x,y,z);
+  pts[1]=vnl_double_3(x,y,z).as_vector();
 
   x = 3.0;  y=1.0;  error[2]=0; z = a[0] + a[1]*x + a[2]*y + error[2];
-  pts[2]=vnl_vector<double>(3, x,y,z);
+  pts[2]=vnl_double_3(x,y,z).as_vector();
 
   x = -2.0;  y=3.0; error[3]=-0.0025;  z = a[0] + a[1]*x + a[2]*y + error[3];
-  pts[3]=vnl_vector<double>(3, x,y,z);
+  pts[3]=vnl_double_3(x,y,z).as_vector();
 
   x = 2.0;  y=4.0;  error[4]=0.9;  z = a[0] + a[1]*x + a[2]*y + error[4];
-  pts[4]=vnl_vector<double>(3, x,y,z);
+  pts[4]=vnl_double_3(x,y,z).as_vector();
 
   x = 5.0;  y=-4.0;  error[5]=0; z = a[0] + a[1]*x + a[2]*y + error[5];
-  pts[5]=vnl_vector<double>(3, x,y,z);
+  pts[5]=vnl_double_3(x,y,z).as_vector();
 
   x = 3.0;  y=-2.0;  error[6]=-0.004; z = a[0] + a[1]*x + a[2]*y + error[6];
-  pts[6]=vnl_vector<double>(3, x,y,z);
+  pts[6]=vnl_double_3(x,y,z).as_vector();
 
   x = 2.0;  y=-2.0;  error[7]=-0.8; z = a[0] + a[1]*x + a[2]*y + error[7];
-  pts[7]=vnl_vector<double>(3, x,y,z);
+  pts[7]=vnl_double_3(x,y,z).as_vector();
 
   x = 3.0;  y=0.0;  error[8]=0.008; z = a[0] + a[1]*x + a[2]*y + error[8];
-  pts[8]=vnl_vector<double>(3, x,y,z);
+  pts[8]=vnl_double_3(x,y,z).as_vector();
 
   x = -1.0;  y=-2.0;  error[9]=0.003; z = a[0] + a[1]*x + a[2]*y + error[9];
-  pts[9]=vnl_vector<double>(3, x,y,z);
+  pts[9]=vnl_double_3(x,y,z).as_vector();
 
   x = 0.0;  y=0.0;  error[10]=0.3; z = a[0] + a[1]*x + a[2]*y + error[10];
-  pts[10]=vnl_vector<double>(3, x,y,z);
+  pts[10]=vnl_double_3(x,y,z).as_vector();
 
   x = -1.0;  y=2.0;  error[11]=-0.0012; z = a[0] + a[1]*x + a[2]*y + error[11];
-  pts[11]=vnl_vector<double>(3, x,y,z);
+  pts[11]=vnl_double_3(x,y,z).as_vector();
 
   //
   //  Create the linear regression problem and an lms objective
@@ -181,7 +182,7 @@ static void test_ran_sam_search()
 
   double sigma = 0.1;
   vcl_vector<image_point_match> matches;
-  vnl_vector<double> sim_params(4, 1.4,-0.2,20.0,-18.0);
+  vnl_double_4 sim_params(1.4,-0.2,20.0,-18.0);
   generate_similarity_matches( sim_params, sigma, matches );  // 20 matches, 13 points
   rrel_estimation_problem* match_prob = new similarity_from_matches( matches );
 #if 0

@@ -2,7 +2,8 @@
 #include <vcl_cmath.h>
 #include <vcl_vector.h>
 
-#include <vnl/vnl_vector.h>
+#include <vnl/vnl_double_3.h>
+#include <vnl/vnl_double_4.h>
 #include <vnl/vnl_matrix.h>
 
 #include <rrel/rrel_tukey_obj.h>
@@ -27,70 +28,70 @@ regression_points( const vnl_vector<double>& a,
 
   //  Initialize variables.
   double x = 1.0, y=-0.5, z= a[0] + a[1]*x + a[2]*y;
-  pts[0]=vnl_vector<double>(3, x,y,z);
+  pts[0]=vnl_double_3(x,y,z).as_vector();
 
   x = 2.0;  y=4.0; z = a[0] + a[1]*x + a[2]*y;
-  pts[1]=vnl_vector<double>(3, x,y,z);
+  pts[1]=vnl_double_3(x,y,z).as_vector();
 
   x = 3.0;  y=1.0; z = a[0] + a[1]*x + a[2]*y;
-  pts[2]=vnl_vector<double>(3, x,y,z);
+  pts[2]=vnl_double_3(x,y,z).as_vector();
 
   x = -2.0;  y=3.0; z = a[0] + a[1]*x + a[2]*y;
-  pts[3]=vnl_vector<double>(3, x,y,z);
+  pts[3]=vnl_double_3(x,y,z).as_vector();
 
   x = 2.0;  y=4.0;  z = a[0] + a[1]*x + a[2]*y;
-  pts[4]=vnl_vector<double>(3, x,y,z);
+  pts[4]=vnl_double_3(x,y,z).as_vector();
 
   x = 5.0;  y=-4.0; z = a[0] + a[1]*x + a[2]*y;
-  pts[5]=vnl_vector<double>(3, x,y,z);
+  pts[5]=vnl_double_3(x,y,z).as_vector();
 
   x = 3.0;  y=-2.0; z = a[0] + a[1]*x + a[2]*y;
-  pts[6]=vnl_vector<double>(3, x,y,z);
+  pts[6]=vnl_double_3(x,y,z).as_vector();
 
   x = 2.0;  y=-2.0; z = a[0] + a[1]*x + a[2]*y;
-  pts[7]=vnl_vector<double>(3, x,y,z);
+  pts[7]=vnl_double_3(x,y,z).as_vector();
 
   x = 3.0;  y=0.0;  z = a[0] + a[1]*x + a[2]*y;
-  pts[8]=vnl_vector<double>(3, x,y,z);
+  pts[8]=vnl_double_3(x,y,z).as_vector();
 
   x = -1.0; y=-2.0; z = a[0] + a[1]*x + a[2]*y;
-  pts[9]=vnl_vector<double>(3, x,y,z);
+  pts[9]=vnl_double_3(x,y,z).as_vector();
 
   x = 0.0;  y=0.0;  z = a[0] + a[1]*x + a[2]*y;
-  pts[10]=vnl_vector<double>(3, x,y,z);
+  pts[10]=vnl_double_3(x,y,z).as_vector();
 
   x = -1.0; y=2.0;  z = a[0] + a[1]*x + a[2]*y;
-  pts[11]=vnl_vector<double>(3, x,y,z);
+  pts[11]=vnl_double_3(x,y,z).as_vector();
 
   x = 3.5; y=5.0;  z = a[0] + a[1]*x + a[2]*y;
-  pts[12]=vnl_vector<double>(3, x,y,z);
+  pts[12]=vnl_double_3(x,y,z).as_vector();
 
   x = 4.5; y=5.5;  z = a[0] + a[1]*x + a[2]*y;
-  pts[13]=vnl_vector<double>(3, x,y,z);
+  pts[13]=vnl_double_3(x,y,z).as_vector();
 
   x = 3.5; y=6.0;  z = a[0] + a[1]*x + a[2]*y;
-  pts[14]=vnl_vector<double>(3, x,y,z);
+  pts[14]=vnl_double_3(x,y,z).as_vector();
 
   x = -3.5; y=5.0;  z = a[0] + a[1]*x + a[2]*y;
-  pts[15]=vnl_vector<double>(3, x,y,z);
+  pts[15]=vnl_double_3(x,y,z).as_vector();
 
   x = -2.5; y=-4.0;  z = a[0] + a[1]*x + a[2]*y;
-  pts[16]=vnl_vector<double>(3, x,y,z);
+  pts[16]=vnl_double_3(x,y,z).as_vector();
 
   x = 3.5; y=7.0;  z = a[0] + a[1]*x + a[2]*y;
-  pts[17]=vnl_vector<double>(3, x,y,z);
+  pts[17]=vnl_double_3(x,y,z).as_vector();
 
   x = -4.5; y=-4.0;  z = a[0] + a[1]*x + a[2]*y;
-  pts[18]=vnl_vector<double>(3, x,y,z);
+  pts[18]=vnl_double_3(x,y,z).as_vector();
 
   x = 6.5; y=4.0;  z = a[0] + a[1]*x + a[2]*y;
-  pts[19]=vnl_vector<double>(3, x,y,z);
+  pts[19]=vnl_double_3(x,y,z).as_vector();
 
   for ( int i=0; i<num_pts; ++i )
     if ( i%10 == 5 )  //
-      pts[i].z() += noise( 20 * sigma);
+      pts[i][2] += noise( 20 * sigma);
     else
-      pts[i].z() += noise( sigma );
+      pts[i][2] += noise( sigma );
 }
 
 inline bool
@@ -123,7 +124,7 @@ check( const vnl_vector<double>& correct_params,
 static void test_irls()
 {
   //  Set true parameter estimate.
-  vnl_vector<double> true_params(3, 10.0, 0.02, -0.1);
+  vnl_double_3 true_params(10.0, 0.02, -0.1);
 
   //  Create the linear regression problem and an m_estimator objective
   //  function.
@@ -196,7 +197,7 @@ static void test_irls()
 
   //  onto irls from matches
   int trace_level = 0;
-  vnl_vector<double> params(4, 1.2,0.3,15.0,-4.0);
+  vnl_double_4 params(1.2,0.3,15.0,-4.0);
   vcl_vector< image_point_match > matches;
   sigma = 0.25;
   generate_similarity_matches( params, sigma, matches );

@@ -1,6 +1,7 @@
 #include <vcl_iostream.h>
 
-#include <vnl/vnl_vector.h>
+#include <vnl/vnl_double_3.h>
+#include <vnl/vnl_double_4.h>
 #include <vnl/vnl_matrix.h>
 
 #include <testlib/testlib_test.h>
@@ -13,9 +14,9 @@ static void test_orthogonal_regression()
 {
   //  z = 0.02 x - 0.1 y + 10.0
   double a0 = 0.02, a1 = -0.1, a2 = 10.0;
-  vnl_vector<double> true_params(4, a0,a1,-1.0,a2);
-  vnl_vector<double> par(4);
-  vnl_vector<double> norm_vect(3, true_params[0],true_params[1],true_params[2]);
+  vnl_double_4 true_params(a0,a1,-1.0,a2);
+  vnl_vector<double> par;
+  vnl_double_3 norm_vect(true_params[0],true_params[1],true_params[2]);
   true_params /= norm_vect.two_norm();  //  4 component vector
   norm_vect /= norm_vect.two_norm();    //  3 component normal only
   const unsigned int num_pts=7;
@@ -35,31 +36,31 @@ static void test_orthogonal_regression()
   vcl_vector< vnl_vector<double> > pts(num_pts);
   vnl_vector<double> p(3);
 
-  p.x() = 1.0;  p.y()=-0.5; p.z() = a0 * p.x() + a1* p.y() + a2;
+  p[0] = 1.0;  p[1]=-0.5; p[2] = a0 * p[0] + a1* p[1] + a2;
   p += error[0] * norm_vect;
   pts[0] = p;
 
-  p.x() = 2.0;  p.y()=4.0;  p.z() = a0 * p.x() + a1* p.y() + a2;
+  p[0] = 2.0;  p[1]=4.0;  p[2] = a0 * p[0] + a1* p[1] + a2;
   p += error[1] * norm_vect;
   pts[1] = p;
 
-  p.x()= 3.0;   p.y()=1.0;  p.z() = a0 * p.x() + a1* p.y() + a2;
+  p[0]= 3.0;   p[1]=1.0;  p[2] = a0 * p[0] + a1* p[1] + a2;
   p += error[2] * norm_vect;
   pts[2] = p;
 
-  p.x()= -2.0;  p.y()=3.0;  p.z() = a0 * p.x() + a1* p.y() + a2;
+  p[0]= -2.0;  p[1]=3.0;  p[2] = a0 * p[0] + a1* p[1] + a2;
   p += error[3] * norm_vect;
   pts[3] = p;
 
-  p.x()= 2.0;   p.y()=4.0;  p.z() = a0 * p.x() + a1* p.y() + a2;
+  p[0]= 2.0;   p[1]=4.0;  p[2] = a0 * p[0] + a1* p[1] + a2;
   p += error[4] * norm_vect;
   pts[4] = p;
 
-  p.x()= 5.0;   p.y()=-4.0; p.z() = a0 * p.x() + a1* p.y() + a2;
+  p[0]= 5.0;   p[1]=-4.0; p[2] = a0 * p[0] + a1* p[1] + a2;
   p += error[5] * norm_vect;
   pts[5] = p;
 
-  p.x()= 3.0;   p.y()=-2.0; p.z() = a0 * p.x() + a1* p.y() + a2;
+  p[0]= 3.0;   p[1]=-2.0; p[2] = a0 * p[0] + a1* p[1] + a2;
   p += error[6] * norm_vect;
   pts[6] = p;
 
@@ -102,8 +103,8 @@ static void test_orthogonal_regression()
   pts_indices[2] = 3;
   vnl_vector<double> params;
   ok = lr1->fit_from_minimal_set( pts_indices, params );
-  vnl_vector<double> diff1( params - true_params );
-  vnl_vector<double> diff2( params + true_params );
+  vnl_double_4 diff1 = params - true_params;
+  vnl_double_4 diff2 = params + true_params;
   double err;
   if ( diff1.two_norm() < diff2.two_norm() )
     err = diff1.two_norm();
@@ -133,8 +134,8 @@ static void test_orthogonal_regression()
   // Ok.  This one should work.
   ok = lr1->weighted_least_squares_fit( par, cofact );
 
-  diff1 = par - true_params;
-  diff2 = par + true_params;
+  diff1 = vnl_double_4(par) - true_params;
+  diff2 = vnl_double_4(par) + true_params;
   if ( diff1.two_norm() < diff2.two_norm() )
     err = diff1.two_norm();
   else

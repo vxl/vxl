@@ -11,6 +11,7 @@
 #include <vil1/vil1_load.h>
 #include <vil1/vil1_scale_intensities.h>
 #include <vil1/vil1_save.h>
+#include <vnl/vnl_double_2.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_menu.h>
@@ -1028,8 +1029,7 @@ float* vsrl_manager::show_correlations(int x, int y)
 
   // Make 'em pick the point in the left pane...
   if (c!=0) {
-    vcl_cerr << "vsrl_manager::show_correlations() -> "
-             << "Please pick point in left pane.\n";
+    vcl_cerr << "vsrl_manager::show_correlations() -> Please pick point in left pane.\n";
     return NULL;
   }
 
@@ -1322,7 +1322,7 @@ void vsrl_manager::corner_method()
   int zero_disp = 128;
   vcl_cout << "vsrl_manager::corner_method():\n";
   float x0, x1, y0, y1, d; // d = disparity (proportional to z)
-  vnl_vector<double> v_ang(2,0,0);
+  vnl_double_2 v_ang(0.0,0.0);
   vtol_vertex_2d tmp;
   for (;p0_it < pts0.end(); p0_it++, p1_it++) {
     //    vcl_cout << "p0: " << (**p0_it) << "  p1: " << (**p1_it) << vcl_endl;
@@ -1335,7 +1335,7 @@ void vsrl_manager::corner_method()
     d = x1 - x0; // Disparity
     // stuff the disparity into the right place in the image buffer
     disp(int(x0),int(y0)) = vxl_byte(d + zero_disp); // Add in the "0" offset.
-    vnl_vector<double> v_cart(2,x0,y0);
+    vnl_double_2 v_cart(x0,y0);
     rsdl_point rpt(v_cart,v_ang); // make the rsdl point
     rsdlvec.push_back(rpt);  // add the point to the list for the kd_tree
     // While we're looping, we might as well display the points...
@@ -1357,7 +1357,7 @@ void vsrl_manager::corner_method()
     for (int x=0; x<disp.cols(); x++) {
       // Only calculate for the pixels that aren't corner points
       if (disp(x,y) == 0) {
-        vnl_vector<double> v_cart(2,x,y);
+        vnl_double_2 v_cart(x,y);
         rsdl_point query(v_cart,v_ang);
         // Get the nearest neighbor; we'll use that disparity for now
         tree.n_nearest(query,1,neighbors,index);

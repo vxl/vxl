@@ -2,7 +2,7 @@
 #include <vcl_iostream.h>
 #include <mbl/mbl_ar_process.h>
 #include <mbl/mbl_mz_random.h>
-#include <vnl/vnl_vector.h>
+#include <vnl/vnl_double_2.h>
 #include <vnl/vnl_matrix.h>
 
 vnl_vector<double> arp_mean(const vcl_vector<vnl_vector<double> >& v)
@@ -80,13 +80,13 @@ void test_ar_process()
 
   // two start values of autoregressive process are random:
   vcl_vector<vnl_vector<double> > vlist;
-  vlist.push_back(vnl_vector<double>(2, mz_random.normal(), mz_random.normal()));
-  vlist.push_back(vnl_vector<double>(2, mz_random.normal(), mz_random.normal()));
+  vlist.push_back(vnl_double_2(mz_random.normal(), mz_random.normal()).as_vector());
+  vlist.push_back(vnl_double_2(mz_random.normal(), mz_random.normal()).as_vector());
 
   for (unsigned int i=0;i<SIZE;i++)
   {
-    vnl_vector<double> W(2, mz_random.normal(), mz_random.normal());
-    vlist.push_back(A*vlist[i]+B*vlist[i+1]+C*W);
+    vnl_double_2 W(mz_random.normal(), mz_random.normal());
+    vlist.push_back(A*vlist[i]+B*vlist[i+1]+C*W.as_vector());
   }
 
   mbl_ar_process<double> arp;

@@ -1,6 +1,6 @@
 #include <vcl_cmath.h>
 
-#include <vnl/vnl_vector.h>
+#include <vnl/vnl_double_3.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_svd.h>
 
@@ -12,7 +12,7 @@ bool close(double,double);
 
 static void test_linear_reg()
 {
-  vnl_vector<double> true_params(3, 10.0,0.02,-0.1);
+  vnl_double_3 true_params(10.0,0.02,-0.1);
   vnl_vector<double> a(true_params);
 
   const unsigned int num_pts=7;
@@ -26,38 +26,38 @@ static void test_linear_reg()
 
   double x = 1.0, y=-0.5; error[0]=-0.001;
   double z= a[0] + a[1]*x + a[2]*y + error[0]; rand_vars[0] = z;
-  pts[0] = vnl_vector<double>(3, x,y,z);
-  ind_vars[0] = vnl_vector<double>(3, 1.0,x,y);
+  pts[0] = vnl_double_3(x,y,z).as_vector();
+  ind_vars[0] = vnl_double_3(1.0,x,y).as_vector();
 
   x = 2.0;  y=4.0;  error[1]=0;
   z = a[0] + a[1]*x + a[2]*y + error[1]; rand_vars[1] = z;
-  pts[1] = vnl_vector<double>(3, x,y,z);
-  ind_vars[1] = vnl_vector<double>(3, 1.0,x,y);
+  pts[1] = vnl_double_3(x,y,z).as_vector();
+  ind_vars[1] = vnl_double_3(1.0,x,y).as_vector();
 
   x = 3.0;  y=1.0;  error[2]=0;
   z = a[0] + a[1]*x + a[2]*y + error[2]; rand_vars[2] = z;
-  pts[2] = vnl_vector<double>(3, x,y,z);
-  ind_vars[2] = vnl_vector<double>(3, 1.0,x,y);
+  pts[2] = vnl_double_3(x,y,z).as_vector();
+  ind_vars[2] = vnl_double_3(1.0,x,y).as_vector();
 
   x = -2.0;  y=3.0; error[3]=-0.0025;
   z = a[0] + a[1]*x + a[2]*y + error[3]; rand_vars[3] = z;
-  pts[3] = vnl_vector<double>(3, x,y,z);
-  ind_vars[3] = vnl_vector<double>(3, 1.0,x,y);
+  pts[3] = vnl_double_3(x,y,z).as_vector();
+  ind_vars[3] = vnl_double_3(1.0,x,y).as_vector();
 
   x = 2.0;  y=4.0;  error[4]=0.007;
   z = a[0] + a[1]*x + a[2]*y + error[4]; rand_vars[4] = z;
-  pts[4] = vnl_vector<double>(3, x,y,z);
-  ind_vars[4] = vnl_vector<double>(3, 1.0,x,y);
+  pts[4] = vnl_double_3(x,y,z).as_vector();
+  ind_vars[4] = vnl_double_3(1.0,x,y).as_vector();
 
   x = 5.0;  y=-4.0;  error[5]=0;
   z = a[0] + a[1]*x + a[2]*y + error[5]; rand_vars[5] = z;
-  pts[5] = vnl_vector<double>(3, x,y,z);
-  ind_vars[5] = vnl_vector<double>(3, 1.0,x,y);
+  pts[5] = vnl_double_3(x,y,z).as_vector();
+  ind_vars[5] = vnl_double_3(1.0,x,y).as_vector();
 
   x = 3.0;  y=-2.0;  error[6]=-0.004;
   z = a[0] + a[1]*x + a[2]*y + error[6]; rand_vars[6] = z;
-  pts[6] = vnl_vector<double>(3, x,y,z);
-  ind_vars[6] = vnl_vector<double>(3, 1.0,x,y);
+  pts[6] = vnl_double_3(x,y,z).as_vector();
+  ind_vars[6] = vnl_double_3(1.0,x,y).as_vector();
 
   //
   //  The first set of tests are for the constructor, and parameter access methods.

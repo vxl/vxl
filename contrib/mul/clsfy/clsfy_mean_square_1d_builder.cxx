@@ -11,6 +11,7 @@
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
 #include <vsl/vsl_binary_loader.h>
+#include <vnl/vnl_double_2.h>
 #include <clsfy/clsfy_builder_1d.h>
 #include <clsfy/clsfy_mean_square_1d.h>
 #include <vcl_algorithm.h>
@@ -149,7 +150,7 @@ double clsfy_mean_square_1d_builder::build(clsfy_classifier_1d& classifier,
           <<"min_thresh= "<<min_thresh<<vcl_endl;
 #endif
   // pass parameters to classifier
-  classifier.set_params(vnl_vector<double>(2, wm_pos,min_thresh));
+  classifier.set_params(vnl_double_2(wm_pos,min_thresh).as_vector());
   return min_error;
 }
 
@@ -260,7 +261,7 @@ double clsfy_mean_square_1d_builder::build(clsfy_classifier_1d& classifier,
           <<"min_thresh= "<<min_thresh<<vcl_endl;
 
   // pass parameters to classifier
-  classifier.set_params(vnl_vector<double>(2, wm_pos,min_thresh));
+  classifier.set_params(vnl_double_2(wm_pos,min_thresh).as_vector());
   return min_error;
 }
 
@@ -375,7 +376,7 @@ void clsfy_mean_square_1d_builder::b_read(vsl_b_istream& /*bfs*/)
     break;
   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_mean_square_1d_builder&)\n"
-             << "           Unknown version number "<< version << "\n";
+             << "           Unknown version number "<< version << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

@@ -4,6 +4,7 @@
 // \file
 
 #include <vnl/vnl_math.h> // for vnl_huge_val()
+#include <vnl/vnl_double_3.h>
 
 vpgl_matrix_camera::vpgl_matrix_camera():
   matrix_(3,3)
@@ -58,7 +59,7 @@ void vpgl_matrix_camera::world_to_image(vnl_vector<double> const& vect3d,
 void vpgl_matrix_camera::world_to_image(double x, double y, double z,
                                         double& ix, double& iy, double time)
 {
-  vnl_vector<double> vect3d(3, x,y,z);
+  vnl_double_3 vect3d(x,y,z);
   this->world_to_image(vect3d, ix, iy, time);
 }
 
@@ -110,14 +111,9 @@ void vpgl_matrix_camera::image_to_world(
     //Get the ray as the nullvector of the modified projection matrix
     vnl_svd svdP(P3X4);
     vnl_vector<double> nvec = svdP.nullvector();
-    vnl_vector<double> ray(3,0), principal_ray(3,0);
-    ray[0]= nvec[0];
-    ray[1]= nvec[1];
-    ray[2]= nvec[2];
-    //Define the principal ray
-    principal_ray[0]=general_(2,0);
-    principal_ray[1]=general_(2,1);
-    principal_ray[2]=general_(2,2);
+    //Define the ray and the principal ray
+    vnl_double_3 ray(nvec[0],nvec[1],nvec[2]);
+                 principal_ray(general_(2,0),general_(2,1),general_(2,2));
     //Adjust the sense of the world ray
     double d = dot_product(ray, principal_ray);
     ray /=d;

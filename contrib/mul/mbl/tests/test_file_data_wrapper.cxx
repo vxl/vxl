@@ -2,7 +2,7 @@
 #include <testlib/testlib_test.h>
 
 #include <mbl/mbl_file_data_collector.h>
-#include <vnl/vnl_vector.h>
+#include <vnl/vnl_double_2.h>
 #include <vcl_iostream.h>
 #include <vpl/vpl.h> // vpl_unlink()
 
@@ -17,9 +17,9 @@ void test_file_data_wrapper()
            <<   "*********************************\n";
 
   // create data
-  vnl_vector<double> v1(2, -3.0, 4.0);
-  vnl_vector<double> v2(2,  8.0,-7.0);
-  vnl_vector<double> v3(2,-40.0,10.0);
+  vnl_double_2 v1( -3.0, 4.0);
+  vnl_double_2 v2(  8.0,-7.0);
+  vnl_double_2 v3(-40.0,10.0);
 
   vcl_cout<<"v1= "<<v1<<vcl_endl
           <<"v2= "<<v2<<vcl_endl

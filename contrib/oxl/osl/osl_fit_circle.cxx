@@ -5,7 +5,7 @@
 
 #include "osl_fit_circle.h"
 #include <vcl_cmath.h>
-#include <vnl/vnl_vector.h>
+#include <vnl/vnl_double_2.h>
 #include <vnl/algo/vnl_svd.h>
 
 // The well-known square function
@@ -33,7 +33,6 @@ osl_fit_circle::osl_fit_circle(const osl_edgel_chain &chain)
 
 void osl_fit_circle::calculate(const vcl_list<vgl_point_2d<double> > &points)
 {
-    int i;
     int rows = points.size();
 
     error_ = false;
@@ -50,15 +49,14 @@ void osl_fit_circle::calculate(const vcl_list<vgl_point_2d<double> > &points)
     vnl_vector<double> col3(rows);
     vnl_vector<double> col4(rows);
 
-    vcl_list<vgl_point_2d<double> >::const_iterator it;
-
-    for (it = points.begin(), i = 0; it != points.end(); it++, i++)
+    vcl_list<vgl_point_2d<double> >::const_iterator it = points.begin();
+    for (int i = 0; it != points.end(); ++it, ++i)
     {
         col2.put(i, (*it).y());
         col3.put(i, (*it).x());
     }
 
-    for (i = 0; i < rows; i++)
+    for (int i = 0; i < rows; ++i)
     {
         col1.put(i, square(col2.get(i)) + square(col3.get(i)));
         col4.put(i, 1.0);
@@ -75,20 +73,15 @@ void osl_fit_circle::calculate(const vcl_list<vgl_point_2d<double> > &points)
 
     // singular values are stored by vnl_svd in decreasing
     // order, so get last column to get optimal solution
-    vnl_vector<double> u(rows);
-    double a;
+    vnl_vector<double> u = svd.V().get_column(3);
 
-    u = svd.V().get_column(3);
-
-    a = u(0);
-    vnl_vector<double> b(2, u(1),u(2));
+    double a = u(0);
+    vnl_double_2 b(u(1),u(2));
 
     double c = u(3);
 
     center_.set(-b(1) / 2 / a, -b(0) / 2 / a);
     radius_ = vcl_sqrt(square(center_.x()) + square(center_.y()) - c / a);
-
-    double cur_diff;
 
     max_diff_ = avg_diff_ = 0;
 
@@ -96,8 +89,8 @@ void osl_fit_circle::calculate(const vcl_list<vgl_point_2d<double> > &points)
     // to the original routine, which calculates an error sum
     for (it = points.begin(); it != points.end(); it++)
     {
-        cur_diff= vcl_fabs(vcl_sqrt(square((*it).x() - center_.x()) +
-                                    square((*it).y() - center_.y())) - radius_);
+        double cur_diff= vcl_fabs(vcl_sqrt(square((*it).x() - center_.x()) +
+                                           square((*it).y() - center_.y())) - radius_);
 
         if (cur_diff > max_diff_)
             max_diff_ = cur_diff;

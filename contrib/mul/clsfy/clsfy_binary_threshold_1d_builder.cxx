@@ -9,6 +9,7 @@
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_loader.h>
+#include <vnl/vnl_double_2.h>
 #include <clsfy/clsfy_builder_1d.h>
 #include <clsfy/clsfy_binary_threshold_1d.h>
 #include <vcl_algorithm.h>
@@ -191,8 +192,8 @@ double clsfy_binary_threshold_1d_builder::build_from_sorted_data(
     threshold=(data[index].first+data[index+1].first)/2;
 
   // pass parameters to classifier
-  vnl_vector<double> params(2, polarity, threshold*polarity);
-  classifier.set_params(params);
+  vnl_double_2 params(polarity, threshold*polarity);
+  classifier.set_params(params.as_vector());
   return min_err;
 }
 
@@ -290,7 +291,7 @@ void clsfy_binary_threshold_1d_builder::b_read(vsl_b_istream& /*bfs*/)
     break;
   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_binary_threshold_1d_builder&)\n"
-             << "           Unknown version number "<< version << "\n";
+             << "           Unknown version number "<< version << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

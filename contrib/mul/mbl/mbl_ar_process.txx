@@ -9,6 +9,7 @@
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_qr.h>
 #include <vnl/algo/vnl_matrix_inverse.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <mbl/mbl_mz_random.h>
 #include <vcl_cmath.h>
 
@@ -122,7 +123,7 @@ void mbl_ar_process<T>::learn_burg(vcl_vector<vnl_vector<T> >& data)
 
     E=dot_product(Ef,Ef)/((T)dim);
 
-    vnl_vector<T> a(3, T(1),T(0),T(0));
+    vnl_vector_fixed<T,3> a(T(1),T(0),T(0));
     T km;
     for (unsigned int i=0;i<2;i++)
     {
@@ -141,7 +142,7 @@ void mbl_ar_process<T>::learn_burg(vcl_vector<vnl_vector<T> >& data)
         Ef[k]=Efp[k]+km*Ebp[k];
         Eb[k]=Ebp[k]+km*Efp[k];
         }
-      vnl_vector<T> b=a;
+      vnl_vector_fixed<T,3> b=a;
       for (unsigned int k=0;k<i+1;k++)
       {
         b[k+1]+=km*a[i-k];

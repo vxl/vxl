@@ -1,5 +1,6 @@
 #include <vcl_vector.h>
-#include <vnl/vnl_vector.h>
+#include <vnl/vnl_double_2.h>
+#include <vnl/vnl_double_3.h>
 #include <vnl/vnl_math.h>
 #include <testlib/testlib_test.h>
 
@@ -40,8 +41,8 @@ static void test_point()
 #endif
   testlib_test_begin( "ctor from two vnl_vectors" );
   {
-    vnl_vector<double> cv(2, 1.5,2.1);
-    vnl_vector<double> av(3, -3.0,-1.5,3.1);
+    vnl_double_2 cv(1.5,2.1);
+    vnl_double_3 av(-3.0,-1.5,3.1);
     rsdl_point pt_from_2v( cv, av );
     bool ok=true;
     for ( unsigned int i=0; ok && i<Nc; ++i ) ok = ok && close(pt_from_2v.cartesian(i), cv[i]);
@@ -111,7 +112,7 @@ static void test_point()
                      && close( qv.angular(2), from_v[4] ) );
 
   vnl_vector<double> new_c(2);
-  new_c.x() = -7;  new_c.y() = 3;
+  new_c[0] = -7;  new_c[1] = 3;
 
   cart[0] = 3.5; cart[1] = -5.5;
   ang[0] = -vnl_math::pi/4; ang[1] = vnl_math::pi/4; ang[2] = vnl_math::pi;
@@ -142,7 +143,7 @@ static void test_point()
 
   testlib_test_begin( "set_angular from vnl_vector" );
   {
-    vnl_vector<double> avect(3, -1.0,-1.4,2.0);
+    vnl_double_3 avect(-1.0,-1.4,2.0);
     q.set_angular( avect );
     bool ok = true;
     for ( unsigned int i=0; ok && i<Nc; ++i )

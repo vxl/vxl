@@ -7,6 +7,7 @@
 #include <vcsl/vcsl_matrix.h>
 #include <vcsl/vcsl_spatial.h>
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_double_3.h>
 
 vpgl_perspective_camera::vpgl_perspective_camera():
   _mat_cam(NULL),  _params(12)
@@ -102,8 +103,8 @@ void vpgl_perspective_camera::world_to_image(vnl_vector<double> const& vect3d,
 void vpgl_perspective_camera::world_to_image(double x, double y, double z,
                                              double& ix, double& iy, double time)
 {
-  vnl_vector<double> temp(3, x,y,z);
-  vnl_vector<double> transformed=acs->from_local_to_cs(temp,lcs,time);
+  vnl_double_3 temp(x,y,z);
+  vnl_vector<double> transformed=acs->from_local_to_cs(temp.as_vector(),lcs,time);
   _mat_cam->world_to_image(transformed, ix, iy, time);
 }
 
