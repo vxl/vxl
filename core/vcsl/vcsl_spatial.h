@@ -174,7 +174,7 @@ class vcsl_spatial
   vcl_vector<vcsl_spatial_transformation_sptr> motion_;
 
   //: List of spatial coordinate system that can be child of `this' at a time
-  vcl_vector<vcsl_spatial_sptr> _potential_children;
+  vcl_vector<vcsl_spatial_sptr> potential_children_;
 
   //: List of all the spatial coordinate system of the graph
   vcsl_graph_sptr graph_;

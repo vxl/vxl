@@ -16,7 +16,6 @@
 // 2002/01/28 Peter Vanroose - vcl_vector members angle_ and axis_ changed to non-ptr
 // \endverbatim
 
-
 #include <vcsl/vcsl_rotation_sptr.h>
 
 #include <vcsl/vcsl_spatial_transformation.h>
@@ -35,7 +34,7 @@ class vcsl_rotation
   //***************************************************************************
 
   //: Default constructor. 3D rotation
-  explicit vcsl_rotation(void) : _mode_2d(false) {}
+  explicit vcsl_rotation(void) : mode_2d_(false) {}
 
   //: Destructor
   virtual ~vcsl_rotation() {}
@@ -55,20 +54,20 @@ class vcsl_rotation
   virtual bool are_unit_axes(list_of_vectors const& new_axis) const;
 
   //: Is `this' a 2D rotation ?
-  virtual bool is_2d(void) const { return _mode_2d; }
+  virtual bool is_2d(void) const { return mode_2d_; }
 
   //: Is `this' a 3D rotation ?
-  virtual bool is_3d(void) const { return !_mode_2d; }
+  virtual bool is_3d(void) const { return !mode_2d_; }
 
   //***************************************************************************
   // Status setting
   //***************************************************************************
 
   //: Set `this' as a 2D rotation
-  virtual void set_2d(void) { _mode_2d=true; }
+  virtual void set_2d(void) { mode_2d_=true; }
 
   //: Set `this' as a 3D rotation
-  virtual void set_3d(void) { _mode_2d=false; }
+  virtual void set_3d(void) { mode_2d_=false; }
 
   //***************************************************************************
   // Transformation parameters
@@ -115,7 +114,7 @@ class vcsl_rotation
   vnl_quaternion<double> quaternion(double time) const;
 
   //: False if `this' is a 3D rotation, true if `this' is a 2D rotation
-  bool _mode_2d;
+  bool mode_2d_;
 
   //: Angle variation along the time in radians
   list_of_scalars angle_;

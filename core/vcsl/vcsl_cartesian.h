@@ -1,6 +1,5 @@
 #ifndef vcsl_cartesian_h
 #define vcsl_cartesian_h
-
 //:
 // \file 
 // \brief Cartesian coordinate system
@@ -55,7 +54,7 @@ protected:
   //***************************************************************************
 
   //:  True if the axes of `this' are right handed
-  bool _right_handed;
+  bool right_handed_;
 };
 
 #endif // vcsl_cartesian_h

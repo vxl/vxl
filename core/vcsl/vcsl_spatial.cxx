@@ -64,7 +64,7 @@ void vcsl_spatial::set_parent(vcl_vector<vcsl_spatial_sptr> const& new_parent)
     // Erase 'this' from the list of the old parents' potential children
     for (i=parent_.begin();i!=parent_.end();++i)
     {
-      vcl_vector<vcsl_spatial_sptr> children=(*i)->_potential_children;
+      vcl_vector<vcsl_spatial_sptr> children=(*i)->potential_children_;
       for (j=children.begin(); j!=children.end()&&(*j).ptr()!=this; ++j)
         ;
       if ((*j).ptr()==this) children.erase(j);
@@ -74,7 +74,7 @@ void vcsl_spatial::set_parent(vcl_vector<vcsl_spatial_sptr> const& new_parent)
     // Add 'this' to the list of the new parents' potential children
     for (i=parent_.begin();i!=parent_.end();++i)
       if ((*i).ptr()!=0)
-        (*i)->_potential_children.push_back(this);
+        (*i)->potential_children_.push_back(this);
   }
 }
 
@@ -170,10 +170,10 @@ bool vcsl_spatial::recursive_path_from_local_to_cs_exists(const vcsl_spatial_spt
       // If 'other' not found, check if 'other' can be reached through children of 'this'
       if (!result)
         {
-          if (_potential_children.size()!=0)
+          if (potential_children_.size()!=0)
             {
-              for (child=_potential_children.begin();
-                   !result && child!=_potential_children.end();
+              for (child=potential_children_.begin();
+                   !result && child!=potential_children_.end();
                   ++child)
                 {
                   result=!(*child)->reached();
@@ -263,10 +263,10 @@ vcsl_spatial::recursive_path_from_local_to_cs(const vcsl_spatial_sptr &other,
       }
     if (!result)
     {
-      if (_potential_children.size()!=0)
+      if (potential_children_.size()!=0)
       {
-        for (child=_potential_children.begin();
-             !result && child!=_potential_children.end();
+        for (child=potential_children_.begin();
+             !result && child!=potential_children_.end();
              ++child)
         {
           result=!(*child)->reached();

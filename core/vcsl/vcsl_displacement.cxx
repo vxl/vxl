@@ -67,7 +67,7 @@ vnl_vector<double> vcsl_displacement::execute(const vnl_vector<double> &v,
 
   vnl_vector<double> result(3);
 
-  if (_mode_2d)
+  if (mode_2d_)
     {
       result.put(0,v.get(0)-translation.get(0));
       result.put(1,v.get(1)-translation.get(1));
@@ -79,7 +79,7 @@ vnl_vector<double> vcsl_displacement::execute(const vnl_vector<double> &v,
   vnl_quaternion<double> q=quaternion(time);
   result = q.rotate(result);
 
-  if (_mode_2d)
+  if (mode_2d_)
     {
       vnl_vector<double> tmp(2);
       tmp.put(0,result.get(0)+translation.get(0));
@@ -107,7 +107,7 @@ vnl_vector<double> vcsl_displacement::inverse(const vnl_vector<double> &v,
 
   vnl_vector<double> result(3);
 
-  if (_mode_2d)
+  if (mode_2d_)
     {
       result.put(0,v.get(0)-translation.get(0));
       result.put(1,v.get(1)-translation.get(1));
@@ -119,7 +119,7 @@ vnl_vector<double> vcsl_displacement::inverse(const vnl_vector<double> &v,
   vnl_quaternion<double> q=quaternion(time);
   result = q.conjugate().rotate(result);
 
-  if (_mode_2d)
+  if (mode_2d_)
     {
       vnl_vector<double> tmp(2);
       tmp.put(0,result.get(0)+translation.get(0));
@@ -157,4 +157,3 @@ vnl_vector<double> vcsl_displacement::vector_value(double time) const
     }
   return vnl_vector<double>(); // never reached if asserts are in effect
 }
-

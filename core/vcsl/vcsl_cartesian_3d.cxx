@@ -18,7 +18,7 @@ vcsl_cartesian_3d::vcsl_cartesian_3d(void)
   axes_.push_back(a);
   a=new vcsl_axis(*(a.ptr()));
   axes_.push_back(a);
-  _right_handed=true;
+  right_handed_=true;
 }
 
 //---------------------------------------------------------------------------
@@ -46,7 +46,7 @@ const vcsl_cartesian_3d *vcsl_cartesian_3d::cast_to_cartesian_3d(void) const
 //---------------------------------------------------------------------------
 bool vcsl_cartesian_3d::is_right_handed(void) const
 {
-  return _right_handed;
+  return right_handed_;
 }
 
 //***************************************************************************
@@ -58,5 +58,5 @@ bool vcsl_cartesian_3d::is_right_handed(void) const
 //---------------------------------------------------------------------------
 void vcsl_cartesian_3d::set_right_handed(const bool new_right_handed)
 {
-  _right_handed=new_right_handed;
+  right_handed_=new_right_handed;
 }

@@ -9,7 +9,7 @@
 //---------------------------------------------------------------------------
 vcsl_cartesian::vcsl_cartesian(void)
 {
-  _right_handed=true;
+  right_handed_=true;
 }
 
 //---------------------------------------------------------------------------
@@ -28,7 +28,7 @@ vcsl_cartesian::~vcsl_cartesian()
 //---------------------------------------------------------------------------
 bool vcsl_cartesian::is_right_handed(void) const
 {
-  return _right_handed;
+  return right_handed_;
 }
 
 //***************************************************************************
@@ -40,5 +40,5 @@ bool vcsl_cartesian::is_right_handed(void) const
 //---------------------------------------------------------------------------
 void vcsl_cartesian::set_right_handed(const bool new_right_handed)
 {
-  _right_handed=new_right_handed;
+  right_handed_=new_right_handed;
 }

@@ -53,7 +53,7 @@ bool vcsl_rotation::are_unit_axes(list_of_vectors const& new_axis) const
 //---------------------------------------------------------------------------
 void vcsl_rotation::set_static_2d(double new_angle)
 {
-  _mode_2d=true;
+  mode_2d_=true;
   angle_.clear(); angle_.push_back(new_angle);
   vcsl_spatial_transformation::set_static();
 }
@@ -64,7 +64,7 @@ void vcsl_rotation::set_static_2d(double new_angle)
 void vcsl_rotation::set_static(double new_angle,
                                vnl_vector<double> const& new_axis)
 {
-  _mode_2d=false;
+  mode_2d_=false;
   angle_.clear(); angle_.push_back(new_angle);
   axis_.clear(); axis_.push_back(new_axis);
   vcsl_spatial_transformation::set_static();
@@ -108,7 +108,7 @@ vnl_vector<double> vcsl_rotation::execute(const vnl_vector<double> &v,
 
   vnl_quaternion<double> q=quaternion(time);
   vnl_vector<double> result(3);
-  if (_mode_2d)
+  if (mode_2d_)
     {
       result.put(0,v.get(0));
       result.put(1,v.get(1));
@@ -117,7 +117,7 @@ vnl_vector<double> vcsl_rotation::execute(const vnl_vector<double> &v,
   else
     result=v;
   result = q.rotate(result);
-  if (_mode_2d)
+  if (mode_2d_)
     {
       vnl_vector<double> tmp(2);
       result.put(0,result.get(0));
@@ -144,7 +144,7 @@ vnl_vector<double> vcsl_rotation::inverse(const vnl_vector<double> &v,
 
   vnl_vector<double> result(3);
 
-  if (_mode_2d)
+  if (mode_2d_)
     {
       result.put(0,v.get(0));
       result.put(1,v.get(1));
@@ -154,7 +154,7 @@ vnl_vector<double> vcsl_rotation::inverse(const vnl_vector<double> &v,
     result=v;
   vnl_quaternion<double> q=quaternion(time);
   result = q.conjugate().rotate(result);
-  if (_mode_2d)
+  if (mode_2d_)
     {
       vnl_vector<double> tmp(2);
       result.put(0,result.get(0));
@@ -174,7 +174,7 @@ vnl_quaternion<double> vcsl_rotation::quaternion(double time) const
 
   if (beat_.size()==0) // static
     {
-      if (_mode_2d)
+      if (mode_2d_)
         {
           vnl_vector<double> axis_2d(3);
           axis_2d.put(0,0);
@@ -190,7 +190,7 @@ vnl_quaternion<double> vcsl_rotation::quaternion(double time) const
       int i=matching_interval(time);
       vnl_vector<double> axis_2d(3);
 
-      if (_mode_2d)
+      if (mode_2d_)
         {
           axis_2d.put(0,0);
           axis_2d.put(1,0);
@@ -201,7 +201,7 @@ vnl_quaternion<double> vcsl_rotation::quaternion(double time) const
         {
         case vcsl_linear: {
           vnl_quaternion<double> q0, q1;
-          if (_mode_2d)
+          if (mode_2d_)
             {
               q0=vnl_quaternion<double>(axis_2d,angle_[i]);
               q1=vnl_quaternion<double>(axis_2d,angle_[i+1]);
