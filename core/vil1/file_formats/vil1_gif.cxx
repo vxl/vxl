@@ -9,9 +9,8 @@
 #include "vil_gif.h"
 
 #include <vcl_cassert.h>
-#include <vcl_ios.h> // for vcl_hex, vcl_dec
+#include <vcl_iomanip.h> // for vcl_hex, vcl_dec
 #include <vcl_iostream.h>
-#include <vcl_iomanip.h>
 #include <vcl_cstring.h>
 #include <vcl_cctype.h> // for vcl_isprint
 
