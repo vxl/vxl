@@ -7,9 +7,7 @@
 
 #include <vcl_cmath.h>
 #ifdef DEBUG
-#include <vul_temp_filename.h>
 #include <vcl_cstdio.h>
-#include <vpl/vpl.h>
 #include <vcl_iostream.h>
 #endif
 
@@ -598,13 +596,8 @@ static int Perform_Distributed_Task(int points,vnl_rnpoly_solve_cmplx sols[LEN][
   bool solflag=false;           // flag used to remember if a root is found
   int max_deg=P;
 #ifdef DEBUG
-  char const* TMPNAM = vul_temp_filename();
-  char const* FILENAM = TMPNAM ? TMPNAM : "/tmp/cont.results";
+  char const* FILENAM = "/tmp/cont.results";
   FILE *F = vcl_fopen(FILENAM,"w");
-  if (!F) {
-    vpl_unlink(FILENAM);
-    F = vcl_fopen(FILENAM,"w");
-  }
   if (!F) {
     vcl_cerr<<"could not open "<<FILENAM<<"\nplease erase old file first\n";
     F = stderr;
