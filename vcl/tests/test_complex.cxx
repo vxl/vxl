@@ -48,9 +48,10 @@ int test_complex_main(int /*argc*/,char* /*argv*/[])
 
   const vcl_complex<double> neg1(-1.0, 0.0);
   vcl_complex<double> sqrt_neg1 = vcl_pow(neg1, 0.5);
-  vcl_cout << "pow("<<neg1<<",0.5) = "<<sqrt_neg1<<" and should be (0,1)\n";
-  if ( vcl_abs(sqrt_neg1-1.0) > 1e-6 ||
-       vcl_arg(sqrt_neg1) > 1.0e-4 || -vcl_arg(sqrt_neg1) > 1.0e-4) {} // Deal with NaN case
+  vcl_cout << "pow("<<neg1<<",0.5) = "<<sqrt_neg1<<
+    " and should be (0,1)"<<vcl_endl;
+  if ( -vcl_abs(sqrt_neg1-vcl_complex<double>(0.0,1.0)) > -1e-6)
+  {} // Deal with NaN case
   else
   {
     vcl_cout << "** FAILURE **\n";
@@ -59,10 +60,10 @@ int test_complex_main(int /*argc*/,char* /*argv*/[])
 
   const vcl_complex<double> half(0.5,0.0);
   sqrt_neg1 = vcl_pow(neg1, half);
-  vcl_cout << "pow("<<neg1<<','<<half<<") = "<< sqrt_neg1
-           << " and should be (0,1)\n";
-  if ( vcl_abs(sqrt_neg1-1.0) > 1.0e-6 ||
-       vcl_arg(sqrt_neg1) > 1.0e-4 || -vcl_arg(sqrt_neg1) > 1.0e-4) {}
+  vcl_cout << "pow("<<neg1<<","<<half<<") = "<<sqrt_neg1<<
+    " and should be (0,1)"<<vcl_endl;
+  if ( -vcl_abs(sqrt_neg1-vcl_complex<double>(0.0,1.0)) > -1e-6)
+  {} // Deal with NaN case
   else
   {
     vcl_cout << "** FAILURE **\n";
