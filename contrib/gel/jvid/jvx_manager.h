@@ -18,7 +18,7 @@
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_viewer2D_tableau_sptr.h>
 #include <vgui/vgui_dialog.h>
-#include <vidl_vil1/vidl_vil1_movie.h>
+#include <vidl_vil1/vidl_vil1_movie_sptr.h>
 
 #ifdef HAS_MPEG2
 #include <vidl_vil1/vidl_vil1_mpegcodec.h>

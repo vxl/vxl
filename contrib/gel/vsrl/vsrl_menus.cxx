@@ -6,7 +6,6 @@
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_key.h>
-#include <vgui/vgui_modifier.h>
 #include <vgui/vgui_menu.h>
 #include "vsrl_manager.h"
 #include "vsrl_menus.h"

@@ -7,8 +7,6 @@
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_window.h>
 #include <vgui/vgui_command.h>
-#include <vgui/vgui_image_tableau.h>
-#include <vgui/internals/vgui_accelerate.h>
 #include <vidl_vil1/vidl_vil1_io.h>
 #include <jvid/jvx_manager.h>
 
@@ -16,8 +14,8 @@
 # include <vidl_vil1/vidl_vil1_mpegcodec.h>
 #endif
 
-#ifdef HAS_X11
-# include <vgui/internals/vgui_accelerate_x11.h>
+#ifdef HAS_MFC
+# include <vgui/internals/vgui_accelerate.h>
 #endif
 
 #ifdef VCL_WIN32
@@ -36,10 +34,12 @@ void file_callback()
 {
   jvm->load_video_file();
 }
+
 void play_callback()
 {
   jvm->play_video();
 }
+
 int main(int argc, char** argv)
 {
   // Register video codecs

@@ -14,14 +14,12 @@
 #include <vnl/vnl_double_2.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_dialog.h>
-#include <vgui/vgui_menu.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_soview2D.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
-#include <vgui/vgui_projection_inspector.h>
 #include <vsrl/vsrl_stereo_dense_matcher.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
