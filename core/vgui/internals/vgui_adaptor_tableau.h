@@ -14,6 +14,13 @@
 class vgui_adaptor;
 
 //: Propagates tableau posts to an adaptor.
+// This is a special tableau which is always the top
+// of the tableau graph under each adaptor.  (Top means
+// it has no parents and every tableau under the adaptor
+// is a child of one of these).  Its main purpose
+// is to catch messsages "up" the tableau hierarchy
+// like "post_redraw", and pass them on to the
+// adaptor.
 class vgui_adaptor_tableau : private vgui_tableau
 {
   friend class vgui_adaptor;
@@ -26,7 +33,7 @@ class vgui_adaptor_tableau : private vgui_tableau
   bool handle(vgui_event const &e) { return slot.handle(e); }
   vcl_string type_name() const { return "vgui_adaptor_tableau"; }
 
-/*even more*/ private:
+//even more private:
   vgui_adaptor *adaptor;
   vgui_parent_child_link slot;
   void post_message(char const *, void const *);
