@@ -189,8 +189,8 @@ public:
  
   virtual void compute_bounding_box(void); // A local implementation
 
-  void print (ostream &strm=cout) const;
-  void describe(ostream &strm=cout, int blanking=0) const;
+  void print (vcl_ostream &strm=vcl_cout) const;
+  void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;
   
 
   bool remove(vtol_zero_chain_3d *zero_chain,

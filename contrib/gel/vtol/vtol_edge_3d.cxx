@@ -258,7 +258,7 @@ vtol_topology_object_3d *vtol_edge_3d::shallow_copy_with_no_links(void)
   vtol_edge_3d *newedge=new vtol_edge_3d(*this); 
   topology_list_3d *infs=newedge->get_inferiors();
   if (infs->size()!=1) 
-    cerr << "Error in vtol_edge_3d::shallow_copy_with_no_links():\n"
+    vcl_cerr << "Error in vtol_edge_3d::shallow_copy_with_no_links():\n"
          << "vtol_edge_3d does not have exactly 1 inferior\n";
   vtol_topology_object_3d *inf=(*infs)[0];
   newedge->unlink_inferior(inf);
@@ -360,7 +360,7 @@ bool vtol_edge_3d::set_end_points(vtol_vertex_3d *endpt1,
   if((vcl_find(verts->begin(),verts->end(),endpt1)==verts->end())||
      (vcl_find(verts->begin(),verts->end(),endpt2)==verts->end()))
     {
-      cerr << "Error in vtol_edge_3d::set_end_points(): both endpoints must be on this vtol_edge_3d.\n";
+      vcl_cerr << "Error in vtol_edge_3d::set_end_points(): both endpoints must be on this vtol_edge_3d.\n";
       delete verts;
       return false;
     }
@@ -384,13 +384,13 @@ bool vtol_edge_3d::replace_end_point(vtol_vertex_3d *curendpt,
   // Some error checking
   if (!curendpt||!newendpt)
     {
-      cerr << "Error in vtol_edge_3d::replace_end_point(): arguments can not be NULL.\n";
+      vcl_cerr << "Error in vtol_edge_3d::replace_end_point(): arguments can not be NULL.\n";
       return false;
     }
   
   if((curendpt!=this->get_v1())&&(curendpt!=this->get_v2()))
     {
-      cerr << "Error in vtol_edge_3d::replace_end_point(): first argument must be _v1 or _v2.\n";
+      vcl_cerr << "Error in vtol_edge_3d::replace_end_point(): first argument must be _v1 or _v2.\n";
       return false;
     }
   
@@ -669,7 +669,7 @@ bool vtol_edge_3d::disconnect(vcl_vector< vtol_topology_object_3d *> &changes,
     // TODO
     // (*s)->remove( this, changes, deleted );
     ;
-  cerr << "Must implement vtol_one_chain_3d::remove()\n";
+  vcl_cerr << "Must implement vtol_one_chain_3d::remove()\n";
 
   unlink_all_superiors_twoway(this);
   deep_remove(deleted);
@@ -706,7 +706,7 @@ bool vtol_edge_3d::remove(vtol_zero_chain_3d *,
     // TODO
     // ((*s))->remove( this, changes, deleted );
     ;
-  cerr << "Must implement vtol_one_chain_3d::remove()\n";
+  vcl_cerr << "Must implement vtol_one_chain_3d::remove()\n";
 
   // Removal of a zerochain from an edge always results in the
   // destruction of the edge.
@@ -878,7 +878,7 @@ void vtol_edge_3d::compute_bounding_box(void)
 // --
 // This method outputs all edge information to the ostream, strm.  It
 // indents various levels of output by the number given in blanking.
-void vtol_edge_3d::describe(ostream &strm,
+void vtol_edge_3d::describe(vcl_ostream &strm,
                             int blanking) const
 {
   for (int i=0; i<blanking; ++i) strm << ' ';
@@ -887,20 +887,20 @@ void vtol_edge_3d::describe(ostream &strm,
   if(_v1) {
     _v1->print(strm);
   } else {
-    strm << "Null vertex 1" << endl;
+    strm << "Null vertex 1" << vcl_endl;
   }
   for (int i2=0; i2<blanking; ++i2) strm << ' ';
   if(_v2) {
     _v2->print(strm);
   } else {
-    strm << "Null vertex 2" << endl;
+    strm << "Null vertex 2" << vcl_endl;
   }
 }
 
 // -- This method outputs a brief vtol_edge_3d info with vtol_edge_3d object address.
-void vtol_edge_3d::print(ostream &strm) const
+void vtol_edge_3d::print(vcl_ostream &strm) const
 {
-   strm<<"<vtol_edge_3d  "<<"  "<<(void *)this <<"> with id "<<get_id()<<endl;
+   strm<<"<vtol_edge_3d  "<<"  "<<(void *)this <<"> with id "<<get_id()<<vcl_endl;
 }
 
 

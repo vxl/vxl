@@ -63,7 +63,7 @@ vtol_face_3d::vtol_face_3d(const vtol_face_3d &other)
       vtol_topology_object_3d* V2 = newverts[e->get_v2()->get_id()];
       if(!(V1&&V2))
         {
- 	  cerr << "Inconsistent topology in vtol_face_3d copy constructor\n";
+ 	  vcl_cerr << "Inconsistent topology in vtol_face_3d copy constructor\n";
  	  vtol_one_chain_3d *inf = new vtol_one_chain_3d();
           link_inferior(inf);
           return;
@@ -145,7 +145,7 @@ vtol_topology_object_3d * vtol_face_3d::shallow_copy_with_no_links( void )
     vtol_face_3d * newface = new vtol_face_3d;
     topology_list_3d * infs = newface->get_inferiors();
     if ( infs->size() != 1 ) 
-        cerr << "Error in vtol_face_3d::ShallowCopyWithNoLinks\n"
+        vcl_cerr << "Error in vtol_face_3d::ShallowCopyWithNoLinks\n"
              << "vtol_face_3d does not have 1 inferior\n";
     vtol_topology_object_3d * inf = (*infs)[0];
     newface->unlink_inferior( inf );
@@ -218,7 +218,7 @@ vtol_face_3d::vtol_face_3d(vcl_vector<vtol_vertex_3d *> *verts)
     }
   else
     {
-      cout << "face with not enough verts " << verts << endl;
+      vcl_cout << "face with not enough verts " << verts << vcl_endl;
     }
 }
 
@@ -748,7 +748,7 @@ vtol_one_chain_3d* vtol_face_3d::get_one_chain(int which)
     return (_inferiors[which])->cast_to_one_chain_3d();
   else
     {
-      cerr << "Tried to get bad edge_loop from face" << endl;
+      vcl_cerr << "Tried to get bad edge_loop from face" << vcl_endl;
       return NULL;
     }
 }
@@ -868,7 +868,7 @@ void vtol_face_3d::compute_bounding_box()
 // Inferiors.  The blanking argument is used to indent the output in
 // a clear fashion.
 
-void vtol_face_3d::describe(ostream& strm,int blanking) const
+void vtol_face_3d::describe(vcl_ostream& strm,int blanking) const
 {
   for (int j=0; j<blanking; ++j) strm << ' ';
   print();
@@ -879,7 +879,7 @@ void vtol_face_3d::describe(ostream& strm,int blanking) const
       }
       else{
         for (int j=0; j<blanking; ++j) strm << ' ';
-        cout << "Odd inferior for a face" << endl;
+        vcl_cout << "Odd inferior for a face" << vcl_endl;
       }
   }
 }
@@ -889,7 +889,7 @@ void vtol_face_3d::describe(ostream& strm,int blanking) const
 // includes its address in memory.
 
 
-void vtol_face_3d::print(ostream& strm) const
+void vtol_face_3d::print(vcl_ostream& strm) const
 {
   strm << "<vtol_face_3d  ";
   topology_list_3d::const_iterator ii;
@@ -898,6 +898,6 @@ void vtol_face_3d::print(ostream& strm) const
     {
       strm << " " << (*ii)->get_inferiors()->size();
     }
- strm << "   " << (void *) this << '>' << endl;
+ strm << "   " << (void *) this << '>' << vcl_endl;
 
 }

@@ -262,7 +262,7 @@ void vtol_edge_2d::set_end_points(vtol_vertex_2d &endpt1,
   if((vcl_find(verts->begin(),verts->end(),endpt1)==verts->end())||
      (vcl_find(verts->begin(),verts->end(),endpt2)==verts->end()))
     {
-      cerr << "Error in vtol_edge_2d::set_end_points(): both endpoints must be on this vtol_edge_2d.\n";
+      vcl_cerr << "Error in vtol_edge_2d::set_end_points(): both endpoints must be on this vtol_edge_2d.\n";
       delete verts;
     }
   _v1=endpt1;
@@ -645,7 +645,7 @@ void vtol_edge_2d::compute_bounding_box(void)
 // --
 // This method outputs all edge information to the ostream, strm.  It
 // indents various levels of output by the number given in blanking.
-void vtol_edge_2d::describe(ostream &strm,
+void vtol_edge_2d::describe(vcl_ostream &strm,
                             int blanking) const
 {
   for (int i1=0; i1<blanking; ++i1) strm << ' ';
@@ -654,19 +654,19 @@ void vtol_edge_2d::describe(ostream &strm,
   if(_v1) {
     _v1->print(strm);
   } else {
-    strm << "Null vertex 1" << endl;
+    strm << "Null vertex 1" << vcl_endl;
   }
   for (int i3=0; i3<blanking; ++i3) strm << ' ';
   if(_v2) {
     _v2->print(strm);
   } else {
-    strm << "Null vertex 2" << endl;
+    strm << "Null vertex 2" << vcl_endl;
   }
 }
 
 // --
 // This method outputs a brief vtol_edge_2d info with vtol_edge_2d object address.
-void vtol_edge_2d::print(ostream &strm) const
+void vtol_edge_2d::print(vcl_ostream &strm) const
 {
-   strm<<"<vtol_edge_2d  "<<"  "<<(void *)this <<"> with id "<<get_id()<<endl;
+   strm<<"<vtol_edge_2d  "<<"  "<<(void *)this <<"> with id "<<get_id()<<vcl_endl;
 }

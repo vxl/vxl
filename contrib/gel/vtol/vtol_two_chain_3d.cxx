@@ -510,7 +510,7 @@ void vtol_two_chain_3d::deep_remove( vcl_vector< vtol_topology_object_3d * > & r
 bool
 vtol_two_chain_3d::break_into_connected_components( vcl_vector<vtol_topology_object_3d*> & components )
 {
-  cerr << "vtol_two_chain_3d::break_into_connected_components() not implemented yet\n";
+  vcl_cerr << "vtol_two_chain_3d::break_into_connected_components() not implemented yet\n";
   return false; // TO DO
 }
 
@@ -872,7 +872,7 @@ bool vtol_two_chain_3d::operator==(const vsol_spatial_object_3d& obj) const
 void vtol_two_chain_3d::correct_chain_directions()
 {
   // TO DO
-  cerr << "vtol_two_chain_3d::correct_chain_directions() not yet implemented\n";
+  vcl_cerr << "vtol_two_chain_3d::correct_chain_directions() not yet implemented\n";
   
 #if 0
   vcl_vector<vtol_face_3d*> *allfaces = this->faces();
@@ -890,14 +890,14 @@ void vtol_two_chain_3d::correct_chain_directions()
 //    Print Functions
 //*****************************************************
 
-void vtol_two_chain_3d::print(ostream& strm) const
+void vtol_two_chain_3d::print(vcl_ostream& strm) const
 {
-  strm << "<vtol_two_chain_3d " << _inferiors.size() << "  "  << (void *)this << ">"  << endl;
+  strm << "<vtol_two_chain_3d " << _inferiors.size() << "  "  << (void *)this << ">"  << vcl_endl;
 }
 
 
 
-void vtol_two_chain_3d::describe_directions(ostream& strm, int blanking) const
+void vtol_two_chain_3d::describe_directions(vcl_ostream& strm, int blanking) const
 {
   for (int j=0; j<blanking; ++j) strm << ' ';
   strm << "<Dirs [" << _directions.size() << "]: ";
@@ -905,10 +905,10 @@ void vtol_two_chain_3d::describe_directions(ostream& strm, int blanking) const
   vcl_vector<signed char>::const_iterator di;
   for (di=_directions.begin();di!=_directions.end();++di)
     strm << (*di) << "  ";
-  strm << endl;
+  strm << vcl_endl;
 }
 
-void vtol_two_chain_3d::describe(ostream& strm, int blanking) const
+void vtol_two_chain_3d::describe(vcl_ostream& strm, int blanking) const
 {
   for (int j=0; j<blanking; ++j) strm << ' ';
   print(strm);

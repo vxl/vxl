@@ -76,10 +76,10 @@ public:
   int numinf() const { return _inferiors.size(); }
   int numsup() const { return _superiors.size(); }
  
-  void describe_inferiors(ostream& strm=cout,int blanking=0) const;
-  void describe_superiors(ostream& strm=cout,int blanking=0) const;
-  void print(ostream& strm=cout) const;
-  void describe(ostream& strm=cout,int blanking=0) const;
+  void describe_inferiors(vcl_ostream& strm=vcl_cout,int blanking=0) const;
+  void describe_superiors(vcl_ostream& strm=vcl_cout,int blanking=0) const;
+  void print(vcl_ostream& strm=vcl_cout) const;
+  void describe(vcl_ostream& strm=vcl_cout,int blanking=0) const;
 
   inline topology_list_3d * get_inferiors() { return &_inferiors; }
   inline topology_list_3d * get_superiors() { return &_superiors; }

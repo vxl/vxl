@@ -97,9 +97,9 @@ public:
   bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object_3d
 
   //: Printing Functions
-  void print (ostream& strm =cout) const;
-  void describe_directions(ostream& strm = cout, int blanking = 0) const;
-  void describe(ostream& strm = cout, int blanking = 0) const;
+  void print (vcl_ostream& strm =vcl_cout) const;
+  void describe_directions(vcl_ostream& strm = vcl_cout, int blanking = 0) const;
+  void describe(vcl_ostream& strm = vcl_cout, int blanking = 0) const;
 
   bool remove( vtol_two_chain_3d * two_chain,
                vcl_vector< vtol_topology_object_3d * > & changes,

@@ -79,8 +79,8 @@ public:
   inline bool remove_vertex(vtol_vertex_3d *v){this->touch(); return unlink_inferior(v);}
 
   
-  void print (ostream& strm =cout) const;
-  void describe (ostream& strm =cout, int blanking = 0) const;
+  void print (vcl_ostream& strm =vcl_cout) const;
+  void describe (vcl_ostream& strm =vcl_cout, int blanking = 0) const;
 
 
   bool operator== (const vtol_zero_chain_3d&) const;

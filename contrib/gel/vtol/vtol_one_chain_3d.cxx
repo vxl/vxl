@@ -428,9 +428,9 @@ void vtol_one_chain_3d::compute_bounding_box()
       vsol_box_3d* b = e->get_bounding_box();
       if(!b)
 	{
-	  cout << "In vtol_one_chain_3d::ComputeBoundingBox()"
+	  vcl_cout << "In vtol_one_chain_3d::ComputeBoundingBox()"
 	       << " - Edge has null bounding box" 
-	       << endl;
+	       << vcl_endl;
 	  continue;
 	}
       if(xmin > b->get_min_x()) xmin = b->get_min_x();
@@ -570,7 +570,7 @@ bool vtol_one_chain_3d::remove_edge(vtol_edge_3d* doomed_edge, bool force_it)
 {
   if (!force_it && _cycle_p)
     {
-      cerr << "Tried to remove edge to cyclic edge loop" << endl;
+      vcl_cerr << "Tried to remove edge to cyclic edge loop" << vcl_endl;
       return false;
     } else {
       // int index = _inferiors.position(doomed_edge);
@@ -726,15 +726,15 @@ bool vtol_one_chain_3d::operator==(const vsol_spatial_object_3d& obj) const
 // -- Print Methods
 
 
-void vtol_one_chain_3d::print(ostream& strm) const
+void vtol_one_chain_3d::print(vcl_ostream& strm) const
 {
-  strm << "<one_chain_3d " << _inferiors.size() << "  " << (void *) this << ">"  << endl;
+  strm << "<one_chain_3d " << _inferiors.size() << "  " << (void *) this << ">"  << vcl_endl;
 }
 
 
 // -- Describe the directions
 
-void vtol_one_chain_3d::describe_directions(ostream& strm, int blanking) const
+void vtol_one_chain_3d::describe_directions(vcl_ostream& strm, int blanking) const
 {
   for (int j=0; j<blanking; ++j) strm << ' ';
   strm << "<Dirs [" << _directions.size() << "]: ";
@@ -742,13 +742,13 @@ void vtol_one_chain_3d::describe_directions(ostream& strm, int blanking) const
   vcl_vector<signed char>::const_iterator d1;
   for (d1=_directions.begin();d1!=_directions.end();++d1)
     strm << (int)(*d1) << "  ";
-  strm << endl;
+  strm << vcl_endl;
 }
 
 
 // -- Describe the one chain 
 
-void vtol_one_chain_3d::describe(ostream& strm, int blanking) const
+void vtol_one_chain_3d::describe(vcl_ostream& strm, int blanking) const
 {
   for (int j=0; j<blanking; ++j) strm << ' ';
   print(strm);
