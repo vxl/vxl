@@ -189,7 +189,7 @@ vcl_vector<double> FMatrixComputeRobust::calculate_residuals(vcl_vector<HomgPoin
 
 // Find the standard deviation of the residuals
 double FMatrixComputeRobust::stdev(vcl_vector<double>& residuals) {
-  double ret;
+  double ret = 0.0;
   for(int i = 0; i < data_size_; i++)
     ret += residuals[i];
 
