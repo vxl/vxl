@@ -18,6 +18,10 @@ ENDIF(UNIX)
 
 
 ADD_EXECUTABLE(
+vcl_tests vcl_tests.cpp
+)
+
+ADD_EXECUTABLE(
 test_vcl_algorithm test_vcl_algorithm
 )
 
