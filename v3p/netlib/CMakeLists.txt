@@ -6,199 +6,42 @@
 ADD_LIBRARY(netlib netlib_sources)
 
 SOURCE_FILES( netlib_sources
-c_sqrt  
-z_sqrt  
-cdabs 
-cdsqrt 
-F77_aloc 
-exit 
-s_cmp 
-d_lg10 
-s_cat 
-s_copy 
-d_sign 
-d_cnjg 
-d_imag 
-z_div 
-z_abs 
-cabs 
-c_abs 
-c_div 
-sig_die 
-r_sign 
-r_imag 
-r_cnjg 
-pow_ii 
-pow_ri 
-pow_di 
-izamax 
-daxpy 
-dcopy 
-ddot 
-dnrm2 
-drot 
-drotg 
-dscal 
-dasum 
-dzasum 
-dswap 
-dgemv 
-dger 
-saxpy 
-scopy 
-sdot 
-snrm2 
-srot 
-srotg 
-sscal 
-sasum 
-sswap 
-sgemv 
-sger 
-caxpy 
-ccopy 
-cdotc 
-csrot 
-scnrm2 
-cscal 
-cswap 
-zcopy 
-zdotu 
-zdscal 
-zgemm 
-zgemv 
-zgerc 
-ztrmm 
-ztrmv 
-ztrsv 
-lsqr 
-ssvdc 
-dsvdc 
-csvdc 
-zsvdc 
-sqrdc 
-dqrdc 
-cqrdc 
-zqrdc 
-sqrsl 
-dqrsl 
-zqrsl 
-cqrsl 
-dpofa  
-dpoco 
-dposl 
-dpodi 
-isamax 
-idamax 
-rsg 
-rg 
-rs 
-tql1 
-tql2 
-tred1 
-tred2 
-lmdif 
-lmder 
-lmder1 
-pythag 
-rpoly 
-dtrans 
-trans 
-machineparams 
-dgpfa   
-dgpfa3f   
-dsetgpfa  
-gpfa2f  
-gpfa5f 
-dgpfa2f  
-dgpfa5f  
-gpfa   
-gpfa3f  
-setgpfa 
-cg 
-camsun 
-dnlaso 
-lbfgs 
-lbfgs-lb1 
-ilaenv 
-izmax1 
-xerbla 
-lsame 
-dlamch 
-slamch 
-dgeqpf 
-dgeqr2 
-dgerq2 
-dggsvd 
-dggsvp 
-dlacpy 
-dlags2 
-dlange 
-dlapll 
-dlapmt 
-dlapy2 
-dlarf 
-dlarfg 
-dlartg 
-dlas2 
-dlaset 
-dlassq 
-dlasv2 
-dlabad 
-dladiv 
-dlapy3 
-dorg2r 
-dorm2r 
-dormr2 
-dtgsja 
-sggsvd 
-sgeqpf 
-sgeqr2 
-sgerq2 
-sggsvp 
-slacpy 
-slags2 
-slange 
-slapll 
-slapmt 
-slapy2 
-slarf 
-slarfg 
-slartg 
-slas2 
-slaset 
-slassq 
-slasv2 
-sorg2r 
-sorm2r 
-sormr2 
-stgsja 
-zgebak 
-zgebal 
-zgeev 
-zgehd2 
-zgehrd 
-zhseqr 
-zlacgv 
-zlacpy 
-zladiv 
-zlahqr 
-zlahrd 
-zlange 
-zlanhs 
-zlarf 
-zlarfb 
-zlarfg 
-zlarft 
-zlarfx 
-zlascl 
-zlaset 
-zlassq 
-zlatrs 
-ztrevc 
-zung2r 
-zunghr 
-zungqr
+F77_aloc  dgpfa5f   dtrans         r_imag   slarf   zgebak
+c_abs     dlabad    dzasum         r_sign   slarfg  zgebal
+c_div     dlacpy    eisrsg         rg       slartg  zgeev
+c_sqrt    dladiv    enorm          rpoly    slas2   zgehd2
+cabs      dlags2    exit           rs       slaset  zgehrd
+camsun    dlamch    fdjac2         rsg      slassq  zgemm
+caxpy     dlange    full-dpoco     s_cat    slasv2  zgemv
+ccopy     dlapll    gpfa           s_cmp    smvpc   zgerc
+cdabs     dlapmt    gpfa2f         s_copy   snlaso  zhseqr
+cdotc     dlapy2    gpfa3f         sasum    snppla  zlacgv
+cdsqrt    dlapy3    gpfa5f         saxpy    snrm2   zlacpy
+cg        dlarf     idamax         scnrm2   sorg2r  zladiv
+cqrdc     dlarfg    ilaenv         scopy    sorm2r  zlahqr
+cqrsl     dlartg    isamax         sdot     sormr2  zlahrd
+cscal     dlas2     izamax         setgpfa  sortqr  zlange
+csrot     dlaset    izmax1         sgemv    sqrdc   zlanhs
+csvdc     dlassq    lbfgs-example  sgeqpf   sqrsl   zlarf
+cswap     dlasv2    lbfgs-lb1      sgeqr2   srot    zlarfb
+d_cnjg    dnlaso    lbfgs          sger     srotg   zlarfg
+d_imag    dnrm2     lmder          sgerq2   sscal   zlarft
+d_lg10    dorg2r    lmder1         sggsvd   ssvdc   zlarfx
+d_sign    dorm2r    lmdif          sggsvp   sswap   zlascl
+dasum     dormr2    lmpar          sig_die  stgsja  zlaset
+daxpy     dpoco     lsame          slabax   svsort  zlassq
+dcopy     dpodi     lsqr-test      slabcm   tql1    zlatrs
+ddot      dpofa     lsqr           slabfc   tql2    zqrdc
+dgemv     dposl     machineparams  slacpy   trans   zqrsl
+dgeqpf    dqrdc     main           slaeig   tred1   zsvdc
+dgeqr2    dqrsl     pow_dd         slager   tred2   ztrevc
+dger      drot      pow_di         slags2   xerbla  ztrmm
+dgerq2    drotg     pow_ii         slamch   z_abs   ztrmv
+dggsvd    dscal     pow_ri         slange   z_div   ztrsv
+dggsvp    dsetgpfa  pythag         slapll   z_sqrt  zung2r
+dgpfa     dsvdc     qrfac          slapmt   zcopy   zunghr
+dgpfa2f   dswap     qrsolv         slapy2   zdotu   zungqr
+dgpfa3f   dtgsja    r_cnjg         slaran   zdscal
 )
 
 
