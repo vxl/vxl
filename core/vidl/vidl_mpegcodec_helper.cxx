@@ -1,4 +1,4 @@
-// This is vxl/vidl/vidl_mpegcodec_helper.cxx
+// This is core/vidl/vidl_mpegcodec_helper.cxx
 #include "vidl_mpegcodec_helper.h"
 #include "vidl_file_sequence.h"
 #include <vcl_iostream.h>
@@ -161,16 +161,16 @@ vidl_mpegcodec_helper::demux (uint8_t * buf, uint8_t * end, int flags)
 #define DEMUX_DATA 1
 #define DEMUX_SKIP 2
     static int state = DEMUX_SKIP;
-    static int state_bytes = 0;
+    static long int state_bytes = 0;
     static uint8_t head_buf[264];
 
     uint8_t * header;
-    int bytes;
+    long int bytes;
     int len;
 
 #define NEEDBYTES(x)                                           \
     do {                                                       \
-        int missing = (x) - bytes;                             \
+        long int missing = (x) - bytes;                        \
         if (missing > 0) {                                     \
             if (header == head_buf) {                          \
                 if (missing <= end - buf) {                    \
@@ -179,7 +179,7 @@ vidl_mpegcodec_helper::demux (uint8_t * buf, uint8_t * end, int flags)
                     bytes = (x);                               \
                 } else {                                       \
                     vcl_memcpy(header + bytes, buf, end - buf);\
-                    state_bytes = bytes + end - buf;           \
+                    state_bytes = bytes + (end - buf);         \
                     return 0;                                  \
                 }                                              \
             } else {                                           \
