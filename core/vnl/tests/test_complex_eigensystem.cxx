@@ -52,12 +52,12 @@ void test_complex_eigensystem()
     vnl_vector<vcl_complex<double> > l(eig.left_eigen_vector(i));
     err = (l*A - l*w);
     //cout << "  " << err << endl;
-    Assert("  Left  eigenvalue", err.magnitude() < 1e-10);
+    vnl_test_assert("  Left  eigenvalue", err.magnitude() < 1e-10);
     //
     vnl_vector<vcl_complex<double> > r(eig.right_eigen_vector(i));
     err = (A*r - w*r);
     //cout << "  " << err << endl;
-    Assert("  Right eigenvalue", err.magnitude() < 1e-10);
+    vnl_test_assert("  Right eigenvalue", err.magnitude() < 1e-10);
   }
 }
 

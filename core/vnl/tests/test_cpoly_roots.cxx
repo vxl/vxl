@@ -12,12 +12,12 @@ void testvnl_cpoly_roots()
   vnl_vector<double> monic( (a/a[0]).extract(a.size()-1,1) );
   vnl_cpoly_roots roots( monic, 0.0*monic );
   
-  Assert( "Number of solutions", roots.solns.size() == monic.size() );
+  vnl_test_assert( "Number of solutions", roots.solns.size() == monic.size() );
   
   // Evaluate results
   vnl_real_polynomial f(a);
   for(int i = 0; i < f.degree(); ++i)
-    Assert("Root residual", vcl_abs(f.evaluate(roots.solns[i])) < 1e-12);
+    vnl_test_assert("Root residual", vcl_abs(f.evaluate(roots.solns[i])) < 1e-12);
 }
 
 TESTMAIN(testvnl_cpoly_roots);

@@ -15,7 +15,7 @@
 
 static void fsm_assert_(int lineno, bool pass, char const *expr) {
   vcl_cout << __FILE__ ":" << lineno << vcl_endl;
-  Assert(expr, pass);
+  vnl_test_assert(expr, pass);
 }
 #define fsm_assert(c) fsm_assert_(__LINE__, c, #c);
 

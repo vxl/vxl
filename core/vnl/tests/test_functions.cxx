@@ -75,8 +75,8 @@ int testFunctions()
     for (chisq = 0; chisq < 200; chisq+=20)
     {
       float cdf = vnl_chi_squared_cumulative(chisq,n);
-      Assert("vnl_chi_squared CDF", fabs(cdf - cdf_baseline[idx]) < 1e-15);
-      if (! (fabs(cdf - cdf_baseline[idx]) < 1e-15))
+      vnl_test_assert("vnl_chi_squared CDF", fabs(cdf - cdf_baseline[idx]) < 1e-15);
+      if (! (vcl_fabs(cdf - cdf_baseline[idx]) < 1e-15))
         vcl_cout << "Error = " // win32 << setprecision(16)
                  << fabs(cdf - cdf_baseline[idx]) << vcl_endl;
       ++idx;

@@ -36,7 +36,7 @@ void testvnl_matrix_fixed()
   // FIXME: Win32 will have different operator new in vnl dll from
   // the one generated here, so this test fails - RWMC.
 #ifndef WIN32
-  Assert("mallocs", malloc_count <= 1);
+  vnl_test_assert("mallocs", malloc_count <= 1);
 #endif
   
   vcl_cout << "Now watch them mallocs\n";

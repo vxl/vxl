@@ -167,9 +167,9 @@ int doTest4()
     double sparse = es.get_eigenvalue(i);
     vcl_cout << "Dense[" << i << "] : " << dense << vcl_endl;
     vcl_cout << "Sparse[" << i << "]: " << sparse << vcl_endl;
-    double err = fabs(dense - sparse);
+    double err = vcl_fabs(dense - sparse);
     vcl_cout << "Error: " << err << vcl_endl;
-    Assert("vnl_sparse_symmetric_eigensystem eigenvalue error", err < 1e-10);
+    vnl_test_assert("vnl_sparse_symmetric_eigensystem eigenvalue error", err < 1e-10);
   }
   return 0;
 }

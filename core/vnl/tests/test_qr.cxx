@@ -13,12 +13,12 @@ void test_matrix(char const* name, const vnl_matrix<double>& A, double det = 0)
   vnl_qr<double> qr(A);
 
   vcl_string n(name); n+= ": ";
-  AssertNear(n+"Q * R residual", (qr.Q() * qr.R() - A).fro_norm());
-  Assert(n+"Q * Q = I", (qr.Q().transpose() * qr.Q()).is_identity(1e-12));
+  vnl_test_assert_near(n+"Q * R residual", (qr.Q() * qr.R() - A).fro_norm());
+  vnl_test_assert(n+"Q * Q = I", (qr.Q().transpose() * qr.Q()).is_identity(1e-12));
 
   if (det)
-    AssertNear(n+ "Determinant", qr.determinant(), det, 1e-10);
-}
+    vnl_test_assert_near(n+ "Determinant", qr.determinant(), det, 1e-10);
+} 
 
 void old_test()
 {
@@ -52,7 +52,7 @@ void old_test()
 
   double res = (A * x - b).magnitude();
 
-  AssertNear("Solve residual", res, 37.8841, 1e-3);
+  vnl_test_assert_near("Solve residual", res, 37.8841, 1e-3);
 
   {
     double S_data[] = {
@@ -69,51 +69,24 @@ void old_test()
 
 //--------------------------------------------------------------------------------
 
-template <class T> class traits;
-
-VCL_DEFINE_SPECIALIZATION
-class traits<double> {
-public:
-  static double eps() { return 1e-12; }
-  static double rand(double const &) { return 2*double(::rand())/double(RAND_MAX) - 1; }
-};
-
-VCL_DEFINE_SPECIALIZATION
-class traits<float> {
-public:
-  static float eps() { return 1e-5; }
-  static float rand(float const &) { return float( traits<double>::rand(0) ); }
-};
-
-VCL_DEFINE_SPECIALIZATION
-class traits<vcl_complex<float> > {
-public:
-  static float eps() { return traits<float>::eps(); }
-  static vcl_complex<float> rand(vcl_complex<float> const &) {
-    return vcl_complex<float>(traits<float>::rand(0), traits<float>::rand(0));
-  }
-};
-
-VCL_DEFINE_SPECIALIZATION
-class traits<vcl_complex<double> > {
-public:
-  static double eps() { return traits<double>::eps(); }
-  static vcl_complex<double> rand(vcl_complex<double> const &) {
-    return vcl_complex<double>(traits<double>::rand(0), traits<double>::rand(0));
-  }
-};
+inline float  eps(float *) { return 1e-5; }
+inline double eps(double *) { return 1e-12; }
+inline float  eps(vcl_complex<float> *) { return 1e-5; }
+inline double eps(vcl_complex<double> *) { return 1e-12; }
+#define rounding_epsilon(T) ::eps((T*)0)
 
 template <class T>
-void new_test(T *) {
+void new_test(T *)
+{
   unsigned m = 4;
   unsigned n = 5;
 
   vnl_matrix<T> A(m, n);
-  A = A.apply(traits<T>::rand);
+  vnl_test_fill_random(A.begin(), A.end());
   vnl_matlab_print(vcl_cout, A, "A");
 
   vnl_vector<T> b(m);
-  b = b.apply(traits<T>::rand);
+  vnl_test_fill_random(b.begin(), b.end());
   vnl_matlab_print(vcl_cout, b, "b");
 
   vnl_qr<T> qr(A);
@@ -129,9 +102,9 @@ void new_test(T *) {
   vnl_matlab_print(vcl_cout, QR, "QR");
 
   vnl_matrix<T> I(m, m); I.set_identity();
-  vnl_test_assert_near("||Q'Q - 1||", (Q.conjugate_transpose()*Q - I).fro_norm(), 0, traits<T>::eps());
-  vnl_test_assert_near("||A - QR||", (A - QR).fro_norm(), 0, traits<T>::eps());
-  vnl_test_assert_near("||Ax - b||", (A*x - b).two_norm(), 0, traits<T>::eps());
+  vnl_test_assert_near("||Q'Q - 1||", (Q.conjugate_transpose()*Q - I).fro_norm(), 0, rounding_epsilon(T));
+  vnl_test_assert_near("||A - QR||", (A - QR).fro_norm(), 0, rounding_epsilon(T));
+  vnl_test_assert_near("||Ax - b||", (A*x - b).two_norm(), 0, rounding_epsilon(T));
 }
 
 #define inst(T) \

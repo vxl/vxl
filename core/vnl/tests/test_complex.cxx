@@ -36,19 +36,19 @@ void test_complex() {
 
     vcl_complex<double> i(0,1);
 
-    Assert("inner_product() conjugates correctly",
-           vcl_abs( inner_product(i*a,b)-i*inner_product(a,b) ) < 1e-12 &&
-           vcl_abs( inner_product(a,i*b)+i*inner_product(a,b) ) < 1e-12 );
+    vnl_test_assert("inner_product() conjugates correctly",
+		    vcl_abs( inner_product(i*a,b)-i*inner_product(a,b) ) < 1e-12 &&
+		    vcl_abs( inner_product(a,i*b)+i*inner_product(a,b) ) < 1e-12 );
 
-    Assert("dot_product() does not conjugate",
-           vcl_abs( dot_product(i*a,b)-i*dot_product(a,b) ) < 1e-12 &&
-           vcl_abs( dot_product(a,i*b)-i*dot_product(a,b) ) < 1e-12 );
+    vnl_test_assert("dot_product() does not conjugate",
+		    vcl_abs( dot_product(i*a,b)-i*dot_product(a,b) ) < 1e-12 &&
+		    vcl_abs( dot_product(a,i*b)-i*dot_product(a,b) ) < 1e-12 );
 
     double norma=0;
     for (unsigned n=0; n<a.size(); ++n)
       norma += a[n].real()*a[n].real() + a[n].imag()*a[n].imag();
     norma = vcl_sqrt(norma);
-    Assert("correct magnitude", vcl_abs( norma-a.magnitude() ) < 1e-12 );
+    vnl_test_assert("correct magnitude", vcl_abs( norma-a.magnitude() ) < 1e-12 );
   }
 }
 

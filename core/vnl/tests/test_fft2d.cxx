@@ -40,7 +40,7 @@ void test_real(vnl_fftxd_prime_factors<fsm_real> const &prx,
 {
   vnl_fft2d<fsm_real> fft_matrix(M, prx, pry, dir);
   vnl_fft2d<fsm_real> fft_array (M.begin(), M.rows(), M.cols(), prx, pry, dir);
-  Assert ("test real", fft_matrix == fft_array);
+  vnl_test_assert ("test real", fft_matrix == fft_array);
 }
 
 void test_reim(vnl_fftxd_prime_factors<fsm_real> const &prx,
@@ -51,7 +51,7 @@ void test_reim(vnl_fftxd_prime_factors<fsm_real> const &prx,
 {
   vnl_fft2d<fsm_real> fft_matrix(M_real, M_imag, prx, pry, dir);
   vnl_fft2d<fsm_real> fft_array (M_real.begin(), M_imag.begin(), M_real.rows(), M_real.cols(), prx, pry, dir);
-  Assert ("test reim", fft_matrix == fft_array);
+  vnl_test_assert ("test reim", fft_matrix == fft_array);
 }
 
 void test_cplx(vnl_fftxd_prime_factors<fsm_real> const &prx,
@@ -62,7 +62,7 @@ void test_cplx(vnl_fftxd_prime_factors<fsm_real> const &prx,
 #ifndef VCL_VC
   vnl_fft2d<fsm_real> fft_matrix(M, prx, pry, dir);
   vnl_fft2d<fsm_real> fft_array (M.begin(), M.rows(), M.cols(), prx, pry, dir);
-  Assert ("test cplx", fft_matrix == fft_array);
+  vnl_test_assert ("test cplx", fft_matrix == fft_array);
 #endif
 }
 
@@ -134,7 +134,7 @@ void test_fft2d () {
 
     double error = (bwd - vcl_complex<double>(cplx_matrix.size())*cplx_matrix).fro_norm();
     vcl_cout << "error = " << error << vcl_endl;
-    Assert ("fwd-bwd error", error < 1e-7); // increase for float
+    vnl_test_assert ("fwd-bwd error", error < 1e-7); // increase for float
 #endif
   }
 }
