@@ -1,4 +1,3 @@
-//--*-c++-*----
 // This is core/vgl/algo/vgl_h_matrix_3d.txx
 #ifndef vgl_h_matrix_3d_txx_
 #define vgl_h_matrix_3d_txx_
@@ -7,7 +6,6 @@
 
 #include "vgl_h_matrix_3d.h"
 #include <vcl_iostream.h>
-#include <vcl_cassert.h>
 
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_vector_fixed.h>
@@ -51,13 +49,9 @@ vgl_h_matrix_3d<T>::vgl_h_matrix_3d(vcl_istream& s)
 //: Construct an affine vgl_h_matrix_3d from 3x3 M and 3x1 m.
 //
 template <class T>
-vgl_h_matrix_3d<T>::vgl_h_matrix_3d(vnl_matrix_fixed<T,3, 3> const& M,
-                                      vnl_vector_fixed<T, 3> const& m)
+vgl_h_matrix_3d<T>::vgl_h_matrix_3d(vnl_matrix_fixed<T,3,3> const& M,
+                                    vnl_vector_fixed<T,3> const& m)
 {
-  assert(M.rows() == 3);
-  assert(M.columns() == 3);
-  assert(m.size() == 3);
-
   for (int r = 0; r < 3; ++r) {
     for (int c = 0; c < 3; ++c)
       (t12_matrix_)(r, c) = M(r,c);
@@ -222,10 +216,10 @@ void vgl_h_matrix_3d<T>::set (vnl_matrix_fixed<T,4,4> const& H)
 
 
 //----------------------------------------------------------------------------
-#undef BVGL_H_MATRIX_3D_INSTANTIATE
-#define BVGL_H_MATRIX_3D_INSTANTIATE(T) \
+#undef VGL_H_MATRIX_3D_INSTANTIATE
+#define VGL_H_MATRIX_3D_INSTANTIATE(T) \
 template class vgl_h_matrix_3d<T >; \
 template vcl_ostream& operator << (vcl_ostream& s, const vgl_h_matrix_3d<T >& h); \
-template vcl_istream& operator >> (vcl_istream& s, vgl_h_matrix_3d<T >& h);
+template vcl_istream& operator >> (vcl_istream& s, vgl_h_matrix_3d<T >& h)
 
 #endif // vgl_h_matrix_3d_txx_
