@@ -124,7 +124,7 @@ bgui_vtol2D_tableau::add_edge(vtol_edge_2d_sptr const& e ,
   obj->set_style( vgui_style_factory::get_style( r ,
                                                  g ,
                                                  b ,
-                                                 0.0f,
+                                                 1.0f,
                                                  line_width ) );
   if (obj) {
     //obj->set_style(sty.ptr());
@@ -162,7 +162,7 @@ bgui_vtol2D_tableau::add_edge_group(vcl_vector<vtol_edge_2d_sptr>& edges,
   obj->set_style( vgui_style_factory::get_style( r ,
                                                  g ,
                                                  b , 
-                                                 0.0f ,
+                                                 1.0f ,
                                                  line_width ) );
   //obj->set_style(sty.ptr());
   return obj;
@@ -192,7 +192,7 @@ bgui_vtol2D_tableau::add_face(vtol_face_2d_sptr const& f,
   obj->set_style( vgui_style_factory::get_style( r ,
                                                  g ,
                                                  b , 
-                                                 0.0f,
+                                                 1.0f,
                                                  line_width ) );
   if (obj) {
     //  obj->set_style(sty.ptr());

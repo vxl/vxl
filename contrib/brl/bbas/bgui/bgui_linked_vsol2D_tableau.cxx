@@ -116,7 +116,7 @@ bgui_linked_vsol2D_tableau::add_vsol_point_2d(vsol_point_2d_sptr const& p,
   obj->x = p->x();
   obj->y = p->y();
   add(obj);
-  obj->set_style( vgui_style_factory::get_style( r , g , b , point_radius , 0.0f ) );
+  obj->set_style( vgui_style_factory::get_style( r , g , b , point_radius , 1.0f ) );
   return obj;
 }
 
@@ -139,7 +139,7 @@ bgui_linked_vsol2D_tableau::add_vsol_line_2d(vsol_line_2d_sptr const& line,
   bgui_linked_vsol_soview2D_line_seg* obj =
     new bgui_linked_vsol_soview2D_line_seg(line);
   add(obj);
-  obj->set_style( vgui_style_factory::get_style( r , g , b , 0.0f , line_width ) );
+  obj->set_style( vgui_style_factory::get_style( r , g , b , 1.0f , line_width ) );
   return obj;
 }
 
@@ -162,7 +162,7 @@ bgui_linked_vsol2D_tableau::add_vsol_polyline_2d(vsol_polyline_2d_sptr const& pl
   bgui_linked_vsol_soview2D_polyline* obj =
     new bgui_linked_vsol_soview2D_polyline(pline);
   add(obj);
-  obj->set_style( vgui_style_factory::get_style( r , g , b , 0.0f , line_width ) );
+  obj->set_style( vgui_style_factory::get_style( r , g , b , 1.0f , line_width ) );
   return obj;
 }
 
@@ -185,7 +185,7 @@ bgui_linked_vsol2D_tableau::add_digital_curve(vdgl_digital_curve_sptr const& dc,
   bgui_linked_vsol_soview2D_digital_curve* obj =
     new bgui_linked_vsol_soview2D_digital_curve(dc);
   add(obj);
-  obj->set_style( vgui_style_factory::get_style( r , g , b , 0.0f , line_width ) );
+  obj->set_style( vgui_style_factory::get_style( r , g , b , 1.0f , line_width ) );
   return obj;
 }
 
