@@ -6,7 +6,16 @@
 #include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
+#include <vcl_iostream.h>
 
+//: Construct from homogeneous point
+template <class Type>
+vgl_point_2d<Type>::vgl_point_2d(vgl_homg_point_2d<Type> const& p)
+  : x_(p.x()/p.w()), y_(p.y()/p.w()) // could be infinite!
+{
+}
+
+//: Construct from 2 lines (intersection).
 template <class Type>
 vgl_point_2d<Type>::vgl_point_2d(vgl_line_2d<Type> const& l1,
                                  vgl_line_2d<Type> const& l2)
@@ -18,69 +27,13 @@ vgl_point_2d<Type>::vgl_point_2d(vgl_line_2d<Type> const& l1,
 }
 
 template <class Type>
-bool vgl_point_2d<Type>::operator==(const vgl_point_2d<Type> &other) const
-{
-  return (this==&other) ||
-         (   (this->x()==other.x()) && (this->y()==other.y()));
+vcl_ostream&  operator<<(vcl_ostream& s, vgl_point_2d<Type> const& p) {
+  return s << "<vgl_point_2d " << p.x() << "," << p.y() << ">";
 }
 
 template <class Type>
-vgl_point_2d<Type> vgl_point_2d<Type>::operator+(const vgl_point_2d<Type>& that) const
-{
-   vgl_point_2d<Type> result((this->x()+that.x()),this->y()+that.y());
-   return result;
-}
-
-template <class Type>
-vgl_point_2d<Type> vgl_point_2d<Type>::operator-(const vgl_point_2d<Type>& that) const
-{
-   vgl_point_2d<Type> result((this->x()-that.x()),this->y()-that.y());
-   return result;
-}
-
-template <class Type>
-vgl_point_2d<Type> vgl_point_2d<Type>::operator*(Type d) const
-{
-   vgl_point_2d<Type> result(Type(this->x()*d),Type(this->y()*d));
-   return result;
-}
-
-template <class Type>
-vgl_point_2d<Type> vgl_point_2d<Type>::operator/(Type d) const
-{
-   vgl_point_2d<Type> result(Type(this->x()/d),Type(this->y()/d));
-   return result;
-}
-
-template <class Type>
-vgl_point_2d<Type>& vgl_point_2d<Type>::operator+=(const vgl_point_2d<Type>& that)
-{
-   data_[0] += that.data_[0];
-   data_[1] += that.data_[1];
-   return *this;
-}
-
-template <class Type>
-vgl_point_2d<Type>& vgl_point_2d<Type>::operator-=(const vgl_point_2d<Type>& that)
-{
-   data_[0] -= that.data_[0];
-   data_[1] -= that.data_[1];
-   return *this;
-}
-template <class Type>
-vgl_point_2d<Type>& vgl_point_2d<Type>::operator/=(Type d)
-{
-   data_[0] /= d;
-   data_[1] /= d;
-   return *this;
-}
-
-template <class Type>
-vgl_point_2d<Type>& vgl_point_2d<Type>::operator*=(Type d)
-{
-   data_[0] *= d;
-   data_[1] *= d;
-   return *this;
+vcl_istream&  operator>>(vcl_istream& is,  vgl_point_2d<Type>& p) {
+  Type x, y; is >> x >> y; p.set(x,y); return is;
 }
 
 #define VGL_POINT_2D_INSTANTIATE(T) \
