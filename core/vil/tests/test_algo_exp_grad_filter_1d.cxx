@@ -42,8 +42,6 @@ void test_algo_exp_grad_filter_1d_byte_float()
   for (int i=0;i<10;++i) vcl_cout<<" "<<dest[i];
   vcl_cout<<endl;
 
-
-
   // Test application to whole images
   vil2_image_view<vxl_byte> src_im(10,10);
   vil2_image_view<float> dest_im;
