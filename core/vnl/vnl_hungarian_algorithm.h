@@ -16,7 +16,7 @@
 // the rows of the cost matrix \a cost (workers) to the columns
 // (jobs).
 //
-// \param cost An N x M cost matrix.
+// \param cost An N x M cost matrix. The costs cannot be -Infinity.
 //
 // \returns A vector v of size N such that v[i] = j means that row i
 // should be assigned to column j. \code v[i] = -1u \endcode (= \code

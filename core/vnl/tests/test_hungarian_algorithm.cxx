@@ -2,6 +2,7 @@
 #include <testlib/testlib_test.h>
 
 #include <vcl_iostream.h>
+#include <vcl_limits.h>
 #include <vnl/vnl_matrix.h>
 
 static void test_hungarian_algorithm( int, char*[] )
@@ -88,6 +89,33 @@ static void test_hungarian_algorithm( int, char*[] )
                           assign[4]==2 );
 
     testlib_test_begin( "Test 3x5 cost matrix" );
+    vcl_vector<unsigned> assign2 = vnl_hungarian_algorithm( cost.transpose() );
+    testlib_test_perform( assign2.size()==3 &&
+                          assign2[0]==2 &&
+                          assign2[1]==0 &&
+                          assign2[2]==4 );
+  }
+
+  double Inf = vcl_numeric_limits<double>::infinity();
+  {
+    double cost_val[5][3] = { { 2.0, 0.5, 7.0 },
+                              { 1.1, 6.0, 1.0 },
+                              { 1.0, 2.0, 1.0 },
+                              { Inf, 3.0, 3.0 },
+                              { 3.0, 0.5, 0.1 } };
+
+    vnl_matrix<double> cost( &cost_val[0][0], 5, 3 );
+
+    testlib_test_begin( "Test 5x3 cost matrix with Inf" );
+    vcl_vector<unsigned> assign = vnl_hungarian_algorithm( cost );
+    testlib_test_perform( assign.size()==5 &&
+                          assign[0]==1 &&
+                          assign[1]==-1u &&
+                          assign[2]==0 &&
+                          assign[3]==-1u &&
+                          assign[4]==2 );
+
+    testlib_test_begin( "Test 3x5 cost matrix with Inf" );
     vcl_vector<unsigned> assign2 = vnl_hungarian_algorithm( cost.transpose() );
     testlib_test_perform( assign2.size()==3 &&
                           assign2[0]==2 &&

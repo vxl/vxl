@@ -20,14 +20,11 @@ vcl_vector<unsigned> vnl_hungarian_algorithm( vnl_matrix<double> const& cost_in 
 {
   // The Hungarian algorithm (seems to) only work for NxN cost
   // matrices. We can solve the NxM case by padding the matrix with a
-  // very large cost. We can't use something like DBLMAX because the
-  // additions (in step 1 and 6) would immediately cause the rest of
-  // the costs to overflow. So, we use the maximum cost in the input
-  // matrix.
+  // constant cost.
 
   unsigned const N = vcl_max( cost_in.rows(), cost_in.cols() );
 
-  vnl_matrix<double> cost( N, N, *vcl_max_element( cost_in.begin(), cost_in.end() ) );
+  vnl_matrix<double> cost( N, N, 0 );
 
   // Copy in the pieces of the original matrix
   for ( unsigned i = 0; i < cost_in.rows(); ++i ) {
