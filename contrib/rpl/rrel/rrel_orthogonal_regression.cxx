@@ -14,11 +14,10 @@ rrel_orthogonal_regression::rrel_orthogonal_regression( const vnl_matrix<double>
 {
   unsigned int num_pts = pts.rows ();
   set_param_dof( pts.cols() );
-  if ( param_dof() > num_pts ) {
-    vcl_cerr << "\nrrel_orthogonal_regression::rrel_orthogonal_regression  WARNING:  DoF is greater than\n"
-         << "the number of data points.  An infinite set of equally valid\n"
-         << "solutions exists.\n";
-  }
+  if ( param_dof() > num_pts )
+    vcl_cerr << "\nrrel_orthogonal_regression::rrel_orthogonal_regression  WARNING:\n"
+             << "DoF ("<<param_dof()<<") is greater than the number of data points ("
+             << num_pts << ").\nAn infinite set of equally valid solutions exists.\n";
   set_num_samples_for_fit( param_dof() );
 }
 
@@ -32,11 +31,10 @@ rrel_orthogonal_regression::rrel_orthogonal_regression( const vcl_vector<vnl_vec
     vars_.set_row(i, pts[i]);
 
   set_param_dof( vars_.cols() ); // up to a scale
-  if ( param_dof() > num_pts ) {
-    vcl_cerr << "\nrrel_orthogonal_regression::rrel_orthogonal_regression  WARNING:  DoF is greater than\n"
-         << "the number of data points.  An infinite set of equally valid\n"
-         << "solutions exists.\n";
-  }
+  if ( param_dof() > num_pts )
+    vcl_cerr << "\nrrel_orthogonal_regression::rrel_orthogonal_regression  WARNING:\n"
+             << "DoF ("<<param_dof()<<") is greater than the number of data points ("
+             << num_pts << ").\nAn infinite set of equally valid solutions exists.\n";
   set_num_samples_for_fit( param_dof() );
 }
 
@@ -57,7 +55,7 @@ rrel_orthogonal_regression::fit_from_minimal_set( const vcl_vector<int>& point_i
 {
   if ( point_indices.size() != param_dof() ) {
     vcl_cerr << "rrel_orthogonal_regression::fit_from_minimal_sample  The number of point "
-         << "indices must agree with the fit degrees of freedom.\n";
+             << "indices must agree with the fit degrees of freedom.\n";
     return false;
   }
 
@@ -141,7 +139,7 @@ rrel_orthogonal_regression::weighted_least_squares_fit( vnl_vector<double>& para
   A = shift_vars.transpose() * shift_vars;
 
   vnl_svd<double> svd( A, 1.0e-8 );
-	// Rank of (param_dof() -1) is an exact fit
+  // Rank of (param_dof() -1) is an exact fit
   if ( (unsigned int)svd.rank() < param_dof() - 1 ) {
     vcl_cerr << "rrel_orthogonal_regression::WeightedLeastSquaresFit --- singularity!\n";
     return false;
