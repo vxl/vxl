@@ -82,9 +82,7 @@ void sdet_harris_detector::extract_corners()
 
   //Process the image to extract the Harris corners
   points_.clear();
-
-  vil_memory_image_of<unsigned char> input(image_);
-  vil_memory_image_of<float> inputf = brip_float_ops::convert_to_float(input);
+  vil_memory_image_of<float> inputf = brip_float_ops::convert_to_float(image_);
   vil_memory_image_of<float> smooth = brip_float_ops::gaussian(inputf, sigma_);
   vil_memory_image_of<float> IxIx, IxIy, IyIy, c;
   IxIx.resize(w,h);  IxIy.resize(w,h);   IyIy.resize(w,h);
@@ -111,9 +109,10 @@ void sdet_harris_detector::extract_corners()
   vcl_qsort(point_array, n_corners, sizeof(sdet_harris_point),
             (int (*)(const void *, const void *))&compare);
   //ouput the corners (limit by maximum number of corners)
-  if (n_corners>n_corners_)
-    n_corners = n_corners_;
-  for (int i=0; i<n_corners; i++)
+  int num = (int)(percent_corners_*n_corners)/100.0;
+  if(num>n_corners)
+	  num = n_corners;
+  for(int i=0; i<num; i++)
     {
       points_.push_back(point_array[i].point());
       // vcl_cout <<"s[" << i << "]=" << point_array[i].strength() << "\n";

@@ -1611,8 +1611,8 @@ MergeEndPtTouchingJunction(vtol_vertex_2d_sptr const& endpt,
   //Intersections in a 3x3 window around the
   //final point (xs, ys) do not count since
   //there are intrinsically collisions near the vertex
-  bool self_intersects = false;
-  for (int i = N; i<(N+nedgls)&&!self_intersects; i++)
+  bool self_intersects = false;//JLM added -1 need to check!
+  for (int i = N; i<(N+nedgls-1)&&!self_intersects; i++)
   {
     int x = int((*cxy)[i].x()), y = int((*cxy)[i].y());
 #define WARN(x,y) vcl_cerr << "Warning: edgel "<<i<<" is at ("<<x<<','<<y\

@@ -18,7 +18,7 @@ sdet_harris_detector_params(const sdet_harris_detector_params& hdp)
   InitParams(hdp.sigma_,
              hdp.thresh_,
              hdp.n_,
-             hdp.n_corners_,
+             hdp.percent_corners_,
              hdp.scale_factor_
              );
 }
@@ -27,24 +27,24 @@ sdet_harris_detector_params::
 sdet_harris_detector_params(const float sigma, 
                             const float thresh,
                             const int n,
-                            const int n_corners,
+                            const float percent_corners,
                             const float scale_factor
                             )
 {
-  InitParams(sigma, thresh, n, n_corners, scale_factor);
+  InitParams(sigma, thresh, n, percent_corners, scale_factor);
 }
 
 void sdet_harris_detector_params::InitParams(float sigma,
                                              float thresh,
                                              int n,
-                                             int n_corners,
+                                             float percent_corners,
                                              float scale_factor
                                              )
 {
   sigma_= sigma;
   thresh_ = thresh;
   n_ = n;
-  n_corners_ = n_corners;
+  percent_corners_ = percent_corners;
   scale_factor_=scale_factor;
 }
 
@@ -74,9 +74,9 @@ bool sdet_harris_detector_params::SanityCheck()
       msg << "ERROR: should have a reasonable size for the neighborhood";
       valid = false;
     }
-  if(n_corners_<=0)
+  if(percent_corners_<=0||percent_corners_>100)
     {
-      msg << "ERROR: should have at least 1 corner";
+      msg << "ERROR: value must be a valid percentage";
       valid = false;
     }
 
@@ -98,7 +98,7 @@ vcl_ostream& operator << (vcl_ostream& os, const sdet_harris_detector_params& hd
   os << "sigma " << hdp.sigma_ << vcl_endl;
   os << "thresh " << hdp.thresh_ << vcl_endl;
   os << "n " << hdp.n_ << vcl_endl;
-  os << "max_no_corners " << hdp.n_corners_ << vcl_endl;
+  os << "max_no_corners(percent) " << hdp.percent_corners_ << vcl_endl;
   os << "scale_factor " << hdp.scale_factor_ << vcl_endl;
   os << "---]" << vcl_endl;
   return os;

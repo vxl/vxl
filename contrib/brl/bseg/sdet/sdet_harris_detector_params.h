@@ -19,7 +19,7 @@ class sdet_harris_detector_params : public gevd_param_mixin
   sdet_harris_detector_params(const float sigma=1.0, 
                               const float thresh = 2.0,
                               const int n=1,
-                              const int n_corners=200,
+                              const float percent_corners=80.0,
                               const float scale_factor = 0.04
                               );
 
@@ -33,7 +33,7 @@ class sdet_harris_detector_params : public gevd_param_mixin
  void InitParams(float sigma,
                  float thresh,
                  int n,
-                 int n_corners,
+                 float percent_corners,
                  float scale_factor
                  );
  public:
@@ -43,7 +43,7 @@ class sdet_harris_detector_params : public gevd_param_mixin
   float sigma_;        // sigma of the Gaussian smoothing kernel
   float thresh_;       // threshold for weak corners       
   int n_;              // size of the gradient matrix neighorhood (2n+1)x(2n+1)
-  int n_corners_;      // maximum number of corners
+  float percent_corners_;      // maximum of corners as a percent of total
   float scale_factor_; // Harris trace weight 
 };
 
