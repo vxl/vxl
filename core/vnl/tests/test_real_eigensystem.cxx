@@ -37,8 +37,8 @@ void test_real_eigensystem()
     
       vnl_matrix<vnl_double_complex> diff = vnl_complexify(S*eig.Vreal) - vnl_complexify(eig.Vreal)*D;
       vcl_cout << "X*V - V*D = " << diff << vcl_endl;
-      vcl_cout << "residual = " << diff.inf_norm() << vcl_endl;
-      Assert("recompose residual",  diff.inf_norm() < 1e-12);
+      vcl_cout << "residual = " << diff.fro_norm() << vcl_endl;
+      Assert("recompose residual",  diff.fro_norm() < 1e-12);
     }
   
   }
@@ -62,8 +62,8 @@ void test_real_eigensystem()
 
     vnl_matrix<vnl_double_complex> diff = XC*eig.V - eig.V*eig.D;
     vcl_cout << "X*V - V*D = " << diff << vcl_endl;
-    vcl_cout << "residual = " << diff.inf_norm() << vcl_endl;
-    Assert("recompose residual",  diff.inf_norm() < 1e-11);
+    vcl_cout << "residual = " << diff.fro_norm() << vcl_endl;
+    Assert("recompose residual",  diff.fro_norm() < 1e-11);
   }
 }
 
