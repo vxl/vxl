@@ -370,7 +370,7 @@ void vtol_topology_object_2d::link_superior(vtol_topology_object_2d &superior)
   _superiors.push_back(&superior);
   i=_superiors.end();
   i--;
-  i->unprotect();
+  (*i).unprotect();
   touch();
 }
 

@@ -285,7 +285,7 @@ void vtol_two_chain_2d::update_superior_list_p_from_hierarchy_parent(void)
   // Check to see if there is a parent node in the tree.
   
   if(_chain_superiors.size()>0)
-    hierarchy_parent=(vtol_two_chain_2d *)(_chain_superiors.begin()->ptr());
+    hierarchy_parent=(vtol_two_chain_2d *)((*(_chain_superiors.begin())).ptr());
   
   
   // If vtol_two_chain_2d is a child of another vtol_two_chain_2d...the superiors
@@ -743,7 +743,7 @@ two_chain_list_2d *vtol_two_chain_2d::superior_two_chains(void)
 
   result=new vcl_vector<vtol_two_chain_2d_ref>();
   for(hi=_chain_superiors.begin();hi!=_chain_superiors.end();hi++)
-    result->push_back((vtol_two_chain_2d *)(hi->ptr()));
+    result->push_back((vtol_two_chain_2d *)((*hi).ptr()));
   return result;
 }
 

@@ -227,7 +227,7 @@ void vtol_chain_2d::link_chain_superior(vtol_chain_2d &chain_superior)
   _chain_superiors.push_back(&chain_superior);
   i=_chain_superiors.end();
   i--;
-  i->unprotect();
+  (*i).unprotect();
   touch();
 }
 
