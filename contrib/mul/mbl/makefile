@@ -10,6 +10,7 @@ VERSION := 1.0
 
 
 SOURCES += mbl_gamma.cxx
+SOURCES += mbl_mz_random.cxx
 
 # Additional files to document:
 # MANPAGE_SOURCES += yyyyyyyyyyy.txx
