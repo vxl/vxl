@@ -158,7 +158,7 @@ class vnl_numeric_traits<short>
   //: Multiplicative identity
   static const short one VCL_STATIC_CONST_INIT_INT(1);
   //: Maximum value which this type can assume
-  static const short maxval VCL_STATIC_CONST_INIT_INT(0x7fff);
+  static const short maxval; // = 0x7fff;
   //: Return value of abs()
   typedef unsigned short abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -179,7 +179,7 @@ class vnl_numeric_traits<unsigned short>
   //: Multiplicative identity
   static const unsigned short one VCL_STATIC_CONST_INIT_INT(1);
   //: Maximum value which this type can assume
-  static const unsigned short maxval VCL_STATIC_CONST_INIT_INT(255);
+  static const unsigned short maxval; // = 0xffff;
   //: Return value of abs()
   typedef unsigned short abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -242,7 +242,7 @@ class vnl_numeric_traits<long>
   //: Multiplicative identity
   static const long one VCL_STATIC_CONST_INIT_INT(1);
   //: Maximum value which this type can assume
-  static const long maxval; // = 0x7fffffff;
+  static const long maxval; // = 0x7fffffffL or 0x7fffffffffffffffL;
   //: Return value of abs()
   typedef unsigned long abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -263,7 +263,7 @@ class vnl_numeric_traits<unsigned long>
   //: Multiplicative identity
   static const unsigned long one VCL_STATIC_CONST_INIT_INT(1);
   //: Maximum value which this type can assume
-  static const unsigned long maxval; // = 0xffffffff;
+  static const unsigned long maxval; // = 0xffffffffL or 0xffffffffffffffffL;
   //: Return value of abs()
   typedef unsigned long abs_t;
   //: Name of a type twice as long as this one for accumulators and products.

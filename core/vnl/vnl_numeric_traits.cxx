@@ -14,15 +14,15 @@
 #include <vxl_config.h>
 
 static const long s16 = 0x7fffL;
-static const long u16 = 0xffffL;
+static const unsigned long u16 = 0xffffL;
 static const long s32 = 0x7fffffffL;
-static const long u32 = 0xffffffffL;
-#if VXL_HAS_INT_64
-static const long s64 = 0x7fffffffffffffffL;
-static const long u64 = 0xffffffffffffffffL;
+static const unsigned long u32 = 0xffffffffL;
+#if VXL_HAS_INT_64 // need this arithmetic magic to avoid compiler errors
+static const vxl_uint_64 u64 = (vxl_uint_64)(-1);
+static const vxl_sint_64 s64 = u64/2;
 #else // dummy
-static const long s64 = 0;
-static const long u64 = 0;
+static const long s64 = 0L;
+static const unsigned long u64 = 0L;
 #endif
 
 #if !VCL_CAN_STATIC_CONST_INIT_INT
@@ -47,11 +47,9 @@ const signed char vnl_numeric_traits<signed char>::maxval = 127;
 
 const short vnl_numeric_traits<short>::zero = 0;
 const short vnl_numeric_traits<short>::one = 1;
-const short vnl_numeric_traits<short>::maxval = s16;
 
 const unsigned short vnl_numeric_traits<unsigned short>::zero = 0;
 const unsigned short vnl_numeric_traits<unsigned short>::one = 1;
-const unsigned short vnl_numeric_traits<unsigned short>::maxval = u16;
 
 const int vnl_numeric_traits<int>::zero = 0;
 const int vnl_numeric_traits<int>::one = 1;
@@ -67,10 +65,12 @@ const unsigned long vnl_numeric_traits<unsigned long>::one = 1L;
 
 #endif
 
+const short vnl_numeric_traits<short>::maxval = s16;
+const unsigned short vnl_numeric_traits<unsigned short>::maxval = u16;
 const int vnl_numeric_traits<int>::maxval = sizeof(int)==4?s32:s16;
-const unsigned int vnl_numeric_traits<unsigned int>::maxval = sizeof(int)==4?u32:u16;
+const unsigned int vnl_numeric_traits<unsigned int>::maxval = sizeof(unsigned int)==4?u32:u16;
 const long vnl_numeric_traits<long>::maxval = sizeof(long)==8?s64:s32;
-const unsigned long vnl_numeric_traits<unsigned long>::maxval = sizeof(long)==8?u64:u32;
+const unsigned long vnl_numeric_traits<unsigned long>::maxval = sizeof(unsigned long)==8?u64:u32;
 
 #if !VCL_CAN_STATIC_CONST_INIT_FLOAT
 
