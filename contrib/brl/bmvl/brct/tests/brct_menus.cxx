@@ -75,7 +75,6 @@ void brct_menus::show_back_projection()
 void brct_menus::load_image()
 {
   brct_windows_frame::instance()->load_image();
-
 }
 
 void brct_menus::show_epipole()
