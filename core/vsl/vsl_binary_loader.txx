@@ -95,7 +95,7 @@ inline void vsl_b_write(vsl_b_ostream& bfs, const char* b)
 }
 #endif
 
-// For pointer types, but *not* for char* !
+// For pointer to baseclass types, but *not* for char* !
 template<class BaseClass>
 void vsl_b_write(vsl_b_ostream& bfs, const BaseClass* b)
 {
@@ -119,7 +119,7 @@ VCL_VECTOR_INSTANTIATE(T*)
 #define VSL_BINARY_LOADER_INSTANTIATE(T) \
 VSL_BINARY_LOADER_WITH_SPECIALIZATION_INSTANTIATE(T); \
 VCL_INSTANTIATE_INLINE(void vsl_b_read( vsl_b_istream& bfs, T*& b)); \
-template void vsl_b_write(vsl_b_ostream& bfs, const T* b)
+template void vsl_b_write(vsl_b_ostream& bfs, const T* b);
 
 
 #endif // vsl_binary_loader_txx_
