@@ -63,6 +63,7 @@ public:
 
   // the == operator
   bool operator==(const vgl_point_2d<Type> &other) const;
+  bool operator!=(const vgl_point_2d<Type> &other) const { return ! operator==(other); }
 
 
   // Data Access-------------------------------------------------------------
