@@ -1,5 +1,6 @@
 // This is vxl/vidl/vidl_mpegcodec_helper.cxx
 #include "vidl_mpegcodec_helper.h"
+#include "vidl_file_sequence.h"
 #include <vcl_iostream.h>
 #include <vcl_cstdio.h> // for fopen(), fclose()
 #include <vcl_cstring.h> // for memcpy
@@ -36,7 +37,11 @@ vidl_mpegcodec_helper::~vidl_mpegcodec_helper()
 {
   vcl_cout << "vidl_mpegcodec_helper::~vidl_mpegcodec_helper. entering." << vcl_endl;
   vo_close (output_);
-  vcl_fclose(in_file_);
+  if(in_file_) 
+    {
+      in_file_->close();
+      delete in_file_;
+    }
   //mpeg2_close (mpeg2dec_);
   delete mpeg2dec_;
 
@@ -49,7 +54,8 @@ vidl_mpegcodec_helper::init()
   if (init_) return true;
 
   //set up file pointer to mpeg file
-  in_file_ = vcl_fopen(filename_.c_str(),"rb");
+  in_file_ = new vidl_file_sequence();
+  in_file_->open(filename_.c_str());
 
   //set the acceleration. this doesn't work
   //right now.
@@ -100,7 +106,7 @@ vidl_mpegcodec_helper::execute(decode_request * p)
 
   if (p->rt == decode_request::REWIND)
     {
-      vcl_rewind(in_file_);
+      in_file_->seek(0);
       output_->framenum = -2;
       output_->last_frame_decoded = -2;
       return 0;
@@ -110,8 +116,8 @@ vidl_mpegcodec_helper::execute(decode_request * p)
 
   do
     {
-      int reads = vcl_fread (buffer_, chunk_size_, chunk_number_, in_file_);
-      if (reads != chunk_number_) return -1;
+      int reads = in_file_->read(buffer_, (chunk_size_*chunk_number_));
+      if (reads != (chunk_number_*chunk_size_)) return -1;
       (this->*decoder_routine)(reads);
     } while ((!p->done) &&
              (p->rt != decode_request::FILE_GRAB) &&

@@ -40,6 +40,8 @@ extern "C" {
 #undef this
 }
 
+class vidl_file_sequence;
+
 class decode_request
 {
  public:
@@ -194,7 +196,7 @@ class vidl_mpegcodec_helper
   // of mpeg2dec
   uint8_t buffer_[BUFFER_SIZE];
   vcl_string filename_;
-  vcl_FILE * in_file_;
+  vidl_file_sequence * in_file_;
   int demux_track_;
   int demux_pid_;
   int disable_accel_;

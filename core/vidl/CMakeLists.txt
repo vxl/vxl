@@ -9,7 +9,8 @@ ENDIF( MPEG2_FOUND )
 
 SET(vidl_sources
   vidl_test.cxx
-
+  vidl_vob_frame_index.cxx    vidl_vob_frame_index.h
+  vidl_file_sequence.cxx      vidl_file_sequence.h
   vidl_codec.h                vidl_codec_sptr.h
   vidl_clip.cxx  vidl_clip.h  vidl_clip_sptr.h
   vidl_movie.cxx vidl_movie.h vidl_movie_sptr.h
