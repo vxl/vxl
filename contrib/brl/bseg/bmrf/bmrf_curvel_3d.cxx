@@ -17,6 +17,7 @@ bmrf_curvel_3d::bmrf_curvel_3d()
    sum_gamma_(0.0), sum_sqr_gamma_(0.0), stats_valid_(false),
    num_projections_(0)
 {
+  this->set(0.0, 0.0, 0.0);
 }
 
 //: Copy constructor
