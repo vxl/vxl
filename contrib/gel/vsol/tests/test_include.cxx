@@ -28,6 +28,8 @@
 #include <vsol/vsol_polyhedron_sptr.h>
 #include <vsol/vsol_polyline_2d.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
+#include <vsol/vsol_polyline_3d.h>
+#include <vsol/vsol_polyline_3d_sptr.h>
 #include <vsol/vsol_digital_curve_2d.h>
 #include <vsol/vsol_digital_curve_2d_sptr.h>
 #include <vsol/vsol_rectangle_2d.h>
