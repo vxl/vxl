@@ -10,10 +10,12 @@
 // \verbatim
 //  Modifications
 //   06 May 2004 Jocelyn Marchadier
+//   23 Aug 2003 Peter Vanroose - added asserts in get_pointer() to trace down test errors
 // \endverbatim
 
 #include "vmap_types.h"
 #include <vcl_vector.h>
+#include <vcl_cassert.h>
 
 //:
 template< typename F, typename Ref, typename Ptr, typename It >
@@ -174,12 +176,14 @@ class vmap_ptr_sequence
   //:
   pointer & get_pointer(int arg)
   {
+    assert (begin_+arg < end_);
     return begin_[arg] ;
   }
 
   //:
   const pointer & get_pointer(int arg) const
   {
+    assert (begin_+arg < end_);
     return begin_[arg] ;
   }
 
