@@ -151,10 +151,10 @@ void vgl_polygon_scan_iterator<T>::init()
 {
   // count total numverts
   numverts = 0;
-  for (int s = 0; s < poly_.num_sheets(); ++s)
+  for (unsigned int s = 0; s < poly_.num_sheets(); ++s)
     numverts += poly_[s].size();
 
-  int numchains = poly_.num_sheets();
+  unsigned int numchains = poly_.num_sheets();
   // return if no vertices in face
   if ( numverts == 0 ) {
     // Make a call to next() return false.
@@ -171,7 +171,7 @@ void vgl_polygon_scan_iterator<T>::init()
   // create y-sorted array of vertices
   yverts = new vertind[ numverts ];
   int i = 0;
-  for (int j = 0; j < numchains; j++ )
+  for (unsigned int j = 0; j < numchains; j++ )
     for (unsigned int h = 0; h < poly_[ j ].size(); h++ )
     {
       yverts[ i ].chainnum = j;
@@ -432,7 +432,7 @@ void vgl_polygon_scan_iterator<T>::display_chains()
 {
     vcl_cout << "Number of Chains: " << poly_.num_sheets() << vcl_endl
              << "Number of Vertices: " << numverts << vcl_endl;
-    for (int c = 0; c < poly_.num_sheets(); ++c )
+    for (unsigned int c = 0; c < poly_.num_sheets(); ++c )
     {
         vcl_cout << "---- Chain # " << c << " ----\n"
                  << "  Length: " << poly_[ c ].size() << vcl_endl;

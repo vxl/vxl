@@ -150,7 +150,7 @@ vgl_point_2d<T> vgl_closest_point(vgl_polygon<T> const& poly,
   T x=point.x(), y=point.y();
   T dd = vgl_distance_to_linesegment(poly[0][0].x(),poly[0][0].y(), poly[0][1].x(),poly[0][1].y(), x,y);
   int si = 0, di = 0;
-  for ( int s=0; s < poly.num_sheets(); ++s )
+  for ( unsigned int s=0; s < poly.num_sheets(); ++s )
   {
     unsigned int n = poly[s].size();
     assert( n > 1 );

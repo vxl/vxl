@@ -23,8 +23,8 @@
 // of "sheets", each sheet is a list of 2d points.
 // Iterate through all points using
 //
-// for (int s = 0; s < polygon.num_sheets(); ++s)
-//   for (int p = 0; p < polygon[s].size(); ++p)
+// for (unsigned int s = 0; s < polygon.num_sheets(); ++s)
+//   for (unsigned int p = 0; p < polygon[s].size(); ++p)
 //     do_something(polygon[s][p].x(), polygon[s][p].y());
 //
 template <class T>
@@ -41,7 +41,7 @@ class vgl_polygon
   vgl_polygon() {}
 
   //: Construct an empty polygon, setting the number of (empty) sheets
-  explicit vgl_polygon(int num_sheets) : sheets_(num_sheets) {}
+  explicit vgl_polygon(unsigned int num_sheets) : sheets_(num_sheets) {}
 
   //: Construct a single-sheet polygon from a list of n points.
   //  More sheets can be added later with the add_contour method.

@@ -151,7 +151,7 @@ template <class Type>
 double vgl_distance(vgl_polygon<Type> const& poly, vgl_point_2d<Type> const& point, bool closed)
 {
   double dist = -1;
-  for ( int s=0; s < poly.num_sheets(); ++s )
+  for ( unsigned int s=0; s < poly.num_sheets(); ++s )
   {
     unsigned int n = poly[s].size();
     assert( n > 1 );

@@ -10,7 +10,7 @@ T vgl_area_signed(vgl_polygon<T> const& poly)
 {
   // Compute the area using Green's theorem
   T area = T(0);
-  for ( int s = 0; s < poly.num_sheets(); ++s )
+  for ( unsigned int s = 0; s < poly.num_sheets(); ++s )
     for ( unsigned int i = 0, j = poly[s].size()-1; i < poly[s].size(); j=i++ )
       area += poly[s][j].x() * poly[s][i].y() - poly[s][i].x() * poly[s][j].y();
 
