@@ -111,6 +111,12 @@ SOURCE=.\vil2_memory_chunk.cxx
 SOURCE=.\vil2_file_format.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\file_formats/vil2_png.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil2_tiff.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil2_image_view+bool-.cxx
 # End Source File
 # Begin Source File
@@ -441,6 +447,12 @@ SOURCE=.\file_formats/vil2_bmp_file_header.h
 SOURCE=.\file_formats/vil2_bmp_info_header.h
 # End Source File
 # End Group
+SOURCE=.\file_formats/vil2_png.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil2_tiff.h
+# End Source File
+# Begin Source File
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

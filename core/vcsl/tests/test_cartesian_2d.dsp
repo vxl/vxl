@@ -82,19 +82,18 @@ LINK32=link.exe
 # Name "test_cartesian_2d - Win32 Release"
 # Name "test_cartesian_2d - Win32 Debug"
 # Begin Group "Source Files"
-
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
-
+SOURCE=.\test_driver.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_cartesian_2d.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # End Group
 # Begin Group "Resource Files"
-
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

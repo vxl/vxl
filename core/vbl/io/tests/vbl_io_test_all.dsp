@@ -85,16 +85,43 @@ LINK32=link.exe
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
-
 SOURCE=.\vbl_io_test_all.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\golden_test_vbl_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_array_1d_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_array_2d_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_array_3d_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_bounding_box_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_driver.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_smart_ptr_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_sparse_array_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vbl_io_test_classes.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+SOURCE=.\vbl_io_test_classes.h
+# End Source File
 # End Group
 # Begin Group "Resource Files"
-
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target

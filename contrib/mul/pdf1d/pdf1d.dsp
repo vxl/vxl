@@ -99,417 +99,256 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\Templates/mbl_cloneable_ptr+pdf1d_builder-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/mbl_cloneable_ptr+pdf1d_pdf-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+pdf1d_builder~-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+pdf1d_pdf~-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+pdf1d_sampler~-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_binary_loader+pdf1d_builder-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_binary_loader+pdf1d_pdf-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_vector_io+pdf1d_builder~-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vsl_vector_io+pdf1d_pdf~-.cxx
-
 # End Source File
 # Begin Source File
-
+SOURCE=.\Templates/vsl_vector_io+pdf1d_weighted_epanech_kernel_pdf-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\pdf1d_bhat_overlap.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_builder.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_calc_mean_var.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_compare_samples.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_compare_to_pdf.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_compare_to_pdf_bhat.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_compare_to_pdf_ks.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_epanech_kernel_pdf.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_epanech_kernel_pdf_builder.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_epanech_kernel_pdf_sampler.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_exponential.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_exponential_builder.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_exponential_sampler.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_flat.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_flat_builder.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_flat_sampler.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_gaussian.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_gaussian_builder.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_gaussian_kernel_pdf.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_gaussian_kernel_pdf_builder.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_gaussian_kernel_pdf_sampler.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_gaussian_sampler.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_kernel_pdf.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_kernel_pdf_builder.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_mixture.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_mixture_builder.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_mixture_sampler.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_pdf.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_prob_chi2.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_prob_ks.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_resample.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_sampler.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_select_pdf.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_weighted_epanech_kernel_pdf.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_weighted_epanech_kernel_sampler.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_weighted_kernel_pdf.cxx
-
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
 # Begin Source File
-
 SOURCE=.\pdf1d_all.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_bhat_overlap.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_builder.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_calc_mean_var.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_compare_samples.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_compare_to_pdf.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_compare_to_pdf_bhat.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_compare_to_pdf_ks.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_epanech_kernel_pdf.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_epanech_kernel_pdf_builder.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_epanech_kernel_pdf_sampler.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_exponential.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_exponential_builder.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_exponential_sampler.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_flat.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_flat_builder.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_flat_sampler.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_gaussian.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_gaussian_builder.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_gaussian_kernel_pdf.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_gaussian_kernel_pdf_builder.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_gaussian_kernel_pdf_sampler.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_gaussian_sampler.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_kernel_pdf.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_kernel_pdf_builder.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_mixture.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_mixture_builder.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_mixture_sampler.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_pdf.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_prob_chi2.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_prob_ks.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_resample.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_sampler.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_select_pdf.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_weighted_epanech_kernel_pdf.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_weighted_epanech_kernel_sampler.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pdf1d_weighted_kernel_pdf.h
-
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"

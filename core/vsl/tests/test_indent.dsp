@@ -85,15 +85,15 @@ LINK32=link.exe
 # Name "test_indent - Win32 Release"
 # Name "test_indent - Win32 Debug"
 # Begin Group "Source Files"
-
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
-
+SOURCE=.\test_driver.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_indent.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # End Group
 # End Target
