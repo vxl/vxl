@@ -3,13 +3,14 @@
 #pragma implementation
 #endif
 //:
-//  \file
+// \file
 
 #include "PMatrix.h"
 
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_cmath.h>
+#include <vcl_cassert.h>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matlab_print.h>
@@ -50,9 +51,9 @@ PMatrix::PMatrix ():
 //--------------------------------------------------------------
 //
 //: Construct by loading from vcl_istream.
-// <pre>
+// \verbatim
 //   PMatrix P(cin);
-// </pre>
+// \endverbatim
 PMatrix::PMatrix (vcl_istream& i) :
   svd_(0)
 {
@@ -218,27 +219,22 @@ vcl_istream& operator>>(vcl_istream& i, PMatrix& p)
 static bool ok(vcl_istream& f) { return f.good() || f.eof(); }
 
 //: Load from file.
-// <pre>
+// \verbatim
 // P.read_ascii("file.P");
-// </pre>
+// \endverbatim
 bool PMatrix::read_ascii(vcl_istream& f)
 {
   vnl_matrix<double> hold(3,4);
-
   f >> hold;
-  
-  int i,j;
-  for(i=0;i<3;i++){
-      for(j=0;j<4;j++){
-          p_matrix_(i,j) = hold(i,j);
-      }
-  }
 
+  for (int i=0;i<3;i++)
+    for (int j=0;j<4;j++)
+      p_matrix_(i,j) = hold(i,j);
 
   clear_svd();
 
   if (!ok(f)) {
-    //    vcl_cerr << "PMatrix::read_ascii: Failed to load P matrix\n";
+    vcl_cerr << "PMatrix::read_ascii: Failed to load P matrix from stream\n";
     return false;
   }
 
@@ -247,9 +243,9 @@ bool PMatrix::read_ascii(vcl_istream& f)
 
 //: Load from file.
 // Static method, so you can say
-// <pre>
+// \verbatim
 // PMatrix P = PMatrix::read("file.P");
-// </pre>
+// \endverbatim
 PMatrix PMatrix::read(const char* filename)
 {
   vcl_ifstream f(filename);
@@ -469,8 +465,8 @@ PMatrix::get_rows (vnl_vector<double>* a, vnl_vector<double>* b, vnl_vector<doub
 //
 //: Return the rows of P = [a b c]'.
 void
-PMatrix::get_rows(vnl_vector_fixed<double,4>* a, 
-                  vnl_vector_fixed<double,4>* b, 
+PMatrix::get_rows(vnl_vector_fixed<double,4>* a,
+                  vnl_vector_fixed<double,4>* b,
                   vnl_vector_fixed<double,4>* c) const
 {
   a->put(0, p_matrix_(0, 0));
