@@ -24,7 +24,6 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 
