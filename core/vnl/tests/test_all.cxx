@@ -4,7 +4,6 @@
 //#include <vnl/dll.h>
 #include <vnl/vnl_T_n.h>
 #include <vnl/vnl_alloc.h>
-#include <vnl/vnl_binary.h>
 #include <vnl/vnl_c_vector.h>
 #include <vnl/vnl_complex.h>
 #include <vnl/vnl_complex_ops.h>

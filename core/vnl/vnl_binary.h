@@ -7,6 +7,7 @@
 
 //: \file
 //  \brief Functions for saving and loading matrices and vectors in binary format.
+//  \deprecated Use vsl instead
 //
 // The point of doing that is to 1) make it
 // go faster and 2) ensure that no accuracy is lost in the
@@ -17,9 +18,10 @@
 // \verbatim
 // Modifications
 //  LSB (Manchester) 23/3/01
+//  Peter Vanroose - 27 June 2001 - deprecated in favour of vsl
 // \endverbatim
 
-
+#include <vcl_deprecated_header.h>
 #include <vcl_iosfwd.h>
 template <class T> class vnl_vector;
 template <class T> class vnl_matrix;
