@@ -20,6 +20,7 @@
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vpdfl/vpdfl_gaussian_sampler.h>
 #include <vpdfl/vpdfl_sampler_base.h>
+#include <vpdfl/vpdfl_prob_chi2.h>
 
 //=======================================================================
 static bool inline almostEqualsOne(double value);
@@ -276,25 +277,22 @@ void vpdfl_gaussian::gradient(vnl_vector<double>& g, const vnl_vector<double>& x
 
 
 
-double vpdfl_gaussian::log_prob_thresh(double /*pass_proportion*/) const
+double vpdfl_gaussian::log_prob_thresh(double pass_proportion) const
 {
-	vcl_cout<<"vpdfl_gaussian::log_prob_thresh() Not yet implemented. Sorry. See TFC."<<vcl_endl;
-	abort();
-
-	return 0.0;
+  // The mahalanobis distance of n-D gaussian is distributed as Chi^2(n),
+  // by definition, Chi^2 is the sum of independedent Normal RVs.
+  return log_k() - 0.5 * vpdfl_chi2_for_cum_prob (pass_proportion, n_dims());
 }
 
 //=======================================================================
 
 void vpdfl_gaussian::nearest_plausible(vnl_vector<double>& x, double log_p_min) const
 {
-	// Only do it if sd_limit_ is positive
-	vcl_cout<<"vpdfl_gaussian::nearest_plausible() Not yet implemented. Sorry. See TFC."<<vcl_endl;
-	abort();
-
+  // calculate radius of plausible region in standard deviations.
   log_p_min -= log_k();
-  assert(log_p_min <0);
-  const double sd_limit = vcl_sqrt(-2.0*log_p_min);
+  assert(log_p_min <0); // Check sd_limit is positive and real.
+  const double sd_limit =
+    vcl_sqrt(-2.0*log_p_min);
 	
 	dx_ = x;
 	dx_ -= mean();

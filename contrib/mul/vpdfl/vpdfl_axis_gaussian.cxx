@@ -151,9 +151,12 @@ void vpdfl_axis_gaussian::nearest_plausible(vnl_vector<double>& x, double log_p_
 
   double *x_data = x.data_block();
 
-  // Apply arbitrary limit on sd's regardless of log_p_min
-  // Fix this later
-  double sd_limit = 3.0;
+  
+  // calculate radius of plausible region in standard deviations.
+  log_p_min -= log_k();
+  assert(log_p_min <0); // Check sd_limit is positive and real.
+  const double sd_limit =
+    vcl_sqrt(-2.0*log_p_min);
 
   for (int i=0;i<n;++i)
   {

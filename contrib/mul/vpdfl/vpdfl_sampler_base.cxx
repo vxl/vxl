@@ -4,9 +4,9 @@
 
 //:
 // \file
-// \author Tim Cootes
-// \date 12-Apr-2001
-// \brief Base class for Multi-Variate Probability Density Function classes.
+// \author Ian Scott
+// \date 19-Apr-2001
+// \brief Base class for Multi-Variate Probability Sampler classes.
 
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
