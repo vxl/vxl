@@ -35,7 +35,6 @@ bool
 similarity_from_matches::fit_from_minimal_set( const vcl_vector<int>& match_indices,
                                                vnl_vector<double>& params ) const
 {
-  assert( params.size() >= 4 );
   assert( match_indices.size() == 2 );
   if ( matches_[match_indices[0]].point_id_ == matches_[match_indices[1]].point_id_ ||
        (matches_[match_indices[0]].to_loc_ - matches_[match_indices[1]].to_loc_).squared_magnitude()
