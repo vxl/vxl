@@ -3,6 +3,7 @@ USES = vxl
 LIBRARY := vbl-test
 SOURCES += vbl_test_classes.cxx
 
+MINI_PROG_SOURCES += vbl_test_all.cxx
 MINI_PROG_SOURCES += vbl_test_arg.cxx
 MINI_PROG_SOURCES += vbl_test_array.cxx
 MINI_PROG_SOURCES += vbl_test_sparse_array_2d.cxx
