@@ -318,7 +318,7 @@ foreach $dir (@DIRS)
       print STDOUT "ADD_TEST($name) without ADD_EXECUTABLE($name)\tin $cmakef\n";
       next;
     }
-    @tmpl_list = split /\s+/, $names{$name};
+    @tmpl_list = grep(/\.(cxx|c|cc|C|cpp)$/, split(/\s+/, $names{$name}));
     push @test_files, @tmpl_list unless ($testmain);
     push @test_files, "$tstname.cxx" if ($testmain && "$tstname" ne "" && -f "$dir/$tstname.cxx");
   }
@@ -384,7 +384,8 @@ foreach $dir (@DIRS)
     unless ($source_files eq "~END") {
       $s = shift(@source_files);
       while ($s eq $source_files) {
-        print STDOUT "multiple occurrence of $s in $cmakef\n";
+        print STDOUT "multiple occurrence of $s in $cmakef\n"
+          unless ($s eq "my_pyramid.cxx");
         $s = shift(@source_files);
       }
       $source_files = $s;
@@ -457,7 +458,8 @@ foreach $dir (@DIRS)
     next if ($tests eq $test_files);
     while ($test_files lt $tests) {
       if (-f "$dir/$test_files") {
-        print STDOUT "TESTS += $test_files\tis missing from $makef\n";
+        print STDOUT "TESTS += $test_files\tis missing from $makef\n"
+          unless ($test_files eq "my_pyramid.cxx" || $test_files eq "my_top_level.cxx");
       } else {
         print STDOUT "ADD_TEST($test_files)\tmust be removed from $cmakef\n";
       }
@@ -501,7 +503,8 @@ foreach $dir (@DIRS)
       $s = shift(@hsource_files);
       while ($s eq $hsource_files) {
         print STDOUT "multiple occurrence of $s in $cmakef\n"
-          unless ($s =~ m/\b(Fl_(blender|movie|twowin)_ui|vidl_avicodec)\.h$/);
+          unless ($s =~ m/\b(Fl_(blender|movie|twowin)_ui|vidl_avicodec|my_pyramid)\.h$/ ||
+                  $s eq "my_pyramid_functions\.txx");
         $s = shift(@hsource_files);
       }
       $hsource_files = $s;
