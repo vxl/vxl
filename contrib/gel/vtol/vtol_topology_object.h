@@ -333,7 +333,7 @@ class vtol_topology_object
   void link_inferior(vtol_topology_object & inf)
   {
     vcl_cerr << "link_inferior(): deprecated syntax\n";
-    return link_inferior(&inf);
+    link_inferior(&inf);
   }
 
   //---------------------------------------------------------------------------
@@ -346,7 +346,7 @@ class vtol_topology_object
   void unlink_inferior(vtol_topology_object & inf)
   {
     vcl_cerr << "unlink_inferior(): deprecated syntax\n";
-    return unlink_inferior(&inf);
+    unlink_inferior(&inf);
   }
 
   //---------------------------------------------------------------------------
