@@ -18,6 +18,7 @@
 #include <vcl_cassert.h>
 #include <vnl/vnl_tag.h>
 #include <vnl/vnl_error.h>
+#include <vnl/vnl_config.h>
 #include <vnl/vnl_c_vector.h>
 
 export template <class T> class vnl_vector;
@@ -135,14 +136,18 @@ public:
   // There are assert style boundary checks - #define NDEBUG to turn them off.
   T       & operator() (unsigned int i)
   {
+#if VNL_CONFIG_CHECK_BOUNDS
     assert(i<size());   // Check the index is valid.
+#endif
     return data[i];
   }
   //: Return reference to the element at specified index. No range checking.
   // There are assert style boundary checks - #define NDEBUG to turn them off.
   T const & operator() (unsigned int i) const
   {
+#if VNL_CONFIG_CHECK_BOUNDS
     assert(i<size());   // Check the index is valid
+#endif
     return data[i];
   }
 
@@ -293,7 +298,7 @@ public:
   //: Return fourth element of vector
   T& t() const { return data[3]; }
 
-#ifndef VXL_I_dont_want_crazy_methods_in_my_classes
+#if VNL_CONFIG_LEGACY_METHODS
   //: Set the first element (with bound checking)
   void set_x(T const&xx) { if (size() >= 1) data[0] = xx; }
   //: Set the second element (with bound checking)
@@ -308,7 +313,7 @@ public:
   // This function does or tests nothing if NDEBUG is defined
   void assert_size(unsigned sz) const {
 #ifndef NDEBUG
-    assert_size1(sz);
+    assert_size_internal(sz);
 #endif
   }
 
@@ -316,12 +321,18 @@ public:
   // This function does or tests nothing if NDEBUG is defined
   void assert_finite() const {
 #ifndef NDEBUG
-    assert_finite1();
+    assert_finite_internal();
 #endif
   }
 
   //: Return true if its finite
   bool is_finite() const;
+
+  //: Return true iff all the entries are zero.
+  bool is_zero() const;
+
+  //: Return true iff the size is zero.
+  bool empty() const { return !data || !num_elmts; }
 
   //: Return true if *this == v
   bool operator_eq (vnl_vector<T> const& v) const;
@@ -352,8 +363,8 @@ protected:
   unsigned num_elmts;           // Number of elements
   T* data;                      // Pointer to the vnl_vector
 
-  void assert_size1(unsigned sz) const;
-  void assert_finite1() const;
+  void assert_size_internal(unsigned sz) const;
+  void assert_finite_internal() const;
 
   void destroy();
 

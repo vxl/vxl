@@ -355,11 +355,17 @@ void vnl_vector<T>::copy_out (T *ptr) const {
 
 template<class T>
 vnl_vector<T>& vnl_vector<T>::operator= (vnl_vector<T> const& rhs) {
-  if (this != &rhs) {                           // make sure *this != m
-    if (this->num_elmts != rhs.num_elmts)
-      this->resize(rhs.size());
-    for (unsigned i = 0; i < this->num_elmts; i++)      // For each index
-      this->data[i] = rhs.data[i];              // Copy value
+  if (this != &rhs) { // make sure *this != m
+    if (rhs.data) {
+      if (this->num_elmts != rhs.num_elmts)
+        this->resize(rhs.size());
+      for (unsigned i = 0; i < this->num_elmts; i++)
+        this->data[i] = rhs.data[i];
+    }
+    else {
+      // rhs is default-constructed.
+      clear();
+    }
   }
   return *this;
 }
@@ -368,8 +374,8 @@ vnl_vector<T>& vnl_vector<T>::operator= (vnl_vector<T> const& rhs) {
 
 template<class T>
 vnl_vector<T>& vnl_vector<T>::operator+= (T value) {
-  for (unsigned i = 0; i < this->num_elmts; i++) // For each index
-    this->data[i] += value;             // Add scalar
+  for (unsigned i = 0; i < this->num_elmts; i++)
+    this->data[i] += value;
   return *this;
 }
 
@@ -377,8 +383,8 @@ vnl_vector<T>& vnl_vector<T>::operator+= (T value) {
 
 template<class T>
 vnl_vector<T>& vnl_vector<T>::operator*= (T value) {
-  for (unsigned i = 0; i < this->num_elmts; i++) // For each index
-    this->data[i] *= value;                     // Multiply by scalar
+  for (unsigned i = 0; i < this->num_elmts; i++)
+    this->data[i] *= value;
   return *this;
 }
 
@@ -386,8 +392,8 @@ vnl_vector<T>& vnl_vector<T>::operator*= (T value) {
 
 template<class T>
 vnl_vector<T>& vnl_vector<T>::operator/= (T value) {
-  for (unsigned i = 0; i < this->num_elmts; i++) // For each index
-    this->data[i] /= value;                     // division by scalar
+  for (unsigned i = 0; i < this->num_elmts; i++)
+    this->data[i] /= value;
   return *this;
 }
 
@@ -396,11 +402,11 @@ vnl_vector<T>& vnl_vector<T>::operator/= (T value) {
 
 template<class T>
 vnl_vector<T>& vnl_vector<T>::operator+= (vnl_vector<T> const& rhs) {
-  if (this->num_elmts != rhs.num_elmts)         // Size?
+  if (this->num_elmts != rhs.num_elmts)
     vnl_error_vector_dimension ("operator+=",
                            this->num_elmts, rhs.num_elmts);
-  for (unsigned i = 0; i < this->num_elmts; i++) // For each index
-    this->data[i] += rhs.data[i];               // Add elements
+  for (unsigned i = 0; i < this->num_elmts; i++)
+    this->data[i] += rhs.data[i];
   return *this;
 }
 
@@ -409,7 +415,7 @@ vnl_vector<T>& vnl_vector<T>::operator+= (vnl_vector<T> const& rhs) {
 
 template<class T>
 vnl_vector<T>& vnl_vector<T>::operator-= (vnl_vector<T> const& rhs) {
-  if (this->num_elmts != rhs.num_elmts)         // Size?
+  if (this->num_elmts != rhs.num_elmts)
     vnl_error_vector_dimension ("operator-=",
                            this->num_elmts, rhs.num_elmts);
   for (unsigned i = 0; i < this->num_elmts; i++)
@@ -701,7 +707,6 @@ double angle (vnl_vector<T> const& a, vnl_vector<T> const& b) {
   return vcl_acos( abs_r( cos_angle(a, b) ) );
 }
 
-//
 template <class T>
 bool vnl_vector<T>::is_finite() const {
   for(unsigned i = 0; i < this->size();++i)
@@ -711,22 +716,31 @@ bool vnl_vector<T>::is_finite() const {
   return true;
 }
 
-//
 template <class T>
-void vnl_vector<T>::assert_finite1() const {
+bool vnl_vector<T>::is_zero() const
+{
+  T const zero(0);
+  for(unsigned i = 0; i < this->size();++i)
+    if ( !( (*this)[i] == zero) )
+      return false;
+
+  return true;
+}
+
+template <class T>
+void vnl_vector<T>::assert_finite_internal() const {
   if (this->is_finite())
     return;
 
-  vcl_cerr << "*** NAN FEVER **\n";
+  vcl_cerr << __FILE__ ": *** NAN FEVER **\n";
   vcl_cerr << *this;
   vcl_abort();
 }
 
-//
 template <class T>
-void vnl_vector<T>::assert_size1(unsigned sz) const {
+void vnl_vector<T>::assert_size_internal(unsigned sz) const {
   if (this->size() != sz) {
-    vcl_cerr << "vnl_vector : has size " << this->size() << ". Should be " << sz << vcl_endl;
+    vcl_cerr << __FILE__ ": Size is " << this->size() << ". Should be " << sz << vcl_endl;
     vcl_abort();
   }
 }
