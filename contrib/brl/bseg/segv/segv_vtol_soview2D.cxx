@@ -33,8 +33,7 @@ segv_vtol_soview2D_edge::segv_vtol_soview2D_edge(vtol_edge_2d_sptr& e)
 {
   if (!e)
     {
-      vcl_cout << "In segv_vtol_soview2D_edge(..) - null input edge"
-               << vcl_endl;
+      vcl_cout << "In segv_vtol_soview2D_edge(..) - null input edge\n";
       return;
     }
 
@@ -42,8 +41,7 @@ segv_vtol_soview2D_edge::segv_vtol_soview2D_edge(vtol_edge_2d_sptr& e)
   vsol_curve_2d_sptr c = e->curve();
   if (!c)
     {
-      vcl_cout << "In segv_vtol_soview2D_edge(..) -"
-               << " null curve " << vcl_endl;
+      vcl_cout << "In segv_vtol_soview2D_edge(..) - null curve\n";
       return;
     }
   if (c->cast_to_digital_curve())
@@ -57,7 +55,7 @@ segv_vtol_soview2D_edge::segv_vtol_soview2D_edge(vtol_edge_2d_sptr& e)
       n = ech->size();
       //offset the coordinates for display (may not be needed)
       x = new float[n], y = new float[n];
-      for (int i=0; i<n;i++)
+      for (unsigned int i=0; i<n;i++)
         {
           vdgl_edgel ed = (*ech)[i];
           x[i]=ed.get_x();
@@ -82,7 +80,7 @@ segv_vtol_soview2D_edge_group::
 segv_vtol_soview2D_edge_group(vcl_vector<vtol_edge_2d_sptr>& edges)
 {
   for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
-      eit != edges.end(); eit++)
+       eit != edges.end(); eit++)
     {
       vgui_soview2D* sov = new segv_vtol_soview2D_edge(*eit);
       ls.push_back(sov);
@@ -101,14 +99,12 @@ segv_vtol_soview2D_face::segv_vtol_soview2D_face(vtol_face_2d_sptr& f)
 {
   if (!f)
     {
-      vcl_cout << "In segv_vtol_soview2D_face(..) - null input face"
-               << vcl_endl;
+      vcl_cout << "In segv_vtol_soview2D_face(..) - null input face\n";
       return;
     }
-  vcl_vector<vtol_edge_sptr>* edges = f->edges();
+  edge_list* edges = f->edges();
 
-  for (vcl_vector<vtol_edge_sptr>::iterator eit = edges->begin();
-      eit != edges->end(); eit++)
+  for (edge_list::iterator eit = edges->begin(); eit != edges->end(); eit++)
     {
       vtol_edge_2d_sptr e = (*eit)->cast_to_edge_2d();
       vgui_soview2D* sov = new segv_vtol_soview2D_edge(e);
