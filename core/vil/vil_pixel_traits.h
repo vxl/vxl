@@ -1,24 +1,21 @@
-// This is contrib/mul/vil2/vil2_pixel_traits.h
+// This is mul/vil2/vil2_pixel_traits.h
 #ifndef vil2_pixel_traits_h_
 #define vil2_pixel_traits_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
-//  \file
-//  \brief Templated component number/type/size
+// \file
+// \brief Templated component number/type/size
 //
-//  To allow templated image processing algorithms to determine appropriate types, and sizes
-//  The basic framework was copied from AWF's vnl_numeric_traits class.
+// To allow templated image processing algorithms to determine appropriate types, and sizes
+// The basic framework was copied from AWF's vnl_numeric_traits class.
 //
-//  In most cases it is probably better to use vil2_pixel_format.
-//  \author Ian Scott
-//  \date   27 Nov 2002
-//
+// In most cases it is probably better to use vil2_pixel_format.
+// \author Ian Scott
+// \date   27 Nov 2002
 //
 //-----------------------------------------------------------------------------
-
-#include <vxl_config.h> // for type vxl_byte, etc.
 
 //: Pixel properties for templates.
 template <class T>
@@ -173,10 +170,9 @@ class vil2_pixel_traits<long double const> : public vil2_pixel_traits<long doubl
 template <class T>
 class vil2_pixel_traits
 {
-public:
+ public:
   //: Type of individual components
-  typedef vil2_pixel_traits<T::value_type>::component_type component_type;
+  typedef typename vil2_pixel_traits<typename T::value_type>::component_type component_type;
 };
-
 
 #endif // vil2_pixel_traits_h_
