@@ -551,8 +551,10 @@ float vdgl_digital_region::Ir() const
 {
   if (pix_index_<0)
     return 0.0;
-
-  if (!fit_valid_)
+  if(npts_<4)
+    return 0.0;
+  
+    if (!fit_valid_)
     {
       int initial_pix_index = pix_index_;//Save the current pix_index_ state
       this->DoPlaneFit();
@@ -563,6 +565,7 @@ float vdgl_digital_region::Ir() const
         ix = float(this->Ix()), x = this->X(), xo = this->Xo(),
         iy = float(this->Iy()), y = this->Y(), yo = this->Yo();
   float plane_int = io + ix*(x - xo) + iy*(y-yo);
+
   return val - plane_int;
 }
 

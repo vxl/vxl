@@ -39,7 +39,7 @@ vdgl_intensity_face::vdgl_intensity_face(vdgl_intensity_face const& f)
 //    element of one_chains and the interior hole boundaries as
 //    the remaining elements of the list.
 vdgl_intensity_face::vdgl_intensity_face(one_chain_list& one_chains)
-  :vtol_face_2d(one_chains)
+  :vtol_face_2d(one_chains), region_(new vdgl_digital_region())
 {
 }
 

@@ -70,10 +70,14 @@ public:
   float const* Yj() const { return region_->Yj(); }
   float const* Zj() const { return region_->Zj(); }
   unsigned short const* Ij() const { return region_->Ij(); }
+  
   int Npix()const {return region_->Npix(); }
   float X() const { return region_->X(); }
   float Y() const { return region_->Y(); }
   float Z() const { return region_->Z(); }
+  unsigned short I() const {return region_->I();}
+  void reset() const {region_->reset();}
+  bool next() const {return region_->next();}
   float Xo()const { return region_->Xo(); }
   float Yo()const { return region_->Yo(); }
   float Zo()const { return region_->Zo(); }
