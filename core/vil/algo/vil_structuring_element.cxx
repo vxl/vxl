@@ -94,6 +94,6 @@ void vil_compute_offsets(vcl_vector<vcl_ptrdiff_t>& offset, const vil_structurin
   unsigned n = element.p_i().size();
   offset.resize(n);
   for (unsigned int k=0;k<n;++k)
-    offset[k] = element.p_i()[k]*istep +  element.p_j()[k]*jstep;
+    offset[k] = static_cast<vcl_ptrdiff_t>(element.p_i()[k]*istep +  element.p_j()[k]*jstep);
 }
 

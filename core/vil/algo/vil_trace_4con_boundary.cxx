@@ -10,7 +10,8 @@
 //  *p is current point (i,j).
 //  On exit (i,j) and p are updated to move to neighbour
 inline void vil_next_4con_boundary_point(int& i,int& j,int& dir, const bool* &p,
-                                         int ni1, int nj1,int istep,int jstep)
+                                         int ni1, int nj1,
+                                         vcl_ptrdiff_t istep, vcl_ptrdiff_t jstep)
 {
   for (int k=0;k<4;++k)
   {
