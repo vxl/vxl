@@ -16,7 +16,7 @@ SUBDIRS += geml
 SUBDIRS += gmvl
 
 # Dense matcher
-SUBDIRS += vsrl
+#SUBDIRS += vsrl
 
 # Triangulation code
 SUBDIRS += gtrl
