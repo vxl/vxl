@@ -15,12 +15,12 @@
 //    Geoff Cross
 // Created: xxx xx xxxx
 
-#include <vbl/vbl_timestamp.h>
+#include <vul/vul_timestamp.h>
 #include <vbl/vbl_ref_count.h>
 
 #include <vdgl/vdgl_edgel_chain_sptr.h>
 
-class vdgl_interpolator : public vbl_timestamp,
+class vdgl_interpolator : public vul_timestamp,
                           public vbl_ref_count {
    // PUBLIC INTERFACE----------------------------------------------------------
 public:

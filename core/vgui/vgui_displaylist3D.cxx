@@ -15,7 +15,7 @@
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
 
-#include <vbl/vbl_sprintf.h>
+#include <vul/vul_sprintf.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>
@@ -87,7 +87,7 @@ bool vgui_displaylist3D::mouse_down(int x, int y, vgui_button button, vgui_modif
 
   // selecting
   if (button == vgui_LEFT) {
-//  if (debug) cerr << vbl_sprintf("selecting at %f %f", x, y) << endl;
+//  if (debug) cerr << vul_sprintf("selecting at %f %f", x, y) << endl;
 
     vcl_vector<unsigned> hits;
     get_hits(x,y,hits);
@@ -114,7 +114,7 @@ bool vgui_displaylist3D::mouse_down(int x, int y, vgui_button button, vgui_modif
       return false;
     }
 
-//  if (debug) cerr << vbl_sprintf("deselecting at %f %f", x, y) << endl;
+//  if (debug) cerr << vul_sprintf("deselecting at %f %f", x, y) << endl;
 
     vcl_vector<unsigned> hits;
     get_hits(x,y,hits);

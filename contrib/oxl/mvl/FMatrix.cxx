@@ -9,7 +9,7 @@
 #include <vcl_fstream.h>
 #include <vcl_complex.h>
 
-#include <vbl/vbl_printf.h>
+#include <vul/vul_printf.h>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_double_3x3.h>
@@ -179,7 +179,7 @@ vcl_ostream& operator<<(vcl_ostream& os, const FMatrix& F) {
   const vnl_matrix<double>& m = F.get_matrix();
   for (unsigned long i = 0; i < m.rows(); i++) {    // For each row in matrix
     for (unsigned long j = 0; j < m.columns(); j++) // For each column in matrix
-      vbl_printf(os, "%24.16e ", m(i,j));           // Output data element
+      vul_printf(os, "%24.16e ", m(i,j));           // Output data element
     os << "\n";                                     // Output newline
   }
   return os;

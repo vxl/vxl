@@ -38,7 +38,7 @@ class vsol_spatial_object_2d;
 
 #include <vcl_string.h>
 #include <vcl_iostream.h>
-#include <vbl/vbl_timestamp.h>
+#include <vul/vul_timestamp.h>
 #include <vbl/vbl_ref_count.h>
 #include <vsol/vsol_box_2d.h>
 #include <vcl_vector.h>
@@ -70,7 +70,7 @@ const unsigned int VSOL_FLAG_BITS      = 0xFF000000;
 
 
 class vsol_spatial_object_2d
-  : public vbl_timestamp,
+  : public vul_timestamp,
     public vbl_ref_count
 {
 // Data Members--------------------------------------------------------------

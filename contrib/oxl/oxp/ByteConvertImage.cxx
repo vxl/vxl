@@ -5,7 +5,7 @@
 #include "ByteConvertImage.h"
 
 #include <vnl/vnl_math.h>
-#include <vbl/vbl_printf.h>
+#include <vul/vul_printf.h>
 #include <vil/vil_clamp.h>
 
 ByteConvertImage::ByteConvertImage(vil_memory_image_of<float> const& in, bool ignore_zero):
@@ -99,5 +99,5 @@ void ByteConvertImage::filter(vil_memory_image_of<double> const& in)
 
 void ByteConvertImage::print(vcl_ostream& s) const
 {
-  vbl_printf(s, "ByteConvertImage: range %g..%g\n", min_, max_);
+  vul_printf(s, "ByteConvertImage: range %g..%g\n", min_, max_);
 }

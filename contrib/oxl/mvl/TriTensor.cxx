@@ -8,7 +8,7 @@
 #include <vcl_cstdlib.h>
 #include <vcl_vector.h>
 
-#include <vbl/vbl_printf.h>
+#include <vul/vul_printf.h>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matlab_print.h>
@@ -1205,7 +1205,7 @@ vcl_ostream& operator << (vcl_ostream& s, const TriTensor& T)
   for(int i = 0; i < 3; ++i) {
     for(int j = 0; j < 3; ++j) {
       for(int k = 0; k < 3; ++k)
-        vbl_printf(s, "%20.16e ", T(i,j,k));
+        vul_printf(s, "%20.16e ", T(i,j,k));
       s << vcl_endl;
     }
     s << vcl_endl;

@@ -9,9 +9,9 @@
 #include <vcl_string.h>
 #include <vcl_vector.h>
 
-#include <vbl/vbl_arg.h>
-#include <vbl/vbl_sprintf.h>
-#include <vbl/vbl_printf.h>
+#include <vul/vul_arg.h>
+#include <vul/vul_sprintf.h>
+#include <vul/vul_printf.h>
 
 extern "C" {
 #include <jpeglib.h>
@@ -111,7 +111,7 @@ SGIMovieFileWriteData::SGIMovieFileWriteData(char const* filename,
 {
   fp = fopen(filename, "w");
   if (!fp) {
-    vbl_printf(vcl_cerr, "SGIMovieFileWriteData: Can't open %s\n", filename);
+    vul_printf(vcl_cerr, "SGIMovieFileWriteData: Can't open %s\n", filename);
     return;
   }
 
@@ -184,7 +184,7 @@ struct FrameIndex {
 void SGIMovieFileWriteData::Finish()
 {
   if (l != (int)frame_ends.size()) {
-    vbl_printf(vcl_cerr, "ZOKZOK: %d != %d \n", l, frame_ends.size());
+    vul_printf(vcl_cerr, "ZOKZOK: %d != %d \n", l, frame_ends.size());
     return;
   }
   fseek(fp, directory_pos, 0);

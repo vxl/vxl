@@ -17,13 +17,13 @@
 
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
-#include <vbl/vbl_timestamp.h>
+#include <vul/vul_timestamp.h>
 #include <vbl/vbl_ref_count.h>
 
 
 #include "vdgl_edgel.h"
 
-class vdgl_edgel_chain : public vbl_timestamp,
+class vdgl_edgel_chain : public vul_timestamp,
                          public vbl_ref_count {
    // PUBLIC INTERFACE----------------------------------------------------------
 public:

@@ -9,9 +9,9 @@
 #include <vcl_cstring.h>
 #include <vcl_fstream.h>
 
-#include <vbl/vbl_reg_exp.h>
-#include <vbl/vbl_printf.h>
-#include <vbl/vbl_awk.h>
+#include <vul/vul_reg_exp.h>
+#include <vul/vul_printf.h>
+#include <vul/vul_awk.h>
 
 bool GXFileVisitor::do_text = true;
 bool GXFileVisitor::do_antialias = false;
@@ -61,8 +61,8 @@ struct StringToFloat {
 
 bool GXFileVisitor::visit(vcl_istream& s)
 {
-  vbl_reg_exp re("^t +[-+.0-9e]+ +[-+.0-9e]+ +(.+)$");
-  for(vbl_awk awk(s); awk; ++awk) {
+  vul_reg_exp re("^t +[-+.0-9e]+ +[-+.0-9e]+ +(.+)$");
+  for(vul_awk awk(s); awk; ++awk) {
     int NF = awk.NF();
     if (NF == 0)
       continue;
@@ -111,7 +111,7 @@ bool GXFileVisitor::visit(vcl_istream& s)
         char const* text = awk.line();
         // text is of form "t +number +number + ...thetext"
         if (!*text || !re.find(text)) {
-          vbl_printf(vcl_cerr, "GXFileVisitor: Bad \"t\" line: [%s]\n", text);
+          vul_printf(vcl_cerr, "GXFileVisitor: Bad \"t\" line: [%s]\n", text);
         } else {
           this->text(vcl_atof(awk[1]), vcl_atof(awk[2]), re.match(1).c_str());
         }

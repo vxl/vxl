@@ -15,7 +15,7 @@
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_cstdio.h>
-#include <vbl/vbl_sprintf.h>
+#include <vul/vul_sprintf.h>
 
 #include <vgui/internals/vgui_dialog_field.h>
 #include <vgui/internals/vgui_simple_field.h>

@@ -17,7 +17,7 @@
 #include <vsol/vsol_box_2d_sptr.h>
 
 
-#include <vbl/vbl_timestamp.h>
+#include <vul/vul_timestamp.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_bounding_box.h>
 
@@ -26,7 +26,7 @@
 
 class vsol_box_2d
   : public vbl_ref_count,
-    public vbl_timestamp
+    public vul_timestamp
 {
  public:
 

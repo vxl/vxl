@@ -5,10 +5,10 @@
 #include "ImageSequenceName.h"
 
 #include <vcl_iostream.h>
-#include <vbl/vbl_reg_exp.h>
-#include <vbl/vbl_file.h>
-#include <vbl/vbl_sprintf.h>
-#include <vbl/vbl_printf.h>
+#include <vul/vul_reg_exp.h>
+#include <vul/vul_file.h>
+#include <vul/vul_sprintf.h>
+#include <vul/vul_printf.h>
 
 ImageSequenceName::ImageSequenceName(char const* s,
                                      char const* read_or_write,

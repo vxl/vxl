@@ -11,7 +11,7 @@
 #include <vcl_cassert.h>
 #include <vcl_algorithm.h>
 
-#include <vbl/vbl_trace.h>
+#include <vul/vul_trace.h>
 
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_window.h>
@@ -40,25 +40,25 @@ vgui_toolkit *vgui_toolkit::lookup(char const *name)
 
 vgui_toolkit::vgui_toolkit()
 {
-  vbl_trace;
+  vul_trace;
   registry()->push_back(this);
-  vbl_trace;
+  vul_trace;
 }
 
 vgui_toolkit::~vgui_toolkit()
 {
-  vbl_trace;
+  vul_trace;
 
   // deregister
   vcl_vector<vgui_toolkit*>::iterator i = vcl_find(registry()->begin(),
                                                    registry()->end(),
                                                    this);
 
-  vbl_trace;
+  vul_trace;
   assert( i != registry()->end() ); // <-- this is a serious bug
-  vbl_trace;
+  vul_trace;
   registry()->erase(i);
-  vbl_trace;
+  vul_trace;
 }
 
 //

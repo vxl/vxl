@@ -41,7 +41,7 @@ bool vdgl_edgel_chain::set_edgel( const int index, const vdgl_edgel &e)
 void vdgl_edgel_chain::notify_change()
 {
   // let friends know that chain has changed
-  vbl_timestamp::touch();
+  vul_timestamp::touch();
 }
 
 bool vdgl_edgel_chain::add_edgels( const vcl_vector<vdgl_edgel> &es, const int index)

@@ -20,7 +20,7 @@
 
 #include <vtol/vtol_topology_object.h>
 #include <vcl_vector.h>
-#include <vbl/vbl_timestamp.h>
+#include <vul/vul_timestamp.h>
 
 class vtol_vertex;
 class vtol_edge;
@@ -34,7 +34,7 @@ class vtol_topology_object;
 //:
 // This class keeps a cache of various topology object lists
 
-class vtol_topology_cache : public vbl_timestamp
+class vtol_topology_cache : public vul_timestamp
 {
 private:
 

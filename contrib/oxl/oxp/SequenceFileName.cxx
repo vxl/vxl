@@ -6,10 +6,10 @@
 
 #include <vcl_cstddef.h> // for vcl_size_t()
 #include <vcl_iostream.h>
-#include <vbl/vbl_reg_exp.h>
-#include <vbl/vbl_file.h>
-#include <vbl/vbl_sprintf.h>
-#include <vbl/vbl_printf.h>
+#include <vul/vul_reg_exp.h>
+#include <vul/vul_file.h>
+#include <vul/vul_sprintf.h>
+#include <vul/vul_printf.h>
 
 #include <oxp/oxp_parse_seqname.h>
 
@@ -53,16 +53,16 @@ void SequenceFileName::init(char const* s, int start_frame, int step, char const
     // If no /, assume that the file is in CWD which exists
     if (i != vcl_string::npos) {
       vcl_string dir = fmt_.substr(0, i);
-      if (!vbl_file::exists(dir.c_str())) {
+      if (!vul_file::exists(dir.c_str())) {
         vcl_cerr << "SequenceFileName: ** Image directory [" << dir << "] does not exist" << vcl_endl;
         return;
         // cerr << "SequenceFileName: ** Making directory " << dir << endl;
-        // if (!vbl_file::make_directory(dir.c_str())) {
+        // if (!vul_file::make_directory(dir.c_str())) {
         //   cerr << "SequenceFileName: ** Could not mkdir " << dir << endl;
         //   abort();
         // }
       } else
-        if (!vbl_file::is_directory(dir.c_str()))
+        if (!vul_file::is_directory(dir.c_str()))
           vcl_cerr << "SequenceFileName: WARNING: Inferred subdir [" << dir << "]"
                << " exists and is not already a directory\n";
     }
@@ -70,7 +70,7 @@ void SequenceFileName::init(char const* s, int start_frame, int step, char const
 
   // If no extension, we'll need a default
   {
-    vbl_reg_exp re("\\.([a-zA-Z_0-9]+)$");
+    vul_reg_exp re("\\.([a-zA-Z_0-9]+)$");
     if (re.find(fmt_.c_str())) {
       vcl_cerr << "SequenceFileName: Found extension [" << re.match(1) << "]\n";
       int pointpos = re.start(0);
@@ -84,7 +84,7 @@ void SequenceFileName::init(char const* s, int start_frame, int step, char const
 
 vcl_string SequenceFileName::name(int frame)
 {
-  vbl_sprintf buf((fmt_ + ext_).c_str(), frame * step_ + start_frame_);
+  vul_sprintf buf((fmt_ + ext_).c_str(), frame * step_ + start_frame_);
   return (char const*) buf;
 }
 
@@ -98,12 +98,12 @@ void SequenceFileName::set_default_extension(char const* extension)
 
 bool SequenceFileName::exists(const vcl_string& fmt, const char* extension, int frame)
 {
-  vbl_sprintf buf((fmt + extension).c_str(), frame);
+  vul_sprintf buf((fmt + extension).c_str(), frame);
   vcl_cerr << "SequenceFileName: Checking [" << buf << "]\n";
-  return (vbl_file::size(buf.c_str()) > 0 || vbl_file::size((vcl_string(buf) + ".gz").c_str()) > 0);
+  return (vul_file::size(buf.c_str()) > 0 || vul_file::size((vcl_string(buf) + ".gz").c_str()) > 0);
 }
 
 vcl_ostream& SequenceFileName::print(vcl_ostream& s) const
 {
-  return vbl_printf(s, "[%s %d:%d:%d]", (fmt_ + ext_).c_str(), start_frame_, step_, end_);
+  return vul_printf(s, "[%s %d:%d:%d]", (fmt_ + ext_).c_str(), start_frame_, step_, end_);
 }

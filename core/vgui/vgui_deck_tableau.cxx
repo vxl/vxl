@@ -15,7 +15,7 @@
 #include <vcl_algorithm.h>
 #include <vcl_vector.h>
 
-#include <vbl/vbl_sprintf.h>
+#include <vul/vul_sprintf.h>
 
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_menu.h>

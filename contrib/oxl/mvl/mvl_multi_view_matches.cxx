@@ -10,7 +10,7 @@
 #include <vcl_functional.h>
 #include <vcl_fstream.h>
 
-#include <vbl/vbl_awk.h>
+#include <vul/vul_awk.h>
 
 mvl_multi_view_matches::mvl_multi_view_matches(char const* filename)
 {
@@ -237,7 +237,7 @@ vcl_istream& mvl_multi_view_matches::read(vcl_istream& s)
   if (!s.good()) return s;
 
   views_.clear();
-  vbl_awk awk(s);
+  vul_awk awk(s);
   for (int i=0; i < awk.NF(); ++i)
     views_.push_back(atoi(awk[i]));
   ++awk;

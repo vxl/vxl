@@ -4,7 +4,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
 
-#include <vbl/vbl_printf.h>
+#include <vul/vul_printf.h>
 
 #include <vgui/impl/mfc/stdafx.h>
 #include "vgui_accelerate_mfc.h"
@@ -91,7 +91,7 @@ vidfmt::vidfmt()
     ReleaseDC(NULL, hdc);
 
     bpp = dib_hdr->biBitCount;
-    if (debug) vbl_printf(vcl_cerr, "Current video mode is %lu-bit; ", dib_hdr->biBitCount);
+    if (debug) vul_printf(vcl_cerr, "Current video mode is %lu-bit; ", dib_hdr->biBitCount);
 
     switch(dib_hdr->biCompression) {
     case BI_BITFIELDS: {
@@ -120,7 +120,7 @@ vidfmt::vidfmt()
             if (debug) printf("    (888 RGB pixel alignment)");
             break;
         default:
-            vbl_printf(vcl_cerr, "vgui_accelerate_mfc:    (Unknown pixel alignment %x:%x:%x)\n",
+            vul_printf(vcl_cerr, "vgui_accelerate_mfc:    (Unknown pixel alignment %x:%x:%x)\n",
                 fields[0], fields[1], fields[2] );
         }
         break;
@@ -169,7 +169,7 @@ vidfmt::vidfmt()
       unsigned char opx[2];
       bitmap.GetBitmapBits(2,opx);
       unsigned int redmask = opx[1] * 256 + opx[0];
-      if (debug) vbl_printf(vcl_cerr, "redmask = %04x\n", redmask);
+      if (debug) vul_printf(vcl_cerr, "redmask = %04x\n", redmask);
 
       switch (redmask) {
       case 0xf800:
@@ -183,7 +183,7 @@ vidfmt::vidfmt()
         if (debug) printf("    (555 BGR pixel alignment)");
         break;
       default:
-        vbl_printf(vcl_cerr, "vgui_accelerate_mfc:    (Unknown redmask %02x)\n", redmask);
+        vul_printf(vcl_cerr, "vgui_accelerate_mfc:    (Unknown redmask %02x)\n", redmask);
       }
     }
     if (debug) vcl_cerr << vcl_endl;
@@ -203,15 +203,15 @@ vidfmt::vidfmt()
         memset(&b, 0, sizeof b);
         b.bmBits = opx;
         bitmap.GetBitmap(&b);
-        vbl_printf(vcl_cerr, "BITMAP: w %d, h %d, bytesperline %d, bitsPixel %d, bits %p\n",
+        vul_printf(vcl_cerr, "BITMAP: w %d, h %d, bytesperline %d, bitsPixel %d, bits %p\n",
           b.bmWidth, b.bmHeight, b.bmWidthBytes, b.bmBitsPixel, b.bmBits);
 
         bitmap.GetBitmap(&b);
         bitmap.GetBitmapBits(width*b.bmBitsPixel,opx);
-        vbl_printf(vcl_cerr, "opx ");
+        vul_printf(vcl_cerr, "opx ");
         for(int p = 0; p < width; ++p)
-          vbl_printf(vcl_cerr, "%02x %02x | ", (int)opx[2*p + 1], (int)opx[2*p + 0]);
-        vbl_printf(vcl_cerr, "\n");
+          vul_printf(vcl_cerr, "%02x %02x | ", (int)opx[2*p + 1], (int)opx[2*p + 0]);
+        vul_printf(vcl_cerr, "\n");
 #endif
 }
 

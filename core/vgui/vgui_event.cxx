@@ -8,7 +8,7 @@
 #include <vcl_functional.h>
 #include <vcl_iostream.h>
 
-#include <vbl/vbl_get_timestamp.h>
+#include <vul/vul_get_timestamp.h>
 
 void vgui_event::init() {
   type = vgui_EVENT_NULL;
@@ -21,7 +21,7 @@ void vgui_event::init() {
     static int secs_0 = -1;
     static int msecs_0 = -1;
     int secs_now, msecs_now;
-    vbl_get_timestamp(secs_now, msecs_now);
+    vul_get_timestamp(secs_now, msecs_now);
     if (secs_0 == -1 && msecs_0 == -1)
       secs_0 = secs_now, msecs_0 = msecs_now;
     timestamp = 1000*(secs_now - secs_0) + (msecs_now - msecs_0);

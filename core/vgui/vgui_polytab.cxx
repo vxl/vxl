@@ -6,7 +6,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 
-#include <vbl/vbl_sprintf.h>
+#include <vul/vul_sprintf.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_macro.h>

@@ -11,7 +11,7 @@
 
 #include <vnl/vnl_matrix.h>
 
-#include <vbl/vbl_printf.h>
+#include <vul/vul_printf.h>
 
 // Default ctor
 vrml_out::vrml_out()
@@ -420,19 +420,19 @@ void vrml_out::point3d(double x, double y, double z)
 {
   SETUP;
   //f << "\t" << x << " " << y << " " << z << ",\n";
-  vbl_printf(f, "\t %10.4f %10.4f %10.4f,\n", x, y, z);
+  vul_printf(f, "\t %10.4f %10.4f %10.4f,\n", x, y, z);
 }
 
 void vrml_out::point3d(double x, double y, double z, const char *format)
 {
   SETUP;
-  vbl_printf(f, "\t ");
-  vbl_printf(f, format, x);
-  vbl_printf(f, " ");
-  vbl_printf(f, format, y);
-  vbl_printf(f, " ");
-  vbl_printf(f, format, z);
-  vbl_printf(f, ",\n");
+  vul_printf(f, "\t ");
+  vul_printf(f, format, x);
+  vul_printf(f, " ");
+  vul_printf(f, format, y);
+  vul_printf(f, " ");
+  vul_printf(f, format, z);
+  vul_printf(f, ",\n");
 }
 
 void vrml_out::end_pointset()

@@ -7,15 +7,15 @@
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h> // for vcl_abort()
 #include <vcl_fstream.h>
-#include <vbl/vbl_awk.h>
-#include <vbl/vbl_printf.h>
+#include <vul/vul_awk.h>
+#include <vul/vul_printf.h>
 
 /////////////////////////////////////////////////////////////////////////////
 
 vcl_ostream& operator<<(vcl_ostream& s, const NViewMatch& c)
 {
   for(unsigned i = 0; i < c.size(); ++i)
-    vbl_printf(s, "%-4d ", c[i]);
+    vul_printf(s, "%-4d ", c[i]);
 
   return s;
 }
@@ -118,7 +118,7 @@ bool NViewMatches::load(const char* filename)
 bool NViewMatches::load(vcl_istream& s)
 {
   clear();
-  for(vbl_awk awk(s); awk; ++awk) {
+  for(vul_awk awk(s); awk; ++awk) {
     // On first line, set _nviews to field count
     // On subsequent lines, check the field count matches the first line.
     if (awk.NR() == 1)

@@ -11,7 +11,7 @@
 
 #include "vgui_style.h"
 #include <vcl_iostream.h>
-#include <vbl/vbl_sprintf.h>
+#include <vul/vul_sprintf.h>
 
 
 vgui_style::vgui_style() {

@@ -16,7 +16,7 @@
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
 
-#include <vbl/vbl_sprintf.h>
+#include <vul/vul_sprintf.h>
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_gl.h>
@@ -88,7 +88,7 @@ vcl_string vgui_composite::file_name() const
 
 vcl_string vgui_composite::pretty_name() const
 {
-  return vbl_sprintf("%s[#kids=%d]", type_name().c_str(), children.size());
+  return vul_sprintf("%s[#kids=%d]", type_name().c_str(), children.size());
 }
 
 bool vgui_composite::handle(const vgui_event& event)

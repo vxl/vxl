@@ -10,7 +10,7 @@
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
 
-#include <vbl/vbl_sprintf.h>
+#include <vul/vul_sprintf.h>
 
 #include <vil/vil_rgb.h>
 #include <vil/vil_rgba.h>
@@ -227,11 +227,11 @@ void vgui_utils::process_hits(int num_hits, GLuint* ptr, vcl_vector<vcl_vector<u
   // for each hit
    for (int i = 0; i < num_hits; i++) {
      GLuint num_names = *ptr;
-     if (debug) vcl_cerr << vbl_sprintf("number of names for hit[%d] = %d", i, num_names) << vcl_endl;
+     if (debug) vcl_cerr << vul_sprintf("number of names for hit[%d] = %d", i, num_names) << vcl_endl;
      ptr++;
-     if (debug) vcl_cerr << vbl_sprintf(" z1 is %u;", *ptr);
+     if (debug) vcl_cerr << vul_sprintf(" z1 is %u;", *ptr);
      ptr++;
-     if (debug) vcl_cerr << vbl_sprintf(" z2 is %u", *ptr) << vcl_endl;
+     if (debug) vcl_cerr << vul_sprintf(" z2 is %u", *ptr) << vcl_endl;
      ptr++;
 
      vcl_vector<unsigned> names;

@@ -14,7 +14,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vbl/vbl_printf.h>
+#include <vul/vul_printf.h>
 #include <oxp/Mapping_2d_2d.h>
 
 class RadialLensCorrection : public Mapping_2d_2d {

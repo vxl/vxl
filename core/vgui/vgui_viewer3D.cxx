@@ -15,7 +15,7 @@
 #include <vcl_algorithm.h>
 
 #include <vbl/vbl_bool_ostream.h>
-#include <vbl/vbl_sprintf.h>
+#include <vul/vul_sprintf.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>
@@ -207,7 +207,7 @@ bool vgui_viewer3D::handle(const vgui_event& e)
       //cerr << "spinning" << endl;
       vcl_cerr << "-";
       if (debug) {
-        vcl_cerr << vbl_sprintf("spin_data->delta_r %f %f %f %f",
+        vcl_cerr << vul_sprintf("spin_data->delta_r %f %f %f %f",
                             spin_data->delta_r[0],
                             spin_data->delta_r[1],
                             spin_data->delta_r[2],

@@ -5,7 +5,7 @@
 #include "MovieFile.h"
 
 #include <vcl_vector.h>
-#include <vbl/vbl_printf.h>
+#include <vul/vul_printf.h>
 
 #include <oxp/SGIMovieFile.h>
 #include <oxp/ImageSequenceMovieFile.h>

@@ -13,7 +13,7 @@
 
 #include <vcl_vector.h>
 
-#include <vbl/vbl_psfile.h>
+#include <vul/vul_psfile.h>
 
 #include <vil/vil_image.h>
 #include <vil/vil_pixel.h>
@@ -210,11 +210,11 @@ vgui_image_tableau_sptr vgui_easy2D::get_image_tableau() {
 
 void vgui_easy2D::print_psfile(vcl_string filename, int reduction_factor, bool print_geom_objs){
   vil_image img = get_image_tableau()->get_image();
-  typedef vbl_psfile::byte byte;
+  typedef vul_psfile::byte byte;
   byte* data = new byte[img.get_size_bytes()];
   img.get_section(data, 0, 0, img.width(), img.height());
 
-  vbl_psfile psfile(filename.c_str());
+  vul_psfile psfile(filename.c_str());
   psfile.set_parameters(img.width(), img.height());
   psfile.set_reduction_factor(reduction_factor);
   psfile.postscript_header();

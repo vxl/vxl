@@ -11,6 +11,7 @@ vbl
 vnl
 vnl_algo
 vil
+vul
 vil_file_formats
 vgl
 vidl
@@ -27,6 +28,7 @@ ${allvxl_BINARY_DIR}/vcl
 ${allvxl_BINARY_DIR}/v3p/jpeg
 
 ${allvxl_BINARY_DIR}/vxl/vbl
+${allvxl_BINARY_DIR}/vxl/vul
 ${allvxl_BINARY_DIR}/vxl/vnl
 ${allvxl_BINARY_DIR}/vxl/vnl/algo
 ${allvxl_BINARY_DIR}/vxl/vil

@@ -16,7 +16,7 @@
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
 
-#include <vbl/vbl_trace.h>
+#include <vul/vul_trace.h>
 
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_window.h>
