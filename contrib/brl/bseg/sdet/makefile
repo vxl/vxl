@@ -26,8 +26,6 @@ SOURCES += sdet_vehicle_finder_params.cxx
 SOURCES += sdet_watershed_region_proc.cxx
 SOURCES += sdet_watershed_region_proc_params.cxx
 
-MANPAGE_SOURCES += sdet_champher.h # although not ready for use ...
-
 ################################
 include ${IUEROOT}/config/top.mk
 ################################
