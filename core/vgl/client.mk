@@ -4,8 +4,8 @@ vgl_client_mk := 1
 # fsm@robots.ox.ac.uk
 #
 
-include $(IUELOCALROOT)/vxl/vcl/client.mk
+include $(IUELOCALROOT)/vcl/client.mk
 
-ald_libdeps += vgl:vcl
+ald_libdeps += vgl:
 
 endif

@@ -6,9 +6,9 @@ vnl_client_mk := 1
 
 USE_NETLIB := 1
 
-include $(IUELOCALROOT)/vxl/vcl/client.mk
+include $(IUELOCALROOT)/vcl/client.mk
 
-ald_libdeps += vnl:vcl
+ald_libdeps += vnl:
 ald_libdeps += vnl-algo:vnl,netlib
 
 endif
