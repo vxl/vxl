@@ -1,11 +1,10 @@
 #ifndef bxml_vtol_vertex_2d_input_converter_h
 #define bxml_vtol_vertex_2d_input_converter_h
- 
+
 //-----------------------------------------------------------------------------
 //:
 // \file
-// \brief A converter from TargetJr Vertex to vtol_vertex_2d
-//        vtol objects.          
+// \brief A converter from TargetJr Vertex to vtol_vertex_2d vtol objects.
 // \author
 //   J.L. Mundy
 //
@@ -19,11 +18,12 @@
 #include <vsol/vsol_point_2d_sptr.h>
 #include <bxml/bxml_input_converter.h>
 
-class bxml_vtol_vertex_2d_input_converter : public bxml_input_converter {
-public:
+class bxml_vtol_vertex_2d_input_converter : public bxml_input_converter
+{
+ public:
   bxml_vtol_vertex_2d_input_converter();
   virtual ~bxml_vtol_vertex_2d_input_converter();
-  
+
   virtual bool extract_object_atrs(DOM_Node& node);
   virtual bool extract_from_dom(DOM_Node& node);
 
@@ -32,14 +32,10 @@ public:
   // construct new object
   bxml_generic_ptr construct_object();
 
-protected:
+ protected:
   int new_or_ref;
-  vcl_string _id;
-  vsol_point_2d_sptr _pt;
+  vcl_string id_;
+  vsol_point_2d_sptr pt_;
 };
+
 #endif
-
-
-
-
-

@@ -1,16 +1,18 @@
+//:
+// \file
 #include <bxml/bxml_input_converter.h>
 #include <vcl_iostream.h>
 #include <vsol/vsol_spatial_object_2d.h>
 
 typedef vcl_map<vcl_string,bxml_generic_ptr,vcl_less<vcl_string> > OTAB;
-OTAB bxml_input_converter::_obj_table;
+OTAB bxml_input_converter::obj_table_;
 
 
 //: Constuctor
 bxml_input_converter::bxml_input_converter()
 {
-  _debug=false;
-  _null_id = "p00";
+  debug_=false;
+  null_id_ = "p00";
 }
 
 //: Destructor
@@ -22,28 +24,28 @@ vcl_string bxml_input_converter::get_DOM_tag(DOM_Node& node)
 {
   int node_type = node.getNodeType();
   if (node_type != DOM_Node::ELEMENT_NODE) {
-    vcl_cout << "In bxml_input_converter::get_DOM_tag: node_type=" 
+    vcl_cout << "In bxml_input_converter::get_DOM_tag: node_type="
              << node_type << vcl_endl;
     return "";
   }
   char* tag_name = ((DOM_Element*)&node)->getTagName().transcode();
   vcl_string tname(tag_name);
-  return (tname);
+  return tname;
 }
 int bxml_input_converter::check_tag(DOM_Node& node)
 {
   int node_type = node.getNodeType();
   if (node_type != DOM_Node::ELEMENT_NODE) {
-    vcl_cout << "bxml_input_converter::check_tag() Error: node_type=" 
+    vcl_cout << "bxml_input_converter::check_tag() Error: node_type="
              << node_type << vcl_endl;
     return 0;
   }
-  
+
   char* tag_name = ((DOM_Element*)&node)->getTagName().transcode();
   vcl_string tname(tag_name);
-  if(_debug)
-    vcl_cout<< "bxml_input_converter::check_tag() tag_name from DOM: " 
-            << tname << ", tag_name expected: " << get_tag_name() 
+  if (debug_)
+    vcl_cout<< "bxml_input_converter::check_tag() tag_name from DOM: "
+            << tname << ", tag_name expected: " << get_tag_name()
             << vcl_endl << vcl_flush;
   // virtual method get_tag_name()
   if ( tname == get_tag_name() ) {
@@ -54,11 +56,12 @@ int bxml_input_converter::check_tag(DOM_Node& node)
   }
   else {
     // not found
-    if(_debug)
-      vcl_cout<< "bxml_input_converter::check_tag() tag not found" << vcl_endl;
+    if (debug_)
+      vcl_cout<< "bxml_input_converter::check_tag() tag not found\n";
     return 0;
   }
 }
+
 bool bxml_input_converter::getNextElementSibling(DOM_Node& node)
 {
   node = node.getNextSibling();
@@ -66,12 +69,10 @@ bool bxml_input_converter::getNextElementSibling(DOM_Node& node)
   bool found = false;
   while (!found && node != 0) {
     int node_type = node.getNodeType();
-    if (node_type == DOM_Node::ELEMENT_NODE) {   
+    if (node_type == DOM_Node::ELEMENT_NODE)
       found = true;
-    }
-    else {
+    else
       node = node.getNextSibling();
-    }
   }
   return found;
 }
@@ -94,7 +95,7 @@ DOM_Node bxml_input_converter::getChild(DOM_Node& node,vcl_string tname)
 bool bxml_input_converter::has_attr(DOM_Node& node, vcl_string attr_name)
 {
   DOM_Attr attr = ((DOM_Element*)&node)->getAttributeNode(attr_name.c_str());
-  return(attr != NULL);
+  return attr != NULL;
 }
 
 vcl_string bxml_input_converter::get_string_attr(DOM_Node& node,
@@ -129,13 +130,13 @@ bool bxml_input_converter::get_bool_attr(DOM_Node& node,vcl_string attr_name)
 //:unref spatial object instances in the object table
 void bxml_input_converter::clear()
 {
-  for(vcl_map<vcl_string,bxml_generic_ptr,vcl_less<vcl_string> >::iterator
-        pit =_obj_table.begin(); pit != _obj_table.end(); pit++)
+  for (vcl_map<vcl_string,bxml_generic_ptr,vcl_less<vcl_string> >::iterator
+       pit =obj_table_.begin(); pit != obj_table_.end(); pit++)
     {
       bxml_generic_ptr gp = (*pit).second;
       vsol_spatial_object_2d* so = gp.get_vsol_spatial_object();
-      if(so)
+      if (so)
         so->unref();
     }
-  _obj_table.clear();
+  obj_table_.clear();
 }

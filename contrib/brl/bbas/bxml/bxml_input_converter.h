@@ -1,19 +1,19 @@
-#ifndef _bxml_input_converter_h
-#define _bxml_input_converter_h
+#ifndef bxml_input_converter_h_
+#define bxml_input_converter_h_
 
 //-----------------------------------------------------------------------------
-//
+//:
 // \file
 // \author J.L. Mundy
 // \brief The base class for xml input conversion.
-// 
+//
 // \verbatim
 // The current clear operation explicitly uses vsol_spatial_object_2d
-// class methods.  These clear operations should be lower in the 
+// class methods.  These clear operations should be lower in the
 // class hierachies.  When more class roots are needed the clear should
 // be abstracted.
 //
-// Inital version December 07, 2002
+// Initial version December 07, 2002
 // Based on the TargetJr design by R. Kaucic
 // \endverbatim
 //
@@ -24,16 +24,17 @@
 #include <dom/DOM_Document.hpp>
 #include <bxml/bxml_generic_ptr.h>
 #include <bxml/dll.h>
+
 class bxml_input_converter : public vbl_ref_count
 {
  public:
   bxml_input_converter();
   ~bxml_input_converter();
-  
+
   //:specific sub_class string names
-  vcl_string get_tag_name() {return _tag_name;}  
-  vcl_string get_class_name() {return _class_name;}  
-  vcl_string get_ref_tag_name() {return _ref_tag_name;}  
+  vcl_string get_tag_name() {return tag_name_;}
+  vcl_string get_class_name() {return class_name_;}
+  vcl_string get_ref_tag_name() {return ref_tag_name_;}
 
   //:helper functions
   static vcl_string get_DOM_tag(DOM_Node& node);
@@ -55,16 +56,16 @@ class bxml_input_converter : public vbl_ref_count
   virtual bool extract_from_dom(DOM_Node& node) = 0;
   virtual bxml_generic_ptr construct_object()=0;
   //:utilities
-  void set_debug(bool debug){_debug=debug;}
+  void set_debug(bool debug){debug_=debug;}
   //:clear spatial object instances in the table. move lower in hierarchy JLM
   static void clear();
  protected:
-  bool _debug;
-  vcl_string  _null_id;
-  static BXML_DLL_DATA vcl_map<vcl_string,bxml_generic_ptr,vcl_less<vcl_string> >  _obj_table;
-  vcl_string _class_name;
-  vcl_string _tag_name;
-  vcl_string _ref_tag_name;
+  bool debug_;
+  vcl_string  null_id_;
+  static BXML_DLL_DATA vcl_map<vcl_string,bxml_generic_ptr,vcl_less<vcl_string> >  obj_table_;
+  vcl_string class_name_;
+  vcl_string tag_name_;
+  vcl_string ref_tag_name_;
 };
 
 #endif

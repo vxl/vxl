@@ -16,28 +16,28 @@ bxml_vtol_io::~bxml_vtol_io()
 {
 }
 bool bxml_vtol_io::read_edges(vcl_string& xml_file_name,
-                        vcl_vector<vtol_edge_2d_sptr>& edges )
+                              vcl_vector<vtol_edge_2d_sptr>& edges )
 {
   bxml_io::register_input_converters();
   vcl_vector<bxml_generic_ptr> ptrs;
-  if(!bxml_io::parse_xml(xml_file_name, ptrs))
+  if (!bxml_io::parse_xml(xml_file_name, ptrs))
     return false;
-  if(!ptrs.size())
+  if (!ptrs.size())
     return false;
-  for(vcl_vector<bxml_generic_ptr>::iterator pit = ptrs.begin();
-      pit != ptrs.end(); pit++)
+  for (vcl_vector<bxml_generic_ptr>::iterator pit = ptrs.begin();
+       pit != ptrs.end(); pit++)
     {
       vsol_spatial_object_2d* so  = (*pit).get_vsol_spatial_object();
-      if(so->spatial_type()==1){
+      if (so->spatial_type()==1){
       vtol_topology_object* to = so->cast_to_topology_object();
       vtol_edge* e = to->cast_to_edge();
       vtol_edge_2d_sptr e2d = e->cast_to_edge_2d();
-      if(e2d)
+      if (e2d)
         edges.push_back(e2d);
       else
         return false;
      }
     }
   bxml_input_converter::clear();
-  return (edges.size()>0);
+  return edges.size()>0;
 }

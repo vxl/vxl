@@ -6,15 +6,14 @@
 #include <vdgl/vdgl_interpolator_linear.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
-#include <vdgl/vdgl_digital_curve.h>
 #include <vsol/vsol_point_2d.h>
 #include <bxml/bxml_vsol_point_2d_input_converter.h>
 #include <bxml/bxml_vdgl_digital_curve_input_converter.h>
 
 bxml_vdgl_digital_curve_input_converter::bxml_vdgl_digital_curve_input_converter() {
-  _class_name = "vdgl_digital_curve";
-  _tag_name = "discrete_curve_3d";
-  _ref_tag_name = "discrete_curve_3d_ref";
+  class_name_ = "vdgl_digital_curve";
+  tag_name_ = "discrete_curve_3d";
+  ref_tag_name_ = "discrete_curve_3d_ref";
 }
 
 bxml_vdgl_digital_curve_input_converter::~bxml_vdgl_digital_curve_input_converter() {
@@ -29,44 +28,44 @@ bool bxml_vdgl_digital_curve_input_converter::extract_from_dom(DOM_Node& node) {
   }
   else if (new_or_ref == 2) {
     // ref node
-    return (extract_ref_object_atrs(node));
+    return extract_ref_object_atrs(node);
   }
   else {
     extract_object_atrs(node);
   }
 
-  if(_debug)
-    vcl_cout << "discrete_curve_3d: _id=" << _id << " _n_points=" << _n_points << vcl_endl;;
+  if (debug_)
+    vcl_cout << "discrete_curve_3d: id_=" << id_ << " n_points_=" << n_points_ << vcl_endl;;
 
-  _xs.clear();
-  _ys.clear();
+  xs_.clear();
+  ys_.clear();
 
   int num_children=0;
   DOM_Node child = node.getFirstChild();
   while (child != 0) {
     int cnode_type = child.getNodeType();
-    if (cnode_type == DOM_Node::ELEMENT_NODE) {   
+    if (cnode_type == DOM_Node::ELEMENT_NODE) {
       bxml_vsol_point_2d_input_converter conv;
       if (conv.extract_from_dom(child)) {
-	bxml_generic_ptr gp_pt = conv.construct_object();
-	vsol_point_2d* pt = (vsol_point_2d*) gp_pt.get_vsol_spatial_object();
-	if (!pt) {
-	  vcl_cout << "vdgl_digital_curve:Error,  unable to read point_2d" << vcl_endl;;
-	  return false;
-	}
-	_xs.push_back(pt->x());
-	_ys.push_back(pt->y());
-  vcl_string& s = conv.id();
-	num_children++;
+        bxml_generic_ptr gp_pt = conv.construct_object();
+        vsol_point_2d* pt = (vsol_point_2d*) gp_pt.get_vsol_spatial_object();
+        if (!pt) {
+          vcl_cout << "vdgl_digital_curve:Error,  unable to read point_2d" << vcl_endl;;
+          return false;
+        }
+        xs_.push_back(pt->x());
+        ys_.push_back(pt->y());
+        vcl_string& s = conv.id();
+        num_children++;
       }
       else {
-	vcl_cout << "something wrong, no point_2d" << vcl_endl;;
+        vcl_cout << "something wrong, no point_2d" << vcl_endl;;
       }
     }
     child = child.getNextSibling();
   }
-  if (num_children != _n_points ) {
-    vcl_cout << "vdgl_digital_curve:Error num_children=" << num_children << " _n_points=" << _n_points << vcl_endl;;
+  if (num_children != n_points_ ) {
+    vcl_cout << "vdgl_digital_curve:Error num_children=" << num_children << " n_points_=" << n_points_ << vcl_endl;;
     return false;
   }
 
@@ -77,33 +76,33 @@ bxml_generic_ptr bxml_vdgl_digital_curve_input_converter::construct_object()
 {
   if (new_or_ref == 1) {
     vdgl_edgel_chain_sptr ec = new vdgl_edgel_chain();
-    for (int i=0; i<_n_points; i++)
-      ec->add_edgel(vdgl_edgel(_xs[i], _ys[i]));
+    for (int i=0; i<n_points_; i++)
+      ec->add_edgel(vdgl_edgel(xs_[i], ys_[i]));
 
     vdgl_interpolator_sptr itp = new vdgl_interpolator_linear(ec);
     vdgl_digital_curve* dc = new vdgl_digital_curve(itp);
     bxml_generic_ptr gp(dc);
-    if ( !(_id == _null_id) ) {
-     _obj_table[_id] = gp;
+    if ( !(id_ == null_id_) ) {
+     obj_table_[id_] = gp;
      dc->ref();
     }
     return gp;
   }
   else {
-    bxml_generic_ptr gp = _obj_table[_id];
+    bxml_generic_ptr gp = obj_table_[id_];
     return gp;
   }
 }
 
 bool bxml_vdgl_digital_curve_input_converter::extract_ref_object_atrs(DOM_Node& node) {
-  _id = get_string_attr(node,"id");
-  
+  id_ = get_string_attr(node,"id");
+
   return true;
 }
 
 bool bxml_vdgl_digital_curve_input_converter::extract_object_atrs(DOM_Node& node) {
-  _id = get_string_attr(node,"id");
-  _n_points = get_int_attr(node,"n_points");
-  
+  id_ = get_string_attr(node,"id");
+  n_points_ = get_int_attr(node,"n_points");
+
   return true;
 }

@@ -21,10 +21,10 @@
 
 class bxml_vtol_zero_chain_2d_input_converter : public bxml_input_converter
 {
-public:
+ public:
   bxml_vtol_zero_chain_2d_input_converter();
   virtual ~bxml_vtol_zero_chain_2d_input_converter();
-  
+
   virtual bool extract_object_atrs(DOM_Node& node);
   virtual bool extract_from_dom(DOM_Node& node);
 
@@ -33,15 +33,10 @@ public:
   // construct new object
   bxml_generic_ptr construct_object();
 
-protected:
+ protected:
   int new_or_ref;
-  vcl_string _id;
-  vcl_vector<vtol_vertex_sptr> _verts;
-
+  vcl_string id_;
+  vcl_vector<vtol_vertex_sptr> verts_;
 };
+
 #endif
-
-
-
-
-

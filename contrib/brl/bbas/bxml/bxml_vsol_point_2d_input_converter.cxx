@@ -1,30 +1,30 @@
+//:
+// \file
 #include <vcl_iostream.h> //cout
-#include <vcl_string.h>
 #include <dom/DOM_Element.hpp>
 #include <vsol/vsol_point_2d.h>
-#include <vsol/vsol_spatial_object_2d.h>
 #include <bxml/bxml_vsol_point_2d_input_converter.h>
 
 
 bxml_vsol_point_2d_input_converter::bxml_vsol_point_2d_input_converter() {
-  _class_name = "vsol_point_2d";
-  _tag_name = "point_3d";
-  _ref_tag_name = "point_3d_ref";
+  class_name_ = "vsol_point_2d";
+  tag_name_ = "point_3d";
+  ref_tag_name_ = "point_3d_ref";
 }
 
 bxml_vsol_point_2d_input_converter::~bxml_vsol_point_2d_input_converter() {
 }
 
 bool bxml_vsol_point_2d_input_converter::extract_ref_object_atrs(DOM_Node& node) {
-  _id = get_string_attr(node,"id");
+  id_ = get_string_attr(node,"id");
 
   return true;
 }
 
 bool bxml_vsol_point_2d_input_converter::extract_object_atrs(DOM_Node& node) {
-  _x  = get_double_attr(node,"x");
-  _y  = get_double_attr(node,"y");
-  _id = get_string_attr(node,"id");
+  x_  = get_double_attr(node,"x");
+  y_  = get_double_attr(node,"y");
+  id_ = get_string_attr(node,"id");
 
   return true;
 }
@@ -38,7 +38,7 @@ bool bxml_vsol_point_2d_input_converter::extract_from_dom(DOM_Node& node) {
     return false;
   }
   else if (new_or_ref == 2) {
-    return (extract_ref_object_atrs(node));
+    return extract_ref_object_atrs(node);
   }
   else {
     extract_object_atrs(node);
@@ -57,16 +57,16 @@ bool bxml_vsol_point_2d_input_converter::extract_from_dom(DOM_Node& node) {
 bxml_generic_ptr bxml_vsol_point_2d_input_converter::construct_object()
 {
   if (new_or_ref == 1) {
-    vsol_point_2d* p = new vsol_point_2d(_x, _y);
+    vsol_point_2d* p = new vsol_point_2d(x_, y_);
     bxml_generic_ptr gp(p);
-    if ( !(_id == _null_id) ) {
-     _obj_table[_id] = gp;
+    if ( !(id_ == null_id_) ) {
+     obj_table_[id_] = gp;
      p->ref();//Keep the point alive until it is used
     }
     return gp;
   }
   else {
-    bxml_generic_ptr gp = _obj_table[_id];
+    bxml_generic_ptr gp = obj_table_[id_];
     return gp;
   }
 }

@@ -1,4 +1,4 @@
-// This is brl/bseg/sdet_edgel_regions.cxx
+// This is brl/bseg/sdet/sdet_edgel_regions.cxx
 #include "sdet_edgel_regions.h"
 //:
 // \file
@@ -16,7 +16,6 @@
 #include <vul/vul_timer.h>
 
 #include <vsol/vsol_box_2d.h>
-#include <vsol/vsol_box_2d_sptr.h>
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_one_chain.h>
@@ -70,7 +69,7 @@ void sdet_edgel_regions::print_region_array()
       for (unsigned int x = xo_; x<=xend_; x++)
         if (region_label_array_[Y(y)][X(x)]==EDGE
             //&&edge_boundary_array_[Y(y)][X(x)]->IsVertex()
-            )
+           )
           vcl_cout << "* " ;
         else
           vcl_cout << region_label_array_[Y(y)][X(x)] << " " ;
@@ -78,6 +77,7 @@ void sdet_edgel_regions::print_region_array()
     }
   vcl_cout << vcl_endl << vcl_endl;
 }
+
 //Print the contents of the forward eqivalence index
 void sdet_edgel_regions::print_region_equivalence()
 {
@@ -89,20 +89,21 @@ void sdet_edgel_regions::print_region_equivalence()
     {
       vcl_cout << (*rpf_iterator).first << " == ";
       vcl_vector<unsigned int>* labels = (*rpf_iterator).second;
-      if(labels)
+      if (labels)
         {
-          for(vcl_vector<unsigned int>::iterator lit = labels->begin();
-              lit != labels->end(); lit++)
+          for (vcl_vector<unsigned int>::iterator lit = labels->begin();
+               lit != labels->end(); lit++)
             vcl_cout << *lit << " " ;
           vcl_cout << vcl_endl;
         }
     }
   vcl_cout << vcl_endl;
 }
+//
 //Print the contents of the reverse eqivalence index
 void sdet_edgel_regions::print_reverse_region_equivalence()
 {
-  vcl_cout << vcl_endl << "Reverse Label Equivalence:\n"
+  vcl_cout << "\nReverse Label Equivalence:\n"
            << "----------------\n";
   vcl_map<unsigned int, vcl_vector<unsigned int>*>::iterator rpf_iterator;
   for (rpf_iterator= region_pairs_reverse_.begin();
@@ -110,20 +111,21 @@ void sdet_edgel_regions::print_reverse_region_equivalence()
     {
       vcl_cout << (*rpf_iterator).first << " == ";
       vcl_vector<unsigned int>* labels = (*rpf_iterator).second;
-      if(labels)
+      if (labels)
         {
-          for(vcl_vector<unsigned int>::iterator lit = labels->begin();
-              lit != labels->end(); lit++)
-            vcl_cout << *lit << " " ;
+          for (vcl_vector<unsigned int>::iterator lit = labels->begin();
+               lit != labels->end(); lit++)
+            vcl_cout << *lit << " ";
           vcl_cout << vcl_endl;
         }
     }
   vcl_cout << vcl_endl;
 }
+//
 //Print the reduced equivalence relation
 void sdet_edgel_regions::print_base_equivalence()
 {
-  vcl_cout << vcl_endl << "Base Label Equivalence:\n"
+  vcl_cout << "\nBase Label Equivalence:\n"
            << "----------------\n";
 
   for (unsigned int i = min_region_label_; i<max_region_label_; i++)
@@ -206,7 +208,6 @@ sdet_edgel_regions::sdet_edgel_regions(bool debug, bool verbose)
 //: Default destructor
 sdet_edgel_regions::~sdet_edgel_regions()
 {
-
   unsigned int y;
   if (region_label_array_)
     for (y=yo_; y<=yend_; y++)
@@ -323,7 +324,7 @@ compute_edgel_regions(vcl_vector<vtol_edge_2d_sptr>& sgrp,
   if (verbose_)
     this->print_region_array();
   //Resolve region label equivalence
-  if(verbose_)
+  if (verbose_)
     {
       this->print_region_equivalence();
       this->print_reverse_region_equivalence();
@@ -412,7 +413,7 @@ vil_image sdet_edgel_regions::GetEdgeImage(vcl_vector<vtol_edge_2d_sptr>& sg)
   unsigned char no_edge = 0, edge = 255;
 
   vil_memory_image_of<vil_byte> image(sizex,sizey);
-    
+
   for (int y = 0; y<sizey; y++)
     for (int x = 0; x<sizex; x++)
       if (region_label_array_[y][x] == EDGE)
@@ -512,7 +513,7 @@ merge_equivalence(vcl_map<unsigned int, vcl_vector<unsigned int>* >& tab,
 bool sdet_edgel_regions::get_next_label(vcl_vector<unsigned int>* labels,
                                         unsigned int& label)
 {
-  //If the set labels is null then 
+  //If the set labels is null then
   //just return the next larger label (if less than max_region_label_)
   unsigned int tmp = label+1;
   if (!labels)
@@ -522,13 +523,13 @@ bool sdet_edgel_regions::get_next_label(vcl_vector<unsigned int>* labels,
         return true;
       }
 
-  //The set is not empty, so search for a label not found in the 
-  //set. 
+  //The set is not empty, so search for a label not found in the
+  //set.
 
   for (unsigned int i = tmp; i<max_region_label_; i++)
     {
       //if we don't find i we can use it as the new label
-      if(vcl_find(labels->begin(), labels->end(), i) == labels->end())
+      if (vcl_find(labels->begin(), labels->end(), i) == labels->end())
         {
           label = i;
           return true;
@@ -540,14 +541,14 @@ bool sdet_edgel_regions::get_next_label(vcl_vector<unsigned int>* labels,
 //:   Form equivalence classes by transitive closure on each label.
 //    The resulting label equivalence is stored in the map, equivalence_set_.
 //
-//    The idea is to add labels to the current equivalence set, cur_set, 
+//    The idea is to add labels to the current equivalence set, cur_set,
 //    from either forward or reverse equivalence classes until no
 //    new equivalences can be found.  The current equivalence class,
 //    cur_set, is repeatedly scanned when new labels are added to pick up
 //    new equivalence groups.  Old equivalence entries are removed from
 //    forward and reverse forward and reverse equivalence maps as they
 //    are used.  When the cur_set is completely closed, i.e. no new labels
-//    can be added, then a new label not in cur_set is used to 
+//    can be added, then a new label not in cur_set is used to
 //    seed a new equivalence class.
 //
 void sdet_edgel_regions::GrowEquivalenceClasses()
@@ -599,7 +600,7 @@ void sdet_edgel_regions::GrowEquivalenceClasses()
           if (!len) continue;
 
           //Now we check cur_set has actually been extended.
-          //If it has we have to sort the labels so that we can find 
+          //If it has we have to sort the labels so that we can find
           //the next larger label in cur_set easily
           if (len > old_len)
             {
@@ -618,7 +619,7 @@ void sdet_edgel_regions::GrowEquivalenceClasses()
           //If we reach here with merging = false then we have finished the
           //current equivalence class
         }
-      //Find the next largest label that isn't in cur_set to seed the 
+      //Find the next largest label that isn't in cur_set to seed the
       //next equivalence class
       if (!get_next_label(cur_set, cur_label)) return;
     }
@@ -1227,8 +1228,7 @@ void sdet_edgel_regions::UpdateConnectedNeighborhood(unsigned int x, unsigned in
       return;
     default:
       vcl_cout << "In sdet_edgel_regions::UpdateNeigborhood(..)"
-               << "impossible pattern = " << (int)nhood
-               << vcl_endl;
+               << "impossible pattern = " << (int)nhood << vcl_endl;
     }
 }
 static bool reg_edges_neq(sdet_region_edge* r1, sdet_region_edge* r2)
@@ -1354,7 +1354,6 @@ bool sdet_edgel_regions::remove_hairs(vcl_vector<vtol_edge_2d_sptr>& edges)
 void sdet_edgel_regions::repair_failed_insertions(vcl_vector<vtol_edge_2d_sptr>& edges,
                                                   vcl_vector<vtol_vertex_sptr>& bad_verts)
 {
-
   vcl_vector<vtol_vertex_sptr> temp1, temp2;
   for (vcl_vector<vtol_vertex_sptr>::iterator vit = bad_verts.begin();
        vit != bad_verts.end(); vit++)
@@ -1362,14 +1361,14 @@ void sdet_edgel_regions::repair_failed_insertions(vcl_vector<vtol_edge_2d_sptr>&
          eit != failed_insertions_->end(); eit++)
       if ((*vit)==(*eit)->v1())
         {
-          if(vcl_find(edges.begin(), edges.end(), *eit) != edges.end())
+          if (vcl_find(edges.begin(), edges.end(), *eit) != edges.end())
             edges.push_back(*eit);
           temp1.push_back(*vit);
           temp2.push_back((*eit)->v2());
         }
       else if ((*vit)==(*eit)->v2())
         {
-          if(vcl_find(edges.begin(), edges.end(), *eit) != edges.end())
+          if (vcl_find(edges.begin(), edges.end(), *eit) != edges.end())
             edges.push_back(*eit);
           temp1.push_back(*vit);
           temp2.push_back((*eit)->v1());
@@ -1377,7 +1376,7 @@ void sdet_edgel_regions::repair_failed_insertions(vcl_vector<vtol_edge_2d_sptr>&
   for (vcl_vector<vtol_vertex_sptr>::iterator wit = temp1.begin();
        wit != temp1.end(); wit++)
         bad_verts.erase(wit);
-  
+
   for (vcl_vector<vtol_vertex_sptr>::iterator vvit = temp2.begin();
        vvit != temp2.end(); vvit++)
     bad_verts.push_back(*vvit);
@@ -1546,8 +1545,7 @@ void sdet_edgel_regions::AssignEdgeLabels(unsigned int x, unsigned int y)
       return;
     default:
       vcl_cout << "In sdet_edgel_regions::UpdateNeigborhood(..)"
-               << "impossible pattern = " << (int)nhood
-               << vcl_endl;
+               << "impossible pattern = " << (int)nhood << vcl_endl;
     }
 }
 //---------------------------------------------------------------------
@@ -1757,8 +1755,7 @@ void sdet_edgel_regions::ConstructFaces()
       //        face->UnProtect();
       delete face_edges;
     }
-  vcl_cout << vcl_endl;
-  vcl_cout << "Constructed Faces(" << max_region_label_ - min_region_label_
+  vcl_cout << "\nConstructed Faces(" << max_region_label_ - min_region_label_
            << ") in " << t.real() << " msecs.\n";
 }
 //--------------------------------------------------------------

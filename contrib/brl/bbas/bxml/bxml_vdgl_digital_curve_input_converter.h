@@ -21,23 +21,24 @@
 
 class bxml_vdgl_digital_curve_input_converter : public bxml_input_converter
 {
-public:
+ public:
   bxml_vdgl_digital_curve_input_converter();
   virtual ~bxml_vdgl_digital_curve_input_converter();
-  
+
   virtual bool extract_ref_object_atrs(DOM_Node& node);
   virtual bool extract_object_atrs(DOM_Node& node);
   virtual bool extract_from_dom(DOM_Node& node);
 
   // construct new object
   bxml_generic_ptr construct_object();
- 
-protected:
+
+ protected:
   int new_or_ref;
-  vcl_string _id;
-  int _n_points;
-  vcl_vector<float> _xs;
-  vcl_vector<float> _ys;
-  vcl_vector<float> _zs;
+  vcl_string id_;
+  int n_points_;
+  vcl_vector<float> xs_;
+  vcl_vector<float> ys_;
+  vcl_vector<float> zs_;
 };
+
 #endif
