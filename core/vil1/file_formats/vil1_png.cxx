@@ -2,12 +2,11 @@
 #pragma implementation
 #endif
 
+//:
+// \file
 // http://www.mirror.ac.uk/sites/ftp.cdrom.com/pub/png/libpng.html
 
 #include "vil_png.h"
-
-
-
 
 #include <vcl_cassert.h>
 #include <vcl_cstring.h>
