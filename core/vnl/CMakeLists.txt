@@ -56,6 +56,7 @@ vnl_trace
 vnl_sample
 vnl_unary_function
 vnl_transpose
+vnl_rational
 )
 
 AUX_SOURCE_DIRECTORY(Templates vnl_sources)

@@ -645,6 +645,10 @@ SOURCE=".\Templates\vnl_quaternion+double-.cxx"
 # End Source File
 # Begin Source File
 
+SOURCE=.\vnl_rational.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\vnl_real_npolynomial.cxx
 # End Source File
 # Begin Source File
