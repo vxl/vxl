@@ -13,7 +13,11 @@
 # define vcl_generic_ctime_STD /* */
 # include "generic/vcl_ctime.h"
 #else
-# include "iso/vcl_ctime.h"
+# if defined(VCL_VC)
+#  include "win32/vcl_ctime.h"
+# else
+#  include "iso/vcl_ctime.h"
+# endif
 #endif
 
 // ??

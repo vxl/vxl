@@ -24,26 +24,15 @@
 static unsigned long vnl_sample_seed = 12345;
 #endif
 
-#if defined(__unix__)
-// Initialize random number generator by using
-// as seed the number of seconds since the Epoch.
 # include <vcl_ctime.h>
-# define use_ctime
-#else
-// Windows Weenies.
-#endif
 
 void vnl_sample_reseed()
 {
-#ifdef use_ctime
 # if VXL_STDLIB_HAS_DRAND48
   srand48( time(0) );
 # else
   vnl_sample_seed = time(0);
 # endif
-#else
-  // too bad...
-#endif
 }
 
 //: return a random number uniformly drawn on [a, b)
