@@ -11,31 +11,30 @@ SET( vil_algo_sources
   vil_binary_erode.cxx        vil_binary_erode.h
   vil_greyscale_dilate.txx    vil_greyscale_dilate.h
   vil_greyscale_erode.txx     vil_greyscale_erode.h
-                               vil_greyscale_opening.h
-                               vil_greyscale_closing.h
-                               vil_binary_opening.h
-                               vil_binary_closing.h
-                               vil_convolve_1d.h
-                               vil_convolve_2d.h
-                               vil_correlate_1d.h
-                               vil_correlate_2d.h
-                               vil_exp_filter_1d.h
-                               vil_normalised_correlation_2d.h
-                               vil_exp_grad_filter_1d.h
-                               vil_exp_filter_2d.h
-                               vil_suppress_non_max.h
-  vil_line_filter.txx          vil_line_filter.h
-  vil_threshold.txx            vil_threshold.h
-                               vil_grid_merge.h
-                               vil_find_4con_boundary.h
-  vil_fft.txx                  vil_fft.h
-  vil_histogram.cxx            vil_histogram.h
-  vil_histogram_equalise.cxx   vil_histogram_equalise.h
-	vil_trace_4con_boundary.cxx  vil_trace_4con_boundary.h
-	vil_blob_finder.cxx          vil_blob_finder.h
-  vil_distance_transform.cxx   vil_distance_transform.h
+                              vil_greyscale_opening.h
+                              vil_greyscale_closing.h
+                              vil_binary_opening.h
+                              vil_binary_closing.h
+                              vil_convolve_1d.h
+                              vil_convolve_2d.h
+                              vil_correlate_1d.h
+                              vil_correlate_2d.h
+                              vil_exp_filter_1d.h
+                              vil_normalised_correlation_2d.h
+                              vil_exp_grad_filter_1d.h
+                              vil_exp_filter_2d.h
+                              vil_suppress_non_max.h
+  vil_line_filter.txx         vil_line_filter.h
+  vil_threshold.txx           vil_threshold.h
+                              vil_grid_merge.h
+                              vil_find_4con_boundary.h
+  vil_fft.txx                 vil_fft.h
+  vil_histogram.cxx           vil_histogram.h
+  vil_histogram_equalise.cxx  vil_histogram_equalise.h
+  vil_trace_4con_boundary.cxx vil_trace_4con_boundary.h
+  vil_blob_finder.cxx         vil_blob_finder.h
+  vil_distance_transform.cxx  vil_distance_transform.h
 )
-
 
 AUX_SOURCE_DIRECTORY(Templates vil_algo_sources)
 

@@ -307,7 +307,7 @@ static void test_algo_gauss_reduce_2_3_float(unsigned nx, unsigned ny)
   image0.set_size(nx,ny);
   vil_image_view<float> reduced_x;
   reduced_x.set_size(nx,ny);
-	reduced_x.fill(2.22f);
+  reduced_x.fill(2.22f);
 
   for (unsigned int j=0;j<image0.nj();++j)
     for (unsigned int i=0;i<image0.ni();++i)
@@ -324,7 +324,7 @@ static void test_algo_gauss_reduce_2_3_float(unsigned nx, unsigned ny)
   TEST_NEAR("2nd element",reduced_x(1,1),0.5f*image0(1,1)+0.5*image0(2,1),1e-6);
   TEST_NEAR("3rd element",reduced_x(2,1),image0(3,1),1e-6);
   unsigned Lx = (2*nx+1)/3;
-	TEST_NEAR("No over-run",reduced_x(Lx,1),2.22f,1e-6);
+  TEST_NEAR("No over-run",reduced_x(Lx,1),2.22f,1e-6);
 }
 
 static void test_algo_gauss_reduce_byte_2d()
@@ -388,11 +388,11 @@ MAIN( test_algo_gauss_reduce )
 
   test_algo_gauss_reduce_byte_2d();
 
-	test_algo_gauss_reduce_2_3_float(6,3);
-	test_algo_gauss_reduce_2_3_float(7,3);
-	test_algo_gauss_reduce_2_3_float(8,3);
+  test_algo_gauss_reduce_2_3_float(6,3);
+  test_algo_gauss_reduce_2_3_float(7,3);
+  test_algo_gauss_reduce_2_3_float(8,3);
 
-	test_algo_gauss_reduce_2_3_byte_2d();
+  test_algo_gauss_reduce_2_3_byte_2d();
 
   SUMMARY();
 }

@@ -1,6 +1,5 @@
 #ifndef vil_blob_finder_h_
 #define vil_blob_finder_h_
-
 //:
 // \file
 // \brief Finds connected regions in a boolean image.
@@ -23,52 +22,53 @@
 //  case the supplied image (im) will be erased as the blob finder goes
 //  about it's humble task.
 //
-//  \verbatim
+//  \code
 //  vcl_vector<int> bi,bj;
 //  vil_blob_finder finder(bool_image);
 //  while (finder.next_4con_region(bi,bj))
 //  {
 //    vcl_cout<<"Blob boundary length: "<<bi.size()<<vcl_endl;
 //  }
-//  \endverbatim
-class vil_blob_finder {
-private:
-    //: Workspace (may be view of external image)
+//  \endcode
+class vil_blob_finder
+{
+ private:
+  //: Workspace (may be view of external image)
   vil_image_view<bool> image_;
 
-	  //: Current point of interest
-	int i_,j_;
+  //: Current point of interest
+  int i_,j_;
 
-public:
-    //: Default constructor
+ public:
+  //: Default constructor
   vil_blob_finder();
 
-	  //: Construct to work on image (takes deep copy)
+  //: Construct to work on image (takes deep copy)
   vil_blob_finder(const vil_image_view<bool>& image);
 
-	  //: Define image to work on (deep copy taken)
+  //: Define image to work on (deep copy taken)
   void set_image(const vil_image_view<bool>& image);
 
-	  //: Define image to work on and use as workspace
-		//  Image will be erased during process.
-		//  Avoids the deep copy in set_image()
+  //: Define image to work on and use as workspace
+  //  Image will be erased during process.
+  //  Avoids the deep copy in set_image()
   void set_work_image(vil_image_view<bool>& image);
 
-	  //: Get boundary pixels of next blob in current image.
-		// Uses four connected boundary representation.
-		// Return false if no more regions
+  //: Get boundary pixels of next blob in current image.
+  //  Uses four connected boundary representation.
+  //  Return false if no more regions
   bool next_4con_region(vcl_vector<int>& bi, vcl_vector<int>& bj);
 
-	  //: Get largest blob in current image
-		//  Assumes image has been initialised, and that next_4con_region not
-		//  yet called.  Erases internal image during this call, so any
-		//  subsequent calls will not work.
-		//
-		//  bi,bj empty if no blobs found.
+  //: Get largest blob in current image
+  //  Assumes image has been initialised, and that next_4con_region not
+  //  yet called.  Erases internal image during this call, so any
+  //  subsequent calls will not work.
+  //
+  //  bi,bj empty if no blobs found.
   void largest_4con_region(vcl_vector<int>& bi, vcl_vector<int>& bj);
 
-	  //: Get number of blobs in given image
-		//  Overrides any internal state
+  //: Get number of blobs in given image
+  //  Overrides any internal state
   unsigned n_4con_regions(const vil_image_view<bool>& image);
 };
 

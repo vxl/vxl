@@ -37,19 +37,19 @@ void delete_blob(vil_image_view<bool>& image,
                  const vcl_vector<int>& bi, const vcl_vector<int>& bj)
 {
   const unsigned n = bi.size();
-	const unsigned ni = image.ni();
+  const unsigned ni = image.ni();
   for (unsigned k=0;k<n;++k)
-	{
-	  int j = bj[k];
+  {
+    int j = bj[k];
 
-	  // Delete all neighbours to the right
-	  int i = bi[k];
+    // Delete all neighbours to the right
+    int i = bi[k];
     while (i<ni && image(i,j)) { image(i,j)=false; ++i; }
 
-		// Delete all neighbours to the left
+    // Delete all neighbours to the left
     i=bi[k]-1;
-		while (i>=0 && image(i,j)) { image(i,j)=false; --i; }
-	}
+    while (i>=0 && image(i,j)) { image(i,j)=false; --i; }
+  }
 }
 
 //: Get boundary pixels of next blob in current image.
@@ -57,25 +57,21 @@ void delete_blob(vil_image_view<bool>& image,
 // Return false if no more regions
 bool vil_blob_finder::next_4con_region(vcl_vector<int>& bi, vcl_vector<int>& bj)
 {
-  while (j_<image_.nj())
-	{
-	  while (i_<image_.ni())
-		{
+  // Start from current pixel (i_,j_), run over rows until matching pixel found
+  for (; j_<image_.nj(); ++j_,i_=0)
+  {
+    for (; i_<image_.ni(); ++i_)
+    {
       if (image_(i_,j_))
-			{
-			  vil_trace_4con_boundary(bi,bj,image_,i_,j_);
-				delete_blob(image_,bi,bj);
-				return true;
-			}
-			i_++;
+      {
+        vil_trace_4con_boundary(bi,bj,image_,i_,j_);
+        delete_blob(image_,bi,bj);
+        return true;
+      }
+    }
+  }
 
-		}
-		// Move to first element of next row
-		i_ = 0;
-	  j_++;
-	}
-
-	return false;  // Reached end of image without finding another blob
+  return false;  // Reached end of image without finding another blob
 }
 
 //: Get largest blob in current image
@@ -86,13 +82,13 @@ void vil_blob_finder::largest_4con_region(vcl_vector<int>& bi, vcl_vector<int>& 
 {
   bi.resize(0); bj.resize(0);
   vcl_vector<int> tmp_bi,tmp_bj;
-	while (next_4con_region(tmp_bi,tmp_bj))
-	{
-	  if (tmp_bi.size()>bi.size())
-		{
-		  vcl_swap(bi,tmp_bi);
-		  vcl_swap(bj,tmp_bj);
-		}
+  while (next_4con_region(tmp_bi,tmp_bj))
+  {
+    if (tmp_bi.size()>bi.size())
+    {
+      vcl_swap(bi,tmp_bi);
+      vcl_swap(bj,tmp_bj);
+    }
   }
 }
 
@@ -102,7 +98,7 @@ unsigned vil_blob_finder::n_4con_regions(const vil_image_view<bool>& image)
   set_image(image);
   unsigned n=0;
   vcl_vector<int> tmp_bi,tmp_bj;
-	while (next_4con_region(tmp_bi,tmp_bj)) n++;
-	return n;
+  while (next_4con_region(tmp_bi,tmp_bj)) n++;
+  return n;
 }
 
