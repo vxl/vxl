@@ -17,6 +17,8 @@ MANPAGE_SOURCES += vil3d_normalised_correlation_3d.h
 MANPAGE_SOURCES += vil3d_convolve_1d.h
 SOURCES += vil3d_histogram.cxx
 SOURCES += vil3d_histogram_equalise.cxx
+SOURCES += vil3d_distance_transform.cxx
+SOURCES += vil3d_fill_boundary.cxx
 
 ################################
 include ${IUEROOT}/config/top.mk
