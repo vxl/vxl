@@ -46,7 +46,7 @@ void test_hilbert()
   I.fill_diagonal(1.0);
   
   vnl_matrix<double> res = X - I;
-  Assert("Hilbert recomposition residual", res.inf_norm() < 1.1e-10);
+  Assert("Hilbert recomposition residual", res.fro_norm() < 1.1e-10);
 }
 
 // Test recovery of parameters of least-squares parabola fit.
@@ -117,8 +117,8 @@ void test_pmatrix()
   vnl_svd<double> svd(P, 1e-8);
 
   vnl_matrix<double> res = svd.recompose() - P;
-  vcl_cout << "Recomposition residual = " << res.inf_norm() << vcl_endl;
-  Assert("PMatrix recomposition residual", res.inf_norm() < 1e-12);
+  vcl_cout << "Recomposition residual = " << res.fro_norm() << vcl_endl;
+  Assert("PMatrix recomposition residual", res.fro_norm() < 1e-12);
   vcl_cout << " Inv = " << svd.inverse() << vcl_endl;
 
   Assert("singularities = 2", svd.singularities() == 2);
@@ -130,8 +130,8 @@ void test_pmatrix()
   
   vnl_matrix<double> PN = P*N;
   vcl_cout << "P * null(P) = \n" << PN << vcl_endl;
-  vcl_cout << "nullspace residual = " << PN.inf_norm() << vcl_endl;
-  Assert("P nullspace residual", PN.inf_norm() < 1e-12);
+  vcl_cout << "nullspace residual = " << PN.fro_norm() << vcl_endl;
+  Assert("P nullspace residual", PN.fro_norm() < 1e-12);
   
   vnl_vector<double> n = svd.nullvector();
   vcl_cout << "nullvector residual = " << (P*n).magnitude() << vcl_endl;
@@ -180,7 +180,7 @@ void test_svd_recomposition(char const *type, double maxres, T */*tag*/)
   vnl_matrix<T> B=svd.recompose();
   vcl_cout << "B = [ " << vcl_endl << B << "]" << vcl_endl;
   
-  double residual=(A - B).inf_norm();
+  double residual=(A - B).fro_norm();
   vcl_cout << "residual=" << residual << vcl_endl;
   Assert("vnl_svd<float> recomposition residual", residual < maxres);
 }
