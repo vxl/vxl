@@ -6,6 +6,9 @@
 //  \brief Ref. counted block of data on the heap
 //  \author Tim Cootes
 
+
+#include <vil2/vil2_smart_ptr.h>
+
 //: Ref. counted block of data on the heap
 //  Image data block used by vil2_image_view<T>.
 class vil2_memory_chunk
@@ -14,7 +17,7 @@ class vil2_memory_chunk
     void *data_;
 
     //: Number of elements
-    unsigned int size_;
+    unsigned long size_;
 
     //: Reference count
     int ref_count_;
@@ -24,7 +27,7 @@ class vil2_memory_chunk
     vil2_memory_chunk();
 
     //: Allocate n bytes of memory
-    vil2_memory_chunk(unsigned n);
+    vil2_memory_chunk(unsigned long n);
 
     //: Copy ctor
     vil2_memory_chunk(const vil2_memory_chunk&);
@@ -48,11 +51,13 @@ class vil2_memory_chunk
     void* data() { return data_;}
 
     //: Number of bytes allocated
-    unsigned int size() const { return size_; }
+    unsigned long size() const { return size_; }
 
     //: Create space for n elements
-    void resize(int n);
+    void resize(unsigned long n);
 };
+
+typedef vil2_smart_ptr<vil2_memory_chunk> vil2_memory_chunk_sptr;
 
 #endif
 

@@ -12,7 +12,7 @@ vil2_memory_chunk::vil2_memory_chunk()
 }
 
 //: Allocate n bytes of memory
-vil2_memory_chunk::vil2_memory_chunk(unsigned n)
+vil2_memory_chunk::vil2_memory_chunk(unsigned long n)
 : data_(0), size_(0), ref_count_(0)
 {
   resize(n);
@@ -53,9 +53,9 @@ void vil2_memory_chunk::unref()
 }
 
 //: Create space for n elements
-void vil2_memory_chunk::resize(int n)
+void vil2_memory_chunk::resize(unsigned long n)
 {
-  if (size_==(unsigned int)n) return;
+  if (size_==n) return;
   delete [] (char*) data_;
   data_ = 0;
   if (n>0)
