@@ -55,18 +55,17 @@ inline void vil2_exp_filter_1d(const vil2_image_view<srcT>& src_im,
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
+  dest_im.resize(ni,nj,src_im.nplanes());
   int s_istep = src_im.istep(), s_jstep = src_im.jstep();
   int d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
 
-  dest_im.resize(ni,nj,src_im.nplanes());
-
   for (int p=0;p<src_im.nplanes();++p)
   {
-    const srcT*  src_row  = src_im.top_left_ptr()+p*src_im.pstep();
-    const destT* dest_row = dest_im.top_left_ptr()+p*dest_im.pstep();
+    const srcT*  src_row  = src_im.top_left_ptr()+p*src_im.planestep();
+    destT* dest_row = dest_im.top_left_ptr()+p*dest_im.planestep();
 
     for (int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
-      vil2_exp_filter_1d(src_row,s_istep, dest_row,d_istep, ni, ac);
+      vil2_exp_filter_1d(src_row,s_istep, dest_row,d_istep,   ni, k, ac);
   }
 }
 
