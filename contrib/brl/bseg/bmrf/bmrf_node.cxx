@@ -5,9 +5,13 @@
 #include "bmrf_node.h"
 
 
+// Make sure this is set to the number of types defined in neighbor_types
+const int bmrf_node::number_of_types = 3;
+
+
 //: Constructor
 bmrf_node::bmrf_node( int frame_num, double probability )
-  : frame_num_(frame_num), probability_(probability), neighbors_(3) // The number of constants in enum neighbor_type
+  : frame_num_(frame_num), probability_(probability), neighbors_(number_of_types)
 {
 }
 
@@ -40,20 +44,18 @@ bmrf_node::add_neighbor( bmrf_node *node, neighbor_type type )
 
 //: Remove \param node from the neighborhood
 bool
-bmrf_node::remove_neighbor( bmrf_node *node )
+bmrf_node::remove_neighbor( bmrf_node *node, neighbor_type type )
 {
   if(!node || node == this)
     return false;
     
   // search for the node
-  for(unsigned t=0; t<sizeof(neighbor_type); ++t){
-    vcl_vector<bmrf_node*>::iterator itr = neighbors_[t].begin();
-    for(; itr != neighbors_[t].end(); ++itr)
-      if(*itr == node){
-        neighbors_[t].erase(itr);
-        return true;
-      }
-  }
+  vcl_vector<bmrf_node*>::iterator itr = neighbors_[type].begin();
+  for(; itr != neighbors_[type].end(); ++itr)
+    if(*itr == node){
+      neighbors_[type].erase(itr);
+      return true;
+    }
   return false;
 }
 
@@ -65,6 +67,25 @@ bmrf_node::b_write( vsl_b_ostream& os ) const
   vsl_b_write(os, version());
   vsl_b_write(os, this->frame_num_);
   vsl_b_write(os, this->probability_);
+  
+  for(int t=0; t<number_of_types; ++t){
+    // write the number of this type of neighbor
+    vsl_b_write(os, neighbors_[t].size());
+    vcl_vector<bmrf_node*>::const_iterator itr = neighbors_[t].begin();
+    for(; itr != neighbors_[t].end(); ++itr){
+      // Get a serial_number for this node
+      unsigned long id = os.get_serial_number(*itr);
+      if (id == 0){  // The node has not yet been saved
+        id = os.add_serialisation_record(*itr);
+        vsl_b_write(os, id);    // Save the serial number
+        vsl_b_write(os, *itr);  // Save the node
+      }
+      else{
+        vsl_b_write(os, id);    // Save the serial number only
+      }
+    }
+  }
+  
 }
 
 
@@ -80,7 +101,22 @@ bmrf_node::b_read( vsl_b_istream& is )
   {
   case 1:
     vsl_b_read(is, this->frame_num_);
-    vsl_b_read(is, this->probability_);    
+    vsl_b_read(is, this->probability_);
+    for(int t=0; t<number_of_types; ++t){
+      int num_neighbors;
+      vsl_b_read(is, num_neighbors);
+      for(int n=0; n<num_neighbors; ++n){
+        unsigned long id; // Unique serial number identifying object
+        vsl_b_read(is, id);
+
+        bmrf_node* node_ptr = (bmrf_node*) is.get_serialisation_pointer(id);
+        if (node_ptr == 0) { // Not loaded before
+          vsl_b_read(is, node_ptr);                  // load the node
+          is.add_serialisation_record(id, node_ptr); // remember location of this node
+        }
+        neighbors_[t].push_back(node_ptr);
+      }
+    }   
     break;
 
   default:
@@ -112,7 +148,7 @@ bmrf_node::print_summary( vcl_ostream& os ) const
 vcl_string
 bmrf_node::is_a(  ) const
 {
-  return "bmrf_node";
+  return vcl_string("bmrf_node");
 }
 
 
@@ -120,7 +156,7 @@ bmrf_node::is_a(  ) const
 bool
 bmrf_node::is_class( const vcl_string& cls ) const
 {
-  return false;
+  return cls==bmrf_node::is_a();
 }
 
 

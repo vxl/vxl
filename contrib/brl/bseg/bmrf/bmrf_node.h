@@ -25,6 +25,8 @@ class bmrf_node : public vbl_ref_count
 public:
   //: The values of this enum categorize the neighbors
   enum neighbor_type { SPACE, TIME, ALPHA };
+  //: The number of neighbor types defined in the neighbor_type enum
+  static const int number_of_types;
   
   //: Constructor
   bmrf_node( int frame_num = 0, double probability = 0.0 );
@@ -43,7 +45,7 @@ public:
   //: Remove \param node from the neighborhood
   // \return true if the node is removed successfully
   // \return false if the node was not a neighbor
-  bool remove_neighbor( bmrf_node *node );
+  bool remove_neighbor( bmrf_node *node, neighbor_type type );
 
   //: Return the frame number at which this node is found
   int frame_num() const { return frame_num_; }
