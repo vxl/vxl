@@ -190,19 +190,18 @@ vcl_vector<vtol_block*> *vtol_face::compute_blocks(void)
 //---------------------------------------------------------------------------
 bool vtol_face::shares_edge_with(vtol_face &f)
 {
-  bool result = this==&f;
-  if (!result)
-    {
-      edge_list *thisedges=edges();
-      edge_list *fedges=f.edges();
-      edge_list::const_iterator ei1;
-      edge_list::const_iterator ei2;
-      for (ei1=thisedges->begin();!result&&ei1!=thisedges->end();++ei1)
-        for (ei2= fedges->begin();!result&&ei2!=fedges->end();++ei2)
-          result=(*ei1)==(*ei2);
-      delete thisedges;
-      delete fedges;
-    }
+  if (this==&f) return true;
+
+  edge_list *thisedges=edges();
+  edge_list *fedges=f.edges();
+  edge_list::const_iterator ei1;
+  edge_list::const_iterator ei2;
+  bool result=false;
+  for (ei1=thisedges->begin();!result&&ei1!=thisedges->end();++ei1)
+    for (ei2= fedges->begin();!result&&ei2!=fedges->end();++ei2)
+      result=(*ei1)==(*ei2);
+  delete thisedges;
+  delete fedges;
   return result;
 }
 
@@ -266,13 +265,14 @@ bool vtol_face::operator==(const vsol_spatial_object_2d& obj) const
 
 vtol_one_chain_sptr vtol_face::get_one_chain(int which)
 {
+  assert((unsigned int)which < inferiors()->size());
   if ((unsigned int)which < inferiors()->size())
     return (inferiors_[which])->cast_to_one_chain();
   else
-    {
-      vcl_cerr << "Tried to get bad edge_loop from face\n";
-      return NULL;
-    }
+  {
+    vcl_cerr << "Tried to get bad edge_loop from face\n";
+    return NULL;
+  }
 }
 
 //: Returns the first inferior vtol_one_chain of the vtol_face (the boundary onechain).
@@ -354,12 +354,12 @@ void vtol_face::describe(vcl_ostream &strm,
   for (int j=0; j<blanking; ++j) strm << ' ';
   print();
   for (unsigned int i=0;i<inferiors()->size();++i)
-    {
-      if ((inferiors_[i])->cast_to_one_chain()!=0)
-        (inferiors_[i])->cast_to_one_chain()->describe(strm,blanking);
-      else
-        vcl_cout << "*** Odd inferior for a face\n";
-    }
+  {
+    if ((inferiors_[i])->cast_to_one_chain()!=0)
+      (inferiors_[i])->cast_to_one_chain()->describe(strm,blanking);
+    else
+      vcl_cout << "*** Odd inferior for a face\n";
+  }
 }
 
 //:
