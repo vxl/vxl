@@ -25,7 +25,7 @@ vgui_mfc_utils *vgui_mfc_utils::instance_ = NULL;
 void vgui_mfc_utils::menu_dispatcher(UINT nID)
 {
   // Make sure nID is in the relevant range
-  ASSERT(nID>=ID_MENU_ITEMS && nID<ID_MENU_ITEMS+item_count);
+  ASSERT(nID>=ID_MENU_ITEMS && int(nID)<ID_MENU_ITEMS+item_count);
   // Call the callback function associated with the menu item
   callbacks[nID-ID_MENU_ITEMS]->execute();
 }
@@ -47,7 +47,7 @@ vgui_mfc_utils::vgui_mfc_utils()
 //: Destructor.
 vgui_mfc_utils::~vgui_mfc_utils()
 {
-  for (int i=0; i<menus_to_be_deleted.size(); i++)
+  for (unsigned i=0; i<menus_to_be_deleted.size(); i++)
     delete menus_to_be_deleted[i];
 }
 

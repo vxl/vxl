@@ -55,7 +55,7 @@ vgui_mfc::vgui_mfc()
 //: Destructor
 vgui_mfc::~vgui_mfc()
 {
-  for (int i=0; i<windows_to_delete.size(); i++)
+  for (unsigned i=0; i<windows_to_delete.size(); i++)
     delete windows_to_delete[i];
 }
 

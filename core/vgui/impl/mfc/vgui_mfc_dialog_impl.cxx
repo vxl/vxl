@@ -198,14 +198,14 @@ bool vgui_mfc_dialog_impl::ask()
     else if (l.type == inline_tabl)
     {
       vgui_mfc_dialog_inline_tab* tab_data = (vgui_mfc_dialog_inline_tab*)l.widget;
-      if (max_length < tab_data->width/8 + 5)
+      if (max_length < int(tab_data->width/8 + 5))
         max_length = int((7+tab_data->width)/8) + 5;
       height += int(tab_data->height) + 20;
     }
     else if (l.type == text_msg)
     {
       vgui_int_field *field = static_cast<vgui_int_field*>(l.field);
-      if (max_length<field->label.size()+field->current_value().size())
+      if (max_length<int(field->label.size()+field->current_value().size()))
         max_length = field->label.size()+field->current_value().size();
       height += 45;
     }
