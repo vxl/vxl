@@ -1,0 +1,1 @@
+This directory contains Module files which wil be available from the CMake distribution in the next release
