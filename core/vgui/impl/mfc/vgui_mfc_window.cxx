@@ -18,8 +18,8 @@
 
 vgui_mfc_window::vgui_mfc_window(char const *title,
                                  unsigned w, unsigned h,
-                                 int posx VCL,
-                                 int posy VCL)
+                                 int posx,
+                                 int posy)
   : vgui_window()
   , mfcwin(0)
 {
