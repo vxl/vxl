@@ -335,7 +335,7 @@ void mil_image_2d_of<T>::setToWindow(const mil_image_2d_of& im,
   // without having separate pointers for const/non-const
   // we can't get over this easily
   for (int i=0;i<n_planes;++i)
-    planes_[i] = (T*) im.plane(i)+offset;
+    planes_[i] = const_cast<T*>(im.plane(i))+offset;
 
   mil_transform_2d trans;
   trans.set_translation(-xlo,-ylo);
