@@ -6,11 +6,11 @@ include ${IUEROOT}/core/vgui/config.mk
 LIBRARY := brct_test
 SOURCES += brct_windows_frame.cxx
 SOURCES += brct_menus.cxx
-SOURCES += brct_test_synthetic_data.cxx
 
 IULIBS += -lbrct_test
 #TESTS += test_brct_kalman.cxx
 MINI_PROG_SOURCES += test_brct_kalman.cxx
+TESTS += brct_test_synthetic_data.cxx
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
