@@ -35,6 +35,15 @@ public:
   //: Baseclass view of image
   virtual const vil2_image_view_base& image_base() const = 0;
 
+  //: Width of image
+  unsigned ni() const { return image_base().ni(); }
+
+  //: Height of image
+  unsigned nj() const { return image_base().nj(); }
+
+  //: Number of image planes
+  unsigned nplanes() const { return image_base().nplanes(); }
+
   //: Does the name of the class match the argument?
   virtual bool is_class(vcl_string const& s) const{ return s=="vimt_image_2d"; }
 };
