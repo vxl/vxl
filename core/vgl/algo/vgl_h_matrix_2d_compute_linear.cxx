@@ -7,6 +7,7 @@
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_inverse.h>
+#include <vnl/vnl_transpose.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vgl/algo/vgl_norm_trans_2d.h>
 
@@ -193,7 +194,7 @@ compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
   // The result is a transform on lines so we need to convert it to
   // a point transform, i.e., hp = hl^-t.
   vnl_matrix_fixed<double, 3, 3> const &  Ml = hl.get_matrix();
-  vnl_matrix_fixed<double, 3, 3> Mp = (vnl_inverse(Ml)).transpose();
+  vnl_matrix_fixed<double, 3, 3> Mp = vnl_inverse_transpose(Ml);
   hp.set(Mp);
   //
   // Next, hp has to be transformed back to the coordinate system of
@@ -321,7 +322,7 @@ solve_weighted_least_squares(vcl_vector<vgl_homg_line_2d<double> > const& l1,
     D(row, 8) = -l1[i].c() * l2[i].b();
     ++row;
   }
-  M = D.transpose()*W*D;
+  M = vnl_transpose(D)*W*D;
   D.normalize_rows();
   vnl_svd<double> svd(D);
 
@@ -376,7 +377,7 @@ compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
   // The result is a transform on lines so we need to convert it to
   // a point transform, i.e., hp = hl^-t.
   vnl_matrix_fixed<double, 3, 3> const &  Ml = hl.get_matrix();
-  vnl_matrix_fixed<double, 3, 3> Mp = (vnl_inverse(Ml)).transpose();
+  vnl_matrix_fixed<double, 3, 3> Mp = vnl_inverse_transpose(Ml);
   hp.set(Mp);
   //
   // Next, hp has to be transformed back to the coordinate system of
