@@ -1,4 +1,4 @@
-// Example using GTK to make a user-interface and vidl to load a movie.
+// Example using GTK to make a user-interface and vidl_vil1 to load a movie.
 
 #include <vul/vul_sprintf.h>
 #include <vgui/vgui.h>
@@ -9,14 +9,14 @@
 #include <gtk/gtk.h>
 #include <gtkgl/gtkglarea.h>
 
-#include <vidl/vidl_io.h>
-#include <vidl/vidl_frame.h>
-#include <vidl/vidl_movie.h>
+#include <vidl_vil1/vidl_vil1_io.h>
+#include <vidl_vil1/vidl_vil1_frame.h>
+#include <vidl_vil1/vidl_vil1_movie.h>
 
 int idlecallbackid= -1;
 int timer= 30;
-vidl_movie_sptr my_movie;
-vidl_movie::frame_iterator pframe(my_movie);
+vidl_vil1_movie_sptr my_movie;
+vidl_vil1_movie::frame_iterator pframe(my_movie);
 
 gint idlecallback( gpointer context)
 {
@@ -67,7 +67,7 @@ int main(int argc, char ** argv)
 
   vcl_cout << argv[0] << ": playing " << img_filenames.size() << " frames\n";
 
-  my_movie = vidl_io::load_movie(img_filenames);
+  my_movie = vidl_vil1_io::load_movie(img_filenames);
   pframe = my_movie->first();
 
   vil1_image im = pframe->get_image();
