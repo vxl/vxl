@@ -30,6 +30,7 @@ public:
 
 
   static double angle_between_oriented_lines (const vgl_homg_line_3d<Type>& line1, const vgl_homg_line_3d<Type>& line2);
+  static Type distance (const vgl_homg_point_3d<Type>& point1, const vgl_homg_point_3d<Type>& point2);
   static Type distance_squared (const vgl_homg_point_3d<Type>& point1, const vgl_homg_point_3d<Type>& point2);
   static vgl_homg_point_3d<Type> intersect_line_and_plane (const vgl_homg_line_3d<Type>&, const vgl_homg_plane_3d<Type>&);
   static vgl_homg_point_3d<Type> lines_to_point (const vgl_homg_line_3d<Type>& line1, const vgl_homg_line_3d<Type>& line2);

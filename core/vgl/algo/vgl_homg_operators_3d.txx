@@ -47,22 +47,28 @@ Type vgl_homg_operators_3d<Type>::distance_squared (const vgl_homg_point_3d<Type
   Type mag = 0;
   Type d;
 
-  d = point1.x() - point2.x();
+  d = point1.x()/point1.w() - point2.x()/point2.w();
   mag += d*d;
 
-  d = point1.y() - point2.y();
+  d = point1.y()/point1.w() - point2.y()/point2.w();
   mag += d*d;
 
-  d = point1.z() - point2.z();
+  d = point1.z()/point1.w() - point2.z()/point2.w();
   mag += d*d;
 
-  // double d =point1.w() -point2.w();
-  // mag = mag+d*d;
-  
-  // return (point1.get_double3() - point2.get_double3()).magnitude();
-  
   return mag;
 
+}
+
+//-----------------------------------------------------------------------------
+//
+// -- Return the Eucidean distance between the points
+// 
+template <class Type>
+Type vgl_homg_operators_3d<Type>::distance (const vgl_homg_point_3d<Type>& point1, 
+					    const vgl_homg_point_3d<Type>& point2)
+{
+  return sqrt(vgl_homg_operators_3d<Type>::squared_distance(point1,point2);
 }
 
 //-----------------------------------------------------------------------------
@@ -120,36 +126,48 @@ vgl_homg_point_3d<Type> vgl_homg_operators_3d<Type>::lines_to_point (const vcl_v
 
 //-----------------------------------------------------------------------------
 //
-// - Return the squared perpendicular distance between the line and point
+// -- Return the squared perpendicular distance between the line and point
 // 
 template <class Type>
 double
 vgl_homg_operators_3d<Type>::perp_distance_squared (const vgl_homg_line_3d<Type>& , const vgl_homg_point_3d<Type>& )
 {
-  cerr << "Warning: vgl_homg_operators_3d<Type>::perp_distance_squared() not yet implemented\n";
-  return 0;
+  vgl_homg_point_3d<Type> q = vgl_homg_operators_3d<Type>::perp_projection(l, p); // foot point
+  return vgl_homg_operators_3d<Type>::distance_squared(p,q);
 }
 
 //-----------------------------------------------------------------------------
 //
-// - Return the line which is perpendicular to *line and passes
-// through *point
+// -- Return the line which is perpendicular to l and passes through p.
 // 
 template <class Type>
-vgl_homg_line_3d<Type> vgl_homg_operators_3d<Type>::perp_line_through_point (const vgl_homg_line_3d<Type>& , const vgl_homg_point_3d<Type>& ) 
-{ return vgl_homg_line_3d<Type>(); }
+vgl_homg_line_3d<Type> vgl_homg_operators_3d<Type>::perp_line_through_point (const vgl_homg_line_3d<Type>& l, const vgl_homg_point_3d<Type>& p) 
+{
+  vgl_homg_point_3d<Type> q = vgl_homg_operators_3d<Type>::perp_projection(l,p);
+  if (p==q) {
+    cerr << "Warning: cannot return vgl_homg_operators_3d<>::perp_line_through_point() for point on line\n";
+    return vgl_homg_line_3d<Type>();
+  }
+  return vgl_homg_line_3d<Type>(p,q);
+}
 
 
 //-----------------------------------------------------------------------------
 //
-// - Compute the line which is the perpendicular projection of *point
-// onto *line
+// -- Compute the perpendicular projection point of p onto l.
 // 
 template <class Type>
-vgl_homg_point_3d<Type>  vgl_homg_operators_3d<Type>::perp_projection (const vgl_homg_line_3d<Type>& , const vgl_homg_point_3d<Type>& )
+vgl_homg_point_3d<Type>  vgl_homg_operators_3d<Type>::perp_projection (const vgl_homg_line_3d<Type>& l, const vgl_homg_point_3d<Type>& p)
 {
-  cerr << "Warning: vgl_homg_operators_3d<Type>::perp_projection() not yet implemented\n";
-  return vgl_homg_point_3d<Type>();
+  vgl_homg_point_3d<Type> const& q = l.get_point_finite();
+  Type a[3]  = { q.x()/q.w(), q.y()/q.w(), q.z()/q.w() };
+  Type b[3]  = { p.x()/p.w()-a[0], p.y()/p.w()-a[1], p.z()/p.w()-a[2] };
+
+  vgl_homg_point_3d<Type> const& i = l.get_point_infinite();
+  Type dp = i.x()*i.x()+i.y()*i.y()+i.z()*i.z();
+  dp = (b[0]*i.x() + b[1]*i.y() + b[2]*i.z()) / dp;
+
+  return vgl_homg_point_3d<Type>(a[0]+dp*i.x(), a[1]+dp*i.y(), a[2]+dp*i.z()); 
 }
 
 
