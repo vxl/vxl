@@ -9,7 +9,6 @@
 #include <vcl_cstdio.h>
 #include <vcl_iostream.h>
 
-#ifndef WIN32 // problems in conjunction with the "deep copy" constructor
 // The pointer ``the'' is just assigned
 template < class DataType >
   vipl_section_container< DataType > ::vipl_section_container( vipl_section_container< DataType >* pt)
@@ -22,7 +21,6 @@ template < class DataType >
     hsimgptr (0),
     refcount_ (1)
 {}
-#endif
 
 // The pointer is deep copied
 template < class DataType >
