@@ -1,12 +1,17 @@
 #ifndef xcv_image_tableau_h_
 #define xcv_image_tableau_h_
-/*
-  u97mb@robots.ox.ac.uk
-*/
-
-// .NAME    xcv_image_tableau - An image tableau with an associated region of interest
-// .INCLUDE xcv/xcv_image_tableau.h
-// .FILE    xcv_image_tableau.cxx
+//
+// This is xcv/xcv_image_tableau.h
+//
+//: An image tableau with an associated region of interest.
+//
+// \file
+// \author  Marko Bacic (u97mb@robots.ox.ac.uk)
+// \verbatim
+//  Modifications:
+//    Marko Bacic   AUG-2000   Initial version.
+// \end verbatim
+//
 
 #include "xcv_image_tableau_sptr.h"
 #include <vgui/vgui_image_tableau.h>
@@ -23,26 +28,26 @@ public:
 
   vcl_string type_name() const;
 
-  // get
+  //: Return the vil_image
   vil_image get_image() const;
 
-  // set
   void set_image(vil_image const &);
   void set_image(char const *);          // <- convenience
 
-  // size of image (0 if none).
+  //: Width of the ROI, or if not defined then the width of the whole image.
   unsigned width() const;
+  //: Height of the ROI, or if not defined then the height of the whole image.
   unsigned height() const;
-
+  //: Get the low and high values for the ROI.
   bool get_bounding_box(float low[3], float high[3]) const;
 
-  // Define region of interest
+  //: Define region of interest
   void set_roi(float,float,float,float);
-
-  // Undefine region of interest
+  //: Undefine region of interest
   void unset_roi();
 
 protected:
+  //: Handle all events for this tableau.
   bool handle(vgui_event const &e);
 
 private:
