@@ -36,7 +36,7 @@ class vsol_box_2d : public vsol_box, public vbl_ref_count, public vul_timestamp
   vsol_box_2d() {}
 
   vsol_box_2d(vsol_box_2d const &b)
-    : vbl_ref_count(), vul_timestamp(), vsol_box(), box_(b.box_) {}
+    :  vsol_box(), vbl_ref_count(), vul_timestamp(), box_(b.box_) {}
 
   vsol_box_2d(vbl_bounding_box<double,2> const &b) : box_(b) {}
 
