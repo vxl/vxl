@@ -4,9 +4,6 @@
 //:
 // \file
 // \brief Access to certain POSIX functions.
-//
-// The vpl library provides platform-independent access to a few
-// functions defined by the IEEE POSIX Standards.
 
 #include <vcl_cstddef.h>
 

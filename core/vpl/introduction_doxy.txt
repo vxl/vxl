@@ -1,6 +1,7 @@
 // The following text is included in the main documentation page by doxygen
-/*! \mainpage vpl : Posix Compatability Library
-* A set of Posix compliant functions which should work across platforms.
+/*! \mainpage vpl : POSIX Compatability Library
+* The vpl library provides platform-independent access to some
+* functions defined by the IEEE POSIX Standards.
 *
 * \section Lead Developer
 * Fred Wheeler is responsible for co-ordinating significant changes to vpl.
