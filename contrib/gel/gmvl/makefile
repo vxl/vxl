@@ -5,13 +5,11 @@
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
-# depends on vcl, vbl, vnl
-USES := vxl
+# depends on vcl, vbl, vnl, gbl
+USES := vxl gel
 
 LIBRARY := gmvl
 VERSION := 1.0
-
-INCDIRS += ..
 
 SOURCES += gmvl_database.cxx
 SOURCES += gmvl_node.cxx
