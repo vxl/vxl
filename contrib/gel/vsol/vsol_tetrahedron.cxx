@@ -113,12 +113,12 @@ double vsol_tetrahedron::volume(void) const
   double dx12=storage_[1]->x()-storage_[2]->x();
   double dy12=storage_[1]->y()-storage_[2]->y();
   double dz12=storage_[1]->z()-storage_[2]->z();
-//double dx23=storage_[2]->x()-storage_[3]->x();
-//double dy23=storage_[2]->y()-storage_[3]->y();
-//double dz23=storage_[2]->z()-storage_[3]->z();
-  return vnl_math_sqrt(vnl_math_sqr(dy01*dz12-dy12*dz01)
-                      +vnl_math_sqr(dz01*dx12-dz12*dx01)
-                      +vnl_math_sqr(dx01*dy12-dx12*dy01))/6;
+  double dx23=storage_[2]->x()-storage_[3]->x();
+  double dy23=storage_[2]->y()-storage_[3]->y();
+  double dz23=storage_[2]->z()-storage_[3]->z();
+  return vcl_abs(dx23*(dy01*dz12-dy12*dz01)
+                +dy23*(dz01*dx12-dz12*dx01)
+                +dz23*(dx01*dy12-dx12*dy01))/6;
 }
 //***************************************************************************
 // Element change
