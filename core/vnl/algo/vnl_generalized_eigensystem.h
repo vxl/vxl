@@ -47,10 +47,6 @@ public:
 //: Public eigenvalues.  After construction, this contains the diagonal
 // matrix of eigenvalues, stored as a vector.
   vnl_diag_matrix<double> D;
-
-private:
-  void compute_eispack(const vnl_matrix<double>& A, 
-        const vnl_matrix<double>& B);
 };
 
 #endif // vnl_generalized_eigensystem_h_
