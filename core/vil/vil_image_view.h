@@ -13,6 +13,7 @@
 #include <vil2/vil2_smart_ptr.h>
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
+#include <vcl_cassert.h>
 #include <vil2/vil2_memory_chunk.h>
 
 //: An abstract base class of smart pointers to actual image data in memory.
@@ -29,15 +30,15 @@ protected:
   vil2_smart_ptr<vil2_memory_chunk> ptr_;
 public:
 
-    //: Dflt ctor
-    //  Creates an empty one plane image.
+  //: Dflt ctor
+  //  Creates an empty one plane image.
   vil2_image_view();
 
-    //: Create a n_plane plane image of nx x ny pixels
+  //: Create a n_plane plane image of nx x ny pixels
   vil2_image_view(unsigned nx, unsigned ny, unsigned n_planes=1);
 
-	//  Destructor
-  ~vil2_image_view();
+  //  Destructor
+  virtual ~vil2_image_view();
 
   // Standard container stuff
   // This assumes that the data is arranged contiguously.
@@ -150,27 +151,27 @@ public:
   //: Print a 1-line summary of contents
   virtual void print(vcl_ostream&) const;
 
-    //: print all image data to os in a grid (rounds output to int)
+  //: print all image data to os in a grid (rounds output to int)
   virtual void print_all(vcl_ostream& os) const;
 
-    //: Return class name
+  //: Return class name
   virtual vcl_string is_a() const;
 
-    //: True if this is (or is derived from) class s
+  //: True if this is (or is derived from) class s
   virtual bool is_class(vcl_string const& s) const;
 
-    //: True if they share same view of same image data.
-    //  This does not do a deep equality on image data. If the images point
-    //  to different image data objects that contain identical images, then
-    //  the result will still be false.
+  //: True if they share same view of same image data.
+  //  This does not do a deep equality on image data. If the images point
+  //  to different image data objects that contain identical images, then
+  //  the result will still be false.
   bool operator==(const vil2_image_view<T> &other) const;
-
 };
 
 //: Print a 1-line summary of contents
 template <class T>
 inline
-vcl_ostream& operator<<(vcl_ostream& s, vil2_image_view<T> const& i) {
+vcl_ostream& operator<<(vcl_ostream& s, vil2_image_view<T> const& i)
+{
   return i.print(s);
 }
 
