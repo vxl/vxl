@@ -209,6 +209,7 @@ bool vgui_adaptor::dispatch_to_tableau(vgui_event const &e) {
   // send the event to the tableau :
   bool f = the_tableau->handle(e);
   vgui_macro_report_errors;
+  glFlush();
   return f;
 }
 
