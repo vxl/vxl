@@ -21,6 +21,7 @@ SET(vvid_sources
     vvid_file_manager.cxx            vvid_file_manager.h
     vvid_command_line_player.cxx       vvid_command_line_player.h
 )
+AUX_SOURCE_DIRECTORY(Templates vvid_sources)
 
 # sources that do depend on the camera being present
 
@@ -36,8 +37,6 @@ IF(HAS_CMU1394CAMERA)
  )
 ENDIF(HAS_CMU1394CAMERA)
 
-AUX_SOURCE_DIRECTORY(Templates vvid_sources)
-
 # check if we have the camera libraries and assemble accordingly
 IF(HAS_CMU1394CAMERA)
  ADD_LIBRARY(vvid ${vvid_sources} ${cmu_camera_sources})
@@ -46,9 +45,7 @@ ELSE(HAS_CMU1394CAMERA)
 ENDIF(HAS_CMU1394CAMERA)
 
 
-LINK_LIBRARIES( vvid vpro strk sdet gevd vtol brip bgui vgui vidl_vil1 vbl vul vil1 bdgl)
-
-#mbl)
+LINK_LIBRARIES(vvid vpro strk sdet gevd vtol brip bgui vgui vidl_vil1 vbl vul vil1 bdgl)
 
 
 # the main executables
