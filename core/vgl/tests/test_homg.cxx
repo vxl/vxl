@@ -12,6 +12,7 @@
 #include <vgl/vgl_homg_line_3d_2_points.h>
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_1d_basis.h>
+#include <vgl/algo/vgl_homg_operators_1d.h>
 
 static void test_homg_point_1d()
 {
@@ -49,9 +50,30 @@ static void test_homg_point_1d()
   r = cross_ratio(cc,p1,p2,p3); // must equal ratio(p1,p2,p3)
   TEST("cross_ratio", r, 2.25);
 
+  r = vgl_homg_operators_1d<float>::cross_ratio(cc,p1,p2,p3);
+  TEST("cross_ratio", r, 2.25);
+
   TEST("is_ideal", is_ideal(p2), false);
   p2.set(-6,0);
   TEST("ideal", p2.ideal(), true);
+  p2.set(4,1);
+
+  r = vgl_homg_operators_1d<float>::dot(p1,p2);
+  vcl_cout << "p1 = " << p1 << ", p2 = " << p2 << '\n';
+  vcl_cout << "dot(p1,p2) = " << r << '\n';
+  TEST("dot", r, 27);
+
+  r = vgl_homg_operators_1d<float>::cross(p1,p2);
+  vcl_cout << "cross(p1,p2) = " << r << '\n';
+  TEST("cross", r, -6);
+
+  vgl_homg_1d<float> cj = vgl_homg_operators_1d<float>::conjugate(p1,p2,p3);
+  vcl_cout << "conjugate(p1,p2,p3) = " << cj << '\n';
+  TEST("conjugate", cj, vgl_homg_1d<float>(23.0f,7.0f));
+
+  r = vgl_homg_operators_1d<float>::distance(p1,p2);
+  vcl_cout << "distance(p1,p2) = " << r << '\n';
+  TEST("distance", r, 2);
 }
 
 static void test_homg_point_2d()
