@@ -17,7 +17,7 @@ vgui_message::vgui_message()
 //   static const char end[];
 //   void f() { 
 //     vcl_string moo="moo moo moo";
-//     vgui_mesage m;
+//     vgui_message m;
 //     m.from = this;
 //     m.user = sender::begin;
 //     m.data = &moo;
