@@ -1,13 +1,14 @@
 // This is brl/bseg/segv/segv_segmentation_manager.cxx
+#include "segv_segmentation_manager.h"
 //:
 // \file
 // \author J.L. Mundy
 
-#include <math.h>
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vcl_iostream.h>
 #include <vil/vil_load.h>
 #include <vdgl/vdgl_digital_curve.h>
+#include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #ifdef HAS_XERCES
@@ -37,13 +38,11 @@
 #include <vsol/vsol_curve_2d_sptr.h>
 #include <vtol/vtol_one_chain_sptr.h>
 #include <vtol/vtol_one_chain.h>
-#include <vdgl/vdgl_digital_curve_sptr.h>
-#include <vdgl/vdgl_digital_curve.h>
 #include <bgui/bgui_vtol2D_tableau.h>
 #include <gevd/gevd_float_operators.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
-#include <segv/segv_segmentation_manager.h>
+
 //static live_video_manager instance
 segv_segmentation_manager *segv_segmentation_manager::instance_ = 0;
 
@@ -189,8 +188,6 @@ void segv_segmentation_manager::vd_edges()
   sdet_detector det(dp);
   det.SetImage(img_);
 
-
-
   det.DoContour();
   vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
   this->draw_edges(*edges, true);
@@ -259,15 +256,15 @@ void segv_segmentation_manager::read_xml_edges()
 
 void segv_segmentation_manager::test_face()
 {
-  if(!img_)
+  if (!img_)
     return;
   int sx = img_.cols(), sy = img_.rows();
-  if(sx<10||sy<10)
+  if (sx<10||sy<10)
     return;
   t2D_->set_foreground(0.0, 1.0, 0.0);
   vsol_point_2d_sptr pa = new vsol_point_2d(1,1);
-  vsol_point_2d_sptr pb = new vsol_point_2d(sx-2,1);  
-  vsol_point_2d_sptr pc = new vsol_point_2d(sx-2,sy-2);  
+  vsol_point_2d_sptr pb = new vsol_point_2d(sx-2,1);
+  vsol_point_2d_sptr pc = new vsol_point_2d(sx-2,sy-2);
   vsol_point_2d_sptr pd = new vsol_point_2d(1,sy-2);
   vsol_curve_2d_sptr cab = new vdgl_digital_curve(pa, pb);
   vsol_curve_2d_sptr cbc = new vdgl_digital_curve(pb, pc);
@@ -282,17 +279,17 @@ void segv_segmentation_manager::test_face()
   vtol_edge_2d_sptr ecd = new vtol_edge_2d(*vc, *vd, ccd);
   vtol_edge_2d_sptr eda = new vtol_edge_2d(*vd, *va, cda);
   vcl_vector<vtol_edge_sptr> edges;
-  edges.push_back(eab->cast_to_edge());   
-  edges.push_back(ebc->cast_to_edge());   
-  edges.push_back(ecd->cast_to_edge());   
-  edges.push_back(eda->cast_to_edge());   
+  edges.push_back(eab->cast_to_edge());
+  edges.push_back(ebc->cast_to_edge());
+  edges.push_back(ecd->cast_to_edge());
+  edges.push_back(eda->cast_to_edge());
   vtol_one_chain_sptr b_onch = new vtol_one_chain(edges,true);
   vtol_face_2d_sptr b_f = new  vtol_face_2d(*b_onch);
   int px = sx/2, py = sy/2;
 
-  vsol_point_2d_sptr p1 = new vsol_point_2d(px+3,py+3);  
+  vsol_point_2d_sptr p1 = new vsol_point_2d(px+3,py+3);
   vsol_point_2d_sptr p2 = new vsol_point_2d(px,py-3);
-  vsol_point_2d_sptr p3 = new vsol_point_2d(px-3,py+3);  
+  vsol_point_2d_sptr p3 = new vsol_point_2d(px-3,py+3);
   vsol_curve_2d_sptr c12 = new vdgl_digital_curve(p1, p2);
   vsol_curve_2d_sptr c23 = new vdgl_digital_curve(p2, p3);
   vsol_curve_2d_sptr c31 = new vdgl_digital_curve(p3, p1);
@@ -303,15 +300,15 @@ void segv_segmentation_manager::test_face()
   vtol_edge_2d_sptr e23 = new vtol_edge_2d(*v2, *v3, c23);
   vtol_edge_2d_sptr e31 = new vtol_edge_2d(*v3, *v1, c31);
   edges.clear();
-  edges.push_back(e12->cast_to_edge());   
-  edges.push_back(e23->cast_to_edge());   
-  edges.push_back(e31->cast_to_edge());   
+  edges.push_back(e12->cast_to_edge());
+  edges.push_back(e23->cast_to_edge());
+  edges.push_back(e31->cast_to_edge());
   vtol_one_chain_sptr t_onch = new vtol_one_chain(edges,true);
   vtol_face_2d_sptr t_f = new  vtol_face_2d(*t_onch);
   t2D_->add_face(b_f);   t2D_->add_face(t_f);
   t2D_->set_foreground(1.0, 0.0, 0.0);
-  for(int x = 0; x<sx; x+=20)
-    for(int y = 0; y<sy; y+=20)
+  for (int x = 0; x<sx; x+=20)
+    for (int y = 0; y<sy; y+=20)
       {
         vtol_vertex_2d_sptr v = new vtol_vertex_2d(x, y);
         t2D_->add_vertex(v);
