@@ -30,8 +30,8 @@ Copyright: (C) 1997-1999, Advanced Interfaces Group,
 ===========================================================================
 */
 
-#ifndef __gpc_h
-#define __gpc_h
+#ifndef gpc_h_
+#define gpc_h_
 
 #include <stdio.h>
 
@@ -95,6 +95,15 @@ typedef struct                      /* Tristrip set structure            */
 ===========================================================================
 */
 
+void gpc_polygon_clip        (gpc_op           set_operation,
+                              gpc_polygon     *subject_polygon,
+                              gpc_polygon     *clip_polygon,
+                              gpc_polygon     *result_polygon);
+
+void gpc_free_polygon        (gpc_polygon     *polygon);
+
+#if 0 /* These functions are not used in vgl_clip */ 
+
 void gpc_read_polygon        (FILE            *infile_ptr, 
                               int              read_hole_flags,
                               gpc_polygon     *polygon);
@@ -107,11 +116,6 @@ void gpc_add_contour         (gpc_polygon     *polygon,
                               gpc_vertex_list *contour,
                               int              hole);
 
-void gpc_polygon_clip        (gpc_op           set_operation,
-                              gpc_polygon     *subject_polygon,
-                              gpc_polygon     *clip_polygon,
-                              gpc_polygon     *result_polygon);
-
 void gpc_tristrip_clip       (gpc_op           set_operation,
                               gpc_polygon     *subject_polygon,
                               gpc_polygon     *clip_polygon,
@@ -120,11 +124,10 @@ void gpc_tristrip_clip       (gpc_op           set_operation,
 void gpc_polygon_to_tristrip (gpc_polygon     *polygon,
                               gpc_tristrip    *tristrip);
 
-void gpc_free_polygon        (gpc_polygon     *polygon);
-
 void gpc_free_tristrip       (gpc_tristrip    *tristrip);
 
-#endif
+#endif /* 0 */
+#endif /* gpc_h_ */
 
 /*
 ===========================================================================

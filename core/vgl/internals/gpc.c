@@ -878,17 +878,6 @@ static void add_local_min(polygon_node **p, edge_node *edge,
 }
 
 
-static int count_tristrips(polygon_node *tn)
-{
-  int total;
-
-  for (total= 0; tn; tn= tn->next)
-    if (tn->active > 2)
-      total++;
-  return total;
-}
-
-
 static void add_vertex(vertex_node **t, double x, double y)
 {
   if (!(*t))
@@ -901,25 +890,6 @@ static void add_vertex(vertex_node **t, double x, double y)
   else
     /* Head further down the list */
     add_vertex(&((*t)->next), x, y);
-}
-
-
-static void new_tristrip(polygon_node **tn, edge_node *edge,
-                         double x, double y)
-{
-  if (!(*tn))
-  {
-    MALLOC(*tn, sizeof(polygon_node), "tristrip node creation");
-    (*tn)->next= NULL;
-    (*tn)->v[LEFT]= NULL;
-    (*tn)->v[RIGHT]= NULL;
-    (*tn)->active= 1;
-    add_vertex(&((*tn)->v[LEFT]), x, y);
-    edge->outp[ABOVE]= *tn;
-  }
-  else
-    /* Head further down the list */
-    new_tristrip(&((*tn)->next), edge, x, y);
 }
 
 
@@ -1024,93 +994,6 @@ void gpc_free_polygon(gpc_polygon *p)
   FREE(p->hole);
   FREE(p->contour);
   p->num_contours= 0;
-}
-
-
-void gpc_read_polygon(FILE *fp, int read_hole_flags, gpc_polygon *p)
-{
-  int c, v;
-
-  fscanf(fp, "%d", &(p->num_contours));
-  MALLOC(p->hole, p->num_contours * sizeof(int),
-         "hole flag array creation");
-  MALLOC(p->contour, p->num_contours
-         * sizeof(gpc_vertex_list), "contour creation");
-  for (c= 0; c < p->num_contours; c++)
-  {
-    fscanf(fp, "%d", &(p->contour[c].num_vertices));
-
-    if (read_hole_flags)
-      fscanf(fp, "%d", &(p->hole[c]));
-    else
-      p->hole[c]= FALSE; /* Assume all contours to be external */
-
-    MALLOC(p->contour[c].vertex, p->contour[c].num_vertices
-           * sizeof(gpc_vertex), "vertex creation");
-    for (v= 0; v < p->contour[c].num_vertices; v++)
-      fscanf(fp, "%lf %lf", &(p->contour[c].vertex[v].x),
-                            &(p->contour[c].vertex[v].y));
-  }
-}
-
-
-void gpc_write_polygon(FILE *fp, int write_hole_flags, gpc_polygon *p)
-{
-  int c, v;
-
-  fprintf(fp, "%d\n", p->num_contours);
-  for (c= 0; c < p->num_contours; c++)
-  {
-    fprintf(fp, "%d\n", p->contour[c].num_vertices);
-
-    if (write_hole_flags)
-      fprintf(fp, "%d\n", p->hole[c]);
-
-    for (v= 0; v < p->contour[c].num_vertices; v++)
-      fprintf(fp, "% .*f % .*f\n",
-              DBL_DIG, p->contour[c].vertex[v].x,
-              DBL_DIG, p->contour[c].vertex[v].y);
-  }
-}
-
-
-void gpc_add_contour(gpc_polygon *p, gpc_vertex_list *new_contour, int hole)
-{
-  int             *extended_hole, c, v;
-  gpc_vertex_list *extended_contour;
-
-  /* Create an extended hole array */
-  MALLOC(extended_hole, (p->num_contours + 1)
-         * sizeof(int), "contour hole addition");
-
-  /* Create an extended contour array */
-  MALLOC(extended_contour, (p->num_contours + 1)
-         * sizeof(gpc_vertex_list), "contour addition");
-
-  /* Copy the old contour and hole data into the extended arrays */
-  for (c= 0; c < p->num_contours; c++)
-  {
-    extended_hole[c]= p->hole[c];
-    extended_contour[c]= p->contour[c];
-  }
-
-  /* Copy the new contour and hole onto the end of the extended arrays */
-  c= p->num_contours;
-  extended_hole[c]= hole;
-  extended_contour[c].num_vertices= new_contour->num_vertices;
-  MALLOC(extended_contour[c].vertex, new_contour->num_vertices
-         * sizeof(gpc_vertex), "contour addition");
-  for (v= 0; v < new_contour->num_vertices; v++)
-    extended_contour[c].vertex[v]= new_contour->vertex[v];
-
-  /* Dispose of the old contour */
-  FREE(p->contour);
-  FREE(p->hole);
-
-  /* Update the polygon information */
-  p->num_contours++;
-  p->hole= extended_hole;
-  p->contour= extended_contour;
 }
 
 
@@ -1743,6 +1626,122 @@ void gpc_polygon_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
   FREE(sbt);
 }
 
+#if 0 // These functions are not used in vgl_clip
+
+void gpc_read_polygon(FILE *fp, int read_hole_flags, gpc_polygon *p)
+{
+  int c, v;
+
+  fscanf(fp, "%d", &(p->num_contours));
+  MALLOC(p->hole, p->num_contours * sizeof(int),
+         "hole flag array creation");
+  MALLOC(p->contour, p->num_contours
+         * sizeof(gpc_vertex_list), "contour creation");
+  for (c= 0; c < p->num_contours; c++)
+  {
+    fscanf(fp, "%d", &(p->contour[c].num_vertices));
+
+    if (read_hole_flags)
+      fscanf(fp, "%d", &(p->hole[c]));
+    else
+      p->hole[c]= FALSE; /* Assume all contours to be external */
+
+    MALLOC(p->contour[c].vertex, p->contour[c].num_vertices
+           * sizeof(gpc_vertex), "vertex creation");
+    for (v= 0; v < p->contour[c].num_vertices; v++)
+      fscanf(fp, "%lf %lf", &(p->contour[c].vertex[v].x),
+                            &(p->contour[c].vertex[v].y));
+  }
+}
+
+
+void gpc_write_polygon(FILE *fp, int write_hole_flags, gpc_polygon *p)
+{
+  int c, v;
+
+  fprintf(fp, "%d\n", p->num_contours);
+  for (c= 0; c < p->num_contours; c++)
+  {
+    fprintf(fp, "%d\n", p->contour[c].num_vertices);
+
+    if (write_hole_flags)
+      fprintf(fp, "%d\n", p->hole[c]);
+
+    for (v= 0; v < p->contour[c].num_vertices; v++)
+      fprintf(fp, "% .*f % .*f\n",
+              DBL_DIG, p->contour[c].vertex[v].x,
+              DBL_DIG, p->contour[c].vertex[v].y);
+  }
+}
+
+
+void gpc_add_contour(gpc_polygon *p, gpc_vertex_list *new_contour, int hole)
+{
+  int             *extended_hole, c, v;
+  gpc_vertex_list *extended_contour;
+
+  /* Create an extended hole array */
+  MALLOC(extended_hole, (p->num_contours + 1)
+         * sizeof(int), "contour hole addition");
+
+  /* Create an extended contour array */
+  MALLOC(extended_contour, (p->num_contours + 1)
+         * sizeof(gpc_vertex_list), "contour addition");
+
+  /* Copy the old contour and hole data into the extended arrays */
+  for (c= 0; c < p->num_contours; c++)
+  {
+    extended_hole[c]= p->hole[c];
+    extended_contour[c]= p->contour[c];
+  }
+
+  /* Copy the new contour and hole onto the end of the extended arrays */
+  c= p->num_contours;
+  extended_hole[c]= hole;
+  extended_contour[c].num_vertices= new_contour->num_vertices;
+  MALLOC(extended_contour[c].vertex, new_contour->num_vertices
+         * sizeof(gpc_vertex), "contour addition");
+  for (v= 0; v < new_contour->num_vertices; v++)
+    extended_contour[c].vertex[v]= new_contour->vertex[v];
+
+  /* Dispose of the old contour */
+  FREE(p->contour);
+  FREE(p->hole);
+
+  /* Update the polygon information */
+  p->num_contours++;
+  p->hole= extended_hole;
+  p->contour= extended_contour;
+}
+
+
+static int count_tristrips(polygon_node *tn)
+{
+  int total;
+
+  for (total= 0; tn; tn= tn->next)
+    if (tn->active > 2)
+      total++;
+  return total;
+}
+
+static void new_tristrip(polygon_node **tn, edge_node *edge,
+                         double x, double y)
+{
+  if (!(*tn))
+  {
+    MALLOC(*tn, sizeof(polygon_node), "tristrip node creation");
+    (*tn)->next= NULL;
+    (*tn)->v[LEFT]= NULL;
+    (*tn)->v[RIGHT]= NULL;
+    (*tn)->active= 1;
+    add_vertex(&((*tn)->v[LEFT]), x, y);
+    edge->outp[ABOVE]= *tn;
+  }
+  else
+    /* Head further down the list */
+    new_tristrip(&((*tn)->next), edge, x, y);
+}
 
 void gpc_free_tristrip(gpc_tristrip *t)
 {
@@ -1753,7 +1752,6 @@ void gpc_free_tristrip(gpc_tristrip *t)
   FREE(t->strip);
   t->num_strips= 0;
 }
-
 
 void gpc_polygon_to_tristrip(gpc_polygon *s, gpc_tristrip *t)
 {
@@ -2456,6 +2454,8 @@ void gpc_tristrip_clip(gpc_op op, gpc_polygon *subj, gpc_polygon *clip,
   FREE(s_heap);
   FREE(sbt);
 }
+
+#endif // 0
 
 /*
 ===========================================================================
