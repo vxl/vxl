@@ -42,7 +42,7 @@ vnl_matrix<double> vnl_matops::cat(vnl_matrix<double> const &A, vnl_vector<doubl
   return M;
 }
 
-vnl_matrix<double> vnl_matops::cat(const vnl_vector<double> &A, vnl_matrix<double> const &B) {
+vnl_matrix<double> vnl_matops::cat(vnl_vector<double> const &A, vnl_matrix<double> const &B) {
   int rowsA = A.size();
   int rowsB = B.rows();
   int colsB = B.columns();
@@ -82,7 +82,7 @@ double vnl_matops::homg_diff(vnl_matrix<double> const& A, vnl_matrix<double> con
 }
 
 #define implement_converters(U,V)                           \
-vnl_matrix<U> make_matrix_ ## U(const vnl_matrix<V>& M)     \
+vnl_matrix<U> make_matrix_ ## U(vnl_matrix<V> const& M)     \
 {                                                           \
   unsigned m = M.rows();                                    \
   unsigned n = M.columns();                                 \
@@ -93,7 +93,7 @@ vnl_matrix<U> make_matrix_ ## U(const vnl_matrix<V>& M)     \
   return ret;                                               \
 }                                                           \
                                                             \
-vnl_vector<U> make_vector_ ## U(const vnl_vector<V>& v)     \
+vnl_vector<U> make_vector_ ## U(vnl_vector<V> const& v)     \
 {                                                           \
   unsigned n = v.size();                                    \
   vnl_vector<U> ret(n);                                     \
@@ -106,7 +106,7 @@ implement_converters(double,float)
 
 implement_converters(float,double)
 
-vnl_matrix<double>  vnl_matops::f2d(const vnl_matrix<float>& M)
+vnl_matrix<double>  vnl_matops::f2d(vnl_matrix<float> const& M)
 {
   return make_matrix_double(M);
 }
@@ -117,13 +117,13 @@ vnl_matrix<float>  vnl_matops::d2f(vnl_matrix<double> const& M)
   return make_matrix_float(M);
 }
 
-vnl_vector<double>  vnl_matops::f2d(const vnl_vector<float>& M)
+vnl_vector<double>  vnl_matops::f2d(vnl_vector<float> const& M)
 {
   return make_vector_double(M);
 }
 
 
-vnl_vector<float>  vnl_matops::d2f(const vnl_vector<double>& M)
+vnl_vector<float>  vnl_matops::d2f(vnl_vector<double> const& M)
 {
   return make_vector_float(M);
 }
