@@ -10,7 +10,7 @@
 //
 //    HomgNorm2D is a class that normalizes a set of homogeneous points
 //    by subtracting their centroid and uniformly scaling them so that
-//    the average length (nonhomogenous) is $\sqrt2$.
+//    the average length (nonhomogeneous) is $\sqrt2$.
 //
 //    In addition the class stores the matrices that describe the
 //    transformations between normalized and unnormalized representations.
