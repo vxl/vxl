@@ -96,6 +96,9 @@ public:
   //: return the square root, if positive semi-definite.
   vnl_matrix<T> square_root() const;
 
+  //: return the inverse of the square root, if positive semi-definite.
+  vnl_matrix<T> inverse_square_root() const;
+
   //: Solve LS problem M x = b
   vnl_vector<T> solve(vnl_vector<T> const & b);
   
