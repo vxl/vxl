@@ -14,16 +14,15 @@ const int default_tab = 2;
 
 typedef vcl_pair<int,int> indent_data_type;
 
-typedef vcl_map<void*, indent_data_type, vcl_less<void*> > maps2i_type;
-
-//: Global record of tab information for streams
-//  Allows data to persist beyond the lifetime of the indent object itself,
-//  which may be mercifully brief
-static maps2i_type indent_data_map;
-
 // Get pointer to tab and indent data for os
 indent_data_type* indent_data(vcl_ostream& os)
 {
+  typedef vcl_map<void*, indent_data_type, vcl_less<void*> > maps2i_type;
+  // Global record of tab information for streams.
+  // Allows data to persist beyond the lifetime of the indent object itself,
+  // which may be mercifully brief
+  static maps2i_type indent_data_map;
+
   maps2i_type::iterator entry = indent_data_map.find(&os);
   if (entry==indent_data_map.end())
   {
@@ -80,9 +79,15 @@ vcl_ostream& operator<<(vcl_ostream& os, const vsl_indent& /*indent*/)
 //  lots of noise in the output of memory leak checkers.
 //  This call empties the map, removing the potential leak.
 //  Pragmatically it is called in the vsl_delete_all_loaders()
+//
+//  This should no longer be needed, since that static map was made a static
+//  inside the function indent_data() instead of a global one. - PVr.
+//  (B.t.w., purify on SGI's native compiler never showed a memory leak here.)
 void vsl_indent_clear_all_data()
 {
+#if 0 // no longer needed?
   indent_data_map.clear();
+#endif
 }
 
 
