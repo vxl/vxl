@@ -51,10 +51,14 @@ MANPAGE_SOURCES += vil_tile_images.h
 SOURCES += vil_orientations.cxx
 SOURCES += vil_colour_space.cxx
 
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
 ifndef NOTEST
  SUBDIRS += tests examples
 endif
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################
