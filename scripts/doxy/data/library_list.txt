@@ -127,6 +127,7 @@ contrib/gel/mrc vpgl vpgl_ build core/vcsl core/vnl core/vbl
 package: :pserver:anonymous@cvs.sourceforge.net:/cvsroot/vxl contrib/rpl RPI libraries
 contrib/rpl rrel   rrel_   build core/vbl core/vgl core/vnl # core/vnl/algo
 contrib/rpl rsdl   rsdl_   build core/vnl core/vbl
+contrib/rpl rgrl   rgrl_   build contrib/rpl/rrel contrib/rpl/rsdl core/vnl core/vbl core/vil
 
 package: :pserver:anonymous@cvs.sourceforge.net:/cvsroot/vxl contrib/brl Brown University libraries
 contrib/brl/bbas bgrl   bgrl_   build core/vbl core/vsl
