@@ -86,6 +86,8 @@ template<class T>
 void mil_image_2d_of<T>::resize2(int nx, int ny)
 {
   if (nx==nx_ && ny==ny_  || n_planes()==0) return;
+  assert(nx>=0);
+  assert(ny>=0);
   
   release_data();
   
@@ -142,6 +144,8 @@ void mil_image_2d_of<T>::set_n_planes(int n)
 template<class T>
 void mil_image_2d_of<T>::setValidRegion(int xlo, int xhi, int ylo, int yhi)
 {
+  assert(xlo>=0);
+  assert(ylo>=0);
   resize(xhi-xlo,yhi-ylo);
   world2im_.set_translation(-xlo,-ylo);
 }
@@ -193,6 +197,8 @@ void mil_image_2d_of<T>::set(vcl_vector<T*>& planes,
                              int nx, int ny, int xstep, int ystep,
                              const char* format)
 {
+  assert(nx>=0);
+  assert(ny>=0);
   release_data();
   planes_ = planes;
   
@@ -209,6 +215,8 @@ void mil_image_2d_of<T>::set(vcl_vector<T*>& planes,
 template<class T>
 void mil_image_2d_of<T>::setGrey(T* grey_data, int nx, int ny, int ystep)
 {
+  assert(nx>=0);
+  assert(ny>=0);
   release_data();
   planes_.resize(1);
   planes_[0] = grey_data;
@@ -228,6 +236,8 @@ template<class T>
 void mil_image_2d_of<T>::setRGB(T* r, T* g, T* b,
                                 int nx, int ny, int ystep)
 {
+  assert(nx>=0);
+  assert(ny>=0);
   release_data();
   planes_.resize(3);
   planes_[0] = r;
@@ -247,6 +257,8 @@ template<class T>
 void mil_image_2d_of<T>::setRGB(T* r, T* g, T* b,
                                 int nx, int ny, int xstep, int ystep)
 {
+  assert(nx>=0);
+  assert(ny>=0);
   release_data();
   planes_.resize(3);
   planes_[0] = r;
@@ -292,7 +304,11 @@ template<class T>
 void mil_image_2d_of<T>::setToWindow(const mil_image_2d_of& im,
                                      int xlo, int xhi, int ylo, int yhi)
 {
-  assert(this!=&im);
+  assert(this!=&im); // Can't be a window to yourself
+  assert(xlo>=0);
+  assert(ylo>=0);
+  assert(xhi<im.nx());
+  assert(yhi<im.ny());
   
   int n_planes = im.n_planes();
   set_n_planes(n_planes);

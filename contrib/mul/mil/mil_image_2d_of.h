@@ -47,7 +47,6 @@ private:
     int xstep_,ystep_;
     vcl_string format_;
     mil_transform_2d world2im_;
-
     void release_data();
 
     //: Resize current planes to [0..nx-1][0..ny-1]
@@ -57,6 +56,7 @@ private:
     virtual void resize3(int nx, int ny, int n_planes);
 
 public:
+    typedef T pixel_type;
 
     //: Dflt ctor
     //  Creates an empty one plane image.
