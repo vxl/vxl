@@ -1,5 +1,3 @@
-
-
 #include <vcl_fstream.h>
 #include <vcl_vector.h>
 
@@ -12,8 +10,12 @@
 #include <vidl/vidl_movie_sptr.h>
 #include <vidl/vidl_movie.h>
 #include <vidl/vidl_io.h>
-//#include <vidl/vidl_avicodec.h>
+#ifdef VCL_WIN32
+#include <vidl/vidl_avicodec.h>
+#endif
+#ifdef HAS_MPEG
 #include <oxp/oxp_vidl_mpeg_codec.h>
+#endif
 
 int main(int argc, char ** argv)
 {
@@ -26,8 +28,12 @@ int main(int argc, char ** argv)
   if (argc > 1) vul_arg_display_usage_and_exit("Too many arguments\n");
 
   // Register video codecs
-  //  vidl_io::register_codec(new vidl_avicodec);
+#ifdef VCL_WIN32
+  vidl_io::register_codec(new vidl_avicodec);
+#endif
+#ifdef HAS_MPEG
   vidl_io::register_codec(new oxp_vidl_mpeg_codec);
+#endif
   
   // Prime in case it's mpeg
   int s = a_frame() - 14;
