@@ -95,17 +95,17 @@ static bool jmpbuf_ok = false;
 } while (0);
 #define png_setjmp_off() (jmpbuf_ok = false)
 
+// this function, aside from the extra step of retrieving the "error
+// pointer" (below) and the fact that it exists within the application
+// rather than within libpng, is essentially identical to libpng's
+// default error handler.  The second point is critical:  since both
+// setjmp() and longjmp() are called from the same code, they are
+// guaranteed to have compatible notions of how big a jmp_buf is,
+// regardless of whether _BSD_SOURCE or anything else has (or has not)
+// been defined.
+//
 static void pngtopnm_error_handler (png_structp png_ptr, png_const_charp msg)
 {
-  /* this function, aside from the extra step of retrieving the "error
-   * pointer" (below) and the fact that it exists within the application
-   * rather than within libpng, is essentially identical to libpng's
-   * default error handler.  The second point is critical:  since both
-   * setjmp() and longjmp() are called from the same code, they are
-   * guaranteed to have compatible notions of how big a jmp_buf is,
-   * regardless of whether _BSD_SOURCE or anything else has (or has not)
-   * been defined. */
-
   fprintf(stderr, "vil_png:  fatal libpng error: %s\n", msg);
   fflush(stderr);
 
@@ -117,7 +117,7 @@ static void pngtopnm_error_handler (png_structp png_ptr, png_const_charp msg)
   }
 
   vil_jmpbuf_wrapper  *jmpbuf_ptr = (vil_jmpbuf_wrapper*) png_get_error_ptr(png_ptr);
-  if (jmpbuf_ptr == NULL) {         /* we are completely hosed now */
+  if (jmpbuf_ptr == NULL) {         // we are completely hosed now
     fprintf(stderr,
       "pnmtopng:  EXTREMELY fatal error: jmpbuf unrecoverable; terminating.\n");
     fflush(stderr);
