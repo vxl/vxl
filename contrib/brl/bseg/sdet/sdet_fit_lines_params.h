@@ -1,4 +1,4 @@
-//----*-c++-*----tells emacs to use C++ mode----------
+// This is brl/bseg/sdet/sdet_fit_lines_params.h
 #ifndef sdet_fit_lines_params_h_
 #define sdet_fit_lines_params_h_
 //:
@@ -16,23 +16,23 @@
 class sdet_fit_lines_params : public gevd_param_mixin
 {
  public:
-  sdet_fit_lines_params(const double min_fit_length = 10.0,
-                        const double rms_distance = 0.15);
+  sdet_fit_lines_params(int  min_fit_length = 10,
+                        double rms_distance = 0.15);
 
- sdet_fit_lines_params(const sdet_fit_lines_params& old_params);
- ~sdet_fit_lines_params(){}
+  sdet_fit_lines_params(const sdet_fit_lines_params& old_params);
+ ~sdet_fit_lines_params() {}
 
   bool SanityCheck();
  friend
-   vcl_ostream& operator<<(vcl_ostream& os, const sdet_fit_lines_params& flp);
+  vcl_ostream& operator<<(vcl_ostream& os, const sdet_fit_lines_params& flp);
  protected:
-  void InitParams(double min_fit_length,
+  void InitParams(int min_fit_length,
                   double rms_distance);
  public:
   //
   // Parameter blocks and parameters
   //
-  double min_fit_length_; // the shortest curve to fit a line
+  int  min_fit_length_; // the shortest curve to fit a line
   double rms_distance_; // the max rms distance error for the fit
 };
 
