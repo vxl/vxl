@@ -30,7 +30,7 @@ main(int argc, char** argv) {
   if (vil_pixel_format(in) != VIL_BYTE) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
 
   // The threshold value:
-  ubyte threshold = (argc < 4) ? 10 : atoi(argv[3]);
+  ubyte threshold = (argc < 4) ? 128 : atoi(argv[3]);
 
   // perform thresholding:
   vil_image out = vepl_threshold(in,threshold,0,255);

@@ -41,13 +41,13 @@ main(int argc, char** argv) {
 
   // The output image:
   vil_memory_image_of<ubyte> out(in);
-  
+
   // The image sizes:
   int xs = in.width();
   int ys = in.height();
-  
+
   // The threshold value:
-  ubyte threshold = (argc < 4) ? 10 : atoi(argv[3]);
+  ubyte threshold = (argc < 4) ? 128 : atoi(argv[3]);
 
   img_type src(xs,ys); // in-memory 2D image
 

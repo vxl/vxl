@@ -41,7 +41,7 @@ main(int argc, char** argv) {
   out.put_section(&buf[0],0,0,xs,ys);
 
   // The threshold value:
-  ubyte threshold = (argc < 4) ? 10 : vcl_atoi(argv[3]);
+  ubyte threshold = (argc < 4) ? 64 : vcl_atoi(argv[3]);
 
   // perform thresholding:
   out = vepl_threshold(out,threshold,0,255); // NOTE THAT dst == src

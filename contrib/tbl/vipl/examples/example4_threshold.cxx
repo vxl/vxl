@@ -41,9 +41,9 @@ main(int argc, char** argv) {
   // The image sizes:
   int xs = in.width();
   int ys = in.height();
-  
+
   // The threshold value:
-  ubyte threshold = (argc < 4) ? 10 : atoi(argv[3]);
+  ubyte threshold = (argc < 4) ? 64 : atoi(argv[3]);
 
   vil_memory_image_of<ubyte> src(in); // in-memory vil_image
   ubyte* buf = new ubyte[in.get_size_bytes()];
