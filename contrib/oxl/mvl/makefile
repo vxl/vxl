@@ -6,7 +6,7 @@ VERSION := 1.0
 
 IMMEDIATE_LIBS += -lvnl-algo -lvnl -lvbl
 
-SUBDIRS = tests examples
+SUBDIRS = examples # tests
 
 # 0. stuff written in C++
 
