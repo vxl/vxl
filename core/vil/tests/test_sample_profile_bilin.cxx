@@ -17,8 +17,8 @@ void test_sample_profile_bilin_byte()
   vil2_image_view<vil_byte> image1;
   image1.resize(10,10);
 
-  for (int y=0;y<image1.ny();++y)
-     for (int x=0;x<image1.nx();++x)
+  for (int y=0;y<image1.nj();++y)
+     for (int x=0;x<image1.ni();++x)
      {
        image1(x,y) = x+y*10;
      }
@@ -40,8 +40,8 @@ void test_sample_profile_bilin_byte()
   vil2_image_view<float> image3;
   image3.resize(10,10,3);
 
-  for (int y=0;y<image3.ny();++y)
-     for (int x=0;x<image3.nx();++x)
+  for (int y=0;y<image3.nj();++y)
+     for (int x=0;x<image3.ni();++x)
        for (int k=0;k<3;++k)
          image3(x,y,k) = 0.1f*x+y+10*k;
 

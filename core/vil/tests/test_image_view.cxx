@@ -10,8 +10,8 @@ bool Equal(const vil2_image_view<vil_byte>& im0,
            const vil2_image_view<vil_byte>& im1)
 {
   return im0.nplanes()==im1.nplanes()
-      && im0.nx() == im1.nx()
-      && im0.ny() == im1.ny()
+      && im0.ni() == im1.ni()
+      && im0.nj() == im1.nj()
       && im0(0,0,0) == im1(0,0,0)
       && im0(1,1,1) == im1(1,1,1);
 }
@@ -28,11 +28,11 @@ void test_image_view_byte()
   vcl_cout<<"image0: "<<image0<<vcl_endl;
 
   TEST("N.Planes",image0.nplanes(),1);
-  TEST("resize x",image0.nx(),10);
-  TEST("resize y",image0.ny(),8);
+  TEST("resize x",image0.ni(),10);
+  TEST("resize y",image0.nj(),8);
 
-  for (int y=0;y<image0.ny();++y)
-     for (int x=0;x<image0.nx();++x)
+  for (int y=0;y<image0.nj();++y)
+     for (int x=0;x<image0.ni();++x)
      {
        image0(x,y) = x+y;
      }
@@ -44,7 +44,7 @@ void test_image_view_byte()
     vil2_image_view<vil_byte> image1;
     image1 = image0;
 
-    TEST("Shallow copy (size)",image0.nx()==image1.nx() && image0.ny()==image1.ny()
+    TEST("Shallow copy (size)",image0.ni()==image1.ni() && image0.nj()==image1.nj()
                         && image0.nplanes()==image1.nplanes(), true);
 
     image0(4,6)=127;
@@ -61,8 +61,8 @@ void test_image_view_byte()
     image2 = image3;
   }
 
-  TEST("Shallow copy 2",image2.nx()==4
-       && image2.ny()==5 && image2.nplanes()==3, true);
+  TEST("Shallow copy 2",image2.ni()==4
+       && image2.nj()==5 && image2.nplanes()==3, true);
 
   image2(1,1)=17;
   TEST("Data still in scope",image2(3,3),111);
@@ -74,8 +74,8 @@ void test_image_view_byte()
     // Test the deep copy
     vil2_image_view<vil_byte> image4;
     image4.deep_copy(image0);
-    TEST("Deep copy (size)",image0.nx()==image4.nx()
-                         && image0.ny()==image4.ny()
+    TEST("Deep copy (size)",image0.ni()==image4.ni()
+                         && image0.nj()==image4.nj()
                          && image0.nplanes()==image4.nplanes(), true);
     TEST("Deep copy (values)",image4(4,6),image0(4,6));
 
@@ -87,7 +87,7 @@ void test_image_view_byte()
   vil2_image_view<vil_byte> image_win;
   image_win.set_to_window(image0,2,4,3,4);
   TEST("set_to_window size",
-        image_win.nx()==4 && image_win.ny()==4
+        image_win.ni()==4 && image_win.nj()==4
         && image_win.nplanes()==image0.nplanes(),true);
 
   image0(2,3)=222;

@@ -20,8 +20,8 @@ void test_sample_grid_bilin_byte()
 
   vcl_cout<<"Testing one plane image"<<vcl_endl;
 
-  for (int y=0;y<image0.ny();++y)
-     for (int x=0;x<image0.nx();++x)
+  for (int y=0;y<image0.nj();++y)
+     for (int x=0;x<image0.ni();++x)
      {
        image0(x,y) = x+y*10;
      }
@@ -51,8 +51,8 @@ void test_sample_grid_bilin_byte()
   vcl_cout<<"Testing three plane image"<<vcl_endl;
 
   image0.resize(10,10,2);
-  for (int y=0;y<image0.ny();++y)
-    for (int x=0;x<image0.nx();++x)
+  for (int y=0;y<image0.nj();++y)
+    for (int x=0;x<image0.ni();++x)
       for (int p=0;p<2;++p)
        image0(x,y,p) = x+y*10+p*100;
 
