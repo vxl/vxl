@@ -1,16 +1,14 @@
+// This is vxl/vil/vil_memory_image_window.h
 #ifndef vil_memory_image_window_h_
 #define vil_memory_image_window_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// This is vxl/vil/vil_memory_image_window.h
-
 //:
 // \file
 // \brief Operations on a small region of an image
 
 #include "vil_memory_image_of.h"
-
 #include <vil/vil_byte.h>
 
 const int vil_memory_image_window_maxint = 0x07ffffff;
@@ -44,22 +42,20 @@ public:
 #endif
 
   int sum_abs_diff(const vil_memory_image_of<vil_byte>& image2,
-		   int centre2_x, int centre2_y,
-		   int early_exit_level = vil_memory_image_window_maxint);
-  
+                   int centre2_x, int centre2_y,
+                   int early_exit_level = vil_memory_image_window_maxint);
+
   int sum_sqr_diff(const vil_memory_image_of<vil_byte>& image2,
-		   int centre2_x, int centre2_y,
-		   int early_exit_level = vil_memory_image_window_maxint);
-  
+                   int centre2_x, int centre2_y,
+                   int early_exit_level = vil_memory_image_window_maxint);
+
   int normalised_sum_abs_diff(const vil_memory_image_of<vil_byte>& image2,
-			      int centre2_x, int centre2_y,
-			      double normalise_ratio,
-			      int early_exit_level = vil_memory_image_window_maxint);
-  
+                              int centre2_x, int centre2_y,
+                              double normalise_ratio,
+                              int early_exit_level = vil_memory_image_window_maxint);
+
   double normalised_cross_correlation(const vil_memory_image_of<vil_byte>& image2,
                                       int centre2_x, int centre2_y);
-
-
 
   float mean_intensity();
 
