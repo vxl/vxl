@@ -537,6 +537,8 @@ static const char * encode_triplet(char data[3], unsigned n)
 {
   assert (n>0 && n <4);
   out_buf[0] = base64_encoding[(data[0] & 0xFC) >> 2];
+  out_buf[1] = base64_encoding[
+    ((data[0] & 0x3) << 4) + ((data[1] & 0xf0)>>4)];
 
   if (n==1)
   {
@@ -544,8 +546,6 @@ static const char * encode_triplet(char data[3], unsigned n)
     return out_buf;
   }
 
-  out_buf[1] = base64_encoding[
-    ((data[0] & 0x3) << 4) + ((data[1] & 0xf0)>>4)];
   out_buf[2] = base64_encoding[
     ((data[1] & 0xf) << 2) + ((data[2] & 0xc0)>>6)];
 
@@ -567,8 +567,14 @@ vcl_string vul_url::encode_base64(const vcl_string& in)
   unsigned i = 0, line_octets = 0;
   const unsigned l = in.size();
   char data[3];
-  while(i < l)
+  while(i <= l)
   {
+    if(i == l)
+    {
+      out.append("=");
+      return out;
+    }
+
     data[0] = in[i++];
     data[1] = data[2] = 0;
 
@@ -606,7 +612,7 @@ vcl_string vul_url::encode_base64(const vcl_string& in)
 
 static int get_next_char(const vcl_string &in, unsigned int *i)
 {
-  vcl_string out;
+
   while (*i < in.size())
   {
     char c;
