@@ -1,26 +1,24 @@
-
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_string.h>
 #include <vcl_algorithm.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_math.h>
-#include <vbl/vbl_test.h>
+#include <vnl/vnl_test.h>
 #include <vcl_utility.h>
 
 #include <rsdl/rsdl_kd_tree.h>
 #include <rsdl/rsdl_dist.h>
-// #include <rrel/rrel_rand_gauss.h>
 #include <mbl/mbl_mz_random.h>
 
-bool close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-6; }
-bool less_first( const vcl_pair<double,int>& left,
-                 const vcl_pair<double,int>& right )
+static bool close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-6; }
+static bool less_first( const vcl_pair<double,int>& left,
+                        const vcl_pair<double,int>& right )
 {
   return left.first < right.first;
 }
-bool less_second( const vcl_pair<double,int>& left,
-                 const vcl_pair<double,int>& right )
+static bool less_second( const vcl_pair<double,int>& left,
+                         const vcl_pair<double,int>& right )
 {
   return left.second < right.second;
 }
@@ -28,8 +26,8 @@ bool less_second( const vcl_pair<double,int>& left,
 int
 main()
 {
-  vbl_test_start( "rsdl_kd_tree" );
-  
+  vnl_test_start( "rsdl_kd_tree" );
+
   int Nc=2, Na=3;
   rsdl_point pt( Nc, Na );
   vcl_vector< rsdl_point > points;
@@ -43,12 +41,12 @@ main()
   pt.cartesian( 0 ) = 78.2;  pt.cartesian( 1 ) =  97;
   pt.angular( 0 ) = -2.0;   pt.angular( 1 ) = -2.4;   pt.angular( 2 ) = 1.6;
   points.push_back( pt );
- 
+
   //  2
   pt.cartesian( 0 ) = 79;   pt.cartesian( 1 ) =  92;
   pt.angular( 0 ) = -3.0;     pt.angular( 1 ) = 1.8;   pt.angular( 2 ) = 1.7;
   points.push_back( pt );
- 
+
   //  3
   pt.cartesian( 0 ) = 79.5;  pt.cartesian( 1 ) = 92.3;
   pt.angular( 0 ) =  -2.6;   pt.angular( 1 ) = 1.9;   pt.angular( 2 ) = 1.8;
@@ -74,9 +72,9 @@ main()
   pt.angular( 0 ) = 2.6;     pt.angular( 1 ) = 2.05;   pt.angular( 2 ) = 1.1;
   points.push_back( pt );
 
-  vbl_test_begin( "ctor" );
+  vnl_test_begin( "ctor" );
   rsdl_kd_tree tree( points, - vnl_math::pi, 1 );
-  vbl_test_perform( true );
+  vnl_test_perform( true );
 
   rsdl_point query(2,3);
   query.cartesian( 0 ) = 80;  query.cartesian( 1 ) = 99.3;
@@ -87,23 +85,23 @@ main()
 
   bool use_heap = false;
   tree.n_nearest( query, 2, cpoints, cindices );
-  
-  vbl_test_begin( "n_nearest" );
-  bool ok = cpoints.size() == 2 && cindices.size() == 2 
+
+  vnl_test_begin( "n_nearest" );
+  bool ok = cpoints.size() == 2 && cindices.size() == 2
     && cindices[0] == 0 && cindices[1] == 4
     && close( rsdl_dist( cpoints[0], points[0] ), 0 )
     && close( rsdl_dist( cpoints[1], points[4] ), 0 );
-  vbl_test_perform( ok );
+  vnl_test_perform( ok );
 
   use_heap = true;
   tree.n_nearest( query, 2, cpoints_heap, cindices_heap, use_heap );
-  
-  vbl_test_begin( "n_nearest with heap" );
-  ok = cpoints.size() == 2 && cindices.size() == 2 
+
+  vnl_test_begin( "n_nearest with heap" );
+  ok = cpoints.size() == 2 && cindices.size() == 2
     && cindices_heap[0] == 0 && cindices_heap[1] == 4
     && close( rsdl_dist( cpoints_heap[0], points[0] ), 0 )
     && close( rsdl_dist( cpoints_heap[1], points[4] ), 0 );
-  vbl_test_perform( ok );
+  vnl_test_perform( ok );
 
   int M = 5000;
   points.resize( M );
@@ -118,21 +116,23 @@ main()
     points[i].resize( Nc, Na );
     points[i].cartesian(0) = 6.5 * mz_rand.drand32() + 50;
     points[i].cartesian(1) = 6.5 * mz_rand.drand32() + 100;
-    points[i].angular(0) = 2*vnl_math::pi * mz_rand.drand32(); 
-    points[i].angular(1) = 2*vnl_math::pi * mz_rand.drand32(); 
-    points[i].angular(2) = 2*vnl_math::pi * mz_rand.drand32(); 
+    points[i].angular(0) = 2*vnl_math::pi * mz_rand.drand32();
+    points[i].angular(1) = 2*vnl_math::pi * mz_rand.drand32();
+    points[i].angular(2) = 2*vnl_math::pi * mz_rand.drand32();
   }
 
-  rsdl_kd_tree tree2( points, 0, 4 );  
+  rsdl_kd_tree tree2( points, 0, 4 );
   for ( int t=0; t<num_tests; ++t ) {
-    // vcl_cout << "\n\n=============================\n  n_nearest test " << t
-    //          <<   "\n=============================\n";
+#if 0
+    vcl_cout << "\n\n=============================\n  n_nearest test " << t
+             <<   "\n=============================\n";
+#endif
     rsdl_point query(2,3);
     query.cartesian(0) = 6.5 * mz_rand.drand32() + 50;
     query.cartesian(1) = 6.5 * mz_rand.drand32() + 100;
-    query.angular(0) = 2*vnl_math::pi * mz_rand.drand32(); 
-    query.angular(1) = 2*vnl_math::pi * mz_rand.drand32(); 
-    query.angular(2) = 2*vnl_math::pi * mz_rand.drand32(); 
+    query.angular(0) = 2*vnl_math::pi * mz_rand.drand32();
+    query.angular(1) = 2*vnl_math::pi * mz_rand.drand32();
+    query.angular(2) = 2*vnl_math::pi * mz_rand.drand32();
 
     // generate by exhaustive search
     for ( i=0; i<M; ++i ) {
@@ -145,20 +145,20 @@ main()
     use_heap = false;
     tree2.n_nearest( query, n, cpoints, cindices, use_heap );
 
-    vbl_test_begin( "k-d tree vs. exhaustive (stack) ");
+    vnl_test_begin( "k-d tree vs. exhaustive (stack) ");
     ok = true;
     for ( i=0; ok && i<n; ++i )
       ok = ok && cindices[i] == dist_pairs[i].second;
-    vbl_test_perform( ok );
+    vnl_test_perform( ok );
 
     //  find out the k-d tree results w heap
     use_heap = true;
     tree2.n_nearest( query, n, cpoints_heap, cindices_heap, use_heap );
-    
-    vbl_test_begin( "k-d tree vs. exhaustive (heap) ");
+
+    vnl_test_begin( "k-d tree vs. exhaustive (heap) ");
     for ( i=0; ok && i<n; ++i )
       ok = ok && cindices_heap[i] == dist_pairs[i].second;
-    vbl_test_perform( ok );
+    vnl_test_perform( ok );
 
     //  Test the points within a given bounding box.
 
@@ -194,17 +194,15 @@ main()
         inside_count ++ ;
       }
     }
-     
-    /*
-    //  Output to check everything:
-    cout << "\n\nChecking rsdl_kd_tree::points_in_bounding_box\n"
-         << " inside_count from exhaustive test: " << inside_count << "\n"
-         << " number in vector: " << box_indices.size() << endl;
-    */
 
-    /*
-    cout << "\nNow checking each:\n";
-    */
+#if 0
+    //  Output to check everything:
+    vcl_cout << "\n\nChecking rsdl_kd_tree::points_in_bounding_box\n"
+             << " inside_count from exhaustive test: " << inside_count << "\n"
+             << " number in vector: " << box_indices.size() << vcl_endl;
+
+    vcl_cout << "\nNow checking each:\n";
+#endif
     int disagree_index = 0, disagree_pt = 0;
     for ( i=0; i<box_points.size(); ++i ) {
       if ( ! pt_inside[ box_indices[i] ] )
@@ -213,13 +211,13 @@ main()
         disagree_pt ++;
     }
 
-    /*
-    cout << "Number of index disagreements = " << disagree_index
-         <<"\nNumber of point disagreements =" << disagree_pt << endl;
-    */
+#if 0
+    vcl_cout << "Number of index disagreements = " << disagree_index
+             <<"\nNumber of point disagreements =" << disagree_pt << vcl_endl;
+#endif
 
-    vbl_test_begin( "k-d tree bounding box ");
-    vbl_test_perform( inside_count==box_points.size() && disagree_pt==0
+    vnl_test_begin( "k-d tree bounding box ");
+    vnl_test_perform( inside_count==box_points.size() && disagree_pt==0
                       && disagree_index==0 );
 
     //
@@ -243,16 +241,14 @@ main()
         pt_inside[ i ] = false;
     }
 
-    /*
+#if 0
     //  Output to check everything:
-    cout << "\n\nChecking rsdl_kd_tree::points_in_radius\n"
-         << " inside_count from exhaustive test: " << inside_count << "\n"
-         << " number in vector: " << radius_indices.size() << endl;
-    */
+    vcl_cout << "\n\nChecking rsdl_kd_tree::points_in_radius\n"
+             << " inside_count from exhaustive test: " << inside_count << "\n"
+             << " number in vector: " << radius_indices.size() << vcl_endl;
 
-    /*
-    cout << "\nNow checking each:\n";
-    */
+    vcl_cout << "\nNow checking each:\n";
+#endif
     disagree_index = 0; disagree_pt = 0;
     for ( i=0; i<radius_points.size(); ++i ) {
       if ( ! pt_inside[ radius_indices[i] ] )
@@ -261,20 +257,20 @@ main()
         disagree_pt ++;
     }
 
-    /*
-    cout << "Number of index disagreements = " << disagree_index
-         <<"\nNumber of point disagreements =" << disagree_pt << endl;
-    */
+#if 0
+    vcl_cout << "Number of index disagreements = " << disagree_index
+             <<"\nNumber of point disagreements =" << disagree_pt << vcl_endl;
+#endif
 
-    vbl_test_begin( "k-d tree points_in_radius (1)");
-    vbl_test_perform( inside_count==radius_points.size() && disagree_pt==0
+    vnl_test_begin( "k-d tree points_in_radius (1)");
+    vnl_test_perform( inside_count==radius_points.size() && disagree_pt==0
                       && disagree_index==0 );
 
 
     //
     //  Test a normal radius
     //
-    radius = vnl_math::pi / 4; 
+    radius = vnl_math::pi / 4;
 
     //  Now do "points_in_radius" query.
     radius_points.clear();
@@ -292,13 +288,14 @@ main()
         pt_inside[ i ] = false;
     }
 
-    /*
+#if 0
     //  Output to check everything:
-    cout << "\n\nChecking rsdl_kd_tree::points_in_radius\n"
-         << " inside_count from exhaustive test: " << inside_count << "\n"
-         << " number in vector: " << radius_indices.size() << endl;
-    cout << "\nNow checking each:\n";
-    */
+    vcl_cout << "\n\nChecking rsdl_kd_tree::points_in_radius\n"
+             << " inside_count from exhaustive test: " << inside_count << "\n"
+             << " number in vector: " << radius_indices.size() << vcl_endl;
+
+    vcl_cout << "\nNow checking each:\n";
+#endif
     disagree_index = 0; disagree_pt = 0;
     for ( i=0; i<radius_points.size(); ++i ) {
       if ( ! pt_inside[ radius_indices[i] ] )
@@ -307,21 +304,17 @@ main()
         disagree_pt ++;
     }
 
-    /*
-    cout << "Number of index disagreements = " << disagree_index
-         <<"\nNumber of point disagreements =" << disagree_pt << endl;
-    */
+#if 0
+    vcl_cout << "Number of index disagreements = " << disagree_index
+             <<"\nNumber of point disagreements =" << disagree_pt << vcl_endl;
+#endif
 
-    vbl_test_begin( "k-d tree points_in_radius ");
-    vbl_test_perform( inside_count==radius_points.size() && disagree_pt==0
+    vnl_test_begin( "k-d tree points_in_radius ");
+    vnl_test_perform( inside_count==radius_points.size() && disagree_pt==0
                       && disagree_index==0 );
-
-    
-
   }
 
-
-  vbl_test_summary();
+  vnl_test_summary();
 
   return 0;
 }

@@ -1,4 +1,3 @@
-
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
@@ -12,7 +11,7 @@
 
 
 rsdl_kd_tree::rsdl_kd_tree( const vcl_vector< rsdl_point >& points,
-                            double min_angle, 
+                            double min_angle,
                             int points_per_leaf )
   : points_(points), min_angle_(min_angle)
 {
@@ -29,7 +28,7 @@ rsdl_kd_tree::rsdl_kd_tree( const vcl_vector< rsdl_point >& points,
     assert( Na_ == points_[i].num_angular() );
   }
 
-  // 1.  Build the initial bounding box.  
+  // 1.  Build the initial bounding box.
 
   rsdl_point low(Nc_, Na_), high(Nc_, Na_);
 
@@ -124,10 +123,10 @@ rsdl_kd_tree::build_kd_tree( int points_per_leaf,
       values[i] = vcl_pair<double, int> ( points_[ indices[i] ].angular( dim ), indices[i] );
     }
   }
-  vcl_sort( values.begin(), values.end(), first_less ); 
+  vcl_sort( values.begin(), values.end(), first_less );
 
   // vcl_cout << "\nsorted values/indices: \n";
-  // for ( i=0; i<values.size(); ++i ) 
+  // for ( i=0; i<values.size(); ++i )
   //   vcl_cout << i << ":  value = " << values[i].first << ", id = " << values[i].second << vcl_endl;
 
   // 5. Partition the vector and the bounding box along the dimension.
@@ -145,7 +144,7 @@ rsdl_kd_tree::build_kd_tree( int points_per_leaf,
     right_outer_box.min_angular( dim ) = median_value;
   }
 
-  // vcl_cout << "new bounding boxes:  left " << left_outer_box << "\n  right " 
+  // vcl_cout << "new bounding boxes:  left " << left_outer_box << "\n  right "
   //          << right_outer_box << vcl_endl;
   vcl_vector< int > left_indices( med_loc+1 ), right_indices( indices.size()-med_loc-1 );
   for ( i=0; i<=med_loc; ++i ) left_indices[i] = values[i].second;
@@ -254,7 +253,7 @@ rsdl_kd_tree::destroy_tree( rsdl_kd_node*&  p )
 }
 
 
-void 
+void
 rsdl_kd_tree::n_nearest( const rsdl_point& query_point,
                          int n,
                          vcl_vector< rsdl_point >& closest_points,
@@ -275,13 +274,13 @@ rsdl_kd_tree::n_nearest( const rsdl_point& query_point,
     this->n_nearest_with_heap( query_point, n, root_, closest_indices, sq_distances, num_found );
   else
     this->n_nearest_with_stack( query_point, n, root_, closest_indices, sq_distances, num_found );
-
-  /*vcl_cout << "\nAfter n_nearest, leaves_examined_ = " << leaves_examined_
-           << ", fraction = " << float(leaves_examined_) / leaf_count_ 
+#if 0
+  vcl_cout << "\nAfter n_nearest, leaves_examined_ = " << leaves_examined_
+           << ", fraction = " << float(leaves_examined_) / leaf_count_
            << "\n     internal_examined_ = " << internal_examined_
-           << ", fraction = " << float(internal_examined_) / internal_count_ << vcl_endl;*/
-
-  if ( closest_points.size() != num_found )  
+           << ", fraction = " << float(internal_examined_) / internal_count_ << vcl_endl;
+#endif
+  if ( closest_points.size() != num_found )
     closest_points.resize( num_found );
 
   for ( unsigned int i=0; i<num_found; ++i ) {
@@ -290,7 +289,7 @@ rsdl_kd_tree::n_nearest( const rsdl_point& query_point,
 }
 
 
-void 
+void
 rsdl_kd_tree::n_nearest_with_stack( const rsdl_point& query_point,
                                     int n,
                                     rsdl_kd_node* root,
@@ -305,12 +304,12 @@ rsdl_kd_tree::n_nearest_with_stack( const rsdl_point& query_point,
   double sq_dist;
   bool initial_path = true;
 
-  //  Go down tree, 
+  //  Go down tree,
   rsdl_kd_node* current = root;
   sq_dist = 0;
 
   do {
-    // vcl_cout << "\ncurrent -- sq_dist " << sq_dist << ", depth: " << current->depth_ 
+    // vcl_cout << "\ncurrent -- sq_dist " << sq_dist << ", depth: " << current->depth_
     //       << "\nouter_box: "
     //       << current->outer_box_ << "\ninner_box: "
     //       << current->inner_box_ << vcl_endl;
@@ -329,11 +328,11 @@ rsdl_kd_tree::n_nearest_with_stack( const rsdl_point& query_point,
         stack_vec.pop_back();
       }
     }
-     
+
     //  if this is a leaf node, update the set of closest points, and
     //  take the next node from the stack
 
-    else if ( ! current->left_ ) { 
+    else if ( ! current->left_ ) {
       // vcl_cout << "At a leaf\n";
       leaves_examined_ ++ ;
       update_closest( query_point, n, current, closest_indices, sq_distances, num_found );
@@ -378,13 +377,11 @@ rsdl_kd_tree::n_nearest_with_stack( const rsdl_point& query_point,
         current = current->right_ ;
       }
     }
-
   } while ( true );
-
 }
 
 
-void 
+void
 rsdl_kd_tree::n_nearest_with_heap( const rsdl_point& query_point,
                                    int n,
                                    rsdl_kd_node* root,
@@ -394,11 +391,11 @@ rsdl_kd_tree::n_nearest_with_heap( const rsdl_point& query_point,
 {
   // vcl_cout << "\n\n----------------\nn_nearest_with_heap \n";
   vcl_vector< rsdl_kd_heap_entry > heap_vec;
-  heap_vec.reserve( 100 ); 
+  heap_vec.reserve( 100 );
   double left_box_sq_dist, right_box_sq_dist;
   double sq_dist;
 
-  //  Go down tree, 
+  //  Go down tree,
   rsdl_kd_node* current = root;
   while ( current->left_ ) {
     internal_examined_ ++ ;
@@ -417,7 +414,7 @@ rsdl_kd_tree::n_nearest_with_heap( const rsdl_point& query_point,
   vcl_make_heap( heap_vec.begin(), heap_vec.end() );
   sq_dist = 0;
 
-  // vcl_cout << "\nAfter initial trip down the tree, here's the heap\n"; 
+  // vcl_cout << "\nAfter initial trip down the tree, here's the heap\n";
   // int i;
   // for ( i=0; i<heap_vec.size(); ++i )
   //   vcl_cout << "  " << i << ":  sq distance " << heap_vec[i].dist_
@@ -451,15 +448,15 @@ rsdl_kd_tree::n_nearest_with_heap( const rsdl_point& query_point,
         if ( num_found < n || sq_distances[ num_found-1 ] > left_box_sq_dist ) {
           // vcl_cout << "pushing left onto the heap\n";
           heap_vec.push_back( rsdl_kd_heap_entry( left_box_sq_dist, current->left_ ) );
-          vcl_push_heap( heap_vec.begin(), heap_vec.end() ); 
+          vcl_push_heap( heap_vec.begin(), heap_vec.end() );
         };
-        
+
         right_box_sq_dist = rsdl_dist_sq( query_point, current->right_->inner_box_ );
         // vcl_cout << "right sq distance = " << right_box_sq_dist << vcl_endl;
         if ( num_found < n || sq_distances[ num_found-1 ] > right_box_sq_dist ) {
           // vcl_cout << "pushing right onto the heap\n";
           heap_vec.push_back( rsdl_kd_heap_entry( right_box_sq_dist, current->right_ ) );
-          vcl_push_heap( heap_vec.begin(), heap_vec.end() ); 
+          vcl_push_heap( heap_vec.begin(), heap_vec.end() );
         }
       }
     }
@@ -473,12 +470,10 @@ rsdl_kd_tree::n_nearest_with_heap( const rsdl_point& query_point,
       current = heap_vec[ heap_vec.size()-1 ].p_;
       heap_vec.pop_back();
     }
-
   } while ( true );
-
 }
 
-void 
+void
 rsdl_kd_tree::update_closest( const rsdl_point& query_point,
                               int n,
                               rsdl_kd_node* p,
@@ -523,18 +518,17 @@ rsdl_kd_tree::update_closest( const rsdl_point& query_point,
   }
   // vcl_cout << "  End of leaf computation, num_found =  " << num_found
   //          << ", and they are: " << vcl_endl;
-  // for ( int k=0; k<num_found; ++k ) 
+  // for ( int k=0; k<num_found; ++k )
   //   vcl_cout << "     " << k << ":  indices: " << closest_indices[ k ]
   //            << ", sq_dist " << sq_distances[ k ] << vcl_endl;
 }
-
 
 
 //  If there are already n points (at the first leaf) and if a box
 //  drawn around the first point of half-width the distance of the
 //  n-th point fits inside the outer box of this node, then no points
 //  anywhere else in the tree will can replace any of the closest
-//  points.  
+//  points.
 
 bool
 rsdl_kd_tree :: bounded_at_leaf ( const rsdl_point& query_point,
@@ -545,11 +539,11 @@ rsdl_kd_tree :: bounded_at_leaf ( const rsdl_point& query_point,
 {
   // vcl_cout << "bounded_at_leaf\n"
   //          << "num_found = " << num_found << "\n";
-  
+
   if ( num_found != n ) {
     return false;
   }
-  
+
   double radius = vnl_math_sqrt( sq_distances[ n-1 ] );
 
   for ( int i = 0; i < Nc_; ++ i ) {
@@ -573,8 +567,8 @@ rsdl_kd_tree :: bounded_at_leaf ( const rsdl_point& query_point,
 
 
 //  Find all points within a query's bounding box
-void 
-rsdl_kd_tree :: points_in_bounding_box( const rsdl_bounding_box& box, 
+void
+rsdl_kd_tree :: points_in_bounding_box( const rsdl_bounding_box& box,
                                         vcl_vector< rsdl_point >& points_in_box,
                                         vcl_vector< int >& indices_in_box )
 {
@@ -586,7 +580,7 @@ rsdl_kd_tree :: points_in_bounding_box( const rsdl_bounding_box& box,
 }
 
 
-void 
+void
 rsdl_kd_tree :: points_in_radius( const rsdl_point& query_point,
                                   double radius,
                                   vcl_vector< rsdl_point >& points_within_radius,
@@ -636,8 +630,8 @@ rsdl_kd_tree :: points_in_radius( const rsdl_point& query_point,
   //  Clear out the result vectors in preparation
   points_within_radius.clear();
   indices_within_radius.clear();
-  
-  //  Gather the points from the bounding box that are within the radius. 
+
+  //  Gather the points from the bounding box that are within the radius.
   double sq_radius = radius*radius;
   for ( unsigned int i=0; i < indices_in_box.size(); ++i ) {
     int index = indices_in_box[ i ];
@@ -648,7 +642,7 @@ rsdl_kd_tree :: points_in_radius( const rsdl_point& query_point,
   }
 }
 
-void 
+void
 rsdl_kd_tree :: points_in_bounding_box( rsdl_kd_node* current,
                                         const rsdl_bounding_box& box,
                                         vcl_vector< int >& indices_in_box )
@@ -672,7 +666,7 @@ rsdl_kd_tree :: points_in_bounding_box( rsdl_kd_node* current,
   }
 }
 
-void 
+void
 rsdl_kd_tree :: report_all_in_subtree( rsdl_kd_node* current,
                                        vcl_vector< int >& indices )
 {
@@ -686,4 +680,3 @@ rsdl_kd_tree :: report_all_in_subtree( rsdl_kd_node* current,
     }
   }
 }
-
