@@ -2,12 +2,11 @@
 #ifndef vnl_erf_h_
 #define vnl_erf_h_
 //:
-//  \file
-//  \brief Error Function (erf) function approximations
-//  \author Tim Cootes, Ian Scott
+// \file
+// \brief Error Function (erf) function approximations
+// \author Tim Cootes, Ian Scott
 
-#include <vcl_cmath.h>
-#include <vnl\vnl_gamma.h>
+#include <vnl/vnl_gamma.h>
 
 //: The Error function
 // erf(x) = (2/sqrt(pi)) Integral from 0 to x (exp(-t^2) dt)
@@ -21,5 +20,4 @@ inline double vnl_erf(double x)
 // \note the output ranges from 0 to 2, and vnl_erf(0) = 1.
 double vnl_erfc(double x);
 
-
-#endif // vnl_gamma_h_
+#endif // vnl_erf_h_
