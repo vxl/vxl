@@ -1,3 +1,5 @@
+// This is mul/pdf1d/tools/select_n_mixtures.cxx
+
 //:
 // \file
 // \brief Program to explore selecting optimal number of mixture components
@@ -10,7 +12,6 @@
 
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_cmath.h>
 #include <pdf1d/pdf1d_compare_to_pdf_bhat.h>
 #include <pdf1d/pdf1d_calc_mean_var.h>
 #include <pdf1d/pdf1d_sampler.h>

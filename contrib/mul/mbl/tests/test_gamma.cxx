@@ -1,15 +1,12 @@
+// This is mul/mbl/tests/test_gamma.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-#include <vcl_cmath.h>
-
 #include <mbl/mbl_gamma.h>
 
 void test_gamma()
 {
-  vcl_cout << "******************************" << vcl_endl;
-  vcl_cout << " Testing mbl_gamma " << vcl_endl;
-  vcl_cout << "*****************************" << vcl_endl;
+  vcl_cout << "*******************\n"
+           << " Testing mbl_gamma\n"
+           << "*******************\n";
 
   TEST_NEAR("mbl_gamma_p(2,0)",      mbl_gamma_p(2,0),            0,  1e-8);
   TEST_NEAR("mbl_gamma_p(2,inf)",    mbl_gamma_p(2,1e9),        1.0,  1e-8);

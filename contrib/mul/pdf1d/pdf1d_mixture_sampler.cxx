@@ -1,3 +1,5 @@
+// This is mul/pdf1d/pdf1d_mixture_sampler.cxx
+#include "pdf1d_sampler.h"
 //:
 // \file
 // \brief Implements sampling for a mixture model pdf sampler
@@ -5,9 +7,6 @@
 
 //=======================================================================
 
-#include "pdf1d_sampler.h"
-#include <vcl_cstdlib.h>
-#include <vcl_cmath.h>
 #include <vcl_string.h>
 #include <pdf1d/pdf1d_mixture.h>
 #include <pdf1d/pdf1d_mixture_sampler.h>

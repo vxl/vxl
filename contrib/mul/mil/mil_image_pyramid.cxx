@@ -7,7 +7,6 @@
 
 #include "mil_image_pyramid.h"
 
-#include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
 #include <mil/mil_image.h>
 
@@ -120,7 +119,7 @@ vcl_vector<mil_image*>& mil_image_pyramid::data()
 
         //: Define pixel widths
 void mil_image_pyramid::setWidths(double base_pixel_width,
-                                double scale_step)
+                                  double scale_step)
 {
      base_pixel_width_ = base_pixel_width;
      scale_step_ = scale_step;

@@ -1,12 +1,11 @@
+// This is mul/mbl/mbl_chord.h
 #ifndef mbl_chord_h_
 #define mbl_chord_h_
-
 //:
 // \file
 // \author Tim Cootes
 // \brief Horizontal line used in images, with integer co-ordinates
 
-#include <vcl_cmath.h>
 #include <vsl/vsl_binary_io.h>
 
 //: Horizontal line used in images, with integer co-ordinates

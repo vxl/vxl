@@ -1,8 +1,6 @@
+// This is mul/mbl/tests/test_sum_1d.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
 #include <vcl_cmath.h>
-
 #include <mbl/mbl_sum_1d.h>
 
 void test_sum_1d()

@@ -1,6 +1,6 @@
+// This is mul/mil/mil_gaussian_pyramid_builder_2d.txx
 #ifndef mil_gaussian_pyramid_builder_2d_txx_
 #define mil_gaussian_pyramid_builder_2d_txx_
-
 //: \file
 //  \brief Class to build gaussian pyramids of mil_image_2d_of<T>
 //  \author Tim Cootes
@@ -9,12 +9,11 @@
 
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
+#include <vcl_cassert.h>
 
+#include <vnl/vnl_math.h> // for sqrt2
 #include <mil/mil_image_pyramid.h>
 #include <mil/mil_gauss_reduce_2d.h>
-#include <vcl_cassert.h>
-#include <vcl_cmath.h>
-#include <vnl/vnl_math.h> // for sqrt2
 
 //=======================================================================
 

@@ -1,10 +1,8 @@
+// This is mul/pdf1d/tests/test_exponential.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <pdf1d/pdf1d_exponential.h>
 #include <pdf1d/pdf1d_sampler.h>
+#include <testlib/testlib_test.h>
 
 void test_exponential()
 {

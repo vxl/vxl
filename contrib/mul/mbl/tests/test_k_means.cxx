@@ -1,19 +1,18 @@
+// This is mul/mbl/tests/test_k_means.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
 #include <vcl_cmath.h> // for vcl_sqrt()
+#include <vcl_cassert.h>
+#include <vcl_vector.h>
 
-#include <testlib/testlib_test.h>
 #include <mbl/mbl_mz_random.h>
 #include <mbl/mbl_k_means.h>
 #include <mbl/mbl_data_array_wrapper.h>
-#include <vcl_vector.h>
-#include <vnl/vnl_vector.h>
 #include <vbl/vbl_array_3d.h>
 #include <vbl/vbl_array_2d.h>
-#include <vnl/vnl_math.h>
 #include <vbl/vbl_bounding_box.h>
-#include <vcl_cassert.h>
+#include <vnl/vnl_math.h>
+#include <vnl/vnl_vector.h>
+#include <testlib/testlib_test.h>
 
 void test_k_means()
 {
@@ -63,7 +62,7 @@ void test_k_means()
 
   vcl_cout << "\n\n======Test spread of centres\n";
 
-  if(nDims == 2)
+  if (nDims == 2)
   {
     vbl_array_2d<unsigned> m(10, 10, 0u);
     for (i=0; i<nCentres; ++i)
@@ -154,7 +153,7 @@ void test_k_means()
 
   vcl_cout << "\n\n======Test spread of centres\n";
 
-  if(nDims == 2)
+  if (nDims == 2)
   {
     vbl_array_2d<unsigned> m(10, 10, 0u);
     for (i=0; i<centres.size(); ++i)

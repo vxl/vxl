@@ -1,10 +1,6 @@
-#include <vcl_fstream.h>
-
-
-
+// This is mul/mbl/tests/test_priority_bounded_queue.cxx
 #include <vcl_functional.h>
 #include <vcl_deque.h>
-
 #include <mbl/mbl_priority_bounded_queue.h>
 #include <testlib/testlib_test.h>
 
@@ -29,7 +25,6 @@ void test_priority_bounded_queue()
   TEST("After 2 pops, Priority queue top() is correct ", pq.top(), 6 );
   pq.pop();
   TEST("After 3 pops, Priority queue now empty ", pq.size(), 0);
-
 }
 
 TESTLIB_DEFINE_MAIN(test_priority_bounded_queue);

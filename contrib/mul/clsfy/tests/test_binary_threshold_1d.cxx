@@ -1,3 +1,5 @@
+// This is mul/clsfy/tests/test_binary_threshold_1d.cxx
+
 //:
 // \file
 // \brief Tests the clsfy_binary_threshold_1d class
@@ -5,8 +7,6 @@
 // Test construction, IO etc
 
 #include <vcl_iostream.h>
-#include <vcl_iomanip.h>
-#include <vcl_ios.h>
 #include <vcl_string.h>
 #include <vcl_cmath.h>
 #include <clsfy/clsfy_binary_threshold_1d.h>
@@ -24,7 +24,6 @@ void test_adaboost()
   vcl_cout << "*******************************************\n"
            << " Testing clsfy_binary_threshold_1d_builder\n"
            << "*******************************************\n";
-
 
   // Create +ve and -ve sets of data
   vpdfl_axis_gaussian pos_model;
@@ -63,7 +62,6 @@ void test_adaboost()
     neg_samples[i]=x(0);
   }
 
-
   //vcl_cout<<"pos_samples= "<<pos_samples<<vcl_endl;
   //vcl_cout<<"neg_samples= "<<neg_samples<<vcl_endl;
 
@@ -94,8 +92,7 @@ void test_adaboost()
   double error1= b_thresh_builder.build(*b_thresh_clsfr,
                                         neg_samples, neg_wts,
                                         pos_samples, pos_wts
-                                        );
-
+                                       );
 
   vcl_cout<<*b_thresh_clsfr<<vcl_endl;
   //b_thresh_clsfr->print_summary(vcl_cout);
@@ -146,7 +143,7 @@ void test_adaboost()
   double error2= b_thresh_builder.build(*b_thresh_clsfr2,
                                         pos_samples, pos_wts,
                                         neg_samples, neg_wts
-                                        );
+                                       );
 
   b_thresh_clsfr2->print_summary(vcl_cout);
 
@@ -176,11 +173,9 @@ void test_adaboost()
   TEST( "fpr<0.3", fpr<0.3, true );
 
 
-
   vcl_cout << "***********************************\n"
            << " Testing clsfy_binary_threshold_1d\n"
            << "***********************************\n";
-
 
   // Test various parameter settings
   vnl_vector<double> p(2);

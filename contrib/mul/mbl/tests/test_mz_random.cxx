@@ -1,10 +1,8 @@
+// This is mul/mbl/tests/test_mz_random.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
 #include <vcl_cmath.h> // for vcl_sqrt()
-
-#include <testlib/testlib_test.h>
 #include <mbl/mbl_mz_random.h>
+#include <testlib/testlib_test.h>
 
 void test_mz_random()
 {

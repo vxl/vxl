@@ -1,14 +1,10 @@
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
+// This is mul/mil3d/tests/test_gaussian_pyramid_builder_3d.cxx
 #include <testlib/testlib_test.h>
 #include <mil3d/mil3d_image_3d_of.h>
 #include <mil3d/mil3d_gaussian_pyramid_builder_3d.h>
 #include <mil/mil_image_pyramid.h>
-
 #include <vsl/vsl_binary_loader.h>
-#include <vcl_cmath.h>
+#include <vcl_iostream.h>
 
 void test_gaussian_pyramid_builder_3d_build(mil3d_gaussian_pyramid_builder_3d<float>& builder)
 {
@@ -22,7 +18,7 @@ void test_gaussian_pyramid_builder_3d_build(mil3d_gaussian_pyramid_builder_3d<fl
   for (int z=0;z<image0.nz();++z)
     for (int y=0;y<image0.ny();++y)
       for (int x=0;x<image0.nx();++x)
-        image0(x,y,z) = x+y*10+z*100;
+        image0(x,y,z) = x*0.1f+y+z*10;
 
   int default_n_levels = builder.maxLevels();
   builder.setMaxLevels(2);
@@ -42,10 +38,10 @@ void test_gaussian_pyramid_builder_3d_build(mil3d_gaussian_pyramid_builder_3d<fl
   TEST("Level 1 size x",image1.nx(),(nx+1)/2);
   TEST("Level 1 size y",image1.ny(),(ny+1)/2);
   TEST("Level 1 size z",image1.nz(),(nz+1)/2);
-  TEST("Pixel (0,0,0)",vcl_fabs(image0(0,0,0)-image1(0,0,0))<1e-6,true);
-  TEST("Pixel (1,1,1)",vcl_fabs(image0(2,2,2)-image1(1,1,1))<1e-6,true);
-  TEST("Pixel (2,3,3)",vcl_fabs(image1(2,3,3)-664)<1e-6,true);
-  TEST("Corner pixel",vcl_fabs(image0(nx2*2-2,ny2*2-2,nz2*2-2)-image1(nx2-1,ny2-1,nz2-1))<1e-6,true);
+  TEST_NEAR("Pixel (0,0,0)",image0(0,0,0),image1(0,0,0),1e-6);
+  TEST_NEAR("Pixel (1,1,1)",image0(2,2,2),image1(1,1,1),1e-6);
+  TEST_NEAR("Pixel (2,3,3)",image1(2,3,3),66.4f,1e-6);
+  TEST_NEAR("Corner pixel",image0(nx2*2-2,ny2*2-2,nz2*2-2),image1(nx2-1,ny2-1,nz2-1),1e-6);
 
   // restore maxLevels:
   builder.setMaxLevels(default_n_levels);
@@ -70,7 +66,7 @@ void test_gaussian_pyramid_builder_3d_build_xy(mil3d_gaussian_pyramid_builder_3d
   for (int z=0;z<image0.nz();++z)
     for (int y=0;y<image0.ny();++y)
       for (int x=0;x<image0.nx();++x)
-        image0(x,y,z) = x+y*10+z*100;
+        image0(x,y,z) = x*0.1f+y+z*10;
 
   mil3d_transform_3d w2i;
   w2i.set_zoom_only(1,1,0.5,0,0,0);
@@ -99,10 +95,10 @@ void test_gaussian_pyramid_builder_3d_build_xy(mil3d_gaussian_pyramid_builder_3d
   TEST("Level 1 size x",image1.nx(),nx2);
   TEST("Level 1 size y",image1.ny(),ny2);
   TEST("Level 1 size z",image1.nz(),nx2);
-  TEST("Pixel (0,0,0)",vcl_fabs(image0(0,0,0)-image1(0,0,0))<1e-6,true);
-  TEST("Pixel (1,1,1)",vcl_fabs(image0(2,2,2)-image1(1,1,2))<1e-6,true);
-  TEST("Pixel (2,3,3)",vcl_fabs(image1(2,3,3)-364)<1e-6,true);
-  TEST("Corner pixel",vcl_fabs(image0(nx2*2-2,ny2*2-2,nz2-1)-image1(nx2-1,ny2-1,nz2-1))<1e-6,true);
+  TEST_NEAR("Pixel (0,0,0)",image0(0,0,0),image1(0,0,0),1e-6);
+  TEST_NEAR("Pixel (1,1,1)",image0(2,2,2),image1(1,1,2),1e-6);
+  TEST_NEAR("Pixel (2,3,3)",image1(2,3,3),36.4f,1e-6);
+  TEST_NEAR("Corner pixel",image0(nx2*2-2,ny2*2-2,nz2-1),image1(nx2-1,ny2-1,nz2-1),1e-6);
 }
 
 // Check in-homogeneous smoothing option (ie only smooth in x,z but not y on some levels)
@@ -118,7 +114,7 @@ void test_gaussian_pyramid_builder_3d_build_xz(mil3d_gaussian_pyramid_builder_3d
   for (int z=0;z<image0.nz();++z)
     for (int y=0;y<image0.ny();++y)
       for (int x=0;x<image0.nx();++x)
-        image0(x,y,z) = x+y*10+z*100;
+        image0(x,y,z) = x*0.1f+y+z*10;
 
   mil3d_transform_3d w2i;
   w2i.set_zoom_only(1,0.5,1,0,0,0);
@@ -147,10 +143,10 @@ void test_gaussian_pyramid_builder_3d_build_xz(mil3d_gaussian_pyramid_builder_3d
   TEST("Level 1 size x",image1.nx(),nx2);
   TEST("Level 1 size y",image1.ny(),ny2);
   TEST("Level 1 size z",image1.nz(),nx2);
-  TEST("Pixel (0,0,0)",vcl_fabs(image0(0,0,0)-image1(0,0,0))<1e-6,true);
-  TEST("Pixel (1,1,1)",vcl_fabs(image0(2,2,2)-image1(1,2,1))<1e-6,true);
-  TEST("Pixel (2,3,3)",vcl_fabs(image1(2,3,3)-634)<1e-6,true);
-  TEST("Corner pixel",vcl_fabs(image0(nx2*2-2,ny2-1,nz2*2-2)-image1(nx2-1,ny2-1,nz2-1))<1e-6,true);
+  TEST_NEAR("Pixel (0,0,0)",image0(0,0,0),image1(0,0,0),1e-6);
+  TEST_NEAR("Pixel (1,1,1)",image0(2,2,2),image1(1,2,1),1e-6);
+  TEST_NEAR("Pixel (2,3,3)",image1(2,3,3),63.4f,1e-6);
+  TEST_NEAR("Corner pixel",image0(nx2*2-2,ny2-1,nz2*2-2),image1(nx2-1,ny2-1,nz2-1),1e-6);
 }
 
 // Check in-homogeneous smoothing option (ie only smooth in y,z but not x on some levels)
@@ -166,7 +162,7 @@ void test_gaussian_pyramid_builder_3d_build_yz(mil3d_gaussian_pyramid_builder_3d
   for (int z=0;z<image0.nz();++z)
     for (int y=0;y<image0.ny();++y)
       for (int x=0;x<image0.nx();++x)
-        image0(x,y,z) = x+y*10+z*100;
+        image0(x,y,z) = x*0.1f+y+z*10;
 
   mil3d_transform_3d w2i;
   w2i.set_zoom_only(0.5,1,1,0,0,0);
@@ -195,10 +191,10 @@ void test_gaussian_pyramid_builder_3d_build_yz(mil3d_gaussian_pyramid_builder_3d
   TEST("Level 1 size x",image1.nx(),nx2);
   TEST("Level 1 size y",image1.ny(),ny2);
   TEST("Level 1 size z",image1.nz(),nx2);
-  TEST("Pixel (0,0,0)",vcl_fabs(image0(0,0,0)-image1(0,0,0))<1e-6,true);
-  TEST("Pixel (1,1,1)",vcl_fabs(image0(2,2,2)-image1(2,1,1))<1e-6,true);
-  TEST("Pixel (2,3,3)",vcl_fabs(image1(2,3,3)-662)<1e-6,true);
-  TEST("Corner pixel",vcl_fabs(image0(nx2-1,ny2*2-2,nz2*2-2)-image1(nx2-1,ny2-1,nz2-1))<1e-6,true);
+  TEST_NEAR("Pixel (0,0,0)",image0(0,0,0),image1(0,0,0),1e-6);
+  TEST_NEAR("Pixel (1,1,1)",image0(2,2,2),image1(2,1,1),1e-6);
+  TEST_NEAR("Pixel (2,3,3)",image1(2,3,3),66.2f,1e-6);
+  TEST_NEAR("Corner pixel",image0(nx2-1,ny2*2-2,nz2*2-2),image1(nx2-1,ny2-1,nz2-1),1e-6);
 }
 
 void test_gaussian_pyramid_builder_3d()

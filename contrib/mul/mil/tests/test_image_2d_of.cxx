@@ -1,10 +1,8 @@
+// This is mul/mil/tests/test_image_2d_of.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <mil/mil_image_2d_of.h>
 #include <vil/vil_byte.h>
+#include <testlib/testlib_test.h>
 
 bool Equal(const mil_image_2d_of<vil_byte>& im0,
            const mil_image_2d_of<vil_byte>& im1)

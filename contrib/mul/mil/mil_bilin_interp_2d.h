@@ -1,3 +1,4 @@
+// This is mul/mil/mil_bilin_interp_2d.h
 #ifndef mil_bilin_interp_2d_h_
 #define mil_bilin_interp_2d_h_
 //: \file
@@ -5,7 +6,6 @@
 //  \author Tim Cootes
 
 #include <vcl_cassert.h>
-#include <vcl_cfloat.h>
 
 //: Compute bilinear interpolation at (x,y), no bound checks
 //  Image is nx * ny array of T. x,y element is data[ystep*y+x]

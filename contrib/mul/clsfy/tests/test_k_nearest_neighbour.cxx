@@ -1,3 +1,4 @@
+// This is mul/clsfy/tests/test_k_nearest_neighbour.cxx
 // Copyright: (C) 2000 British Telecommunications PLC
 
 //:
@@ -10,9 +11,7 @@
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
 #include <vcl_ios.h>
-#include <vcl_limits.h>
 #include <vcl_algorithm.h>
-#include <vcl_sstream.h>
 
 #include <vcl_string.h>
 #include <clsfy/clsfy_knn_builder.h>

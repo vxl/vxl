@@ -10,7 +10,6 @@
 #include "pdf1d_compare_to_pdf_bhat.h"
 
 #include <vcl_string.h>
-#include <vcl_cmath.h>
 #include <vcl_cstdlib.h> // vcl_abort()
 
 #include <pdf1d/pdf1d_gaussian.h>

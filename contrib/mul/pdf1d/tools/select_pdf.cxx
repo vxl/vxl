@@ -1,3 +1,5 @@
+// This is mul/pdf1d/tools/select_pdf.cxx
+
 //:
 // \file
 // \author Tim Cootes
@@ -8,7 +10,6 @@
 
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_cmath.h>
 #include <pdf1d/pdf1d_compare_to_pdf_ks.h>
 #include <pdf1d/pdf1d_compare_to_pdf_bhat.h>
 #include <pdf1d/pdf1d_calc_mean_var.h>
@@ -25,8 +26,8 @@
 
 //: Generate samples from pdf[0].  See how often pdf[0] is selected.
 double pdf1d_test_pdf_selection(vcl_vector<const pdf1d_pdf*>& pdf,
-                          int n_samples,
-                          pdf1d_compare_to_pdf& comparitor, int n_tests)
+                                int n_samples,
+                                pdf1d_compare_to_pdf& comparitor, int n_tests)
 {
   int n_correct = 0;
   pdf1d_sampler *sampler = pdf[0]->new_sampler();

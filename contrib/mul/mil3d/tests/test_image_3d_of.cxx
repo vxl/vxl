@@ -1,13 +1,11 @@
+// This is mul/mil3d/tests/test_image_3d_of.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <mil3d/mil3d_image_3d_of.h>
 #include <vil/vil_byte.h>
+#include <testlib/testlib_test.h>
 
 bool deepEquality(const mil3d_image_3d_of<vil_byte>& im0,
-           const mil3d_image_3d_of<vil_byte>& im1)
+                  const mil3d_image_3d_of<vil_byte>& im1)
 {
   bool ret=false;
 

@@ -1,3 +1,5 @@
+// This is mul/pdf1d/tools/plot_pdf_estimate.cxx
+
 //:
 // \file
 // \brief Plot kernel estimate to sampled data
@@ -7,7 +9,6 @@
 #include <vcl_iostream.h>
 #include <mbl/mbl_mz_random.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_cmath.h>
 #include <pdf1d/pdf1d_compare_to_pdf_ks.h>
 #include <pdf1d/pdf1d_compare_to_pdf_bhat.h>
 #include <pdf1d/pdf1d_calc_mean_var.h>
@@ -23,9 +24,9 @@ mbl_mz_random mz_random;
 
 //: Generate n samples from pdf, build a pdf and generate text file of resulting pdf
 void plot_estimate(const vcl_string& true_pdf_file, const vcl_string& new_pdf_file,
-                    const pdf1d_pdf& pdf,
-                    const pdf1d_builder& builder,
-                    int n_samples, double min_x, double max_x, int nx)
+                   const pdf1d_pdf& pdf,
+                   const pdf1d_builder& builder,
+                   int n_samples, double min_x, double max_x, int nx)
 {
   vnl_vector<double> d(n_samples),b;
 

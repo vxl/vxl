@@ -1,12 +1,10 @@
+// This is mul/mbl/tests/test_matrix_products.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
 #include <vcl_cmath.h> // for vcl_sqrt()
-
-#include <testlib/testlib_test.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <mbl/mbl_matrix_products.h>
+#include <testlib/testlib_test.h>
 
 void test_matrix_products()
 {

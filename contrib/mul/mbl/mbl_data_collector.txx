@@ -1,12 +1,11 @@
+// This is mul/mbl/mbl_data_collector.txx
 #ifndef mbl_data_collector_txx_
 #define mbl_data_collector_txx_
-
 //:
 //  \file
 
 #include "mbl_data_collector.h"
 
-#include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
 #include <vcl_algorithm.h>
 
@@ -49,9 +48,9 @@ unsigned long mbl_data_collector_copy_all(mbl_data_collector<T> &dest, mbl_data_
 //: Merge all the data from the two mbl_data_wrapper-s into one mbl_data_collector<T>
 template<class T>
 unsigned long mbl_data_collector_merge_all(mbl_data_collector<T> &dest,
-                             mbl_data_wrapper<T > &src0,
-                             mbl_data_wrapper<T > &src1,
-                             vcl_vector<unsigned> *order /*=0*/)
+                                           mbl_data_wrapper<T > &src0,
+                                           mbl_data_wrapper<T > &src1,
+                                           vcl_vector<unsigned> *order /*=0*/)
 {
   unsigned long n0 = src0.size();
   unsigned long n1 = src1.size();

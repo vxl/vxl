@@ -1,11 +1,7 @@
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-#include <vcl_cmath.h>
-//#include <vnl/vnl_test.h>
-
+// This is mul/mbl/tests/test_file_data_wrapper.cxx
 #include <mbl/mbl_file_data_collector.h>
 #include <vnl/vnl_vector.h>
+#include <vcl_iostream.h>
 
 void test_file_data_wrapper()
 {
@@ -26,11 +22,11 @@ void test_file_data_wrapper()
 
   // collect data using mbl_file_data_collector
   vcl_string path= "test_file_data_wrapper.bvl.tmp";
-  
+
   mbl_file_data_collector< vnl_vector<double> > collector(path);
   collector.record(v1);
   collector.record(v2);
-  
+
   // read in data using mbl_file_data_wrapper
   mbl_data_wrapper<vnl_vector<double> >& wrapper
           =collector.data_wrapper();
@@ -41,7 +37,7 @@ void test_file_data_wrapper()
 
   vcl_cout<<"first element= "<<wrapper.current()<<vcl_endl;
   TEST("First element",wrapper.current(),v1);
-  
+
   wrapper.next();
   vcl_cout<<"second element= "<<wrapper.current()<<vcl_endl;
   TEST("Second element",wrapper.current(),v2);
@@ -79,11 +75,7 @@ void test_file_data_wrapper()
   wrapper3.next();
   vcl_cout<<"current element= "<<wrapper.current()<<vcl_endl;
   TEST("testing wrapper3, should be set to first element",wrapper3.current(),v1);
-
-
-  
 }
-
 
 
 TESTMAIN(test_file_data_wrapper);

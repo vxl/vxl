@@ -9,7 +9,6 @@
 
 #include "pdf1d_gaussian.h"
 
-#include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
 #include <vcl_string.h>
 #include <vcl_cmath.h>

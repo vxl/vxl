@@ -1,12 +1,10 @@
+// This is mul/mbl/tests/test_data_wrapper_mixer.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
 #include <vcl_cmath.h>
-#include <testlib/testlib_test.h>
-
 #include <mbl/mbl_data_wrapper_mixer.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vnl/vnl_vector.h>
+#include <testlib/testlib_test.h>
 
 void test_data_wrapper_pair_mixer(unsigned n1, unsigned n2)
 {

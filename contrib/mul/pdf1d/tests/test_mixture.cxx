@@ -1,3 +1,4 @@
+// This is mul/pdf1d/tests/test_mixture.cxx
 //=======================================================================
 //
 //  Copyright: (C) 2000 Victoria University of Manchester
@@ -11,7 +12,6 @@
 
 #include <vcl_iostream.h>
 #include <vcl_string.h>
-#include <vcl_ctime.h>
 #include <vcl_cmath.h>
 #include <pdf1d/pdf1d_mixture.h>
 #include <pdf1d/pdf1d_mixture_builder.h>

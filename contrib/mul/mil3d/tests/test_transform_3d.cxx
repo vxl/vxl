@@ -1,12 +1,10 @@
+// This is mul/mil3d/tests/test_transform_3d.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vgl/vgl_distance.h>
 #include <mil3d/mil3d_transform_3d.h>
+#include <testlib/testlib_test.h>
 
 void test_product(const mil3d_transform_3d& t0, const mil3d_transform_3d& t1)
 {

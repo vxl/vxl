@@ -1,3 +1,4 @@
+// This is mul/vpdfl/tests/test_mixture.cxx
 //=======================================================================
 //
 //  Copyright: (C) 2000 Victoria University of Manchester
@@ -11,7 +12,6 @@
 
 #include <vcl_iostream.h>
 #include <vcl_string.h>
-#include <vcl_ctime.h>
 #include <vpdfl/vpdfl_mixture.h>
 #include <vpdfl/vpdfl_mixture_builder.h>
 #include <vpdfl/vpdfl_mixture_sampler.h>

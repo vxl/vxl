@@ -1,12 +1,11 @@
+// This is mul/mbl/mbl_data_collector_list.txx
 #ifndef mbl_data_collector_list_txx_
 #define mbl_data_collector_list_txx_
-
 //:
 //  \file
 
 #include "mbl_data_collector_list.h"
 
-#include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>

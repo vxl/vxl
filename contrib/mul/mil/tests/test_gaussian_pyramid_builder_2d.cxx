@@ -1,14 +1,11 @@
+// This is mul/mil/tests/test_gaussian_pyramid_builder_2d.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <mil/mil_image_2d_of.h>
 #include <mil/mil_gaussian_pyramid_builder_2d.h>
 #include <mil/mil_image_pyramid.h>
 #include <vil/vil_byte.h>
-
 #include <vsl/vsl_binary_loader.h>
+#include <testlib/testlib_test.h>
 
 void test_gaussian_pyramid_builder_2d_build(mil_gaussian_pyramid_builder_2d<vil_byte>& builder)
 {

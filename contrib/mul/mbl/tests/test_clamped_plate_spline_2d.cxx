@@ -1,11 +1,9 @@
+// This is mul/mbl/tests/test_clamped_plate_spline_2d.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-#include <vcl_cmath.h>
-#include <testlib/testlib_test.h>
 #include <mbl/mbl_clamped_plate_spline_2d.h>
 #include <mbl/mbl_mz_random.h>
 #include <vgl/vgl_distance.h>
+#include <testlib/testlib_test.h>
 
 void test_cps_at_fixed_points(int n_points)
 {

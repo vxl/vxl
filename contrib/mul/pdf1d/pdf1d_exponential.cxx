@@ -9,7 +9,6 @@
 
 #include "pdf1d_exponential.h"
 
-#include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
 #include <vcl_string.h>
 #include <vcl_cmath.h>
@@ -90,7 +89,7 @@ bool pdf1d_exponential::cdf_is_analytic() const
 
 
 double pdf1d_exponential::gradient(double x,
-                                double& p) const
+                                   double& p) const
 {
   if (x<0)
   {

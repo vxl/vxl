@@ -1,3 +1,4 @@
+// This is mul/clsfy/tests/test_rbf_svm_smo.cxx
 // Copyright: (C) 2001 British Telecommunications PLC
 
 //:
@@ -7,22 +8,21 @@
 // Test construction, IO etc.
 
 #include <vcl_vector.h>
-#include <vcl_limits.h>
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
+#include <vcl_ios.h>
 #include <vcl_string.h>
 #include <clsfy/clsfy_rbf_svm.h>
 #include <clsfy/clsfy_rbf_svm_smo_1_builder.h>
 #include <clsfy/clsfy_k_nearest_neighbour.h>
 #include <clsfy/clsfy_rbf_parzen.h>
-#include <vsl/vsl_binary_loader.h>
-#include <mbl/mbl_mz_random.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
+#include <vsl/vsl_binary_loader.h>
+#include <mbl/mbl_mz_random.h>
 #include <mbl/mbl_data_array_wrapper.h>
-#include <vcl_ios.h>
-#include <testlib/testlib_test.h>
 #include <vul/vul_timer.h>
+#include <testlib/testlib_test.h>
 
 //=======================================================================
 void test_rbf_svm()

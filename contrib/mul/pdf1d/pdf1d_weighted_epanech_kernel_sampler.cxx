@@ -1,3 +1,5 @@
+// This is mul/pdf1d/pdf1d_weighted_epanech_kernel_sampler.cxx
+#include "pdf1d_weighted_epanech_kernel_sampler.h"
 //:
 // \file
 // \brief Implements sampling for a weighted Epanechnikov kernel PDF
@@ -5,11 +7,7 @@
 
 //=======================================================================
 
-#include "pdf1d_weighted_epanech_kernel_sampler.h"
-
-#include <vcl_cstdlib.h>
 #include <vcl_string.h>
-#include <vcl_cmath.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>

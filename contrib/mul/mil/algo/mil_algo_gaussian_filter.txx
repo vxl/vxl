@@ -6,7 +6,6 @@
 //  \author Ian Scott
 
 #include "mil_algo_gaussian_filter.h"
-#include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
 #include <vsl/vsl_indent.h>

@@ -1,8 +1,6 @@
+// This is mul/mbl/tests/test_stats_1d.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
 #include <vcl_cmath.h>
-
 #include <mbl/mbl_stats_1d.h>
 
 void test_stats_1d()
@@ -28,7 +26,6 @@ void test_stats_1d()
 
   mbl_stats_1d stats2 = stats;
   TEST("Equality operator",stats==stats2,true);
-
 }
 
 TESTLIB_DEFINE_MAIN(test_stats_1d);

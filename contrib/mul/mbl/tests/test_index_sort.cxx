@@ -1,8 +1,6 @@
+// This is mul/mbl/tests/test_index_sort.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include "mbl/mbl_index_sort.h"
+#include <mbl/mbl_index_sort.h>
 #include <testlib/testlib_test.h>
 
 void test_index_sort()
