@@ -108,47 +108,47 @@ void vgel_kl::match_sequence(vcl_vector<vil_image> &image_list,vgel_multi_view_d
 
 void vgel_kl::match_sequence(vidl_movie_sptr movie,vgel_multi_view_data_vertex_sptr matches)
 {
-    vcl_vector<vil_image> image_list;
-    for (vidl_movie::frame_iterator pframe = movie->first();
-         pframe <= movie->last();
-         ++pframe)
-    {
-      vil_image im = vil_image(pframe->get_image());
-      image_list.push_back(im);
-    }
-    match_sequence(image_list,matches);
+  vcl_vector<vil_image> image_list;
+  for (vidl_movie::frame_iterator pframe = movie->first();
+       pframe <= movie->last();
+       ++pframe)
+  {
+    vil_image im = vil_image(pframe->get_image());
+    image_list.push_back(im);
+  }
+  match_sequence(image_list,matches);
 }
 
 vcl_vector<vtol_vertex_2d_sptr>* vgel_kl::extract_points(vil_image & image)
 {
-    int width=image.width();
-    int height=image.height();
-    vcl_cerr << "Beginning points extraction" << vcl_endl;
+  int width=image.width();
+  int height=image.height();
+  vcl_cerr << "Beginning points extraction" << vcl_endl;
 
-    KLT_PixelType* img1=convert_to_gs_image(image);
+  KLT_PixelType* img1=convert_to_gs_image(image);
 
-    // Now, run the extractor
-    int nFeatures = _params.numpoints;
+  // Now, run the extractor
+  int nFeatures = _params.numpoints;
 
-    vcl_cerr << "Setting up the context..." << vcl_endl;
-    // Set up the context
-    KLT_TrackingContext tc = KLTCreateTrackingContext();
+  vcl_cerr << "Setting up the context..." << vcl_endl;
+  // Set up the context
+  KLT_TrackingContext tc = KLTCreateTrackingContext();
 
-    // Set the default values
-    set_tracking_context (tc);
+  // Set the default values
+  set_tracking_context (tc);
 
-    // KLTPrintTrackingContext(tc);
+  // KLTPrintTrackingContext(tc);
 
-    // Set up structure to hold the features.
-    vcl_cerr << "Setting up structure to hold the features..." << vcl_endl;
-    KLT_FeatureList fl = KLTCreateFeatureList(nFeatures);
+  // Set up structure to hold the features.
+  vcl_cerr << "Setting up structure to hold the features..." << vcl_endl;
+  KLT_FeatureList fl = KLTCreateFeatureList(nFeatures);
 
-    // Extract the features
-    vcl_cerr << "Extracting the features..." << vcl_endl;
-    KLTSelectGoodFeatures(tc, img1, width, height, fl);
+  // Extract the features
+  vcl_cerr << "Extracting the features..." << vcl_endl;
+  KLTSelectGoodFeatures(tc, img1, width, height, fl);
 
   // Make an IUPointGroup to hold the values
-     vcl_vector<vtol_vertex_2d_sptr> *grp = new vcl_vector<vtol_vertex_2d_sptr>();
+  vcl_vector<vtol_vertex_2d_sptr> *grp = new vcl_vector<vtol_vertex_2d_sptr>();
 
   for (int i=0 ; i< fl->nFeatures ; i++)
   {
@@ -171,51 +171,51 @@ vcl_vector<vtol_vertex_2d_sptr>* vgel_kl::extract_points(vil_image & image)
 //Convert a vil_image to an array of grey scale
 KLT_PixelType* vgel_kl::convert_to_gs_image(vil_image &image)
 {
-    if (vil_pixel_format(image)==VIL_RGB_BYTE)
-    {
-      vcl_cerr << "Converting image to grey scale..." << vcl_endl;
+  if (vil_pixel_format(image)==VIL_RGB_BYTE)
+  {
+    vcl_cerr << "Converting image to grey scale..." << vcl_endl;
 
-        int w=image.width();
-        int h=image.height();
-        KLT_PixelType* tab_mono=new KLT_PixelType[w*h];
-        vcl_cerr << "width: " <<w<< "  height: "<<h<<  vcl_endl;
+    int w=image.width();
+    int h=image.height();
+    KLT_PixelType* tab_mono=new KLT_PixelType[w*h];
+    vcl_cerr << "width: " <<w<< "  height: "<<h<<  vcl_endl;
 
-        vil_memory_image_of<vil_byte> ima_mono;
-        ima_mono.resize(w,h);
+    vil_memory_image_of<vil_byte> ima_mono;
+    ima_mono.resize(w,h);
 
-        vil_image_as_byte(image).get_section(ima_mono.get_buffer(), 0, 0, w, h);
-        vil_byte* p=ima_mono.get_buffer();
+    vil_image_as_byte(image).get_section(ima_mono.get_buffer(), 0, 0, w, h);
+    vil_byte* p=ima_mono.get_buffer();
 
-        for(int i=0;i<w;i++)
-            for(int j=0;j<h;j++)
-	      {
-                tab_mono[i*h+j]=(KLT_PixelType)p[i*h+j];
-	      }
-        return tab_mono;
-    } 
-    else if (vil_pixel_format(image)==VIL_BYTE)
+    for(int i=0;i<w;i++)
+      for(int j=0;j<h;j++)
       {
-        int w=image.width();
-        int h=image.height();
-        KLT_PixelType* tab_mono=new KLT_PixelType[w*h];
-        vcl_cerr << "width: " <<w<< "  height: "<<h<<  vcl_endl;
-
-        vil_memory_image_of<vil_byte> ima_mono;
-        ima_mono.resize(w,h);
-
-        vil_image_as_byte(image).get_section(ima_mono.get_buffer(), 0, 0, w, h);
-        vil_byte* p=ima_mono.get_buffer();
-
-        for(int i=0;i<w;i++)
-            for(int j=0;j<h;j++)
-	      {
-                tab_mono[i*h+j]=(KLT_PixelType)p[i*h+j];
-	      }
-        return tab_mono;
+        tab_mono[i*h+j]=(KLT_PixelType)p[i*h+j];
       }
+    return tab_mono;
+  }
+  else if (vil_pixel_format(image)==VIL_BYTE)
+  {
+    int w=image.width();
+    int h=image.height();
+    KLT_PixelType* tab_mono=new KLT_PixelType[w*h];
+    vcl_cerr << "width: " <<w<< "  height: "<<h<<  vcl_endl;
+
+    vil_memory_image_of<vil_byte> ima_mono;
+    ima_mono.resize(w,h);
+
+    vil_image_as_byte(image).get_section(ima_mono.get_buffer(), 0, 0, w, h);
+    vil_byte* p=ima_mono.get_buffer();
+
+    for(int i=0;i<w;i++)
+      for(int j=0;j<h;j++)
+      {
+        tab_mono[i*h+j]=(KLT_PixelType)p[i*h+j];
+      }
+    return tab_mono;
+  }
 
 
-    return NULL;
+  return NULL;
 }
 
 void vgel_kl::set_tracking_context( KLT_TrackingContext tc)
