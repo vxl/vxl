@@ -645,6 +645,12 @@ SOURCE=.\vnl_numeric_limits.cxx
 SOURCE=.\vnl_numeric_traits.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vnl_rank+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_rank+int-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vnl_rational.cxx
 # End Source File
 # Begin Source File
@@ -1078,6 +1084,12 @@ SOURCE=.\vnl_cross.h
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_inverse.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_rank.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_rank.txx
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
