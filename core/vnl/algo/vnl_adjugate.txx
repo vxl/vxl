@@ -1,8 +1,9 @@
 #ifndef vnl_adjugate_txx_
 #define vnl_adjugate_txx_
-/*
-  fsm
-*/
+//:
+// \file
+// \author fsm
+
 #include "vnl_adjugate.h"
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_determinant.h>
@@ -13,6 +14,9 @@
 //
 // E.g. using a singular value decomposition A = U D V^* gives
 // adj(A) = V adj(D) U^*.
+//
+// On the other hand, SVD decomposition makes no sense for e.g. integer matrices
+// and we want to keep T as general as possible.
 
 template <class T>
 void vnl_adjugate(vnl_matrix<T> const &A, vnl_matrix<T> *out)
@@ -22,14 +26,14 @@ void vnl_adjugate(vnl_matrix<T> const &A, vnl_matrix<T> *out)
   out->assert_size(n, n);
 
   vnl_matrix<T> sub(n-1, n-1);
-  for (int i=0; i<n; ++i) {
-    for (int j=0; j<n; ++j) {
-      for (int u=1; u<n; ++u)
-        for (int v=1; v<n; ++v)
-          sub[u-1][v-1] = A[(i+u)%n][(j+v)%n];
-      (*out)[j][i] = vnl_determinant(sub);
+  for (int i=0; i<n; ++i)
+    for (int j=0; j<n; ++j)
+    {
+      for (int u=0; u<n-1; ++u)
+        for (int v=0; v<n-1; ++v)
+          sub[u][v] = A[v+(v<i?0:1)][u+(u<j?0:1)];
+      (*out)[i][j] = vnl_determinant(sub);
     }
-  }
 }
 
 template <class T>
