@@ -7,7 +7,7 @@
 # Set up vcl_where_root_dir.h to have a macro set to $VCL_SOURCE_ROOT_DIR
 CONFIGURE_FILE(
       ${allvxl_SOURCE_DIR}/vcl/vcl_where_root_dir.h.in
-      ${allvxl_SOURCE_DIR}/vcl/vcl_where_root_dir.h ESCAPE_QUOTES)
+      ${allvxl_BINARY_DIR}/vcl/vcl_where_root_dir.h ESCAPE_QUOTES)
 ADD_DEFINITIONS(-DWHERE_ROOT_DIR_H_EXISTS)
 
 SOURCE_FILES( vcl_sources
