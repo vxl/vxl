@@ -36,7 +36,7 @@ bmrf_network_builder::bmrf_network_builder(bmrf_network_builder_params& tp)
   //alpha scales
   alpha_min_ = vcl_atan2((double)(elv_min_-ev_), (double)du_);
   double alpha_max = vcl_atan2((double)(elv_max_-ev_), (double)du_);
-  double temp = alpha_max-alpha_min_;
+  // double temp = alpha_max-alpha_min_;
   alpha_inv_ = 1.0; // 1.0/temp; <- TEMPORARY CHANGE
 
   //maximum s (distance from epipole).
@@ -100,7 +100,6 @@ void bmrf_network_builder::set_image(vil_image_view<float> const& image)
 
 void bmrf_network_builder::set_edges(int frame,
                                      vcl_vector<vtol_edge_2d_sptr> const& edges)
-
 {
   edges_.clear();
   frame_ = frame;
@@ -304,8 +303,8 @@ bool bmrf_network_builder::compute_segments()
     if (!dc)
       continue;
     //:see if the curve is inside the epipolar wedge
-   if (this->inside_epipolar_wedge(dc))
-     dcs.push_back(dc);
+    if (this->inside_epipolar_wedge(dc))
+      dcs.push_back(dc);
   }
   for (vcl_vector<vdgl_digital_curve_sptr>::iterator cit = dcs.begin();
        cit != dcs.end(); cit++)
@@ -599,7 +598,7 @@ double bmrf_network_builder::ds(const double s)
 double bmrf_network_builder::scan_interval(const double a, const double sl,
                                            const double s)
 {
-   if (!image_)
+  if (!image_)
     return 0;
   int n_samples = 0;
   double sum = 0;
