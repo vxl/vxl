@@ -67,8 +67,8 @@ VNL_COPY_INSTANTIATE(S, T); \
 VNL_COPY_INSTANTIATE(T, S)
 
 VNL_COPY_INSTANTIATE_twoway(float, double);
+VNL_COPY_INSTANTIATE_twoway(vcl_complex<float>, vcl_complex<double>);
 #ifndef __hppa // assembler bug on HP?
 VNL_COPY_INSTANTIATE_twoway(double, long double);
-#endif
-VNL_COPY_INSTANTIATE_twoway(vcl_complex<float>, vcl_complex<double>);
 VNL_COPY_INSTANTIATE_twoway(vcl_complex<double>, vcl_complex<long double>);
+#endif
