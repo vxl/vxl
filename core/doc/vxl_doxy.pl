@@ -46,6 +46,7 @@ while (<>)
     s/\bVCL_SUNPRO_ALLOCATOR_HACK\s*\(([^()]*)\)/$1/g;
     s/\bVCL_CAN_STATIC_CONST_INIT_(INT|FLOAT)\b/1/g;
     s/\bVCL_STATIC_CONST_INIT_(INT|FLOAT)\s*\(([^()]*)\)/= $2/g;
+    s/\bVCL_DFL_TYPE_PARAM_STLDECL\s*\(([^,()]*),([^,()]*)\)/class $1 = $2 /g;
 
     if ( $should_end_verbatim )
     {
@@ -91,14 +92,16 @@ while (<>)
         s!$slashslashpatt!$spacespacepatt!;
 #       # Make 'Modifications' a section title:
 #       s!\b(Modifications?)\b\:?!\<H2\>$1\<\/H2\>!;
-        print; next;
+        # remove lines of the form ========= or +-+-+-+-+ or ********* or longer:
+        print unless m/^\s*[*=+-]{9,}\s*$/; next;
     }
 
     # found continuation of comment WITHOUT verbatim -> start line with "*"
     if ( m!$slashslashpatt! && $comment )
     {
         s!$slashslashpatt!$starpatt!;
-        print; next;
+        # remove lines of the form ========= or +-+-+-+-+ or ********* or longer:
+        print unless m/^\s*[*=+-]{9,}\s*$/; next;
     }
 
     # found end of comment -> start line with */
