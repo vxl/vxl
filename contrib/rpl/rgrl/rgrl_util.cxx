@@ -592,7 +592,7 @@ rgrl_util_irls( rgrl_match_set_sptr              match_set,
   weighters.push_back(weighter);
 
   return rgrl_util_irls(match_sets, scales, weighters,
-                        conv_tester, estimator, estimate, error, debug_flag);
+                        conv_tester, estimator, estimate, debug_flag);
 }
 
 bool
@@ -602,7 +602,6 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
                 rgrl_convergence_tester          const& conv_tester,
                 rgrl_estimator_sptr              estimator,
                 rgrl_transformation_sptr&        estimate,
-                double&                          total_error,
                 unsigned int                     debug_flag )
 {
   DebugFuncMacro( debug_flag, 1, " In irls for model "<<estimator->transformation_type().name()<<'\n' );
@@ -680,29 +679,6 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
                      ( current_status->has_converged() ?
                        "converged\n" : current_status->has_stagnated() ?
                                        "stagnated\n" : "reaches max iteration\n" ) );
-
-  // Compute the total alignment error as the sum of the weighted
-  // residual squares
-  //
-  total_error = 0;
-  for ( unsigned ms=0; ms < match_sets.size(); ++ms ) {
-    rgrl_match_set_sptr match_set = match_sets[ms];
-    //  for each from image feature being matched
-    for ( from_iter fitr = match_set->from_begin(); fitr != match_set->from_end(); ++fitr ){
-      if ( fitr.size() == 0 )  continue;
-
-      rgrl_feature_sptr mapped_from = fitr.from_feature()->transform( *estimate );
-      for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
-        //  for each match with a "to" image feature
-        rgrl_feature_sptr to_feature = titr.to_feature();
-        double geometric_err = to_feature->geometric_error( *mapped_from );
-
-        total_error += vnl_math_sqr(geometric_err) * titr.geometric_weight();
-      }
-    }
-  }
-
-  DebugFuncMacro_abv( debug_flag, 1, " Total alignment error = " << total_error << vcl_endl );
 
   return !failed;
 }

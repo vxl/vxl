@@ -64,7 +64,6 @@ rgrl_util_irls( rgrl_match_set_sptr              match_set,
                 rgrl_convergence_tester   const& conv_tester,
                 rgrl_estimator_sptr              estimator,
                 rgrl_transformation_sptr       & estimate,
-                double                         & error,
                 unsigned int                     debug_flag = 0);
 
 //: A simplified version of irls w/o scale re-estimation.
@@ -76,7 +75,6 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
                 rgrl_convergence_tester          const& conv_tester,
                 rgrl_estimator_sptr              estimator,
                 rgrl_transformation_sptr&        estimate,
-                double&                          total_error,
                 unsigned int                     debug_flag = 0);
 
 //: skip empty lines in input stream

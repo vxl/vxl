@@ -178,9 +178,10 @@ aux_sum_rho_values( rgrl_scale const&  scale,
         // signature weight
         //
         double signature_wgt = 1.0;
-        if ( signature_precomputed_ ) {
-          signature_wgt = titr . signature_weight( );
-        }
+        //GY: don't know how to handle this in a correct way
+        //if ( signature_precomputed_ ) {
+        //  signature_wgt = titr . signature_weight( );
+        //}
 
         // sum of rho is weighted by signature
         sum_rho += signature_wgt * m_est_->rho(geometric_err, scale.geometric_scale());

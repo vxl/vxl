@@ -391,10 +391,9 @@ register_single_feature( rgrl_mask_box            image_region,
       // weights are updated (hence reweighted-least-squares)
       // throughout the estimation.
       //
-      double alignment_error;
       if ( !rgrl_util_irls( match_set, scale, weighter,
                             *conv_tester_, xform_estimator,
-                            current_xform_estimate_, alignment_error,
+                            current_xform_estimate_,
                             this->debug_flag() ) ) {
         failed = true;
         continue; //no valid xform, so exit the loop
@@ -671,10 +670,9 @@ register_multi_feature( rgrl_mask_box            image_region,
       // The match sets and the scales are fixed, but the associated
       // weights are updated (hence reweighted-least-squares)
       // throughout the estimation.
-      double alignment_error;
       if ( !rgrl_util_irls( current_match_sets_, scales, weighters,
                             *conv_tester_, xform_estimator,
-                            current_xform_estimate_, alignment_error,
+                            current_xform_estimate_,
                             this->debug_flag() ) ) {
         failed = true;
         continue; //no valid xform, so exit the loop
