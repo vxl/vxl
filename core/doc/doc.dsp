@@ -75,6 +75,10 @@ SOURCE=.\book\book.texi
 # End Source File
 # Begin Source File
 
+SOURCE=.\book\chapter_vsl.texi
+# End Source File
+# Begin Source File
+
 SOURCE=.\homepage\index.html
 # End Source File
 # Begin Source File
