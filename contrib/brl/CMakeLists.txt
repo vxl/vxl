@@ -8,10 +8,10 @@ INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 
 # basic services package
-#SUBDIRS(bbas)
+SUBDIRS(bbas)
 
 # segmentation package
-#SUBDIRS(bseg)
+SUBDIRS(bseg)
 
 # video view library
 SUBDIRS(vvid)
