@@ -32,9 +32,9 @@ void vsl_b_read(vsl_b_istream &is, vgl_conic<T> & conic)
 
   short v;
   vsl_b_read(is, v);
-  switch(v)
+  switch (v)
   {
-  case 1: // I/O version 1
+   case 1: // I/O version 1
     T a, b, c, d, e, f;
     vsl_b_read(is, a);
     vsl_b_read(is, b);
@@ -45,7 +45,7 @@ void vsl_b_read(vsl_b_istream &is, vgl_conic<T> & conic)
     conic.set(a,b,c,d,e,f);
     break;
 
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_conic<T>&)\n"
              << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream

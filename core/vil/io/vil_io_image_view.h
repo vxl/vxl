@@ -46,16 +46,17 @@ inline void vsl_b_read(vsl_b_istream &is, vil_image_view<T>& image)
 
   short w;
   vsl_b_read(is, w);
-  switch(w)
+  switch (w)
   {
-  case 1:
+   case 1:
     vsl_b_read(is, ni);
     vsl_b_read(is, nj);
     vsl_b_read(is, np);
     vsl_b_read(is, istep);
     vsl_b_read(is, jstep);
     vsl_b_read(is, pstep);
-    if (ni*nj*np==0) image.set_size(0,0,0);
+    if (ni*nj*np==0)
+      image.set_size(0,0,0);
     else
     {
       vsl_b_read(is, chunk);
@@ -66,7 +67,7 @@ inline void vsl_b_read(vsl_b_istream &is, vil_image_view<T>& image)
     }
     break;
 
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_image_view<T>&)\n"
              << "           Unknown version number "<< w << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream

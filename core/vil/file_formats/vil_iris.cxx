@@ -159,7 +159,7 @@ bool vil_iris_generic_image::read_header()
   pixmax_    = get_long(is_);
   format_ = bytes_per_component==1 ? VIL_PIXEL_FORMAT_BYTE :
             bytes_per_component==2 ? VIL_PIXEL_FORMAT_UINT_16 :
-                                     VIL_PIXEL_FORMAT_UNKNOWN ;
+                                     VIL_PIXEL_FORMAT_UNKNOWN;
 
   // DUMMY1 starts at 20
   // image name starts at 24
@@ -452,7 +452,7 @@ vxl_sint_16 get_short(vil_stream* file, int location)
   // Decode from two's complement to machine format
   vxl_uint_16 bits = ( buff[0] << 8 ) + buff[1];
 
-  if( ( bits & 0x8000 ) != 0 )
+  if ( ( bits & 0x8000 ) != 0 )
     return -vxl_sint_16( ~bits + 1 );
   else
     return vxl_sint_16( bits );
@@ -490,7 +490,7 @@ vxl_sint_32 get_long(vil_stream* file, int location)
                      ( vxl_uint_32(buff[2]) <<  8 ) |
                                    buff[3];
 
-  if( ( bits & 0x80000000L ) != 0 )
+  if ( ( bits & 0x80000000L ) != 0 )
     return -vxl_sint_32( ~bits + 1 );
   else
     return vxl_sint_32( bits );
@@ -505,7 +505,7 @@ void send_char(vil_stream* data, char s)
 void send_short(vil_stream* data, vxl_sint_16 s)
 {
   vxl_uint_16 bits;
-  if( s < 0 ) {
+  if ( s < 0 ) {
     bits = -s;
     bits = ~bits + 1;
   } else {
@@ -531,7 +531,7 @@ void send_long(vil_stream* data, vxl_sint_32 s)
   // The write out the value as a two's complement number in MSB order
 
   vxl_uint_32 bits;
-  if( s < 0 ) {
+  if ( s < 0 ) {
     bits = -s;
     bits = ~bits + 1;
   } else {

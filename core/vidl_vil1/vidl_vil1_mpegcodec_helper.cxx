@@ -11,8 +11,8 @@
 #endif
 
 vidl_vil1_mpegcodec_helper::vidl_vil1_mpegcodec_helper(vo_open_t * vopen,
-                                             vcl_string filename,
-                                             frame_buffer * buffers) :
+                                                       vcl_string filename,
+                                                       frame_buffer * buffers) :
   filename_(filename),output_open_(vopen)
 {
   demux_track_ = 0;
@@ -36,7 +36,7 @@ vidl_vil1_mpegcodec_helper::~vidl_vil1_mpegcodec_helper()
 {
   vcl_cout << "vidl_vil1_mpegcodec_helper::~vidl_vil1_mpegcodec_helper. entering.\n";
   vo_close (output_);
-  if (in_file_) 
+  if (in_file_)
   {
     in_file_->close();
     delete in_file_;
@@ -199,15 +199,16 @@ vidl_vil1_mpegcodec_helper::demux (uint8_t * buf, uint8_t * endb, int flags)
 
   if (flags & DEMUX_PAYLOAD_START)
     goto payload_start;
-  switch (state) {
-  case DEMUX_HEADER:
+  switch (state)
+  {
+   case DEMUX_HEADER:
     if (state_bytes > 0) {
       header = head_buf;
       bytes = state_bytes;
       goto continue_header;
     }
     break;
-  case DEMUX_DATA:
+   case DEMUX_DATA:
     if (demux_pid_ || (state_bytes > endb - buf)) {
       decode_mpeg2 (buf, endb);
       state_bytes -= endb - buf;
@@ -216,7 +217,7 @@ vidl_vil1_mpegcodec_helper::demux (uint8_t * buf, uint8_t * endb, int flags)
     decode_mpeg2 (buf, buf + state_bytes);
     buf += state_bytes;
     break;
-  case DEMUX_SKIP:
+   case DEMUX_SKIP:
     if (demux_pid_ || (state_bytes > endb - buf)) {
       state_bytes -= endb - buf;
       return 0;
@@ -225,17 +226,19 @@ vidl_vil1_mpegcodec_helper::demux (uint8_t * buf, uint8_t * endb, int flags)
     break;
   }
 
-  while (1) {
+  while (1)
+  {
     if (demux_pid_) {
       state = DEMUX_SKIP;
       return 0;
     }
-  payload_start:
+   payload_start:
     header = buf;
     bytes = endb - buf;
-  continue_header:
-    NEEDBYTES (4);
-    if (header[0] || header[1] || (header[2] != 1)) {
+   continue_header:
+    NEEDBYTES(4);
+    if (header[0] || header[1] || (header[2] != 1))
+    {
       if (demux_pid_) {
         state = DEMUX_SKIP;
         return 0;
@@ -256,33 +259,36 @@ vidl_vil1_mpegcodec_helper::demux (uint8_t * buf, uint8_t * endb, int flags)
       vcl_cerr << "bad stream id : " << header[3] << '\n';
       vcl_exit(1);
     }
-    switch (header[3]) {
-    case 0xb9: // program end code
+    switch (header[3])
+    {
+     case 0xb9: // program end code
       return 1;
-    case 0xba: // pack header
-      NEEDBYTES (12);
+     case 0xba: // pack header
+      NEEDBYTES(12);
       if ((header[4] & 0xc0) == 0x40) { // mpeg2
-        NEEDBYTES (14);
+        NEEDBYTES(14);
         len = 14 + (header[13] & 7);
-        NEEDBYTES (len);
-        DONEBYTES (len);
+        NEEDBYTES(len);
+        DONEBYTES(len);
         // header points to the mpeg2 pack header
       } else if ((header[4] & 0xf0) == 0x20) { // mpeg1
-        DONEBYTES (12);
+        DONEBYTES(12);
         // header points to the mpeg1 pack header
       } else {
         vcl_cerr << "weird pack header\n";
         vcl_exit(1);
       }
       break;
-    default:
-      if (header[3] == demux_track_) {
-      pes:
-        NEEDBYTES (7);
-        if ((header[6] & 0xc0) == 0x80) { // mpeg2
-          NEEDBYTES (9);
+     default:
+      if (header[3] == demux_track_)
+      {
+       pes:
+        NEEDBYTES(7);
+        if ((header[6] & 0xc0) == 0x80) // mpeg2
+        {
+          NEEDBYTES(9);
           len = 9 + header[8];
-          NEEDBYTES (len);
+          NEEDBYTES(len);
           // header points to the mpeg2 pes header
           if (header[7] & 0x80) {
             uint32_t pts;
@@ -292,14 +298,16 @@ vidl_vil1_mpegcodec_helper::demux (uint8_t * buf, uint8_t * endb, int flags)
                  (buf[12] << 7) | (buf[13] >> 1));
             mpeg2_pts (mpeg2dec_, pts);
           }
-        } else { // mpeg1
+        }
+        else // mpeg1
+        {
           int len_skip;
           uint8_t * ptsbuf;
 
           len = 7;
           while (header[len - 1] == 0xff) {
             len++;
-            NEEDBYTES (len);
+            NEEDBYTES(len);
             if (len == 23) {
               vcl_cerr << "too much stuffing.\n";
               break;
@@ -307,11 +315,11 @@ vidl_vil1_mpegcodec_helper::demux (uint8_t * buf, uint8_t * endb, int flags)
           }
           if ((header[len - 1] & 0xc0) == 0x40) {
             len += 2;
-            NEEDBYTES (len);
+            NEEDBYTES(len);
           }
           len_skip = len;
           len += mpeg1_skip_table[header[len - 1] >> 4];
-          NEEDBYTES (len);
+          NEEDBYTES(len);
           // header points to the mpeg1 pes header
           ptsbuf = header + len_skip;
           if (ptsbuf[-1] & 0x20) {
@@ -323,7 +331,7 @@ vidl_vil1_mpegcodec_helper::demux (uint8_t * buf, uint8_t * endb, int flags)
             mpeg2_pts (mpeg2dec_, pts);
           }
         }
-        DONEBYTES (len);
+        DONEBYTES(len);
         bytes = 6 + (header[4] << 8) + header[5] - len;
         if (demux_pid_ || (bytes > endb - buf)) {
           decode_mpeg2 (buf, endb);
@@ -338,8 +346,8 @@ vidl_vil1_mpegcodec_helper::demux (uint8_t * buf, uint8_t * endb, int flags)
         vcl_cerr << "looks like a video stream, not system stream\n";
         vcl_exit(1);
       } else {
-        NEEDBYTES (6);
-        DONEBYTES (6);
+        NEEDBYTES(6);
+        DONEBYTES(6);
         bytes = (header[4] << 8) + header[5];
         if (bytes > endb - buf) {
           state = DEMUX_SKIP;

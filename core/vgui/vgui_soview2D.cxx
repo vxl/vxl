@@ -36,7 +36,7 @@ vcl_ostream& vgui_soview2D_point::print(vcl_ostream& s) const
 
 void vgui_soview2D_point::draw() const
 {
-  //style->apply_point_size();   
+  //style->apply_point_size();
   glBegin(GL_POINTS);
     glVertex2f(x,y);
   glEnd();

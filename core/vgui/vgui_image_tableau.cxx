@@ -153,13 +153,13 @@ get_image_resource() const
 
 //-----------------------------------------------------------------------------
 
-void 
+void
 vgui_image_tableau::
 set_image_view( char const* f )
 {
   name_ = f;
   vil_image_view_base_sptr img = vil_load( f );
-  if( img )
+  if ( img )
     set_image_view( *img );
 }
 
@@ -169,7 +169,7 @@ void
 vgui_image_tableau::
 set_image_view( vil_image_view_base const& I )
 {
-  if( !vil_renderer_ )
+  if ( !vil_renderer_ )
     vil_renderer_ = new vgui_vil_image_renderer;
 
   // use the name of the image as the name of the tableau :
@@ -182,7 +182,7 @@ void
 vgui_image_tableau::
 set_image_resource( vil_image_resource_sptr const& I )
 {
-  if( !vil_renderer_ )
+  if ( !vil_renderer_ )
     vil_renderer_ = new vgui_vil_image_renderer;
 
   // use the name of the image as the name of the tableau :
@@ -195,7 +195,7 @@ void
 vgui_image_tableau::
 set_image( vil1_image const& I )
 {
-  if( !renderer_ )
+  if ( !renderer_ )
     renderer_ = new vgui_image_renderer;
 
   // use the name of the image as the name of the tableau :
@@ -210,7 +210,7 @@ set_image(char const *f)
 {
   name_ = f;
   vil1_image img = vil1_load( f );
-  if( img )
+  if ( img )
     set_image( img );
 }
 
@@ -220,8 +220,8 @@ void
 vgui_image_tableau::
 reread_image()
 {
-  if( renderer_ )      renderer_->reread_image();
-  if( vil_renderer_ )  vil_renderer_->reread_image();
+  if ( renderer_ )      renderer_->reread_image();
+  if ( vil_renderer_ )  vil_renderer_->reread_image();
 }
 
 //-----------------------------------------------------------------------------
@@ -230,13 +230,12 @@ unsigned
 vgui_image_tableau::
 width() const
 {
-  if( renderer_ ) {
+  if ( renderer_ )
     return renderer_->get_image().width();
-  } else if( vil_renderer_ ) {
+  else if ( vil_renderer_ )
     return vil_renderer_->get_image_resource()->ni();
-  } else {
+  else
     return 0;
-  }
 }
 
 //-----------------------------------------------------------------------------
@@ -245,13 +244,12 @@ unsigned
 vgui_image_tableau::
 height() const
 {
-  if( renderer_ ) {
+  if ( renderer_ )
     return renderer_->get_image().height();
-  } else if( vil_renderer_ ) {
+  else if ( vil_renderer_ )
     return vil_renderer_->get_image_resource()->nj();
-  } else {
+  else
     return 0;
-  }
 }
 
 //-----------------------------------------------------------------------------
@@ -287,8 +285,8 @@ handle(vgui_event const &e)
     if (pixels_centered_)
       glTranslated(-0.5, -0.5, 0);
 
-    if( renderer_ )     renderer_->render();
-    if( vil_renderer_ ) vil_renderer_->render();
+    if ( renderer_ )     renderer_->render();
+    if ( vil_renderer_ ) vil_renderer_->render();
 
     if (pixels_centered_)
       glTranslated(+0.5, +0.5, 0);

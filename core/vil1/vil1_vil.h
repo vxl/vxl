@@ -78,7 +78,7 @@ class vil1_vil_image_resource: public vil_image_resource
     if (!src_)
       return VIL_PIXEL_FORMAT_UNKNOWN;
 
-    switch(src_.component_format())
+    switch (src_.component_format())
     {
      case VIL1_COMPONENT_FORMAT_UNKNOWN:
      case VIL1_COMPONENT_FORMAT_COMPLEX:

@@ -98,112 +98,112 @@ void vsl_b_read(vsl_b_istream &is, vil_memory_chunk& chunk)
   int format;
   vil_pixel_format pixel_format;
   unsigned n;
-  switch(w)
+  switch (w)
   {
-  case 1:
+   case 1:
     vsl_b_read(is, format); pixel_format=vil_pixel_format(format);
     vsl_b_read(is, n);
     switch (pixel_format)
     {
 #if VXL_HAS_INT_64
-      case VIL_PIXEL_FORMAT_UINT_64:
-        read_case_macro_v1(vxl_uint_64);
-        break;
-      case VIL_PIXEL_FORMAT_INT_64:
-        read_case_macro_v1(vxl_int_64);
-        break;
+     case VIL_PIXEL_FORMAT_UINT_64:
+      read_case_macro_v1(vxl_uint_64);
+      break;
+     case VIL_PIXEL_FORMAT_INT_64:
+      read_case_macro_v1(vxl_int_64);
+      break;
 #endif
-      case VIL_PIXEL_FORMAT_UINT_32:
-        read_case_macro_v1(vxl_uint_32);
-        break;
-      case VIL_PIXEL_FORMAT_INT_32:
-        read_case_macro_v1(vxl_int_32);
-        break;
-      case VIL_PIXEL_FORMAT_UINT_16:
-        read_case_macro_v1(vxl_uint_16);
-        break;
-      case VIL_PIXEL_FORMAT_INT_16:
-        read_case_macro_v1(vxl_int_16);
-        break;
-      case VIL_PIXEL_FORMAT_BYTE:
-        read_case_macro_v1(vxl_byte);
-        break;
-      case VIL_PIXEL_FORMAT_SBYTE:
-        read_case_macro_v1(vxl_sbyte);
-        break;
-      case VIL_PIXEL_FORMAT_FLOAT:
-        read_case_macro_v1(float);
-        break;
-      case VIL_PIXEL_FORMAT_DOUBLE:
-        read_case_macro_v1(double);
-        break;
-      case VIL_PIXEL_FORMAT_BOOL:
-        read_case_macro_v1(bool);
-        break;
-      // No version 1 complex images were ever written.
-      default:
-        vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_memory_chunk&)\n"
-                 << "           Unknown pixel format "<< format << '\n';
-        is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-        return;
+     case VIL_PIXEL_FORMAT_UINT_32:
+      read_case_macro_v1(vxl_uint_32);
+      break;
+     case VIL_PIXEL_FORMAT_INT_32:
+      read_case_macro_v1(vxl_int_32);
+      break;
+     case VIL_PIXEL_FORMAT_UINT_16:
+      read_case_macro_v1(vxl_uint_16);
+      break;
+     case VIL_PIXEL_FORMAT_INT_16:
+      read_case_macro_v1(vxl_int_16);
+      break;
+     case VIL_PIXEL_FORMAT_BYTE:
+      read_case_macro_v1(vxl_byte);
+      break;
+     case VIL_PIXEL_FORMAT_SBYTE:
+      read_case_macro_v1(vxl_sbyte);
+      break;
+     case VIL_PIXEL_FORMAT_FLOAT:
+      read_case_macro_v1(float);
+      break;
+     case VIL_PIXEL_FORMAT_DOUBLE:
+      read_case_macro_v1(double);
+      break;
+     case VIL_PIXEL_FORMAT_BOOL:
+      read_case_macro_v1(bool);
+      break;
+     // No version 1 complex images were ever written.
+     default:
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_memory_chunk&)\n"
+               << "           Unknown pixel format "<< format << '\n';
+      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      return;
     }
     break;
 
-  case 2:
+   case 2:
     vsl_b_read(is, format); pixel_format=vil_pixel_format(format);
     vsl_b_read(is, n);
     switch (pixel_format)
     {
 #if VXL_HAS_INT_64
-      case VIL_PIXEL_FORMAT_UINT_64:
-        read_case_macro_v2(vxl_uint_64);
-        break;
-      case VIL_PIXEL_FORMAT_INT_64:
-        read_case_macro_v2(vxl_int_64);
-        break;
+     case VIL_PIXEL_FORMAT_UINT_64:
+      read_case_macro_v2(vxl_uint_64);
+      break;
+     case VIL_PIXEL_FORMAT_INT_64:
+      read_case_macro_v2(vxl_int_64);
+      break;
 #endif
-      case VIL_PIXEL_FORMAT_UINT_32:
-        read_case_macro_v2(vxl_uint_32);
-        break;
-      case VIL_PIXEL_FORMAT_INT_32:
-        read_case_macro_v2(vxl_int_32);
-        break;
-      case VIL_PIXEL_FORMAT_UINT_16:
-        read_case_macro_v2(vxl_uint_16);
-        break;
-      case VIL_PIXEL_FORMAT_INT_16:
-        read_case_macro_v2(vxl_int_16);
-        break;
-      case VIL_PIXEL_FORMAT_BYTE:
-        read_case_macro_v2(vxl_byte);
-        break;
-      case VIL_PIXEL_FORMAT_SBYTE:
-        read_case_macro_v2(vxl_sbyte);
-        break;
-      case VIL_PIXEL_FORMAT_FLOAT:
-        read_case_macro_v2(float);
-        break;
-      case VIL_PIXEL_FORMAT_DOUBLE:
-        read_case_macro_v2(double);
-        break;
-      case VIL_PIXEL_FORMAT_BOOL:
-        read_case_macro_v2(bool);
-        break;
-      case VIL_PIXEL_FORMAT_COMPLEX_FLOAT:
-        read_case_macro_v2(vcl_complex<float>);
-        break;
-      case VIL_PIXEL_FORMAT_COMPLEX_DOUBLE:
-        read_case_macro_v2(vcl_complex<double>);
-        break;
-      default:
-        vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_memory_chunk&)\n"
-                 << "           Unknown pixel format "<< format << '\n';
-        is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-        return;
+     case VIL_PIXEL_FORMAT_UINT_32:
+      read_case_macro_v2(vxl_uint_32);
+      break;
+     case VIL_PIXEL_FORMAT_INT_32:
+      read_case_macro_v2(vxl_int_32);
+      break;
+     case VIL_PIXEL_FORMAT_UINT_16:
+      read_case_macro_v2(vxl_uint_16);
+      break;
+     case VIL_PIXEL_FORMAT_INT_16:
+      read_case_macro_v2(vxl_int_16);
+      break;
+     case VIL_PIXEL_FORMAT_BYTE:
+      read_case_macro_v2(vxl_byte);
+      break;
+     case VIL_PIXEL_FORMAT_SBYTE:
+      read_case_macro_v2(vxl_sbyte);
+      break;
+     case VIL_PIXEL_FORMAT_FLOAT:
+      read_case_macro_v2(float);
+      break;
+     case VIL_PIXEL_FORMAT_DOUBLE:
+      read_case_macro_v2(double);
+      break;
+     case VIL_PIXEL_FORMAT_BOOL:
+      read_case_macro_v2(bool);
+      break;
+     case VIL_PIXEL_FORMAT_COMPLEX_FLOAT:
+      read_case_macro_v2(vcl_complex<float>);
+      break;
+     case VIL_PIXEL_FORMAT_COMPLEX_DOUBLE:
+      read_case_macro_v2(vcl_complex<double>);
+      break;
+     default:
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_memory_chunk&)\n"
+               << "           Unknown pixel format "<< format << '\n';
+       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      return;
     }
     break;
 
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_memory_chunk&)\n"
              << "           Unknown version number "<< w << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream

@@ -31,10 +31,9 @@ void vsl_b_read(vsl_b_istream &is, vgl_box_2d<T> & p)
   T min_pos[2];
   T max_pos[2];
   vsl_b_read(is, v);
-  switch(v)
+  switch (v)
   {
-  case 1:
-
+   case 1:
     vsl_b_read(is, min_pos[0]);
     vsl_b_read(is, min_pos[1]);
     vsl_b_read(is, max_pos[0]);
@@ -44,10 +43,9 @@ void vsl_b_read(vsl_b_istream &is, vgl_box_2d<T> & p)
     p.set_min_y(min_pos[1]);
     p.set_max_x(max_pos[0]);
     p.set_max_y(max_pos[1]);
-
     break;
 
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_box_2d<T>&)\n"
              << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream

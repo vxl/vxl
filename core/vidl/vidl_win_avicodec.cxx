@@ -230,7 +230,7 @@ bool vidl_avicodec::load_avi(const char* fname, char mode)
   int modenum = OF_READ;
   DWORD videostreamcode = 0x73646976; // corresponds to char string "vids"
 
-  switch(mode) {
+  switch (mode) {
    case 'r':
     modenum = OF_READ | OF_SHARE_DENY_WRITE;
     break;
@@ -507,7 +507,7 @@ void vidl_avicodec::choose_encoder(AVIEncoderType encoder)
 
   encoder_options_valid=true;
 
-  switch(encoder_type)
+  switch (encoder_type)
   {
    case USEPREVIOUS:
    case UNCOMPRESSED:
@@ -571,8 +571,8 @@ HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
     *db = 0;
     ++db;
   }
- 
-  if(image.nplanes() == 3){
+
+  if (image.nplanes() == 3) {
     image = vil_flip_ud(image);
     for (j=0; j<frame->height(); ++j)
     {
@@ -586,9 +586,9 @@ HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
     }
   }
   else{
-    
+
     // The byte swapping below is probabily unnecessary - use vil_flip_ud instead - FIXME
-    
+
     // Store the TargetJr data in a Bitmap way, DIB is a flipped upside down
     switch (frame->get_bytes_pixel())
     {
@@ -618,10 +618,9 @@ HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
       break;
     default:
       vcl_cerr << "vidl_avicodec : Don't know how to deal with "
-        << frame->get_bytes_pixel() << " bytes per pixel.\n";
-      
+               << frame->get_bytes_pixel() << " bytes per pixel.\n";
+
     } // end switch byte per pixel
-    
   }
 
   // 3rd, Create the Bitmap and stick the datas in it

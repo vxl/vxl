@@ -48,7 +48,7 @@ class vgui_mfc : public vgui_toolkit
                                       const char* title="vgui mfc window");
 
   virtual vgui_window* produce_window(int width, int height,
-                                           const char* title="vgui mfc popup");
+                                      const char* title="vgui mfc popup");
 
   virtual vgui_dialog_impl* produce_dialog(const char* name);
 

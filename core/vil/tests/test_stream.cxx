@@ -8,9 +8,8 @@
 int
 test_stream_main( int argc, char* argv[] )
 {
-  if( argc < 2 ) {
-    vcl_cout << "Supply file_read_data directory as the first argument"
-             << vcl_endl;
+  if ( argc < 2 ) {
+    vcl_cerr << "Supply file_read_data directory as the first argument\n";
     return 1;
   }
 

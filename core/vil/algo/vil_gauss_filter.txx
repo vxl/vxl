@@ -219,7 +219,7 @@ void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
       kernel[1] = kernel[3] = params.filt1();
       kernel[2] = params.filt0();
       vil_convolve_1d(src_im,work, kernel+2, -2, +2,
-        double(), vil_convolve_trim, vil_convolve_trim);
+                      double(), vil_convolve_trim, vil_convolve_trim);
     }
     if (nj==1)
       dest_im=work;
@@ -246,7 +246,6 @@ void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
           dest_im(i,0,p) = l_round(ke0*work(i,0,p) + ke1*work(i,1,p)                  , destT());
           dest_im(i,1,p) = l_round(k1 *work(i,0,p) + k0 *work(i,1,p) + k1 *work(i,2,p), destT());
           dest_im(i,2,p) = l_round(                  ke1*work(i,1,p) + ke0*work(i,2,p), destT());
-    
         }
     }
     else if (nj==4)
@@ -275,11 +274,10 @@ void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
       kernel[2] = params.filt0();
       vil_image_view<destT> rdest = vil_transpose(dest_im);
       vil_convolve_1d(vil_transpose(work), rdest, kernel+2, -2, +2,
-        double(), vil_convolve_trim, vil_convolve_trim);
+                      double(), vil_convolve_trim, vil_convolve_trim);
     }
   }
-      
-      
+
 #if 0
   vsl_indent_inc(vcl_cout);
   vcl_cout << vsl_indent() << "Work image B\n";

@@ -41,7 +41,8 @@ static bool debug = false;
 
 vgui_mfc* vgui_mfc::instance_ = 0;
 
-vgui_mfc* vgui_mfc::instance() {
+vgui_mfc* vgui_mfc::instance()
+{
   if (instance_ == 0)
     instance_ = new vgui_mfc;
 
@@ -70,17 +71,17 @@ vcl_string vgui_mfc::name() const { return "mfc"; }
 
 //--------------------------------------------------------------------------------
 //: Virtual function from vgui - initialise the implementation of vgui.
-void vgui_mfc::init(int &argc, char **argv) {
+void vgui_mfc::init(int &argc, char **argv)
+{
   if (debug) vcl_cerr << "vgui_mfc::init()\n";
 
   // If we are here, then we aren't trying to use vgui in an MFC
   // framework. That is, there shouldn't be another CWinApp
   // somewhere. So, create the vgui one.
-  if( AfxGetApp() ) {
+  if ( AfxGetApp() )
     vcl_cerr << "vgui_mfc::init(): another CWinApp object exists!\n";
-  } else {
+  else
     theApp_ = new vgui_mfc_app;
-  }
 
   //: Initialise MFC foundation classes
   if (!AfxWinInit(::GetModuleHandle(NULL), NULL, ::GetCommandLine(), SW_SHOW))
@@ -92,7 +93,8 @@ void vgui_mfc::init(int &argc, char **argv) {
   AfxGetApp()->InitInstance();
 }
 
-void vgui_mfc::uninit() {
+void vgui_mfc::uninit()
+{
   delete theApp_;
   theApp_ = 0;
 }
@@ -100,7 +102,8 @@ void vgui_mfc::uninit() {
 
 //--------------------------------------------------------------------------------
 //: Virtual function from vgui - runs the event loop.
-void vgui_mfc::run() {
+void vgui_mfc::run()
+{
   if (debug) vcl_cerr << "vgui_mfc::run()\n";
 
   //: Start the main thread
@@ -110,31 +113,33 @@ void vgui_mfc::run() {
   AfxWinTerm();
 }
 
-void vgui_mfc::run_one_event() {
+void vgui_mfc::run_one_event()
+{
   run_till_idle();
   MSG m_msg;
   AfxGetThread()->PumpMessage();
   ::PeekMessage(&m_msg, NULL, NULL, NULL, PM_NOREMOVE);
 }
 
-void vgui_mfc::run_till_idle() {
-
-    MSG msg;
-    while ( ::PeekMessage( &msg, NULL, 0, 0, PM_NOREMOVE ) )
+void vgui_mfc::run_till_idle()
+{
+  MSG msg;
+  while ( ::PeekMessage( &msg, NULL, 0, 0, PM_NOREMOVE ) )
+  {
+    if ( !AfxGetApp()->PumpMessage( ) )
     {
-        if ( !AfxGetApp()->PumpMessage( ) )
-        {
-            ::PostQuitMessage(0);
-            break;
-        }
+      ::PostQuitMessage(0);
+      break;
     }
-    // let MFC do its idle processing
-    //LONG lIdle = 0;
-    //while ( AfxGetApp()->OnIdle(lIdle++ ) )
-    //    ;
+  }
+#if 0 // let MFC do its idle processing
+  LONG lIdle = 0;
+  while ( AfxGetApp()->OnIdle(lIdle++ ) ) ;
+#endif // 0
 }
 
-void vgui_mfc::flush() {
+void vgui_mfc::flush()
+{
   glFlush();
   run_till_idle();
 }
@@ -142,13 +147,12 @@ void vgui_mfc::flush() {
 void vgui_mfc::quit()
 {
   // From MFC FAQ:
-    // Same as double-clicking on main window close box.
-    ASSERT(AfxGetMainWnd() != NULL);
-    AfxGetMainWnd()->SendMessage(WM_CLOSE);
+  // Same as double-clicking on main window close box.
+  ASSERT(AfxGetMainWnd() != NULL);
+  AfxGetMainWnd()->SendMessage(WM_CLOSE);
 }
 
-void vgui_mfc::add_event(const vgui_event& event) {
-}
+void vgui_mfc::add_event(const vgui_event& event) {}
 
 
 //--------------------------------------------------------------------------------

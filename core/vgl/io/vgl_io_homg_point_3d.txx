@@ -30,9 +30,9 @@ void vsl_b_read(vsl_b_istream &is, vgl_homg_point_3d<T> & p)
 
   short v;
   vsl_b_read(is, v);
-  switch(v)
+  switch (v)
   {
-  case 1:
+   case 1:
     T x, y, z, w;
     vsl_b_read(is, x);
     vsl_b_read(is, y);
@@ -41,7 +41,7 @@ void vsl_b_read(vsl_b_istream &is, vgl_homg_point_3d<T> & p)
     p.set(x,y,z,w);
     break;
 
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_homg_point_3d<T>&)\n"
              << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream

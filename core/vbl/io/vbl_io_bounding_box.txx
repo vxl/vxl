@@ -31,9 +31,9 @@ void vsl_b_read(vsl_b_istream &is, vbl_bounding_box_base<T, DIM_> & p)
 
   short v;
   vsl_b_read(is, v);
-  switch(v)
+  switch (v)
   {
-  case 1:
+   case 1:
     p.reset(); // empty the bounding box
     bool b; vsl_b_read(is, b);
     if (b) {
@@ -47,9 +47,9 @@ void vsl_b_read(vsl_b_istream &is, vbl_bounding_box_base<T, DIM_> & p)
     }
     break;
 
-  default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_bounding_box_base<T, DIM_>&) \n"
-             << "           Unknown version number "<< v << "\n";
+   default:
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_bounding_box_base<T, DIM_>&)\n"
+             << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

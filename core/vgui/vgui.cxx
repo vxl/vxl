@@ -38,10 +38,9 @@ bool vgui_mfc_use_bitmap = true;
 // make sure that vgui::uninit is called before the application exits.
 struct vgui_uninit_caller
 {
-  ~vgui_uninit_caller() {
-    vgui::uninit();
-  }
+  ~vgui_uninit_caller() { vgui::uninit(); }
 };
+
 vgui_uninit_caller vgui_the_uniniter_caller_;
 
 //----------------------------------------------------------------------------
@@ -134,7 +133,7 @@ void vgui::init(int &argc, char **argv)
   // list the toolkits registered :
   vcl_cerr << "vgui : registered ";
   for (unsigned i=0; i<vgui_toolkit::registry()->size(); ++i)
-    vcl_cerr << "\'" << (*vgui_toolkit::registry())[i]->name() << "\' ";
+    vcl_cerr << '\'' << (*vgui_toolkit::registry())[i]->name() << "\' ";
   vcl_cerr << vcl_endl;
 
   // if no toolkit was selected, try using the command line arguments.
@@ -155,7 +154,8 @@ void vgui::init(int &argc, char **argv)
   assert(instance_); // need an instance.
 
   // Look for command line options.
-  for (int i=1; i<argc; ) {
+  for (int i=1; i<argc; )
+  {
     if (vcl_strncmp(argv[i],"--factory=",10) == 0)
     {
       // --factory=<name>
@@ -178,7 +178,7 @@ void vgui::init(int &argc, char **argv)
     {
       vgui_mfc_use_bitmap = false;
       vgui_remove_arg(i, argc, argv);
-    }    
+    }
     else if (vcl_strcmp(argv[i],"--emulate-overlays") == 0) {
       vgui_emulate_overlays = true;
       vgui_remove_arg(i, argc, argv);
@@ -202,9 +202,8 @@ void vgui::uninit()
   vcl_cout << "vgui::uninit called" << vcl_endl;
   // make sure uninit does something only once
   static bool uninit_called = false;
-  if( !uninit_called && init_called && instance_ ) {
+  if ( !uninit_called && init_called && instance_ )
     instance_->uninit();
-  }
   uninit_called = true;
 }
 
@@ -307,7 +306,8 @@ void vgui::flush()
 
 //-----------------------------------------------------------------------------
 //: Add event to the event queue.
-void vgui::add_event(vgui_event const& e) {
+void vgui::add_event(vgui_event const& e)
+{
   if (instance_)
     instance_->add_event(e);
   else

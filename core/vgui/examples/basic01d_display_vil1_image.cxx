@@ -20,7 +20,6 @@ int main(int argc, char **argv)
     return 0;
   }
 
-  
   vil1_image img = vil1_load(argv[1]);
 
   // Load image (given in the first command line param) into an image tableau.

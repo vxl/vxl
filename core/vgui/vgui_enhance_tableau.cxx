@@ -96,28 +96,28 @@ bool vgui_enhance_tableau::handle(const vgui_event& e)
 
   if (enable_key_bindings && e.type == vgui_KEY_PRESS)
   {
-    switch(e.key)
+    switch (e.key)
     {
-    case '[':
+     case '[':
       size -= 10;
-      size = (size <10) ? 10 : size ;
+      size = (size <10) ? 10 : size;
       post_redraw();
       return true;
-    case ']':
+     case ']':
       size += 10;
       post_redraw();
       return true;
-    case '{':
+     case '{':
       zoom_factor -= 0.1f;
       vcl_cerr << "enhance : zoom_factor = " << zoom_factor << vcl_endl;
       post_redraw();
       return true;
-    case '}':
+     case '}':
       zoom_factor += 0.1f;
       vcl_cerr << "enhance : zoom_factor = " << zoom_factor << vcl_endl;
       post_redraw();
       return true;
-    default:
+     default:
       break; // quell warning
     };
   }

@@ -218,11 +218,11 @@ vidl_vil1_codec_sptr vidl_vil1_avicodec::load(const char* fname, char mode)
   int modenum = OF_READ;
   DWORD videostreamcode = 0x73646976; // corresponds to char string "vids"
 
-  switch(mode) {
-  case 'r':
+  switch (mode) {
+   case 'r':
     modenum = OF_READ | OF_SHARE_DENY_WRITE;
     break;
-  case 'w':
+   case 'w':
     modenum = OF_READWRITE;
     break;
   }
@@ -500,7 +500,7 @@ void vidl_vil1_avicodec::choose_encoder(AVIEncoderType encoder)
 
   encoder_options_valid=true;
 
-  switch(encoder_type)
+  switch (encoder_type)
   {
    case USEPREVIOUS:
    case UNCOMPRESSED:

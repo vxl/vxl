@@ -47,7 +47,7 @@ class vgui_gtk2_adaptor : public vgui_adaptor, public vgui_adaptor_mixin
 
   void draw();
   void reshape();
-  
+
   // Do any idle processing that needs to be done.
   // Return true if idle processing is not complete
   bool do_idle();

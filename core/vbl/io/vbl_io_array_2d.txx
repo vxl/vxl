@@ -39,9 +39,9 @@ void vsl_b_read(vsl_b_istream &is, vbl_array_2d<T> &p)
   short ver;
   int array_rows, array_cols;
   vsl_b_read(is, ver);
-  switch(ver)
+  switch (ver)
   {
-  case 1:
+   case 1:
     vsl_b_read(is, array_rows);
     vsl_b_read(is, array_cols);
     p.resize(array_rows, array_cols);
@@ -52,7 +52,7 @@ void vsl_b_read(vsl_b_istream &is, vbl_array_2d<T> &p)
     }
     break;
 
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_array_2d<T>&)\n"
              << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream

@@ -96,7 +96,7 @@ HMENU vgui_mfc_utils::add_submenu(const vgui_menu& menu)
   {
     if (menu[i].is_separator())
     {
-      if (debug) vcl_cerr << " <separator> \n";
+      if (debug) vcl_cerr << " <separator>\n";
         popdown_menu->AppendMenu(MF_SEPARATOR);
     }
     else if (menu[i].is_command())
@@ -144,7 +144,7 @@ void vgui_mfc_utils::set_menu(const vgui_menu& menu)
   {
     if (menu[i].is_separator())
     {
-      if (debug) vcl_cerr << " <separator> \n";
+      if (debug) vcl_cerr << " <separator>\n";
       menu_bar->AppendMenu(MF_SEPARATOR);
     }
     else if (menu[i].is_command())
@@ -159,7 +159,7 @@ void vgui_mfc_utils::set_menu(const vgui_menu& menu)
 
       if (debug) vcl_cerr << " <command> " << menu[i].name << vcl_endl;
       menu_bar->AppendMenu(MF_STRING|MF_ENABLED,the_menu_id,
-        the_menu_name.c_str());
+                           the_menu_name.c_str());
     }
     else if (menu[i].is_submenu())
     {
@@ -188,7 +188,7 @@ CMenu *vgui_mfc_utils::set_popup_menu(const vgui_menu &menu)
   {
     if (menu[i].is_separator())
     {
-      if (debug) vcl_cerr << " <separator> \n";
+      if (debug) vcl_cerr << " <separator>\n";
           pop_up->AppendMenu(MF_SEPARATOR);
     }
     else if (menu[i].is_command())

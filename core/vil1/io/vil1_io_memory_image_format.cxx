@@ -27,16 +27,16 @@ void vsl_b_read(vsl_b_istream &is, vil1_memory_image_format& v)
   int cf;
   short w;
   vsl_b_read(is, w);
-  switch(w)
+  switch (w)
   {
-  case 1:
+   case 1:
     vsl_b_read(is, v.components);
     vsl_b_read(is, v.bits_per_component);
     vsl_b_read(is, cf);
     v.component_format=(vil1_component_format)cf;
     break;
 
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil1_memory_image_format&)\n"
              << "           Unknown version number "<< w << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream

@@ -111,6 +111,6 @@ inline void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
 // want filter.size() ~= sd*7, which will avoid significant truncation,
 // without wasting the outer taps on near-zero values.
 void vil_gauss_filter_gen_ntap(double sd, unsigned diff,
-                                vcl_vector<double> &filter_dest);
+                               vcl_vector<double> &filter_dest);
 
 #endif // vil_gauss_filter_h_

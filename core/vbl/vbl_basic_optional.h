@@ -10,7 +10,6 @@
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
 // IMS (Manchester) 21/10/2003: Deprecated - Decision at Providence 2002 Meeting.
 //                              Can be deleted after VXL-1.1
-//        
 // \endverbatim
 
 #include <vcl_iostream.h>

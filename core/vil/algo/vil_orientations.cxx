@@ -104,11 +104,11 @@ void vil_orientations(const vil_image_view<float>& grad_i,
 //
 //  Images assumed to be single plane
 void vil_orientations_at_edges(const vil_image_view<float>& grad_i,
-                      const vil_image_view<float>& grad_j,
-                      vil_image_view<vxl_byte>& orient_im,
-                      vil_image_view<float>& grad_mag,
-                      float grad_threshold,
-                      unsigned n_orientations)
+                               const vil_image_view<float>& grad_j,
+                               vil_image_view<vxl_byte>& orient_im,
+                               vil_image_view<float>& grad_mag,
+                               float grad_threshold,
+                               unsigned n_orientations)
 {
   assert(grad_i.nplanes()==1 && grad_j.nplanes()==1);
   assert(n_orientations<=256);

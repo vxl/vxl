@@ -2,7 +2,7 @@
 #ifndef vil_dog_pyramid_h_
 #define vil_dog_pyramid_h_
 
-//: 
+//:
 // \file
 // \brief Compute a pyramid of difference of gaussian images
 // \author Tim Cootes
@@ -40,7 +40,7 @@ void vil_dog_pyramid(const vil_image_view<T>& src_image,
   dog_pyramid.resize(nL);
 
   vil_image_view<T> sub_sampled_image;
-  
+
   if (nL==0) return;
 
   vil_gauss_filter_5tap_params smooth_params(1.41421);
@@ -60,7 +60,7 @@ void vil_dog_pyramid(const vil_image_view<T>& src_image,
   {
     // Subsample by a factor of 2/3
     // Note - this could be implemented more efficiently
-    //        since bilinear is sampling at pixel positions 
+    //        since bilinear is sampling at pixel positions
     //        and on edges.
     unsigned ni = smooth_pyramid[i-1].ni();
     unsigned nj = smooth_pyramid[i-1].nj();

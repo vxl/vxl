@@ -25,12 +25,14 @@ typedef vbl_smart_ptr<impl> base_sptr;
 
 int impl::reftotal = 0;
 
-impl::impl(int nn) : n(nn) {
+impl::impl(int nn) : n(nn)
+{
   reftotal++;
   vcl_cout <<  "impl ctor : this=" << (void*)this << vcl_endl;
 }
 
-impl::impl() : n(7) {
+impl::impl() : n(7)
+{
   reftotal++;
   vcl_cout <<  "impl ctor : this=" << (void*)this << vcl_endl;
 }
@@ -40,11 +42,13 @@ impl::~impl() {
   vcl_cout <<  "impl dtor : this=" << (void*)this << vcl_endl;
 }
 
-void impl::Print (vcl_ostream &str) {
+void impl::Print (vcl_ostream &str)
+{
   str << "impl(" << n << ") ";
 }
 
-void impl::checkcount () {
+void impl::checkcount ()
+{
   if (reftotal == 0)
     vcl_cout << "impl : PASSED\n";
   else
@@ -66,14 +70,14 @@ void vsl_b_read(vsl_b_istream& is, impl &p)
 
   short ver;
   vsl_b_read(is, ver);
-  switch(ver)
+  switch (ver)
   {
    case 1:
     vsl_b_read(is, p.n);
     break;
    default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, impl&)\n";
-    vcl_cerr << "           Unknown version number "<< ver << '\n';
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, impl&)\n"
+             << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -117,7 +121,7 @@ void vsl_print_summary(vcl_ostream& os, const impl *p)
     os << "NULL PTR";
   else
   {
-    os << "T" << ": ";
+    os << "T: ";
     vsl_print_summary(os, *p);
   }
 };

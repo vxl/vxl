@@ -84,7 +84,7 @@ void test_int()
        (m2.get(0,0)==2 && m2.get(0,1)==2 && m2.get(1,0)==2 && m2.get(1,1)==2), true);
   TEST("m2 = vnl_int_2x2(2)",
        (m2 = vnl_int_2x2(2),
-       (m2.get(0,0)==2 && m2.get(0,1)==2 && m2.get(1,0)==2 && m2.get(1,1)==2)), true);
+        (m2.get(0,0)==2 && m2.get(0,1)==2 && m2.get(1,0)==2 && m2.get(1,1)==2)), true);
   const vnl_int_2x2 ma = m2;
   TEST("(const vnl_matrix_fixed)(i,j)",
        (ma(0,0)==2 && ma(0,1)==2 && ma(1,0)==2 && ma(1,1)==2), true);

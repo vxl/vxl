@@ -41,7 +41,7 @@ vil_stream_fstream::vil_stream_fstream(char const* fn, char const* mode):
   end_( -1 )
 {
   id_ = ++id;
-  xerr << "vil_stream_fstream(\"" << fn << "\", \""<<mode<<"\") = " << id_ << "\n";
+  xerr << "vil_stream_fstream(\"" << fn << "\", \""<<mode<<"\") = " << id_ << '\n';
 #if 0
   if (!f_) {
     vcl_cerr << "vil_stream_fstream::Could not open [" << fn << "]\n";
@@ -167,7 +167,7 @@ void vil_stream_fstream::seek(vil_streampos position)
 vil_streampos vil_stream_fstream::file_size()
 {
   // if not already computed, do so
-  if( end_ == -1 ) {
+  if ( end_ == -1 ) {
     vcl_streampos curr = f_.tellg();
     f_.seekg( 0, vcl_ios_end );
     end_ = f_.tellg();

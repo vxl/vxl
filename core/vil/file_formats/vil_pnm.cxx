@@ -394,9 +394,8 @@ vil_image_view_base_sptr vil_pnm_image::get_copy_view(
       unsigned char a; vs_->read(&a, 1L);
       for (unsigned x = 0; x < ni+x0; ++x)
       {
-        if( x >= x0 ) {
+        if ( x >= x0 )
           bb[y * ni + x-x0] = (a & 0x80) != 0;
-        }
         a <<= 1;
         if (x%8 == 7)
           vs_->read(&a, 1L);

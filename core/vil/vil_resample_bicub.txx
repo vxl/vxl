@@ -124,8 +124,8 @@ void vil_resample_bicub(const vil_image_view<sType>& src_image,
 //: Resample image to a specified width (n1) and height (n2)
 template <class sType, class dType>
 void vil_resample_bicub(const vil_image_view<sType>& src_image,
-                         vil_image_view<dType>& dest_image,
-                         int n1, int n2)
+                        vil_image_view<dType>& dest_image,
+                        int n1, int n2)
 {
    double x0=0;
   double y0=0;
@@ -138,12 +138,11 @@ void vil_resample_bicub(const vil_image_view<sType>& src_image,
 
 #define VIL_RESAMPLE_BICUB_INSTANTIATE( sType, dType ) \
 template void vil_resample_bicub(const vil_image_view<sType >& src_image, \
-                         vil_image_view<dType >& dest_image, \
-                         double x0, double y0, double dx1, double dy1, \
-                         double dx2, double dy2, int n1, int n2); \
+                                 vil_image_view<dType >& dest_image, \
+                                 double x0, double y0, double dx1, double dy1, \
+                                 double dx2, double dy2, int n1, int n2); \
 template void vil_resample_bicub(const vil_image_view<sType >& src_image, \
-                         vil_image_view<dType >& dest_image, \
-                         int n1, int n2) 
-
+                                 vil_image_view<dType >& dest_image, \
+                                 int n1, int n2)
 
 #endif // vil_resample_bicub_txx_

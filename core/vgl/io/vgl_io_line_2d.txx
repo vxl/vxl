@@ -28,16 +28,16 @@ void vsl_b_read(vsl_b_istream &is, vgl_line_2d<T>& v)
   T a,b,c;
   short w;
   vsl_b_read(is, w);
-  switch(w)
+  switch (w)
   {
-  case 1:
+   case 1:
     vsl_b_read(is, a);
     vsl_b_read(is, b);
     vsl_b_read(is, c);
     v.set(a,b,c);
     break;
 
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_line_2d<T>&)\n"
              << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream

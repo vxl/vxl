@@ -22,9 +22,9 @@ inline void vil_cartesian_differential_invariants_3_1plane(
   unsigned max_kernel_width /*=0*/)
 {
   assert(src.nplanes()==1);
-  
+
   unsigned filt_n=int(3*scale + 0.5)*2+1;
-  
+
   if (max_kernel_width!=0 && filt_n > max_kernel_width)
     filt_n = (max_kernel_width | 1); // make sure it is an odd number
 
@@ -169,6 +169,6 @@ void vil_cartesian_differential_invariants_3(
 #define VIL_CARTESIAN_DIFFERENTIAL_INVARIANTS_INSTANTIATE(S, T) \
 template void \
 vil_cartesian_differential_invariants_3( const vil_image_view< S >& src, \
-  vil_image_view< T >& dest, double, unsigned )
+                                         vil_image_view< T >& dest, double, unsigned )
 
 #endif // vil_cartesian_differential_invariants_txx_

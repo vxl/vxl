@@ -27,9 +27,11 @@ vgui_glut_impl::~vgui_glut_impl()
 
 void vgui_glut_impl::init(int &argc, char **argv)
 {
-//   vcl_cerr << __FILE__ " init() :" << vcl_endl;
-//   for (unsigned i=0; i<argc; ++i)
-//     vcl_cerr << i << ' ' << (void*)argv[i] << flush << ' ' << argv[i] << vcl_endl;
+#ifdef DEBUG
+  vcl_cerr << __FILE__ " init() :\n";
+  for (unsigned i=0; i<argc; ++i)
+    vcl_cerr << i << ' ' << (void*)argv[i] << ' ' << argv[i] << vcl_endl;
+#endif
   glutInit(&argc, argv);
 }
 
@@ -48,7 +50,7 @@ vgui_window *vgui_glut_impl::produce_window(int width, int height,
 }
 
 vgui_window *vgui_glut_impl::produce_window(int width, int height,
-                                       char const *title)
+                                            char const *title)
 {
   return new vgui_glut_window(title, width, height);
 }
@@ -128,8 +130,8 @@ void internal_run_till_idle()
 
   // If we get here, it means glutMainLoop()
   // returned, which it should never do.
-  vgui_macro_warning << "internal error in internal_run_till_idle_wrapped()" << vcl_endl;
-  vgui_macro_warning << "please report to fsm" << vcl_endl;
+  vgui_macro_warning << "internal error in internal_run_till_idle_wrapped()\n"
+                     << "please report to fsm\n";
   vcl_abort();
 }
 
@@ -167,9 +169,13 @@ void vgui_glut_impl_process_command_queue()
       glutSetWindow(a->get_id());
 
     // execute the command.
-    //vcl_cerr << "cmnd = " << (void*)vgui_glut_impl_adaptor_menu_command << vcl_endl;
+#ifdef DEBUG
+    vcl_cerr << "cmnd = " << (void*)vgui_glut_impl_adaptor_menu_command << vcl_endl;
+#endif
     c->execute();
-    //vcl_cerr << "returned successfully" << vcl_endl;
+#ifdef DEBUG
+    vcl_cerr << "returned successfully\n";
+#endif
 
     // this matches ref() in vgui_glut_impl_queue_command()
     c->unref();
@@ -191,7 +197,7 @@ void vgui_glut_impl::run()
     internal_run_till_idle();
     vgui_glut_impl_process_command_queue();
   }
-  vgui_macro_warning << "end of vgui_glut_impl event loop" << vcl_endl;
+  vgui_macro_warning << "end of vgui_glut_impl event loop\n";
 }
 
 // This is (erroneously) called from vgui_glut_impl_adaptor::post_destroy().

@@ -149,7 +149,7 @@ void vgui_easy2D_tableau::set_point_radius(float r)
   style_ = vgui_style::new_style( style_ );
   style_->point_size = r;
 }
-  
+
 //: Add the given two-dimensional object to the display.
 void vgui_easy2D_tableau::add(vgui_soview2D* object)
 {

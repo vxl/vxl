@@ -38,9 +38,9 @@ void vsl_b_read(vsl_b_istream &is, vbl_array_1d<T> & p)
   int array_capacity;
   T val;
   vsl_b_read(is, ver);
-  switch(ver)
+  switch (ver)
   {
-  case 1:
+   case 1:
     vsl_b_read(is, array_size);
     vsl_b_read(is, array_capacity);
     p.reserve(array_capacity);
@@ -51,7 +51,7 @@ void vsl_b_read(vsl_b_istream &is, vbl_array_1d<T> & p)
     }
     break;
 
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_array_1d<T>&)\n"
              << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream

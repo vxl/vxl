@@ -29,26 +29,26 @@ vil_memory_image::vil_memory_image(unsigned ni, unsigned nj, unsigned nplanes, v
   switch (vil_pixel_format_component_format(format))
   {
 #define macro( F , T  ) \
-  case F :     view_ = new vil_image_view<T >(ni, nj, nplanes, \
-                                              vil_pixel_format_num_components(format)); \
-               break;
-macro(VIL_PIXEL_FORMAT_BYTE ,   vxl_byte)
-macro(VIL_PIXEL_FORMAT_SBYTE ,  vxl_sbyte)
+   case F : view_ = new vil_image_view<T >(ni, nj, nplanes, \
+                                           vil_pixel_format_num_components(format)); \
+            break;
+   macro(VIL_PIXEL_FORMAT_BYTE ,   vxl_byte)
+   macro(VIL_PIXEL_FORMAT_SBYTE ,  vxl_sbyte)
 #if VXL_HAS_INT_64
-macro(VIL_PIXEL_FORMAT_UINT_64, vxl_uint_64)
-macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64)
+   macro(VIL_PIXEL_FORMAT_UINT_64, vxl_uint_64)
+   macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64)
 #endif
-macro(VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32)
-macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32)
-macro(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16)
-macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16)
-macro(VIL_PIXEL_FORMAT_BOOL ,   bool)
-macro(VIL_PIXEL_FORMAT_FLOAT ,  float)
-macro(VIL_PIXEL_FORMAT_DOUBLE , double)
-macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
-macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
+   macro(VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32)
+   macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32)
+   macro(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16)
+   macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16)
+   macro(VIL_PIXEL_FORMAT_BOOL ,   bool)
+   macro(VIL_PIXEL_FORMAT_FLOAT ,  float)
+   macro(VIL_PIXEL_FORMAT_DOUBLE , double)
+   macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
+   macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
 #undef macro
-  default:
+   default:
     vcl_cerr << "ERROR: vil_memory_image::vil_memory_image\n"
                 "\t unknown format " << format << vcl_endl;
     vcl_abort();
@@ -62,24 +62,24 @@ vil_memory_image::vil_memory_image(vil_image_view_base const &view)
   switch (vil_pixel_format_component_format(view.pixel_format()))
   {
 #define macro( F , T ) \
-  case F :  view_ = new vil_image_view<T >(view); break;
-macro(VIL_PIXEL_FORMAT_BYTE ,   vxl_byte )
-macro(VIL_PIXEL_FORMAT_SBYTE ,  vxl_sbyte )
+   case F :  view_ = new vil_image_view<T >(view); break;
+   macro(VIL_PIXEL_FORMAT_BYTE ,   vxl_byte )
+   macro(VIL_PIXEL_FORMAT_SBYTE ,  vxl_sbyte )
 #if VXL_HAS_INT_64
-macro(VIL_PIXEL_FORMAT_UINT_64, vxl_uint_64 )
-macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
+   macro(VIL_PIXEL_FORMAT_UINT_64, vxl_uint_64 )
+   macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
 #endif
-macro(VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32 )
-macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-macro(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16 )
-macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-macro(VIL_PIXEL_FORMAT_BOOL ,   bool )
-macro(VIL_PIXEL_FORMAT_FLOAT ,  float )
-macro(VIL_PIXEL_FORMAT_DOUBLE , double )
-macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
-macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
+   macro(VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32 )
+   macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+   macro(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16 )
+   macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+   macro(VIL_PIXEL_FORMAT_BOOL ,   bool )
+   macro(VIL_PIXEL_FORMAT_FLOAT ,  float )
+   macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+   macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
+   macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
 #undef macro
-  default:
+   default:
     vcl_cerr << "ERROR: vil_memory_image::vil_memory_image\n\tunknown format "
              << vil_pixel_format_component_format(view.pixel_format()) << '\n';
     vcl_abort();
@@ -96,33 +96,32 @@ vil_image_view_base_sptr vil_memory_image::get_copy_view(unsigned i0, unsigned n
 {
   if (i0 + ni > view_->ni() || j0 + nj > view_->nj()) return 0;
 
-  switch(view_->pixel_format())
+  switch (view_->pixel_format())
   {
 #define macro( F , T ) \
-  case  F : { \
-      const vil_image_view< T > &v = \
-        static_cast<const vil_image_view< T > &>(*view_); \
-      vil_image_view< T > w(v.memory_chunk(), &v(i0,j0), \
-                            ni, nj, v.nplanes(), \
-                            v.istep(), v.jstep(), v.planestep()); \
-      return new vil_image_view< T >(vil_copy_deep(w)); }
-macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
-macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+   case  F : { \
+    const vil_image_view< T > &v = static_cast<const vil_image_view< T > &>(*view_); \
+    vil_image_view< T > w(v.memory_chunk(), &v(i0,j0), \
+                          ni, nj, v.nplanes(), \
+                          v.istep(), v.jstep(), v.planestep()); \
+    return new vil_image_view< T >(vil_copy_deep(w)); }
+   macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
+   macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
 #if VXL_HAS_INT_64
-macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
-macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
+   macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
+   macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
 #endif
-macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
-macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-macro(VIL_PIXEL_FORMAT_BOOL , bool )
-macro(VIL_PIXEL_FORMAT_FLOAT , float )
-macro(VIL_PIXEL_FORMAT_DOUBLE , double )
-macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
-macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
+   macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+   macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+   macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+   macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+   macro(VIL_PIXEL_FORMAT_BOOL , bool )
+   macro(VIL_PIXEL_FORMAT_FLOAT , float )
+   macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+   macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
+   macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
 #undef macro
-  default:
+   default:
     return 0;
   }
 }
@@ -134,32 +133,31 @@ vil_image_view_base_sptr vil_memory_image::get_view(unsigned i0, unsigned ni,
 {
   if (i0 + ni > view_->ni() || j0 + nj > view_->nj()) return 0;
 
-  switch(view_->pixel_format())
+  switch (view_->pixel_format())
   {
 #define macro( F , T ) \
-  case  F : { \
-      const vil_image_view< T > &v = \
-        static_cast<const vil_image_view< T > &>(*view_); \
-      return new vil_image_view< T >(v.memory_chunk(), &v(i0,j0), \
-                                     ni, nj, v.nplanes(), \
-                                     v.istep(), v.jstep(), v.planestep()); }
-macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
-macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+   case  F : { \
+    const vil_image_view< T > &v = static_cast<const vil_image_view< T > &>(*view_); \
+    return new vil_image_view< T >(v.memory_chunk(), &v(i0,j0), \
+                                   ni, nj, v.nplanes(), \
+                                   v.istep(), v.jstep(), v.planestep()); }
+   macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
+   macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
 #if VXL_HAS_INT_64
-macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
-macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
+   macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
+   macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
 #endif
-macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
-macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-macro(VIL_PIXEL_FORMAT_BOOL , bool )
-macro(VIL_PIXEL_FORMAT_FLOAT , float )
-macro(VIL_PIXEL_FORMAT_DOUBLE , double )
-macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
-macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
+   macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+   macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+   macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+   macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+   macro(VIL_PIXEL_FORMAT_BOOL , bool )
+   macro(VIL_PIXEL_FORMAT_FLOAT , float )
+   macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+   macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
+   macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
 #undef macro
-  default:
+   default:
     return 0;
   }
 }
@@ -172,45 +170,42 @@ bool vil_memory_image::put_view(const vil_image_view_base& im,unsigned i0, unsig
   if (view_-> pixel_format() != im.pixel_format()) return false;
   if (!view_fits(im, i0, j0)) return false;
 
-  switch(view_->pixel_format())
+  switch (view_->pixel_format())
   {
 #define macro( F , T ) \
-  case  F : { \
-      vil_image_view< T > &v = \
-        static_cast<vil_image_view< T > &>(*view_); \
-      const vil_image_view< T > &w = \
-        static_cast<const vil_image_view< T > &>(im); \
-      if (v.memory_chunk() == w.memory_chunk()) \
-      { \
-        if (&v(i0,j0) != w.top_left_ptr()) { \
-          vcl_cerr << "ERROR: vil_memory_image::put_view()\n" \
-            "different window from that used in get_view()\n"; \
-          vcl_abort(); } \
-        else return true; /* The user has already modified the data in place. */ \
-      } \
-      vil_copy_to_window(w, v, i0, j0); \
-      return true; }
+   case  F : { \
+    vil_image_view< T > &v = static_cast<vil_image_view< T > &>(*view_); \
+    const vil_image_view< T > &w = static_cast<const vil_image_view< T > &>(im); \
+    if (v.memory_chunk() == w.memory_chunk()) \
+    { \
+      if (&v(i0,j0) != w.top_left_ptr()) { \
+        vcl_cerr << "ERROR: vil_memory_image::put_view()\n" \
+                 << "different window from that used in get_view()\n"; \
+        vcl_abort(); } \
+      else return true; /* The user has already modified the data in place. */ \
+    } \
+    vil_copy_to_window(w, v, i0, j0); \
+    return true; }
 
-macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
-macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+   macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
+   macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
 #if VXL_HAS_INT_64
-macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
-macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
+   macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
+   macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
 #endif
-macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
-macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-macro(VIL_PIXEL_FORMAT_BOOL , bool )
-macro(VIL_PIXEL_FORMAT_FLOAT , float )
-macro(VIL_PIXEL_FORMAT_DOUBLE , double )
-macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
-macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
+   macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+   macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+   macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+   macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+   macro(VIL_PIXEL_FORMAT_BOOL , bool )
+   macro(VIL_PIXEL_FORMAT_FLOAT , float )
+   macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+   macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
+   macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
 #undef macro
-
-  default:
+   default:
     vcl_cerr << "WARNING: vil_memory_image::put_view()\n"
-                "\t Unexpected pixel type" << view_->pixel_format() << vcl_endl;
+             << "\t Unexpected pixel type" << view_->pixel_format() << vcl_endl;
     return 0;
   }
 }

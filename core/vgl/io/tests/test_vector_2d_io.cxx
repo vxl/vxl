@@ -17,8 +17,8 @@ void test_vector_2d_double_io()
   vgl_vector_2d<double> v_out(1.2,-3.4), v_in;
 
   vsl_b_ofstream bfs_out("vgl_vector_2d_test_double_io.bvl.tmp");
-  TEST ("Created vgl_vector_2d_test_double_io.bvl.tmp for writing",
-         (!bfs_out), false);
+  TEST("Created vgl_vector_2d_test_double_io.bvl.tmp for writing",
+       (!bfs_out), false);
   vsl_b_write(bfs_out, v_out);
   bfs_out.close();
 
@@ -47,8 +47,8 @@ void test_vector_2d_float_io()
   vgl_vector_2d<float> v_out(1.2f,-3.4f), v_in;
 
   vsl_b_ofstream bfs_out("vgl_vector_2d_test_float_io.bvl.tmp");
-  TEST ("Created vgl_vector_2d_test_float_io.bvl.tmp for writing",
-         (!bfs_out), false);
+  TEST("Created vgl_vector_2d_test_float_io.bvl.tmp for writing",
+       (!bfs_out), false);
   vsl_b_write(bfs_out, v_out);
   bfs_out.close();
 
@@ -77,8 +77,8 @@ void test_vector_2d_int_io()
   vgl_vector_2d<int> v_out(1,-3), v_in;
 
   vsl_b_ofstream bfs_out("vgl_vector_2d_test_int_io.bvl.tmp");
-  TEST ("Created vgl_vector_2d_test_int_io.bvl.tmp for writing",
-         (!bfs_out), false);
+  TEST("Created vgl_vector_2d_test_int_io.bvl.tmp for writing",
+       (!bfs_out), false);
   vsl_b_write(bfs_out, v_out);
   bfs_out.close();
 

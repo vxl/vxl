@@ -26,16 +26,16 @@ void vsl_b_read(vsl_b_istream &is, vgl_vector_2d<T> & v)
 
   short ver;
   vsl_b_read(is, ver);
-  switch(ver)
+  switch (ver)
   {
-  case 1:
+   case 1:
     T x, y;
     vsl_b_read(is, x);
     vsl_b_read(is, y);
     v.set(x,y);
     break;
 
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_vector_2d<T>&)\n"
              << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream

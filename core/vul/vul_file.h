@@ -32,7 +32,7 @@ struct vul_file
   static bool change_directory(vcl_string const& dirname) {
     return change_directory(dirname.c_str());
   }
-  
+
   //: Make a writable directory.
   // You might imagine mkdir would be a better name,
   // and then you might imagine a world w/out ms.

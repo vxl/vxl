@@ -431,7 +431,7 @@ bool vgui_mfc_dialog_impl::ask()
       //MFC impl:Create(_T("EDIT"), NULL, dwStyle, rect, pParentWnd, nID);
       // So we use CWnd::CreateEx. Note that the class name is EDIT
       edit->CreateEx(WS_EX_CLIENTEDGE,_T("EDIT"),NULL,
-                       WS_CHILD|WS_BORDER|ES_LEFT|ES_AUTOHSCROLL,r,this,IDOK);
+                     WS_CHILD|WS_BORDER|ES_LEFT|ES_AUTOHSCROLL,r,this,IDOK);
       edit->SetFont(font);
       edit->SetWindowText(l.field->current_value().c_str());
       edit->UpdateWindow();
@@ -508,7 +508,7 @@ bool vgui_mfc_dialog_impl::ask()
       r.top += 5;
       r.bottom += r.top + long(tab_data->height);
       widg->CreateEx(WS_EX_CLIENTEDGE,TempsNewClass,NULL,
-                   WS_CHILD|WS_BORDER|ES_LEFT|ES_AUTOHSCROLL,r,this,IDOK);
+                     WS_CHILD|WS_BORDER|ES_LEFT|ES_AUTOHSCROLL,r,this,IDOK);
 
       widg->ShowWindow(SW_SHOW);
       awlist.push_back(widg);

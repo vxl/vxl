@@ -31,7 +31,7 @@ void vsl_b_read(vsl_b_istream &is, vil1_memory_image & p)
 
   short v;
   vsl_b_read(is, v);
-  switch(v)
+  switch (v)
   {
    case 1:
     vsl_b_read(is, (vil1_image &) p);

@@ -44,11 +44,11 @@ void vil_resample_bilin(const vil_image_view<sType>& src_image,
                                                   y0+(n1-1)*dy1+(n2-1)*dy2,src_image);
 #ifdef DEBUG
   // corners
-  vcl_cout<<"src_image= "<<src_image<<vcl_endl;
-  vcl_cout<<"x0="<<x0<<vcl_endl;
-  vcl_cout<<"y0="<<y0<<vcl_endl;
-  vcl_cout<<"x0+(n1-1)*dx1+(n2-1)*dx2="<<x0+(n1-1)*dx1+(n2-1)*dx2<<vcl_endl;
-  vcl_cout<<"y0+(n1-1)*dy1+(n2-1)*dy2="<<y0+(n1-1)*dy1+(n2-1)*dy2<<vcl_endl;
+  vcl_cout<<"src_image= "<<src_image<<vcl_endl
+          <<"x0="<<x0<<vcl_endl
+          <<"y0="<<y0<<vcl_endl
+          <<"x0+(n1-1)*dx1+(n2-1)*dx2="<<x0+(n1-1)*dx1+(n2-1)*dx2<<vcl_endl
+          <<"y0+(n1-1)*dy1+(n2-1)*dy2="<<y0+(n1-1)*dy1+(n2-1)*dy2<<vcl_endl;
 #endif
 
   const unsigned ni = src_image.ni();
@@ -133,8 +133,8 @@ void vil_resample_bilin(const vil_image_view<sType>& src_image,
 //: Resample image to a specified width (n1) and height (n2)
 template <class sType, class dType>
 void vil_resample_bilin(const vil_image_view<sType>& src_image,
-                         vil_image_view<dType>& dest_image,
-                         int n1, int n2)
+                        vil_image_view<dType>& dest_image,
+                        int n1, int n2)
 {
   double x0=0;
   double y0=0;
@@ -146,15 +146,14 @@ void vil_resample_bilin(const vil_image_view<sType>& src_image,
 }
 
 
-
 #define VIL_RESAMPLE_BILIN_INSTANTIATE( sType, dType ) \
 template void vil_resample_bilin(const vil_image_view<sType >& src_image, \
-                         vil_image_view<dType >& dest_image, \
-                         double x0, double y0, double dx1, double dy1, \
-                         double dx2, double dy2, int n1, int n2); \
+                                 vil_image_view<dType >& dest_image, \
+                                 double x0, double y0, double dx1, double dy1, \
+                                 double dx2, double dy2, int n1, int n2); \
 template void vil_resample_bilin(const vil_image_view<sType >& src_image, \
-                         vil_image_view<dType >& dest_image, \
-                         int n1, int n2) 
+                                 vil_image_view<dType >& dest_image, \
+                                 int n1, int n2)
 
 
 #endif // vil_resample_bilin_txx_

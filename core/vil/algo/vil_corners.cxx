@@ -100,12 +100,12 @@ void vil_corners(const vil_image_view<float>& grad_i,
 //  after the elements of C have been smoothed.
 //  g is the vector of first derivatives (gx,gy)'
 //  It relies only on first derivatives.
-// 
+//
 //  Currently uses somewhat inefficient multi-pass method.
 //  Could be improved.
 void vil_corners_rohr(const vil_image_view<float>& gx,
-                 const vil_image_view<float>& gy,
-                 vil_image_view<float>& corner_im)
+                      const vil_image_view<float>& gy,
+                      vil_image_view<float>& corner_im)
 {
   vil_image_view<float> tmp_im,work_im, gx2,gy2,gxy;
   vil_gauss_filter_5tap_params smooth_params(1.0);
@@ -125,4 +125,3 @@ void vil_corners_rohr(const vil_image_view<float>& gx,
   vil_math_image_product(gxy,gxy,tmp_im);
   vil_math_add_image_fraction(corner_im,1.0f,tmp_im,-1.0f);
 }
-

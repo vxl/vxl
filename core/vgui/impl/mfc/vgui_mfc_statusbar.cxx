@@ -53,7 +53,8 @@ void vgui_mfc_statusbar::update()
 
 
 //: Append given text (of given length) to the status bar
-int vgui_mfc_statusbar::write(const char* text, int n) {
+int vgui_mfc_statusbar::write(const char* text, int n)
+{
   static bool start_new = false;
   if (n == 1) {
     if (text[0] == '\n') {
@@ -88,7 +89,8 @@ int vgui_mfc_statusbar::write(const char* text, int n) {
 }
 
 //: Write given text to the status bar.
-int vgui_mfc_statusbar::write(const char* text) {
+int vgui_mfc_statusbar::write(const char* text)
+{
         statusbar->SetWindowText(text);
   linebuffer = text;
   statusbar->SetPaneText(0,linebuffer.c_str());

@@ -362,9 +362,8 @@ void vgui_gtk2_adaptor::reshape()
 
 bool vgui_gtk2_adaptor::do_idle()
 {
-  if( idle_request_posted_ ) {
+  if ( idle_request_posted_ )
     idle_request_posted_ =  dispatch_to_tableau( vgui_event( vgui_IDLE ) );
-  }
   return idle_request_posted_;
 }
 

@@ -127,7 +127,8 @@ double vnl_brent::minimize_given_bounds_and_1st_f(double ax, double bx,
   b=(ax > cx ? ax : cx);
   x=w=v=bx;
   fw=fv=fx=fb;
-  for (iter=1;iter<=ITMAX;iter++) {
+  for (iter=1;iter<=ITMAX;iter++)
+  {
     xm=0.5*(a+b);
     tol1=tol*vcl_fabs(x)+ZEPS;
     tol2=2.0*(tol1);

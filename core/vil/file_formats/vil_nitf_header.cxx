@@ -204,7 +204,7 @@ const char * ConvertClassification(NITFClass c)
         c==SECRET       || c==TOPSECRET))
     c = DefaultClassification;
 
-  switch(c)
+  switch (c)
   {
     case UNCLASSIFIED: STRCPY(cc,"UNCLASSIFIED"); break;
     case RESTRICTED:   STRCPY(cc,"RESTRICTED");   break;

@@ -37,13 +37,15 @@ VGUI_STATIC_OBJECT(Map_soview, object_map);
 #endif
 
 
-unsigned vgui_soview::create_id() {
+unsigned vgui_soview::create_id()
+{
   unsigned nid = current_id;
   current_id++;
   return nid;
 }
 
-void vgui_soview::add_id() {
+void vgui_soview::add_id()
+{
   id = create_id();
 #if AWF_USE_MAP
   object_map().insert(Map_soview::value_type(id, this));
@@ -53,8 +55,8 @@ void vgui_soview::add_id() {
 #endif
 }
 
-vgui_soview* vgui_soview::id_to_object(unsigned id) {
-
+vgui_soview* vgui_soview::id_to_object(unsigned id)
+{
 #if AWF_USE_MAP
   Map_soview::iterator i = object_map().find(id);
   if (i != object_map().end()) {
@@ -70,7 +72,8 @@ vgui_soview* vgui_soview::id_to_object(unsigned id) {
 }
 
 
-vgui_soview::vgui_soview() : selectable(true), style(0) {
+vgui_soview::vgui_soview() : selectable(true), style(0)
+{
   add_id();
 }
 
@@ -83,7 +86,8 @@ vcl_ostream& vgui_soview::print(vcl_ostream& s) const
   return s << "id " << id;
 }
 
-vcl_string vgui_soview::type_name() const  {
+vcl_string vgui_soview::type_name() const
+{
   // this should never be called. derived classes should implement type_name().
   static bool warned=false;
   if (!warned) {
@@ -94,7 +98,8 @@ vcl_string vgui_soview::type_name() const  {
 }
 
 
-void vgui_soview::draw_select() const {
+void vgui_soview::draw_select() const
+{
   // default is to draw as normal. Complex objects may override
   // this behaviour.
   //
@@ -102,24 +107,26 @@ void vgui_soview::draw_select() const {
 }
 
 
-void vgui_soview::load_name() const {
+void vgui_soview::load_name() const
+{
   glLoadName(id);
 }
 
 
-void vgui_soview::set_style(const vgui_style_sptr& newstyle) {
+void vgui_soview::set_style(const vgui_style_sptr& newstyle)
+{
   style = newstyle;
 }
 
-void vgui_soview::set_colour(float r, float g, float b) {
-
+void vgui_soview::set_colour(float r, float g, float b)
+{
   vgui_style_sptr newstyle = vgui_style::new_style();
 
   newstyle->rgba[0] = r;
   newstyle->rgba[1] = g;
   newstyle->rgba[2] = b;
 
-  if(style){
+  if (style) {
     newstyle->point_size = style->point_size;
     newstyle->line_width = style->line_width;
   }
@@ -127,13 +134,13 @@ void vgui_soview::set_colour(float r, float g, float b) {
   style = newstyle;
 }
 
-void vgui_soview::set_point_size(float s) {
-
+void vgui_soview::set_point_size(float s)
+{
   vgui_style_sptr newstyle = vgui_style::new_style();
 
   newstyle->point_size = s;
 
-  if(style){
+  if (style) {
     newstyle->rgba[0] = style->rgba[0];
     newstyle->rgba[1] = style->rgba[1];
     newstyle->rgba[2] = style->rgba[2];
@@ -143,13 +150,13 @@ void vgui_soview::set_point_size(float s) {
   style = newstyle;
 }
 
-void vgui_soview::set_line_width(float w) {
-
+void vgui_soview::set_line_width(float w)
+{
   vgui_style_sptr newstyle = vgui_style::new_style();
 
   newstyle->line_width = w;
-    
-  if(style){
+
+  if (style) {
     newstyle->rgba[0] = style->rgba[0];
     newstyle->rgba[1] = style->rgba[1];
     newstyle->rgba[2] = style->rgba[2];
@@ -160,7 +167,8 @@ void vgui_soview::set_line_width(float w) {
 }
 
 
-vgui_style_sptr vgui_soview::get_style() const {
+vgui_style_sptr vgui_soview::get_style() const
+{
   return style;
 }
 
@@ -180,18 +188,21 @@ const void * const vgui_soview::msg_deselect="x";
 // vc++ static data members have some peculiarities, so
 // we use this traditional work-around instead :
 typedef vcl_multimap<void *, void *, vcl_less<void *> > mmap_Pv_Pv;
-static mmap_Pv_Pv &the_map() {
+static mmap_Pv_Pv &the_map()
+{
   static mmap_Pv_Pv *ptr = 0;
   if (!ptr)
     ptr = new mmap_Pv_Pv;
   return *ptr;
 }
 
-void vgui_soview::attach(vgui_observer* o) {
+void vgui_soview::attach(vgui_observer* o)
+{
   the_map().insert(mmap_Pv_Pv::value_type(this, o));
 }
 
-void vgui_soview::detach(vgui_observer* o) {
+void vgui_soview::detach(vgui_observer* o)
+{
   mmap_Pv_Pv::iterator lo = the_map().lower_bound(this);
   mmap_Pv_Pv::iterator hi = the_map().upper_bound(this);
   for (mmap_Pv_Pv::iterator i=lo; i!=hi; ++i)
@@ -206,7 +217,8 @@ void vgui_soview::detach(vgui_observer* o) {
   vcl_cerr << __FILE__ " : no such observer on this soview\n";
 }
 
-void vgui_soview::get_observers(vcl_vector<vgui_observer*>& vobs) const {
+void vgui_soview::get_observers(vcl_vector<vgui_observer*>& vobs) const
+{
   mmap_Pv_Pv::const_iterator lo = the_map().lower_bound( const_cast<vgui_soview*>(this) );
   mmap_Pv_Pv::const_iterator hi = the_map().upper_bound( const_cast<vgui_soview*>(this) );
   for (mmap_Pv_Pv::const_iterator i=lo; i!=hi; ++i)
@@ -214,14 +226,16 @@ void vgui_soview::get_observers(vcl_vector<vgui_observer*>& vobs) const {
 }
 
 // These two method could be optimized a bit.
-void vgui_soview::notify() const {
+void vgui_soview::notify() const
+{
   vcl_vector<vgui_observer*> vobs;
   get_observers(vobs);
   for (unsigned i=0; i<vobs.size(); ++i)
     vobs[i]->update();
 }
 
-void vgui_soview::notify(vgui_message const &msg) const {
+void vgui_soview::notify(vgui_message const &msg) const
+{
   vcl_vector<vgui_observer*> vobs;
   get_observers(vobs);
   for (unsigned i=0; i<vobs.size(); ++i)

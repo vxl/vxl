@@ -29,9 +29,9 @@ void vsl_b_read(vsl_b_istream &is, vgl_vector_3d<T> & vec)
 
   short v;
   vsl_b_read(is, v);
-  switch(v)
+  switch (v)
   {
-  case 1:
+   case 1:
     T x, y, z;
     vsl_b_read(is, x);
     vsl_b_read(is, y);
@@ -39,7 +39,7 @@ void vsl_b_read(vsl_b_istream &is, vgl_vector_3d<T> & vec)
     vec.set(x,y,z);
     break;
 
-  default:
+   default:
     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_vector_3d<T>&)\n"
              << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream

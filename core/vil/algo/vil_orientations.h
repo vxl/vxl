@@ -39,17 +39,17 @@ void vil_orientations(const vil_image_view<float>& grad_i,
 //
 //  Images assumed to be single plane
 void vil_orientations_at_edges(const vil_image_view<float>& grad_i,
-                      const vil_image_view<float>& grad_j,
-                      vil_image_view<vxl_byte>& orient_im,
-                      vil_image_view<float>& grad_mag,
-                      float grad_threshold,
-                      unsigned n_orientations=255);
+                               const vil_image_view<float>& grad_j,
+                               vil_image_view<vxl_byte>& orient_im,
+                               vil_image_view<float>& grad_mag,
+                               float grad_threshold,
+                               unsigned n_orientations=255);
 
 //: Compute orientation and gradient magnitude using sobel to get gradients
 template <class T>
 inline void vil_orientations_from_sobel(const vil_image_view<T>& src_image,
-                      vil_image_view<float>& orient_im,
-                      vil_image_view<float>& grad_mag)
+                                        vil_image_view<float>& orient_im,
+                                        vil_image_view<float>& grad_mag)
 {
   vil_image_view<float> grad_i,grad_j;
   vil_sobel_3x3(src_image,grad_i,grad_j);
@@ -65,16 +65,13 @@ inline void vil_orientations_from_sobel(const vil_image_view<T>& src_image,
 //  Images assumed to be single plane
 template <class T>
 inline void vil_orientations_from_sobel(const vil_image_view<T>& src_image,
-                      vil_image_view<vxl_byte>& orient_im,
-                      vil_image_view<float>& grad_mag,
-                      unsigned n_orientations=256)
+                                        vil_image_view<vxl_byte>& orient_im,
+                                        vil_image_view<float>& grad_mag,
+                                        unsigned n_orientations=256)
 {
   vil_image_view<float> grad_i,grad_j;
   vil_sobel_3x3(src_image,grad_i,grad_j);
   vil_orientations(grad_i,grad_j,orient_im,grad_mag,n_orientations);
 }
-
-
-
 
 #endif // vil_orientations_h_

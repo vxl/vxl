@@ -43,12 +43,12 @@ bool vil_nitf_version_v20::operator== (vil_nitf_version& otherVersion)
  *  Method to return a vil_nitf_version_v20 object as a vil_nitf_version
  *  object.  This always returns the same object.  It can be used to
  *  prevent a proliferation of  vil_nitf_version objects in the system.
- * 
+ *
  *  NOTE: deprecated.  It seems the only reason for this method was to return
- *  an instance of vil_nitf_version_v20 so vil_nitf_image_subheader and 
+ *  an instance of vil_nitf_version_v20 so vil_nitf_image_subheader and
  *  could invoke method vil_nitf_version_20::newImageHeaderBand.  It seemed
  *  to make more sense to make newImageHeaderBand a virtual method of
- *  vil_nitf_image_subheader and implement in its subclasses.  
+ *  vil_nitf_image_subheader and implement in its subclasses.
  */
 /*====================================================================*/
 vil_nitf_version_v20 * vil_nitf_version_v20::GetVersion()
@@ -61,10 +61,10 @@ vil_nitf_version_v20 * vil_nitf_version_v20::GetVersion()
         nitfvXX = new vil_nitf_version_v20 (V20_VERSION_STR);
 #if DEBUG
         vcl_cout << method_name << "create version object = "
-                 << nitfvXX << " <" << nitfvXX->GetTitle() << ">" << vcl_endl ;
+                 << nitfvXX << " <" << nitfvXX->GetTitle() << '>' << vcl_endl;
 #endif
     }
-    return nitfvXX ;
+    return nitfvXX;
 }
 
 /*====================================================================*/
@@ -78,9 +78,9 @@ vil_nitf_version_v20 * vil_nitf_version_v20::GetVersion()
 vcl_string vil_nitf_version_v20::get_version_str()
 {
     static vcl_string method_name = "vil_nitf_version_v20::get_version_str: ";
-    vcl_string version_str = V20_VERSION_STR ;
+    vcl_string version_str = V20_VERSION_STR;
 
-    return version_str ;
+    return version_str;
 }
 
 //:

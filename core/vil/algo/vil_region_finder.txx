@@ -29,15 +29,15 @@ init( vil_region_finder_connectivity conn )
   static int const nbrs8_delta[8][2] = { { 1, 0}, { 1,-1}, { 0,-1}, {-1,-1},
                                          {-1, 0}, {-1, 1}, { 0, 1}, { 1, 1} };
   processed_.fill( false );
-  switch( conn ){
-    case vil_region_finder_4_conn:
-      num_nbrs_ = 4;
-      nbr_delta_ = nbrs4_delta;
-      break;
-    case vil_region_finder_8_conn:
-      num_nbrs_ = 8;
-      nbr_delta_ = nbrs8_delta;
-      break;
+  switch ( conn ) {
+   case vil_region_finder_4_conn:
+    num_nbrs_ = 4;
+    nbr_delta_ = nbrs4_delta;
+    break;
+   case vil_region_finder_8_conn:
+    num_nbrs_ = 8;
+    nbr_delta_ = nbrs8_delta;
+    break;
   }
 }
 

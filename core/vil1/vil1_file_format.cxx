@@ -70,7 +70,8 @@ vil1_file_format::~vil1_file_format()
 static vil1_file_format** storage = 0;
 vil1_file_format** vil1_file_format::all()
 {
-  if (storage == 0) {
+  if (storage == 0)
+  {
     storage = new vil1_file_format*[256];
     int c = 0;
 
@@ -115,15 +116,15 @@ vil1_file_format** vil1_file_format::all()
 
 class vil1_file_format_list_destroyer
 {
-public:
+ public:
   ~vil1_file_format_list_destroyer()
   {
-    if(storage==0) return;
+    if (storage==0) return;
     unsigned i=0;
     while (storage[i])
       delete storage[i++];
     delete [] storage;
   }
 };
-static vil1_file_format_list_destroyer destroyer_obj;
 
+static vil1_file_format_list_destroyer destroyer_obj;

@@ -13,11 +13,11 @@
 
 //: Create a big image by tiling images in patches (must be of same size)
 //  Creates a large image by putting smaller images into an approximately
-//  square grid.  
+//  square grid.
 //  If there are n small images, the grid will have sqrt(n) columns.
 template<class T>
 inline void vil_tile_images(vil_image_view<T>& big_image,
-                     const vcl_vector<vil_image_view<T> >& patches)
+                            const vcl_vector<vil_image_view<T> >& patches)
 {
   unsigned n = patches.size();
   unsigned ni = unsigned(vcl_sqrt(float(n)));
@@ -31,8 +31,8 @@ inline void vil_tile_images(vil_image_view<T>& big_image,
   big_image.fill(vxl_byte(0));
   for (unsigned k=0;k<n;++k)
   {
-    assert(patches[k].ni()==pi && patches[k].nj()== pj 
-           && patches[k].nplanes()== np);
+    assert(patches[k].ni()==pi && patches[k].nj()== pj &&
+           patches[k].nplanes()== np);
 
     unsigned i = k%ni;
     unsigned j = k/ni;

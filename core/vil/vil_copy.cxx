@@ -40,7 +40,7 @@ bool vil_copy_deep(const vil_image_resource_sptr &src, vil_image_resource_sptr &
     while (got_to_line < src->nj())
     {
       vil_image_view_base_sptr view_ref = src->get_view(0, src->ni(), got_to_line,
-        vcl_min(got_to_line+block_size, src->nj()));
+                                                        vcl_min(got_to_line+block_size, src->nj()));
       if (!view_ref) return false;
       if (!dest->put_view(*view_ref,0,got_to_line)) return false;
       got_to_line += block_size;

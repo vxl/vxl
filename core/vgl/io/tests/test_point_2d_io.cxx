@@ -17,8 +17,8 @@ void test_point_2d_double_io()
   vgl_point_2d<double> p_out(1.2,3.4), p_in;
 
   vsl_b_ofstream bfs_out("vgl_point_2d_test_double_io.bvl.tmp");
-  TEST ("Created vgl_point_2d_test_double_io.bvl.tmp for writing",
-         (!bfs_out), false);
+  TEST("Created vgl_point_2d_test_double_io.bvl.tmp for writing",
+       (!bfs_out), false);
   vsl_b_write(bfs_out, p_out);
   bfs_out.close();
 

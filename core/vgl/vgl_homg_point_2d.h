@@ -237,11 +237,11 @@ vgl_homg_point_2d<T> midpoint(vgl_homg_point_2d<T> const& p1,
 // \relates vgl_homg_point_2d
 template <class T> inline
 vgl_homg_point_2d<T> centre(vgl_homg_point_2d<T> const& p1,
-                               vgl_homg_point_2d<T> const& p2)
+                            vgl_homg_point_2d<T> const& p2)
 {
-  return vgl_homg_point_2d<T>(p1.x()*p2.w() + p2.x()*p1.w() ,
-                                 p1.y()*p2.w() + p2.y()*p1.w() ,
-                                 p1.w()*p2.w()*2 );
+  return vgl_homg_point_2d<T>(p1.x()*p2.w() + p2.x()*p1.w(),
+                              p1.y()*p2.w() + p2.y()*p1.w(),
+                              p1.w()*p2.w()*2 );
 }
 
 //: Return the point at the centre of gravity of a set of given points.

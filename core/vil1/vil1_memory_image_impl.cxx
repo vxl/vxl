@@ -19,7 +19,7 @@ vil1_memory_image_impl::vil1_memory_image_impl(int planes, int w, int h,
                                                const& format)
 {
   init((void*)0, planes, w, h, format.components, format.bits_per_component,
-            format.component_format);
+       format.component_format);
 }
 
 vil1_memory_image_impl::vil1_memory_image_impl(int planes, int w, int h,
@@ -148,7 +148,7 @@ void vil1_memory_image_impl::resize(int planes, int width, int height)
   if (!is_foreign_buf_)
     delete [] buf_;
   init((void*)0, planes, width, height, components_,
-            bits_per_component_, component_format_);
+       bits_per_component_, component_format_);
 }
 
 bool vil1_memory_image_impl::get_section(void* obuf, int x0, int y0,

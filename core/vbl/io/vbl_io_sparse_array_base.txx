@@ -35,10 +35,10 @@ void vsl_b_read(vsl_b_istream &is, vbl_sparse_array_base<T, Index> & p)
   short v;
   vsl_b_read(is, v);
 
-  switch(v)
+  switch (v)
   {
-  case 1: {
-    unsigned size;
+   case 1: {
+    unsigned int size;
     vsl_b_read(is, size);
 
 #ifdef VCL_SUNPRO_CC_50
@@ -57,11 +57,12 @@ void vsl_b_read(vsl_b_istream &is, vbl_sparse_array_base<T, Index> & p)
       p(value.first)=value.second;
     }
 #endif
-  } break;
+    break;
+   }
 
-  default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_sparse_array_base<T, Index> &) \n"
-             << "           Unknown version number "<< v << "\n";
+   default:
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_sparse_array_base<T, Index> &)\n"
+             << "           Unknown version number "<< v << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

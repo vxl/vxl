@@ -37,7 +37,7 @@ vil1_image vil1_smooth_gaussian(vil1_image const & in, double sigma)
     mask[x] *= mass_scale;
 
   // Call convolver
-  switch(vil1_pixel_format(in))
+  switch (vil1_pixel_format(in))
   {
     case VIL1_BYTE:  return vil1_convolve_separable(in, &mask[0], size-1, (vxl_byte*)0, (double*)0, (float*)0);
     case VIL1_UINT16:return vil1_convolve_separable(in, &mask[0], size-1, (vxl_uint_16*)0, (double*)0, (float*)0);

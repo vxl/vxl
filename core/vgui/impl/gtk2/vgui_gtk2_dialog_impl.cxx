@@ -298,8 +298,8 @@ bool vgui_gtk2_dialog_impl::ask() {
     gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
                      cancel, TRUE, TRUE, 0);
     gtk_signal_connect(GTK_OBJECT(cancel), "clicked",
-                     GTK_SIGNAL_FUNC(cancel_cb),
-                     &dialog_status_);
+                       GTK_SIGNAL_FUNC(cancel_cb),
+                       &dialog_status_);
     gtk_widget_show(cancel);
   }
 

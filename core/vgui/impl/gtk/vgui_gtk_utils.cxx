@@ -49,11 +49,11 @@ vgui_key vgui_gtk_utils::translate_key(GdkEventKey const *gev)
   if (gev->length == 1)
     return vgui_key( *(gev->string) );
 
-  switch(gev->keyval)
+  switch (gev->keyval)
   {
-  case GDK_Page_Up:
+   case GDK_Page_Up:
     return vgui_PAGE_UP;
-  case GDK_Page_Down:
+   case GDK_Page_Down:
     return vgui_PAGE_DOWN;
   }
 
@@ -123,7 +123,7 @@ void vgui_gtk_utils::add_submenu(GtkWidget *widget, const vgui_menu& menu)
   {
     if (menu[i].is_separator())
     {
-      if (debug) vcl_cerr << " <separator> \n";
+      if (debug) vcl_cerr << " <separator>\n";
       GtkWidget* item = gtk_menu_item_new();
       gtk_menu_append(GTK_MENU(widget), item);
       gtk_widget_show(item);
@@ -141,26 +141,26 @@ void vgui_gtk_utils::add_submenu(GtkWidget *widget, const vgui_menu& menu)
 
       gtk_widget_show(item);
       if (menu[i].short_cut.mod!=vgui_MODIFIER_NULL ||
-         menu[i].short_cut.key!=vgui_KEY_NULL)
-        {
-          gint mask = 0;
-          // Health warning - It seems that GDK_MOD1_MASK corresponds
-          // to META on Solaris and ALT has no correspondance
-          if (menu[i].short_cut.mod & vgui_CTRL)
-            mask|=GDK_CONTROL_MASK;
-          if (menu[i].short_cut.mod & vgui_META)
-            mask|=GDK_MOD1_MASK;
-          if (menu[i].short_cut.mod & vgui_SHIFT)
-            mask|=GDK_SHIFT_MASK;
-          if (menu[i].short_cut.mod & vgui_ALT)
-            mask|=GDK_MOD2_MASK;
-          gtk_widget_add_accelerator (item,
-                                      "activate",
-                                      accel_group,
-                                      char(menu[i].short_cut.key),
-                                      mask,
-                                      GtkAccelFlags(GTK_ACCEL_VISIBLE|GTK_ACCEL_LOCKED));
-        }
+          menu[i].short_cut.key!=vgui_KEY_NULL)
+      {
+        gint mask = 0;
+        // Health warning - It seems that GDK_MOD1_MASK corresponds
+        // to META on Solaris and ALT has no correspondance
+        if (menu[i].short_cut.mod & vgui_CTRL)
+          mask|=GDK_CONTROL_MASK;
+        if (menu[i].short_cut.mod & vgui_META)
+          mask|=GDK_MOD1_MASK;
+        if (menu[i].short_cut.mod & vgui_SHIFT)
+          mask|=GDK_SHIFT_MASK;
+        if (menu[i].short_cut.mod & vgui_ALT)
+          mask|=GDK_MOD2_MASK;
+        gtk_widget_add_accelerator (item,
+                                    "activate",
+                                    accel_group,
+                                    char(menu[i].short_cut.key),
+                                    mask,
+                                    GtkAccelFlags(GTK_ACCEL_VISIBLE|GTK_ACCEL_LOCKED));
+      }
     }
     else if (menu[i].is_submenu())
     {
@@ -183,7 +183,7 @@ void vgui_gtk_utils::set_menu(GtkWidget *widget, const vgui_menu& menu, bool is_
   {
     if (menu[i].is_separator())
     {
-      if (debug) vcl_cerr << " <separator> \n";
+      if (debug) vcl_cerr << " <separator>\n";
       GtkWidget* item = gtk_menu_item_new();
       if (!is_menubar)
         gtk_menu_append(GTK_MENU(widget), item);
@@ -199,26 +199,26 @@ void vgui_gtk_utils::set_menu(GtkWidget *widget, const vgui_menu& menu, bool is_
       else
       {
         if (menu[i].short_cut.mod!=vgui_MODIFIER_NULL ||
-           menu[i].short_cut.key!=vgui_KEY_NULL)
-          {
-            gint mask = 0;
-            // Health warning - It seems that GDK_MOD1_MASK corresponds
-            // to META on Solaris and ALT has no correspondance
-            if (menu[i].short_cut.mod & vgui_CTRL)
-              mask|=GDK_CONTROL_MASK;
-            if (menu[i].short_cut.mod & vgui_META)
-              mask|=GDK_MOD1_MASK;
-            if (menu[i].short_cut.mod & vgui_SHIFT)
-              mask|=GDK_SHIFT_MASK;
-            if (menu[i].short_cut.mod & vgui_ALT)
-              mask|=GDK_MOD2_MASK;
-            gtk_widget_add_accelerator (item,
-                                        "activate",
-                                        accel_group,
-                                        char(menu[i].short_cut.key),
-                                        mask,
-                                        GtkAccelFlags(GTK_ACCEL_VISIBLE|GTK_ACCEL_LOCKED));
-          }
+            menu[i].short_cut.key!=vgui_KEY_NULL)
+        {
+          gint mask = 0;
+          // Health warning - It seems that GDK_MOD1_MASK corresponds
+          // to META on Solaris and ALT has no correspondance
+          if (menu[i].short_cut.mod & vgui_CTRL)
+            mask|=GDK_CONTROL_MASK;
+          if (menu[i].short_cut.mod & vgui_META)
+            mask|=GDK_MOD1_MASK;
+          if (menu[i].short_cut.mod & vgui_SHIFT)
+            mask|=GDK_SHIFT_MASK;
+          if (menu[i].short_cut.mod & vgui_ALT)
+            mask|=GDK_MOD2_MASK;
+          gtk_widget_add_accelerator (item,
+                                      "activate",
+                                      accel_group,
+                                      char(menu[i].short_cut.key),
+                                      mask,
+                                      GtkAccelFlags(GTK_ACCEL_VISIBLE|GTK_ACCEL_LOCKED));
+        }
         gtk_menu_append(GTK_MENU(widget), item);
       }
 

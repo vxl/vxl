@@ -150,7 +150,8 @@ typedef struct
   int name;
 } vgui_gtk_adaptor_callback_data;
 
-void vgui_gtk_adaptor::post_timer(float timeout, int name) {
+void vgui_gtk_adaptor::post_timer(float timeout, int name)
+{
   vgui_gtk_adaptor_callback_data *cd = new vgui_gtk_adaptor_callback_data; // <*> acquire
   cd->adapt = this;
   cd->name = name;
@@ -266,8 +267,8 @@ gint vgui_gtk_adaptor::handle(GtkWidget *widget,
 
   if (event.type == vgui_BUTTON_DOWN &&
       event.button == adaptor->popup_button &&
-      event.modifier == adaptor->popup_modifier) {
-
+      event.modifier == adaptor->popup_modifier)
+  {
     GdkEventButton *bevent = (GdkEventButton *)gev;
 
     GtkWidget *popup_menu = gtk_menu_new ();    /* Don't need to show menus */
