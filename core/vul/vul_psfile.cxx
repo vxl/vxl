@@ -44,9 +44,10 @@ static const vcl_streampos HEADER_START(-1);
 //-----------------------------------------------------------------------------
 //: Default constructor.
 //-----------------------------------------------------------------------------
-vul_psfile::vul_psfile(char const* f)
+vul_psfile::vul_psfile(char const* f, bool dbg)
   : output_filestream(f)
 {
+  debug = dbg;
   set_paper_orientation(vul_psfile::PORTRAIT);
   set_paper_type(vul_psfile::US_NORMAL);
   set_paper_layout(vul_psfile::CENTER);
@@ -754,7 +755,7 @@ void vul_psfile::reset_postscript_header()
 {
   if (printer_paper_orientation == vul_psfile::LANDSCAPE)
   {
-    vul_printf(output_filestream, "%d %d %d %d\n",
+    vul_printf(output_filestream, "%4d %4d %4d %4d\n",
         (int) (pos_iny * PIX2INCH + 0.5),
         (int) (pos_inx * PIX2INCH + 0.5),
         (int) (pos_iny * PIX2INCH + 0.5) + ih,
@@ -762,7 +763,7 @@ void vul_psfile::reset_postscript_header()
   }
   else
   {
-    vul_printf(output_filestream, "%d %d %d %d\n", ox,oy,ox+iw,oy+ih);
+    vul_printf(output_filestream, "%4d %4d %4d %4d\n", ox,oy,ox+iw,oy+ih);
   }
   output_filestream << "%%Pages: 1\n"
                     << "%%DocumentFonts:\n"
