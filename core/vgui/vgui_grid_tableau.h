@@ -26,7 +26,7 @@
 struct vgui_grid_tableau_data
 {
   int handle;       // Handle returned by polytab
-  int tab_pos;      // Position in tableaux vcl_list (tabs)
+  int tab_pos;      // Position in array of tableaux (`tabs')
   bool is_default;  // True if this is a default tableau (not set by the user)
   int time_selected;// Time last left clicked on (-1 if not selected)
 };
