@@ -67,8 +67,7 @@ IU_PACKAGES +=                  \
              MultiView          \
              Segmentation       \
              Recognition        \
-             Database           \
-             Matching
+             Database
 
 #GUI_PACKAGES += Viewing # InterViews support was removed
 GUI_PACKAGES += MotifInterface
