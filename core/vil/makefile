@@ -60,6 +60,7 @@ DEFINES += -UHAS_TIFF
 SOURCES += vil2_decimate.cxx
 SOURCES += vil2_vil1.cxx
 MANPAGE_SOURCES += vil2_resample_bilin.txx
+MANPAGE_SOURCES += vil2_pixel_traits.h
 
 SUBDIRS += algo io
 

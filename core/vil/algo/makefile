@@ -13,6 +13,7 @@ SOURCES += vil2_gauss_reduce.cxx
 MANPAGE_SOURCES += vil2_gauss_reduce.txx
 MANPAGE_SOURCES += vil2_convolve_1d.h
 MANPAGE_SOURCES += vil2_convolve_2d.h
+MANPAGE_SOURCES += vil2_correlate_1d.h
 MANPAGE_SOURCES += vil2_exp_filter_1d.h
 SOURCES += vil2_binary_erode.cxx
 SOURCES += vil2_binary_dilate.cxx
