@@ -50,14 +50,14 @@ ADD_TEST( vil2_test_algo_exp_grad_filter_1d vil2_test_driver test_algo_exp_grad_
 ADD_TEST( vil2_test_image_view_maths        vil2_test_driver test_image_view_maths )
 ADD_TEST( vil2_memory_chunk                 vil2_test_driver test_memory_chunk )
 ADD_TEST( vil2_resample_bilin               vil2_test_driver test_resample_bilin )
-ADD_TEST( test_binary_dilate                vil2_test_driver test_binary_dilate )
-ADD_TEST( test_binary_erode                 vil2_test_driver test_binary_erode )
-ADD_TEST( test_greyscale_dilate             vil2_test_driver test_greyscale_dilate )
-ADD_TEST( test_greyscale_erode              vil2_test_driver test_greyscale_erode )
-ADD_TEST( test_median                       vil2_test_driver test_median )
+ADD_TEST( vil2_test_binary_dilate                vil2_test_driver test_binary_dilate )
+ADD_TEST( vil2_test_binary_erode                 vil2_test_driver test_binary_erode )
+ADD_TEST( vil2_test_greyscale_dilate             vil2_test_driver test_greyscale_dilate )
+ADD_TEST( vil2_test_greyscale_erode              vil2_test_driver test_greyscale_erode )
+ADD_TEST( vil2_test_median                       vil2_test_driver test_median )
 
 
 # To run timing tests
 ADD_EXECUTABLE( vil2_test_access_timings vil2_test_access_timings.cxx)
 TARGET_LINK_LIBRARIES( vil2_test_access_timings vil2_algo vil2 vpl vul mbl testlib vcl )
-
+ADD_TEST( vil2_test_access_timings vil2_test_access_timings )
