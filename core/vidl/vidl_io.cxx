@@ -100,6 +100,9 @@ vidl_movie_ref  vidl_io::load_movie(
   return movie;
 }
 
+static bool looks_like_a_file_list(char const* fname);
+static vidl_clip_ref load_from_file_list(char const* fname);
+
 // -- Load a clip, takes a file name and return the created clip.
 // A starting frame, ending frame and increment number are optionals
 vidl_clip_ref  vidl_io::load_clip(
@@ -140,39 +143,10 @@ vidl_clip_ref  vidl_io::load_clip(
           // if(!dir.IsOpen())
           //    return 0;
           
-          // Declare the vcl_list of image filenames
-          vcl_list<vcl_string> filenames;
-
-          vbl_sequence_filename_map map(fname);
-      
-          for(int i = 0;i < map.get_nviews(); ++i)
-              {
-                  vcl_string name = map.name(i);
-                  vcl_string fullpath = (vcl_string)fname + vcl_string("/") + name;
-                  // check to see if file is a directory.
-                  if (vbl_file::is_directory(fullpath))
-                      continue;
-                  filenames.push_back(fullpath);
-              }
-          
-//       StringArray* fn = dir.GetFileList();
-//       int f=0;
-//       for(;f < fn->GetSize(); f++)
-//         {
-//           const char* name = fn->GetEntry(f);
-//           vcl_string fullpath = (vcl_string)fname + vcl_string("/") + vcl_string(name);
-//           // check to see if file is a directory.
-//           if (IUE_stat(fullpath.c_str()).is_directory())
-//             continue;
-          
-//           filenames.push_back(fullpath);
-//         }
-      
-      // Call load_images and return the result
-          return load_images(filenames, start, end, increment, mode);
 #endif
       }
-
+  else if (looks_like_a_file_list(fname))
+    return load_from_file_list(fname);
 
   // The file is not a directory,
   // Let us try all the known video formats,
@@ -343,4 +317,33 @@ vcl_list<vcl_string> vidl_io::supported_types()
 void vidl_io::register_codec(vidl_codec* codec)
 {
   supported_types_.push_back(codec);
+}
+
+static bool looks_like_a_file_list(char const* fname)
+{
+  while (*fname) {
+    if (*fname == '%' || *fname == '#')
+      return true;
+    ++fname;
+  }
+  return false;
+}
+
+static vidl_clip_ref load_from_file_list(char const* fname)
+{
+  // Declare the vcl_list of image filenames
+  vcl_list<vcl_string> filenames;
+
+  vbl_sequence_filename_map map(fname);
+      
+  for(int i = 0;i < map.get_nviews(); ++i) {
+    vcl_string fullpath = map.image_name(i);
+    // check to see if file is a directory.
+    if (vbl_file::is_directory(fullpath))
+      continue;
+    filenames.push_back(fullpath);
+  }
+        
+  // Call load_images and return the result
+  return vidl_io::load_images(filenames, 'r');
 }
