@@ -52,7 +52,7 @@ void vbl_qsort_ascending(T* base, int n)
 #if VXL_HAS_QSORT
   qsort(base, n, sizeof base[0], vbl_qsort_helper<T>::ascend);
 #else
-  vcl_sort(base, base+n, std::less<T>());
+  vcl_sort(base, base+n, vcl_less<T>());
 #endif
 }
 
@@ -65,7 +65,7 @@ void vbl_qsort_descending(T* base, int n)
 #if VXL_HAS_QSORT
   qsort(base, n, sizeof base[0], vbl_qsort_helper<T>::ascend);
 #else
-  vcl_sort(base, base+n, std::less<T>());
+  vcl_sort(base, base+n, vcl_less<T>());
 #endif
 }
 
@@ -79,7 +79,7 @@ void vbl_qsort_ascending(vcl_vector<T>& v)
 #if VXL_HAS_QSORT
   qsort(v.begin(), v.size(), sizeof v[0], vbl_qsort_helper<T>::ascend);
 #else
-  vcl_sort(v.begin(), v.end(), std::less<T>());
+  vcl_sort(v.begin(), v.end(), vcl_less<T>());
 #endif
 }
 
