@@ -13,8 +13,11 @@ bool close(double,double);
 
 class null_m_est : public rrel_m_est_obj
 {
+ public:
   double rho( double u ) const { return u; }
   double wgt( double u ) const { return u; }
+  void wgt( vect_const_iter b, vect_const_iter e, vect_const_iter s, vect_iter w) const { rrel_m_est_obj::wgt(b,e,s,w); }
+  void wgt( vect_const_iter b, vect_const_iter e, double s, vect_iter w) const { rrel_m_est_obj::wgt(b,e,s,w); }
 };
 
 MAIN( test_similarity_from_matches )
@@ -85,21 +88,21 @@ MAIN( test_similarity_from_matches )
   testlib_test_begin( "fit_from_minimal_sample -- exact" );
   indices[0] = 0;  indices[1] = 3;
   testlib_test_perform( sim.fit_from_minimal_set( indices, est_params )
-                    && close( est_params[0], params[0] )
-                    && close( est_params[1], params[1] )
-                    && close( est_params[2], params[2] )
-                    && close( est_params[3], params[3] ) );
+                        && close( est_params[0], params[0] )
+                        && close( est_params[1], params[1] )
+                        && close( est_params[2], params[2] )
+                        && close( est_params[3], params[3] ) );
 
   vcl_vector<double> residuals;
   testlib_test_begin( "compute_residuals" );
   sim.compute_residuals( params.as_ref(), residuals );
   testlib_test_perform( residuals.size() == 6
-                    && close( residuals[0],  0 )
-                    && close( residuals[1],  5 )
-                    && close( residuals[2], 50 )
-                    && close( residuals[3],  0 )
-                    && close( residuals[4], 10 )
-                    && close( residuals[5],  0.5 ) );
+                        && close( residuals[0],  0 )
+                        && close( residuals[1],  5 )
+                        && close( residuals[2], 50 )
+                        && close( residuals[3],  0 )
+                        && close( residuals[4], 10 )
+                        && close( residuals[5],  0.5 ) );
 
   vcl_vector<double> temp_res(6);
   vcl_vector<double> weights;
@@ -110,12 +113,12 @@ MAIN( test_similarity_from_matches )
 
   testlib_test_begin( "compute_weights" );
   sim.compute_weights( temp_res, &obj, 1.0, weights );
-  testlib_test_perform( close( weights[0], 1.0 * 1.0 / 1.1 )
-                    && close( weights[1], 0.1 * 0.1 / 1.1 )
-                    && close( weights[2], 0.02 * 0.02 / 1.14 )
-                    && close( weights[3], 1.0 * 1.0 / 1.14 )
-                    && close( weights[4], 0.12 * 0.12 / 1.14 )
-                    && close( weights[5], 0.9 ) );
+  testlib_test_perform(    close( weights[0], 1.0 * 1.0 / 1.1 )
+                        && close( weights[1], 0.1 * 0.1 / 1.1 )
+                        && close( weights[2], 0.02 * 0.02 / 1.14 )
+                        && close( weights[3], 1.0 * 1.0 / 1.14 )
+                        && close( weights[4], 0.12 * 0.12 / 1.14 )
+                        && close( weights[5], 0.9 ) );
 
   SUMMARY();
 }
