@@ -2,8 +2,8 @@
 #include <vepl/vepl_monadic.h>
 #include <vipl/vipl_monadic.h>
 #include <vil/vil_memory_image_of.h>
-#include <vil/vil_rgb.h>
 #include <vcl_cmath.h>
+#include <vcl_iostream.h>
 
 typedef unsigned char ubyte;
 float abs_float(float const& a) { return (a<0) ? -a : a; }
