@@ -3,14 +3,15 @@
 #ifdef __GNUG__
 #pragma interface
 #endif
-#include <vipl/filter/vipl_filter_abs.h>
+#include "vipl_filter_abs.h"
+#include <vipl/filter/vipl_trivial_pixeliter.h>
 
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr = vipl_trivial_pixeliter >
  class vipl_filter ;
 
 #include <vipl/section/vipl_section_descriptor.h>
 #include <vipl/section/vipl_section_container.h>
-#include <vipl/section/vipl_section_iterator.h>
+//#include <vipl/section/vipl_section_iterator.h>
 
 #include <vcl_stlfwd.h> // forward declaration for vcl_vector
 
@@ -82,7 +83,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
 #define CONVERT_TO_OUT(v) ((DataOut) (v))
 #endif
 // the include file below defines the type VIPL_FILTER_STATE
-#include <vipl/filter/vipl_filter_helper.h>// for adding members by macros....
+#include "vipl_filter_helper.h" // for adding members by macros....
 
 #include <vbl/vbl_smart_ptr.h>
 
