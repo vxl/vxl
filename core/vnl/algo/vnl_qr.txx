@@ -18,10 +18,10 @@ static inline int vnl_linpack_qrdc(vnl_netlib_qrdc_proto(T)) \
 { return p##qrdc_(vnl_netlib_qrdc_params); } \
 static inline int vnl_linpack_qrsl(vnl_netlib_qrsl_proto(T)) \
 { return p##qrsl_(vnl_netlib_qrsl_params); }
-macro(s, vnl_netlib::real);
-macro(d, vnl_netlib::doublereal);
-macro(c, vnl_netlib::complex);
-macro(z, vnl_netlib::doublecomplex);
+macro(s, vnl_netlib::real_t);
+macro(d, vnl_netlib::doublereal_t);
+macro(c, vnl_netlib::complex_t);
+macro(z, vnl_netlib::doublecomplex_t);
 #undef macro
 
 
