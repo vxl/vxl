@@ -734,9 +734,9 @@ void osl_fit_lines::MergeLines(vcl_list<osl_edgel_chain*> *curves_) {
 
   // Parameters and scatter matrices
   double x1_2,x1_3,x2_2,x2_3;
-  CoolMatrix<double> S(3,3,0.0);
-  CoolMatrix<double> Si(3,3),S1i(3,3),S2i(3,3),S3i(3,3);
-  CoolMatrix<double> S11(2,2),S12(2,1),S_lambda,vec3(1,1);
+  vnl_matrix<double> S(3,3,0.0);
+  vnl_matrix<double> Si(3,3),S1i(3,3),S2i(3,3),S3i(3,3);
+  vnl_matrix<double> S11(2,2),S12(2,1),S_lambda,vec3(1,1);
   double S22;
   double normaliser=0.0; // Effecively the total number of points in the lines
 
@@ -795,8 +795,8 @@ void osl_fit_lines::MergeLines(vcl_list<osl_edgel_chain*> *curves_) {
   S_lambda = S11 - S12 * (1.0/S22) * S12.transpose();
 
   // Assign data for the Eigenvalue/vector computation
-  CoolMatrix<double> U(2,2),V(2,2),W(2,2);
-  CoolMatrix<double> eigenvector(2,1);
+  vnl_matrix<double> U(2,2),V(2,2),W(2,2);
+  vnl_matrix<double> eigenvector(2,1);
 
   // Compute the Eigenvalues and the fitted line parameters
   S_lambda.singular_value_decomposition(U,W,V);

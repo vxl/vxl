@@ -44,7 +44,7 @@ class vrml_out
   void write_faces(vcl_list<Face*>& triangles);
   void write_faces_textured(vcl_list<Face*>& triangles, char const* imagefilename, int xsize, int ysize);
   void write_faces_textured(vcl_list<Face*>& triangles, char const* imagefilename, int xsize, int ysize,
-                            CoolMatrix<double> const& Pmatrix);
+                            vnl_matrix<double> const& Pmatrix);
   void write_faces_textured(vcl_list<Face*>& triangles, char const* imagefilename, int xsize, int ysize,
                             CoolAssociationP<Vertex*, IUPoint*>&);
   void write_faces_textured(vcl_list<Face*>& triangles, char const* imagefilename, vrml_out_vertex_to_texture const& textures);

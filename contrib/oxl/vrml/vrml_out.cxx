@@ -53,15 +53,16 @@ vrml_out::~vrml_out()
 void vrml_out::prologue()
 {
   SETUP;
-  f << "#VRML V1.0 ascii\n\n";
-  f << "#TargetJr vrml_out output\n";
-  f << "Separator {\n";
-  f << "ShapeHints {\n";
-  f << "\t vertexOrdering  CLOCKWISE\n";
-  f << "\t shapeType       UNKNOWN_SHAPE_TYPE\n";
-  //  f << "\t faceType        UNKNOWN_FACE_TYPE\n"; // Not necessarily convex
-  // vrweb barfs on previous line if faces are triangles...
-  f << "}\n";
+  f << "#VRML V1.0 ascii\n\n"
+    << "#vxl vrml_out output\n"
+    << "Separator {\n"
+    << "ShapeHints {\n"
+    << "\t vertexOrdering  CLOCKWISE\n"
+    << "\t shapeType       UNKNOWN_SHAPE_TYPE\n"
+#if 0 // vrweb barfs on the following line if faces are triangles...
+    << "\t faceType        UNKNOWN_FACE_TYPE\n"; // Not necessarily convex
+#endif
+    << "}\n";
 }
 
 void vrml_out::comment(char const* msg)
@@ -80,8 +81,8 @@ void vrml_out::verbatim(char const* msg)
 void vrml_out::epilogue()
 {
   SETUP;
-  f << "}\n";
-  f << "# End TargetJr vrml_out output\n";
+  f << "}\n"
+    << "# End vxl vrml_out output\n";
 }
 
 #if 0
@@ -306,7 +307,7 @@ void vrml_out::write_faces_textured(
 class VTT : public vrml_out_vertex_to_texture
 {
  public:
-  VTT(int xsize, int ysize, CoolMatrix<double> const& m)
+  VTT(int xsize, int ysize, vnl_matrix<double> const& m)
         : vrml_out_vertex_to_texture(xsize, ysize), Pmatrix(m) {}
 
   void get_texture_coords(
@@ -314,14 +315,13 @@ class VTT : public vrml_out_vertex_to_texture
         double* u,
         double* v) const
       {
-        double data[] = { vertex->GetX(), vertex->GetY(), vertex->GetZ(), 1.0};
-        CoolVector<double> p3d(data,4);
-        CoolVector<double> p2d = Pmatrix*p3d;
+        vnl_vector<double> p3d(4, vertex->GetX(), vertex->GetY(), vertex->GetZ(), 1.0);
+        vnl_vector<double> p2d = Pmatrix*p3d;
         *u = p2d.x() / p2d.z(); // ==> texture coordinate *u / image_xsize;
         *v = p2d.y() / p2d.z(); // ==> texture coordinate 1 - *v / image_ysize;
       }
 
-  CoolMatrix<double> Pmatrix;
+  vnl_matrix<double> Pmatrix;
 };
 
 void vrml_out::write_faces_textured(
@@ -329,7 +329,7 @@ void vrml_out::write_faces_textured(
         char const* imagefilename,
         int xsize,
         int ysize,
-        CoolMatrix<double> const& Pmatrix
+        vnl_matrix<double> const& Pmatrix
        )
 {
   VTT vtt(xsize, ysize, Pmatrix);
@@ -445,8 +445,8 @@ void vrml_out::end_pointset()
 void vrml_out::begin_texture(char const* texture_filename)
 {
   SETUP;
-  f << "  Texture2 { filename \"" << texture_filename << "\" }\n";
-  f << "  TextureCoordinate2 { point [\n";
+  f << "  Texture2 { filename \"" << texture_filename << "\" }\n"
+    << "  TextureCoordinate2 { point [\n";
 }
 
 void vrml_out::texture2(double u, double v)
