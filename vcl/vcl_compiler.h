@@ -59,6 +59,9 @@
 #  endif
 # elif (__GNUC__==3)
 #  define VCL_GCC_30
+#  if (__GNUC_MINOR__>0)
+#   define VCL_GCC_31
+#  endif
 # else
 #  error "Dunno about this gcc"
 # endif
