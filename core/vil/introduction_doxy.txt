@@ -165,6 +165,7 @@ vil_image_view<vxl_byte> filtered_image = vil_transpose(tmp_image2);
 * - vil_fill_row(view,j,value)     : Fills row j with value
 * - vil_fill_col(view,i,value)     : Fills col i with value
 * - vil_fill_mask(view,mask,value) : Fills region defined by boolean mask image
+* - vil_fill_disk(view,ci,cj,r,val): Fills disk in image with value
 * - vil_clamp                      : Clamp image pixels to given range
 * - vil_histogram_equalise(image)  : Apply histogram equalisation
 *

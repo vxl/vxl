@@ -8,6 +8,7 @@
 
 #include <vcl_cassert.h>
 #include <vil/vil_image_view.h>
+#include <vcl_algorithm.h>
 
 //: Fill view with given value
 //  O(size).
@@ -105,6 +106,31 @@ void vil_fill_mask(vil_image_view<srcT>& image,
       const bool* pixelB = rowB;
       for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelB+=istepB)
         if (*pixelB==b) *pixelA=value;
+    }
+  }
+}
+
+//: Fills pixels in disk with centre (ci,cj), radius r, with given value
+//  Fills all planes of image with the value.
+template<class T>
+inline
+void vil_fill_disk(vil_image_view<T>& image, double ci, double cj, double r, T value)
+{
+  int ilo = vcl_max(0,int(ci-r));
+  int ihi = vcl_min(int(image.ni()-1),int(ci+r+1.0));
+  int jlo = vcl_max(0,int(cj-r));
+  int jhi = vcl_min(int(image.nj()-1),int(cj+r+1.0));
+
+  double r2 = r*r;
+  for (unsigned j=jlo;j<=jhi;++j)
+  {
+    double t2 = r2 - (j-cj)*(j-cj);
+    for (unsigned i=ilo;i<=ihi;++i)
+    {
+      if ((i-ci)*(i-ci)<t2)
+      {
+        for (unsigned k=0;k<image.nplanes();++k) image(i,j,k)=value;
+      }
     }
   }
 }
