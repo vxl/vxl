@@ -42,7 +42,8 @@ vcl_cerr << "WARNING: " << exception.what() << vcl_endl;
   {
     vcl_string msg_;
    public:
-    mbl_exception_no_name_in_factory(const vcl_string&  msg): msg_(msg) {}
+    mbl_exception_no_name_in_factory(vcl_string failed_name, vcl_string valid_names)
+      : msg_(vcl_string("No such value: ")+failed_name+"\nValid values are: ["+valid_names+"]") {}
     const char * what() const {return msg_.c_str();}
   };
 
