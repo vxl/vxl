@@ -2,7 +2,7 @@
 //:
 // \file
 #include <vcl_fstream.h>
-#include <vcl_cmath.h> // for exp()
+#include <vcl_cmath.h>
 #include <vbl/vbl_array_2d.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_matrix_fixed.h>
@@ -17,12 +17,8 @@
 #include <brct/brct_algos.h>
 
 brct_plane_sweeper::brct_plane_sweeper(brct_plane_sweeper_params const& sp) // FIXME: sp unused
+ : n_planes_(0), n_cams_(0), del_(1.f), to_cam_(0), pindx_(192,256,vsol_box_2d_sptr(0))
 {
-  homographies_valid_=false;
-  n_planes_ =0;
-  n_cams_ = 0;
-  del_ =1;
-  to_cam_ = 0;
 }
 
 brct_plane_sweeper::~brct_plane_sweeper()
@@ -486,6 +482,7 @@ depth_image_box(const double zmin, const double zmax)
   return un;
 }
 
+#if 0 // unused static function
 static void debug_print(const int c0, const int r0, const int dr,
                         const int c, const int r,
                         const float cc_val)
@@ -496,6 +493,7 @@ static void debug_print(const int c0, const int r0, const int dr,
     return;
   vcl_cout << "C[" << r << "][" << c << "]= " << cc_val << vcl_endl;
 }
+#endif // 0
 
 //: sweep the z plane and find positions of max cross-correlation
 bool brct_plane_sweeper::
@@ -601,7 +599,6 @@ harris_depth_match(vcl_vector<vsol_point_3d_sptr>& points_3d,
   //get the size of the depth image
   //scan over the required z planes and get the union of all overlapping boxes
   vsol_box_2d_sptr un = this->depth_image_box(zmin_, zmax_);
-  double Tx = -(un->get_min_x()), Ty = -(un->get_min_y());
   int w = (int)(un->width()), h = (int)(un->height());
 
   //data processing images
