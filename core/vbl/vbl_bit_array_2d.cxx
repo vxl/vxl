@@ -68,8 +68,8 @@ void vbl_bit_array_2d::enlarge( int num_rows, int num_cols)
       index( i, 0, byteindex, bitindex);
 
       // find start of old column
-      unsigned long index= i* tempn;
-      unsigned long oldbyteindex= (unsigned long)(double(index)/CHAR_BIT);
+      unsigned long idx= i* tempn;
+      unsigned long oldbyteindex= (unsigned long)(double(idx)/CHAR_BIT);
 
       for (int j=0; j< tempn/CHAR_BIT; j++)
         data_[byteindex+j] = tempdata[oldbyteindex+j];
@@ -112,10 +112,10 @@ void vbl_bit_array_2d::construct(int num_rows, int num_cols)
 
 void vbl_bit_array_2d::index( unsigned int x, unsigned int y, unsigned long &byteindex, unsigned int &bitindex) const
 {
-  unsigned long index= x* num_cols_ + y;
+  unsigned long idx= x* num_cols_ + y;
 
-  byteindex= (unsigned long)(double(index)/CHAR_BIT);
-  bitindex = index%CHAR_BIT;
+  byteindex= (unsigned long)(double(idx)/CHAR_BIT);
+  bitindex = idx%CHAR_BIT;
 }
 
 bool vbl_bit_array_2d::operator==(vbl_bit_array_2d const &a) const
@@ -171,7 +171,7 @@ vcl_ostream& operator<< (vcl_ostream &os, const vbl_bit_array_2d &array)
   for (int i=0; i< array.rows(); i++)
   {
     for (int j=0; j< array.columns(); j++)
-      os << array(i,j) << " ";
+      os << array(i,j) << ' ';
 
     os << vcl_endl;
   }
