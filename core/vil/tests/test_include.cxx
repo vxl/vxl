@@ -29,6 +29,8 @@
 #include <vil/algo/vil_threshold.h>
 #include <vil/algo/vil_exp_filter_2d.h>
 #include <vil/algo/vil_suppress_non_max.h>
+#include <vil/algo/vil_blob_finder.h>
+#include <vil/algo/vil_trace_4con_boundary.h>
 #include <vil/vil_bicub_interp.h>
 #include <vil/vil_bilin_interp.h>
 #include <vil/vil_clamp.h>
