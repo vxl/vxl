@@ -280,8 +280,6 @@ n_nearest( const vnl_vector_fixed< COORD_T, 2 > & query_pt,
   int num_found = 0;
 
   int c_bin_x, c_bin_y;
-  int bin_x, bin_y;
-  int min_bin_x, min_bin_y, max_bin_x, max_bin_y;
   this->point_to_bin( query_pt.x(), query_pt.y(), c_bin_x, c_bin_y );
 
   int infinity_norm_dist = 0;
@@ -332,39 +330,40 @@ n_nearest( const vnl_vector_fixed< COORD_T, 2 > & query_pt,
       bin_xs.clear(); bin_ys.clear();
 
       // make list of bins to try
-      min_bin_x = vnl_math_max( c_bin_x - infinity_norm_dist, 0 );
-      max_bin_x = vnl_math_min( c_bin_x + infinity_norm_dist, num_bins_x_ - 1 );
-      min_bin_y = vnl_math_max( c_bin_y - infinity_norm_dist, 0 );
-      max_bin_y = vnl_math_min( c_bin_y + infinity_norm_dist, num_bins_y_ - 1 );
+      int lower_x_for_y = vnl_math_max( c_bin_x - infinity_norm_dist, 0 );
+      int upper_x_for_y = vnl_math_min( c_bin_x + infinity_norm_dist, num_bins_x_-1 );
 
       // across top (when origin is at upper left)
-      if ( min_bin_y == c_bin_y - infinity_norm_dist  ) {   // haven't fallen off top
-        for ( bin_x = min_bin_x; bin_x <= max_bin_x; ++ bin_x ) {
+      if ( c_bin_y - infinity_norm_dist >= 0 ) {
+        for ( int bin_x = lower_x_for_y; bin_x <= upper_x_for_y; ++ bin_x ) {
           bin_xs.push_back( bin_x );
-          bin_ys.push_back( min_bin_y );
+          bin_ys.push_back( c_bin_y - infinity_norm_dist );
         }
       }
 
       // across bottom (when origin is at upper left)
-      if ( max_bin_y == c_bin_y + infinity_norm_dist ) {   // haven't fallen off bottom
-        for ( bin_x = min_bin_x; bin_x <= max_bin_x; ++ bin_x ) {
+      if ( c_bin_y + infinity_norm_dist < num_bins_y_ ) {   // haven't fallen off bottom
+        for ( int bin_x = lower_x_for_y; bin_x <= upper_x_for_y; ++ bin_x ) {
           bin_xs.push_back( bin_x );
-          bin_ys.push_back( max_bin_y );
+          bin_ys.push_back( c_bin_y + infinity_norm_dist );
         }
       }
 
+      int lower_y_for_x = vnl_math_max( c_bin_y - infinity_norm_dist+1, 0 );
+      int upper_y_for_x = vnl_math_min( c_bin_y + infinity_norm_dist-1, num_bins_y_-1 );
+
       // across left
-      if ( min_bin_x == c_bin_x - infinity_norm_dist  ) {   // haven't fallen off left edge
-        for ( bin_y = min_bin_y + 1;  bin_y < max_bin_y; ++ bin_y ) {
-          bin_xs.push_back( min_bin_x );
+      if ( c_bin_x - infinity_norm_dist >= 0 ) {   // haven't fallen off left edge
+        for ( int bin_y = lower_y_for_x;  bin_y <= upper_y_for_x; ++ bin_y ) {
+          bin_xs.push_back( c_bin_x - infinity_norm_dist );
           bin_ys.push_back( bin_y );
         }
       }
 
       // across right
-      if ( max_bin_x == c_bin_x + infinity_norm_dist ) {   // haven't fallen off right edge
-        for ( bin_y = min_bin_y + 1; bin_y < max_bin_y; ++ bin_y ) {
-          bin_xs.push_back( max_bin_x );
+      if ( c_bin_x + infinity_norm_dist < num_bins_x_ ) {   // haven't fallen off right edge
+        for ( int bin_y = lower_y_for_x;  bin_y <= upper_y_for_x; ++ bin_y ) {
+          bin_xs.push_back( c_bin_x + infinity_norm_dist );
           bin_ys.push_back( bin_y );
         }
       }

@@ -3,6 +3,7 @@
 #include <vcl_algorithm.h>
 
 #include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_double_2.h>
 #include <vnl/vnl_math.h>
 #include <testlib/testlib_test.h>
 
@@ -125,6 +126,35 @@ MAIN( test_bins_2d )
     testlib_test_begin( "points_within_radius" );
     testlib_test_perform( correct );
   }
+
+  { //new test with bin size 5,5
+    vnl_double_2 a(0,0), b(100,100), c(5,5), d(4.9,0), e(8.8,0), f(1,0);
+    rsdl_bins_2d<double, int>  bins(a,b,c);//min, max, size
+ 
+    bins.add_point(e, 1);
+    bins.add_point(f, 2);
+ 
+    vcl_vector<int> answer;
+    bins.n_nearest(d, 1, answer);
+ 
+    testlib_test_begin( "Second bin test bin size 5,5" );
+    testlib_test_perform( answer.size() >= 1 && (answer[0] == 1 ||  answer[0] == 2) );
+  }
+ 
+  {//same as new test with bin size 2,2
+    vnl_double_2 a(0,0), b(100,100), c(2,2), d(4.9,0), e(8.8,0), f(1,0);
+    rsdl_bins_2d<double, int>  bins(a,b,c);//min, max, size
+ 
+    bins.add_point(e, 1);
+    bins.add_point(f, 2);
+ 
+    vcl_vector<int> answer;
+    bins.n_nearest(d, 1, answer);
+ 
+    testlib_test_begin( "Second bin test bin size 2,2" );
+    testlib_test_perform( answer.size() >= 1 && (answer[0] == 1 ||  answer[0] == 2) );
+  }
+  
 
   SUMMARY();
 }
