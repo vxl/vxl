@@ -547,7 +547,7 @@ void vsrl_manager::draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions,
       }
       if (c->cast_to_digital_curve())
       {
-        vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
+        vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
         //get the edgel chain
         vdgl_interpolator_sptr itrp = dc->get_interpolator();
         vdgl_edgel_chain_sptr ech = itrp->get_edgel_chain();
