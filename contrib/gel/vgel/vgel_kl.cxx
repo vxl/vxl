@@ -5,7 +5,6 @@
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_image_as.h>
 #include <vgel/vgel_multi_view_data.h>
-#include <vgel/kl/klt_CC.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vidl/vidl_movie.h>
 
