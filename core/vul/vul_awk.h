@@ -49,7 +49,7 @@ class vul_awk
   // Operations----------------------------------------------------------------
 
 //: Return field i.  Counting starts at 0.
-  char const* operator[] (unsigned i) {
+  char const* operator[] (unsigned i) const {
     if (i < fields_.size())
       return fields_[i];
     else
