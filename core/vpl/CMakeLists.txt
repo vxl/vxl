@@ -10,4 +10,6 @@ SOURCE_FILES( vpl_sources
   vpl_unistd
 )
 
-SUBDIRS(tests)
+IF( BUILD_TESTS)
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTS)
