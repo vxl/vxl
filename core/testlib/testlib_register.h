@@ -38,7 +38,7 @@ extern vcl_vector<vcl_string>       testlib_test_name_;
 //: Declare the existence of the test.
 // If you DECLARE( x ), then you will need to define a function int x_main(int,char*[]).
 #ifdef VCL_VC
-#define DECLARE( testname ) _cdecl int testname ## _main ( int argc, char* argv[] )
+#define DECLARE( testname ) int _cdecl testname ## _main ( int argc, char* argv[] )
 #else
 #define DECLARE( testname )  int testname ## _main ( int argc, char* argv[] )
 #endif 
