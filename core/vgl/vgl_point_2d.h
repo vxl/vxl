@@ -63,10 +63,10 @@ public:
   vgl_point_2d<Type> operator-(const vgl_point_2d<Type>& that) const;
 
   //: Return this * d
-  vgl_point_2d<Type> operator*(double d) const;
+  vgl_point_2d<Type> operator*(Type d) const;
 
   //: Return this/d
-  vgl_point_2d<Type> operator/(double d) const;
+  vgl_point_2d<Type> operator/(Type d) const;
 
   //: Add that to this and return result
   vgl_point_2d<Type>& operator+=(const vgl_point_2d<Type>& that);
@@ -75,10 +75,10 @@ public:
   vgl_point_2d<Type>& operator-=(const vgl_point_2d<Type>& that);
 
   //: Multiply this by d and return result
-  vgl_point_2d<Type>& operator*=(double d);
+  vgl_point_2d<Type>& operator*=(Type d);
 
   //: Divide this by d and return result
-  vgl_point_2d<Type>& operator/=(double d);
+  vgl_point_2d<Type>& operator/=(Type d);
 
   // the == operator
   bool operator==(const vgl_point_2d<Type> &other) const;

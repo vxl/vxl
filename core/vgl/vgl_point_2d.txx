@@ -39,14 +39,14 @@ vgl_point_2d<Type> vgl_point_2d<Type>::operator-(const vgl_point_2d<Type>& that)
 }
 
 template <class Type>
-vgl_point_2d<Type> vgl_point_2d<Type>::operator*(double d) const
+vgl_point_2d<Type> vgl_point_2d<Type>::operator*(Type d) const
 {
    vgl_point_2d<Type> result(Type(this->x()*d),Type(this->y()*d));
    return result;
 }
 
 template <class Type>
-vgl_point_2d<Type> vgl_point_2d<Type>::operator/(double d) const
+vgl_point_2d<Type> vgl_point_2d<Type>::operator/(Type d) const
 {
    vgl_point_2d<Type> result(Type(this->x()/d),Type(this->y()/d));
    return result;
@@ -68,7 +68,7 @@ vgl_point_2d<Type>& vgl_point_2d<Type>::operator-=(const vgl_point_2d<Type>& tha
    return *this;
 }
 template <class Type>
-vgl_point_2d<Type>& vgl_point_2d<Type>::operator/=(double d)
+vgl_point_2d<Type>& vgl_point_2d<Type>::operator/=(Type d)
 {
    data_[0] /= d;
    data_[1] /= d;
@@ -76,7 +76,7 @@ vgl_point_2d<Type>& vgl_point_2d<Type>::operator/=(double d)
 }
 
 template <class Type>
-vgl_point_2d<Type>& vgl_point_2d<Type>::operator*=(double d)
+vgl_point_2d<Type>& vgl_point_2d<Type>::operator*=(Type d)
 {
    data_[0] *= d;
    data_[1] *= d;
