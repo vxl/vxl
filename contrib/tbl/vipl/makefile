@@ -70,10 +70,13 @@ endif
 
 ifndef NOTEST
 # These three libraries are only needed for template instantiation,
-# used in the examples; leave them out if you don't need those examples:
+# used in the examples; leave them out if you don't need those examples,
+# or if you are using implicit instantiation:
+ifneq ($(USE_IMPLICIT_TEMPLATES),1)
 SUBDIRS += vipl_with_section
 SUBDIRS += vipl_with_vnl_matrix
 SUBDIRS += vipl_with_vbl_array_2d
+endif
 
 SUBDIRS += examples
 SUBDIRS += tests

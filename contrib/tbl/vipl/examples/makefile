@@ -42,14 +42,21 @@ MINI_PROG_SOURCES += example2_threshold.cxx
 MINI_PROG_SOURCES += example_x_gradient.cxx
 MINI_PROG_SOURCES += example_histogram.cxx
 
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
+# No need to link against template libraries when implicitly instantiating:
+ifneq ($(USE_IMPLICIT_TEMPLATES),1)
 IULIBS += -lvipl_with_vnl_matrix   # for B.
 IULIBS += -lvipl_with_vbl_array_2d # for C.
 IULIBS += -lvipl_with_section      # for D.
+endif
 
 IULIBS += -lvnl                    # for B.
 IULIBS += -lvbl                    # for C.
 IULIBS += -lvipl -lvil -lvpl       # for all
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################

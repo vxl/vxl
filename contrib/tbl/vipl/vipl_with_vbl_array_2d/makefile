@@ -7,23 +7,17 @@
 
 USES += vxl tbl
 
-LIBRARY := vipl_with_vbl_array_2d
-VERSION := 1.0
-
-# Do not instantiate templates in the library but implicitly, on use:
-USE_IMPLICIT_TEMPLATES := 1
-
-SOURCES += Templates/vipl_filter_2d+vbl_array_2d+uchar-.vbl_array_2d+uchar-.uchar.uchar-.cxx 
-MANPAGE_SOURCES += accessors/vipl_accessors_vbl_array_2d.txx
-
 #######################################
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
-# No need to compile the files in Templates when implicitly instantiating:
-ifeq ($(USE_IMPLICIT_TEMPLATES),1)
-  TEMPLATE_SOURCES :=
+# Build this library only if not using implicit template instantiation
+ifneq (1,$(USE_IMPLICIT_TEMPLATES))
+LIBRARY := vipl_with_vbl_array_2d
+VERSION := 1.0
 endif
+
+MANPAGE_SOURCES += accessors/vipl_accessors_vbl_array_2d.txx
 
 ######################################
 include ${IUEROOT}/config/top-rules.mk
