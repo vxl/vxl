@@ -54,7 +54,6 @@ vcl_istream &operator>>(vcl_istream &is, vcl_complex<T > &z) { \
 }
 
 
-
 // ---------- emulation
 #if !VCL_USE_NATIVE_COMPLEX
 // ** make sure gcc 2.7 sees this **
@@ -66,10 +65,10 @@ VCL_COMPLEX_INSTANTIATE(long double);
 # elif defined(VCL_EGCS)
 # if !VCL_HAS_TEMPLATE_SYMBOLS
 # define do_inlines(FLOAT) \
-template ostream& operator<<(ostream &, complex<FLOAT > const &); \
-template complex<FLOAT > sqrt (complex<FLOAT >const& x); \
-template complex<FLOAT > operator / (complex<FLOAT >const&,complex<FLOAT >const&); \
-template complex<FLOAT > operator / (complex<FLOAT >const&,FLOAT); \
+template vcl_ostream& operator<<(vcl_ostream &, vcl_complex<FLOAT > const &); \
+template vcl_complex<FLOAT > vcl_sqrt (vcl_complex<FLOAT >const& x); \
+template vcl_complex<FLOAT > operator / (vcl_complex<FLOAT >const&,vcl_complex<FLOAT >const&); \
+template vcl_complex<FLOAT > operator / (vcl_complex<FLOAT >const&,FLOAT); \
 implement_rsh(FLOAT)
 
 do_inlines(float);
@@ -82,36 +81,36 @@ do_inlines(long double);
 # if !VCL_HAS_TEMPLATE_SYMBOLS
 # define VCL_COMPLEX_INSTANTIATE_INLINE(x) template x
 # define do_inlines(FLOAT) \
-VCL_COMPLEX_INSTANTIATE_INLINE(bool operator==(complex<FLOAT >const&,complex<FLOAT >const&));\
-VCL_COMPLEX_INSTANTIATE_INLINE(bool operator==(FLOAT,complex<FLOAT >const&));\
-VCL_COMPLEX_INSTANTIATE_INLINE(bool operator==(complex<FLOAT >const&,FLOAT));\
-VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT imag(complex<FLOAT >const&));\
-VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT real(complex<FLOAT >const&));\
-VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > sqrt (complex<FLOAT >const& x));\
-VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > operator + (complex<FLOAT >const&,complex<FLOAT >const&));\
-VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > operator + (complex<FLOAT >const&,FLOAT));\
-VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > operator + (FLOAT,complex<FLOAT >const&));\
-VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > operator - (complex<FLOAT >const&,complex<FLOAT >const&));\
-VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > operator - (complex<FLOAT >const&,FLOAT));\
-VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > operator - (FLOAT,complex<FLOAT >const&));\
-VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > operator * (complex<FLOAT >const&,complex<FLOAT >const&));\
-VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > operator * (complex<FLOAT >const&,FLOAT));\
-VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > operator * (FLOAT,complex<FLOAT >const&));\
-VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > operator / (complex<FLOAT >const&,complex<FLOAT >const&));\
-VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > operator / (complex<FLOAT >const&,FLOAT));\
-VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > operator / (FLOAT,complex<FLOAT >const&));\
-VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > polar (FLOAT,FLOAT));\
-VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > pow (complex<FLOAT >const&,complex<FLOAT >const&));\
-VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > pow (complex<FLOAT >const&,FLOAT));\
-VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > pow (complex<FLOAT >const&,int));\
-VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > pow (FLOAT,complex<FLOAT >const&));\
-VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > exp (complex<FLOAT >const&));\
-VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT > log (complex<FLOAT >const&));\
-VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT arg (complex<FLOAT >const&));\
-VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT abs (complex<FLOAT >const&));\
-VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT norm (complex<FLOAT >const&));\
-VCL_COMPLEX_INSTANTIATE_INLINE(complex<FLOAT>& __doadv (complex<FLOAT>* ths, const complex<FLOAT>& y));\
-template ostream& operator<<(ostream &, complex<FLOAT > const &);\
+VCL_COMPLEX_INSTANTIATE_INLINE(bool operator==(vcl_complex<FLOAT >const&,vcl_complex<FLOAT >const&));\
+VCL_COMPLEX_INSTANTIATE_INLINE(bool operator==(FLOAT,vcl_complex<FLOAT >const&));\
+VCL_COMPLEX_INSTANTIATE_INLINE(bool operator==(vcl_complex<FLOAT >const&,FLOAT));\
+VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT vcl_imag(vcl_complex<FLOAT >const&));\
+VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT vcl_real(vcl_complex<FLOAT >const&));\
+VCL_COMPLEX_INSTANTIATE_INLINE(vcl_complex<FLOAT > vcl_sqrt (vcl_complex<FLOAT >const& x));\
+VCL_COMPLEX_INSTANTIATE_INLINE(vcl_complex<FLOAT > operator + (vcl_complex<FLOAT >const&,vcl_complex<FLOAT >const&));\
+VCL_COMPLEX_INSTANTIATE_INLINE(vcl_complex<FLOAT > operator + (vcl_complex<FLOAT >const&,FLOAT));\
+VCL_COMPLEX_INSTANTIATE_INLINE(vcl_complex<FLOAT > operator + (FLOAT,vcl_complex<FLOAT >const&));\
+VCL_COMPLEX_INSTANTIATE_INLINE(vcl_complex<FLOAT > operator - (vcl_complex<FLOAT >const&,vcl_complex<FLOAT >const&));\
+VCL_COMPLEX_INSTANTIATE_INLINE(vcl_complex<FLOAT > operator - (vcl_complex<FLOAT >const&,FLOAT));\
+VCL_COMPLEX_INSTANTIATE_INLINE(vcl_complex<FLOAT > operator - (FLOAT,vcl_complex<FLOAT >const&));\
+VCL_COMPLEX_INSTANTIATE_INLINE(vcl_complex<FLOAT > operator * (vcl_complex<FLOAT >const&,vcl_complex<FLOAT >const&));\
+VCL_COMPLEX_INSTANTIATE_INLINE(vcl_complex<FLOAT > operator * (vcl_complex<FLOAT >const&,FLOAT));\
+VCL_COMPLEX_INSTANTIATE_INLINE(vcl_complex<FLOAT > operator * (FLOAT,vcl_complex<FLOAT >const&));\
+VCL_COMPLEX_INSTANTIATE_INLINE(vcl_complex<FLOAT > operator / (vcl_complex<FLOAT >const&,vcl_complex<FLOAT >const&));\
+VCL_COMPLEX_INSTANTIATE_INLINE(vcl_complex<FLOAT > operator / (vcl_complex<FLOAT >const&,FLOAT));\
+VCL_COMPLEX_INSTANTIATE_INLINE(vcl_complex<FLOAT > operator / (FLOAT,vcl_complex<FLOAT >const&));\
+VCL_COMPLEX_INSTANTIATE_INLINE(vcl_complex<FLOAT > vcl_polar (FLOAT,FLOAT));\
+VCL_COMPLEX_INSTANTIATE_INLINE(vcl_complex<FLOAT > vcl_pow (vcl_complex<FLOAT >const&,vcl_complex<FLOAT >const&));\
+VCL_COMPLEX_INSTANTIATE_INLINE(vcl_complex<FLOAT > vcl_pow (vcl_complex<FLOAT >const&,FLOAT));\
+VCL_COMPLEX_INSTANTIATE_INLINE(vcl_complex<FLOAT > vcl_pow (vcl_complex<FLOAT >const&,int));\
+VCL_COMPLEX_INSTANTIATE_INLINE(vcl_complex<FLOAT > vcl_pow (FLOAT,vcl_complex<FLOAT >const&));\
+VCL_COMPLEX_INSTANTIATE_INLINE(vcl_complex<FLOAT > vcl_exp (vcl_complex<FLOAT >const&));\
+VCL_COMPLEX_INSTANTIATE_INLINE(vcl_complex<FLOAT > vcl_log (vcl_complex<FLOAT >const&));\
+VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT vcl_arg (vcl_complex<FLOAT >const&));\
+VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT vcl_abs (vcl_complex<FLOAT >const&));\
+VCL_COMPLEX_INSTANTIATE_INLINE(FLOAT vcl_norm (vcl_complex<FLOAT >const&));\
+VCL_COMPLEX_INSTANTIATE_INLINE(vcl_complex<FLOAT>& __doadv (vcl_complex<FLOAT>* ths, const vcl_complex<FLOAT>& y));\
+template vcl_ostream& operator<<(vcl_ostream &, vcl_complex<FLOAT > const &);\
 implement_rsh(FLOAT)
 
 do_inlines(float);
@@ -122,7 +121,7 @@ do_inlines(long double);
 // ---------- sunpro
 #elif defined(VCL_SUNPRO_CC)
 # define do_inlines(FLOAT) \
-template std::complex<FLOAT > std::conj<FLOAT >(std::complex<FLOAT > const &)
+template vcl_complex<FLOAT > vcl_conj<FLOAT >(vcl_complex<FLOAT > const &)
 
 do_inlines(float);
 do_inlines(double);

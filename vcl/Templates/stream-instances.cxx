@@ -5,14 +5,14 @@
 #if defined(VCL_EGCS)
 # if !VCL_HAS_TEMPLATE_SYMBOLS
 //template class smanip<int>;
-template ostream & operator<<(ostream &, smanip<int> const &);
+template vcl_ostream & operator<<(vcl_ostream &, smanip<int> const &);
 # endif
 #endif
 
 #if defined(VCL_GCC_295) && !defined(GNU_LIBSTDCXX_V3)
 # if !VCL_HAS_TEMPLATE_SYMBOLS
 //template class smanip<int>;
-template ostream & operator<<(ostream &, smanip<int> const &);
+template vcl_ostream & operator<<(vcl_ostream &, smanip<int> const &);
 # endif
 #endif
 
@@ -25,18 +25,18 @@ template class std::basic_fstream<char, std::char_traits<char> >;
 template class std::basic_ifstream<char, std::char_traits<char> >;
 //template class std::basic_ofstream<char, std::char_traits<char> >;
 namespace {
-  void tic(std::ostream &s, int x) { s << std::setw(14) << x; }
+  void tic(vcl_ostream &s, int x) { s << std::setw(14) << x; }
   template std::basic_stringstream<char, std::char_traits<char>, std::allocator<char> >;
 }
 #endif
 
 
 #if defined(VCL_SUNPRO_CC_50)
-std::ostream &operator<<(std::ostream &s, short x)
+vcl_ostream &operator<<(vcl_ostream &s, short x)
 { return s << int(x); }
 
 # include <string>
-//void blah(std::istream &s1, std::string &s2) { s1 >> s2; }
+//void blah(vcl_istream &s1, std::string &s2) { s1 >> s2; }
 //
 #define type0 std::basic_istream<char,std::char_traits<char> >
 #define type1 std::basic_string<char,std::char_traits<char>,std::allocator<char> >

@@ -12,7 +12,7 @@ template class vcl_basic_string<char, vcl_char_traits<char> >;
 #endif
 
 // this should work for all compilers. by putting it in the
-// library we (a) get the implicit template instances it 
+// library we (a) get the implicit template instances it
 // needs and (b) make sure that it does work.
 void vcl_string_instance_tickler(vcl_ostream &os, vcl_string::iterator i, char *a, char const *b)
 {
@@ -44,9 +44,9 @@ template bs &bs::replace<char const*>(char *, char *, char const *, char const *
 template class __default_alloc_template<true, 0>; \
 template bs &bs::replace(char *, char *, char *, char *); \
 template bs &bs::replace(char *, char *, char const *, char const *); \
-template bs &bs::replace(size_t, size_t, bs const &, size_t, size_t); \
-template bs &bs::replace(size_t, size_t, char const *, size_t); \
-template bs &bs::replace(size_t, size_t, size_t, char)
+template bs &bs::replace(vcl_size_t, vcl_size_t, bs const &, vcl_size_t, vcl_size_t); \
+template bs &bs::replace(vcl_size_t, vcl_size_t, char const *, vcl_size_t); \
+template bs &bs::replace(vcl_size_t, vcl_size_t, vcl_size_t, char)
 
 #  undef bs
 #  define bs basic_string<char, string_char_traits<char>, __default_alloc_template<true , 0> >
