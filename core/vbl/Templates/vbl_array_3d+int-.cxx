@@ -1,3 +1,2 @@
-#include <vbl/vbl_array_3d.h>
 #include <vbl/vbl_array_3d.txx>
-template class vbl_array_3d<int>;
+VBL_ARRAY_3D_INSTANTIATE(int);
