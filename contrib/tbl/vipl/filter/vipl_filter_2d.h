@@ -46,8 +46,8 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, VCL_DFL_TYPE_
                 int img_border=0 ,
                 DataOut fill_val=0) ;
 
-  vipl_filter_2d(); // argless ctor
-  ~vipl_filter_2d(); // (virtual) destructor
+  vipl_filter_2d() {} // argless ctor
+  ~vipl_filter_2d() {} // (virtual) destructor
 
   //user accessed low_level c++ copy constructor
   // note this does NOT copy input/output image pointers!!!

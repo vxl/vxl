@@ -48,15 +48,6 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
 {}
 
 template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
-  vipl_filter_2d< ImgIn,ImgOut,DataIn,DataOut,PixelItr > ::~vipl_filter_2d()
-{}
-
-template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
-  vipl_filter_2d< ImgIn,ImgOut,DataIn,DataOut,PixelItr > ::vipl_filter_2d()
-// C++ low-level, argument-less constructor
-{}
-
-template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
   vipl_filter_2d< ImgIn,ImgOut,DataIn,DataOut,PixelItr >
   ::vipl_filter_2d(const vipl_filter_2d< ImgIn,ImgOut,DataIn,DataOut,PixelItr > &t)
   :
