@@ -20,6 +20,7 @@
 // External declarations for values
 //*****************************************************************************
 #include <vsol/vsol_surface_3d.h>
+class vsol_polygon_3d;
 
 class vsol_region_3d : public vsol_surface_3d
 {
@@ -53,8 +54,11 @@ class vsol_region_3d : public vsol_surface_3d
   // virtuals of vsol_spatial_object_3d
   //***************************************************************************
 
-  virtual vsol_region_3d* cast_to_region(void) { return this; }
-  virtual vsol_region_3d const* cast_to_region(void) const { return this; }
+   virtual vsol_region_3d* cast_to_region(void) { return this; }
+   virtual const vsol_region_3d * cast_to_region(void) const { return this; }
+
+   virtual vsol_polygon_3d *cast_to_polygon(void) {return 0;}
+   virtual const vsol_polygon_3d *cast_to_polygon(void) const {return 0;}
 
   //***************************************************************************
   // Status report

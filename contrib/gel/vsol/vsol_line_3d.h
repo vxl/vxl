@@ -122,6 +122,12 @@ class vsol_line_3d : public vsol_curve_3d
   //---------------------------------------------------------------------------
   inline bool operator!=(const vsol_line_3d &o) const {return !operator==(o);}
 
+  //---------------------------------------------------------------------------
+  //: Save downcasting methods
+  //---------------------------------------------------------------------------
+//   virtual vsol_line_3d* cast_to_line(void) { return this;}
+//   virtual const vsol_line_3d * cast_to_line(void) const { return this;}
+
   //***************************************************************************
   // Status report
   //***************************************************************************

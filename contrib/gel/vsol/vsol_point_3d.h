@@ -30,6 +30,7 @@ class vsol_point_3d;
 #include <vsol/vsol_spatial_object_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_homg_point_3d.h>
 
 class vsol_point_3d : public vsol_spatial_object_3d
 {
@@ -107,6 +108,12 @@ class vsol_point_3d : public vsol_spatial_object_3d
   //---------------------------------------------------------------------------
   inline bool operator!=(const vsol_point_3d &o) const {return !operator==(o);}
 
+  //---------------------------------------------------------------------------
+  //: Safe downcasting methods
+  //---------------------------------------------------------------------------
+  virtual vsol_point_3d* cast_to_point(void) { return this;}
+  virtual const vsol_point_3d * cast_to_line() const { return this;}
+
   //***************************************************************************
   // Status report
   //***************************************************************************
@@ -169,6 +176,11 @@ class vsol_point_3d : public vsol_spatial_object_3d
   //: Return the vector `this',`other'.
   //---------------------------------------------------------------------------
   virtual vgl_vector_3d<double> to_vector(const vsol_point_3d &other) const;
-};
 
+  //---------------------------------------------------------------------------
+  //: Return the vgl_homg_point_3d corresponding to *this
+  //---------------------------------------------------------------------------
+ inline vgl_homg_point_3d<double> homg_point()
+  {return vgl_homg_point_3d<double>(p_);}
+};
 #endif // vsol_point_3d_h_

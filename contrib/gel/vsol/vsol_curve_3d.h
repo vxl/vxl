@@ -21,6 +21,8 @@
 #include <vsol/vsol_spatial_object_3d.h>
 #include <vsol/vsol_point_3d_sptr.h>
 
+class vsol_line_3d;
+
 class vsol_curve_3d
   :public vsol_spatial_object_3d
 {
@@ -59,8 +61,11 @@ public:
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a curve, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vsol_curve_3d *cast_to_curve(void) {return this;}
-  virtual const vsol_curve_3d *cast_to_curve(void) const {return this;}
+  virtual vsol_curve_3d* cast_to_curve(void) {return this;}
+  virtual const vsol_curve_3d* cast_to_curve(void) const {return this;}
+
+  virtual vsol_line_3d* cast_to_line(void) { return 0;}
+  virtual const vsol_line_3d * cast_to_line(void) const { return 0;}
 
   //---------------------------------------------------------------------------
   //: Return the first point of `this'

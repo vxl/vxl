@@ -92,6 +92,12 @@ class vsol_polygon_3d : public vsol_region_3d
   //---------------------------------------------------------------------------
   inline bool operator!=(const vsol_polygon_3d &o)const{return !operator==(o);}
 
+  //---------------------------------------------------------------------------
+  //: Safe down-casting methods
+  //---------------------------------------------------------------------------
+   virtual vsol_polygon_3d *cast_to_polygon(void) {return this;}
+  virtual const vsol_polygon_3d *cast_to_polygon(void) const {return this;}
+
   //***************************************************************************
   // Status report
   //***************************************************************************
