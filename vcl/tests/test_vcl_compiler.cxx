@@ -50,7 +50,7 @@ int main()
   
   vcl_test_implicit_instantiation(100);
   
-  return (int) X<int>::pl;
+  return (int)(long) X<int>::pl;
 }
 
 #if defined(VCL_USE_IMPLICIT_TEMPLATES) && VCL_USE_IMPLICIT_TEMPLATES
