@@ -394,7 +394,7 @@ vil2_image_view_base_sptr vil2_dicom_image::get_copy_view(
   else // floating point image.
   {
     vil2_image_view<float> view(nx, ny);
-    double f;
+    float f;
     for (unsigned i=y0; i<ny; i++)
     {
       int next_row = header_.dimx_*i;

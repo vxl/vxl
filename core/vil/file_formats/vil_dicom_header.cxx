@@ -419,7 +419,7 @@ void vil2_dicom_header_format::readIdentifyingElements(short element,
     {
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
-      last_read_.study_time_ = atof(data_p);
+      last_read_.study_time_ = (float) atof(data_p);
     } // End of if (data_p)
     break;
 
@@ -430,7 +430,7 @@ void vil2_dicom_header_format::readIdentifyingElements(short element,
     {
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
-      last_read_.series_time_ = atof(data_p);
+      last_read_.series_time_ = (float) atof(data_p);
     } // End of if (data_p)
     break;
 
@@ -441,7 +441,7 @@ void vil2_dicom_header_format::readIdentifyingElements(short element,
     {
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
-      last_read_.acquisition_time_ = atof(data_p);
+      last_read_.acquisition_time_ = (float) atof(data_p);
     } // End of if (data_p)
     break;
 
@@ -452,7 +452,7 @@ void vil2_dicom_header_format::readIdentifyingElements(short element,
     {
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
-      last_read_.image_time_ = atof(data_p);
+      last_read_.image_time_ = (float) atof(data_p);
     }
     break;
 
@@ -672,7 +672,7 @@ void vil2_dicom_header_format::readPatientElements(short element,
     {
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
-      last_read_.patient_weight_ = atof(data_p);
+      last_read_.patient_weight_ = (float) atof(data_p);
     } // End of if (data_p)
     break;
 
@@ -781,7 +781,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
     {
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
-      last_read_.slice_thickness_ = atof(data_p);
+      last_read_.slice_thickness_ = (float) atof(data_p);
     } // End of if (data_p)
     break;
 
@@ -792,7 +792,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
     {
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
-      last_read_.repetition_time_ = atof(data_p);
+      last_read_.repetition_time_ = (float) atof(data_p);
     } // End of if (data_p)
     break;
 
@@ -803,7 +803,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
     {
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
-      last_read_.echo_time_= atof(data_p);
+      last_read_.echo_time_= (float) atof(data_p);
     } // End of if (data_p)
     break;
 
@@ -814,7 +814,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
     {
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
-      last_read_.inversion_time_= atof(data_p);
+      last_read_.inversion_time_= (float) atof(data_p);
     } // End of if (data_p)
     break;
 
@@ -825,7 +825,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
     {
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
-      last_read_.number_of_averages_ = atof(data_p);
+      last_read_.number_of_averages_ = (float) atof(data_p);
     } // End of if (data_p)
     break;
 
@@ -847,7 +847,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
     {
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
-      last_read_.mag_field_strength_ = atof(data_p);
+      last_read_.mag_field_strength_ = (float) atof(data_p);
     } // End of if (data_p)
     break;
 
@@ -858,7 +858,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
     {
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
-      last_read_.slice_spacing_ = atof(data_p);
+      last_read_.slice_spacing_ = (float) atof(data_p);
     } // End of if (data_p)
     break;
 
@@ -880,7 +880,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
     {
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
-      last_read_.pixel_bandwidth_ = atof(data_p);
+      last_read_.pixel_bandwidth_ = (float) atof(data_p);
     } // End of if (data_p)
     break;
 
@@ -946,7 +946,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
     {
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
-      last_read_.reconst_diameter_ = atof(data_p);
+      last_read_.reconst_diameter_ = (float) atof(data_p);
     } // End of if (data_p)
     break;
 
@@ -979,7 +979,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
     {
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
-      last_read_.flip_angle_ = atof(data_p);
+      last_read_.flip_angle_ = (float) atof(data_p);
     } // End of if (data_p)
     break;
 
@@ -990,7 +990,7 @@ void vil2_dicom_header_format::readAcquisitionElements(short element,
     {
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
-      last_read_.sar_ = atof(data_p);
+      last_read_.sar_ = (float) atof(data_p);
     } // End of if (data_p)
     break;
 
@@ -1165,7 +1165,7 @@ void vil2_dicom_header_format::readRelationshipElements(short element,
     {
       fs.read(data_p, dblock_size);
       data_p[dblock_size]=0;
-      last_read_.slice_location_ = atof(data_p);
+      last_read_.slice_location_ = (float) atof(data_p);
     } // End of if (data_p)
     break;
 
@@ -1257,7 +1257,7 @@ void vil2_dicom_header_format::readImageElements(short element,
     {
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
-      last_read_.xsize_ = atof(data_p);
+      last_read_.xsize_ = (float) atof(data_p);
 
       // The y size should come after a '\'
       // If only a 0 is found, ysize = xsize
@@ -1274,11 +1274,11 @@ void vil2_dicom_header_format::readImageElements(short element,
 
       if (gone == '\\')
       {
-        last_read_.ysize_ = atof(data_p);
+        last_read_.ysize_ = (float) atof(data_p);
       }
       else
       {
-        last_read_.ysize_ = last_read_.xsize_;
+        last_read_.ysize_ = (float) last_read_.xsize_;
       }
     } // End of if (data_p)
     break;
@@ -1374,7 +1374,7 @@ void vil2_dicom_header_format::readImageElements(short element,
     {
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
-      last_read_.window_centre_ = atof(data_p);
+      last_read_.window_centre_ = (float) atof(data_p);
     } // End of if (data_p)
     break;
 
@@ -1385,7 +1385,7 @@ void vil2_dicom_header_format::readImageElements(short element,
     {
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
-      last_read_.window_width_ = atof(data_p);
+      last_read_.window_width_ = (float) atof(data_p);
     } // End of if (data_p)
     break;
 
@@ -1396,7 +1396,7 @@ void vil2_dicom_header_format::readImageElements(short element,
     {
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
-      last_read_.res_intercept_ = atof(data_p);
+      last_read_.res_intercept_ = (float) atof(data_p);
     } // End of if (data_p)
     break;
 
@@ -1407,7 +1407,7 @@ void vil2_dicom_header_format::readImageElements(short element,
     {
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
-      last_read_.res_slope_ = atof(data_p);
+      last_read_.res_slope_ = (float) atof(data_p);
     } // End of if (data_p)
     break;
 
