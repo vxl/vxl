@@ -18,6 +18,7 @@ SOURCES += mbl_screen_counter.cxx
 SOURCES += mbl_rbf_network.cxx
 SOURCES += mbl_read_double.cxx
 SOURCES += mbl_read_int.cxx
+SOURCES += mbl_arb_length_int.cxx
 
 # Additional files to document:
 MANPAGE_SOURCES += mbl_data_array_ptr_wrapper.txx
@@ -26,6 +27,7 @@ MANPAGE_SOURCES += mbl_data_collector.txx
 MANPAGE_SOURCES += mbl_data_collector_list.txx
 MANPAGE_SOURCES += mbl_data_wrapper.txx
 MANPAGE_SOURCES += mbl_stochastic_data_collector.txx
+MANPAGE_SOURCES += mbl_selected_data_wrapper.txx
 MANPAGE_SOURCES += mbl_chord.h
 MANPAGE_SOURCES += mbl_cloneable_ptr.h
 MANPAGE_SOURCES += mbl_index_sort.h
