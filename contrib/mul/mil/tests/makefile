@@ -3,7 +3,7 @@ USES += mul
 include ${IUEROOT}/vxl/vnl/algo/config.mk
 include ${IUEROOT}/vxl/vil/config.mk
 
-IULIBS := -lmil -lmbl -lvpdfl -lvnl-io -lvnl-algo -lvgl -lvnl -lvil -lvsl -lvpl
+IULIBS := -lmil -lvpdfl -lmbl -lvnl-io -lvnl-algo -lvgl -lvnl -lvil -lvsl -lvpl
 
 
 TESTS += test_mil.cxx

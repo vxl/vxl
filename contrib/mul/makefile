@@ -12,6 +12,9 @@ SUBDIRS += mbl
 # Multivariate PDF objects, builders, samplers, etc.
 SUBDIRS += vpdfl
 
+# Manchester images 
+SUBDIRS += mil
+
 ################################
 include ${IUEROOT}/config/top.mk
 ################################
