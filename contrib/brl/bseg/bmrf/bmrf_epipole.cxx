@@ -33,8 +33,6 @@ bmrf_epipole::to_epi_coords(const vgl_point_2d<double>& u_v) const
 {
   // the line from the epipole to the image point
   vgl_line_segment_2d<double> epi_line(epi_, u_v);
-  //intersection with x = elu line
-  vgl_vector_2d<double> dir = epi_line.direction();
 
   return vgl_point_2d<double>(vgl_distance(epi_, u_v), epi_line.slope_radians());
 }
