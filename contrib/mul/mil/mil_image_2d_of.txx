@@ -408,7 +408,7 @@ void mil_image_2d_of<T>::print_summary(vcl_ostream& os) const
     os<<"Format: "<<format_<<"  "
       <<planes_.size()<<" planes, each "<<nx_<<" x "<<ny_
       <<vcl_endl
-      <<"Transform: "<<world2im_;
+      <<vsl_indent() << "Transform: "<<world2im_;
 }
 
 //=======================================================================
@@ -417,15 +417,17 @@ void mil_image_2d_of<T>::print_summary(vcl_ostream& os) const
 template<class T>
 void mil_image_2d_of<T>::print_all(vcl_ostream& os) const
 {
+    os<<vsl_indent();
     print_summary(os);
     os<<vcl_endl;
 
     for (int i=0;i<n_planes();++i)
     {
-        if (n_planes()>1) os<<"Plane "<<i<<":"<<vcl_endl;
+        if (n_planes()>1) os<<vsl_indent()<<"Plane "<<i<<":"<<vcl_endl;
         const T* im_data = plane(i);
         for (int y=ny_-1;y>=0;--y)
         {
+            os<<vsl_indent();
             for (int x=0;x<nx_;++x)
             {
                 int v = int(im_data[ystep_*y+x*xstep_]);

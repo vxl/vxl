@@ -17,17 +17,14 @@
 #include <vnl/vnl_math.h> // for sqrt2
 
 //=======================================================================
-// Dflt ctor
-//=======================================================================
 
 template<class T>
 mil_gaussian_pyramid_builder_2d<T>::mil_gaussian_pyramid_builder_2d()
     : max_levels_(99)
 {
+	set_min_size(5, 5);
 }
 
-//=======================================================================
-// Destructor
 //=======================================================================
 
 template<class T>
@@ -38,7 +35,6 @@ mil_gaussian_pyramid_builder_2d<T>::~mil_gaussian_pyramid_builder_2d()
 //=======================================================================
 //: Define maximum number of levels to build
 //  Limits levels built in subsequent calls to build()
-//=======================================================================
 template<class T>
 void mil_gaussian_pyramid_builder_2d<T>::setMaxLevels(int max_l)
 {
@@ -61,7 +57,6 @@ int mil_gaussian_pyramid_builder_2d<T>::maxLevels()
 //=======================================================================
 //: Create new (empty) pyramid on heap
 //  Caller responsible for its deletion
-//=======================================================================
 template<class T>
 mil_image_pyramid* mil_gaussian_pyramid_builder_2d<T>::newImagePyramid() const
 {
@@ -71,9 +66,8 @@ mil_image_pyramid* mil_gaussian_pyramid_builder_2d<T>::newImagePyramid() const
 
 //=======================================================================
 //: Scale step between levels
-//=======================================================================
 template<class T>
-double mil_gaussian_pyramid_builder_2d<T>::scaleStep() const
+double mil_gaussian_pyramid_builder_2d<T>::scale_step() const
 {
     return 2.0;
 }
@@ -82,9 +76,8 @@ double mil_gaussian_pyramid_builder_2d<T>::scaleStep() const
 //: Smooth and subsample src_im to produce dest_im
 //  Applies 1-5-8-5-1 filter in x and y, then samples
 //  every other pixel.
-//=======================================================================
 template<class T>
-void mil_gaussian_pyramid_builder_2d<T>::gaussReduce(mil_image_2d_of<T>& dest_im,
+void mil_gaussian_pyramid_builder_2d<T>::gauss_reduce(mil_image_2d_of<T>& dest_im,
                      const mil_image_2d_of<T>& src_im)
 {
     int nx = src_im.nx();
@@ -124,7 +117,6 @@ void mil_gaussian_pyramid_builder_2d<T>::gaussReduce(mil_image_2d_of<T>& dest_im
 
 //=======================================================================
 //: Deletes all data in im_pyr
-//=======================================================================
 template<class T>
 void mil_gaussian_pyramid_builder_2d<T>::emptyPyr(mil_image_pyramid& im_pyr)
 {
@@ -134,7 +126,6 @@ void mil_gaussian_pyramid_builder_2d<T>::emptyPyr(mil_image_pyramid& im_pyr)
 
 //=======================================================================
 //: Checks pyramid has at least n levels
-//=======================================================================
 template<class T>
 void mil_gaussian_pyramid_builder_2d<T>::checkPyr(mil_image_pyramid& im_pyr,  int n_levels)
 {
@@ -152,7 +143,6 @@ void mil_gaussian_pyramid_builder_2d<T>::checkPyr(mil_image_pyramid& im_pyr,  in
 
 //=======================================================================
 //: Build pyramid
-//=======================================================================
 template<class T>
 void mil_gaussian_pyramid_builder_2d<T>::build(mil_image_pyramid& image_pyr,
                                     const mil_image& im)
@@ -166,10 +156,10 @@ void mil_gaussian_pyramid_builder_2d<T>::build(mil_image_pyramid& image_pyr,
     int ny = base_image.ny();
 
     // Compute number of levels to pyramid so that top is no less
-    // than 5 x 5
+    // than minXSize_ x minYSize_
     int s = 1;
     int max_levels = 1;
-    while ((nx/(2*s)>=5) && (ny/(2*s)>=5))
+    while ((nx/(2*s)>=minXSize_) && (ny/(2*s)>=minYSize_))
     {
         max_levels++;
         s*=2;
@@ -194,7 +184,7 @@ void mil_gaussian_pyramid_builder_2d<T>::build(mil_image_pyramid& image_pyr,
         mil_image_2d_of<T>& im_i0 = (mil_image_2d_of<T>&) image_pyr(i);
         mil_image_2d_of<T>& im_i1 = (mil_image_2d_of<T>&) image_pyr(i-1);
 
-        gaussReduce(im_i0,im_i1);
+        gauss_reduce(im_i0,im_i1);
     }
 
     // Estimate width of pixels in base image
@@ -212,14 +202,14 @@ void mil_gaussian_pyramid_builder_2d<T>::build(mil_image_pyramid& image_pyr,
 //=======================================================================
 //: Extend pyramid
 // The first layer of the pyramid must already be set.
-//=======================================================================
 template<class T>
 void mil_gaussian_pyramid_builder_2d<T>::extend(mil_image_pyramid& image_pyr)
 {
+    
     //  Require image mil_image_2d_of<T>
     assert(image_pyr(0).is_a() == work_im_.is_a());
 
-    assert(image_pyr.scaleStep() == scaleStep());
+    assert(image_pyr.scale_step() == scale_step());
 
     int nx = image_pyr(0).nx();
     int ny = image_pyr(0).ny();
@@ -228,10 +218,10 @@ void mil_gaussian_pyramid_builder_2d<T>::extend(mil_image_pyramid& image_pyr)
     // than 5 x 5
     int s = 1;
     int max_levels = 1;
-    while ((nx/(2*s)>=5) && (ny/(2*s)>=5))
+    while ((nx/(scale_step()*s)>=minXSize_) && (ny/(scale_step()*s)>=minXSize_))
     {
         max_levels++;
-        s*=2;
+        s*=scale_step();
     }
 
     if (max_levels>max_levels_)
@@ -255,14 +245,12 @@ void mil_gaussian_pyramid_builder_2d<T>::extend(mil_image_pyramid& image_pyr)
           mil_image_2d_of<T>& im_i0 = (mil_image_2d_of<T>&) image_pyr(i);
           mil_image_2d_of<T>& im_i1 = (mil_image_2d_of<T>&) image_pyr(i-1);
 
-          gaussReduce(im_i0,im_i1);
+          gauss_reduce(im_i0,im_i1);
       }
     }
 }
 
 
-//=======================================================================
-// Method: is_a
 //=======================================================================
 
 template<class T>
@@ -271,8 +259,6 @@ vcl_string mil_gaussian_pyramid_builder_2d<T>::is_a() const
   return vcl_string("mil_gaussian_pyramid_builder_2d<T>");
 }
 
-//=======================================================================
-// Method: is_class
 //=======================================================================
 
 template<class T>
@@ -283,8 +269,6 @@ bool mil_gaussian_pyramid_builder_2d<T>::is_class(vcl_string const& s) const
 }
 
 //=======================================================================
-// Method: version_no
-//=======================================================================
 
 template<class T>
 short mil_gaussian_pyramid_builder_2d<T>::version_no() const
@@ -292,8 +276,6 @@ short mil_gaussian_pyramid_builder_2d<T>::version_no() const
     return 1;
 }
 
-//=======================================================================
-// Method: clone
 //=======================================================================
 
 template<class T>
@@ -303,16 +285,12 @@ mil_image_pyramid_builder* mil_gaussian_pyramid_builder_2d<T>::clone() const
 }
 
 //=======================================================================
-// Method: print
-//=======================================================================
 
 template<class T>
 void mil_gaussian_pyramid_builder_2d<T>::print_summary(vcl_ostream&) const
 {
 }
 
-//=======================================================================
-// Method: save
 //=======================================================================
 
 template<class T>
@@ -322,8 +300,6 @@ void mil_gaussian_pyramid_builder_2d<T>::b_write(vsl_b_ostream& bfs) const
     vsl_b_write(bfs,max_levels_);
 }
 
-//=======================================================================
-// Method: load
 //=======================================================================
 
 template<class T>

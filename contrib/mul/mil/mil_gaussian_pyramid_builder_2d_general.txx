@@ -1,0 +1,461 @@
+//: \file
+//  \brief Build gaussian image pyramids at any scale separation
+//  \author Ian Scott
+
+
+#include <mil/mil_gaussian_pyramid_builder_2d_general.h>
+#include <vcl_cstdlib.h>
+#include <vcl_cassert.h>
+#include <vcl_string.h>
+#include <vcl_iostream.h>
+#include <vsl/vsl_indent.h>
+#include <vgl/vgl_box_2d.h>
+#include <mil/mil_bilin_interp_2d.h>
+#include <mil/mil_image_2d_of.h>
+#include <mil/mil_image_pyramid.h>
+#include <mbl/mbl_gamma.h>
+#include <vsl/vsl_indent.h>
+
+//=======================================================================
+
+template <class T>
+mil_gaussian_pyramid_builder_2d_general<T>::mil_gaussian_pyramid_builder_2d_general()
+{
+	set_scale_step(2.0);
+}
+
+//=======================================================================
+
+template <class T>
+mil_gaussian_pyramid_builder_2d_general<T>::~mil_gaussian_pyramid_builder_2d_general()
+{
+}
+
+template <class T>
+void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(mil_image_2d_of<T>& dest_im, 
+					 const mil_image_2d_of<T>& src_im)
+{
+	int src_nx = src_im.nx();
+	int src_ny = src_im.ny();
+	int dest_nx = dest_im.nx();
+	int dest_ny = dest_im.ny();
+	int ystep = src_im.ystep();
+	int n_planes = src_im.n_planes();
+	
+	
+		// Reduce plane-by-plane
+
+  double init_x = 0.5 * (src_nx - 1 - dest_nx*scale_step());
+  double init_y = 0.5 * (src_ny - 1 - dest_ny*scale_step());
+
+
+	for (int i=0;i<n_planes;++i)
+		gauss_reduce(dest_im.plane(i),dest_im.ystep(),
+					src_im.plane(i),src_nx,src_ny,dest_nx,dest_ny,ystep);
+#if(0)
+  vsl_inc_indent(vcl_cout);
+  vcl_cout << vsl_indent() << "Work image B" << vcl_endl;
+  workb_.print_all(vcl_cout);
+  vsl_dec_indent(vcl_cout);
+#endif
+
+		// Sort out world to image transformation for destination image				
+	mil_transform_2d scaling;
+	scaling.set_zoom_only(1/scale_step(),-init_x,-init_y);
+	dest_im.setWorld2im(scaling * src_im.world2im());
+	
+}
+
+//=======================================================================
+//: Smooth and subsample src_im to produce dest_im
+//  Applies 5 pin filter in x and y, then samples
+//  every other pixel.
+//  Assumes dest_im has suffient data allocated		 
+
+template <class T>
+void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(T* dest_im, int dest_ystep,
+					 const T* src_im, 
+					 int src_nx, int src_ny, int dest_nx, int dest_ny, int src_ystep)
+{
+	
+	// Convolve src with a 5 x 1 gaussian filter, 
+	// placing result in work_
+
+	T* worka_im = worka_.plane(0);
+	T* workb_im = workb_.plane(0);
+	int work_ystep = worka_.ystep();
+	assert (work_ystep == workb_.ystep());
+
+	// First perform horizontal smoothing
+	for (int y=0;y<src_ny;y++)
+	{
+		T* worka_row = worka_im + y*work_ystep;
+		const T* src_col3  = src_im + y*src_ystep;
+		const T* src_col2  = src_col3 - 1;
+		const T* src_col1  = src_col3 - 2;
+		const T* src_col4  = src_col3 + 1;
+		const T* src_col5  = src_col3 + 2;
+		int nx2 = src_nx-2;
+		int x;
+		for (x=2;x<nx2;x++)
+			worka_row[x] = T(    filt2_ * src_col1[x]
+						 	 	 + filt1_ * src_col2[x] 
+						 		 + filt0_ * src_col3[x] 
+						 	 	 + filt1_ * src_col4[x]
+								 + filt2_ * src_col5[x]
+								 + 0.5);
+
+
+		// Now deal with edge effects :
+		worka_row[0] = T( filt_edge0_ * src_col3[0]
+						  + filt_edge1_ * src_col4[0] 
+						  + filt_edge2_ * src_col5[0]
+						  + 0.5);
+
+		worka_row[1] = T( filt_pen_edge_n1_ * src_col2[1]
+						  + filt_pen_edge0_ * src_col3[1]
+						  + filt_pen_edge1_ * src_col4[1] 
+						  + filt_pen_edge2_ * src_col5[1]
+						  + 0.5);
+
+		worka_row[src_nx-2] = T( filt_pen_edge2_ * src_col1[x]
+								 + filt_pen_edge1_ * src_col2[x]
+								 + filt_pen_edge0_ * src_col3[x] 
+								 + filt_pen_edge_n1_ * src_col4[x]
+								 + 0.5);
+
+		x++;
+		worka_row[src_nx-1] = T( filt_edge2_ * src_col1[x]
+								 + filt_edge1_ * src_col2[x] 
+								 + filt_edge0_ * src_col3[x]
+								 + 0.5);
+	}
+
+//	worka_.print_all(vcl_cout);
+	// Now perform vertical smoothing
+	for (int y=2;y<src_ny-2;y++)
+	{
+		T* workb_row = workb_im + y*work_ystep;
+
+		const T* worka_row3  = worka_im + y*work_ystep;
+		const T* worka_row2  = worka_row3 - work_ystep;
+		const T* worka_row1  = worka_row3 - 2 * work_ystep;
+		const T* worka_row4  = worka_row3 + work_ystep;
+		const T* worka_row5  = worka_row3 + 2 * work_ystep;
+
+		for (int x=0; x<src_nx; x++)
+			workb_row[x] = T(  filt2_ * worka_row1[x]
+						 		+ filt1_ * worka_row2[x] 
+						 		+ filt0_ * worka_row3[x] 
+						 		+ filt1_ * worka_row4[x]
+								+ filt2_ * worka_row5[x]
+								+ 0.5);
+
+	}
+
+
+		// Now deal with edge effects :
+	// 
+	const T* worka_row_bottom_1 = worka_im;
+	const T* worka_row_bottom_2 = worka_row_bottom_1 + work_ystep;
+	const T* worka_row_bottom_3 = worka_row_bottom_1 + 2 * work_ystep;
+	const T* worka_row_bottom_4 = worka_row_bottom_1 + 3 * work_ystep;
+	
+	const T* worka_row_top_5  = worka_im + (src_ny-1) * work_ystep;
+	const T* worka_row_top_4  = worka_row_top_5 - work_ystep;
+	const T* worka_row_top_3  = worka_row_top_5 - 2 * work_ystep;
+	const T* worka_row_top_2  = worka_row_top_5 - 3 * work_ystep;
+
+	T* workb_row_top			= workb_im + (src_ny-1) * work_ystep;
+	T* workb_row_next_top	= workb_row_top - work_ystep;
+	T* workb_row_bottom		= workb_im;
+	T* workb_row_next_bottom	= workb_row_bottom + work_ystep;
+
+	for (int x=0;x<src_nx;x++)
+	{
+		workb_row_top[x] = T(  filt_edge0_ * worka_row_top_5[x]
+								+ filt_edge1_ * worka_row_top_4[x] 
+								+ filt_edge2_ * worka_row_top_3[x]
+								+ 0.5);
+
+		workb_row_next_top[x] = T( filt_pen_edge2_ * worka_row_top_5[x]
+									+ filt_pen_edge1_ * worka_row_top_4[x]
+									+ filt_pen_edge0_ * worka_row_top_3[x] 
+									+ filt_pen_edge_n1_ * worka_row_top_2[x]
+									+ 0.5);
+
+		workb_row_next_bottom[x] = T(  filt_pen_edge2_ * worka_row_bottom_4[x] 
+										+ filt_pen_edge1_ * worka_row_bottom_3[x] 
+										+ filt_pen_edge0_ * worka_row_bottom_2[x]
+										+ filt_pen_edge_n1_ * worka_row_bottom_1[x]
+										+ 0.5);
+
+		workb_row_bottom[x] = T(   filt_edge2_ * worka_row_bottom_3[x]
+									+ filt_edge1_ * worka_row_bottom_2[x] 
+									+ filt_edge0_ * worka_row_bottom_1[x]
+									+ 0.5);
+
+
+	}
+
+//	workb_.print_all(vcl_cout);
+
+	T* dest_row = dest_im;
+	
+//	assert (dest_nx*scale_step() <= src_nx && dest_ny*scale_step() <= src_ny);
+
+  const double init_x = 0.5 * (src_nx-1 - (dest_nx-1)*scale_step());
+	double y = 0.5 * (src_ny -1 - (dest_ny-1)*scale_step());
+	for (int yi=0; yi<dest_ny; yi++)
+	{
+		double x=init_x; 
+		for (int xi=0; xi<dest_nx; xi++)
+		{
+
+			dest_row[xi] = mil_safe_extend_bilin_interp_2d(x, y,
+					workb_im,  src_nx, src_ny, work_ystep);
+			x += scale_step_;
+
+		}
+		y+= scale_step_;
+		dest_row += dest_ystep;
+	}
+}
+
+
+
+//: Set the Scale step
+template <class T>
+void mil_gaussian_pyramid_builder_2d_general<T>::set_scale_step(double scaleStep)
+{
+	assert(scaleStep> 1.0  && scaleStep<=2.0);
+	scale_step_ = scaleStep;
+// This arrangement gives close to a 1-5-8-5-1 filter for scalestep of2.0;
+// and 0-0-1-0-0 for a scale step close to 1.0;
+	double z = 1/vcl_sqrt(2.0*(scaleStep-1.0));
+	filt0_ = mbl_erf(0.5 * z) - mbl_erf(-0.5 * z);
+	filt1_ = mbl_erf(1.5 * z) - mbl_erf(0.5 * z);
+	filt2_ = mbl_erf(2.5 * z) - mbl_erf(1.5 * z);
+
+	double five_tap_total = 2*(filt2_ + filt1_) + filt0_;
+//	double four_tap_total = filt2_ + 2*(filt1_) + filt0_;
+//	double three_tap_total = filt2_ + filt1_ + filt0_;
+
+//	Calculate 3 tap half Gaussian filter assuming constant edge extension
+	filt_edge0_ = (filt0_ + filt1_ + filt2_) / five_tap_total;
+	filt_edge1_ = filt1_ / five_tap_total;
+	filt_edge2_ = filt2_ / five_tap_total;
+/*
+	filt_edge0_ = 1.0;
+	filt_edge1_ = 0.0;
+	filt_edge2_ = 0.0;
+*/
+//	Calculate 4 tap skewed Gaussian filter assuming constant edge extension
+	filt_pen_edge_n1_ = (filt1_+filt2_) / five_tap_total;
+	filt_pen_edge0_ = filt0_ / five_tap_total;
+	filt_pen_edge1_ = filt1_ / five_tap_total;
+	filt_pen_edge2_ = filt2_ / five_tap_total;
+
+//	Calculate 5 tap Gaussian filter
+	filt0_ = filt0_ / five_tap_total;
+	filt1_ = filt1_ / five_tap_total;
+	filt2_ = filt2_ / five_tap_total;
+};
+
+//=======================================================================
+
+template <class T>
+void mil_gaussian_pyramid_builder_2d_general<T>::build(mil_image_pyramid& im_pyr, 
+									const mil_image& im)
+{
+  //  Require image mil_image_2d_of<T>
+  assert(im.is_a()==worka_.is_a());
+
+	const mil_image_2d_of<T>& base_image = (const mil_image_2d_of<T>&) im;
+	
+  int nx = base_image.nx();
+  int ny = base_image.ny();
+
+
+	// Compute number of levels to pyramid so that top is no less
+	// than minXSize_ x minYSize_
+	double s = scale_step();
+	int max_levels = 1;
+	while (((int)(nx/s+0.5)>=min_x_size()) && ((int)(ny/s+0.5)>=min_y_size()))
+	{
+		max_levels++;
+		s *= scale_step();
+	}
+
+	if (max_levels>maxLevels())
+		max_levels=maxLevels();
+	
+	worka_.resize(nx,ny);
+	workb_.resize(nx,ny);
+
+	// Set up image pyramid
+	checkPyr(im_pyr,max_levels);
+	
+	mil_image_2d_of<T>& im0 = (mil_image_2d_of<T>&) im_pyr(0);
+	
+	// Shallow copy of part of base_image
+	im0.setToWindow(base_image,0,nx-1,0,ny-1);
+
+	int i;
+  s = scale_step();
+	for (i=1;i<max_levels;i++)
+	{
+		mil_image_2d_of<T>& im_i0 = (mil_image_2d_of<T>&) im_pyr(i);
+		mil_image_2d_of<T>& im_i1 = (mil_image_2d_of<T>&) im_pyr(i-1);
+	  if (im_i0.n_planes()!=im_i1.n_planes())
+		  im_i0.set_n_planes(im_i1.n_planes());
+	  im_i0.resize(nx/s+0.5,ny/s+0.5);
+		
+    s*=scale_step();
+		gauss_reduce(im_i0,im_i1);
+	}
+	
+	// Estimate width of pixels in base image
+	vgl_point_2d<double>  c0(0.5*(nx-1),0.5*(ny-1));
+	vgl_point_2d<double>  c1 = c0 + vgl_vector_2d<double> (1,1);
+	mil_transform_2d im2world = base_image.world2im().inverse();
+	vgl_vector_2d<double>  dw = im2world(c1) - im2world(c0);
+	
+	double base_pixel_width = vcl_sqrt(0.5*(dw.x()*dw.x() + dw.y()*dw.y()));
+	
+	im_pyr.setWidths(base_pixel_width,scale_step());
+}
+
+
+
+//=======================================================================
+//: Extend pyramid
+// The first layer of the pyramid must already be set.
+template<class T>
+void mil_gaussian_pyramid_builder_2d_general<T>::extend(mil_image_pyramid& image_pyr)
+{
+    
+  //  Require image mil_image_2d_of<T>
+  assert(image_pyr(0).is_a() == worka_.is_a());
+
+  assert(image_pyr.scale_step() == scale_step());
+
+  const int nx = image_pyr(0).nx();
+  const int ny = image_pyr(0).ny();
+
+  // Compute number of levels to pyramid so that top is no less
+  // than 5 x 5
+  double s = scale_step();
+  int max_levels = 1;
+	while (((int)(nx/s+0.5)>=min_x_size()) && ((int)(ny/s+0.5)>=min_y_size()))
+  {
+      max_levels++;
+      s*=scale_step();
+  }
+
+  if (max_levels>maxLevels())
+      max_levels=maxLevels();
+
+	worka_.resize(nx,ny);
+	workb_.resize(nx,ny);
+
+  // Set up image pyramid
+  int oldsize = image_pyr.nLevels();
+  if (oldsize<max_levels) // only extend, if it isn't already tall enough
+  {
+    image_pyr.data().resize(max_levels);
+
+
+    int i;
+    s = vcl_pow(scale_step(), oldsize);
+    for (i=oldsize;i<max_levels;i++)
+    {
+      image_pyr.data()[i] = new mil_image_2d_of<T>;
+      mil_image_2d_of<T>& im_i0 = (mil_image_2d_of<T>&) image_pyr(i);
+      mil_image_2d_of<T>& im_i1 = (mil_image_2d_of<T>&) image_pyr(i-1);
+	    if (im_i0.n_planes()!=im_i1.n_planes())
+		    im_i0.set_n_planes(im_i1.n_planes());
+	    im_i0.resize(nx/s+0.5,ny/s+0.5);
+
+      s*=scale_step();
+      gauss_reduce(im_i0,im_i1);
+    }
+  }
+}
+
+
+//=======================================================================
+
+template <class T>
+vcl_string mil_gaussian_pyramid_builder_2d_general<T>::is_a() const
+{
+  return vcl_string("mil_gaussian_pyramid_builder_2d_general<T>");
+}
+
+//=======================================================================
+
+template <class T>
+short mil_gaussian_pyramid_builder_2d_general<T>::version_no() const 
+{ 
+	return 1; 
+}
+
+//=======================================================================
+
+template <class T>
+mil_image_pyramid_builder* mil_gaussian_pyramid_builder_2d_general<T>::clone() const
+{
+	return new mil_gaussian_pyramid_builder_2d_general(*this);
+}
+
+//=======================================================================
+
+template <class T>
+void mil_gaussian_pyramid_builder_2d_general<T>::print_summary(vcl_ostream& os) const
+{
+	
+	mil_gaussian_pyramid_builder_2d<T>::print_summary(os);
+
+}
+
+//=======================================================================
+
+template <class T>
+void mil_gaussian_pyramid_builder_2d_general<T>::b_write(vsl_b_ostream& bfs) const
+{
+	vsl_b_write(bfs,is_a());
+	vsl_b_write(bfs,version_no());
+	mil_gaussian_pyramid_builder_2d<T>::b_write(bfs);
+	vsl_b_write(bfs,scale_step_);
+}
+
+//=======================================================================
+
+template <class T>
+void mil_gaussian_pyramid_builder_2d_general<T>::b_read(vsl_b_istream& bfs)
+{
+	vcl_string name;
+	vsl_b_read(bfs,name);
+	if (name != is_a())
+	{
+		vcl_cerr << "mil_gaussian_pyramid_builder_2d_general::b_read() : ";
+		vcl_cerr << "Attempted to load object of type ";
+		vcl_cerr << name <<" into object of type " << is_a() << vcl_endl;
+		abort();
+	}
+
+	short version;
+	vsl_b_read(bfs,version);
+	switch (version)
+	{
+		case (1):
+			mil_gaussian_pyramid_builder_2d<T>::b_read(bfs);
+			vsl_b_read(bfs,scale_step_);
+			break;
+		default:
+			vcl_cerr << "mil_gaussian_pyramid_builder_2d_general<T>::b_read() ";
+			vcl_cerr << "Unexpected version number " << version << vcl_endl;
+			abort();
+	}
+}
+

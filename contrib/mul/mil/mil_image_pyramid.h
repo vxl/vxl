@@ -55,7 +55,7 @@ public:
         //: Scaling per level
         //  Pixels at level L have width
         //  basePixelWidth() * scaleStep()^L
-    double scaleStep() const;
+    double scale_step() const;
 
         //: Access to image data
         //  Should only be used by pyramid builders

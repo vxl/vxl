@@ -24,6 +24,14 @@ private:
 
   mutable mil_image_2d_of<T> work_im_;
 
+	  //:Minimum size in X direction of top layer of pyramid.
+	unsigned minXSize_;
+
+	  //:Minimum size in Y direction of top layer of pyramid.
+	unsigned minYSize_;
+
+
+protected:
   //: Checks pyramid has at least n levels of correct type
   void checkPyr(mil_image_pyramid& im_pyr,  int n_levels);
 
@@ -64,13 +72,26 @@ public:
         //: Smooth and subsample src_im to produce dest_im
         //  Applies 1-5-8-5-1 filter in x and y, then samples
         //  every other pixel.
-    void gaussReduce(mil_image_2d_of<T>& dest_im,
+    void gauss_reduce(mil_image_2d_of<T>& dest_im,
                      const mil_image_2d_of<T>& src_im);
 
         //: Scale step between levels
-    virtual double scaleStep() const;
+    virtual double scale_step() const;
 
-        //: Version number for I/O
+	    //: get the minimum Y size of the top layer of the pyramid
+	    // defaults to 5.
+	  unsigned min_y_size() { return minYSize_;}
+
+	    //: get the minimum Y size of the top layer of the pyramid
+	    // defaults to 5.
+	  unsigned min_x_size() { return minXSize_;}
+
+	    //: Set the minimum size of the top layer of the pyramid
+	  virtual void set_min_size(unsigned X, unsigned Y) { minYSize_ = Y; minXSize_ = X;}
+
+
+    
+    //: Version number for I/O
     short version_no() const;
 
         //: Name of the class

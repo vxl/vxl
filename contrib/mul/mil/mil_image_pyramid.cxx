@@ -84,7 +84,7 @@ double mil_image_pyramid::basePixelWidth() const
         //: Scaling per level
         //  Pixels at level L have width
         //  basePixelWidth() * scaleStep()^L
-double mil_image_pyramid::scaleStep() const
+double mil_image_pyramid::scale_step() const
 {
     return scale_step_;
 }

@@ -47,7 +47,7 @@ public:
     virtual void extend(mil_image_pyramid&) = 0;
 
         //: Scale step between levels
-    virtual double scaleStep() const = 0;
+    virtual double scale_step() const = 0;
 
         //: Version number for I/O
     short version_no() const;

@@ -2,6 +2,7 @@
 LINK_LIBRARIES( mil )
 LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/mul/mil )
 
+INCLUDE( ${allvxl_SOURCE_DIR}/mul/mbl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/mul/vbl/io/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/mul/vnl/io/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/mul/vgl/io/CMakeListsLink.txt )

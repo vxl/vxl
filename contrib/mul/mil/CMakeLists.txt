@@ -16,6 +16,7 @@ mil_image_pyramid
 mil_image_pyramid_builder
 mil_transform_2d
 mil_byte_image_2d_io
+
 )
 
 AUX_SOURCE_DIRECTORY(Templates mil_sources )

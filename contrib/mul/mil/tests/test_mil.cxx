@@ -10,6 +10,7 @@
 #include <mil/tests/test_bilin_interp_2d.cxx>
 #include <mil/tests/test_gauss_reduce_2d.cxx>
 #include <mil/tests/test_gaussian_pyramid_builder_2d.cxx>
+#include <mil/tests/test_gaussian_pyramid_builder_2d_general.cxx>
 
 #undef TESTMAIN
 #define TESTMAIN(x) int main() \
@@ -22,6 +23,7 @@ void run_test_vsml()
   test_bilin_interp_2d();
   test_gauss_reduce_2d();
   test_gaussian_pyramid_builder_2d();
+  test_gaussian_pyramid_builder_2d_general();
 }
 
 
