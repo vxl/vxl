@@ -188,7 +188,7 @@ public:
   virtual int get_serialisation_other_data(unsigned long serial_number) const;
 
   //: Modify the user-defined data associated with the unique serial number
-  // If there is no record of the object, this function will return abort.
+  // If there is no record of the object, this function will abort.
   virtual int set_serialisation_other_data(unsigned long serial_number,
     int other_data);
 

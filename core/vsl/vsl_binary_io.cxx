@@ -397,7 +397,7 @@ int vsl_b_ostream::get_serialisation_other_data(void *pointer) const
 }
 
 //: Modify the user-defined data associated with the object.
-// If there is no record of the object, this function will return abort.
+// If there is no record of the object, this function will abort.
 int vsl_b_ostream::set_serialisation_other_data
     (void *pointer, int other_data)
 {
@@ -407,12 +407,9 @@ int vsl_b_ostream::set_serialisation_other_data
   {
     vcl_cerr << "vsl_b_ostream::set_serialisation_other_data(): "
              << "No such value " << pointer << "in records." <<vcl_endl;
-    vcl_abort(); return -1;
+    vcl_abort();
   }
-  else
-  {
-    return (*entry).second.second;
-  }
+  return (*entry).second.second;
 }
 
 
@@ -538,7 +535,7 @@ int vsl_b_istream::get_serialisation_other_data
 }
 
 //: Modify the user-defined data associated with the unique serial number
-// If there is no record of the object, this function will return abort.
+// If there is no record of the object, this function will  abort.
 int vsl_b_istream::set_serialisation_other_data
     (unsigned long serial_number, int other_data)
 {
@@ -549,12 +546,9 @@ int vsl_b_istream::set_serialisation_other_data
     vcl_cerr << "vsl_b_istream::set_serialisation_other_data(): "
              << "No such value " << serial_number << "in records."
              << vcl_endl;
-    vcl_abort(); return -1;
+    vcl_abort();
   }
-  else
-  {
-    return (*entry).second.second;
-  }
+  return (*entry).second.second;
 }
 
 

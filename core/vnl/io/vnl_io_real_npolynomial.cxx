@@ -22,6 +22,8 @@ void vsl_b_write(vsl_b_ostream & os, const vnl_real_npolynomial & p)
 //: Binary load self from stream.
 void vsl_b_read(vsl_b_istream &is, vnl_real_npolynomial & p)
 {
+  if (!is) return;
+
   short ver;
   vnl_vector<double> coeffs;
   vnl_matrix<int> polyn;
@@ -35,9 +37,10 @@ void vsl_b_read(vsl_b_istream &is, vnl_real_npolynomial & p)
     break;
 
   default:
-    vcl_cerr << "ERROR: vsl_b_read(s, vnl_real_npolynomial&): Unknown version number "
-            << ver << vcl_endl;
-    vcl_abort();
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_real_npolynomial&) \n";
+    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
 

@@ -33,28 +33,32 @@ void vsl_b_write(vsl_b_ostream& s, const vcl_map<Key, T, Compare>& v)
 //====================================================================================
 //: Read map from binary stream
 template <class Key, class T, class Compare>
-void vsl_b_read(vsl_b_istream& s, vcl_map<Key, T, Compare>& v)
+void vsl_b_read(vsl_b_istream& is, vcl_map<Key, T, Compare>& v)
 {
+  if (!is) return;
+
   v.clear();
   unsigned map_size;
   short ver;
-  vsl_b_read(s, ver);
+  vsl_b_read(is, ver);
   switch (ver)
   {
   case 1:
-    vsl_b_read(s, map_size);
+    vsl_b_read(is, map_size);
     for (unsigned i=0; i<map_size; i++)
     {
       Key first_val;
       T second_val;
-      vsl_b_read(s, first_val);
-      vsl_b_read(s, second_val);
+      vsl_b_read(is, first_val);
+      vsl_b_read(is, second_val);
       v[first_val] = second_val;
     }
     break;
   default:
-    vcl_cerr << "vsl_b_read(s, vcl_map<>&) Unknown version number "<< ver << vcl_endl;
-    vcl_abort();
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_map<K, T>&) \n";
+    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
 
@@ -104,6 +108,8 @@ void vsl_b_write(vsl_b_ostream& s, const vcl_multimap<Key, T, Compare>& v)
 template <class Key, class T, class Compare>
 void vsl_b_read(vsl_b_istream& s, vcl_multimap<Key, T, Compare>& v)
 {
+  if (!is) return;
+
   v.clear();
   unsigned multimap_size;
   short ver;
@@ -122,8 +128,12 @@ void vsl_b_read(vsl_b_istream& s, vcl_multimap<Key, T, Compare>& v)
     }
     break;
   default:
-    vcl_cerr << "vsl_b_read(s, vcl_multimap<>&) Unknown version number "<< ver << vcl_endl;
-    vcl_abort();
+  if (!is) return;
+
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_multimap<K, T>&) \n";
+    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
 

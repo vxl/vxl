@@ -27,6 +27,8 @@ void vsl_b_write(vsl_b_ostream &os, const vnl_sparse_matrix_pair<T> & p)
 template<class T>
 void vsl_b_read(vsl_b_istream &is, vnl_sparse_matrix_pair<T> & p)
 {
+  if (!is) return;
+
   short ver;
   vsl_b_read(is, ver);
   switch(ver)
@@ -37,8 +39,10 @@ void vsl_b_read(vsl_b_istream &is, vnl_sparse_matrix_pair<T> & p)
     break;
 
   default:
-    vcl_cerr << "ERROR: vsl_b_read(s, vnl_sparse_matrix_pair&): Unknown version number "<< ver << vcl_endl;
-    vcl_abort();
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_sparse_matrix_pair<T>&) \n";
+    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
 
@@ -91,6 +95,8 @@ void vsl_b_write(vsl_b_ostream & os, const vnl_sparse_matrix<T> & p)
 template<class T>
 void vsl_b_read(vsl_b_istream &is, vnl_sparse_matrix<T> & p)
 {
+  if (!is) return;
+
   typedef vnl_sparse_matrix_pair<T> pair_t;
 #if defined(VCL_SUNPRO_CC)
   // SunPro is the broken one.
@@ -135,8 +141,10 @@ void vsl_b_read(vsl_b_istream &is, vnl_sparse_matrix<T> & p)
     break;
 
   default:
-    vcl_cerr << "ERROR: vsl_b_read(s, vnl_sparse_matrix&): Unknown version number "<< ver << vcl_endl;
-    vcl_abort();
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_sparse_matrix<T>&) \n";
+    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
 

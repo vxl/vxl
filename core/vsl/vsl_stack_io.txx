@@ -34,25 +34,27 @@ void vsl_b_write(vsl_b_ostream& s, const vcl_stack<T>& v)
 //====================================================================================
 //: Read stack from binary stream
 template <class T>
-void vsl_b_read(vsl_b_istream& s, vcl_stack<T>& v)
+void vsl_b_read(vsl_b_istream& is, vcl_stack<T>& v)
 {
+  if (!is) return;
+
   while (!v.empty()) v.pop(); // clear stack, which has no clear() member
 
   unsigned stack_size;
   vcl_stack<T> tmp_stack;
   short ver;
-  vsl_b_read(s, ver);
+  vsl_b_read(is, ver);
   switch (ver)
   {
   case 1:
-    vsl_b_read(s, stack_size);
+    vsl_b_read(is, stack_size);
 
     // We need to reverse the order of the values before we load them
     // back into the stack, so use another temporary stack for this:
     for (unsigned i=0; i<stack_size; i++)
     {
       T tmp;
-      vsl_b_read(s,tmp);
+      vsl_b_read(is,tmp);
       tmp_stack.push(tmp);
     }
     for (unsigned i=0; i<stack_size; i++)
@@ -62,8 +64,10 @@ void vsl_b_read(vsl_b_istream& s, vcl_stack<T>& v)
     }
     break;
   default:
-    vcl_cerr << "vsl_b_read(s, vcl_stack<T>&) Unknown version number "<< ver << vcl_endl;
-    vcl_abort();
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_stack<T>&) \n";
+    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
 

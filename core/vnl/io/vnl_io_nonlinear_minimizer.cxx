@@ -84,6 +84,8 @@ void vsl_b_write(vsl_b_ostream & os, const vnl_nonlinear_minimizer & p)
 //: Binary load self from stream.
 void vsl_b_read(vsl_b_istream &is, vnl_nonlinear_minimizer & p)
 {
+  if (!is) return;
+
   short ver;
   // Load & save variables
   double ftol;    // Termination tolerance on F (sum of squared residuals)
@@ -118,9 +120,10 @@ void vsl_b_read(vsl_b_istream &is, vnl_nonlinear_minimizer & p)
     break;
 
   default:
-    vcl_cerr << "vsl_b_read(vsl_b_istream &, vnl_nonlinear_minimizer & ):"
-        <<"Unknown version number "<< ver << vcl_endl;
-    vcl_abort();
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_nonlinear_minimizer&) \n";
+    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
 

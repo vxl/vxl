@@ -36,6 +36,8 @@ vsl_binary_loader<BaseClass>::~vsl_binary_loader()
 template<class BaseClass>
 void vsl_binary_loader<BaseClass>::load_object( vsl_b_istream& is, BaseClass*& b)
 {
+  if (!is) return;
+
   // HELP ON RUN-TIME ERROR HERE
   // If you get a run-time error here it is most-likely because you called
   // vsl_b_read with an uninitialised null base_class pointer. The base class
@@ -67,7 +69,8 @@ void vsl_binary_loader<BaseClass>::load_object( vsl_b_istream& is, BaseClass*& b
     vcl_cerr << object_.size()<<" valid loaders: "<<vcl_endl;
     for (int j=0; j<object_.size(); ++j)
       vcl_cerr << object_[j]->is_a() << vcl_endl;
-    vcl_abort();
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
 

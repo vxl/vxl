@@ -743,6 +743,7 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const signed int* begin, unsign
 // size of the block being read.
 inline void vsl_b_read_block(vsl_b_istream &is, signed int* begin, unsigned nelems)
 {
+  if (!is) return;
   unsigned long nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
@@ -756,7 +757,6 @@ inline void vsl_b_read_block(vsl_b_istream &is, signed int* begin, unsigned nele
     {
       vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., signed int*,..)"
         << " Corrupted data stream" << vcl_endl;
-      vcl_abort();
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     }
   }

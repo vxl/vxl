@@ -26,26 +26,30 @@ void vsl_b_write(vsl_b_ostream& s, const vcl_set<T>& v)
 //====================================================================================
 //: Read set from binary stream
 template <class T>
-void vsl_b_read(vsl_b_istream& s, vcl_set<T>& v)
+void vsl_b_read(vsl_b_istream& is, vcl_set<T>& v)
 {
+  if (!is) return;
+
   v.clear();
   unsigned set_size;
   short ver;
-  vsl_b_read(s, ver);
+  vsl_b_read(is, ver);
   switch (ver)
   {
   case 1:
-    vsl_b_read(s, set_size);
+    vsl_b_read(is, set_size);
     for (unsigned i=0; i<set_size; i++)
     {
       T tmp;
-      vsl_b_read(s,tmp);
+      vsl_b_read(is,tmp);
       v.insert(tmp);
     }
     break;
   default:
-    vcl_cerr << "vsl_b_read(s, vcl_set<T>&) Unknown version number "<< ver << vcl_endl;
-    vcl_abort();
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_set<T>&) \n";
+    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
 

@@ -27,6 +27,8 @@ void vsl_b_write(vsl_b_ostream & os, const vnl_matrix<T> & p)
 template<class T>
 void vsl_b_read(vsl_b_istream &is, vnl_matrix<T> & p)
 {
+  if (!is) return;
+
   short v;
   unsigned m, n;
   vsl_b_read(is, v);
@@ -42,8 +44,10 @@ void vsl_b_read(vsl_b_istream &is, vnl_matrix<T> & p)
       vsl_b_read_block(is, p.begin(), p.size());
     break;
   default:
-    vcl_cerr << "vsl_b_read(s, vnl_matrix&) Unknown version number "<< v << vcl_endl;
-    vcl_abort();
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vnl_matrix<T>&) \n";
+    vcl_cerr << "           Unknown version number "<< v << "\n";
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
 

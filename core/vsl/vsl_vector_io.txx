@@ -37,15 +37,17 @@ void vsl_b_write(vsl_b_ostream& s, const vcl_vector<T>& v)
 //====================================================================================
 //: Read vector from binary stream
 template <class T>
-void vsl_b_read(vsl_b_istream& s, vcl_vector<T>& v)
+void vsl_b_read(vsl_b_istream& is, vcl_vector<T>& v)
 {
+  if (!is) return;
+
   unsigned n;
   short ver;
-  vsl_b_read(s, ver);
+  vsl_b_read(is, ver);
   switch (ver)
   {
   case 1:
-    vsl_b_read(s,n);
+    vsl_b_read(is,n);
     v.resize(n);
 
     // There is nothing in the STL standard that says that vector<> has
@@ -56,12 +58,14 @@ void vsl_b_read(vsl_b_istream& s, vcl_vector<T>& v)
 
     if (v.size())
     {
-      vsl_b_read_block(s, &v[0], n);
+      vsl_b_read_block(is, &v[0], n);
     }
     break;
   default:
-    vcl_cerr << "vsl_b_read(s, vcl_vector<T>&) Unknown version number "<< ver << vcl_endl;
-    vcl_abort();
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_vector<T>&) \n";
+    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 
 }

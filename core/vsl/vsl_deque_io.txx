@@ -27,22 +27,26 @@ void vsl_b_write(vsl_b_ostream& s, const vcl_deque<T>& v)
 //====================================================================================
 //: Read deque from binary stream
 template <class T>
-void vsl_b_read(vsl_b_istream& s, vcl_deque<T>& v)
+void vsl_b_read(vsl_b_istream& is, vcl_deque<T>& v)
 {
+  if (!is) return;
+
   unsigned deque_size;
   short ver;
-  vsl_b_read(s, ver);
+  vsl_b_read(is, ver);
   switch (ver)
   {
   case 1:
-    vsl_b_read(s, deque_size);
+    vsl_b_read(is, deque_size);
     v.resize(deque_size);
     for (unsigned i=0; i<deque_size; i++)
-      vsl_b_read(s,v[i]);
+      vsl_b_read(is,v[i]);
     break;
   default:
-    vcl_cerr << "vsl_b_read(s, vcl_deque<T>&) Unknown version number "<< ver << vcl_endl;
-    vcl_abort();
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_deque<T>&) \n";
+    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
   }
 }
 
