@@ -6,7 +6,8 @@ INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg )
 SET(brip_sources
    brip_histogram.h      brip_histogram.txx
    brip_mutual_info.h    brip_mutual_info.txx
-   brip_float_ops.cxx    brip_float_ops.h
+   brip_vil1_float_ops.h brip_vil1_float_ops.cxx
+   brip_vil_float_ops.h  brip_vil_float_ops.cxx
                          brip_vil_ops.h
 
 )

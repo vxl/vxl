@@ -1,6 +1,7 @@
-// This is brl/bseg/brip/brip_float_ops.h
-#ifndef brip_float_ops_h_
-#define brip_float_ops_h_
+//--*-c++-*--
+// This is brl/bseg/brip/brip_vil1_float_ops.h
+#ifndef brip_vil1_float_ops_h_
+#define brip_vil1_float_ops_h_
 //-----------------------------------------------------------------------------
 //:
 // \file
@@ -15,6 +16,8 @@
 // \verbatim
 //  Modifications
 //   Initial version February 15, 2003
+//   Renamed to brip_vil1_float_ops January 24, 2004, In order to support
+//   moving from vil1 to vil.
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -26,10 +29,10 @@
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_rgb.h>
 
-class brip_float_ops
+class brip_vil1_float_ops
 {
  public:
-  ~brip_float_ops() {}
+  ~brip_vil1_float_ops() {}
 
   //: convolves with the specified kernel
   static vil1_memory_image_of<float>
@@ -238,7 +241,7 @@ class brip_float_ops
                                         const float f0, const float radius,
                                         const float fx, const float fy);
   //: Default constructor is private
-  brip_float_ops() {}
+  brip_vil1_float_ops() {}
 };
 
-#endif // brip_float_ops_h_
+#endif // brip_vil1_float_ops_h_
