@@ -7,6 +7,7 @@
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>
 #include <vcl_complex.h>
+#include <vbl/vbl_array_1d.h>
 #include <vnl/algo/vnl_fft_prime_factors.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_inverse.h>
@@ -1458,58 +1459,34 @@ spatial_frequency_filter(vil1_memory_image_of<float> const & input,
 //   yr 0  x
 //      x  x
 //
-double brip_vil1_float_ops::
+float brip_vil1_float_ops::
 bilinear_interpolation(vil1_memory_image_of<float> const & input,
                        const double x, const double y)
 {
   //check bounds
   int w = input.width(), h = input.height();
   //the pixel containing the interpolated point
-  int xr = (int)(x+0.5), yr = (int)(y+0.5);
+  int xr = (int)x, yr = (int)y;
+  double fx = x-xr, fy = y-yr;
   if (xr<0||xr>w-2)
     return 0;
   if (yr<0||yr>h-2)
     return 0;
   double int00 = input(xr, yr), int10 = input(xr+1,yr);
   double int01 = input(xr, yr+1), int11 = input(xr+1,yr+1);
-
-  double s00 = (1-x+xr)*(1-y+yr)*int00,   s10 = (x-xr)*(1-y+yr)*int10;
-  double s01 = (1-x+xr)*(y-yr)*int01, s11 = (x-xr)*(y-yr)*int11;
-  return s00+s01+s10+s11;
+  double int0 = int00 + fy * (int01 - int00);
+  double int1 = int10 + fy * (int11 - int10);
+  float val = (float) (int0 + fx * (int1 - int0));
+  return val;
 }
-
-#if 0 // unused static function
-static bool clip_box(vsol_box_2d_sptr const& box, vsol_box_2d_sptr& clip)
-{
-  clip = new vsol_box_2d();
-  double xmin = 0, xmax =0, ymin = 0, ymax=0;
-  if (box->get_min_x()<0)
-    xmin = 0;
-  if (box->get_min_y()<0)
-    ymin = 0;
-  if (box->get_max_x()<0)
-    return false;
-  if (box->get_max_y()<0)
-    return false;
-  xmax = box->get_max_x();
-  ymax = box->get_max_y();
-  if (xmin == xmax)
-    return false;
-  if (ymin == ymax)
-    return false;
-  clip->add_point(xmin, ymin);
-  clip->add_point(xmax, ymax);
-  return true;
-}
-#endif // 0
-
 //: Transform the input to the output by a homography.
 //  if the output size is fixed then only the corresponding
 //  region of input image space is transformed.
 bool brip_vil1_float_ops::homography(vil1_memory_image_of<float> const & input,
                                      vgl_h_matrix_2d<double>const& H,
                                      vil1_memory_image_of<float>& output,
-                                     bool output_size_fixed)
+                                     bool output_size_fixed,
+                                     float output_fill_value)
 {
   if (!input)
     return false;
@@ -1541,10 +1518,8 @@ bool brip_vil1_float_ops::homography(vil1_memory_image_of<float> const & input,
     if (!bsol_algs::homography(input_poly, H, output_poly))
       return false;
     vsol_box_2d_sptr temp = output_poly->get_bounding_box();
-    output.resize(int(temp->width()), int(temp->height())); // round down to nearest int
-    for (int x = 0; x<output.width(); x++)
-      for (int y = 0; y<output.height(); y++)
-        output(x,y) = 0;
+    output.resize(temp->width(), temp->height());
+    output.fill(output_fill_value);
     //offset the transform and transformed roi so that lower left is (0,0)
     output_roi = new vsol_box_2d();
     output_roi->add_point(0, 0);
@@ -1561,6 +1536,7 @@ bool brip_vil1_float_ops::homography(vil1_memory_image_of<float> const & input,
       return false;
     //The output roi and poly
     wout = output.width(); hout = output.height();
+    output.fill(output_fill_value);
     output_roi = new vsol_box_2d();
     output_roi->add_point(0, 0);
     output_roi->add_point(wout, hout);
@@ -1624,11 +1600,7 @@ bool brip_vil1_float_ops::homography(vil1_memory_image_of<float> const & input,
 
         if ((iu < ailow || iu >= aihigh-1) ||
             (iv < ajlow || iv >= ajhigh-1))
-        {
-          // val = 0;
-          // if (! zero_missed_pixels) continue;
           continue;
-        }
         else
         {
           /* Get the neighbouring pixels */
@@ -1683,3 +1655,297 @@ brip_vil1_float_ops::rotate(vil1_memory_image_of<float> const & input,
     return out;
   return temp;
 }
+bool brip_vil1_float_ops::chip(vil1_memory_image_of<float> const & input,
+                               vsol_box_2d_sptr const& roi,
+                               vil1_memory_image_of<float> chip)
+{
+  if(!input||!roi)
+    return false;
+  int w = input.width(), h = input.height();
+  int x_min = (int)roi->get_min_x(), y_min = (int)roi->get_min_y(); 
+  int x_max = (int)roi->get_max_x(), y_max = (int)roi->get_max_y(); 
+  if(x_min<0)
+    x_min = 0;
+  if(y_min<0)
+    y_min = 0;
+  if(x_max>w-1)
+    x_max=w-1;
+  if(y_max>h-1)
+    y_max=w-1;
+  int rw = x_max-x_min, rh = y_max-y_min;
+  if(rw<=0||rh<=0)
+    return false;
+  for(int y = y_min; y<y_max; y++)
+    for(int x =x_min; x<x_max; x++)
+      chip(x-x_min, y-y_min) = input(x, y);
+  return true;
+}
+//:compute normalized cross correlation from the intensity moment sums.
+static float cross_corr(const double area, const double si1, const double si2,
+                        const double si1i1, 
+                        const double si2i2, const double si1i2,
+                        const float intensity_thresh)
+{
+  if(!area)
+    return 0;
+  //the mean values
+  double u1 = si1/area, u2 = si2/area;
+  if(u1<intensity_thresh||u2<intensity_thresh)
+    return -1;
+  double neu = si1i2 - area*u1*u2;
+  double sd1 = vcl_sqrt(si1i1-area*u1*u1), sd2 = vcl_sqrt(si2i2-area*u2*u2);
+  if(!neu)
+    return 0;
+  if(!sd1||!sd2)
+    if(neu>0)
+      return 1;
+    else
+      return -1;
+  double den = sd1*sd2;
+  return (float)neu/den;
+}
+
+//:perform normalized cross-correlation at a sub-pixel location
+// thus all the pixel values are interpolated.
+float brip_vil1_float_ops::
+cross_correlate(vil1_memory_image_of<float> const & image1,
+                vil1_memory_image_of<float> const & image2,
+                const float x, const float y,
+                const int radius, 
+                const float intensity_thresh)
+{
+  int w1 = image1.width(), h1 = image1.height();
+  int w2 = image1.width(), h2 = image1.height();
+  //bounds checks
+  if(w1!=w2||h1!=h2)
+    return -1;
+  if(x<radius||x>w1-radius-1||y<radius||y>h1-radius-1)
+    return -1;
+
+  //accumulate correlation sums,
+  //bi-linear interpolate the values
+  int s = 2*radius+1;
+  double area = s*s;
+  double sI1=0, sI2=0, sI1I1=0, sI2I2=0, sI1I2=0;
+  for(float y0 = -radius; y0<=radius; y0+=1.0)
+    for(float x0 = -radius; x0<=radius; x0+=1.0)
+      {
+        float xp = x+x0, yp = y+y0;
+        double v1 = 
+          brip_vil1_float_ops::bilinear_interpolation(image1, xp, yp);
+        double v2 = 
+          brip_vil1_float_ops::bilinear_interpolation(image2, xp, yp);
+        sI1 += v1;
+        sI2 += v2;
+        sI1I1 += v1*v1;
+        sI2I2 += v2*v2;
+        sI1I2 += v1*v2;
+      }
+  //:compute correlation.
+  float cc = cross_corr(area, sI1, sI2, sI1I1, sI2I2, sI1I2, intensity_thresh);
+  return cc;
+}
+
+//: r0 is the image from from which to read the new intensity values
+//  r is the summing array row in which the values are to be accumulated
+static bool update_row(vil1_memory_image_of<float> const& image1,
+                       vil1_memory_image_of<float> const& image2,
+                       const int r0, 
+                       const int r, 
+                       vbl_array_2d<double>& SI1,
+                       vbl_array_2d<double>& SI2,
+                       vbl_array_2d<double>& SI1I1,
+                       vbl_array_2d<double>& SI2I2,
+                       vbl_array_2d<double>& SI1I2)
+{
+  int w1 = image1.width();
+  int w2 = image2.width();
+  int h1 = image1.height();
+  int h2 = image2.height();
+  if(w1!=w2||h1!=h2||r<0||r>=h1)
+    return false;
+  double i10 = image1(0,r0), i20 = image2(0,r0);
+  SI1[r][0] = i10; SI2[r][0] = i20; SI1I1[r][0]=i10*i10;
+  SI2I2[r][0]=i20*i20; SI1I2[r][0]=i10*i20;
+  for(int c = 1; c<w1; c++)
+    {
+      double i1c = image1(c,r0);
+      double i2c = image2(c,r0);
+      SI1[r][c]    = SI1[r][c-1]+i1c; 
+      SI2[r][c]    = SI2[r][c-1]+i2c;
+      SI1I1[r][c]  = SI1I1[r][c-1]+ i1c*i1c;
+      SI2I2[r][c]  = SI2I2[r][c-1]+ i2c*i2c;
+      SI1I2[r][c]  = SI1I2[r][c-1]+ i1c*i2c;
+    }
+ return true;
+}
+
+static bool initialize_slice(vil1_memory_image_of<float> const& image1,
+                            vil1_memory_image_of<float> const& image2,
+                            const int radius, 
+                            vbl_array_2d<double>& SI1,
+                            vbl_array_2d<double>& SI2,
+                            vbl_array_2d<double>& SI1I1,
+                            vbl_array_2d<double>& SI2I2,
+                            vbl_array_2d<double>& SI1I2)
+{
+  for(int r = 0; r<=2*radius; r++)
+    if(!update_row(image1, image2, r, r, SI1, SI2, SI1I1, SI2I2, SI1I2))
+      return false;
+  return true;
+}
+static bool collapse_slice( vbl_array_2d<double> const& SI1,
+                            vbl_array_2d<double> const& SI2,
+                            vbl_array_2d<double> const& SI1I1,
+                            vbl_array_2d<double> const& SI2I2,
+                            vbl_array_2d<double> const& SI1I2,
+                            vbl_array_1d<double>& dSI1,
+                            vbl_array_1d<double>& dSI2,
+                            vbl_array_1d<double>& dSI1I1,
+                            vbl_array_1d<double>& dSI2I2,
+                            vbl_array_1d<double>& dSI1I2)
+{
+  //sanity check
+  int w = SI1.cols(), h = SI1.rows();
+  int dw = SI1.cols();
+  if(dw!=w)
+    return false;
+
+  for(int c = 0; c<w; c++)
+    {
+      dSI1[c]=0; dSI2[c]=0; dSI1I1[c]=0;
+      dSI2I2[c]=0; dSI1I2[c]=0;
+      for(int r = 0; r<h; r++)
+        {
+          dSI1[c] += SI1[r][c];
+          dSI2[c] += SI2[r][c];
+          dSI1I1[c] += SI1I1[r][c];
+          dSI2I2[c] += SI2I2[r][c];
+          dSI1I2[c] += SI1I2[r][c];
+        }
+    }
+  return true;
+}
+
+static bool cross_correlate_row(int radius, 
+                                vbl_array_1d<double>& dSI1,
+                                vbl_array_1d<double>& dSI2,
+                                vbl_array_1d<double>& dSI1I1,
+                                vbl_array_1d<double>& dSI2I2,
+                                vbl_array_1d<double>& dSI1I2,
+                                float intensity_thresh,
+                                vbl_array_1d<float>& cc
+                                )
+{
+  //sanity check
+  int w = dSI1.size(), wc = cc.size();
+  if(!w||!wc||w!=wc)
+    return false;
+  int s = 2*radius+1;
+  double area = s*s;
+  //the general case
+  double si1=dSI1[s-1], si2=dSI2[s-1], si1i1=dSI1I1[s-1], 
+    si2i2=dSI2I2[s-1], si1i2=dSI1I2[s-1]; 
+  float cor = cross_corr(area, si1, si2, si1i1, si2i2, si1i2, intensity_thresh);
+  cc[radius]= cor;
+  //the remaining columns
+  for(int c = radius+1; c+radius<w; c++)
+    {
+      si1=dSI1[c+radius]-dSI1[c-radius-1];
+      si2=dSI2[c+radius]-dSI2[c-radius-1];
+      si1i1=dSI1I1[c+radius]-dSI1I1[c-radius-1];
+      si2i2=dSI2I2[c+radius]-dSI2I2[c-radius-1];
+      si1i2=dSI1I2[c+radius]-dSI1I2[c-radius-1]; 
+      float cor = cross_corr(area, si1, si2, si1i1, si2i2, si1i2, intensity_thresh);
+      cc[c] =cor;
+    }
+
+ return true;
+}  
+
+static void advance_rows(vbl_array_2d<double>& S)
+
+{
+  int nr = S.rows(), nc = S.cols();
+  for(int r = 0; r<nr-1; r++)
+    for(int c =0; c<nc; c++)
+      S[r][c]=S[r+1][c];
+}
+
+
+static bool output_cc_row(const int r0,  vbl_array_1d<float> const& cc,
+                   vil1_memory_image_of<float>& out)
+{
+  int n = cc.size(), w = out.width();
+  if(n!=w)
+    return false;
+  for(int c = 0; c<w; c++)
+    out(c, r0) = cc[c];
+  return true;
+}
+
+  
+vil1_memory_image_of<float> brip_vil1_float_ops::
+cross_correlate(vil1_memory_image_of<float> const & image1,
+                     vil1_memory_image_of<float> const & image2,
+                     const int radius, 
+                     const float intensity_thresh)
+{
+  vul_timer t;
+  vil1_memory_image_of<float> out;
+  int w = image1.width(), h = image1.height();
+  int w2 = image2.width(), h2 = image2.height();
+  //sizes must match
+  if(w!=w2||h!=h2)
+    {
+      vcl_cout << "In brip_vil1_float_ops::fast_cross_correlate(..) -"
+               << " image sizes don't match\n";
+      return out;
+    }
+  out.resize(w, h);
+  out.fill(0.0);
+  int s = 2*radius+1;
+  //Create the running sum slices
+  vbl_array_2d<double> SI1(s,w), SI2(s,w), 
+    SI1I1(s,w), SI2I2(s,w), SI1I2(s,w);
+  vbl_array_1d<float> cc(w, 0.0);
+  vbl_array_1d<double> dSI1(w, 0.0), dSI2(w, 0.0), 
+    dSI1I1(w, 0.0), dSI2I2(w, 0.0), dSI1I2(w, 0.0);
+  initialize_slice(image1, image2, radius, SI1, SI2, SI1I1, SI2I2, SI1I2);
+  if(!collapse_slice(SI1, SI2, SI1I1, SI2I2, SI1I2,
+                 dSI1, dSI2, dSI1I1, dSI2I2, dSI1I2))
+    return false;
+  int r0 = radius; 
+  for(; r0+radius+1<h; r0++)
+    {
+      if(r0==5)
+        r0=r0;
+      //      vcl_cout << "r0 " << r0 << "\n";
+      if(!cross_correlate_row(radius, dSI1, dSI2, dSI1I1, dSI2I2, dSI1I2, 
+                              intensity_thresh, cc))
+        return false;
+      //      vcl_cout << "\n";
+      advance_rows(SI1); advance_rows(SI2);  advance_rows(SI1I1);
+      advance_rows(SI2I2); advance_rows(SI1I2);
+      if(!update_row(image1, image2, r0+radius+1, 2*radius,
+                     SI1, SI2, SI1I1, SI2I2, SI1I2))
+        return false;
+      if(!collapse_slice(SI1, SI2, SI1I1, SI2I2, SI1I2,
+                         dSI1, dSI2, dSI1I1, dSI2I2, dSI1I2))
+        return false;
+      if(!output_cc_row(r0, cc, out))
+		return false;
+    }
+  //handle the last row
+  //  vcl_cout << "r0 " << r0 << "\n";
+  if(!cross_correlate_row(radius, dSI1, dSI2, dSI1I1, dSI2I2, dSI1I2, 
+                          intensity_thresh, cc))
+    return false;
+  //  vcl_cout << "\n";
+  if(!output_cc_row(r0, cc, out))
+		return false;
+  vcl_cout << "RunningSumCrossCorrelation for " << w*h/1000.0f << " k pixels in " 
+           << t.real() << " msecs\n"<< vcl_flush;
+  return out;
+}
+  

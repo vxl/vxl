@@ -6,10 +6,10 @@
 //:
 // \file
 // \author J.L. Mundy
-// \brief operations on memory_image_of<float> operands
+// \brief operations on image_view<float> operands
 //
 // These methods are similar to the VanDuc gevd_float_ops methods. However,
-// they use vil1_image_of<float> buffers rather than the old bufferxy
+// they use vil_image_view<float> buffers rather than the old bufferxy
 // structure. The purpose is to provide efficient foundational
 // segmentation routines. They are not meant to be generic.
 //
@@ -25,10 +25,11 @@
 #include <vcl_complex.h>
 #include <vnl/vnl_matrix.h>
 #include <vbl/vbl_array_2d.h>
+#include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_rgb.h>
-
+#include <vsol/vsol_box_2d_sptr.h>
 class brip_vil_float_ops
 {
  public:
@@ -209,8 +210,39 @@ class brip_vil_float_ops
   static double 
     bilinear_interpolation(vil_image_view<float> const & input,
                             const double x, const double y);
+  //:map the input to the output by a homography.
+  // \note if the output size is fixed then only the corresponding 
+  // input image space is transformed.
+  static bool homography(vil_image_view<float> const & input,
+                         vgl_h_matrix_2d<double>const& H,
+                         vil_image_view<float>& output,
+                         bool output_size_fixed = false,
+                         float output_fill_value = 0.0);
 
-    
+  //:rotate the input image counter-clockwise about the image origin        
+  static 
+  vil_image_view<float> rotate(vil_image_view<float> const & input,
+                                     const double theta_deg);
+
+  //:extract a region of interest. If roi does not overlap input, return false
+static bool chip(vil_image_view<float> const & input,
+                 vsol_box_2d_sptr const& roi, vil_image_view<float> chip);
+
+  //:cross-correlate two images at a given sub-pixel location
+  static float
+  cross_correlate(vil_image_view<float> const & image1,
+                  vil_image_view<float> const & image2,
+                  const float x, const float y,
+                  const int radius = 5, 
+                  const float intensity_thresh=25.0);
+
+  //:cross_correlate two images using running sums
+  static vil_image_view<float> 
+  cross_correlate(vil_image_view<float> const & image1,
+                  vil_image_view<float> const & image2,
+                  const int radius = 5, 
+                  const float intensity_thresh=25.0);
+
  private:
 
   //: find if the center pixel of a neighborhood is the maximum value

@@ -25,6 +25,7 @@
 #include <vcl_complex.h>
 #include <vnl/vnl_matrix.h>
 #include <vbl/vbl_array_2d.h>
+#include <vsol/vsol_box_2d_sptr.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_memory_image_of.h>
@@ -207,7 +208,7 @@ class brip_vil1_float_ops
                              const bool output_fourier_mag,
                              vil1_memory_image_of<float> & output);
   //: 2x2 bilinear interpolation of image at specified location
-  static double 
+  static float
     bilinear_interpolation(vil1_memory_image_of<float> const & input,
                             const double x, const double y);
   //:map the input to the output by a homography.
@@ -216,12 +217,34 @@ class brip_vil1_float_ops
   static bool homography(vil1_memory_image_of<float> const & input,
                          vgl_h_matrix_2d<double>const& H,
                          vil1_memory_image_of<float>& output,
-                         bool output_size_fixed = false);
+                         bool output_size_fixed = false,
+                         float output_fill_value = 0.0);
 
   //:rotate the input image counter-clockwise about the image origin        
   static 
   vil1_memory_image_of<float> rotate(vil1_memory_image_of<float> const & input,
                                      const double theta_deg);
+
+  bool chip(vil1_memory_image_of<float> const & input,
+                               vsol_box_2d_sptr const& roi,
+                               vil1_memory_image_of<float> chip);
+  
+  
+  //:cross-correlate two images at a given sub-pixel location
+  static float
+  cross_correlate(vil1_memory_image_of<float> const & image1,
+                  vil1_memory_image_of<float> const & image2,
+                  const float x, const float y,
+                  const int radius = 5, 
+                  const float intensity_thresh=25.0);
+
+  //:Cross-correlate two images using faster running sums
+  static vil1_memory_image_of<float> 
+  cross_correlate(vil1_memory_image_of<float> const & image1,
+                  vil1_memory_image_of<float> const & image2,
+                  const int radius = 5, 
+                  const float intensity_thresh=25.0);
+
  private:
 
   //: find if the center pixel of a neighborhood is the maximum value
