@@ -129,6 +129,9 @@ SOURCE=.\test_algo_histogram_equalise.cxx
 # Begin Source File
 SOURCE=.\test_algo_distance_transform.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_algo_trace_4con_boundary.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
