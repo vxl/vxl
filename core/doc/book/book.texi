@@ -720,6 +720,7 @@ catch up with the language standard, the answer is "all but the following":
 @itemize @bullet
 @item run-time type information (RTTI) in core libraries.
 @item exceptions in core libraries.
+@item nested classes (not supported very well by MSVC)
 @item wide characters (not supported by FreeBSD).
 @item member templates (not supported by SGI CC 7.2.x).
 @item partial template specializations (not supported by SGI CC 7.2.x).
@@ -734,7 +735,7 @@ The justification for banning certain things in core libraries is to encourage
 the adoption of the core by reducing the possiblility of porting problems.
 The justification for allowing it for Level 2 and greater libraries is that
 they are really pretty useful and hard to do without in more complex libraries
-than those in the core (e.g. RTTI for doing things like strategy patterns, or 
+than those in the core (e.g. RTTI for doing things like strategy patterns, or
 managing polymorphic class trees).
 
 
