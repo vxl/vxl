@@ -83,9 +83,6 @@ void QvVrmlFile::traverse(QvVisitor* visitor)
     visitor->Visit(*np);
 }
 
-#include <vcl_vector.txx>
-VCL_VECTOR_INSTANTIATE(QvNode*);
-
 #include "QvPointSet.h"
 #include "QvIndexedLineSet.h"
 #include "QvIndexedFaceSet.h"
