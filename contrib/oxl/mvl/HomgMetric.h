@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \brief Measurments on homogeneous coordinates
+// \brief Measurements on homogeneous coordinates
 //
 //    HomgMetric is a class that allows measurements to be made between
 //    homogeneous primitives.  If attached to an ImageMetric (q.v.), uses
