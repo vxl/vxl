@@ -34,6 +34,7 @@ class brip_vil_float_ops
  public:
   ~brip_vil_float_ops() {}
 
+  
   //: convolves with the specified kernel
   static vil_image_view<float>
     convolve(vil_image_view<float> const& input,
@@ -43,7 +44,7 @@ class brip_vil_float_ops
   static vil_image_view<float> gaussian(vil_image_view<float> const& input,
                                         float sigma);
 
-#ifdef VIL_CONVOLVE_WITH_MASK_EXISTS // TODO
+#if 1 // #ifdef VIL_CONVOLVE_WITH_MASK_EXISTS // TODO
   //: convolves with a Gaussian kernel and for a given mask
   static vil_image_view<float> gaussian(vil_image_view<float> const& input,
                                         float sigma,
