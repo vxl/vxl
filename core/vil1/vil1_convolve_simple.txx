@@ -17,12 +17,12 @@
 //--------------------------------------------------------------------------------
 
 template <class I1, class I2, class AC, class O>
-void vil_convolve_simple(I1 input1, unsigned w1, unsigned h1,
-			 I2 input2, unsigned w2, unsigned h2,
-			 O out,
+void vil_convolve_simple(I1 const* const* input1, unsigned w1, unsigned h1,
+			 I2 const* const* input2, unsigned w2, unsigned h2,
+			 O       * const* out,
 			 AC *)
 {
-  typedef typename vil_ip_traits<O>::pixel_type OutType;
+  typedef typename vil_ip_traits<O* const*>::pixel_type OutType;
 
   trace << "w1 h1 = " << w1 << ' ' << h1 << endl;
   trace << "w2 h2 = " << w2 << ' ' << h2 << endl;
@@ -146,5 +146,4 @@ template void vil_convolve_simple/*<I1, I2, AC, O >*/(vil_memory_image_of<I1> co
 #define VIL_CONVOLVE_SIMPLE_INSTANTIATE(I1, I2, AC, O) \
 VIL_CONVOLVE_SIMPLE_INSTANTIATE0(I1, I2, AC, O); \
 VIL_CONVOLVE_SIMPLE_INSTANTIATE1(I1, I2, AC, O); \
-VIL_CONVOLVE_SIMPLE_INSTANTIATE2(I1, I2, AC, O); \
-;
+VIL_CONVOLVE_SIMPLE_INSTANTIATE2(I1, I2, AC, O)

@@ -25,9 +25,9 @@ template <class T> class vil_memory_image_of;
 // AC : accumulator pixel type
 // O  : output image type
 template <class I1, class I2, class AC, class O>
-void vil_convolve_simple(I1 in1, unsigned w1, unsigned h1, // input 1
-			 I2 in2, unsigned w2, unsigned h2, // input 2
-			 O  out,                           // ouput
+void vil_convolve_simple(I1 const* const*  in1, unsigned w1, unsigned h1, // input 1
+			 I2 const* const*  in2, unsigned w2, unsigned h2, // input 2
+			 O       * const*  out,                           // ouput
 			 AC *); // dummy
 
 // This function performs some bounds checks on the given memory images
