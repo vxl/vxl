@@ -96,7 +96,7 @@ rrel_ran_sam_search::estimate( const rrel_estimation_problem * problem,
   vcl_vector<int> point_indices( points_per );
   vnl_vector<double> new_params;
   vcl_vector<double> residuals( num_points );
-  double min_obj = 0.0;
+  min_obj_ = 0.0;
   bool  obj_set=false;
 
   scale_ = -1;
@@ -140,11 +140,11 @@ rrel_ran_sam_search::estimate( const rrel_estimation_problem * problem,
       }
       if ( trace_level_ >= 1)
         vcl_cout << "Objective = " << new_obj << vcl_endl;
-      if ( !obj_set || new_obj<min_obj ) {
+      if ( !obj_set || new_obj<min_obj_ ) {
         if ( trace_level_ >= 2)
           vcl_cout << "New best\n";
         obj_set = true;
-        min_obj = new_obj;
+        min_obj_ = new_obj;
         params_ = new_params;
       }
       indices_ = point_indices;
