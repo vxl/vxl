@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_cross_product_matrix.h
 #ifndef vnl_cross_product_matrix_h_
 #define vnl_cross_product_matrix_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief 3x3 cross-product matrix of vector
@@ -13,6 +10,7 @@
 // \verbatim
 //  Modifications
 //   4/4/01 LSB (Manchester) Tidied Documentation
+//   27 June 2003 - Peter Vanroose - made set() inlined and removed .cxx file.
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -43,7 +41,20 @@ class vnl_cross_product_matrix : public vnl_double_3x3
     return *this;
   }
 
-  void set(const double* v); // override method in vnl_vector
+  //: Construct a vnl_cross_product_matrix from a C-array of 3 doubles.
+  //  Overrides a method in vnl_matrix.
+  void set(const double* v)
+  {
+    const double e1 = v[0];
+    const double e2 = v[1];
+    const double e3 = v[2];
+
+    vnl_cross_product_matrix & E = *this;
+
+    E(0,0) =   0; E(0,1) = -e3; E(0,2) =  e2;
+    E(1,0) =  e3; E(1,1) =   0; E(1,2) = -e1;
+    E(2,0) = -e2; E(2,1) =  e1; E(2,2) =   0;
+  }
 };
 
 #endif // vnl_cross_product_matrix_h_
