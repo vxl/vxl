@@ -1,3 +1,5 @@
+#ifndef ouml_io_txx_
+#define ouml_io_txx_
 // miscellaneous io operators
 
 #include "io.h"
@@ -73,3 +75,5 @@ vcl_ostream &operator<<(vcl_ostream &os, const vil_rgb<unsigned char> &colour)
      << (int)colour.B_ << ">\n";
   return os;
 }
+
+#endif // ouml_io_txx_
