@@ -33,8 +33,6 @@
 //     PTU ported to vxl may-20
 // \endverbatim
 
-#include <vtol/vtol_topology_object_sptr.h>
-#include <vcl_vector.h>
 #include <vsol/vsol_region_2d_sptr.h>
 #include <vtol/vtol_face.h>
 
@@ -46,7 +44,8 @@ class vtol_two_chain_2d;
 class vtol_face_2d
   : public vtol_face
 {
-public:
+  vsol_region_2d_sptr surface_;
+ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
@@ -139,11 +138,7 @@ public:
 
   //: this should not called by a client
   virtual vtol_face *
-  copy_with_arrays(vcl_vector<vtol_topology_object_sptr> &verts,
-                   vcl_vector<vtol_topology_object_sptr> &edges) const;
-
-private:
-  vsol_region_2d_sptr surface_;
+  copy_with_arrays(topology_list &verts, topology_list &edges) const;
 };
 
 #endif // vtol_face_2d_h

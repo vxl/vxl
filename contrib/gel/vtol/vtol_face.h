@@ -46,7 +46,7 @@ class vtol_face_2d;
 class vtol_face
   : public vtol_topology_object
 {
-public:
+ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
@@ -71,14 +71,13 @@ public:
   virtual vtol_one_chain *get_one_chain(int which = 0);
   virtual vtol_one_chain *get_boundary_cycle(void);
   virtual bool add_hole_cycle(vtol_one_chain &new_hole);
-  virtual vcl_vector<vtol_one_chain_sptr> *get_hole_cycles(void);
+  virtual one_chain_list *get_hole_cycles(void);
 
   // Methods that are here for now in transition.. :x
 
   //: Inferior/Superior Accessor Methods
   virtual vtol_face *
-  copy_with_arrays(vcl_vector<vtol_topology_object_sptr> &verts,
-                   vcl_vector<vtol_topology_object_sptr> &edges) const =0;
+  copy_with_arrays(topology_list &verts, topology_list &edges) const =0;
 
   //***************************************************************************
   // Replaces dynamic_cast<T>
@@ -128,6 +127,7 @@ public:
   virtual one_chain_list *outside_boundary_one_chains(void);
 
   // WARNING these methods should not be used by clients
+  // The returned pointers must be deleted after use.
 
   virtual vcl_vector<vtol_vertex*> *compute_vertices(void);
   virtual vcl_vector<vtol_edge*> *compute_edges(void);

@@ -34,7 +34,7 @@ class vtol_block;
 class vtol_zero_chain
   : public vtol_topology_object
 {
-public:
+ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
@@ -56,7 +56,7 @@ public:
   //  REQUIRE: new_vertices.size()>0
   //---------------------------------------------------------------------------
   explicit
-  vtol_zero_chain(const vcl_vector<vtol_vertex_sptr> &new_vertices);
+  vtol_zero_chain(const vertex_list &new_vertices);
 
   //---------------------------------------------------------------------------
   //: Copy constructor. Copy the vertices and the links
@@ -131,7 +131,7 @@ public:
                         int blanking=0) const;
 
   // : Warning - should not be used by clients
-protected:
+ protected:
   virtual vcl_vector<vtol_vertex*> *compute_vertices(void);
   virtual vcl_vector<vtol_edge*> *compute_edges(void);
   virtual vcl_vector<vtol_zero_chain*> *compute_zero_chains(void);

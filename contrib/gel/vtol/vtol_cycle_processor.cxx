@@ -29,7 +29,7 @@ vtol_cycle_processor::vtol_cycle_processor(vcl_vector<vtol_edge_2d_sptr>& edges)
 
 //---------------------------------------------------------------
 //
-static void pop_stacks(vcl_vector<vtol_vertex_sptr>& verts, vcl_vector<vtol_edge_2d_sptr>& edges,
+static void pop_stacks(vertex_list& verts, vcl_vector<vtol_edge_2d_sptr>& edges,
                        vtol_vertex_sptr& v, vcl_vector<vtol_edge_2d_sptr>& cycle_edges)
 {
   bool found = false;
@@ -176,12 +176,11 @@ static void v_edges(vtol_vertex_sptr v, vcl_vector<vtol_edge_2d_sptr>& b_edges,
                     bool force, vcl_vector<vtol_edge_2d_sptr>& edges_at_vertex)
 {
   edges_at_vertex.clear();
-  vcl_vector<vtol_edge_sptr> *edges = v->edges();
-  vcl_vector<vtol_edge_sptr>::iterator eit;
-  for ( eit = edges->begin(); eit != edges->end(); eit++)
+  edge_list *edges = v->edges();
+  for (edge_list::iterator eit = edges->begin(); eit != edges->end(); eit++)
     {
       vtol_edge_2d_sptr e = (*eit)->cast_to_edge_2d();
-      if (vcl_find(b_edges.begin(), b_edges.end(),e) != b_edges.end()) 
+      if (vcl_find(b_edges.begin(), b_edges.end(),e) != b_edges.end())
         {
           if (used(e))
             continue;
@@ -330,7 +329,7 @@ static void assign_initial_edge(vtol_edge_2d_sptr& e,
   if (used(e))
     {
       vcl_cout << "In vtol_cycle_processor::assign_intial_edge(..) "
-           << "shouldn't happen - error\n";
+               << "shouldn't happen - error\n";
       return;
     }
   vtol_vertex_sptr v1 = e->v1(), v2 = e->v2();
@@ -467,7 +466,7 @@ static bool classify_two_edge_path(vtol_edge_2d_sptr& e0, vtol_edge_2d_sptr& e1)
   return !bridge;
 }
 //---------------------------------------------------------------------
-//: 
+//:
 //   Search the set of vtol_edge(s) connected to the last path vertex for
 //   a suitable addition to the path
 //
@@ -506,7 +505,7 @@ bool vtol_cycle_processor::classify_path(vcl_vector<vtol_edge_2d_sptr>& path_edg
 {
   if (!path_edges.size())
     return false;
-  vcl_vector<vtol_edge_sptr> c_edges;
+  edge_list c_edges;
   vtol_edge_2d_sptr e0 = *path_edges.begin();
   //If the path is a self_loop then the treatment is special
   //A self loop is classified as both a cw and ccw cycle
@@ -632,7 +631,6 @@ void vtol_cycle_processor::compute_cycles()
               if (touched(*eit)&&used(*eit))
                 removed_edges.push_back(*eit);
 
-            
               removed_edges.clear();
 
             this->set_bridge_vars();
@@ -643,7 +641,7 @@ void vtol_cycle_processor::compute_cycles()
 }
 
 //-----------------------------------------------------------------
-//: 
+//:
 //    The input is a set of 1-cycles in chains_.  These cycles are
 //    sorted so that they form a proper containment relation.  That
 //    is, there is one outer cycle, with traversal in the ccw direction
@@ -654,18 +652,16 @@ void vtol_cycle_processor::sort_one_cycles()
 {
   if (!chains_.size())
     {
-      vcl_cout << "In vtol_cycle_processor:: sort_one_cycles(..) no cycles "
-           << vcl_endl;
+      vcl_cout << "In vtol_cycle_processor:: sort_one_cycles(..) no cycles\n";
       return;
     }
   nested_one_cycles_.clear();
   //First, find the outer bounding vtol_one_chain. This outer boundary is
   //defined as a ccw cycle with the largest bounding box.
   //search for the largest ccw bounding box
-  vcl_vector<vtol_one_chain_sptr>::iterator cit = chains_.begin();
   double area = 0;
-  vtol_one_chain_sptr outer_chain;
-  for (cit=chains_.begin(); cit != chains_.end(); cit++)
+  vtol_one_chain_sptr outer_chain = 0;
+  for (one_chain_list::iterator cit=chains_.begin(); cit!=chains_.end(); cit++)
     {
       untouch(*cit);
       if (!ccw(*cit))
@@ -681,15 +677,14 @@ void vtol_cycle_processor::sort_one_cycles()
 
   if (!outer_chain||!ccw(outer_chain))
     {
-      vcl_cout << " In vtol_cycle_processor::sort_one_cycles(..) "
-           << " Shouldn't happen that there is no outer chain"
-           << vcl_endl
-           << "N cycles = " << chains_.size() << vcl_endl;
-      for (vcl_vector<vtol_one_chain_sptr>::iterator cit = chains_.begin();
+      vcl_cout << " In vtol_cycle_processor::sort_one_cycles(..)"
+               << " Shouldn't happen that there is no outer chain\n"
+               << "N cycles = " << chains_.size() << vcl_endl;
+      for (one_chain_list::iterator cit = chains_.begin();
            cit != chains_.end(); cit++)
         {
-          vcl_cout << " is chain ccw?  " << ccw(*cit) << vcl_endl;
-          vcl_cout << " is chain cw?  " << cw(*cit) << vcl_endl;
+          vcl_cout << " is chain ccw?  " << ccw(*cit) << vcl_endl
+                   << " is chain cw?  " << cw(*cit) << vcl_endl;
         }
       vcl_cout << "Outer Chain " << outer_chain << vcl_endl;
       return;
@@ -707,10 +702,10 @@ void vtol_cycle_processor::sort_one_cycles()
   // - one caveat is that the equality test below is exact.
   //   some situations may require a tolerance
   vsol_box_2d* b = outer_chain->get_bounding_box();
-  for (cit = chains_.begin(); cit != chains_.end(); cit++)
+  for (one_chain_list::iterator cit=chains_.begin(); cit!=chains_.end(); cit++)
     if (cw(*cit)&&!touched(*cit))
     {
-      if ((vtol_one_chain_sptr)(*cit)==(vtol_one_chain_sptr)outer_chain)
+      if ((*cit)==outer_chain)
         continue;
       vsol_box_2d* bc = (*cit)->get_bounding_box();
       if ((*bc<*b)&&!bc->near_equal(*b, tolerance_))
@@ -729,8 +724,8 @@ void vtol_cycle_processor::process()
   valid_ = true;
 }
 
-bool vtol_cycle_processor::nested_one_cycles(vcl_vector<vtol_one_chain_sptr>& one_chains,
-                                        const float& tolerance)
+bool vtol_cycle_processor::nested_one_cycles(one_chain_list& one_chains,
+                                             const float& tolerance)
 {
   if (!valid_||tolerance!=tolerance_)
     {

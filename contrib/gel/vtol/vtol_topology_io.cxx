@@ -306,9 +306,9 @@ void vtol_topology_io::write_zero_chain(vtol_zero_chain_sptr const& zc,
 
   // write the inferiors
 
-  const vcl_vector<vtol_topology_object_sptr> *inferiors = zc->inferiors();
+  const topology_list *inferiors = zc->inferiors();
 
-  vcl_vector<vtol_topology_object_sptr>::const_iterator i;
+  topology_list::const_iterator i;
   for (i=inferiors->begin();i!=inferiors->end();++i)
   {
     strm << " <vxl_vertex_2d_sptr id=\"v2d" << (*i)->get_id() << "\"/>" << vcl_endl;
@@ -323,9 +323,9 @@ void vtol_topology_io::write_edge_2d(vtol_edge_2d_sptr const& e, vcl_ostream &st
 
   // write the inferiors
 
-  const vcl_vector<vtol_topology_object_sptr> *inferiors = e->inferiors();
+  const topology_list *inferiors = e->inferiors();
 
-  vcl_vector<vtol_topology_object_sptr>::const_iterator i;
+  topology_list::const_iterator i;
   for (i=inferiors->begin();i!=inferiors->end();++i)
   {
     strm << " <vxl_zero_chain_2d_sptr id=\"zc_" << (*i)->get_id() << "\"/>" << vcl_endl;
@@ -341,9 +341,9 @@ void vtol_topology_io::write_one_chain(vtol_one_chain_sptr const& oc, vcl_ostrea
 
   // write the inferiors
 
-  const vcl_vector<vtol_topology_object_sptr> *inferiors = oc->inferiors();
+  const topology_list *inferiors = oc->inferiors();
 
-  vcl_vector<vtol_topology_object_sptr>::const_iterator i;
+  topology_list::const_iterator i;
   for (i=inferiors->begin();i!=inferiors->end();++i)
   {
     vtol_edge *e = (*i)->cast_to_edge();
@@ -375,9 +375,9 @@ void vtol_topology_io::write_face_2d(vtol_face_2d_sptr const& f, vcl_ostream &st
 
   // write the inferiors
 
-  const vcl_vector<vtol_topology_object_sptr> *inferiors = f->inferiors();
+  const topology_list *inferiors = f->inferiors();
 
-  vcl_vector<vtol_topology_object_sptr>::const_iterator i;
+  topology_list::const_iterator i;
   for (i=inferiors->begin();i!=inferiors->end();++i)
   {
     strm << " <vxl_one_chain_2d_sptr id=\"oc_" << (*i)->get_id() << "\"/>" << vcl_endl;
@@ -393,9 +393,9 @@ void vtol_topology_io::write_two_chain(vtol_two_chain_sptr const& tc, vcl_ostrea
 
   // write the inferiors
 
-  const vcl_vector<vtol_topology_object_sptr> *inferiors = tc->inferiors();
+  const topology_list *inferiors = tc->inferiors();
 
-  vcl_vector<vtol_topology_object_sptr>::const_iterator i;
+  topology_list::const_iterator i;
   for (i=inferiors->begin();i!=inferiors->end();++i)
   {
     vtol_face *f = (*i)->cast_to_face();
@@ -427,9 +427,9 @@ void vtol_topology_io::write_block(vtol_block_sptr const& b, vcl_ostream &strm)
 
   // write the inferiors
 
-  const vcl_vector<vtol_topology_object_sptr> *inferiors = b->inferiors();
+  const topology_list *inferiors = b->inferiors();
 
-  vcl_vector<vtol_topology_object_sptr>::const_iterator i;
+  topology_list::const_iterator i;
   for (i=inferiors->begin();i!=inferiors->end();++i)
   {
     strm << " <vxl_two_chain_2d_sptr id=\"tc_" << (*i)->get_id() << "\"/>" << vcl_endl;

@@ -54,7 +54,7 @@ vtol_edge_2d::vtol_edge_2d(vtol_vertex_2d &new_v1,
 vtol_edge_2d::vtol_edge_2d(const vtol_edge_2d &other)
   : curve_(0)
 {
-  vcl_vector<vtol_topology_object_sptr>::const_iterator i;
+  topology_list::const_iterator i;
   for (i=other.inferiors()->begin();i!=other.inferiors()->end();++i)
   {
     vtol_zero_chain_sptr zc = (*i)->clone()->cast_to_topology_object()->cast_to_zero_chain();
@@ -121,9 +121,8 @@ vtol_edge_2d::vtol_edge_2d(vtol_zero_chain &new_zero_chain)
 vtol_edge_2d::vtol_edge_2d(zero_chain_list &newchains)
 {
   // 1) Link the inferiors.
-  zero_chain_list::iterator i;
 
-  for (i=newchains.begin();i!= newchains.end();++i )
+  for (zero_chain_list::iterator i=newchains.begin(); i!=newchains.end(); ++i)
     link_inferior(*(*i));
 
   // 2) Set v1_ and v2_;

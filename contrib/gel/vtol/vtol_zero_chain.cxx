@@ -40,13 +40,12 @@ vtol_zero_chain::vtol_zero_chain(vtol_vertex &v1,
 //: Constructor from an array of vertices
 // Require: new_vertices.size()>0
 //---------------------------------------------------------------------------
-vtol_zero_chain::vtol_zero_chain(const vcl_vector<vtol_vertex_sptr> &new_vertices)
+vtol_zero_chain::vtol_zero_chain(const vertex_list &new_vertices)
 {
   // require
   assert(new_vertices.size()>0);
 
-  vcl_vector<vtol_vertex_sptr>::const_iterator i;
-  for (i=new_vertices.begin();i!=new_vertices.end();++i )
+  for (vertex_list::const_iterator i=new_vertices.begin();i!=new_vertices.end();++i)
     link_inferior(*(*i));
 }
 
@@ -55,16 +54,9 @@ vtol_zero_chain::vtol_zero_chain(const vcl_vector<vtol_vertex_sptr> &new_vertice
 //---------------------------------------------------------------------------
 vtol_zero_chain::vtol_zero_chain(const vtol_zero_chain &other)
 {
-  vtol_vertex_sptr new_vertex;
-  vcl_vector<vtol_topology_object_sptr>::const_iterator i;
-
+  topology_list::const_iterator i;
   for (i=other.inferiors()->begin();i!=other.inferiors()->end();++i)
-    {
-      new_vertex = (*i)->clone()->cast_to_topology_object()->cast_to_vertex();
-
-      // new_vertex=(vtol_vertex *)((*i)->clone().ptr());
-      link_inferior(*new_vertex);
-    }
+    link_inferior(*((*i)->clone()->cast_to_topology_object()->cast_to_vertex()));
 }
 
 //---------------------------------------------------------------------------
@@ -184,21 +176,18 @@ vcl_vector<vtol_block*>* vtol_zero_chain::compute_blocks(void)
 
 bool vtol_zero_chain::operator==(const vtol_zero_chain &other) const
 {
-  const vcl_vector<vtol_topology_object_sptr> *inf1=inferiors();
-  const vcl_vector<vtol_topology_object_sptr> *inf2=other.inferiors();
-  //vtol_topology_object_sptr v1;
-  //vtol_topology_object_sptr v2;
-  vcl_vector<vtol_topology_object_sptr>::const_iterator i1;
-  vcl_vector<vtol_topology_object_sptr>::const_iterator i2;
+  const topology_list *inf1=inferiors();
+  const topology_list *inf2=other.inferiors();
+  topology_list::const_iterator i1;
+  topology_list::const_iterator i2;
 
   bool result=this==&other;
 
   if (!result)
     {
       result=inf1->size()==inf2->size();
-      if (result)
-        for (i1=inf1->begin(),i2=inf2->begin(); i1!=inf1->end()&&result; ++i1,++i2)
-          result=*(*i1)==*(*i2);
+      for (i1=inf1->begin(),i2=inf2->begin(); i1!=inf1->end()&&result; ++i1,++i2)
+        result=*(*i1)==*(*i2);
     }
   return result;
 }

@@ -45,7 +45,7 @@ class vtol_one_chain
 //: public vtol_topology_object,
   : public vtol_chain
 {
-public:
+ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
@@ -59,14 +59,14 @@ public:
   //: Constructor from an array of edges
   //---------------------------------------------------------------------------
   explicit vtol_one_chain(edge_list &,
-                             bool new_is_cycle=false);
+                          bool new_is_cycle=false);
 
   //---------------------------------------------------------------------------
   //: Constructor from an array of edges and an array of directions
   //---------------------------------------------------------------------------
   explicit vtol_one_chain(edge_list &,
-                             vcl_vector<signed char> &,
-                             bool new_is_cycle=false);
+                          vcl_vector<signed char> &,
+                          bool new_is_cycle=false);
 
   //---------------------------------------------------------------------------
   //: Copy constructor
@@ -145,8 +145,7 @@ public:
   virtual void reverse_directions(void);
 
   virtual vtol_one_chain *
-  copy_with_arrays(vcl_vector<vtol_topology_object_sptr> &verts,
-                   vcl_vector<vtol_topology_object_sptr> &edges) const;
+  copy_with_arrays(topology_list &verts, topology_list &edges) const;
 
   virtual void compute_bounding_box(void); //A local implementation
 
@@ -167,9 +166,10 @@ public:
   virtual void describe_directions(vcl_ostream &strm=vcl_cout, int blanking=0) const;
   virtual void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;
 
-public:
+ public:
 
   // \warning clients should not use these methods
+  // The returned pointers must be deleted after use.
 
   virtual vcl_vector<vtol_vertex*> *compute_vertices(void);
   virtual vcl_vector<vtol_edge*> *compute_edges(void);

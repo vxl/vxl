@@ -150,7 +150,7 @@ void vtol_vertex::print(vcl_ostream &strm) const
 
 //: This method outputs a detailed description of the vertex including the inferiors and superiors.
 void vtol_vertex::describe(vcl_ostream &strm,
-                              int blanking) const
+                           int blanking) const
 {
   for (int i=0; i<blanking; ++i) strm << ' ';
   print(strm);
@@ -183,13 +183,13 @@ bool vtol_vertex::is_connected(const vtol_vertex &v2)
 }
 
 
-//: This method returns true if the Edge, edg, is on the superior list of the vertex.
+//: This method returns true if edg is on the superior list of the vertex.
 bool vtol_vertex::is_endpoint(const vtol_edge &edg)
 {
-  vtol_edge_sptr e=(vtol_edge*)(&edg); // const violation
-  const edge_list *edge_list=edges();
-  bool result=vcl_find(edge_list->begin(),edge_list->end(),e)!=edge_list->end();
-  delete edge_list;
+  vtol_edge_sptr e=const_cast<vtol_edge*>(&edg); // const violation
+  const edge_list *e_list=edges();
+  bool result=vcl_find(e_list->begin(),e_list->end(),e)!=e_list->end();
+  delete e_list;
   return result;
 }
 

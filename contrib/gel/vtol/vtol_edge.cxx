@@ -1,7 +1,7 @@
+// This is gel/vtol/vtol_edge.cxx
 #include "vtol_edge.h"
-
 //:
-//  \file
+// \file
 
 #include <vcl_cassert.h>
 #include <vtol/vtol_zero_chain.h>
@@ -33,7 +33,7 @@ vtol_edge::vtol_edge(void)
 //---------------------------------------------------------------------------
 vtol_zero_chain_sptr vtol_edge::zero_chain(void) const
 {
-  vcl_vector<vtol_topology_object_sptr> const& inf = *(inferiors());
+  topology_list const& inf = *(inferiors());
   for (unsigned int i=0; i<inf.size(); ++i)
     if (inf[i]->cast_to_zero_chain()->v0()) // PVr- avoid returning empty chain
       return inf[i]->cast_to_zero_chain();
@@ -130,7 +130,7 @@ void vtol_edge::set_vertices_from_zero_chains(void)
           v2_=v1_;
           break;
         default:
-          vcl_vector<vtol_topology_object_sptr> const * v = zc0->inferiors();
+          topology_list const * v = zc0->inferiors();
           v1_=v->front()->cast_to_vertex();
           v2_=v->back()->cast_to_vertex();
           break;
@@ -157,8 +157,8 @@ void vtol_edge::set_vertices_from_zero_chains(void)
               v1_=(*verts)[0];
               v2_=(*verts)[numverts-1];
             }
+          delete verts;
         }
-      delete verts;
     }
   touch();
 }
@@ -293,7 +293,7 @@ vcl_vector<vtol_block *> *vtol_edge::compute_blocks(void)
 // These vertices are v1_ and v2_ in that order.
 vertex_list *vtol_edge::endpoints(void)
 {
-  vertex_list *newl=new vcl_vector<vtol_vertex_sptr>();
+  vertex_list *newl=new vertex_list;
   if (v1_)
     newl->push_back(v1_);
   if (v2_)
@@ -312,10 +312,8 @@ bool vtol_edge::share_vertex_with(vtol_edge &other)
   vertex_list *thisedges=vertices();
   vertex_list *eedges=other.vertices();
 
-  vcl_vector<vtol_vertex_sptr>::iterator i1;
-  vcl_vector<vtol_vertex_sptr>::iterator i2;
-  for (i1=thisedges->begin();i1!=thisedges->end();++i1 )
-    for (i2=eedges->begin();i2!=eedges->end(); ++i2 )
+  for (vertex_list::iterator i1=thisedges->begin();i1!=thisedges->end();++i1 )
+    for (vertex_list::iterator i2=eedges->begin();i2!=eedges->end(); ++i2 )
       if ((*i1)==(*i2))
         return true;
   return false;
