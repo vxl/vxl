@@ -35,7 +35,7 @@ double FMatrixComputeLMedSq::calculate_residual(vgl_homg_point_2d<double>& one,
 {
   vgl_homg_line_2d<double> l1 = F->image2_epipolar_line(one);
   vgl_homg_line_2d<double> l2 = F->image1_epipolar_line(two);
-  return vgl_homg_operators_2d<double>::perp_dist_squared(two, l1);
+  return vgl_homg_operators_2d<double>::perp_dist_squared(two, l1)
       +  vgl_homg_operators_2d<double>::perp_dist_squared(one, l2);
 }
 
