@@ -19,13 +19,13 @@ File: vgl/vgl_point_2d.txx:
 ...
 
 #define VGL_POINT_2D_INSTANTIATE(T) \
-template class vgl_point_2d<T>; \
-template vcl_ostream& operator<<(vcl_ostream&, const vgl_point_2d<T>&); \
-template vcl_istream& operator>>(vcl_istream&, vgl_point_2d<T>&); \
-template void vsl_print_summary(vcl_ostream &, const vgl_point_2d<T> &); \
-template void vsl_b_read(vcl_istream &, vgl_point_2d<T> &); \
-template void vsl_b_write(vcl_ostream &, const vgl_point_2d<T> &); \
-;
+template class vgl_point_2d<T >; \
+template vcl_ostream& operator<<(vcl_ostream&, const vgl_point_2d<T >&); \
+template vcl_istream& operator>>(vcl_istream&, vgl_point_2d<T >&); \
+template void vsl_print_summary(vcl_ostream &, const vgl_point_2d<T > &); \
+template void vsl_b_read(vcl_istream &, vgl_point_2d<T > &); \
+template void vsl_b_write(vcl_ostream &, const vgl_point_2d<T > &)
+
 @end example
 
 To instantiate a vgl_point_2d<double> there is a file in the vgl/Templates directory:

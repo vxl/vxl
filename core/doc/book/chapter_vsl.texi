@@ -264,7 +264,6 @@ NB, the template instantiation files should be placed in your own libraries (ie 
 avoid creating unnecessary and unused versions of a given templated function.
 
 
-
 @section Tidy Printing with @code{vsl_indent}
 
 The utility functions and class in @code{vsl_indent} give a way of putting
@@ -320,7 +319,6 @@ vcl_ostream& operator<<(vcl_ostream& os, const Fred& fred)
   vsl_indent_dec(os);
   return os;
 @}
-
 
 class Jim
 @{
@@ -582,7 +580,7 @@ avoids having to modify the shared object.
 @subsection Future Work
 
 @enumerate
-@item Currently, a few error checks in the IO still result in a error message and @code{abort()}. Since
+@item Currently, a few error checks in the IO still result in a error message and @code{std::abort()}. Since
 IO code is error prone for reasons often beyond the control of the programmer, this behaviour should be
 replaced with a standard error message a setting of the stream's fail flag, and return.
 @item Design a format for @code{long double} and add it @code{to vsl_binary_io.h}.
@@ -624,8 +622,7 @@ class vxl_my_class : public vxl_baseclass
   virtual vxl_baseclass* clone() const;
 @};
 
-//: Provide examples of each type of polymorphic object
-//  that might appear in the stream.
+//: Provide examples of each type of polymorphic object that might appear in the stream.
 void vxl_configure_loaders()
 @{
     vsl_add_to_binary_loader(vxl_my_class());
@@ -706,18 +703,18 @@ public:
   //: Write derived class to os using baseclass reference
   virtual void b_write_by_base(vsl_b_ostream& os, const vxl_baseclass& base) const;
 
-   //: Write derived class to os using baseclass reference
+  //: Write derived class to os using baseclass reference
   virtual void b_read_by_base(vsl_b_istream& is, vxl_baseclass& base) const;
 
-    //: Copy this object onto the heap and return a pointer
+  //: Copy this object onto the heap and return a pointer
   virtual vxl_baseclassIO* clone() const;
 
-   //: Return name of class for which this object provides IO
+  //: Return name of class for which this object provides IO
   virtual vcl_string target_classname() const;
 
-    //: Return true if b is of class target_classname()
-    //  Typically this will just be "return b.is_class(target_classname())"
-    //  However, third party libraries may use a different system
+  //: Return true if b is of class target_classname()
+  //  Typically this will just be "return b.is_class(target_classname())"
+  //  However, third party libraries may use a different system
   virtual bool is_io_for(const vxl_baseclass& b) const;
 @};
 
@@ -803,7 +800,7 @@ plain classes to improve memory efficiency.
 For plain classes (those with no virtual functions), and those derived from plain classes,
 you need to add the following functions to the class definition in the .h file.
 @example
-//: Binary save self to stream.
+  //: Binary save self to stream.
   void b_write(vsl_b_ostream &os) const;
 
   //: Binary load self from stream.
@@ -867,24 +864,24 @@ you need to add the following functions to the class definition in the .h file.
 You will also need to add the following global scope helper function declarations to the .h file
 
 @example
-    //: Binary save vnl_my_class to stream.
+  //: Binary save vnl_my_class to stream.
   void vsl_b_write(vsl_b_ostream &os, const vnl_my_class & b);
 
-    //: Binary load vnl_my_class from stream.
+  //: Binary load vnl_my_class from stream.
   void vsl_b_read(vsl_b_istream &is, vnl_my_class & b);
 
-    //: Allows derived class to be loaded by base-class pointer
-    //  A loader object exists which is invoked by calls
-    //  of the form "vsl_b_read(os,base_ptr)".  This loads derived class
-    //  objects from the disk, places them on the heap and
-    //  returns a base class pointer.
-    //  In order to work the loader object requires
-    //  an instance of each derived class that might be
-    //  found.  This function gives the model class to
-    //  the appropriate loader.
+  //: Allows derived class to be loaded by base-class pointer
+  //  A loader object exists which is invoked by calls
+  //  of the form "vsl_b_read(os,base_ptr)".  This loads derived class
+  //  objects from the disk, places them on the heap and
+  //  returns a base class pointer.
+  //  In order to work the loader object requires
+  //  an instance of each derived class that might be
+  //  found.  This function gives the model class to
+  //  the appropriate loader.
   void vsl_add_to_binary_loader(const vanyl_my_base_class& b);
 
-    //: Stream output operator for class pointer
+  //: Stream output operator for class pointer
   void vsl_print_summary(vcl_ostream& os,const vanyl_my_base_class* b);
 @end example
 
@@ -944,8 +941,7 @@ It is common and perfectly acceptable to modify a classes I/O during very early 
 changing the version number.
 
 @example
-//=======================================
-//: Return IO version number;
+//: Return IO version number
 short vanyl_my_class::version() const
 @{
   return 1;
@@ -963,7 +959,6 @@ or else not save it  and regenerate it on loading.
 
 The standard form for the method is
 @example
-//=======================================
 //: Binary save self to stream.
 void vanyl_my_class::b_write(vsl_b_ostream &os) const
 @{
@@ -1024,7 +1019,6 @@ and predictability for programmers.
 
 The standard form for the method is
 @example
-//=======================================
 //: Output a human readable summary to the stream
 void vanyl_my_class::print_summary(vcl_ostream &os) const
 @{
@@ -1033,7 +1027,6 @@ void vanyl_my_class::print_summary(vcl_ostream &os) const
     // optionally os << vcl_endl;
 @}
 @end example
-
 
 @subsubsection Platform Independent Class Identification
 
@@ -1047,7 +1040,6 @@ If the class is not part of an inheritance hierarchy or will not ever be loaded 
 pointer, the @code{is_a()} method is not necessary and can be left out.
 
 @example
-//=======================================
 //: Return a platform independent string identifying the class
 vcl_string vanyl_my_class::is_a() const
 @{
@@ -1058,7 +1050,6 @@ vcl_string vanyl_my_class::is_a() const
 The @code{is_class()} methods are not used by the vsl system, but are useful when
 you don't have RTTI.
 @example
-//=======================================
 //: Return true if the argument matches the string identifying the class or any parent class
 bool vanyl_my_class::is_class(vcl_string const& s) const
 @{
@@ -1079,7 +1070,6 @@ that compiler generated default copy constructor is suitable(e.g. The class has 
 or reference member variables.)
 
 @example
-//=======================================
 //: Create a copy of the object on the heap.
 // The caller is responsible for deletion
 vanyl_my_base_class* vanyl_my_class::clone() const
@@ -1090,16 +1080,13 @@ vanyl_my_base_class* vanyl_my_class::clone() const
 
 @subsubsection Helper Functions.
 
-
 @example
-//==============================================
 //: Binary save vnl_vector to stream.
 void vsl_b_write(vsl_b_ostream &os, const vanyl_my_class & v)
 @{
   v.b_write(os);
 @}
 
-//==============================================
 //: Binary load vnl_vector from stream.
 void vsl_b_read(vsl_b_istream &is, vanyl_my_class & v)
 @{
@@ -1110,7 +1097,6 @@ It is acceptable to inline the previous two functions, in which case a half-dece
 will optimise them completely away.
 
 @example
-//==============================================
 //: Output a human readable summary to the stream
 void vsl_print_summary(vcl_ostream& os,const vanyl_my_class& v)
 @{
@@ -1128,7 +1114,7 @@ The implementation code for functions to be added to base classes is as follows
 
 @example
 //==============================================
-//: Allows derived class to be loaded by base-class pointer
+//: Allows derived class to be loaded by base-class pointer.
 //  A loader object exists which is invoked by calls
 //  of the form "vsl_b_read(os,base_ptr);".  This loads derived class
 //  objects from the stream, places them on the heap and
@@ -1158,16 +1144,16 @@ If the base class is abstract, then you should not to provide
 implementations for the following methods. Instead declare them
 as pure virtual methods in the .h file.
 @example
-        //: Create a copy on the heap and return base class pointer
+    //: Create a copy on the heap and return base class pointer
     virtual my_base_class* clone() const = 0;
 
-        //: Print class to os
+    //: Print class to os
     virtual void print_summary(vcl_ostream& os) const = 0;
 
-        //: Save class to binary file stream
+    //: Save class to binary file stream
     virtual void b_write(vsl_b_ostream& bfs) const = 0;
 
-         //: Load class from binary file stream
+    //: Load class from binary file stream
     virtual void b_read(vsl_b_istream& bfs) = 0;
 
 @end example
@@ -1247,7 +1233,6 @@ objects they point to are the Bs.
 template<class T>
 void vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T> &p)
 @{
-
   // write version number
   const short io_version_no = 1;
   vsl_b_write(os, io_version_no);
@@ -1259,7 +1244,6 @@ void vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T> &p)
   // pointed to is being saved
   if (id == 0)
   @{
-
     // Store a record of the address of B and get a serial number
     id = os.add_serialisation_record(p.ptr());
 
@@ -1275,7 +1259,6 @@ void vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T> &p)
   @{
     vsl_b_write(os, id);         // Save the serial number
   @}
-
 @}
 
 //=============================================================================
@@ -1385,7 +1368,7 @@ Essentially this means writing the following functions for each class:
   //: Binary load vnl_my_class from stream.
   void vsl_b_read(vsl_b_istream &is, vnl_my_class & c);
 
-    //: Stream output operator for class pointer
+  //: Stream output operator for class pointer
   void vsl_print_summary(vcl_ostream& os, const vnl_my_class& c);
 @end example
 
@@ -1458,7 +1441,6 @@ void vsl_b_read(vsl_b_istream &is, vgl_point_2d<T>& p)
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   @}
-
 @}
 
 
@@ -1519,18 +1501,18 @@ public:
   //: Write derived class to os using baseclass reference
   virtual void b_write_by_base(vsl_b_ostream& os, const BaseClass& base) const;
 
-   //: Write derived class to os using baseclass reference
+  //: Write derived class to os using baseclass reference
   virtual void b_read_by_base(vsl_b_istream& is, BaseClass& base) const;
 
-    //: Copy this object onto the heap and return a pointer
+  //: Copy this object onto the heap and return a pointer
   virtual BaseClassIO* clone() const;
 
-   //: Return name of class for which this object provides IO
+  //: Return name of class for which this object provides IO
   virtual vcl_string target_classname() const;
 
-    //: Return true if b is of class target_classname()
-    //  Typically this will just be "return b.is_class(target_classname())"
-    //  However, third party libraries may use a different system
+  //: Return true if b is of class target_classname()
+  //  Typically this will just be "return b.is_class(target_classname())"
+  //  However, third party libraries may use a different system
   virtual bool is_io_for(const BaseClass& b) const;
 @};
 
@@ -1615,7 +1597,7 @@ vcl_string BaseClassIO()::target_classname() const
 //: Return true if b is of class target_classname()
 bool BaseClassIO()::is_io_for(const BaseClass& b) const
 @{
-  return (b.is_a()==target_classname());
+  return b.is_a()==target_classname();
 @}
 
 //====================================================================================
@@ -1651,9 +1633,7 @@ void vsl_b_read(vsl_b_istream &is, BaseClass & p)
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   @}
-
 @}
-
 
 //====================================================================================
 //: Output a human readable summary to the stream
@@ -1685,12 +1665,11 @@ void vsl_b_read(vsl_b_istream &is, BaseClass* &b)
     vsl_clipon_binary_loader<BaseClass,BaseClassIO>::instance().read_object(is,b);
 @}
 
-
 // Explicitly instantiate loader
 VSL_CLIPON_BINARY_LOADER_INSTANTIATE(BaseClass, BaseClassIO);
 
-
 @end example
+
 
 @subsubsection Clip-on IO Derived Class Header
 
@@ -1723,18 +1702,18 @@ public:
   //: Write derived class to os using baseclass reference
   virtual void b_write_by_base(vsl_b_ostream& os, const BaseClass& base) const;
 
-   //: Write derived class to os using baseclass reference
+  //: Write derived class to os using baseclass reference
   virtual void b_read_by_base(vsl_b_istream& is, BaseClass& base) const;
 
-    //: Copy this object onto the heap and return a pointer
+  //: Copy this object onto the heap and return a pointer
   virtual BaseClassIO* clone() const;
 
-   //: Return name of class for which this object provides IO
+  //: Return name of class for which this object provides IO
   virtual vcl_string target_classname() const;
 
-    //: Return true if b is of class target_classname()
-    //  Typically this will just be "return b.is_class(target_classname())"
-    //  However, third party libraries may use a different system
+  //: Return true if b is of class target_classname()
+  //  Typically this will just be "return b.is_class(target_classname())"
+  //  However, third party libraries may use a different system
   virtual bool is_io_for(const BaseClass& b) const;
 @};
 
@@ -1756,12 +1735,12 @@ For a DerivedClass, one creates @file{DerivedClassIO.cxx} as follows
 @example
 // This is DerivedClassIO.cxx
 
-#include <DerivedClass.h>
-#include <DerivedClassIO.h>
-
 //:
 // \file
 // \author Tim Cootes
+
+#include <DerivedClass.h>
+#include <DerivedClassIO.h>
 
 //: Constructor
 DerivedClassIO()::DerivedClassIO()
@@ -1791,7 +1770,6 @@ void DerivedClassIO()::b_read_by_base(vsl_b_istream& is, BaseClass& base) const
   vsl_b_read(is,base);
 @}
 
-
 //: Copy this object onto the heap and return a pointer
 BaseClassIO* DerivedClassIO()::clone() const
 @{
@@ -1807,7 +1785,7 @@ vcl_string DerivedClassIO()::target_classname() const
 //: Return true if b is of class target_classname()
 bool DerivedClassIO()::is_io_for(const BaseClass& b) const
 @{
-  return (b.is_a()==target_classname());
+  return b.is_a()==target_classname();
 @}
 
 //====================================================================================
@@ -1843,7 +1821,6 @@ void vsl_b_read(vsl_b_istream &is, DerivedClass & p)
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   @}
-
 @}
 
 @end example
@@ -1897,13 +1874,10 @@ void test_point_2d_double_io()
     TEST ("Finished reading file successfully", (!bfs_in), false);
     bfs_in.close();
 
-
     TEST ("p_out == p_in", p_out == p_in, true);
 
-
     vsl_print_summary(vcl_cout, p_out);
-        vcl_cout << vcl_endl;
-
+    vcl_cout << vcl_endl;
 @}
 
 void test_point_2d_prime()
@@ -1915,7 +1889,7 @@ void test_point_2d_prime()
 TESTMAIN(test_point_2d_prime);
 @end example
 
-The macros @code{TEST} and @code{TESTMAIN} are defined in the file @file{vgl/vgl_test.h}
+The macros @code{TEST} and @code{TESTMAIN} are defined in the file @file{testlib/testlib_test.h}
 
 We must then add a call to this test to @file{test_vgl_io.cxx}:
 
@@ -1949,7 +1923,6 @@ how many were successful/unsuccessful.
 To summarise, when adding a test program to v?l you need to
 
 @enumerate
-@item Ensure v?l_test.* exists (if not, create one)
 @item Create a test function in @file{tests/test_classname_io.cxx}
 @item Add a call to the function in @file{tests/test_v?l_io.cxx}
 @end enumerate

@@ -268,7 +268,7 @@
   \global\AFGfiguresonpage=0
   \dimen0=0pt
   \global\AFGfiguresizeonpage = 0pt
-  \AFGcheckfiglist     % check if there is figure waiting and return it in box 0 
+  \AFGcheckfiglist     % check if there is figure waiting and return it in box 0
   \ifvoid0          % nothing left
   \else
       \AFGfigureinsert0% insert this figure
@@ -300,7 +300,7 @@
 \gdef\pagecontents#1{%
     % unpack box \topins if nonempty, but warn if created when no figures
     \ifvoid\topins\else
-       \unvbox\topins  
+       \unvbox\topins
        \ifnum\AFGfiguresonpage=0      % check for insertion of figures
          \warning{AWF: TOPINS set, but figures=0, either figures or topinsert
          material might have been lost}
@@ -322,7 +322,7 @@
     %
     % If real page contents are larger than minpagesize, output them
     % but if they're too small, leave this page with nothing but
-    % figures, and move the small bit of text to the top of the next page. 
+    % figures, and move the small bit of text to the top of the next page.
     \AFGpagesize=\ht#1
     \advance\AFGpagesize by \dp#1          % determine size of box #1
     \ifdim\AFGpagesize>\minpagesize
@@ -813,7 +813,7 @@ where each line of input produces a line of output.}
 % @paragraphindent NCHARS
 % We'll use ems for NCHARS, close enough.
 % We cannot implement @paragraphindent asis, though.
-% 
+%
 \def\asisword{asis} % no translation, these are keywords
 \def\noneword{none}
 %
@@ -971,10 +971,10 @@ where each line of input produces a line of output.}
   \def\pdfmakeoutlines{{%
     \openin 1 \jobname.toc
     \ifeof 1\else\bgroup
-      \closein 1 
+      \closein 1
       \indexnofonts
       \def\tt{}
-      % thanh's hack / proper braces in bookmarks  
+      % thanh's hack / proper braces in bookmarks
       \edef\mylbrace{\iftrue \string{\else}\fi}\let\{=\mylbrace
       \edef\myrbrace{\iffalse{\else\string}\fi}\let\}=\myrbrace
       %
@@ -1014,7 +1014,7 @@ where each line of input produces a line of output.}
       \let\nextmakelinks=\makelinks
       \ifnum\lnkcount>0,\fi
       \picknum{#1}%
-      \startlink attr{/Border [0 0 0]} 
+      \startlink attr{/Border [0 0 0]}
         goto name{\pdfmkpgn{\the\pgn}}%
       \linkcolor #1%
       \advance\lnkcount by 1%
@@ -1068,7 +1068,7 @@ where each line of input produces a line of output.}
     \ifx\first0\adn0
     \else\ifx\first1\adn1 \else\ifx\first2\adn2 \else\ifx\first3\adn3
     \else\ifx\first4\adn4 \else\ifx\first5\adn5 \else\ifx\first6\adn6
-    \else\ifx\first7\adn7 \else\ifx\first8\adn8 \else\ifx\first9\adn9 
+    \else\ifx\first7\adn7 \else\ifx\first8\adn8 \else\ifx\first9\adn9
     \else
       \ifnum0=\countA\else\makelink\fi
       \ifx\first.\let\next=\done\else
@@ -1083,7 +1083,7 @@ where each line of input produces a line of output.}
   \def\pdflink#1{%
     \startlink attr{/Border [0 0 0]} goto name{\mkpgn{#1}}
     \linkcolor #1\endlink}
-  \def\mkpgn#1{#1@} 
+  \def\mkpgn#1{#1@}
   \def\done{\edef\st{\global\noexpand\toksA={\the\toksB}}\st}
 \fi % \ifx\pdfoutput
 
@@ -1474,7 +1474,7 @@ where each line of input produces a line of output.}
 
 % rms does not like angle brackets --karl, 17may97.
 % So now @email is just like @uref, unless we are pdf.
-% 
+%
 %\def\email#1{\angleleft{\tt #1}\angleright}
 \ifpdf
   \def\email#1{\doemail#1,,\finish}
@@ -2746,7 +2746,7 @@ width0pt\relax} \fi
 \def\@{@}% will be @@ when we switch to @ as escape char.
 % Need these in case \tex is in effect and \{ is a \delimiter again.
 % But can't use \lbracecmd and \rbracecmd because texindex assumes
-% braces and backslashes are used only as delimiters.  
+% braces and backslashes are used only as delimiters.
 \let\{ = \mylbrace
 \let\} = \myrbrace
 \def\_{{\realbackslash _}}%
@@ -4512,7 +4512,7 @@ width0pt\relax} \fi
 % to account for this both in the \...x definition and in parsing the
 % input at hand.  Thus also need a control sequence (passed as #5) for
 % the \E... definition to assign the category name to.
-% 
+%
 \def\deftypeopparsebody#1#2#3#4#5 #6 {\begingroup\inENV
   \medbreak
   \def#1{\endgraf\endgroup\medbreak}%
@@ -4895,7 +4895,7 @@ width0pt\relax} \fi
 
 % These definitions are used if you use @defunx (etc.)
 % anywhere other than immediately after a @defun or @defunx.
-% 
+%
 \def\defcvx#1 {\errmessage{@defcvx in invalid context}}
 \def\deffnx#1 {\errmessage{@deffnx in invalid context}}
 \def\defivarx#1 {\errmessage{@defivarx in invalid context}}
@@ -5707,7 +5707,7 @@ width0pt\relax} \fi
         \nobreak\bigskip
         % Usually we'll have text after the image which will insert
         % \parskip glue, so insert it here too to equalize the space
-        % above and below. 
+        % above and below.
         \nobreak\vskip\parskip
         \nobreak
         \centerline{\epsfbox{#1.eps}}%
@@ -5896,7 +5896,7 @@ should work if nowhere else does.}
 \message{floating bodies,}
 %Modified from below by
 % Andrew Fitzgibbon, awf@robots.ox.ac.uk, September 1, 2000
-% 
+%
 %Date: Tue, 25 Oct 88 14:11:06 +0100
 %From: Joost Zalmstra <mcvax!nat.vu.nl!jjaz@uunet.UU.NET>
 %Subject: Re:Page Make-up Challenge
@@ -5976,7 +5976,7 @@ should work if nowhere else does.}
             \advance\dimen0 by \pagetotal
             \ifdim\dimen0>\pagegoal  % no space on this page
 \AFGverbose{NOSPACE}            \AFGaddtolist{#1}            % so save for later
-            \else 
+            \else
                 \advance\dimen0 by \AFGfiguresizeonpage
                 \ifdim\dimen0>\dimen\topins % exceding maximum insertion size
 \AFGverbose{GTMAX}                  \AFGaddtolist{#1}         % so save for later
@@ -6226,7 +6226,7 @@ AAA~\vfill\eject
 % Say @foo, not \foo, in error messages.
 @escapechar = `@@
 
-% These look ok in all fonts, so just make them not special.  
+% These look ok in all fonts, so just make them not special.
 @catcode`@& = @other
 @catcode`@# = @other
 @catcode`@% = @other

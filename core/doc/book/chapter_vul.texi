@@ -109,8 +109,6 @@ vul_printf(vcl_cerr, "Line %05d, Code %-30s\n", __LINE__, code);
 @end smallexample
 
 
-
-
 @section Reading command-line arguments: @code{vul_arg}
 @cindex argc, argv
 @cindex vul_arg
@@ -252,7 +250,6 @@ formatting, for quick testing purposes.  Here's an example
   // do stuff
   tic.print(vcl_cerr); // Print times to vcl_cerr.
 @end example
-
 
 
 @section Reading ASCII files: @code{vul_awk}

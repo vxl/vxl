@@ -126,7 +126,7 @@ decided that zero-based indexing was closer to being ``not weird''.
   A.@ttb{fliplr}(); // Reverse columns
   A.@ttb{normalize_rows}();  // Divide each row by its 2-norm
   A.@ttb{scale_row}(0, 2.0); // Multiply row 0 by 2
-  memset(A.@ttb{data_block}(), 0); // Access A's raw storage
+  vcl_memset(A.@ttb{data_block}(), 0); // Access A's raw storage
   fill(A.@ttb{begin}(), A.@ttb{end}(), 0.0); // Fill using STL iterators
 
   vnl_matrix<double> C = B + 0.1 * A; // Arithmetic
@@ -140,7 +140,7 @@ decided that zero-based indexing was closer to being ``not weird''.
   if (A.@ttb{is_zero}(1e-8)) vcl_cerr << "Each element of A is within 1e-8 of zero\n";
   if (A.@ttb{is_identity}(1e-8)) vcl_cerr << "(A - I) is_zero to 1e-8\n";
 
-  A.@ttb{read_ascii}(cin); // Read A from standard input
+  A.@ttb{read_ascii}(vcl_cin); // Read A from standard input
 
 @end smallexample
 @end cartouche
@@ -274,14 +274,16 @@ points read from standard input.
 @figure
 @cartouche
 @example
-#include <vnl/vnl_matops.h>
+#include <vnl/vnl_matrix.h>
+#include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
+#include <vcl_iostream.h>
 
 main() @{
   // Read points from stdin
   vnl_matrix<double> pts;
-  cin >> pts;
+  vcl_cin >> pts;
 
   // Build design matrix D
   int npts = pts.rows();
