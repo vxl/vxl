@@ -73,7 +73,7 @@ void mbl_index_sort(const vcl_vector<T>& data, vcl_vector<int>& index)
 // \endverbatim
 template <class T, class INDEX=unsigned, class CONT = vcl_vector<T>,
   class CMP=vcl_less<T> >
-struct mbl_index_sort_cmp
+  struct mbl_index_sort_cmp: public vcl_binary_function<INDEX, INDEX, bool>
 {
   explicit mbl_index_sort_cmp(const CONT &data, const CMP &c = CMP()):
     data_(data), cmp_(c) {}
