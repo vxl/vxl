@@ -162,7 +162,7 @@ vil3d_slice_list_to_volume(const vcl_vector<vil_image_resource_sptr> & images)
 }
 
 
-//: Make a "generic_image" on which put_section may be applied.
+//: Not implemented - Make a "generic_image" on which put_section may be applied.
 // The file may be opened immediately for writing so that a header can be written.
 // The width/height etc are explicitly specified, so that file_format implementors
 // know what they need to do...
@@ -172,6 +172,9 @@ vil3d_slice_list_format::make_output_image(const char* filename,
                                            unsigned nk, unsigned nplanes,
                                            enum vil_pixel_format) const
 {
+  // This should follow the pattern of make_input_image.
+  // Construct a load of image resources using vil_new_image_resource
+  // If you are able to construct them all, then create the slice_image.
   vcl_cerr <<"vil3d_slice_list_format::make_output_image() NYI\n";
   vcl_abort();
   return 0;

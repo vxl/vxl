@@ -2,10 +2,10 @@
   <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
   <title>Notes on vil3d image loader</title>
 </head><body>
-<h1>How to manage the loading process</h1>
+<h2>How to manage the loading process</h2>
 
-<h2>Ideal</h2>
-<h3>Use cases</h3>
+<h3>Ideal</h3>
+<h4>Use cases</h4>
 
 <ol>
 
@@ -23,7 +23,7 @@ attempt to load files. The file contents confirm the filetype.</li>
   <li>A loader plugin may need to know the filename while taking a filestream?</li>
 </ol>
 
-<h3>Design</h3>
+<h4>Design</h4>
 <p>Several lists of loaders.</p>
 
 <ol>
@@ -45,20 +45,46 @@ attempt to load files. The file contents confirm the filetype.</li>
   </li>
 </ol>
 
-<h2>Practical</h2>
+<h3>Practical</h3>
 
 <p>This is getting too messy. Instead we will start with a single list of loaders,
-that will each get a chance to load an image based on a filepath.</p>
+that will each get a chance to load an image based on a filepath. In all other
+respects the loader should be like the vil loader. It should load an image view
+by</p>
 
-<h3>Use cases</h3>
+<ol>
+  <li>Passing the filename (not open stream as in vil) to a sequence of loaders</li>
+  <li>Each loader should attempt to determine relatively quickly if it can load
+    the filename</li>
+  <li>The actual filename(s) to be loaded can be inferred from the filename -
+    they need not match precisely.</li>
+  <li>As a loader attempts to read the file, it can abort at any time, by
+    returning a null image_resource_sptr</li>
+  <li>When all the image header details, etc have been read, the image loader
+    will return a formed image_resource</li>
+  <li>The vil3d_load function (or client) can then call the resource's get_view()
+    to read the image.</li>
+</ol>
+
+<h4>Use cases</h4>
 <p> That should allow the following use cases.</p>
 <ol>
   <li>Filename is in the filesystem namespace. Fileformat identified by file contents.</li>
   <li>Filename implies a set of files. Files are in the filesystem. The
 existence of the files triggers full attempt to load files. The file
 contents confirm the filetype.</li>
-  <li>Filename is URL. The file contents identify format.</li>
   <li>Filename describes image in entirety</li>
 </ol>
+
+<h2>How to save files in vil3d</h2>
+<p>No file saving routines have been written, but place holders for various
+parts of the saving system are in place.<br>
+I recommend that you follow the pattern used by vil. It may be complicated, but
+it had many advantages in dealing with large files, and header information. As
+with the loader, vil3d saver should pass around filenames to image_format::make_output_image(),
+so that multiple slice filenames, etc. can be inferred.</p>
+<p>Ian Scott.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 
 </body></html>
