@@ -131,7 +131,9 @@ class vnl_bignum {
 public:
   vnl_bignum();                        // Void constructor
   vnl_bignum(long);                    // Long constructor
+  vnl_bignum(unsigned long);           // Unsigned Long constructor
   vnl_bignum(int);                     // Int constructor
+  vnl_bignum(unsigned int);            // Unsigned Int constructor
   vnl_bignum(double);                  // Double constructor
   vnl_bignum(vnl_bignum const&);       // Copy constructor
   vnl_bignum(const char*);             // String constructor
@@ -142,8 +144,15 @@ public:
   operator long() const;               // Implicit type conversion
   operator float() const;              // Implicit type conversion
   operator double() const;             // Implicit type conversion
+  inline operator short() { return ((const vnl_bignum*)this)->operator short(); }
+  inline operator int() { return ((const vnl_bignum*)this)->operator int(); }
+  inline operator long() { return ((const vnl_bignum*)this)->operator long(); }
+  inline operator float() { return ((const vnl_bignum*)this)->operator float(); }
+  inline operator double() { return ((const vnl_bignum*)this)->operator double(); }
 
   vnl_bignum operator-() const;        // Unary minus operator
+  inline vnl_bignum operator+() { return *this; } // Unary plus operator
+  inline vnl_bignum operator+() const { return *this; } // Unary plus operator
 
   vnl_bignum& operator=(const vnl_bignum&); // Assignment operator
 
@@ -179,6 +188,18 @@ public:
   inline bool operator> (long r) const { return vnl_bignum(r) < (*this); }
   inline bool operator<=(long r) const { return !operator>(vnl_bignum(r)); }
   inline bool operator>=(long r) const { return !operator<(vnl_bignum(r)); }
+  inline bool operator==(int r) const { return operator==(long(r)); }
+  inline bool operator!=(int r) const { return !operator==(long(r)); }
+  inline bool operator< (int r) const { return operator<(long(r)); }
+  inline bool operator> (int r) const { return vnl_bignum(long(r)) < (*this); }
+  inline bool operator<=(int r) const { return !operator>(long(r)); }
+  inline bool operator>=(int r) const { return !operator<(long(r)); }
+  inline bool operator==(double r) const { return r == operator double(); }
+  inline bool operator!=(double r) const { return r != operator double(); }
+  inline bool operator< (double r) const { return r > operator double(); }
+  inline bool operator> (double r) const { return r < operator double(); }
+  inline bool operator<=(double r) const { return r >= operator double(); }
+  inline bool operator>=(double r) const { return r <= operator double(); }
 
   inline vnl_bignum abs() const { return operator<(0L) ? operator-() : *this; }
 
@@ -285,6 +306,8 @@ inline vnl_bignum operator%(int r1, vnl_bignum const& r2) {
   vnl_bignum result((long)r1); return result %= r2;
 }
 
+// Miscellaneous operators and functions
+
 inline bool operator==(long r1, vnl_bignum const& r2) { return r2==r1; }
 inline bool operator!=(long r1, vnl_bignum const& r2) { return r2!=r1; }
 inline bool operator< (long r1, vnl_bignum const& r2) { return r2> r1; }
@@ -307,6 +330,10 @@ namespace std {
   inline vnl_bignum abs(vnl_bignum const& x) { return x.abs(); }
 }
 #endif
+
+inline vnl_bignum vnl_math_squared_magnitude(vnl_bignum const& x) { return x*x; }
+
+inline vnl_bignum vnl_math_abs(vnl_bignum const& x) { return x<0L ? -x : x; }
 
 #include <vnl/vnl_complex_traits.h>
 
@@ -368,7 +395,7 @@ public:
   //: Name of a type twice as long as this one for accumulators and products.
   typedef vcl_complex<vnl_bignum> double_t;
   //: Name of type which results from multiplying this type with a double
-  typedef vcl_complex<double> real_t;
+  typedef vcl_complex<vnl_bignum> real_t;
 };
 
 #endif // vnl_bignum_h_
