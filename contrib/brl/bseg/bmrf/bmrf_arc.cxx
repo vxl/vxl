@@ -14,8 +14,9 @@
 //: Constructor
 bmrf_arc::bmrf_arc()
   : from_(NULL), to_(NULL), probability_(-1.0),
-    min_alpha_(0.0), max_alpha_(0.0), avg_intensity_error_(0.0),
-    dist_ratio_(0.0), induced_match_error_(0.0)
+    min_alpha_(0.0), max_alpha_(0.0), 
+    gamma_(0.0), inv_gamma_(0.0),
+    avg_intensity_error_(0.0), induced_match_error_(0.0)
 {
 }
 
@@ -23,8 +24,9 @@ bmrf_arc::bmrf_arc()
 //: Constructor
 bmrf_arc::bmrf_arc( const bmrf_node_sptr& f, const bmrf_node_sptr& t)
   : from_(f.ptr()), to_(t.ptr()), probability_(-1.0),
-    min_alpha_(0.0), max_alpha_(0.0), avg_intensity_error_(0.0),
-    dist_ratio_(0.0), induced_match_error_(0.0)
+    min_alpha_(0.0), max_alpha_(0.0), 
+    gamma_(0.0), inv_gamma_(0.0),
+    avg_intensity_error_(0.0), induced_match_error_(0.0)
 {
   if ( from_ && to_ ) {
     if (from_->frame_num() != to_->frame_num())
@@ -41,11 +43,12 @@ bmrf_arc::reverse() const
   rev_arc->to_ = this->from_;
   rev_arc->from_ = this->to_;
   rev_arc->probability_ = -1.0;
-  rev_arc->dist_ratio_ = 1.0/this->dist_ratio_;
+  rev_arc->gamma_ = this->inv_gamma_;
+  rev_arc->inv_gamma_ = this->gamma_;
 
   bmrf_epi_seg_sptr ep1 = rev_arc->from_->epi_seg();
   bmrf_epi_seg_sptr ep2 = rev_arc->to_->epi_seg();
-  bmrf_gamma_func_sptr gamma_inv = new bmrf_const_gamma_func(rev_arc->induced_gamma_inv());
+  bmrf_gamma_func_sptr gamma_inv = new bmrf_const_gamma_func(rev_arc->inv_gamma_);
   bmrf_epi_seg_sptr xform_seg = bmrf_epi_transform(ep2, gamma_inv, double(-rev_arc->time_step()));
   rev_arc->induced_match_error_ = bmrf_match_error(ep1, xform_seg);
 
@@ -57,7 +60,7 @@ bmrf_arc::reverse() const
 double
 bmrf_arc::probability()
 {
-  if (probability_ < 0.0)
+  if (from_->probability_ < 0.0)
     from_->compute_probability();
   return probability_;
 }
@@ -104,10 +107,16 @@ bmrf_arc::time_init()
   max_alpha_ = bmrf_max_alpha(ep1, ep2);
 
   avg_intensity_error_ = bmrf_intensity_error(ep1, ep2);
-  dist_ratio_ = bmrf_avg_distance_ratio(ep1, ep2);
 
-  bmrf_gamma_func_sptr gamma_inv = new bmrf_const_gamma_func(induced_gamma_inv());
-  bmrf_epi_seg_sptr xform_seg = bmrf_epi_transform(ep2, gamma_inv, double(-time_step()));
+  int t = time_step();
+  double dist_ratio = bmrf_avg_distance_ratio(ep1, ep2);
+  gamma_ = (1.0 - dist_ratio) / t;
+
+  dist_ratio = bmrf_avg_distance_ratio(ep2, ep1);
+  inv_gamma_ = (1.0 - dist_ratio) / -t;
+
+  bmrf_gamma_func_sptr gamma_inv = new bmrf_const_gamma_func(inv_gamma_);
+  bmrf_epi_seg_sptr xform_seg = bmrf_epi_transform(ep2, gamma_inv, double(-t));
   induced_match_error_ = bmrf_match_error(ep1, xform_seg);
 }
 

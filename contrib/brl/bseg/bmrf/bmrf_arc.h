@@ -44,16 +44,22 @@ class bmrf_arc : public vbl_ref_count
   //: Return the probability of this arc
   double probability();
 
+  //: Return the minimum alpha in common with both nodes
+  double min_alpha() const { return min_alpha_; }
+
+  //: Return the maximum alpha in common with both nodes
+  double max_alpha() const { return max_alpha_; }
+
   //: Return the average intesity error
   double avg_intensity_error() const { return avg_intensity_error_; }
 
   //: Return the constant gamma value induced by the segment pair
   //  \note this maps the "from" arc to the "to" arc
-  double induced_gamma() const { return (1.0 - dist_ratio_) / time_step(); }
+  double induced_gamma() const { return gamma_; }
 
   //: Return the constant inverse gamma value induced by the segment pair
   //  \note this maps the "to" arc to the "from" arc
-  double induced_gamma_inv() const { return (1.0 - 1.0/dist_ratio_) / -time_step(); }
+  double induced_gamma_inv() const { return inv_gamma_; }
 
   //: Return the average match error given the induced gamma
   double induced_match_error() const { return induced_match_error_; }
@@ -77,8 +83,9 @@ class bmrf_arc : public vbl_ref_count
 
   double probability_;
   double min_alpha_, max_alpha_;
+  
+  double gamma_, inv_gamma_;
   double avg_intensity_error_;
-  double dist_ratio_;
   double induced_match_error_;
 };
 
