@@ -24,12 +24,8 @@
 
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h> // for vcl_abort()
-#include <vcl_cmath.h>
-#include <vnl/vnl_math.h>
-#include <vcl_ctime.h>
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>
-#include <vbl/vbl_triple.h>
 #include <mbl/mbl_file_data_collector.h>
 #include <mbl/mbl_data_collector_list.h>
 #include <mbl/mbl_index_sort.h>
@@ -67,19 +63,16 @@ vcl_string clsfy_direct_boost_builder::is_a() const
 double clsfy_direct_boost_builder::calc_prop_same(
                    const vcl_vector<bool>& vec1,
                    const vcl_vector<bool>& vec2) const
-
 {
   unsigned n = vec1.size();
   assert( n==vec2.size() );
   int sum= 0;
   for (unsigned i=0;i<n;++i)
-  {
-    if (vec1[i]==vec2[i]) 
-      sum++;
-  }
+    if (vec1[i]==vec2[i])
+      ++sum;
+
   return sum*1.0/n;
 }
-
 
 
 //: Calc threshold for current version of strong classifier
@@ -117,7 +110,7 @@ double clsfy_direct_boost_builder::calc_threshold(
     //vcl_cout<<"outputs[ index["<<i<<"] ]= "<<outputs[ index[i] ]<<vcl_endl;
     if ( outputs[ index[i] ] == 0 ) n_neg++;
     else if ( outputs[ index[i] ] == 1 ) n_pos++;
-    else 
+    else
     {
       vcl_cout<<"ERROR: clsfy_direct_boost_basic_builder::calc_threshold()"<<vcl_endl;
       vcl_cout<<"Unrecognised output value"<<vcl_endl;
@@ -129,15 +122,14 @@ double clsfy_direct_boost_builder::calc_threshold(
     //vcl_cout<<"n_pos= "<<n_pos<<vcl_endl;
     //vcl_cout<<"n_neg= "<<n_neg<<vcl_endl;
     int error= n_neg+(tot_pos-n_pos);
-    
-    if ( error<= min_error ) 
+
+    if ( error<= min_error )
     {
       min_error= error;
       min_thresh = scores[ index[i] ] + 0.001 ;
       //vcl_cout<<"error= "<<error<<vcl_endl;
       //vcl_cout<<"min_thresh= "<<min_thresh<<vcl_endl;
     }
-
   }
 
   assert( n_pos+ n_neg== n );
@@ -145,18 +137,16 @@ double clsfy_direct_boost_builder::calc_threshold(
   //vcl_cout<<"min_thresh= "<<min_thresh<<vcl_endl;
 
   return min_thresh;
-
 }
-
 
 
 //: Build classifier composed of 1d classifiers working on individual vector elements
 // Builds an n-component classifier, each component of which is a 1D classifier
 // working on a single element of the input vector.
 double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
-                       mbl_data_wrapper<vnl_vector<double> >& inputs,
-                       unsigned nClasses,
-                       const vcl_vector<unsigned> &outputs) const
+                                         mbl_data_wrapper<vnl_vector<double> >& inputs,
+                                         unsigned nClasses,
+                                         const vcl_vector<unsigned> &outputs) const
 {
   // nb  ignore nClasses=1, ie always binary classifier
 
@@ -175,7 +165,7 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
   else
   {
     vcl_cout<<"Maximum number of classifiers to be found by Adaboost ="
-        <<max_n_clfrs_<<vcl_endl;
+            <<max_n_clfrs_<<vcl_endl;
   }
 
   if ( weak_builder_ == 0 )
@@ -189,7 +179,7 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
   else
   {
     vcl_cout<<"Weak learner used by AdaBoost ="
-        <<weak_builder_->is_a()<<vcl_endl;
+            <<weak_builder_->is_a()<<vcl_endl;
   }
 
   if ( bs_ < 0 )
@@ -210,7 +200,7 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
   assert (max_n_clfrs_ >= 0);
 
   // first arrange the data in the form
-  // vcl_vector< < vcl_vector< vtl_triple<double,int,int> > > > data
+  // vcl_vector< < vcl_vector< vbl_triple<double,int,int> > > > data
   // + vnl_vector wts
   // then sort all data once, then build the classifier
 
@@ -247,13 +237,13 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
     collector= &ram_collector;
   }
 
-  
+
   // say load in and sort 100 at once?????
   // ie 100 features at once!
 
   //int bs= 100; //batch size
   vcl_vector< vnl_vector< double > >vec(bs_);
-  
+
   vcl_cout<<"d= "<<d<<vcl_endl;
   int b=0;
   while ( b+1<d )
@@ -301,14 +291,14 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
   assert ( wrapper.current().size() == n );
   assert ( d == (int)wrapper.size() );
 
- 
+
   // nb have to set builder as a member variable elsewhere
   clsfy_classifier_1d* c1d = weak_builder_->new_classifier();
- 
+
   // wts not really used!!
   vnl_vector<double> wts(n,1.0/n);
 
-  // need to train each weak classifier on the data 
+  // need to train each weak classifier on the data
   // and record the error and output responses of the weak classifiers
   vcl_vector< double > errors(0);
   vcl_vector< vcl_vector<bool> > responses(0);
@@ -319,7 +309,7 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
   {
     const vnl_vector<double>& vec= wrapper.current();
     double error= weak_builder_->build(*c1d, vec, wts, outputs);
-    
+
     vcl_vector<bool> resp_vec(n);
     // now get responses
     for (int k=0; k<n;++k)
@@ -329,7 +319,6 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
         resp_vec[k]=false;
       else
         resp_vec[k]=true;
-
     }
 
     responses.push_back( resp_vec );
@@ -337,7 +326,6 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
     classifiers.push_back( c1d->clone() );
 
     wrapper.next();
-
   }
 
   delete c1d;
@@ -355,11 +343,9 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
   strong_classifier.clear();
   strong_classifier.set_n_dims(d);
 
-  
 
   for (int k=0; k<max_n_clfrs_; ++k)
   {
-
     if (index.size() == 0 ) break;
 
     // store best classifier that is left in list
@@ -368,12 +354,10 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
     vcl_cout<<"errors["<<ind<<"]= "<<errors[ind]<<vcl_endl;
     if (errors[ind]> 0.5 ) break;
 
-
     if (errors[ind]==0)
       strong_classifier.add_one_classifier( classifiers[ind], 1.0, ind);
     else
       strong_classifier.add_one_classifier( classifiers[ind], 1.0/errors[ind], ind);
-   
 
     if (calc_all_thresholds_)
     {
@@ -390,7 +374,7 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
 
     if (errors[ind]==0) break;
 
-    // find all classifiers that are similar to the selected 
+    // find all classifiers that are similar to the selected
     // classifier i
     vcl_vector<int> new_index(0);
     vcl_vector<bool>& i_vec=responses[ind];
@@ -398,29 +382,26 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
     int n_rejects=0;
     for (int j=0; j<n; ++j)
     {
-
       vcl_vector<bool>& j_vec=responses[ index[j] ];
       double prop_same= calc_prop_same(i_vec,j_vec);
       //vcl_cout<<"prop_same= "<<prop_same<<vcl_endl;
       //vcl_cout<<"prop_= "<<prop_<<vcl_endl;
-      if( prop_same < prop_ )
+      if ( prop_same < prop_ )
         new_index.push_back( index[j] );
       else
         n_rejects++;
     }
 
     vcl_cout<<"number of rejects due to similarity= "<<n_rejects<<vcl_endl;
-      
+
     //for (int p=0; p<new_index.size(); ++p)
     //  vcl_cout<<"new_index["<<p<<"]= "<<new_index[p]<<vcl_endl;
 
     index= new_index;
 
-
     //for (int p=0; p<index.size(); ++p)
     //  vcl_cout<<"index["<<p<<"]= "<<index[p]<<vcl_endl;
   }
-
 
 
   // calculating response from classifier so far
@@ -433,8 +414,6 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
   // one at a time, so if using mbl_file_data_wrapper should be OK!
   vcl_cout<<"calculating training error"<<vcl_endl;
   return clsfy_test_error(strong_classifier, inputs, outputs);
-
-
 }
 
 
@@ -476,6 +455,7 @@ clsfy_direct_boost_builder& clsfy_direct_boost_builder::operator=(const clsfy_di
   return *this;
 }
 #endif // 0
+
 
 //=======================================================================
 
