@@ -75,7 +75,7 @@ kalman_filter::~kalman_filter()
 
 void kalman_filter::init_state_3d_estimation()
 {
-	
+
 	// 
 	// 
 	//
@@ -139,7 +139,7 @@ void kalman_filter::init_state_3d_estimation()
 		int size0 = ec0->size();
 		int size1 = ec1->size();
 		int npts = 2* ((size0 < size1) ? size0 : size1); // interpolate 2 times more
-	
+
 #if 0
 		for (int i=0; i<3; i++)
 			for (int j=0; j<3; j++)
@@ -350,7 +350,7 @@ void kalman_filter::update_observes(const vnl_double_3x4 &P, int iframe)
 
 void kalman_filter::update_confidence()
 {
-#if 1
+#if  1
   vcl_vector<vnl_double_3x4> cams(memory_size_); //cur_pos_ is 0 based
   for (int i = 0; i < memory_size_; i++)
     cams[i] = get_projective_matrix(motions_[(cur_pos_-i)%memory_size_]);
@@ -371,8 +371,9 @@ void kalman_filter::update_confidence()
         // find most possible point across all the trackers
         double probability = 0;
         vgl_point_2d<double> u = brct_algos::most_possible_point(trackers_[t][cur_pos_ - f], x);
-        if(probability<x.prob_at(u)){
-          probability = x.prob_at(u);
+        vnl_double_2 z1(x.x(), x.y()), z2(u.x(), u.y());
+        if(probability<matched_point_prob(z1,z2)){
+          probability = matched_point_prob(z1,z2);
         }
         
         prob *= probability;
@@ -395,10 +396,9 @@ void kalman_filter::update_confidence()
 
 #endif
 
-#if 0
+#if 0 
   for(int i=0; i<num_points_; i++)
-    //prob_[i] = 1.0/vnl_det(curve_3d_.get_point(i)->get_covariant_matrix());
-    prob_[i] = 1;
+    prob_[i] = 1.0/vnl_det(curve_3d_.get_point(i)->get_covariant_matrix());
 #endif
 }
 
@@ -508,7 +508,7 @@ void kalman_filter::inc()
   }
 
   // update confidence level for each points
-//  update_confidence();
+  update_confidence();
 }
 
 
@@ -841,7 +841,7 @@ double kalman_filter::matched_point_prob(vnl_double_2& z, vnl_double_2& z_pred)
   vnl_double_2 dz = z - z_pred;
   double d2 = dz[0]*dz[0] + dz[1]*dz[1];
 
-  if (d2 > 1)
+  if (d2 > 5)
     return 0;
   else
     return vcl_exp(-d2/2);
