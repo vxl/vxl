@@ -37,7 +37,7 @@ rgrl_scale_sptr
 rgrl_scale_est_null::
 estimate_weighted( rgrl_match_set const& match_set,
                    rgrl_scale_sptr const& scales,
-                   bool use_signature_only,
+                   bool /*use_signature_only*/,
                    bool penalize_scaling ) const
 {
   return estimate_unweighted( match_set, scales, penalize_scaling );
