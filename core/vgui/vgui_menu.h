@@ -72,9 +72,6 @@ struct vgui_menu_item
   //  the menu. non-zero for submenu items only.
   vgui_menu *menu;
 
-  //: bool flag set for toggle buttons.
-  bool is_toggle;
-
   //: Description of keyboard shortcut (makes no sense for separators).
   struct invocation {
     vgui_modifier mod;
@@ -82,31 +79,23 @@ struct vgui_menu_item
   } short_cut;
 
   //: Return true if the item is a command (item which performs an action).
-  bool is_command()       const { return name!="" &&  (bool)cmnd && (menu == 0) && !(bool)is_toggle; }
+  bool is_command()       const { return name!="" &&  (bool)cmnd && (menu == 0) && !is_toggle_button(); }
 
   //: Returns true if the item is a sub-menu.
-  bool is_submenu()       const { return name!="" && !(bool)cmnd && (menu != 0) && !(bool)is_toggle; }
+  bool is_submenu()       const { return name!="" && !(bool)cmnd && (menu != 0) && !is_toggle_button(); }
 
   //: Returns true if the item is a toggle button.
-  bool is_toggle_button() const { return name!="" &&  (bool)cmnd && (menu == 0) &&  (bool)is_toggle; }
+  bool is_toggle_button() const;
 
   //: Returns true if the item is a separator.
-  bool is_separator()     const { return name=="" && !(bool)cmnd && (menu == 0) && !(bool)is_toggle; }
+  bool is_separator()     const { return name=="" && !(bool)cmnd && (menu == 0) && !is_toggle_button(); }
 };
 
 //: Representation of a menu for both pop-up and menubar menus.
 //
 // Building the menu:
 //
-// NB 1. empty strings are not acceptable names.
-//
-// NB 2. make sure the signature of your callback
-//       function is correct, or the function pointer
-//       will get cast to bool and the menu item
-//       treated as a toggle button.
-//     ESPECIALLY: REMOVE DUMMY "const void *" ARGUMENT !  (PVr, Apr.2002)
-//      --> look for VC++ warning C4305:
-//      'argument' : truncation from 'void (__cdecl *)(const void *)' to 'bool'
+// NB. empty strings are not acceptable names.
 class vgui_menu
 {
   vcl_vector<vgui_menu_item> items;
@@ -148,14 +137,6 @@ class vgui_menu
            vgui_menu const &,
            vgui_key key =vgui_KEY_NULL,
            vgui_modifier modifiers =vgui_MODIFIER_NULL);
-
-#if 1 // see above comment.
-  //: Add given toggle button to this menu.
-  void add(vcl_string const &,
-           bool initial,
-           vgui_key key =vgui_KEY_NULL,
-           vgui_modifier modifiers =vgui_MODIFIER_NULL);
-#endif
 
   //: Add separator to this menu.
   void separator();        // a separator

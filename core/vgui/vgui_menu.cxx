@@ -13,7 +13,6 @@
 vgui_menu_item::vgui_menu_item()
   : name("[]")
   , menu(0)
-  , is_toggle(false)
 {
   short_cut.mod = vgui_MODIFIER_NULL;
   short_cut.key = vgui_KEY_NULL;
@@ -23,7 +22,6 @@ vgui_menu_item::vgui_menu_item(vgui_menu_item const &that)
   : name(that.name)
   , cmnd(that.cmnd)
   , menu(that.menu)
-  , is_toggle(that.is_toggle)
   , short_cut(that.short_cut)
 {
   if (menu)
@@ -35,6 +33,19 @@ vgui_menu_item::~vgui_menu_item()
   if (menu)
     delete menu;
   menu = 0;
+}
+
+bool vgui_menu_item::is_toggle_button() const
+{
+  // The use of dynamic_cast is forbidden by the VXL
+  // guidelines. However, the alternative here is to implement our own
+  // RTTI in vgui_command using a virtual function like
+  // is_a_toggle_command. However, this is GUI code. It's not
+  // performance critical, and mostly requires RTTI and threads and
+  // all kinds of things. Let's just use the compiler generated
+  // version until we run into a real problem.
+  //
+  return name!="" &&  (bool)cmnd && (menu == 0) &&  dynamic_cast<vgui_command_toggle*>(cmnd.ptr()) != 0;
 }
 
 //--------------------------------------------------------------------------------
@@ -77,7 +88,7 @@ void vgui_menu::add(vcl_string const &n,
                     vgui_modifier modifiers)
 {
   im_here;
-  vgui_command_sptr cfunc = new vgui_command_cfunc(f, client_data); //KYM fix for SunPro
+  vgui_command* cfunc = new vgui_command_cfunc(f, client_data); //KYM fix for SunPro
   add(n, /* (vgui_command*) */cfunc, key, modifiers);
 }
 
@@ -87,7 +98,7 @@ void vgui_menu::add(vcl_string const &n,
                     vgui_modifier modifiers)
 {
   im_here;
-  vgui_command_sptr cfunc = new vgui_command_cfunc(f);  //KYM fix for SunPro
+  vgui_command* cfunc = new vgui_command_cfunc(f);  //KYM fix for SunPro
   add(n, /* (vgui_command*) */cfunc, key, modifiers);
 }
 
@@ -102,24 +113,6 @@ void vgui_menu::add(vcl_string const &n,
   i.menu = new vgui_menu(m);
   i.short_cut.key = key;
   i.short_cut.mod = modifiers;
-  items.push_back(i);
-}
-
-void vgui_menu::add(vcl_string const &n,
-                    bool initial,
-                    vgui_key key,
-                    vgui_modifier modifiers)
-{
-  im_here;
-  vgui_menu_item i;
-  i.name = n;
-  i.cmnd = new vgui_command_toggle(initial);
-#ifdef DEBUG
-  vcl_cerr << "vgui_menu::add : new toggle : " << (void*) i.cmnd.as_pointer() << '\n';
-#endif
-  i.short_cut.key = key;
-  i.short_cut.mod = modifiers;
-  i.is_toggle = true;
   items.push_back(i);
 }
 
