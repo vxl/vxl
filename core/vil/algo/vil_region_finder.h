@@ -1,6 +1,7 @@
 #ifndef vil_region_finder_h_
 #define vil_region_finder_h_
-
+//:
+// \file
 #include <vcl_vector.h>
 #include <vil/vil_image_view.h>
 
@@ -16,7 +17,7 @@ enum vil_region_finder_connectivity {
 //: Extract regions from an image using a flood-fill.
 //
 // This class encapsulates a simple flood fill algorithm to extract a
-// four or eight connected regions from an image. It uses an auxillary
+// four or eight connected regions from an image. It uses an auxiliary
 // bool image to mark pixels as processed. This mark is not reset
 // between calls to the region extraction routine, so each region can
 // be extracted only once.
@@ -24,7 +25,7 @@ enum vil_region_finder_connectivity {
 template<typename pix_type>
 class vil_region_finder
 {
-public:
+ public:
   //:
   typedef vil_image_view<pix_type> image_view;
 
@@ -49,7 +50,7 @@ public:
   image_view const&
   image() const;
 
-private:
+ private:
   //:
   // Marks all pixels as unprocessed, and sets the neighbour deltas
   // based on the requested connectivity.
