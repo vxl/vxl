@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_reg_image_2d_h_.h
+// This is mul/vil2/vil2_reg_image_2d.h
 #ifndef vil2_reg_image_2d_h_
 #define vil2_reg_image_2d_h_
 
@@ -22,10 +22,10 @@ public:
   //: A world to image transform.
   T world2im;
 
-    //: Return class name
+  //: Return class name
   virtual vcl_string is_a() const;
 
-    //: True if this is (or is derived from) class s
+  //: True if this is (or is derived from) class s
   virtual bool is_class(vcl_string const& s) const;
 };
 
