@@ -64,38 +64,6 @@ compute_status( rgrl_converge_status_sptr               prev_status,
   double new_error = *middle * scaling;
   bool good = new_error < tolerance_;
 
-  // Step3: First check if the regions in the view have converged. If yes,
-  //        check the convergence of the transform estimate by comparing to
-  //        the previous status. The oscillation count is incremented if the
-  //        error_diff changes the sign.
-  //
-  bool converged;
-  bool stagnated = false;
-  unsigned int oscillation_count = 0;
-  double error_diff = 0.0;
-  if (new_error == 0.0 )
-    converged = true;
-  else if ( prev_status && current_view.regions_converged_to(prev_view) ) {
-    double old_error = prev_status->error();
-    error_diff = new_error-old_error;
-    double diff = (new_error-old_error) / new_error ;
-    converged = vcl_abs( diff ) < 1e-3;
-    if ( !converged ) {
-      // look for oscillation
-      if ( error_diff * prev_status->error_diff() < 0.0 ) {
-        oscillation_count = prev_status->oscillation_count() + 1;
-        DebugMacro_abv(1, "Oscillation. Count="<<oscillation_count<<'\n' );
-      } else {
-        if ( prev_status->oscillation_count() > 0 )
-          oscillation_count = prev_status->oscillation_count() - 1;
-      }
-      if ( oscillation_count > 10 ) {
-        stagnated = true;
-      }
-    }
-  } else {
-    converged = false;
-  }
+  return compute_status_helper( new_error, good, prev_status, prev_view, current_view );
 
-  return new rgrl_converge_status( converged, stagnated, good, new_error, oscillation_count, error_diff );
 }
