@@ -85,14 +85,8 @@ public:
   //: Copy constructor
   vnl_vector (vnl_vector<T> const&);
 
-  //: Takes responsibility for data in vector that
-  //  that is emptied, this now uses that's data
-  vnl_vector (vnl_vector<T> &that, vnl_tag_grab)
-    : num_elmts(that.num_elmts), data(that.data)
-    { that.num_elmts=0; that.data=0; }
-
 #ifndef VXL_DOXYGEN_SHOULD_SKIP_THIS 
-  // <internal>
+// <internal>
   // These constructors are here so that operator* etc can take
   // advantage of the C++ return value optimization.
   vnl_vector (vnl_vector<T> const &, vnl_vector<T> const &, vnl_tag_add); // v + v
@@ -103,8 +97,10 @@ public:
   vnl_vector (vnl_vector<T> const &, T,                     vnl_tag_sub); // v - s
   vnl_vector (vnl_matrix<T> const &, vnl_vector<T> const &, vnl_tag_mul); // M * v
   vnl_vector (vnl_vector<T> const &, vnl_matrix<T> const &, vnl_tag_mul); // v * M
-  vnl_vector (vnl_vector<T> const &, vnl_tag_grab); // magic
-  // </internal>
+  vnl_vector (vnl_vector<T> &that, vnl_tag_grab)
+    : num_elmts(that.num_elmts), data(that.data)
+  { that.num_elmts=0; that.data=0; } // "*this" now uses "that"'s data.
+// </internal>
 #endif
 
   //: Destructor
