@@ -2,6 +2,11 @@
 
 ADD_EXECUTABLE( xcv xcv_sources )
 
+# This is needed for xcv_geomery.cxx
+IF(CMAKE_COMPILER_IS_GNUCXX)
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ftemplate-depth-50")
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
 SOURCE_FILES( xcv_sources
   xcv_image_tableau
   xcv_file
@@ -38,21 +43,3 @@ INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vbl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vpl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )
-LINK_LIBRARIES( -lGLw )
-LINK_LIBRARIES( -lXm )
-LINK_LIBRARIES( -lXt )
-LINK_LIBRARIES( -lqt )
-LINK_LIBRARIES( -ltiff )
-LINK_LIBRARIES( -ljpeg )
-LINK_LIBRARIES( -lpng )
-LINK_LIBRARIES( -lz )
-LINK_LIBRARIES( -lgtkgl )
-LINK_LIBRARIES( -lgtk )
-LINK_LIBRARIES( -lgdk )
-LINK_LIBRARIES( -lgmodule )
-LINK_LIBRARIES( -lglib )
-LINK_LIBRARIES( -lXext )
-LINK_LIBRARIES( -lX11 )
-LINK_LIBRARIES( -lGLU )
-LINK_LIBRARIES( -lGL )
-LINK_LIBRARIES( -lXmu )
