@@ -8,7 +8,6 @@
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   15 May 2001, from vipl/examples
 //
-#include <vil/vil_pixel.h>
 #include <vepl/vepl_histogram.h>
 
 // for I/O:
@@ -20,18 +19,21 @@ typedef unsigned char ubyte;
 
 int
 main(int argc, char** argv) {
-  if (argc < 2) { vcl_cerr << "Syntax: example_histogram file_in\n"; return 1; }
+  if (argc < 2)
+  {
+    vcl_cerr << "Syntax: example_histogram file_in\n";
+    return 1;
+  }
 
   // The input image:
   vil_image in = vil_load(argv[1]);
 
   // The filter:
-  vil_image out = vepl_histogram(in);
+  vcl_vector<unsigned int> out = vepl_histogram(in);
 
   // Write output:
-  ubyte buf[256]; out.get_section(buf,0,0,256,1);
-  for (int i=0; i<256; ++i) if (buf[i] != 0)
-    vcl_cout << i << ": " << int(buf[i]) << vcl_endl;
+  for (unsigned int i=0; i<out.size(); ++i) if (out[i] != 0)
+    vcl_cout << i << ": " << out[i] << vcl_endl;
 
   return 0;
 }

@@ -46,20 +46,18 @@
 //   and accessing a small number of bins from a large dynamic range image may segfault
 //   if check bounds is not turned on (off by default)
 //
-//   TB says: Note this example does not work unless output image (the
-//   histogram) is same size as input image.  This will be fixed when ROI's
-//   are update to be either input or output driven.  (They are currently
-//   output driven, so only the input pixels corresponding to the output
-//   image size are considered.  TB made various mods for newgen and IUE
-//   consistency and allow one to chose which "column" in the 2D output image
-//   was used to store the histogram.
-//
 // \author Peter Vanroose, K.U.Leuven (ESAT/PSI)
 // \date   28 April 2001
+//
+// \verbatim
+//  Modifications
+//   25-May-2002 - Peter Vanroose - changed return type from vil_image to vcl_vector<uint>
+// \endverbatim
 
 #include <vil/vil_image.h>
+#include <vcl_vector.h>
 
 //: pixel value histogram of 2D image, stored in a 256x1 output image
-vil_image vepl_histogram(vil_image const& );
+vcl_vector<unsigned int> vepl_histogram(vil_image const& );
 
 #endif // vepl_histogram_h_
