@@ -1450,31 +1450,3 @@ void segv_segmentation_manager::set_range_params()
 
   itab->set_mapping(rmps);
 }
-
-void segv_segmentation_manager::test_inline_viewer()
-{
-
-  vgui_easy2D_tableau_sptr e2d = vgui_easy2D_tableau_new();
-  vgui_viewer2D_tableau_sptr v2D = vgui_viewer2D_tableau_new(e2d);
-  
-  e2d->set_line_width(2.0);
-  for(int i = 50; i<350; i+=3)
-    e2d->add_line(i,0,i,250);
-  static float val=0;
-  static bool test = false;
-  vgui_dialog test_inline("Inline Tableau");
-  test_inline.inline_tableau(v2D, 400, 300);
-  //test_inline.field("Value:", val);
-  //test_inline.checkbox("Test:", test);
-  if (!test_inline.ask())
-    return;
-  vcl_vector<vgui_soview*> so_views =  e2d->get_selected_soviews();
-  for(vcl_vector<vgui_soview*>::iterator sit = so_views.begin();
-      sit != so_views.end(); sit++)
-    {
-      vgui_soview2D* s2d = (vgui_soview2D*)(*sit);
-      vgui_soview2D_lineseg* sl = (vgui_soview2D_lineseg*)(s2d);
-      if(sl)
-        vcl_cout << "p "  << sl->x0 << '\n';
-    }
-}

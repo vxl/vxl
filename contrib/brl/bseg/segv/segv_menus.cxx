@@ -162,10 +162,6 @@ void segv_menus::set_range_params_callback()
   segv_segmentation_manager::instance()->set_range_params();
 }
 
-void segv_menus::test_inline_viewer_callback()
-{
-  segv_segmentation_manager::instance()->test_inline_viewer();
-}
 
 //segv_menus definition
 vgui_menu segv_menus::get_menu()
@@ -187,7 +183,6 @@ vgui_menu segv_menus::get_menu()
   menuview.add("Rotate", rotate_image_callback);
   menuview.add("Display Histogram Track File", display_histogram_track_callback);
   menuview.add("Set Range Params", set_range_params_callback);
-  menuview.add("Test Inline Viewer", test_inline_viewer_callback);
 
   //edit menu entries
   menuedit.add("Region Of Interest", roi_callback);

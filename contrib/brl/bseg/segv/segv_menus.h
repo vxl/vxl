@@ -49,7 +49,6 @@ class segv_menus
   SEGV_DLL_DATA static void find_vehicle_callback();
   SEGV_DLL_DATA static void display_histogram_track_callback();
   SEGV_DLL_DATA static void set_range_params_callback();
-  SEGV_DLL_DATA static void test_inline_viewer_callback();
 
 #if 0
 #ifdef HAS_XERCES

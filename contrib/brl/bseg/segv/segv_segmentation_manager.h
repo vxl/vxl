@@ -66,7 +66,7 @@ class segv_segmentation_manager : public vgui_wrapper_tableau
   void find_vehicle();
   void display_histogram_track();
   void set_range_params();
-  void test_inline_viewer();
+
 #if 0
 #ifdef HAS_XERCES
   void read_xml_edges();
