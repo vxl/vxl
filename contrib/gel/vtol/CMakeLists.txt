@@ -29,7 +29,7 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(vtol ${vtol_sources})
-TARGET_LINK_LIBRARIES(vtol vdgl vsol vbl vul vcl)
+TARGET_LINK_LIBRARIES(vtol vdgl vsol vbl vul ${CMAKE_THREAD_LIBS})
 
 IF (BUILD_EXAMPLES)
   SUBDIRS(examples)
