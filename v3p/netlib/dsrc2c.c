@@ -6,14 +6,21 @@
 extern double log(double), sqrt(double); /* #include <math.h> */
 extern long time(long *timer);           /* #include <time.h> */
 
-extern doublereal pbeta_(integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *);
+extern doublereal cheby_(doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *);
+extern doublereal determ_(integer *, doublereal *, doublereal *);
+extern doublereal eigvns_(integer *, doublereal *, doublereal *, doublereal *, integer *);
+extern doublereal eigvss_(integer *, doublereal *, doublereal *, doublereal *, integer *, integer *);
 extern doublereal itpackddot_(integer *, doublereal *, integer *, doublereal *, integer *);
+extern doublereal pbeta_(integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *);
 extern doublereal pvtbv_(integer *, integer *, integer *, doublereal *, doublereal *);
-extern logical chgsme_(doublereal *, integer *);
-extern logical tstchg_(integer *);
-extern doublereal timer_(real *);
 extern doublereal tau_(integer *);
+extern doublereal timer_(real *);
+extern integer bisrch_(integer *, integer *, integer *);
 extern integer ipstr_(doublereal *);
+extern logical chgsme_(doublereal *, integer *);
+extern logical omgchg_(integer *);
+extern logical omgstr_(integer *);
+extern logical tstchg_(integer *);
 
 /***** BEGIN VXL ADDITIONS ****/
 
@@ -2931,14 +2938,9 @@ int itsrcg_(integer *nn, integer *ia, integer *ja, doublereal *a, doublereal *rh
     static integer n;
     static logical q1;
     static doublereal t1, t2, t3, t4, con;
-    extern doublereal itpackddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     static doublereal dnrm;
-    extern doublereal pbeta_(integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *);
-    extern doublereal pvtbv_(integer *, integer *, integer *, doublereal *, doublereal *);
     static doublereal gamold;
-    extern logical omgchg_(integer *);
     static doublereal betnew, rhoold;
-    extern logical omgstr_(integer *);
 
 /* ... FUNCTION: */
 
@@ -3080,12 +3082,8 @@ int itsrsi_(integer *nn, integer *ia, integer *ja, doublereal *a, doublereal *rh
     static doublereal c1, c2, c3;
     static logical q1;
     static doublereal con;
-    extern doublereal itpackddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     static doublereal dnrm;
-    extern doublereal pbeta_(integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *);
-    extern doublereal pvtbv_(integer *, integer *, integer *, doublereal *, doublereal *);
     static doublereal betnew;
-    extern logical tstchg_(integer *), omgstr_(integer *);
 
 /* ... FUNCTION: */
 
@@ -3199,7 +3197,6 @@ int itrscg_(integer *n, integer *nnb, integer *ia, integer *ja, doublereal *a, d
     static logical q1;
     static integer nb, nr;
     static doublereal con;
-    extern doublereal itpackddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     static doublereal dnrm;
     static doublereal gamold;
     static doublereal rhoold;
@@ -3283,10 +3280,8 @@ int itrssi_(integer *n, integer *nnb, integer *ia, integer *ja, doublereal *a,
     static doublereal c1, c2, c3;
     static logical q1;
     static integer nb, nr;
-    extern doublereal itpackddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     static doublereal dnrm;
     static doublereal cnst;
-    extern logical tstchg_(integer *);
 
 /* ... FUNCTION: */
 
@@ -3443,8 +3438,6 @@ int chgcon_(doublereal *tri, doublereal *gamold, doublereal *rhoold, integer *ib
     static doublereal end;
     static integer ier;
     static doublereal cmold, start;
-    extern doublereal eigvns_(integer *, doublereal *, doublereal *, doublereal *, integer *),
-                      eigvss_(integer *, doublereal *, doublereal *, doublereal *, integer *, integer *);
 
 /*     COMPUTES THE NEW ESTIMATE FOR THE LARGEST EIGENVALUE FOR */
 /*     CONJUGATE GRADIENT ACCELERATION. */
@@ -3574,7 +3567,6 @@ int chgsi_(doublereal *dtnrm, integer *ibmth)
 
     /* Local variables */
     static doublereal zm1, zm2;
-    extern doublereal cheby_(doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *);
     static doublereal cmold;
 
 /* ... COMPUTES NEW CHEBYSHEV ACCELERATION PARAMETERS ADAPTIVELY. */
@@ -5457,7 +5449,6 @@ int permat_(integer *nn, integer *ia, integer *ja, doublereal *a, integer *p,
     static integer nels;
     static doublereal temp;
     static integer next;
-    extern integer bisrch_(integer *, integer *, integer *);
 
 /* ********************************************************************* */
 
@@ -5654,7 +5645,6 @@ int perror_(integer *nn, integer *ia, integer *ja, doublereal *a, doublereal *rh
 
     /* Local variables */
     static integer n;
-    extern doublereal itpackddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     static doublereal bnrm, temp, rnrm;
     static integer idgts;
     static doublereal digit1, digit2;
@@ -6464,7 +6454,6 @@ int pstop_(integer *n, doublereal *u, doublereal *dnrm, doublereal *ccon, intege
 {
     /* Local variables */
     static doublereal tl, tr, con;
-    extern doublereal itpackddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     static doublereal uold;
 
 /*     THIS SUBROUTINE PERFORMS A TEST TO SEE IF THE ITERATIVE */
@@ -7711,7 +7700,6 @@ int zbrent_(integer *n, doublereal *tri, doublereal *eps, integer *nsig,
     static integer ic;
     static doublereal rm, tol, rone, temp;
     static integer maxfn;
-    extern doublereal determ_(integer *, doublereal *, doublereal *);
 
 /*   MODIFIED IMSL ROUTINE NAME   - ZBRENT */
 
