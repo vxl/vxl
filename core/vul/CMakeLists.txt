@@ -4,6 +4,11 @@
 #   ian.m.scott@stud.man.ac.uk
 #
 
+# Set up vul_where_vxl.h to have a macro set to $VXL_SOURCE_DIR
+CONFIGURE_FILE(
+      ${allvxl_SOURCE_DIR}/vxl/vul/vul_where_vxl.h.in
+      ${allvxl_SOURCE_DIR}/vxl/vul/vul_where_vxl.h ESCAPE_QUOTES)
+
 
 ADD_LIBRARY(vul vul_sources)
 

@@ -1,0 +1,14 @@
+//:
+// \file
+// \author Tim Cootes/Bill Hoffman
+// \brief Allows cmake to set up macro giving name of VXL source root directory
+
+// Note: The make system (eg cmake) should generate a file, vul_where_vxl.h, from
+// this, in which the macro is set correctly.
+// For non-cmake systems this might cause a problem.  In particular if there is
+// no vul_where_vxl.h, some other stuff might not compile.
+// If we supply a default vul_where_vxl.h, it would be changed by cmake, and
+// may get checked back into the repository by accident.
+
+#define VXL_SOURCE_ROOT_DIR "${allvxl_SOURCE_DIR}"
+
