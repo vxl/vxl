@@ -83,16 +83,20 @@ void test_numeric_limits()
            << "rnder = " << vnl_numeric_limits<float>::round_error() << vcl_endl;
 
   TEST("dmax", vnl_numeric_limits<double>::max() > 1e308, true);
+#ifndef __alpha__ // on alpha, infinity() == max()
   TEST("dinf", vnl_numeric_limits<double>::infinity() >
                vnl_numeric_limits<double>::max(), true);
+#endif
   TEST("dmin", vnl_numeric_limits<double>::min() < 1e-307 &&
                vnl_numeric_limits<double>::min() > 0, true);
   TEST("deps", vnl_numeric_limits<double>::epsilon() < 1e-12 &&
                vnl_numeric_limits<double>::epsilon() > 0, true);
   TEST("rnder",vnl_numeric_limits<double>::round_error(), 0.5);
   TEST("fmax", vnl_numeric_limits<float>::max() > 1e38f, true);
+#ifndef __alpha__ // on alpha, infinity() == max()
   TEST("finf", vnl_numeric_limits<float>::infinity() >
                vnl_numeric_limits<float>::max(), true);
+#endif
   TEST("fmin", vnl_numeric_limits<float>::min() < 1e-37f &&
                vnl_numeric_limits<float>::min() > 0, true);
   TEST("feps", vnl_numeric_limits<float>::epsilon() < 1e-6f &&
