@@ -5,7 +5,7 @@
 
 # variables to REPLACE
 # 
-#  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\mul" /I "$(VXLROOT)\v3p\png" /I "$(VXLROOT)\v3p\zlib" /I "$(VXLROOT)\v3p\jpeg" /I "$(VXLROOT)\v3p\tiff" == include path
+#  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\v3p\png" /I "$(VXLROOT)\v3p\zlib" /I "$(VXLROOT)\v3p\jpeg" /I "$(VXLROOT)\v3p\tiff" == include path
 #  == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_PNG -DHAS_JPEG -DHAS_TIFF == compiler defines
 # vil2_io_test_driver  == name of output library
@@ -53,11 +53,11 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\mul" /I "$(VXLROOT)\v3p\png" /I "$(VXLROOT)\v3p\zlib" /I "$(VXLROOT)\v3p\jpeg" /I "$(VXLROOT)\v3p\tiff"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_PNG -DHAS_JPEG -DHAS_TIFF /D "vil2_io_test_driver_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\v3p\png" /I "$(VXLROOT)\v3p\zlib" /I "$(VXLROOT)\v3p\jpeg" /I "$(VXLROOT)\v3p\tiff"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_PNG -DHAS_JPEG -DHAS_TIFF /D "vil2_io_test_driver_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2 -DCMAKE_INTDIR=\"Release\"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
-# ADD RSC  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\mul" /I "$(VXLROOT)\v3p\png" /I "$(VXLROOT)\v3p\zlib" /I "$(VXLROOT)\v3p\jpeg" /I "$(VXLROOT)\v3p\tiff" /l 0x409 /d "NDEBUG"
+# ADD RSC  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\v3p\png" /I "$(VXLROOT)\v3p\zlib" /I "$(VXLROOT)\v3p\jpeg" /I "$(VXLROOT)\v3p\tiff" /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -97,13 +97,13 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP   /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
 # ADD CPP /nologo  /D "WIN32"  /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\mul" /I "$(VXLROOT)\v3p\png" /I "$(VXLROOT)\v3p\zlib" /I "$(VXLROOT)\v3p\jpeg" /I "$(VXLROOT)\v3p\tiff"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_PNG -DHAS_JPEG -DHAS_TIFF /D "vil2_io_test_driver_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\v3p\png" /I "$(VXLROOT)\v3p\zlib" /I "$(VXLROOT)\v3p\jpeg" /I "$(VXLROOT)\v3p\tiff"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_PNG -DHAS_JPEG -DHAS_TIFF /D "vil2_io_test_driver_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ -DCMAKE_INTDIR=\"Debug\"
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
-# ADD RSC  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\mul" /I "$(VXLROOT)\v3p\png" /I "$(VXLROOT)\v3p\zlib" /I "$(VXLROOT)\v3p\jpeg" /I "$(VXLROOT)\v3p\tiff" /l 0x409 /d "_DEBUG"
+# ADD RSC  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\v3p\png" /I "$(VXLROOT)\v3p\zlib" /I "$(VXLROOT)\v3p\jpeg" /I "$(VXLROOT)\v3p\tiff" /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -141,12 +141,12 @@ LINK32=link.exe
 # PROP Intermediate_Dir "MinSizeRel"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /nologo  /D "WIN32"  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\mul" /I "$(VXLROOT)\v3p\png" /I "$(VXLROOT)\v3p\zlib" /I "$(VXLROOT)\v3p\jpeg" /I "$(VXLROOT)\v3p\tiff"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_PNG -DHAS_JPEG -DHAS_TIFF /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\mul" /I "$(VXLROOT)\v3p\png" /I "$(VXLROOT)\v3p\zlib" /I "$(VXLROOT)\v3p\jpeg" /I "$(VXLROOT)\v3p\tiff"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_PNG -DHAS_JPEG -DHAS_TIFF /D "vil2_io_test_driver_EXPORTS"
+# ADD CPP /nologo  /D "WIN32"  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\v3p\png" /I "$(VXLROOT)\v3p\zlib" /I "$(VXLROOT)\v3p\jpeg" /I "$(VXLROOT)\v3p\tiff"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_PNG -DHAS_JPEG -DHAS_TIFF /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\v3p\png" /I "$(VXLROOT)\v3p\zlib" /I "$(VXLROOT)\v3p\jpeg" /I "$(VXLROOT)\v3p\tiff"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_PNG -DHAS_JPEG -DHAS_TIFF /D "vil2_io_test_driver_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O1 -DCMAKE_INTDIR=\"MinSizeRel\"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
-# ADD RSC  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\mul" /I "$(VXLROOT)\v3p\png" /I "$(VXLROOT)\v3p\zlib" /I "$(VXLROOT)\v3p\jpeg" /I "$(VXLROOT)\v3p\tiff" /l 0x409 /d "NDEBUG"
+# ADD RSC  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\v3p\png" /I "$(VXLROOT)\v3p\zlib" /I "$(VXLROOT)\v3p\jpeg" /I "$(VXLROOT)\v3p\tiff" /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -186,11 +186,11 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\mul" /I "$(VXLROOT)\v3p\png" /I "$(VXLROOT)\v3p\zlib" /I "$(VXLROOT)\v3p\jpeg" /I "$(VXLROOT)\v3p\tiff"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_PNG -DHAS_JPEG -DHAS_TIFF /D "vil2_io_test_driver_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\v3p\png" /I "$(VXLROOT)\v3p\zlib" /I "$(VXLROOT)\v3p\jpeg" /I "$(VXLROOT)\v3p\tiff"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_PNG -DHAS_JPEG -DHAS_TIFF /D "vil2_io_test_driver_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /Zi /O2 -DCMAKE_INTDIR=\"RelWithDebInfo\"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
-# ADD RSC  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\mul" /I "$(VXLROOT)\v3p\png" /I "$(VXLROOT)\v3p\zlib" /I "$(VXLROOT)\v3p\jpeg" /I "$(VXLROOT)\v3p\tiff" /l 0x409 /d "NDEBUG"
+# ADD RSC  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\v3p\png" /I "$(VXLROOT)\v3p\zlib" /I "$(VXLROOT)\v3p\jpeg" /I "$(VXLROOT)\v3p\tiff" /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
