@@ -3,12 +3,10 @@
 //:
 // \file
 
-//*****************************************************************************
-// External declarations for implementation
-//*****************************************************************************
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
-#include "vsol_point_3d.h"
+#include <vsl/vsl_vector_io.h>
+#include <vsol/vsol_point_3d.h>
 
 //***************************************************************************
 // Initialization
@@ -116,7 +114,7 @@ bool vsol_polyhedron::is_convex(void) const
 //---------------------------------------------------------------------------
 //: Is `p' in `this' ?
 //---------------------------------------------------------------------------
-bool vsol_polyhedron::in(vsol_point_3d const& ) const
+bool vsol_polyhedron::in(vsol_point_3d_sptr const& ) const
 {
   // TODO
   vcl_cerr << "Warning: vsol_polyhedron::in() has not been implemented yet\n";
@@ -148,4 +146,78 @@ void vsol_polyhedron::describe(vcl_ostream &strm, int blanking) const
   for (unsigned int i=0; i<size(); ++i)
     strm << ' ' << *(vertex(i));
   strm << ']' << vcl_endl;
+}
+
+//----------------------------------------------------------------
+// ================   Binary I/O Methods ========================
+//----------------------------------------------------------------
+
+//: Binary save self to stream.
+void vsol_polyhedron::b_write(vsl_b_ostream &os) const
+{
+  vsl_b_write(os, version());
+  vsol_spatial_object_3d::b_write(os);
+  vsl_b_write(os, true); // Indicate non-null pointer stored
+  vsl_b_write(os, storage_);
+}
+
+//: Binary load self from stream (not typically used)
+void vsol_polyhedron::b_read(vsl_b_istream &is)
+{
+  short ver;
+  vsl_b_read(is, ver);
+  switch (ver)
+  {
+   case 1:
+    vsol_spatial_object_3d::b_read(is);
+
+    bool null_ptr;
+    vsl_b_read(is, null_ptr);
+    if (!null_ptr)
+      return;
+    vsl_b_read(is, storage_);
+    break;
+   default:
+    vcl_cerr << "vsol_polyhedron: unknown I/O version " << ver << '\n';
+  }
+}
+
+//: Return IO version number;
+short vsol_polyhedron::version() const
+{
+  return 1;
+}
+
+//: Print an ascii summary to the stream
+void vsol_polyhedron::print_summary(vcl_ostream &os) const
+{
+  os << *this;
+}
+
+//: Binary save vsol_polyhedron to stream.
+void
+vsl_b_write(vsl_b_ostream &os, vsol_polyhedron const* p)
+{
+  if (p==0) {
+    vsl_b_write(os, false); // Indicate null pointer stored
+  }
+  else{
+    vsl_b_write(os,true); // Indicate non-null pointer stored
+    p->b_write(os);
+  }
+}
+
+//: Binary load vsol_polyhedron from stream.
+void
+vsl_b_read(vsl_b_istream &is, vsol_polyhedron* &p)
+{
+  delete p;
+  bool not_null_ptr;
+  vsl_b_read(is, not_null_ptr);
+  if (not_null_ptr) {
+    p = new vsol_polyhedron(vcl_vector<vsol_point_3d_sptr>());
+    p->b_read(is);
+  }
+  else
+    p = 0;
 }

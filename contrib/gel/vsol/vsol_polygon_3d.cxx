@@ -3,11 +3,9 @@
 //:
 // \file
 
-//*****************************************************************************
-// External declarations for implementation
-//*****************************************************************************
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
+#include <vsl/vsl_vector_io.h>
 #include <vsol/vsol_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 
@@ -19,7 +17,7 @@
 //: Constructor from a vcl_vector (not a geometric vector but a list of points).
 // Require: new_vertices.size()>=3 and valid_vertices(new_vertices)
 //---------------------------------------------------------------------------
-vsol_polygon_3d::vsol_polygon_3d(const vcl_vector<vsol_point_3d_sptr> &new_vertices)
+vsol_polygon_3d::vsol_polygon_3d(vcl_vector<vsol_point_3d_sptr> const& new_vertices)
 {
   // require
   assert(new_vertices.size()>=3);
@@ -31,7 +29,7 @@ vsol_polygon_3d::vsol_polygon_3d(const vcl_vector<vsol_point_3d_sptr> &new_verti
 //---------------------------------------------------------------------------
 // Copy constructor
 //---------------------------------------------------------------------------
-vsol_polygon_3d::vsol_polygon_3d(const vsol_polygon_3d &other)
+vsol_polygon_3d::vsol_polygon_3d(vsol_polygon_3d const& other)
   : vsol_region_3d(other)
 {
   //vsol_point_3d_sptr p;
@@ -53,7 +51,7 @@ vsol_polygon_3d::~vsol_polygon_3d()
 //: Clone `this': creation of a new object and initialization.
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_3d_sptr vsol_polygon_3d::clone(void) const
+vsol_spatial_object_3d* vsol_polygon_3d::clone(void) const
 {
   return new vsol_polygon_3d(*this);
 }
@@ -81,7 +79,7 @@ vsol_point_3d_sptr vsol_polygon_3d::vertex(const int i) const
 //---------------------------------------------------------------------------
 //: Has `this' the same points than `other' in the same order ?
 //---------------------------------------------------------------------------
-bool vsol_polygon_3d::operator==(const vsol_polygon_3d &other) const
+bool vsol_polygon_3d::operator==(vsol_polygon_3d const& other) const
 {
   bool result = (this==&other);
 
@@ -112,7 +110,7 @@ bool vsol_polygon_3d::operator==(const vsol_polygon_3d &other) const
 //---------------------------------------------------------------------------
 //: spatial object equality
 //---------------------------------------------------------------------------
-bool vsol_polygon_3d::operator==(const vsol_spatial_object_3d& obj) const
+bool vsol_polygon_3d::operator==(vsol_spatial_object_3d const& obj) const
 {
   return
    obj.spatial_type() == vsol_spatial_object_3d::REGION &&
@@ -241,7 +239,7 @@ bool vsol_polygon_3d::valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_ve
 //---------------------------------------------------------------------------
 //: Is `p' in `this' ?
 //---------------------------------------------------------------------------
-bool vsol_polygon_3d::in(const vsol_point_3d_sptr& ) const
+bool vsol_polygon_3d::in(vsol_point_3d_sptr const& ) const
 {
   // TODO
   vcl_cerr << "Warning: vsol_polygon_3d::in() has not been implemented yet\n";
@@ -253,7 +251,7 @@ bool vsol_polygon_3d::in(const vsol_point_3d_sptr& ) const
 // Require: in(p)
 //---------------------------------------------------------------------------
 vgl_vector_3d<double>
-vsol_polygon_3d::normal_at_point(const vsol_point_3d_sptr &p) const
+vsol_polygon_3d::normal_at_point(vsol_point_3d_sptr const& p) const
 {
   // require
   assert(in(p));
@@ -287,8 +285,95 @@ vsol_polygon_3d::vsol_polygon_3d(void)
 inline void vsol_polygon_3d::describe(vcl_ostream &strm, int blanking) const
 {
   if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
-  strm << "[vsol_polyline_3d";
-  for (unsigned int i=0; i<size(); ++i)
-    strm << ' ' << *(vertex(i));
-  strm << ']' << vcl_endl;
+  if (size() == 0)
+    strm << "[vsol_polygon_3d null]";
+  else {
+    strm << "[vsol_polygon_3d Nverts=" << size()
+         << " Area=" << area();
+    for (unsigned int i=0; i<size(); ++i)
+      strm << " p" << i << ':' << *(vertex(i));
+    strm << ']';
+  }
+  strm << vcl_endl;
+}
+
+//----------------------------------------------------------------
+// ================   Binary I/O Methods ========================
+//----------------------------------------------------------------
+
+//: Binary save self to stream.
+void vsol_polygon_3d::b_write(vsl_b_ostream &os) const
+{
+  vsl_b_write(os, version());
+  vsol_spatial_object_3d::b_write(os);
+  if (!storage_)
+    vsl_b_write(os, false); // Indicate null pointer stored
+  else
+  {
+    vsl_b_write(os, true); // Indicate non-null pointer stored
+    vsl_b_write(os, *storage_);
+  }
+}
+
+//: Binary load self from stream (not typically used)
+void vsol_polygon_3d::b_read(vsl_b_istream &is)
+{
+  short ver;
+  vsl_b_read(is, ver);
+  switch (ver)
+  {
+   case 1:
+    vsol_spatial_object_3d::b_read(is);
+
+    delete storage_;
+    storage_ = new vcl_vector<vsol_point_3d_sptr>();
+    bool null_ptr;
+    vsl_b_read(is, null_ptr);
+    if (!null_ptr)
+      return;
+    vsl_b_read(is, *storage_);
+    break;
+   default:
+    vcl_cerr << "vsol_polygon_3d: unknown I/O version " << ver << '\n';
+  }
+}
+
+//: Return IO version number;
+short vsol_polygon_3d::version() const
+{
+  return 1;
+}
+
+//: Print an ascii summary to the stream
+void vsol_polygon_3d::print_summary(vcl_ostream &os) const
+{
+  os << *this;
+}
+
+//: Binary save vsol_polygon_3d to stream.
+void
+vsl_b_write(vsl_b_ostream &os, vsol_polygon_3d const* p)
+{
+  if (p==0) {
+    vsl_b_write(os, false); // Indicate null pointer stored
+  }
+  else{
+    vsl_b_write(os,true); // Indicate non-null pointer stored
+    p->b_write(os);
+  }
+}
+
+//: Binary load vsol_polygon_3d from stream.
+void
+vsl_b_read(vsl_b_istream &is, vsol_polygon_3d* &p)
+{
+  delete p;
+  bool not_null_ptr;
+  vsl_b_read(is, not_null_ptr);
+  if (not_null_ptr) {
+    p = new vsol_polygon_3d(vcl_vector<vsol_point_3d_sptr>());
+    p->b_read(is);
+  }
+  else
+    p = 0;
 }

@@ -3,9 +3,6 @@
 //:
 // \file
 
-//*****************************************************************************
-// External declarations for implementation
-//*****************************************************************************
 #include <vgl/vgl_distance.h>
 
 //***************************************************************************
@@ -23,7 +20,7 @@ vsol_point_3d::~vsol_point_3d()
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_3d_sptr vsol_point_3d::clone(void) const
+vsol_spatial_object_3d* vsol_point_3d::clone(void) const
 {
   return new vsol_point_3d(*this);
 }
@@ -35,14 +32,14 @@ vsol_spatial_object_3d_sptr vsol_point_3d::clone(void) const
 //---------------------------------------------------------------------------
 //: Has `this' the same coordinates than `other' ?
 //---------------------------------------------------------------------------
-bool vsol_point_3d::operator==(const vsol_point_3d &other) const
+bool vsol_point_3d::operator==(vsol_point_3d const& other) const
 {
   return this==&other || p_==other.p_;
 }
 
 //: spatial object equality
 
-bool vsol_point_3d::operator==(const vsol_spatial_object_3d& obj) const
+bool vsol_point_3d::operator==(vsol_spatial_object_3d const& obj) const
 {
   return
    obj.spatial_type() == vsol_spatial_object_3d::POINT
@@ -106,7 +103,7 @@ void vsol_point_3d::set_z(const double new_z)
 //---------------------------------------------------------------------------
 //: Return the distance (N2) between `this' and `other'
 //---------------------------------------------------------------------------
-double vsol_point_3d::distance(const vsol_point_3d &other) const
+double vsol_point_3d::distance(vsol_point_3d const& other) const
 {
   return vgl_distance(p_,other.p_);
 }
@@ -119,7 +116,7 @@ double vsol_point_3d::distance(vsol_point_3d_sptr other) const
 //---------------------------------------------------------------------------
 //: Return the middle point between `this' and `other'
 //---------------------------------------------------------------------------
-vsol_point_3d_sptr vsol_point_3d::middle(const vsol_point_3d &other) const
+vsol_point_3d_sptr vsol_point_3d::middle(vsol_point_3d const& other) const
 {
   return new vsol_point_3d(midpoint(p_,other.p_));
 }
@@ -145,7 +142,86 @@ vsol_point_3d::plus_vector(vgl_vector_3d<double> const& v) const
 //: Return the vector `this',`other'.
 //---------------------------------------------------------------------------
 vgl_vector_3d<double>
-vsol_point_3d::to_vector(const vsol_point_3d &other) const
+vsol_point_3d::to_vector(vsol_point_3d const& other) const
 {
   return vgl_vector_3d<double>(other.x() - x(),other.y() - y(),other.z() - z());
+}
+
+//----------------------------------------------------------------
+// ================   Binary I/O Methods ========================
+//----------------------------------------------------------------
+
+//: Binary save self to stream.
+void vsol_point_3d::b_write(vsl_b_ostream &os) const
+{
+  vsl_b_write(os, version());
+  vsol_spatial_object_3d::b_write(os);
+  vsl_b_write(os, p_.x());
+  vsl_b_write(os, p_.y());
+  vsl_b_write(os, p_.z());
+}
+
+//: Binary load self from stream (not typically used)
+void vsol_point_3d::b_read(vsl_b_istream &is)
+{
+  if (!is)
+    return;
+  short ver;
+  vsl_b_read(is, ver);
+  switch (ver)
+  {
+   case 1:
+    vsol_spatial_object_3d::b_read(is);
+    { double x=0, y=0, z=0;
+      vsl_b_read(is, x);
+      vsl_b_read(is, y);
+      vsl_b_read(is, z);
+      this->p_.set(x, y, z);
+    }
+    break;
+
+   default:
+    vcl_cerr << "I/O ERROR: vsol_point_3d::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< ver << '\n';
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
+  }
+}
+
+//: Return IO version number;
+short vsol_point_3d::version() const
+{
+  return 1;
+}
+
+//: Print an ascii summary to the stream
+void vsol_point_3d::print_summary(vcl_ostream &os) const
+{
+  os << *this;
+}
+
+//: Binary save vsol_point_3d to stream.
+void
+vsl_b_write(vsl_b_ostream &os, vsol_point_3d const* p)
+{
+  if (p==0) {
+    vsl_b_write(os, false); // Indicate null pointer stored
+  }
+  else{
+    vsl_b_write(os,true); // Indicate non-null pointer stored
+    p->b_write(os);
+  }
+}
+
+//: Binary load vsol_point_3d from stream.
+void
+vsl_b_read(vsl_b_istream &is, vsol_point_3d* &p)
+{
+  delete p; p=0;
+  bool not_null_ptr;
+  vsl_b_read(is, not_null_ptr);
+  if (not_null_ptr) {
+    p = new vsol_point_3d(0.0,0.0,0.0);
+    p->b_read(is);
+  }
 }

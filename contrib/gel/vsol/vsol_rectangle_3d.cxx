@@ -3,9 +3,6 @@
 //:
 // \file
 
-//*****************************************************************************
-// External declarations for implementation
-//*****************************************************************************
 #include <vcl_cassert.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vsol/vsol_point_3d.h>
@@ -22,9 +19,9 @@
 //              ordinate axis and the height.
 // Require: valid_vertices(new_p0,new_p1,new_p2)
 //---------------------------------------------------------------------------
-vsol_rectangle_3d::vsol_rectangle_3d(const vsol_point_3d_sptr &new_p0,
-                                     const vsol_point_3d_sptr &new_p1,
-                                     const vsol_point_3d_sptr &new_p2)
+vsol_rectangle_3d::vsol_rectangle_3d(vsol_point_3d_sptr const& new_p0,
+                                     vsol_point_3d_sptr const& new_p1,
+                                     vsol_point_3d_sptr const& new_p2)
 {
   storage_=new vcl_vector<vsol_point_3d_sptr>(3);
   (*storage_)[0]=new_p0;
@@ -37,7 +34,7 @@ vsol_rectangle_3d::vsol_rectangle_3d(const vsol_point_3d_sptr &new_p0,
 //---------------------------------------------------------------------------
 // Copy constructor
 //---------------------------------------------------------------------------
-vsol_rectangle_3d::vsol_rectangle_3d(const vsol_rectangle_3d &other)
+vsol_rectangle_3d::vsol_rectangle_3d(vsol_rectangle_3d const& other)
   : vsol_polygon_3d(other)
 {
 }
@@ -53,7 +50,7 @@ vsol_rectangle_3d::~vsol_rectangle_3d()
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_3d_sptr vsol_rectangle_3d::clone(void) const
+vsol_spatial_object_3d* vsol_rectangle_3d::clone(void) const
 {
   return new vsol_rectangle_3d(*this);
 }
@@ -104,19 +101,19 @@ vsol_point_3d_sptr vsol_rectangle_3d::p3(void) const
 //---------------------------------------------------------------------------
 //: Has `this' the same points than `other' in the same order ?
 //---------------------------------------------------------------------------
-bool vsol_rectangle_3d::operator==(const vsol_rectangle_3d &other) const
+bool vsol_rectangle_3d::operator==(vsol_rectangle_3d const& other) const
 {
   return vsol_polygon_3d::operator==(other);
 }
 
-bool vsol_rectangle_3d::operator==(const vsol_polygon_3d &other) const
+bool vsol_rectangle_3d::operator==(vsol_polygon_3d const& other) const
 {
   return vsol_polygon_3d::operator==(other);
 }
 
 //: spatial object equality
 
-bool vsol_rectangle_3d::operator==(const vsol_spatial_object_3d& obj) const
+bool vsol_rectangle_3d::operator==(vsol_spatial_object_3d const& obj) const
 {
   return
    obj.spatial_type() == vsol_spatial_object_3d::REGION &&
@@ -174,7 +171,7 @@ bool vsol_rectangle_3d::valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_
 //---------------------------------------------------------------------------
 //: Is `p' in `this' ?
 //---------------------------------------------------------------------------
-bool vsol_rectangle_3d::in(const vsol_point_3d_sptr& ) const
+bool vsol_rectangle_3d::in(vsol_point_3d_sptr const& ) const
 {
   // TODO
   vcl_cerr << "Warning: vsol_rectangle_3d::in() has not been implemented yet\n";
@@ -186,7 +183,7 @@ bool vsol_rectangle_3d::in(const vsol_point_3d_sptr& ) const
 // Require: in(p)
 //---------------------------------------------------------------------------
 vgl_vector_3d<double>
-vsol_rectangle_3d::normal_at_point(const vsol_point_3d_sptr &p) const
+vsol_rectangle_3d::normal_at_point(vsol_point_3d_sptr const& p) const
 {
   // require
   assert(in(p));
@@ -209,4 +206,83 @@ inline void vsol_rectangle_3d::describe(vcl_ostream &strm, int blanking) const
   for (unsigned int i=0; i<size(); ++i)
     strm << ' ' << *(vertex(i));
   strm << '>' << vcl_endl;
+}
+
+//----------------------------------------------------------------
+// ================   Binary I/O Methods ========================
+//----------------------------------------------------------------
+
+//: Binary save self to stream.
+void vsol_rectangle_3d::b_write(vsl_b_ostream &os) const
+{
+  vsl_b_write(os, version());
+  vsol_polygon_3d::b_write(os);
+}
+
+//: Binary load self from stream (not typically used)
+void vsol_rectangle_3d::b_read(vsl_b_istream &is)
+{
+  if (!is)
+    return;
+  short ver;
+  vsl_b_read(is, ver);
+  switch (ver)
+  {
+   case 1:
+    vsol_polygon_3d::b_read(is);
+    if (storage_->size()!=4){
+      vcl_cerr << "I/O ERROR: vsol_rectangle_3d::b_read(vsl_b_istream&)\n"
+               << "           Incorrect number of vertices: "<< storage_->size() << '\n';
+      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      return;
+    }
+    break;
+
+   default:
+    vcl_cerr << "I/O ERROR: vsol_rectangle_3d::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< ver << '\n';
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
+  }
+}
+//: Return IO version number;
+short vsol_rectangle_3d::version() const
+{
+  return 1;
+}
+
+//: Print an ascii summary to the stream
+void vsol_rectangle_3d::print_summary(vcl_ostream &os) const
+{
+  os << *this;
+}
+
+//external functions
+
+//: Binary save vsol_rectangle_3d* to stream.
+void
+vsl_b_write(vsl_b_ostream &os, vsol_rectangle_3d const* r)
+{
+  if (!r) {
+    vsl_b_write(os, false); // Indicate null rectangle stored
+  }
+  else {
+    vsl_b_write(os,true); // Indicate non-null rectangle stored
+    r->b_write(os);
+  }
+}
+
+//: Binary load vsol_rectangle_3d* from stream.
+void
+vsl_b_read(vsl_b_istream &is, vsol_rectangle_3d* &r)
+{
+  delete r;
+  bool not_null_ptr;
+  vsl_b_read(is, not_null_ptr);
+  if (not_null_ptr) {
+    r = new vsol_rectangle_3d(new vsol_point_3d(0.0,0.0,0.0),new vsol_point_3d(0.0,0.0,0.0),new vsol_point_3d(0.0,0.0,0.0));
+    r->b_read(is);
+  }
+  else
+    r = 0;
 }

@@ -18,19 +18,17 @@
 // \verbatim
 //  Modifications
 //   2004/05/14 Peter Vanroose  Added describe()
+//   2004/09/06 Peter Vanroose  Added Binary I/O
 // \endverbatim
 //*****************************************************************************
 
-class vsol_polyhedron;
-
-//*****************************************************************************
-// External declarations for values
-//*****************************************************************************
 #include <vsol/vsol_volume_3d.h>
 #include <vsol/vsol_point_3d.h>
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vcl_vector.h>
 #include <vcl_iosfwd.h>
+#include <vsl/vsl_binary_io.h>
+class vsol_tetrahedron;
 
 class vsol_polyhedron : public vsol_volume_3d
 {
@@ -69,7 +67,16 @@ class vsol_polyhedron : public vsol_volume_3d
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d_sptr clone(void) const { return new vsol_polyhedron(*this); }
+  virtual vsol_spatial_object_3d* clone(void) const { return new vsol_polyhedron(*this); }
+
+  //---------------------------------------------------------------------------
+  //: Safe down-casting methods
+  //---------------------------------------------------------------------------
+  virtual vsol_polyhedron *cast_to_polyhedron(void) {return this;}
+  virtual vsol_polyhedron const* cast_to_polyhedron(void) const {return this;}
+
+  virtual vsol_tetrahedron* cast_to_tetrahedron(void) {return 0;}
+  virtual const vsol_tetrahedron* cast_to_tetrahedron(void) const {return 0;}
 
   //***************************************************************************
   // Access
@@ -138,7 +145,27 @@ class vsol_polyhedron : public vsol_volume_3d
   //---------------------------------------------------------------------------
   //: Is `p' in `this' ?
   //---------------------------------------------------------------------------
-  virtual bool in(vsol_point_3d const& p) const;
+  virtual bool in(vsol_point_3d_sptr const& p) const;
+
+  // ==== Binary IO methods ======
+
+  //: Binary save self to stream.
+  void b_write(vsl_b_ostream &os) const;
+
+  //: Binary load self from stream.
+  void b_read(vsl_b_istream &is);
+
+  //: Return IO version number;
+  short version() const;
+
+  //: Print an ascii summary to the stream
+  void print_summary(vcl_ostream &os) const;
+
+  //: Return a platform independent string identifying the class
+  vcl_string is_a() const { return vcl_string("vsol_polyhedron"); }
+
+  //: Return true if the argument matches the string identifying the class or any parent class
+  bool is_class(const vcl_string& cls) const { return cls==is_a(); }
 
   //---------------------------------------------------------------------------
   //: output description to stream
@@ -151,5 +178,11 @@ class vsol_polyhedron : public vsol_volume_3d
   //---------------------------------------------------------------------------
   vsol_polyhedron() {}
 };
+
+//: Binary save vsol_polyhedron* to stream.
+void vsl_b_write(vsl_b_ostream &os, const vsol_polyhedron* p);
+
+//: Binary load vsol_polyhedron* from stream.
+void vsl_b_read(vsl_b_istream &is, vsol_polyhedron* &p);
 
 #endif // vsol_polyhedron_h_

@@ -18,12 +18,10 @@
 //   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 //   2001/07/03 Peter Vanroose  Replaced vnl_double_3 by vgl_vector_3d
 //   2004/05/14 Peter Vanroose  Added describe()
+//   2004/09/06 Peter Vanroose  Added Binary I/O
 // \endverbatim
 //*****************************************************************************
 
-//*****************************************************************************
-// External declarations for values
-//*****************************************************************************
 #include <vsol/vsol_polygon_3d.h>
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vcl_iosfwd.h>
@@ -41,14 +39,14 @@ class vsol_rectangle_3d : public vsol_polygon_3d
   //  axis and the width. `new_p2' defines the ordinate axis and the height.
   //  REQUIRE: valid_vertices(new_p0,new_p1,new_p2)
   //---------------------------------------------------------------------------
-  vsol_rectangle_3d(const vsol_point_3d_sptr &new_p0,
-                    const vsol_point_3d_sptr &new_p1,
-                    const vsol_point_3d_sptr &new_p2);
+  vsol_rectangle_3d(vsol_point_3d_sptr const& new_p0,
+                    vsol_point_3d_sptr const& new_p1,
+                    vsol_point_3d_sptr const& new_p2);
 
   //---------------------------------------------------------------------------
   //: Copy constructor
   //---------------------------------------------------------------------------
-  vsol_rectangle_3d(const vsol_rectangle_3d &other);
+  vsol_rectangle_3d(vsol_rectangle_3d const& other);
 
   //---------------------------------------------------------------------------
   //: Destructor
@@ -59,7 +57,7 @@ class vsol_rectangle_3d : public vsol_polygon_3d
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d_sptr clone(void) const;
+  virtual vsol_spatial_object_3d* clone(void) const;
 
   //***************************************************************************
   // Access
@@ -92,10 +90,10 @@ class vsol_rectangle_3d : public vsol_polygon_3d
   //---------------------------------------------------------------------------
   //: Has `this' the same points than `other' in the same order ?
   //---------------------------------------------------------------------------
-  virtual bool operator==(const vsol_rectangle_3d &other) const;
-  inline bool operator!=(const vsol_rectangle_3d &other)const{return !operator==(other);}
-  virtual bool operator==(const vsol_polygon_3d &other) const; // virtual of vsol_polygon_3d
-  virtual bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object_3d
+  virtual bool operator==(vsol_rectangle_3d const& other) const;
+  inline bool operator!=(vsol_rectangle_3d const& other)const{return !operator==(other);}
+  virtual bool operator==(vsol_polygon_3d const& other) const; // virtual of vsol_polygon_3d
+  virtual bool operator==(vsol_spatial_object_3d const& obj) const; // virtual of vsol_spatial_object_3d
 
   //***************************************************************************
   // Status report
@@ -128,13 +126,33 @@ class vsol_rectangle_3d : public vsol_polygon_3d
   //---------------------------------------------------------------------------
   //: Is `p' in `this' ?
   //---------------------------------------------------------------------------
-  virtual bool in(const vsol_point_3d_sptr &p) const;
+  virtual bool in(vsol_point_3d_sptr const& p) const;
 
   //---------------------------------------------------------------------------
   //: Return the unit normal vector at point `p'. Have to be deleted manually
   //  REQUIRE: in(p)
   //---------------------------------------------------------------------------
-  virtual vgl_vector_3d<double> normal_at_point(const vsol_point_3d_sptr &p) const;
+  virtual vgl_vector_3d<double> normal_at_point(vsol_point_3d_sptr const& p) const;
+
+  // ==== Binary IO methods ======
+
+  //: Binary save self to stream.
+  void b_write(vsl_b_ostream &os) const;
+
+  //: Binary load self from stream.
+  void b_read(vsl_b_istream &is);
+
+  //: Return IO version number;
+  short version() const;
+
+  //: Print an ascii summary to the stream
+  void print_summary(vcl_ostream &os) const;
+
+  //: Return a platform independent string identifying the class
+  virtual vcl_string is_a() const { return "vsol_rectangle_3d"; }
+
+  //: Return true if the argument matches the string identifying the class or any parent class
+  bool is_class(const vcl_string& cls) const { return cls==is_a() || vsol_polygon_3d::is_class(cls); }
 
   //---------------------------------------------------------------------------
   //: output description to stream
