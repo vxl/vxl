@@ -32,6 +32,10 @@
 #ifndef VCL_GCC_295 //gcc2.95
 #include <vcl_locale.h>
 #endif
+// limits must appear before complex for VC 6
+#ifndef VCL_GCC_295 //gcc2.95
+#include <vcl_limits.h>
+#endif
 #include <vcl_queue.h>
 #include <vcl_string.h>
 #include <vcl_complex.h>
@@ -59,9 +63,6 @@
 #endif
 #include <vcl_vector.h>
 #include <vcl_functional.h>
-#ifndef VCL_GCC_295 //gcc2.95
-#include <vcl_limits.h>
-#endif
 
 #include <vcl_complex_fwd.h>
 #include <vcl_stlfwd.h>

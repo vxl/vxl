@@ -1,7 +1,7 @@
 // This is rpl/rrel/rrel_muset_obj.cxx
+#include <vcl_limits.h>
 #include "rrel_muset_obj.h"
 
-#include <vcl_limits.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
