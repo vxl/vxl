@@ -134,7 +134,7 @@ struct vbl_array_1d
   unsigned capacity() const { return alloc_ - begin_; }
 
   //: Get the ith element.
-  // Use NDEBUG to turn bounds checking off
+  // #define NDEBUG to turn bounds checking off.
   reference       operator[](unsigned i)
   {
     assert (i < end_ - begin_);
@@ -142,7 +142,7 @@ struct vbl_array_1d
   }
 
   //: Get the ith element.
-  // Use NDEBUG to turn bounds checking off
+  // #define NDEBUG to turn bounds checking off.
   const_reference operator[](unsigned i) const
   {
     assert (i < end_ - begin_);
