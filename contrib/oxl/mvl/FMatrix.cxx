@@ -12,9 +12,9 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3.h>
-#include <vnl/vnl_matops.h> // use vnl_matlab_print.h for pretty printing
 
-#undef vnl_svd_h_
+// explanation ??
+//#undef vnl_svd_h_
 
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_rpoly_roots.h>
