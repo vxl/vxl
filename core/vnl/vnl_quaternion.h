@@ -20,6 +20,8 @@
 
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
+//what was this for? #include <vcl_functional.h>
+
 //: 4-element vector that represents rotation in 3D.
 // Quaternion is a 4-element vector with 1 real and 3 imaginary
 // components:
@@ -52,10 +54,6 @@
 // Envelope for envelope-letter scheme that avoids deep copy on
 // return by value in arithmetic expressions like: q1 * q2 * q3 *...
 //
-
-//what was this for? #include <vcl_functional.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_matrix_fixed.h>
 
 export template <class T>
 class vnl_quaternion : public vnl_vector_fixed<T, 4> { // public for IS-A relation
