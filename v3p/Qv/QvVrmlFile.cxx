@@ -169,7 +169,7 @@ void QvVrmlFile::compute_centroid_radius()
   centroid[0] = vcv.centroid[0];
   centroid[1] = vcv.centroid[1];
   centroid[2] = vcv.centroid[2];
-  radius = vcv.radius;
+  radius = (float)vcv.radius;
   vcl_cerr << "QvVrmlFile::compute_centroid_radius: c = "
            << centroid[0] << " " << centroid[1] << " " << centroid[2]
            << ", r = " << radius << vcl_endl;
