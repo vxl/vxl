@@ -17,6 +17,7 @@ SET(vimt_sources
   vimt_sample_grid_bilin.txx    vimt_sample_grid_bilin.h
   vimt_bilin_interp.h
   vimt_resample_bilin.h
+  vimt_add_all_binary_loaders.h vimt_add_all_binary_loaders.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vimt_sources)
