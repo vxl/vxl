@@ -10,35 +10,31 @@
 
 void test_convert1(const char * golden_data_dir)
 {
-  vcl_cout << "*******************************************\n"
+  vcl_cout << "*********************************************\n"
            << " Testing vil2_convert*(vil2_image_view<T>..)\n"
-           << "*******************************************\n";
+           << "*********************************************\n";
 
+  vcl_string datadir = golden_data_dir;
+  if (*golden_data_dir) datadir += "/";
 
   vil2_image_view<vxl_byte> image1 = vil2_convert_to_grey_using_rgb_weighting(
-    vil2_load((vcl_string(golden_data_dir) + "/ff_grey8bit_raw.pgm").c_str()),
-    vxl_byte());
+    vil2_load((datadir + "ff_grey8bit_raw.pgm").c_str()), vxl_byte());
   TEST("vil2_convert_to_grey_using_rgb_weighting(vil2_load(grey_image))", image1, true);
 
   vil2_print_all(vcl_cout, image1);
 
   vil2_image_view<float> image2 = vil2_convert_to_grey_using_average(
-    vil2_load((vcl_string(golden_data_dir) + "/ff_rgb8bit_ascii.ppm").c_str()),
-    float());
+    vil2_load((datadir + "ff_rgb8bit_ascii.ppm").c_str()), float());
   TEST("vil2_convert_to_grey_using_average(vil2_load(rgb_image))", image2, true);
 
   vil2_print_all(vcl_cout, image2);
-
 }
 
 MAIN( test_convert )
 {
   START( "vil2_convert" );
 
-  const char * golden_data_dir="";
-  if (argc>=2) golden_data_dir = argv[1];
- 
-  test_convert1(golden_data_dir);
+  test_convert1(argc>1 ? argv[1] : "file_read_data");
 
   SUMMARY();
 }
