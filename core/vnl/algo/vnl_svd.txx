@@ -1,17 +1,3 @@
-#ifdef GNU_LIBSTDCXX_V3
-// FIXME
-# include <vnl/vnl_vector.h>
-# include <vnl/vnl_diag_matrix.h>
-# define hack_(T, L) \
-struct foo##L : vnl_vector<T > { foo##L() { } }; \
-struct boo##L : vnl_diag_matrix<T > { boo##L() { } };
-# define hack(T, L) hack_(T, L)
-hack(float, __LINE__)
-hack(double, __LINE__)
-hack(vcl_complex<float>, __LINE__)
-hack(vcl_complex<double>, __LINE__)
-#endif
-
 #include "vnl_svd.h"
 
 #include <vcl_fstream.h>

@@ -1,9 +1,3 @@
-#ifdef GNU_LIBSTDCXX_V3
-// FIXME
-# include <vnl/vnl_vector.h>
-struct foo : vnl_vector<double> { foo() { } };
-#endif
-
 #include "vnl_file_vector.h"
 
 #include <vcl_fstream.h>
