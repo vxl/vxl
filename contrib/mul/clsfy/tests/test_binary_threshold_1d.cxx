@@ -162,7 +162,7 @@ void test_adaboost()
   
   vcl_cout<<"error2= "<<error2<<vcl_endl;
 
-  TEST ("error1==error2", error1==error2, true);
+  TEST ("error1==error2", vcl_fabs(error1-error2)<0.001, true);
 
   tp=0;
   fp=0;
