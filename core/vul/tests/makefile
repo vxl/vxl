@@ -6,6 +6,7 @@ TESTS += vul_test_arg.cxx
 TESTS += vul_test_sprintf.cxx
 TESTS += vul_test_root_dir.cxx
 TESTS += vul_test_temp_filename.cxx
+TESTS += vul_test_psfile.cxx
 TESTS += vul_test_url.cxx
 
 IULIBS := -lvul -lvpl
