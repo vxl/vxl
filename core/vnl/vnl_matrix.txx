@@ -1104,8 +1104,8 @@ void vnl_matrix<T>::assert_finite_internal() const
   else {
     vcl_cerr << __FILE__ ": it is quite big (" << rows() << 'x' << cols() << ")" << vcl_endl;
     vcl_cerr << __FILE__ ": in the following picture - means finite and * means non-finite:" << vcl_endl;
-    for (int i=0; i<rows(); ++i) {
-      for (int j=0; j<cols(); ++j)
+    for (unsigned int i=0; i<rows(); ++i) {
+      for (unsigned int j=0; j<cols(); ++j)
         vcl_cerr << char(vnl_math_isfinite((*this)(i, j)) ? '-' : '*');
       vcl_cerr << vcl_endl;
     }
