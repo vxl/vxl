@@ -21,6 +21,8 @@ SOURCES += vidl_movie.cxx
 SOURCES += vidl_frame.cxx
 SOURCES += vidl_frame_as_image.cxx
 SOURCES += vidl_image_list_codec.cxx
+SOURCES += vidl_file_sequence.cxx
+SOURCES += vidl_vob_frame_index.cxx
 SOURCES += vidl_io.cxx
 
 ifdef HAS_MPEG2
