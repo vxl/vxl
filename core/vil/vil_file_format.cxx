@@ -85,6 +85,9 @@ vil2_file_format** vil2_file_format::all()
 #endif
 #if HAS_PNM
     storage[c++] = new vil2_pnm_file_format;
+    storage[c++] = new vil2_pbm_file_format;
+    storage[c++] = new vil2_pgm_file_format;
+    storage[c++] = new vil2_ppm_file_format;
 #endif
 #if HAS_IRIS
     storage[c++] = new vil2_iris_file_format;
