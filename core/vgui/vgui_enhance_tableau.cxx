@@ -17,7 +17,7 @@
 
 #include <vcl_iostream.h>
 
-#include <vnl/vnl_matrix.h>
+#include <vnl/vnl_matrix_fixed.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_tableau.h>
@@ -70,7 +70,8 @@ vcl_string vgui_enhance_tableau::type_name() const {return "vgui_enhance_tableau
 
 bool vgui_enhance_tableau::handle(const vgui_event& e)
 {
-  if (!enhancing_ && e.type == vgui_BUTTON_DOWN && e.button == vgui_LEFT) {
+  if (!enhancing_ && e.type == vgui_BUTTON_DOWN && e.button == vgui_LEFT)
+  {
     enhancing_ = true;
     x = (int)e.wx;
     y = (int)e.wy;
@@ -78,21 +79,25 @@ bool vgui_enhance_tableau::handle(const vgui_event& e)
     return true;
   }
 
-  if (enhancing_ && e.type == vgui_BUTTON_UP && e.button == vgui_LEFT) {
+  if (enhancing_ && e.type == vgui_BUTTON_UP && e.button == vgui_LEFT)
+  {
     enhancing_ = false;
     post_redraw();
     return true;
   }
 
-  if (enhancing_ && e.type == vgui_MOTION) {
+  if (enhancing_ && e.type == vgui_MOTION)
+  {
     x = (int)e.wx;
     y = (int)e.wy;
     post_redraw();
     return true;
   }
 
-  if (enable_key_bindings && e.type == vgui_KEY_PRESS) {
-    switch(e.key) {
+  if (enable_key_bindings && e.type == vgui_KEY_PRESS)
+  {
+    switch(e.key)
+    {
     case '[':
       size -= 10;
       size = (size <10) ? 10 : size ;
@@ -117,12 +122,13 @@ bool vgui_enhance_tableau::handle(const vgui_event& e)
     };
   }
 
-  if (e.type == vgui_DRAW) {
+  if (e.type == vgui_DRAW)
+  {
     // first draw the child
     slot1->handle(e);
 
-    if (enhancing_) {
-
+    if (enhancing_)
+    {
       // get original offsets and scales
       vgui_matrix_state ms;
 #if defined(VCL_SGI_CC)
@@ -134,7 +140,7 @@ bool vgui_enhance_tableau::handle(const vgui_event& e)
         ptr = ptr;
       }
 #endif
-      vnl_matrix<double> M = ms.modelview_matrix();
+      vnl_matrix_fixed<double,4,4> M = ms.modelview_matrix();
       float sx = M(0,0);
       float sy = M(0,0);
       float ox = M(0,3);

@@ -10,14 +10,14 @@
 //
 // \verbatim
 //  Modifications
-//    AWF Renamed store, and made it save and restore on 
+//    AWF Renamed store, and made it save and restore on
 //        construction/desctruction.
 //    FSM Renamed method names for consistency with projection_inspector.
 // \endverbatim
 
 #include <vcl_iosfwd.h>
 #include <vgui/vgui_gl.h>
-template <class T> class vnl_matrix;
+#include <vnl/vnl_fwd.h>
 
 //: Stores and retrieves the current projection and modelview matrices.
 //
@@ -28,15 +28,21 @@ template <class T> class vnl_matrix;
 //
 // vgui_matrix_state also has various static convenience methods for GL matrix
 // handling.
-class vgui_matrix_state {
-public:
+class vgui_matrix_state
+{
+  // NB : matrices stored in column (fortran) order.
+  double P[16]; // projection
+  double M[16]; // modelview
+  bool restore_on_destroy;
+
+ public:
   vgui_matrix_state(bool save_now_restore_on_destroy = true);
   ~vgui_matrix_state();
 
   void save();
   void restore() const;
   void print(vcl_ostream& );
-  
+
   // set
   static void identity_gl_matrices(); // set both matrices to the identity.
   static void clear_gl_matrices();    // set both matrices to zero.
@@ -44,9 +50,9 @@ public:
 
   // query
   static bool gl_matrices_are_cleared();
-  static vnl_matrix<double> projection_matrix();
-  static vnl_matrix<double> modelview_matrix();
-  static vnl_matrix<double> total_transformation();
+  static vnl_matrix_fixed<double,4,4> projection_matrix();
+  static vnl_matrix_fixed<double,4,4> modelview_matrix();
+  static vnl_matrix_fixed<double,4,4> total_transformation();
 
   // Projection matrices
   static void premultiply(vnl_matrix<double> const &,GLenum );
@@ -56,12 +62,6 @@ public:
   static void postmultiply(const vnl_matrix<double> &M,GLenum matrix);
   static void postmultiply_projection(vnl_matrix<double> const &M) { postmultiply(M,GL_PROJECTION); }
   static void postmultiply_modelview (vnl_matrix<double> const &M) { postmultiply(M,GL_MODELVIEW); }
-
-private:
-  // NB : matrices stored in column (fortran) order.
-  double P[16]; // projection
-  double M[16]; // modelview
-  bool restore_on_destroy;
 };
 
 #endif // vgui_matrix_state_h_

@@ -2,9 +2,8 @@
 #include <vcl_vector.h>
 
 #include <testlib/testlib_test.h>
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_matrix_fixed.h> // for matrix * vector_fixed operator
-#include <vnl/vnl_vector.h>
+#include <vnl/vnl_matrix_fixed.h>
+#include <vnl/vnl_vector_fixed.h>
 
 #include <rrel/tests/similarity_from_matches.h>
 
@@ -22,9 +21,9 @@ MAIN( test_similarity_from_matches )
 {
   START( "similarity from matches" );
 
-  vnl_matrix<double> A(2,2,0.0);
-  vnl_vector<double> t(2);
-  vnl_vector<double> params(4);
+  vnl_matrix_fixed<double,2,2> A(0.0);
+  vnl_vector_fixed<double,2> t;
+  vnl_vector_fixed<double,4> params;
   double a = 1.2, b=0.3, tx=15, ty=-4;
   params[0] = a; params[1] = b;  params[2] = tx;  params[3] = ty;
   A(0,0) = A(1,1) = a;

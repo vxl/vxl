@@ -1,13 +1,12 @@
+#include "similarity_from_matches.h"
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_matrix_fixed.h> // for matrix * vector_fixed operator
-#include <vnl/vnl_vector.h>
-#include <vnl/algo/vnl_svd.h>
-
-#include "similarity_from_matches.h"
+#include <vnl/vnl_matrix_fixed.h>
+#include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_det.h>
+#include <vnl/vnl_inverse.h>
 
 double noise( double sigma );
 
@@ -21,8 +20,10 @@ similarity_from_matches::similarity_from_matches( const vcl_vector<image_point_m
 
   int old_point_id = matches_[0].point_id_;
   num_points_to_match_ = 1;
-  for ( unsigned int i=1; i<matches_.size(); ++i ) {
-    if ( matches_[i].point_id_ != old_point_id ) {
+  for ( unsigned int i=1; i<matches_.size(); ++i )
+  {
+    if ( matches_[i].point_id_ != old_point_id )
+    {
       num_points_to_match_ ++ ;
       old_point_id = matches_[i].point_id_;
     }
@@ -30,24 +31,27 @@ similarity_from_matches::similarity_from_matches( const vcl_vector<image_point_m
   assert( num_points_to_match_ >= 2 );
 }
 
-bool 
+bool
 similarity_from_matches::fit_from_minimal_set( const vcl_vector<int>& match_indices,
                                                vnl_vector<double>& params ) const
 {
+  assert( params.size() >= 4 );
   assert( match_indices.size() == 2 );
   if ( matches_[match_indices[0]].point_id_ == matches_[match_indices[1]].point_id_ ||
        (matches_[match_indices[0]].to_loc_ - matches_[match_indices[1]].to_loc_).squared_magnitude()
-       < 1.0e-6 ) {
+       < 1.0e-6 )
+  {
     vcl_cout << "identical from points or to points: returning false" << vcl_endl;
     return false;
   }
 
-  vnl_matrix<double> X( 4, 4, 0.0 );
-  vnl_vector<double> U(4);
-  for ( int i=0; i<2; ++i ) {
-    // vcl_cout << "i = " << i << ", match_indices[i] = " << match_indices[i] << "\n";
-    // vcl_cout << "from_loc_ = " << matches_[match_indices[i]].from_loc_
-    //          << ", to_loc_ = " << matches_[match_indices[i]].to_loc_ << vcl_endl;
+  vnl_matrix_fixed<double,4,4> X( 0.0 );
+  vnl_vector_fixed<double,4> U;
+  for ( int i=0; i<2; ++i )
+  {
+    // vcl_cout << "i = " << i << ", match_indices[i] = " << match_indices[i] << '\n'
+    //          << "from_loc_ = " << matches_[match_indices[i]].from_loc_
+    //          << ", to_loc_ = " << matches_[match_indices[i]].to_loc_ << '\n';
     double x = matches_[match_indices[i]].from_loc_.x();
     double y = matches_[match_indices[i]].from_loc_.y();
     double u = matches_[match_indices[i]].to_loc_.x();
@@ -59,28 +63,30 @@ similarity_from_matches::fit_from_minimal_set( const vcl_vector<int>& match_indi
     U( 2*i+1 ) = v;
   }
 
-  // vcl_cout << "X matrix = " << X << "\n"
-  //          << "U vector = " << U << vcl_endl;
+  // vcl_cout << "X matrix = " << X << '\n'
+  //          << "U vector = " << U << '\n';
 
-  vnl_svd<double> svd( X );
-  if ( svd.rank() < 4 ) { 
-    vcl_cout << "Rank is " << svd.rank() << ", returning false" << vcl_endl;
+  if ( vnl_det(X) == 0.0 )
+  {
+    vcl_cout << "Rank is < 4, fit_from_minimal_set() returns false\n";
     return false;
   }
 
-  params = svd.inverse() * U;
+  params = vnl_inverse(X) * U;
   return true;
 }
 
 
-unsigned int 
+unsigned int
 similarity_from_matches::num_samples( ) const
 {
   return matches_.size();
 }
 
+static
 double calc_residual( const vnl_vector<double>& params, const image_point_match& match )
 {
+  assert(params.size() >= 4);
   double from_x = match.from_loc_.x();
   double from_y = match.from_loc_.y();
   vnl_vector_fixed<double,2> trans;
@@ -88,7 +94,6 @@ double calc_residual( const vnl_vector<double>& params, const image_point_match&
   trans.y() = params[1] * from_x + params[0] * from_y + params[3];
   return (trans - match.to_loc_).two_norm();
 }
-
 
 
 void
@@ -102,19 +107,19 @@ similarity_from_matches::compute_residuals( const vnl_vector<double>& params,
 }
 
 
-void 
+void
 similarity_from_matches::compute_weights( const vcl_vector<double>& residuals,
                                           const rrel_wls_obj* obj,
                                           double scale,
                                           vcl_vector<double>& weights ) const
-
 {
   // First compute the weights as normal.
   rrel_estimation_problem::compute_weights( residuals, obj, scale, weights );
 
   // Then augment them.
   unsigned int i=0;
-  while ( i<matches_.size() ) {
+  while ( i<matches_.size() )
+  {
     int start = i;
     double sum_weights = 0;
     for ( ; i<matches_.size() && matches_[start].point_id_ == matches_[i].point_id_; ++ i )
@@ -125,23 +130,21 @@ similarity_from_matches::compute_weights( const vcl_vector<double>& residuals,
   }
 }
 
-bool 
+bool
 similarity_from_matches::weighted_least_squares_fit( vnl_vector<double>& params,
                                                      vnl_matrix<double>& cofact,
                                                      const vcl_vector<double>* weights ) const
 {
   assert( params.size() == 4 );
+  vnl_matrix_fixed<double,4,4> wXtX(0.0);
+  vnl_matrix_fixed<double,2,4> Xi(0.0);  Xi(0,2) = Xi(1,3) = 1.0;
+  vnl_vector_fixed<double,4> wXtu(0.0);
 
-  vnl_matrix<double> wXtX( 4, 4, 0.0 );
-  vnl_matrix<double> Xi( 2, 4 );
-  Xi( 0, 2 ) = Xi( 1, 3) = 1;
-  Xi( 0, 3 ) = Xi( 1, 2) = 0;
-  vnl_vector<double> wXtu(4, 0.0);
-
-  for ( unsigned int i=0; i<matches_.size(); ++i ) {
+  for ( unsigned int i=0; i<matches_.size(); ++i )
+  {
     // vcl_cout << "i = " << i << ". from_loc_ = " << matches_[i].from_loc_
     //          << ", to_loc_ = " << matches_[i].to_loc_ << vcl_endl;
-    Xi( 0, 0 ) = Xi( 1, 1 ) = matches_[i].from_loc_.x(); 
+    Xi( 0, 0 ) = Xi( 1, 1 ) = matches_[i].from_loc_.x();
     Xi( 1, 0 ) = matches_[i].from_loc_.y();
     Xi( 0, 1 ) = -Xi(1, 0 );
 
@@ -150,22 +153,24 @@ similarity_from_matches::weighted_least_squares_fit( vnl_vector<double>& params,
     wXtu += (*weights)[i] * Xi.transpose() * matches_[i].to_loc_;
   }
 
-  // vcl_cout << "wXtX matrix = " << wXtX << "\n"
-  //          << "wXtu vector = " << wXtu << vcl_endl;
+  // vcl_cout << "wXtX matrix = " << wXtX << '\n'
+  //          << "wXtu vector = " << wXtu << '\n';
 
-  vnl_svd<double> svd( wXtX );
-  if ( svd.rank() < 4 ) { 
-    vcl_cout << "Rank is " << svd.rank() << ", returning false" << vcl_endl;
+  if ( vnl_det(wXtX) == 0.0 )
+  {
+    vcl_cout << "Rank is < 4, weighted_least_squares_fit() returns false\n";
     return false;
   }
 
-  params = svd.inverse() * wXtu;
-  cofact = svd.inverse();
-  if ( vnl_math_abs(params[0]) < 1.0e-6 && vnl_math_abs(params[1]) < 1.0e-6 ) {
-    vcl_cout << "Transformation is degenerate" << vcl_endl;
+  cofact = vnl_inverse(wXtX);
+  params = cofact * wXtu;
+  if ( vnl_math_abs(params[0]) < 1.0e-6 && vnl_math_abs(params[1]) < 1.0e-6 )
+  {
+    vcl_cout << "Transformation is degenerate\n";
     return false;
   }
-  return true;
+  else
+    return true;
 }
 
 void
@@ -173,8 +178,9 @@ generate_similarity_matches( const vnl_vector<double>& params,
                              double sigma,
                              vcl_vector<image_point_match>& matches )
 {
-  vnl_matrix<double> A(2,2,0.0);
-  vnl_vector<double> t(2);
+  assert( params.size() == 4 );
+  vnl_matrix_fixed<double,2,2> A;
+  vnl_vector_fixed<double,2> t;
   A(0,0) = A(1,1) = params[0];
   A(0,1) = -params[1];  A(1,0) = params[1];
   t[0] = params[2]; t[1] = params[3];

@@ -7,17 +7,18 @@
 // \author fsm@robots.ox.ac.uk
 
 #include "vgui_rasterpos.h"
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
+#include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_matrix_fixed.h>
 #include <vgui/vgui_matrix_state.h>
 
 // Purpose : a RasterPos() routine which sets the raster position, even if GL thinks it is invalid.
-void vgui_rasterpos4dv(double const X[4]) {
+void vgui_rasterpos4dv(double const X[4])
+{
   GLint vp[4]; // x,y, w,h
   glGetIntegerv(GL_VIEWPORT, vp);
 
-  vnl_matrix<double> T(vgui_matrix_state::total_transformation());
-  vnl_vector<double> tmp = T * vnl_vector<double>(X, 4);
+  vnl_matrix_fixed<double,4,4> T = vgui_matrix_state::total_transformation();
+  vnl_vector_fixed<double,4> tmp = T * vnl_vector_fixed<double,4>(X);
   float rx = tmp[0]/tmp[3];
   float ry = tmp[1]/tmp[3];
 
@@ -41,12 +42,14 @@ void vgui_rasterpos4dv(double const X[4]) {
            0);
 }
 
-void vgui_rasterpos2f(float x, float y) {
+void vgui_rasterpos2f(float x, float y)
+{
   double X[4]={x,y,0,1};
   vgui_rasterpos4dv(X);
 }
 
-bool vgui_rasterpos_valid() {
+bool vgui_rasterpos_valid()
+{
   GLboolean params;
   glGetBooleanv(GL_CURRENT_RASTER_POSITION_VALID, &params);
   return params != GL_FALSE;

@@ -11,7 +11,7 @@
 // \brief Projects 3D models into a GL context given a camera projection matrix.
 //
 // Contains classes: vgui_camera
-// 
+//
 // \verbatim
 //  Modifications
 //    991103 Geoff Initial version.
@@ -36,22 +36,22 @@ class vgui_camera
   vgui_camera();
 
   //: Constructor - create a camera with the given projection matrix.
-  vgui_camera( const vnl_matrix<double> &P);
+  vgui_camera( const vnl_matrix_fixed<double,3,4> &P);
 
   //: Set the projection matrix to the given matrix.
-  void set_pmatrix( const vnl_matrix<double> &m);
+  void set_pmatrix( const vnl_matrix_fixed<double,3,4> &m);
 
   //: Plug this matrix into a vgui_loader_tableau.
   //  Note: this will return a GL_PROJECTION_MATRIX with the assumption that
   //  you have an euclidean reconstruction.  The result is that the front and
   //  back clipping planes will be PARALLEL (note: not projective frame!) to
   //  the image plane.
-  vnl_matrix<double> get_glprojmatrix( const int imagesizex= 720, 
-                                       const int imagesizey= 576) const;
+  vnl_matrix_fixed<double,3,4> get_glprojmatrix( const int imagesizex= 720,
+                                                 const int imagesizey= 576) const;
 
  protected:
   //: The projection matrix.
-  vnl_matrix<double> pmatrix;
+  vnl_matrix_fixed<double,3,4> pmatrix;
 };
 
 #endif // vgui_camera_h_

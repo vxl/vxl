@@ -15,15 +15,15 @@
 // \verbatim
 //  Modifications:
 //   03-Nov-1999 Geoff Initial version.
-//   04-Jan-2000 fsm@robots. added set_ortho(), thereby obsoleting 
+//   04-Jan-2000 fsm@robots. added set_ortho(), thereby obsoleting
 //                           view_section and view_volume.
 //   05-Jan-2000 fsm@robots. added set_identity(), thereby obsoleting
 //                           reset_matrix_state.
 //   14-Aug-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
-//   01-OCT-2002 K.Y.McGaul - Moved vgui_load to vgui_loader_tableau. 
+//   01-OCT-2002 K.Y.McGaul - Moved vgui_load to vgui_loader_tableau.
 // \endverbatim
 
-template <class T> class vnl_matrix;
+#include <vnl/vnl_fwd.h>
 #include <vgui/vgui_loader_tableau_sptr.h>
 #include <vgui/vgui_wrapper_tableau.h>
 
@@ -45,10 +45,10 @@ class vgui_loader_tableau : public vgui_wrapper_tableau
   vcl_string type_name() const;
 
   //: Set the projection matrix to the given matrix.
-  void set_projection(vnl_matrix<double> const &m);
+  void set_projection(vnl_matrix_fixed<double,4,4> const &m);
 
   //: Set the modelview matrix to the given matrix.
-  void set_modelview(vnl_matrix<double> const &m);
+  void set_modelview(vnl_matrix_fixed<double,4,4> const &m);
 
   //: Unset the projection matrix.
   void unset_projection();
@@ -88,8 +88,6 @@ class vgui_loader_tableau : public vgui_wrapper_tableau
   bool modelviewmatrixloaded;
 
   // note: for efficiency, these are pre-transformed, ie stored in GL format.
-  //vnl_matrix<double> projectionmatrixt;
-  //vnl_matrix<double> modelviewmatrixt;
   double projectionmatrixt[16];
   double modelviewmatrixt[16];
 };

@@ -10,10 +10,11 @@
 
 #include "vgui_loader_tableau.h"
 #include <vcl_iostream.h>
-#include <vnl/vnl_matrix.h>
+#include <vnl/vnl_matrix_fixed.h>
 #include <vgui/vgui_gl.h>
 
-vcl_string vgui_loader_tableau::type_name() const {
+vcl_string vgui_loader_tableau::type_name() const
+{
   return "vgui_loader_tableau";
 }
 
@@ -27,7 +28,7 @@ vgui_loader_tableau::vgui_loader_tableau( vgui_tableau_sptr const&child)
 {
 }
 
-void vgui_loader_tableau::set_projection( vnl_matrix<double> const &m)
+void vgui_loader_tableau::set_projection( vnl_matrix_fixed<double,4,4> const &m)
 {
   projectionmatrixloaded= true;
   m.transpose().copy_out(projectionmatrixt);
@@ -38,7 +39,7 @@ void vgui_loader_tableau::unset_projection()
   projectionmatrixloaded= false;
 }
 
-void vgui_loader_tableau::set_modelview( vnl_matrix<double> const &m)
+void vgui_loader_tableau::set_modelview( vnl_matrix_fixed<double,4,4> const &m)
 {
   modelviewmatrixloaded= true;
   m.transpose().copy_out(modelviewmatrixt);
@@ -70,8 +71,7 @@ bool vgui_loader_tableau::handle( vgui_event const &e)
 
 void vgui_loader_tableau::set_identity()
 {
-  vnl_matrix<double> I(4,4);
-  I.set_identity();
+  vnl_matrix_fixed<double,4,4> I; I.set_identity();
   set_projection(I);
   set_modelview(I);
 }
@@ -81,9 +81,7 @@ void vgui_loader_tableau::set_ortho(float x1,float y1,float z1, float x2,float y
   if (x1==x2 || y1==y2 || z1==z2)
     vcl_cerr << __FILE__ " warning in set_ortho() : volume has no extent\n";
 
-  vnl_matrix<double> M(4,4);
-
-  M.set_identity();
+  vnl_matrix_fixed<double,4,4> M; M.set_identity();
   set_projection(M);
 
   M(0,0) = 2/(x2-x1); M(0,3) = (x1+x2)/(x1-x2);
