@@ -25,14 +25,23 @@
 #include <vcl_vector.h>
 #include <vcl_string.h>
 
+#ifdef VCL_VC
+typedef int ( (__cdecl *const) TestMainFunction)( int, char*[] );
+#else
 typedef int (*TestMainFunction)( int, char*[] );
+#endif
 
 extern vcl_vector<TestMainFunction> testlib_test_func_;
 extern vcl_vector<vcl_string>       testlib_test_name_;
 
+
 //: Declare the existence of the test.
 // If you DECLARE( x ), then you will need to define a function int x_main(int,char*[]).
+#ifdef VCL_VC
+#define DECLARE( testname ) _cdecl int testname ## _main ( int argc, char* argv[] )
+#else
 #define DECLARE( testname )  int testname ## _main ( int argc, char* argv[] )
+#endif 
 
 //: Register the test with the driver.
 // \param testname should be the same as one of the tests declared with DECLARE.
