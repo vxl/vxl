@@ -23,39 +23,39 @@ public:
   //: Constructor.
   //  \a table_size is the size of table (= max number of residuals
   //  pre-computed).
-  rrel_muse_table( int max_n_stored );
+  rrel_muse_table( unsigned int max_n_stored );
 
   //: Destructor
   ~rrel_muse_table() {}
 
   //: Expected value of the kth ordered residual from n samples.
   //  The value is retrieved from the lookup table when possible.
-  double expected_kth( int k, int n ) const;
+  double expected_kth( unsigned int k, unsigned int n ) const;
 
   //: Standard deviation of the kth ordered residual from n samples.
   //  The value is retrieved from the lookup table when possible.
-  double standard_dev_kth( int k, int n ) const;
+  double standard_dev_kth( unsigned int k, unsigned int n ) const;
 
   //: The divisor.
   //  The value is retrieved from the lookup table when possible.
-  double muset_divisor( int k, int n ) const;
+  double muset_divisor( unsigned int k, unsigned int n ) const;
 
 private:
   //: Expected value of the kth ordered residual from n samples.
   //  The value is computed "from scratch".
-  double calculate_expected( int k, int n ) const;
+  double calculate_expected( unsigned int k, unsigned int n ) const;
 
   //: Standard deviation of the kth ordered residual from n samples.
   //  The value is computed "from scratch".
-  double calculate_standard_dev( int k, int n, double expected_kth ) const;
+  double calculate_standard_dev( unsigned int k, unsigned int n, double expected_kth ) const;
 
   //: The divisor.
   //  The value is computed "from scratch".
-  double calculate_divisor( int k, int n, double expected_kth ) const;
+  double calculate_divisor( unsigned int k, unsigned int n, double expected_kth ) const;
 
 private:
   //: Size of the tables.
-  int max_n_stored_;
+  unsigned int max_n_stored_;
 
   //: Table of expected values.
   vbl_array_2d<double> expected_;

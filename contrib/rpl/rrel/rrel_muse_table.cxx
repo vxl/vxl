@@ -8,7 +8,7 @@
 
 static const int max_allowed_to_store = 1000;
 
-rrel_muse_table::rrel_muse_table( int max_n_stored )
+rrel_muse_table::rrel_muse_table( unsigned int max_n_stored )
 {
   if ( max_n_stored > max_allowed_to_store ) {
     vcl_cerr << "WARNING: Requested rrel_muse_table size is larger than max allowed.\n"
@@ -22,7 +22,7 @@ rrel_muse_table::rrel_muse_table( int max_n_stored )
   standard_dev_.resize( max_n_stored_+1, max_n_stored_+1 );
   muse_t_divisor_.resize( max_n_stored_+1, max_n_stored_+1 );
 
-  int k,n;
+  unsigned int k,n;
   for ( n=1; n<=max_n_stored_; ++n )
     for ( k=1; k<=n; ++k ) {
       expected_(k,n) = calculate_expected( k, n );
@@ -33,7 +33,7 @@ rrel_muse_table::rrel_muse_table( int max_n_stored )
 
 
 double
-rrel_muse_table::expected_kth( int k, int n ) const
+rrel_muse_table::expected_kth( unsigned int k, unsigned int n ) const
 {
   assert( 0<k && k<= n );
   if ( n <= max_n_stored_ ) {
@@ -45,7 +45,7 @@ rrel_muse_table::expected_kth( int k, int n ) const
 
 
 double
-rrel_muse_table::standard_dev_kth( int k, int n ) const
+rrel_muse_table::standard_dev_kth( unsigned int k, unsigned int n ) const
 {
   assert( 0<k && k<=n );
   if ( n <= max_n_stored_ ) {
@@ -56,7 +56,7 @@ rrel_muse_table::standard_dev_kth( int k, int n ) const
 }
 
 double
-rrel_muse_table::muset_divisor( int k, int n ) const
+rrel_muse_table::muset_divisor( unsigned int k, unsigned int n ) const
 {
   assert( 0<k && k<= n );
   if ( n <= max_n_stored_ ) {
@@ -68,14 +68,14 @@ rrel_muse_table::muset_divisor( int k, int n ) const
 
 
 double
-rrel_muse_table::calculate_expected( int k, int n ) const
+rrel_muse_table::calculate_expected( unsigned int k, unsigned int n ) const
 {
   return rrel_misc_gaussian_cdf_inv(0.5*(1.0+((double)k / (double)(n+1))));
 }
 
 
 double
-rrel_muse_table::calculate_standard_dev( int k, int n,
+rrel_muse_table::calculate_standard_dev( unsigned int k, unsigned int n,
                                          double expected_kth ) const
 {
   double pk, qk, Qk, pQk, Qk_prime, Qk_dprime, Qk_tprime, vrk;
@@ -107,7 +107,7 @@ rrel_muse_table::calculate_standard_dev( int k, int n,
 
 
 double
-rrel_muse_table::calculate_divisor( int k, int n,
+rrel_muse_table::calculate_divisor( unsigned int k, unsigned int n,
                                     double expected_kth ) const
 {
   return (n+1)*vcl_sqrt(2/vnl_math::pi)*(1.0-vcl_exp(-vnl_math_sqr(expected_kth)/2.0));
@@ -128,9 +128,9 @@ rrel_muse_table_print( vcl_ostream& ostr,
 void
 rrel_muse_table_print( vcl_ostream& ostr,
                        const rrel_muse_table& table,
-                       int n )
+                       unsigned int n )
 {
-  for ( int k=1; k<n; ++k ) {
+  for ( unsigned int k=1; k<n; ++k ) {
     ostr << k << " " << n << ":  " << table.expected_kth( k, n)
          << ", " << table.standard_dev_kth( k, n )
          << ", " << table.muset_divisor( k, n ) << "\n";
