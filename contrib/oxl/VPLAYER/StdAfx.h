@@ -3,7 +3,7 @@
 //      are changed infrequently
 //
 
-#if !defined(AFX_STDAFX_H__AC7F3EAD_571D_455D_9278_69ED810092F0__INCLUDED_)
+#ifndef AFX_STDAFX_H__AC7F3EAD_571D_455D_9278_69ED810092F0__INCLUDED_
 #define AFX_STDAFX_H__AC7F3EAD_571D_455D_9278_69ED810092F0__INCLUDED_
 
 #if _MSC_VER > 1000
@@ -27,4 +27,4 @@
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
-#endif // !defined(AFX_STDAFX_H__AC7F3EAD_571D_455D_9278_69ED810092F0__INCLUDED_)
+#endif // AFX_STDAFX_H__AC7F3EAD_571D_455D_9278_69ED810092F0__INCLUDED_
