@@ -9,8 +9,11 @@
 // \brief A base class reference-counting view of some image data.
 // \author Ian Scott - Manchester
 
-#include <vcl_iosfwd.h>
 #include <vil2/vil2_image_view_base.h>
+#include <vil2/vil2_smart_ptr.h>
+#include <vcl_iosfwd.h>
+#include <vcl_string.h>
+class vil2_memory_chunk;
 
 //: An abstract base class of smart pointers to actual image data in memory.
 
@@ -44,13 +47,13 @@ public:
   // aritmetic indexing stuff
 
   //: Pointer to the first (top left in plane 0) pixel;
-  T * top_left_ptr() { return top_left_; }  // Make origin explicit 
+  T * top_left_ptr() { return top_left_; }  // Make origin explicit
   //: Pointer to the first (top left in plane 0) pixel;
-  const T * top_left_ptr const { return top_left_; }
-  //: Add this to your pixel pointer to get 
-  int xstep {return xstep_;}
-  int ystep {return ystep_;}
-  int planestep {return planestep_;}
+  const T * top_left_ptr() const { return top_left_; }
+  //: Add this to your pixel pointer to get
+  int xstep() { return xstep_; }
+  int ystep() { return ystep_; }
+  int planestep() { return planestep_; }
 
   //: The number of pixels.
   inline unsigned size() const { return height() * width() * nplanes(); }
@@ -90,9 +93,9 @@ public:
   //: resize to width x height x nplanes
   // If already correct size, this function returns quickly
   void resize(unsigned width, unsigned height, unsigned nplanes);
-  
+
   //: Make a compy of the underlying data.
-  void deep_copy(const vil2_image_view& src)
+  void deep_copy(const vil2_image_view& src);
 
   //: Disconnect this view from the underlying data.
   void release_data();
@@ -104,17 +107,18 @@ public:
   //: Arrange that this is window on given image.
   void set_to_window(const vil2_image_view& im,
                      unsigned x0, unsigned nx, unsigned y0,
-                     unsigned ny, unsigned p0=0, unsigned np=1)
-
+                     unsigned ny, unsigned p0=0, unsigned np=1);
 
   //: Print a 1-line summary of contents
   vcl_ostream& print(vcl_ostream&) const;
 
+  vcl_string is_a() const;
 };
 
 //: Print a 1-line summary of contents
+template <class T>
 inline
-vcl_ostream& operator<<(vcl_ostream& s, vil2_image_view const& i) {
+vcl_ostream& operator<<(vcl_ostream& s, vil2_image_view<T> const& i) {
   return i.print(s);
 }
 
