@@ -1,12 +1,15 @@
+// This is core/vgui/vgui_vil2_section_buffer_apply.txx
+#ifndef vgui_vil2_section_buffer_apply_txx_
+#define vgui_vil2_section_buffer_apply_txx_
+//:
+// \file
+// \author Amitha Perera
+
 #include "vgui_vil2_section_buffer_apply.h"
-
 #include "vgui_vil2_section_buffer.h"
-
 #include "internals/vgui_gl_selection_macros.h"
 
-#include <vil2/vil2_image_view.h>
-#include <vil2/vil2_rgb.h>
-#include <vil2/vil2_rgba.h>
+#include <vcl_cassert.h>
 
 namespace {
 
@@ -33,29 +36,23 @@ convert_buffer( vil2_image_view<InT> const& in,
   switch( in.nplanes() ) {
     case 1:
     {
-      for( unsigned j=0; j < h; ++j ) {
-        for( unsigned i=0; i < w; ++i ) {
+      for ( unsigned j=0; j < h; ++j )
+        for ( unsigned i=0; i < w; ++i )
           vgui_pixel_convert( in(i+x,j+y), *(out+i+j*hstep) );
-        }
-      }
       return true;
     }
     case 3:
     {
-      for( unsigned j=0; j < h; ++j ) {
-        for( unsigned i=0; i < w; ++i ) {
+      for ( unsigned j=0; j < h; ++j )
+        for ( unsigned i=0; i < w; ++i )
           vgui_pixel_convert( in(i+x,j+y,0), in(i+x,j+y,1), in(i+x,j+y,2), *(out+i+j*hstep) );
-        }
-      }
       return true;
     }
     case 4:
     {
-      for( unsigned j=0; j < h; ++j ) {
-        for( unsigned i=0; i < w; ++i ) {
+      for ( unsigned j=0; j < h; ++j )
+        for ( unsigned i=0; i < w; ++i )
           vgui_pixel_convert( in(i+x,j+y,0), in(i+x,j+y,1), in(i+x,j+y,2), in(i+x,j+y,3), *(out+i+j*hstep) );
-        }
-      }
       return true;
     }
     default:
@@ -94,24 +91,7 @@ vgui_vil2_section_buffer_apply( vgui_vil2_section_buffer& sec_buf,
     // constructor would've failed.
     assert( false );
   }
-
 #undef Code
 }
 
-template<typename T>
-void
-vgui_vil2_section_buffer_apply( vgui_vil2_section_buffer& sec_buf,
-                                vil2_image_view< vil2_rgb<T> > const& image_in )
-{
-  vil2_image_view< T > planes_view = image_in;
-  vgui_vil2_section_buffer_apply( sec_buf, planes_view );
-}
-
-template<typename T>
-void
-vgui_vil2_section_buffer_apply( vgui_vil2_section_buffer& sec_buf,
-                                vil2_image_view< vil2_rgba<T> > const& image_in )
-{
-  vil2_image_view< T > planes_view = image_in;
-  vgui_vil2_section_buffer_apply( sec_buf, planes_view );
-}
+#endif // vgui_vil2_section_buffer_apply_txx_
