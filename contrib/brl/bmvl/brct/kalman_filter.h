@@ -39,6 +39,7 @@ class kalman_filter
   vcl_vector<vgl_point_2d<double> > get_pre_observes();
   vcl_vector<vgl_point_2d<double> > get_cur_observes();
   vcl_vector<vgl_point_2d<double> > get_next_observes();
+  void read_epipole(char *fname);
   void read_data(char* fname);
   vcl_vector<vgl_point_3d<double> > get_local_pts();
 
@@ -60,7 +61,7 @@ class kalman_filter
 
   //: update the matched points in the next frame using closest neighbour.
   void update_observes(const vnl_double_3x4 &P, int iframe);
-  void init_velocity();
+  void init_velocity(vnl_double_2 & epipole);
 
   //: set linearized observation matrix
   vnl_matrix_fixed<double, 2, 6> get_H_matrix(vnl_double_3x4 &P, vnl_double_3 &Y);
@@ -109,6 +110,9 @@ class kalman_filter
 
   //: covariant matrix of 2D projection
   vnl_matrix_fixed<double, 6, 6> Q0_;
+
+  //: initial epipole
+  vnl_double_2 e_;
 
   //: camera intrinsic parameters
   vnl_double_3x3 K_;

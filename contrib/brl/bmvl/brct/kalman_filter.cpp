@@ -36,11 +36,14 @@ kalman_filter::kalman_filter(char* fname)
 {
   // read data into the pool
   read_data(fname);
-  init();
+  //init();
 }
 
 void kalman_filter::init()
 {
+
+  read_epipole("epipole.ini");
+
   //
   cur_pos_ = 0;
 
@@ -59,7 +62,7 @@ void kalman_filter::init()
 
   init_cam_intrinsic();
   
-  init_velocity();
+  init_velocity(e_);
   init_covariant_matrix();  
 
   init_state_vector();
@@ -501,7 +504,17 @@ void kalman_filter::inc()
   // update confidence level for each points
   update_confidence();
 }
+void kalman_filter::read_epipole(char *fname)
+{
+  vcl_ifstream fp(fname);
 
+  double x, y;
+  fp>> x >> y;
+
+  e_[0] = x; 
+  e_[1] = y;
+
+}
 void kalman_filter::read_data(char *fname)
 {
   vcl_ifstream fp(fname);
@@ -556,27 +569,11 @@ void kalman_filter::read_data(char *fname)
   }
 }
 
-void kalman_filter::init_velocity()
+void kalman_filter::init_velocity(vnl_double_2 & epipole)
 {
   vcl_vector<vgl_homg_line_2d<double> > lines;
 
-  //
-  // This is a temporary solution
-  //
-  vgl_homg_point_2d<double> mp00(179, 253), mp01(364, 254), mp02(463, 306), mp03(416, 202), mp04(402, 192);
-  vgl_homg_point_2d<double> mp10(235, 267), mp11(450, 271), mp12(566, 331), mp13(505, 212), mp14(488, 202);
-
-  vgl_homg_line_2d<double> l1(mp00, mp10), l2(mp01, mp11), l3(mp02, mp12), l4(mp03, mp13), l5(mp04, mp14);
-  lines.push_back(l1);
-  lines.push_back(l2);
-  lines.push_back(l3);
-  lines.push_back(l4);
-  lines.push_back(l5);
-  /////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-  vgl_homg_point_2d<double> epipole = vgl_homg_operators_2d<double>::lines_to_point(lines);
-  vnl_double_3 e(epipole.x(),epipole.y(),epipole.w());
+  vnl_double_3 e(epipole[0],epipole[1],1.0);
   init_cam_intrinsic();
 
   // get translation

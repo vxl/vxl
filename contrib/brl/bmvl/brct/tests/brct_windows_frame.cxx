@@ -87,13 +87,20 @@ void brct_windows_frame::init()
 
   // initialize the easy 2d grid
   vgui_image_tableau_sptr tab_img = vgui_image_tableau_new();
-  vgui_easy2D_tableau_sptr tab2d = vgui_easy2D_tableau_new(tab_img);
-//  vgui_composite_tableau_sptr tab2d = vgui_composite_tableau_new(easy2d, tab_img);
+  vgui_easy2D_tableau_sptr easy2d = vgui_easy2D_tableau_new(tab_img);
 
-  //tab_cps_ = tab2d;
-  tab_2d_ = tab2d;
+  bgui_picker_tableau_sptr picker = bgui_picker_tableau_new(easy2d);
+  vgui_rubberband_easy2D_client* r_client = new vgui_rubberband_easy2D_client(easy2d);
+  vgui_rubberband_tableau_sptr rubber = vgui_rubberband_tableau_new(r_client);
+
+  vgui_composite_tableau_sptr tab2d = vgui_composite_tableau_new(picker, rubber);
+
+  tab_picker_ = picker;
+  tab_rubber_ = rubber;
+  tab_cps_ = tab2d;
+  easy_2d_ = easy2d;
   img_2d_ = tab_img;
-  tab_2d_->set_foreground(0, 0, 1);
+  easy_2d_->set_foreground(0, 0, 1);
 
   vgui_viewer2D_tableau_sptr v2d = vgui_viewer2D_tableau_new(tab2d);
   grid_->add_at(v2d, col, row);
@@ -138,12 +145,12 @@ void brct_windows_frame::add_curve2d(vcl_vector<vgl_point_2d<double> > &pts)
   int size = pts.size();
   assert(size > 1);
   curves_2d_.resize(size-1);
-  instance_->tab_2d_->set_foreground(1, 1, 1);
+  instance_->easy_2d_->set_foreground(1, 1, 1);
   for (int i=0; i<size-1; i++)
   {
     vgl_point_2d<double>& s = pts[i];
     vgl_point_2d<double>& e = pts[i+1];
-    vgui_soview2D_lineseg* l = instance_->tab_2d_->add_line(s.x(), s.y(), e.x(), e.y());
+    vgui_soview2D_lineseg* l = instance_->easy_2d_->add_line(s.x(), s.y(), e.x(), e.y());
     curves_2d_[i] = l;
   }
 
@@ -177,12 +184,12 @@ void brct_windows_frame::remove_debug_info()
 {
   int size = predicted_curves_2d_.size();
   for (int i=0; i<size; i++)
-    instance_->tab_2d_->remove(predicted_curves_2d_[i]);
+    instance_->easy_2d_->remove(predicted_curves_2d_[i]);
   predicted_curves_2d_.size();
 
   size = debug_curves_2d_.size();
   for (int i=0; i<size; i++)
-    instance_->tab_2d_->remove(debug_curves_2d_[i]);
+    instance_->easy_2d_->remove(debug_curves_2d_[i]);
   predicted_curves_2d_.size();
 
   this->post_redraw();
@@ -218,6 +225,8 @@ void brct_windows_frame::init_kalman()
   // add the curve in the second view
   c2d = kalman_->get_cur_observes();
   add_curve2d(c2d);
+
+  instance_->post_redraw();
 }
 
 void brct_windows_frame::go()
@@ -254,10 +263,10 @@ void brct_windows_frame::add_predicted_curve2d(vcl_vector<vgl_point_2d<double> >
   int size = pts.size();
   assert(size > 1);
   predicted_curves_2d_.resize(size-1);
-  instance_->tab_2d_->set_foreground(0, 1, 0);
+  instance_->easy_2d_->set_foreground(0, 1, 0);
   for (int i=0; i<size-1; i++) {
     vgl_point_2d<double>& s = pts[i];
-    vgui_soview2D_point* p = instance_->tab_2d_->add_point(s.x(), s.y());
+    vgui_soview2D_point* p = instance_->easy_2d_->add_point(s.x(), s.y());
     predicted_curves_2d_[i] = p;
   }
 
@@ -269,11 +278,11 @@ void brct_windows_frame::add_next_observes(vcl_vector<vgl_point_2d<double> > &pt
   int size = pts.size();
   assert(size > 1);
   debug_curves_2d_.resize(size-1);
-  instance_->tab_2d_->set_foreground(0, 0, 1);
+  instance_->easy_2d_->set_foreground(0, 0, 1);
   for (int i=0; i<size-1; i++) {
     vgl_point_2d<double>& s = pts[i];
     vgl_point_2d<double>& e = pts[i+1];
-    vgui_soview2D_lineseg* l = instance_->tab_2d_->add_line(s.x(), s.y(), e.x(), e.y());
+    vgui_soview2D_lineseg* l = instance_->easy_2d_->add_line(s.x(), s.y(), e.x(), e.y());
     debug_curves_2d_[i] = l;
   }
 
@@ -289,7 +298,7 @@ void brct_windows_frame::show_next_observes()
 void brct_windows_frame::show_back_projection()
 {
   vcl_vector<vnl_matrix<double> > c2d = kalman_->get_back_projection();
-  instance_->tab_2d_->set_foreground(0, 0, 1);
+  instance_->easy_2d_->set_foreground(0, 0, 1);
 
   int framenum = c2d.size();
 
@@ -301,7 +310,7 @@ void brct_windows_frame::show_back_projection()
     for (int i=0; i<size-1; i++) {
       double x1 = c2d[f][0][i], x2 = c2d[f][0][i+1];
       double y1 = c2d[f][1][i], y2 = c2d[f][1][i+1];
-      vgui_soview2D_lineseg* l = instance_->tab_2d_->add_line(x1, y1, x2, y2);
+      vgui_soview2D_lineseg* l = instance_->easy_2d_->add_line(x1, y1, x2, y2);
       debug_curves_2d_.push_back(l);
     }
   }
@@ -322,7 +331,7 @@ void brct_windows_frame::load_image()
   if (img_2d_)
   {
       img_2d_->set_image(img_);
-      img_2d_->post_redraw();
+      instance_->post_redraw();
       return;
   }
 
@@ -331,10 +340,10 @@ void brct_windows_frame::load_image()
 
 void brct_windows_frame::show_epipole()
 {
-  instance_->tab_2d_->set_foreground(1, 0, 0);
+  instance_->easy_2d_->set_foreground(1, 0, 0);
   vgl_point_2d<double> e = kalman_->get_cur_epipole();
   vcl_cout<<"\n epipole ("<<e.x() <<'\t'<<e.y()<<")\n";
-  instance_->tab_2d_->add_point(e.x(), e.y());
+  instance_->easy_2d_->add_point(e.x(), e.y());
   instance_->post_redraw();
 }
 
@@ -347,4 +356,19 @@ void brct_windows_frame::init_epipole()
    vgl_homg_point_2d<double> epipole = vgl_homg_operators_2d<double>::lines_to_point(lines_);
 
    e_ -> set(epipole.x() / epipole.w(), epipole.y()/ epipole.w());
+
+   vcl_ofstream out("epipole.ini");
+   out<<e_->x()<<" "<<e_->y();
+}
+
+void brct_windows_frame::creat_line()
+{
+  float x1=0, y1=0, x2=0, y2=0;
+  vcl_cout<<"pick the first line";
+  tab_picker_->pick_line(&x1, &y1, &x2, &y2);
+  vgl_homg_point_2d<double> p1(x1, y1, 1), p2(x2, y2, 1);
+  vgl_homg_line_2d<double> l(p1, p2);
+  lines_.push_back(l);
+
+
 }

@@ -12,8 +12,10 @@
 #include <vgui/vgui_easy2D_tableau_sptr.h>
 #include <vgui/vgui_image_tableau_sptr.h>
 #include <vgui/vgui_composite_tableau_sptr.h>
+#include <vgui/vgui_rubberband_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_grid_tableau_sptr.h>
+#include <bgui/bgui_picker_tableau.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/vgl_point_3d.h>
@@ -38,6 +40,7 @@ class brct_windows_frame : public vgui_wrapper_tableau
   static brct_windows_frame *instance();
 
   //:methods for run menu callbacks
+	void creat_line();
   void quit();
   void add_curve2d(vcl_vector<vgl_point_2d<double> > &pts);
   void remove_curve2d();
@@ -78,10 +81,12 @@ class brct_windows_frame : public vgui_wrapper_tableau
 
   //: kalman filter
   kalman_filter* kalman_;
+  bgui_picker_tableau_sptr tab_picker_;
   vgui_composite_tableau_sptr tab_cps_;
   vgui_image_tableau_sptr img_2d_;
-  vgui_easy2D_tableau_sptr tab_2d_;
+  vgui_easy2D_tableau_sptr easy_2d_;
   vgui_easy3D_tableau_sptr tab_3d_;
+  vgui_rubberband_tableau_sptr tab_rubber_;
   vil1_image img_;
   vgui_grid_tableau_sptr grid_;
 
