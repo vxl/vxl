@@ -3,6 +3,7 @@
 SET( vil2_algo_sources
   vil2_sobel_1x3.cxx           vil2_sobel_1x3.h    vil2_sobel_1x3.txx
   vil2_sobel_3x3.cxx           vil2_sobel_3x3.h    vil2_sobel_3x3.txx
+  vil2_gauss_filter.cxx        vil2_gauss_filter.h vil2_gauss_filter.txx
   vil2_gauss_reduce.cxx        vil2_gauss_reduce.h vil2_gauss_reduce.txx
   vil2_median.txx              vil2_median.h
   vil2_structuring_element.cxx vil2_structuring_element.h

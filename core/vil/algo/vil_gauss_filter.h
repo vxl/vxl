@@ -11,17 +11,18 @@
 
 #include <vil2/vil2_image_view.h>
 
-class vil2_gauss_filter_params
+class vil2_gauss_filter_5tap_params
 {
-  double scale_step_;
+  double sigma_;
   double filt2_, filt1_, filt0_;
   double filt_edge2_, filt_edge1_, filt_edge0_;
   double filt_pen_edge2_, filt_pen_edge1_,
          filt_pen_edge0_, filt_pen_edge_n1_;
 public:
-  explicit vil2_gauss_filter_params(double scale_step);
-  //: the scale step between pyramid levels
-  double scale_step() const {return scale_step_;}
+  //: Set the 
+  explicit vil2_gauss_filter_5tap_params(double sigma_);
+  //: The width of the Gaussian
+  double sigma() const {return sigma_;}
 
   //: Filter tap value
   // The value of the two outside elements of the 5-tap 1D FIR filter
@@ -72,7 +73,7 @@ template <class srcT, class destT>
 void vil2_gauss_filter_5tap(const srcT* src_im, vcl_ptrdiff_t src_ystep,
                             unsigned ni, unsigned nj,
                             destT* dest_im, vcl_ptrdiff_t dest_ystep,
-                            const vil2_gauss_filter_params& params,
+                            const vil2_gauss_filter_5tap_params& params,
                             destT* work);
 
 //: Smooth a src_im to produce dest_im
@@ -80,7 +81,7 @@ void vil2_gauss_filter_5tap(const srcT* src_im, vcl_ptrdiff_t src_ystep,
 template <class srcT, class destT>
 void vil2_gauss_filter_5tap(const vil2_image_view<srcT>& src_im,
                             vil2_image_view<destT>& dest_im,
-                            const vil2_gauss_filter_params &params,
+                            const vil2_gauss_filter_5tap_params &params,
                             vil2_image_view<destT> &work);
 
 
@@ -90,7 +91,7 @@ void vil2_gauss_filter_5tap(const vil2_image_view<srcT>& src_im,
 template <class srcT, class destT>
 inline void vil2_gauss_filter_5tap(const vil2_image_view<srcT>& src_im,
                                    vil2_image_view<destT>& dest_im,
-                                   const vil2_gauss_filter_params &params)
+                                   const vil2_gauss_filter_5tap_params &params)
 {
   vil2_image_view<destT> work;
   vil2_gauss_filter_5tap(src_im, dest_im, params, work);
