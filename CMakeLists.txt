@@ -78,6 +78,15 @@ IF(RUN_CONFIGURE)
                 ${allvxl_BINARY_DIR} )
 ENDIF(RUN_CONFIGURE)
 
+IF( ${allvxl_BINARY_DIR} MATCHES  \\+ )
+  MESSAGE([SEND_ERROR] "You cannot have a + in your binary path")
+ENDIF( ${allvxl_BINARY_DIR} MATCHES  \\+ )
+IF( ${allvxl_SOURCE_DIR} MATCHES  \\+ )
+  MESSAGE([SEND_ERROR] "You cannot have a + in your source path")
+ENDIF( ${allvxl_SOURCE_DIR} MATCHES  \\+ )
+
+
+
 # include CMakeListsLocal.txt from source directory if it exists
 # also include it from the binary dir if different from source dir
 IF( ${allvxl_BINARY_DIR} MATCHES ${allvxl_SOURCE_DIR} )
