@@ -1,4 +1,5 @@
 TESTMAIN = vcl_tests.cxx
+TESTS += vcl_tests.cxx
 # All tests are called from vcl_tests.cxx
 SOURCES += test_vcl_rel_ops.cxx
 SOURCES += test_vcl_compiler.cxx
