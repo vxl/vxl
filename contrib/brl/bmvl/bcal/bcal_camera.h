@@ -2,7 +2,7 @@
 #define bcam_CAMERA_H__
 //#=====================================================================================
 //#
-//#       Filename:  camera.h
+//#       Filename:  bcal_camera.h
 //#
 //#    Description:
 //#
@@ -24,12 +24,12 @@
 // It provide facility for set it on and off.
 // the difination of each bits is given at Brown's paper.
 
-class lens_model
+class bcal_lens_model
 {
   double kc_[7];
   bool flags_[7]; // to show which distortion is on
  public:
-  lens_model() {
+  bcal_lens_model() {
     for (int i=0; i<7; i++) {
       kc_[i] = 0;
       flags_[i] = false;
@@ -45,11 +45,11 @@ class lens_model
 
 // an abstract camera definition.
 // it store the lens model and intrisic parameter of camera
-class camera
+class bcal_camera
 {
   int id_;
   vnl_double_3x3 k_;
-  lens_model lm_;
+  bcal_lens_model lm_;
  public:
    int getID() { return id_;}
   vnl_double_3x3 get_intrisic_matrix(){ return k_;}
@@ -57,8 +57,8 @@ class camera
 
   void set_intrisic_matrix(vnl_double_3x3 k) {k_ = k;}
 
-  camera(int id);
-  ~camera(){}
+  bcal_camera(int id);
+  ~bcal_camera(){}
 };
 
 #endif // bcam_CAMERA_H__

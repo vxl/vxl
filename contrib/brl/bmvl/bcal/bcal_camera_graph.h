@@ -23,7 +23,7 @@
 
 
 template<class S, class V, class E>
-class camera_graph
+class bcal_camera_graph
 {
  protected:
   struct vertex_node{
@@ -153,12 +153,12 @@ class camera_graph
 
  public: // constructor and destructor
 
-  camera_graph()
+  bcal_camera_graph()
   {
     init_graph();
   }
 
-  virtual ~camera_graph()
+  virtual ~bcal_camera_graph()
   {
     erase_graph();
   }

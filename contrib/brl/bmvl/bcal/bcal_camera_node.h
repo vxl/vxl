@@ -1,5 +1,5 @@
 
-// camera_node.h: interface for the camera_node class.
+// bcal_camera_node.h: interface for the bcal_camera_node class.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -12,16 +12,16 @@
 
 #include <vcl_vector.h>
 #include <vcsl/vcsl_spatial.h>
-#include "camera.h"
+#include "bcal_camera.h"
 
-class camera_node : public vcsl_spatial
+class bcal_camera_node : public vcsl_spatial
 {
 protected:
-  camera* cam_;
+  bcal_camera* cam_;
   int num_views_;
 public:
-  camera_node(int id=0);
-  virtual ~camera_node();
+  bcal_camera_node(int id=0);
+  virtual ~bcal_camera_node();
 public:
   virtual void set_beat(vcl_vector<double> const & new_beat);
   vnl_double_3x3 get_intrinsic() const { return cam_->get_intrisic_matrix();} 
