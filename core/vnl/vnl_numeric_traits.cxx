@@ -21,6 +21,9 @@ const bool vnl_numeric_traits<bool>::zero = 0;
 const bool vnl_numeric_traits<bool>::one = 1;
 #endif
 
+const char vnl_numeric_traits<char>::zero = 0;
+const char vnl_numeric_traits<char>::one = 1;
+
 const unsigned char vnl_numeric_traits<unsigned char>::zero = 0;
 const unsigned char vnl_numeric_traits<unsigned char>::one = 1;
 

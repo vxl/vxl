@@ -69,6 +69,21 @@ public:
 #endif
 
 VCL_DEFINE_SPECIALIZATION
+class vnl_numeric_traits<char> {
+public:
+  //: Additive identity
+  static const char zero VCL_STATIC_CONST_INIT_INT(0);
+  //: Multiplicative identity
+  static const char one VCL_STATIC_CONST_INIT_INT(1);
+  //: Return value of abs()
+  typedef unsigned char abs_t;
+  //: Name of a type twice as long as this one for accumulators and products.
+  typedef short double_t;
+  //: Name of type which results from multiplying this type with a double
+  typedef double real_t;
+};
+
+VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<unsigned char> {
 public:
   //: Additive identity
