@@ -29,6 +29,8 @@ else {
 
 foreach $dir (@DIRS)
 {
+  # make that the embedding directory, if this is a file name:
+  $dir =~ s!/[^/]+$!! if -f $dir;
   opendir(TMP,"$dir");
   @tmp_list = readdir(TMP);
   closedir(TMP);
@@ -111,12 +113,17 @@ foreach $dir (@DIRS)
   @sources = ();
   @tests = ();
   @subdirs = ();
+  $testmain = "";
   if (open(MAKEFILE, $makef)) {
     @hsources = ();
     @aux_sources = ("Templates");
     while(<MAKEFILE>) {
       s/\$\(wildcard (.*)\)/$1/g; s/\#.*//; s/\$\([^()]+\)//;
-      if (m/^\s*(SOURCES|MINI_PROG_SOURCES|TESTS)\s*\:?\=\s*(\S+)/) {
+      if (m/^\s*TESTMAIN\s*\:?\=\s*(\S+)/) {
+        @sources = ($1);
+        $testmain = "$1";
+      }
+      if (m/^\s*(SOURCES|MINI_PROG_SOURCES|TESTS|TESTMAIN)\s*\:?\=\s*(\S+)/) {
         $file = "$2";
         @sources = ($file);
         @tests = ($file) if ($1 eq "TESTS");
@@ -220,11 +227,11 @@ foreach $dir (@DIRS)
       if ( $x =~ m/\.h(\.in)?$/) { push @hsource_files, "$x"; }
       elsif ( $x =~ m/\.txx$/) { push @hsource_files, "$x"; }
       elsif (-f "$dir/$x") { push @source_files, "$x"; }
-      elsif (-f "$dir/$x.cxx") { push @source_files, "$x.cxx"; }
-      elsif (-f "$dir/$x.c") { push @source_files, "$x.c"; }
-      elsif (-f "$dir/$x.cc") { push @source_files, "$x.cc"; }
-      elsif (-f "$dir/$x.C") { push @source_files, "$x.C"; }
-      elsif (-f "$dir/$x.cpp") { push @source_files, "$x.cpp"; }
+      elsif (-f "$dir/$x.cxx") { printf "Should replace $x by $x.cxx in $cmakef\n"; push @source_files, "$x.cxx"; }
+      elsif (-f "$dir/$x.c") { printf "Should replace $x by $x.c in $cmakef\n"; push @source_files, "$x.c"; }
+      elsif (-f "$dir/$x.cc") { printf "Should replace $x by $x.cc in $cmakef\n"; push @source_files, "$x.cc"; }
+      elsif (-f "$dir/$x.C") { printf "Should replace $x by $x.C in $cmakef\n"; push @source_files, "$x.C"; }
+      elsif (-f "$dir/$x.cpp") { printf "Should replace $x by $x.cpp in $cmakef\n"; push @source_files, "$x.cpp"; }
       else { printf "No source file $x.* found in $dir\n"; }
     }
   }
@@ -236,28 +243,35 @@ foreach $dir (@DIRS)
       push @source_files,"$x" if ($x =~ m/_mocced\.cxx$/);
     }
   }
-  while ($cmakefile =~ s/\bADD_EXECUTABLE\s*\(\s*(\S+)\s+(\S+)\s*\)//) {
+  while ($cmakefile =~ s/\bADD_EXECUTABLE\s*\(\s*(\S+)((\s+[^\s()]+)+)\s*\)//) {
     $name = "$1"; $x = "$2";
     if ($x =~ m/_sources$/) {
       $names{$name} = $source_files[0] if (defined($source_files[0]));
       next;
     }
-    $names{$name} = $x;
-    if (-f "$dir/$x") { push @source_files, "$x"; }
-    elsif (-f "$dir/$x.cxx") { push @source_files, "$x.cxx"; }
-    elsif (-f "$dir/$x.c") { push @source_files, "$x.c"; }
-    elsif (-f "$dir/$x.cc") { push @source_files, "$x.cc"; }
-    elsif (-f "$dir/$x.C") { push @source_files, "$x.C"; }
-    elsif (-f "$dir/$x.cpp") { push @source_files, "$x.cpp"; }
-    else { printf "No source file $x.* found in $dir\n"; }
+    $names{$name} = "$x";
+    foreach $y (split /\s+/, "$x") {
+      next if ($y eq "");
+      if ( $y =~ m/\.h(\.in)?$/) { push @hsource_files, "$y"; }
+      elsif ( $y =~ m/\.txx$/) { push @hsource_files, "$y"; }
+      elsif (-f "$dir/$y") { push @source_files, "$y"; }
+      elsif (-f "$dir/$y.cxx") { printf "Should replace $y by $y.cxx in $cmakef\n"; push @source_files, "$y.cxx"; }
+      elsif (-f "$dir/$y.c") { printf "Should replace $y by $y.c in $cmakef\n"; push @source_files, "$y.c"; }
+      elsif (-f "$dir/$y.cc") { printf "Should replace $y by $y.cc in $cmakef\n"; push @source_files, "$y.cc"; }
+      elsif (-f "$dir/$y.C") { printf "Should replace $y by $y.C in $cmakef\n"; push @source_files, "$y.C"; }
+      elsif (-f "$dir/$y.cpp") { printf "Should replace $y by $y.cpp in $cmakef\n"; push @source_files, "$y.cpp"; }
+      else { printf "No source file $y.* found in $dir\n"; }
+    }
   }
-  while ($cmakefile =~ s/\bADD_TEST\s*\(\s*\S+\s+(\S+)(\s+[^()]+)?\s*\)//) {
-    $name = "$1";
+  while ($cmakefile =~ s/\bADD_TEST\s*\(\s*\S+\s+(\S+)\s*(([^\s()]+)?)((\s+[^()]+)?)\s*\)//) {
+    $name = "$1"; $tstname = "$2";
     if (! exists ($names{$name}) ) {
       print STDOUT "ADD_TEST($name) without ADD_EXECUTABLE($name)\tin $cmakef\n";
       next;
     }
-    push @test_files, $names{$name};
+    @tmpl_list = split /\s+/, $names{$name};
+    push @test_files, @tmpl_list unless ($testmain);
+    push @test_files, "$tstname.cxx" if ($testmain);
   }
   while ($cmakefile =~ s/\bSUBDIRS\s*\(\s*([^()]+)\)//) {
     @tmpl_list = split /\s+/, "$1";
@@ -305,7 +319,7 @@ foreach $dir (@DIRS)
       $s = shift(@source);
       while ($s eq $source) {
         print STDOUT "multiple occurrence of $s in $f\n"
-          unless ("$s" =~ m/^Templates\//);
+          unless ("$s" =~ m/^Templates\// || "$s" =~ m/^test_driver\.cxx$/);
         $s = shift(@source);
       }
       $source = $s;
@@ -358,7 +372,6 @@ foreach $dir (@DIRS)
                     $sources eq "internals/vgui_accelerate_x11.cxx");
         }
         if ($sources lt $source_files) {
-          $sources =~ s/\.(cxx|c|C|cpp)$//;
           print STDOUT "SOURCE_FILES($sources)\tis missing from $cmakef\n";
         }
       } else {
@@ -384,7 +397,7 @@ foreach $dir (@DIRS)
       $tests = $s;
     }
     unless ($test_files eq "~END") {
-      $s = shift(@test_files);
+      $s = ""; $s = shift(@test_files) while ($s eq "");
       while ($s eq $test_files) {
         print STDOUT "multiple occurrence of ADD_TEST($s) in $cmakef\n";
         $s = shift(@test_files);
@@ -422,7 +435,7 @@ foreach $dir (@DIRS)
       $s = shift(@hsource);
       while ($s eq $hsource) {
         print STDOUT "multiple occurrence of $s in $f\n"
-          unless ("$s" =~ m/^Templates\//);
+          unless ("$s" =~ m/^Templates\// || "$s" =~ m/^test_driver\.h$/);
         $s = shift(@hsource);
       }
       $hsource = $s;
