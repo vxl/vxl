@@ -380,5 +380,23 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_begin( "  16-bit greyscale uncompressed" );
   testlib_test_perform( test( "ff_grey16bit_true_for_dicom.txt", CheckGrey<vxl_uint_16>( "ff_grey16bit_uncompressed.dcm" ) ) );
 
+  vcl_cout << "NITF [NITF v2.0]\n";
+  testlib_test_begin( "  8-bit grey" );
+  testlib_test_perform( test( "ff_grey8bit_true_for_nitf.txt", CheckGrey<vxl_uint_8>( "ff_grey8bit_uncompressed.nitf" ) ) );
+  testlib_test_begin( "  16-bit grey (actually 11-bit)" );
+  testlib_test_perform( test( "ff_grey16bit_true_for_nitf.txt", CheckGrey<vxl_uint_16>( "ff_grey16bit_uncompressed.nitf" ) ) );
+#if 0
+  testlib_test_begin( "  8-bit RGB" );
+  testlib_test_perform( test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_uint_8>( "ff_rgb8bit_uncompressed.nitf" ) ) );
+  testlib_test_begin( "  16-bit RGB" );
+  testlib_test_perform( test( "ff_planar16bit_true.txt", CheckColourPlanes<vxl_uint_16>( "ff_rgb16bit_uncompressed.nitf" ) ) );
+  testlib_test_begin( "  32-bit grey" );
+  testlib_test_perform( test( "ff_grey32bit_true.txt", CheckGrey<vxl_uint_32>( "ff_grey32bit.nitf" ) ) );
+  testlib_test_begin( "  32-bit float grey" );
+  testlib_test_perform( test( "ff_grey_float_true.txt", CheckGreyFloat<float>( "ff_grey_float.nitf" ) ) );
+  testlib_test_begin( "  64-bit float grey" );
+  testlib_test_perform( test( "ff_grey_float_true.txt", CheckGreyFloat<double>( "ff_grey_double.nitf" ) ) );
+#endif
+
   return testlib_test_summary();
 }
