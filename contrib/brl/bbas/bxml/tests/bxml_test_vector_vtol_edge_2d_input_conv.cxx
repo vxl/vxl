@@ -23,6 +23,8 @@ bool near_eq(double x, double y)
   if (x) { ++success; vcl_cout << "PASSED\n"; } else { ++failures; vcl_cout << "FAILED\n"; } }
 
 #define test_path "$VXLROOT/contrib/brl/bbas/bxml/tests/"
+//#define test_path "c:/vxl/vxl/contrib/brl/bbas/bxml/tests/"
+
 int main(int, char **)
 {
   int success=0, failures=0;
@@ -34,6 +36,7 @@ int main(int, char **)
   vcl_string test_file = "xml_edge_test_2.xml";
   vcl_string full_test_file_path = test_path + test_file;
   vcl_vector<bxml_generic_ptr> edgs;
+  vcl_vector<vtol_edge_2d_sptr> edges_2d;
   Assert(bxml_io::parse_xml(full_test_file_path, edgs));
   vcl_cout << "Converted " << edgs.size() << " edges\n";
   Assert(edgs.size()==21);
@@ -47,6 +50,7 @@ int main(int, char **)
       vtol_topology_object* to = so->cast_to_topology_object();
       vtol_edge* e = to->cast_to_edge();
       vtol_edge_2d_sptr e2d = e->cast_to_edge_2d();
+      edges_2d.push_back(e2d);
       vcl_cout << "edge:" << *(e2d->v1()) << *(e2d->v2()) << vcl_endl;
       vsol_curve_2d_sptr c = e2d->curve();
       vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
@@ -58,9 +62,15 @@ int main(int, char **)
       vcl_cout << vcl_endl << vcl_endl << vcl_endl ;
     }
   }
+  bxml_input_converter::clear();
+  int j = 0;
+  for(vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges_2d.begin();
+      eit!= edges_2d.end(); eit++, j++)
+    vcl_cout << "eout[ " << j << "]" << *(*eit) << vcl_endl;
 
-  vcl_cout << "finished testing vxml_vtol_edge_2d_input_converter\n";
+  vcl_cout << "finished testing vxml_vtol_edge_2d_input_converter" 
+           << vcl_endl;
   vcl_cout << "Test Summary: " << success << " tests succeeded, "
            << failures << " tests failed" << (failures?"\t***\n":"\n");
-  return failures;
-}
+    return failures;
+  }
