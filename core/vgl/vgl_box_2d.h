@@ -39,6 +39,23 @@ class vgl_point_2d;
 //        |       MinPosition
 //        O------X
 // \endverbatim
+// If you are using a vgl_box_2d<int> to indicate a window on an image, do not forget
+// that your axes will be flipped. You could think of the window as follows.
+//  \verbatim
+//        O------X
+//        |       MinPosition
+//        |             O------------O
+//        |             |            |
+//        Y             |            |
+//                      |  Centroid  |
+//                      |      o     |
+//                      |            |
+//                      |            |
+//                      |            |
+//                      O------------O
+//                               MaxPosition     
+// \endverbatim
+
 
 template <class Type>
 class vgl_box_2d {
