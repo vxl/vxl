@@ -193,11 +193,24 @@ macro( vxl_uint_64 )
 #undef macro
 #endif //DOXYGEN_SHOULD_SKIP_THIS
 // declare general case in case anyone needs something weird.
+
+#if defined(VCL_VC)
+// Visual C++ intentionally warnings when a non-bool is assigned or
+// cast to a bool. Since the following cast is valid, we supress the
+// warning.
+# pragma warning( push )
+# pragma warning( disable : 4800 )
+#endif
+
 template <class In, class Out>
 inline void vil_convert_cast_pixel<In, Out>::operator () (In v, Out &d) const
 {
   d = static_cast<Out>(v);
 }
+
+#if defined(VCL_VC)
+# pragma warning( pop )
+#endif
 
 
 //: Cast one pixel type to another (with rounding).
