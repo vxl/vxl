@@ -45,7 +45,7 @@ void testlib_test_assert_equal(const vcl_string& msg, long expr, long target);
 #define AssertFar testlib_test_assert_far
 
 //: initialise test
-#define START(s) testlib_test_start(s);
+#define START(s) testlib_test_start(s)
 
 //: TEST function, s is message, test to see if p==v
 #define TEST(s,p,v) \
@@ -84,28 +84,34 @@ do { \
 } while (0)
 
 //: summarise test
-#define SUMMARY() return testlib_test_summary();
+#define SUMMARY() return testlib_test_summary()
 
 //: run a singleton test function
 #define RUN_TEST_FUNC(x) \
-  testlib_test_start(#x); x(); return testlib_test_summary();
+  testlib_test_start(#x); x(); return testlib_test_summary()
 
 //: declare the main function
 #define MAIN( testname ) \
   int testname ## _main( int argc, char* argv[] )
  
-//: a simplified version of the main test, just in one line
+//: A simplified version of the main test, just in one line.
+// Avoids compiler warnings about "unused argc and argv".
 #define TESTMAIN( testname ) \
-  MAIN( testname ) { START( #testname ); testname(); SUMMARY(); }
+  int testname ## _main(int,char**) { START(#testname); testname(); SUMMARY(); }
 
-//: Another simplified main test.
+//: A simplified version of the main test, with parameter passing.
+#undef TESTMAIN_ARGS
+#define TESTMAIN_ARGS( x ) \
+  int x ## _main(int argc, char*argv[]) { START(#x); x(argc,argv); SUMMARY(); }
+
+//: Another simplified main test.  To be used in a standalone executable.
 #undef TESTLIB_DEFINE_MAIN
 #define TESTLIB_DEFINE_MAIN(x) \
-int main() { testlib_test_start(#x); x(); return testlib_test_summary(); }
+  int main() { START(#x); x(); return testlib_test_summary(); }
 
-//: A simplified main test with parameter passing.
+//: A simplified main test with parameter passing.  To be used in a standalone executable.
 #undef TESTLIB_DEFINE_MAIN_ARGS
 #define TESTLIB_DEFINE_MAIN_ARGS(x) \
-int main(int argc, char * argv[]) { testlib_test_start(#x); x(argc,argv); return testlib_test_summary(); }
+  int main(int argc, char * argv[]) { START(#x); x(argc,argv); SUMMARY(); }
 
 #endif // testlib_test_h_
