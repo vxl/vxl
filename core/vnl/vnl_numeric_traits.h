@@ -45,26 +45,6 @@ class vnl_numeric_traits;
 ////: Name of type which results from multiplying this type with a double
 //  typedef double real_t;
 
-#if 0 // if anyone uses these, he or she should be shot -- fsm.
-#if defined(i386)
-// 16 bit int
-typedef short long_char;
-typedef long int long_short;
-typedef long int long_int;
-typedef unsigned short long_uchar;
-typedef unsigned long int long_ushort;
-typedef unsigned long long long_uint;
-#else
-// 32 bit
-typedef short long_char;
-typedef int long_short;
-typedef long long_int;
-typedef unsigned short long_uchar;
-typedef unsigned int long_ushort;
-typedef unsigned long long_uint;
-#endif
-#endif
-
 #ifndef NO_STD_BOOL
 VCL_DEFINE_SPECIALIZATION
 class vnl_numeric_traits<bool> {
