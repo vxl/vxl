@@ -15,6 +15,7 @@
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
+#include <vgl/algo/vgl_h_matrix_2d_optimize_lmq.h>
 #include <vgl/algo/vgl_norm_trans_3d.h>
 #include <vgl/algo/vgl_norm_trans_2d.h>
 #include <vgl/vgl_line_segment_2d.h>
@@ -23,6 +24,10 @@
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
 #include <vdgl/vdgl_digital_curve.h>
+#include <rrel/rrel_homography2d_est.h>
+#include <rrel/rrel_ransac_obj.h>
+#include <rrel/rrel_ran_sam_search.h>
+#include <rrel/rrel_muset_obj.h>
 #include <bdgl/bdgl_curve_algs.h>
 #include <vsol/vsol_box_3d.h>
 #include <vsol/vsol_point_3d.h>
@@ -657,7 +662,8 @@ compute_euclidean_camera(vcl_vector<vgl_point_2d<double> > const& image_points,
 // step to project points onto the best fitting plane.
 bool brct_algos::homography(vcl_vector<vgl_point_3d<double> > const& world_points,
                             vcl_vector<vgl_point_2d<double> > const& image_points,
-                            vgl_h_matrix_2d<double> & H)
+                            vgl_h_matrix_2d<double> & H,
+                            bool optimize)
 {
   //convert points to homogeneous points
   vcl_vector<vgl_homg_point_2d<double> > h_image_points;
@@ -671,7 +677,108 @@ bool brct_algos::homography(vcl_vector<vgl_point_3d<double> > const& world_point
     h_world_points.push_back(vgl_homg_point_2d<double>((*pit).x(),(*pit).y()));
   vgl_h_matrix_2d_compute_linear hc;
   hc.verbose(true);
-  return hc.compute(h_world_points, h_image_points, H);
+  bool success = hc.compute(h_world_points, h_image_points, H);
+  if(!success)
+    return false;
+  if(!optimize)
+    return true;
+  // optimize the homography using Levenberg-Marquardt
+  vgl_h_matrix_2d_optimize_lmq lm(H);
+  return lm.optimize(h_world_points, h_image_points, H);
+}
+
+bool brct_algos::
+homography_ransac(vcl_vector<vgl_point_3d<double> > const& world_points,
+                  vcl_vector<vgl_point_2d<double> > const& image_points,
+                  vgl_h_matrix_2d<double> & H, bool optimize)
+{
+  //convert points to homogeneous points
+  vcl_vector<vgl_homg_point_2d<double> > h_image_points;
+  for (vcl_vector<vgl_point_2d<double> >::const_iterator pit = image_points.begin();
+       pit != image_points.end(); pit++)
+    h_image_points.push_back(vgl_homg_point_2d<double>((*pit).x(), (*pit).y()));
+
+  vcl_vector<vgl_homg_point_2d<double> > h_world_points;
+  for (vcl_vector<vgl_point_3d<double> >::const_iterator pit = world_points.begin();
+       pit != world_points.end(); pit++)
+    h_world_points.push_back(vgl_homg_point_2d<double>((*pit).x(),(*pit).y()));
+
+  double max_outlier_frac = 0.5;
+  double desired_prob_good = 0.99;
+  int max_pops = 1;
+  int trace_level = 0;
+  rrel_homography2d_est hg( h_world_points, h_image_points);
+  rrel_ransac_obj* ransac = new rrel_ransac_obj();
+  hg.set_prior_scale(1.0);
+  rrel_ran_sam_search* ransam = new rrel_ran_sam_search;
+  ransam->set_trace_level(trace_level);
+  //ransam->set_sampling_params( max_outlier_frac, desired_prob_good, max_pops);
+  ransam->set_gen_all_samples();
+  if ( !ransam->estimate( &hg, ransac ) )
+  {vcl_cout << "RANSAC failed!!\n";
+  return false;}
+    else {
+      vcl_cout << "RANSAC succeeded.\n"
+               << "estimate = " << ransam->params() << vcl_endl
+               << "scale = " << ransam->scale() << vcl_endl;
+    }
+  H.set((ransam->params()).data_block());
+  delete ransac;
+  delete ransam;
+  if(!optimize)
+    return true;
+
+  // optimize the homography using Levenberg-Marquardt
+  vgl_h_matrix_2d_optimize_lmq lm(H);
+  return lm.optimize(h_world_points, h_image_points, H);
+}
+
+bool brct_algos::
+homography_muse(vcl_vector<vgl_point_3d<double> > const& world_points,
+                vcl_vector<vgl_point_2d<double> > const& image_points,
+                vgl_h_matrix_2d<double> & H, bool optimize)
+{
+  //convert points to homogeneous points
+  vcl_vector<vgl_homg_point_2d<double> > h_image_points;
+  for (vcl_vector<vgl_point_2d<double> >::const_iterator pit = image_points.begin();
+       pit != image_points.end(); pit++)
+    h_image_points.push_back(vgl_homg_point_2d<double>((*pit).x(), (*pit).y()));
+
+  vcl_vector<vgl_homg_point_2d<double> > h_world_points;
+  for (vcl_vector<vgl_point_3d<double> >::const_iterator pit = world_points.begin();
+       pit != world_points.end(); pit++)
+    h_world_points.push_back(vgl_homg_point_2d<double>((*pit).x(),(*pit).y()));
+
+  double max_outlier_frac = 0.5;
+  double desired_prob_good = 0.99;
+  int max_pops = 1;
+  int trace_level = 0;
+  rrel_homography2d_est hg( h_world_points, h_image_points);
+  rrel_ransac_obj* ransac = new rrel_ransac_obj();
+  hg.set_no_prior_scale();
+  rrel_muset_obj* muset = new rrel_muset_obj( world_points.size()+1 );
+  rrel_ran_sam_search* ransam = new rrel_ran_sam_search;
+  ransam->set_trace_level(trace_level);
+  //ransam->set_sampling_params( max_outlier_frac, desired_prob_good, max_pops);
+  ransam->set_gen_all_samples();
+  if ( !ransam->estimate( &hg, muset ) )
+  {vcl_cout << "MUSE failed!!\n";
+  return false;}
+    else {
+      vcl_cout << "MUSE succeeded.\n"
+               << "estimate = " << ransam->params() << vcl_endl
+               << "scale = " << ransam->scale() << vcl_endl;
+    }
+  
+  H.set((ransam->params()).data_block());
+  delete muset;
+  delete ransam;
+  if(!optimize)
+    return true;
+
+  // optimize the homography using Levenberg-Marquardt
+  vgl_h_matrix_2d_optimize_lmq lm(H);
+  return lm.optimize(h_world_points, h_image_points, H);
 }
 
 void brct_algos:: project(vcl_vector<vgl_point_3d<double> > const& world_points,
@@ -694,6 +801,7 @@ void brct_algos::project(vcl_vector<vgl_point_3d<double> > const& world_points,
                      vcl_vector<vgl_point_2d<double> > & image_points)
 {
   image_points.clear();
+  image_points.resize(0);
   for (vcl_vector<vgl_point_3d<double> >::const_iterator pit = world_points.begin();
        pit != world_points.end(); pit++)
   {
@@ -756,8 +864,32 @@ vnl_double_4x4 brct_algos::convert_to_target(vnl_double_3x4 const& P)
   return T.transpose();
 }
 
+bool brct_algos::read_world_points(vcl_ifstream& str,
+                                   vcl_vector<vgl_point_3d<double> >& world_points)
+{
+  world_points.clear();
+  vcl_string temp;
+  str >> temp;
+  if (temp != "NUMPOINTS:")
+    return false;
+  int n_pts;
+  str >> n_pts;
+  for (int i = 0; i<n_pts; i++)
+  {
+    str >> temp;
+    if (temp != "POINT3D:")
+      return false;
+    vgl_point_3d<double> world_point;
+    str >> world_point;
+    vcl_cout << "W " << world_point << '\n';
+    world_points.push_back(world_point);
+  }
+  return true;
+}
+
 bool brct_algos::
 read_target_corrs(vcl_ifstream& str,
+                  vcl_vector<bool>& valid,
                   vcl_vector<vgl_point_2d<double> >& image_points,
                   vcl_vector<vgl_point_3d<double> >& world_points)
 {
@@ -772,14 +904,38 @@ read_target_corrs(vcl_ifstream& str,
     str >> temp;
     if (temp != "CORRESP:")
       return false;
-    int junk1, junk2;
+	bool val;
+    int junk;
     vgl_point_2d<double> image_point;
     vgl_point_3d<double> world_point;
-    str >> junk1 >> junk2
+    str >> val >> junk	
         >> world_point >> image_point;
     vcl_cout << "W " << world_point << "  I " << image_point << '\n';
+    valid.push_back(val);
     image_points.push_back(image_point);
     world_points.push_back(world_point);
+  }
+  return true;
+}
+bool brct_algos::write_corrs(vcl_ofstream& str,
+                             vcl_vector<bool>& valid,
+                             vcl_vector<vgl_point_2d<double> >& image_points,
+                             vcl_vector<vgl_point_3d<double> >& world_points)
+{
+  if(!str)
+    return false;
+  str << "NUMPOINTS:";
+  int n_corrs = world_points.size();
+  str << ' ' << n_corrs << '\n';
+  for (int i = 0; i<n_corrs; i++)
+  {
+    vgl_point_3d<double> P = world_points[i];
+    vgl_point_2d<double> p = image_points[i];
+    str << "CORRESP:";
+    str << ' ' << (int)valid[i];
+    str << ' ' << i;
+    str << ' ' << P.x() << ' ' << P.y() << ' ' << P.z(); 
+    str << ' ' << p.x() << ' ' << p.y() << '\n';
   }
   return true;
 }
@@ -833,5 +989,55 @@ vgl_p_matrix<double> brct_algos::p_from_h(vgl_h_matrix_2d<double> const& H)
     Mp[r][3] = M[r][2];
   }
   vgl_p_matrix<double> P(Mp);
+  return P;
+}
+//------------------------------------------------------------
+//: form a p_matrix from a homography and Z-y pairs,
+//   assumes the world plane is X-Y.
+//  hi are columns from H
+// Given H = [h0|h1|h2], then P = [h0|h1|h'|h2]
+//                         _   _
+//                         | 0 |
+// where h' is of the form | v |
+//                         | 0 |
+//                         -   -
+//  Given a y-Z pair
+//         h01 X + h11 Y  +  v Z + h21 
+//   y =   -------------------------------
+//             h02 X + h12 Y  + h22 
+//              1
+//  Thus  v =  ---(y(h02 X + h12 Y  + h22) - h01 X - h11 Y - h21)
+//              Z
+vgl_p_matrix<double> brct_algos::
+p_from_h(vgl_h_matrix_2d<double> const& H, vcl_vector<double> const& image_y,
+         vcl_vector<vgl_point_3d<double> > const& world_p)
+{
+
+  unsigned n = world_p.size();
+  if(!n)
+    return brct_algos::p_from_h(H);
+  vnl_double_3x3 h = H.get_matrix();  
+  double vsum = 0;
+  for(unsigned i = 0; i<n; ++i)
+    {
+      vgl_point_3d<double> pw = world_p[i];
+      if(vcl_fabs(pw.z()) < 0.01)
+        continue;
+      //note h has row vectors not column vectors as in comments
+      //so transpose indices
+      double temp = image_y[i]*(h[2][0]*pw.x() + h[2][1]*pw.y() + h[2][2]);
+      temp -= h[1][0]*pw.x();
+      temp -= h[1][1]*pw.y();
+      temp -= h[1][2];
+      temp /= pw.z();
+      vsum += temp;
+    }
+  vsum /= n;
+  if(vcl_fabs(vsum) < 1e-06)
+    return brct_algos::p_from_h(H);
+  vgl_p_matrix<double> P = brct_algos::p_from_h(H);
+  vnl_double_3x4 p = P.get_matrix();
+  p[1][2] = vsum;
+  P.set(p);
   return P;
 }

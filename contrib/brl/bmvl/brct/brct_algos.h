@@ -83,10 +83,31 @@ class brct_algos
  //: compute a world to image homography from Euclidean Points
  static bool homography(vcl_vector<vgl_point_3d<double> > const& world_points,
                         vcl_vector<vgl_point_2d<double> > const& image_points,
-                        vgl_h_matrix_2d<double> & H);
+                        vgl_h_matrix_2d<double> & H, bool optimize = false);
 
- //: form a 3x4 projection matrix from a planar homography
+ //: compute a world to image homography from Euclidean Points (ransac)
+ static bool 
+homography_ransac(vcl_vector<vgl_point_3d<double> > const& world_points,
+                  vcl_vector<vgl_point_2d<double> > const& image_points,
+                  vgl_h_matrix_2d<double> & H, bool optimize = false);
+
+ //: compute a world to image homography from Euclidean Points (muse)
+ static bool 
+homography_muse(vcl_vector<vgl_point_3d<double> > const& world_points,
+                vcl_vector<vgl_point_2d<double> > const& image_points,
+                vgl_h_matrix_2d<double> & H, bool optimize = false);
+
+
+ //: form a planar 3x4 projection matrix from a planar homography
  static vgl_p_matrix<double> p_from_h(vgl_h_matrix_2d<double> const& H);
+
+ //: form a 3-d 3x4 projection matrix from a planar homography and y-z vals
+ //It is assumed that the vanishing point of the world z axis is 
+ //the image y axis.
+ static 
+vgl_p_matrix<double> brct_algos::
+p_from_h(vgl_h_matrix_2d<double> const& H, vcl_vector<double> const& image_y,
+         vcl_vector<vgl_point_3d<double> > const& world_p);
 
  //: change the world coordinates to be at image scale and position
  static void scale_and_translate_world(vcl_vector<vgl_point_3d<double> > const& world_points,
@@ -161,9 +182,21 @@ class brct_algos
                              const float r = 1.0, const float g = 1.0,
                              const float b = 1.0,
                              const float transparency = 0.0);
-  static bool read_target_corrs(vcl_ifstream& str,
-                                vcl_vector<vgl_point_2d<double> >& image_points,
-                                vcl_vector<vgl_point_3d<double> >& world_points);
+  static 
+    bool read_world_points(vcl_ifstream& str,
+                           vcl_vector<vgl_point_3d<double> >& world_points);
+  static 
+    bool read_target_corrs(vcl_ifstream& str,
+                           vcl_vector<bool>& valid,
+                           vcl_vector<vgl_point_2d<double> >& image_points,
+                           vcl_vector<vgl_point_3d<double> >& world_points);
+
+  static 
+    bool write_corrs(vcl_ofstream& str,
+                     vcl_vector<bool>& valid,
+                     vcl_vector<vgl_point_2d<double> >& image_points,
+                     vcl_vector<vgl_point_3d<double> >& world_points);
+
 
   static void write_target_camera(vcl_ofstream& str, vnl_double_3x4 const& P);
 };
