@@ -35,7 +35,7 @@ vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<T> &R) : base (R.rows(), R.columns())
 // -- super-simple: takes complex matrix, can do both directions
 // -- don't have to worry about the prime-factors
 template<class T> 
-vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<vnl_complex<T> > &Z, int dir) : base (Z)
+vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<vcl_complex<T> > &Z, int dir) : base (Z)
 {
   vnl_fftxd_prime_factors<T> oPFx (Z.rows ());
   vnl_fftxd_prime_factors<T> oPFy (Z.cols ());
@@ -100,7 +100,7 @@ vnl_fft2d<T>::vnl_fft2d (const T *RData, const T *IData,  // data
 #ifndef VCL_VC60
 // -- init to given complex vnl_matrix
 template<class T> 
-vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<vnl_complex<T> > &C, 
+vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<vcl_complex<T> > &C, 
 			 const vnl_fftxd_prime_factors<T> &oPFx, 
 			 const vnl_fftxd_prime_factors<T> &oPFy, int dir)
   : base(C)
@@ -110,7 +110,7 @@ vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<vnl_complex<T> > &C,
 
 // -- create new complex given 'raw' complex c(CData)
 template<class T> 
-vnl_fft2d<T>::vnl_fft2d (const vnl_complex<T> *CData, 
+vnl_fft2d<T>::vnl_fft2d (const vcl_complex<T> *CData, 
 			 unsigned int iRows, unsigned int iCols, // dimensions
 			 const vnl_fftxd_prime_factors<T> &oPFx, 
 			 const vnl_fftxd_prime_factors<T> &oPFy, int dir)
@@ -160,7 +160,7 @@ inline void cxx_gpfa (float  *a, float  *b, const float  *triggs,
 // can be called directly by user to avoid copying-overhead
 // called internally by all constructors
 template<class T> 
-int vnl_fft2d<T>::doFFT_IP (vnl_complex<T> *cdata, unsigned int iRows,
+int vnl_fft2d<T>::doFFT_IP (vcl_complex<T> *cdata, unsigned int iRows,
 			    unsigned int iColumns, 
 			    const vnl_fftxd_prime_factors<T> &oPFx, 
 			    const vnl_fftxd_prime_factors<T> &oPFy, int iDirection)
