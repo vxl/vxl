@@ -27,6 +27,11 @@
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
+kalman_filter::kalman_filter()
+{
+}
+
+
 
 kalman_filter::kalman_filter(char* fname)
 {
@@ -521,4 +526,15 @@ void kalman_filter::init_velocity()
   X_[3] = T[0];
   X_[4] = T[1];
   X_[5] = T[2];
+}
+
+vcl_vector<vgl_point_3d<double> > kalman_filter::get_local_pts()
+{
+  vcl_vector<vgl_point_3d<double> > pts;
+  pts.resize(num_points_);  
+  
+  for(int i=0; i<num_points_; i++){
+    pts[i].set(Xl_[i][0], Xl_[i][1], Xl_[i][2]);
+  }
+  return pts;
 }

@@ -15,6 +15,7 @@
 #include <vnl/vnl_double_3x4.h>
 #include <vnl/vnl_matrix.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
+#include <vgl/vgl_point_3d.h>
 
 class kalman_filter
 {
@@ -23,10 +24,15 @@ class kalman_filter
   //virtual kalman_state inc(double dt);
  public:
   void read_data(char* fname);
+  vcl_vector<vgl_point_3d<double> > kalman_filter::get_local_pts();
   void inc();
   void update_covariant();
   vnl_vector_fixed<double, 2> projection(vnl_double_3x4 &P, vnl_vector_fixed<double, 3> &X);
   void prediction();
+
+  //: constructors
+  //
+  kalman_filter();
   kalman_filter(char* fname);
   virtual ~kalman_filter();
 
