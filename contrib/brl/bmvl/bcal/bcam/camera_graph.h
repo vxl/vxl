@@ -97,10 +97,10 @@ class camera_graph
     class iterator{
     public:
       iterator() :pos_ (0), _Ptr(0) {}
-      iterator(vcl_vector<vertex_node*>* _P, int pos=0): _Ptr(_P), pos_(pos) {}
+      iterator(vcl_vector<vertex_node*>* _P, int pos = 0) : _Ptr(_P), pos_(pos) {}
       iterator(const iterator& _X) : _Ptr(_X._Ptr), pos_(_X.pos_) {}
-      CameraNode* operator->() const {return (*_Ptr)[pos_]->v_; }
-      CameraNode& operator*() const {return (CameraNode&)*(this->()); }
+      CameraNode& operator*() const {return *((*_Ptr)[pos_]->v_); }
+      CameraNode* operator->() const {return &(**this); }
 
       iterator& operator=(iterator& _X)
       {
