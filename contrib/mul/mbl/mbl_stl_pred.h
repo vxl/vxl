@@ -1,4 +1,4 @@
-// This is mul/mbl/mbl_stl.h
+// This is mul/mbl/mbl_stl_pred.h
 #ifndef mbl_stl_pred_h_
 #define mbl_stl_pred_h_
 //:
@@ -16,15 +16,15 @@
 // Note without this you'd need bind2nd mem_fun which can cause reference to reference compile errors
 class mbl_stl_pred_str_contains : public vcl_unary_function<vcl_string, bool>
 {
-    //: The sought substring
-    const vcl_string& substr_;    
-  public:
-    mbl_stl_pred_str_contains(const vcl_string& substr): substr_(substr){}
-        
-    inline bool operator()(const vcl_string& str) const
-    {
-        return ( (str.find(substr_) != str.npos) ? true : false);
-    }
+  //: The sought substring
+  const vcl_string& substr_;
+ public:
+  mbl_stl_pred_str_contains(const vcl_string& substr): substr_(substr){}
+
+  inline bool operator()(const vcl_string& str) const
+  {
+    return ( (str.find(substr_) != str.npos) ? true : false);
+  }
 };
 
 //: Adapt a predicate over a vector to the operation specified on an index into that vector
@@ -36,14 +36,13 @@ class mbl_stl_pred_index_adapter : public vcl_unary_function<unsigned, bool>
   const vcl_vector<T >& vec_;
   //: The predicate to really be applied
   Pred Op_;
-  public:
-    mbl_stl_pred_index_adapter(const vcl_vector<T >& v, Pred Op):
-        vec_(v),Op_(Op){}
-        
-    inline bool operator()(const unsigned& i) const
-    {
-        return Op_(vec_[i]);
-    }
+ public:
+  mbl_stl_pred_index_adapter(vcl_vector<T> const& v, Pred Op):vec_(v),Op_(Op){}
+
+  inline bool operator()(const unsigned& i) const
+  {
+    return Op_(vec_[i]);
+  }
 };
 
 //: Helper function to create an index adapter of the appropriate type
@@ -53,7 +52,7 @@ class mbl_stl_pred_index_adapter : public vcl_unary_function<unsigned, bool>
 template <class T, class Pred>
 inline mbl_stl_pred_index_adapter<T,Pred> mbl_stl_pred_create_index_adapter(const vcl_vector<T>& v, Pred Op)
 {
-    return  mbl_stl_pred_index_adapter<T,Pred>(v,Op);
+  return  mbl_stl_pred_index_adapter<T,Pred>(v,Op);
 };
 
 //Order a collection of pair iterators according to their dereferenced keys
@@ -74,9 +73,8 @@ struct mbl_stl_pred_pair_iter_value_order : public vcl_binary_function<PairIter,
 {
   inline bool  operator()(const PairIter& iter1, const PairIter& iter2 ) const
   {
-    return (iter1->second < iter2->second) ? true : false ;
+    return (iter1->second < iter2->second) ? true : false;
   }
 };
-
 
 #endif
