@@ -14,7 +14,7 @@
 #include <vil/vil_image_resource.h>
 
 //: Format class for a volume made up of a list of images.
-// The filename format can be a list of ':' delimited filenames.
+// The filename format can be a list of ';' delimited filenames.
 // It can also be single filename where '#' represents a numeric character.
 // A set of image files with contiguous numbering will be loaded, starting
 // with the lowest number.

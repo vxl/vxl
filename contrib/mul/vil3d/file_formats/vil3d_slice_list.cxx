@@ -81,7 +81,7 @@ void parse_multiple_filenames(const vcl_string & input,
   unsigned start=0;
   for (unsigned i=0; i != input.size(); ++i)
   {
-    if (input[i]==':')
+    if (input[i]==';')
     {
       filenames.push_back(input.substr(start, i-start));
       start=i+1;

@@ -181,7 +181,7 @@ int test_file_format_read_main( int argc, char* argv[] )
   vcl_cout << "List of slices)\n";
   testlib_test_begin( "  List of ppm slices" );
   testlib_test_perform( test( "ff_3planes8bit_true.txt",
-                              CheckColourPlanes<vxl_byte>( "ff_rgb8bit_ascii.1.ppm:ff_rgb8bit_ascii.2.ppm" ) ) );
+                              CheckColourPlanes<vxl_byte>( "ff_rgb8bit_ascii.1.ppm;ff_rgb8bit_ascii.2.ppm" ) ) );
 
   testlib_test_begin( "  Implied List of ppm slices" );
   testlib_test_perform( test( "ff_3planes8bit_true.txt",

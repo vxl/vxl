@@ -13,7 +13,7 @@ void test_load_transform(char * golden_data_dir)
            << "*********************\n";
 
   vcl_string imagename = golden_data_dir;
-  imagename = imagename+"/ff_rgb8bit_ascii.1.ppm:"+
+  imagename = imagename+"/ff_rgb8bit_ascii.1.ppm;"+
               imagename+"/ff_rgb8bit_ascii.2.ppm";
   vil3d_image_resource_sptr im = vil3d_load_image_resource(imagename.c_str());
 
