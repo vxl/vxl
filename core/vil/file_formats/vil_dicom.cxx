@@ -349,11 +349,11 @@ bool vil_dicom_image::interpret_hologic_header(float& xpixSize, float& ypixSize)
 
   vcl_string src = header_.image_comments_;
   //Find start of x pixel size sub-text
-  unsigned ipxStart = src.find(HOLOGIC_PixelXSizeMM);
+  vcl_size_t ipxStart = src.find(HOLOGIC_PixelXSizeMM);
   if (ipxStart==src.npos) return false;
 
   //Find end of x pixel size sub-text
-  unsigned ipxEnd = src.find(HOLOGIC_PixelXSizeMM_END,ipxStart);
+  vcl_size_t ipxEnd = src.find(HOLOGIC_PixelXSizeMM_END,ipxStart);
   if (ipxEnd==src.npos) return false;
 
   //Extract just the numerical part of the text
@@ -376,11 +376,11 @@ bool vil_dicom_image::interpret_hologic_header(float& xpixSize, float& ypixSize)
   }
 
   //Find start of y pixel size sub-text
-  unsigned ipyStart = src.find(HOLOGIC_PixelYSizeMM);
+  vcl_size_t ipyStart = src.find(HOLOGIC_PixelYSizeMM);
   if (ipyStart==src.npos) return false;
 
   //Find end of y pixel size sub-text
-  unsigned ipyEnd = src.find(HOLOGIC_PixelYSizeMM_END,ipyStart);
+  vcl_size_t ipyEnd = src.find(HOLOGIC_PixelYSizeMM_END,ipyStart);
   if (ipyEnd==src.npos) return false;
 
   //Extract just the numerical part of the text
