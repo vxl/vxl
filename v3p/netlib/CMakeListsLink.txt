@@ -1,5 +1,0 @@
-LINK_LIBRARIES( netlib )
-
-IF(UNIX)
-  LINK_LIBRARIES( m )
-ENDIF(UNIX)

@@ -1,2 +1,0 @@
-
-LINK_LIBRARIES( vgel_kl )
