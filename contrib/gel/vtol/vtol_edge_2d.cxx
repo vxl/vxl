@@ -281,7 +281,7 @@ void vtol_edge_2d::compute_bounding_box(void)
   if (c->cast_to_digital_curve())
     {
       vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
-      vsol_box_2d * dc_box = dc->get_bounding_box();
+      vsol_box_2d_sptr dc_box = dc->get_bounding_box();
       if (!dc_box)
         {
           vcl_cout << "In vtol_edge_2d::compute_bounding_box() - curve has null"

@@ -10,6 +10,7 @@
 #include <vnl/vnl_math.h>
 
 #include <vsol/vsol_box_2d.h>
+#include <vsol/vsol_box_2d_sptr.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_edgel_chain.h>
@@ -844,7 +845,7 @@ void vtol_cycle_processor::sort_one_cycles()
       untouch(*cit);
       if (!ccw(*cit))
         continue;
-      vsol_box_2d* box = (*cit)->get_bounding_box();
+      vsol_box_2d_sptr box = (*cit)->get_bounding_box();
       double WxH = box->width()*box->height();
       if (WxH>area)
         {
@@ -882,16 +883,16 @@ void vtol_cycle_processor::sort_one_cycles()
   //
   // - one caveat is that the equality test below is exact.
   //   some situations may require a tolerance
-  vsol_box_2d* b = outer_chain->get_bounding_box();
+  vsol_box_2d_sptr b = outer_chain->get_bounding_box();
   for (one_chain_list::iterator cit=chains_.begin(); cit!=chains_.end(); cit++)
     if (cw(*cit)&&!touched(*cit))
     {
       if ((*cit)==outer_chain)
         continue;
-      vsol_box_2d* bc = (*cit)->get_bounding_box();
+      vsol_box_2d_sptr bc = (*cit)->get_bounding_box();
       if ((*bc<*b)&&!bc->near_equal(*b, tolerance_))
       {
-        vsol_box_2d* bc = (*cit)->get_bounding_box();
+        vsol_box_2d_sptr bc = (*cit)->get_bounding_box();
         if ((*bc<*b)&&!bc->near_equal(*b, tolerance_))
           {
             if (debug1_)
@@ -1174,19 +1175,19 @@ bool vtol_cycle_processor::connect_paths(vcl_vector<vtol_edge_2d_sptr>& edges,
       eit != edges.end(); eit++)
     {
       vtol_vertex_sptr v1 = (*eit)->v1(), v2 = (*eit)->v2();
-      if (!v1->get_user_flag(flag2))
-        {edge_verts.push_back(v1); v1->set_user_flag(flag2);}
-      if (!v2->get_user_flag(flag2))
-        {edge_verts.push_back(v2); v2->set_user_flag(flag2);}
+      if (!v1->get_user_flag(flag1))
+        {edge_verts.push_back(v1); v1->set_user_flag(flag1);}
+      if (!v2->get_user_flag(flag1))
+        {edge_verts.push_back(v2); v2->set_user_flag(flag1);}
     }
 
   //search through the list of bad verts and attempt to connect them
   //repaired_verts allows the successfully connected vertices to be
-  //removed from the bad_verts set.  flag1 marks vertices as used.
+  //removed from the bad_verts set.  flag2 marks vertices as used.
   vcl_vector<vtol_vertex_sptr> repaired_verts;
   for (vit=bad_verts.begin(); vit != bad_verts.end(); vit++)
     {
-      if ((*vit)->get_user_flag(flag1))//skip used vertices
+      if ((*vit)->get_user_flag(flag2))//skip used vertices
         continue;
       bool found_edge = false;
       //find edges attached to each bad vert
@@ -1202,34 +1203,31 @@ bool vtol_cycle_processor::connect_paths(vcl_vector<vtol_edge_2d_sptr>& edges,
           //  2)v can't be found in bad_verts;
           //  3)v can't be found in edge_verts;
           //  4)e is already in the input edge set.
-          if (v->get_user_flag(flag1))
+          if (v->get_user_flag(flag2))
             continue; //condition 1)
           bool found_in_bad_verts =
             vcl_find(temp.begin(), temp.end(), v) != temp.end();
-          //            stl_cool_topology::vcl_vector_vertex_find(temp, v);
           bool found_in_edge_verts = false;
           if (!found_in_bad_verts) //condition 2)
             found_in_edge_verts=
               vcl_find(edge_verts.begin(), edge_verts.end(), v) != edge_verts.end();
-              //  stl_cool_topology::vcl_vector_vertex_find(edge_verts, v);
           if (!(found_in_bad_verts||found_in_edge_verts)) // condition 3)
             continue;
-          //          if (stl_cool_topology::vcl_vector_edge_find(edges, e))
           if ( vcl_find(edges.begin(), edges.end(), e) != edges.end())
-            //stl_cool_topology::vector_edge_find(edges, e)
             continue; //condition 4)
+
           //Found a connecting edge, so add it to the input edges
           edges.push_back(e->cast_to_edge_2d());
           found_edge = true;
-          v->set_user_flag(flag1);
-          (*vit)->set_user_flag(flag1);
+          v->set_user_flag(flag2);
+          (*vit)->set_user_flag(flag2);
           //record the successes
           repaired_verts.push_back(*vit);
           repaired_verts.push_back(v);//should also be in bad_verts
         }
       delete vedges;
       paths_connected =
-        paths_connected&&(*vit)->get_user_flag(flag1);
+        paths_connected&&(*vit)->get_user_flag(flag2);
     }
   //Clear the flags
   for (vcl_vector<vtol_vertex_sptr>::iterator vit = bad_verts.begin();
