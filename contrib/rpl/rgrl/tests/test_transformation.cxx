@@ -87,7 +87,7 @@ test_trans_affine()
   xform->inv_map(true_point, inv_map_pt);
   testlib_test_perform( close(inv_map_pt, point, 1e-7) );
 
-  vnl_vector<double> point2(3), next_inv_map(3), delta_to(3), inv_map_pt2(3);
+  vnl_vector<double> point2(3), next_inv_map(3), delta_to(3), inv_map_pt2(3, 100.0);
   point2[0] = 5.0;
   point2[1] = 2.0;
   point2[2] = -2.0;
@@ -360,6 +360,10 @@ void test_trans_rigid()
   xform->inv_map(point, inv_map_pt);
   xform->map_location(inv_map_pt,inv_inv_map_pt);
   testlib_test_perform( close(point, inv_inv_map_pt, 1e-7) );
+  vcl_cout << "point = " << point << '\n'
+           << "inv_map(point) = " << inv_map_pt << '\n'
+           << "map_location(inv_map(point)) = " << inv_inv_map_pt << '\n'
+           << "difference = " << inv_inv_map_pt-point << vcl_endl;
 }
 
 } // end anonymous namespace
