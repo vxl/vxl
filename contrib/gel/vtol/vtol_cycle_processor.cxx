@@ -59,12 +59,12 @@ static bool unused(vtol_edge_2d_sptr& e)
 }
 static bool plus_used(vtol_edge_2d_sptr& e)
 {
-  return e->get_user_flag(VSOL_FLAG1);
+  return e->get_user_flag(VSOL_FLAG1) != 0;
 }
 
 static bool minus_used(vtol_edge_2d_sptr& e)
 {
-  return e->get_user_flag(VSOL_FLAG2);
+  return e->get_user_flag(VSOL_FLAG2) != 0;
 }
 
 static bool half_used(vtol_edge_2d_sptr& e)
@@ -86,12 +86,12 @@ static void use_minus(vtol_edge_2d_sptr& e)
 // predicates
 static bool ccw(vtol_one_chain_sptr& ch)
 {
-  return ch->get_user_flag(VSOL_FLAG1);
+  return ch->get_user_flag(VSOL_FLAG1) != 0;
 }
 
 static bool cw(vtol_one_chain_sptr& ch)
 {
-  return ch->get_user_flag(VSOL_FLAG2);
+  return ch->get_user_flag(VSOL_FLAG2) != 0;
 }
 
 // assignment
@@ -125,7 +125,7 @@ static void touch(vtol_edge_2d_sptr& e)
 
 static bool touched(vtol_edge_2d_sptr& e)
 {
-  return e->get_user_flag(VSOL_FLAG3);
+  return e->get_user_flag(VSOL_FLAG3) != 0;
 }
 static bool self_loop(vtol_edge_2d_sptr& e)
 {
@@ -163,7 +163,7 @@ static void touch(vtol_one_chain_sptr& ch)
 
 static bool touched(vtol_one_chain_sptr& ch)
 {
-  return ch->get_user_flag(VSOL_FLAG3);
+  return ch->get_user_flag(VSOL_FLAG3) != 0;
 }
 
 //----------------------------------------------------------
