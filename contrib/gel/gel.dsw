@@ -12,9 +12,6 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name gbl
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name geml
     End Project Dependency
     Begin Project Dependency
@@ -56,18 +53,6 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name vtol
     End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "gbl"=.\gbl\gbl.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
 }}}
 
 ###############################################################################

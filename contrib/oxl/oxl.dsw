@@ -342,9 +342,6 @@ Package=<4>
     Project_Dep_Name netlib
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name oxp
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name vbl
     End Project Dependency
     Begin Project Dependency

@@ -54,9 +54,6 @@ Package=<4>
     Project_Dep_Name mvl
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name oxp
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name vrml
     End Project Dependency
     Begin Project Dependency
@@ -364,27 +361,6 @@ Package=<4>
 ###############################################################################
 
 Project: "osl"=..\oxl\osl\osl.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name vbl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vil
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vnl_algo
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "oxp"=..\oxl\oxp\oxp.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -1026,9 +1002,6 @@ Package=<4>
     Project_Dep_Name vidl
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name oxp
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name vgui
     End Project Dependency
 }}}
@@ -1222,9 +1195,6 @@ Package=<4>
 {{{
     Begin Project Dependency
     Project_Dep_Name mvl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name oxp
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name vbl
