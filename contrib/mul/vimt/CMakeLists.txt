@@ -14,6 +14,7 @@ SET(vimt_sources
     vimt_scale_pyramid_builder_2d.txx             vimt_scale_pyramid_builder_2d.h
     vimt_sample_profile_bilin.txx                 vimt_sample_profile_bilin.h
     vimt_sample_grid_bilin.txx                    vimt_sample_grid_bilin.h
+    vimt_sample_grid_bicub.txx                    vimt_sample_grid_bicub.h
     vimt_bilin_interp.h
     vimt_resample_bilin.h
     vimt_load_transform.h			vimt_load_transform.cxx
