@@ -38,11 +38,16 @@ vimt_image_pyramid::~vimt_image_pyramid()
 const vimt_image_pyramid&
     vimt_image_pyramid::operator=(const vimt_image_pyramid& that)
 {
+    if (&that == this) return *this;
+
     base_pixel_width_ = that.base_pixel_width_;
     scale_step_ = that.scale_step_;
-    image_.resize(that.image_.size());
+    image_.resize(that.image_.size(),0);
     for (unsigned int i=0;i<image_.size();++i)
-        image_[i] = that.image_[i]->clone();
+    {
+      delete image_[i];
+      image_[i] = that.image_[i]->clone();
+    }
 
     return *this;
 }
@@ -60,7 +65,7 @@ void vimt_image_pyramid::resize(int n_levels, const vimt_image& im_type)
     if (int(image_.size())==n_levels && n_levels>0 && image_[0]->is_a()==im_type.is_a())
         return;
     deleteImages();
-    image_.resize(n_levels);
+    image_.resize(n_levels,0);
     for (int i=0;i<n_levels;++i)
         image_[i]=im_type.clone();
 }
