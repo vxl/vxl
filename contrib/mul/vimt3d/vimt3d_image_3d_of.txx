@@ -1,16 +1,17 @@
 #ifndef vimt3d_image_3d_of_txx_
 #define vimt3d_image_3d_of_txx_
 //:
-//  \file
-//  \brief Container for vil_image_view<T> + transform
-//  \author Tim Cootes
+// \file
+// \brief Container for vil_image_view<T> + transform
+// \author Tim Cootes
 
 #include "vimt3d_image_3d_of.h"
 #include <vcl_string.h>
+#include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
+#include <vsl/vsl_vector_io.h>
 #include <vimt3d/vimt3d_image_3d_of.h>
 #include <vil3d/vil3d_print.h>
-#include <vsl/vsl_vector_io.h>
 #include <vil3d/io/vil3d_io_image_view.h>
 
 //=======================================================================
@@ -127,8 +128,8 @@ void vimt3d_image_3d_of<T>::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,world2im_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vimt3d_image_3d_of<T>::b_read(vsl_b_istream&) \n"
-             << "           Unknown version number "<< version << "\n";
+    vcl_cerr << "I/O ERROR: vimt3d_image_3d_of<T>::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< version << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
