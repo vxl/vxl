@@ -31,6 +31,7 @@ MANPAGE_SOURCES += vnl_scalar_join_iterator.txx
 
 #
 SOURCES += vnl_alloc.cxx
+SOURCES += vnl_block.cxx
 SOURCES += vnl_math.cxx
 SOURCES += vnl_copy.cxx
 SOURCES += vnl_complex.cxx
