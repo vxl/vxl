@@ -125,7 +125,7 @@ class vidl_io
   //---------------------------------------------------------
 
   static bool save(
-        vidl_movie* movie,
+        vidl_movie_sptr movie,
         const char* fname,
         const char* type
         );
@@ -179,7 +179,7 @@ class vidl_io
         }
 
   static bool save_images(
-        vidl_movie* movie,
+        vidl_movie_sptr movie,
         const char* fname,
         const char* type
         );

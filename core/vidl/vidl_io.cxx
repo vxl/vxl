@@ -281,7 +281,7 @@ vidl_clip_sptr  vidl_io::load_images(
 }
 
 //: Save a video into a file "fname" as type "type"
-bool vidl_io::save(vidl_movie* movie, const char* fname, const char* type)
+bool vidl_io::save(vidl_movie_sptr movie, const char* fname, const char* type)
 {
   // Go along the vcl_list of supported videoCODECs,
   // find the one of the type asked if it does exist.
@@ -301,19 +301,19 @@ bool vidl_io::save(vidl_movie* movie, const char* fname, const char* type)
 
 
   // Try to save it
-  if ((*i)->save(movie, fname))
+  if ((*i)->save(movie.ptr(), fname))
     return true;
   else
     return false;
 }
 
 // This function should be removed and integrated in save()
-bool vidl_io::save_images(vidl_movie* movie, const char* fname,  const char* type)
+bool vidl_io::save_images(vidl_movie_sptr movie, const char* fname,  const char* type)
 {
   vidl_image_list_codec codec;
 
   // Try to save and return success or failure
-  return codec.save(movie, fname, type);
+  return codec.save(movie.ptr(), fname, type);
 }
 
 //: Return the list of the supported video coder/decoder types

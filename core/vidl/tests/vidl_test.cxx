@@ -1,6 +1,8 @@
 #include <vidl/vidl_movie.h>
 #include <vidl/vidl_frame.h>
+#include <vidl/vidl_io.h>
 #include <vcl_iostream.h>
+#include <vcl_cstdlib.h>
 
 int main ()
 {
@@ -64,5 +66,10 @@ int main ()
     if (p>=10)
       pframe->get_view();
 
-  return 0;
+
+  vcl_exit(0);
+
+  // I want to test the signature, but couldn't be bothered checking
+  // it works. IMS
+  vidl_io::save(movie, "image_directory" , "ImageList");
 }
