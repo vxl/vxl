@@ -241,23 +241,16 @@ inline void vsol_spatial_object_3d::set_tag_id(int id)
 //: constructor initialize basic vsol_spatial_object_3d attributes.
 //   bounding_box is set to NULL.
 inline vsol_spatial_object_3d::vsol_spatial_object_3d(void)
+  : vul_timestamp(), vbl_ref_count(), bounding_box_(0), id_(0), tag_(0)
 {
-  bounding_box_ = NULL;
-  id_ = 0;
-  tag_ = 0;
-  vsol_spatial_object_3d::tagcount_++;
-  set_tag_id(tagcount_);
-  touch();
+  set_tag_id(++tagcount_);
 }
 
 
 inline vsol_spatial_object_3d::vsol_spatial_object_3d(vsol_spatial_object_3d const &s)
+  : vul_timestamp(), vbl_ref_count(), bounding_box_(0), id_(s.get_id()), tag_(0)
 {
-  bounding_box_=0;
-  id_ = s.get_id();
-  tag_ = 0;
-  vsol_spatial_object_3d::tagcount_++;
-  set_tag_id(tagcount_);
+  set_tag_id(++tagcount_);
 }
 
 
