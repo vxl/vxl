@@ -31,12 +31,6 @@ ADD_EXECUTABLE( registration_retina_no_view
 )
 TARGET_LINK_LIBRARIES( registration_retina_no_view rgrl  testlib)
 
-ADD_EXECUTABLE( registration_retina
-  test_util.h                      test_util.cxx
-  registration_retina.cxx
-)
-TARGET_LINK_LIBRARIES( registration_retina rgrl  testlib)
-
 ADD_EXECUTABLE( registration_simple_shapes
   test_util.h                      test_util.cxx
   registration_simple_shapes.cxx
