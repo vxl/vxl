@@ -48,8 +48,8 @@
 
 #include <vcl/vcl_iostream.h>
 
-#ifdef __PC__
-#  include <vcl/vcl_cfloat.h>
+#ifdef WIN32
+#  include <float.h>
 #  ifndef MAXFLOAT
 #    define MAXFLOAT FLT_MAX
 #  endif

@@ -1,4 +1,4 @@
-#include <QvCone.h>
+#include <Qv/QvCone.h>
 
 QV_NODE_SOURCE(QvCone);
 

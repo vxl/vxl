@@ -1,13 +1,15 @@
-LIBRARY = Qv
+LIBRARY := Qv
 
-USES = vxl
+USES := v3p vxl
 
-INCDIRS = . $(IUEROOT)/v3p
+INCDIRS += .
 
-SOURCES = QvLib.cxx
+SOURCES += vecutil.cxx
+SOURCES += QvLib.cxx
 SOURCES += wrltraverse.cxx
 SOURCES += wrlbuild.cxx
-SOURCES += vecutil.cxx
+SOURCES += QvVisitor.cxx
+SOURCES += QvVrmlFile.cxx
 
 # DEFINES += -D__PC__
 
