@@ -48,7 +48,7 @@ double vnl_brent::minimize_given_bounds(double ax, double bx, double cx,
                                        double *xmin)
 {
   int iter;
-  double a,b,d,etemp,fu,fv,fw,fx,p1,q,r,tol1,tol2,u,v,w,x,xm;
+  double a,b,d=0.0,etemp,fu,fv,fw,fx,p1,q,r,tol1,tol2,u,v,w,x,xm;
   double e=0.0;
 
   a=(ax < cx ? ax : cx);
@@ -71,7 +71,7 @@ double vnl_brent::minimize_given_bounds(double ax, double bx, double cx,
       if (q > 0.0) p1 = -p1;
       q=fabs(q);
       etemp=e;
-      e=d; // "mvox_powell.cxx", line 139: Warning: The variable d has not yet been assigned a value.
+      e=d; // Warning: The variable d has not yet been assigned a value.
       if (fabs(p1) >= fabs(0.5*q*etemp) || p1 <= q*(a-x) || p1 >= q*(b-x))
         d=CGOLD*(e=(x >= xm ? a-x : b-x));
       else {
