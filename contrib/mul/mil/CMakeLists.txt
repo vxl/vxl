@@ -14,6 +14,7 @@ SOURCE_FILES(mil_sources
   mil_image_pyramid_builder.cxx
   mil_transform_2d.cxx
   mil_byte_image_2d_io.cxx
+  mil_byte_image_2d_io_plugin.cxx
   mil_convert_image_2d.cxx
   mil_normalise_image_2d.cxx    
   mil_invert_image_2d.cxx 
