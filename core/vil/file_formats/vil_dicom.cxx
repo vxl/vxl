@@ -89,23 +89,83 @@ void imageSwap(char *in_im, int num_bytes,
 
   // Only swap if two bytes used and the endians of system and
   // file differ
-  if (num_bytes == 2 && dhi.file_endian_ != dhi.sys_endian_)
+  //Note may also need to swap to do some bit shift transforms in some OW modes when using Big Endian
+  //Then may reverse swap (eg. when both system and file are big-endian).
+  // This appears to be the implication of DICOM standard PS3.5-2001 where for Pixel data
+  //the bits allocated, used, and high bit are defined in "virtual" Little Endian prior to potential swapping pre-transfer. 
+  // See op cit Annex D.
+  //Note that post-shifting the bits_stored are the low order bits of the word (viewed as contiguous in Little-Endian)
+  //So in packed schemes such as bits_allocated=12 with bits_stored=10, and high_bit=11, the relevant 10 bits are down-shifted by 2.
+  // Martin Roberts
+  //-------------------------  !!!!!!!!!!!!!!! -------------------------------------
+  //!!! Note this code will NOT cope with odd packing schemes across multiple words 
+  //  (e.g. bits stored=18, high_bit =19, split across 3 bytes) !!
+  //-------------------------  !!!!!!!!!!!!!!! -------------------------------------
+
+  if(num_bytes != 2) return; 
+  bool bSystemReqSwap = dhi.file_endian_ != dhi.sys_endian_; //Need a swap for file to system
+  //We may also need to do some shifting where the bit range is some sub-part of a two-byte word
+  bool bShiftNeeded =  ((dhi.res_slope_ == VIL_DICOM_HEADER_DEFAULTSLOPE) && 
+			( (dhi.high_bit_ <dhi.allocated_bits_ - 1) || //some unused high-bits that may be set
+			  (dhi.high_bit_ > dhi.stored_bits_-1)));     //or the relevant sub-portion does not start at bit 0
+  //But the shifting needs to be done with a little-endian ordering
+  bool bShiftReqSwap = bShiftNeeded && (dhi.file_endian_ == VIL_DICOM_HEADER_DEBIGENDIAN);
+  
+  bool bSwap = bSystemReqSwap || bShiftReqSwap;
+ 
+  if ( bSwap || bShiftNeeded)
   {
-    // Read two bytes at a time, swapping
+    // Read two bytes at a time, swapping and/or shifting unused bits away
     for (int i=0; i<dhi.dimy_; i++)
     {
       row_num = (dhi.dimx_*num_bytes)*i;
 
       for (int j=0; j<dhi.dimx_*num_bytes; j+=num_bytes)
       {
-        swaps[0] = in_im[row_num+j];
-        swaps[1] = in_im[row_num+(j+1)];
-        in_im[row_num+j]=swaps[1];
-        in_im[row_num+(j+1)]=swaps[0];
+	if(bShiftReqSwap) //Ensure Little-Endian while we shift
+	{
+	  swaps[0] = in_im[row_num+j];
+	  swaps[1] = in_im[row_num+(j+1)];
+	  in_im[row_num+j]=swaps[1];
+	  in_im[row_num+(j+1)]=swaps[0];
+	}
+
+	if(bShiftNeeded)
+	{
+	  char* pRaw = in_im+row_num+j;
+	  vxl_uint_16* pWord =  reinterpret_cast<vxl_uint_16*>(pRaw);
+	  vxl_uint_16 pixval = *pWord;
+	  short bitshift = dhi.allocated_bits_ - dhi.high_bit_ - 1;
+	  //Potential shifts to remove unused (overlay) high order bits
+	  if(bitshift>0)
+	  {
+	    //Zero any unused high order bits - these may not be zero in the data as they can include overlays
+	    //Shift left and back right to zero the high order bits at the left end
+	    pixval<<=bitshift;
+	    pixval>>=bitshift;
+	  }
+	  bitshift = dhi.high_bit_ - short(dhi.stored_bits_+1.0E-12) -1; //Not sure why stored_bit is a float!
+	  if(bitshift>0)
+	  {
+	    //The bits used do not start at the first so bit-shift right to make first used bit the first in word
+	    pixval>>= bitshift;
+	  }
+	  *pWord = pixval;
+	}
+	//And finally may need to revert the swap if it was done just for the bit shift on Big-Endian, 
+	// or we impose the system swap if we just shifted without a pre-swap
+	if(bShiftReqSwap != bSystemReqSwap)
+	{
+	  swaps[0] = in_im[row_num+j];
+	  swaps[1] = in_im[row_num+(j+1)];
+	  in_im[row_num+j]=swaps[1];
+	  in_im[row_num+(j+1)]=swaps[0];
+	} 
       }
     }
   }
 }
+
 
 
 char *convert12to16(char *im, vil_dicom_header_info dhi,
@@ -301,13 +361,6 @@ vil_image_view_base_sptr vil_dicom_image::get_copy_view(
   // Get the number of rows and columns to read
   int cols=header_.dimx_;
   int rows=header_.dimy_;
-  if (cols == VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED ||
-      rows == VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED)
-  {
-    vcl_cerr<< "ERROR: vil_dicom_image::get_copy_view\n"
-            << "       Could not read file header\n";
-    return 0;
-  }
 
   // The number of bytes to read at a time depends on the
   // allocated bits. If 16 or 12 are allocated, then two bytes
@@ -343,7 +396,7 @@ vil_image_view_base_sptr vil_dicom_image::get_copy_view(
   if (header_.allocated_bits_ == 12)
     void_im = (void *)convert12to16((char *) void_im, header_);
 
-  // Do any swapping necessary
+  // Do any swapping necessary (also may do any bit shifting needed if part-words are being used
   imageSwap((char *)void_im,bytes_read,header_);
 
 
@@ -356,7 +409,9 @@ vil_image_view_base_sptr vil_dicom_image::get_copy_view(
         {
           int next_row = header_.dimx_*i;
           for (unsigned j=x0; j<(x0+nx); ++j)
-            view(j-x0,i-y0) = static_cast<vxl_uint_16 *>(void_im)[next_row+j];
+	  {
+            view(j-x0,i-y0) = static_cast<vxl_uint_16 *>(void_im)[next_row+j]; ;
+	  }
         }
         delete [] (char *) void_im;
         return new vil_image_view<vxl_uint_16>(view);
