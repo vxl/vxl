@@ -280,8 +280,8 @@ void segv_segmentation_manager::beaudet_measure()
       return;
     }
   static float sigma = 1.0f;
-  static float scale_factor = 0.04f;
-  static int n = 2;
+//static float scale_factor = 0.04f;
+//static int n = 2;
   static float cmax=100;
   vgui_dialog harris_dialog("beaudet");
   harris_dialog.field("sigma", sigma);
