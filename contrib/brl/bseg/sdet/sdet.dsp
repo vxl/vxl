@@ -183,9 +183,6 @@ SOURCE=.\sdet_detector_params.h
 SOURCE=.\sdet_edge_champher.h
 # End Source File
 # Begin Source File
-SOURCE=.\sdet_champher.h
-# End Source File
-# Begin Source File
 SOURCE=.\sdet_edgel_regions.h
 # End Source File
 # Begin Source File
