@@ -1,6 +1,15 @@
-// bcal_euclidean_transformation.h: interface for the bcal_euclidean_transformation class.
+//-----------------------------------------------------------------------------
+//:
+// \file
+// \brief interface for the bcal_euclidean_transformation class.
 //
-//////////////////////////////////////////////////////////////////////
+// \verbatim
+//  Modifications:
+//    Sancar Adali  April 1, 2004  Added get_trans_matrix(i) for acccessing ith
+//                                 transformation matrix
+// \endverbatim
+//-----------------------------------------------------------------------------
+
 
 #ifndef AFX_EUCLIDEAN_TRANSFORMATION_H__F0345CDE_C4EB_47BA_9A60_25A77056C5EB__INCLUDED_
 #define AFX_EUCLIDEAN_TRANSFORMATION_H__F0345CDE_C4EB_47BA_9A60_25A77056C5EB__INCLUDED_
@@ -29,6 +38,8 @@ class bcal_euclidean_transformation : public vcsl_spatial_transformation
   virtual vnl_vector<double> execute(const vnl_vector<double> &v, double tims) const;
   virtual bool is_invertible(double time) const; // for abstract interface
   virtual void set_beat(vcl_vector<double> const& new_beat);
+  vnl_double_4x4 get_trans_matrix(int i);
+
 
   // for debugging
   // print information

@@ -72,3 +72,9 @@ void bcal_euclidean_transformation::print(vcl_ostream& os)
     os << "\n the "<<i<<"-th transformation is: \n"<< trans_[i];
   }
 }
+
+
+vnl_double_4x4 bcal_euclidean_transformation::get_trans_matrix(int i)
+{
+  return trans_[i].get_matrix();
+}
