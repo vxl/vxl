@@ -35,7 +35,7 @@
 #pragma interface "vcl_straits.h"
 #endif
 
-#include <ctype.h>
+#include <vcl/vcl_cctype.h>
 #include <vcl/vcl_cstring.h>
 
 #include <vcl/vcl_iosfwd.h>
