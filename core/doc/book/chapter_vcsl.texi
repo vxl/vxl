@@ -28,12 +28,10 @@ This includes classes for
 
   @item vcsl_unit
     Abstract unit associated to a dimension
-  @table @samp
+  @table
     @item vcsl_length_unit
-    @table @samp
-    @end table
     @item vcsl_angle_unit
-    @table @samp
+    @table
       @item vcsl_radian
         This is the standard angular unit
       @item vcsl_degree
@@ -44,14 +42,14 @@ This includes classes for
 @subsection Co-ordinate Systems and Transformations
 @table
   @item vcsl_coordinate_system
-  @table @samp
+  @table
     @item vcsl_cartesian_2d
     @item vcsl_cartesian_3d
     @item vcsl_cylindrical
     @item vcsl_polar
     @item vcsl_spherical
     @item vcsl_geographic
-    @table @samp
+    @table
       @item vcsl_geocentric
         Intended to represent a location relative to the earth
       @item vcsl_geodetic
@@ -64,12 +62,12 @@ This includes classes for
   @end table
 
   @item vcsl_spatial_transformation
-  @table @samp
+  @table
     @item vcsl_cylindrical_to_cartesian_3d
     @item vcsl_perspective
     @item vcsl_rotation
       Rotation about an axis through the origin
-    @table @samp
+    @table
       @item vcsl_displacement
         Rotation about a general axis
     @end table
@@ -110,3 +108,4 @@ virtual bool is_linear(void) const=0;
 // REQUIRE: is_linear()
 virtual vnl_matrix<double> *matrix(const double time) const;
 @end example
+@end enumerate
