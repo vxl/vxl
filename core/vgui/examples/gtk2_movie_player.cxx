@@ -1,3 +1,5 @@
+//:
+// \file
 // This is a more complicated example using GTK to make our GUI instead
 // of VGUI (apart from the OpenGL area).
 //
@@ -38,15 +40,16 @@ gint stopimage(GtkWidget*, gpointer deckptr)
 
 int main(int argc, char ** argv)
 {
+  if (argc < 2) { vcl_cerr << "Usage: " << argv[0] << " img1 [img2 ... ]\n"; return 1; }
   vgui::select("gtk");
   vgui::init(argc, argv);
 
   vgui_deck_tableau_new deck;
 
   // Load the images into image tableaux and add them to the deck:
-  for (int i=1; i<10; ++i)
+  for (int i=1; i<argc; ++i)
   {
-    vgui_image_tableau_new image(argc>i ? argv[i] : "az32_10.tif");
+    vgui_image_tableau_new image(argv[i]);
     deck->add(image);
   }
 
