@@ -9,19 +9,19 @@
 #include <vul/vul_file.h>
 #include <vul/vul_sprintf.h>
 
-vidl_vil1_file_sequence::vidl_vil1_file_sequence(char const* fmt)
+vidl_vil1_file_sequence::vidl_vil1_file_sequence(vcl_string const& fmt)
 {
   open(fmt);
 }
 
-bool vidl_vil1_file_sequence::open(char const* fmt)
+bool vidl_vil1_file_sequence::open(vcl_string const& fmt)
 {
   current_file_index = -1;
 
   // fmt could be a "lst" file, or a single vob or mpg or a %d list
-  int l = vcl_strlen(fmt);
-  if (l > 4 && vcl_strcmp(fmt + l - 4, ".lst") == 0) {
-    vcl_ifstream f(fmt);
+  int l = fmt.size();
+  if (l > 4 && fmt.substr(l-4) == ".lst") {
+    vcl_ifstream f(fmt.c_str());
     assert(f.good());
     for (vul_awk awk(f); awk; ++awk) {
       if (awk.NF() > 0) {
@@ -30,11 +30,11 @@ bool vidl_vil1_file_sequence::open(char const* fmt)
       }
     }
   }
-  else if (vcl_strchr(fmt, '%') ) {
+  else if (fmt.find('%') != vcl_string::npos ) {
     // Assume a list.  Could start from some low number... Could glob.  hmmm.
     bool found_one = false;
     for (int i = 0; ; ++i) {
-      const char* buf = vul_sprintf(fmt, i).c_str();
+      vcl_string buf = vul_sprintf(fmt.c_str(), i);
       int s = vul_file::size(buf);
       if (s > 0) {
         found_one = true;

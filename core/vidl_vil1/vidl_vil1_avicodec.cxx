@@ -197,11 +197,11 @@ int vidl_vil1_avicodec::put_section(int /*position*/,
 //-----------------------------------------------------------------------------
 //: Probe the file fname, open it as an AVI file. If it works, return true, false otherwise.
 
-bool vidl_vil1_avicodec::probe(const char* fname)
+bool vidl_vil1_avicodec::probe(vcl_string const& fname)
 {
   int modenum = OF_READ | OF_SHARE_DENY_WRITE;
   AVIFileInit();
-  if (AVIFileOpen(&avi_file_, fname, modenum, 0L)==0)
+  if (AVIFileOpen(&avi_file_, fname.c_str(), modenum, 0L)==0)
   {
     // The file was opened with success
     // So, release it
@@ -213,7 +213,7 @@ bool vidl_vil1_avicodec::probe(const char* fname)
   return false;
 }
 
-vidl_vil1_codec_sptr vidl_vil1_avicodec::load(const char* fname, char mode)
+vidl_vil1_codec_sptr vidl_vil1_avicodec::load(vcl_string const& fname, char mode)
 {
   int modenum = OF_READ;
   DWORD videostreamcode = 0x73646976; // corresponds to char string "vids"
@@ -228,7 +228,7 @@ vidl_vil1_codec_sptr vidl_vil1_avicodec::load(const char* fname, char mode)
   }
 
   AVIFileInit();
-  AVIFileOpen(&avi_file_, fname, modenum, 0L);
+  AVIFileOpen(&avi_file_, fname.c_str(), modenum, 0L);
 
   // only support first video stream
   if (AVIFileGetStream(avi_file_, &avi_stream_, videostreamcode, 0) != AVIERR_OK) {
@@ -249,7 +249,7 @@ vidl_vil1_codec_sptr vidl_vil1_avicodec::load(const char* fname, char mode)
 
   set_format('L');
   set_image_class('C');
-  set_name(vul_file::basename(fname).c_str());
+  set_name(vul_file::basename(fname));
   set_description(fname);
 
   // Open the first frame
@@ -295,7 +295,7 @@ vidl_vil1_codec_sptr vidl_vil1_avicodec::load(const char* fname, char mode)
 }
 
 
-bool vidl_vil1_avicodec::save(vidl_vil1_movie* movie, const char* fname)
+bool vidl_vil1_avicodec::save(vidl_vil1_movie* movie, vcl_string const& fname)
 {
   PAVIFILE avi_file;
   AVISTREAMINFO avi_stream_info;
@@ -309,7 +309,7 @@ bool vidl_vil1_avicodec::save(vidl_vil1_movie* movie, const char* fname)
   // Open the movie file for writing....
   //
   hr = AVIFileOpen(&avi_file,               // returned file pointer
-                   fname,                   // file name
+                   fname.c_str(),           // file name
                    OF_WRITE | OF_CREATE,    // mode to open file with
                    NULL);                   // use handler determined
   // from file extension....

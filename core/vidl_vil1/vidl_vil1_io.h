@@ -42,7 +42,7 @@ class vidl_vil1_io
   //---------------------------------------------------------
 
   static vidl_vil1_movie_sptr load_movie(
-        const char* fname,
+        vcl_string const& fname,
         int start, int end,
         int increment,
         char mode = 'r'
@@ -65,7 +65,7 @@ class vidl_vil1_io
         );
 
   static vidl_vil1_movie_sptr load_movie(
-        const char* fname,
+        vcl_string const& fname,
         char mode = 'r'
         ) { return load_movie(fname, 0, 0, 1, mode); }
 
@@ -84,7 +84,7 @@ class vidl_vil1_io
   //---------------------------------------------------------
 
   static vidl_vil1_clip_sptr load_clip(
-        const char* fname,
+        vcl_string const& fname,
         int start,
         int end,
         int increment,
@@ -106,7 +106,7 @@ class vidl_vil1_io
         );
 
   static vidl_vil1_clip_sptr load_clip(
-        const char* fname,
+        vcl_string const& fname,
         char mode = 'r'
         ) { return load_clip(fname, 0, 0, 1, mode); }
 
@@ -124,9 +124,8 @@ class vidl_vil1_io
 
   static bool save(
         vidl_vil1_movie* movie,
-        const char* fname,
-        const char* type
-        );
+        vcl_string const& fname,
+        vcl_string const& type);
 
   // returns vcl_string names  for supported types
   static vcl_list<vcl_string> supported_types();
@@ -178,9 +177,8 @@ class vidl_vil1_io
 
   static bool save_images(
         vidl_vil1_movie* movie,
-        const char* fname,
-        const char* type
-        );
+        vcl_string const& fname,
+        vcl_string const& type);
 };
 
 #endif // vidl_vil1_io_h
