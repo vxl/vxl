@@ -35,8 +35,10 @@ class bxml_generic_ptr
 
   //:Accessing specific classes from a generic pointer
   inline void* get_anyobject() const {return ptrs_.anyobject_;}
-  inline vcl_vector<void*>* get_vector() const; 
-  inline vsol_spatial_object_2d* get_vsol_spatial_object() const; 
+  //: access for vcl_vector
+  inline vcl_vector<void*>* get_vector() const { return type_==VECT ? ptrs_.vec_ptr_ : 0; }
+  //: access for vsol_spatial_object
+  inline vsol_spatial_object_2d* get_vsol_spatial_object() const { return type_==VSOL_SO ? ptrs_.vso_ptr_ : 0; }
 
   //:stream print
   inline friend vcl_ostream& operator<<(vcl_ostream&, const bxml_generic_ptr&);
@@ -61,21 +63,4 @@ inline vcl_ostream& operator<<(vcl_ostream& os, const bxml_generic_ptr& ptr)
   return os;
 }
 
-//: access for vcl_vector
-inline vcl_vector<void*>* bxml_generic_ptr::get_vector() const 
-{
-  if (type_==VECT)
-    return ptrs_.vec_ptr_;
-  else
-    return 0;
-}
-
-//: access for vsol_spatial_object
-inline vsol_spatial_object_2d* bxml_generic_ptr::get_vsol_spatial_object() const 
-{
-  if (type_==VSOL_SO)
-    return ptrs_.vso_ptr_;
-  else
-    return 0;
-}
 #endif // bxml_generic_ptr_h_
