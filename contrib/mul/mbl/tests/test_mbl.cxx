@@ -10,6 +10,7 @@
 #include <mbl/tests/test_mz_random.cxx>
 #include <mbl/tests/test_matrix_products.cxx>
 #include <mbl/tests/test_matxvec.cxx>
+#include <mbl/tests/test_stats_1d.cxx>
 
 #undef TESTMAIN
 #define TESTMAIN(x) int main() \
@@ -22,6 +23,7 @@ void run_test_mbl()
   test_mz_random();
   test_matrix_products();
   test_matxvec();
+  test_stats_1d();
 }
 
 

@@ -15,6 +15,7 @@ mbl_matxvec
 mbl_mz_random
 mbl_k_means
 mbl_data_collector_base
+mbl_stats_1d
 )
 
 AUX_SOURCE_DIRECTORY(Templates mbl_sources)
