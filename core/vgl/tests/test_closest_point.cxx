@@ -8,10 +8,14 @@
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_homg_line_3d_2_points.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_line_2d.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_plane_3d.h>
 #include <vcl_iostream.h>
 #include <vcl_cmath.h> // for sqrt()
 
-static void testLine2DClosestPoint()
+static void testHomgLine2DClosestPoint()
 {
   vgl_homg_point_2d<double> p, q;
   vgl_homg_line_2d<double> l;
@@ -35,7 +39,7 @@ static void testLine2DClosestPoint()
 }
 
 // Test for closest points on two 3D lines, by Brendan McCane
-static void testLine3DClosestPoints()
+static void testHomgLine3DClosestPoints()
 {
   vgl_homg_point_3d<double> p1, p2;
   vgl_homg_line_3d_2_points<double> l1;
@@ -96,7 +100,7 @@ static void testLine3DClosestPoints()
   TEST_NEAR("Skew lines distance test", vgl_distance(pts.first,l2),1/vcl_sqrt(3.0),1e-8);
 }
 
-static void testPlane3DClosestPoint()
+static void testHomgPlane3DClosestPoint()
 {
   vgl_homg_point_3d<double> p, q;
   vgl_homg_plane_3d<double> l;
@@ -119,10 +123,58 @@ static void testPlane3DClosestPoint()
   TEST_NEAR("Distance test", vgl_distance(q,l), 1.0, 1e-8);
 }
 
+static void testLine2DClosestPoint()
+{
+  vgl_point_2d<double> p, q;
+  vgl_line_2d<double> l;
+
+  // test for coincident
+  l.set(0,1,-1); q.set(0,1); p = vgl_closest_point(l,q);
+  TEST("2D coincident test", p, q);
+  TEST("2D coincident test", vgl_closest_point(q,l), q);
+  TEST_NEAR("Distance test", vgl_distance(l,q), 0.0, 1e-8);
+  TEST_NEAR("Distance test", vgl_distance(q,l), 0.0, 1e-8);
+  q.set(5,1); p = vgl_closest_point(l,q);
+  TEST("2D coincident test", p, q);
+
+  // test for non-coincident
+  q.set(0,2); p.set(0,1);
+  TEST("2D non-coincident test", vgl_closest_point(l,q), p);
+  TEST_NEAR("Distance test", vgl_distance(l,q), 1.0, 1e-8);
+  q.set(5,2); p.set(5,1);
+  TEST("2D non-coincident test", vgl_closest_point(q,l), p);
+  TEST_NEAR("Distance test", vgl_distance(q,l), 1.0, 1e-8);
+}
+
+static void testPlane3DClosestPoint()
+{
+  vgl_point_3d<double> p, q;
+  vgl_plane_3d<double> l;
+
+  // test for coincident
+  l.set(0,1,0,-1); q.set(0,1,2); p = vgl_closest_point(l,q);
+  TEST("3D coincident test", p, q);
+  TEST("3D coincident test", vgl_closest_point(q,l), q);
+  TEST_NEAR("Distance test", vgl_distance(l,q), 0.0, 1e-8);
+  TEST_NEAR("Distance test", vgl_distance(q,l), 0.0, 1e-8);
+  q.set(5,1,3); p = vgl_closest_point(l,q);
+  TEST("3D coincident test", p, q);
+
+  // test for non-coincident
+  q.set(0,2,3); p.set(0,1,3);
+  TEST("3D non-coincident test", vgl_closest_point(l,q), p);
+  TEST_NEAR("Distance test", vgl_distance(l,q), 1.0, 1e-8);
+  q.set(5,2,3); p.set(5,1,3);
+  TEST("3D non-coincident test", vgl_closest_point(q,l), p);
+  TEST_NEAR("Distance test", vgl_distance(q,l), 1.0, 1e-8);
+}
+
 static void test_closest_point()
 {
+  testHomgLine2DClosestPoint();
+  testHomgLine3DClosestPoints();
+  testHomgPlane3DClosestPoint();
   testLine2DClosestPoint();
-  testLine3DClosestPoints();
   testPlane3DClosestPoint();
 }
 
