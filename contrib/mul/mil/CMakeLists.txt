@@ -28,6 +28,7 @@ SET(mil_sources
  mil_sample_grid_2d.txx          mil_sample_grid_2d.h
 
  mil_bilin_interp_2d.h
+ mil_wrappers.h
  mil_convert_vil.h
 )
 
