@@ -4,10 +4,6 @@
 // \file
 
 #include <vsol/vsol_point_3d.h>
-
-//*****************************************************************************
-// External declarations for implementation
-//*****************************************************************************
 #include <vcl_cassert.h>
 #include <vcl_cstdio.h>
 #include <vcl_cmath.h>
@@ -61,7 +57,7 @@ bsol_intrinsic_curve_3d::~bsol_intrinsic_curve_3d()
 //: Clone `this': creation of a new object and initialization
 // See Prototype pattern
 //---------------------------------------------------------------------------
-vsol_spatial_object_3d_sptr bsol_intrinsic_curve_3d::clone(void) const
+vsol_spatial_object_3d* bsol_intrinsic_curve_3d::clone(void) const
 {
   return new bsol_intrinsic_curve_3d(*this);
 }

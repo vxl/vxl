@@ -1,23 +1,18 @@
-#ifndef _BSOL_INTRINSIC_CURVE_3D_H_
-#define _BSOL_INTRINSIC_CURVE_3D_H_
+#ifndef bsol_intrinsic_curve_3d_h_
+#define bsol_intrinsic_curve_3d_h_
 //*****************************************************************************
 //:
 //  \file
 // \brief Generic intrinsic curve in 3D that has intrinsic curvature, torsion, d_theta, d_s defined.
-//        Note that to make the definition intrinsic, I inherent it from vsol_curve_3d.
+// Note that to make the definition intrinsic, I inherit it from vsol_curve_3d.
 //
-// \author
-// MingChing Chang
+// \author MingChing Chang
 // \date   2004/03/19
 //
 // \verbatim
 //  Modifications
 //   2004/03/17 MingChing Chang Creation
 // \endverbatim
-//*****************************************************************************
-
-//*****************************************************************************
-// External declarations for values
 //*****************************************************************************
 
 #include <vcl_vector.h>
@@ -98,7 +93,9 @@ class bsol_intrinsic_curve_3d : public vsol_curve_3d
   virtual ~bsol_intrinsic_curve_3d();
   //: Clone `this': creation of a new object and initialization
   // See Prototype pattern
-  virtual vsol_spatial_object_3d_sptr clone(void) const;
+  virtual vsol_spatial_object_3d* clone(void) const;
+  //: Return a platform independent string identifying the class
+  vcl_string is_a() const { return vcl_string("bsol_intrinsic_curve_3d"); }
 
   //***************************************************************************
   // Access
@@ -410,4 +407,4 @@ class bsol_intrinsic_curve_3d : public vsol_curve_3d
   }
 };
 
-#endif // #ifndef _BSOL_INTRINSIC_CURVE_3D_H_
+#endif // bsol_intrinsic_curve_3d_h_
