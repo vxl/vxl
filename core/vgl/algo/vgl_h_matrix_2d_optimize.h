@@ -32,13 +32,13 @@ class projection_lsqf : public vnl_least_squares_function
  public:
   projection_lsqf(vcl_vector<vgl_homg_point_2d<double> > const& from_points, 
                   vcl_vector<vgl_homg_point_2d<double> > const& to_points)
-    : n_(from_points.size()), from_points_(from_points),
-    vnl_least_squares_function(9, 2*from_points.size(), no_gradient)
-    {
+    :vnl_least_squares_function(9, 2*from_points.size(), no_gradient)
     
+    {
+      n_ = from_points.size();
+      from_points_=from_points;
       assert(n_==to_points.size());
-      for(unsigned i = 0; i<n_; ++i)
-        to_points_.push_back(vgl_point_2d<double> (to_points[i]));
+      to_points_ = to_points;
     }
   ~projection_lsqf() { }
   //compute the projection error given a set of h parameters

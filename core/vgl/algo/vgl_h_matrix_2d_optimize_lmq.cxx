@@ -103,7 +103,7 @@ optimize_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
           vgl_h_matrix_2d<double>& H)
 {
   //number of lines must be the same
-  int n = lines1.size();
+  unsigned n = lines1.size();
   assert(n == lines2.size());
   assert(n>4);
   //compute the normalizing transforms. By convention, these are point
