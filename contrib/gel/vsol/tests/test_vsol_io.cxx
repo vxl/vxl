@@ -30,7 +30,6 @@
 
 void test_vsol_io()
 {
-
   vsl_add_to_binary_loader(vsol_point_2d());
   vsl_add_to_binary_loader(vsol_line_2d());
   vsl_add_to_binary_loader(vsol_polyline_2d());
@@ -60,8 +59,8 @@ void test_vsol_io()
   p_ina->b_read(bp_in);
   bp_in.close();
 
-  vcl_cout << "Recovered point" << *p_in << '\n'
-           << "Recovered point" << *p_ina << '\n';
+  vcl_cout << "Recovered point " << *p_in << '\n'
+           << "Recovered point " << *p_ina << '\n';
 
   TEST("Testing point io",
        p_in && p_ina &&
@@ -110,7 +109,7 @@ void test_vsol_io()
 
   vsol_line_2d_sptr l = new vsol_line_2d(p0, p1);
   vsol_line_2d_sptr la = new vsol_line_2d(p1, p0);
-  vcl_cout << "testing on lines" << *l << ' ' << *la << '\n';
+  vcl_cout << "testing on lines\n " << *l << ' ' << *la;
 
   vsl_b_ofstream bl_out("test_line_2d_io.tmp");
 
@@ -129,7 +128,7 @@ void test_vsol_io()
   vsl_b_read(bl_in, l_ina);
   bl_in.close();
 
-  vcl_cout << "Recovered lines" << *l_in << ' ' << *l_ina << '\n';
+  vcl_cout << "Recovered lines\n " << *l_in << ' ' << *l_ina;
 
   TEST("Testing line io",
        l_in && l_ina &&
@@ -143,26 +142,26 @@ void test_vsol_io()
   lines.push_back(l);   lines.push_back(la);
   vsl_b_ofstream blv_out("test_line_2d_io.tmp");
   vsl_b_write(blv_out, lines);
-  blv_out.close();  
-  
+  blv_out.close();
+
   vsl_b_ifstream blv_in("test_line_2d_io.tmp");
   vsl_b_read(blv_in, lines_in);
-  blv_in.close();  
+  blv_in.close();
   good = true;
   k = 0;
-  for(vcl_vector<vsol_line_2d_sptr>::iterator lit = lines_in.begin();
-      lit != lines_in.end(); lit++, k++)
-    {
-      vcl_cout << "Saved line" << *lines[k] << ' ' 
-               << "Read line" << *(*lit) << '\n';
-      good = good && *(*lit) == *lines[k];
-    }
+  for (vcl_vector<vsol_line_2d_sptr>::iterator lit = lines_in.begin();
+       lit != lines_in.end(); lit++, k++)
+  {
+    vcl_cout << "Saved line " << *lines[k]
+             << " Read line " << *(*lit);
+    good = good && *(*lit) == *lines[k];
+  }
   TEST("Testing line vector io", good, true);
 
   // remove the temporary file
   vpl_unlink ("test_line_2d_io.tmp");
 
-  
+
   //vsol_polyline_2d I/O
   vcl_cout << "\nTesting I/O for vsol_polyline_2d\n";
 
@@ -170,7 +169,7 @@ void test_vsol_io()
   TEST("Created test_polyline_2d_io.tmp for writing",(!ply_out), false);
 
   vsol_polyline_2d_sptr poly = new vsol_polyline_2d(points);
-  vcl_cout << "Writing polyline " << *poly << '\n';
+  vcl_cout << "Writing polyline " << *poly;
   vsl_b_write(ply_out, poly);
   ply_out.close();
 
@@ -178,11 +177,8 @@ void test_vsol_io()
   TEST("Created test_polyline_2d_io.tmp for reading",(!ply_in), false);
   vsol_polyline_2d_sptr poly_in;
   vsl_b_read(ply_in, poly_in);
-  vcl_cout << "Read polyline " << *poly_in << '\n';
-  TEST("Testing polyline io",
-       poly && poly_in &&
-       *poly == *poly_in,
-       true);
+  vcl_cout << "Read polyline " << *poly_in;
+  TEST("Testing polyline io", poly && poly_in && *poly == *poly_in, true);
 
   vsol_point_2d_sptr pb1 = new vsol_point_2d(4.4, 5.5);
   vsol_point_2d_sptr pb2 = new vsol_point_2d(6.6, 7.7);
@@ -194,20 +190,20 @@ void test_vsol_io()
   plines.push_back(poly);   plines.push_back(polyb);
   vsl_b_ofstream bplv_out("test_polyline_2d_io.tmp");
   vsl_b_write(bplv_out, plines);
-  bplv_out.close();  
-  
+  bplv_out.close();
+
   vsl_b_ifstream bplv_in("test_polyline_2d_io.tmp");
   vsl_b_read(bplv_in, plines_in);
-  blv_in.close();  
+  blv_in.close();
   good = true;
   k = 0;
-  for(vcl_vector<vsol_polyline_2d_sptr>::iterator plit = plines_in.begin();
-      plit != plines_in.end(); plit++, k++)
-    {
-      vcl_cout << "Saved polyline" << *plines[k] << ' ' 
-               << "Read polyline" << *(*plit) << '\n';
-      good = good && *(*plit) == *plines[k];
-    }
+  for (vcl_vector<vsol_polyline_2d_sptr>::iterator plit = plines_in.begin();
+       plit != plines_in.end(); plit++, k++)
+  {
+    vcl_cout << "Saved polyline " << *plines[k]
+             << " Read polyline " << *(*plit);
+    good = good && *(*plit) == *plines[k];
+  }
   TEST("Testing polyline vector io", good, true);
 
   // remove the temporary file
@@ -220,7 +216,7 @@ void test_vsol_io()
   TEST("Created test_polygon_2d_io.tmp for writing",(!pgy_out), false);
 
   vsol_polygon_2d_sptr polyg = new vsol_polygon_2d(points);
-  vcl_cout << "Writing polygon " << *polyg << '\n';
+  vcl_cout << "Writing polygon " << *polyg;
   vsl_b_write(pgy_out, polyg);
   pgy_out.close();
 
@@ -228,12 +224,8 @@ void test_vsol_io()
   TEST("Created test_polygon_2d_io.tmp for reading",(!pgy_in), false);
   vsol_polygon_2d_sptr polyg_in;
   vsl_b_read(pgy_in, polyg_in);
-  vcl_cout << "Read polygon " << *polyg_in << '\n';
-  TEST("Testing polygon io",
-       polyg && polyg_in &&
-       *polyg == *polyg_in,
-       true);
-
+  vcl_cout << "Read polygon " << *polyg_in;
+  TEST("Testing polygon io", polyg && polyg_in && *polyg == *polyg_in, true);
 
   pointsb.push_back(pointsb[0]);
   vsol_polygon_2d_sptr polygb = new vsol_polygon_2d(pointsb);
@@ -241,20 +233,20 @@ void test_vsol_io()
   plygns.push_back(polyg);   plygns.push_back(polygb);
   vsl_b_ofstream bplgv_out("test_polygon_2d_io.tmp");
   vsl_b_write(bplgv_out, plygns);
-  bplgv_out.close();  
-  
+  bplgv_out.close();
+
   vsl_b_ifstream bplgv_in("test_polygon_2d_io.tmp");
   vsl_b_read(bplgv_in, plygns_in);
-  blv_in.close();  
+  blv_in.close();
   good = true;
   k = 0;
-  for(vcl_vector<vsol_polygon_2d_sptr>::iterator plit = plygns_in.begin();
-      plit != plygns_in.end(); plit++, k++)
-    {
-      vcl_cout << "Saved polygon" << *plygns[k] << ' ' 
-               << "Read polygon" << *(*plit) << '\n';
-      good = good && *(*plit) == *plygns[k];
-    }
+  for (vcl_vector<vsol_polygon_2d_sptr>::iterator plit = plygns_in.begin();
+       plit != plygns_in.end(); plit++, k++)
+  {
+    vcl_cout << "Saved polygon " << *plygns[k]
+             << " Read polygon " << *(*plit);
+    good = good && *(*plit) == *plygns[k];
+  }
   TEST("Testing polygon vector io", good, true);
   // remove the temporary file
   vpl_unlink ("test_polygon_2d_io.tmp");
@@ -266,7 +258,7 @@ void test_vsol_io()
   TEST("Created test_box_2d_io.tmp for writing",(!bx_out), false);
 
   vsol_box_2d_sptr box = new vsol_box_2d();
-  box->add_point(0, 1);   box->add_point(10, 11); 
+  box->add_point(0, 1);   box->add_point(10, 11);
   vcl_cout << "Writing box " << *box << '\n';
   vsl_b_write(bx_out, box);
   bx_out.close();
@@ -276,32 +268,29 @@ void test_vsol_io()
   vsol_box_2d_sptr box_in;
   vsl_b_read(bx_in, box_in);
   vcl_cout << "Read box " << *box_in << '\n';
-  TEST("Testing box io",
-       box && box_in &&
-       box->near_equal(*box_in, 0.01f),
-       true);
+  TEST("Testing box io", box && box_in && box->near_equal(*box_in,0.01f), true);
   bx_in.close();
 
   vsol_box_2d_sptr boxb = new vsol_box_2d();
-  boxb->add_point(100, 110);   boxb->add_point(101, 111); 
+  boxb->add_point(100, 110);   boxb->add_point(101, 111);
   vcl_vector<vsol_box_2d_sptr> boxes, boxes_in;
   boxes.push_back(box);   boxes.push_back(boxb);
   vsl_b_ofstream bboxv_out("test_box_2d_io.tmp");
   vsl_b_write(bboxv_out, boxes);
-  bboxv_out.close();  
-  
+  bboxv_out.close();
+
   vsl_b_ifstream bboxv_in("test_box_2d_io.tmp");
   vsl_b_read(bboxv_in, boxes_in);
-  bboxv_in.close();  
+  bboxv_in.close();
   good = true;
   k = 0;
-  for(vcl_vector<vsol_box_2d_sptr>::iterator plit = boxes_in.begin();
-      plit != boxes_in.end(); plit++, k++)
-    {
-      vcl_cout << "Saved box" << *boxes[k] << ' ' 
-               << "Read box" << *(*plit) << '\n';
-      good = good && (*plit)->near_equal(*boxes[k], 0.01f);
-    }
+  for (vcl_vector<vsol_box_2d_sptr>::iterator plit = boxes_in.begin();
+       plit != boxes_in.end(); plit++, k++)
+  {
+    vcl_cout << "Saved box " << *boxes[k] << '\n'
+             << " Read box " << *(*plit) << '\n';
+    good = good && (*plit)->near_equal(*boxes[k], 0.01f);
+  }
   TEST("Testing box vector io", good, true);
 
 
@@ -320,21 +309,16 @@ void test_vsol_io()
   vsl_b_write(bpm_out, obj3);
   vsl_b_write(bpm_out, obj4);
   bpm_out.close();
-  
-  if(obj1)
-    vcl_cout << "Saved object 1: "; obj1->print(vcl_cout);
-  if(obj2)
-    vcl_cout << "\nSaved object 2:"; obj2->print(vcl_cout);
-  if(obj3)
-    vcl_cout << "\nSaved object 3:"; obj3->print(vcl_cout);
-  if(obj4)
-    vcl_cout << "\nSaved object 4:"; obj4->print(vcl_cout);
-  vcl_cout << vcl_endl;
+
+  if (obj1) vcl_cout << "Saved object 1: "; obj1->print(vcl_cout);
+  if (obj2) vcl_cout << "Saved object 2: "; obj2->print(vcl_cout);
+  if (obj3) vcl_cout << "Saved object 3: "; obj3->print(vcl_cout);
+  if (obj4) vcl_cout << "Saved object 4: "; obj4->print(vcl_cout);
 
   vsl_b_ifstream bpm_in("test_polymorph_io.tmp");
   TEST("Opened test_polymorph_io.tmp for reading",(!bpm_in), false);
 
-  vsol_spatial_object_2d_sptr obj1_in, obj2_in, obj3_in, obj4_in; 
+  vsol_spatial_object_2d_sptr obj1_in, obj2_in, obj3_in, obj4_in;
   vsl_b_read(bpm_in, obj1_in);
   vsl_b_read(bpm_in, obj2_in);
   vsl_b_read(bpm_in, obj3_in);
@@ -342,13 +326,11 @@ void test_vsol_io()
   bpm_in.close();
 
   vcl_cout << "Recovered object 1: "; obj1_in->print(vcl_cout);
-  vcl_cout << "\nRecovered object 2:"; obj2_in->print(vcl_cout);
-  vcl_cout << "\nRecovered object 3:"; obj3_in->print(vcl_cout);
-  vcl_cout << "\nRecovered object 4:"; obj4_in->print(vcl_cout);
-  vcl_cout << vcl_endl;
+  vcl_cout << "Recovered object 2: "; obj2_in->print(vcl_cout);
+  vcl_cout << "Recovered object 3: "; obj3_in->print(vcl_cout);
+  vcl_cout << "Recovered object 4: "; obj4_in->print(vcl_cout);
 
   TEST("Testing polymorphic io", true, true);
-
 }
 
 TESTMAIN(test_vsol_io);
