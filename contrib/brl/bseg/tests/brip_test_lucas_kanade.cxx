@@ -6,7 +6,7 @@
 #include <brip/brip_float_ops.h>
 #include <testlib/testlib_test.h>
 
-static void brip_test_lucas_kanade(int argc, char * argv[])
+static void brip_test_lucas_kanade()
 {
   vil1_memory_image_of<float> cur, prev, vx, vy, ang;
   int w = 32, h =32;
@@ -57,4 +57,4 @@ static void brip_test_lucas_kanade(int argc, char * argv[])
   TEST_NEAR("ang(11,24)", ang(11,24), 130.53, 0.005);
 }
 
-TESTMAIN_ARGS(brip_test_lucas_kanade);
+TESTMAIN(brip_test_lucas_kanade);
