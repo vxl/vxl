@@ -212,6 +212,11 @@ int vul_string_atoi(vcl_string const& s)
   return vcl_atoi(s.c_str());
 }
 
+double vul_string_atof(vcl_string const& s)
+{
+  return vcl_atof(s.c_str());
+}
+
 static bool NotSpace(char a)
 {
   return !vcl_isspace(a);

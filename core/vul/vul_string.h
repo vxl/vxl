@@ -46,6 +46,9 @@ extern vcl_string& vul_string_reverse(vcl_string&);
 //: Reads an integer from a string
 extern int vul_string_atoi(vcl_string const&);
 
+//: Reads an double from a string
+extern double vul_string_atof(vcl_string const& s);
+
 //: Convert a string to a boolean.
 // Looks for On, true, yes, 1 to mean true. everything else is false.
 // It ignores leading and trailing whitespace and capitalisation.
