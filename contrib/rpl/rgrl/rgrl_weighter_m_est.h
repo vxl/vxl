@@ -37,6 +37,10 @@ class rgrl_weighter_m_est
 
   ~rgrl_weighter_m_est();
 
+  //: set true if desires to weight more on distinct match
+  void set_weight_more_on_distinct_match( bool flag )
+  {    weight_more_on_distinct_match_ = flag; }
+  
   void
   compute_weights( rgrl_scale const&  scale,
                    rgrl_match_set&    match_set ) const;
@@ -62,6 +66,7 @@ class rgrl_weighter_m_est
   vcl_auto_ptr<rrel_m_est_obj> m_est_;
   bool use_signature_error_;
   bool signature_precomputed_;
+  bool weight_more_on_distinct_match_;
 };
 
 #endif

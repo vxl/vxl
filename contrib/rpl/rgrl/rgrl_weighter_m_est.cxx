@@ -21,7 +21,8 @@ rgrl_weighter_m_est( vcl_auto_ptr<rrel_m_est_obj>  m_est,
                      bool                          use_precomputed_signature_wgt )
   : m_est_( m_est ),
     use_signature_error_( use_signature_error ),
-    signature_precomputed_( use_precomputed_signature_wgt )
+    signature_precomputed_( use_precomputed_signature_wgt ),
+    weight_more_on_distinct_match_( true )
 {
 }
 
@@ -108,15 +109,22 @@ compute_weights( rgrl_scale const&  scales,
     // Now, assign the cumulative weights for each match by scaling
     // the initial cumulative weight by the fraction of the total
     // cumulative weight.
-    // So a feature with more matches will be penalized for the
+    // If weight_more_on_distinct_match_ is set,
+    // a feature with more matches will be penalized for the
     // ambiguity, and a feature with a unique match will not be
     // affected at all.
 
     if ( sum_weights > 1e-16 ) { //sum_weights not approaching 0
-      for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
-        double wgt = titr.cumulative_weight();
-        titr.set_cumulative_weight( wgt*wgt / sum_weights );
-      }
+      if( weight_more_on_distinct_match_ )
+        for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
+          double wgt = titr.cumulative_weight();
+            titr.set_cumulative_weight( wgt*wgt / sum_weights );
+        }
+      else
+        for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
+          double wgt = titr.cumulative_weight();
+            titr.set_cumulative_weight( wgt / sum_weights );
+        }
     }
   }
 }
