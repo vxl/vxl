@@ -12,6 +12,7 @@ MANPAGE_SOURCES += vil3d_slice.h
 MANPAGE_SOURCES += vil3d_trilin_interp.h
 MANPAGE_SOURCES += vil3d_crop.h
 MANPAGE_SOURCES += vil3d_switch_axes.h
+MANPAGE_SOURCES += vil3d_math.h
 
 SUBDIRS += algo io
 

@@ -14,6 +14,8 @@ TESTS += test_algo_binary_erode.cxx
 TESTS += test_algo_structuring_element.cxx
 TESTS += test_algo_exp_filter.cxx
 TESTS += test_switch_axes.cxx
+TESTS += test_algo_grad_1x3.cxx
+TESTS += test_math.cxx
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
