@@ -188,6 +188,7 @@ void test_mixture()
   vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
   TEST("70 <= pass <= 130", pass >= 70 && pass <= 130, true);
 
+  vsl_delete_all_loaders();
   delete p_pdf;
   delete p_sampler;
   delete p_sampler2;

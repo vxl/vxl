@@ -222,6 +222,7 @@ void test_pc_gaussian()
   vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
   TEST("70 < pass < 130", pass > 70 && pass < 130, true);
 
+  vsl_delete_all_loaders();
   delete p_sampler2;
   delete p_pdf_built;
   delete p_sampler;

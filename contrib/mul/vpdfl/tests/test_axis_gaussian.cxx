@@ -138,6 +138,7 @@ void test_axis_gaussian()
   vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
   TEST("70 < pass < 130", pass > 70 && pass < 130, true);
 
+  vsl_delete_all_loaders();
   delete p_sampler2;
   delete base_pdf_ptr_in;
   delete base_builder_ptr_in;

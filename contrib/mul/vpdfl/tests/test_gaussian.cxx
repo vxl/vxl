@@ -179,6 +179,7 @@ void test_gaussian()
   delete p_sampler;
   delete p_base_pdf_in;
   delete p_base_builder_in;
+  vsl_delete_all_loaders();
 }
 
 TESTLIB_DEFINE_MAIN(test_gaussian);
