@@ -66,7 +66,7 @@
 // It appears several programmers have (independently)
 // not realised their lack of knowledge of complex numbers.
 // pow(complex(-1,0),0.5) should return (0,1) not (Nan,0), etc.
-#define VCL_COMPLEX_POW_WORKS 1
+#define VCL_COMPLEX_POW_WORKS 0
 
 
 //: VCL_DEFAULT_VALUE(x)
