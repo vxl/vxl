@@ -14,17 +14,26 @@
 // # define isnan _isnan
 # define finite _finite
 # define finitef _finite
+#ifndef finitel
+# define finitel _finite
+#endif
 # define isnan _isnan
 #elif VXL_IEEEFP_HAS_FINITE
 # include <ieeefp.h>
 # ifndef finitef
 #  define finitef finite
 # endif
+# ifndef finitel
+#  define finitel finite
+# endif
 
 #elif VXL_C_MATH_HAS_FINITE
 # include <math.h> // dont_vxl_filter: this is *not* supposed to be <cmath>
-# ifndef __alpha__ // on Alpha, finitef() must be used for float args instead of finite()
+# if !defined(__alpha__) && !(VXL_C_MATH_HAS_FINITEF)// on Alpha, finitef() must be used for float args instead of finite()
 #  define finitef finite
+# endif
+# if !(VXL_C_MATH_HAS_FINITEL)
+#  define finitel finite
 # endif
 
 #elif defined(__hpux) 
@@ -165,7 +174,7 @@ bool vnl_math_isnan(long double x)
 // Plausible theory : 'finite' is a preprocessor macro, defined in terms of a
 // macro called 'isinf'.
 #if defined(isinf)
-# if defined(__GNUC__) || defined(VCL_METRO_WERKS)
+# if defined(__GNUC__) || defined(VCL_METRO_WERKS) || defined(__INTEL_COMPILER)
 // I do not know if MW accepts #warning. Comment out the #undef if not.
 #  warning macro isinf is defined
 #  undef isinf
@@ -188,7 +197,7 @@ bool vnl_math_isfinite(float x) { return finitef(x) != 0; }
 //: Return true if x is neither NaN nor Inf.
 bool vnl_math_isfinite(double x) { return finite(x) != 0; }
 //: Return true if x is neither NaN nor Inf.
-bool vnl_math_isfinite(long double x) { return finite(x) != 0; }
+bool vnl_math_isfinite(long double x) { return finitel(x) != 0; }
 #else
 // Assume IEEE floating point number representation
 bool vnl_math_isfinite(float x) { return !bMe(&x,0x7f800000L,sz_f) && bMp(&x,0x7fffffffL,sz_f) != 0x7f7fffffL; }
@@ -215,7 +224,7 @@ bool vnl_math_isinf(float x) { return !finitef(x) && !isnan(x); }
 //: Return true if x is inf
 bool vnl_math_isinf(double x) { return !finite(x) && !isnan(x); }
 //: Return true if x is inf
-bool vnl_math_isinf(long double x) { return !finite(x) && !isnan(x); }
+bool vnl_math_isinf(long double x) { return !finitel(x) && !isnan(x); }
 #else
 // Assume IEEE floating point number representation
 bool vnl_math_isinf(float x) {return(bMe(&x,0x7f800000L,sz_f)&&!bMp(&x,0x007fffffL,sz_f))||bMp(&x,0x7fffffffL,sz_f)==0x7f7fffffL;}
