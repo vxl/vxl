@@ -32,7 +32,15 @@ SET( MPEG2_FOUND "NO" )
 IF(MPEG2_INCLUDE_DIR)
   IF(MPEG2_mpeg2_LIBRARY)
     SET( MPEG2_FOUND "YES" )
-    SET( MPEG2_LIBRARIES ${MPEG2_mpeg2_LIBRARY} ${MPEG2_vo_LIBRARY} )
+    SET( MPEG2_LIBRARIES ${MPEG2_mpeg2_LIBRARY} 
+                         ${MPEG2_vo_LIBRARY})
+
+    #some native mpeg2 installations will depend
+    #on libSDL, if found, add it in.
     INCLUDE( ${MODULE_PATH}/NewCMake/FindSDL.cmake )
+    IF(SDL_FOUND)
+      SET( MPEG2_LIBRARIES ${MPEG2_LIBRARIES} ${SDL_LIBRARY})
+    ENDIF(SDL_FOUND)
+
   ENDIF(MPEG2_mpeg2_LIBRARY)
 ENDIF(MPEG2_INCLUDE_DIR)
