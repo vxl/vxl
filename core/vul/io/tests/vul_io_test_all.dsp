@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="vul_test_all" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="vul_io_test_all" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -13,25 +13,25 @@
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vcl/config.win32-VC60" /I "$(VXLROOT)/vxl"  == include path
 #  == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
-# vul_test_all  == name of output library
-# /libpath:"$(VXLROOT)/vcl/$(IntDir)" "vcl.lib" /STACK:10000000  == libraries linked in 
+# vul_io_test_all  == name of output library
+# /libpath:"$(VXLROOT)/vcl/$(IntDir)"  "vcl.lib" /STACK:10000000  == libraries linked in 
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
-CFG=vul_test_all - Win32 Debug
+CFG=vul_io_test_all - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "vul_test_all.mak".
+!MESSAGE NMAKE /f "vul_io_test_all.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "vul_test_all.mak" CFG="vul_test_all - Win32 Debug"
+!MESSAGE NMAKE /f "vul_io_test_all.mak" CFG="vul_io_test_all - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "vul_test_all - Win32 Debug" (based on "Win32 (x86) Application")
-!MESSAGE "vul_test_all - Win32 Release" (based on "Win32 (x86) Application")
+!MESSAGE "vul_io_test_all - Win32 Debug" (based on "Win32 (x86) Application")
+!MESSAGE "vul_io_test_all - Win32 Release" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -42,7 +42,7 @@ CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "vul_test_all - Win32 Release"
+!IF  "$(CFG)" == "vul_io_test_all - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -56,7 +56,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vcl/config.win32-VC60" /I "$(VXLROOT)/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vul_test_all_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vcl/config.win32-VC60" /I "$(VXLROOT)/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vul_io_test_all_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -69,7 +69,7 @@ LINK32=link.exe
 # ADD LINK32 /nologo /subsystem:console /machine:I386 /IGNORE:4089
 # ADD LINK32 /libpath:"$(VXLROOT)/vcl/$(IntDir)" "vcl.lib" /STACK:10000000 
 
-!ELSEIF  "$(CFG)" == "vul_test_all - Win32 Debug"
+!ELSEIF  "$(CFG)" == "vul_io_test_all - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -83,7 +83,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP   /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
 # ADD CPP /nologo  /D "WIN32"  /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vcl/config.win32-VC60" /I "$(VXLROOT)/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vul_test_all_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vxl" /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vcl/config.win32-VC60" /I "$(VXLROOT)/vxl"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vul_io_test_all_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -102,14 +102,14 @@ LINK32=link.exe
 
 # Begin Target
 
-# Name "vul_test_all - Win32 Release"
-# Name "vul_test_all - Win32 Debug"
+# Name "vul_io_test_all - Win32 Release"
+# Name "vul_io_test_all - Win32 Debug"
 
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\vul_test_all.cxx
+SOURCE=.\vul_io_test_all.cxx
 
 # End Source File
 # End Group

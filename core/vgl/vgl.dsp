@@ -480,6 +480,11 @@ SOURCE=.\Templates/vgl_homg_1d+double-.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\Templates/vgl_homg_1d+longdouble-.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/vgl_homg_1d+float-.cxx
 
 # End Source File

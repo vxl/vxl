@@ -233,16 +233,6 @@ SOURCE=.\vbl_io_smart_ptr.txx
 # End Source File
 # Begin Source File
 
-SOURCE=.\vbl_io_sparse_array.h
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\vbl_io_sparse_array.txx
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\vbl_io_sparse_array_1d.h
 
 # End Source File
