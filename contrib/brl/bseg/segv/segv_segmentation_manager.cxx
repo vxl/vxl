@@ -55,9 +55,8 @@
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
 #include <strk/strk_epipolar_grouper.h>
-//static live_video_manager instance
-segv_segmentation_manager *segv_segmentation_manager::instance_ = 0;
 
+segv_segmentation_manager *segv_segmentation_manager::instance_ = 0;
 
 segv_segmentation_manager *segv_segmentation_manager::instance()
 {
@@ -166,6 +165,7 @@ segv_segmentation_manager::draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges,
   }
   t2D_->post_redraw();
 }
+
 //-----------------------------------------------------------------------------
 //: Draw line segments on the tableau
 //-----------------------------------------------------------------------------
@@ -189,6 +189,7 @@ draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines)
 
   t2D_->post_redraw();
 }
+
 //-----------------------------------------------------------------------------
 //: Draw polylines on the tableau
 //-----------------------------------------------------------------------------
@@ -212,6 +213,7 @@ draw_polylines(vcl_vector<vsol_polyline_2d_sptr > const& polys)
 
   t2D_->post_redraw();
 }
+
 //-----------------------------------------------------------------------------
 //: Draw line segments on the tableau
 //-----------------------------------------------------------------------------
@@ -513,10 +515,10 @@ void segv_segmentation_manager::regions()
     vil1_image ed_img = rp.get_edge_image();
     vgui_image_tableau_sptr itab =  t2D_->get_image_tableau();
     if (!itab)
-      {
-        vcl_cout << "In segv_segmentation_manager::regions() - null image tableau\n";
-        return;
-      }
+    {
+      vcl_cout << "In segv_segmentation_manager::regions() - null image tableau\n";
+      return;
+    }
     itab->set_image(ed_img);
     itab->post_redraw();
   }
@@ -783,6 +785,7 @@ void segv_segmentation_manager::fit_lines()
   }
   this->draw_lines(lines);
 }
+
 #if 0
 #ifdef HAS_XERCES
 void segv_segmentation_manager::read_xml_edges()
@@ -799,12 +802,13 @@ void segv_segmentation_manager::read_xml_edges()
 }
 #endif
 #endif
+
 void segv_segmentation_manager::test_face()
 {
   if (!img_)
     return;
   int sx = img_.cols(), sy = img_.rows();
-  if (sx<10||sy<10)
+  if (sx<10 || sy<10)
     return;
   t2D_->set_foreground(0.0, 1.0, 0.0);
   vsol_point_2d_sptr pa = new vsol_point_2d(1,1);
@@ -830,8 +834,8 @@ void segv_segmentation_manager::test_face()
   edges.push_back(eda->cast_to_edge());
   vtol_one_chain_sptr b_onch = new vtol_one_chain(edges,true);
   vtol_face_2d_sptr b_f = new  vtol_face_2d(b_onch);
-  int px = sx/2, py = sy/2;
 
+  int px = sx/2, py = sy/2;
   vsol_point_2d_sptr p1 = new vsol_point_2d(px+3,py+3);
   vsol_point_2d_sptr p2 = new vsol_point_2d(px,py-3);
   vsol_point_2d_sptr p3 = new vsol_point_2d(px-3,py+3);
@@ -880,21 +884,22 @@ void segv_segmentation_manager::test_digital_lines()
   t2D_->add_digital_curve(cae);
   t2D_->add_digital_curve(caf);
 }
+
 void segv_segmentation_manager::display_IHS()
 {
-  if(!img_)
+  if (!img_)
     return;
   vgui_image_tableau_sptr itab =  t2D_->get_image_tableau();
   if (!itab)
-    {
-      vcl_cout << "In segv_segmentation_manager::display_IHS() - null image tableau\n";
-      return;
-    }
+  {
+    vcl_cout << "In segv_segmentation_manager::display_IHS() - null image tableau\n";
+    return;
+  }
   vil1_memory_image_of<float> I,H,S;
 
   vil1_memory_image_of<vil1_rgb<unsigned char> > in_image(img_), out_image;
-if(!in_image)
-  return;
+  if (!in_image)
+    return;
   brip_float_ops::convert_to_IHS(in_image, I, H, S);
   brip_float_ops::display_IHS_as_RGB(I, H, S, out_image);
   itab->set_image(out_image);
@@ -903,15 +908,15 @@ if(!in_image)
 
 void segv_segmentation_manager::display_epi_region_image()
 {
-  if(!img_)
+  if (!img_)
     return;
   vgui_image_tableau_sptr itab =  t2D_->get_image_tableau();
   if (!itab)
-    {
-      vcl_cout << "In segv_segmentation_manager::display_epi_region_image() - null image tableau\n";
-      return;
-    }
-   static bool agr = false;
+  {
+    vcl_cout << "In segv_segmentation_manager::display_epi_region_image() - null image tableau\n";
+    return;
+  }
+  static bool agr = false;
   static sdet_detector_params dp;
   static strk_epipolar_grouper_params egp;
   dp.borderp = false;
@@ -949,8 +954,8 @@ void segv_segmentation_manager::display_epi_region_image()
   eg.set_image(flt);
   eg.set_edges(0, *edges);
   eg.group();
-  vil1_memory_image_of<unsigned char>& out = eg.epi_region_image();
-  if(!out)
+  vil1_memory_image_of<unsigned char> out = eg.epi_region_image();
+  if (!out)
     return;
   itab->set_image(out);
   vcl_vector<vsol_polyline_2d_sptr> segs = eg.display_segs(0);
