@@ -1,3 +1,5 @@
+// This is vxl/vnl/vnl_matrix.txx
+
 //
 // Copyright (C) 1991 Texas Instruments Incorporated.
 // Copyright (C) 1992 General Electric Company.
@@ -82,13 +84,17 @@
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
+#include <vcl_cassert.h>
+
+
+// conflicts with operator!= for std::vector<vcl_complex<double> >::iterator.
+// # include <vcl_rel_ops.h>  // inline operator!= function template
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_complex.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_c_vector.h>
 #include <vnl/vnl_numeric_traits.h>
-
 //--------------------------------------------------------------------------------
 
 // This macro allocates and initializes the dynamic storage used by a vnl_matrix.
@@ -443,7 +449,7 @@ vcl_ostream& operator<< (vcl_ostream& os, vnl_matrix<T> const& m) {
   return os;
 }
 
-// -- Read an vnl_matrix from an ascii istream, automatically
+//: Read an vnl_matrix from an ascii istream, automatically
 // determining file size if the input matrix has zero size.
 template<class T>
 vcl_istream& operator>>(vcl_istream& s, vnl_matrix<T>& M) {
@@ -585,7 +591,7 @@ vnl_matrix<T> vnl_matrix<T>::operator+ (T const& value) const {
 }
 
 
-// operator+ -- Returns new matrix with elements of lhs matrix multiplied
+// operator* -- Returns new matrix with elements of lhs matrix multiplied
 // with value. O(m*n).
 
 template<class T>
@@ -598,9 +604,11 @@ vnl_matrix<T> vnl_matrix<T>::operator* (T const& value) const {
 }
 
 
-// operator+ -- Returns new matrix with elements of lhs matrix divided by
-// value. O(m*n).
 
+
+//: operator/
+// Returns new matrix with elements of lhs matrix divided by
+// value. O(m*n).
 template<class T>
 vnl_matrix<T> vnl_matrix<T>::operator/ (T const& value) const {
   vnl_matrix<T> result(this->num_rows, this->num_cols);
@@ -611,7 +619,7 @@ vnl_matrix<T> vnl_matrix<T>::operator/ (T const& value) const {
 }
 #endif
 
-// -- Return the matrix made by applying "f" to each element.
+//: Return the matrix made by applying "f" to each element.
 template <class T>
 vnl_matrix<T> vnl_matrix<T>::apply(T (*f)(T const&)) const {
   vnl_matrix<T> ret(num_rows, num_cols);
@@ -759,7 +767,7 @@ vnl_matrix<T> element_quotient (vnl_matrix<T> const& m1,
   return result;
 }
 
-// -- Fill this matrix with the given data.  We assume that p points to
+//: Fill this matrix with the given data.  We assume that p points to
 // a contiguous rows*cols array, stored rowwise.
 template<class T>
 void vnl_matrix<T>::copy_in(T const *p)
@@ -770,7 +778,7 @@ void vnl_matrix<T>::copy_in(T const *p)
     *dp++ = *p++;
 }
 
-// -- Fill the given array with this matrix.  We assume that p points to
+//: Fill the given array with this matrix.  We assume that p points to
 // a contiguous rows*cols array, stored rowwise.
 template<class T>
 void vnl_matrix<T>::copy_out(T *p) const
@@ -781,7 +789,7 @@ void vnl_matrix<T>::copy_out(T *p) const
     *p++ = *dp++;
 }
 
-// -- Fill this matrix with a row*row identity matrix.
+//: Fill this matrix with a row*row identity matrix.
 template<class T>
 void vnl_matrix<T>::set_identity()
 {
@@ -792,7 +800,7 @@ void vnl_matrix<T>::set_identity()
       this->data[i][j] = (i == j) ? 1 : 0; // Assign fill value
 }
 
-// -- Make each row of the matrix have unit norm.
+//: Make each row of the matrix have unit norm.
 // All-zero rows are ignored.
 template<class T>
 void vnl_matrix<T>::normalize_rows()
@@ -814,7 +822,7 @@ void vnl_matrix<T>::normalize_rows()
   }
 }
 
-// -- Make each column of the matrix have unit norm.
+//: Make each column of the matrix have unit norm.
 // All-zero columns are ignored.
 template<class T>
 void vnl_matrix<T>::normalize_columns()
@@ -836,7 +844,7 @@ void vnl_matrix<T>::normalize_columns()
   }
 }
 
-// -- Multiply row[row_index] by value
+//: Multiply row[row_index] by value
 template<class T>
 void vnl_matrix<T>::scale_row(unsigned row_index, T value)
 {
@@ -846,7 +854,7 @@ void vnl_matrix<T>::scale_row(unsigned row_index, T value)
     this->data[row_index][j] *= value;
 }
 
-// -- Multiply column[column_index] by value
+//: Multiply column[column_index] by value
 template<class T>
 void vnl_matrix<T>::scale_column(unsigned column_index, T value)
 {
@@ -856,7 +864,7 @@ void vnl_matrix<T>::scale_column(unsigned column_index, T value)
     this->data[j][column_index] *= value;
 }
 
-// -- Returns a copy of n rows, starting from "row"
+//: Returns a copy of n rows, starting from "row"
 template<class T>
 vnl_matrix<T> vnl_matrix<T>::get_n_rows (unsigned row, unsigned n) const {
   if (row + n > this->num_rows)
@@ -866,7 +874,7 @@ vnl_matrix<T> vnl_matrix<T>::get_n_rows (unsigned row, unsigned n) const {
   return vnl_matrix<T>(data[row], n, this->num_cols);
 }
 
-// -- Returns a copy of n columns, starting from "column".
+//: Returns a copy of n columns, starting from "column".
 template<class T>
 vnl_matrix<T> vnl_matrix<T>::get_n_columns (unsigned column, unsigned n) const {
   if (column + n > this->num_cols)
@@ -879,7 +887,7 @@ vnl_matrix<T> vnl_matrix<T>::get_n_columns (unsigned column, unsigned n) const {
   return result;
 }
 
-// -- Create a vector out of row[row_index].
+//: Create a vector out of row[row_index].
 template<class T>
 vnl_vector<T> vnl_matrix<T>::get_row(unsigned row_index) const
 {
@@ -894,7 +902,7 @@ vnl_vector<T> vnl_matrix<T>::get_row(unsigned row_index) const
   return v;
 }
 
-// -- Create a vector out of column[column_index].
+//: Create a vector out of column[column_index].
 template<class T>
 vnl_vector<T> vnl_matrix<T>::get_column(unsigned column_index) const
 {
@@ -911,7 +919,7 @@ vnl_vector<T> vnl_matrix<T>::get_column(unsigned column_index) const
 
 //--------------------------------------------------------------------------------
 
-// -- Set row[row_index] to data at given address. No bounds check.
+//: Set row[row_index] to data at given address. No bounds check.
 template<class T>
 void vnl_matrix<T>::set_row(unsigned row_index, T const *v)
 {
@@ -919,14 +927,14 @@ void vnl_matrix<T>::set_row(unsigned row_index, T const *v)
     this->data[row_index][j] = v[j];
 }
 
-// -- Set row[row_index] to given vector. No bounds check.
+//: Set row[row_index] to given vector. No bounds check.
 template<class T>
 void vnl_matrix<T>::set_row(unsigned row_index, vnl_vector<T> const &v)
 {
   set_row(row_index,v.data_block());
 }
 
-// -- Set row[row_index] to given value.
+//: Set row[row_index] to given value.
 template<class T>
 void vnl_matrix<T>::set_row(unsigned row_index, T v)
 {
@@ -936,7 +944,7 @@ void vnl_matrix<T>::set_row(unsigned row_index, T v)
 
 //--------------------------------------------------------------------------------
 
-// -- Set column[column_index] to data at given address.
+//: Set column[column_index] to data at given address.
 template<class T>
 void vnl_matrix<T>::set_column(unsigned column_index, T const *v)
 {
@@ -944,14 +952,14 @@ void vnl_matrix<T>::set_column(unsigned column_index, T const *v)
     this->data[i][column_index] = v[i];
 }
 
-// -- Set column[column_index] to given vector. No bounds check.
+//: Set column[column_index] to given vector. No bounds check.
 template<class T>
 void vnl_matrix<T>::set_column(unsigned column_index, vnl_vector<T> const &v)
 {
   set_column(column_index,v.data_block());
 }
 
-// -- Set column[column_index] to given value.
+//: Set column[column_index] to given value.
 template<class T>
 void vnl_matrix<T>::set_column(unsigned column_index, T v)
 {
@@ -960,7 +968,7 @@ void vnl_matrix<T>::set_column(unsigned column_index, T v)
 }
 
 
-// -- Set columns starting at starting_column to given matrix
+//: Set columns starting at starting_column to given matrix
 template<class T>
 void vnl_matrix<T>::set_columns(unsigned starting_column, vnl_matrix<T> const& m)
 {
@@ -999,7 +1007,7 @@ bool vnl_matrix<T>::operator_eq(vnl_matrix<T> const& rhs) const {
   return true;                                           // Else same; return true
 }
 
-// -- Return true if maximum absolute deviation of M from identity is <= tol.
+//: Return true if maximum absolute deviation of M from identity is <= tol.
 template <class T>
 bool vnl_matrix<T>::is_identity(double tol) const
 {
@@ -1014,7 +1022,7 @@ bool vnl_matrix<T>::is_identity(double tol) const
   return true;
 }
 
-// -- Return true if max(abs((*this))) <= tol.  Tol defaults to zero.
+//: Return true if max(abs((*this))) <= tol.  Tol defaults to zero.
 template <class T>
 bool vnl_matrix<T>::is_zero(double tol) const
 {
@@ -1026,7 +1034,7 @@ bool vnl_matrix<T>::is_zero(double tol) const
   return true;
 }
 
-// -- Return true if any element of (*this) is nan
+//: Return true if any element of (*this) is nan
 template <class T>
 bool vnl_matrix<T>::has_nans() const
 {
@@ -1038,7 +1046,7 @@ bool vnl_matrix<T>::has_nans() const
   return false;
 }
 
-// -- Return false if any element of (*this) is inf or nan
+//: Return false if any element of (*this) is inf or nan
 template <class T>
 bool vnl_matrix<T>::is_finite() const
 {
@@ -1050,7 +1058,7 @@ bool vnl_matrix<T>::is_finite() const
   return true;
 }
 
-// -- Abort if any element of M is inf or nan
+//: Abort if any element of M is inf or nan
 template <class T>
 void vnl_matrix<T>::assert_finite() const
 {
@@ -1062,7 +1070,7 @@ void vnl_matrix<T>::assert_finite() const
   vcl_abort();
 }
 
-// -- Abort unless M has the given size.
+//: Abort unless M has the given size.
 template <class T>
 void vnl_matrix<T>::assert_size(unsigned rs,unsigned cs) const
 {
@@ -1073,7 +1081,7 @@ void vnl_matrix<T>::assert_size(unsigned rs,unsigned cs) const
   }
 }
 
-// -- Read a vnl_matrix from an ascii istream, automatically
+//: Read a vnl_matrix from an ascii istream, automatically
 // determining file size if the input matrix has zero size.
 template <class T>
 bool vnl_matrix<T>::read_ascii(vcl_istream& s)
@@ -1185,7 +1193,7 @@ bool vnl_matrix<T>::read_ascii(vcl_istream& s)
   return true;
 }
 
-// -- Read a vnl_matrix from an ascii istream, automatically
+//: Read a vnl_matrix from an ascii istream, automatically
 // determining file size if the input matrix has zero size.
 // This is a static method so you can type
 // <verb>
@@ -1236,7 +1244,7 @@ void vnl_matrix<T>::swap(vnl_matrix<T> &that)
   vcl_swap(this->data, that.data);
 }
 
-// -- Reverse order of rows.  Name is from Matlab, meaning "flip upside down".
+//: Reverse order of rows.  Name is from Matlab, meaning "flip upside down".
 template <class T>
 void vnl_matrix<T>::flipud()
 {
@@ -1254,7 +1262,7 @@ void vnl_matrix<T>::flipud()
     }
   }
 }
-// -- Reverse order of columns.
+//: Reverse order of columns.
 template <class T>
 void vnl_matrix<T>::fliplr()
 {
@@ -1424,7 +1432,7 @@ L80:
 } /* dtrans_ */
 
 
-// -- Transpose matrix M in place.  Works for rectangular matrices using an
+//: Transpose matrix M in place.  Works for rectangular matrices using an
 // enormously clever algorithm from ACM TOMS.
 template <class T>
 void vnl_matrix<T>::inplace_transpose()
@@ -1437,7 +1445,7 @@ void vnl_matrix<T>::inplace_transpose()
   int iok = ::vnl_inplace_transpose(data_block(), n, m, &move[0], iwrk);
   if (iok != 0)
     vcl_cerr << __FILE__ " : inplace_transpose() -- iok = " << iok << vcl_endl;
-  
+
   this->num_rows = n;
   this->num_cols = m;
 
@@ -1451,6 +1459,7 @@ void vnl_matrix<T>::inplace_transpose()
       data[i] = tmp + i * m;
   }
 }
+
 
 #if VCL_CAN_DO_STATIC_TEMPLATE_MEMBER
 template <class T>

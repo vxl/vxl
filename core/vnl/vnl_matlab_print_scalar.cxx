@@ -1,3 +1,5 @@
+// This is vxl/vnl/vnl_matlab_print_scalar.cxx
+
 #include "vnl_matlab_print.h"
 
 #include <vcl_cstdio.h>  // sprintf()
@@ -7,12 +9,13 @@
 #include <vcl_cassert.h>
 #include <vcl_complex.h>
 
+
 // moved here because 2.7 choked
 
 VCL_DEFINE_SPECIALIZATION
 void vnl_matlab_print_scalar(int const &v,
-                             char *buf,
-                             vnl_matlab_print_format)
+                 char *buf,
+                 vnl_matlab_print_format VCL_DEFAULT_VALUE(vnl_matlab_print_format_default))
 {
   sprintf(buf, "%4d ", v);
 }

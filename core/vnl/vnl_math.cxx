@@ -2,6 +2,8 @@
 #pragma implementation
 #endif
 
+// This is vxl/vnl/vnl_math.cxx
+
 #include <vnl/vnl_math.h>
 #include <vxl_config.h>
 
@@ -65,9 +67,11 @@ const float    vnl_math::maxfloat  = 3.40282346638528860e+38F;
 
 //--------------------------------------------------------------------------------
 
-// -- Return true iff x is "Not a Number"
+//: Return true iff x is "Not a Number"
 bool vnl_math_isnan(float x) { return x != x; }
+//: Return true iff x is "Not a Number"
 bool vnl_math_isnan(double x) { return x != x; }
+//: Return true iff x is "Not a Number"
 bool vnl_math_isnan(long double x) { return x != x; }
 
 // fsm@robots.ox.ac.uk
@@ -84,12 +88,16 @@ bool vnl_math_isnan(long double x) { return x != x; }
 #  error macro isinf is defined
 # endif
 #endif
-// -- Return true if x is neither NaN nor Inf.
+
 #if defined(_MSC_VER)
+//: Return true if x is neither NaN nor Inf.
 bool vnl_math_isfinite(double x) { return finite(x) != 0; } // quell performance warning -- fsm
 #else
+//: Return true if x is neither NaN nor Inf.
 bool vnl_math_isfinite(float x) { return finite(x); }
+//: Return true if x is neither NaN nor Inf.
 bool vnl_math_isfinite(double x) { return finite(x); }
+//: Return true if x is neither NaN nor Inf.
 bool vnl_math_isfinite(long double x) { return finite(x); }
 #endif
 
@@ -100,9 +108,11 @@ inline bool isnan(double x)
 }
 #endif
 
-// -- Return true if x is inf
+//: Return true if x is inf
 bool vnl_math_isinf(float x) { return !finite(x) && !isnan(x); }
+//: Return true if x is inf
 bool vnl_math_isinf(double x) { return !finite(x) && !isnan(x); }
+//: Return true if x is inf
 bool vnl_math_isinf(long double x) { return !finite(x) && !isnan(x); }
 
 //----------------------------------------------------------------------
@@ -117,7 +127,7 @@ int      vnl_huge_val(int)    { return 0x7fffffffffffffff; }
 short    vnl_huge_val(short)  { return 0x7fff; }
 char     vnl_huge_val(char)   { return 0x7f; }
 #else
-// -- Type-accessible infinities for use in templates.
+//: Type-accessible infinities for use in templates.
 template <class T> T vnl_huge_val(T);
 double vnl_huge_val(double) { return HUGE_VAL; }
 float  vnl_huge_val(float)  { return (float)HUGE_VAL; }

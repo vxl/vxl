@@ -48,6 +48,8 @@ SOURCES += vnl_matops.cxx
 SOURCES += vnl_real_polynomial.cxx
 SOURCES += vnl_real_npolynomial.cxx
 SOURCES += vnl_binary.cxx
+SOURCES += vnl_binary_io.cxx
+SOURCES += vnl_binary_loader_base.cxx
 
 # ops
 SOURCES += vnl_fastops.cxx

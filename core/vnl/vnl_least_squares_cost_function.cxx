@@ -1,9 +1,11 @@
+// This is vxl/vnl/vnl_least_squares_cost_function.cxx
+
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation
 #endif
 //
-// .NAME vnl_least_squares_cost_function
+// vnl_least_squares_cost_function
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 20 Aug 99
 //

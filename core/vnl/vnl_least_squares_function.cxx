@@ -1,7 +1,10 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
-// .NAME vnl_least_squares_function
+
+// This is vxl/vnl/vnl_least_squares_function.cxx
+
+// vnl_least_squares_function
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 31 Aug 96
 
@@ -47,13 +50,13 @@ void vnl_least_squares_function::clear_failure()
 }
 
 void vnl_least_squares_function::gradf(vnl_vector<double> const & /*x*/,
-                                       vnl_matrix<double>       & /*jacobian*/)
+                       vnl_matrix<double>       & /*jacobian*/)
 {
 }
 
 void vnl_least_squares_function::trace(int /* iteration */,
-                                       vnl_vector<double> const & /*x*/,
-                                 vnl_vector<double> const & /*fx*/)
+                       vnl_vector<double> const & /*x*/,
+                 vnl_vector<double> const & /*fx*/)
 {
 }
 

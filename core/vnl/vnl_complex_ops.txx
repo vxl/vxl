@@ -1,9 +1,11 @@
+// This is vxl/vnl/vnl_complex_ops.txx
+
 /*
   fsm@robots.ox.ac.uk
 */
 #include "vnl_complex_ops.h"
 
-//--------------------------------------------------------------------------------
+//-----------------------------------------------------------------------
 
 template <class T>
 void vnl_complexify(T const *src, vcl_complex<T> *dst, unsigned n) {
@@ -32,7 +34,7 @@ vnl_matrix<vcl_complex<T> > vnl_complexify(vnl_matrix<T> const &M) {
 }
 
 
-// -- Vector of absolute values of vnl_complex_vector_t<REAL>.
+//: Vector of absolute values of vnl_complex_vector_t<REAL>.
 template <class T>
 vnl_vector<T> abs(vnl_vector<vcl_complex<T> > const & C)
 {
@@ -43,7 +45,7 @@ vnl_vector<T> abs(vnl_vector<vcl_complex<T> > const & C)
 }
 
 
-// -- Vector of angles of vnl_vector<vcl_complex<T> >.
+//: Vector of angles of vnl_vector<vcl_complex<T> >.
 // atan2(imag(C), real(C))
 template <class T>
 vnl_vector<T> angle(vnl_vector<vcl_complex<T> > const & C)
@@ -54,7 +56,7 @@ vnl_vector<T> angle(vnl_vector<vcl_complex<T> > const & C)
   return ret;
 }
 
-// -- Vector of real parts of vnl_vector<vcl_complex<T> >.
+//: Vector of real parts of vnl_vector<vcl_complex<T> >.
 template <class T>
 vnl_vector<T> real(vnl_vector<vcl_complex<T> > const & C)
 {
@@ -64,7 +66,7 @@ vnl_vector<T> real(vnl_vector<vcl_complex<T> > const & C)
   return ret;
 }
 
-// -- Vector of imaginary parts of vnl_vector<vcl_complex<T> >.
+//: Vector of imaginary parts of vnl_vector<vcl_complex<T> >.
 template <class T>
 vnl_vector<T> imag(vnl_vector<vcl_complex<T> > const & C)
 {
@@ -74,9 +76,9 @@ vnl_vector<T> imag(vnl_vector<vcl_complex<T> > const & C)
   return ret;
 }
 
-//--------------------------------------------------------------------------------
+//----------------------------------------------------------------------
 
-// -- Matrix of absolute values of vnl_complex_matrix_t<REAL>.
+//: Matrix of absolute values of vnl_complex_matrix_t<REAL>.
 template <class T>
 vnl_matrix<T> abs(vnl_matrix<vcl_complex<T> > const& C)
 {
@@ -88,7 +90,7 @@ vnl_matrix<T> abs(vnl_matrix<vcl_complex<T> > const& C)
 }
 
 
-// -- Matrix of angles of vnl_complex_matrix_t<T>.
+//: Matrix of angles of vnl_complex_matrix_t<T>.
 // atan2(imag(C), real(C))
 template <class T>
 vnl_matrix<T> angle(vnl_matrix<vcl_complex<T> > const& C)
@@ -100,7 +102,7 @@ vnl_matrix<T> angle(vnl_matrix<vcl_complex<T> > const& C)
   return ret;
 }
 
-// -- Matrix of real parts of vnl_complex_matrix_t<T>.
+//: Matrix of real parts of vnl_complex_matrix_t<T>.
 template <class T>
 vnl_matrix<T> real(vnl_matrix<vcl_complex<T> > const& C)
 {
@@ -111,7 +113,7 @@ vnl_matrix<T> real(vnl_matrix<vcl_complex<T> > const& C)
   return ret;
 }
 
-// -- Matrix of imaginary parts of vnl_complex_matrix_t<T>.
+//: Matrix of imaginary parts of vnl_complex_matrix_t<T>.
 template <class T>
 vnl_matrix<T> imag(vnl_matrix<vcl_complex<T> > const& C)
 {
@@ -122,7 +124,7 @@ vnl_matrix<T> imag(vnl_matrix<vcl_complex<T> > const& C)
   return ret;
 }
 
-//--------------------------------------------------------------------------------
+//-------------------------------------------------------------------------
 
 #define VNL_COMPLEX_OPS_INSTANTIATE(T) \
 template void vnl_complexify(T const *, vcl_complex<T > *, unsigned); \

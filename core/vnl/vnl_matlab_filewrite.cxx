@@ -2,6 +2,8 @@
 #pragma implementation
 #endif
 
+// This is vxl/vnl/vnl_matlab_filewrite.cxx
+
 #include "vnl_matlab_filewrite.h"
 
 #include <vcl_fstream.h>

@@ -1,5 +1,7 @@
 #ifndef vnl_matrix_exp_txx_
 #define vnl_matrix_exp_txx_
+// This is vxl/vnl/vnl_matrix_exp.txx
+
 /*
   fsm@robots.ox.ac.uk
 */

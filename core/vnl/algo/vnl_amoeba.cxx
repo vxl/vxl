@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// .NAME vnl_amoeba
+// vnl_amoeba
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 23 Oct 97
 //
@@ -291,7 +291,7 @@ void vnl_amoebaFit::amoeba(vnl_vector<double>& x)
   x = simplex[0].v;
 }
 
-// -- Method
+//: Method
 void vnl_amoeba::minimize(vnl_vector<double>& x)
 {
   vnl_amoebaFit af(*this);
@@ -299,13 +299,13 @@ void vnl_amoeba::minimize(vnl_vector<double>& x)
   num_evaluations_ = af.num_evaluations_;
 }
 
-// -- Static method
+//: Static method
 void vnl_amoeba::minimize(vnl_cost_function& f, vnl_vector<double>& x)
 {
   minimize(f, x, 0);
 }
 
-// -- Static method
+//: Static method
 void vnl_amoeba::minimize(vnl_cost_function& f, vnl_vector<double>& x, double delta)
 {
   vnl_amoeba a(f);

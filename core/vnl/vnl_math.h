@@ -3,14 +3,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME	vnl_math - namespace with standard math functions
-// .LIBRARY	vnl
-// .HEADER	vxl package
-// .INCLUDE	vnl/vnl_math.h
-// .FILE	vnl_math.cxx
-//
-// .SECTION Description
+// This is vxl/vnl/vnl_math.h
+
+//: \file
+//  \brief Namespace with standard math functions
+//  \author Andrew W. Fitzgibbon, Oxford RRG, July 13, 1996
 //    The vnl_math namespace provides a standard set of the simple mathematical
 //    functions (min, max, sqr, sgn, rnd, abs), and some predefined constants
 //    such as pi and e, which are not defined by the ANSI C++ standard.
@@ -27,17 +24,15 @@
 //    which in combination with inlining can make them  more efficient than
 //    their counterparts in the standard C library.
 //
-// .SECTION Author
-//     Andrew W. Fitzgibbon, Oxford RRG, July 13, 1996
-//
-// .SECTION Modifications
+
+//      Modifications
 //     210598 AWF Removed conditional VCL_IMPLEMENT_STATIC_CONSTS, sometimes gcc needs them.
-//
+//     LSB (Modifications) 23/1/01 Documentation tidied
 
 #include <vcl_cmath.h>
 #include "dll.h"
 
-// Type-accessible infinities for use in templates.
+//: Type-accessible infinities for use in templates.
 template <class T> T vnl_huge_val(T);
 double   vnl_huge_val(double);
 float    vnl_huge_val(float);
@@ -49,7 +44,7 @@ char     vnl_huge_val(char);
 //: real numerical constants
 class vnl_math {
 public:
-  // pi, e and all that
+  //: pi, e and all that
   static VNL_DLL_DATA double const e               VCL_STATIC_CONST_INIT_FLOAT(2.7182818284590452354);
   static VNL_DLL_DATA double const log2e           VCL_STATIC_CONST_INIT_FLOAT(1.4426950408889634074);
   static VNL_DLL_DATA double const log10e          VCL_STATIC_CONST_INIT_FLOAT(0.43429448190325182765);
@@ -64,11 +59,11 @@ public:
   static VNL_DLL_DATA double const sqrt2           VCL_STATIC_CONST_INIT_FLOAT(1.41421356237309504880);
   static VNL_DLL_DATA double const sqrt1_2         VCL_STATIC_CONST_INIT_FLOAT(0.70710678118654752440);
 
-  // IEEE double machine precision
+  //: IEEE double machine precision
   static VNL_DLL_DATA double const eps             VCL_STATIC_CONST_INIT_FLOAT(2.2204460492503131e-16);
   static VNL_DLL_DATA double const sqrteps         VCL_STATIC_CONST_INIT_FLOAT(1.490116119384766e-08);
 
-  // MAX* constants.
+  //: MAX* constants.
   // Supplied until compilers accept the templated numeric_traits.
   // These are lowercase to avoid conflict with OS-defined macros.
   static VNL_DLL_DATA int const      maxint;

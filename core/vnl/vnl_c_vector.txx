@@ -1,6 +1,8 @@
+// This is vxl/vnl/vnl_c_vector.txx
+
 //-*- c++ -*-------------------------------------------------------------------
 //
-// .NAME vnl_c_vector
+// This is vnl_c_vector
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 12 Feb 98
 //
@@ -64,7 +66,7 @@ void vnl_c_vector<T>::scale(T const *x, T *y, unsigned n, T const &s_) {
       y[i] = s*x[i];
 }
 
-//--------------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 #define impl_elmt_wise_commutative(op) \
   if (z == x) \
     for (unsigned i=0; i<n; ++i) \
@@ -109,7 +111,7 @@ void vnl_c_vector<T>::divide(T const *x, T const *y, T *z, unsigned n) {
 
 #undef impl_elmt_wise_commutative
 #undef impl_elmt_wise_noncommutative
-//--------------------------------------------------------------------------------
+//--------------------------------------------------------------------------
 
 template <class T>
 void vnl_c_vector<T>::negate(T const *x, T *y, unsigned n) {
@@ -179,7 +181,7 @@ void vnl_c_vector<T>::conjugate(T const *src, T *dst, unsigned n) {
     dst[i] = vnl_complex_traits<T>::conjugate( src[i] );
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 //: Returns max value of the vector.
 template<class T> 
@@ -248,7 +250,7 @@ void vnl_c_vector_inf_norm(T const *p, unsigned n, S *out)
   }
 }
 
-//--------------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 
 // this should not be changed at run-time anyway.
 #define vnl_c_vector_use_vnl_alloc 1
@@ -271,7 +273,8 @@ inline void* vnl_c_vector_alloc(int n, int size)
 
 inline void vnl_c_vector_dealloc(void* v, int n, int size)
 { 
-  //vcl_cerr << "\ncall to vnl_c_vector_dealloc(" << v << ", " << n << ", " << size << ")\n";
+  //vcl_cerr << "\ncall to vnl_c_vector_dealloc(" << v << ", " << n
+  //         << ", " << size << ")\n";
 #if vnl_c_vector_use_vnl_alloc
   if (v) 
     vnl_alloc::deallocate(v, (n == 0) ? 8 : (n * size));
@@ -306,7 +309,7 @@ void vnl_c_vector<T>::deallocate(T* v, int n)
   vnl_c_vector_dealloc(v, n, sizeof (T));
 }
 
-//--------------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 
 #define VNL_C_VECTOR_INSTANTIATE_norm(T, S)\
 template void vnl_c_vector_two_norm_squared(T const *, unsigned, S *); \

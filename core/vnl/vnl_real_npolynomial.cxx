@@ -1,19 +1,20 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vnl_real_npolynomial
-// Author: Marc Pollefeys, ESAT-VISICS, K.U.Leuven
-// Created: 12 08 97
-//
-//-----------------------------------------------------------------------------
+// This is vxl/vnl/vnl_real_npolynomial.cxx
 
-#include "vnl_real_npolynomial.h"
+//:
+//  \file
+//  \brief a degree n real polynomial
+//  \author Marc Pollefeys, ESAT-VISICS, K.U.Leuven, 12-08-97
+//  Implements a polynomial with N variables
+
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>    // fabs()
 #include <vcl_iostream.h>
+#include "vnl_real_npolynomial.h"
 
-// -- Constructor
+//: Constructor
 //<PRE>
 // coeffs = vnl_vector<double>(nterms)
 // polyn = vnl_matrix<int>(nterms,nvar)
@@ -38,7 +39,7 @@ vnl_real_npolynomial::vnl_real_npolynomial(const vnl_vector<double>& c, const vn
   simplify();
 }
 
-// -- Combine terms with idential exponents (i.e., identical rows in polyn_).
+//: Combine terms with idential exponents (i.e., identical rows in polyn_).
 // Remove terms with zero coefficient.
 void vnl_real_npolynomial::simplify()
 {
@@ -82,6 +83,18 @@ double vnl_real_npolynomial::eval(const vnl_vector<double>& x)
   }
   return eval(xn);
 }
+
+
+//: Set the coefficients and degree of variable 
+void vnl_real_npolynomial::set(const vnl_vector<double>& c, const vnl_matrix<int>& p)
+{
+  coeffs_= c;
+  polyn_ = p;
+  nvar_ = p.cols();
+  nterms_ = p.rows();
+  ideg_ = p.max_value();
+}
+
 
 int vnl_real_npolynomial::degree()
 {
@@ -208,3 +221,9 @@ vcl_ostream& operator<<(vcl_ostream& os, vnl_real_npolynomial const& P)
   }
   os << vcl_endl; return os;
 }
+
+
+
+
+
+

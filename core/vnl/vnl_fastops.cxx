@@ -1,9 +1,11 @@
+// This is vxl/vnl/vnl_fastops.cxx
+
 //-*- c++ -*-------------------------------------------------------------------
 #ifdef __GNUC__
 #pragma implementation
 #endif
 //
-// .NAME vnl_fastops
+// vnl_fastops
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 08 Dec 96
 //
@@ -15,7 +17,7 @@
 #include <vcl_cstring.h> // memset()
 #include <vcl_iostream.h>
 
-// -- Compute $A^\top A$.
+//: Compute \f$A^\top A\f$$.
 void vnl_fastops::AtA(const vnl_matrix<double>& A, vnl_matrix<double>* AtA)
 {
   unsigned n = A.columns();
@@ -24,12 +26,12 @@ void vnl_fastops::AtA(const vnl_matrix<double>& A, vnl_matrix<double>* AtA)
     vcl_cerr << "vnl_fastops::AtA: " << AtA->rows() << "x" << AtA->columns() << " is not " << n << "x" << n << vcl_endl;
     vcl_abort();
   }
-
+  
   int m = A.rows();
-
+  
   double const* const* a = A.data_array();
   double** ata = AtA->data_array();
-
+  
   if (0) {
     for(unsigned i = 0; i < n; ++i)
       for(unsigned j = i; j < n; ++j) {
@@ -50,13 +52,13 @@ void vnl_fastops::AtA(const vnl_matrix<double>& A, vnl_matrix<double>* AtA)
         while (arow != arowend)
           *atarow++ += aki * *arow++;
       }
-    for(unsigned i = 0; i < n; ++i)
-      for(unsigned j = i+1; j < n; ++j)
-        ata[j][i] = ata[i][j];
+      for(unsigned i = 0; i < n; ++i)
+        for(unsigned j = i+1; j < n; ++j)
+          ata[j][i] = ata[i][j];
   }
 }
 
-// -- Compute $A B$.
+//: Compute AxB.
 void vnl_fastops::AB(const vnl_matrix<double>& A, const vnl_matrix<double>& B, vnl_matrix<double>* out_ptr)
 {
   unsigned ma = A.rows();
@@ -89,7 +91,7 @@ void vnl_fastops::AB(const vnl_matrix<double>& A, const vnl_matrix<double>& B, v
     }
 }
 
-// -- Compute $A^\top B$.
+//:  Compute \f$A^\topB\f$.
 void vnl_fastops::AtB(const vnl_matrix<double>& A, const vnl_matrix<double>& B, vnl_matrix<double>* out_ptr)
 {
   unsigned ma = A.rows();
@@ -122,7 +124,7 @@ void vnl_fastops::AtB(const vnl_matrix<double>& A, const vnl_matrix<double>& B, 
     }
 }
 
-// -- Compute $A^\top b$ for vector b. out_ptr may not be b.
+//: Compute \f$A^\top b \f$ for vector b. out_ptr may not be b.
 void vnl_fastops::AtB(const vnl_matrix<double>& A, const vnl_vector<double>& B, vnl_vector<double>* out_ptr)
 {
   unsigned m = A.rows();
@@ -153,7 +155,7 @@ void vnl_fastops::AtB(const vnl_matrix<double>& A, const vnl_vector<double>& B, 
   }
 }
 
-// -- Compute $A B^\top$.
+//: Compute \f$A B^\top \f$.
 void vnl_fastops::ABt(const vnl_matrix<double>& A, const vnl_matrix<double>& B, vnl_matrix<double>* out_ptr)
 {
   unsigned ma = A.rows();
@@ -186,28 +188,28 @@ void vnl_fastops::ABt(const vnl_matrix<double>& A, const vnl_matrix<double>& B, 
     }
 }
 
-// -- Compute $X += A^\top A$
+//: Compute \f$ X += A^\top A\f$
 void vnl_fastops::inc_X_by_AtA(vnl_matrix<double>& X, const vnl_matrix<double>& A)
 {
   unsigned m = X.rows();
   unsigned n = X.columns();
   unsigned l = A.rows();
-
+  
   if (m != n || m != A.columns()) {
     vcl_cerr << "vnl_fastops::inc_X_by_AtA: size error\n";
     vcl_abort();
   }
-
+  
   double const* const* a = A.data_array();
   double** x = X.data_array();
-
+  
   if (l == 2) {
     for(unsigned i = 0; i < n; ++i) {
       x[i][i] += (a[0][i] * a[0][i] +
-                  a[1][i] * a[1][i]);
+        a[1][i] * a[1][i]);
       for(unsigned j = i+1; j < n; ++j) {
         double accum = (a[0][i] * a[0][j] +
-                        a[1][i] * a[1][j]);
+          a[1][i] * a[1][j]);
         x[i][j] += accum;
         x[j][i] += accum;
       }
@@ -225,7 +227,7 @@ void vnl_fastops::inc_X_by_AtA(vnl_matrix<double>& X, const vnl_matrix<double>& 
   }
 }
 
-// -- Compute $X += A^\top B$
+// Compute \f$X += A^\top B\f$
 void vnl_fastops::inc_X_by_AtB(vnl_matrix<double>& X, const vnl_matrix<double>& A, const vnl_matrix<double>& B)
 {
   unsigned mx = X.rows();
@@ -260,7 +262,7 @@ void vnl_fastops::inc_X_by_AtB(vnl_matrix<double>& X, const vnl_matrix<double>& 
     }
 }
 
-// -- Compute $X += A^\top b$
+//: Compute \f$X += A^\top b\f$
 void vnl_fastops::inc_X_by_AtB(vnl_vector<double>& X, const vnl_matrix<double>& A, const vnl_vector<double>& B)
 {
   unsigned mx = X.size();
@@ -292,7 +294,7 @@ void vnl_fastops::inc_X_by_AtB(vnl_vector<double>& X, const vnl_matrix<double>& 
   }
 }
 
-// -- Compute $X -= A^\top B$
+//: Compute \f$X -= A^\top B\f$
 void vnl_fastops::dec_X_by_AtB(vnl_matrix<double>& X, const vnl_matrix<double>& A, const vnl_matrix<double>& B)
 {
   unsigned mx = X.rows();
@@ -327,7 +329,7 @@ void vnl_fastops::dec_X_by_AtB(vnl_matrix<double>& X, const vnl_matrix<double>& 
     }
 }
 
-// -- Compute dot product of a and b
+//: Compute dot product of a and b
 double vnl_fastops::dot(const double* a, const double* b, int n)
 {
   double accum = 0;
@@ -349,7 +351,7 @@ double vnl_fastops::dot(const double* a, const double* b, int n)
   return accum;
 }
 
-// -- Compute $X -= A B^\top$
+//: Compute \f$X -= A B^\top\f$
 void vnl_fastops::dec_X_by_ABt(vnl_matrix<double>& X, const vnl_matrix<double>& A, const vnl_matrix<double>& B)
 {
   unsigned mx = X.rows();

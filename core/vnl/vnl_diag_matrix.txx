@@ -1,6 +1,8 @@
 #ifndef vnl_diag_matrix_C_
 #define vnl_diag_matrix_C_
 
+// This is vxl/vnl/vnl_diag_matrix.txx
+
 #include "vnl_diag_matrix.h"
 
 #include <vcl_iostream.h>
@@ -10,7 +12,10 @@
 # undef inline
 #endif
 
-// -- Return inv(D) * b.
+
+
+
+//: Return inv(D) * b.
 template <class T>
 vnl_vector<T> vnl_diag_matrix<T>::solve(vnl_vector<T> const& b)
 {
@@ -21,7 +26,7 @@ vnl_vector<T> vnl_diag_matrix<T>::solve(vnl_vector<T> const& b)
   return ret;
 }
 
-// -- Return inv(D) * b.
+//: Return inv(D) * b.
 template <class T>
 void vnl_diag_matrix<T>::solve(vnl_vector<T> const& b, vnl_vector<T>* out)
 {
@@ -30,7 +35,7 @@ void vnl_diag_matrix<T>::solve(vnl_vector<T> const& b, vnl_vector<T>* out)
     (*out)[i] = b[i] / diagonal_[i];
 }
 
-// -- Print in MATLAB diag([1 2 3]) form.
+//: Print in MATLAB diag([1 2 3]) form.
 template <class T>
 vcl_ostream& operator<< (vcl_ostream& s, const vnl_diag_matrix<T>& D)
 {
@@ -41,10 +46,10 @@ vcl_ostream& operator<< (vcl_ostream& s, const vnl_diag_matrix<T>& D)
 }
 
 #if 0
-// -- Compares two matrices for component-wise equality within a small epsilon
+//: Compares two matrices for component-wise equality within a small epsilon
 template<class T>
 bool epsilon_equals (const vnl_diag_matrix<T>& m1, const vnl_diag_matrix<T>& m2,
-                     double alt_epsilon)
+             double alt_epsilon VCL_DEFAULT_VALUE(0))
 {
   if (alt_epsilon < 0)
     {
@@ -53,7 +58,7 @@ bool epsilon_equals (const vnl_diag_matrix<T>& m1, const vnl_diag_matrix<T>& m2,
     }
 
   if (m1.rows() != m2.rows())
-     return false;                  // different sizes.
+     return false;              // different sizes.
 
   double local_epsilon;
   if (alt_epsilon == 0)
@@ -95,6 +100,7 @@ VCL_INSTANTIATE_INLINE(vnl_matrix<T > operator- (vnl_diag_matrix<T > const &, vn
 VCL_INSTANTIATE_INLINE(vnl_vector<T > operator* (const vnl_vector<T >&, vnl_diag_matrix<T > const &));\
 VCL_INSTANTIATE_INLINE(vnl_vector<T > operator* (vnl_diag_matrix<T > const &, const vnl_vector<T >&));\
 template vcl_ostream& operator<< (vcl_ostream& s, vnl_diag_matrix<T > const &)
+
 //template bool epsilon_equals (vnl_diag_matrix<T > const & , vnl_diag_matrix<T > const & , double)
 
 #endif

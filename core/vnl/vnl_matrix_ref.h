@@ -3,14 +3,26 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+
+// This is vxl/vnl/vnl_matrix_ref.h
+
+//:
+// \file
+// \brief vnl_matrix reference to user-supplied storage.
 //
-// .NAME	vnl_matrix_ref - vnl_matrix reference to user-supplied storage
-// .LIBRARY	vnl
-// .HEADER	vxl package
-// .INCLUDE	vnl/vnl_matrix_ref.h
-// .FILE	vnl_matrix_ref.cxx
+// \author Andrew W. Fitzgibbon, Oxford RRG, 04 Aug 96
+
+
 //
-// .SECTION Description
+//Modifications:
+//* Documentation updated by Ian Scott 12 Mar 2000
+//
+//-----------------------------------------------------------------------------
+
+#include <vcl_new.h>
+#include <vnl/vnl_matrix.h>
+
+//: vnl_matrix reference to user-supplied storage
 //    vnl_matrix_ref is a vnl_matrix for which the data space has been
 //    supplied externally.  This is useful for two main tasks:
 //    (a) Treating some row-based "C" matrix as a vnl_matrix in order to
@@ -27,18 +39,6 @@
 //    very difficult though, as vnl_matrix_ref objects may not be constructed using
 //    operator new, and are therefore unlikely to be the unwitting subject
 //    of an operator delete.
-//
-// .SECTION Author
-//     Andrew W. Fitzgibbon, Oxford RRG, 04 Aug 96
-//
-// .SECTION Modifications:
-//     <none yet>
-//
-//-----------------------------------------------------------------------------
-
-#include <vcl_new.h>
-#include <vnl/vnl_matrix.h>
-
 template <class T>
 class vnl_matrix_ref : public vnl_matrix<T> {
   typedef vnl_matrix<T> Base;
@@ -69,12 +69,16 @@ private:
 //#if !defined(VCL_GCC_295)
 //  void* operator new(size_t) { return 0; }
 //#endif
-  
-  // Disallow resizing
-  bool resize (unsigned int, unsigned int) { return false; }
 
-  // Disallow this as it would create a non-const alias to the Matrix
+
+  //: Resizing is disallowed
+  bool resize (unsigned int, unsigned int) { return 0; }
+
+
+  //: Copy constructor is disallowed
+  // because it would create a non-const alias to the Matrix
   vnl_matrix_ref(vnl_matrix<T> const &) {}
+
 
   // You can't assign one of these from a matrix, cos' you don't have any space
   vnl_matrix_ref(vnl_matrix_ref<T> const &) {}

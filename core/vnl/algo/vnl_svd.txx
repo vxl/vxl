@@ -190,7 +190,7 @@ vcl_ostream& operator<<(vcl_ostream& s, const vnl_svd<T>& svd)
 //-----------------------------------------------------------------------------
 // Chunky bits.
 
-// -- find weights below threshold tol, zero them out, and update W_ and
+//: find weights below threshold tol, zero them out, and update W_ and
 // Winverse_
 template <class T>
 void
@@ -210,7 +210,7 @@ vnl_svd<T>::zero_out_absolute(double tol)
   }
 }
 
-// -- find weights below tol*max(w) and zero them out
+//: find weights below tol*max(w) and zero them out
 template <class T> void vnl_svd<T>::zero_out_relative(double tol) // sqrt(machine epsilon)
 {
   zero_out_absolute(tol * vcl_abs(sigma_max()));
@@ -218,7 +218,7 @@ template <class T> void vnl_svd<T>::zero_out_relative(double tol) // sqrt(machin
 
 
 /*
-// -- return the largest singular value
+//: return the largest singular value
 template <class T>
 vnl_svd<T>::singval_t vnl_svd<T>::sigma_max() const
 {
@@ -227,7 +227,7 @@ vnl_svd<T>::singval_t vnl_svd<T>::sigma_max() const
 
 
 
-// -- return the smallest singular value
+//: return the smallest singular value
 template <class T>
 vnl_svd<T>::singval_t vnl_svd<T>::sigma_min() const
 {
@@ -236,7 +236,7 @@ vnl_svd<T>::singval_t vnl_svd<T>::sigma_min() const
 
 
 
-// -- Return ratio of smallest/largest singular value
+//: Return ratio of smallest/largest singular value
 template <class T>
 vnl_svd<T>::singval_t vnl_svd<T>::well_condition () const
 {
@@ -245,7 +245,7 @@ vnl_svd<T>::singval_t vnl_svd<T>::well_condition () const
 
 */
 
-// -- Calculate determinant as product of diagonals in W.
+//: Calculate determinant as product of diagonals in W.
 template <class T>
 vnl_svd<T>::singval_t vnl_svd<T>::determinant_magnitude() const
 {
@@ -262,7 +262,7 @@ vnl_svd<T>::singval_t vnl_svd<T>::norm() const
   return vcl_abs(sigma_max());
 }
 
-// -- Recompose SVD to U*W*V'
+//: Recompose SVD to U*W*V'
 template <class T>
 vnl_matrix<T> vnl_svd<T>::recompose() const
 {
@@ -282,7 +282,7 @@ vnl_matrix<T> vnl_svd<T>::inverse() const
 }
 
 
-// -- Calculate pseudo-inverse.
+//: Calculate pseudo-inverse.
 template <class T>
 vnl_matrix<T> vnl_svd<T>::pinverse()  const
 {
@@ -296,7 +296,7 @@ vnl_matrix<T> vnl_svd<T>::pinverse()  const
 
 
 
-// -- Calculate inverse of transpose.
+//: Calculate inverse of transpose.
 template <class T>
 vnl_matrix<T> vnl_svd<T>::tinverse()  const
 {
@@ -310,7 +310,7 @@ vnl_matrix<T> vnl_svd<T>::tinverse()  const
 
 
 
-// -- Solve the matrix equation M X = B, returning X
+//: Solve the matrix equation M X = B, returning X
 template <class T>
 vnl_matrix<T> vnl_svd<T>::solve(vnl_matrix<T> const& B)  const
 {
@@ -333,7 +333,7 @@ vnl_matrix<T> vnl_svd<T>::solve(vnl_matrix<T> const& B)  const
   return x;
 }
 
-// -- Solve the matrix-vector system M x = y, returning x.
+//: Solve the matrix-vector system M x = y, returning x.
 template <class T>
 vnl_vector<T> vnl_svd<T>::solve(vnl_vector<T> const& y)  const
 {
@@ -376,7 +376,7 @@ void vnl_svd<T>::solve(T const *y, T *x) const {
   solve(vnl_vector<T>(y, m_)).copy_out(x);
 }
 
-// -- Solve the matrix-vector system M x = y, assuming that
+//: Solve the matrix-vector system M x = y, assuming that
 // the singular values W have been preinverted by the caller.
 template <class T>
 void vnl_svd<T>::solve_preinverted(vnl_vector<T> const& y, vnl_vector<T>* x_out)  const
@@ -396,7 +396,7 @@ void vnl_svd<T>::solve_preinverted(vnl_vector<T> const& y, vnl_vector<T>* x_out)
 }
 
 //-----------------------------------------------------------------------------
-// -- Return N s.t. M * N = 0
+//: Return N s.t. M * N = 0
 template <class T>
 vnl_matrix <T> vnl_svd<T>::nullspace()  const
 {
@@ -407,7 +407,7 @@ vnl_matrix <T> vnl_svd<T>::nullspace()  const
 }
 
 //-----------------------------------------------------------------------------
-// -- Return N s.t. M * N = 0
+//: Return N s.t. M * N = 0
 template <class T>
 vnl_matrix <T> vnl_svd<T>::nullspace(int required_nullspace_dimension)  const
 {
@@ -415,7 +415,7 @@ vnl_matrix <T> vnl_svd<T>::nullspace(int required_nullspace_dimension)  const
 }
 
 //-----------------------------------------------------------------------------
-// -- Return N s.t. M' * N = 0
+//: Return N s.t. M' * N = 0
 template <class T>
 vnl_matrix <T> vnl_svd<T>::left_nullspace()  const
 {
@@ -425,7 +425,7 @@ vnl_matrix <T> vnl_svd<T>::left_nullspace()  const
   return U_.extract(U_.rows(), n_-k, 0, k);
 }
 
-// -- Implementation to be done yet; currently returns left_nullspace(). - PVR.
+//: Implementation to be done yet; currently returns left_nullspace(). - PVR.
 template <class T>
 vnl_matrix<T> vnl_svd<T>::left_nullspace(int /*required_nullspace_dimension*/) const
 {
@@ -434,7 +434,7 @@ vnl_matrix<T> vnl_svd<T>::left_nullspace(int /*required_nullspace_dimension*/) c
 
 
 //-----------------------------------------------------------------------------
-// -- Return the rightmost column of V.  Does not check to see whether or
+//: Return the rightmost column of V.  Does not check to see whether or
 // not the matrix actually was rank-deficient - the caller is assumed to have
 // examined W and decided that to his or her satisfaction.
 template <class T>
@@ -447,7 +447,7 @@ vnl_vector <T> vnl_svd<T>::nullvector()  const
 }
 
 //-----------------------------------------------------------------------------
-// -- Return the rightmost column of U.  Does not check to see whether or
+//: Return the rightmost column of U.  Does not check to see whether or
 // not the matrix actually was rank-deficient.
 template <class T>
 vnl_vector <T> vnl_svd<T>::left_nullvector()  const

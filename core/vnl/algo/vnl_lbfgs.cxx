@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 //
-// .NAME vnl_lbfgs
+// vnl_lbfgs
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 22 Aug 99
 //
@@ -14,7 +14,7 @@
 #include <vcl_cstdio.h>   // sprintf()
 #include <vcl_iostream.h>
 
-// -- Default constructor.
+//: Default constructor.
 // memory is set to 5, line_search_accuracy to 0.9.
 // Calls init_parameters
 vnl_lbfgs::vnl_lbfgs():
@@ -23,7 +23,7 @@ vnl_lbfgs::vnl_lbfgs():
   init_parameters();
 }
 
-// -- Constructor. f is the cost function to be minimized.
+//: Constructor. f is the cost function to be minimized.
 // Calls init_parameters
 vnl_lbfgs::vnl_lbfgs(vnl_cost_function& f):
   f_(&f)
@@ -31,7 +31,7 @@ vnl_lbfgs::vnl_lbfgs(vnl_cost_function& f):
   init_parameters();
 }
 
-// -- Called by constructors.
+//: Called by constructors.
 // Memory is set to 5, line_search_accuracy to 0.9, default_step_length to 1.
 void vnl_lbfgs::init_parameters()
 {

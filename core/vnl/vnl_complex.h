@@ -1,3 +1,5 @@
+// This is vxl/vnl/vnl_complex.h
+
 //-*- c++ -*-------------------------------------------------------------------
 #ifndef vnl_complex_h_
 #define vnl_complex_h_
@@ -5,18 +7,17 @@
 #pragma interface
 #endif
 
-// .NAME vnl_complex
-// .HEADER vxl package
-// .LIBRARY vnl
-// .INCLUDE vnl/vnl_complex.h
-// .FILE vnl_complex.cxx
+//: \file
+//  \brief Complex additions to vnl_math.
 //
-// .SECTION Description
 //     We don't want everyone to pay for complex when they don't need it, as
-//     its ratio of expense to frequency of use is high. So we define those 
+//     its ratio of expense to frequency of use is high. So we define those
 //     functions from vnl_math which use complex here instead.
 //     In a sense, vnl_math should be a namespace, and this file adds to that
 //     namespace.
+
+// Modifications
+// LSB (Manchester) 26/3/01 Tidied documentation
 
 #include <vcl_cmath.h>
 #include <vcl_complex.h>

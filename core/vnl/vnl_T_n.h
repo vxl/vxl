@@ -3,6 +3,8 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// This is vxl/vnl/vnl_T_n.h
+
 /*
   fsm@robots.ox.ac.uk
 */

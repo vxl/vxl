@@ -1,5 +1,5 @@
 // -*- c++ -*-
-// .NAME vnl_fft2d
+// vnl_fft2d
 // Author: Veit U.B. Schenk, Oxford RRG, 19 Mar 98
 //
 //-----------------------------------------------------------------------------
@@ -14,9 +14,9 @@
 
 //--------------------------------------------------------------------------------
 
-// -- super-simple constructor: take vnl_matrix<float>, do the forward FFT
-// -- don't have to worry about the prime-factors
-template<class T>
+//: super-simple constructor: take vnl_matrix<float>, do the forward FFT
+// don't have to worry about the prime-factors
+template<class T> 
 vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<T> &R) : base (R.rows(), R.columns())
 {
   vnl_complexify(R.data_block(),
@@ -32,8 +32,8 @@ vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<T> &R) : base (R.rows(), R.columns())
   doFFT (oPFx, oPFy, +1); // always forward
 }
 
-// -- super-simple: takes complex matrix, can do both directions
-// -- don't have to worry about the prime-factors
+//: super-simple: takes complex matrix, can do both directions
+// don't have to worry about the prime-factors
 template<class T>
 vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<vcl_complex<T> > &Z, int dir) : base (Z)
 {
@@ -46,9 +46,9 @@ vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<vcl_complex<T> > &Z, int dir) : base (
 
   doFFT (oPFx, oPFy, dir);
 }
-
-// -- init with vnl_matrix R (default i=0.0)
-template<class T>
+  
+//: init with vnl_matrix R (default i=0.0)
+template<class T> 
 vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<T> &R,
                          const vnl_fftxd_prime_factors<T> &oPFx,
                          const vnl_fftxd_prime_factors<T> &oPFy, int dir)
@@ -60,7 +60,7 @@ vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<T> &R,
 }
 
 
-// -- init with vnl_matrices r,i
+//: init with vnl_matrices r,i
 template<class T>
 vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<T> &R, const vnl_matrix<T> &I,
                          const vnl_fftxd_prime_factors<T> &oPFx,
@@ -72,7 +72,7 @@ vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<T> &R, const vnl_matrix<T> &I,
   doFFT (oPFx, oPFy, dir);
 }
 
-// -- init with 'raw' r(RData) and default i(0.0)
+//: init with 'raw' r(RData) and default i(0.0)
 template<class T>
 vnl_fft2d<T>::vnl_fft2d (const T *RData, unsigned int iRows, unsigned int iCols,
                          const vnl_fftxd_prime_factors<T> &oPFx,
@@ -84,7 +84,7 @@ vnl_fft2d<T>::vnl_fft2d (const T *RData, unsigned int iRows, unsigned int iCols,
   doFFT (oPFx, oPFy, dir);
 }
 
-// -- init with 'raw' r(RData) and 'raw' i(IData)
+//: init with 'raw' r(RData) and 'raw' i(IData)
 template<class T>
 vnl_fft2d<T>::vnl_fft2d (const T *RData, const T *IData,  // data
                          unsigned int iRows, unsigned int iCols, // dimensions
@@ -98,7 +98,7 @@ vnl_fft2d<T>::vnl_fft2d (const T *RData, const T *IData,  // data
 }
 
 #ifndef VCL_VC60
-// -- init to given complex vnl_matrix
+//: init to given complex vnl_matrix
 template<class T>
 vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<vcl_complex<T> > &C,
                          const vnl_fftxd_prime_factors<T> &oPFx,
@@ -108,8 +108,8 @@ vnl_fft2d<T>::vnl_fft2d (const vnl_matrix<vcl_complex<T> > &C,
   doFFT (oPFx, oPFy, dir);
 }
 
-// -- create new complex given 'raw' complex c(CData)
-template<class T>
+//: create new complex given 'raw' complex c(CData)
+template<class T> 
 vnl_fft2d<T>::vnl_fft2d (const vcl_complex<T> *CData,
                          unsigned int iRows, unsigned int iCols, // dimensions
                          const vnl_fftxd_prime_factors<T> &oPFx,
@@ -156,7 +156,7 @@ inline void cxx_gpfa (float  *a, float  *b, const float  *triggs,
 }
 
 
-// -- the static member function
+//: the static member function
 // can be called directly by user to avoid copying-overhead
 // called internally by all constructors
 template<class T>
@@ -181,9 +181,9 @@ int vnl_fft2d<T>::doFFT_IP (vcl_complex<T> *cdata, unsigned int iRows,
 
   return info;
 }
-
-// -- calls the actual fft routine with correct stride for complex data
-// -- declared as 'private', since only called from within constructors
+  
+//: calls the actual fft routine with correct stride for complex data
+// declared as 'private', since only called from within constructors
 
 
 template<class T>

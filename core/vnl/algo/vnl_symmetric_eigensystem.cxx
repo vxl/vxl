@@ -2,7 +2,7 @@
 #pragma implementation
 #endif
 //
-// .NAME vnl_symmetric_eigensystem
+// vnl_symmetric_eigensystem
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 29 Aug 96
 //

@@ -1,3 +1,5 @@
+// This is vxl/vnl/vnl_test.cxx
+
 //
 // Copyright (C) 1991 Texas Instruments Incorporated.
 //
@@ -28,7 +30,7 @@ void vnl_test_start(const char* name = 0) {
   tests_failed = 0;
   test_name = name;
   vcl_cout << "-----------------------------------------------------------------------------\n";
-  vcl_cout << "Start Testing";	
+  vcl_cout << "Start Testing";
   if (test_name != NULL) vcl_cout << " " << test_name;
   vcl_cout << ":\n-----------------------------------------------------------------------------\n";
   vcl_cout.flush();

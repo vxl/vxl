@@ -1,15 +1,13 @@
-// -*- c++ -*-
-//
-// .NAME testvnl_fft2d
-// .SECTION Description
-// test program for 2D FFT routines
-// creates 2D arrays and matrices, computes forward fft, then backward fft
+//:
+// \file
+// \brief test program for 2D FFT routines.
+// \author Veit U.B. Schenk, Oxford RRG.
+// \date 20 Mar 1998
+// Creates 2D arrays and matrices, computes forward fft, then backward fft 
 // for all (where applicable) constructors of the class
 // and computes differences between input and output.
 //
-// Author: Veit U.B. Schenk, Oxford RRG
-// Created: 20 Mar 1998
-//
+
 //-----------------------------------------------------------------------------
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>

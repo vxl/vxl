@@ -3,18 +3,16 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME	vnl_double_3x2
-// .LIBRARY	vnl
-// .HEADER	vxl package
-// .INCLUDE	vnl/vnl_double_3x2.h
-// .FILE	vnl_double_3x2.cxx
-//
-// .SECTION Author
-//     Andrew W. Fitzgibbon, Oxford RRG, 23 Dec 96
-//
-// .SECTION Modifications:
+// This is vxl/vnl/vnl_double_3x2.h
+
+//: \file
+// \brief
+// \author Andrew W. Fitzgibbon, Oxford RRG, 23 Dec 96
+
+// Modifications:
 //   Peter Vanroose, 25 June 1999: no need to use #pragma instantiate anymore
 //   Peter Vanroose, 21 Oct 1999: vnl_matrix_fixed<double,2,3> already instantiated
+//   4/4/01 LSB (Manchester) Tidied documentation
 //
 //-----------------------------------------------------------------------------
 

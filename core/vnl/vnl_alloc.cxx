@@ -1,3 +1,5 @@
+// This is vxl/vnl/vnl_alloc.cxx
+
 #include "vnl_alloc.h"
 
 #include <vcl_cstring.h>  // memcpy() lives here.
@@ -9,7 +11,7 @@ vnl_alloc::chunk_alloc(vcl_size_t size, int& nobjs)
   char * result;
   vcl_size_t total_bytes = size * nobjs;
   vcl_size_t bytes_left = end_free - start_free;
-
+  
   if (bytes_left >= total_bytes) {
     result = start_free;
     start_free += total_bytes;
@@ -26,7 +28,6 @@ vnl_alloc::chunk_alloc(vcl_size_t size, int& nobjs)
     if (bytes_left > 0) {
       obj *  * my_free_list =
         free_list + FREELIST_INDEX(bytes_left);
-
       ((obj *)start_free) -> free_list_link = *my_free_list;
       *my_free_list = (obj *)start_free;
     }
@@ -93,8 +94,8 @@ void* vnl_alloc::refill(vcl_size_t n)
 
 void*
 vnl_alloc::reallocate(void *p,
-                      vcl_size_t old_sz,
-                      vcl_size_t new_sz)
+          vcl_size_t old_sz,
+          vcl_size_t new_sz)
 {
   void * result;
   vcl_size_t copy_sz;

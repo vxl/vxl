@@ -3,29 +3,19 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME	vnl_numeric_traits - Templated zero/one/precision
-// .LIBRARY	vnl
-// .HEADER	vxl package
-// .INCLUDE	vnl/vnl_numeric_traits.h
-// .FILE	vnl_numeric_traits.cxx
-//
-// .SECTION Description
-//    To allow templated numerical algorithms to determine appropriate
+// This is vxl/vnl/vnl_numeric_traits.h
+
+//: \file
+//  \brief Templated zero/one/precision
+//  \author Andrew W. Fitzgibbon, Oxford RRG, 04 Sep 96
+//  To allow templated numerical algorithms to determine appropriate
 //    values for zero, one, maxval, and types for double precision,
 //    maximum product etc.
-//
-// .SECTION Description
-//    To allow templated numerical algorithms to determine appropriate
-//    values for zero, one, maxval, and types for double precision,
-//    maximum product etc.
-//
-// .SECTION Author
-//     Andrew W. Fitzgibbon, Oxford RRG, 04 Sep 96
-//
-// .SECTION Modifications:
+
+//     Modifications:
 //     980212 AWF Initial version.
 //     AWF 010498 Moved to math
+//     LSB (Manchester) 23/3/01 Documentation tidied 
 //
 //-----------------------------------------------------------------------------
 

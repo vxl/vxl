@@ -1,3 +1,5 @@
+// This is vxl/vnl/vnl_quaternion.txx
+
 //
 // Copyright (C) 1992 General Electric Company.
 //

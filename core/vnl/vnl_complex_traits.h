@@ -3,41 +3,38 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+// This is vxl/vnl/vnl_complex_traits.h
+
+//: \file
+//  \brief To allow templated real or complex algorithms to determine appropriate actions of conjugation, complexification etc.
+//  \author F. Schaffalitzky, Oxford RRG, 26 Mar 1999
+
+
+//     
 //
-// .NAME	vnl_complex_traits
-// .LIBRARY	vnl
-// .HEADER	vxl package
-// .INCLUDE	vnl/vnl_complex_traits.h
-// .FILE	vnl_complex_traits.cxx
-//
-// .SECTION Description
-//    To allow templated real or complex algorithms to determine appropriate
-//    actions of conjugation, complexification etc.
-//
-// .SECTION Author
-//     F. Schaffalitzky, Oxford RRG, 26 Mar 1999
-//
-// .SECTION Modifications:
+// Modifications:
+// LSB (Manchester) 26/3/01 Documentation tidied 
 //
 //-----------------------------------------------------------------------------
 
 #include <vcl_complex.h>
-
-// default is real.
+//: To allow templated real or complex algorithms to determine appropriate
+//    actions of conjugation, complexification etc.
+// Default is real.
 template <class T>
 class vnl_complex_traits {
 public:
-  // -- whether complex or not
+  //: Whether complex or not
   enum { isreal = true };
 
-  // -- complex conjugation
+  //: Complex conjugation
   static T conjugate(T x) { return x; }
 
-  // -- complexification
+  //: Complexification
   static vcl_complex<T> complexify(T x) { return vcl_complex<T>(x,T(0)); }
 };
 
-// -- override for vcl_complex<REAL> :
+//: override for vcl_complex<REAL> :
 
 // vcl_complex<float>
 VCL_DEFINE_SPECIALIZATION

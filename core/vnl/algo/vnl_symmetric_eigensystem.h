@@ -3,13 +3,23 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME	vnl_symmetric_eigensystem - Solve $A x = \lambda x$ using vnl_qr
-// .HEADER	vxl package
-// .LIBRARY	vnl-algo
-// .INCLUDE	vnl/algo/vnl_symmetric_eigensystem.h
-// .FILE	vnl_symmetric_eigensystem.cxx
+
+//:
+//  \file
+//  \brief Find eigenvalues of a symmetric matrix
+//  \author Andrew W. Fitzgibbon, Oxford RRG, 29 Aug 96
 //
-// .SECTION Description
+//  Modifications
+//  fsm@robots, 5 March 2000: templated
+//  dac (Manchester) 28/03/2001: tidied up documentation
+//  
+
+#include <vnl/vnl_matrix.h>
+#include <vnl/vnl_diag_matrix.h>
+
+
+//: Find eigenvalues of a symmetric matrix
+//
 // @{
 //    Solve the eigenproblem $A x = \lambda x$, with $A$ symmetric.
 //    The resulting eigenvectors and values are sorted in increasing order
@@ -43,17 +53,11 @@
 //     full matrix to tridiagonal form.
 // \end{quote}
 // @}
-//
-// .SECTION Author
-//    Andrew W. Fitzgibbon, Oxford RRG, 29 Aug 96
-// .SECTION Modifications:
-//    fsm@robots, 5 March 2000: templated
-
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_diag_matrix.h>
+  
 
 template <class T>
-bool vnl_symmetric_eigensystem_compute(vnl_matrix<T> const & A, vnl_matrix<T> & V, vnl_vector<T> & D);
+bool vnl_symmetric_eigensystem_compute(vnl_matrix<T> const & A, 
+                                       vnl_matrix<T> & V, vnl_vector<T> & D);
 
 template <class T>
 class vnl_symmetric_eigensystem {

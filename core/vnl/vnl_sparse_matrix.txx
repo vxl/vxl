@@ -1,8 +1,10 @@
+// This is vxl/vnl/vnl_sparse_matrix.txx
+
 #include <vnl/vnl_sparse_matrix.h>
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
-#include <vcl_iostream.h>
 #include <vcl_algorithm.h>
+#include <vcl_iostream.h>
 
 // #define DEBUG_SPARSE 1
 
@@ -10,8 +12,9 @@
 # include <vnl/vnl_matrix.h>
 #endif
 
+// Implementation of vnl_sparse_matrix
 //------------------------------------------------------------
-// -- Construct an empty matrix
+//: Construct an empty matrix
 template <class T>
 vnl_sparse_matrix<T>::vnl_sparse_matrix()
   : rs_(0), cs_(0)
@@ -19,7 +22,7 @@ vnl_sparse_matrix<T>::vnl_sparse_matrix()
 }
 
 //------------------------------------------------------------
-// -- Construct an empty m*n matrix.  There are m rows and n columns.
+//: Construct an empty m*n matrix.  There are m rows and n columns.
 template <class T>
 vnl_sparse_matrix<T>::vnl_sparse_matrix(unsigned int m, unsigned int n)
   : elements(m), rs_(m), cs_(n)
@@ -27,7 +30,7 @@ vnl_sparse_matrix<T>::vnl_sparse_matrix(unsigned int m, unsigned int n)
 }
 
 //------------------------------------------------------------
-// -- Construct an m*n Matrix and copy rhs into it.
+//: Construct an m*n Matrix and copy rhs into it.  
 template <class T>
 vnl_sparse_matrix<T>::vnl_sparse_matrix(const vnl_sparse_matrix<T>& rhs)
   : elements(rhs.elements), rs_(rhs.rs_), cs_(rhs.cs_)
@@ -35,7 +38,7 @@ vnl_sparse_matrix<T>::vnl_sparse_matrix(const vnl_sparse_matrix<T>& rhs)
 }
 
 //------------------------------------------------------------
-// -- Copy another vnl_sparse_matrix<T> into this.
+//: Copy another vnl_sparse_matrix<T> into this.
 template <class T>
 vnl_sparse_matrix<T>& vnl_sparse_matrix<T>::operator=(const vnl_sparse_matrix<T>& rhs)
 {
@@ -50,7 +53,7 @@ vnl_sparse_matrix<T>& vnl_sparse_matrix<T>::operator=(const vnl_sparse_matrix<T>
 }
 
 //------------------------------------------------------------
-// -- Multiply this*rhs, another sparse matrix.
+//: Multiply this*rhs, another sparse matrix.
 template <class T>
 void vnl_sparse_matrix<T>::mult(const vnl_sparse_matrix<T>& rhs, vnl_sparse_matrix<T>& result) const
 {
@@ -129,11 +132,11 @@ void vnl_sparse_matrix<T>::mult(const vnl_sparse_matrix<T>& rhs, vnl_sparse_matr
 }
 
 //------------------------------------------------------------
-// -- Multiply this*p, a fortran order matrix.  The matrix p has n
+//: Multiply this*p, a fortran order matrix.  The matrix p has n
 // rows and m columns, and is in fortran order, ie. columns first.
 template <class T>
 void vnl_sparse_matrix<T>::mult(unsigned int prows, unsigned int pcols,
-                                T const* p, T* q) const
+        T const* p, T* q) const
 {
   assert(prows == columns());
 
@@ -215,7 +218,7 @@ void vnl_sparse_matrix<T>::mult(unsigned int prows, unsigned int pcols,
 
 
 //------------------------------------------------------------
-// -- Multiply this*rhs, a vector.
+//: Multiply this*rhs, a vector.
 template <class T>
 void vnl_sparse_matrix<T>::mult(const vnl_vector<T>& rhs, vnl_vector<T>& result) const
 {
@@ -242,7 +245,7 @@ void vnl_sparse_matrix<T>::mult(const vnl_vector<T>& rhs, vnl_vector<T>& result)
 }
 
 //------------------------------------------------------------
-// -- Multiply lhs*this, where lhs is a vector
+//: Multiply lhs*this, where lhs is a vector
 template <class T>
 void vnl_sparse_matrix<T>::pre_mult(const vnl_vector<T>& lhs, vnl_vector<T>& result) const
 {
@@ -279,7 +282,7 @@ void vnl_sparse_matrix<T>::pre_mult(const vnl_vector<T>& lhs, vnl_vector<T>& res
 }
 
 //------------------------------------------------------------
-// -- Add rhs to this.
+//: Add rhs to this.
 template <class T>
 void vnl_sparse_matrix<T>::add(const vnl_sparse_matrix<T>& rhs,
                                vnl_sparse_matrix<T>& result) const
@@ -332,7 +335,7 @@ void vnl_sparse_matrix<T>::add(const vnl_sparse_matrix<T>& rhs,
 }
 
 //------------------------------------------------------------
-// -- Subtract rhs from this.
+//: Subtract rhs from this.
 template <class T>
 void vnl_sparse_matrix<T>::subtract(const vnl_sparse_matrix<T>& rhs,
                                     vnl_sparse_matrix<T>& result) const
@@ -385,7 +388,7 @@ void vnl_sparse_matrix<T>::subtract(const vnl_sparse_matrix<T>& rhs,
 }
 
 //------------------------------------------------------------
-// -- Get a reference to an entry in the matrix.
+//: Get a reference to an entry in the matrix.
 template <class T>
 T& vnl_sparse_matrix<T>::operator()(unsigned int r, unsigned int c)
 {
@@ -420,6 +423,9 @@ void vnl_sparse_matrix<T>::diag_AtA(vnl_vector<T> & result) const
   }
 }
 
+//------------------------------------------------------------
+//: Set row in the matrix.
+
 template <class T>
 void vnl_sparse_matrix<T>::set_row(unsigned int r,
                                    vcl_vector<int> const& cols,
@@ -451,8 +457,10 @@ vnl_sparse_matrix<T>& vnl_sparse_matrix<T>::vcat(vnl_sparse_matrix<T> const& A)
   return *this;
 }
 
+
+
 //------------------------------------------------------------
-// -- This is occasionally useful.  Sums a row of the matrix
+//: This is occasionally useful.  Sums a row of the matrix
 // efficiently.
 template <class T>
 double vnl_sparse_matrix<T>::sum_row(unsigned int r)
@@ -476,7 +484,7 @@ void vnl_sparse_matrix<T>::scale_row(unsigned int r, T scale)
 }
 
 //------------------------------------------------------------
-// -- Resizes the matrix so that it has r rows and c columns.
+//: Resizes the matrix so that it has r rows and c columns.
 //    Currently not implemented.
 //
 template <class T>
@@ -487,7 +495,7 @@ void vnl_sparse_matrix<T>::resize( int /*r*/, int /*c*/)
 }
 
 //------------------------------------------------------------
-// -- Resets the internal iterator
+//: Resets the internal iterator 
 //
 template <class T>
 void vnl_sparse_matrix<T>::reset()
@@ -497,7 +505,7 @@ void vnl_sparse_matrix<T>::reset()
 }
 
 //------------------------------------------------------------
-// -- Moves the internal iterator to next non-zero entry in matrix.
+//: Moves the internal iterator to next non-zero entry in matrix.
 // Returns true if there is another value, false otherwise. Use
 // in combination with methods reset, getrow, getcolumn, and value.
 //
@@ -534,7 +542,7 @@ bool vnl_sparse_matrix<T>::next()
 }
 
 //------------------------------------------------------------
-// -- Returns the row of the entry pointed to by internal iterator.
+//: Returns the row of the entry pointed to by internal iterator.
 //
 template <class T>
 int vnl_sparse_matrix<T>::getrow()
@@ -543,7 +551,7 @@ int vnl_sparse_matrix<T>::getrow()
 }
 
 //------------------------------------------------------------
-// -- Returns the column of the entry pointed to by internal iterator.
+//: Returns the column of the entry pointed to by internal iterator.
 //
 template <class T>
 int vnl_sparse_matrix<T>::getcolumn()
@@ -552,10 +560,16 @@ int vnl_sparse_matrix<T>::getcolumn()
 }
 
 //------------------------------------------------------------
-// -- Returns the value pointed to by the internal iterator.
+//: Returns the value pointed to by the internal iterator.
 //
 template <class T>
 T vnl_sparse_matrix<T>::value()
 {
   return (*itr_cur).second;
 }
+
+
+
+#define VNL_SPARSE_MATRIX_INSTANTIATE(T) \
+template class vnl_sparse_matrix<T>; 
+

@@ -3,14 +3,10 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME vnl_matlab_print2
-// .HEADER vxl package
-// .LIBRARY vnl
-// .INCLUDE vnl/vnl_matlab_print2.h
-// .FILE vnl_matlab_print2.cxx
-//
-// .SECTION Description
+// This is vxl/vnl/vnl_matlab_print2.h
+
+//: \file
+//  \author fsm@robots.ox.ac.uk
 // After including this header file, the client should be able to say :
 // \verbatim
 //   vnl_matrix<double> foo(3, 14);
@@ -29,9 +25,8 @@
 //        vnl_matlab_print(cerr, foo, 0, vnl_matlab_fmt_long);
 // \endverbatim
 //
-// .SECTION Author
-//     fsm@robots.ox.ac.uk
-
+//
+//     
 #include <vnl/vnl_matlab_print.h>
 
 // The proxy classes.

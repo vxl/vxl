@@ -1,5 +1,5 @@
 // -*- c++ -*-
-// .NAME vnl_fft1d
+// vnl_fft1d
 // Author: Veit U.B. Schenk, Oxford RRG, 19 Mar 98
 //
 //-----------------------------------------------------------------------------
@@ -14,8 +14,8 @@
 
 //--------------------------------------------------------------------------------
 
-// -- super-easy constructor #1: take real vector
-// -- and do the forward transform
+//: super-easy constructor #1: take real vector
+//: and do the forward transform
 
 template<class T>
 vnl_fft1d<T>::vnl_fft1d (const vnl_vector<T> &R) : base (R.size())
@@ -31,9 +31,9 @@ vnl_fft1d<T>::vnl_fft1d (const vnl_vector<T> &R) : base (R.size())
   doFFT (oPF, +1);
 }
 
-// -- super-easy constructor #2: take complex vector and direction
-// -- don't worry about twiddle-factors, just lean back ....
-template<class T>
+//: super-easy constructor #2: take complex vector and direction
+//: don't worry about twiddle-factors, just lean back ....
+template<class T> 
 vnl_fft1d<T>::vnl_fft1d (vnl_vector<vcl_complex<T> > const &Z, int dir) : base (Z)
 {
   vnl_fftxd_prime_factors<T> oPF (Z.size ());
@@ -44,9 +44,9 @@ vnl_fft1d<T>::vnl_fft1d (vnl_vector<vcl_complex<T> > const &Z, int dir) : base (
   }
   doFFT (oPF, dir);
 }
-
-// -- create complex from vnl_vector R and i=0.0
-template<class T>
+  
+//: create complex from vnl_vector R and i=0.0
+template<class T> 
 vnl_fft1d<T>::vnl_fft1d (const vnl_vector<T> &R,
                          const vnl_fftxd_prime_factors<T> &oPF, int dir)
   : base(R.size ())
@@ -58,8 +58,8 @@ vnl_fft1d<T>::vnl_fft1d (const vnl_vector<T> &R,
   doFFT (oPF, dir);
 }
 
-// -- create complex from vnl_vectors r,i
-template<class T>
+//: create complex from vnl_vectors r,i
+template<class T> 
 vnl_fft1d<T>::vnl_fft1d (const vnl_vector<T> &R, const vnl_vector<T> &I,
                          const vnl_fftxd_prime_factors<T> &oPF, int dir)
   : base(R.size ())
@@ -71,7 +71,7 @@ vnl_fft1d<T>::vnl_fft1d (const vnl_vector<T> &R, const vnl_vector<T> &I,
   doFFT (oPF, dir);
 }
 
-// -- create complex from 'raw' r(RData) and default i(0.0)
+//: create complex from 'raw' r(RData) and default i(0.0)
 template<class T>
 vnl_fft1d<T>::vnl_fft1d (const T *RData, unsigned iLen,
                          const vnl_fftxd_prime_factors<T> &oPF, int dir)
@@ -84,7 +84,7 @@ vnl_fft1d<T>::vnl_fft1d (const T *RData, unsigned iLen,
   doFFT (oPF, dir);
 }
 
-// -- create complex from 'raw' r(RData) and 'raw' i(IData)
+//: create complex from 'raw' r(RData) and 'raw' i(IData)
 template<class T>
 vnl_fft1d<T>::vnl_fft1d (const T *RData, const T *IData, unsigned iLen,
                          const vnl_fftxd_prime_factors<T> &oPF, int dir)
@@ -98,7 +98,7 @@ vnl_fft1d<T>::vnl_fft1d (const T *RData, const T *IData, unsigned iLen,
 }
 
 #ifndef VCL_VC
-// -- init to given complex vnl_vector
+//: init to given complex vnl_vector
 template<class T>
 vnl_fft1d<T>::vnl_fft1d (vnl_vector<vcl_complex<T> > const& C,
                          vnl_fftxd_prime_factors<T> const& oPF, int dir)
@@ -108,7 +108,7 @@ vnl_fft1d<T>::vnl_fft1d (vnl_vector<vcl_complex<T> > const& C,
 }
 #endif
 
-// -- create new complex given 'raw' complex c(CData)
+//: create new complex given 'raw' complex c(CData)
 template<class T>
 vnl_fft1d<T>::vnl_fft1d (vcl_complex<T> const *CData, unsigned iLen,
                          vnl_fftxd_prime_factors<T> const &oPF, int dir)
@@ -155,7 +155,7 @@ inline void cxx_gpfa(float  *a, float  *b, const float  *triggs,
 }
 
 
-// -- the static member function
+//: the static member function
 // can be called directly by user to avoid copying-overhead
 // called internally by all constructors
 template<class T>
@@ -172,11 +172,9 @@ int vnl_fft1d<T>::doFFT_IP (vcl_complex<T> *cdata, unsigned iLen,
                2,0,iLen,1,iDirection,oPF.getPvnl_qr (),&info);
   return info;
 }
-
-// -- calls the actual fft routine with correct stride for complex data
-// -- declared as 'private', since only called from within constructors
-
-
+  
+//: calls the actual fft routine with correct stride for complex data
+// declared as 'private', since only called from within constructors
 template<class T>
 int vnl_fft1d<T>::doFFT (const vnl_fftxd_prime_factors<T> &oPF, int iDirection)
 {

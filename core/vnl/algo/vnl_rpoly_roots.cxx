@@ -2,7 +2,7 @@
 #pragma implementation
 #endif
 //
-// .NAME vnl_rpoly_roots
+// vnl_rpoly_roots
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 06 Aug 96
 //
@@ -70,7 +70,7 @@ vnl_vector<double> vnl_rpoly_roots::realroots(double tol) const
   return ret;
 }
 
-// -- Compute roots using Jenkins-Traub algorithm.
+//: Compute roots using Jenkins-Traub algorithm.
 // Calls rpoly and interprets failure codes.
 bool vnl_rpoly_roots::compute()
 {

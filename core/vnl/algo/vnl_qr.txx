@@ -26,7 +26,7 @@ macro(z, vnl_netlib::doublecomplex_t);
 #undef macro
 
 
-// -- Extract the Q*R decomposition of matrix M.  The decomposition is stored in
+//: Extract the Q*R decomposition of matrix M.  The decomposition is stored in
 // a compact and time-efficient packed form, which is most easily used via the
 // "solve" and "determinant" methods.
 template <class T>
@@ -63,7 +63,7 @@ vnl_qr<T>::~vnl_qr()
   delete R_;
 }
 
-// -- Return the determinant of M.  This is computed from M = vnl_qr as follows:
+//: Return the determinant of M.  This is computed from M = vnl_qr as follows:
 // |M| = |Q| |R|
 // |R| is the product of the diagonal elements.
 // |Q| is (-1)^n as it is a product of Householder reflections.
@@ -80,7 +80,7 @@ T vnl_qr<T>::determinant() const
   return det;
 }
 
-// -- Unpack and return unitary part Q.
+//: Unpack and return unitary part Q.
 template <class T>
 vnl_matrix<T>& vnl_qr<T>::Q()
 {
@@ -144,7 +144,7 @@ vnl_matrix<T>& vnl_qr<T>::Q()
   return *Q_;
 }
 
-// -- Unpack and return R.
+//: Unpack and return R.
 template <class T>
 vnl_matrix<T>& vnl_qr<T>::R()
 {
@@ -171,7 +171,7 @@ vnl_matrix<T>& vnl_qr<T>::R()
 // Qb    Q'b   x     norm(A*x - b)  A*x
 
 
-// -- Solve equation M x = b for x using the computed decomposition.
+//: Solve equation M x = b for x using the computed decomposition.
 template <class T>
 vnl_vector<T> vnl_qr<T>::solve(const vnl_vector<T>& b) const
 {
@@ -201,7 +201,7 @@ vnl_vector<T> vnl_qr<T>::solve(const vnl_vector<T>& b) const
   return x;
 }
 
-// -- Return residual vector d of M x = b -> d = Q'b
+//: Return residual vector d of M x = b -> d = Q'b 
 template <class T>
 vnl_vector<T> vnl_qr<T>::QtB(const vnl_vector<T>& b) const
 {

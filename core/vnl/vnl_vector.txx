@@ -1,3 +1,5 @@
+// This is vxl/vnl/vnl_vector.txx
+
 //
 // Created: VDN 02/21/92 new lite version adapted from Matrix.h
 //
@@ -104,6 +106,23 @@ vnl_vector<T>::vnl_vector (T const& px, T const& py, T const& pz)
 // primitive types like int, and NOT OBJECTS passed by value, like vectors,
 // matrices, because constructors must be known and called at compile time!!!
 
+// template<class T> 
+// vnl_vector<T>::vnl_vector (unsigned len, int n, T v00, ...)
+// : num_elmts(len), data(vnl_c_vector<T>::allocate_T(len))
+// {
+//   cerr << "Please use automatic arrays instead variable arguments" << endl;
+//   if (n > 0) {					// If user specified values
+//     va_list argp;				// Declare argument list
+//     va_start (argp, v00);           		// Initialize macro
+//     for (int i = 0; i < len && n; i++, n--)	// For remaining values given
+//       if (i == 0)
+// 	this->data[0] = v00;			// Hack for v00 ...
+//       else
+// 	this->data[i] = va_arg(argp, T);	// Extract and assign
+//     va_end(argp);
+//   }
+// }
+
 #if 0 // commented out
 template<class T>
 vnl_vector<T>::vnl_vector (unsigned len, int n, T v00, ...)
@@ -124,7 +143,6 @@ vnl_vector<T>::vnl_vector (unsigned len, int n, T v00, ...)
 #endif
 
 //: Creates a new copy of vector v. O(n).
-
 template<class T>
 vnl_vector<T>::vnl_vector (vnl_vector<T> const& v)
 {
@@ -764,6 +782,7 @@ void vnl_vector<T>::inline_function_tickler()
   v = T(3) - v;
   v = T(3) * v;
 }
+
 
 //--------------------------------------------------------------------------------
 

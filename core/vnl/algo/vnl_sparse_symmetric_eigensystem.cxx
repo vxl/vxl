@@ -41,7 +41,7 @@ static vnl_sparse_symmetric_eigensystem * current_system = 0;
 #endif
 
 //------------------------------------------------------------
-// -- Callback for multiplying our matrix by a number of vectors.  The
+//: Callback for multiplying our matrix by a number of vectors.  The
 // input is p, which is an NxM matrix.  This function returns q = A p,
 // where A is the current sparse matrix.
 FUNCTION
@@ -56,7 +56,7 @@ int sse_op_callback(const int* n,
 }
 
 //------------------------------------------------------------
-// -- Callback for saving the Lanczos vectors as required by dnlaso.
+//: Callback for saving the Lanczos vectors as required by dnlaso.
 // If k=0, save the m columns of q as the (j-m+1)th through jth
 // vectors.  If k=1 then return the (j-m+1)th through jth vectors in
 // q.
@@ -83,7 +83,7 @@ vnl_sparse_symmetric_eigensystem::vnl_sparse_symmetric_eigensystem()
 }
 
 //------------------------------------------------------------
-// -- Here is where the fortran converted code gets called.  The
+//: Here is where the fortran converted code gets called.  The
 // sparse matrix M is assumed to be symmetric.  The n smallest
 // eigenvalues and their corresponding eigenvectors are calculated if
 // smallest is true (the default).  Otherwise the n largest eigenpairs
@@ -233,9 +233,10 @@ int vnl_sparse_symmetric_eigensystem::CalculateNPairs(vnl_sparse_matrix<double>&
 }
 
 //------------------------------------------------------------
-// -- Callback from solver to calculate the product A p.
+//: Callback from solver to calculate the product A p.
 int vnl_sparse_symmetric_eigensystem::CalculateProduct(int n, int m,
-                                                       const double* p, double* q)
+                                                       const double* p,
+                                                       double* q)
 {
   // Call the special multiply method on the matrix.
   mat->mult(n,m,p,q);
@@ -244,7 +245,7 @@ int vnl_sparse_symmetric_eigensystem::CalculateProduct(int n, int m,
 }
 
 //------------------------------------------------------------
-// -- Callback to store vectors for dnlaso.
+//: Callback to store vectors for dnlaso.
 int vnl_sparse_symmetric_eigensystem::SaveVectors(int n, int m,
                                                   const double* q,
                                                   int base)
@@ -267,7 +268,7 @@ int vnl_sparse_symmetric_eigensystem::SaveVectors(int n, int m,
 }
 
 //------------------------------------------------------------
-// -- Callback to restore vectors for dnlaso.
+//: Callback to restore vectors for dnlaso.
 int vnl_sparse_symmetric_eigensystem::RestoreVectors(int n, int m,
                                                      double* q,
                                                      int base)
@@ -287,7 +288,7 @@ int vnl_sparse_symmetric_eigensystem::RestoreVectors(int n, int m,
 }
 
 //------------------------------------------------------------
-// -- Return a calculated eigenvector.
+//: Return a calculated eigenvector.
 vnl_vector<double> vnl_sparse_symmetric_eigensystem::get_eigenvector(int i) const
 {
   assert(i<nvalues);

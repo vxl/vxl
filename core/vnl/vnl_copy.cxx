@@ -1,3 +1,5 @@
+// This is vxl/vnl/vnl_copy.cxx
+
 /*
   fsm@robots.ox.ac.uk
 */
@@ -11,7 +13,7 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_diag_matrix.h>
 
-//--------------------------------------------------------------------------------
+//-------------------------------------------------------------------
 
 template <class S, class T>
 void vnl_copy(S const *src, T *dst, unsigned n)
@@ -27,7 +29,7 @@ void vnl_copy(S const &src, T &dst)
   vnl_copy(src.begin(), dst.begin(), src.size());
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------
 
 // C arrays
 #define VNL_COPY_INSTANTIATE0(S, T) \

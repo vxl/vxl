@@ -1,3 +1,5 @@
+// This is vxl/vnl/vnl_binary.cxx
+
 /*
   fsm@robots.ox.ac.uk
 */
@@ -44,8 +46,7 @@ bool vnl_binary_load(vcl_istream &f, vnl_vector<T> &v)
   return true;
 }
 
-// -------------------- vnl_matrix
-
+//:vnl_matrix
 template <class T>
 bool vnl_binary_save(vcl_ostream &f, vnl_matrix<T> const &A)
 {
@@ -75,7 +76,7 @@ bool vnl_binary_load(vcl_istream &f, vnl_matrix<T> &A)
   return true;
 }
 
-// -------------------- vnl_diag_matrix
+//: vnl_diag_matrix
 
 template <class T>
 bool vnl_binary_save(vcl_ostream &f, vnl_diag_matrix<T> const &D)
@@ -100,6 +101,7 @@ bool vnl_binary_load(vcl_istream &f, vnl_diag_matrix<T> &D)
   }
   else
     D.clear();
+
   return true;
 }
 

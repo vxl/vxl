@@ -1,3 +1,5 @@
+// This is vxl/vnl/vnl_sample.cxx
+
 /*
   fsm@robots.ox.ac.uk
 */
@@ -44,7 +46,7 @@ void vnl_sample_reseed()
 #endif
 }
 
-// -- return a random number uniformly drawn on [a, b)
+//: return a random number uniformly drawn on [a, b)
 double vnl_sample_uniform(double a, double b) 
 {
 #if VXL_STDLIB_HAS_DRAND48

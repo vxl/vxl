@@ -4,26 +4,25 @@
 #pragma interface
 #endif
 
-// *** under construction ***
+//:
+//  \file
+//  \brief Purpose: declare in a central place the list of symbols from netlib
+//  \author fsm@robots.ox.ac.uk
+//  
+//  Modifications
+//  dac (Manchester) 28/03/2001: tidied up documentation
+//
 
-// .NAME	vnl_netlib
-// .LIBRARY	vnl-algo
-// .HEADER	vxl Package
-// .INCLUDE	vnl/algo/vnl_netlib.h
-// .FILE	vnl_netlib.cxx
-//
-// .SECTION Description
-// Purpose: declare in a central place the list of symbols from netlib
-// referenced from vnl-algo. This list was auto-generated, so it is
-// exhaustive as of 16 March 2000 (10pm)
 
-// Note: the declarations are initially entered as "int f()", which
-// will conflict with the actual prototype. If you get a conflict,
-// enter the correct prototype in here.
+//: Purpose: declare in a central place the list of symbols from netlib
+//  referenced from vnl-algo. This list was auto-generated, so it is
+//  exhaustive as of 16 March 2000 (10pm)
 //
-// .SECTION Author
-//  fsm@robots.ox.ac.uk
+//  Note: the declarations are initially entered as "int f()", which 
+//  will conflict with the actual prototype. If you get a conflict,
+//  enter the correct prototype in here.
 //
+
 
 #include <vcl_complex.h>
 
@@ -158,11 +157,14 @@ extern "C" {
   // cholesky
   int dpofa_(doublereal *m, const int& lda, const int& n, int* info);
   int dposl_(const doublereal *a, const int& lda, const int& n, doublereal *b);
-  int dpoco_(doublereal *a, const int& lda, const int& n, doublereal* rcond, doublereal *z, int *info);
-  int dpodi_(doublereal *a, const int& lda, const int& n, doublereal* det, const int& job);
+  int dpoco_(doublereal *a, const int& lda, const int& n, 
+      doublereal* rcond, doublereal *z, int *info);
+  int dpodi_(doublereal *a, const int& lda, const int& n,
+      doublereal* det, const int& job);
 
   // roots of real polynomial
-  void rpoly_(const doublereal* op, int* degree, doublereal *zeror, doublereal *zeroi, int *fail);
+  void rpoly_(const doublereal* op, int* degree, doublereal *zeror, 
+                doublereal *zeroi, int *fail);
 
   //
   int chscdf_();

@@ -1,8 +1,10 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
+// This is vxl/vnl/vnl_matops.cxx
+
 //
-// .NAME vnl_matops
+// vnl_matops
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 05 Aug 96
 //
@@ -71,7 +73,7 @@ vnl_matrix<double> vnl_matops::vcat(vnl_matrix<double> const &A, vnl_matrix<doub
 
 extern "C" int dtrans_(double *a, const int& m, const int& n, const int& mn, int* move, const int& iwrk, int* iok);
 
-// -- Return fro_norm( (A ./ B) - mean(A ./ B) )
+//: Return fro_norm( (A ./ B) - mean(A ./ B) )
 double vnl_matops::homg_diff(vnl_matrix<double> const& A, vnl_matrix<double> const& B)
 {
   vnl_matrix<double> ratio = element_quotient(A, B);

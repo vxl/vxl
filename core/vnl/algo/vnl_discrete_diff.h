@@ -1,26 +1,27 @@
 #ifndef vnl_discrete_diff_h_
 #define vnl_discrete_diff_h_
 
-// .NAME	vnl_discrete_diff
-// .LIBRARY	vnl-algo
-// .HEADER	vxl Package
-// .INCLUDE	vnl/algo/vnl_discrete_diff.h
-// .FILE	vnl_discrete_diff.cxx
+//:
+//  \file
+//  \brief Functions to compute jacobians of vnl_least_squares_functions
+//  \author fsm@robots.ox.ac.uk
 //
-// .SECTION Description
-// Functions to compute jacobians of vnl_least_squares_functions by discrete differencing.
-// They return false on failure and true on success.
+//  Modifications
+//  dac (Manchester) 28/03/2001: tidied up documentation
 //
-// .SECTION Author
-//   fsm@robots.ox.ac.uk
-//
+
+
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 class vnl_least_squares_function;
 
+//: Functions to compute jacobians of vnl_least_squares_functions 
+//  by discrete differencing.  They return false on failure and 
+//  true on success.
+
 class vnl_discrete_diff {
 public:
-  //--------------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
   //
   // Notation :
   //
@@ -33,7 +34,7 @@ public:
   // J    mxn     jacobian of the function at x.
   //
 
-  //--------------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
   //
   // forward differencing
   //
@@ -53,7 +54,7 @@ public:
                        vnl_vector<double> const &y,
                        vnl_matrix<double>       &J);
 
-  //--------------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
   //
   // symmetric differencing
   //

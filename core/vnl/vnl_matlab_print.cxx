@@ -1,3 +1,5 @@
+// This is vxl/vnl/vnl_matlab_print.cxx
+
 /*
   fsm@robots.ox.ac.uk
 */
@@ -110,7 +112,7 @@ vcl_ostream& vnl_matlab_print(vcl_ostream& s,
 
 //--------------------------------------------------------------------------------
 
-// -- Can be used within debugger to print matrix
+//: Can be used within debugger to print matrix
 extern "C"
 void vnl_dbprintmx(vnl_matrix<double> const& p)
 {

@@ -1,14 +1,19 @@
 #ifndef vnl_fft2d_h_
 #define vnl_fft2d_h_
+
+//:
+//  \file
+//  \brief Templated 2D FFT class based on Temperton FFT routines
+//  \author Veit U.B. Schenk, Oxford RRG, 19 Mar 98
 //
-// .NAME vnl_fft2d - templated 2D FFT class based on Temperton FFT routines
-// .HEADER vxl package
-// .LIBRARY vnl-algo
-// .INCLUDE vnl/algo/vnl_fft2d.h
-// .FILE vnl_fft2d.txx
-//
-// .SECTION Description
-//  templated 2D FFT class based on Temperton FFT routines:
+//  Modifications
+//  dac (Manchester) 28/03/2001: tidied up documentation
+
+#include <vcl_complex.h>
+#include <vnl/vnl_matrix.h>
+#include "vnl_fftxd_prime_factors.h"
+
+//: Templated 2D FFT class based on Temperton FFT routines
 //
 //  C TEMPERTON
 //  A GENERALIZED PRIME FACTOR FFT ALGORITHM FOR ANY $N = 2^P 3^Q 5^R$
@@ -27,16 +32,6 @@
 //  call do doFFT. These PrimeFactors<T> objects contain the prime-factors
 //  of the 'number' (the size of the array) to be FFT'd.
 //  (integral part of Temperton's algorithm)
-//
-// .SECTION Author
-//   Veit U.B. Schenk, Oxford RRG, 19 Mar 98
-// .SECTION Modifications:
-//
-//-----------------------------------------------------------------------------
-
-#include <vcl_complex.h>
-#include <vnl/vnl_matrix.h>
-#include "vnl_fftxd_prime_factors.h"
 
 template<class T>
 class vnl_fft2d : public vnl_matrix<vcl_complex<T> > {
@@ -46,7 +41,7 @@ public:
   vnl_fft2d (const vnl_matrix<T> &real); // always forward
   vnl_fft2d (const vnl_matrix<vcl_complex<T> > &z, int dir); // both forw and backw
 
-  // (real,imag)-constructors
+  //: (real,imag)-constructors
   vnl_fft2d (const vnl_matrix<T> &r, const vnl_matrix<T> &i,
              const vnl_fftxd_prime_factors<T> &oPFx,
              const vnl_fftxd_prime_factors<T> &oPFy, int dir); // vnl_matrixs r,i
@@ -61,16 +56,17 @@ public:
              const vnl_fftxd_prime_factors<T> &oPFy, int dir);         // 'raw' r. I defaults to 0.0
 
 #ifndef VCL_VC60
-  // complex-constructors
+  //: complex-constructor
   vnl_fft2d (const vnl_matrix<vcl_complex<T> > &c,
              const vnl_fftxd_prime_factors<T> &oPFx,
              const vnl_fftxd_prime_factors<T> &oPFy, int dir);          //  complex vnl_matrix
+  //: complex-constructor
   vnl_fft2d (const vcl_complex<T> *cdata, unsigned int iRows, unsigned int iCols,
              const vnl_fftxd_prime_factors<T> &oPFx,
              const vnl_fftxd_prime_factors<T> &oPFy, int dir);  // 'raw' complex data
 #endif
 
-  // static member function: avoid copy-overhead
+  //: static member function: avoid copy-overhead
   static int doFFT_IP (vcl_complex<T> *cdata, unsigned int rows, unsigned int cols,
                        const vnl_fftxd_prime_factors<T> &oPFx,
                        const vnl_fftxd_prime_factors<T> &oPFy, int dir);

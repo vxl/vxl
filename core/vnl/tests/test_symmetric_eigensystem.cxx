@@ -1,8 +1,10 @@
-//
-// .NAME test_symmetric_eigensystem
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 29 Aug 96
-//
+
+//:
+// \file
+// \brief test program for symmetric eigensystem routines.
+// \author Andrew W. Fitzgibbon, Oxford RRG.
+// \date 29 Aug 96
+
 //-----------------------------------------------------------------------------
 
 #include <vcl_iostream.h>
