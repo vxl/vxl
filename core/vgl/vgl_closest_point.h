@@ -40,28 +40,32 @@ void vgl_closest_point_to_linesegment(T& ret_x, T& ret_y, T& ret_z,
                                       T x, T y, T z);
 
 //: Closest point to \a (x,y) on open polygon \a (px[i],py[i])
+//  Also returns the index of the polygon line segment where this point lies.
 template <class T>
-void vgl_closest_point_to_non_closed_polygon(T& ret_x, T& ret_y,
-                                             T const px[], T const py[], unsigned int n,
-                                             T x, T y);
+int vgl_closest_point_to_non_closed_polygon(T& ret_x, T& ret_y,
+                                            T const px[], T const py[], unsigned int n,
+                                            T x, T y);
 
 //: Closest point to \a (x,y,z) on open polygon \a (px[i],py[i],pz[i])
+//  Also returns the index of the polygon line segment where this point lies.
 template <class T>
-void vgl_closest_point_to_non_closed_polygon(T& ret_x, T& ret_y, T& ret_z,
-                                             T const px[], T const py[], T const pz[], unsigned int n,
-                                             T x, T y, T z);
+int vgl_closest_point_to_non_closed_polygon(T& ret_x, T& ret_y, T& ret_z,
+                                            T const px[], T const py[], T const pz[], unsigned int n,
+                                            T x, T y, T z);
 
 //: Closest point to \a (x,y) on closed polygon \a (px[i],py[i])
+//  Also returns the index of the polygon line segment where this point lies.
 template <class T>
-void vgl_closest_point_to_closed_polygon(T& ret_x, T& ret_y,
-                                         T const px[], T const py[], unsigned int n,
-                                         T x, T y);
+int vgl_closest_point_to_closed_polygon(T& ret_x, T& ret_y,
+                                        T const px[], T const py[], unsigned int n,
+                                        T x, T y);
 
 //: Closest point to \a (x,y,z) on closed polygon \a (px[i],py[i],pz[i])
+//  Also returns the index of the polygon line segment where this point lies.
 template <class T>
-void vgl_closest_point_to_closed_polygon(T& ret_x, T& ret_y, T& ret_z,
-                                         T const px[], T const py[], T const pz[], unsigned int n,
-                                         T x, T y, T z);
+int vgl_closest_point_to_closed_polygon(T& ret_x, T& ret_y, T& ret_z,
+                                        T const px[], T const py[], T const pz[], unsigned int n,
+                                        T x, T y, T z);
 
 //: Return the point on the given line closest to the origin
 // \relates vgl_line_2d

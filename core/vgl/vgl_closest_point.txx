@@ -47,7 +47,7 @@ void vgl_closest_point_to_linesegment(T& ret_x, T& ret_y,
   // Then it just remains to intersect these two lines:
   T dx = x2-x1;
   T dy = y2-y1;
-  double c = dx*dx+dy+dy;
+  double c = dx*dx+dy*dy;
   ret_x = T((dx*dx*x0+dy*dy*x1-dx*dy*(y0-y1))/c); // possible rounding error!
   ret_y = T((dx*dx*y1+dy*dy*y0-dx*dy*(x1-x0))/c);
 }
@@ -81,9 +81,9 @@ void vgl_closest_point_to_linesegment(T& ret_x, T& ret_y, T& ret_z,
 }
 
 template <class T>
-void vgl_closest_point_to_non_closed_polygon(T& ret_x, T& ret_y,
-                                             T const px[], T const py[], unsigned int n,
-                                             T x, T y)
+int vgl_closest_point_to_non_closed_polygon(T& ret_x, T& ret_y,
+                                            T const px[], T const py[], unsigned int n,
+                                            T x, T y)
 {
   assert(n>1);
   double dd = vgl_distance2_to_linesegment(px[0],py[0], px[1],py[1], x,y);
@@ -94,12 +94,13 @@ void vgl_closest_point_to_non_closed_polygon(T& ret_x, T& ret_y,
     if (nd<dd) { dd=nd; di=i; }
   }
   vgl_closest_point_to_linesegment(ret_x,ret_y, px[di],py[di], px[di+1],py[di+1], x,y);
+  return di;
 }
 
 template <class T>
-void vgl_closest_point_to_non_closed_polygon(T& ret_x, T& ret_y, T& ret_z,
-                                             T const px[], T const py[], T const pz[], unsigned int n,
-                                             T x, T y, T z)
+int vgl_closest_point_to_non_closed_polygon(T& ret_x, T& ret_y, T& ret_z,
+                                            T const px[], T const py[], T const pz[], unsigned int n,
+                                            T x, T y, T z)
 {
   assert(n>1);
   double dd = vgl_distance2_to_linesegment(px[0],py[0],pz[0], px[1],py[1],pz[1], x,y,z);
@@ -111,12 +112,13 @@ void vgl_closest_point_to_non_closed_polygon(T& ret_x, T& ret_y, T& ret_z,
   }
   vgl_closest_point_to_linesegment(ret_x,ret_y,ret_z, px[di],py[di],pz[di],
                                    px[di+1],py[di+1],pz[di+1], x,y,z);
+  return di;
 }
 
 template <class T>
-void vgl_closest_point_to_closed_polygon(T& ret_x, T& ret_y,
-                                         T const px[], T const py[], unsigned int n,
-                                         T x, T y)
+int vgl_closest_point_to_closed_polygon(T& ret_x, T& ret_y,
+                                        T const px[], T const py[], unsigned int n,
+                                        T x, T y)
 {
   assert(n>1);
   double dd = vgl_distance2_to_linesegment(px[0],py[0], px[n-1],py[n-1], x,y);
@@ -126,16 +128,17 @@ void vgl_closest_point_to_closed_polygon(T& ret_x, T& ret_y,
     double nd = vgl_distance2_to_linesegment(px[i],py[i], px[i+1],py[i+1], x,y);
     if (nd<dd) { dd=nd; di=i; }
   }
-  if (di == -1)
+  if (di == -1) di+=n,
     vgl_closest_point_to_linesegment(ret_x,ret_y, px[0],py[0], px[n-1],py[n-1], x,y);
   else
     vgl_closest_point_to_linesegment(ret_x,ret_y, px[di],py[di], px[di+1],py[di+1], x,y);
+  return di;
 }
 
 template <class T>
-void vgl_closest_point_to_closed_polygon(T& ret_x, T& ret_y, T& ret_z,
-                                         T const px[], T const py[], T const pz[], unsigned int n,
-                                         T x, T y, T z)
+int vgl_closest_point_to_closed_polygon(T& ret_x, T& ret_y, T& ret_z,
+                                        T const px[], T const py[], T const pz[], unsigned int n,
+                                        T x, T y, T z)
 {
   assert(n>1);
   double dd = vgl_distance2_to_linesegment(px[0],py[0],pz[0], px[n-1],py[n-1],pz[n-1], x,y,z);
@@ -145,12 +148,13 @@ void vgl_closest_point_to_closed_polygon(T& ret_x, T& ret_y, T& ret_z,
     double nd = vgl_distance2_to_linesegment(px[i],py[i],pz[i], px[i+1],py[i+1],pz[i+1], x,y,z);
     if (nd<dd) { dd=nd; di=i; }
   }
-  if (di == -1)
+  if (di == -1) di+=n,
     vgl_closest_point_to_linesegment(ret_x,ret_y,ret_z, px[0],py[0],pz[0],
                                      px[n-1],py[n-1],pz[n-1], x,y,z);
   else
     vgl_closest_point_to_linesegment(ret_x,ret_y,ret_z, px[di],py[di],pz[di],
                                      px[di+1],py[di+1],pz[di+1], x,y,z);
+  return di;
 }
 
 template <class T>
@@ -376,10 +380,10 @@ vgl_point_3d<T> vgl_closest_point(vgl_line_3d_2_points<T> const& l,
 #define VGL_CLOSEST_POINT_INSTANTIATE(T) \
 template void vgl_closest_point_to_linesegment(T&,T&,T,T,T,T,T,T); \
 template void vgl_closest_point_to_linesegment(T&,T&,T&,T,T,T,T,T,T,T,T,T); \
-template void vgl_closest_point_to_non_closed_polygon(T&,T&,T const[],T const[],unsigned int,T,T); \
-template void vgl_closest_point_to_non_closed_polygon(T&,T&,T&,T const[],T const[],T const[],unsigned int,T,T,T); \
-template void vgl_closest_point_to_closed_polygon(T&,T&,T const[],T const[],unsigned int,T,T); \
-template void vgl_closest_point_to_closed_polygon(T&,T&,T&,T const[],T const[],T const[],unsigned int,T,T,T); \
+template int vgl_closest_point_to_non_closed_polygon(T&,T&,T const[],T const[],unsigned int,T,T); \
+template int vgl_closest_point_to_non_closed_polygon(T&,T&,T&,T const[],T const[],T const[],unsigned int,T,T,T); \
+template int vgl_closest_point_to_closed_polygon(T&,T&,T const[],T const[],unsigned int,T,T); \
+template int vgl_closest_point_to_closed_polygon(T&,T&,T&,T const[],T const[],T const[],unsigned int,T,T,T); \
 template vgl_point_2d<T > vgl_closest_point_origin(vgl_line_2d<T >const& l); \
 template vgl_point_3d<T > vgl_closest_point_origin(vgl_plane_3d<T > const& pl); \
 template vgl_point_3d<T > vgl_closest_point_origin(vgl_line_3d_2_points<T > const& l); \
