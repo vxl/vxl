@@ -55,7 +55,7 @@ public:
 
   //: The robust loss function for the M-estimator.
   //  \a r is the residual and \a s is the scale for that residual.
-  virtual double rho( double r, double s ) const { return rho(r/s); }
+  inline  double rho( double r, double s ) const { return rho(r/s); }
 
   //: The weight of the residual.
   //  \a u is a normalised residual (i.e. u=r/scale). wgt(u) is
@@ -64,7 +64,7 @@ public:
 
   //: The weight of the residual.
   //  \a r is the residual and \a s is the scale for that residual.
-  virtual double wgt( double r, double s ) const { return wgt(r/s)/(s*s); }
+  inline  double wgt( double r, double s ) const { return wgt(r/s)/(s*s); }
 
   //: False.
   //  In general, most M-estimators work quite well with an estimated
