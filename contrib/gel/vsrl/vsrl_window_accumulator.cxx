@@ -62,8 +62,8 @@ void vsrl_window_accumulator::execute()
   double sum=0;
   double N;
 
-  unsigned int num_row = in_mat_->rows()-1;
-  unsigned int num_col = in_mat_->cols()-1;
+  int num_row = in_mat_->rows()-1;
+  int num_col = in_mat_->cols()-1;
 
   while (num_row > current_row_){
 

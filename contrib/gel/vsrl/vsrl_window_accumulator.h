@@ -40,8 +40,8 @@ class vsrl_window_accumulator
   unsigned int win_width_; // the window width
   unsigned int win_height_; // the window height
 
-  unsigned int current_row_; // the current row that is being processed
-  unsigned int current_col_; // the current column the is being processed
+  int current_row_; // the current row that is being processed
+  int current_col_; // the current column the is being processed
 
   // internal methods
 
