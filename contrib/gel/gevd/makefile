@@ -5,9 +5,9 @@
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
-USES := vxl
+USES := vxl gel
 
-IMMEDIATE_LIBS := vxl
+IMMEDIATE_LIBS := -lvdgl -lvtol -lvil -lvnl -lvbl
 
 LIBRARY := gevd
 VERSION := 1.0
