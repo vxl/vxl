@@ -6,7 +6,7 @@ INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
 
 # determines if vgui is built and opengl is available
-INCLUDE( ${VXLCORE_INCLUDE_DIR}/vgui/UseVGUI.cmake )
+INCLUDE( ${vxl_SOURCE_DIR}/core/vgui/UseVGUI.cmake )
 
 IF(HAS_VGUI)
 SET(bgui_sources

@@ -1,6 +1,6 @@
 # ./oxl/apps/vxl_vrml_viewer/CMakeLists.txt
 
-INCLUDE( ${VXLCORE_INCLUDE_DIR}/vgui/UseVGUI.cmake )
+INCLUDE( ${vxl_SOURCE_DIR}/core/vgui/UseVGUI.cmake )
 
 INCLUDE(${MODULE_PATH}/FindQv.cmake)
 

@@ -22,7 +22,7 @@ SET(vsrl_sources
 AUX_SOURCE_DIRECTORY(Templates vsrl_sources)
 
 # vsrl_manager depends on vgui, on tbl/vepl and on brl/bseg/sdet
-INCLUDE( ${VXLCORE_INCLUDE_DIR}/vgui/UseVGUI.cmake )
+INCLUDE( ${vxl_SOURCE_DIR}/core/vgui/UseVGUI.cmake )
 
 IF (HAS_VGUI)
  SET(vsrl_sources ${vsrl_sources}

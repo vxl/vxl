@@ -6,10 +6,10 @@ INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
 # find the path to the cmu camera libraries and includes
-INCLUDE(${BRL_INCLUDE_DIR}/bmods/find_cmu_camera.cmake)
+INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/find_cmu_camera.cmake )
 
 # determines if vgui is built and opengl is available
-INCLUDE( ${VXLCORE_INCLUDE_DIR}/vgui/UseVGUI.cmake )
+INCLUDE( ${vxl_SOURCE_DIR}/core/vgui/UseVGUI.cmake )
 
 IF(HAS_VGUI)
 # we have vgui enabled so ..

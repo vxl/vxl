@@ -3,7 +3,7 @@
 # All libraries are mutually independent, except for bmvv <-- btom 
 # Also, bcal and btom are independent of the rest of brl; brct depends on bbas.
 
-INCLUDE(${BRL_INCLUDE_DIR}/bmods/find_xerces.cmake)
+INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/find_xerces.cmake )
 
 # camera calibration
 SUBDIRS(bcal)
