@@ -91,7 +91,7 @@ public:
     //: Return the number of principle compoents when using fixed partition.
   int fixed_partition() const
   {
-    if (partitionMethod_ == fixed) return fixed_partition_;
+    if (partitionMethod_ == vpdfl_pc_gaussian_builder::fixed) return fixed_partition_;
     else return -1;
   }
 

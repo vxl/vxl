@@ -35,8 +35,8 @@
 
 //=======================================================================
 
-vpdfl_pc_gaussian_builder::vpdfl_pc_gaussian_builder(): partitionMethod_(fixed),
-proportionOfVariance_(0)
+vpdfl_pc_gaussian_builder::vpdfl_pc_gaussian_builder()
+  : partitionMethod_(vpdfl_pc_gaussian_builder::fixed), proportionOfVariance_(0)
 {
 }
 
@@ -67,7 +67,7 @@ void vpdfl_pc_gaussian_builder::set_fixed_partition(int n_principle_components)
 {
   assert(n_principle_components >=0);
   fixed_partition_ = n_principle_components;
-  partitionMethod_ = fixed;
+  partitionMethod_ = vpdfl_pc_gaussian_builder::fixed;
 }
 
 //=======================================================================
@@ -282,10 +282,11 @@ void vpdfl_pc_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
   evecs.fliplr();
   // eigenvalues are highest first now
 
-  
-  //vcl_cerr << "S" << S <<vcl_endl;
-  //vcl_cerr << "evals" << evals <<vcl_endl;
-  //vcl_cerr << "evecs" << evecs <<vcl_endl;
+#if 0
+  vcl_cerr << "S" << S <<vcl_endl
+           << "evals" << evals <<vcl_endl
+           << "evecs" << evecs <<vcl_endl;
+#endif
 
   eValsFloorZero(evals);
 
@@ -327,7 +328,7 @@ unsigned vpdfl_pc_gaussian_builder::decide_partition(const vnl_vector<double>& e
   double noise /*=0.0*/) const
 {
   assert (eVals.size() > 0);
-  if (partitionMethod_ == fixed)
+  if (partitionMethod_ == vpdfl_pc_gaussian_builder::fixed)
   {
     return vnl_math_min(eVals.size(), (unsigned)fixed_partition()+1);;
   }
