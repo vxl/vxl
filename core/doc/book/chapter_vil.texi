@@ -17,6 +17,10 @@ megabyte) that special care must be taken to avoid unnecessary copying of
 their data.  In both cases, the normal requirements of efficiency and
 ease-of-use apply.  The system must allow:
 @itemize @bullet
+@item Beginners to have easy access to an image type. This image type
+should also be the default image type for an programmer writing
+image processing code. This image type must be very efficient to use.
+
 @item Fast access to images on disk, at no more than a 10% speed penalty
 for operations on images in memory.
 
@@ -24,22 +28,10 @@ for operations on images in memory.
 small portion of a 10000 by 10000 pixel satellite image, one should
 not have to load the entire 300 megabytes into memory.
 
-@item Efficient access to the native image layout.  Some systems convert
-all images to a consistent internal format when loading, for example, RGB
-top-to-bottom.  This is convenient for users, and is what vil's
-@code{vil_load_rgb} function does.  However, for some applications, the
-disk format is specially designed for efficiency, so it must also be
-possible to get raw access to the disk format.
-
 @item Efficient memory management, both automatic and programmer-mediated.
 Automatic management is vital during program development, when the code is
 changing quickly.  On the other hand, release builds need the kind of
 optimisations that only a human can apply.
-
-@item Beginners to have easy access to an image type. This image type
-should also be the default image type for an advanced programmer writing
-image processing code.
-
 @end itemize
 
 @section Loading and saving
