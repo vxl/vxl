@@ -1,3 +1,5 @@
+#ifndef B3P_NETLIB_H_
+#define B3P_NETLIB_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -20,4 +22,7 @@ int adaptquad_(int f(float*), float *a, float *b, float *tol, float * srmat, flo
 #ifdef __cplusplus
 }
 #endif
+
+
+#endif 
 
