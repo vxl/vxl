@@ -79,4 +79,72 @@ class rgrl_cast
   void *ptr;
 };
 
+
+//: Cast down the hierarchy.
+//
+//  This does a dynamic_cast and then asserts that the result is not
+//  null. Therefore, you are guaranteed that the result is a valid
+//  pointer, or else the program will halt.
+//
+// Example of usage:
+// \example
+//    rgrl_transformation_sptr trans = new rgrl_trans_affine(...);
+//    const rgrl_trans_affine* aff = rgrl_const_cast<rgrl_trans_affine*>(trans);
+// \endexample
+//
+template<typename ToType>
+class rgrl_const_cast
+{
+ public:
+  //: Downcast a feature object
+  rgrl_const_cast( rgrl_feature_sptr const& feature )
+  {
+    ptr = dynamic_cast<const ToType>( feature.as_pointer() );
+    assert ( ptr );
+  }
+
+  //: Downcast a feature object
+  rgrl_const_cast( rgrl_feature_set_sptr const& feature_set )
+  {
+    ptr = dynamic_cast<const ToType>( feature_set.as_pointer() );
+    assert ( ptr );
+  }
+
+  //: Downcast a transformation object.
+  rgrl_const_cast( rgrl_transformation_sptr const& trans )
+  {
+    ptr = dynamic_cast<const ToType>( trans.as_pointer() );
+    assert ( ptr );
+  }
+
+  //: Downcast a convergence status object.
+  rgrl_const_cast( rgrl_converge_status_sptr const& status )
+  {
+    ptr = dynamic_cast<const ToType>( status.as_pointer() );
+    assert ( ptr );
+  }
+
+  //: Downcast a invariant feature object.
+  rgrl_const_cast( rgrl_invariant_sptr const& invariant )
+  {
+    ptr = dynamic_cast<const ToType>( invariant.as_pointer() );
+    assert ( ptr );
+  }
+
+  //:
+  operator const ToType() const
+  {
+    return const_cast<const ToType>(ptr);
+  }
+
+  //:
+  const ToType operator->() const
+  {
+    return const_cast<const ToType>(ptr);
+  }
+
+ private:
+  const void *ptr;
+};
+
 #endif // rgrl_cast_h_
