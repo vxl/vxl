@@ -10,11 +10,11 @@ void test_nonlinear_minimizer_io()
 {
     vcl_cout << "***********************************" << vcl_endl;
     vcl_cout << "Testing vnl_nonlinear_minimizer_io" << vcl_endl;
-    vcl_cout << "***********************************" << vcl_endl;  
-    
+    vcl_cout << "***********************************" << vcl_endl;
+
   //// test constructors, accessors
   vnl_nonlinear_minimizer minimizer_out, minimizer_in;
-  
+
   // mininizer settings to be saved
   double xtol_out= 0.001;
   double ftol_out= xtol_out*0.01;
@@ -33,22 +33,22 @@ void test_nonlinear_minimizer_io()
   minimizer_out.set_trace(trace_out);
   minimizer_out.set_verbose(verbose_out);
   minimizer_out.set_check_derivatives(cd_out);
-  
+
   vsl_print_summary(vcl_cout, minimizer_out);
   vcl_cout << vcl_endl;
 
     vsl_b_ofstream bfs_out("vnl_nonlinear_minimizer_io.bvl.tmp");
-    TEST ("Created vnl_nonlinear_minimizer_test_io.bvl.tmp for writing", 
+    TEST ("Created vnl_nonlinear_minimizer_test_io.bvl.tmp for writing",
             (!bfs_out), false);
     vsl_b_write(bfs_out, minimizer_out);
-    bfs_out.close();        
-        
+    bfs_out.close();
+
     vsl_b_ifstream bfs_in("vnl_nonlinear_minimizer_io.bvl.tmp");
-    TEST ("Opened vnl_nonlinear_minimizer_test_io.bvl.tmp for reading", 
+    TEST ("Opened vnl_nonlinear_minimizer_test_io.bvl.tmp for reading",
             (!bfs_in), false);
     vsl_b_read(bfs_in, minimizer_in);
-    bfs_in.close();     
-        
+    bfs_in.close();
+
     double ftol_in=minimizer_in.get_f_tolerance();
   double xtol_in=minimizer_in.get_x_tolerance();
     double gtol_in=minimizer_in.get_g_tolerance();
@@ -57,7 +57,7 @@ void test_nonlinear_minimizer_io()
   bool trace_in=minimizer_in.get_trace();
   bool verbose_in=minimizer_in.get_verbose();
   int cd_in=minimizer_in.get_check_derivatives();
-    
+
     TEST ("ftol_in == ftol_out", ftol_in == ftol_out, true);
     TEST ("xtol_in == xtol_out", xtol_in == xtol_out, true);
   TEST ("gtol_in == gtol_out", gtol_in == gtol_out, true);
@@ -71,12 +71,11 @@ void test_nonlinear_minimizer_io()
   vcl_cout << vcl_endl;
 }
 
-/*
+#if 0
 void test_real_polynomial_prime()
 {
   test_real_polynomial_io();
 }
 
-
 TESTMAIN(test_real_polynomial_prime);
-*/ 
+#endif

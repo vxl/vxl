@@ -140,5 +140,5 @@ void vsl_clipon_binary_loader<BaseClass,BaseClassIO>::print_object_summary( vcl_
 template class vsl_clipon_binary_loader<B, IO >; \
 /* Create space for singleton pointer */ \
 vsl_clipon_binary_loader<B, IO >* vsl_clipon_binary_loader<B, IO >::instance_ = 0; \
-VCL_VECTOR_INSTANTIATE(IO*) \
-;
+VCL_VECTOR_INSTANTIATE(IO*)
+

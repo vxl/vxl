@@ -69,5 +69,5 @@ template class vsl_binary_loader<T >; \
 template void vsl_b_read( vsl_b_istream& bfs, T*& b); \
 /* Create space for singleton pointer */ \
 vsl_binary_loader<T >* vsl_binary_loader<T >::instance_ = 0; \
-VCL_VECTOR_INSTANTIATE(T*) \
-;
+VCL_VECTOR_INSTANTIATE(T*)
+

@@ -7,7 +7,7 @@
 #include <vcl_iosfwd.h>
 
 //: Put indents into output streams, to produce more legible printed output
-//  It's use is best described by example:
+//  Its use is best described by example:
 // \verbatim
 // vcl_cout<<vsl_indent()<<"No Indent"<<vcl_endl;
 // vsl_inc_indent(vcl_cout);

@@ -55,34 +55,34 @@
 // All loader singletons can be deleted using vsl_delete_all_loaders()
 template<class BaseClass>
 class vsl_binary_loader : public vsl_binary_loader_base {
-  
+
 private :
-  
+
     //: the singleton object
   static vsl_binary_loader<BaseClass>* instance_;
-  
+
     //: List of concrete classes that this loader can deal with
   vcl_vector<BaseClass*> object_;
-  
+
 public :
     //: Constructor
   vsl_binary_loader() {};
-  
+
     //: Destructor
   ~vsl_binary_loader();
-  
+
     //: Returns the instance variable for the singleton.
   static vsl_binary_loader<BaseClass>& instance();
-  
+
     //: Remove all example objects
   void make_empty();
-  
+
     //: Add example object to list of those that can be loaded
   void add( const BaseClass& b) { object_.push_back(b.clone());};
-  
+
     //: Return current list of class objects which can be loaded
   const vcl_vector<BaseClass*>& object() { return object_; }
-  
+
     //: Loads object and sets base class pointer
     //  Determines which derived class object on is belongs
     //  to, loads it and sets b to be a pointer to it.

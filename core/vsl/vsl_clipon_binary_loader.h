@@ -135,7 +135,7 @@ public :
 };
 
 
-/*
+#if 0
 //: Loads object and sets base class pointer
 //  Determines which derived class object on bfs belongs
 //  to, loads it and sets b to be a pointer to it.
@@ -147,7 +147,7 @@ inline void vsl_b_read( vsl_b_istream& bfs, BaseClass*& b)
   vsl_clipon_binary_loader<BaseClass,BaseClassIO>::
     instance().load_object(bfs,b);
 }
-*/
+#endif
 
 
 #endif // vsl_clipon_binary_loader_h_

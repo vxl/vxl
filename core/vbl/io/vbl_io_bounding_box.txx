@@ -55,7 +55,7 @@ void vsl_print_summary(vcl_ostream& os,const vbl_bounding_box<T, DIM> & p)
     {
       os << "min[" << i << "] = " << p.min_[i] << vcl_endl;
     }
-    os << vcl_endl; 
+    os << vcl_endl;
     for(int i=0;i<DIM;i++)
     {
       os << "max_[" << i << "] = " << p.max_[i] << vcl_endl;
@@ -65,10 +65,7 @@ void vsl_print_summary(vcl_ostream& os,const vbl_bounding_box<T, DIM> & p)
 }
 
 #define VBL_IO_BOUNDING_BOX_INSTANTIATE(T,DIM) \
-template void vsl_print_summary(vcl_ostream &,\
-const vbl_bounding_box<T ,DIM > &); \
-template void vsl_b_read(vsl_b_istream &,\
-vbl_bounding_box<T ,DIM > &); \
-template void vsl_b_write(vsl_b_ostream &,\
-const vbl_bounding_box<T ,DIM > &); \
-;
+template void vsl_print_summary(vcl_ostream&,const vbl_bounding_box<T,DIM >&);\
+template void vsl_b_read(vsl_b_istream &, vbl_bounding_box<T ,DIM > &); \
+template void vsl_b_write(vsl_b_ostream &, const vbl_bounding_box<T ,DIM > &)
+

@@ -49,5 +49,5 @@ void vsl_print_summary(vcl_ostream& os,const vgl_homg_point_2d<T> & p)
 #define VGL_IO_HOMG_POINT_2D_INSTANTIATE(T) \
 template void vsl_print_summary(vcl_ostream &, const vgl_homg_point_2d<T> &); \
 template void vsl_b_read(vsl_b_istream &, vgl_homg_point_2d<T> &); \
-template void vsl_b_write(vsl_b_ostream &, const vgl_homg_point_2d<T> &); \
-;
+template void vsl_b_write(vsl_b_ostream &, const vgl_homg_point_2d<T> &)
+

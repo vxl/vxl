@@ -24,21 +24,21 @@ void test_bounding_box_double_io()
   p_out.update(X,Y); // Second point now defines a bounding box
 
   vsl_b_ofstream bfs_out("vbl_bounding_box_test_double_io.bvl.tmp");
-  TEST ("Created vbl_bounding_box_test_double_io.bvl.tmp for writing", 
+  TEST ("Created vbl_bounding_box_test_double_io.bvl.tmp for writing",
     (!bfs_out), false);
   vsl_b_write(bfs_out, p_out);
   bfs_out.close();
 
 
   vsl_b_ifstream bfs_in("vbl_bounding_box_test_double_io.bvl.tmp");
-  TEST ("Opened vbl_bounding_box_test_double_io.bvl.tmp for reading", 
+  TEST ("Opened vbl_bounding_box_test_double_io.bvl.tmp for reading",
     (!bfs_in), false);
   vsl_b_read(bfs_in, p_in);
   bfs_in.close();
 
 
 
-  TEST ("p_out.initialized_ == p_in.initialized_", 
+  TEST ("p_out.initialized_ == p_in.initialized_",
     p_out.initialized_ == p_in.initialized_, true);
   TEST ("p_out.min_[0] == p_in.min_[0]", p_out.min_[0] == p_in.min_[0], true);
   TEST ("p_out.min_[1] == p_in.min_[1]", p_out.min_[1] == p_in.min_[1], true);
@@ -47,7 +47,6 @@ void test_bounding_box_double_io()
 
   vsl_print_summary(vcl_cout, p_out);
   vcl_cout << vcl_endl;
-    
 }
 
 
@@ -55,6 +54,5 @@ void test_bounding_box_prime()
 {
   test_bounding_box_double_io();
 }
-
 
 TESTMAIN(test_bounding_box_prime);
