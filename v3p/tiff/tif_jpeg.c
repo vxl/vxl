@@ -41,8 +41,8 @@
 #include <assert.h>
 #include <stdio.h>
 #include <setjmp.h>
-#include <jpeglib.h>
-#include <jerror.h>
+#include <jpeglib.h> /* from jpeg */
+#include <jerror.h> /* from jpeg */
 
 /*
  * On some machines it may be worthwhile to use _setjmp or sigsetjmp
