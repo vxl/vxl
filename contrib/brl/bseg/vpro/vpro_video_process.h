@@ -1,4 +1,4 @@
-// This is brl/vpro/vpro_video_process.h
+// This is brl/bseg/vpro/vpro_video_process.h
 #ifndef vpro_video_process_h_
 #define vpro_video_process_h_
 //--------------------------------------------------------------------------------
