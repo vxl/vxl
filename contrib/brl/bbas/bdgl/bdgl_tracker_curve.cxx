@@ -41,11 +41,8 @@ void bdgl_tracker_curve  ::init_set(vtol_edge_2d_sptr const& c,int id)
   ec=c->curve()->cast_to_digital_curve()->get_interpolator()->get_edgel_chain();
 
   //subsampling the curves so as to cut the computational time short
-  for (int i=0;i<ec->size();)
-    {
-      ec_sub->add_edgel(ec->edgel(i));
-      i+=2;
-    }
+  for (unsigned int i=0; i<ec->size(); i+=2)
+    ec_sub->add_edgel(ec->edgel(i));
   desc= new bdgl_curve_description(ec_sub);
 }
 
@@ -160,34 +157,29 @@ double bdgl_tracker_curve ::compute_euclidean_distance_next(vnl_matrix<double> R
 {
   if (get_best_match_next())
   {
-   double x1,y1,x2,y2;
-   double dist=0;
-   vcl_map<int,int> alignment= get_best_match_next()->mapping_;
-   vcl_map<int,int>::iterator iter1;
+    double dist=0;
+    vcl_map<int,int> alignment= get_best_match_next()->mapping_;
 
-   double H[2]={0,0};
-   for (iter1 = alignment.begin(); iter1!=alignment.end(); iter1++)
-   {
-     H[0]=desc->points_[(*iter1).first].x();
-     H[1]=desc->points_[(*iter1).first].y();
+    for (vcl_map<int,int>::iterator iter1 = alignment.begin(); iter1!=alignment.end(); iter1++)
+    {
+      double H[2] = { desc->points_[(*iter1).first].x(),
+                      desc->points_[(*iter1).first].y() };
 
-     vnl_matrix<double> X (H, 2, 1);
-     vnl_matrix<double> Xt=R*X+T;
+      vnl_matrix<double> X (H, 2, 1);
+      vnl_matrix<double> Xt=R*X+T;
 
-     x1=Xt(0,0);
-     y1=Xt(1,0);
+      double x1=Xt(0,0);
+      double y1=Xt(1,0);
 
-     x2=get_best_match_next()->match_curve_set[0]->desc->points_[(*iter1).second].x();
-     y2=get_best_match_next()->match_curve_set[0]->desc->points_[(*iter1).second].y();
+      double x2=get_best_match_next()->match_curve_set[0]->desc->points_[(*iter1).second].x();
+      double y2=get_best_match_next()->match_curve_set[0]->desc->points_[(*iter1).second].y();
 
-     dist+=vcl_sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
-  }
+      dist+=vcl_sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
+    }
 
-  dist/=alignment.size();
-  return dist;
+    dist/=alignment.size();
+    return dist;
   }
   else
-  {
-    return -1;
-  }
+    return -1.0;
 }
