@@ -1,0 +1,53 @@
+# DESCRIPTION:
+#
+#   This is the vepl library, containing the `easy' image processing
+# algorithm interface classes based on vipl, specialised for vil.
+#
+# These classes are derived from the vipl classes with a similar name.
+#
+# The examples subdirectory contains example programs showing how to use the
+# filter classes with vil images.
+#
+USES += vxl tbl
+# Make sure all template instantiations are available in this library:
+USE_IMPLICIT_TEMPLATES := 1
+
+LIBRARY := vepl
+VERSION := 1.0
+
+# A. Point operators:
+MANPAGE_SOURCES += vepl_convert.txx
+SOURCES += vepl_threshold.cxx
+SOURCES += vepl_add_random_noise.cxx
+SOURCES += vepl_monadic.cxx
+SOURCES += vepl_dyadic.cxx
+
+# B. Convolutions:
+SOURCES += vepl_erode_disk.cxx
+SOURCES += vepl_dilate_disk.cxx
+SOURCES += vepl_sobel.cxx
+SOURCES += vepl_gaussian_convolution.cxx
+SOURCES += vepl_x_gradient.cxx
+SOURCES += vepl_y_gradient.cxx
+SOURCES += vepl_gradient_mag.cxx
+SOURCES += vepl_gradient_dir.cxx
+SOURCES += vepl_median.cxx
+
+# C. Moments:
+SOURCES += vepl_moment.cxx
+
+# Z. Miscellaneous:
+SOURCES += vepl_histogram.cxx
+
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += examples
+SUBDIRS += tests
+endif
+
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################

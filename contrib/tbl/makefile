@@ -2,7 +2,7 @@
 # as designed by Terry Boult, but converted to be used with vxl.
 
 # image processing
-SUBDIRS += vipl
+SUBDIRS += vipl vepl
 
 ################################
 include ${IUEROOT}/config/top.mk

@@ -1,4 +1,20 @@
 ADD_LIBRARY(vepl vepl_sources)
 
 SOURCE_FILES(vepl_sources
+vepl_convert
+vepl_threshold
+vepl_add_random_noise
+vepl_monadic
+vepl_dyadic
+vepl_erode_disk
+vepl_dilate_disk
+vepl_sobel
+vepl_gaussian_convolution
+vepl_x_gradient
+vepl_y_gradient
+vepl_gradient_mag
+vepl_gradient_dir
+vepl_median
+vepl_moment
+vepl_histogram
 )
