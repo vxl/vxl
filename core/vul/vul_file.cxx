@@ -128,6 +128,24 @@ vcl_string vul_file::basename(char const* fn, char const * suffix)
   return self;
 }
 
+
+
+
+//: Delete 1 or more files using the Local OS prefered globbing.
+// e.g. \c delete_file_glob("*"); will delete all the files in the
+// current directory on most operating systems.
+bool vul_file::delete_file_glob(char const* file_glob)
+{
+  vcl_string command = file_glob;
+#ifdef VCL_WIN32
+  command = "del " + command;
+#else
+  command = "rm " + command;
+#endif
+  return vcl_system(command.c_str())==0;
+}
+
+
 vcl_string vul_file::expand_tilde(char const* vul_filename)
 {
   if (!vul_filename || (vcl_strlen(vul_filename) == 0))
