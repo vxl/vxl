@@ -564,9 +564,10 @@ vil_image_view_base_sptr vil_nitf_image::get_copy_view(
 
              << method_name << "pixel_format    = " << pixel_format() << vcl_endl
              << method_name << "bytes_per_pixel = " << bytes_per_pixel << vcl_endl
-             << method_name << "total_bytes = " << total_bytes << vcl_endl
-
-             << method_name << "origin = (" << i0 << ", " << j0 << ")\n"
+             << method_name << "total_bytes = " << total_bytes << vcl_endl ;
+  }
+  if (debug_level > 1) {
+    vcl_cout << method_name << "origin = (" << i0 << ", " << j0 << ")\n"
              << method_name << "size = (" << ni << ", " << nj << ", "
              << this->nplanes() << ")\n"
              << method_name << "block_size_x = " << get_block_size_x() << vcl_endl;
@@ -714,7 +715,7 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
   }
 
   if (debug_level > 0) {
-      vcl_cout << method_name
+      vcl_cout << "\n" << method_name
                << "i0 = " << i0
                << "  j0 = " << j0
                << "  ni = " << ni
@@ -725,6 +726,7 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
 
                << method_name
                << "num_blocks_x = " << get_num_blocks_x()
+               << "  num_blocks_y = " << get_num_blocks_y()
                << "  bytes_per_block = " << bytes_per_block
                << "  bytes_per_block_row = " << bytes_per_block_row
                << "  bytes_per_image_row = " << bytes_per_image_row
@@ -754,38 +756,49 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
 
   calculated_pixels = get_num_blocks_y() * get_block_size_y();
   diff = calculated_pixels - nj;  // NEED TO CHECK THIS.
-  unsigned long last_image_col_num = (max_block_x * get_block_size_x()) - 1;
+  unsigned long last_image_col_num = 0 ;
+  if (ni < get_block_size_x()) {
+      last_image_col_num = i0 + ni - 1 ;
+  }
+  else {
+      last_image_col_num = (max_block_x * get_block_size_x()) - 1 ;
+  }
   unsigned long last_image_row_num = (max_block_y * get_block_size_x()) - 1;
   unsigned long display_pixels = (max_block_x - start_block_x) * get_block_size_x();
   display_pixels = (max_block_y - start_block_y) * get_block_size_y();
 
   if (debug_level > 1) {
+// Please do not combine the vcl_out statements below into one statement. 
+// I prefer it the way it is.   -- MAL 2004mar1.
       vcl_cout << method_name << "start_block_x = " << start_block_x
-               << "  start_block_x_offset = " << start_block_x_offset << vcl_endl
-               << method_name << "max_block_x = " << max_block_x
-               << "  expected last X pixel = " << last_image_col_num << vcl_endl
-               << method_name << "start_block_y = " << start_block_y
-               << "  max_block_y = " << max_block_y << vcl_endl
-               << "expected last Y pixel = " << last_image_row_num << vcl_endl
+               << "  max_block_x = " << max_block_x 
+               << "  start_block_row_offset = " << start_block_row_offset
+               << vcl_endl ;
+      vcl_cout << method_name << "  start_block_x_offset = " << start_block_x_offset
+               << "  expected last X pixel = " << last_image_col_num << vcl_endl ;
+      vcl_cout << method_name << "start_block_y = " << start_block_y
+               << "  max_block_y = " << max_block_y << vcl_endl ;
+      vcl_cout << "expected last Y pixel = " << last_image_row_num << vcl_endl ;
 
-               << method_name << "display pixels = " << display_pixels << " rows"
-
-               << " by " << display_pixels << " columns\n";
+      vcl_cout << method_name << "display pixels = " << display_pixels << " rows"
+               << " by " << display_pixels << " columns" << vcl_endl ;
   }
+
+  vcl_clock_t start = vcl_clock();
 
   // ITERATE OVER BLOCKS LEFT TO RIGHT, TOP TO BOTTOM, READING IMAGE BYTES.
   // INSERT BYTES INTO ONE UNIFORM GRID
 
-  vcl_clock_t start = vcl_clock();
-
+  // OUTER LOOP - ITERATE OVER BLOCKS IN Y (== J == BLOCK ROW) DIMENSION.
   for (unsigned int block_row = start_block_y; block_row < max_block_y; ++block_row)
   {
     unsigned int block_col ;  // DEFINE OUT HERE SO WE CAN DISPLAY AT END OF EACH BLOCK ROW
                               // DO NOT INITIALIZE BECAUSE VALUE IS REASSIGNED BEFORE
                               // INITIAL VALUE IS EVER USED.  SOME COMPILERS COMPLAIN ABOUT THIS.
 
-    unsigned long bytes_copied = 0;  // bytes copied for this row
+    unsigned long bytes_copied = 0;  // bytes copied for first pixel row
 
+    // ITERATE OVER BLOCKS IN X (== I == BLOCK COLUMN) DIMENSION.
     for (block_col = start_block_x; block_col < max_block_x; ++block_col)
     {
       unsigned long image_block_col = block_col - start_block_x;  // BLOCK COLUMN RELATIVE TO IMAGE.
@@ -794,6 +807,7 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
       unsigned block_offset = (block_row * bytes_per_block_row)
                             + (block_col * bytes_per_block);
       in_stream_->seek(get_image_data_offset() + block_offset);
+    // READ IN ONE BLOCK OF DATA
       unsigned long bytes_read = in_stream_->read(block_buffer, bytes_per_block);
 
       total_read_count += bytes_read;
@@ -801,8 +815,7 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
       ++read_count;
       ++blocks_read;
 
-      if (bytes_read < bytes_per_block)
-      {
+      if (bytes_read < bytes_per_block) {
         vcl_cerr << method_name
                  << "WARNING: number of bytes read = " << bytes_read
                  << " less than requested = " << bytes_per_block << '\n'
@@ -814,7 +827,7 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
                  << vcl_endl;
         continue;
       }
-      if (reverse_bytes()) {
+      if (bytes_per_pixel > 1 && reverse_bytes()) {
         reverse_bytes(block_buffer, bytes_read, bytes_per_pixel);
       }
 
@@ -830,10 +843,11 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
       {
         max_row = max_block_y_pixels;
       }
-
+    // THIS LOOP COPIES PIXELS FROM READ BUFFER INTO IMAGE BUFFER.
+    // ITERATE OVER ROWS OF PIXELS WITHIN BLOCK
+    // SKIP OVER THOSE PIXEL ROWS WHICH ARE NOT NEEDED, I.E. IF (row < start_block_row_offset)
       for (unsigned int row = 0; row < max_row; ++row)
       {
-        // FOR NOW, SKIP OVER UNNEEDED ROWS BY READING AND DISCARDING THEM
         if (start_block_row_offset > 0 && block_row == start_block_y &&
             row < start_block_row_offset)
         {
@@ -872,22 +886,26 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
         unsigned char * first_byte = buffer_pos;
         unsigned long copy_count = bytes_per_read;
 
-        if (start_block_x_offset > 0 && (block_col == start_block_x)) {
-          copy_count = (get_block_size_x() - start_block_x_offset) * bytes_per_pixel;
-          first_byte += (start_block_x_offset * bytes_per_pixel);
+        if (block_col == start_block_x) {
+            if (start_block_x_offset > 0) {
+                copy_count = (get_block_size_x() - start_block_x_offset) * bytes_per_pixel;
+                first_byte += (start_block_x_offset * bytes_per_pixel);
+            }
+            if (ni < get_block_size_x()) {
+                copy_count = ni * bytes_per_pixel;
+            }
         }
-        if ((block_col == (max_block_x - 1)) && (max_block_x_pixels < get_block_size_x())) {
+        if ((block_col > 0) && (block_col == (max_block_x - 1)) && (max_block_x_pixels < get_block_size_x())) {
           copy_count = max_block_x_pixels * bytes_per_pixel;
         }
 
         assert(copy_count != 0);
         vcl_memcpy(image_offset, first_byte, copy_count);
 
-        if (row == 0) {
+        if (row == start_block_row_offset) {
           bytes_copied += copy_count;
         }
 #ifdef DEBUG
-
         // display_copied_bytes IS SET ABOVE IF BYTES IN BUFFER ARE DISPLAYED.
         if (display_copied_bytes)
         {
@@ -921,12 +939,14 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
 
     if (debug_level > 1) {
         last_image_col_num = (block_col * get_block_size_x()) - 1;
-        vcl_cout << "end for loop - block_row = " << block_row
-                 << "  block_col = " << block_col
+        vcl_cout << method_name << "end for loop - block_row = " << block_row
+                 << "  block_col = " << (block_col - 1)
                  << "  start_block_y = " << start_block_y << '\n'
                  << "last_image_row_num = " << last_image_row_num
                  << "  last_image_col_num = " << last_image_col_num << '\n'
-                 << "blocks_read = " << blocks_read << vcl_endl;
+                 << "blocks_read = " << blocks_read 
+                 << "    bytes_copied = " << bytes_copied
+                 << vcl_endl;
     }
 
     if (bytes_copied != bytes_per_image_row) {
@@ -945,7 +965,8 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
     vcl_clock_t finish = vcl_clock();
 
     vcl_cout << "finish reading input = " << finish << vcl_endl;
-    display_elapsed_time(start, finish, "read image bytes");
+    vcl_string msg_str = "read image bytes" ;
+    display_elapsed_time(start, finish, msg_str);
 
     vcl_cout << method_name << "start_block_x = " << start_block_x
              << "  max_block_x = " << max_block_x << vcl_endl
@@ -964,7 +985,10 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
     vcl_cout << method_name << "buffer end - last_image_offset = " << diff << vcl_endl;
   }
 
-  if (total_read_count != total_bytes) {
+  if ((total_read_count != total_bytes)
+      && (ni > get_block_size_x())
+      && (nj > get_block_size_y())) {
+
     vcl_cerr << method_name << "WARNING: image size = " << total_bytes
              << " != bytes read = " << total_read_count << vcl_endl;
   }
@@ -1077,7 +1101,8 @@ bool vil_nitf_image::construct_pyramid_images(
     bool write_success = vil_save(*save_view, out_file_name.c_str(), "png");
 
     vcl_clock_t finish = vcl_clock();
-    display_elapsed_time(start, finish, "save 2-byte PNG file");
+    vcl_string msg_str = "save 2-byte PNG file" ;
+    display_elapsed_time(start, finish, msg_str);
 
     vcl_cout << "Saved image as 2-byte PNG to file <" << out_file_name
              << "> using vil_save.  Success = " << write_success << vcl_endl;
@@ -1110,15 +1135,17 @@ void  vil_nitf_image::calculate_start_block(
   if (j0 != 0)
   {
     start_block = j0 / block_size;
-    vcl_cout << method_name << "set start_block to " << start_block << vcl_endl;
-
+    if (debug_level > 1) {
+        vcl_cout << method_name << "set start_block to " << start_block << vcl_endl;
+    }
     if (j0 > 0 && j0 % block_size != 0)
     {
       start_block_offset = j0 - (start_block * block_size);
-
-      vcl_cout << method_name << "first pixel not on block boundary\n"
-               << "  set offset for starting block = "
-               << start_block_offset << vcl_endl;
+      if (debug_level > 1) {
+          vcl_cout << method_name << "first pixel not on block boundary - "
+                   << "set offset for starting block = "
+                   << start_block_offset << vcl_endl;
+      }
     }
   }  // end if (j0 != 0)
 }
