@@ -228,6 +228,10 @@ vil2_image_view<vxl_byte> filtered_image = vil2_transpose(tmp_image2);
 * - vil2_math_image_abs_difference(imA,imB,im_diff) : im_diff = |imA-imB|
 * - vil2_math_add_image_fraction(imA,fa,imB,fb)     : imA = fa*imA + fb*imB  (Useful for moving averages!)
 *
+* Morphological functions
+* - vil2_binary_erode
+* - vil2_binary_dilate
+*
 * Other related maths functions
 * - vil2_math_integral_image(imA,im_sum)               : Images integrating values
 * - vil2_math_integral_sqr_image(imA,im_sum,im_sum_sq) : Images integrating values and square of values
