@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_box_2d.txx
+// This is core/vgl/vgl_box_2d.txx
 #ifndef vgl_box_2d_txx_
 #define vgl_box_2d_txx_
 //:
@@ -52,35 +52,35 @@ vgl_box_2d<Type>::vgl_box_2d(Type xmin, Type xmax, Type ymin, Type ymax)
 }
 
 template <class Type>
-vgl_box_2d<Type>::vgl_box_2d(const Type min_position[2],
+vgl_box_2d<Type>::vgl_box_2d(const Type centroid[2],
                              Type width, Type height)
 {
-  min_pos_[0]=min_position[0];
-  min_pos_[1]=min_position[1];
-  max_pos_[0]=min_position[0]+width;
-  max_pos_[1]=min_position[1]+height;
+  min_pos_[0]=Type(centroid[0]-0.5*width);
+  min_pos_[1]=Type(centroid[1]-0.5*height);
+  max_pos_[0]=Type(centroid[0]+0.5*width);
+  max_pos_[1]=Type(centroid[1]+0.5*height);
 }
 
 template <class Type>
-vgl_box_2d<Type>::vgl_box_2d(const vgl_point_2d<Type>& min_position,
+vgl_box_2d<Type>::vgl_box_2d(const vgl_point_2d<Type>& centroid,
                              Type width, Type height)
 {
-  min_pos_[0]=min_position.x();
-  min_pos_[1]=min_position.y();
-  max_pos_[0]=min_position.x()+width;
-  max_pos_[1]=min_position.y()+height;
+  min_pos_[0]=Type(centroid.x()-0.5*width);
+  min_pos_[1]=Type(centroid.y()-0.5*height);
+  max_pos_[0]=Type(centroid.x()+0.5*width);
+  max_pos_[1]=Type(centroid.y()+0.5*height);
 }
 
 template <class Type>
 Type vgl_box_2d<Type>::centroid_x() const
 {
-  return (min_pos_[0] + max_pos_[0])/2;
+  return Type(0.5*(min_pos_[0] + max_pos_[0]));
 }
 
 template <class Type>
 Type vgl_box_2d<Type>::centroid_y() const
 {
-  return (min_pos_[1] + max_pos_[1])/2;
+  return Type(0.5*(min_pos_[1] + max_pos_[1]));
 }
 
 template <class Type>
@@ -133,16 +133,16 @@ template <class Type>
 void vgl_box_2d<Type>::set_width(Type width)
 {
   Type x = centroid_x();
-  min_pos_[0] = x-width/2;
-  max_pos_[0] = x+width/2;
+  min_pos_[0] = Type(x-0.5*width);
+  max_pos_[0] = Type(x+0.5*width);
 }
 
 template <class Type>
 void vgl_box_2d<Type>::set_height(Type height)
 {
   Type y = centroid_y();
-  min_pos_[1] = y-height/2;
-  max_pos_[1] = y+height/2;
+  min_pos_[1] = Type(y-0.5*height);
+  max_pos_[1] = Type(y+0.5*height);
 }
 
 template <class Type>

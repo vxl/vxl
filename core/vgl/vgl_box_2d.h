@@ -1,4 +1,4 @@
-// This is vxl/vgl/vgl_box_2d.h
+// This is core/vgl/vgl_box_2d.h
 #ifndef vgl_box_2d_h
 #define vgl_box_2d_h
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -13,13 +13,14 @@
 //
 // \verbatim
 //  Modifications
-//  IMS (Manchester) 14/03/2001: Tidied up the documentation + added binary_io
-//  Amitha Perera    10/07/2001: Deprecated get_*() in favour of *(), as agreed in Zurich.
-//  Peter Vanroose    5/10/2001: Added operator==() and is_empty()
-//  Peter Vanroose    6/10/2001: Added method add(vgl_point_2d<T>) to enlarge a box
-//  Peter Vanroose    7/10/2001: Removed deprecated get_*() functions
-//  Peter Vanroose     Feb.2002: brief doxygen comment placed on single line
-//  Peter Vanroose   12Sep.2002: Added method add(vgl_box_2d<T>) to enlarge a box
+//   IMS (Manchester) 14/03/2001: Tidied up the documentation + added binary_io
+//   Amitha Perera    10/07/2001: Deprecated get_*() in favour of *(), as agreed in Zurich.
+//   Peter Vanroose    5/10/2001: Added operator==() and is_empty()
+//   Peter Vanroose    6/10/2001: Added method add(vgl_point_2d<T>) to enlarge a box
+//   Peter Vanroose    7/10/2001: Removed deprecated get_*() functions
+//   Peter Vanroose     Feb.2002: brief doxygen comment placed on single line
+//   Peter Vanroose   12Sep.2002: Added method add(vgl_box_2d<T>) to enlarge a box
+//   Peter Vanroose   22Apr.2003: Interface change (centroid constructor): now in correspondence with vgl_box_3d<T>
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -85,12 +86,12 @@ class vgl_box_2d
   //: Construct using ranges in \a x and \a y
   vgl_box_2d(Type xmin, Type xmax, Type ymin, Type ymax);
 
-  //: Construct using lower-left, width and height
-  vgl_box_2d(const Type min_position[2],
+  //: Construct width x height box centered at centroid
+  vgl_box_2d(const Type centroid[2],
              Type width, Type height);
 
-  //: Construct using lower-left, width and height
-  vgl_box_2d(const vgl_point_2d<Type>& min_position, Type width, Type height);
+  //: Construct width x height box centered at centroid
+  vgl_box_2d(const vgl_point_2d<Type>& centroid, Type width, Type height);
 
   //: Copy constructor
   inline vgl_box_2d(const vgl_box_2d& that) { *this = that; }
