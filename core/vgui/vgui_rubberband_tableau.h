@@ -8,7 +8,7 @@
 // \file
 // \author  K.Y.McGaul
 // \date    31-MAR-2000
-// \brief   Tableau to rubberband circles, lines etc.  
+// \brief   Tableau to rubberband circles, lines etc.
 //
 //  Contains classes: vgui_rubberband_tableau  vgui_rubberband_tableau_new
 //                    vgui_rubberband_client  vgui_rubberband_easy2D_client
@@ -62,7 +62,7 @@ class vgui_rubberband_client
 //-----------------------------------------------------------------------------
 //: Rubberbanding onto a vgui_easy2D_tableau.
 //
-//  Special case of vgui_rubberband_client for cases where we just want to 
+//  Special case of vgui_rubberband_client for cases where we just want to
 //  draw rubberbanded objects straight onto a vgui_easy2D_tableau.
 class vgui_rubberband_easy2D_client : public vgui_rubberband_client
 {
@@ -78,39 +78,39 @@ class vgui_rubberband_easy2D_client : public vgui_rubberband_client
   void add_point(float x, float y){easy->add_point(x,y);}
 
   //: Called by vgui_rubberband_tableau when the user has selected a finite line.
-  //  Adds a finite line to the vgui_easy2D.
+  //  Adds a finite line to the vgui_easy2D_tableau.
   void add_line(float x0, float y0, float x1, float y1)
     {easy->add_line(x0, y0, x1, y1);}
 
   //: Called by vgui_rubberband_tableau when user has selected an infinite line.
-  //  Adds an infinite line to the vgui_easy2D.
+  //  Adds an infinite line to the vgui_easy2D_tableau.
   void add_infinite_line(float a, float b, float c)
     {easy->add_infinite_line(a, b, c);}
 
   //: Called by vgui_rubberband_tableau when the user has selected a circle.
-  //  Adds a circle to the vgui_easy2D.
+  //  Adds a circle to the vgui_easy2D_tableau.
   void add_circle(float x, float y, float r)
     {easy->add_circle(x, y, r);}
 
   //: Called by vgui_rubberband_tableau when the user has selectd a linestrip.
-  //  Adds a linestrip to the vgui_easy2D.
+  //  Adds a linestrip to the vgui_easy2D_tableau.
   void add_linestrip(int n, float const* x, float const* y)
     {easy->add_linestrip(n, x, y);}
 
   //: Called by vgui_rubberband_tableau when the user has selected a polygon.
-  //  Adds a polygon to the vgui_easy2D.
+  //  Adds a polygon to the vgui_easy2D_tableau.
   void add_polygon(int n, float const* x, float const* y)
     {easy->add_polygon(n, x, y);}
 
-  //: Does nothing - vgui_easy2D doesn't have a rectangular box object.
+  //: Does nothing - vgui_easy2D_tableau doesn't have a rectangular box object.
   void add_box(float, float, float, float){}
 };
 
 //-----------------------------------------------------------------------------
-//: Tableau to rubberband circles, lines etc.  
+//: Tableau to rubberband circles, lines etc.
 //
-//  The values captured (eg. two points defining a line) are passed to the 
-//  appropriate function (eg. add_line) in the client passed in to the 
+//  The values captured (eg. two points defining a line) are passed to the
+//  appropriate function (eg. add_line) in the client passed in to the
 //  constructor.  This client is derived from vgui_rubberband_client.
 //
 //  In more detail:
@@ -120,7 +120,7 @@ class vgui_rubberband_easy2D_client : public vgui_rubberband_client
 //  down event defining the start point.  A line is shown on the display
 //  between the start point and the mouse pointer until the second gesture
 //  is performed (releasing the mouse button) and this defines the end point.
-//  
+//
 //  These values are passed to add_line in the client.  These values could
 //  be used to draw the line (like vgui_rubberband_easy2D_client) or
 //  you can create your own client derived from vgui_rubberband_client to
@@ -145,7 +145,7 @@ class vgui_rubberband_tableau : public vgui_tableau
   //  Takes the vgui_rubberband_client as a parameter.
   vgui_rubberband_tableau(vgui_rubberband_client* client);
 
-  //vgui_rubberband_tableau(vgui_easy2D_sptr const&);
+//vgui_rubberband_tableau(vgui_easy2D_tableau_sptr const&);
 
   //: Return the type of this tableau ('vgui_rubberband_tableau').
   vcl_string type_name() const { return "vgui_rubberband_tableau"; }
@@ -188,7 +188,7 @@ class vgui_rubberband_tableau : public vgui_tableau
 
  private:
   vgui_rubberband_client *client_;
-  enum object_type {none_enum, point_enum, line_enum, infinite_line_enum, 
+  enum object_type {none_enum, point_enum, line_enum, infinite_line_enum,
     circle_enum, polygon_enum, linestrip_enum,box_enum};
   bool active;
   static object_type obj_type;

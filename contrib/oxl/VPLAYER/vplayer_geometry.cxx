@@ -14,14 +14,14 @@
 #include <vgui/vgui_color_text.h>
 #include <vgui/vgui_soview.h>
 #include <vgui/vgui_soview2D.h>
-#include <vgui/vgui_easy2D.h>
+#include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_macro.h>
 
 #include "vplayer.h"
 
 //static bool debug = true;
 extern void get_current(unsigned*, unsigned*);
-extern vcl_vector<vgui_easy2D_sptr> get_easy2D_list();
+extern vcl_vector<vgui_easy2D_tableau_sptr> get_easy2D_list();
 
 //-----------------------------------------------------------------------------
 //: Draw a point onto the currently selected tableau.
@@ -106,7 +106,7 @@ void vplayer_geometry::change_sel_color()
   if (!color_dl.ask())
     return;
 
-  vcl_vector<vgui_easy2D_sptr> easy_list = get_easy2D_list();
+  vcl_vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
   {
     vcl_vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews();
@@ -133,7 +133,7 @@ void vplayer_geometry::change_sel_radius()
   if (!radius_dl.ask())
     return;
 
-  vcl_vector<vgui_easy2D_sptr> easy_list = get_easy2D_list();
+  vcl_vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
   {
     vcl_vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews();
@@ -159,7 +159,7 @@ void vplayer_geometry::change_sel_width()
   if (!width_dl.ask())
     return;
 
-  vcl_vector<vgui_easy2D_sptr> easy_list = get_easy2D_list();
+  vcl_vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
   {
     vcl_vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews();
@@ -186,7 +186,7 @@ void vplayer_geometry::delete_sel_objs()
   if (!del_dl.ask())
     return;
 
-  vcl_vector<vgui_easy2D_sptr> easy_list = get_easy2D_list();
+  vcl_vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
   {
     vcl_vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews();
@@ -210,7 +210,7 @@ void vplayer_geometry::delete_all()
   if (!del_dl.ask())
     return;
 
-  vgui_easy2D_sptr easy_tab = get_easy2D_at(col, row);
+  vgui_easy2D_tableau_sptr easy_tab = get_easy2D_at(col, row);
   if (!easy_tab)
   {
     vgui_macro_warning << "Unable to get current easy2D to delete te objects\n";
@@ -238,7 +238,7 @@ void vplayer_geometry::delete_points()
   if (!del_dl.ask())
     return;
 
-  vgui_easy2D_sptr easy_tab = get_easy2D_at(col,row);
+  vgui_easy2D_tableau_sptr easy_tab = get_easy2D_at(col,row);
   if (!easy_tab)
   {
     vgui_macro_warning << "Unable to get current easy2D to delete  points\n";
@@ -266,7 +266,7 @@ void vplayer_geometry::delete_lines()
   if (!del_dl.ask())
     return;
 
-  vgui_easy2D_sptr easy_tab = get_easy2D_at(col,row);
+  vgui_easy2D_tableau_sptr easy_tab = get_easy2D_at(col,row);
   if (!easy_tab)
   {
     vgui_macro_warning << "Unable to get current easy2D to delete lines\n";
@@ -294,7 +294,7 @@ void vplayer_geometry::delete_inf_lines()
   if (!del_dl.ask())
     return;
 
-  vgui_easy2D_sptr easy_tab = get_easy2D_at(col,row);
+  vgui_easy2D_tableau_sptr easy_tab = get_easy2D_at(col,row);
   if (!easy_tab)
   {
     vgui_macro_warning << "Unable to get current easy2D to delete infinite lines?\n";
@@ -322,7 +322,7 @@ void vplayer_geometry::delete_circles()
   if (!del_dl.ask())
     return;
 
-  vgui_easy2D_sptr easy_tab = get_easy2D_at(col,row);
+  vgui_easy2D_tableau_sptr easy_tab = get_easy2D_at(col,row);
   if (!easy_tab)
   {
     vgui_macro_warning << "Unable to get current easy2D to delete circles?\n";
@@ -350,7 +350,7 @@ void vplayer_geometry::delete_linestrips()
   if (!del_dl.ask())
     return;
 
-  vgui_easy2D_sptr easy_tab = get_easy2D_at(col,row);
+  vgui_easy2D_tableau_sptr easy_tab = get_easy2D_at(col,row);
   if (!easy_tab)
   {
     vgui_macro_warning << "Unable to get current easy2D to delete linestrips\n";
@@ -377,7 +377,7 @@ void vplayer_geometry::change_default_color()
   if (!color_dl.ask())
     return;
 
-  vcl_vector<vgui_easy2D_sptr> easy_list = get_easy2D_list();
+  vcl_vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
   {
     easy_list[i]->set_foreground(red_value(color_value),
@@ -399,7 +399,7 @@ void vplayer_geometry::change_default_radius()
   if (!radius_dl.ask())
     return;
 
-  vcl_vector<vgui_easy2D_sptr> easy_list = get_easy2D_list();
+  vcl_vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
   {
     easy_list[i]->set_point_radius(point_radius);
@@ -419,7 +419,7 @@ void vplayer_geometry::change_default_width()
   if (!width_dl.ask())
     return;
 
-  vcl_vector<vgui_easy2D_sptr> easy_list = get_easy2D_list();
+  vcl_vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
     easy_list[i]->set_line_width(line_width);
 }
@@ -431,7 +431,7 @@ void vplayer_geometry::save(const char *object_type,const char *dialog_name)
 {
   unsigned col, row;
   get_current(&col, &row);
-  vgui_easy2D_sptr easy_tab = get_easy2D_at(col, row);
+  vgui_easy2D_tableau_sptr easy_tab = get_easy2D_at(col, row);
   vgui_dialog save_dl(dialog_name);
   static vcl_string filename = "temp.dat";
   static vcl_string regexp = "*.*";
@@ -505,7 +505,7 @@ void vplayer_geometry::load(const char *object_type,const char *dialog_name)
 {
   unsigned col, row;
   get_current(&col, &row);
-  vgui_easy2D_sptr easy_tab = get_easy2D_at(col, row);
+  vgui_easy2D_tableau_sptr easy_tab = get_easy2D_at(col, row);
   vgui_dialog load_dl(dialog_name);
   static vcl_string filename = "temp.dat";
   static vcl_string regexp = "*.*";

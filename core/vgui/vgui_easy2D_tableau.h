@@ -16,7 +16,7 @@
 // Modifications
 //    24-SEP-1999  P.Pritchett - Initial version.
 //    20-JUL-2000  Marko Bacic - Provided support for printing linestrips
-//    25-APR-2002  domi@vision.ee.ethz.ch - make print_psfile work without 
+//    25-APR-2002  domi@vision.ee.ethz.ch - make print_psfile work without
 //                                          image tableau
 //    26-APR-2002  K.Y.McGaul - Added some doxygen-style documentation.
 //    01-OCT-2002  K.Y.McGaul - Moved vgui_easy2D to vgui_easy2D_tableau.
@@ -39,22 +39,22 @@ class vgui_soview2D_polygon;
 
 //: Tableau to display two-dimensinal geometric objects.
 //
-//  Two dimensional geometric objects (see vgui_soview2D) such as lines, 
-//  points, circles, etc can be added using add, or add_point, add_line, 
+//  Two dimensional geometric objects (see vgui_soview2D) such as lines,
+//  points, circles, etc can be added using add, or add_point, add_line,
 //  add_circle, etc.
 //
-//  The constructor of this tableau can accept a child tableau such as an 
-//  image or clear tableau on top of which the geometric objects will be 
-//  displayed (so for example, lines can be drawn on an image).  To display 
-//  objects on a non-black, plain coloured background use a clear_tableau 
+//  The constructor of this tableau can accept a child tableau such as an
+//  image or clear tableau on top of which the geometric objects will be
+//  displayed (so for example, lines can be drawn on an image).  To display
+//  objects on a non-black, plain coloured background use a clear_tableau
 //  and set its colour.
 //
-//  To remove objects call remove(vgui_soview*).  The vgui_soview* is returned 
-//  by add(), or you can get a list of all soviews using get_all().  To remove 
-//  all objects use clear().  
+//  To remove objects call remove(vgui_soview*).  The vgui_soview* is returned
+//  by add(), or you can get a list of all soviews using get_all().  To remove
+//  all objects use clear().
 //
-//  The geometric objects on the easy2D (and any underlying image) can be saved 
-//  as PostScript by calling print_psfile. (If you just wish to save an image 
+//  The geometric objects on the easy2D (and any underlying image) can be saved
+//  as PostScript by calling print_psfile. (If you just wish to save an image
 //  of your easy2D you may want to use vgui_utils::dump_colour_buffer instead).
 class vgui_easy2D_tableau : public vgui_displaylist2D_tableau
 {
@@ -75,7 +75,7 @@ class vgui_easy2D_tableau : public vgui_displaylist2D_tableau
   //  In particular, use draw events to draw 2-dimensional geometric objects.
   bool handle(const vgui_event& e);
 
-  //: Returns the name given to this tableau in the constructor. 
+  //: Returns the name given to this tableau in the constructor.
   vcl_string name() const { return name_; };
 
   //: Returns the filename of the child image if there is one, else the name.
@@ -94,7 +94,7 @@ class vgui_easy2D_tableau : public vgui_displaylist2D_tableau
   void set_child(vgui_tableau_sptr const&);
 
   //: Set the colour of objects to the given red, green, blue values.
-  void set_foreground(float r, float g, float b) 
+  void set_foreground(float r, float g, float b)
     { fg[0] = r; fg[1] = g; fg[2] = b; }
 
   //: Set the width of lines to the given width.
@@ -110,7 +110,7 @@ class vgui_easy2D_tableau : public vgui_displaylist2D_tableau
   vgui_soview2D_point* add_point(float x, float y);
 
   //: Add a finite line with the given start and end points to the display.
-  //  Note that this will be added as a vgui_lineseg (not 
+  //  Note that this will be added as a vgui_lineseg (not
   //  vgui_line - which doesn't exist).
   vgui_soview2D_lineseg* add_line(float x0, float y0, float x1, float y1);
 
@@ -121,14 +121,14 @@ class vgui_easy2D_tableau : public vgui_displaylist2D_tableau
   vgui_soview2D_circle* add_circle(float x, float y, float r);
 
   //: Add an ellipse with a given center, width, height, and angle
-  vgui_soview2D_ellipse* add_ellipse(float x, float y, float w, 
+  vgui_soview2D_ellipse* add_ellipse(float x, float y, float w,
     float h, float phi);
 
   //: Add a point with the given projective coordinates.
   vgui_soview2D_point* add_point_3dv(double const p[3]);
 
   //: Add a line with the given projective start and end points.
-  vgui_soview2D_lineseg* add_line_3dv_3dv(double const p1[3], 
+  vgui_soview2D_lineseg* add_line_3dv_3dv(double const p1[3],
                                           double const p2[3]);
 
   //: Add an infinite line with the given projective coordinates.
@@ -138,11 +138,11 @@ class vgui_easy2D_tableau : public vgui_displaylist2D_tableau
   vgui_soview2D_circle* add_circle_3dv(double const point[3], float r);
 
   //: Add a linestrip with the given n vertices to the display.
-  vgui_soview2D_linestrip* add_linestrip(unsigned n, float const *x, 
+  vgui_soview2D_linestrip* add_linestrip(unsigned n, float const *x,
     float const *y);
 
   //: Add  polygon with the given n vertices to the display.
-  vgui_soview2D_polygon* add_polygon(unsigned n, float const *x, 
+  vgui_soview2D_polygon* add_polygon(unsigned n, float const *x,
     float const *y);
 
   //: Remove the given soview from the display.
@@ -152,7 +152,7 @@ class vgui_easy2D_tableau : public vgui_displaylist2D_tableau
   void clear() { vgui_displaybase_tableau::clear(); }
 
   //: Returns a list of all soviews on the display.
-  vcl_vector<vgui_soview*> const &get_all() const 
+  vcl_vector<vgui_soview*> const &get_all() const
   { return vgui_displaybase_tableau::get_all(); }
 
   //: If the child tableau is an image_tableau, return this.
@@ -171,7 +171,7 @@ class vgui_easy2D_tableau : public vgui_displaylist2D_tableau
 
   //: Child tableau if there is one.
   vgui_parent_child_link image_slot;
- 
+
   //: Child image tableau, if there is one.
   vgui_image_tableau_sptr image_image;
 

@@ -14,7 +14,7 @@
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_macro.h>
-#include <vgui/vgui_easy2D.h>
+#include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_rubberbander.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_composite.h>
@@ -41,13 +41,13 @@ xcv_tableau_sptr xcv_tab;
 //-----------------------------------------------------------------------------
 //: Gets the list of all easy2D tableaux in xcv.
 //-----------------------------------------------------------------------------
-vcl_vector<vgui_easy2D_sptr> get_easy2D_list()
+vcl_vector<vgui_easy2D_tableau_sptr> get_easy2D_list()
 {
-  vcl_vector<vgui_easy2D_sptr> easy_tabs;
+  vcl_vector<vgui_easy2D_tableau_sptr> easy_tabs;
   vcl_vector<vgui_tableau_sptr> all_tabs = xcv_tab->get_tableau_list();
   for (unsigned i=0; i<all_tabs.size(); i++)
   {
-    vgui_easy2D_sptr easy;
+    vgui_easy2D_tableau_sptr easy;
     easy.vertical_cast(all_tabs[i]);
     easy_tabs.push_back(easy);
   }
@@ -84,9 +84,9 @@ vgui_rubberbander_sptr get_rubberbander_at(unsigned col, unsigned row)
 //: Return the underlying easy2D from the tableau at the given position.
 //  This function returns NULL if it fails.
 //-----------------------------------------------------------------------------
-vgui_easy2D_sptr get_easy2D_at(unsigned col, unsigned row)
+vgui_easy2D_tableau_sptr get_easy2D_at(unsigned col, unsigned row)
 {
-  vgui_easy2D_sptr ret;
+  vgui_easy2D_tableau_sptr ret;
   vgui_rubberbander_sptr rub = get_rubberbander_at(col, row);
   if (rub) {
     ret.vertical_cast(
@@ -103,7 +103,7 @@ vgui_easy2D_sptr get_easy2D_at(unsigned col, unsigned row)
 vgui_image_tableau_sptr get_image_tableau_at(unsigned col, unsigned row)
 {
   vgui_image_tableau_sptr ret;
-  vgui_easy2D_sptr tab = get_easy2D_at(col, row);
+  vgui_easy2D_tableau_sptr tab = get_easy2D_at(col, row);
   if (tab)
   {
     ret.vertical_cast(

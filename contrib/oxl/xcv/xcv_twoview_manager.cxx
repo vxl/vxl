@@ -63,10 +63,10 @@ void xcv_twoview_manager::set_tableau(vgui_tableau_sptr const& tab, unsigned tab
            << "] to tableau pointer: " << tab << vcl_endl;
 #endif
   tabs[tab_nb] = tab;
-  rubberbands[tab_nb].vertical_cast(vgui_find_below_by_type_name(tab, vcl_string("vgui_rubberbander")));
+  rubberbands[tab_nb].vertical_cast(vgui_find_below_by_type_name(tab, vcl_string("vgui_rubberbander_tableau")));
   if (! rubberbands[tab_nb])
     vgui_macro_warning << "Unable to find rubberbander for tableau1\n";
-  easys[tab_nb].vertical_cast(vgui_find_below_by_type_name(tab, vcl_string("vgui_easy2D")));
+  easys[tab_nb].vertical_cast(vgui_find_below_by_type_name(tab, vcl_string("vgui_easy2D_tableau")));
   if (!easys[tab_nb]) {
     vgui_macro_warning << "Unable to find easy2D for tableau no. " << tab_nb << " \"" << tab << "\"\n";
     vgui_text_graph(vcl_cerr);
@@ -145,17 +145,17 @@ void xcv_twoview_manager::draw_f_matrix(vgui_event const& e, vgui_tableau_sptr c
     if (easys[transfer_index])
       easys[transfer_index]->add_infinite_line(hl[0], hl[1], hl[2]);
     else
-      vgui_macro_warning << "no vgui_easy2D for transfer_index = " 
+      vgui_macro_warning << "no vgui_easy2D_tableau for transfer_index = " 
       << transfer_index << vcl_endl;
     if (easys[(transfer_index+1)%2])
       easys[(transfer_index+1)%2]->add_point(ix, iy);
     else
-      vgui_macro_warning << "no vgui_easy2D for transfer_index = " 
+      vgui_macro_warning << "no vgui_easy2D_tableau for transfer_index = " 
       << (transfer_index+1)%2 << vcl_endl;
     if (easys[0])
       easys[0]->post_redraw();
     else
-      vgui_macro_warning << "no vgui_easy2D at index 0\n";
+      vgui_macro_warning << "no vgui_easy2D_tableau at index 0\n";
   }
   else
   {
@@ -297,8 +297,9 @@ void xcv_twoview_manager::draw_corner_matches(
 //-----------------------------------------------------------------------------
 void xcv_twoview_manager::draw_overlay_corner_matches(vgui_tableau_sptr const&)
 {
-  // Get the currently highlighted point:
+  vcl_cerr << "xcv_twoview_manager::draw_overlay_corner_matches(vgui_tableau_sptr) is not yet implemented\n";
 #if 0 // commented out - FIXME
+  // Get the currently highlighted point:
   vgui_soview* sv = easys[(transfer_index+1)%2]->get_highlighted_soview();
   if (sv->type_name() != "vgui_soview2D_point")
     return;
@@ -316,7 +317,7 @@ void xcv_twoview_manager::draw_overlay_corner_matches(vgui_tableau_sptr const&)
   do
   {
     j++;
-    hips->get(j)._homg.get_nonhomogeneous(xx, yy);
+    hips->get(j).homg_.get_nonhomogeneous(xx, yy);
   }
   while (j<corner_matches->size() && sv_point->x != xx & sv_point->y != yy);
 
@@ -329,14 +330,14 @@ void xcv_twoview_manager::draw_overlay_corner_matches(vgui_tableau_sptr const&)
 
   HomgPoint2D new_point;
   if (transfer_index == 0)
-    new_point = (corner_matches->get_corners1())->get(index2)._homg;
+    new_point = (corner_matches->get_corners1())->get(index2).homg_;
   else
-    new_point = (corner_matches->get_corners2())->get(index2)._homg;
+    new_point = (corner_matches->get_corners2())->get(index2).homg_;
   double new_x, new_y;
   new_point.get_nonhomogeneous(new_x, new_y);
 
   rubberbands[transfer_index]->draw_circle(new_x, new_y, 5);
-#endif
+#endif // 0
 }
 
 //-----------------------------------------------------------------------------

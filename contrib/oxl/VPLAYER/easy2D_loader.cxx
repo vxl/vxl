@@ -1,15 +1,15 @@
 #include "easy2D_loader.h"
 
-easy2D_loader::easy2D_loader(vgui_easy2D_sptr const& e2d)
+easy2D_loader::easy2D_loader(vgui_easy2D_tableau_sptr const& e2d)
 {
   easy_ = e2d;
 }
 
 bool easy2D_loader::point(const char *type, float x,float y)
 {
-  if(type[0] == 'p')
+  if (type[0] == 'p')
     easy_->add_point(x,y);
-  if(type[0] == '+')
+  if (type[0] == '+')
   {
     easy_->add_line(x-5,y,x+5,y);
     easy_->add_line(x,y-5,x,y+5);
@@ -19,7 +19,7 @@ bool easy2D_loader::point(const char *type, float x,float y)
 
 bool easy2D_loader::polyline(float const *x,float const *y,int n)
 {
-  for(int i = 1;i<n;i++)
+  for (int i = 1;i<n;i++)
     easy_->add_line(x[i-1],y[i-1],x[i],y[i]);
   return true;
 }

@@ -1,7 +1,6 @@
-// This is ./oxl/xcv/xcv_segmentation.h
+// This is oxl/xcv/xcv_segmentation.h
 #ifndef xcv_segmentation_h_
 #define xcv_segmentation_h_
-
 //:
 // \file
 // \author  K.Y.McGaul
@@ -21,7 +20,6 @@
 class vgui_menu;
 class osl_harris_params;
 class osl_canny_ox_params;
-class vgui_easy2D;
 class osl_edge;
 
 class xcv_segmentation

@@ -1,21 +1,21 @@
 #include "easy2D_sequencer.h"
 
-easy2D_sequencer::easy2D_sequencer(vcl_vector<vgui_easy2D *> seq)
+easy2D_sequencer::easy2D_sequencer(vcl_vector<vgui_easy2D_tableau_sptr> seq)
 {
   sequence_ = seq;
   pos_ = seq.begin();
 }
-vgui_easy2D *easy2D_sequencer::next() 
+vgui_easy2D_tableau_sptr easy2D_sequencer::next() 
 {
-  if(pos_ == sequence_.end())
+  if (pos_ == sequence_.end())
     pos_ = sequence_.begin();
   else
     pos_++;
   return *pos_;
 }
-vgui_easy2D *easy2D_sequencer::prev() 
+vgui_easy2D_tableau_sptr easy2D_sequencer::prev() 
 {
-  if(pos_ == sequence_.begin())
+  if (pos_ == sequence_.begin())
     pos_ = sequence_.end();
   else
     pos_--;

@@ -12,7 +12,7 @@
 #include <vgui/vgui_key.h>
 
 #include <vgui/vgui_adaptor.h>
-#include <vgui/vgui_easy2D.h>
+#include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_rubberbander.h>
 #include <vgui/vgui_dialog.h>
 
@@ -32,7 +32,7 @@ static void DRAW()
 bool volatile playing = false;
 extern vidl_movie_sptr my_movie;
 extern vidl_movie::frame_iterator pframe;
-extern vcl_vector<vgui_easy2D_sptr> tableaux_;
+extern vcl_vector<vgui_easy2D_tableau_sptr> tableaux_;
 int frame_num = 2;
 long delta_t = 30;
 
@@ -45,7 +45,7 @@ void vplayer_video::play_video()
      get_current(&col,&row);
      vgui_rubberbander_sptr r= get_rubberbander_at(col,row);
      playing = true;
-     vcl_vector<vgui_easy2D_sptr>::iterator it = tableaux_.begin();
+     vcl_vector<vgui_easy2D_tableau_sptr>::iterator it = tableaux_.begin();
      vul_timer t;
      while (playing)
      {

@@ -1,15 +1,12 @@
-// This is ./oxl/xcv/xcv_threeview_manager.cxx
-
+// This is oxl/xcv/xcv_threeview_manager.cxx
+#include "xcv_threeview_manager.h"
 //:
 //  \file
 // See xcv_threeview_manager.h for a description of this file.
 //
 // \author K.Y.McGaul
 
-#include "xcv_threeview_manager.h"
-
 #include <vcl_iostream.h>
-
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_projection_inspector.h>
 #include <vgui/vgui_find.h>
@@ -37,10 +34,10 @@ void xcv_threeview_manager::set_tableau(vgui_tableau_sptr const& tab, unsigned t
     return;
   }
   tabs[tab_nb] = tab;
-  rubberbands[tab_nb].vertical_cast(vgui_find_below_by_type_name(tab, vcl_string("vgui_rubberbander")));
+  rubberbands[tab_nb].vertical_cast(vgui_find_below_by_type_name(tab, vcl_string("vgui_rubberbander_tableau")));
   if (! rubberbands[tab_nb])
     vgui_macro_warning << "Unable to find rubberbander for tableau1" << vcl_endl;
-  easys[tab_nb].vertical_cast(vgui_find_below_by_type_name(tab, vcl_string("vgui_easy2D")));
+  easys[tab_nb].vertical_cast(vgui_find_below_by_type_name(tab, vcl_string("vgui_easy2D_tableau")));
   if (! easys[tab_nb])
     vgui_macro_warning << "Unable to find easy2D for tableau" << tab_nb << vcl_endl;
 }
@@ -60,7 +57,7 @@ void xcv_threeview_manager::toggle_tri_tensor_display()
 //:
 //-----------------------------------------------------------------------------
 void xcv_threeview_manager::draw_tri_tensor(vgui_event const& e, vgui_tableau_sptr const& child_tab,
-  bool make_permanent)
+                                            bool make_permanent)
 {
   // Get the address of the event and turn it into a HomgPoint2D:
   vgui_projection_inspector p_insp;

@@ -1,11 +1,11 @@
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-
+//:
+// \file
 // \author  fsm@robots.ox.ac.uk
 //
 // This example draws a polygon on the display using OpenGl function calls
 // to draw the polygon.  Note, you could achieve the same effect using
-// a vgui_easy2D to draw the polygon and do all the calls to OpenGL functions
-// for you.
+// a vgui_easy2D_tableau to draw the polygon and do all the calls to OpenGL
+// functions for you.
 //
 // Example usage:  example_draw_polygon -n 7 -b
 
@@ -147,4 +147,3 @@ int main(int argc, char **argv)
   return vgui::run(zoom, 512, 512);
 }
 
-#endif

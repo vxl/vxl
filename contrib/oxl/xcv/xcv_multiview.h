@@ -23,9 +23,6 @@
 #include <vcl_vector.h>
 
 class vgui_menu;
-class vgui_rubberband_tableau;
-class vgui_easy2D;
-class HomgPoint2D;
 
 class xcv_multiview
 {

@@ -74,10 +74,12 @@ vgui_rubberband_tableau::vgui_rubberband_tableau(vgui_rubberband_client *client)
   init(client);
 }
 
-//vgui_rubberband_tableau::vgui_rubberband_tableau(vgui_easy2D_sptr const& easy)
-//{
-//  init(new vgui_rubberband_tableau_easy2D_client(easy));
-//}
+#if 0
+vgui_rubberband_tableau::vgui_rubberband_tableau(vgui_easy2D_tableau_sptr const& easy)
+{
+  init(new vgui_rubberband_tableau_easy2D_client(easy));
+}
+#endif
 
 void vgui_rubberband_tableau::set_client(vgui_rubberband_client *client)
 {

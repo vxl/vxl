@@ -1,7 +1,6 @@
-// This is ./oxl/xcv/xcv_processing.h
+// This is oxl/xcv/xcv_processing.h
 #ifndef xcv_processing_h_
 #define xcv_processing_h_
-
 //:
 // \file
 // \author  K.Y.McGaul
@@ -16,10 +15,6 @@
 // \endverbatim
 
 class vgui_menu;
-class osl_harris_params;
-class osl_canny_ox_params;
-class vgui_easy2D;
-class osl_edge;
 
 class xcv_processing
 {
