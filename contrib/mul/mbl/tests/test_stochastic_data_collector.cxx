@@ -39,7 +39,7 @@ void test_stochastic_data_collector()
   collector.reseed(14545);
   
   vcl_cout << "===========Generate data " <<vcl_endl;
-  vcl_vector<unsigned> hist(10,0);
+  vcl_vector<unsigned> hist(10, 0u);
   const int n_expts = 50;
   for (int i=0;i<n_expts;++i)
   {
