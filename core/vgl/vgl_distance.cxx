@@ -15,6 +15,7 @@
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_homg_plane_3d.h>
+#include <vcl_cmath.h> // for vcl_sqrt()
 
 template <class Type>
 static inline Type square(Type x) { return x*x; }

@@ -5,6 +5,7 @@
 
 #include <vcl_list.h>
 #include <vcl_vector.h>
+#include <vcl_cmath.h> // for vcl_sqrt(), vcl_acos()
 
 #include <vnl/vnl_matops.h>
 #include <vnl/vnl_matrix.h>
