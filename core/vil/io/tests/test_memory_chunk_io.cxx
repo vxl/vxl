@@ -1,10 +1,11 @@
 // This is mul/vil2/tests/test_memory_chunk.cxx
-#include <vcl_iostream.h>
-#include <vxl_config.h>
-#include <testlib/testlib_test.h>
 #include <vil2/vil2_memory_chunk.h>
 #include <vil2/io/vil2_io_memory_chunk.h>
 #include <vil2/io/vil2_io_smart_ptr.h>
+#include <vcl_iostream.h>
+#include <vcl_cstring.h> // for memset()
+#include <vxl_config.h>
+#include <testlib/testlib_test.h>
 
 template<class T>
 inline void test_memory_chunk_io_as(T value)
@@ -13,6 +14,7 @@ inline void test_memory_chunk_io_as(T value)
   vil2_memory_chunk chunk1(35*sizeof(T),
     vil2_pixel_format_component_format(vil2_pixel_format_of(T())));
   T* data1 = (T*) chunk1.data();
+  vcl_memset(data1,0,35*sizeof(T)); // avoid "UMR" on subsequent vsl_b_write()
   data1[3]= value;
   vil2_memory_chunk_sptr chunk_sptr1 = new vil2_memory_chunk(chunk1);
 
@@ -43,8 +45,6 @@ inline void test_memory_chunk_io_as(T value)
   vcl_cout<<"Testing IO using smart pointer"<<vcl_endl;
   TEST("Size OK",chunk_sptr2->size()==chunk1.size(),true);
   TEST("Type OK", chunk_sptr2->pixel_format(),chunk1.pixel_format());
-
-
 }
 
 MAIN( test_memory_chunk_io )
