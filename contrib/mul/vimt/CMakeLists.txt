@@ -16,7 +16,7 @@ AUX_SOURCE_DIRECTORY(Templates vimt_sources)
 ADD_LIBRARY(vimt ${vimt_sources})
 TARGET_LINK_LIBRARIES(vimt vil2 vil2_algo mbl vnl_algo vbl_io vgl vil)
 
-# SUBDIRS(algo)
+SUBDIRS(examples)
 
 # IF (BUILD_TESTING)
 #   SUBDIRS(tests)

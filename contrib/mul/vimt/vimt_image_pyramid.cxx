@@ -141,7 +141,9 @@ void vimt_image_pyramid::print_all(vcl_ostream& os) const
     {
         os<<"Image at level "<<i<<" : ";
         image_[i]->print_all(os);
+		os<<vcl_endl;
     }
+
 }
 
 vcl_ostream& operator<<(vcl_ostream& os, const vimt_image_pyramid& im_pyr)
