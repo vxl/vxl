@@ -121,8 +121,8 @@ FMatrixPlanar::set (const vnl_matrix<double>& f_matrix )
      if (svd.rank()!=2) 
      { 
 	  planar = false; 
-	  cerr << "WARNING in FMatrixPlanar::set" << endl;
-	  cerr << "F matrix not rank 2: svd = " << svd.W() << endl;
+	  vcl_cerr << "WARNING in FMatrixPlanar::set" << vcl_endl;
+	  vcl_cerr << "F matrix not rank 2: svd = " << svd.W() << vcl_endl;
      }
      else
      {
@@ -130,14 +130,14 @@ FMatrixPlanar::set (const vnl_matrix<double>& f_matrix )
 	  if (svd.rank()!=2) 
 	  { 
 	       planar = false; 
-	       cerr << "WARNING in FMatrixPlanar::set" << endl;
-	       cerr << "Symmetric part matrix not rank 2: svd = " << svd.W() << endl;
+	       vcl_cerr << "WARNING in FMatrixPlanar::set" << vcl_endl;
+	       vcl_cerr << "Symmetric part matrix not rank 2: svd = " << svd.W() << vcl_endl;
 	  }
      }
      
      if (!planar)
      {
-	  cerr << "WARNING: F matrix not planar so cannot allocate to FMatrixPlanar\n" ;
+	  vcl_cerr << "WARNING: F matrix not planar so cannot allocate to FMatrixPlanar\n" ;
 	  return FALSE;
      }
 		 
@@ -219,8 +219,8 @@ void FMatrixPlanar::init(const FMatrix& F)
 	  f2 = sqrt(eig1)*v1 - sqrt(-eig0)*v0;
      }
      else {
-	  cerr << "ERROR in FMatrix::init" << endl
-	       << "EXITING..." << endl;
+	  vcl_cerr << "ERROR in FMatrix::init" << vcl_endl
+	       << "EXITING..." << vcl_endl;
 	  assert(false);
      }
 

@@ -80,7 +80,7 @@ public:
   vbl_sparse_array<T>::end;
 
   // Data Control--------------------------------------------------------------
-  ostream& print(ostream&) const;
+  vcl_ostream& print(vcl_ostream&) const;
   //friend ostream& operator >> (ostream&, const vbl_sparse_array_2d<T>& );
 
 protected:
@@ -89,7 +89,7 @@ protected:
 };
 
 template <class T>
-inline ostream& operator << (ostream& s, const vbl_sparse_array_2d<T>& a) {
+inline vcl_ostream& operator << (vcl_ostream& s, const vbl_sparse_array_2d<T>& a) {
   return a.print(s);
 }
 

@@ -61,7 +61,7 @@ protected:
 };
 
 template <class T>
-inline ostream& operator << (ostream& s, const vbl_sparse_array<T>& a)
+inline vcl_ostream& operator << (vcl_ostream& s, const vbl_sparse_array<T>& a)
 {
   return a.print(s);
 }

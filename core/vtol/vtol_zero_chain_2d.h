@@ -122,8 +122,8 @@ public:
   virtual bool operator==(const vtol_zero_chain_2d &other) const;
   bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
   
-  virtual void print(ostream &strm=cout) const;
-  virtual void describe(ostream &strm=cout,
+  virtual void print(vcl_ostream &strm=vcl_cout) const;
+  virtual void describe(vcl_ostream &strm=vcl_cout,
                         int blanking=0) const;
 
   // : Warning - should not be used by clients

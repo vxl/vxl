@@ -2,6 +2,8 @@
 #pragma implementation
 #endif
 
+#include <vcl_functional.h>	//vxl_filter
+#include <vcl_utility.h>	//vxl_filter
 #include "vrml_out.h"
 
 #include <vcl_fstream.h>
@@ -19,7 +21,7 @@ vrml_out::vrml_out()
 }
 
 // -- Point vrml output to this stream
-vrml_out::vrml_out(ostream& s)
+vrml_out::vrml_out(vcl_ostream& s)
 {
   s_ = &s;
   own_ostream_ = false;
@@ -28,10 +30,10 @@ vrml_out::vrml_out(ostream& s)
 // -- Open filename for writing, write prologue, and on closure write epilogue
 vrml_out::vrml_out(char const* filename)
 {
-  s_ = new ofstream(filename);
+  s_ = new vcl_ofstream(filename);
   own_ostream_ = true;
   if (!s_ || !(*s_)) {
-    cerr << "Cannot open " << filename << " for writing\n";
+    vcl_cerr << "Cannot open " << filename << " for writing\n";
     delete s_; s_ = 0; own_ostream_ = false;
   }
   else prologue();
@@ -46,7 +48,7 @@ vrml_out::~vrml_out()
   }
 }
 
-#define SETUP if (s_ == 0) { cerr << "vrml_out -- ostream not set!\n"; return; } ostream& f = *s_
+#define SETUP if (s_ == 0) { vcl_cerr << "vrml_out -- vcl_ostream not set!\n"; return; } vcl_ostream& f = *s_
 
 // -- Write vrml_out header and an opening "Separator {"
 void vrml_out::prologue()
@@ -66,13 +68,13 @@ void vrml_out::prologue()
 void vrml_out::comment(char const* msg)
 {
   SETUP;
-  f << "# " << msg << endl;
+  f << "# " << msg << vcl_endl;
 }
 
 void vrml_out::verbatim(char const* msg)
 {
   SETUP;
-  f << msg << endl;
+  f << msg << vcl_endl;
 }
 
 // -- Write closing "}"
@@ -103,7 +105,7 @@ void vrml_out::display_pointset ()
 #if 0
 struct VRML_IO_VertexRememberer {
   vrml_out* vrml_;
-  typedef vcl_map<void*, int, less<void*> > Map;
+  typedef vcl_map<void*, int, vcl_less<void*> > Map;
   Map vertex_ids;
   int current_vertex_id;
   
@@ -137,7 +139,7 @@ int VRML_IO_VertexRememberer::vertex_id(Vertex* v)
   if (p != vertex_ids.end())
     return (*p).second;
   
-  cerr << 
+  vcl_cerr << 
   "VRML_IO_VertexRememberer::vertex_ids() WARNING! This can't happen -- vertex "
        << v << " has no id.  Fnarrr.\n";
 
@@ -201,8 +203,8 @@ void vrml_out::write_faces_textured(
 {
   VRML_IO_VertexRememberer vertexer(this, triangles.length() * 3/2);
 
-  ofstream phil3d("/tmp/pcptex.3d");
-  ofstream phil2d("/tmp/pcptex.2d");
+  vcl_ofstream phil3d("/tmp/pcptex.3d");
+  vcl_ofstream phil2d("/tmp/pcptex.2d");
 
   begin_pointset();
   for(triangles.reset(); triangles.next(); ) {
@@ -212,7 +214,7 @@ void vrml_out::write_faces_textured(
       Vertex *v = vertices->value();
       if (vertexer.send_vertex(v)) {
 	// Save pcp3d
-	phil3d << v->GetX() << " " << v->GetY() << " " << v->GetZ() << endl;
+	phil3d << v->GetX() << " " << v->GetY() << " " << v->GetZ() << vcl_endl;
 	// Save pcp texture coord
 	int xsize = v2t.image_xsize;
 	int ysize = v2t.image_ysize;
@@ -220,7 +222,7 @@ void vrml_out::write_faces_textured(
 	v2t.get_texture_coords(v, &ix, &iy);
 	ix = ix / xsize;
 	iy = 1.0 - iy / ysize;
-	phil2d << ix << " " << iy << endl;
+	phil2d << ix << " " << iy << vcl_endl;
       }
     }
   }
@@ -240,7 +242,7 @@ void vrml_out::write_faces_textured(
       int id = vertexer.vertex_id(v);
       if (id > last_id) {
 	if (last_id + 1 != id)
-	  cerr << "vrml_out::write_faces_textured() -- texture buggered\n";
+	  vcl_cerr << "vrml_out::write_faces_textured() -- texture buggered\n";
 	++last_id;
 
 	double ix, iy;
@@ -295,7 +297,7 @@ void vrml_out::write_faces_textured(
 	int ysize
 	)
 {
-  cerr << "vrml_out::write_faces_textured() -- hacking image-world transform\n";
+  vcl_cerr << "vrml_out::write_faces_textured() -- hacking image-world transform\n";
   Hack_VertexToTexture hack(xsize, ysize);
   write_faces_textured(triangles, imagefilename, hack);
 }
@@ -376,9 +378,9 @@ void vrml_out::write_topology(TopologyObject* topobj)
     return;
   }
   
-  cerr << "VRML: not handling " << topobj << endl;
+  vcl_cerr << "VRML: not handling " << topobj << vcl_endl;
   f << "# vrml_out: Couldn't handle " 
-    << TopologyObject::TopoNames[topobj->GetTopologyType()] << endl;
+    << TopologyObject::TopoNames[topobj->GetTopologyType()] << vcl_endl;
 }
 
 void vrml_out::write_topology(vcl_list<TopologyObject*>& topobjs)

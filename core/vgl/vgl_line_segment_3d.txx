@@ -22,18 +22,18 @@ vgl_line_segment_3d<Type>::~vgl_line_segment_3d()
 
 // stream operators 
 template <class Type> 
-ostream& operator<<(ostream& s, vgl_line_segment_3d<Type> const & p)
+vcl_ostream& operator<<(vcl_ostream& s, vgl_line_segment_3d<Type> const & p)
 {
   return s << p.get_point1() << " " << p.get_point2() << "\n";
 }
 
 template <class Type>
-istream& operator>>(istream& is, vgl_line_segment_3d<Type>& p)
+vcl_istream& operator>>(vcl_istream& is, vgl_line_segment_3d<Type>& p)
 {
   return is >> p.get_point1() >> p.get_point2();
 }
 
 #define VGL_LINE_SEGMENT_3D_INSTANTIATE(Type) \
 template class vgl_line_segment_3d<Type >;\
-template istream& operator>>(istream&, vgl_line_segment_3d<Type >&);\
-template ostream& operator<<(ostream&, vgl_line_segment_3d<Type > const&);
+template vcl_istream& operator>>(vcl_istream&, vgl_line_segment_3d<Type >&);\
+template vcl_ostream& operator<<(vcl_ostream&, vgl_line_segment_3d<Type > const&);

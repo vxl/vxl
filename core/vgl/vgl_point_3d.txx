@@ -33,6 +33,6 @@ vgl_point_3d<Type> vgl_point_3d<Type>::operator-(const vgl_point_3d<Type>& that)
 
 #define VGL_POINT_3D_INSTANTIATE(T) \
 template class vgl_point_3d<T>; \
-template ostream& operator<<(ostream&, const vgl_point_3d<T>&); \
-template istream& operator>>(istream&, vgl_point_3d<T>&)
+template vcl_ostream& operator<<(vcl_ostream&, const vgl_point_3d<T>&); \
+template vcl_istream& operator>>(vcl_istream&, vgl_point_3d<T>&)
 

@@ -60,7 +60,7 @@ public:
 
 // -- Provide an ASCII diagnosis of the last minimization on ostream.
   void diagnose_outcome(/*vcl_cerr*/) const;
-  void diagnose_outcome(ostream&) const;
+  void diagnose_outcome(vcl_ostream&) const;
 
 // -- Return J'*J computed at last minimum.
   vnl_matrix<double> const& get_JtJ();

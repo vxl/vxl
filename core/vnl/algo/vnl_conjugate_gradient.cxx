@@ -191,7 +191,7 @@ bool vnl_conjugate_gradient::minimize( vnl_vector<double> &x)
 }
 
 
-void vnl_conjugate_gradient::diagnose_outcome(ostream& os) const
+void vnl_conjugate_gradient::diagnose_outcome(vcl_ostream& os) const
 {
   os << "vnl_conjugate_gradient: " 
      << num_iterations_ 

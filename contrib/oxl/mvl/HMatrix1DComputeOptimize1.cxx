@@ -41,14 +41,14 @@ public:
 #else
     int
 #endif
-      f=cout.flags();
+      f=vcl_cout.flags();
 #endif
-    cout.flags(vcl_ios::fixed | vcl_ios::showpos);
+    vcl_cout.flags(vcl_ios::fixed | vcl_ios::showpos);
     double z,y;
     for (unsigned i=0;i<N;i++) {
       z=z1[i];
       y=(z+x[0])/(x[1]*z+1+x[2]);
-      cout << z << ' ' << y << '[' << z2[i] << ']' << endl;
+      vcl_cout << z << ' ' << y << '[' << z2[i] << ']' << vcl_endl;
     }
   }
   

@@ -40,7 +40,7 @@ public:
     backslash_continuations = 0x04
   };
 
-  vbl_awk(istream& s, ModeFlags mode = none);
+  vbl_awk(vcl_istream& s, ModeFlags mode = none);
   ~vbl_awk();
 
   // Operations----------------------------------------------------------------
@@ -74,7 +74,7 @@ public:
 
 // -- Display error message, line number, optional field number and char within field.
 
-  void error(ostream&, char const* message, int field = -1, int char_within_field = 0);
+  void error(vcl_ostream&, char const* message, int field = -1, int char_within_field = 0);
 
   // Computations--------------------------------------------------------------
 
@@ -84,7 +84,7 @@ public:
 
 protected:
   // Data Members--------------------------------------------------------------
-  istream& fd_;
+  vcl_istream& fd_;
 
   ModeFlags mode_;
 

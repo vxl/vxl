@@ -34,10 +34,10 @@ public:
   HMatrix1D(const HMatrix1D&,const HMatrix1D&);// product of two HMatrix1Ds
   HMatrix1D(const vnl_matrix<double>& M);
   HMatrix1D(const double* t_matrix);
-  HMatrix1D(istream& s);
+  HMatrix1D(vcl_istream& s);
  ~HMatrix1D();
  static HMatrix1D read(char const* filename);
- static HMatrix1D read(istream&);
+ static HMatrix1D read(vcl_istream&);
 
   // Operations----------------------------------------------------------------
 
@@ -67,7 +67,7 @@ private:
   vnl_double_2x2 _t21_matrix;
 };
 
-ostream& operator << (ostream& s, const HMatrix1D& H);
-istream& operator >> (istream& s, HMatrix1D& H);
+vcl_ostream& operator << (vcl_ostream& s, const HMatrix1D& H);
+vcl_istream& operator >> (vcl_istream& s, HMatrix1D& H);
 
 #endif // _HMatrix1D_h

@@ -125,14 +125,14 @@ protected:
 
 // stream operators
 template <class Type>
-inline ostream&  operator<<(ostream& s, vgl_box_3d<Type> const& p) {
+inline vcl_ostream&  operator<<(vcl_ostream& s, vgl_box_3d<Type> const& p) {
   return s << " <vgl_box_3d ("
            << p->min_pos_[0] << "," << p->min_pos_[1] << "," << p->min_pos_[2] << ") - ("
            << p->max_pos_[0] << "," << p->max_pos_[1] << "," << p->max_pos_[2] << ") >";
 }
 
 template <class Type>
-inline istream&  operator>>(istream& is,  vgl_box_3d<Type>& p) {
+inline vcl_istream&  operator>>(vcl_istream& is,  vgl_box_3d<Type>& p) {
   return is >> p->min_pos_[0] >> p->min_pos_[1] >> p->min_pos_[2]
             >> p->max_pos_[0] >> p->max_pos_[1] >> p->max_pos_[2];
 }

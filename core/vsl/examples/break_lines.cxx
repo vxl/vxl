@@ -16,11 +16,11 @@ int main(int argc, char **argv)
   vbl_arg_parse(argc, argv);
     
   //
-  cerr << "loading topology" << endl;
+  vcl_cerr << "loading topology" << vcl_endl;
   vcl_list<vsl_edge*> edges;
   vcl_list<vsl_vertex*> vertices;
   if (in() == "")
-    vsl_load_topology(cin, edges, vertices);
+    vsl_load_topology(vcl_cin, edges, vertices);
   else
     vsl_load_topology(in().c_str(), edges, vertices);
 
@@ -35,9 +35,9 @@ int main(int argc, char **argv)
   vsl_topology_ref(broken);
   
   //
-  cerr << "saving topology" << endl;
+  vcl_cerr << "saving topology" << vcl_endl;
   if (out() == "")
-    vsl_save_topology(cout, broken);
+    vsl_save_topology(vcl_cout, broken);
   else
     vsl_save_topology(out().c_str(), broken);
 

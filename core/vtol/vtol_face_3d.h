@@ -132,9 +132,9 @@ public:
   bool operator== (const vtol_face_3d &) const;
   bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object_3d
 
-  void print (ostream &strm=cout) const;
+  void print (vcl_ostream &strm=vcl_cout) const;
 
-  void describe(ostream &strm=cout, int blanking=0) const;
+  void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;
 
 
   bool remove(vtol_one_chain_3d *one_chain,

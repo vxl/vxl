@@ -22,7 +22,7 @@ base_impl::~base_impl() {
   vcl_cout <<  "base_impl dtor : this=" << (void*)this << vcl_endl;
 }
 
-void base_impl::Print (ostream &str) {
+void base_impl::Print (vcl_ostream &str) {
   str << "base_impl(" << n << ") ";
 }
   

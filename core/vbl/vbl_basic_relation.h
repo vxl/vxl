@@ -162,7 +162,7 @@ public:
   inline void print_relation() { dump_relation(vcl_cout); }
 
   // Print the relation on cerr.
-  void dump_relation(ostream& str = vcl_cerr);
+  void dump_relation(vcl_ostream& str = vcl_cerr);
 
   // Type downcasting methods.
   virtual void* get_type();
@@ -183,7 +183,7 @@ template
   class T3,
   class T4,
   class T5>
-inline ostream& operator<<(ostream& str, vbl_basic_relation<T1,T2,T3,T4,T5>& rel)
+inline vcl_ostream& operator<<(vcl_ostream& str, vbl_basic_relation<T1,T2,T3,T4,T5>& rel)
 {
   rel.dump_relation(str);
   return str;

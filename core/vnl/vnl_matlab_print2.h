@@ -51,7 +51,7 @@ struct vnl_matlab_print_proxy
 // Output operator for the proxies.
 template <class T> 
 inline
-ostream &operator<<(ostream &os, vnl_matlab_print_proxy<T> const &mp) 
+vcl_ostream &operator<<(vcl_ostream &os, vnl_matlab_print_proxy<T> const &mp) 
 {
   return vnl_matlab_print(os, mp.obj, mp.name, mp.format);
 }
@@ -71,7 +71,7 @@ vnl_matlab_print(T const &obj,
 
 #define VNL_MATLAB_PRINT2_INSTANTIATE(T) \
 template struct vnl_matlab_print_proxy<T >; \
-VCL_INSTANTIATE_INLINE(ostream &operator<<(ostream &, \
+VCL_INSTANTIATE_INLINE(vcl_ostream &operator<<(vcl_ostream &, \
                                            vnl_matlab_print_proxy<T > const &)); \
 VCL_INSTANTIATE_INLINE(vnl_matlab_print_proxy<T > vnl_matlab_print(T const &, \
                                                                    char const *, \

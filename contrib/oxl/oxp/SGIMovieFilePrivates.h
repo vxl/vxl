@@ -18,6 +18,8 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <vcl_functional.h>	//vxl_filter
+#include <vcl_utility.h>	//vxl_filter
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_map.h>
@@ -33,7 +35,7 @@ struct SGIMV_Variables {
   typedef vcl_map<vcl_string, vcl_string, vcl_less<vcl_string> > VarData;
   VarData data;
 
-  SGIMV_Variables(istream& f) {
+  SGIMV_Variables(vcl_istream& f) {
     read(f);
   }
   SGIMV_Variables() {}
@@ -44,8 +46,8 @@ struct SGIMV_Variables {
   double get_double(char const* s) { return get_double(vcl_string(s)); }
   double get_double(vcl_string const& s);
 
-  void read(istream& f);
-  ostream& print(ostream& s) const;
+  void read(vcl_istream& f);
+  vcl_ostream& print(vcl_ostream& s) const;
 };
 
 struct SGIMV_FrameIndex {
@@ -54,7 +56,7 @@ struct SGIMV_FrameIndex {
 };
 
 struct SGIMV_FrameIndexArray : public vcl_vector<SGIMV_FrameIndex> {
-  SGIMV_FrameIndexArray(istream& f, int n);
+  SGIMV_FrameIndexArray(vcl_istream& f, int n);
   SGIMV_FrameIndexArray() {}
 };
 

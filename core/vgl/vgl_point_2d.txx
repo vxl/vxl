@@ -47,6 +47,6 @@ vgl_point_2d<Type> vgl_point_2d<Type>::operator-(const vgl_point_2d<Type>& that)
 
 #define VGL_POINT_2D_INSTANTIATE(T) \
 template class vgl_point_2d<T>; \
-template ostream& operator<<(ostream&, const vgl_point_2d<T>&); \
-template istream& operator>>(istream&, vgl_point_2d<T>&)
+template vcl_ostream& operator<<(vcl_ostream&, const vgl_point_2d<T>&); \
+template vcl_istream& operator>>(vcl_istream&, vgl_point_2d<T>&)
 

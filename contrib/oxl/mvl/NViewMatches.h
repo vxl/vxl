@@ -54,7 +54,7 @@ struct NViewMatch : public vnl_vector<int> {
   bool is_consistent(const NViewMatch& b) const;
   int count_observations() const;
 };
-ostream& operator<<(ostream& s, const NViewMatch& c);
+vcl_ostream& operator<<(vcl_ostream& s, const NViewMatch& c);
 
 #ifdef VCL_GCC_27
 inline bool operator==(const NViewMatch& a, const NViewMatch& b)
@@ -68,7 +68,7 @@ public:
 
   // Constructors/Destructors--------------------------------------------------
   NViewMatches();
-  NViewMatches(istream& s);
+  NViewMatches(vcl_istream& s);
   NViewMatches(const char* filename);
   NViewMatches(int nviews, int min_overlap = 2);
   ~NViewMatches();
@@ -79,10 +79,10 @@ public:
   // Operations----------------------------------------------------------------
   int nviews() const { return _nviews; }
 
-  bool load(istream&);
+  bool load(vcl_istream&);
   bool load(const char* filename);
 
-  bool save(ostream&);
+  bool save(vcl_ostream&);
   bool save(const char* filename);
 
   void clear();

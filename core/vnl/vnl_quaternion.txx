@@ -243,5 +243,5 @@ vnl_vector<T> vnl_quaternion<T>::rotate (const vnl_vector<T>& v) const {
 #undef VNL_QUATERNION_INSTANTIATE
 #define VNL_QUATERNION_INSTANTIATE(T) \
 template class vnl_quaternion<T >;\
-VCL_INSTANTIATE_INLINE(ostream& operator<< (ostream&, const vnl_quaternion<T >&));
+VCL_INSTANTIATE_INLINE(vcl_ostream& operator<< (vcl_ostream&, const vnl_quaternion<T >&));
 

@@ -18,21 +18,21 @@
 //--------------------------------------------------------------------------------
 
 // SGI needs??
-void vnl_read_bytes(istream &s, void *p, unsigned bytes) {
+void vnl_read_bytes(vcl_istream &s, void *p, unsigned bytes) {
   s.read((char *)p, bytes);
 }
 
 VCL_DEFINE_SPECIALIZATION
-void vnl_matlab_read_data(istream &s, float *p, unsigned n)
+void vnl_matlab_read_data(vcl_istream &s, float *p, unsigned n)
 { ::vnl_read_bytes(s, p, n*sizeof(*p)); }
 
 VCL_DEFINE_SPECIALIZATION
-void vnl_matlab_read_data(istream &s, double *p, unsigned n)
+void vnl_matlab_read_data(vcl_istream &s, double *p, unsigned n)
 { ::vnl_read_bytes(s, p, n*sizeof(*p)); }
 
 #define implement_read_complex_data(T) \
 VCL_DEFINE_SPECIALIZATION \
-void vnl_matlab_read_data(istream &s, vnl_complex<T > *ptr, unsigned n) { \
+void vnl_matlab_read_data(vcl_istream &s, vnl_complex<T > *ptr, unsigned n) { \
   T *re = vnl_c_vector<T >::allocate_T(n); \
   T *im = vnl_c_vector<T >::allocate_T(n); \
   ::vnl_read_bytes(s, re, n*sizeof(T)); \
@@ -56,7 +56,7 @@ implement_read_complex_data(double)
 
 //--------------------------------------------------------------------------------
 
-vnl_matlab_readhdr::vnl_matlab_readhdr(istream &s_) : s(s_), varname(0), data_read(false) {
+vnl_matlab_readhdr::vnl_matlab_readhdr(vcl_istream &s_) : s(s_), varname(0), data_read(false) {
   read_hdr();
 }
 
@@ -173,7 +173,7 @@ fsm_define_methods(vnl_double_complex);
 #include <vnl/vnl_matrix.h>
 
 template <class T> 
-bool vnl_matlab_read_or_die(istream &s, 
+bool vnl_matlab_read_or_die(vcl_istream &s, 
 			    vnl_vector<T> &v,
 			    char const *name VCL_DEFAULT_VALUE(0)) 
 {
@@ -192,7 +192,7 @@ bool vnl_matlab_read_or_die(istream &s,
 }
   
 template <class T> 
-bool vnl_matlab_read_or_die(istream &s, 
+bool vnl_matlab_read_or_die(vcl_istream &s, 
 			    vnl_matrix<T> &M, 
 			    char const *name VCL_DEFAULT_VALUE(0))
 {
@@ -211,8 +211,8 @@ bool vnl_matlab_read_or_die(istream &s,
 }
 
 #define inst(T) \
-template bool vnl_matlab_read_or_die(istream &, vnl_vector<T> &, char const *); \
-template bool vnl_matlab_read_or_die(istream &, vnl_matrix<T> &, char const *); 
+template bool vnl_matlab_read_or_die(vcl_istream &, vnl_vector<T> &, char const *); \
+template bool vnl_matlab_read_or_die(vcl_istream &, vnl_matrix<T> &, char const *); 
 
 inst(double);
 inst(float);

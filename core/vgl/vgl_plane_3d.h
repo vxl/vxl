@@ -104,7 +104,7 @@ protected:
 // stream operators 
 
 template <class Type>
-inline ostream&  operator<<(ostream& s, const vgl_plane_3d<Type>& p) {
+inline vcl_ostream&  operator<<(vcl_ostream& s, const vgl_plane_3d<Type>& p) {
   return s << " <vgl_plane_3d "
            << p.data_[0] << " x + "
            << p.data_[1] << " y + "
@@ -113,7 +113,7 @@ inline ostream&  operator<<(ostream& s, const vgl_plane_3d<Type>& p) {
 }
 
 template <class Type>
-istream&  operator>>(istream& is, vgl_plane_3d<Type>& p) {
+vcl_istream&  operator>>(vcl_istream& is, vgl_plane_3d<Type>& p) {
   return is >> p.data_[0] >> p.data_[1] >> p.data_[2] >> p.data_[3];
 }
 

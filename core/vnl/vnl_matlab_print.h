@@ -40,35 +40,35 @@ void vnl_matlab_print_scalar(T const &v,
 
 //: print a 1D array.
 template <class T>
-ostream &vnl_matlab_print(ostream &, 
+vcl_ostream &vnl_matlab_print(vcl_ostream &, 
 			  T const *array,
 			  unsigned length,
 			  vnl_matlab_print_format =vnl_matlab_print_format_default);
 
 //: print a 2D array.
 template <class T>
-ostream &vnl_matlab_print(ostream &, 
+vcl_ostream &vnl_matlab_print(vcl_ostream &, 
 			  T const * const *array,
 			  unsigned rows, unsigned cols,
 			  vnl_matlab_print_format =vnl_matlab_print_format_default);
 
 //: print a vnl_diagonal_matrix<>.
 template <class T>
-ostream &vnl_matlab_print(ostream &, 
+vcl_ostream &vnl_matlab_print(vcl_ostream &, 
 			  vnl_diag_matrix<T> const &, 
 			  char const *variable_name =0,
 			  vnl_matlab_print_format =vnl_matlab_print_format_default);
 
 //: print a vnl_matrix<>.
 template <class T>
-ostream &vnl_matlab_print(ostream &, 
+vcl_ostream &vnl_matlab_print(vcl_ostream &, 
 			  vnl_matrix<T> const &, 
 			  char const *variable_name =0,
 			  vnl_matlab_print_format =vnl_matlab_print_format_default);
 
 //: print a vnl_vector<>.
 template <class T>
-ostream &vnl_matlab_print(ostream &, 
+vcl_ostream &vnl_matlab_print(vcl_ostream &, 
 			  vnl_vector<T> const &, 
 			  char const *variable_name =0,
 			  vnl_matlab_print_format =vnl_matlab_print_format_default);

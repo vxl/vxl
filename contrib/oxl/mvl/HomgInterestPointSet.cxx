@@ -74,7 +74,7 @@ HomgInterestPointSet::HomgInterestPointSet(const HomgInterestPointSet& that)
   else
     _data = new HomgInterestPointSetData();
 
-  cerr << "HomgInterestPointSet::copy ctor: size " << n << endl;
+  vcl_cerr << "HomgInterestPointSet::copy ctor: size " << n << vcl_endl;
 
   for (unsigned i = 0; i < n; ++i)
     (*_data)[i] = (*that._data)[i];
@@ -201,7 +201,7 @@ float HomgInterestPointSet::get_mean_intensity(int i) const
   assert(i >= 0 && i < int(_data->size()));
   float v = (*_data)[i]._mean_intensity;
   if (v == 0.0F) {
-    cerr << "HomgInterestPointSet: WARNING mean_intensity["<<i<<"] = 0\n";
+    vcl_cerr << "HomgInterestPointSet: WARNING mean_intensity["<<i<<"] = 0\n";
   }
   return v;
 }
@@ -215,16 +215,16 @@ float HomgInterestPointSet::get_mean_intensity(int i) const
 // homogeneous form.
 bool HomgInterestPointSet::read(const char* filename, const HomgMetric& c)
 {
-  ifstream f(filename);
+  vcl_ifstream f(filename);
   if (!f.good()) {
-    cerr << "HomgInterestPointSet::read() -- Failed to open \"" << filename << "\"\n";
+    vcl_cerr << "HomgInterestPointSet::read() -- Failed to open \"" << filename << "\"\n";
     return false;
   }
 
   return read(f, c);
 }
 
-bool HomgInterestPointSet::read(istream& f, const ImageMetric* c)
+bool HomgInterestPointSet::read(vcl_istream& f, const ImageMetric* c)
 {
   clear();
 
@@ -251,7 +251,7 @@ bool HomgInterestPointSet::read(const char* filename, vil_image const& src, cons
     return false;
 
 #if 1
-  cerr << "HomgInterestPointSet::read() not implemented in any sense of the word\n";
+  vcl_cerr << "HomgInterestPointSet::read() not implemented in any sense of the word\n";
 #else
   //cerr << "HomgInterestPointSet: Computing mean intensities\n";
   vil_memory_image_of<unsigned char> imbuf(src);
@@ -271,16 +271,16 @@ bool HomgInterestPointSet::read(const char* filename, vil_image const& src, cons
 // -- Save a corner set as a simple ASCII file of x y pairs.
 bool HomgInterestPointSet::write(const char* filename) const
 {
-  ofstream fout(filename);
+  vcl_ofstream fout(filename);
   if (!fout.good()) {
-    cerr << "HomgInterestPointSet::write() -- Failed to open \"" << filename << "\"\n";
+    vcl_cerr << "HomgInterestPointSet::write() -- Failed to open \"" << filename << "\"\n";
     return false;
   }
-  cerr << "HomgInterestPointSet: Saving corners to \"" << filename << "\"\n";
+  vcl_cerr << "HomgInterestPointSet: Saving corners to \"" << filename << "\"\n";
   return write(fout, get_conditioner()); 
 }
 
-bool HomgInterestPointSet::write(ostream& f, ImageMetric const*) const
+bool HomgInterestPointSet::write(vcl_ostream& f, ImageMetric const*) const
 {
   for (unsigned i=0; i < size(); i++) {
     const vnl_double_2& p = get_2d(i);

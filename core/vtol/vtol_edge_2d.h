@@ -239,8 +239,8 @@ public:
  
   virtual void compute_bounding_box(void); // A local implementation
 
-  virtual void print(ostream &strm=cout) const;
-  virtual void describe(ostream &strm=cout,
+  virtual void print(vcl_ostream &strm=vcl_cout) const;
+  virtual void describe(vcl_ostream &strm=vcl_cout,
                         int blanking=0) const;
 };
 #endif

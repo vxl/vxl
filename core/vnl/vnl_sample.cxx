@@ -12,7 +12,7 @@
 #if VXL_STDLIB_HAS_DRAND48
 // On SunPro 5.0, <cstdlib> does not
 // declare drand48() but <stdlib.h> does.
-# include <stdlib.h>
+# include <stdlib.h> // dont_vxl_filter
 #endif
 
 // -- return a random number uniformly drawn on [a, b)

@@ -62,7 +62,7 @@ void ImageWarp<PixelType>::gapfill(vil_memory_image_of<PixelType>& out, int ngap
   int minnz = 4;
   while (ngaps > 0) {
     while (1) {
-      cerr << "Gapfilling " << ngaps << " pixels\n";
+      vcl_cerr << "Gapfilling " << ngaps << " pixels\n";
       int old_ngaps = ngaps;
       for(int oy = 0; oy < h; ++oy) 
 	for(int ox = 0; ox < w; ++ox)

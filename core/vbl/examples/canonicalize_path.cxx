@@ -7,7 +7,7 @@
 int main(int argc, char **argv)
 {
   for (int i=1; i<argc; ++i)
-    cout << '\'' << argv[i] << "\' => \'" << vbl_canonical_path(argv[i]) << '\'' << endl;
+    vcl_cout << '\'' << argv[i] << "\' => \'" << vbl_canonical_path(argv[i]) << '\'' << vcl_endl;
 
   return 0;
 }

@@ -43,10 +43,10 @@ HMatrix1DCompute::compute_cool_homg(const vcl_vector<HomgPoint1D> &,
 				    const vcl_vector<HomgPoint1D> &,
 				    HMatrix1D *) 
 {
-  cerr << endl;
-  cerr << "HMatrix1DCompute::compute_cool_homg() :" << endl;
-  cerr << "This is a virtual method which should have been" << endl;
-  cerr << "overridden by a class derived from HMatrix1DCompute." << endl;
+  vcl_cerr << vcl_endl;
+  vcl_cerr << "HMatrix1DCompute::compute_cool_homg() :" << vcl_endl;
+  vcl_cerr << "This is a virtual method which should have been" << vcl_endl;
+  vcl_cerr << "overridden by a class derived from HMatrix1DCompute." << vcl_endl;
   abort();
   return false;
 }

@@ -78,7 +78,7 @@ void PMatrixDecompCR::compute(const vnl_matrix<double>& p, bool scale_C)
   if (((C * Po - p).fro_norm() > 1e-4) || 
       (C(0,0) < 0) || 
       (C(2,2) < 0)) {
-    cerr << "PMatrixDecompCR: AIEEE!\n";
+    vcl_cerr << "PMatrixDecompCR: AIEEE!\n";
     MATLABPRINT(p);
     MATLABPRINT((vnl_matrix<double> const&/*2.7*/)C);
     MATLABPRINT((vnl_matrix<double> const&/*2.7*/)Po);

@@ -49,10 +49,10 @@ public:
   HomgPoint2D get_unitized() const;
 
   // Utility Methods---------------------------------------------------------
-  static HomgPoint2D read(istream&, bool is_homogeneous = false);
+  static HomgPoint2D read(vcl_istream&, bool is_homogeneous = false);
 };
 
-istream& operator>>(istream& is, HomgPoint2D& p);
-ostream& operator<<(ostream& s, const HomgPoint2D& );
+vcl_istream& operator>>(vcl_istream& is, HomgPoint2D& p);
+vcl_ostream& operator<<(vcl_ostream& s, const HomgPoint2D& );
 
 #endif // _HomgPoint2D_h

@@ -23,7 +23,7 @@ struct vil_bmp_core_header
   vil_bmp_core_header();
   void read(vil_stream *);
   void write(vil_stream *) const;
-  void print(ostream &) const;
+  void print(vcl_ostream &) const;
 };
 
 #endif // vil_bmp_core_header_h_

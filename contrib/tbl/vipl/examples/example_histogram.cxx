@@ -36,7 +36,7 @@ typedef int ubyte; // this is a hack!!!  See the Description.
 
 int
 main(int argc, char** argv) {
-  if (argc < 2) { cerr << "Syntax: example_histogram file_in\n"; return 1; }
+  if (argc < 2) { vcl_cerr << "Syntax: example_histogram file_in\n"; return 1; }
 
   // The input image:
   vil_image in = vil_load(argv[1]);
@@ -45,7 +45,7 @@ main(int argc, char** argv) {
   section<int,2> dst(1,256);
 
   // set the input image:
-  if (vil_pixel_type(in) != VIL_BYTE) { cerr << "Please use a ubyte image as input\n"; return 2; }
+  if (vil_pixel_type(in) != VIL_BYTE) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
   in.get_section(src.buffer,0,0,in.width(),in.height());
 
   // The filter:
@@ -56,7 +56,7 @@ main(int argc, char** argv) {
 
   // Write output:
   {for (int i=0; i<256; ++i) if (src.buffer[i] != 0)
-     cout << i << ": " << int(src.buffer[i]) << endl;
+     vcl_cout << i << ": " << int(src.buffer[i]) << vcl_endl;
   }
 
   return 0;

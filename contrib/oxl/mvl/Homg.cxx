@@ -5,7 +5,7 @@
 #include "Homg.h"
 #include <vcl_cmath.h>
 #ifdef VCL_SUNPRO_CC_50
-# include <math.h> // no HUGE_VAL in <cmath>
+# include <math.h> // dont_vxl_filter: no HUGE_VAL in <cmath>
 #endif
 
 double Homg::infinity = HUGE_VAL;

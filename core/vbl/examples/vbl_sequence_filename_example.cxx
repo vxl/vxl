@@ -9,7 +9,7 @@ int main (int argc, char** argv)
     
     // Print out all the files that are specified by that pattern.
     for(int i = 0; i < map.get_nviews(); ++i) {
-      cout << map.name(i) << endl;
+      vcl_cout << map.name(i) << vcl_endl;
     }
     
   } else {
@@ -25,10 +25,10 @@ int main (int argc, char** argv)
     }
     {
       vbl_sequence_filename_map map("im.###,:5:");
-      cerr << map.name(10) << endl;
-      cerr << map.pair_name(10,11) << endl;
-      cerr << map.triplet_name(10,11,12) << endl;
-      cerr << map.image_name(10) << endl;
+      vcl_cerr << map.name(10) << vcl_endl;
+      vcl_cerr << map.pair_name(10,11) << vcl_endl;
+      vcl_cerr << map.triplet_name(10,11,12) << vcl_endl;
+      vcl_cerr << map.image_name(10) << vcl_endl;
     }
   }
 }

@@ -129,7 +129,7 @@ int vnl_lsqr::minimize(vnl_vector<double>& result)
   return 0; // return value not used
 }
 
-void vnl_lsqr::diagnose_outcome(ostream& os) const
+void vnl_lsqr::diagnose_outcome(vcl_ostream& os) const
 {
   translate_return_code(os, return_code_);
   os << __FILE__ " : residual norm estimate = " << resid_norm_estimate_ << vcl_endl;
@@ -138,7 +138,7 @@ void vnl_lsqr::diagnose_outcome(ostream& os) const
   os << __FILE__ " : iterations             = " << num_iter_ << vcl_endl;
 }
 
-void vnl_lsqr::translate_return_code(ostream& os, int rc)
+void vnl_lsqr::translate_return_code(vcl_ostream& os, int rc)
 {
   char* vnl_lsqr_reasons[] = {
    "x = 0  is the exact solution. No iterations were performed.",

@@ -58,7 +58,7 @@ void HomgLine2D::get_2_points_on_line(HomgPoint2D* p1, HomgPoint2D* p2) const
 //-----------------------------------------------------------------------------
 //
 // -- Print to ostream in the format "<HomgLine2D x y w>"
-ostream& operator<<(ostream& s, const HomgLine2D& p)
+vcl_ostream& operator<<(vcl_ostream& s, const HomgLine2D& p)
 {
   return s << "<HomgLine2D " << p.get_vector() << ">";
 }

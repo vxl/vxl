@@ -88,7 +88,7 @@ void vbl_array_2d<T>::destroy()
 
 //
 template<class T> 
-ostream& operator<< (ostream &os, const vbl_array_2d<T> &array)
+vcl_ostream& operator<< (vcl_ostream &os, const vbl_array_2d<T> &array)
 {
   for( int i=0; i< array.rows(); i++)
     {
@@ -108,4 +108,4 @@ ostream& operator<< (ostream &os, const vbl_array_2d<T> &array)
 #undef VBL_ARRAY_2D_INSTANTIATE
 #define VBL_ARRAY_2D_INSTANTIATE(type) \
 template class vbl_array_2d<type >;\
-template ostream& operator<< (ostream& , const vbl_array_2d<type >& );
+template vcl_ostream& operator<< (vcl_ostream& , const vbl_array_2d<type >& );

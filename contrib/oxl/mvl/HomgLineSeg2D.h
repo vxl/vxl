@@ -50,7 +50,7 @@ private:
   HomgPoint2D _point2;
 };
 
-ostream& operator<<(ostream& s, const HomgLineSeg2D& );
+vcl_ostream& operator<<(vcl_ostream& s, const HomgLineSeg2D& );
 
 //--------------------------------------------------------------
 //

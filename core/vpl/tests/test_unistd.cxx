@@ -2,7 +2,7 @@
 
 #include <vpl/vpl_unistd.h>
 
-#define Assert(x) do { if (x) cerr << "test PASSED\n"; else cerr << "test FAILED [" #x "]\n"; } while (0)
+#define Assert(x) do { if (x) vcl_cerr << "test PASSED\n"; else vcl_cerr << "test FAILED [" #x "]\n"; } while (0)
 
 
 int main(int, char **)
@@ -11,18 +11,18 @@ int main(int, char **)
   vpl_chdir("/tmp/vpltest");
 
   {
-    ofstream f("file");
+    vcl_ofstream f("file");
     f << 1234;
   }
   {
-    ifstream f("/tmp/vpltest/file");
+    vcl_ifstream f("/tmp/vpltest/file");
     int s;
     f >> s;
     Assert(s == 1234);
   }
   vpl_unlink("file");
   {
-    ifstream f("/tmp/vpltest/file");
+    vcl_ifstream f("/tmp/vpltest/file");
     Assert(!f.good());
   }
 

@@ -31,7 +31,7 @@ public:
   // Constructors/Initializers/Destructors----------------------------------
 
   FMatrix();
-  FMatrix(istream& f);
+  FMatrix(vcl_istream& f);
   FMatrix(const double *f_matrix);
   FMatrix(const vnl_matrix<double>& f_matrix);
   FMatrix(const PMatrix& P1, const PMatrix& P2);
@@ -40,7 +40,7 @@ public:
   virtual ~FMatrix();
 
   static FMatrix read(char const* filename);
-  static FMatrix read(istream& s);
+  static FMatrix read(vcl_istream& s);
 
   // Operations------------------------------------------------------------
 
@@ -88,10 +88,10 @@ public:
   bool get_rank2_flag (void) const;
   void set_rank2_flag (bool rank2_flag);
 
-friend ostream& operator<<(ostream& s, const FMatrix& F);
-friend istream& operator>>(istream& s, FMatrix& F);
+friend vcl_ostream& operator<<(vcl_ostream& s, const FMatrix& F);
+friend vcl_istream& operator>>(vcl_istream& s, FMatrix& F);
 
-  bool read_ascii(istream& f);
+  bool read_ascii(vcl_istream& f);
 
   // INTERNALS---------------------------------------------------------------
 

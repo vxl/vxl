@@ -114,13 +114,13 @@ protected:
 //: stream operators
 
 template <class Type>
-ostream&  operator<<(ostream& s, const vgl_line_2d<Type>& p) {
+vcl_ostream&  operator<<(vcl_ostream& s, const vgl_line_2d<Type>& p) {
   return s << " <vgl_line_2d " << p->data_[0] << " x + " << p->data_[1]
            << " y + " << p->data_[2] << " = 0>";
 }
 
 template <class Type>
-istream&  operator>>(istream& is,  vgl_line_2d<Type>& p) {
+vcl_istream&  operator>>(vcl_istream& is,  vgl_line_2d<Type>& p) {
   return is >> p->data_[0] >> p->data_[1] >> p->data_[2];
 }
 

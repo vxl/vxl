@@ -237,15 +237,15 @@ vtol_vertex_2d::valid_superior_type(const vtol_topology_object_2d &superior) con
  *    Print Functions
  */
 // -- This method outputs a simple text representation of the vertex including its address in memory.
-void vtol_vertex_2d::print(ostream &strm) const
+void vtol_vertex_2d::print(vcl_ostream &strm) const
 {
   strm<<"<vtol_vertex_2d "<<x()<<","<<y()<<","<<(void *)this<<"> with id ";
-  strm<<get_id()<<endl;
+  strm<<get_id()<<vcl_endl;
 }
 
 
 // -- This method outputs a detailed description of the vertex including the inferiors and superiors.
-void vtol_vertex_2d::describe(ostream &strm,
+void vtol_vertex_2d::describe(vcl_ostream &strm,
                               int blanking) const
 {
   for (int i=0; i<blanking; ++i) strm << ' ';
@@ -308,7 +308,7 @@ vtol_edge_2d *vtol_vertex_2d::new_edge(vtol_vertex_2d &other)
 double vtol_vertex_2d::distance_from(const vnl_double_2 &v)
 {
   //  return _point->distance_from(v);
-  cerr << "vtol_vertex_2d::distance_from() not implemented yet\n";
+  vcl_cerr << "vtol_vertex_2d::distance_from() not implemented yet\n";
   return -1; // TO DO
 }
 
@@ -316,7 +316,7 @@ double vtol_vertex_2d::distance_from(const vnl_double_2 &v)
 double vtol_vertex_2d::euclidean_distance(vtol_vertex_2d& v)
 {
   //  return _point->euclidean_distance(*v.get_point());
-  cerr << "vtol_vertex_2d::euclidean_distance() not yet implemented\n";
+  vcl_cerr << "vtol_vertex_2d::euclidean_distance() not yet implemented\n";
   return -1; // TO DO
 }
 
@@ -362,7 +362,7 @@ for (face_list_2d::iterator i = faces.begin();
 vtol_vertex_2d *vtol_vertex_2d::vertex_diff(vtol_vertex_2d& diffvert)
 {
   // return new vtol_vertex_2d((*_point) - (*(diffvert._point)));
-  cerr << "vtol_vertex_2d::vertex_diff() not implemented yet\n";
+  vcl_cerr << "vtol_vertex_2d::vertex_diff() not implemented yet\n";
   return 0; // TO DO
 }
 
@@ -446,7 +446,7 @@ void vtol_vertex_2d::explore_vertex(vertex_list_2d &verts)
         vv=e->v2();
       else
         {
-          cerr << "Explorevtol_vertex_2d: shouldn't get this\n";
+          vcl_cerr << "Explorevtol_vertex_2d: shouldn't get this\n";
           continue;
         }
       

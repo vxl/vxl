@@ -67,7 +67,7 @@ void vil_convolve_1d_x(vil_convolve_signal_1d<I1 const> const &kernel,
 	case vil_convolve_trim:
 	  break;
 	default: 
-	  abort();
+	  vcl_abort();
 	  break;
 	}
 	
@@ -93,7 +93,7 @@ void vil_convolve_1d_x(vil_convolve_signal_1d<I1 const> const &kernel,
 	case vil_convolve_trim:
 	  break;
 	default:
-	  abort();
+	  vcl_abort();
 	  break;
 	}
 	

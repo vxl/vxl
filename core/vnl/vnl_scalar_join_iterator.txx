@@ -11,7 +11,7 @@
 #define VNL_SCALAR_JOIN_ITERATOR_INSTANTIATE(T)\
 template class vnl_scalar_join_iterator_indexed_pair<T >;\
 template class vnl_scalar_join_iterator<T >; \
-template ostream& operator<<(ostream& s, const vnl_scalar_join_iterator_indexed_pair<T>& p);\
+template vcl_ostream& operator<<(vcl_ostream& s, const vnl_scalar_join_iterator_indexed_pair<T>& p);\
 VCL_LIST_INSTANTIATE(vnl_scalar_join_iterator_indexed_pair<T>)
 
 #include <vcl_cassert.h>
@@ -27,7 +27,7 @@ template <class T>
 bool vnl_scalar_join_iterator_indexed_pair<T>::operator <  (const vnl_scalar_join_iterator_indexed_pair<T>& that) const { return (*object) < (*that.object); }
 
 template <class T>
-ostream& operator<<(ostream& s, const vnl_scalar_join_iterator_indexed_pair<T>& p)
+vcl_ostream& operator<<(vcl_ostream& s, const vnl_scalar_join_iterator_indexed_pair<T>& p)
 {
   return s << p.original_index << " " << *(p.object) << vcl_endl;
 }

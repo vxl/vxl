@@ -25,7 +25,7 @@
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vcl_iostream.h>
-#include <math.h> // for sqrt()
+#include <vcl_cmath.h> // for sqrt()
 
 typedef unsigned char ubyte;
 float square(float const& x) { return x*x; }
@@ -34,11 +34,11 @@ float squareroot(float const& x) { return (float)sqrt(double(x)); }
 
 int
 main(int argc, char** argv) {
-  if (argc < 3) { cerr << "Syntax: example_vipl_moment file_in file_out\n"; return 1; }
+  if (argc < 3) { vcl_cerr << "Syntax: example_vipl_moment file_in file_out\n"; return 1; }
 
   // The input image:
   vil_image in = vil_load(argv[1]);
-  if (vil_pixel_type(in) != VIL_BYTE) { cerr << "Please use a ubyte image as input\n"; return 2; }
+  if (vil_pixel_type(in) != VIL_BYTE) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
 
   // The output image:
   vil_memory_image_of<float> out (in);
@@ -83,7 +83,7 @@ main(int argc, char** argv) {
   op.put_out_data_ptr(&pgm);
   op.filter();
   vil_save(pgm, argv[2], "pnm");
-  cout << "Written image of type PGM to " << argv[2] << endl;
+  vcl_cout << "Written image of type PGM to " << argv[2] << vcl_endl;
 
   return 0;
 }

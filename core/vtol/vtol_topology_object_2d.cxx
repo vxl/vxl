@@ -478,23 +478,23 @@ void vtol_topology_object_2d::blocks(block_list_2d &new_list)
 
 
 // -- print the object
-void vtol_topology_object_2d::print(ostream &strm) const
+void vtol_topology_object_2d::print(vcl_ostream &strm) const
 {
-  strm<<"<vtol_topology_object_2d "<<(void *)this<<">"<<endl;
-  strm<<"number of inferiors "<<numinf()<<endl;
-  strm<<"number of superiors "<<numsup()<<endl;
+  strm<<"<vtol_topology_object_2d "<<(void *)this<<">"<<vcl_endl;
+  strm<<"number of inferiors "<<numinf()<<vcl_endl;
+  strm<<"number of superiors "<<numsup()<<vcl_endl;
 }
 
-void vtol_topology_object_2d::describe_inferiors(ostream &strm,
+void vtol_topology_object_2d::describe_inferiors(vcl_ostream &strm,
                                                  int blanking) const
 {
   vcl_vector<vtol_topology_object_2d_ref>::const_iterator i;
 
   for (int n=0; n<blanking; ++n) strm << ' ';
   if(_inferiors.size()==0)
-    strm<<"**INFERIORS:  Empty"<<endl;
+    strm<<"**INFERIORS:  Empty"<<vcl_endl;
   else
-    strm<<"**INFERIORS:"<<endl;
+    strm<<"**INFERIORS:"<<vcl_endl;
   
   for(i=_inferiors.begin();i!=_inferiors.end();++i) {
     for (int n=0; n<blanking; ++n) strm << ' ';
@@ -502,16 +502,16 @@ void vtol_topology_object_2d::describe_inferiors(ostream &strm,
   }
 }
 
-void vtol_topology_object_2d::describe_superiors(ostream &strm,
+void vtol_topology_object_2d::describe_superiors(vcl_ostream &strm,
                                                  int blanking) const
 {
   vcl_list<vtol_topology_object_2d_ref>::const_iterator i;
 
   for (int n=0; n<blanking; ++n) strm << ' ';
   if(_superiors.size()==0)
-    strm<<"**SUPERIORS:  Empty"<<endl;
+    strm<<"**SUPERIORS:  Empty"<<vcl_endl;
   else
-    strm<<"**SUPERIORS:"<<endl;
+    strm<<"**SUPERIORS:"<<vcl_endl;
   
   for(i=_superiors.begin();i!= _superiors.end();++i) {
     for (int n=0; n<blanking; ++n) strm << ' ';
@@ -519,7 +519,7 @@ void vtol_topology_object_2d::describe_superiors(ostream &strm,
   }
 }
 
-void vtol_topology_object_2d::describe(ostream &strm,
+void vtol_topology_object_2d::describe(vcl_ostream &strm,
                                        int blanking) const
 {
   describe_inferiors(strm,blanking);
@@ -535,7 +535,7 @@ void vtol_topology_object_2d::describe(ostream &strm,
 //---------------------------------------------------------------------------
 vcl_vector<vtol_vertex_2d *> *vtol_topology_object_2d::compute_vertices(void)
 {       
-  cout << "Compute vertices" << endl;
+  vcl_cout << "Compute vertices" << vcl_endl;
   return 0;
 }
 
@@ -546,7 +546,7 @@ vcl_vector<vtol_vertex_2d *> *vtol_topology_object_2d::compute_vertices(void)
 vcl_vector<vtol_zero_chain_2d *> *
 vtol_topology_object_2d::compute_zero_chains(void)
 {       
-  cout << "Compute zero_chains" << endl;
+  vcl_cout << "Compute zero_chains" << vcl_endl;
   return 0;
 }
 
@@ -556,7 +556,7 @@ vtol_topology_object_2d::compute_zero_chains(void)
 
 vcl_vector<vtol_edge_2d *> *vtol_topology_object_2d::compute_edges(void)
 {       
-  cout << "Compute edges" << endl;
+  vcl_cout << "Compute edges" << vcl_endl;
   return 0;
 }
 
@@ -566,7 +566,7 @@ vcl_vector<vtol_edge_2d *> *vtol_topology_object_2d::compute_edges(void)
 vcl_vector<vtol_one_chain_2d *> *
 vtol_topology_object_2d::compute_one_chains(void)
 {       
-  cout << "Compute one chains" << endl;
+  vcl_cout << "Compute one chains" << vcl_endl;
   return 0;
 }
 
@@ -575,7 +575,7 @@ vtol_topology_object_2d::compute_one_chains(void)
 //---------------------------------------------------------------------------
 vcl_vector<vtol_face_2d *> *vtol_topology_object_2d::compute_faces(void)
 {       
-  cout << "Compute faces" << endl;
+  vcl_cout << "Compute faces" << vcl_endl;
   return 0;
 }
 
@@ -585,7 +585,7 @@ vcl_vector<vtol_face_2d *> *vtol_topology_object_2d::compute_faces(void)
 vcl_vector<vtol_two_chain_2d *> *
 vtol_topology_object_2d::compute_two_chains(void)
 {       
-  cout << "Compute two chains" << endl;
+  vcl_cout << "Compute two chains" << vcl_endl;
   return 0;
 }
 
@@ -594,7 +594,7 @@ vtol_topology_object_2d::compute_two_chains(void)
 //---------------------------------------------------------------------------
 vcl_vector<vtol_block_2d *> *vtol_topology_object_2d::compute_blocks(void)
 {       
-  cout << "Compute blocks" << endl;
+  vcl_cout << "Compute blocks" << vcl_endl;
   return 0;
 }
 

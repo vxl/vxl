@@ -128,7 +128,7 @@ protected:
 // Stream operators
 //*****************************************************************************
 template <class Type>
-ostream &operator<<(ostream &s,
+vcl_ostream &operator<<(vcl_ostream &s,
                     const vgl_homg_point_3d<Type> &p)
 {
   return s << " <vgl_homg_point_3d ("
@@ -137,7 +137,7 @@ ostream &operator<<(ostream &s,
 }
 
 template <class Type>
-istream &operator>>(istream &is,
+vcl_istream &operator>>(vcl_istream &is,
                     vgl_homg_point_3d<Type> &p)
 {
   return is >> p.x() >> p.y() >> p.z() >> p.w();

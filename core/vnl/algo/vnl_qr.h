@@ -64,6 +64,6 @@ inline T vnl_qr_determinant(vnl_matrix<T> const& m)
 }
 
 template <class T>
-ostream& operator<<(ostream&, vnl_qr<T> const & qr);
+vcl_ostream& operator<<(vcl_ostream&, vnl_qr<T> const & qr);
 
 #endif // vnl_qr_h_

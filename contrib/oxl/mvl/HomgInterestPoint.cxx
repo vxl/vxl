@@ -65,7 +65,7 @@ HomgInterestPoint::~HomgInterestPoint()
 {
 }
 
-ostream& operator<<(ostream& s, const HomgInterestPoint&) 
+vcl_ostream& operator<<(vcl_ostream& s, const HomgInterestPoint&) 
 {
   return s;
 }

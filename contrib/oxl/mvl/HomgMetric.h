@@ -89,7 +89,7 @@ public:
   double image_to_homg_distance_sqr(double image_distance) const;
   double homg_to_image_distance_sqr(double homg_distance) const;
 
-  ostream& print(ostream&) const;
+  vcl_ostream& print(vcl_ostream&) const;
 
   operator const ImageMetric* () const { return _metric; }
 
@@ -114,6 +114,6 @@ private:
   // Helpers-------------------------------------------------------------------
 };
 
-inline ostream& operator<<(ostream& s, const HomgMetric& h) { return h.print(s); }
+inline vcl_ostream& operator<<(vcl_ostream& s, const HomgMetric& h) { return h.print(s); }
 
 #endif // HomgMetric_h_

@@ -59,6 +59,6 @@ private:
   HomgPoint3D point_infinite_;
 };
 
-ostream& operator<<(ostream& s, const HomgLine3D& );
+vcl_ostream& operator<<(vcl_ostream& s, const HomgLine3D& );
 
 #endif // _HomgLine3D_h

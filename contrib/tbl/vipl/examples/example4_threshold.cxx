@@ -26,11 +26,11 @@ typedef vil_image img_type;
 
 int
 main(int argc, char** argv) {
-  if (argc < 3) { cerr << "Syntax: example4_threshold file_in file_out [threshold]\n"; return 1; }
+  if (argc < 3) { vcl_cerr << "Syntax: example4_threshold file_in file_out [threshold]\n"; return 1; }
 
   // The input image:
   vil_image in = vil_load(argv[1]);
-  if (vil_pixel_type(in) != VIL_BYTE) { cerr << "Please use a ubyte image as input\n"; return 2; }
+  if (vil_pixel_type(in) != VIL_BYTE) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
 
   // The output image:
   vil_memory_image_of<ubyte> out(in);
@@ -59,7 +59,7 @@ main(int argc, char** argv) {
   src.get_section(buf,0,0,xs,ys);
   out.put_section(buf,0,0,xs,ys);
   vil_save(out, argv[2], "pnm");
-  cout << "Written image of type PGM to " << argv[2] << endl;
+  vcl_cout << "Written image of type PGM to " << argv[2] << vcl_endl;
 
   delete[] buf;
   return 0;

@@ -53,7 +53,7 @@ bool vbl_sparse_array<T>::put(unsigned i, const T& t)
 
 // -- Print the Array to a stream in "(i): value" format.
 template <class T>
-ostream& vbl_sparse_array<T>::print(ostream& out) const
+vcl_ostream& vbl_sparse_array<T>::print(vcl_ostream& out) const
 {
   for(const_iterator p = begin(); p != end(); ++p)
     out << "(" << (*p).first << "): " << (*p).second << vcl_endl;
@@ -63,7 +63,7 @@ ostream& vbl_sparse_array<T>::print(ostream& out) const
 #undef VBL_SPARSE_ARRAY_INSTANTIATE
 #define VBL_SPARSE_ARRAY_INSTANTIATE(T)\
 template class vbl_sparse_array<T>; \
-VCL_INSTANTIATE_INLINE(ostream& operator << (ostream&, const vbl_sparse_array<T> &))
+VCL_INSTANTIATE_INLINE(vcl_ostream& operator << (vcl_ostream&, const vbl_sparse_array<T> &))
 
 
 #ifdef MAIN

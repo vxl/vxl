@@ -89,7 +89,7 @@ public:
   inline void set_z (Type pz) { data_[2] = pz;}
 
 
-  ostream& write(ostream& s) const {
+  vcl_ostream& write(vcl_ostream& s) const {
     return s << x() << " " << y() << " " << z();
   }
   
@@ -104,13 +104,13 @@ protected:
 // stream operators 
 
 template <class Type>
-ostream&  operator<<(ostream& s, const vgl_point_3d<Type>& p) {
+vcl_ostream&  operator<<(vcl_ostream& s, const vgl_point_3d<Type>& p) {
   return s << "<vgl_point_3d "
            << p.x() << "," << p.y() << "," << p.z() << ">";
 }
 
 template <class Type>
-istream&  operator>>(istream& is,  vgl_point_3d<Type>& p) {
+vcl_istream&  operator>>(vcl_istream& is,  vgl_point_3d<Type>& p) {
   return is >> p.x() >> p.y() >> p.z(); 
 }
 

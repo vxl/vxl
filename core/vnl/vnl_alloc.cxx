@@ -30,7 +30,7 @@ vnl_alloc::chunk_alloc(vcl_size_t size, int& nobjs)
       ((obj *)start_free) -> free_list_link = *my_free_list;
       *my_free_list = (obj *)start_free;
     }
-    start_free = (char*)malloc(bytes_to_get);
+    start_free = (char*)vcl_malloc(bytes_to_get);
     if (0 == start_free) {
       int i;
       obj *  * my_free_list, *p;
@@ -49,7 +49,7 @@ vnl_alloc::chunk_alloc(vcl_size_t size, int& nobjs)
 	  // right free vcl_list.
 	}
       }
-      start_free = (char*)malloc(bytes_to_get);
+      start_free = (char*)vcl_malloc(bytes_to_get);
       // This should either throw an
       // exception or remedy the situation.  Thus we assume it
       // succeeded.
@@ -101,12 +101,12 @@ vnl_alloc::reallocate(void *p,
   vcl_size_t copy_sz;
     
   if (old_sz > VNL_ALLOC_MAX_BYTES && new_sz > VNL_ALLOC_MAX_BYTES) {
-    return(realloc(p, new_sz));
+    return(vcl_realloc(p, new_sz));
   }
   if (ROUND_UP(old_sz) == ROUND_UP(new_sz)) return(p);
   result = allocate(new_sz);
   copy_sz = new_sz > old_sz? old_sz : new_sz;
-  memcpy(result, p, copy_sz);
+  vcl_memcpy(result, p, copy_sz);
   deallocate(p, old_sz);
   return(result);
 }

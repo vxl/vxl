@@ -20,7 +20,7 @@ vidl_movie::vidl_movie(vidl_clip_ref clip)
 {
   // Check validity of initialisation
   if (!clip_.empty())
-    cerr << "Bad inittialisation of the movie."<< endl;
+    vcl_cerr << "Bad inittialisation of the movie."<< vcl_endl;
 
   add_clip(clip);
 }
@@ -82,8 +82,8 @@ int vidl_movie::width() const
   for (; i!= clip_.end(); ++i)
     if ((*i)->width() != sizeX)
       {
-        cerr << "SizeX of the movie asked. But the different clips have different sizes." 
-             << endl;
+        vcl_cerr << "SizeX of the movie asked. But the different clips have different sizes." 
+             << vcl_endl;
         return 0;
       }
 
@@ -106,8 +106,8 @@ int vidl_movie::height() const
   for (; i!= clip_.end(); ++i)
     if ((*i)->height() != sizeY)
       {
-        cerr << "SizeY of the movie asked. But the different clips have different sizes." 
-             << endl;
+        vcl_cerr << "SizeY of the movie asked. But the different clips have different sizes." 
+             << vcl_endl;
         return 0;
       }
 

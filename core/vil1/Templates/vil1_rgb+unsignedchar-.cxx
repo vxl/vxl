@@ -18,7 +18,7 @@
 // }
 // #endif
 
-ostream& operator<<(ostream& s, const vil_rgb<unsigned char>& rgb)
+vcl_ostream& operator<<(vcl_ostream& s, const vil_rgb<unsigned char>& rgb)
 {
  return s << '[' << (int)rgb.r << ' ' << (int)rgb.g << ' ' << (int)rgb.b << ']';
 }

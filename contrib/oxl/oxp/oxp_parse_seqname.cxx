@@ -40,7 +40,7 @@ void oxp_parse_seqname::parse(char const* s)
     int last = re.start(0);
     filename = filename.substr(0,last);
 
-    vbl_printf(cerr, "oxp_parse_seqname: %s [%s:%s:%s]  -> ",
+    vbl_printf(vcl_cerr, "oxp_parse_seqname: %s [%s:%s:%s]  -> ",
 	   filename.c_str(),
 	   match_start.c_str(), match_step.c_str()+1, match_end.c_str());
 
@@ -54,10 +54,10 @@ void oxp_parse_seqname::parse(char const* s)
     if (match_end.length() > 0)
       end = atoi(match_end.c_str());
 
-    vbl_printf(cerr, "[%d:%d:%d]\n", start, step, end);
+    vbl_printf(vcl_cerr, "[%d:%d:%d]\n", start, step, end);
     
   } else if (strchr(s, ',')) {
-    vbl_printf(cerr, "oxp_parse_seqname: Warning: \"%s\" contains a comma, but didn't match my regexp.\n", s);
+    vbl_printf(vcl_cerr, "oxp_parse_seqname: Warning: \"%s\" contains a comma, but didn't match my regexp.\n", s);
   }
   
 }

@@ -25,7 +25,7 @@ typedef unsigned char ubyte;
 
 int
 main(int argc, char** argv) {
-  if (argc < 3) { cerr << "Syntax: example1_threshold file_in file_out [threshold]\n"; return 1; }
+  if (argc < 3) { vcl_cerr << "Syntax: example1_threshold file_in file_out [threshold]\n"; return 1; }
 
   // The input image:
   vil_image in = vil_load(argv[1]);
@@ -33,7 +33,7 @@ main(int argc, char** argv) {
   vil_image* src = &in;
 #ifndef NO_MEMORY_IMAGE // otherwise get_pixel() would be very slow!!
   vil_memory_image_of<ubyte> mem(in);
-  if (!mem) { cerr << "This is not a ubyte image\n"; return 3; }
+  if (!mem) { vcl_cerr << "This is not a ubyte image\n"; return 3; }
   src = &mem;
 #endif
 
@@ -52,6 +52,6 @@ main(int argc, char** argv) {
   op.filter();
 
   vil_save(out, argv[2], "pnm");
-  cout << "Written thresholded image of type PGM to " << argv[2] << endl;
+  vcl_cout << "Written thresholded image of type PGM to " << argv[2] << vcl_endl;
   return 0;
 }

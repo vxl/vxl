@@ -133,7 +133,7 @@ void vbl_array_3d<T>::fill(T const& value)
 #include <vcl_iostream.h>
 
 template <class T>
-ostream & operator<<(ostream &os,const vbl_array_3d<T> & A)
+vcl_ostream & operator<<(vcl_ostream &os,const vbl_array_3d<T> & A)
 {
   for (int i=0;i<A.get_row1_count();i++) {
     for (int j=0;j<A.get_row2_count();j++) {
@@ -150,7 +150,7 @@ ostream & operator<<(ostream &os,const vbl_array_3d<T> & A)
 }
 
 template <class T>
-istream & operator>>(istream &is,vbl_array_3d<T> & A)
+vcl_istream & operator>>(vcl_istream &is,vbl_array_3d<T> & A)
 {
   for (int i=0;i<A.get_row1_count();i++)
     for (int j=0;j<A.get_row2_count();j++)
@@ -166,5 +166,5 @@ istream & operator>>(istream &is,vbl_array_3d<T> & A)
 
 #undef VBL_ARRAY_3D_IO_INSTANTIATE
 #define VBL_ARRAY_3D_IO_INSTANTIATE(T) \
-template ostream & operator<<(ostream &,vbl_array_3d<T > const &); \
-template istream & operator>>(istream &,vbl_array_3d<T > &)
+template vcl_ostream & operator<<(vcl_ostream &,vbl_array_3d<T > const &); \
+template vcl_istream & operator>>(vcl_istream &,vbl_array_3d<T > &)

@@ -10,7 +10,7 @@
 #include <vcl_climits.h>
 #include <vcl_iostream.h>
 
-ostream& vil_image::print(ostream& s) const
+vcl_ostream& vil_image::print(vcl_ostream& s) const
 {
   s << "[vil_image: size " << width() << " x " << height();
   char const *fmt = file_format();

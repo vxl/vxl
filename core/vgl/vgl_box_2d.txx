@@ -209,7 +209,7 @@ void vgl_box_2d<Type>::set_centroid(vgl_point_2d<Type>& centroid)
 }
 
 template <class Type>
-ostream& vgl_box_2d<Type>::print(ostream& s) const
+vcl_ostream& vgl_box_2d<Type>::print(vcl_ostream& s) const
 {
   return s << "<vgl_box_2d "
 	   << min_pos_[0] << "," << min_pos_[1]
@@ -219,14 +219,14 @@ ostream& vgl_box_2d<Type>::print(ostream& s) const
 }
 
 template <class Type>
-ostream& vgl_box_2d<Type>::write(ostream& s) const
+vcl_ostream& vgl_box_2d<Type>::write(vcl_ostream& s) const
 {
   return s << min_pos_[0] << " " << min_pos_[1] << " "
 	   << max_pos_[0] << " " << max_pos_[1] << "\n";
 }
 
 template <class Type>
-istream& vgl_box_2d<Type>::read(istream& s)
+vcl_istream& vgl_box_2d<Type>::read(vcl_istream& s)
 {
   return s >> min_pos_[0] >> min_pos_[1]
 	   >> max_pos_[0] >> max_pos_[1];
@@ -258,6 +258,6 @@ vgl_box_2d<Type> intersect(vgl_box_2d<Type> const& a, vgl_box_2d<Type> const& b)
 #undef VGL_BOX_2D_INSTANTIATE
 #define VGL_BOX_2D_INSTANTIATE(Type)\
 template class vgl_box_2d<Type >;\
-template istream& operator>>(istream&, vgl_box_2d<Type >&);\
-template ostream& operator<<(ostream&, vgl_box_2d<Type > const&);\
+template vcl_istream& operator>>(vcl_istream&, vgl_box_2d<Type >&);\
+template vcl_ostream& operator<<(vcl_ostream&, vgl_box_2d<Type > const&);\
 template vgl_box_2d<Type > intersect(vgl_box_2d<Type > const&, vgl_box_2d<Type > const&);

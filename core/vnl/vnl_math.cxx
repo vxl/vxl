@@ -15,7 +15,7 @@
 # include <ieeefp.h>
 
 #elif VXL_MATH_HAS_FINITE
-# include <math.h>  // this is *not* supposed to be <cmath>
+# include <math.h>  // dont_vxl_filter: this is *not* supposed to be <cmath>
 
 #elif defined(SYSV) && !defined(hppa)
 // needed on platforms with finite() declared in strange places, e.g. on alpha
@@ -32,7 +32,7 @@ bool finite(double x)
 #endif
 
 #ifdef VCL_SUNPRO_CC_50
-# include <math.h> // no HUGE_VAL or isnan() in <cmath>
+# include <math.h> // dont_vxl_filter: no HUGE_VAL or isnan() in <cmath>
 #endif
 
 //--------------------------------------------------------------------------------

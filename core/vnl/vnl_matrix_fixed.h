@@ -72,12 +72,12 @@ public:
 
 #if defined(VCL_GCC_27)
 template <class T,int m,int n>
-inline ostream & operator<<(ostream &os,const vnl_matrix_fixed<T,m,n> &M)
+inline vcl_ostream & operator<<(vcl_ostream &os,const vnl_matrix_fixed<T,m,n> &M)
 {
   return os << static_cast<vnl_matrix<T> const &>(M);
 }
 template <class T,int m,int n>
-inline istream & operator>>(istream &is,vnl_matrix_fixed<T,m,n> &M)
+inline vcl_istream & operator>>(vcl_istream &is,vnl_matrix_fixed<T,m,n> &M)
 {
   return is >> static_cast<vnl_matrix<T>       &>(M);
 }

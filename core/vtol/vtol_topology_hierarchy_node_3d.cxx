@@ -38,7 +38,7 @@ vtol_topology_hierarchy_node_3d::link_inferior (vtol_topology_object_3d *parent,
 {
   if (child  == 0)
     {
-      cerr << "Attempt to link null inferior element\n";
+      vcl_cerr << "Attempt to link null inferior element\n";
       return false;
     }
 
@@ -63,7 +63,7 @@ vtol_topology_hierarchy_node_3d::link_superior (vtol_topology_object_3d *parent,
 {
   if (parent  == 0)
     {
-      cerr << "Attempt to link null superior element\n";
+      vcl_cerr << "Attempt to link null superior element\n";
       return false;
     }
 
@@ -91,7 +91,7 @@ vtol_topology_hierarchy_node_3d::link_superior_oneway( vtol_topology_object_3d *
 {
   if (superior == 0)
   {
-      cerr << "Attempt to link null superior element\n";
+      vcl_cerr << "Attempt to link null superior element\n";
       return false;
   }
 
@@ -117,7 +117,7 @@ vtol_topology_hierarchy_node_3d::link_inferior_oneway( vtol_topology_object_3d *
 {
   if (inferior == 0)
   {
-      cerr << "Attempt to link null inferior element\n";
+      vcl_cerr << "Attempt to link null inferior element\n";
       return false;
   }
 
@@ -264,7 +264,7 @@ vtol_topology_hierarchy_node_3d::unlink_all_inferiors_twoway( vtol_topology_obje
         if ( link )
 	  link->unlink_superior_simple( thisobj ); // remove up link
         else
-  	    cout << "Null value in inferior's list\n";
+  	    vcl_cout << "Null value in inferior's list\n";
     }
     _inferiors.clear();  // remove all down links
 }
@@ -290,7 +290,7 @@ vtol_topology_hierarchy_node_3d::unlink_all_superiors_twoway( vtol_topology_obje
         if ( link )
 	  link->unlink_inferior_simple( thisobj ); // remove down link
         else
-  	    cout << "Null value in inferior's list\n";
+  	    vcl_cout << "Null value in inferior's list\n";
     }
     _superiors.clear();  // remove all up links
 }
@@ -342,19 +342,19 @@ void vtol_topology_hierarchy_node_3d::remove(topology_list_3d &list,
 
 
 // -- print the node
-void vtol_topology_hierarchy_node_3d::print(ostream& strm) const
+void vtol_topology_hierarchy_node_3d::print(vcl_ostream& strm) const
 {
-  strm << "<vtol_topology_hierarchy_node_3d " << (void *)this << ">" << endl;
-  strm << "number of inferiors " << numinf() << endl;
-  strm << "number of superiors " << numsup() << endl;
+  strm << "<vtol_topology_hierarchy_node_3d " << (void *)this << ">" << vcl_endl;
+  strm << "number of inferiors " << numinf() << vcl_endl;
+  strm << "number of superiors " << numsup() << vcl_endl;
 }
 
-void vtol_topology_hierarchy_node_3d::describe_inferiors(ostream& strm,int blanking) const
+void vtol_topology_hierarchy_node_3d::describe_inferiors(vcl_ostream& strm,int blanking) const
 {
   for (int j=0; j<blanking; ++j) strm << ' ';
   if (_inferiors.size()==0)
-    strm << "**INFERIORS:  Empty" << endl;
-  else  strm << "**INFERIORS:" << endl;
+    strm << "**INFERIORS:  Empty" << vcl_endl;
+  else  strm << "**INFERIORS:" << vcl_endl;
 
   for (topology_list_3d::const_iterator ii=_inferiors.begin();ii!= _inferiors.end();++ii)
     {
@@ -364,12 +364,12 @@ void vtol_topology_hierarchy_node_3d::describe_inferiors(ostream& strm,int blank
 }
 
 
-void vtol_topology_hierarchy_node_3d::describe_superiors(ostream& strm,int blanking) const
+void vtol_topology_hierarchy_node_3d::describe_superiors(vcl_ostream& strm,int blanking) const
 {
   for (int j=0; j<blanking; ++j) strm << ' ';
   if (_superiors.size()==0)
-    strm << "**SUPERIORS:  Empty" << endl;
-  else  strm << "**SUPERIORS:" << endl;
+    strm << "**SUPERIORS:  Empty" << vcl_endl;
+  else  strm << "**SUPERIORS:" << vcl_endl;
 
   for (topology_list_3d::const_iterator ii=_superiors.begin();ii!= _superiors.end();++ii)
     {
@@ -378,7 +378,7 @@ void vtol_topology_hierarchy_node_3d::describe_superiors(ostream& strm,int blank
 }
 
 
-void vtol_topology_hierarchy_node_3d::describe(ostream& strm,int blanking) const
+void vtol_topology_hierarchy_node_3d::describe(vcl_ostream& strm,int blanking) const
 {
   describe_inferiors(strm, blanking);
   describe_superiors(strm, blanking);

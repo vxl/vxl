@@ -161,8 +161,8 @@ public:
   virtual bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
 
   //: Printing Functions
-  virtual void print(ostream &strm=cout) const;
-  virtual void describe(ostream &strm=cout,
+  virtual void print(vcl_ostream &strm=vcl_cout) const;
+  virtual void describe(vcl_ostream &strm=vcl_cout,
                         int blanking=0) const;
 };
 #endif

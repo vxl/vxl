@@ -61,7 +61,7 @@ public:
   vnl_real_npolynomial& operator*=(double P) { coeffs_ *= P; return *this; }
   vnl_real_npolynomial operator/(double P) const { return operator*(1.0/P); }
   vnl_real_npolynomial& operator/=(double P) { return operator*=(1.0/P); }
-  friend ostream& operator<<(ostream& , vnl_real_npolynomial const& );
+  friend vcl_ostream& operator<<(vcl_ostream& , vnl_real_npolynomial const& );
 
 private:
   void simplify();

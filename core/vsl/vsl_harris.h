@@ -45,7 +45,7 @@ public:
 
   void get_corners(vcl_vector<vcl_pair<float, float> > &) const;
   void get_corners(vcl_vector<float> &, vcl_vector<float> &) const;
-  void save_corners(ostream &stream) const;
+  void save_corners(vcl_ostream &stream) const;
   void save_corners(char const *file) const;
 
   // these buffers persist between invocations so that 

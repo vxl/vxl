@@ -70,7 +70,7 @@ bool vtol_hierarchy_node_3d::add_hierarchy_inferior(vtol_hierarchy_node_3d* link
 {
   if (link  == NULL)
     {
-      cerr << "Attempt to link null inferior element\n";
+      vcl_cerr << "Attempt to link null inferior element\n";
       return false;
     }
   if (vcl_find(_hierarchy_inferiors.begin(),_hierarchy_inferiors.end(),link) != _hierarchy_inferiors.end())
@@ -109,7 +109,7 @@ bool vtol_hierarchy_node_3d::add_hierarchy_superior(vtol_hierarchy_node_3d* link
 {
   if (link  == NULL)
     {
-      cerr << "Attempt to link null superior element\n";
+      vcl_cerr << "Attempt to link null superior element\n";
       return false;
     }
 
@@ -153,7 +153,7 @@ bool vtol_hierarchy_node_3d::add_hierarchy_inferior_oneway(vtol_hierarchy_node_3
 {
   if (link  == NULL)
     {
-      cerr << "Attempt to link null inferior element\n";
+      vcl_cerr << "Attempt to link null inferior element\n";
       return false;
     }
   
@@ -174,7 +174,7 @@ bool vtol_hierarchy_node_3d::add_hierarchy_superior_oneway(vtol_hierarchy_node_3
 {
   if (link  == NULL)
     {
-      cerr << "Attempt to link null superior element\n";
+      vcl_cerr << "Attempt to link null superior element\n";
       return false;
     }
 

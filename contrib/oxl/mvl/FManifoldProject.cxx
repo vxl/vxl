@@ -87,11 +87,11 @@ void FManifoldProject::set_F(const FMatrix& Fobj)
 
     // Now C is zero cos F is rank 2
     if (vnl_math_abs(Cprime) > 1e-6) {
-      cerr << "FManifoldProject: ** HartleySturm: F = " << F_ << endl;
-      cerr << "FManifoldProject: ** HartleySturm: B = " << Bprime << endl;
-      cerr << "FManifoldProject: ** HartleySturm: Cerror = " << Cprime << endl;
-      cerr << "FManifoldProject: ** HartleySturm: F not rank 2 ?\n";
-      cerr << "FManifoldProject: singular values are "  << vnl_svd<double>(F_).W() << endl;
+      vcl_cerr << "FManifoldProject: ** HartleySturm: F = " << F_ << vcl_endl;
+      vcl_cerr << "FManifoldProject: ** HartleySturm: B = " << Bprime << vcl_endl;
+      vcl_cerr << "FManifoldProject: ** HartleySturm: Cerror = " << Cprime << vcl_endl;
+      vcl_cerr << "FManifoldProject: ** HartleySturm: F not rank 2 ?\n";
+      vcl_cerr << "FManifoldProject: singular values are "  << vnl_svd<double>(F_).W() << vcl_endl;
     }
     // **** Now have quadric x'*A*x = 0 ****
     
@@ -119,7 +119,7 @@ double FManifoldProject::correct(const HomgPoint2D& p1, const HomgPoint2D& p2, H
   vnl_double_4 p;
   if (!p1.get_nonhomogeneous(p[0], p[1]) ||
       !p2.get_nonhomogeneous(p[2], p[3])) {
-    cerr << "FManifoldProject: p1 or p2 at infinity\n";
+    vcl_cerr << "FManifoldProject: p1 or p2 at infinity\n";
     *out1 = p1;
     *out2 = p2;
     return 1e30;
@@ -143,14 +143,14 @@ double FManifoldProject::correct(const HomgPoint2D& p1, const HomgPoint2D& p2, H
 
     double EPIDIST = dot_product(out2->get_vector(), F_*out1->get_vector());
     if (EPIDIST > 1e-4) {
-      cerr << "FManifoldProject: Affine F: EPIDIST = " << EPIDIST << endl;
-      cerr << "FManifoldProject: Affine F: p = " << (dot_product(p,n) + d) << endl;
+      vcl_cerr << "FManifoldProject: Affine F: EPIDIST = " << EPIDIST << vcl_endl;
+      vcl_cerr << "FManifoldProject: Affine F: p = " << (dot_product(p,n) + d) << vcl_endl;
 
       double EPI1 = dot_product(out2->get_vector(), F_*out1->get_vector());
       double EPI2 = dot_product(p, n) + d;
-      cerr << "t = " << n << " " << d << endl;
-      cerr << "F_ = " << F_ << endl;
-      cerr << "FManifoldProject: Affine F: E = " << (EPI1 - EPI2) << endl;
+      vcl_cerr << "t = " << n << " " << d << vcl_endl;
+      vcl_cerr << "F_ = " << F_ << vcl_endl;
+      vcl_cerr << "FManifoldProject: Affine F: E = " << (EPI1 - EPI2) << vcl_endl;
       //abort();
     }
     
@@ -167,8 +167,8 @@ double FManifoldProject::correct(const HomgPoint2D& p1, const HomgPoint2D& p2, H
   double b4 = 1./d_[3]; double a4 = vnl_math_sqr(pprime[3])*b4;
 
   if (vnl_math_max(vnl_math_abs(b1 + b2), vnl_math_abs(b3 + b4)) > 1e-7) {
-    cerr << "FManifoldProject: B = [" <<b1<< " " <<b2<< " " <<b3<< " " <<b4<< "];\n";
-    cerr << "FManifoldProject: b1 != -b2 or b3 != -b4\n";
+    vcl_cerr << "FManifoldProject: B = [" <<b1<< " " <<b2<< " " <<b3<< " " <<b4<< "];\n";
+    vcl_cerr << "FManifoldProject: b1 != -b2 or b3 != -b4\n";
   }
   
   // a11 ../ (b1 - x).^2 + a12 ../ (b1 + x).^2 + a21 ../ (b2 - x).^2 + a22 ../ (b2 + x).^2
@@ -225,11 +225,11 @@ double FManifoldProject::correct(const HomgPoint2D& p1, const HomgPoint2D& p2, H
       if (0 && EPIDIST > 1e-12) {
 	// This can happen in reasonable circumstances -- notably when one
 	// epipole is at infinity.
-	cout << "FManifoldProject: A root has epidist = " << sqrt(EPIDIST) << endl;
-	cout << "  coeffs: " << _coeffs << endl;
-	cout << "  root = " << lambda << endl;
-	cout << "  poly residual = " << poly.evaluate(lambda) << endl;
-	cout << "  rational poly residual = " << RATPOLY_RESIDUAL << endl;
+	vcl_cout << "FManifoldProject: A root has epidist = " << sqrt(EPIDIST) << vcl_endl;
+	vcl_cout << "  coeffs: " << _coeffs << vcl_endl;
+	vcl_cout << "  root = " << lambda << vcl_endl;
+	vcl_cout << "  poly residual = " << poly.evaluate(lambda) << vcl_endl;
+	vcl_cout << "  rational poly residual = " << RATPOLY_RESIDUAL << vcl_endl;
 	++ errs;
 	break;
       }
@@ -244,7 +244,7 @@ double FManifoldProject::correct(const HomgPoint2D& p1, const HomgPoint2D& p2, H
   }
 
   if (!got_one) {
-    cerr << "FManifoldProject: AROOGAH. Final epipolar distance =  " << dmin << ", errs = " << errs << endl;
+    vcl_cerr << "FManifoldProject: AROOGAH. Final epipolar distance =  " << dmin << ", errs = " << errs << vcl_endl;
     *out1 = p1;
     *out2 = p2;
   } else {

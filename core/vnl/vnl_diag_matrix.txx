@@ -32,7 +32,7 @@ void vnl_diag_matrix<T>::solve(vnl_vector<T> const& b, vnl_vector<T>* out)
 
 // -- Print in MATLAB diag([1 2 3]) form.
 template <class T>
-ostream& operator<< (ostream& s, const vnl_diag_matrix<T>& D)
+vcl_ostream& operator<< (vcl_ostream& s, const vnl_diag_matrix<T>& D)
 {
   s << "diag([ ";
   for (unsigned i=0; i<D.rows(); ++i)
@@ -94,7 +94,7 @@ VCL_INSTANTIATE_INLINE(vnl_matrix<T > operator- (vnl_matrix<T > const &, vnl_dia
 VCL_INSTANTIATE_INLINE(vnl_matrix<T > operator- (vnl_diag_matrix<T > const &, vnl_matrix<T > const &));	\
 VCL_INSTANTIATE_INLINE(vnl_vector<T > operator* (const vnl_vector<T >&, vnl_diag_matrix<T > const &));	\
 VCL_INSTANTIATE_INLINE(vnl_vector<T > operator* (vnl_diag_matrix<T > const &, const vnl_vector<T >&));	\
-template ostream& operator<< (ostream& s, vnl_diag_matrix<T > const &);
+template vcl_ostream& operator<< (vcl_ostream& s, vnl_diag_matrix<T > const &);
 
 //template bool epsilon_equals (vnl_diag_matrix<T > const & , vnl_diag_matrix<T > const & , double) 
 

@@ -87,8 +87,8 @@ public:
   bool read(const char* filename, vil_image const& src, const HomgMetric& c = 0);
   bool write(const char* filename) const;
 
-  bool read(istream& f, const ImageMetric* c);
-  bool write(ostream& f, const ImageMetric* c) const;
+  bool read(vcl_istream& f, const ImageMetric* c);
+  bool write(vcl_ostream& f, const ImageMetric* c) const;
 
 protected:
   // Data Members--------------------------------------------------------------

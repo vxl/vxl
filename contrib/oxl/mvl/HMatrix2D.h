@@ -44,7 +44,7 @@ public:
   HMatrix2D(const HMatrix2D& M);
   HMatrix2D(const vnl_matrix<double>& M);
   HMatrix2D(const double* t_matrix);
-  HMatrix2D(istream& s);
+  HMatrix2D(vcl_istream& s);
   HMatrix2D(char const* filename);
  ~HMatrix2D();
 
@@ -84,7 +84,7 @@ public:
   void set (const double *t_matrix);
   void set (const vnl_matrix<double>& t_matrix);
 
-  bool read(istream& s);
+  bool read(vcl_istream& s);
   bool read(char const* filename);
 
   // INTERNALS-----------------------------------------------------------------
@@ -93,7 +93,7 @@ private:
   vnl_double_3x3 _t12_matrix;
 };
 
-ostream& operator << (ostream& s, const HMatrix2D& H);
-istream& operator >> (istream& s, HMatrix2D& H);
+vcl_ostream& operator << (vcl_ostream& s, const HMatrix2D& H);
+vcl_istream& operator >> (vcl_istream& s, HMatrix2D& H);
 
 #endif // _HMatrix2D_h

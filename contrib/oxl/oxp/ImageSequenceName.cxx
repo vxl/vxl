@@ -27,7 +27,7 @@ void ImageSequenceName::init(char const* read_or_write, char const* default_exte
   // Check loading if input_file
   if (read_or_write[0] == 'r') {
     if (!ext_.length()) {
-      cerr << "ImageSequenceName: Searching for extension\n";
+      vcl_cerr << "ImageSequenceName: Searching for extension\n";
       static char const * extensions[] = {
 	"",
 	"", // Space for default

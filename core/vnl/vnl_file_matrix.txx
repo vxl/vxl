@@ -13,7 +13,7 @@ template <class T>
 vnl_file_matrix<T>::vnl_file_matrix(char const* filename)
 {
   if (filename && strcmp(filename, "-")) {
-    ifstream o(filename);
+    vcl_ifstream o(filename);
     ok_=read_ascii(o);
     if (!ok_)
       vcl_cerr << "vnl_file_matrix: ERROR loading " << filename << vcl_endl;

@@ -76,7 +76,7 @@ double HomgPlane3D::distance(const HomgPoint3D& x) const
 }
 
 // -- print
-ostream& operator<<(ostream& s, const HomgPlane3D& P)
+vcl_ostream& operator<<(vcl_ostream& s, const HomgPlane3D& P)
 {
   return s << P.get_vector();
 }

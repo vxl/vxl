@@ -109,7 +109,7 @@ public:
   inline void Print() { Dump(vcl_cout); }
 
   // Print the where clause on cerr or stream.
-  void Dump(ostream& str = vcl_cerr) const
+  void Dump(vcl_ostream& str = vcl_cerr) const
   {
     str << "<";
     if (first_wild) str << "*";

@@ -16,13 +16,13 @@
 
 class example_sp : public vbl_ref_count {
 public:
-  example_sp() { cout << "example_sp constructor, refcount=" << get_references() << endl; }
+  example_sp() { vcl_cout << "example_sp constructor, refcount=" << get_references() << vcl_endl; }
 
-  ~example_sp() { cout << "example_sp destructor, refcount=" << get_references() << endl; }
+  ~example_sp() { vcl_cout << "example_sp destructor, refcount=" << get_references() << vcl_endl; }
 
-  example_sp(example_sp const&) { cout << "example_sp copy constructor, refcount=" << get_references() << endl; }
+  example_sp(example_sp const&) { vcl_cout << "example_sp copy constructor, refcount=" << get_references() << vcl_endl; }
 
-  friend ostream& operator<<(ostream& os, example_sp const& e) {
+  friend vcl_ostream& operator<<(vcl_ostream& os, example_sp const& e) {
     int p = e.get_references(); 
     if (p < 1000) os << "example_sp, refcount=" << p;
     else          os << "example_sp, invalid";
@@ -37,8 +37,8 @@ typedef vbl_smart_ptr<example_sp> example_sp_ref;
 class bigmatrix_impl : public vbl_ref_count {
 public:
   double data[256][256];
-  bigmatrix_impl() { cerr << "bigmatrix_impl ctor" << endl; }
-  ~bigmatrix_impl() { cerr << "bigmatrix_impl dtor" << endl; }
+  bigmatrix_impl() { vcl_cerr << "bigmatrix_impl ctor" << vcl_endl; }
+  ~bigmatrix_impl() { vcl_cerr << "bigmatrix_impl dtor" << vcl_endl; }
 };
 
 class bigmatrix {

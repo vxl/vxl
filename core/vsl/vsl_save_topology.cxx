@@ -7,7 +7,7 @@
 #include "vsl_save_topology.h"
 #include <vcl_fstream.h>
 
-void vsl_save_topology(ostream &f, vcl_list<vsl_edge*> const &es, vcl_list<vsl_vertex*> const &vs) 
+void vsl_save_topology(vcl_ostream &f, vcl_list<vsl_edge*> const &es, vcl_list<vsl_vertex*> const &vs) 
 {
   unsigned vid = 0;
   char const *name = "fred";
@@ -65,7 +65,7 @@ void vsl_save_topology(ostream &f, vcl_list<vsl_edge*> const &es, vcl_list<vsl_v
 
 void vsl_save_topology(char const *f, vcl_list<vsl_edge*> const &e, vcl_list<vsl_vertex*> const &v) 
 {
-  ofstream file(f);
+  vcl_ofstream file(f);
   vsl_save_topology(file, e, v);
 }
 
@@ -74,7 +74,7 @@ void vsl_save_topology(char const *f, vcl_list<vsl_edge*> const &e)
   vsl_save_topology(f, e, vcl_list<vsl_vertex*>());
 }
 
-void vsl_save_topology(ostream &s, vcl_list<vsl_edge*> const &e)
+void vsl_save_topology(vcl_ostream &s, vcl_list<vsl_edge*> const &e)
 {
   vsl_save_topology(s, e, vcl_list<vsl_vertex*>());
 }

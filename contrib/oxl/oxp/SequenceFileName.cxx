@@ -54,7 +54,7 @@ void SequenceFileName::init(char const* s, int start_frame, int step, char const
     if (i != vcl_string::npos) {
       vcl_string dir = fmt_.substr(0, i);
       if (!vbl_file::exists(dir.c_str())) {
-	cerr << "SequenceFileName: ** Image directory [" << dir << "] does not exist" << endl;
+	vcl_cerr << "SequenceFileName: ** Image directory [" << dir << "] does not exist" << vcl_endl;
 	return;
 	// cerr << "SequenceFileName: ** Making directory " << dir << endl;
 	// if (!vbl_file::make_directory(dir.c_str())) {
@@ -63,7 +63,7 @@ void SequenceFileName::init(char const* s, int start_frame, int step, char const
 	// }
       } else 
 	if (!vbl_file::is_directory(dir.c_str()))
-	  cerr << "SequenceFileName: WARNING: Inferred subdir [" << dir << "]"
+	  vcl_cerr << "SequenceFileName: WARNING: Inferred subdir [" << dir << "]"
 	       << " exists and is not already a directory\n";
     }
   }
@@ -72,7 +72,7 @@ void SequenceFileName::init(char const* s, int start_frame, int step, char const
   {
     vbl_reg_exp re("\\.([a-zA-Z_0-9]+)$");
     if (re.find(fmt_.c_str())) {
-      cerr << "SequenceFileName: Found extension [" << re.match(1) << "]\n";
+      vcl_cerr << "SequenceFileName: Found extension [" << re.match(1) << "]\n";
       int pointpos = re.start(0);
       ext_ = fmt_.substr(pointpos);
       fmt_.erase(pointpos, vcl_string::npos);
@@ -99,11 +99,11 @@ void SequenceFileName::set_default_extension(char const* extension)
 bool SequenceFileName::exists(const vcl_string& fmt, const char* extension, int frame)
 {
   vbl_sprintf buf((fmt + extension).c_str(), frame);
-  cerr << "SequenceFileName: Checking [" << buf << "]\n";
+  vcl_cerr << "SequenceFileName: Checking [" << buf << "]\n";
   return (vbl_file::size(buf.c_str()) > 0 || vbl_file::size((vcl_string(buf) + ".gz").c_str()) > 0);
 }
 
-ostream& SequenceFileName::print(ostream& s) const
+vcl_ostream& SequenceFileName::print(vcl_ostream& s) const
 {
   return vbl_printf(s, "[%s %d:%d:%d]", (fmt_ + ext_).c_str(), start_frame_, step_, end_);
 }

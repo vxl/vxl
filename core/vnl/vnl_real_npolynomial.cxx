@@ -179,7 +179,7 @@ vnl_real_npolynomial vnl_real_npolynomial::operator*(double P) const
   return vnl_real_npolynomial(coef, poly);
 }
 
-ostream& operator<<(ostream& os, vnl_real_npolynomial const& P)
+vcl_ostream& operator<<(vcl_ostream& os, vnl_real_npolynomial const& P)
 {
   if (P.nvar_ <= 3) for (int i=0; i<P.nterms_; ++i) {
     os << ' ';

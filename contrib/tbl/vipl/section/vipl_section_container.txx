@@ -181,35 +181,35 @@ template < class DataType >
 template < class DataType >
   bool vipl_section_container< DataType > ::operator<( const vipl_section_container< DataType >& b) const
 {
-  cerr << "Warning: called unimplemented method operator<\n";
+  vcl_cerr << "Warning: called unimplemented method operator<\n";
   return false;
 }
 
 template < class DataType >
   bool vipl_section_container< DataType > ::operator>( const vipl_section_container< DataType >& b) const
 {
-  cerr << "Warning: called unimplemented method operator>\n";
+  vcl_cerr << "Warning: called unimplemented method operator>\n";
   return false;
 }
 
 template < class DataType >
   bool vipl_section_container< DataType > ::operator<=( const vipl_section_container< DataType >& b) const
 {
-  cerr << "Warning: called unimplemented method operator<=\n";
+  vcl_cerr << "Warning: called unimplemented method operator<=\n";
   return false;
 }
 
 template < class DataType >
   bool vipl_section_container< DataType > ::operator>=( const vipl_section_container< DataType >& b) const
 {
-  cerr << "Warning: called unimplemented method operator>=\n";
+  vcl_cerr << "Warning: called unimplemented method operator>=\n";
   return false;
 }
 
 template < class DataType >
   void vipl_section_container< DataType > ::swap( const vipl_section_container< DataType >& b) const
 {
-  cerr << "Warning: called unimplemented method swap\n";
+  vcl_cerr << "Warning: called unimplemented method swap\n";
 }
 
 // Modifies the passed in descriptor to point to the next section . This is
@@ -332,7 +332,7 @@ template < class DataType >
 	image_size(vipl_filter_abs::Y_Axis());
   }
   if (in_out.real_container() == the()) {
-    cout << "next_section() for 0x" << (void *)&in_out << endl;
+    vcl_cout << "next_section() for 0x" << (void *)&in_out << vcl_endl;
   }
   return incremented_Y | incremented_X;
 }

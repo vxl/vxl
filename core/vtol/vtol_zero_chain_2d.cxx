@@ -249,12 +249,12 @@ bool vtol_zero_chain_2d::operator==(const vsol_spatial_object_2d& obj) const
 
 // -- print the object 
 
-void vtol_zero_chain_2d::print(ostream &strm) const
+void vtol_zero_chain_2d::print(vcl_ostream &strm) const
 {
-  strm << "<vtol_zero_chain_2d " << _inferiors.size() << " " << (void *)this << ">" << endl;
+  strm << "<vtol_zero_chain_2d " << _inferiors.size() << " " << (void *)this << ">" << vcl_endl;
 }
 
-void vtol_zero_chain_2d::describe(ostream &strm,
+void vtol_zero_chain_2d::describe(vcl_ostream &strm,
                                   int blanking) const
 {
   for (int j=0; j<blanking; ++j) strm << ' ';

@@ -94,14 +94,14 @@ public:
   virtual double image_to_homg_distance(double image_distance) const;
   virtual double homg_to_image_distance(double image_distance) const;
 
-  virtual ostream& print(ostream& s) const;
+  virtual vcl_ostream& print(vcl_ostream& s) const;
 
   // Data Control--------------------------------------------------------------
 
   // Static functions to condition/decondition image relations
   static FMatrix decondition(const FMatrix& F, const ImageMetric* c1, const ImageMetric* c2);
 
-  inline friend ostream& operator <<(ostream& o, const ImageMetric& m) { return m.print(o); }
+  inline friend vcl_ostream& operator <<(vcl_ostream& o, const ImageMetric& m) { return m.print(o); }
 };
 
 #endif // ImageMetric_h_

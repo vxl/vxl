@@ -81,8 +81,8 @@ private:
 // formatted I/O
 //
 #include <vcl_iosfwd.h>
-template <class T> ostream & operator<<(ostream &,const vbl_array_3d<T> &);
-template <class T> istream & operator>>(istream &,vbl_array_3d<T> &);
+template <class T> vcl_ostream & operator<<(vcl_ostream &,const vbl_array_3d<T> &);
+template <class T> vcl_istream & operator>>(vcl_istream &,vbl_array_3d<T> &);
 
 #define VBL_ARRAY_3D_INSTANTIATE \
 extern "please include vbl/vbl_array_3d.txx instead"

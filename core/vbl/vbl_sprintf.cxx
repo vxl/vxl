@@ -58,7 +58,7 @@ vbl_sprintf::operator const char* () const
   return c_str(); 
 }
 
-ostream & operator<<(ostream &os,const vbl_sprintf& s) 
+vcl_ostream & operator<<(vcl_ostream &os,const vbl_sprintf& s) 
 {
   return os << (const char*)s; 
 }

@@ -116,7 +116,7 @@ bool AffineMetric::can_invert_distance() const
 */
 
 // -- print to ostream
-ostream& AffineMetric::print(ostream& s) const
+vcl_ostream& AffineMetric::print(vcl_ostream& s) const
 {
   return s << "AffineMetric [" << A_.get_row(0) << ";" << A_.get_row(1) << ";" << A_.get_row(2) << "]";
 }

@@ -32,7 +32,7 @@ public:
   T pop() {
     int n = size();
     if (n == 0) {
-      cerr <<  "ZOKS: Stack underflow\n";
+      vcl_cerr <<  "ZOKS: Stack underflow\n";
       exit(1);
     }
     T tmp = (*this)[n-1];
@@ -42,7 +42,7 @@ public:
 
   void print() {
     for(unsigned i = 0; i < size(); ++i)
-      cout << (*this)[i] << endl;
+      vcl_cout << (*this)[i] << vcl_endl;
   }
 };
 
@@ -50,7 +50,7 @@ public:
 
 void cantshift(const vcl_string& arg)
 {
-  cerr << "matcalc: Missing argument after \"" << arg << "\".\n"; 
+  vcl_cerr << "matcalc: Missing argument after \"" << arg << "\".\n"; 
   exit (-1);
 }
 
@@ -127,9 +127,9 @@ int main(int argc, char ** argv)
       
     } else { // Load from file
       Matrix m;
-      ifstream f(arg.c_str());
+      vcl_ifstream f(arg.c_str());
       if (!m.read_ascii(f)) {
-	cerr <<  "Can't read file [" << arg << "]\n";
+	vcl_cerr <<  "Can't read file [" << arg << "]\n";
 	return -1;
       }
       stack.push(m);

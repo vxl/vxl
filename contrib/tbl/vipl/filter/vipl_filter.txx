@@ -111,7 +111,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   }
   for(int i=0; i< ninputs; i++, src_img++) {
     if(src_img == 0)
-      cerr << "filter ctor passed vector will null src_img pointers, ignored them watch out." << endl;
+      vcl_cerr << "filter ctor passed vector will null src_img pointers, ignored them watch out." << vcl_endl;
     else
      ref_inf()[i] = *src_img;
      if(ref_inf()[i]) FILTER_IMPTR_INC_REFCOUNT(((ImgIn*)ref_inf()[i]));
@@ -122,7 +122,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
   ::~vipl_filter()
 {
-  // cout << "destructor for abstract class filter called " << this << endl;
+  // vcl_cout << "destructor for abstract class filter called " << this << vcl_endl;
   if(ref_src_section()) FILTER_IMPTR_DEC_REFCOUNT(ref_src_section()); // dec_refcount or kill it
   if(ref_dst_section()) FILTER_IMPTR_DEC_REFCOUNT(ref_dst_section()); // dec_refcount or kill it
   if(ref_secp())        FILTER_IMPTR_DEC_REFCOUNT(ref_secp()); // dec_refcount or kill it
@@ -252,7 +252,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
     }
   }
   //else
-  cerr << "Warning: called is_section_within_ROA but no valid sections defined. Returning 0\n";
+  vcl_cerr << "Warning: called is_section_within_ROA but no valid sections defined. Returning 0\n";
   return 0;
 }
 
@@ -277,7 +277,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
       }
       st += ibs;
       end -= ibs;
-      // cerr << "c st end ibs" << st << " " << end << " " << ibs << endl;
+      // vcl_cerr << "c st end ibs" << st << " " << end << " " << ibs << vcl_endl;
 #define min(a,b) ((a<b)?(a):(b))
 #define max(a,b) ((a>b)?(a):(b))
       if(inROA()) {
@@ -292,7 +292,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
       int ibs = image_border_size();
       int end = secp()->curr_sec_end(axis);
       int st = secp()->curr_sec_start(axis);
-      // cerr << "a st end ibs" << st << " " << end << " " << ibs << endl;
+      // vcl_cerr << "a st end ibs" << st << " " << end << " " << ibs << vcl_endl;
       if(st > end){ // swap hack in case people get it wrong....
         int temp = end;
         end = st;
@@ -300,13 +300,13 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
       }
       st += ibs;
       end -= ibs;
-      // cerr << "c st end ibs" << st << " " << end << " " << ibs << endl;
+      // vcl_cerr << "c st end ibs" << st << " " << end << " " << ibs << vcl_endl;
       if(ROA()) st = min(end,max(st,ROA()->curr_sec_start(axis)+ibs));
       return st;
     }
   }
   //else
-  cerr << "Warning: called start but no valid sections defined. Returning 0\n";
+  vcl_cerr << "Warning: called start but no valid sections defined. Returning 0\n";
   return 0;
 }
 
@@ -336,7 +336,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
              }
              st += ibs;
              end -= ibs;
-             // cerr << "c st end ibs" << st << " " << end << " " << ibs << endl;
+             // vcl_cerr << "c st end ibs" << st << " " << end << " " << ibs << vcl_endl;
              if(inROA())
                if(inROA()) st = min(end,max(st,inROA()->curr_sec_start(axis)+ibs));
              return end;
@@ -353,13 +353,13 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
              }
              st += ibs;
              end -= ibs;
-             // cerr << "c st end ibs" << st << " " << end << " " << ibs << endl;
+             // vcl_cerr << "c st end ibs" << st << " " << end << " " << ibs << vcl_endl;
              if(ROA()) st = min(end,max(st,ROA()->curr_sec_start(axis)+ibs));
              return end;
            }
          }
         //else
-        cerr << "Warning: called stop but no valid sections defined. Returning 0\n";
+        vcl_cerr << "Warning: called stop but no valid sections defined. Returning 0\n";
         return 0;
 }
 
@@ -387,7 +387,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
     return true;
   }
   //else
-  cerr << "Warning: index out of range in put_in_data_ptr, ignored\n";
+  vcl_cerr << "Warning: index out of range in put_in_data_ptr, ignored\n";
   return false;
 }
 
@@ -398,7 +398,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
                           ::in_data_ptr(int index)
 {
   if(0 <= index && index < numinputs()) return inf()[index];
-  else cerr << "Warning: index out of range, returning data at 0 instead\n";
+  else vcl_cerr << "Warning: index out of range, returning data at 0 instead\n";
   return inf()[0];
 }
 
@@ -411,11 +411,11 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   if(0 <= index && index < numinputs()) {
         if (inf()[index]) return *inf()[index];
         else {
-           cerr << "Warning: input pointer is null returning image at index 0\n";
+           vcl_cerr << "Warning: input pointer is null returning image at index 0\n";
            return *inf()[0];
         }
   } //else
-   cerr << "Warning: out of range is null, a new val, it will leak\n";
+   vcl_cerr << "Warning: out of range is null, a new val, it will leak\n";
    return *inf()[0];
 }
 
@@ -445,7 +445,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   if (READY(output_state()) )
     return ref_outf();
   else {
-    cerr << "Warning: Tried to reference a NOT READY output-data, returned 0\n";
+    vcl_cerr << "Warning: Tried to reference a NOT READY output-data, returned 0\n";
     return 0;
   }
 }
@@ -458,7 +458,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   if (READY(output_state()) )
     return *outf();
   else {
-    cerr << "Warning: Tried to reference a NOT READY output-returning old input, may coredump\n";
+    vcl_cerr << "Warning: Tried to reference a NOT READY output-returning old input, may coredump\n";
     return *outf();
   }
 }
@@ -527,7 +527,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   if (NOT_READY(input_state())) {
     // first make sure that the filter is ready to proceed
     ref_filter_state() = Not_Ready;
-    cerr << "Warning: filtering without valid input\n";
+    vcl_cerr << "Warning: filtering without valid input\n";
     return false;
   } else if (UNCHANGED(input_state())) {
     ref_filter_state() |= Unchanged;
@@ -538,7 +538,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
     // be conservative - if input has changed, then may need to regen the
     // output since we can not compare respective sizes .
     if (outf()) FILTER_IMPTR_DEC_REFCOUNT(ref_outf());
-    cerr << "Warning: Input changed after output set.  Sizes may not match...\n";
+    vcl_cerr << "Warning: Input changed after output set.  Sizes may not match...\n";
   }
   if ((check_params_1(proceed_anyway) &&
       READY(filter_state()) && CHANGED(filter_state())) || proceed_anyway) {
@@ -610,7 +610,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   bool vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
                       ::compose_with(vipl_filter_abs& to)
 {
-  cerr << "Warning: called unimplemented method compose_with\n";
+  vcl_cerr << "Warning: called unimplemented method compose_with\n";
   return false;
 }
 #endif

@@ -82,7 +82,7 @@ public:
   int get_size_bytes() const;
     
   //: Print a 1-line summary of contents
-  ostream& print(ostream&) const;
+  vcl_ostream& print(vcl_ostream&) const;
   
   //------------ smart-pointer logic --------
 
@@ -147,7 +147,7 @@ protected:
 
 //: Print a 1-line summary of contents
 inline
-ostream& operator<<(ostream& s, vil_image const& i) {
+vcl_ostream& operator<<(vcl_ostream& s, vil_image const& i) {
   return i.print(s);
 }
 

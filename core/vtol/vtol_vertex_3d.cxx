@@ -22,7 +22,7 @@ vtol_vertex_3d::vtol_vertex_3d(const vsol_point_3d_ref pt)
 {
 #if 0
   if (!pt) {
-    cerr << "Error: Zero pointer passed in to vtol_vertex_3d::vtol_vertex_3d(vsol_point_3d*)\n";
+    vcl_cerr << "Error: Zero pointer passed in to vtol_vertex_3d::vtol_vertex_3d(vsol_point_3d*)\n";
     pt = new vsol_point_3d(0.0 ,0.0,0.0);
   }
 #endif
@@ -201,15 +201,15 @@ vsol_spatial_object_3d *vtol_vertex_3d::spatial_copy(void)
  *    Print Functions
  */
 // -- This method outputs a simple text representation of the vertex including its address in memory.
-void vtol_vertex_3d::print(ostream &strm) const
+void vtol_vertex_3d::print(vcl_ostream &strm) const
 {
   strm<<"<vtol_vertex_3d "<<x()<<","<<y()<<"," << z() << "," <<(void *)this<<"> with id ";
-  strm<<get_id()<<endl;
+  strm<<get_id()<<vcl_endl;
 }
 
 
 // -- This method outputs a detailed description of the vertex including the inferiors and superiors.
-void vtol_vertex_3d::describe(ostream &strm,
+void vtol_vertex_3d::describe(vcl_ostream &strm,
                               int blanking) const
 {
   for (int j=0; j<blanking; ++j) strm << ' ';
@@ -250,7 +250,7 @@ vtol_edge_3d *vtol_vertex_3d::new_edge(vtol_vertex_3d *other_vert)
 double vtol_vertex_3d::distance_from(const vector_3d &v)
 {
   //  return _point->distance_from(v);
-  cerr << "vtol_vertex_3d::distance_from() not implemented yet\n";
+  vcl_cerr << "vtol_vertex_3d::distance_from() not implemented yet\n";
   return -1; // TO DO
 }
 
@@ -258,7 +258,7 @@ double vtol_vertex_3d::distance_from(const vector_3d &v)
 double vtol_vertex_3d::euclidean_distance(vtol_vertex_3d& v)
 {
   //  return _point->euclidean_distance(*v.get_point());
-  cerr << "vtol_vertex_3d::euclidean_distance() not yet implemented\n";
+  vcl_cerr << "vtol_vertex_3d::euclidean_distance() not yet implemented\n";
   return -1; // TO DO
 }
 
@@ -307,7 +307,7 @@ for (face_list_3d::iterator i = faces.begin();
 vtol_vertex_3d *vtol_vertex_3d::vertex_diff(vtol_vertex_3d& diffvert)
 {
   // return new vtol_vertex_3d((*_point) - (*(diffvert._point)));
-  cerr << "vtol_vertex_3d::vertex_diff() not implemented yet\n";
+  vcl_cerr << "vtol_vertex_3d::vertex_diff() not implemented yet\n";
   return 0; // TO DO
 }
 
@@ -397,7 +397,7 @@ void subst_vertex_on_edge(vtol_vertex_3d *v1,
       edge->set_v2(v1);
       return;
     }
-  cout<<"In vtol_vertex_3d::merge_references(.) Shouldn't happen"<<endl;
+  vcl_cout<<"In vtol_vertex_3d::merge_references(.) Shouldn't happen"<<vcl_endl;
 }
 
 // Should not be a method on Vertex...not tested.
@@ -492,7 +492,7 @@ void vtol_vertex_3d::explore_vertex(vertex_list_3d &verts)
         vv=e->get_v2();
       else
         {
-          cerr << "Explorevtol_vertex_3d: shouldn't get this\n";
+          vcl_cerr << "Explorevtol_vertex_3d: shouldn't get this\n";
           continue;
         }
       

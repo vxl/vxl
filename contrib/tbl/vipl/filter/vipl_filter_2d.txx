@@ -68,7 +68,7 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
   // assuming that the coordinate space of input, intermediate and output are
   // "locked" by sectioning
   if (ref_outf() == 0) {
-    cerr << "Warning: empty output image in vipl_filter_2d::applyop, returning without processing\n";
+    vcl_cerr << "Warning: empty output image in vipl_filter_2d::applyop, returning without processing\n";
     return false;
   }
   // the name of the section container generator.
@@ -77,14 +77,14 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
     ref_dst_section() = vipl_filterable_section_container_generator(*ref_outf(),(DataOut*) 0);
   }
   if (ref_dst_section() == 0) {
-    cerr << "Warning: empty dst section in vipl_filter_2d::applyop, returning without processing\n";
+    vcl_cerr << "Warning: empty dst section in vipl_filter_2d::applyop, returning without processing\n";
     return false;
   }
   if (ref_src_section() == 0) {
     ref_src_section() = vipl_filterable_section_container_generator(*ref_inf()[0], (DataIn*) 0);
   }
   if (ref_src_section() == 0) {
-    cerr << "Warning: empty src section in vipl_filter_2d::applyop, presuming output driving but cannot be ptr safe\n";
+    vcl_cerr << "Warning: empty src section in vipl_filter_2d::applyop, presuming output driving but cannot be ptr safe\n";
   }
   preop(); // virtual function call
   ref_dst_section()->ref_overlap()[0] = image_border_size();
@@ -109,7 +109,7 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
          it != enditr;
          ++it) {
       if (dstitr ==enddstitr) {
-        cerr << "Warning: In vipl_filter_2d, output iter ran out of items before input.  resetting to beginning\n";
+        vcl_cerr << "Warning: In vipl_filter_2d, output iter ran out of items before input.  resetting to beginning\n";
         dstitr = (*ref_dst_section()).begin();
       }
 #ifdef VCL_VC60
@@ -150,7 +150,7 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
          it != enditr;
          ++it) {
       if (srcitr == endsrcitr) {
-        cerr << "Warning: In vipl_filter_2d, input iter ran out of items before output.  resetting to beginning\n";
+        vcl_cerr << "Warning: In vipl_filter_2d, input iter ran out of items before output.  resetting to beginning\n";
         srcitr = (*ref_src_section()).begin();
       }
 #ifdef VCL_VC60

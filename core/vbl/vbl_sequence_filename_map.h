@@ -61,7 +61,7 @@ public:
 
 
   // pretty print
-  ostream& print(ostream& s) const;
+  vcl_ostream& print(vcl_ostream& s) const;
 
 protected:
   bool filter_dirent(char const* name, vcl_string const& extension);
@@ -80,6 +80,6 @@ protected:
   void parse();
 };
 
-ostream& operator<<(ostream &os, const vbl_sequence_filename_map& s);
+vcl_ostream& operator<<(vcl_ostream &os, const vbl_sequence_filename_map& s);
 
 #endif // vbl_sequence_filename_map_h_

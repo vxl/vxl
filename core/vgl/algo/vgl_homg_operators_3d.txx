@@ -144,7 +144,7 @@ vgl_homg_operators_3d<Type>::vgl_homg_line_3d vgl_homg_operators_3d<Type>::perp_
 {
   vgl_homg_point_3d<Type> q = vgl_homg_operators_3d<Type>::perp_projection(l,p);
   if (get_vector(p)==get_vector(q))
-    cerr << "Warning: cannot return vgl_homg_operators_3d<>::perp_line_through_point() for point on line\n";
+    vcl_cerr << "Warning: cannot return vgl_homg_operators_3d<>::perp_line_through_point() for point on line\n";
   return vgl_homg_line_3d(p,q);
 }
 

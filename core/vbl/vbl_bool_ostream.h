@@ -32,9 +32,9 @@ public:
   };
 };
 
-ostream& operator<<(ostream& s, const vbl_bool_ostream::on_off& proxy);
-ostream& operator<<(ostream& s, const vbl_bool_ostream::high_low& proxy);
-ostream& operator<<(ostream& s, const vbl_bool_ostream::true_false& proxy);
+vcl_ostream& operator<<(vcl_ostream& s, const vbl_bool_ostream::on_off& proxy);
+vcl_ostream& operator<<(vcl_ostream& s, const vbl_bool_ostream::high_low& proxy);
+vcl_ostream& operator<<(vcl_ostream& s, const vbl_bool_ostream::true_false& proxy);
 
 
 #endif // vbl_bool_ostream_h_

@@ -298,7 +298,7 @@ void vtol_two_chain_2d::update_superior_list_p_from_hierarchy_parent(void)
 bool
 vtol_two_chain_2d::break_into_connected_components( vcl_vector<vtol_topology_object_2d*> & components )
 {
-  cerr << "vtol_two_chain_2d::break_into_connected_components() not implemented yet\n";
+  vcl_cerr << "vtol_two_chain_2d::break_into_connected_components() not implemented yet\n";
   return false; // TO DO
 }
 
@@ -786,7 +786,7 @@ bool vtol_two_chain_2d::operator==(vsol_spatial_object_2d const& obj) const
 // -- correct the chain directions
 void vtol_two_chain_2d::correct_chain_directions(void)
 {
-  cerr << "vtol_two_chain_2d::correct_chain_directions() not yet implemented\n";
+  vcl_cerr << "vtol_two_chain_2d::correct_chain_directions() not yet implemented\n";
   // TO DO
 #if 0
   vcl_vector<vtol_face_2d*> *allfaces = this->faces();
@@ -804,12 +804,12 @@ void vtol_two_chain_2d::correct_chain_directions(void)
 //    Print Functions
 //***************************************************************************
 
-void vtol_two_chain_2d::print(ostream &strm) const
+void vtol_two_chain_2d::print(vcl_ostream &strm) const
 {
-  strm << "<vtol_two_chain_2d " << _inferiors.size() << "  "  << (void *)this << ">"  << endl;
+  strm << "<vtol_two_chain_2d " << _inferiors.size() << "  "  << (void *)this << ">"  << vcl_endl;
 }
 
-void vtol_two_chain_2d::describe_directions(ostream &strm,
+void vtol_two_chain_2d::describe_directions(vcl_ostream &strm,
                                             int blanking) const
 {
   for (int j=0; j<blanking; ++j) strm << ' ';
@@ -818,10 +818,10 @@ void vtol_two_chain_2d::describe_directions(ostream &strm,
   vcl_vector<signed char>::const_iterator di;
   for (di=_directions.begin();di!=_directions.end();++di)
     strm << (*di) << "  ";
-  strm << endl;
+  strm << vcl_endl;
 }
 
-void vtol_two_chain_2d::describe(ostream &strm,
+void vtol_two_chain_2d::describe(vcl_ostream &strm,
                                  int blanking) const
 {
   for (int j=0; j<blanking; ++j) strm << ' ';

@@ -29,7 +29,7 @@
 #include <vtol/vtol_two_chain_3d.h>
 #include <vtol/vtol_block_3d.h>
 
-static inline void ASSERT(bool b) { cout << ((b) ? " PASSED\n" : " *** FAILED\n"); }
+static inline void ASSERT(bool b) { vcl_cout << ((b) ? " PASSED\n" : " *** FAILED\n"); }
 
 static void test_topology_3d(void);
 
@@ -37,27 +37,27 @@ static void test_topology_3d(void)
 {
   // OK we want to make two faces and put them into a block
   
-  cout << "Creating vertices" << endl;
+  vcl_cout << "Creating vertices" << vcl_endl;
 
   vtol_vertex_3d *v1=new vtol_vertex_3d(0.0,0.0,0.0);
   vtol_vertex_3d *v2=new vtol_vertex_3d(0.0,1.0,1.0);
   vtol_vertex_3d *v3=new vtol_vertex_3d(1.0,1.0,0.0);
   vtol_vertex_3d *v4=new vtol_vertex_3d(1.0,0.0,0.0);
-  v1->describe(cout, 8);
+  v1->describe(vcl_cout, 8);
 
-  cout << "Creating faces" << endl;
+  vcl_cout << "Creating faces" << vcl_endl;
 
   vcl_vector<vtol_vertex_3d *> verts;
   
   verts.push_back(v1);
   verts.push_back(v2);
   verts.push_back(v3);
-  cout<<"verts filled"<<endl;
+  vcl_cout<<"verts filled"<<vcl_endl;
 
   vtol_face_3d *f1=new vtol_face_3d(&verts);
-  cout<<"Face f1 created"<<endl;
+  vcl_cout<<"Face f1 created"<<vcl_endl;
 
-  f1->describe(cout, 8);
+  f1->describe(vcl_cout, 8);
 
   verts.clear();
   
@@ -68,145 +68,145 @@ static void test_topology_3d(void)
 
   vtol_face_3d *f2=new vtol_face_3d(&verts);
   
-  cout << "Creating a block" << endl;
+  vcl_cout << "Creating a block" << vcl_endl;
   
   vcl_vector<vtol_face_3d *> faces;
   
   faces.push_back(f1);
   faces.push_back(f2);
-  cout<<"faces filled"<<endl;
+  vcl_cout<<"faces filled"<<vcl_endl;
   
   vtol_block_3d *b1=new vtol_block_3d(faces);
-  cout<<"Block b1 created"<<endl;
-  b1->describe(cout, 8);
+  vcl_cout<<"Block b1 created"<<vcl_endl;
+  b1->describe(vcl_cout, 8);
 
   /////////////// begin to test the vertex 
  
-  cout << "************** test vertex *************" << endl;
-  cout << "topology_type: ";
-  cout << v1->topology_type(); 
+  vcl_cout << "************** test vertex *************" << vcl_endl;
+  vcl_cout << "topology_type: ";
+  vcl_cout << v1->topology_type(); 
   ASSERT(v1->topology_type() == 1);
   
-  cout << "x() y() z() : ";
-  cout << '(' << v1->x() << ',' << v1->y() << ',' << v1->z() << ')';
+  vcl_cout << "x() y() z() : ";
+  vcl_cout << '(' << v1->x() << ',' << v1->y() << ',' << v1->z() << ')';
   ASSERT(v1->x() == 0 && v1->y() == 0 && v1->z() == 0);
    
-  cout << "v1 == v1 ";
+  vcl_cout << "v1 == v1 ";
   ASSERT((*v1) == (*v1));
 
-  cout << "v1 != v2 ";
+  vcl_cout << "v1 != v2 ";
   ASSERT(! ((*v1) == (*v2)));
   
-  cout << "is_connected v1 & v2";
+  vcl_cout << "is_connected v1 & v2";
   ASSERT(v1->is_connected(v2));
 
-  cout << "! is_connected v2 & v4";
+  vcl_cout << "! is_connected v2 & v4";
   ASSERT(! v2->is_connected(v4));
   
-  cout << "is_endpointp";
+  vcl_cout << "is_endpointp";
   vtol_edge_3d *ed=v1->new_edge(v2);
   ASSERT(v1->is_endpointp(*ed));
 
-  cout << "! is_endpointp";
+  vcl_cout << "! is_endpointp";
   ASSERT(! v3->is_endpointp(*ed));
  
 
    /////////////// begin to test the zero_chain 
  
-  cout << "************** test zero_chain  *************" << endl;
+  vcl_cout << "************** test zero_chain  *************" << vcl_endl;
   
   vtol_zero_chain_3d *zc=ed->get_zero_chain();
 
-  cout << "zc->v0() == v1";
+  vcl_cout << "zc->v0() == v1";
   ASSERT((zc->v0() == v1));
 
-  cout << "length: ";
-  cout << zc->length();
+  vcl_cout << "length: ";
+  vcl_cout << zc->length();
   ASSERT(zc->length() == 2);
 
-  cout << "*zc == *zc";
+  vcl_cout << "*zc == *zc";
   ASSERT(*zc == *zc);
 
-  cout << "describe zero_chain" << endl;
-  zc->describe(cout, 8);
+  vcl_cout << "describe zero_chain" << vcl_endl;
+  zc->describe(vcl_cout, 8);
   
   
   /////////////// begin to test the edge 
   
-  cout << "************** test edge  *************" << endl;
-  cout << "get_v1 == v1 && get_v2 == v2";
+  vcl_cout << "************** test edge  *************" << vcl_endl;
+  vcl_cout << "get_v1 == v1 && get_v2 == v2";
   ASSERT((ed->get_v1() == v1) && (ed->get_v2() == v2));
 
-  cout << "*ed == *ed";
+  vcl_cout << "*ed == *ed";
   ASSERT(*ed == *ed);
   
-  cout << "Share vertex with ed2";
+  vcl_cout << "Share vertex with ed2";
   vtol_edge_3d *ed2=v2->new_edge(v3);
   ASSERT(ed->share_vertex_with(ed2));
 
-  cout << "! Share vertex with ed3";
+  vcl_cout << "! Share vertex with ed3";
   vtol_edge_3d *ed3=v3->new_edge(v4);
   ASSERT(! ed->share_vertex_with(ed3));
   
-  cout << "is_endpoint v1";
+  vcl_cout << "is_endpoint v1";
   ASSERT(ed->is_endpoint(v1));
 
-  cout << "! is_endpoint2 v1";
+  vcl_cout << "! is_endpoint2 v1";
   ASSERT(! ed->is_endpoint2(v1));
 
-  cout << "is_endpoint1 v1";
+  vcl_cout << "is_endpoint1 v1";
   ASSERT(ed->is_endpoint1(v1));
   
-  cout << "other_endpoint(v1) == v2";
+  vcl_cout << "other_endpoint(v1) == v2";
   ASSERT(ed->other_endpoint(v1)==v2);
   
-  cout << "describe edge" << endl;
-  ed->describe(cout, 8);
+  vcl_cout << "describe edge" << vcl_endl;
+  ed->describe(vcl_cout, 8);
 
 
   /////////////// begin to test the one_chain 
-  cout << "************** test one_chain  *************" << endl;
+  vcl_cout << "************** test one_chain  *************" << vcl_endl;
   vtol_one_chain_3d *oc1=f1->get_one_chain(0);
   vtol_one_chain_3d *oc2=f2->get_one_chain(0);
   
-  cout << "Get number of edges: ";
-  cout << oc1->num_edges();
+  vcl_cout << "Get number of edges: ";
+  vcl_cout << oc1->num_edges();
   ASSERT(oc1->num_edges() == 3);
   
-  cout << "*oc1 == *oc1";
+  vcl_cout << "*oc1 == *oc1";
   ASSERT(*oc1 == *oc1);
 
-  cout << "*oc1 != *oc2";
+  vcl_cout << "*oc1 != *oc2";
   ASSERT(! (*oc1 == *oc2));
 
 
   /////////////// begin to test the face 
-  cout << "************** test face  *************" << endl;
+  vcl_cout << "************** test face  *************" << vcl_endl;
 
-  cout << "Test the number of edges: ";
-  cout << f1->get_num_edges();
+  vcl_cout << "Test the number of edges: ";
+  vcl_cout << f1->get_num_edges();
   ASSERT(f1->get_num_edges() == 3);
   
-  cout << "Shared edge with f2";
+  vcl_cout << "Shared edge with f2";
   ASSERT(f1->shares_edge_with(f2));
   
   
   /////////////// begin to test the two_chain  
-  cout << "************** test two_chain  *************" << endl;
+  vcl_cout << "************** test two_chain  *************" << vcl_endl;
   
   vtol_two_chain_3d *tc=b1->get_boundary_cycle();
   
-  cout << "num_faces: ";
-  cout << tc->num_faces();
+  vcl_cout << "num_faces: ";
+  vcl_cout << tc->num_faces();
   ASSERT(tc->num_faces() == 2);
   
   ///////////////// begin to test the block 
 
-  cout << "************** test block  *************" << endl;
-  b1->describe(cout, 8); 
+  vcl_cout << "************** test block  *************" << vcl_endl;
+  b1->describe(vcl_cout, 8); 
 
   //////////////////////// Test accessors 
-  cout << "Accessors: vertices, zero_chains ... blocks" << endl << endl;
+  vcl_cout << "Accessors: vertices, zero_chains ... blocks" << vcl_endl << vcl_endl;
 
   vertex_list_3d *vl;
   zero_chain_list_3d *zcl;
@@ -216,103 +216,103 @@ static void test_topology_3d(void)
   two_chain_list_3d *tcl;
   block_list_3d *bl;
 
-  cout <<"Vertex expects: ";
-  cout << "1 3 3 2 2 1 1 - gets:  ";
-  vl=v1->vertices(); cout << vl->size() << ' ';
-  zcl=v1->zero_chains(); cout << zcl->size() << ' ';
-  el=v1->edges(); cout << el->size() << ' ';
-  ocl=v1->one_chains(); cout << ocl->size() << ' ';
-  fl=v1->faces(); cout << fl->size() << ' ';
-  tcl=v1->two_chains(); cout << tcl->size() << ' ';
-  bl=v1->blocks(); cout << bl->size() << ' ';
+  vcl_cout <<"Vertex expects: ";
+  vcl_cout << "1 3 3 2 2 1 1 - gets:  ";
+  vl=v1->vertices(); vcl_cout << vl->size() << ' ';
+  zcl=v1->zero_chains(); vcl_cout << zcl->size() << ' ';
+  el=v1->edges(); vcl_cout << el->size() << ' ';
+  ocl=v1->one_chains(); vcl_cout << ocl->size() << ' ';
+  fl=v1->faces(); vcl_cout << fl->size() << ' ';
+  tcl=v1->two_chains(); vcl_cout << tcl->size() << ' ';
+  bl=v1->blocks(); vcl_cout << bl->size() << ' ';
   ASSERT(vl->size() == 1 && zcl->size() == 3 && el->size() == 3 && ocl->size() == 2 && fl->size() == 2 && tcl->size() == 1 && bl->size() == 1);
   delete vl; delete zcl; delete el; delete ocl; delete fl; delete tcl; delete bl;
 
-  cout <<"zero_chain expects: ";
-  cout << "2 1 1 1 1 1 1 - gets:  ";
-  vl=zc->vertices(); cout << vl->size() << ' ';
-  zcl=zc->zero_chains(); cout << zcl->size() << ' ';
-  el=zc->edges(); cout << el->size() << ' ';
-  ocl=zc->one_chains(); cout << ocl->size() << ' ';
-  fl=zc->faces(); cout << fl->size() << ' ';
-  tcl=zc->two_chains(); cout << tcl->size() << ' ';
-  bl=zc->blocks(); cout << bl->size() << ' ';
+  vcl_cout <<"zero_chain expects: ";
+  vcl_cout << "2 1 1 1 1 1 1 - gets:  ";
+  vl=zc->vertices(); vcl_cout << vl->size() << ' ';
+  zcl=zc->zero_chains(); vcl_cout << zcl->size() << ' ';
+  el=zc->edges(); vcl_cout << el->size() << ' ';
+  ocl=zc->one_chains(); vcl_cout << ocl->size() << ' ';
+  fl=zc->faces(); vcl_cout << fl->size() << ' ';
+  tcl=zc->two_chains(); vcl_cout << tcl->size() << ' ';
+  bl=zc->blocks(); vcl_cout << bl->size() << ' ';
   ASSERT(vl->size() == 2 && zcl->size() == 1 && el->size() == 1 && ocl->size() == 1 && fl->size() == 1 && tcl->size() == 1 && bl->size() == 1);
   delete vl; delete zcl; delete el; delete ocl; delete fl; delete tcl; delete bl;
 
   vtol_edge_3d* ed13= v1->new_edge(v3);
 
-  cout <<"edge expects: ";
-  cout << "2 1 1 2 2 1 1 - gets:  ";
-  vl=ed13->vertices(); cout << vl->size() << ' ';
-  zcl=ed13->zero_chains(); cout << zcl->size() << ' ';
-  el=ed13->edges(); cout << el->size() << ' ';
-  ocl=ed13->one_chains(); cout << ocl->size() << ' ';
-  fl=ed13->faces(); cout << fl->size() << ' ';
-  tcl=ed13->two_chains(); cout << tcl->size() << ' ';
-  bl=ed13->blocks(); cout << bl->size() << ' ';
+  vcl_cout <<"edge expects: ";
+  vcl_cout << "2 1 1 2 2 1 1 - gets:  ";
+  vl=ed13->vertices(); vcl_cout << vl->size() << ' ';
+  zcl=ed13->zero_chains(); vcl_cout << zcl->size() << ' ';
+  el=ed13->edges(); vcl_cout << el->size() << ' ';
+  ocl=ed13->one_chains(); vcl_cout << ocl->size() << ' ';
+  fl=ed13->faces(); vcl_cout << fl->size() << ' ';
+  tcl=ed13->two_chains(); vcl_cout << tcl->size() << ' ';
+  bl=ed13->blocks(); vcl_cout << bl->size() << ' ';
   ASSERT(vl->size() == 2 && zcl->size() == 1 && el->size() == 1 && ocl->size() == 2 && fl->size() == 2 && tcl->size() == 1 && bl->size() == 1);
   delete vl; delete zcl; delete el; delete ocl; delete fl; delete tcl; delete bl;
 
 
-  cout <<"one_chain expects: ";
-  cout << "3 3 3 1 1 1 1 - gets:  ";
-  vl=oc1->vertices(); cout << vl->size() << ' ';
-  zcl=oc1->zero_chains(); cout << zcl->size() << ' ';
-  el=oc1->edges(); cout << el->size() << ' ';
-  ocl=oc1->one_chains(); cout << ocl->size() << ' ';
-  fl=oc1->faces(); cout << fl->size() << ' ';
-  tcl=oc1->two_chains(); cout << tcl->size() << ' ';
-  bl=oc1->blocks(); cout << bl->size() << ' ';
+  vcl_cout <<"one_chain expects: ";
+  vcl_cout << "3 3 3 1 1 1 1 - gets:  ";
+  vl=oc1->vertices(); vcl_cout << vl->size() << ' ';
+  zcl=oc1->zero_chains(); vcl_cout << zcl->size() << ' ';
+  el=oc1->edges(); vcl_cout << el->size() << ' ';
+  ocl=oc1->one_chains(); vcl_cout << ocl->size() << ' ';
+  fl=oc1->faces(); vcl_cout << fl->size() << ' ';
+  tcl=oc1->two_chains(); vcl_cout << tcl->size() << ' ';
+  bl=oc1->blocks(); vcl_cout << bl->size() << ' ';
   ASSERT(vl->size() == 3 && zcl->size() == 3 && el->size() == 3 && ocl->size() == 1 && fl->size() == 1 && tcl->size() == 1 && bl->size() == 1);
   delete vl; delete zcl; delete el; delete ocl; delete fl; delete tcl; delete bl;
 
 
-  cout <<"face expects: ";
-  cout << "3 3 3 1 1 1 1 - gets:  ";
-  vl=f1->vertices(); cout << vl->size() << ' ';
-  zcl=f1->zero_chains(); cout << zcl->size() << ' ';
-  el=f1->edges(); cout << el->size() << ' ';
-  ocl=f1->one_chains(); cout << ocl->size() << ' ';
-  fl=f1->faces(); cout << fl->size() << ' ';
-  tcl=f1->two_chains(); cout << tcl->size() << ' ';
-  bl=f1->blocks(); cout << bl->size() << ' ';
+  vcl_cout <<"face expects: ";
+  vcl_cout << "3 3 3 1 1 1 1 - gets:  ";
+  vl=f1->vertices(); vcl_cout << vl->size() << ' ';
+  zcl=f1->zero_chains(); vcl_cout << zcl->size() << ' ';
+  el=f1->edges(); vcl_cout << el->size() << ' ';
+  ocl=f1->one_chains(); vcl_cout << ocl->size() << ' ';
+  fl=f1->faces(); vcl_cout << fl->size() << ' ';
+  tcl=f1->two_chains(); vcl_cout << tcl->size() << ' ';
+  bl=f1->blocks(); vcl_cout << bl->size() << ' ';
   ASSERT(vl->size() == 3 && zcl->size() == 3 && el->size() == 3 && ocl->size() == 1 && fl->size() == 1 && tcl->size() == 1 && bl->size() == 1);
   delete vl; delete zcl; delete el; delete ocl; delete fl; delete tcl; delete bl;
 
-  cout <<"two_chain expects: ";
-  cout << "4 5 5 2 2 1 1 - gets:  ";
-  vl=tc->vertices(); cout << vl->size() << ' ';
-  zcl=tc->zero_chains(); cout << zcl->size() << ' ';
-  el=tc->edges(); cout << el->size() << ' ';
-  ocl=tc->one_chains(); cout << ocl->size() << ' ';
-  fl=tc->faces(); cout << fl->size() << ' ';
-  tcl=tc->two_chains(); cout << tcl->size() << ' ';
-  bl=tc->blocks(); cout << bl->size() << ' ';
+  vcl_cout <<"two_chain expects: ";
+  vcl_cout << "4 5 5 2 2 1 1 - gets:  ";
+  vl=tc->vertices(); vcl_cout << vl->size() << ' ';
+  zcl=tc->zero_chains(); vcl_cout << zcl->size() << ' ';
+  el=tc->edges(); vcl_cout << el->size() << ' ';
+  ocl=tc->one_chains(); vcl_cout << ocl->size() << ' ';
+  fl=tc->faces(); vcl_cout << fl->size() << ' ';
+  tcl=tc->two_chains(); vcl_cout << tcl->size() << ' ';
+  bl=tc->blocks(); vcl_cout << bl->size() << ' ';
   ASSERT(vl->size() == 4 && zcl->size() == 5 && el->size() == 5 && ocl->size() == 2 && fl->size() == 2 && tcl->size() == 1 && bl->size() == 1);
   delete vl; delete zcl; delete el; delete ocl; delete fl; delete tcl; delete bl;
 
-  cout <<"block expects: ";
-  cout << "4 5 5 2 2 1 1 - gets:  ";
-  vl=b1->vertices(); cout << vl->size() << ' ';
-  zcl=b1->zero_chains(); cout << zcl->size() << ' ';
-  el=b1->edges(); cout << el->size() << ' ';
-  ocl=b1->one_chains(); cout << ocl->size() << ' ';
-  fl=b1->faces(); cout << fl->size() << ' ';
-  tcl=b1->two_chains(); cout << tcl->size() << ' ';
-  bl=b1->blocks(); cout << bl->size() << ' ';
+  vcl_cout <<"block expects: ";
+  vcl_cout << "4 5 5 2 2 1 1 - gets:  ";
+  vl=b1->vertices(); vcl_cout << vl->size() << ' ';
+  zcl=b1->zero_chains(); vcl_cout << zcl->size() << ' ';
+  el=b1->edges(); vcl_cout << el->size() << ' ';
+  ocl=b1->one_chains(); vcl_cout << ocl->size() << ' ';
+  fl=b1->faces(); vcl_cout << fl->size() << ' ';
+  tcl=b1->two_chains(); vcl_cout << tcl->size() << ' ';
+  bl=b1->blocks(); vcl_cout << bl->size() << ' ';
   ASSERT(vl->size() == 4 && zcl->size() == 5 && el->size() == 5 && ocl->size() == 2 && fl->size() == 2 && tcl->size() == 1 && bl->size() == 1);
   delete vl; delete zcl; delete el; delete ocl; delete fl; delete tcl; delete bl;
 
-  cout << "Done" << endl;
+  vcl_cout << "Done" << vcl_endl;
 }
 
 int main(int argc,
          char *argv[])
 {
-  cout<<"***************************************************"<<endl;
-  cout<<"******************* test 3D topology **************"<<endl;
-  cout<<"***************************************************"<<endl;
+  vcl_cout<<"***************************************************"<<vcl_endl;
+  vcl_cout<<"******************* test 3D topology **************"<<vcl_endl;
+  vcl_cout<<"***************************************************"<<vcl_endl;
   test_topology_3d();
   return 0;
 }

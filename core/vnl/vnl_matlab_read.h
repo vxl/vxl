@@ -25,19 +25,19 @@ template <class T> class vnl_matrix;
 // reasonably be read into the destination, abort().
 //
 // The vector/matrix will be resized if necessary.
-template <class T> bool vnl_matlab_read_or_die(istream &, vnl_vector<T> &, char const *name =0);
-template <class T> bool vnl_matlab_read_or_die(istream &, vnl_matrix<T> &, char const *name =0);
+template <class T> bool vnl_matlab_read_or_die(vcl_istream &, vnl_vector<T> &, char const *name =0);
+template <class T> bool vnl_matlab_read_or_die(vcl_istream &, vnl_matrix<T> &, char const *name =0);
 
 // ------------------------------ less easy ------------------------------
 
 // MATLAB stores its data as a real block followed by an imaginary block.
 // This function will read both blocks and interleave them into the area
 // pointed to by ptr. For real T, it is equivalent to s.read(ptr, sizeof(T)*n);
-template <class T> void vnl_matlab_read_data(istream &s, T *ptr, unsigned n);
+template <class T> void vnl_matlab_read_data(vcl_istream &s, T *ptr, unsigned n);
 
 class vnl_matlab_readhdr {
 public:
-  vnl_matlab_readhdr(istream &);
+  vnl_matlab_readhdr(vcl_istream &);
   ~vnl_matlab_readhdr();
 
   operator bool () const;
@@ -69,7 +69,7 @@ fsm_declare_methods(vcl_complex<double>);
 #undef fsm_declare_methods
   
 private:
-  istream &s;
+  vcl_istream &s;
   vnl_matlab_header hdr;
   char *varname;
   bool data_read;

@@ -37,7 +37,7 @@ public: \
 inline bool operator==(vnl_##T##_##n const & a, vnl_##T##_##n const & b) \
 { return (vnl_vector<T > const &)a == (vnl_vector<T > const &)b; } \
  \
-inline ostream & operator<<(ostream & s, vnl_##T##_##n const & v) \
+inline vcl_ostream & operator<<(vcl_ostream & s, vnl_##T##_##n const & v) \
 { return s << (vnl_vector<T > const&)v; }
 #else
 # define vnl_T_n_funcs_impl(T,n) /* no need */

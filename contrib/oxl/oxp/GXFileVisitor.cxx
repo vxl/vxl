@@ -25,9 +25,9 @@ GXFileVisitor::GXFileVisitor()
 // call the various virtuals.
 bool GXFileVisitor::visit(char const* filename)
 {
-  ifstream f(filename);
+  vcl_ifstream f(filename);
   if (!f.good()) {
-    cerr << "GXFileVisitor: Could not open [" << filename << "]\n";
+    vcl_cerr << "GXFileVisitor: Could not open [" << filename << "]\n";
     return false;
   }
   return visit(f);
@@ -57,7 +57,7 @@ struct StringToFloat {
   
 };
 
-bool GXFileVisitor::visit(istream& s)
+bool GXFileVisitor::visit(vcl_istream& s)
 {
   vbl_reg_exp re("^t +[-+.0-9e]+ +[-+.0-9e]+ +(.+)$");
   for(vbl_awk awk(s); awk; ++awk) {
@@ -86,12 +86,12 @@ bool GXFileVisitor::visit(istream& s)
 	base = 1;
 	npoints = (NF - 1)/2;
 	if (npoints * 2 + 1 != NF) {
-	  cerr << "movie: Polyline with odd # of vertices!!!\n";
+	  vcl_cerr << "movie: Polyline with odd # of vertices!!!\n";
 	  return false; //fsm
 	}
       }
       if (npoints > 1023) {
-	cerr << "movie: Polyline longer than 1024 points!!\n";
+	vcl_cerr << "movie: Polyline longer than 1024 points!!\n";
 	npoints = 1023;
 	return false; //fsm
       }
@@ -109,7 +109,7 @@ bool GXFileVisitor::visit(istream& s)
 	char const* text = awk.line();
 	// text is of form "t +number +number + ...thetext"
 	if (!*text || !re.find(text)) {
-	  vbl_printf(cerr, "GXFileVisitor: Bad \"t\" line: [%s]\n", text);
+	  vbl_printf(vcl_cerr, "GXFileVisitor: Bad \"t\" line: [%s]\n", text);
 	} else {
 	  this->text(atof(awk[1]), atof(awk[2]), re.match(1).c_str());
 	}
@@ -158,7 +158,7 @@ bool GXFileVisitor::visit(istream& s)
 	    break;
 	  }
 	if (!ok) {
-	  cerr << "GXFileVisitor: Colour [" << cs << "] not recognised\n";
+	  vcl_cerr << "GXFileVisitor: Colour [" << cs << "] not recognised\n";
 	  return false; //fsm
 	}
       }
@@ -166,7 +166,7 @@ bool GXFileVisitor::visit(istream& s)
       this->set_color(color[0], color[1], color[2]);
       
     } else {
-      cerr << "movie: bad gx line " << awk.line() << endl;
+      vcl_cerr << "movie: bad gx line " << awk.line() << vcl_endl;
       return false; //fsm
     }
   }

@@ -27,7 +27,7 @@ struct ByteConvertImage : public vil_memory_image_of<vil_byte> {
   ByteConvertImage(vil_memory_image_of<double> const& in, bool ignore_zero = false);
   ByteConvertImage(vil_memory_image_of<double> const& in, double min, double max);
 
-  void print(ostream&) const;
+  void print(vcl_ostream&) const;
 
 private:
   bool ignore_zero_;

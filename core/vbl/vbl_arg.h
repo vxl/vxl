@@ -24,7 +24,7 @@
 class vbl_arg_info_list;
 template <class T> class vbl_arg;
 template <class T> void settype     (vbl_arg<T> &);
-template <class T> void print_value (ostream &, vbl_arg<T> const &);
+template <class T> void print_value (vcl_ostream &, vbl_arg<T> const &);
 template <class T> int  parse       (vbl_arg<T>*, char**);
 
 //: This is the base class for the templated vbl_arg<T>s
@@ -57,7 +57,7 @@ public://protected:
   virtual ~vbl_arg_base() {}
 
   virtual int parse(char ** argv) = 0;
-  virtual ostream& print_value(ostream&) = 0;
+  virtual vcl_ostream& print_value(vcl_ostream&) = 0;
 };
 
 //: Parse the list of arguments....
@@ -149,7 +149,7 @@ public:
   int parse(char ** argv) { return ::parse(this, argv); }
 
   //: print
-  ostream& print_value(ostream &s) {
+  vcl_ostream& print_value(vcl_ostream &s) {
     ::print_value(s, *this);
     return s; // << flush
   }

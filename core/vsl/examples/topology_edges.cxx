@@ -11,23 +11,23 @@
 
 int main(int argc, char **argv) {
   if (argc>1) {
-    cerr << "extra arguments" << endl;
+    vcl_cerr << "extra arguments" << vcl_endl;
     return 1;
   }
 
-  cerr << "reading topology" << endl;
+  vcl_cerr << "reading topology" << vcl_endl;
   vcl_list<vsl_Edge*> edges;
   vcl_list<vsl_Vertex*> vertices;
-  vsl_load_topology(cin, edges, vertices);
+  vsl_load_topology(vcl_cin, edges, vertices);
 
-  cerr << "writing edges" << endl;
-  cout << edges.size() << " edges" << endl;
+  vcl_cerr << "writing edges" << vcl_endl;
+  vcl_cout << edges.size() << " edges" << vcl_endl;
   for (vcl_list<vsl_Edge*>::iterator i=edges.begin(); i!=edges.end(); ++i) {
-    cout << endl;
+    vcl_cout << vcl_endl;
     vsl_Edge const *e = *i;
-    cout << e->size() << endl;
+    vcl_cout << e->size() << vcl_endl;
     for (unsigned j=0; j<e->size(); ++j)
-      cout << e->GetX(j) << ' ' << e->GetY(j) << endl;
+      vcl_cout << e->GetX(j) << ' ' << e->GetY(j) << vcl_endl;
   }
 
   return 0;

@@ -312,7 +312,7 @@ void vnl_levenberg_marquardt::diagnose_outcome() const
 
 // fsm: should this function be a method on vnl_nonlinear_minimizer?
 // if not, the return codes should be moved into LM.
-void vnl_levenberg_marquardt::diagnose_outcome(ostream& s) const
+void vnl_levenberg_marquardt::diagnose_outcome(vcl_ostream& s) const
 {
 #define whoami "vnl_levenberg_marquardt"
   //if (!verbose_) return;

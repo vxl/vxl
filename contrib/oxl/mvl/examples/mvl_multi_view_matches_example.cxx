@@ -37,37 +37,37 @@ int main (int argc, char** argv)
     vcl_vector<int> indx;
     
     // add track1
-    cerr << "Adding Track 1" << endl;
+    vcl_cerr << "Adding Track 1" << vcl_endl;
     make_match(track1, v, indx);
     mvm.add_track(v, indx);
-    cerr << mvm << endl;
+    vcl_cerr << mvm << vcl_endl;
     // add track2 (no overlap with track 1)
-    cerr << "Adding Track 2" << endl;
+    vcl_cerr << "Adding Track 2" << vcl_endl;
     make_match(track2, v, indx);
     mvm.add_track(v, indx);
-    cerr << mvm << endl;
+    vcl_cerr << mvm << vcl_endl;
     // add track3 (overlaps 1 and 2, all merged into track 1)
-    cerr << "Adding Track 3" << endl;
+    vcl_cerr << "Adding Track 3" << vcl_endl;
     make_match(track3, v, indx);
     mvm.add_track(v, indx);
-    cerr << mvm << endl;
+    vcl_cerr << mvm << vcl_endl;
     // add track1 again
-    cerr << "Adding Track 1" << endl;
+    vcl_cerr << "Adding Track 1" << vcl_endl;
     make_match(track1, v, indx);
     mvm.add_track(v, indx);
-    cerr << mvm << endl;
+    vcl_cerr << mvm << vcl_endl;
     // add track4 (inconsistent, all deleted)
-    cerr << "Adding Track 4" << endl;
+    vcl_cerr << "Adding Track 4" << vcl_endl;
     make_match(track4, v, indx);
     mvm.add_track(v, indx);
-    cerr << mvm << endl;
+    vcl_cerr << mvm << vcl_endl;
   }
   // Now for the speed test
   {
     
-    cerr << "Setting up 500 view multi_view_matches..." << endl;    
+    vcl_cerr << "Setting up 500 view multi_view_matches..." << vcl_endl;    
     mvl_multi_view_matches mvm(500);
-    cerr << "Adding 50000 random pair-wise matches..." << endl;
+    vcl_cerr << "Adding 50000 random pair-wise matches..." << vcl_endl;
     
     int f[50000];
     int i1[50000];
@@ -82,7 +82,7 @@ int main (int argc, char** argv)
     for (int i=0; i < 50000; ++i) {
       mvm.add_pair(f[i], i1[i], f[i]+1, i2[i]);
     }
-    cerr << timer.user()  << " msec" << endl;
-    cerr << mvm.num_tracks() << " distinct tracks" << endl;
+    vcl_cerr << timer.user()  << " msec" << vcl_endl;
+    vcl_cerr << mvm.num_tracks() << " distinct tracks" << vcl_endl;
   }
 }

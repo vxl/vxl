@@ -23,7 +23,7 @@ struct ImageSequenceMovieFilePrivates {
       // Load new image
       vcl_string newname = seqname.name(index);
       if (MovieFileInterface::verbose)
-        vbl_printf(cerr, "ImageSequenceMovieFile: Loading [%s]: ", newname.c_str());
+        vbl_printf(vcl_cerr, "ImageSequenceMovieFile: Loading [%s]: ", newname.c_str());
       current_image.load(newname.c_str(), MovieFileInterface::verbose ? vil_file_image::laconic : vil_file_image::silent);
       current_image_index = index;
     }

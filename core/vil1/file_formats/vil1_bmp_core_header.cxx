@@ -39,7 +39,7 @@ void vil_bmp_core_header::write(vil_stream *s) const
   vil_16bit_write_little_endian(s, bitsperpixel);
 }
 
-void vil_bmp_core_header::print(ostream &s) const
+void vil_bmp_core_header::print(vcl_ostream &s) const
 {
   s << "vil_bmp_core_header:" << vcl_endl
     << "  header_size  : " << header_size  << vcl_endl

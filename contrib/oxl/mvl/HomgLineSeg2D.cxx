@@ -44,7 +44,7 @@ void HomgLineSeg2D::set (const HomgPoint2D& point1,
 //-----------------------------------------------------------------------------
 //
 // -- print to ostream
-ostream& operator<<(ostream& s, const HomgLineSeg2D& p)
+vcl_ostream& operator<<(vcl_ostream& s, const HomgLineSeg2D& p)
 {
   return s <<
     "<HomgLineSeg2D " << p.get_vector() <<
@@ -63,8 +63,8 @@ ImplicitLine* HomgLineSeg2D::get_implicitline() const
   IUPoint *startpoint = get_point1().get_iupoint();
   IUPoint *endpoint = get_point2().get_iupoint();
   if (!startpoint || !endpoint) {
-    cerr << "HomgLineSeg2D::get_implicitline() -- Endpoint at infinity\n";
-    cerr << "    " << *this << endl;
+    vcl_cerr << "HomgLineSeg2D::get_implicitline() -- Endpoint at infinity\n";
+    vcl_cerr << "    " << *this << vcl_endl;
     return 0;
   }
   

@@ -23,6 +23,8 @@ SOURCES += vnl_levenberg_marquardt.cxx
 SOURCES += vnl_conjugate_gradient.cxx
 SOURCES += vnl_lbfgs.cxx
 SOURCES += vnl_amoeba.cxx
+SOURCES += vnl_powell.cxx
+SOURCES += vnl_brent.cxx
 SOURCES += vnl_lsqr.cxx
 
 # equation solvers

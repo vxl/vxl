@@ -54,8 +54,8 @@ public:
   int FindNearestLineIndex(double x, double y);
 
   // Data Control--------------------------------------------------------------
-  bool load_ascii(istream&, HomgMetric const& c);
-  bool save_ascii(ostream&) const;
+  bool load_ascii(vcl_istream&, HomgMetric const& c);
+  bool save_ascii(vcl_ostream&) const;
 
   bool set_iuline(int i, void* l);
 

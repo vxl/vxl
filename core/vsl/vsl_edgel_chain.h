@@ -36,8 +36,8 @@ public:
   void SetY(float v, int i);
   int size() const;
   //
-  void write_ascii(ostream &) const;
-  void read_ascii(istream &);
+  void write_ascii(vcl_ostream &) const;
+  void read_ascii(vcl_istream &);
 };
 
 // urgh

@@ -39,7 +39,7 @@ void HomgNorm2D::normalize(const vcl_vector<HomgPoint2D>& points)
   
   double diameter = scale_xyroot2(_normalized, _normalized);
   if (diameter == 0) {
-    cerr << "HomgNorm2D: All points coincident\n";
+    vcl_cerr << "HomgNorm2D: All points coincident\n";
     diameter = 1;
     was_coincident_=true; // FSM
   }
@@ -58,12 +58,12 @@ void HomgNorm2D::normalize(const vcl_vector<HomgPoint2D>& points)
       double l = residual.magnitude();
       if (l > 1e-12) {
 	//	cerr << "\n\n";
-	cerr << "HomgNorm2D: "
+	vcl_cerr << "HomgNorm2D: "
 	     << "d = " << diameter 
 	     << "ni = " << ni
 	     << "mi = " << mi
 	     << "Residual = " << residual 
-	     << " mag = " << l << endl;
+	     << " mag = " << l << vcl_endl;
       }
     }
   }
@@ -144,7 +144,7 @@ static void centre (const vcl_vector<HomgPoint2D>& in,
       }
     }
     if (vnl_math_hypot(cog_x, cog_y) > 1e-10)
-      cerr << "HomgNorm2D: expected (0,0) computed (" << cog_x << "," << cog_y << ")\n";
+      vcl_cerr << "HomgNorm2D: expected (0,0) computed (" << cog_x << "," << cog_y << ")\n";
   }
 }
 
@@ -192,7 +192,7 @@ static double scale_xyroot2(const vcl_vector<HomgPoint2D>& in,
     if (numfinite > 0) magnitude /= numfinite;
     const double expected = sqrt(2.0);
     if (vnl_math_abs(expected - magnitude) > 1e-14)
-      cerr << "HomgNorm2D: Expected magnitude " << expected << " computed magnitude " << magnitude << endl;
+      vcl_cerr << "HomgNorm2D: Expected magnitude " << expected << " computed magnitude " << magnitude << vcl_endl;
   }
 
   // Return

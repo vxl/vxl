@@ -5,7 +5,7 @@
 #include "vbl_bool_ostream.h"
 
 
-ostream& operator<<(ostream& s, const vbl_bool_ostream::on_off& proxy) {
+vcl_ostream& operator<<(vcl_ostream& s, const vbl_bool_ostream::on_off& proxy) {
   if (*(proxy.truth)) 
     s << "on";
   else 
@@ -13,7 +13,7 @@ ostream& operator<<(ostream& s, const vbl_bool_ostream::on_off& proxy) {
   return s;
 }
  
-ostream& operator<<(ostream& s, const vbl_bool_ostream::high_low& proxy) {
+vcl_ostream& operator<<(vcl_ostream& s, const vbl_bool_ostream::high_low& proxy) {
   if (*(proxy.truth)) 
     s << "high";
   else 
@@ -21,7 +21,7 @@ ostream& operator<<(ostream& s, const vbl_bool_ostream::high_low& proxy) {
   return s;
 }
  
-ostream& operator<<(ostream& s, const vbl_bool_ostream::true_false& proxy) {
+vcl_ostream& operator<<(vcl_ostream& s, const vbl_bool_ostream::true_false& proxy) {
   if (*(proxy.truth)) 
     s << "true";
   else 

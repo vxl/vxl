@@ -60,6 +60,6 @@ private:
 
 };
 
-ostream& operator<<(ostream&, const HomgPlane3D&);
+vcl_ostream& operator<<(vcl_ostream&, const HomgPlane3D&);
 
 #endif // _HomgPlane3D_h

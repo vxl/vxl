@@ -58,6 +58,6 @@ public:
   void get_2_points_on_line(HomgPoint2D* p1, HomgPoint2D* p2) const;
 };
 
-ostream& operator<<(ostream& s, const HomgLine2D& );
+vcl_ostream& operator<<(vcl_ostream& s, const HomgLine2D& );
 
 #endif // _HomgLine2D_h

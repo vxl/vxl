@@ -23,9 +23,9 @@ int main(int argc, char **argv) {
 
   vcl_string* in_file = new vcl_string(in());
   if (*in_file == "") {
-    cout << "input image file: ";
+    vcl_cout << "input image file: ";
     char tmp[1024];
-    cin >> tmp;
+    vcl_cin >> tmp;
     delete in_file;
     in_file = new vcl_string(tmp);
   }
@@ -34,13 +34,13 @@ int main(int argc, char **argv) {
   vil_image image = vil_load(in_file->c_str());
   if (!image)
     return 1;
-  cerr << in_file << " : " << image << endl;
+  vcl_cerr << in_file << " : " << image << vcl_endl;
 
   vcl_list<vsl_Edge*> edges;
   vsl_easy_canny(canny(), image, &edges);
   
   if (out() == "")
-    vsl_save_topology(cout, edges, vcl_list<vsl_Vertex*>());
+    vsl_save_topology(vcl_cout, edges, vcl_list<vsl_Vertex*>());
   else
     vsl_save_topology(out().c_str(), edges, vcl_list<vsl_Vertex*>());
   //   for (vcl_list<vsl_Edge*>::iterator i=edges.begin(); i!=edges.end(); ++i) {

@@ -349,12 +349,12 @@ public:
   //: print and describe the objects
   //---------------------------------------------------------------------------
 
-  virtual void print(ostream &strm=cout) const;
-  virtual void describe_inferiors(ostream &strm=cout,
+  virtual void print(vcl_ostream &strm=vcl_cout) const;
+  virtual void describe_inferiors(vcl_ostream &strm=vcl_cout,
                                   int blanking=0) const;
-  virtual void describe_superiors(ostream &strm=cout,
+  virtual void describe_superiors(vcl_ostream &strm=vcl_cout,
                                   int blanking=0) const;
-  virtual void describe(ostream &strm=cout,
+  virtual void describe(vcl_ostream &strm=vcl_cout,
                         int blanking=0) const;
 private:
   //***************************************************************************

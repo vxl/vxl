@@ -132,10 +132,10 @@ main()
   vcl_vector<HomgPoint2D> p2;
   vcl_vector<HomgPoint2D> p3;
 
-  cout << "count  = " << fred.count() << endl;
+  vcl_cout << "count  = " << fred.count() << vcl_endl;
   
   fred.extract_matches(p1, p2, p3);
 
-  cout << p1 << endl;
+  vcl_cout << p1 << vcl_endl;
 }
 #endif

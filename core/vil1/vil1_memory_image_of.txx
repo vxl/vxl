@@ -38,6 +38,14 @@ vil_memory_image_of<T>::vil_memory_image_of(int sizex, int sizey):
 {
 }
 
+// added by Brendan McCane for creating an image from already
+// allocated memory.
+template <class T>
+vil_memory_image_of<T>::vil_memory_image_of(T *buf, int sizex, int sizey):
+  vil_memory_image(buf, 1, sizex, sizey, vil_memory_image_of_format<T>())
+{
+}
+
 #if 0 // this method was removed
 template <class T>
 vil_memory_image_of<T>::vil_memory_image_of(int sizex, int sizey, T const& value):
@@ -102,13 +110,5 @@ void vil_memory_image_of<T>::fill(T const& v)
   }
 }
 
-// added by Brendan McCane for creating an image from already
-// allocated memory.
-template <class T>
-vil_memory_image_of<T>::vil_memory_image_of(T *buf, int sizex, int sizey):
-  vil_memory_image(buf, 1, sizex, sizey, vil_memory_image_of_format<T>())
-{
-}
-
 #define VIL_MEMORY_IMAGE_OF_INSTANTIATE(T)\
-template class vil_memory_image_of<T >;
+template class vil_memory_image_of<T >

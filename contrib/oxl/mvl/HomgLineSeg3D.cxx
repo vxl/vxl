@@ -71,7 +71,7 @@ void HomgLineSeg3D::set (const HomgPoint3D& point1, const HomgPoint3D& point2)
   _point2 = point2;
 }
 
-ostream& operator << (ostream& s, const HomgLineSeg3D& l)
+vcl_ostream& operator << (vcl_ostream& s, const HomgLineSeg3D& l)
 {
   return s << l.get_point1().get_vector() << ", " << l.get_point2().get_vector();
 }

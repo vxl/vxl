@@ -29,7 +29,7 @@ public:
   HMatrix3D(const vnl_matrix<double>& M);
   HMatrix3D(const vnl_matrix<double>& M, const vnl_vector<double>& m);
   HMatrix3D(const double* t_matrix);
-  HMatrix3D(istream&);
+  HMatrix3D(vcl_istream&);
  ~HMatrix3D();
 
   // Operations----------------------------------------------------------------
@@ -37,7 +37,7 @@ public:
   HomgPoint3D transform(const HomgPoint3D& x1) const;
   HomgLine3D transform(const HomgLine3D& l1) const;
 
-  bool load(istream&);
+  bool load(vcl_istream&);
 
   // Data Access---------------------------------------------------------------
 
@@ -57,7 +57,7 @@ public:
 PMatrix operator* (const PMatrix&, const HMatrix3D& H);
 
 // stream I/O
-ostream &operator<<(ostream &,HMatrix3D const &);
-istream& operator>>(istream &,HMatrix3D       &);
+vcl_ostream &operator<<(vcl_ostream &,HMatrix3D const &);
+vcl_istream& operator>>(vcl_istream &,HMatrix3D       &);
 
 #endif // _HMatrix3D_h

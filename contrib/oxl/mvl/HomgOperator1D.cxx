@@ -32,7 +32,7 @@ double HomgOperator1D::CrossRatio(const Homg1D& a, const Homg1D& b, const Homg1D
   double n = (x1*w3-x3*w1)*(x2*w4-x4*w2);
   double m = (x1*w4-x4*w1)*(x2*w3-x3*w2);
   if (n == 0 && m == 0)
-    cerr << "CrossRatio not defined: three of the given points coincide" << endl;
+    vcl_cerr << "CrossRatio not defined: three of the given points coincide" << vcl_endl;
   return n/m;
 }
 
@@ -62,7 +62,7 @@ void HomgOperator1D::unitize(Homg1D* a)
   double x = a->get_x(), w = a->get_w();
   double norm = vcl_sqrt (x*x + w*w);
   if (norm == 0.0) {
-    cerr << "HomgOperator1D::unitize() -- Zero length vector\n";
+    vcl_cerr << "HomgOperator1D::unitize() -- Zero length vector\n";
     return;
   }
   norm = 1.0/norm;
@@ -76,7 +76,7 @@ double HomgOperator1D::distance (const HomgPoint1D& a,
   double x1 = a.get_x(), w1 = a.get_w();
   double x2 = b.get_x(), w2 = b.get_w();
   if (w1 == 0 || w2 == 0) {
-    cerr << "HomgOperator1D::distance() -- point at infinity";
+    vcl_cerr << "HomgOperator1D::distance() -- point at infinity";
     return Homg::infinity;
   }
   return (x1 / w1 - x2 / w2);

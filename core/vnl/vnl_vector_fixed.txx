@@ -42,11 +42,11 @@ VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T VCL_COMMA n> operator-(T const, vnl_ve
 VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T VCL_COMMA n> operator*(T const, vnl_vector_fixed<T,n> const&));\
 VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T VCL_COMMA n> element_product (vnl_vector_fixed<T,n> const&, vnl_vector_fixed<T,n> const&)) \
 VCL_INSTANTIATE_INLINE(vnl_vector_fixed<T VCL_COMMA n> element_quotient(vnl_vector_fixed<T,n> const&, vnl_vector_fixed<T,n> const&)) \
-VCL_INSTANTIATE_INLINE(ostream &operator<<(ostream & VCL_COMMA vnl_vector_fixed<T VCL_COMMA n> const &))
+VCL_INSTANTIATE_INLINE(vcl_ostream &operator<<(vcl_ostream & VCL_COMMA vnl_vector_fixed<T VCL_COMMA n> const &))
 #else
 #define VNL_VECTOR_FIXED_INSTANTIATE(T,n) \
 template class vnl_vector_fixed<T, n>; \
-VCL_INSTANTIATE_INLINE(ostream &operator<<(ostream & VCL_COMMA vnl_vector_fixed<T VCL_COMMA n> const &))
+VCL_INSTANTIATE_INLINE(vcl_ostream &operator<<(vcl_ostream & VCL_COMMA vnl_vector_fixed<T VCL_COMMA n> const &))
 #endif
 
 //--------------------------------------------------------------------------------

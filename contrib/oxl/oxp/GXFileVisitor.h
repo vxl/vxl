@@ -23,7 +23,7 @@ public:
   virtual ~GXFileVisitor() {}
 
   bool visit(char const* filename);
-  bool visit(istream&);
+  bool visit(vcl_istream&);
 
   virtual bool point(char const* type, float x, float y);
   virtual bool polyline(float const* x, float const* y, int n);

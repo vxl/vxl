@@ -51,6 +51,6 @@ private:
   HomgPoint3D _point2;
 };
 
-ostream& operator<<(ostream& s, const HomgLineSeg3D& );
+vcl_ostream& operator<<(vcl_ostream& s, const HomgLineSeg3D& );
 
 #endif // _HomgLineSeg3D_h

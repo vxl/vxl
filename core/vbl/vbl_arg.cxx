@@ -454,7 +454,7 @@ static int list_parse(vcl_list<int> &out, char ** argv)
 
 //: bool
 VDS void settype(vbl_arg<bool> &arg) { arg.type_ = "bool"; }
-VDS void print_value(ostream &s, vbl_arg<bool> const &arg) 
+VDS void print_value(vcl_ostream &s, vbl_arg<bool> const &arg) 
 { s << (arg() ? "set" : "not set"); }
 VDS int parse(vbl_arg<bool>* arg, char ** /*argv*/) {
   arg->value_ = true;
@@ -464,7 +464,7 @@ template class vbl_arg<bool>;
 
 //: int
 VDS void settype(vbl_arg<int> &arg) { arg.type_ = "integer"; }
-VDS void print_value(ostream  &s, vbl_arg<int> const &arg) 
+VDS void print_value(vcl_ostream  &s, vbl_arg<int> const &arg) 
 { s << arg(); }
 VDS int parse(vbl_arg<int>* arg, char ** argv) {
   char* endptr = 0;
@@ -485,7 +485,7 @@ template class vbl_arg<int>;
 
 //: unsigned
 VDS void settype(vbl_arg<unsigned> &arg) { arg.type_ = "integer"; }
-VDS void print_value(ostream &s, vbl_arg<unsigned> const &arg) 
+VDS void print_value(vcl_ostream &s, vbl_arg<unsigned> const &arg) 
 { s << arg(); }
 VDS int parse(vbl_arg<unsigned>* arg, char ** argv) {
   char* endptr = 0;
@@ -506,7 +506,7 @@ template class vbl_arg<unsigned>;
 
 //: float
 VDS void settype(vbl_arg<float> &arg) { arg.type_ = "float"; }
-VDS void print_value(ostream &s, vbl_arg<float> const &arg) 
+VDS void print_value(vcl_ostream &s, vbl_arg<float> const &arg) 
 { s << arg(); }
 VDS int parse(vbl_arg<float>* arg, char ** argv) {
   char* endptr = 0;
@@ -521,7 +521,7 @@ template class vbl_arg<float>;
 
 //: double
 VDS void settype(vbl_arg<double> &arg) { arg.type_ = "float"; }
-VDS void print_value(ostream &s, vbl_arg<double> const &arg) 
+VDS void print_value(vcl_ostream &s, vbl_arg<double> const &arg) 
 { s << arg(); }
 VDS int parse(vbl_arg<double>* arg, char ** argv) {
   char* endptr = 0;
@@ -536,7 +536,7 @@ template class vbl_arg<double>;
 
 //: char *
 VDS void settype(vbl_arg<char *> &arg) { arg.type_ = "string"; }
-VDS void print_value(ostream &s, vbl_arg<char *> const &arg) 
+VDS void print_value(vcl_ostream &s, vbl_arg<char *> const &arg) 
 { s << '\'' << (arg()?arg():"(null)") << '\''; }
 VDS int parse(vbl_arg<char*>* arg, char ** argv) {
   arg->value_ = argv[0]; // argv is valid till the end of the program so 
@@ -546,7 +546,7 @@ template class vbl_arg<char*>;
 
 //: char const *
 VDS void settype(vbl_arg<char const *> &arg) { arg.type_ = "string"; }
-VDS void print_value(ostream &s, vbl_arg<char const *> const &arg) 
+VDS void print_value(vcl_ostream &s, vbl_arg<char const *> const &arg) 
 { s << '\'' << arg() << '\''; }
 VDS int parse(vbl_arg<char const *>* arg, char ** argv) {
   arg->value_ = argv[0]; // argv is valid till the end of the program so 
@@ -556,7 +556,7 @@ template class vbl_arg<char const*>;
 
 //: vcl_string
 VDS void settype(vbl_arg<vcl_string> &arg) { arg.type_ = "string"; }
-VDS void print_value(ostream &s, vbl_arg<vcl_string> const &arg) 
+VDS void print_value(vcl_ostream &s, vbl_arg<vcl_string> const &arg) 
 { s << '\'' << arg() << '\''; }
 VDS int parse(vbl_arg<vcl_string>* arg, char ** argv) {
   if (argv[0]) {
@@ -572,7 +572,7 @@ template class vbl_arg<vcl_string>;
 
 //: vcl_list<int>
 VDS void settype(vbl_arg<vcl_list<int> > &arg) { arg.type_ = "integer list"; }
-VDS void print_value(ostream &s, vbl_arg<vcl_list<int> > const &arg) {
+VDS void print_value(vcl_ostream &s, vbl_arg<vcl_list<int> > const &arg) {
   for (vcl_list<int>::const_iterator i=arg().begin(); i!=arg().end(); ++i)
     s << ' ' << *i;
 }
@@ -583,7 +583,7 @@ template class vbl_arg<vcl_list<int> >;
 
 //: vcl_vector<int>
 VDS void settype(vbl_arg<vcl_vector<int> > &arg) { arg.type_ = "integer list"; }
-VDS void print_value(ostream &s, vbl_arg<vcl_vector<int> > const &arg) {
+VDS void print_value(vcl_ostream &s, vbl_arg<vcl_vector<int> > const &arg) {
   for (unsigned i=0; i<arg().size(); ++i)
     s << ' ' << arg()[i];
 }
@@ -598,7 +598,7 @@ template class vbl_arg<vcl_vector<int> >;
 
 //: vcl_vector<unsigned>
 VDS void settype(vbl_arg<vcl_vector<unsigned> > &arg) { arg.type_ = "integer list"; }
-VDS void print_value(ostream &s, vbl_arg<vcl_vector<unsigned> > const &arg) {
+VDS void print_value(vcl_ostream &s, vbl_arg<vcl_vector<unsigned> > const &arg) {
   for (unsigned i=0; i<arg().size(); ++i)
     s << ' ' << arg()[i];
 }
@@ -613,7 +613,7 @@ template class vbl_arg<vcl_vector<unsigned> >;
 
 //: vcl_vector<double>
 VDS void settype(vbl_arg<vcl_vector<double> > &arg) { arg.type_ = "double list"; }
-VDS void print_value(ostream &s, vbl_arg<vcl_vector<double> > const &arg) {
+VDS void print_value(vcl_ostream &s, vbl_arg<vcl_vector<double> > const &arg) {
   for (int i=0; i<arg().size(); ++i)
     s << ' ' << arg()[i];
 }

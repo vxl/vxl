@@ -11,7 +11,7 @@
 #include <vcl_iostream.h>
 
 template <class T, int DIM>
-ostream& vbl_bounding_box<T, DIM>::print(ostream& s) const
+vcl_ostream& vbl_bounding_box<T, DIM>::print(vcl_ostream& s) const
 {
   s << "<bbox(";
   for(int i = 0; i < DIM; ++i)
@@ -41,5 +41,5 @@ VCL_INSTANTIATE_INLINE(bool meet    (vbl_bounding_box<T,DIM> const &, vbl_boundi
 
 #define VBL_BOUNDING_BOX_INSTANTIATE(T,DIM) \
 template class vbl_bounding_box<T , DIM >; \
-vbl_bbox_inst_inline(ostream& operator << (ostream&, vbl_bounding_box<T,DIM> const &)); \
+vbl_bbox_inst_inline(vcl_ostream& operator << (vcl_ostream&, vbl_bounding_box<T,DIM> const &)); \
 vbl_bbox_inst_functions(T,DIM)

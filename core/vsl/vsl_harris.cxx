@@ -321,12 +321,12 @@ void vsl_harris::get_corners(vcl_vector<float> &corx, vcl_vector<float> &cory) c
 }
 
 //: convenience method
-void vsl_harris::save_corners(ostream &f) const {
+void vsl_harris::save_corners(vcl_ostream &f) const {
   for (unsigned i=0; i<cc.size(); ++i)
     f << cc[i].first << ' ' << cc[i].second << vcl_endl;
 }
 void vsl_harris::save_corners(char const *filename) const {
-  ofstream f(filename);
+  vcl_ofstream f(filename);
   assert(f.good());
   save_corners(f);
   f.close();

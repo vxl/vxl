@@ -64,6 +64,6 @@ public:
 #endif
 };
 
-ostream& operator<<(ostream &os, const vbl_sprintf& s);
+vcl_ostream& operator<<(vcl_ostream &os, const vbl_sprintf& s);
 
 #endif // vbl_sprintf_h_

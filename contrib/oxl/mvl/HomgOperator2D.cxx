@@ -61,7 +61,7 @@ void HomgOperator2D::unitize(Homg2D* a)
   double norm = sqrt (vnl_math_sqr(x) + vnl_math_sqr(y) + vnl_math_sqr(z));
   
   if (norm == 0.0) {
-    cerr << "HomgOperator2D::unitize() -- Zero length vector\n";
+    vcl_cerr << "HomgOperator2D::unitize() -- Zero length vector\n";
     return;
   }
   
@@ -84,7 +84,7 @@ double HomgOperator2D::distance_squared (const HomgPoint2D& point1,
   double z2 = point2.get_w();
 
   if (z1 == 0 || z2 == 0) {
-    cerr << "HomgOperator2D::distance_squared() -- point at infinity";
+    vcl_cerr << "HomgOperator2D::distance_squared() -- point at infinity";
     return Homg::infinity;
   }
 
@@ -107,7 +107,7 @@ double HomgOperator2D::distance_squared (const HomgPoint2D& point1,
 double HomgOperator2D::perp_dist_squared (const HomgPoint2D& point, const HomgLine2D& line)
 {
   if (line.check_infinity() || point.check_infinity()) {
-    cerr << "HomgOperator2D::perp_dist_squared() -- line or point at infinity";
+    vcl_cerr << "HomgOperator2D::perp_dist_squared() -- line or point at infinity";
     return Homg::infinity;
   }
   
@@ -394,7 +394,7 @@ static vnl_vector<double> most_orthogonal_vector_svd(const vcl_vector<HomgLine2D
     D.set_row(i, lines[i].get_vector());
   
   vnl_svd<double> svd(D);
-  cout << "[movrank " << svd.W() << "]";
+  vcl_cout << "[movrank " << svd.W() << "]";
   
   return svd.nullvector();
 }
@@ -446,7 +446,7 @@ HomgLineSeg2D HomgOperator2D::clip_line_to_lineseg(const HomgLine2D& line,
 
 double HomgOperator2D::perp_distance_squared (const HomgLine2D& line, const HomgPoint2D& point)
 {
-  cerr << "HomgOperator2D::perp_distance_squared should be replaced by perp_dist_squared\n";
+  vcl_cerr << "HomgOperator2D::perp_distance_squared should be replaced by perp_dist_squared\n";
   return perp_dist_squared(point, line);
 }
 
@@ -478,7 +478,7 @@ double HomgOperator2D::CrossRatio(const Homg2D& a, const Homg2D& b, const Homg2D
   double n = (x>y) ? (x1*w3-x3*w1)*(x2*w4-x4*w2) : (y1*w3-y3*w1)*(y2*w4-y4*w2);
   double m = (x>y) ? (x1*w4-x4*w1)*(x2*w3-x3*w2) : (y1*w4-y4*w1)*(y2*w3-y3*w2);
   if (n == 0 && m == 0)
-    cerr << "CrossRatio not defined: three of the given points coincide" << endl;
+    vcl_cerr << "CrossRatio not defined: three of the given points coincide" << vcl_endl;
   return n/m;
 }
 

@@ -31,11 +31,11 @@ HomgOperator3D::sort_points(HomgPoint3D* points, int n)
     }
   }
   if (num_finite < n) {
-    cerr << "WARNING HomgOperator3D::sort_points -- " << (n - num_finite) << " at infinity\n";
+    vcl_cerr << "WARNING HomgOperator3D::sort_points -- " << (n - num_finite) << " at infinity\n";
   }
   
   if (!num_finite) {
-    cerr << "HomgOperator3D::sort_points: all points at infinity - no action";
+    vcl_cerr << "HomgOperator3D::sort_points: all points at infinity - no action";
     return;
   }
 
@@ -169,7 +169,7 @@ HomgOperator3D::intersect_line_and_plane (const HomgLine3D &line, const HomgPlan
 HomgPoint3D
 HomgOperator3D::lines_to_point (const HomgLine3D& , const HomgLine3D& )
 {
-  cerr << "Warning: HomgOperator3D::lines_to_point() not yet implemented\n";
+  vcl_cerr << "Warning: HomgOperator3D::lines_to_point() not yet implemented\n";
   return HomgPoint3D();
 }
 
@@ -181,7 +181,7 @@ HomgOperator3D::lines_to_point (const HomgLine3D& , const HomgLine3D& )
 HomgPoint3D
 HomgOperator3D::lines_to_point (const vcl_vector<HomgLine3D>& )
 {
-  cerr << "Warning: HomgOperator3D::lines_to_point() not yet implemented\n";
+  vcl_cerr << "Warning: HomgOperator3D::lines_to_point() not yet implemented\n";
   return HomgPoint3D();
 }
 
@@ -192,7 +192,7 @@ HomgOperator3D::lines_to_point (const vcl_vector<HomgLine3D>& )
 double
 HomgOperator3D::perp_distance_squared (const HomgLine3D& , const HomgPoint3D& )
 {
-  cerr << "Warning: HomgOperator3D::perp_distance_squared() not yet implemented\n";
+  vcl_cerr << "Warning: HomgOperator3D::perp_distance_squared() not yet implemented\n";
   return 0;
 }
 
@@ -213,7 +213,7 @@ HomgOperator3D::perp_line_through_point (const HomgLine3D& , const HomgPoint3D& 
 HomgPoint3D 
 HomgOperator3D::perp_projection (const HomgLine3D& , const HomgPoint3D& )
 {
-  cerr << "Warning: HomgOperator3D::perp_projection() not yet implemented\n";
+  vcl_cerr << "Warning: HomgOperator3D::perp_projection() not yet implemented\n";
   return HomgPoint3D();
 }
 
@@ -243,7 +243,7 @@ HomgOperator3D::planes_to_line (const HomgPlane3D& plane1, const HomgPlane3D& pl
 HomgLine3D 
 HomgOperator3D::planes_to_line (const vcl_vector<HomgPlane3D>&)
 {
-  cerr << "Warning: HomgOperator3D::planes_to_line() not yet implemented\n";
+  vcl_cerr << "Warning: HomgOperator3D::planes_to_line() not yet implemented\n";
   return HomgLine3D();
 }
 
@@ -255,7 +255,7 @@ HomgOperator3D::planes_to_line (const vcl_vector<HomgPlane3D>&)
 HomgLine3D 
 HomgOperator3D::points_to_line (const HomgPoint3D&, const HomgPoint3D&)
 {
-  cerr << "Warning: HomgOperator3D::points_to_line() not yet implemented\n";
+  vcl_cerr << "Warning: HomgOperator3D::points_to_line() not yet implemented\n";
   return HomgLine3D();
 }
 
@@ -266,7 +266,7 @@ HomgOperator3D::points_to_line (const HomgPoint3D&, const HomgPoint3D&)
 HomgLine3D  
 HomgOperator3D::points_to_line (const vcl_vector<HomgPoint3D>&)
 {
-  cerr << "Warning: HomgOperator3D::points_to_line() not yet implemented\n";
+  vcl_cerr << "Warning: HomgOperator3D::points_to_line() not yet implemented\n";
   return HomgLine3D();
 }
 
@@ -277,7 +277,7 @@ HomgOperator3D::points_to_line (const vcl_vector<HomgPoint3D>&)
 HomgPlane3D 
 HomgOperator3D::points_to_plane (const HomgPoint3D&, const HomgPoint3D&, const HomgPoint3D&)
 {
-  cerr << "Warning: HomgOperator3D::points_to_plane() not yet implemented\n";
+  vcl_cerr << "Warning: HomgOperator3D::points_to_plane() not yet implemented\n";
   return HomgPlane3D();
 }
 
@@ -289,7 +289,7 @@ HomgOperator3D::points_to_plane (const HomgPoint3D&, const HomgPoint3D&, const H
 HomgPlane3D 
 HomgOperator3D::points_to_plane (const vcl_vector<HomgPoint3D>&)
 {
-  cerr << "Warning: HomgOperator3D::points_to_plane() not yet implemented\n";
+  vcl_cerr << "Warning: HomgOperator3D::points_to_plane() not yet implemented\n";
   return HomgPlane3D();
 }
 
@@ -368,6 +368,6 @@ double HomgOperator3D::CrossRatio(const Homg3D& a, const Homg3D& b, const Homg3D
              (y>z)        ? (y1*w4-y4*w1)*(y2*w3-y3*w2) :
                             (z1*w4-z4*w1)*(z2*w3-z3*w2);
   if (n == 0 && m == 0)
-    cerr << "CrossRatio not defined: three of the given points coincide" << endl;
+    vcl_cerr << "CrossRatio not defined: three of the given points coincide" << vcl_endl;
   return n/m;
 }

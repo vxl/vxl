@@ -48,7 +48,7 @@ public:
   unsigned count_nonempty() const { return storage_.size(); }
 
   // Data Control--------------------------------------------------------------
-  ostream& print(ostream&) const;
+  vcl_ostream& print(vcl_ostream&) const;
 
 protected:
   unsigned n1_;
@@ -64,7 +64,7 @@ public:
 };
 
 template <class T>
-inline ostream& operator << (ostream& s, const vbl_sparse_array_3d<T>& a)
+inline vcl_ostream& operator << (vcl_ostream& s, const vbl_sparse_array_3d<T>& a)
 {
   return a.print(s);
 }

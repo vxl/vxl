@@ -14,12 +14,12 @@ MovieFileInterface::~MovieFileInterface()
 
 bool MovieFileInterface::GetFrame(int /*frame_index*/, void* /*buffer*/)
 {
-  cerr << "MovieFileInterface::GetFrame not implemented\n";
+  vcl_cerr << "MovieFileInterface::GetFrame not implemented\n";
   return false;
 }
 
 bool MovieFileInterface::GetField(int /*frame_index*/, void* /*buffer*/)
 {
-  cerr << "MovieFileInterface::GetField not implemented\n";
+  vcl_cerr << "MovieFileInterface::GetField not implemented\n";
   return false;
 }

@@ -13,7 +13,7 @@
 
 // -- Print the Array to a stream in "(i,j): value" format.
 template <class T>
-ostream& vbl_sparse_array_2d<T>::print(ostream& out) const
+vcl_ostream& vbl_sparse_array_2d<T>::print(vcl_ostream& out) const
 {
   const_iterator enD = storage_.end();
   for(const_iterator p = storage_.begin(); p != enD; ++p) {
@@ -31,7 +31,7 @@ template class vbl_sparse_array_2d<T>
 #undef VBL_SPARSE_ARRAY_2D_INSTANTIATE 
 #define VBL_SPARSE_ARRAY_2D_INSTANTIATE(T) \
 VBL_SPARSE_ARRAY_2D_INSTANTIATE_base(T); \
-VCL_INSTANTIATE_INLINE(ostream& operator<< (ostream&, const vbl_sparse_array_2d<T> &))
+VCL_INSTANTIATE_INLINE(vcl_ostream& operator<< (vcl_ostream&, const vbl_sparse_array_2d<T> &))
  
 
 #ifdef MAIN

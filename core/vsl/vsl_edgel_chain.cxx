@@ -76,13 +76,13 @@ void vsl_edgel_chain::SetLength(int nn) {
     abort();
 }
 
-void vsl_edgel_chain::write_ascii(ostream &os) const {
+void vsl_edgel_chain::write_ascii(vcl_ostream &os) const {
   os << n << vcl_endl; // length
   for (unsigned i=0; i<n; ++i)
     os << x[i] << ' ' << y[i] << ' ' << grad[i] << ' ' << theta[i] << vcl_endl;
 }
 
-void vsl_edgel_chain::read_ascii(istream &is) {
+void vsl_edgel_chain::read_ascii(vcl_istream &is) {
   {
     int n_ = -1;
     is >> vcl_ws >> n_;

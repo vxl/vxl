@@ -15,7 +15,7 @@ PMatrixDec::PMatrixDec(const vnl_matrix<double>& p_matrix)
   : PMatrix(p_matrix), _j_matrix(3,3), _d_matrix(4,4)
 {
   if (!((p_matrix.rows() == 3) && (p_matrix.columns() == 4)))
-    cout << "PMatrixDec WARNING: Incorrect size of matrix" << endl;
+    vcl_cout << "PMatrixDec WARNING: Incorrect size of matrix" << vcl_endl;
   Init();
 }
 
@@ -47,7 +47,7 @@ void PMatrixDec::Init()
     a_u = a_u-u0*u0;
     a_v = a_v-v0*v0;
     if ((a_u <= 0.0) || (a_v <= 0.0))
-      cout << "PMatrixDec WARNING: Incorrect projection matrix" << endl;
+      vcl_cout << "PMatrixDec WARNING: Incorrect projection matrix" << vcl_endl;
     else
     {
       a_u = sqrt(a_u);
@@ -92,12 +92,12 @@ void PMatrixDec::Init()
 
 //---------------------------------------------------------------
 // -- Print to ostream
-ostream& operator<<(ostream& s, const PMatrixDec& P) 
+vcl_ostream& operator<<(vcl_ostream& s, const PMatrixDec& P) 
 {
-  s << "PROJECTION MATRIX = [" << endl << P.get_matrix() << "]" << endl 
-    << "DECOMPOSITION: " << endl
-    << "Intrinsic Parameters = [" << endl << P._j_matrix << "]" << endl 
-    << "Extrinsic Parameters = [" << endl << P._d_matrix << "]" << endl;
+  s << "PROJECTION MATRIX = [" << vcl_endl << P.get_matrix() << "]" << vcl_endl 
+    << "DECOMPOSITION: " << vcl_endl
+    << "Intrinsic Parameters = [" << vcl_endl << P._j_matrix << "]" << vcl_endl 
+    << "Extrinsic Parameters = [" << vcl_endl << P._d_matrix << "]" << vcl_endl;
   return s;
 }
 
@@ -113,21 +113,21 @@ void PMatrixDec::Test()
   matrix1(0,2)= 552.506; matrix1(1,2)= 194.806; matrix1(2,2)= 0.960472;
   matrix1(0,3)= -596.353;matrix1(1,3)= 92.4159; matrix1(2,3)= 0.228363;
 
-  cout << "Correct Matrix: " << endl;
-  cout << matrix1 << endl;
+  vcl_cout << "Correct Matrix: " << vcl_endl;
+  vcl_cout << matrix1 << vcl_endl;
   PMatrixDec pmat1(matrix1);
-  cout << pmat1;
+  vcl_cout << pmat1;
   vnl_matrix<double> J(3,4);
   J.update(pmat1.IntrinsicParameters(), 0, 0); // Copy columns 0,1 and 2
   J(0,3) = 0.0; // Last column = 0
   J(1,3) = 0.0;
   J(2,3) = 0.0;  
-  cout << "P = [J O_3]*D = [" << endl
-       << J * pmat1.ExtrinsicParameters() << "]" << endl;
-  cout << "AlphaU=" << pmat1.GetAlphaU() << endl;
-  cout << "AlphaV=" << pmat1.GetAlphaV() << endl;
-  cout << "U0=" << pmat1.GetU0() << endl;
-  cout << "V0=" << pmat1.GetV0() << endl;
+  vcl_cout << "P = [J O_3]*D = [" << vcl_endl
+       << J * pmat1.ExtrinsicParameters() << "]" << vcl_endl;
+  vcl_cout << "AlphaU=" << pmat1.GetAlphaU() << vcl_endl;
+  vcl_cout << "AlphaV=" << pmat1.GetAlphaV() << vcl_endl;
+  vcl_cout << "U0=" << pmat1.GetU0() << vcl_endl;
+  vcl_cout << "V0=" << pmat1.GetV0() << vcl_endl;
 
   vnl_matrix<double> matrix2(4, 4);
   int i,j;
@@ -135,18 +135,18 @@ void PMatrixDec::Test()
     for (i=0; i<4; i++)
       matrix2(i,j)= 1.0;  
 
-  cout << "Another Incorrect Matrix: " << endl;
-  cout << matrix2 << endl;
+  vcl_cout << "Another Incorrect Matrix: " << vcl_endl;
+  vcl_cout << matrix2 << vcl_endl;
   PMatrixDec pmat2(matrix2);
-  cout << pmat2;
+  vcl_cout << pmat2;
 
   vnl_matrix<double> matrix3(2, 2);
   for (j=0; j<2; j++)
     for (i=0; i<2; i++)
       matrix3(i,j)= 2.0;  
 
-  cout << "Incorrect Matrix: " << endl;
-  cout << matrix3 << endl;
+  vcl_cout << "Incorrect Matrix: " << vcl_endl;
+  vcl_cout << matrix3 << vcl_endl;
   PMatrixDec pmat3(matrix3);
-  cout << pmat3;
+  vcl_cout << pmat3;
 }

@@ -129,29 +129,29 @@ int main(int argc,
   p->put(1,2);
   p->put(2,3);
 
-  cout<<"-----> t=0"<<endl;
+  vcl_cout<<"-----> t=0"<<vcl_endl;
   q=cs0->from_local_to_cs(*p,csa,0);
-  cout<<"q(cs0->csa)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<endl;
+  vcl_cout<<"q(cs0->csa)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<vcl_endl;
   delete q;
 
-  cout<<"-----> t=0.4"<<endl;
+  vcl_cout<<"-----> t=0.4"<<vcl_endl;
   q=cs0->from_local_to_cs(*p,csa,0.4);
-  cout<<"q(cs0->csa)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<endl;
+  vcl_cout<<"q(cs0->csa)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<vcl_endl;
   delete q;
   
-  cout<<"-----> t=0.5"<<endl;
+  vcl_cout<<"-----> t=0.5"<<vcl_endl;
   q=cs0->from_local_to_cs(*p,csa,0.5);
-  cout<<"q(cs0->csa)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<endl;
+  vcl_cout<<"q(cs0->csa)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<vcl_endl;
   delete q;
 
-  cout<<"-----> t=0.6"<<endl;
+  vcl_cout<<"-----> t=0.6"<<vcl_endl;
   q=cs0->from_local_to_cs(*p,csa,0.6);
-  cout<<"q(cs0->csa)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<endl;
+  vcl_cout<<"q(cs0->csa)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<vcl_endl;
   delete q;
 
-  cout<<"-----> t=1"<<endl;
+  vcl_cout<<"-----> t=1"<<vcl_endl;
   q=cs0->from_local_to_cs(*p,csa,1);
-  cout<<"q(cs0->csa)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<endl;
+  vcl_cout<<"q(cs0->csa)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<vcl_endl;
   delete q;
 
   delete p;

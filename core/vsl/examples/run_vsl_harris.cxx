@@ -26,7 +26,7 @@ int main(int argc,char **argv)
   if (infile() == "-") {
     //cerr << "reading image from stdin" << endl;
     //I = vil_load(cin);
-    cerr << "cannot read from stdin yet" << endl;
+    vcl_cerr << "cannot read from stdin yet" << vcl_endl;
     return 1;
   }
   else
@@ -47,8 +47,8 @@ int main(int argc,char **argv)
 
   // save
   if (outfile() == "") {
-    cerr << "writing image to stdout" << endl;
-    H.save_corners(cout);
+    vcl_cerr << "writing image to stdout" << vcl_endl;
+    H.save_corners(vcl_cout);
   }
   else
     H.save_corners(outfile().c_str());

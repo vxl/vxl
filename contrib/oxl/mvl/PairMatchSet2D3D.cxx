@@ -28,7 +28,7 @@ PairMatchSet2D3D::PairMatchSet2D3D(const HomgInterestPointSet* corners, vcl_vect
 // Assignment
 PairMatchSet2D3D& PairMatchSet2D3D::operator=(const PairMatchSet2D3D& )
 {
-  cerr << "PairMatchSet2D3D::operator= not implemented\n";
+  vcl_cerr << "PairMatchSet2D3D::operator= not implemented\n";
   return *this;
 }
 
@@ -70,7 +70,7 @@ void PairMatchSet2D3D::set_from(const PairMatchSet2D3D& otherframe_to_3d, const 
 HomgMetric PairMatchSet2D3D::get_conditioner() const
 {
   if (!_corners) {
-    cerr << "PairMatchSet2D3D::get_conditioner() WARNING _corners not set!\n";
+    vcl_cerr << "PairMatchSet2D3D::get_conditioner() WARNING _corners not set!\n";
     return 0;
   }
   return _corners->get_conditioner();
@@ -80,7 +80,7 @@ const HomgPoint2D& PairMatchSet2D3D::get_point_2d(int i1) const
 {
   if (!_corners) {
     static HomgPoint2D dummy;
-    cerr << "PairMatchSet2D3D::get_point_2d() WARNING _corners not set!\n";
+    vcl_cerr << "PairMatchSet2D3D::get_point_2d() WARNING _corners not set!\n";
     return dummy;
   }
   return _corners->get_homg(i1);
@@ -94,7 +94,7 @@ const HomgPoint3D& PairMatchSet2D3D::get_point_3d(int i2) const
 const HomgInterestPointSet* PairMatchSet2D3D::get_corners() const
 {
   if (!_corners) {
-    cerr << "PairMatchSet2D3D::get_point_2d() WARNING _corners not set!\n";
+    vcl_cerr << "PairMatchSet2D3D::get_point_2d() WARNING _corners not set!\n";
     return 0;
   }
   return _corners;

@@ -61,7 +61,7 @@ public:
   // make tests for this class
   void Test();
 
-  friend ostream& operator<<(ostream& s, const PMatrixDec& P);
+  friend vcl_ostream& operator<<(vcl_ostream& s, const PMatrixDec& P);
 
   // INTERNALS---------------------------------------------------------------
 protected:

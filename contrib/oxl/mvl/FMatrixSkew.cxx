@@ -142,9 +142,9 @@ FMatrixSkew::find_nearest_perfect_match(const HomgPoint2D& point1,
 
      if (temp < 0)
      {
-	  cerr << "Error in FMatrixSkew::find_nearest_perfect_match " << endl
-	       << "Imaginary solution obtained" << endl 
-	       << "No solution returned" << endl;
+	  vcl_cerr << "Error in FMatrixSkew::find_nearest_perfect_match " << vcl_endl
+	       << "Imaginary solution obtained" << vcl_endl 
+	       << "No solution returned" << vcl_endl;
 	  return;
      }
 
@@ -207,7 +207,7 @@ bool FMatrixSkew::set (const double* f_matrix )
 	 (f_matrix[4] > tolerance) |
 	 (f_matrix[8] > tolerance) )
      {
-	  cerr << "WARNING: F matrix not skew symmetric so cannot allocate to FMatrixSkew\n" ;
+	  vcl_cerr << "WARNING: F matrix not skew symmetric so cannot allocate to FMatrixSkew\n" ;
 	  return false;
      }
 		 

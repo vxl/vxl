@@ -37,7 +37,7 @@ MovieFile::MovieFile(char const* filename, int start, int step, int end):
 #ifndef WIN32
   // Attempt to open for reading.  If it exists, assume it's a movie file.
   // not on windows, it will create it if it doesn't exist...
-  ifstream fd(fn.c_str());
+  vcl_ifstream fd(fn.c_str());
   if (fd.good()) 
     {
       qt = new SGIMovieFile(fn.c_str());
@@ -70,13 +70,13 @@ int MovieFile::GetNumFrames()
 {
   // Probe...
   if (end_ == -1) {
-    cerr << "MovieFile: probing ";
+    vcl_cerr << "MovieFile: probing ";
     int i;
     for(i = 0; GetImage(i); ++i)
       ;
     --i;
     end_ = start_ + i * step_;
-    cerr << " done\n";
+    vcl_cerr << " done\n";
   }
   return (end_ - start_) / step_ + 1;
 }

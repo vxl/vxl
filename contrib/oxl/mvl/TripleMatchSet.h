@@ -66,8 +66,8 @@ public:
   void set(PairMatchSet* match12, PairMatchSet* match23);
   void set_from_pairwise_matches(const PairMatchSet& matches12, const PairMatchSet& matches23);
 
-  void write_ascii(ostream& s) const;
-  bool read_ascii(istream& s);
+  void write_ascii(vcl_ostream& s) const;
+  bool read_ascii(vcl_istream& s);
 
   void update_feature_match_data();
   int  size() const;
@@ -104,7 +104,7 @@ protected:
   PairMatchSet *_match23;
 };
 
-istream& operator >> (istream& s,  TripleMatchSet& ccc);
-ostream& operator << (ostream& s, const TripleMatchSet& ccc);
+vcl_istream& operator >> (vcl_istream& s,  TripleMatchSet& ccc);
+vcl_ostream& operator << (vcl_ostream& s, const TripleMatchSet& ccc);
 
 #endif // TripleMatchSet_h_

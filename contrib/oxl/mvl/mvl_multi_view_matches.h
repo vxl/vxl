@@ -28,6 +28,7 @@
 //-----------------------------------------------------------------------------
 
 //#include <vcl_memory.h>
+#include <vcl_functional.h>	//vxl_filter
 #include <vcl_utility.h>
 #include <vcl_vector.h>
 #include <vcl_iosfwd.h>
@@ -66,9 +67,9 @@ public:
   vcl_vector<int>& get_view_indices () { return views_; }
 
   //: Standard I/O
-  ostream& print(ostream&) const;
-  istream& read(istream&);
-  ostream& write(ostream&) const;
+  vcl_ostream& print(vcl_ostream&) const;
+  vcl_istream& read(vcl_istream&);
+  vcl_ostream& write(vcl_ostream&) const;
 
   //: Convenience
   void read(char const* file);
@@ -85,7 +86,7 @@ protected:
   void remove_maps(int track_index);      // iterate over tracks_[track_index] and remove the corner_to_track_maps_
 };
 
-inline ostream& operator<<(ostream& s, mvl_multi_view_matches const& v) { return v.print(s); }
-inline istream& operator>>(istream& s, mvl_multi_view_matches& v) { return v.read(s); }
+inline vcl_ostream& operator<<(vcl_ostream& s, mvl_multi_view_matches const& v) { return v.print(s); }
+inline vcl_istream& operator>>(vcl_istream& s, mvl_multi_view_matches& v) { return v.read(s); }
 
 #endif // mvl_multi_view_matches_h_

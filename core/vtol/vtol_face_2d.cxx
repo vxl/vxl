@@ -57,7 +57,7 @@ vtol_face_2d::vtol_face_2d(const vtol_face_2d &other)
       vtol_topology_object_2d_ref V2 = newverts[e->v2()->get_id()];
       if(!V1 || !V2)
         {
- 	  cerr << "Inconsistent topology in vtol_face_2d copy constructor\n";
+ 	  vcl_cerr << "Inconsistent topology in vtol_face_2d copy constructor\n";
  	  vtol_one_chain_2d_ref inf = new vtol_one_chain_2d();
           link_inferior(*inf);
           return;
@@ -594,7 +594,7 @@ vtol_one_chain_2d *vtol_face_2d::get_one_chain(int which)
     return (_inferiors[which])->cast_to_one_chain();
   else
     {
-      cerr << "Tried to get bad edge_loop from face" << endl;
+      vcl_cerr << "Tried to get bad edge_loop from face" << vcl_endl;
       return NULL;
     }
 }
@@ -704,7 +704,7 @@ void vtol_face_2d::compute_bounding_box()
 // Inferiors.  The blanking argument is used to indent the output in
 // a clear fashion.
 
-void vtol_face_2d::describe(ostream &strm,
+void vtol_face_2d::describe(vcl_ostream &strm,
                             int blanking) const
 {
   for (int j=0; j<blanking; ++j) strm << ' ';
@@ -714,19 +714,19 @@ void vtol_face_2d::describe(ostream &strm,
       if((_inferiors[i])->cast_to_one_chain()!=0)
         (_inferiors[i])->cast_to_one_chain()->describe(strm,blanking);
       else
-        cout << "*** Odd inferior for a face" << endl;
+        vcl_cout << "*** Odd inferior for a face" << vcl_endl;
     }
 }
 
 // --
 // This method prints out a simple text representation for the vtol_face_2d which
 // includes its address in memory.
-void vtol_face_2d::print(ostream &strm) const
+void vtol_face_2d::print(vcl_ostream &strm) const
 {
   strm << "<vtol_face_2d  ";
   topology_list_2d::const_iterator ii;
   
   for(ii=_inferiors.begin();ii!= _inferiors.end();++ii)
     strm << " " << (*ii)->inferiors()->size();
-  strm << "   " << (void *) this << '>' << endl;
+  strm << "   " << (void *) this << '>' << vcl_endl;
 }

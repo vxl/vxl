@@ -26,7 +26,7 @@ public:
 
   void set_default_extension(char const* ext);
   vcl_string name(int frame);
-  ostream& print(ostream& s) const;
+  vcl_ostream& print(vcl_ostream& s) const;
 
   // -- Set start_frame, end_frame by scanning the directory given by the
   // pattern, and finding limits.
@@ -60,6 +60,6 @@ protected:
   static bool exists(const vcl_string& fmt, const char* extension, int real_frame_index);
 };
 
-inline ostream& operator<<(ostream& s, const SequenceFileName& p) { return p.print(s); }
+inline vcl_ostream& operator<<(vcl_ostream& s, const SequenceFileName& p) { return p.print(s); }
 
 #endif // SequenceFileName_h_

@@ -203,7 +203,7 @@ TriTensor::set(const PMatrix& P2, const PMatrix& P3)
 void
 TriTensor::set(const vnl_matrix<double>& T1, const vnl_matrix<double>& T2, const vnl_matrix<double>& T3)
 {
-  cerr << "Unimplemented\n";
+  vcl_cerr << "Unimplemented\n";
   vnl_matrix<double> const* Ts[3];
   Ts[0] = &T1;
   Ts[1] = &T2;
@@ -773,7 +773,7 @@ void TriTensor::get_constraint_lines_image3(const HomgPoint2D& p1, const HomgPoi
   assert(lines->size() == 9);
   if (tt_verbose)
     for(int i = 0; i < 9; ++i)
-      cout << (*lines)[i]<< endl;
+      vcl_cout << (*lines)[i]<< vcl_endl;
 
   return;
 
@@ -1190,7 +1190,7 @@ void TriTensor::get_constraint_lines_image1(const HomgPoint2D& p2, const HomgPoi
 
 //-----------------------------------------------------------------------------
 // -- Read from ASCII istream
-istream& operator >> (istream& s, TriTensor& T)
+vcl_istream& operator >> (vcl_istream& s, TriTensor& T)
 {
   for(int i = 0; i < 3; ++i)
     for(int j = 0; j < 3; ++j)
@@ -1201,15 +1201,15 @@ istream& operator >> (istream& s, TriTensor& T)
 
 //-----------------------------------------------------------------------------
 // -- Print in ASCII to ostream
-ostream& operator << (ostream& s, const TriTensor& T)
+vcl_ostream& operator << (vcl_ostream& s, const TriTensor& T)
 {
   for(int i = 0; i < 3; ++i) {
     for(int j = 0; j < 3; ++j) {
       for(int k = 0; k < 3; ++k)
 	vbl_printf(s, "%20.16e ", T(i,j,k));
-      s << endl;
+      s << vcl_endl;
     }
-    s << endl;
+    s << vcl_endl;
   }
   return s;
 }
@@ -1382,7 +1382,7 @@ void TriTensor::compute_P_matrices(const vnl_vector<double>& x, double alpha, do
   vnl_double_3x3 DIFF = B0 + TTe2 - OuterProduct3x3(e3, vnl_transpose(TTe2)*e3);
   double diffmag = DIFF.fro_norm();
   if (diffmag > 1e-12) {
-    cerr << "TriTensor::compute_P_matrices: DIFF = " << DIFF << endl;
+    vcl_cerr << "TriTensor::compute_P_matrices: DIFF = " << DIFF << vcl_endl;
   }
 
   vnl_double_3x3& A0 = Te3;
@@ -1394,8 +1394,8 @@ void TriTensor::compute_P_matrices(const vnl_vector<double>& x, double alpha, do
   P2->set(A0 + OuterProduct3x3(e2, x), beta*e2);
   P3->set(B0 + OuterProduct3x3(e3, x), alpha*e3);
 
-  cerr << *P2 << endl;
-  cerr << *P3 << endl;
+  vcl_cerr << *P2 << vcl_endl;
+  vcl_cerr << *P3 << vcl_endl;
   
   // Check
   this->check_equal_up_to_scale(TriTensor(*P2, *P3));
@@ -1439,9 +1439,9 @@ static bool check_same(const TriTensor& T1, const TriTensor& T2) {
   rms /= 27;
     
   if (rms > 1e-15) {
-    cerr << "check_same: different TriTensors\n";
-    cerr << "T1 = " << endl << T1;
-    cerr << "T2 = " << endl << T2;
+    vcl_cerr << "check_same: different TriTensors\n";
+    vcl_cerr << "T1 = " << vcl_endl << T1;
+    vcl_cerr << "T2 = " << vcl_endl << T2;
     return false;
   }
 

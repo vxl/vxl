@@ -55,11 +55,11 @@ void TripleMatchSet::set_from_pairwise_matches(const PairMatchSet& matches12,
     if (matchp(i3))
       add_match(p12.get_i1(), p12.get_i2(), i3);
   }
-  cout << "TripleMatchSet: " << count() << " triplet matches." << endl;
+  vcl_cout << "TripleMatchSet: " << count() << " triplet matches." << vcl_endl;
 }
 
 // -- Write as three ascii columns.
-void TripleMatchSet::write_ascii(ostream & s) const
+void TripleMatchSet::write_ascii(vcl_ostream & s) const
 {
   for (iterator match = begin(); match; ++match) {
     s << match.get_i1() << "\t";
@@ -69,7 +69,7 @@ void TripleMatchSet::write_ascii(ostream & s) const
 }
 
 // -- Read from ascii istream
-bool TripleMatchSet::read_ascii(istream& s)
+bool TripleMatchSet::read_ascii(vcl_istream& s)
 {
   vnl_matrix<double> m;
   s >> m;
@@ -77,7 +77,7 @@ bool TripleMatchSet::read_ascii(istream& s)
     return false;
   
   if (m.columns() != 3) {
-    cerr << "TripleMatchSet::read_ascii(): cols = " << m.columns() << ", not 3\n";
+    vcl_cerr << "TripleMatchSet::read_ascii(): cols = " << m.columns() << ", not 3\n";
     return false;
   }
   
@@ -102,14 +102,14 @@ bool TripleMatchSet::read_ascii(istream& s)
 }
 
 // -- Write to ostream with header
-ostream& operator << (ostream& s, const TripleMatchSet& matches)
+vcl_ostream& operator << (vcl_ostream& s, const TripleMatchSet& matches)
 {
-  s << "# TripleMatchSet: " << matches.count() << " triplet matches." << endl;
+  s << "# TripleMatchSet: " << matches.count() << " triplet matches." << vcl_endl;
   matches.write_ascii(s);
   return s;
 }
 
-istream& operator >> (istream& s, TripleMatchSet& matches)
+vcl_istream& operator >> (vcl_istream& s, TripleMatchSet& matches)
 {
   matches.read_ascii(s);
   return s;
@@ -122,17 +122,17 @@ istream& operator >> (istream& s, TripleMatchSet& matches)
 bool TripleMatchSet::add_match(int i1, int i2, int i3)
 {
   if (get_match_23(i2) != MatchSet::NoMatch) {
-    cerr << "TripleMatchSet::add_match(" <<i1<< ", "<<i2<<", "<<i3<<")\n";
+    vcl_cerr << "TripleMatchSet::add_match(" <<i1<< ", "<<i2<<", "<<i3<<")\n";
     int old_i1 = get_match_21(i2);
     int old_i3 = get_match_23(i2);
-    cerr<<"*** i2 is already in a match ("<<old_i1<<"/"<<i2<<"/"<<old_i3<<")\n";
+    vcl_cerr<<"*** i2 is already in a match ("<<old_i1<<"/"<<i2<<"/"<<old_i3<<")\n";
   }
 
   if (get_match_12(i1) != MatchSet::NoMatch) {
-    cerr<<"TripleMatchSet::add_match("<<i1<<", "<<i2<<", "<<i3<<")\n";
+    vcl_cerr<<"TripleMatchSet::add_match("<<i1<<", "<<i2<<", "<<i3<<")\n";
     int old_i2 = get_match_12(i1);
     int old_i3 = get_match_23(old_i2);
-    cerr<<"*** i1 is already in a match ("<<i1<<"/"<<old_i2<<"/"<<old_i3<<")\n";
+    vcl_cerr<<"*** i1 is already in a match ("<<i1<<"/"<<old_i2<<"/"<<old_i3<<")\n";
   }
 
   return (_match12->add_match(i1, i2) && _match23->add_match(i2, i3));
@@ -249,7 +249,7 @@ void TripleMatchSet::clear_nontriplets()
     if (i2 != NoMatch) {
       int i3 = NoMatch;
       if (i2 >= _match23->size() || i2 < 0)
-	cerr << "TripleMatchSet::clear_nontriplets() -- bad i2 = " << i2 << endl;
+	vcl_cerr << "TripleMatchSet::clear_nontriplets() -- bad i2 = " << i2 << vcl_endl;
       else
 	i3 = _match23->get_match_12(i2);
       
@@ -260,7 +260,7 @@ void TripleMatchSet::clear_nontriplets()
 	accept[i2] = true;
     }
   }
-  cout << "TripleMatchSet::clear_nontriplets() -- Cleared i2 " << cleared_count << endl;
+  vcl_cout << "TripleMatchSet::clear_nontriplets() -- Cleared i2 " << cleared_count << vcl_endl;
   
   for (int i2 = 0; i2 < _match23->size(); i2++)
     if (!accept[i2]) {
@@ -268,19 +268,19 @@ void TripleMatchSet::clear_nontriplets()
       ++cleared_count;
     }
   
-  cout << "TripleMatchSet::clear_nontriplets() -- Cleared i3 " << cleared_count << endl;
+  vcl_cout << "TripleMatchSet::clear_nontriplets() -- Cleared i3 " << cleared_count << vcl_endl;
 }
 
 bool TripleMatchSet::delete_match(int i1, int i2, int i3)
 {
   int old_12 = _match12->get_match_12(i1);
   if (old_12 != i2) {
-    cerr << "TripleMatchSet::delete_match - old/new i2 = " << old_12 << "/" << i2 << endl;
+    vcl_cerr << "TripleMatchSet::delete_match - old/new i2 = " << old_12 << "/" << i2 << vcl_endl;
     _match23->clear_match_1(old_12);
   }
   int old_23 = _match23->get_match_12(i2);
   if (old_23 != i3) {
-    cerr << "TripleMatchSet::delete_match - old/new i3 = " << old_23 << "/" << i3 << endl;
+    vcl_cerr << "TripleMatchSet::delete_match - old/new i3 = " << old_23 << "/" << i3 << vcl_endl;
   }
   
   _match12->clear_match_1(i1);

@@ -60,7 +60,7 @@ static int compare_crossedges(vgl_polygon_scan_iterator::crossedge *u,
 
 void vgl_polygon_scan_iterator::vertind::display( char const* str)
 {  
-  cout << str << " chainnum = " << chainnum << "   vertnum = " << vertnum << endl << flush;
+  vcl_cout << str << " chainnum = " << chainnum << "   vertnum = " << vertnum << vcl_endl;
 }
 
 
@@ -121,7 +121,7 @@ void vgl_polygon_scan_iterator::init()
 	i++;
       }
   if ( i != numverts ) 
-    cout << "Error:  i does not equal numverts!" << endl << flush;
+    vcl_cout << "Error:  i does not equal numverts!" << vcl_endl;
   
   // sort vertices by y coordinate
   chs = &poly_[0]; // a hack -- but apparently must do it to use qsort
@@ -349,19 +349,19 @@ void vgl_polygon_scan_iterator::get_prev_vert( vertind v, vertind & prevvert )
 void vgl_polygon_scan_iterator::display_chains()
 {
     int c, v;
-    cout << "Number of Chains: " << poly_.num_sheets() << endl;
-    cout << "Number of Vertices: " << numverts << endl;
+    vcl_cout << "Number of Chains: " << poly_.num_sheets() << vcl_endl;
+    vcl_cout << "Number of Vertices: " << numverts << vcl_endl;
     for ( c = 0; c < poly_.num_sheets(); c++ )
     {
-        cout << "---- Chain # " << c << " ----" << endl;
-        cout << "  Length: " << poly_[ c ].size() << endl;
+        vcl_cout << "---- Chain # " << c << " ----" << vcl_endl;
+        vcl_cout << "  Length: " << poly_[ c ].size() << vcl_endl;
         for ( v = 0; v < poly_[ c ].size(); v++ )
 	{
-            cout << "  [ " << poly_[ c ][ v ].x() 
-                 << " " << poly_[ c ][ v ].y() << " ]" << endl; 
+            vcl_cout << "  [ " << poly_[ c ][ v ].x() 
+                 << " " << poly_[ c ][ v ].y() << " ]" << vcl_endl; 
         }
     }
-    cout << flush;
+    vcl_cout << vcl_flush;
 }
 
 // ---------------------------------------------------------------------------//
@@ -370,15 +370,15 @@ void vgl_polygon_scan_iterator::display_chains()
 void vgl_polygon_scan_iterator::display_crossedges()
 {
     int i;
-    cout << "----- CROSSEDGES -----" << endl;
-    cout << "numcrossedges: " << numcrossedges << endl;
+    vcl_cout << "----- CROSSEDGES -----" << vcl_endl;
+    vcl_cout << "numcrossedges: " << numcrossedges << vcl_endl;
     for ( i = 0; i< numcrossedges; i++ )
     {
-        cout << "x = " << crossedges[i].x
+        vcl_cout << "x = " << crossedges[i].x
              << "y = " << crossedges[i].dx;
         crossedges[i].v.display( "v: " );
     }
-    cout << "---------------------" << endl;
-    cout << flush;
+    vcl_cout << "---------------------" << vcl_endl;
+    vcl_cout << vcl_flush;
 }
 

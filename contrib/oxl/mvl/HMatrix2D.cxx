@@ -29,7 +29,7 @@ HMatrix2D::HMatrix2D(const HMatrix2D& M)
 
 
 // -- Constructor from istream
-HMatrix2D::HMatrix2D(istream& s)
+HMatrix2D::HMatrix2D(vcl_istream& s)
 {
   _t12_matrix.read_ascii(s);
 }
@@ -37,9 +37,9 @@ HMatrix2D::HMatrix2D(istream& s)
 // -- Constructor from file
 HMatrix2D::HMatrix2D(char const* filename)
 {
-  ifstream f(filename);
+  vcl_ifstream f(filename);
   if (!f.good())
-    cerr << "HMatrix2D::read: Error opening " << filename << endl;
+    vcl_cerr << "HMatrix2D::read: Error opening " << filename << vcl_endl;
   else
     _t12_matrix.read_ascii(f);  
 }
@@ -92,7 +92,7 @@ HomgLine2D HMatrix2D::transform_to_plane1(const HomgLine2D& l2) const
 
 HomgPoint2D HMatrix2D::transform_to_plane1(const HomgPoint2D& x2) const
 {
-  cerr << "HMatrix2D::transform_to_plane1(HomgPoint2D): Warning: calculating inverse matrix\n";
+  vcl_cerr << "HMatrix2D::transform_to_plane1(HomgPoint2D): Warning: calculating inverse matrix\n";
   vnl_double_3x3 _t21_matrix = this->get_inverse().get_matrix();
   return HomgPoint2D(_t21_matrix * x2.get_vector());
 }
@@ -103,27 +103,27 @@ HomgPoint2D HMatrix2D::transform_to_plane1(const HomgPoint2D& x2) const
 
 HomgLine2D HMatrix2D::transform_to_plane2(const HomgLine2D& l1) const
 {
-  cerr << "HMatrix2D::transform_to_plane2(HomgLine2D): Warning: calculating inverse matrix\n";
+  vcl_cerr << "HMatrix2D::transform_to_plane2(HomgLine2D): Warning: calculating inverse matrix\n";
   vnl_double_3x3 _t21_matrix = this->get_inverse().get_matrix().transpose();
   return HomgLine2D(_t21_matrix * l1.get_vector());
 }
 
 //-----------------------------------------------------------------------------
 // -- Print H on ostream
-ostream& operator<<(ostream& s, const HMatrix2D& h)
+vcl_ostream& operator<<(vcl_ostream& s, const HMatrix2D& h)
 {
   return s << h.get_matrix();
 }
 
 // -- Read H from istream
-istream& operator >> (istream& s, HMatrix2D& H)
+vcl_istream& operator >> (vcl_istream& s, HMatrix2D& H)
 {
   H = HMatrix2D(s);
   return s;
 }
 
 // -- Read H from istream
-bool HMatrix2D::read(istream& s)
+bool HMatrix2D::read(vcl_istream& s)
 {
   return _t12_matrix.read_ascii(s);
 }
@@ -131,9 +131,9 @@ bool HMatrix2D::read(istream& s)
 // -- Read H from file
 bool HMatrix2D::read(char const* filename)
 {
-  ifstream f(filename);
+  vcl_ifstream f(filename);
   if (!f.good())
-    cerr << "HMatrix2D::read: Error opening " << filename << endl;
+    vcl_cerr << "HMatrix2D::read: Error opening " << filename << vcl_endl;
   return read(f);
 }
 
@@ -191,7 +191,7 @@ HMatrix2D HMatrix2D::get_inverse() const
 // premultiplied by H.
 vnl_double_4 HMatrix2D::transform_bounding_box(double x0, double y0, double x1, double y1)
 {
-  cerr << "FIXME: HMatrix2D::transform_bounding_box() is not yet implemented\n";
+  vcl_cerr << "FIXME: HMatrix2D::transform_bounding_box() is not yet implemented\n";
   return vnl_double_4();
 
 //  // Find bbox of transformed image

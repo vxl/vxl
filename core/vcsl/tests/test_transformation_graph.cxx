@@ -173,58 +173,58 @@ static void test1(void)
   p->put(0,1);
   p->put(1,2);
   p->put(2,3);
-  cout<<"-----> t=0"<<endl;
+  vcl_cout<<"-----> t=0"<<vcl_endl;
   q=cs2->from_local_to_cs(*p,csa,0);
-  cout<<"q(cs2->csa)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<endl;
+  vcl_cout<<"q(cs2->csa)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<vcl_endl;
   delete q;
 
   q=cs1->from_local_to_cs(*p,cs2,0);
-  cout<<"q(cs1->cs2)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<endl;
+  vcl_cout<<"q(cs1->cs2)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<vcl_endl;
   delete q;
 
   q=cs1->from_local_to_cs(*p,cs3,0);
-  cout<<"q(cs1->cs3)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<endl;
+  vcl_cout<<"q(cs1->cs3)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<vcl_endl;
   delete q;
 
-  cout<<"-----> t=0.4"<<endl;
+  vcl_cout<<"-----> t=0.4"<<vcl_endl;
   q=cs2->from_local_to_cs(*p,csa,0.4);
-  cout<<"q(cs2->csa)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<endl;
+  vcl_cout<<"q(cs2->csa)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<vcl_endl;
   delete q;
 
   q=cs1->from_local_to_cs(*p,cs2,0.4);
-  cout<<"q(cs1->cs2)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<endl;
+  vcl_cout<<"q(cs1->cs2)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<vcl_endl;
   delete q;
 
   q=cs1->from_local_to_cs(*p,cs3,0.4);
-  cout<<"q(cs1->cs3)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<endl;
+  vcl_cout<<"q(cs1->cs3)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<vcl_endl;
   delete q;
 
 
-  cout<<"-----> t=0.5"<<endl;
+  vcl_cout<<"-----> t=0.5"<<vcl_endl;
   q=cs2->from_local_to_cs(*p,csa,0.5);
-  cout<<"q(cs2->csa)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<endl;
+  vcl_cout<<"q(cs2->csa)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<vcl_endl;
   delete q;
 
   q=cs1->from_local_to_cs(*p,cs2,0.5);
-  cout<<"q(cs1->cs2)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<endl;
+  vcl_cout<<"q(cs1->cs2)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<vcl_endl;
   delete q;
 
   q=cs1->from_local_to_cs(*p,cs3,0.5);
-  cout<<"q(cs1->cs3)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<endl;
+  vcl_cout<<"q(cs1->cs3)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<vcl_endl;
   delete q;
 
 
-  cout<<"-----> t=1"<<endl;
+  vcl_cout<<"-----> t=1"<<vcl_endl;
   q=cs2->from_local_to_cs(*p,csa,1);
-  cout<<"q(cs2->csa)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<endl;
+  vcl_cout<<"q(cs2->csa)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<vcl_endl;
   delete q;
 
   q=cs1->from_local_to_cs(*p,cs2,1);
-  cout<<"q(cs1->cs2)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<endl;
+  vcl_cout<<"q(cs1->cs2)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<vcl_endl;
   delete q;
 
   q=cs1->from_local_to_cs(*p,cs3,1);
-  cout<<"q(cs1->cs3)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<endl;
+  vcl_cout<<"q(cs1->cs3)="<<q->get(0)<<' '<<q->get(1)<<' '<<q->get(2)<<vcl_endl;
   delete q;
 
   delete parent3;

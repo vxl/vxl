@@ -51,8 +51,8 @@ bool FMatrixComputeLinear::compute (vcl_vector<HomgPoint2D>& points1,
 				    vcl_vector<HomgPoint2D>& points2, FMatrix *F)
 {
   if (points1.size() < 8 || points2.size() < 8) {
-    cerr << "FMatrixComputeLinear: Need at least 8 point pairs." << endl;
-    cerr << "Number in each set: " << points1.size() << ", " << points2.size() << endl;
+    vcl_cerr << "FMatrixComputeLinear: Need at least 8 point pairs." << vcl_endl;
+    vcl_cerr << "Number in each set: " << points1.size() << ", " << points2.size() << vcl_endl;
     return false;
   }
 

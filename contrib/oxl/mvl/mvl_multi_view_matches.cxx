@@ -2,11 +2,13 @@
 #pragma implementation
 #endif
 
-#include <mvl/mvl_multi_view_matches.h>
+#include "mvl_multi_view_matches.h"
 
-#include <vcl_fstream.h>
 #include <vcl_cassert.h>
 #include <vcl_set.h>
+#include <vcl_functional.h>
+#include <vcl_fstream.h>
+
 #include <vbl/vbl_awk.h>
 
 mvl_multi_view_matches::mvl_multi_view_matches(char const* filename)
@@ -106,7 +108,7 @@ void mvl_multi_view_matches::add_track(vcl_vector<int> const& views, vcl_vector<
   for (int i=0; i < track_length; ++i) {
     Map_iterator m = view_to_internal_map_.find(views[i]);
     if (m == view_to_internal_map_.end()) {
-      cerr << __FILE__ << " : view specified outside range!" << endl;
+      vcl_cerr << __FILE__ << " : view specified outside range!" << vcl_endl;
       abort();
     }
     internal_frames[i] = (*m).second;  // holds the internal-frame index corresponding to given corner[i]
@@ -124,7 +126,7 @@ void mvl_multi_view_matches::add_track(vcl_vector<int> const& views, vcl_vector<
       Map_iterator m = corner_to_track_maps_[internal_frames[i]].find(corners[i]);
       if (m != corner_to_track_maps_[internal_frames[i]].end()) {
 	if ((*m).second >= tracks_.size()) {
-	  cerr << __FILE__ << " : URK!" << internal_frames[i] << " " << corners[i] << " " << (*m).second << " " << tracks_.size() << endl;
+	  vcl_cerr << __FILE__ << " : URK!" << internal_frames[i] << " " << corners[i] << " " << (*m).second << " " << tracks_.size() << vcl_endl;
 	  abort();
 	}
 	friend_tracks.insert((*m).second);
@@ -192,7 +194,7 @@ void mvl_multi_view_matches::add_track(vcl_vector<int> const& views, vcl_vector<
 
 void mvl_multi_view_matches::add_matches(mvl_multi_view_matches const& matches)
 {
-  cerr << __FILE__ ": mvl_multi_view_matches::add_matches() not implemented" << endl;
+  vcl_cerr << __FILE__ ": mvl_multi_view_matches::add_matches() not implemented" << vcl_endl;
   abort();
 }
 
@@ -214,18 +216,18 @@ void mvl_multi_view_matches::remove_maps(int track_index)
   }
 }
 
-ostream& mvl_multi_view_matches::print(ostream& s) const
+vcl_ostream& mvl_multi_view_matches::print(vcl_ostream& s) const
 {
   for (int i=0; i < tracks_.size(); ++i) {
     s << "Track " << i << " : ";
     for (Map::const_iterator m = tracks_[i].begin(); m != tracks_[i].end(); ++m)
       s << "(" << views_[(*m).first] << "," << (*m).second << ") ";
-    s << endl;
+    s << vcl_endl;
   }
   return s;
 }
 
-istream& mvl_multi_view_matches::read(istream& s)
+vcl_istream& mvl_multi_view_matches::read(vcl_istream& s)
 {
   if (!s.good()) return s;
 
@@ -235,10 +237,10 @@ istream& mvl_multi_view_matches::read(istream& s)
     views_.push_back(atoi(awk[i]));
   ++awk;
 
-  cerr << __FILE__ << " : reading views ( ";
+  vcl_cerr << __FILE__ << " : reading views ( ";
   for (int i=0; i < views_.size(); ++i)
-    cerr << views_[i] << " ";
-  cerr << ")" << endl;
+    vcl_cerr << views_[i] << " ";
+  vcl_cerr << ")" << vcl_endl;
 
   init();
   
@@ -257,38 +259,38 @@ istream& mvl_multi_view_matches::read(istream& s)
   for (int i=0; i < tracks_.size(); ++i)
     update_maps(i);
 
-  cerr << __FILE__ << " : read " << tracks_.size() << " tracks" << endl;
+  vcl_cerr << __FILE__ << " : read " << tracks_.size() << " tracks" << vcl_endl;
 
   return s;
 }
 
-ostream& mvl_multi_view_matches::write(ostream& s) const
+vcl_ostream& mvl_multi_view_matches::write(vcl_ostream& s) const
 {
   if (!s.good()) return s;
   
   // Output the view indices on the first line
   for (int i=0; i < views_.size(); ++i)
     s << i << " ";
-  s << endl;
+  s << vcl_endl;
   
   // Now output the (track, internal frame, corner_index) triplets on each line
   for (int i=0; i < tracks_.size(); ++i)
     for (Map::const_iterator m = tracks_[i].begin(); m != tracks_[i].end(); ++m)
-      s << i << " " << (*m).first << " " << (*m).second << endl;
+      s << i << " " << (*m).first << " " << (*m).second << vcl_endl;
   
-  cerr << __FILE__ << " : wrote " << tracks_.size() << " tracks" << endl; 
+  vcl_cerr << __FILE__ << " : wrote " << tracks_.size() << " tracks" << vcl_endl; 
 
   return s;
 }
 
 void mvl_multi_view_matches::read(char const* filename)
 {
-  ifstream fin(filename);
+  vcl_ifstream fin(filename);
   read(fin);
 }
 
 void mvl_multi_view_matches::write(char const* filename) const
 {
-  ofstream fout(filename);
+  vcl_ofstream fout(filename);
   write(fout);
 }

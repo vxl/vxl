@@ -4,15 +4,16 @@
 
 #include <vcl_compiler.h>
 #if defined(VCL_SGI_CC)
-// urgh! there is no rdbuf() method for *setting* the
-// stream buffer.
-# include <memory.h>         // These headers are
-# include <stddef.h>         // in the old style
-# define private public      // intentionally. We
-# define protected public    // *want* to include
-# include <iostream.h>       // the old SGI headers
-# undef private              // as they are without
-# undef protected            // going through vcl.
+// urgh! there is no rdbuf() method for *setting* thestream buffer.
+// These headers are in the old style intentionally. We *want* to
+// include the old SGI headers as they are without going through vcl.
+# include <memory.h>         // dont_vxl_filter
+# include <stddef.h>         // dont_vxl_filter
+# define private public
+# define protected public
+# include <iostream.h>       // dont_vxl_filter
+# undef private
+# undef protected
 #endif
 
 #include <vbl/vbl_redirector.h>

@@ -110,7 +110,7 @@ SGIMovieFileWriteData::SGIMovieFileWriteData(char const* filename,
 {
   fp = fopen(filename, "w");
   if (!fp) {
-    vbl_printf(cerr, "SGIMovieFileWriteData: Can't open %s\n", filename);
+    vbl_printf(vcl_cerr, "SGIMovieFileWriteData: Can't open %s\n", filename);
     return;
   }
 
@@ -183,7 +183,7 @@ struct FrameIndex {
 void SGIMovieFileWriteData::Finish()
 {
   if (l != (int)frame_ends.size()) {
-    vbl_printf(cerr, "ZOKZOK: %d != %d \n", l, frame_ends.size());
+    vbl_printf(vcl_cerr, "ZOKZOK: %d != %d \n", l, frame_ends.size());
     return;
   }
   fseek(fp, directory_pos, 0);

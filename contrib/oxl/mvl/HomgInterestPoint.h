@@ -49,6 +49,6 @@ public:
   friend bool operator == (const HomgInterestPoint&, const HomgInterestPoint&);
 };
 
-ostream& operator << (ostream& s, const HomgInterestPoint&);
+vcl_ostream& operator << (vcl_ostream& s, const HomgInterestPoint&);
 
 #endif // HomgInterestPoint_h_

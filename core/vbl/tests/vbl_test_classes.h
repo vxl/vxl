@@ -19,7 +19,7 @@ public :
   base_impl(int nn);
   base_impl();
   ~base_impl();
-  void Print (ostream &str);
+  void Print (vcl_ostream &str);
   static void checkcount ();
 };
 

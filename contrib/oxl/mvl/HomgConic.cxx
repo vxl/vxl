@@ -208,8 +208,8 @@ void HomgConic::closest_point(const HomgPoint2D& p, HomgPoint2D* pout, double *d
     // Display the distance, and check that the point is indeed on the conic
     double F = this->F(*pout);
     if (fabs(F) > 1e-9) {
-      cerr << "HomgConic::get_closest_point() F = " << F << "  distance = " << sqrt(distance) << endl;
-      cerr << "WARNING: F = " << F << ".  It should be real tiny\n";
+      vcl_cerr << "HomgConic::get_closest_point() F = " << F << "  distance = " << sqrt(distance) << vcl_endl;
+      vcl_cerr << "WARNING: F = " << F << ".  It should be real tiny\n";
     }
   }
 

@@ -97,7 +97,7 @@ void ByteConvertImage::filter(vil_memory_image_of<double> const& in)
     }
 }
  
-void ByteConvertImage::print(ostream& s) const
+void ByteConvertImage::print(vcl_ostream& s) const
 {
   vbl_printf(s, "ByteConvertImage: range %g..%g\n", min_, max_);
 }

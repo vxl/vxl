@@ -97,13 +97,13 @@ protected:
 
 // stream operators 
 template <class Type>
-ostream&  operator<<(ostream& s, const vgl_homg_point_2d<Type>& p) {
+vcl_ostream&  operator<<(vcl_ostream& s, const vgl_homg_point_2d<Type>& p) {
   return s << " <vgl_homg_point_2d ("
            << p.x() << "," << p.y() << "," << p.w() << ") >";
 }
 
 template <class Type>
-istream&  operator>>(istream& is,  vgl_homg_point_2d<Type>& p) {
+vcl_istream&  operator>>(vcl_istream& is,  vgl_homg_point_2d<Type>& p) {
   return is >> p.x() >> p.y() >> p.w() ;
 }
 

@@ -47,7 +47,7 @@ public:
   // Constructors/Initializers/Destructors-------------------------------------
 
   PMatrix();
-  PMatrix(istream&);
+  PMatrix(vcl_istream&);
   PMatrix(const double *c_matrix);
   explicit PMatrix(const vnl_matrix<double>&);
   PMatrix(const vnl_matrix<double>& A, const vnl_vector<double>& a);
@@ -55,7 +55,7 @@ public:
  ~PMatrix();
 
   static PMatrix read(char const* filename);
-  static PMatrix read(istream&);
+  static PMatrix read(vcl_istream&);
 
   // Operations----------------------------------------------------------------
 
@@ -109,7 +109,7 @@ public:
   // vnl_matrix<double>& get_matrix() { return _p_matrix; }
 
   // Utility Methods-----------------------------------------------------------
-  bool read_ascii(istream& f);
+  bool read_ascii(vcl_istream& f);
 
   // Data Members--------------------------------------------------------------
 protected:
@@ -117,8 +117,8 @@ protected:
   mutable vnl_svd<double>* _svd;
 };
 
-ostream& operator<<(ostream& s, const PMatrix& p);
-istream& operator>>(istream& i, PMatrix& p);
+vcl_ostream& operator<<(vcl_ostream& s, const PMatrix& p);
+vcl_istream& operator>>(vcl_istream& i, PMatrix& p);
 
 //inline
 //PMatrix operator*(const HMatrix3D& C, const PMatrix& P)

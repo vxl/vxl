@@ -502,7 +502,7 @@ QvInput::readReal(double& d)
 
     *s = '\0';
 
-    d = atof(str);
+    d = vcl_atof(str);
 
     return TRUE;
 }

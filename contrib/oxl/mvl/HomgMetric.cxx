@@ -32,7 +32,7 @@ HomgMetric::~HomgMetric()
 }
 
 // -- Print HomgMetric to ostream.
-ostream& HomgMetric::print(ostream & s) const
+vcl_ostream& HomgMetric::print(vcl_ostream & s) const
 {
   if (_metric) 
     s << "[HomgMetric: " << *_metric << "]";
@@ -212,8 +212,8 @@ double HomgMetric::homg_to_image_distance_sqr(double image_distance) const
     return image_distance;
 }
 
-static ostream& warning(char const * fn) {
-  return cerr << "HomgMetric::" << fn << "() WARNING: ";
+static vcl_ostream& warning(char const * fn) {
+  return vcl_cerr << "HomgMetric::" << fn << "() WARNING: ";
 }
 
 // Static functions to condition/decondition image relations-----------------

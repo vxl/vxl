@@ -163,14 +163,14 @@ extern vil_rgb<double> tickle_mi_fancy;
 
 template <class T>
 inline
-ostream& operator<<(ostream& s, vil_rgb<T> const& rgb)
+vcl_ostream& operator<<(vcl_ostream& s, vil_rgb<T> const& rgb)
 {
   return s << '[' << rgb.r << ' ' << rgb.g << ' ' << rgb.b << ']';
 }
 
 // Specialization to get vil_rgb<byte> right.
 VCL_DEFINE_SPECIALIZATION
-ostream& operator<<(ostream&, vil_rgb<unsigned char> const&);
+vcl_ostream& operator<<(vcl_ostream&, vil_rgb<unsigned char> const&);
 
 // ** Arithmetic operators
 

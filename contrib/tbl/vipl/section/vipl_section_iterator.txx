@@ -1,7 +1,7 @@
 #include <vipl/section/vipl_section_iterator.h>
 #include <vipl/section/vipl_section_container.h>
 #include <vipl/section/vipl_section_descriptor.h>
-#include <stdio.h> // for error message stuff
+#include <vcl_cstdio.h> // for error message stuff
 
 // Assigns the pointer directly. Does not deep copy them.
 template < class DataType >

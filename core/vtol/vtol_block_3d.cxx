@@ -518,12 +518,12 @@ bool vtol_block_3d::remove_two_chain(vtol_two_chain_3d* doomed_face_loop)
 
 // -- print data 
  
-void vtol_block_3d::print(ostream& strm) const
+void vtol_block_3d::print(vcl_ostream& strm) const
 {
-  strm << "<vtol_block_3d " << _inferiors.size() << "  " << (void *)this << ">"  << endl;
+  strm << "<vtol_block_3d " << _inferiors.size() << "  " << (void *)this << ">"  << vcl_endl;
 }
 
-void vtol_block_3d::describe(ostream& strm, int blanking) const
+void vtol_block_3d::describe(vcl_ostream& strm, int blanking) const
 {
   for (int i=0; i<blanking; ++i) strm << ' ';
   print(strm);

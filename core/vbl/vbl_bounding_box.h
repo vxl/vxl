@@ -71,7 +71,7 @@ public:
     return vol;
   }
   
-  ostream& print(ostream& s) const;
+  vcl_ostream& print(vcl_ostream& s) const;
 
   T const* get_min() const { return min_; }
   T const* get_max() const { return max_; }
@@ -129,12 +129,12 @@ bool meet(vbl_bounding_box<T,DIM> const &a, vbl_bounding_box<T,DIM> const &b)
 // VC50 has trouble with this
 #if !defined (VCL_WIN32) && !defined(VCL_SUNPRO_CC)
 template <class T, int DIM>
-ostream& operator << (ostream& s, const vbl_bounding_box<T,DIM>& bbox) { return bbox.print(s); }
+vcl_ostream& operator << (vcl_ostream& s, const vbl_bounding_box<T,DIM>& bbox) { return bbox.print(s); }
 #else
 template <class T>
-ostream& operator << (ostream& s, const vbl_bounding_box<T,2>& bbox) { return bbox.print(s); }
+vcl_ostream& operator << (vcl_ostream& s, const vbl_bounding_box<T,2>& bbox) { return bbox.print(s); }
 template <class T>
-ostream& operator << (ostream& s, const vbl_bounding_box<T,3>& bbox) { return bbox.print(s); }
+vcl_ostream& operator << (vcl_ostream& s, const vbl_bounding_box<T,3>& bbox) { return bbox.print(s); }
 #endif
 
 #endif // vbl_bounding_box_h_

@@ -54,8 +54,8 @@ HMatrix2DComputeLinear::compute_p(const vcl_vector<HomgPoint2D>& inpoints1,
   
   int equ_count = n * (_allow_ideal_points ? 3 : 2);
   if (n * 2 < TM_UNKNOWNS_COUNT - 1) {
-    cerr << "HMatrix2DComputeLinear: Need at least 4 matches.\n";
-    if (n == 0) cerr << "Could be vcl_vector setlength idiosyncrasies!\n";
+    vcl_cerr << "HMatrix2DComputeLinear: Need at least 4 matches.\n";
+    if (n == 0) vcl_cerr << "Could be vcl_vector setlength idiosyncrasies!\n";
     return false;
   }
 
@@ -112,8 +112,8 @@ HMatrix2DComputeLinear::compute_p(const vcl_vector<HomgPoint2D>& inpoints1,
   // FSM added :
   //
   if (svd.W(7)<DEGENERACY_THRESHOLD*svd.W(8)) {
-    cerr << "HMatrix2DComputeLinear : design matrix has rank < 8" << endl;
-    cerr << "HMatrix2DComputeLinear : probably due to degenerate point configuration" << endl;
+    vcl_cerr << "HMatrix2DComputeLinear : design matrix has rank < 8" << vcl_endl;
+    vcl_cerr << "HMatrix2DComputeLinear : probably due to degenerate point configuration" << vcl_endl;
     return false;
   }
   H->set(svd.nullvector().data_block());

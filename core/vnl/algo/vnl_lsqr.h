@@ -45,9 +45,9 @@ public:
   int get_number_of_iterations() const { return num_iter_; }
 
   // -- Pontificate about the outcome of the last minimization.
-  void diagnose_outcome(ostream& os) const;
+  void diagnose_outcome(vcl_ostream& os) const;
 
-  static void translate_return_code(ostream& os, int return_code);
+  static void translate_return_code(vcl_ostream& os, int return_code);
 
 protected:
   vnl_linear_system* ls_;

@@ -13,7 +13,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 
-ostream& operator<<(ostream& s, const NViewMatch& c)
+vcl_ostream& operator<<(vcl_ostream& s, const NViewMatch& c)
 {
   for(unsigned i = 0; i < c.size(); ++i)
     vbl_printf(s, "%-4d ", c[i]);
@@ -29,7 +29,7 @@ bool NViewMatch::matches(const NViewMatch& b, int min_overlap) const
   unsigned l = size();
 
   if (l != b.size()) {
-    cerr << "NViewMatch::matches(B): matching vectors of different lengths\n";
+    vcl_cerr << "NViewMatch::matches(B): matching vectors of different lengths\n";
     return false;
   }
   
@@ -83,7 +83,7 @@ NViewMatches::NViewMatches():
 {
 }
 
-NViewMatches::NViewMatches(istream& s)
+NViewMatches::NViewMatches(vcl_istream& s)
 {
   load(s);
 }
@@ -110,15 +110,15 @@ void NViewMatches::clear()
 
 bool NViewMatches::load(const char* filename)
 {
-  ifstream s(filename);
+  vcl_ifstream s(filename);
   if (!s.good()) {
-    cerr << "NViewMatches::load(" << filename << ") - bad filename\n";
+    vcl_cerr << "NViewMatches::load(" << filename << ") - bad filename\n";
     return false;
   }
   return load(s);
 }
 
-bool NViewMatches::load(istream& s)
+bool NViewMatches::load(vcl_istream& s)
 {
   clear();
   for(vbl_awk awk(s); awk; ++awk) {
@@ -128,7 +128,7 @@ bool NViewMatches::load(istream& s)
       _nviews = awk.NF();
     else 
       if (awk.NF() != _nviews) {
-	cerr << "NViewMatches::load() ERROR: only " << awk.NF() << " fields on line " << awk.NR() << endl;
+	vcl_cerr << "NViewMatches::load() ERROR: only " << awk.NF() << " fields on line " << awk.NR() << vcl_endl;
 	return false;
       }
 
@@ -147,7 +147,7 @@ bool NViewMatches::load(istream& s)
   return true;
 }
 
-bool NViewMatches::save(ostream& s)
+bool NViewMatches::save(vcl_ostream& s)
 {
   for(unsigned i = 0; i < size(); ++i)
     s << (*this)[i] << "\n";
@@ -156,7 +156,7 @@ bool NViewMatches::save(ostream& s)
 
 bool NViewMatches::save(const char* filename)
 {
-  ofstream o(filename);
+  vcl_ofstream o(filename);
   return save(o);
 }
 
@@ -208,8 +208,8 @@ int NViewMatches::incorporate(const NViewMatch& newtrack)
 	merged = i;
       } else {
 	if ((*i).is_consistent(*merged)) {
-	  cerr << "Merge : " << (*i) << endl;
-	  cerr << "        " << (*merged) << endl;
+	  vcl_cerr << "Merge : " << (*i) << vcl_endl;
+	  vcl_cerr << "        " << (*merged) << vcl_endl;
 	  // A further consistent match, so merge the two match tracks
 	  (*merged).incorporate((*i));
 	  erase(i);

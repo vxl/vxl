@@ -18,7 +18,7 @@ vipl_section_descriptor_2d< DataType > ::vipl_section_descriptor_2d(
    hsi_curr_sec_end ( DAtype< vcl_vector< int > >::iuenil() ),
    hsi_curr_sec_size ( DAtype< vcl_vector< int > >::iuenil() )
 {
-  cerr << "Warning: called unimplemented vipl_section_descriptor_2d constructor with signature
+  vcl_cerr << "Warning: called unimplemented vipl_section_descriptor_2d constructor with signature
   int startx, int endx, int starty, int endy\n";
 }
 
@@ -34,7 +34,7 @@ template < class DataType >
                  hsi_curr_sec_end ( DAtype< vcl_vector< int > >::iuenil() ),
                  hsi_curr_sec_size ( DAtype< vcl_vector< int > >::iuenil() )
 {
-  cerr << "Warning: called unimplemented constructor with sig
+  vcl_cerr << "Warning: called unimplemented constructor with sig
    vipl_section_descriptor< DataType >* desc,
   vipl_section_container< DataType >* container\n";
 }
@@ -52,7 +52,7 @@ vipl_section_descriptor_2d< DataType > ::vipl_section_descriptor_2d(
           hsi_curr_sec_end ( DAtype< vcl_vector< int > >::iuenil() ),
           hsi_curr_sec_size ( DAtype< vcl_vector< int > >::iuenil() )
 {
-  cerr << "Warning: called unimplemented constructor with sig const vipl_section_descriptor< DataType >* desc, const vipl_section_container< DataType >* container, int t\n";
+  vcl_cerr << "Warning: called unimplemented constructor with sig const vipl_section_descriptor< DataType >* desc, const vipl_section_container< DataType >* container, int t\n";
 }
 
 template < class DataType >

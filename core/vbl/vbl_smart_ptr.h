@@ -169,7 +169,7 @@ inline bool operator== (T const* p, vbl_smart_ptr<T> const& a)
 // because if you're about to make a system call you can afford the
 // cost of a function call.
 template <class T>
-ostream& operator<< (ostream&, vbl_smart_ptr<T> const&);
+vcl_ostream& operator<< (vcl_ostream&, vbl_smart_ptr<T> const&);
 
 #define VBL_SMART_PTR_INSTANTIATE(T) \
 extern "please include vbl/vbl_smart_ptr.txx instead"

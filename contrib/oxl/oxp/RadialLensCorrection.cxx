@@ -96,7 +96,7 @@ void RadialLensCorrection::implement_inverse_map(double x2, double y2, double* x
     r = -r;
     double res = (r*(1 + _k2 * r * r) - rc);
     if (fabs(res) > 1e-11) {
-      cerr << "RES = " << res << " -- call awf!\n";
+      vcl_cerr << "RES = " << res << " -- call awf!\n";
     }
   } else {
     double t = -vnl_math_sgn(R) * vnl_math_cuberoot(fabs(R) + sqrt(DELTA));

@@ -58,7 +58,7 @@ vipl_section_descriptor< DataType > ::vipl_section_descriptor(
     hsi_curr_sec_size (1,0),
     refcount_ (1)
 {
-  cerr << "Warning: called unimplemented constructor with sig vcl_vector< int >& startpts, vcl_vector< int >& endpts\n";
+  vcl_cerr << "Warning: called unimplemented constructor with sig vcl_vector< int >& startpts, vcl_vector< int >& endpts\n";
 }
 
 template < class DataType >
@@ -135,7 +135,7 @@ int vipl_section_descriptor< DataType > ::curr_sec_size( int axis) const
 template < class DataType >
 int vipl_section_descriptor< DataType > ::data_offsets( int axis) const
 {
-  cerr << "Warning: called unimplemented method data_offsets\n";
+  vcl_cerr << "Warning: called unimplemented method data_offsets\n";
   return 0;
 }
 
@@ -143,7 +143,7 @@ int vipl_section_descriptor< DataType > ::data_offsets( int axis) const
 template < class DataType >
 DataType* vipl_section_descriptor< DataType > ::data_ptr()
 {
-  cerr << "Warning: called unimplemented method data_ptr\n";
+  vcl_cerr << "Warning: called unimplemented method data_ptr\n";
   return 0;
 }
 
@@ -151,7 +151,7 @@ DataType* vipl_section_descriptor< DataType > ::data_ptr()
 template < class DataType >
 const DataType* vipl_section_descriptor< DataType > ::data_ptr() const
 {
-  cerr << "Warning: called unimplemented method data_ptr\n";
+  vcl_cerr << "Warning: called unimplemented method data_ptr\n";
   return 0;
 }
 

@@ -455,12 +455,12 @@ bool vtol_block_2d::add_hole_cycle(vtol_two_chain_2d &new_hole)
 
 // -- print data 
  
-void vtol_block_2d::print(ostream &strm) const
+void vtol_block_2d::print(vcl_ostream &strm) const
 {
-  strm<<"<vtol_block_2d "<<_inferiors.size()<<"  "<<(void *)this<<">"<<endl;
+  strm<<"<vtol_block_2d "<<_inferiors.size()<<"  "<<(void *)this<<">"<<vcl_endl;
 }
 
-void vtol_block_2d::describe(ostream &strm,
+void vtol_block_2d::describe(vcl_ostream &strm,
                              int blanking) const
 {
   for (int i=0; i<blanking; ++i) strm << ' ';

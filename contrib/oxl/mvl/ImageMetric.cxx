@@ -10,8 +10,8 @@
 #include <mvl/HomgLineSeg2D.h>
 #include <mvl/HomgOperator2D.h>
 
-static ostream& warning(char const * fn) {
-  return cerr << fn << " WARNING: ";
+static vcl_ostream& warning(char const * fn) {
+  return vcl_cerr << fn << " WARNING: ";
 }
 
 // - Default ctor
@@ -134,11 +134,11 @@ double ImageMetric::perp_dist_squared(const HomgPoint2D & p, const HomgLine2D & 
 HomgPoint2D ImageMetric::perp_projection(const HomgLine2D & l, const HomgPoint2D & p)
 {
   if (p.check_infinity()) {
-    cerr << "ImageMetric::perp_projection -- point at infinity\n";
+    vcl_cerr << "ImageMetric::perp_projection -- point at infinity\n";
   }
   
   if (l.check_infinity()) {
-    cerr << "ImageMetric::perp_projection -- line at infinity\n";
+    vcl_cerr << "ImageMetric::perp_projection -- line at infinity\n";
   }
 
   return HomgOperator2D::perp_projection(homg_to_image_line(l), homg_to_imagehomg(p));
@@ -249,6 +249,6 @@ FMatrix ImageMetric::decondition(const FMatrix& F, const ImageMetric* c1, const 
   return FMatrix( C1inv.transpose() * F.get_matrix() * C2inv );
 }
 
-ostream & ImageMetric::print(ostream& s) const {
+vcl_ostream & ImageMetric::print(vcl_ostream& s) const {
   return s << "Empty ImageMetric";
 }

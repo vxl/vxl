@@ -98,13 +98,13 @@ public:
   // IO------------------------------------------------------------------------
 
   // Input/Output--------------------------------------------------------------
-  void print_brief(ostream& s) const;
+  void print_brief(vcl_ostream& s) const;
   void print_brief() const;
-  void write_ascii(ostream& s) const;
-  bool read_ascii(istream& s);
+  void write_ascii(vcl_ostream& s) const;
+  bool read_ascii(vcl_istream& s);
 
-  friend ostream& operator<<(ostream& s, const PairMatchSet& cc);
-  friend istream& operator>>(istream& s, PairMatchSet& cc);
+  friend vcl_ostream& operator<<(vcl_ostream& s, const PairMatchSet& cc);
+  friend vcl_istream& operator>>(vcl_istream& s, PairMatchSet& cc);
 
   bool get_match(int at, int* i1, int* i2) const;
 protected:

@@ -14,7 +14,7 @@
 #include <vcl_iosfwd.h>
 #include <vcl_vector.h>
 
-template </*typename*/class T> void vbl_binary_save(ostream &, vcl_vector<T> const &);
-template </*typename*/class T> void vbl_binary_load(istream &, vcl_vector<T> &);
+template </*typename*/class T> void vbl_binary_save(vcl_ostream &, vcl_vector<T> const &);
+template </*typename*/class T> void vbl_binary_load(vcl_istream &, vcl_vector<T> &);
 
 #endif // vbl_binary_h_

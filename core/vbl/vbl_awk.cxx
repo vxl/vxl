@@ -15,7 +15,7 @@
 #include <vcl_iostream.h>
 
 // -- Construct from input stream
-vbl_awk::vbl_awk(istream& s, ModeFlags mode):
+vbl_awk::vbl_awk(vcl_istream& s, ModeFlags mode):
   fd_(s),
   mode_(mode)
 {

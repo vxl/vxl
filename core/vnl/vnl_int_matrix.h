@@ -28,7 +28,7 @@ public:
   
   vnl_int_matrix() {}
   vnl_int_matrix(char const* filename);
-  vnl_int_matrix(istream& s);
+  vnl_int_matrix(vcl_istream& s);
   vnl_int_matrix(unsigned r, unsigned c): Base(r, c) {}
   vnl_int_matrix(unsigned r, unsigned c, int fillvalue): Base(r, c, fillvalue) {}
   vnl_int_matrix(const vnl_matrix<double>& d);

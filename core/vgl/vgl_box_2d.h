@@ -104,9 +104,9 @@ public:
 	    y <= max_pos_[1]);
   }
 
-  ostream& print(ostream&) const;
-  ostream& write(ostream&) const;
-  istream& read(istream&);
+  vcl_ostream& print(vcl_ostream&) const;
+  vcl_ostream& write(vcl_ostream&) const;
+  vcl_istream& read(vcl_istream&);
 
   // INTERNALS-----------------------------------------------------------------
 protected:
@@ -120,12 +120,12 @@ private:
 
 // stream operators
 template <class Type>
-ostream&  operator<<(ostream& s, const vgl_box_2d<Type>& p) {
+vcl_ostream&  operator<<(vcl_ostream& s, const vgl_box_2d<Type>& p) {
   return p.print(s);
 }
 
 template <class Type>
-istream&  operator>>(istream& is,  vgl_box_2d<Type>& p) {
+vcl_istream&  operator>>(vcl_istream& is,  vgl_box_2d<Type>& p) {
   return p.read(is);
 }
 

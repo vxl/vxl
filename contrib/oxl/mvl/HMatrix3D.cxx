@@ -37,7 +37,7 @@ HMatrix3D::HMatrix3D(const vnl_matrix<double>& M):
 //--------------------------------------------------------------
 //
 // -- Load H from ASCII istream.
-HMatrix3D::HMatrix3D(istream& s)
+HMatrix3D::HMatrix3D(vcl_istream& s)
 {
   load(s);
 }
@@ -105,7 +105,7 @@ HomgLine3D HMatrix3D::transform(const HomgLine3D& l1) const
 
 //-----------------------------------------------------------------------------
 // -- Print H on ostream
-ostream& operator<<(ostream& s, const HMatrix3D& h)
+vcl_ostream& operator<<(vcl_ostream& s, const HMatrix3D& h)
 {
   if (HomgPrettyPrint::pretty) 
     return vnl_matlab_print(s, (vnl_matrix<double> const &/*2.7 needs*/) h.get_matrix(), "");
@@ -114,14 +114,14 @@ ostream& operator<<(ostream& s, const HMatrix3D& h)
 }
 
 // -- Load H from ASCII file.
-bool HMatrix3D::load(istream& s)
+bool HMatrix3D::load(vcl_istream& s)
 {
   (*this).read_ascii(s);
   return (s.good() || s.eof());
 }
 
 // -- Load H from ASCII file.
-istream& operator>>(istream& s, HMatrix3D& H)
+vcl_istream& operator>>(vcl_istream& s, HMatrix3D& H)
 {
   H.load(s);
   return s;

@@ -243,7 +243,7 @@ vbl_basic_relation<T1,T2,T3,T4,T5>::where_is(const vbl_basic_relation_where<T1,T
 //------------------------------------------------------------
 // -- Dump the relation onto the given stream.
 template <class T1, class T2, class T3, class T4, class T5>
-void vbl_basic_relation<T1,T2,T3,T4,T5>::dump_relation(ostream& str)
+void vbl_basic_relation<T1,T2,T3,T4,T5>::dump_relation(vcl_ostream& str)
 {
   str << "Relation " << get_name() << ":" << vcl_endl;
   where->Dump(str);

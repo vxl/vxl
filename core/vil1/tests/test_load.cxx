@@ -12,7 +12,7 @@ void test(char const* magic, int comps, int bits)
 {
   char const* FNAME = "/tmp/t.pgm";
   {
-    ofstream f(FNAME);
+    vcl_ofstream f(FNAME);
     // reference to rvalue not allowed.
     f << magic << "\n2\n3\n255\nABCDEF";
   }
@@ -23,7 +23,7 @@ void test(char const* magic, int comps, int bits)
     "vil_image_impl: size " << i.width() << "x" << i.height() <<
     ", " << i.components() << " component" <<
     ", " << i.bits_per_component() << " bit" << 
-    endl;
+    vcl_endl;
 
   AssertEq(i.components(), comps);
   AssertEq(i.bits_per_component(), bits);

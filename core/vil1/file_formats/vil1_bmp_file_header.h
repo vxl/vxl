@@ -22,7 +22,7 @@ struct vil_bmp_file_header
   vil_bmp_file_header();
   void read(vil_stream *);
   void write(vil_stream *) const;
-  void print(ostream &) const;
+  void print(vcl_ostream &) const;
   bool signature_valid() const;
 };
 

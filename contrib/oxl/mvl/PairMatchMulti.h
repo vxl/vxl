@@ -25,6 +25,7 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <vcl_utility.h>	//vxl_filter
 #include <vcl_functional.h>
 #include <vcl_map.h>
 #include <vcl_iosfwd.h>
@@ -48,7 +49,7 @@ public:
   // Constructors/Destructors--------------------------------------------------
 
   PairMatchMulti();
-  PairMatchMulti(istream& s);
+  PairMatchMulti(vcl_istream& s);
   PairMatchMulti(const PairMatchMulti& that);
  ~PairMatchMulti();
 
@@ -96,7 +97,7 @@ public:
   }
 
   bool load(char const* filename);
-  bool read_ascii(istream& s);
+  bool read_ascii(vcl_istream& s);
 
   // Data Control--------------------------------------------------------------
 
@@ -141,7 +142,7 @@ PairMatchMultiIterator PairMatchMulti::iter()
   return PairMatchMultiIterator(_matches12.begin(), _matches12.end());
 }
 
-ostream& operator << (ostream&, const PairMatchMulti&);
-istream& operator >> (istream&, PairMatchMulti&);
+vcl_ostream& operator << (vcl_ostream&, const PairMatchMulti&);
+vcl_istream& operator >> (vcl_istream&, PairMatchMulti&);
 
 #endif // PairMatchMulti_h_

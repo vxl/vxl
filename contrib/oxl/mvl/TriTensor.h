@@ -196,7 +196,7 @@ private:
   FManifoldProject* _fmp13;
 };
 
-ostream& operator << (ostream&, const TriTensor& T);
-istream& operator >> (istream&, TriTensor& T);
+vcl_ostream& operator << (vcl_ostream&, const TriTensor& T);
+vcl_istream& operator >> (vcl_istream&, TriTensor& T);
 
 #endif // _TriTensor_h

@@ -49,19 +49,19 @@ LineSegSet::~LineSegSet()
 // -- Construct from ascii file
 LineSegSet::LineSegSet(const char* filename, const HomgMetric& c)
 {
-  ifstream f(filename);
+  vcl_ifstream f(filename);
   load_ascii(f, c);
 }
 
 // -- Load lines from ASCII file
-bool LineSegSet::load_ascii(istream& f, HomgMetric const& c)
+bool LineSegSet::load_ascii(vcl_istream& f, HomgMetric const& c)
 {
   vnl_matrix<double> L;
   f >> L;
 
   int cols = L.columns();
   if (cols != 6 && cols != 4) {
-    cerr << "Load failed -- there are " << L.columns() << " data per row\n";
+    vcl_cerr << "Load failed -- there are " << L.columns() << " data per row\n";
     return false;
   }
 
@@ -88,7 +88,7 @@ bool LineSegSet::load_ascii(istream& f, HomgMetric const& c)
     _hlines.push_back(c.image_to_homg(line));
   }
   
-  cerr << "Loaded " << _hlines.size() << " line segments\n";
+  vcl_cerr << "Loaded " << _hlines.size() << " line segments\n";
   return true;
 }
   
@@ -98,7 +98,7 @@ int LineSegSet::FindNearestLineIndex(double x, double y)
   //float dist;
   int mini=-1;
 
-  cerr <<"LineSegSet::FindNearestLineIndex AIIEEEEE\n";
+  vcl_cerr <<"LineSegSet::FindNearestLineIndex AIIEEEEE\n";
 //  for (int i=0; i<int(size()); i++){
 //    ImplicitLine* dl = get_iuline(i);
 //    double t = ( dl->GetStartX() - P->x() ) * ( dl->GetEndX() - P->x() );
@@ -120,7 +120,7 @@ int LineSegSet::FindNearestLineIndex(double x, double y)
 }
 
 // -- Save lines to ASCII file
-bool LineSegSet::save_ascii(ostream& f) const
+bool LineSegSet::save_ascii(vcl_ostream& f) const
 {
   for(unsigned i = 0; i < _hlines.size(); ++i) {
     HomgLineSeg2D const& l = _hlines[i];
@@ -129,9 +129,9 @@ bool LineSegSet::save_ascii(ostream& f) const
     vnl_double_2 p2 = _conditioner.homg_to_image(l.get_point2());
     
     f << p1[0] << " " << p1[1] << "\t";
-    f << p2[0] << " " << p2[1] << endl;
+    f << p2[0] << " " << p2[1] << vcl_endl;
   }
-  cerr << "LineSegSet: Saved " << _hlines.size() << " line segments\n";
+  vcl_cerr << "LineSegSet: Saved " << _hlines.size() << " line segments\n";
   return true;
 }
 

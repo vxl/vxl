@@ -58,7 +58,7 @@ HomgPoint2D HomgPoint2D::get_unitized() const
   double norm = sqrt (vnl_math_sqr(x) + vnl_math_sqr(y) + vnl_math_sqr(z));
   
   if (norm == 0.0) {
-    cerr << "HomgPoint2D::get_unitized() -- Zero length vector\n";
+    vcl_cerr << "HomgPoint2D::get_unitized() -- Zero length vector\n";
     return *this;
   }
   
@@ -69,7 +69,7 @@ HomgPoint2D HomgPoint2D::get_unitized() const
 //-----------------------------------------------------------------------------
 //
 // -- Print to ostream as <HomgPoint2D x y z>
-ostream& operator<<(ostream& s, const HomgPoint2D& p)
+vcl_ostream& operator<<(vcl_ostream& s, const HomgPoint2D& p)
 {
   return s << "<HomgPoint2D " << p.get_vector() << ">";
 }
@@ -77,7 +77,7 @@ ostream& operator<<(ostream& s, const HomgPoint2D& p)
 //-----------------------------------------------------------------------------
 //
 // -- Read from ASCII istream.  Assumes points are stored in homogeneous form as 3 reals.
-istream& operator>>(istream& is, HomgPoint2D& p)
+vcl_istream& operator>>(vcl_istream& is, HomgPoint2D& p)
 {
   double x, y, z;
   is >> x >> y >> z;
@@ -90,7 +90,7 @@ istream& operator>>(istream& is, HomgPoint2D& p)
 //
 // -- read from istream.  Default is to assume that points are nonhomogeneous
 // 2D, set is_homogeneous to true if points are already in homogeneous form.
-HomgPoint2D HomgPoint2D::read(istream& is, bool is_homogeneous)
+HomgPoint2D HomgPoint2D::read(vcl_istream& is, bool is_homogeneous)
 {
   if (is_homogeneous) {
     HomgPoint2D ret;

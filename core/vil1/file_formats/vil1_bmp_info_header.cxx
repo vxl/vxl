@@ -41,7 +41,7 @@ void vil_bmp_info_header::write(vil_stream *s) const
   vil_32bit_write_little_endian(s, colorcount);
 }
 
-void vil_bmp_info_header::print(ostream &s) const
+void vil_bmp_info_header::print(vcl_ostream &s) const
 {
   s << "vil_bmp_info_header:" << vcl_endl
     << "  compression  : " << compression << vcl_endl

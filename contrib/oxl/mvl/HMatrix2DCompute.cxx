@@ -50,13 +50,13 @@ HMatrix2DCompute::compute_pl(const PointArray&,
 			     const LineArray&,
 			     HMatrix2D *) 
 {
-  cerr << endl;
-  cerr << "HMatrix2DCompute::compute_pl() :" << endl;
-  cerr << "This is a virtual method which should have been" << endl;
-  cerr << "overridden by a class derived from HMatrix2DCompute." << endl;
-  cerr << "The derived class may have omitted to implement" << endl;
-  cerr << "enough of the methods compute_p(),compute_l() and" << endl;
-  cerr << "compute_pl()." << endl;
+  vcl_cerr << vcl_endl;
+  vcl_cerr << "HMatrix2DCompute::compute_pl() :" << vcl_endl;
+  vcl_cerr << "This is a virtual method which should have been" << vcl_endl;
+  vcl_cerr << "overridden by a class derived from HMatrix2DCompute." << vcl_endl;
+  vcl_cerr << "The derived class may have omitted to implement" << vcl_endl;
+  vcl_cerr << "enough of the methods compute_p(),compute_l() and" << vcl_endl;
+  vcl_cerr << "compute_pl()." << vcl_endl;
   abort();
   return false;
 }

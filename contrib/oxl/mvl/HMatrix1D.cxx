@@ -27,7 +27,7 @@ HMatrix1D::HMatrix1D(const HMatrix1D& M)
 
 /*
   // -- Copy constructor
-  HMatrix1D::HMatrix1D(istream& s)
+  HMatrix1D::HMatrix1D(vcl_istream& s)
   {
   _t12_matrix.read_ascii(s);
   vnl_svd<double> svd(_t12_matrix);
@@ -62,7 +62,7 @@ HMatrix1D::HMatrix1D (const double* H)
   _t21_matrix = svd.inverse();
 }
 
-HMatrix1D::HMatrix1D (istream &is)
+HMatrix1D::HMatrix1D (vcl_istream &is)
 {
   _t12_matrix.read_ascii(is);
   vnl_svd<double> svd(_t12_matrix);
@@ -108,20 +108,20 @@ HomgPoint1D HMatrix1D::preimage(const HomgPoint1D& x2) const
 
 //-----------------------------------------------------------------------------
 // -- Print H on ostream
-ostream& operator<<(ostream& s, const HMatrix1D& h)
+vcl_ostream& operator<<(vcl_ostream& s, const HMatrix1D& h)
 {
   return s << h.get_matrix();
 }
 
 // -- Read H from istream
-istream& operator >> (istream& s, HMatrix1D& H)
+vcl_istream& operator >> (vcl_istream& s, HMatrix1D& H)
 {
   H = HMatrix1D(s);
   return s;
 }
 
 // -- Read H from istream
-HMatrix1D HMatrix1D::read(istream& s)
+HMatrix1D HMatrix1D::read(vcl_istream& s)
 {
   return HMatrix1D(s);
 }
@@ -130,9 +130,9 @@ HMatrix1D HMatrix1D::read(istream& s)
 // -- Read H from file
 HMatrix1D HMatrix1D::read(char const* filename)
 {
-  ifstream f(filename);
+  vcl_ifstream f(filename);
   if (!f.good())
-    cerr << "HMatrix1D::read: Error opening " << filename << endl;
+    vcl_cerr << "HMatrix1D::read: Error opening " << filename << vcl_endl;
   return HMatrix1D(f);
 }
 

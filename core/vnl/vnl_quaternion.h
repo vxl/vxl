@@ -195,7 +195,7 @@ inline vnl_quaternion<T>& vnl_quaternion<T>::operator= (const vnl_quaternion<T>&
 // operator<<  --
 
 template <class T>
-inline ostream& operator<< (ostream& os, const vnl_quaternion<T>& q) {
+inline vcl_ostream& operator<< (vcl_ostream& os, const vnl_quaternion<T>& q) {
   return os << *((vnl_vector<T>*) &q);
 }
 

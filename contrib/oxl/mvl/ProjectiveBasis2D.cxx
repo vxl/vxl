@@ -58,7 +58,7 @@ void ProjectiveBasis2D::compute(const HomgPoint2D& p1, const HomgPoint2D& p2, co
     full_matrix.set_column(3, p4.get_vector());
     
     if (! full_matrix.is_finite() || full_matrix.has_nans()) {
-      cerr << "Error (ProjectiveBasis2D): given matrix has infinite or NaN values\n";
+      vcl_cerr << "Error (ProjectiveBasis2D): given matrix has infinite or NaN values\n";
       T_.set_identity(); collinear_ = true; return;
     }
     
@@ -66,7 +66,7 @@ void ProjectiveBasis2D::compute(const HomgPoint2D& p1, const HomgPoint2D& p2, co
     collinear_ = (s.rank() < 3);
 
     if (collinear_ && warn_)
-      cerr << "Warning (ProjectiveBasis2D): Three out of the four points are nearly collinear\n";
+      vcl_cerr << "Warning (ProjectiveBasis2D): Three out of the four points are nearly collinear\n";
   } else {
     collinear_ = false;
   }
@@ -85,7 +85,7 @@ void ProjectiveBasis2D::compute(const HomgPoint2D& p1, const HomgPoint2D& p2, co
   back_matrix.set_column(2, scales_vector[2] * p3.get_vector());
 
   if (! back_matrix.is_finite() || back_matrix.has_nans()) {
-    cerr << "Error (ProjectiveBasis2D): back matrix has infinite or NaN values\n";
+    vcl_cerr << "Error (ProjectiveBasis2D): back matrix has infinite or NaN values\n";
     T_.set_identity(); collinear_ = true; return;
   }
 

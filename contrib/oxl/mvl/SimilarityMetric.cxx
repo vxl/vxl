@@ -101,11 +101,11 @@ SimilarityMetric::~SimilarityMetric()
 // -- One line printout
 void SimilarityMetric::print(char* msg) const
 {
-  cout<<msg<<": SimilarityMetric ("<<_centre_x<<","<<_centre_y<<", "<<_inv_scale<<")\n";
+  vcl_cout<<msg<<": SimilarityMetric ("<<_centre_x<<","<<_centre_y<<", "<<_inv_scale<<")\n";
 }
 
 // -- One line printout
-ostream& SimilarityMetric::print(ostream& s) const
+vcl_ostream& SimilarityMetric::print(vcl_ostream& s) const
 {
   return s<<"[SimilarityMetric ("<<_centre_x<<","<<_centre_y<<"), "<<_inv_scale << "]";
 }
@@ -180,12 +180,12 @@ double SimilarityMetric::perp_dist_squared(HomgPoint2D const & p, HomgLine2D con
 
   // pcp separated
   if (p.check_infinity()) {
-    cerr << "ImageMetric::perp_dist_squared -- point at infinity\n";
+    vcl_cerr << "ImageMetric::perp_dist_squared -- point at infinity\n";
     return Homg::infinity;
   }
   
   if (l.check_infinity()) {
-    cerr << "ImageMetric::perp_dist_squared -- line at infinity\n";
+    vcl_cerr << "ImageMetric::perp_dist_squared -- line at infinity\n";
     return Homg::infinity;
   }
   

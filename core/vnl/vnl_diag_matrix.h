@@ -116,7 +116,7 @@ private:
 // // Define this now,
 // #define IUE_DEFINED_vnl_diag_matrix
 
-template <class T> ostream& operator<< (ostream&, vnl_diag_matrix<T> const&);
+template <class T> vcl_ostream& operator<< (vcl_ostream&, vnl_diag_matrix<T> const&);
 
 // -- Convert a vnl_diag_matrix to a Matrix.
 template <class T>

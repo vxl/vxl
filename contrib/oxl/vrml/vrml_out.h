@@ -27,12 +27,12 @@ public:
   // Constructors/Destructors--------------------------------------------------
   
   vrml_out();
-  vrml_out(ostream& s);
+  vrml_out(vcl_ostream& s);
   vrml_out(char const* filename);
   ~vrml_out();
 
   // Operations----------------------------------------------------------------
-  void open(ostream& s);
+  void open(vcl_ostream& s);
   void close();
   
   void prologue();
@@ -90,7 +90,7 @@ public:
 
 protected:
   // Data Members--------------------------------------------------------------
-  ostream* s_;
+  vcl_ostream* s_;
   bool own_ostream_;
   
 private:

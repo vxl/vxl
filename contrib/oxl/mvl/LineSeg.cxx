@@ -17,18 +17,18 @@ LineSeg::LineSeg(float x0, float y0, float x1, float y1, float theta, float grad
 }
 
 // -- Save to ostream
-ostream& operator<<(ostream& s, const LineSeg& l)
+vcl_ostream& operator<<(vcl_ostream& s, const LineSeg& l)
 {
   return s << l._x0 << " "
 	   << l._y0 << " "
 	   << l._x1 << " "
 	   << l._y1 << " "
 	   << l._theta << " "
-	   << l._grad_mean << endl;
+	   << l._grad_mean << vcl_endl;
 }
 
 // -- Read from istream
-istream& operator>>(istream& s, LineSeg& l)
+vcl_istream& operator>>(vcl_istream& s, LineSeg& l)
 {
   return s >> l._x0 >> l._y0 >> l._x1 >> l._y1 >> l._theta >> l._grad_mean;
 }

@@ -11,14 +11,14 @@
 #include <vcl_vector.h>
 
 void vsl_load_topology(char const *f, vcl_list<vsl_edge*> &e, vcl_list<vsl_vertex*> &v) {
-  ifstream file(f);
+  vcl_ifstream file(f);
   vsl_load_topology(file, e, v);
 }
 
 #define streamok \
 { if (f.bad()) { vcl_cerr << __FILE__ ":" << __LINE__ << " stream bad at this point" << vcl_endl; return; } }
 
-void vsl_load_topology(istream &f, vcl_list<vsl_edge*> &es, vcl_list<vsl_vertex*> &vs) {
+void vsl_load_topology(vcl_istream &f, vcl_list<vsl_edge*> &es, vcl_list<vsl_vertex*> &vs) {
   es.clear();
   vs.clear();
   

@@ -172,7 +172,7 @@ public:
   inline void Print() { Dump(vcl_cout); }
 
   // Print the tuple on cerr.
-  void Dump(ostream& str = vcl_cerr) const
+  void Dump(vcl_ostream& str = vcl_cerr) const
   {
     str << "<" << first << "," << second;
     if (!vbl_basic_optional_traits<T3>::IsOptional)
@@ -273,7 +273,7 @@ template
   class T3,
   class T4,
   class T5>
-inline ostream& operator<<(ostream& str, const vbl_basic_tuple<T1,T2,T3,T4,T5>& tuple)
+inline vcl_ostream& operator<<(vcl_ostream& str, const vbl_basic_tuple<T1,T2,T3,T4,T5>& tuple)
 {
   tuple.Dump(str);
   return str;

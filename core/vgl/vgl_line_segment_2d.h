@@ -39,9 +39,9 @@ private:
 
 // stream operators 
 template <class Type> 
-ostream&  operator<<(ostream& s, const vgl_line_segment_2d<Type>& p);
+vcl_ostream&  operator<<(vcl_ostream& s, const vgl_line_segment_2d<Type>& p);
 
 template <class Type>
-istream&  operator>>(istream& is,  vgl_line_segment_2d<Type>& p);
+vcl_istream&  operator>>(vcl_istream& is,  vgl_line_segment_2d<Type>& p);
 
 #endif // vgl_line_segment_2d_h_

@@ -121,7 +121,7 @@ void vgl_homg_operators_2d<Type>::unitize(vgl_homg_point_2d<Type>& a)
   double norm = vcl_sqrt (x*x + y*y + z*z);
   
   if (norm == 0.0) {
-    cerr << "vgl_homg_operators_2d<Type>::unitize() -- Zero length vector\n";
+    vcl_cerr << "vgl_homg_operators_2d<Type>::unitize() -- Zero length vector\n";
     return;
   }
   
@@ -145,7 +145,7 @@ double vgl_homg_operators_2d<Type>::distance_squared (const vgl_homg_point_2d<Ty
   double z2 = point2.w();
 
   if (z1 == 0 || z2 == 0) {
-    cerr << "vgl_homg_operators_2d<Type>::distance_squared() -- point at infinity";
+    vcl_cerr << "vgl_homg_operators_2d<Type>::distance_squared() -- point at infinity";
     return vnl_numeric_limits<Type>::infinity();
   }
 
@@ -169,7 +169,7 @@ template <class Type>
 double vgl_homg_operators_2d<Type>::perp_dist_squared (const vgl_homg_point_2d<Type>& point, const vgl_homg_line_2d<Type>& line)
 {
   if ((line.a()==0 && line.b()== 0) || point.w()==0) {
-    cerr << "vgl_homg_operators_2d<Type>::perp_dist_squared() -- line or point at infinity";
+    vcl_cerr << "vgl_homg_operators_2d<Type>::perp_dist_squared() -- line or point at infinity";
     // return Homg::infinity;
     return 10000000; // TODO make an infinity for homg operators 
   }
@@ -371,7 +371,7 @@ vnl_vector<Type> vgl_homg_operators_2d<Type>::most_orthogonal_vector_svd(const v
     D.set_row(j, get_vector(*i));
 
   vnl_svd<Type> svd(D);
-  cout << "[movrank " << svd.W() << "]";
+  vcl_cout << "[movrank " << svd.W() << "]";
   
   return svd.nullvector();
 }
@@ -400,7 +400,7 @@ vgl_homg_point_2d<Type> vgl_homg_operators_2d<Type>::lines_to_point(const vcl_ve
 template <class Type>
 double vgl_homg_operators_2d<Type>::perp_distance_squared (const vgl_homg_line_2d<Type>& line, const vgl_homg_point_2d<Type>& point)
 {
-  cerr << "vgl_homg_operators_2d<Type>::perp_distance_squared should be replaced by perp_dist_squared\n";
+  vcl_cerr << "vgl_homg_operators_2d<Type>::perp_distance_squared should be replaced by perp_dist_squared\n";
   return perp_dist_squared(point, line);
 }
 
@@ -433,7 +433,7 @@ double vgl_homg_operators_2d<Type>::CrossRatio(const vgl_homg_point_2d<Type>& a,
   double n = (x>y) ? (x1*w3-x3*w1)*(x2*w4-x4*w2) : (y1*w3-y3*w1)*(y2*w4-y4*w2);
   double m = (x>y) ? (x1*w4-x4*w1)*(x2*w3-x3*w2) : (y1*w4-y4*w1)*(y2*w3-y3*w2);
   if (n == 0 && m == 0)
-    cerr << "CrossRatio not defined: three of the given points coincide" << endl;
+    vcl_cerr << "CrossRatio not defined: three of the given points coincide" << vcl_endl;
   return n/m;
 }
 

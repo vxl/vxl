@@ -59,7 +59,7 @@ public:
   enum Enum { IsOptional = true };
 };
 
-inline ostream& operator<<(ostream& str, const vbl_basic_optional&)
+inline vcl_ostream& operator<<(vcl_ostream& str, const vbl_basic_optional&)
 {
   return str;
 }

@@ -46,6 +46,6 @@ public:
   double squared_radius() const { return get_double3().squared_magnitude(); }
 };
 
-ostream& operator<<(ostream& s, const HomgPoint3D& );
+vcl_ostream& operator<<(vcl_ostream& s, const HomgPoint3D& );
 
 #endif // _HomgPoint3D_h

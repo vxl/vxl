@@ -20,7 +20,7 @@
 // -------------------- vnl_vector
 
 template <class T>
-bool vnl_binary_save(ostream &f, vnl_vector<T> const &v)
+bool vnl_binary_save(vcl_ostream &f, vnl_vector<T> const &v)
 {
   int tmp = v.size();
   f.write(stream_cast &tmp, sizeof(tmp));
@@ -32,7 +32,7 @@ bool vnl_binary_save(ostream &f, vnl_vector<T> const &v)
 }
 
 template <class T>
-bool vnl_binary_load(istream &f, vnl_vector<T> &v)
+bool vnl_binary_load(vcl_istream &f, vnl_vector<T> &v)
 {
   int n = -1;
   f.read(stream_cast &n, sizeof(n));
@@ -59,7 +59,7 @@ bool vnl_binary_load(istream &f, vnl_vector<T> &v)
 // -------------------- vnl_matrix
 
 template <class T>
-bool vnl_binary_save(ostream &f, vnl_matrix<T> const &A)
+bool vnl_binary_save(vcl_ostream &f, vnl_matrix<T> const &A)
 {
   int tmp;
   tmp = A.rows(); f.write(stream_cast &tmp, sizeof(tmp));
@@ -72,7 +72,7 @@ bool vnl_binary_save(ostream &f, vnl_matrix<T> const &A)
 }
 
 template <class T>
-bool vnl_binary_load(istream &f, vnl_matrix<T> &A)
+bool vnl_binary_load(vcl_istream &f, vnl_matrix<T> &A)
 {
   int r = -1, c = -1;
   f.read(stream_cast &r, sizeof(r));
@@ -100,7 +100,7 @@ bool vnl_binary_load(istream &f, vnl_matrix<T> &A)
 // -------------------- vnl_diag_matrix
 
 template <class T>
-bool vnl_binary_save(ostream &f, vnl_diag_matrix<T> const &D)
+bool vnl_binary_save(vcl_ostream &f, vnl_diag_matrix<T> const &D)
 {
   int tmp = D.size();
   f.write(stream_cast &tmp, sizeof(tmp));
@@ -112,7 +112,7 @@ bool vnl_binary_save(ostream &f, vnl_diag_matrix<T> const &D)
 }
 
 template <class T>
-bool vnl_binary_load(istream &f, vnl_diag_matrix<T> &D)
+bool vnl_binary_load(vcl_istream &f, vnl_diag_matrix<T> &D)
 {
   int n = -1;
   f.read(stream_cast &n, sizeof(n));
@@ -137,12 +137,12 @@ bool vnl_binary_load(istream &f, vnl_diag_matrix<T> &D)
 //------------------------------------------------------------
 
 #define inst(T) \
-template bool vnl_binary_save(ostream &, vnl_vector<T > const &); \
-template bool vnl_binary_save(ostream &, vnl_matrix<T > const &); \
-template bool vnl_binary_save(ostream &, vnl_diag_matrix<T > const &); \
-template bool vnl_binary_load(istream &, vnl_vector<T > &); \
-template bool vnl_binary_load(istream &, vnl_matrix<T > &); \
-template bool vnl_binary_load(istream &, vnl_diag_matrix<T > &); \
+template bool vnl_binary_save(vcl_ostream &, vnl_vector<T > const &); \
+template bool vnl_binary_save(vcl_ostream &, vnl_matrix<T > const &); \
+template bool vnl_binary_save(vcl_ostream &, vnl_diag_matrix<T > const &); \
+template bool vnl_binary_load(vcl_istream &, vnl_vector<T > &); \
+template bool vnl_binary_load(vcl_istream &, vnl_matrix<T > &); \
+template bool vnl_binary_load(vcl_istream &, vnl_diag_matrix<T > &); \
 ;
 
 inst(int);

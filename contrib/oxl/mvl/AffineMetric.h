@@ -44,7 +44,7 @@ public:
   virtual bool can_invert_distance() const { return false; }
 
   // Computations--------------------------------------------------------------
-  ostream& print(ostream& s) const;
+  vcl_ostream& print(vcl_ostream& s) const;
 
   // Data Access---------------------------------------------------------------
 

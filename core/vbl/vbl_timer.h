@@ -54,7 +54,7 @@ public:
   long system(); // system      time (ms) since last mark
   long all();    // user+system time (ms) since last mark
 
-  void print(ostream& s);
+  void print(vcl_ostream& s);
 
 private:
   vbl_timer_data *data;

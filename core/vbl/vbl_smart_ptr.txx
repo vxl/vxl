@@ -22,7 +22,7 @@ template <class T>
 struct vbl_smart_ptr_T_as_string { static char const *str() { return "T"; } };
 
 template <class T>
-ostream& operator<< (ostream& os, vbl_smart_ptr<T> const& r)
+vcl_ostream& operator<< (vcl_ostream& os, vbl_smart_ptr<T> const& r)
 {
   return os << "vbl_smart_ptr<"
 	    << vbl_smart_ptr_T_as_string<T>::str()
@@ -36,5 +36,5 @@ ostream& operator<< (ostream& os, vbl_smart_ptr<T> const& r)
 template class vbl_smart_ptr<T >; \
 VCL_DEFINE_SPECIALIZATION struct vbl_smart_ptr_T_as_string<T > \
 { static char const *str() { return #T; } }; \
-template ostream& operator<< (ostream&, vbl_smart_ptr<T > const&); \
+template vcl_ostream& operator<< (vcl_ostream&, vbl_smart_ptr<T > const&); \
 VCL_INSTANTIATE_INLINE(bool operator== (vbl_smart_ptr<T > const&, vbl_smart_ptr<T > const&));

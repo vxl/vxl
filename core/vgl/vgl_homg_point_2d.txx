@@ -19,6 +19,6 @@ vgl_homg_point_2d<Type>::vgl_homg_point_2d (vgl_homg_line_2d<Type> const& l1,
 
 #define VGL_HOMG_POINT_2D_INSTANTIATE(T) \
 template class vgl_homg_point_2d<T>; \
-template ostream& operator<<(ostream&, vgl_homg_point_2d<T>const&); \
-template istream& operator>>(istream&, vgl_homg_point_2d<T>&)
+template vcl_ostream& operator<<(vcl_ostream&, vgl_homg_point_2d<T>const&); \
+template vcl_istream& operator>>(vcl_istream&, vgl_homg_point_2d<T>&)
 

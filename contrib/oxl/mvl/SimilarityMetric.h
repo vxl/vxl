@@ -66,7 +66,7 @@ public:
   // virtual bool can_invert_distance() const { return true; }
 
   // Data Control--------------------------------------------------------------
-  ostream& print(ostream&) const;
+  vcl_ostream& print(vcl_ostream&) const;
   void print() const;
   void print(char* msg) const;
 

@@ -20,7 +20,7 @@
 #endif
 
 // SGI needs char * as first argument to ostream::write
-void vnl_write_bytes(ostream &s, void const *p, unsigned bytes) {
+void vnl_write_bytes(vcl_ostream &s, void const *p, unsigned bytes) {
   s.write((char const *)p, bytes);
 }
 
@@ -41,18 +41,18 @@ long vnl_is_complex(vnl_float_complex  const &) { return 1; }
 long vnl_is_complex(vnl_double_complex const &) { return 1; }
 
 // template <class T> void vnl_write_real(ostream &, T const *, unsigned );
-void vnl_write_real(ostream &s, float const *data, unsigned n)
+void vnl_write_real(vcl_ostream &s, float const *data, unsigned n)
 { ::vnl_write_bytes(s, data, n*sizeof(*data)); }
-void vnl_write_real(ostream &s, double const *data, unsigned n)
+void vnl_write_real(vcl_ostream &s, double const *data, unsigned n)
 { ::vnl_write_bytes(s, data, n*sizeof(*data)); }
-void vnl_write_real(ostream &s, vnl_float_complex const *data, unsigned n) {
+void vnl_write_real(vcl_ostream &s, vnl_float_complex const *data, unsigned n) {
   float dummy;
   for (unsigned i=0; i<n; ++i) { // real block
     dummy = data[i].real();
     ::vnl_write_bytes(s, &dummy, sizeof(dummy));
   }
 }
-void vnl_write_real(ostream &s, vnl_double_complex const *data, unsigned n) {
+void vnl_write_real(vcl_ostream &s, vnl_double_complex const *data, unsigned n) {
   double dummy;
   for (unsigned i=0; i<n; ++i) { // real block
     dummy = data[i].real();
@@ -61,16 +61,16 @@ void vnl_write_real(ostream &s, vnl_double_complex const *data, unsigned n) {
 }
 
 // template <class T> void vnl_write_imag(ostream &, T const *, unsigned );
-void vnl_write_imag(ostream &, float const *, unsigned ) { }
-void vnl_write_imag(ostream &, double const *, unsigned ) { }
-void vnl_write_imag(ostream &s, vnl_float_complex const *data, unsigned n) {
+void vnl_write_imag(vcl_ostream &, float const *, unsigned ) { }
+void vnl_write_imag(vcl_ostream &, double const *, unsigned ) { }
+void vnl_write_imag(vcl_ostream &s, vnl_float_complex const *data, unsigned n) {
   float dummy;
   for (unsigned i=0; i<n; ++i) { // imag block
     dummy = data[i].imag();
     ::vnl_write_bytes(s, &dummy, sizeof(dummy));
   }
 }
-void vnl_write_imag(ostream &s, vnl_double_complex const *data, unsigned n) {
+void vnl_write_imag(vcl_ostream &s, vnl_double_complex const *data, unsigned n) {
   double dummy;
   for (unsigned i=0; i<n; ++i) { // imag block
     dummy = data[i].imag();
@@ -82,7 +82,7 @@ void vnl_write_imag(ostream &s, vnl_double_complex const *data, unsigned n) {
 
 //: scalars
 template <class T>
-bool vnl_matlab_write(ostream &s, T const & x, char const *name) {
+bool vnl_matlab_write(vcl_ostream &s, T const & x, char const *name) {
   vnl_matlab_header hdr;
   hdr.type = native_BYTE_ORDER + vnl_matlab_header::vnl_COLUMN_WISE + vnl_scalar_precision(x);
   hdr.rows = 1;
@@ -98,11 +98,11 @@ bool vnl_matlab_write(ostream &s, T const & x, char const *name) {
   return s.good() != 0;
 }
 #define scalar_instantiate(T) \
-template bool vnl_matlab_write(ostream &, T const &, char const *);
+template bool vnl_matlab_write(vcl_ostream &, T const &, char const *);
 
 //: 1D array
 template <class T>
-bool vnl_matlab_write(ostream &s, T const *v, unsigned n, char const *name) {
+bool vnl_matlab_write(vcl_ostream &s, T const *v, unsigned n, char const *name) {
   vnl_matlab_header hdr;
   hdr.type = native_BYTE_ORDER + vnl_matlab_header::vnl_COLUMN_WISE + vnl_scalar_precision(v[0]);
   hdr.rows = n;
@@ -118,11 +118,11 @@ bool vnl_matlab_write(ostream &s, T const *v, unsigned n, char const *name) {
   return s.good() != 0;
 }
 #define array1D_instantiate(T) \
-template bool vnl_matlab_write(ostream &, T const *, unsigned, char const *);
+template bool vnl_matlab_write(vcl_ostream &, T const *, unsigned, char const *);
 
 //: 2D array
 template <class T>
-bool vnl_matlab_write(ostream &s, 
+bool vnl_matlab_write(vcl_ostream &s, 
 		      T const * const *data, 
 		      unsigned rows, unsigned cols, 
 		      char const *name) 
@@ -144,7 +144,7 @@ bool vnl_matlab_write(ostream &s,
   return s.good() != 0;
 }
 #define array2D_instantiate(T) \
-template bool vnl_matlab_write(ostream &, T const * const *, unsigned, unsigned, char const *);
+template bool vnl_matlab_write(vcl_ostream &, T const * const *, unsigned, unsigned, char const *);
 
 //--------------------------------------------------------------------------------
 

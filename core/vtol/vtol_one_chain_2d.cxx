@@ -614,9 +614,9 @@ void vtol_one_chain_2d::compute_bounding_box(void)
       vsol_box_2d_ref b=e->get_bounding_box();
       if (!b)
 	{
-	  cout << "In vtol_one_chain_2d::ComputeBoundingBox()"
+	  vcl_cout << "In vtol_one_chain_2d::ComputeBoundingBox()"
 	       << " - Edge has null bounding box" 
-	       << endl;
+	       << vcl_endl;
 	  continue;
 	}
       if(xmin>b->get_min_x())
@@ -901,7 +901,7 @@ bool vtol_one_chain_2d::operator==(vsol_spatial_object_2d const& obj) const
 
 void vtol_one_chain_2d::print(vcl_ostream &strm) const
 {
-  strm << "<one_chain_2d " << _inferiors.size() << "  " << (void *) this << ">"  << endl;
+  strm << "<one_chain_2d " << _inferiors.size() << "  " << (void *) this << ">"  << vcl_endl;
 }
 
 // -- Describe the directions
@@ -915,7 +915,7 @@ void vtol_one_chain_2d::describe_directions(vcl_ostream &strm,
   vcl_vector<signed char>::const_iterator d1;
   for (d1=_directions.begin();d1!=_directions.end();++d1)
     strm << (int)(*d1) << "  ";
-  strm << endl;
+  strm << vcl_endl;
 }
 
 // -- Describe the one chain 

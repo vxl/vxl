@@ -69,7 +69,7 @@ HomgLine3D::~HomgLine3D()
 //-----------------------------------------------------------------------------
 //
 // -- print to ostream
-ostream& operator<<(ostream& s, const HomgLine3D& l)
+vcl_ostream& operator<<(vcl_ostream& s, const HomgLine3D& l)
 {
   return s << "<HomgLine3D " << l.get_point_finite() << " dir " << l.get_point_infinite() << ">";
 }
@@ -84,8 +84,8 @@ vnl_double_3 HomgLine3D::dir() const
 {
   const vnl_vector<double>& d = point_infinite_.get_vector();
   if (d[3] != 0) { 
-    cerr << *this;
-    cerr << "*** HomgLine3D: Infinite point not at infinity!! ***\n";
+    vcl_cerr << *this;
+    vcl_cerr << "*** HomgLine3D: Infinite point not at infinity!! ***\n";
   }
   return vnl_double_3(d[0], d[1], d[2]);
 }

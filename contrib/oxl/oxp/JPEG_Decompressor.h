@@ -32,7 +32,7 @@
 struct JPEG_DecompressorPrivates;
 class JPEG_Decompressor {
 public:
-  JPEG_Decompressor(ifstream& s);
+  JPEG_Decompressor(vcl_ifstream& s);
   JPEG_Decompressor(int fd);
   ~JPEG_Decompressor();
 

@@ -99,7 +99,7 @@ bool vbl_sparse_array_3d<T>::put(unsigned i, unsigned j, unsigned k, const T& t)
 } 
 
 template <class T>
-ostream& vbl_sparse_array_3d<T>::print(ostream& out) const
+vcl_ostream& vbl_sparse_array_3d<T>::print(vcl_ostream& out) const
 {
   for(Map::const_iterator p = storage_.begin(); p != storage_.end(); ++p) {
     unsigned i,j,k;
@@ -116,7 +116,7 @@ template class vbl_sparse_array_3d<T>
 #undef VBL_SPARSE_ARRAY_3D_INSTANTIATE 
 #define VBL_SPARSE_ARRAY_3D_INSTANTIATE(T) \
 VBL_SPARSE_ARRAY_3D_INSTANTIATE_base(T); \
-VCL_INSTANTIATE_INLINE(ostream& operator << (ostream&, const vbl_sparse_array_3d<T> &))
+VCL_INSTANTIATE_INLINE(vcl_ostream& operator << (vcl_ostream&, const vbl_sparse_array_3d<T> &))
 
 #ifdef MAIN
 int main()

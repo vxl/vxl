@@ -4,6 +4,7 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
+#include <vcl_utility.h>	//vxl_filter
 #include "vbl_canonical_path.h"
 
 #ifdef VCL_WIN32

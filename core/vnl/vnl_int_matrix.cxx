@@ -31,6 +31,6 @@ vnl_int_matrix::vnl_int_matrix(const vnl_matrix<double>& d):
 // -- Load from disk
 vnl_int_matrix::vnl_int_matrix(char const* filename)
 {
-  ifstream s(filename);
+  vcl_ifstream s(filename);
   read_ascii(s);
 }

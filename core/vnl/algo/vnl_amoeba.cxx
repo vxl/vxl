@@ -121,13 +121,13 @@ double simplex_diameter(const vcl_vector<SimplexCorner>& simplex)
 }
 
 
-ostream& operator<<(ostream& s, const SimplexCorner& simplex)
+vcl_ostream& operator<<(vcl_ostream& s, const SimplexCorner& simplex)
 {
   s << "S" << simplex.fv << " ";
   return s;
 }
 
-ostream& operator<<(ostream& s, const vcl_vector<SimplexCorner>& simplex)
+vcl_ostream& operator<<(vcl_ostream& s, const vcl_vector<SimplexCorner>& simplex)
 {
   for(unsigned i = 0; i < simplex.size(); ++i)
     s << simplex[i].fv << " ";

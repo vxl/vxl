@@ -6,12 +6,12 @@
 #include <vil/vil_load.h>
 #include <vil/vil_image.h>
 
-ostream &dec(ostream &os, unsigned char c) {
+vcl_ostream &dec(vcl_ostream &os, unsigned char c) {
   static char dig[]="0123456789";
   return os << dig[(c/100)%10] << dig[(c/10)%10] << dig[c%10];
 }
 
-ostream &hex(ostream &os, unsigned char c) {
+vcl_ostream &hex(vcl_ostream &os, unsigned char c) {
   static char dig[]="0123456789ABCDEF";
   return os << dig[(c & 0xF0)>>4] << dig[c & 0x0F];
 }

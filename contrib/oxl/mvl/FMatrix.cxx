@@ -39,7 +39,7 @@ FMatrix::FMatrix()
 //
 // -- Constructor.  Load from istream.
 
-FMatrix::FMatrix(istream& f)
+FMatrix::FMatrix(vcl_istream& f)
 {
   _rank2_flag = false;
   read_ascii(f);
@@ -95,7 +95,7 @@ FMatrix::~FMatrix()
 
 //---------------------------------------------------------------
 // -- Read from ASCII istream
-bool FMatrix::read_ascii(istream& s) {
+bool FMatrix::read_ascii(vcl_istream& s) {
   s >> _f_matrix;
   if (!(s.good() || s.eof()))
     return false;
@@ -109,23 +109,23 @@ bool FMatrix::read_ascii(istream& s) {
 
 FMatrix FMatrix::read(char const* filename)
 {
-  ifstream f(filename);
+  vcl_ifstream f(filename);
   FMatrix F;
   if (!F.read_ascii(f))
-    cerr << "FMatrix: Error reading from [" << filename << "]\n";
+    vcl_cerr << "FMatrix: Error reading from [" << filename << "]\n";
   return F;
 }
 
 //---------------------------------------------------------------
 // -- Read from ASCII istream
-istream& operator>>(istream& s, FMatrix& F) {
+vcl_istream& operator>>(vcl_istream& s, FMatrix& F) {
   F.read_ascii(s);
   return s;
 }
 
 //---------------------------------------------------------------
 // -- Read from ASCII istream
-FMatrix FMatrix::read(istream& s)
+FMatrix FMatrix::read(vcl_istream& s)
 {
   return FMatrix(s);
 }
@@ -177,7 +177,7 @@ FMatrix::image2_epipolar_distance_squared(HomgPoint2D *point1_ptr,
 
 //---------------------------------------------------------------
 // -- Print to ostream
-ostream& operator<<(ostream& os, const FMatrix& F) {
+vcl_ostream& operator<<(vcl_ostream& os, const FMatrix& F) {
   const vnl_matrix<double>& m = F.get_matrix();
   for (unsigned long i = 0; i < m.rows(); i++) {		// For each row in matrix
     for (unsigned long j = 0; j < m.columns(); j++)		// For each column in matrix
@@ -292,7 +292,7 @@ FMatrix::find_nearest_perfect_match(const HomgPoint2D& point1,
   double g = -special_f_matrix(0, 1) / special_f_matrix(2, 1);
   double g2 = -special_f_matrix(0, 2) / special_f_matrix(2, 2);
   if (fabs ((f-f2) / f) > 0.05 || fabs ((g-g2) / g) > 0.05)
-    cerr << "F matrix isn't rank 2.\n";
+    vcl_cerr << "F matrix isn't rank 2.\n";
 
   /* section 4.2 of the paper. */
   
@@ -334,7 +334,7 @@ FMatrix::find_nearest_perfect_match(const HomgPoint2D& point1,
     }
   
   if (!real_root_flag) {
-    cerr << "FMatrix::find_nearest_perfect_match -- no real root\n";
+    vcl_cerr << "FMatrix::find_nearest_perfect_match -- no real root\n";
     return;
   }
 

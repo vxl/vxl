@@ -25,7 +25,7 @@ vil_bmp_file_header::vil_bmp_file_header()
   bitmap_offset = 0;
 }
 
-void vil_bmp_file_header::print(ostream &s) const
+void vil_bmp_file_header::print(vcl_ostream &s) const
 {
   s << "vil_bmp_file_header:" << vcl_endl
     << "  magic   : " << vcl_hex 

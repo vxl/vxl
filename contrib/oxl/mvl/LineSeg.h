@@ -46,7 +46,7 @@ public:
 
 };
 
-ostream& operator<<(ostream&, const LineSeg& l);
-istream& operator>>(istream&, LineSeg& l);
+vcl_ostream& operator<<(vcl_ostream&, const LineSeg& l);
+vcl_istream& operator>>(vcl_istream&, LineSeg& l);
 
 #endif // LineSeg_h_

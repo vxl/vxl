@@ -54,7 +54,7 @@ className::~className()							      \
 {									      \
     if (values != NULL) {						      \
 	if (canUseMalloc)						      \
-	    free((char *) values);					      \
+	    vcl_free((char *) values);					      \
 	else								      \
 	    delete [] values;						      \
     }									      \
@@ -67,7 +67,7 @@ className::allocValues(int newNum)					      \
 	if (newNum > 0) {						      \
 	    if (canUseMalloc)						      \
 		values = (valueType *)					      \
-		    malloc(numValues * sizeof(valueType) * newNum);	      \
+		    vcl_malloc(numValues * sizeof(valueType) * newNum);	      \
 	    else							      \
 		values = new valueType[numValues * newNum];		      \
 	}								      \
@@ -76,7 +76,7 @@ className::allocValues(int newNum)					      \
 	if (newNum > 0) {						      \
 	    if (canUseMalloc)						      \
 		values = (valueType *)					      \
-		    realloc(values, numValues * sizeof(valueType) * newNum);  \
+		    vcl_realloc(values, numValues * sizeof(valueType) * newNum);  \
 	    else {							      \
 		valueType *oldValues = values;				      \
 		values = new valueType[numValues * newNum];		      \
@@ -93,7 +93,7 @@ className::allocValues(int newNum)					      \
 	}								      \
 	else {								      \
 	    if (canUseMalloc)						      \
-		free((char *) values);					      \
+		vcl_free((char *) values);					      \
 	    else							      \
 		delete [] values;					      \
 	    values = NULL;						      \

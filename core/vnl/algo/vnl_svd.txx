@@ -176,7 +176,7 @@ static void foo()
 
 
 template <class T>
-ostream& operator<<(ostream& s, const vnl_svd<T>& svd)
+vcl_ostream& operator<<(vcl_ostream& s, const vnl_svd<T>& svd)
 {
   s << "vnl_svd<T>:\n";
   //s << "M = [\n" << M << "]\n";
@@ -464,4 +464,4 @@ vnl_vector <T> vnl_svd<T>::left_nullvector()  const
 #undef VNL_SVD_INSTANTIATE
 #define VNL_SVD_INSTANTIATE(T) \
 template class vnl_svd<T >; \
-template ostream& operator<<(ostream &, vnl_svd<T > const &);
+template vcl_ostream& operator<<(vcl_ostream &, vnl_svd<T > const &);

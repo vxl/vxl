@@ -14,6 +14,6 @@ vgl_homg_point_3d<Type>::vgl_homg_point_3d(void)
 
 #define VGL_HOMG_POINT_3D_INSTANTIATE(T) \
 template class vgl_homg_point_3d<T>; \
-template ostream& operator<<(ostream&, vgl_homg_point_3d<T>const&); \
-template istream& operator>>(istream&, vgl_homg_point_3d<T>&)
+template vcl_ostream& operator<<(vcl_ostream&, vgl_homg_point_3d<T>const&); \
+template vcl_istream& operator>>(vcl_istream&, vgl_homg_point_3d<T>&)
 

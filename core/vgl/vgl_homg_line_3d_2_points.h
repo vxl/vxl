@@ -93,11 +93,11 @@ protected:
 //+****************************************************************************
 
 template <class Type>
-ostream &operator<<(ostream &s,
+vcl_ostream &operator<<(vcl_ostream &s,
                     const vgl_homg_line_3d_2_points<Type> &p);
 
 template <class Type>
-istream &operator>>(istream &is,
+vcl_istream &operator>>(vcl_istream &is,
                     vgl_homg_line_3d_2_points<Type> &p);
 
 #endif // vgl_homg_line_3d_2_points_h_
