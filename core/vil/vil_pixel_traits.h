@@ -172,7 +172,11 @@ class vil2_pixel_traits
 {
  public:
   //: Type of individual components
+#if defined VCL_VC60 || !VCL_HAS_TYPENAME
+  typedef vil2_pixel_traits<T::value_type>::component_type component_type;
+#else
   typedef typename vil2_pixel_traits<typename T::value_type>::component_type component_type;
+#endif
 };
 
 #endif // vil2_pixel_traits_h_

@@ -38,9 +38,9 @@ void test_image_view_rgba(vil2_image_view<vxl_byte> &image2, vil2_image_view<flo
   vil2_convert_rgb_to_grey(image6, image7);
   TEST("vil2_convert_rgb_to_grey(vil2_rgba)", image7, true);
 
-  TEST_NEAR("Conversion rgba to grey", image7(0,0),  1.71540, 1e-5);
+  TEST_NEAR("Conversion rgba to grey", image7(0,0),  0.71540, 1e-5);
 
-  TEST_NEAR("Conversion rgba to grey", image7(2,1), 35.71540, 1e-5);
+  TEST_NEAR("Conversion rgba to grey", image7(2,1), 33.71540, 1e-5);
 
   vil2_print_all(vcl_cout, image7);
 }
@@ -211,11 +211,11 @@ void test_image_view(S d1, vcl_string s_name, T d2)
   const vil2_pixel_format format = vil2_pixel_format_of(S());
   if (format == VIL2_PIXEL_FORMAT_FLOAT || format == VIL2_PIXEL_FORMAT_DOUBLE)
   {
-    TEST_NEAR("Rounding ", image2(0,0,0), 0.6, 1e-5);
-    TEST_NEAR("Rounding ", image2(2,2,1), 35.6, 1e-5);
+    TEST_NEAR("Casting ", image2(0,0,0), 0.6, 1e-5);
+    TEST_NEAR("Casting ", image2(2,2,1), 35.6, 1e-5);
   }
   else
-    TEST("Rounding ", image2(0,0,0) == 1 && image2(2,2,1) == 36, true);
+    TEST("Casting ", image2(0,0,0) == 0 && image2(2,2,1) == 35, true);
 
   image7.clear();
   vil2_convert_rgb_to_grey(vil2_view_as_rgb(image2), image7);
@@ -225,11 +225,11 @@ void test_image_view(S d1, vcl_string s_name, T d2)
   if (format == VIL2_PIXEL_FORMAT_FLOAT || format == VIL2_PIXEL_FORMAT_DOUBLE)
     TEST_NEAR("Conversion rgb to grey", image7(0,0), 0.6, 1e-5);
   else
-    TEST_NEAR("Conversion rgb to grey", image7(0,0), 1.0, 1e-5);
+    TEST_NEAR("Conversion rgb to grey", image7(0,0), 0.0, 1e-5);
   if (format == VIL2_PIXEL_FORMAT_FLOAT || format == VIL2_PIXEL_FORMAT_DOUBLE)
     TEST_NEAR("Conversion rgb to grey", image7(2,1), 34.196, 1e-5);
   else
-    TEST_NEAR("Conversion rgb to grey", image7(2,1), 34.5960, 1e-5);
+    TEST_NEAR("Conversion rgb to grey", image7(2,1), 33.596, 1e-5);
 
   vil2_convert_cast(image7, image5);
   TEST("vil2_convert_cast<T,S>", image5, true);
