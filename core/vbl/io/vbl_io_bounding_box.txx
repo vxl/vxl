@@ -38,7 +38,7 @@ void vsl_b_read(vsl_b_istream &is, vbl_bounding_box<T, DIM> & p)
 
   default:
     vcl_cerr << "vsl_b_read(is, vbl_bounding_box&): Unknown version number "<< v << vcl_endl;
-    abort();
+    vcl_abort();
   }
 
 }
