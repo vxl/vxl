@@ -14,6 +14,7 @@ MANPAGE_SOURCES += vil3d_binary_opening.h
 SOURCES += vil3d_structuring_element.cxx
 MANPAGE_SOURCES += vil3d_exp_filter.h
 MANPAGE_SOURCES += vil3d_normalised_correlation_3d.h
+MANPAGE_SOURCES += vil3d_convolve_1d.h
 
 ################################
 include ${IUEROOT}/config/top.mk

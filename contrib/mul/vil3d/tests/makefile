@@ -25,6 +25,7 @@ TESTS += test_algo_normalised_correlation_3d.cxx
 TESTS += test_file_format_read.cxx
 PARAMS_test_file_format_read := file_read_data
 TESTS += test_convert.cxx
+TESTS += test_algo_convolve_1d.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
