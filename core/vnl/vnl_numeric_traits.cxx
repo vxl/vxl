@@ -80,13 +80,15 @@ const double vnl_numeric_traits<double>::maxval VCL_STATIC_CONST_INIT_FLOAT_DEFN
 const long double vnl_numeric_traits<long double>::maxval VCL_STATIC_CONST_INIT_FLOAT_DEFN(1.7976931348623157E+308);
 #endif
 
-const vcl_complex<float> vnl_numeric_traits<vcl_complex<float> >::zero = 0.0F;
-const vcl_complex<double> vnl_numeric_traits<vcl_complex<double> >::zero = 0.0;
-const vcl_complex<long double> vnl_numeric_traits<vcl_complex<long double> >::zero = 0.0;
+// Must use constructor-call syntax for initialization of complex
+// specializations for Borland compiler.
+const vcl_complex<float> vnl_numeric_traits<vcl_complex<float> >::zero(0.0f);
+const vcl_complex<double> vnl_numeric_traits<vcl_complex<double> >::zero(0.0);
+const vcl_complex<long double> vnl_numeric_traits<vcl_complex<long double> >::zero(0.0);
 
-const vcl_complex<float> vnl_numeric_traits<vcl_complex<float> >::one = 1.0F;
-const vcl_complex<double> vnl_numeric_traits<vcl_complex<double> >::one = 1.0;
-const vcl_complex<long double> vnl_numeric_traits<vcl_complex<long double> >::one = 1.0;
+const vcl_complex<float> vnl_numeric_traits<vcl_complex<float> >::one(1.0f);
+const vcl_complex<double> vnl_numeric_traits<vcl_complex<double> >::one(1.0);
+const vcl_complex<long double> vnl_numeric_traits<vcl_complex<long double> >::one(1.0);
 
 // Unknown, so undefined. Will cause link errors if someone refers to it.
 //const vcl_complex<float> vnl_numeric_traits<vcl_complex<float> >::maxval;
