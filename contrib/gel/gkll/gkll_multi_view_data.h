@@ -4,9 +4,9 @@
 #pragma interface
 #endif
 //--------------------------------------------------------------------------------
-// .NAME        gkll_multi_view_point_data
-// .INCLUDE     gkll/gkll_multi_view_point_data
-// .FILE        gkll_multi_view_point_data.cxx
+// .NAME        gkll_multi_view_data
+// .INCLUDE     gkll/gkll_multi_view_data
+// .FILE        gkll_multi_view_data.cxx
 // .SECTION     Description:
 //   Class to hold the matched points through mutli views
 // .SECTION Author
