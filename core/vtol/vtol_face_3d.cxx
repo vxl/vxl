@@ -715,7 +715,8 @@ bool vtol_face_3d::operator==(const vtol_face_3d& otherf) const
   if (this == &otherf) return true;
 
   if(_surface && otherf._surface)
-    if(*(vsol_spatial_object_3d*)_surface != *(vsol_spatial_object_3d*)otherf._surface)
+    if(*(vsol_spatial_object_3d *)_surface.ptr()
+       !=*(vsol_spatial_object_3d*)otherf._surface.ptr())
       return false;
   if(_surface && !otherf._surface || otherf._surface && !_surface)
     return false;
