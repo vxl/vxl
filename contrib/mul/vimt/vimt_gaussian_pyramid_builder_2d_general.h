@@ -23,9 +23,8 @@ class vimt_gaussian_pyramid_builder_2d_general : public vimt_gaussian_pyramid_bu
     //: image workspace
     mutable vil_image_view<T> workb_;
 
-    //: Pre-calculated scale parametesr and filter taps.
+    //: Pre-calculated scale parameters and filter taps.
     vil_gauss_reduce_params scale_params_;
-
 
  public:
     //: Build pyramid
