@@ -137,12 +137,13 @@ execute(const rgrl_object* caller, const rgrl_event & event )
         //  for each match with a "to" image feature
         const rgrl_feature_sptr& to_feature = titr.to_feature();
         double error = titr.to_feature()->geometric_error( *mapped_from );
-        double wgt = titr.cumulative_weight();
+        double cum_wgt = titr.cumulative_weight();
+        double sig_wgt = titr.signature_weight();
 
         // now output in the format of:
         // [from loc] [to loc] wgt error [mapped_to loc]
         mofs << from_feature->location() << " \t" << to_feature->location() << " \t"
-             << wgt << " \t" << error << " \t\t" << mapped_from->location() << vcl_endl;
+             << sig_wgt << ' ' << cum_wgt << " \t" << error << " \t\t" << mapped_from->location() << vcl_endl;
       }
     }
   }
