@@ -8,6 +8,8 @@
 #include <vcl_cassert.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_matrix_fixed.h>
+#include <vnl/vnl_vector_fixed.h>
 #include "rgrl_trans_similarity.h"
 #include "rgrl_match_set.h"
 
@@ -58,29 +60,36 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // We use all the constraints from all the match sets to develop a
   // single linear system for the affine transformation.
   //
-  vnl_matrix<double> XtWX( 4, 4 );
-  vnl_vector<double> XtWy( 4 );
+  vnl_matrix_fixed<double, 4, 4> XtWX;
+  vnl_vector_fixed<double, 4> XtWy;
   XtWX.fill( 0.0 );
   XtWy.fill( 0.0 );
 
   // Determine the weighted centres for the similarity transformation. We
   // take the centres of all the points in all the match sets.
   //
-  vnl_vector<double> from_centre( m, 0.0 );
-  vnl_vector<double> to_centre( m, 0.0 );
-  vnl_vector<double> from_pt( m );
-  vnl_vector<double> to_pt( m );
-  vnl_vector<double> DtBq;
+  vnl_vector_fixed<double, 2> from_centre( 0.0, 0.0 );
+  vnl_vector_fixed<double, 2> to_centre( 0.0, 0.0 );
+  vnl_vector_fixed<double, 2> from_pt;
+  vnl_vector_fixed<double, 2> to_pt;
+  vnl_vector_fixed<double, 4> DtBq;
+  vnl_matrix_fixed<double, 2, 4> D; // holds [px -py 1 0; py px 0 1] 
+  vnl_matrix_fixed<double, 4, 2> Dt; // holds [px -py 1 0; py px 0 1]^T
+  vnl_matrix_fixed<double, 4, 2> DtB;      // holds product of D^T * B
   double sum_wgt = 0.0;
+  D.fill( 0.0 );
+  Dt.fill( 0.0 );
   for ( unsigned ms=0; ms < matches.size(); ++ms ) {
     rgrl_match_set const& match_set = *matches[ms];
     for ( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
       for ( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {
         double const wgt = ti.cumulative_weight();
         from_pt = fi.from_feature()->location();
-        from_centre += from_pt * wgt;
+        from_pt *= wgt;
+        from_centre += from_pt;
         to_pt = ti.to_feature()->location();
-        to_centre   += to_pt * wgt;
+        to_pt *= wgt;
+        to_centre   += to_pt;
         sum_wgt += wgt;
       }
     }
@@ -111,13 +120,18 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
         ++count;
 
         // For each constraint, add w*DtBD to XtWX
-        vnl_matrix<double> D( 2, 4, 0.0 ); // holds [px -py 1 0; py px 0 1] 
         D(0,0) = from_pt[0]; D(0,1) = -from_pt[1]; D(0,2) = 1;
         D(1,0) = from_pt[1]; D(1,1) =  from_pt[0]; D(1,3) = 1;
-        XtWX += wgt * D.transpose() * B * D;
+        // transpose D explicitly for efficiency
+        Dt(0,0) = from_pt[0]; Dt(1,0) = -from_pt[1]; Dt(2,0) = 1;
+        Dt(0,1) = from_pt[1]; Dt(1,1) =  from_pt[0]; Dt(3,1) = 1;
+        
+        DtB = Dt * B;
+        XtWX += wgt * DtB * D;
 
         // add w*DtBq to XtWy
-        DtBq = to_pt.pre_multiply( D.transpose()*B );
+        // DtBq = to_pt.pre_multiply( DtB );
+        DtBq = DtB * to_pt;
         for ( unsigned i = 0; i<4; ++i)
           XtWy[i] += wgt * DtBq[i];
       }
@@ -130,7 +144,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   double factor1 = vnl_math_max(XtWX(1,1),XtWX(0,0));
   double scale = vcl_sqrt( (factor1 > 0 && factor0 > 0) ? factor1 / factor0 : 1 );   // neither should be 0
  
-  vnl_vector<double> s(4);
+  vnl_vector_fixed<double, 4> s;
   s(2) = s(3) = scale; s(0) = s(1) = 1;
   for ( int i=0; i<4; i++ ) {
     XtWy(i) *= s(i);
@@ -156,8 +170,8 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
   // Compute the solution into XtWy
   //
-  vnl_matrix<double> covar = svd.inverse();
-  XtWy.pre_multiply( covar );
+  vnl_matrix_fixed<double, 4, 4> covar = svd.inverse();
+  XtWy = covar * XtWy;
 
   // Eliminate the scale of XtWX
   //

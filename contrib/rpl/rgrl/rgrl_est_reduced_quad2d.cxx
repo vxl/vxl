@@ -8,6 +8,8 @@
 #include <vcl_cassert.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_matrix_fixed.h>
+#include <vnl/vnl_vector_fixed.h>
 #include "rgrl_trans_reduced_quad.h"
 #include "rgrl_match_set.h"
 
@@ -65,20 +67,22 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // We use all the constraints from all the match sets to develop a
   // single linear system for the affine transformation.
   //
-  vnl_matrix<double> XtWX( 6, 6 );
-  vnl_vector<double> XtWy( 6 );
+  vnl_matrix_fixed<double, 6, 6> XtWX;
+  vnl_vector_fixed<double, 6> XtWy;
   XtWX.fill( 0.0 );
   XtWy.fill( 0.0 );
-  vnl_matrix<double> D( 2, 6, 0.0 );
+  vnl_matrix_fixed<double, 2, 6> D;
+  D.fill( 0.0 );
 
   // Determine the weighted centres for the reduced_quad transformation. We
   // take the centres of all the points in all the match sets.
   //
-  vnl_vector<double> from_centre( m, 0.0 );
-  vnl_vector<double> to_centre( m, 0.0 );
-  vnl_vector<double> from_pt( m );
-  vnl_vector<double> to_pt( m );
-  vnl_vector<double> DtBq;
+  vnl_vector_fixed<double, 2> from_centre( 0.0, 0.0 );
+  vnl_vector_fixed<double, 2> to_centre( 0.0, 0.0 );
+  vnl_vector_fixed<double, 2> from_pt;
+  vnl_vector_fixed<double, 2> to_pt;
+  vnl_vector_fixed<double, 6> DtBq;
+  vnl_matrix_fixed<double, 6, 2> DtB;
   double sum_wgt = 0.0;
   for ( unsigned ms=0; ms < matches.size(); ++ms ) {
     rgrl_match_set const& match_set = *matches[ms];
@@ -86,9 +90,11 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       for ( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {
         double const wgt = ti.cumulative_weight();
         from_pt = fi.from_feature()->location();
-        from_centre += from_pt * wgt;
+        from_pt *= wgt;
+        from_centre += from_pt;
         to_pt = ti.to_feature()->location();
-        to_centre   += to_pt * wgt;
+        to_pt *= wgt;
+        to_centre   += to_pt;
         sum_wgt += wgt;
       }
     }
@@ -127,10 +133,12 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
         D(1,2) = from_pt[1];
         D(0,4) = D(1,5) = 1;
 
-        XtWX += wgt * D.transpose() * B * D;
+        // store this product to save computation
+        DtB = D.transpose() * B;
+        XtWX += wgt * DtB * D;
 
         // add w*XtBq to XtWy
-        DtBq = to_pt.pre_multiply( D.transpose()*B );
+        DtBq = DtB * to_pt;
         for ( unsigned i = 0; i<6; ++i)
           XtWy[i] += wgt * DtBq[i];
       }
@@ -145,7 +153,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   double scale0 = vcl_sqrt( (factor0 > 0 && factor2 > 0) ? factor2 / factor0 : 1);   // neither should be 0
   double scale1 = vcl_sqrt( (factor1 > 0 && factor2 > 0) ? factor2 / factor1 : 1 );
 
-  vnl_vector<double> s(6);
+  vnl_vector_fixed<double, 6> s;
   s(0) = s(1) = 1; s(2) = s(3) = scale1;
   s(4) = s(5) = scale0;
 
@@ -177,8 +185,8 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
   // Compute the solution into XtWy
   //
-  vnl_matrix<double> covar = svd.inverse();
-  XtWy.pre_multiply( covar );
+  vnl_matrix_fixed<double, 6, 6> covar = svd.inverse();
+  XtWy = covar * XtWy;
 
   // Eliminate the scale of XtWX
   //
