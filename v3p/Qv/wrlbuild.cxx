@@ -298,7 +298,6 @@ void QvTextureCoordinate2::build (QvState* state)
 }
 
 
-
 /***** properties *****/
 
 
@@ -474,7 +473,6 @@ void QvTexture2Transform::build (QvState*)
 } // QvTexture2Transform
 
 
-
 /***** lights *****/
 
 
@@ -515,7 +513,6 @@ void QvSpotLight::build (QvState*)
   // dropoffrate: light rays diverging from main emission line have lower intensity;
   // 0.0: constant intensity; 1.0: sharp dropoff
 }
-
 
 
 /***** cameras *****/
@@ -598,7 +595,6 @@ void QvPerspectiveCamera::build (QvState*)
   invertmatrix (invmat_);
 #endif
 } // QvPerspectiveCamera
-
 
 
 /***** transformations *****/
@@ -711,7 +707,6 @@ void QvScale::build (QvState*)
 
   //ge3dScale (scale_);  // set up transformation (as in draw)
 }
-
 
 
 /***** shapes *****/
@@ -838,9 +833,9 @@ void QvAsciiText::build (QvState*)
 void QvCube::build (QvState*)
 {
   // object coordinates
-  omax_.x = fabs (width.value / 2.0);
-  omax_.y = fabs (height.value / 2.0);
-  omax_.z = fabs (depth.value / 2.0);
+  omax_.x = vcl_fabs (width.value / 2.0);
+  omax_.y = vcl_fabs (height.value / 2.0);
+  omax_.z = vcl_fabs (depth.value / 2.0);
   omin_.x = -omax_.x;
   omin_.y = -omax_.y;
   omin_.z = -omax_.z;
@@ -942,7 +937,6 @@ void QvSphere::build (QvState*)
 } // QvSphere
 
 
-
 void QvIndexedFaceSet::build (QvState* state)
 {
 //vcl_cerr << "QvIndexedFaceSet::build" << vcl_endl;
@@ -1033,7 +1027,7 @@ void QvIndexedFaceSet::build (QvState* state)
         // vcl_cerr << *fn << vcl_endl;
         float norm2 = dot3D (*fn, *fn);
         if (norm2 > 0.0)  // normalize
-        { norm2 = 1 / sqrt (norm2);
+        { norm2 = 1 / vcl_sqrt (norm2);
           scl3D (*fn, norm2);
         }
         // vcl_cerr << *fn << vcl_endl;
@@ -1193,7 +1187,6 @@ void QvIndexedFaceSet::build (QvState* state)
 } // QvIndexedFaceSet
 
 
-
 void QvIndexedLineSet::build (QvState* state)
 {
 //vcl_cerr << "QvIndexedLineSet::build" << vcl_endl;
@@ -1236,7 +1229,6 @@ void QvIndexedLineSet::build (QvState* state)
 } // QvIndexedLineSet
 
 
-
 void QvPointSet::build (QvState* state)
 {
   QvElement* attr = state->getTopElement (QvState::Coordinate3Index);
@@ -1275,7 +1267,6 @@ void QvPointSet::build (QvState* state)
 // << ", number: " << num_ << " (originally " << numPoints.value << ")" << vcl_endl;
 
 } // QvPointSet
-
 
 
 /***** WWW *****/
@@ -1353,7 +1344,6 @@ void QvWWWInline::build (QvState* state)
 } // QvWWWInline
 
 
-
 /***** misc *****/
 
 void QvInfo::build (QvState*)
@@ -1402,7 +1392,6 @@ void QvInfo::build (QvState*)
 
 
 void QvUnknownNode::build (QvState* state)  { QvGroup::build (state); }
-
 
 
 /***** extensions *****/

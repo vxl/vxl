@@ -4,6 +4,7 @@
 
 #include "QvVrmlFile.h"
 
+#include <vcl_cmath.h> // for vcl_sqrt()
 #include <vcl_cstdio.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
@@ -113,7 +114,7 @@ struct VrmlCentroidVisitor : public QvVisitor {
     pass = 1;
     radius = 0;
     f.traverse(this);
-    radius = sqrt(radius);
+    radius = vcl_sqrt(radius);
   }
 
   void inc(const point3D& p) {

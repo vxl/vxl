@@ -270,8 +270,8 @@ void invertmatrix (matrix4D a)
     for (i = k; i < n; i++)
     { s = 0.0;
       for (j = k; j < n; j++)
-        s += fabs (a [i][j]);
-      q = fabs (a [i][k]) / s;
+        s += vcl_fabs (a [i][j]);
+      q = vcl_fabs (a [i][k]) / s;
       if (q > max)
       { max = q;
         p [k] = i;
@@ -309,7 +309,6 @@ void invertmatrix (matrix4D a)
 } // invertmatrix
 
 
-
 // conversion cartesian - spherepoint
 
 // cartes2sphere
@@ -317,9 +316,9 @@ void invertmatrix (matrix4D a)
 
 void cartes2sphere (const point3D& p, spherepoint& s)
 {
-  s.r = sqrt (dot3D (p, p));  // length
-  s.phi = atan2 (p.y, p.x);  // angle from x to y axis
-  s.theta = (s.r > 0.0) ? acos (p.z / s.r) : 0.0;  // angle from z axis to x-y-plane
+  s.r = vcl_sqrt (dot3D (p, p));  // length
+  s.phi = vcl_atan2 (p.y, p.x);  // angle from x to y axis
+  s.theta = (s.r > 0.0) ? vcl_acos (p.z / s.r) : 0.0;  // angle from z axis to x-y-plane
 }
 
 
@@ -329,12 +328,11 @@ void cartes2sphere (const point3D& p, spherepoint& s)
 
 void sphere2cartes (const spherepoint& s, point3D& p)
 {
-  double sinth = sin (s.theta);
-  p.x = s.r * cos (s.phi) * sinth;
-  p.y = s.r * sin (s.phi) * sinth;
-  p.z = s.r * cos (s.theta);
+  double sinth = vcl_sin (s.theta);
+  p.x = s.r * vcl_cos (s.phi) * sinth;
+  p.y = s.r * vcl_sin (s.phi) * sinth;
+  p.z = s.r * vcl_cos (s.theta);
 }
-
 
 
 // convert radians to degrees
@@ -378,10 +376,10 @@ void sphere2cartes (const spherepoint& s, point3D& p)
 void rotation2quaternion (const vector3D& axis, float angle, vector3D& v, float& s)
 {
   angle /= 2.0;
-  s = sin (angle);
+  s = vcl_sin (angle);
   v = axis;
-  scl3D (v, s);     // v = sin (phi/2) * axis
-  s = cos (angle);  // s = cos (phi/2)
+  scl3D (v, s);         // v = vcl_sin (phi/2) * axis
+  s = vcl_cos (angle);  // s = vcl_cos (phi/2)
 }
 
 
@@ -389,17 +387,17 @@ void rotation2quaternion (const vector3D& axis, float angle, vector3D& v, float&
 
 void quaternion2rotation (const vector3D& v, float s, vector3D& axis, float& angle)
 {
-  angle = acos (s);  // half angle
-  s = sin (angle);
+  angle = vcl_acos (s);  // half angle
+  s = vcl_sin (angle);
   if (s)
   { s = 1.0 / s;
     axis = v;
-    scl3D (axis, s);  // axis = v / sin (acos (s))
+    scl3D (axis, s);  // axis = v / vcl_sin (vcl_acos (s))
   }
   else
     init3D (axis, 0, 0, 0);
 
-  angle *= 2.0;  // angle = 2 * acos (s)
+  angle *= 2.0;  // angle = 2 * vcl_acos (s)
 }
 
 
@@ -463,16 +461,18 @@ void computeBoundingbox (const point3D& /*omin*/, const point3D& /*omax*/,
 
   emptyBoundingbox (wmin, wmax);
 
-//point3D p; p.x = 0; p.y = 0; p.z = 0;
-//
-//for (int i = 0;  i < 8;  i++)
-//{
-//    ge3d_transform_mc_wc (
-//      (i & 4) ? omin.x : omax.x,  (i & 2) ? omin.y : omax.y,  (i & 1) ? omin.z : omax.z,
-//      &p.x, &p.y, &p.z
-//    );
-//    extendBoundingbox (p, p, wmin, wmax);
-//}
+#if 0 // commented out
+  point3D p; p.x = 0; p.y = 0; p.z = 0;
+
+  for (int i = 0;  i < 8;  i++)
+  {
+    ge3d_transform_mc_wc (
+      (i & 4) ? omin.x : omax.x,  (i & 2) ? omin.y : omax.y,  (i & 1) ? omin.z : omax.z,
+      &p.x, &p.y, &p.z
+    );
+    extendBoundingbox (p, p, wmin, wmax);
+  }
+#endif
 
 } // computeBoundingbox
 

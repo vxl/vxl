@@ -202,7 +202,8 @@ bool QvVisitor::Visit(QvWWWInline* node)
 static const bool warn = false;
 
 #define NOWARN_IMPLEMENTATION(T)  bool QvVisitor::Visit(T*) { return false; }
-#define DEFAULT_IMPLEMENTATION(T) bool QvVisitor::Visit(T*) { if (warn) vcl_cerr << "QvVisitor: ignoring " << #T << vcl_endl; return false; }
+#define DEFAULT_IMPLEMENTATION(T) bool QvVisitor::Visit(T*) { \
+  if (warn) vcl_cerr << "QvVisitor: ignoring " << #T << vcl_endl; return false; }
 
 NOWARN_IMPLEMENTATION(QvInfo);
 NOWARN_IMPLEMENTATION(QvCoordinate3);
