@@ -1,5 +1,6 @@
 // This is mul/vil2/tests/test_image_resource.cxx
 #include <testlib/testlib_test.h>
+
 #include <vcl_iostream.h>
 #include <vil2/vil2_image_resource.h>
 #include <vil2/vil2_math.h>
@@ -11,21 +12,20 @@
 #include <vil2/vil2_print.h>
 #include <vil2/vil2_decimate.h>
 
-
 template <class T>
 void test_image_resource(vcl_string type, vil2_pixel_format format, T dummy)
 {
-  vcl_cout << "******************************************************************\n";
-  vcl_cout << " Testing vil2_image_resource objects with pixel type = " << type << "\n";
-  vcl_cout << "******************************************************************\n";
+  vcl_cout << "******************************************************************\n"
+           << " Testing vil2_image_resource objects with pixel type = " << type << "\n"
+           << "******************************************************************\n";
 
   vil2_image_resource_sptr mem = vil2_new_image_resource(10,8,1,format);
 
   TEST("vil2_new_image_resource", mem, true);
 
   vil2_image_view<T> view1 = mem->get_view(0, mem->ni(), 0, mem->nj());
-  TEST("vil2_memory_image::get_view()", view1 && view1.ni()==10 && view1.nj()==8
-    && view1.nplanes()==1, true );
+  TEST("vil2_memory_image::get_view()",
+       view1 && view1.ni()==10 && view1.nj()==8 && view1.nplanes()==1, true );
 
   view1.fill(0);
 
@@ -80,12 +80,10 @@ void test_image_resource(vcl_string type, vil2_pixel_format format, T dummy)
   view1 = flip4->get_view(0, flip4->ni(), 0, flip4->nj());
   view2 = mem->get_view(0, mem->ni(), 0, mem->nj());
   // Check that they are the same view of the same data
-  TEST("x == flip_lr(flip_ud(flip_lr(flip_ud(x)))) A",
-       view1 == view2, true);
+  TEST("x == flip_lr(flip_ud(flip_lr(flip_ud(x)))) A", view1, view2);
   view1 = flip4->get_copy_view(0, flip4->ni(), 0, flip4->nj());
   // Check that they are not the same view of the same data
-  TEST("x == flip_lr(flip_ud(flip_lr(flip_ud(x)))) B",
-       view1 != view2, true);
+  TEST("x == flip_lr(flip_ud(flip_lr(flip_ud(x)))) B", view1 != view2, true);
   TEST("x == flip_lr(flip_ud(flip_lr(flip_ud(x)))) C",
        vil2_image_view_deep_equality(view1, view2), true);
   flip4->put_view(view2, 0, 0);
