@@ -102,9 +102,6 @@ LIB32=link.exe -lib
 SOURCE=.\Templates/vbl_smart_ptr+imp_line-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+sdet_fit_lines_params-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+vifa_bbox-.cxx
 # End Source File
 # Begin Source File
