@@ -297,7 +297,7 @@ void golden_test_vgl_io(bool save_file)
   }
 
   // Read in file to each class in turn
-  vcl_string gold_path=testlib_root_dir()+"/vxl/vgl/io/tests/golden_vgl_io_test.bvl";
+  vcl_string gold_path=testlib_root_dir()+"/core/vgl/io/tests/golden_vgl_io_test.bvl";
   vsl_b_ifstream bfs_in(gold_path.c_str());
   TEST ("Opened golden_vgl_io_test.bvl for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, double_point_2d_in);

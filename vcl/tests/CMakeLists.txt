@@ -49,7 +49,7 @@ ADD_TEST( vcl_test_new         vcl_test_driver test_new )
 ADD_TEST( vcl_test_set         vcl_test_driver test_set )
 ADD_TEST( vcl_test_string      vcl_test_driver test_string )
 ADD_TEST( vcl_test_vector      vcl_test_driver test_vector )
-ADD_TEST( vcl_test_cstdio      vcl_test_driver test_cstdio ${allvxl_SOURCE_DIR}/vcl/tests/test_cstdio.txt )
+ADD_TEST( vcl_test_cstdio      vcl_test_driver test_cstdio ${vxl_SOURCE_DIR}/vcl/tests/test_cstdio.txt )
 # Only a compiler test:
 #ADD_TEST( vcl_test_headers     vcl_test_driver test_headers )
 #ADD_TEST( vcl_test_stlfwd      vcl_test_driver test_stlfwd )

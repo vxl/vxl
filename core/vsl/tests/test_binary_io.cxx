@@ -185,7 +185,7 @@ void test_binary_io()
   vcl_size_t size_t_in2 = 99;
   vcl_ptrdiff_t ptrdiff_t_in2 = 99;
 
-  vcl_string gold_path=testlib_root_dir()+"/vxl/vsl/tests/golden_test_binary_io.bvl";
+  vcl_string gold_path=testlib_root_dir()+"/core/vsl/tests/golden_test_binary_io.bvl";
   vsl_b_ifstream bfs_in2(gold_path.c_str());
 
   // If this test fails, it could be due to a missing golden file, or one

@@ -2,7 +2,7 @@
 
 FIND_FILE(TESTLIB_VCL_WHERE_ROOT_DIR_H
           vcl_where_root_dir.h
-          ${allvxl_BINARY_DIR}/vcl )
+          ${vxl_BINARY_DIR}/vcl )
 
 IF (TESTLIB_VCL_WHERE_ROOT_DIR_H)
   ADD_DEFINITIONS(-DVCL_WHERE_ROOT_DIR_H_EXISTS)

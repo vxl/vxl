@@ -124,7 +124,7 @@ void golden_test_vil_io(bool save_file)
     }
 
     // Read in file to each class in turn
-    vcl_string gold_path=testlib_root_dir()+"/vxl/vil/io/tests/golden_test_vil_io.bvl";
+    vcl_string gold_path=testlib_root_dir()+"/core/vil/io/tests/golden_test_vil_io.bvl";
     vsl_b_ifstream bfs_in(gold_path.c_str());
     vsl_b_read(bfs_in, p_in_memory_image_of);
     vsl_b_read(bfs_in, p_in_memory_image_impl);

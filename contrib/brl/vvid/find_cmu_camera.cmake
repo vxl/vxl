@@ -9,11 +9,11 @@
 IF(WIN32)
 
   FIND_PATH( CMU1394CAMERA_VVID_INCLUDE_PATH 1394Camera.h
-    ${allvxl_SOURCE_DIR}/../1394camera5_2/include
+    ${vxl_SOURCE_DIR}/../1394camera5_2/include
   )
 
   FIND_LIBRARY( CMU1394CAMERA_VVID_LIBRARY_PATH 1394camera
-    ${allvxl_SOURCE_DIR}/../1394camera5_2/lib
+    ${vxl_SOURCE_DIR}/../1394camera5_2/lib
   )
 
   IF(CMU1394CAMERA_VVID_INCLUDE_PATH)

@@ -11,7 +11,7 @@
 void test_file_matrix()
 {
   vnl_file_matrix<double> H((testlib_root_dir()+
-    "/vxl/vnl/tests/data_3x3_matrix").c_str());
+    "/core/vnl/tests/data_3x3_matrix").c_str());
 
   vnl_matlab_print(vcl_cout, H, "H");
   TEST("file_matrix 3x3", H.rows(), 3);

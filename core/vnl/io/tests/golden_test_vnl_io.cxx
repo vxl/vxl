@@ -150,7 +150,7 @@ void golden_test_vnl_io(bool save_file)
   }
 
   // Read in file to each class in turn
-  vcl_string gold_path=testlib_root_dir()+"/vxl/vnl/io/tests/golden_test_vnl_io.bvl";
+  vcl_string gold_path=testlib_root_dir()+"/core/vnl/io/tests/golden_test_vnl_io.bvl";
   vsl_b_ifstream bfs_in(gold_path.c_str());
   TEST ("Opened golden_test_vnl_io.bvl for reading ", ! bfs_in, false);
   vsl_b_read(bfs_in, v_in);

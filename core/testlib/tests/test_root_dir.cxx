@@ -7,7 +7,7 @@ MAIN( test_root_dir )
 {
   START("Find Root Dir");
   // Check that a file exists
-  vcl_string path = testlib_root_dir() + "/vxl/testlib/testlib_root_dir.h";
+  vcl_string path = testlib_root_dir() + "/core/testlib/testlib_root_dir.h";
 
   vcl_fstream is(path.c_str(),vcl_ios_in);
 
