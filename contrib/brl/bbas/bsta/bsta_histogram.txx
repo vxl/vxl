@@ -40,7 +40,7 @@ bsta_histogram<T>::bsta_histogram(const T min, const T max,
 template <class T>
 bsta_histogram<T>::bsta_histogram(const T min, const T max,
                                   vcl_vector<T> const& data, const T min_prob)
-  : area_valid_(false), area_(0), delta_(0),
+  : area_valid_(false), area_(0), delta_(0), min_prob_(min_prob),
     min_ (min), max_(max), range_(max-min), counts_(data)
 {
   nbins_ = data.size();
