@@ -1,14 +1,11 @@
 // This is brl/bbas/bgrl/bgrl_graph.cxx
+#include "bgrl_graph.h"
 //:
 // \file
-
-#include "bgrl_graph.h"
 #include "bgrl_vertex.h"
 #include "bgrl_edge.h"
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsl/vsl_set_io.h>
-#include <vcl_algorithm.h>
-
 
 //: Constructor
 bgrl_graph::bgrl_graph()
@@ -20,7 +17,7 @@ bgrl_graph::bgrl_graph()
 bool
 bgrl_graph::add_vertex(const bgrl_vertex_sptr& vertex)
 {
-  if (!vertex.ptr()) return false;
+  if (!vertex) return false;
 
   return vertices_.insert(vertex).second;
 }
@@ -30,22 +27,22 @@ bgrl_graph::add_vertex(const bgrl_vertex_sptr& vertex)
 bool
 bgrl_graph::remove_vertex(const bgrl_vertex_sptr& vertex)
 {
-  if (!vertex.ptr()) return false;
+  if (!vertex) return false;
 
   if (vertices_.erase(vertex) == 0) return false;
 
   vertex->strip();
-  
+
   return true;
 }
 
 
-//: Add an edge between \p v1 and \p v2 
+//: Add an edge between \p v1 and \p v2
 bgrl_edge_sptr
 bgrl_graph::add_edge( const bgrl_vertex_sptr& v1, const bgrl_vertex_sptr& v2 )
 {
-  if (!v1.ptr() || !v2.ptr()) return false;
- 
+  if (!v1 || !v2) return false;
+
   if ( vertices_.count(v1) == 0 && !this->add_vertex(v1) )
     return bgrl_edge_sptr(NULL);
   if ( vertices_.count(v2) == 0 && !this->add_vertex(v2) )
@@ -55,11 +52,11 @@ bgrl_graph::add_edge( const bgrl_vertex_sptr& v1, const bgrl_vertex_sptr& v2 )
 }
 
 
-//: Remove an edge between \p v1 and \p v2 
+//: Remove an edge between \p v1 and \p v2
 bool
 bgrl_graph::remove_edge( const bgrl_vertex_sptr& v1, const bgrl_vertex_sptr& v2 )
 {
-  if (!v1.ptr() || !v2.ptr()) return false;
+  if (!v1 || !v2) return false;
 
   return v1->remove_edge_to(v2);
 }
@@ -69,16 +66,16 @@ bool
 bgrl_graph::purge()
 {
   bool retval = false;
-  
-  for( vertex_iterator v_itr = vertices_.begin();
-       v_itr != vertices_.end(); ++v_itr ) 
+
+  for ( vertex_iterator v_itr = vertices_.begin();
+        v_itr != vertices_.end(); ++v_itr )
   {
     bgrl_vertex_sptr curr_vertex = *v_itr;
     // remove the NULL edges
     retval = curr_vertex->purge() || retval;
     // remove edges to vertices not in this graph
-    for( edge_iterator e_itr = curr_vertex->out_edges_.begin(); 
-         e_itr != curr_vertex->out_edges_.end(); ++e_itr ) 
+    for ( edge_iterator e_itr = curr_vertex->out_edges_.begin();
+          e_itr != curr_vertex->out_edges_.end(); ++e_itr )
     {
       if (vertices_.find((*e_itr)->to()) == vertices_.end()) {
         curr_vertex->remove_edge_to((*e_itr)->to());
@@ -86,8 +83,8 @@ bgrl_graph::purge()
       }
     }
     // remove edges from vertices not in this graph
-    for( edge_iterator e_itr = curr_vertex->in_edges_.begin(); 
-         e_itr != curr_vertex->in_edges_.end(); ++e_itr ) 
+    for ( edge_iterator e_itr = curr_vertex->in_edges_.begin();
+          e_itr != curr_vertex->in_edges_.end(); ++e_itr )
     {
       if (vertices_.find((*e_itr)->from()) == vertices_.end()) {
         (*e_itr)->from()->remove_edge_to(curr_vertex);
@@ -142,18 +139,18 @@ bgrl_graph::b_read( vsl_b_istream& is )
 
   short ver;
   vsl_b_read(is, ver);
-  switch(ver)
+  switch (ver)
   {
-  case 1:
+   case 1:
     vsl_b_read(is, vertices_);
-    
+
     if (this->purge())
       vcl_cerr << "I/O WARNING: bgrl_graph::b_read(vsl_b_istream&)\n"
                << "             It is likely that the graph object is corrupt.\n"
                << "             Invalid edges have been purged.\n";
     break;
 
-  default:
+   default:
     vcl_cerr << "I/O ERROR: bgrl_graph::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
@@ -182,9 +179,9 @@ bgrl_graph::version(  ) const
 void
 bgrl_graph::depth_iterator::next_vertex()
 {
-  if (curr_vertex_.ptr() == NULL) return;
+  if (!curr_vertex_) return;
   for ( edge_iterator itr = curr_vertex_->begin();
-        itr != curr_vertex_->end(); ++itr ) 
+        itr != curr_vertex_->end(); ++itr )
   {
     if ( visited_.find((*itr)->to()) == visited_.end() )
       eval_queue_.push_front((*itr)->to());
@@ -193,7 +190,7 @@ bgrl_graph::depth_iterator::next_vertex()
     eval_queue_.pop_front();
   if (eval_queue_.empty())
     curr_vertex_ = NULL;
-  else{
+  else {
     curr_vertex_ = eval_queue_.front();
     eval_queue_.pop_front();
     visited_.insert(curr_vertex_);
@@ -205,9 +202,9 @@ bgrl_graph::depth_iterator::next_vertex()
 void
 bgrl_graph::breadth_iterator::next_vertex()
 {
-  if (curr_vertex_.ptr() == NULL) return;
+  if (!curr_vertex_) return;
   for ( edge_iterator itr = curr_vertex_->begin();
-        itr != curr_vertex_->end(); ++itr ) 
+        itr != curr_vertex_->end(); ++itr )
   {
     if ( visited_.find((*itr)->to()) == visited_.end() )
       eval_queue_.push_back((*itr)->to());
