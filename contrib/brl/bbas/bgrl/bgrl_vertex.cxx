@@ -5,6 +5,7 @@
 
 #include "bgrl_edge.h"
 #include <vsl/vsl_binary_io.h>
+#include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_set_io.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
 
@@ -274,9 +275,24 @@ vsl_b_read(vsl_b_istream &is, bgrl_vertex* &v)
 }
 
 
+//: Allows derived class to be loaded by base-class pointer.
+//  A loader object exists which is invoked by calls
+//  of the form "vsl_b_read(os,base_ptr);".  This loads derived class
+//  objects from the stream, places them on the heap and
+//  returns a base class pointer.
+//  In order to work the loader object requires
+//  an instance of each derived class that might be
+//  found.  This function gives the model class to
+//  the appropriate loader.
+void vsl_add_to_binary_loader(const bgrl_vertex& v)
+{
+  vsl_binary_loader<bgrl_vertex>::instance().add(v);
+}
+
+
 //: Print an ASCII summary to the stream
 void
-vsl_print_summary(vcl_ostream &os, bgrl_vertex* v)
+vsl_print_summary(vcl_ostream &os, const bgrl_vertex* v)
 {
   os << "bgrl_vertex{ ";
   v->print_summary(os);

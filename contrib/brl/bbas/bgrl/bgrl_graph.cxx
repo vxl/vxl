@@ -6,6 +6,7 @@
 #include "bgrl_edge.h"
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsl/vsl_set_io.h>
+#include <vsl/vsl_binary_loader.h>
 #include <vcl_iostream.h>
 
 //: Constructor
@@ -226,52 +227,6 @@ bgrl_graph::version(  ) const
 }
 
 
-//: Increment the current vertex
-void
-bgrl_graph::depth_iterator::next_vertex()
-{
-  if (!curr_vertex_) return;
-  for ( edge_iterator itr = curr_vertex_->begin();
-        itr != curr_vertex_->end(); ++itr )
-  {
-    if ( visited_.find((*itr)->to()) == visited_.end() )
-      eval_queue_.push_front((*itr)->to());
-  }
-  while ( !eval_queue_.empty() && visited_.find(eval_queue_.front()) != visited_.end() )
-    eval_queue_.pop_front();
-  if (eval_queue_.empty())
-    curr_vertex_ = NULL;
-  else {
-    curr_vertex_ = eval_queue_.front();
-    eval_queue_.pop_front();
-    visited_.insert(curr_vertex_);
-  }
-}
-
-
-//: Increment the current vertex
-void
-bgrl_graph::breadth_iterator::next_vertex()
-{
-  if (!curr_vertex_) return;
-  for ( edge_iterator itr = curr_vertex_->begin();
-        itr != curr_vertex_->end(); ++itr )
-  {
-    if ( visited_.find((*itr)->to()) == visited_.end() )
-      eval_queue_.push_back((*itr)->to());
-  }
-  while ( !eval_queue_.empty() && visited_.find(eval_queue_.front()) != visited_.end() )
-    eval_queue_.pop_front();
-  if (eval_queue_.empty())
-    curr_vertex_ = NULL;
-  else {
-    curr_vertex_ = eval_queue_.front();
-    eval_queue_.pop_front();
-    visited_.insert(curr_vertex_);
-  }
-}
-
-
 //-----------------------------------------------------------------------------------------
 // External functions
 //-----------------------------------------------------------------------------------------
@@ -307,9 +262,24 @@ vsl_b_read(vsl_b_istream &is, bgrl_graph* &g)
 }
 
 
+//: Allows derived class to be loaded by base-class pointer.
+//  A loader object exists which is invoked by calls
+//  of the form "vsl_b_read(os,base_ptr);".  This loads derived class
+//  objects from the stream, places them on the heap and
+//  returns a base class pointer.
+//  In order to work the loader object requires
+//  an instance of each derived class that might be
+//  found.  This function gives the model class to
+//  the appropriate loader.
+void vsl_add_to_binary_loader(const bgrl_graph& g)
+{
+  vsl_binary_loader<bgrl_graph>::instance().add(g);
+}
+
+
 //: Print an ASCII summary to the stream
 void
-vsl_print_summary(vcl_ostream &os, bgrl_graph* g)
+vsl_print_summary(vcl_ostream &os, const bgrl_graph* g)
 {
   os << "bgrl_graph{";
   g->print_summary(os);

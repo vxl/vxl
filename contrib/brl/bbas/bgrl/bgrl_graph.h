@@ -25,6 +25,8 @@
 #include "bgrl_vertex_sptr.h"
 #include "bgrl_edge_sptr.h"
 #include "bgrl_graph_sptr.h"
+#include "bgrl_search_func_sptr.h"
+#include "bgrl_search_func.h"
 
 //: The graph
 class bgrl_graph : public vbl_ref_count
@@ -103,72 +105,44 @@ class bgrl_graph : public vbl_ref_count
   {
    public:
     //: Constructor
-    iterator( bgrl_graph_sptr graph, bgrl_vertex_sptr vertex ) : graph_(graph), curr_vertex_(vertex) {}
+    iterator( bgrl_graph_sptr graph, bgrl_search_func_sptr func ) 
+      : graph_(graph), search_func_(func) {}
 
     //: Destructor
     virtual ~iterator() {}
 
     //: Increment
-    iterator& operator++ () { next_vertex(); return *this; }
+    iterator& operator++ () { search_func_->next_vertex(); return *this; }
 
     //: Dereference
-    bgrl_vertex_sptr operator -> () const { return curr_vertex_; }
+    bgrl_vertex_sptr operator -> () const { return search_func_->curr_vertex(); }
     //: Dereference
-    bgrl_vertex_sptr operator * () const { return curr_vertex_; }
+    bgrl_vertex_sptr operator * () const { return search_func_->curr_vertex(); }
 
     //: Equality comparison
-    bool operator == (const iterator& rhs) const { return rhs.curr_vertex_ == this->curr_vertex_; }
+    bool operator == (const iterator& rhs) const 
+    { return rhs.search_func_->curr_vertex() == this->search_func_->curr_vertex(); }
 
     //: Inequality comparison
-    bool operator != (const iterator& rhs) const { return rhs.curr_vertex_ != this->curr_vertex_; }
+    bool operator != (const iterator& rhs) const 
+    { return rhs.search_func_->curr_vertex() != this->search_func_->curr_vertex(); }
 
    protected:
-    //: Increment the current vertex
-    virtual void next_vertex() = 0;
 
     bgrl_graph_sptr graph_;
-    bgrl_vertex_sptr curr_vertex_;
+    bgrl_search_func_sptr search_func_;
   };
 
-  // Depth first search iterator
-  class depth_iterator : public iterator
-  {
-   public:
-    //: Constructor
-    depth_iterator( bgrl_graph_sptr graph, bgrl_vertex_sptr vertex ) : iterator(graph, vertex){ visited_.insert(vertex); }
-
-   protected:
-    //: Increment the current vertex
-    void next_vertex();
-
-    vcl_deque<bgrl_vertex_sptr> eval_queue_;
-    vcl_set<bgrl_vertex_sptr> visited_;
-  };
-
-  // Breadth first search iterator
-  class breadth_iterator : public iterator
-  {
-   public:
-    //: Constructor
-    breadth_iterator( bgrl_graph_sptr graph, bgrl_vertex_sptr vertex ) : iterator(graph, vertex){ visited_.insert(vertex); }
-
-   protected:
-    //: Increment the current vertex
-    void next_vertex();
-
-    vcl_deque<bgrl_vertex_sptr> eval_queue_;
-    vcl_set<bgrl_vertex_sptr> visited_;
-  };
 
   //: Depth first search begin iterator
-  depth_iterator depth_begin(bgrl_vertex_sptr vertex) { return depth_iterator(this, vertex); }
+  iterator depth_begin(bgrl_vertex_sptr vertex) { return iterator(this, new bgrl_depth_search(vertex)); }
   //: Depth first search end iterator
-  depth_iterator depth_end()   { return depth_iterator(this, NULL); }
+  iterator depth_end()   { return iterator(this, new bgrl_depth_search(NULL)); }
 
   //: Breadth first search begin iterator
-  breadth_iterator breadth_begin(bgrl_vertex_sptr vertex) { return breadth_iterator(this, vertex); }
+  iterator breadth_begin(bgrl_vertex_sptr vertex) { return iterator(this, new bgrl_breadth_search(vertex)); }
   //: Breadth first search end iterator
-  breadth_iterator breadth_end()   { return breadth_iterator(this, NULL); }
+  iterator breadth_end()   { return iterator(this, new bgrl_breadth_search(NULL)); }
 };
 
 
@@ -178,8 +152,19 @@ void vsl_b_write(vsl_b_ostream &os, const bgrl_graph* g);
 //: Binary load bgrl_graph from stream.
 void vsl_b_read(vsl_b_istream &is, bgrl_graph* &g);
 
+//: Allows derived class to be loaded by base-class pointer
+//  A loader object exists which is invoked by calls
+//  of the form "vsl_b_read(os,base_ptr)".  This loads derived class
+//  objects from the disk, places them on the heap and
+//  returns a base class pointer.
+//  In order to work the loader object requires
+//  an instance of each derived class that might be
+//  found.  This function gives the model class to
+//  the appropriate loader.
+void vsl_add_to_binary_loader(const bgrl_graph& g);
+
 //: Print an ASCII summary to the stream
-void vsl_print_summary(vcl_ostream &os, bgrl_graph* g);
+void vsl_print_summary(vcl_ostream &os, const bgrl_graph* g);
 
 
 #endif // bgrl_graph_h_

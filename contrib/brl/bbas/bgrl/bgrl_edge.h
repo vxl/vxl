@@ -71,9 +71,20 @@ void vsl_b_write(vsl_b_ostream &os, const bgrl_edge* e);
 //  \relates bgrl_edge
 void vsl_b_read(vsl_b_istream &is, bgrl_edge* &e);
 
+//: Allows derived class to be loaded by base-class pointer
+//  A loader object exists which is invoked by calls
+//  of the form "vsl_b_read(os,base_ptr)".  This loads derived class
+//  objects from the disk, places them on the heap and
+//  returns a base class pointer.
+//  In order to work the loader object requires
+//  an instance of each derived class that might be
+//  found.  This function gives the model class to
+//  the appropriate loader.
+void vsl_add_to_binary_loader(const bgrl_edge& e);
+
 //: Print an ASCII summary to the stream
 //  \relates bgrl_edge
-void vsl_print_summary(vcl_ostream &os, bgrl_edge* e);
+void vsl_print_summary(vcl_ostream &os, const bgrl_edge* e);
 
 
 #endif // bgrl_edge_h_

@@ -109,8 +109,19 @@ void vsl_b_write(vsl_b_ostream &os, const bgrl_vertex* v);
 //: Binary load bgrl_vertex from stream.
 void vsl_b_read(vsl_b_istream &is, bgrl_vertex* &v);
 
+//: Allows derived class to be loaded by base-class pointer
+//  A loader object exists which is invoked by calls
+//  of the form "vsl_b_read(os,base_ptr)".  This loads derived class
+//  objects from the disk, places them on the heap and
+//  returns a base class pointer.
+//  In order to work the loader object requires
+//  an instance of each derived class that might be
+//  found.  This function gives the model class to
+//  the appropriate loader.
+void vsl_add_to_binary_loader(const bgrl_vertex& v);
+
 //: Print an ASCII summary to the stream
-void vsl_print_summary(vcl_ostream &os, bgrl_vertex* v);
+void vsl_print_summary(vcl_ostream &os, const bgrl_vertex* v);
 
 
 #endif // bgrl_vertex_h_

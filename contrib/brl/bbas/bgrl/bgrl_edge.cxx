@@ -3,6 +3,8 @@
 //:
 // \file
 
+#include <vsl/vsl_binary_loader.h>
+
 
 //: Return a platform independent string identifying the class
 vcl_string 
@@ -84,9 +86,24 @@ vsl_b_read(vsl_b_istream &is, bgrl_edge* &e)
 }
 
 
+//: Allows derived class to be loaded by base-class pointer.
+//  A loader object exists which is invoked by calls
+//  of the form "vsl_b_read(os,base_ptr);".  This loads derived class
+//  objects from the stream, places them on the heap and
+//  returns a base class pointer.
+//  In order to work the loader object requires
+//  an instance of each derived class that might be
+//  found.  This function gives the model class to
+//  the appropriate loader.
+void vsl_add_to_binary_loader(const bgrl_edge& e)
+{
+  vsl_binary_loader<bgrl_edge>::instance().add(e);
+}
+
+
 //: Print an ASCII summary of a bgrl_edge to the stream
 void
-vsl_print_summary(vcl_ostream &os, bgrl_edge* e)
+vsl_print_summary(vcl_ostream &os, const bgrl_edge* e)
 {
   os << "bgrl_edge{ ";
   e->print_summary(os);

@@ -5,5 +5,7 @@
 #include <bbas/bgrl/bgrl_vertex.h>
 #include <bbas/bgrl/bgrl_graph_sptr.h>
 #include <bbas/bgrl/bgrl_graph.h>
+#include <bbas/bgrl/bgrl_search_func_sptr.h>
+#include <bbas/bgrl/bgrl_search_func.h>
 
 int main() { return 0; }
