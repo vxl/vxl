@@ -11,7 +11,7 @@
 
 USES = # completely independent!
 
-LIB := TIFF
+LIBRARY := TIFF
 VERSION := 1.0
 
 SOURCES += tif_close.c
