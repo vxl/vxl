@@ -219,7 +219,7 @@ inline void vil2_algo_convolve_1d(const vil2_image_view<srcT>& src_im,
   dest_im.resize(ni,nj,src_im.nplanes());
   int d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
 
-  for (int p=0;p<src_im.nplanes();++p)
+  for (unsigned int p=0;p<src_im.nplanes();++p)
   {
     // Select first row of p-th plane
     const srcT*  src_row  = src_im.top_left_ptr()+p*src_im.planestep();
@@ -234,12 +234,12 @@ inline void vil2_algo_convolve_1d(const vil2_image_view<srcT>& src_im,
 
 template <class destT, class kernelT, class accumT>
 inline vil2_image_resource_sptr vil2_algo_convolve_1d(
-  const vil2_image_resource_sptr& src_im,
-  const destT dt,
-  const kernelT* kernel, int k_lo, int k_hi,
-  const accumT ac,
-  vil2_convolve_boundary_option start_option,
-  vil2_convolve_boundary_option end_option);
+               const vil2_image_resource_sptr& src_im,
+               const destT dt,
+               const kernelT* kernel, int k_lo, int k_hi,
+               const accumT ac,
+               vil2_convolve_boundary_option start_option,
+               vil2_convolve_boundary_option end_option);
 
 //: A resource adaptor that behaves like a algo_convolve_1d'ed version of its input
 template <class kernelT, class accumT, class destT>
@@ -248,11 +248,11 @@ class vil2_algo_convolve_1d_resource : public vil2_image_resource
   //: Construct a convolve filter.
   // You can't create one of these directly, use vil2_algo_convolve_1d instead
   vil2_algo_convolve_1d_resource(const vil2_image_resource_sptr& src,
-                                  const kernelT* kernel, int k_lo, int k_hi,
-                                  vil2_convolve_boundary_option start_option,
-                                  vil2_convolve_boundary_option end_option):
-    src_(src), kernel_(kernel), klo_(k_lo), khi_(k_hi),
-    start_option_(start_option), end_option_(end_option)
+                                 const kernelT* kernel, int k_lo, int k_hi,
+                                 vil2_convolve_boundary_option start_option,
+                                 vil2_convolve_boundary_option end_option):
+                        src_(src), kernel_(kernel), klo_(k_lo), khi_(k_hi),
+                        start_option_(start_option), end_option_(end_option)
     {
       // Can't do period extension yet.
       assert (start_option != vil2_convolve_periodic_extend ||
@@ -318,8 +318,8 @@ class vil2_algo_convolve_1d_resource : public vil2_image_resource
   //: Extra property information
   virtual bool get_property(char const* tag, void* property_value = 0) const
   {
-      if (0==vcl_strcmp(tag, vil2_property_read_only))
-    return property_value ? (*(bool*)property_value) = true : true;
+    if (0==vcl_strcmp(tag, vil2_property_read_only))
+      return property_value ? (*(bool*)property_value) = true : true;
 
     return src_->get_property(tag, property_value);
   }
@@ -336,15 +336,15 @@ class vil2_algo_convolve_1d_resource : public vil2_image_resource
 // \relates vil2_image_resource
 template <class destT, class kernelT, class accumT>
 inline vil2_image_resource_sptr vil2_algo_convolve_1d(
-  const vil2_image_resource_sptr& src_im,
-  const destT dt,
-  const kernelT* kernel, int k_lo, int k_hi,
-  const accumT ac,
-  vil2_convolve_boundary_option start_option,
-  vil2_convolve_boundary_option end_option)
+                         const vil2_image_resource_sptr& src_im,
+                         const destT dt,
+                         const kernelT* kernel, int k_lo, int k_hi,
+                         const accumT ac,
+                         vil2_convolve_boundary_option start_option,
+                         vil2_convolve_boundary_option end_option)
 {
   return new vil2_algo_convolve_1d_resource<kernelT, accumT, destT>(src_im,
-    kernel, k_lo, k_hi, start_option, end_option);
+                              kernel, k_lo, k_hi, start_option, end_option);
 }
 
 #endif // vil2_algo_convolve_1d_h_
