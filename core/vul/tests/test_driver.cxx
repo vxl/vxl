@@ -7,6 +7,7 @@ DECLARE( test_psfile );
 DECLARE( test_sprintf );
 DECLARE( test_url );
 DECLARE( test_temp_filename );
+DECLARE( test_regexp );
 
 void
 register_tests()
@@ -18,6 +19,7 @@ register_tests()
   REGISTER( test_sprintf );
   REGISTER( test_url );
   REGISTER( test_temp_filename );
+  REGISTER( test_regexp );
 }
 
 DEFINE_MAIN;

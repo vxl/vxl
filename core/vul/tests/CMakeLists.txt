@@ -13,6 +13,7 @@ ADD_EXECUTABLE( vul_test_driver
   test_sprintf.cxx
   test_url.cxx
   test_temp_filename.cxx
+  test_regexp.cxx
 )
 
 ADD_TEST( vul_test_include        vul_test_driver test_include )
@@ -22,3 +23,4 @@ ADD_TEST( vul_test_psfile         vul_test_driver test_psfile )
 ADD_TEST( vul_test_sprintf        vul_test_driver test_sprintf )
 ADD_TEST( vul_test_url            vul_test_driver test_url )
 ADD_TEST( vul_test_temp_filename  vul_test_driver test_temp_filename )
+ADD_TEST( vul_test_regexp         vul_test_driver test_regexp )
