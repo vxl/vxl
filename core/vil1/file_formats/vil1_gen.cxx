@@ -62,13 +62,13 @@ char const* vil_gen_generic_image::file_format() const
   return vil_gen_format_tag;
 }
 
-vil_gen_generic_image::vil_gen_generic_image(vcl_string const& s,
-                                             int planes,
-                                             int width,
-                                             int height,
-                                             int components,
-                                             int bits_per_component,
-                                             vil_component_format format)
+vil_gen_generic_image::vil_gen_generic_image(vcl_string const& /*s*/,
+                                             int /*planes*/,
+                                             int /*width*/,
+                                             int /*height*/,
+                                             int /*components*/,
+                                             int /*bits_per_component*/,
+                                             vil_component_format /*format*/)
 {
   vcl_abort();
 }
@@ -193,7 +193,7 @@ bool vil_gen_generic_image::get_section(void* buf, int x0, int y0, int xs, int y
   return false;
 }
 
-bool vil_gen_generic_image::put_section(void const* buf, int x0, int y0, int xs, int ys)
+bool vil_gen_generic_image::put_section(void const* /*buf*/, int /*x0*/, int /*y0*/, int /*xs*/, int /*ys*/)
 {
   vcl_abort();
   return false;

@@ -45,7 +45,7 @@ class vcsl_rotation
 
   //: Is `this' invertible at time `time'?
   //  REQUIRE: valid_time(time)
-  virtual bool is_invertible(double time) const { return true; }
+  virtual bool is_invertible(double /*time*/) const { return true; }
 
   //: Is `this' correctly set ?
   virtual bool is_valid(void) const;

@@ -1,6 +1,5 @@
 #ifndef vidl_mpegcodec_h
 #define vidl_mpegcodec_h
-
 //:
 // \file
 //
@@ -20,9 +19,6 @@
 //
 //  this class works on both mpeg1 and mpeg2.
 // \date July 2002
-// \verbatim
-// Modifications
-// \endverbatim
 
 #include "vidl_mpegcodec_helper.h"
 #include <vidl/vidl_codec.h>
@@ -51,12 +47,12 @@ public:
                      int y0,
                      int xs,
                      int ys) const;
-  int    put_section(int frame_position,
-                     void* ib,
-                     int x0,
-                     int y0,
-                     int xs,
-                     int ys){return 0;}
+  int    put_section(int /*frame_position*/,
+                     void* /*ib*/,
+                     int /*x0*/,
+                     int /*y0*/,
+                     int /*xs*/,
+                     int /*ys*/){return 0;}
 
   virtual bool probe(const char* fname);
   virtual vidl_codec_sptr load(const char* fname, char mode = 'r' );

@@ -38,7 +38,7 @@ bool vcsl_cylindrical_to_cartesian_3d::is_invertible(double time) const
 //---------------------------------------------------------------------------
 vnl_vector<double>
 vcsl_cylindrical_to_cartesian_3d::execute(const vnl_vector<double> &v,
-                                          double time) const
+                                          double /*time*/) const
 {
   // require
   assert(is_valid());
