@@ -94,7 +94,7 @@ vil_stream_url::vil_stream_url(char const *url)
   // send HTTP 1.0 request.
   vcl_sprintf(buffer, "GET http://%s/%s\n", host.c_str(), path.c_str());
 
-  if (::write(tcp_socket, buffer, strlen(buffer)) < 0) {
+  if (::write(tcp_socket, buffer, vcl_strlen(buffer)) < 0) {
     vcl_cerr << __FILE__ ": error sending HTTP request" << vcl_endl;
     return;
   }

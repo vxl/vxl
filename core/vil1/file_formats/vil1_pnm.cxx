@@ -215,9 +215,9 @@ bool vil_pnm_generic_image::write_header()
   //sprintf(buf, "P%d\n# VIL pnm image\n%u %u\n%lu\n",
   //        magic_, width_, height_, maxval_);
   // The comment does not add any useful information.
-  sprintf(buf, "P%d\n%u %u\n%lu\n",
+  vcl_sprintf(buf, "P%d\n%u %u\n%lu\n",
           magic_, width_, height_, maxval_);
-  vs_->write(buf, strlen(buf));
+  vs_->write(buf, vcl_strlen(buf));
   start_of_data_ = vs_->tell();
   return true;
 }
@@ -280,7 +280,7 @@ bool vil_pnm_generic_image::get_section(void* buf, int x0, int y0, int xs, int y
 }
 
 void operator<<(vil_stream& vs, int a) {
-  char buf[128]; sprintf(buf, " %d\n", a); vs.write(buf,strlen(buf));
+  char buf[128]; vcl_sprintf(buf, " %d\n", a); vs.write(buf,vcl_strlen(buf));
 }
 
 bool vil_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs, int ys)

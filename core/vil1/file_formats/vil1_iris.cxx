@@ -114,7 +114,7 @@ vil_iris_generic_image::vil_iris_generic_image(vil_stream* is, int planes,
     height_ = height;
     pixmin_ = 0;
     pixmax_ = (bits_per_component == 8) ? 255 : 65535;
-    strcpy(imagename_, "vil writes an iris image!");
+    vcl_strcpy(imagename_, "vil writes an iris image!");
     colormap_ = 0;
 
     if ((components * planes) == 1)
