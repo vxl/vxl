@@ -80,7 +80,7 @@ static double line_distance(vgl_line_segment_2d<double> const& seg,
 
 //:conversion from image coordinates to epipolar coordinates
 void bmrf_network_builder::epi_coords(const double u, const double v,
-                                      double& alpha, double& s)
+                                      double& alpha, double& s) const
 {
   vgl_point_2d<double> p(u, v);
   vgl_line_segment_2d<double> el(epi_, p);
@@ -107,12 +107,9 @@ void bmrf_network_builder::set_edges(int frame,
   network_valid_ = false;
 }
 
-void bmrf_network_builder::init(const int n_frames)
+void bmrf_network_builder::init()
 {
   network_ = new bmrf_network();
-  min_epi_segs_.resize(n_frames);
-  max_epi_segs_.resize(n_frames);
-  network_valid_ = false;
 }
 
 //: insure that the knots are stored in alpha increasing order.
@@ -346,17 +343,17 @@ bool bmrf_network_builder::compute_segments()
 //: the map between epipolar coordinates and image coordinates
 //  returns false if the image coordinates are out of bounds
 bool bmrf_network_builder::image_coords(const double a, const double s,
-                                        double& u, double& v)
+                                        double& u, double& v) const
 {
   u = 0; v = 0;
-  if (!image_)
-    return false;
   //unscale alpha
   double A = a/alpha_inv_ + alpha_min_;
   //get  u,v relative to the epipole
   u = s*vcl_cos(A); v = s*vcl_sin(A);
   //add the epipole position
   u += eu_; v += ev_;
+  if (!image_)
+    return false;
   if (u<0||u>image_.ni())
     return false;
   if (v<0||v>image_.nj())

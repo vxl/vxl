@@ -18,13 +18,13 @@ class bmrf_network_builder_params : public gevd_param_mixin
 {
  public:
   bmrf_network_builder_params(const float eu = -610.071,
-                               const float ev = 237.358,
-                               const int  elu = 1000,
-                               const int elv_min =390,
-                               const int elv_max =450,
-                               const int Ns = 10,
-                               const float ae_thresh = 7.0,
-                               const float  s_range = false
+                              const float ev = 237.358,
+                              const int  elu = 1000,
+                              const int elv_min =390,
+                              const int elv_max =450,
+                              const int Ns = 10,
+                              const float alpha_range = 0.1,
+                              const float s_range = 20
                               );
 
  bmrf_network_builder_params(const bmrf_network_builder_params& old_params);
@@ -40,8 +40,8 @@ class bmrf_network_builder_params : public gevd_param_mixin
                   int elv_min,
                   int elv_max,
                   int Ns,
-                  float alpha_range = 0.1,
-                  float s_range = 20
+                  float alpha_range,
+                  float s_range
                  );
  public:
   //
@@ -51,8 +51,8 @@ class bmrf_network_builder_params : public gevd_param_mixin
   float ev_;   //row position of the epipole
   int elu_; //col position of the epipolar parameter space
   int elv_min_; // minimum row position of the epipolar space
-  int elv_max_; // maximum col position of the epipolar space
-  int Ns_;   // number of samples in the s dimension of an unbounded region
+  int elv_max_; // maximum row position of the epipolar space
+  int Ns_;   // number of intensity samples in s of an unbounded region
   float alpha_range_;   //range in alpha for time neighbors [0, 1].
   float  s_range_;  // range in s for time neighbors (pixels)
 };

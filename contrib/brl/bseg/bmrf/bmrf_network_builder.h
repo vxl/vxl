@@ -41,6 +41,9 @@ class bmrf_network_builder : public bmrf_network_builder_params
 
   //Mutators
 
+  //:initialize the builder
+  void init();
+
   //: specify the image for the current frame
   void set_image(vil_image_view<float> const& image);
 
@@ -51,15 +54,13 @@ class bmrf_network_builder : public bmrf_network_builder_params
 
   //:convert image coordinates to epipolar coordinates
   void epi_coords(const double u, const double v,
-                  double& alpha, double& s);
+                  double& alpha, double& s) const;
 
   //:convert epipolar coordinates to image coordinates
   // \note if \param u or \param v are outside the image return false.
   bool image_coords(const double a, const double s,
-                    double& u, double& v);
+                    double& u, double& v) const;
 
-  //:initialize arrays
-  void init(const int n_frames);
 
   //: the main process method
   bool build();
