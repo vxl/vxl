@@ -17,18 +17,6 @@ IF(HAS_VGUI)
  )
  AUX_SOURCE_DIRECTORY(Templates segv_sources)
 
- INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/find_xerces.cmake )
-
- IF(HAS_XERCES)
-  ADD_DEFINITIONS(-DHAS_XERCES)
- ENDIF(HAS_XERCES)
-
- ADD_LIBRARY(segv ${segv_sources})
-
- IF(HAS_XERCES)
-  TARGET_LINK_LIBRARIES(segv bxml)
- ENDIF(HAS_XERCES)
-
  TARGET_LINK_LIBRARIES(segv bgui vgui strk sdet bsol brip vtol vdgl vsol vil1 vbl)
 
 ENDIF(HAS_VGUI)
