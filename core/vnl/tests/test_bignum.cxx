@@ -4,8 +4,8 @@
 
 #include <vcl_iostream.h>
 #ifndef __alpha__ // On Alpha, compiler runs out of memory when including these
-#include <vcl_sstream.h>
-#include <vcl_iomanip.h>
+# include <vcl_sstream.h>
+# include <vcl_iomanip.h>
 #endif
 #include <vnl/vnl_bignum.h>
 #include <vnl/vnl_bignum_traits.h>
@@ -49,7 +49,7 @@ static void run_constructor_tests() {
   {vnl_bignum b(-1234567.0L); TEST("vnl_bignum b(-1234567.0L);", (long double)b, -1234567.0L);}
   {vnl_bignum b(1234567e3L); TEST("vnl_bignum b(1234567e3L);", (long double)b, 1234567e3L);}
   {vnl_bignum b(-1234567e3L); TEST("vnl_bignum b(-1234567e3L);", (long double)b, -1234567e3L);}
-  {vnl_bignum b((long double)(0xf00000)); TEST("vnl_bignum b(double(0xf00000));", b, 0xf00000);}
+  {vnl_bignum b((long double)(0xf00000)); TEST("vnl_bignum b((long double)(0xf00000));", (long double)b, (long double)0xf00000);}
 
   vcl_cout << "char* constructor:\n";
   {vnl_bignum b("-1"); TEST("vnl_bignum b(\"-1\");", b, -1L);}
@@ -400,10 +400,11 @@ static void run_division_tests() {
 
     b = vnl_bignum(num)/vnl_bignum(den);
     r = vnl_bignum(num) % vnl_bignum(den);
-    vcl_cout << "\nquotient  = " << b << "\n";
-    vcl_cout <<   "            "; b.dump(); vcl_cout << "\n";
-    vcl_cout << "\nremainder = " << r << "\n";
-    vcl_cout <<   "            "; r.dump(); vcl_cout << "\n";
+    vcl_cout <<   "\nquotient  = " << b
+             <<   "\n            "; b.dump();
+    vcl_cout << "\n\nremainder = " << r
+             <<   "\n            "; r.dump();
+    vcl_cout << '\n';
   }
 #endif
 }
@@ -414,8 +415,8 @@ static void run_multiplication_division_tests() {
   vnl_bignum b2 = "0xffffffff";                 // Create vnl_bignum object
   vnl_bignum b3 = "12345e30";                   // Create vnl_bignum object
 
-  vcl_cout << "b2 = " << b2 << vcl_endl;
-  vcl_cout << "b3 = " << b3 << vcl_endl;
+  vcl_cout << "b2 = " << b2 << vcl_endl
+           << "b3 = " << b3 << vcl_endl;
 
   TEST("(b2*b3) / b3 = b2", ((b2*b3) / b3 == b2), 1);
   TEST("(b2*b3) / b2 = b3", ((b2*b3) / b2 == b3), 1);
@@ -430,8 +431,8 @@ static void run_addition_subtraction_tests() {
   long sub_errors = 0;
   vnl_bignum bi,bj,bij;
 
-  vcl_cout << " for (i = 1; i < 0xfffffff;  i *= 3) \n";
-  vcl_cout << "   for (j = 1; j < 0xfffffff; j *= 3) \n      ";
+  vcl_cout << " for (i = 1; i < 0xfffffff;  i *= 3) \n"
+           << "   for (j = 1; j < 0xfffffff; j *= 3) \n      ";
 
   {for (i = 1; i < 0xfffffff;  i *= 3) {
     vcl_cout.put('.');
