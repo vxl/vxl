@@ -4,6 +4,7 @@ DECLARE( test_convert );
 DECLARE( test_file_format_read );
 DECLARE( test_pixel_format );
 DECLARE( test_save_load_image );
+DECLARE( test_image_loader_robustness );
 DECLARE( test_stream );
 DECLARE( test_image_view );
 DECLARE( test_image_resource );
@@ -58,6 +59,7 @@ register_tests()
   REGISTER( test_pixel_format );
   REGISTER( test_save_load_image );
   REGISTER( test_file_format_read );
+  REGISTER( test_image_loader_robustness );
   REGISTER( test_stream );
   REGISTER( test_image_view );
   REGISTER( test_image_resource );

@@ -11,6 +11,7 @@ ADD_EXECUTABLE( vil_test_all
   # file format readers/writers
   test_file_format_read.cxx
   test_save_load_image.cxx
+  test_image_loader_robustness.cxx
   test_stream.cxx
 
   # image operations
@@ -77,6 +78,7 @@ ADD_TEST( vil_test_memory_chunk             vil_test_all test_memory_chunk)
 # file format readers/writers
 ADD_TEST( vil_test_file_format_read         vil_test_all test_file_format_read ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
 ADD_TEST( vil_test_save_load_image          vil_test_all test_save_load_image)
+ADD_TEST( vil_test_image_loader_robustness  vil_test_all test_image_loader_robustness)
 ADD_TEST( vil_test_stream                   vil_test_all test_stream)
 
 # image operations
