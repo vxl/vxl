@@ -85,7 +85,7 @@ public:
     operator bool () const;
 
   private:
-    iterator& operator ++ (int /*postfix*/) { abort(); return *this; }
+    iterator& operator ++ (int /*postfix*/);// { abort(); return *this; }
 
   private:
     const PairMatchSet* _c;

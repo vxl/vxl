@@ -2,13 +2,19 @@
 #pragma implementation
 #endif
 
+#include "PairMatchSet.h"
+
 #include <vcl/vcl_cstdlib.h>
 #include <vcl/vcl_cassert.h>
-
 #include <vcl/vcl_vector.h>
 
-#include "MatchSet.h"
-#include "PairMatchSet.h"
+#include <mvl/MatchSet.h>
+
+PairMatchSet::iterator& PairMatchSet::iterator::operator ++ (int /*postfix*/)
+{
+  vcl_abort();
+  return *this;
+}
 
 // -- @{Construct a PairMatchSet for values of $i_1$ between 0 and \argfont{size}.@}
 PairMatchSet::PairMatchSet(unsigned size):
