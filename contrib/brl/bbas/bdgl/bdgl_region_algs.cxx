@@ -2,6 +2,7 @@
 // \file
 #include <vcl_algorithm.h>
 #include <vcl_cmath.h>
+#include <vcl_cstdlib.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vdgl/vdgl_digital_region.h>
 #include <bdgl/bdgl_region_algs.h>
