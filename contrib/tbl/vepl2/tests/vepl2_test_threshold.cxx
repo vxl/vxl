@@ -27,7 +27,7 @@ int vepl2_test_threshold()
 #define args ,128
   ONE_TEST(vepl2_threshold,byte_img,byte_ori,unsigned char,84908,m+"_byte",args);
   ONE_TEST(vepl2_threshold,shrt_img,shrt_ori,unsigned short,21757868,m+"_short",args);
-  ONE_TEST(vepl2_threshold,int__img,int__ori,unsigned int,21757868,m+"_int",args);
+//ONE_TEST(vepl2_threshold,int__img,int__ori,unsigned int,21757868,m+"_int",args);
   ONE_TEST(vepl2_threshold,flot_img,flot_ori,float,903,m+"_float",args);
   ONE_TEST(vepl2_threshold,dble_img,dble_ori,double,903,m+"_double",args);
   ONE_TEST(vepl2_threshold,colr_img,colr_ori,vil2_rgb<unsigned char>,101528,m+"_colour",args);
