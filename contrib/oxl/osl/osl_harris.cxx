@@ -277,15 +277,13 @@ void osl_harris::do_adaptive()
 
         int NUM_PER_TILE = (int) ( IDEAL_NUM_PER_TILE * (THIS_TILE_AREA/TILE_AREA) );
 
-        double thresh = 0;
+        double thresh = 0; // Less than NUM on tile, take them all
         if (n > NUM_PER_TILE)
         {
           // Sort corners to get thresholds
           vcl_sort(cornerness.begin(), cornerness.begin()+n);
           thresh = cornerness[n-1-NUM_PER_TILE];
         }
-        else // Less than NUM on tile, take them all
-          thresh = 0;
 
         // Keep corners over thresh
         for (int row = window_row_start_index; row < window_row_end_index; row++)
