@@ -2,12 +2,13 @@
 // Author: Peter Vanroose
 // Created: 29 January 2002
 //-----------------------------------------------------------------------------
-#include <vul/vul_test.h>
+#include <testlib/testlib_test.h>
+
 #include <vul/vul_psfile.h>
 #include <vul/vul_temp_filename.h>
 #include <vpl/vpl.h> // for unlink()
 
-void test_vul_psfile()
+void test_psfile()
 {
   vcl_string filename = vul_temp_filename()+".ps";
   vul_psfile f(filename.c_str());
@@ -72,4 +73,4 @@ void test_vul_psfile()
   vpl_unlink(filename.c_str());
 }
 
-TESTMAIN(test_vul_psfile);
+TESTMAIN(test_psfile);

@@ -5,16 +5,17 @@
 // Created: 21 Jan 97
 //
 //-----------------------------------------------------------------------------
-#ifdef __GNUC__
-// this is a bit of a hack...
-#pragma implementation "vul_arg.h"
-#endif
+
+//  #ifdef __GNUC__
+//  // this is a bit of a hack...
+//  #pragma implementation "vul_arg.h"
+//  #endif
 
 #include <vul/vul_arg.h>
 #include <vcl_cstring.h> // needed for strcmp()
 #include <vcl_list.h>
 #include <vcl_algorithm.h>
-#include <vul/vul_test.h>
+#include <testlib/testlib_test.h>
 
 char const * my_argv_1[] = {
   "progname",
@@ -81,10 +82,9 @@ void test_do_vul_arg()
   TEST("list contents", ok, true);
 }
 
-extern "C"
-void test_vul_arg()
+void test_arg()
 {
   test_do_vul_arg();
 }
 
-TESTMAIN(test_vul_arg);
+TESTMAIN(test_arg);

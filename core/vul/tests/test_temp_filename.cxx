@@ -1,13 +1,14 @@
 // Amitha Perera <perera@cs.rpi.edu>
 
+#include <testlib/testlib_test.h>
+
 #include <vul/vul_temp_filename.h>
-#include <vul/vul_test.h>
 #include <vpl/vpl.h>  // for vpl_unlink and vpl_sleep
 #include <vcl_fstream.h>
 
-int main()
+MAIN( test_temp_filename )
 {
-  vul_test_start("Temporary filename");
+  START("Temporary filename");
 
   {
     vcl_string filename = vul_temp_filename();
@@ -39,5 +40,5 @@ int main()
     TEST("Testing multiple calls", filename1 == filename2, false);
   }
 
-  return vul_test_summary();
+  SUMMARY();
 }

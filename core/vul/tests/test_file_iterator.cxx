@@ -3,9 +3,10 @@
 #include <vpl/vpl.h>
 #include <vul/vul_file.h>
 #include <vul/vul_timer.h>
-#include <vul/vul_test.h>
 #include <vul/vul_temp_filename.h>
 #include <vcl_map.h>
+
+#include <testlib/testlib_test.h>
 
 // file iter
 #include <vul/vul_file_iterator.h>
@@ -297,7 +298,7 @@ void test_vul_sleep_timer()
 }
 
 
-void vul_test_all()
+void test_file_iterator()
 {
 #ifndef VCL_WIN32
   test_file_iterator_unix();
@@ -310,4 +311,4 @@ void vul_test_all()
 }
 
 
-TESTMAIN(vul_test_all);
+TESTMAIN(test_file_iterator);

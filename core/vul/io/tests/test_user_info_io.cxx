@@ -4,9 +4,10 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vul/vul_test.h>
 #include <vul/io/vul_io_user_info.h>
 #include <vsl/vsl_binary_io.h>
+
+#include <testlib/testlib_test.h>
 
 void test_user_info_io()
 {
@@ -41,11 +42,4 @@ void test_user_info_io()
 
 }
 
-
-void test_user_info_prime()
-{
-  test_user_info_io();
-}
-
-
-TESTMAIN(test_user_info_prime);
+TESTMAIN(test_user_info_io);

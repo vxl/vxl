@@ -1,8 +1,8 @@
 #include <vul/vul_sprintf.h>
 #include <vcl_iostream.h>
-#include <vul/vul_test.h>
+#include <testlib/testlib_test.h>
 
-void test_vul_sprintf(void)
+void test_sprintf(void)
 {
   vul_sprintf buf0("[%d]", 123);
   vcl_cout << "buf0=" << buf0 << vcl_endl;
@@ -15,4 +15,4 @@ void test_vul_sprintf(void)
   TEST("buf1 == [awf]", buf1, "[awf]");
 }
 
-TESTMAIN(test_vul_sprintf);
+TESTMAIN(test_sprintf);
