@@ -167,6 +167,9 @@ SOURCE=.\vil3d_exp_filter.h
 # Begin Source File
 SOURCE=.\vil3d_normalised_correlation_3d.h
 # End Source File
+# Begin Source File
+SOURCE=.\vil3d_convolve_1d.h
+# End Source File
 # End Group
 # End Target
 # End Project
