@@ -1094,8 +1094,8 @@ void brip_vil_float_ops::rgb_to_ihs(vil_rgb<vxl_byte> const& rgb,
   if (h >= 360)
     h = h - 360; //:              (Hue must be less than 360)
 
-  h = h * (255.0 / 360.0);
-  s = s * 255.0;
+  h = (vxl_byte)(h * (255.0 / 360.0));
+  s = (vxl_byte)(s * 255.0);
 }
 
 void brip_vil_float_ops::ihs_to_rgb(vil_rgb<vxl_byte> & rgb,
