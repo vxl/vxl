@@ -73,19 +73,19 @@ transfer_error_covar( vnl_vector<double> const& from_loc  ) const
   double h_1Tp = dot_product(h_1, p);
   double h_2Tp_inv = 1/dot_product(h_2, p);
 
-  J_wrt_h(0,0) = J_wrt_h(1,3) = p(0);
-  J_wrt_h(0,1) = J_wrt_h(1,4) = p(1);
-  J_wrt_h(0,2) = J_wrt_h(1,5) = p(2);
+  J_wrt_h(0,0) = J_wrt_h(1,3) = p[0];
+  J_wrt_h(0,1) = J_wrt_h(1,4) = p[1];
+  J_wrt_h(0,2) = J_wrt_h(1,5) = p[2];
 
-  J_wrt_h(0,6) = -1*p(0)*h_0Tp*h_2Tp_inv;
-  J_wrt_h(0,7) = -1*p(1)*h_0Tp*h_2Tp_inv;
-  J_wrt_h(0,8) = -1*p(2)*h_0Tp*h_2Tp_inv;
+  J_wrt_h(0,6) = -1*p[0]*h_0Tp*h_2Tp_inv;
+  J_wrt_h(0,7) = -1*p[1]*h_0Tp*h_2Tp_inv;
+  J_wrt_h(0,8) = -1*p[2]*h_0Tp*h_2Tp_inv;
 
-  J_wrt_h(1,6) = -1*p(0)*h_1Tp*h_2Tp_inv;
-  J_wrt_h(1,7) = -1*p(1)*h_1Tp*h_2Tp_inv;
-  J_wrt_h(1,8) = -1*p(2)*h_1Tp*h_2Tp_inv;
+  J_wrt_h(1,6) = -1*p[0]*h_1Tp*h_2Tp_inv;
+  J_wrt_h(1,7) = -1*p[1]*h_1Tp*h_2Tp_inv;
+  J_wrt_h(1,8) = -1*p[2]*h_1Tp*h_2Tp_inv;
 
-  J_wrt_h(1,8) *= h_2Tp_inv;
+  J_wrt_h *= h_2Tp_inv;
 
   return J_wrt_h * covar_ * J_wrt_h.transpose();
 }
