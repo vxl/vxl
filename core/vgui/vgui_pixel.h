@@ -175,6 +175,16 @@ vxl_byte vgui_pixel_clamp( vxl_byte in )
 
 //: Clamps the given type into [0,255].
 //
+// This overload only checks the lower bound.
+inline
+vxl_byte vgui_pixel_clamp( vxl_sbyte in )
+{
+  if( in < 0 ) return 0u;
+  return in;
+}
+
+//: Clamps the given type into [0,255].
+//
 // This overload only checks the upper bound, since the type is
 // unsigned.
 inline
