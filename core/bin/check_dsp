@@ -41,7 +41,7 @@ foreach $dir (@DIRS)
       closedir(TMP);
     }
   }
-  if ($dir =~ m/\bvil$/) {
+  if ($dir =~ m/\bvil2?$/) {
     opendir(TMP,"$dir/file_formats");
     foreach $x (readdir(TMP)) { push @tmp_list, "file_formats/$x"; }
     closedir(TMP);
@@ -53,6 +53,13 @@ foreach $dir (@DIRS)
   }
   if ($dir =~ m/\bvipl$/) {
     foreach $sd ( ("filter","section","accessors","vipl_with_section","vipl_with_vbl_array_2d","vipl_with_vnl_matrix","vipl_with_section/accessors","vipl_with_vbl_array_2d/accessors","vipl_with_vnl_matrix/accessors") ) {
+      opendir(TMP,"$dir/$sd");
+      foreach $x (readdir(TMP)) { push @tmp_list, "$sd/$x"; }
+      closedir(TMP);
+    }
+  }
+  if ($dir =~ m/\bvepl2$/) {
+    foreach $sd ( ("accessors","section") ) {
       opendir(TMP,"$dir/$sd");
       foreach $x (readdir(TMP)) { push @tmp_list, "$sd/$x"; }
       closedir(TMP);
@@ -125,6 +132,7 @@ foreach $dir (@DIRS)
       }
       if (m/^\s*(SOURCES|MINI_PROG_SOURCES|TESTS|TESTMAIN)\s*\:?\=\s*(\S+)/) {
         $file = "$2";
+        print "$file\t\#specified in $makef does not exist\n" unless (-f "$dir/$file");
         @sources = ($file);
         @tests = ($file) if ($1 eq "TESTS");
         $file =~ s/\.(c|cxx|cc|cpp|C)$/.h/;
@@ -132,6 +140,7 @@ foreach $dir (@DIRS)
       }
       if (m/^\s*(MANPAGE_SOURCES)\s*\:?\=\s*(\S+)/) {
         $file = "$2";
+        print "$file\t\#specified in $makef does not exist\n" unless (-f "$dir/$file");
         push @hsources, $file;
         if ($file =~ m/\.txx$/) {
           $file =~ s/\.txx$/.h/;
@@ -147,6 +156,7 @@ foreach $dir (@DIRS)
           }
         }
         else {
+          print "$file\t\#specified in $makef does not exist\n" unless (-f "$dir/$file");
           push @sources, $file;
           push @tests, $file if ($1 eq "TESTS");
           $file =~ s/\.(c|cxx|cc|cpp|C)$/.h/;
@@ -156,6 +166,7 @@ foreach $dir (@DIRS)
       }
       if (m/^\s*(MANPAGE_SOURCES)\s*\+\=\s*(\S+)/) {
         $file = "$2";
+        print "$file\t\#specified in $makef does not exist\n" unless (-f "$dir/$file");
         push @hsources, $file;
         if ($file =~ m/\.txx$/) {
           $file =~ s/\.txx$/.h/;
@@ -222,9 +233,9 @@ foreach $dir (@DIRS)
     foreach $x (@tmpl_list) {
       next if ($x eq "\$\{$moc_files\}");
       if ( $x =~ m/^\$\{(\S+sources)\}$/ ) { ; }
-      elsif ( $x =~ m/\.h(\.in)?$/) { push @hsource_files, "$x"; }
-      elsif ( $x =~ m/\.rc$/) { push @hsource_files, "$x"; }
-      elsif ( $x =~ m/\.txx$/) { push @hsource_files, "$x"; }
+      elsif (-f "$dir/$x" && $x =~ m/\.h(\.in)?$/) { push @hsource_files, "$x"; }
+      elsif (-f "$dir/$x" && $x =~ m/\.rc$/) { push @hsource_files, "$x"; }
+      elsif (-f "$dir/$x" && $x =~ m/\.txx$/) { push @hsource_files, "$x"; }
       elsif (-f "$dir/$x") { push @source_files, "$x"; }
       elsif (-f "$dir/$x.cxx") { printf "Should replace $x by $x.cxx in $cmakef\n"; push @source_files, "$x.cxx"; }
       elsif (-f "$dir/$x.c") { printf "Should replace $x by $x.c in $cmakef\n"; push @source_files, "$x.c"; }
@@ -364,7 +375,7 @@ foreach $dir (@DIRS)
                     $sources eq "internals/vgui_accelerate_x11.cxx");
         }
         if ($sources lt $source_files) {
-          print STDOUT "SOURCE_FILES($sources)\tis missing from $cmakef\n";
+          print STDOUT " $sources\tis missing from SOURCE_FILES in $cmakef\n";
         }
       } else {
         print STDOUT "SOURCES += $sources\tmust be removed from $makef\n"
@@ -486,7 +497,7 @@ foreach $dir (@DIRS)
           print STDOUT "SOURCE=.\\$hsources\tis missing from $f (header files)\n";
         }
         if ($hsources lt $hsource_files) {
-          print STDOUT "SOURCE_FILES($hsources)\tis missing from $cmakef\n";
+          print STDOUT " $hsources\tis missing from SOURCE_FILES in $cmakef\n";
         }
       } else {
         print STDOUT "MANPAGE_SOURCES += $hsources\tmust be removed from $makef\n";
