@@ -452,101 +452,101 @@ void brct_algos::print_motion_array(vnl_matrix<double>& H)
 
 void brct_algos::write_vrml_header(vcl_ofstream& str)
 {
-  str << "#VRML V2.0 utf8 \n";
-  str << "Background {  \n";
-  str << "  skyColor [ 1 1 1 ]\n";
-  str << "  groundColor [ 1 1 1 ]\n";
-  str << "}\n";
-  str << "PointLight {\n";
-  str << "  on FALSE\n";
-  str << "  intensity 1 \n";
-  str << "ambientIntensity 0 \n";
-  str << "color 1 1 1 \n";
-  str << "location 0 0 0\n"; 
-  str << "attenuation 1 0 0 \n";
-  str << "radius 100  \n";
-  str << "}\n";
+  str << "#VRML V2.0 utf8\n"
+      << "Background {\n"
+      << "  skyColor [ 1 1 1 ]\n"
+      << "  groundColor [ 1 1 1 ]\n"
+      << "}\n"
+      << "PointLight {\n"
+      << "  on FALSE\n"
+      << "  intensity 1\n"
+      << "ambientIntensity 0\n"
+      << "color 1 1 1\n"
+      << "location 0 0 0\n"
+      << "attenuation 1 0 0\n"
+      << "radius 100\n"
+      << "}\n";
 }
 void brct_algos::write_vrml_trailer(vcl_ofstream& str)
 {
 }
-void brct_algos::write_vrml_points(vcl_ofstream& str, 
-                       vcl_vector<vsol_point_3d_sptr> const& pts3d)
+void brct_algos::write_vrml_points(vcl_ofstream& str,
+                                   vcl_vector<vsol_point_3d_sptr> const& pts3d)
 {
-  str << "Shape {\n";
-  str << "  appearance NULL\n";
-  str << "    geometry PointSet {\n";
-  str << "      color NULL\n";
-  str << "      coord Coordinate{\n";
-  str << "       point[\n";
+  str << "Shape {\n"
+      << "  appearance NULL\n"
+      << "    geometry PointSet {\n"
+      << "      color NULL\n"
+      << "      coord Coordinate{\n"
+      << "       point[\n";
   int n = pts3d.size();
-  for(int i =0; i<n; i++)
-    str << -pts3d[i]->x() << " " << pts3d[i]->y() << " " << pts3d[i]->z() << "\n";
-str << "   ] \n";
-str << "  }\n";
-str << " }\n";
-str << "}\n";
+  for (int i =0; i<n; i++)
+    str << -pts3d[i]->x() << ' ' << pts3d[i]->y() << ' ' << pts3d[i]->z() << '\n';
+  str << "   ]\n"
+      << "  }\n"
+      << " }\n"
+      << "}\n";
 }
 void brct_algos::write_vrml_box(vcl_ofstream& str, vsol_box_3d_sptr const& box,
                                 const float r, const float g, const float b,
                                 const float transparency)
 {
-  if(!box)
+  if (!box)
     return;
   double x0 = box->get_min_x(), y0 = box->get_min_y(), z0 = box->get_min_z();
   double width = box->width(), height = box->height(), depth = box->depth();
   double hw=width/2, hh=height/2, hd=depth/2;
-  str << "Transform { \n";
-  str << "translation " << -(hw + x0) << " " << (hh + y0) << " " 
-      << " " << (hd + z0) << "\n";
-  str << "children [ \n";
-  str << "Shape {\n";
-  str << " appearance Appearance{\n";
-  str << "   material Material\n";
-  str << "    {\n";
-  str << "      diffuseColor " << r << " " << g << " " << b << "\n";
-  str << "      transparency " << transparency << "\n";
-  str << "    }\n";
-  str << "  }\n";
-  str << " geometry Box\n";
-  str <<   "{\n";  
-  str << "  size " << width << " " << height << " " <<  depth << "\n";
-  str <<  "   }\n";
-  str <<  "  }\n";
-  str <<  " ]\n";
-  str << "}\n";
+  str << "Transform {\n"
+      << "translation " << -(hw + x0) << ' ' << (hh + y0) << ' '
+      << ' ' << (hd + z0) << '\n'
+      << "children [\n"
+      << "Shape {\n"
+      << " appearance Appearance{\n"
+      << "   material Material\n"
+      << "    {\n"
+      << "      diffuseColor " << r << ' ' << g << ' ' << b << '\n'
+      << "      transparency " << transparency << '\n'
+      << "    }\n"
+      << "  }\n"
+      << " geometry Box\n"
+      <<   "{\n"
+      << "  size " << width << ' ' << height << ' ' <<  depth << '\n'
+      <<  "   }\n"
+      <<  "  }\n"
+      <<  " ]\n"
+      << "}\n";
 }
 
-void brct_algos::read_vrml_points(vcl_ifstream& str, 
-                      vcl_vector<vsol_point_3d_sptr>& pts3d)
+void brct_algos::read_vrml_points(vcl_ifstream& str,
+                                  vcl_vector<vsol_point_3d_sptr>& pts3d)
 {
   pts3d.clear();
   bool point_set_found = false;
   vcl_string s, ps = "point[";
-  while(!point_set_found&&!str.eof())
-    {
-      str >> s;
-      point_set_found = (s==ps);
-    }
-  if(!point_set_found)
+  while (!point_set_found&&!str.eof())
+  {
+    str >> s;
+    point_set_found = (s==ps);
+  }
+  if (!point_set_found)
     return;
 
-  //we found the begining of the points
+  //we found the beginning of the points
   vcl_string np0 = "#", np1 = "npoints";
   str >> s;
-  if(s!=np0)
+  if (s!=np0)
     return;
   str >> s;
-  if(s!=np1)
+  if (s!=np1)
     return;
   int npts = 0;
   str >> npts;
-  for(int i = 0; i<npts; i++)
-    {
-      double x=0, y=0, z=0;
-      str >> x >> y >> z;
-      vsol_point_3d_sptr p = new vsol_point_3d(x, y, z);
-      pts3d.push_back(p);
-    }
+  for (int i = 0; i<npts; i++)
+  {
+    double x=0, y=0, z=0;
+    str >> x >> y >> z;
+    vsol_point_3d_sptr p = new vsol_point_3d(x, y, z);
+    pts3d.push_back(p);
+  }
 }
-    
+
