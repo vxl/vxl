@@ -13,12 +13,13 @@
 #include <vil/algo/vil_convolve_1d.h>
 #include <vil/vil_math.h>
 #include <vil/vil_transpose.h>
+#include <vil/vil_plane.h>
 
 
 //: Compute 1st, 2nd, and 3rd order C.d.i.s of an image.
 // The input must be 1 plane, the output will be 8 planes.
 template <class S, class T>
-void vil_cartesian_differential_invariants_3(
+inline void vil_cartesian_differential_invariants_3_1plane(
   const vil_image_view<S>& src, vil_image_view<T>& dest, double scale)
 {
   assert(src.nplanes()==1);
@@ -134,6 +135,26 @@ void vil_cartesian_differential_invariants_3(
                   +(3.0*Lxxy(i,j)*Lx(i,j)*Lx(i,j)*Ly(i,j))
                   +(3.0*Lxyy(i,j)*Lx(i,j)*Ly(i,j)*Ly(i,j));
     }
+  }
+}
+
+
+//: Compute 1st, 2nd, and 3rd order C.d.i.s of an image.
+template <class S, class T>
+inline void vil_cartesian_differential_invariants_3(
+  const vil_image_view<S>& src, vil_image_view<T>& dest, double scale)
+{
+  dest.set_size(src.ni(), src.nj(), src.nplanes()*8);
+  assert (dest.planestep() >= dest.ni() * dest.nj());
+  
+  for (unsigned p=0; p < src.nplanes(); ++p)
+  {
+    vil_image_view<T> destplanes = vil_planes(dest, p*8, 1, 8);
+#ifndef NDEBUG
+    vil_image_view<T> check = destplanes;
+#endif
+    vil_cartesian_differential_invariants_3_1plane(vil_plane(src, p), destplanes, scale);
+    assert(destplanes == check);
   }
 }
 
