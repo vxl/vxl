@@ -2,6 +2,8 @@ USES += contrib/gel core
 include ../config.mk
 include ${IUEROOT}/core/testlib/config.mk
 
+TESTMAIN := test_driver.cxx
+
 TESTS += test_vertex_2d.cxx
 TESTS += test_zero_chain.cxx
 TESTS += test_edge_2d.cxx
