@@ -1103,6 +1103,9 @@ SOURCE=.\vnl_definite_integral.h
 # Begin Source File
 SOURCE=.\vnl_integrant_fnct.h
 # End Source File
+# Begin Source File
+SOURCE=.\vnl_util_fixed.h
+# End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
