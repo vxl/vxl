@@ -1,3 +1,5 @@
+//:
+// \file
 #include <vcl_iostream.h>
 
 #include <testlib/testlib_test.h>
@@ -18,7 +20,6 @@
 #include "test_util.h"
 
 namespace {
-
 
 void
 test_trans_affine()
@@ -72,7 +73,7 @@ test_trans_affine()
   vnl_vector<double> true_direction( 3 );
   true_direction = A * direction;  // should specify manually?
   true_direction.normalize();
-  
+
   vnl_vector<double> xformed_direction( 3 );
 
   // for the affine, the location is irrelevant when transforming a
@@ -114,21 +115,21 @@ test_trans_quadratic()
   Q(0,0) = 1.0;  Q(0,1) = 0; Q(0,2) = 0.5;
   Q(1,0) = 0.05; Q(1,1) = 1; Q(1,2) = 0.001;
 
-  A(0,0) = 2.0;  A(0,1) = 4.0; 
-  A(1,0) = 1.0;  A(1,1) =-1.0; 
+  A(0,0) = 2.0;  A(0,1) = 4.0;
+  A(1,0) = 1.0;  A(1,1) =-1.0;
 
   t[0] =  3.0;
   t[1] = -4.0;
 
   // The same transform, centered at from_center(4,10) and to_center(-5,30)
-  
-  uc_A(0,0) = -8-5+2;  
-  uc_A(0,1) = -2+4; 
+
+  uc_A(0,0) = -8-5+2;
+  uc_A(0,1) = -2+4;
   uc_A(1,0) = -0.4-0.01+1;
-  uc_A(1,1) = -20-0.004-1; 
+  uc_A(1,1) = -20-0.004-1;
 
   uc_tt[0] =  16+20-8-40+3-5;
-  uc_tt[1] =  0.05*16+100+0.04-4+10-4+30; 
+  uc_tt[1] =  0.05*16+100+0.04-4+10-4+30;
 
   vnl_vector<double> from_center(2), to_center(2);
   from_center[0] = 4; from_center[1] = 10;
@@ -145,7 +146,7 @@ test_trans_quadratic()
   point[1] = 2.0;
 
   vnl_vector<double> true_point(2);
-  true_point[0] = 29;  
+  true_point[0] = 29;
   true_point[1] = 1.4560;
 
   vnl_vector<double> xformed_point( 2 );
@@ -167,7 +168,7 @@ test_trans_quadratic()
   true_direction[0] = 0.9768;
   true_direction[1] = 0.2141;
   true_direction.normalize();
-  
+
   vnl_vector<double> xformed_direction( 2 );
   xform->map_direction( point, direction, xformed_direction );
   testlib_test_perform( close(xformed_direction,true_direction,  1e-4) );
@@ -179,13 +180,12 @@ test_trans_quadratic()
   xform->inv_map(true_point, false, delta_to, inv_map_pt, next_inv_map);
   testlib_test_perform(  close(point, inv_map_pt, 1e-2) );
 
-  //test the constructor with input xform as centered 
+  //test the constructor with input xform as centered
   testlib_test_begin( "Construct 2D quadratic transform object with centered xform" );
   rgrl_transformation_sptr xform2 = new rgrl_trans_quadratic( Q, A, t, covar, from_center, to_center);
-  testlib_test_perform( rgrl_cast<rgrl_trans_quadratic*>(xform2)->Q() == Q 
-                        && close(rgrl_cast<rgrl_trans_quadratic*>(xform2)->A(),uc_A) 
+  testlib_test_perform( rgrl_cast<rgrl_trans_quadratic*>(xform2)->Q() == Q
+                        && close(rgrl_cast<rgrl_trans_quadratic*>(xform2)->A(),uc_A)
                         && close(rgrl_cast<rgrl_trans_quadratic*>(xform2)->t(),uc_tt) );
-
 }
 
 void
@@ -193,39 +193,38 @@ test_trans_spline()
 {
   // 1D spline
   {
-  vcl_cout << "test 1D spline transformation with affine\n";
-  vcl_vector< rgrl_spline_sptr > splines;
-  rgrl_spline_sptr spline = new rgrl_spline( vnl_vector< unsigned > ( 1, 1 ) );
-  vnl_vector< double > c( spline->num_of_control_points() );
-//    for( unsigned i=0; i<c.size(); ++i )
-//      c[ i ] = random.drand32( 0, 10 );
-  c[ 0 ] = 1.0;
-  c[ 1 ] = 2.0;
-  c[ 2 ] = 2.0;
-  c[ 3 ] = 1.0;
-  spline->set_control_points( c );
-  splines.push_back( spline );
-  vnl_vector< double > x0( 1, 0.0 );
-  vnl_vector< double > delta( 1, 1.0 );
-  
-  vnl_matrix< double > A( 1, 1, 2.0 );
-  vnl_vector< double > T( 1, 1.0 );
-  rgrl_transformation_sptr affine = new rgrl_trans_affine( A, T );
-  rgrl_trans_spline trans( splines, x0, delta, affine );
+    vcl_cout << "test 1D spline transformation with affine\n";
+    vcl_vector< rgrl_spline_sptr > splines;
+    rgrl_spline_sptr spline = new rgrl_spline( vnl_vector< unsigned > ( 1, 1 ) );
+    vnl_vector< double > c( spline->num_of_control_points() );
+//  for ( unsigned i=0; i<c.size(); ++i )
+//    c[ i ] = random.drand32( 0, 10 );
+    c[ 0 ] = 1.0;
+    c[ 1 ] = 2.0;
+    c[ 2 ] = 2.0;
+    c[ 3 ] = 1.0;
+    spline->set_control_points( c );
+    splines.push_back( spline );
+    vnl_vector< double > x0( 1, 0.0 );
+    vnl_vector< double > delta( 1, 1.0 );
 
-  vnl_vector< double > from( 1, 0.5 );
-  vnl_vector< double > to( 1 );
-  vnl_vector< double > mapped_to( 1, 11.75/6+0.5*2+1 );
-  trans.map_location( from, to );
-  vcl_cout << "mapped to = " << to << "\n";
-  TEST( "test map_location()", (mapped_to-to).two_norm() < 1e-5, true );
+    vnl_matrix< double > A( 1, 1, 2.0 );
+    vnl_vector< double > T( 1, 1.0 );
+    rgrl_transformation_sptr affine = new rgrl_trans_affine( A, T );
+    rgrl_trans_spline trans( splines, x0, delta, affine );
+
+    vnl_vector< double > from( 1, 0.5 );
+    vnl_vector< double > to( 1 );
+    vnl_vector< double > mapped_to( 1, 11.75/6+0.5*2+1 );
+    trans.map_location( from, to );
+    vcl_cout << "mapped to = " << to << '\n';
+    TEST( "test map_location()", (mapped_to-to).two_norm() < 1e-5, true );
   }
 }
 
 //: A test for the rigid transformation
 void test_trans_rigid()
 {
-
   // the tolerance for angle extraction
   double tol = 1e-10;
 
@@ -238,10 +237,9 @@ void test_trans_rigid()
 
   const int NUM_TRIALS = 1000;
 
-    
+
   for (int qqq=0; qqq<NUM_TRIALS; qqq++)
   {
-
     double phi = randomizer.drand32(-vnl_math::pi/2,vnl_math::pi/2);
     double alpha = randomizer.drand32(-vnl_math::pi/2,vnl_math::pi/2);
     double theta = randomizer.drand32(-vnl_math::pi/2,vnl_math::pi/2);
@@ -256,22 +254,22 @@ void test_trans_rigid()
 
     vnl_matrix<double> R = rigid3.R();
 
-    double det = vnl_determinant<double>(R);
+    double det = vnl_determinant(R);
     if (! det == 1.0 )
     {
-      vcl_cout<<"Failing with determinant test"<<vcl_endl;
-      vcl_cout<<"Determinant is "<<det<<vcl_endl;
+      vcl_cout<<"Failing with determinant test\n"
+              <<"Determinant is "<<det<<vcl_endl;
       statusdet = false;
     }
 
-    if (!( vnl_math_abs(phi-dphi)< tol     && 
-           vnl_math_abs(theta-dtheta)< tol && 
+    if (!( vnl_math_abs(phi-dphi)< tol     &&
+           vnl_math_abs(theta-dtheta)< tol &&
            vnl_math_abs(alpha-dalpha)< tol ))
     {
       testlib_test_perform(false);
-      vcl_cout<<"Failing for this case: "<<vcl_endl;
-      vcl_cout<<"initial   phi,alpha,theta = "<<phi<<" "<<alpha<<" "<<theta<<vcl_endl;
-      vcl_cout<<"extracted phi,alpha,theta = "<<dphi<<" "<<dalpha<<" "<<dtheta<<vcl_endl;
+      vcl_cout<<"Failing for this case:\n"
+              <<"initial   phi,alpha,theta = "<<phi<<' '<<alpha<<' '<<theta<<vcl_endl
+              <<"extracted phi,alpha,theta = "<<dphi<<' '<<dalpha<<' '<<dtheta<<vcl_endl;
       status3 = false;
     }
 
@@ -280,12 +278,11 @@ void test_trans_rigid()
     if (! (vnl_math_abs(theta-dtheta)< tol ) )
     {
       testlib_test_perform(false);
-      vcl_cout<<"Failing for this case: "<<vcl_endl;
-      vcl_cout<<"initial   theta = "<<theta<<vcl_endl;
-      vcl_cout<<"extracted theta = "<<dtheta<<vcl_endl;
+      vcl_cout<<"Failing for this case:\n"
+              <<"initial   theta = "<<theta<<vcl_endl
+              <<"extracted theta = "<<dtheta<<vcl_endl;
       status2 = false;
     }
-
   }
   if (status3)
   {
@@ -301,12 +298,12 @@ void test_trans_rigid()
   testlib_test_begin(" Determinant of 3d rotation is unity ");
   testlib_test_perform(statusdet);
 
-  
+
   vnl_matrix<double> A;
 
   rgrl_transformation_sptr xform;
   rgrl_trans_rigid* rigid;
- 
+
   double phi = randomizer.drand32(-vnl_math::pi/2,vnl_math::pi/2);
   double alpha = randomizer.drand32(-vnl_math::pi/2,vnl_math::pi/2);
   double theta = randomizer.drand32(-vnl_math::pi/2,vnl_math::pi/2);
@@ -361,7 +358,7 @@ void test_trans_rigid()
 
   xform->map_direction( point, direction, xformed_direction );
   testlib_test_perform( close(xformed_direction, A*direction,1e-6));
-  
+
   testlib_test_begin( "inv_map and map_location are inverses" );
 
   // Test the inv_map functions
@@ -369,7 +366,6 @@ void test_trans_rigid()
   xform->inv_map(point, inv_map_pt);
   xform->map_location(inv_map_pt,inv_inv_map_pt);
   testlib_test_perform( close(point, inv_inv_map_pt, 1e-8) );
-  
 }
 
 
