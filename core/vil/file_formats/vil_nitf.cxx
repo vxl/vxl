@@ -213,8 +213,7 @@ bool vil_nitf_file_format::read_header_data()
       vcl_cerr << method_name << "WARNING: "
                << "after reading message header, file position = "
                << save_pos << " is not equal to message header length = "
-               << message_header_->GetHeaderLength()
-               << vcl_endl;
+               << message_header_->GetHeaderLength() << vcl_endl;
     }
 
     // FOR NOW, JUST READ FIRST IMAGE SUBHEADER.  MAL 20oct2003
@@ -467,20 +466,20 @@ vil_pixel_format vil_nitf_image::pixel_format() const
 
   if (image_subheader_ != static_cast<vil_nitf_image_subheader_sptr>(0))
   {
-    switch(get_bits_per_pixel())
+    switch (get_bits_per_pixel())
     {
-      case 8:
-        format = VIL_PIXEL_FORMAT_BYTE;
-        break;
-      case 16:
-        format = VIL_PIXEL_FORMAT_UINT_16;
-        break;
-      case 32:
-        format = VIL_PIXEL_FORMAT_UINT_32;
-        break;
-      default:
-        format = VIL_PIXEL_FORMAT_UNKNOWN;
-        break;
+     case 8:
+      format = VIL_PIXEL_FORMAT_BYTE;
+      break;
+     case 16:
+      format = VIL_PIXEL_FORMAT_UINT_16;
+      break;
+     case 32:
+      format = VIL_PIXEL_FORMAT_UINT_32;
+      break;
+     default:
+      format = VIL_PIXEL_FORMAT_UNKNOWN;
+      break;
     }
     // Deal separately with RBG case
     if (image_subheader_->NBANDS == 3 &&
@@ -607,36 +606,36 @@ vil_image_view_base_sptr vil_nitf_image::get_single_band_view(
 
   vil_memory_chunk_sptr buffer = read_single_band_data(i0, ni, j0, nj);
 
-  switch(pixel_format())
+  switch (pixel_format())
   {
-    case VIL_PIXEL_FORMAT_BYTE:
-      image_view = new vil_image_view<vxl_byte>(
+   case VIL_PIXEL_FORMAT_BYTE:
+    image_view = new vil_image_view<vxl_byte>(
                        buffer, (const vxl_byte * ) buffer->data(),
                        ni, nj, nplanes(), nplanes(), nplanes() * ni, 1);
-      break;
+    break;
 
-    case VIL_PIXEL_FORMAT_UINT_16:
-      image_view = new vil_image_view<vxl_uint_16>(
+   case VIL_PIXEL_FORMAT_UINT_16:
+    image_view = new vil_image_view<vxl_uint_16>(
                        buffer, (const vxl_uint_16 * ) buffer->data(),
                        ni, nj, nplanes(), nplanes(), nplanes() * ni, 1);
-      break;
+    break;
 
-    case VIL_PIXEL_FORMAT_UINT_32:
-      image_view = new vil_image_view<vxl_uint_32>(
+   case VIL_PIXEL_FORMAT_UINT_32:
+    image_view = new vil_image_view<vxl_uint_32>(
                        buffer, (const vxl_uint_32 * ) buffer->data(),
                        ni, nj, nplanes(), nplanes(), nplanes() * ni, 1);
-      break;
+    break;
 #if 0
-    case VIL_PIXEL_FORMAT_RGB_BYTE:
-      image_view = new vil_image_view<vil_rgb<vxl_byte> >(
+   case VIL_PIXEL_FORMAT_RGB_BYTE:
+    image_view = new vil_image_view<vil_rgb<vxl_byte> >(
                        buffer, (const vil_rgb<vxl_byte> * ) buffer->data(),
                        ni, nj, nplanes(), nplanes(), nplanes() * ni, 1);
-      break;
+    break;
 #endif
-    default:
-      vcl_cerr << method_name << "Logic not implemented for pixel format = "
-               << pixel_format() << vcl_endl;
-      break;
+   default:
+    vcl_cerr << method_name << "Logic not implemented for pixel format = "
+             << pixel_format() << vcl_endl;
+    break;
   }  // end switch pixel_format
 
   return image_view;
@@ -773,14 +772,14 @@ vil_memory_chunk_sptr vil_nitf_image::read_single_band_data(
       vcl_cout << method_name << "start_block_x = " << start_block_x
                << "  max_block_x = " << max_block_x
                << "  start_block_row_offset = " << start_block_row_offset
-               << vcl_endl;
-      vcl_cout << method_name << "  start_block_x_offset = " << start_block_x_offset
-               << "  expected last X pixel = " << last_image_col_num << vcl_endl;
-      vcl_cout << method_name << "start_block_y = " << start_block_y
-               << "  max_block_y = " << max_block_y << vcl_endl;
-      vcl_cout << "expected last Y pixel = " << last_image_row_num << vcl_endl;
+               << vcl_endl
+               << method_name << "  start_block_x_offset = " << start_block_x_offset
+               << "  expected last X pixel = " << last_image_col_num << vcl_endl
+               << method_name << "start_block_y = " << start_block_y
+               << "  max_block_y = " << max_block_y << vcl_endl
+               << "expected last Y pixel = " << last_image_row_num << vcl_endl
 
-      vcl_cout << method_name << "display pixels = " << display_pixels
+               << method_name << "display pixels = " << display_pixels
                << " rows by " << display_pixels << " columns" << vcl_endl;
   }
 
@@ -1036,7 +1035,7 @@ bool vil_nitf_image::construct_pyramid_images(
 
   bool success = true;
 
-  char * tag_name = vil_property_quantisation_depth;
+  const char * tag_name = vil_property_quantisation_depth;
   unsigned int bits_per_component = 0;
   bool got_property = this->get_property(tag_name, &bits_per_component);
 
