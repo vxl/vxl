@@ -48,48 +48,46 @@ compute_matches( rgrl_feature_set const&       from_set,
   matches_sptr->reserve( from.size() );
 
   //  generate the matches for each feature of this feature type in the current region
-  for ( feat_iter fitr = from.begin(); fitr != from.end(); ++fitr ) {
-
+  for ( feat_iter fitr = from.begin(); fitr != from.end(); ++fitr )
+  {
     rgrl_feature_sptr mapped = (*fitr)->transform( current_xform );
     feat_vector matching_features = to_set.k_nearest_features( mapped, k_ );
 
     // find the one most similar
     double max_weight = -1;
     rgrl_feature_sptr max_feature;
-    for ( feat_iter i = matching_features.begin(); i != matching_features.end(); ++i ) {
-      
-      if( thres_ > 0 && vnl_vector_ssd( (*i)->location(), mapped->location() ) > thres_ )
+    for ( feat_iter i = matching_features.begin(); i != matching_features.end(); ++i )
+    {
+      if ( thres_ > 0 && vnl_vector_ssd( (*i)->location(), mapped->location() ) > thres_ )
          continue;
-      
+
       double wgt = (*i)->absolute_signature_weight( mapped );
-      
-      if( wgt > max_weight ) {
+
+      if ( wgt > max_weight ) {
         max_weight = wgt;
         max_feature = *i;
       }
     }
-  
+
     // Add match
-    // for consitent behavior, use 
+    // for consitent behavior, use
     // add_feature_and_matches() which computes the signature weight
     // We could also add one match with max_weight, which
-    // should be identical action. 
-    // 
-    
+    // should be identical action.
+    //
+
     //feat_vector pruned_set;
-    //if( max_feature )
+    //if ( max_feature )
     //  pruned_set.push_back( max_feature );
-    //  
+    //
     //matches_sptr->add_feature_and_matches( *fitr, mapped, pruned_set );
 
-    if( max_feature )
+    if ( max_feature )
       matches_sptr->add_feature_and_match( *fitr, mapped, max_feature, max_weight );
-
   }
 
   return matches_sptr;
 }
-
 
 
 //  It is to restrict the number of nearest neighbors during the inversion.
@@ -108,9 +106,9 @@ add_one_flipped_match( rgrl_match_set_sptr&      inv_set,
   rgrl_feature_sptr mapped = from->transform( *inverse_xform );
 
   // for consistent behavior,
-  // pick the k nearest neighbor, 
+  // pick the k nearest neighbor,
   // and then pick the one with highest similarity
-  // 
+  //
 
   internal_dist_node one;
   // compute the distance
@@ -118,45 +116,45 @@ add_one_flipped_match( rgrl_match_set_sptr&      inv_set,
   //
   vcl_vector< internal_dist_node > dist_nodes;
   dist_nodes.reserve( size );
-  for ( nodes_vec_iterator itr = begin_iter; itr!=end_iter; ++itr ) {
-    
+  for ( nodes_vec_iterator itr = begin_iter; itr!=end_iter; ++itr )
+  {
     internal_dist_node tmp_node;
-    
+
     // NOTE: should not use rgrl_feature::geometric_error() function,
     //       because it may compute normal distance, which is not desired
     //
     tmp_node.geo_err_ = vnl_vector_ssd( itr->from_->location(), mapped->location() );
     tmp_node.itr_ = itr;
-    
+
     // push back
     dist_nodes.push_back( tmp_node );
   }
 
   // 1. Kth element based on distance
   //
-  if( size > k_ )
+  if ( size > k_ )
     vcl_nth_element( dist_nodes.begin(), dist_nodes.begin()+k_, dist_nodes.end() );
-  
+
   // 2. Most similar feature
   //
   double max_weight = -1.0;
   rgrl_feature_sptr max_feature;
-  for( unsigned i=0; i<k_ && i<size; ++i ) {
-
-    if( thres_ > 0 && dist_nodes[i].geo_err_ > thres_ )
+  for ( unsigned i=0; i<k_ && i<size; ++i )
+  {
+    if ( thres_ > 0 && dist_nodes[i].geo_err_ > thres_ )
       continue;
 
     rgrl_feature_sptr const& one_fea = dist_nodes[i].itr_->from_;
     double wgt = one_fea->absolute_signature_weight( mapped );
-    
-    if( wgt > max_weight ) {
+
+    if ( wgt > max_weight ) {
       max_weight = wgt;
       max_feature = one_fea;
     }
   }
-  
+
   // add matches
-  if( max_feature )
+  if ( max_feature )
     inv_set->add_feature_and_match( from, mapped, max_feature, max_weight );
 }
-  
+
