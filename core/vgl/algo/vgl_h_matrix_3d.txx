@@ -272,7 +272,7 @@ set_rotation_roll_pitch_yaw(T yaw, T pitch, T roll)
       t12_matrix_[r][c]=R[c][r];
 }
 
-//: Set to rotation specified by euler angles
+//: Set to rotation specified by Euler angles
 template <class T>
 void vgl_h_matrix_3d<T>::
 set_rotation_euler(T rz1, T ry, T rz2)
