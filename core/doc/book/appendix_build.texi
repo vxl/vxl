@@ -1,7 +1,41 @@
+After building VXL, you will want to write some code which links against
+your shiny new libraries. The details of this process vary depending on how
+you are building your own code. In general, as well as all the system standard libraries, you will need to
+tell your compiler and linker the following:
+
+@itemize @bullet
+@item
+For the include directories, you will need to use @code{$VXLSRC/vcl}
+and @code{$VXLSRC/core}. If you are using one of the contributed non-core
+libraries, e.g. the spatial objects library @code{vsol} in
+@code{contrib/gel}, then you need to add the relevant contrib directory,
+e.g. @code{$VXLSRC/contrib/gel}.
+
+@item
+With the default build options in VXL, all the libraries are placed in
+@code{$VXLBIN/lib}.
+
+@item
+You obviously need to decide which libraries to link against. As
+explained before, VXL is a collection of libraries. You will almost
+certainly have to link against @code{vcl}. You should also link against any
+libraries you explicitly use. e.g. if your code has a @code{#include
+<vnl/vector.h>} then link against @code{vnl}. Any missing libraries can be
+added as the linker complains they are missing. VXL's simple naming scheme
+should make it very easy to identify the missing library from the error
+message.
+@end itemize
+
 @anchor{CMake}
 @section CMake
 @cindex CMake
 @cindex CMakeLists.txt files
+
+If keeping track of include directories, etc. is too much hassle, or if you
+are building a project to run on multiple platforms, then we suggest using
+the CMake system to build your project. CMake automatically communicates the
+necessary settings between VXL and your project.
+
 
 VXL uses the CMake configuration system to generate Makefiles (for GNU
 Make or NMake) and MSVS Project files.  There are other build systems
@@ -492,7 +526,7 @@ New VXL source code directories for executables and libraries
 will need a @file{CMakeLists.txt} file, but not a
 @file{CMakeListsLink.txt} and not a @file{CMakeListsHeaders.txt} file.
 
-@section Other Build Systems
+@section Other Build Systems for Building VXL.
 @cindex .dsp files
 @cindex DSP files
 
