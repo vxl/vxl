@@ -1,36 +1,5 @@
-// <begin copyright notice>
-// ---------------------------------------------------------------------------
-//
-//                   Copyright (c) 1997 TargetJr Consortium
-//               GE Corporate Research and Development (GE CRD)
-//                             1 Research Circle
-//                            Niskayuna, NY 12309
-//                            All Rights Reserved
-//              Reproduction rights limited as described below.
-//
-//      Permission to use, copy, modify, distribute, and sell this software
-//      and its documentation for any purpose is hereby granted without fee,
-//      provided that (i) the above copyright notice and this permission
-//      notice appear in all copies of the software and related documentation,
-//      (ii) the name TargetJr Consortium (represented by GE CRD), may not be
-//      used in any advertising or publicity relating to the software without
-//      the specific, prior written permission of GE CRD, and (iii) any
-//      modifications are clearly marked and summarized in a change history
-//      log.
-//
-//      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
-//      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
-//      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
-//      IN NO EVENT SHALL THE TARGETJR CONSORTIUM BE LIABLE FOR ANY SPECIAL,
-//      INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND OR ANY
-//      DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
-//      WHETHER OR NOT ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR ON
-//      ANY THEORY OF LIABILITY ARISING OUT OF OR IN CONNECTION WITH THE
-//      USE OR PERFORMANCE OF THIS SOFTWARE.
-//
-// ---------------------------------------------------------------------------
-// <end copyright notice>
-
+//:
+// \file
 #include <vul/vul_timer.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>   // for vcl_abs(int)
@@ -140,7 +109,6 @@ gevd_contour::gevd_contour(float min_strength, int min_length,
 }
 
 
-
 //: Free space allocated for detecting contours.
 gevd_contour::~gevd_contour()
 {
@@ -149,8 +117,8 @@ gevd_contour::~gevd_contour()
 }
 
 
-//: Find network of linked edges and vertices, from 8-connected
-// edge elements. The contours must be less than 2 pixel wide,
+//: Find network of linked edges and vertices, from 8-connected edge elements.
+// The contours must be less than 2 pixel wide,
 // for example found from non maximum suppression.
 // Isolated edgels and short segments are erased.
 bool
@@ -212,13 +180,12 @@ gevd_contour::FindNetwork(gevd_bufferxy& edgels,
 
   for ( unsigned int i=0; i< vertices2.size(); i++)
     vertices->push_back( vertices2[i]);
-  
+
   return true;
 }
 
 
-//: Return TRUE if pixel is a local maximum,
-// and so is right on top of contour.
+//: Return TRUE if pixel is a local maximum, and so is right on top of contour.
 bool
 on_contour(const gevd_bufferxy& edgels, const int i, const int j)
 {
@@ -240,7 +207,8 @@ RecordPixel(int i, int j, gevd_bufferxy& edgels,
 }
 
 
-//: Find next best pixel on contour, searching for strongest response,
+//:
+// Find next best pixel on contour, searching for strongest response,
 // and favoring 4-connected over 8-connected.
 // Return 0, if no pixel is found, or direction in range [2*pi, 4*pi).
 int
@@ -266,7 +234,8 @@ NextPixel(int& i, int& j, const gevd_bufferxy& edgels)
 }
 
 
-//: Trace and collect pixels on thin contours, stronger pixels first,
+//:
+// Trace and collect pixels on thin contours, stronger pixels first,
 // and favoring 4-connected over 8-connected. Thinning is not used,
 // and so will avoid errors because of square grid tesselation.
 // A chain can not cross itself. It can only touch itself or another
@@ -297,7 +266,7 @@ gevd_contour::FindChains(gevd_bufferxy& edgels, const int njunction,
   const int xmax = edgels.GetSizeX()-rmax-1;
   const int ymax = edgels.GetSizeY()-rmax-1;
   vcl_vector<int> xloc(xmax+ymax), yloc(xmax+ymax); // work space for
-  
+
   for (int j = rmax; j <= ymax; j++)
     for (int i = rmax; i <= xmax; i++)
     {
@@ -351,8 +320,8 @@ gevd_contour::FindChains(gevd_bufferxy& edgels, const int njunction,
           x = xloc[0], y = yloc[0]; // start again from first pixel
 
           vcl_vector<int> xloctemp( xloc.size()), yloctemp( yloc.size());
-          
-		  for ( unsigned int iii=0; iii< xloc.size(); iii++)
+
+          for ( unsigned int iii=0; iii< xloc.size(); iii++)
             xloctemp[iii]= xloc[xloc.size()-1-iii];
           for ( unsigned int jjj=0; jjj< yloc.size(); jjj++)
             yloctemp[jjj]= yloc[yloc.size()-1-jjj];
@@ -420,7 +389,8 @@ gevd_contour::FindChains(gevd_bufferxy& edgels, const int njunction,
 }
 
 
-//: Check that end point of a weak contour touches another stronger
+//:
+// Check that end point of a weak contour touches another stronger
 // contour at an internal pixel. Localize the junction to pixel accuracy
 // by searching for shortest distance from end point to chain.
 // Gaussian smoothing can put local maximum change in filter response
@@ -501,7 +471,7 @@ DetectJunction(vtol_vertex_2d& end, int& index,
   vdgl_digital_curve_sptr dc2 =(stronger->curve()->cast_to_digital_curve());
 
   // find corresponding index on contour
-  for (int n = 0; n < dc2->get_interpolator()->get_edgel_chain()->size(); n++)  
+  for (int n = 0; n < dc2->get_interpolator()->get_edgel_chain()->size(); n++)
   {
     vdgl_edgel edgel= dc2->get_interpolator()->get_edgel_chain()->edgel(n);
 
@@ -529,14 +499,14 @@ ConfirmJunctionOnCycle(int index, float threshold,
 
   for (int n = index-radius; n <= index+radius; n++)
   {
-    int _n = (n-1+wrap)%len;    // modulo operations to wrap at borders
-    int n_ = (n+1+wrap)%len;
+    int nm = (n-1+wrap)%len;    // modulo operations to wrap at borders
+    int np = (n+1+wrap)%len;
 
-    vdgl_edgel _edgel= dc->get_interpolator()->get_edgel_chain()->edgel( _n);
-    vdgl_edgel edgel_= dc->get_interpolator()->get_edgel_chain()->edgel( n_);
+    vdgl_edgel edgel_m= dc->get_interpolator()->get_edgel_chain()->edgel( nm);
+    vdgl_edgel edgel_p= dc->get_interpolator()->get_edgel_chain()->edgel( np);
 
-    if (vcl_fabs(floatPixel(edgels, int( edgel_.x()), int( edgel_.y())) -
-                 floatPixel(edgels, int( _edgel.x()), int( _edgel.y())))
+    if (vcl_fabs(floatPixel(edgels, int( edgel_p.x()), int( edgel_p.y())) -
+                 floatPixel(edgels, int( edgel_m.x()), int( edgel_m.y())))
         > threshold)
       return true;
   }
@@ -544,8 +514,8 @@ ConfirmJunctionOnCycle(int index, float threshold,
 }
 
 
-
-//: Break the cycle at given index, and create new cycle from/to
+//:
+// Break the cycle at given index, and create new cycle from/to
 // and not including index pixel. Update the chain map accordingly.
 void
 BreakCycle(vtol_vertex_2d& junction, const int index,
@@ -837,9 +807,8 @@ NumConnectedRays(vtol_vertex_2d& v)
 }
 
 
-//: Detect touching another junction or end point,
-// from an end point of a dangling chain.
-vtol_vertex_2d_sptr 
+//: Detect touching another junction or end point, from an end point of a dangling chain.
+vtol_vertex_2d_sptr
 DetectTouch(const vtol_vertex_2d& end, const int maxSpiral,
             gevd_bufferxy& vertexMap)
 {
@@ -893,9 +862,8 @@ MergeEndPtsOfChain(vtol_vertex_2d& endpt, vtol_vertex_2d& other, vtol_edge_2d& c
 }
 
 
-//: Merge 2 touching chains into 1, deleting the 2 touching end points
-// and their chains. Smooth away short kinks is delayed for later.
-// Update global maps.
+//: Merge 2 touching chains into 1, deleting the 2 touching end points and their chains.
+// Smooth away short kinks is delayed for later.  Update global maps.
 void
 MergeEndPtTouchingEndPt(vtol_vertex_2d& end1, vtol_vertex_2d& end2,
                         vtol_edge_2d_sptr& merge, vtol_edge_2d_sptr& longer, vtol_edge_2d_sptr& shorter,
@@ -1005,7 +973,8 @@ MergeEndPtTouchingJunction(vtol_vertex_2d &endpt, vtol_vertex_2d& junction,
 }
 
 
-//: Find junctions from end points touching at an interior point
+//:
+// Find junctions from end points touching at an interior point
 // of a chain, with detectable jump in filter response.
 // Localize these junctions on the stronger contour to pixel accuracy,
 // and break stronger chain into subchains.
@@ -1275,8 +1244,9 @@ gevd_contour::SubPixelAccuracy(vcl_vector<vtol_edge_2d_sptr>& edges,
 }
 
 
-//: Generate an Edge with a vdgl_digital_curve representing a straight line
-//    between the specified vertices.
+//:
+//  Generate an Edge with a vdgl_digital_curve representing a straight line
+//  between the specified vertices.
 static vtol_edge_2d_sptr DigitalEdge(vtol_vertex_2d_sptr  vs, vtol_vertex_2d_sptr  ve)
 {
   double xs= vs->x();
@@ -1296,7 +1266,8 @@ static vtol_edge_2d_sptr DigitalEdge(vtol_vertex_2d_sptr  vs, vtol_vertex_2d_spt
 }
 
 
-//: Insert virtual edges and vertices to enforce closure
+//:
+// Insert virtual edges and vertices to enforce closure
 // of the regions beyond the rectangular image border.
 // The location of the border is at 3 pixels away from the
 // real image border, because of kernel radius in convolution
@@ -1618,7 +1589,8 @@ gevd_contour::InsertBorder(vcl_vector<vtol_edge_2d_sptr>& edges,
 }
 
 
-//: Convolve array elements with [1 0 1]/2, replacing
+//:
+// Convolve array elements with [1 0 1]/2, replacing
 // center pixel by average of 2 neighbors.
 // This will make the spacing between pixels almost equal
 // and prune away small zig-zags.
@@ -1637,7 +1609,8 @@ EqualizeElements(float* elmts, const int n,
 }
 
 
-//: Make the spacing of the chain pixels nearly equal by
+//:
+// Make the spacing of the chain pixels nearly equal by
 // smoothing their locations with the average filter  [1 0 1]/2.
 // This will reduce square grid tesselation artifacts, and
 // lead to more accurate estimation of the tangent direction,
@@ -1753,7 +1726,8 @@ gevd_contour::Translate(vcl_vector<vtol_edge_2d_sptr>& edges, // translate loc t
 }
 
 
-//: Remove and delete all elements in global lists, and set
+//:
+// Remove and delete all elements in global lists, and set
 // the global lists to NULL. Remove all digital chains of edges.
 // Edges and vertices are removed with UnProtect().
 void
@@ -1806,7 +1780,8 @@ gevd_contour::CreateEdgeMap(vcl_vector<vtol_edge_2d_sptr>& edges,
 }
 
 
-//: Mask the detected edge elements and junctions with a given
+//:
+// Mask the detected edge elements and junctions with a given
 // mask array, using AND operation, for ROI with arbitrary shapes.
 void
 gevd_contour::MaskEdgels(const gevd_bufferxy& mask,
@@ -1831,7 +1806,8 @@ gevd_contour::MaskEdgels(const gevd_bufferxy& mask,
 }
 
 
-//: Set the orientation at each edgel on all digital curves to a continous
+//:
+// Set the orientation at each edgel on all digital curves to a continous
 // orientation value, which is consistent with C. Rothwell's EdgeDetector.
 // That is theta = (180/M_PI)*atan2(dI/dy, dI/dx)
 //
@@ -1882,8 +1858,7 @@ gevd_contour::SetEdgelData(gevd_bufferxy& grad_mag, gevd_bufferxy& angle, vcl_ve
 }
 
 
-//: Compare function to sort the edges by their length in pixels,
-// largest first.
+//: Compare function to sort the edges by their length in pixels, largest first.
 int
 gevd_contour::LengthCmp(vtol_edge_2d_sptr const& dc1, vtol_edge_2d_sptr const& dc2)
 {
@@ -1893,8 +1868,7 @@ gevd_contour::LengthCmp(vtol_edge_2d_sptr const& dc1, vtol_edge_2d_sptr const& d
 }
 
 
-//: Create a 2-way lookup table from list elements in set,
-// using array and get_id/set_id.
+//: Create a 2-way lookup table from list elements in set, using array and get_id/set_id.
 vcl_vector<vtol_edge_2d_sptr>*
 gevd_contour::CreateLookupTable(vcl_vector<vtol_edge_2d_sptr>& set)
 {
@@ -1917,7 +1891,8 @@ gevd_contour::CreateLookupTable(vcl_vector<vtol_vertex_2d_sptr >& set)
 }
 
 
-//: Insert topology object in 2-way lookup table,
+//:
+// Insert topology object in 2-way lookup table,
 // using Id and dynamic array. Protect it in the network.
 void
 gevd_contour::LookupTableInsert(vcl_vector<vtol_edge_2d_sptr>& set,
@@ -1964,8 +1939,8 @@ gevd_contour::LookupTableReplace(vcl_vector<vtol_vertex_2d_sptr >& set,
 }
 
 
-//: Remove topology object from 2-way lookup table
-// leaving a empty hole. Also remove object from the network.
+//: Remove topology object from 2-way lookup table leaving an empty hole.
+// Also remove object from the network.
 void
 gevd_contour::LookupTableRemove(vcl_vector<vtol_edge_2d_sptr>& set,
                            vtol_edge_2d_sptr elmt)

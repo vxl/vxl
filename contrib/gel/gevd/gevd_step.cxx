@@ -1,35 +1,3 @@
-// <begin copyright notice>
-// ---------------------------------------------------------------------------
-//
-//                   Copyright (c) 1997 TargetJr Consortium
-//               GE Corporate Research and Development (GE CRD)
-//                             1 Research Circle
-//                            Niskayuna, NY 12309
-//                            All Rights Reserved
-//              Reproduction rights limited as described below.
-//
-//      Permission to use, copy, modify, distribute, and sell this software
-//      and its documentation for any purpose is hereby granted without fee,
-//      provided that (i) the above copyright notice and this permission
-//      notice appear in all copies of the software and related documentation,
-//      (ii) the name TargetJr Consortium (represented by GE CRD), may not be
-//      used in any advertising or publicity relating to the software without
-//      the specific, prior written permission of GE CRD, and (iii) any
-//      modifications are clearly marked and summarized in a change history
-//      log.
-//
-//      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
-//      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
-//      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
-//      IN NO EVENT SHALL THE TARGETJR CONSORTIUM BE LIABLE FOR ANY SPECIAL,
-//      INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND OR ANY
-//      DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
-//      WHETHER OR NOT ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR ON
-//      ANY THEORY OF LIABILITY ARISING OUT OF OR IN CONNECTION WITH THE
-//      USE OR PERFORMANCE OF THIS SOFTWARE.
-//
-// ---------------------------------------------------------------------------
-// <end copyright notice>
 #include <vcl_vector.h>
 #include <vnl/vnl_math.h>
 #include <vul/vul_timer.h>
@@ -38,12 +6,14 @@
 #include "gevd_float_operators.h"
 #include "gevd_pixel.h"
 
+//:
+// \file
 // Use 8 directions, with 45 degree angle in between them.
 // The array DIS gives the i-component of the directions
 // The array DJS gives the j-component of the directions.
 // Shown here for a right-handed coordinate system for (i,j)
 // in accordance with standard texts. -- JLM
-//
+//\verbatim
 //               j
 //         ______|_____________
 //        |      |      |      |
@@ -56,7 +26,8 @@
 //        |  5   |  6   |  7   |
 //        |______|______|______|
 //
-//
+//\endverbatim
+
 const byte TWOPI = 8, FULLPI = 4, HALFPI = 2;
 const int DIS[] = { 1, 1, 0,-1,-1,-1, 0, 1, // 8-connected neighbors
                     1, 1, 0,-1,-1,-1, 0, 1, // wrapped by 2PI to
@@ -147,7 +118,6 @@ gevd_step::DetectEdgels(const gevd_bufferxy& image,
                    gevd_bufferxy*& locationx, gevd_bufferxy*& locationy,
                    gevd_bufferxy*& grad_mag, gevd_bufferxy*& angle)
 {
-
   //vcl_cout << "*** Detect step profiles with first-derivative of Gaussian"
   //         << *this
   //         << vcl_endl;
@@ -157,7 +127,7 @@ gevd_step::DetectEdgels(const gevd_bufferxy& image,
   }
 
   // -tpk @@ missing check if the requested buffer size is too small to contain the convolution operations
-  
+
   // 1. Smooth image to regularize data, before taking derivatives
   gevd_bufferxy* smooth = NULL;      // Gaussian smoothed image
   // use float to avoid overflow/truncation
@@ -242,24 +212,25 @@ gevd_step::DetectEdgels(const gevd_bufferxy& image,
   return true;
 }
 
-//: Return -/+ PI/2, to encode the existence of an end point
+//:
+// Return -/+ PI/2, to encode the existence of an end point
 // on the left/right side of the current contour point i,j.
-// Note, in TargetJr, images have a left-handed (i,j) coordinate frame,
+// Note, in vil, images have a left-handed (i,j) coordinate frame,
 // i.e., i increases left to right and j increases downward in the image.
 //
 // The search proceeds as follows:
 //
 // 1)
+//\verbatim
 //        X
 //    --(i,j)--
 //        X    |
 //             v  Normal to contour (dir)
-//
+//\endverbatim
 // if either X is occupied then it must be a corner -- so do nothing.
 //
 // 2) Next, search along the contour to the left or right
-//
-//
+//\verbatim
 //      L         R
 //      L--(i,j)--R
 //      L    |    R
@@ -269,7 +240,7 @@ gevd_step::DetectEdgels(const gevd_bufferxy& image,
 //  neighbor    neighbor    return -2.
 //                          if any L position is occupied but not any R
 //                          return +2.  Otherwise return 0.
-//
+//\endverbatim
 //  Thus, the direction code along the contour at the end of the contour
 //  is returned.
 static int
@@ -303,7 +274,7 @@ LeftXorRightEnd(const gevd_bufferxy& contour,
   return (leftp? 0: -HALFPI) + (rightp? 0: HALFPI); // increment from dir
 }
 
-//: Find best step extension from end point, which has largest local maximum slope. 
+//: Find best step extension from end point, which has largest local maximum slope.
 // Search all 3x3=9 neighboring locations/orientations
 // in the direction of the contour.  If the best gradient along the contour
 // extension is below the threshold, then return 0, otherwise
@@ -328,9 +299,9 @@ BestStepExtension(const gevd_bufferxy& smooth,
       int dir = direc + RDS[d];
       int di = DIS[dir];
       int dj = DJS[dir];
-      float _pix = floatPixel(smooth, ni-di, nj-dj);
-      float  pix_ = floatPixel(smooth, ni+di, nj+dj);
-      float slope = vcl_fabs(pix_ - _pix);
+      float pix_m = floatPixel(smooth, ni-di, nj-dj);
+      float pix_p = floatPixel(smooth, ni+di, nj+dj);
+      float slope = vcl_fabs(pix_p - pix_m);
       float max_s = (dir%HALFPI)? best_s*vcl_sqrt(2.0): best_s;
       if (slope > max_s) {      // find best strength
         int di2 = 2*di;
@@ -348,21 +319,21 @@ BestStepExtension(const gevd_bufferxy& smooth,
   if (best_s > threshold) {     // interpolate with parabola
     float pix = floatPixel(smooth, best_i, best_j);
     int di2 = 2 * DIS[best_d], dj2 = 2 * DJS[best_d];
-    float _s = vcl_fabs(pix - floatPixel(smooth, best_i-di2, best_j-dj2));
-    float s_ = vcl_fabs(pix - floatPixel(smooth, best_i+di2, best_j+dj2));
+    float s_m = vcl_fabs(pix - floatPixel(smooth, best_i-di2, best_j-dj2));
+    float s_p = vcl_fabs(pix - floatPixel(smooth, best_i+di2, best_j+dj2));
     if (best_d%HALFPI) {
-      _s /= vcl_sqrt(2.0);
-      s_ /= vcl_sqrt(2.0);
+      s_m /= vcl_sqrt(2.0);
+      s_p /= vcl_sqrt(2.0);
     }
-    best_l = gevd_float_operators::InterpolateParabola(_s, best_s, s_,
-                                     best_s);
+    best_l = gevd_float_operators::InterpolateParabola(s_m, best_s, s_p, best_s);
     return best_s;
   } else                        // not found
     return 0;
 }
 
 
-//: Find junctions by searching for extensions of contours from
+//:
+// Find junctions by searching for extensions of contours from
 // their dangling end points. Non maximum suppression insures that
 // contours have width < 2, and so we can find the left/right neighbors,
 // and deduce end points. By using a minimally smoothed image,
@@ -389,7 +360,7 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
   const int ymax = image.GetSizeY()-rmax-1;
 
   //vcl_cout << "RecoverJunctions: rmax, kmax, xmax, ymax:" << rmax << " " << kmax << " " << xmax << " " << ymax << " " << vcl_endl;
-  
+
   // 1. Find end points of dangling contours
   //const int length0 = xmax/kmax*ymax/kmax/4;// 25% size
   //const float growth = 2;     // growth ratio of the arrays
@@ -478,18 +449,19 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
       junctiony[j] = yloc[i];
       j++;
     }
-  /*vcl_cout << "Find " << length << " end points, and "
-           << njunction << " junctions." << vcl_endl
+#if 0
+  vcl_cout << "Find " << length << " end points, and "
+           << njunction << " junctions.\n"
            << "Recover " << 100.0*njunction/length
            << "% end points as junctions > "
-           << threshold << ", in "
-           << t.real() << " msecs." << vcl_endl;
-  */
+           << threshold << ", in " << t.real() << " msecs.\n";
+#endif
   return njunction;
 }
 
 
-//: Return the standard deviation of raw noise, in the original image,
+//:
+// Return the standard deviation of raw noise, in the original image,
 // either estimated or given by the user. If the noise has not been
 // estimated, return 0.
 float
@@ -499,7 +471,8 @@ gevd_step::NoiseSigma() const
 }
 
 
-//: Compute response of white noise through the filter dG, or
+//:
+// Compute response of white noise through the filter dG, or
 // second-derivative of the Gaussian. Using a threshold of 3 times
 // this noise response would eliminate 99% of the noise edges.
 float
@@ -510,7 +483,8 @@ gevd_step::NoiseResponse() const
 }
 
 
-//: Return threshold for detecting contour or junction,
+//:
+// Return threshold for detecting contour or junction,
 // which is response of white gaussian noise, noise_sigma,
 // to step edge detector, i.e. first-order derivative of Gaussian,
 // smooth_sigma.
@@ -529,8 +503,8 @@ gevd_step::NoiseThreshold(bool shortp) const
 }
 
 
-
-//: Compute response of white noise through the filter dG, or
+//:
+// Compute response of white noise through the filter dG, or
 // first-derivative of the Gaussian. Using a threshold of 3 times
 // this noise response would eliminate 99% of the noise edges.
 float

@@ -1,37 +1,5 @@
-// <begin copyright notice>
-// ---------------------------------------------------------------------------
-//
-//                   Copyright (c) 1997 TargetJr Consortium
-//               GE Corporate Research and Development (GE CRD)
-//                             1 Research Circle
-//                            Niskayuna, NY 12309
-//                            All Rights Reserved
-//              Reproduction rights limited as described below.
-//
-//      Permission to use, copy, modify, distribute, and sell this software
-//      and its documentation for any purpose is hereby granted without fee,
-//      provided that (i) the above copyright notice and this permission
-//      notice appear in all copies of the software and related documentation,
-//      (ii) the name TargetJr Consortium (represented by GE CRD), may not be
-//      used in any advertising or publicity relating to the software without
-//      the specific, prior written permission of GE CRD, and (iii) any
-//      modifications are clearly marked and summarized in a change history
-//      log.
-//
-//      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
-//      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
-//      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
-//      IN NO EVENT SHALL THE TARGETJR CONSORTIUM BE LIABLE FOR ANY SPECIAL,
-//      INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND OR ANY
-//      DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
-//      WHETHER OR NOT ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR ON
-//      ANY THEORY OF LIABILITY ARISING OUT OF OR IN CONNECTION WITH THE
-//      USE OR PERFORMANCE OF THIS SOFTWARE.
-//
-// ---------------------------------------------------------------------------
-// <end copyright notice>
-//-----------------------------------------------------------------------------
-//
+//:
+// \file
 // see gevd_detector.h
 //
 //-----------------------------------------------------------------------------
@@ -57,7 +25,7 @@ gevd_detector::gevd_detector(gevd_detector_params& params)
     vertices(NULL), edges(NULL),
     filterFactor(2), hysteresisFactor(2.0), noiseThreshold(0.0)
 {
-  if(params.automatic_threshold)
+  if (params.automatic_threshold)
     noise = -params.noise_weight;
   else
     noise = params.noise_multiplier;
@@ -85,20 +53,20 @@ gevd_detector::gevd_detector(vil_image img, float smoothSigma, float noiseSigma,
 void gevd_detector::UnProtectLists()
 {
 #if 0 // commented out
-    if(edges)//Need to mimic the protection of Contour
-    for(CoolListP<Edge*>::iterator eit = edges->begin();
-        eit != edges->end(); eit++)
-      (*eit)->UnProtect();
-    if(vertices)
-      for(CoolListP<Vertex*>::iterator vit = vertices->begin();
-          vit != vertices->end(); vit++)
-        (*vit)->UnProtect();
+  if (edges)//Need to mimic the protection of Contour
+  for (CoolListP<Edge*>::iterator eit = edges->begin();
+       eit != edges->end(); eit++)
+    (*eit)->UnProtect();
+  if (vertices)
+    for (CoolListP<Vertex*>::iterator vit = vertices->begin();
+         vit != vertices->end(); vit++)
+      (*vit)->UnProtect();
 #endif
 }
 
 
-//: Destructor. Caller has an obligation to clear all the created edges and
-// vertices.
+//: Destructor.
+//  Caller has an obligation to clear all the created edges and vertices.
 gevd_detector::~gevd_detector()
 {
   ClearData();
@@ -115,7 +83,6 @@ void gevd_detector::ClearData()
   delete vertices;
   delete edges;
 }
-
 
 
 //: Detect the contour, a list of edges and vertices are generated.
@@ -147,14 +114,14 @@ bool  gevd_detector::DoContour()
     vcl_cout << "Edgel output from DoContour:";
     (*edge)->describe(vcl_cout, 2);
     }
-  
+
   contour.SubPixelAccuracy(*edges, *vertices, // insert subpixel
                            *locationx, *locationy); // accuracy
   if (this->spacingp)           // reduce zig-zags and space out pixels
     gevd_contour::EqualizeSpacing(*edges); // in chains
   if (this->borderp)            // insert a virtual contour to enforce
     contour.InsertBorder(*edges, *vertices); // closure at border
-  if(grad_mag&&angle)
+  if (grad_mag&&angle)
     gevd_contour::SetEdgelData(*grad_mag, *angle, *edges); //Continous edgel orientation.
 
 //   const RectROI* roi = image->GetROI();
@@ -195,7 +162,7 @@ bool  gevd_detector::DoFoldContour()
     gevd_contour::EqualizeSpacing(*edges); // in chains
   if (this->borderp)            // insert a virtual contour to enforce
     contour.InsertBorder(*edges, *vertices); // closure at border
-  if(grad_mag&&angle)
+  if (grad_mag&&angle)
     gevd_contour::SetEdgelData(*grad_mag, *angle, *edges); //Continous edgel orientation.
 
 //   const RectROI* roi = image->GetROI();
@@ -302,7 +269,7 @@ gevd_bufferxy* gevd_detector::GetBufferFromImage()
   image_float_buf = new gevd_bufferxy(sizex, sizey,8*sizeof(float));
 
 #if 0 // commented out
-  if(image->GetPixelType() == Image::FLOAT)
+  if (image->GetPixelType() == Image::FLOAT)
     {
       image->GetSection(image_float_buf->GetBuffer(),
                         roi->GetOrigX(), roi->GetOrigY(), sizex, sizey);
@@ -332,32 +299,32 @@ gevd_bufferxy* gevd_detector::GetBufferFromImage()
 
 void gevd_detector::print(vcl_ostream &strm) const
 {
-  strm << "gevd_Detector:" << vcl_endl <<
-    "    noise " << noise << vcl_endl <<
-    "    njunction " << njunction << vcl_endl <<
-    "    num vertices " << vertices->size() << vcl_endl <<
-    "    num edges " << edges->size() << vcl_endl <<
-    "    filterfactor " << filterFactor << vcl_endl <<
-    "    hysteresisfactor " << hysteresisFactor << vcl_endl <<
-    "    noiseThreshold " << noiseThreshold << vcl_endl <<
-    "    smooth " <<   smooth << vcl_endl << // Smoothing kernal sigma
-    "    noise_weight " <<   noise_weight << vcl_endl << //The weight between sensor noise and texture noise
-    "    noise_multiplier " <<   noise_multiplier << vcl_endl << // The overal noise threshold scale factor
-    "    automatic_threshold " <<   automatic_threshold << vcl_endl << // Determine the threshold values from image
-    "    aggressive_junction_closure " <<   aggressive_junction_closure << vcl_endl << //Close junctions agressively
-    "    minLength " <<   minLength << vcl_endl <<                // minimum chain length
-    "    contourFactor " <<   contourFactor << vcl_endl <<  //Threshold along contours
-    "    junctionFactor " <<   junctionFactor << vcl_endl << //Threshold at junctions
-    "    filterFactor " <<   filterFactor << vcl_endl <<   // ratio of sensor to texture noise
-    "    junctionp " <<   junctionp << vcl_endl << // recover missing junctions
-    "    minJump " <<   minJump << vcl_endl <<  // change in strength at junction
-    "    maxGap " <<   maxGap << vcl_endl <<   // Bridge small gaps up to max_gap across.
-    "    spacingp " <<   spacingp << vcl_endl <<  // equalize spacing?
-    "    borderp " <<   borderp << vcl_endl <<   // insert virtual border for closure?
-    "    corner_angle " <<   corner_angle << vcl_endl << // smallest angle at corner
-    "    separation " <<   separation << vcl_endl << // |mean1-mean2|/sigma
-    "    min_corner_length " <<   min_corner_length << vcl_endl << // min length to find corners
-    "    cycle " <<   cycle << vcl_endl << // number of corners in a cycle
-    "    ndimension " <<   ndimension << // spatial dimension of edgel chains.
-    vcl_endl;
+  strm << "gevd_Detector:\n"
+       << "    noise " << noise << vcl_endl
+       << "    njunction " << njunction << vcl_endl
+       << "    num vertices " << vertices->size() << vcl_endl
+       << "    num edges " << edges->size() << vcl_endl
+       << "    filterfactor " << filterFactor << vcl_endl
+       << "    hysteresisfactor " << hysteresisFactor << vcl_endl
+       << "    noiseThreshold " << noiseThreshold << vcl_endl
+       << "    smooth " <<   smooth << vcl_endl // Smoothing kernal sigma
+       << "    noise_weight " <<   noise_weight << vcl_endl //The weight between sensor noise and texture noise
+       << "    noise_multiplier " <<   noise_multiplier << vcl_endl // The overal noise threshold scale factor
+       << "    automatic_threshold " <<   automatic_threshold << vcl_endl // Determine the threshold values from image
+       << "    aggressive_junction_closure " <<   aggressive_junction_closure << vcl_endl //Close junctions agressively
+       << "    minLength " <<   minLength << vcl_endl          // minimum chain length
+       << "    contourFactor " <<   contourFactor << vcl_endl  // Threshold along contours
+       << "    junctionFactor " <<   junctionFactor << vcl_endl //Threshold at junctions
+       << "    filterFactor " <<   filterFactor << vcl_endl    // ratio of sensor to texture noise
+       << "    junctionp " <<   junctionp << vcl_endl // recover missing junctions
+       << "    minJump " <<   minJump << vcl_endl  // change in strength at junction
+       << "    maxGap " <<   maxGap << vcl_endl   // Bridge small gaps up to max_gap across.
+       << "    spacingp " <<   spacingp << vcl_endl  // equalize spacing?
+       << "    borderp " <<   borderp << vcl_endl   // insert virtual border for closure?
+       << "    corner_angle " <<   corner_angle << vcl_endl // smallest angle at corner
+       << "    separation " <<   separation << vcl_endl // |mean1-mean2|/sigma
+       << "    min_corner_length " <<   min_corner_length << vcl_endl // min length to find corners
+       << "    cycle " <<   cycle << vcl_endl // number of corners in a cycle
+       << "    ndimension " <<   ndimension // spatial dimension of edgel chains.
+       << vcl_endl;
 }
