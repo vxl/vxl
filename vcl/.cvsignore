@@ -1,5 +1,0 @@
-config.[A-Za-vx-z]*
-vcl_config_manual.h
-vcl_config_headers.h
-vcl_config_compiler.h
-vcl_where_root_dir.h
