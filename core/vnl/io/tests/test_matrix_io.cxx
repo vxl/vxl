@@ -2,6 +2,7 @@
 #include <vcl_iostream.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/io/vnl_io_matrix.h>
+#include <vsl/vsl_binary_io.h>
 #include <testlib/testlib_test.h>
 #include <vpl/vpl.h>
 

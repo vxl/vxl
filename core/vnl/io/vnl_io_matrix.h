@@ -6,7 +6,7 @@
 // \author Louise Butcher
 // \date 20-Mar-2001
 
-#include <vsl/vsl_binary_io.h>
+#include <vsl/vsl_fwd.h>
 #include <vnl/vnl_matrix.h>
 
 //: Binary save vnl_matrix to stream.
