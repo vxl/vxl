@@ -4,6 +4,7 @@
 // \author Tim Cootes - Manchester
 
 #include <vil2/vil2_image_view.h>
+#include <vil2/vil2_image_view_functions.h>
 #include <vil/vil_byte.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
@@ -20,7 +21,7 @@ int main(int argc, char** argv)
   // equivalent to image.set_to_memory(&vec_data[0],8,8,1,1,8,1);
 
   vcl_cout<<"View as image:"<<vcl_endl;
-  image.print_all(vcl_cout);
+  vil2_print_all(vcl_cout,image);
 
   vcl_cout<<vcl_endl;
   vcl_cout<<"Note that if the raw data gets destroyed "<<vcl_endl;

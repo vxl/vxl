@@ -36,8 +36,48 @@ vil2_image_view<vil_rgb<T> > vil2_view_as_rgb(const vil2_image_view<T>& v)
                                              v.xstep()/3,v.ystep()/3,1);
 }
 
-#define VIL_IMAGE_VIEW_FUNCTIONS_INSTANTIATE(T) \
+//: How to print value in vil2_print_all(image_view)
+template<class T>
+void vil2_print_value(vcl_ostream& os, const T& value)
+{
+  int v = int(value);
+  if (v<10)  os<<" ";
+  if (v<100) os<<" ";
+  os<<v;
+}
+
+
+//: print all image data to os in a grid (rounds output to int)
+template<class T>
+void vil2_print_all(vcl_ostream& os,const vil2_image_view<T>& view)
+{
+  os<<view.is_a()<<" "<<view.nplanes()<<" planes, each "<<view.nx()<<" x "<<view.ny();
+  os<<" xstep: "<<view.xstep()<<" ";
+  os<<" ystep: "<<view.ystep()<<" ";
+  os<<" planestep: "<<view.planestep()<<endl;
+  for (int i=0;i<view.nplanes();++i)
+  {
+    if (view.nplanes()>1) os<<"Plane "<<i<<":"<<vcl_endl;
+    for (int y=0;y<view.ny();++y)
+    {
+      for (int x=0;x<view.nx();++x)
+      {
+	    vil2_print_value(os,view(x,y,i));
+		os<<" ";
+      }
+      os<<vcl_endl;
+    }
+  }
+}
+
+// For things which must not be composites
+#define VIL_IMAGE_VIEW_FUNCTIONS_INSTANTIATE_NON_COMP(T) \
 template vil2_image_view<T > vil2_view_as_planes(const vil2_image_view<vil_rgb<T > >&); \
-template vil2_image_view<vil_rgb<T > > vil2_view_as_rgb(const vil2_image_view<T >& plane_view)
+template vil2_image_view<vil_rgb<T > > vil2_view_as_rgb(const vil2_image_view<T >& plane_view); \
+template void vil2_print_value(vcl_ostream& os, const T& value)
+
+// For everything else
+#define VIL_IMAGE_VIEW_FUNCTIONS_INSTANTIATE_2(T) \
+template void vil2_print_all(vcl_ostream& os,const vil2_image_view<T >& view)
 
 #endif

@@ -4,6 +4,7 @@
 // \author Tim Cootes - Manchester
 
 #include <vil2/vil2_image_view.h>
+#include <vil2/vil2_image_view_functions.h>
 #include <vil/vil_byte.h>
 #include <vil/vil_rgb.h>
 #include <vcl_iostream.h>
@@ -45,17 +46,17 @@ int main(int argc, char** argv)
       rgb_image(x,y) = vil_rgb<vil_byte>(x+10*y,x+10*y+100,x+10*y+200);
 
   vcl_cout<<"Original image:"<<vcl_endl;
-  rgb_image.print_all(vcl_cout);
+  vil2_print_all(vcl_cout,rgb_image);
 
   vcl_cout<<vcl_endl;
   vcl_cout<<"Create a view of it as a set of planes:"<<vcl_endl;
   vil2_image_view<vil_byte> plane_view = view_as_planes(rgb_image);
-  plane_view.print_all(vcl_cout);
+  vil2_print_all(vcl_cout,plane_view);
 
   vcl_cout<<vcl_endl;
   vcl_cout<<"Create a view of this plane view as rgb:"<<vcl_endl;
   vil2_image_view<vil_rgb<vil_byte> > rgb_image2 = view_as_rgb(plane_view);
-  rgb_image2.print_all(vcl_cout);
+  vil2_print_all(vcl_cout,rgb_image2);
 
   return 0;
 }

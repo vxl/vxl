@@ -7,6 +7,7 @@ SET( vil2_sources
   vil2_image_view_base.cxx vil2_image_view_base.h
   vil2_image_view.cxx vil2_image_view.h vil2_image_view.txx
   vil2_image_data.cxx vil2_image_data.h
+  vil2_image_view_functions.cxx vil2_image_view_functions.h vil2_image_view_functions.txx
 
   vil2_file_format.cxx vil2_file_format.h
   vil2_load.cxx vil2_load.h

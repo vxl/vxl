@@ -4,6 +4,7 @@
 // \author Tim Cootes - Manchester
 
 #include <vil2/vil2_image_view.h>
+#include <vil2/vil2_image_view_functions.h>
 #include <vil/vil_byte.h>
 #include <vcl_iostream.h>
 
@@ -21,7 +22,7 @@ int main(int argc, char** argv)
         image(x,y,i) = vil_byte(x+10*y+100*i);
 
   vcl_cout<<"Slow fill image"<<vcl_endl;
-  image.print_all(vcl_cout);
+  vil2_print_all(vcl_cout,image);
 
   // Fast fill
   vil_byte* plane = image.top_left_ptr();
@@ -37,7 +38,7 @@ int main(int argc, char** argv)
   }
 
   vcl_cout<<"Fast fill image"<<vcl_endl;
-  image.print_all(vcl_cout);
+  vil2_print_all(vcl_cout,image);
 
   return 0;
 }

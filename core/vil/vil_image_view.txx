@@ -282,22 +282,7 @@ void vil2_image_view<T>::print_all(vcl_ostream& os) const
 {
   print(os);
   os<<"  xstep: "<<xstep_<<" ystep: "<<ystep_<<" planestep: "<<planestep_<<vcl_endl;
-
-  for (int i=0;i<nplanes();++i)
-  {
-    if (nplanes()>1) os<<"Plane "<<i<<":"<<vcl_endl;
-    const T* im_data = top_left_ + i*planestep_;
-    for (int y=0;y<ny_;++y)
-    {
-      for (int x=0;x<nx_;++x)
-      {
-        T v = im_data[ystep_*y+x*xstep_];
-        os.width(3);
-        os<<v<<" ";
-      }
-      os<<vcl_endl;
-    }
-  }
+  vcl_cout<<"vil2_image_view<T>::print_all Not complete!"<<vcl_endl;
 }
 
 

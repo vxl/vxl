@@ -4,6 +4,7 @@
 // \author Tim Cootes - Manchester
 
 #include <vil2/vil2_image_view.h>
+#include <vil2/vil2_image_view_functions.h>
 #include <vil/vil_byte.h>
 #include <vcl_iostream.h>
 
@@ -28,12 +29,12 @@ int main(int argc, char** argv)
       image(x,y) = vil_byte(x+10*y);
 
   vcl_cout<<"Original image:"<<vcl_endl;
-  image.print_all(vcl_cout);
+  vil2_print_all(vcl_cout,image);
 
   vcl_cout<<vcl_endl;
   vcl_cout<<"Create transposed view of plane"<<vcl_endl;
   vil2_image_view<vil_byte> transpose = vil2_transpose(image);
-  transpose.print_all(vcl_cout);
+  vil2_print_all(vcl_cout,transpose);
 
   return 0;
 }
