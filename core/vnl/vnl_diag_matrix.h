@@ -14,6 +14,7 @@
 //  Modifications
 //  IMS (Manchester) 16/03/2001: Tidied up the documentation + added binary_io
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
+//   Sep.2002 - Peter Vanroose - Added operator+, operator-, operator*
 // \endverbatim
 
 #include <vcl_cassert.h>
@@ -30,6 +31,8 @@ export
 template <class T>
 class vnl_diag_matrix
 {
+  vnl_vector<T> diagonal_;
+
  public:
   vnl_diag_matrix() {}
 
@@ -79,6 +82,19 @@ class vnl_diag_matrix
   T& operator[] (unsigned i) { return diagonal_[i]; }
   T const& operator[] (unsigned i) const { return diagonal_[i]; }
 
+  //: set element with boundary checks.
+  void put (unsigned r, unsigned c, T const& v) {
+    assert(r == c); assert(r>=0); assert (r<size()); diagonal_[r] = v;
+  }
+
+  //: get element with boundary checks.
+  T get (unsigned r, unsigned c) const {
+    assert(r == c); assert(r>=0); assert (r<size()); return diagonal_[r];
+  }
+
+  //: Set all diagonal elements of matrix to specified value.
+  void fill_diagonal (T const& v) { diagonal_.fill(v); }
+
   // iterators
 
   typedef typename vnl_vector<T>::iterator iterator;
@@ -109,9 +125,6 @@ class vnl_diag_matrix
 
   //: Set diagonal elements using vector
   void set(vnl_vector<T> const& v)  { diagonal_=v; }
-
- protected:
-  vnl_vector<T> diagonal_;
 
  private:
   #if VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD
@@ -167,10 +180,22 @@ inline T vnl_diag_matrix<T>::determinant() const
   return det;
 }
 
+//: Multiply two vnl_diag_matrices.  Just multiply the diag elements - n flops
+template <class T>
+inline vnl_diag_matrix<T> operator* (vnl_diag_matrix<T> const& A, vnl_diag_matrix<T> const& B)
+{
+  assert(A.size() == B.size());
+  vnl_diag_matrix<T> ret = A;
+  for (unsigned i = 0; i < A.size(); ++i)
+    ret(i,i) *= B(i,i);
+  return ret;
+}
+
 //: Multiply a Matrix by a vnl_diag_matrix.  Just scales the columns - mn flops
 template <class T>
 inline vnl_matrix<T> operator* (vnl_matrix<T> const& A, vnl_diag_matrix<T> const& D)
 {
+  assert(A.columns() == D.size());
   vnl_matrix<T> ret(A.rows(), A.columns());
   for (unsigned i = 0; i < A.rows(); ++i)
     for (unsigned j = 0; j < A.columns(); ++j)
@@ -182,6 +207,7 @@ inline vnl_matrix<T> operator* (vnl_matrix<T> const& A, vnl_diag_matrix<T> const
 template <class T>
 inline vnl_matrix<T> operator* (vnl_diag_matrix<T> const& D, vnl_matrix<T> const& A)
 {
+  assert(A.rows() == D.size());
   vnl_matrix<T> ret(A.rows(), A.columns());
   T const* d = D.data_block();
   for (unsigned i = 0; i < A.rows(); ++i)
@@ -190,11 +216,23 @@ inline vnl_matrix<T> operator* (vnl_diag_matrix<T> const& D, vnl_matrix<T> const
   return ret;
 }
 
+//: Add two vnl_diag_matrices.  Just add the diag elements - n flops
+template <class T>
+inline vnl_diag_matrix<T> operator+ (vnl_diag_matrix<T> const& A, vnl_diag_matrix<T> const& B)
+{
+  assert(A.size() == B.size());
+  vnl_diag_matrix<T> ret = A;
+  for (unsigned i = 0; i < A.size(); ++i)
+    ret(i,i) += B(i,i);
+  return ret;
+}
+
 //: Add a vnl_diag_matrix to a Matrix.  n adds, mn copies.
 template <class T>
-inline vnl_matrix<T> operator + (vnl_matrix<T> const& A, vnl_diag_matrix<T> const& D)
+inline vnl_matrix<T> operator+ (vnl_matrix<T> const& A, vnl_diag_matrix<T> const& D)
 {
   const unsigned n = D.size();
+  assert(A.rows() == n); assert(A.columns() == n);
   vnl_matrix<T> ret(A);
   T const* d = D.data_block();
   for (unsigned j = 0; j < n; ++j)
@@ -204,16 +242,28 @@ inline vnl_matrix<T> operator + (vnl_matrix<T> const& A, vnl_diag_matrix<T> cons
 
 //: Add a Matrix to a vnl_diag_matrix.  n adds, mn copies.
 template <class T>
-inline vnl_matrix<T> operator + (vnl_diag_matrix<T> const& D, vnl_matrix<T> const& A)
+inline vnl_matrix<T> operator+ (vnl_diag_matrix<T> const& D, vnl_matrix<T> const& A)
 {
   return A + D;
 }
 
+//: Subtract two vnl_diag_matrices.  Just subtract the diag elements - n flops
+template <class T>
+inline vnl_diag_matrix<T> operator- (vnl_diag_matrix<T> const& A, vnl_diag_matrix<T> const& B)
+{
+  assert(A.size() == B.size());
+  vnl_diag_matrix<T> ret = A;
+  for (unsigned i = 0; i < A.size(); ++i)
+    ret(i,i) -= B(i,i);
+  return ret;
+}
+
 //: Subtract a vnl_diag_matrix from a Matrix.  n adds, mn copies.
 template <class T>
-inline vnl_matrix<T> operator - (vnl_matrix<T> const& A, vnl_diag_matrix<T> const& D)
+inline vnl_matrix<T> operator- (vnl_matrix<T> const& A, vnl_diag_matrix<T> const& D)
 {
   const unsigned n = D.size();
+  assert(A.rows() == n); assert(A.columns() == n);
   vnl_matrix<T> ret(A);
   T const* d = D.data_block();
   for (unsigned j = 0; j < n; ++j)
@@ -223,9 +273,10 @@ inline vnl_matrix<T> operator - (vnl_matrix<T> const& A, vnl_diag_matrix<T> cons
 
 //: Subtract a Matrix from a vnl_diag_matrix.  n adds, mn copies.
 template <class T>
-inline vnl_matrix<T> operator - (vnl_diag_matrix<T> const& D, vnl_matrix<T> const& A)
+inline vnl_matrix<T> operator- (vnl_diag_matrix<T> const& D, vnl_matrix<T> const& A)
 {
   const unsigned n = D.size();
+  assert(A.rows() == n); assert(A.columns() == n);
   vnl_matrix<T> ret(n, n);
   T const* d = D.data_block();
   for (unsigned i = 0; i < n; ++i)
@@ -243,6 +294,7 @@ inline vnl_matrix<T> operator - (vnl_diag_matrix<T> const& D, vnl_matrix<T> cons
 template <class T>
 inline vnl_vector<T> operator* (vnl_diag_matrix<T> const& D, vnl_vector<T> const& A)
 {
+  assert(A.size() == D.size());
   return element_product(D.diagonal(), A);
 }
 
@@ -250,6 +302,7 @@ inline vnl_vector<T> operator* (vnl_diag_matrix<T> const& D, vnl_vector<T> const
 template <class T>
 inline vnl_vector<T> operator* (vnl_vector<T> const& A, vnl_diag_matrix<T> const& D)
 {
+  assert(A.size() == D.size());
   return element_product(D.diagonal(), A);
 }
 
