@@ -1,33 +1,8 @@
 // This is core/vcsl/vcsl_coordinate_system.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 #include "vcsl_coordinate_system.h"
-
 #include <vcl_cassert.h>
-
 #include <vcsl/vcsl_axis.h>
 #include <vcsl/vcsl_unit.h>
-
-//***************************************************************************
-// Status report
-//***************************************************************************
-
-//---------------------------------------------------------------------------
-// Number of axes
-//---------------------------------------------------------------------------
-int vcsl_coordinate_system::dimensionality(void) const
-{
-  return axes_.size();
-}
-
-//---------------------------------------------------------------------------
-// Is `i' an index on an axis ?
-//---------------------------------------------------------------------------
-bool vcsl_coordinate_system::valid_axis(int i) const
-{
-  return (i>=0)&&(i<int(axes_.size()));
-}
 
 //---------------------------------------------------------------------------
 // Return the axis `i'
@@ -40,19 +15,6 @@ vcsl_axis_sptr vcsl_coordinate_system::axis(int i) const
 
   return axes_[i];
 }
-
-//***************************************************************************
-// Because VXL does not use dynamic_cast<> :-(
-//***************************************************************************
-
-const vcsl_spatial *vcsl_coordinate_system::cast_to_spatial(void) const
-{
-  return 0;
-}
-
-//***************************************************************************
-// Conversion
-//***************************************************************************
 
 //---------------------------------------------------------------------------
 // Convert `v', expressed with cs units, to standard units
