@@ -17,23 +17,42 @@
 //\endverbatim
 
 #include <vil/file_formats/vil_pnm.h>
+#include <vil2/vil2_file_format.h>
 #include <vil2/vil2_image_data.h>
 
 
 class vil2_image_view_base;
+
+
+
+//: Loader for PPM,PGM,PBM files
+class vil2_pnm_file_format : public vil2_file_format
+{
+ public:
+  virtual char const* tag() const;
+  virtual vil2_image_data* make_input_image(vil_stream* vs);
+  virtual vil2_image_data* make_output_image(vil_stream* vs, unsigned planes,
+                                            unsigned width,
+                                            unsigned height,
+                                            unsigned components,
+                                            unsigned bits_per_component,
+                                            vil_component_format format);
+};
+
+
 
 //: Generic image implementation for PNM files
 class vil2_pnm_generic_image : public vil2_image_data
 {
   vil_stream* vs_;
   int magic_;
-  int width_;
-  int height_;
+  unsigned width_;
+  unsigned height_;
   unsigned long int maxval_;
 
   int start_of_data_;
-  int components_;
-  int bits_per_component_;
+  unsigned components_;
+  unsigned bits_per_component_;
 
   bool read_header();
   bool write_header();
@@ -42,47 +61,38 @@ class vil2_pnm_generic_image : public vil2_image_data
  public:
 
   vil2_pnm_generic_image(vil_stream* is);
-  vil2_pnm_generic_image(vil_stream* is, int planes,
-                        int width,
-                        int height,
-                        int components,
-                        int bits_per_component,
+  vil2_pnm_generic_image(vil_stream* is, unsigned planes,
+                        unsigned width,
+                        unsigned height,
+                        unsigned components,
+                        unsigned bits_per_component,
                         vil_component_format format);
   ~vil2_pnm_generic_image();
 
   //: Dimensions:  planes x width x height x components
-  virtual int planes() const { return 1; }
-  virtual int width() const { return width_; }
-  virtual int height() const { return height_; }
-  virtual int components() const { return components_; }
+  virtual unsigned planes() const { return 1; }
+  virtual unsigned width() const { return width_; }
+  virtual unsigned height() const { return height_; }
+  virtual unsigned components() const { return components_; }
 
-  virtual int bits_per_component() const { return bits_per_component_; }
+  virtual unsigned bits_per_component() const { return bits_per_component_; }
   virtual enum vil_component_format component_format() const { return VIL_COMPONENT_FORMAT_UNSIGNED_INT; }
 
-  //: Create a new view which is compatible with the underlying image type.
-  // \param planewise, Do you want the data provided in planes (or components)?
-  virtual vil2_image_view_base* new_view(bool planewise=true);
+
 
   //: Create a read/write view of the data.
   // Modifying this view might modify the actual data.
   // If you want to modify this data in place, call put_view after you done, and 
   // it should work efficiently.
-  virtual bool get_view(vil2_image_view_base* im, unsigned x0, unsigned y0, unsigned width, unsigned height) const = 0;
-
-  //: Create a read/write view of the data.
-  // Modifying this view might modify the actual data.
-  // If you want to modify this data in place, call put_view after you done, and 
-  // it should work efficiently.
-  virtual bool get_view(vil2_image_view_base* im, unsigned x0, unsigned y0, unsigned plane0, unsigned width, unsigned height, unsigned nplanes) const = 0;
+  // \return 0 if unable to get view of correct size.
+  virtual vil2_image_view_base* get_view(unsigned x0, unsigned y0, unsigned plane0, unsigned nx, unsigned ny, unsigned nplanes) const;
 
   //: Create a read/write view of a copy of this data.
-  virtual bool get_copy_view(vil2_image_view_base* im, unsigned x0, unsigned y0, unsigned width, unsigned height) const = 0;
-
-  //: Create a read/write view of a copy of this data.
-  virtual bool get_copy_view(vil2_image_view_base* im, unsigned x0, unsigned y0, unsigned plane0, unsigned width, unsigned height, unsigned nplanes) const = 0;
+  // \return 0 if unable to get view of correct size.
+  virtual vil2_image_view_base* get_copy_view(unsigned x0, unsigned y0, unsigned plane0, unsigned nx, unsigned ny, unsigned nplanes) const;
 
   //: Put the data in this view back into the image source.
-  virtual bool put_view(vil2_image_view_base* im, unsigned x0, unsigned y0, unsigned plane0 = 0) = 0;
+  virtual bool put_view(const vil2_image_view_base& im, unsigned x0, unsigned y0, unsigned plane0 = 0);
 
   char const* file_format() const;
   bool get_property(char const *tag, void *prop = 0) const;
