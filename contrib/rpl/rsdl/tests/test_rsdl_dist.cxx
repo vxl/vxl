@@ -1,7 +1,7 @@
 #include <vcl_cmath.h>
 #include <vcl_vector.h>
 #include <vnl/vnl_math.h>
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 
 #include <rsdl/rsdl_point.h>
 #include <rsdl/rsdl_bounding_box.h>
@@ -12,7 +12,7 @@ static bool close( double x, double y ) { return vnl_math_abs(x-y) < 1.0e-6; }
 int
 main()
 {
-  vnl_test_start( "rsdl_dist" );
+  testlib_test_start( "rsdl_dist" );
 
   const unsigned int Nc = 2;
   const unsigned int Na = 3;
@@ -40,11 +40,11 @@ main()
   rsdl_point p( p_cart.begin(), p_cart.end(), p_ang.begin(), p_ang.end() );
   rsdl_point q( q_cart.begin(), q_cart.end(), q_ang.begin(), q_ang.end() );
 
-  vnl_test_begin( "square distance between points" );
-  vnl_test_perform( close( sq_dist, rsdl_dist_sq( p, q ) ) );
+  testlib_test_begin( "square distance between points" );
+  testlib_test_perform( close( sq_dist, rsdl_dist_sq( p, q ) ) );
 
-  vnl_test_begin( "distance between points" );
-  vnl_test_perform( close( vcl_sqrt(sq_dist), rsdl_dist( p, q ) ) );
+  testlib_test_begin( "distance between points" );
+  testlib_test_perform( close( vcl_sqrt(sq_dist), rsdl_dist( p, q ) ) );
 
 
   p_cart[0] = -1.5;  q_cart[0] = 2.5;
@@ -56,7 +56,7 @@ main()
   q.set_cartesian( q_cart.begin() ); q.set_angular( q_ang.begin() );
   rsdl_bounding_box box( p, q );
 
-  vnl_test_begin( "point-to-box dist sq - point inside" );
+  testlib_test_begin( "point-to-box dist sq - point inside" );
   double cart0_arr[] = { 1, 4.0 };
   double ang0_arr[] = { 3*vnl_math::pi/16, vnl_math::pi, 8*vnl_math::pi/5 };
   vcl_vector<double> cart0;
@@ -65,18 +65,18 @@ main()
   for ( unsigned int i=0; i < Na; ++i )  ang0.push_back( ang0_arr[i] );
 
   rsdl_point test_p( cart0.begin(), cart0.end(), ang0.begin(), ang0.end() );
-  vnl_test_perform( close( rsdl_dist_sq( test_p, box), 0) );
-  vnl_test_begin( "point-to-box dist - point inside" );
-  vnl_test_perform( close( rsdl_dist( test_p, box), 0) );
+  testlib_test_perform( close( rsdl_dist_sq( test_p, box), 0) );
+  testlib_test_begin( "point-to-box dist - point inside" );
+  testlib_test_perform( close( rsdl_dist( test_p, box), 0) );
 
-  vnl_test_begin( "point-to-box dist sq - point outside cartesian" );
+  testlib_test_begin( "point-to-box dist sq - point outside cartesian" );
   cart0[0] = -2.5; cart0[1] = 7.5;
   test_p.set_cartesian( cart0.begin() );
-  vnl_test_perform( close( rsdl_dist_sq( test_p, box), 3.25) );
-  vnl_test_begin( "point-to-box dist sq - point outside cartesian" );
-  vnl_test_perform( close( rsdl_dist( test_p, box), vcl_sqrt(3.25)) );
+  testlib_test_perform( close( rsdl_dist_sq( test_p, box), 3.25) );
+  testlib_test_begin( "point-to-box dist sq - point outside cartesian" );
+  testlib_test_perform( close( rsdl_dist( test_p, box), vcl_sqrt(3.25)) );
 
-  vnl_test_begin( "point-to-box dist sq - angle outside (a)" );
+  testlib_test_begin( "point-to-box dist sq - angle outside (a)" );
   cart0[0] = 1;  cart0[1] = 4;  // cartesian back inside
   test_p.set_cartesian( cart0.begin() );
   ang0[0] = vnl_math::pi/16;    // non-wrap, below
@@ -85,20 +85,20 @@ main()
   test_p.set_angular( ang0.begin() );
   sq_dist = vnl_math_sqr( vnl_math::pi/16 ) + vnl_math_sqr( vnl_math::pi/8 ) +
     vnl_math_sqr( 2*vnl_math::pi/5 );
-  vnl_test_perform( close( rsdl_dist_sq( test_p, box), sq_dist ) );
-  vnl_test_begin( "point-to-box dist - angle outside (a) " );
-  vnl_test_perform( close( rsdl_dist( test_p, box), vcl_sqrt(sq_dist)) );
+  testlib_test_perform( close( rsdl_dist_sq( test_p, box), sq_dist ) );
+  testlib_test_begin( "point-to-box dist - angle outside (a) " );
+  testlib_test_perform( close( rsdl_dist( test_p, box), vcl_sqrt(sq_dist)) );
 
-  vnl_test_begin( "point-to-box dist sq - angle outside (b)" );
+  testlib_test_begin( "point-to-box dist sq - angle outside (b)" );
   ang0[0] = 15*vnl_math::pi/8;    // non-wrap, above, but closer to min value
   ang0[1] = 3*vnl_math::pi/8;    // wrap, closer to "max" (smaller angle value)
   ang0[2] = 19*vnl_math::pi/10;  // non-wrap, above
   test_p.set_angular( ang0.begin() );
   sq_dist = vnl_math_sqr( vnl_math::pi/4 ) + vnl_math_sqr( vnl_math::pi/8 ) +
     vnl_math_sqr( vnl_math::pi/10 );
-  vnl_test_perform( close( rsdl_dist_sq( test_p, box), sq_dist ) );
-  vnl_test_begin( "point-to-box dist - angle outside (b) " );
-  vnl_test_perform( close( rsdl_dist( test_p, box), vcl_sqrt(sq_dist)) );
+  testlib_test_perform( close( rsdl_dist_sq( test_p, box), sq_dist ) );
+  testlib_test_begin( "point-to-box dist - angle outside (b) " );
+  testlib_test_perform( close( rsdl_dist( test_p, box), vcl_sqrt(sq_dist)) );
 
 
   //  Now testing box intersection code.  This will take a bit because
@@ -115,38 +115,38 @@ main()
   // below/below (nothing)
   inner_c.min_cartesian(0) = -3.0; inner_c.max_cartesian(0) = -1.9;
   rsdl_dist_box_relation( inner_c, outer_c, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - cartesian only (a) " );
-  vnl_test_perform( !inside && !intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - cartesian only (a) " );
+  testlib_test_perform( !inside && !intersects );
 
   // below/between (intersects)
   inner_c.min_cartesian(0) = -3.0; inner_c.max_cartesian(0) = -1.0;
   rsdl_dist_box_relation( inner_c, outer_c, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - cartesian only (b) " );
-  vnl_test_perform( !inside && intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - cartesian only (b) " );
+  testlib_test_perform( !inside && intersects );
 
   // below/above (intersects)
   inner_c.min_cartesian(0) = -20.0; inner_c.max_cartesian(0) = 20.0;
   rsdl_dist_box_relation( inner_c, outer_c, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - cartesian only (c) " );
-  vnl_test_perform( !inside && intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - cartesian only (c) " );
+  testlib_test_perform( !inside && intersects );
 
   // between/between (inside and intersects)
   inner_c.min_cartesian(0) = -1.0; inner_c.max_cartesian(0) = 1.0;
   rsdl_dist_box_relation( inner_c, outer_c, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - cartesian only (d) " );
-  vnl_test_perform( inside && intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - cartesian only (d) " );
+  testlib_test_perform( inside && intersects );
 
   // between/above (intersects)
   inner_c.min_cartesian(0) = -1.0; inner_c.max_cartesian(0) = 8.0;
   rsdl_dist_box_relation( inner_c, outer_c, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - cartesian only (e) " );
-  vnl_test_perform( !inside && intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - cartesian only (e) " );
+  testlib_test_perform( !inside && intersects );
 
   // above/above (nothing)
   inner_c.min_cartesian(0) = 7.0; inner_c.max_cartesian(0) = 8.0;
   rsdl_dist_box_relation( inner_c, outer_c, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - cartesian only (f) " );
-  vnl_test_perform( !inside && !intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - cartesian only (f) " );
+  testlib_test_perform( !inside && !intersects );
 
   //  Angular next.  Start with neither interval wrapping around (6 tests)
   rsdl_point min_a(0,1), max_a(0,1);
@@ -157,38 +157,38 @@ main()
   //  both below (nothing)
   inner_a.min_cartesian(0) = -vnl_math::pi; inner_a.max_cartesian(0) = -3*vnl_math::pi/4;
   rsdl_dist_box_relation( inner_a, outer_a, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - angular only (1a) " );
-  vnl_test_perform( !inside && !intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - angular only (1a) " );
+  testlib_test_perform( !inside && !intersects );
 
   //  below / between (intersects)
   inner_a.min_cartesian(0) = -vnl_math::pi; inner_a.max_cartesian(0) = -vnl_math::pi/4;
   rsdl_dist_box_relation( inner_a, outer_a, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - angular only (1b) " );
-  vnl_test_perform( !inside && intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - angular only (1b) " );
+  testlib_test_perform( !inside && intersects );
 
   //  below / above (intersects)
   inner_a.min_cartesian(0) = -vnl_math::pi; inner_a.max_cartesian(0) = vnl_math::pi;
   rsdl_dist_box_relation( inner_a, outer_a, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - angular only (1c) " );
-  vnl_test_perform( !inside && intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - angular only (1c) " );
+  testlib_test_perform( !inside && intersects );
 
   // between / between (inside and intersects)
   inner_a.min_cartesian(0) = -vnl_math::pi/4; inner_a.max_cartesian(0) = vnl_math::pi/4;
   rsdl_dist_box_relation( inner_a, outer_a, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - angular only (1d) " );
-  vnl_test_perform( inside && intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - angular only (1d) " );
+  testlib_test_perform( inside && intersects );
 
   // between / above (intersects)
   inner_a.min_cartesian(0) = 0; inner_a.max_cartesian(0) = vnl_math::pi;
   rsdl_dist_box_relation( inner_a, outer_a, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - angular only (1e) " );
-  vnl_test_perform( !inside && intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - angular only (1e) " );
+  testlib_test_perform( !inside && intersects );
 
   // above / above (nothing)
   inner_a.min_cartesian(0) = vnl_math::pi; inner_a.max_cartesian(0) = 1.5*vnl_math::pi;
   rsdl_dist_box_relation( inner_a, outer_a, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - angular only (1f) " );
-  vnl_test_perform( !inside && !intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - angular only (1f) " );
+  testlib_test_perform( !inside && !intersects );
 
   //
   //  Now, outer does not wrap around, but inner does
@@ -199,38 +199,38 @@ main()
   // below / below   (intersects because of wrap-around)
   inner_a.min_cartesian(0) = vnl_math::pi/4; inner_a.max_cartesian(0) = vnl_math::pi/8;
   rsdl_dist_box_relation( inner_a, outer_a, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - angular only (2a) " );
-  vnl_test_perform( !inside && intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - angular only (2a) " );
+  testlib_test_perform( !inside && intersects );
 
   //  between / below (intersects)
   inner_a.min_cartesian(0) = vnl_math::pi; inner_a.max_cartesian(0) = vnl_math::pi/8;
   rsdl_dist_box_relation( inner_a, outer_a, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - angular only (2b) " );
-  vnl_test_perform( !inside && intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - angular only (2b) " );
+  testlib_test_perform( !inside && intersects );
 
   // above / below (nothing)
   inner_a.min_cartesian(0) = 7*vnl_math::pi/4; inner_a.max_cartesian(0) = vnl_math::pi/8;
   rsdl_dist_box_relation( inner_a, outer_a, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - angular only (2c) " );
-  vnl_test_perform( !inside && !intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - angular only (2c) " );
+  testlib_test_perform( !inside && !intersects );
 
   // between / between (intersects)
   inner_a.min_cartesian(0) = vnl_math::pi; inner_a.max_cartesian(0) = 3*vnl_math::pi/4;
   rsdl_dist_box_relation( inner_a, outer_a, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - angular only (2d) " );
-  vnl_test_perform( !inside && intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - angular only (2d) " );
+  testlib_test_perform( !inside && intersects );
 
   // above / between (intersects)
   inner_a.min_cartesian(0) = 7*vnl_math::pi/4; inner_a.max_cartesian(0) = vnl_math::pi;
   rsdl_dist_box_relation( inner_a, outer_a, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - angular only (2e) " );
-  vnl_test_perform( !inside && intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - angular only (2e) " );
+  testlib_test_perform( !inside && intersects );
 
   // above / above (intersects)
   inner_a.min_cartesian(0) = 7*vnl_math::pi/4; inner_a.max_cartesian(0) = 1.6*vnl_math::pi;
   rsdl_dist_box_relation( inner_a, outer_a, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - angular only (2f) " );
-  vnl_test_perform( !inside && intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - angular only (2f) " );
+  testlib_test_perform( !inside && intersects );
 
 
   //  Now, outer wraps around, but inner does not
@@ -239,38 +239,38 @@ main()
   //  below / below (inside and intersects)
   inner_a.min_cartesian(0) = vnl_math::pi/8; inner_a.max_cartesian(0) = vnl_math::pi/4;
   rsdl_dist_box_relation( inner_a, outer_a, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - angular only (3a) " );
-  vnl_test_perform( inside && intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - angular only (3a) " );
+  testlib_test_perform( inside && intersects );
 
   //  below / between (intersects)
   inner_a.min_cartesian(0) = vnl_math::pi/8; inner_a.max_cartesian(0) = 3*vnl_math::pi/4;
   rsdl_dist_box_relation( inner_a, outer_a, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - angular only (3b) " );
-  vnl_test_perform( !inside && intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - angular only (3b) " );
+  testlib_test_perform( !inside && intersects );
 
   //  below / above (intersects)
   inner_a.min_cartesian(0) = vnl_math::pi/8; inner_a.max_cartesian(0) = 7*vnl_math::pi/4;
   rsdl_dist_box_relation( inner_a, outer_a, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - angular only (3c) " );
-  vnl_test_perform( !inside && intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - angular only (3c) " );
+  testlib_test_perform( !inside && intersects );
 
   //  between / between (nothing)
   inner_a.min_cartesian(0) = 7*vnl_math::pi/8; inner_a.max_cartesian(0) = vnl_math::pi;
   rsdl_dist_box_relation( inner_a, outer_a, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - angular only (3d) " );
-  vnl_test_perform( !inside && !intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - angular only (3d) " );
+  testlib_test_perform( !inside && !intersects );
 
   //  between / above (intersects)
   inner_a.min_cartesian(0) = 7*vnl_math::pi/8; inner_a.max_cartesian(0) = 7*vnl_math::pi/4;
   rsdl_dist_box_relation( inner_a, outer_a, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - angular only (3e) " );
-  vnl_test_perform( !inside && intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - angular only (3e) " );
+  testlib_test_perform( !inside && intersects );
 
   //  above / above (inside and intersects)
   inner_a.min_cartesian(0) = 3*vnl_math::pi/2; inner_a.max_cartesian(0) = 7*vnl_math::pi/4;
   rsdl_dist_box_relation( inner_a, outer_a, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - angular only (3f) " );
-  vnl_test_perform( inside && intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - angular only (3f) " );
+  testlib_test_perform( inside && intersects );
 
 
  //  Now, both wrap around...
@@ -279,38 +279,38 @@ main()
   //  below / below (intersect)
   inner_a.min_cartesian(0) = vnl_math::pi/4; inner_a.max_cartesian(0) = vnl_math::pi/8;
   rsdl_dist_box_relation( inner_a, outer_a, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - angular only (4a) " );
-  vnl_test_perform( !inside && intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - angular only (4a) " );
+  testlib_test_perform( !inside && intersects );
 
   //  between / below (intersect)
   inner_a.min_cartesian(0) = vnl_math::pi; inner_a.max_cartesian(0) = vnl_math::pi/8;
   rsdl_dist_box_relation( inner_a, outer_a, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - angular only (4b) " );
-  vnl_test_perform( !inside && intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - angular only (4b) " );
+  testlib_test_perform( !inside && intersects );
 
   //  above / below (inside and intersect)
   inner_a.min_cartesian(0) = 7*vnl_math::pi/4; inner_a.max_cartesian(0) = vnl_math::pi/8;
   rsdl_dist_box_relation( inner_a, outer_a, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - angular only (4c) " );
-  vnl_test_perform( inside && intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - angular only (4c) " );
+  testlib_test_perform( inside && intersects );
 
   //  between / between (intersect)
   inner_a.min_cartesian(0) = 9*vnl_math::pi/8; inner_a.max_cartesian(0) = vnl_math::pi;
   rsdl_dist_box_relation( inner_a, outer_a, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - angular only (4d) " );
-  vnl_test_perform( intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - angular only (4d) " );
+  testlib_test_perform( intersects );
 
   //  above / between (intersect)
   inner_a.min_cartesian(0) = 7*vnl_math::pi/4; inner_a.max_cartesian(0) = vnl_math::pi;
   rsdl_dist_box_relation( inner_a, outer_a, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - angular only (4e) " );
-  vnl_test_perform( intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - angular only (4e) " );
+  testlib_test_perform( intersects );
 
   //  above / above (intersect)
   inner_a.min_cartesian(0) = 7*vnl_math::pi/4; inner_a.max_cartesian(0) = 13*vnl_math::pi/8;
   rsdl_dist_box_relation( inner_a, outer_a, inside, intersects );
-  vnl_test_begin( "rsdl_dist_box_relation - angular only (4f) " );
-  vnl_test_perform( intersects );
+  testlib_test_begin( "rsdl_dist_box_relation - angular only (4f) " );
+  testlib_test_perform( intersects );
 
   //  Test for control logic inside  rsdl_dist_box_relation
   const double pi = vnl_math::pi;
@@ -331,35 +331,35 @@ main()
   rsdl_bounding_box inner( i_min, i_max );
 
   //  succeeds on inside and intersects
-  vnl_test_begin( "rsdl_dist_box_relation - complete (a) " );
+  testlib_test_begin( "rsdl_dist_box_relation - complete (a) " );
   rsdl_dist_box_relation( inner, outer, inside, intersects );
-  vnl_test_perform( inside && intersects );
+  testlib_test_perform( inside && intersects );
 
   // inside fails on cartesian
   inner.min_cartesian(0) = 1.25;
-  vnl_test_begin( "rsdl_dist_box_relation - complete (b) " );
+  testlib_test_begin( "rsdl_dist_box_relation - complete (b) " );
   rsdl_dist_box_relation( inner, outer, inside, intersects );
-  vnl_test_perform( !inside && intersects );
+  testlib_test_perform( !inside && intersects );
 
   // inside fails on angular
   inner.min_cartesian(0) = 1.95;
   inner.min_angular(2) = 5*pi/4;
-  vnl_test_begin( "rsdl_dist_box_relation - complete (c) " );
+  testlib_test_begin( "rsdl_dist_box_relation - complete (c) " );
   rsdl_dist_box_relation( inner, outer, inside, intersects );
-  vnl_test_perform( !inside && intersects );
+  testlib_test_perform( !inside && intersects );
 
   // intersects fails on cartesian
   inner.min_cartesian(0) = 4.75; inner.max_cartesian(0) = 5.0;
-  vnl_test_begin( "rsdl_dist_box_relation - complete (d) " );
+  testlib_test_begin( "rsdl_dist_box_relation - complete (d) " );
   rsdl_dist_box_relation( inner, outer, inside, intersects );
-  vnl_test_perform( !inside && !intersects );
+  testlib_test_perform( !inside && !intersects );
 
   // intersects fails on angular
   inner.min_cartesian(0) = 1.95;
   inner.min_angular(0) = 0;   inner.max_angular(0) = pi/4;
-  vnl_test_begin( "rsdl_dist_box_relation - complete (e) " );
+  testlib_test_begin( "rsdl_dist_box_relation - complete (e) " );
   rsdl_dist_box_relation( inner, outer, inside, intersects );
-  vnl_test_perform( !inside && !intersects );
+  testlib_test_perform( !inside && !intersects );
 
 
   //  Now rsdl_dist_point_in_box.  Start by resetting the box boundaries
@@ -376,55 +376,55 @@ main()
   pt.angular(1) = pi;
   pt.angular(2) = pi/8;
 
-  vnl_test_begin( "rsdl_dist_point_in_box (a) " );
+  testlib_test_begin( "rsdl_dist_point_in_box (a) " );
   inside = rsdl_dist_point_in_box( pt, outer );
-  vnl_test_perform( inside );
+  testlib_test_perform( inside );
 
   pt.angular(2) = 7*pi/4;
-  vnl_test_begin( "rsdl_dist_point_in_box (b) " );
+  testlib_test_begin( "rsdl_dist_point_in_box (b) " );
   inside = rsdl_dist_point_in_box( pt, outer );
-  vnl_test_perform( inside );
+  testlib_test_perform( inside );
 
-  vnl_test_begin( "rsdl_dist_point_in_box (c) " );
+  testlib_test_begin( "rsdl_dist_point_in_box (c) " );
   pt.cartesian(1) = -2;
   inside = rsdl_dist_point_in_box( pt, outer );
-  vnl_test_perform( !inside );
+  testlib_test_perform( !inside );
 
-  vnl_test_begin( "rsdl_dist_point_in_box (d) " );
+  testlib_test_begin( "rsdl_dist_point_in_box (d) " );
   pt.cartesian(1) = 1;
   pt.cartesian(0) = 5;
   inside = rsdl_dist_point_in_box( pt, outer );
-  vnl_test_perform( !inside );
+  testlib_test_perform( !inside );
 
-  vnl_test_begin( "rsdl_dist_point_in_box (e) " );
+  testlib_test_begin( "rsdl_dist_point_in_box (e) " );
   pt.cartesian(0) = 2.5;
   inside = rsdl_dist_point_in_box( pt, outer );
-  vnl_test_perform( inside );  // sanity check to make sure things are reset correctly
+  testlib_test_perform( inside );  // sanity check to make sure things are reset correctly
 
-  vnl_test_begin( "rsdl_dist_point_in_box (f) " );
+  testlib_test_begin( "rsdl_dist_point_in_box (f) " );
   double temp = pt.angular(0);
   pt.angular(0) = -3*pi/2;
   inside = rsdl_dist_point_in_box( pt, outer );
   pt.angular(0) = temp;
   bool back_inside = rsdl_dist_point_in_box( pt, outer );
-  vnl_test_perform( !inside && back_inside );
+  testlib_test_perform( !inside && back_inside );
 
-  vnl_test_begin( "rsdl_dist_point_in_box (g) " );
+  testlib_test_begin( "rsdl_dist_point_in_box (g) " );
   temp = pt.angular(0);
   pt.angular(0) = 3*pi/2;
   inside = rsdl_dist_point_in_box( pt, outer );
   pt.angular(0) = temp;
   back_inside = rsdl_dist_point_in_box( pt, outer );
-  vnl_test_perform( !inside && back_inside );
+  testlib_test_perform( !inside && back_inside );
 
-  vnl_test_begin( "rsdl_dist_point_in_box (h) " );
+  testlib_test_begin( "rsdl_dist_point_in_box (h) " );
   temp = pt.angular(2);
   pt.angular(2) = pi;
   inside = rsdl_dist_point_in_box( pt, outer );
   pt.angular(2) = temp;
   back_inside = rsdl_dist_point_in_box( pt, outer );
-  vnl_test_perform( !inside && back_inside );
+  testlib_test_perform( !inside && back_inside );
 
-  vnl_test_summary();
+  testlib_test_summary();
   return 0;
 }

@@ -4,7 +4,7 @@
 
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_math.h>
-#include <vbl/vbl_test.h>
+#include <testlib/testlib_test.h>
 
 #include <mbl/mbl_mz_random.h>
 
@@ -23,7 +23,7 @@ static bool less_first( const vcl_pair<double,int>& l,
 int
 main()
 {
-  vbl_test_start( "rsdl_bins_2d" );
+  testlib_test_start( "rsdl_bins_2d" );
 
   vnl_vector_fixed< double, 2 > min_pt, max_pt, bin_sizes;
   min_pt.x() = 1.0;   min_pt.y() = -2.5;
@@ -39,55 +39,55 @@ main()
 
   pt.x() += dist_tol / 4;
   pt.y() -= dist_tol / 4;
-  vbl_test_begin( "add point and change point" );
+  testlib_test_begin( "add point and change point" );
   int changed_value = -5;
-  vbl_test_perform( bins.change_point( pt, changed_value ) );
+  testlib_test_perform( bins.change_point( pt, changed_value ) );
 
-  vbl_test_begin( "get value" );
+  testlib_test_begin( "get value" );
   int stored_value;
-  vbl_test_perform( bins.get_value( pt, stored_value ) &&
-                    stored_value == changed_value );
+  testlib_test_perform( bins.get_value( pt, stored_value ) &&
+                        stored_value == changed_value );
 
   vnl_vector_fixed< double, 2 > nearby( pt.x() + dist_tol, pt.y() - 2*dist_tol );
-  vbl_test_begin( "change nearby, but not close enough" );
-  vbl_test_perform( !bins.change_point( nearby, 22 ) &&
-                    bins.get_value( pt, stored_value ) &&
-                    stored_value == changed_value );
+  testlib_test_begin( "change nearby, but not close enough" );
+  testlib_test_perform( !bins.change_point( nearby, 22 ) &&
+                        bins.get_value( pt, stored_value ) &&
+                        stored_value == changed_value );
 
-  vbl_test_begin( "remove" );
-  vbl_test_perform( bins.remove_point( pt ) &&
-                    ! bins.get_value( pt, stored_value ) );
+  testlib_test_begin( "remove" );
+  testlib_test_perform( bins.remove_point( pt ) &&
+                        ! bins.get_value( pt, stored_value ) );
 
   pt.x() = 56.4; pt.y() = 31.0;
   int added_value = 45;
   bins.add_point( pt, added_value );
   vnl_vector_fixed< double, 2 > pt2( 56.1, 30 );
-  vbl_test_begin( "remove -- not there" );
-  vbl_test_perform( !bins.remove_point( pt2 )
-                    && bins.get_value( pt, stored_value )
-                    && stored_value == added_value );
-  vbl_test_begin( "remove -- different stored value" );
-  vbl_test_perform( !bins.remove_point( pt, 30 )
-                    && bins.get_value( pt, stored_value )
-                    && stored_value == added_value );
+  testlib_test_begin( "remove -- not there" );
+  testlib_test_perform( !bins.remove_point( pt2 ) &&
+                        bins.get_value( pt, stored_value )
+                        && stored_value == added_value );
+  testlib_test_begin( "remove -- different stored value" );
+  testlib_test_perform( !bins.remove_point( pt, 30 ) &&
+                        bins.get_value( pt, stored_value )
+                        && stored_value == added_value );
 
-  vbl_test_begin( "remove with value" );
-  vbl_test_perform( bins.remove_point( pt, added_value )
-                    && !bins.get_value( pt, stored_value ) );
+  testlib_test_begin( "remove with value" );
+  testlib_test_perform( bins.remove_point( pt, added_value ) &&
+                        !bins.get_value( pt, stored_value ) );
 
   pt.x() = 100; pt.y() = -30;
   added_value = 24;
-  vbl_test_begin( "adding point outside range" );
+  testlib_test_begin( "adding point outside range" );
   bins.add_point( pt, added_value );
-  vbl_test_perform( bins.get_value( pt, stored_value )
-                    && stored_value == added_value );
+  testlib_test_perform( bins.get_value( pt, stored_value )
+                        && stored_value == added_value );
 
   pt.x() = -50; pt.y() = 77.7;
   added_value = 13;
-  vbl_test_begin( "adding point outside range" );
+  testlib_test_begin( "adding point outside range" );
   bins.add_point( pt, added_value );
-  vbl_test_perform( bins.get_value( pt, stored_value )
-                    && stored_value == added_value );
+  testlib_test_perform( bins.get_value( pt, stored_value )
+                        && stored_value == added_value );
 
   //  Generate a bunch of points:
   const int M=60;
@@ -120,8 +120,8 @@ main()
         all_close_indices.push_back( i );
     }
 
-    vbl_test_begin( "is_any_point_within_radius" );
-    vbl_test_perform( bin_answer == (all_close_indices.size() > 0) );
+    testlib_test_begin( "is_any_point_within_radius" );
+    testlib_test_perform( bin_answer == (all_close_indices.size() > 0) );
 
     vcl_vector< int > bin_close_indices;
     bins.points_within_radius( q, radius, bin_close_indices );
@@ -133,10 +133,10 @@ main()
             i < vnl_math_min(all_close_indices.size(), bin_close_indices.size()); ++i )
       correct = all_close_indices[ i ] == bin_close_indices[ i ];
 
-    vbl_test_begin( "points_within_radius" );
-    vbl_test_perform( correct );
+    testlib_test_begin( "points_within_radius" );
+    testlib_test_perform( correct );
   }
 
-  vbl_test_summary();
+  testlib_test_summary();
   return 0;
 }

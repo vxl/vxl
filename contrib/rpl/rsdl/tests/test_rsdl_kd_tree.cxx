@@ -2,7 +2,7 @@
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
 #include <vnl/vnl_math.h>
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vcl_utility.h>
 
 #include <rsdl/rsdl_kd_tree.h>
@@ -26,7 +26,7 @@ static bool less_second( const vcl_pair<double,int>& left,
 int
 main()
 {
-  vnl_test_start( "rsdl_kd_tree" );
+  testlib_test_start( "rsdl_kd_tree" );
 
   int Nc=2, Na=3;
   rsdl_point pt( Nc, Na );
@@ -72,9 +72,9 @@ main()
   pt.angular( 0 ) = 2.6;     pt.angular( 1 ) = 2.05;   pt.angular( 2 ) = 1.1;
   points.push_back( pt );
 
-  vnl_test_begin( "ctor" );
+  testlib_test_begin( "ctor" );
   rsdl_kd_tree tree( points, - vnl_math::pi, 1 );
-  vnl_test_perform( true );
+  testlib_test_perform( true );
 
   rsdl_point query(2,3);
   query.cartesian( 0 ) = 80;  query.cartesian( 1 ) = 99.3;
@@ -86,22 +86,22 @@ main()
   bool use_heap = false;
   tree.n_nearest( query, 2, cpoints, cindices );
 
-  vnl_test_begin( "n_nearest" );
+  testlib_test_begin( "n_nearest" );
   bool ok = cpoints.size() == 2 && cindices.size() == 2
     && cindices[0] == 0 && cindices[1] == 4
     && close( rsdl_dist( cpoints[0], points[0] ), 0 )
     && close( rsdl_dist( cpoints[1], points[4] ), 0 );
-  vnl_test_perform( ok );
+  testlib_test_perform( ok );
 
   use_heap = true;
   tree.n_nearest( query, 2, cpoints_heap, cindices_heap, use_heap );
 
-  vnl_test_begin( "n_nearest with heap" );
+  testlib_test_begin( "n_nearest with heap" );
   ok = cpoints.size() == 2 && cindices.size() == 2
     && cindices_heap[0] == 0 && cindices_heap[1] == 4
     && close( rsdl_dist( cpoints_heap[0], points[0] ), 0 )
     && close( rsdl_dist( cpoints_heap[1], points[4] ), 0 );
-  vnl_test_perform( ok );
+  testlib_test_perform( ok );
 
   int M = 5000;
   points.resize( M );
@@ -144,20 +144,20 @@ main()
     use_heap = false;
     tree2.n_nearest( query, n, cpoints, cindices, use_heap );
 
-    vnl_test_begin( "k-d tree vs. exhaustive (stack) ");
+    testlib_test_begin( "k-d tree vs. exhaustive (stack) ");
     ok = true;
     for ( int i=0; ok && i<n; ++i )
       ok = ok && cindices[i] == dist_pairs[i].second;
-    vnl_test_perform( ok );
+    testlib_test_perform( ok );
 
     //  find out the k-d tree results w heap
     use_heap = true;
     tree2.n_nearest( query, n, cpoints_heap, cindices_heap, use_heap );
 
-    vnl_test_begin( "k-d tree vs. exhaustive (heap) ");
+    testlib_test_begin( "k-d tree vs. exhaustive (heap) ");
     for ( int i=0; ok && i<n; ++i )
       ok = ok && cindices_heap[i] == dist_pairs[i].second;
-    vnl_test_perform( ok );
+    testlib_test_perform( ok );
 
     //  Test the points within a given bounding box.
 
@@ -215,9 +215,9 @@ main()
              <<"\nNumber of point disagreements =" << disagree_pt << vcl_endl;
 #endif
 
-    vnl_test_begin( "k-d tree bounding box ");
-    vnl_test_perform( inside_count==box_points.size() && disagree_pt==0
-                      && disagree_index==0 );
+    testlib_test_begin( "k-d tree bounding box ");
+    testlib_test_perform( inside_count==box_points.size() && disagree_pt==0
+                          && disagree_index==0 );
 
     //
     //  Test an overly large radius
@@ -261,9 +261,9 @@ main()
              <<"\nNumber of point disagreements =" << disagree_pt << vcl_endl;
 #endif
 
-    vnl_test_begin( "k-d tree points_in_radius (1)");
-    vnl_test_perform( inside_count==radius_points.size() && disagree_pt==0
-                      && disagree_index==0 );
+    testlib_test_begin( "k-d tree points_in_radius (1)");
+    testlib_test_perform( inside_count==radius_points.size() && disagree_pt==0
+                          && disagree_index==0 );
 
 
     //
@@ -308,12 +308,12 @@ main()
              <<"\nNumber of point disagreements =" << disagree_pt << vcl_endl;
 #endif
 
-    vnl_test_begin( "k-d tree points_in_radius ");
-    vnl_test_perform( inside_count==radius_points.size() && disagree_pt==0
-                      && disagree_index==0 );
+    testlib_test_begin( "k-d tree points_in_radius ");
+    testlib_test_perform( inside_count==radius_points.size() && disagree_pt==0
+                          && disagree_index==0 );
   }
 
-  vnl_test_summary();
+  testlib_test_summary();
 
   return 0;
 }
