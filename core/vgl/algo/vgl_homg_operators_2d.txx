@@ -273,7 +273,6 @@ vgl_homg_operators_2d<T>::perp_projection(const vgl_homg_line_2d<T>& line,
 {
   vgl_homg_line_2d<T> perpline = perp_line_through_point (line, point);
   vgl_homg_point_2d<T> answer = cross(line, perpline);
-  unitize(answer);
   return answer;
 }
 
