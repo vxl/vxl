@@ -38,8 +38,9 @@ core testlib testlib_ build
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl contrib/mul Manchester University Libraries
 contrib/mul mbl    mbl_    build core/vnl core/vgl
-contrib/mul mil    mil_    build contrib/mul/mbl core/vbl core/vil1
-contrib/mul mil3d  mil3d_  build contrib/mul/mil
+# Don't document mil or mil3d anymore, they are deprecated.
+# contrib/mul mil    mil_    build contrib/mul/mbl core/vbl core/vil1
+# contrib/mul mil3d  mil3d_  build contrib/mul/mil
 contrib/mul pdf1d  pdf1d_  build contrib/mul/mbl core/vbl
 contrib/mul vpdfl  vpdfl_  build contrib/mul/mbl
 contrib/mul clsfy  clsfy_  build contrib/mul/vpdfl
