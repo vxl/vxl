@@ -24,6 +24,9 @@
 #include <vsrl/vsrl_stereo_dense_matcher.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
+#include <vdgl/vdgl_digital_curve.h>
+#include <vdgl/vdgl_interpolator.h>
+#include <vdgl/vdgl_edgel_chain.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_vertex.h>
