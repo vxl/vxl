@@ -98,7 +98,7 @@ public:
   void clear();
 
   //: Get i<I>th</I> component.
-  const vpdfl_pdf_base & component(unsigned i) { return *component_[i]; }
+  const vpdfl_pdf_base & component(unsigned i) const { return *component_[i]; }
 
   //: Access to components - for use by builders
   //  Care must be taken to ensure consistency when modifying
