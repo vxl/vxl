@@ -67,7 +67,10 @@ class kalman_filter
   void init_transit_matrix();
 
  private:
+   //: position and confidence of feature samples
   vcl_vector<vnl_double_3> Xl_;
+  vcl_vector<double> prob_;
+
   vcl_vector<vnl_matrix<double> > observes_;
 
   //: each element of the vector represents a projection of the same 3D curves.

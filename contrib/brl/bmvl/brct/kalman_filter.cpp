@@ -201,11 +201,13 @@ void kalman_filter::init_state_vector()
   zc /= num_points_;
 
   Xl_.resize(num_points_);
+  prob_.resize(num_points_);
 
   for (int i=0; i<num_points_; i++) {
     Xl_[i][0] = pts_3d[i].x() - xc;
     Xl_[i][1] = pts_3d[i].y() - yc;
     Xl_[i][2] = pts_3d[i].z() - zc;
+    prob_[i] = 1.0/num_points_;
   }
 
   X_[0] = xc;
@@ -333,6 +335,7 @@ vnl_double_2 kalman_filter::projection(const vnl_double_3x4 &P, const vnl_double
 
     return z;
 }
+
 
 void kalman_filter::update_observes(const vnl_double_3x4 &P)
 {
