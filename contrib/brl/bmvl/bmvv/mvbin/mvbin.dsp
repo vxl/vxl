@@ -284,10 +284,7 @@ LINK32=link.exe
 # Begin Group "Source Files"
 # PROP Default_Filter ""
 # Begin Source File
-SOURCE=.\mviewer.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\modtom.cxx
+SOURCE=.\recon.cxx
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"

@@ -108,6 +108,12 @@ SOURCE=.\bsol_distance_histogram.cxx
 SOURCE=.\bsol_algs.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bsol_point_index_2d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bsol_point_index_3d.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bsol_hough_line_index-.cxx
 # End Source File
 # End Group
@@ -124,6 +130,12 @@ SOURCE=.\bsol_distance_histogram.h
 # End Source File
 # Begin Source File
 SOURCE=.\bsol_hough_line_index_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsol_point_index_2d.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsol_point_index_3d.h
 # End Source File
 # End Group
 # End Target

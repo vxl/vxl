@@ -99,31 +99,19 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "c;cxx"
 # Begin Source File
-SOURCE=.\bmvv_multiview_manager.cxx
+SOURCE=.\bmvv_recon_manager.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bmvv_menus.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bmvv_tomography_manager.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bmvv_tomg_menus.cxx
+SOURCE=.\bmvv_recon_menus.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\bmvv_multiview_manager.h
+SOURCE=.\bmvv_recon_manager.h
 # End Source File
 # Begin Source File
-SOURCE=.\bmvv_menus.h
-# End Source File
-# Begin Source File
-SOURCE=.\bmvv_tomography_manager.h
-# End Source File
-# Begin Source File
-SOURCE=.\bmvv_tomg_menus.h
+SOURCE=.\bmvv_recon_menus.h
 # End Source File
 # End Group
 # End Target
