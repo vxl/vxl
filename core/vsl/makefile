@@ -6,6 +6,7 @@ VERSION := 1.0
 SOURCES += vsl_indent.cxx
 SOURCES += vsl_binary_io.cxx
 SOURCES += vsl_binary_loader_base.cxx
+SOURCES += vsl_vector_io_bool.cxx
 
 # Additional files to document:
 MANPAGE_SOURCES += vsl_fwd.h
