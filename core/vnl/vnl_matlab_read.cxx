@@ -8,8 +8,8 @@
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h> // abort()
 #include <vcl_cstring.h> // memset()
+#include <vcl_complex.h>
 #include <vnl/vnl_c_vector.h>
-#include <vnl/vnl_complex.h>
 #include <vnl/vnl_complex_traits.h>
 
 // FIXME: Currently ignores the byte ordering of the MAT file header, effectively
@@ -32,21 +32,21 @@ void vnl_matlab_read_data(vcl_istream &s, double *p, unsigned n)
 
 #define implement_read_complex_data(T) \
 VCL_DEFINE_SPECIALIZATION \
-void vnl_matlab_read_data(vcl_istream &s, vnl_complex<T > *ptr, unsigned n) { \
+void vnl_matlab_read_data(vcl_istream &s, vcl_complex<T > *ptr, unsigned n) { \
   T *re = vnl_c_vector<T >::allocate_T(n); \
   T *im = vnl_c_vector<T >::allocate_T(n); \
   ::vnl_read_bytes(s, re, n*sizeof(T)); \
   ::vnl_read_bytes(s, im, n*sizeof(T)); \
   for (unsigned i=0; i<n; ++i) \
-    ptr[i] = vnl_complex<T >(re[i], im[i]); \
+    ptr[i] = vcl_complex<T >(re[i], im[i]); \
   vnl_c_vector<T >::deallocate(re, n); \
   vnl_c_vector<T >::deallocate(im, n); \
 }
 
 //#if VCL_CAN_DO_PARTIAL_SPECIALIZATION
 //template <class T> implement_read_complex_data(T)
-//template void vnl_matlab_read_data(istream &, vnl_complex<float > *, unsigned);
-//template void vnl_matlab_read_data(istream &, vnl_complex<double> *, unsigned);
+//template void vnl_matlab_read_data(istream &, vcl_complex<float > *, unsigned);
+//template void vnl_matlab_read_data(istream &, vcl_complex<double> *, unsigned);
 //#else
 implement_read_complex_data(float )
 implement_read_complex_data(double)
@@ -122,8 +122,8 @@ void vnl_matlab_readhdr::read_next() {
 
 bool vnl_matlab_readhdr::type_chck(float &) { return is_single() && !is_complex(); }
 bool vnl_matlab_readhdr::type_chck(double &) { return !is_single() && !is_complex(); }
-bool vnl_matlab_readhdr::type_chck(vnl_float_complex &) { return is_single() && is_complex(); }
-bool vnl_matlab_readhdr::type_chck(vnl_double_complex &) { return !is_single() && is_complex(); }
+bool vnl_matlab_readhdr::type_chck(vcl_complex<float> &) { return is_single() && is_complex(); }
+bool vnl_matlab_readhdr::type_chck(vcl_complex<double> &) { return !is_single() && is_complex(); }
 
 #define fsm_define_methods(T) \
 bool vnl_matlab_readhdr::read_data(T &v) { \
@@ -140,7 +140,7 @@ bool vnl_matlab_readhdr::read_data(T *p) { \
 } \
 bool vnl_matlab_readhdr::read_data(T * const *m) { \
   if (!type_chck(m[0][0])) { vcl_cerr << "type_check" << vcl_endl; return false; } \
-  T *tmp = vnl_c_vector<T>::allocate_T(rows()*cols()); \
+  T *tmp = vnl_c_vector<T >::allocate_T(rows()*cols()); \
   /*vnl_c_vector<T >::fill(tmp, rows()*cols(), 3.14159);*/ \
   vnl_matlab_read_data(s, tmp, rows()*cols()); \
   int a, b; \
@@ -155,13 +155,13 @@ bool vnl_matlab_readhdr::read_data(T * const *m) { \
   for (int i=0; i<rows(); ++i) \
     for (int j=0; j<cols(); ++j) \
       m[i][j] = tmp[a*i + b*j]; \
-  vnl_c_vector<T>::deallocate(tmp, rows()*cols()); \
+  vnl_c_vector<T >::deallocate(tmp, rows()*cols()); \
   data_read = true; return *this; \
 }
 fsm_define_methods(float);
 fsm_define_methods(double);
-fsm_define_methods(vnl_float_complex);
-fsm_define_methods(vnl_double_complex);
+fsm_define_methods(vcl_complex<float>);
+fsm_define_methods(vcl_complex<double>);
 #undef fsm_define_methods
 
 //--------------------------------------------------------------------------------

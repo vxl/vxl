@@ -10,7 +10,7 @@
 #include <vnl/vnl_complex_ops.h>
 #include <vnl/algo/vnl_netlib.h> // zgeev_()
 
-void vnl_complex_eigensystem::compute(vnl_matrix<vnl_double_complex> const & A,
+void vnl_complex_eigensystem::compute(vnl_matrix<vcl_complex<double> > const & A,
 				      bool right,
 				      bool left)
 {
@@ -34,10 +34,10 @@ void vnl_complex_eigensystem::compute(vnl_matrix<vnl_double_complex> const & A,
   // eigenvector storage and vice versa.
   // But then we also have to conjugate our R after calling the routine.
   //
-  vnl_matrix<vnl_double_complex> tmp(A);
+  vnl_matrix<vcl_complex<double> > tmp(A);
 
   int work_space=10*N;
-  vnl_vector<vnl_double_complex> work(work_space);
+  vnl_vector<vcl_complex<double> > work(work_space);
 
   int rwork_space=2*N;
   vnl_vector<double> rwork(rwork_space);
@@ -85,7 +85,7 @@ void vnl_complex_eigensystem::compute(vnl_matrix<vnl_double_complex> const & A,
 //--------------------------------------------------------------------------------
 
 //
-vnl_complex_eigensystem::vnl_complex_eigensystem(vnl_matrix<vnl_double_complex> const &A,
+vnl_complex_eigensystem::vnl_complex_eigensystem(vnl_matrix<vcl_complex<double> > const &A,
 						 bool right,
 						 bool left)
   : N(A.rows())
@@ -111,7 +111,7 @@ vnl_complex_eigensystem::vnl_complex_eigensystem(vnl_matrix<double> const &A_rea
   A_real.assert_size(N,N);
   A_imag.assert_size(N,N);
   
-  vnl_matrix<vnl_double_complex> A(N,N);
+  vnl_matrix<vcl_complex<double> > A(N,N);
   vnl_complexify(A_real.begin(), A_imag.begin(), A.begin(), A.size());
 
   compute(A, right, left);

@@ -45,7 +45,7 @@ public:
   typedef T abs_t;
 
 // -- Name of a type twice as long as this one for accumulators and products.
-// For float it's double, for vnl_complex<float> it's vnl_complex<double>.
+// For float it's double, for vcl_complex<float> it's vcl_complex<double>.
 // In theory one might use long double for double, but in practice it's too slow
 // and it doesn't matter so much for double.  Define NUMERICS_LONG_DOUBLE_IS_FAST
 // if you want long double.
