@@ -24,6 +24,7 @@ DECLARE( test_matlab );
 DECLARE( test_matrix );
 DECLARE( test_matrix_exp );
 DECLARE( test_matrix_fixed );
+DECLARE( test_matrix_fixed_ref );
 DECLARE( test_minimizers );
 DECLARE( test_numeric_limits );
 DECLARE( test_numeric_traits );
@@ -42,6 +43,7 @@ DECLARE( test_sym_matrix );
 DECLARE( test_symmetric_eigensystem );
 DECLARE( test_transpose );
 DECLARE( test_vector );
+DECLARE( test_vector_fixed_ref );
 DECLARE( test_gamma );
 DECLARE( test_arithmetic );
 
@@ -72,6 +74,7 @@ register_tests()
   REGISTER( test_matrix );
   REGISTER( test_matrix_exp );
   REGISTER( test_matrix_fixed );
+  REGISTER( test_matrix_fixed_ref );
   REGISTER( test_minimizers );
   REGISTER( test_numeric_limits );
   REGISTER( test_numeric_traits );
@@ -90,6 +93,7 @@ register_tests()
   REGISTER( test_symmetric_eigensystem );
   REGISTER( test_transpose );
   REGISTER( test_vector );
+  REGISTER( test_vector_fixed_ref );
   REGISTER( test_gamma );
   REGISTER( test_arithmetic );
 }

@@ -37,6 +37,8 @@ IF(NETLIB_FOUND)
     test_matrix.cxx
     test_matrix_exp.cxx
     test_matrix_fixed.cxx
+    test_vector_fixed_ref.cxx
+    test_matrix_fixed_ref.cxx
     test_minimizers.cxx
     test_numeric_limits.cxx
     test_numeric_traits.cxx
