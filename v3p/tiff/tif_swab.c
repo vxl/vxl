@@ -31,7 +31,7 @@
 #include "tiffio.h"
 
 #ifndef TIFFSwabShort
-TIFFSwabShort(wp)
+void TIFFSwabShort(wp)
 	unsigned short *wp;
 {
 	register unsigned char *cp = (unsigned char *)wp;
@@ -42,7 +42,7 @@ TIFFSwabShort(wp)
 #endif
 
 #ifndef TIFFSwabLong
-TIFFSwabLong(lp)
+void TIFFSwabLong(lp)
 	unsigned long *lp;
 {
 	register unsigned char *cp = (unsigned char *)lp;
@@ -54,7 +54,7 @@ TIFFSwabLong(lp)
 #endif
 
 #ifndef TIFFSwabArrayOfShort
-TIFFSwabArrayOfShort(wp, n)
+void TIFFSwabArrayOfShort(wp, n)
 	unsigned short *wp;
 	register int n;
 {
@@ -71,7 +71,7 @@ TIFFSwabArrayOfShort(wp, n)
 #endif
 
 #ifndef TIFFSwabArrayOfLong
-TIFFSwabArrayOfLong(lp, n)
+void TIFFSwabArrayOfLong(lp, n)
 	register unsigned long *lp;
 	register int n;
 {
@@ -174,7 +174,7 @@ unsigned char TIFFNoBitRevTable[256] = {
     0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff, 
 };
 
-TIFFReverseBits(cp, n)
+void TIFFReverseBits(cp, n)
 	register unsigned char *cp;
 	register int n;
 {

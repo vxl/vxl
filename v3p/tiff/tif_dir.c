@@ -37,7 +37,7 @@
 #include "prototypes.h"
 #include <string.h> /* for strlen() */
 
-static
+static void
 DECLARE2(setString, char**, cpp, char*, cp)
 {
 	if (*cpp)
@@ -49,7 +49,7 @@ DECLARE2(setString, char**, cpp, char*, cp)
 	}
 }
 
-static
+static void
 DECLARE3(setShortArray, u_short**, wpp, u_short*, wp, long, n)
 {
 	if (*wpp)
@@ -59,7 +59,7 @@ DECLARE3(setShortArray, u_short**, wpp, u_short*, wp, long, n)
 		bcopy(wp, *wpp, n);
 }
 
-static
+static void
 DECLARE3(setLongArray, u_long**, wpp, u_long*, wp, long, n)
 {
 	if (*wpp)
@@ -69,7 +69,7 @@ DECLARE3(setLongArray, u_long**, wpp, u_long*, wp, long, n)
 		bcopy(wp, *wpp, n);
 }
 
-static
+static void
 DECLARE3(setFloatArray, float**, wpp, float*, wp, long, n)
 {
 	if (*wpp)
@@ -87,7 +87,7 @@ DECLARE3(setFloatArray, float**, wpp, float*, wp, long, n)
  * that is expected by the compression code
  * and that is to be stored in the file.
  */
-static
+static void
 DECLARE3(setJPEGQTable, u_char***, wpp, u_char**, wp, int, nc)
 {
 	static u_char zigzag[64] = {
@@ -119,7 +119,7 @@ DECLARE3(setJPEGQTable, u_char***, wpp, u_char**, wp, int, nc)
 /*
  * Install a JPEG Coefficient table.
  */
-static
+static void
 DECLARE3(setJPEGCTable, u_char***, cpp, u_char**, cp, int, nc)
 {
 	u_char *tab;
@@ -539,7 +539,7 @@ TIFFVSetField(tif, tag, ap)
 	return (status);
 }
 
-static
+static void
 TIFFGetField1(td, tag, ap)
 	TIFFDirectory *td;
 	int tag;
@@ -817,7 +817,7 @@ TIFFVGetField(tif, tag, ap)
 /*
  * Internal interface to TIFFGetField...
  */
-int
+void
 /*VARARGS2*/
 DECLARE2V(_TIFFgetfield, TIFFDirectory*, td, int, tag)
 {
@@ -838,6 +838,7 @@ DECLARE2V(_TIFFgetfield, TIFFDirectory*, td, int, tag)
 /*
  * Release storage associated with a directory.
  */
+void
 TIFFFreeDirectory(tif)
 	TIFF *tif;
 {

@@ -445,8 +445,8 @@ LZWPreDecode(tif)
 	sp->dec_bitsleft = tif->tif_rawdatasize << 3;
 #endif
 	sp->dec_free_entp = sp->dec_codetab + CODE_FIRST;
-	sp->dec_oldcodep = &sp->dec_codetab[-1];
-	sp->dec_maxcodep = &sp->dec_codetab[sp->dec_nbitsmask-1];
+	sp->dec_oldcodep  = sp->dec_codetab - 1;
+	sp->dec_maxcodep  = sp->dec_codetab + (sp->dec_nbitsmask-1);
 	return (1);
 }
 
@@ -1235,6 +1235,7 @@ LZWCleanup(tif)
 		free(tif->tif_data);
 		tif->tif_data = NULL;
 	}
+	return (0==0); /* true */
 }
 
 /*

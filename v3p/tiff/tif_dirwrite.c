@@ -42,7 +42,7 @@
 
 #if USE_PROTOTYPES
 static	TIFFWriteNormalTag(TIFF*, TIFFDirEntry*, TIFFFieldInfo*);
-static	TIFFSetupShortLong(TIFF *, u_short, TIFFDirEntry *, u_long);
+static	void TIFFSetupShortLong(TIFF *, u_short, TIFFDirEntry *, u_long);
 static	TIFFSetupShortPair(TIFF *, u_short, TIFFDirEntry *);
 static	TIFFWriteRational(TIFF *,
 	    TIFFDataType, u_short, TIFFDirEntry *, float);
@@ -446,7 +446,7 @@ DECLARE3(TIFFWriteNormalTag,
  * Setup a directory entry with either a SHORT
  * or LONG type according to the value.
  */
-static
+static void
 DECLARE4(TIFFSetupShortLong,
     TIFF*, tif, u_short, tag, TIFFDirEntry*, dir, u_long, v)
 {

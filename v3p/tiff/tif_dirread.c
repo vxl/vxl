@@ -42,8 +42,8 @@
 
 #include "prototypes.h"
 #if USE_PROTOTYPES
-static	EstimateStripByteCounts(TIFF *, TIFFDirEntry *, u_int);
-static	MissingRequired(TIFF *, char *);
+static	void EstimateStripByteCounts(TIFF *, TIFFDirEntry *, u_int);
+static	void MissingRequired(TIFF *, char *);
 static	CheckDirCount(TIFF *, TIFFDirEntry *, u_long);
 static	TIFFFetchData(TIFF *, TIFFDirEntry *, char *);
 static	TIFFFetchString(TIFF *, TIFFDirEntry *, char *);
@@ -526,7 +526,7 @@ bad:
 	return (0);
 }
 
-static
+static void
 EstimateStripByteCounts(tif, dir, dircount)
 	TIFF *tif;
 	TIFFDirEntry *dir;
@@ -571,7 +571,7 @@ EstimateStripByteCounts(tif, dir, dircount)
 		td->td_rowsperstrip = td->td_imagelength;
 }
 
-static
+static void
 MissingRequired(tif, tagname)
 	TIFF *tif;
 	char *tagname;

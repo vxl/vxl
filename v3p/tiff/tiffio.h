@@ -145,11 +145,11 @@ extern	int TIFFWriteEncodedStrip(TIFF*, unsigned, unsigned char*, unsigned);
 extern	int TIFFWriteRawStrip(TIFF*, unsigned, unsigned char*, unsigned);
 extern	int TIFFWriteEncodedTile(TIFF*, unsigned, unsigned char*, unsigned);
 extern	int TIFFWriteRawTile(TIFF*, unsigned, unsigned char*, unsigned);
-extern	int TIFFSwabShort(unsigned short *);
-extern	int TIFFSwabLong(unsigned long *);
-extern	int TIFFSwabArrayOfShort(unsigned short *, int);
-extern	int TIFFSwabArrayOfLong(unsigned long *, int);
-extern	int TIFFReverseBits(unsigned char *, int);
+extern	void TIFFSwabShort(unsigned short *);
+extern	void TIFFSwabLong(unsigned long *);
+extern	void TIFFSwabArrayOfShort(unsigned short *, int);
+extern	void TIFFSwabArrayOfLong(unsigned long *, int);
+extern	void TIFFReverseBits(unsigned char *, int);
 #if defined(__cplusplus)
 }
 #endif

@@ -87,7 +87,7 @@ static const int litTypeshift[13] = {
  * swapping state according to the file
  * contents and the machine architecture.
  */
-static
+static void
 DECLARE3(TIFFInitOrder, register TIFF*, tif, int, magic, int, bigendian)
 {
 	/* XXX how can we deduce this dynamically? */
