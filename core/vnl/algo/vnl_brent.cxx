@@ -2,12 +2,14 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+
+#include "vnl_brent.h"
+
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
 
 #include <vnl/vnl_math.h>
-#include <vnl/algo/vnl_brent.h>
 #include <vnl/vnl_vector_fixed.h>
 
 struct vnl_brent_data {

@@ -10,12 +10,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#include "vbl_bit_array_3d.h"
+
 #include <vcl_cstring.h> // for memset()
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_climits.h>
-
-#include "vbl_bit_array_3d.h"
 
 // Default ctor
 vbl_bit_array_3d::vbl_bit_array_3d(unsigned int sizex,

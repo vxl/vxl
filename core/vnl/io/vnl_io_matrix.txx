@@ -1,12 +1,11 @@
-// This is ./vxl/vnl/io/vnl_io_matrix.txx
+// This is vxl/vnl/io/vnl_io_matrix.txx
 #ifndef vnl_io_matrix_txx_
 #define vnl_io_matrix_txx_
-
 //:
 // \file
 
+#include "vnl_io_matrix.h"
 #include <vnl/vnl_matrix.h>
-#include <vnl/io/vnl_io_matrix.h>
 #include <vsl/vsl_binary_explicit_io.h>
 #include <vsl/vsl_indent.h>
 

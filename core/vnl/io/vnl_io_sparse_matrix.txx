@@ -1,13 +1,12 @@
-// This is ./vxl/vnl/io/vnl_io_sparse_matrix.txx
+// This is vxl/vnl/io/vnl_io_sparse_matrix.txx
 #ifndef vnl_io_sparse_matrix_txx_
 #define vnl_io_sparse_matrix_txx_
-
 //:
 // \file
 
+#include "vnl_io_sparse_matrix.h"
 #include <vnl/vnl_sparse_matrix.h>
 #include <vsl/vsl_binary_io.h>
-#include <vnl/io/vnl_io_sparse_matrix.h>
 #include <vcl_cassert.h>
 
 //I/O for vnl_sparse_matrix_pair
@@ -126,13 +125,13 @@ void vsl_b_read(vsl_b_istream &is, vnl_sparse_matrix<T> & p)
     // As we cannot resize the matrix, check that it is the correct size.
     assert (n_rows==(int)p.rows());
     assert (n_cols==(int)p.columns());
-    for(int i=0;i<n_rows;i++)
+    for (int i=0;i<n_rows;i++)
     {
       vsl_b_read(is,row_size);
       indexes.resize(row_size);
       values.resize(row_size);
 
-      for(int j=0;j<row_size;j++)
+      for (int j=0;j<row_size;j++)
       {
         pair_t p;
         vsl_b_read(is, p);

@@ -1,13 +1,12 @@
 // This is vxl/vil/vil_warp.cxx
-
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 
-#include <vcl_cassert.h>
+#include "vil_warp.h"
+#include "vil_warp.txx"
 
-#include <vil/vil_warp.h>
-#include <vil/vil_warp.txx>
+#include <vcl_cassert.h>
 
 #include <vil/vil_rgb.h>
 #include <vil/vil_pixel.h>

@@ -2,10 +2,12 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+
+#include "vnl_powell.h"
+
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 
-#include <vnl/algo/vnl_powell.h>
 #include <vnl/algo/vnl_brent.h>
 #include <vnl/vnl_matlab_print.h>
 #include <vnl/vnl_math.h>
