@@ -685,6 +685,14 @@ SOURCE=.\vnl_sample.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vnl_sparse_matrix+double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vnl_sparse_matrix+float-.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\vnl_sparse_matrix_linear_system.cxx
 # End Source File
 # Begin Source File

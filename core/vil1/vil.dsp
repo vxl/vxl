@@ -557,6 +557,10 @@ SOURCE=.\vil_stream_url.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vil_test.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\file_formats\vil_viff.cxx
 # End Source File
 # Begin Source File
@@ -830,6 +834,10 @@ SOURCE=.\vil_stream_section.h
 # Begin Source File
 
 SOURCE=.\vil_stream_url.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vil_test.h
 # End Source File
 # Begin Source File
 

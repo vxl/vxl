@@ -261,6 +261,18 @@ SOURCE=".\Templates\vgl_line_segment_2d+double-.cxx"
 # End Source File
 # Begin Source File
 
+SOURCE=".\Templates\vgl_line_segment_2d+float-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vgl_line_segment_3d+double-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vgl_line_segment_3d+float-.cxx"
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates\vgl_line_segment_3d.cxx
 # End Source File
 # Begin Source File
@@ -306,6 +318,10 @@ SOURCE=.\vgl_polygon_test.cxx
 # Begin Source File
 
 SOURCE=.\vgl_region_scan_iterator.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_test.cxx
 # End Source File
 # Begin Source File
 
@@ -386,6 +402,10 @@ SOURCE=.\vgl_polygon.h
 # Begin Source File
 
 SOURCE=.\vgl_polygon_scan_iterator.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vgl_test.h
 # End Source File
 # End Group
 # End Target

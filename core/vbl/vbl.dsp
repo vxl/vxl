@@ -335,6 +335,10 @@ SOURCE=.\vbl_string.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\vbl_test.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\vbl_timer.cxx
 # End Source File
 # Begin Source File
@@ -516,6 +520,10 @@ SOURCE=.\vbl_sprintf.h
 # Begin Source File
 
 SOURCE=.\vbl_string.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\vbl_test.h
 # End Source File
 # Begin Source File
 
