@@ -5,7 +5,6 @@
 
 #include <vgui/vgui_loader_tableau.h>
 #include <vgui/vgui_image_tableau.h>
-#include <vcl_cstdlib.h>
 #include <vgui/impl/gtk/vgui_gtk_adaptor.h>
 #include <gtk/gtk.h>
 #include <gtkgl/gtkglarea.h>
