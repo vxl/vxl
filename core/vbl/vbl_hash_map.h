@@ -8,7 +8,6 @@
 // \file
 // \brief Simpler hashtable
 
-#include <vcl_iosfwd.h>
 #include <vcl_functional.h> // vcl_equal_to()
 #include <vcl_hash_map.h>
 #include <vcl_utility.h> // vcl_pair<>

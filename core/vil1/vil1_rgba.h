@@ -10,8 +10,6 @@
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date 12 Nov 99
 
-#include <vcl_iosfwd.h>
-
 //: This is the appropriate pixel type for RGBA colour images.
 // The purpose of rgba<T> is to provide an object which consists of four Ts arranged
 // in order and which can be referred to as 'R', 'G', 'B' and 'A'. Thus, if win32

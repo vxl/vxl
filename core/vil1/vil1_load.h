@@ -26,7 +26,6 @@
 //     011002 Peter Vanroose - vil_load now respects top-is-first; vil_load_raw not
 //\endverbatim
 
-#include <vcl_iosfwd.h>
 #include <vil/vil_fwd.h>
 #include <vil/vil_image.h>
 

@@ -15,7 +15,6 @@
 //  3 October 2001 Peter Vanroose - Implemented get_property("top_row_first")
 //\endverbatim
 
-#include <vcl_iosfwd.h>
 class vil_stream;
 
 //=============================================================================

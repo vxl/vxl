@@ -15,7 +15,6 @@
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vil/vil_stream_core.h>
-#include <vcl_ios.h>
 #include <vcl_fstream.h>
 
 #if defined(unix)
