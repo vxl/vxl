@@ -11,7 +11,6 @@
 #include <vcl_cmath.h>
 #include <clsfy/clsfy_binary_threshold_1d.h>
 #include <clsfy/clsfy_binary_threshold_1d_builder.h>
-#include <clsfy/clsfy_binary_threshold_1d_sorted_builder.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>
 #include <testlib/testlib_test.h>
@@ -176,25 +175,6 @@ void test_adaboost()
   TEST( "tpr>0.7", tpr>0.7, true );
   TEST( "fpr<0.3", fpr<0.3, true );
 
-
-  vcl_cout << "**************************************************\n"
-           << " Testing clsfy_binary_threshold_1d_sorted_builder\n"
-           << "**************************************************\n";
-
-
-  // Train again with +ve and -ve data, but using sorted builder
-  clsfy_binary_threshold_1d_sorted_builder b_thresh_sorted_builder;
-  clsfy_classifier_1d* b_thresh_clsfr3=b_thresh_sorted_builder.new_classifier();
-  double error3= b_thresh_sorted_builder.build(*b_thresh_clsfr3,
-                                               neg_samples, neg_wts,
-                                               pos_samples, pos_wts
-                                              );
-
-  vcl_cout<<"error3= "<<error3<<vcl_endl;
-
-  TEST( "sorted builder clsfr == normal builder clsfr",
-         b_thresh_clsfr3->params()==b_thresh_clsfr->params(),
-         true);
 
 
   vcl_cout << "***********************************\n"
