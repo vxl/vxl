@@ -4,7 +4,7 @@
 #include <vgui/vgui_command.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/internals/vgui_accelerate.h>
-#include "bmvv_menus.h"
+#include <bmvl/bmvv/bmvv_menus.h>
 #include <bmvl/bmvv/bmvv_multiview_manager.h>
 
 #ifdef HAS_X11
