@@ -9,3 +9,6 @@ SUBDIRS(bdgl)
 
 # xml<->vxl conversion 
 SUBDIRS(bxml)
+
+# basic vgui classes
+SUBDIRS(bgui)
