@@ -56,7 +56,7 @@ void vtol_topology_cache::clear_cache()
 void vtol_topology_cache::validate_cache()
 {
   //timestamp here is a static number maintained
-  //by our process, owned by vbl_timestamp,
+  //by our process, owned by vul_timestamp,
   //and incremented everytime you get_unique_timestamp
 
   // if this cache is younger than the source
