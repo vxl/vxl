@@ -32,6 +32,7 @@ ADD_EXECUTABLE( vil_algo_test_all
   test_median.cxx
   test_suppress_non_max.cxx
   test_algo_sobel.cxx
+  test_algo_abs_shuffle_distance.cxx
 )
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
@@ -71,7 +72,8 @@ ADD_TEST( vil_algo_test_greyscale_dilate    vil_algo_test_all test_greyscale_dil
 ADD_TEST( vil_algo_test_greyscale_erode     vil_algo_test_all test_greyscale_erode)
 ADD_TEST( vil_algo_test_median              vil_algo_test_all test_median)
 ADD_TEST( vil_algo_test_suppress_non_max    vil_algo_test_all test_suppress_non_max )
-ADD_TEST( vil_algo_test_algo_sobel              vil_algo_test_all test_algo_sobel)
+ADD_TEST( vil_algo_test_algo_sobel          vil_algo_test_all test_algo_sobel)
+ADD_TEST( vil_algo_abs_shuffle_distance     vil_algo_test_all test_algo_abs_shuffle_distance)
 
 #ADD_EXECUTABLE( vil_mil_gauss_general_timings vil_mil_gauss_general_timings.cxx)
 #TARGET_LINK_LIBRARIES( vil_mil_gauss_general_timings vil_algo mil vpl vul mbl testlib vcl )

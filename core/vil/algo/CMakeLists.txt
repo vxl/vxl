@@ -44,6 +44,7 @@ SET( vil_algo_sources
                               vil_tile_images.h
   vil_orientations.cxx        vil_orientations.h
   vil_colour_space.cxx        vil_colour_space.h
+  vil_abs_shuffle_distance.txx vil_abs_shuffle_distance.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vil_algo_sources)

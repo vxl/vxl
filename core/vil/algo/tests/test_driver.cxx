@@ -30,6 +30,7 @@ DECLARE( test_greyscale_erode );
 DECLARE( test_median );
 DECLARE( test_suppress_non_max );
 DECLARE( test_algo_sobel );
+DECLARE( test_algo_abs_shuffle_distance );
 
 void
 register_tests()
@@ -64,6 +65,7 @@ register_tests()
   REGISTER( test_median );
   REGISTER( test_suppress_non_max );
   REGISTER( test_algo_sobel );
+  REGISTER( test_algo_abs_shuffle_distance );
 }
 
 DEFINE_MAIN;
