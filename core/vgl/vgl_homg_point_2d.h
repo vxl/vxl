@@ -35,7 +35,7 @@ public:
   // Constructors/Initializers/Destructors-----------------------------------
 
   // Default constructor  
-  // vgl_homg_point_2d () {}
+  vgl_homg_point_2d () {}
   
   // Default copy constructor  
   // vgl_homg_point_2d (const vgl_homg_point_2d<Type>& that) {

@@ -6,6 +6,7 @@
 #include <vxl_config.h>
 
 #if defined(_MSC_VER)
+// I don't think we need this, because <ieeefp.h> is available -- fsm
 # include <Float.h> // for 'isnan' and 'finite'
 // # define isnan _isnan
 # define finite _finite
