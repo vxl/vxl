@@ -35,5 +35,13 @@ ADD_TEST( vil1_test_file_format_read  vil1_test_all test_file_format_read ${CMAK
 ADD_TEST( vil1_test_resample          vil1_test_all test_resample ${CMAKE_CURRENT_SOURCE_DIR}/square.pgm )
 ADD_TEST( vil1_test_vil               vil1_test_all test_vil ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
 
+#ADD_EXECUTABLE( vil_vil1_compare_access_timings vil_vil1_compare_access_timings.cxx)
+#TARGET_LINK_LIBRARIES( vil_vil1_compare_access_timings vil mbl vcl )
+#ADD_TEST( vil_vil1_compare_access_timings vil_vil1_compare_access_timings )
+
+#ADD_EXECUTABLE( vil_vil1_compare_function_timings vil_vil1_compare_function_timings.cxx)
+#TARGET_LINK_LIBRARIES( vil_vil1_compare_function_timings vil1 mbl vcl )
+#ADD_TEST( vil_vil1_compare_function_timings vil_vil1_compare_function_timings )
+
 ADD_EXECUTABLE( vil1_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vil1_test_include vil1 vil )

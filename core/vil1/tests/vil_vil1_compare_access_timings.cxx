@@ -1,8 +1,8 @@
 //:
 // \file
-// \brief Tool to test performance of different methods of accessing image data
-//        When run, tries a variety of different approaches and reports their timings.
-//        Useful to try it on different platforms to how different optimisers perform.
+// \brief Tool to test performance of different methods of accessing image data.
+//  When run, tries a variety of different approaches and reports their timings.
+//  Useful to try it on different platforms to see how different optimisers perform.
 // \author Tim Cootes
 
 #include <vcl_iostream.h>
@@ -77,7 +77,7 @@ void compute_stats(int i, imT& image, int n_loops)
   mbl_stats_1d stats;
   for (int j=0;j<10;++j) stats.obs(method(i,image,n_loops));
   vcl_cout<<"Method "<<i<<") Mean: "<<int(stats.mean()+0.5)
-          <<"us  +/-"<<int(0.5*(stats.max()-stats.min())+0.5)<<"us"<<vcl_endl;
+          <<"us  +/-"<<int(0.5*(stats.max()-stats.min())+0.5)<<"us\n";
 }
 
 int main(int argc, char** argv)
@@ -90,23 +90,23 @@ int main(int argc, char** argv)
   vil_image_view<vil_rgb<vxl_byte> >    rgb_2image(NI,NJ);
   int n_loops = 100;
   vcl_cout<<"Times to fill a "<<NI<<" x "<<NJ
-          <<" image of 1 plane (in microsecs) [Range= 0.5(max-min)]"<<vcl_endl;
-  vcl_cout<<"vil1_memory_image_of Images of BYTE"<<vcl_endl;
+          <<" image of 1 plane (in microsecs) [Range= 0.5(max-min)]\n"
+          <<"vil1_memory_image_of Images of BYTE\n";
   for (int i=1; i<=2; ++i)
     compute_stats(i,byte_1image,n_loops);
-  vcl_cout<<"vil_image_view Images of BYTE"<<vcl_endl;
+  vcl_cout<<"vil_image_view Images of BYTE\n";
   for (int i=1; i<=2; ++i)
     compute_stats(i,byte_2image,n_loops);
-  vcl_cout<<"vil1_memory_image_of Images of FLOAT"<<vcl_endl;
+  vcl_cout<<"vil1_memory_image_of Images of FLOAT\n";
   for (int i=1; i<=2; ++i)
     compute_stats(i,float_1image,n_loops);
-  vcl_cout<<"vil_image_view Images of FLOAT"<<vcl_endl;
+  vcl_cout<<"vil_image_view Images of FLOAT\n";
   for (int i=1; i<=2; ++i)
     compute_stats(i,float_2image,n_loops);
-  vcl_cout<<"vil1_memory_image_of Images of RGB<BYTE>"<<vcl_endl;
+  vcl_cout<<"vil1_memory_image_of Images of RGB<BYTE>\n";
   for (int i=1; i<=2; ++i)
     compute_stats(i,rgb_1image,n_loops);
-  vcl_cout<<"vil_image_view Images of RGB<BYTE>"<<vcl_endl;
+  vcl_cout<<"vil_image_view Images of RGB<BYTE>\n";
   for (int i=1; i<=2; ++i)
     compute_stats(i,rgb_2image,n_loops);
   return 0;

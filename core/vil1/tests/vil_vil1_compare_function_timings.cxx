@@ -2,11 +2,10 @@
 // \file
 // \brief Tool to compare standard algorithms/functions in vil1 and vil
 // \author Ian Scott
-// Will compare the following operations
+// Will compare the following operations:
 // Deep copy, fill, 1d convolve, 2d convolve, correlation, force to rgb, force to float, pnm read/write
-// Using (where appropriate) byte, float and rgb byte pixels.
+// using (where appropriate) byte, float and rgb byte pixels.
 // These timings will be used to optimise vil.
-
 
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for imT
@@ -25,7 +24,6 @@
 
 const unsigned NI=256;
 const unsigned NJ=256;
-
 
 template <class T>
 double fill(vil_image_view<T>& image, int n_loops, bool print)
@@ -194,7 +192,6 @@ double conv1d(vil1_memory_image_of<vil1_rgb<vxl_byte> >& image, int n_loops, boo
   return 0;
 }
 
-
 template <class imT>
 double method(int i, imT& image, int n_loops, bool print)
 {
@@ -249,8 +246,7 @@ int main(int argc, char** argv)
   vcl_cout<<"------------------------------\n";
   compute_stats(1,rgb_1image,n_loops);
   compute_stats(1,rgb_2image,n_loops);
-  vcl_cout<<"------------------------------\n";
-  vcl_cout << "\n\n";
+  vcl_cout<<"------------------------------\n\n\n";
 
   compute_stats(2,byte_1image,n_loops);
   compute_stats(2,byte_2image,n_loops);

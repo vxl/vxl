@@ -73,10 +73,6 @@ ADD_TEST( vil_test_resample_bicub           vil_test_all test_resample_bicub)
 #TARGET_LINK_LIBRARIES( vil_test_access_timings_noplanes vil mbl vcl )
 #ADD_TEST( vil_test_access_timings_noplanes vil_test_access_timings_noplanes )
 
-#ADD_EXECUTABLE( vil_vil_compare_access_timings vil_vil_compare_access_timings.cxx)
-#TARGET_LINK_LIBRARIES( vil_vil_compare_access_timings vil mbl vcl )
-#ADD_TEST( vil_vil_compare_access_timings vil_vil_compare_access_timings )
-
 #ADD_EXECUTABLE( vil_test_pair_access_timings vil_test_pair_access_timings.cxx)
 #TARGET_LINK_LIBRARIES( vil_test_pair_access_timings vil mbl vcl )
 #ADD_TEST( vil_test_pair_access_timings vil_test_pair_access_timings )
@@ -85,13 +81,5 @@ ADD_TEST( vil_test_resample_bicub           vil_test_all test_resample_bicub)
 #TARGET_LINK_LIBRARIES( vil_test_random_access_timings vil mbl vcl )
 #ADD_TEST( vil_test_random_access_timings vil_test_random_access_timings )
 
-#ADD_EXECUTABLE( vil_mil_gauss_general_timings vil_mil_gauss_general_timings.cxx)
-#TARGET_LINK_LIBRARIES( vil_mil_gauss_general_timings vil_algo mil vpl vul mbl testlib vcl )
-#ADD_TEST( vil_mil_gauss_general_timings vil_mil_gauss_general_timings )
-
-#ADD_EXECUTABLE( vil_vil_compare_function_timings vil_vil_compare_function_timings.cxx)
-#TARGET_LINK_LIBRARIES( vil_vil_compare_function_timings vil mbl vcl )
-#ADD_TEST( vil_vil_compare_function_timings vil_vil_compare_function_timings )
-
 ADD_EXECUTABLE( vil_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( vil_test_include vil_algo vil )
+TARGET_LINK_LIBRARIES( vil_test_include vil )
