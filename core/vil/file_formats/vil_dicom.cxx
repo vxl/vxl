@@ -9,6 +9,7 @@
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vcl_cstring.h>
 #include <vcl_cstdlib.h>
 #include <vcl_vector.h>
@@ -106,9 +107,9 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
   }
 
   read_header( &ffmt, header_ );
-  
+
   correct_manufacturer_discrepancies(); //correct known manufacturers drop-offs in header data!
-  
+
   DicomImage img( &ffmt, EXS_Unknown );
 
   if ( img.getStatus() != EIS_Normal ) {
@@ -194,7 +195,7 @@ char const* vil_dicom_image::file_format() const
 }
 
 vil_dicom_image::vil_dicom_image(vil_stream* vs, unsigned ni, unsigned nj,
-                                   unsigned nplanes, vil_pixel_format format)
+                                 unsigned nplanes, vil_pixel_format format)
 {
   assert(!"vil_dicom_image doesn't yet support output");
 
@@ -264,7 +265,7 @@ vil_image_view_base_sptr vil_dicom_image::get_view(
 
 
 bool vil_dicom_image::put_view(const vil_image_view_base& view,
-                                unsigned x0, unsigned y0)
+                               unsigned x0, unsigned y0)
 {
   assert(!"vil_dicom_image doesn't yet support output yet");
 
@@ -289,13 +290,13 @@ bool vil_dicom_image::put_view(const vil_image_view_base& view,
   //NB if this section starts bloating, use derived classes which override correct_manufacturer_discrepancies
 void vil_dicom_image::correct_manufacturer_discrepancies()
 {
-    if( ( (header_.manufacturer_ == "HOLOGIC") || (header_.manufacturer_ == "Hologic") ) &&
-          (header_.model_name_.find("QDR") != header_.model_name_.npos ) )
+    if ( ( (header_.manufacturer_ == "HOLOGIC") || (header_.manufacturer_ == "Hologic") ) &&
+           (header_.model_name_.find("QDR") != header_.model_name_.npos ) )
     {
         //Hologic QDR Bone Densitometry source - set (default) pixel spacing from private format image comments
         float xPixelSize=1.0;
         float yPixelSize=1.0;
-        if(interpret_hologic_header(xPixelSize,yPixelSize))
+        if (interpret_hologic_header(xPixelSize,yPixelSize))
         {
             header_.spacing_x_ = xPixelSize;
             header_.spacing_y_ = yPixelSize;
@@ -312,54 +313,54 @@ bool vil_dicom_image::interpret_hologic_header(float& xpixSize, float& ypixSize)
     static const vcl_string HOLOGIC_PixelXSizeMM_END = "</PixelXSizeMM>";
     static const vcl_string HOLOGIC_PixelYSizeMM = "<PixelYSizeMM>";
     static const vcl_string HOLOGIC_PixelYSizeMM_END = "</PixelYSizeMM>";
-    
+
     vcl_string src = header_.image_comments_;
     //Find start of x pixel size sub-text
     unsigned ipxStart = src.find(HOLOGIC_PixelXSizeMM);
-    if(ipxStart==src.npos) return false;
-    
+    if (ipxStart==src.npos) return false;
+
     //Find end of x pixel size sub-text
     unsigned ipxEnd = src.find(HOLOGIC_PixelXSizeMM_END,ipxStart);
-    if(ipxEnd==src.npos) return false;
-    
+    if (ipxEnd==src.npos) return false;
+
     //Extract just the numerical part of the text
     vcl_string strPixelXSizeMM="";
     ipxStart+= HOLOGIC_PixelXSizeMM.size();
     strPixelXSizeMM.append(src,ipxStart, ipxEnd-ipxStart);
 
-    if(strPixelXSizeMM.size()>0)
+    if (strPixelXSizeMM.size()>0)
     {
         //Translate string to number
         vcl_stringstream  translate_is(strPixelXSizeMM,vcl_stringstream::in);
         translate_is>>xpixSize;
-        if(!translate_is) return false;
-        if(xpixSize<=0.0 || xpixSize>=1.0E6) return false; //Don't believe crazy values
+        if (!translate_is) return false;
+        if (xpixSize<=0.0 || xpixSize>=1.0E6) return false; //Don't believe crazy values
     }
     else
     {
         return false; //No x pixel value present between the tags
     }
-    
+
     //Find start of y pixel size sub-text
     unsigned ipyStart = src.find(HOLOGIC_PixelYSizeMM);
-    if(ipyStart==src.npos) return false;
-    
+    if (ipyStart==src.npos) return false;
+
     //Find end of y pixel size sub-text
     unsigned ipyEnd = src.find(HOLOGIC_PixelYSizeMM_END,ipyStart);
-    if(ipyEnd==src.npos) return false;
-    
-    //Extract just the numerical part of the text    
+    if (ipyEnd==src.npos) return false;
+
+    //Extract just the numerical part of the text
     vcl_string strPixelYSizeMM="";
     ipyStart+= HOLOGIC_PixelYSizeMM.size();
     strPixelYSizeMM.append(src,ipyStart, ipyEnd-ipyStart);
 
-    if(strPixelYSizeMM.size()>0)
+    if (strPixelYSizeMM.size()>0)
     {
         //Translate string to number
         vcl_stringstream  translate_is(strPixelYSizeMM,vcl_stringstream::in);
         translate_is>>ypixSize;
-        if(!translate_is) return false;
-        if(ypixSize<=0.0 || ypixSize>=1.0E6) return false; //Don't believe crazy values
+        if (!translate_is) return false;
+        if (ypixSize<=0.0 || ypixSize>=1.0E6) return false; //Don't believe crazy values
     }
     else
     {
@@ -815,6 +816,5 @@ read_header( DcmObject* f, vil_dicom_header_info& i )
 #undef ap_join
 #undef ap_type
 #undef ap_el
-
 }
 
