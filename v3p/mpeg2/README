@@ -1,0 +1,53 @@
+This directory hold MPEG2 source code, ported to VXL.
+
+The original MPEG2 code comes from:
+http://libmpeg2.sourceforge.net/files/mpeg2dec-0.2.1.tar.gz
+
+The goals of this port were:
+  Get mpeg2 and vo libraries to build in VXL, but not the executables.
+  Copy a minimal number of files from the MPEG2 source tree.
+  Modify a minimal number of the files so upgrades are easier.
+
+Porting to VXL
+--------------
+
+The subset of files copied were:
+
+  configure.in
+  aclocal.m4
+  acinclude.m4
+  COPYING
+  libmpeg2/*.[ch]
+  libmpeg2/configure.incl
+  libvo/*.[ch]
+  libvo/configure.incl
+  include/*.h
+  include/config.h.in
+  vc++/config.h
+  vc++/inttypes.h
+
+Directory vc++ was changes to win32.  The only files modified were:
+
+  configure.in
+  aclocal.m4
+
+For both of these files, the original was checked in to the CVS
+repository first, then the changes were checked in.  The autoconf
+configuration of mpeg2 was simplified since we are only building
+libmpeg2 and libvo, and not installing.  Autoconf still created the
+config.h file, but not the makefiles.
+
+Rebuilding "configure"
+----------------------
+
+The source files for configure are:
+  * configure.in
+  * aclocal.m4
+  * acinclude.m4
+To rebuild configure, use these commands:
+
+  cd $VXLSRC/v3p/mpeg2
+  autoconf
+
+configure gets committed to the CVS repository even though it is a
+generated file.
