@@ -826,7 +826,6 @@ defined(PNG_READ_BACKGROUND_SUPPORTED)
    png_fixed_point int_x_blue;
    png_fixed_point int_y_blue;
 #endif
-
 } png_info;
 
 typedef png_info FAR * png_infop;
@@ -1133,7 +1132,7 @@ struct png_struct_def
 #endif
 
 #if defined(PNG_READ_SHIFT_SUPPORTED) || defined(PNG_WRITE_SHIFT_SUPPORTED)
-   png_color_8 shift;         /* shift for significant bit tranformation */
+   png_color_8 shift;         /* shift for significant bit transformation */
 #endif
 
 #if defined(PNG_tRNS_SUPPORTED) || defined(PNG_READ_BACKGROUND_SUPPORTED) \
@@ -1279,7 +1278,6 @@ struct png_struct_def
    png_bytep palette_to_index;       /* which original index points to this */
                                      /* palette color */
 #endif
-
 };
 
 

@@ -156,14 +156,14 @@ png_default_flush(png_structp png_ptr)
                    arguments a pointer to a png_struct.  After a call to
                    the flush function, there should be no data in any buffers
                    or pending transmission.  If the output method doesn't do
-                   any buffering of ouput, a function prototype must still be
+                   any buffering of output, a function prototype must still be
                    supplied although it doesn't have to do anything.  If
                    PNG_WRITE_FLUSH_SUPPORTED is not defined at libpng compile
                    time, output_flush_fn will be ignored, although it must be
                    supplied for compatibility. */
 void PNGAPI
 png_set_write_fn(png_structp png_ptr, png_voidp io_ptr,
-   png_rw_ptr write_data_fn, png_flush_ptr output_flush_fn)
+                 png_rw_ptr write_data_fn, png_flush_ptr output_flush_fn)
 {
    png_ptr->io_ptr = io_ptr;
 
@@ -192,9 +192,9 @@ png_set_write_fn(png_structp png_ptr, png_voidp io_ptr,
    {
       png_ptr->read_data_fn = NULL;
       png_warning(png_ptr,
-         "Attempted to set both read_data_fn and write_data_fn in");
+                  "Attempted to set both read_data_fn and write_data_fn in");
       png_warning(png_ptr,
-         "the same structure.  Resetting read_data_fn to NULL.");
+                  "the same structure.  Resetting read_data_fn to NULL.");
    }
 }
 
@@ -206,10 +206,10 @@ void *png_far_to_near(png_structp png_ptr,png_voidp ptr, int check)
    void FAR *far_ptr;
    FP_OFF(near_ptr) = FP_OFF(ptr);
    far_ptr = (void FAR *)near_ptr;
-   if(check != 0)
-      if(FP_SEG(ptr) != FP_SEG(far_ptr))
+   if (check != 0)
+      if (FP_SEG(ptr) != FP_SEG(far_ptr))
          png_error(png_ptr,"segment lost in conversion");
-   return(near_ptr);
+   return near_ptr;
 }
 #  else
 void *png_far_to_near(png_structp png_ptr,png_voidp ptr, int check)
@@ -218,10 +218,10 @@ void *png_far_to_near(png_structp png_ptr,png_voidp ptr, int check)
    void FAR *far_ptr;
    near_ptr = (void FAR *)ptr;
    far_ptr = (void FAR *)near_ptr;
-   if(check != 0)
-      if(far_ptr != ptr)
+   if (check != 0)
+      if (far_ptr != ptr)
          png_error(png_ptr,"segment lost in conversion");
-   return(near_ptr);
+   return near_ptr;
 }
 #   endif
 #   endif
