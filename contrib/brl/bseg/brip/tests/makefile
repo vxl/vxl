@@ -6,6 +6,8 @@ TESTMAIN := test_driver.cxx
 TESTS += test_histogram.cxx
 TESTS += test_mutual_info.cxx
 
+MINI_PROG_SOURCES += test_include.cxx
+
 #########################################
 include ${IUEROOT}/config/static-tests.mk
 #########################################
