@@ -13,30 +13,32 @@
 
 USES += contrib/tbl core
 include ../config.mk
-include ${IUEROOT}/core/vpl/config.mk # for all
-include ${IUEROOT}/core/vnl/config.mk # for B.
-include $(IUEROOT)/core/vbl/config.mk # for C.
+include ${IUEROOT}/core/vil1/config.mk # for B.
+include ${IUEROOT}/core/vnl/config.mk # for C.
+include $(IUEROOT)/core/vbl/config.mk # for D.
 
 # Do not instantiate templates in the library but implicitly, on use:
 USE_IMPLICIT_TEMPLATES := 1
 
-# A. using vil_image as 2D storage class:
+# A. using vil_image_view<T> as 2D storage class:
 MINI_PROG_SOURCES += example_convert.cxx
 MINI_PROG_SOURCES += example_add_random_noise.cxx
 MINI_PROG_SOURCES += example_std_dev.cxx
 MINI_PROG_SOURCES += example1_threshold.cxx
+
+# B. using vil1_image as 2D storage class:
 MINI_PROG_SOURCES += example4_threshold.cxx
 
-# B. using vnl_matrix<T> as 2D storage class:
+# C. using vnl_matrix<T> as 2D storage class:
 MINI_PROG_SOURCES += example3_threshold.cxx
 MINI_PROG_SOURCES += example_median.cxx
 MINI_PROG_SOURCES += example_gaussian_convolution.cxx
 
-# C. using vbl_array_2d<T> as 2D storage class:
+# D. using vbl_array_2d<T> as 2D storage class:
 MINI_PROG_SOURCES += example_gradient_mag.cxx
 MINI_PROG_SOURCES += example_sobel.cxx
 
-# D. using section<T,2> as 2D storage class:
+# E. using section<T,2> as 2D storage class:
 MINI_PROG_SOURCES += example_dilate_disk.cxx
 MINI_PROG_SOURCES += example_erode_disk.cxx
 MINI_PROG_SOURCES += example2_threshold.cxx

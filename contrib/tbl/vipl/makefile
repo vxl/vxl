@@ -1,14 +1,14 @@
 # DESCRIPTION:
 #
 #   This is the vipl library, containing the (templated) image processing
-# algorithm implementations for vxl, but completely independent from vil1
+# algorithm implementations for vxl, but completely independent from vil
 # and thus also usable by other image representations, e.g., TargetJr or IUE.
 #
 # Three subdirectories, vipl_with_vnl_matrix, vipl_with_section and
 # vipl_with_vbl_array_2d, create libraries with specialisations and
-# instantiations for using other classes (instead of vil1_image) as
-# template arguments to the filter classes.
-# The subdirectory Templates contains the instantiations for using vil1_image.
+# instantiations for using other classes (instead of vil_image_view<T>)
+# as template arguments to the filter classes.
+# The subdirectory Templates contains the instantiations for using vil_image_view.
 # Those (and only those) go into the "standard" library vipl.
 #
 # The examples subdirectory contains example programs showing how to use the
@@ -26,6 +26,7 @@ USE_IMPLICIT_TEMPLATES := 1
 SOURCES += filter/vipl_filter_abs.cxx
 MANPAGE_SOURCES += filter/vipl_filter_helper.h
 MANPAGE_SOURCES += filter/vipl_trivial_pixeliter.h
+MANPAGE_SOURCES += section/vipl_filterable_section_container_generator_vil_image_view.txx
 MANPAGE_SOURCES += section/vipl_filterable_section_container_generator_vil1_image.txx
 MANPAGE_SOURCES += section/vipl_filterable_section_container_generator_vcl_vector.txx
 MANPAGE_SOURCES += vipl_with_section/vipl_filterable_section_container_generator_section.txx
@@ -66,6 +67,7 @@ MANPAGE_SOURCES += section/vipl_section_descriptor_2d.txx
 MANPAGE_SOURCES += section/vipl_section_iterator.txx
 
 # Image accessors (getpixel, setpixel)
+MANPAGE_SOURCES += accessors/vipl_accessors_vil_image_view.txx
 MANPAGE_SOURCES += accessors/vipl_accessors_vil1_image.txx
 MANPAGE_SOURCES += accessors/vipl_accessors_vcl_vector.txx
 MANPAGE_SOURCES += vipl_with_section/accessors/vipl_accessors_section.txx
@@ -102,8 +104,3 @@ include ${IUEROOT}/config/top-rules.mk
 
 # compile with -O2 for efficiency:
 #debug = $(optimize)
-
-ifeq "$(TJ_GCC30)$(optimize)" "1-O2"
-# gcc 3.0 needs too much virtual memory with -O2
-FLAGS_vipl_with_section/Templates/vipl_filter_2d+section+vil1_rgb+uchar-.2-.section+vil1_rgb+uchar-.2-.vil1_rgb+uchar-.vil1_rgb+uchar--.cxx := -O1
-endif
