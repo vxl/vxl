@@ -20,14 +20,14 @@
 //  The safe interpolatable region is [-0.5,view.ni()-0.5)*[0,view.nj()-0.5).
 // \relates vil_image_view
 template<class T>
-inline double vil_nearest_neighbour_interp_safe(
+inline T vil_nearest_neighbour_interp_safe(
   const vil_image_view<T> &view, double x, double y, unsigned p=0)
 {
   int ix = int(x + 0.5);
   int iy = int(y + 0.5);
   if (ix >= 0 && ix < view.ni() && iy >= 0 && iy < view.nj())
     return view(ix, iy, p);
-  else return 0.0;
+  else return 0;
 }
 
 
@@ -37,7 +37,7 @@ inline double vil_nearest_neighbour_interp_safe(
 //  the code will fail an ASSERT.
 //  The safe interpolatable region is [-0.5,view.ni()-0.5)*[0.5,view.nj()-0.5).
 template<class T>
-inline double vil_nearest_neighbour_interp(
+inline T vil_nearest_neighbour_interp(
   const vil_image_view<T> &view, double x, double y, unsigned p=0)
 {
   int ix = int(x + 0.5);
@@ -56,7 +56,7 @@ inline double vil_nearest_neighbour_interp(
 //  The safe interpolatable region is [-0.5,view.ni()-0.5)*[-0.5,view.nj()-0.5).
 // \relates vil_image_view
 template<class T>
-inline double vil_nearest_neighbour_interp_safe_extend(
+inline T vil_nearest_neighbour_interp_safe_extend(
   const vil_image_view<T> &view, double x, double y, unsigned p=0)
 {
   int ix = int(x + 0.5);

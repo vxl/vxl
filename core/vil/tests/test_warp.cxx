@@ -9,7 +9,7 @@
 // Explicit instantiation
 // Needed because the compilers (at least MSVC6.0) cannot
 // automatically instantiate it on demand in a template.
-template double vil_nearest_neighbour_interp_safe<vxl_byte>(
+template vxl_byte vil_nearest_neighbour_interp_safe<vxl_byte>(
   const vil_image_view<vxl_byte> &, double, double, unsigned);
 
 void mapper (double ox, double oy, double &ix, double &iy)
