@@ -119,3 +119,21 @@ vcl_string vbl_file::expand_tilde(char const* vbl_filename)
   return user.home_directory + fn;
 #endif
 }
+
+vcl_string vbl_file::basename(char const* filename, char const* suffix) {
+  vcl_string fn(filename);
+  unsigned int start = fn.rfind('/') + 1;
+  unsigned int end;
+  if (!suffix) {
+    end = fn.rfind('.') - 1;
+  } else {
+    if (suffix[0] != '.')
+      end = fn.rfind(suffix) - 2;
+    else 
+      end = fn.rfind(suffix) - 1;	
+  }
+  if (start != vcl_string::npos) 
+    return fn.substr(start, end-start+1);
+  else 
+    return fn.substr(0,end);
+}
