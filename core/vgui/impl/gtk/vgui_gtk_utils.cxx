@@ -1,12 +1,12 @@
-// This is oxl/vgui/impl/gtk/vgui_gtk_utils.cxx
+// This is core/vgui/impl/gtk/vgui_gtk_utils.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-//
+//:
+// \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   19 Dec 99
 // \brief  See vgui_gtk_utils.h for a description of this file.
-
 
 #include "vgui_gtk_utils.h"
 
@@ -80,34 +80,33 @@ void vgui_gtk_utils::set_modifiers(vgui_event &e, const guint state)
 
 bool vgui_gtk_utils::is_modifier(GdkEvent const *gev)
 {
-  if (gev->type == GDK_KEY_PRESS ||
-      gev->type == GDK_KEY_RELEASE)
-  {
-    GdkEventKey *e = (GdkEventKey*)gev;
+  if (gev->type != GDK_KEY_PRESS &&
+      gev->type != GDK_KEY_RELEASE)
+    return false;
 
-    // This code would only return 'true' if any of the modifier is solely
-    // pressed. However we want to return 'true' so long as any of the
-    // modifiers is pressed simultaneously with some other key. This is a must
-    // if want to allow menu accelerator keys. - u97mb
+  GdkEventKey *e = (GdkEventKey*)(const_cast<GdkEvent*>(gev));
+  // cannot use static_cast<> here since GdkEventKey and GdkEvent are unrelated
 
 #if 0
-    if (e->keyval & GDK_Shift_L ||
-        e->keyval & GDK_Shift_R ||
-        e->keyval & GDK_Control_L ||
-        e->keyval & GDK_Control_R ||
-        e->keyval & GDK_Meta_L ||
-        e->keyval & GDK_Meta_R ||
-        e->keyval & GDK_Alt_L ||
-        e->keyval & GDK_Alt_R)
-#endif
-    // - u97mb
-    // GDK_MOD1_MASK corresponds to META key(at least on Sun Solaris)
-    if (e->state & GDK_CONTROL_MASK ||
-       e->state & GDK_SHIFT_MASK ||
-       e->state & GDK_MOD1_MASK)
-      return true;
-  }
-  return false;
+  // This code would only return 'true' if any of the modifier keys is solely
+  // pressed. However we want to return 'true' so long as any of the modifier
+  // keys is pressed simultaneously with some other key. This is a must
+  // if we want to allow menu accelerator keys. - u97mb
+
+  return e->keyval & GDK_Shift_L ||
+         e->keyval & GDK_Shift_R ||
+         e->keyval & GDK_Control_L ||
+         e->keyval & GDK_Control_R ||
+         e->keyval & GDK_Meta_L ||
+         e->keyval & GDK_Meta_R ||
+         e->keyval & GDK_Alt_L ||
+         e->keyval & GDK_Alt_R;
+#endif // 0
+  // - u97mb
+  // GDK_MOD1_MASK corresponds to META key(at least on Sun Solaris)
+  return e->state & GDK_CONTROL_MASK ||
+         e->state & GDK_SHIFT_MASK ||
+         e->state & GDK_MOD1_MASK;
 }
 
 

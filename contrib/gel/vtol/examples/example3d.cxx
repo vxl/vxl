@@ -129,7 +129,8 @@ class example_face_3d : public vtol_face
     }
     link_inferior(new vtol_one_chain(elist,dirs,true));
   }
-  virtual vsol_spatial_object_2d_sptr clone() const {vertex_list* vl=((T*)this)->vertices(); T* f=new T(*vl);delete vl;return f;}
+  virtual vsol_spatial_object_2d_sptr clone() const {vertex_list* vl=(const_cast<T*>(this))->vertices();
+                                                     T* f=new T(*vl);delete vl;return f;}
   bool operator==(T const& f) const { return false; }
   virtual void print(vcl_ostream &strm=vcl_cout) const { strm << "<example_face_3d>"; }
   virtual void describe(vcl_ostream &strm=vcl_cout, int=0) const { print(strm); }

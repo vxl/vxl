@@ -1,10 +1,9 @@
-// This is vxl/vil/vil_stream_core.cxx
-
-// @author fsm
-
+// This is core/vil/vil_stream_core.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+// \author fsm
+
 #include "vil_stream_core.h"
 
 #include <vcl_cassert.h>
@@ -30,7 +29,7 @@ vil_streampos vil_stream_core::read (void *buf, vil_streampos n)
 vil_streampos vil_stream_core::write(void const *buf, vil_streampos n)
 {
   assert(n>=0);
-  vil_streampos rv = m_transfer((char*)buf, curpos_, n, false); // const violation!
+  vil_streampos rv = m_transfer((char*)(const_cast<void*>(buf)), curpos_, n, false); // const violation!
   curpos_ += rv;
   return rv;
 }

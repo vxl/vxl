@@ -69,7 +69,7 @@ void
 QvNode::unref() const
 {
     if (--refCount == 0) // mutable const
-        delete (QvNode *) this; // const violation!
+        delete const_cast<QvNode*>(this); // const violation!
 }
 
 void
