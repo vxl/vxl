@@ -10,7 +10,10 @@
 vdgl_digital_curve::vdgl_digital_curve( vdgl_interpolator_sptr interpolator)
   : interpolator_( interpolator)
 {
-  int i,j = 0;
+  int i = 0;
+  int j = 0;
+  // AGAP: What is this doing? Should this just be
+  //   assert( interpolator != 0 )  ?
   if (!interpolator) { i = i / j; }
 }
 
