@@ -59,13 +59,13 @@ static void test_math_value_range()
   }
 
   // Check the min/max values
-  int min=1e6; 
-  int max=-1e6;
+  int min=2000; 
+  int max=-2000;
   vil3d_math_value_range(img, min, max);
   TEST("vil3d_math_value_range(): min", min==1, true);
   TEST("vil3d_math_value_range(): max", max==1000, true);
 
-  int val=1e6;
+  int val=2000;
 
   // Test a likely pair of percentiles
   vil3d_math_value_range_percentile(img, 0.05, val);
