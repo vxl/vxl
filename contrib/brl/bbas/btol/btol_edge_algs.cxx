@@ -1,6 +1,7 @@
+// This is brl/bbas/btol/btol_edge_algs.cxx
+#include "btol_edge_algs.h"
 //:
 // \file
-#include "btol_edge_algs.h"
 #include <vcl_algorithm.h> // vcl_find()
 #include <vcl_cmath.h>
 #include <vdgl/vdgl_digital_curve.h>
@@ -46,14 +47,14 @@ bool btol_edge_algs::unlink_all_inferiors_twoway(vtol_edge_2d_sptr const& e)
     return true;
   if (infs->size()>1)
     {
-      vcl_cout << " In btol_edge_algs::unlink_all_inferiors_twoway(..) "
+      vcl_cout << " In btol_edge_algs::unlink_all_inferiors_twoway(..) -"
                << " inferiors inconsistent size\n";
       return false;
     }
   vtol_zero_chain_sptr inf_zero_chain = infs->front()->cast_to_zero_chain();
   if (!inf_zero_chain)
     {
-      vcl_cout << " In btol_edge_algs::unlink_all_inferiors_twoway(..) "
+      vcl_cout << " In btol_edge_algs::unlink_all_inferiors_twoway(..) -"
                << " null zero chain\n";
       return false;
     }
@@ -111,8 +112,8 @@ vsol_box_2d btol_edge_algs::bounding_box(vcl_vector<vtol_edge_2d_sptr>& edges)
       if (c->cast_to_digital_curve())
         b.grow_minmax_bounds(*c->cast_to_digital_curve()->get_bounding_box());
       else
-        vcl_cout << "In btol_edge_algs::bounding_box(..) - curve has"
-                 << " unknown geometry\n";
+        vcl_cout << "In btol_edge_algs::bounding_box(..) -"
+                 << " curve has unknown geometry\n";
     }
   return b;
 }
