@@ -2,9 +2,9 @@
 #
 #   This is the vsrl (dense matcher) library.
 
-USES += contrib/gel contrib/brl/bseg contrib/tbl core
+USES += contrib/gel contrib/brl/bseg contrib/tbl contrib/oxl contrib/rpl core
 
-IMMEDIATE_LIBS := -lvtol -lvdgl -lvgui -lvepl -lvgl -lvil1 -lvnl
+IMMEDIATE_LIBS := -lvtol -lvdgl -lvgui -lvepl -lvgl -lvil1 -lvnl -lvgel -lrsdl
 
 LIBRARY := vsrl
 VERSION := 1.0
