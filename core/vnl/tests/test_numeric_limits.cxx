@@ -1,7 +1,8 @@
 #include <vcl_iostream.h>
 #include <vnl/vnl_numeric_limits.h>
+#include <vnl/vnl_test.h>
 
-int main()
+void test_numeric_limits()
 {
   vcl_cout << "dmax  = " << vnl_numeric_limits<double>::max() << vcl_endl;
   vcl_cout << "dmin  = " << vnl_numeric_limits<double>::min() << vcl_endl;
@@ -18,5 +19,6 @@ int main()
   vcl_cout << "fnan  = " << vnl_numeric_limits<float>::quiet_NaN() << vcl_endl;
   vcl_cout << "finf  = " << vnl_numeric_limits<float>::infinity() << vcl_endl;
   vcl_cout << "fninf = " << -vnl_numeric_limits<float>::infinity() << vcl_endl;
-  return 0;
 }
+
+TESTMAIN(test_numeric_limits);
