@@ -335,11 +335,8 @@ private:   // internal classes and constants
   //: Image of indices into the vertex node list
   typedef vil_image_view< unsigned > index_image_type;
 
-  //: shorthand for the vertex node
-  typedef vtol_extract_topology_vertex_node vertex_node;
-
   // For VC6, to give access to the constants
-  friend struct vertex_node;
+  friend struct vtol_extract_topology_vertex_node;
 
   // Allow the test harness to call on the "internal" member function is_edge()
   // for thorough testing.
@@ -407,11 +404,11 @@ private:   // internal classes and constants
   set_vertex_index( unsigned i, unsigned j, unsigned index );
 
   //: The vertex node structure given by \a index
-  vertex_node&
+  vtol_extract_topology_vertex_node&
   node( unsigned index );
 
   //: The vertex node structure given by \a index
-  vertex_node const&
+  vtol_extract_topology_vertex_node const&
   node( unsigned index ) const;
 
   //: Move ( \a i, \a j ) in direction \a dir
@@ -510,7 +507,7 @@ private:   // internal classes and constants
   LABEL_TYPE min_label_, max_label_;
 
   //: List of vertices (which form the nodes of the graph)
-  vcl_vector< vertex_node > node_list_;
+  vcl_vector< vtol_extract_topology_vertex_node > node_list_;
 
   //: Quick conversion from vertex coordinates to vertex node indices
   index_image_type index_img_;
