@@ -71,16 +71,7 @@ class vnl_math
   static VNL_DLL_DATA const double sqrteps         VCL_STATIC_CONST_INIT_FLOAT_DECL(1.490116119384766e-08);
   //: IEEE single machine precision
   static VNL_DLL_DATA const float float_eps        VCL_STATIC_CONST_INIT_FLOAT_DECL(1.192092896e-07f);
-  static VNL_DLL_DATA const float float_sqrteps   VCL_STATIC_CONST_INIT_FLOAT_DECL(3.4526698307e-4f);
-
-#if 0 // deprecated; use vnl_numeric_traits<T>::maxval instead
-  //: MAX* constants.
-  // These are lowercase to avoid conflict with OS-defined macros.
-  static VNL_DLL_DATA const int      maxint;
-  static VNL_DLL_DATA const long int maxlong;
-  static VNL_DLL_DATA const double   maxdouble;
-  static VNL_DLL_DATA const float    maxfloat;
-#endif
+  static VNL_DLL_DATA const float float_sqrteps    VCL_STATIC_CONST_INIT_FLOAT_DECL(3.4526698307e-4f);
 };
 
 // We do not want to make assumptions about unknown types that happen
