@@ -358,8 +358,8 @@ void brct_windows_frame::init_epipole()
 
   e_ -> set(epipole.x() / epipole.w(), epipole.y()/ epipole.w());
 
-  vcl_ofstream out("epipole.ini");
-  out<<e_->x()<<' '<<e_->y();
+  kalman_->init_epipole(epipole.x(), epipole.y());
+  
 }
 
 void brct_windows_frame::creat_line()
