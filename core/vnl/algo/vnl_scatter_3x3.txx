@@ -41,7 +41,7 @@ void vnl_scatter_3x3<T>::add_outer_product(const vnl_vector_fixed<T,3> & u,
   for(int i = 0; i < 3; ++i)
     for(int j = 0; j < 3; ++j)
       S(i,j) += v[i]*u[j];
-  symmetricp = false;
+  symmetricp = false; // conservative assumption -- use add_outer_product(v) to maintain symmetry
 }
 
 template <class T>
