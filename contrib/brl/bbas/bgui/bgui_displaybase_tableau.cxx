@@ -167,13 +167,16 @@ void bgui_displaybase_tableau::draw_soviews_render()
          id_iter != selections.end(); ++id_iter )
     {
       vgui_soview* so = vgui_soview::id_to_object(*id_iter);
+      
+      if( !is_highlighted( *id_iter ) ) {
+      
+        vgui_style* style = so->get_style();
+        glPointSize(style->point_size);
+        glLineWidth(style->line_width);
+        glColor3f(1,0,0);
 
-      vgui_style* style = so->get_style();
-      glPointSize(style->point_size);
-      glLineWidth(style->line_width);
-      glColor3f(1,0,0);
-
-      so->draw();
+        so->draw();
+      }
     }
 
     if (debug)
