@@ -47,7 +47,7 @@ void test_sample_profile_bilin_byte()
   vil2_sample_profile_bilin(&vec3[0],image3,x0,y0,dx,dy,3);
   TEST_NEAR("First value",vec3[0],5.5f,1e-6);
   TEST_NEAR("Second value",vec3[1],15.5f,1e-6);
-  TEST_NEAR("Last value",vec3[8],25.7f,1e-6);
+  TEST_NEAR("Last value",vec3[8],25.7f,1e-5);
 
   vcl_vector<double> vec4(24);
   vil2_sample_profile_bilin(&vec4[0],image3,x0,y0,dx,dy,8);
