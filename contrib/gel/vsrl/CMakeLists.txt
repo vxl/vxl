@@ -17,18 +17,31 @@ SET(vsrl_sources
  vsrl_token.cxx                 vsrl_token.h
  vsrl_token_saliency.cxx        vsrl_token_saliency.h
  vsrl_window_accumulator.cxx    vsrl_window_accumulator.h
- vsrl_manager.cxx               vsrl_manager.h
  vsrl_point_picker.cxx          vsrl_point_picker.h
  vsrl_point_picker_sptr.h
  vsrl_menus.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vsrl_sources)
+
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg)
 INCLUDE_DIRECTORIES(${TBL_INCLUDE_DIR})
 
+# vsrl_manager depends on vgui and hence on OpenGL
+INCLUDE(${MODULE_PATH}/NewCMake/FindOpenGL.cmake)
+
+IF (OPENGL_FOUND)
+SET(vsrl_sources ${vsrl_sources}
+ vsrl_manager.cxx               vsrl_manager.h
+)
+ENDIF (OPENGL_FOUND)
+
 ADD_LIBRARY(vsrl ${vsrl_sources})
-TARGET_LINK_LIBRARIES(vsrl sdet vtol vdgl vgui vepl vgl vil vnl)
+
+TARGET_LINK_LIBRARIES(vsrl sdet vtol vdgl vepl vgl vil vnl)
+IF (OPENGL_FOUND)
+ TARGET_LINK_LIBRARIES(vsrl vgui)
+ENDIF (OPENGL_FOUND)
 
 IF (BUILD_EXAMPLES)
   SUBDIRS(examples)
