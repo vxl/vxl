@@ -16,6 +16,7 @@ vil2_memory_chunk::vil2_memory_chunk()
 vil2_memory_chunk::vil2_memory_chunk(unsigned long n, vil2_pixel_format pixel_form)
 : data_(new char[n]), size_(n), pixel_format_(pixel_form), ref_count_(0)
 {
+  assert(vil2_pixel_format_num_components(pixel_form) == 1);
 }
 
 //: Destructor

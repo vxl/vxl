@@ -20,6 +20,7 @@ class vil2_memory_chunk
     unsigned long size_;
 
     //: Indicate what format data is (used for binary IO)
+    // Should always be a scalar type.
     vil2_pixel_format pixel_format_;
 
     //: Reference count
@@ -30,7 +31,8 @@ class vil2_memory_chunk
     vil2_memory_chunk();
 
     //: Allocate n bytes of memory
-    //  pixel_format indicates what format to be used for binary IO
+    // \param pixel_format indicates what format to be used for binary IO,
+    // and should always be a scalar type.
     vil2_memory_chunk(unsigned long n, vil2_pixel_format pixel_format);
 
     //: Copy ctor
