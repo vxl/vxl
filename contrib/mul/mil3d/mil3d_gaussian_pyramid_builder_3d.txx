@@ -68,31 +68,31 @@ int mil3d_gaussian_pyramid_builder_3d<T>::n_levels(const mil3d_image_3d_of<T>& b
   while ((nx>=int(min_x_size_)) && (ny>=int(min_y_size_)) && (nz>=int(min_z_size_)))
   {
     if (uniform_reduction_)
-	{
+    {
       nx = (nx+1)/2; dx*=2;
       ny = (ny+1)/2; dy*=2;
       nz = (nz+1)/2; dz*=2;
     }
-	else if (dz*dz/(dx*dx)>2.0)
-	{
-	  // Pixels large in z, so don't smooth them
+    else if (dz*dz/(dx*dx)>2.0)
+    {
+      // Pixels large in z, so don't smooth them
       nx = (nx+1)/2; dx*=2;
       ny = (ny+1)/2; dy*=2;
-	}
-	else if (dy*dy/(dx*dx)>2.0)
-	{
-	  // Pixels large in y, so don't smooth them
+    }
+    else if (dy*dy/(dx*dx)>2.0)
+    {
+      // Pixels large in y, so don't smooth them
       nx = (nx+1)/2; dx*=2;
       nz = (nz+1)/2; dz*=2;
-	}
-	else if (dx*dx/(dy*dy)>2.0)
-	{
-	  // Pixels large in x, so don't smooth them
+    }
+    else if (dx*dx/(dy*dy)>2.0)
+    {
+      // Pixels large in x, so don't smooth them
       ny = (ny+1)/2; dy*=2;
       nz = (nz+1)/2; dz*=2;
-	}
-	else
-	{
+    }
+    else
+    {
       nx = (nx+1)/2; dx*=2;
       ny = (ny+1)/2; dy*=2;
       nz = (nz+1)/2; dz*=2;
@@ -276,6 +276,7 @@ void mil3d_gaussian_pyramid_builder_3d<T>::gauss_reduce_xz_15851(mil3d_image_3d_
   scaling.set_zoom_only(0.5,1.0,0.5,0,0,0);
   dest_im.setWorld2im(scaling * src_im.world2im());
 }
+
 //: Smooth and subsample src_im to produce dest_im, smoothing in y and z only
 //  Applies 1-5-8-5-1 filter and subsamples in y then z, but not x
 template<class T>
@@ -355,7 +356,6 @@ void mil3d_gaussian_pyramid_builder_3d<T>::gauss_reduce(mil3d_image_3d_of<T>& de
     gauss_reduce_yz_15851(dest_im,src_im);
   else
     gauss_reduce_15851(dest_im,src_im);
-
 }
 
 //=======================================================================
