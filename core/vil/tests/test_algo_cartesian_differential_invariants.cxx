@@ -37,6 +37,9 @@ static void test_algo_cartesian_differential_invariants()
   // directly comparable.
   // See cpp_above_matlab_comparing_cdi_code.png for impulse responses
   // from VXL and matlab versions (VXL version on top).
+  // Not the lack of radial symmetry (especially in 4th, 5th, and 7th planes)
+  // are due to rounding error. They should be zero, and are actually small values that
+  // have been scaled up while saving to file.
 
   // The following is a regression test. The golden values are
   // merely verified as above.
