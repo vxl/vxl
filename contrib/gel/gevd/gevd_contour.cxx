@@ -42,13 +42,13 @@
 // #include <cool/ArrayP.h>
 // #include <cool/ListP.h>
 // #include <iostream.h>
-#include <vcl_cmath.h>     // for vcl_abs()
-#include <vcl_cstdlib.h>   // for vcl_abs()
+#include <vcl_cstdlib.h>   // for vcl_abs(int)
 #include <vcl_cassert.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h> // for vcl_max()
 
 #include <vil/vil_byte.h>
+#include <vnl/vnl_math.h>     // for sqrt(2)
 
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
@@ -245,7 +245,7 @@ gevd_contour::FindNetwork(gevd_bufferxy& edgels,
 bool
 Ongevd_contour(const gevd_bufferxy& edgels, const int i, const int j)
 {
-  float pix = (1 + vcl_sqrt(2.0)) * floatPixel(edgels, i, j); // fuzzy threshold
+  float pix = (1 + vnl_math::sqrt2) * floatPixel(edgels, i, j); // fuzzy threshold
   for (vil_byte dir = 0; dir < TWOPI; dir += HALFPI) // 4-connected only
     if (floatPixel(edgels, i+DIS[dir], j+DJS[dir]) > pix)
       return false;             // should choose neighbor instead
