@@ -8,6 +8,7 @@ ADD_EXECUTABLE( rgrl_test_all
   test_transformation.cxx
   test_trans_reader.cxx
   test_feature.cxx
+  test_feature_region.cxx
   test_feature_set.cxx
   test_match_set.cxx
   test_spline.cxx
@@ -25,6 +26,7 @@ ADD_TEST( rgrl_rgrl_util              rgrl_test_all test_rgrl_util )
 ADD_TEST( rgrl_transformation         rgrl_test_all test_transformation )
 ADD_TEST( rgrl_trans_reader           rgrl_test_all test_trans_reader ${CMAKE_CURRENT_SOURCE_DIR}/affine_xform.txt )
 ADD_TEST( rgrl_feature                rgrl_test_all test_feature )
+ADD_TEST( rgrl_feature_region         rgrl_test_all test_feature_region )
 ADD_TEST( rgrl_feature_set            rgrl_test_all test_feature_set )
 ADD_TEST( rgrl_match_set              rgrl_test_all test_match_set )
 ADD_TEST( rgrl_spline                 rgrl_test_all test_spline )

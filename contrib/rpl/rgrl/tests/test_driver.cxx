@@ -4,6 +4,7 @@ DECLARE( test_rgrl_util );
 DECLARE( test_transformation );
 DECLARE( test_trans_reader );
 DECLARE( test_feature );
+DECLARE( test_feature_region );
 DECLARE( test_feature_set );
 DECLARE( test_match_set );
 DECLARE( test_spline );
@@ -21,6 +22,7 @@ register_tests()
   REGISTER( test_rgrl_util );
   REGISTER( test_transformation );
   REGISTER( test_feature );
+  REGISTER( test_feature_region );
   REGISTER( test_trans_reader );
   REGISTER( test_feature_set );
   REGISTER( test_match_set );

@@ -56,6 +56,19 @@ ADD_EXECUTABLE( estimate_normals_3d
 )
 TARGET_LINK_LIBRARIES( estimate_normals_3d rrel rsdl vnl_algo)
 
+# pesudo matching executables
+ADD_EXECUTABLE( match_2d
+  match_2d.cxx 
+)
+TARGET_LINK_LIBRARIES( match_2d rgrl vnl vil)
+
+# multi-resolution version
+ADD_EXECUTABLE( match_2d_multi
+  match_2d_multi.cxx 
+)
+TARGET_LINK_LIBRARIES( match_2d_multi rgrl vil_algo vil vnl)
+
+
 
 #*************************** regression tests ***************************
 

@@ -21,6 +21,10 @@ SET( rgrl_sources
   rgrl_feature_trace_pt.h              rgrl_feature_trace_pt.cxx
   rgrl_feature_face_pt.h               rgrl_feature_face_pt.cxx
   rgrl_feature_landmark.h              rgrl_feature_landmark.cxx
+  rgrl_feature_point_region.h          rgrl_feature_point_region.cxx
+  rgrl_feature_region.h                rgrl_feature_region.cxx
+  rgrl_feature_trace_region.h          rgrl_feature_trace_region.cxx
+  rgrl_feature_face_region.h           rgrl_feature_face_region.cxx
 
   rgrl_feature_set.h                   rgrl_feature_set.cxx          
   rgrl_feature_set_sptr.h
@@ -35,6 +39,13 @@ SET( rgrl_sources
   rgrl_matcher_k_nearest.h             rgrl_matcher_k_nearest.cxx
   rgrl_matcher_fixed.h                 rgrl_matcher_fixed.cxx
   rgrl_matcher_k_nearest_boundary.h    rgrl_matcher_k_nearest_boundary.cxx
+  rgrl_matcher_pseudo.h                rgrl_matcher_pseudo.txx
+  rgrl_matcher_pseudo_3d.h             rgrl_matcher_pseudo_3d.txx
+  rgrl_matcher_pseudo_int_3d.h         rgrl_matcher_pseudo_int_3d.txx
+
+  rgrl_evaluator_sptr.h
+  rgrl_evaluator.h
+  rgrl_evaluator_ssd.h                 rgrl_evaluator_ssd.cxx
 
   rgrl_spline.h                        rgrl_spline.cxx               
   rgrl_spline_sptr.h
