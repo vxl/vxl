@@ -258,14 +258,6 @@ void bmvv_multiview_manager::vd_edges()
       vcl_cout << "In bmvv_multiview_manager::vd_edges() - null tableau\n";
       return;
     }
-
-  //display test verts
-  vcl_vector<vtol_vertex_2d_sptr> test_verts = det.get_test_verts();
-  btab->set_foreground(0.0,1.0,0.0);
-  for (vcl_vector<vtol_vertex_2d_sptr>::iterator vit = test_verts.begin();
-       vit != test_verts.end(); vit++)
-    if ((*vit))
-      btab->add_vertex(*vit);
 }
 
 void bmvv_multiview_manager::regions()
