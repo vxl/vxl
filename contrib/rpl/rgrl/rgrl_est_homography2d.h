@@ -47,7 +47,7 @@ public:
   rgrl_type_macro( rgrl_est_homography2d, rgrl_estimator );
 
 private:
-  void normalize( rgrl_set_of<rgrl_match_set_sptr> const& matches,
+  bool normalize( rgrl_set_of<rgrl_match_set_sptr> const& matches,
                   vcl_vector< vnl_vector<double> >& norm_froms,
                   vcl_vector< vnl_vector<double> >& norm_tos,
                   vcl_vector< double >& wgts,
