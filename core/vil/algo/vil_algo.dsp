@@ -192,6 +192,9 @@ SOURCE=.\Templates/vil_gauss_filter+byte.byte-.cxx
 SOURCE=.\Templates/vil_cartesian_differential_invariants+float.float-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil_cartesian_differential_invariants+byte.float-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vil_histogram.cxx
 # End Source File
 # Begin Source File
