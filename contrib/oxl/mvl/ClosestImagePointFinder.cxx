@@ -55,7 +55,7 @@ void ClosestImagePointFinder::get_all_within_search_region(double cx, double cy,
   get_all_within_search_region(vgl_box_2d<double>(cx - w, cx + w, cy - h, cy + h), out);
 }
 
-void ClosestImagePointFinder::get_all_within_search_region(const vgl_box_2d<double>& disparity_bounds, vcl_vector<int>* out)
+void ClosestImagePointFinder::get_all_within_search_region(vgl_box_2d<double> const& disparity_bounds, vcl_vector<int>* out)
 {
   // Look at `point2's between y0 and y1
   vcl_multimap_double_int::iterator potential = y2i_->lower_bound(disparity_bounds.get_min_y());
