@@ -40,9 +40,9 @@ void parse_globbed_filenames(const vcl_string & input,
   if (filename.find("?") != filename.npos) return;
 
   // Check that all the #s are in a single group.
-  unsigned start = filename.find_first_of("#");
-  if (start == filename.npos) return ;
-  unsigned end = filename.find_first_not_of("#", start);
+  vcl_size_t start = filename.find_first_of("#");
+  if (start == filename.npos) return;
+  vcl_size_t end = filename.find_first_not_of("#", start);
   if (filename.find_first_of("#",end) != filename.npos) return;
   filename.replace(start,end-start,end-start,'?');
 
@@ -110,7 +110,7 @@ vil3d_slice_list_format::make_input_image(const char * filename) const
 
   // load all the slices
   vcl_vector<vil_image_resource_sptr> images(filenames.size());
-  
+
   bool same = true;
 
   for (unsigned i=0; i<filenames.size(); ++i)
@@ -132,7 +132,7 @@ vil3d_slice_list_format::make_input_image(const char * filename) const
   }
 
   // everything seems fine so create the volume
-  
+
   // If they are all dicom images, create an explicit dicom volume.
   if (same && vcl_strcmp("dicom", images.front()->file_format())==0)
     return new vil3d_dicom_image(images);
