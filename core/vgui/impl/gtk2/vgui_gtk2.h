@@ -71,11 +71,10 @@ class vgui_gtk2 : public vgui_toolkit
 
  protected:
   //: Default constructor.
-  vgui_gtk2();
+  vgui_gtk2() {}
 
   //: Initialise the implementation of vgui.
   void init(int &, char **);
-  static vgui_gtk2* instance_;
 };
 
 #endif // vgui_gtk2_h_

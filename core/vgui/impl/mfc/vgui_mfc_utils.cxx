@@ -18,7 +18,6 @@
 #include <vgui/vgui_command.h>
 #include <vcl_iostream.h>
 static bool debug = false;
-vgui_mfc_utils *vgui_mfc_utils::instance_ = NULL;
 
 
 //: Called within message service routine of vgui_mfc_mainfrm.
@@ -33,15 +32,8 @@ void vgui_mfc_utils::menu_dispatcher(UINT nID)
 //: (Create if necessary and) return singleton instance of this class.
 vgui_mfc_utils *vgui_mfc_utils::instance()
 {
-  if (!instance_)
-    instance_= new vgui_mfc_utils;
+  static vgui_mfc_utils *instance_ = new vgui_mfc_utils;
   return instance_;
-}
-
-//: Constructor.
-vgui_mfc_utils::vgui_mfc_utils()
-{
-  item_count = 0;
 }
 
 //: Destructor.

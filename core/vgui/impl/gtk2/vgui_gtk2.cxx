@@ -17,20 +17,10 @@
 
 static bool debug = false;
 
-vgui_gtk2* vgui_gtk2::instance_ = 0;
-
 vgui_gtk2* vgui_gtk2::instance()
 {
-  if (instance_ == 0)
-    instance_ = new vgui_gtk2;
-
+  static vgui_gtk2* instance_ = new vgui_gtk2;
   return instance_;
-}
-
-//---------------------------------------------------------------------------------
-//: Default constructor
-vgui_gtk2::vgui_gtk2()
-{
 }
 
 //--------------------------------------------------------------------------------

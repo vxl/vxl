@@ -26,7 +26,7 @@
 #define mb_is_valid(x) (int(x) != INVALID_TEXTURE_NAME)
 
 bool debug = false;
-vgui_cache_wizard *vgui_cache_wizard::instance_ = 0;
+
 //: Constructor.
 // Set the image quadrant width/height.
 // Do use sensible values(i.e. powers of two) otherwise the cache
@@ -36,7 +36,7 @@ vgui_cache_wizard::vgui_cache_wizard(int quadrant_width,
 {
   if (debug)
     vcl_cerr << __FILE__": this is the constructor\n";
-  //*(int*)0 = 1;
+    // *(int*)0 = 1;
 
   //: Get the maximum texture size.
   // Note that this function returns the worst case scenario
@@ -73,8 +73,7 @@ vgui_cache_wizard::~vgui_cache_wizard()
 
 vgui_cache_wizard *vgui_cache_wizard::Instance()
 {
-  if (!instance_)
-    instance_ = new vgui_cache_wizard(DEFAULT_QUADRANT_WIDTH, DEFAULT_QUADRANT_HEIGHT);
+  static vgui_cache_wizard *instance_ = new vgui_cache_wizard(DEFAULT_QUADRANT_WIDTH, DEFAULT_QUADRANT_HEIGHT);
   return instance_;
 }
 
@@ -209,7 +208,7 @@ pix *data = new pix[ img.width()*img.height() ]; /* note: this buffer is w-by-h,
 section_ok = img.get_section( data, 0,0, img.width(),img.height() ); \
 char const *what = wh; \
 /* bool found = false; */ /* used to allow semicolons after macro calls */ \
-if (false) { }
+if (false) {}
 
 // 'fmt' is the GLenum format passed to glDrawPixels()
 // 'typ' is the GLenum type passed to glDrawPixels()

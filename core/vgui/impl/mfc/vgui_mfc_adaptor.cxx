@@ -134,12 +134,6 @@ void vgui_mfc_adaptor::post_redraw()
   redraw_posted_ = true;
 }
 
-void vgui_mfc_adaptor::post_idle_request()
-{
-  idle_request_posted_ = true;
-}
-
-
 //: MFC implementation of vgui_adaptor function - make this the current GL rendering context.
 void vgui_mfc_adaptor::make_current()
 {
@@ -512,7 +506,7 @@ void mfc_key(UINT nChar, UINT nFlags, int *the_key, int *the_ascii_char)
         *the_key = vgui_key(0);
         *the_ascii_char = vgui_key(0);
         return;
-    };
+    }
   }
   else
   {

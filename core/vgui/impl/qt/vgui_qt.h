@@ -12,7 +12,7 @@
 //
 // \verbatim
 //  Modifications
-// 24.03.2000 JS  Initial Version, adapted from vgui_gtk
+//   24.03.2000 JS  Initial Version, adapted from vgui_gtk
 // \endverbatim
 //-----------------------------------------------------------------------------
 
@@ -24,10 +24,10 @@ class vgui_qt_window;
 //: QT implementation of vgui_toolkit.
 class vgui_qt : public vgui_toolkit
 {
-public:
-   static    vgui_qt* instance();
-   virtual   vcl_string name() const { return "qt"; };
-   virtual   void     run();
+ public:
+   static    vgui_qt*   instance();
+   virtual   vcl_string name() const { return "qt"; }
+   virtual   void       run();
    virtual   vgui_window* produce_window(int width, int height,
                                          const vgui_menu& menubar,
                                               const char* title="vgui qt window");
@@ -35,10 +35,9 @@ public:
                                          const char* title="vgui qt popup");
    virtual   vgui_dialog_impl* produce_dialog(const char* name);
 
-protected:
-   vgui_qt() { };
+ protected:
+   vgui_qt() {}
    void      init(int &, char **);
-   static    vgui_qt* instance_;
 };
 
 #endif // VGUI_QT_H_

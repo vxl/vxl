@@ -20,11 +20,10 @@
 class basic_manager : public vgui_wrapper_tableau
 {
   vil1_image img_;
-  vgui_image_tableau_sptr itab_; 
-  static basic_manager *instance_;
+  vgui_image_tableau_sptr itab_;
  public:
-  basic_manager();
-  ~basic_manager();
+  basic_manager() : vgui_wrapper_tableau() {}
+  ~basic_manager() {}
   static basic_manager *instance();
   void quit();
   void load_image();

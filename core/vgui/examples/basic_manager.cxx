@@ -8,26 +8,16 @@
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 
-//static basic_manager instance
-basic_manager *basic_manager::instance_ = 0;
-
-
 basic_manager *basic_manager::instance()
 {
+  static basic_manager *instance_ = 0;
   if (!instance_)
   {
     instance_ = new basic_manager();
     instance_->init();
   }
-  return basic_manager::instance_;
+  return instance_;
 }
-
-//-----------------------------------------------------------
-// constructors/destructor
-//
-basic_manager::basic_manager():vgui_wrapper_tableau(){}
-
-basic_manager::~basic_manager(){}
 
 void basic_manager::init()
 {

@@ -82,9 +82,6 @@ class vgui_cache_wizard
 
   //: Cache queue
   vcl_list <GLuint> cache_queue_;
-
-  //: Only one instance of a class is allowed
-  static vgui_cache_wizard *instance_;
 };
 
 #endif // vgui_cache_wizard_h_

@@ -4,14 +4,12 @@
 
 #include <qapplication.h>
 
-//-----------------------------------------------------------------------------
-vgui_qt* vgui_qt::instance_ = 0;
 
 //-----------------------------------------------------------------------------
 vgui_qt* vgui_qt::instance()
 {
-   if (instance_ == 0) instance_ = new vgui_qt;
-   return instance_;
+  static vgui_qt* instance_ = new vgui_qt;
+  return instance_;
 }
 
 

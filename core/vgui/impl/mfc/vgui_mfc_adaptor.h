@@ -26,7 +26,7 @@
 //                            setup_adaptor it is assumed to be the main
 //                            window.
 //   07-07-2003  M.R.Johnson - Disabled MFC acceleration by default so that new
-//                             overlay code will work (which requires double 
+//                             overlay code will work (which requires double
 //                             buffering). Overlays necessary to enable new
 //                             highlighting mechanism in vgui tableaux.
 //   07-21-2003  A.Perera   - Update the overlay mechanism for Windows, since copying
@@ -102,7 +102,7 @@ class vgui_mfc_adaptor : public CView, public vgui_adaptor, public vgui_adaptor_
   void post_timer(float,int);
 
   //: Flags than a child requests idle processing
-  void post_idle_request();
+  void post_idle_request() { idle_request_posted_ = true; }
 
   //: Return the default popup menu (not yet implemented).
   vgui_menu get_popup();
@@ -143,7 +143,6 @@ class vgui_mfc_adaptor : public CView, public vgui_adaptor, public vgui_adaptor_
   CDC* m_pDC_aux;
   //: True if the aux buffer is a copy of the main GL buffer
   bool aux_dc_valid_;
-
 
   //: True while a redraw event has been requested but not implemented.
   bool redraw_posted_;

@@ -36,9 +36,6 @@ class vgui_mfc_utils
   //: Number of menu items.
   int item_count;
 
-  //: Singleton instance of this class.
-  static vgui_mfc_utils *instance_;
-
   //: List of commands to be called by menus.
   vcl_vector<vgui_command *> callbacks;
 
@@ -53,7 +50,7 @@ class vgui_mfc_utils
   static vgui_mfc_utils *instance();
 
   //: Constructor.
-  vgui_mfc_utils();
+  vgui_mfc_utils() : item_count(0) {}
 
   //: Destructor.
   ~vgui_mfc_utils();
