@@ -44,12 +44,12 @@ inline void vil2_exp_filter_1d(const srcT* src, int sstep,
   }
 }
 
-//: Apply exponential filter to src_im to produce dest_im
-//  Symmetric exponential filter of the form exp(c*|x|) applied. c=log(k)
+//: Apply exponential filter along i to src_im to produce dest_im
+//  Symmetric exponential filter of the form exp(c*|i|) applied. c=log(k)
 //  Uses fast recursive implementation.
 // \relates vil2_image_view
 template <class srcT, class destT, class accumT>
-inline void vil2_exp_filter_1d(const vil2_image_view<srcT>& src_im,
+inline void vil2_exp_filter_i(const vil2_image_view<srcT>& src_im,
                                vil2_image_view<destT>& dest_im,
                                double k, accumT ac)
 {
@@ -63,9 +63,34 @@ inline void vil2_exp_filter_1d(const vil2_image_view<srcT>& src_im,
   {
     const srcT*  src_row  = src_im.top_left_ptr()+p*src_im.planestep();
     destT* dest_row = dest_im.top_left_ptr()+p*dest_im.planestep();
-
+    // Filter each row
     for (int j=0;j<nj;++j,src_row+=s_jstep,dest_row+=d_jstep)
       vil2_exp_filter_1d(src_row,s_istep, dest_row,d_istep,   ni, k, ac);
+  }
+}
+
+//: Apply exponential filter along j to src_im to produce dest_im
+//  Symmetric exponential filter of the form exp(c*|j|) applied. c=log(k)
+//  Uses fast recursive implementation.
+// \relates vil2_image_view
+template <class srcT, class destT, class accumT>
+inline void vil2_exp_filter_j(const vil2_image_view<srcT>& src_im,
+                               vil2_image_view<destT>& dest_im,
+                               double k, accumT ac)
+{
+  unsigned ni = src_im.ni();
+  unsigned nj = src_im.nj();
+  dest_im.resize(ni,nj,src_im.nplanes());
+  int s_istep = src_im.istep(), s_jstep = src_im.jstep();
+  int d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
+
+  for (int p=0;p<src_im.nplanes();++p)
+  {
+    const srcT*  src_col  = src_im.top_left_ptr()+p*src_im.planestep();
+    destT* dest_col = dest_im.top_left_ptr()+p*dest_im.planestep();
+    // Filter each col
+    for (int i=0;i<ni;++i,src_col+=s_istep,dest_col+=d_istep)
+      vil2_exp_filter_1d(src_col,s_jstep, dest_col,d_jstep,   nj, k, ac);
   }
 }
 
