@@ -39,10 +39,10 @@
 //#include <vcl_memory.h> // For memcpy()
 //#include <vcl_iostream.h>/
 //#include <vcl_fstream.h>
-//#include <vcl_cstdio.h> // For sscanf()
+#include <vcl_cstdio.h> // For sscanf()
 
 #include <vcl_compiler.h>
-#if defined(VCL_SUNPRO_CC_50) || defined(VCL_SGI_CC) || defined(VCL_GCC_30)
+#if defined(VCL_VC) || defined(VCL_SUNPRO_CC_50) || defined(VCL_SGI_CC) || defined(VCL_GCC_30)
 #define iostream_char char
 #else
 #define iostream_char unsigned char
