@@ -20,8 +20,8 @@ double angle(vgl_vector_3d<T> const& a, vgl_vector_3d<T> const& b) {
 template <class T>
 bool parallel(vgl_vector_3d<T> const& a, vgl_vector_3d<T> const& b, double eps)
 {
-  T cross = cross_product(a,b); // should be zero
-  if (eps <= 0 || cross == T(0)) return cross == T(0);
+  double cross = cross_product(a,b).length(); // should be zero
+  if (eps <= 0 || cross == 0.0) return cross == 0.0;
   // Since cross != 0, a and b cannot have zero length:
   double dev = cross / a.length() / a.length();
   return (dev < eps && -dev < eps);
