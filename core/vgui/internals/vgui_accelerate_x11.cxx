@@ -155,7 +155,7 @@ bool vgui_accelerate_x11::vgui_glClear( GLbitfield mask )
       if (leftover != 0) glClear( leftover );
       return true;
     }
-#endif  // If we have been succesful then we should never reach this point!!
+#endif  // If we have been successful then we should never reach this point!!
   }
 
   // Call the baseclass method as a fallback
@@ -354,7 +354,7 @@ bool vgui_accelerate_x11::vgui_glDrawPixels( GLsizei width, GLsizei height,
         return true;
       }
     }
-#endif // If we have been succesful then we should never reach this point!!
+#endif // If we have been successful then we should never reach this point!!
   }
 
   // Call the baseclass method as a fallback
