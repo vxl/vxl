@@ -48,7 +48,7 @@ int main(int argc, char** argv)
 
   vcl_vector<vgl_point_2d<double> > w_peaks;
   vimt_find_world_peaks_3x3(w_peaks,fit_image);
-  for (int i=0;i<w_peaks.size();++i) vcl_cout<<"Peak "<<i<<") "<<w_peaks[i]<<vcl_endl;
+  for (unsigned i=0;i<w_peaks.size();++i) vcl_cout<<"Peak "<<i<<") "<<w_peaks[i]<<vcl_endl;
 
   return 0;
 }

@@ -52,10 +52,10 @@ inline void vimt_find_world_peaks_3x3(vcl_vector<vgl_point_2d<double> >& peaks,
   unsigned ni=im.ni(),nj=im.nj();
   int istep = im.istep(),jstep=im.jstep();
   const T* row = im.top_left_ptr()+plane*im.planestep()+istep+jstep;
-  for (int j=1;j<nj;++j,row+=jstep)
+  for (unsigned j=1;j<nj;++j,row+=jstep)
   {
     const T* pixel = row;
-    for (int i=1;i<ni;++i,pixel+=istep)
+    for (unsigned i=1;i<ni;++i,pixel+=istep)
       if (vimt_is_peak_3x3(pixel,istep,jstep)) peaks.push_back(im2w(i,j));
   }
 }
