@@ -110,8 +110,8 @@ void test_table2()
   mbl_table table3(delim, headers);
   table3.append_row(row0);
   vcl_vector<double> row1_mod2(3);
-  row1_mod2[0] = -1.23;
-  row1_mod2[1] = -3.45;
+  row1_mod2[0] = -1.23 + 1e-13;
+  row1_mod2[1] = -3.45 - 1e-14;
   row1_mod2[2] = -6.78 + 1e-14;
   table3.append_row(row1_mod2);
   bool equal03 = table0 == table3;
