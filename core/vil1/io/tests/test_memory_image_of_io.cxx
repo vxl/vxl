@@ -1,19 +1,16 @@
+// This is vxl/vil/io/tests/test_memory_image_of_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
-
-#include <testlib/testlib_test.h>
 #include <vil/vil_memory_image_of.h>
 #include <vil/io/vil_io_memory_image_of.h>
 #include <vil/io/vil_io_image_impl.h>
 #include <vil/io/vil_io_memory_image_impl.h>
-
+#include <testlib/testlib_test.h>
 
 void test_memory_image_of_io()
 {
-  vcl_cout << "******************************\n";
-  vcl_cout << "Testing vil_memory_image_of io\n";
-  vcl_cout << "******************************\n";
+  vcl_cout << "******************************\n"
+           << "Testing vil_memory_image_of io\n"
+           << "******************************\n";
 
   // Image set-up and construction
   int height = 10;
@@ -69,8 +66,4 @@ void test_memory_image_of_io()
 }
 
 
-MAIN( test_memory_image_of_io )
-{
-  test_memory_image_of_io();
-  SUMMARY();
-}
+TESTMAIN( test_memory_image_of_io );

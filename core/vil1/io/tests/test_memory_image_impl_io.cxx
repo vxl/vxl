@@ -1,14 +1,11 @@
+// This is vxl/vil/io/tests/test_memory_image_impl_io.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
 #include <vcl_vector.h>
-
-#include <testlib/testlib_test.h>
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_memory_image_impl.h>
 #include <vil/vil_memory_image_of_format.txx>
 #include <vil/io/vil_io_memory_image_impl.h>
-
+#include <testlib/testlib_test.h>
 
 void test_memory_image_impl_io()
 {
@@ -88,8 +85,5 @@ void test_memory_image_impl_io()
   vcl_cout << vcl_endl;
 }
 
-MAIN( test_memory_image_impl_io )
-{
-  test_memory_image_impl_io();
-  SUMMARY();
-}
+
+TESTMAIN( test_memory_image_impl_io );
