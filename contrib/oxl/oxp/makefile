@@ -4,7 +4,7 @@ TRY_MPEG2 := 1
 
 LIBRARY = oxp
 
-IMMEDIATE_LIBS += -lvil -lvnl_algo -lvnl -lvbl
+IMMEDIATE_LIBS += -lvil -lvnl_algo -lvnl -lvbl -lvpl
 
 #######################################
 include $(IUEROOT)/config/top-params.mk
