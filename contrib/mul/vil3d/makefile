@@ -3,7 +3,6 @@ USES := vxl mul
 LIBRARY := vil3d
 VERSION := 1.0
 
-SOURCES += vil3d_image_view.cxx
 SOURCES += vil3d_image_view_base.cxx
 MANPAGE_SOURCES += vil3d_image_view.txx
 MANPAGE_SOURCES += vil3d_plane.h

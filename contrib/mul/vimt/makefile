@@ -4,7 +4,6 @@ LIBRARY := vimt
 VERSION := 1.0
 
 SOURCES += vimt_image.cxx
-SOURCES += vimt_image_2d_of.cxx
 SOURCES += vimt_image_pyramid.cxx
 SOURCES += vimt_image_pyramid_builder.cxx
 SOURCES += vimt_transform_2d.cxx
