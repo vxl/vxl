@@ -273,6 +273,12 @@
 #define VCL_HAS_SLICED_DESTRUCTOR_BUG @VCL_HAS_SLICED_DESTRUCTOR_BUG@
 
 
+//: VCL_HAS_WORKING_STRINGSTREAM
+//
+// True if a fully functional std::stringstream is found.
+#define VCL_HAS_WORKING_STRINGSTREAM @VCL_HAS_WORKING_STRINGSTREAM@
+
+
 //: VCL_NULL_TMPL_ARGS
 //
 // Define to <> for compilers that require them in friend template function

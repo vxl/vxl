@@ -98,6 +98,7 @@ void fn() {
   // VC7 only raises warnings for previous tests
   A i; i.f();
 }
+int main() { return 0; }
 #endif // VCL_FOR_SCOPE_HACK
 
 //-------------------------------------
@@ -980,6 +981,35 @@ int main()
 }
 
 #endif // VCL_HAS_SLICED_DESTRUCTOR_BUG
+
+//-------------------------------------
+
+#ifdef VCL_HAS_WORKING_STRINGSTREAM
+// VCL_HAS_WORKING_STRINGSTREAM is set to 1 if a fully functional std::stringstream is found.
+
+// Some compilers don't provide a fully functional std::stringstream.
+// This program will return 0 whenever sufficient functionality is detected.
+
+#include <sstream>
+
+int main()
+{
+  std::istringstream s1("text"); char c;
+  s1 >> c; if (c != 't') return 1;
+  s1 >> c; if (c != 'e') return 1;
+  s1 >> c; if (c != 'x') return 1;
+  std::ostringstream s2; s2 << "text";
+  if (s2.str() != "text") return 1;
+  std::ostringstream s3;
+  c = 't'; s3 << c;
+  c = 'e'; s3 << c;
+  c = 'x'; s3 << c;
+  c = 't'; s3 << c;
+  if (s3.str() != "text") return 1;
+  return 0; // success
+}
+
+#endif // VCL_HAS_WORKING_STRINGSTREAM
 
 //-------------------------------------
 
