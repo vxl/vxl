@@ -175,3 +175,12 @@ Method 2) Mean: 3214us  +/-50us
 Method 3) Mean: 1402us  +/-5us
 Method 4) Mean: 1192us  +/-50us
 Method 5) Mean: 741us  +/-50us
+
+With all vxl_byte replace by float in RelwithDebInfo
+Method 1) Mean: 7821us  +/-150us
+Method 2) Mean: 7761us  +/-55us
+Method 3) Mean: 7260us  +/-50us
+Method 4) Mean: 7471us  +/-200us
+Method 5) Mean: 7481us  +/-55us
+Method 6) Mean: 7250us  +/-50us
+Method 7) Mean: 7271us  +/-50us
