@@ -1,13 +1,11 @@
 // This is core/vnl/vnl_sparse_matrix.txx
 #ifndef vnl_sparse_matrix_txx_
 #define vnl_sparse_matrix_txx_
-
 //:
 // \file
 
 #include "vnl_sparse_matrix.h"
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h>
 #include <vcl_algorithm.h>
 #include <vcl_iostream.h>
 
@@ -163,7 +161,7 @@ void vnl_sparse_matrix<T>::mult(unsigned int prows, unsigned int pcols,
     for (int cc = 0; cc<pcols; cc++)
       pd(rr,cc) = p[rr + cc*prows];
 
-  vcl_cout << "Initial p: \n";
+  vcl_cout << "Initial p:\n";
   for (int rr = 0; rr<prows; rr++) {
     for (int cc = 0; cc<pcols; cc++) {
       T pval = p[rr + cc*prows];
@@ -212,7 +210,7 @@ void vnl_sparse_matrix<T>::mult(unsigned int prows, unsigned int pcols,
   }
 
 #ifdef DEBUG_SPARSE
-  vcl_cout << "Final q: \n";
+  vcl_cout << "Final q:\n";
   for (int rr = 0; rr<prows; rr++) {
     for (int cc = 0; cc<pcols; cc++) {
       T pval = q[rr + cc*prows];
@@ -498,7 +496,7 @@ void vnl_sparse_matrix<T>::set_size( int r, int c)
   cs_ = c;
   elements.resize(r);
   typename vnl_sparse_matrix_elements::iterator ie;
-  for(ie = elements.begin(); ie != elements.end(); ++ie)
+  for (ie = elements.begin(); ie != elements.end(); ++ie)
   {
     // just set matrix to 0
     ie->clear();
