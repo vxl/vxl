@@ -27,8 +27,9 @@ vidl_frame::~vidl_frame()
 // -- Return the image.
 vil_image vidl_frame::get_image()
 {
-  if (! image_)
-    image_ = new vidl_frame_as_image(this);  
+  if (! image_) {
+    image_ = vil_image(new vidl_frame_as_image(this));
+  }
   return image_;
 }
 
