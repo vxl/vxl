@@ -45,6 +45,11 @@ extern "C" int finitef(float);
 # include <math.h> // dont_vxl_filter: no HUGE_VAL or isnan() in <cmath>
 #endif
 
+#if defined(__APPLE__)
+# include <math.h>
+# define isnan __isnan
+#endif
+
 //--------------------------------------------------------------------------------
 
 // constants
