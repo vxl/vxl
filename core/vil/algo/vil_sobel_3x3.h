@@ -37,6 +37,15 @@ void vil_sobel_3x3_1plane(const unsigned char* src,
                           unsigned ni, unsigned nj);
 
 //: Compute gradients of single plane of 2D data using 3x3 Sobel filters
+//  Computes both i and j gradients of an ni x nj plane of data
+//  1 pixel border around grad images is set to zero
+void vil_sobel_3x3_1plane(const unsigned char* src,
+                          vcl_ptrdiff_t s_istep, vcl_ptrdiff_t s_jstep,
+                          double* gi, vcl_ptrdiff_t gi_istep, vcl_ptrdiff_t gi_jstep,
+                          double* gj, vcl_ptrdiff_t gj_istep, vcl_ptrdiff_t gj_jstep,
+                          unsigned ni, unsigned nj);
+
+//: Compute gradients of single plane of 2D data using 3x3 Sobel filters
 //  Computes both i and j gradients of an ni x nj plane of data.
 //  1 pixel border around grad images is set to zero
 void vil_sobel_3x3_1plane(const float* src,
