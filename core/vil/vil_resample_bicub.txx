@@ -19,8 +19,8 @@ inline bool vil_grid_corner_in_image(double x0, double y0,
 {
   if (x0<2) return false;
   if (y0<2) return false;
-  if (x0+3>image.ni()) return false;
-  if (y0+3>image.nj()) return false;
+  if (x0>image.ni()-3) return false;
+  if (y0>image.nj()-3) return false;
   return true;
 }
 
@@ -127,12 +127,13 @@ void vil_resample_bicub(const vil_image_view<sType>& src_image,
                         vil_image_view<dType>& dest_image,
                         int n1, int n2)
 {
-   double x0=0;
+  double f= 0.9999999; // so sampler doesn't go off edge of image
+  double x0=0;
   double y0=0;
-  double dx1=(src_image.ni()-1)*1.0/(n1-1);
+  double dx1=f*(src_image.ni()-1)*1.0/(n1-1);
   double dy1=0;
   double dx2=0;
-  double dy2=(src_image.nj()-1)*1.0/(n2-1);
+  double dy2=f*(src_image.nj()-1)*1.0/(n2-1);
   vil_resample_bicub( src_image, dest_image, x0, y0, dx1, dy1, dx2, dy2, n1, n2 );
 }
 
