@@ -15,7 +15,7 @@ class X
   X(float a, float b) : x_(a + b) { }
   X(double a, double b) : x_(a + b) { }
   void method() const { vcl_cout << '[' << x_ << ']' << '\n' << vcl_flush; }
-  bool operator==(X const& y) { return x_ == y.x(); }
+  bool operator==(X const& y) const { return x_ == y.x(); }
 };
 
 vcl_ostream& operator<<(vcl_ostream& is, X const& a) { return is << a.x(); }
@@ -130,6 +130,24 @@ static void vbl_test_array_3d()
   TEST("element (0,1,0) is 3", v(0,1,0), X(3,0));
   TEST("element (0,1,1) is 1", v(0,1,1), X(1,0));
   TEST("element (0,1,2) is -1", v(0,1,2), X(-1,0));
+
+  X buf[6];
+  buf[0] = X(1, 2);
+  buf[1] = X(3.0f, 4.0f);
+  buf[2] = X(-2, 1);
+  buf[3] = X(1, 2);
+  buf[4] = X(-1.0, 2.0);
+  buf[5] = X(-2, 1);
+  vbl_array_3d<X> w(1,2,3,buf);
+
+  TEST("constructor from buffer", w, v);
+  w = v;
+  TEST("assignment operator", w, v);
+  const vbl_array_3d<X> u = v;
+  TEST("copy constructor", u, v);
+
+  for (vbl_array_3d<X>::const_iterator i=u.begin(); i!=u.end(); ++i)
+    (*i).method();
 }
 
 static void vbl_test_array()
