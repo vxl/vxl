@@ -189,7 +189,7 @@ void xcv_multiview::load_f_matrix()
   vcl_string* f_matrix_filename = get_loadfile();
   static vcl_string regexp = "*.*";
   f_dialog.inline_file("File containing FMatrix:", regexp, *f_matrix_filename);
-  if (!f_dialog.ask())
+  if (!f_dialog.ask() || f_matrix_filename->size() == 0)
     return;
 
   // Read the FMatrix from the file:
