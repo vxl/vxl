@@ -18,7 +18,7 @@
 //
 // .SECTION Modifications:
 //   AWF 030897 Moved to MViewBasics
-//   210598 AWF Return squared error, as sqrt(|x - p|^2 + |x' - p'|^2) is meaningless.
+//   210598 AWF Return squared error, as \sqrt(|x - p|^2 + |x' - p'|^2) is meaningless.
 //   AWF Handle affine F.
 //   P. Torr added in a check for multiple solutions
 //     this might be necessary to flag the instance when a particular correspondence
@@ -52,10 +52,7 @@ private:
   vnl_double_4x4 V_;
   vnl_double_4 d_;
 
-  bool _affine_F;
-
-  // Workspace that we don't want to repeatedly malloc.
-  vnl_vector<double> _coeffs;
+  bool affine_F_;
 };
 
 #endif // FManifoldProject_h_

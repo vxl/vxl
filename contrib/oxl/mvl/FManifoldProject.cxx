@@ -24,17 +24,13 @@
 #include <mvl/HomgOperator2D.h>
 
 //: Construct an FManifoldProject object which will use the given F to correct point pairs.
-FManifoldProject::FManifoldProject(const FMatrix& Fobj):
-  _coeffs(7)
+FManifoldProject::FManifoldProject(const FMatrix& Fobj)
 {
   set_F(Fobj);
 }
 
 //: Construct an FManifoldProject object with the intention of later setting its F.
-FManifoldProject::FManifoldProject():
-  _coeffs(7)
-{
-}
+FManifoldProject::FManifoldProject() {}
 
 //: Use the given F to correct point pairs.
 void FManifoldProject::set_F(const FMatrix& Fobj)
@@ -63,8 +59,8 @@ void FManifoldProject::set_F(const FMatrix& Fobj)
   //MATLABPRINT(eig.D);
 
   // If all eigs are 0, had an affine F
-  _affine_F = eig.D(3,3) < 1e-6;
-  if (_affine_F) {
+  affine_F_ = eig.D(3,3) < 1e-6;
+  if (affine_F_) {
     ///vcl_cerr << "FManifoldProject: Affine F = " << F_ << vcl_endl;
     double s = 1.0 / b.magnitude();
     t_ = b * s;
@@ -120,7 +116,7 @@ double FManifoldProject::correct(const HomgPoint2D& p1, const HomgPoint2D& p2, H
     return 1e30;
   }
 
-  if (_affine_F) {
+  if (affine_F_) {
     // Easy case for affine F, F is a plane.
     // t_ = n;
     // d_[0] = d;
@@ -171,25 +167,25 @@ double FManifoldProject::correct(const HomgPoint2D& p1, const HomgPoint2D& p2, H
   //                 2         2              2         2              2         2          2              2         2         2
   //     (a3*(x - b1)  (x - b2)  + a2*(x - b1)  (x - b3)  + a1*(x - b2)  (x - b3) ) (x - b4)  + a4*(x - b1)  (x - b2)  (x - b3)
   // Coeffs from mma, assuming /. { b4 -> -b3, b2 -> -b1 }
-  static vnl_vector<double> _coeffs(7);
+  static vnl_vector<double> coeffs_(7);
   double b12 = b1*b1;
   double b32 = b3*b3;
   double b14 = b12*b12;
   double b34 = b32*b32;
 
-  _coeffs[6] = a3*b14*b32 + a4*b14*b32 + a1*b12*b34 + a2*b12*b34;
-  _coeffs[5] = (2*a3*b14*b3 - 2*a4*b14*b3 + 2*a1*b1*b34 - 2*a2*b1*b34);
-  _coeffs[4] = (a3*b14 + a4*b14 - 2*(a1 +a2 + a3 + a4)*b12*b32 + a1*b34 + a2*b34);
-  _coeffs[3] = (-4*a3*b12*b3 + 4*a4*b12*b3 - 4*a1*b1*b32 + 4*a2*b1*b32);
-  _coeffs[2] = (a1*b12 + a2*b12 - 2*a3*b12 - 2*a4*b12 - 2*a1*b32 - 2*a2*b32 + a3*b32 + a4*b32);
-  _coeffs[1] = 2*(b3*(a3 - a4) + b1*(a1 - a2));
-  _coeffs[0] = (a1 + a2 + a3 + a4);
+  coeffs_[6] = a3*b14*b32 + a4*b14*b32 + a1*b12*b34 + a2*b12*b34;
+  coeffs_[5] = (2*a3*b14*b3 - 2*a4*b14*b3 + 2*a1*b1*b34 - 2*a2*b1*b34);
+  coeffs_[4] = (a3*b14 + a4*b14 - 2*(a1 +a2 + a3 + a4)*b12*b32 + a1*b34 + a2*b34);
+  coeffs_[3] = (-4*a3*b12*b3 + 4*a4*b12*b3 - 4*a1*b1*b32 + 4*a2*b1*b32);
+  coeffs_[2] = (a1*b12 + a2*b12 - 2*a3*b12 - 2*a4*b12 - 2*a1*b32 - 2*a2*b32 + a3*b32 + a4*b32);
+  coeffs_[1] = 2*(b3*(a3 - a4) + b1*(a1 - a2));
+  coeffs_[0] = (a1 + a2 + a3 + a4);
 
   // Don't try this: c = c ./ [1e0 1e2 1e4 1e6 1e8 1e10 1e12]
-  _coeffs /= _coeffs.magnitude();
+  coeffs_ /= coeffs_.magnitude();
 
-  vnl_real_polynomial poly(_coeffs);
-  vnl_rpoly_roots roots(_coeffs);
+  vnl_real_polynomial poly(coeffs_);
+  vnl_rpoly_roots roots(coeffs_);
   double dmin = 1e30;
   vnl_double_4 Xmin;
   vnl_vector<double> realroots = roots.realroots(1e-8);
@@ -221,7 +217,7 @@ double FManifoldProject::correct(const HomgPoint2D& p1, const HomgPoint2D& p2, H
         // This can happen in reasonable circumstances -- notably when one
         // epipole is at infinity.
         vcl_cerr << "FManifoldProject: A root has epidist = " << vcl_sqrt(EPIDIST) << vcl_endl;
-        vcl_cerr << "  coeffs: " << _coeffs << vcl_endl;
+        vcl_cerr << "  coeffs: " << coeffs_ << vcl_endl;
         vcl_cerr << "  root = " << lambda << vcl_endl;
         vcl_cerr << "  poly residual = " << poly.evaluate(lambda) << vcl_endl;
         vcl_cerr << "  rational poly residual = " << RATPOLY_RESIDUAL << vcl_endl;
