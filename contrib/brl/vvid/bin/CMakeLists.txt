@@ -20,5 +20,5 @@ IF(HAS_CMU1394CAMERA)
 
  SET(videx_sources videx.cxx videx_menus.cxx videx_menus.h)
  ADD_EXECUTABLE (videx ${videx_sources})
- TARGET_LINK_LIBRARIES(videx vvid bgui vgui )
+ TARGET_LINK_LIBRARIES(videx vvid bgui vgui vpro)
 ENDIF(HAS_CMU1394CAMERA)
