@@ -35,13 +35,13 @@ static theta_pair inter_line_circle(vnl_vector<double> const& l)
   float c2=c * c;
   theta_pair phis;
   if (c2<=(a2+b2)) {
-    double alpha=acos(sqrt(c2/(a2+b2)));
+    double alpha=vcl_acos(vcl_sqrt(c2/(a2+b2)));
     if (c<0) {
       a= -a;
       b= -b;
       c= -c;
     }
-    double beta=atan2(b,a)+vnl_math::pi;
+    double beta=vcl_atan2(b,a)+vnl_math::pi;
     phis.theta1=beta-alpha;
     phis.theta2=beta+alpha;
   } else {
@@ -68,7 +68,7 @@ spaced_angles(double alpha1,
   double offset=0.02;
   
   for(double alpha = alpha1;;) {
-    double d = l(0) * cos(alpha) + l(1) * sin(alpha) + l(2);
+    double d = l(0) * vcl_cos(alpha) + l(1) * vcl_sin(alpha) + l(2);
     alpha += k*d*d + offset;
     
     if (alpha >= alpha2)
@@ -85,8 +85,8 @@ spaced_angles(double alpha1,
   vnl_double_2 nonhomg;
   for(unsigned j=0;j<ang.size();j++)
     {
-      point(0)=cos(ang[j]);
-      point(1)=sin(ang[j]);
+      point(0)=vcl_cos(ang[j]);
+      point(1)=vcl_sin(ang[j]);
       point(2)=1;
       tpoint=Hinv*point;
       out->push_back(vnl_double_2(tpoint(0)/tpoint(2), tpoint(1)/tpoint(2)));
@@ -136,7 +136,7 @@ vsl_conic_points::vsl_conic_points(vsl_conic_as_matrix const& conic,
   
   vnl_diag_matrix<double> Q(3);
   for(unsigned i=0; i<3; i++)
-    Q(i,i) = sqrt(fabs(eig.D(i,i)));
+    Q(i,i) = vcl_sqrt(vcl_fabs(eig.D(i,i)));
   
   vnl_matrix<double> H = Q*eig.V.transpose();
   
@@ -212,7 +212,7 @@ vsl_conic_points::find_angles(vnl_matrix<double> const& b, vnl_matrix<double> co
   for (unsigned j=0;j<(phi.size()-1);j++)
     {
       double alpha = (phi[j]+phi[j+1])/2;
-      vnl_double_3  a(cos(alpha),sin(alpha),1);
+      vnl_double_3  a(vcl_cos(alpha),vcl_sin(alpha),1);
       vnl_double_3 H_mp=Hinv*a;
       double Hmx = H_mp[0]/H_mp[2];
       double Hmy = H_mp[1]/H_mp[2];

@@ -15,8 +15,8 @@ vsl_conic_as_params::vsl_conic_as_params(double cx, double cy, double rx, double
   double Ry=(ry != 0) ? (vnl_math_sgn(ry)/(ry*ry)) : 0;
   
   theta = -theta;
-  double cost = cos(theta);
-  double sint = sin(theta);
+  double cost = vcl_cos(theta);
+  double sint = vcl_sin(theta);
   double cost2 = cost*cost;
   double sint2 = sint*sint;
   double sin2t = 2*sint*cost;
