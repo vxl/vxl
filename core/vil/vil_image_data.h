@@ -62,14 +62,14 @@ class vil2_image_data
   // \return 0 if unable to get view of correct size. Caller is responsible for
   // deleting the view.
   virtual vil2_image_view_base* get_view(unsigned x0, unsigned y0,
-    unsigned plane0, unsigned width, unsigned height,
-    unsigned nplanes) const = 0;
+    unsigned plane0, unsigned nx, unsigned ny, unsigned nplanes) const
+  { return get_copy_view (x0, y0, plane0, nx, ny, nplanes); }
 
   //: Create a read/write view of a copy of this data.
   // \return 0 if unable to get view of correct size. Caller is responsible for
   // deleting the view.
   virtual vil2_image_view_base* get_copy_view(unsigned x0, unsigned y0,
-    unsigned plane0, unsigned width, unsigned height,
+    unsigned plane0, unsigned nx, unsigned ny,
     unsigned nplanes) const = 0;
 
   //: Put the data in this view back into the image source.
