@@ -29,7 +29,6 @@ void vsl_b_read(vsl_b_istream &is, vnl_real_polynomial & p)
 
   short ver;
   vnl_vector<double> coeffs;
-  vnl_matrix<int> polyn;
   vsl_b_read(is, ver);
   switch(ver)
   {

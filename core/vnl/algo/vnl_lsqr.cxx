@@ -42,7 +42,7 @@ vnl_lsqr::~vnl_lsqr()
 }
 
 // Requires number_of_residuals() of workspace in rw.
-void vnl_lsqr::aprod_(int* mode, int* m, int* n, double* x, double* y, int* leniw, int* lenrw, int* iw, double* rw )
+void vnl_lsqr::aprod_(int* mode, int* m, int* n, double* x, double* y, int* /*leniw*/, int* /*lenrw*/, int* /*iw*/, double* rw )
 {
   vnl_lsqr* active = vnl_lsqr_Activate::current;
 
@@ -92,7 +92,7 @@ int vnl_lsqr::minimize(vnl_vector<double>& result)
   vnl_vector<double> rhs(m);
   ls_->get_rhs(rhs);
 
-  vnl_lsqr_Activate activator(this);
+  vnl_lsqr_Activate activator(this); // This variable is not used, but the constructor must be called.
 
   lsqr_(&m, &n, aprod_, &damp, &leniw, &lenrw, iw, &rw[0],
         rhs.data_block(), &v[0], &w[0], result.data_block(), &se[0],
