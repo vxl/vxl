@@ -14,6 +14,7 @@ MANPAGE_SOURCES += vgl_h_matrix_2d.txx
 MANPAGE_SOURCES += vgl_h_matrix_3d.txx
 MANPAGE_SOURCES += vgl_p_matrix.txx
 MANPAGE_SOURCES += vgl_norm_trans_2d.txx
+MANPAGE_SOURCES += vgl_norm_trans_3d.txx
 SOURCES += vgl_h_matrix_1d_compute.cxx
 SOURCES += vgl_h_matrix_1d_compute_3point.cxx
 SOURCES += vgl_h_matrix_1d_compute_linear.cxx
