@@ -18,6 +18,10 @@ SOURCES += clsfy_binary_threshold_1d.cxx
 SOURCES += clsfy_builder_1d.cxx
 SOURCES += clsfy_classifier_1d.cxx
 SOURCES += clsfy_simple_adaboost.cxx
+SOURCES += clsfy_smo_base.cxx
+SOURCES += clsfy_smo_1.cxx
+SOURCES += clsfy_rbf_svm.cxx
+SOURCES += clsfy_rbf_svm_smo_1_builder.cxx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
