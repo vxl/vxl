@@ -80,10 +80,10 @@ public:
 
   //: Return true iff the plane is the plane at infinity.
   // The method checks that max(|nx|,|ny|,|nz|) < tol * |d|
-  bool ideal(Type tol) const {
-    return vcl_abs(nx()) < tol * vcl_abs(d()) &&
-           vcl_abs(ny()) < tol * vcl_abs(d()) &&
-           vcl_abs(nz()) < tol * vcl_abs(d());
+  bool ideal(Type tol = Type(0)) const {
+    return vcl_abs(nx()) <= tol * vcl_abs(d()) &&
+           vcl_abs(ny()) <= tol * vcl_abs(d()) &&
+           vcl_abs(nz()) <= tol * vcl_abs(d());
   }
 
 protected:
