@@ -37,14 +37,16 @@ mbl_thin_plate_spline_2d::~mbl_thin_plate_spline_2d()
 {
 }
 // First some useful maths functions
+
+#if 0 // unused
 inline double r2lnr(const vgl_point_2d<double>&  pt)
 {
   double r2 = pt.x() * pt.x() + pt.y() * pt.y();
   if (r2>1e-8)   return 0.5 * r2 * vcl_log(r2);
   else     return 0;
 }
+#endif
 
-// First some useful maths functions
 inline double r2lnr(const vgl_vector_2d<double>&  pt)
 {
   double r2 = pt.x() * pt.x() + pt.y() * pt.y();
