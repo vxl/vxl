@@ -324,7 +324,7 @@ bool vil2_image_view<T>::operator==(const vil2_image_view<T> &other) const
 }
 
 
-#define VIL_IMAGE_VIEW_INSTANTIATE(T) \
+#define VIL2_IMAGE_VIEW_INSTANTIATE(T) \
 template class vil2_image_view<T >
 
 #endif // vil2_image_view_txx_
