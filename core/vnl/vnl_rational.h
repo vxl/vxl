@@ -46,6 +46,7 @@
 
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
+#include <vcl_cmath.h> // for sqrt
 
 //: Infinite precision rational numbers
 //
@@ -232,11 +233,11 @@ public:
     assert(r == t); // abort on underflow or overflow
     return r;
   }
-  //inline operator const long () const { return truncate(); }
-  //inline operator const float () const { return ((float)num_)/((float)den_); }
-  //inline operator const double () const { return ((double)num_)/((double)den_); }
+  inline operator long () const { return truncate(); }
   inline operator long () { return truncate(); }
+  inline operator float () const { return ((float)num_)/((float)den_); }
   inline operator float () { return ((float)num_)/((float)den_); }
+  inline operator double () const { return ((double)num_)/((double)den_); }
   inline operator double () { return ((double)num_)/((double)den_); }
 
   //: Calculate greatest common divisor of two integers.
@@ -386,7 +387,13 @@ namespace std {
   inline vnl_rational abs (vnl_rational const& x) { return x.abs(); }
 }
 #endif
-vnl_rational sqrt (vnl_rational x); // { return vnl_rational(vcl_sqrt(double(x))); }
+#if defined(VCL_SUNPRO_CC) || defined(VCL_SGI_CC) || !VCL_USE_NATIVE_COMPLEX
+inline vnl_rational vcl_sqrt(vnl_rational const& x) { return vnl_rational(vcl_sqrt(double(x))); }
+#else
+namespace std {
+  inline vnl_rational sqrt(vnl_rational const& x) { return vnl_rational(vcl_sqrt(double(x))); }
+}
+#endif
 
 inline vnl_rational vnl_math_abs(vnl_rational const& x) { return x<0L ? -x : x; }
 inline vnl_rational vnl_math_squared_magnitude(vnl_rational const& x) { return x*x; }
@@ -432,7 +439,7 @@ inline bool vnl_math_isnan(vcl_complex<vnl_rational> const& z)
 inline bool vnl_math_isfinite(vcl_complex<vnl_rational> const& z)
   { return vnl_math_isfinite(vcl_real(z)) && vnl_math_isfinite(vcl_imag(z)); }
 inline vnl_rational vnl_math_squared_magnitude(vcl_complex<vnl_rational> const& z) { return vcl_norm(z); }
-inline vnl_rational vnl_math_abs(vcl_complex<vnl_rational> const& z) { return sqrt(vcl_norm(z)); }
+inline vnl_rational vnl_math_abs(vcl_complex<vnl_rational> const& z) { return vcl_sqrt(vcl_norm(z)); }
 inline vcl_complex<vnl_rational> vnl_math_sqr(vcl_complex<vnl_rational> const& z) { return z*z; }
 inline vcl_ostream& operator<< (vcl_ostream& s, vcl_complex<vnl_rational> const& z) {
   return s << '(' << z.real() << "," << z.imag() << ')'; }
