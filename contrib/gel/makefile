@@ -1,11 +1,11 @@
 # spatial objects
 SUBDIRS += vsol
 
-# topology
-SUBDIRS += vtol gst
-
 # digital  geometry
 SUBDIRS += vdgl
+
+# topology
+SUBDIRS += vtol gst
 
 # van-duc region finder (ported from TargetJr)
 SUBDIRS += gevd
