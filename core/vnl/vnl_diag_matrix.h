@@ -23,6 +23,10 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 
+// forward declarations
+template <class T> class vnl_diag_matrix;
+template <class T> vnl_vector<T> operator*(vnl_diag_matrix<T> const&, vnl_vector<T> const&);
+
 //: stores a diagonal matrix as a single vector.
 //  vnl_diag_matrix stores a diagonal matrix for time and space efficiency.
 //  Specifically, only the diagonal elements are stored, and some matrix
@@ -331,6 +335,5 @@ inline vnl_vector<T> operator* (vnl_vector<T> const& A, vnl_diag_matrix<T> const
   assert(A.size() == D.size());
   return element_product(D.diagonal(), A);
 }
-
 
 #endif // vnl_diag_matrix_h_
