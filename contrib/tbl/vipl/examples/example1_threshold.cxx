@@ -43,9 +43,9 @@ main(int argc, char** argv) {
   // The output image:
   vil_memory_image_of<ubyte> out(in);
   vil_image* dst = &out;
-  
+
   // The threshold value:
-  ubyte threshold = (argc < 4) ? 127 : atoi(argv[3]);
+  ubyte threshold = (argc < 4) ? 127 : vcl_atoi(argv[3]);
 
   // The filter:
   vipl_threshold<vil_image,vil_image,ubyte,ubyte VCL_DFL_TMPL_ARG(vipl_trivial_pixeliter)> op(threshold,0);

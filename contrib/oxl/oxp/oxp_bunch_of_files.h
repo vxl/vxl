@@ -35,7 +35,7 @@ struct oxp_bunch_of_files
  private:
   int current_file_index;
   vcl_vector<vcl_string> filenames;
-  vcl_vector<FILE*> fps;
+  vcl_vector<vcl_FILE*> fps;
   vcl_vector<unsigned int> filesizes;
   vcl_vector<offset_t> start_byte;
 };

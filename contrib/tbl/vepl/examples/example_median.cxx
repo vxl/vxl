@@ -1,3 +1,5 @@
+// This is tbl/vepl/examples/example_median.cxx
+
 //:
 // \file
 //  This example program shows a typical use of the median filter on
@@ -30,7 +32,7 @@ main(int argc, char** argv) {
   vil_image in = vil_load(argv[1]);
 
   // The radius: (default is 3x3 square)
-  float radius = (argc < 4) ? 1.5 : vcl_atof(argv[3]);
+  float radius = (argc < 4) ? 1.5f : (float)vcl_atof(argv[3]);
 
   // The filter:
   vil_image out = vepl_median(in,radius);

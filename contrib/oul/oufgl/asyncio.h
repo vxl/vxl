@@ -1,4 +1,6 @@
-//-*-c++-*--------------------------------------------------------------
+// This is oul/oufgl/asyncio.h
+#ifndef OTAGO_Asyncio_IO__h_INCLUDED
+#define OTAGO_Asyncio_IO__h_INCLUDED
 //:
 // \file
 // \brief A simple wrapper around POSIX.1b aynchronous I/O
@@ -7,9 +9,6 @@
 // University of Otago, Dunedin, New Zealand
 // Reproduction rights limited as described in the COPYRIGHT file.
 //----------------------------------------------------------------------
-
-#ifndef OTAGO_Asyncio_IO__h_INCLUDED
-#define OTAGO_Asyncio_IO__h_INCLUDED
 
 //----------------------------------------------------------------------
 //: Asynchronous I/O wrapper
@@ -59,7 +58,7 @@
 class AsyncIO_Shared_State
 {
 protected:
-  static volatile sig_atomic_t complete;   // 0 - in progress, 1 - complete
+  static volatile vcl_sig_atomic_t complete;   // 0 - in progress, 1 - complete
 
   // Set complete flag when completion signal arrives. Currently ignores
   // the signal number (see the warning at the start of this header)

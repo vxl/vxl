@@ -1,3 +1,5 @@
+// This is tbl/vipl/examples/example_gaussian_convolution.cxx
+
 //:
 // \file
 //  This example program shows a typical use of the gaussian convolution filter
@@ -43,7 +45,7 @@ main(int argc, char** argv) {
   int ys = in.height();
 
   // The value of sigma: (default is 5)
-  float sigma = (argc < 4) ? 5.0f : atof(argv[3]);
+  float sigma = (argc < 4) ? 5.0f : (float)vcl_atof(argv[3]);
 
   img_type src(ys,xs);
   img_type dst(ys,xs);

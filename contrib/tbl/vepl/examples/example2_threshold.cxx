@@ -1,3 +1,5 @@
+// This is tbl/vepl/examples/example2_threshold.cxx
+
 //:
 // \file
 //  This example program shows a typical use of the vepl_threshold function on
@@ -37,7 +39,7 @@ main(int argc, char** argv) {
   }
 
   // The threshold value:
-  ubyte threshold = (argc < 4) ? 128 : atoi(argv[3]);
+  ubyte threshold = (argc < 4) ? 128 : vcl_atoi(argv[3]);
 
   // perform thresholding:
   vil_image out = vepl_threshold(in,threshold,0,255);

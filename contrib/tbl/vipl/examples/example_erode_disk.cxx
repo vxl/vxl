@@ -1,3 +1,5 @@
+// This is tbl/vipl/examples/example_erode_disk.cxx
+
 //:
 // \file
 //  This example program shows a typical use of a morphological IP class on
@@ -41,13 +43,13 @@ main(int argc, char** argv) {
 
   // The output image:
   vil_memory_image_of<ubyte> out(in);
-  
+
   // The image sizes:
   int xs = in.width();
   int ys = in.height();
-  
+
   // The radius: (default is 3x3 square)
-  float radius = (argc < 4) ? 1.5 : atof(argv[3]);
+  float radius = (argc < 4) ? 1.5f : (float)vcl_atof(argv[3]);
 
   img_type src(xs,ys); // in-memory 2D images
   img_type dst(xs,ys);

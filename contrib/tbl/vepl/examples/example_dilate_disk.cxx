@@ -1,3 +1,5 @@
+// This is tbl/vepl/examples/example_dilate_disk.cxx
+
 //:
 // \file
 //  This example program shows a typical use of a morphological function on
@@ -33,7 +35,7 @@ main(int argc, char** argv) {
   vil_image in = vil_load(argv[1]);
 
   // The radius: (default is 3+3 cross)
-  float radius = (argc < 4) ? 1 : atof(argv[3]);
+  float radius = (argc < 4) ? 1.0f : (float)vcl_atof(argv[3]);
 
   // The filter:
   vil_image out = vepl_dilate_disk(in,radius);

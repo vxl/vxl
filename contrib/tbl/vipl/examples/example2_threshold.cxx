@@ -47,7 +47,7 @@ main(int argc, char** argv) {
   int ys = in.height();
 
   // The threshold value:
-  ubyte threshold = (argc < 4) ? 128 : atoi(argv[3]);
+  ubyte threshold = (argc < 4) ? 128 : vcl_atoi(argv[3]);
 
   img_type src(xs,ys); // in-memory 2D image
 
