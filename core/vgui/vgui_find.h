@@ -3,15 +3,13 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+//: \file
+// \author  fsm@robots.ox.ac.uk
 
 #include <vcl_string.h>
 #include <vgui/vgui_tableau_sptr.h>
 
 //: Search for a tableau by type in the hierarchy.
-
 //  If \param direction_down is true, it will search below \param
 //  start. Otherwise, it will search above \param start. Returns a
 //  null pointer if a matching tableau is not found.
@@ -52,5 +50,4 @@ inline
 vgui_tableau_sptr vgui_find_above_by_name(vgui_tableau_sptr const& start, vcl_string const &name)
 { return vgui_find_by_name(start, name, false); }
 
-
-#endif
+#endif // vgui_find_h_
