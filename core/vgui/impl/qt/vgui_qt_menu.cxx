@@ -1,0 +1,38 @@
+#include "vgui_qt_menu.h"
+#include <vcl_iostream.h>
+
+//---------------------------------------------------------------------------
+vgui_qt_menu::vgui_qt_menu(const vgui_menu& menu)
+: QPopupMenu()
+{
+   connect(this, SIGNAL(activated(int)), this, SLOT(upon_activated(int)));
+
+   //int i = 1;
+   commands_ = new vgui_command_ref[menu.size()];
+   for (unsigned i=0; i < menu.size();i++) 
+   {
+      if (menu[i].is_separator()) 
+      {
+         insertSeparator();
+      }
+      else if (menu[i].is_command()) 
+      {
+         insertItem(menu[i].name.c_str(), i);
+         commands_[i] = menu[i].cmnd;
+      }
+      else if (menu[i].is_submenu()) 
+      {
+         vgui_qt_menu* qm = new vgui_qt_menu(*(menu[i].menu));
+         insertItem(menu[i].name.c_str(), (QPopupMenu*)qm, i);
+      }
+   }
+}
+
+
+//---------------------------------------------------------------------------
+void vgui_qt_menu::upon_activated(int id)
+{
+   vcl_cerr << "upon_activated " << id << vcl_endl;
+   vgui_command_ref c = commands_[id];
+   c->execute();
+}

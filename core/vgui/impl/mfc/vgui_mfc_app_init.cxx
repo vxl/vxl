@@ -1,0 +1,18 @@
+#ifdef __GNUC__
+#pragma implementation
+#endif
+#include "vgui_mfc_app_init.h"
+
+#include <vgui/impl/mfc/stdafx.h>
+#include <vgui/impl/mfc/vgui_mfc_app.h>
+
+
+vgui_mfc_app_init::vgui_mfc_app_init()
+{
+  p = new vgui_mfc_app;
+}
+
+vgui_mfc_app_init::~vgui_mfc_app_init()
+{
+  delete p;
+}
