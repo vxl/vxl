@@ -16,4 +16,21 @@
 * - One can use it to wrap up other image classes transparently.
 * - It is simple to extend to 3D images, and avoids huge arrays of pointers
 * - It allows 2D views of 3D images easily.
+*
+* \subsection pyr Image Pyramids
+* Image pyramids (mil_image_pyramid) are stacks of images, assumed to have lower
+* resolution as one goes up the stack.
+*
+* They can be build using mil_image_pyramid_builder objects such as
+* - mil_gaussian_pyramid_builder_2d
+* - mil_gaussian_pyramid_builder_2d_general
+*
+* \subsection Interp Interpolation
+* Interpolation functions include
+* - mil_bilin_interp_2d (Fast interpolation with no checks on image size - seg fault if outside)
+* - mil_safe_bilin_interp_2d (Check inside image, if not, return zero)
+* - mil_safe_extend_bilin_interp_2d (Bilinear, if outside return value at nearest edge pixel)
+*
+* \subsection Sampling Sampling
+* Profiles can be sampled using mil_sample_profile_2d
 */
