@@ -1,6 +1,6 @@
 #include <vcl_fstream.h>
 
-#include <vpl/vpl_unistd.h>
+#include <vpl/vpl.h>
 #include <sys/types.h>
 
 #define Assert(x) do { if (x) vcl_cout << "test PASSED\n"; else vcl_cout << "test FAILED [" #x "]\n"; } while (0)
@@ -29,6 +29,8 @@ int main(int, char **)
 
   vpl_chdir("/tmp");
   vpl_rmdir("/tmp/vpltest");
+
+  vpl_usleep(5000000); // 5 seconds
 
   return 0;
 }
