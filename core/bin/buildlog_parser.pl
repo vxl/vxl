@@ -14,6 +14,9 @@ exec perl -I $IUEROOT/vxl/bin -x $0 ${1+"$@"}
 #      ad-hoc fix for bug in ParseDate which does not recognise "DST" in date;
 #      simplified expressions, e.g. by replacing $currentline with $_;
 #      added removal of $IUEROOT absolute path (which is irrelevant).
+# 21 May 2001 - Amitha Perera - fixed to work on FreeBSD (temp
+#      filenames should not have $s in them in perl, because interpolation
+#      happens in the most awkward places.
 #
 
 # global modules from CPAN
@@ -27,8 +30,8 @@ use FrostAPI;
 # see if we have compress
 #   if so, we output to a tmpfile first, then compress it, MIME it and then output it
 #   otherwise we just output it to STDOUT
-$tmpfilename1= "/tmp/buildlog_parser_$$1.tmp";
-$tmpfilename2= "/tmp/buildlog_parser_$$2.tmp";
+$tmpfilename1= "/tmp/buildlog_parser_${$}_1.tmp";
+$tmpfilename2= "/tmp/buildlog_parser_${$}_2.tmp";
 
 if ( -f "/bin/compress" )
   {
@@ -49,7 +52,6 @@ if ( -f "/tmp/iup_opt/bin/gzip" )
   {
     $compress= "/tmp/iup_opt/bin/gzip -c $tmpfilename1 > $tmpfilename2";
   }
-
 
 # get current date and time
 $date= localtime;
