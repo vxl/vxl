@@ -100,6 +100,21 @@ LIB32=link.exe -lib
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\vidl_mpegcodec.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vidl_mpegcodec_helper.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vidl_yuv_2_rgb.cxx
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\Templates/vbl_smart_ptr+vidl_clip-.cxx
 
 # End Source File
@@ -233,6 +248,21 @@ SOURCE=.\vidl_codec.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\vidl_mpegcodec.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vidl_mpegcodec_helper.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vidl_yuv_2_rgb.h
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\vidl_codec_sptr.h
 
 # End Source File
@@ -254,6 +284,11 @@ SOURCE=.\vidl_image_list_codec_sptr.h
 # Begin Source File
 
 SOURCE=.\vidl_movie_sptr.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\vidl_mpegcodec_sptr.h
 
 # End Source File
 # End Group

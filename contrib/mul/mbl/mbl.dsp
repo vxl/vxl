@@ -268,6 +268,11 @@ SOURCE=.\mbl_histogram.cxx
 SOURCE=.\mbl_clamped_plate_spline_2d.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\mbl_read_yes.cxx
+
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -474,6 +479,11 @@ SOURCE=.\mbl_histogram.h
 # Begin Source File
 
 SOURCE=.\mbl_clamped_plate_spline_2d.h
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\mbl_read_yes.h
 
 # End Source File
 # End Group

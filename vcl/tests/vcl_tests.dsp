@@ -186,6 +186,11 @@ SOURCE=.\test_vcl_string.cxx
 SOURCE=.\test_vcl_vector.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\test_vcl_cstdio.cxx
+
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
