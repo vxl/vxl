@@ -229,7 +229,7 @@ void test_regexp()
 
   // finds an expression ending with p, beginning with d, and having
   // two characters in between that are the same as the two characters
-  // before the first p encounterd in the line.
+  // before the first p encountered in the line.
 
   rxp.compile("(..p).*d(..p)");
   TEST("rxp.compile(\"(..p).*d(..p)\")", 0, 0);
