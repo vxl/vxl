@@ -1,14 +1,15 @@
+// This is gel/vsol/vsol_tetrahedron.h
 #ifndef vsol_tetrahedron_h_
 #define vsol_tetrahedron_h_
 //*****************************************************************************
 //:
-//  \file
+// \file
 // \brief tetrahedral volume in 3D space
 //
 // The vertices order gives the orientation of the tetrahedron
 //
-// \author
-// Peter Vanroose, 5 July 2000.
+// \author Peter Vanroose
+// \date   5 July 2000.
 //*****************************************************************************
 
 class vsol_tetrahedron;
@@ -20,20 +21,20 @@ class vsol_tetrahedron;
 #include "vsol_polyhedron.h"
 #include "vsol_point_3d.h"
 
-class vsol_tetrahedron
-  :public vsol_polyhedron
+class vsol_tetrahedron : public vsol_polyhedron
 {
+ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
-public:
+
   //---------------------------------------------------------------------------
   //: Constructor from its 4 vertices
   //---------------------------------------------------------------------------
-  explicit vsol_tetrahedron(const vsol_point_3d_sptr &new_p0,
-                            const vsol_point_3d_sptr &new_p1,
-                            const vsol_point_3d_sptr &new_p2,
-                            const vsol_point_3d_sptr &new_p3);
+  vsol_tetrahedron(const vsol_point_3d_sptr &new_p0,
+                   const vsol_point_3d_sptr &new_p1,
+                   const vsol_point_3d_sptr &new_p2,
+                   const vsol_point_3d_sptr &new_p3);
 
   //---------------------------------------------------------------------------
   //: Copy constructor
@@ -58,22 +59,22 @@ public:
   //---------------------------------------------------------------------------
   //: Return the first vertex
   //---------------------------------------------------------------------------
-  virtual vsol_point_3d_sptr p0(void) const;
+  vsol_point_3d_sptr p0(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the second vertex
   //---------------------------------------------------------------------------
-  virtual vsol_point_3d_sptr p1(void) const;
+  vsol_point_3d_sptr p1(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the third vertex
   //---------------------------------------------------------------------------
-  virtual vsol_point_3d_sptr p2(void) const;
+  vsol_point_3d_sptr p2(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the last vertex
   //---------------------------------------------------------------------------
-  virtual vsol_point_3d_sptr p3(void) const;
+  vsol_point_3d_sptr p3(void) const;
 
   //***************************************************************************
   // Comparison

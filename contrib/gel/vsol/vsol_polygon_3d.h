@@ -1,21 +1,22 @@
-#ifndef vsol_polygon_3d_h
-#define vsol_polygon_3d_h
+// This is gel/vsol/vsol_polygon_3d.h
+#ifndef vsol_polygon_3d_h_
+#define vsol_polygon_3d_h_
 //*****************************************************************************
 //:
-//  \file
-// \brief Polygon of a 3D space
+// \file
+// \brief Polygon in 3D space
 //
-// The vertices are defined in the counterclockwise.
+// The vertices are to be defined in counterclockwise order.
 //
-// \author
-// François BERTEL
+// \author François BERTEL
+// \date   2000/05/09
 //
 // \verbatim
-// Modifications
-// 2001/07/03 Peter Vanroose  Corrected the implementation of is_convex()
-// 2001/07/03 Peter Vanroose  Replaced vnl_double_3 by vgl_vector_3d
-// 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-// 2000/05/09 François BERTEL Creation
+//  Modifications
+//   2000/05/09 François BERTEL Creation
+//   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
+//   2001/07/03 Peter Vanroose  Replaced vnl_double_3 by vgl_vector_3d
+//   2001/07/03 Peter Vanroose  Corrected the implementation of is_convex()
 // \endverbatim
 //*****************************************************************************
 
@@ -27,13 +28,23 @@
 #include <vcl_vector.h>
 #include <vgl/vgl_fwd.h> // vgl_vector_3d
 
-class vsol_polygon_3d
-  :public vsol_region_3d
+class vsol_polygon_3d : public vsol_region_3d
 {
+ protected:
+  //***************************************************************************
+  // Data members
+  //***************************************************************************
+
+  //---------------------------------------------------------------------------
+  // Description: List of vertices
+  //---------------------------------------------------------------------------
+  vcl_vector<vsol_point_3d_sptr> *storage_;
+
+ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
-public:
+
   //---------------------------------------------------------------------------
   //: Constructor from a vcl_vector (not a geometric vector but a list of points)
   //  REQUIRE: new_vertices.size()>=3 and valid_vertices(new_vertices)
@@ -64,7 +75,7 @@ public:
   //: Return vertex `i'
   //  REQUIRE: valid_index(i)
   //---------------------------------------------------------------------------
-  virtual vsol_point_3d_sptr vertex(const int i) const;
+  vsol_point_3d_sptr vertex(const int i) const;
 
   //***************************************************************************
   // Comparison
@@ -93,17 +104,17 @@ public:
   //---------------------------------------------------------------------------
   //: Compute the bounding box of `this'
   //---------------------------------------------------------------------------
-  virtual void compute_bounding_box(void);
+  virtual void compute_bounding_box(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the number of vertices
   //---------------------------------------------------------------------------
-  virtual int size(void) const;
+  int size(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the area of `this'
   //---------------------------------------------------------------------------
-  virtual double area(void) const;
+  virtual double area(void) const; // virtual of vsol_region_3d
 
   //---------------------------------------------------------------------------
   //: Is `this' convex ?
@@ -113,10 +124,10 @@ public:
   //---------------------------------------------------------------------------
   //: Is `i' a valid index for the list of vertices ?
   //---------------------------------------------------------------------------
-  virtual bool valid_index(unsigned int i) const { return i<storage_->size(); }
+  bool valid_index(unsigned int i) const { return i<storage_->size(); }
 
   //---------------------------------------------------------------------------
-  //: Are `new_vertices' valid vertices ?
+  //: Are `new_vertices' valid vertices to build a polygon of the current type?
   //  That is are all vertices in the same plane ?
   //---------------------------------------------------------------------------
   virtual bool valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_vertices) const;
@@ -134,22 +145,13 @@ public:
   //: Return the unit normal vector at point `p'. Have to be deleted manually
   //  REQUIRE: in(p)
   //---------------------------------------------------------------------------
-  virtual vgl_vector_3d<double>
-  normal_at_point(const vsol_point_3d_sptr &p) const;
+  virtual vgl_vector_3d<double> normal_at_point(const vsol_point_3d_sptr &p) const;
 
-  //***************************************************************************
-  // Implementation
-  //***************************************************************************
-protected:
+ protected:
   //---------------------------------------------------------------------------
   //: Default constructor. Do nothing. Just to enable inherance.
   //---------------------------------------------------------------------------
   vsol_polygon_3d(void);
-
-  //---------------------------------------------------------------------------
-  // Description: List of vertices
-  //---------------------------------------------------------------------------
-  vcl_vector<vsol_point_3d_sptr> *storage_;
 };
 
-#endif // vsol_polygon_3d_h
+#endif // vsol_polygon_3d_h_

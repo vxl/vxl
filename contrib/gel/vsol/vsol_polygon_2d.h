@@ -1,20 +1,21 @@
-#ifndef vsol_polygon_2d_h
-#define vsol_polygon_2d_h
+// This is gel/vsol/vsol_polygon_2d.h
+#ifndef vsol_polygon_2d_h_
+#define vsol_polygon_2d_h_
 //*****************************************************************************
 //:
-//  \file
-// \brief Polygon of a 2D space
+// \file
+// \brief Polygon in 2D space
 //
-// The vertices are defined in the counterclockwise.
+// The vertices are to be defined in counterclockwise order.
 //
-// \author
-// François BERTEL
+// \author François BERTEL
+// \date   2000/05/09
 //
 // \verbatim
-// Modifications
-// 2001/07/03 Peter Vanroose  Corrected the implementation of is_convex()
-// 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-// 2000/05/09 François BERTEL Creation
+//  Modifications
+//   2000/05/09 François BERTEL Creation
+//   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
+//   2001/07/03 Peter Vanroose  Corrected the implementation of is_convex()
 // \endverbatim
 //*****************************************************************************
 
@@ -25,13 +26,22 @@
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vcl_vector.h>
 
-class vsol_polygon_2d
-  :public vsol_region_2d
+class vsol_polygon_2d : public vsol_region_2d
 {
+ protected:
+  //***************************************************************************
+  // Data members
+  //***************************************************************************
+
+  //---------------------------------------------------------------------------
+  // Description: List of vertices
+  //---------------------------------------------------------------------------
+  vcl_vector<vsol_point_2d_sptr> *storage_;
+
   //***************************************************************************
   // Initialization
   //***************************************************************************
-public:
+ public:
   //---------------------------------------------------------------------------
   //: Constructor from a vcl_vector (not a geometric vector but a list of points)
   //  REQUIRE: new_vertices.size()>=3
@@ -62,7 +72,7 @@ public:
   //: Return vertex `i'
   //  REQUIRE: valid_index(i)
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_sptr vertex(const int i) const;
+  vsol_point_2d_sptr vertex(const int i) const;
 
   //***************************************************************************
   // Comparison
@@ -91,17 +101,17 @@ public:
   //---------------------------------------------------------------------------
   //: Compute the bounding box of `this'
   //---------------------------------------------------------------------------
-  virtual void compute_bounding_box(void);
+  virtual void compute_bounding_box(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the number of vertices
   //---------------------------------------------------------------------------
-  virtual int size(void) const;
+  int size(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the area of `this'
   //---------------------------------------------------------------------------
-  virtual double area(void) const;
+  virtual double area(void) const; // virtual of vsol_region_2d
 
   //---------------------------------------------------------------------------
   //: Is `this' convex ?
@@ -111,21 +121,22 @@ public:
   //---------------------------------------------------------------------------
   //: Is `i' a valid index for the list of vertices ?
   //---------------------------------------------------------------------------
-  virtual bool valid_index(unsigned int i) const { return i<storage_->size(); }
+  bool valid_index(unsigned int i) const { return i<storage_->size(); }
+
+  //---------------------------------------------------------------------------
+  //: Are `new_vertices' valid vertices to build a polygon of the current type?
+  //  All vertex sets are valid for a general polygon.
+  //---------------------------------------------------------------------------
+  virtual bool valid_vertices(const vcl_vector<vsol_point_2d_sptr> new_vertices) const { return true; }
 
   //***************************************************************************
   // Implementation
   //***************************************************************************
-protected:
+ protected:
   //---------------------------------------------------------------------------
   //: Default constructor. Do nothing. Just to enable inherance.
   //---------------------------------------------------------------------------
   vsol_polygon_2d(void);
-
-  //---------------------------------------------------------------------------
-  // Description: List of vertices
-  //---------------------------------------------------------------------------
-  vcl_vector<vsol_point_2d_sptr> *storage_;
 };
 
-#endif // vsol_polygon_2d_h
+#endif // vsol_polygon_2d_h_

@@ -1,17 +1,18 @@
-#ifndef vsol_triangle_2d_h
-#define vsol_triangle_2d_h
+// This is gel/vsol/vsol_triangle_2d.h
+#ifndef vsol_triangle_2d_h_
+#define vsol_triangle_2d_h_
 //*****************************************************************************
 //:
-//  \file
-// \brief Triangle of a 2D space.
+// \file
+// \brief Triangle in 2D space.
 //
-// \author
-// François BERTEL
+// \author François BERTEL
+// \date   2000/05/02
 //
 // \verbatim
-// Modifications
-// 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-// 2000/05/02 François BERTEL Creation
+//  Modifications
+//   2000/05/02 François BERTEL Creation
+//   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 // \endverbatim
 //*****************************************************************************
 
@@ -20,19 +21,19 @@
 //*****************************************************************************
 #include <vsol/vsol_polygon_2d.h>
 
-class vsol_triangle_2d
-  :public vsol_polygon_2d
+class vsol_triangle_2d : public vsol_polygon_2d
 {
+ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
-public:
+
   //---------------------------------------------------------------------------
   //: Constructor from its 3 vertices
   //---------------------------------------------------------------------------
-  explicit vsol_triangle_2d(const vsol_point_2d_sptr &new_p0,
-                            const vsol_point_2d_sptr &new_p1,
-                            const vsol_point_2d_sptr &new_p2);
+  vsol_triangle_2d(const vsol_point_2d_sptr &new_p0,
+                   const vsol_point_2d_sptr &new_p1,
+                   const vsol_point_2d_sptr &new_p2);
 
   //---------------------------------------------------------------------------
   //: Copy constructor
@@ -57,17 +58,17 @@ public:
   //---------------------------------------------------------------------------
   //: Return the first vertex
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_sptr p0(void) const;
+  vsol_point_2d_sptr p0(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the second vertex
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_sptr p1(void) const;
+  vsol_point_2d_sptr p1(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the last vertex
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_sptr p2(void) const;
+  vsol_point_2d_sptr p2(void) const;
 
   //***************************************************************************
   // Comparison
@@ -97,17 +98,17 @@ public:
   //---------------------------------------------------------------------------
   //: Set the first vertex
   //---------------------------------------------------------------------------
-  virtual void set_p0(const vsol_point_2d_sptr &new_p0);
+  void set_p0(const vsol_point_2d_sptr &new_p0);
 
   //---------------------------------------------------------------------------
   //: Set the second vertex
   //---------------------------------------------------------------------------
-  virtual void set_p1(const vsol_point_2d_sptr &new_p1);
+  void set_p1(const vsol_point_2d_sptr &new_p1);
 
   //---------------------------------------------------------------------------
   //: Set the last vertex
   //---------------------------------------------------------------------------
-  virtual void set_p2(const vsol_point_2d_sptr &new_p2);
+  void set_p2(const vsol_point_2d_sptr &new_p2);
 };
 
-#endif // vsol_triangle_2d_h
+#endif // vsol_triangle_2d_h_

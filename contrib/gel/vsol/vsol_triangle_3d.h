@@ -1,20 +1,21 @@
-#ifndef vsol_triangle_3d_h
-#define vsol_triangle_3d_h
+// This is gel/vsol/vsol_triangle_3d.h
+#ifndef vsol_triangle_3d_h_
+#define vsol_triangle_3d_h_
 //*****************************************************************************
 //:
-//  \file
-// \brief Triangle of a 3D space.
+// \file
+// \brief Triangle in 3D space.
 //
 // The vertices order gives the orientation of the triangle
 //
-// \author
-// François BERTEL
+// \author François BERTEL
+// \date   2000/05/04
 //
 // \verbatim
-// Modifications
-// 2001/07/03 Peter Vanroose  Replaced vnl_double_3 by vgl_vector_3d
-// 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-// 2000/05/04 François BERTEL Creation
+//  Modifications
+//   2000/05/04 François BERTEL Creation
+//   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
+//   2001/07/03 Peter Vanroose  Replaced vnl_double_3 by vgl_vector_3d
 // \endverbatim
 //*****************************************************************************
 
@@ -23,19 +24,19 @@
 //*****************************************************************************
 #include <vsol/vsol_polygon_3d.h>
 
-class vsol_triangle_3d
-  :public vsol_polygon_3d
+class vsol_triangle_3d : public vsol_polygon_3d
 {
+ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
-public:
+
   //---------------------------------------------------------------------------
   //: Constructor from its 3 vertices
   //---------------------------------------------------------------------------
-  explicit vsol_triangle_3d(const vsol_point_3d_sptr &new_p0,
-                            const vsol_point_3d_sptr &new_p1,
-                            const vsol_point_3d_sptr &new_p2);
+  vsol_triangle_3d(const vsol_point_3d_sptr &new_p0,
+                   const vsol_point_3d_sptr &new_p1,
+                   const vsol_point_3d_sptr &new_p2);
 
   //---------------------------------------------------------------------------
   //: Copy constructor
@@ -60,17 +61,17 @@ public:
   //---------------------------------------------------------------------------
   //: Return the first vertex
   //---------------------------------------------------------------------------
-  virtual vsol_point_3d_sptr p0(void) const;
+  vsol_point_3d_sptr p0(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the second vertex
   //---------------------------------------------------------------------------
-  virtual vsol_point_3d_sptr p1(void) const;
+  vsol_point_3d_sptr p1(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the last vertex
   //---------------------------------------------------------------------------
-  virtual vsol_point_3d_sptr p2(void) const;
+  vsol_point_3d_sptr p2(void) const;
 
   //***************************************************************************
   // Comparison
@@ -100,17 +101,17 @@ public:
   //---------------------------------------------------------------------------
   //: Set the first vertex
   //---------------------------------------------------------------------------
-  virtual void set_p0(const vsol_point_3d_sptr &new_p0);
+  void set_p0(const vsol_point_3d_sptr &new_p0);
 
   //---------------------------------------------------------------------------
   //: Set the second vertex
   //---------------------------------------------------------------------------
-  virtual void set_p1(const vsol_point_3d_sptr &new_p1);
+  void set_p1(const vsol_point_3d_sptr &new_p1);
 
   //---------------------------------------------------------------------------
   //: Set the last vertex
   //---------------------------------------------------------------------------
-  virtual void set_p2(const vsol_point_3d_sptr &new_p2);
+  void set_p2(const vsol_point_3d_sptr &new_p2);
 
   //***************************************************************************
   // Basic operations
@@ -127,8 +128,7 @@ public:
   //  vertices are aligned, the normal is the null vector.
   //  REQUIRE: in(p)
   //---------------------------------------------------------------------------
-  virtual vgl_vector_3d<double>
-  normal_at_point(const vsol_point_3d_sptr &p) const;
+  virtual vgl_vector_3d<double> normal_at_point(const vsol_point_3d_sptr &p) const;
 };
 
-#endif // vsol_triangle_3d_h
+#endif // vsol_triangle_3d_h_

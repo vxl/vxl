@@ -1,20 +1,22 @@
-#ifndef vsol_rectangle_2d_h
-#define vsol_rectangle_2d_h
+// This is gel/vsol/vsol_rectangle_2d.h
+#ifndef vsol_rectangle_2d_h_
+#define vsol_rectangle_2d_h_
 //*****************************************************************************
 //:
-//  \file
-// \brief Rectangle of a 2D space
+// \file
+// \brief Rectangle in 2D space
 //
-// The vertices are defined in the counterclockwise.
+// The 3 vertices are to be defined in counterclockwise order,
+// with a 90 degree corner between v1-v2 and v1-v3.
 //
-// \author
-// François BERTEL
+// \author François BERTEL
+// \date   2000/05/08
 //
 // \verbatim
-// Modifications
-// 2001/07/03 Peter Vanroose  Replaced vnl_double_2 by vgl_vector_2d
-// 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-// 2000/05/08 François BERTEL Creation
+//  Modifications
+//   2000/05/08 François BERTEL Creation
+//   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
+//   2001/07/03 Peter Vanroose  Replaced vnl_double_2 by vgl_vector_2d
 // \endverbatim
 //*****************************************************************************
 
@@ -23,22 +25,22 @@
 //*****************************************************************************
 #include <vsol/vsol_polygon_2d.h>
 
-class vsol_rectangle_2d
-  :public vsol_polygon_2d
+class vsol_rectangle_2d : public vsol_polygon_2d
 {
+ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
-public:
+
   //---------------------------------------------------------------------------
   //: Constructor from 3 points.
   //  `new_p0' is the origin of the rectangle. `new_p1' defines the abscissa
   //  axis and the width. `new_p2' defines the ordinate axis and the height.
   //  REQUIRE: valid_vertices(new_p0,new_p1,new_p2)
   //---------------------------------------------------------------------------
-  explicit vsol_rectangle_2d(const vsol_point_2d_sptr &new_p0,
-                             const vsol_point_2d_sptr &new_p1,
-                             const vsol_point_2d_sptr &new_p2);
+  vsol_rectangle_2d(const vsol_point_2d_sptr &new_p0,
+                    const vsol_point_2d_sptr &new_p1,
+                    const vsol_point_2d_sptr &new_p2);
 
   //---------------------------------------------------------------------------
   //: Copy constructor
@@ -63,22 +65,22 @@ public:
   //---------------------------------------------------------------------------
   //: Return the first vertex
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_sptr p0(void) const;
+  vsol_point_2d_sptr p0(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the second vertex
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_sptr p1(void) const;
+  vsol_point_2d_sptr p1(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the third vertex
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_sptr p2(void) const;
+  vsol_point_2d_sptr p2(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the last vertex
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_sptr p3(void) const;
+  vsol_point_2d_sptr p3(void) const;
 
   //***************************************************************************
   // Comparison
@@ -97,19 +99,14 @@ public:
   //***************************************************************************
 
   //---------------------------------------------------------------------------
-  //: Compute the bounding box of `this'
-  //---------------------------------------------------------------------------
-  virtual void compute_bounding_box(void);
-
-  //---------------------------------------------------------------------------
   //: Return the width
   //---------------------------------------------------------------------------
-  virtual double width(void) const;
+  double width(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the height
   //---------------------------------------------------------------------------
-  virtual double height(void) const;
+  double height(void) const;
 
   //---------------------------------------------------------------------------
   //: Return the area of `this'
@@ -122,4 +119,4 @@ public:
   virtual bool valid_vertices(const vcl_vector<vsol_point_2d_sptr> new_vertices) const;
 };
 
-#endif // vsol_rectangle_2d_h
+#endif // vsol_rectangle_2d_h_
