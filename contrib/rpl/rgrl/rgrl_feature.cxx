@@ -32,11 +32,3 @@ rgrl_feature::signature_error_dimension( vcl_type_info const& ) const
   assert( ! "This rgrl_feature doesn't implement signature_error_dimension()" );
   return 0;
 }
-
-double
-rgrl_feature::absolute_signature_weight( rgrl_feature_sptr ) const
-{
-  assert( ! "This rgrl_feature doesn't implement absolute_signature_weight()" );
-  return -1.0;
-}
-
