@@ -10,8 +10,10 @@
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_vector.h>
 
+static
 inline double sqr(double x) { return x*x; }
 
+static
 void testlib_test_assert_near(const vcl_string& msg, vgl_homg_point_2d<double> const& p2,
                               vgl_homg_point_2d<double> const& p1, double tol = 1e-6)
 {
@@ -20,6 +22,7 @@ void testlib_test_assert_near(const vcl_string& msg, vgl_homg_point_2d<double> c
   testlib_test_assert_near(msg, expr, 0.0, tol);
 }
 
+static
 void testlib_test_assert_near(const vcl_string& msg, vgl_homg_line_2d<double> const& l2,
                               vgl_homg_line_2d<double> const& l1, double tol = 1e-6)
 {
@@ -29,6 +32,7 @@ void testlib_test_assert_near(const vcl_string& msg, vgl_homg_line_2d<double> co
   testlib_test_assert_near(msg, expr, 0.0, tol);
 }
 
+static
 void testlib_test_assert_near(const vcl_string& msg, vgl_box_2d<double> const& b1,
                               vgl_box_2d<double> const& b2, double tol = 1e-6)
 {
@@ -39,7 +43,8 @@ void testlib_test_assert_near(const vcl_string& msg, vgl_box_2d<double> const& b
   testlib_test_assert_near(msg, expr, 0.0, tol);
 }
 
-double distance(vgl_conic<double> const& c1, vgl_conic<double> const& c2)
+static
+double conic_distance(vgl_conic<double> const& c1, vgl_conic<double> const& c2)
 {
   double k;  // multiplicative factor for coefficients
 
@@ -62,16 +67,18 @@ double distance(vgl_conic<double> const& c1, vgl_conic<double> const& c2)
   return expr;
 }
 
+static
 void testlib_test_assert_near(const vcl_string& msg, vgl_conic<double> const& c2,
                               vgl_conic<double> const& c1, double tol = 1e-6)
 {
-  testlib_test_assert_near(msg, distance(c1,c2), 0.0, tol);
+  testlib_test_assert_near(msg, conic_distance(c1,c2), 0.0, tol);
 }
 
+static
 void testlib_test_assert_far(const vcl_string& msg, vgl_conic<double> const& c2,
                              vgl_conic<double> const& c1, double tol = 1e-6)
 {
-  testlib_test_assert_far(msg, distance(c1,c2), 0.0, tol);
+  testlib_test_assert_far(msg, conic_distance(c1,c2), 0.0, tol);
 }
 
 MAIN( test_conic )
