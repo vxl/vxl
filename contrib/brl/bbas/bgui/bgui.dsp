@@ -105,7 +105,7 @@ SOURCE=.\Templates/vcl_vector+bgui_vtol2D_tableau_sptr-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+bgui_style-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_map+vcl_string.vbl_smart_ptr+bgui_style--.cxx
+SOURCE=.\Templates/vcl_map+vcl_string.bgui_style_sptr-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\bgui_image_tableau.cxx
