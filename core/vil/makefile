@@ -9,6 +9,7 @@ include ${IUEROOT}/config/top-params.mk
 
 # basic things
 SOURCES += vil_image_resource.cxx
+MANPAGE_SOURCES += vil_image_resource_sptr.h
 SOURCES += vil_image_resource_plugin.cxx
 MANPAGE_SOURCES += vil_image_view.txx
 SOURCES += vil_image_view_base.cxx

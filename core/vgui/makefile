@@ -141,9 +141,6 @@ SOURCES += vgui_statusbar.cxx
 
 # vil2 support
 SOURCES += vgui_vil_image_renderer.cxx
-MANPAGE_SOURCES += vgui_vil_image_tableau.txx
-MANPAGE_SOURCES += vgui_vil_image_tableau_sptr.h
-SOURCES += internals/vgui_generic_vil_image_view.cxx
 
 # internals
 SOURCES += internals/vgui_invert_homg4x4.cxx
