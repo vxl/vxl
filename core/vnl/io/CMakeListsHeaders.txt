@@ -1,4 +1,5 @@
 SOURCE_FILES(vnl_io_sources
+  vnl_io_bignum.h
   vnl_io_diag_matrix.h
   vnl_io_matrix.h
   vnl_io_matrix_fixed.h
