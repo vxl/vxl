@@ -277,12 +277,14 @@ foreach $f (@FILES)
     elsif ($j eq "vil/vil_convolve.h") { $i="$i(|_[a-z_]+)"; }
     elsif ($j =~ m/vil2?\/algo\/vil2?_convolve_1d.h$/) { $i="vil2\?_convolve_(1d|edge_1d|boundary_option)"; }
     elsif ($j =~ m/vil2?\/vil2?_copy\.h$/) { $i="($i)(|_deep|_to_window|_reformat)"; }
+    elsif ($j =~ m/vil2?\/algo\/vil2?_exp_filter_1d.h$/) { $i="vil2\?_exp_filter_(1d|i|j)"; }
     elsif ($j =~ m/vil2?\/algo\/vil2?_exp_grad_filter_1d.h$/) { $i="vil2\?_exp_grad_filter_(1d|i|j)"; }
     elsif ($j =~ m/vil2?\/vil2?_fill\.h$/) { $i="($i)_(line|row|col)"; }
     elsif ($j =~ m/vil2?\/vil2?_flip\.h$/) { $i="($i)_(ud|lr)"; }
     elsif ($j =~ m/vil2?\/algo\/vil2?_gauss_filter\.h$/) { $i="($i)_(5tap(_params)?)"; }
     elsif ($j =~ m/vil2?\/algo\/vil2?_gauss_reduce\.h$/) { $i="$i(|_params|_general|_121)"; }
     elsif ($j =~ m/vil2?\/algo\/vil2?_fft\.h$/) { $i="$i(|_2d_fwd|_2d_bwd)"; }
+    elsif ($j =~ m/vil2?\/algo\/vil2?_suppress_non_max\.h$/) { $i="vil2\?_(is_peak|suppress_non_max)_3x3"; }
     elsif ($j =~ m/vil2?\/vil2?_load\.h$/) { $i="$i(|_image_resource)"; }
     elsif ($j =~ m/vil2?\/vil2?_image_view\.h$/) { $i="$i(|_deep_equality)"; }
     elsif ($j =~ m/vil2?\/vil2?_image_view_base\.h$/) { $i="$i(|_sptr)"; }
