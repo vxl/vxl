@@ -211,7 +211,7 @@ class vnl_vector_fixed
   //  data_block()[0] is the first element of the vector
   T      * data_block() { return data_; }
 
-
+ private:
   //:
   // \deprecated Use v[0] instead
   const T& x() const { return (*this)[0]; }
@@ -237,7 +237,7 @@ class vnl_vector_fixed
   //:
   // \deprecated Use v[3] instead
   T& t() { return (*this)[3]; }
-
+ public:
 
   //----------------------------------------------------------------------
   // Conversion to vnl_vector_ref.
@@ -630,9 +630,9 @@ vnl_vector_fixed<T,3> cross_3d (vnl_vector_fixed<T,3> const& v1, vnl_vector_fixe
 {
   vnl_vector_fixed<T,3> result;
 
-  result.x() = v1.y() * v2.z() - v1.z() * v2.y();
-  result.y() = v1.z() * v2.x() - v1.x() * v2.z();
-  result.z() = v1.x() * v2.y() - v1.y() * v2.x();
+  result[0] = v1[1] * v2[2] - v1[2] * v2[1];
+  result[1] = v1[2] * v2[0] - v1[0] * v2[2];
+  result[2] = v1[0] * v2[1] - v1[1] * v2[0];
   return result;
 }
 
