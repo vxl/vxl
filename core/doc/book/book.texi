@@ -990,8 +990,8 @@ A simple two dimensional sparse array
 @comment ------------------------------------------------------------------
 @node    vul, vnl, vbl, Top
 @comment node-name, next,           previous, up
-@chapter vbl: Basics
-@cindex vbl
+@chapter vul: Utilities
+@cindex vul
 @cindex basics
 @cindex general utilities
 

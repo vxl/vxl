@@ -566,9 +566,17 @@ Classes should print a short summary of their contents. Devolve printing
 of complex members and parent classes to that class, only if it is sensible.
 
 Do not give too much information. For instance if your class is a
-container print the number of elements , and then no more that
-perhaps the first 5 elements, with a @code{...} to indicate if there
-are more
+container print the number of elements , and then no more than
+perhaps the first 5 elements, with eclipsis to indicate if there
+are more.
+
+To aid clear printing the following rule has been to be helpful.
+@quotation
+If a summary can be printed on a single line, then do not output a linefeed.
+If a summary contains linefeeds in the middle, then finish the summary with a linefeed.
+@end quotation
+This approach gives flexibility in the output format whilst preserving readability
+and predictability for programmers.
 
 The standard form for the method is
 @example
@@ -576,8 +584,9 @@ The standard form for the method is
 //: Output a human readable summary to the stream
 void vanyl_my_class::print_summary(vcl_ostream &os) const
 @{
-    os<<"Important Value: "<<this->my_value<<" .. "<<vcl_endl;
+    os<<"Important Value: "<<this->my_value<<" .. ";
     ...
+    // optionally os << vcl_endl;
 @}
 @end example
 
@@ -1782,7 +1791,7 @@ avoids having to modify the shared object.
 
 @enumerate
 @item Currently, too many error checks in the IO simply result in a error message and @code{abort()}. Since
-IO code is error prone for reasons often beyond the control of the prorammer, this behaviour should be
+IO code is error prone for reasons often beyond the control of the programmer, this behaviour should be
 replaced with something more tolerant. The authors suggest that a suitable behaviour would be to print the error message, set the error flag on
 the stream, and return.
 @item Design a format for @code{long double} and add it @code{to vsl_binary_io.h}.
