@@ -98,7 +98,7 @@ while (<>)
     if ( m!$slashslashpatt! && $comment )
     {
         s!$slashslashpatt!$starpatt!;
-        print unless m/^[*=\s-]*$/; next;
+        print; next;
     }
 
     # found end of comment -> start line with */
