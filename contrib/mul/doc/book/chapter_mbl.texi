@@ -1,4 +1,3 @@
-
 @chapsummary
 General utilities used by several mul libraries.
 @endchapsummary
@@ -139,7 +138,8 @@ These seem @emph{more normal}.
 @subsubsection Testing distribution of outliers separations.
 
 One further possibility is that there might be correlation between adjacent samples. So
-I counted the separations (number of samples) between outliers (those that exceeded 2 standard deviations), and plotted the distribution of intervals, along with the expected distribution.
+I counted the separations (number of samples) between outliers (those that exceeded 2 standard
+deviations), and plotted the distribution of intervals, along with the expected distribution.
 The first graph is for a seed of 123456, and the second for a seed of 9667566.
 (Note: The key on the following two graphs is reversed.)
 
