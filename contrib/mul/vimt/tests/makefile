@@ -15,6 +15,8 @@ TESTS += test_correlate_2d.cxx
 TESTS += test_find_troughs.cxx
 TESTS += test_find_peaks.cxx
 
+MINI_PROG_SOURCES += test_include.cxx
+
 #########################################
 include ${IUEROOT}/config/static-tests.mk
 #########################################

@@ -13,9 +13,10 @@ TESTS += test_two_chain.cxx
 TESTS += test_block.cxx
 TESTS += vtol_test_refcounting.cxx
 TESTS += test_cycle_processor.cxx
+FLAGS_test_cycle_processor.cxx := -O1
 TESTS += vtol_test_timing.cxx
 
-FLAGS_test_cycle_processor.cxx := -O1
+MINI_PROG_SOURCES += test_include.cxx
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk

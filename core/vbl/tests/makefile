@@ -19,6 +19,8 @@ TESTS += vbl_test_quadruple
 TESTS += vbl_test_triple
 TESTS += vbl_test_qsort
 
+MINI_PROG_SOURCES += test_include.cxx
+
 #########################################
 include ${IUEROOT}/config/static-tests.mk
 #########################################

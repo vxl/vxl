@@ -1,9 +1,7 @@
 TESTMAIN = test_driver.cxx
-#TESTS += test_rel_ops.cxx
 TESTS += test_cstdio.cxx
 PARAMS_test_cstdio := test_cstdio.txt
 TESTS += test_compiler.cxx
-SOURCES += test_headers.cxx
 TESTS += test_iterator.cxx
 TESTS += test_iostream.cxx
 TESTS += test_fstream.cxx
@@ -21,6 +19,8 @@ TESTS += test_cmath.cxx
 SOURCES += test_stlfwd.cxx
 TESTS += test_exception.cxx
 TESTS += test_cctype.cxx
+
+MINI_PROG_SOURCES += test_include.cxx
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk

@@ -5,7 +5,6 @@ include ${IUEROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 
-TESTS += test_includes.cxx
 TESTS += test_point_2d_io.cxx
 TESTS += test_point_3d_io.cxx
 TESTS += test_homg_point_1d_io.cxx
@@ -25,6 +24,8 @@ TESTS += test_box_2d_io.cxx
 TESTS += test_box_3d_io.cxx
 TESTS += test_polygon_io.cxx
 TESTS += golden_test_vgl_io.cxx
+
+MINI_PROG_SOURCES += test_include.cxx
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk

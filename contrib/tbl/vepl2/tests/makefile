@@ -20,6 +20,8 @@ TESTS += vepl2_test_sobel.cxx
 TESTS += vepl2_test_x_gradient.cxx
 TESTS += vepl2_test_y_gradient.cxx
 
+MINI_PROG_SOURCES += test_include.cxx
+
 #########################################
 include ${IUEROOT}/config/static-tests.mk
 #########################################

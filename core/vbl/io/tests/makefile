@@ -5,7 +5,7 @@ include ${IUEROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 
-SOURCES += vbl_io_test_all.cxx
+SOURCES += vbl_io_test_classes.cxx
 
 TESTS += test_smart_ptr_io.cxx
 TESTS += test_bounding_box_io.cxx
@@ -16,7 +16,7 @@ TESTS += test_sparse_array_io.cxx
 TESTS += test_triple_io.cxx
 TESTS += golden_test_vbl_io.cxx
 
-SOURCES += vbl_io_test_classes.cxx
+MINI_PROG_SOURCES += test_include.cxx
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk

@@ -14,8 +14,6 @@ include ${IUEROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 
-SOURCES += vcsl_test_all.cxx
-
 TESTS += test_meter.cxx
 TESTS += test_radian.cxx
 TESTS += test_degree.cxx
@@ -32,6 +30,8 @@ TESTS += test_scale.cxx
 TESTS += test_translation.cxx
 TESTS += test_rotation.cxx
 TESTS += test_displacement.cxx
+
+MINI_PROG_SOURCES += test_include.cxx
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk

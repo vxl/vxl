@@ -17,6 +17,8 @@ TESTS += test_switch_axes.cxx
 TESTS += test_algo_grad_1x3.cxx
 TESTS += test_math.cxx
 
+MINI_PROG_SOURCES += test_include.cxx
+
 #########################################
 include ${IUEROOT}/config/static-tests.mk
 #########################################

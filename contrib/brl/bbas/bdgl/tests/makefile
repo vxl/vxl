@@ -6,6 +6,8 @@ include ${IUEROOT}/core/vnl/config.mk
 
 TESTS += test_curve_algs.cxx
 
+MINI_PROG_SOURCES += test_include.cxx
+
 #########################################
 include ${IUEROOT}/config/static-tests.mk
 #########################################

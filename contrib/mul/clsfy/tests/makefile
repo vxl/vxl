@@ -15,6 +15,8 @@ TESTS += test_binary_threshold_1d.cxx
 TESTS += test_direct_boost.cxx
 TESTS += test_mean_square_1d.cxx
 
+MINI_PROG_SOURCES += test_include.cxx
+
 #########################################
 include ${IUEROOT}/config/static-tests.mk
 #########################################

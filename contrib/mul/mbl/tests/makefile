@@ -7,6 +7,8 @@ include $(IUEROOT)/core/testlib/config.mk
 
 TESTS += test_mbl.cxx # includes all test .cxx files
 
+MINI_PROG_SOURCES += test_include.cxx
+
 #########################################
 include ${IUEROOT}/config/static-tests.mk
 #########################################

@@ -30,6 +30,8 @@ TESTS += test_vsol_rectangle_3d.cxx
 TESTS += test_vsol_polygon_3d.cxx
 TESTS += test_vsol_tetrahedron.cxx
 
+MINI_PROG_SOURCES += test_include.cxx
+
 #########################################
 include ${IUEROOT}/config/static-tests.mk
 #########################################

@@ -25,11 +25,12 @@ TESTS += test_copy.cxx
 PARAMS_test_copy := square.pgm
 TESTS += test_file_format_read.cxx
 PARAMS_test_file_format_read := file_read_data
-TESTS += test_include.cxx
 TESTS += test_assign.cxx
 TESTS += test_load_gen.cxx
 TESTS += test_resample.cxx
 PARAMS_test_resample := square.pgm
+
+MINI_PROG_SOURCES += test_include.cxx
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk

@@ -6,7 +6,6 @@ include ${IUEROOT}/core/testlib/config.mk
 
 TESTMAIN = test_driver.cxx
 SOURCES += test_util.cxx
-TESTS += test_include.cxx
 TESTS += test_fft.cxx
 TESTS += test_fft1d.cxx
 TESTS += test_fft2d.cxx
@@ -55,6 +54,8 @@ TESTS += test_cholesky.cxx
 MANPAGE_SOURCES += test_arithmetic_body.h
 
 MINI_PROG_SOURCES += basic_operation_timings.cxx
+
+MINI_PROG_SOURCES += test_include.cxx
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk

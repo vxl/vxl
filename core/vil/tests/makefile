@@ -51,6 +51,8 @@ TESTS += test_algo_find_4con_boundary.cxx
 #MINI_PROG_SOURCES += vil2_test_pair_access_timings.cxx
 #MINI_PROG_SOURCES += vil2_vil_compare_function_timings.cxx
 
+MINI_PROG_SOURCES += test_include.cxx
+
 #########################################
 include ${IUEROOT}/config/static-tests.mk
 #########################################

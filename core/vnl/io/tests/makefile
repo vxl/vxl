@@ -7,7 +7,6 @@ TESTMAIN = test_driver.cxx
 TESTS += golden_test_vnl_io.cxx
 TESTS += test_bignum_io.cxx
 TESTS += test_diag_matrix_io.cxx
-TESTS += test_include.cxx
 TESTS += test_matrix_fixed_io.cxx
 TESTS += test_matrix_io.cxx
 TESTS += test_nonlinear_minimizer_io.cxx
@@ -19,6 +18,8 @@ TESTS += test_sym_matrix_io.cxx
 TESTS += test_vector_fixed_io.cxx
 TESTS += test_vector_io.cxx
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+MINI_PROG_SOURCES += test_include.cxx
+
+#########################################
+include ${IUEROOT}/config/static-tests.mk
+#########################################

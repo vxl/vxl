@@ -10,6 +10,8 @@ TESTMAIN := test_driver.cxx
 TESTS += vepl_test_threshold.cxx
 TESTS += vepl_test_erode_disk.cxx
 
+MINI_PROG_SOURCES += test_include.cxx
+
 #########################################
 include ${IUEROOT}/config/static-tests.mk
 #########################################

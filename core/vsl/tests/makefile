@@ -5,8 +5,6 @@ include ${IUEROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 
-SOURCES += vsl_test_all.cxx
-
 TESTS += test_indent.cxx
 TESTS += test_binary_io.cxx
 
@@ -21,6 +19,8 @@ TESTS += test_set_io.cxx
 TESTS += test_stack_io.cxx
 TESTS += test_string_io.cxx
 TESTS += test_vector_io.cxx
+
+MINI_PROG_SOURCES += test_include.cxx
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk
