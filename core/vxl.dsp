@@ -67,6 +67,11 @@ MTL=midl.exe
 SOURCE=.\vxl_copyright.h
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\vxl_config.h.in
+
+# End Source File
 # End Group
 # End Target
 # End Project
