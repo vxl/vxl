@@ -53,8 +53,8 @@ unsigned mbl_n_combinations(const vcl_vector<unsigned>& n)
 inline
 void mbl_print_combination(vcl_ostream& os, const vcl_vector<unsigned>& x)
 {
-  for (int i=x.size()-1;i>0;--i) vcl_cout<<x[i]<<":";
-  vcl_cout<<x[0];
+  for (int i=x.size()-1;i>0;--i) os<<x[i]<<':';
+  os<<x[0];
 }
 
 #endif // mbl_combination_h
