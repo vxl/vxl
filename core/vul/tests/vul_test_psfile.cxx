@@ -20,9 +20,9 @@ void test_vul_psfile()
 
   f.set_paper_type(vul_psfile::A4);
   f.set_paper_orientation(vul_psfile::PORTRAIT);
-  f.set_bg_color(0.9,0.1,0); // light red-ish
-  f.set_fg_color(0,0,0.1);   // dark blue-ish
-  f.set_line_width(0.2);
+  f.set_bg_color(0.9f,0.1f,0.0f); // light red-ish
+  f.set_fg_color(0.0f,0.0f,0.1f);   // dark blue-ish
+  f.set_line_width(0.2f);
 
   f.postscript_header();
   
