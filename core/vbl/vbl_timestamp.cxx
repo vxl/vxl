@@ -21,8 +21,8 @@ void vbl_timestamp::touch()
   timestamp_ = get_unique_timestamp();
 }
 
-bool vbl_timestamp::older(vbl_timestamp *t)
+bool vbl_timestamp::older(vbl_timestamp const& t) const
 {
   // find out if this is older that t
-  return timestamp_<t->get_time_stamp();
+  return timestamp_<t.get_time_stamp();
 }
