@@ -62,12 +62,29 @@ void test_network()
        node_4->num_neighbors() == 3,
        true);
 
+  TEST("Testing seg_to_node()",
+       the_network->seg_to_node(node_4->epi_seg()) == node_4 &&
+       the_network->seg_to_node(node_1->epi_seg(),1) == node_1 &&
+       the_network->seg_to_node(node_1->epi_seg(),2) == bmrf_node_sptr(NULL) &&
+       the_network->seg_to_node(NULL) == bmrf_node_sptr(NULL),
+       true);
+
   // remove arcs
   TEST("Testing remove_arc()",
        the_network->remove_arc(node_3, node_5, bmrf_node::ALPHA) &&
        the_network->remove_arc(node_3, node_5) &&
        !the_network->remove_arc(node_3, node_5), // can't remove an arc not in the graph
        true);
+
+  TEST("Testing size()",
+       the_network->size() == 5 &&
+       the_network->size(1) == 2 &&
+       the_network->size(2) == 2 &&
+       the_network->size(3) == 1 &&
+       the_network->size(10) == 0,
+       true);
+
+  TEST("Testing purge()",the_network->purge(),false);
 
   double depth_order[] = {0.4, 0.3, 0.2, 0.1, 0.5};
   bool depth_check = true;
@@ -103,6 +120,14 @@ void test_network()
 
   // remove the temporary file
   vpl_unlink ("test_node_io.tmp");
+
+  TEST("Testing size() on loaded network",
+       network_in->size() == the_network->size() &&
+       network_in->size(1) == the_network->size(1) &&
+       network_in->size(2) == the_network->size(2) &&
+       network_in->size(3) == the_network->size(3) &&
+       network_in->size(10) == the_network->size(10),
+       true);
 }
 
 
