@@ -11,8 +11,8 @@ bool vipl_erode_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
 #ifdef DEBUG
   vcl_cout << "Starting vipl_erode_disk::section_applyop() ...";
 #endif
-  const ImgIn &in = in_data(0);
-  ImgOut &out = *out_data_ptr();
+  const ImgIn &in = this->in_data(0);
+  ImgOut &out = *this->out_data_ptr();
   int size = (radius() < 0) ? 0 : int(radius());
 
   // circular mask was generated in preop(), we just use it here
@@ -21,10 +21,10 @@ bool vipl_erode_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
 #ifdef DEBUG
   vcl_cout << " set start & stop ...";
 #endif
-  int startx = start(X_Axis());
-  int starty = 0; // = start(Y_Axis());
-  int stopx = stop(X_Axis());
-  int stopy = stop(Y_Axis()); // = height(out);
+  int startx = start(this->X_Axis());
+  int starty = 0; // = start(this->Y_Axis());
+  int stopx = stop(this->X_Axis());
+  int stopy = stop(this->Y_Axis()); // = height(out);
 #ifdef DEBUG
   vcl_cout << " (" << startx << ':' << stopx << ',' << starty << ':' << stopy << ')';
   vcl_cout << " run over image ...";

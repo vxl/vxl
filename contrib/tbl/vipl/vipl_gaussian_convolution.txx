@@ -7,26 +7,26 @@
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
 {
-  const ImgIn &in = in_data(0);
-  ImgOut &out = *out_data_ptr();
+  const ImgIn &in = this->in_data(0);
+  ImgOut &out = *this->out_data_ptr();
   int size = masksize();
 
   // Make temporary buffer to hold result of first (horizontal) convolution
-  int width = stop(X_Axis())-start(X_Axis());
-  int height = stop(Y_Axis())-start(Y_Axis());
+  int width  = stop(this->X_Axis()) - start(this->X_Axis());
+  int height = stop(this->Y_Axis()) - start(this->Y_Axis());
   double* buf = new double[width*height];
   if (!buf) return false; // memory allocation failed
 
   // 1-D mask was generated in preop(), we just use it here:
 
   // horizontal convolution:
-  int starty = start(Y_Axis());
-  int stopy = stop(Y_Axis());
+  int starty = start(this->Y_Axis());
+  int stopy = stop(this->Y_Axis());
   for (int j = starty; j < stopy; ++j)
   {
     int buf_j = j - starty;
-    int startx = start(X_Axis(),j);
-    int stopx = stop(X_Axis(),j);
+    int startx = start(this->X_Axis(),j);
+    int stopx = stop(this->X_Axis(),j);
     for (int i = startx; i < stopx; ++i) {
       int buf_i = i - startx;
       double result = mask()[0] * fgetpixel(in, i, j, DataIn(0));
@@ -39,8 +39,8 @@ bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section
   for (int j = starty; j < stopy; ++j)
   {
     int buf_j = j - starty;
-    int startx = start(X_Axis(),j);
-    int stopx = stop(X_Axis(),j);
+    int startx = start(this->X_Axis(),j);
+    int stopx = stop(this->X_Axis(),j);
     for (int i = startx; i < stopx; ++i) {
       int buf_i = i - startx;
       double result = mask()[0] * buf[buf_i+width*buf_j];

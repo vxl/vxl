@@ -99,7 +99,7 @@ class vipl_histogram : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelIt
            , indexout_(0)
            , checkrange_(0)
       {
-        put_is_input_driven(true); // get sections from input
+        this->put_is_input_driven(true); // get sections from input
       }
 
   inline vipl_histogram(vipl_histogram const& A)
@@ -110,7 +110,7 @@ class vipl_histogram : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelIt
            , indexout_(A.indexout_)
            , checkrange_(A.checkrange_)
       {
-        put_is_input_driven(true); // get sections from input
+        this->put_is_input_driven(true); // get sections from input
       }
   inline ~vipl_histogram() {}
 

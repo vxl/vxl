@@ -7,15 +7,15 @@
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_dilate_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
 {
-  const ImgIn &in = in_data(0);
-  ImgOut &out = out_data();
+  const ImgIn &in = this->in_data(0);
+  ImgOut &out = this->out_data();
   int size = (radius() < 0) ? 0 : int(radius());
   // mask is filled in preop function
   // apply filter:
-  int startx = start(X_Axis());
-  int starty = start(Y_Axis());
-  int stopx = stop(X_Axis());
-  int stopy = stop(Y_Axis());
+  int startx = start(this->X_Axis());
+  int starty = start(this->Y_Axis());
+  int stopx = stop(this->X_Axis());
+  int stopy = stop(this->Y_Axis());
   for (register int j = starty, ej =  stopy; j < ej  ; ++j)
     for (register int i = startx, ei = stopx; i < ei ; ++i)
     {
@@ -61,7 +61,8 @@ bool vipl_dilate_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: preop()
 // Since we will know if radius changes between calls to filter, we
 // destroy the mask in postop, after we are all done filtering
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
-bool vipl_dilate_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: postop(){
+bool vipl_dilate_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: postop()
+{
   int size = (radius() < 0) ? 0 : int(radius());
   if (mask()) {
     for (int x=0; x<=size; ++x)

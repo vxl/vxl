@@ -17,13 +17,11 @@
 // does all the work
 template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
   vipl_filter_2d< ImgIn,ImgOut,DataIn,DataOut,PixelItr >
-  ::vipl_filter_2d(
-                const ImgIn* src_img ,
-                ImgOut* dst_img ,
-                int ninputs,
-                int img_border ,
-                DataOut fill_val
-                )
+  ::vipl_filter_2d(const ImgIn* src_img ,
+                   ImgOut* dst_img ,
+                   int ninputs,
+                   int img_border ,
+                   DataOut fill_val)
     : vipl_filter<ImgIn, ImgOut, DataIn, DataOut, 2 VCL_DFL_TMPL_ARG(vipl_trivial_pixeliter)>
       (src_img, dst_img, ninputs, img_border, fill_val)
 {}
@@ -42,8 +40,7 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
                 ImgOut* dst_img ,
                 int ninputs,
                 int img_border ,
-                DataOut fill_val
-                )
+                DataOut fill_val)
      : vipl_filter<ImgIn, ImgOut, DataIn, DataOut, 2 VCL_DFL_TMPL_ARG(vipl_trivial_pixeliter)>
        (src_img, dst_img, ninputs, img_border, fill_val)
 {}
@@ -66,121 +63,121 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
 
   // assuming that the coordinate space of input, intermediate and output are
   // "locked" by sectioning
-  if (!ref_outf()) {
+  if (!this->ref_outf()) {
     vcl_cerr << "Warning: empty output image in vipl_filter_2d::applyop, returning without processing\n";
     return false;
   }
   // the name of the section container generator.
   // do not generate a new one if there is one already.
-  if (!ref_dst_section()) {
-    ref_dst_section() = vipl_filterable_section_container_generator(*ref_outf(),(DataOut*) 0);
+  if (!this->ref_dst_section()) {
+    this->ref_dst_section() = vipl_filterable_section_container_generator(*this->ref_outf(),(DataOut*)0);
   }
-  if (!ref_dst_section()) {
+  if (!this->ref_dst_section()) {
     vcl_cerr << "Warning: empty dst section in vipl_filter_2d::applyop, returning without processing\n";
     return false;
   }
-  if (!ref_src_section()) {
-    ref_src_section() = vipl_filterable_section_container_generator(*ref_inf()[0], (DataIn*) 0);
+  if (!this->ref_src_section()) {
+    this->ref_src_section() = vipl_filterable_section_container_generator(*this->ref_inf()[0],(DataIn*)0);
   }
-  if (!ref_src_section()) {
+  if (!this->ref_src_section()) {
     vcl_cerr << "Warning: empty src section in vipl_filter_2d::applyop, presuming output driving but cannot be ptr safe\n";
   }
-  preop(); // virtual function call
-  ref_dst_section()->ref_overlap()[0] = image_border_size();
-  ref_dst_section()->ref_overlap()[1] = image_border_size();
-  if (ref_src_section()) {
-    ref_src_section()->ref_overlap()[0] = image_border_size();
-    ref_src_section()->ref_overlap()[1] = image_border_size();
+  this->preop(); // virtual function call
+  this->ref_dst_section()->ref_overlap()[0] = this->image_border_size();
+  this->ref_dst_section()->ref_overlap()[1] = this->image_border_size();
+  if (this->ref_src_section()) {
+    this->ref_src_section()->ref_overlap()[0] = this->image_border_size();
+    this->ref_src_section()->ref_overlap()[1] = this->image_border_size();
   }
   iter_out enddstitr, dstitr;
   iter_in endsrcitr, srcitr;
-  if (ref_src_section()) {
-    endsrcitr = (*ref_src_section()).end();
-    srcitr = (*ref_src_section()).begin();
+  if (this->ref_src_section()) {
+    endsrcitr = (*this->ref_src_section()).end();
+    srcitr = (*this->ref_src_section()).begin();
   }
-  if (ref_dst_section()) {
-    enddstitr = (*ref_dst_section()).end();
-    dstitr = (*ref_dst_section()).begin();
+  if (this->ref_dst_section()) {
+    enddstitr = (*this->ref_dst_section()).end();
+    dstitr = (*this->ref_dst_section()).begin();
   }
-  if (is_input_driven()) {
-    iter_in enditr = (*ref_src_section()).end();
-    for (iter_in it = (*ref_src_section()).begin(); it != enditr; ++it) {
+  if (this->is_input_driven())
+  {
+    iter_in enditr = (*this->ref_src_section()).end();
+    for (iter_in it = (*this->ref_src_section()).begin(); it != enditr; ++it)
+    {
       if (dstitr ==enddstitr) {
         vcl_cerr << "Warning: In vipl_filter_2d, output iter ran out of items before input.  resetting to beginning\n";
-        dstitr = (*ref_dst_section()).begin();
+        dstitr = (*this->ref_dst_section()).begin();
       }
-#ifdef VCL_VC60
-      // this awkward construction is to get around a VC60 compiler bug
+#ifdef VCL_VC60 // this awkward construction is to get around a VC60 compiler bug
       vipl_section_descriptor<DataOut>& secDesc = *dstitr;
       put_secp( new vipl_section_descriptor<DataOut> (secDesc) );
 #else
       put_secp( new vipl_section_descriptor<DataOut> (*dstitr));
 #endif
-      ref_dst_section()->ref_overlap()[0] = image_border_size();
-      ref_dst_section()->ref_overlap()[1] = image_border_size();
-      if (ref_src_section()) {
-#ifdef VCL_VC60
-        // this awkward construction is to get around a VC60 compiler bug
+      this->ref_dst_section()->ref_overlap()[0] = this->image_border_size();
+      this->ref_dst_section()->ref_overlap()[1] = this->image_border_size();
+      if (this->ref_src_section()) {
+#ifdef VCL_VC60 // this awkward construction is to get around a VC60 compiler bug
         vipl_section_descriptor<DataIn>& inSecDesc = *it;
         put_insecp( new vipl_section_descriptor<DataIn> (inSecDesc));
 #else
         put_insecp( new vipl_section_descriptor<DataIn> (*it));
 #endif
-        ref_src_section()->ref_overlap()[0] = image_border_size();
-        ref_src_section()->ref_overlap()[1] = image_border_size();
+        this->ref_src_section()->ref_overlap()[0] = this->image_border_size();
+        this->ref_src_section()->ref_overlap()[1] = this->image_border_size();
       }
-      section_preop(); // virtual function call
-      section_applyop(); // virtual function call
-      section_postop(); // virtual function call
-      if (ref_secp()) {
-        FILTER_IMPTR_DEC_REFCOUNT(ref_secp()); // ??really what we want or a kludge??
+      this->section_preop(); // virtual function call
+      this->section_applyop(); // virtual function call
+      this->section_postop(); // virtual function call
+      if (this->ref_secp()) {
+        FILTER_IMPTR_DEC_REFCOUNT(this->ref_secp()); // ??really what we want or a kludge??
         ++dstitr;
       }
-      if (ref_insecp()) {
-        FILTER_IMPTR_DEC_REFCOUNT(ref_insecp());
+      if (this->ref_insecp()) {
+        FILTER_IMPTR_DEC_REFCOUNT(this->ref_insecp());
       }
     }
   }
-  else {
-    iter_out enditr = (*ref_dst_section()).end();
-    for (iter_out it = (*ref_dst_section()).begin(); it != enditr; ++it) {
+  else
+  {
+    iter_out enditr = (*this->ref_dst_section()).end();
+    for (iter_out it = (*this->ref_dst_section()).begin(); it != enditr; ++it)
+    {
       if (srcitr == endsrcitr) {
         vcl_cerr << "Warning: In vipl_filter_2d, input iter ran out of items before output.  resetting to beginning\n";
-        srcitr = (*ref_src_section()).begin();
+        srcitr = (*this->ref_src_section()).begin();
       }
-#ifdef VCL_VC60
-      // this awkward construction is to get around a VC60 compiler bug
+#ifdef VCL_VC60 // this awkward construction is to get around a VC60 compiler bug
       vipl_section_descriptor<DataOut>& secDesc2 = *it;
       put_secp( new vipl_section_descriptor<DataOut> (secDesc2));
 #else
       put_secp( new vipl_section_descriptor<DataOut> (*it));
 #endif
-      ref_dst_section()->ref_overlap()[0] = image_border_size();
-      ref_dst_section()->ref_overlap()[1] = image_border_size();
-      if (ref_src_section()) {
-#ifdef VCL_VC60
-        // this awkward construction is to get around a VC60 compiler bug
+      this->ref_dst_section()->ref_overlap()[0] = this->image_border_size();
+      this->ref_dst_section()->ref_overlap()[1] = this->image_border_size();
+      if (this->ref_src_section()) {
+#ifdef VCL_VC60 // this awkward construction is to get around a VC60 compiler bug
         vipl_section_descriptor<DataIn>& inSecDesc2 = *srcitr;
         put_insecp( new vipl_section_descriptor<DataIn> (inSecDesc2));
 #else
         put_insecp( new vipl_section_descriptor<DataIn> (*srcitr));
 #endif
-        ref_src_section()->ref_overlap()[0] = image_border_size();
-        ref_src_section()->ref_overlap()[1] = image_border_size();
+        this->ref_src_section()->ref_overlap()[0] = this->image_border_size();
+        this->ref_src_section()->ref_overlap()[1] = this->image_border_size();
       }
-      section_preop(); // virtual function call
-      section_applyop(); // virtual function call
-      section_postop(); // virtual function call
-      if (ref_secp()) {
-        FILTER_IMPTR_DEC_REFCOUNT(ref_secp()); // ??really what we want or a kludge??
+      this->section_preop(); // virtual function call
+      this->section_applyop(); // virtual function call
+      this->section_postop(); // virtual function call
+      if (this->ref_secp()) {
+        FILTER_IMPTR_DEC_REFCOUNT(this->ref_secp()); // ??really what we want or a kludge??
       }
-      if (ref_insecp()) {
-        FILTER_IMPTR_DEC_REFCOUNT(ref_insecp());
+      if (this->ref_insecp()) {
+        FILTER_IMPTR_DEC_REFCOUNT(this->ref_insecp());
         ++srcitr;
       }
     }
   }
-  postop(); // virtual function call
+  this->postop(); // virtual function call
   return true;
 }
 

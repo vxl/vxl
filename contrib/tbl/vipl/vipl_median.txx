@@ -6,18 +6,18 @@
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_median <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
 {
-  const ImgIn &in = in_data(0);
-  ImgOut &out = *out_data_ptr();
+  const ImgIn &in = this->in_data(0);
+  ImgOut &out = *this->out_data_ptr();
   int size = (radius() < 0) ? 0 : int(radius());
 
   // circular mask was generated in preop(), we just use it here
 
   // apply filter:
   DataIn* v = new DataIn[(2*size+1)*(2*size+1)];
-  int startx = start(X_Axis());
-  int starty = start(Y_Axis());
-  int stopx = stop(X_Axis());
-  int stopy = stop(Y_Axis());
+  int startx = start(this->X_Axis());
+  int starty = start(this->Y_Axis());
+  int stopx = stop(this->X_Axis());
+  int stopy = stop(this->Y_Axis());
   for (int j = starty; j < stopy; ++j)
     for (int i = startx; i < stopx; ++i) {
       register int count = 0;
@@ -51,13 +51,13 @@ bool vipl_median <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: preop()
   float rs = (radius() < 0) ? 0 : radius() * radius();
   typedef bool* boolptr;
   if (mask() == 0)
-         ref_mask() = new boolptr[1+size];
+    ref_mask() = new boolptr[1+size];
   else {
-        for (int x=0; x<=size; ++x)
-            if (mask()[x]) delete[] ref_mask()[x];
-        delete[] ref_mask();
-        ref_mask() = new boolptr[1+size];
-        }
+    for (int x=0; x<=size; ++x)
+      if (mask()[x]) delete[] ref_mask()[x];
+    delete[] ref_mask();
+    ref_mask() = new boolptr[1+size];
+  }
   for (int x=0; x<=size; ++x) {
     ref_mask()[x] = new bool[size+1];
     for (int y=0; y<=size; ++y)

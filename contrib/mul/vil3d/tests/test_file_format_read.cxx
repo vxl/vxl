@@ -14,9 +14,8 @@
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_print.h>
 
-
-// Ian Scott
-// Mar 2003
+// \author Ian Scott
+// \date Mar 2003
 
 // Compare the results of loading different files with the true data
 // that's supposed to be in those files. Only deals with single plane
@@ -27,7 +26,7 @@ typedef vxl_uint_32 TruePixelType;
 class CheckPixel
 {
  public:
-  virtual ~CheckPixel() { }
+  virtual ~CheckPixel() {}
   virtual bool operator() ( unsigned int p, unsigned int i, unsigned int j, unsigned int k,
                             const vcl_vector<TruePixelType>& pixel ) const = 0;
 };
@@ -58,7 +57,7 @@ class CheckPixelT : public CheckPixel
 #ifdef DEBUG
     vcl_cout << '\n' << vcl_flush; vil3d_print_all(vcl_cout, img_);
 #endif
-// Now read just part of the image.
+    // Now read just part of the image.
     im = ir->get_copy_view(ni/2, ni-ni/2, nj/2, nj-nj/2, nk/2, nk-nk/2);
     if ( !im )
     {
@@ -86,12 +85,12 @@ class CheckGrey : public CheckPixelT<T>
                     const vcl_vector<TruePixelType>& pixel ) const
   {
     assert( p == 0 );
-    return img_ && pixel.size() == 1 &&
-      i < img_.ni() && j < img_.nj() && k < img_.nk() &&
-      pixel[0] == (TruePixelType)img_(i,j,k) &&
-      ( !(i > img_.ni()/2 && j > img_.nj()/2 && k > img_.nk()/2)
-        || pixel[0] == (TruePixelType)far_oct_img_(i-img_.ni()/2,
-        j-img_.nj()/2, k-img_.nk()/2) );
+    return this->img_ && pixel.size() == 1 &&
+      i < this->img_.ni() && j < this->img_.nj() && k < this->img_.nk() &&
+      pixel[0] == (TruePixelType)this->img_(i,j,k) &&
+      ( !(i > this->img_.ni()/2 && j > this->img_.nj()/2 && k > this->img_.nk()/2)
+        || pixel[0] == (TruePixelType)this->far_oct_img_(i-this->img_.ni()/2,
+        j-this->img_.nj()/2, k-this->img_.nk()/2) );
   }
 };
 
@@ -104,10 +103,10 @@ class CheckColourPlanes : public CheckPixelT<T>
   bool operator() ( unsigned int p, unsigned int i, unsigned int j, unsigned int k,
                     const vcl_vector<TruePixelType>& pixel) const
   {
-    return img_ && pixel.size() == 1 && pixel[0] == img_(i,j,k,p) &&
-      ( !(i > img_.ni()/2 && j > img_.nj()/2 && k > img_.nk()/2)
-        || pixel[0] == (TruePixelType)far_oct_img_(i-img_.ni()/2,
-        j-img_.nj()/2, k-img_.nk()/2) );
+    return this->img_ && pixel.size() == 1 && pixel[0] == this->img_(i,j,k,p) &&
+      ( !(i > this->img_.ni()/2 && j > this->img_.nj()/2 && k > this->img_.nk()/2)
+        || pixel[0] == (TruePixelType)this->far_oct_img_(i-this->img_.ni()/2,
+        j-this->img_.nj()/2, k-this->img_.nk()/2) );
   }
 };
 

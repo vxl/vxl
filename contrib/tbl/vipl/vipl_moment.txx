@@ -41,15 +41,15 @@ double power(double x, int y)
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_moment <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
 {
-  const ImgIn &in = in_data(0);
-  ImgOut &out = *out_data_ptr();
+  const ImgIn &in = this->in_data(0);
+  ImgOut &out = *this->out_data_ptr();
 
   // We create a (double) float buffer to hold the computed values.
 
-  int startx = start(X_Axis());
-  int starty = start(Y_Axis());
-  int stopx = stop(X_Axis());
-  int stopy = stop(Y_Axis());
+  int startx = start(this->X_Axis());
+  int starty = start(this->Y_Axis());
+  int stopx = stop(this->X_Axis());
+  int stopy = stop(this->Y_Axis());
 
   int sizex = stopx-startx+1;
   int sizey = stopy-starty+1;

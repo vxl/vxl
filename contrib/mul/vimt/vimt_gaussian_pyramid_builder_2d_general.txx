@@ -22,7 +22,6 @@ vimt_gaussian_pyramid_builder_2d_general<T>::vimt_gaussian_pyramid_builder_2d_ge
   scale_params_(2.0)
 {}
 
-
 //: Construct with given scale_step
 template <class T>
 vimt_gaussian_pyramid_builder_2d_general<T>::vimt_gaussian_pyramid_builder_2d_general(double scale_step):
@@ -33,9 +32,7 @@ vimt_gaussian_pyramid_builder_2d_general<T>::vimt_gaussian_pyramid_builder_2d_ge
 
 template <class T>
 vimt_gaussian_pyramid_builder_2d_general<T>::~vimt_gaussian_pyramid_builder_2d_general()
-{
-}
-
+{}
 
 //: Set the Scale step
 template <class T>
@@ -43,6 +40,7 @@ void vimt_gaussian_pyramid_builder_2d_general<T>::set_scale_step(double scaleSte
 {
   scale_params_ = vil_gauss_reduce_params(scaleStep);
 }
+
 //=======================================================================
 
 template <class T>
@@ -61,21 +59,21 @@ void vimt_gaussian_pyramid_builder_2d_general<T>::build(
   // than minXSize_ x minYSize_
   double s = scale_step();
   int maxlevels = 1;
-  while (((unsigned int)(ni/s+0.5)>=min_x_size()) &&
-         ((unsigned int)(nj/s+0.5)>=min_y_size()))
+  while (((unsigned int)(ni/s+0.5)>=this->min_x_size()) &&
+         ((unsigned int)(nj/s+0.5)>=this->min_y_size()))
   {
     maxlevels++;
     s *= scale_step();
   }
 
-  if (maxlevels>max_levels())
-    maxlevels=max_levels();
+  if (maxlevels > this->max_levels())
+    maxlevels=this->max_levels();
 
   worka_.set_size(ni,nj);
   workb_.set_size(ni,nj);
 
   // Set up image pyramid
-  check_pyr(im_pyr,maxlevels);
+  this->check_pyr(im_pyr,maxlevels);
 
   vimt_image_2d_of<T>& im0 = static_cast<vimt_image_2d_of<T>&>(im_pyr(0));
 
@@ -136,15 +134,15 @@ void vimt_gaussian_pyramid_builder_2d_general<T>::extend(vimt_image_pyramid& ima
   // than 5 x 5
   double s = scale_step();
   int maxlevels = 1;
-  while (((unsigned int)(ni/s+0.5)>=min_x_size()) &&
-         ((unsigned int)(nj/s+0.5)>=min_y_size()))
+  while (((unsigned int)(ni/s+0.5) >= this->min_x_size()) &&
+         ((unsigned int)(nj/s+0.5) >= this->min_y_size()))
   {
      maxlevels++;
      s*=scale_step();
   }
 
-  if (maxlevels>max_levels())
-      maxlevels=max_levels();
+  if (maxlevels > this->max_levels())
+    maxlevels=this->max_levels();
 
   worka_.set_size(ni,nj);
   workb_.set_size(ni,nj);
@@ -178,14 +176,14 @@ vcl_string vimt_gaussian_pyramid_builder_2d_general<T>::is_a() const
 {
   return vcl_string("vimt_gaussian_pyramid_builder_2d_general<T>");
 }
-#endif
-
+#endif // 0
 //=======================================================================
 
 template <class T>
 bool vimt_gaussian_pyramid_builder_2d_general<T>::is_class(vcl_string const& s) const
 {
-  return s==vimt_gaussian_pyramid_builder_2d_general<T>::is_a() || vimt_gaussian_pyramid_builder_2d<T>::is_class(s);
+  return s==vimt_gaussian_pyramid_builder_2d_general<T>::is_a() ||
+         vimt_gaussian_pyramid_builder_2d<T>::is_class(s);
 }
 
 //=======================================================================
@@ -235,15 +233,15 @@ void vimt_gaussian_pyramid_builder_2d_general<T>::b_read(vsl_b_istream& bfs)
 
   switch (version)
   {
-  case (1):
+   case 1:
     vimt_gaussian_pyramid_builder_2d<T>::b_read(bfs);
 
     vsl_b_read(bfs,scale);
     set_scale_step(scale);
     break;
-  default:
-    vcl_cerr << "I/O ERROR: vimt_gaussian_pyramid_builder_2d_general<T>::b_read(vsl_b_istream&)\n";
-    vcl_cerr << "           Unknown version number "<< version << "\n";
+   default:
+    vcl_cerr << "I/O ERROR: vimt_gaussian_pyramid_builder_2d_general<T>::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< version << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
