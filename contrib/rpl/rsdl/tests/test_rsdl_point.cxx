@@ -78,7 +78,7 @@ main()
   vbl_test_begin( "ctor all cartesian" );
   vcl_vector<double> c(2);
   c[0] = 15; c[1] = 13.1;
-  rsdl_point pt_no_ang( c.begin(), c.end(), vcl_vector<double>::iterator(), vcl_vector<double>::iterator() );
+  rsdl_point pt_no_ang( c.begin(), c.end(), c.begin(), c.begin() );
   vbl_test_perform( true );
   vbl_test_begin( "cartesian" );
   ok = true;
