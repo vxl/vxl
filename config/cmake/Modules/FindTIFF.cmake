@@ -21,6 +21,7 @@ IF(NOT HAS_TIFF)
   
       SET( HAS_TIFF "YES" )
       ADD_DEFINITIONS( -DHAS_TIFF )
+      SET( TIFF_LIBRARIES tiff )
   
       INCLUDE( ${allvxl_SOURCE_DIR}/v3p/tiff/CMakeListsLink.txt )
   

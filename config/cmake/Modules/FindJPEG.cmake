@@ -21,6 +21,7 @@ IF(NOT HAS_JPEG)
       SET( HAS_JPEG "YES" )
       ADD_DEFINITIONS( -DHAS_JPEG )
       INCLUDE_DIRECTORIES( ${JPEG_INCLUDE_PATH} )
+      SET( JPEG_LIBRARIES jpeg )
   
       INCLUDE( ${allvxl_SOURCE_DIR}/v3p/jpeg/CMakeListsLink.txt )
   

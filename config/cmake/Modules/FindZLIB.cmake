@@ -22,7 +22,8 @@ IF(NOT HAS_ZLIB)
       SET( HAS_ZLIB "YES" )
       ADD_DEFINITIONS( -DHAS_ZLIB )
       INCLUDE_DIRECTORIES( ${ZLIB_INCLUDE_PATH} )
-  
+      SET( ZLIB_LIBRARIES zlib )
+
       INCLUDE( ${allvxl_SOURCE_DIR}/v3p/zlib/CMakeListsLink.txt )
   
     ENDIF(ZLIB_INCLUDE_PATH)
