@@ -210,10 +210,20 @@ SET( vcl_sources
   emulation/vcl_pair.h
   emulation/vcl_rel_ops.h
   emulation/vcl_stack.h
-  emulation/vcl_stlconf.h
   emulation/vcl_stlfwd.h
   emulation/vcl_tempbuf.h
   emulation/vcl_tree.h
+
+  emulation/vcl_stlconf.h
+  emulation/gcc-272-stlconf.h
+  emulation/gcc-2800-stlconf.h
+  emulation/gcc-281-stlconf.h
+  emulation/gcc-295-stlconf.h
+  emulation/sgi-CC-stlconf.h
+  emulation/sun-CC4.1-stlconf.h
+  emulation/sun-CC5.0-stlconf.h
+  emulation/win32-vc50-stlconf.h
+  emulation/stlcomp.h
 
   gcc/vcl_cmath.h
   gcc/vcl_cstdlib.h
@@ -293,6 +303,10 @@ SET( vcl_sources
 
   win32-vc70/vcl_cmath.h
   win32-vc70/vcl_cstdlib.h
+
+  mwerks/vcl_cmath.h
+  mwerks/vcl_complex.h
+  mwerks/vcl_cstdlib.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vcl_sources)
