@@ -55,6 +55,10 @@ public:
   //  the denominator is allowed to be 0, to represent +Inf or -Inf.
   inline vnl_rational (long num = 0L, long den = 1L)
     : num_(num), den_(den) { assert(num!=0||den!=0); normalize(); }
+  inline vnl_rational (int num, int den = 1)
+    : num_(num), den_(den) { assert(num!=0||den!=0); normalize(); }
+  inline vnl_rational (unsigned int num, unsigned int den = 1)
+    : num_(num), den_(den) { assert(num!=0||den!=0); normalize(); }
   //: Creates a rational from a double.
   //  This is done by computing the continued fraction approximation for d.
   explicit vnl_rational (double d);
@@ -63,6 +67,8 @@ public:
     : num_(from.numerator()), den_(from.denominator()) {}
   //  Destructor
   inline ~vnl_rational() {}
+  //  Assignment: overwrite an existing vnl_rational
+  inline void set(long num, long den) { assert(num!=0||den!=0); num_=num; den_=den; normalize(); }
 
   //: Return the numerator of the (simplified) rational number representation
   inline long numerator () const { return num_; }
@@ -79,6 +85,8 @@ public:
   inline bool operator!= (vnl_rational const& rhs) const { return !operator==(rhs); }
   inline bool operator== (long rhs) const { return (num_ == rhs && den_ == 1); }
   inline bool operator!= (long rhs) const { return !operator==(rhs); }
+  inline bool operator== (int rhs) const { return (num_ == rhs && den_ == 1); }
+  inline bool operator!= (int rhs) const { return !operator==(rhs); }
 
   //: Unary minus - returns the negation of the current rational.
   inline vnl_rational operator-() const { return vnl_rational(-num_, den_); }
@@ -168,6 +176,14 @@ public:
   inline bool operator> (long r) const { return num_ > den_ * r; }
   inline bool operator<= (long r) const { return !operator>(r); }
   inline bool operator>= (long r) const { return !operator<(r); }
+  inline bool operator< (int r) const { return num_ < den_ * r; }
+  inline bool operator> (int r) const { return num_ > den_ * r; }
+  inline bool operator<= (int r) const { return !operator>(r); }
+  inline bool operator>= (int r) const { return !operator<(r); }
+  inline bool operator< (double r) const { return num_ < den_ * r; }
+  inline bool operator> (double r) const { return num_ > den_ * r; }
+  inline bool operator<= (double r) const { return !operator>(r); }
+  inline bool operator>= (double r) const { return !operator<(r); }
 
   //: Converts rational value to integer by truncating towards zero.
   inline long truncate () const { assert(den_ != 0);  return num_/den_; }
@@ -229,6 +245,12 @@ vcl_ostream& operator<< (vcl_ostream& s, vnl_rational const& r) {
   return s << r.numerator() << "/" << r.denominator();
 }
 
+//: simple input
+vcl_istream& operator>> (vcl_istream& s, vnl_rational& r) {
+  long n, d; s >> n >> d;
+  r.set(n,d); return s;
+}
+
 //: Returns the addition of two rational numbers.
 inline vnl_rational operator+ (vnl_rational const& r1, vnl_rational const& r2) {
   vnl_rational result(r1); return result += r2;
@@ -288,5 +310,11 @@ inline long truncate (vnl_rational const& r) { return r.truncate(); }
 inline long floor (vnl_rational const& r) { return r.floor(); }
 inline long ceil (vnl_rational const& r) { return r.ceil(); }
 inline long round (vnl_rational const& r) { return r.round(); }
+
+inline vnl_rational vnl_math_abs(vnl_rational const& x) { return x<0L ? -x : x; }
+inline vnl_rational vnl_math_squared_magnitude(vnl_rational const& x) { return x*x; }
+inline vnl_rational vnl_math_sqr(vnl_rational const& x) { return x*x; }
+inline bool vnl_math_isnan(vnl_rational const& x){return false;}
+inline bool vnl_math_isfinite(vnl_rational const& x){return x.denominator() != 0L;} \
 
 #endif // vnl_rational_h_
