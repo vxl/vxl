@@ -5,7 +5,7 @@
 #include "vcl_iterator.h"
 
 #if VCL_USE_IMPLICIT_TEMPLATES
-# include "iso/vcl_functional.txx"
+# include "iso/vcl_iterator.txx"
 #elif !VCL_USE_NATIVE_STL
 # include "emulation/vcl_iterator.txx"
 #elif defined(VCL_EGCS)
