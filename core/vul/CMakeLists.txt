@@ -27,7 +27,7 @@ SOURCE_FILES(vul_sources
   vul_url.h                   vul_url.cxx
   vul_user_info.h             vul_user_info.cxx
 
-  vul_lru_helper.txx          vul_lru_helper.h
+#  vul_lru_helper.txx          vul_lru_helper.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vul_sources)
