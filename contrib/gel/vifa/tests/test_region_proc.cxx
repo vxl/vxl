@@ -55,10 +55,11 @@ static void test_region_proc(int argc, char* argv[])
 
       vcl_cout << "  Intensity Face #" << i << ": " << (*face);
 
-      edge_list*        el = face->edges();
+      edge_list* el = face->edges();
       for (edge_list::iterator eli = el->begin(); eli!=el->end(); ++eli)
         TEST("Edges must have non-coincident end points", (*eli)->v1() != (*eli)->v2(), true);
-      one_chain_list*        ocl = face->one_chains();
+      delete el;
+      one_chain_list* ocl = face->one_chains();
 
       if (ocl)
       {
