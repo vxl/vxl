@@ -65,6 +65,15 @@ public:
   //  For some objective functions, such as RANSAC, an estimated scale
   //  is not enough. The problem must have a prior scale estimate.
   virtual bool requires_prior_scale() const = 0;
+
+  //: True if the objective function can estimate scale.
+  //  Some objective functions, such as MUSE, can provide an accurate
+  //  inlier scale estimate.
+  virtual bool can_estimate_scale() const { return false; }
+
+  //: Scale estimate.
+  //  The result is undefined if can_estimate_scale() is false.
+  virtual double scale( vect_const_iter res_begin, vect_const_iter res_end ) const { return 0.0; }
 };
 
 #endif

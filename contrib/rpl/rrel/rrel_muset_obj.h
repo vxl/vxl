@@ -78,6 +78,13 @@ public:
   virtual bool requires_prior_scale() const
     { return false; }
 
+  //: True, since MUSE can estimate scale.
+  //  \sa rrel_objective::can_estimate_scale.
+  virtual bool can_estimate_scale() const { return true; }
+
+  //: Scale estimate.
+  virtual double scale( vect_const_iter res_begin, vect_const_iter res_end ) const;
+
   //: Set the minimum fraction of the data that are inliers.
   void set_min_inlier_fraction( double min_frac=0.25 )
     {  min_frac_ = min_frac; }

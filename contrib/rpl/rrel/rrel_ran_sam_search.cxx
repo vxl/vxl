@@ -79,6 +79,7 @@ rrel_ran_sam_search::estimate( const rrel_estimation_problem * problem,
   double min_obj;
   bool  obj_set=false;
 
+  scale_ = -1;
 
   //
   //  The main loop repeatedly establishes a sample, generates fit
@@ -132,12 +133,16 @@ rrel_ran_sam_search::estimate( const rrel_estimation_problem * problem,
   problem->compute_residuals( params_, residuals );
   if ( trace_level_ >= 1) vcl_cout << "\nOptimum fit = " << params_ << vcl_endl;
   if ( trace_level_ >= 2) this->trace_residuals( residuals );
-  if ( residuals.size() > 1 ) {
-    scale_ = rrel_util_median_abs_dev_scale( residuals.begin(), residuals.end() );
+  if( obj_fcn->can_estimate_scale() ) {
+    scale_ = obj_fcn->scale( residuals.begin(), residuals.end() );
   } else {
-    scale_ = 0;
-    vcl_cout << "Can't estimate scale from one residual!\n";
-    return false;
+    if ( residuals.size() > 1 ) {
+      scale_ = rrel_util_median_abs_dev_scale( residuals.begin(), residuals.end() );
+    } else {
+      scale_ = 0;
+      vcl_cout << "Can't estimate scale from one residual!\n";
+      return false;
+    }
   }
   if ( trace_level_ >= 1) vcl_cout << "Scale = " << scale_ << vcl_endl;
   return true;

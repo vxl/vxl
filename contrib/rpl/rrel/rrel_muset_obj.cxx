@@ -62,6 +62,15 @@ rrel_muset_obj::fcn( vect_const_iter begin, vect_const_iter end,
 }
 
 
+double
+rrel_muset_obj::scale( vect_const_iter begin, vect_const_iter end ) const
+{
+  double sigma, objective;
+  internal_fcn( begin, end, objective, sigma );
+  return sigma;
+}
+
+
 void
 rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
                               double& best_objective, double& sigma_est ) const
