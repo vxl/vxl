@@ -249,7 +249,7 @@ MACRO( DETERMINE_TYPE VAR INTEGRAL_TYPE SIZE TYPE_LIST )
       # line to avoid issues with spaces. (In "long double", for
       # example)
       WRITE_FILE( ${CMAKE_BINARY_DIR}/CMakeTmp/config.h "#define THE_TYPE ${TYPE}\n#define THE_SIZE ${SIZE}\n#define INTEGRAL_TYPE ${INTEGRAL_TYPE}" )
-      SET( MACRO_DETERMINE_TYPE_FLAGS "-DVXL_HAS_TYPE_OF_SIZE -I${CMAKE_BINARY_DIR}/CMakeTmp" )
+      SET( MACRO_DETERMINE_TYPE_FLAGS "-DVXL_HAS_TYPE_OF_SIZE -I\"${CMAKE_BINARY_DIR}/CMakeTmp\"" )
       MESSAGE( STATUS "${MSG} [Checking ${TYPE}...]" )
       TRY_RUN( RUN_RESULT COMPILE_RESULT
             ${CMAKE_BINARY_DIR}
