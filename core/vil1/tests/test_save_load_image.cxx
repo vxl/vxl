@@ -72,21 +72,32 @@ bool test_image_equal(char const* type_name,
   TEST ("Image dimensions", sizex == sizex2 && sizey == sizey2, true);
   if (sizex != sizex2 || sizey != sizey2)
   {
-    vcl_cout << type_name << ": sizes are " << sizex2 << " x " << sizey2 << vcl_endl << vcl_flush;
+    vcl_cout << type_name << ": sizes are " << sizex2 << " x " << sizey2
+             << " instead of " << sizex << " x " << sizey << vcl_endl << vcl_flush;
     return false;
   }
 
   TEST ("Image pixel sizes", cell_bits, cell_bits2);
   if (cell_bits != cell_bits2)
   {
-    vcl_cout << type_name << ": pixel size is " << cell_bits2 << vcl_endl << vcl_flush;
+    vcl_cout << type_name << ": pixel size is " << cell_bits2
+             << " instead of " << cell_bits << vcl_endl << vcl_flush;
+    return false;
+  }
+
+  TEST ("Pixel format", vil_pixel_format(image), vil_pixel_format(image2));
+  if (vil_pixel_format(image) != vil_pixel_format(image2))
+  {
+    vcl_cout << type_name << ": pixel format is " << vil_print(vil_pixel_format(image2))
+             << " instead of " << vil_print(vil_pixel_format(image)) << vcl_endl << vcl_flush;
     return false;
   }
 
   TEST ("Image format", image.component_format(), image2.component_format());
   if (image.component_format() != image2.component_format())
   {
-    vcl_cout << type_name << ": format is " << image2.component_format() << vcl_endl << vcl_flush;
+    vcl_cout << type_name << ": component format is " << vil_print(image2.component_format())
+             << " instead of " << vil_print(image.component_format()) << vcl_endl << vcl_flush;
     return false;
   }
 
@@ -383,7 +394,7 @@ vil_image CreateTest16bitImage(int wd, int ht)
 // create a 32 bit test image
 vil_image CreateTest32bitImage(int wd, int ht)
 {
-  vil_memory_image_of<int> image(wd, ht);
+  vil_memory_image_of<unsigned int> image(wd, ht);
   for(int y = 0; y < ht; y++)
     for(int x = 0; x < wd; x++)
       image(x, y) = x + wd*y;
@@ -457,18 +468,13 @@ MAIN( test_save_load_image )
   vil_test_image_type_raw("bmp", image24);
 #endif
 
-  // lily (Leuven)
-#if 1
-  //vil_test_image_type("lily", image8);
-  //vil_test_image_type("lily", imagefloat);
-#endif
-
   // VIFF image (Khoros)
 #if 1
-  //vil_test_image_type("viff", image1);
+//vil_test_image_type("viff", image1);
   vil_test_image_type("viff", image8);
   vil_test_image_type("viff", image16);
-  //vil_test_image_type("viff", image3p);
+  vil_test_image_type("viff", image32);
+  vil_test_image_type("viff", image3p);
   vil_test_image_type("viff", imagefloat);
 #endif
 
@@ -502,7 +508,7 @@ MAIN( test_save_load_image )
 #if 1
   vil_test_image_type("iris", image8);
 //vil_test_image_type("iris", image16); // not implemented yet
-  vil_test_image_type("iris", image24);
+  vil_test_image_type("iris", image3p);
 #endif
 
 
