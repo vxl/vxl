@@ -327,6 +327,7 @@
 #if defined(_WIN32) || defined(WIN32)
 #  define VCL_WIN32
 #  if defined(_MSC_VER)
+#   define VCL_VC
 #   if _MSC_VER >= 1200
 #    define VCL_VC60 1
 #   else

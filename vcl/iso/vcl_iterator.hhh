@@ -1,0 +1,25 @@
+#ifndef vcl_iso_iterator_h_
+#define vcl_iso_iterator_h_
+/*
+  fsm@robots.ox.ac.uk
+*/
+
+#include <iterator>
+
+@iterator_traits
+@iterator
+@reverse_iterator
+@istream_iterator
+@ostream_iterator
+@back_insert_iterator
+@front_insert_iterator
+@insert_iterator
+@input_iterator_tag
+@output_iterator_tag
+@forward_iterator_tag
+@bidirectional_iterator_tag
+@random_access_iterator_tag
+@advance
+@distance
+
+#endif

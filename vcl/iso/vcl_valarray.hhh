@@ -1,0 +1,11 @@
+#ifndef vcl_iso_valarray_h_
+#define vcl_iso_valarray_h_
+/*
+  fsm@robots.ox.ac.uk
+*/
+
+#include <valarray>
+
+@valarray
+
+#endif

@@ -1,0 +1,13 @@
+#ifndef vcl_iso_string_h_
+#define vcl_iso_string_h_
+/*
+  fsm@robots.ox.ac.uk
+*/
+
+#include <string>
+
+@char_traits
+@basic_string
+@string
+
+#endif

@@ -27,9 +27,7 @@
 
 // -------------------- iso
 #else
-# include <map>
-# define vcl_map      std::map
-# define vcl_multimap std::multimap
+# include <vcl/iso/vcl_map.h>
 #endif
 
 #define VCL_MAP_INSTANTIATE(T1, T2, L) extern "please include vcl_map.txx"

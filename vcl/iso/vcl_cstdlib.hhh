@@ -1,0 +1,33 @@
+#ifndef vcl_iso_cstdlib_h_
+#define vcl_iso_cstdlib_h_
+/*
+  fsm@robots.ox.ac.uk
+*/
+
+#include <cstdlib>
+
+@exit
+@abort
+@size_t
+@abs
+@abort
+@qsort
+@free
+@malloc
+@strtol
+@strtoul
+@realloc
+
+using std::exit;
+using std::abort;
+using std::size_t;
+using std::abs;
+using std::abort;
+using std::qsort;
+using std::free;
+using std::malloc;
+using std::strtol;
+using std::strtoul;
+using std::realloc;
+
+#endif

@@ -17,3 +17,10 @@ work with your non-ISO compiler.
 If you find that vcl/iso/vcl_blah.h is *almost*
 right for your compiler, you may #include it and
 then fix a few things afterwards (or before).
+
+
+Most of the .h files in this directory are generated
+from templates. Each line @blah in a template file
+expands into a #define vcl_blah std::blah in the .h
+file. There are various checks to make sure we don't
+#define things twice.

@@ -1,0 +1,35 @@
+#ifndef vcl_iso_iostream_h_
+#define vcl_iso_iostream_h_
+/*
+  fsm@robots.ox.ac.uk
+*/
+
+#include <iostream>
+
+@ios
+@ios::in
+@ios::out
+@ios::ate
+@ios::app
+@ios::trunc
+@ios::binary
+@hex
+@dec
+@ws
+@setprecision
+@endl
+@streampos
+@streambuf
+@streamsize
+@cin
+@cout
+@cerr
+
+// allowed for now
+using std::cin;
+using std::cout;
+using std::cerr;
+using std::endl;
+using std::flush;
+
+#endif

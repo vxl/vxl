@@ -4,7 +4,8 @@
 #include <vcl/vcl_iterator.h>
 #include <vcl/vcl_vector.h>
 
-ostream &delim(ostream &os) {
+vcl_ostream &delim(vcl_ostream &os) 
+{
   //return os << endl;
   return os << ", ";
 }

@@ -22,7 +22,7 @@
 #elif defined(VCL_WIN32)
 # include <vcl/win32/vcl_utility.txx>
 #else
-  error "USE_NATIVE_STL with unknown compiler"
+# include <vcl/iso/vcl_utility.txx>
 #endif
 
 #endif

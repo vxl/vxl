@@ -1,0 +1,17 @@
+#ifndef vcl_iso_fstream_h_
+#define vcl_iso_fstream_h_
+/*
+  fsm@robots.ox.ac.uk
+*/
+
+#include <fstream>
+
+@fstream
+@ifstream
+@ofstream
+
+using std :: fstream;
+using std :: ofstream;
+using std :: ifstream;
+
+#endif

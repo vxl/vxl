@@ -14,12 +14,8 @@
 
 // -------------------- iso
 #else
-# include <algorithm>
-# include <functional>
-# define vcl_algorithm_h_STD std ::
+# include <vcl/iso/vcl_algorithm.h>
 #endif
-
-// vcl_destroy() and vcl_construct() moved to vcl_new.h -- fsm
 
 // Now #define vcl_blah to std::blah (except for emulation) :
 #if defined(vcl_algorithm_h_STD)
@@ -84,9 +80,6 @@
 # define vcl_rotate_copy       vcl_algorithm_h_STD rotate_copy
 # define vcl_search 	       vcl_algorithm_h_STD search
 # define vcl_search_n 	       vcl_algorithm_h_STD search_n
-//kym: conflicts with class set.... 
-//fsm: which "class set"?
-//# define vcl_set 	        vcl_algorithm_h_STD set
 # define vcl_set_difference    vcl_algorithm_h_STD set_difference
 # define vcl_set_intersection  vcl_algorithm_h_STD set_intersection
 # define vcl_set_symmetric_difference \
@@ -104,6 +97,5 @@
 # define vcl_unique_copy       vcl_algorithm_h_STD unique_copy
 # define vcl_upper_bound       vcl_algorithm_h_STD upper_bound
 #endif
-
 
 #endif // inclusion guard

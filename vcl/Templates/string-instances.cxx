@@ -3,6 +3,10 @@
 
 VCL_BASIC_STRING_INSTANTIATE(char, vcl_char_traits<char> );
 
+#if defined(VCL_SUNPRO_CC)
+template class vcl_basic_string<char, vcl_char_traits<char> >;
+#endif
+
 #if defined(VCL_EGCS)
 # define bs basic_string<char, string_char_traits<char>, __default_alloc_template<1, 0> >
 template bs &bs::replace(char *, char *, char *, char *);

@@ -19,8 +19,7 @@
 
 // -------------------- iso
 #else
-# include <vector>
-# define vcl_vector std::vector
+# include <vcl/iso/vcl_vector.h>
 #endif
 
 #endif

@@ -7,6 +7,6 @@
 
 #undef VCL_BASIC_STRING_INSTANTIATE
 #define VCL_BASIC_STRING_INSTANTIATE(charT, Traits) \
-template class std::basic_string<charT, Traits >;
+/*template class std::basic_string<charT, Traits >; */
 
 #endif

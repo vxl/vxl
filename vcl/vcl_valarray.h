@@ -1,8 +1,5 @@
 #ifndef vcl_valarray_h_
 #define vcl_valarray_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 /*
   fsm@robots.ox.ac.uk
 */
@@ -14,8 +11,7 @@
 # define vcl_valarray valarray
 
 #else
-# include <valarray>
-# define vcl_valarray std::valarray
+# include <vcl/iso/vcl_valarray.h>
 #endif
 
 #endif

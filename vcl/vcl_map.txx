@@ -22,7 +22,7 @@
 #elif defined(_MSC_VER)
 # include <vcl/win32/vcl_map.txx>
 #else
-  error "USE_NATIVE_STL with unknown compiler"
+# include <vcl/iso/vcl_map.txx>
 #endif
 
 #endif

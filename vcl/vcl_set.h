@@ -21,9 +21,7 @@
 
 // -------------------- iso
 #else
-# include <set>
-# define vcl_set      std::set
-# define vcl_multiset std::multiset
+# include <vcl/iso/vcl_set.h>
 #endif
 
 #define VCL_SET_INSTANTIATE extern "you must include vcl/vcl_set.txx first"

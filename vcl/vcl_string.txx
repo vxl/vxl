@@ -15,5 +15,5 @@
 #elif defined(VCL_WIN32)
 # include <vcl/win32/vcl_string.txx>
 #else
-  error "USE_NATIVE_STL with unknown compiler"
+# include <vcl/iso/vcl_string.txx>
 #endif

@@ -14,7 +14,7 @@
 # include <streambuf>
 # define vcl_streambuf std::streambuf
 
-#elif defined(VCL_GCC)
+#elif defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
 # include <streambuf.h>
 # define vcl_streambuf streambuf
 
@@ -22,9 +22,8 @@
 # include <iostream.h>
 # define vcl_streambuf streambuf
 
-#else // iso
-# include <streambuf>
-# define vcl_streambuf std::streambuf
+#else
+# include <vcl/iso/vcl_streambuf.h>
 #endif
 
 #endif

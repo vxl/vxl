@@ -13,9 +13,7 @@
 # define vcl_make_pair make_pair
 
 #else // e.g. VCL_SUNPRO_CC or VCL_VC60
-# include <utility>
-# define vcl_pair std::pair
-# define vcl_make_pair std::make_pair
+# include <vcl/iso/vcl_utility.h>
 #endif
 
 #define VCL_PAIR_INSTANTIATE extern "you must include vcl/vcl_utility.txx first"

@@ -5,15 +5,13 @@
 
 #if !VCL_USE_NATIVE_STL
 # include <vcl/emulation/vcl_list.h>
+
+#elif defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
+# include <list.h>
+# define vcl_list list
+
 #else
-# ifdef VCL_GCC_WITH_LIBSTDCXX_V2
-#  include_next <list.h>
-#  define vcl_list list
-# else
-// Native STL, not GCC:
-#  include <list>
-#  define vcl_list std::list
-# endif
+# include <vcl/iso/vcl_list.h>
 #endif
 
 #define VCL_LIST_INSTANTIATE \

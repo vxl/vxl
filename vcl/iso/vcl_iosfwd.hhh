@@ -1,0 +1,24 @@
+#ifndef vcl_iso_iosfwd_h_
+#define vcl_iso_iosfwd_h_
+/*
+  fsm@robots.ox.ac.uk
+*/
+
+#include <iosfwd>
+
+@istream
+@ostream
+@iostream
+@fstream
+@ifstream
+@ofstream
+
+// 
+using std::istream;
+using std::ostream;
+using std::iostream;
+using std::fstream;
+using std::ifstream;
+using std::ofstream;
+
+#endif

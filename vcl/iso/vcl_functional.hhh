@@ -1,0 +1,35 @@
+#ifndef vcl_iso_functional_h_
+#define vcl_iso_functional_h_
+/*
+  fsm@robots.ox.ac.uk
+*/
+
+#include <functional>
+
+@unary_function      
+@binary_function     
+@plus                
+@minus               
+@multiplies          
+@divides             
+@modulus             
+@negate              
+@equal_to            
+@not_equal_to        
+@greater             
+@less                
+@greater_equal       
+@less_equal          
+@logical_and         
+@logical_or          
+@logical_not         
+@identity            
+@select1st           
+@select2nd           
+@project1st          
+@project2nd          
+@constant_void_fun   
+@constant_unary_fun  
+@constant_binary_fun 
+
+#endif

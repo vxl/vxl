@@ -1,0 +1,16 @@
+#ifndef vcl_iso_cstring_h_
+#define vcl_iso_cstring_h_
+/*
+  fsm@robots.ox.ac.uk
+*/
+
+#include <cstring>
+
+@strcpy
+@strcat
+@strlen
+@memcpy
+@memset
+@memmove
+
+#endif

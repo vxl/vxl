@@ -21,64 +21,45 @@
 //
 // If you just want to forward declare the vcl complex types, use 
 // vcl_complex_fwd.h instead.
-//  *** make sure the two files are kept consistent ***
+#include <vcl/vcl_complex_fwd.h>
 
 // ---------- all emulation
 #if !VCL_USE_NATIVE_COMPLEX 
 # include <vcl/emulation/vcl_complex.h>
-#ifndef vcl_abs
-# define vcl_abs  abs
-#endif
-# define vcl_conj conj
-# define vcl_norm norm
+# define vcl_complex_STD /*std::*/::
 
-// ---------- native gcc
-#elif defined(VCL_GCC_WITH_GNU_LIBSTDCXX_V2)
+// ---------- gcc with old library
+#elif (defined(VCL_EGCS) || defined(VCL_GCC_295)) && !defined(GNU_LIBSTDCXX_V3)
 # include <complex>
-# define vcl_complex complex
-#ifndef vcl_abs
-# define vcl_abs     abs
-#endif
-# define vcl_conj    conj
-# define vcl_norm    norm
+# define vcl_complex_STD /*std::*/::
 
 // ---------- gcc 2.95.2 with libstdc++-v3
 #elif defined(VCL_GCC_295) && defined(GNU_LIBSTDCXX_V3)
 # include <vcl/emulation/vcl_complex.h>
-#ifndef vcl_abs
-# define vcl_abs     abs
-#endif
-# define vcl_conj    conj
-# define vcl_norm    norm
+# define vcl_complex_STD /*std::*/::
 
 // ---------- native WIN32
 #elif defined(VCL_WIN32)
 # include <vcl/win32/vcl_complex.h>
-#ifndef vcl_abs
-# define vcl_abs     std::abs
-#endif
-# define vcl_conj    std::conj
-# define vcl_norm    std::norm
+# define vcl_complex_STD std::
 
 // ---------- SunPro compiler
 #elif defined(VCL_SUNPRO_CC)
 # include <vcl/sunpro/vcl_complex.h>
-#ifndef vcl_abs
-# define vcl_abs     std::abs
-#endif
-# define vcl_conj    std::conj
-# define vcl_norm    std::norm
+# define vcl_complex_STD std::
 
-// ---------- all other compilers (eg ISO ones... :)
+// ---------- ISO
 #else
-# include <complex>
-# define vcl_complex std::complex
-#ifndef vcl_abs
-# define vcl_abs     std::abs
+# include <vcl/iso/vcl_complex.h>
 #endif
-# define vcl_conj    std::conj
-# define vcl_norm    std::norm
 
+#ifdef vcl_complex_STD
+# ifndef vcl_abs
+#  define vcl_abs  vcl_complex_STD abs
+# endif
+# define vcl_conj  vcl_complex_STD conj
+# define vcl_norm  vcl_complex_STD norm
+# define vcl_polar vcl_complex_STD polar
 #endif
 
 //--------------------------------------------------------------------------------

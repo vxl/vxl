@@ -1,0 +1,18 @@
+#ifndef vcl_iso_complex_h_
+#define vcl_iso_complex_h_
+/*
+  fsm@robots.ox.ac.uk
+*/
+
+#include <complex>
+
+@complex
+@real
+@imag
+@polar
+@abs
+@sqrt
+@conj
+@norm
+
+#endif

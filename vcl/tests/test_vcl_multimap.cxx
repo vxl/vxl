@@ -3,7 +3,7 @@
 
 typedef vcl_multimap<int, double, vcl_less<int> > mymap;
 
-ostream &operator<<(ostream &s, mymap::value_type const &x) 
+vcl_ostream &operator<<(vcl_ostream &s, mymap::value_type const &x) 
 {
   return s << '(' << x.first << ',' << x.second << ')';
 }

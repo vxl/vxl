@@ -1,0 +1,34 @@
+#ifndef vcl_iso_cmath_h_
+#define vcl_iso_cmath_h_
+/*
+  fsm@robots.ox.ac.uk
+*/
+
+#include <cmath>
+
+@abs
+@acos
+@asin
+@atan
+@atan2
+@ceil
+@cos
+@cosh
+@exp
+@fabs
+@floor
+@fmod
+@frexp
+@ldexp
+@log
+@log10
+@modf
+@pow
+@pow
+@sin
+@sinh
+@sqrt
+@tan
+@tanh
+
+#endif

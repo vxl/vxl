@@ -1,0 +1,20 @@
+#ifndef vcl_iso_memory_h_
+#define vcl_iso_memory_h_
+/*
+  fsm@robots.ox.ac.uk
+*/
+
+#include <memory>
+
+// [20.4] lib.memory
+
+@allocator
+@raw_storage_iterator
+@get_temporary_buffer
+@return_temporary_buffer
+@uninitialized_copy
+@uninitialized_fill
+@uninitialized_fill_n
+@auto_ptr
+
+#endif

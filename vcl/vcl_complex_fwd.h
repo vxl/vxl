@@ -19,12 +19,16 @@
 
 // ---------- emulation
 #if !VCL_USE_NATIVE_COMPLEX
-template <class T> class vcl_complex;
+# include <vcl/emulation/vcl_complex_fwd.h>
 
-// ---------- native gcc
-#elif defined(VCL_GCC_WITH_LIBSTDCXX_V2)
+// ---------- gcc with old library
+#elif defined(VCL_EGCS) || (defined(VCL_GCC_295) && !defined(GNU_LIBSTDCXX_V3))
 template <class T> class complex;
 # define vcl_complex complex
+
+// ---------- gcc with new library
+#elif defined(VCL_GCC_295) && defined(GNU_LIBSTDCXX_V3)
+# include <vcl/emulation/vcl_complex_fwd.h>
 
 // ---------- native WIN32
 #elif defined(VCL_WIN32)
@@ -34,10 +38,14 @@ template <class T> class complex;
 #elif defined(VCL_SUNPRO_CC)
 # include <vcl/sunpro/vcl_complex_fwd.h>
 
-// ---------- all other compilers
+// ---------- ISO
 #else
-// this will work, but may be costly :
-# include <vcl/vcl_complex.h>
+namespace std {
+  template <typename T> class complex;
+}
+# ifndef vcl_complex
+# define vcl_complex std::complex
+# endif
 #endif
 
 // by definition, this should work for all compilers :

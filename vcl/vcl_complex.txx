@@ -19,7 +19,7 @@
 #elif defined(VCL_WIN32)
 # include <vcl/win32/vcl_complex.txx>
 #else
-#  error "USE_NATIVE_COMPLEX with unknown compiler"
+# include <vcl/iso/vcl_complex.txx>
 #endif
 
 #endif

@@ -1,14 +1,11 @@
 #ifndef vcl_numeric_h_
 #define vcl_numeric_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 /*
   fsm@robots.ox.ac.uk
 */
 
 #include <vcl/vcl_compiler.h>
 
-#include <numeric>
+#include <vcl/iso/vcl_numeric.h>
 
 #endif

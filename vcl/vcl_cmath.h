@@ -38,8 +38,14 @@
 #include <vcl/vcl_compiler.h>
 
 // 1. include system header
-#if defined(VCL_GCC_27) || defined(VCL_SGI_CC_720) || defined(VCL_VC60)
+#if defined(VCL_GCC_27)
 # include <math.h>
+#elif defined(VCL_SGI_CC_720)
+# include <math.h>
+#elif defined(VCL_VC60)
+# include <math.h>
+#elif defined(VCL_EGCS) || (defined(VCL_GCC_295) && !defined(GNU_LIBSTDCXX_V3))
+# include <cmath> // got the right prototypes, but not in namespace std::
 #else // iso
 # include <vcl/iso/vcl_cmath.h>
 #endif

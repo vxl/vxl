@@ -7,9 +7,6 @@
 // this is to get the vcl_ios_* macros.
 #include <vcl/vcl_iostream.h>
 
-// include compiler header (many compilers, eg. gcc, don't have it).
-#include <sstream>
-using std :: ostringstream;
-using std :: istringstream;
+#include <vcl/iso/vcl_sstream.h>
 
 #endif

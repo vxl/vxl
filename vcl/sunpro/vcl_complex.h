@@ -1,7 +1,8 @@
 #ifndef vcl_sunpro_complex_h_
 #define vcl_sunpro_complex_h_
 
-# include <vcl/vcl_functional.h> // get !=(T,T) declared. so that !=(complex<T>..) specializes
+//# include <vcl/vcl_functional.h> // get !=(T,T) declared. so that !=(complex<T>..) specializes
+
 # include <complex>              // get compiler <complex>
 # define vcl_complex std::complex
 using std :: sqrt;

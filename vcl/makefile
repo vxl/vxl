@@ -2,6 +2,9 @@
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
+xall::
+	cd ./iso && $(MAKE)
+
 USES := vxl
 
 LIBRARY := vcl

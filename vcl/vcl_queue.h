@@ -12,8 +12,7 @@
 # define vcl_queue queue
 
 #else
-# include <queue>
-# define vcl_queue std::queue
+# include <vcl/iso/vcl_queue.h>
 #endif
 
 #define VCL_QUEUE_INSTANTIATE(T) extern "you must #include vcl/vcl_queue.txx"

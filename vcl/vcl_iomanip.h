@@ -7,22 +7,14 @@
 #include <vcl/vcl_compiler.h>
 // NB. we allow both 'blah' and 'vcl_blah' to mean 'std::blah'.
 
-#if defined(VCL_GCC_27) || defined(VCL_GCC_WITH_LIBSTDCXX_V2) || defined(VCL_SGI_CC_720)
+#undef vcl_setw
+
+#if (defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)) || defined(VCL_SGI_CC_720)
 # include <iomanip.h>
-# define vcl_iomanip_h_STD(name) /*std*/::name
-# define vcl_iomanip_h_USE(name) /*using std::name*/
+# define vcl_setw     ::setw
 
-#else // std-conforming compilers
-# include <iomanip>
-# define vcl_iomanip_h_STD(name) std::name
-# define vcl_iomanip_h_USE(name) using std::name
+#else
+# include <vcl/iso/vcl_iomanip.h>
 #endif
-
-//// ws
-//#define vcl_ws vcl_iomanip_h_STD(ws)
-//vcl_iomanip_h_USE(ws);
-// setw
-#define vcl_setw vcl_iomani_h_STD(setw)
-vcl_iomanip_h_USE(setw);
 
 #endif
