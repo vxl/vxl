@@ -1,4 +1,4 @@
-// This is oxl/vgui/vgui_blackbox.cxx
+// This is oxl/vgui/vgui_blackbox_tableau.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -6,7 +6,7 @@
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   13 Oct 99
-// \brief  See vgui_blackbox.h for a description of this file.
+// \brief  See vgui_blackbox_tableau.h for a description of this file.
 //
 // \verbatim
 //  Modifications:
@@ -14,7 +14,7 @@
 // \endverbatim
 
 
-#include "vgui_blackbox.h"
+#include "vgui_blackbox_tableau.h"
 
 #include <vcl_iostream.h>
 #include <vcl_cstdio.h>
@@ -25,23 +25,22 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_utils.h>
 
-vgui_blackbox::vgui_blackbox(vgui_tableau_sptr const& t) :
+vgui_blackbox_tableau::vgui_blackbox_tableau(vgui_tableau_sptr const& t) :
   vgui_wrapper_tableau(t),
-  recording(false),
-  playback(false)
+  recording(false)
 {
 }
 
-vgui_blackbox::~vgui_blackbox()
+vgui_blackbox_tableau::~vgui_blackbox_tableau()
 {
 }
 
-vcl_string vgui_blackbox::type_name() const { return "vgui_blackbox"; }
+vcl_string vgui_blackbox_tableau::type_name() const { return "vgui_blackbox_tableau"; }
 
 
 static void help() {
   vcl_cerr << vcl_endl;
-  vcl_cerr << "-- vgui_blackbox ---------\n";
+  vcl_cerr << "-- vgui_blackbox_tableau ---------\n";
   vcl_cerr << "|     keys               |\n";
   vcl_cerr << "| `,'  start/stop record |\n";
   vcl_cerr << "| `.'           playback |\n";
@@ -53,7 +52,7 @@ static void help() {
 }
 
 
-bool vgui_blackbox::handle(const vgui_event& event) {
+bool vgui_blackbox_tableau::handle(const vgui_event& event) {
   // manage the recording and playback
   if (event.type == vgui_KEY_PRESS) {
     bool do_save= false;
@@ -83,7 +82,7 @@ bool vgui_blackbox::handle(const vgui_event& event) {
           vgui_event *old_e = 0;
           int frame_number = 0;
           int t = 0;
-          vcl_ofstream story("/tmp/vgui_blackbox.story");
+          vcl_ofstream story("/tmp/vgui_blackbox_tableau.story");
 
           for (vcl_vector<vgui_event>::iterator e_iter=events.begin();
                e_iter != events.end(); ++e_iter) {
@@ -112,7 +111,7 @@ bool vgui_blackbox::handle(const vgui_event& event) {
             // Save frames
             {
               char buf[1024];
-              vcl_sprintf(buf, "/tmp/vgui_blackbox.%03d.ppm", frame_number);
+              vcl_sprintf(buf, "/tmp/vgui_blackbox_tableau.%03d.ppm", frame_number);
               if (do_save)  vgui_utils::dump_colour_buffer(buf);
               if (old_e) {
                 double d = (dt * 1e-3);
@@ -131,7 +130,7 @@ bool vgui_blackbox::handle(const vgui_event& event) {
 
     case '/':
       if (!recording) {
-        vcl_cerr << "vgui_blackbox EVENTS\n";
+        vcl_cerr << "vgui_blackbox_tableau EVENTS\n";
         for (vcl_vector<vgui_event>::iterator e_iter=events.begin();
              e_iter != events.end(); ++e_iter) {
           vcl_cerr << *e_iter << vcl_endl;
