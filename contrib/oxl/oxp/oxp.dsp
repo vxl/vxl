@@ -208,6 +208,26 @@ SOURCE=.\vsl_conic_as_params.cxx
 SOURCE=.\vsl_conic_points.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\oxp_bunch_of_files.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\oxp_mpeg_codec.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\oxp_vidl_moviefile.cxx
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\oxp_vidl_mpeg_codec.cxx
+
+# End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
