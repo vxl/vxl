@@ -103,11 +103,11 @@ vtol_edge_2d::vtol_edge_2d(vtol_zero_chain &new_zero_chain)
 // chain list to v2_. No assumptions are made as to the curve type. The
 // data member, curve_ is left to be NULL.
 
-vtol_edge_2d::vtol_edge_2d(zero_chain_list &newchains)
+vtol_edge_2d::vtol_edge_2d(zero_chain_list const& newchains)
 {
   // 1) Link the inferiors.
 
-  for (zero_chain_list::iterator i=newchains.begin(); i!=newchains.end(); ++i)
+  for (zero_chain_list::const_iterator i=newchains.begin(); i!=newchains.end(); ++i)
     link_inferior(*i);
 
   // 2) Set v1_ and v2_;

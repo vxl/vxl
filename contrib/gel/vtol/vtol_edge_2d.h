@@ -85,7 +85,7 @@ class vtol_edge_2d
   //---------------------------------------------------------------------------
   //: Constructor from an array of zero-chains.
   //---------------------------------------------------------------------------
-  explicit vtol_edge_2d(zero_chain_list &new_zero_chains);
+  explicit vtol_edge_2d(zero_chain_list const& new_zero_chains);
 
   explicit vtol_edge_2d(vsol_curve_2d &);
   explicit vtol_edge_2d(vtol_vertex_2d &,

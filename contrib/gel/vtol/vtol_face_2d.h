@@ -61,12 +61,12 @@ class vtol_face_2d
   //: Constructor
   //  REQUIRE: verts.size()>2
   //---------------------------------------------------------------------------
-  explicit vtol_face_2d(vertex_list &verts);
+  explicit vtol_face_2d(vertex_list const& verts);
 
   //---------------------------------------------------------------------------
   //: Constructor
   //---------------------------------------------------------------------------
-  explicit vtol_face_2d(one_chain_list &onechs);
+  explicit vtol_face_2d(one_chain_list const& onechs);
 
   //---------------------------------------------------------------------------
   //: Constructor

@@ -135,7 +135,7 @@ vtol_face *vtol_face_2d::shallow_copy_with_no_links(void) const
 // L is the length of the vertex list, verts, and i goes from 0 to L.
 // Require: verts.size()>2
 
-vtol_face_2d::vtol_face_2d(vertex_list &verts)
+vtol_face_2d::vtol_face_2d(vertex_list const& verts)
   :surface_(0)
 {
   // require
@@ -152,7 +152,7 @@ vtol_face_2d::vtol_face_2d(vertex_list &verts)
 
   //generate a list of edges for edge loop
   bool done=false;
-  vertex_list::iterator vi=verts.begin();
+  vertex_list::const_iterator vi=verts.begin();
   vtol_vertex_sptr v01=(*vi);
   edge_list elist;
   vcl_vector<signed char> directions;
@@ -189,7 +189,7 @@ vtol_face_2d::vtol_face_2d(vertex_list &verts)
 // boundary vtol_one_chain.  The remaining one_chains are holes boundaries
 // on the face.
 
-vtol_face_2d::vtol_face_2d(one_chain_list &onechs)
+vtol_face_2d::vtol_face_2d(one_chain_list const& onechs)
   :surface_(0)
 {
   // 1)  Add one chains to the inferiors list.
@@ -215,10 +215,8 @@ vtol_face_2d::vtol_face_2d(one_chain_list &onechs)
                                     new vsol_point_2d(xmax,ymax)));
 
   if (onech!=0)
-    {
-      for (unsigned int i = 1; i < onechs.size(); ++i)
-        onech->link_chain_inferior(onechs[i].ptr());
-    }
+    for (unsigned int i = 1; i < onechs.size(); ++i)
+      onech->link_chain_inferior(onechs[i]);
 }
 
 //: Constructor of a Planar face from a vtol_one_chain.

@@ -64,14 +64,14 @@ class vtol_one_chain
   //---------------------------------------------------------------------------
   //: Constructor from an array of edges
   //---------------------------------------------------------------------------
-  explicit vtol_one_chain(edge_list &,
+  explicit vtol_one_chain(edge_list const&,
                           bool new_is_cycle=false);
 
   //---------------------------------------------------------------------------
   //: Constructor from an array of edges and an array of directions
   //---------------------------------------------------------------------------
-  explicit vtol_one_chain(edge_list &,
-                          vcl_vector<signed char> &,
+  explicit vtol_one_chain(edge_list const&,
+                          vcl_vector<signed char> const&,
                           bool new_is_cycle=false);
 
   //---------------------------------------------------------------------------
@@ -133,7 +133,7 @@ class vtol_one_chain
   //---------------------------------------------------------------------------
   //: Is `chain_inf_sup' type valid for `this' ?
   //---------------------------------------------------------------------------
-  virtual bool valid_chain_type(vtol_chain const* chain_inf_sup) const
+  virtual bool valid_chain_type(vtol_chain_sptr chain_inf_sup) const
   { return chain_inf_sup->cast_to_one_chain() != 0; }
   bool valid_chain_type(vtol_one_chain_sptr ) const { return true; }
 

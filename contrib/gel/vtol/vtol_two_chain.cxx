@@ -45,10 +45,10 @@ void vtol_two_chain::unlink_chain_inferior(vtol_two_chain_sptr chain_inferior)
 //---------------------------------------------------------------------------
 //: Constructor
 //---------------------------------------------------------------------------
-vtol_two_chain::vtol_two_chain(face_list &faces,
+vtol_two_chain::vtol_two_chain(face_list const& faces,
                                bool new_is_cycle)
 {
-  for (face_list::iterator i=faces.begin(); i!=faces.end();++i)
+  for (face_list::const_iterator i=faces.begin(); i!=faces.end();++i)
     {
       link_inferior(*i);
       // all face normals point outward.
@@ -60,12 +60,12 @@ vtol_two_chain::vtol_two_chain(face_list &faces,
 //---------------------------------------------------------------------------
 //: Constructor
 //---------------------------------------------------------------------------
-vtol_two_chain::vtol_two_chain(face_list &faces,
-                               vcl_vector<signed char> &dirs,
+vtol_two_chain::vtol_two_chain(face_list const& faces,
+                               vcl_vector<signed char> const& dirs,
                                bool new_is_cycle)
 {
-  vcl_vector<signed char>::iterator di;
-  face_list::iterator fi;
+  vcl_vector<signed char>::const_iterator di;
+  face_list::const_iterator fi;
 
   for (di=dirs.begin(),fi=faces.begin();
       fi!=faces.end()&&di!=dirs.end();
@@ -380,16 +380,6 @@ void vtol_two_chain::remove_face(vtol_face &doomed_face)
       touch();
       unlink_inferior(&doomed_face);
     }
-}
-
-void vtol_two_chain::add_block(vtol_block &new_block)
-{
-  new_block.link_inferior(this);
-}
-
-void vtol_two_chain::remove_block(vtol_block &doomed_block)
-{
-  doomed_block.unlink_inferior(this);
 }
 
 //***************************************************************************

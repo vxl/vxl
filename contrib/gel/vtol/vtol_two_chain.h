@@ -61,13 +61,13 @@ class vtol_two_chain
   //---------------------------------------------------------------------------
   //: Constructor
   //---------------------------------------------------------------------------
-  explicit vtol_two_chain(face_list &, bool new_is_cycle=false);
+  explicit vtol_two_chain(face_list const&, bool new_is_cycle=false);
 
   //---------------------------------------------------------------------------
   //: Constructor
   //---------------------------------------------------------------------------
-  explicit vtol_two_chain(face_list &,
-                          vcl_vector<signed char> &,
+  explicit vtol_two_chain(face_list const&,
+                          vcl_vector<signed char> const&,
                           bool new_is_cycle=false);
 
   //---------------------------------------------------------------------------
@@ -113,8 +113,6 @@ class vtol_two_chain
 
   virtual void add_face(vtol_face &,signed char);
   virtual void remove_face(vtol_face &);
-  virtual void add_block(vtol_block &);
-  virtual void remove_block(vtol_block &);
 
   //***************************************************************************
   // Replaces dynamic_cast<T>
@@ -149,7 +147,7 @@ class vtol_two_chain
   //---------------------------------------------------------------------------
   //: Is `chain_inf_sup' type valid for `this' ?
   //---------------------------------------------------------------------------
-  virtual bool valid_chain_type(vtol_chain const* chain_inf_sup) const
+  virtual bool valid_chain_type(vtol_chain_sptr chain_inf_sup) const
   { return chain_inf_sup->cast_to_two_chain()!=0; }
   bool valid_chain_type(vtol_two_chain_sptr ) const { return true; }
 

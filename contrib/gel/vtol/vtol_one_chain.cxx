@@ -42,12 +42,12 @@ void vtol_one_chain::unlink_chain_inferior(vtol_one_chain_sptr chain_inferior)
 //---------------------------------------------------------------------------
 //: Constructor from an array of edges
 //---------------------------------------------------------------------------
-vtol_one_chain::vtol_one_chain(edge_list &edgs,
+vtol_one_chain::vtol_one_chain(edge_list const& edgs,
                                bool new_is_cycle)
 {
   set_cycle(new_is_cycle);
 
-  for (edge_list::iterator i=edgs.begin();i!=edgs.end();++i)
+  for (edge_list::const_iterator i=edgs.begin(); i!=edgs.end(); ++i)
     {
       link_inferior(*i);
       directions_.push_back((signed char)1);
@@ -60,16 +60,16 @@ vtol_one_chain::vtol_one_chain(edge_list &edgs,
 //---------------------------------------------------------------------------
 //: Constructor from an array of edges and an array of directions
 //---------------------------------------------------------------------------
-vtol_one_chain::vtol_one_chain(edge_list &edgs,
-                               vcl_vector<signed char> &dirs,
+vtol_one_chain::vtol_one_chain(edge_list const& edgs,
+                               vcl_vector<signed char> const& dirs,
                                bool new_is_cycle)
 {
   set_cycle(new_is_cycle);
 
-  for (edge_list::iterator i=edgs.begin();i!=edgs.end();++i)
+  for (edge_list::const_iterator i=edgs.begin(); i!=edgs.end(); ++i)
     link_inferior(*i);
 
-  for (vcl_vector<signed char>::iterator j=dirs.begin();j!=dirs.end();++j)
+  for (vcl_vector<signed char>::const_iterator j=dirs.begin();j!=dirs.end();++j)
     directions_.push_back(*j);
 }
 
