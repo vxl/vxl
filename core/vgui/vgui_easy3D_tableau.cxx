@@ -77,6 +77,9 @@ void
 vgui_easy3D_tableau::
 set_foreground(float r, float g, float b)
 {
+  // create a new style object so that already added objects don't
+  // suddenly change
+  style_ = vgui_style::new_style( style_ );
   style_->rgba[0] = r;
   style_->rgba[1] = g;
   style_->rgba[2] = b;
@@ -86,6 +89,9 @@ void
 vgui_easy3D_tableau::
 set_line_width(float w)
 {
+  // create a new style object so that already added objects don't
+  // suddenly change
+  style_ = vgui_style::new_style( style_ );
   style_->line_width = w;
 }
 
@@ -93,6 +99,9 @@ void
 vgui_easy3D_tableau::
 set_point_radius(float r)
 {
+  // create a new style object so that already added objects don't
+  // suddenly change
+  style_ = vgui_style::new_style( style_ );
   style_->point_size = r;
 }
 

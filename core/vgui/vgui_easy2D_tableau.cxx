@@ -124,6 +124,9 @@ void vgui_easy2D_tableau::set_child(vgui_tableau_sptr const& i)
 //: Set the colour of objects to the given red, green, blue values.
 void vgui_easy2D_tableau::set_foreground(float r, float g, float b)
 {
+  // create a new style object so that already added objects don't
+  // suddenly change
+  style_ = vgui_style::new_style( style_ );
   style_->rgba[0] = r;
   style_->rgba[1] = g;
   style_->rgba[2] = b;
@@ -132,12 +135,18 @@ void vgui_easy2D_tableau::set_foreground(float r, float g, float b)
 //: Set the width of lines to the given width.
 void vgui_easy2D_tableau::set_line_width(float w)
 {
+  // create a new style object so that already added objects don't
+  // suddenly change
+  style_ = vgui_style::new_style( style_ );
   style_->line_width = w;
 }
 
 //: Set the radius of points to the given radius.
 void vgui_easy2D_tableau::set_point_radius(float r)
 {
+  // create a new style object so that already added objects don't
+  // suddenly change
+  style_ = vgui_style::new_style( style_ );
   style_->point_size = r;
 }
   
