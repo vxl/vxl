@@ -9,6 +9,7 @@
 IF(NOT HAS_NETLIB)
 
   SET( HAS_NETLIB "YES" )
-  LINK_LIBRARIES( netlib )
+  LINK_LIBRARIES( netlib m )
+  # netlib needs --of course-- libm: for sqrt, exp, log, pow, sin, cos.
 
 ENDIF(NOT HAS_NETLIB)
