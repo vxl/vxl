@@ -33,7 +33,7 @@ template <class T>
 void vil_colour_space_RGB_to_HSV(T r, T g, T b, T *h, T *s, T *v);
 
 //: Transform from HSV to RGB colour space
-
+//
 // The input HSV values will lie in the ranges:
 //    H : [0, 360)   (an angle, in bloody degrees)
 //    S : [0, 1]
