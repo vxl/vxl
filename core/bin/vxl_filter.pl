@@ -386,6 +386,10 @@ sub process_headers {
       s/<Numerics\/MatrixInverse\.h>/<vnl\/algo\/vnl_matrix_inverse.h>/;
       s/<Numerics\/Eigensystem\.h>/<vnl\/algo\/vnl_real_eigensystem.h>/;
       s/<Numerics\/SparseMatrix\.h>/<vnl\/vnl_sparse_matrix.h>/;
+      s/<Numerics\/Transpose\.h>/<vnl\/vnl_transpose.h>/;
+      s/<Numerics\/Scatter3x3\.h>/<vnl\/algo\/vnl_scatter_3x3.h>/g;
+      s/<Numerics\/CrossProductMatrix\.h>/<vnl\/vnl_cross_product_matrix.h>/g;
+      s/<Numerics\/Identity3x3\.h>/<vnl\/vnl_identity_3x3.h>/g;
       s/<Numerics\/Int([0-9x]+)\.h>/<vnl\/vnl_int_$1.h>/;
       s/<Numerics\/Float([0-9x]+)\.h>/<vnl\/vnl_float_$1.h>/;
       s/<Numerics\/Double([0-9x]+)\.h>/<vnl\/vnl_double_$1.h>/;
@@ -403,7 +407,7 @@ sub process_headers {
       s/<(math|Numerics)\/MatrixFixed\.h>/<vnl\/vnl_matrix_fixed.h>/;
       s/<Numerics\/MatrixRef\.h>/<vnl\/vnl_matrix_ref.h>/;
       s/UnaryFunction\.h/vnl_unary_function.h>/;
-      s/Identity\.h/vnl_identity.h>/;
+      s/math\/Identity\.h/vnl\/vnl_identity.h>/;
 
       s/<Numerics\/LevenbergMarquardt\.h>/<vnl\/algo\/vnl_levenberg_marquardt.h>/;
       s/<Numerics\/SymmetricEigensystem\.h>/<vnl\/algo\/vnl_symmetric_eigensystem.h>/;
@@ -766,8 +770,10 @@ sub process_lines {
       s/\bIUE_c_vector\b/vnl_c_vector/g;
       s/\bIUE_vector\b/vnl_vector/g;
       s/\bCoolVector\b/vnl_vector/g;
+      s/\bDouble([234])\b/vnl_double_$1/g;
       s/\bIUE_matrix\b/vnl_matrix/g;
       s/\bCoolMatrix\b/vnl_matrix/g;
+      s/\bDouble([234]x[234])\b/vnl_double_$1/g;
       s/\bDiagMatrix\b/vnl_diag_matrix/g;
       s/IUE_math/vnl_math/g;
       s/\bMath\b/vnl_math/g;
