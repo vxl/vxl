@@ -1,9 +1,12 @@
 # testing code for brct library
-# brl/bmvl/brct/CMakeLists.txt
+# brl/bmvl/brct/tests/CMakeLists.txt
 
-INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR} )
+INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas)
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg)
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bmvl)
 
 # determines if vgui is built and opengl is available
 INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
@@ -25,3 +28,6 @@ ENDIF(HAS_VGUI)
 ADD_EXECUTABLE(brct_test_synthetic_data brct_test_synthetic_data.cxx)
 TARGET_LINK_LIBRARIES(brct_test_synthetic_data brct)
 ADD_TEST(brct_test_synthetic_data brct_test_synthetic_data)
+
+ADD_EXECUTABLE(brct_test_include test_include.cxx)
+TARGET_LINK_LIBRARIES(brct_test_include brct)
