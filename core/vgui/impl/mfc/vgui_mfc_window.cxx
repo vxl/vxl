@@ -26,11 +26,11 @@
 static bool first_window = true;
 
 void vgui_mfc_window::init_window(char const *title,
-                             vgui_menu const &menubar,
-                             bool has_menu,
-                             unsigned width, unsigned height,
-                             int posx,
-                             int posy)
+                                  vgui_menu const &menubar,
+                                  bool has_menu,
+                                  unsigned width, unsigned height,
+                                  int posx,
+                                  int posy)
 {
   //if (first_window) // First time use the main window
   {
@@ -84,7 +84,8 @@ vgui_mfc_window::vgui_mfc_window(unsigned width, unsigned height,
 }
 
 //: Destructor
-vgui_mfc_window::~vgui_mfc_window() {
+vgui_mfc_window::~vgui_mfc_window()
+{
   glFlush();
   delete mfcwin;
   mfcwin = 0;
@@ -133,7 +134,7 @@ void vgui_mfc_window::reshape(unsigned w, unsigned h)
   //Maybe there is a way to resize the active window and that will take
   //care of the other stuff.  JLM 10/3/2002
   int kludge_width_margin = 35, kludge_height_margin=100;
-  
+
   w_placement.rcNormalPosition.right = w_placement.rcNormalPosition.left+w+kludge_width_margin;
   w_placement.rcNormalPosition.bottom = w_placement.rcNormalPosition.top+h+kludge_height_margin;
   // Store the geometry information back into window
@@ -148,9 +149,9 @@ void vgui_mfc_window::reposition(int x,int y)
   // Obtain window geometry information
   main_wnd->GetWindowPlacement(&w_placement);
   int width = w_placement.rcNormalPosition.right -
-    w_placement.rcNormalPosition.left;
+               w_placement.rcNormalPosition.left;
   int height = w_placement.rcNormalPosition.bottom -
-    w_placement.rcNormalPosition.top;
+               w_placement.rcNormalPosition.top;
 
   // Modify upper left hand corner
   w_placement.rcNormalPosition.left=x;
@@ -162,7 +163,6 @@ void vgui_mfc_window::reposition(int x,int y)
 
   // Store the geometry information back into window
   main_wnd->SetWindowPlacement(&w_placement);
-
 }
 
 void vgui_mfc_window::set_title(const vcl_string &s)
