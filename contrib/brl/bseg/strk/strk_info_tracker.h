@@ -48,7 +48,9 @@ class strk_info_tracker : public strk_info_tracker_params
   void cull_samples();
   void track();
   void clear();
-
+  //Debug Methods
+  //: Evalutate the information at the initial region
+  void evaluate_info();
  protected:
   //protected methods
   //:random choice to refresh the intensity data of a sample
@@ -78,9 +80,6 @@ class strk_info_tracker : public strk_info_tracker_params
   vcl_vector<strk_tracking_face_2d_sptr> current_samples_;
   vcl_vector<strk_tracking_face_2d_sptr> hypothesized_samples_;
   vcl_vector<strk_tracking_face_2d_sptr> track_history_;
-  double model_intensity_entropy_;
-  double model_gradient_dir_entropy_;
-  double model_color_entropy_;
 };
 
 #endif // strk_info_tracker_h_

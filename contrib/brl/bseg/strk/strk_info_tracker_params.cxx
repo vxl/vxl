@@ -22,7 +22,7 @@ strk_info_tracker_params(const strk_info_tracker_params& tp)
              tp.sigma_,
              tp.gradient_info_,
              tp.color_info_,
-             tp.frac_time_samples_,
+             tp.min_gradient_,
              tp.verbose_,
              tp.debug_
              );
@@ -36,7 +36,7 @@ strk_info_tracker_params(const int n_samples,
                          const float sigma,
                          const bool gradient_info,
                          const bool color_info,
-                         const float frac_time_samples,
+                         const float min_gradient,
                          const bool verbose,
                          const bool debug)
 {
@@ -47,7 +47,7 @@ strk_info_tracker_params(const int n_samples,
              sigma,
              gradient_info,
              color_info,
-             frac_time_samples,
+             min_gradient,
              verbose,
              debug);
 }
@@ -59,7 +59,7 @@ void strk_info_tracker_params::InitParams(int n_samples,
                                           float sigma,
                                           bool gradient_info,
                                           bool color_info,
-                                          float frac_time_samples,
+                                          float min_gradient,
                                           bool verbose,
                                           bool debug)
 {
@@ -70,7 +70,7 @@ void strk_info_tracker_params::InitParams(int n_samples,
   sigma_ = sigma;
   gradient_info_ = gradient_info;
   color_info_ = color_info;
-  frac_time_samples_ = frac_time_samples;
+  min_gradient_ = min_gradient;
   verbose_ = verbose;
   debug_ = debug;
 }
@@ -102,7 +102,7 @@ vcl_ostream& operator << (vcl_ostream& os, const strk_info_tracker_params& tp)
   os << "sigma " << tp.sigma_ << vcl_endl;
   os << "gradient_info " << tp.gradient_info_ << vcl_endl;
   os << "color_info " << tp.color_info_ << vcl_endl;
-  os << "frac_time_samples " << tp.frac_time_samples_ << vcl_endl;
+  os << "min_gradient " << tp.min_gradient_ << vcl_endl;
   os << "verbose " << tp.verbose_ << vcl_endl;
   os << "debug " << tp.debug_ << vcl_endl;
   os << "---]" << vcl_endl;

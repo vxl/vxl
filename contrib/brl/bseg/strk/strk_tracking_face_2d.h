@@ -111,12 +111,14 @@ class strk_tracking_face_2d : public vbl_ref_count
                         vil1_memory_image_of<float> const& Ix,
                         vil1_memory_image_of<float> const& Iy,
                         vil1_memory_image_of<float> const& hue,
-                        vil1_memory_image_of<float> const& sat);
+                        vil1_memory_image_of<float> const& sat,
+                        const float min_gradient);
 
   strk_tracking_face_2d(vtol_intensity_face_sptr const& intf);
   strk_tracking_face_2d(strk_tracking_face_2d_sptr const& tf);
   ~strk_tracking_face_2d();
   //:accessors
+  void set_min_gradient(const float min_gradient){min_gradient_=min_gradient;}
   vtol_intensity_face_sptr face() const { return intf_; }
   bool gradient_needed() const { return gradient_info_; }
   bool color_needed() const { return color_info_; }
@@ -150,7 +152,7 @@ class strk_tracking_face_2d : public vbl_ref_count
   float model_color_entropy(){return model_color_entropy_;}
   float color_entropy(){return color_entropy_;}
   float color_joint_entropy(){return color_joint_entropy_;}
-
+  
   //: utilities
   bool compute_mutual_information(vil1_memory_image_of<float> const& image,
                                   vil1_memory_image_of<float> const& Ix,
@@ -206,6 +208,7 @@ class strk_tracking_face_2d : public vbl_ref_count
                                      vil1_memory_image_of<float> const& sat);
 
   // members
+  float min_gradient_;
   vtol_intensity_face_sptr intf_;
   bool gradient_info_;
   bool color_info_;

@@ -560,7 +560,7 @@ double strk_epipolar_grouper::ds(const double s)
 double strk_epipolar_grouper::scan_interval(const double a, const double sl,
                                             const double s)
 {
-  if (!image_)
+   if (!image_)
     return 0;
   int n_samples = 0;
   double sum = 0;

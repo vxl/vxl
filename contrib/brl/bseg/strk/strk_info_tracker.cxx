@@ -29,20 +29,11 @@ static bool info_compare(strk_tracking_face_2d_sptr const f1,
 strk_info_tracker::strk_info_tracker(strk_info_tracker_params& tp)
   : strk_info_tracker_params(tp)
 {
-//  model_intensity_hist_=0;
-  model_intensity_entropy_=0;
- // model_gradient_dir_hist_=0;
-  model_gradient_dir_entropy_=0;
-  model_color_entropy_=0;
 }
 
 //:Default Destructor
 strk_info_tracker::~strk_info_tracker()
 {
-//  if (model_intensity_hist_)
-//    delete model_intensity_hist_;
- // if (model_gradient_dir_hist_)
- //   delete model_gradient_dir_hist_;
 }
 
 //-------------------------------------------------------------------------
@@ -132,7 +123,8 @@ void strk_info_tracker::init()
     return;
   strk_tracking_face_2d_sptr tf;
   tf = new strk_tracking_face_2d(initial_model_, image_0_,
-                                 Ix_0_, Iy_0_, hue_0_, sat_0_);
+                                 Ix_0_, Iy_0_, hue_0_, sat_0_, 
+                                 min_gradient_);
   current_samples_.push_back(tf);
  }
 
@@ -150,6 +142,7 @@ generate_randomly_positioned_sample(strk_tracking_face_2d_sptr const& seed)
   float s = (2.f*scale_range_)*float(vcl_rand()/(RAND_MAX+1.0)) - scale_range_;
   float scale = 1+s;
   strk_tracking_face_2d* tf = new strk_tracking_face_2d(seed);
+  tf->set_min_gradient(min_gradient_);
   tf->transform(tx, ty, theta, scale);
   return tf;
 }
@@ -179,7 +172,8 @@ void strk_info_tracker::generate_samples()
 bool strk_info_tracker::refresh_sample()
 {
   double t = vcl_rand()/(RAND_MAX+1.0);
-  return t<=frac_time_samples_;
+//  return t<=frac_time_samples_;
+  return 0;
 }
 
 strk_tracking_face_2d_sptr strk_info_tracker::
@@ -190,7 +184,8 @@ clone_and_refresh_data(strk_tracking_face_2d_sptr const& sample)
   vtol_face_2d_sptr f =
     sample->face()->cast_to_face_2d();
   strk_tracking_face_2d_sptr tf;
-  tf = new strk_tracking_face_2d(f, image_i_, Ix_i_, Iy_i_, hue_i_, sat_i_);
+  tf = new strk_tracking_face_2d(f, image_i_, Ix_i_, Iy_i_, hue_i_, sat_i_,
+                                 min_gradient_);
   return tf;
 }
 
@@ -210,7 +205,7 @@ void strk_info_tracker::cull_samples()
              << " = IntInfo(" <<  tf->int_mutual_info()
              << ") + GradInfo(" <<  tf->grad_mutual_info()
              << ") + ColorInfo(" <<  tf->color_mutual_info()
-             << ")\n";
+             << ")\n" << vcl_flush;
   
   if(debug_)
     vcl_cout << "model_intensity_entropy = " << tf->model_intensity_entropy()
@@ -230,7 +225,7 @@ void strk_info_tracker::cull_samples()
              << "color_entropy = " << tf->color_entropy()
              << "\n"
              << "color_joint_entropy = " << tf->color_joint_entropy()
-             << "\n\n\n";
+             << "\n\n\n" << vcl_flush;
   
   hypothesized_samples_.clear();
   //save track history
@@ -366,4 +361,46 @@ void strk_info_tracker::clear()
 {
   current_samples_.clear();
   hypothesized_samples_.clear();
+}
+
+//--------------------------------------------------------------------------
+//: Evaluate information between I_0 and I_i at the initial region 
+//  Useful for debugging purposes.
+void strk_info_tracker::evaluate_info()
+{
+  if (!initial_model_)
+    return;
+  strk_tracking_face_2d_sptr tf =
+    new strk_tracking_face_2d(initial_model_, image_0_,
+                              Ix_0_, Iy_0_, hue_0_, sat_0_,
+                              min_gradient_);
+  if(!tf->compute_mutual_information(image_i_, Ix_i_, Iy_i_, hue_i_, sat_i_))
+    return;
+  
+  if (verbose_)
+    vcl_cout << "Total Inf = " << tf->total_info()
+             << " = IntInfo(" <<  tf->int_mutual_info()
+             << ") + GradInfo(" <<  tf->grad_mutual_info()
+             << ") + ColorInfo(" <<  tf->color_mutual_info()
+             << ")\n" << vcl_flush;
+  
+  if(debug_)
+    vcl_cout << "model_intensity_entropy = " << tf->model_intensity_entropy()
+             << "\n"
+             << "intensity_entropy = " << tf->intensity_entropy()
+             << "\n"
+             << "intensity_joint_entropy = " <<tf->intensity_joint_entropy()
+             << "\n\n"
+             << "model_gradient_entropy = " << tf->model_gradient_entropy()
+             << "\n"
+             << "gradient_entropy = " << tf->gradient_entropy()
+             << "\n"
+             << "gradient_joint_entropy = " << tf->gradient_joint_entropy()
+             << "\n\n"
+             << "model_color_entropy = " << tf->model_color_entropy()
+             << "\n"
+             << "color_entropy = " << tf->color_entropy()
+             << "\n"
+             << "color_joint_entropy = " << tf->color_joint_entropy()
+             << "\n\n\n"<< vcl_flush;
 }

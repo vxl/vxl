@@ -297,8 +297,10 @@ strk_tracking_face_2d(vtol_face_2d_sptr const& face,
                       vil1_memory_image_of<float> const& Ix,
                       vil1_memory_image_of<float> const& Iy,
                       vil1_memory_image_of<float> const& hue,
-                      vil1_memory_image_of<float> const& sat)
+                      vil1_memory_image_of<float> const& sat,
+                      const float min_gradient)
 {
+  min_gradient_ = min_gradient;
   intf_ = 0;
   Ix_ = 0;
   Iy_ = 0;
@@ -405,6 +407,7 @@ strk_tracking_face_2d::strk_tracking_face_2d(strk_tracking_face_2d_sptr const& t
   intensity_joint_entropy_=tf->intensity_joint_entropy_;
   gradient_joint_entropy_=tf->gradient_joint_entropy_;
   color_joint_entropy_=tf->color_joint_entropy_;
+  min_gradient_ = tf->min_gradient_;
 }
 
 strk_tracking_face_2d::~strk_tracking_face_2d()
@@ -523,7 +526,8 @@ init_gradient_info(vil1_memory_image_of<float> const& Ix,
       Ix_[i] = Ixi;  Iy_[i] = Iyi;
       float ang = float(deg_rad*vcl_atan2(Iyi, Ixi))+180.f;
       float mag = vcl_abs(Ixi)+vcl_abs(Iyi);
-      model_gradient_dir_hist.upcount(ang, mag);
+      if(mag>min_gradient_)
+        model_gradient_dir_hist.upcount(ang, mag);
     }
   //compute the gradient direction entropy
   float ent = 0;
@@ -708,8 +712,11 @@ compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
              << "Ixi, Iyi " << Ixi << ' ' << Iyi << '\n'
              << "angi, magi " << angi << ' ' << magi << '\n';
 #endif
-    image_dir_hist.upcount(angi, magi);
-    joint_dir_hist.upcount(ang0,mag0,angi,magi);
+    if(mag0>min_gradient_&&magi>min_gradient_)
+      {
+        image_dir_hist.upcount(angi, magi);
+        joint_dir_hist.upcount(ang0,mag0,angi,magi);
+      }
   }
   float npixf = (float)npix, nf = (float)n;
   float frac = nf/npixf;
