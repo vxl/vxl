@@ -205,7 +205,7 @@ inline void vil_convolve_1d(const srcT* src0, unsigned nx, vcl_ptrdiff_t s_step,
                             vil_convolve_boundary_option start_option,
                             vil_convolve_boundary_option end_option)
 {
-  assert(k_hi - k_lo +1 <= nx);
+  assert(k_hi - k_lo +1 <= (int) nx);
 
   // Deal with start (fill elements 0..1+k_hi of dest)
   vil_convolve_edge_1d(src0,nx,s_step,dest0,d_step,kernel,k_lo,k_hi,1,ac,start_option);
@@ -248,7 +248,7 @@ inline void vil_convolve_1d(const vil_image_view<srcT>& src_im,
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
-  assert(k_hi - k_lo +1 <= ni);
+  assert(k_hi - k_lo +1 <= (int) ni);
   vcl_ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep();
 
   dest_im.set_size(ni,nj,src_im.nplanes());
