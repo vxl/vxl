@@ -14,22 +14,13 @@
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_gl.h>
 
-namespace {
-
 // helper routines and classes
-
 // converts a typename to a string for pretty printing
-template <class T>
-struct to_string {
-  static const char* name;
-};
-
-template <class T>
-const char* to_string<T>::name = "<(no name)>";
 // To be specialised for each templated type; see instantiation macro
-
-} // end anonymous namespace
-
+template <class T> const char* vgui_vil_image_tableau_to_string(T*)
+{
+  return "<(no name)>";
+}
 
 //-----------------------------------------------------------------------------
 template <class T>
@@ -72,7 +63,9 @@ vcl_string
 vgui_vil_image_tableau<T>::pretty_name() const
 {
   vcl_ostringstream s;
-  s << type_name() << '<' << to_string<T>::name << ">[" << *renderer_->get_image_view() << ']';
+  s << type_name() << '<'
+    << vgui_vil_image_tableau_to_string(static_cast<T*>(0))
+    << ">[" << *renderer_->get_image_view() << ']';
   return s.str();
 }
 
@@ -163,7 +156,8 @@ vgui_vil_image_tableau<T>::handle( vgui_event const &e )
 
 #undef VGUI_VIL_IMAGE_TABLEAU_INSTANTIATE
 #define VGUI_VIL_IMAGE_TABLEAU_INSTANTIATE(T) \
-namespace { const char* to_string<T >::name = "<" #T ">"; } \
+VCL_DEFINE_SPECIALIZATION const char* vgui_vil_image_tableau_to_string<T >(T*) \
+{ return "<" #T ">"; } \
 template class vgui_vil_image_tableau<T >
 
 #endif // vgui_vil_image_tableau_txx_
