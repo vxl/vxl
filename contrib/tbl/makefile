@@ -1,10 +1,9 @@
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
+# This is the tbl package, containing the image processing library
+# as designed by Terry Boult, but converted to be used with vxl.
 
 # image processing
 SUBDIRS += vipl
 
-######################################
-include ${IUEROOT}/config/top-rules.mk
-######################################
+################################
+include ${IUEROOT}/config/top.mk
+################################
