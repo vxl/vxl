@@ -1,5 +1,5 @@
 // This file is supposed to define any template instances needed
-// to give a sensible complex type for float and double.
+// to give a sensible complex type for float, double and long double.
 //
 // E.g. ensure that "operator/(complex<float>, float)" exists
 //
@@ -42,10 +42,11 @@ vcl_complex<T> vcl_complex_instances_ticker(T *)
 }
 template vcl_complex<float > vcl_complex_instances_ticker(float  *);
 template vcl_complex<double> vcl_complex_instances_ticker(double *);
+template vcl_complex<long double> vcl_complex_instances_ticker(long double *);
 
 // macro to implement an operator>>, for compilers that need it.
 # define implement_rsh(T) \
-istream &operator>>(istream &is, vcl_complex<T > &z) { \
+vcl_istream &operator>>(vcl_istream &is, vcl_complex<T > &z) { \
   T r, i; \
   is >> r >> i; \
   z = vcl_complex<T >(r, i); \
@@ -59,6 +60,7 @@ istream &operator>>(istream &is, vcl_complex<T > &z) { \
 // ** make sure gcc 2.7 sees this **
 VCL_COMPLEX_INSTANTIATE(float);
 VCL_COMPLEX_INSTANTIATE(double);
+VCL_COMPLEX_INSTANTIATE(long double);
 
 // ---------- egcs
 # elif defined(VCL_EGCS)
@@ -72,6 +74,7 @@ implement_rsh(FLOAT);
 
 do_inlines(float); 
 do_inlines(double);
+do_inlines(long double);
 # endif
 
 // ---------- gcc 2.95
@@ -113,6 +116,7 @@ implement_rsh(FLOAT);
 
 do_inlines(float);
 do_inlines(double);
+do_inlines(long double);
 # endif
 
 // ---------- sunpro
@@ -122,6 +126,7 @@ template std::complex<FLOAT > std::conj<FLOAT >(std::complex<FLOAT > const &);
 
 do_inlines(float);
 do_inlines(double);
+do_inlines(long double);
 
 // ---------- ISO
 #else
