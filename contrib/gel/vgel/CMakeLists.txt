@@ -5,7 +5,6 @@ ADD_LIBRARY(vgel vgel_sources)
 SOURCE_FILES(vgel_sources
   vgel_kl.cxx
   vgel_kl_params.cxx
-# vgel_multi_view_data.txx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vgel_sources)
