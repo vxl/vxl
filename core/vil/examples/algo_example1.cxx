@@ -6,7 +6,6 @@
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil2/vil2_image_view.h>
-#include <vil2/vil2_image_view_functions.h>
 #include <vil2/vil2_print.h>
 #include <vil2/algo/vil2_algo_sobel_3x3.h>
 

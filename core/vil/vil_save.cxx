@@ -15,7 +15,7 @@
 #include <vil2/vil2_new.h>
 #include <vil2/vil2_pixel_format.h>
 #include <vil2/vil2_image_resource.h>
-#include <vil2/vil2_image_view_functions.h>
+#include <vil2/vil2_image_view.h>
 
 
 //: Send vil2_image to disk.

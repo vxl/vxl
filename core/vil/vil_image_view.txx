@@ -18,7 +18,6 @@
 #include <vcl_ostream.h>
 #include <vil2/vil2_smart_ptr.h>
 #include <vil2/vil2_pixel_format.h>
-#include <vil2/vil2_image_view_functions.h>
 
 //=======================================================================
 

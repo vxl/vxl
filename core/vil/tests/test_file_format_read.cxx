@@ -10,7 +10,6 @@
 
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_image_resource.h>
-#include <vil2/vil2_image_view_functions.h>
 #include <vil2/vil2_load.h>
 #include <vil/vil_rgb.h>
 

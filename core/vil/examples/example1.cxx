@@ -6,7 +6,6 @@
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil2/vil2_image_view.h>
-#include <vil2/vil2_image_view_functions.h>
 #include <vil2/vil2_print.h>
 
 int main(int argc, char** argv)

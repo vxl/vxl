@@ -23,12 +23,12 @@ SET( vil2_sources
   vil2_plane.cxx vil2_plane.h
   vil2_math.h
   vil2_view_as.h
+  vil2_fill.h
   vil2_load.cxx  vil2_load.h
   vil2_save.cxx  vil2_save.h
   vil2_copy.txx  vil2_copy.h
   vil2_new.cxx   vil2_new.h
   vil2_print.cxx vil2_print.h
-  vil2_image_view_functions.cxx vil2_image_view_functions.h vil2_image_view_functions.txx
 
   # Sampling Operations
   vil2_bilin_interp.h

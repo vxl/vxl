@@ -3,7 +3,6 @@
 #include <vxl_config.h>
 #include <testlib/testlib_test.h>
 #include <vil2/vil2_image_view.h>
-#include <vil2/vil2_image_view_functions.h>
 #include <vil2/vil2_print.h>
 #include <vil2/algo/vil2_algo_gauss_reduce.h>
 
