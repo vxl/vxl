@@ -55,7 +55,7 @@ template <class T, unsigned int n>
 void
 vnl_vector_fixed<T,n>::flip()
 {
-  for ( size_type i=0; 2*i+1 < n; ++i )
+  for ( unsigned int i=0; 2*i+1 < n; ++i )
     vcl_swap( data_[i], data_[n-1-i] );
 }
 
