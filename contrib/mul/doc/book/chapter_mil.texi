@@ -182,3 +182,19 @@ with vsl_b_read(), this relationship will be retained.  That's due to
 the awesome power of the serialisation in the binary IO code, and the
 use of mbl_smart_ptr (thanks to Ian Scott for that).
 
+@subsection Sampling along profiles
+
+To sample along a profile (points p+i.u, where i=[0..n-1]) use
+
+@smallexample
+  mil_image_2d_of<vil_byte> image(100,100);
+	vnl_vector<double> vec;
+	vgl_point_2d<double> p;
+	vgl_vector_2d<double> u;
+
+  mil_sample_profile_2d(vec,p,u,n,image);
+@end smallexample
+
+Here p and u are in world co-ordinates.  The image.world2im()
+deals with the transformation into the image frame.
+
