@@ -46,7 +46,7 @@ void test_file_iterator_unix()
     ++f;
     TEST("test_file_iterator 5", found[f()], 0); ++found[f()];
     ++f;
-    TEST("F ran out 1", (!f)?true:false, true);
+    TEST("F ran out 1", !f, true);
 
     TEST("test_file_iterator once 1", found["/tmp/vxltest/a/."], 1);
     TEST("test_file_iterator once 2", found["/tmp/vxltest/a/.."], 1);
@@ -65,7 +65,7 @@ void test_file_iterator_unix()
     ++f;
     TEST("test_file_iterator 7", found[f()], 0); ++found[f()];
     ++f;
-    TEST("F ran out 2", (!f)?true:false, true);
+    TEST("F ran out 2", !f, true);
 
     TEST("test_file_iterator once 6", found["/tmp/vxltest/a/123.dat"], 1);
     TEST("test_file_iterator once 7", found["/tmp/vxltest/a/123.txt"], 1);
@@ -81,7 +81,7 @@ void test_file_iterator_unix()
     ++f;
     TEST("test_file_iterator 9", found[f()], 0); ++found[f()];
     ++f;
-    TEST("F ran out 3", (!f)?true:false, true);
+    TEST("F ran out 3", !f, true);
 
     TEST("test_file_iterator once 8", found["/tmp/vxltest/a/123.dat"], 1);
     TEST("test_file_iterator once 9", found["/tmp/vxltest/a/13.dat"], 1);
@@ -97,7 +97,7 @@ void test_file_iterator_unix()
     ++f;
     TEST("test_file_iterator 11", found[f()], 0); ++found[f()];
     ++f;
-    TEST("F ran out 4", (!f)?true:false, true);
+    TEST("F ran out 4", !f, true);
 
     TEST("test_file_iterator once 10", found["/tmp/vxltest/a/123.dat"], 1);
     TEST("test_file_iterator once 11", found["/tmp/vxltest/a/123.txt"], 1);
@@ -114,7 +114,7 @@ void test_file_iterator_unix()
     ++f;
     TEST("test_file_iterator 13", found[f()], 0); ++found[f()];
     ++f;
-    TEST("F ran out 5", (!f)?true:false, true);
+    TEST("F ran out 5", !f, true);
 
     TEST("test_file_iterator once 12", found["/tmp/vxltest/a/123.dat"], 1);
     TEST("test_file_iterator once 13", found["/tmp/vxltest/a/13.dat"], 1);
@@ -128,7 +128,7 @@ void test_file_iterator_unix()
     ++f;
     TEST("test_file_iterator 15", found[f()], 0); ++found[f()];
     ++f;
-    TEST("F ran out 6", (!f)?true:false, true);
+    TEST("F ran out 6", !f, true);
 
     TEST("test_file_iterator once 14", found["/tmp/vxltest/a/123.dat"], 1);
     TEST("test_file_iterator once 15", found["/tmp/vxltest/b/123.dat"], 1);
@@ -148,7 +148,7 @@ void test_file_iterator_unix()
     ++f;
     TEST("test_file_iterator 17", found[f()], 0); ++found[f()];
     ++f;
-    TEST("F ran out 7", (!f)?true:false, true);
+    TEST("F ran out 7", !f, true);
 
     TEST("test_file_iterator once 16", found["/tmp/vxltest/b/."], 1);
     TEST("test_file_iterator once 17", found["/tmp/vxltest/b/.."], 1);
@@ -168,7 +168,7 @@ void test_file_iterator_unix()
     ++f;
     TEST("test_file_iterator 19", found[f()], 0); ++found[f()];
     ++f;
-    TEST("F ran out 8", (!f)?true:false, true);
+    TEST("F ran out 8", !f, true);
 
     TEST("test_file_iterator 18", found["/tmp/vxltest/."], 1);
     TEST("test_file_iterator 19", found["/tmp/vxltest/.."], 1);
@@ -208,7 +208,7 @@ void test_file_iterator_dos()
     ++f;
     TEST("test_file_iterator 5", f(), vcl_string(tempdir+"\\a\\13.dat"));
     ++f;
-    TEST("F ran out 1", (!f)?true:false, true);
+    TEST("F ran out 1", !f, true);
   }
 
   // 1. Check file.*
@@ -220,7 +220,7 @@ void test_file_iterator_dos()
     ++f;
     TEST("test_file_iterator 7", f(), vcl_string(tempdir+"\\a\\123.txt"));
     ++f;
-    TEST("F ran out 2", (!f)?true:false, true);
+    TEST("F ran out 2", !f, true);
   }
 
   // 2. Check *.ext
@@ -232,7 +232,7 @@ void test_file_iterator_dos()
     ++f;
     TEST("test_file_iterator 9", f(), vcl_string(tempdir+"\\a\\13.dat"));
     ++f;
-    TEST("F ran out 3", (!f)?true:false, true);
+    TEST("F ran out 3", !f, true);
   }
 
   // 3. Check ?.*
@@ -244,7 +244,7 @@ void test_file_iterator_dos()
     ++f;
     TEST("test_file_iterator 11", f(), vcl_string(tempdir+"\\a\\123.txt"));
     ++f;
-    TEST("F ran out 4", (!f)?true:false, true);
+    TEST("F ran out 4", !f, true);
   }
 
   // 4. Check 1[23]*.dat
@@ -256,7 +256,7 @@ void test_file_iterator_dos()
     ++f;
     TEST("test_file_iterator 13", f(), vcl_string(tempdir+"\\a\\13.dat"));
     ++f;
-    TEST("F ran out 5", (!f)?true:false, true);
+    TEST("F ran out 5", !f, true);
   }
 
 
@@ -268,7 +268,7 @@ void test_file_iterator_dos()
     ++f;
     TEST("test_file_iterator 15", f(), (tempdir+"\\b\\123.dat").c_str() );
     ++f;
-    TEST("F ran out 6", (!f)?true:false, true);
+    TEST("F ran out 6", !f, true);
   }
 #endif
 
@@ -283,7 +283,7 @@ void test_file_iterator_dos()
     ++f;
     TEST("test_file_iterator 17", f(), vcl_string(tempdir+"\\b\\.."));
     ++f;
-    TEST("F ran out 7", (!f)?true:false, true);
+    TEST("F ran out 7", !f, true);
   }
   vpl_rmdir( (tempdir+"\\b").c_str() );
 
@@ -298,7 +298,7 @@ void test_file_iterator_dos()
     ++f;
     TEST("test_file_iterator 19", f(), vcl_string(tempdir+"\\.."));
     ++f;
-    TEST("F ran out 8", (!f)?true:false, true);
+    TEST("F ran out 8", !f, true);
   }
 
   vpl_rmdir( tempdir.c_str() );
