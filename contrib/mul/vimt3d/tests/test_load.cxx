@@ -10,22 +10,24 @@ static void test_load(int argc, char* argv[])
            << " Testing vimt3d_load\n"
            << "*********************\n";
 
-  vcl_string imagename = argc<2 ? "." : argv[1];
+  vcl_string imagename = argc<2 ? "../../vil3d/tests/file_read_data" : argv[1];
   imagename = imagename+"/ff_rgb8bit_ascii.1.ppm;"+
               imagename+"/ff_rgb8bit_ascii.2.ppm";
   vil3d_image_resource_sptr im = vil3d_load_image_resource(imagename.c_str());
 
   TEST("Load slice image", !im, false);
+  if (im) {
+    vimt3d_transform_3d t1 = vimt3d_load_transform(im);
+    TEST("No header information", t1.is_identity(), true);
+  }
 
-  vimt3d_transform_3d t1 = vimt3d_load_transform(im);
-  TEST("No header information", t1.is_identity(), true);
-
-  imagename = argv[1];
+  imagename = argc<2 ? "../../vil3d/tests/file_read_data" : argv[1];
   imagename = imagename+"/ff_grey_cross.gipl";
   im = vil3d_load_image_resource(imagename.c_str());
 
   TEST("Load gipl image", !im, false);
 
+  if (!im) return;
   vimt3d_transform_3d t2 = vimt3d_load_transform(im);
   vcl_cout << "\n gipl transform: " << t2 << vcl_endl;
 
