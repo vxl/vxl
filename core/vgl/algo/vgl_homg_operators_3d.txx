@@ -196,7 +196,7 @@ typename vgl_homg_operators_3d<Type>::vgl_homg_line_3d
 vgl_homg_operators_3d<Type>::planes_to_line(const vgl_homg_plane_3d<Type>& plane1,
                                             const vgl_homg_plane_3d<Type>& plane2)
 {
-  // TODO need equivilent of get_vector
+  // TODO need equivalent of get_vector
   vnl_matrix<Type> M(2,4);
   M.set_row(0, get_vector(plane1));
   M.set_row(1, get_vector(plane2));
