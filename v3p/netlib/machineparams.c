@@ -35,13 +35,8 @@ integer *i;
 
   double dmach[3] = {
     2.2204460492503130808472633361816406250000e-16,
-#ifdef WIN32
     1.7976931348623158e+308,
     2.2250738585072014e-308
-#else
-    1.797693134862316e+308, /* out of range ?!? COULD SOMEBODY CHECK THIS ? */
-    2.225073858507202e-308
-#endif
   };
   
   return dmach[*i - 1];
