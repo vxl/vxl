@@ -35,8 +35,12 @@ vsl_binary_loader<BaseClass>::~vsl_binary_loader()
 template<class BaseClass>
 void vsl_binary_loader<BaseClass>::load_object( vsl_b_istream& is, BaseClass*& b)
 {
-  // Delete old object pointed to by b
-  delete b;
+
+  // HELP ON RUN-TIME ERROR HERE
+  // If you get a run-time error here it is most-likely because you called
+  // vsl_b_read with an uninitialised null base_class pointer. The base class
+  // pointer should either point to a real object, or be set to 0 - IMS.
+  delete b;   // Delete old object pointed to by b
 
   vcl_string name;
   vsl_b_read(is,name);
