@@ -94,7 +94,7 @@ bool operator==(const vnl_sym_matrix<T> &a, const vnl_sym_matrix<T> &b)
 {
   if (a.rows() != b.rows()) return false;
   const T* a_data = a.data_block();
-  const T* b_data = a.data_block();
+  const T* b_data = b.data_block();
   const unsigned mn = a.size();
   for (unsigned i = 0; i < mn; ++i)
     if (a_data[i] != b_data[i]) return false;
@@ -107,12 +107,14 @@ template <class T>
 bool operator==(const vnl_sym_matrix<T> &a, const vnl_matrix<T> &b)
 {
   if (a.rows() != b.rows() || a.cols() != b.cols()) return false;
-  //const T* a_data = a.data_block();
-  //const T* b_data = a.data_block();
+
   const unsigned n = a.rows();
   for (unsigned i=0; i< n; ++i)
-    for (unsigned j=0; j<=i; ++j)
+  {
+    for (unsigned j=0; j<i; ++j)
       if (a.fast(i,j) != b(i,j) || a.fast(i,j) != b(j,i)) return false;
+    if (a.fast(i,i) != b(i,i)) return false;
+  }
   return true;
 }
 
