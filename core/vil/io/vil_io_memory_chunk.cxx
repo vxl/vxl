@@ -8,6 +8,7 @@
 
 #include "vil_io_memory_chunk.h"
 #include <vsl/vsl_block_binary.h>
+#include <vsl/vsl_complex_io.h>
 
 #define write_case_macro(T)\
 vsl_b_write(os,unsigned(chunk.size()/sizeof(T ))); \
@@ -49,6 +50,12 @@ void vsl_b_write(vsl_b_ostream &os, const vil_memory_chunk& chunk)
       break;
     case VIL_PIXEL_FORMAT_BOOL:
       write_case_macro(bool);
+      break;
+    case VIL_PIXEL_FORMAT_COMPLEX_FLOAT:
+      write_case_macro(vcl_complex<float>);
+      break;
+    case VIL_PIXEL_FORMAT_COMPLEX_DOUBLE:
+      write_case_macro(vcl_complex<double>);
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_write(vsl_b_istream&, vil_memory_chunk&)\n"
@@ -115,6 +122,7 @@ void vsl_b_read(vsl_b_istream &is, vil_memory_chunk& chunk)
       case VIL_PIXEL_FORMAT_BOOL:
         read_case_macro_v1(bool);
         break;
+      // No version 1 complex images were ever written.
       default:
         vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_memory_chunk&)\n"
                  << "           Unknown pixel format "<< format << '\n';
@@ -154,6 +162,12 @@ void vsl_b_read(vsl_b_istream &is, vil_memory_chunk& chunk)
         break;
       case VIL_PIXEL_FORMAT_BOOL:
         read_case_macro_v2(bool);
+        break;
+      case VIL_PIXEL_FORMAT_COMPLEX_FLOAT:
+        read_case_macro_v2(vcl_complex<float>);
+        break;
+      case VIL_PIXEL_FORMAT_COMPLEX_DOUBLE:
+        read_case_macro_v2(vcl_complex<double>);
         break;
       default:
         vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_memory_chunk&)\n"
