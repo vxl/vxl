@@ -432,6 +432,11 @@ vtol_two_chain::valid_chain_type(vtol_chain const& chain_inf_sup) const
 //    Accessor Functions
 //***************************************************************************
 
+vtol_face_sptr vtol_two_chain::face(int i)
+{
+  return inferiors_[i]->cast_to_face();
+}
+
 //: outside boundary vertices
 
 vertex_list *vtol_two_chain::outside_boundary_vertices(void)

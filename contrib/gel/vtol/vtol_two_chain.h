@@ -95,7 +95,7 @@ class vtol_two_chain
   //: get the direction of the face
   signed char direction(vtol_face const& f) const;
 
-  virtual vtol_face_sptr face(int i) { return inferiors_[i]->cast_to_face(); }
+  virtual vtol_face_sptr face(int i);
 
   //---------------------------------------------------------------------------
   //: Shallow copy with no links
