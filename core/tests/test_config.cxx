@@ -19,7 +19,7 @@ MAIN( test_config )
   START("config");
 
   // This test does not test much.  Mostly, it prints configuration
-  // macros so they can be viewed through Dart. Some sanity checks are
+  // macros so they can be viewed through Dart.  Some sanity checks are
   // at the end.
 
   vcl_cout << "All macro definitions are shown inside parenthesis\n";
@@ -363,6 +363,22 @@ MAIN( test_config )
   vcl_cout << "VCL_NEEDS_NAMESPACE_STD ";
 #ifdef VCL_NEEDS_NAMESPACE_STD
   vcl_cout << "is set to " << quote(VCL_NEEDS_NAMESPACE_STD);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VCL_NUMERIC_LIMITS_HAS_INFINITY ";
+#ifdef VCL_NUMERIC_LIMITS_HAS_INFINITY
+  vcl_cout << "is set to " << quote(VCL_NUMERIC_LIMITS_HAS_INFINITY);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VCL_PROCESSOR_HAS_INFINITY ";
+#ifdef VCL_PROCESSOR_HAS_INFINITY
+  vcl_cout << "is set to " << quote(VCL_PROCESSOR_HAS_INFINITY);
 #else
   vcl_cout << "is not set";
 #endif
@@ -763,22 +779,6 @@ MAIN( test_config )
   vcl_cout << "VCL_CXX_HAS_HEADER_LIMITS ";
 #ifdef VCL_CXX_HAS_HEADER_LIMITS
   vcl_cout << "is set to " << quote(VCL_CXX_HAS_HEADER_LIMITS);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_NUMERIC_LIMITS_HAS_INFINITY ";
-#ifdef VCL_NUMERIC_LIMITS_HAS_INFINITY
-  vcl_cout << "is set to " << quote(VCL_NUMERIC_LIMITS_HAS_INFINITY);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_PROCESSOR_HAS_INFINITY ";
-#ifdef VCL_PROCESSOR_HAS_INFINITY
-  vcl_cout << "is set to " << quote(VCL_PROCESSOR_HAS_INFINITY);
 #else
   vcl_cout << "is not set";
 #endif
@@ -1568,6 +1568,14 @@ MAIN( test_config )
 #endif
   vcl_cout << vcl_endl;
 
+  vcl_cout << "__MINGW32__ ";
+#ifdef __MINGW32__
+  vcl_cout << "is set to " << quote(__MINGW32__);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
   vcl_cout << "_WIN32 ";
 #ifdef _WIN32
   vcl_cout << "is set to " << quote(_WIN32);
@@ -1608,6 +1616,22 @@ MAIN( test_config )
 #endif
   vcl_cout << vcl_endl;
 
+  vcl_cout << "unix ";
+#ifdef unix
+  vcl_cout << "is set to " << quote(unix);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "__unix ";
+#ifdef __unix
+  vcl_cout << "is set to " << quote(__unix);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
   vcl_cout << "__DATE__ ";
 #ifdef __DATE__
   vcl_cout << "is set to " << quote(__DATE__);
@@ -1622,22 +1646,17 @@ MAIN( test_config )
 #else
   vcl_cout << "is not set";
 #endif
-  vcl_cout << vcl_endl << vcl_endl;
+  vcl_cout << vcl_endl;
 
-  vcl_cout << "sizeof(char) is " << sizeof(char) << vcl_endl
-           << "sizeof(short) is " << sizeof(short) << vcl_endl
-           << "sizeof(int) is " << sizeof(int) << vcl_endl
-           << "sizeof(long) is " << sizeof(long) << vcl_endl
-           << "sizeof(float) is " << sizeof(float) << vcl_endl
-           << "sizeof(double) is " << sizeof(double) << vcl_endl;
+  vcl_cout << vcl_endl;
 
-  // These are types that we expect every machine to have
+  // These are types that we expect every machine to have.
 
   testlib_test_begin( "Size of vxl_byte" );
 #if VXL_HAS_BYTE
   testlib_test_perform( sizeof( vxl_byte ) == 1 );
 #else
-  vcl_cout << "(no byte)";
+  vcl_cout << "(no vxl_byte)" << vcl_endl;
   testlib_test_perform( false );
 #endif
 
@@ -1645,7 +1664,7 @@ MAIN( test_config )
 #if VXL_HAS_INT_8
   testlib_test_perform( sizeof( vxl_uint_8 ) == 1 );
 #else
-  vcl_cout << "(no uint_8)";
+  vcl_cout << "(no vxl_uint_8)" << vcl_endl;
   testlib_test_perform( false );
 #endif
 
@@ -1653,7 +1672,7 @@ MAIN( test_config )
 #if VXL_HAS_INT_16
   testlib_test_perform( sizeof( vxl_uint_16 ) == 2 );
 #else
-  vcl_cout << "(no uint_16)";
+  vcl_cout << "(no vxl_uint_16)" << vcl_endl;
   testlib_test_perform( false );
 #endif
 
@@ -1661,7 +1680,7 @@ MAIN( test_config )
 #if VXL_HAS_INT_32
   testlib_test_perform( sizeof( vxl_uint_32 ) == 4 );
 #else
-  vcl_cout << "(no uint_32)";
+  vcl_cout << "(no vxl_uint_32)" << vcl_endl;
   testlib_test_perform( false );
 #endif
 
@@ -1669,7 +1688,7 @@ MAIN( test_config )
 #if VXL_HAS_IEEE_32
   testlib_test_perform( sizeof( vxl_ieee_32 ) == 4 );
 #else
-  vcl_cout << "(no ieee_32)";
+  vcl_cout << "(no vxl_ieee_32)" << vcl_endl;
   testlib_test_perform( false );
 #endif
 
@@ -1677,33 +1696,44 @@ MAIN( test_config )
 #if VXL_HAS_IEEE_64
   testlib_test_perform( sizeof( vxl_ieee_64 ) == 8 );
 #else
-  vcl_cout << "(no ieee_64)";
+  vcl_cout << "(no vxl_ieee_64)" << vcl_endl;
   testlib_test_perform( false );
 #endif
 
-  // These may not exist on some platforms. If they exist, they should
+  vcl_cout << vcl_endl;
+
+  // These may not exist on some platforms.  If they exist, they should
   // be of the correct size.
 
 #if VXL_HAS_INT_64
   testlib_test_begin( "Size of vxl_uint_64" );
   testlib_test_perform( sizeof( vxl_uint_64 ) == 8 );
 #else
-  vcl_cout << "(no uint_64)\n";
+  vcl_cout << "(no vxl_uint_64)" << vcl_endl;
 #endif
 
 #if VXL_HAS_IEEE_96
   testlib_test_begin( "Size of vxl_ieee_96" );
   testlib_test_perform( sizeof( vxl_ieee_96 ) == 12 );
 #else
-  vcl_cout << "(no ieee_96)\n";
+  vcl_cout << "(no vxl_ieee_96)" << vcl_endl;
 #endif
 
 #if VXL_HAS_IEEE_128
   testlib_test_begin( "Size of vxl_ieee_128" );
   testlib_test_perform( sizeof( vxl_ieee_128 ) == 16 );
 #else
-  vcl_cout << "(no ieee_128)\n";
+  vcl_cout << "(no vxl_ieee_128)" << vcl_endl;
 #endif
+
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "sizeof(char) is " << sizeof(char) << vcl_endl;
+  vcl_cout << "sizeof(short) is " << sizeof(short) << vcl_endl;
+  vcl_cout << "sizeof(int) is " << sizeof(int) << vcl_endl;
+  vcl_cout << "sizeof(long) is " << sizeof(long) << vcl_endl;
+  vcl_cout << "sizeof(float) is " << sizeof(float) << vcl_endl;
+  vcl_cout << "sizeof(double) is " << sizeof(double) << vcl_endl;
 
   SUMMARY();
 }

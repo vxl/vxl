@@ -35,10 +35,13 @@ print <<EOF;
 #define quote0(x) #x
 #define quote(x) quote0((x))
 
-static void test_config()
+MAIN( test_config )
 {
-  // This test does not actually test anything.  Instead, it prints
-  // configuration macros so they can be viewed through Dart.
+  START("config");
+
+  // This test does not test much.  Mostly, it prints configuration
+  // macros so they can be viewed through Dart.  Some sanity checks are
+  // at the end.
 
   vcl_cout << "All macro definitions are shown inside parenthesis\\n";
 
@@ -95,7 +98,7 @@ for $var_exp (
   'VCL_ALLOWS_NAMESPACE_STD',
   'VCL_NEEDS_NAMESPACE_STD',
   'VCL_NUMERIC_LIMITS_HAS_INFINITY',
-  'VCL_PROCESSOR_HAS_INFINITY'
+  'VCL_PROCESSOR_HAS_INFINITY',
 
   # from vcl_config_headers.h
   'VCL_CXX_HAS_HEADER_CASSERT',
@@ -260,11 +263,14 @@ for $var_exp (
 
   # OS related
   '__CYGWIN__',         # cygwin
+  '__MINGW32__',        # MinGW
   '_WIN32',             # windows
   '__sgi',              # sgi
   '__alpha__',          # Alpha
   '__APPLE__',          # MacOS X
   'macintosh',          #
+  'unix',               #
+  '__unix',             #
 
   # other
   '__DATE__',           # gcc (set at compile time)
@@ -289,6 +295,77 @@ EOF
 
 print <<EOF;
   vcl_cout << vcl_endl;
+
+  // These are types that we expect every machine to have.
+
+EOF
+
+############################################################################
+
+my $var_type_size;
+for $var_type_size (
+  'VXL_HAS_BYTE,vxl_byte,1',
+  'VXL_HAS_INT_8,vxl_uint_8,1',
+  'VXL_HAS_INT_16,vxl_uint_16,2',
+  'VXL_HAS_INT_32,vxl_uint_32,4',
+  'VXL_HAS_IEEE_32,vxl_ieee_32,4',
+  'VXL_HAS_IEEE_64,vxl_ieee_64,8'
+  ) {
+my $var;
+my $type;
+my $size;
+($var,$type,$size) = split /,/, $var_type_size;
+
+print <<EOF;
+  testlib_test_begin( "Size of $type" );
+#if $var
+  testlib_test_perform( sizeof( $type ) == $size );
+#else
+  vcl_cout << "(no $type)" << vcl_endl;
+  testlib_test_perform( false );
+#endif
+
+EOF
+}
+
+############################################################################
+
+print <<EOF;
+  vcl_cout << vcl_endl;
+
+  // These may not exist on some platforms.  If they exist, they should
+  // be of the correct size.
+
+EOF
+
+############################################################################
+
+for $var_type_size (
+  'VXL_HAS_INT_64,vxl_uint_64,8',
+  'VXL_HAS_IEEE_96,vxl_ieee_96,12',
+  'VXL_HAS_IEEE_128,vxl_ieee_128,16'
+  ) {
+my $var;
+my $type;
+my $size;
+($var,$type,$size) = split /,/, $var_type_size;
+
+print <<EOF;
+#if $var
+  testlib_test_begin( "Size of $type" );
+  testlib_test_perform( sizeof( $type ) == $size );
+#else
+  vcl_cout << "(no $type)" << vcl_endl;
+#endif
+
+EOF
+}
+
+############################################################################
+
+print <<EOF;
+  vcl_cout << vcl_endl;
+
 EOF
 
 ############################################################################
@@ -311,8 +388,9 @@ EOF
 ############################################################################
 
 print <<EOF;
+
+  SUMMARY();
 }
-TESTMAIN(test_config);
 EOF
 
 ############################################################################
