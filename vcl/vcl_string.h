@@ -15,6 +15,9 @@
 #elif defined(VCL_WIN32)
 # include "win32/vcl_string.h"
 
+#elif defined(VCL_SGI_CC_7)
+# include "sgi/vcl_string.h"
+
 #else
 # include "iso/vcl_string.h"
 #endif
