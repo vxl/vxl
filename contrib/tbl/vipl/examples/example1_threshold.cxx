@@ -24,6 +24,7 @@
 #include <vipl/accessors/vipl_accessors_vil_image.h>
 #include <vipl/vipl_threshold.h>
 #include <vcl_iostream.h>
+#include <vcl_cstdlib.h> // for atoi()
 typedef unsigned char ubyte;
 
 int

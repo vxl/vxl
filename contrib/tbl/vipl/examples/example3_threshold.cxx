@@ -30,6 +30,7 @@ typedef vnl_matrix<ubyte> img_type;
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vcl_iostream.h>
+#include <vcl_cstdlib.h> // for atoi()
 
 int
 main(int argc, char** argv) {
