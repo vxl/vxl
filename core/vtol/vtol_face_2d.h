@@ -1,4 +1,3 @@
-
 #ifndef vtol_face_2d_H
 #define vtol_face_2d_H
 // .NAME vtol_face_2d - Represents the basic 2D topological entity
@@ -36,33 +35,66 @@
 //     PTU ported to vxl may-20
 //
 ///
-
-class vtol_face_2d;
-
 #include <vtol/vtol_face_2d_ref.h>
+
 #include <vtol/vtol_topology_object_2d.h>
 #include <vcl/vcl_vector.h>
+#include <vsol/vsol_region_2d_ref.h>
 
 class vtol_vertex_2d;
 class vtol_edge_2d;
 class vtol_one_chain_2d;
 class vtol_two_chain_2d;
-#include <vsol/vsol_region_2d_ref.h>
 
 class vtol_face_2d
   : public vtol_topology_object_2d
 {
 public:
-
-  //: Constructors and Destructors
+  //***************************************************************************
+  // Initialization
+  //***************************************************************************
+  
+  //---------------------------------------------------------------------------
+  //: Default constructor
+  //---------------------------------------------------------------------------
   explicit vtol_face_2d(void);
+
+  //---------------------------------------------------------------------------
+  //: Constructor
+  //: REQUIRE: verts.size()>2
+  //---------------------------------------------------------------------------
+  explicit vtol_face_2d(vertex_list_2d &verts);
+
+  //---------------------------------------------------------------------------
+  //: Constructor
+  //---------------------------------------------------------------------------
+  explicit vtol_face_2d(one_chain_list_2d &onechs);
+
+  //---------------------------------------------------------------------------
+  //: Constructor
+  //---------------------------------------------------------------------------
+  explicit vtol_face_2d(vtol_one_chain_2d &edgeloop);
+
+  //---------------------------------------------------------------------------
+  //: Constructor
+  //---------------------------------------------------------------------------
+  explicit vtol_face_2d(vsol_region_2d &facesurf);
+
+  //---------------------------------------------------------------------------
+  //: Constructor
+  //---------------------------------------------------------------------------
+  explicit vtol_face_2d(edge_list_2d &edges);//for faces with interior holes
+
+  //---------------------------------------------------------------------------
+  //: Copy constructor
+  //---------------------------------------------------------------------------
   vtol_face_2d(const vtol_face_2d &other);
-  explicit vtol_face_2d(vcl_vector<vtol_vertex_2d *> *verts);
-  explicit vtol_face_2d(vcl_vector<vtol_one_chain_2d *> &onechs);
-  explicit vtol_face_2d(vtol_one_chain_2d *edgeloop);
-  explicit vtol_face_2d(vsol_region_2d_ref facesurf);
-  explicit vtol_face_2d(vcl_vector<vtol_edge_2d *> *edges);//for faces with interior holes
+
+  //---------------------------------------------------------------------------
+  //: Destructor
+  //---------------------------------------------------------------------------
   virtual ~vtol_face_2d();
+
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   //: See Prototype pattern
@@ -76,79 +108,102 @@ public:
   //---------------------------------------------------------------------------
   virtual vtol_topology_object_2d_type topology_type(void) const;
 
-  vsol_region_2d_ref get_surface(void) const;
-  void set_surface(vsol_region_2d_ref newsurf);
-  vtol_one_chain_2d *get_one_chain(int which = 0);
-  vtol_one_chain_2d *get_boundary_cycle(void);
-  bool add_hole_cycle(vtol_one_chain_2d *new_hole);
-  vcl_vector<vtol_one_chain_2d *> *get_hole_cycles(void);
+  virtual vsol_region_2d *surface(void) const;
+  virtual void set_surface(vsol_region_2d *const newsurf);
+  virtual vtol_one_chain_2d *get_one_chain(int which = 0);
+  virtual vtol_one_chain_2d *get_boundary_cycle(void);
+  virtual bool add_hole_cycle(vtol_one_chain_2d &new_hole);
+  virtual vcl_vector<vtol_one_chain_2d_ref> *get_hole_cycles(void);
 
   // Methods that are here for now in transition.. :x
 
   //: Inferior/Superior Accessor Methods
-  vtol_face_2d *copy_with_arrays(vcl_vector<vtol_topology_object_2d *> &verts,
-				 vcl_vector<vtol_topology_object_2d *> &edges);
+  virtual vtol_face_2d *
+  copy_with_arrays(vcl_vector<vtol_topology_object_2d_ref> &verts,
+                   vcl_vector<vtol_topology_object_2d_ref> &edges) const;
 
-  vtol_face_2d *cast_to_face_2d(void) { return this; }
- 
-  vcl_vector<vtol_vertex_2d *> *outside_boundary_vertices(void);
-  vcl_vector<vtol_vertex_2d *> *vertices(void);
-  vcl_vector<vtol_zero_chain_2d *> *outside_boundary_zero_chains(void);
-  vcl_vector<vtol_zero_chain_2d *> *zero_chains(void);
-  vcl_vector<vtol_edge_2d *> *outside_boundary_edges(void);
-  vcl_vector<vtol_edge_2d *> *edges(void);
-  vcl_vector<vtol_one_chain_2d *> *outside_boundary_one_chains(void);
-  vcl_vector<vtol_one_chain_2d *> *one_chains(void);
-  vcl_vector<vtol_face_2d *> *faces(void);
-  vcl_vector<vtol_two_chain_2d *> *two_chains(void);
-  vcl_vector<vtol_block_2d *> *blocks(void);
+  //***************************************************************************
+  // Replaces dynamic_cast<T>
+  //***************************************************************************
 
-  bool add_edge_loop(vtol_one_chain_2d *);
-  bool add_one_chain(vtol_one_chain_2d *);
-  bool remove_edge_loop(vtol_one_chain_2d *);
-  bool remove_one_chain(vtol_one_chain_2d *);
-  bool add_face_loop(vtol_two_chain_2d *);
-  bool add_two_chain(vtol_two_chain_2d *);
-  bool remove_face_loop(vtol_two_chain_2d *);
-  bool remove_two_chain(vtol_two_chain_2d *);
+  //---------------------------------------------------------------------------
+  //: Return `this' if `this' is a face, 0 otherwise
+  //---------------------------------------------------------------------------
+  virtual const vtol_face_2d *cast_to_face(void) const;
+  
+  //---------------------------------------------------------------------------
+  //: Return `this' if `this' is a face, 0 otherwise
+  //---------------------------------------------------------------------------
+  virtual vtol_face_2d *cast_to_face(void);
+
+  //***************************************************************************
+  // Status report
+  //***************************************************************************
+
+  //---------------------------------------------------------------------------
+  //: Is `inferior' type valid for `this' ?
+  //---------------------------------------------------------------------------
+  virtual bool
+  valid_inferior_type(const vtol_topology_object_2d &inferior) const;
+
+  //---------------------------------------------------------------------------
+  //: Is `superior' type valid for `this' ?
+  //---------------------------------------------------------------------------
+  virtual bool
+  valid_superior_type(const vtol_topology_object_2d &superior) const;
+  
+  //: accessors for boundary elements 
+  virtual vertex_list_2d *outside_boundary_vertices(void);
+  virtual zero_chain_list_2d *outside_boundary_zero_chains(void);
+  virtual edge_list_2d *outside_boundary_edges(void);
+  virtual one_chain_list_2d *outside_boundary_one_chains(void);
+
+  //: Warning these methods should not be used by clients 
+
+  virtual vcl_vector<vtol_vertex_2d*> *compute_vertices(void);
+  virtual vcl_vector<vtol_edge_2d*> *compute_edges(void);
+  virtual vcl_vector<vtol_zero_chain_2d*> *compute_zero_chains(void);
+  virtual vcl_vector<vtol_one_chain_2d*> *compute_one_chains(void);
+  virtual vcl_vector<vtol_face_2d*> *compute_faces(void);
+  virtual vcl_vector<vtol_two_chain_2d*> *compute_two_chains(void);
+  virtual vcl_vector<vtol_block_2d*> *compute_blocks(void);
+
+  virtual vcl_vector<vtol_vertex_2d*> *outside_boundary_compute_vertices(void);
+  virtual vcl_vector<vtol_zero_chain_2d*> *outside_boundary_compute_zero_chains(void);
+  virtual vcl_vector<vtol_edge_2d*> *outside_boundary_compute_edges(void);
+  virtual vcl_vector<vtol_one_chain_2d*> *outside_boundary_compute_one_chains(void);
+
+
+
+  virtual void add_one_chain(vtol_one_chain_2d &);
 
   // Editing Functions
 
   //: Utility Functions and overloaded operators
 
-  void reverse_normal(void);
-  int get_num_edges(void);
+  virtual void reverse_normal(void);
+  virtual int get_num_edges(void) const;
    
-  //: deep copy
-  vtol_face_2d *copy(void) { return new vtol_face_2d(*this); } // deep copy
-  virtual vtol_topology_object_2d * shallow_copy_with_no_links( void );
-
-  virtual vsol_spatial_object_2d *spatial_copy() { return this->copy(); }
-
+  //---------------------------------------------------------------------------
+  //: Copy with no links. Only copy the surface if it exists
+  //---------------------------------------------------------------------------
+  virtual vtol_face_2d *shallow_copy_with_no_links(void) const;
 
   virtual void compute_bounding_box(void); //A local implementation
 
+  virtual bool operator==(const vtol_face_2d &other)const;
 
-  bool operator==(const vsol_spatial_object_2d &) const;
-  bool operator== (const vtol_face_2d &)const;
+  virtual void print(ostream &strm=cout) const;
 
-  void print (ostream &strm=cout);
+  virtual void describe(ostream &strm=cout,
+                        int blanking=0) const;
+  //---------------------------------------------------------------------------
+  //: Does `this' share an edge with `f' ? Comparison of edge pointers,
+  //: not geometric values
+  //---------------------------------------------------------------------------
+  virtual bool shares_edge_with(vtol_face_2d &f);
 
-  void describe(ostream &strm=cout,
-                int blanking=0);
-
-
-  bool remove(vtol_one_chain_2d *one_chain,
-              vcl_vector<vtol_topology_object_2d *> &changes,
-              vcl_vector<vtol_topology_object_2d *> &deleted);
-  void deep_remove(vcl_vector<vtol_topology_object_2d *> &removed);
-
-  virtual bool disconnect(vcl_vector<vtol_topology_object_2d *> &changes,
-                          vcl_vector<vtol_topology_object_2d *> &deleted);
-
-  bool shares_edge_with(vtol_face_2d *f);
-
- private:
+private:
   vsol_region_2d_ref _surface;
 };
 

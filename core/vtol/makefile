@@ -18,9 +18,10 @@ VERSION := 1.0
 
 SOURCES += vtol_topology_object_2d.cxx
 SOURCES += vtol_topology_cache_2d.cxx
-SOURCES += vtol_topology_hierarchy_node_2d.cxx
+# SOURCES += vtol_topology_hierarchy_node_2d.cxx
 SOURCES += vtol_list_functions_2d.cxx
-SOURCES += vtol_hierarchy_node_2d.cxx
+# SOURCES += vtol_hierarchy_node_2d.cxx
+SOURCES += vtol_chain_2d.cxx
 SOURCES += vtol_two_chain_2d.cxx
 SOURCES += vtol_one_chain_2d.cxx
 SOURCES += vtol_zero_chain_2d.cxx

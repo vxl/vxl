@@ -35,53 +35,53 @@
 
 #ifndef MACROS_2d_H
 #define MACROS_2d_H
-#include<vcl/vcl_vector.h>
-#include<vcl/vcl_algorithm.h>
+#include <vcl/vcl_vector.h>
+#include <vcl/vcl_list.h>
+#include <vcl/vcl_algorithm.h>
 
-#define SEL_SUP_2d(suptype,target) \
-  vcl_vector<suptype*> *new_list = new vcl_vector<suptype*>(), *sublist; \
-  for(topology_list_2d::iterator i = _superiors.begin(); i != _superiors.end(); i++) \
+#define SEL_SUP_2d(suptype,target)\
+  vcl_vector<suptype *> *new_list=new vcl_vector<suptype *>();\
+  vcl_vector<suptype *> *sublist;\
+  vcl_list<vtol_topology_object_2d_ref>::iterator i;\
+  vcl_vector<suptype*>::iterator m_i;\
+  for(i=_superiors.begin();i!=_superiors.end();i++)\
       {\
-       sublist = (*i)->target();\
-        if (sublist->size())\
+       sublist=(*i)->target();\
+        if(sublist->size())\
 	{ \
-          vcl_vector<suptype*>::iterator m_i; \
-          for(m_i=sublist->begin();m_i!=sublist->end();m_i++){ \
-               new_list->push_back(*m_i); \
-          } \
+          for(m_i=sublist->begin();m_i!=sublist->end();m_i++){\
+               new_list->push_back(*m_i);\
+          }\
 	}\
-	delete sublist; \
+	delete sublist;\
       }\
-       tagged_union((vcl_vector<vsol_spatial_object_2d*> *)new_list); \
+       tagged_union((vcl_vector<vsol_spatial_object_2d *> *)new_list);\
       return new_list
 
-
-#define SEL_INF_2d(inftype, target) \
-  vcl_vector<inftype*> *new_list = new vcl_vector<inftype*>(), * sublist; \
-  for(topology_list_2d::iterator i = _inferiors.begin(); i != _inferiors.end(); i++) \
-     {                                    \
-     sublist = (*i)->target();         \
-     if (sublist->size()) \
+#define SEL_INF_2d(inftype,target)\
+  vcl_vector<inftype *> *new_list=new vcl_vector<inftype *>();\
+  vcl_vector<inftype *> *sublist;\
+  for(topology_list_2d::iterator i=_inferiors.begin();i!=_inferiors.end();i++)\
+     {\
+     sublist=(*i)->target();\
+     if(sublist->size())\
        {\
-        vcl_vector<inftype*>::iterator m_i; \
-          for(m_i=sublist->begin(); m_i!=sublist->end();m_i++){ \
-            new_list->push_back(*m_i); \
-          } \
+        vcl_vector<inftype *>::iterator m_i;\
+          for(m_i=sublist->begin();m_i!=sublist->end();m_i++){\
+            new_list->push_back(*m_i);\
+          }\
       }\
-     delete sublist; \
+     delete sublist;\
     }\
-    tagged_union((vcl_vector<vsol_spatial_object_2d*> *)new_list); \
+    tagged_union((vcl_vector<vsol_spatial_object_2d *> *)new_list);\
     return new_list
-
-
-
 
 #define SUBCHAIN_INF_2d(listnm, suptype, inftype, target) \
     vcl_vector<inftype*> *templist; \
-    hierarchy_node_list_2d::iterator hi; \
-    for (hi=_hierarchy_inferiors.begin(); hi != _hierarchy_inferiors.end(); hi++ ) \
+    chain_list_2d::iterator hi; \
+    for (hi=_chain_inferiors.begin(); hi != _chain_inferiors.end(); hi++ ) \
        { \
-	 templist = ((suptype *) (*hi))->target(); \
+	 templist = ((suptype *) ((*hi).ptr()))->target(); \
           vcl_vector<inftype*>::iterator m_i; \
           for(m_i=templist->begin();m_i!=templist->end();m_i++){ \
             listnm->push_back(*m_i); \
@@ -98,7 +98,7 @@
    vcl_vector<targettype*> *templist;  \
       for(topology_list_2d::iterator i = _inferiors.begin(); i != _inferiors.end(); i++) \
          { \
-	templist = ((inftype*)(*i))->outside_boundary_##target(); \
+	templist = ((inftype*)((*i).ptr()))->outside_boundary_##target(); \
         vcl_vector<targettype*>::iterator m_i; \
         for(m_i=templist->begin();m_i!=templist->end();m_i++){ \
             newlist->push_back(*m_i); \
@@ -128,7 +128,7 @@
    vcl_vector<inftype*> *new_list = new vcl_vector<inftype*>(); \
       for(topology_list_2d::iterator i = _inferiors.begin(); i != _inferiors.end(); i++) \
      {\
-   new_list->push_back((inftype*)(*i)); \
+   new_list->push_back((inftype*)((*i).ptr())); \
    }\
    return new_list       
 

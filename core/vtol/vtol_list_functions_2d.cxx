@@ -37,7 +37,6 @@
 //: Note if you really want a tagged union...this is it...
 // otherwise you can call remove_duplicates and get the
 // same result....pav 
-
 void tagged_union(vcl_vector<vsol_spatial_object_2d*>* topolist)
 {
   vcl_vector<vsol_spatial_object_2d*> temp;
@@ -60,5 +59,3 @@ void tagged_union(vcl_vector<vsol_spatial_object_2d*>* topolist)
   (*topolist)=temp;
 
 }
-
-

@@ -1,108 +1,267 @@
-
 #include <vtol/vtol_topology_object_2d.h>
+
 #include <vtol/vtol_topology_cache_2d.h>
-//#include <vtol/vtol_zero_chain_2d.h>
-#include <vtol/vtol_one_chain_2d.h>
-//#include <vtol/vtol_edge_2d.h>
-//#include <vtol/vtol_vertex_2d.h>
-//#include <vtol/some_stubs.h>
 
+//***************************************************************************
+// Initialization
+//***************************************************************************
 
-//:
-//  This is the destructor for topology_object_2d.
+//---------------------------------------------------------------------------
+// Name: vtol_topology_object_2d
+// Task: Default constructor
+//---------------------------------------------------------------------------
+vtol_topology_object_2d::vtol_topology_object_2d(void)
+  :_superiors(0),
+   _inferiors(0)
+{
+  inf_sup_cache= new vtol_topology_cache_2d(this);
+  touch();
+}
+
+//---------------------------------------------------------------------------
+// Name: vtol_topology_object_2d
+// Task: Constructor with given sizes for arrays of inferiors and superiors
+//---------------------------------------------------------------------------
+vtol_topology_object_2d::vtol_topology_object_2d(const int num_inferiors,
+                                                 const int num_superiors)
+  :_superiors(num_superiors),
+   _inferiors(num_inferiors)
+{
+  inf_sup_cache=new vtol_topology_cache_2d(this);
+  touch();
+}
+
+//---------------------------------------------------------------------------
+// Name: ~vtol_topology_object_2d
+// Task: Destructor
+//---------------------------------------------------------------------------
 vtol_topology_object_2d::~vtol_topology_object_2d()
 {
   delete inf_sup_cache;
 }
 
-
-//:
-// constructor
-vtol_topology_object_2d::vtol_topology_object_2d(int num_inferiors, int num_superiors) :
-  vtol_topology_hierarchy_node_2d(num_inferiors, num_superiors)
-{
-  inf_sup_cache = 0;
-}
-
-//:
-// method to delete object if under the right conditions
-
-void vtol_topology_object_2d::protected_destroy()
-{
-  vtol_one_chain_2d* onechain = this->cast_to_one_chain_2d();
-  if(onechain && onechain->is_sub_chain())
-    {
-      return;
-    }
-
-
-  if (( (this->is_referenced())) // if referenced
-      || (this->numsup() > 0))  // or has superiors
-    {
-      return;
-    }
-  vtol_topology_object_2d::destroy(this);
-}
-
-
-//:
-// Recursively traverse the inferiors of objects to
-// delete the entire hierarchy of a topological entity
-// if 1) the object is not protected from outside
-//    2) the object is the highest node...ie has no superiors.
-//    3) the object is not on a SpatialGroup...ie a SpatialGroup is the superior.
-
-
-void vtol_topology_object_2d::destroy(vtol_topology_object_2d* topobj)
-{
-  // Recursively traverse the inferiors of objects to
-  // delete the entire hierarchy of a topological entity
-  // if 1) the object is not protected from outside
-  //    2) the object is the highest node...ie has no superiors.
-  //    3) the object is not on a SpatialGroup...ie a SpatialGroup is the superior.
-
-  vtol_one_chain_2d* onechain = topobj->cast_to_one_chain_2d();
-
-  if(onechain && onechain->is_sub_chain())
-    return;
-
-  if (( !(topobj->is_referenced())) // not referenced
-      && (topobj->numsup() == 0))  // no superiors
-    {
-      
-      while(topobj->get_inferiors()->size())
-        {
-          vtol_topology_object_2d *infptr;
-          infptr =  *(topobj->get_inferiors()->begin());
-        
-          topobj->vtol_topology_hierarchy_node_2d::unlink_inferior(topobj, infptr);
-
-          vtol_topology_object_2d::destroy(infptr);
-        }
-
-      if(onechain && onechain->contains_sub_chains())
-        {
-          one_chain_list_2d* inflist = onechain->inferior_one_chains();
-
-	    for (one_chain_list_2d::iterator i = inflist->begin(); 
-	       i != inflist->end(); ++i)
-            {
-              vtol_one_chain_2d* subchain = *i;
-              onechain->remove_inferior_one_chain(subchain);
-            }
-	    for (one_chain_list_2d::iterator i = inflist->begin(); 
-		 i != inflist->end(); ++i)
-	      vtol_topology_object_2d::destroy((vtol_topology_object_2d*)(*i));
-          delete inflist;
-        }
- 
-      // Finally delete the object itself.
-      delete topobj;
-    }
- }
+//***************************************************************************
+// Replaces dynamic_cast<T>
+//***************************************************************************
 
 //---------------------------------------------------------------------------
-// Name: get_spatial_type
+// Name: cast_to_vertex
+// Task: Return `this' if `this' is a vertex, 0 otherwise
+//---------------------------------------------------------------------------
+const vtol_vertex_2d *vtol_topology_object_2d::cast_to_vertex(void) const
+{
+  return 0;
+}
+
+//---------------------------------------------------------------------------
+// Name: cast_to_vertex
+// Task: Return `this' if `this' is a vertex, 0 otherwise
+//---------------------------------------------------------------------------
+vtol_vertex_2d *vtol_topology_object_2d::cast_to_vertex(void)
+{
+  return 0;
+}
+
+//---------------------------------------------------------------------------
+// Name: cast_to_zero_chain
+// Task: Return `this' if `this' is a zero_chain, 0 otherwise
+//---------------------------------------------------------------------------
+const vtol_zero_chain_2d *
+vtol_topology_object_2d::cast_to_zero_chain(void) const
+{
+  return 0;
+}
+
+//---------------------------------------------------------------------------
+// Name: cast_to_zero_chain
+// Task: Return `this' if `this' is a zero_chain, 0 otherwise
+//---------------------------------------------------------------------------
+vtol_zero_chain_2d *vtol_topology_object_2d::cast_to_zero_chain(void)
+{
+  return 0;
+}
+
+//---------------------------------------------------------------------------
+// Name: cast_to_edge
+// Task: Return `this' if `this' is an edge, 0 otherwise
+//---------------------------------------------------------------------------
+const vtol_edge_2d *vtol_topology_object_2d::cast_to_edge(void) const
+{
+  return 0;
+}
+
+//---------------------------------------------------------------------------
+// Name: cast_to_edge
+// Task: Return `this' if `this' is an edge, 0 otherwise
+//---------------------------------------------------------------------------
+vtol_edge_2d *vtol_topology_object_2d::cast_to_edge(void)
+{
+  return 0;
+}
+
+//---------------------------------------------------------------------------
+// Name: cast_to_one_chain
+// Task: Return `this' if `this' is an one_chain, 0 otherwise
+//---------------------------------------------------------------------------
+const vtol_one_chain_2d *vtol_topology_object_2d::cast_to_one_chain(void) const
+{
+  return 0;
+}
+
+//---------------------------------------------------------------------------
+// Name: cast_to_one_chain
+// Task: Return `this' if `this' is an one_chain, 0 otherwise
+//---------------------------------------------------------------------------
+vtol_one_chain_2d *vtol_topology_object_2d::cast_to_one_chain(void)
+{
+  return 0;
+}
+
+//---------------------------------------------------------------------------
+// Name: cast_to_face
+// Task: Return `this' if `this' is a face, 0 otherwise
+//---------------------------------------------------------------------------
+const vtol_face_2d *vtol_topology_object_2d::cast_to_face(void) const
+{
+  return 0;
+}
+
+//---------------------------------------------------------------------------
+// Name: cast_to_face
+// Task: Return `this' if `this' is a face, 0 otherwise
+//---------------------------------------------------------------------------
+vtol_face_2d *vtol_topology_object_2d::cast_to_face(void)
+{
+  return 0;
+}
+
+//---------------------------------------------------------------------------
+// Name: cast_to_two_chain
+// Task: Return `this' if `this' is a two_chain, 0 otherwise
+//---------------------------------------------------------------------------
+const vtol_two_chain_2d *
+vtol_topology_object_2d::cast_to_two_chain(void) const
+{
+  return 0;
+}
+
+//---------------------------------------------------------------------------
+// Name: cast_to_two_chain
+// Task: Return `this' if `this' is a two_chain, 0 otherwise
+//---------------------------------------------------------------------------
+vtol_two_chain_2d *vtol_topology_object_2d::cast_to_two_chain(void)
+{
+  return 0;
+}
+
+//---------------------------------------------------------------------------
+// Name: cast_to_block
+// Task: Return `this' if `this' is a block, 0 otherwise
+//---------------------------------------------------------------------------
+const vtol_block_2d *vtol_topology_object_2d::cast_to_block(void) const
+{
+  return 0;
+}
+
+//---------------------------------------------------------------------------
+// Name: cast_to_block
+// Task: Return `this' if `this' is a block, 0 otherwise
+//---------------------------------------------------------------------------
+vtol_block_2d *vtol_topology_object_2d::cast_to_block(void)
+{
+  return 0;
+}
+
+//***************************************************************************
+// Status report
+//***************************************************************************
+
+//---------------------------------------------------------------------------
+// Name: is_inferior
+// Task: Is `inferior' already an inferior of `this' ?
+//---------------------------------------------------------------------------
+bool
+vtol_topology_object_2d::is_inferior(const vtol_topology_object_2d &inferior) const
+{
+  bool result;
+  vcl_vector<vtol_topology_object_2d_ref>::const_iterator i;
+  
+  for(i=_inferiors.begin();(i!=_inferiors.end())&&((*i).ptr()!=&inferior);
+      i++)
+    ;
+  result=i!=_inferiors.end();
+
+  return result;
+}
+
+//---------------------------------------------------------------------------
+// Name: is_superior
+// Task: Is `superior' already an superior of `this' ?
+//---------------------------------------------------------------------------
+bool
+vtol_topology_object_2d::is_superior(const vtol_topology_object_2d &superior) const
+{
+  bool result;
+  vcl_list<vtol_topology_object_2d_ref>::const_iterator i;
+  
+  for(i=_superiors.begin();(i!=_superiors.end())&&((*i).ptr()!=&superior);
+      i++)
+    ;
+  result=i!=_superiors.end();
+
+  return result;
+}
+
+//---------------------------------------------------------------------------
+// Name: numinf
+// Task: Number of inferiors
+//---------------------------------------------------------------------------
+int vtol_topology_object_2d::numinf(void) const
+{
+  return _inferiors.size();
+}
+
+//---------------------------------------------------------------------------
+//: Number of superiors
+//---------------------------------------------------------------------------
+int vtol_topology_object_2d::numsup(void) const
+{
+  return _superiors.size();
+}
+
+//---------------------------------------------------------------------------
+// Name: superiors
+// Task: Return the superiors list
+//---------------------------------------------------------------------------
+const vcl_vector<vtol_topology_object_2d_ref> *
+vtol_topology_object_2d::superiors(void) const
+{
+  vcl_vector<vtol_topology_object_2d_ref> *result;
+  vcl_list<vtol_topology_object_2d_ref>::const_iterator i;
+
+  result=new vcl_vector<vtol_topology_object_2d_ref>();
+  result->reserve(_superiors.size());
+  for(i=_superiors.begin();i!=_superiors.end();i++)
+    result->push_back(*i);
+
+  // check
+  assert(_superiors.size()==result->size());
+
+  return result;
+}
+
+//---------------------------------------------------------------------------
+// Name: inferiors
+// Task: Return the inferiors list
+//---------------------------------------------------------------------------
+const vcl_vector<vtol_topology_object_2d_ref> *
+vtol_topology_object_2d::inferiors(void) const
+{
+  return &_inferiors;
+}
+
+//---------------------------------------------------------------------------
+// Name: spatial_type
 // Name: Return the spatial type
 //---------------------------------------------------------------------------
 vtol_topology_object_2d::vsol_spatial_object_2d_type
@@ -121,85 +280,408 @@ vtol_topology_object_2d::topology_type(void) const
   return TOPOLOGY_NO_TYPE;
 }
 
-//:
-// Get list of vertices 
+//***************************************************************************
+// Basic operations
+//***************************************************************************
 
-vertex_list_2d* vtol_topology_object_2d::vertices()
+//---------------------------------------------------------------------------
+// Name: link_inferior
+// Task: Link `this' with an inferior `inferior'
+// Require: valid_inferior_type(inferior) and !is_inferior(inferior)
+//---------------------------------------------------------------------------
+void vtol_topology_object_2d::link_inferior(vtol_topology_object_2d &inferior)
 {
-  cerr << "Error: vtol_topology_object_2d::vertices() not implemented for this topology object\n";
-  return new vertex_list_2d;
+  // require
+  assert(valid_inferior_type(inferior));
+  assert(!is_inferior(inferior));
+
+  _inferiors.push_back(&inferior);
+  ref();
+  inferior.link_superior(*this);
+  protected_--;
+  touch();
+}
+
+//---------------------------------------------------------------------------
+// Name: unlink_inferior
+// Task: Unlink `this' with the inferior `inferior'
+// Require: valid_inferior_type(inferior) and is_inferior(inferior)
+//---------------------------------------------------------------------------
+void vtol_topology_object_2d::unlink_inferior(vtol_topology_object_2d &inferior)
+{
+  // require
+  assert(valid_inferior_type(inferior));
+  assert(is_inferior(inferior));
+  
+  vcl_vector<vtol_topology_object_2d_ref>::iterator i;
+  
+  for(i=_inferiors.begin();(i!=_inferiors.end())&&((*i).ptr()!=&inferior);
+      i++)
+    ;
+  inferior.unlink_superior(*this);
+  _inferiors.erase(i);
+  touch();
+}
+
+//---------------------------------------------------------------------------
+// Name: unlink_all_inferiors
+// Task: Unlink `this' with all its inferiors
+//---------------------------------------------------------------------------
+void vtol_topology_object_2d::unlink_all_inferiors(void)
+{
+  while(_inferiors.size()>0)
+    {
+      (*_inferiors.begin())->unlink_superior(*this);
+      _inferiors.erase(_inferiors.begin());
+    }
+  touch();
+}
+
+//---------------------------------------------------------------------------
+// Name: unlink
+// Task: Unlink `this' of the network
+//---------------------------------------------------------------------------
+void vtol_topology_object_2d::unlink(void)
+{
+  while(_superiors.size()>0)
+    (*_superiors.begin())->unlink_inferior(*this);
+  unlink_all_inferiors();
+}
+
+//***************************************************************************
+// WARNING: the 2 following methods are directly called only by the superior
+// class. It is FORBIDDEN to use them directly
+// If you want to link and unlink superior use sup.link_inferior(*this)
+// of sup.unlink_inferior(*this) 
+//***************************************************************************
+
+//---------------------------------------------------------------------------
+// Name: link_superior
+// Task: Link `this' with a superior `superior'
+// Require: valid_superior_type(superior) and !is_superior(superior)
+//---------------------------------------------------------------------------
+void vtol_topology_object_2d::link_superior(vtol_topology_object_2d &superior)
+{
+  // require
+  assert(valid_superior_type(superior));
+  assert(!is_superior(superior));
+  vcl_list<vtol_topology_object_2d_ref>::iterator i;
+
+  _superiors.push_back(&superior);
+  i=_superiors.end();
+  i--;
+  i->unprotect();
+  touch();
+}
+
+//---------------------------------------------------------------------------
+// Name: unlink_superior
+// Task: Unlink `this' with its superior `superior'
+// Require: valid_superior_type(superior) and is_superior(superior)
+//---------------------------------------------------------------------------
+void vtol_topology_object_2d::unlink_superior(vtol_topology_object_2d &superior)
+{
+  // require
+  assert(valid_superior_type(superior));
+  assert(is_superior(superior));
+
+  vcl_list<vtol_topology_object_2d_ref>::iterator i;
+
+  for(i=_superiors.begin();(i!=_superiors.end())&&((*i).ptr()!=&superior);
+      i++)
+    ;
+
+  // check
+  assert((*i).ptr()==&superior);
+
+  _superiors.erase(i); // unlink
+  touch();
 }
 
 
 //:
-// set list of vertices 
+// get list of vertices 
 
-void vtol_topology_object_2d::vertices(vertex_list_2d& verts)
+vertex_list_2d* vtol_topology_object_2d::vertices(void) 
 {
-  if(!inf_sup_cache)
-    inf_sup_cache = new vtol_topology_cache_2d(this);
+  vertex_list_2d* new_list=new vertex_list_2d;
+  inf_sup_cache->vertices(*new_list);
+  return new_list;
+  
+}
+
+//:
+// get list of vertices 
+
+void vtol_topology_object_2d::vertices(vertex_list_2d& verts) 
+{
   inf_sup_cache->vertices(verts); 
 }
 
 //:
-// Get list of zero_chains 
-zero_chain_list_2d* vtol_topology_object_2d::zero_chains()
+// get list of zero_chains 
+zero_chain_list_2d* vtol_topology_object_2d::zero_chains(void) 
 {
-  cerr << "Error: vtol_topology_object_2d::zero_chains() not implemented for this topology object\n";
-  return new zero_chain_list_2d;
+  zero_chain_list_2d* new_list=new zero_chain_list_2d;
+  inf_sup_cache->zero_chains(*new_list);
+  return new_list;
 }
 
 
 //:
-// set list of zero chains
-void vtol_topology_object_2d::zero_chains( zero_chain_list_2d& zerochains)
+// get list of zero chains
+void vtol_topology_object_2d::zero_chains(zero_chain_list_2d &zerochains) 
 {
-  if(!inf_sup_cache)
-    inf_sup_cache = new vtol_topology_cache_2d(this);
   inf_sup_cache->zero_chains(zerochains);
-}
-
-//:
-// get list of one chains
-
-one_chain_list_2d* vtol_topology_object_2d::one_chains()
-{
-  cerr << "Error: vtol_topology_object_2d::one_chains() not implemented for this topology object\n";
-  return new one_chain_list_2d;
-}
-
-//:
-// set list of one chains
-
-void vtol_topology_object_2d::one_chains( one_chain_list_2d& onechains)
-{
-  if(!inf_sup_cache)
-    inf_sup_cache = new vtol_topology_cache_2d(this);
-  inf_sup_cache->one_chains(onechains);
 }
 
 //:
 // get list of edges
 
-edge_list_2d* vtol_topology_object_2d::edges()
+edge_list_2d* vtol_topology_object_2d::edges(void) 
 {
-  cerr << "Error: vtol_topology_object_2d::edges() not implemented for this topology object\n";
-  return new edge_list_2d;
+  edge_list_2d* new_list=new edge_list_2d;
+  inf_sup_cache->edges(*new_list);
+  return new_list;
 }
 
 //:
-// set list of edges
+// get list of edges
 
-void vtol_topology_object_2d::edges(edge_list_2d& edges)
+void vtol_topology_object_2d::edges(edge_list_2d &edges) 
 {
-  if(!inf_sup_cache)
-    inf_sup_cache = new vtol_topology_cache_2d(this);
   inf_sup_cache->edges(edges);
 }
 
 //:
-// print the object
-void vtol_topology_object_2d::print (ostream& strm)
+// get list of one chains
+
+one_chain_list_2d* vtol_topology_object_2d::one_chains(void) 
 {
-  strm << "<vtol_topology_object_2d " << (void *)this << ">" << endl;
+  one_chain_list_2d* new_list=new one_chain_list_2d;
+  inf_sup_cache->one_chains(*new_list);
+  return new_list;
+
 }
+
+//:
+// get list of one chains
+
+void vtol_topology_object_2d::one_chains(one_chain_list_2d &onechains) 
+{
+  inf_sup_cache->one_chains(onechains);
+}
+
+//:
+// get list of faces
+
+face_list_2d *vtol_topology_object_2d::faces(void) 
+{
+  face_list_2d *new_list=new face_list_2d;
+  inf_sup_cache->faces(*new_list);
+  return new_list;
+}
+
+//:
+// get list of faces
+
+void vtol_topology_object_2d::faces(face_list_2d &face_list)
+{
+  inf_sup_cache->faces(face_list);
+}
+
+//:
+// get list of two chains 
+
+two_chain_list_2d *vtol_topology_object_2d::two_chains(void) 
+{
+  two_chain_list_2d *new_list=new two_chain_list_2d;
+  inf_sup_cache->two_chains(*new_list);
+  return new_list;
+
+}
+
+//:
+// get list of two chains 
+
+void vtol_topology_object_2d::two_chains(two_chain_list_2d &new_list) 
+{
+  inf_sup_cache->two_chains(new_list);
+}
+
+
+//:
+// get list of blocks
+
+block_list_2d *vtol_topology_object_2d::blocks(void) 
+{
+  block_list_2d *new_list=new block_list_2d;
+  inf_sup_cache->blocks(*new_list);
+  return new_list;
+}
+
+
+//:
+// get list of blocks
+
+void vtol_topology_object_2d::blocks(block_list_2d &new_list) 
+{
+  inf_sup_cache->blocks(new_list);
+}
+
+
+//:
+// print the object
+void vtol_topology_object_2d::print(ostream &strm) const
+{
+  strm<<"<vtol_topology_object_2d "<<(void *)this<<">"<<endl;
+  strm<<"number of inferiors "<<numinf()<<endl;
+  strm<<"number of superiors "<<numsup()<<endl;
+}
+
+void vtol_topology_object_2d::describe_inferiors(ostream &strm,
+                                                 int blanking) const
+{
+  vcl_vector<vtol_topology_object_2d_ref>::const_iterator i;
+
+  if(_inferiors.size()==0)
+    strm<<"**INFERIORS:  Empty"<<endl;
+  else
+    strm<<"**INFERIORS:"<<endl;
+  
+  for(i=_inferiors.begin();i!=_inferiors.end();i++)
+    (*i)->print();
+}
+
+void vtol_topology_object_2d::describe_superiors(ostream &strm,
+                                                 int blanking) const
+{
+  vcl_list<vtol_topology_object_2d_ref>::const_iterator i;
+  if(_superiors.size()==0)
+    strm<<"**SUPERIORS:  Empty"<<endl;
+  else
+    strm<<"**SUPERIORS:"<<endl;
+  
+  for(i=_superiors.begin();i!= _superiors.end();i++)
+    (*i)->print();
+}
+
+void vtol_topology_object_2d::describe(ostream &strm,
+                                       int blanking) const
+{
+  describe_inferiors(strm,blanking);
+  describe_superiors(strm,blanking);
+}
+
+
+// temperary methods used for testing
+
+
+//---------------------------------------------------------------------------
+// Name: compute_vertices
+// Task: Compute lists of vertices 
+//---------------------------------------------------------------------------
+vcl_vector<vtol_vertex_2d *> *vtol_topology_object_2d::compute_vertices(void)
+{       
+  cout << "Compute vertices" << endl;
+  return 0;
+}
+
+
+//---------------------------------------------------------------------------
+// Name: compute_zero_chains
+// Task: Compute lists of zero chains 
+//---------------------------------------------------------------------------
+vcl_vector<vtol_zero_chain_2d *> *
+vtol_topology_object_2d::compute_zero_chains(void)
+{       
+  cout << "Compute zero_chains" << endl;
+  return 0;
+}
+
+//---------------------------------------------------------------------------
+// Name: compute_edges
+// Task: compute lists of edges 
+//---------------------------------------------------------------------------
+
+vcl_vector<vtol_edge_2d *> *vtol_topology_object_2d::compute_edges(void)
+{       
+  cout << "Compute edges" << endl;
+  return 0;
+}
+
+//---------------------------------------------------------------------------
+// Name: compute_one_chains
+// Task: compute lists of one chains 
+//---------------------------------------------------------------------------
+vcl_vector<vtol_one_chain_2d *> *
+vtol_topology_object_2d::compute_one_chains(void)
+{       
+  cout << "Compute one chains" << endl;
+  return 0;
+}
+
+//---------------------------------------------------------------------------
+// Name: compute_faces
+// Task: compute lists of faces 
+//---------------------------------------------------------------------------
+vcl_vector<vtol_face_2d *> *vtol_topology_object_2d::compute_faces(void)
+{       
+  cout << "Compute faces" << endl;
+  return 0;
+}
+
+//---------------------------------------------------------------------------
+// Name: compute_two_chains
+// Task: compute lists of two chains 
+//---------------------------------------------------------------------------
+vcl_vector<vtol_two_chain_2d *> *
+vtol_topology_object_2d::compute_two_chains(void)
+{       
+  cout << "Compute two chains" << endl;
+  return 0;
+}
+
+//---------------------------------------------------------------------------
+// Name: compute_blocks
+// Task: compute lists of blocks 
+//---------------------------------------------------------------------------
+vcl_vector<vtol_block_2d *> *vtol_topology_object_2d::compute_blocks(void)
+{       
+  cout << "Compute blocks" << endl;
+  return 0;
+}
+
+#if 0
+vertex_list_2d *vtol_topology_object_2d::vertices(void)
+{
+  vertex_list_2d *result;
+  vertex_list_2d *sublist;
+
+  result=new vcl_vector<vtol_vertex_2d_ref>();
+
+  if(topology_type()<VERTEX)
+    {
+      vcl_vector<vtol_topology_object_2d_ref>::const_iterator i;
+      for(i=_inferiors.begin();i!=_inferiors.end();i++)
+        {
+          sublist=(*i)->vertices();
+          result->insert(result->end(),sublist()->begin(),sublist()->end());
+          unique(result);
+        }
+    }
+  else if(topology_type()==VERTEX)
+    result->push_back(this);
+  else
+    {
+      vcl_vector<vtol_topology_object_2d_ref>::const_iterator i;
+      for(i=_superiors.begin();i!=_superiors.end();i++)
+        {
+          sublist=(*i)->vertices();
+          result->insert(result->end(),sublist()->begin(),sublist()->end());
+          unique(result);
+        }
+    }
+  return result;
+}
+#endif

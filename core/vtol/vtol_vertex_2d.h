@@ -1,6 +1,5 @@
 #ifndef VTOL_VERTEX_2D_H
 #define VTOL_VERTEX_2D_H
-
 // .NAME vtol_vertex_2d - Topological container for a spatial point
 // .LIBRARY vtol
 // .HEADER vxl Package
@@ -22,31 +21,51 @@
 //     LEG May 2000. ported to vxl
 //
 /// .EXAMPLE vtol_vertex_2d.example
-
+#include <vtol/vtol_vertex_2d_ref.h>
 
 #include <vtol/vtol_topology_object_2d.h>
-// #include <vsol/vsol_point_2d.h>
 #include <vnl/vnl_double_2.h>
-//#include <vtol/sol_stubs.h>
 #include <vsol/vsol_point_2d_ref.h>
-
-typedef vnl_double_2  vector_2d;
 
 class vtol_vertex_2d
   : public vtol_topology_object_2d
 {
 public:
+  //***************************************************************************
+  // Initialization
+  //***************************************************************************
+  
+  //---------------------------------------------------------------------------
+  //: Default constructor
+  //---------------------------------------------------------------------------
+  explicit vtol_vertex_2d(void);
 
-  // Constructors and Destructors
+  //---------------------------------------------------------------------------
+  //: Constructor from a point (the point is not copied)
+  //: REQUIRE: new_point!=0
+  //---------------------------------------------------------------------------
+  explicit vtol_vertex_2d(vsol_point_2d &new_point);
 
-  vtol_vertex_2d(void);
-  vtol_vertex_2d(const vsol_point_2d_ref);
-  vtol_vertex_2d(const vsol_point_2d &);   // for some peculiar cases.
-  vtol_vertex_2d(const vtol_vertex_2d &other);
-  vtol_vertex_2d(const vector_2d &);
-  vtol_vertex_2d(double,double);
+  //---------------------------------------------------------------------------
+  //: Constructor from a vector
+  //---------------------------------------------------------------------------
+  explicit vtol_vertex_2d::vtol_vertex_2d(const vnl_double_2 &v);
 
-  ~vtol_vertex_2d();
+  //---------------------------------------------------------------------------
+  //: Constructor from abscissa `new_x' and ordinate `new_y' of the point
+  //---------------------------------------------------------------------------
+  explicit vtol_vertex_2d(const double new_x,
+                          const double new_y);
+
+  //---------------------------------------------------------------------------
+  //: Copy constructor. Copy the point but not the links
+  //---------------------------------------------------------------------------
+  explicit vtol_vertex_2d(const vtol_vertex_2d &other);
+
+  //---------------------------------------------------------------------------
+  //: Destructor
+  //---------------------------------------------------------------------------
+  virtual ~vtol_vertex_2d();
   
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
@@ -54,15 +73,7 @@ public:
   //---------------------------------------------------------------------------
   virtual vsol_spatial_object_2d_ref clone(void) const;
 
-  //  vector_2d *get_location() { return _point->get_location();}
-  //  vector_2d *get_orientation() { return _point->get_orientation();}
-  //  vector_2d *get_size() { return _point->get_size();}
-  //void set_location(double x, double y) { _point->set_location(x, y);}
-  //void set_location(vector_2d&m) { _point->set_location(m);}
-  //void set_orientation(double x, double y) { _point->set_orientation(x,y);}
-  //void set_orientation(vector_2d & m) {_point->set_orientation(m);}
-  //void set_size(double x, double y) {_point->set_size(x, y);}
-  //void set_size(vector_2d&m) {_point->set_size(m);}
+ //  explicit vtol_vertex_2d(const vsol_point_2d &);   // for some peculiar cases.
 
   // Accessors
 
@@ -71,49 +82,104 @@ public:
   //---------------------------------------------------------------------------
   virtual vtol_topology_object_2d_type topology_type(void) const;
 
-  virtual vsol_point_2d_ref get_point(void) const;
-  virtual void set_point(vsol_point_2d_ref pt);
+  //---------------------------------------------------------------------------
+  //: Return the point
+  //---------------------------------------------------------------------------
+  virtual vsol_point_2d *point(void) const;
 
-  // vtol_topology_object_2d::topology_object_type get_topology_type() const { return vtol_topology_object_2d::VERTEX; }
-  
-  vertex_list_2d *vertices(void);
-  edge_list_2d *edges(void);
-  zero_chain_list_2d *zero_chains(void);
-  one_chain_list_2d *one_chains(void);
-  face_list_2d *faces(void);
-  two_chain_list_2d *two_chains(void);
-  block_list_2d *blocks(void);
+  //---------------------------------------------------------------------------
+  //: Set the point (the point is not copied)
+  //: REQUIRE: new_point.ptr()!=0
+  //---------------------------------------------------------------------------
+  virtual void set_point(vsol_point_2d &new_point);
+ 
 
-  void explore_vertex(vertex_list_2d&);
+  virtual void explore_vertex(vertex_list_2d &);
   // Methods called on Vertex
   // for vsol_point_2d.   These are here
   // during the transition period.
   // Looks like forever now - JLM
 
+  //---------------------------------------------------------------------------
+  //: Return the abscissa of the point
+  //---------------------------------------------------------------------------
   virtual double x(void) const;
+
+  //---------------------------------------------------------------------------
+  //: Return the ordinate of the point
+  //---------------------------------------------------------------------------
   virtual double y(void) const;
 
-  virtual void set_x(double val);
-  virtual void set_y(double val);
+  //---------------------------------------------------------------------------
+  //: Set the abscissa of the point with `new_x'
+  //---------------------------------------------------------------------------
+  virtual void set_x(const double new_x);
 
-  //  bool Transform(CoolTransform const& );
+  //---------------------------------------------------------------------------
+  //: Set the ordinate of the point with `new_y'
+  //---------------------------------------------------------------------------
+  virtual void set_y(const double new_y);
 
-  bool operator==(const vsol_spatial_object_2d &obj) const; // virtual of vsol_spatial_object_2d.
-  bool operator==(const vtol_vertex_2d &) const;
-  vtol_vertex_2d& operator=(const vtol_vertex_2d&);
-  vtol_vertex_2d *cast_to_vertex(void);
-  vtol_vertex_2d *copy(void);
-  virtual vsol_spatial_object_2d *spatial_copy(void);
+  //  bool operator==(const vsol_spatial_object_2d &obj) const; // virtual of vsol_spatial_object_2d.
 
-  int order(void);
-  bool is_connected(vtol_vertex_2d *);
-  bool eq(vtol_vertex_2d &);
-  vtol_edge_2d *new_edge(vtol_vertex_2d *);
+  //---------------------------------------------------------------------------
+  //: Is `this' has the same coordinates for its point than `other' ?
+  //---------------------------------------------------------------------------
+  virtual bool operator==(const vtol_vertex_2d &other) const;
+
+  //---------------------------------------------------------------------------
+  //: Assignment of `this' with `other' (copy the point not the links)
+  //---------------------------------------------------------------------------
+  virtual vtol_vertex_2d& operator=(const vtol_vertex_2d &other);
+
+  //***************************************************************************
+  // Replaces dynamic_cast<T>
+  //***************************************************************************
+
+  //---------------------------------------------------------------------------
+  //: Return `this' if `this' is a vertex, 0 otherwise
+  //---------------------------------------------------------------------------
+  virtual const vtol_vertex_2d *cast_to_vertex(void) const;
+
+  //---------------------------------------------------------------------------
+  //: Return `this' if `this' is a vertex, 0 otherwise
+  //---------------------------------------------------------------------------
+  virtual vtol_vertex_2d *cast_to_vertex(void);
+
+  //***************************************************************************
+  // Status report
+  //***************************************************************************
+
+  //---------------------------------------------------------------------------
+  //: Is `inferior' type valid for `this' ?
+  //---------------------------------------------------------------------------
+  virtual bool
+  valid_inferior_type(const vtol_topology_object_2d &inferior) const;
+
+  //---------------------------------------------------------------------------
+  //: Is `superior' type valid for `this' ?
+  //---------------------------------------------------------------------------
+  virtual bool
+  valid_superior_type(const vtol_topology_object_2d &superior) const;
+
+  //---------------------------------------------------------------------------
+  //: Is `this' connected with `v2' ?
+  //: ie has a superior of `this' `v2' as inferior ?
+  //---------------------------------------------------------------------------
+  virtual bool is_connected(const vtol_vertex_2d &v2);
+
+  //---------------------------------------------------------------------------
+  //: Create a line edge from `this' and `other' only if this edge does not
+  //: exist. Otherwise it just returns the existing edge
+  //: REQUIRE: other.ptr()!=0 and other.ptr()!=this
+  //---------------------------------------------------------------------------
+  virtual vtol_edge_2d *new_edge(vtol_vertex_2d &other);
+
   vtol_vertex_2d *vertex_diff (vtol_vertex_2d &);
   bool is_endpointp (const vtol_edge_2d &);
-  double distance_from(const vector_2d &);
+  double distance_from(const vnl_double_2 &);
   double euclidean_distance(vtol_vertex_2d &v); //actual distance, not squared - JLM
-  void merge_references(vtol_vertex_2d*);
+  //  void merge_references(vtol_vertex_2d &);
   //  void calculate_average_normal(IUE_vector<double>&);
 
 
@@ -121,18 +187,23 @@ public:
   void describe(ostream &strm=cout,
                 int blanking=0);
 
-  void deep_remove(topology_list_2d &removed);
-  virtual vtol_topology_object_2d *shallow_copy_with_no_links(void);
-  virtual bool disconnect(topology_list_2d &changes,
-                          topology_list_2d &deleted);
 protected:
-  //  vsol_point_2d *_point;
-
   //---------------------------------------------------------------------------
   // Description: point associated to the vertex
   //---------------------------------------------------------------------------
   vsol_point_2d_ref _point;
+
+
+public:
+  
+  // : Warning - should not be used by clients
+  virtual vcl_vector<vtol_vertex_2d*> *compute_vertices(void);
+  virtual vcl_vector<vtol_edge_2d*> *compute_edges(void);
+  virtual vcl_vector<vtol_zero_chain_2d*> *compute_zero_chains(void);
+  virtual vcl_vector<vtol_one_chain_2d*> *compute_one_chains(void);
+  virtual vcl_vector<vtol_face_2d*> *compute_faces(void);
+  virtual vcl_vector<vtol_two_chain_2d*> *compute_two_chains(void);
+  virtual vcl_vector<vtol_block_2d*> *compute_blocks(void);
 };
 
 #endif
-
