@@ -333,7 +333,11 @@ SET( vcl_sources
   stlport/vcl_cstdlib.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates vcl_sources)
+# We use implicit instantiation of the standard library now,
+# so we shouldn't be explicitly instantiating anything.
+# This also avoid trouble where the instantiation hack conflict
+# with modern, more compliant compilers.
+#AUX_SOURCE_DIRECTORY(Templates vcl_sources)
 
 
 ADD_LIBRARY(vcl ${vcl_sources})
