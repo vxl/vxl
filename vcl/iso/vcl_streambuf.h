@@ -1,19 +1,16 @@
 #ifndef vcl_iso_streambuf_h_
 #define vcl_iso_streambuf_h_
 
+// This is a generated file. DO NOT EDIT! Not even a little bit.
+
 #include <streambuf>
 
-// basic_streambuf
-#ifndef vcl_basic_streambuf
-#define vcl_basic_streambuf std::basic_streambuf
+#ifdef vcl_generic_streambuf_STD
+  ** error **
+#else
+# define vcl_generic_streambuf_STD std
 #endif
-// streambuf
-#ifndef vcl_streambuf
-#define vcl_streambuf std::streambuf
-#endif
-// streambuf
-#ifndef vcl_streambuf
-#define vcl_streambuf std::streambuf
-#endif
+
+#include "../generic/vcl_streambuf.h"
 
 #endif // vcl_iso_streambuf_h_
