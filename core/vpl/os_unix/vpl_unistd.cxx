@@ -136,19 +136,6 @@ PASSTHRU(mode_t, umask, (vpl_mode_t  a0), (a0))
 
 PASSTHRU(int, access, (const char *  a0,int  a1), (a0, a1));
 PASSTHRU(unsigned int, alarm, (unsigned int  a0), (a0));
-#if 0 // nobody uses this anyway
-#if defined(__FreeBSD__)
-extern "C" char* brk( const char *) VPL_THROW(());
-PASSTHRU(char *, brk, (const char* a0), (a0));
-// I think this is an operating system difference, not a compiler difference.
-//#elif defined(VCL_GCC_30)
-//extern "C" int brk (char*) VPL_THROW(());
-//PASSTHRU(int, brk, (void *  a0), ((char*)a0));
-#else
-extern "C" int brk (void*) VPL_THROW(());
-PASSTHRU(int, brk, (void *  a0), (a0));
-#endif
-#endif
 PASSTHRU(int, chdir, (const char * s), (s));
 PASSTHRU(int, chown, (const char *  a0,vpl_uid_t  a1,vpl_gid_t  a2), (a0, a1, a2));
 PASSTHRU(int, close, (int  a0), (a0));
