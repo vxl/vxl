@@ -768,6 +768,11 @@ SOURCE=.\vrml/vgui_vrml_tableau.cxx
 SOURCE=.\vrml/vgui_vrml_texture_map.cxx
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\vgui_register_all.cxx
+
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
