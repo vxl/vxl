@@ -141,3 +141,15 @@ void vgui_style_factory::change_style_impl(vgui_soview* so, vgui_style* st_new, 
     styles_map.insert(MultiMap_styles::value_type(st_new, so));
   }
 }
+
+//: clear all maps and vectors 
+void vgui_style_factory::clear()
+{
+  instance()->clear_impl();
+}
+
+void vgui_style_factory::clear_impl()
+{
+  styles.clear();
+  styles_map.clear();
+}

@@ -75,6 +75,11 @@ vgui_soview::vgui_soview() : selectable(true), style(0) {
   add_id();
 }
 
+vgui_soview::~vgui_soview()
+{
+  delete style;
+}
+
 vcl_ostream& vgui_soview::print(vcl_ostream& s) const
 {
   return s << "id " << id;

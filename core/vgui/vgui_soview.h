@@ -35,7 +35,7 @@ class vgui_soview /*: public vgui_observable*/
   vgui_soview();
 
   //: Destructor - delete this soview.
-  virtual ~vgui_soview() {}
+  virtual ~vgui_soview();
 
   //: Render this soview on the display.
   virtual void draw() = 0;

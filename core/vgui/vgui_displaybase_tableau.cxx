@@ -90,12 +90,22 @@ void vgui_displaybase_tableau::remove(vgui_soview* object)
     objects.erase(i);
   }
 }
-
-
+//: clear all soviews from the display. 
+//  The soviews must be deleted otherwise we have a big memory leak.
+//  It is not clear that the design intended that the creator of the 
+//  soview is responsible for deleting it.  In any case, such management
+//  would be impossible without reference counting.  If users are going
+//  to keep soviews for personal use, then the whole soview scheme 
+//  should be changed to smart pointers. JLM
+//
 void vgui_displaybase_tableau::clear()
 {
   highlighted = 0;
   deselect_all();
+  vgui_style_factory::clear();
+  for(vcl_vector<vgui_soview*>::iterator sit = objects.begin();
+      sit != objects.end(); sit++)
+    delete (*sit);
   objects.clear();
 }
 
