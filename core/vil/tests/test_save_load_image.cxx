@@ -29,6 +29,7 @@
 #include <vcl_fstream.h>
 
 #include <vxl_config.h> // for vxl_byte
+#include <vil/vil_config.h> // for HAS_JPEG
 
 #include <vul/vul_temp_filename.h>
 #include <vpl/vpl.h> // vpl_unlink()
