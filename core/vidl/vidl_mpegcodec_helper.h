@@ -5,18 +5,18 @@
 // \file
 // \author l.e.galup
 // \date July 2002
-// \brief   This is a rewrite of the mpeg2dec program. it has been modified
+//          This is a rewrite of the mpeg2dec program. it has been modified
 //          to work with the video player, i.e., by implementing a get_section
 //          method. this required some buffering, and the ability to decode
 //          a file grab at a time. there is some extra legacy code here.
 //          though some things seem to serve no purpose, i left them there as hooks
-//          for possible evolution of this class. 
-// 
+//          for possible evolution of this class.
+//
 //          the mpeg_codec sends a request to this helper via
 //          a decode_request. data is stored in the mpeg_codec_data class, which
 //          holds a frame buffer, owned by the mpeg_codec. decoded frames are
 //          stored in this frame_buffer, and subsequent user requests for frames
-//          just does a memcpy from this frame_buffer into the user supplied buffer. 
+//          just does a memcpy from this frame_buffer into the user supplied buffer.
 // \verbatim
 // Modifications
 // \endverbatim
@@ -26,7 +26,6 @@
 #include <vcl_string.h>
 #include <vcl_map.h>
 #include <vcl_iostream.h>
-#include <vcl_vector.h>
 
 #define BUFFER_SIZE 4096
 #define DEMUX_PAYLOAD_START 1
@@ -43,16 +42,16 @@ extern "C" {
 #undef this
 }
 
-class decode_request 
+class decode_request
 {
  public:
   enum request_type
     {
       SEEK, FILE_GRAB, SKIP, REWIND
     };
-  //seek seeks from the current file pointer 
+  //seek seeks from the current file pointer
   //position until it gets frame position
-  //file grab does a single fread from the 
+  //file grab does a single fread from the
   //file of size BUFFER_SIZE
 
   request_type rt;
@@ -67,78 +66,78 @@ class frame_buffer
 
   frame_buffer()
     {
-      _buffers = new vcl_map<int,unsigned char *>; 
+      buffers_ = new vcl_map<int,unsigned char *>;
     }
 
   void init(int width, int height, int bits_pixel)
     {
       //allocate mem 4 ring buffer
       for (int i=1; i<30 ; i++)
-	{
-	  unsigned char * buf = new unsigned char[width*height*(bits_pixel/8)];
-	  (*_buffers)[-i] = buf;
-	}
+        {
+          unsigned char * buf = new unsigned char[width*height*(bits_pixel/8)];
+          (*buffers_)[-i] = buf;
+        }
       return;
     }
 
   ~frame_buffer()
     {
       vcl_cout << "frame_buffer DTOR. entering." << vcl_endl;
-      vcl_map<int,unsigned char *>::iterator vmiuit = _buffers->begin();
-      for (;vmiuit != _buffers->end(); vmiuit++)
-	delete[] (*vmiuit).second;
-      delete _buffers;
+      vcl_map<int,unsigned char *>::iterator vmiuit = buffers_->begin();
+      for (;vmiuit != buffers_->end(); vmiuit++)
+        delete[] (*vmiuit).second;
+      delete buffers_;
       vcl_cout << "frame_buffer DTOR. exiting." << vcl_endl;
     }
 
-  unsigned char * get_buff(int i) {return (*_buffers)[i];}
+  unsigned char * get_buff(int i) {return (*buffers_)[i];}
   unsigned char * next(int framenum)
   {
     //first, get the oldest frame in the buffer
-    unsigned char * buf = (*_buffers->begin()).second;
+    unsigned char * buf = (*buffers_->begin()).second;
 
     //remove it from the map
-    _buffers->erase(_buffers->begin());
+    buffers_->erase(buffers_->begin());
 
     //use the memory for the new frame
-    (*_buffers)[framenum] = buf;
+    (*buffers_)[framenum] = buf;
 
     return buf;
   }
 
   void print()
     {
-      vcl_map<int,unsigned char *>::const_iterator vmiucit = _buffers->begin();
-      for (;vmiucit != _buffers->end(); vmiucit++)
-	vcl_cout << (*vmiucit).first << vcl_endl;
+      vcl_map<int,unsigned char *>::const_iterator vmiucit = buffers_->begin();
+      for (;vmiucit != buffers_->end(); vmiucit++)
+        vcl_cout << (*vmiucit).first << vcl_endl;
     }
 
-  int first_frame_num() { return (*_buffers->begin()).first;}
+  int first_frame_num() { return (*buffers_->begin()).first;}
 
   bool reset()
     {
-      vcl_map<int,unsigned char *>::iterator vmit = _buffers->begin();
-      for(int i=-30; vmit != _buffers->end(); vmit++,i++)
-	{
-	  unsigned char * buf = (*vmit).second;
-	  
-	  //remove it from the map
-	  _buffers->erase(vmit);
-	  
-	  //use the memory for the new frame
-	  (*_buffers)[i] = buf;
-	}
-		return true;
+      vcl_map<int,unsigned char *>::iterator vmit = buffers_->begin();
+      for (int i=-30; vmit != buffers_->end(); vmit++,i++)
+        {
+          unsigned char * buf = (*vmit).second;
+
+          //remove it from the map
+          buffers_->erase(vmit);
+
+          //use the memory for the new frame
+          (*buffers_)[i] = buf;
+        }
+      return true;
     }
 
  private:
-  vcl_map<int,unsigned char *> * _buffers;
+  vcl_map<int,unsigned char *> * buffers_;
 };
 
 struct vidl_mpegcodec_data : vo_instance_t
 {
  public:
-  enum output_format_t 
+  enum output_format_t
     {
       GREY, RGB
     };
@@ -164,17 +163,17 @@ class vidl_mpegcodec_helper
   friend class vidl_mpegcodec;
 
  public:
-  vidl_mpegcodec_helper(vo_open_t * vopen, 
-		    vcl_string filename, 
-		    frame_buffer * buffers);
+  vidl_mpegcodec_helper(vo_open_t * vopen,
+                        vcl_string filename,
+                        frame_buffer * buffers);
   ~vidl_mpegcodec_helper();
   bool init();
   int execute(decode_request * p);
   void print();
-  int get_width() {return _output->width;}
-  int get_height() {return _output->height;}
-  int get_last_frame() {return _output->last_frame_decoded;}
-  vidl_mpegcodec_data::output_format_t get_format() {return _output->output_format;}
+  int get_width() {return output_->width;}
+  int get_height() {return output_->height;}
+  int get_last_frame() {return output_->last_frame_decoded;}
+  vidl_mpegcodec_data::output_format_t get_format() {return output_->output_format;}
 
  private:
   /////////////////////////////////////////////////////////
@@ -192,23 +191,23 @@ class vidl_mpegcodec_helper
   bool decode_ts(int packets);
   bool decode_es(int reads);
 
-  // each of these arguments were static 
+  // each of these arguments were static
   // and global in the original implementation
   // of mpeg2dec
-  uint8_t _buffer[BUFFER_SIZE];
-  vcl_string _filename;
-  FILE * _in_file;
-  int _demux_track;
-  int _demux_pid;
-  int _disable_accel;
-  mpeg2dec_t * _mpeg2dec;
-  vo_open_t * _output_open;
-  vidl_mpegcodec_data * _output;
-  int _chunk_size;
-  int _chunk_number;
+  uint8_t buffer_[BUFFER_SIZE];
+  vcl_string filename_;
+  FILE * in_file_;
+  int demux_track_;
+  int demux_pid_;
+  int disable_accel_;
+  mpeg2dec_t * mpeg2dec_;
+  vo_open_t * output_open_;
+  vidl_mpegcodec_data * output_;
+  int chunk_size_;
+  int chunk_number_;
   bool (vidl_mpegcodec_helper::*decoder_routine)(int);
 
-  bool _init; //true once init() has completed
+  bool init_; //true once init() has completed
 };
 
 #endif // vidl_mpegcodec_helper
