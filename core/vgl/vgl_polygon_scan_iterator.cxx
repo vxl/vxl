@@ -82,8 +82,8 @@ void vgl_polygon_scan_iterator::vertind::display( char const* str)
 //===============================================================
 vgl_polygon_scan_iterator::~vgl_polygon_scan_iterator()
 {
-  delete [] crossedges;
-  delete [] yverts;
+  if( crossedges ) delete [] crossedges;
+  if( yverts ) delete [] yverts;
 }
 
 //===============================================================
@@ -124,7 +124,14 @@ void vgl_polygon_scan_iterator::init()
 
   int numchains = poly_.num_sheets();
   // return if no vertices in face
-  if ( numverts == 0 ) return;
+  if ( numverts == 0 ) {
+    // Make a call to next() return false.
+    y0 = 0;
+    y1 = -1;
+    crossedges = 0;
+    yverts = 0;
+    return;
+  }
 
   // create array for storing edges crossing current scan line
   crossedges = new crossedge[ numverts ];
