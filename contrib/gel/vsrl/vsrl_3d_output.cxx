@@ -187,27 +187,25 @@ void vsrl_3d_output::write_output(char *filename)
   // Create a range image to dump the data into for further use.
   // Set initial image to zero.
   range_image_.resize(width,height+1);
-  for (int x=0;x<width;x++) {
-    for (int y=0;y<height+1;y++) {
+  for (int x=0;x<width;x++)
+    for (int y=0;y<height+1;y++)
       range_image_(x,y) = 0.0;
-    }
-  }
 
   vcl_vector<double>::iterator iX=X_out.begin();
   vcl_vector<double>::iterator iY=Y_out.begin();
   vcl_vector<double>::iterator iZ=Z_out.begin();
   vcl_vector<double>::iterator itx=tx_out.begin();
   vcl_vector<double>::iterator ity=ty_out.begin();
-  double maxval=0.0;
+  double maxval=0.0; // assume that not all values in Z_out are negative - TODO
 
   for (; iX!=X_out.end(); ++iX, ++iY, ++iZ, ++itx, ++ity)
-    {
-      file << (*iX) << ' ' << (*iY) << ' ' << (*iZ) << ' ' << *itx << ' ' << *ity << vcl_endl;
-      // populate the range image
-      int ix = int(*iX+0.5), iy = int(*iY+0.5); // round to nearest integer
-      range_image_(ix,height-iy) = *iZ;
-      if (*iZ > maxval) maxval = *iZ; // find the maximum for later scaling
-    }
+  {
+    file << (*iX) << ' ' << (*iY) << ' ' << (*iZ) << ' ' << *itx << ' ' << *ity << vcl_endl;
+    // populate the range image
+    int ix = int(*iX+0.5), iy = int(*iY+0.5); // round to nearest integer
+    range_image_(ix,height-iy) = *iZ;
+    if (*iZ > maxval) maxval = *iZ; // find the maximum for later scaling
+  }
 
   // Save the range image - scaled to 0->255
   double scale = 255.0/maxval; double shift=0;
@@ -217,15 +215,13 @@ void vsrl_3d_output::write_output(char *filename)
   for (int r=0;r<range_image_.rows();r++) {
     for (int c=0;c<range_image_.cols();c++) {
       scaled_image.get_section(&d_tmp,c,r,1,1);
-      rimage_(c,r) = d_tmp;
+      rimage_(c,r) = (unsigned char)(d_tmp+0.5); // round to nearest byte-value
     }
   }
-  static vcl_string range_image_file="range_image.tif";
-  if (!vil1_save(rimage_,range_image_file.c_str())) {
-    vcl_cerr << "vsrl_3d_output::write_output: Error saving range image!" << vcl_endl;
-  }
+  if (!vil1_save(rimage_,"range_image.tif"))
+    vcl_cerr << "vsrl_3d_output::write_output: Error saving range image!\n";
 
-  // OK we can now compute the conectivity between points
+  // OK we can now compute the connectivity between points
 
   vcl_cout << "computing the triangles\n";
 
@@ -321,21 +317,17 @@ void vsrl_3d_output::read_projective_transform(char *filename)
 }
 
 
-// identify points which are not part of the recitfied image
+// identify points which are not part of the rectified image
 
 bool vsrl_3d_output::non_valid_point(int x, int y)
 {
-  if (x>=0 && x < buffer1_.width() && y>=0 && y <buffer1_.height()){
-    if (buffer1_(x,y)==3){
+  if (x>=0 && x < buffer1_.width() && y>=0 && y < buffer1_.height())
+    if (buffer1_(x,y)==3)
       return true;
-    }
-  }
 
-  if (x>=0 && x < buffer2_.width() && y>=0 && y <buffer2_.height()){
-    if (buffer2_(x,y)==3){
+  if (x>=0 && x < buffer2_.width() && y>=0 && y < buffer2_.height())
+    if (buffer2_(x,y)==3)
       return true;
-    }
-  }
 
   // it looks like this is a valid point
   return false;
