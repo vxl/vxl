@@ -47,7 +47,7 @@ void osl_easy_canny(int which_canny,
   case 2: {
     osl_edge_detector_params params;
     if (sigma)
-      params._sigma = sigma;
+      params.sigma_ = sigma;
     osl_edge_detector filter(params);
     filter.detect_edges(image, edges);
   } break;
@@ -56,5 +56,4 @@ void osl_easy_canny(int which_canny,
     vcl_cerr << __FILE__ ": unrecognised which_canny=" << which_canny << vcl_endl;
     break;
   }
-
 }

@@ -35,43 +35,43 @@ osl_edge_detector::osl_edge_detector(osl_edge_detector_params const &params)
   : osl_edge_detector_params(params)
 {
   //Set up histogram stuff -  old style maintained for compatability
-  _gradient_histogram = false; //Do we need to compute a histogram?
-  _histogram_resolution = 15; // The number of buckets
+  gradient_histogram_ = false; //Do we need to compute a histogram?
+  histogram_resolution_ = 15; // The number of buckets
 
- _width = int(_sigma*vcl_sqrt(2*vcl_log(1.0/_gauss_tail))+1); // round up to int
-  _k_size = 2*_width+ 1;
-  _kernel = new float[_k_size];
-  _max_gradient = _low;
-  _xjunc = new vcl_list<int>;
-  _yjunc = new vcl_list<int>;
-  _vlist = new vcl_list<osl_Vertex*>;
+ width_ = int(sigma_*vcl_sqrt(2*vcl_log(1.0/gauss_tail_))+1); // round up to int
+  k_size_ = 2*width_+ 1;
+  kernel_ = new float[k_size_];
+  max_gradient_ = low_;
+  xjunc_ = new vcl_list<int>;
+  yjunc_ = new vcl_list<int>;
+  vlist_ = new vcl_list<osl_Vertex*>;
 
-  _jval = 2000.0;
+  jval_ = 2000.0;
 
-  _vertidcount = 0;
+  vertidcount_ = 0;
 }
 
 //-----------------------------------------------------------------------------
 
 osl_edge_detector::~osl_edge_detector() {
-  Free_float_image(_dx,_xsize);
-  Free_float_image(_dy,_xsize);
-  Free_float_image(_grad,_xsize);
+  Free_float_image(dx_,xsize_);
+  Free_float_image(dy_,xsize_);
+  Free_float_image(grad_,xsize_);
 
-  Free_float_image(_thin,_xsize);
-  Free_float_image(_theta,_xsize);
-  Free_float_image(_thresh,_xsize);
+  Free_float_image(thin_,xsize_);
+  Free_float_image(theta_,xsize_);
+  Free_float_image(thresh_,xsize_);
 
-  Free_int_image(_dist,_xsize);
-  Free_int_image(_jx,_xsize);
-  Free_int_image(_jy,_xsize);
-  Free_int_image(_junction,_xsize);
+  Free_int_image(dist_,xsize_);
+  Free_int_image(jx_,xsize_);
+  Free_int_image(jy_,xsize_);
+  Free_int_image(junction_,xsize_);
 
-  //no point _vlist->clear();
-  delete _vlist;
-  delete [] _kernel;
-  delete _xjunc;
-  delete _yjunc;
+  //no point vlist_->clear();
+  delete vlist_;
+  delete [] kernel_;
+  delete xjunc_;
+  delete yjunc_;
 }
 
 
@@ -84,60 +84,60 @@ void osl_edge_detector::detect_edges(vil_image const &image,
   assert(edges!=0);
 
   //
-  _xsize = image.height();
-  _ysize = image.width();
-  _xstart = 0;
-  _ystart = 0;
+  xsize_ = image.height();
+  ysize_ = image.width();
+  xstart_ = 0;
+  ystart_ = 0;
 
-  //vcl_cerr << "_xstart = " << _xstart << " _ystart = " << _ystart << vcl_endl;
-  //vcl_cerr << "_xsize = " << _xsize << " _ysize = " << _ysize << vcl_endl;
+  //vcl_cerr << "xstart_ = " << xstart_ << " ystart_ = " << ystart_ << vcl_endl;
+  //vcl_cerr << "xsize_ = " << xsize_ << " ysize_ = " << ysize_ << vcl_endl;
 
-  _dx = Make_float_image(_xsize,_ysize);
-  _dy = Make_float_image(_xsize,_ysize);
-  _grad = Make_float_image(_xsize,_ysize);
-  _smooth = Make_float_image(_xsize,_ysize);
+  dx_ = Make_float_image(xsize_,ysize_);
+  dy_ = Make_float_image(xsize_,ysize_);
+  grad_ = Make_float_image(xsize_,ysize_);
+  smooth_ = Make_float_image(xsize_,ysize_);
 
-  _thin = Make_float_image(_xsize,_ysize);
-  _thresh = Make_float_image(_xsize,_ysize);
-  _theta = Make_float_image(_xsize,_ysize);
+  thin_ = Make_float_image(xsize_,ysize_);
+  thresh_ = Make_float_image(xsize_,ysize_);
+  theta_ = Make_float_image(xsize_,ysize_);
 
-  _dist = Make_int_image(_xsize,_ysize);
-  _junction = Make_int_image(_xsize,_ysize);
-  _jx = Make_int_image(_xsize,_ysize);
-  _jy = Make_int_image(_xsize,_ysize);
+  dist_ = Make_int_image(xsize_,ysize_);
+  junction_ = Make_int_image(xsize_,ysize_);
+  jx_ = Make_int_image(xsize_,ysize_);
+  jy_ = Make_int_image(xsize_,ysize_);
 
-  if (_verbose)
+  if (verbose_)
     vcl_cerr << "Doing canny on image region "
-         << _xsize << " by " << _ysize << vcl_endl
-         << "Gaussian tail = " << _gauss_tail << vcl_endl
-         << "Sigma         = " << _sigma << vcl_endl
-         << "Kernel size   = " << _k_size << vcl_endl
-         << "Threshold     = " << _low << vcl_endl;
+         << xsize_ << " by " << ysize_ << vcl_endl
+         << "Gaussian tail = " << gauss_tail_ << vcl_endl
+         << "Sigma         = " << sigma_ << vcl_endl
+         << "Kernel size   = " << k_size_ << vcl_endl
+         << "Threshold     = " << low_ << vcl_endl;
 
-  if (_verbose) vcl_cerr << "setting convolution kernel and zeroing images\n";
-  osl_kernel_DOG(_sigma, _kernel, _k_size, _width);
+  if (verbose_) vcl_cerr << "setting convolution kernel and zeroing images\n";
+  osl_kernel_DOG(sigma_, kernel_, k_size_, width_);
 
-  osl_canny_base_fill_raw_image(_thin, _xsize, _ysize, 0.0f);
-  osl_canny_base_fill_raw_image(_thresh, _xsize, _ysize, _low);
-  osl_canny_base_fill_raw_image(_theta, _xsize, _ysize, DUMMYTHETA);
+  osl_canny_base_fill_raw_image(thin_, xsize_, ysize_, 0.0f);
+  osl_canny_base_fill_raw_image(thresh_, xsize_, ysize_, low_);
+  osl_canny_base_fill_raw_image(theta_, xsize_, ysize_, DUMMYTHETA);
 
   // A suitably large value (FAR) - perhaps should be more. This represents the
   // distance of a point to the nearest edgel
-  osl_canny_base_fill_raw_image(_dist, _xsize, _ysize, FAR);
+  osl_canny_base_fill_raw_image(dist_, xsize_, ysize_, FAR);
 
   // Do the traditional Canny parts, and use non-maximal supression to
   // set the thresholds.
-  if (_verbose) vcl_cerr << "smoothing the image\n";
-  osl_canny_smooth_rothwell(image, _kernel, _width, _k_size, _smooth);
+  if (verbose_) vcl_cerr << "smoothing the image\n";
+  osl_canny_smooth_rothwell(image, kernel_, width_, k_size_, smooth_);
 
-  if (_verbose) vcl_cerr << "computing x,y derivatives and norm of gradient\n";
-  osl_canny_gradient(_xsize, _ysize, _smooth, _dx, _dy, _grad);
+  if (verbose_) vcl_cerr << "computing x,y derivatives and norm of gradient\n";
+  osl_canny_gradient(xsize_, ysize_, smooth_, dx_, dy_, grad_);
 
-  if (_verbose) vcl_cerr << "doing sub-pixel interpolation\n";
+  if (verbose_) vcl_cerr << "doing sub-pixel interpolation\n";
   Sub_pixel_interpolation();
 
-  if (_verbose) vcl_cerr << "assigning thresholds\n";
-  Set_thresholds(); // _ghist is computed here
+  if (verbose_) vcl_cerr << "assigning thresholds\n";
+  Set_thresholds(); // ghist_ is computed here
 
   // If we don't want to maintain the strict measurement of the topology
   // (ie. we want to stop the junction regions becoming too extensive), we
@@ -148,32 +148,32 @@ void osl_edge_detector::detect_edges(vil_image const &image,
   }
 
   // Thin the edge image, though keep the original thick one
-  if (_verbose) vcl_cerr << "thinning edges\n";
+  if (verbose_) vcl_cerr << "thinning edges\n";
   Thin_edges();
 
   // Locate junctions in the edge image and joint the clusters together
   // as we have no confidence in the geometry around them.
-  if (_verbose) vcl_cerr << "locating junctions in the edge image - ";
+  if (verbose_) vcl_cerr << "locating junctions in the edge image - ";
   Find_junctions();
-  if (_verbose) vcl_cerr << _xjunc->size() << " junctions found\n";
+  if (verbose_) vcl_cerr << xjunc_->size() << " junctions found\n";
 
   Find_junction_clusters();
-  if (_verbose) vcl_cerr << _vlist->size() << " junction clusters found\n";
+  if (verbose_) vcl_cerr << vlist_->size() << " junction clusters found\n";
 
-  // Finally do edge following to extract the edge data from the _thin image
-  if (_verbose) vcl_cerr << "doing final edge following\n";
+  // Finally do edge following to extract the edge data from the thin_ image
+  if (verbose_) vcl_cerr << "doing final edge following\n";
   Follow_curves(edges);
 
-  if (_verbose) vcl_cerr << "finished osl_edge_detector\n";
+  if (verbose_) vcl_cerr << "finished osl_edge_detector\n";
 }
 
 //-----------------------------------------------------------------------------
 //:
 // A procedure that performs sub-pixel interpolation for all edges greater
-// than the threshold by parabolic fitting. Writes edges into the _thresh image
-// if they are maxima and above _low. This gives a good indication of the local
-// edge strengths. Stores sub-pixel positions in _dx and _dy, and set the
-// orientations in _theta.
+// than the threshold by parabolic fitting. Writes edges into the thresh_ image
+// if they are maxima and above low_. This gives a good indication of the local
+// edge strengths. Stores sub-pixel positions in dx_ and dy_, and set the
+// orientations in theta_.
 //
 void osl_edge_detector::Sub_pixel_interpolation() {
   float h1=0.0,h2=0.0; // dummy initialisation values
@@ -183,16 +183,16 @@ void osl_edge_detector::Sub_pixel_interpolation() {
   float fraction,dnewx=0.0,dnewy=0.0; // dummy initialisation values
 
   // Add 1 to get rid of border effects.
-  for (int x=_width+1; x<_xsize-_width-1; ++x)  {
-    float *g0 = _grad[x-1];
-    float *g1 = _grad[x];
-    float *g2 = _grad[x+1];
-    float *dx = _dx[x];
-    float *dy = _dy[x];
+  for (unsigned int x=width_+1; x+width_+1<xsize_; ++x)  {
+    float *g0 = grad_[x-1];
+    float *g1 = grad_[x];
+    float *g2 = grad_[x+1];
+    float *dx = dx_[x];
+    float *dy = dy_[x];
 
-    for (int y=_width+1; y<_ysize-_width-1; ++y)  {
+    for (unsigned int y=width_+1; y+width_+1<ysize_; ++y)  {
       // First check that we have a potential edge
-      if ( g1[y] > _low ) {
+      if ( g1[y] > low_ ) {
         theta = k*vcl_atan2(dy[y],dx[y]);
 
         // Now work out which direction wrt the eight-way
@@ -264,7 +264,7 @@ void osl_edge_detector::Sub_pixel_interpolation() {
           //vcl_cerr << "*** ERROR ON SWITCH IN NMS ***\n";
         }
 
-        // Now store the edge data, re-use _dx[][] and _dy[][]
+        // Now store the edge data, re-use dx_[][] and dy_[][]
         // for sub-pixel locations (don't worry about the junk
         // that is already in them). Use any edgels that get
         // non-maximal suppression to bootstrap the image
@@ -273,11 +273,11 @@ void osl_edge_detector::Sub_pixel_interpolation() {
         // height  = g1[y] + frac*(h2-h1)/4 ?
         if ( (g1[y]>=h1) && (g1[y]>=h2) && (vcl_fabs(dnewx)<=0.5) && (vcl_fabs(dnewy)<=0.5) ) {
 
-          if ( g1[y]*ALPHA > _low )
-            _thresh[x][y] = ALPHA * g1[y]; // Use a ALPHA% bound
-          // _thresh image starts off as being equal to _low
+          if ( g1[y]*ALPHA > low_ )
+            thresh_[x][y] = ALPHA * g1[y]; // Use a ALPHA% bound
+          // thresh_ image starts off as being equal to low_
           // else
-          //   _thresh[x][y] = _low;
+          //   thresh_[x][y] = low_;
           Thicken_threshold(x,y);
         }
 
@@ -290,7 +290,7 @@ void osl_edge_detector::Sub_pixel_interpolation() {
           dx[y] = x + 0.5;
           dy[y] = y + 0.5;
         }
-        _theta[x][y] = theta;
+        theta_[x][y] = theta;
       }
       // For consistency assign these values even though the
       // edge is below strength.
@@ -301,26 +301,26 @@ void osl_edge_detector::Sub_pixel_interpolation() {
     }
   }
 
-  // Clean up around the border to ensure consistency in the _dx and _dy values.
-  for (int x=0; x<_xsize; ++x) {
-    for (int y=0; y<=_width; ++y) {
-      _dx[x][y] = x + 0.5;
-      _dy[x][y] = y + 0.5;
+  // Clean up around the border to ensure consistency in the dx_ and dy_ values.
+  for (unsigned int x=0; x<xsize_; ++x) {
+    for (unsigned int y=0; y<=width_; ++y) {
+      dx_[x][y] = x + 0.5;
+      dy_[x][y] = y + 0.5;
     }
-    for (int y=_ysize-_width-1; y<_ysize; ++y) {
-      _dx[x][y] = x + 0.5;
-      _dy[x][y] = y + 0.5;
+    for (int y=ysize_-width_-1; y<int(ysize_); ++y) {
+      dx_[x][y] = x + 0.5;
+      dy_[x][y] = y + 0.5;
     }
   }
 
-  for (int y=_width+1; y<_ysize-_width-1; ++y) {
-    for (int x=0; x<=_width; ++x)  {
-      _dx[x][y] = x + 0.5;
-      _dy[x][y] = y + 0.5;
+  for (unsigned int y=width_+1; y+width_+1<ysize_; ++y) {
+    for (unsigned int x=0; x<=width_; ++x)  {
+      dx_[x][y] = x + 0.5;
+      dy_[x][y] = y + 0.5;
     }
-    for (int x=_xsize-_width-1; x<_xsize; ++x) {
-      _dx[x][y] = x + 0.5;
-      _dy[x][y] = y + 0.5;
+    for (int x=xsize_-width_-1; x<int(xsize_); ++x) {
+      dx_[x][y] = x + 0.5;
+      dy_[x][y] = y + 0.5;
     }
   }
 }
@@ -333,24 +333,24 @@ void osl_edge_detector::Sub_pixel_interpolation() {
 //
 void osl_edge_detector::Thicken_threshold(int x, int y) {
   // Experimental change 13/4/95 by CAR
-  int width = _width;
+  int width = width_;
   //    int width = 0;
 
   for (int i=x-width; i<=x+width; ++i)
     for (int j=y-width; j<=y+width; ++j)  {
 
-      _dist[i][j] = 0;
-      if ( _thresh[i][j] != _low )
-        _thresh[i][j] = vcl_min(_thresh[x][y], _thresh[i][j]);
+      dist_[i][j] = 0;
+      if ( thresh_[i][j] != low_ )
+        thresh_[i][j] = vcl_min(thresh_[x][y], thresh_[i][j]);
       else
-        _thresh[i][j] = _thresh[x][y];
+        thresh_[i][j] = thresh_[x][y];
     }
 }
 
 
 //-----------------------------------------------------------------------------
 //:
-// Takes the _thresh image that contains threshold values near to where
+// Takes the thresh_ image that contains threshold values near to where
 // non-maximal suppression succeeded, and zero elsewhere, and extend the
 // values to all areas of the image. This is done using chamfer masks so that
 // the final threshold assigned at any one point (ie. a point that was
@@ -370,39 +370,39 @@ void osl_edge_detector::Thicken_threshold(int x, int y) {
 void osl_edge_detector::Set_thresholds()
 {
   int **fdist,**bdist,**a1dist,**a2dist;
-  fdist = Make_int_image(_xsize,_ysize);
-  bdist = Make_int_image(_xsize,_ysize);
-  a1dist = Make_int_image(_xsize,_ysize);
-  a2dist = Make_int_image(_xsize,_ysize);
-  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(int const*const*, _dist), fdist, _xsize, _ysize);
-  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(int const*const*, _dist), bdist, _xsize, _ysize);
-  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(int const*const*, _dist), a1dist, _xsize, _ysize);
-  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(int const*const*, _dist), a2dist, _xsize, _ysize);
+  fdist = Make_int_image(xsize_,ysize_);
+  bdist = Make_int_image(xsize_,ysize_);
+  a1dist = Make_int_image(xsize_,ysize_);
+  a2dist = Make_int_image(xsize_,ysize_);
+  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(int const*const*, dist_), fdist, xsize_, ysize_);
+  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(int const*const*, dist_), bdist, xsize_, ysize_);
+  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(int const*const*, dist_), a1dist, xsize_, ysize_);
+  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(int const*const*, dist_), a2dist, xsize_, ysize_);
 
   float **fth,**bth,**a1th,**a2th;
-  fth = Make_float_image(_xsize,_ysize);
-  bth = Make_float_image(_xsize,_ysize);
-  a1th = Make_float_image(_xsize,_ysize);
-  a2th = Make_float_image(_xsize,_ysize);
-  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(float const *const*, _thresh), fth, _xsize, _ysize);
-  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(float const *const*, _thresh), bth, _xsize, _ysize);
-  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(float const *const*, _thresh), a1th, _xsize, _ysize);
-  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(float const *const*, _thresh), a2th, _xsize, _ysize);
+  fth = Make_float_image(xsize_,ysize_);
+  bth = Make_float_image(xsize_,ysize_);
+  a1th = Make_float_image(xsize_,ysize_);
+  a2th = Make_float_image(xsize_,ysize_);
+  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(float const *const*, thresh_), fth, xsize_, ysize_);
+  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(float const *const*, thresh_), bth, xsize_, ysize_);
+  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(float const *const*, thresh_), a1th, xsize_, ysize_);
+  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(float const *const*, thresh_), a2th, xsize_, ysize_);
 
-  osl_chamfer_Forward (_xsize, _ysize, fdist, fth);
-  osl_chamfer_Backward(_xsize, _ysize, bdist, bth);
-  osl_chamfer_Alt1(_xsize, _ysize, a1dist, a1th);
-  osl_chamfer_Alt2(_xsize, _ysize, a2dist, a2th);
+  osl_chamfer_Forward (xsize_, ysize_, fdist, fth);
+  osl_chamfer_Backward(xsize_, ysize_, bdist, bth);
+  osl_chamfer_Alt1(xsize_, ysize_, a1dist, a1th);
+  osl_chamfer_Alt2(xsize_, ysize_, a2dist, a2th);
 
   // The range of the effect of the smoothing kernel, including the scale factor
   // we have ignored up to now for the chamfer masks
-  //    int range = 3*_width;
-  //    float max_gradient = _low;  //Commented out May 1997- JLM
-  //Replaced by global _max_gradient
-  for (int x=0; x<_xsize; ++x) {
-    for (int y=0; y<_ysize; ++y) {
+  //    int range = 3*width_;
+  //    float max_gradient = low_;  //Commented out May 1997- JLM
+  //Replaced by global max_gradient_
+  for (unsigned int x=0; x<xsize_; ++x) {
+    for (unsigned int y=0; y<ysize_; ++y) {
 
-      if ( _thresh[x][y] == _low ) {
+      if ( thresh_[x][y] == low_ ) {
 
         // Determine the two closest edge points.
         int option = osl_Minimum4(fdist[x][y],
@@ -428,41 +428,41 @@ void osl_edge_detector::Set_thresholds()
           //break;
         }
         if ( den != 0.0 )
-          _thresh[x][y] = num / den;
-        else if ( _thresh[x][y] <= _low )
-          _thresh[x][y] = _low;
+          thresh_[x][y] = num / den;
+        else if ( thresh_[x][y] <= low_ )
+          thresh_[x][y] = low_;
       }
 
-      if ( _grad[x][y]>_thresh[x][y] ) {
-        //changed to _max_gradient, global - May 1997 JLM
-        if (_grad[x][y]>_max_gradient)
-          _max_gradient=_grad[x][y];
-        _thin[x][y] = _grad[x][y];
+      if ( grad_[x][y]>thresh_[x][y] ) {
+        //changed to max_gradient_, global - May 1997 JLM
+        if (grad_[x][y]>max_gradient_)
+          max_gradient_=grad_[x][y];
+        thin_[x][y] = grad_[x][y];
       }
     }
   }
   // Noticed that all gradient values are used in edgel Strength Histogram - May 1997
   // So defer to actual edgel chain formation.
 #if 0 // commented out
-  if (_gradient_histogram)
+  if (gradient_histogram_)
         {
-            _ghist =
-              new Histogram(_histogram_resolution, _low, max_gradient);
-            for (x=0; x<_xsize; ++x)
-                for (y=0; y<_ysize; ++y)
-                  //_ghist->UpCount(_grad[x][y]); //All Pixels (Used since 1995)
-                  _ghist->UpCount(_thin[x][y]);  //Just at edgels (First check
+            ghist_ =
+              new Histogram(histogram_resolution_, low_, max_gradient);
+            for (x=0; x<xsize_; ++x)
+                for (y=0; y<ysize_; ++y)
+                  //ghist_->UpCount(grad_[x][y]); //All Pixels (Used since 1995)
+                  ghist_->UpCount(thin_[x][y]);  //Just at edgels (First check
         }                                        //for significant differences)
 #endif
 
-  Free_int_image(fdist,_xsize);
-  Free_int_image(bdist,_xsize);
-  Free_int_image(a1dist,_xsize);
-  Free_int_image(a2dist,_xsize);
-  Free_float_image(fth,_xsize);
-  Free_float_image(bth,_xsize);
-  Free_float_image(a1th,_xsize);
-  Free_float_image(a2th,_xsize);
+  Free_int_image(fdist,xsize_);
+  Free_int_image(bdist,xsize_);
+  Free_int_image(a1dist,xsize_);
+  Free_int_image(a2dist,xsize_);
+  Free_float_image(fth,xsize_);
+  Free_float_image(bth,xsize_);
+  Free_float_image(a1th,xsize_);
+  Free_float_image(a2th,xsize_);
 }
 
 struct osl_edge_detector_xyfloat {
@@ -493,12 +493,12 @@ static int compare(osl_edge_detector_xyfloat* xyf1, osl_edge_detector_xyfloat* x
 //
 void osl_edge_detector::Thin_edges() {
 
-  // Find all of the edgels with a strength > _low
-  int x,y,a,b,c,d,e,f,g,h,genus,count;
+  // Find all of the edgels with a strength > low_
+  int a,b,c,d,e,f,g,h,genus,count;
   bool do_output = true;
 
   vcl_cerr << __FILE__ ": Fast Sort" << vcl_endl;
-  osl_edge_detector_xyfloat* edgel_array = new osl_edge_detector_xyfloat[_xsize * _ysize];
+  osl_edge_detector_xyfloat* edgel_array = new osl_edge_detector_xyfloat[xsize_ * ysize_];
   int edgel_array_len = 0;
   int pos = 0;
   count = 1;     // count set to dummy value
@@ -506,13 +506,13 @@ void osl_edge_detector::Thin_edges() {
 
     count = 0;
     edgel_array_len = 0;
-    for (x=_width; x<_xsize-_width; ++x)
-      for (y=_width; y<_ysize-_width; ++y)
-        if ( _thin[x][y] > _thresh[x][y] ) {
+    for (unsigned int x=width_; x+width_<xsize_; ++x)
+      for (unsigned int y=width_; y+width_<ysize_; ++y)
+        if ( thin_[x][y] > thresh_[x][y] ) {
 
           edgel_array[edgel_array_len].x = x;
           edgel_array[edgel_array_len].y = y;
-          edgel_array[edgel_array_len].thin = _thin[x][y];
+          edgel_array[edgel_array_len].thin = thin_[x][y];
           edgel_array_len++;
         }
 
@@ -535,19 +535,18 @@ void osl_edge_detector::Thin_edges() {
 
     // Do the thinning taking the weakest edges first and works
     // up through the list strengthwise.
-    for (pos=0; pos<edgel_array_len; ++pos)  {
+    for (pos=0; pos<edgel_array_len; ++pos) {
+      int x = edgel_array[pos].x;
+      int y = edgel_array[pos].y;
 
-      x = edgel_array[pos].x;
-      y = edgel_array[pos].y;
-
-      if ( _thin[x-1][y-1] > _thresh[x-1][y-1] )  a = 1; else a = 0;
-      if ( _thin[x  ][y-1] > _thresh[x  ][y-1] )  b = 1; else b = 0;
-      if ( _thin[x+1][y-1] > _thresh[x+1][y-1] )  c = 1; else c = 0;
-      if ( _thin[x+1][y  ] > _thresh[x+1][y  ] )  d = 1; else d = 0;
-      if ( _thin[x+1][y+1] > _thresh[x+1][y+1] )  e = 1; else e = 0;
-      if ( _thin[x  ][y+1] > _thresh[x  ][y+1] )  f = 1; else f = 0;
-      if ( _thin[x-1][y+1] > _thresh[x-1][y+1] )  g = 1; else g = 0;
-      if ( _thin[x-1][y  ] > _thresh[x-1][y  ] )  h = 1; else h = 0;
+      if ( thin_[x-1][y-1] > thresh_[x-1][y-1] )  a = 1; else a = 0;
+      if ( thin_[x  ][y-1] > thresh_[x  ][y-1] )  b = 1; else b = 0;
+      if ( thin_[x+1][y-1] > thresh_[x+1][y-1] )  c = 1; else c = 0;
+      if ( thin_[x+1][y  ] > thresh_[x+1][y  ] )  d = 1; else d = 0;
+      if ( thin_[x+1][y+1] > thresh_[x+1][y+1] )  e = 1; else e = 0;
+      if ( thin_[x  ][y+1] > thresh_[x  ][y+1] )  f = 1; else f = 0;
+      if ( thin_[x-1][y+1] > thresh_[x-1][y+1] )  g = 1; else g = 0;
+      if ( thin_[x-1][y  ] > thresh_[x-1][y  ] )  h = 1; else h = 0;
 
       genus = a+b+c+d+e+f+g+h;
 
@@ -560,7 +559,7 @@ void osl_edge_detector::Thin_edges() {
         // If the genus is zero delete the edge
         if ( genus == 0 ) {
           count++;
-          _thin[x][y] = 0.0;
+          thin_[x][y] = 0.0;
         }
       }
     }
@@ -574,25 +573,25 @@ void osl_edge_detector::Thin_edges() {
 //:
 // Finds all pixels that are surrounded by four edgels, but which are
 // themselves not edgels. These `holes' cause the construction of complex
-// topological descriptions. To simplify matters, we raise the _thin value
+// topological descriptions. To simplify matters, we raise the thin_ value
 // of the central pixel and so force it to be an edgel.
 //
 void osl_edge_detector::Fill_holes() {
-  // Find all of the edgels with a strength <= _thresh
+  // Find all of the edgels with a strength <= thresh_
   float SMALL = 0.0001f;
 
-  for (int x=_width; x<_xsize-_width; ++x)
-    for (int y=_width; y<_ysize-_width; ++y)
-      if ( _thin[x][y] <= _thresh[x][y] ) {
+  for (unsigned int x=width_; x+width_<xsize_; ++x)
+    for (unsigned int y=width_; y+width_<ysize_; ++y)
+      if ( thin_[x][y] <= thresh_[x][y] ) {
 
         int count = 0;
-        if ( _thin[x  ][y-1] > _thresh[x  ][y-1] ) count++;
-        if ( _thin[x  ][y+1] > _thresh[x  ][y+1] ) count++;
-        if ( _thin[x+1][y  ] > _thresh[x+1][y  ] ) count++;
-        if ( _thin[x-1][y  ] > _thresh[x-1][y  ] ) count++;
+        if ( thin_[x  ][y-1] > thresh_[x  ][y-1] ) count++;
+        if ( thin_[x  ][y+1] > thresh_[x  ][y+1] ) count++;
+        if ( thin_[x+1][y  ] > thresh_[x+1][y  ] ) count++;
+        if ( thin_[x-1][y  ] > thresh_[x-1][y  ] ) count++;
 
         if ( count == 4 )
-          _thin[x][y] = _thresh[x][y] + SMALL;
+          thin_[x][y] = thresh_[x][y] + SMALL;
       }
 }
 
@@ -604,29 +603,29 @@ extern osl_Vertex *osl_find(vcl_list<osl_Vertex*> const *l, osl_Vertex const &v)
 
 //:
 // Follow all edgel chains that have pixel values above their corresponding
-// threshold values (_thin[x][y] > _thresh[x][y]).
+// threshold values (thin_[x][y] > thresh_[x][y]).
 //
 void osl_edge_detector::Follow_curves(vcl_list<osl_edge*> *edges)
 {
   //  //Added May 1997 to restrict histogram to actual detected edgels -JLM
-  //  if (_gradient_histogram)
-  //    _ghist = new Histogram(_histogram_resolution, _low, _max_gradient);
+  //  if (gradient_histogram_)
+  //    ghist_ = new Histogram(histogram_resolution_, low_, max_gradient_);
 
   vcl_list<int> xcoords,ycoords;
   vcl_list<float> grad;
 
-  _chain_no = 10;  // Must be set to a number >= 1
+  chain_no_ = 10;  // Must be set to a number >= 1
 
   // Find an edgel point and start to follow it.
   edges->clear();
-  for (int x=_width; x<_xsize-_width; ++x)  {
-    float *thin = _thin[x];
-    for (int y=_width; y<_ysize-_width; ++y) {
-      if ( (thin[y]<=_thresh[x][y]) || _junction[x][y] )
+  for (unsigned int x=width_; x+width_<xsize_; ++x)  {
+    float *thin = thin_[x];
+    for (unsigned int y=width_; y+width_<ysize_; ++y) {
+      if ( (thin[y]<=thresh_[x][y]) || junction_[x][y] )
         continue;
 
       // Set the following variable [what a pointless comment]
-      _chain_no++;
+      chain_no_++;
 
       // clear lists before following
       xcoords.clear();
@@ -672,24 +671,24 @@ void osl_edge_detector::Follow_curves(vcl_list<osl_edge*> *edges)
         count--;
 
         // If we are not at a junction use sub-pixel value.
-        if ( val != _jval ) {
-          *(px++) = _dx[tmpx][tmpy] + _xstart;
-          *(py++) = _dy[tmpx][tmpy] + _ystart;
+        if ( val != jval_ ) {
+          *(px++) = dx_[tmpx][tmpy] + xstart_;
+          *(py++) = dy_[tmpx][tmpy] + ystart_;
           *(pg++) = val;
-          //     if (_ghist)
-          //       _ghist->UpCount(val); //Added edgel histogram here -May 1997
+          //     if (ghist_)
+          //       ghist_->UpCount(val); //Added edgel histogram here -May 1997
         }
         else {
-          *(px++) = tmpx + _xstart;
-          *(py++) = tmpy + _ystart;
+          *(px++) = tmpx + xstart_;
+          *(py++) = tmpy + ystart_;
           *(pg++) = 0.0;   // Mark the gradient as zero at a junction
         }
-        if (_theta[tmpx][tmpy] == DUMMYTHETA) {
+        if (theta_[tmpx][tmpy] == DUMMYTHETA) {
           const float k = 180.0f/float(vnl_math::pi);
-          _theta[tmpx][tmpy]  = k*vcl_atan2(_dy[tmpx][y],_dx[tmpx][y]);
+          theta_[tmpx][tmpy]  = k*vcl_atan2(dy_[tmpx][y],dx_[tmpx][y]);
         }
 
-        *(pt++) = _theta[tmpx][tmpy];
+        *(pt++) = theta_[tmpx][tmpy];
       }
 
       // Just check whether we have created a trivial edgechain
@@ -704,12 +703,12 @@ void osl_edge_detector::Follow_curves(vcl_list<osl_edge*> *edges)
       else if ( dc->size() > 1 ) {
         // Create a edge for the image topology
         osl_Vertex *v1 = new osl_Vertex(dc->GetX(0),dc->GetY(0));
-        v1->SetId(_vertidcount++);
+        v1->SetId(vertidcount_++);
         osl_Vertex *v2 = new osl_Vertex(dc->GetX(dc->size()-1),dc->GetY(dc->size()-1));
-        v2->SetId(_vertidcount++);
+        v2->SetId(vertidcount_++);
         // Check whether each vertex is a junction
-        osl_Vertex *V1 = osl_find(_vlist, *v1);
-        osl_Vertex *V2 = osl_find(_vlist, *v2);
+        osl_Vertex *V1 = osl_find(vlist_, *v1);
+        osl_Vertex *V2 = osl_find(vlist_, *v2);
 
         // If neither are junctions we may have formed a single isolated
         // chain that should have common vertex endpoints.
@@ -722,7 +721,7 @@ void osl_edge_detector::Follow_curves(vcl_list<osl_edge*> *edges)
             osl_IUDelete(v1);
             osl_IUDelete(v2);
             v1 = new osl_Vertex(dc->GetX(0),dc->GetY(0));
-            v1->SetId(_vertidcount++);
+            v1->SetId(vertidcount_++);
             V1 = v1;  V2 = v1;
             single_chain = true;
           }
@@ -764,17 +763,18 @@ void osl_edge_detector::Follow(int x, int y,
                                int reverse)
 {
   // Make sure that we do not overun the border of the image
-  if ( (x<=0) || (x>=_xsize-1) || (y<=0) || (y>=_ysize-1) )
-    return;
+  assert( x>0 && y>0 );
+  assert( (unsigned int)x+1<xsize_ );
+  assert( (unsigned int)y+1<ysize_ );
 
   // Add the current point to the coordinate lists, and delete from
   // the edge image
   if (!reverse) {
     xc->push_front(x);
     yc->push_front(y);
-    grad->push_front(_thin[x][y]);
+    grad->push_front(thin_[x][y]);
   }
-  _thin[x][y] = 0.0;
+  thin_[x][y] = 0.0;
 
   // The order of traversal is (x axis to the right and y axis down) :
   //    5 0 4
@@ -786,7 +786,7 @@ void osl_edge_detector::Follow(int x, int y,
 
   // Now recursively look for connected eight-neighbours.
 #define smoo(a, b) \
-  else if ( (_thin[a][b]>_thresh[a][b]) && (_junction[a][b]==0) ) \
+  else if ( (thin_[a][b]>thresh_[a][b]) && (junction_[a][b]==0) ) \
     Follow(a, b, xc,yc, grad, 0);
   smoo(x  , y-1)
   smoo(x-1, y  )
@@ -798,16 +798,16 @@ void osl_edge_detector::Follow(int x, int y,
   smoo(x+1, y+1)
 #undef smoo
 
-  // Else see if there is a junction nearby, and record it. The _chain_no
+  // Else see if there is a junction nearby, and record it. The chain_no_
   // variable is used to prevent the same junction being inserted at both
   // ends of the edgel chains when reversal occurs next to the junction
   // (in that case there will only be two stored points: the edge and the junction)
 #define smoo(a, b) \
-  else if ( _junction[a][b] && ((xc->size()>2) || (_junction[a][b]!=_chain_no)) ) { \
-    xc->push_front(_jx[a][b]); \
-    yc->push_front(_jy[a][b]); \
-    grad->push_front(_jval); \
-    _junction[a][b] = _chain_no; \
+  else if ( junction_[a][b] && ((xc->size()>2) || (junction_[a][b]!=chain_no_)) ) { \
+    xc->push_front(jx_[a][b]); \
+    yc->push_front(jy_[a][b]); \
+    grad->push_front(jval_); \
+    junction_[a][b] = chain_no_; \
   }
   smoo(x  , y-1)
   smoo(x-1, y  )
@@ -830,29 +830,29 @@ void osl_edge_detector::Follow(int x, int y,
 //
 void osl_edge_detector::Find_junctions() {
   // Reset the junction variables
-  _xjunc->clear();
-  _yjunc->clear();
-  osl_canny_base_fill_raw_image(_junction, _xsize, _ysize, 0);
+  xjunc_->clear();
+  yjunc_->clear();
+  osl_canny_base_fill_raw_image(junction_, xsize_, ysize_, 0);
 
-  for (int x=_width; x<_xsize-_width; ++x)
-    for (int y=_width; y<_ysize-_width; ++y)  {
-      if ( _thin[x  ][y  ] <= _thresh[x  ][y] )
+  for (unsigned int x=width_; x+width_<xsize_; ++x)
+    for (unsigned int y=width_; y+width_<ysize_; ++y) {
+      if ( thin_[x][y] <= thresh_[x][y] )
         continue;
 
       int count = 0;
-      if ( _thin[x-1][y-1] > _thresh[x-1][y-1] )  count++;
-      if ( _thin[x  ][y-1] > _thresh[x  ][y-1] )  count++;
-      if ( _thin[x+1][y-1] > _thresh[x+1][y-1] )  count++;
-      if ( _thin[x+1][y  ] > _thresh[x+1][y  ] )  count++;
-      if ( _thin[x+1][y+1] > _thresh[x+1][y+1] )  count++;
-      if ( _thin[x  ][y+1] > _thresh[x  ][y+1] )  count++;
-      if ( _thin[x-1][y+1] > _thresh[x-1][y+1] )  count++;
-      if ( _thin[x-1][y  ] > _thresh[x-1][y  ] )  count++;
+      if ( thin_[x-1][y-1] > thresh_[x-1][y-1] )  count++;
+      if ( thin_[x  ][y-1] > thresh_[x  ][y-1] )  count++;
+      if ( thin_[x+1][y-1] > thresh_[x+1][y-1] )  count++;
+      if ( thin_[x+1][y  ] > thresh_[x+1][y  ] )  count++;
+      if ( thin_[x+1][y+1] > thresh_[x+1][y+1] )  count++;
+      if ( thin_[x  ][y+1] > thresh_[x  ][y+1] )  count++;
+      if ( thin_[x-1][y+1] > thresh_[x-1][y+1] )  count++;
+      if ( thin_[x-1][y  ] > thresh_[x-1][y  ] )  count++;
 
       if ( count > 2 ) {
-        _xjunc->push_front(x);
-        _yjunc->push_front(y);
-        _junction[x][y] = 1;
+        xjunc_->push_front(x);
+        yjunc_->push_front(y);
+        junction_[x][y] = 1;
       }
     }
 }
@@ -871,9 +871,9 @@ void osl_edge_detector::Find_junction_clusters() {
   yvertices.clear();
   xjunc.clear();
   yjunc.clear();
-  for (int x=_width; x<_xsize-_width; ++x) {
-    for (int y=_width; y<_ysize-_width; ++y) {
-      if ( _junction[x][y] ) {
+  for (unsigned int x=width_; x+width_<xsize_; ++x) {
+    for (unsigned int y=width_; y+width_<ysize_; ++y) {
+      if ( junction_[x][y] ) {
 
         // Each cluster is written to (xcoords,ycooords)
         xcoords.clear();  ycoords.clear();
@@ -898,22 +898,22 @@ void osl_edge_detector::Find_junction_clusters() {
   // the cluster centres appear in both lists
   // xjunc.reset();  yjunc.reset();
   while ( xjunc.size() ) {
-    _junction[xjunc.front()][yjunc.front()] = 1;
+    junction_[xjunc.front()][yjunc.front()] = 1;
     xjunc.pop_front();
     yjunc.pop_front();
   }
 
   // Construct the list of junction cluster centres
-  _vlist->clear();
+  vlist_->clear();
   for (vcl_list<int>::iterator i=xvertices.begin(), j=yvertices.begin();
        i!=xvertices.end() && j!=yvertices.end();
        ++i, ++j) {
     //for (xvertices.reset(),yvertices.reset(); xvertices.next(),yvertices.next(); )  {
 
-    osl_Vertex *v = new osl_Vertex( (*i)/*xvertices.value()*/+_xstart,
-                                    (*j)/*yvertices.value()*/+_ystart);
-    _vlist->push_front(v);
-    _junction[(*i)/*xvertices.value()*/][(*j)/*yvertices.value()*/] = 2;
+    osl_Vertex *v = new osl_Vertex( (*i)/*xvertices.value()*/+xstart_,
+                                    (*j)/*yvertices.value()*/+ystart_);
+    vlist_->push_front(v);
+    junction_[(*i)/*xvertices.value()*/][(*j)/*yvertices.value()*/] = 2;
   }
 
   xvertices.clear();
@@ -931,14 +931,14 @@ void osl_edge_detector::Follow_junctions(int x, int y, vcl_list<int> *xc, vcl_li
   // the junction image
   xc->push_front(x);
   yc->push_front(y);
-  _junction[x][y] = 0;
+  junction_[x][y] = 0;
 
   // Now recursively look for connected eight-neighbours
   //    5 0 4
   //    1 * 3
   //    6 2 7
 #define smoo(a, b) \
-  if ( _junction[a][b] ) Follow_junctions(a,b, xc,yc);
+  if ( junction_[a][b] ) Follow_junctions(a,b, xc,yc);
   smoo(x  , y-1)
   smoo(x-1, y  )
   smoo(x  , y+1)
@@ -975,7 +975,7 @@ void osl_edge_detector::Cluster_centre(vcl_list<int> &xc,
 
   // Now find the point closest to the CofG
   float dist,newdist;
-  dist = _xsize*_ysize; // A number larger than the image size
+  dist = xsize_*ysize_; // A number larger than the image size
   for (xc.reset(),yc.reset(); xc.next(),yc.next(); )
     if ( (newdist=hypot(x-xc.value(),y-yc.value())) < dist )
       {
@@ -990,17 +990,17 @@ void osl_edge_detector::Cluster_centre(vcl_list<int> &xc,
   float grad = -1.0;  // Negative is smaller than the smallest norm of gradient
   for (it i=xc.begin(),j=yc.begin(); i!=xc.end() && j!=yc.end(); ++i, ++j)
     //xc.reset(),yc.reset(); xc.next(),yc.next(); )
-    if ( _grad[(*i)/*xc.value()*/][(*j)/*yc.value()*/] > grad ) {
-      grad = _grad[(*i)/*xc.value()*/][(*j)/*yc.value()*/];
+    if ( grad_[(*i)/*xc.value()*/][(*j)/*yc.value()*/] > grad ) {
+      grad = grad_[(*i)/*xc.value()*/][(*j)/*yc.value()*/];
       x0 = (*i);//xc.value();
       y0 = (*j);//yc.value();
     }
 
-  // Set up the (_jx,_jy) arrays to point to the cluster centre
+  // Set up the (jx_,jy_) arrays to point to the cluster centre
   for (it i=xc.begin(), j=yc.begin(); i!=xc.end() && j!=yc.end(); ++i, ++j) {
     //xc.reset(),yc.reset(); xc.next(),yc.next(); )  {
-    _jx[(*i)/*xc.value()*/][(*j)/*yc.value()*/] = x0;
-    _jy[(*i)/*xc.value()*/][(*j)/*yc.value()*/] = y0;
+    jx_[(*i)/*xc.value()*/][(*j)/*yc.value()*/] = x0;
+    jy_[(*i)/*xc.value()*/][(*j)/*yc.value()*/] = y0;
   }
 }
 

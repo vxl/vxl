@@ -1,5 +1,6 @@
 #include <vsrl/vsrl_window_accumulator.h>
 #include <vcl_iostream.h>
+#include <vcl_cassert.h>
 #include <vsrl/vsrl_parameters.h>
 
 // constructor 
@@ -7,14 +8,14 @@
 vsrl_window_accumulator::vsrl_window_accumulator()
 {
   // initial values
-  _in_mat=0;
-  _out_mat=0;
+  in_mat_=0;
+  out_mat_=0;
 
-  _win_width= (vsrl_parameters::instance()->correlation_window_width)/2; // probably 10
-  _win_height= (vsrl_parameters::instance()->correlation_window_height)/2; // probably 10
+  win_width_= (vsrl_parameters::instance()->correlation_window_width)/2; // probably 10
+  win_height_= (vsrl_parameters::instance()->correlation_window_height)/2; // probably 10
 
-  _current_row=0;
-  _current_col=0;
+  current_row_=0;
+  current_col_=0;
 }
 
 // destructor
@@ -25,27 +26,27 @@ vsrl_window_accumulator::~vsrl_window_accumulator()
 void vsrl_window_accumulator::set_in_matrix(vnl_matrix<double> *in_mat)
 {
   // set the in matrix
-  _in_mat=in_mat;
+  in_mat_=in_mat;
 }
 
 
 void vsrl_window_accumulator::set_out_matrix(vnl_matrix<double> *out_mat)
 {
   // set the out matrix
-  _out_mat=out_mat;
+  out_mat_=out_mat;
 }
 
 
 void vsrl_window_accumulator::set_window_width(int width)
 {
   // the width of the accumulation window
-  _win_width=width/2;
+  win_width_=width/2;
 }
 
 void vsrl_window_accumulator::set_window_height(int height)
 {
   // the height of the accumulation window
-  _win_height=height/2;
+  win_height_=height/2;
 }
 
 
@@ -53,31 +54,31 @@ void vsrl_window_accumulator::execute()
 {
   // run the accumulation 
 
-  _current_row= 0-1;
+  current_row_= 0-1;
 
   // the column sums 
 
-  vnl_vector<double> vec(_in_mat->cols());
+  vnl_vector<double> vec(in_mat_->cols());
   double sum=0;
   double N;
 
-  int num_row = (_in_mat->rows()-1);
-  int num_col = (_in_mat->cols()-1);
+  unsigned int num_row = in_mat_->rows()-1;
+  unsigned int num_col = in_mat_->cols()-1;
 
-  while((num_row >  _current_row)){
+  while (num_row > current_row_){
 
     // get the column sums 
     next_column_sums(vec);
 
-    while(num_col > _current_col){
+    while (num_col > current_col_){
 
       // get the sum;
       sum = next_accumulation(vec,sum);
 
       // save the accumulation 
-      N=num_samples(_current_row,_current_col);
+      N=num_samples(current_row_,current_col_);
 
-      (*_out_mat)(_current_row, _current_col) = sum/N;
+      (*out_mat_)(current_row_, current_col_) = sum/N;
     }
   }
 }
@@ -90,15 +91,15 @@ void vsrl_window_accumulator::initial_column_sums(vnl_vector<double> &vec)
 
   // set the current row and column to zero
 
-  _current_row=0;
-  _current_col=0-1;
+  current_row_=0;
+  current_col_=0-1;
 
   // find out how far to accumulate;
 
-  unsigned int sum_length=_win_height;
+  unsigned int sum_length=win_height_;
 
-  if(sum_length >= _in_mat->rows()){
-    sum_length=_in_mat->rows()-1;
+  if (sum_length >= in_mat_->rows()){
+    sum_length=in_mat_->rows()-1;
   }
 
   // initialize the vector of column sums 
@@ -107,14 +108,11 @@ void vsrl_window_accumulator::initial_column_sums(vnl_vector<double> &vec)
 
   // start to accumulate
 
-  int i,j;
-  double sum;
-
-  for(i=0;i<_in_mat->columns();i++){
-    sum=0;
-    for(j=0;j<=sum_length;j++){
-      sum=sum+(*_in_mat)(j,i);
-    }
+  for (unsigned int i=0;i<in_mat_->columns();i++)
+  {
+    double sum=0;
+    for (unsigned int j=0;j<=sum_length;j++)
+      sum+=(*in_mat_)(j,i);
     vec(i)=sum;
   }
 }
@@ -124,38 +122,29 @@ void vsrl_window_accumulator::next_column_sums(vnl_vector<double> &vec)
   // using the column sums from the previous calculation, update the vec
   // by going to the next region
 
-  if(_current_row<0){
+  if (current_row_<0){
     // initialize the column vectors
     initial_column_sums(vec);
     return;
   }
 
-  _current_col=0-1;
-  _current_row++;
+  current_col_=0-1;
+  current_row_++;
 
-  int add_row = _current_row + _win_height;
-  int delete_row= _current_row - _win_height -1;
+  unsigned int add_row = current_row_ + win_height_;
+  int delete_row= current_row_ - win_height_ -1;
 
-  int add_row_flag=1;
-  int delete_row_flag=1;
-
-  if(add_row>=_in_mat->rows()){
-    add_row_flag=0;
-  }
-
-  if(delete_row <0){
-    delete_row_flag=0;
-  }
+  bool add_row_flag= add_row<in_mat_->rows();
+  bool delete_row_flag= delete_row >=0;
 
   // update the vector sums 
 
-  for(int i=0;i<_in_mat->cols();i++){
-    if(add_row_flag){
-      vec(i)=vec(i) + (*_in_mat)(add_row,i);
-    }
-    if(delete_row_flag){
-      vec(i)=vec(i) - (*_in_mat)(delete_row,i);
-    }
+  for (unsigned int i=0;i<in_mat_->cols();i++)
+  {
+    if (add_row_flag)
+      vec(i)=vec(i) + (*in_mat_)(add_row,i);
+    if (delete_row_flag)
+      vec(i)=vec(i) - (*in_mat_)(delete_row,i);
   }
 }
 
@@ -163,17 +152,16 @@ double vsrl_window_accumulator::initial_accumulation(vnl_vector<double> &vec)
 {
   // perform an initial accumulation using the column sums
 
-  _current_col=0;
+  current_col_=0;
 
-  int sum_width=_win_width;
-  if(sum_width >= _in_mat->cols()){
-    sum_width = _in_mat->cols() - 1;
+  unsigned int sum_width=win_width_+1;
+  if (sum_width > in_mat_->cols()){
+    sum_width = in_mat_->cols();
   }
 
   double sum=0;
-  int i;
-  for(i=0;i<= sum_width;i++){
-    sum = sum+ vec(i);
+  for (unsigned int i=0;i< sum_width;i++){
+    sum += vec(i);
   }
 
   return sum;
@@ -181,21 +169,21 @@ double vsrl_window_accumulator::initial_accumulation(vnl_vector<double> &vec)
 
 double vsrl_window_accumulator::next_accumulation(vnl_vector<double> &vec, double old_sum)
 {
-  if(_current_col<0){
+  if (current_col_<0){
     // initialize the accumulation
     return initial_accumulation(vec);
   }
 
   // update the accumulation using the old sum and the column sums 
-  _current_col++;
+  current_col_++;
 
-  int add_col=_current_col + _win_width;
-  int delete_col= _current_col - _win_width -1;
+  unsigned int add_col=current_col_ + win_width_;
+  int delete_col= current_col_ - win_width_ -1;
 
-  if(add_col<_in_mat->cols()){
+  if (add_col<in_mat_->cols()){
     old_sum=old_sum + vec(add_col);
   }
-  if(delete_col >=0){
+  if (delete_col >=0){
     old_sum=old_sum - vec(delete_col);
   }
 
@@ -205,17 +193,19 @@ double vsrl_window_accumulator::next_accumulation(vnl_vector<double> &vec, doubl
 
 double vsrl_window_accumulator::num_samples(int r, int c)
 {
+  assert(r>=0 && c>=0);
+
   // we want to find the number of samples in the region r,c
 
-  int l1 = (c > _win_width) ? _win_width : c;
-  int l2 = _in_mat->cols() -1 -c;
-  if(l2 > _win_width) l2 = _win_width;
+  int l1 = ((unsigned int)c > win_width_) ? win_width_ : c;
+  int l2 = in_mat_->cols() -1 -c;
+  if (l2 > int(win_width_)) l2 = win_width_;
 
   double w = l1+l2+1;
 
-  l1 = (r > _win_height) ? _win_height : r;
-  l2 = _in_mat->rows() -1 -r;
-  if(l2 > _win_height) l2 = _win_height;
+  l1 = ((unsigned int)r > win_height_) ? win_height_ : r;
+  l2 = in_mat_->rows() -1 -r;
+  if (l2 > int(win_height_)) l2 = win_height_;
 
   double h = l1+l2+1;
 

@@ -17,13 +17,13 @@ public :
   osl_edge_detector_params();
   ~osl_edge_detector_params();
 
-  float _sigma;       // Standard deviation of the smoothing kernel
-  float _low;         // Low hysteresis threshold
-  float _gauss_tail;  // Used in determining the convolution kernel
-  bool  _fill_gaps;   // maintain topology, flag
+  float sigma_;       // Standard deviation of the smoothing kernel
+  float low_;         // Low hysteresis threshold
+  float gauss_tail_;  // Used in determining the convolution kernel
+  bool  fill_gaps_;   // maintain topology, flag
                       // true = fill in one-pixel holes
                       // false = do not fill in holes
-  bool _verbose;      // output debug messages
+  bool verbose_;      // output debug messages
 };
 
 #endif // osl_edge_detector_params_h_

@@ -20,11 +20,11 @@ public:
   float high;              // High hysteresis threshold
   int  edge_min;           // Minimum edge pixel intensity
   //                          Used in the follow part of canny.
-  //                          The edgel image is scaled by _scale_OX
+  //                          The edgel image is scaled by scale_OX_
   //                          before comparing edgels to edge_min.
   int  min_length;         // Minimum number of pixels in a curve . was 60
   int  border_size;        // Border size around the image to be set
-  float  border_value;     // to _border_value_OX (usually 0) to
+  float  border_value;     // to border_value_OX_ (usually 0) to
   //                          ensure follow won't overrun.
   float  scale;            // Value used in the follow part of canny to
   //                          scale image after the hysteresis part.

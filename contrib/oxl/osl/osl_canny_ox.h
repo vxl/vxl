@@ -13,9 +13,9 @@
 // though sub-pixel interpolation of the final edge output has been included,
 // and there is patching of single pixel gaps in the edgel chains.
 //
-// In order not to ignore a border of size _width (half the kernel size)
+// In order not to ignore a border of size width_ (half the kernel size)
 // around the image, as is done in class Canny, this implementation
-// uses _sub_area_OX to normalise the (gaussian) smoothed border pixels---see
+// uses sub_area_OX_ to normalise the (gaussian) smoothed border pixels---see
 // the description of Smooth_imageOX().
 //
 // .SECTION Author
@@ -28,8 +28,8 @@
 // Charlie Rothwell, Nic Pillow and Sven Utcke.
 //
 //   Samer Abdallah - 18/05/96 - Cleared some compiler warnings
-//   Samer Abdallah - 24/05/96 - Fixed _theta[x][y] in Non_maximal_supressionOX
-//                               _theta[x][y] now stores the edge normal
+//   Samer Abdallah - 24/05/96 - Fixed theta_[x][y] in Non_maximal_supressionOX
+//                               theta_[x][y] now stores the edge normal
 //   Maarten Vergauwen (vergauwe@esat.kuleuven.ac.be) - 08/10/98 - Added AdjustForMask method
 //   Peter Vanroose - 30/12/99 - Link_edgelsOX rewritten and documented
 //   F. Schaffaliztky 2-apr-99   converted from Segmentation to osl
@@ -52,7 +52,7 @@ public:
   ~osl_canny_ox();
 
 protected:
-  osl_edgel_chain *Get_NMS_edgelsOX(int n_edgels_NMS, int *_x, int *_y);
+  osl_edgel_chain *Get_NMS_edgelsOX(int n_edgels_NMS, int *x_, int *y_);
 
   // Functions used in performing the hysteresis part of canny
   int HysteresisOX(osl_edgel_chain *&, int *&);
@@ -60,7 +60,7 @@ protected:
   void Add_linkOX(int,int,osl_LINK *[]);
   void Link_edgelsOX(vcl_vector<unsigned> const &, vcl_vector<unsigned> const &,osl_LINK *[]);
   int Get_n_edgels_hysteresisOX(osl_edgel_chain *&,int *&);
-  void Get_hysteresis_edgelsOX(osl_edgel_chain *&,int *&, osl_edgel_chain *&, int *_x, int *_y);
+  void Get_hysteresis_edgelsOX(osl_edgel_chain *&,int *&, osl_edgel_chain *&, int *x_, int *y_);
   void Delete_linksOX(osl_LINK **, int);
   osl_edge *NO_FollowerOX(osl_edgel_chain *);
 
@@ -76,18 +76,18 @@ protected:
   void Find_junction_clustersOX();
 
 protected:
-  int _max_width_OX;       // The maximum smoothing kernel width
-  float *_sub_area_OX;     // Used in smoothing the image near the borders
+  int max_width_OX_;       // The maximum smoothing kernel width
+  float *sub_area_OX_;     // Used in smoothing the image near the borders
 
-  int _edge_min_OX;        // Minimum edge pixel intensity
+  int edge_min_OX_;        // Minimum edge pixel intensity
 
-  int _min_length_OX;      // Minimum number of pixels in a curve
-  int _border_size_OX;     // Border size around the image to be set
-  float _border_value_OX;  //   to _border_value_OX (usually 0) to ensure
+  int min_length_OX_;      // Minimum number of pixels in a curve
+  int border_size_OX_;     // Border size around the image to be set
+  float border_value_OX_;  //   to border_value_OX_ (usually 0) to ensure
                            //   follow won't overrun.
-  float _scale_OX;         // Value used in the follow part of canny to
+  float scale_OX_;         // Value used in the follow part of canny to
                            //   scale image after the hysteresis part.
-  int _follow_strategy_OX; // Flag used in the Final_followOX() to determined
+  int follow_strategy_OX_; // Flag used in the Final_followOX() to determined
                            //  the order of neighboring pixel checking
                            //  (see Final_followOX() function in osl_canny_ox.C
                            //  When equal to 0, only NMS and Hysteresis
@@ -95,8 +95,8 @@ protected:
                            //  Locating Junctions in not performed either.
                            //  See Do_osl_canny_ox(...)
 
-  bool _join_flag_OX;      // True to enable pixel jumping
-  int _junction_option_OX; // True if we want to locate junctions
+  bool join_flag_OX_;      // True to enable pixel jumping
+  int junction_option_OX_; // True if we want to locate junctions
 };
 
 #endif // osl_canny_ox_h

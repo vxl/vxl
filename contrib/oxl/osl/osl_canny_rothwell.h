@@ -22,7 +22,7 @@
 // this yeilds a much better understanding of the image topology.
 //
 // Note that nothing special has been done around the border of the image;
-// we have simply ignored a border of size _width all the way round. Perhaps
+// we have simply ignored a border of size width_ all the way round. Perhaps
 // this should be changed to provide consistency with the rest of TargetJr.
 //
 // .SECTION Author
@@ -61,16 +61,16 @@ protected:
   void Find_junctions();
   void Find_junction_clusters();
 
-  int **_dangling;     // Binary image true only at dangling ends, and relevant lists
-  vcl_list<int> *_xdang,*_ydang;
-  float _range;       // The maximal region of effect of the smallest smoothing kernel
+  int **dangling_;     // Binary image true only at dangling ends, and relevant lists
+  vcl_list<int> *xdang_,*ydang_;
+  float range_;       // The maximal region of effect of the smallest smoothing kernel
 
   // Parameters for the adaptive smoothing
-  float _old_sigma;   // Smoothing sigma
-  int _old_width;     // The smoothing kernel width
-  int _old_k_size;    // The kernel is 2*_width+1s
+  float old_sigma_;   // Smoothing sigma
+  int old_width_;     // The smoothing kernel width
+  int old_k_size_;    // The kernel is 2*width_+1s
 
-  float _dummy;       // A dummy intensity step value
+  float dummy_;       // A dummy intensity step value
 };
 
 #endif // osl_canny_rothwell_h

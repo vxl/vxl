@@ -12,7 +12,7 @@
 //
 // Definition of a base class for doing Canny edge detection.
 // Note that nothing special has been done around the border of the image;
-// we have simply ignored a border of size _width all the way round. Perhaps
+// we have simply ignored a border of size width_ all the way round. Perhaps
 // this should be changed to provide consistency with the rest of TargetJr.
 //
 // .SECTION Author
@@ -57,36 +57,36 @@ protected:
   static int Junction_neighbour(int const * const *junction, int x, int y);
 
 
-  int _xstart,_ystart; // The origin of the buffer in the image
-  int _xsize,_ysize;   // The width of the image buffer
+  unsigned int xstart_,ystart_; // The origin of the buffer in the image
+  unsigned int xsize_,ysize_;   // The width of the image buffer
 
-  float **_smooth;     // Smoothed intensity image
-  float **_dx;         // Derivatives in x, and sub-pixel x coordinates
-  float **_dy;         // Derivatives in y, and sub-pixel y coordinates
-  float **_grad;       // Gradient image
+  float **smooth_;     // Smoothed intensity image
+  float **dx_;         // Derivatives in x, and sub-pixel x coordinates
+  float **dy_;         // Derivatives in y, and sub-pixel y coordinates
+  float **grad_;       // Gradient image
 
-  float **_thick;      // Gradient image after NMS
-  float **_thin;       // Gradient image after NMS and thinning
-  float **_theta;      // Orientation image
+  float **thick_;      // Gradient image after NMS
+  float **thin_;       // Gradient image after NMS and thinning
+  float **theta_;      // Orientation image
 
 
-  int **_junction;     // Binary image true only at junctions ends, and relevant lists
-  int **_jx,**_jy;     // Images of (x,y) coordinates of nearest cluster centre
-  vcl_list<int> *_xjunc;
-  vcl_list<int> *_yjunc;
-  vcl_list<osl_Vertex*> *_vlist;   // The junction cluster centres
+  int **junction_;     // Binary image true only at junctions ends, and relevant lists
+  int **jx_,**jy_;     // Images of (x,y) coordinates of nearest cluster centre
+  vcl_list<int> *xjunc_;
+  vcl_list<int> *yjunc_;
+  vcl_list<osl_Vertex*> *vlist_;   // The junction cluster centres
 
-  float _gauss_tail;  // The value of the kernel at its tail
-  float _sigma;       // Smoothing sigma
-  int _width;         // The smoothing kernel width - can change
-  int _w0;            // Same as above, but does not change
-  int _k_size;        // The kernel is 2*_width+1s
-  float *_kernel;     // 1-Dimensional convolution kernel of size k_size
-  float _low;         // Low threshold for hysteresis
-  float _high;        // High threshold for hysteresis
+  float gauss_tail_;  // The value of the kernel at its tail
+  float sigma_;       // Smoothing sigma
+  int width_;         // The smoothing kernel width - can change
+  int w0_;            // Same as above, but does not change
+  int k_size_;        // The kernel is 2*width_+1s
+  float *kernel_;     // 1-Dimensional convolution kernel of size k_size
+  float low_;         // Low threshold for hysteresis
+  float high_;        // High threshold for hysteresis
 
-  float _jval;        // A dummy junction intensity step value
-  int _chain_no;      // A dummy variable used in following
+  float jval_;        // A dummy junction intensity step value
+  int chain_no_;      // A dummy variable used in following
   bool verbose;
 };
 

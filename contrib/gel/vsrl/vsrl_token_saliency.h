@@ -68,14 +68,14 @@ class vsrl_token_saliency
   void create_saliency_image(char *filename);
 
  private:
-  vsrl_image_correlation *_image_correlation; // structure used to determine image correlation 
+  vsrl_image_correlation *image_correlation_; // structure used to determine image correlation 
 
-  vnl_matrix<int> *_saliency_matrix; // a matrix that keeps track of the saliencies
+  vnl_matrix<int> *saliency_matrix_; // a matrix that keeps track of the saliencies
 
   // the saliency thresholds 
 
-  double _std_thresh;
-  double _mean_thresh;
+  double std_thresh_;
+  double mean_thresh_;
 
   // method used to compute saliencies
 

@@ -8,12 +8,12 @@
 // \author fsm@robots.ox.ac.uk
 
 //: Compute one half of the 1st Derivative Of a Gaussian.
-// '_k_size' is the actual size of the array pointed to by '_kernel'.
-void osl_kernel_DOG(float _sigma, float *_kernel, int _k_size, int _width);
+// 'k_size_' is the actual size of the array pointed to by 'kernel_'.
+void osl_kernel_DOG(float sigma_, float *kernel_, int k_size_, int width_);
 
 //: Fancy version
-void osl_kernel_DOG(float *_kernel, float *_sub_area_OX, int &_k_size,
-                    float _sigma, float _gauss_tail,
-                    int _max_width_OX, int &_width);
+void osl_kernel_DOG(float *kernel_, float *sub_area_OX_, int &k_size_,
+                    float sigma_, float gauss_tail_,
+                    int max_width_OX_, int &width_);
 
 #endif // osl_kernel_h_

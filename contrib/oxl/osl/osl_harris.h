@@ -20,8 +20,8 @@
 // Modifications:
 //       First version generated from C code with minimal modification for C++/
 //       Target data structures.
-//   P.Vanroose  Mar97  corrected memory management (_point_list & *_free_*())
-//   P.Vanroose  Aug97  _point_list now safer (added AddPoint(); SetPointList() out of use now)
+//   P.Vanroose  Mar97  corrected memory management (point_list_ & *free_*())
+//   P.Vanroose  Aug97  point_list_ now safer (added AddPoint(); SetPointList() out of use now)
 //   J.Mundy     Jan98  slight modified the interface to correspond to new style using parameter blocks and image dispatch
 // \endverbatim
 

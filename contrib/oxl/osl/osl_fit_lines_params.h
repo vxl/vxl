@@ -22,13 +22,13 @@ public :
   bool SanityCheck();
 
   //The parameter members
-  int _min_fit_length;   // Minimum number of pixels to fit lines to
-  bool _use_square_fit;
-  double _threshold;    // RMS fitting distance threshold
-  double _theta;          // Lines must be within theta to be merged
-  bool _dc_only;           // Set to 1 to prevent refit to non-dc's
-  bool _incremtl;          // Set to 0 to use simple (PAB) fit
-  int _ignore_end_edgels;  // Number of (often garbage) edgels to ignore from the
+  int min_fit_length_;   // Minimum number of pixels to fit lines to
+  bool use_square_fit_;
+  double threshold_;    // RMS fitting distance threshold
+  double theta_;          // Lines must be within theta to be merged
+  bool dc_only_;           // Set to 1 to prevent refit to non-dc's
+  bool incremtl_;          // Set to 0 to use simple (PAB) fit
+  int ignore_end_edgels_;  // Number of (often garbage) edgels to ignore from the
   // start and end of a segment when fitting a line
 };
 

@@ -7,23 +7,23 @@
 
 
 osl_edge_detector_params::osl_edge_detector_params()
-  : _sigma(3.0f)
-  , _low(6)
-  , _gauss_tail(0.015f)
-  , _fill_gaps(true)
-  , _verbose(false)
+  : sigma_(3.0f)
+  , low_(6)
+  , gauss_tail_(0.015f)
+  , fill_gaps_(true)
+  , verbose_(false)
 {
 }
 
 #if 0 // commented out
 // from osl_edge_detector
 osl_edge_detector_params::osl_edge_detector_params()
-  : _sigma(1.0f)
-  , _low(6)
-  , _gauss_tail(0.05f)
+  : sigma_(1.0f)
+  , low_(6)
+  , gauss_tail_(0.05f)
   , grd_hist(false)
   , res(15)
-  , _verbose(true)
+  , verbose_(true)
 {
 }
 #endif
@@ -40,24 +40,24 @@ bool osl_edge_detector_params::SanityCheck()
   vcl_strstream msg;
   bool valid = true;
 
-  if (_sigma <= 0)  // Standard deviation of the smoothing kernel
+  if (sigma_ <= 0)  // Standard deviation of the smoothing kernel
   {
     msg << "ERROR: Value of gaussian smoothing sigma is too low <=0" << vcl_ends;
     valid = false;
   }
 
-  if (_low <= 0)    // Noise weighting factor
+  if (low_ <= 0)    // Noise weighting factor
   {
     msg << "ERROR: Value of noise weight must be >0" << vcl_ends;
     valid = false;
   }
 
-  if (_gauss_tail <= 0) // Cutoff for gaussian kernel radius
+  if (gauss_tail_ <= 0) // Cutoff for gaussian kernel radius
   {
     msg << "ERROR: Value of gauss tail fraction is too low <= 0" << vcl_ends;
     valid = false;
   }
-  _error_msg = msg.str();
+  error_msg_ = msg.str();
   return valid;
 }
 #endif

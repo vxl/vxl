@@ -54,26 +54,26 @@ class vsrl_dynamic_program
     double num_null1; // the number of consecuative null assignments for this assignment
   };
 
-  token_list _list1; // the first set of tokens
-  token_list _list2; // the second list of tokens
+  token_list list1_; // the first set of tokens
+  token_list list2_; // the second list of tokens
 
-  double _inner_cost; // the cost of a missing inner assignment
-  double _outer_cost; // the cost of a missing outer assignment
-  double _continuity_cost; // the cost of a discontinuity
-  int _search_range; // the search range for each token;
+  double inner_cost_; // the cost of a missing inner assignment
+  double outer_cost_; // the cost of a missing outer assignment
+  double continuity_cost_; // the cost of a discontinuity
+  int search_range_; // the search range for each token;
 
-  vcl_vector<int> _lower_search_range; // the search range for each token
-  vcl_vector<int> _upper_search_range; // in the future it could be specific
+  vcl_vector<int> lower_search_range_; // the search range for each token
+  vcl_vector<int> upper_search_range_; // in the future it could be specific
 
   void define_search_range();
 
 
-  assignment_node **_cost_matrix; // structure used to keep track of assignment costs
-  int _num_row; // the number of rows in the matrix
-  int _num_col; // the number of columns in the matrix
+  assignment_node **cost_matrix_; // structure used to keep track of assignment costs
+  int num_row_; // the number of rows in the matrix
+  int num_col_; // the number of columns in the matrix
 
-  vsrl_null_token *_inner_null_token;
-  vsrl_null_token *_outer_null_token;
+  vsrl_null_token *inner_null_token_;
+  vsrl_null_token *outer_null_token_;
 
   // private functions
   // allocate the matrix

@@ -52,8 +52,8 @@
 //                       but commented out. (Look for "May")  The old code
 //                       just histogrammed the gradient magintude.
 //          JLM June 1997 Found a bug in the above change which failed if
-//                       _ghist is NULL.
-//          JLM Dec 1997 Moved _sigma, _low, _gauss_tail and _verbose
+//                       ghist_ is NULL.
+//          JLM Dec 1997 Moved sigma_, low_, gauss_tail_ and verbose_
 //                       up to osl_edge_detector_params and added new syle
 //                       constructors and execution
 //-----------------------------------------------------------------------------
@@ -86,39 +86,39 @@ private:
   void Cluster_centre(vcl_list<int>&,vcl_list<int>&,int&,int&);
 
 private:
-  int _width;          // The smoothing kernel width
-  int _k_size;         // The kernel is 2*_width+1s
-  float *_kernel;      // 1-Dimensional convolution kernel of size k_size
+  unsigned int width_;  // The smoothing kernel width
+  unsigned int k_size_; // The kernel is 2*width_+1s
+  float *kernel_;       // 1-Dimensional convolution kernel of size k_size
 
-  int _xstart,_ystart; // The origin of the buffer in the image
-  int _xsize,_ysize;   // The width of the image buffer
+  unsigned int xstart_,ystart_; // The origin of the buffer in the image
+  unsigned int xsize_,ysize_;   // The width of the image buffer
 
-  float **_dx;         // Derivatives in x, and sub-pixel x coordinates
-  float **_dy;         // Derivatives in y, and sub-pixel y coordinates
-  float **_grad;       // Gradient image, and various other storage images
-  float **_smooth;     // Smoothed image.
+  float **dx_;         // Derivatives in x, and sub-pixel x coordinates
+  float **dy_;         // Derivatives in y, and sub-pixel y coordinates
+  float **grad_;       // Gradient image, and various other storage images
+  float **smooth_;     // Smoothed image.
 
   // Quite a few of the following could be done using hash tables
-  float **_thin;       // Gradient image after thinning
-  float **_theta;      // Orientation image
-  float **_thresh;     // Image of the different thresholds used (replacing low)
+  float **thin_;       // Gradient image after thinning
+  float **theta_;      // Orientation image
+  float **thresh_;     // Image of the different thresholds used (replacing low)
 
-  int **_dist;         // Distance transform image
-  int **_junction;     // Image true only at junctions ends, and relevant lists
-  int **_jx,**_jy;     // Images of (x,y) coordinates of nearest cluster centre
-  vcl_list<int> *_xjunc,*_yjunc;
-  vcl_list<osl_Vertex*> *_vlist;   // The junction cluster centres
+  int **dist_;         // Distance transform image
+  int **junction_;     // Image true only at junctions ends, and relevant lists
+  int **jx_,**jy_;     // Images of (x,y) coordinates of nearest cluster centre
+  vcl_list<int> *xjunc_,*yjunc_;
+  vcl_list<osl_Vertex*> *vlist_;   // The junction cluster centres
 
-  float _jval;        // A dummy junction intensity step value
-  int _chain_no;      // A dummy variable used in following
+  float jval_;        // A dummy junction intensity step value
+  int chain_no_;      // A dummy variable used in following
 
-  int _vertidcount;   // A counter used for setting vertex identifiers
+  int vertidcount_;   // A counter used for setting vertex identifiers
 
 // Added a histogram of edge gradient magnitudes - JLM May 1995
-  bool _gradient_histogram; // Do we need to compute one?
-  float _max_gradient; // Added May 1997 - JLM
-  int _histogram_resolution; // The number of buckets in the histogram
-  //Histogram* _ghist;
+  bool gradient_histogram_; // Do we need to compute one?
+  float max_gradient_; // Added May 1997 - JLM
+  int histogram_resolution_; // The number of buckets in the histogram
+  //Histogram* ghist_;
 };
 
 #endif // osl_edge_detector_h

@@ -8,20 +8,20 @@
 // \author fsm@robots.ox.ac.uk
 
 //: compute x,y-derivatives and absolute value of gradient.
-// _xsize is the number of rows [sic] and
-// _ysize the number of columns [sic].
-void osl_canny_gradient(int _xsize, int _ysize,
-                        float const * const * _smooth,
-                        float * const * _dx,
-                        float * const * _dy,
-                        float * const * _grad);
+// xsize_ is the number of rows [sic] and
+// ysize_ the number of columns [sic].
+void osl_canny_gradient(int xsize_, int ysize_,
+                        float const * const * smooth_,
+                        float * const * dx_,
+                        float * const * dy_,
+                        float * const * grad_);
 
 //: computes doubled central derivatives : df[i] = f[i+1]-f[i-1].
 // the boundary pixels are left untouched.
-void osl_canny_gradient_central(int _xsize, int _ysize,
-                                float const * const * _smooth,
-                                float * const * _dx,
-                                float * const * _dy,
-                                float * const * _grad);
+void osl_canny_gradient_central(int xsize_, int ysize_,
+                                float const * const * smooth_,
+                                float * const * dx_,
+                                float * const * dy_,
+                                float * const * grad_);
 
 #endif // osl_canny_gradient_h_

@@ -1,4 +1,3 @@
-
 //:
 //  \file
 
@@ -23,14 +22,14 @@ osl_fit_lines::osl_fit_lines(osl_fit_lines_params const & params,
                              double scale, double x0, double y0)
   : osl_fit_lines_params(params)
 {
-  float temp_thresh = this->_threshold;
-  if (this->_use_square_fit) temp_thresh *= this->_threshold;
-  this->_threshold = temp_thresh;
-  _data = new osl_OrthogRegress(scale,x0,y0);
+  float temp_thresh = this->threshold_;
+  if (this->use_square_fit_) temp_thresh *= this->threshold_;
+  this->threshold_ = temp_thresh;
+  data_ = new osl_OrthogRegress(scale,x0,y0);
 }
 
 osl_fit_lines::~osl_fit_lines() {
-  delete _data; _data = 0;
+  delete data_; data_ = 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -48,13 +47,12 @@ void osl_fit_lines::simple_fit_to_list(vcl_list<osl_edge *> *myedges,
 {
   int edge_no = 0;
   bool success = false;
-
-  //  for(myedges->reset(), _curves->clear(); myedges->next();)
-  //  {
-  //    osl_edge *edge = myedges->pop();
-  //_curves->clear();
   vcl_list<osl_edgel_chain*> curves;
-  for(vcl_list<osl_edge*>::iterator i=myedges->begin(); i!=myedges->end(); ++i) {
+#if 0
+  for (myedges->reset(), curves_->clear(); myedges->next();) {
+    osl_edge *edge = myedges->pop();
+#endif
+  for (vcl_list<osl_edge*>::iterator i=myedges->begin(); i!=myedges->end(); ++i) {
     osl_edge *edge = *i;
 
     bool angle_ok = true;
@@ -63,7 +61,7 @@ void osl_fit_lines::simple_fit_to_list(vcl_list<osl_edge *> *myedges,
       assert(dc!=0);
 
       // If the osl_edgel_chain is long enough fit
-      if( dc->size() < _min_fit_length )
+      if ( dc->size() < min_fit_length_ )
         success = false;
 
       else {
@@ -71,32 +69,32 @@ void osl_fit_lines::simple_fit_to_list(vcl_list<osl_edge *> *myedges,
         // Since some code sets Theta in degrees, and some radians!
         // This is an attempt to guess whether the angles are degrees
         // or radians
-        {for(int ii=0; ii<dc->size(); ii++) {
+        {for (int ii=0; ii<dc->size(); ii++) {
           if (dc->GetTheta(ii) > 3.2 || dc->GetTheta(ii) < -3.2) {
             using_degrees = vnl_math::pi / 180;
             break;
           }
         }}
         success = false;
-        _data->Reset();
+        data_->Reset();
         double angle = 0.7853981;
         int  orient0 = int((dc->GetTheta(0) * using_degrees + angle/2.0) / angle);
-        {for(int ii=0;ii<dc->size();ii++) {
-          _data->IncrByXY(dc->GetX(ii), dc->GetY(ii));
+        {for (int ii=0;ii<dc->size();ii++) {
+          data_->IncrByXY(dc->GetX(ii), dc->GetY(ii));
           int orient = int((dc->GetTheta(ii) * using_degrees + angle/2.0)/angle);
           int diff = vnl_math_abs(orient - orient0);
           if (diff > 1 && diff < 7)
             angle_ok = false;
         }}
-        _data->Fit();
-        double mean_cost = MyGetCost(_data, 0, dc->size(), dc);
-        double ls_cost = _data->GetCost();
-        if (_use_square_fit && ls_cost < _threshold ||
-            !_use_square_fit && mean_cost < _threshold && angle_ok)
+        data_->Fit();
+        double mean_cost = MyGetCost(data_, 0, dc->size(), dc);
+        double ls_cost = data_->GetCost();
+        if (use_square_fit_ && ls_cost < threshold_ ||
+            !use_square_fit_ && mean_cost < threshold_ && angle_ok)
           {
             success = true;
-            _old_finish = 0;
-            if (_use_square_fit)
+            old_finish_ = 0;
+            if (use_square_fit_)
               OutputLine(&curves, 0, dc->size(), dc, ls_cost);
             else
               OutputLine(&curves, 0, dc->size(), dc, mean_cost);
@@ -133,22 +131,25 @@ void osl_fit_lines::simple_fit_to_list(vcl_list<osl_edge *> *myedges,
 void osl_fit_lines::incremental_fit_to_list(vcl_list<osl_edge *> *myedges,
                                             vcl_list<osl_edge *> *outedges)
 {
-  //  vcl_cout << "Fitting lines to Edge(s), threshold = " << _threshold << vcl_endl;
+#if 0
+  vcl_cout << "Fitting lines to Edge(s), threshold = " << threshold_ << vcl_endl;
+#endif
   int edge_no = 0;
   int vertex_no = 1000;
   // Take each Edge in turn and attempt to fit
   // a number of straight lines to it
 
   outedges->clear();
-  //  for(myedges->reset(), _curves->clear(); myedges->next();)
-  //  {
-  //    osl_edge *edge = myedges->pop();
+#if 0
+  for (myedges->reset(), curves_->clear(); myedges->next();) {
+    osl_edge *edge = myedges->pop();
+#endif
   for (vcl_list<osl_edge*>::iterator iter=myedges->begin(); iter!=myedges->end(); ++iter) {
     osl_edge *edge = *iter;
     ++edge_no;
 
     vcl_list<osl_edgel_chain*> curves;
-    if (_use_square_fit)
+    if (use_square_fit_)
       SquareIncrementalFit(&curves, edge);
     else
       MeanIncrementalFit(&curves, edge);
@@ -160,24 +161,26 @@ void osl_fit_lines::incremental_fit_to_list(vcl_list<osl_edge *> *myedges,
     // with a number of other edges.
 
     // If we have failed to find a fit.
-    if( curves.empty() ) {
+    if ( curves.empty() ) {
       edge->SetId(edge_no);
-      //edge->GetCurve()->SetId(edge_no++);
-      // edge->Protect(); // DORIN this should not be done since
-      // the edge is not created.
+#if 0
+      edge->GetCurve()->SetId(edge_no++);
+      edge->Protect(); // DORIN this should not be done since the edge is not created.
+#endif
       outedges->push_front(edge);
       warn_if_empty(edge);
     }
 
     // If we have fitted a line and have no gunk.
-    else if( curves.size() == 1 ) {
+    else if ( curves.size() == 1 ) {
       osl_edgel_chain *mycurve = fsm_pop(&curves);
-      //Curve *mycurve = _curves->pop();
-      //edge->SetCurve(mycurve);
-      //edge->SetId(edge_no);
-      //edge->GetCurve()->SetId(edge_no++);
-      // edge->Protect(); // DORIN this should not be done since
-      // the edge is not created.
+#if 0
+      Curve *mycurve = curves_->pop();
+      edge->SetCurve(mycurve);
+      edge->SetId(edge_no);
+      edge->GetCurve()->SetId(edge_no++);
+      edge->Protect(); // DORIN this should not be done since the edge is not created.
+#endif
       outedges->push_front(new osl_edge(*mycurve, edge->GetV1(), edge->GetV2()));
       outedges->front()->SetId(edge_no);
       warn_if_empty(edge);
@@ -209,7 +212,7 @@ void osl_fit_lines::incremental_fit_to_list(vcl_list<osl_edge *> *myedges,
                             vertex_no++); // id
 
         osl_edge *newedge = 0;
-        if( v1 == vstart ) {
+        if ( v1 == vstart ) {
           edge->set_v2(v2);
           newedge = edge; // DORIN in this case protection not required
         }
@@ -221,7 +224,7 @@ void osl_fit_lines::incremental_fit_to_list(vcl_list<osl_edge *> *myedges,
 
         newedge->SetId(edge_no);
         // newedge->Protect(); // DORIN Protect newedge: moved above in
-        // the else branch of the if( v1 == vstart ) test
+        // the else branch of the if ( v1 == vstart ) test
 
         outedges->push_front(newedge);
         warn_if_empty(newedge);
@@ -237,7 +240,7 @@ void osl_fit_lines::incremental_fit_to_list(vcl_list<osl_edge *> *myedges,
       newedge->ref/*Protect*/();
       outedges->push_front(newedge);
       warn_if_empty(newedge);
-#else
+#else // 0
       osl_vertex *v1 = 0;
       osl_vertex *v2 = edge->GetV1();
       while (!curves.empty()) {
@@ -250,7 +253,7 @@ void osl_fit_lines::incremental_fit_to_list(vcl_list<osl_edge *> *myedges,
         outedges->push_front(new osl_edge(*next, v1, v2));
         warn_if_empty(outedges->front());
       }
-#endif
+#endif // 0
     }
   }
 }
@@ -260,7 +263,7 @@ void osl_fit_lines::incremental_fit_to_list(vcl_list<osl_edge *> *myedges,
 // This method is used to fit lines incrementally using the mean
 // absolute error instead of the mean square error. The difference
 // between this and SquareIncrementalFit is very small.
-void osl_fit_lines::MeanIncrementalFit(vcl_list<osl_edgel_chain*> *_curves, osl_edge *edge)
+void osl_fit_lines::MeanIncrementalFit(vcl_list<osl_edgel_chain*> *curves_, osl_edge *edge)
 {
   //vcl_cerr << "MeanIncrementalFit()" << vcl_endl;
   float new_cost, new_est_cost;
@@ -269,7 +272,7 @@ void osl_fit_lines::MeanIncrementalFit(vcl_list<osl_edgel_chain*> *_curves, osl_
   assert(dc!=0);
 
   // If the EdgelChain is long enough fit
-  if( dc->size() < _min_fit_length )
+  if ( dc->size() < min_fit_length_ )
     return;
 
   bool added = false;
@@ -277,33 +280,32 @@ void osl_fit_lines::MeanIncrementalFit(vcl_list<osl_edgel_chain*> *_curves, osl_
   double distance;
 
   // Set up the data class for the first set of Edgels in the DigitalCurve
-  int start = _ignore_end_edgels;
-  _old_finish = 1;  // set _old_finish so we record from the start
-  int finish = start + _min_fit_length;
+  int start = ignore_end_edgels_;
+  old_finish_ = 1;  // set old_finish_ so we record from the start
+  int finish = start + min_fit_length_;
 
-  _data->Reset();
-  for(i=start;i<finish;i++)
-    _data->IncrByXY(dc->GetX(i),dc->GetY(i));
+  data_->Reset();
+  for (i=start;i<finish;i++)
+    data_->IncrByXY(dc->GetX(i),dc->GetY(i));
 
   // Now, until the end of the chain, test whether each
   // Edgel belongs to a straight line
-  while( finish <= dc->size() ) {
+  while ( finish <= dc->size() ) {
     // Define the start and end points of the DigitalCurve segment
     segment_length = finish - start;
 
     // Fit by orthogonal regression
-    _data->Fit();
-    new_cost = MyGetCost(_data, start, finish, dc);
+    data_->Fit();
+    new_cost = MyGetCost(data_, start, finish, dc);
 
     // Now evaluate the fit, and if both good and there are more points, grow
-    if( new_cost < _threshold) {
+    if ( new_cost < threshold_) {
       // If there are no more points, store the current fit,
       // and mark finish to ensure the next DigitalCurve is used.
-      if( finish == dc->size() ) {
-        OutputLine(_curves, start,finish-_ignore_end_edgels,dc,new_cost);
+      if ( finish == dc->size() ) {
+        OutputLine(curves_, start,finish-ignore_end_edgels_,dc,new_cost);
         finish++;
       }
-
       else {
         // Else, if possible, add more points to the current
         // interpretation by adapting the data class and moving the
@@ -312,18 +314,18 @@ void osl_fit_lines::MeanIncrementalFit(vcl_list<osl_edgel_chain*> *_curves, osl_
         // fitting cost is equal to the actual cost
         added = false;
         new_est_cost = new_cost;
-        while( (finish<dc->size()) && (new_est_cost<_threshold ) ) {
+        while ( (finish<dc->size()) && (new_est_cost<threshold_ ) ) {
           // Compute an upper bound estimate on the fitting cost
           // by adding the distance of the next point to the
           // currently fitted line
           distance =
-            _data->GetA()*dc->GetX(finish) + _data->GetB()*dc->GetY(finish) + _data->GetC();
+            data_->GetA()*dc->GetX(finish) + data_->GetB()*dc->GetY(finish) + data_->GetC();
           new_est_cost = (segment_length*new_est_cost + vcl_fabs(distance)) / (segment_length+1);
 
           // If this residual is low enough, include the point within
           // the orthogonal regression data class
-          if( new_est_cost < _threshold ) {
-            _data->IncrByXY(dc->GetX(finish),dc->GetY(finish));
+          if ( new_est_cost < threshold_ ) {
+            data_->IncrByXY(dc->GetX(finish),dc->GetY(finish));
             finish++;
             segment_length++;
             added = true;
@@ -332,20 +334,20 @@ void osl_fit_lines::MeanIncrementalFit(vcl_list<osl_edgel_chain*> *_curves, osl_
 
         // If no points can be added, output the line, store the fit,
         // and reset the data class
-        if( !added ) {
-          // capes Aug 1999 - now backtrack by _ignore_end_edgels and
+        if ( !added ) {
+          // capes Aug 1999 - now backtrack by ignore_end_edgels_ and
           // refit to avoid fitting to the garbage end edgels which are curving away
           // from the line
-          for (int ii=0; ii<_ignore_end_edgels; ++ii)
-            _data->DecrByXY(dc->GetX(finish-1-ii), dc->GetY(finish-1-ii));
-          _data->Fit();
-          new_cost = MyGetCost(_data, start, finish-_ignore_end_edgels, dc);
-          OutputLine(_curves, start,finish-_ignore_end_edgels,dc,new_cost);
-          start = finish+_ignore_end_edgels;  finish = start + _min_fit_length;
-          if( finish<=dc->size() ) {
-            _data->Reset();
-            for(i=start;i<finish;i++)
-              _data->IncrByXY(dc->GetX(i),dc->GetY(i));
+          for (int ii=0; ii<ignore_end_edgels_; ++ii)
+            data_->DecrByXY(dc->GetX(finish-1-ii), dc->GetY(finish-1-ii));
+          data_->Fit();
+          new_cost = MyGetCost(data_, start, finish-ignore_end_edgels_, dc);
+          OutputLine(curves_, start,finish-ignore_end_edgels_,dc,new_cost);
+          start = finish+ignore_end_edgels_;  finish = start + min_fit_length_;
+          if ( finish<=dc->size() ) {
+            data_->Reset();
+            for (i=start;i<finish;i++)
+              data_->IncrByXY(dc->GetX(i),dc->GetY(i));
           }
         }
       }
@@ -353,42 +355,42 @@ void osl_fit_lines::MeanIncrementalFit(vcl_list<osl_edgel_chain*> *_curves, osl_
 
     // Else the fit is not good enough. We therefore remove the first
     // point and add or delete points from the end of the current line
-    // segment until the resulting segment length is _min_fit_length
+    // segment until the resulting segment length is min_fit_length_
     else {
       // Unfortunately, using the mean absolute error sometimes
       // means that we have to rewind a bit from the end before
       // drawing the next straight line.
-      if( added ) {
+      if ( added ) {
         added = false;
         i = finish;
-        while (new_cost > _threshold && segment_length > _min_fit_length) {
-          _data->DecrByXY(dc->GetX(i), dc->GetY(i));
+        while (new_cost > threshold_ && segment_length > min_fit_length_) {
+          data_->DecrByXY(dc->GetX(i), dc->GetY(i));
           i --;
           segment_length --;
-          _data->Fit();
-          new_cost = MyGetCost(_data, start, i, dc);
+          data_->Fit();
+          new_cost = MyGetCost(data_, start, i, dc);
         }
         finish = i;
-        OutputLine(_curves, start,finish,dc,new_cost);
-        start = finish;  finish = start + _min_fit_length;
-        if( finish<=dc->size() ) {
-          _data->Reset();
-          for(i=start;i<finish;i++)
-            _data->IncrByXY(dc->GetX(i),dc->GetY(i));
+        OutputLine(curves_, start,finish,dc,new_cost);
+        start = finish;  finish = start + min_fit_length_;
+        if ( finish<=dc->size() ) {
+          data_->Reset();
+          for (i=start;i<finish;i++)
+            data_->IncrByXY(dc->GetX(i),dc->GetY(i));
         }
       }
       else {
-        _data->DecrByXY(dc->GetX(start),dc->GetY(start));
+        data_->DecrByXY(dc->GetX(start),dc->GetY(start));
         start++;
 
-        if( segment_length > _min_fit_length )
-          while( (segment_length-1) > _min_fit_length ) {
-            _data->DecrByXY(dc->GetX(finish),dc->GetY(finish));
+        if ( segment_length > min_fit_length_ )
+          while ( (segment_length-1) > min_fit_length_ ) {
+            data_->DecrByXY(dc->GetX(finish),dc->GetY(finish));
             finish--;
             segment_length--;
           }
-        else if( finish<dc->size() ) {
-          _data->IncrByXY(dc->GetX(finish),dc->GetY(finish));
+        else if ( finish<dc->size() ) {
+          data_->IncrByXY(dc->GetX(finish),dc->GetY(finish));
           finish++;
         }
 
@@ -401,23 +403,24 @@ void osl_fit_lines::MeanIncrementalFit(vcl_list<osl_edgel_chain*> *_curves, osl_
   // Finally, record any junk edgels at the end of the edgelchain that
   // have not been described by a straight line, that is so long as
   // a line has been fitted
-  int length = dc->size() - _old_finish;
-  if( _curves->size() && length ) {
+  int length = dc->size() - old_finish_;
+  if ( curves_->size() && length ) {
     osl_edgel_chain *ndc = new osl_edgel_chain(length);
-    for(i=0,j=_old_finish;j<dc->size();i++,j++) {
+    for (i=0,j=old_finish_;j<dc->size();i++,j++) {
       ndc->SetX(dc->GetX(j),i);
       ndc->SetY(dc->GetY(j),i);
       ndc->SetGrad(dc->GetGrad(j),i);
       ndc->SetTheta(dc->GetTheta(j),i);
     }
-    //ndc->SetStartX(ndc->GetX(0));
-    //ndc->SetStartY(ndc->GetY(0));
-    //ndc->SetStartZ(0.0);
-    //ndc->SetEndX(ndc->GetX(ndc->size()-1));
-    //ndc->SetEndY(ndc->GetY(ndc->size()-1));
-    //ndc->SetEndZ(0.0);
-
-    _curves->push_front(ndc);
+#if 0
+    ndc->SetStartX(ndc->GetX(0));
+    ndc->SetStartY(ndc->GetY(0));
+    ndc->SetStartZ(0.0);
+    ndc->SetEndX(ndc->GetX(ndc->size()-1));
+    ndc->SetEndY(ndc->GetY(ndc->size()-1));
+    ndc->SetEndZ(0.0);
+#endif
+    curves_->push_front(ndc);
   }
 }
 
@@ -427,16 +430,17 @@ void osl_fit_lines::MeanIncrementalFit(vcl_list<osl_edgel_chain*> *_curves, osl_
 // and its associated DigitalCurve, and fits lines using
 // orthogonal regression with mean square error residual and incremental
 // fitting.
-void osl_fit_lines::SquareIncrementalFit(vcl_list<osl_edgel_chain*> *_curves, osl_edge *edge)
+void osl_fit_lines::SquareIncrementalFit(vcl_list<osl_edgel_chain*> *curves_, osl_edge *edge)
 {
-  //vcl_cerr << "SquareIncrementalFit()" << vcl_endl;
-
+#if 0
+  vcl_cerr << "SquareIncrementalFit()" << vcl_endl;
+#endif
   // Get the digital curve
   osl_edgel_chain *dc = edge;//->GetCurve()->CastToDigitalCurve();
   assert(dc!=0);
 
   // If the EdgelChain is long enough fit
-  if( dc->size() < _min_fit_length )
+  if ( dc->size() < min_fit_length_ )
     return;
 
   bool added = false;
@@ -444,30 +448,30 @@ void osl_fit_lines::SquareIncrementalFit(vcl_list<osl_edgel_chain*> *_curves, os
   double distance;
 
   // Set up the data class for the first set of Edgels in the DigitalCurve
-  int start = _ignore_end_edgels;
-  _old_finish = 1;  // set _old_finish so we record from the start
-  int finish = start + _min_fit_length;
+  int start = ignore_end_edgels_;
+  old_finish_ = 1;  // set old_finish_ so we record from the start
+  int finish = start + min_fit_length_;
 
-  _data->Reset();
-  for(i=start;i<finish;i++)
-    _data->IncrByXY(dc->GetX(i),dc->GetY(i));
+  data_->Reset();
+  for (i=start;i<finish;i++)
+    data_->IncrByXY(dc->GetX(i),dc->GetY(i));
 
   // Now, until the end of the chain, test whether each
   // Edgel belongs to a straight line
-  while( finish <= dc->size() ) {
+  while ( finish <= dc->size() ) {
     // Define the start and end points of the DigitalCurve segment
     segment_length = finish - start;
 
     // Fit by orthogonal regression
-    _data->Fit();
+    data_->Fit();
 
 
     // Now evaluate the fit, and if both good and there are more points, grow
-    if( _data->GetCost() < _threshold ) {
+    if ( data_->GetCost() < threshold_ ) {
       // If there are no more points, store the current fit,
       // and mark finish to ensure the next DigitalCurve is used.
-      if( finish == dc->size() ) {
-        OutputLine(_curves, start,finish-_ignore_end_edgels,dc,_data->GetCost());
+      if ( finish == dc->size() ) {
+        OutputLine(curves_, start,finish-ignore_end_edgels_,dc,data_->GetCost());
         finish++;
       }
 
@@ -478,19 +482,19 @@ void osl_fit_lines::SquareIncrementalFit(vcl_list<osl_edgel_chain*> *_curves, os
         // added, and that the estimated
         // fitting cost is equal to the actual cost
         added = false;
-        _data->SetEstCost(_data->GetCost());
-        while( (finish<dc->size()) && (_data->GetEstCost()<_threshold) ) {
+        data_->SetEstCost(data_->GetCost());
+        while ( (finish<dc->size()) && (data_->GetEstCost()<threshold_) ) {
           // Compute an upper bound estimate on the fitting cost
           // by adding the distance of the next point to the
           // currently fitted line
           distance =
-            _data->GetA()*dc->GetX(finish) + _data->GetB()*dc->GetY(finish) + _data->GetC();
-          _data->SetEstCost( (segment_length*_data->GetEstCost() + distance*distance) / (segment_length+1) );
+            data_->GetA()*dc->GetX(finish) + data_->GetB()*dc->GetY(finish) + data_->GetC();
+          data_->SetEstCost( (segment_length*data_->GetEstCost() + distance*distance) / (segment_length+1) );
 
           // If this residual is low enough, include the point within
           // the orthogonal regression data class
-          if( _data->GetEstCost()<_threshold ) {
-            _data->IncrByXY(dc->GetX(finish),dc->GetY(finish));
+          if ( data_->GetEstCost()<threshold_ ) {
+            data_->IncrByXY(dc->GetX(finish),dc->GetY(finish));
             finish++;
             segment_length++;
             added = true;
@@ -499,20 +503,20 @@ void osl_fit_lines::SquareIncrementalFit(vcl_list<osl_edgel_chain*> *_curves, os
 
         // If no points can be added, output the line, store the fit,
         // and reset the data class
-        if( !added ) {
-          // capes Aug 1999 - now backtrack by _ignore_end_edgels and
+        if ( !added ) {
+          // capes Aug 1999 - now backtrack by ignore_end_edgels_ and
           // refit to avoid fitting to the garbage end edgels which are curving away
           // from the line
-          for (int ii=0; ii<_ignore_end_edgels; ++ii)
-            _data->DecrByXY(dc->GetX(finish-1-ii), dc->GetY(finish-1-ii));
-          _data->Fit();
+          for (int ii=0; ii<ignore_end_edgels_; ++ii)
+            data_->DecrByXY(dc->GetX(finish-1-ii), dc->GetY(finish-1-ii));
+          data_->Fit();
 
-          OutputLine(_curves, start,finish-_ignore_end_edgels,dc,_data->GetCost());
-          start = finish+_ignore_end_edgels;  finish = start + _min_fit_length;
-          if( finish<=dc->size() ) {
-            _data->Reset();
-            for(i=start;i<finish;i++)
-              _data->IncrByXY(dc->GetX(i),dc->GetY(i));
+          OutputLine(curves_, start,finish-ignore_end_edgels_,dc,data_->GetCost());
+          start = finish+ignore_end_edgels_;  finish = start + min_fit_length_;
+          if ( finish<=dc->size() ) {
+            data_->Reset();
+            for (i=start;i<finish;i++)
+              data_->IncrByXY(dc->GetX(i),dc->GetY(i));
           }
         }
       }
@@ -520,27 +524,27 @@ void osl_fit_lines::SquareIncrementalFit(vcl_list<osl_edgel_chain*> *_curves, os
 
     // Else the fit is not good enough. We therefore remove the first
     // point and add or delete points from the end of the current line
-    // segment until the resulting segment length is _min_fit_length
+    // segment until the resulting segment length is min_fit_length_
     else {
 #if 0
       // This error checking line is included for historical reasons -
       // the LEWIS version used to get into numerical difficulties from
       // time to time
-      if( added )
+      if ( added )
         WARN << "failure in incremental fit - vnl_svd<double>?\n";
 #endif
 
-      _data->DecrByXY(dc->GetX(start),dc->GetY(start));
+      data_->DecrByXY(dc->GetX(start),dc->GetY(start));
       start++;
 
-      if( segment_length > _min_fit_length )
-        while( (segment_length-1) > _min_fit_length ) {
-          _data->DecrByXY(dc->GetX(finish),dc->GetY(finish));
+      if ( segment_length > min_fit_length_ )
+        while ( (segment_length-1) > min_fit_length_ ) {
+          data_->DecrByXY(dc->GetX(finish),dc->GetY(finish));
           finish--;
           segment_length--;
         }
-      else if( finish<dc->size() ) {
-        _data->IncrByXY(dc->GetX(finish),dc->GetY(finish));
+      else if ( finish<dc->size() ) {
+        data_->IncrByXY(dc->GetX(finish),dc->GetY(finish));
         finish++;
       }
 
@@ -552,68 +556,70 @@ void osl_fit_lines::SquareIncrementalFit(vcl_list<osl_edgel_chain*> *_curves, os
   // Finally, record any junk edgels at the end of the edgelchain that
   // have not been described by a straight line, that is so long as
   // a line has been fitted.
-  int length = dc->size() - _old_finish;
-  if( _curves->size() && length ) {
+  int length = dc->size() - old_finish_;
+  if ( curves_->size() && length ) {
     osl_edgel_chain *ndc = new osl_edgel_chain(length);
-    for(i=0,j=_old_finish;j<dc->size();i++,j++) {
+    for (i=0,j=old_finish_;j<dc->size();i++,j++) {
       ndc->SetX(dc->GetX(j),i);
       ndc->SetY(dc->GetY(j),i);
       ndc->SetGrad(dc->GetGrad(j),i);
       ndc->SetTheta(dc->GetTheta(j),i);
     }
-    //ndc->SetStartX(ndc->GetX(0));
-    //ndc->SetStartY(ndc->GetY(0));
-    //ndc->SetStartZ(0.0);
-    //ndc->SetEndX(ndc->GetX(ndc->size()-1));
-    //ndc->SetEndY(ndc->GetY(ndc->size()-1));
-    //ndc->SetEndZ(0.0);
-
-    _curves->push_front(ndc);
+#if 0
+    ndc->SetStartX(ndc->GetX(0));
+    ndc->SetStartY(ndc->GetY(0));
+    ndc->SetStartZ(0.0);
+    ndc->SetEndX(ndc->GetX(ndc->size()-1));
+    ndc->SetEndY(ndc->GetY(ndc->size()-1));
+    ndc->SetEndZ(0.0);
+#endif
+    curves_->push_front(ndc);
   }
 }
 
 //-----------------------------------------------------------------------------
 //
 //: Output the fitted line.
-void osl_fit_lines::OutputLine(vcl_list<osl_edgel_chain*> *_curves,
+void osl_fit_lines::OutputLine(vcl_list<osl_edgel_chain*> *curves_,
                                int start, int finish,
                                osl_edgel_chain *dc,
                                float /*cost*/)
 {
   // First of all, store the edgel data between the current fit
   // and the previous fit to a DigitalCurve
-  int length = start - _old_finish;
-  if( length > 0 ) {
+  int length = start - old_finish_;
+  if ( length > 0 ) {
     osl_edgel_chain *ndc = new osl_edgel_chain(length);
-    for(int i=0,j=_old_finish;j<start;i++,j++) {
+    for (int i=0,j=old_finish_;j<start;i++,j++) {
       ndc->SetX(dc->GetX(j),i);
       ndc->SetY(dc->GetY(j),i);
       ndc->SetGrad(dc->GetGrad(j),i);
       ndc->SetTheta(dc->GetTheta(j),i);
     }
-    //ndc->SetStartX(ndc->GetX(0));
-    //ndc->SetStartY(ndc->GetY(0));
-    //ndc->SetStartZ(0.0);
-    //ndc->SetEndX(ndc->GetX(ndc->size()-1));
-    //ndc->SetEndY(ndc->GetY(ndc->size()-1));
-    //ndc->SetEndZ(0.0);
-
-    _curves->push_front(ndc);
+#if 0
+    ndc->SetStartX(ndc->GetX(0));
+    ndc->SetStartY(ndc->GetY(0));
+    ndc->SetStartZ(0.0);
+    ndc->SetEndX(ndc->GetX(ndc->size()-1));
+    ndc->SetEndY(ndc->GetY(ndc->size()-1));
+    ndc->SetEndZ(0.0);
+#endif
+    curves_->push_front(ndc);
   }
-  _old_finish = finish;
+  old_finish_ = finish;
 
   // Create a osl_edgel_chain from the fit
   osl_edgel_chain *line = new osl_edgel_chain(finish-start);
-  for(int i=0,j=start;j<finish;i++,j++) {  // Copy the edgels into the new chain
+  for (int i=0,j=start;j<finish;i++,j++) {  // Copy the edgels into the new chain
     line->SetX(dc->GetX(j),i);
     line->SetY(dc->GetY(j),i);
     line->SetGrad(dc->GetGrad(j),i);
     line->SetTheta(dc->GetTheta(j),i);
   }
-  _curves->push_front(line);
+  curves_->push_front(line);
 
   // and check to see if we can merge two lines together
-  MergeLines(_curves);
+  MergeLines(curves_);
 }
 
 //-----------------------------------------------------------------------------
@@ -626,14 +632,14 @@ void osl_fit_lines::OutputLine(vcl_list<osl_edgel_chain*> *_curves,
 // should be done using the underlying edgel data, *** BUT THIS IS
 // NOT YET IMPLEMENTED ***
 //
-void osl_fit_lines::MergeLines(vcl_list<osl_edgel_chain*> *_curves) {
-  if( _curves->size() < 2 )
+void osl_fit_lines::MergeLines(vcl_list<osl_edgel_chain*> *curves_) {
+  if ( curves_->size() < 2 )
     return;
 
   // Take the first two lines off the list (must be careful about the
   // ordering if we are to produce a correctly formed EdgelChain).
-  osl_edgel_chain *dc2 = fsm_pop(_curves);
-  osl_edgel_chain *dc1 = fsm_pop(_curves);
+  osl_edgel_chain *dc2 = fsm_pop(curves_);
+  osl_edgel_chain *dc1 = fsm_pop(curves_);
 
 #ifndef fsm_is_cute
   osl_ortho_regress fitter;
@@ -644,9 +650,9 @@ void osl_fit_lines::MergeLines(vcl_list<osl_edgel_chain*> *_curves) {
     fitter.add_point(dc2->GetX(i), dc2->GetY(i));
   double a, b, c;
   fitter.fit(&a, &b, &c);
-  if (fitter.cost(a, b, c) >= _threshold) {
-    _curves->push_front(dc1);
-    _curves->push_front(dc2);
+  if (fitter.cost(a, b, c) >= threshold_) {
+    curves_->push_front(dc1);
+    curves_->push_front(dc2);
   }
   else {
     // FIXME: what if endpoints are equal?
@@ -665,7 +671,7 @@ void osl_fit_lines::MergeLines(vcl_list<osl_edgel_chain*> *_curves) {
     }
     delete dc1;
     delete dc2;
-    _curves->push_front(dc);
+    curves_->push_front(dc);
   }
 
 #else
@@ -690,7 +696,7 @@ void osl_fit_lines::MergeLines(vcl_list<osl_edgel_chain*> *_curves) {
   float phi = vcl_atan2(yfinish-ystart,xfinish-xstart);
   double cp = vcl_cos(phi), sp = vcl_sin(phi);
 
-  for(int i=0;i<2;i++) {
+  for (int i=0;i<2;i++) {
     float x = x1[i]*cp + y1[i]*sp;
     y1[i]   = y1[i]*cp - x1[i]*sp;
     x1[i] = x;
@@ -700,17 +706,16 @@ void osl_fit_lines::MergeLines(vcl_list<osl_edgel_chain*> *_curves) {
     x2[i] = x;
   }
 
-
   // Determine the rotated line parameters
   double a[2],b[2],c[2];
-  for(int i=0;i<2;i++) {
+  for (int i=0;i<2;i++) {
     // This next bit for the Bhattacharyya comparison
     a[i] = y1[i] - y2[i];
     b[i] = x2[i] - x1[i];
     c[i] = x1[i]*y2[i] - x2[i]*y1[i];
 
     double m = vcl_sqrt(a[i]*a[i] + b[i]*b[i]);
-    if( b[i] > 0 ) m = -m;
+    if ( b[i] > 0 ) m = -m;
 
     a[i] /= m;  b[i] /= m;  c[i] /= m;
   }
@@ -719,10 +724,10 @@ void osl_fit_lines::MergeLines(vcl_list<osl_edgel_chain*> *_curves) {
   double theta = 180.0*vcl_acos(a[0]*a[1]+b[0]*b[1])/M_PI;
   // Best we can do is eliminate cases that don't double
   // back on themselves
-  if( theta > 90.0 )
+  if ( theta > 90.0 )
     theta = 180.0 - theta;
-  if( theta > _theta ) {
-    _curves->push_front(dc1);  _curves->push_front(dc2);
+  if ( theta > theta_ ) {
+    curves_->push_front(dc1);  curves_->push_front(dc2);
     return;
   }
 
@@ -759,7 +764,7 @@ void osl_fit_lines::MergeLines(vcl_list<osl_edgel_chain*> *_curves) {
     x2_2 = x2[i]*x2[i];  x2_3 = x2_2*x2[i];
 
     // Compute the total scatter matrix for each line
-    if( x2[i] > x1[i] ) {
+    if ( x2[i] > x1[i] ) {
       Si = (x2_3-x1_3)/3.0*S1i;
       Si += (x2_2-x1_2)*S2i;
       Si += (x2[i]-x1[i])*S3i;
@@ -798,12 +803,12 @@ void osl_fit_lines::MergeLines(vcl_list<osl_edgel_chain*> *_curves) {
   // Check that the Eigenvalues are both semi-positive
   if ((W.get(0,0)<0.0) || (W.get(1,1)<0.0)) {
     WARN << "numerical ill-conditioning in MergeLines";
-    _curves->push_front(l1);  _curves->push_front(l2);
+    curves_->push_front(l1);  curves_->push_front(l2);
     return;
   }
 
   double cost;  // Again this is the mean square distance
-  if( W.get(0,0) < W.get(1,1) ) {
+  if ( W.get(0,0) < W.get(1,1) ) {
     cost = W.get(0,0)/normaliser;
     eigenvector.put(0,0,U.get(0,0));  eigenvector.put(1,0,U.get(1,0));
   }
@@ -813,8 +818,8 @@ void osl_fit_lines::MergeLines(vcl_list<osl_edgel_chain*> *_curves) {
   }
 
   // If the cost of the fitted line is too high restore the EdgeList and return
-  if( cost >= _threshold ) {
-    _curves->push_front(l1);  _curves->push_front(l2);
+  if ( cost >= threshold_ ) {
+    curves_->push_front(l1);  curves_->push_front(l2);
     return;
   }
   else
@@ -827,7 +832,7 @@ void osl_fit_lines::MergeLines(vcl_list<osl_edgel_chain*> *_curves) {
   double m = vcl_sqrt(la*la+lb*lb);
   // Make sure that b >= 0 to be consistent with osl_OrthogRegress - though
   // we don't actually store {a,b,c}
-  if( lb < 0.0 )
+  if ( lb < 0.0 )
     m *= -1.0;
   la /= m;  lb /= m;  lc /= m;
 
@@ -868,7 +873,7 @@ void osl_fit_lines::MergeLines(vcl_list<osl_edgel_chain*> *_curves) {
   }
 
   // Store the new ImplicitDigitalLine
-  _curves->push_front(line);
+  curves_->push_front(line);
 
   // and remove the old ones
 
@@ -889,7 +894,7 @@ float osl_fit_lines::MyGetCost(osl_OrthogRegress const *fitter,
 
   float distance = 0;
 
-  for(int i = start; i < finish; i ++)
+  for (int i = start; i < finish; i ++)
     distance += vcl_fabs(A*dc->GetX(i) + B*dc->GetY(i) + C);
 
   return distance / (finish - start);

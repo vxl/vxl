@@ -11,13 +11,13 @@ osl_fit_lines_params::osl_fit_lines_params(int min_fit_len,
                                            bool dc,
                                            bool inc,
                                            int ignore_end_edgels)
-: _min_fit_length(min_fit_len)
-  , _use_square_fit(use_sqr)
-  , _threshold(thresh)
-  , _theta(th)
-  , _dc_only(dc)
-  , _incremtl(inc)
-  , _ignore_end_edgels(ignore_end_edgels)
+: min_fit_length_(min_fit_len)
+  , use_square_fit_(use_sqr)
+  , threshold_(thresh)
+  , theta_(th)
+  , dc_only_(dc)
+  , incremtl_(inc)
+  , ignore_end_edgels_(ignore_end_edgels)
 {}
 
 //: Checks that parameters are within acceptable bounds
@@ -26,17 +26,17 @@ bool osl_fit_lines_params::SanityCheck() {
   vcl_strstream msg;
   bool valid = true;
 
-  if (_min_fit_length < 3) {
+  if (min_fit_length_ < 3) {
     msg << "ERROR: Min fit length too short < 3" << vcl_ends;
     valid = false;
   }
 
-  if (_threshold > 1.0) {
+  if (threshold_ > 1.0) {
     msg << "ERROR: Fit error is quit large" << vcl_ends;
     valid = false;
   }
 
-  if (_theta > 15) {
+  if (theta_ > 15) {
     msg << "ERROR: Value of angle tolerance is too large >15" << vcl_ends;
     valid = false;
   }

@@ -11,31 +11,31 @@
 //--------------------------------------------------------------
 
 osl_canny_base::osl_canny_base(float sigma, float low, float high, bool v)
-  : _xstart(0), _ystart(0)
-  , _xsize(0), _ysize(0)
+  : xstart_(0), ystart_(0)
+  , xsize_(0), ysize_(0)
 
-  , _smooth(0)
-  , _dx(0)
-  , _dy(0)
-  , _grad(0)
+  , smooth_(0)
+  , dx_(0)
+  , dy_(0)
+  , grad_(0)
 
-  , _thick(0)
-  , _thin(0)
-  , _theta(0)
+  , thick_(0)
+  , thin_(0)
+  , theta_(0)
 
-  , _junction(0)
-  , _jx(0)
-  , _jy(0)
-  , _xjunc(0)
-  , _yjunc(0)
-  , _vlist(0)
+  , junction_(0)
+  , jx_(0)
+  , jy_(0)
+  , xjunc_(0)
+  , yjunc_(0)
+  , vlist_(0)
 
-  , _kernel(0)
+  , kernel_(0)
 {
   verbose =v;
-  _sigma = sigma;
-  _low = low;
-  _high = high;
+  sigma_ = sigma;
+  low_ = low;
+  high_ = high;
 }
 
 //: Destructor does nothing at all.
@@ -96,71 +96,72 @@ void osl_canny_base::Final_follow(int x, int y,
                                   int reverse)
 {
   // Make sure that we do not overun the border of the image
-  if ( (x<=0) || (x>=_xsize-1) || (y<=0) || (y>=_ysize-1) )
-    return;
+  assert ( x>0 && y>0);
+  assert ( (unsigned int)x+1<xsize_);
+  assert ( (unsigned int)y+1<ysize_);
 
   // Add the current point to the coordinate lists, and delete from
   // the edge image
   if (!reverse) {
     xc->push_front(x);
     yc->push_front(y);
-    grad->push_front(_thin[x][y]);
+    grad->push_front(thin_[x][y]);
   }
-  _thin[x][y] = 0.0;
+  thin_[x][y] = 0.0;
 
   // Now recursively look for connected eight-neighbours
-  if      ( (_thin[x  ][y-1]>_low) && (_junction[x  ][y-1]==0) )
+  if      ( (thin_[x  ][y-1]>low_) && (junction_[x  ][y-1]==0) )
     Final_follow(x,y-1,xc,yc,grad,0);
-  else if ( (_thin[x-1][y  ]>_low) && (_junction[x-1][y  ]==0) )
+  else if ( (thin_[x-1][y  ]>low_) && (junction_[x-1][y  ]==0) )
     Final_follow(x-1,y,xc,yc,grad,0);
-  else if ( (_thin[x  ][y+1]>_low) && (_junction[x  ][y+1]==0) )
+  else if ( (thin_[x  ][y+1]>low_) && (junction_[x  ][y+1]==0) )
     Final_follow(x,y+1,xc,yc,grad,0);
-  else if ( (_thin[x+1][y  ]>_low) && (_junction[x+1][y  ]==0) )
+  else if ( (thin_[x+1][y  ]>low_) && (junction_[x+1][y  ]==0) )
     Final_follow(x+1,y,xc,yc,grad,0);
-  else if ( (_thin[x+1][y-1]>_low) && (_junction[x+1][y-1]==0) )
+  else if ( (thin_[x+1][y-1]>low_) && (junction_[x+1][y-1]==0) )
     Final_follow(x+1,y-1,xc,yc,grad,0);
-  else if ( (_thin[x-1][y-1]>_low) && (_junction[x-1][y-1]==0) )
+  else if ( (thin_[x-1][y-1]>low_) && (junction_[x-1][y-1]==0) )
     Final_follow(x-1,y-1,xc,yc,grad,0);
-  else if ( (_thin[x-1][y+1]>_low) && (_junction[x-1][y+1]==0) )
+  else if ( (thin_[x-1][y+1]>low_) && (junction_[x-1][y+1]==0) )
     Final_follow(x-1,y+1,xc,yc,grad,0);
-  else if ( (_thin[x+1][y+1]>_low) && (_junction[x+1][y+1]==0) )
+  else if ( (thin_[x+1][y+1]>low_) && (junction_[x+1][y+1]==0) )
     Final_follow(x+1,y+1,xc,yc,grad,0);
 
-  // Else see if there is a junction nearby, and record it. The _chain_no
+  // Else see if there is a junction nearby, and record it. The chain_no_
   // variable is used to prevent the same junction being inserted at both
   // ends of the EdgelChains when reversel occurs next to the junction
   // (in that case there will only be two stored points: the edge and the junction)
-  else if ( _junction[x  ][y-1] && ((xc->size()>2)||(_junction[x  ][y-1]!=_chain_no)) ) {
-    xc->push_front(_jx[x  ][y-1]);  yc->push_front(_jy[x  ][y-1]);  grad->push_front(_jval);
-    _junction[x  ][y-1] = _chain_no;
+  else if ( junction_[x  ][y-1] && ((xc->size()>2)||(junction_[x  ][y-1]!=chain_no_)) ) {
+    xc->push_front(jx_[x  ][y-1]);  yc->push_front(jy_[x  ][y-1]);  grad->push_front(jval_);
+    junction_[x  ][y-1] = chain_no_;
   }
-  else if ( _junction[x-1][y  ] && ((xc->size()>2)||(_junction[x-1][y  ]!=_chain_no)) ) {
-    xc->push_front(_jx[x-1][y  ]);  yc->push_front(_jy[x-1][y  ]);  grad->push_front(_jval);
-    _junction[x-1][y  ] = _chain_no;
+  else if ( junction_[x-1][y  ] && ((xc->size()>2)||(junction_[x-1][y  ]!=chain_no_)) ) {
+    xc->push_front(jx_[x-1][y  ]);  yc->push_front(jy_[x-1][y  ]);  grad->push_front(jval_);
+    junction_[x-1][y  ] = chain_no_;
   }
-  else if ( _junction[x  ][y+1] && ((xc->size()>2)||(_junction[x  ][y+1]!=_chain_no)) ) {
-    xc->push_front(_jx[x  ][y+1]);  yc->push_front(_jy[x  ][y+1]);  grad->push_front(_jval);
-    _junction[x  ][y+1] = _chain_no;
+  else if ( junction_[x  ][y+1] && ((xc->size()>2)||(junction_[x  ][y+1]!=chain_no_)) ) {
+    xc->push_front(jx_[x  ][y+1]);  yc->push_front(jy_[x  ][y+1]);  grad->push_front(jval_);
+    junction_[x  ][y+1] = chain_no_;
   }
-  else if ( _junction[x+1][y  ] && ((xc->size()>2)||(_junction[x+1][y  ]!=_chain_no)) ) {
-    xc->push_front(_jx[x+1][y  ]);  yc->push_front(_jy[x+1][y  ]);  grad->push_front(_jval);
-    _junction[x+1][y  ] = _chain_no;
+  else if ( junction_[x+1][y  ] && ((xc->size()>2)||(junction_[x+1][y  ]!=chain_no_)) ) {
+    xc->push_front(jx_[x+1][y  ]);  yc->push_front(jy_[x+1][y  ]);  grad->push_front(jval_);
+    junction_[x+1][y  ] = chain_no_;
   }
-  else if ( _junction[x+1][y-1] && ((xc->size()>2)||(_junction[x+1][y-1]!=_chain_no)) ) {
-    xc->push_front(_jx[x+1][y-1]);  yc->push_front(_jy[x+1][y-1]);  grad->push_front(_jval);
-    _junction[x+1][y-1] = _chain_no;
+  else if ( junction_[x+1][y-1] && ((xc->size()>2)||(junction_[x+1][y-1]!=chain_no_)) ) {
+    xc->push_front(jx_[x+1][y-1]);  yc->push_front(jy_[x+1][y-1]);  grad->push_front(jval_);
+    junction_[x+1][y-1] = chain_no_;
   }
-  else if ( _junction[x-1][y-1] && ((xc->size()>2)||(_junction[x-1][y-1]!=_chain_no)) ) {
-    xc->push_front(_jx[x-1][y-1]);  yc->push_front(_jy[x-1][y-1]);  grad->push_front(_jval);
-    _junction[x-1][y-1] = _chain_no;
+  else if ( junction_[x-1][y-1] && ((xc->size()>2)||(junction_[x-1][y-1]!=chain_no_)) ) {
+    xc->push_front(jx_[x-1][y-1]);  yc->push_front(jy_[x-1][y-1]);  grad->push_front(jval_);
+    junction_[x-1][y-1] = chain_no_;
   }
-  else if ( _junction[x-1][y+1] && ((xc->size()>2)||(_junction[x-1][y+1]!=_chain_no)) ) {
-    xc->push_front(_jx[x-1][y+1]);  yc->push_front(_jy[x-1][y+1]);  grad->push_front(_jval);
-    _junction[x-1][y+1] = _chain_no;
+  else if ( junction_[x-1][y+1] && ((xc->size()>2)||(junction_[x-1][y+1]!=chain_no_)) ) {
+    xc->push_front(jx_[x-1][y+1]);  yc->push_front(jy_[x-1][y+1]);  grad->push_front(jval_);
+    junction_[x-1][y+1] = chain_no_;
   }
-  else if ( _junction[x+1][y+1] && ((xc->size()>2)||(_junction[x+1][y+1]!=_chain_no)) ) {
-    xc->push_front(_jx[x+1][y+1]);  yc->push_front(_jy[x+1][y+1]);  grad->push_front(_jval);
-    _junction[x+1][y+1] = _chain_no;
+  else if ( junction_[x+1][y+1] && ((xc->size()>2)||(junction_[x+1][y+1]!=chain_no_)) ) {
+    xc->push_front(jx_[x+1][y+1]);  yc->push_front(jy_[x+1][y+1]);  grad->push_front(jval_);
+    junction_[x+1][y+1] = chain_no_;
   }
 }
 
