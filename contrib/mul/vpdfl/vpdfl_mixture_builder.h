@@ -1,7 +1,6 @@
 #ifndef vpdfl_mixture_builder_h_
 #define vpdfl_mixture_builder_h_
 /*=======================================================================
-Id
 
 	Copyright: (C) 2000 Victoria University of Manchester
 
