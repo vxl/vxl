@@ -30,5 +30,5 @@ int main (int argc, char** argv)
       vcl_cerr << map.image_name(10) << vcl_endl;
     }
   }
+  return 0;
 }
-

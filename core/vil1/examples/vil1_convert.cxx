@@ -19,4 +19,5 @@ int main(int argc, char ** argv)
   if (!in) return -1;
 
   vil_save(in, output_filename, output_format);
+  return 0;
 }

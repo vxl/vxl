@@ -29,6 +29,7 @@ int main(int argc, char ** argv)
   vil_image crop = vil_crop(in, x0, y0, w, h);
 
   vil_save(crop, output_filename, in.file_format());
+  return 0;
 }
 
 // save(crop, "t.pgm", "pnm") is implemented as:

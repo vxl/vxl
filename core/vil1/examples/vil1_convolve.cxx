@@ -112,6 +112,7 @@ int main(int argc, char ** argv)
   vil_convolve_simple(inimg, kernelimg, (float*)0, outimg);
 
   vil_save(outimg, a_output_filename().c_str(), in.file_format());
+  return 0;
 }
 
 // save(crop, "t.pgm", "pnm") is implemented as:
