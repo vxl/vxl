@@ -29,7 +29,6 @@ IF(HAS_CMU1394CAMERA)
   cmu_1394_camera.cxx          cmu_1394_camera.h
   vvid_live_video_tableau.cxx  vvid_live_video_tableau.h
                                vvid_live_video_tableau_sptr.h
-  vvid_live_video_frame.cxx    vvid_live_video_frame.h vvid_live_video_frame_sptr.h
   vvid_live_video_manager.cxx  vvid_live_video_manager.h
   vvid_live_stereo_manager.cxx vvid_live_stereo_manager.h
  )
