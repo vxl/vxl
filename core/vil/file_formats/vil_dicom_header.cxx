@@ -1682,9 +1682,9 @@ void vil_dicom_header_format::clearInfo(void)
   last_read_.window_width_ = VIL_DICOM_HEADER_UNSPECIFIED;
 
   // Info for loading image
-  last_read_.xsize_ = VIL_DICOM_HEADER_DEFAULTSIZE;
-  last_read_.ysize_ = VIL_DICOM_HEADER_DEFAULTSIZE;
-  last_read_.slice_spacing_ = VIL_DICOM_HEADER_DEFAULTSIZE;
+  last_read_.xsize_ = VIL_DICOM_HEADER_DEFAULTSIZE_FLOAT;
+  last_read_.ysize_ = VIL_DICOM_HEADER_DEFAULTSIZE_FLOAT;
+  last_read_.slice_spacing_ = VIL_DICOM_HEADER_DEFAULTSIZE_FLOAT;
   last_read_.res_intercept_ = VIL_DICOM_HEADER_DEFAULTINTERCEPT;
   last_read_.res_slope_ = VIL_DICOM_HEADER_DEFAULTSLOPE;
   last_read_.pix_rep_ = VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED;

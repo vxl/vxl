@@ -199,7 +199,7 @@ class vil_correlate_1d_resource : public vil_image_resource
  protected:
   vil_image_resource_sptr src_;
   const kernelT* kernel_;
-  int klo_, khi_;
+  vcl_ptrdiff_t klo_, khi_;
   vil_convolve_boundary_option start_option_, end_option_;
 };
 

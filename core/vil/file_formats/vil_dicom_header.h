@@ -373,6 +373,7 @@ struct vil_dicom_header_info
 const short VIL_DICOM_HEADER_UNSPECIFIED = -1;
 const unsigned short VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED = (unsigned short) -1;
 const double VIL_DICOM_HEADER_DEFAULTSIZE = 1.0;
+const double VIL_DICOM_HEADER_DEFAULTSIZE_FLOAT = 1.0f;
 const float VIL_DICOM_HEADER_DEFAULTINTERCEPT = 0.0;
 const float VIL_DICOM_HEADER_DEFAULTSLOPE = 1.0;
 

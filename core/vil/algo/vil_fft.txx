@@ -31,7 +31,7 @@ vil_fft_2d_base (vcl_complex<T> * data,
           // use contiguous data memory directly in vnl_vector
           vnl_vector_ref<vcl_complex<T> > v (n0, d);
           fft_1d.transform (v, dir);
-          if (1 == dir) v /= n0; // proper scaling for inverse FFT
+          if (1 == dir) v /= static_cast<T>(n0); // proper scaling for inverse FFT
       }
   }
   else {
@@ -43,7 +43,7 @@ vil_fft_2d_base (vcl_complex<T> * data,
           for (unsigned i0=0; i0<n0; i0++, d+=step0)
               v(i0) = *d;
           fft_1d.transform (v, dir);
-          if (1 == dir) v /= n0; // proper scaling for inverse FFT
+          if (1 == dir) v /= static_cast<T>(n0); // proper scaling for inverse FFT
           d = data + i1*step1 + i2*step2;
           // copy vnl_vector back to non-contiguous data memory
           for (unsigned i0=0; i0<n0; i0++, d+=step0)

@@ -67,9 +67,10 @@ void vil_rotate_image(const vil_image_view<sType>& src_image,
   // nb varies every 90 degrees ( ie different corner at top of image!)
   double dx1, dy1, dx2, dy2, x0, y0;
   int n1,n2;
-  if ( theta_360< 0 )
-    assert(!"This should not happen");
-  else if ( theta_360< 90 )
+
+  assert(theta_360>= 0.0 && theta_360 < 360.0);
+
+  if ( theta_360< 90.0 )
   {
     dx1= (bi-ai)/l1;
     dy1= (bj-aj)/l1;
@@ -80,7 +81,7 @@ void vil_rotate_image(const vil_image_view<sType>& src_image,
     n1 = l1;
     n2 = l2;
   }
-  else if (theta_360< 180 )
+  else if (theta_360< 180.0 )
   {
     dx1= (ai-ci)/l2;
     dy1= (aj-cj)/l2;
@@ -91,7 +92,7 @@ void vil_rotate_image(const vil_image_view<sType>& src_image,
     n1 = l2;
     n2 = l1;
   }
-  else if (theta_360< 270 )
+  else if (theta_360< 270.0 )
   {
     dx1= (ci-di)/l1;
     dy1= (cj-dj)/l1;
@@ -102,7 +103,7 @@ void vil_rotate_image(const vil_image_view<sType>& src_image,
     n1 = l1;
     n2 = l2;
   }
-  else if (theta_360< 360 )
+  else if (theta_360< 360.0 )
   {
     dx1= (di-bi)/l2;
     dy1= (dj-bj)/l2;
@@ -113,8 +114,6 @@ void vil_rotate_image(const vil_image_view<sType>& src_image,
     n1 = l2;
     n2 = l1;
   }
-  else
-    assert(!"This should not happen");
 
   vil_resample_bilin(src_image, dest_image, x0, y0, dx1, dy1, dx2, dy2, n1, n2 );
 }

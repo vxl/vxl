@@ -77,7 +77,7 @@ inline void vil_find_4con_boundary_below_threshold(vcl_vector<int>& bi,
   bi.resize(0); bj.resize(0);
   int ni1 = image.ni()-1;
   int nj1 = image.nj()-1;
-  int istep = image.istep(), jstep=image.jstep();
+  vcl_ptrdiff_t istep = image.istep(), jstep=image.jstep();
 
   int i = p0_i, j = p0_j;
   const T* p = &image(i,j);
@@ -120,7 +120,7 @@ inline void vil_find_4con_boundary_above_threshold(vcl_vector<int>& bi,
   bi.resize(0); bj.resize(0);
   int ni1 = image.ni()-1;
   int nj1 = image.nj()-1;
-  int istep = image.istep(), jstep=image.jstep();
+  vcl_ptrdiff_t istep = image.istep(), jstep=image.jstep();
 
   int i = p0_i, j = p0_j;
   const T* p = &image(i,j);

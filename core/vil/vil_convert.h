@@ -86,7 +86,7 @@ macro( vil_rgba<vxl_byte> )
 
 // declare general case in case anyone needs something weird.
 template <class In, class Out>
-inline void vil_convert_cast_pixel<In, Out>::operator () (In v, Out &d) const { d = (Out)(v); }
+inline void vil_convert_cast_pixel<In, Out>::operator () (In v, Out &d) const { d = static_cast<Out>(v); }
 
 
 //: Cast one pixel type to another (with rounding).
