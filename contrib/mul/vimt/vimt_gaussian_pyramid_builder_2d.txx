@@ -1,6 +1,6 @@
+// This is mul/vimt/vimt_gaussian_pyramid_builder_2d.txx
 #ifndef vimt_gaussian_pyramid_builder_2d_txx_
 #define vimt_gaussian_pyramid_builder_2d_txx_
-
 //: \file
 //  \brief Class to build gaussian pyramids of vimt_image_2d_of<T>
 //  \author Tim Cootes
@@ -13,7 +13,6 @@
 #include <vimt/vimt_image_pyramid.h>
 #include <vil2/algo/vil2_algo_gauss_reduce.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
 #include <vnl/vnl_math.h> // for sqrt2
 
 //=======================================================================
@@ -103,7 +102,6 @@ void vimt_gaussian_pyramid_builder_2d<T>::gauss_reduce(vimt_image_2d_of<T>& dest
   vimt_transform_2d scaling;
   scaling.set_zoom_only(0.5,0,0);
   dest_im.set_world2im(scaling * src_im.world2im());
-
 }
 
 //=======================================================================
@@ -144,21 +142,21 @@ void vimt_gaussian_pyramid_builder_2d<T>::checkPyr(vimt_image_pyramid& im_pyr,  
 //: Build pyramid
 template<class T>
 void vimt_gaussian_pyramid_builder_2d<T>::build(vimt_image_pyramid& image_pyr,
-                                               const vimt_image& im) const
+                                                const vimt_image& im) const
 {
   //  Require image vimt_image_2d_of<T>
   assert(im.is_a()==work_im_.is_a());
 
   const vimt_image_2d_of<T>& base_image = (const vimt_image_2d_of<T>&) im;
 
-  int nx = base_image.image().nx();
-  int ny = base_image.image().ny();
+  int ni = base_image.image().ni();
+  int nj = base_image.image().nj();
 
   // Compute number of levels to pyramid so that top is no less
   // than minXSize_ x minYSize_
   int s = 1;
   int max_levels = 1;
-  while ((nx/(2*s)>=int(minXSize_)) && (ny/(2*s)>=int(minYSize_)))
+  while ((ni/(2*s)>=int(minXSize_)) && (nj/(2*s)>=int(minYSize_)))
   {
     max_levels++;
     s*=2;
@@ -173,7 +171,7 @@ void vimt_gaussian_pyramid_builder_2d<T>::build(vimt_image_pyramid& image_pyr,
   vimt_image_2d_of<T>& im0 = (vimt_image_2d_of<T>&) image_pyr(0);
 
   // Shallow copy of part of base_image
-  im0.set_to_window(base_image,0,nx-1,0,ny-1);
+  im0.set_to_window(base_image,0,ni-1,0,nj-1);
 
   int i;
   for (i=1;i<max_levels;i++)
@@ -185,7 +183,7 @@ void vimt_gaussian_pyramid_builder_2d<T>::build(vimt_image_pyramid& image_pyr,
   }
 
   // Estimate width of pixels in base image
-  vgl_point_2d<double>  c0(0.5*(nx-1),0.5*(ny-1));
+  vgl_point_2d<double>  c0(0.5*(ni-1),0.5*(nj-1));
   vgl_point_2d<double>  c1 = c0 + vgl_vector_2d<double> (1,1);
   vimt_transform_2d im2world = base_image.world2im().inverse();
   vgl_vector_2d<double>  dw = im2world(c1) - im2world(c0);
@@ -208,14 +206,14 @@ void vimt_gaussian_pyramid_builder_2d<T>::extend(vimt_image_pyramid& image_pyr) 
   assert(image_pyr.scale_step() == scale_step());
 
   vimt_image_2d_of<T>& im_base = (vimt_image_2d_of<T>&) image_pyr(0);
-  int nx = im_base.image().nx();
-  int ny = im_base.image().ny();
+  int ni = im_base.image().ni();
+  int nj = im_base.image().nj();
 
   // Compute number of levels to pyramid so that top is no less
   // than 5 x 5
   double s = 1;
   int max_levels = 1;
-  while ((nx/(scale_step()*s)>=minXSize_) && (ny/(scale_step()*s)>=minXSize_))
+  while ((ni/(scale_step()*s)>=minXSize_) && (nj/(scale_step()*s)>=minXSize_))
   {
     max_levels++;
     s*=scale_step();
