@@ -46,52 +46,52 @@ public:
   double X_tolerance;
   double F_tolerance;
 
-	  //: Define maximum number of iterations to use
-	void set_max_iterations(int n);
+  //: Define maximum number of iterations to use
+  void set_max_iterations(int n);
 
-	  //: Define tolerance on elements of x
+  //: Define tolerance on elements of x
   void set_x_tolerance(double tol);
 
-	  //: Define tolerance on function evaluation
+  //: Define tolerance on function evaluation
   void set_f_tolerance(double tol);
 
-	  //: Define scaling used to select starting verticies relative to intial x0
-		//  ie the i'th vertex has x[i] = x0[i]*(1+relative_diameter)
+  //: Define scaling used to select starting vertices relative to intial x0
+  //  ie the i'th vertex has x[i] = x0[i]*(1+relative_diameter)
   void set_relative_diameter(double r);
 
-	  //: Scaling used to select starting verticies relative to intial x0
-		//  ie the i'th vertex has x[i] = x0[i]*(1+relative_diameter)
+  //: Scaling used to select starting vertices relative to intial x0
+  //  ie the i'th vertex has x[i] = x0[i]*(1+relative_diameter)
   double relative_diameter;
 
-	  //: Construct and supply function to be minimized
+  //: Construct and supply function to be minimized
   vnl_amoeba(vnl_cost_function& f);
 
-	  //: Modify x to minimise function supplied in constructor
-		//  Start simplex defined by scaling elements of x
+  //: Modify x to minimise function supplied in constructor
+  //  Start simplex defined by scaling elements of x
   void minimize(vnl_vector<double>& x);
 
-    //: Perform optimisation.  Start simplex defined by adding dx[i] to each x[i]
+  //: Perform optimisation.  Start simplex defined by adding dx[i] to each x[i]
   void minimize(vnl_vector<double>& x, const vnl_vector<double>& dx);
 
-	  //: Number of evaluations used in last call to minimize
+  //: Number of evaluations used in last call to minimize
   int get_num_evaluations() const { return num_evaluations_; }
 
 public:
-    //: Modify x so as to minimise f(x)
+  //: Modify x so as to minimise f(x)
   static void minimize(vnl_cost_function& f, vnl_vector<double>& x);
 
-    //: Modify x so as to minimise f(x)
-		//  Start simplex defined by adding dx[i] to each x[i]
+  //: Modify x so as to minimise f(x)
+  //  Start simplex defined by adding dx[i] to each x[i]
   static void minimize(vnl_cost_function& f, vnl_vector<double>& x,
-	                     const vnl_vector<double>& dx);
+                       const vnl_vector<double>& dx);
 
-    //: Modify x so as to minimise f(x)
-		//  delta defines relative size of initial simplex
-		//  ie the i'th vertex has xi[i] = x[i]*(1+delta)
+  //: Modify x so as to minimise f(x)
+  //  delta defines relative size of initial simplex
+  //  ie the i'th vertex has xi[i] = x[i]*(1+delta)
   static void minimize(vnl_cost_function& f, vnl_vector<double>& x,
                        double delta);
 
-    //: Modify x so as to minimise f(x)
+  //: Modify x so as to minimise f(x)
   static void minimize(vnl_least_squares_function& f, vnl_vector<double>& x);
 
   static bool default_verbose;
@@ -101,8 +101,8 @@ protected:
   int num_evaluations_;
 };
 
-//: Private class needs to be declared here
-//  in order to instantiate STL container of it.
+//: Private struct needs to be declared in the header file
+//  in order to instantiate STL container of it elsewhere.
 struct vnl_amoeba_SimplexCorner {
   vnl_vector<double> v;
   double fv;
