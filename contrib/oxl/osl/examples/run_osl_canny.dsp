@@ -10,11 +10,11 @@
 
 # variables to REPLACE
 # 
-# /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl" /I "c:/awf/src/vxl/v3p/jpeg" /I "c:/awf/src/vxl/v3p/png" /I "c:/awf/src/vxl/v3p/zlib" /I "c:/awf/src/vxl/v3p/tiff"  == include path
+# /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/v3p/jpeg" /I "$(IUEROOT)/v3p/png" /I "$(IUEROOT)/v3p/zlib" /I "$(IUEROOT)/v3p/tiff"  == include path
 #  == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF == compiler defines
 # run_osl_canny  == name of output library
-#  /LIBPATH:"c:/awf/src/vxl/oxl/osl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/oxl/osl"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl"  /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl"  /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo"  /LIBPATH:"c:/awf/src/vxl/v3p/netlib/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/netlib"  /LIBPATH:"c:/awf/src/vxl/vxl/vil/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vil"  /LIBPATH:"c:/awf/src/vxl/vxl/vil/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vil"  /LIBPATH:"c:/awf/src/vxl/vxl/vpl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vpl"  /LIBPATH:"c:/awf/src/vxl/vxl/vpl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vpl"  /LIBPATH:"c:/awf/src/vxl/v3p/jpeg/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/jpeg"  /LIBPATH:"c:/awf/src/vxl/v3p/jpeg/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/jpeg"  /LIBPATH:"c:/awf/src/vxl/v3p/png/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/png"  /LIBPATH:"c:/awf/src/vxl/v3p/png/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/png"  /LIBPATH:"c:/awf/src/vxl/v3p/zlib/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/zlib"  /LIBPATH:"c:/awf/src/vxl/v3p/zlib/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/zlib"  /LIBPATH:"c:/awf/src/vxl/v3p/tiff/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/tiff"  /LIBPATH:"c:/awf/src/vxl/v3p/tiff/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/tiff"  /LIBPATH:"c:/awf/src/vxl/vxl/vbl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vbl"  /LIBPATH:"c:/awf/src/vxl/vxl/vbl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vbl"  /LIBPATH:"c:/awf/src/vxl/vxl/vul/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vul"  /LIBPATH:"c:/awf/src/vxl/vxl/vul/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vul"  "opengl32.lib" "glu32.lib" "osl.lib" "vnl.lib" "vcl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vcl.lib" "vil.lib" "vpl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vbl.lib" "vbl.lib" "vul.lib" "vil.lib" "vpl.lib" "vcl.lib" /STACK:10000000  == libraries linked in 
+#  /LIBPATH:"$(IUEROOT)/oxl/osl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/oxl/osl"  /LIBPATH:"$(IUEROOT)/vxl/vnl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl"  /LIBPATH:"$(IUEROOT)/vxl/vnl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl"  /LIBPATH:"$(IUEROOT)/vcl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vcl"  /LIBPATH:"$(IUEROOT)/vcl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vcl"  /LIBPATH:"$(IUEROOT)/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl/algo"  /LIBPATH:"$(IUEROOT)/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl/algo"  /LIBPATH:"$(IUEROOT)/v3p/netlib/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/netlib"  /LIBPATH:"$(IUEROOT)/vxl/vil/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vil"  /LIBPATH:"$(IUEROOT)/vxl/vil/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vil"  /LIBPATH:"$(IUEROOT)/vxl/vpl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vpl"  /LIBPATH:"$(IUEROOT)/vxl/vpl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vpl"  /LIBPATH:"$(IUEROOT)/v3p/jpeg/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/jpeg"  /LIBPATH:"$(IUEROOT)/v3p/jpeg/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/jpeg"  /LIBPATH:"$(IUEROOT)/v3p/png/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/png"  /LIBPATH:"$(IUEROOT)/v3p/png/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/png"  /LIBPATH:"$(IUEROOT)/v3p/zlib/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/zlib"  /LIBPATH:"$(IUEROOT)/v3p/zlib/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/zlib"  /LIBPATH:"$(IUEROOT)/v3p/tiff/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/tiff"  /LIBPATH:"$(IUEROOT)/v3p/tiff/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/tiff"  /LIBPATH:"$(IUEROOT)/vxl/vbl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vbl"  /LIBPATH:"$(IUEROOT)/vxl/vbl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vbl"  /LIBPATH:"$(IUEROOT)/vxl/vul/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vul"  /LIBPATH:"$(IUEROOT)/vxl/vul/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vul"  "opengl32.lib" "glu32.lib" "osl.lib" "vnl.lib" "vcl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vcl.lib" "vil.lib" "vpl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vbl.lib" "vbl.lib" "vul.lib" "vil.lib" "vpl.lib" "vcl.lib" /STACK:10000000  == libraries linked in 
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
 CFG=run_osl_canny - Win32 Debug
@@ -58,7 +58,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl" /I "c:/awf/src/vxl/v3p/jpeg" /I "c:/awf/src/vxl/v3p/png" /I "c:/awf/src/vxl/v3p/zlib" /I "c:/awf/src/vxl/v3p/tiff"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "run_osl_canny_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/v3p/jpeg" /I "$(IUEROOT)/v3p/png" /I "$(IUEROOT)/v3p/zlib" /I "$(IUEROOT)/v3p/tiff"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "run_osl_canny_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -70,30 +70,30 @@ LINK32=link.exe
 # ADD BASE LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/oxl/osl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/oxl/osl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/netlib/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/netlib" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vil/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vil" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vil/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vil" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vpl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vpl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vpl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vpl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/jpeg/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/jpeg" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/jpeg/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/jpeg" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/png/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/png" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/png/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/png" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/zlib/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/zlib" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/zlib/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/zlib" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/tiff/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/tiff" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/tiff/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/tiff" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vbl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vbl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vbl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vbl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vul/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vul" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vul/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vul" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/oxl/osl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/oxl/osl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vcl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vcl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vcl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vcl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl/algo" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl/algo" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/netlib/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/netlib" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vil/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vil" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vil/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vil" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vpl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vpl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vpl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vpl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/jpeg/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/jpeg" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/jpeg/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/jpeg" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/png/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/png" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/png/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/png" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/zlib/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/zlib" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/zlib/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/zlib" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/tiff/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/tiff" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/tiff/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/tiff" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vbl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vbl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vbl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vbl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vul/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vul" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vul/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vul" 
 # ADD LINK32 "opengl32.lib"
 # ADD LINK32 "glu32.lib"
 # ADD LINK32 "osl.lib"
@@ -132,7 +132,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP   /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
 # ADD CPP /nologo  /D "WIN32"  /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl" /I "c:/awf/src/vxl/v3p/jpeg" /I "c:/awf/src/vxl/v3p/png" /I "c:/awf/src/vxl/v3p/zlib" /I "c:/awf/src/vxl/v3p/tiff"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "run_osl_canny_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/v3p/jpeg" /I "$(IUEROOT)/v3p/png" /I "$(IUEROOT)/v3p/zlib" /I "$(IUEROOT)/v3p/tiff"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "run_osl_canny_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -146,30 +146,30 @@ LINK32=link.exe
 # ADD BASE LINK32   kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /IGNORE:4089
 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/oxl/osl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/oxl/osl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/netlib/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/netlib" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vil/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vil" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vil/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vil" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vpl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vpl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vpl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vpl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/jpeg/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/jpeg" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/jpeg/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/jpeg" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/png/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/png" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/png/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/png" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/zlib/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/zlib" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/zlib/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/zlib" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/tiff/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/tiff" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/tiff/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/tiff" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vbl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vbl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vbl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vbl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vul/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vul" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vul/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vul" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/oxl/osl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/oxl/osl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vcl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vcl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vcl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vcl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl/algo" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl/algo" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/netlib/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/netlib" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vil/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vil" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vil/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vil" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vpl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vpl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vpl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vpl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/jpeg/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/jpeg" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/jpeg/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/jpeg" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/png/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/png" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/png/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/png" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/zlib/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/zlib" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/zlib/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/zlib" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/tiff/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/tiff" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/tiff/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/tiff" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vbl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vbl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vbl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vbl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vul/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vul" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vul/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vul" 
 # ADD LINK32 "opengl32.lib"
 # ADD LINK32 "glu32.lib"
 # ADD LINK32 "osl.lib"
@@ -206,8 +206,8 @@ LINK32=link.exe
 # PROP Intermediate_Dir "MinSizeRel"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /nologo  /D "WIN32" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl" /I "c:/awf/src/vxl/v3p/jpeg" /I "c:/awf/src/vxl/v3p/png" /I "c:/awf/src/vxl/v3p/zlib" /I "c:/awf/src/vxl/v3p/tiff"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl" /I "c:/awf/src/vxl/v3p/jpeg" /I "c:/awf/src/vxl/v3p/png" /I "c:/awf/src/vxl/v3p/zlib" /I "c:/awf/src/vxl/v3p/tiff"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "run_osl_canny_EXPORTS"
+# ADD CPP /nologo  /D "WIN32" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/v3p/jpeg" /I "$(IUEROOT)/v3p/png" /I "$(IUEROOT)/v3p/zlib" /I "$(IUEROOT)/v3p/tiff"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/v3p/jpeg" /I "$(IUEROOT)/v3p/png" /I "$(IUEROOT)/v3p/zlib" /I "$(IUEROOT)/v3p/tiff"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "run_osl_canny_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O1
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -219,30 +219,30 @@ LINK32=link.exe
 # ADD BASE LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 # ADD LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /IGNORE:4089
 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/oxl/osl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/oxl/osl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/netlib/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/netlib" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vil/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vil" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vil/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vil" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vpl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vpl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vpl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vpl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/jpeg/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/jpeg" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/jpeg/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/jpeg" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/png/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/png" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/png/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/png" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/zlib/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/zlib" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/zlib/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/zlib" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/tiff/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/tiff" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/tiff/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/tiff" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vbl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vbl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vbl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vbl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vul/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vul" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vul/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vul" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/oxl/osl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/oxl/osl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vcl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vcl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vcl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vcl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl/algo" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl/algo" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/netlib/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/netlib" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vil/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vil" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vil/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vil" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vpl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vpl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vpl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vpl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/jpeg/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/jpeg" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/jpeg/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/jpeg" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/png/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/png" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/png/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/png" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/zlib/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/zlib" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/zlib/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/zlib" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/tiff/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/tiff" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/tiff/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/tiff" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vbl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vbl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vbl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vbl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vul/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vul" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vul/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vul" 
 # ADD LINK32 "opengl32.lib"
 # ADD LINK32 "glu32.lib"
 # ADD LINK32 "osl.lib"
@@ -281,7 +281,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/vcl" /I "c:/awf/src/vxl/vcl/config.win32-VC60" /I "c:/awf/src/vxl/vxl" /I "c:/awf/src/vxl/oxl" /I "c:/awf/src/vxl/v3p/jpeg" /I "c:/awf/src/vxl/v3p/png" /I "c:/awf/src/vxl/v3p/zlib" /I "c:/awf/src/vxl/v3p/tiff"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "run_osl_canny_EXPORTS"
+# ADD CPP /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/vcl" /I "$(IUEROOT)/vcl/config.win32-VC60" /I "$(IUEROOT)/vxl" /I "$(IUEROOT)/oxl" /I "$(IUEROOT)/v3p/jpeg" /I "$(IUEROOT)/v3p/png" /I "$(IUEROOT)/v3p/zlib" /I "$(IUEROOT)/v3p/tiff"    -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL -DHAS_JPEG -DHAS_PNG -DHAS_ZLIB -DHAS_TIFF /D "run_osl_canny_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /Zi /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -293,30 +293,30 @@ LINK32=link.exe
 # ADD BASE LINK32  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /IGNORE:4089
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /IGNORE:4089
 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/oxl/osl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/oxl/osl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vcl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vcl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vnl/algo" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/netlib/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/netlib" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vil/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vil" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vil/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vil" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vpl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vpl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vpl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vpl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/jpeg/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/jpeg" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/jpeg/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/jpeg" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/png/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/png" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/png/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/png" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/zlib/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/zlib" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/zlib/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/zlib" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/tiff/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/tiff" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/v3p/tiff/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/v3p/tiff" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vbl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vbl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vbl/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vbl" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vul/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vul" 
-# ADD LINK32 /LIBPATH:"c:/awf/src/vxl/vxl/vul/$(IntDir)"  /LIBPATH:"c:/awf/src/vxl/vxl/vul" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/oxl/osl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/oxl/osl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vcl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vcl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vcl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vcl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl/algo" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vnl/algo/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vnl/algo" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/netlib/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/netlib" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vil/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vil" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vil/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vil" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vpl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vpl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vpl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vpl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/jpeg/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/jpeg" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/jpeg/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/jpeg" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/png/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/png" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/png/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/png" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/zlib/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/zlib" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/zlib/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/zlib" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/tiff/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/tiff" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/v3p/tiff/$(IntDir)"  /LIBPATH:"$(IUEROOT)/v3p/tiff" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vbl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vbl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vbl/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vbl" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vul/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vul" 
+# ADD LINK32 /LIBPATH:"$(IUEROOT)/vxl/vul/$(IntDir)"  /LIBPATH:"$(IUEROOT)/vxl/vul" 
 # ADD LINK32 "opengl32.lib"
 # ADD LINK32 "glu32.lib"
 # ADD LINK32 "osl.lib"
@@ -356,141 +356,141 @@ SOURCE=".\CMakeLists.txt"
 
 !IF  "$(CFG)" == "run_osl_canny - Win32 Release"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindJPEG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeJPEG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativePNG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeTIFF.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeZLIB.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindPNG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindTIFF.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindZLIB.cmake"\
-	"c:/awf/src/vxl/oxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/oxl/osl/CMakeLists.txt"\
-	"c:/awf/src/vxl/oxl/osl/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/oxl/osl/examples/CMakeLists.txt"\
-	"c:/awf/src/vxl/v3p/jpeg/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/v3p/netlib/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/v3p/png/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/v3p/tiff/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/v3p/zlib/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/vcl/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/vxl/vbl/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/vxl/vil/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/vxl/vnl/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/vxl/vnl/algo/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/vxl/vpl/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/vxl/vul/CMakeListsLink.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/config.cmake/Modules/FindJPEG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeJPEG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativePNG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeTIFF.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeZLIB.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindPNG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindTIFF.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindZLIB.cmake"\
+	"$(IUEROOT)/oxl/CMakeLists.txt"\
+	"$(IUEROOT)/oxl/osl/CMakeLists.txt"\
+	"$(IUEROOT)/oxl/osl/CMakeListsLink.txt"\
+	"$(IUEROOT)/oxl/osl/examples/CMakeLists.txt"\
+	"$(IUEROOT)/v3p/jpeg/CMakeListsLink.txt"\
+	"$(IUEROOT)/v3p/netlib/CMakeListsLink.txt"\
+	"$(IUEROOT)/v3p/png/CMakeListsLink.txt"\
+	"$(IUEROOT)/v3p/tiff/CMakeListsLink.txt"\
+	"$(IUEROOT)/v3p/zlib/CMakeListsLink.txt"\
+	"$(IUEROOT)/vcl/CMakeListsLink.txt"\
+	"$(IUEROOT)/vxl/vbl/CMakeListsLink.txt"\
+	"$(IUEROOT)/vxl/vil/CMakeListsLink.txt"\
+	"$(IUEROOT)/vxl/vnl/CMakeListsLink.txt"\
+	"$(IUEROOT)/vxl/vnl/algo/CMakeListsLink.txt"\
+	"$(IUEROOT)/vxl/vpl/CMakeListsLink.txt"\
+	"$(IUEROOT)/vxl/vul/CMakeListsLink.txt"
 # Begin Custom Build
 
 "run_osl_canny.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/oxl/osl/examples/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/oxl/osl/examples" -O"c:/awf/src/vxl/oxl/osl/examples" -B"c:/awf/src/vxl"
+	"cmake.exe" "$(IUEROOT)/oxl/osl/examples/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/oxl/osl/examples" -O"$(IUEROOT)/oxl/osl/examples" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "run_osl_canny - Win32 Debug"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindJPEG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeJPEG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativePNG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeTIFF.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeZLIB.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindPNG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindTIFF.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindZLIB.cmake"\
-	"c:/awf/src/vxl/oxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/oxl/osl/CMakeLists.txt"\
-	"c:/awf/src/vxl/oxl/osl/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/oxl/osl/examples/CMakeLists.txt"\
-	"c:/awf/src/vxl/v3p/jpeg/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/v3p/netlib/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/v3p/png/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/v3p/tiff/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/v3p/zlib/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/vcl/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/vxl/vbl/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/vxl/vil/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/vxl/vnl/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/vxl/vnl/algo/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/vxl/vpl/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/vxl/vul/CMakeListsLink.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/config.cmake/Modules/FindJPEG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeJPEG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativePNG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeTIFF.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeZLIB.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindPNG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindTIFF.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindZLIB.cmake"\
+	"$(IUEROOT)/oxl/CMakeLists.txt"\
+	"$(IUEROOT)/oxl/osl/CMakeLists.txt"\
+	"$(IUEROOT)/oxl/osl/CMakeListsLink.txt"\
+	"$(IUEROOT)/oxl/osl/examples/CMakeLists.txt"\
+	"$(IUEROOT)/v3p/jpeg/CMakeListsLink.txt"\
+	"$(IUEROOT)/v3p/netlib/CMakeListsLink.txt"\
+	"$(IUEROOT)/v3p/png/CMakeListsLink.txt"\
+	"$(IUEROOT)/v3p/tiff/CMakeListsLink.txt"\
+	"$(IUEROOT)/v3p/zlib/CMakeListsLink.txt"\
+	"$(IUEROOT)/vcl/CMakeListsLink.txt"\
+	"$(IUEROOT)/vxl/vbl/CMakeListsLink.txt"\
+	"$(IUEROOT)/vxl/vil/CMakeListsLink.txt"\
+	"$(IUEROOT)/vxl/vnl/CMakeListsLink.txt"\
+	"$(IUEROOT)/vxl/vnl/algo/CMakeListsLink.txt"\
+	"$(IUEROOT)/vxl/vpl/CMakeListsLink.txt"\
+	"$(IUEROOT)/vxl/vul/CMakeListsLink.txt"
 # Begin Custom Build
 
 "run_osl_canny.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/oxl/osl/examples/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/oxl/osl/examples" -O"c:/awf/src/vxl/oxl/osl/examples" -B"c:/awf/src/vxl"
+	"cmake.exe" "$(IUEROOT)/oxl/osl/examples/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/oxl/osl/examples" -O"$(IUEROOT)/oxl/osl/examples" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "run_osl_canny - Win32 MinSizeRel"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindJPEG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeJPEG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativePNG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeTIFF.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeZLIB.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindPNG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindTIFF.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindZLIB.cmake"\
-	"c:/awf/src/vxl/oxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/oxl/osl/CMakeLists.txt"\
-	"c:/awf/src/vxl/oxl/osl/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/oxl/osl/examples/CMakeLists.txt"\
-	"c:/awf/src/vxl/v3p/jpeg/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/v3p/netlib/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/v3p/png/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/v3p/tiff/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/v3p/zlib/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/vcl/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/vxl/vbl/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/vxl/vil/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/vxl/vnl/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/vxl/vnl/algo/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/vxl/vpl/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/vxl/vul/CMakeListsLink.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/config.cmake/Modules/FindJPEG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeJPEG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativePNG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeTIFF.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeZLIB.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindPNG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindTIFF.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindZLIB.cmake"\
+	"$(IUEROOT)/oxl/CMakeLists.txt"\
+	"$(IUEROOT)/oxl/osl/CMakeLists.txt"\
+	"$(IUEROOT)/oxl/osl/CMakeListsLink.txt"\
+	"$(IUEROOT)/oxl/osl/examples/CMakeLists.txt"\
+	"$(IUEROOT)/v3p/jpeg/CMakeListsLink.txt"\
+	"$(IUEROOT)/v3p/netlib/CMakeListsLink.txt"\
+	"$(IUEROOT)/v3p/png/CMakeListsLink.txt"\
+	"$(IUEROOT)/v3p/tiff/CMakeListsLink.txt"\
+	"$(IUEROOT)/v3p/zlib/CMakeListsLink.txt"\
+	"$(IUEROOT)/vcl/CMakeListsLink.txt"\
+	"$(IUEROOT)/vxl/vbl/CMakeListsLink.txt"\
+	"$(IUEROOT)/vxl/vil/CMakeListsLink.txt"\
+	"$(IUEROOT)/vxl/vnl/CMakeListsLink.txt"\
+	"$(IUEROOT)/vxl/vnl/algo/CMakeListsLink.txt"\
+	"$(IUEROOT)/vxl/vpl/CMakeListsLink.txt"\
+	"$(IUEROOT)/vxl/vul/CMakeListsLink.txt"
 # Begin Custom Build
 
 "run_osl_canny.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/oxl/osl/examples/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/oxl/osl/examples" -O"c:/awf/src/vxl/oxl/osl/examples" -B"c:/awf/src/vxl"
+	"cmake.exe" "$(IUEROOT)/oxl/osl/examples/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/oxl/osl/examples" -O"$(IUEROOT)/oxl/osl/examples" -B"$(IUEROOT)"
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "run_osl_canny - Win32 RelWithDebInfo"
 USERDEP__HACK=\
-	"c:/awf/src/vxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindJPEG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeJPEG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativePNG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeTIFF.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindNativeZLIB.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindOpenGL.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindPNG.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindTIFF.cmake"\
-	"c:/awf/src/vxl/config.cmake/Modules/FindZLIB.cmake"\
-	"c:/awf/src/vxl/oxl/CMakeLists.txt"\
-	"c:/awf/src/vxl/oxl/osl/CMakeLists.txt"\
-	"c:/awf/src/vxl/oxl/osl/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/oxl/osl/examples/CMakeLists.txt"\
-	"c:/awf/src/vxl/v3p/jpeg/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/v3p/netlib/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/v3p/png/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/v3p/tiff/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/v3p/zlib/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/vcl/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/vxl/vbl/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/vxl/vil/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/vxl/vnl/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/vxl/vnl/algo/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/vxl/vpl/CMakeListsLink.txt"\
-	"c:/awf/src/vxl/vxl/vul/CMakeListsLink.txt"
+	"$(IUEROOT)/CMakeLists.txt"\
+	"$(IUEROOT)/config.cmake/Modules/FindJPEG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeJPEG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativePNG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeTIFF.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindNativeZLIB.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindOpenGL.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindPNG.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindTIFF.cmake"\
+	"$(IUEROOT)/config.cmake/Modules/FindZLIB.cmake"\
+	"$(IUEROOT)/oxl/CMakeLists.txt"\
+	"$(IUEROOT)/oxl/osl/CMakeLists.txt"\
+	"$(IUEROOT)/oxl/osl/CMakeListsLink.txt"\
+	"$(IUEROOT)/oxl/osl/examples/CMakeLists.txt"\
+	"$(IUEROOT)/v3p/jpeg/CMakeListsLink.txt"\
+	"$(IUEROOT)/v3p/netlib/CMakeListsLink.txt"\
+	"$(IUEROOT)/v3p/png/CMakeListsLink.txt"\
+	"$(IUEROOT)/v3p/tiff/CMakeListsLink.txt"\
+	"$(IUEROOT)/v3p/zlib/CMakeListsLink.txt"\
+	"$(IUEROOT)/vcl/CMakeListsLink.txt"\
+	"$(IUEROOT)/vxl/vbl/CMakeListsLink.txt"\
+	"$(IUEROOT)/vxl/vil/CMakeListsLink.txt"\
+	"$(IUEROOT)/vxl/vnl/CMakeListsLink.txt"\
+	"$(IUEROOT)/vxl/vnl/algo/CMakeListsLink.txt"\
+	"$(IUEROOT)/vxl/vpl/CMakeListsLink.txt"\
+	"$(IUEROOT)/vxl/vul/CMakeListsLink.txt"
 # Begin Custom Build
 
 "run_osl_canny.dsp" :  "$(SOURCE)" "$(INTDIR)" "$(OUTDIR)"
-	"c:/awf/src/CMake/Source/cmake.exe" "c:/awf/src/vxl/oxl/osl/examples/CMakeLists.txt" -DSP -H"c:/awf/src/vxl" -S"c:/awf/src/vxl/oxl/osl/examples" -O"c:/awf/src/vxl/oxl/osl/examples" -B"c:/awf/src/vxl"
+	"cmake.exe" "$(IUEROOT)/oxl/osl/examples/CMakeLists.txt" -DSP -H"$(IUEROOT)" -S"$(IUEROOT)/oxl/osl/examples" -O"$(IUEROOT)/oxl/osl/examples" -B"$(IUEROOT)"
 
 # End Custom Build
 
