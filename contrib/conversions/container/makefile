@@ -17,10 +17,14 @@ MANPAGE_SOURCES += CoolArray_to_CoolList.h
 MANPAGE_SOURCES += CoolList_to_CoolArray.h
 endif
 
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
 ifndef NOTEST
 SUBDIRS := tests
 endif
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################

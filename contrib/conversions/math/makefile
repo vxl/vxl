@@ -23,10 +23,14 @@ MANPAGE_SOURCES += vnl_vector_to_IUE_vector.h
 MANPAGE_SOURCES += IUE_vector_to_vnl_vector.h
 endif
 
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
 ifndef NOTEST
 SUBDIRS := tests
 endif
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################

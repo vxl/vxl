@@ -130,6 +130,10 @@ SOURCES += Probability.cxx
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
+ifeq "$(TJ_GCC30)" "1"
+FLAGS_FMatrixComputeRobust.cxx += -O0 # otherwise gcc 3.0 needs too much virtual memory
+endif
+
 ifndef NOTEST
 SUBDIRS = examples # tests
 endif
