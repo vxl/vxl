@@ -1,4 +1,4 @@
-// This is core/vgui/impl/gtk/vgui_gtk_dialog_impl.cxx
+// This is core/vgui/impl/gtk/vgui_gtk2_dialog_impl.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -6,9 +6,9 @@
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   28 Dec 99
-// \brief  See vgui_gtk_dialog_impl.h for a description of this file.
+// \brief  See vgui_gtk2_dialog_impl.h for a description of this file.
 
-#include "vgui_gtk_dialog_impl.h"
+#include "vgui_gtk2_dialog_impl.h"
 
 #include <vcl_string.h>
 #include <vcl_vector.h>
@@ -16,11 +16,12 @@
 #include <vul/vul_sprintf.h>
 
 #include <vgui/vgui_gl.h>
-#include <vgui/impl/gtk/vgui_gtk_adaptor.h>
 #include <vgui/internals/vgui_dialog_field.h>
 #include <vgui/internals/vgui_simple_field.h>
 #include <vgui/internals/vgui_string_field.h>
 #include <gtk/gtkfilesel.h>
+
+#include "vgui_gtk2_adaptor.h"
 
 static bool debug = false;
 static bool is_modal = true;
@@ -28,7 +29,7 @@ static bool is_modal = true;
 
 //--------------------------------------------------------------------------------
 //: Constructor
-vgui_gtk_dialog_impl::vgui_gtk_dialog_impl(const char* name)
+vgui_gtk2_dialog_impl::vgui_gtk2_dialog_impl(const char* name)
   : vgui_dialog_impl(name)
 {
   title = name;
@@ -39,11 +40,11 @@ vgui_gtk_dialog_impl::vgui_gtk_dialog_impl(const char* name)
 
 //--------------------------------------------------------------------------------
 //: Destructor
-vgui_gtk_dialog_impl::~vgui_gtk_dialog_impl() {
+vgui_gtk2_dialog_impl::~vgui_gtk2_dialog_impl() {
 }
 
 
-struct vgui_gtk_dialog_impl_choice {
+struct vgui_gtk2_dialog_impl_choice {
   vcl_vector<vcl_string> names;
   int index;
 };
@@ -51,11 +52,11 @@ struct vgui_gtk_dialog_impl_choice {
 
 //--------------------------------------------------------------------------------
 //: Make a choice widget
-void* vgui_gtk_dialog_impl::choice_field_widget(const char* /*txt*/,
+void* vgui_gtk2_dialog_impl::choice_field_widget(const char* /*txt*/,
                                                 const vcl_vector<vcl_string>& labels,
                                                 int& val)
 {
-  vgui_gtk_dialog_impl_choice *ch = new vgui_gtk_dialog_impl_choice;
+  vgui_gtk2_dialog_impl_choice *ch = new vgui_gtk2_dialog_impl_choice;
   ch->names = labels;
   ch->index = val;
 
@@ -65,13 +66,13 @@ void* vgui_gtk_dialog_impl::choice_field_widget(const char* /*txt*/,
 //--------------------------------------------------------------------------------
 //: Make a tableau widget.
 //
-// This returns a vgui_gtk_adaptor, not a GtkWidget!
-void* vgui_gtk_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr tab,
+// This returns a vgui_gtk2_adaptor, not a GtkWidget!
+void* vgui_gtk2_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr tab,
   unsigned width, unsigned height)
 {
-  vgui_gtk_adaptor *ct = new vgui_gtk_adaptor();
+  vgui_gtk2_adaptor *ct = new vgui_gtk2_adaptor();
   ct->set_tableau(tab);
-  GtkWidget *glarea= (( vgui_gtk_adaptor *)ct)->get_glarea_widget();
+  GtkWidget *glarea= (( vgui_gtk2_adaptor *)ct)->get_glarea_widget();
   gtk_widget_set_usize(glarea, width, height);
   gtk_widget_show(glarea);
 
@@ -85,16 +86,16 @@ static
 void accept_cb(GtkWidget* /*widget*/,
                gpointer   data) {
   if (debug) vcl_cerr << "accept\n";
-  vgui_gtk_dialog_impl::status_type* d = static_cast<vgui_gtk_dialog_impl::status_type*>(data);
-  *d = vgui_gtk_dialog_impl::OK;
+  vgui_gtk2_dialog_impl::status_type* d = static_cast<vgui_gtk2_dialog_impl::status_type*>(data);
+  *d = vgui_gtk2_dialog_impl::OK;
 }
 
 static
 void cancel_cb(GtkWidget* /*widget*/,
                gpointer data) {
   if (debug) vcl_cerr << "cancel\n";
-  vgui_gtk_dialog_impl::status_type* d = static_cast<vgui_gtk_dialog_impl::status_type*>(data);
-  *d = vgui_gtk_dialog_impl::CANCEL;
+  vgui_gtk2_dialog_impl::status_type* d = static_cast<vgui_gtk2_dialog_impl::status_type*>(data);
+  *d = vgui_gtk2_dialog_impl::CANCEL;
 }
 
 static
@@ -102,12 +103,12 @@ gint close_window_cb(GtkWidget* /*widget*/,
                      GdkEvent* /*event*/,
                      gpointer data) {
   if (debug) vcl_cerr << "close window\n";
-  vgui_gtk_dialog_impl::status_type* d = static_cast<vgui_gtk_dialog_impl::status_type*>(data);
-  *d = vgui_gtk_dialog_impl::CLOSE;
+  vgui_gtk2_dialog_impl::status_type* d = static_cast<vgui_gtk2_dialog_impl::status_type*>(data);
+  *d = vgui_gtk2_dialog_impl::CLOSE;
   return FALSE; // propagate as necessary
 }
 
-struct vgui_gtk_dialog_impl_int_pair {
+struct vgui_gtk2_dialog_impl_int_pair {
   int* val;
   int tmp;
 };
@@ -116,7 +117,7 @@ struct vgui_gtk_dialog_impl_int_pair {
 void choose_cb(GtkWidget* /*widget*/,
                gpointer data) {
 
-  vgui_gtk_dialog_impl_int_pair *ip = (vgui_gtk_dialog_impl_int_pair*) data;
+  vgui_gtk2_dialog_impl_int_pair *ip = (vgui_gtk2_dialog_impl_int_pair*) data;
   *(ip->val) = ip->tmp;
   if (debug) vcl_cerr << "choose " << (ip->tmp) << vcl_endl;
 }
@@ -127,12 +128,12 @@ void choose_cb(GtkWidget* /*widget*/,
 //: Changes the modality of the dialog.
 //  True makes the dialog modal (i.e. the dialog 'grabs' all events), this is the default.
 //  False makes the dialog non-modal.
-void vgui_gtk_dialog_impl::modal(const bool m)
+void vgui_gtk2_dialog_impl::modal(const bool m)
 {
   is_modal = m;
 }
 
-void vgui_gtk_dialog_impl::set_ok_button(const char* txt)
+void vgui_gtk2_dialog_impl::set_ok_button(const char* txt)
 {
   if (txt)
     ok_text = vcl_string(txt);
@@ -140,7 +141,7 @@ void vgui_gtk_dialog_impl::set_ok_button(const char* txt)
     ok_text = vcl_string("REMOVEBUTTON");
 }
 
-void vgui_gtk_dialog_impl::set_cancel_button(const char* txt)
+void vgui_gtk2_dialog_impl::set_cancel_button(const char* txt)
 {
   if (txt)
     cancel_text = vcl_string(txt);
@@ -269,7 +270,7 @@ void choose_color(GtkWidget* /*w*/, GtkEntry* color_entry)
 
 //-------------------------------------------------------------------------------
 //: Display the dialog box.
-bool vgui_gtk_dialog_impl::ask() {
+bool vgui_gtk2_dialog_impl::ask() {
   GtkWidget* dialog = gtk_dialog_new();
 
   gtk_window_set_title(GTK_WINDOW(dialog), title.c_str());
@@ -307,7 +308,7 @@ bool vgui_gtk_dialog_impl::ask() {
   vcl_vector<GtkWidget*> wlist;
 
   // to delete the adaptors associated with inline tableaux
-  vcl_vector<vgui_gtk_adaptor*> adaptor_list;
+  vcl_vector<vgui_gtk2_adaptor*> adaptor_list;
 
   // to delete the file selection dialog for the inline selection
   vcl_vector<GtkWidget*> delete_wlist;
@@ -361,7 +362,7 @@ bool vgui_gtk_dialog_impl::ask() {
       GtkWidget* menu = gtk_menu_new();
 
 
-      vgui_gtk_dialog_impl_choice *ch = (vgui_gtk_dialog_impl_choice*)l.widget;
+      vgui_gtk2_dialog_impl_choice *ch = (vgui_gtk2_dialog_impl_choice*)l.widget;
 
       int count = 0;
       for (vcl_vector<vcl_string>::iterator s_iter =  ch->names.begin();
@@ -371,7 +372,7 @@ bool vgui_gtk_dialog_impl::ask() {
         gtk_widget_show(item);
         gtk_menu_append(GTK_MENU(menu), item);
 
-        vgui_gtk_dialog_impl_int_pair *ip = new vgui_gtk_dialog_impl_int_pair;
+        vgui_gtk2_dialog_impl_int_pair *ip = new vgui_gtk2_dialog_impl_int_pair;
         ip->val = &(ch->index);
         ip->tmp = count;
 
@@ -492,7 +493,7 @@ bool vgui_gtk_dialog_impl::ask() {
       wlist.push_back(color_entry);
     }
     else if (l.type == inline_tabl) {
-      vgui_gtk_adaptor* adapt = static_cast<vgui_gtk_adaptor*>(l.widget);
+      vgui_gtk2_adaptor* adapt = static_cast<vgui_gtk2_adaptor*>(l.widget);
       GtkWidget* widg = adapt->get_glarea_widget();
       GtkWidget* hbox = gtk_hbox_new(FALSE, 10);
 
@@ -519,7 +520,7 @@ bool vgui_gtk_dialog_impl::ask() {
   // the associated glarea should be destroyed by the time this
   // function call ends. That is, by the time further iterations of
   // the gtk main loop occur.
-  for( vcl_vector<vgui_gtk_adaptor*>::iterator iter = adaptor_list.begin();
+  for( vcl_vector<vgui_gtk2_adaptor*>::iterator iter = adaptor_list.begin();
        iter != adaptor_list.end(); ++iter ) {
     delete *iter;
   }
@@ -558,7 +559,7 @@ bool vgui_gtk_dialog_impl::ask() {
       }
       if (l.type == choice_elem) {
         vgui_int_field *field = static_cast<vgui_int_field*>(l.field);
-        vgui_gtk_dialog_impl_choice *ch = static_cast<vgui_gtk_dialog_impl_choice*>(l.widget);
+        vgui_gtk2_dialog_impl_choice *ch = static_cast<vgui_gtk2_dialog_impl_choice*>(l.widget);
         field->var = ch->index;
       }
     }

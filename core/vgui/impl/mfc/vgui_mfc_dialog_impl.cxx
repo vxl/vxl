@@ -570,12 +570,6 @@ bool vgui_mfc_dialog_impl::ask()
   // Remove all the created objects from the heap
   for (vcl_vector<CWnd *>::iterator w_iter = awlist.begin();w_iter!=awlist.end();++w_iter)
     delete *w_iter;
-  for (vcl_vector<element>::iterator e_iter4 = elements.begin(); e_iter4 != elements.end(); ++e_iter4)
-  {
-    element l = *e_iter4;
-    if (l.type != inline_tabl) // no field for inline tableau.
-      delete l.field;
-  }
   delete accept;
   delete cancel;
   delete font;

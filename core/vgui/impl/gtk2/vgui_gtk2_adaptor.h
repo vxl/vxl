@@ -1,6 +1,6 @@
-// This is core/vgui/impl/gtk/vgui_gtk_adaptor.h
-#ifndef vgui_gtk_adaptor_h_
-#define vgui_gtk_adaptor_h_
+// This is core/vgui/impl/gtk/vgui_gtk2_adaptor.h
+#ifndef vgui_gtk2_adaptor_h_
+#define vgui_gtk2_adaptor_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -21,16 +21,16 @@
 #include <gtk/gtk.h>
 
 struct vgui_overlay_helper;
-class vgui_gtk_window;
+class vgui_gtk2_window;
 
 //: The GTK implementation of vgui_adaptor.
-class vgui_gtk_adaptor : public vgui_adaptor, public vgui_adaptor_mixin
+class vgui_gtk2_adaptor : public vgui_adaptor, public vgui_adaptor_mixin
 {
  public:
   typedef vgui_adaptor_mixin mixin;
 
-  vgui_gtk_adaptor(vgui_gtk_window* win = 0);
-  ~vgui_gtk_adaptor();
+  vgui_gtk2_adaptor(vgui_gtk2_window* win = 0);
+  ~vgui_gtk2_adaptor();
 
   // vgui_adaptor methods
   void swap_buffers();
@@ -75,7 +75,7 @@ class vgui_gtk_adaptor : public vgui_adaptor, public vgui_adaptor_mixin
   GtkWidget *widget;
 
   // pointer to the window which contains this adaptor
-  vgui_gtk_window* win_;
+  vgui_gtk2_window* win_;
 
   // pointer to overlay emulation data
   vgui_overlay_helper *ovl_helper;
@@ -88,4 +88,4 @@ class vgui_gtk_adaptor : public vgui_adaptor, public vgui_adaptor_mixin
   int last_mouse_x, last_mouse_y;
 };
 
-#endif // vgui_gtk_adaptor_h_
+#endif // vgui_gtk2_adaptor_h_

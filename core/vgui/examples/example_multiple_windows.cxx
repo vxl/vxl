@@ -94,7 +94,7 @@ static void ptolemy()
 // Now do some stuff...
 int main (int argc, char** argv) {
 
-  vgui::select("gtk");   // Multiple windows only implemented for gtk adaptor at present!
+  //vgui::select("gtk");   // Multiple windows only implemented for gtk adaptor at present!
   vgui::init(argc, argv);
 
   if (argc < 2) {

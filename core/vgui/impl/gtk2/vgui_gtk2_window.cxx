@@ -1,4 +1,4 @@
-// This is oxl/vgui/impl/gtk/vgui_gtk_window.cxx
+// This is oxl/vgui/impl/gtk/vgui_gtk2_window.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -6,19 +6,18 @@
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   18 Dec 99
-// \brief  See vgui_gtk_window.h for a description of this file.
+// \brief  See vgui_gtk2_window.h for a description of this file.
 
-#include "vgui_gtk_window.h"
+#include "vgui_gtk2_window.h"
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_menu.h>
 
 #include <gtk/gtk.h>
-#include <gtkgl/gtkglarea.h>
 
-#include "vgui_gtk_adaptor.h"
-#include "vgui_gtk_utils.h"
-#include "vgui_gtk_statusbar.h"
+#include "vgui_gtk2_adaptor.h"
+#include "vgui_gtk2_utils.h"
+#include "vgui_gtk2_statusbar.h"
 
 static bool debug = false;
 
@@ -28,7 +27,7 @@ extern "C" {
 // post_destroy on adaptor and block emission of "destroy" signal so that this window
 // is not prematurely destroyed.
 static gint delete_event_callback(GtkWidget* w, GdkEvent* e, gpointer data) {
-  vgui_gtk_adaptor* adaptor = static_cast<vgui_gtk_adaptor*>(data);
+  vgui_gtk2_adaptor* adaptor = static_cast<vgui_gtk2_adaptor*>(data);
 
   adaptor->post_destroy();
 
@@ -41,18 +40,18 @@ static gint delete_event_callback(GtkWidget* w, GdkEvent* e, gpointer data) {
 
 //--------------------------------------------------------------------------------
 //: Constructor
-vgui_gtk_window::vgui_gtk_window(int w, int h, const char* title)
+vgui_gtk2_window::vgui_gtk2_window(int w, int h, const char* title)
   : use_menubar(false)
   , use_statusbar(true)
   , last_menubar(new vgui_menu)
 {
-  if (debug) vcl_cerr << "vgui_gtk_window::vgui_gtk_window\n";
+  if (debug) vcl_cerr << "vgui_gtk2_window::vgui_gtk2_window\n";
 
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title(GTK_WINDOW(window), title);
   gtk_window_set_default_size(GTK_WINDOW(window),w,h);
 
-  adaptor = new vgui_gtk_adaptor(this);
+  adaptor = new vgui_gtk2_adaptor(this);
 
 #ifndef __SGI_CC // SGI's iostream does not allow re-initialising
   vgui::out.rdbuf(statusbar.statusbuf);
@@ -64,18 +63,18 @@ vgui_gtk_window::vgui_gtk_window(int w, int h, const char* title)
 
 //--------------------------------------------------------------------------------
 //: Constructor
-vgui_gtk_window::vgui_gtk_window(int w, int h, const vgui_menu& menu, const char* title)
+vgui_gtk2_window::vgui_gtk2_window(int w, int h, const vgui_menu& menu, const char* title)
   : use_menubar(true)
   , use_statusbar(true)
   , last_menubar(new vgui_menu)
 {
-  if (debug) vcl_cerr << "vgui_gtk_window::vgui_gtk_window\n";
+  if (debug) vcl_cerr << "vgui_gtk2_window::vgui_gtk2_window\n";
 
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title(GTK_WINDOW(window), title);
   gtk_window_set_default_size(GTK_WINDOW(window),w,h);
 
-  adaptor = new vgui_gtk_adaptor(this);
+  adaptor = new vgui_gtk2_adaptor(this);
 
   set_menubar(menu);
 
@@ -89,7 +88,7 @@ vgui_gtk_window::vgui_gtk_window(int w, int h, const vgui_menu& menu, const char
 
 //--------------------------------------------------------------------------------
 //: Destructor
-vgui_gtk_window::~vgui_gtk_window()
+vgui_gtk2_window::~vgui_gtk2_window()
 {
   gtk_widget_destroy(window);
   delete last_menubar;
@@ -98,7 +97,7 @@ vgui_gtk_window::~vgui_gtk_window()
 
 //--------------------------------------------------------------------------------
 //: Useful initialisation functions
-void vgui_gtk_window::init() {
+void vgui_gtk2_window::init() {
 
   box = gtk_vbox_new(FALSE, 0);
   gtk_container_add(GTK_CONTAINER (window), box);
@@ -134,8 +133,8 @@ void vgui_gtk_window::init() {
 
 
 //: Puts the given menubar onto the window.
-void vgui_gtk_window::set_menubar(const vgui_menu &menu) {
-  if (debug) vcl_cerr << "vgui_gtk_window::set_menubar\n";
+void vgui_gtk2_window::set_menubar(const vgui_menu &menu) {
+  if (debug) vcl_cerr << "vgui_gtk2_window::set_menubar\n";
 
   use_menubar = true;
 
@@ -144,36 +143,36 @@ void vgui_gtk_window::set_menubar(const vgui_menu &menu) {
   *last_menubar = menu;
 
   menubar = gtk_menu_bar_new();
-  if (vgui_gtk_utils::accel_group == NULL)
+  if (vgui_gtk2_utils::accel_group == NULL)
     {
-      vgui_gtk_utils::accel_group = gtk_accel_group_get_default();
-      gtk_accel_group_attach(vgui_gtk_utils::accel_group,GTK_OBJECT(window));
+      vgui_gtk2_utils::accel_group = gtk_accel_group_new();
+      gtk_window_add_accel_group(GTK_WINDOW(window),vgui_gtk2_utils::accel_group);
     }
-  vgui_gtk_utils::set_menu(menubar, *last_menubar, true);
+  vgui_gtk2_utils::set_menu(menubar, *last_menubar, true);
 }
 
 
-void vgui_gtk_window::set_adaptor(vgui_adaptor* a) {
-  adaptor = static_cast<vgui_gtk_adaptor*>(a);
+void vgui_gtk2_window::set_adaptor(vgui_adaptor* a) {
+  adaptor = static_cast<vgui_gtk2_adaptor*>(a);
 }
 
 
 //: Returns the current adaptor (OpenGL widget holder).
-vgui_adaptor* vgui_gtk_window::get_adaptor() {
+vgui_adaptor* vgui_gtk2_window::get_adaptor() {
   return adaptor;
 }
 
-void vgui_gtk_window::show() {
+void vgui_gtk2_window::show() {
   init();
 
-  if (debug) vcl_cerr << "vgui_gtk_window::show\n";
+  if (debug) vcl_cerr << "vgui_gtk2_window::show\n";
   gtk_widget_show(window);
 }
 
-void vgui_gtk_window::hide() {
-  if (debug) vcl_cerr << "vgui_gtk_window::hide\n";
+void vgui_gtk2_window::hide() {
+  if (debug) vcl_cerr << "vgui_gtk2_window::hide\n";
 }
 
-void vgui_gtk_window::set_title(vcl_string const &title) {
+void vgui_gtk2_window::set_title(vcl_string const &title) {
   gtk_window_set_title(GTK_WINDOW(window), title.c_str());
 }

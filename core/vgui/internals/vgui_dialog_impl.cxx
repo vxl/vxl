@@ -28,6 +28,11 @@ vgui_dialog_impl::vgui_dialog_impl(const char* n)
 
 vgui_dialog_impl::~vgui_dialog_impl()
 {
+  for (vcl_vector<element>::iterator iter = elements.begin();
+       iter != elements.end(); ++iter)
+  {
+    delete iter->field;
+  }
 }
 
 //------------------------------------------------------------------------------
@@ -176,11 +181,13 @@ void vgui_dialog_impl::inline_tab(const vgui_tableau_sptr tab, unsigned width,
                                   unsigned height)
 {
   // kym - don't use the field - store the tableau in the widget variable(?). 
-  //vgui_string_field *field = new vgui_string_field();
+  // Since the OpenGL window in the inline tableau doesn't have any
+  //variables, it doesn't make sense for it to have a field.
+
   element l;
   l.type = inline_tabl;
   l.widget = inline_tableau_widget(tab, width, height);
-  //l.field = field;
+  l.field = 0;
 
   elements.push_back(l);
 }

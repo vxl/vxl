@@ -1,6 +1,6 @@
-// This is oxl/vgui/impl/gtk/vgui_gtk_dialog_impl.h
-#ifndef vgui_gtk_dialog_impl_h_
-#define vgui_gtk_dialog_impl_h_
+// This is oxl/vgui/impl/gtk/vgui_gtk2_dialog_impl.h
+#ifndef vgui_gtk2_dialog_impl_h_
+#define vgui_gtk2_dialog_impl_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -10,7 +10,7 @@
 // \date   28 Dec 99
 // \brief  The GTK implementation of vgui_dialog_impl.
 //
-//  Contains classes:  vgui_gtk_dialog_impl
+//  Contains classes:  vgui_gtk2_dialog_impl
 //
 // \verbatim
 //  Modifications:
@@ -29,11 +29,11 @@
 class vgui_tableau_sptr;
 
 //: Specialization of vgui_dialog_impl for GTK. Creates a GTK dialog box.
-class vgui_gtk_dialog_impl : public vgui_dialog_impl
+class vgui_gtk2_dialog_impl : public vgui_dialog_impl
 {
  public:
-  vgui_gtk_dialog_impl(const char* name);
-  ~vgui_gtk_dialog_impl();
+  vgui_gtk2_dialog_impl(const char* name);
+  ~vgui_gtk2_dialog_impl();
 
   void* choice_field_widget(const char*, const vcl_vector<vcl_string>&, int&);
   void* inline_tableau_widget(const vgui_tableau_sptr tab, unsigned width, unsigned height);
@@ -63,4 +63,4 @@ public:
 
 };
 
-#endif // vgui_gtk_dialog_impl_h_
+#endif // vgui_gtk2_dialog_impl_h_

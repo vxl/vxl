@@ -141,7 +141,7 @@ class vgui_dialog_impl
   enum element_type {bool_elem, int_elem, long_elem, float_elem,
                      double_elem, string_elem, choice_elem, text_msg,
                      file_bsr, color_csr,inline_file_bsr,inline_color_csr,
-                     inline_tabl};
+                     inline_tabl, unknown};
 
   //: Data associated with each field in the dialog box.
   //  The representation of a dialog box in vgui is simply as a list
@@ -151,12 +151,18 @@ class vgui_dialog_impl
     //: What type of field this is (int, bool, file browser, etc)
     element_type type;
     //: A pointer to a GUI widget for this field, if one exists.
-    //  This is null in most cases since it is easier to construct widgets
-    //  as we need them, except perhaps for something complicated like a
-    //  file browser or colour chooser.
+    //  This is null in most cases since it is easier to construct
+    //  widgets as we need them, except perhaps for something
+    //  complicated like a file browser or colour chooser. The GUI
+    //  implementation is completely responsible for this pointer
+    //  (i.e. ensuring memory deallocation when the dialog closes,
+    //  etc.)
     void *widget;
     //: Field to collect data from the user.
+    // The derived GUI implementation should not delete these.
     vgui_dialog_field *field;
+
+    element() : type(unknown), widget(0), field(0) { }
   };
 
  protected:

@@ -30,6 +30,7 @@ IF (OPENGL_GLU_FOUND)
   # implementations
   INCLUDE(${MODULE_PATH}/NewCMake/FindQt.cmake)
   INCLUDE(${MODULE_PATH}/NewCMake/FindGTK.cmake)
+  INCLUDE(${MODULE_PATH}/FindGTK2.cmake)
   INCLUDE(${MODULE_PATH}/NewCMake/FindMFC.cmake)
 
   ADD_DEFINITIONS( -DHAS_OPENGL)
@@ -369,6 +370,47 @@ IF (GTK_FOUND)
 
 ENDIF (GTK_FOUND)
 
+
+##################################################
+# GTK2
+##################################################
+
+IF (GTK2_FOUND)
+
+  OPTION(VGUI_USE_GTK2 "Should GTK2 support be compiled into vgui?" YES)
+
+  IF(VGUI_USE_GTK2)
+
+    IF(VGUI_USE_GTK)
+       MESSAGE(SEND_ERROR "You cannot build against both GTK1 and"
+                           "GTK2 at the same time")
+    ENDIF(VGUI_USE_GTK)
+    
+
+    ADD_DEFINITIONS( "-DVGUI_USE_GTK2" )
+
+    # This puts the include directories and whatever compiler flags
+    # are necessary for GTK2
+    ADD_DEFINITIONS( ${GTK2_DEFINITIONS} )
+
+    SET(vgui_gtk2_sources
+      impl/gtk2/vgui_gtk2.cxx             impl/gtk2/vgui_gtk2.h
+      impl/gtk2/vgui_gtk2_adaptor.cxx     impl/gtk2/vgui_gtk2_adaptor.h
+      impl/gtk2/vgui_gtk2_dialog_impl.cxx impl/gtk2/vgui_gtk2_dialog_impl.h
+      impl/gtk2/vgui_gtk2_statusbar.cxx   impl/gtk2/vgui_gtk2_statusbar.h
+      impl/gtk2/vgui_gtk2_tag.cxx
+      impl/gtk2/vgui_gtk2_utils.cxx       impl/gtk2/vgui_gtk2_utils.h
+      impl/gtk2/vgui_gtk2_window.cxx      impl/gtk2/vgui_gtk2_window.h
+    )
+
+    SET( vgui_sources ${vgui_sources} ${vgui_gtk2_sources} )
+
+    AUX_SOURCE_DIRECTORY(impl/gtk2/Templates vgui_gtk2_sources)
+
+  ENDIF(VGUI_USE_GTK2)
+
+ENDIF (GTK2_FOUND)
+
 ######################################################################
 # END TOOLKIT IMPLEMENTATIONS
 ######################################################################
@@ -405,6 +447,10 @@ IF (VGUI_USE_GTK)
   # vul listed above. Don't repeat.
   TARGET_LINK_LIBRARIES(vgui ${GTK_LIBRARIES})
 ENDIF (VGUI_USE_GTK)
+IF (VGUI_USE_GTK2)
+  # vul listed above. Don't repeat.
+  TARGET_LINK_LIBRARIES(vgui ${GTK2_LIBRARIES})
+ENDIF (VGUI_USE_GTK2)
 
 # Basic vgui dependencies.
 # These should appear after the above, because most of

@@ -40,6 +40,7 @@
 // attempt this. -- Amitha Perera.
 
 extern int vgui_gtk_tag_function();
+extern int vgui_gtk2_tag_function();
 extern int vgui_glut_tag_function();
 extern int vgui_mfc_tag_function();
 extern int vgui_fltk_tag_function();
@@ -56,6 +57,9 @@ int vgui_register_all_implementations()
 {
 #ifdef VGUI_USE_GTK
   vgui_gtk_tag_function();
+#endif
+#ifdef VGUI_USE_GTK2
+  vgui_gtk2_tag_function();
 #endif
 #if VGUI_MESA
   vgui_accelerate_x11_tag_function();
