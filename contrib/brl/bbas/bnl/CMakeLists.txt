@@ -10,3 +10,5 @@ SET(bnl_sources
 ADD_LIBRARY(bnl ${bnl_sources})
 
 TARGET_LINK_LIBRARIES(bnl vnl vnl_algo)
+
+SUBDIRS(algo)
