@@ -4,18 +4,22 @@
 #include <vcl/vcl_compiler.h>
 
 #if defined(VCL_WIN32)
-#include <sys/timeb.h>
+# include <sys/timeb.h>
 extern "C" int gettimeofday(struct timeval*, struct timezone*);
-#else
-#if !defined(VCL_NO_SYS_TIME_H)
-#include <sys/time.h>
-#else
-#ifdef SYSV
+
+#elif defined(GNU_LIBSTDCXX_V3)
+# define __restrict /* */
+# include <sys/time.h>
+# undef __restrict
+
+#elif !defined(VCL_NO_SYS_TIME_H)
+# include <sys/time.h>
+
+#elif defined(SYSV)
 extern "C" int gettimeofday(struct timeval *tp);
+
 #else
 extern "C" int gettimeofday(struct timeval*, struct timezone*);
-#endif
-#endif
 #endif
 
 //struct timeval:
