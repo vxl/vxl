@@ -52,19 +52,18 @@ oxl osl osl_ build
 oxl vgui vgui_ build
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl gel GE Libraries
-# Need to check dependency order
 gel geml geml_ build
-gel gevd gevd_ build
-gel gkll gkll_ build
-gel gmvl gmvl_ build
-gel gst gst_ build
-gel gtrl gtrl_ build
-gel vdgl vdgl_ build
-gel vgel vgel_ build
-gel vmal vmal_ build
-gel vsol vsol_ build
 gel vsrl vsrl_ build
+gel gtrl gtrl_ build
+gel vsol vsol_ build
+gel gst gst_ build
 gel vtol vtol_ build
+gel vdgl vdgl_ build
+gel gmvl gmvl_ build
+gel vgel vgel_ build
+gel gkll gkll_ build
+gel vmal vmal_ build
+gel gevd gevd_ build
 
 package: :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl rpl RPI libraries
 rpl rrel rrel_ build
