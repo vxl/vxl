@@ -745,8 +745,17 @@ ostream& operator<< (ostream& s, vnl_vector<T> const& v) {
 // Otherwise, read to EOF.
 template <class T>
 istream& operator>>(istream& s, vnl_vector<T>& M) {
-  if (M.data_block() == 0) M = T(3)* M; // fsm: hack to get 2.96 to instantiate the inline function.
   M.read_ascii(s); return s;
+}
+
+template <class T>
+void vnl_vector<T>::inline_function_tickler()
+{
+  vnl_vector<T> v;
+  // fsm: hacks to get 2.96/2.97/3.0 to instantiate the inline functions.
+  v = T(3) + v;
+  v = T(3) - v;
+  v = T(3) * v;
 }
 
 //--------------------------------------------------------------------------------

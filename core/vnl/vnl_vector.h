@@ -218,6 +218,7 @@ protected:
 # undef v
 # undef m
 #endif
+  static void inline_function_tickler();
 };
 
 //--------------------------------------------------------------------------------
