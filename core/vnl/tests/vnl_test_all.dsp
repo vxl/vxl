@@ -115,6 +115,9 @@ SOURCE=.\test_cpoly_roots.cxx
 SOURCE=.\test_determinant.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_inverse.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_fft.cxx
 # End Source File
 # Begin Source File
