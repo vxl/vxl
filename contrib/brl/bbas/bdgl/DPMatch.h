@@ -57,8 +57,8 @@ class DPMatch
   double euclidean_distance(vnl_matrix<double> R,vnl_matrix<double> T,double s);
   double transformed_euclidean_distance();
   void deformation_cost();
-  int matched_len1;
-  int matched_len2;
+  double matched_len1;
+  double matched_len2;
 
   double ds1_;
   double ds2_;

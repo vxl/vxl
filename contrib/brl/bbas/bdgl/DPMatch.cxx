@@ -108,7 +108,7 @@ double DPMatch::normfinalCost()
   if (curve1_.Tcurvature()<curve2_.Tcurvature())
       alpha=curve1_.Tcurvature();
 
-  return finalCost_/((1+R*alpha)*((double)matched_len1+(double)matched_len2))/2;
+  return finalCost_/((1+R*alpha)*(matched_len1+matched_len2))/2;
 }
 
 vcl_map <int,int> DPMatch::refine_mapping()
