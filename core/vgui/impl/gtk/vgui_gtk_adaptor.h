@@ -60,7 +60,7 @@ class vgui_gtk_adaptor : public vgui_adaptor, public vgui_adaptor_mixin
   GtkWidget *get_glarea_widget() { return widget; }
 
  private:
-  // main GDK-to-vgui event despatcher
+  // main GDK-to-vgui event dispatcher
   static gint handle(GtkWidget *, GdkEvent *, gpointer);
 
   // idle callbacks which service pending redraw/destroy posts
