@@ -11,11 +11,8 @@
 template <class PixelType>
 void ImageWarp<PixelType>::mean_nz_intensity(const vil_memory_image_of<PixelType>& in, 
 					     int x, int y, int window_size,
-#if defined(VCL_GCC_27)
-					     double *out,
-#else
-					     vnl_numeric_traits<PixelType>::real_t* out,
-#endif
+					     ImageWarp<PixelType>::real_t* out,
+					     //typename vnl_numeric_traits<PixelType>::real_t* out,
 					     int * nnzp)
 {
   // taking a const reference is slower and causes missing symbols (SunPro 5.0)
@@ -45,12 +42,8 @@ void ImageWarp<PixelType>::mean_nz_intensity(const vil_memory_image_of<PixelType
   
   if (nnzp)
     *nnzp = nnz;
-#if defined(VCL_GCC_27)
-#warning This code does not work with gcc2.7
-#else
   if (nnz > 0)
     *out = total_nz * (1.0 / nnz);
-#endif
 }
 
 template <class PixelType>
@@ -66,9 +59,6 @@ void ImageWarp<PixelType>::gapfill(vil_memory_image_of<PixelType>& out, int ngap
       int old_ngaps = ngaps;
       for(int oy = 0; oy < h; ++oy) 
 	for(int ox = 0; ox < w; ++ox)
-#if defined(VCL_GCC_27)
-#warning This code does not work with gcc2.7
-#else
 	  if (out(ox, oy) == vnl_numeric_traits<PixelType>::zero) {
 	    int nnz;
 	    real_t tmp;
@@ -78,7 +68,6 @@ void ImageWarp<PixelType>::gapfill(vil_memory_image_of<PixelType>& out, int ngap
 	      out(ox, oy) = PixelType(tmp);
 	    }
 	  }
-#endif
       if (ngaps == old_ngaps)
 	break;
       old_ngaps = ngaps;
