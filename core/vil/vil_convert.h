@@ -179,7 +179,7 @@ inline void vil2_convert_planes_to_grey(const vil2_image_view<inP>&src,
 // \relates vil2_image_view
 template <class outP>
 inline vil2_image_view<outP> vil2_convert_to_grey_using_average(
-  const vil2_image_view_base_sptr &src, outP dummy)
+  const vil2_image_view_base_sptr &src, outP /*dummy*/)
 {
   // Check output is scalar component image.
   assert (vil2_pixel_format_num_components(vil2_pixel_format_of(outP())) == 1);
@@ -228,14 +228,13 @@ macro(VIL2_PIXEL_FORMAT_DOUBLE , double )
 template <class outP>
 inline vil2_image_view<outP> vil2_convert_to_grey_using_rgb_weighting(
                           const vil2_image_view_base_sptr &src,
-                          outP dummy,
+                          outP /*dummy*/,
                           double rw=0.2125,
                           double gw=0.7154,
                           double bw=0.0721)
 {
   // Check output is scalar component image.
   assert (vil2_pixel_format_num_components(vil2_pixel_format_of(outP())) == 1);
-
 
   // try to do it quickly
   if (vil2_pixel_format_of(outP()) == src->pixel_format() && src->nplanes() == 1)
@@ -252,7 +251,7 @@ inline vil2_image_view<outP> vil2_convert_to_grey_using_rgb_weighting(
   case F: { \
       vil2_image_view<T > src1 = src; \
       vil2_image_view<double> dest1; \
-      vil2_convert_planes_to_grey(src1, dest1); \
+      vil2_convert_planes_to_grey(src1, dest1, rw, gw, bw); \
       vil2_convert_cast(dest1,dest); \
       break; }
 macro(VIL2_PIXEL_FORMAT_BYTE, vxl_byte )
@@ -269,8 +268,6 @@ macro(VIL2_PIXEL_FORMAT_DOUBLE , double )
   }
   return dest;
 }
-
-
 
 
 #endif // vil2_convert_h_
