@@ -252,7 +252,7 @@ set_scaling_factors( vnl_vector<double> const& scaling )
   // checking scaling
   // set it to epsison if scaling is in fact zero
   for ( unsigned int i=0; i<scaling.size(); ++i )
-    assert( vnl_math_isfinite( scaling[i] ) && scaling[i] > 0.0 );
+    assert( vnl_math_isfinite( scaling[i] ) );
 
   scaling_factors_ = scaling;
 }
