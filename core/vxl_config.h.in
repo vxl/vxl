@@ -14,6 +14,8 @@
 /* order to catch illegitimate uses. However, typedefs are superior */
 /* to #defines, especially for the two keyword types, so we use     */
 /* typedefs for the valid cases.                                    */
+#define VXL_HAS_INT_8 @VXL_HAS_INT_8@
+#define VXL_INT_8 @VXL_INT_8@
 #if @VXL_HAS_INT_8@
   typedef          @VXL_INT_8@  vxl_int_8;
   typedef   signed @VXL_INT_8@  vxl_sint_8;
@@ -24,6 +26,8 @@
 # define vxl_uint_8  void
 #endif
 
+#define VXL_HAS_INT_16 @VXL_HAS_INT_16@
+#define VXL_INT_16 @VXL_INT_16@
 #if @VXL_HAS_INT_16@
   typedef          @VXL_INT_16@ vxl_int_16;
   typedef   signed @VXL_INT_16@ vxl_sint_16;
@@ -34,6 +38,8 @@
 # define vxl_uint_16 void
 #endif
 
+#define VXL_HAS_INT_32 @VXL_HAS_INT_32@
+#define VXL_INT_32 @VXL_INT_32@
 #if @VXL_HAS_INT_32@
   typedef          @VXL_INT_32@ vxl_int_32;
   typedef   signed @VXL_INT_32@ vxl_sint_32;
@@ -44,6 +50,8 @@
 # define vxl_uint_32 void
 #endif
 
+#define VXL_HAS_INT_64 @VXL_HAS_INT_64@
+#define VXL_INT_64 @VXL_INT_64@
 #if @VXL_HAS_INT_64@
   typedef          @VXL_INT_64@ vxl_int_64;
   typedef   signed @VXL_INT_64@ vxl_sint_64;
@@ -54,24 +62,32 @@
 # define vxl_uint_64 void
 #endif
 
+#define VXL_HAS_IEEE_32 @VXL_HAS_IEEE_32@
+#define VXL_IEEE_32 @VXL_IEEE_32@
 #if @VXL_HAS_IEEE_32@
   typedef @VXL_IEEE_32@ vxl_ieee_32;
 #else
 # define vxl_ieee_32 void
 #endif
 
+#define VXL_HAS_IEEE_64 @VXL_HAS_IEEE_64@
+#define VXL_IEEE_64 @VXL_IEEE_64@
 #if @VXL_HAS_IEEE_64@
   typedef @VXL_IEEE_64@ vxl_ieee_64;
 #else
 # define vxl_ieee_64 void
 #endif
 
+#define VXL_HAS_IEEE_96 @VXL_HAS_IEEE_96@
+#define VXL_IEEE_96 @VXL_IEEE_96@
 #if @VXL_HAS_IEEE_96@
   typedef @VXL_IEEE_96@ vxl_ieee_96;
 #else
 # define vxl_ieee_96 void
 #endif
 
+#define VXL_HAS_IEEE_128 @VXL_HAS_IEEE_128@
+#define VXL_IEEE_128 @VXL_IEEE_128@
 #if @VXL_HAS_IEEE_128@
   typedef @VXL_IEEE_128@ vxl_ieee_128;
 #else

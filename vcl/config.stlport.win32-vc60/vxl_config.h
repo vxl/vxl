@@ -13,6 +13,8 @@
 /* order to catch illegitimate uses. However, typedefs are superior */
 /* to #defines, especially for the two keyword types, so we use     */
 /* typedefs for the valid cases.                                    */
+#define VXL_HAS_INT_8 1
+#define VXL_INT_8 char
 #if 1
   typedef          char  vxl_int_8;
   typedef   signed char  vxl_sint_8;
@@ -23,6 +25,8 @@
 # define vxl_uint_8  void
 #endif
 
+#define VXL_HAS_INT_16 1
+#define VXL_INT_16 short
 #if 1
   typedef          short vxl_int_16;
   typedef   signed short vxl_sint_16;
@@ -33,6 +37,8 @@
 # define vxl_uint_16 void
 #endif
 
+#define VXL_HAS_INT_32 1
+#define VXL_INT_32 int
 #if 1
   typedef          int vxl_int_32;
   typedef   signed int vxl_sint_32;
@@ -43,6 +49,8 @@
 # define vxl_uint_32 void
 #endif
 
+#define VXL_HAS_INT_64 0
+#define VXL_INT_64 void
 #if 0
   typedef          void vxl_int_64;
   typedef   signed void vxl_sint_64;
@@ -53,24 +61,32 @@
 # define vxl_uint_64 void
 #endif
 
+#define VXL_HAS_IEEE_32 1
+#define VXL_IEEE_32 float
 #if 1
   typedef float vxl_ieee_32;
 #else
 # define vxl_ieee_32 void
 #endif
 
+#define VXL_HAS_IEEE_64 1
+#define VXL_IEEE_64 double
 #if 1
   typedef double vxl_ieee_64;
 #else
 # define vxl_ieee_64 void
 #endif
 
+#define VXL_HAS_IEEE_96 0
+#define VXL_IEEE_96 void
 #if 0
-  typedef long double vxl_ieee_96;
+  typedef void vxl_ieee_96;
 #else
 # define vxl_ieee_96 void
 #endif
 
+#define VXL_HAS_IEEE_128 0
+#define VXL_IEEE_96 void
 #if 0
   typedef void vxl_ieee_128;
 #else
