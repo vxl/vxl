@@ -301,10 +301,6 @@ SOURCE=.\vnl_binary.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=".\Templates\vnl_c_vector+bool-.cxx"
-# End Source File
-# Begin Source File
-
 SOURCE=".\Templates\vnl_c_vector+double-.cxx"
 # End Source File
 # Begin Source File
@@ -349,7 +345,15 @@ SOURCE=.\vnl_complex.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vnl_complex_ops.cxx
+SOURCE=.\Templates\vnl_complex_ops+double-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_complex_ops+float-.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\Templates\vnl_complex_ops+long_double-.cxx
 # End Source File
 # Begin Source File
 
@@ -369,7 +373,7 @@ SOURCE=.\vnl_cross_product_matrix.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=.\Templates\vnl_determinant.cxx
+SOURCE=.\Templates\vnl_determinant+T-.cxx
 # End Source File
 # Begin Source File
 
