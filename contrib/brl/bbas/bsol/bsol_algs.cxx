@@ -28,4 +28,17 @@ bounding_box(vcl_vector<vsol_line_2d_sptr> const & lines)
     }
  return b;
 }
-
+//:returns true if the a and b intersect
+bool bsol_algs::meet(vsol_box_2d_sptr const & a, vsol_box_2d_sptr const & b)
+{
+  double min_x_a = a->get_min_x(), max_x_a = a->get_max_x();
+  double min_y_a = a->get_min_y(), max_y_a = a->get_max_y();
+  double min_x_b = b->get_min_x(), max_x_b = b->get_max_x();
+  double min_y_b = b->get_min_y(), max_y_b = b->get_max_y();
+  if(min_x_b>max_x_a||min_x_a>max_x_b)
+    return false;
+  if(min_y_b>max_y_a||min_y_a>max_y_b)
+    return false;
+  return true;
+}
+  

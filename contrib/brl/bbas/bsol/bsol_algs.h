@@ -26,7 +26,8 @@ class bsol_algs
   //: Finds a bounding box for a set of vsol_line_2ds
   static vbl_bounding_box<double,2> 
     bounding_box(vcl_vector<vsol_line_2d_sptr> const& lines);
-
+  //:do two boxes intersect?
+  static bool meet(vsol_box_2d_sptr const & a, vsol_box_2d_sptr const & b);
  private:
   bsol_algs();
 };
