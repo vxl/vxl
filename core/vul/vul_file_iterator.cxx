@@ -9,6 +9,12 @@
 
 #include <vul/vul_file.h>
 
+
+
+// Modifications:
+// Ian Scott 09/06/2003 Add filename general globbing support
+
+
 // Declare pimpl, reset, and iteration routines
 // for each OS
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
@@ -69,59 +75,104 @@ struct vul_file_iterator_data
   }
 };
 #else
-// Er, I can't do this one.  I think it would mean hauling
-// in libglob.  Can that do "*/*"?
-// Done just enough that "dir/*" will work....
 #include <dirent.h>
+#include <vul/vul_reg_exp.h>
 struct vul_file_iterator_data
 {
-  vcl_string original_dirname;
-  vcl_string baseglob;
-  DIR* dir_handle;
-  dirent* de;
-  vcl_string found;
-  char const* name;
-
+  vcl_string original_dirname_;
+  vcl_string baseglob_;
+  DIR* dir_handle_;
+  dirent* de_;
+  vcl_string found_;
+  char const* name_;
+  vul_reg_exp reg_exp_;
+  
   vul_file_iterator_data(char const* glob) {
-    original_dirname = vul_file::dirname(glob);
-    baseglob = vul_file::basename(glob);
-    dir_handle = opendir(original_dirname.c_str());
+    original_dirname_ = vul_file::dirname(glob) + "/";
+
+    baseglob_ = vul_file::basename(glob);
+    vcl_string::iterator i = baseglob_.begin();
+    bool prev_slash=false, in_sqr_brackets=false;
+    vcl_string re; //assemble the Regexp string
+    while (i != baseglob_.end())
+    {
+      if (*i=='\\' && !prev_slash)
+        prev_slash = true;
+      else if (prev_slash)
+      {
+        prev_slash == false;
+        re.push_back('\\');
+        re.push_back(*i);
+      }
+      else if (*i=='[' && !in_sqr_brackets)
+      {
+        in_sqr_brackets = true;
+        re.push_back('[');
+      }
+      else if (*i==']' && in_sqr_brackets)
+      {
+        in_sqr_brackets = false;
+        re.push_back(']');
+      }
+      else if (*i=='?' && !in_sqr_brackets)
+        re.push_back('.');
+      else if (*i=='*' && !in_sqr_brackets)
+        re.append(".*");
+      else
+        re.append(vul_reg_exp::protect(*i));
+
+      ++i;
+    }
+
+    reg_exp_.compile(re.c_str());
+
+    dir_handle_ = opendir(original_dirname_.c_str());
+    
+    // Strip unnecessary ./
+    if (original_dirname_ == "./") original_dirname_.clear();
+
+
     next();
   }
 
   void mkname() {
     // Remember full path
-    found = original_dirname + "/" + de->d_name;
-    name = found.c_str();
+    found_ = original_dirname_ + de_->d_name;
+    name_ = found_.c_str();
     // no need to remember filename, it's in data.name
   }
 
+
   void next() {
-    assert(dir_handle != 0);
-    de = readdir(dir_handle);
-    if (de)
-      mkname();
-    else {
-      closedir(dir_handle);
-      dir_handle = 0;
-    }
+    assert(dir_handle_ != 0);
+    do
+    {
+      de_ = readdir(dir_handle_);
+      if (de_==0) {
+        closedir(dir_handle_);
+        dir_handle_ = 0;
+        return;
+      }
+    } while ( ! reg_exp_.find(de_->d_name) );
+    mkname();
+
   }
 
   // should be constish, and ret 0 when nuffink
   char const* value() {
-    if (!dir_handle) return 0;
-    return name;
+    if (!dir_handle_) return 0;
+    return name_;
   }
 
   // Return non-dir part of fn
   char const* value_filename() {
-    if (!dir_handle) return 0;
-    return de->d_name;
+    if (!dir_handle_) return 0;
+    return de_->d_name;
   }
 
   ~vul_file_iterator_data() {
-    if (dir_handle)
-      closedir(dir_handle);
+    if (dir_handle_)
+      closedir(dir_handle_);
   }
 };
 

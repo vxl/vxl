@@ -8,6 +8,8 @@ DECLARE( test_url );
 DECLARE( test_temp_filename );
 DECLARE( test_regexp );
 DECLARE( test_string );
+DECLARE( test_sleep_timer );
+DECLARE( test_vul_file );
 
 void
 register_tests()
@@ -20,6 +22,8 @@ register_tests()
   REGISTER( test_temp_filename );
   REGISTER( test_regexp );
   REGISTER( test_string );
+  REGISTER( test_sleep_timer );
+  REGISTER( test_vul_file );
 }
 
 DEFINE_MAIN;

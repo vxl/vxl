@@ -3,8 +3,6 @@
 #include <vcl_fstream.h>
 #include <vcl_map.h>
 #include <vpl/vpl.h>
-#include <vul/vul_file.h>
-#include <vul/vul_timer.h>
 #include <vul/vul_temp_filename.h>
 
 #include <testlib/testlib_test.h>
@@ -58,8 +56,8 @@ void test_file_iterator_unix()
   }
 
   // 1. Check file.*
-  if (0)// This doesn't support more than * yet see note in vul_fil_iterator.cxx
   {
+    vcl_cout << "Testing /tmp/vxltest/a/123.*" << vcl_endl;
     vul_file_iterator f("/tmp/vxltest/a/123.*");
     // test for files - don't care about order?
     vcl_map<vcl_string, int> found;
@@ -74,8 +72,8 @@ void test_file_iterator_unix()
   }
 
   // 2. Check *.ext
-  if (0)// This doesn't support more than * yet see note in vul_fil_iterator.cxx
   {
+    vcl_cout << "Testing /tmp/vxltest/a/*.dat" << vcl_endl;
     vul_file_iterator f("/tmp/vxltest/a/*.dat");
     // test for files - don't care about order?
     vcl_map<vcl_string, int> found;
@@ -90,8 +88,8 @@ void test_file_iterator_unix()
   }
 
   // 3. Check ?.*
-  if (0)// This doesn't support more than * yet see note in vul_fil_iterator.cxx
   {
+    vcl_cout << "Testing /tmp/vxltest/a/1?3.???" << vcl_endl;
     vul_file_iterator f("/tmp/vxltest/a/1?3.???");
     // test for files - don't care about order?
     vcl_map<vcl_string, int> found;
@@ -124,6 +122,7 @@ void test_file_iterator_unix()
   vpl_unlink("/tmp/vxltest/b/123.txt");
   vpl_unlink("/tmp/vxltest/b/123.dat");
   {
+    vcl_cout << "Testing /tmp/vxltest/b/*" << vcl_endl;
     vul_file_iterator f("/tmp/vxltest/b/*");
     // test for files - don't care about order?
     vcl_map<vcl_string, int> found;
@@ -143,6 +142,7 @@ void test_file_iterator_unix()
   vpl_unlink("/tmp/vxltest/a/123.dat");
   vpl_rmdir("/tmp/vxltest/a");
   {
+    vcl_cout << "Testing /tmp/vxltest/*" << vcl_endl;
     vul_file_iterator f("/tmp/vxltest/*");
     // test for files - don't care about order?
     vcl_map<vcl_string, int> found;
@@ -266,38 +266,6 @@ void test_file_iterator_dos()
   vpl_rmdir( tempdir.c_str() );
 }
 
-
-void test_vul_file()
-{
-  // vul_file::basename
-  TEST("basename 1", vul_file::basename("fred.txt"), "fred.txt");
-  TEST("basename 2", vul_file::basename("/awf/fred.txt"), "fred.txt");
-  TEST("basename 3", vul_file::basename("fred.txt", ".txt"), "fred");
-  TEST("basename 4", vul_file::basename("/awf/fred.txt", ".txt"), "fred");
-  TEST("basename 5", vul_file::basename("t", ".txt"), "t");
-  TEST("basename 6", vul_file::basename(".txt", ".txt"), "");
-  TEST("basename 7", vul_file::basename("t.txt", ".txt"), "t");
-  TEST("basename 8", vul_file::basename(".ttt", ".txt"), ".ttt");
-  TEST("basename 9", vul_file::basename("/awf/t", ".txt"), "t");
-
-  // vul_file::dirname
-  TEST("dirname 1", vul_file::dirname("fred.txt"), ".");
-  TEST("dirname 2", vul_file::dirname("/awf/fred.txt"), "/awf");
-}
-
-void test_vul_sleep_timer()
-// vul_timer, vpl_sleep
-{
-  vul_timer tic;
-  vpl_sleep(1);
-  double t = tic.real() / 1000.0;
-
-  vcl_cout << "vul_timer: sleep lasted " << t << " seconds, expected 1.0\n";
-
-  TEST("Sleep for between 0.5 and 3 seconds", t> 0.5 && t < 3.0, true);
-}
-
-
 void test_file_iterator()
 {
 #ifndef VCL_WIN32
@@ -305,9 +273,6 @@ void test_file_iterator()
 #else
   test_file_iterator_dos();
 #endif
-
-  test_vul_file();
-  test_vul_sleep_timer();
 }
 
 
