@@ -147,10 +147,10 @@ vil_iris_generic_image::vil_iris_generic_image(vil_stream* is, int planes,
                 planes_ = 4;
                 dimension_ = 3;
          }
-         else vcl_cerr << "Cannot write iris image, they can do but grayscale or RGB(A)\n";
+         else vcl_cerr << __FILE__ ": Cannot write iris image, they can do but grayscale or RGB(A)\n";
     write_header();
   }
-  else vcl_cerr << "Cannot write iris image, they want 8 or 16 bits per component\n";
+  else vcl_cerr << __FILE__ ": Cannot write iris image, they want 8 or 16 bits per component\n";
 }
 
 vil_iris_generic_image::~vil_iris_generic_image()
@@ -186,26 +186,26 @@ bool vil_iris_generic_image::read_header()
 
   if (magic_ != 474)
   {
-    vcl_cerr << "This is not an Iris RGB file: magic number is incorrect: "
+    vcl_cerr << __FILE__ ": This is not an Iris RGB file: magic number is incorrect: "
              << magic_ << vcl_endl;
     return false;
   }
 
   if (storage_ != 0 && storage_ != 1)
   {
-    vcl_cerr << "This is not an Iris RGB file: storage must be RLE or VERBATIM\n";
+    vcl_cerr << __FILE__ ": This is not an Iris RGB file: storage must be RLE or VERBATIM\n";
     return false;
   }
 
   if (colormap_ == 3)
   {
-    vcl_cerr << "This is not an ordinary Iris RGB image but a colormap file\n";
+    vcl_cerr << __FILE__ ": This is not an ordinary Iris RGB image but a colormap file\n";
     return false;
   }
 
   if (dimension_ == 3 && colormap_ != 0)
   {
-    vcl_cerr << "Cannot handle Iris RGB file with colormap other than NORMAL\n";
+    vcl_cerr << __FILE__ ": Cannot handle Iris RGB file with colormap other than NORMAL\n";
     return false;
   }
 
@@ -219,7 +219,7 @@ bool vil_iris_generic_image::read_header()
 bool vil_iris_generic_image::write_header()
 {
 #ifdef DEBUG
-  vcl_cerr << "vil_iris_generic_image::write_header()\n"
+  vcl_cerr << __FILE__ ": vil_iris_generic_image::write_header()\n"
            << "Here we go : \n"
            << "magic_      = " << magic_    << vcl_endl
            << "storage_    = " << storage_ << vcl_endl
@@ -261,7 +261,7 @@ bool vil_iris_generic_image::write_header()
 vil_image vil_iris_generic_image::get_plane(int plane) const
 {
   assert(plane < planes_); // should this be 'plane <= planes_'? planes start at 0.
-  vcl_cerr << "do something for vil_iris_generic_image::get_plane\n";
+  vcl_cerr << __FILE__ ": do something for vil_iris_generic_image::get_plane\n";
   return 0;
 }
 
@@ -468,13 +468,13 @@ long get_long(vil_stream* file, int location){
 }
 
 
-static void send_char(vil_stream* data, int s)
+void send_char(vil_stream* data, int s)
 {
   char c = s;
   data->write(&c ,1);
 }
 
-static void send_short(vil_stream* data, int s)
+void send_short(vil_stream* data, int s)
 {
   unsigned char buff[2];
   buff[0] = (s >> 8) & 0xff;
@@ -482,7 +482,7 @@ static void send_short(vil_stream* data, int s)
   data->write(buff, 2);
 }
 
-static void send_ushort(vil_stream* data, unsigned int s)
+void send_ushort(vil_stream* data, unsigned int s)
 {
   unsigned char buff[2];
   buff[0] = (s >> 8) & 0xff;
@@ -490,7 +490,7 @@ static void send_ushort(vil_stream* data, unsigned int s)
   data->write(buff, 2);
 }
 
-static void send_long(vil_stream* data, long s)
+void send_long(vil_stream* data, long s)
 {
   unsigned char buff[4];
   buff[0] = (s >> 24) & 0xff;
