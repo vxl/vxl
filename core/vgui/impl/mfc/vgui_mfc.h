@@ -43,6 +43,7 @@ public:
   virtual void run_one_event();
   virtual void run_till_idle();
   virtual void flush();
+  virtual void quit();
   virtual void add_event(const vgui_event&);
 
   virtual vgui_window* produce_window(int width, int height, const vgui_menu& menubar,
