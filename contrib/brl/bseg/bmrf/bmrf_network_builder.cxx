@@ -495,7 +495,7 @@ intensity_candidates(bmrf_epi_seg_sptr const& seg,
       found_alpha = true;
       right_cand.push_back(*sit);
     }
-  return found_something&&found_alpha;
+  return some_candidates&&found_alpha;
 }
 
 //: the radius for intensity sampling
@@ -602,7 +602,7 @@ double bmrf_network_builder::scan_interval(const double a, const double sl,
     return 0;
   int n_samples = 0;
   double sum = 0;
-  for (double si = sl; si<=s; si+=ds(si))
+  for (double si = sl; si<=s; si+=ds(si), ++n_samples)
   {
     double u, v;
     if (!image_coords(a, si, u, v))
@@ -612,7 +612,6 @@ double bmrf_network_builder::scan_interval(const double a, const double sl,
 #if 0
     sum += brip_float_ops::bilinear_interpolation(image_, u+0.5, v+0.5);//JLM
 #endif
-    ++n_samples;
   }
   if (!n_samples)
     return 0;
@@ -646,7 +645,9 @@ scan_right(double a,double s, vcl_vector<bmrf_epi_seg_sptr> const& right_cand,
 //==================================================================
 bool bmrf_network_builder::fill_intensity_values(bmrf_epi_seg_sptr& seg)
 {
-  //vcl_cout << "\n\nStarting new Seg\n";
+#ifdef DEBUG
+  vcl_cout << "\n\nStarting new Seg\n";
+#endif
   //the potential bounding segments
   vcl_vector<bmrf_epi_seg_sptr> left_cand, right_cand;
   this->intensity_candidates(seg, left_cand, right_cand);
@@ -670,12 +671,16 @@ bool bmrf_network_builder::set_intensity_info()
   //the min and max caches hold the same segments, just sorted
   //differently
   vcl_vector<bmrf_epi_seg_sptr>& segs = min_epi_segs_;
-  //vcl_cout << "Intensity data for Frame " << frame_ << '\n';
+#ifdef DEBUG
+  vcl_cout << "Intensity data for Frame " << frame_ << '\n';
+#endif
   for (vcl_vector<bmrf_epi_seg_sptr>::iterator sit = segs.begin();
        sit != segs.end(); sit++)
   {
     this->fill_intensity_values(*sit);
-    //vcl_cout << *(*sit) << '\n'<< vcl_flush;
+#ifdef DEBUG
+    vcl_cout << *(*sit) << vcl_endl;
+#endif
   }
 return true;
 }
