@@ -2,9 +2,9 @@
 #ifndef vil3d_grad_1x3_txx_
 #define vil3d_grad_1x3_txx_
 //:
-//  \file
-//  \brief Apply grad gradient filter to an image
-//  \author Tim Cootes
+// \file
+// \brief Apply grad gradient filter to an image
+// \author Tim Cootes
 
 #include "vil3d_grad_1x3.h"
 #include <vil3d/vil3d_plane.h>
@@ -59,7 +59,7 @@ void vil3d_grad_1x3(const vil3d_image_view<srcT>& src,
 //  Use (-0.5,0,+0.5) filters in i,j,k
 template<class srcT, class destT>
 void vil3d_grad_1x3_mag_sq(const vil3d_image_view<srcT>& src,
-                    vil3d_image_view<destT>& grad_mag2)
+                           vil3d_image_view<destT>& grad_mag2)
 {
   unsigned np = src.nplanes();
   unsigned ni = src.ni();
@@ -81,8 +81,8 @@ template void vil3d_grad_1x3(const vil3d_image_view< srcT >& src, \
 template void vil3d_grad_1x3(const vil3d_image_view< srcT >& src, \
                                    vil3d_image_view<destT >& grad_i, \
                                    vil3d_image_view<destT >& grad_j, \
-                                   vil3d_image_view<destT>& grad_k); \
-template void vil3d_grad_1x3_mag_sq(const vil3d_image_view<srcT>& src, \
-                                   vil3d_image_view<destT>& grad_mag2)
+                                   vil3d_image_view<destT >& grad_k); \
+template void vil3d_grad_1x3_mag_sq(const vil3d_image_view<srcT >& src, \
+                                   vil3d_image_view<destT >& grad_mag2)
 
-#endif
+#endif // vil3d_grad_1x3_txx_
