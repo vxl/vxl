@@ -14,16 +14,16 @@ void test_static_const_definition()
 {
 #define ONE_ZERO( Type ) \
   if(true){\
-    check_pointer( &vnl_numeric_traits<Type>::zero );\
-    check_pointer( &vnl_numeric_traits<Type>::one );\
-    check_pointer( &vnl_numeric_traits<const Type>::zero );\
-    check_pointer( &vnl_numeric_traits<const Type>::one );\
+    check_pointer( &vnl_numeric_traits< Type >::zero );\
+    check_pointer( &vnl_numeric_traits< Type >::one );\
+    check_pointer( &vnl_numeric_traits< const Type >::zero );\
+    check_pointer( &vnl_numeric_traits< const Type >::one );\
   }else
 #define ALL( Type ) \
   ONE_ZERO( Type ); \
   if(true){\
-    check_pointer( &vnl_numeric_traits<Type>::maxval );\
-    check_pointer( &vnl_numeric_traits<const Type>::maxval );\
+    check_pointer( &vnl_numeric_traits< Type >::maxval );\
+    check_pointer( &vnl_numeric_traits< const Type >::maxval );\
   }else
 
   ALL(bool);
