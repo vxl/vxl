@@ -161,7 +161,7 @@ generate_data(feature_vector& feature_set)
 }
 
 int
-main( int argc, char* argv[] )
+main()
 {
   prepare_testing();
 

@@ -244,7 +244,7 @@ add_outliers( feature_vector& feature_points )
 }
 
 int
-main( int argc, char* argv[] )
+main()
 {
   prepare_testing();
 
