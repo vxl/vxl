@@ -16,6 +16,7 @@
 // \endverbatim
 
 #include <vcl_cmath.h>
+#include <vcl_cassert.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_math.h>
 #include <vil/vil_fill.h>
@@ -70,19 +71,18 @@ brip_sqrt_grad_singular_values(const vil_image_view<T>& input, vil_image_view<T>
 }
 
 
-
-//: Filter an image with a gaussian kernel 
-// This is an ntap alternative to vil_gauss_filter_5tap 
+//: Filter an image with a gaussian kernel
+// This is an ntap alternative to vil_gauss_filter_5tap
 // The kernel is generated using vcl_exp instead of vnl_erf
 // \param sigma The width of the gaussian
 // \param k_size The number of elements in the 1D filter
 // \param option The boundary option applied at all boundaries (see vil_convolve_1d)
 template <class srcT, class destT>
-void brip_gauss_filter( const vil_image_view<srcT>& src_im,
-                        vil_image_view<destT>& dest_im,
-                        double sigma,
-                        unsigned k_size,
-                        vil_convolve_boundary_option option )
+inline void brip_gauss_filter( const vil_image_view<srcT>& src_im,
+                               vil_image_view<destT>& dest_im,
+                               double sigma,
+                               unsigned k_size,
+                               vil_convolve_boundary_option option )
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
@@ -92,27 +92,27 @@ void brip_gauss_filter( const vil_image_view<srcT>& src_im,
 
   // compute the kernel
   double *kernel = new double[k_size];
-  for(int i=0; i<k_size; ++i){
+  for (int i=0; i<k_size; ++i){
     double val = ((double(i)+0.5)-double(k_size)/2.0);
     kernel[i] = vcl_exp(-(val*val)/(2.0*sigma*sigma));
   }
   double sum = 0.0;
-  for(int i=0; i<k_size; ++i) sum += kernel[i];
-  for(int i=0; i<k_size; ++i) kernel[i] /= sum;
+  for (int i=0; i<k_size; ++i) sum += kernel[i];
+  for (int i=0; i<k_size; ++i) kernel[i] /= sum;
 
   vil_image_view<destT> work(ni, nj, n_planes);
 
   // filter horizontal
   vil_convolve_1d(src_im, work, kernel+int(k_size)/2,
-                  -int(k_size)/2, int(k_size-1)/2, 
+                  -int(k_size)/2, int(k_size-1)/2,
                   destT(0), option, option);
 
   // filter vertical
   vil_image_view<destT> work_t = vil_transpose(work);
   vil_image_view<destT> dest_t = vil_transpose(dest_im);
   vil_convolve_1d(work_t, dest_t, kernel+int(k_size)/2,
-                  -int(k_size)/2, int(k_size-1)/2, 
-                  destT(0), option, option);    
+                  -int(k_size)/2, int(k_size-1)/2,
+                  destT(0), option, option);
 
   delete kernel;
 }
