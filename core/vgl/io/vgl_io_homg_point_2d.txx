@@ -27,9 +27,11 @@ void vsl_b_read(vsl_b_istream &is, vgl_homg_point_2d<T> & p)
   switch(v)
   {
   case 1:
-    vsl_b_read(is, p.x());
-    vsl_b_read(is, p.y());
-    vsl_b_read(is, p.w());
+    T x, y, w;
+    vsl_b_read(is, x);
+    vsl_b_read(is, y);
+    vsl_b_read(is, w);
+    p.set(x,y,w);
     break;
 
   default:

@@ -27,9 +27,11 @@ void vsl_b_read(vsl_b_istream &is, vgl_point_3d<T> & p)
   switch(v)
   {
   case 1:
-    vsl_b_read(is, p.x());
-    vsl_b_read(is, p.y());
-    vsl_b_read(is, p.z());
+    T x, y, z;
+    vsl_b_read(is, x);
+    vsl_b_read(is, y);
+    vsl_b_read(is, z);
+    p.set(x,y,z);
     break;
 
   default:
