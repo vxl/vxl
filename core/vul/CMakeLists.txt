@@ -1,8 +1,7 @@
-# ./vxl/vul/CMakeLists.txt
+# core/vul/CMakeLists.txt
 
 SET(vul_sources
   vul_fwd.h
-  vul_canonical_path.h
   vul_whereami.h
 
   vul_arg.h                   vul_arg.cxx
