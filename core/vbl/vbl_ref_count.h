@@ -1,7 +1,9 @@
+// This is vxl/vbl/vbl_ref_count.h
 #ifndef vbl_ref_count_h
 #define vbl_ref_count_h
-
-// This is vxl/vbl/vbl_ref_count.h
+#ifdef __GNUC__
+#pragma interface
+#endif
 
 //:
 // \file
