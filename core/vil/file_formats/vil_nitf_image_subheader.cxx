@@ -447,7 +447,7 @@ void vil_nitf_image_subheader::Copy (const vil_nitf_image_subheader* h)
     FilledCopy (IC, h->IC);
     FilledCopy (COMRAT, h->COMRAT);
 
-    if (version_ == 0 || h->NBANDS < 1) {
+    if (version_.length() == 0 || h->NBANDS < 1) {
         unsigned int i;
         for (i = 0; i < NBANDS; i++) {
             if (bands[i]) {
@@ -478,7 +478,7 @@ void vil_nitf_image_subheader::Copy (const vil_nitf_image_subheader* h)
         //
         j = i;
         for (; i < h->NBANDS; i++) {
-            newbands[i] = version_->newImageHeaderBand();
+            newbands[i] = new_image_header_band();
         }
         // Free up any structures we are not reusing...
         //
