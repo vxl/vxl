@@ -61,7 +61,7 @@ LIB32=link.exe -lib
 # PROP BASE Output_Dir "Debug"
 # PROP BASE Intermediate_Dir "Debug"
 # PROP BASE Target_Dir ""
-# PROP Use_MFC 2
+# PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
@@ -70,7 +70,7 @@ MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_LIB" /YX /FD /GZ /c
 # ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\mul" /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
-# ADD RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
+# ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -80,10 +80,10 @@ LIB32=link.exe -lib
 
 !ELSEIF  "$(CFG)" == "vgl_io - Win32 StaticDebug"
 
-# PROP BASE Use_MFC 2
+# PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "vgl_io___Win32_StaticDebug"
-# PROP BASE Intermediate_Dir "vgl_io___Win32_StaticDebug"
+# PROP BASE Output_Dir "StaticDebug"
+# PROP BASE Intermediate_Dir "StaticDebug"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
@@ -93,21 +93,21 @@ LIB32=link.exe -lib
 MTL=midl.exe
 # ADD BASE CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
 # ADD CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)\vxl" /I "$(IUEROOT)\mul" /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
+# ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\Debug\vgl_io.lib"
+# ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\..\StaticDebug\vgl_io.lib"
 
 !ELSEIF  "$(CFG)" == "vgl_io - Win32 StaticRelease"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "vgl_io___Win32_StaticRelease"
-# PROP BASE Intermediate_Dir "vgl_io___Win32_StaticRelease"
+# PROP BASE Output_Dir "StaticRelease"
+# PROP BASE Intermediate_Dir "StaticRelease"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
@@ -123,7 +123,7 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\Release\vgl_io.lib"
+# ADD BASE LIB32
 # ADD LIB32 /nologo /out:"..\..\StaticRelease\vgl_io.lib"
 
 !ENDIF 

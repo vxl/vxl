@@ -82,8 +82,8 @@ LIB32=xilink6.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "osl___Win32_StaticDebug"
-# PROP BASE Intermediate_Dir "osl___Win32_StaticDebug"
+# PROP BASE Output_Dir "StaticDebug"
+# PROP BASE Intermediate_Dir "StaticDebug"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
@@ -99,15 +99,15 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\Debug\osl.lib"
+# ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\StaticDebug\osl.lib"
 
 !ELSEIF  "$(CFG)" == "osl - Win32 StaticRelease"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "osl___Win32_StaticRelease"
-# PROP BASE Intermediate_Dir "osl___Win32_StaticRelease"
+# PROP BASE Output_Dir "StaticRelease"
+# PROP BASE Intermediate_Dir "StaticRelease"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
@@ -123,7 +123,7 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\Release\osl.lib"
+# ADD BASE LIB32
 # ADD LIB32 /nologo /out:"..\StaticRelease\osl.lib"
 
 !ENDIF 

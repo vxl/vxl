@@ -32,13 +32,13 @@ RSC=rc.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "Release"
-# PROP BASE Intermediate_Dir "Release"
+# PROP BASE Output_Dir "tests/Release"
+# PROP BASE Intermediate_Dir "tests/Release"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "Release"
-# PROP Intermediate_Dir "Release"
+# PROP Output_Dir "tests/Release"
+# PROP Intermediate_Dir "tests/Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /YX /FD /c
 # ADD CPP /nologo /MD /W3 /GX /O2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /YX /FD /c
@@ -55,13 +55,13 @@ LINK32=link.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "Qvtest___Win32_Debug"
-# PROP BASE Intermediate_Dir "Qvtest___Win32_Debug"
+# PROP BASE Output_Dir "tests/Debug"
+# PROP BASE Intermediate_Dir "tests/Debug"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "Qvtest___Win32_Debug"
-# PROP Intermediate_Dir "Qvtest___Win32_Debug"
+# PROP Output_Dir "tests/Debug"
+# PROP Intermediate_Dir "tests/Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /YX /FD /GZ /c
 # ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /YX /FD /GZ /c

@@ -61,7 +61,7 @@ LIB32=link.exe -lib
 # PROP BASE Output_Dir "Debug"
 # PROP BASE Intermediate_Dir "Debug"
 # PROP BASE Target_Dir ""
-# PROP Use_MFC 2
+# PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
@@ -80,10 +80,10 @@ LIB32=link.exe -lib
 
 !ELSEIF  "$(CFG)" == "vnl_io - Win32 StaticDebug"
 
-# PROP BASE Use_MFC 2
+# PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "vnl_io___Win32_StaticDebug"
-# PROP BASE Intermediate_Dir "vnl_io___Win32_StaticDebug"
+# PROP BASE Output_Dir "StaticDebug"
+# PROP BASE Intermediate_Dir "StaticDebug"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
@@ -99,15 +99,15 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\Debug\vnl_io.lib"
+# ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\..\StaticDebug\vnl_io.lib"
 
 !ELSEIF  "$(CFG)" == "vnl_io - Win32 StaticRelease"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "vnl_io___Win32_StaticRelease"
-# PROP BASE Intermediate_Dir "vnl_io___Win32_StaticRelease"
+# PROP BASE Output_Dir "StaticRelease"
+# PROP BASE Intermediate_Dir "StaticRelease"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
@@ -123,7 +123,7 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\Release\vnl_io.lib"
+# ADD BASE LIB32
 # ADD LIB32 /nologo /out:"..\..\StaticRelease\vnl_io.lib"
 
 !ENDIF 

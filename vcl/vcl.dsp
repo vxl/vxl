@@ -61,10 +61,10 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "vcl___Win32_Debug"
-# PROP BASE Intermediate_Dir "vcl___Win32_Debug"
+# PROP BASE Output_Dir "Debug"
+# PROP BASE Intermediate_Dir "Debug"
 # PROP BASE Target_Dir ""
-# PROP Use_MFC 2
+# PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
@@ -73,7 +73,7 @@ MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_LIB" /YX /FD /GZ /c
 # ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
-# ADD RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
+# ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -83,10 +83,10 @@ LIB32=link.exe -lib
 
 !ELSEIF  "$(CFG)" == "vcl - Win32 StaticDebug"
 
-# PROP BASE Use_MFC 2
+# PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "vcl___Win32_StaticDebug"
-# PROP BASE Intermediate_Dir "vcl___Win32_StaticDebug"
+# PROP BASE Output_Dir "StaticDebug"
+# PROP BASE Intermediate_Dir "StaticDebug"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
@@ -96,21 +96,21 @@ LIB32=link.exe -lib
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /Ob2 /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
 # ADD CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)\vcl\config.win32-vc60" /I "$(IUEROOT)\vcl" /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
+# ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:".\Debug\vcl.lib"
+# ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:".\StaticDebug\vcl.lib"
 
 !ELSEIF  "$(CFG)" == "vcl - Win32 StaticRelease"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "vcl___Win32_StaticRelease"
-# PROP BASE Intermediate_Dir "vcl___Win32_StaticRelease"
+# PROP BASE Output_Dir "StaticRelease"
+# PROP BASE Intermediate_Dir "StaticRelease"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
@@ -128,44 +128,44 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:".\Release\vcl.lib"
+# ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:".\StaticRelease\vcl.lib"
 
 !ELSEIF  "$(CFG)" == "vcl - Win32 DebugSTLPort"
 
-# PROP BASE Use_MFC 2
+# PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "vcl___Win32_DebugSTLPort"
-# PROP BASE Intermediate_Dir "vcl___Win32_DebugSTLPort"
+# PROP BASE Output_Dir "DebugSTLPort"
+# PROP BASE Intermediate_Dir "DebugSTLPort"
 # PROP BASE Target_Dir ""
-# PROP Use_MFC 2
+# PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "Debug-STLPort"
-# PROP Intermediate_Dir "Debug-STLPort"
+# PROP Output_Dir "DebugSTLPort"
+# PROP Intermediate_Dir "DebugSTLPort"
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /Ob2 /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
 # ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(STLPORT)\stlport" /I "$(IUEROOT)\vcl\config.stlport.win32-vc60" /I "$(IUEROOT)\vcl" /D "WIN32" /D "_DEBUG" /D "_LIB" /FD /GZ /c
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
-# ADD RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
+# ADD BASE RSC /l 0x409 /d "_DEBUG"
+# ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:".\Debug\vcl.lib"
-# ADD LIB32 /nologo /out:".\Debug-STLPort\vcl.lib"
+# ADD BASE LIB32 /nologo
+# ADD LIB32 /nologo /out:".\DebugSTLPort\vcl.lib"
 
 !ELSEIF  "$(CFG)" == "vcl - Win32 ReleaseSTLPort"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "vcl___Win32_ReleaseSTLPort"
-# PROP BASE Intermediate_Dir "vcl___Win32_ReleaseSTLPort"
+# PROP BASE Output_Dir "ReleaseSTLPort"
+# PROP BASE Intermediate_Dir "ReleaseSTLPort"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "Release-STLPort"
-# PROP Intermediate_Dir "Release-STLPort"
+# PROP Output_Dir "ReleaseSTLPort"
+# PROP Intermediate_Dir "ReleaseSTLPort"
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /FD /c
@@ -178,8 +178,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:".\Release\vcl.lib"
-# ADD LIB32 /nologo /out:".\Release-STLPort\vcl.lib"
+# ADD BASE LIB32 /nologo
+# ADD LIB32 /nologo /out:".\ReleaseSTLPort\vcl.lib"
 
 !ENDIF 
 

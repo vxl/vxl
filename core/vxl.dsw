@@ -410,6 +410,9 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name vcl
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vbl_io
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -424,6 +427,9 @@ Package=<4>
 {{{
     Begin Project Dependency
     Project_Dep_Name vcl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vgl_io
     End Project Dependency
 }}}
 
@@ -440,6 +446,9 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name vcl
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vil_io
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -454,6 +463,9 @@ Package=<4>
 {{{
     Begin Project Dependency
     Project_Dep_Name vcl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vnl_io
     End Project Dependency
 }}}
 
@@ -487,6 +499,9 @@ Package=<4>
 {{{
     Begin Project Dependency
     Project_Dep_Name vcl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vsl
     End Project Dependency
 }}}
 

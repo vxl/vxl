@@ -2,7 +2,7 @@
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-# TARGTYPE "Win32 (x86) Static Library" 0x0104
+# TARGTYPE "Win32 (x86) Generic Project" 0x010a
 
 CFG=vxl - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
@@ -17,62 +17,41 @@ CFG=vxl - Win32 Debug
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "vxl - Win32 Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "vxl - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "vxl - Win32 Release" (based on "Win32 (x86) Generic Project")
+!MESSAGE "vxl - Win32 Debug" (based on "Win32 (x86) Generic Project")
 !MESSAGE 
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
 # PROP Scc_LocalPath ""
-CPP=cl.exe
-RSC=rc.exe
+MTL=midl.exe
 
 !IF  "$(CFG)" == "vxl - Win32 Release"
 
-# PROP BASE Use_MFC 2
+# PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "Release"
 # PROP BASE Intermediate_Dir "Release"
 # PROP BASE Target_Dir ""
-# PROP Use_MFC 2
+# PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /D "NDEBUG"
-# ADD CPP /nologo /D "NDEBUG"
-# ADD BASE RSC /d "NDEBUG"
-# ADD RSC /d "NDEBUG"
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo
 
 !ELSEIF  "$(CFG)" == "vxl - Win32 Debug"
 
-# PROP BASE Use_MFC 2
+# PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
 # PROP BASE Output_Dir "Debug"
 # PROP BASE Intermediate_Dir "Debug"
 # PROP BASE Target_Dir ""
-# PROP Use_MFC 2
+# PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /D "_DEBUG"
-# ADD CPP /nologo /D "_DEBUG"
-# ADD BASE RSC /d "_DEBUG"
-# ADD RSC /d "_DEBUG"
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo
 
 !ENDIF 
 
@@ -80,8 +59,5 @@ LIB32=link.exe -lib
 
 # Name "vxl - Win32 Release"
 # Name "vxl - Win32 Debug"
-# Begin Group "Resource Files"
-
-# End Group
 # End Target
 # End Project

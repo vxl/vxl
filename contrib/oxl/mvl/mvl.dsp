@@ -85,8 +85,8 @@ LIB32=link.exe -lib
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "mvl___Win32_StaticDebug"
-# PROP BASE Intermediate_Dir "mvl___Win32_StaticDebug"
+# PROP BASE Output_Dir "StaticDebug"
+# PROP BASE Intermediate_Dir "StaticDebug"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
@@ -104,15 +104,15 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\Debug\mvl.lib"
+# ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\StaticDebug\mvl.lib"
 
 !ELSEIF  "$(CFG)" == "mvl - Win32 StaticRelease"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "mvl___Win32_StaticRelease"
-# PROP BASE Intermediate_Dir "mvl___Win32_StaticRelease"
+# PROP BASE Output_Dir "StaticRelease"
+# PROP BASE Intermediate_Dir "StaticRelease"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
@@ -128,20 +128,20 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\Release\mvl.lib"
+# ADD BASE LIB32
 # ADD LIB32 /nologo /out:"..\StaticRelease\mvl.lib"
 
 !ELSEIF  "$(CFG)" == "mvl - Win32 ReleaseSTLPort"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "mvl___Win32_ReleaseSTLPort"
-# PROP BASE Intermediate_Dir "mvl___Win32_ReleaseSTLPort"
+# PROP BASE Output_Dir "ReleaseSTLPort"
+# PROP BASE Intermediate_Dir "ReleaseSTLPort"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "Release-STLPort"
-# PROP Intermediate_Dir "Release-STLPort"
+# PROP Output_Dir "ReleaseSTLPort"
+# PROP Intermediate_Dir "ReleaseSTLPort"
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
@@ -152,20 +152,20 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\Release\mvl.lib"
-# ADD LIB32 /nologo /out:"..\Release-STLPort\mvl.lib"
+# ADD BASE LIB32
+# ADD LIB32 /nologo /out:"..\ReleaseSTLPort\mvl.lib"
 
 !ELSEIF  "$(CFG)" == "mvl - Win32 DebugSTLPort"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "mvl___Win32_DebugSTLPort"
-# PROP BASE Intermediate_Dir "mvl___Win32_DebugSTLPort"
+# PROP BASE Output_Dir "DebugSTLPort"
+# PROP BASE Intermediate_Dir "DebugSTLPort"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "Debug-STLPort"
-# PROP Intermediate_Dir "Debug-STLPort"
+# PROP Output_Dir "DebugSTLPort"
+# PROP Intermediate_Dir "DebugSTLPort"
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /GZ /c
@@ -178,8 +178,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\Debug\mvl.lib"
-# ADD LIB32 /nologo /out:"..\Debug-STLPort\mvl.lib"
+# ADD BASE LIB32
+# ADD LIB32 /nologo /out:"..\DebugSTLPort\mvl.lib"
 
 !ENDIF 
 
