@@ -48,6 +48,12 @@ vil_image_impl *vil_gif_file_format::make_input_image(vil_stream *s)
     return new vil_gif_loader_saver(s);
 }
 
+vil_image_impl *vil_gif_file_format::make_output_image(vil_stream*, int, int, int, int, int, vil_component_format)
+{
+  vcl_cerr << "GIF writer not yet implemented\n";
+  return 0;
+}
+
 bool vil_gif_loader_saver::get_property(char const *tag, void *prop) const
 {
   if (0==vcl_strcmp(tag, vil_property_top_row_first))
@@ -59,7 +65,7 @@ bool vil_gif_loader_saver::get_property(char const *tag, void *prop) const
   return false;
 }
 
-vil_gif_loader_saver::vil_gif_loader_saver(vil_stream *s_) : s(s_)
+vil_gif_loader_saver::vil_gif_loader_saver(vil_stream *s_) : s(s_), is_grey(false)
 {
   s->ref();
   assert(vil_gif_probe(s));
@@ -126,6 +132,14 @@ vil_gif_loader_saver::vil_gif_loader_saver(vil_stream *s_) : s(s_)
   if (global_color_map) {
     vcl_cerr << "read global colour map" << vcl_endl;
     s->read(global_color_map->cmap, 3*global_color_map->size);
+
+    is_grey = true;
+    for (int i=0; is_grey && i<global_color_map->size; ++i)
+       if (global_color_map->cmap[3*i+0] !=
+           global_color_map->cmap[3*i+1] ||
+           global_color_map->cmap[3*i+1] !=
+           global_color_map->cmap[3*i+2])
+         is_grey = false;
 
     for (int i=0; i<16; ++i)
       vcl_cerr << vcl_setw(3) << i << ' '

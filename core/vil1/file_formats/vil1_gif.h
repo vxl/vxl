@@ -29,8 +29,7 @@ struct vil_gif_file_format : /*public*/ vil_file_format
 {
   char const* tag() const;
   vil_image_impl *make_input_image(vil_stream* vs);
-  vil_image_impl *make_output_image(vil_stream*, int, int, int, int, int, vil_component_format)
-    { return 0; }
+  vil_image_impl *make_output_image(vil_stream*, int, int, int, int, int, vil_component_format);
 };
 
 struct vil_gif_color_map
@@ -69,7 +68,7 @@ struct vil_gif_loader_saver : public vil_image_impl
   int planes() const { return images.size(); }
   int width() const { return screen_width_; }
   int height() const { return screen_height_; }
-  int components() const { return 3; }//{ return 1; }
+  int components() const { return is_grey ? 1 : 3; }
   int bits_per_component() const { return 8; }
   enum vil_component_format component_format() const { return VIL_COMPONENT_FORMAT_UNSIGNED_INT; }
 
@@ -86,6 +85,7 @@ private:
   vil_stream *s;
   int screen_width_;
   int screen_height_;
+  bool is_grey; // set to true if all entries in the colour map are grey
 
   vil_gif_color_map *global_color_map;
   int background_index;
