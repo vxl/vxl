@@ -15,16 +15,16 @@
 #include <vbl/vbl_bounding_box.h>
 
 //: Binary save vbl__point_3d to stream.
-template <class T, int DIM>
-void vsl_b_write(vsl_b_ostream &os, const vbl_bounding_box<T, DIM> & p);
+template <class T, class DIM_>
+void vsl_b_write(vsl_b_ostream &os, const vbl_bounding_box_base<T, DIM_> & p);
 
 //: Binary load vbl_bounding_box from stream.
-template <class T, int DIM>
-void vsl_b_read(vsl_b_istream &is, vbl_bounding_box<T, DIM> & p);
+template <class T, class DIM_>
+void vsl_b_read(vsl_b_istream &is, vbl_bounding_box_base<T, DIM_> & p);
 
 //: Print human readable summary of object to a stream
-template <class T, int DIM>
-void vsl_print_summary(vcl_ostream& os,const vbl_bounding_box<T, DIM> & p);
+template <class T, class DIM_>
+void vsl_print_summary(vcl_ostream& os,const vbl_bounding_box_base<T, DIM_> & p);
 
 
 #endif // vbl_io_bounding_box_h
