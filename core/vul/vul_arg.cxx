@@ -24,8 +24,6 @@
 #include <vcl_cstdio.h> // sprintf()
 #include <vcl_iostream.h>
 #include <vcl_cstring.h>
-#include <vcl_algorithm.h>
-#include <vcl_iterator.h>
 #include <vcl_cstdlib.h> // exit()
 #include <vcl_cmath.h>   // floor()
 #include <vcl_vector.h>
@@ -278,8 +276,7 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
     args_[i]->set_ = false;
 
   // Generate shorter command name
-  const char * slashes = "\\/";
-  char * cmdname = argv[0]+strlen(argv[0]);
+  char * cmdname = argv[0]+vcl_strlen(argv[0]);
   while (cmdname > argv[0] && *cmdname != '/' && *cmdname != '\\') --cmdname ;
   if (*cmdname == '\\' || *cmdname == '/') cmdname++;
 
