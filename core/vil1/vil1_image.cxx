@@ -19,8 +19,8 @@ vcl_ostream& vil_image::print(vcl_ostream& s) const
   s << ", file format " << (fmt ? fmt : "unknown");
   s << ", components " << components();
   s << ", bits per component " << bits_per_component();
-#if 0
-  s << ", type " << component_format() << " -- " << pixel_type();
+#if 1
+  s << ", format " << vil_print(component_format());
 #else
   s << ", format "; switch (component_format()) {
   case VIL_COMPONENT_FORMAT_UNSIGNED_INT: s << "unsigned"; break;
