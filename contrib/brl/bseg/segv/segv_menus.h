@@ -28,6 +28,7 @@ class segv_menus
   SEGV_DLL_DATA static void beaudet_measure_callback();
   SEGV_DLL_DATA static void vd_edges_callback();
   SEGV_DLL_DATA static void regions_callback();
+  SEGV_DLL_DATA static void fit_lines_callback();
   SEGV_DLL_DATA static void read_xml_edges_callback();
   SEGV_DLL_DATA static void test_face_callback();
   SEGV_DLL_DATA static void test_digital_lines_callback();

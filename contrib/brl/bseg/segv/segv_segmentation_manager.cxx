@@ -19,6 +19,8 @@
 #include <sdet/sdet_detector.h>
 #include <sdet/sdet_harris_detector_params.h>
 #include <sdet/sdet_harris_detector.h>
+#include <sdet/sdet_fit_lines_params.h>
+#include <sdet/sdet_fit_lines.h>
 #include <gevd/gevd_clean_edgels.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_modifier.h>
@@ -77,6 +79,7 @@ void segv_segmentation_manager::init()
 {
   vgui_image_tableau_sptr itab = bgui_image_tableau_new();
   t2D_ = bgui_vtol2D_tableau_new(itab);
+  //  t2D_->set_edge_style(0.0, 0.0, 0.0, 2.0);
   vgui_viewer2D_tableau_sptr v2d = vgui_viewer2D_tableau_new(t2D_);
   vgui_shell_tableau_sptr shell = vgui_shell_tableau_new(v2d);
   this->add_child(shell);
@@ -148,6 +151,27 @@ segv_segmentation_manager::draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges,
             }
         }
     }
+  t2D_->post_redraw();
+}
+//-----------------------------------------------------------------------------
+//: Draw line segments on the tableau
+//-----------------------------------------------------------------------------
+void segv_segmentation_manager::
+draw_line_segments(vcl_vector<vgl_line_segment_2d<double> > const& segs)
+{
+  if (!t2D_)
+    return;
+  //  this->clear_display();
+  vgui_image_tableau_sptr itab = t2D_->get_image_tableau();
+  if (!itab)
+    {
+      vcl_cout << "In segv_segmentation_manager::draw_edges - null image tab\n";
+      return;
+    }
+  for (vcl_vector<vgl_line_segment_2d<double> >::const_iterator sit = segs.begin();
+       sit != segs.end(); sit++)
+      t2D_->add_line_segment(*sit);
+
   t2D_->post_redraw();
 }
 
@@ -314,16 +338,17 @@ void segv_segmentation_manager::vd_edges()
   this->clear_display();
   static bool agr = true;
   static sdet_detector_params dp;
-  dp.noise_multiplier=1.0;
+  static float nm = 2.0;
+  	
   vgui_dialog vd_dialog("VD Edges");
   vd_dialog.field("Gaussian sigma", dp.smooth);
-  vd_dialog.field("Noise Threshold", dp.noise_multiplier);
+  vd_dialog.field("Noise Threshold", nm);
   vd_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
   vd_dialog.checkbox("Agressive Closure", agr);
   vd_dialog.checkbox("Compute Junctions", dp.junctionp);
   if (!vd_dialog.ask())
     return;
-
+	dp.noise_multiplier=nm;	
   if (agr)
     dp.aggressive_junction_closure=1;
   else
@@ -345,10 +370,10 @@ void segv_segmentation_manager::regions()
   static bool agr = true;
   static bool residual = false;
   static sdet_detector_params dp;
-  dp.noise_multiplier=1.0;
+  static float nm = 1.0;
   vgui_dialog region_dialog("Edgel Regions");
   region_dialog.field("Gaussian sigma", dp.smooth);
-  region_dialog.field("Noise Threshold", dp.noise_multiplier);
+  region_dialog.field("Noise Threshold", nm);
   region_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
   region_dialog.checkbox("Agressive Closure", agr);
   region_dialog.checkbox("Compute Junctions", dp.junctionp);
@@ -356,6 +381,7 @@ void segv_segmentation_manager::regions()
   region_dialog.checkbox("Residual Image", residual);
   if (!region_dialog.ask())
     return;
+  dp.noise_multiplier=nm;
   if (agr)
     dp.aggressive_junction_closure=1;
   else
@@ -393,6 +419,45 @@ void segv_segmentation_manager::regions()
       itab->set_image(res_img);
     }
 }
+void segv_segmentation_manager::fit_lines()
+{
+  //  this->clear_display();
+  static bool agr = true;
+  static sdet_detector_params dp;
+  static sdet_fit_lines_params flp;
+  static float nm = 2.0;
+  vgui_dialog vd_dialog("Fit Lines");
+  vd_dialog.field("Gaussian sigma", dp.smooth);
+  vd_dialog.field("Noise Threshold", nm);
+  vd_dialog.field("Min Fit Length", flp.min_fit_length_);
+  vd_dialog.field("RMS Distance", flp.rms_distance_);
+  vd_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
+  vd_dialog.checkbox("Agressive Closure", agr);
+  vd_dialog.checkbox("Compute Junctions", dp.junctionp);
+  if (!vd_dialog.ask())
+    return;
+	dp.noise_multiplier=nm;
+  if (agr)
+    dp.aggressive_junction_closure=1;
+  else
+    dp.aggressive_junction_closure=0;
+
+  sdet_detector det(dp);
+  det.SetImage(img_);
+
+  det.DoContour();
+  vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
+  if(!edges)
+  {
+	  vcl_cout << "No edges to fit lines \n";
+	  return;
+  }
+  sdet_fit_lines fl(flp);
+  fl.set_edges(*edges);
+  fl.fit_lines();
+  this->draw_line_segments(fl.get_line_segs());
+}
+
 
 #ifdef HAS_XERCES
 void segv_segmentation_manager::read_xml_edges()

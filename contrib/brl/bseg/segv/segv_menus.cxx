@@ -63,6 +63,11 @@ void segv_menus::regions_callback()
   segv_segmentation_manager::instance()->regions();
 }
 
+void segv_menus::fit_lines_callback()
+{
+  segv_segmentation_manager::instance()->fit_lines();
+}
+
 #ifdef HAS_XERCES
 void segv_menus::read_xml_edges_callback()
 {
@@ -104,6 +109,7 @@ vgui_menu segv_menus::get_menu()
   menuedit.add("Beaudet", beaudet_measure_callback);
   menuedit.add("VD Edges", vd_edges_callback);
   menuedit.add("Regions", regions_callback);
+  menuedit.add("Line Segments", fit_lines_callback);
   menuedit.add("TestFace", test_face_callback);
   menuedit.add("TestDigitalCurves", test_digital_lines_callback);
   //Top level menu layout
