@@ -26,9 +26,9 @@ void vil3d_header_data::set_size(unsigned ni, unsigned nj,
                                  unsigned nk, unsigned nplanes)
 {
   ni_ = ni;
-	nj_ = nj;
-	nk_ = nk;
-	nplanes_ = nplanes;
+  nj_ = nj;
+  nk_ = nk;
+  nplanes_ = nplanes;
 }
 
 //: Define voxel size
@@ -56,7 +56,6 @@ vcl_string vil3d_header_data::is_a() const
 {
   return vcl_string("vil3d_header_data");
 }
-
 
 //: True if this is (or is derived from) class s
 bool vil3d_header_data::is_class(vcl_string const& s) const

@@ -14,10 +14,10 @@ SET( vil3d_sources ${vil3d_sources}
   vil3d_switch_axes.h
   vil3d_math.h
   vil3d_header_data.h vil3d_header_data.cxx
-	vil3d_file_format.h vil3d_file_format.cxx
-	vil3d_load.h vil3d_load.cxx
+  vil3d_file_format.h vil3d_file_format.cxx
+  vil3d_load.h vil3d_load.cxx
 
-	file_formats/vil3d_gipl_format.h file_formats/vil3d_gipl_format.cxx
+  file_formats/vil3d_gipl_format.h file_formats/vil3d_gipl_format.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vil3d_sources)
