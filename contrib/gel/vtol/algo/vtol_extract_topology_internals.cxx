@@ -1,4 +1,4 @@
-#include <vtol/algo/vtol_extract_topology_internals.h>
+#include "vtol_extract_topology_internals.h"
 #include <vbl/vbl_smart_ptr.txx>
 
 // These are instantiations of internal classes, so we don't take the
