@@ -1,3 +1,6 @@
+#ifndef rgrl_matcher_pseudo_txx_
+#define rgrl_matcher_pseudo_txx_
+
 #include "rgrl_matcher_pseudo.h"
 #include "rgrl_feature_face_region.h"
 #include "rgrl_feature_trace_region.h"
@@ -8,23 +11,24 @@
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vil/vil_bilin_interp.h>
+#include <vcl_cassert.h>
 
 const static unsigned verbose_ = 2;
 const static double max_response_value = 1.0e30;
-  
+
 
 template <class PixelType>
 inline
 bool
-in_range( vil_image_view< PixelType > const& image, 
+in_range( vil_image_view< PixelType > const& image,
           rgrl_mask_sptr const& mask,
           vnl_double_2 const& location )
 {
-  if( mask && !mask->inside( location.as_ref() ) )
+  if ( mask && !mask->inside( location.as_ref() ) )
       return false;
 
   if ( location[ 0 ] < 0 || location[ 0 ] > image.ni()-1 ||
-       location[ 1 ] < 0 || location[ 1 ] > image.nj()-1 ) 
+       location[ 1 ] < 0 || location[ 1 ] > image.nj()-1 )
     return false;
 
   return true;
@@ -33,11 +37,11 @@ in_range( vil_image_view< PixelType > const& image,
 template <class PixelType>
 inline
 bool
-in_range( vil_image_view< PixelType > const& image, 
+in_range( vil_image_view< PixelType > const& image,
           rgrl_mask_sptr const& mask,
           vnl_vector< double > const& location )
 {
-  if( mask && !mask->inside( location ) )
+  if ( mask && !mask->inside( location ) )
       return false;
 
   return true;
@@ -67,7 +71,6 @@ compute_matches( rgrl_feature_set const&    from_set,
      rgrl_transformation const& current_xform,
      rgrl_scale const&          current_scale ) const
 {
-
   typedef vcl_vector<rgrl_feature_sptr> f_vector_type;
   typedef f_vector_type::iterator f_iterator_type;
 
@@ -76,116 +79,117 @@ compute_matches( rgrl_feature_set const&    from_set,
 
   //  Get the from image features in the current view
   f_vector_type from = from_set.features_in_region( current_view.region() );
-  DebugMacro (1,  " compute_matches : from.size() = " << from.size() << "\n");
-  DebugMacro_abv(1,"geometric scale = " << current_scale.geometric_scale()<< "\n" );
+  DebugMacro (1,  " compute_matches : from.size() = " << from.size() << '\n' );
+  DebugMacro_abv(1,"geometric scale = " << current_scale.geometric_scale()<< '\n' );
 
-  //  Vector for mapped pixels 
+  //  Vector for mapped pixels
   rgrl_mapped_pixel_vector_type  mapped_pixels;
   mapped_pixels.reserve( from.size() );
-  
+
   //  Vectors for matched features and weights.
   f_vector_type matched_to_features;
   vcl_vector<double> match_weights;
-  
+
   // Match each feature...
-  for ( f_iterator_type fitr = from.begin(); fitr != from.end(); ++fitr ) 
-    {
-      // Match by searching in the tangent space of the
-      // transformed from image feature.  The match_weights are to be
-      // treated later as similarity weights
-      matched_to_features.clear();
-      match_weights.clear();
-      
-      // for debug purpose
-      // double x = (*fitr)->location()[0];
-      // double y = (*fitr)->location()[1];      
-      
-      // Map the feature location using the current transformation
-      rgrl_feature_sptr mapped_feature = (*fitr)->transform( current_xform );
+  for ( f_iterator_type fitr = from.begin(); fitr != from.end(); ++fitr )
+  {
+    // Match by searching in the tangent space of the
+    // transformed from image feature.  The match_weights are to be
+    // treated later as similarity weights
+    matched_to_features.clear();
+    match_weights.clear();
 
-      { // Begin debugging
-        if ( (*fitr)->is_type( rgrl_feature_trace_region::type_id() ) )
-          DebugMacro_abv(1, "\n\nfrom :\n" << (*fitr)->location()
-                         << " normal: " 
-                         << rgrl_cast<rgrl_feature_trace_region *> ( *fitr )->normal_subspace().get_column(0)
-                         << "\nmapped :\n" << mapped_feature->location()
-                         << rgrl_cast<rgrl_feature_trace_region *> ( mapped_feature )->normal_subspace().get_column(0) <<"\n" );
-        else if ( (*fitr)->is_type( rgrl_feature_face_region::type_id() ) )
-          DebugMacro_abv(1, "\n\nfrom :\n" << (*fitr)->location() 
-                         << " normal: " 
-                         << rgrl_cast<rgrl_feature_face_region *> ( *fitr )->normal()
-                         << "\nmapped :\n" << mapped_feature->location()
-                         << " normal: " 
-                         << rgrl_cast<rgrl_feature_face_region *> ( mapped_feature )->normal()<<"\n");
-        else if ( (*fitr)->is_type( rgrl_feature_point_region::type_id() ) ) 
-          DebugMacro_abv(1, "\n\nfrom :\n" << (*fitr)->location() 
-                         << "\nmapped :\n" << mapped_feature->location()<<"\n");
-      } // End debugging
+    // for debug purpose
+    // double x = (*fitr)->location()[0];
+    // double y = (*fitr)->location()[1];
 
-      // Check if the mapped feature is inside the valid region.
-      // If the location is not inside the valid region
-      // set the weight = 0
-      if( !in_range( to_image_, to_mask_, mapped_feature->location() ) ) {
-        //  Make a dummy vector of intensity weights.
-        // vcl_vector< double > dummy_intensity_weights( 0 ) //CT: not needed now;
-        vcl_vector< double > match_weights( 0 );
-        
-        //  Add the feature and its matches and weights to the match set
-        matches_sptr
-          -> add_feature_matches_and_weights( *fitr, mapped_feature, matched_to_features,
-                                              match_weights );
- 
-       DebugMacro_abv(1, " skip match from: " << (*fitr)->location() 
-                       << ", to: " << mapped_feature->location() << "\n" );
+    // Map the feature location using the current transformation
+    rgrl_feature_sptr mapped_feature = (*fitr)->transform( current_xform );
 
-        continue;
-      }
+    { // Begin debugging
+      if ( (*fitr)->is_type( rgrl_feature_trace_region::type_id() ) )
+        DebugMacro_abv(1, "\n\nfrom :\n" << (*fitr)->location()
+                       << " normal: "
+                       << rgrl_cast<rgrl_feature_trace_region *> ( *fitr )->normal_subspace().get_column(0)
+                       << "\nmapped :\n" << mapped_feature->location()
+                       << rgrl_cast<rgrl_feature_trace_region *> ( mapped_feature )->normal_subspace().get_column(0) <<'\n' );
+      else if ( (*fitr)->is_type( rgrl_feature_face_region::type_id() ) )
+        DebugMacro_abv(1, "\n\nfrom :\n" << (*fitr)->location()
+                       << " normal: "
+                       << rgrl_cast<rgrl_feature_face_region *> ( *fitr )->normal()
+                       << "\nmapped :\n" << mapped_feature->location()
+                       << " normal: "
+                       << rgrl_cast<rgrl_feature_face_region *> ( mapped_feature )->normal()<<'\n');
+      else if ( (*fitr)->is_type( rgrl_feature_point_region::type_id() ) )
+        DebugMacro_abv(1, "\n\nfrom :\n" << (*fitr)->location()
+                       << "\nmapped :\n" << mapped_feature->location()<<'\n');
+    } // End debugging
 
-      // Map the intensities of the pixels in the from image
-      // surrounding the from image feature.  Form a vector of pairs,
-      // with each pair containing a mapped location and the
-      // associated intensity.
-      mapped_pixels.clear();
-     
-      this -> map_region_intensities( current_xform, (*fitr), mapped_pixels );
-
-      // if there is no mapped pixels in the valid region, no matcher is created
-      if ( mapped_pixels.size() == 0 ) {
-        //  Make a dummy vector of intensity weights.
-        // vcl_vector< double > dummy_intensity_weights( 0 ); //CT: not needed now
-        vcl_vector< double > match_weights( 0 );
-        
-        //  Add the feature and its matches and weights to the match set
-        matches_sptr
-          -> add_feature_matches_and_weights( *fitr, mapped_feature, matched_to_features,
-                                              match_weights );
-        DebugMacro(3, " from point : " << (*fitr)->location() << " to point : " << mapped_feature->location() << " doesn't have proper matches \n");
-        continue;
-      }
-
-      this -> match_mapped_region( mapped_feature, mapped_pixels, current_scale,
-           matched_to_features, match_weights );
-      
+    // Check if the mapped feature is inside the valid region.
+    // If the location is not inside the valid region
+    // set the weight = 0
+    if ( !in_range( to_image_, to_mask_, mapped_feature->location() ) ) {
       //  Make a dummy vector of intensity weights.
-      // vcl_vector< double > dummy_intensity_weights( match_weights.size(), 1.0 );
+      // vcl_vector< double > dummy_intensity_weights( 0 ) //CT: not needed now;
+      vcl_vector< double > match_weights( 0 );
 
       //  Add the feature and its matches and weights to the match set
-      matches_sptr -> add_feature_matches_and_weights( *fitr, mapped_feature, matched_to_features,
-              match_weights );
+      matches_sptr
+        -> add_feature_matches_and_weights( *fitr, mapped_feature, matched_to_features,
+                                            match_weights );
+
+     DebugMacro_abv(1, " skip match from: " << (*fitr)->location()
+                     << ", to: " << mapped_feature->location() << '\n' );
+
+      continue;
     }
-  
-  DebugMacro(3, "matches set from size = " << matches_sptr->from_size() <<"\n");
-  
+
+    // Map the intensities of the pixels in the from image
+    // surrounding the from image feature.  Form a vector of pairs,
+    // with each pair containing a mapped location and the
+    // associated intensity.
+    mapped_pixels.clear();
+
+    this -> map_region_intensities( current_xform, (*fitr), mapped_pixels );
+
+    // if there is no mapped pixels in the valid region, no matcher is created
+    if ( mapped_pixels.size() == 0 ) {
+      //  Make a dummy vector of intensity weights.
+      // vcl_vector< double > dummy_intensity_weights( 0 ); //CT: not needed now
+      vcl_vector< double > match_weights( 0 );
+
+      //  Add the feature and its matches and weights to the match set
+      matches_sptr
+        -> add_feature_matches_and_weights( *fitr, mapped_feature, matched_to_features,
+                                            match_weights );
+      DebugMacro(3, " from point : " << (*fitr)->location()
+                   << " to point : " << mapped_feature->location() << " doesn't have proper matches\n");
+      continue;
+    }
+
+    this -> match_mapped_region( mapped_feature, mapped_pixels, current_scale,
+         matched_to_features, match_weights );
+
+    //  Make a dummy vector of intensity weights.
+    // vcl_vector< double > dummy_intensity_weights( match_weights.size(), 1.0 );
+
+    //  Add the feature and its matches and weights to the match set
+    matches_sptr -> add_feature_matches_and_weights( *fitr, mapped_feature, matched_to_features,
+            match_weights );
+  }
+
+  DebugMacro(3, "matches set from size = " << matches_sptr->from_size() <<'\n');
+
   typedef rgrl_match_set::from_iterator       from_iter;
   typedef from_iter::to_iterator              to_iter;
   for ( from_iter fitr = matches_sptr->from_begin(); fitr !=  matches_sptr->from_end(); ++fitr ) {
-    if( fitr.size() == 0 )  continue;
+    if ( fitr.size() == 0 )  continue;
 
     rgrl_feature_sptr mapped_from = fitr.mapped_from_feature();
-    for( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
+    for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
       rgrl_feature_sptr to = titr.to_feature();
-      DebugMacro(3, mapped_from->location()[0]<<" "<<mapped_from->location()[1]<<" "<<
-            to->location()[0]<<" "<<to->location()[1]<<"\n");
+      DebugMacro(3, mapped_from->location()[0]<<' '<<mapped_from->location()[1]<<' '<<
+            to->location()[0]<<' '<<to->location()[1]<<'\n');
     }
   }
 
@@ -203,26 +207,26 @@ map_region_intensities( rgrl_transformation      const& trans,
   static vnl_vector<double> spacing_ratio( 2, 1.0 );
 
   if ( feature_sptr -> is_type( rgrl_feature_face_region::type_id() ) )
-    {
-      rgrl_feature_face_region * face_ptr = 
-  rgrl_cast<rgrl_feature_face_region *> ( feature_sptr );
-      this -> map_region_intensities( face_ptr -> pixel_coordinates_ratio( spacing_ratio ), trans,
-              feature_sptr, mapped_pixels );
-    }
+  {
+    rgrl_feature_face_region * face_ptr =
+        rgrl_cast<rgrl_feature_face_region *> ( feature_sptr );
+    this -> map_region_intensities( face_ptr -> pixel_coordinates_ratio( spacing_ratio ), trans,
+            feature_sptr, mapped_pixels );
+  }
   else if ( feature_sptr -> is_type( rgrl_feature_trace_region::type_id() ))
-    {
-      rgrl_feature_trace_region * trace_ptr = 
-        rgrl_cast<rgrl_feature_trace_region *> ( feature_sptr );
-      this -> map_region_intensities( trace_ptr -> pixel_coordinates_ratio( spacing_ratio ), trans,
-                                      feature_sptr, mapped_pixels );
-    }
-  else // Assuming feature_point_region 
-    {
-      rgrl_feature_point_region * point_ptr = 
-        rgrl_cast<rgrl_feature_point_region *> ( feature_sptr );
-      this -> map_region_intensities( point_ptr -> pixel_coordinates_ratio( spacing_ratio ), trans,
-                                      feature_sptr, mapped_pixels );
-    }
+  {
+    rgrl_feature_trace_region * trace_ptr =
+      rgrl_cast<rgrl_feature_trace_region *> ( feature_sptr );
+    this -> map_region_intensities( trace_ptr -> pixel_coordinates_ratio( spacing_ratio ), trans,
+                                    feature_sptr, mapped_pixels );
+  }
+  else // Assuming feature_point_region
+  {
+    rgrl_feature_point_region * point_ptr =
+      rgrl_cast<rgrl_feature_point_region *> ( feature_sptr );
+    this -> map_region_intensities( point_ptr -> pixel_coordinates_ratio( spacing_ratio ), trans,
+                                    feature_sptr, mapped_pixels );
+  }
 }
 
 
@@ -234,9 +238,9 @@ map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
                         rgrl_feature_sptr                    feature_sptr,
                         rgrl_mapped_pixel_vector_type   & mapped_pixels) const
 {
-  DebugMacro(3,"   number of points around the from point: " << pixel_locations.size() <<"\n");
-  // check # of pixels 
-  if( pixel_locations.empty() )  return;
+  DebugMacro(3,"   number of points around the from point: " << pixel_locations.size() <<'\n');
+  // check # of pixels
+  if ( pixel_locations.empty() )  return;
 
   unsigned dim = feature_sptr -> location() . size();
   assert ( dim == 2 ); // so far vil force it to be 2D
@@ -246,21 +250,21 @@ map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
 
   // reserve space
   mapped_pixels.reserve( pixel_locations.size() );
-  
+
   double intensity;
   for ( unsigned int i=0; i<pixel_locations.size(); ++i )
   {
     //  Copy the int pixel locations to doubles.  Yuck.
     for ( unsigned int j=0; j<dim; ++j )  pixel_loc_dbl[j] = pixel_locations[i][j];
     // Check if the location is inside the valid region
-    if( !in_range( from_image_, from_mask_, pixel_loc_dbl ) )
+    if ( !in_range( from_image_, from_mask_, pixel_loc_dbl ) )
       continue;
-    
+
     trans.map_location( pixel_loc_dbl.as_ref(), mapped_pixel.location.as_ref().non_const() );
     // Check if the location is inside the valid region
-    if( !in_range( to_image_, to_mask_, mapped_pixel.location ) )
+    if ( !in_range( to_image_, to_mask_, mapped_pixel.location ) )
       continue;
-    
+
     //  Extract the intensity.  This is where we need ITK.
     // only work for one plane so far
     assert ( from_image_.nplanes() == 1 );
@@ -287,7 +291,7 @@ map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
 //    if ( X[ 0 ][ 0 ] == 0 )
 //      return 0.0;
 
-//    // find r that minimizes s 
+//    // find r that minimizes s
 //    // ds = 2ar + b = 0
 //    // r = -b / 2a
 //    return - X[ 1 ][ 0 ] / ( 2 * X[ 0 ][ 0 ] ) ;
@@ -307,17 +311,17 @@ map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
 //    if ( idx1 == 0 ) idx1 = 1;
 //    if ( idx2 == 0 ) idx2 = 1;
 
-//    if ( idx1 == (int)responses.size() - 1 ) 
+//    if ( idx1 == (int)responses.size() - 1 )
 //      idx1 = responses.size() - 2;
-//    if ( idx2 == (int)responses.size() - 1 ) 
+//    if ( idx2 == (int)responses.size() - 1 )
 //      idx2 = responses.size() - 2;
 
 //    // In 2D, I treat it as fitting a parabola in each direction ( d1
 //    // and d2 ), since we use the curvature along both direction to
 //    // approximate the paincipal curvature anyway.
 
-//    // let s be the similarity error, s = a r^2 + b r + c. 
-//    // Use points index-1, index, index+1 to model the 
+//    // let s be the similarity error, s = a r^2 + b r + c.
+//    // Use points index-1, index, index+1 to model the
 //    // parameters X = [a, b, c].
 //    vnl_matrix < double > A ( 3, 3 );
 //    vnl_matrix< double > S1 ( 3, 1 ) ;
@@ -344,8 +348,8 @@ sub_pixel( vcl_vector< double > const& responses )
 {
   assert( responses.size() == 3 );
 
-  // let s be the similarity error, s = a r^2 + b r + c. 
-  // Use points index-1, index, index+1 to model the 
+  // let s be the similarity error, s = a r^2 + b r + c.
+  // Use points index-1, index, index+1 to model the
   // parameters X = [a, b, c].
   vnl_matrix < double > A ( 3, 3 );
   vnl_matrix< double > S ( 3, 1 ) ;
@@ -369,11 +373,11 @@ sub_pixel( vcl_vector< double > const& responses )
     return 0;
   }
 
-  // find r that minimizes s 
+  // find r that minimizes s
   // ds = 2ar + b = 0
   // r = -b / 2a
   double best_index =  -X[ 1 ][ 0 ] / ( 2 * X[ 0 ][ 0 ] );
-  
+
   assert( best_index <= 1 && best_index >= -1 );
 
   return best_index;
@@ -381,7 +385,7 @@ sub_pixel( vcl_vector< double > const& responses )
 
 template <class PixelType>
 void
-rgrl_matcher_pseudo<PixelType> :: 
+rgrl_matcher_pseudo<PixelType> ::
 match_mapped_region( rgrl_feature_sptr                     mapped_feature,
                      rgrl_mapped_pixel_vector_type const & mapped_pixels,
                      rgrl_scale                    const & current_scale,
@@ -389,23 +393,23 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
                      vcl_vector< double >                & match_weights ) const
 {
   //  At this point, find the most similar feature within the given
-  //  scale. 
+  //  scale.
   unsigned int dim = mapped_feature -> location() . size();
- 
+
   const double scale_multiplier = 4;   // magic number.  frown.
-  
+
   vnl_matrix< double > normal_space;
 
   if ( mapped_feature -> is_type( rgrl_feature_face_region::type_id() ) )
   {
-    rgrl_feature_face_region * face_ptr = 
+    rgrl_feature_face_region * face_ptr =
     rgrl_cast<rgrl_feature_face_region *> ( mapped_feature );
     normal_space = vnl_matrix< double > ( dim, 1 );
     normal_space . set_column ( 0, face_ptr -> normal() );
   }
   else if ( mapped_feature->is_type( rgrl_feature_trace_region::type_id()) ) // RGRL_FEATURE_TRACE_REGION
   {
-    rgrl_feature_trace_region * trace_ptr = 
+    rgrl_feature_trace_region * trace_ptr =
     rgrl_cast<rgrl_feature_trace_region *> ( mapped_feature );
     normal_space = trace_ptr -> normal_subspace();
   }
@@ -427,9 +431,9 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
   //assert( normal_space.columns() == 1 );
   if ( normal_space.columns() == 1 ) {
     vnl_double_2 basis = normal_space.get_column(0);
-    
-    DebugMacro_abv(2, "normal basis :\n" << basis << "\n");
-    
+
+    DebugMacro_abv(2, "normal basis :\n" << basis << '\n');
+
     vcl_vector<double> responses( 2*max_offset+1, 0.0 );
     bool is_best_initialized = false;
     int best_offset = 0;
@@ -441,30 +445,30 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
 
     // Don't favor the max_offset_range. sometimes the region is
     // homogeneous, the responses might have same value
-    for( int abs_offset = 0; abs_offset <= max_offset; ++abs_offset ) 
-      {
-        int offset = abs_offset;
-        do {
-          int i = offset + max_offset;
-          responses[i] = this -> compute_response( mapped_location, mapped_pixels, basis * double(offset) );
-          
-          DebugMacro_abv(2," response at offset " << offset 
-                         << " ( i = " << i << " ) : " << responses[ i ] <<"\n" );
-            
-          // We don't want to use the responses of the offsets that shift
-          // the box across the boundary.
-          if ( (!is_best_initialized || responses[i] < min_response ) &&
-               responses[ i ] != max_response_value )
-            {
-              is_best_initialized = true;
-              min_response = responses[i];
-              best_offset = offset;
-            }
-          offset = -offset;
-        } while( offset < 0 );
-      }
+    for ( int abs_offset = 0; abs_offset <= max_offset; ++abs_offset )
+    {
+      int offset = abs_offset;
+      do {
+        int i = offset + max_offset;
+        responses[i] = this -> compute_response( mapped_location, mapped_pixels, basis * double(offset) );
 
-    DebugMacro_abv(2," the best offset = " << best_offset << "\n" ); 
+        DebugMacro_abv(2," response at offset " << offset
+                       << " ( i = " << i << " ) : " << responses[ i ] <<'\n' );
+
+        // We don't want to use the responses of the offsets that shift
+        // the box across the boundary.
+        if ( (!is_best_initialized || responses[i] < min_response ) &&
+             responses[ i ] != max_response_value )
+          {
+            is_best_initialized = true;
+            min_response = responses[i];
+            best_offset = offset;
+          }
+        offset = -offset;
+      } while ( offset < 0 );
+    }
+
+    DebugMacro_abv(2," the best offset = " << best_offset << '\n' );
 
     assert( is_best_initialized );
 
@@ -479,103 +483,102 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
     // The best_offset so far is constrained on the discrete space.
     // Now we use a parabola to model the similarity error
     // (responses) and find the position of the minimum response.
-      
-    // If the best offset is at the (+/-)max_offset, no need to 
+
+    // If the best offset is at the (+/-)max_offset, no need to
     // calculate the sub_offset.
     double sub_offset = 0;
-    if( best_offset != max_offset &&
+    if ( best_offset != max_offset &&
         best_offset != -max_offset )
       {
         // If one neighbor's response is not valid, calculate the second
         // derivative value of the other neighbor and sub_pixel is not necessary.
-        if( responses[ index - 1 ] == max_response_value )
+        if ( responses[ index - 1 ] == max_response_value )
           index ++;
         else if ( responses[ index + 1 ] == max_response_value )
           index--;
         else
-          {
-            vcl_vector< double > responses_for_sub_pixel( 3 );
-            responses_for_sub_pixel[ 0 ] = responses[ index - 1 ];
-            responses_for_sub_pixel[ 1 ] = responses[ index ];
-            responses_for_sub_pixel[ 2 ] = responses[ index + 1 ];
-            sub_offset = sub_pixel( responses_for_sub_pixel );
-            assert( sub_offset + best_offset >= -max_offset );
-            assert( sub_offset + best_offset <= max_offset );
-//                if( sub_offset + best_offset < -max_offset ) best_offset = -max_offset;
-//                if( sub_offset + best_offset > max_offset ) best_offset = max_offset;
-          }
+        {
+          vcl_vector< double > responses_for_sub_pixel( 3 );
+          responses_for_sub_pixel[ 0 ] = responses[ index - 1 ];
+          responses_for_sub_pixel[ 1 ] = responses[ index ];
+          responses_for_sub_pixel[ 2 ] = responses[ index + 1 ];
+          sub_offset = sub_pixel( responses_for_sub_pixel );
+          assert( sub_offset + best_offset >= -max_offset );
+          assert( sub_offset + best_offset <= max_offset );
+//        if ( sub_offset + best_offset < -max_offset ) best_offset = -max_offset;
+//        if ( sub_offset + best_offset > max_offset ) best_offset = max_offset;
+        }
       }
 
     match_location = mapped_location + basis * ( best_offset + sub_offset );
 
-    DebugMacro_abv(2,"best match :\n" << match_location << "\n" ); 
+    DebugMacro_abv(2,"best match :\n" << match_location << '\n' );
 
     // Here I use the second derivative at index to approximate the
     // second derivative at sub_pixel.
     // We need at least three valid values for calculating second derivatives.
-    // 
-    if ( index >0 && index < responses.size()-1 &&
-         responses[ index ] != max_response_value && 
+    //
+    if ( index >0 && index+1 < responses.size() &&
+         responses[ index ] != max_response_value &&
          index + 1 <= 2*max_offset &&
          index - 1 >= -2*max_offset &&
          responses[ index + 1 ] != max_response_value &&
          responses[ index - 1 ] != max_response_value )
-         second_derivative = vnl_math_abs( responses[ index-1 ] + responses[ index+1 ] 
+         second_derivative = vnl_math_abs( responses[ index-1 ] + responses[ index+1 ]
                                         - 2 * responses[ index ] ); // should be positive
     // If one neighbor's response is not valid, calculate the second
     // derivative value of the other neighbor
     else {
       second_derivative = 0;
-      DebugMacro_abv(2, "index=" << index << ", max_offset=" 
-                     << max_offset << ", responses[index-1]=" << responses[index-1] 
-                     << ", responses[index+1]=" << responses[index+1] << "\n" );
+      DebugMacro_abv(2, "index=" << index << ", max_offset="
+                     << max_offset << ", responses[index-1]=" << responses[index-1]
+                     << ", responses[index+1]=" << responses[index+1] << '\n' );
       DebugMacro_abv(2, "   neighbors' responses are not valid. Set the second_derivative = 0\n");
     }
-
   }
   else if ( normal_space.columns() == 2 ) { //For feature_point_region
     vnl_vector<double> basis1 = normal_space . get_column(0);
     vnl_vector<double> basis2 = normal_space . get_column(1);
-    
+
     vcl_vector<double> temp( 2*max_offset+1, 0.0 );
     vcl_vector< vcl_vector<double> > responses( 2*max_offset+1, temp );
 
     bool is_best_initialized = false;
     int best_off1 = 0, best_off2 = 0;
-    
+
     //  Find the offset along the basis direction giving the best
     //  response.
-    
+
     vnl_vector<double> mapped_location = mapped_feature -> location();
     for ( int off1 = -max_offset, i=0; off1 <= max_offset; ++off1, ++i )
       for ( int off2 = -max_offset, j=0; off2 <= max_offset; ++off2, ++j )
-        {
-          responses[i][j] = this -> compute_response( mapped_location, mapped_pixels, 
-                                                      basis1 * off1 + basis2 * off2 );
-          
-          if ( ( !is_best_initialized || responses[i][j] < min_response ) 
-               && responses[i][j] != max_response_value )
-            {
-              is_best_initialized = true;
-              min_response = responses[i][j];
-              best_off1 = off1;
-              best_off2 = off2;
-            }
-        }
-    
+      {
+        responses[i][j] = this -> compute_response( mapped_location, mapped_pixels,
+                                                    basis1 * off1 + basis2 * off2 );
+
+        if ( ( !is_best_initialized || responses[i][j] < min_response )
+             && responses[i][j] != max_response_value )
+          {
+            is_best_initialized = true;
+            min_response = responses[i][j];
+            best_off1 = off1;
+            best_off2 = off2;
+          }
+      }
+
     assert( is_best_initialized );
-    
+
     //  Evaluate the second derivative at the peak.  If the
     //  peak occurrence is on the boundary, compute the second
     //  derivative based on one step in from the boundary.
-    
+
     int idx1 = 0, idx2 = 0;   // indices into the array of responses
     int deriv_loc1 = best_off1;
     if ( deriv_loc1 == -max_offset ) ++deriv_loc1;
     else if ( deriv_loc1 == max_offset ) --deriv_loc1;
     idx1 = deriv_loc1 + max_offset;
     idx2 = best_off2 + max_offset;
-    
+
     // The best_offset so far is constrained on the discrete space.
     // Now we use a parabola to model the similarity error
     // (responses) and find the position of the minimum response.
@@ -583,65 +586,65 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
     // the convenience. Since it's only an approximation in one grid,
     // I assume this approximation is good enough.
     double sub_offset1;
-    
-    if( best_off1 == max_offset || best_off1 == -max_offset )
+
+    if ( best_off1 == max_offset || best_off1 == -max_offset )
       sub_offset1 = best_off1;
-    else if( responses[ idx1 - 1 ][ idx2 ] == max_response_value ||
+    else if ( responses[ idx1 - 1 ][ idx2 ] == max_response_value ||
              responses[ idx1 + 1 ][ idx2 ] == max_response_value )
       {
         sub_offset1 = idx1 - max_offset;
       }
     else
-      {
-        vcl_vector< double > responses_for_sub_pixel( 3 );
-        responses_for_sub_pixel[ 0 ] = responses[ idx1 - 1 ][ idx2 ];
-        responses_for_sub_pixel[ 1 ] = responses[ idx1 ][ idx2 ];
-        responses_for_sub_pixel[ 2 ] = responses[ idx1 + 1 ][ idx2 ];
-        sub_offset1 = sub_pixel( responses_for_sub_pixel ) + idx1 - max_offset;
-        // the sub_pixel here is used only for interpolation
-        // if it's outside
-        if ( sub_offset1 < -max_offset ) sub_offset1 = -max_offset;
-        if ( sub_offset1 > max_offset ) sub_offset1 = max_offset;
-        DebugMacro_abv(2, " sub_offset1 = " << sub_offset1 << " in [ " 
-                       << -max_offset << " , " << max_offset << " ] " <<"\n");
-      }
-    
-    double second_d1 = vnl_math_abs( responses[ idx1-1 ][ idx2 ] + responses[ idx1+1 ][ idx2 ] 
+    {
+      vcl_vector< double > responses_for_sub_pixel( 3 );
+      responses_for_sub_pixel[ 0 ] = responses[ idx1 - 1 ][ idx2 ];
+      responses_for_sub_pixel[ 1 ] = responses[ idx1 ][ idx2 ];
+      responses_for_sub_pixel[ 2 ] = responses[ idx1 + 1 ][ idx2 ];
+      sub_offset1 = sub_pixel( responses_for_sub_pixel ) + idx1 - max_offset;
+      // the sub_pixel here is used only for interpolation
+      // if it's outside
+      if ( sub_offset1 < -max_offset ) sub_offset1 = -max_offset;
+      if ( sub_offset1 > max_offset ) sub_offset1 = max_offset;
+      DebugMacro_abv(2, " sub_offset1 = " << sub_offset1 << " in [ "
+                     << -max_offset << " , " << max_offset << " ]\n");
+    }
+
+    double second_d1 = vnl_math_abs( responses[ idx1-1 ][ idx2 ] + responses[ idx1+1 ][ idx2 ]
                                      - 2 * responses[ idx1 ][ idx2 ] );
-    
+
     int deriv_loc2 = best_off2;
     if ( deriv_loc2 == -max_offset ) ++deriv_loc2;
     else if ( deriv_loc2 == max_offset ) --deriv_loc2;
     idx2 = deriv_loc2 + max_offset;
     idx1 = best_off1 + max_offset;
     double sub_offset2;
-    if( best_off2 == max_offset || best_off2 == -max_offset )
+    if ( best_off2 == max_offset || best_off2 == -max_offset )
       sub_offset2 = best_off2;
-    else if( responses[ idx1 ][ idx2 - 1 ] == max_response_value ||
+    else if ( responses[ idx1 ][ idx2 - 1 ] == max_response_value ||
              responses[ idx1 ][ idx2 + 1 ] == max_response_value )
       {
         sub_offset2 = idx2 - max_offset;
       }
     else
-      {
-        vcl_vector< double > responses_for_sub_pixel( 3 );
-        responses_for_sub_pixel[ 0 ] = responses[ idx1 ][ idx2 - 1 ];
-        responses_for_sub_pixel[ 1 ] = responses[ idx1 ][ idx2 ];
-        responses_for_sub_pixel[ 2 ] = responses[ idx1 ][ idx2 + 1 ];
-        sub_offset2 = sub_pixel( responses_for_sub_pixel ) + idx2 - max_offset;
-        if ( sub_offset2 < -max_offset ) sub_offset2 = -max_offset;
-        if ( sub_offset2 > max_offset ) sub_offset2 = max_offset;
+    {
+      vcl_vector< double > responses_for_sub_pixel( 3 );
+      responses_for_sub_pixel[ 0 ] = responses[ idx1 ][ idx2 - 1 ];
+      responses_for_sub_pixel[ 1 ] = responses[ idx1 ][ idx2 ];
+      responses_for_sub_pixel[ 2 ] = responses[ idx1 ][ idx2 + 1 ];
+      sub_offset2 = sub_pixel( responses_for_sub_pixel ) + idx2 - max_offset;
+      if ( sub_offset2 < -max_offset ) sub_offset2 = -max_offset;
+      if ( sub_offset2 > max_offset ) sub_offset2 = max_offset;
 
-        DebugMacro_abv(2, " sub_offset2 = " << sub_offset2 << " in [ "
-                       << -max_offset << " , " << max_offset << " ] " << "\n"); 
-      }
-    
-    double second_d2 = vnl_math_abs( responses[ idx1 ][ idx2-1 ] + responses[ idx1 ][ idx2+1 ] 
+      DebugMacro_abv(2, " sub_offset2 = " << sub_offset2 << " in [ "
+                     << -max_offset << " , " << max_offset << " ]\n");
+    }
+
+    double second_d2 = vnl_math_abs( responses[ idx1 ][ idx2-1 ] + responses[ idx1 ][ idx2+1 ]
                                      - 2 * responses[ idx1 ][ idx2 ] );
-    
+
     second_derivative = vnl_math_min( second_d1, second_d2 );
     match_location = mapped_location + basis1 * sub_offset1 + basis2 * sub_offset2;
-    DebugMacro_abv(1, "best match :\n" << match_location << "\n" );
+    DebugMacro_abv(1, "best match :\n" << match_location << '\n' );
   }
   else {
     vcl_cerr << "Code doesn't handle a normal subspace of greater than two dimenions.\n";
@@ -652,38 +655,39 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
   match_weights . clear();
   rgrl_feature_sptr mf_ptr;
   if ( mapped_feature -> is_type( rgrl_feature_face_region::type_id() ) )
-    {
-      rgrl_feature_face_region * face_ptr = 
-  rgrl_cast<rgrl_feature_face_region *> ( mapped_feature );
-      mf_ptr = new rgrl_feature_face_region( match_location, face_ptr -> normal() );
-    }
+  {
+    rgrl_feature_face_region * face_ptr =
+      rgrl_cast<rgrl_feature_face_region *> ( mapped_feature );
+    mf_ptr = new rgrl_feature_face_region( match_location, face_ptr -> normal() );
+  }
   else if (  mapped_feature -> is_type( rgrl_feature_trace_region::type_id() ) )
-    {
-      rgrl_feature_trace_region * trace_ptr = 
-  rgrl_cast<rgrl_feature_trace_region *> ( mapped_feature );
-      mf_ptr = new rgrl_feature_trace_region( match_location, trace_ptr -> tangent() );
-    }
+  {
+    rgrl_feature_trace_region * trace_ptr =
+      rgrl_cast<rgrl_feature_trace_region *> ( mapped_feature );
+    mf_ptr = new rgrl_feature_trace_region( match_location, trace_ptr -> tangent() );
+  }
   else { //rgrl_feature_point_region
-    rgrl_feature_point_region * point_ptr = 
-      rgrl_cast<rgrl_feature_point_region *> ( mapped_feature );
     mf_ptr = new rgrl_feature_point_region( match_location );
   }
 
   matched_to_features . push_back( mf_ptr );
   double weight = second_derivative / (1.0 + min_response);
-  /* other options for weights
-  //double epsilon = 1e-16;
-  //double weight = min_response/(second_derivative + epsilon);
-  //double weight = 1;
-  */
+#if 0 // other options for weights
+  double epsilon = 1e-16;
+  double weight = min_response/(second_derivative + epsilon);
+  double weight = 1;
+#endif // 0
 
-  match_weights.push_back( weight ); 
-  DebugMacro(3, "Signature error for best match :\n" << weight <<", second_derivative = "<< second_derivative<<" min_response = "<<min_response<<" old wgt = "<<second_derivative / (1.0 + min_response)<<"\n");
+  match_weights.push_back( weight );
+  DebugMacro(3, "Signature error for best match :\n" << weight
+             <<", second_derivative = "<< second_derivative
+             <<" min_response = "<<min_response
+             <<" old wgt = "<<second_derivative / (1.0 + min_response)<<'\n');
 }
 
 template <class PixelType>
-double 
-rgrl_matcher_pseudo<PixelType> :: 
+double
+rgrl_matcher_pseudo<PixelType> ::
 compute_response( vnl_double_2            const& mapped_location,
                   rgrl_mapped_pixel_vector_type const& mapped_pixels,
                   vnl_double_2            const& shift ) const
@@ -700,11 +704,11 @@ compute_response( vnl_double_2            const& mapped_location,
   a.reserve( mapped_pixels.size() );
   b.reserve( mapped_pixels.size() );
   weights.reserve( mapped_pixels.size() );
-  for ( unsigned i = 0; i < mapped_pixels.size(); ++i ) { 
+  for ( unsigned i = 0; i < mapped_pixels.size(); ++i ) {
     vnl_double_2 location = mapped_pixels[i].location + shift;
     //vcl_cout << " position : " << mapped_pixels[ i ].location << "  shift " << shift << vcl_endl;
     // Check if the location is inside the valid region
-    if( !in_range( to_image_, to_mask_, location ) )
+    if ( !in_range( to_image_, to_mask_, location ) )
       return max_response_value;
 
     intensity = vil_bilin_interp(to_image_,  location[0], location[1] );
@@ -715,6 +719,6 @@ compute_response( vnl_double_2            const& mapped_location,
 
   //  call the response function
   return evaluator_->evaluate( a, b, weights );
-  
-  
 }
+
+#endif // rgrl_matcher_pseudo_txx_
