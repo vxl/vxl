@@ -1,5 +1,4 @@
-//--*-c++-*--
-// This is brl/bseg/strk/bmrf_network_builder.cxx
+// This is brl/bseg/bmrf/bmrf_network_builder.cxx
 #include "bmrf_network_builder.h"
 //:
 // \file
@@ -12,12 +11,8 @@
 #include <vgl/vgl_point_2d.h>
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_point_2d.h>
-#include <vsol/vsol_polyline_2d.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vtol/vtol_edge_2d.h>
-#if 0
-#include <brip/brip_float_ops.h>
-#endif
 #include <bmrf/bmrf_epi_point.h>
 #include <bmrf/bmrf_epi_seg.h>
 #include <bmrf/bmrf_node.h>
@@ -85,7 +80,7 @@ static double line_distance(vgl_line_segment_2d<double> const& seg,
 
 //:conversion from image coordinates to epipolar coordinates
 void bmrf_network_builder::epi_coords(const double u, const double v,
-                                       double& alpha, double& s)
+                                      double& alpha, double& s)
 {
   vgl_point_2d<double> p(u, v);
   vgl_line_segment_2d<double> el(epi_, p);
@@ -95,14 +90,15 @@ void bmrf_network_builder::epi_coords(const double u, const double v,
   alpha = (ang-alpha_min_)*alpha_inv_;
   s = line_distance(el, p);
 }
+
 void bmrf_network_builder::set_image(vil_image_view<float> const& image)
 {
   image_=image;
   network_valid_ = false;
 }
-void
-bmrf_network_builder::set_edges(int frame,
-                                 vcl_vector<vtol_edge_2d_sptr> const & edges)
+
+void bmrf_network_builder::set_edges(int frame,
+                                     vcl_vector<vtol_edge_2d_sptr> const& edges)
 
 {
   edges_.clear();
@@ -303,32 +299,32 @@ bool bmrf_network_builder::compute_segments()
   vcl_vector<vdgl_digital_curve_sptr> dcs;
   for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges_.begin();
        eit != edges_.end(); eit++)
-    {
-      vsol_curve_2d_sptr c = (*eit)->curve();
-      vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
-      if (!dc)
-        continue;
-      //:see if the curve is inside the epipolar wedge
-     if (this->inside_epipolar_wedge(dc))
-       dcs.push_back(dc);
-    }
+  {
+    vsol_curve_2d_sptr c = (*eit)->curve();
+    vdgl_digital_curve_sptr dc = c->cast_to_digital_curve();
+    if (!dc)
+      continue;
+    //:see if the curve is inside the epipolar wedge
+   if (this->inside_epipolar_wedge(dc))
+     dcs.push_back(dc);
+  }
   for (vcl_vector<vdgl_digital_curve_sptr>::iterator cit = dcs.begin();
        cit != dcs.end(); cit++)
+  {
+    vcl_vector<bmrf_epi_seg_sptr> epi_segs;
+    if (!this->extract_alpha_segments((*cit), epi_segs))
+      continue;
+    // For later computations, the epi_segs are sorted according
+    // to min and max s values.  This ordering enables efficient
+    // searching for nearby segments.
+    int k=0;
+    for (vcl_vector<bmrf_epi_seg_sptr>::iterator sit = epi_segs.begin();
+         sit != epi_segs.end(); sit++, k++ )
     {
-      vcl_vector<bmrf_epi_seg_sptr> epi_segs;
-      if (!this->extract_alpha_segments((*cit), epi_segs))
-        continue;
-      // For later computations, the epi_segs are sorted according
-      // to min and max s values.  This ordering enables efficient
-      // searching for nearby segments.
-      int k=0;
-      for (vcl_vector<bmrf_epi_seg_sptr>::iterator sit = epi_segs.begin();
-           sit != epi_segs.end(); sit++, k++ )
-        {
-          min_segments.push_back(*sit);
-          max_segments.push_back(*sit);
-        }
+      min_segments.push_back(*sit);
+      max_segments.push_back(*sit);
     }
+  }
   //sort the segments according to min epipolar distance
   vcl_sort(min_segments.begin(),
            min_segments.end(),
@@ -350,7 +346,7 @@ bool bmrf_network_builder::compute_segments()
 //: the map between epipolar coordinates and image coordinates
 //  returns false if the image coordinates are out of bounds
 bool bmrf_network_builder::image_coords(const double a, const double s,
-                                         double& u, double& v)
+                                        double& u, double& v)
 {
   u = 0; v = 0;
   if (!image_)
@@ -509,6 +505,8 @@ double bmrf_network_builder::radius(const double s)
 {
   return (Ns_*s)/smax_;
 }
+
+#if 0 // This function is not being used
 //=====================================================================
 //: Tests if a segment has an alpha range that intersects [min_a, max_a]
 //  Also returns the bounds of the intersection, [as, ae].
@@ -533,6 +531,7 @@ static bool inside_range(const double min_a, const double max_a,
     ae = seg_max_a;
   return true;
 }
+#endif // 0
 
 //:find the closest left bounding segment s value
 double bmrf_network_builder::
@@ -546,16 +545,16 @@ find_left_s(const double a, const double s,
   double ds_min = vnl_numeric_traits<double>::maxval;
   for (vcl_vector<bmrf_epi_seg_sptr>::const_iterator sit = cand.begin();
        sit != cand.end(); sit++)
+  {
+    if (a<(*sit)->min_alpha()||a>(*sit)->max_alpha())
+      continue;
+    double xs = (*sit)->s(a);
+    if (xs<s)
     {
-      if (a<(*sit)->min_alpha()||a>(*sit)->max_alpha())
-        continue;
-      double xs = (*sit)->s(a);
-      if (xs<s)
-      {
-        double ds = s-xs;
-        ds_min = vnl_math_min(ds_min, ds);
-      }
+      double ds = s-xs;
+      ds_min = vnl_math_min(ds_min, ds);
     }
+  }
   if (ds_min<r)
   {
     return s-ds_min;
@@ -575,16 +574,16 @@ find_right_s(const double a, const double s,
   double ds_min = vnl_numeric_traits<double>::maxval;
   for (vcl_vector<bmrf_epi_seg_sptr>::const_iterator sit = cand.begin();
        sit != cand.end(); sit++)
+  {
+    if (a<(*sit)->min_alpha()||a>(*sit)->max_alpha())
+      continue;
+    double xs = (*sit)->s(a);
+    if (xs>s)
     {
-      if (a<(*sit)->min_alpha()||a>(*sit)->max_alpha())
-        continue;
-      double xs = (*sit)->s(a);
-      if (xs>s)
-      {
-        double ds = xs-s;
-        ds_min = vnl_math_min(ds_min, ds);
-      }
+      double ds = xs-s;
+      ds_min = vnl_math_min(ds_min, ds);
     }
+  }
   if (ds_min<r)
   {
     return s+ds_min;
@@ -599,7 +598,7 @@ double bmrf_network_builder::ds(const double s)
 
 //: Find the average intensity for given s limits on a line of constant alpha
 double bmrf_network_builder::scan_interval(const double a, const double sl,
-                                            const double s)
+                                           const double s)
 {
    if (!image_)
     return 0;
@@ -681,27 +680,28 @@ bool bmrf_network_builder::set_intensity_info()
   }
 return true;
 }
+
 //==============================================================
 //: Add the current nodes to the network
 //=============================================================
 bool bmrf_network_builder::add_frame_nodes()
 {
-  if(!network_)
+  if (!network_)
     return false;
   vcl_vector<bmrf_epi_seg_sptr>& segs = min_epi_segs_;
-  for(vcl_vector<bmrf_epi_seg_sptr>::iterator sit = segs.begin();
-      sit != segs.end(); sit++)
+  for (vcl_vector<bmrf_epi_seg_sptr>::iterator sit = segs.begin();
+       sit != segs.end(); sit++)
+  {
+    //for now, make the node the entire alpha segment.
+    bmrf_node_sptr node = new bmrf_node(*sit, frame_);
+    if (!network_->add_node(node))
     {
-      //for now, make the node the entire alpha segment.
-      bmrf_node_sptr node = new bmrf_node(*sit, frame_);
-      if(!network_->add_node(node))
-        {
-          vcl_cout << "In bmrf_network_builder::build_network() -"
-                   << " trying to add a node that already exists "
-                   << *(*sit) << "\n";
-          return false;
-        }
+      vcl_cout << "In bmrf_network_builder::build_network() -"
+               << " trying to add a node that already exists "
+               << *(*sit) << vcl_endl;
+      return false;
     }
+  }
   return true;
 }
 
@@ -722,18 +722,18 @@ time_neighbors(bmrf_node_sptr const& node,
   double s_min = node->epi_seg()->min_s(), s_max = node->epi_seg()->max_s();
   //scan the frame for s bounds
   //the upper bound passes zero velocity
-  //the lower bound is extended by the maxiumum velocity range, s_range_.
+  //the lower bound is extended by the maximum velocity range, s_range_.
   vcl_vector<bmrf_node_sptr> temp;
   int frame = node->frame_num();
   for (bmrf_network::seg_node_map::const_iterator nit = network_->begin(frame-1);
        nit != network_->end(frame-1); ++nit)
-    if((nit->first->min_s() <= s_max) &&
-       (nit->first->max_s() < (s_min - s_range_)))
+    if ((nit->first->min_s() <= s_max) &&
+        (nit->first->max_s() < (s_min - s_range_)))
       temp.push_back(nit->second);
 
   //filter out nodes that do not lie within the alpha range of the node
   //under consideration.
-  double a_min = node->epi_seg()->min_alpha(), 
+  double a_min = node->epi_seg()->min_alpha(),
     a_max = node->epi_seg()->max_alpha();
 
   bool found_something = false;
@@ -748,40 +748,42 @@ time_neighbors(bmrf_node_sptr const& node,
 
   return found_something;
 }
+
 //==============================================================
-//: Assign neighbors to nodes.  For now just select a range of 
+//: Assign neighbors to nodes.  For now just select a range of
 //  neighbors from alpha and s in the previous frame, i.e.,
 //  no in-frame neighbors.
 //=============================================================
 bool bmrf_network_builder::assign_neighbors()
 {
   //If we are in the first frame, do nothing.
-  if(!frame_)
+  if (!frame_)
     return true;
   //iterate over nodes in the current frame
-  if(!network_)
+  if (!network_)
     return false;
- 
-  for( bmrf_network::seg_node_map::const_iterator nit = network_->begin(frame_);
+
+  for (bmrf_network::seg_node_map::const_iterator nit = network_->begin(frame_);
        nit != network_->end(frame_); ++nit )
+  {
+    vcl_vector<bmrf_node_sptr> neighbors;
+    if (!this->time_neighbors(nit->second, neighbors))
+      continue;
+    for (vcl_vector<bmrf_node_sptr>::iterator nnit = neighbors.begin();
+         nnit != neighbors.end(); nnit++)
     {
-      vcl_vector<bmrf_node_sptr> neighbors;
-      if(!this->time_neighbors(nit->second, neighbors))
-        continue;
-      for(vcl_vector<bmrf_node_sptr>::iterator nnit = neighbors.begin();
-          nnit != neighbors.end(); nnit++)
-        {
-          network_->add_arc(nit->second, *nnit, bmrf_node::TIME);
-          network_->add_arc(*nnit, nit->second, bmrf_node::TIME);
-        }
+      network_->add_arc(nit->second, *nnit, bmrf_node::TIME);
+      network_->add_arc(*nnit, nit->second, bmrf_node::TIME);
     }
+  }
   return true;
 }
+
 bool bmrf_network_builder::build_network()
 {
-  if(!this->add_frame_nodes())
+  if (!this->add_frame_nodes())
     return false;
-  if(!this->assign_neighbors())
+  if (!this->assign_neighbors())
     return false;
   network_valid_ = true;
   return true;
@@ -805,7 +807,7 @@ bool bmrf_network_builder::build()
 bmrf_network_sptr bmrf_network_builder::network()
 {
   bmrf_network_sptr net;
-  if(!network_valid_)
+  if (!network_valid_)
     return net;
   return network_;
 }
