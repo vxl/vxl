@@ -310,7 +310,7 @@ read( vcl_istream& is )
 
   // skip any empty lines
   rgrl_util_skip_empty_lines( is );
-  if( is.eof() ) 
+  if( !is ) 
     return;   // reach the end of stream
   
   tag_str="";
