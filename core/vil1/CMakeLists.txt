@@ -18,10 +18,14 @@ vil_32bit
 vil_test
 
 # various vil_stream classes
-vil_stream_fstream      # from a file
-vil_stream_core         # in-core vil_stream
-vil_stream_section      # present a section of a vil_stream
-vil_stream_url          # load image from URL
+# from a file
+vil_stream_fstream
+# in-core vil_stream
+vil_stream_core
+# present a section of a vil_stream
+vil_stream_section
+# load image from URL
+vil_stream_url
 
 # classes derived from vil_image
 vil_file_image
@@ -38,9 +42,11 @@ vil_resample_image_impl
 vil_flipud_impl
 vil_block_cache_image_impl
 vil_clamp_image_impl
-vil_clamp_image # Helper specializations for vil_clamp_image_impl
+# Helper specializations for vil_clamp_image_impl
+vil_clamp_image
 vil_scale_intensities_image_impl
-vil_scale_intensities_image # Helper specializations for vil_scale_intensities_image_impl
+# Helper specializations for vil_scale_intensities_image_impl
+vil_scale_intensities_image
 
 # file format readers/writers (see below for conditional ones)
 file_formats/vil_gen
