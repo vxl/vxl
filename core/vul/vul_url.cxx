@@ -79,6 +79,15 @@ vcl_istream * vul_http_open(char const *url)
       break;
     }
 
+  // do character translation
+  unsigned k =0;
+  while (k < path.size())
+  {
+    if (path[k] == ' ')
+      path.replace(k, 1, "%20");
+    else if (path[k] = '%')
+      path.replace(k, 1, "%25");
+  }
 
   // so far so good.
 #ifdef DEBUG
@@ -264,6 +273,15 @@ bool vul_http_exists(char const *url)
       break;
     }
 
+  // do character translation
+  unsigned k =0;
+  while (k < path.size())
+  {
+    if (path[k] == ' ')
+      path.replace(k, 1, "%20");
+    else if (path[k] = '%')
+      path.replace(k, 1, "%25");
+  }
 
   // so far so good.
 #ifdef DEBUG
@@ -272,6 +290,8 @@ bool vul_http_exists(char const *url)
            << "path = \'" << path << "\'" << vcl_endl
            << "port = " << port << vcl_endl;
 #endif
+
+
 
 #ifdef VCL_WIN32
   if (called_WSAStartup==0)

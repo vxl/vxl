@@ -150,6 +150,15 @@ vil_stream_url::vil_stream_url(char const *url)
       break;
     }
 
+  // do character translation
+  unsigned k =0;
+  while (k < path.size())
+  {
+    if (path[k] == ' ')
+      path.replace(k, 1, "%20");
+    else if (path[k] = '%')
+      path.replace(k, 1, "%25");
+  }
 
   // so far so good.
 #ifdef DEBUG
