@@ -7,9 +7,15 @@ SUBDIRS += segv
 # segmentation application executables
 SUBDIRS += sbin
 
-# segmentation tests
-SUBDIRS += tests
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+# segmentation tests
+ifndef NOTEST
+ SUBDIRS += tests
+endif
+
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################
