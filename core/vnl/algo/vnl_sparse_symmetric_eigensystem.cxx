@@ -51,7 +51,7 @@ int sse_op_callback(const int* n,
                     const double* p,
                     double* q)
 {
-  assert(current_system);
+  assert(current_system != 0);
 
   return current_system->CalculateProduct(*n,*m,p,q);
 }
@@ -68,7 +68,7 @@ int sse_iovect_callback(const int* n,
                         const int* j,
                         const int* k)
 {
-  assert(current_system);
+  assert(current_system != 0);
 
   if (*k==0)
     return current_system->SaveVectors(*n,*m,q,*j-*m);
