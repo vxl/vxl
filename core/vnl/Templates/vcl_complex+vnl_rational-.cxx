@@ -33,6 +33,8 @@ template vcl_ostream& operator<<(vcl_ostream &, vcl_complex<vnl_rational> const 
 template vcl_complex<vnl_rational> operator/ (vcl_complex<vnl_rational>const&,vcl_complex<vnl_rational>const&);
 template vcl_complex<vnl_rational> operator/ (vcl_complex<vnl_rational>const&,vnl_rational);
 implement_rsh(vnl_rational);
+#include <std/complext.cc>
+template vcl_complex<vnl_rational>& __doadv<vnl_rational>(vcl_complex<vnl_rational>*, vcl_complex<vnl_rational> const&);
 # endif
 
 // ---------- gcc 2.95
@@ -59,6 +61,8 @@ template vcl_complex<vnl_rational> operator/(vnl_rational,vcl_complex<vnl_ration
 template vcl_complex<vnl_rational> vcl_pow (vcl_complex<vnl_rational>const&,int);
 template vcl_ostream& operator<<(vcl_ostream &, vcl_complex<vnl_rational> const &);
 implement_rsh(vnl_rational);
+#include <std/complext.cc>
+template vcl_complex<vnl_rational>& __doadv<vnl_rational>(vcl_complex<vnl_rational>*, vcl_complex<vnl_rational> const&);
 # endif
 
 // ---------- sunpro
