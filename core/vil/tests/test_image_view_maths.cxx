@@ -150,6 +150,17 @@ void test_image_view_maths_byte()
                        correct_var_norm_image(x,y) );
 
   TEST_NEAR("test variance normalisation",diff2,0,1e-6);
+
+  // Testing square-root function
+  vil_image_view<float> im_sqrt(5,5);
+  im_sqrt.fill(4.0f);
+  im_sqrt(1,2)=-1.0f;
+  im_sqrt(3,4)=9.0f;
+  vil_math_sqrt(im_sqrt);
+  TEST_NEAR("vil_math_sqrt (a)",im_sqrt(1,1),2.0,1e-6);
+  TEST_NEAR("vil_math_sqrt (b)",im_sqrt(3,4),3.0,1e-6);
+  TEST_NEAR("vil_math_sqrt (-ives)",im_sqrt(1,2),0.0,1e-6);
+
 }
 
 MAIN( test_image_view_maths )

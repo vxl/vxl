@@ -194,6 +194,27 @@ inline void vil_math_mean_and_variance(sumT& mean, sumT& var, const vil_image_vi
   var = sum_sq/(im.ni()*im.nj()) - mean*mean;
 }
 
+//: Compute square-root of each pixel element (or zero if negative)
+// \relates vil_image_view
+template<class T>
+inline void vil_math_sqrt(vil_image_view<T>& image)
+{
+  unsigned ni = image.ni(),nj = image.nj(),np = image.nplanes();
+  vcl_ptrdiff_t istep=image.istep(),jstep=image.jstep(),pstep = image.planestep();
+  T* plane = image.top_left_ptr();
+  for (unsigned p=0;p<np;++p,plane += pstep)
+  {
+    T* row = plane;
+    for (unsigned j=0;j<nj;++j,row += jstep)
+    {
+      T* pixel = row;
+      for (unsigned i=0;i<ni;++i,pixel+=istep) 
+        *pixel = T(*pixel>0?vcl_sqrt(*pixel):0);
+    }
+  }
+}
+
+
 //: Truncate each pixel value so it fits into range [min_v,max_v]
 //  If value < min_v value=min_v
 //  If value > max_v value=max_v
