@@ -1,10 +1,15 @@
 // This is mul/vimt3d/tests/test_transform_3d.cxx
 #include <vcl_iostream.h>
+#include <vpl/vpl.h> // vpl_unlink()
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vgl/vgl_distance.h>
 #include <vimt3d/vimt3d_transform_3d.h>
 #include <testlib/testlib_test.h>
+
+#ifndef LEAVE_IMAGES_BEHIND
+#define LEAVE_IMAGES_BEHIND 0
+#endif
 
 void test_product(const vimt3d_transform_3d& t0, const vimt3d_transform_3d& t1)
 {
@@ -62,9 +67,9 @@ void test_the_transform(vimt3d_transform_3d& t)
 
 void test_transform_3d_a()
 {
-  vcl_cout << "****************************\n";
-  vcl_cout << " Testing vimt3d_transform_3d\n";
-  vcl_cout << "****************************\n";
+  vcl_cout << "*****************************\n"
+           << " Testing vimt3d_transform_3d\n"
+           << "*****************************\n";
 
   vimt3d_transform_3d trans0;
   vgl_point_3d<double> p0(1,2,0),p1;
@@ -100,7 +105,6 @@ void test_transform_3d_a()
 
   // -------- Test the binary I/O --------
 
-
   vsl_b_ofstream bfs_out("test_transform_3d.bvl.tmp");
   TEST("Created test_transform_3d.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out, trans0);
@@ -114,18 +118,20 @@ void test_transform_3d_a()
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
+#if !LEAVE_IMAGES_BEHIND
+  vpl_unlink("test_transform_3d.bvl.tmp");
+#endif
+
   vnl_vector<double> v0,v0_in;
   trans0.params(v0);
   trans0_in.params(v0_in);
-  TEST("Binary IO for form", trans0.form()==trans0_in.form(),true);
+  TEST("Binary IO for form", trans0.form(), trans0_in.form());
   TEST_NEAR("Binary IO for params", (v0-v0_in).magnitude(),0.0,1e-6);
 }
 
 MAIN( test_transform_3d )
 {
-  START( "3D Transformations" );
-
+  START("3D Transformations");
   test_transform_3d_a();
-
   SUMMARY();
 }
