@@ -27,7 +27,7 @@ CFG=vil - Win32 StaticDebug
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
 # PROP Scc_LocalPath ""
-CPP=cl.exe
+CPP=xicl6.exe
 RSC=rc.exe
 
 !IF  "$(CFG)" == "vil - Win32 Release"
@@ -50,7 +50,7 @@ MTL=midl.exe
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LIB32=link.exe -lib
+LIB32=xilink6.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\Release\vil.lib"
 
@@ -68,13 +68,13 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 MTL=midl.exe
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)/v3p/jpeg" /I "$(IUEROOT)\vcl\config.win32-VC60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)/vxl" /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "_AFXDLL" /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /Ob2 /I "$(IUEROOT)/v3p/jpeg" /I "$(IUEROOT)\vcl\config.win32-VC60" /I "$(IUEROOT)\vcl" /I "$(IUEROOT)/vxl" /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "_AFXDLL" /FR /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LIB32=link.exe -lib
+LIB32=xilink6.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\Debug\vil.lib"
 
@@ -98,7 +98,7 @@ MTL=midl.exe
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LIB32=link.exe -lib
+LIB32=xilink6.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\Debug\vil.lib"
 # ADD LIB32 /nologo /out:"..\StaticDebug\vil.lib"
 
@@ -122,7 +122,7 @@ MTL=midl.exe
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LIB32=link.exe -lib
+LIB32=xilink6.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\Release\vil.lib"
 # ADD LIB32 /nologo /out:"..\StaticRelease\vil.lib"
 
@@ -252,6 +252,10 @@ SOURCE=.\vil_flipud.cxx
 # Begin Source File
 
 SOURCE=.\vil_flipud_impl.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats\vil_gen.cxx
 # End Source File
 # Begin Source File
 
@@ -624,6 +628,10 @@ SOURCE=.\vil_flipud_impl.h
 # Begin Source File
 
 SOURCE=.\vil_fwd.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\file_formats\vil_gen.h
 # End Source File
 # Begin Source File
 
