@@ -28,7 +28,7 @@ HMatrix2D::HMatrix2D(const HMatrix2D& M)
 }
 
 
-//: Constructor from istream
+//: Constructor from vcl_istream
 HMatrix2D::HMatrix2D(vcl_istream& s)
 {
   _t12_matrix.read_ascii(s);
@@ -109,20 +109,20 @@ HomgLine2D HMatrix2D::transform_to_plane2(const HomgLine2D& l1) const
 }
 
 //-----------------------------------------------------------------------------
-//: Print H on ostream
+//: Print H on vcl_ostream
 vcl_ostream& operator<<(vcl_ostream& s, const HMatrix2D& h)
 {
   return s << h.get_matrix();
 }
 
-//: Read H from istream
+//: Read H from vcl_istream
 vcl_istream& operator >> (vcl_istream& s, HMatrix2D& H)
 {
   H = HMatrix2D(s);
   return s;
 }
 
-//: Read H from istream
+//: Read H from vcl_istream
 bool HMatrix2D::read(vcl_istream& s)
 {
   return _t12_matrix.read_ascii(s);

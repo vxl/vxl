@@ -1188,7 +1188,7 @@ void TriTensor::get_constraint_lines_image1(const HomgPoint2D& p2, const HomgPoi
 // @{ INPUT/OUTPUT @}
 
 //-----------------------------------------------------------------------------
-//: Read from ASCII istream
+//: Read from ASCII vcl_istream
 vcl_istream& operator >> (vcl_istream& s, TriTensor& T)
 {
   for(int i = 0; i < 3; ++i)
@@ -1199,7 +1199,7 @@ vcl_istream& operator >> (vcl_istream& s, TriTensor& T)
 }
 
 //-----------------------------------------------------------------------------
-//: Print in ASCII to ostream
+//: Print in ASCII to vcl_ostream
 vcl_ostream& operator << (vcl_ostream& s, const TriTensor& T)
 {
   for(int i = 0; i < 3; ++i) {

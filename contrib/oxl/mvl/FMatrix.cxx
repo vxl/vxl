@@ -35,7 +35,7 @@ FMatrix::FMatrix()
 
 //--------------------------------------------------------------
 //
-//: Constructor.  Load from istream.
+//: Constructor.  Load from vcl_istream.
 
 FMatrix::FMatrix(vcl_istream& f)
 {
@@ -92,7 +92,7 @@ FMatrix::~FMatrix()
 }
 
 //---------------------------------------------------------------
-//: Read from ASCII istream
+//: Read from ASCII vcl_istream
 bool FMatrix::read_ascii(vcl_istream& s) {
   s >> _f_matrix;
   if (!(s.good() || s.eof()))
@@ -115,14 +115,14 @@ FMatrix FMatrix::read(char const* filename)
 }
 
 //---------------------------------------------------------------
-//: Read from ASCII istream
+//: Read from ASCII vcl_istream
 vcl_istream& operator>>(vcl_istream& s, FMatrix& F) {
   F.read_ascii(s);
   return s;
 }
 
 //---------------------------------------------------------------
-//: Read from ASCII istream
+//: Read from ASCII vcl_istream
 FMatrix FMatrix::read(vcl_istream& s)
 {
   return FMatrix(s);
@@ -174,7 +174,7 @@ FMatrix::image2_epipolar_distance_squared(HomgPoint2D *point1_ptr,
 }
 
 //---------------------------------------------------------------
-//: Print to ostream
+//: Print to vcl_ostream
 vcl_ostream& operator<<(vcl_ostream& os, const FMatrix& F) {
   const vnl_matrix<double>& m = F.get_matrix();
   for (unsigned long i = 0; i < m.rows(); i++) {    // For each row in matrix

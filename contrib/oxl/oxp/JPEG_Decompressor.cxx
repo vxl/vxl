@@ -19,11 +19,8 @@ JPEG_Decompressor::JPEG_Decompressor(int fd)
   init(fd);
 }
 
-// FIXME: cannot be sure ifstream has an fd() method. the sense of
-// this conditional should be reversed so that the function only 
-// gets defined for the, nonstandard, libraries that support it.
-// We should never be commenting out code to avoid standardness.
-#if !defined(VCL_VC) && !defined(VCL_KAI) && !defined(GNU_LIBSTDCXX_V3)
+// cannot be sure vcl_ifstream has an fd() method.
+#if defined(VCL_SGI_CC) || defined(VCL_SUNPRO_CC) || (defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3))
 JPEG_Decompressor::JPEG_Decompressor(vcl_ifstream& f)
 {
   init(f.rdbuf()->fd());

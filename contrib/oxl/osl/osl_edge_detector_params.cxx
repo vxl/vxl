@@ -34,7 +34,7 @@ osl_edge_detector_params::~osl_edge_detector_params() { }
 //
 bool osl_edge_detector_params::SanityCheck()
 {
-  strstream msg;
+  vcl_strstream msg;
   bool valid = true;
 
   if (_sigma <= 0)  // Standard deviation of the smoothing kernel

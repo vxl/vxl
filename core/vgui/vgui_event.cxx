@@ -98,25 +98,27 @@ vcl_ostream& operator<<(vcl_ostream& s, vgui_event_type t)
   return s << "[" __FILE__ " : bad event, code " << int(t) << "]";
 }
 
-// struct bitcode {
-//   int code;
-//   char const* name;
-// };
+#if 0
+struct bitcode {
+  int code;
+  char const* name;
+};
 
-// static ostream& print_bitcodes(ostream& s, bitcode* codes, int val)
-// {
-//   int val_in = val;
-//   char const *spc = "";
-//   for(; codes->name; ++codes)
-//     if (val & codes->code) {
-//       s << spc << codes->name;
-//       spc = " ";
-//       val &= ~codes->code;
-//     }
-//   if (val != 0)
-//     s << "[Bad code, val " << val_in << "]";
-//   return s;
-// }
+static vcl_ostream& print_bitcodes(vcl_ostream& s, bitcode* codes, int val)
+{
+  int val_in = val;
+  char const *spc = "";
+  for(; codes->name; ++codes)
+    if (val & codes->code) {
+      s << spc << codes->name;
+      spc = " ";
+      val &= ~codes->code;
+    }
+  if (val != 0)
+    s << "[Bad code, val " << val_in << "]";
+  return s;
+}
+#endif // 0
 
 vcl_ostream& operator<<(vcl_ostream& s, vgui_event const& e)
 {

@@ -91,7 +91,7 @@ void PMatrixDec::Init()
 
 
 //---------------------------------------------------------------
-//: Print to ostream
+//: Print to vcl_ostream
 vcl_ostream& operator<<(vcl_ostream& s, const PMatrixDec& P)
 {
   s << "PROJECTION MATRIX = [" << vcl_endl << P.get_matrix() << "]" << vcl_endl

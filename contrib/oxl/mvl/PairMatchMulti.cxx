@@ -27,7 +27,7 @@ PairMatchMulti::PairMatchMulti()
   _scores = 0;
 }
 
-// - Construct and load matches (via operator>>) from istream.
+// - Construct and load matches (via operator>>) from vcl_istream.
 PairMatchMulti::PairMatchMulti(vcl_istream& f)
 {
   _scores = 0;

@@ -68,7 +68,7 @@ HomgLine3D::~HomgLine3D()
 
 //-----------------------------------------------------------------------------
 //
-//: print to ostream
+//: print to vcl_ostream
 vcl_ostream& operator<<(vcl_ostream& s, const HomgLine3D& l)
 {
   return s << "<HomgLine3D " << l.get_point_finite() << " dir " << l.get_point_infinite() << ">";

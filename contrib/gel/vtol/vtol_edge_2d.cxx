@@ -297,7 +297,7 @@ bool vtol_edge_2d::operator==(const vsol_spatial_object_3d& obj) const
 //
 
 //:
-// This method outputs all edge information to the ostream, strm.  It
+// This method outputs all edge information to the vcl_ostream, strm.  It
 // indents various levels of output by the number given in blanking.
 void vtol_edge_2d::describe(vcl_ostream &strm,
                             int blanking) const

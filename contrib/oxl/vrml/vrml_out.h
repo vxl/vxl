@@ -91,7 +91,7 @@ protected:
   bool own_ostream_;
 
 private:
-  // private as don't want 2 people on same ostream
+  // private as don't want 2 people on same vcl_ostream
   vrml_out(const vrml_out& that);
   vrml_out& operator=(const vrml_out& that);
 };

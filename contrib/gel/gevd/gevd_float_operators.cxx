@@ -44,14 +44,7 @@
 #include "gevd_bufferxy.h"
 #include "gevd_float_operators.h"
 //#include <ImageProcessing/xpixel.h>
-
-//#include <cool/Vector.h>
-// #include <cool/Timer.h>
-
-//#include <iostream.h>
-//#include <fstream.h>
-
-//#include <math.h>
+//#include <cool/Timer.h>
 
 #ifdef WIN32
 inline static double rint(double v)

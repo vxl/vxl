@@ -15,11 +15,11 @@
 // perform common operations e.g. generate epipolar lines
 //
 
-#include <vnl/vnl_double_3x3.h>
-
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgPoint2D.h>
 #include <vcl_iosfwd.h>
+
+#include <vnl/vnl_double_3x3.h>
 
 class PMatrix;
 

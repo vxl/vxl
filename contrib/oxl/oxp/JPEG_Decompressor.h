@@ -32,7 +32,9 @@
 struct JPEG_DecompressorPrivates;
 class JPEG_Decompressor {
 public:
+#if defined(VCL_SGI_CC) || defined(VCL_SUNPRO_CC) || (defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3))
   JPEG_Decompressor(vcl_ifstream& s);
+#endif
   JPEG_Decompressor(int fd);
   ~JPEG_Decompressor();
 

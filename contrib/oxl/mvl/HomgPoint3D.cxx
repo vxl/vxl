@@ -107,7 +107,7 @@ HomgPoint3D::get_double3() const
 
 //-----------------------------------------------------------------------------
 //
-//: Print to ostream
+//: Print to vcl_ostream
 vcl_ostream& operator<<(vcl_ostream& s, const HomgPoint3D& p)
 {
   return s << "<HomgPoint3D " << p.get_vector() << ">";

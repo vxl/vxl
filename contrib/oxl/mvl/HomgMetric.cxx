@@ -31,7 +31,7 @@ HomgMetric::~HomgMetric()
   // _metric;
 }
 
-//: Print HomgMetric to ostream.
+//: Print HomgMetric to vcl_ostream.
 vcl_ostream& HomgMetric::print(vcl_ostream & s) const
 {
   if (_metric)

@@ -107,20 +107,20 @@ HomgPoint1D HMatrix1D::preimage(const HomgPoint1D& x2) const
 }
 
 //-----------------------------------------------------------------------------
-//: Print H on ostream
+//: Print H on vcl_ostream
 vcl_ostream& operator<<(vcl_ostream& s, const HMatrix1D& h)
 {
   return s << h.get_matrix();
 }
 
-//: Read H from istream
+//: Read H from vcl_istream
 vcl_istream& operator >> (vcl_istream& s, HMatrix1D& H)
 {
   H = HMatrix1D(s);
   return s;
 }
 
-//: Read H from istream
+//: Read H from vcl_istream
 HMatrix1D HMatrix1D::read(vcl_istream& s)
 {
   return HMatrix1D(s);

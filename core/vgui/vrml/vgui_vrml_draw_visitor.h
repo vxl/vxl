@@ -23,7 +23,7 @@
 
 //these may be typedefs in the glu header (linux),
 //so they can't be forward declared like this.
-//cf istream, ostream
+//cf vcl_istream, vcl_ostream
 //class GLUquadricObj;
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>

@@ -39,7 +39,7 @@ vrml_out::vrml_out(char const* filename)
   else prologue();
 }
 
-//: Destructor.  If we own the ostream, write the epilogue
+//: Destructor.  If we own the vcl_ostream, write the epilogue
 vrml_out::~vrml_out()
 {
   if (own_ostream_) {

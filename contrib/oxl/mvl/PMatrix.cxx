@@ -46,7 +46,7 @@ PMatrix::PMatrix ():
 
 //--------------------------------------------------------------
 //
-//: Construct by loading from istream
+//: Construct by loading from vcl_istream
 // <pre>
 //   PMatrix P(cin);
 // </pre>
@@ -171,7 +171,7 @@ HomgPlane3D PMatrix::backproject (const HomgLine2D& l) const
 }
 
 //-----------------------------------------------------------------------------
-//: Print p on ostream
+//: Print p on vcl_ostream
 vcl_ostream& operator<<(vcl_ostream& s, const PMatrix& p)
 {
   if (HomgPrettyPrint::pretty)
@@ -181,7 +181,7 @@ vcl_ostream& operator<<(vcl_ostream& s, const PMatrix& p)
 }
 
 //-----------------------------------------------------------------------------
-//: Load p from ascii istream
+//: Load p from ascii vcl_istream
 vcl_istream& operator>>(vcl_istream& i, PMatrix& p)
 {
   p.read_ascii(i);
@@ -226,7 +226,7 @@ PMatrix PMatrix::read(const char* filename)
   return P;
 }
 
-//: Load from istream
+//: Load from vcl_istream
 PMatrix PMatrix::read(vcl_istream& s)
 {
   PMatrix P;

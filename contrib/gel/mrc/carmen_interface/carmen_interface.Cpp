@@ -38,10 +38,10 @@
 // Modifications : see gauss_simulator.h
 //
 //-----------------------------------------------------------------------------
-//#include <math.h>
-#include <stdlib.h>
-#include <fstream>
-#include <iostream>
+//#include <vcl_cmath.h>
+#include <vcl_cstdlib.h>
+#include <vcl_fstream.h>
+#include <vcl_iostream.h>
 //--------------------------------------------
 // Carmen Includes
 #define DEFINED_MAX_MIN
@@ -80,7 +80,7 @@ void carmen_interface::set_carmen_camera(int view_no)
   bool stat = (bool)_carmen->create_camera(view_no, "PerspectiveCamera");
   if(!stat)
     {
-      cerr << _carmen->geterror() << endl;
+      vcl_cerr << _carmen->geterror() << vcl_endl;
       return;
     }
 }
@@ -97,7 +97,7 @@ bool carmen_interface::add_full_correspondence(int view_no, int point_id,
 
   //Set up the primary point3D.
   stat = (bool)_carmen->set_primary_parameter(point_id, "X", x,
-                                             default_3d_point_sdev, FIX);
+                                              default_3d_point_sdev, FIX);
   if(!stat)
     {
       cerr << _carmen->geterror() << endl;
@@ -105,14 +105,14 @@ bool carmen_interface::add_full_correspondence(int view_no, int point_id,
     }
 
   stat = (bool)_carmen->set_primary_parameter(point_id, "Y", y,
-                                             default_3d_point_sdev, FIX);
+                                              default_3d_point_sdev, FIX);
   if(!stat)
     {
       cerr << _carmen->geterror() << endl;
       return stat;
     }
   stat = (bool)_carmen->set_primary_parameter(point_id, "Z", z,
-                                             default_3d_point_sdev, FIX);
+                                              default_3d_point_sdev, FIX);
   if(!stat)
     {
       cerr << _carmen->geterror() << endl;
@@ -120,7 +120,7 @@ bool carmen_interface::add_full_correspondence(int view_no, int point_id,
     }
   //define the corresponding 2d secondary
   stat = _carmen->define_control_point(view_no, point_id, u, v, 
-                                      default_2d_point_sdev);
+                                       default_2d_point_sdev);
   if(!stat)
     {
       cerr << _carmen->geterror() << endl;
@@ -133,12 +133,11 @@ bool carmen_interface::add_full_correspondence(int view_no, int point_id,
 //
 bool carmen_interface::load_correspondence_file(const string& file_path)
 {
-	ifstream instr(file_path.c_str());
+	vcl_ifstream instr(file_path.c_str());
   if(!instr)
     {
-      cout <<"In carmen_interface::load_correspondence_file()"
-           <<" - can't open file  "
-           << file_path.c_str() << endl;
+      vcl_cout <<"In carmen_interface::load_correspondence_file()"
+               <<" - can't open file  " << file_path.c_str() << vcl_endl;
       return false;
     }
   char buf[100];
@@ -150,7 +149,7 @@ bool carmen_interface::load_correspondence_file(const string& file_path)
     instr >> npts;
   else
     {
-      cout << "bad file " << endl;
+      vcl_cout << "bad file " << vcl_endl;
       return false;
     }
   int view_no=0, point_id=0;
@@ -162,12 +161,12 @@ bool carmen_interface::load_correspondence_file(const string& file_path)
       keyword = buf;
       if(keyword!="CORRESP:")
         {
-          cout << "wrong number of correspondences " << endl;
+          vcl_cout << "wrong number of correspondences " << vcl_endl;
           return false;
         }
       instr >> view_no >> point_id >> x >> y >> z >> u >> v;
-      cout << "Corr: " <<  view_no << " " << point_id << " " << x << " " <<  y 
-           << " " << z << " " <<  u << " " << v << endl;
+      vcl_cout << "Corr: " <<  view_no << " " << point_id << " " << x << " " <<  y 
+               << " " << z << " " <<  u << " " << v << vcl_endl;
       bool stat = add_full_correspondence(view_no, point_id, x, y, z, u, v);
       if(!stat)
         return false;
@@ -185,12 +184,12 @@ void carmen_interface::solve()
   bool stat = (bool)_carmen->init_cameras();
   if(!stat)
     {
-      cerr << _carmen->geterror() << endl;
+      vcl_cerr << _carmen->geterror() << vcl_endl;
       return;
     }
   stat = (bool)_carmen->solve_for_everything();
   if (!stat) 
-    cerr << _carmen->geterror() << endl;
+    vcl_cerr << _carmen->geterror() << vcl_endl;
 }
 
 //--------------------------------------------------------------------

@@ -20,7 +20,7 @@ osl_fit_lines_params::osl_fit_lines_params(int min_fit_len,
 //: Checks that parameters are within acceptable bounds
 bool osl_fit_lines_params::SanityCheck() {
 #if 0
-  strstream msg;
+  vcl_strstream msg;
   bool valid = true;
 
   if (_min_fit_length < 3) {

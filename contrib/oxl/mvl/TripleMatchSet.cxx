@@ -69,7 +69,7 @@ void TripleMatchSet::write_ascii(vcl_ostream & s) const
   }
 }
 
-//: Read from ascii istream
+//: Read from ascii vcl_istream
 bool TripleMatchSet::read_ascii(vcl_istream& s)
 {
   vnl_matrix<double> m;
@@ -102,7 +102,7 @@ bool TripleMatchSet::read_ascii(vcl_istream& s)
   return true;
 }
 
-//: Write to ostream with header
+//: Write to vcl_ostream with header
 vcl_ostream& operator << (vcl_ostream& s, const TripleMatchSet& matches)
 {
   s << "# TripleMatchSet: " << matches.count() << " triplet matches." << vcl_endl;

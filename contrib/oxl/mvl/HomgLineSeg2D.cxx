@@ -43,7 +43,7 @@ void HomgLineSeg2D::set (const HomgPoint2D& point1,
 
 //-----------------------------------------------------------------------------
 //
-//: print to ostream
+//: print to vcl_ostream
 vcl_ostream& operator<<(vcl_ostream& s, const HomgLineSeg2D& p)
 {
   return s <<

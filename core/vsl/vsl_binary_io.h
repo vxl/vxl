@@ -22,7 +22,7 @@
 #include <vcl_utility.h>
 #include <vcl_cstdlib.h>
 
-//: An binary output adaptor for any ostream 
+//: A binary output adaptor for any vcl_ostream 
 // Currently the main use of this is to encourage streams to be opened
 // in binary mode (ie. withour CR/LF conversion)
 //
@@ -111,7 +111,7 @@ protected:
 };
 
 
-//: An adapter for an ofstream to make it suitable for binary IO
+//: An adapter for a vcl_ofstream to make it suitable for binary IO
 class vsl_b_ofstream: public vsl_b_ostream
 {
 public:
@@ -138,7 +138,7 @@ public:
 
 
 
-//: An adaptor for any istream to make it suitable for binary input
+//: An adaptor for any vcl_istream to make it suitable for binary input
 // Currently the main use of this is to encourage file streams to be opened
 // in binary mode (ie. withour CR/LF conversion)
 // In future, if someone wants to add serialisation support, they
@@ -213,7 +213,7 @@ protected:
 };
 
 
-//: An adapter for an ofstream to make it suitable for binary IO
+//: An adapter for a vcl_ifstream to make it suitable for binary IO
 class vsl_b_ifstream: public vsl_b_istream
 {
 public:

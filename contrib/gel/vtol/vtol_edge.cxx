@@ -442,10 +442,10 @@ void vtol_edge::compute_bounding_box(void)
 //
 
 //:
-// This method outputs all edge information to the ostream, strm.  It
+// This method outputs all edge information to the vcl_ostream, strm.  It
 // indents various levels of output by the number given in blanking.
 void vtol_edge::describe(vcl_ostream &strm,
-                            int blanking) const
+                         int blanking) const
 {
   for (int i1=0; i1<blanking; ++i1) strm << ' ';
   print(strm);
