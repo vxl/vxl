@@ -6,7 +6,7 @@
 // This is vxl/vnl/vnl_matlab_print.h
 
 //: \file
-//  \brief MATLAB print
+//  \brief Print matrices and vectors in nice MATLAB format.
 //  \author fsm@robots.ox.ac.uk, from awf's MatOps code.
 
 
@@ -15,22 +15,8 @@ template <class T> class vnl_matrix;
 template <class T> class vnl_diag_matrix;
 #include <vcl_iosfwd.h>
 
-//: pretty-printing matlab formats
-enum vnl_matlab_print_format {
-  vnl_matlab_print_format_default,
-  vnl_matlab_print_format_short,
-  vnl_matlab_print_format_long,
-  vnl_matlab_print_format_short_e,
-  vnl_matlab_print_format_long_e
-};
+#include <vnl/vnl_matlab_print_format.h>
 
-//: print real or complex scalar into character buffer.
-template <class T>
-void vnl_matlab_print_scalar(T const &v,
-                             char *buf,
-                             vnl_matlab_print_format =vnl_matlab_print_format_default);
-
-// Print in nice MATLAB format.
 // If a variable name (e.g. "foo") is given, the raw data will be preceded by
 //   "foo = diag([ " for a vnl_diag_matrix
 //   "foo = [ ...\n" for a vnl_matrix and
@@ -73,32 +59,8 @@ vcl_ostream &vnl_matlab_print(vcl_ostream &,
                           char const *variable_name =0,
                           vnl_matlab_print_format =vnl_matlab_print_format_default);
 
-// -------------------- Setting the default format.
-
-//: get top of stack :
-vnl_matlab_print_format vnl_matlab_print_format_top();
-
-//: set new, get old format at top of stack :
-vnl_matlab_print_format vnl_matlab_print_format_set(vnl_matlab_print_format);
-
-//: push/pop the top of the stack :
-void vnl_matlab_print_format_push(vnl_matlab_print_format);
-void vnl_matlab_print_format_pop ();
-
-
 
 //: naughty naming-convention-defying-but-handy macro.
 #define MATLABPRINT(X) (vnl_matlab_print(vcl_cerr, X, #X))
-
-#ifdef VCL_KAI
-namespace std { template <typename T> class complex; }
-#define declare_specialization(T) template <> void vnl_matlab_print_scalar(T const &, char *, vnl_matlab_print_format)
-declare_specialization(int);
-declare_specialization(float);
-declare_specialization(double);
-declare_specialization(vcl_complex<float>);
-declare_specialization(vcl_complex<double>);
-#undef declare_specialization
-#endif
 
 #endif // vnl_matlab_print_h_
