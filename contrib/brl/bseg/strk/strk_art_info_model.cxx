@@ -72,7 +72,7 @@ strk_art_info_model::strk_art_info_model(strk_art_info_model_sptr const& im)
 {
   if (!im)
     return;
-  for (int i = 0; i<im->n_faces(); i++)
+  for (unsigned int i = 0; i<im->n_faces(); i++)
     faces_.push_back(new strk_tracking_face_2d(im->face(i)));
   stem_pivot_ = im->stem_pivot_;
   long_arm_radius_ = im->long_arm_radius_;
@@ -80,10 +80,10 @@ strk_art_info_model::strk_art_info_model(strk_art_info_model_sptr const& im)
 }
 
 strk_art_info_model::strk_art_info_model(strk_art_info_model const& im)
-  : vbl_ref_count(), stem_pivot_(im.stem_pivot_),
-    long_arm_radius_(im.long_arm_radius_), short_arm_radius_(im.short_arm_radius_)
+  : vbl_ref_count(), long_arm_radius_(im.long_arm_radius_),
+    short_arm_radius_(im.short_arm_radius_), stem_pivot_(im.stem_pivot_)
 {
-  for (int i = 0; i<im.n_faces(); i++)
+  for (unsigned int i = 0; i<im.n_faces(); i++)
     faces_.push_back(new strk_tracking_face_2d(im.face(i)));
 }
 
