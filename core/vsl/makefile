@@ -24,6 +24,7 @@ MANPAGE_SOURCES += vsl_string_io.txx
 MANPAGE_SOURCES += vsl_vector_io.txx
 MANPAGE_SOURCES += vsl_quick_file.h
 MANPAGE_SOURCES += vsl_block_binary.h
+MANPAGE_SOURCES += vsl_b_read_block_old.h
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
