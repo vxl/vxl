@@ -1,9 +1,10 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./oxl/vgui/impl/mfc/vgui_mfc_doc.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
+//:
+// \file
 //
-// This is vgui/impl/mfc/vgui_mfc_doc.cxx
 // See vgui_mfc_doc.h for a description of this file.
 //
 // \author Marko Bacic, Oxford RRG
@@ -29,7 +30,6 @@ IMPLEMENT_DYNCREATE(vgui_mfc_doc, CDocument)
 
 vgui_mfc_doc::vgui_mfc_doc()
 {
-
 }
 
 vgui_mfc_doc::~vgui_mfc_doc()
@@ -66,4 +66,3 @@ void vgui_mfc_doc::Dump(CDumpContext& dc) const
         CDocument::Dump(dc);
 }
 #endif //_DEBUG
-
