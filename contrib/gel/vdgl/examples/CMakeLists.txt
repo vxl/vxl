@@ -5,6 +5,5 @@ ADD_EXECUTABLE( test_vdgl test_vdgl )
 
 # Immediate dependencies
 INCLUDE( ${allvxl_SOURCE_DIR}/gel/vtol/CMakeListsLink.txt )
-LINK_LIBRARIES(vdgl)
-LINK_DIRECTORIES( ${allvxl_BINARY_DIR}/gel/vdgl )
+INCLUDE( ${allvxl_SOURCE_DIR}/gel/vdgl/CMakeListsLink.txt )
 

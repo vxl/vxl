@@ -8,6 +8,7 @@ ADD_EXECUTABLE( vnl_svd vnl_svd )
 ADD_EXECUTABLE( vnl_lsqr_test vnl_lsqr_test )
 
 # Immediate dependencies
+INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/algo/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vnl/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vxl/vul/CMakeListsLink.txt )
 INCLUDE( ${allvxl_SOURCE_DIR}/vcl/CMakeListsLink.txt )
