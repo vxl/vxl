@@ -1,12 +1,13 @@
-// Source
-
+// This is core/vil/file_formats/vil_nitf_header_v20.h
+#ifndef vil_nitf_header_v20_h_
+#define vil_nitf_header_v20_h_
 //================ GE Aerospace NITF support libraries =================
+//:
+// \file
+// \brief This file defines the NITF headers for NITF v2.0.
 //
-// Description:	This file defines the NITF headers for NITF v2.0.
-//
-//  $Revision: 1.1 $ 
-//  $Date: 2003/12/26 00:20:23 $
-//  $Author: mlaymon $
+//  \date: 2003/12/26
+//  \author: mlaymon
 //
 // For a given header 'head', head->Read(file) is called when the
 // appropriate place in the file is reached, and it will return a
@@ -15,16 +16,14 @@
 // Written by:       Lynn Bigelow
 // Date:             July, 1993
 //
-//  Modified by J. Mundy Feb. 1998               
-//  Made the ICAT and IFC fields accept spaces as well as the 
+//  Modified by J. Mundy Feb. 1998
+//  Made the ICAT and IFC fields accept spaces as well as the
 //  standard entries.  Needed to ingest Northrup Grummond images
 //=====================lkbjfcbtdddhtargbskmtaps=======================
 
-#ifndef	_vil_nitf_header_v20_h
-#define _vil_nitf_header_v20_h
-
 #include "vil_nitf_message_header_v20.h"
 #include "vil_nitf_image_subheader_v20.h"
+#include <vcl_ctime.h>
 
 #if 0  // NOT IMPLEMENTED
 
@@ -36,10 +35,10 @@
 #  undef LabelSubHeader_v11
 #endif
 
-#ifndef _vil_nitf_symbol_subheader_v20_h
-#define _vil_nitf_symbol_subheader_v20_h
+#ifndef vil_nitf_symbol_subheader_v20_h_
+#define vil_nitf_symbol_subheader_v20_h_
 #define vil_nitf_symbol_subheader_v11 vil_nitf_symbol_subheader_v20
-#  undef  _vil_nitf_symbol_subheader_v11_h
+#  undef  vil_nitf_symbol_subheader_v11_h_
 #  include "vil_nitf_symbol_subheader_v11.h"
 #  undef vil_nitf_symbol_subheader_v11
 #endif
@@ -64,10 +63,10 @@
 
 #if 0  // NOT IMPLEMENTED
 
-inline StatusCode LabelSubHeader_v20::AsciiWrite (vil_stream*) {return (STATUS_BAD);}
-inline StatusCode LabelSubHeader_v20::AsciiRead (vil_stream*)  {return (STATUS_BAD);}
-inline StatusCode TextSubHeader_v20::AsciiRead (vil_stream*)   {return (STATUS_BAD);}
-inline StatusCode TextSubHeader_v20::AsciiWrite (vil_stream*)  {return (STATUS_BAD);}
+inline StatusCode LabelSubHeader_v20::AsciiWrite (vil_stream*) {return STATUS_BAD;}
+inline StatusCode LabelSubHeader_v20::AsciiRead (vil_stream*)  {return STATUS_BAD;}
+inline StatusCode TextSubHeader_v20::AsciiRead (vil_stream*)   {return STATUS_BAD;}
+inline StatusCode TextSubHeader_v20::AsciiWrite (vil_stream*)  {return STATUS_BAD;}
 
 #endif
 
@@ -84,17 +83,17 @@ inline const char* GetVersion20Date()
 
     // We must fool SCCS, otherwise it will try to
     // be smart and interpret the percents in the string.
-    // 
-    time_t clock;
+    //
+    vcl_time_t clock;
     struct tm *tm;
-    clock = time (NULL) ;
-    tm = localtime (&clock) ;
-    // char* format = "%d%H%M%SZ%h%y" ;
+    clock = time (NULL);
+    tm = localtime (&clock);
+    // char* format = "%d%H%M%SZ%h%y";
 
-    strncpy (rval, "              ", 15);
-    strftime (rval, 15, date_format, tm);
+    vcl_strncpy(rval, "              ", 15);
+    vcl_strftime(rval, 15, date_format, tm);
 
-    return (rval) ;
+    return rval;
 }
 
-#endif  // _vil_nitf_header_v20_h
+#endif  // vil_nitf_header_v20_h_

@@ -1,12 +1,12 @@
-// Source
-
+// This is core/vil/file_formats/vil_nitf_message_header_v20.cxx
+#include "vil_nitf_message_header_v20.h"
 //================ GE Aerospace NITF support libraries =================
+//:
+// \file
+// \brief Implentation for NITF version 2.0 message header.
 //
-// Description:	Implentation for NITF version 2.0 message header.
-//
-//  $Revision: 1.1 $ 
-//  $Date: 2003/12/26 00:21:31 $
-//  $Author: mlaymon $
+//  \date: 2003/12/26
+//  \author: mlaymon
 //
 // Written by:       Lynn Bigelow
 // Date:             July, 1993
@@ -22,7 +22,7 @@
 //=====================lkbjfcbtdddhtargbskmtaps=======================
 //
 // Copyright (C) 1998, Lockheed Martin Corporation
-// 
+//
 // This software is intellectual property of Lockheed Martin
 // Corporation and may not be copied or redistributed except
 // as specified in the FOCUS Software License.
@@ -32,18 +32,17 @@
 #ifndef WIN32
 #include <sys/time.h>
 #endif
+#include <vcl_cstring.h>
 
 #include "vil_nitf_macro_defs.h"
 #include "vil_nitf_version_v20.h"
 #include "vil_nitf_header_v20.h"
 
-#include "vil_nitf_message_header_v20.h"
-
-char const * HEADER_VERSION_STR = "NITF02.00" ;
+char const * HEADER_VERSION_STR = "NITF02.00";
 
 vil_nitf_message_header_v20::vil_nitf_message_header_v20()
 {
-  Init () ;
+  Init ();
 }
 
 vil_nitf_message_header_v20::vil_nitf_message_header_v20 (const vil_nitf_message_header& h)
@@ -54,8 +53,8 @@ vil_nitf_message_header_v20::vil_nitf_message_header_v20 (const vil_nitf_message
 
 vil_nitf_message_header_v20::vil_nitf_message_header_v20 (const vil_nitf_message_header_v20&h):vil_nitf_message_header (h)
 {
-    setVersion (vil_nitf_version_v20::GetVersion()) ;
-    FilledCopy (MDT, GetVersion20Date()) ;
+    setVersion (vil_nitf_version_v20::GetVersion());
+    FilledCopy (MDT, GetVersion20Date());
 }
 
 vil_nitf_message_header_v20::~vil_nitf_message_header_v20()
@@ -63,57 +62,57 @@ vil_nitf_message_header_v20::~vil_nitf_message_header_v20()
 }
 
 /**
- * Read version from input.  
+ * Read version from input.
  *
  * @return true if version is correct, otherwise false.
  */
 bool vil_nitf_message_header_v20::read_version (vil_stream* file)
 {
-    bool valid = false ;
+    bool valid = false;
 
-    if (!file || !file->ok()) return valid ;
+    if (!file || !file->ok()) return valid;
 
-    valid = true ;
-    if ((file->read (MHDR, 9) <  9) ||
-	(strcmp (MHDR, HEADER_VERSION_STR)))
+    valid = true;
+    if ((file->read(MHDR, 9) <  9) ||
+        (vcl_strcmp(MHDR, HEADER_VERSION_STR)))
     {
-        valid = false ;
+        valid = false;
     }
-    return valid ;	
+    return valid;
 }
 
 StatusCode vil_nitf_message_header_v20::Read (vil_stream* file)
 {
-    static vcl_string method_name = "vil_nitf_message_header_v20::Read: " ;
+    static vcl_string method_name = "vil_nitf_message_header_v20::Read: ";
 
     if (!file || !file->ok()) {
-      return STATUS_BAD ;
+      return STATUS_BAD;
     }
 
-    int curpos = file->tell() ;
+    int curpos = file->tell();
 
-    vcl_cout << "\n#### enter " << method_name 
-	     << "currpos = " << curpos << vcl_endl ;
+    vcl_cout << "\n#### enter " << method_name
+             << "currpos = " << curpos << vcl_endl;
 
-    char buffer[16] ;
+    char buffer[16];
 
-    vcl_string error_details = "" ;
+    vcl_string error_details = "";
 
-    bool error = false ;
-    bool done  = false ;
+    bool error = false;
+    bool done  = false;
 
     while (!done) {
 
         if (!read_version (file)) {
-            error = true ;
-	    error_details = "read_version" ;
-            break ;
+            error = true;
+            error_details = "read_version";
+            break;
         }
 
         if ( (!GetInt (buffer, &CLEVEL, 2, file))   ||
-	     (CLEVEL > 6 && CLEVEL != 99 )) {
+             (CLEVEL > 6 && CLEVEL != 99 )) {
 
-	    error_details = "after read CLEVEL = " + CLEVEL ;
+            error_details = "after read CLEVEL = " + CLEVEL;
             error = true;
             break;
         }
@@ -123,23 +122,23 @@ StatusCode vil_nitf_message_header_v20::Read (vil_stream* file)
             (file->read (MDT,    14) < 14) ||
             (file->read (MTITLE, 80) < 80))
         {
-	    error_details = "after read MTITLE" ;
+            error_details = "after read MTITLE";
             error = true;
             break;
         }
 
-        buffer[1] = 0 ;  // For when MSCLAS is read in.
+        buffer[1] = 0;  // For when MSCLAS is read in.
 
         if ((file->read (buffer,  1) <  1) ||
             (!ValidClassification (buffer)))
         {
-	    error_details = "after read MSCLAS" ;
+            error_details = "after read MSCLAS";
             error = true;
-            break ;
+            break;
         }
         MSCLAS = ConvertClassification (buffer);
 
-        buffer[1] = 0 ;                // For when ENCRYP is read in.
+        buffer[1] = 0;                // For when ENCRYP is read in.
 
         if ((file->read (MSCODE, 40) < 40) ||
             (file->read (MSCTLH, 40) < 40) ||
@@ -147,19 +146,19 @@ StatusCode vil_nitf_message_header_v20::Read (vil_stream* file)
             (file->read (MSCAUT, 20) < 20) ||
             (file->read (MSCTLN, 20) < 20) ||
             (file->read (MSDWNG,  6) <  6) ||
-            (!strcmp (MSDWNG, "999998") &&
+            (!vcl_strcmp(MSDWNG, "999998") &&
              file->read (MSDEVT,40)  < 40) ||
             (!GetInt (buffer, &MSCOP, 5, file)) ||
             (!GetInt (buffer, &MSCPYS, 5, file)) ||
             (file->read (buffer,  1) < 1) ||
-            (!strpbrk (buffer, "01")))
+            (!vcl_strpbrk(buffer, "01")))
         {
-	    error_details = "after read ENCRYP" ;
+            error_details = "after read ENCRYP";
             error = true;
             break;
         }
          ENCRYP = buffer[0] == '0' ? NOTENCRYPTED : ENCRYPTED;
-        
+
         if ((file->read (ONAME,  27) < 27) ||
             (file->read (OPHONE, 18) < 18) ||
             (!GetInt (buffer, &ML, 12,  file)) ||
@@ -167,7 +166,7 @@ StatusCode vil_nitf_message_header_v20::Read (vil_stream* file)
             (!GetInt (buffer, &HL, 6, file)) ||
             (HL < 388 || HL > 276380))
         {
-	    error_details = "after read HL" ;
+            error_details = "after read HL";
             error = true;
             break;
         }
@@ -177,34 +176,34 @@ StatusCode vil_nitf_message_header_v20::Read (vil_stream* file)
         //
 
         // The Image Sub-Header information is first.
-        // 
-	if (read_image_info (file) == false) {
+        //
+        if (read_image_info (file) == false) {
 
-	    error_details = "after read_image_info" ;
-	    error = true ;
-	    break ;
-	}
+            error_details = "after read_image_info";
+            error = true;
+            break;
+        }
 
         if (error) break;
 
-	int n ;
+        int n;
 
         // The Symbol Sub-Header information is next.
-        // 
-        for (n = 0 ; n < NUMS; n++) delete SYMBOLSH[n] ;
+        //
+        for (n = 0; n < NUMS; n++) delete SYMBOLSH[n];
         delete SYMBOLSH;
-        SYMBOLSH = 0 ;
+        SYMBOLSH = 0;
         NUMS = 0;
         if (!GetInt( buffer, &NUMS, 3, file))
         {
-	    error_details = "after read NUMS" ;
+            error_details = "after read NUMS";
             error = true;
             break;
         }
         if (NUMS > 0)
         {
             SYMBOLSH = new SymbolSH*[NUMS];
-            for (n = 0; n < NUMS; n++) SYMBOLSH[n] = 0 ;
+            for (n = 0; n < NUMS; n++) SYMBOLSH[n] = 0;
         }
         for (n = 0; n < NUMS; n++)
         {
@@ -213,7 +212,7 @@ StatusCode vil_nitf_message_header_v20::Read (vil_stream* file)
                 (SYMBOLSH[n]->LSSH > 7000)                     ||
                 (!GetInt (buffer, &SYMBOLSH[n]->LS,   6, file)))
             {
-	        error_details = "reading symbol header info" ;
+                error_details = "reading symbol header info";
                 error = true;
                 break;
             }
@@ -221,21 +220,21 @@ StatusCode vil_nitf_message_header_v20::Read (vil_stream* file)
         if (error) break;
 
         // The Label Sub-Header information is next.
-        // 
+        //
         for (n = 0; n < NUML; n++) delete LABELSH[n];
         delete LABELSH;
-        LABELSH = 0 ;
+        LABELSH = 0;
         NUML = 0;
         if (!GetInt (buffer, &NUML, 3, file))
         {
-	    error_details = "after read NUML" ;
+            error_details = "after read NUML";
             error = true;
             break;
         }
         if (NUML > 0)
         {
             LABELSH = new LabelSH*[NUML];
-            for (n=0; n<NUML; n++) LABELSH[n] = 0 ;
+            for (n=0; n<NUML; n++) LABELSH[n] = 0;
         }
         for (n = 0; n < NUML; n++)
         {
@@ -244,7 +243,7 @@ StatusCode vil_nitf_message_header_v20::Read (vil_stream* file)
                 (!GetInt (buffer, &LABELSH[n]->LL,   3, file)) ||
                 (LABELSH[n]->LL > 320))
             {
-	        error_details = "after reading label header info" ;
+                error_details = "after reading label header info";
                 error = true;
                 break;
             }
@@ -252,21 +251,21 @@ StatusCode vil_nitf_message_header_v20::Read (vil_stream* file)
         if (error) break;
 
         // The Text Sub-Header information is next.
-        // 
+        //
         for (n = 0; n < NUMT; n++) delete TEXTSH[n];
-        delete TEXTSH ;
-        TEXTSH = 0 ;
+        delete TEXTSH;
+        TEXTSH = 0;
         NUMT = 0;
         if (!GetInt (buffer, &NUMT, 3, file))
         {
-	    error_details = "after read NUMT" ;
+            error_details = "after read NUMT";
             error = true;
             break;
         }
         if (NUMT > 0)
         {
             TEXTSH = new TextSH*[NUMT];
-            for (n = 0; n < NUMT; n++) TEXTSH[n] = 0 ;
+            for (n = 0; n < NUMT; n++) TEXTSH[n] = 0;
         }
         for (n = 0; n < NUMT; n++)
         {
@@ -275,7 +274,7 @@ StatusCode vil_nitf_message_header_v20::Read (vil_stream* file)
                 (TEXTSH[n]->LTSH > 2000)                     ||
                 (!GetInt (buffer, &TEXTSH[n]->LT,   5, file)))
             {
-	        error_details = "after reading text header info" ;
+                error_details = "after reading text header info";
                 error = true;
                 break;
             }
@@ -286,18 +285,18 @@ StatusCode vil_nitf_message_header_v20::Read (vil_stream* file)
         //
         for (n = 0; n < NUMDES; n++) delete DESSH[n];
         delete DESSH;
-        DESSH = 0 ;
+        DESSH = 0;
         NUMDES = 0;
         if (!GetInt (buffer, &NUMDES, 3, file))
         {
-	    error_details = "after read NUMDES" ;
+            error_details = "after read NUMDES";
             error = true;
             break;
         }
         if (NUMDES > 0)
         {
             DESSH = new DES_SH*[NUMDES];
-            for (n = 0; n < NUMDES; n++) DESSH[n] = 0 ;
+            for (n = 0; n < NUMDES; n++) DESSH[n] = 0;
         }
         for (n = 0; n < NUMDES; n++)
         {
@@ -305,7 +304,7 @@ StatusCode vil_nitf_message_header_v20::Read (vil_stream* file)
             if ((!GetInt (buffer, &DESSH[n]->LDSH, 4, file)) ||
                 (!GetInt (buffer, &DESSH[n]->LD,   9, file)))
             {
-	        error_details = "after read DES header info" ;
+                error_details = "after read DES header info";
                 error = true;
                 break;
             }
@@ -313,20 +312,20 @@ StatusCode vil_nitf_message_header_v20::Read (vil_stream* file)
         if (error) break;
 
         // The Reserved Extension Segment Sub-Header information is first.
-        // 
+        //
         for (n = 0; n < NUMRES; n++) delete RESSH[n];
         delete RESSH;
-        RESSH = 0 ;
+        RESSH = 0;
         if (!GetInt (buffer, &NUMRES, 3, file))
         {
-	    error_details = "after read NUMRES" ;
+            error_details = "after read NUMRES";
             error = true;
             break;
         }
         if (NUMRES > 0)
         {
             RESSH = new RES_SH*[NUMRES];
-            for (n = 0; n < NUMRES; n++) RESSH[n] = 0 ;
+            for (n = 0; n < NUMRES; n++) RESSH[n] = 0;
         }
         for (n = 0; n < NUMRES; n++)
         {
@@ -334,7 +333,7 @@ StatusCode vil_nitf_message_header_v20::Read (vil_stream* file)
             if ((!GetInt (buffer, &RESSH[n]->LRSH, 4, file)) ||
                 (!GetInt (buffer, &RESSH[n]->LR,   7, file)))
             {
-	        error_details = "after read RES header info" ;
+                error_details = "after read RES header info";
                 error = true;
                 break;
             }
@@ -343,15 +342,14 @@ StatusCode vil_nitf_message_header_v20::Read (vil_stream* file)
 
         // And finally, read any extended header information.
         //
-	if (read_extended_header_data (file) == false) {
+        if (read_extended_header_data (file) == false) {
 
- 	    error_details = "after read extended header info" ;
-	    error = true ;
-	    break ;
-	}
+            error_details = "after read extended header info";
+            error = true;
+            break;
+        }
 
-        done = true ;
-
+        done = true;
     }  // end while (!done)
 
     if (error)
@@ -359,19 +357,17 @@ StatusCode vil_nitf_message_header_v20::Read (vil_stream* file)
         file->seek (curpos);
     }
 
-    StatusCode status_code = (error ? STATUS_BAD : STATUS_GOOD) ;
+    StatusCode status_code = (error ? STATUS_BAD : STATUS_GOOD);
 
-    vcl_cout << "\n#### exit " << method_name 
-	     << "status code = " << status_code 
-	     << "  file position = " << file->tell()
-	     << vcl_endl ;
+    vcl_cout << "\n#### exit " << method_name
+             << "status code = " << status_code
+             << "  file position = " << file->tell()
+             << vcl_endl;
     if (error_details.length() > 0) {
-      vcl_cout << " error details = <" << error_details << ">"
-	       << vcl_endl ;
+      vcl_cout << " error details = <" << error_details << ">\n";
     }
 
-    return status_code ;
-
+    return status_code;
 }  // end method Read
 
 /**
@@ -381,44 +377,44 @@ StatusCode vil_nitf_message_header_v20::Read (vil_stream* file)
  */
 bool vil_nitf_message_header_v20::read_image_info (vil_stream* file)
 {
-    bool success = true ;
+    bool success = true;
 
-    int n ;
+    int n;
     for (n = 0; n < NUMI; n++) {
-        delete IMAGESH[n] ;
+        delete IMAGESH[n];
     }
-    delete IMAGESH ;
-    IMAGESH = 0 ;
-    NUMI = 0 ;
+    delete IMAGESH;
+    IMAGESH = 0;
+    NUMI = 0;
 
-    char buffer[16] ;
+    char buffer[16];
     if (!GetInt (buffer, &NUMI, 3, file))
     {
-	success = false ;
+        success = false;
     }
     if (success && NUMI > 0)
     {
-	IMAGESH = new ImageSH*[NUMI] ;
-	for (n = 0 ; n < NUMI ; n++) {
-	    IMAGESH[n] = 0 ;
-	}
+        IMAGESH = new ImageSH*[NUMI];
+        for (n = 0; n < NUMI; n++) {
+            IMAGESH[n] = 0;
+        }
 
-	for (n = 0 ; n < NUMI ; n++) {
+        for (n = 0; n < NUMI; n++) {
 
-	    IMAGESH[n] = new ImageSH ;
+            IMAGESH[n] = new ImageSH;
 
-	    success = GetInt (buffer, &IMAGESH[n]->LISH, 6, file) ;
-	    if (!success ||
-		(IMAGESH[n]->LISH > 111000) ||
-		(!GetInt (buffer, &IMAGESH[n]->LI, 10, file)))
-	    {
-	        success = false ;
-		break ;
-	    }
-	}  // end for NUMI
+            success = GetInt (buffer, &IMAGESH[n]->LISH, 6, file);
+            if (!success ||
+                (IMAGESH[n]->LISH > 111000) ||
+                (!GetInt (buffer, &IMAGESH[n]->LI, 10, file)))
+            {
+                success = false;
+                break;
+            }
+        }  // end for NUMI
     }
 
-    return success ;
+    return success;
 }
 
 /**
@@ -428,84 +424,79 @@ bool vil_nitf_message_header_v20::read_image_info (vil_stream* file)
  */
 bool vil_nitf_message_header_v20::read_extended_header_data (vil_stream* file)
 {
-    static vcl_string method_name = "vil_nitf_message_header_v20::read_extended_header_data: " ;
+    static vcl_string method_name = "vil_nitf_message_header_v20::read_extended_header_data: ";
 
-    bool success = true ;
-    unsigned read_count = 0 ;
+    bool success = true;
+    unsigned read_count = 0;
 
-    vil_streampos start_pos = file->tell() ;
-    vcl_cout << "\n#### enter " << method_name 
-	     << "file position = " << start_pos
-	     << vcl_endl ;
+    vil_streampos start_pos = file->tell();
+    vcl_cout << "\n#### enter " << method_name
+             << "file position = " << start_pos << vcl_endl;
 
-    char buffer[16] ;
+    char buffer[16];
 
     if (!GetInt (buffer, &UDHDL, 5, file))
     {
-	success = false ;
+        success = false;
     }
     vcl_cout << method_name << "UDHDL = " << UDHDL
-	     << " (user defined header data length)."
-	     << vcl_endl ;
+             << " (user defined header data length).\n";
 
-    delete UDHD ;
-    UDHD = 0 ;
+    delete UDHD;
+    UDHD = 0;
     if (success && (UDHDL > 0))
     {
-        read_count += 5 ;
+        read_count += 5;
 
-	UDHD = new char[UDHDL + 1] ;
-	UDHD[UDHDL] = 0 ;
-	if (file->read (UDHD, UDHDL) < UDHDL)
-	{
-	    success = false ;
-	}
+        UDHD = new char[UDHDL + 1];
+        UDHD[UDHDL] = 0;
+        if (file->read (UDHD, UDHDL) < UDHDL)
+        {
+            success = false;
+        }
     }
 
-    int tmp = 0 ;
+    int tmp = 0;
     if (success) {
 
-        read_count += UDHDL ;
+        read_count += UDHDL;
 
-	if (GetInt (buffer, &tmp, 5, file)) {
+        if (GetInt (buffer, &tmp, 5, file)) {
 
-	  read_count += 5 ;
-	  XHD->XHDL = tmp ;
+          read_count += 5;
+          XHD->XHDL = tmp;
 
-	  vcl_cout << method_name << "XHD->XHDL = " << XHD->XHDL 
-		   << "  read_count = " << read_count 
-		   << vcl_endl ; 
+          vcl_cout << method_name << "XHD->XHDL = " << XHD->XHDL
+                   << "  read_count = " << read_count << vcl_endl;
 
-	  if (XHD->Read (file) != STATUS_GOOD) {
-	      success = false ;
-	  }
-	  else {
-	    read_count += XHD->XHDL ;
-	  }
-	}
-	else {
-	    success = false ;
-	}
+          if (XHD->Read (file) != STATUS_GOOD) {
+              success = false;
+          }
+          else {
+            read_count += XHD->XHDL;
+          }
+        }
+        else {
+            success = false;
+        }
     }
 
-    vcl_cout << "\n#### exit " << method_name 
-	     << "success = " << success
-	     << "  file position = " << file->tell()
-	     << vcl_endl ;
+    vcl_cout << "\n#### exit " << method_name
+             << "success = " << success
+             << "  file position = " << file->tell() << vcl_endl;
 
-    unsigned pos_diff = file->tell() - start_pos ;
+    unsigned pos_diff = file->tell() - start_pos;
     vcl_cout << "    read_count = " << read_count
-	     << "    position diff = " << pos_diff
-	     << vcl_endl ;
+             << "    position diff = " << pos_diff << vcl_endl;
 
-    return success ;
+    return success;
 }
 
 StatusCode vil_nitf_message_header_v20::Write (vil_stream* file)
 {
-    if (!file || !file->ok()) return (STATUS_BAD) ;
+    if (!file || !file->ok()) return STATUS_BAD;
     // WAS IOFile IN TARGETJR.  NO CORRESPONDING METHOD ON vil_stream ?
-//    if (file->GetMode() == 'r')   return (STATUS_BAD) ;
+//    if (file->GetMode() == 'r')   return STATUS_BAD;
 
     bool error = false;
     bool done  = false;
@@ -515,28 +506,28 @@ StatusCode vil_nitf_message_header_v20::Write (vil_stream* file)
     while (!done)
     {
         buffer[0] = *ConvertClassification(MSCLAS);
-        if ((file->write (MHDR,   strlen(MHDR))    <  9) ||
-            (file->write (STYPE,  strlen(STYPE))   <  6) ||
-            (file->write (OSTAID, strlen(OSTAID))  < 10) ||
-            (file->write (MDT,    strlen(MDT))     < 14) ||
-            (file->write (MTITLE, strlen(MTITLE))  < 80) ||
+        if ((file->write (MHDR,   vcl_strlen(MHDR))    <  9) ||
+            (file->write (STYPE,  vcl_strlen(STYPE))   <  6) ||
+            (file->write (OSTAID, vcl_strlen(OSTAID))  < 10) ||
+            (file->write (MDT,    vcl_strlen(MDT))     < 14) ||
+            (file->write (MTITLE, vcl_strlen(MTITLE))  < 80) ||
             (file->write (buffer, 1)               <  1) || // MSCLAS
-            (file->write (MSCODE, strlen(MSCODE))  < 40) ||
-            (file->write (MSCTLH, strlen(MSCTLH))  < 40) ||
-            (file->write (MSREL,  strlen(MSREL))   < 40) ||
-            (file->write (MSCAUT, strlen(MSCAUT))  < 20) ||
-            (file->write (MSCTLN, strlen(MSCTLN))  < 20) ||
-            (file->write (MSDWNG, strlen(MSDWNG))  <  6) ||
-            (!strcmp(MSDWNG, "999998") &&
-             file->write (MSDEVT, strlen(MSDEVT))  < 40) ||
+            (file->write (MSCODE, vcl_strlen(MSCODE))  < 40) ||
+            (file->write (MSCTLH, vcl_strlen(MSCTLH))  < 40) ||
+            (file->write (MSREL,  vcl_strlen(MSREL))   < 40) ||
+            (file->write (MSCAUT, vcl_strlen(MSCAUT))  < 20) ||
+            (file->write (MSCTLN, vcl_strlen(MSCTLN))  < 20) ||
+            (file->write (MSDWNG, vcl_strlen(MSDWNG))  <  6) ||
+            (!vcl_strcmp(MSDWNG, "999998") &&
+             file->write (MSDEVT, vcl_strlen(MSDEVT))  < 40) ||
             (!PutInt(buffer, MSCOP,   5, file))              ||
             (!PutInt(buffer, MSCPYS,  5, file))              ||
             !((ENCRYP==NOTENCRYPTED &&
                file->write ((char*)"0", 1)==1) ||
               (ENCRYP==ENCRYPTED &&
                file->write ((char*)"1", 1)==1))                 ||
-            (file->write (ONAME,  strlen(ONAME))   < 27) ||
-            (file->write (OPHONE, strlen(OPHONE))  < 18) ||
+            (file->write (ONAME,  vcl_strlen(ONAME))   < 27) ||
+            (file->write (OPHONE, vcl_strlen(OPHONE))  < 18) ||
             (!PutInt(buffer, ML,    12, file))               ||
             (!PutInt(buffer, HL,     6, file))               ||
             (!PutInt(buffer, NUMI,   3, file)))
@@ -617,10 +608,10 @@ StatusCode vil_nitf_message_header_v20::Write (vil_stream* file)
         }
         if (error) break;
 
-	//UDHD will be nil of UDHDL=0
+        //UDHD will be nil of UDHDL=0
         if ((!PutInt(buffer, UDHDL, 5, file)) ||
-            (UDHDL>0 && (int) strlen (UDHD) < UDHDL) ||
-            (UDHDL>0 && file->write (UDHD, UDHDL) < UDHDL)) 
+            (UDHDL>0 && (int) vcl_strlen (UDHD) < UDHDL) ||
+            (UDHDL>0 && file->write (UDHD, UDHDL) < UDHDL))
         {
             error = true;
             break;
@@ -637,12 +628,12 @@ StatusCode vil_nitf_message_header_v20::Write (vil_stream* file)
             break;
         }
 
-	done=true;
+        done=true;
     }
 
     if (error) file->seek (curpos);
-    
-    return(error ? STATUS_BAD : STATUS_GOOD);
+
+    return error ? STATUS_BAD : STATUS_GOOD;
 }
 
 /**
@@ -652,22 +643,21 @@ unsigned long vil_nitf_message_header_v20::GetHeaderLength() const
 {
     unsigned long length = 388 +
                  NUMDES*13 + NUMI*16 + NUML*7 + NUMRES*11 + NUMS*10 + NUMT*9 +
-                 UDHDL + XHD->GetHeaderLength() ;
+                 UDHDL + XHD->GetHeaderLength();
     if (!vcl_strcmp (MSDWNG, "999998")) {
-      length += 40 ;
+      length += 40;
     }
 
     // JUST FOR DEBUGGING.
-    static vcl_string method_name = " vil_nitf_message_header_v20::GetHeaderLength: " ;
+    static vcl_string method_name = " vil_nitf_message_header_v20::GetHeaderLength: ";
 
     if (length != vil_nitf_message_header::GetHeaderLength()) {
       vcl_cout << method_name << "WARNING: calculated header length = " << length
-	       << vcl_endl ;
-      vcl_cout << "    does not equal header length from file  = " 
-	       << vil_nitf_message_header::GetHeaderLength()
-	       << vcl_endl ;
+               << vcl_endl
+               << "    does not equal header length from file  = "
+               << vil_nitf_message_header::GetHeaderLength() << vcl_endl;
     }
-    return length ;
+    return length;
 }
 
 //====================================================================
@@ -680,16 +670,16 @@ void vil_nitf_message_header_v20::Init()
 
     char initstr[80];                   // Will be filled with spaces.
 
-    memset (initstr,' ',80) ;
+    vcl_memset(initstr,' ',80);
 
-    STRNCPY (MHDR,   HEADER_VERSION_STR,  9) ;  
-    STRNCPY (STYPE,  initstr,      6) ; 
-    STRNCPY (OSTAID, initstr,     10) ;
+    STRNCPY (MHDR,   HEADER_VERSION_STR,  9);
+    STRNCPY (STYPE,  initstr,      6);
+    STRNCPY (OSTAID, initstr,     10);
 
     // We must fool SCCS, otherwise it will try to
     // be smart and interpret the percents in the string.
-    // 
-    time_t clock;
+    //
+    vcl_time_t clock;
     struct tm *tm;
     clock = time(NULL);
     tm = localtime(&clock);
@@ -702,14 +692,14 @@ void vil_nitf_message_header_v20::Init()
     MSCLAS = DefaultClassification;
     STRNCPY (MSCODE, initstr,     40);
     STRNCPY (MSCTLH, initstr,     40);
-    STRNCPY (MSREL,  initstr,     40); 
+    STRNCPY (MSREL,  initstr,     40);
     STRNCPY (MSCAUT, initstr,     20);
     STRNCPY (MSCTLN, initstr,     20);
     STRNCPY (MSDWNG, initstr,      6);
     STRNCPY (MSDEVT, initstr,     40);
     MSCOP = MSCPYS = 0;
     ENCRYP = NOTENCRYPTED;
-    STRNCPY (ONAME,  initstr,     27); 
+    STRNCPY (ONAME,  initstr,     27);
     STRNCPY (OPHONE, initstr,     18);
     ML = HL = 0;
 
@@ -731,17 +721,16 @@ void vil_nitf_message_header_v20::Init()
     delete TEXTSH;
 
     DESSH = (DES_SH**)NULL;
-    IMAGESH = 0 ;
-    LABELSH = 0 ;
-    RESSH = (RES_SH**) NULL ;
-    SYMBOLSH = 0 ;
-    TEXTSH = 0 ;
+    IMAGESH = 0;
+    LABELSH = 0;
+    RESSH = (RES_SH**) NULL;
+    SYMBOLSH = 0;
+    TEXTSH = 0;
 
     UDHDL = 0;
     delete UDHD;
-    UDHD = 0 ;
+    UDHD = 0;
     delete XHD;
     XHD = new vil_nitf_extended_header(0);
-
 }
 

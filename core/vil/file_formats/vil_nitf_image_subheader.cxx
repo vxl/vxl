@@ -1,135 +1,136 @@
-// Source
-
+// This is core/vil/file_formats/vil_nitf_image_subheader.cxx
+#include "vil_nitf_image_subheader.h"
 //================ GE Aerospace NITF support libraries =================
-//
-// Description:	This file implements the NITF image subheader base class.
+//:
+// \file
+// \brief This file implements the NITF image subheader base class.
 // NOTE: Ported from TargetJr ImageSubHeader.  (Code in file NITFHeader.C)
 //
-//  $Revision: 1.1 $ 
-//  $Date: 2003/12/26 00:20:32 $
-//  $Author: mlaymon $
-//
+//  \date: 2003/12/26
+//  \author: mlaymon
 
 #include <vcl_iostream.h>
+#include <vcl_cstring.h>
+#include <vcl_cstddef.h>
+#include <vcl_cstdlib.h> // for abs(long)
+#include <vcl_cassert.h>
 
 #include "vil_nitf_util.h"
 #include "vil_nitf_version.h"
-#include "vil_nitf_image_subheader.h"
 
-vil_nitf_image_subheader::vil_nitf_image_subheader() 
+vil_nitf_image_subheader::vil_nitf_image_subheader()
     : IID (ID), IDATIM_ (DT), ITITLE (TITLE),
       ISCLAS (CLAS), ISCODE (CODE), ISCTLH (CTLH),
       ISREL (REL),ISCAUT (CAUT), ISCTLN (CTLN),
       ISDWNG (DWNG), ISDEVT (DEVT)
 {
-    RPC_present = false; 
+    RPC_present = false;
     ICHIPB_present = false;
     I2MAPD_present = false;
     PIAIMC_present = false;
-    STDID_present = false;   
+    STDID_present = false;
     IM = TGTID = ISORCE = 0;
     STRCPY(IM,     "");
     STRCPY (TGTID,  "");
     STRCPY (ISORCE, "");
-     
+
     ICORDS = NONE;
 
     IGEOLO = 0;
     STRCPY (IGEOLO, "");
-     
+
     IC = COMRAT = 0;
-    STRCPY (IC,     "") ;
-    STRCPY (COMRAT, "") ;
-     
+    STRCPY (IC,     "");
+    STRCPY (COMRAT, "");
+
     NBANDS = 0;
     bands = 0;
-     
+
     ISYNC = 0;
     IMODE_ = NOT_INTERLEAVED;
-    
+
     NROWS = NCOLS = NBPR = NBPC = NPPBH = NPPBV = 0;
 
     ABPP   = NBPP = 0;
     PJUST  = PJUST_RIGHT;
-    PVTYPE_ = VIL_PIXEL_FORMAT_INT_32 ;
+    PVTYPE_ = VIL_PIXEL_FORMAT_INT_32;
 
     IREP=0; ICAT=0;
     STRCPY (IREP,"MONO    ");
     STRCPY (ICAT,"VIS     ");
 
     IMAG = 0;
-    STRCPY (IMAG,   "") ;
-     
+    STRCPY (IMAG,   "");
+
     UDIDL_ = 0;
     UDID_  = 0;
-    XSHD  = new vil_nitf_extended_subheader (0) ;
+    XSHD  = new vil_nitf_extended_subheader (0);
 
     ANAMRPH[0] = 1; // Default aggregation mode is 1x1
     ANAMRPH[1] = 1;
 
-	// MPP 4/16/2001
-	// Added support for PIAIMC extension
-	// Initialize string pointers so later STRCPY's work OK.
-	SENSMODE = 0; STRCPY(SENSMODE, "");
-	SENSNAME = 0; STRCPY(SENSNAME, "");
-	SOURCE = 0; STRCPY(SOURCE, "");
-	PIAMSNNUM = 0; STRCPY(PIAMSNNUM, "");
-	CAMSPECS = 0; STRCPY(CAMSPECS, "");
-	PROJID = 0; STRCPY(PROJID, "");
-	OTHERCOND = 0; STRCPY(OTHERCOND, "");
-	IDATUM = 0; STRCPY(IDATUM, "");
-	IELLIP = 0; STRCPY(IELLIP, "");
-	PREPROC = 0; STRCPY(PREPROC, "");
-	IPROJ = 0; STRCPY(IPROJ, "");
+    // MPP 4/16/2001
+    // Added support for PIAIMC extension
+    // Initialize string pointers so later STRCPY's work OK.
+    SENSMODE = 0; STRCPY(SENSMODE, "");
+    SENSNAME = 0; STRCPY(SENSNAME, "");
+    SOURCE = 0; STRCPY(SOURCE, "");
+    PIAMSNNUM = 0; STRCPY(PIAMSNNUM, "");
+    CAMSPECS = 0; STRCPY(CAMSPECS, "");
+    PROJID = 0; STRCPY(PROJID, "");
+    OTHERCOND = 0; STRCPY(OTHERCOND, "");
+    IDATUM = 0; STRCPY(IDATUM, "");
+    IELLIP = 0; STRCPY(IELLIP, "");
+    PREPROC = 0; STRCPY(PREPROC, "");
+    IPROJ = 0; STRCPY(IPROJ, "");
 
-        // GWB 2/10/2003
-        // Added for STDIDx support
-        ACQUISITION_DATE = 0; STRCPY(ACQUISITION_DATE, "");
-        MISSION = 0; STRCPY(MISSION, "");
-        PASS = 0; STRCPY(PASS, "");
-        START_SEGMENT = 0; STRCPY(START_SEGMENT, "");
-        REPLAY_REGEN = 0; STRCPY(REPLAY_REGEN, "");
-        BLANK_FILL = 0; STRCPY(BLANK_FILL, "");
-        END_SEGMENT = 0; STRCPY(END_SEGMENT, "");
-        COUNTRY = 0; STRCPY(COUNTRY, "");
-        LOCATION = 0; STRCPY(LOCATION, "");
-        RESERVED_1 = 0; STRCPY(RESERVED_1, "");
-        RESERVED_2 = 0; STRCPY(RESERVED_2, "");
-
+    // GWB 2/10/2003
+    // Added for STDIDx support
+    ACQUISITION_DATE = 0; STRCPY(ACQUISITION_DATE, "");
+    MISSION = 0; STRCPY(MISSION, "");
+    PASS = 0; STRCPY(PASS, "");
+    START_SEGMENT = 0; STRCPY(START_SEGMENT, "");
+    REPLAY_REGEN = 0; STRCPY(REPLAY_REGEN, "");
+    BLANK_FILL = 0; STRCPY(BLANK_FILL, "");
+    END_SEGMENT = 0; STRCPY(END_SEGMENT, "");
+    COUNTRY = 0; STRCPY(COUNTRY, "");
+    LOCATION = 0; STRCPY(LOCATION, "");
+    RESERVED_1 = 0; STRCPY(RESERVED_1, "");
+    RESERVED_2 = 0; STRCPY(RESERVED_2, "");
 }
 
 //====================================================================
-// -- Copy constructor for vil_nitf_image_subheader.
+//: Copy constructor for vil_nitf_image_subheader.
 //====================================================================
 vil_nitf_image_subheader::vil_nitf_image_subheader (const vil_nitf_image_subheader& header)
-    : vil_nitf_header (header), IID (ID), IDATIM_ (DT), ITITLE (TITLE), ISCLAS (CLAS), 
-      ISCODE (CODE), ISCTLH (CTLH), ISREL (REL), ISCAUT (CAUT), ISCTLN (CTLN), 
+    : vil_nitf_header (header), IID (ID), IDATIM_ (DT), ITITLE (TITLE), ISCLAS (CLAS),
+      ISCODE (CODE), ISCTLH (CTLH), ISREL (REL), ISCAUT (CAUT), ISCTLN (CTLN),
       ISDWNG (DWNG), ISDEVT (DEVT)
 {
-	// MPP 4/15/2001
-	// Removed -- duplicate in RPC block below
+        // MPP 4/15/2001
+        // Removed - duplicate in RPC block below
     // RPC_present = header.RPC_present;
 
     IM     = new_strdup (header.IM);
     TGTID  = new_strdup (header.TGTID);
     ISORCE = new_strdup (header.ISORCE);
-     
-    ICORDS = header.ICORDS ;
-    IGEOLO = new_strdup (header.IGEOLO) ;
-     
-    ICOM_.clear() ;
+
+    ICORDS = header.ICORDS;
+    IGEOLO = new_strdup (header.IGEOLO);
+
+    ICOM_.clear();
 
     if (header.ICOM_.size() > 0) {
       //  COPY CONTENTS OF header.ICOM_.  SHOULD WE USE COPY CONSTRUCTOR ??  MAL 9oct2003
-	for (size_t i = 0 ; i < header.ICOM_.size() ; ++i) {
-	    vcl_string temp_str = header.ICOM_[i] ;
-	    this->ICOM_.push_back (temp_str) ;
-	}
+        for (vcl_size_t i = 0; i < header.ICOM_.size(); ++i) {
+            vcl_string temp_str = header.ICOM_[i];
+            this->ICOM_.push_back (temp_str);
+        }
     }
 
-    IC     = new_strdup (header.IC) ;
-    COMRAT = new_strdup (header.COMRAT) ;
-     
+    IC     = new_strdup (header.IC);
+    COMRAT = new_strdup (header.COMRAT);
+
     NBANDS = header.NBANDS;
     bands  = (vil_nitf_image_subheader_band**)NULL;
     if (NBANDS > 0) {
@@ -137,7 +138,7 @@ vil_nitf_image_subheader::vil_nitf_image_subheader (const vil_nitf_image_subhead
 
         unsigned int i;
         for (i = 0; i < NBANDS; i++) {
-            bands[i] = new vil_nitf_image_subheader_band ;
+            bands[i] = new vil_nitf_image_subheader_band;
 
             vil_nitf_image_subheader_band * band = bands[i];
             assert(header.bands[i] != NULL);
@@ -145,7 +146,7 @@ vil_nitf_image_subheader::vil_nitf_image_subheader (const vil_nitf_image_subhead
             band->ITYPE = new_strdup(header.bands[i]->ITYPE);
             band->IFC   = new_strdup(header.bands[i]->IFC);
             band->IMFLT = new_strdup(header.bands[i]->IMFLT);
-            
+
             band->LUTD = 0;
             if (header.bands[i]->NLUTS>0 && header.bands[i]->NELUT>0) {
                 band->NLUTS = header.bands[i]->NLUTS;
@@ -155,18 +156,18 @@ vil_nitf_image_subheader::vil_nitf_image_subheader (const vil_nitf_image_subhead
                 unsigned int j;
                 for (j = 0; j < band->NLUTS; j++) {
                     band->LUTD[j] = new unsigned char[band->NELUT];
-                    memcpy(band->LUTD[j], header.bands[i]->LUTD[j], band->NELUT);
-		}
-	    }
+                    vcl_memcpy(band->LUTD[j], header.bands[i]->LUTD[j], band->NELUT);
+                }
+            }
             else {
                 band->NLUTS = band->NELUT = 0;
-	    }
-	}
+            }
+        }
     }
-     
+
     ISYNC  = header.ISYNC;
     IMODE_  = header.IMODE_;
-    
+
     NROWS  = header.NROWS;
     NCOLS  = header.NCOLS;
     NBPR   = header.NBPR;
@@ -182,11 +183,11 @@ vil_nitf_image_subheader::vil_nitf_image_subheader (const vil_nitf_image_subhead
     ICAT = new_strdup(header.ICAT);
 
     IMAG   = new_strdup(header.IMAG);
-     
-    UDIDL_  = header.UDIDL_ ;
+
+    UDIDL_  = header.UDIDL_;
     UDID_   = new char[UDIDL_ + 1];
     UDID_[UDIDL_] = (char)NULL;
-    vcl_memcpy (UDID_, header.UDID_, UDIDL_) ;
+    vcl_memcpy (UDID_, header.UDID_, UDIDL_);
 
     assert(header.XSHD != NULL);
     XSHD   = new vil_nitf_extended_subheader (*header.XSHD);
@@ -213,12 +214,12 @@ vil_nitf_image_subheader::vil_nitf_image_subheader (const vil_nitf_image_subhead
     HEIGHT_SCALE = header.HEIGHT_SCALE;
 
     int k;
-    for (k=0 ; k<20 ; k++) {
+    for (k=0; k<20; k++) {
        LINE_NUM[k] = header.LINE_NUM[k];
        LINE_DEN[k] = header.LINE_DEN[k];
        SAMP_NUM[k] = header.SAMP_NUM[k];
        SAMP_DEN[k] = header.SAMP_DEN[k];
-    }// next set of RPCs 
+    }// next set of RPCs
 
     // Added by GWB to support Anamorphic Images
     ANAMRPH[0] = header.ANAMRPH[0];
@@ -249,44 +250,44 @@ vil_nitf_image_subheader::vil_nitf_image_subheader (const vil_nitf_image_subhead
     FI_ROW = header.FI_ROW;
     FI_COL = header.FI_COL;
 
-	// MPP 4/15/2001
-	// Added to support PIAIMC extension
-	// Initialize string pointers so later STRNCPY's work OK.
-	SENSMODE = 0;
-	SENSNAME = 0;
-	SOURCE = 0;
-	PIAMSNNUM = 0;
-	CAMSPECS = 0;
-	PROJID = 0;
-	OTHERCOND = 0;
-	IDATUM = 0;
-	IELLIP = 0;
-	PREPROC = 0;
-	IPROJ = 0;
+        // MPP 4/15/2001
+        // Added to support PIAIMC extension
+        // Initialize string pointers so later STRNCPY's work OK.
+        SENSMODE = 0;
+        SENSNAME = 0;
+        SOURCE = 0;
+        PIAMSNNUM = 0;
+        CAMSPECS = 0;
+        PROJID = 0;
+        OTHERCOND = 0;
+        IDATUM = 0;
+        IELLIP = 0;
+        PREPROC = 0;
+        IPROJ = 0;
 
-	// Copy existing header's data
-	PIAIMC_present = header.PIAIMC_present;
-	CLOUDCVR = header.CLOUDCVR;
-	SRP = header.SRP;
-	STRCPY(SENSMODE, header.SENSMODE);
-	STRCPY(SENSNAME, header.SENSNAME);
-	STRCPY(SOURCE, header.SOURCE);
-	COMGEN = header.COMGEN;
-	SUBQUAL = header.SUBQUAL;
-	STRCPY(PIAMSNNUM, header.PIAMSNNUM);
-	STRCPY(CAMSPECS, header.CAMSPECS);
-	STRCPY(PROJID, header.PROJID);
-	GENERATION = header.GENERATION;
-	ESD = header.ESD;
-	STRCPY(OTHERCOND, header.OTHERCOND);
-	MEANGSD = header.MEANGSD;
-	STRCPY(IDATUM, header.IDATUM);
-	STRCPY(IELLIP, header.IELLIP);
-	STRCPY(PREPROC, header.PREPROC);
-	STRCPY(IPROJ, header.IPROJ);
-	SATTRACK_PATH = header.SATTRACK_PATH;
-	SATTRACK_ROW = header.SATTRACK_ROW;
-	// end PIAIMC support
+        // Copy existing header's data
+        PIAIMC_present = header.PIAIMC_present;
+        CLOUDCVR = header.CLOUDCVR;
+        SRP = header.SRP;
+        STRCPY(SENSMODE, header.SENSMODE);
+        STRCPY(SENSNAME, header.SENSNAME);
+        STRCPY(SOURCE, header.SOURCE);
+        COMGEN = header.COMGEN;
+        SUBQUAL = header.SUBQUAL;
+        STRCPY(PIAMSNNUM, header.PIAMSNNUM);
+        STRCPY(CAMSPECS, header.CAMSPECS);
+        STRCPY(PROJID, header.PROJID);
+        GENERATION = header.GENERATION;
+        ESD = header.ESD;
+        STRCPY(OTHERCOND, header.OTHERCOND);
+        MEANGSD = header.MEANGSD;
+        STRCPY(IDATUM, header.IDATUM);
+        STRCPY(IELLIP, header.IELLIP);
+        STRCPY(PREPROC, header.PREPROC);
+        STRCPY(IPROJ, header.IPROJ);
+        SATTRACK_PATH = header.SATTRACK_PATH;
+        SATTRACK_ROW = header.SATTRACK_ROW;
+        // end PIAIMC support
 
         // Begin STDIDx support
         ACQUISITION_DATE = 0;
@@ -321,7 +322,6 @@ vil_nitf_image_subheader::vil_nitf_image_subheader (const vil_nitf_image_subhead
         STRCPY(RESERVED_1, header.RESERVED_1);
         STRCPY(RESERVED_2, header.RESERVED_2);
         // End STDIDx support
-
 }
 
 vil_nitf_image_subheader::~vil_nitf_image_subheader()
@@ -333,11 +333,11 @@ vil_nitf_image_subheader::~vil_nitf_image_subheader()
     delete [] IC;
     delete [] COMRAT;
 
-    ICOM_.clear() ;
+    ICOM_.clear();
 
     // Delete structures holding information for bands.
-    // 
-    unsigned int i ;
+    //
+    unsigned int i;
     for (i = 0; i < NBANDS; i++) {
         if (bands[i]) {
             delete [] bands[i]->ITYPE;
@@ -355,19 +355,19 @@ vil_nitf_image_subheader::~vil_nitf_image_subheader()
     delete [] ICAT;
     delete [] IMAG;
 
-	// MPP 4/15/2001
-	// Added to support PIAIMC extension
-	if (SENSMODE) delete [] SENSMODE;
-	if (SENSNAME) delete [] SENSNAME;
-	if (SOURCE) delete [] SOURCE;
-	if (PIAMSNNUM) delete [] PIAMSNNUM;
-	if (CAMSPECS) delete [] CAMSPECS;
-	if (PROJID) delete [] PROJID;
-	if (OTHERCOND) delete [] OTHERCOND;
-	if (IDATUM) delete [] IDATUM;
-	if (IELLIP) delete [] IELLIP;
-	if (PREPROC) delete [] PREPROC;
-	if (IPROJ) delete [] IPROJ;
+        // MPP 4/15/2001
+        // Added to support PIAIMC extension
+        if (SENSMODE) delete [] SENSMODE;
+        if (SENSNAME) delete [] SENSNAME;
+        if (SOURCE) delete [] SOURCE;
+        if (PIAMSNNUM) delete [] PIAMSNNUM;
+        if (CAMSPECS) delete [] CAMSPECS;
+        if (PROJID) delete [] PROJID;
+        if (OTHERCOND) delete [] OTHERCOND;
+        if (IDATUM) delete [] IDATUM;
+        if (IELLIP) delete [] IELLIP;
+        if (PREPROC) delete [] PREPROC;
+        if (IPROJ) delete [] IPROJ;
 
         // GWB 2/10/2003
         // Added for STDIDx support
@@ -382,64 +382,64 @@ vil_nitf_image_subheader::~vil_nitf_image_subheader()
         if (LOCATION) delete [] LOCATION;
         if (RESERVED_1) delete [] RESERVED_1;
         if (RESERVED_2) delete [] RESERVED_2;
-     
-    delete [] UDID_ ;
-    delete XSHD ;
+
+    delete [] UDID_;
+    delete XSHD;
 }
 
 //====================================================================
-// -- Method on used to determine if the Image is compressed.  If the
-// subclass specific to the NITF format does not use the virtual
-// method IsCompressed(), the NITF version will not use compression.
+//: Method on used to determine if the Image is compressed.
+//  If the subclass specific to the NITF format does not use the virtual
+//  method IsCompressed(), the NITF version will not use compression.
 //====================================================================
 bool vil_nitf_image_subheader::IsCompressed() const
 {
-    bool rval = false ;
-    return rval ;
+    bool rval = false;
+    return rval;
 }
 
 //====================================================================
-// -- Method used to retrieve the Image's cloud cover percentage.  If
-// the subclass specific to the NITF format does not use the virtual
-// method IsCompressed(), the NITF version will not use compression.
+//: Method used to retrieve the Image's cloud cover percentage.
+//  If the subclass specific to the NITF format does not use the virtual
+//  method IsCompressed(), the NITF version will not use compression.
 //====================================================================
 int vil_nitf_image_subheader::GetCloudCoverPercentage() const
 {
   // By default, we don't know the cloud cover %
-    int pct = 999 ;
-    return pct ;
+    int pct = 999;
+    return pct;
 }
 
 //====================================================================
-// -- Method to return a copy of the vil_nitf_header.  The copy returned
-// *must* be deleted by the caller.
+//: Method to return a copy of the vil_nitf_header.
+//  The copy returned *must* be deleted by the caller.
 //====================================================================
 vil_nitf_header*
 vil_nitf_image_subheader::Copy()
 {
     vil_nitf_header* rval = new vil_nitf_image_subheader(*this);
-    return(rval);
+    return rval;
 }
 
 //====================================================================
-// -- Method to copy over the contents of an vil_nitf_image_subheader.  If the
-// supplied header is invalid, the results are unspecified.
+//: Method to copy over the contents of an vil_nitf_image_subheader.
+//  If the supplied header is invalid, the results are unspecified.
 //====================================================================
 void vil_nitf_image_subheader::Copy (const vil_nitf_image_subheader* h)
 {
-    vil_nitf_header::Copy (h) ;
+    vil_nitf_header::Copy (h);
 
-    FilledCopy (IM, h->IM) ;
-    FilledCopy (TGTID, h->TGTID) ;
-    FilledCopy( ISORCE, h->ISORCE) ;
-     
-    ICORDS = h->ICORDS ;
-    FilledCopy (IGEOLO, h->IGEOLO) ;
-     
-    int NICOM = h->ICOM_.size() ;
-    ICOM_.clear() ;
+    FilledCopy (IM, h->IM);
+    FilledCopy (TGTID, h->TGTID);
+    FilledCopy( ISORCE, h->ISORCE);
+
+    ICORDS = h->ICORDS;
+    FilledCopy (IGEOLO, h->IGEOLO);
+
+    int NICOM = h->ICOM_.size();
+    ICOM_.clear();
     for (int n = 0;  n < NICOM; n++) {
-        this->ICOM_.push_back (h->ICOM_[n]) ;
+        this->ICOM_.push_back (h->ICOM_[n]);
     }
 
     FilledCopy (IC, h->IC);
@@ -457,8 +457,8 @@ void vil_nitf_image_subheader::Copy (const vil_nitf_image_subheader* h)
                     delete [] bands[i]->LUTD[j];
                 delete [] bands[i]->LUTD;
                 delete [] bands[i];
-	    }
-	}
+            }
+        }
 
         delete [] bands;
         bands = 0;
@@ -467,17 +467,17 @@ void vil_nitf_image_subheader::Copy (const vil_nitf_image_subheader* h)
         vil_nitf_image_subheader_band** newbands = new vil_nitf_image_subheader_band*[h->NBANDS];
 
         // Copy over h->NBANDS of the existing vil_nitf_image_subheader_band structs.
-        // 
+        //
         unsigned int i,j;
         for (i=0; i<h->NBANDS && i<NBANDS; i++)
             newbands[i] = bands[i];
 
         // Allocate any structures we were able to reuse...
-        // 
+        //
         j = i;
         for (; i < h->NBANDS; i++) {
-            newbands[i] = version_->newImageHeaderBand() ;
-	}
+            newbands[i] = version_->newImageHeaderBand();
+        }
         // Free up any structures we are not reusing...
         //
         for (; j < NBANDS; j++) {
@@ -505,7 +505,7 @@ void vil_nitf_image_subheader::Copy (const vil_nitf_image_subheader* h)
             FilledCopy(band->ITYPE, h->bands[i]->ITYPE);
             FilledCopy(band->IFC,   h->bands[i]->IFC);
             FilledCopy(band->IMFLT, h->bands[i]->IMFLT);
-            
+
             for (j=0; j<band->NLUTS; j++)
                 delete []band->LUTD[j];
             delete []band->LUTD;
@@ -516,9 +516,9 @@ void vil_nitf_image_subheader::Copy (const vil_nitf_image_subheader* h)
                 band->LUTD  = new unsigned char*[band->NLUTS];
                 for (j=0; j<band->NLUTS; j++) {
                     band->LUTD[j] = new unsigned char[band->NELUT];
-                    memcpy(band->LUTD[j], h->bands[i]->LUTD[j], band->NELUT);
-		}
-	    }
+                    vcl_memcpy(band->LUTD[j], h->bands[i]->LUTD[j], band->NELUT);
+                }
+            }
             else
                 {
                 band->NLUTS = band->NELUT = 0;
@@ -538,8 +538,8 @@ void vil_nitf_image_subheader::Copy (const vil_nitf_image_subheader* h)
     PJUST  = h->PJUST;
     PVTYPE_ = h->PVTYPE_;
 
-    FilledCopy (IMAG, h->IMAG) ;
-     
+    FilledCopy (IMAG, h->IMAG);
+
     // PMP added this stuff for RPC capability
     RRDSset = h->RRDSset;
     ULl = h->ULl;  ULs = h->ULs;
@@ -562,12 +562,12 @@ void vil_nitf_image_subheader::Copy (const vil_nitf_image_subheader* h)
     HEIGHT_SCALE = h->HEIGHT_SCALE;
 
     int k;
-    for (k=0 ; k<20 ; k++) {
+    for (k=0; k<20; k++) {
        LINE_NUM[k] = h->LINE_NUM[k];
        LINE_DEN[k] = h->LINE_DEN[k];
        SAMP_NUM[k] = h->SAMP_NUM[k];
        SAMP_DEN[k] = h->SAMP_DEN[k];
-    }// next set of RPCs 
+    }// next set of RPCs
 
     // Added by GWB to support Anamorphic Images
     ANAMRPH[0] = h->ANAMRPH[0];
@@ -598,29 +598,29 @@ void vil_nitf_image_subheader::Copy (const vil_nitf_image_subheader* h)
     FI_ROW = h->FI_ROW;
     FI_COL = h->FI_COL;
 
-	// MPP 4/15/2001
-	// Added to support PIAIMC extension
-	PIAIMC_present = h->PIAIMC_present;
-	CLOUDCVR = h->CLOUDCVR;
-	SRP = h->SRP;
-	STRCPY(SENSMODE, h->SENSMODE);
-	STRCPY(SENSNAME, h->SENSNAME);
-	STRCPY(SOURCE, h->SOURCE);
-	COMGEN = h->COMGEN;
-	SUBQUAL = h->SUBQUAL;
-	STRCPY(PIAMSNNUM, h->PIAMSNNUM);
-	STRCPY(CAMSPECS, h->CAMSPECS);
-	STRCPY(PROJID, h->PROJID);
-	GENERATION = h->GENERATION;
-	ESD = h->ESD;
-	STRCPY(OTHERCOND, h->OTHERCOND);
-	MEANGSD = h->MEANGSD;
-	STRCPY(IDATUM, h->IDATUM);
-	STRCPY(IELLIP, h->IELLIP);
-	STRCPY(PREPROC, h->PREPROC);
-	STRCPY(IPROJ, h->IPROJ);
-	SATTRACK_PATH = h->SATTRACK_PATH;
-	SATTRACK_ROW = h->SATTRACK_ROW;
+        // MPP 4/15/2001
+        // Added to support PIAIMC extension
+        PIAIMC_present = h->PIAIMC_present;
+        CLOUDCVR = h->CLOUDCVR;
+        SRP = h->SRP;
+        STRCPY(SENSMODE, h->SENSMODE);
+        STRCPY(SENSNAME, h->SENSNAME);
+        STRCPY(SOURCE, h->SOURCE);
+        COMGEN = h->COMGEN;
+        SUBQUAL = h->SUBQUAL;
+        STRCPY(PIAMSNNUM, h->PIAMSNNUM);
+        STRCPY(CAMSPECS, h->CAMSPECS);
+        STRCPY(PROJID, h->PROJID);
+        GENERATION = h->GENERATION;
+        ESD = h->ESD;
+        STRCPY(OTHERCOND, h->OTHERCOND);
+        MEANGSD = h->MEANGSD;
+        STRCPY(IDATUM, h->IDATUM);
+        STRCPY(IELLIP, h->IELLIP);
+        STRCPY(PREPROC, h->PREPROC);
+        STRCPY(IPROJ, h->IPROJ);
+        SATTRACK_PATH = h->SATTRACK_PATH;
+        SATTRACK_ROW = h->SATTRACK_ROW;
 
         // GWB 2/10/2003
         // Added for STDIDx support
@@ -655,18 +655,18 @@ bool vil_nitf_image_subheader::GetImageBounds(
     double* lats,    double* lons) const
 {
   //------------------------------------------------------------
-  // -- Get the corners of the image form the NITF image subheader,
+  // Get the corners of the image form the NITF image subheader,
   // and return them with their bounding box.
   // Abort if there is no coordinate system
 
   if (this->ICORDS == NONE) {
-    vcl_cout << "No coordinate system present for this image." << vcl_endl;
+    vcl_cout << "No coordinate system present for this image.\n";
     return false;
   }
 
   // Abort if lat-longs not found
   if (!this->IGEOLO) {
-    vcl_cout << "Corner lat-longs not present for this image." << vcl_endl;
+    vcl_cout << "Corner lat-longs not present for this image.\n";
     return false;
   }
 
@@ -690,7 +690,7 @@ bool vil_nitf_image_subheader::GetImageBounds(
     vcl_strncpy (csec, igeolo, 2); igeolo = igeolo + 2;
     csec[2] = 0;
     cur_val = (double) atoi (cdeg) + ((double) atoi(cmin)/60.0) +
-	      ((double) atoi(csec)/3600.0);
+              ((double) atoi(csec)/3600.0);
 
     // Determine if it is North or South
     if (igeolo[0] == 'S') cur_val = -cur_val;
@@ -709,7 +709,7 @@ bool vil_nitf_image_subheader::GetImageBounds(
     vcl_strncpy (csec, igeolo, 2); igeolo = igeolo + 2;
     csec[2] = 0;
     cur_val = (double)atoi(cdeg) + ((double)atoi(cmin)/60.0) +
-	      ((double)atoi(csec)/3600.0);
+              ((double)atoi(csec)/3600.0);
 
     // Determine if it is East or West
     if (igeolo[0] == 'W') cur_val = -cur_val;
@@ -726,11 +726,11 @@ bool vil_nitf_image_subheader::GetImageBounds(
 }
 
 //-------------------------------------------------------------------
-// -- The NITF standard uses (0.5, 0.5) as the location of the (0, 0) 
-//    pixel. For now we will use (0, 0) as the TargetJr way.
-//    NOTE: vil_nitf_rect_roi is just a typedef for vgl_box_2d<int>.
+//: The NITF standard uses (0.5, 0.5) as the location of the (0, 0) pixel.
+//  For now we will use (0, 0) as the TargetJr way.
+//  NOTE: vil_nitf_rect_roi is just a typedef for vgl_box_2d<int>.
 //
-//  \param roi vcl_vector<int> (4) rectangular region of interest. 
+//  \param roi vcl_vector<int> (4) rectangular region of interest.
 //       roi[0] = min_x
 //       roi[1] = min_y
 //       roi[2] = max_x
@@ -739,42 +739,42 @@ bool vil_nitf_image_subheader::GetImageBounds(
 //  \param f1_col Number of columns in full image.  Set FI_COL to this value.
 //
 void vil_nitf_image_subheader::EncodeICHIPB (
-    vcl_vector<int>& roi, 
+    vcl_vector<int>& roi,
     int f1_row, int f1_col)
 {
-  int min_x = roi[0] ;
-  int min_y = roi[1] ;
-  int max_x = roi[2] ;
-  int max_y = roi[3] ;
+  int min_x = roi[0];
+  int min_y = roi[1];
+  int max_x = roi[2];
+  int max_y = roi[3];
 
-  ICHIPB_present = true ;
-  XFRM_FLAG = 0 ;
-  SCALE_FACTOR = 1.0 ; //For now we don't deal with Rsets
+  ICHIPB_present = true;
+  XFRM_FLAG = 0;
+  SCALE_FACTOR = 1.0; //For now we don't deal with Rsets
   if (ANAMRPH[0] == 1 && ANAMRPH[1] == 1) {
-    ANAMRPH_CORR = 0 ;
+    ANAMRPH_CORR = 0;
   }
   else {
-    ANAMRPH_CORR = 1 ;
+    ANAMRPH_CORR = 1;
   }
   SCANBLK_NUM = 0;
   OP_ROW_11 = 0.5;
   OP_COL_11 = 0.5;
-  float ncols = 0.5 + (max_x - min_x) + 1 ;
-  float nrows = 0.5 + (max_y - min_y) + 1 ;
-  OP_ROW_12 = 0.5 ;
-  OP_COL_12 = ncols ;
+  float ncols = 0.5 + (max_x - min_x) + 1;
+  float nrows = 0.5 + (max_y - min_y) + 1;
+  OP_ROW_12 = 0.5;
+  OP_COL_12 = ncols;
 
-  OP_ROW_21 = nrows ;
-  OP_COL_21 = 0.5 ;
+  OP_ROW_21 = nrows;
+  OP_COL_21 = 0.5;
 
-  OP_ROW_22 = nrows ;
-  OP_COL_22 = ncols ;
-  
-  float first_col = 0.5 + min_x ;
-  float first_row = 0.5 + min_y ;
-  float last_col = 0.5 + max_x ;
-  float last_row = 0.5 + max_y ;
-  
+  OP_ROW_22 = nrows;
+  OP_COL_22 = ncols;
+
+  float first_col = 0.5 + min_x;
+  float first_row = 0.5 + min_y;
+  float last_col = 0.5 + max_x;
+  float last_row = 0.5 + max_y;
+
   FI_ROW_11 = first_row;
   FI_COL_11 = first_col;
 
@@ -839,33 +839,33 @@ bool vil_nitf_image_subheader::get_rational_camera_data(
     int scale_index,
     int offset_index) const
 {
-  static vcl_string method_name = 
-      "vil_nitf_image_subheader::get_rational_camera_data: " ;
+  static vcl_string method_name =
+      "vil_nitf_image_subheader::get_rational_camera_data: ";
 
-  bool success = false ;  // RETURN VALUE
+  bool success = false;  // RETURN VALUE
 
-  int O_SCALE  = scale_index ;
-  int O_OFFSET = offset_index ;
+  int O_SCALE  = scale_index;
+  int O_OFFSET = offset_index;
 
   // Before diving in whole-hog, check if the RPC data is valid.
 
   if (this->RPC_present == false) {
 
-      vcl_string err_msg = "RPC data not present for this image." ;
+      vcl_string err_msg = "RPC data not present for this image.";
 
 #ifdef WITH_SAR_RPC_EXTRACT
       if (vcl_strncmp (this->ICAT, "SAR", 3) != 0) {
-	  err_msg = "RPC data not valid for this image.  Image category != 'SAR'." ;
+          err_msg = "RPC data not valid for this image.  Image category != 'SAR'.";
 #endif
-	  // PutErrorLine("RPC data not present or invalid for this image.");
-	  vcl_cout << method_name << err_msg << vcl_endl ;
-	  return 0 ;
+          // PutErrorLine("RPC data not present or invalid for this image.");
+          vcl_cout << method_name << err_msg << vcl_endl;
+          return 0;
 
 #ifdef WITH_SAR_RPC_EXTRACT
-	}
+        }
 #endif
     }
-  
+
   // The sequence of rational polynomial coefficients in the NITF file
   //  is vastly different than the order CARMEN expects them to be in.
   //
@@ -902,79 +902,78 @@ bool vil_nitf_image_subheader::get_rational_camera_data(
 
       // this maps from NITF RPC00A order to CARMEN order
       int NITF_index_RPC00A[20] = { 11 , 12 , 13 ,  8 , 14 , 7 ,  4 , 17 , 5 , 1 ,
-                                    15 , 16 ,  9 , 18 ,  6 , 2 , 19 , 10 , 3 , 0 } ;
+                                    15 , 16 ,  9 , 18 ,  6 , 2 , 19 , 10 , 3 , 0 };
 
       // this maps from NITF RPC00B order to CARMEN order
       int NITF_index_RPC00B[20] = { 11 , 14 , 17 ,  7 , 12 , 10,  4 , 13 , 5 , 1 ,
-                                    15 , 18 ,  8 , 16 ,  6 , 2 , 19 ,  9 , 3 , 0 } ;
+                                    15 , 18 ,  8 , 16 ,  6 , 2 , 19 ,  9 , 3 , 0 };
 
-      int* NITF_index ; // Point this to the right indexing array for the tag (A/B)
+      int* NITF_index; // Point this to the right indexing array for the tag (A/B)
       switch (RPC_TYPE) {
       case RPC00A:
-        NITF_index = NITF_index_RPC00A ;
-        vcl_cout << "Switching to RPC00A mode" << vcl_endl ;
-        break ;
+        NITF_index = NITF_index_RPC00A;
+        vcl_cout << "Switching to RPC00A mode\n";
+        break;
       case RPC00B:
         NITF_index = NITF_index_RPC00B;
-        vcl_cout << "Switching to RPC00B mode" << vcl_endl ;
-        break ;
+        vcl_cout << "Switching to RPC00B mode\n";
+        break;
       case UNDEFINED:
       default:
         // Should NEVER get here!
-        vcl_cout << "UNKNOWN RPC tag present in this image!" << vcl_endl ;
-        vcl_cout << "RPC_TYPE = " << RPC_TYPE << vcl_endl ;
-        vcl_cout << "Know Types are: " << RPC00A << ", " << RPC00B << vcl_endl ;
-        return 0 ;
+        vcl_cout << "UNKNOWN RPC tag present in this image!\n"
+                 << "RPC_TYPE = " << RPC_TYPE << vcl_endl
+                 << "Know Types are: " << RPC00A << ", " << RPC00B << vcl_endl;
+        return 0;
       }
 
       // Copy (and scramble) all four polynomials.
-      for (int index = 0 ; index < 20 ; index++) {
+      for (int index = 0; index < 20; index++) {
 
-	  samp_num[index] = this->SAMP_NUM[NITF_index[index]] ;
-	  samp_denom[index] = this->SAMP_DEN[NITF_index[index]] ;
-	  line_num[index] = this->LINE_NUM[NITF_index[index]] ;
-	  line_denom[index] = this->LINE_DEN[NITF_index[index]] ;
+          samp_num[index] = this->SAMP_NUM[NITF_index[index]];
+          samp_denom[index] = this->SAMP_DEN[NITF_index[index]];
+          line_num[index] = this->LINE_NUM[NITF_index[index]];
+          line_denom[index] = this->LINE_DEN[NITF_index[index]];
       }
-      
+
       // Now, the easy part. Copy scale and offset parameters for all of
       //  of the variables (latitude/longitude/height/line/sample).
-      
+
       // Okay, copy from the subheader into local variables.
-      scalex[O_SCALE] = this->LONG_SCALE ;    
-      scalex[O_OFFSET] = this->LONG_OFF ;
-      scaley[O_SCALE] = this->LAT_SCALE ;     
-      scaley[O_OFFSET] = this->LAT_OFF ;
-      scalez[O_SCALE] = this->HEIGHT_SCALE ;  
-      scalez[O_OFFSET] = this->HEIGHT_OFF ;
-      scalel[O_SCALE] = this->LINE_SCALE ;    
-      scalel[O_OFFSET] = this->LINE_OFF ;
-      scales[O_SCALE] = this->SAMP_SCALE ;    
-      scales[O_OFFSET] = this->SAMP_OFF ;
-    } 
+      scalex[O_SCALE] = this->LONG_SCALE;
+      scalex[O_OFFSET] = this->LONG_OFF;
+      scaley[O_SCALE] = this->LAT_SCALE;
+      scaley[O_OFFSET] = this->LAT_OFF;
+      scalez[O_SCALE] = this->HEIGHT_SCALE;
+      scalez[O_OFFSET] = this->HEIGHT_OFF;
+      scalel[O_SCALE] = this->LINE_SCALE;
+      scalel[O_OFFSET] = this->LINE_OFF;
+      scales[O_SCALE] = this->SAMP_SCALE;
+      scales[O_OFFSET] = this->SAMP_OFF;
+    }
 #ifdef WITH_SAR_RPC_EXTRACT
   else if ((vcl_strncmp (this->ICAT, "SAR", 3) == 0)) {
       sarrpcextractor extractor (this->XSHD->XHD,(long) this->XSHD->GetHeaderLength());
-      if (!extractor.extractRPC()) { 
-	vcl_cout << method_name
-		 << "RPC data not present or invalid for this image." 
-		 << vcl_endl ;
-	  return 0 ;
+      if (!extractor.extractRPC()) {
+        vcl_cout << method_name
+                 << "RPC data not present or invalid for this image.\n";
+          return 0;
       }
       // FIGURE OUT WHAT TO DO ABOUT THIS.  matx WAS DEFINED AS
       // vnl_matrix<double> matx (4, 20)   TBD: MAL 11dec2003
-      extractor.populateCameraData (matx, scalex, scaley, scalez, scales, scalel) ;
-      this->HEIGHT_OFF = extractor.getHeightOffset() ;
+      extractor.populateCameraData (matx, scalex, scaley, scalez, scales, scalel);
+      this->HEIGHT_OFF = extractor.getHeightOffset();
   }
 #endif
 
   // Set the init_pt to be the centroid of the four world corner points
   // useful for computation.LEG.2/1/01
-  double lat_min, lat_max, lon_min, lon_max ;
-  GetImageBounds (lat_min, lat_max, lon_min, lon_max) ;
+  double lat_min, lat_max, lon_min, lon_max;
+  GetImageBounds (lat_min, lat_max, lon_min, lon_max);
 
-  init_pt[0] = (lat_min + lat_max) / 2 ;
-  init_pt[1] = (lon_min + lon_max) / 2 ;
-  init_pt[2] = scalez[O_OFFSET] ;
+  init_pt[0] = (lat_min + lat_max) / 2;
+  init_pt[1] = (lon_min + lon_max) / 2;
+  init_pt[2] = scalez[O_OFFSET];
 
   //
   // Get image chip information (obtained from I2MAPD).
@@ -982,43 +981,41 @@ bool vil_nitf_image_subheader::get_rational_camera_data(
 
   // Grab data from NITF data structure and store locally.
   // reduced resolution data set (RRDS) of chip
-  double scale_factor = 1 ;
-  int ul_line = 0 ;
-  int ul_sample = 0 ;
+  double scale_factor = 1;
+  int ul_line = 0;
+  int ul_sample = 0;
 
   if (I2MAPD_present) { //this is archaic and should not dominate
-      scale_factor = 1 << this->RRDSset ;
-      ul_line  = this->ULl ;  
-      ul_sample = this->ULs ;
+      scale_factor = 1 << this->RRDSset;
+      ul_line  = this->ULl;
+      ul_sample = this->ULs;
   }
 
   if (ICHIPB_present) { // the modern standard
 
-      scale_factor = this->SCALE_FACTOR ;
-      ul_line  = int ((FI_ROW_11 + 0.5) - 1.0) ;  
-      ul_sample = int ((FI_COL_11 + 0.5) - 1.0) ;  
+      scale_factor = this->SCALE_FACTOR;
+      ul_line  = int ((FI_ROW_11 + 0.5) - 1.0);
+      ul_sample = int ((FI_COL_11 + 0.5) - 1.0);
 
-      vcl_cout << "ICHIPB Present - offsetting Rational Camera by " 
-	       << "(" << ul_sample << " " << ul_line << ")" 
-	       << vcl_endl ;
+      vcl_cout << "ICHIPB Present - offsetting Rational Camera by ("
+               << ul_sample << " " << ul_line << ")\n";
   }
   // Use this to rescale the image
-  double scale = 1 / scale_factor ;
+  double scale = 1 / scale_factor;
 
-  rescales[O_SCALE] = scale ;  
-  rescales[O_OFFSET] = -scale * ul_sample ;
-  rescalel[O_SCALE] = scale ;  
-  rescalel[O_OFFSET] = -scale * ul_line ;
+  rescales[O_SCALE] = scale;
+  rescales[O_OFFSET] = -scale * ul_sample;
+  rescalel[O_SCALE] = scale;
+  rescalel[O_OFFSET] = -scale * ul_line;
 
-  // Display camera data -- debugging output
-  vcl_cout << vcl_endl ;
-  display_camera_attributes (method_name) ;  //
-  vcl_cout << vcl_endl ;
+  // Display camera data - debugging output
+  vcl_cout << vcl_endl;
+  display_camera_attributes (method_name);  //
+  vcl_cout << vcl_endl;
 
   // IF WE GOT HERE, EVERYTING SET OK.
-  success = true ;
-  return success ;
-
+  success = true;
+  return success;
 }  // end method get_rational_camera_data
 
 ////////////////////////////////////////////////////////
@@ -1041,97 +1038,92 @@ bool vil_nitf_image_subheader::get_image_corners (
     vcl_vector<double>& LR,
     vcl_vector<double>& LL) const
 {
-    static vcl_string method_name = "vil_nitf_image_subheader::get_image_corners: " ;
+    static vcl_string method_name = "vil_nitf_image_subheader::get_image_corners: ";
 
-    bool success = false ;  // RETURN VALUE
+    bool success = false;  // RETURN VALUE
 
-  double ULlat, ULlon ;
-  double URlat, URlon ;
-  double LLlat, LLlon ;
-  double LRlat, LRlon ;
+  double ULlat, ULlon;
+  double URlat, URlon;
+  double LLlat, LLlon;
+  double LRlat, LRlon;
 
   // Extract values from the IGEOLO field
-  geostr_to_latlon (IGEOLO,    &ULlat, &ULlon) ;
-  geostr_to_latlon (IGEOLO+15, &URlat, &URlon) ;
-  geostr_to_latlon (IGEOLO+30, &LRlat, &LRlon) ;
-  geostr_to_latlon (IGEOLO+45, &LLlat, &LLlon) ;
+  geostr_to_latlon (IGEOLO,    &ULlat, &ULlon);
+  geostr_to_latlon (IGEOLO+15, &URlat, &URlon);
+  geostr_to_latlon (IGEOLO+30, &LRlat, &LRlon);
+  geostr_to_latlon (IGEOLO+45, &LLlat, &LLlon);
 
   // Guess at the elevation
-  double mean_elev = HEIGHT_OFF ;
+  double mean_elev = HEIGHT_OFF;
 
   // Fill in vectors
-  UL[0] = ULlon ;
-  UL[1] = ULlat ;
-  UL[2] = mean_elev ;
+  UL[0] = ULlon;
+  UL[1] = ULlat;
+  UL[2] = mean_elev;
 
-  UR[0] = URlon ;
-  UR[1] = URlat ;
-  UR[2] = mean_elev ;
+  UR[0] = URlon;
+  UR[1] = URlat;
+  UR[2] = mean_elev;
 
-  LR[0] = LRlon ;
-  LR[1] = LRlat ;
-  LR[2] = mean_elev ;
+  LR[0] = LRlon;
+  LR[1] = LRlat;
+  LR[2] = mean_elev;
 
-  LL[0] = LLlon ;
-  LL[1] = LLlat ;
-  LL[2] = mean_elev ;
+  LL[0] = LLlon;
+  LL[1] = LLlat;
+  LL[2] = mean_elev;
 
   // IF WE GOT HERE, EVERYTING SET OK.
-  success = true ;
-  return success ;
-
+  success = true;
+  return success;
 }  // end method get_image_corners
 
-// END RATIONAL CAMERA STUFF. 
+// END RATIONAL CAMERA STUFF.
 
 ////////////////////////////////////////////////////////////////////////
 /// Display attributes related to defining a rational polynomial camera.
 ////////////////////////////////////////////////////////////////////////
 void vil_nitf_image_subheader::display_camera_attributes (vcl_string caller) const
 {
-    static vcl_string method_name = "vil_nitf_image_subheader::display_camera_attributes: " ;
+    static vcl_string method_name = "vil_nitf_image_subheader::display_camera_attributes: ";
 
     // Only display method name if caller length is not zero.
     // Don't want method name if called from display_attributes.
     // display_attributes already does this.
 
     if (caller.length() > 0) {
-	vcl_cout << method_name ;
-	vcl_cout << " from " << caller ;
-	vcl_cout << vcl_endl ;
+        vcl_cout << method_name << " from " << caller << vcl_endl;
     }
 
     if (this->RPC_present == false) {
-        vcl_cout << method_name 
-		 << "RPC data not present or invalid for this image." 
-		 << vcl_endl;
-	return ;
+        vcl_cout << method_name
+                 << "RPC data not present or invalid for this image.\n";
+        return;
     }
 
-    vcl_cout << "##### start RPC camera data ##### " <<  vcl_endl ;
+    vcl_cout << "##### start RPC camera data #####\n";
 
-    vcl_cout << "ICAT (image category) = " << this->ICAT << vcl_endl ;
+    vcl_cout << "ICAT (image category) = " << this->ICAT << vcl_endl;
 
 #ifdef WITH_SAR_RPC_EXTRACT
     // SAR = Synthetic Aperature Radar
     if (vcl_strncmp (this->ICAT, "SAR", 3) != 0) {
-        vcl_cout << "WARNING: ICAT != \"SAR\".  Necessary for RPC ?" << vcl_endl ;
+        vcl_cout << "WARNING: ICAT != \"SAR\".  Necessary for RPC ?\n";
     }
 #endif
 
-    vcl_cout << "LONG_SCALE = " << this->LONG_SCALE << vcl_endl ;
-    vcl_cout << "LONG_OFF = " << this->LONG_OFF << vcl_endl ;
-    vcl_cout << "LAT_SCALE = " << this->LAT_SCALE << vcl_endl ;
-    vcl_cout << "LAT_OFF = " << this->LAT_OFF << vcl_endl ;
-    vcl_cout << "HEIGHT_SCALE = " << this->HEIGHT_SCALE << vcl_endl ;
-    vcl_cout << "HEIGHT_OFF = " << this->HEIGHT_OFF << vcl_endl ;
-    vcl_cout << "LINE_SCALE = " << this->LINE_SCALE << vcl_endl ;
-    vcl_cout << "LINE_OFF = " << this->LINE_OFF << vcl_endl ;
-    vcl_cout << "SAMP_SCALE = " << this->SAMP_SCALE << vcl_endl ;
-    vcl_cout << "SAMP_OFF = " << this->SAMP_OFF << vcl_endl ;
+    vcl_cout << "LONG_SCALE = " << this->LONG_SCALE << vcl_endl
+             << "LONG_OFF = " << this->LONG_OFF << vcl_endl
+             << "LAT_SCALE = " << this->LAT_SCALE << vcl_endl
+             << "LAT_OFF = " << this->LAT_OFF << vcl_endl
+             << "HEIGHT_SCALE = " << this->HEIGHT_SCALE << vcl_endl
+             << "HEIGHT_OFF = " << this->HEIGHT_OFF << vcl_endl
+             << "LINE_SCALE = " << this->LINE_SCALE << vcl_endl
+             << "LINE_OFF = " << this->LINE_OFF << vcl_endl
+             << "SAMP_SCALE = " << this->SAMP_SCALE << vcl_endl
+             << "SAMP_OFF = " << this->SAMP_OFF << vcl_endl;
 
-    vcl_cout << "##### end RPC camera data ##### " <<  vcl_endl ;
-
+    vcl_cout << "##### end RPC camera data #####\n";
 }  // end method display_camera_attributes
 
 ////////////////////////////////////////////////////////////////////////
@@ -1143,151 +1135,141 @@ void vil_nitf_image_subheader::display_camera_attributes (vcl_string caller) con
 ////////////////////////////////////////////////////////////////////////
 void vil_nitf_image_subheader::display_size_attributes (vcl_string caller) const
 {
-    static vcl_string method_name = "vil_nitf_image_subheader::display_size_attributes: " ;
+    static vcl_string method_name = "vil_nitf_image_subheader::display_size_attributes: ";
 
     // Only display method name if caller length is not zero.
     // Don't want method name if called from display_attributes.
     // display_attributes already does this.
 
     if (caller.length() > 0) {
-	vcl_cout << method_name ;
-	vcl_cout << " from " << caller ;
-	vcl_cout << vcl_endl ;
+        vcl_cout << method_name
+                 << " from " << caller
+                 << vcl_endl;
     }
 
-    vcl_cout << "NCOLS (image cols) = " << this->NCOLS << vcl_endl ;
-    vcl_cout << "NROWS (image rows) = " << this->NROWS << vcl_endl ;
+    vcl_cout << "NCOLS (image cols) = " << this->NCOLS << vcl_endl
+             << "NROWS (image rows) = " << this->NROWS << vcl_endl;
 
-    vcl_cout << "NBANDS (number bands) = " << this->NBANDS << vcl_endl ;
+    vcl_cout << "NBANDS (number bands) = " << this->NBANDS << vcl_endl;
 
-    vcl_cout << "NBPR (number of blocks per row) = " << this->NBPR << vcl_endl ;
+    vcl_cout << "NBPR (number of blocks per row) = " << this->NBPR << vcl_endl;
     if (this->NBPR) {
-      vcl_cout << "NPPBH (number of pixels per block horizontal) = " 
-	       << this->NPPBH << vcl_endl ;
+      vcl_cout << "NPPBH (number of pixels per block horizontal) = "
+               << this->NPPBH << vcl_endl;
     }
-    vcl_cout << "NBPC (number of blocks per column) = " << this->NBPC << vcl_endl ;
+    vcl_cout << "NBPC (number of blocks per column) = " << this->NBPC << vcl_endl;
     if (this->NBPC) {
-      vcl_cout << "NPPBV (number of pixels per block vertical) = " 
-	       << this->NPPBV << vcl_endl ;
+      vcl_cout << "NPPBV (number of pixels per block vertical) = "
+               << this->NPPBV << vcl_endl;
     }
-    
+
     // CHECK VERTICAL IMAGE SIZE -> NCOLS = NBPR X NPPBH
-    unsigned long calculated_pixels = this->NBPR * this->NPPBH ;
+    unsigned long calculated_pixels = this->NBPR * this->NPPBH;
     vcl_cout << "calculated columns = NBPR X NPPBH = " << calculated_pixels
-	     << vcl_endl ;
+             << vcl_endl;
     if (calculated_pixels != this->NCOLS) {
-	unsigned long diff = calculated_pixels - this->NCOLS ;
-        vcl_cout << "WARNING: (NBPR X NPPBH) != NCOLS"
-		 << ".  Difference = " << diff
-		 << vcl_endl ;    
+        unsigned long diff = calculated_pixels - this->NCOLS;
+        vcl_cout << "WARNING: (NBPR X NPPBH) != NCOLS."
+                 << "  Difference = " << diff << vcl_endl;
     }
 
     // CHECK VERTICAL IMAGE SIZE -> NROWS = NBPC X NPPBV
-    calculated_pixels = this->NBPC * this->NPPBV ;
+    calculated_pixels = this->NBPC * this->NPPBV;
     vcl_cout << "calculated rows = NBPC X NPPBV = " << calculated_pixels
-	     << vcl_endl ;
+             << vcl_endl;
     if (calculated_pixels != this->NROWS) {
-	unsigned long diff = calculated_pixels - this->NROWS ;
-        vcl_cout << "WARNING: (NBPC X NPPBV) != NROWS" 
-		 << ".  Difference = " << diff
-		 << vcl_endl ;
+        unsigned long diff = calculated_pixels - this->NROWS;
+        vcl_cout << "WARNING: (NBPC X NPPBV) != NROWS."
+                 << "  Difference = " << diff << vcl_endl;
     }
 
-    vcl_cout << "NBPP (stored bits per pixel) = " << this->NBPP << vcl_endl ;
-    vcl_cout << "ABPP (actual bits per pixel per band) = " 
-	     << this->ABPP << vcl_endl ;
+    vcl_cout << "NBPP (stored bits per pixel) = " << this->NBPP << vcl_endl
+             << "ABPP (actual bits per pixel per band) = "
+             << this->ABPP << vcl_endl;
 
-    unsigned int bytes_per_pixel = NBPP / 8 ;
+    unsigned int bytes_per_pixel = NBPP / 8;
     if ((NBPP % 8) != 0) {
-        vcl_cerr << "WARNING: NBBP is not a multiple of 8." << vcl_endl ;
+        vcl_cerr << "WARNING: NBBP is not a multiple of 8.\n";
     }
-    vcl_cout << "IMODE (image mode = interleave type for pixels) = " << this->IMODE_ << vcl_endl ;
+    vcl_cout << "IMODE (image mode = interleave type for pixels) = " << this->IMODE_ << vcl_endl;
 
     // CHECK IMAGE SIZE = NCOLS X NROWS X (NBPP / 8) X NBANDS
-    vcl_cout << "image data size = " << this->get_data_length() << vcl_endl ;
-    unsigned long image_size = this->NCOLS * this->NROWS * bytes_per_pixel * this->NBANDS ;
-    vcl_cout << "calculated image data size using NCOLS X NROWS X bytes_per_pixel X NBANDS = " 
-	     << image_size
-	     << vcl_endl ;
+    vcl_cout << "image data size = " << this->get_data_length() << vcl_endl;
+    unsigned long image_size = this->NCOLS * this->NROWS * bytes_per_pixel * this->NBANDS;
+    vcl_cout << "calculated image data size using NCOLS X NROWS X bytes_per_pixel X NBANDS = "
+             << image_size << vcl_endl;
     if (image_size != this->get_data_length()) {
 
-        unsigned long diff = 0 ;
-	diff = abs (this->get_data_length() - image_size) ;
-	bool neg_diff = false ;
+        unsigned long diff = vcl_abs((long)this->get_data_length() - (long)image_size);
+        bool neg_diff = false;
         if (this->get_data_length() < image_size) {
-	    neg_diff = true ;
-	}
-        vcl_cout << "WARNING: calculated image size using pixels != image size in header." 
-		 << "  Difference = " ;
-	if (neg_diff) {
-	    vcl_cout << "-" ;
-	}
-	vcl_cout << diff
-		 << vcl_endl ;
+            neg_diff = true;
+        }
+        vcl_cout << "WARNING: calculated image size using pixels != image size in header."
+                 << "  Difference = ";
+        if (neg_diff) {
+            vcl_cout << "-";
+        }
+        vcl_cout << diff << vcl_endl;
     }
     else {
-	vcl_cout << "Calculated image size using pixels OK." << vcl_endl ;
+        vcl_cout << "Calculated image size using pixels OK.\n";
     }
 
     // CHECK IMAGE SIZE = bytes per block X blocks per row X blocks per column X NBANDS
     if ((this->NBPR > 0) || (this->NBPC > 0)) {
 
-      unsigned long bytes_per_block = NPPBH * NPPBV * bytes_per_pixel ;
-      image_size = bytes_per_block * NBPR * NBPC ;
+      unsigned long bytes_per_block = NPPBH * NPPBV * bytes_per_pixel;
+      image_size = bytes_per_block * NBPR * NBPC;
 
-      vcl_cout << "bytes_per_block = " << bytes_per_block << vcl_endl ;
-      vcl_cout << "calculated image data size using # bytes per block X # blocks per row X # blocks per column = " 
-	       << image_size
-	       << vcl_endl ;
+      vcl_cout << "bytes_per_block = " << bytes_per_block << vcl_endl
+               << "calculated image data size using # bytes per block X # blocks per row X # blocks per column = "
+               << image_size << vcl_endl;
 
         if (this->NBANDS > 1) {
-            image_size *= this->NBANDS ;
-	    vcl_cout << "calculated image data size X NBANDS = " 
-		     << image_size
-		     << vcl_endl ;
+            image_size *= this->NBANDS;
+            vcl_cout << "calculated image data size X NBANDS = "
+                     << image_size << vcl_endl;
         }
-	if (image_size != this->get_data_length()) {
-	    unsigned long diff = image_size - this->get_data_length() ;
-	    vcl_cout << "WARNING: calculated image size != image size in header." 
-		     << "  Difference = " << diff
-		     << vcl_endl ;
-	}
-	else {
-	    vcl_cout << "Calculated image size using blocks OK." << vcl_endl ;
-	}
+        if (image_size != this->get_data_length()) {
+            unsigned long diff = image_size - this->get_data_length();
+            vcl_cout << "WARNING: calculated image size != image size in header."
+                     << "  Difference = " << diff << vcl_endl;
+        }
+        else {
+            vcl_cout << "Calculated image size using blocks OK.\n";
+        }
     }
 
-    vcl_cout << "PJUST (justification for ABPP) = " << this->PJUST << vcl_endl ;
+    vcl_cout << "PJUST (justification for ABPP) = " << this->PJUST << vcl_endl;
 
-    vcl_cout << "PVTYPE = " << this->PVTYPE_ << vcl_endl ;
-
+    vcl_cout << "PVTYPE = " << this->PVTYPE_ << vcl_endl;
 }  // end method display_size_attributes
 
 // FIGURE OUT HOW TO PASS vcl_out.
 //void vil_nitf_image_subheader::display_attributes (vcl_ostream out) const
 void vil_nitf_image_subheader::display_attributes (vcl_string caller) const
 {
-    static vcl_string method_name = "vil_nitf_image_subheader::display_attributes: " ;
+    static vcl_string method_name = "vil_nitf_image_subheader::display_attributes: ";
 
-    vcl_cout << method_name ;
+    vcl_cout << method_name;
     if (caller.length() > 0) {
-      vcl_cout << " from " << caller ;
+      vcl_cout << " from " << caller;
     }
-    vcl_cout << vcl_endl ;
+    vcl_cout << vcl_endl;
 
-    vcl_cout << "IDATIM (image date and time) = " << this->IDATIM_ << vcl_endl ;
+    vcl_cout << "IDATIM (image date and time) = " << this->IDATIM_ << vcl_endl;
 
-    display_size_attributes ("") ;
+    display_size_attributes ("");
 
-    vcl_cout << "NBANDS (number of bands) = " << this->NBANDS << vcl_endl ;
-    vcl_cout << "IMODE (image mode) = " << this->IMODE_ << vcl_endl ;
+    vcl_cout << "NBANDS (number of bands) = " << this->NBANDS << vcl_endl
+             << "IMODE (image mode) = " << this->IMODE_ << vcl_endl
 
-    vcl_cout << "IREP (image representation) = <" << this->IREP << ">" << vcl_endl ;
-    vcl_cout << "ICAT (image category) = " << this->ICAT << vcl_endl ;
+             << "IREP (image representation) = <" << this->IREP << ">\n"
+             << "ICAT (image category) = " << this->ICAT << vcl_endl
 
-    vcl_cout << "isCompressed = " << this->IsCompressed() << vcl_endl ;
-    vcl_cout << "IC (compression code) = " << this->IC << vcl_endl ;
+             << "isCompressed = " << this->IsCompressed() << vcl_endl
+             << "IC (compression code) = " << this->IC << vcl_endl
 
-    vcl_cout << "ICORDS = " << this->ICORDS << vcl_endl ;
-
+             << "ICORDS = " << this->ICORDS << vcl_endl;
 }  // end method display_attributes

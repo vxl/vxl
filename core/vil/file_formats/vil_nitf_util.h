@@ -1,27 +1,26 @@
-// Source
+// This is core/vil/file_formats/vil_nitf_util.h
 
 //================ GE Aerospace NITF support libraries =================
 //
-// Description:	This file defines utility methods for NITF.
+// Description: This file defines utility methods for NITF.
 //
 // For a given header 'head', head->Read (file) is called when the
 // appropriate place in the file is reached, and it will return a
 // StatusCode indicating success or failure.
 //
-// \author  $Author: mlaymon $
-// \date $Date: 2003/12/26 00:22:18 $
-// \Version $Revision: 1.1 $
+// \author  mlaymon
+// \date 2003/12/26
 //
 // Written by:       Burt Smith
 // Date:             August 26, 1992
 //
-//=====================lkbjfcbtdddhtargbskmtaps=======================
+//====================================================================
 
-#ifndef	_vil_nitf_util_h
-#define _vil_nitf_util_h
+#ifndef vil_nitf_util_h_
+#define vil_nitf_util_h_
 
-#include <vcl_cstring.h>
 #include <vcl_cstdio.h>
+#include <vcl_cstring.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
 
@@ -38,25 +37,25 @@
 //  \param optflag flag indicating how to remove characters
 //    0: ALL:            delete all characters c.
 //    1: TRAILING:       delete trailing characters c.
-//    2: LEADING:	   delete leading characters c.
-//    3: HEAD/TAIL:	   delete all leading && trailing characters c.
+//    2: LEADING:          delete leading characters c.
+//    3: HEAD/TAIL:        delete all leading && trailing characters c.
 //
-char * squeeze (char*, int, int) ;
-void clear_string_vector (vcl_vector<vcl_string *> str_vector) ;
+char * squeeze (char*, int, int);
+void clear_string_vector (vcl_vector<vcl_string *> str_vector);
 void display_as_hex (
-    const unsigned char * buffer, 
-    unsigned int display_count, 
-    unsigned int bytes_per_value, 
-    vcl_string label = "") ;
-void display_as_hex (const unsigned char value) ;
+    const unsigned char * buffer,
+    unsigned int display_count,
+    unsigned int bytes_per_value,
+    vcl_string label = "");
+void display_as_hex (const unsigned char value);
 
-// Two functions below are from TargetJr file 
+// Two functions below are from TargetJr file
 //    .../IUPackages/GeneralUtility/Basics/geopt_util.C
 
-enum geopt_coord {LAT, LON} ;
+enum geopt_coord {LAT, LON};
 
-int geostr_to_latlon (const char* str, double* lat, double* lon) ;
-int geostr_to_double (const char* str, double* val, geopt_coord lat_lon_flag) ;
+int geostr_to_latlon (const char* str, double* lat, double* lon);
+int geostr_to_double (const char* str, double* val, geopt_coord lat_lon_flag);
 
 // this inline assumes b, v and f are valid.  It does not
 // change the value of v unless the read is successful.
@@ -68,30 +67,30 @@ int geostr_to_double (const char* str, double* val, geopt_coord lat_lon_flag) ;
 // \param preserve flag indicating if original value should be restored on failure
 //
 // \return true if read successful
-// 
+//
 inline bool GetInt (char* cbuf, int* ival, int count, vil_stream * f, bool preserve = true)
 {
-    int orig_val = *ival ;
-    bool rval = true ;
+    int orig_val = *ival;
+    bool rval = true;
 
     if (f->read (cbuf, count) < count) {
-        rval = false ;
+        rval = false;
     }
     else {
-      char fmt[6] ;
+      char fmt[6];
       cbuf[count] = '\0'; // Prevent Purify UMR warning (MPP 5/7/2002)
-      sprintf (fmt, "%%%dd", count) ;
+      vcl_sprintf(fmt, "%%%dd", count);
 
       // IF cbuf CONTAINS BLANKS, TREAT AS ZERO
-      if (sscanf (cbuf, fmt, ival) < 1) {
-	*ival = 0 ;
+      if (vcl_sscanf(cbuf, fmt, ival) < 1) {
+        *ival = 0;
       }
       if (preserve && *ival < 0) {
-	rval = false ;
-	*ival = orig_val ;
+        rval = false;
+        *ival = orig_val;
       }
     }
-    return rval ;
+    return rval;
 }
 
 // this inline assumes b, v and f are valid.  It does not
@@ -104,61 +103,57 @@ inline bool GetInt (char* cbuf, int* ival, int count, vil_stream * f, bool prese
 // \param preserve flag indicating if original value should be restored on failure
 //
 // \return true if read successful
-// 
-inline bool get_unsigned (char* cbuf, unsigned * ival, int count, vil_stream * f, bool preserve = true)
+//
+inline bool get_unsigned(char* cbuf, unsigned * ival, int count, vil_stream * f, bool preserve = true)
 {
-    unsigned orig_val = *ival ;
-    bool rval = true ;
+#if 0 // see below
+    unsigned orig_val = *ival;
+#endif
 
-    if (f->read (cbuf, count) < count) {
-        rval = false ;
-    }
-    else {
-      char fmt[6] ;
-      cbuf[count] = '\0'; // Prevent Purify UMR warning (MPP 5/7/2002)
-      sprintf (fmt, "%%%uu", count) ;
+    if (f->read(cbuf, count) < count)
+        return false;
 
-      // IF cbuf CONTAINS BLANKS, TREAT AS ZERO
-      if (sscanf (cbuf, fmt, ival) < 1) {
-	*ival = 0 ;
-      }
-      if (preserve && *ival < 0) {
-	rval = false ;
-	*ival = orig_val ;
-      }
+    char fmt[6];
+    if (count > 99) return false; // avoid problems with fmt
+    vcl_sprintf(fmt, "%%%uu", count);
+
+    // IF cbuf CONTAINS BLANKS, TREAT AS ZERO
+    if (vcl_sscanf(cbuf, fmt, ival) < 1) {
+      *ival = 0;
     }
-    return rval ;
+#if 0 // *ival is unsigned, so it can never be < 0
+    if (preserve && *ival < 0) {
+      *ival = orig_val;
+      return false;
+    }
+#endif
+    return true;
 }
 
 // this inline assumes b and f are valid.
-// 
+//
 inline bool PutInt (char* b, int v, int w, vil_stream* f, bool p = true)
 {
-    bool rval = true;
-    if (p && v < 0) return (false);
-    sprintf (b, "%0*d", w, v);
+    if (p && v < 0) return false;
+    vcl_sprintf(b, "%0*d", w, v);
     int pos = f->tell();
-    if (f->write (b,w) < w) { rval = false;
-                                f->seek (pos); }
-    return rval ;
+    if (f->write (b,w) < w) { f->seek(pos); return false; }
+    return true;
 }
 
 // this inline assumes b and f are valid.
-// 
+//
 inline bool put_unsigned (char* b, unsigned int v, int w, vil_stream* f, bool p = true)
 {
     bool rval = true;
-    if (p && v < 0) {
-      return false ;
-    }
-    sprintf (b, "%0*u", w, v) ;
-    int pos = f->tell() ;
-    if (f->write (b, w) < w) { 
-      rval = false ;
-      f->seek (pos) ; 
+    vcl_sprintf(b, "%0*u", w, v);
+    int pos = f->tell();
+    if (f->write (b, w) < w) {
+      rval = false;
+      f->seek(pos);
     }
 
-    return rval ;
+    return rval;
 }
 
 inline bool GetUchar (char* b, vxl_byte* v, int w, vil_stream* f)
@@ -169,11 +164,11 @@ inline bool GetUchar (char* b, vxl_byte* v, int w, vil_stream* f)
   else
     for (int i =0; i < w; i++)
       v[i]= (vxl_byte)b[i];
-  return rval ;
+  return rval;
 }
 
 // this inline assumes b and f are valid.
-// 
+//
 inline bool PutUchar (char* b, vxl_byte* v, int w, vil_stream* f)
 {
     bool rval = true;
@@ -181,11 +176,11 @@ inline bool PutUchar (char* b, vxl_byte* v, int w, vil_stream* f)
     for (int i =0; i < w; i++)
       b[i]= v[i];
     int pos = f->tell();
-    if (f->write (b,w) < w) { 
+    if (f->write (b,w) < w) {
         rval = false;
-	f->seek (pos); 
+        f->seek (pos);
     }
-    return rval ;
+    return rval;
 }
 
 /////////////////////////////////////////////////
@@ -200,13 +195,13 @@ inline char* new_strdup (const char* str)
     char *ret;
 
     if (str) {
-	ret = new char[strlen(str)+1] ;
-	strcpy (ret, str) ;
+        ret = new char[vcl_strlen(str)+1];
+        vcl_strcpy(ret, str);
     }
     else {
-      ret = 0 ;
+      ret = 0;
     }
-    return ret ;
+    return ret;
 }
 
-#endif
+#endif // vil_nitf_util_h_
