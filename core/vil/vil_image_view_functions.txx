@@ -150,28 +150,6 @@ void vil2_fill_col(vil2_image_view<T>& view, unsigned i, T value)
 }
 
 
-//: print all image data to os in a grid (rounds output to int)
-template<class T>
-void vil2_print_all(vcl_ostream& os,const vil2_image_view<T>& view)
-{
-  os<<view.is_a()<<" "<<view.nplanes()<<" planes, each "<<view.ni()<<" x "<<view.nj();
-  os<<" istep: "<<view.istep()<<" ";
-  os<<" jstep: "<<view.jstep()<<" ";
-  os<<" planestep: "<<view.planestep()<<vcl_endl;
-  for (int p=0;p<view.nplanes();++p)
-  {
-    if (view.nplanes()>1) os<<"Plane "<<p<<":"<<vcl_endl;
-    for (int j=0;j<view.nj();++j)
-    {
-      for (int i=0;i<view.ni();++i)
-      {
-        vil2_print_value(os,view(i,j,p));
-        os<<" ";
-      }
-      os<<vcl_endl;
-    }
-  }
-}
 
 // For things which must not be composites
 #define VIL2_IMAGE_VIEW_FUNCTIONS_INSTANTIATE_FOR_SCALARS(T) \
@@ -182,7 +160,6 @@ template void vil2_value_range(T& min_value, T& max_value,const vil2_image_view<
 // For everything else
 #define VIL2_IMAGE_VIEW_FUNCTIONS_INSTANTIATE(T) \
 template bool vil2_deep_equality(const vil2_image_view<T > &lhs, const vil2_image_view<T > &rhs); \
-template void vil2_print_all(vcl_ostream& os,const vil2_image_view<T >& view); \
 template void vil2_fill(vil2_image_view<T >& view, T value); \
 template void vil2_fill_line(T * data, unsigned n, int step, T value); \
 template void vil2_fill_row(vil2_image_view<T >& view, unsigned j, T value); \

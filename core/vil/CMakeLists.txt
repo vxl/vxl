@@ -26,6 +26,7 @@ SET( vil2_sources
   vil2_save.cxx  vil2_save.h
   vil2_copy.txx  vil2_copy.h
   vil2_new.cxx   vil2_new.h
+  vil2_print.cxx vil2_print.h
   vil2_image_view_functions.cxx vil2_image_view_functions.h vil2_image_view_functions.txx
 
   # Sampling Operations

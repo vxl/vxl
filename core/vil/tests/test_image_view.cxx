@@ -6,6 +6,7 @@
 #include <vil2/vil2_image_view_functions.h>
 #include <vil2/vil2_crop.h>
 #include <vil2/vil2_copy.h>
+#include <vil2/vil2_print.h>
 
 bool Equal(const vil2_image_view<vxl_byte>& im0,
            const vil2_image_view<vxl_byte>& im1)

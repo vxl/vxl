@@ -6,6 +6,7 @@
 #include <vil2/vil2_clamp.h>
 #include <vil2/vil2_transpose.h>
 #include <vil2/vil2_flip.h>
+#include <vil2/vil2_print.h>
 #include <vcl_iostream.h>
 #include <testlib/testlib_test.h>
 

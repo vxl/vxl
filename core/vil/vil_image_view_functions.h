@@ -12,7 +12,7 @@
 
 //: True if the actual images are identical.
 // $\bigwedge_{i,j,p} {\textstyle src}(i,j,p) == {\textstyle dest}(i,j,p)$
-// The data may be formatted differently in each memory chunk. O(n).
+// The data may be formatted differently in each memory chunk.
 //  O(size).
 // \relates vil2_image_view
 template<class T>
@@ -59,15 +59,5 @@ void vil2_fill_col(vil2_image_view<T>& view, unsigned i, T value);
 // \relates vil2_image_view
 template<class T>
 void vil2_value_range(T& min_value, T& max_value,const vil2_image_view<T>& view);
-
-//: How to print value in vil2_print_all(image_view)
-// \relates vil2_image_view
-template<class T>
-void vil2_print_value(vcl_ostream& s, const T& value);
-
-//: print all image data to os in a grid
-// \relates vil2_image_view
-template<class T>
-void vil2_print_all(vcl_ostream& os,const vil2_image_view<T>& view);
 
 #endif // vil2_image_view_fns_h_

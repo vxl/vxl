@@ -3,11 +3,11 @@
 // \brief Example of setting up view of external data.
 // \author Tim Cootes - Manchester
 
-#include <vil2/vil2_image_view.h>
-#include <vil2/vil2_image_view_functions.h>
-#include <vxl_config.h> // for vxl_byte
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
+#include <vxl_config.h> // for vxl_byte
+#include <vil2/vil2_image_view.h>
+#include <vil2/vil2_print.h>
 
 int main(int argc, char** argv)
 {

@@ -3,12 +3,12 @@
 // \brief Example of generating functions to manipulate views.
 // \author Tim Cootes - Manchester
 
-#include <vil/vil_rgb.h>
-#include <vil2/vil2_image_view.h>
-#include <vil2/vil2_image_view_functions.h>
-#include <vxl_config.h> // for vxl_byte
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
+#include <vxl_config.h> // for vxl_byte
+#include <vil/vil_rgb.h>
+#include <vil2/vil2_image_view.h>
+#include <vil2/vil2_print.h>
 
 //: Example function to return a 3-plane view of an RGB image
 vil2_image_view<vxl_byte> view_as_planes(const vil2_image_view<vil_rgb<vxl_byte> >& v)

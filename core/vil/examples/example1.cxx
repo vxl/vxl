@@ -3,10 +3,11 @@
 // \brief Example of creating and filling a vil2_image_view<T>.
 // \author Tim Cootes - Manchester
 
+#include <vcl_iostream.h>
+#include <vxl_config.h> // for vxl_byte
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_image_view_functions.h>
-#include <vxl_config.h> // for vxl_byte
-#include <vcl_iostream.h>
+#include <vil2/vil2_print.h>
 
 int main(int argc, char** argv)
 {

@@ -27,6 +27,7 @@
 #include <vil2/vil2_image_view.h>
 #include <vil2/vil2_pixel_format.h>
 #include <vil2/vil2_image_view_functions.h>
+#include <vil2/vil2_print.h>
 
 #include <vcl_string.h>
 #include <vcl_cstring.h>

@@ -3,14 +3,14 @@
 // \brief Example of manipulating different views of a vil2_image_view<T>.
 // \author Tim Cootes - Manchester
 
+#include <vcl_iostream.h>
+#include <vxl_config.h> // for vxl_byte
 #include <vil2/vil2_image_view.h>
-#include <vil2/vil2_image_view_functions.h>
 #include <vil2/vil2_crop.h>
 #include <vil2/vil2_transpose.h>
 #include <vil2/vil2_flip.h>
 #include <vil2/vil2_plane.h>
-#include <vxl_config.h> // for vxl_byte
-#include <vcl_iostream.h>
+#include <vil2/vil2_print.h>
 
 int main(int argc, char** argv)
 {
