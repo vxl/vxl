@@ -28,7 +28,10 @@ void mbl_read_props_print(vcl_ostream &afs, mbl_read_props_type props)
 // a closing brace '}'
 //
 // There should be one property per line, with a colon ':' after
-// each property label. Each property label should not contain
+// each property label. The remainder of that line is the property value.
+// If the next line begins with a brace, the following text up to matching
+// braces is included in the property value.
+// Each property label should not contain
 // any whitespace.
 mbl_read_props_type mbl_read_props(vcl_istream &afs)
 {
@@ -80,6 +83,11 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
         label.erase(label.size() -1, 1);
         afs >> vcl_ws;
         vcl_getline(afs, str1);
+        if (str1=="{")
+        {
+          afs.putback('\n');
+          str1 = mbl_parse_block(afs, true);
+        }
         props[label] = str1;
         last_label = label;
       }
