@@ -130,6 +130,7 @@ void strk_info_tracker::set_initial_model(vtol_face_2d_sptr const& face)
 {
   initial_model_ = face;
 }
+
 //--------------------------------------------------------------------------
 //: Initialize the info_tracker
 bool strk_info_tracker::init()
@@ -175,11 +176,12 @@ generate_randomly_positioned_sample(strk_tracking_face_2d_sptr const& seed)
   tf->transform(tx, ty, theta, scale);
   return tf;
 }
+
 static void 
 print_tracking_bounds(vcl_vector<strk_tracking_face_2d_sptr> const& faces)
 {
-  if(!faces.size())
-	return;
+  if (!faces.size())
+    return;
   float xmin = vnl_numeric_traits<float>::maxval, xmax =0;
   float ymin = xmin, ymax = 0;
   for (vcl_vector<strk_tracking_face_2d_sptr>::const_iterator fit =
@@ -192,13 +194,13 @@ print_tracking_bounds(vcl_vector<strk_tracking_face_2d_sptr> const& faces)
       ymax = vnl_math_max(ymax, y);
     }
   strk_tracking_face_2d_sptr f = faces[0];
-  float farea  = f->Npix();
   float search_area = (xmax-xmin)*(ymax-ymin);
-  //  float R = farea/search_area;
+  float R = f->Npix()/search_area;
 
-  vcl_cout << "S[(" << xmin << " " << xmax << ")(" << ymin << " " << ymax
-          << ")]= " << search_area << "\n";
+  vcl_cout << "S[(" << xmin << ' ' << xmax << ")(" << ymin << ' ' << ymax
+           << ")]= " << search_area << ", area ratio = " << R << '\n';
 }
+
 //--------------------------------------------------------------------------
 //: generate a random set of new faces from the existing samples
 void strk_info_tracker::generate_samples()
@@ -325,10 +327,10 @@ void strk_info_tracker::cull_samples()
       vcl_cout << "Color Inf Diff = " << color_MIdiff << vcl_endl;
     }
     if (gradient_info_)
-      {
-        float grad_MI = tf->grad_mutual_info();
-        vcl_cout << "Grad Mutual Info = " << grad_MI << vcl_endl;
-      }
+    {
+      float grad_MI = tf->grad_mutual_info();
+      vcl_cout << "Grad Mutual Info = " << grad_MI << vcl_endl;
+    }
     vcl_cout << "Total Inf Diff = " << tf->total_info_diff() << vcl_endl;
 
     this->construct_background_faces(tf->face()->cast_to_face_2d());
@@ -418,86 +420,82 @@ get_best_face_points(vcl_vector<vtol_topology_object_sptr>& points)
     return;
   if (!use_background_)
     current_samples_[0]->face_points(points);
-  else
-    ;
 }
 
 //--------------------------------------------------------------------------
 //: Construct tracking faces which are clones of the current tracking face
-//  but arrayed on each edge of the bounding box of the current tracking face
+//  (but arrayed on each edge of the bounding box of the current tracking face)
 bool strk_info_tracker::
 construct_background_faces(vtol_face_2d_sptr const& current_model,
                            bool first_frame)
 {
-  if(!current_model)
+  if (!current_model)
     return false;
   background_faces_.clear();
   vsol_box_2d_sptr bb = current_model->get_bounding_box();
-  if(!bb)
+  if (!bb)
     return false;
   double min_x = bb->get_min_x();
   double max_x = bb->get_max_x();
   double min_y = bb->get_min_y();
   double max_y = bb->get_max_y();
-  double cx = (min_x + max_x)/2;
-  double cy = (min_y + max_y)/2;
   double width = max_x-min_x;
   double height = max_y-min_y;
   vcl_vector<vtol_vertex_sptr> verts;
   vcl_vector<vtol_vertex_2d_sptr> model_verts_2d;
   current_model->vertices(verts);
-  for(vcl_vector<vtol_vertex_sptr>::iterator vit = verts.begin();
-      vit != verts.end();vit++)
+  for (vcl_vector<vtol_vertex_sptr>::iterator vit = verts.begin();
+       vit != verts.end();vit++)
     model_verts_2d.push_back((*vit)->cast_to_vertex_2d());
   double tx[4], ty[4];
   tx[0]=width; ty[0]=0;
   tx[1]=-width; ty[1]=0;
   tx[2]=0; ty[2]=height;
   tx[3]=0; ty[3]=-height;
-  for(int i = 0; i<4; i++)
+  for (int i = 0; i<4; i++)
+  {
+    vcl_vector<vtol_vertex_sptr> face_verts;
+    for (vcl_vector<vtol_vertex_2d_sptr>::iterator vit =model_verts_2d.begin();
+         vit != model_verts_2d.end(); vit++)
     {
-      vcl_vector<vtol_vertex_sptr> face_verts;
-      for(vcl_vector<vtol_vertex_2d_sptr>::iterator vit =model_verts_2d.begin();
-            vit != model_verts_2d.end(); vit++)
-        {
-          vtol_vertex_2d_sptr mv = (*vit);
-          double x = mv->x()+tx[i], y = mv->y()+ty[i];
-          vtol_vertex_2d_sptr tmv = new vtol_vertex_2d(x, y);
-          face_verts.push_back(tmv->cast_to_vertex());
-        }
-      vtol_face_2d_sptr f = new vtol_face_2d(face_verts);
-      strk_tracking_face_2d_sptr tf;
-      if(first_frame)
-        tf = new strk_tracking_face_2d(f, image_0_,
-                                       Ix_0_, Iy_0_,
-                                       hue_0_, sat_0_,
-                                       min_gradient_,
-                                       parzen_sigma_);
-      else
-        tf = new strk_tracking_face_2d(f, image_i_,
-                                       Ix_i_, Iy_i_,
-                                       hue_i_, sat_i_,
-                                       min_gradient_,
-                                       parzen_sigma_);
-      if(!tf->Npix())
-        continue;
-      if (renyi_joint_entropy_)
-        tf->set_renyi_joint_entropy();
-      tf->compute_mutual_information(image_i_,
-                                     Ix_i_, Iy_i_,
-                                     hue_i_, sat_i_);
-      background_faces_.push_back(tf);
+      vtol_vertex_2d_sptr mv = (*vit);
+      double x = mv->x()+tx[i], y = mv->y()+ty[i];
+      vtol_vertex_2d_sptr tmv = new vtol_vertex_2d(x, y);
+      face_verts.push_back(tmv->cast_to_vertex());
     }
+    vtol_face_2d_sptr f = new vtol_face_2d(face_verts);
+    strk_tracking_face_2d_sptr tf;
+    if (first_frame)
+      tf = new strk_tracking_face_2d(f, image_0_,
+                                     Ix_0_, Iy_0_,
+                                     hue_0_, sat_0_,
+                                     min_gradient_,
+                                     parzen_sigma_);
+    else
+      tf = new strk_tracking_face_2d(f, image_i_,
+                                     Ix_i_, Iy_i_,
+                                     hue_i_, sat_i_,
+                                     min_gradient_,
+                                     parzen_sigma_);
+    if (!tf->Npix())
+      continue;
+    if (renyi_joint_entropy_)
+      tf->set_renyi_joint_entropy();
+    tf->compute_mutual_information(image_i_,
+                                   Ix_i_, Iy_i_,
+                                   hue_i_, sat_i_);
+    background_faces_.push_back(tf);
+  }
   return true;
 }
 
 bool 
 strk_info_tracker::get_background_faces(vcl_vector<vtol_face_2d_sptr>& faces)
 {
-  if(!background_faces_.size())
+  if (!background_faces_.size())
     return false;
   faces.clear();
-  for(vcl_vector<strk_tracking_face_2d_sptr>::iterator fit = background_faces_.begin(); fit != background_faces_.end(); fit++)
+  for (vcl_vector<strk_tracking_face_2d_sptr>::iterator fit = background_faces_.begin(); fit != background_faces_.end(); fit++)
     faces.push_back((*fit)->face()->cast_to_face_2d());
   return true;
 }
