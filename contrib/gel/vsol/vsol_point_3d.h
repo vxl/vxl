@@ -202,10 +202,10 @@ class vsol_point_3d : public vsol_spatial_object_3d
   void print_summary(vcl_ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  vcl_string is_a() const { return vcl_string("vsol_point_3d"); }
+  virtual vcl_string is_a() const { return vcl_string("vsol_point_3d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  bool is_class(const vcl_string& cls) const { return cls==is_a(); }
+  virtual bool is_class(const vcl_string& cls) const { return cls==is_a(); }
 
   //---------------------------------------------------------------------------
   //: output description to stream
