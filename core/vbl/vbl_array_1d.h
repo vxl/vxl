@@ -16,6 +16,7 @@
 
 #include <vcl_new.h>
 #include <vcl_cassert.h>
+#include <vcl_iosfwd.h>
 
 //: A simple container.
 // This container stores its elements in contiguous
