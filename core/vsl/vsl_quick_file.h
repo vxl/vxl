@@ -8,7 +8,7 @@
 //
 // All the functions return true if successful.
 // The functions will also output a success or failure message to stderr by
-// default, although you may substitute any vcl_ostream, or null to avoid the
+// default, although you may substitute any vcl_ostream, or \c (vcl_ostream*)0 to avoid the
 // message.
 // 
 // For these templated functions to work, the object must have vsl_b_read and
