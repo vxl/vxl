@@ -204,6 +204,7 @@ double vsol_rectangle_3d::area(void) const
 //---------------------------------------------------------------------------
 bool vsol_rectangle_3d::valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_vertices) const
 {
+  if (new_vertices.size() != 3) return false;
   vgl_vector_3d<double> a=new_vertices[0]->to_vector(*(new_vertices[1]));
   vgl_vector_3d<double> b=new_vertices[1]->to_vector(*(new_vertices[2]));
   // the two vectors should be orthogonal:
