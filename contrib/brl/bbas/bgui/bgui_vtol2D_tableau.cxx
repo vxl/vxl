@@ -334,7 +334,47 @@ void bgui_vtol2D_tableau::clear_all()
   highlight_ = false;//in case of event interrupts during the clear
   obj_map_.clear();
   vgui_easy2D_tableau::clear();
-  this->init();
+  //  this->init();
   highlight_ = temp;
   this->post_redraw();
+}
+
+void bgui_vtol2D_tableau::set_vsol_point_2d(const float r, const float g,
+                                            const float b, const point_radius)
+{
+  bgui_style_sptr sty = new bgui_style(r, g, b, point_radius, 0.0f);
+  bgui_vtol_soview2D_point p;
+  style_map_[p.type_name()]=sty;
+}
+
+void bgui_vtol2D_tableau::set_digital_curve_style(const float r, const float g,
+                                                  const float b, 
+                                                  const line_width)
+{
+  bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
+  bgui_vtol_soview2D_digital_curve dc;
+  style_map_[dc.type_name()]=sty;
+}
+
+void bgui_vtol2D_tableau::set_vertex_style(const float r, const float g,
+                                           const float b, const point_radius)
+{
+  bgui_style_sptr sty = new bgui_style(r, g, b, point_radius, 0.0f);
+  bgui_vtol_soview2D_vertex sv;
+  style_map_[sv.type_name()]=sty;
+}
+void bgui_vtol2D_tableau::set_edge_style(const float r, const float g,
+                                         const float b, const line_width)
+{
+  bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
+  bgui_vtol_soview2D_edge se;
+  style_map_[se.type_name()]=sty;
+}
+
+void bgui_vtol2D_tableau::set_face_style(const float r, const float g, 
+                                         const float b, const line_width)
+{
+  bgui_style_sptr sty = new bgui_style(r, g, b, 0.0f, line_width);
+  bgui_vtol_soview2D_face sf;
+  style_map_[sf.type_name()]=sty;
 }
