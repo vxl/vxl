@@ -1,7 +1,7 @@
 # mul/mil/CMakeLists.txt
 
 SET(mil_sources
- mil_all.h
+ mil_all.h                       mil_add_all_loaders.cxx
 
  mil_gauss_reduce_2d.cxx         mil_gauss_reduce_2d.h
  mil_image.cxx                   mil_image.h

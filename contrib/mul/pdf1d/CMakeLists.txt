@@ -1,7 +1,7 @@
 # mul/pdf1d/CMakeLists.txt
 
 SET(pdf1d_sources
-  pdf1d_all.h
+  pdf1d_all.h                                      pdf1d_add_all_loaders.cxx
   pdf1d_pdf.cxx                                    pdf1d_pdf.h
   pdf1d_sampler.cxx                                pdf1d_sampler.h
   pdf1d_builder.cxx                                pdf1d_builder.h
