@@ -73,7 +73,13 @@ bool vnl_math_isnan(double x)
 // Plausible theory : 'finite' is a preprocessor macro, defined in terms of a
 // macro called 'isinf'.
 #if defined(isinf)
-# error macro isinf is defined
+# ifdef __GNUC__
+#  warning macro isinf is defined
+#  undef isinf
+# else
+// do not fail silently
+#  error macro isinf is defined
+# endif
 #endif
 // -- Return true if x is neither NaN nor Inf.
 bool vnl_math_isfinite(double x) 
