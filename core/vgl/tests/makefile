@@ -23,6 +23,7 @@ TESTS += test_fit_lines_2d.cxx
 TESTS += test_closest_point.cxx
 TESTS += test_p_matrix.cxx
 TESTS += test_convex.cxx
+TESTS += test_convex_hull_2d.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
