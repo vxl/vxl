@@ -20,6 +20,6 @@ AUX_SOURCE_DIRECTORY(Templates test_brct_sources)
 ADD_EXECUTABLE(test_brct ${test_brct_sources})
 ADD_TEST(test_brct_kalman test_brct)
 
-TARGET_LINK_LIBRARIES(test_brct vgui brct)
+TARGET_LINK_LIBRARIES(test_brct vcl vgui brct)
 
 ENDIF(HAS_VGUI)

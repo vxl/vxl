@@ -6,24 +6,25 @@
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vcl_iostream.h>
 #include <vgui/vgui.h>
+#include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_easy3D_tableau.h>
 #include <vgui/vgui_viewer3D_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 
-#include <bdgl/bdgl_curve_matcher.h>
-
 //static live_video_manager instance
 brct_windows_frame *brct_windows_frame::instance_ = 0;
+vcl_string brct_windows_frame::win_title_ = "BRCT";
 
 //===============================================================
 //: The singleton pattern - only one instance of the manager can occur
 //==============================================================
-brct_windows_frame *brct_windows_frame::instance()
+brct_windows_frame *brct_windows_frame::instance(vcl_string& s)
 {
   if (!instance_)
     {
       instance_ = new brct_windows_frame();
+	  brct_windows_frame::win_title_ = s;
       instance_->init();
     }
   return brct_windows_frame::instance_;
@@ -47,7 +48,7 @@ brct_windows_frame::~brct_windows_frame()
 //======================================================================
 void brct_windows_frame::init()
 {
-	grid_ = vgui_grid_tableau_new(1,1);
+	grid_ = vgui_grid_tableau_new(2,1);
 	grid_->set_grid_size_changeable(true);
   	unsigned int col=0, row = 0;
 	// add 3D tableau
@@ -81,12 +82,21 @@ void brct_windows_frame::init()
 	tab3d->set_point_radius(15);
 	tab3d->set_foreground(1,1,1);
 	tab3d->add_point(0,0,0);
-    
-	
+    	
 	vgui_viewer3D_tableau_sptr v3d = vgui_viewer3D_tableau_new(tab3d);
-	grid_->add_at(tab3d, 0, 0);
+	grid_->add_at(v3d, col+1, row);
 	vgui_shell_tableau_sptr shell = vgui_shell_tableau_new(grid_);
  	this->add_child(shell);
+
+	// set up components of window: menu, scroll bar etc.
+	win_ = vgui::produce_window(800, 600, produce_menu(), brct_windows_frame::win_title_);
+  	win_->set_statusbar(true);
+  	win_->enable_vscrollbar(true);
+  	win_->enable_hscrollbar(true);
+  	win_->show();
+  	win_->get_adaptor()->set_tableau(instance_);
+  	this->set_window(win_);
+  	this->post_redraw();
 }
 
 //=========================================================================
@@ -106,3 +116,7 @@ void brct_windows_frame::quit()
   vcl_exit(1);
 }
 
+vgui_menu brct_windows_frame::produce_menu()
+{
+	return vgui_menu();		
+}
