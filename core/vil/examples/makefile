@@ -23,6 +23,7 @@ MINI_PROG_SOURCES += vil_image_copy.cxx
 MINI_PROG_SOURCES += vil_rotate_image.cxx
 MINI_PROG_SOURCES += example_interpolate.cxx
 MINI_PROG_SOURCES += example_complex.cxx
+MINI_PROG_SOURCES += vil_resample_image.cxx
 
 ################################
 include ${IUEROOT}/config/top.mk
