@@ -20,6 +20,7 @@
 // François BERTEL
 //
 // .SECTION Modifications
+// 2000/05/09 Peter VANROOSE         dist_origin() re-implemented
 // 2000/05/05 François BERTEL        Several minor bugs fixed
 // 2000/02/29 Peter VANROOSE         Several minor fixes
 // 2000/02/16 Don HAMILTON, Peter TU Creation
@@ -98,7 +99,7 @@ public:
   void set (Type a, Type b, Type c){ data_[0] = a; data_[1] = b; data_[2] = c; }
 
   //: find the distance of the line to the origin
-  Type distance_to_origin() const;
+  Type dist_origin() const;
 
   //: Get two points on the line; normally the intersection with X and Y axes.
   void get_two_points(vgl_point_2d<Type> &p1, vgl_point_2d<Type> &p2);

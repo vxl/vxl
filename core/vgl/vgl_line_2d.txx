@@ -2,40 +2,24 @@
 
 #include <vgl/vgl_point_2d.h>
 
-//: find the distance of the line to the origin
+//: return the distance of the line to the origin
 template <class Type>
-Type vgl_line_2d<Type>::distance_to_origin() const
+Type vgl_line_2d<Type>::dist_origin() const
 {
-  Type aa=a();
-  Type bb=b();
-  Type cc=c();
-  Type norm=aa*aa+bb*bb;
-
-  Type midpt_x=-aa*cc/norm; 
-  Type midpt_y=-bb*cc/norm;
-  
-  return sqrt(midpt_x*midpt_x+midpt_y*midpt_y);
+  return c() / sqrt(a()*a()+b()*b());
 }
 
-//: get two points on the line 
-// find the closest point to the origin and then add 10 x direction and to y
-// direction  
+//: get two points on the line.  These two points are normally the intersections
+// with the Y axis and X axis, respectively.  When the line is parallel to one
+// of these, the point with y=1 or x=1, resp. are taken.  When the line goes
+// through the origin, the second point is (b, -a).
 template <class Type>
-void vgl_line_2d<Type>::get_two_points(vgl_point_2d<Type> &p1,
-                                       vgl_point_2d<Type> &p2)
+void vgl_line_2d<Type>::get_two_points(vgl_point_2d<Type> &p1, vgl_point_2d<Type> &p2)
 {
-  Type aa=a();
-  Type bb=b();
-  Type cc=c();
-  Type norm=aa*aa+bb*bb;
-  
-  Type midpt_x=-aa*cc/norm; 
-  Type midpt_y=-bb*cc/norm;
-  
-  Type dx=dir_x();
-  Type dy=dir_y();
-
-  p1.set(midpt_x+10*dx,midpt_y+10*dy);
-  p2.set(midpt_y-10*dx,midpt_y-10*dy);
+  if (b() == 0)       p1.set(-c()/a(), 1);
+  else                p1.set(0, -c()/b());
+  if (a() == 0)       p2.set(1, -c()/b());
+  else if ( c() == 0) p2.set(b(), -a());
+  else                p2.set(-c()/a(), 0);
 }
 

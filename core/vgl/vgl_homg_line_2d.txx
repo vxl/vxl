@@ -12,6 +12,7 @@
 
 
 #include <vgl/vgl_homg_line_2d.h> 
+#include <vgl/vgl_homg_point_2d.h> 
 
 // TODO
 //  Type get_direction() const
@@ -37,24 +38,37 @@
 //    return normal;
 //  }
 
- // find the distance of the line to the origin
+//: find the distance of the line to the origin
 template <class Type>
-Type vgl_homg_line_2d<Type>::dist_orign() const
+Type vgl_homg_line_2d<Type>::dist_origin() const
 {
-  // TODO
-  return 0;
+  return this->c() / sqrt( this->a()*this->a() + this->b()*this->b() );
 }
 
 
-// get two points on the line 
+//: get two points on the line.  These two points are normally the intersections
+// with the Y axis and X axis, respectively.  When the line is parallel to one
+// of these, the point with y=1 or x=1, resp. are taken.  When the line goes
+// through the origin, the second point is (b, -a, 1).  Finally, when the line
+// is the line at infinity, the returned points are (1,0,0) and (0,1,0).
+// Thus, whenever possible, the returned points are not at infinity.
 template <class Type>
 void vgl_homg_line_2d<Type>::get_two_points(vgl_homg_point_2d<Type> &p1, vgl_homg_point_2d<Type> &p2)
 {
-  // todo 
-  // needs svd ie:
-  // IUE_matrix<double> M(get_vector().data_block(), 1, 3);
-  // SVD svd(o);
-  // p1->set(svd.V(0,1), svd.V(1,1), svd.V(2,1));
-  // p2->set(svd.V(0,2), svd.V(1,2), svd.V(2,2));
+  if (this->b() == 0) p1.set(-this->c(), this->a(), this->a());
+  else                p1.set(0, -this->c(), this->b());
+  if (this->a() == 0) p2.set(this->b(), -this->c(), this->b());
+  else if ( c() == 0) p2.set(this->b(), -this->a(), 1);
+  else                p2.set(-this->c(), 0, this->a());
+}
+
+// Note that the given points must be distinct!
+template <class Type>
+vgl_homg_line_2d<Type>::vgl_homg_line_2d (vgl_homg_point_2d<Type> const& l1,
+                                          vgl_homg_point_2d<Type> const& l2)
+{
+  set(l1.y()*l2.w()-l1.w()*l2.y(),
+      l1.w()*l2.x()-l1.x()*l2.w(),
+      l1.x()*l2.y()-l1.y()*l2.x());
 }
 

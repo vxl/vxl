@@ -7,7 +7,8 @@
 // Author: Don Hamilton, Peter Tu
 // Copyright:
 // Created: Feb 15 2000
-// Modifications:
+// .SECTION Modifications:
+//  Peter Vanroose,  9 May 2000: added intersection constructor
 //  Peter Vanroose, 29 Feb 2000: several minor fixes and additions
 
 #include <vcl/vcl_iostream.h>
@@ -16,6 +17,9 @@
 
 template <class Type>
 class vgl_point_2d;
+
+template <class Type>
+class vgl_homg_line_2d;
 
 //: Represents a homogeneous 2D point.
 template <class Type>
@@ -45,6 +49,10 @@ public:
 
   // -- Construct from homogeneous 3-vector.
   vgl_homg_point_2d (const Type v[3]) { set(v[0],v[1],v[3]); }
+
+  // -- Construct from 2 lines (intersection).
+  vgl_homg_point_2d (vgl_homg_line_2d<Type> const& l1,
+                     vgl_homg_line_2d<Type> const& l2);
 
   // Default destructor
   // ~vgl_homg_point_2d () {}

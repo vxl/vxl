@@ -20,12 +20,14 @@
 // François BERTEL
 //
 // .SECTION Modifications
+// 2000/05/06 Peter Vanroose         Implemented force_point2_infinite()
 // 2000/05/05 François BERTEL        Change default constructor
 // 2000/02/15 Don HAMILTON, Peter TU Creation
 //-----------------------------------------------------------------------------
 
-template <class Type>
-class vgl_homg_line_3d_2_points;
+#ifdef __GNUC__
+#pragma interface
+#endif
 
 #include <vcl/vcl_iostream.h>
 #include <vgl/vgl_homg_point_3d.h>
@@ -40,50 +42,40 @@ public:
   //---------------------------------------------------------------------------
   //: Default constructor with (0,0,0,1) and (1,0,0,0)
   //---------------------------------------------------------------------------
-  explicit vgl_homg_line_3d_2_points(void);
+  explicit vgl_homg_line_3d_2_points(void)
+  : point_finite_(0,0,0,1), point_infinite_(1,0,0,0) {}
 
   //---------------------------------------------------------------------------
-  //: Copy constructor
+  // Copy constructor
   //---------------------------------------------------------------------------
-  vgl_homg_line_3d_2_points(const vgl_homg_line_3d_2_points<Type> &that);  
+  vgl_homg_line_3d_2_points(const vgl_homg_line_3d_2_points<Type> &that)
+  : point_finite_(that.point_finite_), point_infinite_(that.point_infinite_) {}
 
   //---------------------------------------------------------------------------
   //: Construct from two points
   //---------------------------------------------------------------------------
-  vgl_homg_line_3d_2_points(const vgl_homg_point_3d<Type> &point_finite,
-                            const vgl_homg_point_3d<Type> &point_infinite);
+  vgl_homg_line_3d_2_points(vgl_homg_point_3d<Type> const& point_finite,
+                            vgl_homg_point_3d<Type> const& point_infinite);
   //---------------------------------------------------------------------------
-  //: Destructor
+  // Destructor (does nothing)
   //---------------------------------------------------------------------------
-  ~vgl_homg_line_3d_2_points();
+  ~vgl_homg_line_3d_2_points() {}
 
   //***************************************************************************
-  //: Data access
+  // Data access
   //***************************************************************************
   
-  vgl_homg_point_3d<Type> const &get_point_finite(void) const
-  {
-    return point_finite_;
-  }
-  vgl_homg_point_3d<Type> &get_point_finite(void)
-  {
-    return point_finite_;
-  }
-  vgl_homg_point_3d<Type> const &get_point_infinite(void) const
-  {
-    return point_infinite_;
-  } 
-  vgl_homg_point_3d<Type> &get_point_infinite(void)
-  {
-    return point_infinite_;
-  }
+  vgl_homg_point_3d<Type>const& get_point_finite() const {return point_finite_;}
+  vgl_homg_point_3d<Type>     & get_point_finite()       {return point_finite_;}
+  vgl_homg_point_3d<Type>const& get_point_infinite()const{return point_infinite_;}
+  vgl_homg_point_3d<Type>     & get_point_infinite()     {return point_infinite_;}
 
   //***************************************************************************
   // Utility methods
   //***************************************************************************
   
   //---------------------------------------------------------------------------
-  //: force a point to infinity
+  //: force the point point_infinite_ to infinity, without changing the line
   //---------------------------------------------------------------------------
   void force_point2_infinite(void);
 
@@ -94,6 +86,7 @@ protected:
   // Data Members------------------------------------------------------------
   // any finite point on the line
   vgl_homg_point_3d<Type> point_finite_;
+  // the (unique) point at infinity
   vgl_homg_point_3d<Type> point_infinite_;
 };
 

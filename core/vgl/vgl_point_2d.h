@@ -8,7 +8,8 @@
 // Author: Don Hamilton, Peter Tu
 // Copyright:
 // Created: Feb 15 2000
-// Modifications:
+// .SECTION Modifications:
+//  Peter Vanroose, May  9 2000: implemented intersection constructor
 //  Peter Vanroose, Feb 28 2000: lots of minor corrections
 
 #include <vcl/vcl_iostream.h>

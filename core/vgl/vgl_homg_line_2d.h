@@ -7,7 +7,9 @@
 // Author: Don Hamilton, Peter Tu
 // Copyright:
 // Created: Feb 15 2000
-// Modifications:
+// .SECTION Modifications:
+//  Peter Vanroose, May  9 2000: implemented dist_origin() and get_two_points()
+//                               and added constructor from two points
 //  Peter Vanroose, Feb 28 2000: lots of minor corrections
 
 #include <vcl/vcl_iostream.h>
@@ -44,6 +46,9 @@ public:
   // -- Construct from 3-vector.
   vgl_homg_line_2d (const Type v[3]) { set(v[0],v[1],v[2]); }
 
+  // -- Construct from two points (join)
+  vgl_homg_line_2d (vgl_homg_point_2d<Type> const& p1, vgl_homg_point_2d<Type> const& p2);
+
   // Default destructor
   // ~vgl_homg_line_2d () {}
 
@@ -79,7 +84,7 @@ public:
   inline bool ideal(Type tol) { return vcl_min(fabs(a()),fabs(b())) < tol * fabs(c()); }   
   
   // find the distance of the line to the origin
-  Type dist_orign() const;
+  Type dist_origin() const;
 
   // get two points on the line 
   
