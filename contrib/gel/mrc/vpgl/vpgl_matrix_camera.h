@@ -4,12 +4,11 @@
 
 class vpgl_matrix_camera : public vpgl_basic_camera
 {
-public:
-
- // Constructors
+ public:
+  // Constructors
   vpgl_matrix_camera();
   vpgl_matrix_camera(const vnl_matrix<double>& mat);
- // Destructors
+  // Destructors
   virtual ~vpgl_matrix_camera() {}
 
   // virtual interface for camera classes
@@ -26,8 +25,8 @@ public:
                               vnl_vector<double>& world, double u, double v);
 #endif
 
-  // A function to set and get the initilization point
-  bool get_3x3matrix(vnl_matrix<double> &mat) const {mat=_matrix; return true;}
+  // A function to set and get the initialization point
+  bool get_3x3matrix(vnl_matrix<double> &mat) const {mat=matrix_; return true;}
 
   double& operator() (unsigned int r, unsigned int c);
 
@@ -37,11 +36,9 @@ public:
   void set_general_matrix(const vnl_matrix<double> & gen);
 #endif
 
-protected:
-
- vnl_matrix<double> _matrix;
- //vnl_matrix<double> _general;
-
+ protected:
+ vnl_matrix<double> matrix_;
+ //vnl_matrix<double> general_;
 };
 
 #endif // VPGL_MATRIX_CAMERA_H

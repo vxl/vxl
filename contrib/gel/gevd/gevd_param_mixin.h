@@ -6,7 +6,7 @@
 // \brief A mixin to package algorithm parameters
 //
 //   The base class for blocks of algorithm parameters. Algorithms,
-//   such as edge detection, would inhert specializations of this mixin
+//   such as edge detection, would inherit specializations of this mixin
 //   which contain the actual parameters and methods to validate the
 //   parameters.
 //
@@ -34,8 +34,8 @@ class ParamModifier;
 
 class gevd_param_mixin
 {
-  bool _valid;
-  vcl_string _error_msg;
+  bool valid_;
+  vcl_string error_msg_;
  public:
   //=====================================================
   // Constructors and Destructors
@@ -43,8 +43,8 @@ class gevd_param_mixin
   virtual  ~gevd_param_mixin();
   //=====================================================
   virtual bool SanityCheck();
-  bool Valid() { return _valid; }
-  const char* GetErrorMsg() {return _error_msg.c_str();}
+  bool Valid() { return valid_; }
+  const char* GetErrorMsg() {return error_msg_.c_str();}
   void SetErrorMsg(const char* msg);
   virtual void Describe(ParamModifier&) {};
 };

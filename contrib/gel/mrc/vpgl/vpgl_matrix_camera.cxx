@@ -7,17 +7,17 @@
 #include <vnl/vnl_math.h> // for vnl_huge_val()
 
 vpgl_matrix_camera::vpgl_matrix_camera():
-  _matrix(3,3)
+  matrix_(3,3)
 {
   int r, c;
   for (r=0; r<3; r++)
     for (c=0; c<3; c++)
-      _matrix(r, c) = (r==c)?1.0:0.0;
+      matrix_(r, c) = (r==c)?1.0:0.0;
 }
 
 
 vpgl_matrix_camera::vpgl_matrix_camera(const vnl_matrix<double>& mat):
-  _matrix(3,3)
+  matrix_(3,3)
 {
   if ((mat.rows() != 3) || (mat.columns() != 3))
     {
@@ -26,10 +26,10 @@ vpgl_matrix_camera::vpgl_matrix_camera(const vnl_matrix<double>& mat):
     int r, c;
     for (r=0; r<3; r++)
       for (c=0; c<3; c++)
-        _matrix(r, c) = (r==c)?1.0:0.0;
+        matrix_(r, c) = (r==c)?1.0:0.0;
     }
   else
-    _matrix = mat;
+    matrix_ = mat;
 }
 
 
@@ -38,7 +38,7 @@ void vpgl_matrix_camera::world_to_image(vnl_vector<double> const& vect3d,
 {
   double dummy=0;
   // Compute the homogeneous image point
-  vnl_vector<double> homog_image_pt = _matrix*vect3d;
+  vnl_vector<double> homog_image_pt = matrix_*vect3d;
 
   // Initialize for default, ie. homogenizing var in image pt is 0.
   imgu = vnl_huge_val(dummy);
@@ -68,24 +68,24 @@ void vpgl_matrix_camera::world_to_image(double x, double y, double z,
 //: the virtual image to world projection.
 //  This implementation uses two facts: 1) the camera center is given by the null vector
 //    of the projection matrix.  That is, 0 = T*C. Where T is the 3x4
-//    projection matrix and C is the 3-d homegenous position vector, O
-//    is a 3 elment column vector of all zeros.
+//    projection matrix and C is the 3-d homogeneous position vector, O
+//    is a 3 element column vector of all zeros.
 //    2) The ray through any image point can be found by replacing
 //    the translation column of the 3x4 projection matrix by the negative
 //    of the image point in 2-d homogeneous coordinates.  That is,
-//
-//    wu    t00 x + t01 y + t02 z + t03
+// \code
+//    wu  = t00 x + t01 y + t02 z + t03
 //    wv  = t10 x + t11 y + t12 z + t13
-//    w     t20 x + t21 y + t22 z + t23
-//
+//    w   = t20 x + t21 y + t22 z + t23
+// \endcode
 //   It can be seen that as w->infinity the constant terms, ti3, can be
 //   ignored. Thus,
-//
-//    t00 x + t01 y + t02 z - w u    0
+// \code
+//    t00 x + t01 y + t02 z - w u  = 0
 //    t10 x + t11 y + t12 z - w v  = 0
-//    t20 x + t21 y + t22 z - w      0
-//
-//    If we define the ray corrdinates as r = (x/w y/w z/w),
+//    t20 x + t21 y + t22 z - w    = 0
+// \endcode
+//    If we define the ray coordinates as r = (x/w y/w z/w),
 //    then r is the nullvector of the SVD of the modified projection matrix.
 //    One final consideration is to make sure that the sense of the
 //    ray is along the principal ray which is the lower left three elements
@@ -97,7 +97,7 @@ void vpgl_matrix_camera::image_to_world(
 {
   //Get the center of projection
 
-    vnl_svd svd(_general);
+    vnl_svd svd(general_);
     vnl_vector<double> cproj = svd.nullvector();
     for (int i = 0; i<3; i++)
       pos[i] = cproj[i]/cproj[3];
@@ -106,7 +106,7 @@ void vpgl_matrix_camera::image_to_world(
     vnl_matrix<double> P3X4(3,4,0.0);
     for (int r = 0; r<3; r++)
       for (int c = 0; c<3; c++)
-        P3X4.put(r,c, _general.get(r,c));
+        P3X4.put(r,c, general_.get(r,c));
     P3X4.put(0,3, -x);   P3X4.put(1,3,-y); P3X4.put(2,3,-1.0);
     //Get the ray as the nullvector of the modified projection matrix
     vnl_svd svdP(P3X4);
@@ -116,9 +116,9 @@ void vpgl_matrix_camera::image_to_world(
     ray[1]= nvec[1];
     ray[2]= nvec[2];
     //Define the principal ray
-    principal_ray[0]=_general(2,0);
-    principal_ray[1]=_general(2,1);
-    principal_ray[2]=_general(2,2);
+    principal_ray[0]=general_(2,0);
+    principal_ray[1]=general_(2,1);
+    principal_ray[2]=general_(2,2);
     //Adjust the sense of the world ray
     double d = dot_product(ray, principal_ray);
     ray /=d;
@@ -138,13 +138,13 @@ double& vpgl_matrix_camera::operator() (unsigned int r, unsigned int c)
   }
 
   // Return the matrix entry
-  return _matrix(r, c);
+  return matrix_(r, c);
 }
 
 #if 0
 //: Function to set the matrix.  Does a dimension check before assigning.
 void vpgl_matrix_camera::set_general_matrix(const vnl_matrix<double> & gen){
-  _general=gen;
+  general_=gen;
 }
 #endif
 
@@ -153,10 +153,10 @@ void vpgl_matrix_camera::set_matrix(const vnl_matrix<double>& mat)
   if ((mat.rows() != 3) || (mat.columns() != 4))
     vcl_cerr << "vpgl_matrix_camera: Wrong dimensions of the matrix\n";
   else
-    _matrix = mat;
+    matrix_ = mat;
 }
 void vpgl_matrix_camera::get_matrix(vnl_matrix<double> & m) const {
-  m = _matrix;
+  m = matrix_;
 }
 
 // NOTE:  FOLLOWING WILL EVENTUALLY BE MOVED TO THE SOLVER/TARGET INTERFACE
@@ -165,12 +165,12 @@ void vpgl_matrix_camera::get_matrix(vnl_matrix<double> & m) const {
 // Assumes row/column indexes in mat start from 1, not 0.
 //   Removed const because carmen has problems with it... WAH
 vpgl_matrix_camera::vpgl_matrix_camera( double **mat):
-  _matrix(3,3),_general(3,4)
+  matrix_(3,3),general_(3,4)
 {
   // Fill up the actual matrix
   for (int i=0;i<3;i++)
     for (int j=0;j<4;j++)
-      _general(i,j)=mat[i+1][j+1];
+      general_(i,j)=mat[i+1][j+1];
 }
 #endif
 

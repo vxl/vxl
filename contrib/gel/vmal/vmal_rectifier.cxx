@@ -20,7 +20,7 @@ vmal_rectifier::vmal_rectifier()
 vmal_rectifier::vmal_rectifier(vmal_multi_view_data_vertex_sptr mvd_vertex,
                                vmal_multi_view_data_edge_sptr mvd_edge,
                                int ima_height, int ima_width) :
-  _is_f_compute(false)
+  is_f_compute_(false)
 {
   if ((mvd_vertex->get_nb_views()>1) && (mvd_edge->get_nb_views()>1))
   {
@@ -29,10 +29,10 @@ vmal_rectifier::vmal_rectifier(vmal_multi_view_data_vertex_sptr mvd_vertex,
     vcl_vector<vtol_edge_2d_sptr> tmp_lines1;
 
     mvd_edge->get(0,1,tmp_lines0,tmp_lines1);
-    _numpoints=tmp_lines0.size();
+    numpoints_=tmp_lines0.size();
 
-    convert_lines_double_3(tmp_lines0, _lines0_p, _lines0_q);
-    convert_lines_double_3(tmp_lines1, _lines1_p, _lines1_q);
+    convert_lines_double_3(tmp_lines0, lines0_p_, lines0_q_);
+    convert_lines_double_3(tmp_lines1, lines1_p_, lines1_q_);
 
 
     vcl_vector<vtol_vertex_2d_sptr> tmp_points0;
@@ -40,35 +40,35 @@ vmal_rectifier::vmal_rectifier(vmal_multi_view_data_vertex_sptr mvd_vertex,
 
     mvd_vertex->get(0,1,tmp_points0,tmp_points1);
 
-    convert_points_double_3(tmp_points0, _points0);
-    convert_points_double_3(tmp_points1, _points1);
-    _height=ima_height;
-    _width=ima_width;
+    convert_points_double_3(tmp_points0, points0_);
+    convert_points_double_3(tmp_points1, points1_);
+    height_=ima_height;
+    width_=ima_width;
   }
 }
 
 vmal_rectifier::~vmal_rectifier()
 {
-  delete [] _points0;
-  delete [] _points1;
-  delete [] _lines0_p;
-  delete [] _lines0_q;
-  delete [] _lines1_p;
-  delete [] _lines1_q;
+  delete [] points0_;
+  delete [] points1_;
+  delete [] lines0_p_;
+  delete [] lines0_q_;
+  delete [] lines1_p_;
+  delete [] lines1_q_;
 }
 
 void vmal_rectifier::rectification_matrix(vnl_double_3x3& H0,
                                           vnl_double_3x3& H1)
 {
-  if (!_is_f_compute)
+  if (!is_f_compute_)
   {
-    _is_f_compute=true;
+    is_f_compute_=true;
     vcl_vector<HomgPoint2D> v_points0;
     vcl_vector<HomgPoint2D> v_points1;
-    for (int i=0;i<_numpoints;i++)
+    for (int i=0;i<numpoints_;i++)
     {
-      HomgPoint2D tmp_point0(_points0[i][0],_points0[i][1]);
-      HomgPoint2D tmp_point1(_points1[i][0],_points1[i][1]);
+      HomgPoint2D tmp_point0(points0_[i][0],points0_[i][1]);
+      HomgPoint2D tmp_point1(points1_[i][0],points1_[i][1]);
       v_points0.push_back(tmp_point0);
       v_points1.push_back(tmp_point1);
     }
@@ -76,7 +76,7 @@ void vmal_rectifier::rectification_matrix(vnl_double_3x3& H0,
     FMatrixComputeLinear tmp_fcom;
     FMatrix tmp_f;
     tmp_fcom.compute(v_points0,v_points1,& tmp_f);
-    tmp_f.get(&_F12.as_ref().non_const());
+    tmp_f.get(&F12_.as_ref().non_const());
 
     HomgPoint2D epi1;
     HomgPoint2D epi2;
@@ -98,27 +98,27 @@ void vmal_rectifier::rectification_matrix(vnl_double_3x3& H0,
     tmp_epi2[1]=y2;
     tmp_epi2[2]=1.0;
 
-    _epipoles.push_back(tmp_epi1);
-    _epipoles.push_back(tmp_epi2);
+    epipoles_.push_back(tmp_epi1);
+    epipoles_.push_back(tmp_epi2);
   }
   bool affine=false;
   int out_height;
   int out_width;
-  int sweeti=(int)(_width/2);
-  int sweetj=(int)(_height/2);
+  int sweeti=(int)(width_/2);
+  int sweetj=(int)(height_/2);
 
   compute_joint_epipolar_transform_new(
-    _points0,       // Points in one view
-    _points1,       // Points in the other view
-    _numpoints,     // Number of matched points
-    _H0, _H1,       // The matrices to be returned
-    _height, _width,// Dimensions of the input images
+    points0_,       // Points in one view
+    points1_,       // Points in the other view
+    numpoints_,     // Number of matched points
+    H0_, H1_,       // The matrices to be returned
+    height_, width_,// Dimensions of the input images
     out_height, out_width,
     sweeti, sweetj, // Sweet spot in the first image
     affine);
-  H0=_H0;
-  H1=_H1;
-  // vnl_double_3 p1=H0*_epipoles[0], p2=H1*_epipoles[1], p3=H0*_points0[0], p4=H1*_points1[0];
+  H0=H0_;
+  H1=H1_;
+  // vnl_double_3 p1=H0*epipoles_[0], p2=H1*epipoles_[1], p3=H0*points0_[0], p4=H1*points1_[0];
 }
 
 //In this case (3 cameras), we assume that the first camera matrix is equal
@@ -129,8 +129,8 @@ void vmal_rectifier::set_tritensor(TriTensor &tri)
 {
   //this method is helpful when using the vmal_projective_reconstruction class
   //that compute the tritensor.
-  _is_f_compute=true;
-  _tritensor=tri;
+  is_f_compute_=true;
+  tritensor_=tri;
 
   HomgPoint2D epi12=tri.get_epipole_12();
   FMatrix F12(tri.get_fmatrix_12());
@@ -143,8 +143,8 @@ void vmal_rectifier::set_tritensor(TriTensor &tri)
   tmp_epi[1]=y;
   tmp_epi[2]=1.0;
 
-  _epipoles.push_back(tmp_epi);
-  F12.get(&_F12.as_ref().non_const());
+  epipoles_.push_back(tmp_epi);
+  F12.get(&F12_.as_ref().non_const());
 }
 
 void vmal_rectifier::compute_joint_epipolar_transform_new (
@@ -189,11 +189,11 @@ void vmal_rectifier::compute_initial_joint_epipolar_transforms (
    // Compute the pair of epipolar transforms to rectify matched points
    // This does a minimally distorting correction to H0 and matches it with H1.
 
-  if (_is_f_compute)
+  if (is_f_compute_)
   {
     //the epipoles are already set, we don't have to compute the
     //the fundamental matrix.
-    if ( !compute_initial_joint_epipolar_transforms (_F12,sweeti, sweetj, H0, H1))
+    if ( !compute_initial_joint_epipolar_transforms (F12_,sweeti, sweetj, H0, H1))
     {
       // Error message and exit
       vcl_cerr<<"Computation of epipolar transform failed\n";
@@ -234,7 +234,7 @@ void vmal_rectifier::compute_initial_joint_epipolar_transforms (
 }
 
 //: Computes a pair of transformation matrices for an image pair that will define the joint epipolar projection.
-// This does a minimially distortion-free correction to H0 and then
+// This does a minimally distortion-free correction to H0 and then
 // gets a matching H0.
 
 int vmal_rectifier::compute_initial_joint_epipolar_transforms (
@@ -245,7 +245,7 @@ int vmal_rectifier::compute_initial_joint_epipolar_transforms (
   )
 {
   // First get the epipole e'
-  vnl_double_3 p1 = _epipoles[0];
+  vnl_double_3 p1 = epipoles_[0];
 
   // Next, compute the mapping H' for the second image
 
@@ -278,7 +278,7 @@ int vmal_rectifier::compute_initial_joint_epipolar_transforms (
     // Multiply things out
   H0 =  T * H0;
   p1 = T * p1;
-  vnl_double_3 ep1=H0*_epipoles[0];
+  vnl_double_3 ep1=H0*epipoles_[0];
 
   // Now send the epipole to infinity
   double x = p1[2]/p1[0];
@@ -290,7 +290,7 @@ int vmal_rectifier::compute_initial_joint_epipolar_transforms (
 
   // Multiply things out.  Put the result in H0
   H0 = E * H0;
-  ep1=H0*_epipoles[0];
+  ep1=H0*epipoles_[0];
   // Next compute the initial 2x
   H1 = matching_transform (Q.transpose(), H0);
 
