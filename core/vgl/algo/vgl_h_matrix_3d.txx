@@ -6,6 +6,7 @@
 
 #include "vgl_h_matrix_3d.h"
 #include <vcl_iostream.h>
+#include <vcl_fstream.h>
 #include <vcl_cmath.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_transpose.h>
