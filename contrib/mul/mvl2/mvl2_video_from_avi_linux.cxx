@@ -165,9 +165,9 @@ int mvl2_video_from_avi::length()
   return moviestream_->GetLength();
 }
 
-int mvl2_video_from_avi::seek(int frame_number)
+int mvl2_video_from_avi::seek(unsigned int frame_number)
 {
-  if (!is_initialized_ || frame_number<0 || frame_number>moviestream_->GetLength())
+  if (!is_initialized_ || frame_number>moviestream_->GetLength())
     return -1;
   if (frame_number==0)
   {
@@ -179,15 +179,13 @@ int mvl2_video_from_avi::seek(int frame_number)
   if (frame_number==current_frame_) return current_frame_;
   if (frame_number==current_frame_+1) return next_frame();
 
-  int key_frame;
-
   moviestream_->Seek(frame_number);
-  key_frame=moviestream_->SeekToPrevKeyFrame();
-  key_frame=moviestream_->GetPos();
+  moviestream_->SeekToPrevKeyFrame();
+  unsigned int key_frame=moviestream_->GetPos();
   vcl_cout << "[mvl2_video_from_avi::seek] key frame ";
   vcl_cout << key_frame << "  -> uncomppress ";
   vcl_cout << frame_number-key_frame << " frames\n";
-  for (int i=key_frame;i<=frame_number;i++)
+  for (unsigned int i=key_frame; i<=frame_number; ++i)
   {
     //current_frame_=moviestream_->GetPos();
     moviestream_->ReadFrame();
