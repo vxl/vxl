@@ -1,7 +1,7 @@
 ADD_LIBRARY(vepl vepl_sources)
 
 SOURCE_FILES(vepl_sources
-vepl_convert
+#vepl_convert
 vepl_threshold
 vepl_add_random_noise
 vepl_monadic
@@ -18,3 +18,5 @@ vepl_median
 vepl_moment
 vepl_histogram
 )
+
+AUX_SOURCE_DIRECTORY(Templates vepl_sources)
