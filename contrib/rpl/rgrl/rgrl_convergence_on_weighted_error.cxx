@@ -33,20 +33,17 @@ compute_status( rgrl_converge_status_sptr               prev_status,
   //        matches are precomputed.
   //
   //rgrl_transformation_sptr current_xform = current_view.xform_estimate();
-  //vcl_vector<double> errors;
-  //vcl_vector<double> weights;
+  vcl_vector<double> errors;
+  vcl_vector<double> weights;
 
-  double error_sum = 0, weight_sum = 0;
   for ( unsigned ds=0; ds < current_match_sets.size(); ++ds ) {
     rgrl_match_set const& ms = *current_match_sets[ds];
     for ( from_iter fitr = ms.from_begin(); fitr != ms.from_end(); ++fitr ) {
       //rgrl_feature_sptr mapped = fitr.from_feature()->transform( *current_xform );
-      //rgrl_feature_sptr mapped = fitr.mapped_from_feature();
+      rgrl_feature_sptr mapped = fitr.mapped_from_feature();
       for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
-        const double error = titr.geometric_error();
-        const double weight = titr.cumulative_weight();  //take the precomputed wgt
-        error_sum += error * weight;
-        weight_sum += weight;
+        errors.push_back( titr.to_feature()->geometric_error( *mapped ) );
+        weights.push_back( titr.cumulative_weight() ); //take the precomputed wgt
       }
     }
   }
@@ -56,13 +53,13 @@ compute_status( rgrl_converge_status_sptr               prev_status,
   //        transformation, the error is scaled by the scaling of
   //        the spread of the transformed data points
   //
-  //vec_iter eitr = errors.begin();
-  //vec_iter witr = weights.begin();
-  //double error_sum = 0, weight_sum = 0;
-  //for ( ; eitr!=errors.end(); ++eitr, ++witr ) {
-  //  error_sum += (*eitr) * (*witr);
-  //  weight_sum +=  (*witr);
-  //}
+  vec_iter eitr = errors.begin();
+  vec_iter witr = weights.begin();
+  double error_sum = 0, weight_sum = 0;
+  for ( ; eitr!=errors.end(); ++eitr, ++witr ) {
+    error_sum += (*eitr) * (*witr);
+    weight_sum +=  (*witr);
+  }
 
   double scaling = 1;
   if ( penalize_scaling ) {

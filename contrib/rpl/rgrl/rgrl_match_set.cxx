@@ -105,11 +105,8 @@ add_feature_and_matches( rgrl_feature_sptr                      from_feature,
   matches_and_weights_.push_back( blank );
   for ( to_itr = matching_to.begin(); to_itr != matching_to.end(); ++to_itr )
   {
-    const double sig_wgt = (*to_itr)->absolute_signature_weight( mapped_feature );
-    double geo_err = -1e5;
-    if( mapped_feature) 
-      geo_err = (*to_itr)->geometric_error( *mapped_feature );
-    matches_and_weights_.back().push_back( match_info( *to_itr, sig_wgt, geo_err ));
+    double sig_wgt = (*to_itr)->absolute_signature_weight( mapped_feature );
+    matches_and_weights_.back().push_back( match_info( *to_itr, sig_wgt ));
   }
 }
 
@@ -147,10 +144,7 @@ add_feature_matches_and_weights( rgrl_feature_sptr                      from_fea
   for ( to_itr = matching_to.begin(), s_itr = signature_weights.begin();
         to_itr != matching_to.end(); ++to_itr,  ++s_itr )
   {
-    double geo_err = -1e5;
-    if( mapped_feature) 
-      geo_err = (*to_itr)->geometric_error( *mapped_feature );
-    matches_and_weights_.back().push_back( match_info( *to_itr, *s_itr, geo_err ));
+    matches_and_weights_.back().push_back( match_info( *to_itr, *s_itr ));
   }
 }
 
@@ -172,10 +166,7 @@ add_feature_and_match( rgrl_feature_sptr from_feature,
   xformed_from_features_.push_back( mapped_feature );
 
   vcl_vector<match_info> match;
-  double geo_err = -1e5;
-  if( mapped_feature) 
-    geo_err = matching_to->geometric_error( *mapped_feature );
-  match.push_back( match_info( matching_to, wgt, wgt, wgt, geo_err ) );
+  match.push_back( match_info( matching_to, wgt, wgt, wgt ) );
   matches_and_weights_.push_back( match );
 }
 
@@ -303,13 +294,12 @@ match_info( rgrl_feature_sptr to_feat,
 
 rgrl_match_set::match_info::
 match_info( rgrl_feature_sptr to_feat,
-            double signature_wgt,
-            double geometric_err )
+            double signature_wgt )
   : to_feature( to_feat ),
     geometric_weight( -1.0 ),
     signature_weight( signature_wgt ),
     cumulative_weight( -1.0 ),
-    geometric_residual( geometric_err )
+    geometric_residual( 0.0 )
 {
 }
 
@@ -472,12 +462,6 @@ geometric_weight() const
   return itr_->geometric_weight;
 }
 
-double
-rgrl_match_set_from_to_iterator::
-geometric_error() const
-{
-  return itr_->geometric_residual;
-}
 
 double
 rgrl_match_set_from_to_iterator::
@@ -518,12 +502,6 @@ set_cumulative_weight( double cum_wgt )
   itr_->cumulative_weight = cum_wgt;
 }
 
-void
-rgrl_match_set_from_to_iterator::
-set_geometric_error( double geom_err )
-{
-  itr_->geometric_residual = geom_err;
-}
 
 rgrl_match_set_from_to_iterator::
 rgrl_match_set_from_to_iterator( MatchInfoIter const& itr )
@@ -704,12 +682,6 @@ cumulative_weight( ) const
   return itr_->cumulative_weight;
 }
 
-double
-rgrl_match_set_const_from_to_iterator::
-geometric_error() const
-{
-  return itr_->geometric_residual;
-}
 
 rgrl_match_set_const_from_to_iterator::
 rgrl_match_set_const_from_to_iterator( MatchInfoIter const& itr )

@@ -139,14 +139,13 @@ class rgrl_match_set
     match_info( rgrl_feature_sptr to_feat,
                 double geometric_wgt,
                 double signature_wgt,
-                double cumulative_wgt,
-                double geometric_err );
+                double cumulative_wgt = 0.0,
+                double geometric_err = 0.0);
 
     //:  Initialize the signature weight only
     //
     match_info( rgrl_feature_sptr to_feat,
-                double signature_wgt,
-                double geometric_err );
+                double signature_wgt );
 
     rgrl_feature_sptr to_feature;
     double geometric_weight;
@@ -299,9 +298,6 @@ class rgrl_match_set_from_to_iterator
   double geometric_weight() const;
 
   //:
-  double geometric_error() const;
-
-  //:
   double signature_weight() const;
 
   //:
@@ -360,9 +356,6 @@ class rgrl_match_set_const_from_to_iterator
 
   //:
   double cumulative_weight() const;
-  
-  //:
-  double geometric_error() const;
 
  protected:
 

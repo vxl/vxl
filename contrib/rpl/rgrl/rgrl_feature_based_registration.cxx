@@ -391,9 +391,10 @@ register_single_feature( rgrl_mask_box            image_region,
       // weights are updated (hence reweighted-least-squares)
       // throughout the estimation.
       //
+      double alignment_error;
       if ( !rgrl_util_irls( match_set, scale, weighter,
                             *conv_tester_, xform_estimator,
-                            current_xform_estimate_,
+                            current_xform_estimate_, alignment_error,
                             this->debug_flag() ) ) {
         failed = true;
         continue; //no valid xform, so exit the loop
@@ -407,8 +408,7 @@ register_single_feature( rgrl_mask_box            image_region,
       //
       DebugMacro(  2, " Updating scale estimates and checking for validity\n" );
 
-      // match_set->remap_from_features( *current_xform_estimate_ );
-      match_set->update_geometric_error( current_xform_estimate_ );
+      match_set->remap_from_features( *current_xform_estimate_ );
       weighter->compute_weights( *scale, *match_set );
 
       // compute the scaling factors  
@@ -671,9 +671,10 @@ register_multi_feature( rgrl_mask_box            image_region,
       // The match sets and the scales are fixed, but the associated
       // weights are updated (hence reweighted-least-squares)
       // throughout the estimation.
+      double alignment_error;
       if ( !rgrl_util_irls( current_match_sets_, scales, weighters,
                             *conv_tester_, xform_estimator,
-                            current_xform_estimate_,
+                            current_xform_estimate_, alignment_error,
                             this->debug_flag() ) ) {
         failed = true;
         continue; //no valid xform, so exit the loop
@@ -688,8 +689,7 @@ register_multi_feature( rgrl_mask_box            image_region,
       DebugMacro(  2, " Updating scale estimates and checking for validity\n" );
       for ( unsigned int fs=0; fs < data_count; ++fs ) {
         if ( current_match_sets_[fs]->from_size() > 0 ) {
-          // current_match_sets_[fs]->remap_from_features( *current_xform_estimate_ );
-          current_match_sets_[fs]->update_geometric_error( current_xform_estimate_ );
+          current_match_sets_[fs]->remap_from_features( *current_xform_estimate_ );
           weighters[fs]->compute_weights( *scales[fs], *current_match_sets_[fs] );
 
       // compute image scaling factors  
