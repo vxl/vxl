@@ -30,10 +30,11 @@ vil_image_view<T>::vil_image_view()
 {}
 
 template<class T>
-vil_image_view<T>::vil_image_view(unsigned n_i, unsigned n_j, unsigned n_planes)
-: top_left_(0),istep_(1),jstep_(0)
+vil_image_view<T>::vil_image_view(unsigned n_i, unsigned n_j, unsigned n_planes, unsigned n_components)
+: top_left_(0),istep_(n_components)
 {
-  set_size(n_i,n_j,n_planes);
+  assert(n_planes==1 || n_components==1);
+  set_size(n_i,n_j,n_planes*n_components);
 }
 
 //: Set this view to look at someone else's memory data.
@@ -47,7 +48,7 @@ vil_image_view<T>::vil_image_view(const T* top_left, unsigned n_i, unsigned n_j,
 //: Set this view to look at another view's data
 //  Need to pass the memory chunk to set up the internal smart ptr appropriately
 template<class T>
-vil_image_view<T>::vil_image_view(const vil_smart_ptr<vil_memory_chunk>& mem_chunk,
+vil_image_view<T>::vil_image_view(vil_memory_chunk_sptr const& mem_chunk,
                                   const T* top_left, unsigned n_i, unsigned n_j, unsigned n_planes,
                                   vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step, vcl_ptrdiff_t plane_step)
  : vil_image_view_base(n_i, n_j, n_planes)
@@ -537,9 +538,9 @@ void vil_image_view<T>::set_size(unsigned n_i, unsigned n_j, unsigned n_planes)
   ni_ = n_i;
   nj_ = n_j;
   nplanes_ = n_planes;
-  istep_ = 1;
-  jstep_ = n_i;
-  planestep_ = n_i*n_j;
+  if (istep_==0) istep_ = 1;
+  jstep_ = n_i*istep_;
+  planestep_ = istep_==1 ? n_i*n_j : 1;
 
   top_left_ = reinterpret_cast<T*>(ptr_->data());
 }

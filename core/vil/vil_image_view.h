@@ -8,6 +8,10 @@
 // \file
 // \brief A base class reference-counting view of some image data.
 // \author Ian Scott - Manchester
+// \verbatim
+//  Modifications
+//   Peter Vanroose - 21 Aug.2003 - support added for interleaved planes
+// \endverbatim
 
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
@@ -57,8 +61,10 @@ class vil_image_view : public vil_image_view_base
   //  Creates an empty one-plane image.
   vil_image_view();
 
-  //: Create an n_plane plane image of ni x nj pixels
-  vil_image_view(unsigned ni, unsigned nj, unsigned n_planes=1);
+  //: Create an image of ni x nj pixels in n_planes * n_components planes
+  //  If n_planes is 1 and n_components > 1, the planes are interleaved.
+  //  n_planes and n_components should not be both different from 1.
+  vil_image_view(unsigned ni, unsigned nj, unsigned n_planes=1, unsigned n_components=1);
 
   //: Set this view to look at someone else's memory data.
   //  If the data goes out of scope then this view could be invalid, and
