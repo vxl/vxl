@@ -13,11 +13,8 @@
 
 btom_slice_simulator_params::
 btom_slice_simulator_params(const btom_slice_simulator_params& bss)
+  : gevd_param_mixin(*this), ncyl_(bss.ncyl_), min_xy_sigma_(bss.min_xy_sigma_), max_xy_sigma_(bss.max_xy_sigma_)
 {
-  InitParams(bss.ncyl_,
-             bss.min_xy_sigma_,
-             bss.max_xy_sigma_
-            );
 }
 
 btom_slice_simulator_params::
@@ -25,8 +22,9 @@ btom_slice_simulator_params(const int ncyl,
                             const float min_xy_sigma,
                             const float max_xy_sigma
                            )
+  : ncyl_(ncyl), min_xy_sigma_(min_xy_sigma), max_xy_sigma_(max_xy_sigma)
 {
-  InitParams(ncyl, min_xy_sigma, max_xy_sigma);
+  SanityCheck();
 }
 
 void btom_slice_simulator_params::InitParams(int ncyl,
@@ -37,6 +35,7 @@ void btom_slice_simulator_params::InitParams(int ncyl,
   ncyl_ = ncyl;
   min_xy_sigma_ = min_xy_sigma;
   max_xy_sigma_ = max_xy_sigma;
+  SanityCheck();
 }
 
 //-----------------------------------------------------------------------------
