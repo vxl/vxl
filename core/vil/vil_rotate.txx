@@ -103,7 +103,7 @@ void vil_rotate_image(const vil_image_view<sType>& src_image,
     n1 = l1;
     n2 = l2;
   }
-  else if (theta_360< 360.0 )
+  else // if (theta_360< 360.0 )
   {
     dx1= (di-bi)/l2;
     dy1= (dj-bj)/l2;
