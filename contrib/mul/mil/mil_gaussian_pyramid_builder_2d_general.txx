@@ -350,7 +350,7 @@ void mil_gaussian_pyramid_builder_2d_general<T>::build(mil_image_pyramid& im_pyr
 		mil_image_2d_of<T>& im_i1 = (mil_image_2d_of<T>&) im_pyr(i-1);
 	  if (im_i0.n_planes()!=im_i1.n_planes())
 		  im_i0.set_n_planes(im_i1.n_planes());
-	  im_i0.resize(nx/s+0.5,ny/s+0.5);
+	  im_i0.resize((int) (nx/s+0.5), (int) (ny/s+0.5));
 		
     s*=scale_step();
 		gauss_reduce(im_i0,im_i1);
@@ -416,7 +416,7 @@ void mil_gaussian_pyramid_builder_2d_general<T>::extend(mil_image_pyramid& image
       mil_image_2d_of<T>& im_i1 = (mil_image_2d_of<T>&) image_pyr(i-1);
 	    if (im_i0.n_planes()!=im_i1.n_planes())
 		    im_i0.set_n_planes(im_i1.n_planes());
-	    im_i0.resize(nx/s+0.5,ny/s+0.5);
+	    im_i0.resize((int)(nx/s+0.5),(int)(ny/s+0.5));
 
       s*=scale_step();
       gauss_reduce(im_i0,im_i1);

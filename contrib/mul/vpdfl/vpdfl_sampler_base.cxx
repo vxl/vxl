@@ -40,7 +40,7 @@ void vpdfl_sampler_base::set_model(const vpdfl_pdf_base& model)
 //: PDF of which this is an instance
 const vpdfl_pdf_base& vpdfl_sampler_base::model() const
 {
-  assert (pdf_model_);
+  assert (pdf_model_ != 0);
   return *pdf_model_;
 }
 
