@@ -42,7 +42,12 @@ void segv_menus::read_xml_edges_callback()
 
 void segv_menus::test_face_callback()
 {
-  segv_segmentation_manager::instance()->test_face();
+segv_segmentation_manager::instance()->test_face();
+}
+
+void segv_menus::test_digital_lines_callback()
+{
+segv_segmentation_manager::instance()->test_digital_lines();
 }
 
 //segv_menus definition
@@ -64,6 +69,7 @@ vgui_menu segv_menus::get_menu()
   menuedit.add("VD Edges", vd_edges_callback);
   menuedit.add("Regions", regions_callback);
   menuedit.add("TestFace", test_face_callback);
+  menuedit.add("TestDigitalCurves", test_digital_lines_callback);
   //Top level menu layout
   menubar.add( "File", menufile);
   menubar.add( "View", menuview);

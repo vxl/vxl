@@ -86,7 +86,7 @@ void segv_segmentation_manager::load_image()
 {
   bool greyscale = false;
   vgui_dialog load_image_dlg("Load image file");
-  static vcl_string image_filename = "";
+  static vcl_string image_filename = "c:/images/ShortBaseline/bad-region-jar-1.tif";
   static vcl_string ext = "*.*";
   load_image_dlg.file("Image Filename:", ext, image_filename);
   load_image_dlg.checkbox("greyscale ", greyscale);
@@ -173,6 +173,7 @@ void segv_segmentation_manager::vd_edges()
   this->clear_display();
   static bool agr = true;
   static sdet_detector_params dp;
+  dp.noise_multiplier=1.0;
   vgui_dialog* vd_dialog = new vgui_dialog("VD Edges");
   vd_dialog->field("Gaussian sigma", dp.smooth);
   vd_dialog->field("Noise Threshold", dp.noise_multiplier);
@@ -190,32 +191,29 @@ void segv_segmentation_manager::vd_edges()
   det.DoContour();
   vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
   this->draw_edges(*edges, true);
-  //display test verts
-  vcl_vector<vtol_vertex_2d_sptr> test_verts = det.get_test_verts();
-  t2D_->set_foreground(0.0,1.0,0.0);
-  for (vcl_vector<vtol_vertex_2d_sptr>::iterator vit = test_verts.begin();
-      vit != test_verts.end(); vit++)
-    if ((*vit))
-      t2D_->add_vertex(*vit);
 }
 
 void segv_segmentation_manager::regions()
 {
   this->clear_display();
+  static bool debug = false;
   static bool agr = true;
+  static bool residual = false;
   static sdet_detector_params dp;
+  dp.noise_multiplier=1.0;
   vgui_dialog* vd_dialog = new vgui_dialog("VD Edges");
   vd_dialog->field("Gaussian sigma", dp.smooth);
   vd_dialog->field("Noise Threshold", dp.noise_multiplier);
   vd_dialog->checkbox("Automatic Threshold", dp.automatic_threshold);
   vd_dialog->checkbox("Agressive Closure", agr);
+  vd_dialog->checkbox("Debug", debug);
+  vd_dialog->checkbox("Residual Image", residual);
   if (!vd_dialog->ask())
     return;
   if (agr)
     dp.aggressive_junction_closure=1;
   else
     dp.aggressive_junction_closure=0;
-  bool debug = false;
   sdet_region_proc_params rpp(debug, true, dp);
   sdet_region_proc rp(rpp);
   rp.set_image(img_);
@@ -236,6 +234,18 @@ void segv_segmentation_manager::regions()
    vcl_vector<vdgl_intensity_face_sptr>& regions = rp.get_regions();
    this->draw_regions(regions, true);
     }
+  if (residual)
+    {
+      vil_image res_img = rp.get_residual_image();
+      vgui_image_tableau_sptr itab =  t2D_->get_image_tableau();
+      if (!itab)
+      {
+          vcl_cout << "In segv_segmentation_manager::regions() - null image tableau\n";
+          return;
+      }
+      itab->set_image(res_img);
+    }
+
 }
 
 #ifdef HAS_XERCES
@@ -312,4 +322,24 @@ void segv_segmentation_manager::test_face()
         vtol_vertex_2d_sptr v = new vtol_vertex_2d(x, y);
         t2D_->add_vertex(v);
       }
+}
+void segv_segmentation_manager::test_digital_lines()
+{
+  t2D_->set_foreground(1.0, 1.0, 0.0);
+  vsol_point_2d_sptr pa = new vsol_point_2d(0,0);
+  vsol_point_2d_sptr pb = new vsol_point_2d(20,0);
+  vsol_point_2d_sptr pc = new vsol_point_2d(10, 20);  
+  vsol_point_2d_sptr pd = new vsol_point_2d(20,20);  
+  vsol_point_2d_sptr pe = new vsol_point_2d(20, 10);
+  vsol_point_2d_sptr pf = new vsol_point_2d(0, 20);
+  vdgl_digital_curve_sptr cab = new vdgl_digital_curve(pa, pb);
+  vdgl_digital_curve_sptr cac = new vdgl_digital_curve(pa, pc);
+  vdgl_digital_curve_sptr cad = new vdgl_digital_curve(pa, pd);
+  vdgl_digital_curve_sptr cae = new vdgl_digital_curve(pa, pe);
+  vdgl_digital_curve_sptr caf = new vdgl_digital_curve(pa, pf);
+  t2D_->add_digital_curve(cab);
+  t2D_->add_digital_curve(cac);
+  t2D_->add_digital_curve(cad);
+  t2D_->add_digital_curve(cae);
+  t2D_->add_digital_curve(caf);
 }

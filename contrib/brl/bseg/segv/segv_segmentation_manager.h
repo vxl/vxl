@@ -34,6 +34,7 @@ class segv_segmentation_manager : public vgui_wrapper_tableau
   void vd_edges();
   void regions();
   void test_face();
+  void test_digital_lines();
 #ifdef HAS_XERCES
   void read_xml_edges();
 #endif

@@ -24,6 +24,7 @@ class segv_menus
   SEGV_DLL_DATA static void regions_callback();
   SEGV_DLL_DATA static void read_xml_edges_callback();
   SEGV_DLL_DATA static void test_face_callback();
+  SEGV_DLL_DATA static void test_digital_lines_callback();
   SEGV_DLL_DATA static vgui_menu get_menu();
  private:
   segv_menus(){};
