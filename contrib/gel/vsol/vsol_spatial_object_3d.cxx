@@ -10,6 +10,7 @@ char * vsol_spatial_object_3d::SpatialTypes[] = {"NO_TYPE             ",
                         "POINT               ",
                         "CURVE               ",
                         "REGION              ",
+                        "VOLUME              ",
                         "SPATIALGROUP        ",
                         "NUM_SPATIALOBJECT_TYPES"};
 

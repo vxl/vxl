@@ -86,6 +86,7 @@ public:
     POINT,
     CURVE,
     REGION,
+    VOLUME,
     SPATIALGROUP,
     NUM_SPATIALOBJECT_TYPES
   };
