@@ -23,6 +23,12 @@
 
 typedef unsigned char ubyte;
 typedef vbl_array_2d<ubyte> img_type;
+#ifdef VCL_VC
+#include <vbl/vbl_smart_ptr.h>
+template class vbl_smart_ptr<img_type>;
+void vbl_smart_ptr<img_type>::ref(img_type*) {}
+void vbl_smart_ptr<img_type>::unref(img_type*) {}
+#endif
 
 // for I/O:
 #include <vil/vil_load.h>

@@ -27,6 +27,13 @@ typedef unsigned char ubyte;
 typedef vil_rgb<ubyte> rgbcell;
 typedef section<rgbcell,2> img_type;
 
+#ifdef VCL_VC
+#include <vbl/vbl_smart_ptr.h>
+template class vbl_smart_ptr<img_type>;
+void vbl_smart_ptr<img_type>::ref(img_type*) {}
+void vbl_smart_ptr<img_type>::unref(img_type*) {}
+#endif
+
 // for I/O:
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>

@@ -25,6 +25,14 @@
 
 typedef unsigned char ubyte;
 
+typedef vnl_matrix<ubyte> img_type;
+#ifdef VCL_VC
+#include <vbl/vbl_smart_ptr.h>
+template class vbl_smart_ptr<img_type>;
+void vbl_smart_ptr<img_type>::ref(img_type*) {}
+void vbl_smart_ptr<img_type>::unref(img_type*) {}
+#endif
+
 // for I/O:
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
@@ -48,14 +56,14 @@ main(int argc, char** argv) {
   // The radius: (default is 3x3 square)
   float radius = (argc < 4) ? 1.5 : atof(argv[3]);
 
-  vnl_matrix<ubyte> src(xs,ys);
-  vnl_matrix<ubyte> dst(xs,ys);
+  img_type src(xs,ys);
+  img_type dst(xs,ys);
 
   // set the input image:
   in.get_section(src.begin(),0,0,xs,ys);
 
   // The filter:
-  vipl_median<vnl_matrix<ubyte>,vnl_matrix<ubyte>,ubyte,ubyte VCL_DFL_TMPL_ARG(vipl_trivial_pixeliter)> op(radius);
+  vipl_median<img_type,img_type,ubyte,ubyte VCL_DFL_TMPL_ARG(vipl_trivial_pixeliter)> op(radius);
   op.put_in_data_ptr(&src);
   op.put_out_data_ptr(&dst);
   op.filter();
