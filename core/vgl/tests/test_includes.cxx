@@ -1,7 +1,8 @@
 #include <testlib/testlib_test.h>
-
 #include <vgl/vgl_fwd.h>
+
 #include <vgl/vgl_1d_basis.h>
+#include <vgl/vgl_area.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_clip.h>
@@ -16,6 +17,7 @@
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_line_2d.h>
+#include <vgl/vgl_line_3d_2_points.h>
 #include <vgl/vgl_line_segment_2d.h>
 #include <vgl/vgl_line_segment_3d.h>
 #include <vgl/vgl_lineseg_test.h>

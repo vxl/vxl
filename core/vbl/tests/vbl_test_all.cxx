@@ -1,25 +1,27 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
 #include <testlib/testlib_test.h>
-
 #include <vbl/vbl_fwd.h>
+
 #include <vbl/vbl_smart_ptr.h>
+#include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_bounding_box.h>
+#include <vbl/vbl_shared_pointer.h>
+#include <vbl/vbl_triple.h>
+#include <vbl/vbl_quadruple.h>
+
 #include <vbl/vbl_array_1d.h>
 #include <vbl/vbl_array_2d.h>
 #include <vbl/vbl_array_3d.h>
-#include <vbl/vbl_bool_ostream.h>
-#include <vbl/vbl_protection_traits.h>
-#include <vbl/vbl_qsort.h>
-#include <vbl/vbl_quadruple.h>
-#include <vbl/vbl_ref_count.h>
-#include <vbl/vbl_shared_pointer.h>
-#include <vbl/vbl_sort.h>
+#include <vbl/vbl_bit_array_2d.h>
+#include <vbl/vbl_bit_array_3d.h>
 #include <vbl/vbl_sparse_array_1d.h>
 #include <vbl/vbl_sparse_array_2d.h>
 #include <vbl/vbl_sparse_array_3d.h>
-#include <vbl/vbl_triple.h>
+#include <vbl/vbl_big_sparse_array_3d.h>
+
+#include <vbl/vbl_bool_ostream.h>
+#include <vbl/vbl_protection_traits.h>
+#include <vbl/vbl_sort.h>
+#include <vbl/vbl_qsort.h>
 
 #if 0 // These files use the nonexistent vcl_hash_map.h and/or vcl_hash_string.h
 #include <vbl/vbl_hash_map.h>
@@ -36,9 +38,9 @@
 void test_bounding_box()
 {
   vcl_cout << "\n\n\n"
-           << "*******************\n"
-           << " Test Bounding Box\n"
-           << "*******************\n";
+           << "***********************\n"
+           << " Test vbl_bounding_box\n"
+           << "***********************\n";
   vbl_bounding_box<double,3> bb;
   TEST("bounding box dimension", bb.dimension(), 3);
   bb.update(-3.0,4.0,5.0);
@@ -65,9 +67,10 @@ void test_bounding_box()
 
 void test_qsort()
 {
-  vcl_cout << "\n\n\n************\n"
-                 << " Test qsort \n"
-                 << "************" << vcl_endl;
+  vcl_cout << "\n\n\n"
+           << "****************\n"
+           << " Test vbl_qsort\n"
+           << "****************\n";
   vcl_vector<double> v(10);
   for (int i=0; i<10; ++i) v[i] = 0.1*i*i - i + 1; // parabola with top (5,-1.5)
   vbl_qsort_ascending(v);
@@ -80,9 +83,10 @@ void test_qsort()
 
 void test_triple()
 {
-  vcl_cout << "\n\n\n*************\n"
-                 << " Test Triple \n"
-                 << "*************" << vcl_endl;
+  vcl_cout << "\n\n\n"
+           << "*****************\n"
+           << " Test vbl_triple\n"
+           << "*****************\n";
   vbl_triple<double,int,int> t(7.0,1,2);
   TEST("vbl_triple constructor", t.first == 7.0 && t.second == 1 && t.third == 2, true);
   vbl_triple<double,int,int> t2 = t; t2.first = 6.0;
@@ -97,9 +101,10 @@ void test_triple()
 
 void test_quadruple()
 {
-  vcl_cout << "\n\n\n****************\n"
-                 << " Test Quadruple \n"
-                 << "****************" << vcl_endl;
+  vcl_cout << "\n\n\n"
+           << "********************\n"
+           << " Test vbl_quadruple\n"
+           << "********************\n";
   vbl_quadruple<int,int,int,int> t(7,0,1,2);
   TEST("vbl_quadruple constructor", t.first == 7 && t.second == 0 && t.third == 1 && t.fourth == 2, true);
   vbl_quadruple<int,int,int,int> t2 = t; t2.first = 6;
