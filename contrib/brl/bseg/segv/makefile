@@ -3,6 +3,7 @@ USES += contrib/brl contrib/brl/bbas contrib/brl/bseg contrib/gel core
 LIBRARY := segv
 VERSION := 1.0
 
+MANPAGE_SOURCES += dll.h
 MANPAGE_SOURCES += vil_dll.h
 SOURCES += segv_segmentation_manager.cxx
 SOURCES += segv_vtol2D_tableau.cxx
