@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* Subroutine */ int dlabad_(small, large)
+/* Subroutine */ void dlabad_(small, large)
 doublereal *small, *large;
 {
     /* Builtin functions */
@@ -63,8 +63,6 @@ doublereal *small, *large;
         *small = sqrt(*small);
         *large = sqrt(*large);
     }
-
-    return 0;
 
 /*     End of DLABAD */
 

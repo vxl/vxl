@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* Subroutine */ int sggsvd_(char *jobu, char *jobv, char *jobq, integer *m,
+/* Subroutine */ void sggsvd_(char *jobu, char *jobv, char *jobq, integer *m,
         integer *n, integer *p, integer *k, integer *l, real *a, integer *lda,
          real *b, integer *ldb, real *alpha, real *beta, real *u, integer *
         ldu, real *v, integer *ldv, real *q, integer *ldq, real *work,
@@ -24,7 +24,7 @@
     extern real slange_(char *, integer *, integer *, real *, integer *,
             real *, ftnlen);
     static integer ncycle;
-    extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen), stgsja_(
+    extern /* Subroutine */ void xerbla_(char *, integer *, ftnlen), stgsja_(
             char *, char *, char *, integer *, integer *, integer *, integer *
             , integer *, real *, integer *, real *, integer *, real *, real *,
              real *, real *, real *, integer *, real *, integer *, real *,
@@ -309,7 +309,7 @@
     if (*info != 0) {
         i__1 = -(*info);
         xerbla_("SGGSVD", &i__1, 6L);
-        return 0;
+        return;
     }
 
 /*     Compute the Frobenius norm of matrices A and B */
@@ -338,8 +338,6 @@
             ldb, &tola, &tolb, &alpha[1], &beta[1], &u[u_offset], ldu, &v[
             v_offset], ldv, &q[q_offset], ldq, &work[1], &ncycle, info, 1L,
             1L, 1L);
-
-    return 0;
 
 /*     End of SGGSVD */
 

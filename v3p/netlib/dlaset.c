@@ -6,7 +6,7 @@
 #include "f2c.h"
 
 /*<       SUBROUTINE DLASET( UPLO, M, N, ALPHA, BETA, A, LDA ) >*/
-/* Subroutine */ int dlaset_(char *uplo, integer *m, integer *n, doublereal *
+/* Subroutine */ void dlaset_(char *uplo, integer *m, integer *n, doublereal *
         alpha, doublereal *beta, doublereal *a, integer *lda, ftnlen uplo_len)
 {
     /* System generated locals */
@@ -177,7 +177,7 @@
     }
 
 /*<       RETURN >*/
-    return 0;
+    return;
 
 /*     End of DLASET */
 

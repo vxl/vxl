@@ -11,7 +11,7 @@ static real c_b4 = 1.f;
 static real c_b5 = 0.f;
 static integer c__1 = 1;
 
-/* Subroutine */ int slarf_(char *side, integer *m, integer *n, real *v,
+/* Subroutine */ void slarf_(char *side, integer *m, integer *n, real *v,
         integer *incv, real *tau, real *c, integer *ldc, real *work, ftnlen
         side_len)
 {
@@ -20,10 +20,10 @@ static integer c__1 = 1;
     real r__1;
 
     /* Local variables */
-    extern /* Subroutine */ int sger_(integer *, integer *, real *, real *,
+    extern /* Subroutine */ void sger_(integer *, integer *, real *, real *,
             integer *, real *, integer *, real *, integer *);
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int sgemv_(char *, integer *, integer *, real *,
+    extern /* Subroutine */ void sgemv_(char *, integer *, integer *, real *,
             real *, integer *, real *, integer *, real *, real *, integer *,
             ftnlen);
 
@@ -142,7 +142,6 @@ static integer c__1 = 1;
                     ldc);
         }
     }
-    return 0;
 
 /*     End of SLARF */
 

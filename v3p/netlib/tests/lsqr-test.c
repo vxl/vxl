@@ -3,7 +3,7 @@
         -lf2c -lm   (in that order)
 */
 
-#include "f2c.h"
+#include "../f2c.h"
 
 /* Table of constant values */
 
@@ -74,14 +74,14 @@ static integer c__80 = 80;
 /*     These routines are for testing  LSQR. */
 
 /* ******************************************************** */
-/* Subroutine */ int aprod_(mode, m, n, x, y, leniw, lenrw, iw, rw)
+/* Subroutine */ void aprod_(mode, m, n, x, y, leniw, lenrw, iw, rw)
 integer *mode, *m, *n;
 doublereal *x, *y;
 integer *leniw, *lenrw, *iw;
 doublereal *rw;
 {
     static integer locd, locw, lochy, lochz;
-    extern /* Subroutine */ int aprod1_(), aprod2_();
+    extern /* Subroutine */ void aprod1_(), aprod2_();
 
 /*     ------------------------------------------------------------------
 */
@@ -104,17 +104,15 @@ doublereal *rw;
     lochz = lochy + *m;
     locw = lochz + *n;
     if (*mode == 1) {
-        aprod1_(m, n, &x[1], &y[1], &rw[locd], &rw[lochy], &rw[lochz], &rw[
-                locw]);
+        aprod1_(m, n, &x[1], &y[1], &rw[locd], &rw[lochy], &rw[lochz], &rw[locw]);
     }
     if (*mode != 1) {
-        aprod2_(m, n, &x[1], &y[1], &rw[locd], &rw[lochy], &rw[lochz], &rw[
-                locw]);
+        aprod2_(m, n, &x[1], &y[1], &rw[locd], &rw[lochy], &rw[lochz], &rw[locw]);
     }
 /*     End of APROD */
 } /* aprod_ */
 
-/* Subroutine */ int aprod1_(m, n, x, y, d, hy, hz, w)
+/* Subroutine */ void aprod1_(m, n, x, y, d, hy, hz, w)
 integer *m, *n;
 doublereal *x, *y, *d, *hy, *hz, *w;
 {
@@ -123,7 +121,7 @@ doublereal *x, *y, *d, *hy, *hz, *w;
 
     /* Local variables */
     static integer i;
-    extern /* Subroutine */ int hprod_();
+    extern /* Subroutine */ void hprod_();
 
 /*     ------------------------------------------------------------------
 */
@@ -162,7 +160,7 @@ doublereal *x, *y, *d, *hy, *hz, *w;
 /*     End of APROD1 */
 } /* aprod1_ */
 
-/* Subroutine */ int aprod2_(m, n, x, y, d, hy, hz, w)
+/* Subroutine */ void aprod2_(m, n, x, y, d, hy, hz, w)
 integer *m, *n;
 doublereal *x, *y, *d, *hy, *hz, *w;
 {
@@ -171,7 +169,7 @@ doublereal *x, *y, *d, *hy, *hz, *w;
 
     /* Local variables */
     static integer i;
-    extern /* Subroutine */ int hprod_();
+    extern /* Subroutine */ void hprod_();
 
 /*     ------------------------------------------------------------------
 */
@@ -205,7 +203,7 @@ doublereal *x, *y, *d, *hy, *hz, *w;
 /*     End of APROD2 */
 } /* aprod2_ */
 
-/* Subroutine */ int hprod_(n, hz, x, y)
+/* Subroutine */ void hprod_(n, hz, x, y)
 integer *n;
 doublereal *hz, *x, *y;
 {
@@ -243,8 +241,7 @@ doublereal *hz, *x, *y;
 /*     End of HPROD */
 } /* hprod_ */
 
-/* Subroutine */ int lstp_(m, n, nduplc, npower, damp, x, b, d, hy, hz, w,
-        acond, rnorm)
+/* Subroutine */ void lstp_(m, n, nduplc, npower, damp, x, b, d, hy, hz, w, acond, rnorm)
 integer *m, *n, *nduplc, *npower;
 doublereal *damp, *x, *b, *d, *hy, *hz, *w, *acond, *rnorm;
 {
@@ -260,7 +257,7 @@ doublereal *damp, *x, *b, *d, *hy, *hz, *w, *acond, *rnorm;
     extern doublereal dnrm2_();
     static integer i, j;
     static doublereal t;
-    extern /* Subroutine */ int dscal_(), hprod_(), aprod1_();
+    extern /* Subroutine */ void dscal_(), hprod_(), aprod1_();
     static doublereal dampsq, fourpi;
 
 /*     ------------------------------------------------------------------
@@ -381,7 +378,7 @@ doublereal *damp, *x, *b, *d, *hy, *hz, *w, *acond, *rnorm;
 /*     End of LSTP */
 } /* lstp_ */
 
-/* Subroutine */ int test_(m, n, nduplc, npower, damp)
+/* Subroutine */ void test_(m, n, nduplc, npower, damp)
 integer *m, *n, *nduplc, *npower;
 doublereal *damp;
 {
@@ -411,25 +408,25 @@ The length of  RW  should be at least\002,i6)";
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    integer s_wsfe(), do_fio(), e_wsfe();
+    /* Subroutine */ void s_wsfe(), do_fio(), e_wsfe();
     double sqrt();
 
     /* Local variables */
     static integer locd;
     static doublereal atol, btol, etol;
     static integer locw;
-    extern /* Subroutine */ int lsqr_(), lstp_();
+    extern /* Subroutine */ void lsqr_(), lstp_();
     static integer nout;
     extern doublereal dnrm2_();
     static doublereal b[200];
     static integer j;
     static doublereal acond, u[200], v[100], w[100], x[100];
-    extern /* Subroutine */ int dscal_(), aprod_();
+    extern /* Subroutine */ void dscal_(), aprod_();
     static doublereal anorm;
     static integer lochy;
     static doublereal enorm;
     static integer lochz;
-    extern /* Subroutine */ int dcopy_();
+    extern /* Subroutine */ void dcopy_();
     static doublereal rnorm;
     static integer istop;
     static doublereal xnorm, xtrue[100], se[100];
@@ -595,14 +592,13 @@ The length of  RW  should be at least\002,i6)";
         do_fio(&c__1, (char *)&enorm, (ftnlen)sizeof(doublereal));
         e_wsfe();
     }
-    return 0;
+    return;
 /*     Not enough workspace. */
 L900:
     io___55.ciunit = nout;
     s_wsfe(&io___55);
     do_fio(&c__1, (char *)&ltotal, (ftnlen)sizeof(integer));
     e_wsfe();
-    return 0;
 /*     End of TEST */
 } /* test_ */
 
@@ -612,11 +608,11 @@ L900:
 /* Main program */ main()
 {
     /* Builtin functions */
-    /* Subroutine */ int s_stop();
+    /* Subroutine */ void s_stop();
 
     /* Local variables */
     static doublereal zero;
-    extern /* Subroutine */ int test_();
+    extern /* Subroutine */ void test_();
     static doublereal damp1, damp2, damp3, damp4;
 
 
@@ -636,20 +632,20 @@ L900:
 
 #include <stdio.h>
 
-integer s_wsfe() {return 0;}
-integer do_fio(integer* fp, char* buf, integer len)
+/* Subroutine */ void do_fio(integer* fp, char* buf, integer len)
 {
   int i;
   FILE* f = fdopen(*fp, "w");
   if (len==sizeof(integer))
-    return fprintf(f, "%d\n", *((integer*)buf));
+    fprintf(f, "%d\n", *((integer*)buf));
   else if (len==sizeof(doublereal))
-    return fprintf(f, "%g\n", *((doublereal*)buf));
+    fprintf(f, "%g\n", *((doublereal*)buf));
   else {
     for (i=0; i<len; ++i) fputc(buf[i], f);
     fputc('\n', f);
-    return len;
   }
 }
-integer e_wsfe() {return 0;}
-int s_stop() {return 0;}
+
+/* Subroutine */ void s_wsfe() {}
+/* Subroutine */ void e_wsfe() {}
+/* Subroutine */ void s_stop() {}

@@ -7,13 +7,14 @@
 #include "stdio.h"
 #include "f2c.h"
 
+/* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
+
 /* Table of constant values */
 
 static integer c__9 = 9;
 static integer c__1 = 1;
 
-
-/*      ________________________________________________________ */
+/*      ________________________________________________________  */
 /*     |                                                        | */
 /*     |   MINIMIZE A FUNCTION USING THE FLETCHER-REEVES FORM   | */
 /*     |            OF THE CONJUGATE GRADIENT METHOD            | */
@@ -76,14 +77,13 @@ static integer c__1 = 1;
 /*     |    PACKAGE ROUTINES: CUB,FD,FV,FVD,INS                 | */
 /*     |________________________________________________________| */
 
-/* Subroutine */ int cg_(x, e, it, step, t, limit, n, m, value, grad, both,
-        pre, h)
+/* Subroutine */ void cg_(x, e, it, step, t, limit, n, m, value, grad, both, pre, h)
 doublereal *x, *e;
 integer *it;
 doublereal *step, *t;
 integer *limit, *n, *m;
 doublereal (*value) ();
-/* Subroutine */ int (*grad) (), (*both) (), (*pre) ();
+void (*grad) (), (*both) (), (*pre) ();
 doublereal *h;
 {
     /* Initialized data */
@@ -97,23 +97,21 @@ doublereal *h;
     static doublereal a7 = .3;
 
     /* System generated locals */
-    integer h_dim1, h_offset, i__1;
     doublereal d__1, d__2;
 
     /* Builtin functions */
     double log(), exp(), d_sign(), sqrt();
     /* integer s_wsle(), do_lio(), e_wsle();*/
-    /* Subroutine */ /*int s_stop();*/
+    /* Subroutine */ /* void s_stop();*/
 
     /* Local variables */
     static doublereal a, b, c, d, f, g;
     static integer i, j, k, l;
-    static doublereal p, q, r, s, v, w, y[50], z[50], a8, c0, c1, d0, f0, f1,
-            l3, da, db, fa, fb, fc;
+    static doublereal p, q, r, s, v, w, y[50], z[50], a8, c0, c1, d0, f0, f1, l3, da, db, fa, fb, fc;
     extern doublereal fd_();
     static integer na, nb, nc, nd, iq;
     extern doublereal fv_();
-    extern /* Subroutine */ int cub_(), fvd_(), ins_();
+    extern /* Subroutine */ void cub_(), fvd_(), ins_();
 
     /* Fortran I/O blocks */
     static cilist io___43 = { 0, 6, 0, 0, 0 };
@@ -121,96 +119,69 @@ doublereal *h;
     static cilist io___45 = { 0, 6, 0, 0, 0 };
     static cilist io___46 = { 0, 6, 0, 0, 0 };
 
-
-    /* Parameter adjustments */
-    h_dim1 = *n;
-    h_offset = h_dim1 + 1;
-    h -= h_offset;
-    --x;
-
     /* Function Body */
+
     a8 = a3 + .01;
     *it = 0;
-    (*both)(&f, &h[h_dim1 * 3 + 1], &x[1]);
-    *e = (float)0.;
-    i__1 = *n;
-    for (i = 1; i <= i__1; ++i) {
-/* L10: */
-        if ((d__1 = h[i + h_dim1 * 3], abs(d__1)) > *e) {
-            *e = (d__2 = h[i + h_dim1 * 3], abs(d__2));
+    (*both)(&f, &h[*n * 2], x);
+    *e = 0.f;
+    for (i = 0; i < *n; ++i) {
+        if (abs(h[i + *n * 2]) > *e) {
+            *e = abs(h[i + *n * 2]);
         }
     }
     if (*e <= *t) {
-        return 0;
+        return;
     }
-    l3 = (float)1. / log(a3);
-    (*pre)(&h[(h_dim1 << 1) + 1], &h[h_dim1 * 3 + 1]);
+    l3 = 1.f / log(a3);
+    (*pre)(&h[*n], &h[*n * 2]);
     a = *step;
-    if (a > 0.) {
-        goto L30;
-    }
-    i__1 = *n;
-    for (i = 1; i <= i__1; ++i) {
-/* L20: */
-        if ((d__1 = x[i], abs(d__1)) > a) {
-            a = (d__2 = x[i], abs(d__2));
+    if (a <= 0.) {
+        for (i = 0; i < *n; ++i) {
+            if (abs(x[i]) > a) {
+                a = abs(x[i]);
+            }
+        }
+        a *= .01f / *e;
+        if (a == 0.) {
+            a = 1.f;
         }
     }
-    a = a * (float).01 / *e;
-    if (a == 0.) {
-        a = (float)1.;
-    }
-L30:
-    g = (float)0.;
-    i__1 = *n;
-    for (i = 1; i <= i__1; ++i) {
-/* L40: */
-        g += h[i + (h_dim1 << 1)] * h[i + h_dim1 * 3];
+    g = 0.f;
+    for (i = 0; i < *n; ++i) {
+        g += h[i + *n] * h[i + *n * 2];
     }
     if (g < 0.) {
         goto L620;
     }
 L50:
     l = 0;
-    i__1 = *n;
-    for (i = 1; i <= i__1; ++i) {
-/* L60: */
-        h[i + h_dim1] = -h[i + (h_dim1 << 1)];
+    for (i = 0; i < *n; ++i) {
+        h[i] = -h[i+*n];
     }
     d = -g;
 L70:
-    fa = fv_(&a, &x[1], &h[h_offset], n, value);
+    fa = fv_(&a, x, h, n, value);
     c0 = a;
     f0 = fa;
     j = 2;
-    y[0] = (float)0.;
+    y[0] = 0.f;
     z[0] = f;
     y[1] = a;
     z[1] = fa;
     v = a1 * d;
     w = a2 * d;
     iq = 0;
-    if (fa <= f) {
-        goto L80;
+    if (fa > f) {
+        c = a; b = 0.f; a = 0.f;
+        fc = fa; fb = f; fa = f;
     }
-    c = a;
-    b = (float)0.;
-    a = (float)0.;
-    fc = fa;
-    fb = f;
-    fa = f;
-    goto L90;
-L80:
-    c = (float)0.;
-    b = (float)0.;
-    fc = f;
-    fb = f;
-    iq = 1;
-L90:
-    na = 0;
-    nb = 0;
-    nc = 0;
-    nd = 0;
+    else {
+        c = 0.f; b = 0.f;
+        fc = f; fb = f;
+        iq = 1;
+    }
+    na = 0; nb = 0; nc = 0; nd = 0;
     q = (d + (f - f0) / c0) / c0;
     if (q < 0.) {
         goto L110;
@@ -222,30 +193,25 @@ L100:
         goto L610;
     }
     q = a3 * q;
-    p = fv_(&q, &x[1], &h[h_offset], n, value);
+    p = fv_(&q, x, h, n, value);
     ins_(&q, &p, &a, &b, &c, &fa, &fb, &fc, &j, y, z);
     if (p - f < w * q) {
         goto L100;
     }
     goto L260;
 L110:
-    q = d * (float).5 / q;
-    if (q < c0 * (float).01) {
-        q = c0 * (float).01;
+    q = d * .5f / q;
+    if (q < c0 * .01f) {
+        q = c0 * .01f;
     }
-    p = fv_(&q, &x[1], &h[h_offset], n, value);
-    if (p <= f0) {
-        goto L120;
+    p = fv_(&q, x, h, n, value);
+    if (p > f0) {
+        f1 = f0; c1 = c0;
+        f0 = p; c0 = q;
     }
-    f1 = f0;
-    c1 = c0;
-    f0 = p;
-    c0 = q;
-    goto L130;
-L120:
-    f1 = p;
-    c1 = q;
-L130:
+    else {
+        f1 = p; c1 = q;
+    }
     ins_(&q, &p, &a, &b, &c, &fa, &fb, &fc, &j, y, z);
 L135:
     if (a == 0.) {
@@ -269,7 +235,7 @@ L150:
         goto L630;
     }
     q = a4 * q;
-    p = fv_(&q, &x[1], &h[h_offset], n, value);
+    p = fv_(&q, x, h, n, value);
     ins_(&q, &p, &a, &b, &c, &fa, &fb, &fc, &j, y, z);
     if (p - f >= v * q) {
         goto L150;
@@ -289,15 +255,15 @@ L160:
         goto L320;
     }
     r = log(c1 / c0);
-    s = (doublereal) (-((integer) (r * l3 + (float).999)));
-    r = exp(r / s) * (float).999;
+    s = (doublereal) (-((integer) (r * l3 + .999f)));
+    r = exp(r / s) * .999f;
     q = c1;
 L170:
     q *= r;
     if (q < c0) {
         goto L320;
     }
-    p = fv_(&q, &x[1], &h[h_offset], n, value);
+    p = fv_(&q, x, h, n, value);
     ins_(&q, &p, &a, &b, &c, &fa, &fb, &fc, &j, y, z);
     ++na;
     if (p - f > v * q) {
@@ -312,7 +278,7 @@ L190:
         goto L630;
     }
     q = a4 * q;
-    p = fv_(&q, &x[1], &h[h_offset], n, value);
+    p = fv_(&q, x, h, n, value);
     ins_(&q, &p, &a, &b, &c, &fa, &fb, &fc, &j, y, z);
     if (p - f >= v * q) {
         goto L190;
@@ -338,7 +304,7 @@ L220:
         goto L610;
     }
     q = a3 * q;
-    p = fv_(&q, &x[1], &h[h_offset], n, value);
+    p = fv_(&q, x, h, n, value);
     ins_(&q, &p, &a, &b, &c, &fa, &fb, &fc, &j, y, z);
     if (p - f < w * q) {
         goto L220;
@@ -349,8 +315,8 @@ L230:
         goto L250;
     }
     r = log(c0 / c1);
-    s = (doublereal) ((integer) (r * l3 + (float).999));
-    r = exp(r / s) * (float)1.001;
+    s = (doublereal) ((integer) (r * l3 + .999f));
+    r = exp(r / s) * 1.001f;
     q = a;
 L240:
     q *= r;
@@ -358,7 +324,7 @@ L240:
         goto L250;
     }
     ++nd;
-    p = fv_(&q, &x[1], &h[h_offset], n, value);
+    p = fv_(&q, x, h, n, value);
     ins_(&q, &p, &a, &b, &c, &fa, &fb, &fc, &j, y, z);
     if (p - f < w * q) {
         goto L240;
@@ -376,8 +342,8 @@ L260:
     }
     v = c - a;
     w = a - b;
-    r = (float)1. / v;
-    s = (float)1. / w;
+    r = 1.f / v;
+    s = 1.f / w;
     p = fc - fa;
     q = fb - fa;
     *e = p * r + q * s;
@@ -389,21 +355,21 @@ L260:
         goto L320;
     }
     q = p * r * w - q * s * v;
-    q = a - q * (float).5 / *e;
-    p = fv_(&q, &x[1], &h[h_offset], n, value);
+    q = a - q * .5f / *e;
+    p = fv_(&q, x, h, n, value);
     ins_(&q, &p, &a, &b, &c, &fa, &fb, &fc, &j, y, z);
     goto L320;
 L270:
-    r = (float)1. / a;
-    s = (float)1. / b;
+    r = 1.f / a;
+    s = 1.f / b;
     p = r * (fa - f) - d;
     q = s * (fb - f) - d;
     *e = a - b;
     v = (r * p - s * q) / *e;
     w = (a * q * s - b * p * r) / *e;
-    v = w * w - v * (float)3. * d;
+    v = w * w - v * 3.f * d;
     if (v < 0.) {
-        v = (float)0.;
+        v = 0.f;
     }
     v = sqrt(v);
     if (w + v == 0.) {
@@ -413,7 +379,7 @@ L270:
     if (q <= 0.) {
         goto L320;
     }
-    p = fv_(&q, &x[1], &h[h_offset], n, value);
+    p = fv_(&q, x, h, n, value);
     ins_(&q, &p, &a, &b, &c, &fa, &fb, &fc, &j, y, z);
     goto L320;
 L280:
@@ -424,8 +390,8 @@ L280:
     if (q >= 0.) {
         goto L320;
     }
-    q = d * (float).5 / q;
-    p = fv_(&q, &x[1], &h[h_offset], n, value);
+    q = d * .5f / q;
+    p = fv_(&q, x, h, n, value);
     ins_(&q, &p, &a, &b, &c, &fa, &fb, &fc, &j, y, z);
     goto L320;
 L290:
@@ -443,14 +409,14 @@ L310:
         goto L610;
     }
     q = a3 * q;
-    p = fv_(&q, &x[1], &h[h_offset], n, value);
+    p = fv_(&q, x, h, n, value);
     ins_(&q, &p, &a, &b, &c, &fa, &fb, &fc, &j, y, z);
     if (p - f < w * q) {
         goto L310;
     }
     goto L250;
 L320:
-    da = fd_(&a, &x[1], &h[h_offset], n, grad);
+    da = fd_(&a, x, h, n, grad);
     if (da > a6 * g) {
         goto L410;
     }
@@ -458,21 +424,15 @@ L320:
         goto L560;
     }
     r = a;
-    q = (float)0.;
-    i__1 = j;
-    for (i = 1; i <= i__1; ++i) {
-        if (y[i - 1] > a) {
+    q = 0.f;
+    for (i = 0; i < j; ++i) {
+        if (y[i] > a) {
             goto L370;
         }
-        if (y[i - 1] <= q) {
-            goto L330;
+        if (y[i] <= q || y[i] == a) {
+            continue; /* next i */
         }
-        if (y[i - 1] == a) {
-            goto L330;
-        }
-        q = y[i - 1];
-L330:
-        ;
+        q = y[i];
     }
     if (a <= a8 * q) {
         goto L560;
@@ -484,7 +444,7 @@ L340:
         goto L610;
     }
     q = a3 * q;
-    p = fv_(&q, &x[1], &h[h_offset], n, value);
+    p = fv_(&q, x, h, n, value);
     f1 = fa;
     ins_(&q, &p, &a, &b, &c, &fa, &fb, &fc, &j, y, z);
     if (p < f1) {
@@ -493,44 +453,39 @@ L340:
     if (a > r) {
         goto L360;
     }
-    i__1 = *n;
-    for (i = 1; i <= i__1; ++i) {
-/* L350: */
-        h[i + (h_dim1 << 1)] = x[i] + a * h[i + h_dim1];
+    for (i = 0; i < *n; ++i) {
+        h[i+*n] = x[i] + a * h[i];
     }
     goto L560;
 L360:
-    da = fd_(&a, &x[1], &h[h_offset], n, grad);
+    da = fd_(&a, x, h, n, grad);
     if (da > a6 * g) {
         goto L410;
     }
     goto L560;
 L370:
-    q = y[i - 1];
-    i__1 = j;
-    for (k = i; k <= i__1; ++k) {
-        if (y[k - 1] <= a) {
-            goto L380;
+    q = y[i];
+    for (k = i; k < j; ++k) {
+        if (y[k] <= a) {
+            continue; /* next k */
         }
-        if (y[k - 1] < q) {
-            q = y[k - 1];
+        if (y[k] < q) {
+            q = y[k];
         }
-L380:
-        ;
     }
     if (q <= a5 * a) {
         goto L560;
     }
     f0 = log(q / a);
-    s = (doublereal) ((integer) (f0 * l3 + (float).999));
-    f0 = exp(f0 / s) * (float)1.001;
+    s = (doublereal) ((integer) (f0 * l3 + .999f));
+    f0 = exp(f0 / s) * 1.001f;
     s = a;
 L390:
     s *= f0;
     if (s >= q) {
         goto L320;
     }
-    p = fv_(&s, &x[1], &h[h_offset], n, value);
+    p = fv_(&s, x, h, n, value);
     f1 = fa;
     ins_(&s, &p, &a, &b, &c, &fa, &fb, &fc, &j, y, z);
     if (p < f1) {
@@ -539,44 +494,41 @@ L390:
     if (a > r) {
         goto L320;
     }
-    i__1 = *n;
-    for (i = 1; i <= i__1; ++i) {
-/* L400: */
-        h[i + (h_dim1 << 1)] = x[i] + a * h[i + h_dim1];
+    for (i = 0; i < *n; ++i) {
+        h[i+*n] = x[i] + a * h[i];
     }
     goto L560;
 L410:
-    b = (float)0.;
-    k = 1;
+    b = 0.f;
+    k = 0;
     i = k;
 L420:
     ++i;
-    if (i > j) {
+    if (i+1 > j) {
         goto L430;
     }
-    if (y[i - 1] >= a) {
+    if (y[i] >= a) {
         goto L420;
     }
-    if (y[i - 1] < b) {
+    if (y[i] < b) {
         goto L420;
     }
-    b = y[i - 1];
+    b = y[i];
     k = i;
     goto L420;
 L430:
-    fb = z[k - 1];
+    fb = z[k];
     db = d;
     if (b != 0.) {
-        db = fd_(&b, &x[1], &h[h_offset], n, grad);
+        db = fd_(&b, x, h, n, grad);
     }
-/* L440: */
-    w = (d__1 = b - a, abs(d__1)) * (float)2.;
+    w = abs(b - a) * 2.f;
     cub_(&c, &a, &b, &fa, &fb, &da, &db);
     nc = 1;
     goto L480;
 L450:
-    w *= (float).5;
-    if (w < (d__1 = c0 - c, abs(d__1))) {
+    w *= .5f;
+    if (w < abs(c0 - c)) {
         goto L550;
     }
     if (c0 < c) {
@@ -606,14 +558,14 @@ L480:
         goto L500;
     }
     c = s + (s - c);
-    s = (a + b) * (float).5;
+    s = (a + b) * .5f;
     if (c > s) {
         c = s;
     }
     goto L500;
 L490:
     c = r - (c - r);
-    s = (a + b) * (float).5;
+    s = (a + b) * .5f;
     if (c < s) {
         c = s;
     }
@@ -621,7 +573,7 @@ L500:
     c0 = a;
     f0 = fa;
     d0 = da;
-    fvd_(&f, &d, &c, &x[1], &h[h_offset], n, both);
+    fvd_(&f, &d, &c, x, h, n, both);
     if (f < fa) {
         goto L510;
     }
@@ -654,19 +606,17 @@ L540:
     }
     goto L530;
 L550:
-    c = (a + b) * (float).5;
+    c = (a + b) * .5f;
     ++nb;
-    w = (d__1 = b - a, abs(d__1));
+    w = abs(b - a);
     goto L500;
 L560:
-    *e = (float)0.;
-    i__1 = *n;
-    for (i = 1; i <= i__1; ++i) {
-        if ((d__1 = h[i + h_dim1 * 3], abs(d__1)) > *e) {
-            *e = (d__2 = h[i + h_dim1 * 3], abs(d__2));
+    *e = 0.f;
+    for (i = 0; i < *n; ++i) {
+        if (abs(h[i+*n*2]) > *e) {
+            *e = abs(h[i+*n*2]);
         }
-/* L570: */
-        x[i] = h[i + (h_dim1 << 1)];
+        x[i] = h[i+*n];
     }
     ++(*it);
     if (*e <= *t) {
@@ -678,12 +628,10 @@ L560:
     f = fa;
     d = da;
     a = a7 * a;
-    (*pre)(&h[(h_dim1 << 1) + 1], &h[h_dim1 * 3 + 1]);
-    r = (float)0.;
-    i__1 = *n;
-    for (i = 1; i <= i__1; ++i) {
-/* L580: */
-        r += h[i + (h_dim1 << 1)] * h[i + h_dim1 * 3];
+    (*pre)(&h[*n], &h[*n*2]);
+    r = 0.f;
+    for (i = 0; i < *n; ++i) {
+        r += h[i+*n] * h[i+*n*2];
     }
     if (r < 0.) {
         goto L620;
@@ -694,12 +642,10 @@ L560:
     if (l >= *m) {
         goto L50;
     }
-    d = (float)0.;
-    i__1 = *n;
-    for (i = 1; i <= i__1; ++i) {
-        h[i + h_dim1] = -h[i + (h_dim1 << 1)] + s * h[i + h_dim1];
-/* L590: */
-        d += h[i + h_dim1] * h[i + h_dim1 * 3];
+    d = 0.f;
+    for (i = 0; i < *n; ++i) {
+        h[i] = -h[i+*n] + s * h[i];
+        d += h[i] * h[i+*n*2];
     }
     goto L70;
 L600:
@@ -725,8 +671,12 @@ L620:
 /*     s_stop("", 0L); */
 L630:
 /* Computing 25th power */
-    d__1 = a3, d__2 = d__1, d__1 *= d__1, d__1 *= d__1, d__1 *= d__1, d__2 *=
-            d__1;
+    d__1 = a3,
+    d__2 = a3,
+    d__1 *= d__1,
+    d__1 *= d__1,
+    d__1 *= d__1,
+    d__2 *= d__1;
     q *= d__2 * (d__1 * d__1);
     nd = 0;
 L640:
@@ -735,7 +685,7 @@ L640:
         goto L650;
     }
     q = a3 * q;
-    p = fv_(&q, &x[1], &h[h_offset], n, value);
+    p = fv_(&q, x, h, n, value);
     ins_(&q, &p, &a, &b, &c, &fa, &fb, &fc, &j, y, z);
     if (p - f > v * q) {
         goto L640;
@@ -746,10 +696,9 @@ L650:
 /*     do_lio(&c__9, &c__1, "UNABLE TO SATISFY ARMIJO CONDITION", 34L); */
 /*     e_wsle(); */
     printf("UNABLE TO SATISFY ARMIJO CONDITION\n");
-    return 0;
+    return;
 L660:
     *step = a;
-    return 0;
 } /* cg_ */
 
 doublereal fv_(a, x, h, n, value)
@@ -757,99 +706,58 @@ doublereal *a, *x, *h;
 integer *n;
 doublereal (*value) ();
 {
-    /* System generated locals */
-    integer h_dim1, h_offset, i__1;
-    doublereal ret_val;
-
     /* Local variables */
     static integer i;
 
-    /* Parameter adjustments */
-    h_dim1 = *n;
-    h_offset = h_dim1 + 1;
-    h -= h_offset;
-    --x;
-
     /* Function Body */
-    i__1 = *n;
-    for (i = 1; i <= i__1; ++i) {
-/* L10: */
-        h[i + (h_dim1 << 1)] = x[i] + *a * h[i + h_dim1];
+    for (i = 0; i < *n; ++i) {
+        h[i+*n] = x[i] + *a * h[i];
     }
-    ret_val = (*value)(&h[(h_dim1 << 1) + 1]);
-    return ret_val;
+    return (*value)(&h[*n]);
 } /* fv_ */
 
 doublereal fd_(a, x, h, n, grad)
 doublereal *a, *x, *h;
 integer *n;
-/* Subroutine */ int (*grad) ();
+void (*grad) ();
 {
-    /* System generated locals */
-    integer h_dim1, h_offset, i__1;
-    doublereal ret_val;
-
     /* Local variables */
     static doublereal d;
     static integer i;
 
-    /* Parameter adjustments */
-    h_dim1 = *n;
-    h_offset = h_dim1 + 1;
-    h -= h_offset;
-    --x;
-
     /* Function Body */
-    i__1 = *n;
-    for (i = 1; i <= i__1; ++i) {
-/* L10: */
-        h[i + (h_dim1 << 1)] = x[i] + *a * h[i + h_dim1];
+    for (i = 0; i < *n; ++i) {
+        h[i+*n] = x[i] + *a * h[i];
     }
-    (*grad)(&h[h_dim1 * 3 + 1], &h[(h_dim1 << 1) + 1]);
-    d = (float)0.;
-    i__1 = *n;
-    for (i = 1; i <= i__1; ++i) {
-/* L20: */
-        d += h[i + h_dim1] * h[i + h_dim1 * 3];
+    (*grad)(&h[*n*2], &h[*n]);
+    d = 0.f;
+    for (i = 0; i < *n; ++i) {
+        d += h[i] * h[i+*n*2];
     }
-    ret_val = d;
-    return ret_val;
+    return d;
 } /* fd_ */
 
-/* Subroutine */ int fvd_(v, d, a, x, h, n, both)
+/* Subroutine */ void fvd_(v, d, a, x, h, n, both)
 doublereal *v, *d, *a, *x, *h;
 integer *n;
-/* Subroutine */ int (*both) ();
+/* Subroutine */ void (*both) ();
 {
-    /* System generated locals */
-    integer h_dim1, h_offset, i__1;
-
     /* Local variables */
     static integer i;
 
-    /* Parameter adjustments */
-    h_dim1 = *n;
-    h_offset = h_dim1 + 1;
-    h -= h_offset;
-    --x;
-
     /* Function Body */
-    i__1 = *n;
-    for (i = 1; i <= i__1; ++i) {
-/* L10: */
-        h[i + (h_dim1 << 1)] = x[i] + *a * h[i + h_dim1];
+    for (i = 0; i < *n; ++i) {
+        h[i+*n] = x[i] + *a * h[i];
     }
-    (*both)(v, &h[h_dim1 * 3 + 1], &h[(h_dim1 << 1) + 1]);
-    *d = (float)0.;
-    i__1 = *n;
-    for (i = 1; i <= i__1; ++i) {
-/* L20: */
-        *d += h[i + h_dim1] * h[i + h_dim1 * 3];
+    (*both)(v, &h[*n*2], &h[*n]);
+    *d = 0.f;
+    for (i = 0; i < *n; ++i) {
+        *d += h[i] * h[i+*n*2];
     }
-    return 0;
+    return;
 } /* fvd_ */
 
-/* Subroutine */ int cub_(x, a, b, c, d, e, f)
+/* Subroutine */ void cub_(x, a, b, c, d, e, f)
 doublereal *x, *a, *b, *c, *d, *e, *f;
 {
     /* System generated locals */
@@ -868,7 +776,7 @@ doublereal *x, *a, *b, *c, *d, *e, *f;
     v = *e + *f - (*d - *c) * 3 / g;
     w = v * v - *e * *f;
     if (w < 0.) {
-        w = (float)0.;
+        w = 0.f;
     }
     d__1 = sqrt(w);
     w = d_sign(&d__1, &g);
@@ -885,7 +793,7 @@ doublereal *x, *a, *b, *c, *d, *e, *f;
     }
 L10:
     *x = *b - g * *f / (z + w);
-    return 0;
+    return;
 L20:
     if (*c < *d) {
         *x = *a;
@@ -893,7 +801,7 @@ L20:
     if (*c >= *d) {
         *x = *b;
     }
-    return 0;
+    return;
 L30:
     if (d_sign(&z, &g) != z) {
         goto L40;
@@ -903,50 +811,35 @@ L30:
     }
 L40:
     *x = *a + g * *e / (y - w);
-    return 0;
+    return;
 L50:
     *x = *a;
-    return 0;
+    return;
 } /* cub_ */
 
-/* Subroutine */ int ins_(s, f, a, b, c, fa, fb, fc, j, y, z)
+/* Subroutine */ void ins_(s, f, a, b, c, fa, fb, fc, j, y, z)
 doublereal *s, *f, *a, *b, *c, *fa, *fb, *fc;
 integer *j;
 doublereal *y, *z;
 {
-    /* Parameter adjustments */
-    --z;
-    --y;
-
     /* Function Body */
-    ++(*j);
     y[*j] = *s;
     z[*j] = *f;
+    ++(*j);
     if (*f <= *fa) {
-        goto L20;
+        *c = *b; *b = *a; *a = *s;
+        *fc = *fb; *fb = *fa; *fa = *f;
+        return;
     }
     if (*f <= *fb) {
-        goto L10;
+        *c = *b; *b = *s;
+        *fc = *fb; *fb = *f;
+        return;
     }
     if (*f > *fc) {
-        return 0;
+        return;
     }
     *c = *s;
     *fc = *f;
-    return 0;
-L10:
-    *c = *b;
-    *b = *s;
-    *fc = *fb;
-    *fb = *f;
-    return 0;
-L20:
-    *c = *b;
-    *b = *a;
-    *a = *s;
-    *fc = *fb;
-    *fb = *fa;
-    *fa = *f;
-    return 0;
 } /* ins_ */
 

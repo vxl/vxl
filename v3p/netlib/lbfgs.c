@@ -33,7 +33,7 @@ static integer c__1 = 1;
 /*     LBFGS SUBROUTINE */
 /*     **************** */
 
-/* Subroutine */ int lbfgs_(n, m, x, f, g, diagco, diag, iprint, eps, xtol, w,
+/* Subroutine */ void lbfgs_(n, m, x, f, g, diagco, diag, iprint, eps, xtol, w,
          iflag)
 integer *n, *m;
 doublereal *x, *f, *g;
@@ -49,7 +49,6 @@ integer *iflag;
     static doublereal zero = 0.;
 
     /* System generated locals */
-    integer i__1;
     doublereal d__1;
 
     /* Builtin functions */
@@ -62,16 +61,16 @@ integer *iflag;
     static integer info, iscn, nfev, iycn, iter;
     static doublereal ftol;
     static integer nfun, ispt, iypt;
-    extern /* Subroutine */ int lbp1d_();
+    extern /* Subroutine */ void lbp1d_();
     static integer i, bound;
-    extern /* Subroutine */ int lbptf_();
+    extern /* Subroutine */ void lbptf_();
     static doublereal gnorm;
-    extern /* Subroutine */ int daxpy_();
+    extern /* Subroutine */ void daxpy_();
     static integer point;
     static doublereal xnorm;
     static integer cp;
     static doublereal sq, yr, ys;
-    extern /* Subroutine */ int mcsrch_();
+    extern /* Subroutine */ void mcsrch_();
     static logical finish;
     static doublereal yy;
     static integer maxfev;
@@ -387,16 +386,14 @@ L10:
     point = 0;
     finish = FALSE_;
     if (*diagco) {
-        i__1 = *n;
-        for (i = 1; i <= i__1; ++i) {
+        for (i = 1; i <= *n; ++i) {
 /* L30: */
             if (diag[i] <= zero) {
                 goto L195;
             }
         }
     } else {
-        i__1 = *n;
-        for (i = 1; i <= i__1; ++i) {
+        for (i = 1; i <= *n; ++i) {
 /* L40: */
             diag[i] = 1.;
         }
@@ -419,8 +416,7 @@ L10:
 
     ispt = *n + (*m << 1);
     iypt = ispt + *n * *m;
-    i__1 = *n;
-    for (i = 1; i <= i__1; ++i) {
+    for (i = 1; i <= *n; ++i) {
 /* L50: */
         w[ispt + i] = -g[i] * diag[i];
     }
@@ -455,19 +451,17 @@ L80:
     ys = ddot_(n, &w[iypt + npt + 1], &c__1, &w[ispt + npt + 1], &c__1);
     if (! (*diagco)) {
         yy = ddot_(n, &w[iypt + npt + 1], &c__1, &w[iypt + npt + 1], &c__1);
-        i__1 = *n;
-        for (i = 1; i <= i__1; ++i) {
+        for (i = 1; i <= *n; ++i) {
 /* L90: */
             diag[i] = ys / yy;
         }
     } else {
         *iflag = 2;
-        return 0;
+        return;
     }
 L100:
     if (*diagco) {
-        i__1 = *n;
-        for (i = 1; i <= i__1; ++i) {
+        for (i = 1; i <= *n; ++i) {
 /* L110: */
             if (diag[i] <= zero) {
                 goto L195;
@@ -485,14 +479,12 @@ L100:
         cp = *m;
     }
     w[*n + cp] = one / ys;
-    i__1 = *n;
-    for (i = 1; i <= i__1; ++i) {
+    for (i = 1; i <= *n; ++i) {
 /* L112: */
         w[i] = -g[i];
     }
     cp = point;
-    i__1 = bound;
-    for (i = 1; i <= i__1; ++i) {
+    for (i = 1; i <= bound; ++i) {
         --cp;
         if (cp == -1) {
             cp = *m - 1;
@@ -506,14 +498,12 @@ L100:
 /* L125: */
     }
 
-    i__1 = *n;
-    for (i = 1; i <= i__1; ++i) {
+    for (i = 1; i <= *n; ++i) {
 /* L130: */
         w[i] = diag[i] * w[i];
     }
 
-    i__1 = bound;
-    for (i = 1; i <= i__1; ++i) {
+    for (i = 1; i <= bound; ++i) {
         yr = ddot_(n, &w[iypt + cp * *n + 1], &c__1, &w[1], &c__1);
         beta = w[*n + cp + 1] * yr;
         inmc = *n + *m + cp + 1;
@@ -530,8 +520,7 @@ L100:
 /*     STORE THE NEW SEARCH DIRECTION */
 /*     ------------------------------ */
 
-    i__1 = *n;
-    for (i = 1; i <= i__1; ++i) {
+    for (i = 1; i <= *n; ++i) {
 /* L160: */
         w[ispt + point * *n + i] = w[i];
     }
@@ -546,8 +535,7 @@ L165:
     if (iter == 1) {
         stp = stp1;
     }
-    i__1 = *n;
-    for (i = 1; i <= i__1; ++i) {
+    for (i = 1; i <= *n; ++i) {
 /* L170: */
         w[i] = g[i];
     }
@@ -558,7 +546,7 @@ L172:
         *iflag = 1;
 /*       Return, in order to get another sample of F and G. */
 /*       Next call comes right back here. */
-        return 0;
+        return;
     }
     if (info != 1) {
         goto L190;
@@ -569,8 +557,7 @@ L172:
 /*     ----------------------------------------- */
 
     npt = point * *n;
-    i__1 = *n;
-    for (i = 1; i <= i__1; ++i) {
+    for (i = 1; i <= *n; ++i) {
         w[ispt + npt + i] = stp * w[ispt + npt + i];
 /* L175: */
         w[iypt + npt + i] = g[i] - w[i];
@@ -596,7 +583,7 @@ L172:
     }
     if (finish) {
         *iflag = 0;
-        return 0;
+        return;
     }
     goto L80;
 
@@ -613,21 +600,21 @@ L190:
         lbptf_(" POSSIBLE CAUSES: FUNCTION OR GRADIENT ARE ", 43L);
         lbptf_(" INCORRECT OR INCORRECT TOLERANCES", 34L);
     }
-    return 0;
+    return;
 L195:
     *iflag = -2;
     if (lb3_1.lp > 0) {
         lbp1d_("IFLAG=-2, THE %d-TH DIAGONAL ELEMENT OF THE", &i, 43L);
         lbptf_("INVERSE HESSIAN APPROXIMATION IS NOT POSITIVE", 45L);
     }
-    return 0;
+    return;
 L196:
     *iflag = -3;
     if (lb3_1.lp > 0) {
         lbptf_("IFLAG= -3, IMPROPER INPUT PARAMETERS.", 37L);
         lbptf_(" (N OR M ARE NOT POSITIVE)", 26L);
     }
-    return 0;
+    return;
 } /* lbfgs_ */
 
 
@@ -747,7 +734,7 @@ L196:
 /*     LINE SEARCH ROUTINE MCSRCH */
 /*     ************************** */
 
-/* Subroutine */ int mcsrch_(n, x, f, g, s, stp, ftol, xtol, maxfev, info,
+/* Subroutine */ void mcsrch_(n, x, f, g, s, stp, ftol, xtol, maxfev, info,
         nfev, wa)
 integer *n;
 doublereal *x, *f, *g, *s, *stp, *ftol, *xtol;
@@ -762,19 +749,18 @@ doublereal *wa;
     static doublereal zero = 0.;
 
     /* System generated locals */
-    integer i__1;
     doublereal d__1;
 
     /* Local variables */
     static doublereal dgxm, dgym;
     static integer j, infoc;
-    extern /* Subroutine */ int lbptf_();
+    extern /* Subroutine */ void lbptf_();
     static doublereal finit, width, stmin, stmax;
     static logical stage1;
     static doublereal width1, ftest1, dg, fm, fx, fy;
     static logical brackt;
     static doublereal dginit, dgtest;
-    extern /* Subroutine */ int mcstep_();
+    extern /* Subroutine */ void mcstep_();
     static doublereal dgm, dgx, dgy, fxm, fym, stx, sty;
 
 
@@ -903,21 +889,20 @@ doublereal *wa;
     if (*n <= 0 || *stp <= zero || *ftol < zero || lb3_1.gtol < zero || *xtol
             < zero || lb3_1.stpmin < zero || lb3_1.stpmax < lb3_1.stpmin || *
             maxfev <= 0) {
-        return 0;
+        return;
     }
 
 /*     COMPUTE THE INITIAL GRADIENT IN THE SEARCH DIRECTION */
 /*     AND CHECK THAT S IS A DESCENT DIRECTION. */
 
     dginit = zero;
-    i__1 = *n;
-    for (j = 1; j <= i__1; ++j) {
+    for (j = 1; j <= *n; ++j) {
         dginit += g[j] * s[j];
 /* L10: */
     }
     if (dginit >= zero) {
         lbptf_("THE SEARCH DIRECTION IS NOT A DESCENT DIRECTION", 47L);
-        return 0;
+        return;
     }
 
 /*     INITIALIZE LOCAL VARIABLES. */
@@ -929,8 +914,7 @@ doublereal *wa;
     dgtest = *ftol * dginit;
     width = lb3_1.stpmax - lb3_1.stpmin;
     width1 = width / p5;
-    i__1 = *n;
-    for (j = 1; j <= i__1; ++j) {
+    for (j = 1; j <= *n; ++j) {
         wa[j] = x[j];
 /* L20: */
     }
@@ -982,20 +966,18 @@ L30:
 /*        AND COMPUTE THE DIRECTIONAL DERIVATIVE. */
 /*        We return to main program to obtain F and G. */
 
-    i__1 = *n;
-    for (j = 1; j <= i__1; ++j) {
+    for (j = 1; j <= *n; ++j) {
         x[j] = wa[j] + *stp * s[j];
 /* L40: */
     }
     *info = -1;
-    return 0;
+    return;
 
 L45:
     *info = 0;
     ++(*nfev);
     dg = zero;
-    i__1 = *n;
-    for (j = 1; j <= i__1; ++j) {
+    for (j = 1; j <= *n; ++j) {
         dg += g[j] * s[j];
 /* L50: */
     }
@@ -1025,7 +1007,7 @@ L45:
 /*        CHECK FOR TERMINATION. */
 
     if (*info != 0) {
-        return 0;
+        return;
     }
 
 /*        IN THE FIRST STAGE WE SEEK A STEP FOR WHICH THE MODIFIED */
@@ -1092,7 +1074,7 @@ L45:
 
 } /* mcsrch_ */
 
-/* Subroutine */ int mcstep_(stx, fx, dx, sty, fy, dy, stp, fp, dp, brackt,
+/* Subroutine */ void mcstep_(stx, fx, dx, sty, fy, dy, stp, fp, dp, brackt,
         stpmin, stpmax, info)
 doublereal *stx, *fx, *dx, *sty, *fy, *dy, *stp, *fp, *dp;
 logical *brackt;
@@ -1172,7 +1154,7 @@ integer *info;
 
     if (*brackt && (*stp <= min(*stx,*sty) || *stp >= max(*stx,*sty)) || *dx *
              (*stp - *stx) >= 0. || *stpmax < *stpmin) {
-        return 0;
+        return;
     }
 
 /*     DETERMINE IF THE DERIVATIVES HAVE OPPOSITE SIGN. */
@@ -1367,7 +1349,6 @@ integer *info;
             *stp = max(d__1,*stp);
         }
     }
-    return 0;
 
 /*     LAST LINE OF SUBROUTINE MCSTEP. */
 

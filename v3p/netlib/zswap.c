@@ -1,4 +1,4 @@
-/*  -- translated by f2c (version of 23 April 1993  18:34:30).
+/* zswap.f -- translated by f2c (version of 23 April 1993  18:34:30).
    You must link the resulting object file with the libraries:
         -lf2c -lm   (in that order)
 */
@@ -6,9 +6,10 @@
 #include "f2c.h"
 
 /* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
+/*                               and moved out of zsvdc.c to separate file */
 
 
-/* Subroutine */ void zcopy_(n, zx, incx, zy, incy)
+/* Subroutine */ void zswap_(n, zx, incx, zy, incy)
 integer *n;
 doublecomplex *zx;
 integer *incx;
@@ -16,20 +17,25 @@ doublecomplex *zy;
 integer *incy;
 {
     /* Local variables */
-    static integer i, ix, iy;
+    static integer i;
+    static doublecomplex ztemp;
+    static integer ix, iy;
 
-/*     copies a vector, x, to a vector, y. */
-/*     jack dongarra, linpack, 4/11/78. */
+
+/*     interchanges two vectors. */
+/*     jack dongarra, 3/11/78. */
 /*     modified 12/3/93, array(1) declarations changed to array(*) */
 
-    /* Function Body */
 
+    /* Function Body */
     if (*n <= 0) {
         return;
     }
     if (*incx == 1 && *incy == 1) {
         for (i = 0; i < *n; ++i) {
-            zy[i].r = zx[i].r, zy[i].i = zx[i].i;
+            ztemp.r = zx[i].r, ztemp.i = zx[i].i;
+            zx[i].r = zy[i].r, zx[i].i = zy[i].i;
+            zy[i].r = ztemp.r, zy[i].i = ztemp.i;
         }
     }
     else {
@@ -41,9 +47,10 @@ integer *incy;
             iy = (1-(*n)) * *incy;
         }
         for (i = 0; i < *n; ++i) {
-            zy[iy].r = zx[ix].r, zy[iy].i = zx[ix].i;
+            ztemp.r = zx[ix].r, ztemp.i = zx[ix].i;
+            zx[ix].r = zy[iy].r, zx[ix].i = zy[iy].i;
+            zy[iy].r = ztemp.r, zy[iy].i = ztemp.i;
             ix += *incx; iy += *incy;
         }
     }
-} /* zcopy_ */
-
+} /* zswap_ */

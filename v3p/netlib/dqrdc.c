@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* Subroutine */ int dqrdc_(x, ldx, n, p, qraux, jpvt, work, job)
+/* Subroutine */ void dqrdc_(x, ldx, n, p, qraux, jpvt, work, job)
 doublereal *x;
 integer *ldx, *n, *p;
 doublereal *qraux;
@@ -31,9 +31,9 @@ integer *job;
     extern doublereal dnrm2_();
     static integer j, l;
     static doublereal t;
-    extern /* Subroutine */ int dscal_(), dswap_();
+    extern /* Subroutine */ void dscal_(), dswap_();
     static logical swapj;
-    extern /* Subroutine */ int daxpy_();
+    extern /* Subroutine */ void daxpy_();
     static doublereal nrmxl;
     static integer jj, jp, pl, pu;
     static doublereal tt, maxnrm;
@@ -309,6 +309,6 @@ L190:
 /* L200: */
         ;
     }
-    return 0;
+    return;
 } /* dqrdc_ */
 

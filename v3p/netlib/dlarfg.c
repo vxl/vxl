@@ -6,7 +6,7 @@
 #include "f2c.h"
 
 /*<       SUBROUTINE DLARFG( N, ALPHA, X, INCX, TAU ) >*/
-/* Subroutine */ int dlarfg_(integer *n, doublereal *alpha, doublereal *x,
+/* Subroutine */ void dlarfg_(integer *n, doublereal *alpha, doublereal *x,
         integer *incx, doublereal *tau)
 {
     /* System generated locals */
@@ -20,7 +20,7 @@
     static doublereal beta;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     static integer j;
-    extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *,
+    extern /* Subroutine */ void dscal_(integer *, doublereal *, doublereal *,
             integer *);
     static doublereal xnorm;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *,
@@ -60,8 +60,7 @@
 /*  where tau is a real scalar and v is a real (n-1)-element */
 /*  vector. */
 
-/*  If the elements of x are all zero, then tau = 0 and H is taken to be
-*/
+/*  If the elements of x are all zero, then tau = 0 and H is taken to be */
 /*  the unit matrix. */
 
 /*  Otherwise  1 <= tau <= 2. */
@@ -87,8 +86,7 @@
 /*  TAU     (output) DOUBLE PRECISION */
 /*          The value tau. */
 
-/*  =====================================================================
-*/
+/*  ===================================================================== */
 
 /*     .. Parameters .. */
 /*<       DOUBLE PRECISION   ONE, ZERO >*/
@@ -118,8 +116,7 @@
     if (*n <= 1) {
 /*<          TAU = ZERO >*/
         *tau = 0.;
-/*<          RETURN >*/
-        return 0;
+        return;
 /*<       END IF >*/
     }
 
@@ -147,8 +144,7 @@
 /*<          IF( ABS( BETA ).LT.SAFMIN ) THEN >*/
         if (abs(beta) < safmin) {
 
-/*           XNORM, BETA may be inaccurate; scale X and recompute
-them */
+/*           XNORM, BETA may be inaccurate; scale X and recompute them */
 
 /*<             RSAFMN = ONE / SAFMIN >*/
             rsafmn = 1. / safmin;
@@ -185,8 +181,7 @@ L10:
             d__1 = 1. / (*alpha - beta);
             dscal_(&i__1, &d__1, &x[1], incx);
 
-/*           If ALPHA is subnormal, it may lose relative accuracy
-*/
+/*           If ALPHA is subnormal, it may lose relative accuracy */
 
 /*<             ALPHA = BETA >*/
             *alpha = beta;
@@ -195,8 +190,6 @@ L10:
             for (j = 1; j <= i__1; ++j) {
 /*<                ALPHA = ALPHA*SAFMIN >*/
                 *alpha *= safmin;
-/*<    20       CONTINUE >*/
-/* L20: */
             }
 /*<          ELSE >*/
         } else {
@@ -213,11 +206,7 @@ L10:
 /*<       END IF >*/
     }
 
-/*<       RETURN >*/
-    return 0;
-
 /*     End of DLARFG */
 
-/*<       END >*/
 } /* dlarfg_ */
 

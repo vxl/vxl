@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* Subroutine */ int slassq_(integer *n, real *x, integer *incx, real *scale,
+/* Subroutine */ void slassq_(integer *n, real *x, integer *incx, real *scale,
         real *sumsq)
 {
     /* System generated locals */
@@ -102,10 +102,8 @@
                     *sumsq += r__1 * r__1;
                 }
             }
-/* L10: */
         }
     }
-    return 0;
 
 /*     End of SLASSQ */
 

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* Subroutine */ int tred1_(nm, n, a, d, e, e2)
+/* Subroutine */ void tred1_(nm, n, a, d, e, e2)
 integer *nm, *n;
 doublereal *a, *d, *e, *e2;
 {
@@ -206,6 +206,5 @@ L300:
         ;
     }
 
-    return 0;
 } /* tred1_ */
 

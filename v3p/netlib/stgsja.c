@@ -12,7 +12,7 @@ static real c_b14 = 1.f;
 static integer c__1 = 1;
 static real c_b43 = -1.f;
 
-/* Subroutine */ int stgsja_(char *jobu, char *jobv, char *jobq, integer *m,
+/* Subroutine */ void stgsja_(char *jobu, char *jobv, char *jobq, integer *m,
         integer *p, integer *n, integer *k, integer *l, real *a, integer *lda,
          real *b, integer *ldb, real *tola, real *tolb, real *alpha, real *
         beta, real *u, integer *ldu, real *v, integer *ldv, real *q, integer *
@@ -25,12 +25,12 @@ static real c_b43 = -1.f;
     real r__1;
 
     /* Local variables */
-    extern /* Subroutine */ int srot_(integer *, real *, integer *, real *,
+    extern /* Subroutine */ void srot_(integer *, real *, integer *, real *,
             integer *, real *, real *);
     static integer i, j;
     static real gamma;
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int sscal_(integer *, real *, real *, integer *);
+    extern /* Subroutine */ void sscal_(integer *, real *, real *, integer *);
     static real a1;
     static logical initq;
     static real a2, a3, b1;
@@ -38,11 +38,11 @@ static real c_b43 = -1.f;
     static real b2, b3;
     static logical wantu, wantv;
     static real error, ssmin;
-    extern /* Subroutine */ int scopy_(integer *, real *, integer *, real *,
+    extern /* Subroutine */ void scopy_(integer *, real *, integer *, real *,
             integer *), slags2_(logical *, real *, real *, real *, real *,
             real *, real *, real *, real *, real *, real *, real *, real *);
     static integer kcycle;
-    extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen), slapll_(
+    extern /* Subroutine */ void xerbla_(char *, integer *, ftnlen), slapll_(
             integer *, real *, integer *, real *, integer *, real *), slaset_(
             char *, integer *, integer *, real *, real *, real *, integer *,
             ftnlen), slartg_(real *, real *, real *, real *, real *);
@@ -382,7 +382,7 @@ static real c_b43 = -1.f;
     if (*info != 0) {
         i__1 = -(*info);
         xerbla_("STGSJA", &i__1, 6L);
-        return 0;
+        return;
     }
 
 /*     Initialize U, V and Q, if necessary */
@@ -624,7 +624,7 @@ L50:
 
 L90:
     *ncycle = kcycle;
-    return 0;
+    return;
 
 /*     End of STGSJA */
 

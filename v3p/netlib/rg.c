@@ -14,7 +14,7 @@ static doublereal c_b130 = 0.;
 /* Fullsource for module RG from package EISPACK. */
 /* Retrieved from NETLIB on Thu Jan 23 06:12:53 1997. */
 /* ====================================================================== */
-/* Subroutine */ int rg_(nm, n, a, wr, wi, matz, z, iv1, fv1, ierr)
+/* Subroutine */ void rg_(nm, n, a, wr, wi, matz, z, iv1, fv1, ierr)
 integer *nm, *n;
 doublereal *a, *wr, *wi;
 integer *matz;
@@ -27,9 +27,9 @@ integer *ierr;
     integer a_dim1, a_offset, z_dim1, z_offset;
 
     /* Local variables */
-    extern /* Subroutine */ int balbak_(), balanc_(), elmhes_(), eltran_();
+    extern /* Subroutine */ void balbak_(), balanc_(), elmhes_(), eltran_();
     static integer is1, is2;
-    extern /* Subroutine */ int hqr_(), hqr2_();
+    extern /* Subroutine */ void hqr_(), hqr2_();
 
 
 
@@ -120,17 +120,17 @@ L20:
     }
     balbak_(nm, n, &is1, &is2, &fv1[1], n, &z[z_offset]);
 L50:
-    return 0;
+    return;
 } /* rg_ */
 
-/* Subroutine */ int balanc_(nm, n, a, low, igh, scale)
+/* Subroutine */ void balanc_(nm, n, a, low, igh, scale)
 integer *nm, *n;
 doublereal *a;
 integer *low, *igh;
 doublereal *scale;
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    integer a_dim1, a_offset;
     doublereal d__1;
 
     /* Local variables */
@@ -218,20 +218,16 @@ L20:
         goto L50;
     }
 
-    i__1 = l;
-    for (i = 1; i <= i__1; ++i) {
+    for (i = 1; i <= l; ++i) {
         f = a[i + j * a_dim1];
         a[i + j * a_dim1] = a[i + m * a_dim1];
         a[i + m * a_dim1] = f;
-/* L30: */
     }
 
-    i__1 = *n;
-    for (i = k; i <= i__1; ++i) {
+    for (i = k; i <= *n; ++i) {
         f = a[j + i * a_dim1];
         a[j + i * a_dim1] = a[m + i * a_dim1];
         a[m + i * a_dim1] = f;
-/* L40: */
     }
 
 L50:
@@ -248,12 +244,9 @@ L80:
     --l;
 /*     .......... for j=l step -1 until 1 do -- .......... */
 L100:
-    i__1 = l;
-    for (jj = 1; jj <= i__1; ++jj) {
+    for (jj = 1; jj <= l; ++jj) {
         j = l + 1 - jj;
-
-        i__2 = l;
-        for (i = 1; i <= i__2; ++i) {
+        for (i = 1; i <= l; ++i) {
             if (i == j) {
                 goto L110;
             }
@@ -278,11 +271,8 @@ L130:
     ++k;
 
 L140:
-    i__1 = l;
-    for (j = k; j <= i__1; ++j) {
-
-        i__2 = l;
-        for (i = k; i <= i__2; ++i) {
+    for (j = k; j <= l; ++j) {
+        for (i = k; i <= l; ++i) {
             if (i == j) {
                 goto L150;
             }
@@ -300,32 +290,24 @@ L170:
         ;
     }
 /*     .......... now balance the submatrix in rows k to l .......... */
-    i__1 = l;
-    for (i = k; i <= i__1; ++i) {
-/* L180: */
+    for (i = k; i <= l; ++i) {
         scale[i] = 1.;
     }
 /*     .......... iterative loop for norm reduction .......... */
 L190:
     noconv = FALSE_;
 
-    i__1 = l;
-    for (i = k; i <= i__1; ++i) {
+    for (i = k; i <= l; ++i) {
         c = 0.;
         r = 0.;
 
-        i__2 = l;
-        for (j = k; j <= i__2; ++j) {
-            if (j == i) {
-                goto L200;
+        for (j = k; j <= l; ++j) {
+            if (j != i) {
+                c += abs(a[j + i * a_dim1]);
+                r += abs(a[i + j * a_dim1]);
             }
-            c += (d__1 = a[j + i * a_dim1], abs(d__1));
-            r += (d__1 = a[i + j * a_dim1], abs(d__1));
-L200:
-            ;
         }
-/*     .......... guard against zero c or r due to underflow .........
-. */
+/*     .......... guard against zero c or r due to underflow .......... */
         if (c == 0. || r == 0.) {
             goto L270;
         }
@@ -357,14 +339,12 @@ L240:
         scale[i] *= f;
         noconv = TRUE_;
 
-        i__2 = *n;
-        for (j = k; j <= i__2; ++j) {
+        for (j = k; j <= *n; ++j) {
 /* L250: */
             a[i + j * a_dim1] *= g;
         }
 
-        i__2 = l;
-        for (j = 1; j <= i__2; ++j) {
+        for (j = 1; j <= l; ++j) {
 /* L260: */
             a[j + i * a_dim1] *= f;
         }
@@ -380,17 +360,17 @@ L270:
 L280:
     *low = k;
     *igh = l;
-    return 0;
+    return;
 } /* balanc_ */
 
-/* Subroutine */ int balbak_(nm, n, low, igh, scale, m, z)
+/* Subroutine */ void balbak_(nm, n, low, igh, scale, m, z)
 integer *nm, *n, *low, *igh;
 doublereal *scale;
 integer *m;
 doublereal *z;
 {
     /* System generated locals */
-    integer z_dim1, z_offset, i__1, i__2;
+    integer z_dim1, z_offset;
 
     /* Local variables */
     static integer i, j, k;
@@ -447,20 +427,18 @@ doublereal *z;
 
     /* Function Body */
     if (*m == 0) {
-        goto L200;
+        return; /* exit from balbak_ */
     }
     if (*igh == *low) {
         goto L120;
     }
 
-    i__1 = *igh;
-    for (i = *low; i <= i__1; ++i) {
+    for (i = *low; i <= *igh; ++i) {
         s = scale[i];
 /*     .......... left hand eigenvectors are back transformed */
 /*                if the foregoing statement is replaced by */
 /*                s=1.0d0/scale(i). .......... */
-        i__2 = *m;
-        for (j = 1; j <= i__2; ++j) {
+        for (j = 1; j <= *m; ++j) {
 /* L100: */
             z[i + j * z_dim1] *= s;
         }
@@ -470,8 +448,7 @@ doublereal *z;
 /*     ......... for i=low-1 step -1 until 1, */
 /*               igh+1 step 1 until n do -- .......... */
 L120:
-    i__1 = *n;
-    for (ii = 1; ii <= i__1; ++ii) {
+    for (ii = 1; ii <= *n; ++ii) {
         i = ii;
         if (i >= *low && i <= *igh) {
             goto L140;
@@ -484,8 +461,7 @@ L120:
             goto L140;
         }
 
-        i__2 = *m;
-        for (j = 1; j <= i__2; ++j) {
+        for (j = 1; j <= *m; ++j) {
             s = z[i + j * z_dim1];
             z[i + j * z_dim1] = z[k + j * z_dim1];
             z[k + j * z_dim1] = s;
@@ -495,12 +471,9 @@ L120:
 L140:
         ;
     }
-
-L200:
-    return 0;
 } /* balbak_ */
 
-/* Subroutine */ int cdiv_(ar, ai, br, bi, cr, ci)
+/* Subroutine */ void cdiv_(ar, ai, br, bi, cr, ci)
 doublereal *ar, *ai, *br, *bi, *cr, *ci;
 {
     /* System generated locals */
@@ -524,10 +497,10 @@ doublereal *ar, *ai, *br, *bi, *cr, *ci;
     s = d__1 * d__1 + d__2 * d__2;
     *cr = (ars * brs + ais * bis) / s;
     *ci = (ais * brs - ars * bis) / s;
-    return 0;
+    return;
 } /* cdiv_ */
 
-/* Subroutine */ int elmhes_(nm, n, low, igh, a, int_)
+/* Subroutine */ void elmhes_(nm, n, low, igh, a, int_)
 integer *nm, *n, *low, *igh;
 doublereal *a;
 integer *int_;
@@ -539,8 +512,7 @@ integer *int_;
     /* Local variables */
     static integer i, j, m;
     static doublereal x, y;
-    static integer la, mm1, kp1, mp1;
-
+    static integer la, mm1, kp1;
 
 
 /*     this subroutine is a translation of the algol procedure elmhes, */
@@ -577,13 +549,11 @@ integer *int_;
 /*          only elements low through igh are used. */
 
 /*     questions and comments should be directed to burton s. garbow, */
-/*     mathematics and computer science div, argonne national laboratory
-*/
+/*     mathematics and computer science div, argonne national laboratory */
 
 /*     this version dated august 1983. */
 
-/*     ------------------------------------------------------------------
-*/
+/*     ------------------------------------------------------------------ */
 
     /* Parameter adjustments */
     --int_;
@@ -595,7 +565,7 @@ integer *int_;
     la = *igh - 1;
     kp1 = *low + 1;
     if (la < kp1) {
-        goto L200;
+        return; /* exit from elmhes_ */
     }
 
     i__1 = la;
@@ -640,10 +610,8 @@ L130:
         if (x == 0.) {
             goto L180;
         }
-        mp1 = m + 1;
-
         i__2 = *igh;
-        for (i = mp1; i <= i__2; ++i) {
+        for (i = m+1; i <= i__2; ++i) {
             y = a[i + mm1 * a_dim1];
             if (y == 0.) {
                 goto L160;
@@ -670,12 +638,9 @@ L160:
 L180:
         ;
     }
-
-L200:
-    return 0;
 } /* elmhes_ */
 
-/* Subroutine */ int eltran_(nm, n, low, igh, a, int_, z)
+/* Subroutine */ void eltran_(nm, n, low, igh, a, int_, z)
 integer *nm, *n, *low, *igh;
 doublereal *a;
 integer *int_;
@@ -685,7 +650,7 @@ doublereal *z;
     integer a_dim1, a_offset, z_dim1, z_offset, i__1, i__2;
 
     /* Local variables */
-    static integer i, j, kl, mm, mp, mp1;
+    static integer i, j, kl, mm, mp;
 
 
 
@@ -743,57 +708,40 @@ doublereal *z;
     a -= a_offset;
 
     /* Function Body */
-    i__1 = *n;
-    for (j = 1; j <= i__1; ++j) {
-
-        i__2 = *n;
-        for (i = 1; i <= i__2; ++i) {
-/* L60: */
+    for (j = 1; j <= *n; ++j) {
+        for (i = 1; i <= *n; ++i) {
             z[i + j * z_dim1] = 0.;
         }
 
         z[j + j * z_dim1] = 1.;
-/* L80: */
     }
 
     kl = *igh - *low - 1;
     if (kl < 1) {
-        goto L200;
+        return;
     }
 /*     .......... for mp=igh-1 step -1 until low+1 do -- .......... */
-    i__1 = kl;
-    for (mm = 1; mm <= i__1; ++mm) {
+    for (mm = 1; mm <= kl; ++mm) {
         mp = *igh - mm;
-        mp1 = mp + 1;
-
-        i__2 = *igh;
-        for (i = mp1; i <= i__2; ++i) {
-/* L100: */
+        for (i = mp+1; i <= *igh; ++i) {
             z[i + mp * z_dim1] = a[i + (mp - 1) * a_dim1];
         }
 
         i = int_[mp];
         if (i == mp) {
-            goto L140;
+            continue;
         }
 
-        i__2 = *igh;
-        for (j = mp; j <= i__2; ++j) {
+        for (j = mp; j <= *igh; ++j) {
             z[mp + j * z_dim1] = z[i + j * z_dim1];
             z[i + j * z_dim1] = 0.;
-/* L130: */
         }
 
         z[i + mp * z_dim1] = 1.;
-L140:
-        ;
     }
-
-L200:
-    return 0;
 } /* eltran_ */
 
-/* Subroutine */ int hqr_(nm, n, low, igh, h, wr, wi, ierr)
+/* Subroutine */ void hqr_(nm, n, low, igh, h, wr, wi, ierr)
 integer *nm, *n, *low, *igh;
 doublereal *h, *wr, *wi;
 integer *ierr;
@@ -1059,7 +1007,6 @@ L190:
             p = h[k + j * h_dim1] + q * h[k + 1 + j * h_dim1];
             h[k + j * h_dim1] -= p * x;
             h[k + 1 + j * h_dim1] -= p * y;
-/* L200: */
         }
 
 /* Computing MIN */
@@ -1145,10 +1092,10 @@ L330:
 L1000:
     *ierr = en;
 L1001:
-    return 0;
+    return;
 } /* hqr_ */
 
-/* Subroutine */ int hqr2_(nm, n, low, igh, h, wr, wi, z, ierr)
+/* Subroutine */ void hqr2_(nm, n, low, igh, h, wr, wi, z, ierr)
 integer *nm, *n, *low, *igh;
 doublereal *h, *wr, *wi, *z;
 integer *ierr;
@@ -1161,7 +1108,7 @@ integer *ierr;
     double sqrt(), d_sign();
 
     /* Local variables */
-    extern /* Subroutine */ int cdiv_();
+    extern /* Subroutine */ void cdiv_();
     static doublereal norm;
     static integer i, j, k, l, m;
     static doublereal p, q, r, s, t, w, x, y;
@@ -1436,7 +1383,6 @@ L190:
             p = h[k + j * h_dim1] + q * h[k + 1 + j * h_dim1];
             h[k + j * h_dim1] -= p * x;
             h[k + 1 + j * h_dim1] -= p * y;
-/* L200: */
         }
 
 /* Computing MIN */
@@ -1840,6 +1786,6 @@ L840:
 L1000:
     *ierr = en;
 L1001:
-    return 0;
+    return;
 } /* hqr2_ */
 

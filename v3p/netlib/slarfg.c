@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* Subroutine */ int slarfg_(integer *n, real *alpha, real *x, integer *incx,
+/* Subroutine */ void slarfg_(integer *n, real *alpha, real *x, integer *incx,
         real *tau)
 {
     /* System generated locals */
@@ -19,7 +19,7 @@
     static real beta;
     extern doublereal snrm2_(integer *, real *, integer *);
     static integer j;
-    extern /* Subroutine */ int sscal_(integer *, real *, real *, integer *);
+    extern /* Subroutine */ void sscal_(integer *, real *, real *, integer *);
     static real xnorm;
     extern real slapy2_(real *, real *);
     extern doublereal slamch_(char *);
@@ -103,7 +103,7 @@
     /* Function Body */
     if (*n <= 1) {
         *tau = 0.f;
-        return 0;
+        return;
     }
 
     i__1 = *n - 1;
@@ -123,8 +123,7 @@
         safmin = slamch_("S") / slamch_("E");
         if (abs(beta) < safmin) {
 
-/*           XNORM, BETA may be inaccurate; scale X and recompute
-them */
+/*           XNORM, BETA may be inaccurate; scale X and recompute them */
 
             rsafmn = 1.f / safmin;
             knt = 0;
@@ -149,8 +148,7 @@ L10:
             r__1 = 1.f / (*alpha - beta);
             sscal_(&i__1, &r__1, &x[1], incx);
 
-/*           If ALPHA is subnormal, it may lose relative accuracy
-*/
+/*           If ALPHA is subnormal, it may lose relative accuracy */
 
             *alpha = beta;
             i__1 = knt;
@@ -166,8 +164,6 @@ L10:
             *alpha = beta;
         }
     }
-
-    return 0;
 
 /*     End of SLARFG */
 

@@ -15,10 +15,10 @@ static integer c__2 = 2;
 /* Fullsource for module LMDIF from package MINPACK. */
 /* Retrieved from NETLIB on Wed Jul  3 14:18:04 1996. */
 /* ====================================================================== */
-/* Subroutine */ int lmdif_(fcn, m, n, x, fvec, ftol, xtol, gtol, maxfev,
+/* Subroutine */ void lmdif_(fcn, m, n, x, fvec, ftol, xtol, gtol, maxfev,
         epsfcn, diag, mode, factor, nprint, info, nfev, fjac, ldfjac, ipvt,
         qtf, wa1, wa2, wa3, wa4, errors)
-/* Subroutine */ int (*fcn) ();
+/* Subroutine */ void (*fcn) ();
 integer *m, *n;
 doublereal *x, *fvec, *ftol, *xtol, *gtol;
 integer *maxfev;
@@ -53,11 +53,11 @@ doublereal *errors;
     static doublereal temp, temp1, temp2;
     static integer i, j, l, iflag;
     static doublereal delta;
-    extern /* Subroutine */ int qrfac_(), lmpar_();
+    extern /* Subroutine */ void qrfac_(), lmpar_();
     static doublereal ratio;
     extern doublereal enorm_();
     static doublereal fnorm, gnorm;
-    extern /* Subroutine */ int fdjac2_();
+    extern /* Subroutine */ void fdjac2_();
     static doublereal pnorm, xnorm, fnorm1, actred, dirder, epsmch, prered;
     extern doublereal dpmpar_();
     static doublereal par, sum;
@@ -637,7 +637,7 @@ L300:
     if (*nprint > 0) {
         (*fcn)(m, n, &x[1], &fvec[1], &iflag);
     }
-    return 0;
+    return;
 
 /*     last card of subroutine lmdif. */
 

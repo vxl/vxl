@@ -6,7 +6,7 @@
 
 #include "f2c.h"
 
-/* Subroutine */ int dger_(integer *m, integer *n, doublereal *alpha,
+/* Subroutine */ void dger_(integer *m, integer *n, doublereal *alpha,
         doublereal *x, integer *incx, doublereal *y, integer *incy,
         doublereal *a, integer *lda)
 {
@@ -17,7 +17,7 @@
     static integer info;
     static doublereal temp;
     static integer i, j, ix, jy, kx;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
+    extern /* Subroutine */ void xerbla_(char *, integer *);
 
 
 /*  Purpose
@@ -118,13 +118,13 @@
     }
     if (info != 0) {
         xerbla_("DGER  ", &info);
-        return 0;
+        return;
     }
 
 /*     Quick return if possible. */
 
     if (*m == 0 || *n == 0 || *alpha == 0.) {
-        return 0;
+        return;
     }
 
 /*     Start the operations. In this version the elements of A are
@@ -167,8 +167,6 @@
             jy += *incy;
         }
     }
-
-    return 0;
 
 /*     End of DGER  . */
 

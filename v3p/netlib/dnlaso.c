@@ -16,9 +16,9 @@ static doublereal c_b88 = 0.;
 
 /* ------------------------------------------------------------------ */
 
-/* Subroutine */ int dnlaso_(op, iovect, n, nval, nfig, nperm, nmval, val,
+/* Subroutine */ void dnlaso_(op, iovect, n, nval, nfig, nperm, nmval, val,
         nmvec, vec, nblock, maxop, maxj, work, ind, ierr)
-/* Subroutine */ int (*op) (), (*iovect) ();
+int (*op) (), (*iovect) ();
 integer *n, *nval, *nfig, *nperm, *nmval;
 doublereal *val;
 integer *nmvec;
@@ -36,13 +36,13 @@ integer *ind, *ierr;
     extern doublereal dnrm2_();
     static integer i, m, nband;
     static doublereal delta;
-    extern /* Subroutine */ int dnwla_();
+    extern /* Subroutine */ void dnwla_();
     static logical small;
-    extern /* Subroutine */ int dcopy_();
+    extern /* Subroutine */ void dcopy_();
     static integer i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, nv;
-    extern /* Subroutine */ int dnppla_();
+    extern /* Subroutine */ void dnppla_();
     static logical raritz;
-    extern /* Subroutine */ int dortqr_(), dvsort_();
+    extern /* Subroutine */ void dortqr_(), dvsort_();
     static doublereal eps;
     static integer nop;
 
@@ -268,7 +268,7 @@ TES*/
         *ierr += 512;
     }
     if (*ierr != 0) {
-        return 0;
+        return;
     }
 
     small = *nval < 0;
@@ -326,7 +326,7 @@ L20:
             goto L70;
         }
         *ierr = -1;
-        return 0;
+        return;
 
 L70:
         ;
@@ -402,17 +402,16 @@ L130:
 
 L140:
     ind[1] = nop;
-    return 0;
 } /* dnlaso_ */
 
 
 /* ------------------------------------------------------------------ */
 
-/* Subroutine */ int dnwla_(op, iovect, n, nband, nval, nfig, nperm, val,
+/* Subroutine */ void dnwla_(op, iovect, n, nband, nval, nfig, nperm, val,
         nmvec, vec, nblock, maxop, maxj, nop, p1, p0, res, tau, otau, t, alp,
         bet, s, p2, bound, atemp, vtemp, d, ind, small, raritz, delta, eps,
         ierr)
-/* Subroutine */ int (*op) (), (*iovect) ();
+/* Subroutine */ void (*op) (), (*iovect) ();
 integer *n, *nband, *nval, *nfig, *nperm;
 doublereal *val;
 integer *nmvec;
@@ -441,22 +440,22 @@ integer *ierr;
     static doublereal utol;
     extern doublereal dnrm2_();
     static integer i, j, k, l, m;
-    extern /* Subroutine */ int dscal_();
+    extern /* Subroutine */ void dscal_();
     static integer ngood, nleft;
     static doublereal anorm;
-    extern /* Subroutine */ int dmvpc_(), dcopy_();
+    extern /* Subroutine */ void dmvpc_(), dcopy_();
     static integer mtemp;
     static doublereal dzero[1];
-    extern /* Subroutine */ int daxpy_();
+    extern /* Subroutine */ void daxpy_();
     static integer i1;
     static doublereal pnorm, epsrt, rnorm;
     static integer ii, ng;
-    extern /* Subroutine */ int dlaeig_(), dlager_(), dlaran_();
+    extern /* Subroutine */ void dlaeig_(), dlager_(), dlaran_();
     static doublereal betmin, alpmin, betmax, alpmax;
     static integer ntheta;
     static logical enough;
     static integer number, nstart;
-    extern /* Subroutine */ int dortqr_(), dvsort_();
+    extern /* Subroutine */ void dortqr_(), dvsort_();
 
 
 
@@ -921,7 +920,7 @@ L380:
     *ierr = -8;
 L390:
     if (nleft == 0) {
-        return 0;
+        return;
     }
     test = TRUE_;
 L400:
@@ -1267,7 +1266,7 @@ L690:
 
     m = *nperm - *nblock + 1;
     if (m <= 0) {
-        return 0;
+        return;
     }
     i__2 = m;
     for (i = 1; i <= i__2; ++i) {
@@ -1284,7 +1283,7 @@ L690:
 L790:
     m = *nperm - *nblock;
     if (m <= 0) {
-        return 0;
+        return;
     }
     i__2 = m;
     for (i = 1; i <= i__2; ++i) {
@@ -1293,12 +1292,12 @@ L790:
             goto L800;
         }
         *raritz = TRUE_;
-        return 0;
+        return;
 L800:
         ;
     }
 
-    return 0;
+    return;
 
 /* ------------------------------------------------------------------ */
 
@@ -1313,7 +1312,7 @@ L810:
 
 /* *********************************************************************** */
 
-/* Subroutine */ int dlabax_(n, nband, a, x, y)
+/* Subroutine */ void dlabax_(n, nband, a, x, y)
 integer *n, *nband;
 doublereal *a, *x, *y;
 {
@@ -1323,7 +1322,7 @@ doublereal *a, *x, *y;
     /* Local variables */
     static doublereal zero[1];
     static integer i, k, l, m;
-    extern /* Subroutine */ int dcopy_();
+    extern /* Subroutine */ void dcopy_();
 
 
 /*  THIS SUBROUTINE SETS Y = A*X */
@@ -1360,25 +1359,21 @@ doublereal *a, *x, *y;
         i__2 = *n - k + 1;
         m = min(i__2,*nband);
         if (m < 2) {
-            goto L20;
+            continue;
         }
         i__2 = m;
         for (i = 2; i <= i__2; ++i) {
             l = k + i - 1;
             y[l] += a[i + k * a_dim1] * x[k];
             y[k] += a[i + k * a_dim1] * x[l];
-/* L10: */
         }
-L20:
-        ;
     }
-    return 0;
 } /* dlabax_ */
 
 
 /* *********************************************************************** */
 
-/* Subroutine */ int dlabcm_(n, nband, nl, nr, a, eigval, lde, eigvec, atol,
+/* Subroutine */ void dlabcm_(n, nband, nl, nr, a, eigval, lde, eigvec, atol,
         artol, bound, atemp, d, vtemp)
 integer *n, *nband, *nl, *nr;
 doublereal *a, *eigval;
@@ -1396,11 +1391,11 @@ doublereal *eigvec, *atol, *artol, *bound, *atemp, *d, *vtemp;
     static integer nval, numl;
     extern doublereal dnrm2_();
     static integer i, j, l, m;
-    extern /* Subroutine */ int dscal_();
+    extern /* Subroutine */ void dscal_();
     static doublereal sigma, resid;
-    extern /* Subroutine */ int dcopy_(), daxpy_();
+    extern /* Subroutine */ void dcopy_(), daxpy_();
     static doublereal vnorm;
-    extern /* Subroutine */ int dlabfc_(), dlabax_(), dlaran_();
+    extern /* Subroutine */ void dlabfc_(), dlabax_(), dlaran_();
     static doublereal rq;
     static integer numvec;
     static doublereal gap;
@@ -1709,7 +1704,7 @@ L330:
             goto L305;
         }
         if (j == nval) {
-            return 0;
+            return;
         }
         m = j + 1;
         i__2 = nval;
@@ -1718,19 +1713,14 @@ L330:
                     eigvec_dim1 + 1], &c__1);
             daxpy_(n, &d__1, &eigvec[j * eigvec_dim1 + 1], &c__1, &eigvec[i *
                     eigvec_dim1 + 1], &c__1);
-/* L340: */
         }
-/* L400: */
     }
-    return 0;
-
-/* L500: */
 } /* dlabcm_ */
 
 
 /* *********************************************************************** */
 
-/* Subroutine */ int dlabfc_(n, nband, a, sigma, number, lde, eigvec, numl,
+/* Subroutine */ void dlabfc_(n, nband, a, sigma, number, lde, eigvec, numl,
         ldad, atemp, d, atol)
 integer *n, *nband;
 doublereal *a, *sigma;
@@ -1750,7 +1740,7 @@ doublereal *atemp, *d, *atol;
     /* Local variables */
     static doublereal zero[1];
     static integer i, j, k, l, m;
-    extern /* Subroutine */ int dcopy_(), dswap_(), daxpy_();
+    extern /* Subroutine */ void dcopy_(), dswap_(), daxpy_();
     static integer la, ld, kk, nb1, lpm;
 
 
@@ -1919,25 +1909,21 @@ L110:
         i__2 = *nband - i + 1;
         dcopy_(&i__2, &d[i + i * d_dim1], &c__1, &atemp[l * atemp_dim1 + 1], &
                 c__1);
-/* L120: */
     }
 
 /*   BACK SUBSTITUTION */
 
     if (*number == 0) {
-        return 0;
+        return;
     }
     i__1 = *n;
     for (kk = 1; kk <= i__1; ++kk) {
         k = *n - kk + 1;
         if ((d__1 = atemp[k * atemp_dim1 + 1], abs(d__1)) <= *atol) {
-            atemp[k * atemp_dim1 + 1] = d_sign(atol, &atemp[k * atemp_dim1 +
-                    1]);
+            atemp[k * atemp_dim1 + 1] = d_sign(atol, &atemp[k * atemp_dim1 + 1]);
         }
 
-/* L130: */
-        i__2 = *number;
-        for (i = 1; i <= i__2; ++i) {
+        for (i = 1; i <= *number; ++i) {
             eigvec[k + i * eigvec_dim1] /= atemp[k * atemp_dim1 + 1];
             m = min(*ldad,k) - 1;
             if (m == 0) {
@@ -1948,19 +1934,16 @@ L110:
                 l = k - j;
                 eigvec[l + i * eigvec_dim1] -= atemp[j + 1 + l * atemp_dim1] *
                          eigvec[k + i * eigvec_dim1];
-/* L140: */
             }
 L150:
             ;
         }
-/* L160: */
     }
-    return 0;
 } /* dlabfc_ */
 
 
 
-/* Subroutine */ int dlaeig_(n, nband, nl, nr, a, eigval, lde, eigvec, bound,
+/* Subroutine */ void dlaeig_(n, nband, nl, nr, a, eigval, lde, eigvec, bound,
         atemp, d, vtemp, eps, tmin, tmax)
 integer *n, *nband, *nl, *nr;
 doublereal *a, *eigval;
@@ -1978,7 +1961,7 @@ doublereal *eigvec, *bound, *atemp, *d, *vtemp, *eps, *tmin, *tmax;
     static doublereal atol;
     static integer nval, i, m;
     static doublereal artol;
-    extern /* Subroutine */ int dlabcm_();
+    extern /* Subroutine */ void dlabcm_();
 
 
 /*  THIS IS A SPECIALIZED VERSION OF THE SUBROUTINE BNDEIG TAILORED */
@@ -2024,7 +2007,7 @@ doublereal *eigvec, *bound, *atemp, *d, *vtemp, *eps, *tmin, *tmax;
     }
     eigval[1] = a[a_dim1 + 1];
     eigvec[eigvec_dim1 + 1] = 1.;
-    return 0;
+    return;
 
 /*   SET UP INITIAL EIGENVALUE BOUNDS */
 
@@ -2034,7 +2017,6 @@ L30:
     for (i = 2; i <= i__1; ++i) {
         bound[(i << 1) + 1] = *tmin;
         bound[(i << 1) + 2] = *tmax;
-/* L50: */
     }
     bound[4] = *tmax;
     bound[(nval + 2 << 1) + 1] = *tmin;
@@ -2045,17 +2027,15 @@ L30:
         bound[(nval + 2 << 1) + 1] = *tmax;
     }
 
-/* L60: */
     dlabcm_(n, nband, nl, nr, &a[a_offset], &eigval[1], lde, &eigvec[
             eigvec_offset], &atol, &artol, &bound[3], &atemp[1], &d[1], &
             vtemp[1]);
-    return 0;
 } /* dlaeig_ */
 
 
 /* *********************************************************************** */
 
-/* Subroutine */ int dlager_(n, nband, nstart, a, tmin, tmax)
+/* Subroutine */ void dlager_(n, nband, nstart, a, tmin, tmax)
 integer *n, *nband, *nstart;
 doublereal *a, *tmin, *tmax;
 {
@@ -2115,13 +2095,13 @@ L40:
         *tmax = max(d__1,d__2);
 /* L50: */
     }
-    return 0;
+    return;
 } /* dlager_ */
 
 
 /* *********************************************************************** */
 
-/* Subroutine */ int dlaran_(n, x)
+/* Subroutine */ void dlaran_(n, x)
 integer *n;
 doublereal *x;
 {
@@ -2162,15 +2142,13 @@ doublereal *x;
     i__1 = *n;
     for (i = 1; i <= i__1; ++i) {
         x[i] = (doublereal) urand_(&iurand) - .5;
-/* L10: */
     }
-    return 0;
 } /* dlaran_ */
 
 
 /* ------------------------------------------------------------------ */
 
-/* Subroutine */ int dmvpc_(nblock, bet, maxj, j, s, number, resnrm, orthcf,
+/* Subroutine */ void dmvpc_(nblock, bet, maxj, j, s, number, resnrm, orthcf,
         rv)
 integer *nblock;
 doublereal *bet;
@@ -2223,20 +2201,17 @@ doublereal *resnrm, *orthcf, *rv;
 /* Computing MIN */
             d__2 = orthcf[i], d__3 = (d__1 = rv[k], abs(d__1));
             orthcf[i] = min(d__2,d__3);
-/* L10: */
         }
         resnrm[i] = dnrm2_(nblock, &rv[1], &c__1);
-/* L20: */
     }
-    return 0;
 } /* dmvpc_ */
 
 
 /* ------------------------------------------------------------------ */
 
-/* Subroutine */ int dnppla_(op, iovect, n, nperm, nop, nmval, val, nmvec,
+/* Subroutine */ void dnppla_(op, iovect, n, nperm, nop, nmval, val, nmvec,
         vec, nblock, h, hv, p, q, bound, d, delta, small, raritz, eps)
-/* Subroutine */ int (*op) (), (*iovect) ();
+/* Subroutine */ void (*op) (), (*iovect) ();
 integer *n, *nperm, *nop, *nmval;
 doublereal *val;
 integer *nmvec;
@@ -2257,13 +2232,13 @@ doublereal *eps;
     static doublereal hmin, hmax, temp;
     extern doublereal dnrm2_();
     static integer i, j, k, l, m;
-    extern /* Subroutine */ int dcopy_();
+    extern /* Subroutine */ void dcopy_();
     static doublereal dzero[1];
-    extern /* Subroutine */ int daxpy_();
+    extern /* Subroutine */ void daxpy_();
     static integer jj;
-    extern /* Subroutine */ int dlaeig_();
+    extern /* Subroutine */ void dlaeig_();
     static integer kk;
-    extern /* Subroutine */ int dlager_();
+    extern /* Subroutine */ void dlager_();
 
 
 
@@ -2496,7 +2471,7 @@ L260:
 L270:
     ++i;
     if (i > *nperm) {
-        return 0;
+        return;
     }
     temp = *delta - val[i + val_dim1];
     if (! (*small)) {
@@ -2514,7 +2489,7 @@ L270:
 
 /* ------------------------------------------------------------------ */
 
-/* Subroutine */ int dortqr_(nz, n, nblock, z, b)
+/* Subroutine */ void dortqr_(nz, n, nblock, z, b)
 integer *nz, *n, *nblock;
 doublereal *z, *b;
 {
@@ -2530,9 +2505,9 @@ doublereal *z, *b;
     static doublereal temp;
     extern doublereal dnrm2_();
     static integer i, j, k, m;
-    extern /* Subroutine */ int dscal_();
+    extern /* Subroutine */ void dscal_();
     static doublereal sigma;
-    extern /* Subroutine */ int daxpy_();
+    extern /* Subroutine */ void daxpy_();
     static integer length;
     static doublereal tau;
 
@@ -2617,22 +2592,19 @@ L30:
                     z_dim1], &c__1) / tau;
             daxpy_(&length, &temp, &z[i + i * z_dim1], &c__1, &z[i + k *
                     z_dim1], &c__1);
-/* L40: */
         }
 L50:
         d__1 = -1. / sigma;
         dscal_(&length, &d__1, &z[i + i * z_dim1], &c__1);
 L60:
         z[i + i * z_dim1] += 1.;
-/* L70: */
     }
-    return 0;
 } /* dortqr_ */
 
 
 /* ------------------------------------------------------------------- */
 
-/* Subroutine */ int dvsort_(num, val, res, iflag, v, nmvec, n, vec)
+/* Subroutine */ void dvsort_(num, val, res, iflag, v, nmvec, n, vec)
 integer *num;
 doublereal *val, *res;
 integer *iflag;
@@ -2646,7 +2618,7 @@ doublereal *vec;
     /* Local variables */
     static doublereal temp;
     static integer i, k, m;
-    extern /* Subroutine */ int dswap_();
+    extern /* Subroutine */ void dswap_();
 
 
 /*  THIS SUBROUTINE SORTS THE EIGENVALUES (VAL) IN ASCENDING ORDER */
@@ -2661,7 +2633,7 @@ doublereal *vec;
 
     /* Function Body */
     if (*num <= 1) {
-        return 0;
+        return;
     }
     i__1 = *num;
     for (i = 2; i <= i__1; ++i) {
@@ -2688,9 +2660,7 @@ doublereal *vec;
 L10:
             ;
         }
-/* L20: */
     }
-    return 0;
 } /* dvsort_ */
 
 doublereal urand_(iy)

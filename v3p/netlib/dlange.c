@@ -25,7 +25,7 @@ doublereal dlange_(char *norm, integer *m, integer *n, doublereal *a, integer
     static doublereal scale;
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     static doublereal value;
-    extern /* Subroutine */ int dlassq_(integer *, doublereal *, integer *,
+    extern /* Subroutine */ void dlassq_(integer *, doublereal *, integer *,
             doublereal *, doublereal *);
     static doublereal sum;
 

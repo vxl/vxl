@@ -6,7 +6,7 @@
 #include "f2c.h"
 
 /*<       SUBROUTINE DLACPY( UPLO, M, N, A, LDA, B, LDB ) >*/
-/* Subroutine */ int dlacpy_(char *uplo, integer *m, integer *n, doublereal *
+/* Subroutine */ void dlacpy_(char *uplo, integer *m, integer *n, doublereal *
         a, integer *lda, doublereal *b, integer *ldb, ftnlen uplo_len)
 {
     /* System generated locals */
@@ -140,11 +140,8 @@
         }
 /*<       END IF >*/
     }
-/*<       RETURN >*/
-    return 0;
 
 /*     End of DLACPY */
 
-/*<       END >*/
 } /* dlacpy_ */
 

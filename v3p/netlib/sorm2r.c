@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* Subroutine */ int sorm2r_(char *side, char *trans, integer *m, integer *n,
+/* Subroutine */ void sorm2r_(char *side, char *trans, integer *m, integer *n,
         integer *k, real *a, integer *lda, real *tau, real *c, integer *ldc,
         real *work, integer *info, ftnlen side_len, ftnlen trans_len)
 {
@@ -20,10 +20,10 @@ static integer c__1 = 1;
     static logical left;
     static integer i;
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int slarf_(char *, integer *, integer *, real *,
+    extern /* Subroutine */ void slarf_(char *, integer *, integer *, real *,
             integer *, real *, real *, integer *, real *, ftnlen);
     static integer i1, i2, i3, ic, jc, mi, ni, nq;
-    extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
+    extern /* Subroutine */ void xerbla_(char *, integer *, ftnlen);
     static logical notran;
     static real aii;
 
@@ -170,13 +170,13 @@ static integer c__1 = 1;
     if (*info != 0) {
         i__1 = -(*info);
         xerbla_("SORM2R", &i__1, 6L);
-        return 0;
+        return;
     }
 
 /*     Quick return if possible */
 
     if (*m == 0 || *n == 0 || *k == 0) {
-        return 0;
+        return;
     }
 
     if (left && ! notran || ! left && notran) {
@@ -221,9 +221,7 @@ static integer c__1 = 1;
         slarf_(side, &mi, &ni, &a[i + i * a_dim1], &c__1, &tau[i], &c[ic + jc
                 * c_dim1], ldc, &work[1], 1L);
         a[i + i * a_dim1] = aii;
-/* L10: */
     }
-    return 0;
 
 /*     End of SORM2R */
 

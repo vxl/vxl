@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* Subroutine */ int slas2_(real *f, real *g, real *h, real *ssmin, real *
+/* Subroutine */ void slas2_(real *f, real *g, real *h, real *ssmin, real *
         ssmax)
 {
     /* System generated locals */
@@ -135,7 +135,7 @@ if */
             }
         }
     }
-    return 0;
+    return;
 
 /*     End of SLAS2 */
 

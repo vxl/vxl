@@ -5,7 +5,9 @@
 
 #include "f2c.h"
 
-/* Subroutine */ int zlaset_(uplo, m, n, alpha, beta, a, lda, uplo_len)
+/* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
+
+/* Subroutine */ void zlaset_(uplo, m, n, alpha, beta, a, lda, uplo_len)
 char *uplo;
 integer *m, *n;
 doublecomplex *alpha, *beta, *a;
@@ -13,7 +15,7 @@ integer *lda;
 ftnlen uplo_len;
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    integer i__1;
 
     /* Local variables */
     static integer i, j;
@@ -25,113 +27,77 @@ ftnlen uplo_len;
 /*     Courant Institute, Argonne National Lab, and Rice University */
 /*     October 31, 1992 */
 
-/*     .. Scalar Arguments .. */
-/*     .. */
-/*     .. Array Arguments .. */
-/*     .. */
-
-/*  Purpose */
-/*  ======= */
-
-/*  ZLASET initializes a 2-D array A to BETA on the diagonal and */
-/*  ALPHA on the offdiagonals. */
-
-/*  Arguments */
-/*  ========= */
-
-/*  UPLO    (input) CHARACTER*1 */
-/*          Specifies the part of the matrix A to be set. */
-/*          = 'U':      Upper triangular part is set. The lower triangle
-*/
-/*                      is unchanged. */
-/*          = 'L':      Lower triangular part is set. The upper triangle
-*/
-/*                      is unchanged. */
-/*          Otherwise:  All of the matrix A is set. */
-
-/*  M       (input) INTEGER */
-/*          On entry, M specifies the number of rows of A. */
-
-/*  N       (input) INTEGER */
-/*          On entry, N specifies the number of columns of A. */
-
-/*  ALPHA   (input) COMPLEX*16 */
-/*          All the offdiagonal array elements are set to ALPHA. */
-
-/*  BETA    (input) COMPLEX*16 */
-/*          All the diagonal array elements are set to BETA. */
-
-/*  A       (input/output) COMPLEX*16 array, dimension (LDA,N) */
-/*          On entry, the m by n matrix A. */
-/*          On exit, A(i,j) = ALPHA, 1 <= i <= m, 1 <= j <= n, i.ne.j; */
-/*                   A(i,i) = BETA , 1 <= i <= min(m,n) */
-
-/*  LDA     (input) INTEGER */
-/*          The leading dimension of the array A.  LDA >= max(1,M). */
-
-/*  =====================================================================
-*/
-
-/*     .. Local Scalars .. */
-/*     .. */
-/*     .. External Functions .. */
-/*     .. */
-/*     .. Intrinsic Functions .. */
-/*     .. */
-/*     .. Executable Statements .. */
-
-    /* Parameter adjustments */
-    a_dim1 = *lda;
-    a_offset = a_dim1 + 1;
-    a -= a_offset;
+/*  ===================================================================== */
+/*                                                                        */
+/*  Purpose                                                               */
+/*  =======                                                               */
+/*                                                                        */
+/*  ZLASET initializes a 2-D array A to BETA on the diagonal and          */
+/*  ALPHA on the offdiagonals.                                            */
+/*                                                                        */
+/*  Arguments                                                             */
+/*  =========                                                             */
+/*                                                                        */
+/*  UPLO    (input) CHARACTER*1                                           */
+/*          Specifies the part of the matrix A to be set.                 */
+/*          = 'U':      Upper triangular part is set. The lower triangle  */
+/*                      is unchanged.                                     */
+/*          = 'L':      Lower triangular part is set. The upper triangle  */
+/*                      is unchanged.                                     */
+/*          Otherwise:  All of the matrix A is set.                       */
+/*                                                                        */
+/*  M       (input) INTEGER                                               */
+/*          On entry, M specifies the number of rows of A.                */
+/*                                                                        */
+/*  N       (input) INTEGER                                               */
+/*          On entry, N specifies the number of columns of A.             */
+/*                                                                        */
+/*  ALPHA   (input) COMPLEX*16                                            */
+/*          All the offdiagonal array elements are set to ALPHA.          */
+/*                                                                        */
+/*  BETA    (input) COMPLEX*16                                            */
+/*          All the diagonal array elements are set to BETA.              */
+/*                                                                        */
+/*  A       (input/output) COMPLEX*16 array, dimension (LDA,N)            */
+/*          On entry, the m by n matrix A.                                */
+/*          On exit, A(i,j) = ALPHA, 1 <= i <= m, 1 <= j <= n, i.ne.j;    */
+/*                   A(i,i) = BETA , 1 <= i <= min(m,n)                   */
+/*                                                                        */
+/*  LDA     (input) INTEGER                                               */
+/*          The leading dimension of the array A.  LDA >= max(1,M).       */
+/*                                                                        */
+/*  ===================================================================== */
 
     /* Function Body */
+
     if (lsame_(uplo, "U", 1L, 1L)) {
 
-/*        Set the diagonal to BETA and the strictly upper triangular
-*/
+/*        Set the diagonal to BETA and the strictly upper triangular */
 /*        part of the array to ALPHA. */
 
-        i__1 = *n;
-        for (j = 2; j <= i__1; ++j) {
-/* Computing MIN */
-            i__3 = j - 1;
-            i__2 = min(i__3,*m);
-            for (i = 1; i <= i__2; ++i) {
-                i__3 = i + j * a_dim1;
-                a[i__3].r = alpha->r, a[i__3].i = alpha->i;
-/* L10: */
+        for (j = 1; j < *n; ++j) {
+            for (i = 0; i < j && i < *m; ++i) {
+                i__1 = i + j * *lda;
+                a[i__1].r = alpha->r, a[i__1].i = alpha->i;
             }
-/* L20: */
         }
-        i__1 = min(*n,*m);
-        for (i = 1; i <= i__1; ++i) {
-            i__2 = i + i * a_dim1;
-            a[i__2].r = beta->r, a[i__2].i = beta->i;
-/* L30: */
+        for (j = 0; j < *n && j < *m; ++j) {
+            i__1 = j + j * *lda;
+            a[i__1].r = beta->r, a[i__1].i = beta->i;
         }
 
     } else if (lsame_(uplo, "L", 1L, 1L)) {
 
-/*        Set the diagonal to BETA and the strictly lower triangular
-*/
+/*        Set the diagonal to BETA and the strictly lower triangular */
 /*        part of the array to ALPHA. */
 
-        i__1 = min(*m,*n);
-        for (j = 1; j <= i__1; ++j) {
-            i__2 = *m;
-            for (i = j + 1; i <= i__2; ++i) {
-                i__3 = i + j * a_dim1;
-                a[i__3].r = alpha->r, a[i__3].i = alpha->i;
-/* L40: */
+        for (j = 0; j < *m && j < *n; ++j) {
+            for (i = j + 1; i < *m; ++i) {
+                i__1 = i + j * *lda;
+                a[i__1].r = alpha->r, a[i__1].i = alpha->i;
             }
-/* L50: */
-        }
-        i__1 = min(*n,*m);
-        for (i = 1; i <= i__1; ++i) {
-            i__2 = i + i * a_dim1;
-            a[i__2].r = beta->r, a[i__2].i = beta->i;
-/* L60: */
+            i__1 = j + j * *lda;
+            a[i__1].r = beta->r, a[i__1].i = beta->i;
         }
 
     } else {
@@ -139,25 +105,17 @@ ftnlen uplo_len;
 /*        Set the array to BETA on the diagonal and ALPHA on the */
 /*        offdiagonal. */
 
-        i__1 = *n;
-        for (j = 1; j <= i__1; ++j) {
-            i__2 = *m;
-            for (i = 1; i <= i__2; ++i) {
-                i__3 = i + j * a_dim1;
-                a[i__3].r = alpha->r, a[i__3].i = alpha->i;
-/* L70: */
+        for (j = 0; j < *n; ++j) {
+            for (i = 0; i < *m; ++i) {
+                i__1 = i + j * *lda;
+                a[i__1].r = alpha->r, a[i__1].i = alpha->i;
             }
-/* L80: */
         }
-        i__1 = min(*m,*n);
-        for (i = 1; i <= i__1; ++i) {
-            i__2 = i + i * a_dim1;
-            a[i__2].r = beta->r, a[i__2].i = beta->i;
-/* L90: */
+        for (j = 0; j < *m && j < *n; ++j) {
+            i__1 = j + j * *lda;
+            a[i__1].r = beta->r, a[i__1].i = beta->i;
         }
     }
-
-    return 0;
 
 /*     End of ZLASET */
 

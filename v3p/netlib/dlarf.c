@@ -12,7 +12,7 @@ static doublereal c_b5 = 0.;
 static integer c__1 = 1;
 
 /*<       SUBROUTINE DLARF( SIDE, M, N, V, INCV, TAU, C, LDC, WORK ) >*/
-/* Subroutine */ int dlarf_(char *side, integer *m, integer *n, doublereal *v,
+/* Subroutine */ void dlarf_(char *side, integer *m, integer *n, doublereal *v,
          integer *incv, doublereal *tau, doublereal *c, integer *ldc,
         doublereal *work, ftnlen side_len)
 {
@@ -21,11 +21,11 @@ static integer c__1 = 1;
     doublereal d__1;
 
     /* Local variables */
-    extern /* Subroutine */ int dger_(integer *, integer *, doublereal *,
+    extern /* Subroutine */ void dger_(integer *, integer *, doublereal *,
             doublereal *, integer *, doublereal *, integer *, doublereal *,
             integer *);
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int dgemv_(char *, integer *, integer *,
+    extern /* Subroutine */ void dgemv_(char *, integer *, integer *,
             doublereal *, doublereal *, integer *, doublereal *, integer *,
             doublereal *, doublereal *, integer *, ftnlen);
 
@@ -164,11 +164,8 @@ static integer c__1 = 1;
         }
 /*<       END IF >*/
     }
-/*<       RETURN >*/
-    return 0;
 
 /*     End of DLARF */
 
-/*<       END >*/
 } /* dlarf_ */
 

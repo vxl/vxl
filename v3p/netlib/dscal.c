@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* Subroutine */ int dscal_(n, da, dx, incx)
+/* Subroutine */ void dscal_(n, da, dx, incx)
 integer *n;
 doublereal *da, *dx;
 integer *incx;
@@ -29,7 +29,7 @@ integer *incx;
 
     /* Function Body */
     if (*n <= 0 || *incx <= 0) {
-        return 0;
+        return;
     }
     if (*incx == 1) {
         goto L20;
@@ -42,9 +42,8 @@ integer *incx;
     i__2 = *incx;
     for (i = 1; i__2 < 0 ? i >= i__1 : i <= i__1; i += i__2) {
         dx[i] = *da * dx[i];
-/* L10: */
     }
-    return 0;
+    return;
 
 /*        code for increment equal to 1 */
 
@@ -59,10 +58,9 @@ L20:
     i__2 = m;
     for (i = 1; i <= i__2; ++i) {
         dx[i] = *da * dx[i];
-/* L30: */
     }
     if (*n < 5) {
-        return 0;
+        return;
     }
 L40:
     mp1 = m + 1;
@@ -73,8 +71,6 @@ L40:
         dx[i + 2] = *da * dx[i + 2];
         dx[i + 3] = *da * dx[i + 3];
         dx[i + 4] = *da * dx[i + 4];
-/* L50: */
     }
-    return 0;
 } /* dscal_ */
 

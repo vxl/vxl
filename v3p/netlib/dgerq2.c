@@ -6,7 +6,7 @@
 #include "f2c.h"
 
 /*<       SUBROUTINE DGERQ2( M, N, A, LDA, TAU, WORK, INFO ) >*/
-/* Subroutine */ int dgerq2_(integer *m, integer *n, doublereal *a, integer *
+/* Subroutine */ void dgerq2_(integer *m, integer *n, doublereal *a, integer *
         lda, doublereal *tau, doublereal *work, integer *info)
 {
     /* System generated locals */
@@ -14,7 +14,7 @@
 
     /* Local variables */
     static integer i, k;
-    extern /* Subroutine */ int dlarf_(char *, integer *, integer *,
+    extern /* Subroutine */ void dlarf_(char *, integer *, integer *,
             doublereal *, integer *, doublereal *, doublereal *, integer *,
             doublereal *, ftnlen), dlarfg_(integer *, doublereal *,
             doublereal *, integer *, doublereal *), xerbla_(char *, integer *,
@@ -144,7 +144,7 @@
         i__1 = -(*info);
         xerbla_("DGERQ2", &i__1, 6L);
 /*<          RETURN >*/
-        return 0;
+        return;
 /*<       END IF >*/
     }
 
@@ -175,14 +175,9 @@
                 a[a_offset], lda, &work[1], 5L);
 /*<          A( M-K+I, N-K+I ) = AII >*/
         a[*m - k + i + (*n - k + i) * a_dim1] = aii;
-/*<    10 CONTINUE >*/
-/* L10: */
     }
-/*<       RETURN >*/
-    return 0;
 
 /*     End of DGERQ2 */
 
-/*<       END >*/
 } /* dgerq2_ */
 

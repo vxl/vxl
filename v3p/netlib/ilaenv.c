@@ -16,7 +16,7 @@ ftnlen opts_len;
     integer ret_val;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy();
+    /* Subroutine */ void s_copy();
     integer s_cmp();
 
     /* Local variables */

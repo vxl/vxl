@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* Subroutine */ int sscal_(n, sa, sx, incx)
+/* Subroutine */ void sscal_(n, sa, sx, incx)
 integer *n;
 real *sa, *sx;
 integer *incx;
@@ -29,7 +29,7 @@ integer *incx;
 
     /* Function Body */
     if (*n <= 0 || *incx <= 0) {
-        return 0;
+        return;
     }
     if (*incx == 1) {
         goto L20;
@@ -44,7 +44,7 @@ integer *incx;
         sx[i] = *sa * sx[i];
 /* L10: */
     }
-    return 0;
+    return;
 
 /*        code for increment equal to 1 */
 
@@ -62,7 +62,7 @@ L20:
 /* L30: */
     }
     if (*n < 5) {
-        return 0;
+        return;
     }
 L40:
     mp1 = m + 1;
@@ -75,6 +75,6 @@ L40:
         sx[i + 4] = *sa * sx[i + 4];
 /* L50: */
     }
-    return 0;
+    return;
 } /* sscal_ */
 

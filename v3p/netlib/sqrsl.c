@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* Subroutine */ int sqrsl_(x, ldx, n, k, qraux, y, qy, qty, b, rsd, xb, job,
+/* Subroutine */ void sqrsl_(x, ldx, n, k, qraux, y, qy, qty, b, rsd, xb, job,
         info)
 real *x;
 integer *ldx, *n, *k;
@@ -25,7 +25,7 @@ integer *job, *info;
     static logical cqty;
     static integer i, j;
     static real t;
-    extern /* Subroutine */ int scopy_(), saxpy_();
+    extern /* Subroutine */ void scopy_(), saxpy_();
     static logical cb;
     static integer jj;
     static logical cr;
@@ -392,6 +392,6 @@ L220:
     }
 L240:
 L250:
-    return 0;
+    return;
 } /* sqrsl_ */
 

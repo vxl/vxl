@@ -5,21 +5,13 @@
 
 #include "f2c.h"
 
+/* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
+
 /* Double Complex */ void zladiv_( ret_val, x, y)
 doublecomplex * ret_val;
 doublecomplex *x, *y;
 {
-    /* System generated locals */
-    doublereal d__1, d__2, d__3, d__4;
-    doublecomplex z__1;
-
-    /* Builtin functions */
-    double d_imag();
-
-    /* Local variables */
-    static doublereal zi;
-    extern /* Subroutine */ int dladiv_();
-    static doublereal zr;
+    extern /* Subroutine */ void dladiv_();
 
 
 /*  -- LAPACK auxiliary routine (version 2.0) -- */
@@ -27,44 +19,26 @@ doublecomplex *x, *y;
 /*     Courant Institute, Argonne National Lab, and Rice University */
 /*     October 31, 1992 */
 
-/*     .. Scalar Arguments .. */
-/*     .. */
+/*  ===================================================================== */
+/*                                                                        */
+/*  Purpose                                                               */
+/*  =======                                                               */
+/*                                                                        */
+/*  ZLADIV := X / Y, where X and Y are complex.  The computation of X / Y */
+/*  will not overflow on an intermediary step unless the results          */
+/*  overflows.                                                            */
+/*                                                                        */
+/*  Arguments                                                             */
+/*  =========                                                             */
+/*                                                                        */
+/*  X       (input) COMPLEX*16                                            */
+/*  Y       (input) COMPLEX*16                                            */
+/*          The complex scalars X and Y.                                  */
+/*                                                                        */
+/*  ===================================================================== */
 
-/*  Purpose */
-/*  ======= */
-
-/*  ZLADIV := X / Y, where X and Y are complex.  The computation of X / Y
-*/
-/*  will not overflow on an intermediary step unless the results */
-/*  overflows. */
-
-/*  Arguments */
-/*  ========= */
-
-/*  X       (input) COMPLEX*16 */
-/*  Y       (input) COMPLEX*16 */
-/*          The complex scalars X and Y. */
-
-/*  =====================================================================
-*/
-
-/*     .. Local Scalars .. */
-/*     .. */
-/*     .. External Subroutines .. */
-/*     .. */
-/*     .. Intrinsic Functions .. */
-/*     .. */
-/*     .. Executable Statements .. */
-
-    d__1 = x->r;
-    d__2 = d_imag(x);
-    d__3 = y->r;
-    d__4 = d_imag(y);
-    dladiv_(&d__1, &d__2, &d__3, &d__4, &zr, &zi);
-    z__1.r = zr, z__1.i = zi;
-     ret_val->r = z__1.r,  ret_val->i = z__1.i;
-
-    return ;
+    dladiv_(&(x->r), &(x->i), &(y->r), &(y->i), &(ret_val->r), &(ret_val->i));
+    return;
 
 /*     End of ZLADIV */
 

@@ -4,7 +4,7 @@
 
 #include "f2c.h"
 
-/* Subroutine */ int qrsolv_(n, r, ldr, ipvt, diag, qtb, x, sdiag, wa)
+/* Subroutine */ void qrsolv_(n, r, ldr, ipvt, diag, qtb, x, sdiag, wa)
 integer *n;
 doublereal *r;
 integer *ldr, *ipvt;
@@ -130,11 +130,9 @@ doublereal *diag, *qtb, *x, *sdiag, *wa;
         i__2 = *n;
         for (i = j; i <= i__2; ++i) {
             r[i + j * r_dim1] = r[j + i * r_dim1];
-/* L10: */
         }
         x[j] = r[j + j * r_dim1];
         wa[j] = qtb[j];
-/* L20: */
     }
 
 /*     eliminate the diagonal matrix d using a givens rotation. */
@@ -152,7 +150,6 @@ doublereal *diag, *qtb, *x, *sdiag, *wa;
         i__2 = *n;
         for (k = j; k <= i__2; ++k) {
             sdiag[k] = zero;
-/* L30: */
         }
         sdiag[j] = diag[l];
 
@@ -207,10 +204,8 @@ L50:
                 temp = cos_ * r[i + k * r_dim1] + sin_ * sdiag[i];
                 sdiag[i] = -sin_ * r[i + k * r_dim1] + cos_ * sdiag[i];
                 r[i + k * r_dim1] = temp;
-/* L60: */
             }
 L70:
-/* L80: */
             ;
         }
 L90:
@@ -220,7 +215,6 @@ L90:
 
         sdiag[j] = r[j + j * r_dim1];
         r[j + j * r_dim1] = x[j];
-/* L100: */
     }
 
 /*     solve the triangular system for z. if the system is */
@@ -235,7 +229,6 @@ L90:
         if (nsing < *n) {
             wa[j] = zero;
         }
-/* L110: */
     }
     if (nsing < 1) {
         goto L150;
@@ -251,11 +244,9 @@ L90:
         i__2 = nsing;
         for (i = jp1; i <= i__2; ++i) {
             sum += r[i + j * r_dim1] * wa[i];
-/* L120: */
         }
 L130:
         wa[j] = (wa[j] - sum) / sdiag[j];
-/* L140: */
     }
 L150:
 
@@ -265,9 +256,7 @@ L150:
     for (j = 1; j <= i__1; ++j) {
         l = ipvt[j];
         x[l] = wa[j];
-/* L160: */
     }
-    return 0;
 
 /*     last card of subroutine qrsolv. */
 

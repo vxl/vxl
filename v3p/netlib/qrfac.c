@@ -8,7 +8,7 @@
 
 static integer c__1 = 1;
 
-/* Subroutine */ int qrfac_(m, n, a, lda, pivot, ipvt, lipvt, rdiag, acnorm,
+/* Subroutine */ void qrfac_(m, n, a, lda, pivot, ipvt, lipvt, rdiag, acnorm,
         wa)
 integer *m, *n;
 doublereal *a;
@@ -244,7 +244,7 @@ L100:
         rdiag[j] = -ajnorm;
 /* L110: */
     }
-    return 0;
+    return;
 
 /*     last card of subroutine qrfac. */
 

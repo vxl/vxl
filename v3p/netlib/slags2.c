@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* Subroutine */ int slags2_(logical *upper, real *a1, real *a2, real *a3,
+/* Subroutine */ void slags2_(logical *upper, real *a1, real *a2, real *a3,
         real *b1, real *b2, real *b3, real *csu, real *snu, real *csv, real *
         snv, real *csq, real *snq)
 {
@@ -15,7 +15,7 @@
     /* Local variables */
     static real aua11, aua12, aua21, aua22, avb11, avb12, avb21, avb22, ua11r,
              ua22r, vb11r, vb22r, a, b, c, d, r, s1, s2;
-    extern /* Subroutine */ int slasv2_(real *, real *, real *, real *, real *
+    extern /* Subroutine */ void slasv2_(real *, real *, real *, real *, real *
             , real *, real *, real *, real *), slartg_(real *, real *, real *,
              real *, real *);
     static real ua11, ua12, ua21, ua22, vb11, vb12, vb21, vb22, csl, csr, snl,
@@ -283,8 +283,6 @@
         }
 
     }
-
-    return 0;
 
 /*     End of SLAGS2 */
 

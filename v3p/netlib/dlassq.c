@@ -6,7 +6,7 @@
 #include "f2c.h"
 
 /*<       SUBROUTINE DLASSQ( N, X, INCX, SCALE, SUMSQ ) >*/
-/* Subroutine */ int dlassq_(integer *n, doublereal *x, integer *incx,
+/* Subroutine */ void dlassq_(integer *n, doublereal *x, integer *incx,
         doublereal *scale, doublereal *sumsq)
 {
     /* System generated locals */
@@ -127,11 +127,8 @@
         }
 /*<       END IF >*/
     }
-/*<       RETURN >*/
-    return 0;
 
 /*     End of DLASSQ */
 
-/*<       END >*/
 } /* dlassq_ */
 

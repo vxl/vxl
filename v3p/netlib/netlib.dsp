@@ -209,10 +209,6 @@ SOURCE=.\c_div.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\c_sqrt.c
-# End Source File
-# Begin Source File
-
 SOURCE=.\cabs.c
 # End Source File
 # Begin Source File
@@ -230,14 +226,6 @@ SOURCE=.\ccopy.c
 # Begin Source File
 
 SOURCE=.\cdotc.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\cdabs.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\cdsqrt.c
 # End Source File
 # Begin Source File
 
@@ -849,11 +837,23 @@ SOURCE=.\z_sqrt.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\zaxpy.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\zcopy.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\zdotc.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\zdotu.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\zdrot.c
 # End Source File
 # Begin Source File
 
@@ -969,7 +969,15 @@ SOURCE=.\zqrsl.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\zscal.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\zsvdc.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\zswap.c
 # End Source File
 # Begin Source File
 

@@ -10,7 +10,7 @@
 
 static integer c__1 = 1;
 
-/* Subroutine */ int chscdf_(x, nu, cdf)
+/* Subroutine */ void chscdf_(x, nu, cdf)
 real *x;
 integer *nu;
 real *cdf;
@@ -56,7 +56,7 @@ real *cdf;
     static real sd;
     static doublereal dw, dx;
     static integer ievodd;
-    extern /* Subroutine */ int norcdf_();
+    extern /* Subroutine */ void norcdf_();
     static doublereal chi;
     static real anu;
     static doublereal dnu;
@@ -131,13 +131,13 @@ L50:
     fprintf(stderr,fmt_47,*nu);
 
     *cdf = (float)0.;
-    return 0;
+    return;
 L55:
     fprintf(stderr,fmt_4);
     fprintf(stderr,fmt_46,*x);
 
     *cdf = (float)0.;
-    return 0;
+    return;
 L90:
 
 /* -----START POINT-----------------------------------------------------
@@ -182,10 +182,10 @@ L90:
     goto L109;
 L105:
     *cdf = (float)0.;
-    return 0;
+    return;
 L107:
     *cdf = (float)1.;
-    return 0;
+    return;
 L109:
 
 /*     DISTINGUISH BETWEEN 3 SEPARATE REGIONS */
@@ -205,7 +205,7 @@ L109:
     }
     ibran = 1;
     fprintf(stderr,fmt_99,ibran);
-    return 0;
+    return;
 
 /*     TREAT THE SMALL AND MODERATE DEGREES OF FREEDOM CASE */
 /*     (THAT IS, WHEN NU IS SMALLER THAN 1000). */
@@ -255,7 +255,7 @@ L160:
     sum += (1. - dcdfn) * 2.;
 L170:
     *cdf = 1. - sum;
-    return 0;
+    return;
 
 /*     TREAT THE CASE WHEN NU IS LARGE */
 /*     (THAT IS, WHEN NU IS EQUAL TO OR GREATER THAN 1000) */
@@ -269,7 +269,7 @@ L2000:
     u = (pow(d__1, dpower) - 1. + 1. / dfact) * sqrt(dfact);
     norcdf_(&u, &cdfn);
     *cdf = cdfn;
-    return 0;
+    return;
 
 /*     TREAT THE CASE WHEN NU IS LARGE */
 /*     (THAT IS, WHEN NU IS EQUAL TO OR GREATER THAN 1000) */
@@ -301,12 +301,10 @@ L3000:
     u = term0 + term1 + term2 + term3 + term4;
     norcdf_(&u, &cdfn);
     *cdf = cdfn;
-    return 0;
-
 } /* chscdf_ */
 
 /* NORCDF */
-/* Subroutine */ int norcdf_(x, cdf)
+/* Subroutine */ void norcdf_(x, cdf)
 real *x, *cdf;
 {
     /* Initialized data */
@@ -393,7 +391,5 @@ real *x, *cdf;
     if (*x < (float)0.) {
         *cdf = (float)1. - *cdf;
     }
-
-    return 0;
 } /* norcdf_ */
 

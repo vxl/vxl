@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* Subroutine */ int trans_(a, m, n, mn, move, iwrk, iok)
+/* Subroutine */ void trans_(a, m, n, mn, move, iwrk, iok)
 real *a;
 integer *m, *n, *mn, *move, *iwrk, *iok;
 {
@@ -155,7 +155,7 @@ L110:
 /* NORMAL RETURN */
 L120:
     *iok = 0;
-    return 0;
+    return;
 /* IF MATRIX IS SQUARE,EXCHANGE ELEMENTS A(I,J) AND A(J,I). */
 L130:
     n1 = *n - 1;
@@ -178,7 +178,7 @@ L130:
 L160:
     *iok = i;
 L170:
-    return 0;
+    return;
 L180:
     *iok = -1;
     goto L170;

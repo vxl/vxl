@@ -10,7 +10,7 @@
 static integer c__1 = 1;
 
 /*<       SUBROUTINE DORG2R( M, N, K, A, LDA, TAU, WORK, INFO ) >*/
-/* Subroutine */ int dorg2r_(integer *m, integer *n, integer *k, doublereal *
+/* Subroutine */ void dorg2r_(integer *m, integer *n, integer *k, doublereal *
         a, integer *lda, doublereal *tau, doublereal *work, integer *info)
 {
     /* System generated locals */
@@ -19,7 +19,7 @@ static integer c__1 = 1;
 
     /* Local variables */
     static integer i, j, l;
-    extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *,
+    extern /* Subroutine */ void dscal_(integer *, doublereal *, doublereal *,
             integer *), dlarf_(char *, integer *, integer *, doublereal *,
             integer *, doublereal *, doublereal *, integer *, doublereal *,
             ftnlen), xerbla_(char *, integer *, ftnlen);
@@ -138,7 +138,7 @@ static integer c__1 = 1;
         i__1 = -(*info);
         xerbla_("DORG2R", &i__1, 6L);
 /*<          RETURN >*/
-        return 0;
+        return;
 /*<       END IF >*/
     }
 
@@ -146,7 +146,7 @@ static integer c__1 = 1;
 
 /*<    >*/
     if (*n <= 0) {
-        return 0;
+        return;
     }
 
 /*     Initialise columns k+1:n to columns of the unit matrix */
@@ -164,8 +164,6 @@ static integer c__1 = 1;
         }
 /*<          A( J, J ) = ONE >*/
         a[j + j * a_dim1] = 1.;
-/*<    20 CONTINUE >*/
-/* L20: */
     }
 
 /*<       DO 40 I = K, 1, -1 >*/
@@ -200,17 +198,10 @@ static integer c__1 = 1;
         for (l = 1; l <= i__1; ++l) {
 /*<             A( L, I ) = ZERO >*/
             a[l + i * a_dim1] = 0.;
-/*<    30    CONTINUE >*/
-/* L30: */
         }
-/*<    40 CONTINUE >*/
-/* L40: */
     }
-/*<       RETURN >*/
-    return 0;
 
 /*     End of DORG2R */
 
-/*<       END >*/
 } /* dorg2r_ */
 

@@ -3,9 +3,6 @@
         -lf2c -lm   (in that order)
 */
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 #include "f2c.h"
 
 /* Table of constant values */
@@ -58,7 +55,7 @@ static integer c__3 = 3;
 /* ---------------------------------------------------------------------- */
 
 /*<       SUBROUTINE GPFA(A,B,TRIGS,INC,JUMP,N,LOT,ISIGN,NJ,INFO) >*/
-/* Subroutine */ int gpfa_(real *a, real *b, real *trigs, integer *inc,
+/* Subroutine */ void gpfa_(real *a, real *b, real *trigs, integer *inc,
         integer *jump, integer *n, integer *lot, integer *isign, integer *nj,
         integer *info)
 {
@@ -67,7 +64,7 @@ static integer c__3 = 3;
 
     /* Local variables */
     static integer i__;
-    extern /* Subroutine */ int gpfa2f_(real *, real *, real *, integer *,
+    extern /* Subroutine */ void gpfa2f_(real *, real *, real *, integer *,
             integer *, integer *, integer *, integer *, integer *), gpfa3f_(
             real *, real *, real *, integer *, integer *, integer *, integer *
             , integer *, integer *), gpfa5f_(real *, real *, real *, integer *
@@ -120,11 +117,5 @@ static integer c__3 = 3;
 
 /*<       INFO = 0 >*/
     *info = 0;
-/*<       RETURN >*/
-    return 0;
-/*<       END >*/
 } /* gpfa_ */
 
-#ifdef __cplusplus
-        }
-#endif

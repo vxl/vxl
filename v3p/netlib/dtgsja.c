@@ -13,7 +13,7 @@ static integer c__1 = 1;
 static doublereal c_b43 = -1.;
 
 /*<    >*/
-/* Subroutine */ int dtgsja_(char *jobu, char *jobv, char *jobq, integer *m,
+/* Subroutine */ void dtgsja_(char *jobu, char *jobv, char *jobq, integer *m,
         integer *p, integer *n, integer *k, integer *l, doublereal *a,
         integer *lda, doublereal *b, integer *ldb, doublereal *tola,
         doublereal *tolb, doublereal *alpha, doublereal *beta, doublereal *u,
@@ -27,14 +27,14 @@ static doublereal c_b43 = -1.;
     doublereal d__1;
 
     /* Local variables */
-    extern /* Subroutine */ int drot_(integer *, doublereal *, integer *,
+    extern /* Subroutine */ void drot_(integer *, doublereal *, integer *,
             doublereal *, integer *, doublereal *, doublereal *);
     static integer i, j;
     static doublereal gamma;
-    extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *,
+    extern /* Subroutine */ void dscal_(integer *, doublereal *, doublereal *,
             integer *);
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int dcopy_(integer *, doublereal *, integer *,
+    extern /* Subroutine */ void dcopy_(integer *, doublereal *, integer *,
             doublereal *, integer *);
     static doublereal a1;
     static logical initq;
@@ -43,13 +43,13 @@ static doublereal c_b43 = -1.;
     static doublereal b2, b3;
     static logical wantu, wantv;
     static doublereal error, ssmin;
-    extern /* Subroutine */ int dlags2_(logical *, doublereal *, doublereal *,
+    extern /* Subroutine */ void dlags2_(logical *, doublereal *, doublereal *,
              doublereal *, doublereal *, doublereal *, doublereal *,
             doublereal *, doublereal *, doublereal *, doublereal *,
             doublereal *, doublereal *), dlapll_(integer *, doublereal *,
             integer *, doublereal *, integer *, doublereal *);
     static integer kcycle;
-    extern /* Subroutine */ int dlartg_(doublereal *, doublereal *,
+    extern /* Subroutine */ void dlartg_(doublereal *, doublereal *,
             doublereal *, doublereal *, doublereal *), dlaset_(char *,
             integer *, integer *, doublereal *, doublereal *, doublereal *,
             integer *, ftnlen), xerbla_(char *, integer *, ftnlen);
@@ -437,7 +437,7 @@ static doublereal c_b43 = -1.;
         i__1 = -(*info);
         xerbla_("DTGSJA", &i__1, 6L);
 /*<          RETURN >*/
-        return 0;
+        return;
 /*<       END IF >*/
     }
 
@@ -586,11 +586,7 @@ trices */
                             l + i) * q_dim1 + 1], &c__1, &csq, &snq);
                 }
 
-/*<    10       CONTINUE >*/
-/* L10: */
             }
-/*<    20    CONTINUE >*/
-/* L20: */
         }
 
 /*<          IF( .NOT.UPPER ) THEN >*/
@@ -624,8 +620,6 @@ onding */
                 dlapll_(&i__2, &work[1], &c__1, &work[*l + 1], &c__1, &ssmin);
 /*<                ERROR = MAX( ERROR, SSMIN ) >*/
                 error = max(error,ssmin);
-/*<    30       CONTINUE >*/
-/* L30: */
             }
 
 /*<    >*/
@@ -637,8 +631,6 @@ onding */
 
 /*        End of cycle loop */
 
-/*<    40 CONTINUE >*/
-/* L40: */
     }
 
 /*     The algorithm has not converged after MAXIT cycles. */
@@ -662,8 +654,6 @@ L50:
         alpha[i] = 1.;
 /*<          BETA( I ) = ZERO >*/
         beta[i] = 0.;
-/*<    60 CONTINUE >*/
-/* L60: */
     }
 
 /*<       DO 70 I = 1, MIN( L, M-K ) >*/
@@ -735,8 +725,6 @@ L50:
 /*<          END IF >*/
         }
 
-/*<    70 CONTINUE >*/
-/* L70: */
     }
 
 /*     Post-assignment */
@@ -771,11 +759,8 @@ L50:
 L100:
 /*<       NCYCLE = KCYCLE >*/
     *ncycle = kcycle;
-/*<       RETURN >*/
-    return 0;
 
 /*     End of DTGSJA */
 
-/*<       END >*/
 } /* dtgsja_ */
 

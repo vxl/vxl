@@ -9,10 +9,10 @@
 
 static integer c__1 = 1;
 
-/* Subroutine */ int lmder_(fcn, m, n, x, fvec, fjac, ldfjac, ftol, xtol,
+/* Subroutine */ void lmder_(fcn, m, n, x, fvec, fjac, ldfjac, ftol, xtol,
         gtol, maxfev, diag, mode, factor, nprint, info, nfev, njev, ipvt, qtf,
          wa1, wa2, wa3, wa4)
-/* Subroutine */ int (*fcn) ();
+/* Subroutine */ void (*fcn) ();
 integer *m, *n;
 doublereal *x, *fvec, *fjac;
 integer *ldfjac;
@@ -46,7 +46,7 @@ doublereal *qtf, *wa1, *wa2, *wa3, *wa4;
     static doublereal temp, temp1, temp2;
     static integer i, j, l, iflag;
     static doublereal delta;
-    extern /* Subroutine */ int qrfac_(), lmpar_();
+    extern /* Subroutine */ void qrfac_(), lmpar_();
     static doublereal ratio;
     extern doublereal enorm_();
     static doublereal fnorm, gnorm, pnorm, xnorm, fnorm1, actred, dirder,
@@ -624,7 +624,6 @@ L300:
     if (*nprint > 0) {
         (*fcn)(m, n, &x[1], &fvec[1], &fjac[fjac_offset], ldfjac, &iflag);
     }
-    return 0;
 
 /*     last card of subroutine lmder. */
 

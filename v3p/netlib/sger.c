@@ -6,7 +6,7 @@
 
 #include "f2c.h"
 
-/* Subroutine */ int sger_(integer *m, integer *n, real *alpha, real *x,
+/* Subroutine */ void sger_(integer *m, integer *n, real *alpha, real *x,
         integer *incx, real *y, integer *incy, real *a, integer *lda)
 {
     /* System generated locals */
@@ -16,7 +16,7 @@
     static integer info;
     static real temp;
     static integer i, j, ix, jy, kx;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
+    extern /* Subroutine */ void xerbla_(char *, integer *);
 
 
 /*  Purpose
@@ -117,13 +117,13 @@
     }
     if (info != 0) {
         xerbla_("SGER  ", &info);
-        return 0;
+        return;
     }
 
 /*     Quick return if possible. */
 
     if (*m == 0 || *n == 0 || *alpha == 0.) {
-        return 0;
+        return;
     }
 
 /*     Start the operations. In this version the elements of A are
@@ -170,8 +170,6 @@
 /* L40: */
         }
     }
-
-    return 0;
 
 /*     End of SGER  . */
 

@@ -10,7 +10,7 @@
 static real c_b12 = 0.f;
 static real c_b22 = 1.f;
 
-/* Subroutine */ int sggsvp_(char *jobu, char *jobv, char *jobq, integer *m,
+/* Subroutine */ void sggsvp_(char *jobu, char *jobv, char *jobq, integer *m,
         integer *p, integer *n, real *a, integer *lda, real *b, integer *ldb,
         real *tola, real *tolb, integer *k, integer *l, real *u, integer *ldu,
          real *v, integer *ldv, real *q, integer *ldq, integer *iwork, real *
@@ -26,7 +26,7 @@ static real c_b22 = 1.f;
     static integer i, j;
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     static logical wantq, wantu, wantv;
-    extern /* Subroutine */ int sgeqr2_(integer *, integer *, real *, integer
+    extern /* Subroutine */ void sgeqr2_(integer *, integer *, real *, integer
             *, real *, real *, integer *), sgerq2_(integer *, integer *, real
             *, integer *, real *, real *, integer *), sorg2r_(integer *,
             integer *, integer *, real *, integer *, real *, real *, integer *
@@ -251,7 +251,7 @@ static real c_b22 = 1.f;
     if (*info != 0) {
         i__1 = -(*info);
         xerbla_("SGGSVP", &i__1, 6L);
-        return 0;
+        return;
     }
 
 /*     QR with column pivoting of B: B*P = V*( S11 S12 ) */
@@ -500,8 +500,6 @@ static real c_b22 = 1.f;
         }
 
     }
-
-    return 0;
 
 /*     End of SGGSVP */
 

@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* Subroutine */ int dposl_(a, lda, n, b)
+/* Subroutine */ void dposl_(a, lda, n, b)
 doublereal *a;
 integer *lda, *n;
 doublereal *b;
@@ -21,7 +21,7 @@ doublereal *b;
     extern doublereal ddot_();
     static integer k;
     static doublereal t;
-    extern /* Subroutine */ int daxpy_();
+    extern /* Subroutine */ void daxpy_();
     static integer kb;
 
 
@@ -87,7 +87,6 @@ doublereal *b;
         i__2 = k - 1;
         t = ddot_(&i__2, &a[k * a_dim1 + 1], &c__1, &b[1], &c__1);
         b[k] = (b[k] - t) / a[k + k * a_dim1];
-/* L10: */
     }
 
 /*     solve r*x = y */
@@ -99,8 +98,6 @@ doublereal *b;
         t = -b[k];
         i__2 = k - 1;
         daxpy_(&i__2, &t, &a[k * a_dim1 + 1], &c__1, &b[1], &c__1);
-/* L20: */
     }
-    return 0;
 } /* dposl_ */
 

@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* Subroutine */ int dpoco_(a, lda, n, rcond, z, info)
+/* Subroutine */ void dpoco_(a, lda, n, rcond, z, info)
 doublereal *a;
 integer *lda, *n;
 doublereal *rcond, *z;
@@ -26,10 +26,10 @@ integer *info;
     extern doublereal ddot_();
     static integer i, j, k;
     static doublereal s, t;
-    extern /* Subroutine */ int dscal_(), dpofa_();
+    extern /* Subroutine */ void dscal_(), dpofa_();
     extern doublereal dasum_();
     static doublereal anorm;
-    extern /* Subroutine */ int daxpy_();
+    extern /* Subroutine */ void daxpy_();
     static doublereal ynorm;
     static integer kb;
     static doublereal ek, sm, wk;
@@ -279,6 +279,6 @@ L160:
         *rcond = 0.;
     }
 L180:
-    return 0;
+    return;
 } /* dpoco_ */
 

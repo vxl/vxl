@@ -5,9 +5,9 @@
 
 #include "f2c.h"
 
-/* Subroutine */ int lmder1_(fcn, m, n, x, fvec, fjac, ldfjac, tol, info,
+/* Subroutine */ void lmder1_(fcn, m, n, x, fvec, fjac, ldfjac, tol, info,
         ipvt, wa, lwa)
-/* Subroutine */ int (*fcn) ();
+/* Subroutine */ void (*fcn) ();
 integer *m, *n;
 doublereal *x, *fvec, *fjac;
 integer *ldfjac;
@@ -27,7 +27,7 @@ integer *lwa;
     /* Local variables */
     static integer mode, nfev, njev;
     static doublereal ftol, gtol, xtol;
-    extern /* Subroutine */ int lmder_();
+    extern /* Subroutine */ void lmder_();
     static integer maxfev, nprint;
 
 /*     ********** */
@@ -190,7 +190,7 @@ integer *lwa;
         *info = 4;
     }
 L10:
-    return 0;
+    return;
 
 /*     last card of subroutine lmder1. */
 

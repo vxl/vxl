@@ -5,17 +5,19 @@
 
 #include "f2c.h"
 
-/* Subroutine */ int cscal_(n, ca, cx, incx)
+/* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
+
+
+/* Subroutine */ void cscal_(n, ca, cx, incx)
 integer *n;
 complex *ca, *cx;
 integer *incx;
 {
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4;
     complex q__1;
 
     /* Local variables */
-    static integer i, nincx;
+    static integer i;
 
 
 /*     scales a vector by a constant. */
@@ -23,45 +25,26 @@ integer *incx;
 /*     modified 3/93 to return if incx .le. 0. */
 /*     modified 12/3/93, array(1) declarations changed to array(*) */
 
-
-    /* Parameter adjustments */
-    --cx;
-
     /* Function Body */
+
     if (*n <= 0 || *incx <= 0) {
-        return 0;
+        return;
     }
+
     if (*incx == 1) {
-        goto L20;
+        for (i = 0; i < *n; ++i) {
+            q__1.r = ca->r * cx[i].r - ca->i * cx[i].i,
+            q__1.i = ca->r * cx[i].i + ca->i * cx[i].r;
+            cx[i].r = q__1.r, cx[i].i = q__1.i;
+        }
     }
-
-/*        code for increment not equal to 1 */
-
-    nincx = *n * *incx;
-    i__1 = nincx;
-    i__2 = *incx;
-    for (i = 1; i__2 < 0 ? i >= i__1 : i <= i__1; i += i__2) {
-        i__3 = i;
-        i__4 = i;
-        q__1.r = ca->r * cx[i__4].r - ca->i * cx[i__4].i, q__1.i = ca->r * cx[
-                i__4].i + ca->i * cx[i__4].r;
-        cx[i__3].r = q__1.r, cx[i__3].i = q__1.i;
-/* L10: */
+    else {
+        for (i = 0; i < *n * *incx; i += *incx) {
+            q__1.r = ca->r * cx[i].r - ca->i * cx[i].i,
+            q__1.i = ca->r * cx[i].i + ca->i * cx[i].r;
+            cx[i].r = q__1.r, cx[i].i = q__1.i;
+        }
     }
-    return 0;
-
-/*        code for increment equal to 1 */
-
-L20:
-    i__2 = *n;
-    for (i = 1; i <= i__2; ++i) {
-        i__1 = i;
-        i__3 = i;
-        q__1.r = ca->r * cx[i__3].r - ca->i * cx[i__3].i, q__1.i = ca->r * cx[
-                i__3].i + ca->i * cx[i__3].r;
-        cx[i__1].r = q__1.r, cx[i__1].i = q__1.i;
-/* L30: */
-    }
-    return 0;
+    return;
 } /* cscal_ */
 

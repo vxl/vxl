@@ -5,96 +5,75 @@
 
 #include "f2c.h"
 
+/* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
+
 doublereal scnrm2_(n, x, incx)
 integer *n;
 complex *x;
 integer *incx;
 {
     /* System generated locals */
-    integer i__1, i__2, i__3;
-    real ret_val, r__1;
+    integer i__1;
+    real r__1;
 
     /* Builtin functions */
-    double r_imag(), sqrt();
+    double sqrt();
 
     /* Local variables */
     static real temp, norm, scale;
     static integer ix;
     static real ssq;
 
-/*     .. Scalar Arguments .. */
-/*     .. Array Arguments .. */
-/*     .. */
-
 /*  SCNRM2 returns the euclidean norm of a vector via the function */
-/*  name, so that */
-
-/*     SCNRM2 := sqrt( conjg( x' )*x ) */
-
+/*  name, so that                                                  */
+/*                                                                 */
+/*     SCNRM2 := sqrt( conjg( x' )*x )                             */
 
 
 /*  -- This version written on 25-October-1982. */
 /*     Modified on 14-October-1993 to inline the call to CLASSQ. */
 /*     Sven Hammarling, Nag Ltd. */
 
-
-/*     .. Parameters .. */
-/*     .. Local Scalars .. */
-/*     .. Intrinsic Functions .. */
-/*     .. */
-/*     .. Executable Statements .. */
-    /* Parameter adjustments */
-    --x;
-
     /* Function Body */
+
     if (*n < 1 || *incx < 1) {
-        norm = (float)0.;
+        norm = 0.f;
     } else {
-        scale = (float)0.;
-        ssq = (float)1.;
-/*        The following loop is equivalent to this call to the LAPACK
-*/
+        scale = 0.f;
+        ssq = 1.f;
+/*        The following loop is equivalent to this call to the LAPACK */
 /*        auxiliary routine: */
 /*        CALL CLASSQ( N, X, INCX, SCALE, SSQ ) */
 
-        i__1 = (*n - 1) * *incx + 1;
-        i__2 = *incx;
-        for (ix = 1; i__2 < 0 ? ix >= i__1 : ix <= i__1; ix += i__2) {
-            i__3 = ix;
-            if (x[i__3].r != (float)0.) {
-                i__3 = ix;
-                temp = (r__1 = x[i__3].r, dabs(r__1));
+        i__1 = (*n - 1) * *incx;
+        for (ix = 0; *incx < 0 ? ix >= i__1 : ix <= i__1; ix += *incx) {
+            if (x[ix].r != 0.f) {
+                temp = (float)dabs(x[ix].r);
                 if (scale < temp) {
-/* Computing 2nd power */
                     r__1 = scale / temp;
-                    ssq = ssq * (r__1 * r__1) + (float)1.;
+                    ssq = ssq * (r__1 * r__1) + 1.f;
                     scale = temp;
                 } else {
-/* Computing 2nd power */
                     r__1 = temp / scale;
                     ssq += r__1 * r__1;
                 }
             }
-            if (r_imag(&x[ix]) != (float)0.) {
-                temp = (r__1 = r_imag(&x[ix]), dabs(r__1));
+            if (x[ix].i != 0.f) {
+                temp = (float)dabs(x[ix].i);
                 if (scale < temp) {
-/* Computing 2nd power */
                     r__1 = scale / temp;
-                    ssq = ssq * (r__1 * r__1) + (float)1.;
+                    ssq = ssq * (r__1 * r__1) + 1.f;
                     scale = temp;
                 } else {
-/* Computing 2nd power */
                     r__1 = temp / scale;
                     ssq += r__1 * r__1;
                 }
             }
-/* L10: */
         }
-        norm = scale * sqrt(ssq);
+        norm = scale * (float)sqrt(ssq);
     }
 
-    ret_val = norm;
-    return ret_val;
+    return norm;
 
 /*     End of SCNRM2. */
 

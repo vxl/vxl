@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* Subroutine */ int dpodi_(a, lda, n, det, job)
+/* Subroutine */ void dpodi_(a, lda, n, det, job)
 doublereal *a;
 integer *lda, *n;
 doublereal *det;
@@ -22,7 +22,7 @@ integer *job;
     /* Local variables */
     static integer i, j, k;
     static doublereal s, t;
-    extern /* Subroutine */ int dscal_(), daxpy_();
+    extern /* Subroutine */ void dscal_(), daxpy_();
     static integer jm1, kp1;
 
 
@@ -177,6 +177,6 @@ L120:
 /* L130: */
     }
 L140:
-    return 0;
+    return;
 } /* dpodi_ */
 

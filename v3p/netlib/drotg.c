@@ -9,7 +9,7 @@
 
 static doublereal c_b4 = 1.;
 
-/* Subroutine */ int drotg_(da, db, c, s)
+/* Subroutine */ void drotg_(da, db, c, s)
 doublereal *da, *db, *c, *s;
 {
     /* System generated locals */
@@ -58,6 +58,5 @@ L10:
 L20:
     *da = r;
     *db = z;
-    return 0;
 } /* drotg_ */
 

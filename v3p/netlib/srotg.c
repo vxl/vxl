@@ -9,7 +9,7 @@
 
 static real c_b4 = (float)1.;
 
-/* Subroutine */ int srotg_(sa, sb, c, s)
+/* Subroutine */ void srotg_(sa, sb, c, s)
 real *sa, *sb, *c, *s;
 {
     /* System generated locals */
@@ -58,6 +58,5 @@ L10:
 L20:
     *sa = r;
     *sb = z;
-    return 0;
 } /* srotg_ */
 

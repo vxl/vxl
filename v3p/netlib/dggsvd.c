@@ -6,7 +6,7 @@
 #include "f2c.h"
 
 /*<    >*/
-/* Subroutine */ int dggsvd_(char *jobu, char *jobv, char *jobq, integer *m,
+/* Subroutine */ void dggsvd_(char *jobu, char *jobv, char *jobq, integer *m,
         integer *n, integer *p, integer *k, integer *l, doublereal *a,
         integer *lda, doublereal *b, integer *ldb, doublereal *alpha,
         doublereal *beta, doublereal *u, integer *ldu, doublereal *v, integer
@@ -24,14 +24,14 @@
     static logical wantq, wantu, wantv;
     extern doublereal dlamch_(char *, ftnlen), dlange_(char *, integer *,
             integer *, doublereal *, integer *, doublereal *, ftnlen);
-    extern /* Subroutine */ int dtgsja_(char *, char *, char *, integer *,
+    extern /* Subroutine */ void dtgsja_(char *, char *, char *, integer *,
             integer *, integer *, integer *, integer *, doublereal *, integer
             *, doublereal *, integer *, doublereal *, doublereal *,
             doublereal *, doublereal *, doublereal *, integer *, doublereal *,
              integer *, doublereal *, integer *, doublereal *, integer *,
             integer *, ftnlen, ftnlen, ftnlen);
     static integer ncycle;
-    extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen), dggsvp_(
+    extern /* Subroutine */ void xerbla_(char *, integer *, ftnlen), dggsvp_(
             char *, char *, char *, integer *, integer *, integer *,
             doublereal *, integer *, doublereal *, integer *, doublereal *,
             doublereal *, integer *, integer *, doublereal *, integer *,
@@ -355,7 +355,7 @@
         i__1 = -(*info);
         xerbla_("DGGSVD", &i__1, 6L);
 /*<          RETURN >*/
-        return 0;
+        return;
 /*<       END IF >*/
     }
 
@@ -394,11 +394,7 @@
             v_offset], ldv, &q[q_offset], ldq, &work[1], &ncycle, info, 1L,
             1L, 1L);
 
-/*<       RETURN >*/
-    return 0;
-
 /*     End of DGGSVD */
 
-/*<       END >*/
 } /* dggsvd_ */
 

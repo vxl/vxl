@@ -3,9 +3,6 @@
         -lf2c -lm   (in that order)
 */
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 #include "f2c.h"
 
 /* Table of constant values */
@@ -40,7 +37,7 @@ static integer c__5 = 5;
 /* ---------------------------------------------------------------------- */
 
 /*<       SUBROUTINE SETGPFA(TRIGS,N,IRES,INFO) >*/
-/* Subroutine */ int dsetgpfa_(doublereal *trigs, integer *n, integer *ires,
+/* Subroutine */ void dsetgpfa_(doublereal *trigs, integer *n, integer *ires,
         integer *info)
 {
     /* System generated locals */
@@ -103,8 +100,7 @@ L20:
     if (nn != 1) {
 /*<          INFO = -1 >*/
         *info = -1;
-/*<          RETURN >*/
-        return 0;
+        return;
 /*<       ENDIF >*/
     }
 
@@ -170,8 +166,6 @@ L20:
             if (kk > ni) {
                 kk -= ni;
             }
-/*<    50 CONTINUE >*/
-/* L50: */
         }
 /*<    60 CONTINUE >*/
 L60:
@@ -180,11 +174,5 @@ L60:
 
 /*<       INFO = 0 >*/
     *info = 0;
-/*<       RETURN >*/
-    return 0;
-/*<       END >*/
 } /* setgpfa_ */
 
-#ifdef __cplusplus
-        }
-#endif

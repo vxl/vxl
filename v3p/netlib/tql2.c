@@ -9,7 +9,7 @@
 
 static doublereal c_b10 = 1.;
 
-/* Subroutine */ int tql2_(nm, n, d, e, z, ierr)
+/* Subroutine */ void tql2_(nm, n, d, e, z, ierr)
 integer *nm, *n;
 doublereal *d, *e, *z;
 integer *ierr;
@@ -253,6 +253,6 @@ L300:
 L1000:
     *ierr = l;
 L1001:
-    return 0;
+    return;
 } /* tql2_ */
 

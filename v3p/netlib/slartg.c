@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* Subroutine */ int slartg_(real *f, real *g, real *cs, real *sn, real *r)
+/* Subroutine */ void slartg_(real *f, real *g, real *cs, real *sn, real *r)
 {
     /* Initialized data */
 
@@ -174,7 +174,6 @@ L30:
             *r = -(*r);
         }
     }
-    return 0;
 
 /*     End of SLARTG */
 

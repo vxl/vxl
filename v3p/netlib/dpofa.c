@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* Subroutine */ int dpofa_(a, lda, n, info)
+/* Subroutine */ void dpofa_(a, lda, n, info)
 doublereal *a;
 integer *lda, *n, *info;
 {
@@ -106,6 +106,6 @@ L20:
     }
     *info = 0;
 L40:
-    return 0;
+    return;
 } /* dpofa_ */
 

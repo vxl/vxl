@@ -24,7 +24,7 @@ real slange_(char *norm, integer *m, integer *n, real *a, integer *lda, real *
     static real scale;
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     static real value;
-    extern /* Subroutine */ int slassq_(integer *, real *, integer *, real *,
+    extern /* Subroutine */ void slassq_(integer *, real *, integer *, real *,
             real *);
     static real sum;
 

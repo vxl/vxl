@@ -5,97 +5,60 @@
 
 #include "f2c.h"
 
-/* Subroutine */ int sswap_(n, sx, incx, sy, incy)
+/* Subroutine */ void sswap_(n, sx, incx, sy, incy)
 integer *n;
 real *sx;
 integer *incx;
 real *sy;
 integer *incy;
 {
-    /* System generated locals */
-    integer i__1;
-
     /* Local variables */
     static integer i, m;
     static real stemp;
-    static integer ix, iy, mp1;
-
+    static integer ix, iy;
 
 /*     interchanges two vectors. */
 /*     uses unrolled loops for increments equal to 1. */
 /*     jack dongarra, linpack, 3/11/78. */
 /*     modified 12/3/93, array(1) declarations changed to array(*) */
 
-
-    /* Parameter adjustments */
-    --sy;
-    --sx;
-
     /* Function Body */
     if (*n <= 0) {
-        return 0;
+        return;
     }
     if (*incx == 1 && *incy == 1) {
-        goto L20;
+        m = *n % 3;
+        for (i = 0; i < m; ++i) {
+            stemp = sx[i];
+            sx[i] = sy[i];
+            sy[i] = stemp;
+        }
+        for (i = m; i < *n; i += 3) {
+            stemp = sx[i];
+            sx[i] = sy[i];
+            sy[i] = stemp;
+            stemp = sx[i + 1];
+            sx[i + 1] = sy[i + 1];
+            sy[i + 1] = stemp;
+            stemp = sx[i + 2];
+            sx[i + 2] = sy[i + 2];
+            sy[i + 2] = stemp;
+        }
     }
-
-/*       code for unequal increments or equal increments not equal */
-/*         to 1 */
-
-    ix = 1;
-    iy = 1;
-    if (*incx < 0) {
-        ix = (-(*n) + 1) * *incx + 1;
+    else {
+        ix = 0; iy = 0;
+        if (*incx < 0) {
+            ix = (1-(*n)) * *incx;
+        }
+        if (*incy < 0) {
+            iy = (1-(*n)) * *incy;
+        }
+        for (i = 0; i < *n; ++i) {
+            stemp = sx[ix];
+            sx[ix] = sy[iy];
+            sy[iy] = stemp;
+            ix += *incx; iy += *incy;
+        }
     }
-    if (*incy < 0) {
-        iy = (-(*n) + 1) * *incy + 1;
-    }
-    i__1 = *n;
-    for (i = 1; i <= i__1; ++i) {
-        stemp = sx[ix];
-        sx[ix] = sy[iy];
-        sy[iy] = stemp;
-        ix += *incx;
-        iy += *incy;
-/* L10: */
-    }
-    return 0;
-
-/*       code for both increments equal to 1 */
-
-
-/*       clean-up loop */
-
-L20:
-    m = *n % 3;
-    if (m == 0) {
-        goto L40;
-    }
-    i__1 = m;
-    for (i = 1; i <= i__1; ++i) {
-        stemp = sx[i];
-        sx[i] = sy[i];
-        sy[i] = stemp;
-/* L30: */
-    }
-    if (*n < 3) {
-        return 0;
-    }
-L40:
-    mp1 = m + 1;
-    i__1 = *n;
-    for (i = mp1; i <= i__1; i += 3) {
-        stemp = sx[i];
-        sx[i] = sy[i];
-        sy[i] = stemp;
-        stemp = sx[i + 1];
-        sx[i + 1] = sy[i + 1];
-        sy[i + 1] = stemp;
-        stemp = sx[i + 2];
-        sx[i + 2] = sy[i + 2];
-        sy[i + 2] = stemp;
-/* L50: */
-    }
-    return 0;
 } /* sswap_ */
 

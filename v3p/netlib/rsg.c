@@ -14,7 +14,7 @@ static doublereal c_b17 = 1.;
 /* Fullsource for module RSG from package EISPACK. */
 /* Retrieved from NETLIB on Thu Aug 29 08:25:55 1996. */
 /* ====================================================================== */
-/* Subroutine */ int rsg_(nm, n, a, b, w, matz, z, fv1, fv2, ierr)
+/* Subroutine */ void rsg_(nm, n, a, b, w, matz, z, fv1, fv2, ierr)
 integer *nm, *n;
 doublereal *a, *b, *w;
 integer *matz;
@@ -25,7 +25,7 @@ integer *ierr;
     integer a_dim1, a_offset, b_dim1, b_offset, z_dim1, z_offset;
 
     /* Local variables */
-    extern /* Subroutine */ int tred1_(), tred2_(), rebak_(), reduc_(),
+    extern /* Subroutine */ void tred1_(), tred2_(), rebak_(), reduc_(),
             tqlrat_(), tql2_();
 
 
@@ -115,7 +115,7 @@ L20:
     }
     rebak_(nm, n, &b[b_offset], &fv2[1], n, &z[z_offset]);
 L50:
-    return 0;
+    return;
 } /* rsg_ */
 
 doublereal epslon_(x)
@@ -164,7 +164,7 @@ L10:
     return ret_val;
 } /* epslon_ */
 
-/* Subroutine */ int tqlrat_(n, d, e2, ierr)
+/* Subroutine */ void tqlrat_(n, d, e2, ierr)
 integer *n;
 doublereal *d, *e2;
 integer *ierr;
@@ -234,12 +234,11 @@ integer *ierr;
     /* Function Body */
     *ierr = 0;
     if (*n == 1) {
-        goto L1001;
+        return;
     }
 
     i__1 = *n;
     for (i = 2; i <= i__1; ++i) {
-/* L100: */
         e2[i - 1] = e2[i];
     }
 
@@ -267,7 +266,6 @@ L105:
             }
 /*     .......... e2(n) is always zero, so there is no exit */
 /*                through the bottom of the loop .......... */
-/* L110: */
         }
 
 L120:
@@ -276,7 +274,10 @@ L120:
         }
 L130:
         if (j == 30) {
-            goto L1000;
+/*     .......... set error -- no convergence to an */
+/*                eigenvalue after 30 iterations .......... */
+            *ierr = l;
+            return;
         }
         ++j;
 /*     .......... form shift .......... */
@@ -290,7 +291,6 @@ L130:
 
         i__2 = *n;
         for (i = l1; i <= i__2; ++i) {
-/* L140: */
             d[i] -= h;
         }
 
@@ -317,7 +317,6 @@ L130:
                 g = b;
             }
             h = g * p / r;
-/* L200: */
         }
 
         e2[l] = s * g;
@@ -348,26 +347,16 @@ L210:
                 goto L270;
             }
             d[i] = d[i - 1];
-/* L230: */
         }
 
 L250:
         i = 1;
 L270:
         d[i] = p;
-/* L290: */
     }
-
-    goto L1001;
-/*     .......... set error -- no convergence to an */
-/*                eigenvalue after 30 iterations .......... */
-L1000:
-    *ierr = l;
-L1001:
-    return 0;
 } /* tqlrat_ */
 
-/* Subroutine */ int rebak_(nm, n, b, dl, m, z)
+/* Subroutine */ void rebak_(nm, n, b, dl, m, z)
 integer *nm, *n;
 doublereal *b, *dl;
 integer *m;
@@ -452,21 +441,19 @@ doublereal *z;
 
             i__3 = *n;
             for (k = i1; k <= i__3; ++k) {
-/* L60: */
                 x -= b[k + i * b_dim1] * z[k + j * z_dim1];
             }
 
 L80:
             z[i + j * z_dim1] = x / dl[i];
-/* L100: */
         }
     }
 
 L200:
-    return 0;
+    return;
 } /* rebak_ */
 
-/* Subroutine */ int reduc_(nm, n, a, b, dl, ierr)
+/* Subroutine */ void reduc_(nm, n, a, b, dl, ierr)
 integer *nm, *n;
 doublereal *a, *b, *dl;
 integer *ierr;
@@ -565,7 +552,6 @@ integer *ierr;
 
             i__3 = i1;
             for (k = 1; k <= i__3; ++k) {
-/* L20: */
                 x -= b[i + k * b_dim1] * b[j + k * b_dim1];
             }
 
@@ -574,7 +560,9 @@ L40:
                 goto L60;
             }
             if (x <= 0.) {
-                goto L1000;
+/*     .......... set error -- b is not positive definite .......... */
+                *ierr = *n * 7 + 1;
+                return;
             }
             y = sqrt(x);
             dl[i] = y;
@@ -602,13 +590,11 @@ L100:
 
             i__3 = i1;
             for (k = 1; k <= i__3; ++k) {
-/* L160: */
                 x -= b[i + k * b_dim1] * a[j + k * a_dim1];
             }
 
 L180:
             a[j + i * a_dim1] = x / y;
-/* L200: */
         }
     }
 /*     .......... pre-multiply by inv(l) and overwrite .......... */
@@ -626,7 +612,6 @@ L180:
 
             i__3 = i1;
             for (k = j; k <= i__3; ++k) {
-/* L220: */
                 x -= a[k + j * a_dim1] * b[i + k * b_dim1];
             }
 
@@ -637,21 +622,14 @@ L240:
 
             i__3 = j1;
             for (k = 1; k <= i__3; ++k) {
-/* L260: */
                 x -= a[j + k * a_dim1] * b[i + k * b_dim1];
             }
 
 L280:
             a[i + j * a_dim1] = x / dl[i];
-/* L300: */
         }
     }
 
-    goto L1001;
-/*     .......... set error -- b is not positive definite .......... */
-L1000:
-    *ierr = *n * 7 + 1;
-L1001:
-    return 0;
+    return;
 } /* reduc_ */
 

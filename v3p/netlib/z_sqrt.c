@@ -1,23 +1,36 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#include <math.h>
 #include "f2c.h"
+extern double sqrt(double);
 
-/* This is here until I find the fortran code for z_sqrt(). */
+/* A slightly more efficient implementation for complex square roots, */
+/* which does not use any of hypot(), atan2(), cos(), sin(). */
+/* Author: Peter Vanroose, June 2001. */
 
-void z_sqrt(doublecomplex *dst, doublecomplex *src)
+/* Note that the imaginary part of the returned value will never be negative.
+ * The other complex square root is just minus the one returned here.
+ */
+
+extern doublereal z_abs();
+
+void z_sqrt(doublecomplex *ret_value, doublecomplex *z)
 {
-  doublereal a = src->r;
-  doublereal b = src->i;
+  doublereal w = z_abs(z);
 
-  doublereal theta = atan2(b,a);
+  ret_value->r = sqrt((w+z->r)/2.);
+  ret_value->i = sqrt((w-z->r)/2.);
+  if (z->i < 0.)
+    ret_value->r = - ret_value->r;
+  return;
+
+#if 0
+  /* was: (fsm@robots.ox.ac.uk) */
+  doublereal a = z->r;
+  doublereal b = z->i;
   doublereal r = hypot(a,b);
-
+  doublereal theta = atan2(b,a);
   theta *= 0.5;
   r = sqrt(r);
-
-  dst->r = r * cos(theta);
-  dst->i = r * sin(theta);
+  ret_value->r = r * cos(theta);
+  ret_value->i = r * sin(theta);
+#endif
 }
 

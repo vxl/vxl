@@ -6,7 +6,7 @@
 #include "f2c.h"
 
 /*<       SUBROUTINE DLAPMT( FORWRD, M, N, X, LDX, K ) >*/
-/* Subroutine */ int dlapmt_(logical *forwrd, integer *m, integer *n,
+/* Subroutine */ void dlapmt_(logical *forwrd, integer *m, integer *n,
         doublereal *x, integer *ldx, integer *k)
 {
     /* System generated locals */
@@ -85,7 +85,7 @@
 
     /* Function Body */
     if (*n <= 1) {
-        return 0;
+        return;
     }
 
 /*<       DO 10 I = 1, N >*/
@@ -93,8 +93,6 @@
     for (i = 1; i <= i__1; ++i) {
 /*<          K( I ) = -K( I ) >*/
         k[i] = -k[i];
-/*<    10 CONTINUE >*/
-/* L10: */
     }
 
 /*<       IF( FORWRD ) THEN >*/
@@ -134,8 +132,6 @@ L20:
                 x[ii + j * x_dim1] = x[ii + in * x_dim1];
 /*<                X( II, IN ) = TEMP >*/
                 x[ii + in * x_dim1] = temp;
-/*<    30       CONTINUE >*/
-/* L30: */
             }
 
 /*<             K( IN ) = -K( IN ) >*/
@@ -189,8 +185,6 @@ L60:
                 x[ii + i * x_dim1] = x[ii + j * x_dim1];
 /*<                X( II, J ) = TEMP >*/
                 x[ii + j * x_dim1] = temp;
-/*<    70       CONTINUE >*/
-/* L70: */
             }
 
 /*<             K( J ) = -K( J ) >*/
@@ -211,11 +205,7 @@ L80:
 /*<       END IF >*/
     }
 
-/*<       RETURN >*/
-    return 0;
-
 /*     End of DLAPMT */
 
-/*<       END >*/
 } /* dlapmt_ */
 

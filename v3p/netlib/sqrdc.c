@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* Subroutine */ int sqrdc_(x, ldx, n, p, qraux, jpvt, work, job)
+/* Subroutine */ void sqrdc_(x, ldx, n, p, qraux, jpvt, work, job)
 real *x;
 integer *ldx, *n, *p;
 real *qraux;
@@ -30,11 +30,11 @@ integer *job;
     extern doublereal sdot_(), snrm2_();
     static integer j, l;
     static real t;
-    extern /* Subroutine */ int sscal_();
+    extern /* Subroutine */ void sscal_();
     static logical swapj;
-    extern /* Subroutine */ int sswap_();
+    extern /* Subroutine */ void sswap_();
     static real nrmxl;
-    extern /* Subroutine */ int saxpy_();
+    extern /* Subroutine */ void saxpy_();
     static integer jj, jp, pl, pu;
     static real tt, maxnrm;
     static integer lp1, lup;
@@ -309,6 +309,5 @@ L190:
 /* L200: */
         ;
     }
-    return 0;
 } /* sqrdc_ */
 

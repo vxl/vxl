@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* Subroutine */ int dqrsl_(x, ldx, n, k, qraux, y, qy, qty, b, rsd, xb, job,
+/* Subroutine */ void dqrsl_(x, ldx, n, k, qraux, y, qy, qty, b, rsd, xb, job,
         info)
 doublereal *x;
 integer *ldx, *n, *k;
@@ -25,7 +25,7 @@ integer *job, *info;
     static logical cqty;
     static integer i, j;
     static doublereal t;
-    extern /* Subroutine */ int dcopy_(), daxpy_();
+    extern /* Subroutine */ void dcopy_(), daxpy_();
     static logical cb;
     static integer jj;
     static logical cr;
@@ -392,6 +392,6 @@ L220:
     }
 L240:
 L250:
-    return 0;
+    return;
 } /* dqrsl_ */
 

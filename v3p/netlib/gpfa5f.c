@@ -3,9 +3,6 @@
         -lf2c -lm   (in that order)
 */
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 #include "f2c.h"
 
 /* Table of constant values */
@@ -19,7 +16,7 @@ static integer c__5 = 5;
 /* ------------------------------------------------------------------- */
 
 /*<       subroutine gpfa5f(a,b,trigs,inc,jump,n,mm,lot,isign) >*/
-/* Subroutine */ int gpfa5f_(real *a, real *b, real *trigs, integer *inc,
+/* Subroutine */ void gpfa5f_(real *a, real *b, real *trigs, integer *inc,
         integer *jump, integer *n, integer *mm, integer *lot, integer *isign)
 {
     /* Initialized data */
@@ -1745,16 +1742,8 @@ static integer c__5 = 5;
 L490:
 /*<       istart = istart + nvex * jump >*/
         istart += nvex * *jump;
-/*<   500 continue >*/
-/* L500: */
     }
 /* -----( end of loop on blocks of transforms ) */
 
-/*<       return >*/
-    return 0;
-/*<       end >*/
 } /* gpfa5f_ */
 
-#ifdef __cplusplus
-        }
-#endif

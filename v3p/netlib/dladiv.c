@@ -7,7 +7,7 @@
 
 /* Modified by Peter Vanroose, June 2001, to allow p/q being equal to a,b,c or d */
 
-/* Subroutine */ int dladiv_(a, b, c, d, p, q)
+/* Subroutine */ void dladiv_(a, b, c, d, p, q)
 doublereal *a, *b, *c, *d, *p, *q;
 {
     static doublereal e, f, t;
@@ -68,8 +68,6 @@ doublereal *a, *b, *c, *d, *p, *q;
         *q = (*b * e - *a) / f;
         *p = t;
     }
-
-    return 0;
 
 /*     End of DLADIV */
 

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* Subroutine */ int sormr2_(char *side, char *trans, integer *m, integer *n,
+/* Subroutine */ void sormr2_(char *side, char *trans, integer *m, integer *n,
         integer *k, real *a, integer *lda, real *tau, real *c, integer *ldc,
         real *work, integer *info, ftnlen side_len, ftnlen trans_len)
 {
@@ -16,10 +16,10 @@
     static logical left;
     static integer i;
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int slarf_(char *, integer *, integer *, real *,
+    extern /* Subroutine */ void slarf_(char *, integer *, integer *, real *,
             integer *, real *, real *, integer *, real *, ftnlen);
     static integer i1, i2, i3, mi, ni, nq;
-    extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
+    extern /* Subroutine */ void xerbla_(char *, integer *, ftnlen);
     static logical notran;
     static real aii;
 
@@ -166,13 +166,13 @@
     if (*info != 0) {
         i__1 = -(*info);
         xerbla_("SORMR2", &i__1, 6L);
-        return 0;
+        return;
     }
 
 /*     Quick return if possible */
 
     if (*m == 0 || *n == 0 || *k == 0) {
-        return 0;
+        return;
     }
 
     if (left && ! notran || ! left && notran) {
@@ -215,7 +215,6 @@
         a[i + (nq - *k + i) * a_dim1] = aii;
 /* L10: */
     }
-    return 0;
 
 /*     End of SORMR2 */
 

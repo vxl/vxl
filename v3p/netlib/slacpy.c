@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* Subroutine */ int slacpy_(char *uplo, integer *m, integer *n, real *a,
+/* Subroutine */ void slacpy_(char *uplo, integer *m, integer *n, real *a,
         integer *lda, real *b, integer *ldb, ftnlen uplo_len)
 {
     /* System generated locals */
@@ -88,9 +88,7 @@
             i__2 = min(j,*m);
             for (i = 1; i <= i__2; ++i) {
                 b[i + j * b_dim1] = a[i + j * a_dim1];
-/* L10: */
             }
-/* L20: */
         }
     } else if (lsame_(uplo, "L", 1L, 1L)) {
         i__1 = *n;
@@ -98,9 +96,7 @@
             i__2 = *m;
             for (i = j; i <= i__2; ++i) {
                 b[i + j * b_dim1] = a[i + j * a_dim1];
-/* L30: */
             }
-/* L40: */
         }
     } else {
         i__1 = *n;
@@ -108,12 +104,9 @@
             i__2 = *m;
             for (i = 1; i <= i__2; ++i) {
                 b[i + j * b_dim1] = a[i + j * a_dim1];
-/* L50: */
             }
-/* L60: */
         }
     }
-    return 0;
 
 /*     End of SLACPY */
 

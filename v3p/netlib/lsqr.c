@@ -11,11 +11,11 @@ static integer c__1 = 1;
 static integer c__2 = 2;
 
 /* From arpa!sol-michael.stanford.edu!mike 5 May 89 23:53:00 PDT */
-/* Subroutine */ int lsqr_(m, n, aprod, damp, leniw, lenrw, iw, rw, u, v, w,
+/* Subroutine */ void lsqr_(m, n, aprod, damp, leniw, lenrw, iw, rw, u, v, w,
         x, se, atol, btol, conlim, itnlim, nout, istop, itn, anorm, acond,
         rnorm, arnorm, xnorm)
 integer *m, *n;
-/* Subroutine */ int (*aprod) ();
+/* Subroutine */ void (*aprod) ();
 doublereal *damp;
 integer *leniw, *lenrw, *iw;
 doublereal *rw, *u, *v, *w, *x, *se, *atol, *btol, *conlim;
@@ -36,9 +36,9 @@ doublereal *anorm, *acond, *rnorm, *arnorm, *xnorm;
     static doublereal test1, test2, test3;
     static integer i;
     static doublereal gamma, delta, t, z;
-    extern /* Subroutine */ int dscal_();
+    extern /* Subroutine */ void dscal_();
     static doublereal theta, bnorm;
-    extern /* Subroutine */ int dcopy_();
+    extern /* Subroutine */ void dcopy_();
     static integer nconv, nstop;
     static doublereal t1, t2, t3, rhbar1, rhbar2, cs, gambar, sn, phibar,
             rhobar, bbnorm, ddnorm, dampsq, cs1, cs2, sn1, sn2, xxnorm, phi,
@@ -675,7 +675,7 @@ L800:
 /*         WRITE(NOUT, 3000) EXIT, MSG(ISTOP) */
 /*      END IF */
 L900:
-    return 0;
+    return;
 /*     ------------------------------------------------------------------
 */
 /* L1000: */

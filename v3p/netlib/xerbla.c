@@ -1,7 +1,7 @@
 #include "f2c.h"
 #include <stdio.h>
 
-/* Subroutine */ int xerbla_(char *srname, integer *info)
+/* Subroutine */ void xerbla_(char *srname, integer *info)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
@@ -38,6 +38,5 @@
 
 /*     End of XERBLA */
 
-    return 0;
 } /* xerbla_ */
 

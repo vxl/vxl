@@ -6,7 +6,7 @@
 #include "f2c.h"
 
 /*<       SUBROUTINE DLARTG( F, G, CS, SN, R ) >*/
-/* Subroutine */ int dlartg_(doublereal *f, doublereal *g, doublereal *cs,
+/* Subroutine */ void dlartg_(doublereal *f, doublereal *g, doublereal *cs,
         doublereal *sn, doublereal *r)
 {
     /* Initialized data */
@@ -182,8 +182,6 @@ L10:
             for (i = 1; i <= i__1; ++i) {
 /*<                R = R*SAFMX2 >*/
                 *r *= safmx2;
-/*<    20       CONTINUE >*/
-/* L20: */
             }
 /*<          ELSE IF( SCALE.LE.SAFMN2 ) THEN >*/
         } else if (scale <= safmn2) {
@@ -220,8 +218,6 @@ L30:
             for (i = 1; i <= i__1; ++i) {
 /*<                R = R*SAFMN2 >*/
                 *r *= safmn2;
-/*<    40       CONTINUE >*/
-/* L40: */
             }
 /*<          ELSE >*/
         } else {
@@ -249,11 +245,8 @@ L30:
         }
 /*<       END IF >*/
     }
-/*<       RETURN >*/
-    return 0;
 
 /*     End of DLARTG */
 
-/*<       END >*/
 } /* dlartg_ */
 

@@ -3,9 +3,6 @@
         -lf2c -lm   (in that order)
 */
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 #include "f2c.h"
 
 /* Table of constant values */
@@ -20,7 +17,7 @@ static integer c__2 = 2;
 /* ------------------------------------------------------------------- */
 
 /*<       subroutine dgpfa2f(a,b,trigs,inc,jump,n,mm,lot,isign) >*/
-/* Subroutine */ int dgpfa2f_(doublereal *a, doublereal *b, doublereal *trigs,
+/* Subroutine */ void dgpfa2f_(doublereal *a, doublereal *b, doublereal *trigs,
          integer *inc, integer *jump, integer *n, integer *mm, integer *lot,
         integer *isign)
 {
@@ -272,8 +269,6 @@ static integer c__2 = 2;
                         b[jd + j] = u2 - t3;
 /*<       j = j + jump >*/
                         j += *jump;
-/*<   110 continue >*/
-/* L110: */
                     }
 /*<       ja = ja + jstepx >*/
                     ja += jstepx;
@@ -281,11 +276,7 @@ static integer c__2 = 2;
                     if (ja < istart) {
                         ja += ninc;
                     }
-/*<   115 continue >*/
-/* L115: */
                 }
-/*<   120 continue >*/
-/* L120: */
             }
 
 /*  finished if n2 = 4 */
@@ -408,8 +399,6 @@ static integer c__2 = 2;
                             b[jd + j] = si3 * (t2 + u3) + co3 * (u2 - t3);
 /*<       j = j + jump >*/
                             j += *jump;
-/*<   130 continue >*/
-/* L130: */
                         }
 /* -----( end of loop across transforms ) */
 /*<       ja = ja + jstepx >*/
@@ -418,23 +407,15 @@ static integer c__2 = 2;
                         if (ja < istart) {
                             ja += ninc;
                         }
-/*<   135 continue >*/
-/* L135: */
                     }
-/*<   140 continue >*/
-/* L140: */
                 }
 /* -----( end of loop along transforms ) */
 /*<       kk = kk + 2*la >*/
                 kk += la << 1;
-/*<   150 continue >*/
-/* L150: */
             }
 /* -----( end of loop on nonzero k ) */
 /*<       la = 4*la >*/
             la <<= 2;
-/*<   160 continue >*/
-/* L160: */
         }
 /* -----( end of loop on type I radix-4 passes) */
 
@@ -503,8 +484,6 @@ L200:
                     b[jb + j] = u0;
 /*<       j = j + jump >*/
                     j += *jump;
-/*<   210 continue >*/
-/* L210: */
                 }
 /* -----(end of loop across transforms) */
 /*<       ja = ja + jstepx >*/
@@ -513,11 +492,7 @@ L200:
                 if (ja < istart) {
                     ja += ninc;
                 }
-/*<   215 continue >*/
-/* L215: */
             }
-/*<   220 continue >*/
-/* L220: */
         }
 
 /*  finished if n2=2 */
@@ -592,8 +567,6 @@ L200:
                             b[jb + j] = t0;
 /*<       j = j + jump >*/
                             j += *jump;
-/*<   230 continue >*/
-/* L230: */
                         }
 
 /*<       else >*/
@@ -625,8 +598,6 @@ L200:
                             b[jb + j] = si1 * t0 + co1 * u0;
 /*<       j = j + jump >*/
                             j += *jump;
-/*<   240 continue >*/
-/* L240: */
                         }
 
 /*<       endif >*/
@@ -639,17 +610,11 @@ L200:
                     if (ja < istart) {
                         ja += ninc;
                     }
-/*<   245 continue >*/
-/* L245: */
                 }
-/*<   250 continue >*/
-/* L250: */
             }
 /* -----(end of loop along transforms) */
 /*<       kk = kk + 2 * la >*/
             kk += la << 1;
-/*<   260 continue >*/
-/* L260: */
         }
 /* -----(end of loop on nonzero k) */
 /* -----(end of radix-2 pass) */
@@ -840,8 +805,6 @@ L300:
                         b[jh + j] = c3 * (u2 + u3);
 /*<       j = j + jump >*/
                         j += *jump;
-/*<   310 continue >*/
-/* L310: */
                     }
 /*<       ja = ja + jstepx >*/
                     ja += jstepx;
@@ -849,14 +812,8 @@ L300:
                     if (ja < istart) {
                         ja += ninc;
                     }
-/*<   312 continue >*/
-/* L312: */
                 }
-/*<   315 continue >*/
-/* L315: */
             }
-/*<   320 continue >*/
-/* L320: */
         }
 
 /*  stage 2 */
@@ -1022,8 +979,6 @@ L300:
                     b[jf + j] = u2 + t1;
 /*<       j = j + jump >*/
                     j += *jump;
-/*<   325 continue >*/
-/* L325: */
                 }
 /*<       ja = ja + jstepx >*/
                 ja += jstepx;
@@ -1031,11 +986,7 @@ L300:
                 if (ja < istart) {
                     ja += ninc;
                 }
-/*<   328 continue >*/
-/* L328: */
             }
-/*<   330 continue >*/
-/* L330: */
         }
 
 /*<       if (n2.eq.8) go to 490 >*/
@@ -1240,8 +1191,6 @@ L300:
                         b[jf + j] = si5 * (t2 - u1) + co5 * (u2 + t1);
 /*<       j = j + jump >*/
                         j += *jump;
-/*<   340 continue >*/
-/* L340: */
                     }
 /*<       ja = ja + jstepx >*/
                     ja += jstepx;
@@ -1249,16 +1198,10 @@ L300:
                     if (ja < istart) {
                         ja += ninc;
                     }
-/*<   342 continue >*/
-/* L342: */
                 }
-/*<   345 continue >*/
-/* L345: */
             }
 /*<       kk = kk + 2 * la >*/
             kk += la << 1;
-/*<   350 continue >*/
-/* L350: */
         }
 
 /*<       la = 8 * la >*/
@@ -1631,8 +1574,6 @@ L400:
                             b[jp + j] = u2 - t3;
 /*<       j = j + jump >*/
                             j += *jump;
-/*<   410 continue >*/
-/* L410: */
                         }
 /* -----( end of loop across transforms ) */
 /*<       ja = ja + jstepx >*/
@@ -1641,14 +1582,8 @@ L400:
                         if (ja < istart) {
                             ja += ninc;
                         }
-/*<   415 continue >*/
-/* L415: */
                     }
-/*<   420 continue >*/
-/* L420: */
                 }
-/*<   430 continue >*/
-/* L430: */
             }
 /* -----( end of double loop for k=0 ) */
 
@@ -2021,8 +1956,6 @@ L400:
                                 b[jp + j] = si3 * (t2 + u3) + co3 * (u2 - t3);
 /*<       j = j + jump >*/
                                 j += *jump;
-/*<   440 continue >*/
-/* L440: */
                             }
 /* -----(end of loop across transforms) */
 /*<       ja = ja + jstepx >*/
@@ -2031,26 +1964,16 @@ L400:
                             if (ja < istart) {
                                 ja += ninc;
                             }
-/*<   445 continue >*/
-/* L445: */
                         }
-/*<   450 continue >*/
-/* L450: */
                     }
-/*<   460 continue >*/
-/* L460: */
                 }
 /* -----( end of double loop for this k ) */
 /*<       kk = kk + 2*la >*/
                 kk += la << 1;
-/*<   470 continue >*/
-/* L470: */
             }
 /* -----( end of loop over values of k ) */
 /*<       la = 4*la >*/
             la <<= 2;
-/*<   480 continue >*/
-/* L480: */
         }
 /* -----( end of loop on type II radix-4 passes ) */
 /* -----( nvex transforms completed) */
@@ -2058,16 +1981,8 @@ L400:
 L490:
 /*<       istart = istart + nvex * jump >*/
         istart += nvex * *jump;
-/*<   500 continue >*/
-/* L500: */
     }
 /* -----( end of loop on blocks of transforms ) */
 
-/*<       return >*/
-    return 0;
-/*<       end >*/
 } /* dgpfa2f_ */
 
-#ifdef __cplusplus
-        }
-#endif

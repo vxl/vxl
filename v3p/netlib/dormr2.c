@@ -6,7 +6,7 @@
 #include "f2c.h"
 
 /*<    >*/
-/* Subroutine */ int dormr2_(char *side, char *trans, integer *m, integer *n,
+/* Subroutine */ void dormr2_(char *side, char *trans, integer *m, integer *n,
         integer *k, doublereal *a, integer *lda, doublereal *tau, doublereal *
         c, integer *ldc, doublereal *work, integer *info, ftnlen side_len,
         ftnlen trans_len)
@@ -17,12 +17,12 @@
     /* Local variables */
     static logical left;
     static integer i;
-    extern /* Subroutine */ int dlarf_(char *, integer *, integer *,
+    extern /* Subroutine */ void dlarf_(char *, integer *, integer *,
             doublereal *, integer *, doublereal *, doublereal *, integer *,
             doublereal *, ftnlen);
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     static integer i1, i2, i3, mi, ni, nq;
-    extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
+    extern /* Subroutine */ void xerbla_(char *, integer *, ftnlen);
     static logical notran;
     static doublereal aii;
 
@@ -207,7 +207,7 @@
         i__1 = -(*info);
         xerbla_("DORMR2", &i__1, 6L);
 /*<          RETURN >*/
-        return 0;
+        return;
 /*<       END IF >*/
     }
 
@@ -215,7 +215,7 @@
 
 /*<    >*/
     if (*m == 0 || *n == 0 || *k == 0) {
-        return 0;
+        return;
     }
 
 /*<    >*/
@@ -280,14 +280,9 @@
                 ldc, &work[1], 1L);
 /*<          A( I, NQ-K+I ) = AII >*/
         a[i + (nq - *k + i) * a_dim1] = aii;
-/*<    10 CONTINUE >*/
-/* L10: */
     }
-/*<       RETURN >*/
-    return 0;
 
 /*     End of DORMR2 */
 
-/*<       END >*/
 } /* dormr2_ */
 

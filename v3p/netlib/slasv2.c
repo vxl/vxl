@@ -10,7 +10,7 @@
 static real c_b3 = 2.f;
 static real c_b4 = 1.f;
 
-/* Subroutine */ int slasv2_(real *f, real *g, real *h, real *ssmin, real *
+/* Subroutine */ void slasv2_(real *f, real *g, real *h, real *ssmin, real *
         ssmax, real *snr, real *csr, real *snl, real *csl)
 {
     /* System generated locals */
@@ -265,7 +265,6 @@ static real c_b4 = 1.f;
     *ssmax = r_sign(ssmax, &tsign);
     r__1 = tsign * r_sign(&c_b4, f) * r_sign(&c_b4, h);
     *ssmin = r_sign(ssmin, &r__1);
-    return 0;
 
 /*     End of SLASV2 */
 

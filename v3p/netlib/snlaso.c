@@ -15,7 +15,7 @@ static real c_b195 = (float)0.;
 
 /* *********************************************************************** */
 
-/* Subroutine */ int slabax_(n, nband, a, x, y)
+/* Subroutine */ void slabax_(n, nband, a, x, y)
 integer *n, *nband;
 real *a, *x, *y;
 {
@@ -25,7 +25,7 @@ real *a, *x, *y;
     /* Local variables */
     static real zero[1];
     static integer i__, k, l, m;
-    extern /* Subroutine */ int scopy_();
+    extern /* Subroutine */ void scopy_();
 
 /*  THIS SUBROUTINE SETS Y = A*X */
 /*  WHERE X AND Y ARE VECTORS OF LENGTH N */
@@ -65,18 +65,16 @@ real *a, *x, *y;
             l = k + i__ - 1;
             y[l] += a[i__ + k * a_dim1] * x[k];
             y[k] += a[i__ + k * a_dim1] * x[l];
-/* L10: */
         }
 L20:
         ;
     }
-    return 0;
 } /* slabax_ */
 
 
 /* *********************************************************************** */
 
-/* Subroutine */ int slabcm_(n, nband, nl, nr, a, eigval, lde, eigvec, atol,
+/* Subroutine */ void slabcm_(n, nband, nl, nr, a, eigval, lde, eigvec, atol,
         artol, bound, atemp, d__, vtemp)
 integer *n, *nband, *nl, *nr;
 real *a, *eigval;
@@ -96,13 +94,13 @@ real *eigvec, *atol, *artol, *bound, *atemp, *d__, *vtemp;
     extern doublereal snrm2_();
     static integer i__, j, l, m;
     static real sigma;
-    extern /* Subroutine */ int sscal_();
+    extern /* Subroutine */ void sscal_();
     static real resid;
-    extern /* Subroutine */ int scopy_();
+    extern /* Subroutine */ void scopy_();
     static real vnorm;
-    extern /* Subroutine */ int saxpy_(), slabfc_();
+    extern /* Subroutine */ void saxpy_(), slabfc_();
     static real rq;
-    extern /* Subroutine */ int slabax_(), slaran_();
+    extern /* Subroutine */ void slabax_(), slaran_();
     static integer numvec;
     static real gap;
 
@@ -147,7 +145,6 @@ real *eigvec, *atol, *artol, *bound, *atemp, *d__, *vtemp;
                 eigvec_dim1 + 1], &c__1) == (float)0.) {
             slaran_(n, &eigvec[i__ * eigvec_dim1 + 1]);
         }
-/* L5: */
     }
 
 /*  LOOP OVER EIGENVALUES */
@@ -266,7 +263,6 @@ L50:
             if (bound[(i__ + 1 << 1) + 2] > rq) {
                 goto L70;
             }
-/* L60: */
         }
         goto L80;
 
@@ -300,7 +296,6 @@ L200:
             if (sigma < bound[(i__ + 1 << 1) + 1]) {
                 goto L220;
             }
-/* L210: */
         }
         i__ = nval + 1;
 L220:
@@ -327,7 +322,6 @@ L220:
             m = j + i__;
             r__1 = (float)1. / vnorm;
             sscal_(n, &r__1, &eigvec[m * eigvec_dim1 + 1], &c__1);
-/* L225: */
         }
 
 /*  UPDATE INTERVALS */
@@ -348,7 +342,6 @@ L227:
             if (numl >= i__) {
                 bound[(i__ + 1 << 1) + 2] = sigma;
             }
-/* L230: */
         }
         if (numl < nval + 1) {
 /* Computing MAX */
@@ -390,7 +383,6 @@ L310:
                     * eigvec_dim1 + 1], &c__1);
             saxpy_(n, &r__1, &eigvec[i__ * eigvec_dim1 + 1], &c__1, &eigvec[j
                     * eigvec_dim1 + 1], &c__1);
-/* L320: */
         }
 L330:
         vnorm = snrm2_(n, &eigvec[j * eigvec_dim1 + 1], &c__1);
@@ -406,7 +398,7 @@ L330:
             goto L305;
         }
         if (j == nval) {
-            return 0;
+            return;
         }
         m = j + 1;
         i__2 = nval;
@@ -415,19 +407,14 @@ L330:
                     * eigvec_dim1 + 1], &c__1);
             saxpy_(n, &r__1, &eigvec[j * eigvec_dim1 + 1], &c__1, &eigvec[i__
                     * eigvec_dim1 + 1], &c__1);
-/* L340: */
         }
-/* L400: */
     }
-    return 0;
-
-/* L500: */
 } /* slabcm_ */
 
 
 /* *********************************************************************** */
 
-/* Subroutine */ int slabfc_(n, nband, a, sigma, number, lde, eigvec, numl,
+/* Subroutine */ void slabfc_(n, nband, a, sigma, number, lde, eigvec, numl,
         ldad, atemp, d__, atol)
 integer *n, *nband;
 real *a, *sigma;
@@ -447,7 +434,7 @@ real *atemp, *d__, *atol;
     /* Local variables */
     static real zero[1];
     static integer i__, j, k, l, m;
-    extern /* Subroutine */ int scopy_(), sswap_(), saxpy_();
+    extern /* Subroutine */ void scopy_(), sswap_(), saxpy_();
     static integer la, ld, kk, nb1, lpm;
 
 /*  THIS SUBROUTINE FACTORS (A-SIGMA*I) WHERE A IS A GIVEN BAND */
@@ -509,7 +496,6 @@ real *atemp, *d__, *atol;
             la = k - i__;
             ld = *nband - i__;
             d__[ld + *nband * d_dim1] = a[i__ + 1 + la * a_dim1];
-/* L10: */
         }
 
 L20:
@@ -523,7 +509,6 @@ L20:
         for (i__ = 1; i__ <= i__2; ++i__) {
             ld = *nband + i__;
             d__[ld + *nband * d_dim1] = a[i__ + 1 + k * a_dim1];
-/* L30: */
         }
 
 /*   TERMINATE */
@@ -598,7 +583,6 @@ L80:
             scopy_(&i__3, &d__[i__ + 1 + (i__ + 1) * d_dim1], &c__1, &d__[i__
                     + i__ * d_dim1], &c__1);
             d__[*ldad + i__ * d_dim1] = (float)0.;
-/* L90: */
         }
 L100:
         ;
@@ -613,13 +597,12 @@ L110:
         i__2 = *nband - i__ + 1;
         scopy_(&i__2, &d__[i__ + i__ * d_dim1], &c__1, &atemp[l * atemp_dim1
                 + 1], &c__1);
-/* L120: */
     }
 
 /*   BACK SUBSTITUTION */
 
     if (*number == 0) {
-        return 0;
+        return;
     }
     i__1 = *n;
     for (kk = 1; kk <= i__1; ++kk) {
@@ -629,7 +612,6 @@ L110:
                     1]);
         }
 
-/* L130: */
         i__2 = *number;
         for (i__ = 1; i__ <= i__2; ++i__) {
             eigvec[k + i__ * eigvec_dim1] /= atemp[k * atemp_dim1 + 1];
@@ -642,17 +624,14 @@ L110:
                 l = k - j;
                 eigvec[l + i__ * eigvec_dim1] -= atemp[j + 1 + l * atemp_dim1]
                          * eigvec[k + i__ * eigvec_dim1];
-/* L140: */
             }
 L150:
             ;
         }
-/* L160: */
     }
-    return 0;
 } /* slabfc_ */
 
-/* Subroutine */ int slaeig_(n, nband, nl, nr, a, eigval, lde, eigvec, bound,
+/* Subroutine */ void slaeig_(n, nband, nl, nr, a, eigval, lde, eigvec, bound,
         atemp, d__, vtemp, eps, tmin, tmax)
 integer *n, *nband, *nl, *nr;
 real *a, *eigval;
@@ -670,7 +649,7 @@ real *eigvec, *bound, *atemp, *d__, *vtemp, *eps, *tmin, *tmax;
     static real atol;
     static integer nval, i__, m;
     static real artol;
-    extern /* Subroutine */ int slabcm_();
+    extern /* Subroutine */ void slabcm_();
 
 /*  THIS IS A SPECIALIZED VERSION OF THE SUBROUTINE BNDEIG TAILORED */
 /*  SPECIFICALLY FOR USE BY THE LASO PACKAGE. */
@@ -712,7 +691,7 @@ real *eigvec, *bound, *atemp, *d__, *vtemp, *eps, *tmin, *tmax;
     }
     eigval[1] = a[a_dim1 + 1];
     eigvec[eigvec_dim1 + 1] = (float)1.;
-    return 0;
+    return;
 
 /*   SET UP INITIAL EIGENVALUE BOUNDS */
 
@@ -722,7 +701,6 @@ L30:
     for (i__ = 2; i__ <= i__1; ++i__) {
         bound[(i__ << 1) + 1] = *tmin;
         bound[(i__ << 1) + 2] = *tmax;
-/* L50: */
     }
     bound[4] = *tmax;
     bound[(nval + 2 << 1) + 1] = *tmin;
@@ -733,17 +711,15 @@ L30:
         bound[(nval + 2 << 1) + 1] = *tmax;
     }
 
-/* L60: */
     slabcm_(n, nband, nl, nr, &a[a_offset], &eigval[1], lde, &eigvec[
             eigvec_offset], &atol, &artol, &bound[3], &atemp[1], &d__[1], &
             vtemp[1]);
-    return 0;
 } /* slaeig_ */
 
 
 /* *********************************************************************** */
 
-/* Subroutine */ int slager_(n, nband, nstart, a, tmin, tmax)
+/* Subroutine */ void slager_(n, nband, nstart, a, tmin, tmax)
 integer *n, *nband, *nstart;
 real *a, *tmin, *tmax;
 {
@@ -777,9 +753,7 @@ real *a, *tmin, *tmax;
         i__2 = *nband;
         for (i__ = 2; i__ <= i__2; ++i__) {
             temp += (r__1 = a[i__ + k * a_dim1], dabs(r__1));
-/* L10: */
         }
-/* L20: */
         l = min(k,*nband);
         if (l == 1) {
             goto L40;
@@ -788,7 +762,6 @@ real *a, *tmin, *tmax;
         for (i__ = 2; i__ <= i__2; ++i__) {
             m = k - i__ + 1;
             temp += (r__1 = a[i__ + m * a_dim1], dabs(r__1));
-/* L30: */
         }
 L40:
 /* Computing MIN */
@@ -797,15 +770,13 @@ L40:
 /* Computing MAX */
         r__1 = *tmax, r__2 = a[k * a_dim1 + 1] + temp;
         *tmax = dmax(r__1,r__2);
-/* L50: */
     }
-    return 0;
 } /* slager_ */
 
 
 /* *********************************************************************** */
 
-/* Subroutine */ int slaran_(n, x)
+/* Subroutine */ void slaran_(n, x)
 integer *n;
 real *x;
 {
@@ -842,15 +813,13 @@ real *x;
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
         x[i__] = urand_(&iurand) - (float).5;
-/* L10: */
     }
-    return 0;
 } /* slaran_ */
 
 
 /* ------------------------------------------------------------------ */
 
-/* Subroutine */ int smvpc_(nblock, bet, maxj, j, s, number, resnrm, orthcf,
+/* Subroutine */ void smvpc_(nblock, bet, maxj, j, s, number, resnrm, orthcf,
         rv)
 integer *nblock;
 real *bet;
@@ -900,21 +869,18 @@ real *resnrm, *orthcf, *rv;
 /* Computing MIN */
             r__2 = orthcf[i__], r__3 = (r__1 = rv[k], dabs(r__1));
             orthcf[i__] = dmin(r__2,r__3);
-/* L10: */
         }
         resnrm[i__] = snrm2_(nblock, &rv[1], &c__1);
-/* L20: */
     }
-    return 0;
 } /* smvpc_ */
 
 /*   VERSION 2    DOES NOT USE EISPACK */
 
 /* ------------------------------------------------------------------ */
 
-/* Subroutine */ int snlaso_(op, iovect, n, nval, nfig, nperm, nmval, val,
+/* Subroutine */ void snlaso_(op, iovect, n, nval, nfig, nperm, nmval, val,
         nmvec, vec, nblock, maxop, maxj, work, ind, ierr)
-/* Subroutine */ int (*op) (), (*iovect) ();
+/* Subroutine */ void (*op) (), (*iovect) ();
 integer *n, *nval, *nfig, *nperm, *nmval;
 real *val;
 integer *nmvec;
@@ -933,13 +899,13 @@ integer *ind, *ierr;
     static integer i__, m, nband;
     static real delta;
     static logical small;
-    extern /* Subroutine */ int snwla_();
+    extern /* Subroutine */ void snwla_();
     static integer i1, i2, i3, i4, i5, i6, i7, i8, i9;
-    extern /* Subroutine */ int scopy_();
+    extern /* Subroutine */ void scopy_();
     static integer i10, i11, i12, i13, nv;
-    extern /* Subroutine */ int snppla_();
+    extern /* Subroutine */ void snppla_();
     static logical raritz;
-    extern /* Subroutine */ int sortqr_(), svsort_();
+    extern /* Subroutine */ void sortqr_(), svsort_();
     static real eps;
     static integer nop;
 
@@ -1162,7 +1128,7 @@ integer *ind, *ierr;
         *ierr += 512;
     }
     if (*ierr != 0) {
-        return 0;
+        return;
     }
 
     small = *nval < 0;
@@ -1188,7 +1154,6 @@ integer *ind, *ierr;
     i__1 = *nperm;
     for (i__ = 1; i__ <= i__1; ++i__) {
         val[i__ + val_dim1] = -val[i__ + val_dim1];
-/* L10: */
     }
 
 /* THIS SORTS THE USER SUPPLIED VALUES AND VECTORS. */
@@ -1205,7 +1170,6 @@ L20:
         val[i__ + (val_dim1 << 1)] = (r__1 = val[i__ + (val_dim1 << 1)], dabs(
                 r__1));
         val[i__ + val_dim1 * 3] = snrm2_(n, &vec[i__ * vec_dim1 + 1], &c__1);
-/* L60: */
     }
 
 /* THIS PERFORMS THE ORTHONORMALIZATION. */
@@ -1221,8 +1185,7 @@ L20:
             goto L70;
         }
         *ierr = -1;
-        return 0;
-
+        return;
 L70:
         ;
     }
@@ -1247,7 +1210,6 @@ L110:
         if (temp == (float)1.) {
             goto L130;
         }
-/* L120: */
     }
 
 /* ------------------------------------------------------------------ */
@@ -1297,17 +1259,17 @@ L130:
 
 L140:
     ind[1] = nop;
-    return 0;
+    return;
 } /* snlaso_ */
 
 
 /* ------------------------------------------------------------------ */
 
-/* Subroutine */ int snwla_(op, iovect, n, nband, nval, nfig, nperm, val,
+/* Subroutine */ void snwla_(op, iovect, n, nband, nval, nfig, nperm, val,
         nmvec, vec, nblock, maxop, maxj, nop, p1, p0, res, tau, otau, t, alp,
         bet, s, p2, bound, atemp, vtemp, d__, ind, small, raritz, delta, eps,
         ierr)
-/* Subroutine */ int (*op) (), (*iovect) ();
+/* Subroutine */ void (*op) (), (*iovect) ();
 integer *n, *nband, *nval, *nfig, *nperm;
 real *val;
 integer *nmvec;
@@ -1338,22 +1300,22 @@ integer *ierr;
     static real zero[1], utol;
     extern doublereal snrm2_();
     static integer i__, j, k, l, m;
-    extern /* Subroutine */ int sscal_();
+    extern /* Subroutine */ void sscal_();
     static integer ngood, nleft;
     static real anorm;
     static integer mtemp;
-    extern /* Subroutine */ int smvpc_();
+    extern /* Subroutine */ void smvpc_();
     static integer i1;
     static real pnorm, epsrt, rnorm;
-    extern /* Subroutine */ int scopy_(), saxpy_();
+    extern /* Subroutine */ void scopy_(), saxpy_();
     static integer ii, ng;
-    extern /* Subroutine */ int slaeig_(), slager_();
+    extern /* Subroutine */ void slaeig_(), slager_();
     static real betmin, alpmin, betmax, alpmax;
     static integer ntheta;
-    extern /* Subroutine */ int slaran_();
+    extern /* Subroutine */ void slaran_();
     static logical enough;
     static integer number, nstart;
-    extern /* Subroutine */ int sortqr_(), svsort_();
+    extern /* Subroutine */ void sortqr_(), svsort_();
 
 /* SNWLA IMPLEMENTS THE LANCZOS ALGORITHM WITH SELECTIVE */
 /* ORTHOGONALIZATION. */
@@ -1489,7 +1451,6 @@ L30:
         if (temp == (float)0.) {
             slaran_(n, &p1[i__ * p1_dim1 + 1]);
         }
-/* L50: */
     }
     if (*nperm == 0) {
         goto L70;
@@ -1498,7 +1459,6 @@ L30:
     for (i__ = 1; i__ <= i__1; ++i__) {
         tau[i__] = (float)1.;
         otau[i__] = (float)0.;
-/* L60: */
     }
 L70:
     i__1 = *n * *nblock;
@@ -1511,7 +1471,6 @@ L70:
     i__1 = mtemp;
     for (i__ = 1; i__ <= i__1; ++i__) {
         scopy_(&j, zero, &c__0, &s[i__ * s_dim1 + 1], &c__1);
-/* L75: */
     }
     ngood = 0;
     tmin = (float)1e30;
@@ -1558,7 +1517,6 @@ L80:
                     n) * epsrt * anorm && i__ > *nperm) {
                 goto L380;
             }
-/* L90: */
         }
 L100:
         ;
@@ -1588,7 +1546,6 @@ L110:
             t[l + m * t_dim1] = -t[l + m * t_dim1];
             --l;
             ++m;
-/* L120: */
         }
 L130:
         ;
@@ -1610,9 +1567,7 @@ L160:
             r__1 = -bet[i__ + k * bet_dim1];
             saxpy_(n, &r__1, &p0[k * p0_dim1 + 1], &c__1, &p2[i__ * p2_dim1 +
                     1], &c__1);
-/* L170: */
         }
-/* L180: */
     }
 
 /* THIS COMPUTES ALP AND P2=P2-P1*ALP. */
@@ -1632,9 +1587,7 @@ L160:
                 saxpy_(n, &r__1, &p1[k * p1_dim1 + 1], &c__1, &p2[i__ *
                         p2_dim1 + 1], &c__1);
             }
-/* L190: */
         }
-/* L200: */
     }
 
 /*  REORTHOGONALIZATION OF THE SECOND BLOCK */
@@ -1658,9 +1611,7 @@ L160:
             }
             ii = i__ - k + 1;
             alp[ii + k * alp_dim1] += temp;
-/* L210: */
         }
-/* L215: */
     }
 
 /* THIS ORTHONORMALIZES THE NEXT BLOCK */
@@ -1677,15 +1628,12 @@ L220:
         for (k = i__; k <= i__2; ++k) {
             l = k - i__ + 1;
             t[l + m * t_dim1] = alp[l + i__ * alp_dim1];
-/* L230: */
         }
         i__2 = i__;
         for (k = 1; k <= i__2; ++k) {
             l = *nblock - i__ + k + 1;
             t[l + m * t_dim1] = bet[k + i__ * bet_dim1];
-/* L240: */
         }
-/* L250: */
     }
 
 /* THIS NEGATES T IF SMALL IS FALSE. */
@@ -1699,9 +1647,7 @@ L220:
         i__2 = l;
         for (k = 1; k <= i__2; ++k) {
             t[k + i__ * t_dim1] = -t[k + i__ * t_dim1];
-/* L260: */
         }
-/* L270: */
     }
 
 /* THIS SHIFTS THE LANCZOS VECTORS */
@@ -1744,9 +1690,7 @@ L305:
             i__3 = *nblock - i__ + 1;
             alp[l + k * alp_dim1] = sdot_(&i__3, &bet[i__ + i__ * bet_dim1],
                     nblock, &bet[k + i__ * bet_dim1], nblock);
-/* L300: */
         }
-/* L310: */
     }
     if (number == 0) {
         goto L330;
@@ -1774,7 +1718,6 @@ L305:
         }
         otau[i__] = tau[i__];
         tau[i__] = temp;
-/* L320: */
     }
 
 /* THIS COMPUTES THE LARGEST SINGULAR VALUE OF BET. */
@@ -1815,7 +1758,7 @@ L380:
     *ierr = -8;
 L390:
     if (nleft == 0) {
-        return 0;
+        return;
     }
     test = TRUE_;
 L400:
@@ -1915,7 +1858,6 @@ L460:
     i__1 = ntheta;
     for (i__ = 1; i__ <= i__1; ++i__) {
         vtemp[i__] = (real) ind[i__];
-/* L465: */
     }
     goto L500;
 
@@ -1989,7 +1931,6 @@ L530:
 /* Computing MIN */
         r__1 = temp, r__2 = atemp[i__];
         temp = dmin(r__1,r__2);
-/* L535: */
     }
     m = ngood + 1;
     l = ngood + min(nstart,*nblock);
@@ -1997,7 +1938,6 @@ L530:
     for (i__ = m; i__ <= i__1; ++i__) {
         r__1 = temp / atemp[i__];
         sscal_(&j, &r__1, &s[i__ * s_dim1 + 1], &c__1);
-/* L540: */
     }
     m = (nstart - 1) / *nblock;
     if (m == 0) {
@@ -2016,9 +1956,7 @@ L530:
             r__1 = temp / atemp[l];
             saxpy_(&j, &r__1, &s[l * s_dim1 + 1], &c__1, &s[i1 * s_dim1 + 1],
                     &c__1);
-/* L550: */
         }
-/* L560: */
     }
 L570:
     nstart = min(nstart,*nblock);
@@ -2033,7 +1971,6 @@ L580:
     for (i__ = 1; i__ <= i__1; ++i__) {
         m = *nperm + i__;
         res[m] = atemp[i__];
-/* L590: */
     }
 
 /* THIS COMPUTES THE RITZ VECTORS BY SEQUENTIALLY RECALLING THE */
@@ -2052,7 +1989,6 @@ L600:
     i__1 = number;
     for (i__ = m; i__ <= i__1; ++i__) {
         scopy_(n, zero, &c__0, &vec[i__ * vec_dim1 + 1], &c__1);
-/* L610: */
     }
 L620:
     i__1 = j;
@@ -2070,7 +2006,6 @@ L620:
                 i1 = ngood + l;
                 saxpy_(n, &s[m + i1 * s_dim1], &p2[k * p2_dim1 + 1], &c__1, &
                         p1[l * p1_dim1 + 1], &c__1);
-/* L630: */
             }
 L640:
             if (ngood == 0) {
@@ -2081,12 +2016,10 @@ L640:
                 i1 = l + *nperm;
                 saxpy_(n, &s[m + l * s_dim1], &p2[k * p2_dim1 + 1], &c__1, &
                         vec[i1 * vec_dim1 + 1], &c__1);
-/* L650: */
             }
 L660:
             ;
         }
-/* L670: */
     }
     if (test || enough) {
         goto L690;
@@ -2102,7 +2035,6 @@ L660:
         sscal_(n, &temp, &vec[i__ * vec_dim1 + 1], &c__1);
         tau[i__] = (float)1.;
         otau[i__] = (float)1.;
-/* L680: */
     }
 
 /*  SHIFT S VECTORS TO ALIGN FOR LATER CALL TO SLAEIG */
@@ -2161,7 +2093,7 @@ L690:
 
     m = *nperm - *nblock + 1;
     if (m <= 0) {
-        return 0;
+        return;
     }
     i__2 = m;
     for (i__ = 1; i__ <= i__2; ++i__) {
@@ -2169,7 +2101,6 @@ L690:
         if (val[l] - val[i__] < tola) {
             goto L30;
         }
-/* L780: */
     }
 
 /* THIS DOES A CLUSTER TEST TO SEE IF A FINAL RAYLEIGH-RITZ */
@@ -2178,7 +2109,7 @@ L690:
 L790:
     m = *nperm - *nblock;
     if (m <= 0) {
-        return 0;
+        return;
     }
     i__2 = m;
     for (i__ = 1; i__ <= i__2; ++i__) {
@@ -2187,11 +2118,11 @@ L790:
             goto L800;
         }
         *raritz = TRUE_;
-        return 0;
+        return;
 L800:
         ;
     }
-    return 0;
+    return;
 
 /* ------------------------------------------------------------------ */
 
@@ -2206,9 +2137,9 @@ L810:
 
 /* ------------------------------------------------------------------ */
 
-/* Subroutine */ int snppla_(op, iovect, n, nperm, nop, nmval, val, nmvec,
+/* Subroutine */ void snppla_(op, iovect, n, nperm, nop, nmval, val, nmvec,
         vec, nblock, h__, hv, p, q, bound, d__, delta, small, raritz, eps)
-/* Subroutine */ int (*op) (), (*iovect) ();
+/* Subroutine */ void (*op) (), (*iovect) ();
 integer *n, *nperm, *nop, *nmval;
 real *val;
 integer *nmvec;
@@ -2230,9 +2161,9 @@ real *eps;
     static real zero[1];
     extern doublereal snrm2_();
     static integer i__, j, k, l, m;
-    extern /* Subroutine */ int scopy_(), saxpy_();
+    extern /* Subroutine */ void scopy_(), saxpy_();
     static integer jj, kk;
-    extern /* Subroutine */ int slaeig_(), slager_();
+    extern /* Subroutine */ void slaeig_(), slager_();
 
 /* THIS SUBROUTINE POST PROCESSES THE EIGENVECTORS.  BLOCK MATRIX */
 /* VECTOR PRODUCTS ARE USED TO MINIMIZED THE NUMBER OF CALLS TO OP. */
@@ -2289,7 +2220,6 @@ real *eps;
     for (i__ = 1; i__ <= i__1; ++i__) {
         scopy_(n, &vec[i__ * vec_dim1 + 1], &c__1, &p[i__ * p_dim1 + 1], &
                 c__1);
-/* L10: */
     }
     (*iovect)(n, &m, &p[p_offset], &m, &c__0);
     (*op)(n, &m, &p[p_offset], &q[q_offset]);
@@ -2301,9 +2231,7 @@ real *eps;
             jj = j - i__ + 1;
             h__[jj + i__ * h_dim1] = temp * sdot_(n, &vec[j * vec_dim1 + 1], &
                     c__1, &q[i__ * q_dim1 + 1], &c__1);
-/* L20: */
         }
-/* L30: */
     }
     if (*nperm < *nblock) {
         goto L90;
@@ -2318,7 +2246,6 @@ L40:
             l = i__ - *nblock + j;
             scopy_(n, &vec[l * vec_dim1 + 1], &c__1, &p[j * p_dim1 + 1], &
                     c__1);
-/* L50: */
         }
         (*iovect)(n, nblock, &p[p_offset], &i__, &c__0);
         (*op)(n, nblock, &p[p_offset], &q[q_offset]);
@@ -2331,11 +2258,8 @@ L40:
                 kk = k - l + 1;
                 h__[kk + l * h_dim1] = temp * sdot_(n, &vec[k * vec_dim1 + 1],
                          &c__1, &q[j * q_dim1 + 1], &c__1);
-/* L60: */
             }
-/* L70: */
         }
-/* L80: */
     }
 
 /* THIS COMPUTES THE SPECTRAL DECOMPOSITION OF H. */
@@ -2354,7 +2278,6 @@ L90:
     i__2 = *nperm;
     for (i__ = 1; i__ <= i__2; ++i__) {
         scopy_(n, zero, &c__0, &vec[i__ * vec_dim1 + 1], &c__1);
-/* L120: */
     }
     m = *nperm % *nblock;
     if (m == 0) {
@@ -2367,9 +2290,7 @@ L90:
         for (j = 1; j <= i__1; ++j) {
             saxpy_(n, &hv[i__ + j * hv_dim1], &p[i__ * p_dim1 + 1], &c__1, &
                     vec[j * vec_dim1 + 1], &c__1);
-/* L130: */
         }
-/* L140: */
     }
     if (*nperm < *nblock) {
         goto L190;
@@ -2387,11 +2308,8 @@ L150:
             for (k = 1; k <= i__4; ++k) {
                 saxpy_(n, &hv[l + k * hv_dim1], &p[j * p_dim1 + 1], &c__1, &
                         vec[k * vec_dim1 + 1], &c__1);
-/* L160: */
             }
-/* L170: */
         }
-/* L180: */
     }
 
 /* ------------------------------------------------------------------ */
@@ -2411,7 +2329,6 @@ L190:
     for (i__ = 1; i__ <= i__1; ++i__) {
         scopy_(n, &vec[i__ * vec_dim1 + 1], &c__1, &p[i__ * p_dim1 + 1], &
                 c__1);
-/* L200: */
     }
     (*op)(n, &m, &p[p_offset], &q[q_offset]);
     ++(*nop);
@@ -2423,7 +2340,6 @@ L190:
         saxpy_(n, &r__1, &p[i__ * p_dim1 + 1], &c__1, &q[i__ * q_dim1 + 1], &
                 c__1);
         val[i__ + (val_dim1 << 1)] = snrm2_(n, &q[i__ * q_dim1 + 1], &c__1);
-/* L210: */
     }
     if (*nperm < *nblock) {
         goto L260;
@@ -2438,7 +2354,6 @@ L220:
             l = i__ - 1 + j;
             scopy_(n, &vec[l * vec_dim1 + 1], &c__1, &p[j * p_dim1 + 1], &
                     c__1);
-/* L230: */
         }
         (*op)(n, nblock, &p[p_offset], &q[q_offset]);
         ++(*nop);
@@ -2451,9 +2366,7 @@ L220:
             saxpy_(n, &r__1, &p[j * p_dim1 + 1], &c__1, &q[j * q_dim1 + 1], &
                     c__1);
             val[l + (val_dim1 << 1)] = snrm2_(n, &q[j * q_dim1 + 1], &c__1);
-/* L240: */
         }
-/* L250: */
     }
 
 /* THIS COMPUTES THE ACCURACY ESTIMATES.  FOR CONSISTENCY WITH SILASO */
@@ -2464,7 +2377,7 @@ L260:
 L270:
     ++i__;
     if (i__ > *nperm) {
-        return 0;
+        return;
     }
     temp = *delta - val[i__ + val_dim1];
     if (! (*small)) {
@@ -2483,7 +2396,7 @@ L270:
 
 /* ------------------------------------------------------------------ */
 
-/* Subroutine */ int sortqr_(nz, n, nblock, z__, b)
+/* Subroutine */ void sortqr_(nz, n, nblock, z__, b)
 integer *nz, *n, *nblock;
 real *z__, *b;
 {
@@ -2499,7 +2412,7 @@ real *z__, *b;
     extern doublereal sdot_(), snrm2_();
     static integer i__, j, k, m;
     static real sigma;
-    extern /* Subroutine */ int sscal_(), saxpy_();
+    extern /* Subroutine */ void sscal_(), saxpy_();
     static integer length;
     static real tau;
 
@@ -2548,7 +2461,6 @@ real *z__, *b;
 L10:
             b[i__ + k * b_dim1] = z__[i__ + k * z_dim1];
             z__[i__ + k * z_dim1] = (float)0.;
-/* L20: */
         }
 L30:
         ;
@@ -2581,22 +2493,20 @@ L30:
                     + k * z_dim1], &c__1) / tau;
             saxpy_(&length, &temp, &z__[i__ + i__ * z_dim1], &c__1, &z__[i__
                     + k * z_dim1], &c__1);
-/* L40: */
         }
 L50:
         r__1 = (float)-1. / sigma;
         sscal_(&length, &r__1, &z__[i__ + i__ * z_dim1], &c__1);
 L60:
         z__[i__ + i__ * z_dim1] += (float)1.;
-/* L70: */
     }
-    return 0;
+    return;
 } /* sortqr_ */
 
 
 /* ------------------------------------------------------------------- */
 
-/* Subroutine */ int svsort_(num, val, res, iflag, v, nmvec, n, vec)
+/* Subroutine */ void svsort_(num, val, res, iflag, v, nmvec, n, vec)
 integer *num;
 real *val, *res;
 integer *iflag;
@@ -2610,7 +2520,7 @@ real *vec;
     /* Local variables */
     static real temp;
     static integer i__, k, m;
-    extern /* Subroutine */ int sswap_();
+    extern /* Subroutine */ void sswap_();
 
 /*  THIS SUBROUTINE SORTS THE EIGENVALUES (VAL) IN ASCENDING ORDER */
 /*  WHILE CONCURRENTLY SWAPPING THE RESIDUALS AND VECTORS. */
@@ -2624,7 +2534,7 @@ real *vec;
 
     /* Function Body */
     if (*num <= 1) {
-        return 0;
+        return;
     }
     i__1 = *num;
     for (i__ = 2; i__ <= i__1; ++i__) {
@@ -2651,8 +2561,6 @@ real *vec;
 L10:
             ;
         }
-/* L20: */
     }
-    return 0;
 } /* svsort_ */
 

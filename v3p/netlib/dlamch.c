@@ -62,7 +62,7 @@ doublereal dlamch_(char *cmach)
     static doublereal rmin, rmax, t, rmach;
     extern logical lsame_(char *, char *);
     static doublereal small, sfmin;
-    extern /* Subroutine */ int dlamc2_(integer *, integer *, logical *,
+    extern /* Subroutine */ void dlamc2_(integer *, integer *, logical *,
             doublereal *, integer *, doublereal *, integer *, doublereal *);
     static integer it;
     static doublereal rnd, eps;
@@ -90,8 +90,7 @@ doublereal dlamch_(char *cmach)
         small = 1. / rmax;
         if (small >= sfmin) {
 
-/*           Use SMALL plus a bit, to avoid the possibility of rou
-nding
+/*           Use SMALL plus a bit, to avoid the possibility of rounding
              causing overflow when computing  1/sfmin. */
 
             sfmin = small * (eps + 1.);
@@ -129,7 +128,7 @@ nding
 
 #include "f2c.h"
 
-/* Subroutine */ int dlamc1_(integer *beta, integer *t, logical *rnd, logical
+/* Subroutine */ void dlamc1_(integer *beta, integer *t, logical *rnd, logical
         *ieee1)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --
@@ -158,7 +157,6 @@ nding
             chopping  ( RND = .FALSE. )  occurs in addition. This may not
 
             be a reliable guide to the way in which the machine performs
-
             its arithmetic.
 
     IEEE1   (output) LOGICAL
@@ -201,18 +199,14 @@ nding
         first = FALSE_;
         one = 1.;
 
-/*        LBETA,  LIEEE1,  LT and  LRND  are the  local values  of  BE
-TA,
+/*        LBETA,  LIEEE1,  LT and  LRND  are the  local values  of  BETA,
           IEEE1, T and RND.
 
-          Throughout this routine  we use the function  DLAMC3  to ens
-ure
-          that relevant values are  stored and not held in registers,
- or
+          Throughout this routine  we use the function  DLAMC3  to ensure
+          that relevant values are  stored and not held in registers, or
           are not affected by optimizers.
 
-          Compute  a = 2.0**m  with the  smallest positive integer m s
-uch
+          Compute  a = 2.0**m  with the  smallest positive integer m such
           that
 
              fl( a + 1.0 ) = a. */
@@ -231,8 +225,7 @@ L10:
         }
 /* +       END WHILE
 
-          Now compute  b = 2.0**m  with the smallest positive integer
-m
+          Now compute  b = 2.0**m  with the smallest positive integer m
           such that
 
              fl( a + b ) .gt. a. */
@@ -249,12 +242,9 @@ L20:
         }
 /* +       END WHILE
 
-          Now compute the base.  a and c  are neighbouring floating po
-int
-          numbers  in the  interval  ( beta**t, beta**( t + 1 ) )  and
- so
-          their difference is beta. Adding 0.25 to c is to ensure that
- it
+          Now compute the base.  a and c  are neighbouring floating point
+          numbers  in the  interval  ( beta**t, beta**( t + 1 ) )  and so
+          their difference is beta. Adding 0.25 to c is to ensure that it
           is truncated to beta and not ( beta - 1 ). */
 
         qtr = one / 4;
@@ -263,10 +253,8 @@ int
         c = dlamc3_(&c, &d__1);
         lbeta = (integer) (c + qtr);
 
-/*        Now determine whether rounding or chopping occurs,  by addin
-g a
-          bit  less  than  beta/2  and a  bit  more  than  beta/2  to
- a. */
+/*        Now determine whether rounding or chopping occurs,  by adding a
+          bit  less  than  beta/2  and a  bit  more  than  beta/2  to a. */
 
         b = (doublereal) lbeta;
         d__1 = b / 2;
@@ -286,14 +274,10 @@ g a
             lrnd = FALSE_;
         }
 
-/*        Try and decide whether rounding is done in the  IEEE  'round
- to
-          nearest' style. B/2 is half a unit in the last place of the
-two
-          numbers A and SAVEC. Furthermore, A is even, i.e. has last
-bit
-          zero, and SAVEC is odd. Thus adding B/2 to A should not  cha
-nge
+/*        Try and decide whether rounding is done in the  IEEE  'round to
+          nearest' style. B/2 is half a unit in the last place of the two
+          numbers A and SAVEC. Furthermore, A is even, i.e. has last bit
+          zero, and SAVEC is odd. Thus adding B/2 to A should not  change
           A, but adding B/2 to SAVEC should change SAVEC. */
 
         d__1 = b / 2;
@@ -302,12 +286,9 @@ nge
         t2 = dlamc3_(&d__1, &savec);
         lieee1 = t1 == a && t2 > savec && lrnd;
 
-/*        Now find  the  mantissa, t.  It should  be the  integer part
- of
-          log to the base beta of a,  however it is safer to determine
-  t
-          by powering.  So we find t as the smallest positive integer
-for
+/*        Now find  the  mantissa, t.  It should  be the  integer part of
+          log to the base beta of a,  however it is safer to determine t
+          by powering.  So we find t as the smallest positive integer for
           which
 
              fl( beta**t + 1.0 ) = 1.0. */
@@ -334,7 +315,7 @@ L30:
     *t = lt;
     *rnd = lrnd;
     *ieee1 = lieee1;
-    return 0;
+    return;
 
 /*     End of DLAMC1 */
 
@@ -342,7 +323,7 @@ L30:
 
 #include "f2c.h"
 
-/* Subroutine */ int dlamc2_(integer *beta, integer *t, logical *rnd,
+/* Subroutine */ void dlamc2_(integer *beta, integer *t, logical *rnd,
         doublereal *eps, integer *emin, doublereal *rmin, integer *emax,
         doublereal *rmax)
 {
@@ -430,11 +411,11 @@ L30:
     static doublereal small;
     static integer gpmin;
     static doublereal third, lrmin, lrmax, sixth;
-    extern /* Subroutine */ int dlamc1_(integer *, integer *, logical *,
+    extern /* Subroutine */ void dlamc1_(integer *, integer *, logical *,
             logical *);
     extern doublereal dlamc3_(doublereal *, doublereal *);
     static logical lieee1;
-    extern /* Subroutine */ int dlamc4_(integer *, doublereal *, integer *),
+    extern /* Subroutine */ void dlamc4_(integer *, doublereal *, integer *),
             dlamc5_(integer *, integer *, integer *, logical *, integer *,
             doublereal *);
     static integer lt, ngnmin, ngpmin;
@@ -448,14 +429,11 @@ L30:
         one = 1.;
         two = 2.;
 
-/*        LBETA, LT, LRND, LEPS, LEMIN and LRMIN  are the local values
- of
+/*        LBETA, LT, LRND, LEPS, LEMIN and LRMIN  are the local values of
           BETA, T, RND, EPS, EMIN and RMIN.
 
-          Throughout this routine  we use the function  DLAMC3  to ens
-ure
-          that relevant values are stored  and not held in registers,
- or
+          Throughout this routine  we use the function  DLAMC3  to ensure
+          that relevant values are stored  and not held in registers, or
           are not affected by optimizers.
 
           DLAMC1 returns the parameters  LBETA, LT, LRND and LIEEE1.
@@ -470,8 +448,7 @@ ure
         a = pow_di(&b, &i__1);
         leps = a;
 
-/*        Try some tricks to see whether or not this is the correct  E
-PS. */
+/*        Try some tricks to see whether or not this is the correct  EPS. */
 
         b = two / 3;
         half = one / 2;
@@ -515,10 +492,8 @@ L10:
 
 /*        Computation of EPS complete.
 
-          Now find  EMIN.  Let A = + or - 1, and + or - (1 + BASE**(-3
-)).
-          Keep dividing  A by BETA until (gradual) underflow occurs. T
-his
+          Now find  EMIN.  Let A = + or - 1, and + or - (1 + BASE**(-3)).
+          Keep dividing  A by BETA until (gradual) underflow occurs. This
           is detected when we cannot recover the previous A. */
 
         rbase = one / lbeta;
@@ -540,14 +515,12 @@ his
         if (ngpmin == ngnmin && gpmin == gnmin) {
             if (ngpmin == gpmin) {
                 lemin = ngpmin;
-/*            ( Non twos-complement machines, no gradual under
-flow;
+/*            ( Non twos-complement machines, no gradual underflow;
                 e.g.,  VAX ) */
             } else if (gpmin - ngpmin == 3) {
                 lemin = ngpmin - 1 + lt;
                 ieee = TRUE_;
-/*            ( Non twos-complement machines, with gradual und
-erflow;
+/*            ( Non twos-complement machines, with gradual underflow;
                 e.g., IEEE standard followers ) */
             } else {
                 lemin = min(ngpmin,gpmin);
@@ -558,8 +531,7 @@ erflow;
         } else if (ngpmin == gpmin && ngnmin == gnmin) {
             if ((i__1 = ngpmin - ngnmin, abs(i__1)) == 1) {
                 lemin = max(ngpmin,ngnmin);
-/*            ( Twos-complement machines, no gradual underflow
-;
+/*            ( Twos-complement machines, no gradual underflow;
                 e.g., CYBER 205 ) */
             } else {
                 lemin = min(ngpmin,ngnmin);
@@ -571,8 +543,7 @@ erflow;
                  {
             if (gpmin - min(ngpmin,ngnmin) == 3) {
                 lemin = max(ngpmin,ngnmin) - 1 + lt;
-/*            ( Twos-complement machines with gradual underflo
-w;
+/*            ( Twos-complement machines with gradual underflow;
                 no known machine ) */
             } else {
                 lemin = min(ngpmin,ngnmin);
@@ -600,20 +571,15 @@ w;
         }
 /* **
 
-          Assume IEEE arithmetic if we found denormalised  numbers abo
-ve,
-          or if arithmetic seems to round in the  IEEE style,  determi
-ned
-          in routine DLAMC1. A true IEEE machine should have both  thi
-ngs
+          Assume IEEE arithmetic if we found denormalised  numbers above,
+          or if arithmetic seems to round in the  IEEE style,  determined
+          in routine DLAMC1. A true IEEE machine should have both  things
           true; however, faulty machines may have one or the other. */
 
         ieee = ieee || lieee1;
 
-/*        Compute  RMIN by successive division by  BETA. We could comp
-ute
-          RMIN as BASE**( EMIN - 1 ),  but some machines underflow dur
-ing
+/*        Compute  RMIN by successive division by  BETA. We could compute
+          RMIN as BASE**( EMIN - 1 ),  but some machines underflow during
           this computation. */
 
         lrmin = 1.;
@@ -637,9 +603,6 @@ ing
     *rmin = lrmin;
     *emax = lemax;
     *rmax = lrmax;
-
-    return 0;
-
 
 /*     End of DLAMC2 */
 
@@ -688,7 +651,7 @@ doublereal dlamc3_(doublereal *a, doublereal *b)
 
 #include "f2c.h"
 
-/* Subroutine */ int dlamc4_(integer *emin, doublereal *start, integer *base)
+/* Subroutine */ void dlamc4_(integer *emin, doublereal *start, integer *base)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
@@ -755,7 +718,6 @@ L10:
         i__1 = *base;
         for (i = 1; i <= *base; ++i) {
             d1 += b1;
-/* L20: */
         }
         d__1 = a * rbase;
         b2 = dlamc3_(&d__1, &zero);
@@ -765,13 +727,10 @@ L10:
         i__1 = *base;
         for (i = 1; i <= *base; ++i) {
             d2 += b2;
-/* L30: */
         }
         goto L10;
     }
 /* +    END WHILE */
-
-    return 0;
 
 /*     End of DLAMC4 */
 
@@ -779,7 +738,7 @@ L10:
 
 #include "f2c.h"
 
-/* Subroutine */ int dlamc5_(integer *beta, integer *p, integer *emin,
+/* Subroutine */ void dlamc5_(integer *beta, integer *p, integer *emin,
         logical *ieee, integer *emax, doublereal *rmax)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --
@@ -888,8 +847,7 @@ L10:
 /*        Either there are an odd number of bits used to store a
           floating-point number, which is unlikely, or some bits are
 
-          not used in the representation of numbers, which is possible
-,
+          not used in the representation of numbers, which is possible,
           (e.g. Cray machines) or the mantissa has an implicit bit,
           (e.g. IEEE machines, Dec Vax machines), which is perhaps the
 
@@ -946,7 +904,6 @@ it
     }
 
     *rmax = y;
-    return 0;
 
 /*     End of DLAMC5 */
 

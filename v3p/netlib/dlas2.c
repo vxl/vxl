@@ -6,7 +6,7 @@
 #include "f2c.h"
 
 /*<       SUBROUTINE DLAS2( F, G, H, SSMIN, SSMAX ) >*/
-/* Subroutine */ int dlas2_(doublereal *f, doublereal *g, doublereal *h,
+/* Subroutine */ void dlas2_(doublereal *f, doublereal *g, doublereal *h,
         doublereal *ssmin, doublereal *ssmax)
 {
     /* System generated locals */
@@ -146,10 +146,8 @@
 /*<             IF( AU.EQ.ZERO ) THEN >*/
             if (au == 0.) {
 
-/*              Avoid possible harmful underflow if exponent r
-ange */
-/*              asymmetric (true SSMIN may not underflow even
-if */
+/*              Avoid possible harmful underflow if exponent range */
+/*              asymmetric (true SSMIN may not underflow even if */
 /*              AU underflows) */
 
 /*<                SSMIN = ( FHMN*FHMX ) / GA >*/
@@ -180,11 +178,8 @@ if */
         }
 /*<       END IF >*/
     }
-/*<       RETURN >*/
-    return 0;
 
 /*     End of DLAS2 */
 
-/*<       END >*/
 } /* dlas2_ */
 

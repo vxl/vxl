@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* Subroutine */ int rs_(nm, n, a, w, matz, z, fv1, fv2, ierr)
+/* Subroutine */ void rs_(nm, n, a, w, matz, z, fv1, fv2, ierr)
 integer *nm, *n;
 doublereal *a, *w;
 integer *matz;
@@ -16,7 +16,7 @@ integer *ierr;
     integer a_dim1, a_offset, z_dim1, z_offset;
 
     /* Local variables */
-    extern /* Subroutine */ int tred1_(), tred2_(), tql1_(), tql2_();
+    extern /* Subroutine */ void tred1_(), tred2_(), tql1_(), tql2_();
 
 
 
@@ -93,6 +93,6 @@ L20:
     tred2_(nm, n, &a[a_offset], &w[1], &fv1[1], &z[z_offset]);
     tql2_(nm, n, &w[1], &fv1[1], &z[z_offset], ierr);
 L50:
-    return 0;
+    return;
 } /* rs_ */
 

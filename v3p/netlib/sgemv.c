@@ -6,7 +6,7 @@
 
 #include "f2c.h"
 
-/* Subroutine */ int sgemv_(char *trans, integer *m, integer *n, real *alpha,
+/* Subroutine */ void sgemv_(char *trans, integer *m, integer *n, real *alpha,
         real *a, integer *lda, real *x, integer *incx, real *beta, real *y,
         integer *incy)
 {
@@ -19,7 +19,7 @@
     static integer lenx, leny, i, j;
     extern logical lsame_(char *, char *);
     static integer ix, iy, jx, jy, kx, ky;
-    extern /* Subroutine */ int xerbla_(char *, integer *);
+    extern /* Subroutine */ void xerbla_(char *, integer *);
 
 
 /*  Purpose
@@ -144,13 +144,13 @@
     }
     if (info != 0) {
         xerbla_("SGEMV ", &info);
-        return 0;
+        return;
     }
 
 /*     Quick return if possible. */
 
     if (*m == 0 || *n == 0 || *alpha == 0. && *beta == 1.) {
-        return 0;
+        return;
     }
 
 /*     Set  LENX  and  LENY, the lengths of the vectors x and y, and set
@@ -211,7 +211,7 @@
         }
     }
     if (*alpha == 0.) {
-        return 0;
+        return;
     }
     if (lsame_(trans, "N")) {
 
@@ -277,7 +277,6 @@
         }
     }
 
-    return 0;
 
 /*     End of SGEMV . */
 

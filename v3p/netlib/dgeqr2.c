@@ -10,7 +10,7 @@
 static integer c__1 = 1;
 
 /*<       SUBROUTINE DGEQR2( M, N, A, LDA, TAU, WORK, INFO ) >*/
-/* Subroutine */ int dgeqr2_(integer *m, integer *n, doublereal *a, integer *
+/* Subroutine */ void dgeqr2_(integer *m, integer *n, doublereal *a, integer *
         lda, doublereal *tau, doublereal *work, integer *info)
 {
     /* System generated locals */
@@ -18,7 +18,7 @@ static integer c__1 = 1;
 
     /* Local variables */
     static integer i, k;
-    extern /* Subroutine */ int dlarf_(char *, integer *, integer *,
+    extern /* Subroutine */ void dlarf_(char *, integer *, integer *,
             doublereal *, integer *, doublereal *, doublereal *, integer *,
             doublereal *, ftnlen), dlarfg_(integer *, doublereal *,
             doublereal *, integer *, doublereal *), xerbla_(char *, integer *,
@@ -144,7 +144,7 @@ static integer c__1 = 1;
         i__1 = -(*info);
         xerbla_("DGEQR2", &i__1, 6L);
 /*<          RETURN >*/
-        return 0;
+        return;
 /*<       END IF >*/
     }
 
@@ -182,14 +182,9 @@ static integer c__1 = 1;
             a[i + i * a_dim1] = aii;
 /*<          END IF >*/
         }
-/*<    10 CONTINUE >*/
-/* L10: */
     }
-/*<       RETURN >*/
-    return 0;
 
 /*     End of DGEQR2 */
 
-/*<       END >*/
 } /* dgeqr2_ */
 

@@ -10,7 +10,7 @@
 static integer c__1 = 1;
 
 /*<       SUBROUTINE DGEQPF( M, N, A, LDA, JPVT, TAU, WORK, INFO ) >*/
-/* Subroutine */ int dgeqpf_(integer *m, integer *n, doublereal *a, integer *
+/* Subroutine */ void dgeqpf_(integer *m, integer *n, doublereal *a, integer *
         lda, integer *jpvt, doublereal *tau, doublereal *work, integer *info)
 {
     /* System generated locals */
@@ -25,21 +25,21 @@ static integer c__1 = 1;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     static doublereal temp2;
     static integer i, j;
-    extern /* Subroutine */ int dlarf_(char *, integer *, integer *,
+    extern /* Subroutine */ void dlarf_(char *, integer *, integer *,
             doublereal *, integer *, doublereal *, doublereal *, integer *,
             doublereal *, ftnlen);
     static integer itemp;
-    extern /* Subroutine */ int dswap_(integer *, doublereal *, integer *,
+    extern /* Subroutine */ void dswap_(integer *, doublereal *, integer *,
             doublereal *, integer *), dgeqr2_(integer *, integer *,
             doublereal *, integer *, doublereal *, doublereal *, integer *),
             dorm2r_(char *, char *, integer *, integer *, integer *,
             doublereal *, integer *, doublereal *, doublereal *, integer *,
             doublereal *, integer *, ftnlen, ftnlen);
     static integer ma, mn;
-    extern /* Subroutine */ int dlarfg_(integer *, doublereal *, doublereal *,
+    extern /* Subroutine */ void dlarfg_(integer *, doublereal *, doublereal *,
              integer *, doublereal *);
     extern integer idamax_(integer *, doublereal *, integer *);
-    extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
+    extern /* Subroutine */ void xerbla_(char *, integer *, ftnlen);
     static doublereal aii;
     static integer pvt;
 
@@ -176,7 +176,7 @@ static integer c__1 = 1;
         i__1 = -(*info);
         xerbla_("DGEQPF", &i__1, 6L);
 /*<          RETURN >*/
-        return 0;
+        return;
 /*<       END IF >*/
     }
 
@@ -215,8 +215,6 @@ static integer c__1 = 1;
             jpvt[i] = i;
 /*<          END IF >*/
         }
-/*<    10 CONTINUE >*/
-/* L10: */
     }
 /*<       ITEMP = ITEMP - 1 >*/
     --itemp;
@@ -255,8 +253,6 @@ static integer c__1 = 1;
             work[i] = dnrm2_(&i__2, &a[itemp + 1 + i * a_dim1], &c__1);
 /*<             WORK( N+I ) = WORK( I ) >*/
             work[*n + i] = work[i];
-/*<    20    CONTINUE >*/
-/* L20: */
         }
 
 /*        Compute factorization */
@@ -368,20 +364,12 @@ static integer c__1 = 1;
                     }
 /*<                END IF >*/
                 }
-/*<    30       CONTINUE >*/
-/* L30: */
             }
-
-/*<    40    CONTINUE >*/
-/* L40: */
         }
 /*<       END IF >*/
     }
-/*<       RETURN >*/
-    return 0;
 
 /*     End of DGEQPF */
 
-/*<       END >*/
 } /* dgeqpf_ */
 

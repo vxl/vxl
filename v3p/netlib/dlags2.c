@@ -6,7 +6,7 @@
 #include "f2c.h"
 
 /*<    >*/
-/* Subroutine */ int dlags2_(logical *upper, doublereal *a1, doublereal *a2,
+/* Subroutine */ void dlags2_(logical *upper, doublereal *a1, doublereal *a2,
         doublereal *a3, doublereal *b1, doublereal *b2, doublereal *b3,
         doublereal *csu, doublereal *snu, doublereal *csv, doublereal *snv,
         doublereal *csq, doublereal *snq)
@@ -17,7 +17,7 @@
     /* Local variables */
     static doublereal aua11, aua12, aua21, aua22, avb12, avb11, avb21, avb22,
             ua11r, ua22r, vb11r, vb22r, a, b, c, d, r, s1, s2;
-    extern /* Subroutine */ int dlasv2_(doublereal *, doublereal *,
+    extern /* Subroutine */ void dlasv2_(doublereal *, doublereal *,
             doublereal *, doublereal *, doublereal *, doublereal *,
             doublereal *, doublereal *, doublereal *), dlartg_(doublereal *,
             doublereal *, doublereal *, doublereal *, doublereal *);
@@ -94,8 +94,7 @@
 /*  SNQ     (output) DOUBLE PRECISION */
 /*          The desired orthogonal matrix Q. */
 
-/*  =====================================================================
-*/
+/*  ===================================================================== */
 
 /*     .. Parameters .. */
 /*<       DOUBLE PRECISION   ZERO >*/
@@ -138,8 +137,7 @@
 /*<    >*/
         if (abs(csl) >= abs(snl) || abs(csr) >= abs(snr)) {
 
-/*           Compute the (1,1) and (1,2) elements of U'*A and V'*B
-, */
+/*           Compute the (1,1) and (1,2) elements of U'*A and V'*B, */
 /*           and (1,2) element of |U|'*|A| and |V|'*|B|. */
 
 /*<             UA11R = CSL*A1 >*/
@@ -194,8 +192,7 @@
 /*<          ELSE >*/
         } else {
 
-/*           Compute the (2,1) and (2,2) elements of U'*A and V'*B
-, */
+/*           Compute the (2,1) and (2,2) elements of U'*A and V'*B, */
 /*           and (2,2) element of |U|'*|A| and |V|'*|B|. */
 
 /*<             UA21 = -SNL*A1 >*/
@@ -213,8 +210,7 @@
 /*<             AVB22 = ABS( SNR )*ABS( B2 ) + ABS( CSR )*ABS( B3 ) >*/
             avb22 = abs(snr) * abs(*b2) + abs(csr) * abs(*b3);
 
-/*           zero (2,2) elements of U'*A and V'*B, and then swap.
-*/
+/*           zero (2,2) elements of U'*A and V'*B, and then swap. */
 
 /*<             IF( ( ABS( UA21 )+ABS( UA22 ) ).NE.ZERO ) THEN >*/
             if (abs(ua21) + abs(ua22) != 0.) {
@@ -277,8 +273,7 @@
 /*<    >*/
         if (abs(csr) >= abs(snr) || abs(csl) >= abs(snl)) {
 
-/*           Compute the (2,1) and (2,2) elements of U'*A and V'*B
-, */
+/*           Compute the (2,1) and (2,2) elements of U'*A and V'*B, */
 /*           and (2,1) element of |U|'*|A| and |V|'*|B|. */
 
 /*<             UA21 = -SNR*A1 + CSR*A2 >*/
@@ -330,8 +325,7 @@
 /*<          ELSE >*/
         } else {
 
-/*           Compute the (1,1) and (1,2) elements of U'*A and V'*B
-, */
+/*           Compute the (1,1) and (1,2) elements of U'*A and V'*B, */
 /*           and (1,1) element of |U|'*|A| and |V|'*|B|. */
 
 /*<             UA11 = CSR*A1 + SNR*A2 >*/
@@ -349,8 +343,7 @@
 /*<             AVB11 = ABS( CSL )*ABS( B1 ) + ABS( SNL )*ABS( B2 ) >*/
             avb11 = abs(csl) * abs(*b1) + abs(snl) * abs(*b2);
 
-/*           zero (1,1) elements of U'*A and V'*B, and then swap.
-*/
+/*           zero (1,1) elements of U'*A and V'*B, and then swap.  */
 
 /*<             IF( ( ABS( UA11 )+ABS( UA12 ) ).NE.ZERO ) THEN >*/
             if (abs(ua11) + abs(ua12) != 0.) {
@@ -387,11 +380,7 @@
 /*<       END IF >*/
     }
 
-/*<       RETURN >*/
-    return 0;
-
 /*     End of DLAGS2 */
 
-/*<       END >*/
 } /* dlags2_ */
 

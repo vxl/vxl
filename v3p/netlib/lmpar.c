@@ -4,7 +4,7 @@
 
 static integer c__2 = 2;
 
-/* Subroutine */ int lmpar_(n, r, ldr, ipvt, diag, qtb, delta, par, x, sdiag,
+/* Subroutine */ void lmpar_(n, r, ldr, ipvt, diag, qtb, delta, par, x, sdiag,
         wa1, wa2)
 integer *n;
 doublereal *r;
@@ -36,7 +36,7 @@ doublereal *diag, *qtb, *delta, *par, *x, *sdiag, *wa1, *wa2;
     extern doublereal dpmpar_();
     static doublereal dxnorm;
     static integer jm1, jp1;
-    extern /* Subroutine */ int qrsolv_();
+    extern /* Subroutine */ void qrsolv_();
     static doublereal sum;
 
 /*     ********** */
@@ -365,7 +365,7 @@ L220:
     if (iter == 0) {
         *par = zero;
     }
-    return 0;
+    return;
 
 /*     last card of subroutine lmpar. */
 

@@ -25,7 +25,7 @@ static doublereal c_b41 = 1.;
 /* Fullsource for module 493 from package TOMS. */
 /* Retrieved from NETLIB on Wed Jul  3 11:47:53 1996. */
 /* ====================================================================== */
-/* Subroutine */ int rpoly_(op, degree, zeror, zeroi, fail)
+/* Subroutine */ void rpoly_(op, degree, zeror, zeroi, fail)
 doublereal *op;
 integer *degree;
 doublereal *zeror, *zeroi;
@@ -41,7 +41,7 @@ logical *fail;
 
     /* Local variables */
     static real base;
-    extern /* Subroutine */ int quad_();
+    extern /* Subroutine */ void quad_();
     static doublereal temp[101];
     static real cosr, sinr;
     static integer i, j, l;
@@ -55,7 +55,7 @@ logical *fail;
     static integer nz;
     static doublereal factor;
     static real xx, yy, smalno;
-    extern /* Subroutine */ int fxshfr_();
+    extern /* Subroutine */ void fxshfr_();
     static integer nm1;
     static real bnd, min_, max_;
     static integer cnt;
@@ -131,7 +131,7 @@ logical *fail;
     }
     *fail = TRUE_;
     *degree = 0;
-    return 0;
+    return;
 /* REMOVE THE ZEROS AT THE ORIGIN IF ANY */
 L10:
     if (op[global_1.nn] != 0.) {
@@ -156,7 +156,7 @@ L40:
         goto L60;
     }
     if (global_1.n < 1) {
-        return 0;
+        return;
     }
 /* CALCULATE THE FINAL ZERO OR PAIR OF ZEROS */
     if (global_1.n == 2) {
@@ -164,11 +164,11 @@ L40:
     }
     zeror[*degree] = -global_1.p[1] / global_1.p[0];
     zeroi[*degree] = 0.;
-    return 0;
+    return;
 L50:
     quad_(global_1.p, &global_1.p[1], &global_1.p[2], &zeror[*degree - 1], &
             zeroi[*degree - 1], &zeror[*degree], &zeroi[*degree]);
-    return 0;
+    return;
 /* FIND LARGEST AND SMALLEST MODULI OF COEFFICIENTS. */
 L60:
     max_ = (float)0.;
@@ -376,10 +376,9 @@ L260:
 /* SHIFTS */
     *fail = TRUE_;
     *degree -= global_1.n;
-    return 0;
 } /* rpoly_ */
 
-/* Subroutine */ int fxshfr_(l2, nz)
+/* Subroutine */ void fxshfr_(l2, nz)
 integer *l2, *nz;
 {
     /* System generated locals */
@@ -393,12 +392,12 @@ integer *l2, *nz;
     static doublereal s;
     static real betas, betav;
     static logical spass;
-    extern /* Subroutine */ int nextk_();
+    extern /* Subroutine */ void nextk_();
     static logical vpass;
-    extern /* Subroutine */ int calcsc_();
+    extern /* Subroutine */ void calcsc_();
     static doublereal ui, vi;
     static real ss, ts, tv, vv;
-    extern /* Subroutine */ int realit_(), quadsd_(), quadit_(), newest_();
+    extern /* Subroutine */ void realit_(), quadsd_(), quadit_(), newest_();
     static real oss, ots, otv, tss, ovv;
     static doublereal svu, svv;
     static real tvv;
@@ -480,7 +479,7 @@ integer *l2, *nz;
 L20:
         quadit_(&ui, &vi, nz);
         if (*nz > 0) {
-            return 0;
+            return;
         }
 /* QUADRATIC ITERATION HAS FAILED. FLAG THAT IT HAS */
 /* BEEN TRIED AND DECREASE THE CONVERGENCE CRITERION. */
@@ -499,7 +498,7 @@ L20:
 L40:
         realit_(&s, nz, &iflag);
         if (*nz > 0) {
-            return 0;
+            return;
         }
 /* LINEAR ITERATION HAS FAILED. FLAG THAT IT HAS BEEN */
 /* TRIED AND DECREASE THE CONVERGENCE CRITERION */
@@ -539,10 +538,9 @@ L70:
         ots = ts;
 /* L80: */
     }
-    return 0;
 } /* fxshfr_ */
 
-/* Subroutine */ int quadit_(uu, vv, nz)
+/* Subroutine */ void quadit_(uu, vv, nz)
 doublereal *uu, *vv;
 integer *nz;
 {
@@ -555,16 +553,16 @@ integer *nz;
     double sqrt();
 
     /* Local variables */
-    extern /* Subroutine */ int quad_();
+    extern /* Subroutine */ void quad_();
     static integer type, i, j;
     static real t;
     static logical tried;
-    extern /* Subroutine */ int nextk_();
+    extern /* Subroutine */ void nextk_();
     static real ee;
-    extern /* Subroutine */ int calcsc_();
+    extern /* Subroutine */ void calcsc_();
     static doublereal ui, vi;
     static real mp, zm;
-    extern /* Subroutine */ int quadsd_(), newest_();
+    extern /* Subroutine */ void quadsd_(), newest_();
     static real relstp, omp;
 
 /* VARIABLE-SHIFT K-POLYNOMIAL ITERATION FOR A */
@@ -586,7 +584,7 @@ L10:
 /* SIGN */
     if ((d__1 = abs(global_1.szr) - abs(global_1.lzr), abs(d__1)) > abs(
             global_1.lzr) * .01) {
-        return 0;
+        return;
     }
 /* EVALUATE POLYNOMIAL BY QUADRATIC SYNTHETIC DIVISION */
     quadsd_(&global_1.nn, &global_1.u, &global_1.v, global_1.p, global_1.qp, &
@@ -614,12 +612,12 @@ L10:
         goto L30;
     }
     *nz = 2;
-    return 0;
+    return;
 L30:
     ++j;
 /* STOP ITERATION AFTER 20 STEPS */
     if (j > 20) {
-        return 0;
+        return;
     }
     if (j < 2) {
         goto L50;
@@ -654,7 +652,7 @@ L50:
     newest_(&type, &ui, &vi);
 /* IF VI IS ZERO THE ITERATION IS NOT CONVERGING */
     if (vi == 0.) {
-        return 0;
+        return;
     }
     relstp = (d__1 = (vi - global_1.v) / vi, abs(d__1));
     global_1.u = ui;
@@ -662,7 +660,7 @@ L50:
     goto L10;
 } /* quadit_ */
 
-/* Subroutine */ int realit_(sss, nz, iflag)
+/* Subroutine */ void realit_(sss, nz, iflag)
 doublereal *sss;
 integer *nz, *iflag;
 {
@@ -721,12 +719,12 @@ L10:
     *nz = 1;
     global_1.szr = s;
     global_1.szi = 0.;
-    return 0;
+    return;
 L40:
     ++j;
 /* STOP ITERATION AFTER 10 STEPS */
     if (j > 10) {
-        return 0;
+        return;
     }
     if (j < 2) {
         goto L50;
@@ -739,7 +737,7 @@ L40:
 /* QUADRATIC ITERATION */
     *iflag = 1;
     *sss = s;
-    return 0;
+    return;
 /* RETURN IF THE POLYNOMIAL VALUE HAS INCREASED */
 /* SIGNIFICANTLY */
 L50:
@@ -791,14 +789,14 @@ L100:
     goto L10;
 } /* realit_ */
 
-/* Subroutine */ int calcsc_(type)
+/* Subroutine */ void calcsc_(type)
 integer *type;
 {
     /* System generated locals */
     doublereal d__1;
 
     /* Local variables */
-    extern /* Subroutine */ int quadsd_();
+    extern /* Subroutine */ void quadsd_();
 
 /* THIS ROUTINE CALCULATES SCALAR QUANTITIES USED TO */
 /* COMPUTE THE NEXT K POLYNOMIAL AND NEW ESTIMATES OF */
@@ -819,7 +817,7 @@ integer *type;
     *type = 3;
 /* TYPE=3 INDICATES THE QUADRATIC IS ALMOST A FACTOR */
 /* OF K */
-    return 0;
+    return;
 L10:
     if (abs(global_1.d) < abs(global_1.c)) {
         goto L20;
@@ -834,7 +832,7 @@ L10:
             global_1.b / global_1.d);
     global_1.a1 = global_1.b * global_1.f - global_1.a;
     global_1.a7 = (global_1.f + global_1.u) * global_1.a + global_1.h;
-    return 0;
+    return;
 L20:
     *type = 1;
 /* TYPE=1 INDICATES THAT ALL FORMULAS ARE DIVIDED BY C */
@@ -847,10 +845,10 @@ L20:
     global_1.a1 = global_1.b - global_1.a * (global_1.d / global_1.c);
     global_1.a7 = global_1.a + global_1.g * global_1.d + global_1.h *
             global_1.f;
-    return 0;
+    return;
 } /* calcsc_ */
 
-/* Subroutine */ int nextk_(type)
+/* Subroutine */ void nextk_(type)
 integer *type;
 {
     /* System generated locals */
@@ -880,9 +878,8 @@ integer *type;
     for (i = 3; i <= i__1; ++i) {
         global_1.k[i - 1] = global_1.a3 * global_1.qk[i - 3] - global_1.a7 *
                 global_1.qp[i - 2];
-/* L10: */
     }
-    return 0;
+    return;
 /* USE SCALED FORM OF THE RECURRENCE */
 L20:
     global_1.a7 /= global_1.a1;
@@ -893,9 +890,8 @@ L20:
     for (i = 3; i <= i__1; ++i) {
         global_1.k[i - 1] = global_1.a3 * global_1.qk[i - 3] - global_1.a7 *
                 global_1.qp[i - 2] + global_1.qp[i - 1];
-/* L30: */
     }
-    return 0;
+    return;
 /* USE UNSCALED FORM OF THE RECURRENCE IF TYPE IS 3 */
 L40:
     global_1.k[0] = 0.;
@@ -903,12 +899,10 @@ L40:
     i__1 = global_1.n;
     for (i = 3; i <= i__1; ++i) {
         global_1.k[i - 1] = global_1.qk[i - 3];
-/* L50: */
     }
-    return 0;
 } /* nextk_ */
 
-/* Subroutine */ int newest_(type, uu, vv)
+/* Subroutine */ void newest_(type, uu, vv)
 integer *type;
 doublereal *uu, *vv;
 {
@@ -945,15 +939,15 @@ L20:
     *uu = global_1.u - (global_1.u * (c3 + c2) + global_1.v * (b1 *
             global_1.a1 + b2 * global_1.a7)) / temp;
     *vv = global_1.v * (c4 / temp + (float)1.);
-    return 0;
+    return;
 /* IF TYPE=3 THE QUADRATIC IS ZEROED */
 L30:
     *uu = 0.;
     *vv = 0.;
-    return 0;
+    return;
 } /* newest_ */
 
-/* Subroutine */ int quadsd_(nn, u, v, p, q, a, b)
+/* Subroutine */ void quadsd_(nn, u, v, p, q, a, b)
 integer *nn;
 doublereal *u, *v, *p, *q, *a, *b;
 {
@@ -983,10 +977,10 @@ doublereal *u, *v, *p, *q, *a, *b;
         *a = c;
 /* L10: */
     }
-    return 0;
+    return;
 } /* quadsd_ */
 
-/* Subroutine */ int quad_(a, b1, c, sr, si, lr, li)
+/* Subroutine */ void quad_(a, b1, c, sr, si, lr, li)
 doublereal *a, *b1, *c, *sr, *si, *lr, *li;
 {
     /* System generated locals */
@@ -1015,7 +1009,7 @@ doublereal *a, *b1, *c, *sr, *si, *lr, *li;
 L10:
     *si = 0.;
     *li = 0.;
-    return 0;
+    return;
 L20:
     if (*c != 0.) {
         goto L30;
@@ -1059,6 +1053,5 @@ L60:
     *lr = *sr;
     *si = (d__1 = d / *a, abs(d__1));
     *li = -(*si);
-    return 0;
 } /* quad_ */
 

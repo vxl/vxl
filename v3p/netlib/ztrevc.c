@@ -5,12 +5,14 @@
 
 #include "f2c.h"
 
+/* Modified by Peter Vanroose, June 2001: manual optimisation and clean-up */
+
 /* Table of constant values */
 
 static integer c__1 = 1;
 static doublecomplex c_b17 = {1.,0.};
 
-/* Subroutine */ int ztrevc_(side, howmny, select, n, t, ldt, vl, ldvl, vr,
+/* Subroutine */ void ztrevc_(side, howmny, select, n, t, ldt, vl, ldvl, vr,
         ldvr, mm, m, work, rwork, info, side_len, howmny_len)
 char *side, *howmny;
 logical *select;
@@ -28,13 +30,10 @@ ftnlen side_len;
 ftnlen howmny_len;
 {
     /* System generated locals */
-    integer t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1,
-            i__2, i__3, i__4, i__5;
-    doublereal d__1, d__2, d__3;
-    doublecomplex z__1, z__2;
+    integer i__1, i__2;
+    doublecomplex z__1;
 
     /* Builtin functions */
-    double d_imag();
     void d_cnjg();
 
     /* Local variables */
@@ -46,18 +45,18 @@ ftnlen howmny_len;
     extern logical lsame_();
     static doublereal remax;
     static logical leftv, bothv;
-    extern /* Subroutine */ int zgemv_();
+    extern /* Subroutine */ void zgemv_();
     static logical somev;
-    extern /* Subroutine */ int zcopy_(), dlabad_();
+    extern /* Subroutine */ void zcopy_(), dlabad_();
     static integer ii, ki;
     extern doublereal dlamch_();
     static integer is;
-    extern /* Subroutine */ int xerbla_(), zdscal_();
+    extern /* Subroutine */ void xerbla_(), zdscal_();
     extern integer izamax_();
     static logical rightv;
     extern doublereal dzasum_();
     static doublereal smlnum;
-    extern /* Subroutine */ int zlatrs_();
+    extern /* Subroutine */ void zlatrs_();
     static doublereal ulp;
 
 
@@ -66,167 +65,127 @@ ftnlen howmny_len;
 /*     Courant Institute, Argonne National Lab, and Rice University */
 /*     September 30, 1994 */
 
-/*     .. Scalar Arguments .. */
-/*     .. */
-/*     .. Array Arguments .. */
-/*     .. */
-
-/*  Purpose */
-/*  ======= */
-
-/*  ZTREVC computes some or all of the right and/or left eigenvectors of
-*/
-/*  a complex upper triangular matrix T. */
-
-/*  The right eigenvector x and the left eigenvector y of T corresponding
-*/
-/*  to an eigenvalue w are defined by: */
-
-/*               T*x = w*x,     y'*T = w*y' */
-
-/*  where y' denotes the conjugate transpose of the vector y. */
-
-/*  If all eigenvectors are requested, the routine may either return the
-*/
-/*  matrices X and/or Y of right or left eigenvectors of T, or the */
-/*  products Q*X and/or Q*Y, where Q is an input unitary */
-/*  matrix. If T was obtained from the Schur factorization of an */
-/*  original matrix A = Q*T*Q', then Q*X and Q*Y are the matrices of */
-/*  right or left eigenvectors of A. */
-
-/*  Arguments */
-/*  ========= */
-
-/*  SIDE    (input) CHARACTER*1 */
-/*          = 'R':  compute right eigenvectors only; */
-/*          = 'L':  compute left eigenvectors only; */
-/*          = 'B':  compute both right and left eigenvectors. */
-
-/*  HOWMNY  (input) CHARACTER*1 */
-/*          = 'A':  compute all right and/or left eigenvectors; */
-/*          = 'B':  compute all right and/or left eigenvectors, */
-/*                  and backtransform them using the input matrices */
-/*                  supplied in VR and/or VL; */
-/*          = 'S':  compute selected right and/or left eigenvectors, */
-/*                  specified by the logical array SELECT. */
-
-/*  SELECT  (input) LOGICAL array, dimension (N) */
-/*          If HOWMNY = 'S', SELECT specifies the eigenvectors to be */
-/*          computed. */
-/*          If HOWMNY = 'A' or 'B', SELECT is not referenced. */
-/*          To select the eigenvector corresponding to the j-th */
-/*          eigenvalue, SELECT(j) must be set to .TRUE.. */
-
-/*  N       (input) INTEGER */
-/*          The order of the matrix T. N >= 0. */
-
-/*  T       (input/output) COMPLEX*16 array, dimension (LDT,N) */
-/*          The upper triangular matrix T.  T is modified, but restored */
-/*          on exit. */
-
-/*  LDT     (input) INTEGER */
-/*          The leading dimension of the array T. LDT >= max(1,N). */
-
-/*  VL      (input/output) COMPLEX*16 array, dimension (LDVL,MM) */
-/*          On entry, if SIDE = 'L' or 'B' and HOWMNY = 'B', VL must */
-/*          contain an N-by-N matrix Q (usually the unitary matrix Q of */
-/*          Schur vectors returned by ZHSEQR). */
-/*          On exit, if SIDE = 'L' or 'B', VL contains: */
-/*          if HOWMNY = 'A', the matrix Y of left eigenvectors of T; */
-/*          if HOWMNY = 'B', the matrix Q*Y; */
-/*          if HOWMNY = 'S', the left eigenvectors of T specified by */
-/*                           SELECT, stored consecutively in the columns
-*/
-/*                           of VL, in the same order as their */
-/*                           eigenvalues. */
-/*          If SIDE = 'R', VL is not referenced. */
-
-/*  LDVL    (input) INTEGER */
-/*          The leading dimension of the array VL.  LDVL >= max(1,N) if */
-/*          SIDE = 'L' or 'B'; LDVL >= 1 otherwise. */
-
-/*  VR      (input/output) COMPLEX*16 array, dimension (LDVR,MM) */
-/*          On entry, if SIDE = 'R' or 'B' and HOWMNY = 'B', VR must */
-/*          contain an N-by-N matrix Q (usually the unitary matrix Q of */
-/*          Schur vectors returned by ZHSEQR). */
-/*          On exit, if SIDE = 'R' or 'B', VR contains: */
-/*          if HOWMNY = 'A', the matrix X of right eigenvectors of T; */
-/*          if HOWMNY = 'B', the matrix Q*X; */
-/*          if HOWMNY = 'S', the right eigenvectors of T specified by */
-/*                           SELECT, stored consecutively in the columns
-*/
-/*                           of VR, in the same order as their */
-/*                           eigenvalues. */
-/*          If SIDE = 'L', VR is not referenced. */
-
-/*  LDVR    (input) INTEGER */
-/*          The leading dimension of the array VR.  LDVR >= max(1,N) if */
-/*           SIDE = 'R' or 'B'; LDVR >= 1 otherwise. */
-
-/*  MM      (input) INTEGER */
-/*          The number of columns in the arrays VL and/or VR. MM >= M. */
-
-/*  M       (output) INTEGER */
-/*          The number of columns in the arrays VL and/or VR actually */
-/*          used to store the eigenvectors.  If HOWMNY = 'A' or 'B', M */
-/*          is set to N.  Each selected eigenvector occupies one */
-/*          column. */
-
-/*  WORK    (workspace) COMPLEX*16 array, dimension (2*N) */
-
-/*  RWORK   (workspace) DOUBLE PRECISION array, dimension (N) */
-
-/*  INFO    (output) INTEGER */
-/*          = 0:  successful exit */
-/*          < 0:  if INFO = -i, the i-th argument had an illegal value */
-
-/*  Further Details */
-/*  =============== */
-
-/*  The algorithm used in this program is basically backward (forward) */
-/*  substitution, with scaling to make the the code robust against */
-/*  possible overflow. */
-
-/*  Each eigenvector is normalized so that the element of largest */
-/*  magnitude has magnitude 1; here the magnitude of a complex number */
-/*  (x,y) is taken to be |x| + |y|. */
-
-/*  =====================================================================
-*/
-
-/*     .. Parameters .. */
-/*     .. */
-/*     .. Local Scalars .. */
-/*     .. */
-/*     .. External Functions .. */
-/*     .. */
-/*     .. External Subroutines .. */
-/*     .. */
-/*     .. Intrinsic Functions .. */
-/*     .. */
-/*     .. Statement Functions .. */
-/*     .. */
-/*     .. Statement Function definitions .. */
-/*     .. */
-/*     .. Executable Statements .. */
-
-/*     Decode and test the input parameters */
-
-    /* Parameter adjustments */
-    --rwork;
-    --work;
-    vr_dim1 = *ldvr;
-    vr_offset = vr_dim1 + 1;
-    vr -= vr_offset;
-    vl_dim1 = *ldvl;
-    vl_offset = vl_dim1 + 1;
-    vl -= vl_offset;
-    t_dim1 = *ldt;
-    t_offset = t_dim1 + 1;
-    t -= t_offset;
-    --select;
+/*  ===================================================================== */
+/*                                                                        */
+/*  Purpose                                                               */
+/*  =======                                                               */
+/*                                                                        */
+/*  ZTREVC computes some or all of the right and/or left eigenvectors of  */
+/*  a complex upper triangular matrix T.                                  */
+/*                                                                        */
+/*  The right eigenvector x and the left eigenvector y of T corresponding */
+/*  to an eigenvalue w are defined by:                                    */
+/*                                                                        */
+/*               T*x = w*x,     y'*T = w*y'                               */
+/*                                                                        */
+/*  where y' denotes the conjugate transpose of the vector y.             */
+/*                                                                        */
+/*  If all eigenvectors are requested, the routine may either return the  */
+/*  matrices X and/or Y of right or left eigenvectors of T, or the        */
+/*  products Q*X and/or Q*Y, where Q is an input unitary                  */
+/*  matrix. If T was obtained from the Schur factorization of an          */
+/*  original matrix A = Q*T*Q', then Q*X and Q*Y are the matrices of      */
+/*  right or left eigenvectors of A.                                      */
+/*                                                                        */
+/*  Arguments                                                             */
+/*  =========                                                             */
+/*                                                                        */
+/*  SIDE    (input) CHARACTER*1                                           */
+/*          = 'R':  compute right eigenvectors only;                      */
+/*          = 'L':  compute left eigenvectors only;                       */
+/*          = 'B':  compute both right and left eigenvectors.             */
+/*                                                                        */
+/*  HOWMNY  (input) CHARACTER*1                                           */
+/*          = 'A':  compute all right and/or left eigenvectors;           */
+/*          = 'B':  compute all right and/or left eigenvectors,           */
+/*                  and backtransform them using the input matrices       */
+/*                  supplied in VR and/or VL;                             */
+/*          = 'S':  compute selected right and/or left eigenvectors,      */
+/*                  specified by the logical array SELECT.                */
+/*                                                                        */
+/*  SELECT  (input) LOGICAL array, dimension (N)                          */
+/*          If HOWMNY = 'S', SELECT specifies the eigenvectors to be      */
+/*          computed.                                                     */
+/*          If HOWMNY = 'A' or 'B', SELECT is not referenced.             */
+/*          To select the eigenvector corresponding to the j-th           */
+/*          eigenvalue, SELECT(j) must be set to .TRUE..                  */
+/*                                                                        */
+/*  N       (input) INTEGER                                               */
+/*          The order of the matrix T. N >= 0.                            */
+/*                                                                        */
+/*  T       (input/output) COMPLEX*16 array, dimension (LDT,N)            */
+/*          The upper triangular matrix T.  T is modified, but restored   */
+/*          on exit.                                                      */
+/*                                                                        */
+/*  LDT     (input) INTEGER                                               */
+/*          The leading dimension of the array T. LDT >= max(1,N).        */
+/*                                                                        */
+/*  VL      (input/output) COMPLEX*16 array, dimension (LDVL,MM)          */
+/*          On entry, if SIDE = 'L' or 'B' and HOWMNY = 'B', VL must      */
+/*          contain an N-by-N matrix Q (usually the unitary matrix Q of   */
+/*          Schur vectors returned by ZHSEQR).                            */
+/*          On exit, if SIDE = 'L' or 'B', VL contains:                   */
+/*          if HOWMNY = 'A', the matrix Y of left eigenvectors of T;      */
+/*          if HOWMNY = 'B', the matrix Q*Y;                              */
+/*          if HOWMNY = 'S', the left eigenvectors of T specified by      */
+/*                           SELECT, stored consecutively in the columns  */
+/*                           of VL, in the same order as their            */
+/*                           eigenvalues.                                 */
+/*          If SIDE = 'R', VL is not referenced.                          */
+/*                                                                        */
+/*  LDVL    (input) INTEGER                                               */
+/*          The leading dimension of the array VL.  LDVL >= max(1,N) if   */
+/*          SIDE = 'L' or 'B'; LDVL >= 1 otherwise.                       */
+/*                                                                        */
+/*  VR      (input/output) COMPLEX*16 array, dimension (LDVR,MM)          */
+/*          On entry, if SIDE = 'R' or 'B' and HOWMNY = 'B', VR must      */
+/*          contain an N-by-N matrix Q (usually the unitary matrix Q of   */
+/*          Schur vectors returned by ZHSEQR).                            */
+/*          On exit, if SIDE = 'R' or 'B', VR contains:                   */
+/*          if HOWMNY = 'A', the matrix X of right eigenvectors of T;     */
+/*          if HOWMNY = 'B', the matrix Q*X;                              */
+/*          if HOWMNY = 'S', the right eigenvectors of T specified by     */
+/*                           SELECT, stored consecutively in the columns  */
+/*                           of VR, in the same order as their            */
+/*                           eigenvalues.                                 */
+/*          If SIDE = 'L', VR is not referenced.                          */
+/*                                                                        */
+/*  LDVR    (input) INTEGER                                               */
+/*          The leading dimension of the array VR.  LDVR >= max(1,N) if   */
+/*           SIDE = 'R' or 'B'; LDVR >= 1 otherwise.                      */
+/*                                                                        */
+/*  MM      (input) INTEGER                                               */
+/*          The number of columns in the arrays VL and/or VR. MM >= M.    */
+/*                                                                        */
+/*  M       (output) INTEGER                                              */
+/*          The number of columns in the arrays VL and/or VR actually     */
+/*          used to store the eigenvectors.  If HOWMNY = 'A' or 'B', M    */
+/*          is set to N.  Each selected eigenvector occupies one          */
+/*          column.                                                       */
+/*                                                                        */
+/*  WORK    (workspace) COMPLEX*16 array, dimension (2*N)                 */
+/*                                                                        */
+/*  RWORK   (workspace) DOUBLE PRECISION array, dimension (N)             */
+/*                                                                        */
+/*  INFO    (output) INTEGER                                              */
+/*          = 0:  successful exit                                         */
+/*          < 0:  if INFO = -i, the i-th argument had an illegal value    */
+/*                                                                        */
+/*  Further Details                                                       */
+/*  ===============                                                       */
+/*                                                                        */
+/*  The algorithm used in this program is basically backward (forward)    */
+/*  substitution, with scaling to make the the code robust against        */
+/*  possible overflow.                                                    */
+/*                                                                        */
+/*  Each eigenvector is normalized so that the element of largest         */
+/*  magnitude has magnitude 1; here the magnitude of a complex number     */
+/*  (x,y) is taken to be |x| + |y|.                                       */
+/*                                                                        */
+/*  ===================================================================== */
 
     /* Function Body */
+
     bothv = lsame_(side, "B", 1L, 1L);
     rightv = lsame_(side, "R", 1L, 1L) || bothv;
     leftv = lsame_(side, "L", 1L, 1L) || bothv;
@@ -240,12 +199,10 @@ ftnlen howmny_len;
 
     if (somev) {
         *m = 0;
-        i__1 = *n;
-        for (j = 1; j <= i__1; ++j) {
+        for (j = 0; j < *n; ++j) {
             if (select[j]) {
                 ++(*m);
             }
-/* L10: */
         }
     } else {
         *m = *n;
@@ -270,13 +227,13 @@ ftnlen howmny_len;
     if (*info != 0) {
         i__1 = -(*info);
         xerbla_("ZTREVC", &i__1, 6L);
-        return 0;
+        return;
     }
 
 /*     Quick return if possible. */
 
     if (*n == 0) {
-        return 0;
+        return;
     }
 
 /*     Set the constants to control overflow. */
@@ -289,131 +246,101 @@ ftnlen howmny_len;
 
 /*     Store the diagonal elements of T in working array WORK. */
 
-    i__1 = *n;
-    for (i = 1; i <= i__1; ++i) {
-        i__2 = i + *n;
-        i__3 = i + i * t_dim1;
-        work[i__2].r = t[i__3].r, work[i__2].i = t[i__3].i;
-/* L20: */
+    for (i = 0; i < *n; ++i) {
+        i__1 = i + *n;
+        i__2 = i + i * *ldt;
+        work[i__1].r = t[i__2].r, work[i__1].i = t[i__2].i;
     }
 
 /*     Compute 1-norm of each column of strictly upper triangular */
 /*     part of T to control overflow in triangular solver. */
 
-    rwork[1] = 0.;
-    i__1 = *n;
-    for (j = 2; j <= i__1; ++j) {
-        i__2 = j - 1;
-        rwork[j] = dzasum_(&i__2, &t[j * t_dim1 + 1], &c__1);
-/* L30: */
+    rwork[0] = 0.;
+    for (j = 1; j < *n; ++j) {
+        rwork[j] = dzasum_(&j, &t[j * *ldt], &c__1);
     }
 
     if (rightv) {
 
 /*        Compute right eigenvectors. */
 
-        is = *m;
-        for (ki = *n; ki >= 1; --ki) {
+        is = *m - 1;
+        for (ki = *n - 1; ki >= 0; --ki) {
 
             if (somev) {
                 if (! select[ki]) {
-                    goto L80;
+                    continue; /* next ki */
                 }
             }
-/* Computing MAX */
-            i__1 = ki + ki * t_dim1;
-            d__3 = ulp * ((d__1 = t[i__1].r, abs(d__1)) + (d__2 = d_imag(&t[
-                    ki + ki * t_dim1]), abs(d__2)));
-            smin = max(d__3,smlnum);
+            i__1 = ki + ki * *ldt;
+            smin = ulp * (abs(t[i__1].r) + abs(t[i__1].i));
+            smin = max(smin, smlnum);
 
-            work[1].r = 1., work[1].i = 0.;
+            work[0].r = 1., work[0].i = 0.;
 
 /*           Form right-hand side. */
 
-            i__1 = ki - 1;
-            for (k = 1; k <= i__1; ++k) {
-                i__2 = k;
-                i__3 = k + ki * t_dim1;
-                z__1.r = -t[i__3].r, z__1.i = -t[i__3].i;
-                work[i__2].r = z__1.r, work[i__2].i = z__1.i;
-/* L40: */
+            for (k = 0; k < ki; ++k) {
+                i__1 = k + ki * *ldt;
+                work[k].r = -t[i__1].r, work[k].i = -t[i__1].i;
             }
 
 /*           Solve the triangular system: */
 /*              (T(1:KI-1,1:KI-1) - T(KI,KI))*X = SCALE*WORK. */
 
-            i__1 = ki - 1;
-            for (k = 1; k <= i__1; ++k) {
-                i__2 = k + k * t_dim1;
-                i__3 = k + k * t_dim1;
-                i__4 = ki + ki * t_dim1;
-                z__1.r = t[i__3].r - t[i__4].r, z__1.i = t[i__3].i - t[i__4]
-                        .i;
-                t[i__2].r = z__1.r, t[i__2].i = z__1.i;
-                i__2 = k + k * t_dim1;
-                if ((d__1 = t[i__2].r, abs(d__1)) + (d__2 = d_imag(&t[k + k *
-                        t_dim1]), abs(d__2)) < smin) {
-                    i__3 = k + k * t_dim1;
-                    t[i__3].r = smin, t[i__3].i = 0.;
+            for (k = 0; k < ki; ++k) {
+                i__1 = k + k * *ldt;
+                i__2 = ki + ki * *ldt;
+                t[i__1].r -= t[i__2].r,
+                t[i__1].i -= t[i__2].i;
+                if (abs(t[i__1].r) + abs(t[i__1].i) < smin) {
+                    t[i__1].r = smin, t[i__1].i = 0.;
                 }
-/* L50: */
             }
 
-            if (ki > 1) {
-                i__1 = ki - 1;
-                zlatrs_("Upper", "No transpose", "Non-unit", "Y", &i__1, &t[
-                        t_offset], ldt, &work[1], &scale, &rwork[1], info, 5L,
-                         12L, 8L, 1L);
-                i__1 = ki;
-                work[i__1].r = scale, work[i__1].i = 0.;
+            if (ki > 0) {
+                zlatrs_("Upper", "No transpose", "Non-unit", "Y", &ki,
+                        t, ldt, work, &scale, rwork, info, 5L, 12L, 8L, 1L);
+                work[ki].r = scale, work[ki].i = 0.;
             }
 
 /*           Copy the vector x or Q*x to VR and normalize. */
 
             if (! over) {
-                zcopy_(&ki, &work[1], &c__1, &vr[is * vr_dim1 + 1], &c__1);
+                k = ki+1;
+                zcopy_(&k, work, &c__1, &vr[is * *ldvr], &c__1);
 
-                ii = izamax_(&ki, &vr[is * vr_dim1 + 1], &c__1);
-                i__1 = ii + is * vr_dim1;
-                remax = 1. / ((d__1 = vr[i__1].r, abs(d__1)) + (d__2 = d_imag(
-                        &vr[ii + is * vr_dim1]), abs(d__2)));
-                zdscal_(&ki, &remax, &vr[is * vr_dim1 + 1], &c__1);
+                ii = izamax_(&k, &vr[is * *ldvr], &c__1);
+                i__1 = ii-1 + is * *ldvr;
+                remax = 1. / (abs(vr[i__1].r) + abs(vr[i__1].i));
+                zdscal_(&k, &remax, &vr[is * *ldvr], &c__1);
 
-                i__1 = *n;
-                for (k = ki + 1; k <= i__1; ++k) {
-                    i__2 = k + is * vr_dim1;
-                    vr[i__2].r = 0., vr[i__2].i = 0.;
-/* L60: */
+                for (k = ki+1; k < *n; ++k) {
+                    i__1 = k + is * *ldvr;
+                    vr[i__1].r = 0., vr[i__1].i = 0.;
                 }
             } else {
-                if (ki > 1) {
-                    i__1 = ki - 1;
+                if (ki > 0) {
                     z__1.r = scale, z__1.i = 0.;
-                    zgemv_("N", n, &i__1, &c_b17, &vr[vr_offset], ldvr, &work[
-                            1], &c__1, &z__1, &vr[ki * vr_dim1 + 1], &c__1,
-                            1L);
+                    zgemv_("N", n, &ki, &c_b17, vr, ldvr,
+                           work, &c__1, &z__1, &vr[ki * *ldvr], &c__1, 1L);
                 }
 
-                ii = izamax_(n, &vr[ki * vr_dim1 + 1], &c__1);
-                i__1 = ii + ki * vr_dim1;
-                remax = 1. / ((d__1 = vr[i__1].r, abs(d__1)) + (d__2 = d_imag(
-                        &vr[ii + ki * vr_dim1]), abs(d__2)));
-                zdscal_(n, &remax, &vr[ki * vr_dim1 + 1], &c__1);
+                ii = izamax_(n, &vr[ki * *ldvr], &c__1);
+                i__1 = ii-1 + ki * *ldvr;
+                remax = 1. / (abs(vr[i__1].r) + abs(vr[i__1].i));
+                zdscal_(n, &remax, &vr[ki * *ldvr], &c__1);
             }
 
 /*           Set back the original diagonal elements of T. */
 
-            i__1 = ki - 1;
-            for (k = 1; k <= i__1; ++k) {
-                i__2 = k + k * t_dim1;
-                i__3 = k + *n;
-                t[i__2].r = work[i__3].r, t[i__2].i = work[i__3].i;
-/* L70: */
+            for (k = 0; k < ki; ++k) {
+                i__1 = k + k * *ldt;
+                i__2 = k + *n;
+                t[i__1].r = work[i__2].r, t[i__1].i = work[i__2].i;
             }
 
             --is;
-L80:
-            ;
         }
     }
 
@@ -421,118 +348,88 @@ L80:
 
 /*        Compute left eigenvectors. */
 
-        is = 1;
-        i__1 = *n;
-        for (ki = 1; ki <= i__1; ++ki) {
-
+        is = 0;
+        for (ki = 0; ki < *n; ++ki) {
             if (somev) {
                 if (! select[ki]) {
-                    goto L130;
+                    continue; /* next ki */
                 }
             }
-/* Computing MAX */
-            i__2 = ki + ki * t_dim1;
-            d__3 = ulp * ((d__1 = t[i__2].r, abs(d__1)) + (d__2 = d_imag(&t[
-                    ki + ki * t_dim1]), abs(d__2)));
-            smin = max(d__3,smlnum);
-
-            i__2 = *n;
-            work[i__2].r = 1., work[i__2].i = 0.;
+            i__1 = ki + ki * *ldt;
+            smin = ulp * (abs(t[i__1].r) + abs(t[i__1].i));
+            smin = max(smin, smlnum);
+            work[*n - 1].r = 1., work[*n - 1].i = 0.;
 
 /*           Form right-hand side. */
 
-            i__2 = *n;
-            for (k = ki + 1; k <= i__2; ++k) {
-                i__3 = k;
-                d_cnjg(&z__2, &t[ki + k * t_dim1]);
-                z__1.r = -z__2.r, z__1.i = -z__2.i;
-                work[i__3].r = z__1.r, work[i__3].i = z__1.i;
-/* L90: */
+            for (k = ki+1; k < *n; ++k) {
+                d_cnjg(&z__1, &t[ki + k * *ldt]);
+                work[k].r = -z__1.r, work[k].i = -z__1.i;
             }
 
 /*           Solve the triangular system: */
 /*              (T(KI+1:N,KI+1:N) - T(KI,KI))'*X = SCALE*WORK. */
 
-            i__2 = *n;
-            for (k = ki + 1; k <= i__2; ++k) {
-                i__3 = k + k * t_dim1;
-                i__4 = k + k * t_dim1;
-                i__5 = ki + ki * t_dim1;
-                z__1.r = t[i__4].r - t[i__5].r, z__1.i = t[i__4].i - t[i__5]
-                        .i;
-                t[i__3].r = z__1.r, t[i__3].i = z__1.i;
-                i__3 = k + k * t_dim1;
-                if ((d__1 = t[i__3].r, abs(d__1)) + (d__2 = d_imag(&t[k + k *
-                        t_dim1]), abs(d__2)) < smin) {
-                    i__4 = k + k * t_dim1;
-                    t[i__4].r = smin, t[i__4].i = 0.;
+            for (k = ki+1; k < *n; ++k) {
+                i__1 = k + k * *ldt;
+                i__2 = ki + ki * *ldt;
+                t[i__1].r -= t[i__2].r,
+                t[i__1].i -= t[i__2].i;
+                if (abs(t[i__1].r) + abs(t[i__1].i) < smin) {
+                    t[i__1].r = smin, t[i__1].i = 0.;
                 }
-/* L100: */
             }
 
-            if (ki < *n) {
-                i__2 = *n - ki;
-                zlatrs_("Upper", "Conjugate transpose", "Non-unit", "Y", &
-                        i__2, &t[ki + 1 + (ki + 1) * t_dim1], ldt, &work[ki +
-                        1], &scale, &rwork[1], info, 5L, 19L, 8L, 1L);
-                i__2 = ki;
-                work[i__2].r = scale, work[i__2].i = 0.;
+            k = ki + 1;
+            if (k < *n) {
+                i__1 = *n - k;
+                zlatrs_("Upper", "Conjugate transpose", "Non-unit", "Y",
+                        &i__1, &t[k + k * *ldt], ldt, &work[k],
+                        &scale, rwork, info, 5L, 19L, 8L, 1L);
+                work[ki].r = scale, work[ki].i = 0.;
             }
 
 /*           Copy the vector x or Q*x to VL and normalize. */
 
             if (! over) {
-                i__2 = *n - ki + 1;
-                zcopy_(&i__2, &work[ki], &c__1, &vl[ki + is * vl_dim1], &c__1)
-                        ;
+                i__1 = *n - ki;
+                zcopy_(&i__1, &work[ki], &c__1, &vl[ki + is * *ldvl], &c__1);
+                ii = izamax_(&i__1, &vl[ki + is * *ldvl], &c__1) + ki;
+                i__2 = ii-1 + is * *ldvl;
+                remax = 1. / (abs(vl[i__2].r) + abs(vl[i__2].i));
+                zdscal_(&i__1, &remax, &vl[ki + is * *ldvl], &c__1);
 
-                i__2 = *n - ki + 1;
-                ii = izamax_(&i__2, &vl[ki + is * vl_dim1], &c__1) + ki - 1;
-                i__2 = ii + is * vl_dim1;
-                remax = 1. / ((d__1 = vl[i__2].r, abs(d__1)) + (d__2 = d_imag(
-                        &vl[ii + is * vl_dim1]), abs(d__2)));
-                i__2 = *n - ki + 1;
-                zdscal_(&i__2, &remax, &vl[ki + is * vl_dim1], &c__1);
-
-                i__2 = ki - 1;
-                for (k = 1; k <= i__2; ++k) {
-                    i__3 = k + is * vl_dim1;
-                    vl[i__3].r = 0., vl[i__3].i = 0.;
-/* L110: */
+                for (k = 0; k < ki; ++k) {
+                    i__1 = k + is * *ldvl;
+                    vl[i__1].r = 0., vl[i__1].i = 0.;
                 }
             } else {
-                if (ki < *n) {
-                    i__2 = *n - ki;
+                k = ki + 1;
+                if (k < *n) {
+                    i__1 = *n - k;
                     z__1.r = scale, z__1.i = 0.;
-                    zgemv_("N", n, &i__2, &c_b17, &vl[(ki + 1) * vl_dim1 + 1],
-                             ldvl, &work[ki + 1], &c__1, &z__1, &vl[ki *
-                            vl_dim1 + 1], &c__1, 1L);
+                    zgemv_("N", n, &i__1, &c_b17, &vl[k * *ldvl],
+                           ldvl, &work[k], &c__1, &z__1, &vl[ki * *ldvl], &c__1, 1L);
                 }
 
-                ii = izamax_(n, &vl[ki * vl_dim1 + 1], &c__1);
-                i__2 = ii + ki * vl_dim1;
-                remax = 1. / ((d__1 = vl[i__2].r, abs(d__1)) + (d__2 = d_imag(
-                        &vl[ii + ki * vl_dim1]), abs(d__2)));
-                zdscal_(n, &remax, &vl[ki * vl_dim1 + 1], &c__1);
+                ii = izamax_(n, &vl[ki * *ldvl], &c__1);
+                i__1 = ii-1 + ki * *ldvl;
+                remax = 1. / (abs(vl[i__1].r) + abs(vl[i__1].i));
+                zdscal_(n, &remax, &vl[ki * *ldvl], &c__1);
             }
 
 /*           Set back the original diagonal elements of T. */
 
-            i__2 = *n;
-            for (k = ki + 1; k <= i__2; ++k) {
-                i__3 = k + k * t_dim1;
-                i__4 = k + *n;
-                t[i__3].r = work[i__4].r, t[i__3].i = work[i__4].i;
-/* L120: */
+            for (k = ki+1; k < *n; ++k) {
+                i__1 = k + k * *ldt;
+                i__2 = k + *n;
+                t[i__1].r = work[i__2].r, t[i__1].i = work[i__2].i;
             }
 
             ++is;
-L130:
-            ;
         }
     }
 
-    return 0;
 
 /*     End of ZTREVC */
 

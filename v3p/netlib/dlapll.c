@@ -6,7 +6,7 @@
 #include "f2c.h"
 
 /*<       SUBROUTINE DLAPLL( N, X, INCX, Y, INCY, SSMIN ) >*/
-/* Subroutine */ int dlapll_(integer *n, doublereal *x, integer *incx,
+/* Subroutine */ void dlapll_(integer *n, doublereal *x, integer *incx,
         doublereal *y, integer *incy, doublereal *ssmin)
 {
     /* System generated locals */
@@ -15,13 +15,13 @@
     /* Local variables */
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *,
             integer *);
-    extern /* Subroutine */ int dlas2_(doublereal *, doublereal *, doublereal
+    extern /* Subroutine */ void dlas2_(doublereal *, doublereal *, doublereal
             *, doublereal *, doublereal *);
     static doublereal c;
-    extern /* Subroutine */ int daxpy_(integer *, doublereal *, doublereal *,
+    extern /* Subroutine */ void daxpy_(integer *, doublereal *, doublereal *,
             integer *, doublereal *, integer *);
     static doublereal ssmax, a11, a12, a22;
-    extern /* Subroutine */ int dlarfg_(integer *, doublereal *, doublereal *,
+    extern /* Subroutine */ void dlarfg_(integer *, doublereal *, doublereal *,
              integer *, doublereal *);
     static doublereal tau;
 
@@ -108,7 +108,7 @@
 /*<          SSMIN = ZERO >*/
         *ssmin = 0.;
 /*<          RETURN >*/
-        return 0;
+        return;
 /*<       END IF >*/
     }
 
@@ -140,11 +140,7 @@
 /*<       CALL DLAS2( A11, A12, A22, SSMIN, SSMAX ) >*/
     dlas2_(&a11, &a12, &a22, ssmin, &ssmax);
 
-/*<       RETURN >*/
-    return 0;
-
 /*     End of DLAPLL */
 
-/*<       END >*/
 } /* dlapll_ */
 

@@ -5,14 +5,10 @@ USES = # nothing!
 USE_STDC++ := 0
 IULIBS = # no dependencies whatsoever
 
+SUBDIRS += tests
+
 LIBRARY := netlib
 VERSION := 1.0
-
-# remove these if you know better
-SOURCES += c_sqrt.c 
-SOURCES += z_sqrt.c 
-SOURCES += cdabs.c
-SOURCES += cdsqrt.c
 
 #*********************
 # Std Fortran Library 
@@ -28,6 +24,7 @@ SOURCES += d_cnjg.c
 SOURCES += d_imag.c
 SOURCES += z_div.c
 SOURCES += z_abs.c
+SOURCES += z_sqrt.c 
 SOURCES += cabs.c
 SOURCES += c_abs.c
 SOURCES += c_div.c
@@ -77,15 +74,20 @@ SOURCES += scnrm2.c
 SOURCES += cscal.c
 SOURCES += cswap.c
 
+SOURCES += zaxpy.c
 SOURCES += zcopy.c
+SOURCES += zdotc.c
 SOURCES += zdotu.c
+SOURCES += zdrot.c
 SOURCES += zdscal.c
 SOURCES += zgemm.c
 SOURCES += zgemv.c
 SOURCES += zgerc.c
+SOURCES += zscal.c
 SOURCES += ztrmm.c
 SOURCES += ztrmv.c
 SOURCES += ztrsv.c
+SOURCES += zswap.c
 
 # LINALG
 SOURCES += lsqr.c

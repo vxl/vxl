@@ -11,7 +11,7 @@ static doublereal c_b3 = 2.;
 static doublereal c_b4 = 1.;
 
 /*<       SUBROUTINE DLASV2( F, G, H, SSMIN, SSMAX, SNR, CSR, SNL, CSL ) >*/
-/* Subroutine */ int dlasv2_(doublereal *f, doublereal *g, doublereal *h,
+/* Subroutine */ void dlasv2_(doublereal *f, doublereal *g, doublereal *h,
         doublereal *ssmin, doublereal *ssmax, doublereal *snr, doublereal *
         csr, doublereal *snl, doublereal *csl)
 {
@@ -380,7 +380,7 @@ static doublereal c_b4 = 1.;
     d__1 = tsign * d_sign(&c_b4, f) * d_sign(&c_b4, h);
     *ssmin = d_sign(ssmin, &d__1);
 /*<       RETURN >*/
-    return 0;
+    return;
 
 /*     End of DLASV2 */
 

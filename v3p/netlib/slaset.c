@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* Subroutine */ int slaset_(char *uplo, integer *m, integer *n, real *alpha,
+/* Subroutine */ void slaset_(char *uplo, integer *m, integer *n, real *alpha,
         real *beta, real *a, integer *lda, ftnlen uplo_len)
 {
     /* System generated locals */
@@ -101,9 +101,7 @@
             i__2 = min(i__3,*m);
             for (i = 1; i <= i__2; ++i) {
                 a[i + j * a_dim1] = *alpha;
-/* L10: */
             }
-/* L20: */
         }
 
     } else if (lsame_(uplo, "L", 1L, 1L)) {
@@ -117,9 +115,7 @@
             i__2 = *m;
             for (i = j + 1; i <= i__2; ++i) {
                 a[i + j * a_dim1] = *alpha;
-/* L30: */
             }
-/* L40: */
         }
 
     } else {
@@ -131,9 +127,7 @@
             i__2 = *m;
             for (i = 1; i <= i__2; ++i) {
                 a[i + j * a_dim1] = *alpha;
-/* L50: */
             }
-/* L60: */
         }
     }
 
@@ -142,10 +136,7 @@
     i__1 = min(*m,*n);
     for (i = 1; i <= i__1; ++i) {
         a[i + i * a_dim1] = *beta;
-/* L70: */
     }
-
-    return 0;
 
 /*     End of SLASET */
 

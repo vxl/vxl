@@ -10,7 +10,7 @@
 static integer c__1 = 1;
 static real c_b44 = (float)-1.;
 
-/* Subroutine */ int ssvdc_(x, ldx, n, p, s, e, u, ldu, v, ldv, work, job,
+/* Subroutine */ void ssvdc_(x, ldx, n, p, s, e, u, ldu, v, ldv, work, job,
         info)
 real *x;
 integer *ldx, *n, *p;
@@ -33,7 +33,7 @@ integer *job, *info;
     static integer kase, jobu, iter;
     extern doublereal sdot_();
     static real test;
-    extern /* Subroutine */ int srot_();
+    extern /* Subroutine */ void srot_();
     static integer nctp1;
     extern doublereal snrm2_();
     static real b, c;
@@ -41,12 +41,12 @@ integer *job, *info;
     static real f, g;
     static integer i, j, k, l, m;
     static real t, scale;
-    extern /* Subroutine */ int sscal_();
+    extern /* Subroutine */ void sscal_();
     static real shift;
     static integer maxit;
-    extern /* Subroutine */ int sswap_();
+    extern /* Subroutine */ void sswap_();
     static logical wantu, wantv;
-    extern /* Subroutine */ int srotg_(), saxpy_();
+    extern /* Subroutine */ void srotg_(), saxpy_();
     static real t1, ztest, el;
     static integer kk;
     static real cs;
@@ -477,21 +477,17 @@ L360:
 
 /*        quit if all the singular values have been found. */
 
-/*     ...exit */
     if (m == 0) {
-        goto L620;
+        return;
     }
 
 /*        if too many iterations have been performed, set */
 /*        flag and return. */
 
-    if (iter < maxit) {
-        goto L370;
+    if (iter >= maxit) {
+        *info = m;
+        return;
     }
-    *info = m;
-/*     ......exit */
-    goto L620;
-L370:
 
 /*        this section of the program inspects for */
 /*        negligible elements in the s and e arrays.  on */
@@ -742,7 +738,5 @@ L600:
     --m;
 L610:
     goto L360;
-L620:
-    return 0;
 } /* ssvdc_ */
 

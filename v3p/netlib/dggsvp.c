@@ -11,7 +11,7 @@ static doublereal c_b12 = 0.;
 static doublereal c_b22 = 1.;
 
 /*<    >*/
-/* Subroutine */ int dggsvp_(char *jobu, char *jobv, char *jobq, integer *m,
+/* Subroutine */ void dggsvp_(char *jobu, char *jobv, char *jobq, integer *m,
         integer *p, integer *n, doublereal *a, integer *lda, doublereal *b,
         integer *ldb, doublereal *tola, doublereal *tolb, integer *k, integer
         *l, doublereal *u, integer *ldu, doublereal *v, integer *ldv,
@@ -28,7 +28,7 @@ static doublereal c_b22 = 1.;
     static integer i, j;
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     static logical wantq, wantu, wantv;
-    extern /* Subroutine */ int dgeqr2_(integer *, integer *, doublereal *,
+    extern /* Subroutine */ void dgeqr2_(integer *, integer *, doublereal *,
             integer *, doublereal *, doublereal *, integer *), dgerq2_(
             integer *, integer *, doublereal *, integer *, doublereal *,
             doublereal *, integer *), dorg2r_(integer *, integer *, integer *,
@@ -301,7 +301,7 @@ static doublereal c_b22 = 1.;
         i__1 = -(*info);
         xerbla_("DGGSVP", &i__1, 6L);
 /*<          RETURN >*/
-        return 0;
+        return;
 /*<       END IF >*/
     }
 
@@ -636,7 +636,7 @@ static doublereal c_b22 = 1.;
     }
 
 /*<       RETURN >*/
-    return 0;
+    return;
 
 /*     End of DGGSVP */
 

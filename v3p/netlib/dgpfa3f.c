@@ -19,7 +19,7 @@ static integer c__3 = 3;
 /* ------------------------------------------------------------------- */
 
 /*<       subroutine dgpfa3f(a,b,trigs,inc,jump,n,mm,lot,isign) >*/
-/* Subroutine */ int dgpfa3f_(doublereal *a, doublereal *b, doublereal *trigs,
+/* Subroutine */ void dgpfa3f_(doublereal *a, doublereal *b, doublereal *trigs,
          integer *inc, integer *jump, integer *n, integer *mm, integer *lot,
         integer *isign)
 {
@@ -218,8 +218,6 @@ static integer c__3 = 3;
                         b[jc + j] = u2 - t3;
 /*<       j = j + jump >*/
                         j += *jump;
-/*<   110 continue >*/
-/* L110: */
                     }
 /*<       ja = ja + jstepx >*/
                     ja += jstepx;
@@ -227,11 +225,7 @@ static integer c__3 = 3;
                     if (ja < istart) {
                         ja += ninc;
                     }
-/*<   115 continue >*/
-/* L115: */
                 }
-/*<   120 continue >*/
-/* L120: */
             }
 
 /*  finished if n3 = 3 */
@@ -332,8 +326,6 @@ static integer c__3 = 3;
                             b[jc + j] = si2 * (t2 + u3) + co2 * (u2 - t3);
 /*<       j = j + jump >*/
                             j += *jump;
-/*<   130 continue >*/
-/* L130: */
                         }
 /* -----( end of loop across transforms ) */
 /*<       ja = ja + jstepx >*/
@@ -342,30 +334,20 @@ static integer c__3 = 3;
                         if (ja < istart) {
                             ja += ninc;
                         }
-/*<   135 continue >*/
-/* L135: */
                     }
-/*<   140 continue >*/
-/* L140: */
                 }
 /* -----( end of loop along transforms ) */
 /*<       kk = kk + 2*la >*/
                 kk += la << 1;
-/*<   150 continue >*/
-/* L150: */
             }
 /* -----( end of loop on nonzero k ) */
 /*<       la = 3*la >*/
             la *= 3;
-/*<   160 continue >*/
-/* L160: */
         }
 /* -----( end of loop on type I radix-3 passes) */
 
 /*  loop on type II radix-3 passes */
 /*  ------------------------------ */
-/*<   400 continue >*/
-/* L400: */
 
 /*<       do 480 ipass = mh+1 , m >*/
         i__2 = m;
@@ -582,8 +564,6 @@ static integer c__3 = 3;
                             b[ji + j] = u2 - t3;
 /*<       j = j + jump >*/
                             j += *jump;
-/*<   410 continue >*/
-/* L410: */
                         }
 /* -----( end of loop across transforms ) */
 /*<       ja = ja + jstepx >*/
@@ -592,14 +572,8 @@ static integer c__3 = 3;
                         if (ja < istart) {
                             ja += ninc;
                         }
-/*<   415 continue >*/
-/* L415: */
                     }
-/*<   420 continue >*/
-/* L420: */
                 }
-/*<   430 continue >*/
-/* L430: */
             }
 /* -----( end of double loop for k=0 ) */
 
@@ -833,8 +807,6 @@ static integer c__3 = 3;
                                 b[ji + j] = si2 * (t2 + u3) + co2 * (u2 - t3);
 /*<       j = j + jump >*/
                                 j += *jump;
-/*<   440 continue >*/
-/* L440: */
                             }
 /* -----(end of loop across transforms) */
 /*<       ja = ja + jstepx >*/
@@ -843,41 +815,25 @@ static integer c__3 = 3;
                             if (ja < istart) {
                                 ja += ninc;
                             }
-/*<   445 continue >*/
-/* L445: */
                         }
-/*<   450 continue >*/
-/* L450: */
                     }
-/*<   460 continue >*/
-/* L460: */
                 }
 /* -----( end of double loop for this k ) */
 /*<       kk = kk + 2*la >*/
                 kk += la << 1;
-/*<   470 continue >*/
-/* L470: */
             }
 /* -----( end of loop over values of k ) */
 /*<       la = 3*la >*/
             la *= 3;
-/*<   480 continue >*/
-/* L480: */
         }
 /* -----( end of loop on type II radix-3 passes ) */
 /* -----( nvex transforms completed) */
-/*<   490 continue >*/
 L490:
 /*<       istart = istart + nvex * jump >*/
         istart += nvex * *jump;
-/*<   500 continue >*/
-/* L500: */
     }
 /* -----( end of loop on blocks of transforms ) */
 
-/*<       return >*/
-    return 0;
-/*<       end >*/
 } /* dgpfa3f_ */
 
 #ifdef __cplusplus

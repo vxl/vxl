@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* Subroutine */ int sgerq2_(integer *m, integer *n, real *a, integer *lda,
+/* Subroutine */ void sgerq2_(integer *m, integer *n, real *a, integer *lda,
         real *tau, real *work, integer *info)
 {
     /* System generated locals */
@@ -13,7 +13,7 @@
 
     /* Local variables */
     static integer i, k;
-    extern /* Subroutine */ int slarf_(char *, integer *, integer *, real *,
+    extern /* Subroutine */ void slarf_(char *, integer *, integer *, real *,
             integer *, real *, real *, integer *, real *, ftnlen), xerbla_(
             char *, integer *, ftnlen), slarfg_(integer *, real *, real *,
             integer *, real *);
@@ -123,7 +123,7 @@
     if (*info != 0) {
         i__1 = -(*info);
         xerbla_("SGERQ2", &i__1, 6L);
-        return 0;
+        return;
     }
 
     k = min(*m,*n);
@@ -146,9 +146,7 @@
         slarf_("Right", &i__1, &i__2, &a[*m - k + i + a_dim1], lda, &tau[i], &
                 a[a_offset], lda, &work[1], 5L);
         a[*m - k + i + (*n - k + i) * a_dim1] = aii;
-/* L10: */
     }
-    return 0;
 
 /*     End of SGERQ2 */
 

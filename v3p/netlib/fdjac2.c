@@ -4,9 +4,9 @@
 
 static integer c__1 = 1;
 
-/* Subroutine */ int fdjac2_(fcn, m, n, x, fvec, fjac, ldfjac, iflag, epsfcn,
+/* Subroutine */ void fdjac2_(fcn, m, n, x, fvec, fjac, ldfjac, iflag, epsfcn,
         wa)
-/* Subroutine */ int (*fcn) ();
+/* Subroutine */ void (*fcn) ();
 integer *m, *n;
 doublereal *x, *fvec, *fjac;
 integer *ldfjac, *iflag;
@@ -140,7 +140,7 @@ doublereal *epsfcn, *wa;
 /* L20: */
     }
 L30:
-    return 0;
+    return;
 
 /*     last card of subroutine fdjac2. */
 

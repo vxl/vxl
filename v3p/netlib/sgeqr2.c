@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* Subroutine */ int sgeqr2_(integer *m, integer *n, real *a, integer *lda,
+/* Subroutine */ void sgeqr2_(integer *m, integer *n, real *a, integer *lda,
         real *tau, real *work, integer *info)
 {
     /* System generated locals */
@@ -17,7 +17,7 @@ static integer c__1 = 1;
 
     /* Local variables */
     static integer i, k;
-    extern /* Subroutine */ int slarf_(char *, integer *, integer *, real *,
+    extern /* Subroutine */ void slarf_(char *, integer *, integer *, real *,
             integer *, real *, real *, integer *, real *, ftnlen), xerbla_(
             char *, integer *, ftnlen), slarfg_(integer *, real *, real *,
             integer *, real *);
@@ -123,7 +123,7 @@ static integer c__1 = 1;
     if (*info != 0) {
         i__1 = -(*info);
         xerbla_("SGEQR2", &i__1, 6L);
-        return 0;
+        return;
     }
 
     k = min(*m,*n);
@@ -153,7 +153,7 @@ static integer c__1 = 1;
         }
 /* L10: */
     }
-    return 0;
+    return;
 
 /*     End of SGEQR2 */
 

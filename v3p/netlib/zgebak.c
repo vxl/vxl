@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* Subroutine */ int zgebak_(job, side, n, ilo, ihi, scale, m, v, ldv, info,
+/* Subroutine */ void zgebak_(job, side, n, ilo, ihi, scale, m, v, ldv, info,
         job_len, side_len)
 char *job, *side;
 integer *n, *ilo, *ihi;
@@ -24,9 +24,9 @@ ftnlen side_len;
     static doublereal s;
     extern logical lsame_();
     static logical leftv;
-    extern /* Subroutine */ int zswap_();
+    extern /* Subroutine */ void zswap_();
     static integer ii;
-    extern /* Subroutine */ int xerbla_(), zdscal_();
+    extern /* Subroutine */ void xerbla_(), zdscal_();
     static logical rightv;
 
 
@@ -139,19 +139,19 @@ ftnlen side_len;
     if (*info != 0) {
         i__1 = -(*info);
         xerbla_("ZGEBAK", &i__1, 6L);
-        return 0;
+        return;
     }
 
 /*     Quick return if possible */
 
     if (*n == 0) {
-        return 0;
+        return;
     }
     if (*m == 0) {
-        return 0;
+        return;
     }
     if (lsame_(job, "N", 1L, 1L)) {
-        return 0;
+        return;
     }
 
     if (*ilo == *ihi) {
@@ -229,8 +229,6 @@ L50:
             }
         }
     }
-
-    return 0;
 
 /*     End of ZGEBAK */
 
