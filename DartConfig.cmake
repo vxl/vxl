@@ -11,4 +11,4 @@ SET (DROP_SITE_USER "ftp")
 SET (DROP_SITE_PASSWORD "vxl-tester@somewhere.com")
 SET (TRIGGER_SITE "http://cgi.cs.rpi.edu/~perera/vxl/submit-testing-results.cgi")
 
-INCLUDE( DartConfigServer.cmake OPTIONAL )
+INCLUDE( ${allvxl_SOURCE_DIR}/DartConfigServer.cmake OPTIONAL )
