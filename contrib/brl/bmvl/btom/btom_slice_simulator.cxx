@@ -1,11 +1,12 @@
 // This is brl/bmvl/btom/btom_slice_simulator.cxx
-#include <vcl_cmath.h>
-#include <btom/btom_gauss_cylinder.h>
-#include <btom/btom_gauss_cylinder_sptr.h>
-#include <btom/btom_slice_simulator.h>
+#include "btom_slice_simulator.h"
 //:
 // \file
 // See btom_slice_simulator.h
+#include <vcl_cmath.h>
+#include <vcl_vector.h>
+#include <btom/btom_gauss_cylinder.h>
+#include <btom/btom_gauss_cylinder_sptr.h>
 //
 //-----------------------------------------------------------------------------
 
