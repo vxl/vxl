@@ -4,6 +4,9 @@ include ${IUEROOT}/core/vul/config.mk
 include ${IUEROOT}/core/vpl/config.mk
 include ${IUEROOT}/core/testlib/config.mk
 
+# This is where vil/vil_config.h resides
+INCDIRS += ../$(RELOBJDIR)/include
+
 TESTMAIN = test_driver.cxx
 
 # basic things
