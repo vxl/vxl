@@ -81,12 +81,14 @@ short mil_image_data<T>::version_no() const
     return 1;
 }
 
+#if 0
 //: Name of the class
 template<class T>
 vcl_string mil_image_data<T>::is_a() const
 {
     return vcl_string("mil_image_data<T>");
 }
+#endif
 
 //: Does the name of the class match the argument?
 template<class T>

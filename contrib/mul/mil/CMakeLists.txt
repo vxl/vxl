@@ -11,6 +11,7 @@ mil_gauss_reduce_2d
 mil_gaussian_pyramid_builder_2d
 mil_image
 mil_image_2d_of
+mil_image_data
 mil_image_io
 mil_image_pyramid
 mil_image_pyramid_builder
