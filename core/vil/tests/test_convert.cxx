@@ -32,9 +32,9 @@ static void test_convert1(const char * golden_data_dir)
 
 static void test_convert_diff_types(const char * golden_data_dir)
 {
-  vcl_cout << "************************************************************\n"
-           << " Testing vil_convert_cast(vil_image_base,vil_image_view<T>)\n"
-           << "************************************************************\n";
+  vcl_cout << "******************************************************\n"
+           << " Testing vil_convert_cast(T,vil_image_view_base_sptr)\n"
+           << "******************************************************\n";
 
   vcl_string datadir = golden_data_dir;
   if (*golden_data_dir) datadir += "/";
@@ -42,24 +42,65 @@ static void test_convert_diff_types(const char * golden_data_dir)
   testlib_test_begin( "Loading images" );
   vil_image_view<vxl_byte> image1 = vil_load((datadir + "ff_grey8bit_raw.pgm").c_str());
   vil_image_view_base_sptr image_base1 = vil_load((datadir + "ff_grey8bit_raw.pgm").c_str());
+  vil_image_view_base_sptr image2 = vil_load((datadir + "ff_grey16bit_raw.pgm").c_str());
+  vil_image_view_base_sptr image3 = vil_load((datadir + "ff_rgb8bit_raw.ppm").c_str());
+  vil_image_view_base_sptr image4 = vil_load((datadir + "ff_rgb16bit_raw.ppm").c_str());
   testlib_test_perform( image1 && image_base1 );
 
-  testlib_test_begin( "Converting explicitly 8bit to 16bit" );
+  testlib_test_begin( "Converting explicitly 8bit grey to 16bit grey" );
   vil_image_view<vxl_uint_16> image_16_1;
   vil_convert_cast( image1, image_16_1 );
-  testlib_test_perform( image_16_1 && image_16_1(4,0) == vxl_uint_16( image1(4,0) ) );
+  testlib_test_perform( image_16_1 && image_16_1(3,0) == vxl_uint_16(image1(3,0)) );
 
-  testlib_test_begin( "Converting implicitly 8bit to 16bit" );
-  vil_image_view<vxl_uint_16> image_16_2 = 
-    vil_convert_cast(vxl_uint_16(), image_base1 );
-  testlib_test_perform( image_16_2 && image_16_2(4,0) == vxl_uint_16( image1(4,0) ) );
-
-  if ( image_16_2 ) {
-    vil_print_all(vcl_cout, image_16_2);
-  } else {
+  vil_print_all(vcl_cout, image1);
+  if ( image_16_1 )
+    vil_print_all(vcl_cout, image_16_1);
+  else
     vcl_cout << "(no dump)\n";
-  }
 
+  testlib_test_begin( "Converting implicitly 8bit grey to 16bit grey" );
+  vil_image_view<vxl_uint_16> image_16_2 =
+    vil_convert_cast(vxl_uint_16(), image_base1 );
+  testlib_test_perform( image_16_2 && image_16_2(4,2) == vxl_uint_16(image1(4,2)) );
+
+  vil_print_all(vcl_cout, image_base1);
+  if ( image_16_2 )
+    vil_print_all(vcl_cout, image_16_2);
+  else
+    vcl_cout << "(no dump)\n";
+
+  testlib_test_begin( "Converting implicitly 16bit grey to 8bit grey" );
+  vil_image_view<vxl_byte> image_8_2 = vil_convert_cast( vxl_byte(), image2 );
+  vil_image_view<vxl_uint_16> image_2 = image2;
+  testlib_test_perform( image_8_2 && image_8_2(4,2) == vxl_byte(image_2(4,2)) );
+
+  vil_print_all(vcl_cout, image2);
+  if ( image_8_2 )
+    vil_print_all(vcl_cout, image_8_2);
+  else
+    vcl_cout << "(no dump)\n";
+
+  testlib_test_begin( "Converting implicitly 8bit RGB to 8bit grey" );
+  vil_image_view<vxl_byte> image_8_3 = vil_convert_cast( vxl_byte(), image3 );
+  vil_image_view<vxl_byte> image_3 = image3;
+  testlib_test_perform( image_8_3 && image_8_3(1,0) == image_3(1,0,1) ); // accidentally a grey pixel ...
+
+  vil_print_all(vcl_cout, image3);
+  if ( image_8_3 )
+    vil_print_all(vcl_cout, image_8_3);
+  else
+    vcl_cout << "(no dump)\n";
+
+  testlib_test_begin( "Converting implicitly 16bit RGB to 8bit grey" );
+  vil_image_view<vxl_byte> image_8_4 = vil_convert_cast( vxl_byte(), image4 );
+  vil_image_view<vxl_uint_16> image_4 = image4;
+  testlib_test_perform( image_8_4 && image_8_4(1,0) == vxl_byte(image_4(1,0,1)) );
+
+  vil_print_all(vcl_cout, image4);
+  if ( image_8_4 )
+    vil_print_all(vcl_cout, image_8_4);
+  else
+    vcl_cout << "(no dump)\n";
 }
 
 static void test_convert_stretch_range()
@@ -124,20 +165,18 @@ static void test_convert_to_n_planes()
   vxl_uint_16 minp,maxp;
   vil_math_value_range(image_16_3_stretched,minp,maxp);
   testlib_test_perform( minp==0 && maxp==65535);
-  
-  
+
+
   TEST("Plane image cannot be directly converted to components",
-    vil_image_view<vil_rgb<float> >(f_image_dest_sptr), false);
+       vil_image_view<vil_rgb<float> >(f_image_dest_sptr), false);
   vil_image_view<vil_rgb<float> > rgb_image =
     vil_convert_to_component_order(f_image_dest_sptr);
   TEST("implict vil_convert_to_component_order API", rgb_image, true);
   TEST("implict vil_convert_to_component_order correct",
-    vil_image_view_deep_equality(vil_image_view<float>(rgb_image), f_image_dest),
-    true);
+       vil_image_view_deep_equality(vil_image_view<float>(rgb_image), f_image_dest),
+       true);
 //  vil_print_all(vcl_cout, image_16_3_stretched);
-  
-  
-  
+
 //  vil_print_all(vcl_cout, image_16_3);
 //  vil_print_all(vcl_cout, u16_image_expected);
 }
