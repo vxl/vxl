@@ -58,7 +58,7 @@ testlib_main( int argc, char* argv[] )
   // The caller should already have called register_tests().
 
   // Don't allow Visual Studio to open critical error dialog boxes
-#if defined(VCL_WIN32)
+#if defined(VCL_VC)
   char * env_var = getenv("DART_TEST_FROM_DART");
   if ( env_var ) {
     // No abort or ANSI assertion failure dialog box
