@@ -73,8 +73,8 @@ private:
   vil_memory_image_of< T > img_;
 };
 
-template CheckRGB< vxl_uint_8 >;
-template CheckGrey< vxl_uint_8 >;
+template class CheckRGB< vxl_uint_8 >;
+template class CheckGrey< vxl_uint_8 >;
 
 
 bool
