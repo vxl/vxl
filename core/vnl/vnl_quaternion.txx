@@ -84,11 +84,11 @@ vnl_quaternion<T>::vnl_quaternion (const vnl_vector<T>& vec)
     this->operator[](i) = 0.0;
 }
 
-//: Creates a quaternion from a transform matrix.
+//: Creates a quaternion from a rotation matrix.
 // Its orthonormal basis vectors are row-wise in the top-left most block.
 // The transform matrix may be any size,
 // but the rotation matrix must be the upper left 3x3.
-
+// WARNING: Takes the transpose of the rotation matrix...
 template <class T>
 vnl_quaternion<T>::vnl_quaternion (const vnl_matrix<T>& transform)
 {
@@ -158,9 +158,10 @@ vnl_vector<T> vnl_quaternion<T>::axis () const {
 
 //: Converts a normalized quaternion into a square rotation matrix with dimension dim.
 //  This is the reverse counterpart of constructing a quaternion from a transformation matrix.
+// WARNING this is inconsistent with the quaternion docs and q.rotate()
 
 template <class T>
-vnl_matrix_fixed<T,3,3> vnl_quaternion<T>::rotation_matrix () const {
+vnl_matrix_fixed<T,3,3> vnl_quaternion<T>::rotation_matrix_transpose () const {
   vnl_matrix_fixed<T,3,3> rot;
   vnl_quaternion<T> const& q = *this;
 
@@ -189,10 +190,10 @@ vnl_matrix_fixed<T,3,3> vnl_quaternion<T>::rotation_matrix () const {
 
 
 template <class T>
-vnl_matrix_fixed<T,4,4> vnl_quaternion<T>::rotation_matrix_4() const {
+vnl_matrix_fixed<T,4,4> vnl_quaternion<T>::rotation_matrix_transpose_4() const {
   vnl_matrix_fixed<T,4,4> rot;
   rot.set_identity();
-  rot.update(this->rotation_matrix().as_ref());
+  rot.update(this->rotation_matrix_transpose().as_ref());
   return rot;
 }
 
