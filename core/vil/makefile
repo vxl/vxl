@@ -9,6 +9,7 @@ include ${IUEROOT}/config/top-params.mk
 
 # basic things
 SOURCES += vil2_image_resource.cxx
+SOURCES += vil2_image_resource_plugin.cxx
 MANPAGE_SOURCES += vil2_image_view.txx
 SOURCES += vil2_image_view_base.cxx
 SOURCES += vil2_memory_chunk.cxx
