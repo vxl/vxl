@@ -64,16 +64,17 @@ static void test_range_map()
   vxl_byte val8 = Lrmuc.map_L_pixel(127);
   vxl_byte* map8 = Lrmuc.Lmap();
   float* fmap8 = Lrmuc.fLmap();
-  float val8f = fmap8[127];
+  vxl_byte val8f = (vxl_byte)(fmap8[127]*255 + 0.5);
   unsigned size8 = Lrmuc.map_size();
   bool map_good = false;
-  if (Lrmuc.mapable())
-  {
-    map_good = true;
-    for (unsigned i = 0; i<size8 && i<256; ++i)
-      map_good = map_good && map8[i]==(vxl_byte)i;
-  }
-  TEST("vxl_byte values", val8==127&&!Lrmuc.offset()&&map_good, true);
+  if(Lrmuc.mapable())
+    {
+      map_good = true;
+      for(unsigned i = 0; i<size8; ++i)
+        if(i>=0&&i<=255)
+          map_good = map_good&&map8[i]==(vxl_byte)i;
+    }
+  TEST("vxl_byte values", val8==127&&val8f==127&&!Lrmuc.offset()&&map_good, true);
 
   //
   //signed 8 bit (signed char)
@@ -85,13 +86,13 @@ static void test_range_map()
   unsigned sizesc = Lrmsc.map_size();
   int offsc = Lrmsc.offset();
   map_good = false;
-  if (Lrmsc.mapable())
-  {
-    map_good = true;
-    for (int i = -128; i<=127; ++i)
-      map_good = map_good&&(mapsc[i+offsc]==(i+offsc));
-  }
-  TEST("signed char values", valsc==64&&Lrmsc.offset()==128&&map_good, true);
+  if(Lrmsc.mapable())
+    {
+      map_good = true;
+      for(int i = -128; i<=127; ++i)
+        map_good = map_good&&(mapsc[i+offsc]==(i+offsc));
+    }
+  TEST("signed char values", sizesc == 256&&valsc==64&&Lrmsc.offset()==128&&map_good, true);
 
 //
 // signed 16 bit (short)
@@ -103,14 +104,14 @@ static void test_range_map()
   unsigned sizesh = Lrmsh.map_size();
   int offsh = Lrmsh.offset();
   map_good = false;
-  if (Lrmsh.mapable())
-  {
-    map_good = true;
-    for (int i = -offsh; i<=(offsh-1); ++i)
-      if (i>=-128 && i<=127)
-        map_good = map_good&&mapsh[i+offsh]==(i+offsh);
-  }
-  TEST("short values", valsh==128&&Lrmsh.offset()==32768&&map_good, true);
+  if(Lrmsh.mapable())
+    {
+	  map_good = true;
+      for(int i = -offsh; i<=(offsh-1); ++i)
+        if(i>=-128 && i<=127)
+          map_good = map_good&&mapsc[i+offsc]==(i+offsc);
+    }
+  TEST("short values", sizesh==65536&&valsh==128&&Lrmsh.offset()==32768&&map_good, true);
 
 //
 // unsigned 16 bit (unsigned short)
@@ -122,13 +123,14 @@ static void test_range_map()
   unsigned sizeush = Lmush.map_size();
   int offush = Lmush.offset();
   map_good = false;
-  if (Lmush.mapable())
-  {
-    map_good = true;
-    for (unsigned int i=0; i<sizeush && i<256; ++i)
-      map_good = map_good && mapush[i]==i;
-  }
-  TEST("unsigned short values", valush==(vxl_byte)128&&offush==0&&map_good, true);
+  if(Lmush.mapable())
+    {
+      map_good = true;
+      for(int i = 0; i<=(sizeush-1); ++i)
+        if(i>=0 && i<=255)
+          map_good = map_good&&mapush[i]==(i);
+    }
+  TEST("unsigned short values", sizeush==65536&&valsh==(vxl_byte)128&&offush==0&&map_good, true);
 
 //
 // float
