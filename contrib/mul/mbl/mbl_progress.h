@@ -1,5 +1,5 @@
-#ifndef mbl_progress_base_h_
-#define mbl_progress_base_h_
+#ifndef mbl_progress_h_
+#define mbl_progress_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
