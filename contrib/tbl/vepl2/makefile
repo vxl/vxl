@@ -15,6 +15,9 @@ USE_IMPLICIT_TEMPLATES := 1
 LIBRARY := vepl2
 VERSION := 1.0
 
+MANPAGE_SOURCES += accessors/vipl_accessors_vil2_image_view_base.txx
+MANPAGE_SOURCES += section/vipl_filterable_section_container_generator_vil2_image_view_base.txx
+
 # A. Point operators:
 MANPAGE_SOURCES += vepl2_convert.txx
 SOURCES += vepl2_threshold.cxx
