@@ -1,7 +1,6 @@
 // This is prip/vdtop/vdtop_kernel.h
 #ifndef vdtop_kernel_h_
 #define vdtop_kernel_h_
-
 //:
 // \file
 // \brief Provides the kernel function, which computes the kernel of some transformations based on local criteria.
@@ -22,16 +21,15 @@
 template <class T>
 void vdtop_set_image_border (vil_image_view<T> & img, int img_thickness, const T & value)
 {
-  int i , k ;
-  for (i = 0; i < img.ni() ; i++)
+  for (unsigned int i = 0; i < img.ni() ; i++)
   {
-    for (k = 0; k<img_thickness; k++)
+    for (int k = 0; k<img_thickness; k++)
       img(i,k) = img(i, img.nj() -1-k) = value ;
   }
-  for ( i = 0; i < img.nj() ; i++)
+  for (unsigned int j = 0; j < img.nj() ; j++)
   {
-    for (k = 0; k<img_thickness; k++)
-      img(k,i) = img(img.ni() -1-k,i) = value ;
+    for (int k = 0; k<img_thickness; k++)
+      img(k,j) = img(img.ni() -1-k,j) = value ;
   }
 }
 
@@ -50,15 +48,15 @@ void vdtop_kernel(vil_image_view<T> & img, TPredicate & pred)
 
   for (typename vil_image_view<T>::iterator i = img.begin() ; i!=img.end(); ++i, ++ii)
   {
-      if (*ii==FALSE_PIXEL)
+    if (*ii==FALSE_PIXEL)
+    {
+      pred.set_position(i) ;
+      if (pred.can_remove())
       {
-        pred.set_position(i) ;
-        if (pred.can_remove())
-        {
-          current.push_back(i) ;
-        }
+        current.push_back(i) ;
       }
     }
+  }
   while (!current.empty())
   {
     while (!current.empty())
