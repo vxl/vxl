@@ -19,11 +19,12 @@
 #include <vil/vil_image_view.h>
 
 //: Useful static functions for vgui.
-class vgui_utils {
-public:
+class vgui_utils
+{
+ public:
   //: Get a memory image (vil1) corresponding to the OpenGL area
   static vil1_memory_image_of<vil1_rgb<unsigned char> > colour_buffer_to_image();
-  
+
   //: Get an image view corresponding to the OpenGL area
   static vil_image_view<vxl_byte> colour_buffer_to_view();
 
@@ -50,7 +51,7 @@ public:
   //: Returns the number of bits per pixel.
   static int bits_per_pixel(GLenum format, GLenum type);
 
-private:
+ private:
   static vil1_memory_image_of<vil1_rgb<GLubyte> > get_image();
   static vil_image_view<GLubyte> get_view();
   static void do_copy();

@@ -39,9 +39,10 @@ vgui_style::new_style(const vgui_style_sptr& s)
   return vgui_style_sptr( new vgui_style( s->rgba[0],s->rgba[1],s->rgba[2],
                                           s->point_size,s->line_width ) );
 }
-  
 
-vgui_style::vgui_style() {
+
+vgui_style::vgui_style()
+{
   for (int i=0; i<2; ++i)
     rgba[i] = 1;
 
@@ -81,14 +82,14 @@ vgui_style::apply_color() const
 void
 vgui_style::apply_line_width() const
 {
-  if( line_width > 0.0 ) 
+  if ( line_width > 0.0 )
     glLineWidth( line_width );
 }
 
 void
 vgui_style::apply_point_size() const
 {
-  if( point_size > 0.0 ) 
+  if ( point_size > 0.0 )
     glPointSize( point_size );
 }
 

@@ -12,7 +12,8 @@
 class vil1_image;
 
 //: Common combinations of component format, bits, planes and components.
-enum vil1_pixel_format_t {
+enum vil1_pixel_format_t
+{
   VIL1_PIXEL_FORMAT_UNKNOWN,
   VIL1_BYTE,       /*!< 1 x W x H x 1 of UINT x 8*/
   VIL1_RGB_BYTE,   /*!< 1 x W x H x 3 of UINT x 8*/
@@ -30,7 +31,8 @@ enum vil1_pixel_format_t {
 inline
 const char* vil1_print(vil1_pixel_format_t f)
 {
-  switch(f) {
+  switch (f)
+  {
     case VIL1_PIXEL_FORMAT_UNKNOWN: return "VIL1_PIXEL_FORMAT_UNKNOWN";
     case VIL1_BYTE: return "VIL1_BYTE";
     case VIL1_RGB_BYTE: return "VIL1_RGB_BYTE";

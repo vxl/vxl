@@ -17,21 +17,22 @@ LONG WINAPI vxl_exception_filter( struct _EXCEPTION_POINTERS *ExceptionInfo )
   DWORD* ExceptionInformation  = ExceptionInfo->ExceptionRecord->ExceptionInformation;
 
   vcl_fprintf(stderr, "\nTOP-LEVEL EXCEPTION HANDLER\n");
-  switch(ExceptionCode) {
-    case EXCEPTION_ACCESS_VIOLATION:
-      vcl_fprintf(stderr, "The instruction at \"0x%.8p\" failed to %s memory at \"0x%.8x\".\n\n",
-                  ExceptionAddress, ExceptionInformation[0] ? "write to" :"read",
-                  ExceptionInformation[1]);
-      break;
+  switch (ExceptionCode)
+  {
+   case EXCEPTION_ACCESS_VIOLATION:
+    vcl_fprintf(stderr, "The instruction at \"0x%.8p\" failed to %s memory at \"0x%.8x\".\n\n",
+                ExceptionAddress, ExceptionInformation[0] ? "write to" :"read",
+                ExceptionInformation[1]);
+    break;
 
-    case EXCEPTION_INT_DIVIDE_BY_ZERO:
-      vcl_fprintf(stderr, "The instruction at \"0x%.8p\" caused an exception of integer devision by zero.\n\n",
-                  ExceptionAddress);
-      break;
-    default:
-      vcl_fprintf(stderr, "The instruction at \"0x%.8p\" caused an unknown exception (exception code: \"0x%.8x\").\n\n",
-                  ExceptionAddress,
-                  ExceptionCode);
+   case EXCEPTION_INT_DIVIDE_BY_ZERO:
+    vcl_fprintf(stderr, "The instruction at \"0x%.8p\" caused an exception of integer devision by zero.\n\n",
+                ExceptionAddress);
+    break;
+   default:
+    vcl_fprintf(stderr, "The instruction at \"0x%.8p\" caused an unknown exception (exception code: \"0x%.8x\").\n\n",
+                ExceptionAddress,
+                ExceptionCode);
   }
 
   // Default action is to abort

@@ -63,30 +63,25 @@ namespace
   convert_buffer( vil_image_view<InT> const& in,
                   OutT* out, vcl_ptrdiff_t hstep )
   {
-    switch( in.nplanes() ) {
-      case 1:
-      {
-        for ( unsigned j=0; j < in.nj(); ++j )
-          for ( unsigned i=0; i < in.ni(); ++i )
-            vgui_pixel_convert( in(i,j), *(out+i+j*hstep) );
-        return true;
-      }
-      case 3:
-      {
-        for ( unsigned j=0; j < in.nj(); ++j )
-          for ( unsigned i=0; i < in.ni(); ++i )
-            vgui_pixel_convert( in(i,j,0), in(i,j,1), in(i,j,2), *(out+i+j*hstep) );
-        return true;
-      }
-      case 4:
-      {
-        for ( unsigned j=0; j < in.nj(); ++j )
-          for ( unsigned i=0; i < in.ni(); ++i )
-            vgui_pixel_convert( in(i,j,0), in(i,j,1), in(i,j,2), in(i,j,3), *(out+i+j*hstep) );
-        return true;
-      }
-      default:
-        return false;
+    switch ( in.nplanes() )
+    {
+     case 1:
+      for ( unsigned j=0; j < in.nj(); ++j )
+        for ( unsigned i=0; i < in.ni(); ++i )
+          vgui_pixel_convert( in(i,j), *(out+i+j*hstep) );
+      return true;
+     case 3:
+      for ( unsigned j=0; j < in.nj(); ++j )
+        for ( unsigned i=0; i < in.ni(); ++i )
+          vgui_pixel_convert( in(i,j,0), in(i,j,1), in(i,j,2), *(out+i+j*hstep) );
+      return true;
+     case 4:
+      for ( unsigned j=0; j < in.nj(); ++j )
+        for ( unsigned i=0; i < in.ni(); ++i )
+          vgui_pixel_convert( in(i,j,0), in(i,j,1), in(i,j,2), in(i,j,3), *(out+i+j*hstep) );
+      return true;
+     default:
+      return false;
     } // end case
   }
 
@@ -234,7 +229,7 @@ apply( vil_image_resource_sptr const& image_in )
   vil_pixel_format component_format =
           vil_pixel_format_component_format( image_in->pixel_format() );
 
-  switch( component_format ) {
+  switch ( component_format ) {
     DoCase( VIL_PIXEL_FORMAT_UINT_32 )
     DoCase( VIL_PIXEL_FORMAT_INT_32 )
     DoCase( VIL_PIXEL_FORMAT_UINT_16 )
@@ -244,11 +239,9 @@ apply( vil_image_resource_sptr const& image_in )
     DoCase( VIL_PIXEL_FORMAT_FLOAT )
     DoCase( VIL_PIXEL_FORMAT_DOUBLE )
     default:
-    {
-      vcl_cerr << __FILE__ << ": " << __LINE__
-               << ": can't handle image pixel format "
-               << component_format << '\n';
-    }
+     vcl_cerr << __FILE__ << ": " << __LINE__
+              << ": can't handle image pixel format "
+              << component_format << '\n';
   }
 
 #undef DoCase
@@ -290,7 +283,7 @@ apply( vil1_image const& image )
         break;                                                                     \
       }
 
-  switch( pixel_format ) {
+  switch ( pixel_format ) {
     DoCase( VIL1_BYTE,       vxl_byte,    1 )
     DoCase( VIL1_UINT16,     vxl_uint_16, 1 )
     DoCase( VIL1_UINT32,     vxl_uint_32, 1 )
@@ -302,11 +295,9 @@ apply( vil1_image const& image )
     DoCase( VIL1_RGB_DOUBLE, double,      3 )
     DoCase( VIL1_RGBA_BYTE,  vxl_byte,    4 )
     default:
-    {
-      vcl_cerr << __FILE__ << ": " << __LINE__
-               << ": can't handle image pixel format "
-               << vil1_print( pixel_format ) << '\n';
-    }
+     vcl_cerr << __FILE__ << ": " << __LINE__
+              << ": can't handle image pixel format "
+              << vil1_print( pixel_format ) << '\n';
   }
 
 #undef DoCase

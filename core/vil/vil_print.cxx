@@ -437,7 +437,8 @@ void vil_print_all(vcl_ostream& os, vil_image_view_base_sptr const& view)
      vil_print_all(os, static_cast<vil_image_view< vil_pixel_format_type_of<T >::type > >(view) );\
      break
 
-  switch( view->pixel_format() ) {
+  switch ( view->pixel_format() )
+  {
 #if VXL_HAS_INT_64
     docase( VIL_PIXEL_FORMAT_UINT_64 );
     docase( VIL_PIXEL_FORMAT_INT_64 );
@@ -481,8 +482,7 @@ void vil_print_all(vcl_ostream& os, vil_image_view_base_sptr const& view)
     docase( VIL_PIXEL_FORMAT_COMPLEX_FLOAT );
     docase( VIL_PIXEL_FORMAT_COMPLEX_DOUBLE );
 
-    default:
-      ;
+    default: ;
   }
 #undef docase
 }

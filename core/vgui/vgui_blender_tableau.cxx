@@ -113,21 +113,21 @@ bool vgui_blender_tableau::handle(vgui_event const &e)
   }
 
   if (e.type == vgui_KEY_PRESS) {
-    switch(e.key) {
-    case '_':
+    switch (e.key)
+    {
+     case '_':
       alpha -= 0.1f;
       if (alpha <= 0.0f) alpha = 0.0f;
       debug << "blender : alpha = " << alpha << vcl_endl;
       post_redraw();
       return true;
-    case '+':
+     case '+':
       alpha += 0.1f;
       if (alpha >= 1.0f) alpha = 1.0f;
       debug << "blender : alpha = " << alpha << vcl_endl;
       post_redraw();
       return true;
-
-    default:
+     default:
       break;
     }
   }

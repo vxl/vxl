@@ -147,7 +147,7 @@ void vgui_mfc_adaptor::make_current()
 //: MFC implementation of vgui_adaptor function - swap buffers if using double buffering.
 void vgui_mfc_adaptor::swap_buffers()
 {
-  if( !vgui_mfc_use_bitmap )
+  if ( !vgui_mfc_use_bitmap )
     SwapBuffers(m_pDC->m_hDC);
 }
 
@@ -226,13 +226,12 @@ int vgui_mfc_adaptor::OnCreate(LPCREATESTRUCT lpCreateStruct)
     return FALSE;
   }
 
-  if( vgui_mfc_use_bitmap ) {
+  if ( vgui_mfc_use_bitmap )
     m_hRC = setup_for_gl( m_pDC,
                           PFD_DRAW_TO_BITMAP | PFD_SUPPORT_OPENGL );
-  } else {
+  else
     m_hRC = setup_for_gl( m_pDC,
                           PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER );
-  }
 
   post_redraw();
 
@@ -319,7 +318,7 @@ void vgui_mfc_adaptor::create_bitmap( int cx, int cy,
                                    &buffer,
                                    NULL,
                                    0 );
-  if( !hbmp ) {
+  if ( !hbmp ) {
     AfxMessageBox( "Failed to create bitmap" );
     return;
   }
@@ -347,7 +346,7 @@ BOOL vgui_mfc_adaptor::OnEraseBkgnd(CDC* pDC)
 //: Redraws the OpenGL area.
 void vgui_mfc_adaptor::service_redraws()
 {
-  if( redraw_posted_ )
+  if ( redraw_posted_ )
   {
     vgui_macro_report_errors;
     this->make_current();
@@ -357,11 +356,13 @@ void vgui_mfc_adaptor::service_redraws()
     aux_dc_valid_ = false;
   }
 
-  if( overlay_redraw_posted_ ) {
+  if ( overlay_redraw_posted_ )
+  {
     this->make_current();
 
-    if( vgui_mfc_use_bitmap ) {
-      if( aux_dc_valid_ ) {
+    if ( vgui_mfc_use_bitmap )
+    {
+      if ( aux_dc_valid_ ) {
         // copy aux buffer to gl buffer
         m_pDC->BitBlt( 0, 0, m_width, m_height, m_pDC_aux, 0, 0, SRCCOPY );
       } else {
@@ -369,11 +370,13 @@ void vgui_mfc_adaptor::service_redraws()
         m_pDC_aux->BitBlt( 0, 0, m_width, m_height, m_pDC, 0, 0, SRCCOPY );
         aux_dc_valid_ = true;
       }
-    } else {
+    }
+    else
+    {
       // Determine we if just did a redraw (aux_dc_valid_==false iff
       // just did a redraw).
       //
-      if( aux_dc_valid_ ) {
+      if ( aux_dc_valid_ ) {
         // Nope. Do a redraw to delete the previous overlay
         dispatch_to_tableau( vgui_event(vgui_DRAW) );
       } else {
@@ -389,7 +392,8 @@ void vgui_mfc_adaptor::service_redraws()
     overlay_redraw_posted_ = false;
   }
 
-  if( vgui_mfc_use_bitmap ) {
+  if ( vgui_mfc_use_bitmap )
+  {
     CWnd* wnd;
     if (m_pCWnd)
       wnd = m_pCWnd;
@@ -437,9 +441,8 @@ void vgui_mfc_adaptor::draw()
 
 bool vgui_mfc_adaptor::do_idle()
 {
-  if( idle_request_posted_ ) {
+  if ( idle_request_posted_ )
     idle_request_posted_ =  dispatch_to_tableau( vgui_event( vgui_IDLE ) );
-  }
   return idle_request_posted_;
 }
 
@@ -458,7 +461,8 @@ void vgui_mfc_adaptor::OnSize(UINT nType, int cx, int cy)
   m_width = cx;
   m_height = cy;
 
-  if( cx != 0 && cy != 0 && vgui_mfc_use_bitmap ) {
+  if ( cx != 0 && cy != 0 && vgui_mfc_use_bitmap )
+  {
     // create a new GL bitmap and aux bitmap to match the new window
     // size.
     HBITMAP obmp = 0;

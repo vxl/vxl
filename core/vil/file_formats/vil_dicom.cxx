@@ -56,11 +56,10 @@ vil_image_resource_sptr vil_dicom_file_format::make_input_image(vil_stream* vs)
     }
   }
 
-  if ( is_dicom ) {
+  if ( is_dicom )
     return new vil_dicom_image( vs );
-  } else {
+  else
     return 0;
-  }
 }
 
 vil_image_resource_sptr vil_dicom_file_format::make_output_image(vil_stream* /*vs*/,
@@ -156,12 +155,12 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
   // Gather the storage format info
 
 #define Stringify( v ) #v
-#define MustRead( func, key, var )                                                      \
-    do{                                                                                 \
-    if ( dset. func( key, var ) != EC_Normal ) {                                         \
-      vcl_cerr << "vil_dicom ERROR: couldn't read " Stringify(key) "; can't handle\n";  \
-      return;                                                                           \
-    }} while (false)
+#define MustRead( func, key, var )                                                     \
+  do {                                                                                 \
+    if ( dset. func( key, var ) != EC_Normal ) {                                       \
+      vcl_cerr << "vil_dicom ERROR: couldn't read " Stringify(key) "; can't handle\n"; \
+      return;                                                                          \
+  }} while (false)
 
   Uint16 bits_alloc, bits_stored, high_bit, pixel_rep;
 
@@ -211,16 +210,15 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
                                   (T*)pixel_buf->data(),                \
                                   ni(), nj(), nplanes(),                \
                                   nplanes(), ni()*nplanes(), 1 ) );     \
-      }break
+      } break
 
-  switch( pixel_format ) {
+  switch ( pixel_format ) {
     DOCASE( VIL_PIXEL_FORMAT_UINT_16 );
     DOCASE( VIL_PIXEL_FORMAT_INT_16 );
     DOCASE( VIL_PIXEL_FORMAT_BYTE );
     DOCASE( VIL_PIXEL_FORMAT_SBYTE );
     DOCASE( VIL_PIXEL_FORMAT_FLOAT );
-    default:
-      vcl_cerr << "vil_dicom ERROR: unexpected pixel format\n";
+    default: vcl_cerr << "vil_dicom ERROR: unexpected pixel format\n";
   }
 #undef DOCASE
 }
@@ -836,7 +834,6 @@ read_header( DcmObject* f, vil_dicom_header_info& i )
 #undef ap_join
 #undef ap_type
 #undef ap_el
-
 }
 
 
@@ -944,21 +941,22 @@ read_pixels_into_buffer(DcmPixelData* pixels,
     void* in_begin = pixel_data->getData();
     float* out_begin = static_cast<float*>( out_buf->data() );
 
-    switch( act_format ) {
-      case VIL_PIXEL_FORMAT_BYTE:
-        rescale_values( (vxl_byte*)in_begin, num_samples, out_begin, slope, intercept );
-        break;
-      case VIL_PIXEL_FORMAT_SBYTE:
-        rescale_values( (vxl_sbyte*)in_begin, num_samples, out_begin, slope, intercept );
-        break;
-      case VIL_PIXEL_FORMAT_UINT_16:
-        rescale_values( (vxl_uint_16*)in_begin, num_samples, out_begin, slope, intercept );
-        break;
-      case VIL_PIXEL_FORMAT_INT_16:
-        rescale_values( (vxl_sint_16*)in_begin, num_samples, out_begin, slope, intercept );
-        break;
-      default:
-        vcl_cerr << "vil_dicom ERROR: unexpected internal pixel format\n";
+    switch ( act_format )
+    {
+     case VIL_PIXEL_FORMAT_BYTE:
+      rescale_values( (vxl_byte*)in_begin, num_samples, out_begin, slope, intercept );
+      break;
+     case VIL_PIXEL_FORMAT_SBYTE:
+      rescale_values( (vxl_sbyte*)in_begin, num_samples, out_begin, slope, intercept );
+      break;
+     case VIL_PIXEL_FORMAT_UINT_16:
+      rescale_values( (vxl_uint_16*)in_begin, num_samples, out_begin, slope, intercept );
+      break;
+     case VIL_PIXEL_FORMAT_INT_16:
+      rescale_values( (vxl_sint_16*)in_begin, num_samples, out_begin, slope, intercept );
+      break;
+     default:
+      vcl_cerr << "vil_dicom ERROR: unexpected internal pixel format\n";
     }
   }
 

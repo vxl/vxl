@@ -150,7 +150,8 @@ vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type
   vgl_polygon<T> result;
 
   gpc_op g_op = GPC_INT;
-  switch( op ) {
+  switch ( op )
+  {
     case vgl_clip_type_intersect:    g_op = GPC_INT;   break;
     case vgl_clip_type_difference:   g_op = GPC_DIFF;  break;
     case vgl_clip_type_union:        g_op = GPC_UNION; break;

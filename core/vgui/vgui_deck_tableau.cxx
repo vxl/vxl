@@ -41,8 +41,8 @@ vgui_deck_tableau::vgui_deck_tableau(vgui_tableau_sptr const& child0,
 //: Constructor - don't use this, use vgui_deck_tableau_new.
 //  Make a deck with three children, listed top to bottom.
 vgui_deck_tableau::vgui_deck_tableau(vgui_tableau_sptr const& child0,
-                     vgui_tableau_sptr const& child1,
-                     vgui_tableau_sptr const& child2) : index_(-1)
+                                     vgui_tableau_sptr const& child1,
+                                     vgui_tableau_sptr const& child2) : index_(-1)
 {
   add(child0);
   add(child1);
@@ -55,8 +55,8 @@ vgui_deck_tableau::~vgui_deck_tableau() {}
 
 //----------------------------------------------------------------------------
 //: Handle events by passing to the current child tableau.
-bool vgui_deck_tableau::handle(const vgui_event& event) {
-
+bool vgui_deck_tableau::handle(const vgui_event& event)
+{
   // First pass events to the default handle method (this calls key_press, etc).
   if (vgui_tableau::handle(event))
     return true;
@@ -75,8 +75,7 @@ bool vgui_deck_tableau::handle(const vgui_event& event) {
 //  This function is called by the default handle() function in vgui_tableau.
 bool vgui_deck_tableau::help()
 {
-  vcl_cerr << "\n"
-           << "-- vgui_deck_tableau ----------------------------\n"
+  vcl_cerr << "\n-- vgui_deck_tableau ----------------------------\n"
            << "|     keys                                      |\n"
            << "| `PageUp' and `PageDown'  switch current child |\n"
            << "-------------------------------------------------\n\n";
@@ -93,8 +92,9 @@ bool vgui_deck_tableau::key_press(int x, int y, vgui_key key, vgui_modifier)
   if (debug)
     vcl_cerr << "vgui_deck_tableau::key_press " << key << vcl_endl;
 
-  switch(key) {
-  case vgui_PAGE_UP:
+  switch (key)
+  {
+   case vgui_PAGE_UP:
     this->next();
     if (index_ok(index_) && children[index_]) {
       vgui_event e(vgui_ENTER);
@@ -104,7 +104,7 @@ bool vgui_deck_tableau::key_press(int x, int y, vgui_key key, vgui_modifier)
     }
     this->post_redraw();
     return true;
-  case vgui_PAGE_DOWN:
+   case vgui_PAGE_DOWN:
     this->prev();
     if (index_ok(index_) && children[index_]) {
       vgui_event e(vgui_ENTER);
@@ -114,7 +114,7 @@ bool vgui_deck_tableau::key_press(int x, int y, vgui_key key, vgui_modifier)
     }
     this->post_redraw();
     return true;
-  default:
+   default:
     return false;
   }
 }
@@ -301,7 +301,7 @@ class vgui_deck_switch_command : public vgui_command
 //----------------------------------------------------------------------------
 //: Builds a popup menu for the user to select the active child.
 void vgui_deck_tableau::get_popup(const vgui_popup_params& params,
-  vgui_menu &menu)
+                                  vgui_menu &menu)
 {
   vgui_menu submenu;
 
@@ -312,7 +312,7 @@ void vgui_deck_tableau::get_popup(const vgui_popup_params& params,
   vcl_vector<vgui_parent_child_link>::iterator i = children.begin();
   for ( ; i!=children.end() ; ++i, ++count) {
     selections.add((*i)->file_name().c_str(),
-      new vgui_deck_switch_command(this,count));
+                   new vgui_deck_switch_command(this,count));
   }
 
   submenu.add("Select active child", selections);

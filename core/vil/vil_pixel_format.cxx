@@ -12,7 +12,8 @@
 #include <vcl_cassert.h>
 #include <vcl_complex.h>
 
-static unsigned component_size[]={
+static unsigned component_size[] =
+{
   0,                   //  VIL_PIXEL_FORMAT_UNKNOWN
 
 #if VXL_HAS_INT_64
@@ -71,7 +72,8 @@ static unsigned component_size[]={
 };
 
 
-static unsigned num_components[]={
+static unsigned num_components[] =
+{
   0,  //  VIL_PIXEL_FORMAT_UNKNOWN
 
 #if VXL_HAS_INT_64
@@ -131,7 +133,8 @@ static unsigned num_components[]={
 };
 
 
-static vil_pixel_format component_format[]={
+static vil_pixel_format component_format[] =
+{
   VIL_PIXEL_FORMAT_UNKNOWN,  //  VIL_PIXEL_FORMAT_UNKNOWN
 
 #if VXL_HAS_INT_64
@@ -217,7 +220,8 @@ vil_pixel_format vil_pixel_format_component_format(enum vil_pixel_format f)
 //: output a pretty string representing the pixel format.
 vcl_ostream & operator << (vcl_ostream &os, vil_pixel_format f)
 {
-  switch(f) {
+  switch (f)
+  {
     case VIL_PIXEL_FORMAT_UNKNOWN: os << "VIL_PIXEL_FORMAT_UNKNOWN";  break;
 
 #if VXL_HAS_INT_64

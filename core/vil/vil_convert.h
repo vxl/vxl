@@ -250,7 +250,8 @@ inline void vil_convert_cast(const vil_image_view_base_sptr&src, vil_image_view<
      vil_convert_cast( vil_image_view< typename vil_pixel_format_type_of<T >::component_type >(src), dest );\
      break
 
-  switch( src->pixel_format() ) {
+  switch ( src->pixel_format() )
+  {
     docase( VIL_PIXEL_FORMAT_UINT_32 );
     docase( VIL_PIXEL_FORMAT_INT_32 );
     docase( VIL_PIXEL_FORMAT_UINT_16 );
@@ -283,7 +284,7 @@ inline void vil_convert_cast(const vil_image_view_base_sptr&src, vil_image_view<
     docase( VIL_PIXEL_FORMAT_COMPLEX_DOUBLE );
 
     default:
-      ;
+     ;
   }
 #undef docase
 }
@@ -551,13 +552,11 @@ inline vil_image_view_base_sptr vil_convert_cast(outP /*dummy*/,
   vil_image_view_base_sptr dest = new vil_image_view<outP>;
   vil_image_view<outP> & dest_ref = static_cast<vil_image_view<outP> &>(*dest);
 
-  switch( vil_pixel_format_component_format(src->pixel_format()) )
+  switch ( vil_pixel_format_component_format(src->pixel_format()) )
   {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define macro(F , T) \
-   case F: \
-     vil_convert_cast( vil_image_view<T >( *src ), dest_ref );\
-     break
+    case F: vil_convert_cast( vil_image_view<T >(*src), dest_ref ); break
 
 #if VXL_HAS_INT_64
     macro( VIL_PIXEL_FORMAT_UINT_64, vxl_uint_64 );
@@ -598,12 +597,11 @@ inline void vil_convert_cast(const vil_image_view_base_sptr& src,
   VXL_DEPRECATED( "void vil_convert_cast(const vil_image_view_base_sptr&,"
     " vil_image_view<outP >&" );
 
-  switch( src->pixel_format() ) {
+  switch ( src->pixel_format() )
+  {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define macro(F , T) \
-   case F: \
-     vil_convert_cast( vil_image_view<T >( src ), dest );\
-     break;
+    case F: vil_convert_cast( vil_image_view<T >(src), dest ); break;
 
 #if VXL_HAS_INT_64
     macro( VIL_PIXEL_FORMAT_UINT_64, vxl_uint_64 )
@@ -657,11 +655,11 @@ inline vil_image_view_base_sptr vil_convert_round(
   vil_image_view_base_sptr dest = new vil_image_view<outP >;
   vil_image_view<outP > &dest_ref = static_cast<vil_image_view<outP >&>(*dest);
 
-  switch(vil_pixel_format_component_format(src->pixel_format()))
+  switch (vil_pixel_format_component_format(src->pixel_format()))
   {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define macro( F , T ) \
-  case F: { \
+   case F: { \
     vil_image_view<T > src1 = src; \
     vil_transform2(src1, dest_ref, vil_convert_round_pixel<T , outP>()); \
     break; }
@@ -702,20 +700,18 @@ inline vil_image_view_base_sptr vil_convert_to_component_order(
   {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define macro( F , T )\
-    case F: { \
-      vil_image_view<T > src_ref(src); \
-      if (!src_ref) return vil_image_view_base_sptr(); \
-      if (src_ref.planestep()==1) return src; \
-      const unsigned ni=src->ni(), nj=src->nj(), nplanes=src->nplanes(); \
-      vil_memory_chunk_sptr chunk = \
-        new vil_memory_chunk(ni*nj*nplanes*sizeof(T), \
-                             vil_pixel_format_component_format(F)); \
-      dest = new vil_image_view<T >(chunk, \
-                                    reinterpret_cast<T*>(chunk->data()), \
-                                    ni, nj, nplanes, nplanes, nplanes*ni, 1); \
-      vil_image_view<T > & dest_ref = static_cast<vil_image_view<T >&>(*dest); \
-      vil_copy_reformat(src_ref, dest_ref); \
-      break; }
+   case F: { \
+    vil_image_view<T > src_ref(src); \
+    if (!src_ref) return vil_image_view_base_sptr(); \
+    if (src_ref.planestep()==1) return src; \
+    const unsigned ni=src->ni(), nj=src->nj(), nplanes=src->nplanes(); \
+    vil_memory_chunk_sptr chunk = new vil_memory_chunk(ni*nj*nplanes*sizeof(T), \
+                                                       vil_pixel_format_component_format(F)); \
+    dest = new vil_image_view<T >(chunk, reinterpret_cast<T*>(chunk->data()), \
+                                  ni, nj, nplanes, nplanes, nplanes*ni, 1); \
+    vil_image_view<T > & dest_ref = static_cast<vil_image_view<T >&>(*dest); \
+    vil_copy_reformat(src_ref, dest_ref); \
+    break; }
 macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
 macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
 #if VXL_HAS_INT_64
@@ -773,25 +769,25 @@ inline vil_image_view<outP> vil_convert_to_grey_using_average(
   {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define macro( F , T ) \
-  case F: { \
-      vil_image_view<T > src1 = *src; \
-      vil_math_mean_over_planes(src1, dest, double()); \
-      break; }
-macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
-macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+   case F: { \
+    vil_image_view<T > src1 = *src; \
+    vil_math_mean_over_planes(src1, dest, double()); \
+    break; }
+   macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
+   macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
 #if VXL_HAS_INT_64
-macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
-macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
+   macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
+   macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
 #endif
-macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
-macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-macro(VIL_PIXEL_FORMAT_FLOAT , float )
-macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+   macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+   macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+   macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+   macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+   macro(VIL_PIXEL_FORMAT_FLOAT , float )
+   macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
 #endif // DOXYGEN_SHOULD_SKIP_THIS
-  default:
+   default:
     dest.clear();
   }
   return dest;
@@ -818,31 +814,31 @@ inline vil_image_view_base_sptr vil_convert_to_grey_using_average(
   {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define macro( F , T ) \
-  case F: { \
-      /* try to do it quickly */ \
-      if (src->nplanes() == 1 && \
-          vil_pixel_format_component_format(src->pixel_format())==1) \
-        return src; \
-      /* create output view */ \
-      vil_image_view<T > dest; \
-      vil_image_view<T > src1 = *src; \
-      vil_math_mean_over_planes(src1, dest, double()); \
-      return vil_image_view_base_sptr(new vil_image_view<T >(dest)); }
-macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
-macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+   case F: { \
+    /* try to do it quickly */ \
+    if (src->nplanes() == 1 && \
+        vil_pixel_format_component_format(src->pixel_format())==1) \
+      return src; \
+    /* create output view */ \
+    vil_image_view<T > dest; \
+    vil_image_view<T > src1 = *src; \
+    vil_math_mean_over_planes(src1, dest, double()); \
+    return vil_image_view_base_sptr(new vil_image_view<T >(dest)); }
+   macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
+   macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
 #if VXL_HAS_INT_64 && !defined(VCL_VC60)
-macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
-macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
+   macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
+   macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
 #endif
-macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
-macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-macro(VIL_PIXEL_FORMAT_FLOAT , float )
-macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+   macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+   macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+   macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+   macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+   macro(VIL_PIXEL_FORMAT_FLOAT , float )
+   macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
 #endif // DOXYGEN_SHOULD_SKIP_THIS
-  default:
+   default:
     return vil_image_view_base_sptr();
   }
 }
@@ -865,32 +861,32 @@ inline vil_image_view_base_sptr vil_convert_to_grey_using_rgb_weighting(
   {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define macro( F , T ) \
-  case F: { \
+   case F: { \
     /* try to do it quickly */ \
-      if (src->nplanes() == 1 && \
-          vil_pixel_format_num_components(src->pixel_format()) == 1) \
-        return vil_image_view_base_sptr(src); \
-      vil_image_view<T > src1 = src; \
-      vil_image_view<double> dest1; \
-      vil_convert_planes_to_grey(src1, dest1, rw, gw, bw); \
-      vil_image_view<T > dest; \
-      vil_convert_round(dest1,dest); \
-      return vil_image_view_base_sptr(new vil_image_view<T > (dest)); }
-macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
-macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+    if (src->nplanes() == 1 && \
+        vil_pixel_format_num_components(src->pixel_format()) == 1) \
+      return vil_image_view_base_sptr(src); \
+    vil_image_view<T > src1 = src; \
+    vil_image_view<double> dest1; \
+    vil_convert_planes_to_grey(src1, dest1, rw, gw, bw); \
+    vil_image_view<T > dest; \
+    vil_convert_round(dest1,dest); \
+    return vil_image_view_base_sptr(new vil_image_view<T >(dest)); }
+   macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
+   macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
 #if VXL_HAS_INT_64 && !defined(VCL_VC60)
-macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
-macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
+   macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
+   macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
 #endif
-macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
-macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-macro(VIL_PIXEL_FORMAT_FLOAT , float )
-macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+   macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+   macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+   macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+   macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+   macro(VIL_PIXEL_FORMAT_FLOAT , float )
+   macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
 #endif // DOXYGEN_SHOULD_SKIP_THIS
-  default:
+   default:
     return vil_image_view_base_sptr();
   }
 }
@@ -951,28 +947,28 @@ inline vil_image_view<outP> vil_convert_to_grey_using_rgb_weighting(
   {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define macro( F , T ) \
-  case F: { \
-      vil_image_view<T > src1 = src; \
-      vil_image_view<double> dest1; \
-      vil_convert_planes_to_grey(src1, dest1, rw, gw, bw); \
-      vil_convert_round(dest1,dest); \
-      break; }
-macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
-macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+   case F: { \
+    vil_image_view<T > src1 = src; \
+    vil_image_view<double> dest1; \
+    vil_convert_planes_to_grey(src1, dest1, rw, gw, bw); \
+    vil_convert_round(dest1,dest); \
+    break; }
+   macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
+   macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
 #if VXL_HAS_INT_64
-macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
-macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
+   macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
+   macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
 #endif
-macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
-macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-macro(VIL_PIXEL_FORMAT_FLOAT , float )
-macro(VIL_PIXEL_FORMAT_DOUBLE , double )
-// Don't even want to think about rgb<complex<float> >
+   macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+   macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+   macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+   macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+   macro(VIL_PIXEL_FORMAT_FLOAT , float )
+   macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+   // Don't even want to think about rgb<complex<float> >
 #undef macro
 #endif // DOXYGEN_SHOULD_SKIP_THIS
-  default:
+   default:
     dest.clear();
   }
   return dest;
@@ -1012,44 +1008,38 @@ inline vil_image_view_base_sptr vil_convert_to_n_planes(
   {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
  #define macro( F, T ) \
-    case F: { \
-        vil_image_view<T > src_ref = src; \
-        if (!src_ref) return vil_image_view_base_sptr(); \
-        /* try to do it quickly 1 */ \
-        if (src_ref.nplanes() >= n_planes)  /* reduce number of planes */ \
-          return vil_image_view_base_sptr( new vil_image_view<T >( \
-              vil_planes(vil_image_view<T > (src),0,1,n_planes) )); \
-        else { /* expand number of planes with copying */ \
-          vil_image_view_base_sptr dest = new vil_image_view<T >( \
-            src_ref.ni(), src_ref.nj(), n_planes); \
-          vil_image_view<T > & dest_ref = \
-            static_cast<vil_image_view<T > &>(*dest); \
-          vil_image_view<T > dest_slices = \
-            vil_planes(dest_ref, 0, 1, src_ref.nplanes()); \
-          vil_copy_reformat(src_ref, dest_slices); \
-          vil_image_view<T > src_slice(vil_plane(src_ref, 0)); \
-          for (unsigned i=src_ref.nplanes(); i<n_planes; ++i) { \
-            dest_slices = vil_plane(dest_ref, i); \
-            vil_copy_reformat(src_slice,  dest_slices); } \
-          return dest;  } } \
-
-macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
-macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+   case F: { \
+    vil_image_view<T > src_ref = src; \
+    if (!src_ref) return vil_image_view_base_sptr(); \
+    /* try to do it quickly 1 */ \
+    if (src_ref.nplanes() >= n_planes) /* reduce number of planes */ \
+      return vil_image_view_base_sptr( new vil_image_view<T >( \
+          vil_planes(vil_image_view<T > (src),0,1,n_planes) )); \
+    else { /* expand number of planes with copying */ \
+      vil_image_view_base_sptr dest = new vil_image_view<T >(src_ref.ni(), src_ref.nj(), n_planes); \
+      vil_image_view<T > & dest_ref = static_cast<vil_image_view<T >&>(*dest); \
+      vil_image_view<T > dest_slices = vil_planes(dest_ref, 0, 1, src_ref.nplanes()); \
+      vil_copy_reformat(src_ref, dest_slices); \
+      vil_image_view<T > src_slice(vil_plane(src_ref, 0)); \
+      for (unsigned i=src_ref.nplanes(); i<n_planes; ++i) { \
+        dest_slices = vil_plane(dest_ref, i); \
+        vil_copy_reformat(src_slice,  dest_slices); } \
+      return dest; } }
+   macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
+   macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
 #if VXL_HAS_INT_64
-macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
-macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
+   macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
+   macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
 #endif
-macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
-macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-macro(VIL_PIXEL_FORMAT_FLOAT , float )
-macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+   macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+   macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+   macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+   macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+   macro(VIL_PIXEL_FORMAT_FLOAT , float )
+   macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
 #endif // DOXYGEN_SHOULD_SKIP_THIS
-
-
-  default:
+   default:
     return vil_image_view_base_sptr();
   }
 }
@@ -1094,28 +1084,28 @@ inline vil_image_view_base_sptr vil_convert_stretch_range(
   {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define macro( F , T ) \
-  case F: { \
-      vil_image_view<T> src_ref = src; \
-      if (!src_ref) return vil_image_view_base_sptr(); \
-      vil_convert_stretch_range(src_ref, inter, lo, hi); \
-      vil_convert_cast(inter, dest_ref); \
-      break; }
-macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
-macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+   case F: { \
+    vil_image_view<T> src_ref = src; \
+    if (!src_ref) return vil_image_view_base_sptr(); \
+    vil_convert_stretch_range(src_ref, inter, lo, hi); \
+    vil_convert_cast(inter, dest_ref); \
+    break; }
+   macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
+   macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
 #if VXL_HAS_INT_64 && !defined(VCL_VC60)
-macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
-macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
+   macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
+   macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
 #endif
-macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
-macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-macro(VIL_PIXEL_FORMAT_FLOAT , float )
-macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+   macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+   macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+   macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+   macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+   macro(VIL_PIXEL_FORMAT_FLOAT , float )
+   macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
 #endif // DOXYGEN_SHOULD_SKIP_THIS
-    default:
-      dest_ref.clear();
+   default:
+    dest_ref.clear();
   }
   return dest;
 }

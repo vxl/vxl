@@ -27,7 +27,8 @@ class vil1_image;
 //: Describes the interpretation of component bits.
 // These make no statement about the number of
 // bits in the representation.
-enum vil1_component_format {
+enum vil1_component_format
+{
   VIL1_COMPONENT_FORMAT_UNKNOWN,
   VIL1_COMPONENT_FORMAT_UNSIGNED_INT,
   VIL1_COMPONENT_FORMAT_SIGNED_INT,
@@ -38,7 +39,8 @@ enum vil1_component_format {
 inline
 const char* vil1_print(vil1_component_format f)
 {
-  switch(f) {
+  switch (f)
+  {
     case VIL1_COMPONENT_FORMAT_UNKNOWN: return "VIL1_COMPONENT_FORMAT=UNKNOWN";
     case VIL1_COMPONENT_FORMAT_UNSIGNED_INT: return "VIL1_COMPONENT_FORMAT=unsigned int";
     case VIL1_COMPONENT_FORMAT_SIGNED_INT: return "VIL1_COMPONENT_FORMAT=signed int";
@@ -145,9 +147,10 @@ class vil1_image_impl
   // You probably should not use a vil1_image_impl in a vbl_smart_ptr, so the
   // ref counting methods are called by the unusual up_ref() and down_ref().
   void up_ref() { ++reference_count; }
-  void down_ref() {
-  assert(reference_count>0);
-  if (--reference_count<=0) delete this;
+  void down_ref()
+  {
+    assert(reference_count>0);
+    if (--reference_count<=0) delete this;
   }
   int reference_count;
 };
