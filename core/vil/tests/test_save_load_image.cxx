@@ -431,6 +431,7 @@ MAIN( test_save_load_image )
     vil2_image_view<vxl_byte> small_greyscale_image(ni,nj);
     for (unsigned j=0;j<nj;++j)
       for (unsigned i=0;i<ni;++i) small_greyscale_image(i,j)=(i+j)*4;
+    vil2_print_all(vcl_cout, small_greyscale_image);
     vil_test_image_type("jpeg", small_greyscale_image, false);
     vcl_string out_path("test_save_load_jpeg.jpg");
     TEST("Saving JPEG",vil2_save(small_greyscale_image, out_path.c_str()),true);

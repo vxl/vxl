@@ -25,6 +25,7 @@
 #include <vil/vil_stream.h>
 #include <vil2/vil2_property.h>
 #include <vil2/vil2_image_view.h>
+#include <vil2/vil2_new.h>
 
 //: the file probe, as a C function.
 bool vil2_jpeg_file_probe(vil_stream *vs) {
@@ -187,11 +188,31 @@ bool vil2_jpeg_image::put_view(const vil2_image_view_base &view,
   unsigned bpp = jc->jobj.input_components;
 
   // write each scanline
-  for (int j=0; j<view2.nj(); ++j) {
-    JSAMPLE const *scanline = (JSAMPLE const*)
-      ((char const*)view2.top_left_ptr() + j*view2.nj()*bpp);
-    if (!jc->write_scanline(y0+j, scanline))
-      return false;
+  if (view2.planestep() == 1 || view2.nplanes() == 1)
+  {
+    assert(view2.istep() == bpp);
+    for (int j=0; j<view2.nj(); ++j) {
+      JSAMPLE const *scanline = (JSAMPLE const*)
+        &view2(0,j);
+      if (!jc->write_scanline(y0+j, scanline))
+        return false;
+    }
+  }
+  else
+  {
+    vil2_image_view<vxl_byte> line = vil2_new_image_view_i_j_plane<vxl_byte>(
+      view2.ni(), 1, view2.nplanes(), vxl_byte());
+    JSAMPLE *scanline = line.top_left_ptr();
+
+    for (int j=0; j<view2.nj(); ++j)
+    {
+      // arrange data into componentwise form.
+      for (unsigned i = 0; i < view2.ni(); ++i)
+        for (unsigned p = 0; p < view2.nplanes(); ++p)
+          line(i,0,p) = view2(i,j,p);
+      if (!jc->write_scanline(y0+j, scanline))
+        return false;
+    }
   }
 
   return true;
