@@ -62,7 +62,6 @@ compute_status_helper( double new_error,
                 rgrl_view                        const& prev_view,
                 rgrl_view                        const& current_view ) const
 {
-
   // Step3: First check if the regions in the view have converged. If yes,
   //        check the convergence of the transform estimate by comparing to
   //        the previous status. The oscillation count is incremented if the
@@ -99,4 +98,4 @@ compute_status_helper( double new_error,
   }
 
   return new rgrl_converge_status( converged, stagnated, good_enough, new_error, oscillation_count, error_diff );
-}  
+}
