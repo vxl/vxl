@@ -461,7 +461,10 @@ void vtol_topology_io::write_block(vtol_block *b, vcl_ostream &strm)
 
 void vtol_topology_io::write_dtd(vcl_ostream &strm)
 {
-  #include <vtol/vtol_dtd.cxx>
+  #include <vtol/vtol_dtd.h>
 
-  strm << vtol_dtd << vcl_endl;
+  strm << vtol_dtd0;
+  strm << vtol_dtd1;
+  strm << vtol_dtd2;
+  strm << vtol_dtd3;
 }
