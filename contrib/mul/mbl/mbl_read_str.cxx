@@ -11,8 +11,8 @@
 //    Based on code written 7-May-92
 //  1.1        Tim        TC_ version 4-Nov-98
 
-#include <vcl_stdio.h>
-#include <vcl_string.h>
+#include <vcl_cstdio.h>
+#include <vcl_cstring.h>
 
 #include <mbl/mbl_read_str.h>
 
