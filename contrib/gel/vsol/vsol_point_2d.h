@@ -60,7 +60,7 @@ class vsol_point_2d : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   //: Copy constructor
   //---------------------------------------------------------------------------
-  inline vsol_point_2d(const vsol_point_2d &pt) : p_(pt.x(),pt.y()) {}
+  inline vsol_point_2d(const vsol_point_2d &pt) : vsol_spatial_object_2d(pt), p_(pt.x(),pt.y()) {}
 
   //---------------------------------------------------------------------------
   //: Destructor
