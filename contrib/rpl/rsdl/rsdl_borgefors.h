@@ -7,7 +7,7 @@
 // \author Charlene Tsai
 // \date 5 May 2001
 //
-// Defines functions assocaited with a templated borgefors
+// Defines functions associated with a templated borgefors
 // distance map. The data based on which the map is built is a vector
 // (should be changed to any stl container type later) of any
 // datatype with x() and y() functions defined.
@@ -17,7 +17,7 @@
 #include <vil/vil_fwd.h>
 #include <vil/vil_byte.h>
 
-//: Defines functions assocaited with a templated borgefors
+//: Defines functions associated with a templated borgefors
 //  distance map. Tthe data based on which the map is built is a vector
 //  (should be changed to any stl container type later) of any
 //  datatype with x() and y() functions defined.
