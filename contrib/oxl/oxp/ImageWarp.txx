@@ -28,7 +28,8 @@ void ImageWarp<PixelType>::mean_nz_intensity(const vil_memory_image_of<PixelType
 #endif
 					     int * nnzp)
 {
-  PixelType const& zero = vnl_numeric_traits<PixelType>::zero;
+  // taking a const reference is slower and causes missing symbols (SunPro 5.0)
+  PixelType const /*&*/ zero = vnl_numeric_traits<PixelType>::zero;
   PixelType total_nz = zero;
   int nnz = 0;
   if (in.in_range_window(x, y, window_size)) {
