@@ -23,9 +23,9 @@ void test_gaussian_pyramid_builder_2d_byte(int nx, int ny)
 
   for (int y=0;y<image0.ny();++y)
      for (int x=0;x<image0.nx();++x)
-	 {
-	   image0(x,y) = x+y*10;
-	 }
+     {
+       image0(x,y) = x+y*10;
+     }
 
   mil_gaussian_pyramid_builder_2d<vil_byte> builder;
   mil_image_pyramid image_pyr;
@@ -37,13 +37,13 @@ void test_gaussian_pyramid_builder_2d_byte(int nx, int ny)
 
   if (image_pyr.nLevels()>0)
   {
-	int nx2 = (nx+1)/2;
-	int ny2 = (ny+1)/2;
+    int nx2 = (nx+1)/2;
+    int ny2 = (ny+1)/2;
     const mil_image_2d_of<vil_byte>& image1 = (const mil_image_2d_of<vil_byte>&) image_pyr(1);
-	TEST("Level 1 size",image1.nx()==(nx+1)/2 && image1.ny()==(ny+1)/2, true);
-	TEST("Pixel (0,0)",image0(0,0)==image1(0,0),true);
-	TEST("Pixel (1,1)",image0(2,2)==image1(1,1),true);
-	TEST("Corner pixel",image0(nx2*2-2,ny2*2-2)==image1(nx2-1,ny2-1),true);
+    TEST("Level 1 size",image1.nx()==(nx+1)/2 && image1.ny()==(ny+1)/2, true);
+    TEST("Pixel (0,0)",image0(0,0)==image1(0,0),true);
+    TEST("Pixel (1,1)",image0(2,2)==image1(1,1),true);
+    TEST("Corner pixel",image0(nx2*2-2,ny2*2-2)==image1(nx2-1,ny2-1),true);
   }
 }
 

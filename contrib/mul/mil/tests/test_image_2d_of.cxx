@@ -15,8 +15,8 @@ bool Equal(const mil_image_2d_of<vil_byte>& im0,
   return im0.nPlanes()==im1.nPlanes()
       && im0.nx() == im1.nx()
       && im0.ny() == im1.ny()
-	  && im0(0,0,0) == im1(0,0,0)
-	  && im0(1,1,1) == im1(1,1,1);
+      && im0(0,0,0) == im1(0,0,0)
+      && im0(1,1,1) == im1(1,1,1);
 }
 
 
@@ -35,22 +35,22 @@ void test_image_2d_of_byte()
 
   for (int y=0;y<image0.ny();++y)
      for (int x=0;x<image0.nx();++x)
-	 {
-	   image0(x,y) = x+y;
-	 }
+     {
+       image0(x,y) = x+y;
+     }
 
   image0.print_all(vcl_cout);
 
   {
     // Test the shallow copy
     mil_image_2d_of<vil_byte> image1;
-	image1 = image0;
+    image1 = image0;
 
-	TEST("Shallow copy (size)",image0.nx()==image1.nx() && image0.ny()==image1.ny()
-	                    && image0.nPlanes()==image1.nPlanes(), true);
+    TEST("Shallow copy (size)",image0.nx()==image1.nx() && image0.ny()==image1.ny()
+                        && image0.nPlanes()==image1.nPlanes(), true);
 
-	image0(4,6)=127;
-	TEST("Shallow copy (values)",image1(4,6)==image0(4,6),true);
+    image0(4,6)=127;
+    TEST("Shallow copy (values)",image1(4,6)==image0(4,6),true);
   }
 
 
@@ -58,9 +58,9 @@ void test_image_2d_of_byte()
   {
     // Check data remains valid if a copy taken
     mil_image_2d_of<vil_byte> image3;
-	image3.setNPlanes(3);
-	image3.resize(4,5);
-	image3.fill(111);
+    image3.setNPlanes(3);
+    image3.resize(4,5);
+    image3.fill(111);
     image2 = image3;
   }
 
@@ -75,23 +75,22 @@ void test_image_2d_of_byte()
   {
     // Test the deep copy
     mil_image_2d_of<vil_byte> image4;
-	image4.deepCopy(image0);
-	TEST("Deep copy (size)",image0.nx()==image4.nx()
-	                     && image0.ny()==image4.ny()
-	                     && image0.nPlanes()==image4.nPlanes(), true);
-	TEST("Deep copy (values)",image4(4,6)==image0(4,6),true);
+    image4.deepCopy(image0);
+    TEST("Deep copy (size)",image0.nx()==image4.nx()
+                         && image0.ny()==image4.ny()
+                         && image0.nPlanes()==image4.nPlanes(), true);
+    TEST("Deep copy (values)",image4(4,6)==image0(4,6),true);
 
-	vil_byte v46 = image0(4,6);
-	image0(4,6)=255;
-	TEST("Deep copy (values really separate)",image4(4,6)==v46,true);
-
+    vil_byte v46 = image0(4,6);
+    image0(4,6)=255;
+    TEST("Deep copy (values really separate)",image4(4,6)==v46,true);
   }
 
   mil_image_2d_of<vil_byte> image_win;
   image_win.setToWindow(image0,2,5,3,6);
   TEST("setToWindow size",
         image_win.nx()==4 && image_win.ny()==4
-		&& image_win.nPlanes()==image0.nPlanes(),true);
+        && image_win.nPlanes()==image0.nPlanes(),true);
 
   image0(2,3)=222;
   TEST("setToWindow is shallow copy",image_win(0,0)==222, true);
@@ -106,8 +105,8 @@ void test_image_2d_byte_io()
   image_out0.resize(5,6);
   for (int i=0;i<2;++i)
     for (int y=0;y<6;++y)
-	  for (int x=0;x<5;++x)
-	    image_out0(x,y,i)=x+10*y+100*i;
+      for (int x=0;x<5;++x)
+        image_out0(x,y,i)=x+10*y+100*i;
 
   image_out1 = image_out0;
 
