@@ -11,6 +11,11 @@
 #include <vil2/vil2_print.h>
 #include <vil3d/vil3d_image_view.h>
 
+#ifdef VCL_VC70
+#  pragma warning( push )
+#  pragma warning( disable: 4244 )  // conversion from ptrdiff_t to int, possible loss of data
+#endif
+
 //: Print all image data to os in a grid (rounds output to int)
 // \relates vil3d_image_view
 template <class T>
@@ -40,5 +45,10 @@ inline void vil3d_print_all(vcl_ostream& os,const vil3d_image_view<T>& view)
    }
   }
 }
+
+#ifdef VCL_VC70
+#  pragma warning( pop )
+#endif
+
 
 #endif // vil3d_print_h_
