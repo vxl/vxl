@@ -15,6 +15,7 @@ SET( LIBRARY_OUTPUT_PATH ${vxl_BINARY_DIR}/lib CACHE PATH
 SET( BUILDING_IN_VXL_TREE "YES" )
 
 INCLUDE( ${vxl_SOURCE_DIR}/UseVXL.cmake )
+INCLUDE( ${vxl_SOURCE_DIR}/UseSTLPort.cmake )
 
 # Copy the UseVXL.cmake file to the binary directory so that client
 # projects don't need to find the source directory first. They can run
