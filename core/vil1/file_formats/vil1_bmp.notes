@@ -107,7 +107,7 @@ core header: (size 16 bytes (for Windows-bmp) or 12 bytes (for (old) OS2-bmp))
  4/2 19 02 00 00   19 02 00 00   width   0x219 = 537
  4/2 93 01 00 00   93 01 00 00   height  0x193 = 403
  2   01 00         01 00         planes
- 2   18 00         08 00         bits per pixel (bpp)
+ 2   18 00         08 00         bits per pixel (bpp) - allowed values are: 1 4 8 16 24 32
                    
 info header: (only for Windows-bmp; size: 24 bytes)
  4   00 00 00 00   00 00 00 00   compression flag (0 ==> no compression)

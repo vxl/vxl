@@ -68,8 +68,8 @@ public:
   virtual int planes() const { return 1; } // assume only one for now.
   virtual int width() const { return core_hdr.width; }
   virtual int height() const { return core_hdr.height; }
-  virtual int components() const { return core_hdr.bitsperpixel/8; } // FIXIT
-  virtual int bits_per_component() const { return 8; } // FIXIT
+  virtual int components() const { return (core_hdr.bitsperpixel<24)?1:core_hdr.bitsperpixel/8; } // FIXME
+  virtual int bits_per_component() const { return (core_hdr.bitsperpixel<24)?core_hdr.bitsperpixel:8; } // FIXME
   virtual enum vil_component_format component_format() const { return VIL_COMPONENT_FORMAT_UNSIGNED_INT; }
 
   //: Copy plane PLANE of this to BUF,

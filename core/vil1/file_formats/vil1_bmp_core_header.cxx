@@ -28,6 +28,7 @@ void vil_bmp_core_header::read(vil_stream *s)
   height       = vil_32bit_read_little_endian(s);
   planes       = vil_16bit_read_little_endian(s);
   bitsperpixel = vil_16bit_read_little_endian(s);
+  // allowed values for bitsperpixel are 1 4 8 16 24 32; currently we only support 8 and 24
 }
 
 void vil_bmp_core_header::write(vil_stream *s) const

@@ -27,9 +27,8 @@ vil_image_impl* vil_bmp_file_format::make_input_image(vil_stream* is)
 
   if ( hdr.signature_valid() )
     return new vil_bmp_generic_image(is);
-
-  //vcl_cerr << "not a .bmp file" << vcl_endl;
-  return 0;
+  else
+    return 0;
 }
 
 vil_image_impl* vil_bmp_file_format::make_output_image(vil_stream* is, int planes,
@@ -87,23 +86,15 @@ vil_bmp_generic_image::vil_bmp_generic_image(vil_stream* is,
                                              vil_component_format format)
   : is_(is)
   , bit_map_start(-1L)
-  //, freds_colormap(0)
-  //, local_color_map_(0)
 {
   is_->ref();
-  assert(planes == 1); // FIXIT
-
-  //file_hdr.magic;
-  //file_hdr.file_size;
-  //file_size.reserved1;
-  //file_size.reserved2;
-  //file_size.bitmap_offset;
-
+  assert(planes == 1); // FIXME
 
   // core_hdr.header_size is set up for us.
   core_hdr.width = width;
   core_hdr.height = height;
   core_hdr.planes = planes;
+  // FIXME - we only support 8 and 24 bpp; add support for 1, 4, 16 and 32 bpp
   assert(bits_per_component == 8 && (components == 1 || components == 3));
   core_hdr.bitsperpixel = bits_per_component * components;
 
@@ -152,6 +143,12 @@ bool vil_bmp_generic_image::read_header()
 #ifdef DEBUG
   core_hdr.print(vcl_cerr); // blather
 #endif
+  // allowed values for bitsperpixel are 1 4 8 16 24 32;
+  // currently we only support 8 and 24 - FIXME
+  if( core_hdr.bitsperpixel != 8 && core_hdr.bitsperpixel != 24 ) {
+    where << "BMP file has a non-supported pixel size of " << core_hdr.bitsperpixel << " bits\n";
+    return false;
+  }
 
   // determine whether or not there is an info header from
   // the size field.
@@ -166,7 +163,7 @@ bool vil_bmp_generic_image::read_header()
 #endif
     if (info_hdr.compression) {
       where << "cannot cope with compression at the moment" << vcl_endl;
-      assert(false);
+      return false;
     }
   }
   else {
@@ -203,7 +200,7 @@ bool vil_bmp_generic_image::read_header()
   }
   else {
     // dunno about this.
-    assert(false); // FIXIT
+    assert(false); // FIXME
   }
 #endif
 
@@ -312,7 +309,7 @@ bool vil_bmp_generic_image::get_section(void* ib, int x0, int y0, int w, int h) 
   else if (core_hdr.bitsperpixel == 24)
     bytes_per_pixel = 3;
   else
-    assert(false); // FIXIT
+    assert(false); // FIXME - add support for 1, 4, 16 and 32 bpp
 
   // actual number of bytes per raster in file.
   unsigned have_bytes_per_raster = ((bytes_per_pixel * core_hdr.width + 3)>>2)<<2;
