@@ -253,7 +253,7 @@ class vtol_topology_object
   //: Is `superior' type valid for `this' ?
   //---------------------------------------------------------------------------
   inline bool valid_superior_type(vtol_topology_object const* sup) const
-  { return sup->valid_superior_type(this); }
+  { return sup->valid_inferior_type(this); }
 
   // deprecated form:
   bool valid_superior_type(vtol_topology_object const& sup) const
