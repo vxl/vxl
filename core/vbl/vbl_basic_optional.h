@@ -12,7 +12,8 @@
 //             Rupert Curwen
 //             GE Corporate Research and Development
 //
-// .SECTION Modifications : None Yet
+// .SECTION Modifications
+//     None Yet
 //
 //-----------------------------------------------------------------------------
 

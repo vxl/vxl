@@ -5,20 +5,23 @@
 #pragma interface
 #endif
 //
+// .NAME        vbl_sprintf - creates a formatted ANSI C++ string
+// .LIBRARY     vbl
+// .HEADER	Basics Package
+// .INCLUDE     vbl/vbl_sprintf.h
+// .FILE        vbl/vbl_sprintf.cxx
+//
 // .SECTION Description
 //    
 // vbl_sprintf is a C++ conforming replacement to the ANSI C functions sprintf
 // and printf.
 // It works in the same way as sprintf but is itself an ANSI C++ string 
 // which can either be kept or output directly using streams  e.g.  
+// \verbatim
 // cerr << vbl_sprintf("int %d, float %f ", 1, 3.14) 
 //      << bigobject << endl;
+// \endverbatim
 //
-// .NAME        vbl_sprintf - creates a formatted ANSI C++ string
-// .LIBRARY     vbl
-// .HEADER	Basics Package
-// .INCLUDE     vbl/vbl_sprintf.h
-// .FILE        vbl/vbl_sprintf.cxx
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 08 Aug 96
 //

@@ -2,7 +2,7 @@
 #define _vbl_protection_traits_h
 //-----------------------------------------------------------------------------
 //
-// .NAME vbl_protection_traits - Template to standardize protection of classes.
+// .NAME vbl_protection_traits - Template to standardize protection of classes
 // .LIBRARY vbl
 // .HEADER Basics Package
 // .INCLUDE vbl/vbl_protection_traits.h

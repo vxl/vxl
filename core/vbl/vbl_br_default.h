@@ -13,7 +13,8 @@
 //             Rupert Curwen, January 14th, 1998
 //             GE Corporate Research and Development
 //
-// .SECTION Modifications : None Yet
+// .SECTION Modifications
+//     None Yet
 //
 //-----------------------------------------------------------------------------
 

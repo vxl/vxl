@@ -1,7 +1,7 @@
 #ifndef vbl_string_h
 #define vbl_string_h
 
-// .DESCRIPTION
+// .SECTION Description
 // Utility functions for C strings and vcl_strings.
 
 #include <vcl/vcl_string.h>

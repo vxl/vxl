@@ -4,15 +4,16 @@
 #pragma interface
 #endif
 //
-// .SECTION Description
-//    vbl_sparse_array_3d is a sparse 3D array allowing space efficient access of
-//    the form s(300,700,900) = 2;
-//
 // .NAME        vbl_sparse_array_3d - Sparse 3D array.
 // .LIBRARY     vbl
 // .HEADER	Basics Package
 // .INCLUDE     vbl/vbl_sparse_array_3d.h
 // .FILE        vbl/vbl_sparse_array_3d.cxx
+//
+// .SECTION Description
+//    vbl_sparse_array_3d is a sparse 3D array allowing space efficient access of
+//    the form s(300,700,900) = 2;
+//
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 02 Oct 96
 //

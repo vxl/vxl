@@ -4,15 +4,16 @@
 #pragma interface
 #endif
 //
-// .SECTION Description
-//    vbl_sparse_array_2d is a sparse 2D array allowing space efficient access of
-//    the form s(3000,7000) = 2;
-//
 // .NAME        vbl_sparse_array_2d - Sparse 2D array.
 // .LIBRARY     vbl
 // .HEADER	Basics Package
 // .INCLUDE     vbl/vbl_sparse_array_2d.h
 // .FILE        vbl/vbl_sparse_array_2d.cxx
+//
+// .SECTION Description
+//    vbl_sparse_array_2d is a sparse 2D array allowing space efficient access of
+//    the form s(3000,7000) = 2;
+//
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 02 Oct 96
 //

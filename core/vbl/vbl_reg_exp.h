@@ -116,23 +116,21 @@ private:
   const char* searchstring;
 }; 
 
-// vbl_reg_exp -- Creates an empty regular expression.
+// -- Creates an empty regular expression.
 
 inline vbl_reg_exp::vbl_reg_exp () { 
   this->program = NULL;
 }
 
 
-// vbl_reg_exp -- Creates a regular expression from string s, and
-// compiles s.
-
+// -- Creates a regular expression from string s, and compiles s.
 
 inline vbl_reg_exp::vbl_reg_exp (const char* s) {  
   this->program = NULL;
   compile(s);
 }
 
-// ~vbl_reg_exp -- Frees space allocated for regular expression.
+// -- Frees space allocated for regular expression.
 
 inline vbl_reg_exp::~vbl_reg_exp () {
 //#ifndef WIN32
@@ -140,37 +138,35 @@ inline vbl_reg_exp::~vbl_reg_exp () {
 //#endif
 }
 
-// Start -- 
+// -- 
 
 inline long vbl_reg_exp::start () const {
   return(this->startp[0] - searchstring);
 }
 
 
-// End -- Returns the start/end index of the last item found.
-
+// -- Returns the start/end index of the last item found.
 
 inline long vbl_reg_exp::end () const {
   return(this->endp[0] - searchstring);
 }
 
 
-// operator!= //
+// operator!= 
 
 inline bool vbl_reg_exp::operator!= (const vbl_reg_exp& r) const {
   return(!(*this == r));
 }
 
 
-// is_valid -- Returns true if a valid regular expression is compiled
-// and ready for pattern matching.
+// -- Returns true if a valid regular expression is compiled and ready for pattern matching.
 
 inline bool vbl_reg_exp::is_valid () const {
   return (this->program != NULL);
 }
 
 
-// set_invalid -- Invalidates regular expression.
+// -- Invalidates regular expression.
 
 inline void vbl_reg_exp::set_invalid () {
 //#ifndef WIN32
@@ -180,18 +176,21 @@ inline void vbl_reg_exp::set_invalid () {
 }
 
 // -- Return start index of nth submatch. start(0) is the start of the full match.
+
 inline int vbl_reg_exp::start(int n) const
 {
   return this->startp[n] - searchstring;
 }
 
 // -- Return end index of nth submatch. end(0) is the end of the full match.
+
 inline int vbl_reg_exp::end(int n) const
 {
   return this->endp[n] - searchstring;
 }
 
 // -- Return nth submatch as a string.
+
 inline vcl_string vbl_reg_exp::match(int n) const
 {
   return vcl_string(this->startp[n], this->endp[n] - this->startp[n]);

@@ -5,6 +5,8 @@
 #pragma interface
 #endif
 //
+// .NAME        vbl_sequence_filename_map - maps sequence frame indices to filenames
+//
 // .SECTION Description
 //    
 // vbl_sequence_filename_map maps sequence frame indices to filenames. It also performs
@@ -17,7 +19,6 @@
 // The vector of indices specifies the mapping from sequence frame-index to filename-index.
 // If not specified, the image directory is probed to determine the sequence start/end frames.
 //
-// .NAME        vbl_sequence_filename_map - maps sequence frame indices to filenames
 // .LIBRARY     vbl
 // .HEADER	Basics Package
 // .INCLUDE     vbl/vbl_sequence_filename_map.h

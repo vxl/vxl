@@ -4,7 +4,7 @@
 //-----------------------------------------------------------------------------
 //
 // .LIBRARY vbl 
-// .HEABR Basics Package
+// .HEADER vxl Package
 // .INCLUDE vbl/vbl_basic_relation_where.h
 // .FILE vbl/vbl_basic_relation_where.cxx
 //
@@ -12,7 +12,7 @@
 //             Rupert W. Curwen, November 13, 1997
 //             GE Corporate Research and Development
 //
-// .SECTION Modifications :
+// .SECTION Modifications
 //
 //-----------------------------------------------------------------------------
 #include <vbl/vbl_basic_tuple.h>

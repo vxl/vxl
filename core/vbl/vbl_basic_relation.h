@@ -12,7 +12,8 @@
 //             Rupert Curwen, October 31st, 1997
 //             GE Corporate Research and Development
 //
-// .SECTION Modifications : None Yet
+// .SECTION Modifications
+//     None Yet
 //
 //-----------------------------------------------------------------------------
 #include <vcl/vcl_cassert.h>

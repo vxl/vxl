@@ -5,15 +5,16 @@
 #pragma interface
 #endif
 
-// .SECTION Description
-//    Printf formatting is just plain handy sometimes.  This header provides
-//    it for C++ programs in a standard-conforming manner.
-//
 // .NAME        vbl_printf - vbl_printf to ostream
 // .LIBRARY     vbl
 // .HEADER	Basics Package
 // .INCLUDE     vbl/vbl_printf.h
 // .FILE        vbl/vbl_printf.cxx
+//
+// .SECTION Description
+//    Printf formatting is just plain handy sometimes.  This header provides
+//    it for C++ programs in a standard-conforming manner.
+//
 // .SECTION Author
 //     Andrew W. Fitzgibbon, Oxford RRG, 03 Jul 97
 //
