@@ -85,7 +85,7 @@ vcl_istream * vul_http_open(char const *url)
   {
     if (path[k] == ' ')
       path.replace(k, 1, "%20");
-    else if (path[k] = '%')
+    else if (path[k] == '%')
       path.replace(k, 1, "%25");
   }
 
@@ -279,7 +279,7 @@ bool vul_http_exists(char const *url)
   {
     if (path[k] == ' ')
       path.replace(k, 1, "%20");
-    else if (path[k] = '%')
+    else if (path[k] == '%')
       path.replace(k, 1, "%25");
   }
 
