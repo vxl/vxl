@@ -24,8 +24,6 @@
 
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
-#include <vsol/vsol_line_2d.h>
-#include <vsol/vsol_line_2d_sptr.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 

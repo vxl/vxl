@@ -21,11 +21,10 @@
 //*****************************************************************************
 #include <vsol/vsol_spatial_object_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
-#include <vsol/vsol_line_2d_sptr.h>
-#include <vsol/vsol_polyline_2d_sptr.h>
-
 class vdgl_digital_curve;
 class vsol_line_2d;
+class vsol_polyline_2d;
+
 class vsol_curve_2d
   :public vsol_spatial_object_2d
 {
@@ -34,7 +33,7 @@ public:
   { CURVE_NO_TYPE=0,
     LINE,
     CONIC,
-	 POLYLINE,
+    POLYLINE,
     DIGITAL_CURVE,
     NUM_CURVE_TYPES
   };
@@ -42,7 +41,7 @@ public:
   //***************************************************************************
   // Initialization
   //***************************************************************************
-public:
+ public:
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
