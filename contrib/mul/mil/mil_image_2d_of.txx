@@ -108,7 +108,9 @@ void mil_image_2d_of<T>::resize2(int nx, int ny)
     ystep_ = nx;
 }
 
+//=======================================================================
 //: Resize to n_planes of [0..nx-1][0..ny-1]
+//=======================================================================
 template<class T>
 void mil_image_2d_of<T>::resize3(int nx, int ny, int n_planes)
 {
@@ -249,11 +251,13 @@ void mil_image_2d_of<T>::setRGB(T* r, T* g, T* b,
     format_ = vcl_string("RGBPlaneByte");
 }
 
+//=======================================================================
 //: Define parameters for packed RGB T images
 //  Sets up a 3 plane image, assuming nx x ny image
 //  of xstep T pixels, ie  red(x,y) = data[x*xstep+y*step],
 //  green(x,y) = data[1+x*xstep+y*step],
 //  blue(x,y) = data[2+x*xstep+y*step]
+//=======================================================================
 template<class T>
 void mil_image_2d_of<T>::setRGB(T* data, int nx, int ny, int xstep, int ystep)
 {
@@ -407,8 +411,9 @@ void mil_image_2d_of<T>::print_summary(vcl_ostream& os) const
       <<"Transform: "<<world2im_;
 }
 
-
+//=======================================================================
 //: print all data to os
+//=======================================================================
 template<class T>
 void mil_image_2d_of<T>::print_all(vcl_ostream& os) const
 {
@@ -501,12 +506,12 @@ void mil_image_2d_of<T>::b_read(vsl_b_istream& bfs)
         planes_[i]=(T*)data_->data() + plane_offsets[i];
 }
 
-
 //=======================================================================
-//: True if transfords, etc. are equal, and they share same image data.
-// This does not do a deep equality on image data. If the images point to
-// different image data objects that contain identical images, then
-// the result will still be false.
+//: True if transforms, etc. are equal, and they share same image data.
+//  This does not do a deep equality on image data. If the images point
+//  to different image data objects that contain identical images, then
+//  the result will still be false.
+//=======================================================================
 template<class T>
 bool mil_image_2d_of<T>::operator==(const mil_image_2d_of<T> &other) const
 {
@@ -519,7 +524,6 @@ bool mil_image_2d_of<T>::operator==(const mil_image_2d_of<T> &other) const
     format_ == other.format_ &&
     world2im_ == other.world2im_;
 }
-
 
 
 #if 0

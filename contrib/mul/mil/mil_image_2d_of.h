@@ -28,9 +28,11 @@
 //
 //  format() returns a vcl_string describing the format.
 //  Formats currently include:
-//  "GreyByte" : an nx() x ny() greyscale image of Ts plane(0)[x+y*ystep()]
-//  "RGBPlaneByte" : an nx() x ny() colour image with three separate
-//                   planes of data, plane(i)[x*im.xstep() + y*imystep()] i=0,1,2 for r,g,b
+//  - "GreyByte" : an nx() x ny() greyscale image of Ts plane(0)[x+y*ystep()]
+//  - "RGBPlaneByte" : an nx() x ny() colour image with three separate
+//                     planes of data,
+//                     plane(i)[x*im.xstep() + y*imystep()] i=0,1,2 for r,g,b
+//
 //  It is safest to examine the number of planes, xstep() and ystep() to
 //  determine the format.
 template<class T>
@@ -167,11 +169,10 @@ public:
     const T& operator()(int x, int y) const
         { return planes_[0][ystep_*y+x*xstep_]; }
 
-
-      //: True if transfordms are equal, and they share same image data.
-      // This does not do a deep equality on image data. If the images point to
-      // different image data objects that contain identical images, then
-      // the result will still be false.
+        //: True if transforms are equal, and they share same image data.
+        //  This does not do a deep equality on image data. If the images point
+        //  to different image data objects that contain identical images, then
+        //  the result will still be false.
     bool operator==(const mil_image_2d_of<T> &) const;
 
         //: Define valid data region (including transform)

@@ -78,9 +78,11 @@ double mil_gaussian_pyramid_builder_2d<T>::scaleStep() const
     return 2.0;
 }
 
+//=======================================================================
 //: Smooth and subsample src_im to produce dest_im
 //  Applies 1-5-8-5-1 filter in x and y, then samples
 //  every other pixel.
+//=======================================================================
 template<class T>
 void mil_gaussian_pyramid_builder_2d<T>::gaussReduce(mil_image_2d_of<T>& dest_im,
                      const mil_image_2d_of<T>& src_im)
@@ -120,8 +122,9 @@ void mil_gaussian_pyramid_builder_2d<T>::gaussReduce(mil_image_2d_of<T>& dest_im
     dest_im.setWorld2im(scaling * src_im.world2im());
 }
 
-
+//=======================================================================
 //: Deletes all data in im_pyr
+//=======================================================================
 template<class T>
 void mil_gaussian_pyramid_builder_2d<T>::emptyPyr(mil_image_pyramid& im_pyr)
 {
@@ -149,7 +152,7 @@ void mil_gaussian_pyramid_builder_2d<T>::checkPyr(mil_image_pyramid& im_pyr,  in
 
 //=======================================================================
 //: Build pyramid
-
+//=======================================================================
 template<class T>
 void mil_gaussian_pyramid_builder_2d<T>::build(mil_image_pyramid& image_pyr,
                                     const mil_image& im)
@@ -209,7 +212,7 @@ void mil_gaussian_pyramid_builder_2d<T>::build(mil_image_pyramid& image_pyr,
 //=======================================================================
 //: Extend pyramid
 // The first layer of the pyramid must already be set.
-
+//=======================================================================
 template<class T>
 void mil_gaussian_pyramid_builder_2d<T>::extend(mil_image_pyramid& image_pyr)
 {
@@ -255,9 +258,7 @@ void mil_gaussian_pyramid_builder_2d<T>::extend(mil_image_pyramid& image_pyr)
           gaussReduce(im_i0,im_i1);
       }
     }
-
 }
-
 
 
 //=======================================================================
