@@ -13,9 +13,9 @@ tif_dumpmode
 tif_error
 tif_fax3
 tif_fax3sm
+tif_flush
 tif_getimage
 tif_jpeg
-tif_flush
 tif_luv
 tif_lzw
 tif_next
@@ -25,8 +25,8 @@ tif_pixarlog
 tif_predict
 tif_print
 tif_read
-tif_swab
 tif_strip
+tif_swab
 tif_thunder
 tif_tile
 tif_version

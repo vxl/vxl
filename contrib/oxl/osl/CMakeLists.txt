@@ -26,3 +26,5 @@ SOURCE_FILES(osl_sources
 )
 
 AUX_SOURCE_DIRECTORY(Templates osl_sources)
+
+SUBDIRS(examples)

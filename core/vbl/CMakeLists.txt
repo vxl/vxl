@@ -20,5 +20,5 @@ AUX_SOURCE_DIRECTORY(Templates vbl_sources)
 
 SUBDIRS(io)
 IF( BUILD_TESTS)
-  SUBDIRS(tests)
+  SUBDIRS(tests examples)
 ENDIF( BUILD_TESTS)

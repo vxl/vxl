@@ -1,4 +1,5 @@
 USES += vxl oxl
+USES += v3p # for Qv, only needed by vrml
 USE_OPENGL:=1
 TRY_GLUT := 1 # vgui_text needs glut. fsm.
 TRY_X11 := 1
@@ -104,6 +105,11 @@ SOURCES += internals/vgui_dialog_impl.cxx
 SOURCES += vgui_statusbuf.cxx
 SOURCES += vgui_statusbar.cxx
 
+# VRML I/O
+SOURCES += vrml/vgui_vrml_texture_map.cxx
+SOURCES += vrml/vgui_vrml_draw_visitor.cxx
+SOURCES += vrml/vgui_vrml_tableau.cxx
+
 #
 SOURCES += vgui_glut.cxx
 SOURCES += internals/vgui_invert_homg4x4.cxx
@@ -134,6 +140,9 @@ else
 SOURCES += internals/vgui_accelerate_mfc.cxx
 endif
 
+# Compile all template instantiations in the following dirs (if these exist):
+AUX_SOURCE_DIRECTORY += vrml/Templates internals/Templates
+
 # -O2 does not turn on inlining, so make sure we use -O3 for egcs and 2.95.
 # Also quell warning about truncating unsigned to fit bitfield.
 ifeq ($(strip $(IU_COMPILER)),gcc-2.95)
@@ -150,7 +159,7 @@ FLAGS_vgui_pixel.cxx += $(optimize)
 #####################
 # SUBDIRS
 #####################
-SUBDIRS += impl vrml
+SUBDIRS += impl
 #SUBDIRS += contrib
 ifndef NOTEST
 SUBDIRS += tests

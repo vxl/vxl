@@ -12,9 +12,8 @@ SUBDIRS += vrml
 ifeq (1,$(strip $(HAS_OPENGL)))
 SUBDIRS += vgui
 SUBDIRS += xcv
-SUBDIRS += ../Oxford/xcv_ox
 SUBDIRS += VPLAYER
-SUBDIRS += apps/vxl_vrml_viewer
+SUBDIRS += apps
 endif
 
 ifndef NOTEST

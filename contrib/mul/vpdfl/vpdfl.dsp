@@ -147,6 +147,14 @@ SOURCE=".\Templates\mbl_cloneable_ptr+vpdfl_pdf_base-.cxx"
 # End Source File
 # Begin Source File
 
+SOURCE=".\Templates\vcl_vector+vpdfl_builder_base~-.cxx"
+# End Source File
+# Begin Source File
+
+SOURCE=".\Templates\vcl_vector+vpdfl_pdf_base~-.cxx"
+# End Source File
+# Begin Source File
+
 SOURCE=".\Templates\vcl_vector+vpdfl_sampler_base~-.cxx"
 # End Source File
 # Begin Source File

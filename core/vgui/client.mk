@@ -14,7 +14,7 @@ include $(IUELOCALROOT)/vxl/vnl/client.mk
 include $(IUELOCALROOT)/vxl/vil/client.mk
 include $(IUELOCALROOT)/vxl/vgl/client.mk
 
-ald_libdeps += vgui:vpl,vbl,vul,vnl-algo,vil,vgl
+ald_libdeps += vgui:vpl,vbl,vul,vnl-algo,vil,vgl,Qv
 ald_libdeps += vgui-SDL:vgui
 ald_libdeps += vgui-glut:vgui
 ald_libdeps += vgui-Fl:vgui

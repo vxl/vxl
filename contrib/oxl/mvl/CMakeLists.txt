@@ -91,3 +91,4 @@ mvl_three_view_six_point_structure
 
 AUX_SOURCE_DIRECTORY(Templates mvl_sources)
 
+SUBDIRS(examples)

@@ -12,10 +12,10 @@ INCLUDE_DIRECTORIES(${allvxl_SOURCE_DIR}/gel)
 SUBDIRS(gbl)
 
 # van-duc region finder (ported from TargetJr)
- SUBDIRS(gevd)
+SUBDIRS(gevd)
 
 # matcher
- SUBDIRS(geml)
+SUBDIRS(geml)
 
 # Multi-view database
 SUBDIRS(gmvl)
@@ -24,7 +24,7 @@ SUBDIRS(gmvl)
 SUBDIRS(vsrl)
 
 # Triangulation code
- SUBDIRS(gtrl)
+SUBDIRS(gtrl)
 
 # spatial objects
 SUBDIRS(vsol)
@@ -36,15 +36,15 @@ SUBDIRS(gst vtol)
 SUBDIRS(vdgl)
 
 # photogrammetry
- SUBDIRS(mrc/vpgl)
+SUBDIRS(mrc/vpgl)
 
 # coordinate systems addon
- SUBDIRS(mrc/vcsl)
+SUBDIRS(mrc/vcsl)
 
 # Kanade-Lucas-Tomasi feature tracker
- SUBDIRS(vgel gkll)
+SUBDIRS(vgel gkll)
 
 # Dense matcher
- SUBDIRS(vmal)
+SUBDIRS(vmal)
 
 INCLUDE(${CMAKE_SOURCE_DIR}/config.cmake/Modules/FindOpenGL.cmake)
