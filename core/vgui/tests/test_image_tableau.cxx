@@ -30,7 +30,7 @@ static void test_image_tableau(int argc, char* argv[])
     testlib_test_begin( "Contents are correct" );
     unsigned buf_size = img.width() * img.height() *
                         img.planes() * img.components() *
-                        (img.bits_per_component()+7) / 8;
+                        ( (img.bits_per_component()+7) / 8 );
     char* img1_buf = new char[buf_size];
     char* img2_buf = new char[buf_size];
 
