@@ -51,6 +51,7 @@ public:
   
   void show();
   void hide();
+  void set_title(vcl_string const &);
 
   void set_menubar(const vgui_menu &menu);
   void set_statusbar(bool) {}
