@@ -5,12 +5,20 @@ IUE_PACKAGE_LIBRARIES += -lvgl
 
 #IUE_PACKAGE_LIBRARIES += -lvil-algo
 IUE_PACKAGE_LIBRARIES += -lvil
-LIBDIRS += $(IUELOCALROOT_libbase)/v3p/tiff/$(tj_libdir) # for libTIFF.so
-LIBDIRS += $(IUELOCALROOT_libbase)/v3p/jpeg/$(tj_libdir) # for libJPEG.so
+
+# For libTIFF.so, and libJPEG.so we may need these in the future.
+# At present they serve no purpose and confuse the SGI linker.
+# fsm
+# LIBDIRS += $(wildcard $(IUELOCALROOT_libbase)/v3p/tiff/$(tj_libdir))
+# LIBDIRS += $(wildcard $(IUELOCALROOT_libbase)/v3p/jpeg/$(tj_libdir))
+# LIBDIRS += $(wildcard $(IUELOCALROOT_libbase)/v3p/netlib/$(tj_libdir))
 
 IUE_PACKAGE_LIBRARIES += -lvnl-algo
+
+# A library path is needed here.
+# LIBDIRS += $(IUELOCALROOT_libbase)/v3p/netlib/$(tj_libdir)
+LIBDIRS += $(IUELOCALROOT_libbase)/Numerics/$(tj_libdir)
 IUE_PACKAGE_LIBRARIES += -lnetlib
-LIBDIRS += $(IUELOCALROOT_libbase)/v3p/netlib/$(tj_libdir) # for libnetlib.so
 
 IUE_PACKAGE_LIBRARIES += -lvnl
 

@@ -5,13 +5,31 @@ exec perl -w -x $0 ${1+"$@"}
 #line 6
 
 # Author: Dave Cooper
-# Modification: fsm, awf. various.
-
+#
 # How it works:
-#  Lines are read from stdin and processed sequentially.
-#  Certain substitutions are performed, like list -> vcl_list etc.
-#  The script keeps track of which headers have been included and
-#  which stl classes have been used.
+# Lines are read from stdin, processed and output on stdout.
+# The processing stages are :
+#     - each line is separated into code + comment.
+#     - header file conversion.
+#     - look for hints about various things, like whether
+#       'string' is a type or an identifier. 
+#     - conversion of code (using hints found).
+#     - emit code + comment for each processed line.
+#
+# The script keeps track of which headers have been included and
+# which stl classes have been used.
+#
+# Bugs and improvements.
+#   1. the script uses some pretty good heuristics to decide
+#      whether 'string' is an identifier or a type, but at 
+#      the moment the decision is made globally, for an entire
+#      source file. it sometimes get it wrong.
+#
+#   2. Sometimes .txx files are included several times.
+#
+#   3. Most substitutions in this script could be done with the
+#      o flag (s/.../.../o;) so that the regexp is compiled
+#      only once. That may or may not speed up the script.
 
 $vcl  = 0; # convert Config-IUE and standard C/C++ code to vcl
 $vbl  = 0; # convert Basics code to vbl
@@ -20,7 +38,6 @@ $vil  = 0; # convert EasyImage to vil
 $vsl  = 0; #
 $vgui = 0; # convert old vgui to new vgui
 $lint = 0; # 
-
 $mvl  = 0;
 $cool = 0;
 
@@ -69,7 +86,7 @@ $saw_allocator = 0; # allocator<>
 # list of .txx files needed (e.g. 'map', 'vector', 'utility')
 @txx_needed = ();
 
-#------------------------------ filter ------------------------------
+#--------------------------------------------------------------------
 
 @lines = ();           # accumulator for lines.
 @comments = ();        # accumulator for comments.
@@ -249,7 +266,7 @@ sub process_headers {
       s/include <pair\.h>/include <vcl\/vcl_utility.h>/;
       s/include <alloc>/include <vcl\/vcl_memory.h>/;
       s/include <alloc\.h>/include <vcl\/vcl_memory.h>/;
-      # non-standard STL headers which are ignored.
+      # non-standard STL headers which are to be commented out.
       s/^(\s*\#\s*include <defalloc.h>)/\/\/$1/;
       s/^(\s*\#\s*include <tree>)/\/\/$1/;
       s/^(\s*\#\s*include <tree.h>)/\/\/$1/;
@@ -266,7 +283,7 @@ sub process_headers {
 
       # warn about hash_map and hash_set
       if ( m/include\s+\<hash_(map|set)\.h\>/ ) {
-       print STDERR "[WARNING: saw hash_map/hash_set]";
+	print STDERR "[WARNING: saw hash_map/hash_set]";
       }
       
       # instantiation macros
@@ -275,7 +292,7 @@ sub process_headers {
     
     #---------------------------------------- COOL -> vcl
     if ($cool) {
-      s!<cool/String.h>!<vcl/vcl_string.h>!g;
+      s!<cool/String.h>!<vcl/vcl_string.h>!;
     }
     
     #---------------------------------------- Basics -> vbl
@@ -306,10 +323,14 @@ sub process_headers {
       s/<Basics\/clamp\.h>/<vil\/vil_clamp.h>/;
       s/<vbl\/vbl_clamp\.h>/<vil\/vil_clamp.h>/;
       s/<Basics\/QSort\.h>/<vbl\/vbl_qsort.h>/;
-      s!Basics/BoundingBox.h!vbl/vbl_bounding_box.h!g;
-      s!Basics/BoundingBox.C!vbl/vbl_bounding_box.txx!g;
-      s!\bBoundingBox<!vbl_bounding_box<!g;
-      s!INSTANTIATE_BOUNDING_BOX!VBL_BOUNDING_BOX_INSTANTIATE!g;
+      s!Basics/BoundingBox.h!vbl/vbl_bounding_box.h!;
+      s!Basics/BoundingBox.C!vbl/vbl_bounding_box.txx!;
+      
+      # sparse array things.
+      s!<Basics/SparseArray([123])D.h>!<vbl/vbl_sparse_array_$1d.h>!;
+      s!<Basics/SparseArray([123])D.C>!<vbl/vbl_sparse_array_$1d.txx>!;
+      s!<Basics/SparseArray.h>!<vbl/vbl_sparse_array.h>!;
+      s!<Basics/SparseArray.C>!<vbl/vbl_sparse_array.txx>!;
       
       s/<cool\/Timer\.h>/<vbl\/vbl_timer.h>/;
       s/<cool\/RegExp\.h>/<vbl\/vbl_reg_exp.h>/;
@@ -329,7 +350,7 @@ sub process_headers {
       s/<math\/math\.h>/<vnl\/vnl_math.h>/;
       s/<math\/c_vector\.h>/<vnl\/vnl_c_vector.h>/;
       
-      s/<Numerics\/Math\.h>/<vnl\/vnl_math.h>/g;
+      s/<Numerics\/Math\.h>/<vnl\/vnl_math.h>/;
       s/<Numerics\/RPolyRoots\.h>/<vnl\/algo\/vnl_rpoly_roots.h>/;
       s/<Numerics\/CPolyRoots\.h>/<vnl\/algo\/vnl_cpoly_roots.h>/;
       s/<Numerics\/Cholesky.h>/<vnl\/algo\/vnl_cholesky.h>/;
@@ -337,7 +358,7 @@ sub process_headers {
       s/<Numerics\/SVD.h>/<vnl\/algo\/vnl_svd.h>/;
       s/<Numerics\/ComplexEigensystem\.h>/<vnl\/algo\/vnl_complex_eigensystem.h>/;
       s/<Numerics\/GeneralizedEigensystem\.h>/<vnl\/algo\/vnl_generalized_eigensystem.h>/;
-      s/<Numerics\/RealPolynomial\.h>/<vnl\/vnl_real_polynomial.h>/g;
+      s/<Numerics\/RealPolynomial\.h>/<vnl\/vnl_real_polynomial.h>/;
       s/<Numerics\/FileMatrix\.h>/<vnl\/vnl_file_matrix.h>/;
       s/<Numerics\/FileVector\.h>/<vnl\/vnl_file_vector.h>/;
       s/<Numerics\/MatrixInverse\.h>/<vnl\/algo\/vnl_matrix_inverse.h>/;
@@ -359,81 +380,82 @@ sub process_headers {
       s/UnaryFunction\.h/vnl_unary_function.h>/;
       s/Identity\.h/vnl_identity.h>/;
       
-      s/<Numerics\/LevenbergMarquardt\.h>/<vnl\/algo\/vnl_levenberg_marquardt.h>/g;
-      s/<Numerics\/SymmetricEigensystem\.h>/<vnl\/algo\/vnl_symmetric_eigensystem.h>/g;
-      s/<Numerics\/DiscreteDiff\.h>/<vnl\/algo\/vnl_discrete_diff.h>/g;
+      s/<Numerics\/LevenbergMarquardt\.h>/<vnl\/algo\/vnl_levenberg_marquardt.h>/;
+      s/<Numerics\/SymmetricEigensystem\.h>/<vnl\/algo\/vnl_symmetric_eigensystem.h>/;
+      s/<Numerics\/DiscreteDiff\.h>/<vnl\/algo\/vnl_discrete_diff.h>/;
       
-      s/<Numerics\/ComplexVectorT/<vnl\/vnl_complex_vector_t/g;
-      s/<Numerics\/ComplexVector/<vnl\/vnl_complex_vector/g;
-      s/<Numerics\/ComplexMatrixT/<vnl\/vnl_complex_matrix_t/g;
-      s/<Numerics\/ComplexMatrix/<vnl\/vnl_complex_matrix/g;
-      s/<Numerics\/LeastSquaresFunction/<vnl\/vnl_least_squares_function/g;
-      s/<Numerics\/LeastSquaresCostFunction\.h>/<vnl\/vnl_least_squares_cost_function.h>/g;
-      s/<Numerics\/NonLinearMinimizer\.h>/<vnl\/vnl_nonlinear_minimizer.h>/g;
-      s/<Numerics\/Double([0-9]x[0-9])\.h>/<vnl\/vnl_double_$1.h>/g;
-      s/<Numerics\/Double([0-9])\.h>/<vnl\/vnl_double_$1.h>/g;
-      s/<Numerics\/LinearOperators3\.h>/<vnl\/vnl_linear_operators_3.h>/g;
-      s/<Numerics\/ChiSquared\.h>/<vnl\/algo\/vnl_chi_squared.h>/g;
+      s/<Numerics\/ComplexVectorT/<vnl\/vnl_complex_vector_t/;
+      s/<Numerics\/ComplexVector/<vnl\/vnl_complex_vector/;
+      s/<Numerics\/ComplexMatrixT/<vnl\/vnl_complex_matrix_t/;
+      s/<Numerics\/ComplexMatrix/<vnl\/vnl_complex_matrix/;
+      s/<Numerics\/LeastSquaresFunction/<vnl\/vnl_least_squares_function/;
+      s/<Numerics\/LeastSquaresCostFunction\.h>/<vnl\/vnl_least_squares_cost_function.h>/;
+      s/<Numerics\/NonLinearMinimizer\.h>/<vnl\/vnl_nonlinear_minimizer.h>/;
+      s/<Numerics\/Double([0-9]x[0-9])\.h>/<vnl\/vnl_double_$1.h>/;
+      s/<Numerics\/Double([0-9])\.h>/<vnl\/vnl_double_$1.h>/;
+      s/<Numerics\/LinearOperators3\.h>/<vnl\/vnl_linear_operators_3.h>/;
+      s/<Numerics\/ChiSquared\.h>/<vnl\/algo\/vnl_chi_squared.h>/;
       
-      s!<cool/Quaternion.h>!<vnl/vnl_quaternion.h>!g;
+      s!<cool/Quaternion.h>!<vnl/vnl_quaternion.h>!;
     }
     
     #---------------------------------------- vgl
     if ($vgl) {
       # includes
-      #s!MViewBasics/HomgPoint2D!vgl/vgl_homg_point_2d!g;
-      #s!MViewBasics/HomgLine2D!vgl/vgl_homg_line_2d!g;
+      #s!MViewBasics/HomgPoint2D!vgl/vgl_homg_point_2d!;
+      #s!MViewBasics/HomgLine2D!vgl/vgl_homg_line_2d!;
     }
     
     #---------------------------------------- vil
     if ($vil) {
       # includes
-      s!<EasyImage/ImageBuffer.h>!<vil/vil_memory_image_of.h>!g;
-      s!<EasyImage/ImageWindowOps.h>!<vil/vil_memory_image_window.h>!g;
-      s!<EasyImage/FileImage.h>!<vil/vil_file_image.h>!g;
-      s!<ImageClasses/Image.h>!<vil/vil_image.h>!g;
+      s!<EasyImage/ImageBuffer.h>!<vil/vil_memory_image_of.h>!;
+      s!<EasyImage/ImageWindowOps.h>!<vil/vil_memory_image_window.h>!;
+      s!<EasyImage/FileImage.h>!<vil/vil_file_image.h>!;
+      s!<ImageClasses/Image.h>!<vil/vil_image.h>!;
     }
     
     #---------------------------------------- MultiView -> mvl
     if ($mvl) {
       
       # includes
-      s!MViewBasics/!mvl/!g;
-      s!MViewCompute/!mvl/!g;
-      s!MViewComputeOX/!mvox/!g;
+      s!MViewBasics/!mvl/!;
+      s!MViewCompute/!mvl/!;
+      s!MViewComputeOX/!mvox/!;
       
       s!<cool/Array.h>!<vcl/vcl_vector.h>!;
       s!<cool/ArrayP.h>!<vcl/vcl_vector.h>!;
       s!<cool/Array.C>!<vcl/vcl_vector.txx>!;
       s!<cool/List(|P).h>!<vcl/vcl_list.h>!;
       s!<cool/List.C>!<vcl/vcl_list.txx>!;
-      s!^(\#include +\<(Geometry|Topology)/)!//$1!g;
+      s!^(\#include +\<(Geometry|Topology)/)!//$1!;
     }
     
     #---------------------------------------- vsl
     if ($vsl) {
+      s!<vsl/fsm_ortho_regress.h>!<vsl/vsl_ortho_regress.h>!;
     }
     
     #---------------------------------------- VGUI -> vgui
     if ($vgui) {
       s/\bVGUI/vgui/g;
       s/<vgui\/vgui_image\.h>/<vil\/vil_image.h>/;
-      s!tableaux/!vgui/!g;
+      s!tableaux/!vgui/!;
       s!tableaux_DLLDATA!vgui_DLLDATA!g;
-      s!vgui_displaybase.C!vgui_displaybase.txx!g;
+      s!vgui_displaybase.C!vgui_displaybase.txx!;
       s!obl/RGBA!vbl/vbl_rgba!g;
       
       s!obl/bool_ostream!vbl/vbl_bool_ostream!g;
       s!obl_on_off!vbl_bool_ostream::on_off!g;
       s!obl_true_false!vbl_bool_ostream::true_false!g;
       s!obl_high_low!vbl_bool_ostream::high_low!g;
-      s!IUE_glu.h!vgui/vgui_glu.h!g;
-      s!IUE_glut.h!vgui/vgui_glut.h!g;
-      s!GL/glx.h!vgui/vgui_glx.h!g;
-      s!GL/glu.h!vgui/vgui_glu.h!g;
-      s!GL/glut.h!vgui/vgui_glut.h!g;
-      s!<IUE_gl!<vgui/vgui_gl!g;
-      s!<vgui_gtk/!<vgui/impl/gtk/!g;
+      s!IUE_glu.h!vgui/vgui_glu.h!;
+      s!IUE_glut.h!vgui/vgui_glut.h!;
+      s!GL/glx.h!vgui/vgui_glx.h!;
+      s!GL/glu.h!vgui/vgui_glu.h!;
+      s!GL/glut.h!vgui/vgui_glut.h!;
+      s!<IUE_gl!<vgui/vgui_gl!;
+      s!<vgui_gtk/!<vgui/impl/gtk/!;
     }
     
     #---------------------------------------- misc
@@ -600,7 +622,7 @@ sub process_lines {
       s/\bbasic_string\s*<\s*char\s*,\s*string_char_traits\s*<\s*char\s*>\s*>/vcl_string/g;
 
       # hex, dec, etc
-      s/\<\<\s*setprecision\s*\(/<< vcl_setprecision\(/g;
+      s/\<\<\s*setprecision\s*\(/\<\< vcl_setprecision\(/g;
       s/\<\<\s*hex\s*\<\</\<\< vcl_hex \<\</g;
       s/\<\<\s*dec\s*\<\</\<\< vcl_dec \<\</g;
       s/\>\>\s*ws\b/\>\> vcl_ws/g;
@@ -644,18 +666,15 @@ sub process_lines {
     
     #---------------------------------------- Basics -> vbl
     if ($vbl) {
-      # symbols
+      #
       s/\bvbl_clamp\b/vil_clamp/g;
       s!\bBoundingBox<!vbl_bounding_box<!g;
       s!INSTANTIATE_BOUNDING_BOX!VBL_BOUNDING_BOX_INSTANTIATE!g;
-      
+
       #
       s!\bSparseArray\b!vbl_sparse_array!g;
       s!\bSparseArray([123])D\b!vbl_sparse_array_$1d!g;
-      s!<Basics/vbl_sparse_array!<vbl/vbl_sparse_array!g;
-      s!<vbl/vbl_sparse_array.C!<vbl/vbl_sparse_array.txx!g;
-      s!<vbl/vbl_sparse_array_([123]d).C!<vbl/vbl_sparse_array_$1.txx!g;
-      s!\bINSTANTIATE_SPARSEARRAY([123])D!VBL_SPARSE_ARRAY_$1D_INSTANTIATE!;
+      s!\bINSTANTIATE_SPARSEARRAY([123])D\b!VBL_SPARSE_ARRAY_$1D_INSTANTIATE!;
       s!\bINSTANTIATE_SPARSEARRAY\b!VBL_SPARSE_ARRAY_INSTANTIATE!;
       
       s!\bARRAY2D_INSTANTIATE\b!VBL_ARRAY_2D_INSTANTIATE!g;
@@ -710,63 +729,63 @@ sub process_lines {
       s/vnl_math::hypot/vnl_math_hypot/g;
       s/\bfloat_complex\b/vnl_float_complex/g;
       s/\bdouble_complex\b/vnl_double_complex/g;
-      s/ChiSquared::ChiSquaredCumulative/vnl_chi_squared_cumulative/g;
+      s/\bChiSquared::ChiSquaredCumulative\b/vnl_chi_squared_cumulative/g;
       s/\bSparseSymmetricEigensystem\b/vnl_sparse_symmetric_eigensystem/g;
       s/\bComplexEigensystem\b/vnl_complex_eigensystem/g;
       s/\bSymmetricEigensystem\b/vnl_symmetric_eigensystem<double> /g;
       s/\bEigensystem\b/vnl_real_eigensystem/g;
-      s/GeneralizedEigensystem/vnl_generalized_eigensystem/g;
-      s/RealPolynomial/vnl_real_polynomial/g;
-      s/DoubleVector/vnl_vector<double>/g;
-      s/DoubleMatrix/vnl_matrix<double>/g;
-      s/SparseMatrix/vnl_sparse_matrix/g;
-      s/DoubleMatrix/vnl_matrix<double>/g;
+      s/\bGeneralizedEigensystem\b/vnl_generalized_eigensystem/g;
+      s/\bRealPolynomial\b/vnl_real_polynomial/g;
+      s/\bDoubleVector\b/vnl_vector<double>/g;
+      s/\bDoubleMatrix\b/vnl_matrix<double>/g;
+      s/\bSparseMatrix\b/vnl_sparse_matrix/g;
+      s/\bDoubleMatrix\b/vnl_matrix<double>/g;
       s/\bfortran_copy\b/vnl_fortran_copy/g;
       s/\bMatOps\b/vnl_matops/g;
       s/\bvnl_matops::matlab_print\b/vnl_matlab_print/g;
       s/\bMATLABMatFileWrite\b/vnl_matlab_filewrite/g;
-      s/FileMatrix/vnl_file_matrix<double>/g;
-      s/FileVector/vnl_file_matrix<double>/g;
-      s/MatrixInverse/vnl_matrix_inverse<double>/g;
-      s/RPolyRoots/vnl_rpoly_roots/g;
-      s/RealPolynomial/vnl_real_polynomial/g;
-      s/RealNPolynomial/vnl_real_npolynomial/g;
-      s/RNPolySolve/vnl_rnpoly_solve/g;
+      s/\bFileMatrix\b/vnl_file_matrix<double>/g;
+      s/\bFileVector\b/vnl_file_matrix<double>/g;
+      s/\bMatrixInverse\b/vnl_matrix_inverse<double>/g;
+      s/\bRPolyRoots\b/vnl_rpoly_roots/g;
+      s/\bRealPolynomial\b/vnl_real_polynomial/g;
+      s/\bRealNPolynomial\b/vnl_real_npolynomial/g;
+      s/\bRNPolySolve\b/vnl_rnpoly_solve/g;
       s/\bCholesky\b/vnl_cholesky/g;
       s/\bQR\b/vnl_qr<double>/g;
       s/\bBaseSVD\b/vnl_svd/g;
       s/\bSVD\b/vnl_svd<double>/g;
-      s/IUE_numeric_limits/vnl_numeric_limits/g;
-      s/IUE_numeric_traits/vnl_numeric_traits/g;
-      s/IUE_complex_traits/vnl_complex_traits/g;
-      s/ComplexVectorT/vnl_complex_vector_t/g;
-      s/ComplexVector/vnl_complex_vector/g;
-      s/ComplexMatrixT/vnl_complex_matrix_t/g;
-      s/ComplexMatrix/vnl_complex_matrix/g;
-      s/ConjugateGradient/vnl_conjugate_gradient/g;
-      s/LeastSquaresFunction/vnl_least_squares_function/g;
-      s/LeastSquaresCostFunction/vnl_least_squares_cost_function/g;
-      s/CostFunction/vnl_cost_function/g;
-      s/IUE_UnaryFunction/vnl_unary_function/g;
+      s/\bIUE_numeric_limits\b/vnl_numeric_limits/g;
+      s/\bIUE_numeric_traits\b/vnl_numeric_traits/g;
+      s/\bIUE_complex_traits\b/vnl_complex_traits/g;
+      s/\bComplexVectorT\b/vnl_complex_vector_t/g;
+      s/\bComplexVector\b/vnl_complex_vector/g;
+      s/\bComplexMatrixT\b/vnl_complex_matrix_t/g;
+      s/\bComplexMatrix\b/vnl_complex_matrix/g;
+      s/\bConjugateGradient\b/vnl_conjugate_gradient/g;
+      s/\bLeastSquaresFunction\b/vnl_least_squares_function/g;
+      s/\bLeastSquaresCostFunction\b/vnl_least_squares_cost_function/g;
+      s/\bCostFunction\b/vnl_cost_function/g;
+      s/\bIUE_UnaryFunction\b/vnl_unary_function/g;
       s/\bIUE_Identity\b/vnl_identity/g;
-      s/LevenbergMarquardt/vnl_levenberg_marquardt/g;
-      s/NonLinearMinimizer/vnl_nonlinear_minimizer/g;
+      s/\bLevenbergMarquardt\b/vnl_levenberg_marquardt/g;
+      s/\bNonLinearMinimizer\b/vnl_nonlinear_minimizer/g;
       s/\bMatrixFixedRef\b/vnl_matrix_fixed_ref/g;
       s/\bMatrixFixed\b/vnl_matrix_fixed/g;
       s/\bVectorFixed\b/vnl_vector_fixed/g;
       s/\bVectorRef\b/vnl_vector_ref/g;
       s/\bMatrixRef\b/vnl_matrix_ref/g;
-      s/RotationMatrix/vnl_rotation_matrix/g;
-      s/Identity3x3/vnl_identity_3x3/g;
-      s/CrossProductMatrix/vnl_cross_product_matrix/g;
+      s/\bRotationMatrix\b/vnl_rotation_matrix/g;
+      s/\bIdentity3x3\b/vnl_identity_3x3/g;
+      s/\bCrossProductMatrix\b/vnl_cross_product_matrix/g;
       s/\bLBFGS\b/vnl_lbfgs/g;
       s/\bTranspose\b/vnl_transpose/g;
       s/\bFastOps\b/vnl_fastops/g;
-      s/DiscreteDiff/vnl_discrete_diff/g;
+      s/\bDiscreteDiff\b/vnl_discrete_diff/g;
       s/\bFFT1D\b/vnl_fft1d/g;
       s/\bFFT2D\b/vnl_fft2d/g;
-      s/FFTxDPrimeFactors/vnl_fftxd_prime_factors/g;
-      s/GaussianKernel1D/vnl_gaussian_kernel_1d/g;
+      s/\bFFTxDPrimeFactors\b/vnl_fftxd_prime_factors/g;
+      s/\bGaussianKernel1D\b/vnl_gaussian_kernel_1d/g;
       s/\bDouble2x2\b/vnl_double_2x2/g;
       s/\bDouble2x3\b/vnl_double_2x3/g;
       s/\bDouble3x3\b/vnl_double_3x3/g;
@@ -776,19 +795,19 @@ sub process_lines {
       s/\bDouble4\b/vnl_double_4/g;
       s/\bDouble3\b/vnl_double_3/g;
       s/\bDouble2\b/vnl_double_2/g;
-      s/LinearOperators3/vnl_linear_operators_3/g;
-      s/IntMatrix/vnl_int_matrix/g;
-      s/AffineApprox/vnl_affine_approx/g;
-      s/Float2/vnl_float_2/g;
-      s/Float3/vnl_float_3/g;
-      s/Scatter3x3/vnl_scatter_3x3<double>/g;
+      s/\bLinearOperators3\b/vnl_linear_operators_3/g;
+      s/\bIntMatrix\b/vnl_int_matrix/g;
+      s/\bAffineApprox\b/vnl_affine_approx/g;
+      s/\bFloat2\b/vnl_float_2/g;
+      s/\bFloat3\b/vnl_float_3/g;
+      s/\bScatter3x3\b/vnl_scatter_3x3<double>/g;
       s/\bAmoeba\b/vnl_amoeba/g;
-      s/IUE_VectorDereference/vnl_vector_dereference/g;
-      s/VectorDereference/vnl_vector_dereference/g;
+      s/\bIUE_VectorDereference\b/vnl_vector_dereference/g;
+      s/\bVectorDereference\b/vnl_vector_dereference/g;
       s/\bInt2\b/vnl_int_2/g;
       s/\bInt3\b/vnl_int_3/g;
       s/\bInt4\b/vnl_int_4/g;
-      s/ScalarJoinIterator/vnl_scalar_join_iterator/g;
+      s/\bScalarJoinIterator\b/vnl_scalar_join_iterator/g;
       #awf s/\bresize\b/vnl_resize/g;
       s/(\.|\->)maxVal\b/$1max_value/g;
       s!\bCoolQuaternion<!vnl_quaternion<!g;
