@@ -154,10 +154,10 @@ inline unsigned long vsl_convert_to_arbitrary_length(const unsigned long* ints,
     unsigned long v = *(ints++);
     while (v > 127)
     {
-      *(ptr++) = v & 127;
+      *(ptr++) = (unsigned char)(v & 127);
       v >>= 7;
     }
-    *(ptr++) = v | 128;
+    *(ptr++) = (unsigned char)(v | 128);
   }
   return (unsigned long)(ptr - buffer);
 }
@@ -226,10 +226,10 @@ inline unsigned long vsl_convert_to_arbitrary_length(const signed long* ints,
     signed long v = *(ints++);
     while (v > 63 || v < -64)
     {
-      *(ptr++) = v & 127;
+      *(ptr++) = (unsigned char)(v & 127);
       v >>= 7;
     }
-    *(ptr++) = (v & 127) | 128;
+    *(ptr++) = (unsigned char)((v & 127) | 128);
   }
 
   return (unsigned long)(ptr - buffer);
@@ -682,7 +682,7 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const double* begin, unsigned n
 
   vsl_swap_bytes_to_buffer((const char *)begin, (char *)block, sizeof(double), nelems);
 
-  os.os().write((const char*) block, (unsigned long)nelems*(unsigned long)sizeof(double));
+  os.os().write((const char*) block, (unsigned long)(nelems*sizeof(double)));
   delete [] block;
 }
 
@@ -690,7 +690,7 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const double* begin, unsigned n
 // This function is very speed efficient.
 inline void vsl_b_read_block(vsl_b_istream &is, double* begin, unsigned nelems)
 {
-  is.is().read((char*) begin, (unsigned long)nelems*(unsigned long)sizeof(double));
+  is.is().read((char*) begin, (unsigned long)(nelems*sizeof(double)));
   vsl_swap_bytes((char *)begin, sizeof(double), nelems);
 }
 
@@ -705,7 +705,7 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const float* begin, unsigned ne
   float *block = new float[nelems];
   vsl_swap_bytes_to_buffer((const char *)begin, (char *)block, sizeof(float), nelems);
 
-  os.os().write((const char*) block, (unsigned long)nelems*(unsigned long)sizeof(float));
+  os.os().write((const char*) block, (unsigned long)(nelems*sizeof(float)));
   delete [] block;
 }
 
@@ -713,7 +713,7 @@ inline void vsl_b_write_block(vsl_b_ostream &os, const float* begin, unsigned ne
 // This function is very speed efficient.
 inline void vsl_b_read_block(vsl_b_istream &is, float* begin, unsigned nelems)
 {
-  is.is().read((char*) begin, (unsigned long)nelems*(unsigned long)sizeof(float));
+  is.is().read((char*) begin, (unsigned long)(nelems*sizeof(float)));
   vsl_swap_bytes((char *)begin, sizeof(float), nelems);
 }
 
