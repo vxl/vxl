@@ -57,14 +57,6 @@ void vil2_value_range(T& min_value, T& max_value,const vil2_image_view<T>& view)
 template<class T>
 void vil2_print_value(vcl_ostream& s, const T& value);
 
-//: Compute minimum and maximum values over view
-void vil2_value_range(vil_rgb<unsigned char>& min_value, vil_rgb<unsigned char>& max_value,
-                      const vil2_image_view<vil_rgb<unsigned char> >& view);
-
-//: Compute minimum and maximum values over view
-void vil2_value_range(vil_rgb<float>& min_value, vil_rgb<float>& max_value,
-                      const vil2_image_view<vil_rgb<float> >& view);
-
 //: print all image data to os in a grid
 template<class T>
 void vil2_print_all(vcl_ostream& os,const vil2_image_view<T>& view);
