@@ -148,7 +148,7 @@ rrel_kernel_density_obj::bandwidth(vect_const_iter res_begin, vect_const_iter re
     break;
 
   case RREL_KERNEL_MUSE:
-    rrel_muset_obj muse(n);
+    rrel_muset_obj muse( (int)n );
     scale = muse.fcn( res_begin, res_end );
     break;
   }
@@ -167,7 +167,7 @@ rrel_kernel_density_obj::kernel_density(vect_const_iter res_begin,
                                         double h) const
 {
   double f=0;
-  unsigned long n = res_end - res_begin;
+  vcl_vector<double>::difference_type n = res_end - res_begin;
   for ( ; res_begin!= res_end; ++res_begin ) {
     f += kernel_function( ( *res_begin - x ) / h );
   }

@@ -8,6 +8,7 @@
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
 #include <vcl_vector.h>
+
 #include <vnl/vnl_math.h>
 
 
@@ -15,7 +16,7 @@ template <class O, class T>
 O
 rrel_util_median_abs_dev_scale( const T& begin,  const T& end, int dof, O* /*dummy*/ )
 {
-  long count = end - begin;
+  long count = long(end - begin); // VC6 & 7 has broken iterator_traits
   assert( count > 0);
 
   if ( count <= dof )
@@ -59,7 +60,7 @@ void rrel_util_median_and_scale( Ran first, Ran last,
                                  T& median, T& scale,
                                  int dof )
 {
-  long count = last-first;
+  long count = long(last-first); // VC6 & 7 has broken iterator_traits
   assert( count > 0 );
   assert( count > dof );
 
@@ -97,7 +98,7 @@ void rrel_util_intercept_adjustment( Ran first, Ran last,
                                      T & center, T & half_width,
                                      int dof )
 {
-  long count = last-first;
+  long count = long(last-first); // VC6 & 7 has broken iterator_traits
   assert( count > dof );
   vcl_sort( first, last );
   int num_in_interval = (count-dof)/2 + dof;
@@ -141,7 +142,7 @@ void rrel_util_intercept_adjust_stats( Ran first, Ran last,
                                        T & robust_mean, T & robust_std, T & inlier_frac,
                                        int dof )
 {
-  long count = last-first;
+  long count = long(last-first); // VC6 & 7 has broken iterator_traits
   assert( count >= dof );
   T center, half_width;
   rrel_util_intercept_adjustment( first, last, center, half_width, dof );
@@ -157,7 +158,7 @@ void rrel_util_intercept_adjust_stats( Ran first, Ran last,
   while ( ++end_itr < last && *end_itr <= center+bound ) {
     sum += *end_itr;
   }
-  long inliers = end_itr - begin_itr;
+  long inliers = long(end_itr - begin_itr); // VC6 & 7 has broken iterator_traits
   robust_mean = sum / inliers;
   inlier_frac = T(inliers) / T(count);
 
