@@ -6,6 +6,7 @@
 #include <vsol/vsol_box_3d.h>
 #include <vcl_algorithm.h>
 #include <vcl_vector.h>
+#include <vcl_cassert.h>
 #include <vtol/vtol_two_chain.h>
 
 //***************************************************************************
