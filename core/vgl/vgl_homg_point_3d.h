@@ -5,8 +5,7 @@
 
 //:
 // \file
-// \author Don HAMILTON Peter TU
-//
+// \author Don HAMILTON, Peter TU
 
 template <class Type>
 class vgl_point_3d;
@@ -28,12 +27,16 @@ public:
   //: Default constructor with (0,0,0,1)
   explicit vgl_homg_point_3d(void);
 
+#if 0
   // Default copy constructor
-  // vgl_homg_point_3d (const vgl_homg_point_3d<Type>& that) {
-  //   set(that.x(),that.y(),that.z(),that.w());
-  // }
+  vgl_homg_point_3d (const vgl_homg_point_3d<Type>& that) {
+    set(that.x(),that.y(),that.z(),that.w());
+  }
+#endif
 
-//unimp  vgl_homg_point_3d(vgl_point_3d<Type> const& p);
+#if 0 //unimp
+  vgl_homg_point_3d(vgl_point_3d<Type> const& p);
+#endif
 
   //: Constructor from four Types
   vgl_homg_point_3d(Type px,
@@ -58,14 +61,16 @@ public:
     set(v[0],v[1],v[2],v[3]);
   }
 
+#if 0
   // Default destructor
-  // ~vgl_homg_point_3d () {}
+  ~vgl_homg_point_3d () {}
 
   // Default assignment operator
-  // vgl_homg_point_3d<Type>& operator=(const vgl_homg_point_3d<Type>& that) {
-  //   set(that.x(),that.y(),that.z(),that.w());
-  //   return *this;
-  // }
+  vgl_homg_point_3d<Type>& operator=(const vgl_homg_point_3d<Type>& that) {
+    set(that.x(),that.y(),that.z(),that.w());
+    return *this;
+  }
+#endif
 
   //***************************************************************************
   // Data Access
@@ -74,11 +79,11 @@ public:
   inline Type x() const { return data_[0]; }
   inline Type y() const { return data_[1]; }
   inline Type z() const { return data_[2]; }
-  inline Type w() const { return data_[3]; } 
+  inline Type w() const { return data_[3]; }
   inline Type& x() { return data_[0]; }
   inline Type& y() { return data_[1]; }
   inline Type& z() { return data_[2]; }
-  inline Type& w() { return data_[3]; } 
+  inline Type& w() { return data_[3]; }
 
   //: Set x,y,z,w
   inline void set(Type px,
@@ -95,7 +100,6 @@ public:
   //: the equality operator
   bool operator==(const vgl_homg_point_3d<Type> &other) const;
 
-
   //: Test for point at infinity
   // Return true when |w| < tol * min(|x|, |y|, |z|)
   bool ideal(Type tol)
@@ -106,6 +110,7 @@ public:
   //***************************************************************************
   // Internals
   //***************************************************************************
+
 protected:
   // the data associated with this point
   Type data_[4];
@@ -114,6 +119,7 @@ protected:
 //*****************************************************************************
 // Stream operators
 //*****************************************************************************
+
 template <class Type>
 vcl_ostream &operator<<(vcl_ostream &s,
                     const vgl_homg_point_3d<Type> &p)
@@ -130,4 +136,4 @@ vcl_istream &operator>>(vcl_istream &is,
   return is >> p.x() >> p.y() >> p.z() >> p.w();
 }
 
-#endif // #ifndef vgl_homg_point_3d_h_
+#endif // vgl_homg_point_3d_h_

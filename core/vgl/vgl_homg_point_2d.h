@@ -31,15 +31,19 @@ public:
 
   // Constructors/Initializers/Destructors-----------------------------------
 
-  // Default constructor
+  //: Default constructor
   vgl_homg_point_2d () {}
 
-  // Default copy constructor
-  // vgl_homg_point_2d (const vgl_homg_point_2d<Type>& that) {
-  //   set(that.x(),that.y(),that.w());
-  // }
+#if 0
+  //: Default copy constructor
+  vgl_homg_point_2d (const vgl_homg_point_2d<Type>& that) {
+    set(that.x(),that.y(),that.w());
+  }
+#endif
 
-//unimp  vgl_homg_point_2d<Type> (vgl_point_2d<Type> const& p);
+#if 0 // unimp
+  vgl_homg_point_2d<Type> (vgl_point_2d<Type> const& p);
+#endif
 
   //: Construct from two Types (nonhomogeneous interface)
   vgl_homg_point_2d (Type px, Type py) { set(px,py); }
@@ -54,14 +58,16 @@ public:
   vgl_homg_point_2d (vgl_homg_line_2d<Type> const& l1,
                      vgl_homg_line_2d<Type> const& l2);
 
+#if 0
   // Default destructor
-  // ~vgl_homg_point_2d () {}
+  ~vgl_homg_point_2d () {}
 
   // Default assignment operator
-  // vgl_homg_point_2d<Type>& operator=(const vgl_homg_point_2d<Type>& that) {
-  //   set(that.x(),that.y(),that.w());
-  //   return *this;
-  // }
+  vgl_homg_point_2d<Type>& operator=(const vgl_homg_point_2d<Type>& that) {
+    set(that.x(),that.y(),that.w());
+    return *this;
+  }
+#endif
 
   // Data Access-------------------------------------------------------------
 

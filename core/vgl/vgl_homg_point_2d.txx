@@ -2,10 +2,11 @@
 #ifndef vgl_homg_point_2d_txx_
 #define vgl_homg_point_2d_txx_
 
-// Author: Don Hamilton, Peter Tu
-// Copyright:
-// Created: Feb 15 2000
-//: Represents a homogeneous 2D point.
+//:
+// \file
+// \brief Represents a homogeneous 2D point.
+// \author Don Hamilton, Peter Tu
+// \date   Feb 15 2000
 
 #include "vgl_homg_point_2d.h"
 #include <vgl/vgl_homg_line_2d.h>

@@ -7,12 +7,13 @@
 //#include <vidl/vidl_avicodec.h>
 #endif // _MSC_VER
 
-/*To be done*/
-//#include <Basics/stat.h>
-//#include <Basics/dir.h>
-//#include <Basics/stringarray.h>
-//#include <Basics/IUPath.h>
-//#include <Basics/IUFilename.h>
+#if 0 // TODO
+#include <Basics/stat.h>
+#include <Basics/dir.h>
+#include <Basics/stringarray.h>
+#include <Basics/IUPath.h>
+#include <Basics/IUFilename.h>
+#endif
 
 #include <vbl/vbl_file.h>
 #include <vbl/vbl_sequence_filename_map.h>
@@ -120,29 +121,29 @@ vidl_clip_sptr  vidl_io::load_clip(
       return 0;
     }
 
+#if 0
   // Check if the filename is a directory
-  // IUE_stat fs(fname);  // check that file size is non zero
-  //   if (!fs) {
-  //     return 0;
-  //   }
+  IUE_stat fs(fname);  // check that file size is non zero
+    if (!fs) {
+      return 0;
+    }
 
-  //vcl_stat_t fs;
-  //if (!vcl_stat(fname, &fs))
-     // return 0;
+  cl_stat_t fs;
+  f (!vcl_stat(fname, &fs))
+     return 0;
+#endif
 
   // test if fname is a directory
   if (vbl_file::is_directory(fname))
       {
-
           // fname is a directory.
           // So, we will process all the files in this directory
           // as images making the video.
           return 0;
 #if 0 // avoid warnings about unreachable code -- fsm@robots.ox.ac.uk
-          // Dir dir(fname);
-          // if(!dir.IsOpen())
-          //    return 0;
-
+          Dir dir(fname);
+          if(!dir.IsOpen())
+             return 0;
 #endif
       }
   else if (looks_like_a_file_list(fname))
@@ -168,7 +169,6 @@ vidl_clip_sptr  vidl_io::load_clip(
 
     ++i;
   }
-
 
   // We did not find a codec corresponding
   // to this file name
@@ -265,7 +265,6 @@ vidl_clip_sptr  vidl_io::load_images(
 //: Save a video into a file "fname" as type "type"
 bool vidl_io::save(vidl_movie* movie, const char* fname, const char* type)
 {
-
   // Go along the vcl_list of supported videoCODECs,
   // find the one of the type asked if it does exist.
   vcl_list<vidl_codec_sptr>::iterator i = supported_types_.begin();
@@ -288,7 +287,6 @@ bool vidl_io::save(vidl_movie* movie, const char* fname, const char* type)
     return true;
   else
     return false;
-
 }
 
 // This function should be removed and integrated in save()
@@ -298,7 +296,6 @@ bool vidl_io::save_images(vidl_movie* movie, const char* fname,  const char* typ
 
   // Try to save and return success or failure
   return codec.save(movie, fname, type);
-
 }
 
 //: Return the list of the supported video coder/decoder types

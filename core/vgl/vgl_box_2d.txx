@@ -2,10 +2,11 @@
 #ifndef vgl_box_2d_txx_
 #define vgl_box_2d_txx_
 
-// Author: Don Hamilton, Peter Tu
-// Copyright:
-// Created: Feb 15 2000
-//: Represents a cartesian 2D box.
+//:
+// \file
+// \brief Represents a cartesian 2D box.
+// \author Don Hamilton, Peter Tu
+// \date   Feb 15 2000
 
 #include "vgl_box_2d.h"
 

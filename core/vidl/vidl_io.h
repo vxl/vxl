@@ -2,7 +2,7 @@
 #define vidl_io_h
 
 //:
-// \file 
+// \file
 // \author Nicolas Dano, september 1999
 // Modifications
 // \verbatim
@@ -135,7 +135,7 @@ public:
 
   // Helpers-------------------------------------------------------------------
 
-  // Functions when videos are sequences of still images
+  //: Functions when videos are sequences of still images
   // This may go in the public area if some people know
   // they are dealing with images
 
@@ -176,7 +176,6 @@ public:
         const char* fname,
         const char* type
         );
-
 };
-#endif // vidl_io_h
 
+#endif // vidl_io_h

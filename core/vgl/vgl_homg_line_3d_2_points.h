@@ -59,6 +59,7 @@ public:
   // Internals
 protected:
   // Data Members------------------------------------------------------------
+
   //: Any finite point on the line
   vgl_homg_point_3d<Type> point_finite_;
   //: the (unique) point at infinity

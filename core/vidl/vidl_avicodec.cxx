@@ -13,7 +13,6 @@
 #include <windowsx.h> // for _fmemset function
 
 
-
 // To improve performance, we could use a Look Up Table
 // instead of computing  255/32
 #define RGB16R(rgb)     ((((UINT)(rgb) >> 10) & 0x1F) * 255u / 31u)
@@ -327,7 +326,7 @@ bool vidl_avicodec::save(vidl_movie* movie, const char* fname)
   }
 
   // Fill in the header for the video stream....
-
+  //
   // The video stream will run in 30ths of a second....
 
   _fmemset(&avi_stream_info, 0, sizeof(avi_stream_info));
@@ -440,6 +439,7 @@ HANDLE  vidl_avicodec::make_dib(vidl_frame_sptr frame, UINT bits)
 
   // 2nd, Copy the array of bytes (and transform it),
   // so it is usable by a 'windows' BitMap
+  //
 
   // The lenght of a row must be a multiple of 4 bytes
   // for windows bitmaps, so we will format them this way

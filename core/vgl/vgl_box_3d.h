@@ -74,22 +74,27 @@ public:
   vgl_box_3d(vgl_point_3d<Type> const& centroid,
              Type width, Type height, Type depth);
 
+#if 0
   // default copy constructor:
-  // vgl_box_3d(vgl_box_3d const& that) {
-  //   this->min_pos_[0] = that.min_pos_[0]; this->max_pos_[0] = that.max_pos_[0];
-  //   this->min_pos_[1] = that.min_pos_[1]; this->max_pos_[1] = that.max_pos_[1];
-  //   this->min_pos_[2] = that.min_pos_[2]; this->max_pos_[2] = that.max_pos_[2];
-  // }
-  // default destructor: ~vgl_box_3d() {}
+  vgl_box_3d(vgl_box_3d const& that) {
+    this->min_pos_[0] = that.min_pos_[0]; this->max_pos_[0] = that.max_pos_[0];
+    this->min_pos_[1] = that.min_pos_[1]; this->max_pos_[1] = that.max_pos_[1];
+    this->min_pos_[2] = that.min_pos_[2]; this->max_pos_[2] = that.max_pos_[2];
+  }
+  // default destructor:
+  ~vgl_box_3d() {}
+#endif
 
   // Operators----------------------------------------------------------------
   // Default assignment operator:
-  // vgl_box_3d& operator=(vgl_box_3d const& that){
-  //   this->min_pos_[0] = that.min_pos_[0]; this->max_pos_[0] = that.max_pos_[0];
-  //   this->min_pos_[1] = that.min_pos_[1]; this->max_pos_[1] = that.max_pos_[1];
-  //   this->min_pos_[2] = that.min_pos_[2]; this->max_pos_[2] = that.max_pos_[2];
-  //   return *this;
-  // }
+#if 0
+  vgl_box_3d& operator=(vgl_box_3d const& that){
+    this->min_pos_[0] = that.min_pos_[0]; this->max_pos_[0] = that.max_pos_[0];
+    this->min_pos_[1] = that.min_pos_[1]; this->max_pos_[1] = that.max_pos_[1];
+    this->min_pos_[2] = that.min_pos_[2]; this->max_pos_[2] = that.max_pos_[2];
+    return *this;
+  }
+#endif
 
   // Data Access---------------------------------------------------------------
 
@@ -124,7 +129,9 @@ public:
   //: Get z component of centroid
   inline Type get_centroid_z() const { return 0.5*(min_pos_[2]+max_pos_[2]); }
 
-  //vgl_point_3d<Type> get_centroid_point() const;
+#if 0
+  vgl_point_3d<Type> get_centroid_point() const;
+#endif
 
   // Data Control--------------------------------------------------------------
 
@@ -169,7 +176,7 @@ public:
   //: Move box so centroid lies at centroid (size unchanged)
   void set_centroid(vgl_point_3d<Type> const& centroid);
 
-    //: Write "<vgl_box_3d x0,y0,z0 to x1,y1,z1>" to stream
+  //: Write "<vgl_box_3d x0,y0,z0 to x1,y1,z1>" to stream
   vcl_ostream& print(vcl_ostream&) const;
 
   //: Write "x0 y0 z0 x1 y1 z1(endl)" to stream
@@ -177,7 +184,6 @@ public:
 
   //: Read x0,y0,z0,x1,y1,z1 from stream
   vcl_istream& read(vcl_istream&);
-
 
   // INTERNALS-----------------------------------------------------------------
 protected:

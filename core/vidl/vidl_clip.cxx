@@ -57,11 +57,11 @@ vidl_clip::vidl_clip(
 //: Constructor. Create a clip from a list of
 // images. Start, end and increment frames are optional
 vidl_clip::vidl_clip(
-        vcl_list<vil_image> &images,
-        int start,
-        int end,
-        int increment
-        )
+                     vcl_list<vil_image> &images,
+                     int start,
+                     int end,
+                     int increment
+                    )
 {
   int position = 0; // Could not cast the iterator i into (int)
                     // but that would be better
@@ -83,8 +83,9 @@ vidl_clip::vidl_clip(
 void vidl_clip::init(int start, int end, int increment)
 {
   // Initialize startframe_, endframe_ and increment_ in the vidl_clip
-
+  //
   // Some sanity checks first
+  //
 
   // Get the actual length
   int len = coder_->length();
@@ -114,7 +115,6 @@ void vidl_clip::init(int start, int end, int increment)
 //: Destructor
 vidl_clip::~vidl_clip()
 {
-
 }
 
 

@@ -12,7 +12,6 @@
 // \author Don Hamilton, Peter Tu
 
 #include <vcl_iostream.h>
-//#include <vcl_algorithm.h> // for vcl_min
 #include <vcl_cmath.h> // for vcl_abs
 
 template <class Type>
@@ -37,7 +36,9 @@ public:
   // Default copy constructor
   // vgl_homg_line_2d (const vgl_homg_line_2d<Type>& that) { *this = that; }
 
-//unimp  vgl_homg_line_2d<Type> (vgl_line_2d<Type> const& p);
+#if 0 // unimp
+  vgl_homg_line_2d<Type> (vgl_line_2d<Type> const& p);
+#endif
 
   //: Construct from three Types.
   vgl_homg_line_2d (Type const& a_, Type const& b_, Type const& c_) { set(a_,b_,c_); }
@@ -48,19 +49,23 @@ public:
   //: Construct from two points (join)
   vgl_homg_line_2d (vgl_homg_point_2d<Type> const& p1, vgl_homg_point_2d<Type> const& p2);
 
+#if 0
   // Default destructor
-  // ~vgl_homg_line_2d () {}
+  ~vgl_homg_line_2d () {}
 
   // Default assignment operator
-  // vgl_homg_line_2d<Type>& operator=(const vgl_homg_line_2d<Type>& that){
-  //   set(that.a(),that.b(),that.c());
-  //   return *this;
-  // }
+  vgl_homg_line_2d<Type>& operator=(const vgl_homg_line_2d<Type>& that){
+    set(that.a(),that.b(),that.c());
+    return *this;
+  }
+#endif
 
   // Data Access-------------------------------------------------------------
 
-  //vcl_vector<Type> get_direction() const;
-  //vcl_vector<Type> get_normal() const;
+#if 0 // TODO
+  vcl_vector<Type> get_direction() const;
+  vcl_vector<Type> get_normal() const;
+#endif
 
   Type dirx() const { return a(); }  // TODO
   Type diry() const { return b(); }  // TODO
@@ -78,9 +83,11 @@ public:
     pos_[2] = c_;
   }
 
+#if 0 // TODO (win32 fails)
   //: Return true iff the point is the point at infinity
-  //    This version checks (min(|a|,|b|) < tol * c
-  //win32 fails  bool ideal(Type tol) const { return vcl_min(vcl_abs(a()),vcl_abs(b())) < tol * vcl_abs(c()); }
+  //  This version checks (min(|a|,|b|) < tol * c
+  bool ideal(Type tol) const { return vcl_min(vcl_abs(a()),vcl_abs(b())) < tol * vcl_abs(c()); }
+#endif
 
   //:get two points on the line
   // These two points are normally the intersections

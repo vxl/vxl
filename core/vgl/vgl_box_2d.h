@@ -88,6 +88,7 @@ public:
 
 
   // Data Access---------------------------------------------------------------
+
   //: Get min x
   inline Type get_min_x() const {return min_pos_[0];}
   //: Get min y
