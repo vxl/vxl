@@ -89,16 +89,20 @@ foreach $f (@FILES)
 # 2. spaces (more than 1) at end of line
   $has_end_spaces = ($file =~ m/  +\n/);
 
-# 3. Lines longer than 132 characters
+# 3. Lines longer than 132 characters, continuation ostream, single-char strings
   if ($file =~ m/.{133,}/ && $f !~ m/\.dsp$/)
   {
     print "$f\t\# has lines of more than 132 characters\n";
     $printed = 1;
   }
-  print "$f\t\# has vcl_endl following a string: replace with \\n\"\n"
+  print "$f\t\# has vcl_endl following a string: consider replacing with \\n\"\n"
     if ($printed && $file =~ m/\"\s*\<\<\s*vcl_endl\b/);
   print "$f\t\# consider joining consecutive \"\<\<\" output lines for $2\n"
     if ($printed && $file =~ m/[{;:](\s*\/\/.*\n)?\s*(\S+)\s*\<\<[^;]+\;\s*\2\s*\<\</);
+  print "$f\t\# consider joining consecutive strings in output for $1\n"
+    if ($printed && $file =~ m/(\S+)\s*\<\<[^;]*(..)\"\s*\<\<\s*\"/ && $2 ne "\\n");
+  print "$f\t\# consider replacing \"$2\" with \'$2\' in output for $1\n"
+    if ($printed && $file =~ m/(\S+)\s*\<\<[^;]+\"(.|\\.)\"/);
 
 # 4. Consecutive comment blocks, separated by blank lines
   if ($file =~ m!\n\s*//:.*\n( *// .*\n)*\s*\n\s*// !)
@@ -202,6 +206,7 @@ foreach $f (@FILES)
     elsif ($j eq "vcl_cwchar.h") { $i="vcl_(mbstate_t|wint_t|btowc|fgetwc|fgetws|fputwc|fputws|fwide|fwprintf|fwscanf|getwc|getwchar|mbrlen|mbrtowc|putwc|putwchar|swprintf|swscanf|ungetwc|vfwprintf|vswprintf|vwprintf|wcrtomb|wcscat|wcschr|wcscmp|wcscoll|wcscpy|wcscspn|wcsftime|wcslen|wcsncat|wcsncmp|wcsncpy|wcspbrk|wcsrchr|wcsrtombs|wcsspn|wcsstr|wcstod|wcstok|wcstol|wctoul|wcsxfrm|wctob|wmemchr|wmemcmp|wmemcpy|wmemmove|wmemset|wprintf|wscanf)"; }
     elsif ($j eq "vcl_cwctype.h") { $i="vcl_(wctrans_t|wctype_t|wint_t|iswalnum|iswalpha|iswcntrl|iswctype|iswdigit|iswgraph|iswlower|iswprint|iswpunct|iswspace|iswupper|iswxdigit|iswctrans|iswupper|iswxdigit|towctrans|towlower|towupper|wctrans|wctype)"; }
     elsif ($j eq "vcl_deque.h") { $i="vcl_(deque|swap)"; }
+    elsif ($j eq "vcl_deprecated.h") { $i="vcl_deprecated_(warn|abort)|VXL_DEPRECATED"; }
     elsif ($j eq "vcl_exception.h") { $i="vcl_(exception|bad_exception|throw|catch|catch_all)"; }
     elsif ($j eq "vcl_fstream.h") { next if ($f =~ m/\bvcl\/(Templates\/f?stream|vcl_iostream|win32-vc60\/vcl_complex\.h$)/); $i="vcl_(filebuf|fstream|ifstream|ofstream)"; }
     elsif ($j eq "vcl_functional.h") { $i="vcl_((|pointer_to_)(unary|binary)_(function|negate)|plus|minus|multiplies|divides|modulus|negate|(|not_)equal_to|(greater|less)(|_equal)|logical_(and|or|not)|not(1|2)|bind(|er)(1st|2nd)|ptr_fun|(|const_)mem_fun(|1)(|_ref)(_t|)|transform)"; }
@@ -265,8 +270,7 @@ foreach $f (@FILES)
     elsif ($j eq "vgui/vgui_tableau_sptr.h") { $i="($i(|_t)|get_tableau)"; }
     elsif ($j eq "vgui/internals/vgui_simple_field.h") { $i="vgui_(simple|bool|int|long|float|double)_field"; }
     elsif ($j =~ m/vil[12]?\/vil[12]?_(stream_)?\d+bit\.h$/) { $i="($i)(|_(read|write)_(big|little)_endian)"; }
-    elsif ($j =~ m/vil2?\/vil2?_bilin_interp\.h$/) { $i="($i)(|_safe|_unsafe|_raw|_safe_extend)"; }
-    elsif ($j =~ m/vil2?\/vil2?_bicub_interp\.h$/) { $i="($i)(|_safe|_unsafe|_raw|_safe_extend)"; }
+    elsif ($j =~ m/vil2?\/vil2?_bi(lin|cub)_interp\.h$/) { $i="($i)(|_safe|_unsafe|_raw|_safe_extend)"; }
     elsif ($j eq "vil/vil_clamp.h") { $i="$i(|_pixel)"; }
     elsif ($j eq "vil/vil_colour_space.h") { $i="($i)_(RGB|HSV)_to_(YIQ|HSV|RGB)"; }
     elsif ($j =~ m/vil2?\/vil2?_convert\.h$/) { $i="($i)_((cast|round)(_pixel)?|(rgb|planes)_to_grey|stretch_range|to_[a-z_]+)"; }
