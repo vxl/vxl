@@ -674,9 +674,8 @@ bool vtol_one_chain_2d::operator==(vtol_one_chain_2d& ch)
     for(r=righth.begin(), l=lefth.begin(); r!=righth.end(); r++, l++)
       if( *((vsol_spatial_object_2d*)(*r)) != *((vsol_spatial_object_2d*)((l))))
 	return false;
-    
-    return true;
   }
+  return true;
 }
 
 
