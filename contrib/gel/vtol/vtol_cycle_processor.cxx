@@ -7,7 +7,6 @@
 #include <vcl_algorithm.h>
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
-#include <vnl/vnl_math.h>
 
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_box_2d_sptr.h>
@@ -258,15 +257,12 @@ static void v_edges(vtol_vertex_sptr v, vcl_vector<vtol_edge_2d_sptr>& b_edges,
   delete edges;
 }
 
-static double flip_y(double ang)
+inline static double flip_y(double ang)
 {
-  double rad_per_deg = vnl_math::pi/180.0;
-  double rang = rad_per_deg*ang;
-  double cs = vcl_cos(rang), si = -vcl_sin(rang);//here is where y is flipped
-  ang = vcl_atan2(si, cs)/rad_per_deg;
-  if (ang<0)
-    ang+=360;
-  return ang;
+  // no need to use sin(), cos() and atan2() for this job! - PVr
+  ang = vcl_fmod(ang,360.0);
+  if (ang <= 0) ang += 360.0;
+  return 360.0-ang;
 }
 
 static double tangent_angle_at_vertex(vtol_vertex_sptr v, vtol_edge_2d_sptr e)
@@ -292,13 +288,10 @@ static double tangent_angle_at_vertex(vtol_vertex_sptr v, vtol_edge_2d_sptr e)
                         get_interpolator()->get_tangent_angle(N-1);
     //reverse the angle since we are at the end rather than the start of the edge?
     ang += 180.0;
-    if (ang>360)
-      ang -= 360;
   }
   //If we want cw and ccw to be correct senses, we flip y because the input
   //edges are in image coordinates that has a left-handed coordinate system.
-  ang = flip_y(ang);
-  return ang;
+  return flip_y(ang);
 }
 
 //----------------------------------------------------------------
