@@ -42,7 +42,7 @@ double RD_ReadDouble1(char *q_str, double default_d,
     if (min_d==0 && max_d==0)
       vcl_cout<<q_str<<" ("<<default_d<<") :";
     else
-      vcl_cout<<q_str<<" ["<<min_d<<".."<<max_d<<"] ("<<default_d<<") :";
+    vcl_cout<<q_str<<" ["<<min_d<<".."<<max_d<<"] ("<<default_d<<") :";
     vcl_cout.flush();
 
     if (vcl_fgets(reply,MAX_LEN,stdin)!=NULL)
