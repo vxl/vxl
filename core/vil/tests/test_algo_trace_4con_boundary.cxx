@@ -1,4 +1,3 @@
-#include <vxl_config.h>
 #include <vcl_iostream.h>
 #include <testlib/testlib_test.h>
 #include <vil/algo/vil_trace_4con_boundary.h>
@@ -7,13 +6,13 @@
 static void show_boundary(const vcl_vector<int>& bi,const vcl_vector<int>& bj)
 {
   for (unsigned int i=0;i<bi.size();++i)
-    vcl_cout<<"("<<bi[i]<<","<<bj[i]<<")";
+    vcl_cout<<" ("<<bi[i]<<','<<bj[i]<<')';
   vcl_cout<<vcl_endl;
 }
 
 void test_algo_trace_4con_boundary1()
 {
-  vcl_cout<<"=== Testing vil_trace_4con_boundary ==="<<vcl_endl;
+  vcl_cout<<"=== Testing vil_trace_4con_boundary ===\n";
   vil_image_view<bool> image(10,11);
 
   // Create 3 x 3 square
