@@ -121,7 +121,7 @@ void xcv_display::toggle_enhance()
   {
     if (debug) vcl_cout << "removing enhance lens\n";
 
-    vgui_slot::replace_child_everywhere(enhance, img);
+    vgui_parent_child_link::replace_child_everywhere(enhance, img);
     is_enhancing = false;
   }
 }
@@ -145,7 +145,7 @@ void xcv_display::toggle_magnify()
     if (!comp) return;
 
     enhance = vgui_enhance_tableau_new();
-    vgui_slot::replace_child_everywhere(comp, enhance);
+    vgui_parent_child_link::replace_child_everywhere(comp, enhance);
     enhance->set_child(comp);
 
     is_magnifying = true;
@@ -155,7 +155,7 @@ void xcv_display::toggle_magnify()
     if (debug) vcl_cout << "removing magnify lens\n";
 
     enhance->set_child(0);
-    vgui_slot::replace_child_everywhere(enhance, comp);
+    vgui_parent_child_link::replace_child_everywhere(enhance, comp);
     enhance = vgui_enhance_tableau_sptr(); //0;
     is_magnifying = false;
   }
