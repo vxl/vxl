@@ -22,9 +22,6 @@
 
 #include <vcl_list.h>
 #include <vcl_vector.h>
-#ifdef VCL_VC60
-# include <vcl_limits.h>
-#endif
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_fwd.h>
 
