@@ -60,6 +60,7 @@ vgl_line_segment_2d<double> vgl_clip_line_to_box(vgl_line_2d<double> const& l,
 }
 
 //: Clip a polygon against another polygon.
+// The two polygons \param poly1 and \param poly2 are combined with each other.
 // The operation (intersection, union, etc) is given by \param op.
 vgl_polygon
 vgl_clip( const vgl_polygon& poly1, const vgl_polygon& poly2,
