@@ -36,12 +36,13 @@
 //  the result (see below), which should be identical.
 //  The speed of execution may of course differ.
 //  In this case both vectors are padded with a sufficient number of zeros,
-//  making the length at least using_fft, then vnl_convolve_cyclic() is applied.
+//  making the length at least that 4th argument,
+//  then vnl_convolve_cyclic() is applied.
 //
 template <class T1, class T2, class U>
 vnl_vector<U>
 vnl_convolve(vnl_vector<T1> const& v1, vnl_vector<T2> const& v2,
-             U*, bool use_fft = 0);
+             U*, int use_fft = 0);
 
 
 //: Convolve two vnl_vector<T>'s, with the same base type T.
@@ -52,7 +53,7 @@ vnl_convolve(vnl_vector<T1> const& v1, vnl_vector<T2> const& v2,
 template <class T>
 vnl_vector<T>
 vnl_convolve(vnl_vector<T> const& v1, vnl_vector<T> const& v2,
-             bool use_fft = 0);
+             int use_fft = 0);
 
 
 //: Cyclically convolve two vnl_vector<T>'s of the same length.
@@ -80,13 +81,13 @@ vnl_convolve_cyclic(vnl_vector<T1> const& v1, vnl_vector<T2> const& v2,
 template <class T1, class T2, class U>
 vnl_matrix<U>
 vnl_convolve(vnl_matrix<T1> const& v1, vnl_matrix<T2> const& v2,
-             U*, bool use_fft = 0);
+             U*, int use_fft = 0);
 
 // Not yet implemented
 template <class T>
 vnl_matrix<T>
 vnl_convolve(vnl_matrix<T> const& v1, vnl_matrix<T> const& v2,
-             bool use_fft = 0);
+             int use_fft = 0);
 
 // Not yet implemented
 template <class T1, class T2, class U>
@@ -98,13 +99,13 @@ vnl_convolve_cyclic(vnl_matrix<T1> const& v1, vnl_matrix<T2> const& v2,
 template <class T1, class T2, class U>
 vnl_matrix<U>
 vnl_convolve(vnl_matrix<T1> const& v1, vnl_vector<T2> const& v2,
-             U*, bool use_fft = 0);
+             U*, int use_fft = 0);
 
 // Not yet implemented
 template <class T>
 vnl_matrix<T>
 vnl_convolve(vnl_matrix<T> const& v1, vnl_vector<T> const& v2,
-             bool use_fft = 0);
+             int use_fft = 0);
 
 #define VNL_CONVOLVE_INSTANTIATE(T) \
 extern "please include vnl/algo/vnl_convolve.txx first"

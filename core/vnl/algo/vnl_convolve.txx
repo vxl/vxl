@@ -88,7 +88,7 @@ vnl_vector<U> vnl_convolve_using_fft(vnl_vector<T1> const& v1, vnl_vector<T2> co
 }
 
 template <class T>
-vnl_vector<T> vnl_convolve(vnl_vector<T> const& v1, vnl_vector<T> const& v2, bool use_fft)
+vnl_vector<T> vnl_convolve(vnl_vector<T> const& v1, vnl_vector<T> const& v2, int use_fft)
 {
   // Quick return if possible:
   if (v1.size() == 0 || v2.size() == 0)
@@ -112,7 +112,7 @@ vnl_vector<T> vnl_convolve(vnl_vector<T> const& v1, vnl_vector<T> const& v2, boo
 }
 
 template <class T1, class T2, class U>
-vnl_vector<U> vnl_convolve(vnl_vector<T1> const& v1, vnl_vector<T2> const& v2, U*, bool use_fft)
+vnl_vector<U> vnl_convolve(vnl_vector<T1> const& v1, vnl_vector<T2> const& v2, U*, int use_fft)
 {
   // Quick return if possible:
   if (v1.size() == 0 || v2.size() == 0)
@@ -135,11 +135,11 @@ vnl_vector<U> vnl_convolve(vnl_vector<T1> const& v1, vnl_vector<T2> const& v2, U
 
 #undef VNL_CONVOLVE_INSTANTIATE
 #define VNL_CONVOLVE_INSTANTIATE_2(T,U) \
-template vnl_vector<U > vnl_convolve(vnl_vector<T > const&, vnl_vector<U > const&, U*, bool); \
+template vnl_vector<U > vnl_convolve(vnl_vector<T > const&, vnl_vector<U > const&, U*, int); \
 template vnl_vector<U > vnl_convolve_cyclic(vnl_vector<T > const&, vnl_vector<U > const&, U*, bool)
 
 #define VNL_CONVOLVE_INSTANTIATE(T,U) \
 VNL_CONVOLVE_INSTANTIATE_2(T,U); \
-template vnl_vector<T > vnl_convolve(vnl_vector<T > const&, vnl_vector<T > const&, bool)
+template vnl_vector<T > vnl_convolve(vnl_vector<T > const&, vnl_vector<T > const&, int)
 
 #endif // vnl_convolve_txx_
