@@ -26,6 +26,7 @@ MANPAGE_SOURCES += vil2_sample_profile_bilin.txx
 MANPAGE_SOURCES += vil2_byte.h
 MANPAGE_SOURCES += vil2_pixel_traits.h
 MANPAGE_SOURCES += vil2_sample_grid_bilin.txx
+MANPAGE_SOURCES += vil2_image_view_maths.h
 
 SUBDIRS += algo
 
