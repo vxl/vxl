@@ -34,7 +34,7 @@ class vidl_frame_as_image : public vil_image_impl
 {
    public:
 
-     vidl_frame_as_image(vidl_frame_ref frame);
+     vidl_frame_as_image(vidl_frame* frame);
      ~vidl_frame_as_image();
 
      vil_component_format component_format() const { return VIL_COMPONENT_FORMAT_UNSIGNED_INT; }
@@ -48,7 +48,8 @@ class vidl_frame_as_image : public vil_image_impl
 
    protected:
 
-     vidl_frame_ref frame_;
+  // Dumb ptr to avoid cycle
+     vidl_frame* frame_;
 };
 #endif // vidl_frame_as_image_h
 
