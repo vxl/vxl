@@ -1,7 +1,7 @@
 SET( HAS_VGUI "NO" )
 IF(BUILD_VGUI)
 
-  INCLUDE(${MODULE_PATH}/NewCMake/FindOpenGL.cmake)
+  INCLUDE(${CMAKE_ROOT}/Modules/FindOpenGL.cmake)
   IF (OPENGL_FOUND)
   IF (OPENGL_GLU_FOUND)
 
