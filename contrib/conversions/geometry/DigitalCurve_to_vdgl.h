@@ -10,7 +10,7 @@
 
 inline vdgl_digital_curve DigitalCurve_to_vdgl(DigitalCurve const& dc)
 {
-  vcl_vector<vdgl_edgel> edgels;
+  vcl_vector<vdgl_edgel> edgels; edgels.reserve(dc.length());
   float* dc_x = dc.GetX();
   float* dc_y = dc.GetY();
   float* dc_z = dc.GetZ();
