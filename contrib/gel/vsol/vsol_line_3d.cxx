@@ -15,11 +15,11 @@
 //---------------------------------------------------------------------------
 //: Constructor from the direction and the middle point
 //---------------------------------------------------------------------------
-vsol_line_3d::vsol_line_3d(const vnl_vector_fixed<double,3> &new_direction,
+vsol_line_3d::vsol_line_3d(const vgl_vector_3d<double> &new_direction,
                            const vsol_point_3d_sptr &new_middle)
 {
-  p0_=new vsol_point_3d(*(new_middle->plus_vector(-(new_direction)/2)));
-  p1_=new vsol_point_3d(*(new_middle->plus_vector((new_direction)/2)));
+  p0_=new vsol_point_3d(*(new_middle->plus_vector(-new_direction/2)));
+  p1_=new vsol_point_3d(*(new_middle->plus_vector(new_direction/2)));
 }
 
 //---------------------------------------------------------------------------
@@ -73,13 +73,9 @@ vsol_point_3d_sptr vsol_line_3d::middle(void) const
 //---------------------------------------------------------------------------
 //: direction of the straight line segment. Has to be deleted manually
 //---------------------------------------------------------------------------
-vnl_vector_fixed<double,3> *vsol_line_3d::direction(void) const
+vgl_vector_3d<double> vsol_line_3d::direction(void) const
 {
-  vnl_vector_fixed<double,3> *result;
-
-  result=p0_->to_vector(*p1_);
-
-  return result;
+  return p0_->to_vector(*p1_);
 }
 
 //---------------------------------------------------------------------------
@@ -229,23 +225,13 @@ void vsol_line_3d::set_length(const double new_length)
   assert(new_length>=0);
 
   vsol_point_3d_sptr m=middle();
-  vnl_vector_fixed<double,3> *d=direction();
+  vgl_vector_3d<double> d =
+    (*p0_)==(*p1_) ? vgl_vector_3d<double>(1.0,0.0,0.0)
+                   : normalized(direction());
+  d *= new_length;
 
-  if((*p0_)==(*p1_)) // ie. d=0 then d is set to (1,0,0)
-    {
-      (*d)[0]=1;
-      (*d)[1]=0;
-      (*d)[2]=0;
-    }
-  else
-    d->normalize();
-
-  (*d)*=new_length;
-
-  p0_=new vsol_point_3d(*(m->plus_vector(-(*d)/2)));
-  p1_=new vsol_point_3d(*(m->plus_vector((*d)/2)));
-
-  delete d;
+  p0_=new vsol_point_3d(*(m->plus_vector(-d/2)));
+  p1_=new vsol_point_3d(*(m->plus_vector(d/2)));
 }
 
 //***************************************************************************

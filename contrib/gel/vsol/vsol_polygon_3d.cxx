@@ -6,6 +6,7 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vsol/vsol_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
 
 //***************************************************************************
 // Initialization
@@ -189,42 +190,57 @@ double vsol_polygon_3d::area(void) const
 
 //---------------------------------------------------------------------------
 //: Is `this' convex ?
+// A polygon is convex if it is planar and if moreover the direction of
+// "turning" at every vertex is the same.  This is checked by calculating
+// the cross product of two consecutive edges and verifying that these
+// all have the same direction, i.e., that their pairwise dot products
+// are all nonnegative (which proves the "turning") and equal to the
+// product of their lengths (which proves coplanarity).
 //---------------------------------------------------------------------------
 bool vsol_polygon_3d::is_convex(void) const
 {
-   bool result = (storage_->size()==3); // A triangle is always convex
+   if (storage_->size()==3) return true; // A triangle is always convex
 
-   if(!result)
-     {
-       vsol_point_3d_sptr p0=(*storage_)[0];
-       vsol_point_3d_sptr p1=(*storage_)[1];
-       vsol_point_3d_sptr p2=(*storage_)[2];
-       vnl_vector_fixed<double,3> *v1=p0->to_vector(*p1);
-       vnl_vector_fixed<double,3> *v2=p1->to_vector(*p2);
-       vnl_vector_fixed<double,3> *n =
-         new vnl_vector_fixed<double,3>(cross_3d(*v1,*v2));
-       delete v2;
-       delete v1;
-       vnl_vector_fixed<double,3> *n_old=0;
+   // First find a non-zero cross product.  This is certainly present,
+   // unless the polygon collapses to a line segment.
+   // Note that cross-product=0 means that two edges are parallel, which
+   // is perfectly valid, but the other "turnings" should still all be in
+   // the same direction.  An earlier implementation allowed for turning
+   // in the other direction after a cross-product=0.
 
-       result=true;
-       for(unsigned int i=3;i<storage_->size()&&result;++i)
-         {
-           delete n_old;
-           n_old=n;
-           p0=p1;
-           p1=p2;
-           p2=(*storage_)[i];
-           v1=p0->to_vector(*p1);
-           v2=p1->to_vector(*p2);
-           n=new vnl_vector_fixed<double,3>(cross_3d(*v1,*v2));
-           delete v2;
-           delete v1;
-           result = (dot_product(*n_old,*n)>=0);
-         }
-       delete n;
-     }
-   return result;
+   vgl_vector_3d<double> n = vgl_vector_3d<double>(0.0,0.0,0.0);
+   for(unsigned int i=0; i<storage_->size(); ++i)
+   {
+     int j = (i>1) ? i-2 : i-2+storage_->size();
+     int k = (i>0) ? i-1 : i-1+storage_->size();
+     vsol_point_3d_sptr p0=(*storage_)[k];
+     vsol_point_3d_sptr p1=(*storage_)[j];
+     vsol_point_3d_sptr p2=(*storage_)[i];
+     vgl_vector_3d<double> v1=p0->to_vector(*p1);
+     vgl_vector_3d<double> v2=p1->to_vector(*p2);
+     n = cross_product(v1,v2);
+     if (n != vgl_vector_3d<double>(0.0,0.0,0.0))
+       break;
+   }
+   if (n == vgl_vector_3d<double>(0.0,0.0,0.0))
+     return true;
+     
+   for(unsigned int i=0; i<storage_->size(); ++i)
+   {
+     int j = (i>1) ? i-2 : i-2+storage_->size();
+     int k = (i>0) ? i-1 : i-1+storage_->size();
+     vsol_point_3d_sptr p0=(*storage_)[k];
+     vsol_point_3d_sptr p1=(*storage_)[j];
+     vsol_point_3d_sptr p2=(*storage_)[i];
+     vgl_vector_3d<double> v1=p0->to_vector(*p1);
+     vgl_vector_3d<double> v2=p1->to_vector(*p2);
+     vgl_vector_3d<double> n2 = cross_product(v1,v2);
+     if (dot_product(n2,n) < 0)
+       return false; // turns in the other direction
+     if (!parallel(n2,n,1e-6))
+       return false; // non-planar
+   }
+   return true;
 }
 
 //---------------------------------------------------------------------------
@@ -247,33 +263,26 @@ bool vsol_polygon_3d::valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_ve
   vsol_point_3d_sptr p1=new_vertices[1];
   vsol_point_3d_sptr p2=new_vertices[2];
 
-  vnl_vector_fixed<double,3>* v1 =
-     new vnl_vector_fixed<double,3>(p1->x()-p0->x(),
-                                    p1->y()-p0->y(),
-                                    p1->z()-p0->z());
+  vgl_vector_3d<double> v1 (p1->x()-p0->x(),
+                            p1->y()-p0->y(),
+                            p1->z()-p0->z());
 
-  vnl_vector_fixed<double,3>* v2 =
-     new vnl_vector_fixed<double,3>(p2->x()-p0->x(),
-                                    p2->y()-p0->y(),
-                                    p2->z()-p0->z());
-  vnl_vector_fixed<double,3>* n = // normal to the plane made by the vertices
-     new vnl_vector_fixed<double,3>(cross_3d(*v1,*v2));
-  delete v2;
-  delete v1;
+  vgl_vector_3d<double> v2 (p2->x()-p0->x(),
+                            p2->y()-p0->y(),
+                            p2->z()-p0->z());
+  vgl_vector_3d<double> n = cross_product(v1,v2);// normal to the plane made by the vertices
 
-  bool result=true;
-  for(unsigned int i=3;i<new_vertices.size()&&result;++i)
+  for(unsigned int i=3;i<new_vertices.size();++i)
   {
     p2=new_vertices[i];
-    v2=new vnl_vector_fixed<double,3>(p2->x()-p0->x(),
-                                      p2->y()-p0->y(),
-                                      p2->z()-p0->z());
-    result = dot_product(*n,*v2)==0;
-    delete v2;
+    v2=vgl_vector_3d<double>(p2->x()-p0->x(),
+                             p2->y()-p0->y(),
+                             p2->z()-p0->z());
+    if (dot_product(n,v2)!=0)
+      return false;
   }
-  delete n;
 
-  return result;
+  return true;
 }
 
 //***************************************************************************
@@ -291,35 +300,28 @@ bool vsol_polygon_3d::in(const vsol_point_3d_sptr &p) const
 }
 
 //---------------------------------------------------------------------------
-//: Return the unit normal vector at point `p'. Have to be deleted manually
+//: Return the unit normal vector at point `p'.
 // Require: in(p)
 //---------------------------------------------------------------------------
-vnl_vector_fixed<double,3> *
+vgl_vector_3d<double>
 vsol_polygon_3d::normal_at_point(const vsol_point_3d_sptr &p) const
 {
   // require
   assert(in(p));
 
-  vnl_vector_fixed<double,3> *result;
-  vsol_point_3d_sptr p0;
-  vsol_point_3d_sptr p1;
-  vsol_point_3d_sptr p2;
+  // Since a polygon is planar, the answer is independent of p:
+  vsol_point_3d_sptr p0=(*storage_)[0];
+  vsol_point_3d_sptr p1=(*storage_)[1];
+  vsol_point_3d_sptr p2=(*storage_)[2];
 
-  p0=(*storage_)[0];
-  p1=(*storage_)[1];
-  p2=(*storage_)[2];
+  vgl_vector_3d<double> v1(p1->x()-p0->x(),
+                           p1->y()-p0->y(),
+                           p1->z()-p0->z());
+  vgl_vector_3d<double> v2(p2->x()-p0->x(),
+                           p2->y()-p0->y(),
+                           p2->z()-p0->z());
 
-  vnl_vector_fixed<double,3> v1(p1->x()-p0->x(),
-                                p1->y()-p0->y(),
-                                p1->z()-p0->z());
-  vnl_vector_fixed<double,3> v2(p2->x()-p0->x(),
-                                p2->y()-p0->y(),
-                                p2->z()-p0->z());
-
-  result=new vnl_vector_fixed<double,3>(cross_3d(v1,v2));
-  if((*result)[0]!=0||(*result)[1]!=0||(*result)[2]!=0)
-    result->normalize();
-  return result;
+  return normalized(cross_product(v1,v2));
 }
 
 //***************************************************************************

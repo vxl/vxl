@@ -11,6 +11,9 @@
 // François BERTEL
 //
 // .SECTION Modifications
+// 2001/07/03 Peter Vanroose  Replaced new/delete by vgl_point_3d as member
+// 2001/07/03 Peter Vanroose  Replaced vnl_double_3 by vgl_vector_3d
+// 2001/06/30 Peter Vanroose  Added constructor from vgl_point_3d
 // 2000/09/18 Peter Tu        connected to vgl
 // 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 // 2000/05/12 François BERTEL Replacement of vnl_vector_fixed<double,3> by
@@ -25,7 +28,7 @@ class vsol_point_3d;
 //*****************************************************************************
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vsol/vsol_spatial_object_3d.h>
-#include <vnl/vnl_double_3.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_point_3d.h>
 
 class vsol_point_3d
@@ -36,16 +39,19 @@ class vsol_point_3d
   //***************************************************************************
 public:
   //---------------------------------------------------------------------------
+  //: Constructor from vgl_point_3d (automatic cast)
+  //---------------------------------------------------------------------------
+  inline vsol_point_3d(vgl_point_3d<double> const& p) : p_(p) {}
+
+  //---------------------------------------------------------------------------
   //: Constructor from cartesian coordinates `new_x', `new_y', `new_z'
   //---------------------------------------------------------------------------
-  explicit vsol_point_3d(const double new_x,
-                         const double new_y,
-                         const double new_z);
+  inline vsol_point_3d(double x, double y, double z) : p_(x,y,z) {}
 
   //---------------------------------------------------------------------------
   //: Copy constructor
   //---------------------------------------------------------------------------
-  vsol_point_3d(const vsol_point_3d &other);
+  inline vsol_point_3d(const vsol_point_3d &pt) : p_(pt.x(),pt.y(),pt.z()) {}
 
   //---------------------------------------------------------------------------
   //: Destructor
@@ -65,17 +71,17 @@ public:
   //---------------------------------------------------------------------------
   //: Return the abscissa
   //---------------------------------------------------------------------------
-  virtual double x(void) const;
+  inline double x(void) const { return p_.x(); }
 
   //---------------------------------------------------------------------------
   //: Return the ordinate
   //---------------------------------------------------------------------------
-  virtual double y(void) const;
+  inline double y(void) const { return p_.y(); }
 
   //---------------------------------------------------------------------------
   //: Return the cote
   //---------------------------------------------------------------------------
-  virtual double z(void) const;
+  inline double z(void) const { return p_.z(); }
 
   //***************************************************************************
   // Comparison
@@ -145,19 +151,18 @@ public:
   //---------------------------------------------------------------------------
   //: Add `v' to `this'
   //---------------------------------------------------------------------------
-  virtual void add_vector(const vnl_double_3 &v);
+  virtual void add_vector(const vgl_vector_3d<double> &v);
 
   //---------------------------------------------------------------------------
   //: Add `v' and `this'
   //---------------------------------------------------------------------------
   virtual vsol_point_3d_sptr
-  plus_vector(const vnl_double_3 &v) const;
+  plus_vector(const vgl_vector_3d<double> &v) const;
 
   //---------------------------------------------------------------------------
-  //: Return the vector `this',`other'. Has to be deleted manually
+  //: Return the vector `this',`other'.
   //---------------------------------------------------------------------------
-  virtual vnl_double_3 *
-  to_vector(const vsol_point_3d &other) const;
+  virtual vgl_vector_3d<double> to_vector(const vsol_point_3d &other) const;
 
   //***************************************************************************
   // Implementation
@@ -166,7 +171,7 @@ private:
   //---------------------------------------------------------------------------
   //Description: Coordinates of the point
   //---------------------------------------------------------------------------
-  vgl_point_3d<double> *p_;
+  vgl_point_3d<double> p_;
 };
 
 #endif // vsol_point_3d_h

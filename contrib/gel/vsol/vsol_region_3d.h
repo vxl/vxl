@@ -22,7 +22,6 @@ class vsol_region_3d;
 //*****************************************************************************
 #include <vsol/vsol_region_3d_sptr.h>
 #include <vsol/vsol_surface_3d.h>
-#include <vnl/vnl_vector.h>
 
 class vsol_region_3d
   :public vsol_surface_3d

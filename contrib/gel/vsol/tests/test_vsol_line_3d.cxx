@@ -19,8 +19,6 @@
 int main(int argc,
          char *argv[])
 {
-  int result=0;
-
   vcl_cout<<"Constructor from extremities"<<vcl_endl;
   vsol_point_3d_sptr p=new vsol_point_3d(10,4,1);
   vsol_point_3d_sptr q=new vsol_point_3d(5,1,-23);
@@ -36,18 +34,15 @@ int main(int argc,
   assert(*a==*b);
 
   vcl_cout<<"Constructor from direction and middle point"<<vcl_endl;
-  vnl_vector_fixed<double,3> *v=new vnl_vector_fixed<double,3>();
-  (*v)[0]=10;
-  (*v)[1]=-2;
-  (*v)[2]=11;
+  vgl_vector_3d<double> v(10,-2,11);
   // choose the above numbers to obtain a "round" length: 15.
 
-  vsol_line_3d_sptr c=new vsol_line_3d(*v,p);
+  vsol_line_3d_sptr c=new vsol_line_3d(v,p);
 
   vcl_cout<<"middle()"<<vcl_endl;
   assert(*(c->middle())==*p);
   vcl_cout<<"direction()"<<vcl_endl;
-  assert(*(c->direction())==*v);
+  assert(c->direction()==v);
 
   vcl_cout<<"length() = "<<c->length()<<vcl_endl;
   assert(c->length()==15);
@@ -66,6 +61,5 @@ int main(int argc,
   c->set_p1(q);
   assert(*(c->p1())==*q);
 
-  delete v;
-  return result;
+  return 0;
 }

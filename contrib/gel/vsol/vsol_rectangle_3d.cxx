@@ -4,7 +4,7 @@
 // External declarations for implementation
 //*****************************************************************************
 #include <vcl_cassert.h>
-#include <vnl/vnl_vector_fixed.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vsol/vsol_point_3d.h>
 #include <vcl_iostream.h>
 
@@ -88,14 +88,9 @@ vsol_point_3d_sptr vsol_rectangle_3d::p2(void) const
 //---------------------------------------------------------------------------
 vsol_point_3d_sptr vsol_rectangle_3d::p3(void) const
 {
-  vsol_point_3d_sptr result;
-  vnl_vector_fixed<double,3> *v;
-
-  result=new vsol_point_3d(*(*storage_)[0]);
-  v=(*storage_)[1]->to_vector(*(*storage_)[2]);
-  result->add_vector(*v);
-  delete v;
-
+  vsol_point_3d_sptr result=new vsol_point_3d(*(*storage_)[0]);
+  vgl_vector_3d<double> v=(*storage_)[1]->to_vector(*(*storage_)[2]);
+  result->add_vector(v);
   return result;
 }
 
@@ -235,12 +230,10 @@ double vsol_rectangle_3d::area(void) const
 //---------------------------------------------------------------------------
 bool vsol_rectangle_3d::valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_vertices) const
 {
-  vnl_vector_fixed<double,3>* a=new_vertices[0]->to_vector(*(new_vertices[1]));
-  vnl_vector_fixed<double,3>* b=new_vertices[1]->to_vector(*(new_vertices[2]));
-  bool result=dot_product(*a,*b)==0;
-  delete b;
-  delete a;
-  return result;
+  vgl_vector_3d<double> a=new_vertices[0]->to_vector(*(new_vertices[1]));
+  vgl_vector_3d<double> b=new_vertices[1]->to_vector(*(new_vertices[2]));
+  // the two vectors should be orthogonal:
+  return dot_product(a,b)==0;
 }
 
 //***************************************************************************
@@ -254,29 +247,26 @@ bool vsol_rectangle_3d::in(const vsol_point_3d_sptr &p) const
 {
   // TO DO
   vcl_cerr << "Warning: vsol_rectangle_3d::in() has not been implemented yet\n";
-  return false;
+  return true;
 }
 
 //---------------------------------------------------------------------------
-//: Return the unit normal vector at point `p'. Have to be deleted manually
+//: Return the unit normal vector at point `p'.
 // Require: in(p)
 //---------------------------------------------------------------------------
-vnl_vector_fixed<double,3> *
+vgl_vector_3d<double>
 vsol_rectangle_3d::normal_at_point(const vsol_point_3d_sptr &p) const
 {
   // require
   assert(in(p));
 
-  vnl_vector_fixed<double,3> *result;
-  vnl_vector_fixed<double,3> v1((*storage_)[1]->x()-(*storage_)[0]->x(),
-                                (*storage_)[1]->y()-(*storage_)[0]->y(),
-                                (*storage_)[1]->z()-(*storage_)[0]->z());
-  vnl_vector_fixed<double,3> v2((*storage_)[2]->x()-(*storage_)[0]->x(),
-                                (*storage_)[2]->y()-(*storage_)[0]->y(),
-                                (*storage_)[2]->z()-(*storage_)[0]->z());
+  // Since a rectangle is planar, the answer is independent of p:
+  vgl_vector_3d<double> v1((*storage_)[1]->x()-(*storage_)[0]->x(),
+                           (*storage_)[1]->y()-(*storage_)[0]->y(),
+                           (*storage_)[1]->z()-(*storage_)[0]->z());
+  vgl_vector_3d<double> v2((*storage_)[2]->x()-(*storage_)[0]->x(),
+                           (*storage_)[2]->y()-(*storage_)[0]->y(),
+                           (*storage_)[2]->z()-(*storage_)[0]->z());
 
-  result=new vnl_vector_fixed<double,3>(cross_3d(v1,v2));
-  if((*result)[0]!=0||(*result)[1]!=0||(*result)[2]!=0)
-    result->normalize();
-  return result;
+  return normalized(cross_product(v1,v2));
 }

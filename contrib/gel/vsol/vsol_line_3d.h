@@ -14,6 +14,7 @@
 // François BERTEL
 //
 // .SECTION Modifications
+// 2001/07/03 Peter Vanroose  Replaced vnl_double_3 by vgl_vector_3d
 // 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 // 2000/05/03 François BERTEL Creation
 //*****************************************************************************
@@ -28,7 +29,7 @@ class vsol_line_3d;
 #include <vsol/vsol_curve_3d.h>
 #include <vsol/vsol_point_3d_sptr.h>
 
-#include <vnl/vnl_vector_fixed.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_homg_line_3d_2_points.h>
 
 class vsol_line_3d
@@ -41,7 +42,7 @@ public:
   //---------------------------------------------------------------------------
   //: Constructor from the direction and the middle point
   //---------------------------------------------------------------------------
-  explicit vsol_line_3d(const vnl_vector_fixed<double,3> &new_direction,
+  explicit vsol_line_3d(const vgl_vector_3d<double> &new_direction,
                         const vsol_point_3d_sptr &new_middle);
 
   //---------------------------------------------------------------------------
@@ -84,7 +85,7 @@ public:
   //---------------------------------------------------------------------------
   //: direction of the straight line segment. Has to be deleted manually
   //---------------------------------------------------------------------------
-  virtual vnl_vector_fixed<double,3> *direction(void) const;
+  virtual vgl_vector_3d<double> direction(void) const;
 
   //---------------------------------------------------------------------------
   //: First point of the straight line segment

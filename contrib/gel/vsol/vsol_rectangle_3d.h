@@ -14,6 +14,7 @@
 // François BERTEL
 //
 // .SECTION Modifications
+// 2001/07/03 Peter Vanroose  Replaced vnl_double_3 by vgl_vector_3d
 // 2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 // 2000/05/08 François BERTEL Creation
 //*****************************************************************************
@@ -138,7 +139,7 @@ public:
   //: Return the unit normal vector at point `p'. Have to be deleted manually
   //  REQUIRE: in(p)
   //---------------------------------------------------------------------------
-  virtual vnl_vector_fixed<double,3> *
+  virtual vgl_vector_3d<double>
   normal_at_point(const vsol_point_3d_sptr &p) const;
 };
 
