@@ -25,7 +25,7 @@ inline _BdIter find(_BdIter __first, _BdIter __last,
   return ::find(__first, __last, __val, input_iterator_tag());
 }
 #endif
-VCL_FIND_INSTANTIATE(vcl_list<int>::iterator, int);
+VCL_FIND_INSTANTIATE_ITER(vcl_list<int>::iterator, int);
 
 
 #if defined(VCL_GCC_295) && !defined(GNU_LIBSTDCXX_V3)

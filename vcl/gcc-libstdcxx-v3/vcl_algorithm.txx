@@ -19,9 +19,11 @@ namespace std { template void sort(I, I); }
 
 #define VCL_FIND_INSTANTIATE(I, T) \
 namespace std { template I std::find(I, I, T const &); }
+#define VCL_FIND_INSTANTIATE_ITER(I, T) VCL_FIND_INSTANTIATE(I, T)
 
 #define VCL_FIND_IF_INSTANTIATE(I, P) \
 namespace std { template I std::find_if(I, I, P); }
+#define VCL_FIND_IF_INSTANTIATE_ITER(I, P) VCL_FIND_IF_INSTANTIATE(I, P)
 
 #define VCL_REMOVE_INSTANTIATE(I, T)
 
