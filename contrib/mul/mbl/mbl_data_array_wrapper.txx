@@ -97,7 +97,7 @@ void mbl_data_array_wrapper<T>::set_index(int n)
   if ((n<0) || (n>=size()))
   {
     vcl_cerr<<"TC_VectorDataBase::set_index(n) ";
-    vcl_cerr<<"n = "<<n<<" not in range 0 .. "<<size()-1<<vcl_endl;
+    vcl_cerr<<"n = "<<n<<" not in range 0 .. "<<((int)size())-1<<vcl_endl;
     vcl_abort();
   }
 
