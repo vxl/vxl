@@ -10,46 +10,82 @@ SET(global_sources
 # common test executable
 SUBDIRS(testlib)
 
-# POSIX layer
-SUBDIRS(vpl)
 
-# stream I/O
-SUBDIRS(vsl)
+IF (BUILD_CORE_UTILITIES)
+  # POSIX layer
+  SUBDIRS(vpl)
 
-# utilities
-SUBDIRS(vul)
+  # utilities
+  SUBDIRS(vul)
 
-# "basics" (templates)
-SUBDIRS(vbl)
+  # "basics" (templates)
+  SUBDIRS(vbl)
+ENDIF (BUILD_CORE_UTILITIES)
 
 # numerics
-SUBDIRS(vnl)
+IF (BUILD_CORE_NUMERICS)
+  SUBDIRS(vnl)
+ENDIF (BUILD_CORE_NUMERICS)
 
 # geometry (including computational geometry)
-SUBDIRS(vgl)
+IF (BUILD_CORE_GEOMETRY)
+  SUBDIRS(vgl)
+ENDIF (BUILD_CORE_GEOMETRY)
 
-# image
-SUBDIRS(vil)
 
-# Old image library
-SUBDIRS(vil1)
+IF (BUILD_CORE_IMAGING)
+  # image
+  SUBDIRS(vil)
+
+  # Old image library
+  SUBDIRS(vil1)
+ENDIF (BUILD_CORE_IMAGING)
+
+IF (BUILD_CORE_SERIALISATION)
+  # Fast Binary IO
+  SUBDIRS(vsl)
+
+  IF (BUILD_CORE_UTILITIES)
+    SUBDIRS(vul/io vbl/io)
+  ENDIF (BUILD_CORE_UTILITIES)
+
+  IF (BUILD_CORE_NUMERICS)
+    SUBDIRS(vnl/io)
+  ENDIF (BUILD_CORE_NUMERICS)
+
+  IF (BUILD_CORE_GEOMETRY)
+    SUBDIRS(vgl/io)
+  ENDIF (BUILD_CORE_GEOMETRY)
+
+  IF (BUILD_CORE_IMAGING)
+    SUBDIRS(vil/io vil1/io)
+  ENDIF (BUILD_CORE_IMAGING)
+ENDIF (BUILD_CORE_SERIALISATION)
+
 
 # video
-SUBDIRS(vidl)
+IF (BUILD_CORE_UTILITIES AND BUILD_CORE_IMAGING)
+  SUBDIRS(vidl)
+  SUBDIRS(vidl_vil1)
+ENDIF (BUILD_CORE_UTILITIES AND BUILD_CORE_IMAGING)
 
-# video (old implementation)
-SUBDIRS(vidl_vil1)
 
 # coordinate systems
-SUBDIRS(vcsl)
+IF (BUILD_CORE_GEOMETRY AND BUILD_CORE_NUMERICS)
+  SUBDIRS(vcsl)
+ENDIF (BUILD_CORE_GEOMETRY AND BUILD_CORE_NUMERICS)
 
+
+IF (BUILD_CORE_ALL)
 # multi-platform GUI toolkit
-SUBDIRS(vgui)
+  SUBDIRS(vgui)
 
-IF(BUILD_EXAMPLES)
-  SUBDIRS(examples)
-ENDIF(BUILD_EXAMPLES)
+  IF(BUILD_EXAMPLES)
+    SUBDIRS(examples)
+  ENDIF(BUILD_EXAMPLES)
 
-IF( BUILD_TESTING )
-  SUBDIRS( tests )
-ENDIF( BUILD_TESTING )
+  IF( BUILD_TESTING )
+    SUBDIRS( tests )
+  ENDIF( BUILD_TESTING )
+ENDIF (BUILD_CORE_ALL)
+

@@ -186,7 +186,6 @@ ADD_LIBRARY(vnl ${vnl_sources})
 TARGET_LINK_LIBRARIES( vnl vcl )
 
 SUBDIRS(algo)
-SUBDIRS(io)
 
 IF( BUILD_EXAMPLES )
   SUBDIRS( examples )

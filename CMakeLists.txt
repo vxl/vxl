@@ -35,6 +35,23 @@ IF(NOT VXL_NO_CMAKE_CONFIGURE)
   SUBDIRS(config/cmake/config)
 ENDIF(NOT VXL_NO_CMAKE_CONFIGURE)
 
+
+# Options to reduce build to just some core libraries
+OPTION( BUILD_CORE_NUMERICS "Build VXL's numerics libraries" YES )
+OPTION( BUILD_CORE_SERIALISATION "Build VXL's serialisation libraries" YES )
+OPTION( BUILD_CORE_UTILITIES "Build VXL's utility libraries" YES )
+OPTION( BUILD_CORE_GEOMETRY "Build VXL's geometry libraries" YES )
+OPTION( BUILD_CORE_IMAGING "Build VXL's imaging libraries" YES )
+SET (BUILD_CORE_ALL OFF CACHE INTERNAL "All Core libraries are being built")
+IF (BUILD_CORE_GEOMETRY AND BUILD_CORE_NUMERICS)
+  IF (BUILD_CORE_UTILITIES AND BUILD_CORE_SERIALISATION)
+    IF (BUILD_CORE_IMAGING)
+      SET (BUILD_CORE_ALL ON CACHE INTERNAL "All Core libraries are being built")
+    ENDIF (BUILD_CORE_IMAGING)
+  ENDIF (BUILD_CORE_UTILITIES AND BUILD_CORE_SERIALISATION)
+ENDIF (BUILD_CORE_GEOMETRY AND BUILD_CORE_NUMERICS)
+
+
 # Build the core vxl + support libraries
 SUBDIRS(vcl v3p core)
 
@@ -43,9 +60,9 @@ IF( EXISTS ${vxl_SOURCE_DIR}/contrib/CMakeLists.txt )
   OPTION( BUILD_CONTRIB "Build the contributed libraries?" YES )
 ENDIF( EXISTS ${vxl_SOURCE_DIR}/contrib/CMakeLists.txt )
 
-IF( BUILD_CONTRIB )
+IF( BUILD_CONTRIB AND BUILD_CORE_ALL)
   SUBDIRS( contrib )
-ENDIF( BUILD_CONTRIB )
+ENDIF( BUILD_CONTRIB AND BUILD_CORE_ALL)
 
 OPTION(BUILD_TARGETJR "Should the TargetJr packages be built?" NO)
 

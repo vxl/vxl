@@ -38,8 +38,6 @@ AUX_SOURCE_DIRECTORY(Templates vbl_sources)
 ADD_LIBRARY(vbl ${vbl_sources})
 TARGET_LINK_LIBRARIES( vbl vcl )
 
-SUBDIRS(io)
-
 IF( BUILD_EXAMPLES )
   SUBDIRS( examples )
 ENDIF( BUILD_EXAMPLES )

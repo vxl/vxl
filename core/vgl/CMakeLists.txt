@@ -60,7 +60,6 @@ ADD_LIBRARY(vgl ${vgl_sources})
 TARGET_LINK_LIBRARIES( vgl vcl )
 
 SUBDIRS( algo )
-SUBDIRS( io )
 
 IF( BUILD_EXAMPLES )
   SUBDIRS( examples )
