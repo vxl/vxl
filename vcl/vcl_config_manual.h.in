@@ -1,6 +1,8 @@
 #ifndef vcl_config_manual_h_
 #define vcl_config_manual_h_
 
+//:
+// \file
 // This file either is or was generated from vcl_config_manual.h.in
 
 // -------------------- manual options
