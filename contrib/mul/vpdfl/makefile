@@ -1,4 +1,4 @@
-#######################################
+ #######################################
 include ${IUEROOT}/config/top-params.mk
 #######################################
 
@@ -12,6 +12,11 @@ SOURCES += vpdfl_prob_chi2.cxx
 SOURCES += vpdfl_pdf_base.cxx 
 SOURCES += vpdfl_builder_base.cxx 
 SOURCES += vpdfl_sampler_base.cxx
+SOURCES += vpdfl_gaussian.cxx 
+SOURCES += vpdfl_gaussian_builder.cxx 
+SOURCES += vpdfl_gaussian_sampler.cxx 
+SOURCES += vpdfl_pc_gaussian.cxx 
+SOURCES += vpdfl_pc_gaussian_builder.cxx 
 SOURCES += vpdfl_axis_gaussian.cxx 
 SOURCES += vpdfl_axis_gaussian_builder.cxx 
 SOURCES += vpdfl_axis_gaussian_sampler.cxx
