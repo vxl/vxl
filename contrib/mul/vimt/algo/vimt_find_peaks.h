@@ -43,6 +43,31 @@ inline void vimt_find_image_peaks_3x3(vcl_vector<vgl_point_2d<unsigned> >& peaks
   }
 }
 
+//: Return image co-ordinates of all points in image strictly above their 8 neighbours
+// \param peak_value: Value at peak
+// \param clear_list: If true (the default) then empty list before adding new examples
+template <class T>
+inline void vimt_find_image_peaks_3x3(vcl_vector<vgl_point_2d<unsigned> >& peaks,
+                                      vcl_vector<T>& peak_value,
+                                      const vil_image_view<T>& image,
+                                      unsigned plane=0, bool clear_list=true)
+{
+  if (clear_list) { peaks.resize(0); peak_value.resize(0); }
+  unsigned ni=image.ni(),nj=image.nj();
+  vcl_ptrdiff_t istep = image.istep(),jstep=image.jstep();
+  const T* row = image.top_left_ptr()+plane*image.planestep()+istep+jstep;
+  for (unsigned j=1;j<nj-1;++j,row+=jstep)
+  {
+    const T* pixel = row;
+    for (unsigned i=1;i<ni-1;++i,pixel+=istep)
+      if (vimt_is_peak_3x3(pixel,istep,jstep))
+      { 
+        peaks.push_back(vgl_point_2d<unsigned>(i,j));
+        peak_value.push_back(*pixel);
+      }
+  }
+}
+
 //: Return world co-ordinates of all points in image strictly above their 8 neighbours
 // \param clear_list: If true (the default) then empty list before adding new examples
 template <class T>
