@@ -12,9 +12,6 @@
 //            Peter Tu April 2003
 //            General Electric
 //
-// \verbatim
-// \endverbatim
-//
 //-------------------------------------------------------------------------------
 
 #include <pop/pop_vertex.h>
@@ -25,7 +22,7 @@ class pop_point_3d;
 
 //: This is an object that has a coordinate system.
 //  The object is based on a set of parameters that can be changed. This object
-//  can be transformed into another coordinate sytem which is a pop_vertex.
+//  can be transformed into another coordinate system which is a pop_vertex.
 
 class pop_geometric_object : public pop_object
 {
