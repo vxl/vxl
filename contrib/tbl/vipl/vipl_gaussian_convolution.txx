@@ -17,7 +17,7 @@ bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section
   if (!buf) return false; // memory allocation failed
 
   // 1-D mask was generated in preop(), we just use it here:
-  DataIn dummy;
+  DataIn dummy = DataIn();
   // horizontal convolution:
   int starty = start(Y_Axis());
   int stopy = stop(Y_Axis());
