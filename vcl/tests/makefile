@@ -5,6 +5,7 @@ TESTS += test_compiler.cxx
 TESTS += test_iterator.cxx
 TESTS += test_iostream.cxx
 TESTS += test_fstream.cxx
+TESTS += test_sstream.cxx
 TESTS += test_map.cxx
 TESTS += test_multimap.cxx
 TESTS += test_vector.cxx
