@@ -1,3 +1,143 @@
 @chapsummary
-Geometric entities, like points and lines, should be kept simple.
+Geometric primitive entities, like points and lines.
 @endchapsummary
+
+The core geometry library @code{vgl} is intended to provide an environment for
+geometric primitives, both in cartesian and homogeneous representations, and
+for both 2D and 3D.
+
+This includes classes for
+@itemize @bullet
+@item Points, lines and planes.
+@item 2D conics.
+@item Rectangular bounding boxes.
+@item Polygons.
+@item Direction vectors.
+@item Region scan iterators.
+@end itemize
+
+In addition, the @code{vgl-algo} library contains functions to perform elementary
+geometric operations like intersecting two lines, finding the nearest point on
+a line or a conic, computing the cross ratio of four points, lines or planes, ...
+For convenience, this functionality is put in a "name space", separate for 2D and
+3D, and separate for cartesian and homogeneous representations.
+
+All representation classes are templated on the computational numeric type,
+typically @code{double} or @code{float}, but it could make sense to use other
+types like @code{int} (especially with homogeneous representations) or e.g.
+@code{vnl_rational} or @code{vcl_complex<double>}.
+
+@subsection Homogeneous 2D classes and operations
+
+The basic 2D classes using homogeoneous (3-argument) representations are:
+
+@itemize @bullet
+@item @code{vgl_homg_point_2d<T>}
+@item @code{vgl_homg_line_2d<T>}
+@item @code{vgl_conic<T>}
+@end itemize
+The most useful static functions in namespace @code{vgl_homg_operators_2d<T>} are:
+@itemize @bullet
+@item @code{double distance_squared(vgl_homg_point_2d<T> const& point1, vgl_homg_point_2d<T> const& point2)}
+@item @code{vgl_homg_line_2d<T> join(vgl_homg_point_2d<T> const& point1, vgl_homg_point_2d<T> const& point2)}
+   to get the line through two points.
+@item @code{vgl_homg_point_2d<T> intersection(vgl_homg_line_2d<T> const& line1, vgl_homg_line_2d<T> const& line2)}
+   to get the intersection point of two lines.
+@item @code{void unitize(vgl_homg_point_2d<T> &a)}
+   to normalize a point representation (3-tuple) to unit magnitude.
+@item @code{double cross_ratio(vgl_homg_point_2d<T> const& p1, vgl_homg_point_2d<T> const& p2, vgl_homg_point_2d<T> const& p3, vgl_homg_point_2d<T> const& p4)}
+@item @code{double angle_between_oriented_lines(vgl_homg_line_2d<T> const& line1, vgl_homg_line_2d<T> const& line2)}
+    Return the angle between the (oriented) lines (in radians).
+@item @code{double perp_distance_squared(vgl_homg_line_2d<T> const& line, vgl_homg_point_2d<T> const& point)}
+@item @code{vgl_homg_point_2d<T> closest_point(vgl_homg_line_2d<T> const &l, vgl_homg_point_2d<T> const &p)}
+@item @code{vgl_homg_line_2d<T> perp_line_through_point(vgl_homg_line_2d<T> const& line, vgl_homg_point_2d<T> const& point)}
+@item @code{vgl_homg_point_2d<T> perp_projection(vgl_homg_line_2d<T> const& line, vgl_homg_point_2d<T> const& point)}
+@item @code{vgl_homg_point_2d<T> midpoint(vgl_homg_point_2d<T> const& p1, vgl_homg_point_2d<T> const& p2)}
+@item @code{vgl_homg_point_2d<T> lines_to_point(vcl_list<vgl_homg_line_2d<T> > const& lines)}
+   to intersect a set of 2D lines to find the least-square point of intersection.
+@item @code{vcl_list<vgl_homg_point_2d<T> > intersection(vgl_conic<T> const &c, vgl_homg_line_2d<T> const &l)}
+   to find all real intersection points of a conic and a line (between 0 and 2).
+@item @code{vcl_list<vgl_homg_point_2d<T> > intersection(vgl_conic<T> const &c1, vgl_conic<T> const &c2)}
+   to find all real intersection points of two conics (between 0 and 4).
+@item @code{vcl_list<vgl_homg_line_2d<T> > tangent_from(vgl_conic<T> const &c, vgl_homg_point_2d<T> const &p)}
+   returns the (at most) two tangent lines that pass through p and are tangent to the conic.
+@item @code{vgl_homg_point_2d<T> closest_point(vgl_conic<T> const& c, vgl_homg_point_2d<T> const& p)}
+   returns the point on the conic closest to the given point.
+@end itemize
+
+@subsection Cartesian 2D classes
+
+The basic 2D classes using non-homogeoneous (2-argument) representations are:
+
+@itemize @bullet
+@item @code{vgl_point_2d<T>}
+@item @code{vgl_line_2d<T>}
+@item @code{vgl_line_segment_2d<T>}
+@item @code{vgl_box_2d<T>}
+@item @code{vgl_vector_2d<T>}
+@end itemize
+
+A line segment is a bounded part of a line, between two end points.
+A vector is a directional difference between two points.
+A box is a rectangular bounding box.
+
+@subsection Homogeneous 2D classes and operations
+
+The basic 3D classes using homogeoneous (4-argument) representations are:
+
+@itemize @bullet
+@item @code{vgl_homg_point_3d<T>}
+@item @code{vgl_homg_plane_3d<T>}
+@item @code{vgl_homg_line_3d_2_points<T>}
+@end itemize
+The most useful static functions in namespace @code{vgl_homg_operators_3d<T>} are:
+@itemize @bullet
+@item @code{T distance(vgl_homg_point_3d<T> const& point1, vgl_homg_point_3d<T> const& point2)}
+@item @code{T distance_squared(vgl_homg_point_3d<T> const& point1, vgl_homg_point_3d<T> const& point2)}
+@item @code{double perp_distance_squared(vgl_homg_line_3d const& line, vgl_homg_point_3d<T> const& point)}
+@item @code{vgl_homg_point_3d<T> intersect_line_and_plane(vgl_homg_line_3d const& , vgl_homg_plane_3d<T> const& )}
+    Return the intersection point of the line and plane.
+@item @code{vgl_homg_point_3d<T> perp_projection(vgl_homg_line_3d const& line, vgl_homg_point_3d<T> const& point)}
+    Compute the perpendicular projection point of p onto l.
+@item @code{double angle_between_oriented_lines(vgl_homg_line_3d const& line1, vgl_homg_line_3d const& line2)}
+    Return the angle between the (oriented) lines (in radians).
+@item @code{vgl_homg_point_3d<T> lines_to_point(vcl_vector<vgl_homg_line_3d > const& line_list)}
+@item @code{vgl_homg_line_3d points_to_line(vcl_vector< vgl_homg_point_3d<T> > const& point_list)}
+@item @code{vgl_homg_line_3d planes_to_line(vcl_vector< vgl_homg_plane_3d<T> > const& plane_list)}
+    Return the intersection line of the planes.
+@item @code{vgl_homg_plane_3d<T> points_to_plane(vcl_vector< vgl_homg_point_3d<T> > const& point_list)}
+@item @code{vgl_homg_point_3d<T> intersection_point(vcl_vector< vgl_homg_plane_3d<T> > const& ) double }
+    Compute best-fit intersection of planes in a point.
+@end itemize
+
+@subsection Cartesian 3D classes
+
+The basic 3D classes using non-homogeoneous (3-argument) representations are:
+
+@itemize @bullet
+@item @code{vgl_point_3d<T>}
+@item @code{vgl_plane_3d<T>}
+@item @code{vgl_line_segment_3d<T>}
+@item @code{vgl_box_3d<T>}
+@item @code{vgl_vector_3d<T>}
+@end itemize
+
+@subsection Homogeneous 1D classes
+
+For sake of completeness, the following 1D representation classes are present:
+@itemize @bullet
+@item @code{vgl_homg_point_1d<T>}
+@item @code{vgl_1d_basis<T>}
+@end itemize
+
+A 1D basis is an arbitrary set of 3 (collinear) points.  One receives coordinate
+0 or (0,1), one has coordinate @infty or (1,0) and the unit point has coordinate
+1 or (1,1).  Such a set is an essential ingredient for any projective
+transformation.
+
+@subsection 2D regions and iterators
+
+The @code{vgl_polygon} class represents a more complex region or area in 2D space.
+The @code{vgl_region_scan_iterator} class allows for iterating through regions.
+More specifically, the derived classes @code{vgl_polygon_scan_iterator},
+@code{vgl_triangle_scan_iterator} and @code{vgl_window_scan_iterator} can be used.
