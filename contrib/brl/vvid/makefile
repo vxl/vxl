@@ -5,7 +5,7 @@ TRY_MPEG2 := 1
 LIBRARY := vvid
 VERSION := 1.0
 
-IMMEDIATE_LIBS := vvid gevd vgui vidl_vil1 vul vil
+IMMEDIATE_LIBS := bgui vgui sdet strk vpro brip btol vtol vsol vidl_vil1 vul vil1
 
 # sources that don't depend on the camera being present
 SOURCES += vvid_frame_trail.cxx
