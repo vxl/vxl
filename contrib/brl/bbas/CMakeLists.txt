@@ -1,0 +1,9 @@
+# ./brl/bbas/CMakeLists.txt
+# main package for basic operations common to all libraries
+
+# topology algorithms
+SUBDIRS(btol)
+
+# digital library algorithms
+SUBDIRS(bdgl)
+
