@@ -292,7 +292,7 @@ vnl_matrix_fixed<T,nrows,ncols>::normalize_rows()
       for (unsigned int j = 0; j < this->cols(); j++) {
         // FIXME need correct rounding here
         // There is e.g. no *standard* operator*=(complex<float>, double), hence the T() cast.
-        (*this)(i,j) *= T(scale);
+        (*this)(i,j) *= (T)(scale);
       }
     }
   }
@@ -314,7 +314,7 @@ vnl_matrix_fixed<T,nrows,ncols>::normalize_columns()
       for (unsigned int i = 0; i < this->rows(); i++) {
         // FIXME need correct rounding here
         // There is e.g. no *standard* operator*=(complex<float>, double), hence the T() cast.
-        (*this)(i,j) *= T(scale);
+        (*this)(i,j) *= (T)(scale);
       }
     }
   }
