@@ -631,11 +631,9 @@ bool vil2_image_view_deep_equality(const vil2_image_view<T> &lhs,
 }
 
 
-
 #define VIL2_IMAGE_VIEW_INSTANTIATE(T) \
 template class vil2_image_view<T >; \
 template bool vil2_image_view_deep_equality(const vil2_image_view<T > &lhs, \
-  const vil2_image_view<T > &rhs);
-
+                                            const vil2_image_view<T > &rhs)
 
 #endif // vil2_image_view_txx_
