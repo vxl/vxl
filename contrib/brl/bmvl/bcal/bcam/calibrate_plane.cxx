@@ -5,18 +5,17 @@
 #include "calibrate_plane.h"
 #include <vcl_fstream.h>
 #include <vcl_iostream.h>
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
 calibrate_plane::calibrate_plane()
 {
-
 }
 
 calibrate_plane::~calibrate_plane()
 {
-
 }
 
 
@@ -24,15 +23,15 @@ int calibrate_plane::readData(char *fname)
 {
   vcl_ifstream  in(fname);
 
-  if(!in){
-    vcl_cerr<<"cannot open the file: "<<fname;
+  if (!in){
+    vcl_cerr<<"cannot open the file: "<<fname << vcl_endl;
     return 1;
   }
-  if(pts_.size() != 0){
+  if (pts_.size() != 0){
     pts_.clear();
   }
 
-  while(!in.eof()){
+  while (!in.eof()){
     double u, v;
     in>>u>>v;
     vgl_homg_point_2d<double> pt(u, v);
