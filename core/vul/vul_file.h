@@ -78,6 +78,8 @@ struct vul_file
 
   //: Strips away extension of the filename
   static vcl_string strip_extension(char const* filename);
+  static vcl_string strip_extension(vcl_string const &filename)
+  { return strip_extension(filename.c_str()); }
 
   //: Delete 1 or more files using the Local OS prefered globbing.
   // E.g. \c delete_file_glob("*"); will delete all the files in the
