@@ -282,6 +282,7 @@ foreach $f (@FILES)
     if ($f !~ m/\bvcl\/.*\bvcl_(ios|iosfwd|iomanip|[siof]+stream|strstream|streambuf)\.h/ &&
         $f !~ m/\bv3p\/(netlib|jpeg|tiff|png|zlib)\// &&
         ($f !~ m/\bvcl\/emulation\/vcl_string\.h$/ || $wd !~ m/end/ ) &&
+        ($f !~ m/\b(rrel\/rrel_util|rsdl\/rsdl_borgefors)\.txx$/ || $wd !~ m/end/ ) &&
         $file_s =~ m/,\s*$wd\s*\)/) {
       print "$f\t\# $wd must be vcl_ios_$wd\n";
       $printed = 1;
@@ -306,6 +307,8 @@ foreach $f (@FILES)
         ($f !~ m/\bvcl\/emulation\/vcl_(algorithm|tree).h$/ || $wd !~ m/(left|right)/ ) &&
         ($f !~ m/\bvnl\/(vnl_matrix\.txx|algo\/vnl_complex_eigensystem\.cxx)$/ || $wd !~ m/(left|right)/ ) &&
         ($f !~ m/\b(oxl\/oxp\/vsl_conic_points\.cxx|gel\/gevd\/gevd_float_operators\.cxx)$/ || $wd !~ m/(left|right)/ ) &&
+        ($f !~ m/\brsdl\/rsdl_(bins_2d|kd_tree)\.h$/ || $wd !~ m/right/ ) &&
+        ($f !~ m/\brsdl\/(rsdl_kd_tree|tests\/test_rsdl_bins_2d|tests\/test_rsdl_kd_tree)\.cxx$/ || $wd !~ m/(left|right)/ ) &&
         $file_s =~ m/[^ .>]\s*\b$wd\s*[|),]/) {
       print "$f\t\# $wd must be vcl_ios_$wd\n";
       $printed = 1;
