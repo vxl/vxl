@@ -5,7 +5,7 @@
 // \file
 // \author Ian Scott.
 
-#include <vxl_config.h>
+#include <vxl_config.h> // for vxl_uint_32 etc.
 #include <vil/vil_rgb.h>
 #include <vil/vil_rgba.h>
 #include <vil2/vil2_byte.h>
@@ -53,11 +53,8 @@ enum vil2_pixel_format {
 // Add values here and be careful to keep values in vil2_pixel_format.cxx in sync
 // Don't forget to increase the end value.
 
-
-
   VIL2_PIXEL_FORMAT_ENUM_END = 35
 }; 
-
 
 
 template <class T>

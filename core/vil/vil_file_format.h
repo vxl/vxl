@@ -9,7 +9,7 @@
 // \brief Base class for image formats
 // \author awf
 
-#include <vil/vil_fwd.h>
+#include <vil/vil_fwd.h> // for vil_stream
 #include <vil2/vil2_image_data.h>
 
 //: Base class for image formats.
@@ -36,10 +36,10 @@ class vil2_file_format
   // The width/height etc are explicitly specified, so that file_format implementors
   // know what they need to do...
   virtual vil2_image_data_sptr make_output_image(vil_stream* vs,
-                                               unsigned nx,
-                                               unsigned ny,
-                                               unsigned nplanes,
-                                               enum vil2_pixel_format) = 0;
+                                                 unsigned nx,
+                                                 unsigned ny,
+                                                 unsigned nplanes,
+                                                 enum vil2_pixel_format) = 0;
 
  public:
   static vil2_file_format** all();
