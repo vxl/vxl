@@ -23,6 +23,8 @@ SET(vil3d_sources
     vil3d_convert.h
     vil3d_fwd.h
     vil3d_from_image_2d.h
+    vil3d_resample_simple.h          vil3d_resample_simple.txx
+    vil3d_resample_trilinear.h       vil3d_resample_trilinear.txx
 
 
     file_formats/vil3d_gipl_format.h file_formats/vil3d_gipl_format.cxx
