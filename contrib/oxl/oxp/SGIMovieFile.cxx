@@ -391,9 +391,8 @@ void SGIMV_Variables::read(vcl_istream& f) {
   if (n > 1000L) {
     vul_printf(vcl_cerr, "SGIMovieFile: warning: A Variable list is %d elements long\n", n);
   }
-  for (unsigned long i = 0; i < n; ++i) {
-    VarData v;
-
+  for (unsigned long i = 0; i < n; ++i)
+  {
     char var_buf[17];
     f.read(var_buf, 16);
     var_buf[16] = 0;
