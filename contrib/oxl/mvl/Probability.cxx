@@ -72,10 +72,11 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
 
     // Select from the first list
     for(int j = 0; j < index.size(); j++) {
-      if(points[j].get_y() >= row_check_lower && points[j].get_y() < row_check_upper && points[j].get_x() >= col_check_lower &&
-points[j].get_x() < col_check_upper) {
+      double x = points[j].get_x(), y = points[j].get_y(), w = points[j].get_w();
+      if (w < 0) { x *= -1; y *= -1; w *= -1; }
+      if(y >= row_check_lower*w && y < row_check_upper*w &&
+         x >= col_check_lower*w && x < col_check_upper*w)
         list.push_back(index[j]);
-      }
     }
 
     int list_size = list.size();
