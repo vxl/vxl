@@ -6,7 +6,7 @@
 //
 // .SECTION Description
 // A shell tableau is a handy collection of things one often wants
-// at the very top of one's tableau hiearchy. It is essentially an
+// at the very top of one's tableau hierarchy. It is essentially an
 // acetate with m utility tableaux at the bottom :
 //
 //    m+n your_tableau_n <--- last user added child.
