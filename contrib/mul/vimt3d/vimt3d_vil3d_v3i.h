@@ -1,6 +1,6 @@
-// This is mul/vil3d/file_formats/vimt3d_vil3d_v3i_format.h
-#ifndef vimt3d_vil3d_v3i_format_h_
-#define vimt3d_vil3d_v3i_format_h_
+// This is mul/vimt3d/vimt3d_vil3d_v3i.h
+#ifndef vimt3d_vil3d_v3i_h_
+#define vimt3d_vil3d_v3i_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -47,7 +47,6 @@ class vimt3d_vil3d_v3i_format: public vil3d_file_format
 };
 
 
-
 // You can't create one of these yourself.
 // Use vimt3d_vil3d_v3i_format instead.
 class vimt3d_vil3d_v3i_image: public vil3d_image_resource
@@ -61,7 +60,6 @@ class vimt3d_vil3d_v3i_image: public vil3d_image_resource
   //: If true, write image file on exit.
   bool dirty_;
 
-
   //: Expected pixel type.
   enum vil_pixel_format pixel_format_;
   //: Private constructor, use vil3d_load instead.
@@ -71,7 +69,7 @@ class vimt3d_vil3d_v3i_image: public vil3d_image_resource
   // This object takes ownership of the file, for writing.
   vimt3d_vil3d_v3i_image(vcl_fstream *file, unsigned ni, unsigned nj,
                          unsigned nk, unsigned nplanes, vil_pixel_format format);
-  
+
  public:
   virtual ~vimt3d_vil3d_v3i_image();
 
@@ -90,14 +88,13 @@ class vimt3d_vil3d_v3i_image: public vil3d_image_resource
 
   //: Pixel Format.
   virtual enum vil_pixel_format pixel_format() const;
-  
+
   //: Get full world to image transform
   const vimt3d_transform_3d & world2im() const;
-  
+
   //: Set full world to image transform
   // Call this before using put_view();
   void set_world2im(const vimt3d_transform_3d & tr);
-
 
   //: Create a read/write view of a copy of this data.
   // This function will always return a
