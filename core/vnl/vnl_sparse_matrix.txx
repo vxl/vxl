@@ -88,7 +88,7 @@ void vnl_sparse_matrix<T>::mult(vnl_sparse_matrix<T> const& rhs, vnl_sparse_matr
     row& result_row = result.elements[row_id];
 
     // Iterate over the row.
-    for (row::const_iterator col_iter = this_row.begin();
+    for (typename row::const_iterator col_iter = this_row.begin();
          col_iter != this_row.end();
          ++col_iter)
     {
@@ -106,8 +106,8 @@ void vnl_sparse_matrix<T>::mult(vnl_sparse_matrix<T> const& rhs, vnl_sparse_matr
         continue;
 
       // Else iterate over rhs's row.
-      row::iterator result_col_iter = result_row.begin();
-      for (row::const_iterator rhs_col_iter = rhs_row.begin();
+      typename row::iterator result_col_iter = result_row.begin();
+      for (typename row::const_iterator rhs_col_iter = rhs_row.begin();
            rhs_col_iter != rhs_row.end();
            ++rhs_col_iter)
       {
@@ -182,7 +182,7 @@ void vnl_sparse_matrix<T>::mult(unsigned int prows, unsigned int pcols,
       continue;
 
     // Iterate over the row.
-    for (row::const_iterator col_iter = this_row.begin();
+    for (typename row::const_iterator col_iter = this_row.begin();
          col_iter != this_row.end();
          ++col_iter)
     {
@@ -235,12 +235,12 @@ void vnl_sparse_matrix<T>::mult(vnl_vector<T> const& rhs, vnl_vector<T>& result)
   result.fill(T(0));
 
   int rhs_row_id =0;
-  vcl_vector<row>::const_iterator lhs_row_iter = elements.begin();
+  typename vcl_vector<row>::const_iterator lhs_row_iter = elements.begin();
   for ( ; lhs_row_iter != elements.end(); ++lhs_row_iter, rhs_row_id++ ) {
     row const & lhs_row = *lhs_row_iter;
     if (lhs_row.empty()) continue;
 
-    row::const_iterator lhs_col_iter = lhs_row.begin();
+    typename row::const_iterator lhs_col_iter = lhs_row.begin();
     for ( ; lhs_col_iter != lhs_row.end(); ++lhs_col_iter) {
       vnl_sparse_matrix_pair<T> const & entry = *lhs_col_iter;
       unsigned const lhs_col_id = entry.first;
@@ -263,7 +263,7 @@ void vnl_sparse_matrix<T>::pre_mult(const vnl_vector<T>& lhs, vnl_vector<T>& res
 
   // Now, iterate over lhs values and rows of rhs
   unsigned lhs_col_id = 0;
-  for ( vcl_vector<row>::const_iterator rhs_row_iter = elements.begin();
+  for (typename vcl_vector<row>::const_iterator rhs_row_iter = elements.begin();
         rhs_row_iter != elements.end();
         ++rhs_row_iter, lhs_col_id++ )
     {
@@ -274,7 +274,7 @@ void vnl_sparse_matrix<T>::pre_mult(const vnl_vector<T>& lhs, vnl_vector<T>& res
       if (rhs_row.empty()) continue;
 
       // Iterate over values in rhs row
-      for (row::const_iterator rhs_col_iter = rhs_row.begin();
+      for (typename row::const_iterator rhs_col_iter = rhs_row.begin();
            rhs_col_iter != rhs_row.end();
            ++rhs_col_iter)
         {
@@ -305,7 +305,7 @@ void vnl_sparse_matrix<T>::add(const vnl_sparse_matrix<T>& rhs,
 
   // Now, iterate over non-zero rows of this.
   unsigned int row_id = 0;
-  for (vcl_vector<row>::const_iterator row_iter = elements.begin();
+  for (typename vcl_vector<row>::const_iterator row_iter = elements.begin();
        row_iter != elements.end();
        ++row_iter, ++row_id)
     {
@@ -326,7 +326,7 @@ void vnl_sparse_matrix<T>::add(const vnl_sparse_matrix<T>& rhs,
       row const& rhs_row = rhs.elements[row_id];
 
       // Iterate over the rhs row.
-      for (row::const_iterator col_iter = rhs_row.begin();
+      for (typename row::const_iterator col_iter = rhs_row.begin();
            col_iter != rhs_row.end();
            ++col_iter)
         {
@@ -358,7 +358,7 @@ void vnl_sparse_matrix<T>::subtract(const vnl_sparse_matrix<T>& rhs,
 
   // Now, iterate over non-zero rows of this.
   unsigned int row_id = 0;
-  for (vcl_vector<row>::const_iterator row_iter = elements.begin();
+  for (typename vcl_vector<row>::const_iterator row_iter = elements.begin();
        row_iter != elements.end();
        ++row_iter, ++row_id)
     {
@@ -379,7 +379,7 @@ void vnl_sparse_matrix<T>::subtract(const vnl_sparse_matrix<T>& rhs,
       row const& rhs_row = rhs.elements[row_id];
 
       // Iterate over the rhs row.
-      for (row::const_iterator col_iter = rhs_row.begin();
+      for (typename row::const_iterator col_iter = rhs_row.begin();
            col_iter != rhs_row.end();
            ++col_iter)
         {
@@ -400,7 +400,7 @@ T& vnl_sparse_matrix<T>::operator()(unsigned int r, unsigned int c)
 {
   assert((r < rows()) && (c < columns()));
   row& rw = elements[r];
-  row::iterator ri;
+  typename row::iterator ri;
   for (ri = rw.begin(); (ri != rw.end()) && ((*ri).first < c); ++ri);
 
   if ((ri == rw.end()) || ((*ri).first != c)) {
@@ -417,10 +417,10 @@ void vnl_sparse_matrix<T>::diag_AtA(vnl_vector<T> & result) const
   result.resize( columns() );
   result.fill(T(0));
 
-  vcl_vector<row>::const_iterator row_iter = elements.begin();
+  typename vcl_vector<row>::const_iterator row_iter = elements.begin();
   for ( ; row_iter != elements.end(); ++row_iter) {
     row const& this_row = *row_iter;
-    row::const_iterator col_iter = this_row.begin();
+    typename row::const_iterator col_iter = this_row.begin();
     for ( ; col_iter != this_row.end(); ++col_iter) {
       vnl_sparse_matrix_pair<T> const& entry = *col_iter;
       unsigned const col_id = entry.first;
@@ -472,7 +472,7 @@ T vnl_sparse_matrix<T>::sum_row(unsigned int r)
   assert(r < rows());
   row & rw = elements[r];
   T sum = T(0);
-  for (row::iterator ri = rw.begin(); ri != rw.end(); ++ri)
+  for (typename row::iterator ri = rw.begin(); ri != rw.end(); ++ri)
     sum += (*ri).second;
 
   return sum;
@@ -483,7 +483,7 @@ void vnl_sparse_matrix<T>::scale_row(unsigned int r, T scale)
 {
   assert(r < rows());
   row& rw = elements[r];
-  for (row::iterator ri = rw.begin(); ri != rw.end(); ++ri)
+  for (typename row::iterator ri = rw.begin(); ri != rw.end(); ++ri)
     (*ri).second *= scale;
 }
 

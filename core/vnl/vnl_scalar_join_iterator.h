@@ -111,8 +111,8 @@ protected:
   vcl_list<vnl_scalar_join_iterator_indexed_pair<T> >* pI2;
   vcl_list<vnl_scalar_join_iterator_indexed_pair<T> >& I1;
   vcl_list<vnl_scalar_join_iterator_indexed_pair<T> >& I2;
-  vcl_list<vnl_scalar_join_iterator_indexed_pair<T> >::iterator index1;
-  vcl_list<vnl_scalar_join_iterator_indexed_pair<T> >::iterator index2;
+  typename vcl_list<vnl_scalar_join_iterator_indexed_pair<T> >::iterator index1;
+  typename vcl_list<vnl_scalar_join_iterator_indexed_pair<T> >::iterator index2;
 };
 
 //: Helper class to hold the sorted arrays of indices.
