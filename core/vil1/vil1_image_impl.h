@@ -1,10 +1,9 @@
-// This is ./vxl/vil/vil_image_impl.h
+// This is vxl/vil/vil_image_impl.h
 #ifndef vil_image_impl_h_
 #define vil_image_impl_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Representation of a generic image
@@ -83,8 +82,9 @@ const char* vil_print(vil_component_format f)
 // - Pixel : spatial location,
 // - Plane
 
-class vil_image_impl {
-public:
+class vil_image_impl
+{
+ public:
   vil_image_impl();
   virtual ~vil_image_impl();
 
@@ -147,7 +147,7 @@ public:
 
 /* END_MANCHESTER_BINARY_IO_CODE */
 
-private:
+ private:
   friend class vil_image;
   // You probably should not use a vil_image_impl in a vbl_smart_ptr, so the
   // ref counting methods are called by the unusual up_ref() and down_ref().

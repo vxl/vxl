@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is vxl/vcsl/vcsl_coordinate_system.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 #include <vcsl/vcsl_coordinate_system.h>
@@ -64,7 +65,7 @@ vcsl_coordinate_system::from_cs_to_standard_units(const vnl_vector<double> &v) c
 
   int j=0;
   vcl_vector<vcsl_axis_sptr>::const_iterator i;
-  for(i=axes_.begin();i!=axes_.end();++i,++j)
+  for (i=axes_.begin();i!=axes_.end();++i,++j)
     result.put(j,v.get(j)/(*i)->unit()->units_per_standard_unit());
 
   return result;
@@ -81,7 +82,7 @@ vcsl_coordinate_system::from_standard_units_to_cs(const vnl_vector<double> &v) c
 
   int j=0;
   vcl_vector<vcsl_axis_sptr>::const_iterator i;
-  for(i=axes_.begin();i!=axes_.end();++i,++j)
+  for (i=axes_.begin();i!=axes_.end();++i,++j)
     result.put(j,v.get(j)*(*i)->unit()->units_per_standard_unit());
 
   return result;

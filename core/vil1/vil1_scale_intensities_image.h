@@ -1,11 +1,9 @@
+// This is vxl/vil/vil_scale_intensities_image.h
 #ifndef vil_scale_intensities_image_h_
 #define vil_scale_intensities_image_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-// This is vxl/vil/vil_scale_intensities_image.h
-
 //:
 // \file
 // \brief Support function for vil_scale_intensities_image_impl

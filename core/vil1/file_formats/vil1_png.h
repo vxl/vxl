@@ -1,9 +1,9 @@
+// This is vxl/vil/file_formats/vil_png.h
 #ifndef vil_png_file_format_h_
 #define vil_png_file_format_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author   awf@robots.ox.ac.uk
@@ -20,8 +20,9 @@
 struct vil_png_structures;
 
 //: Portable network graphics, http://www.cdrom.com/pub/png
-class vil_png_file_format : public vil_file_format {
-public:
+class vil_png_file_format : public vil_file_format
+{
+ public:
   virtual char const* tag() const;
   virtual vil_image_impl* make_input_image(vil_stream* vs);
   virtual vil_image_impl* make_output_image(vil_stream* vs, int planes,
@@ -33,7 +34,8 @@ public:
 };
 
 //: Generic image implementation for PNG files
-class vil_png_generic_image : public vil_image_impl {
+class vil_png_generic_image : public vil_image_impl
+{
   vil_stream* vs_;
   int width_;
   int height_;
@@ -47,7 +49,7 @@ class vil_png_generic_image : public vil_image_impl {
 
   friend class vil_png_file_format;
   vil_png_structures* p;
-public:
+ public:
 
   vil_png_generic_image(vil_stream* is);
   vil_png_generic_image(vil_stream* is, int planes,

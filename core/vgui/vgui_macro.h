@@ -1,6 +1,7 @@
+// This is oxl/vgui/vgui_macro.h
 #ifndef vgui_macro_h_
 #define vgui_macro_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:

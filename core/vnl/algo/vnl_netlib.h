@@ -1,9 +1,6 @@
+// This is vxl/vnl/algo/vnl_netlib.h
 #ifndef vnl_netlib_h_
 #define vnl_netlib_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
 //:
 // \file
 // \brief Declare in a central place the list of symbols from netlib

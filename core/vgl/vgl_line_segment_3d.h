@@ -1,9 +1,7 @@
 // This is vxl/vgl/vgl_line_segment_3d.h
-
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vgl_line_segment_3d_h_
 #define vgl_line_segment_3d_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -22,8 +20,9 @@
 
 //: Represents a 3D line segment using two points.
 template <class Type>
-class vgl_line_segment_3d {
-public:
+class vgl_line_segment_3d
+{
+ public:
   //: Default constructor - does not initialise!
   inline vgl_line_segment_3d() {}
 
@@ -51,7 +50,7 @@ public:
   inline void set(vgl_point_3d<Type> const& p1, vgl_point_3d<Type> const& p2) {
     point1_ = p1; point2_ = p2; }
 
-private:
+ private:
   vgl_point_3d<Type> point1_;
   vgl_point_3d<Type> point2_;
 };

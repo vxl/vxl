@@ -1,11 +1,6 @@
+// This is vxl/vnl/vnl_io_sparse_matrix.h
 #ifndef vnl_io_sparse_matrix_h
 #define vnl_io_sparse_matrix_h
-#ifdef __GNUC__
-#pragma interface
-#endif
-
-// This is vxl/vnl/vnl_io_sparse_matrix.h
-
 //:
 // \file 
 // \author Louise Bucther
@@ -13,7 +8,6 @@
 
 #include <vnl/vnl_sparse_matrix.h>
 #include <vsl/vsl_binary_io.h>
-
 
 //: Binary save vnl_sparse_matrix to stream.
 template <class T>
@@ -26,6 +20,5 @@ void vsl_b_read(vsl_b_istream & is, vnl_sparse_matrix<T> & v);
 //: Print human readable summary of object to a stream
 template <class T>
 void vsl_print_summary(vcl_ostream & os,const vnl_sparse_matrix<T> & b);
-
 
 #endif // vnl_io_sparse_matrix_h

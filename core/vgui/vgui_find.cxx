@@ -1,8 +1,7 @@
-// This is ./oxl/vgui/vgui_find.cxx
-#ifdef __GNUC__
+// This is oxl/vgui/vgui_find.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // \author fsm@robots.ox.ac.uk

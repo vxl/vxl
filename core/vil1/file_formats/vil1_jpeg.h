@@ -1,10 +1,9 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is vxl/vil/file_formats/vil_jpeg.h
 #ifndef vil_jpeg_file_format_h_
 #define vil_jpeg_file_format_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author    fsm@robots.ox.ac.uk
@@ -24,8 +23,9 @@
 bool vil_jpeg_file_probe(vil_stream *vs);
 
 //: Loader for JPEG files
-class vil_jpeg_file_format : public vil_file_format {
-public:
+class vil_jpeg_file_format : public vil_file_format
+{
+ public:
   virtual char const *tag() const;
   virtual vil_image_impl *make_input_image(vil_stream *vs);
   virtual vil_image_impl *make_output_image(vil_stream *vs,
@@ -42,7 +42,8 @@ class vil_jpeg_compressor;
 class vil_jpeg_decompressor;
 
 //: generic_image implementation for JPEG files
-class vil_jpeg_generic_image : public vil_image_impl {
+class vil_jpeg_generic_image : public vil_image_impl
+{
   vil_jpeg_generic_image(vil_stream *is);
   vil_jpeg_generic_image(vil_stream *is,
                          int planes,
@@ -66,7 +67,7 @@ class vil_jpeg_generic_image : public vil_image_impl {
   bool get_section(void       *buf, int x0, int y0, int w, int h) const;
   bool put_section(void const *buf, int x0, int y0, int w, int h);
 
-private:
+ private:
   vil_jpeg_compressor   *jc;
   vil_jpeg_decompressor *jd;
   vil_stream *stream;

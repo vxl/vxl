@@ -1,10 +1,9 @@
+// This is vxl/vil/vil_byte_swap.h
 #ifndef vil_byte_swap_h_
 #define vil_byte_swap_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vil/vil_byte_swap.h
-
 //:
 // \file
 // \author fsm@robots.ox.ac.uk

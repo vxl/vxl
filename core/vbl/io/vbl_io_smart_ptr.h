@@ -1,10 +1,6 @@
-// This is ./vxl/vbl/io/vbl_io_smart_ptr.h
+// This is vxl/vbl/io/vbl_io_smart_ptr.h
 #ifndef vbl_io_smart_ptr_h
 #define vbl_io_smart_ptr_h
-#ifdef __GNUC__
-#pragma interface
-#endif
-
 //:
 // \file 
 // \brief Serialised binary IO functions for vbl_smart_ptr<T>
@@ -60,10 +56,8 @@
 //
 // Objects using I/O via a smart ptr, should not save the objects reference count.
 
-
 #include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_smart_ptr.h>
-
 
 //: Binary save vbl_smart_ptr to stream.
 template <class T>
@@ -76,6 +70,5 @@ void vsl_b_read(vsl_b_istream & is, vbl_smart_ptr<T> & v);
 //: Print human readable summary of object to a stream
 template <class T>
 void vsl_print_summary(vcl_ostream & os,const vbl_smart_ptr<T> & b);
-
 
 #endif // vbl_io_smart_ptr_h

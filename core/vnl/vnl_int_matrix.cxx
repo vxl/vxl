@@ -1,12 +1,9 @@
 // This is vxl/vnl/vnl_int_matrix.cxx
-
-//:
-// \file
-
-//-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
 //
 // vnl_int_matrix
 // Author: Andrew W. Fitzgibbon, Oxford RRG

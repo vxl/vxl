@@ -1,5 +1,5 @@
-// This is ./vxl/vil/file_formats/vil_jpeg_decompressor.cxx
-#ifdef __GNUC__
+// This is vxl/vil/file_formats/vil_jpeg_decompressor.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
@@ -70,7 +70,7 @@ JSAMPLE const *vil_jpeg_decompressor::read_scanline(unsigned line) {
     return biffer;
 
   if (ready && line<jobj.output_scanline) {
-    trace << "...aborting" << vcl_endl;
+    trace << "...aborting\n";
     // bah! have to restart
     jpeg_abort_decompress(&jobj);
 
@@ -80,7 +80,7 @@ JSAMPLE const *vil_jpeg_decompressor::read_scanline(unsigned line) {
   }
 
   if (!ready) {
-    trace << "...restarting" << vcl_endl;
+    trace << "...restarting\n";
 
     // rewind stream
     vil_jpeg_stream_src_rewind(&jobj, stream);
@@ -98,7 +98,7 @@ JSAMPLE const *vil_jpeg_decompressor::read_scanline(unsigned line) {
 
   // allocate scanline buffer, if necessary.
   if (!biffer) {
-    trace << "...allocate buffer" << vcl_endl;
+    trace << "...allocate buffer\n";
     unsigned row_size = jobj.output_width * jobj.output_components;
     biffer = new JSAMPLE[row_size];
   }
@@ -122,7 +122,7 @@ JSAMPLE const *vil_jpeg_decompressor::read_scanline(unsigned line) {
 
   // end reached ?
   if (jobj.output_scanline >= jobj.image_height) {
-    trace << "...reached end" << vcl_endl;
+    trace << "...reached end\n";
     jpeg_finish_decompress(&jobj); // this will call vil_jpeg_term_source()
     ready = false;
   }

@@ -1,5 +1,9 @@
-// This is ./oxl/vgui/vgui_easy3D.h
-
+// This is oxl/vgui/vgui_easy3D.h
+#ifndef vgui_easy3D_h_
+#define vgui_easy3D_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -13,12 +17,6 @@
 //    26-APR-2002  K.Y.McGaul - Added some doxygen-style documentation.
 // \endverbatim
 
-#ifndef vgui_easy3D_h_
-#define vgui_easy3D_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
 #include "vgui_easy3D_sptr.h"
 #include "vgui_displaylist3D.h"
 class vgui_point3D;
@@ -29,7 +27,7 @@ class vgui_lineseg3D;
 //  Three-dimensional objects (see vgui_soview3D) can be added using add, or add_point, add_line.
 class vgui_easy3D : public vgui_displaylist3D
 {
-public:
+ public:
   //: Constructor - don't use this, use vgui_easy3D_new.
   vgui_easy3D();
 
@@ -58,7 +56,7 @@ public:
   void load_e3d(char const* filename);
 
 
-protected:
+ protected:
   ~vgui_easy3D() { }
 
   float fg[3];
@@ -66,7 +64,8 @@ protected:
   float point_size;
 };
 
-struct vgui_easy3D_new : public vgui_easy3D_sptr {
+struct vgui_easy3D_new : public vgui_easy3D_sptr
+{
   typedef vgui_easy3D_sptr base;
   vgui_easy3D_new() : base(new vgui_easy3D()) { }
 };

@@ -1,12 +1,11 @@
-//-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
+// This is oxl/vgui/vgui_text_put.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //
-// .NAME vgui_text
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 19 Oct 99
-//   
+//
 //-----------------------------------------------------------------------------
 
 #include "vgui_text_put.h"

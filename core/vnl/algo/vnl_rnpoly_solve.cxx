@@ -1,7 +1,7 @@
-#ifdef __GNUC__
+// This is vxl/vnl/algo/vnl_rnpoly_solve.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 

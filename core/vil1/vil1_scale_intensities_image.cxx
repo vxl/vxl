@@ -1,8 +1,7 @@
-#ifdef __GNUC__
+// This is vxl/vil/vil_scale_intensities_image.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
-// This is vxl/vil/vil_scale_intensities_image.cxx
 
 #include "vil_scale_intensities_image.h"
 #include <vil/vil_image.h>

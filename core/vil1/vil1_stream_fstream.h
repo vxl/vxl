@@ -1,10 +1,9 @@
 // This is vxl/vil/vil_stream_fstream.h
 #ifndef vil_stream_fstream_h_
 #define vil_stream_fstream_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief A vil_stream implementation using vcl_fstream
@@ -15,8 +14,9 @@
 #include <vil/vil_stream.h>
 
 //: A vil_stream implementation using vcl_fstream
-class vil_stream_fstream : public vil_stream {
-public:
+class vil_stream_fstream : public vil_stream
+{
+ public:
   vil_stream_fstream(char const* filename, char const* mode);
 
   // implement virtual vil_stream interface:
@@ -26,10 +26,10 @@ public:
   vil_streampos tell();
   void seek(vil_streampos position);
 
-protected:
+ protected:
   ~vil_stream_fstream();
 
-private:
+ private:
   vcl_ios_openmode flags_;
   vcl_fstream f_;
   int id_;

@@ -1,11 +1,9 @@
+// This is vxl/vil/vil_clamp_image.h
 #ifndef vil_clamp_image_h_
 #define vil_clamp_image_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-// This is vxl/vil/vil_clamp_image.h
-
 //:
 // \file
 // \brief Support function for vil_clamp_image_impl

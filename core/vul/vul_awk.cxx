@@ -1,8 +1,7 @@
-// This is ./vxl/vul/vul_awk.cxx
-#ifdef __GNUC__
+// This is vxl/vul/vul_awk.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 //
@@ -67,7 +66,7 @@ void vul_awk::next()
   fields_.clear();
   char* cp = split_line_;
 
-  for(;;) {
+  while (true) {
     // Eat white
     while (*cp && vcl_isspace(*cp))
       ++cp;
@@ -105,7 +104,7 @@ char const* vul_awk::line_from(int field_number) const
 void testvul_awk()
 {
   vcl_cout << "Start\n";
-  for(vul_awk awk(vcl_cin); awk; ++awk) {
+  for (vul_awk awk(vcl_cin); awk; ++awk) {
     vcl_cout << awk.NF() << ":" << awk[2] << vcl_endl;
   }
 }

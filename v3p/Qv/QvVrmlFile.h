@@ -1,6 +1,7 @@
+// This is v3p/Qv/QvVrmlFile.h
 #ifndef QvVrmlFile_h_
 #define QvVrmlFile_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //
@@ -24,8 +25,9 @@ struct QvVrmlFileData;
 class  QvVisitor;
 class  QvNode;
 
-class QvVrmlFile {
-public:
+class QvVrmlFile
+{
+ public:
   // Constructors/Destructors--------------------------------------------------
 
   QvVrmlFile(char const* filename);
@@ -41,7 +43,7 @@ public:
   float centroid[3];
   float radius;
 
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
   QvVrmlFileData* p;
 

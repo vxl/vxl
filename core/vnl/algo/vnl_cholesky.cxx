@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is vxl/vnl/algo/vnl_cholesky.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
@@ -89,8 +90,8 @@ vnl_matrix<double> vnl_cholesky::inverse() const
   dpodi_(I.data_block(), &n, &n, 0, &job);
 
   // Copy lower triangle into upper
-  for(int i = 0; i < n; ++i)
-    for(int j = i+1; j < n; ++j)
+  for (int i = 0; i < n; ++i)
+    for (int j = i+1; j < n; ++j)
       I(i,j) = I(j,i);
 
   return I;
@@ -102,9 +103,9 @@ vnl_matrix<double> vnl_cholesky::lower_triangle() const
   unsigned n = A_.columns();
   vnl_matrix<double> L(n,n);
   // Zap upper triangle and transpose
-  for(unsigned i = 0; i < n; ++i) {
+  for (unsigned i = 0; i < n; ++i) {
     L(i,i) = A_(i,i);
-    for(unsigned j = i+1; j < n; ++j) {
+    for (unsigned j = i+1; j < n; ++j) {
       L(j,i) = A_(j,i);
       L(i,j) = 0;
     }
@@ -119,9 +120,9 @@ vnl_matrix<double> vnl_cholesky::upper_triangle() const
   unsigned n = A_.columns();
   vnl_matrix<double> U(n,n);
   // Zap lower triangle and transpose
-  for(unsigned i = 0; i < n; ++i) {
+  for (unsigned i = 0; i < n; ++i) {
     U(i,i) = A_(i,i);
-    for(unsigned j = i+1; j < n; ++j) {
+    for (unsigned j = i+1; j < n; ++j) {
       U(i,j) = A_(j,i);
       U(j,i) = 0;
     }

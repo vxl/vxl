@@ -1,10 +1,9 @@
+// This is vxl/vil/vil_clamp.h
 #ifndef vil_clamp_h_
 #define vil_clamp_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vil/vil_clamp.h
-
 //:
 // \file
 // \brief Templated vil_clamping functions

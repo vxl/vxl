@@ -1,11 +1,8 @@
 // This is vxl/vul/vul_sprintf.cxx
-
-//-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //
-
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 08 Aug 96
 //

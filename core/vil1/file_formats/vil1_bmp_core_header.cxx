@@ -1,9 +1,11 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+// This is vxl/vil/file_formats/vil_bmp_core_header.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vil_bmp_core_header.h"
 
 #include <vcl_iostream.h>
@@ -42,11 +44,10 @@ void vil_bmp_core_header::write(vil_stream *s) const
 
 void vil_bmp_core_header::print(vcl_ostream &s) const
 {
-  s << "vil_bmp_core_header:" << vcl_endl
+  s << "vil_bmp_core_header:\n"
     << "  header_size  : " << header_size  << vcl_endl
     << "  width        : " << width        << vcl_endl
     << "  height       : " << height       << vcl_endl
     << "  planes       : " << planes       << vcl_endl
-    << "  bitsperpixel : " << bitsperpixel << vcl_endl
-    << vcl_endl;
+    << "  bitsperpixel : " << bitsperpixel << vcl_endl << vcl_endl;
 }

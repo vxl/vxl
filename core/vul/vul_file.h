@@ -1,10 +1,9 @@
+// This is vxl/vul/vul_file.h
 #ifndef vul_file_h_
 #define vul_file_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vul/vul_file.h
-
 //:
 // \file
 // \brief A collection of miscellaneous filesystem-type utilities
@@ -22,8 +21,8 @@
 
 //: A collection of miscellaneous filesystem-type utilities
 //
-struct vul_file {
-
+struct vul_file
+{
   //: Return current working directory
   static vcl_string get_cwd();
 

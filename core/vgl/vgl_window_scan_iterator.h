@@ -1,10 +1,9 @@
+// This is vxl/vgl/vgl_window_scan_iterator.h
 #ifndef vgl_window_scan_iterator_h_
 #define vgl_window_scan_iterator_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vgl/vgl_window_scan_iterator.h
-
 //: \file
 // \brief Iterator to scan rectangular windows
 // \author fsm@robots.ox.ac.uk

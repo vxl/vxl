@@ -1,11 +1,6 @@
+// This is vxl/vgl/io/vgl_io_homg_line_3d_2_points.h
 #ifndef vgl_io_homg_line_3d_2_points_h
 #define vgl_io_homg_line_3d_2_points_h
-#ifdef __GNUC__
-#pragma interface
-#endif
-
-// This is vxl/vgl/io/vgl_io_homg_line_3d_2_points.h
-
 //:
 // \file
 // \author John KANG (Manchester)
@@ -25,6 +20,5 @@ void vsl_b_read(vsl_b_istream &is, vgl_homg_line_3d_2_points<T> & p);
 //: Print human readable summary of object to a stream
 template <class T>
 void vsl_print_summary(vcl_ostream& os,const vgl_homg_line_3d_2_points<T> & p);
-
 
 #endif // vgl_io_homg_line_3d_2_points_h

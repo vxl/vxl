@@ -1,8 +1,7 @@
-#ifdef __GNUC__
+// This is vxl/vnl/vnl_linear_system.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-// This is vxl/vnl/vnl_linear_system.cxx
-
 //:
 // \file
 // \author David Capel, capes@robots

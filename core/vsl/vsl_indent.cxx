@@ -1,5 +1,5 @@
-// This is ./vxl/vsl/vsl_indent.cxx
-#ifdef __GNUC__
+// This is vxl/vsl/vsl_indent.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:

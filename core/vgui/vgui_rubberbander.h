@@ -1,6 +1,7 @@
+// This is oxl/vgui/vgui_rubberbander.h
 #ifndef vgui_rubberbander_h_
 #define vgui_rubberbander_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //--------------------------------------------------------------------------------
@@ -27,8 +28,9 @@
 #include <vgui/vgui_easy2D.h>
 #include <vgui/vgui_event_condition.h>
 
-class vgui_rubberbander_client {
-public:
+class vgui_rubberbander_client
+{
+ public:
   virtual ~vgui_rubberbander_client() { }
   virtual void add_point(float, float);
   virtual void add_line(float,float,float,float);
@@ -44,22 +46,17 @@ public:
 // rubberbanded objects straight onto an easy2D.
 class vgui_rubberbander_easy2D_client : public vgui_rubberbander_client
 {
-  public:
-    vgui_easy2D_sptr easy;
-    vgui_rubberbander_easy2D_client(vgui_easy2D_sptr const& e): easy(e) { }
+ public:
+  vgui_easy2D_sptr easy;
+  vgui_rubberbander_easy2D_client(vgui_easy2D_sptr const& e): easy(e) { }
 
-    void add_point(float x, float y){easy->add_point(x,y);}
-    void add_line(float x0, float y0, float x1, float y1)
-      {easy->add_line(x0, y0, x1, y1);}
-    void add_infinite_line(float a, float b, float c)
-      {easy->add_infinite_line(a, b, c);}
-    void add_circle(float x, float y, float r)
-      {easy->add_circle(x, y, r);}
-    void add_linestrip(int n, float const* x, float const* y)
-      {easy->add_linestrip(n, x, y);}
-    void add_polygon(int n, float const* x, float const* y)
-      {easy->add_polygon(n, x, y);}
-    void add_box(float, float, float, float){ }
+  void add_point(float x, float y){easy->add_point(x,y);}
+  void add_line(float x0, float y0, float x1, float y1){easy->add_line(x0, y0, x1, y1);}
+  void add_infinite_line(float a, float b, float c){easy->add_infinite_line(a, b, c);}
+  void add_circle(float x, float y, float r){easy->add_circle(x, y, r);}
+  void add_linestrip(int n, float const* x, float const* y){easy->add_linestrip(n, x, y);}
+  void add_polygon(int n, float const* x, float const* y){easy->add_polygon(n, x, y);}
+  void add_box(float, float, float, float){}
 };
 
 //: Rubberbanding of circles, lines etc.
@@ -69,7 +66,7 @@ class vgui_rubberbander_easy2D_client : public vgui_rubberbander_client
 //  vgui_rubberbander_client.
 class vgui_rubberbander : public vgui_tableau
 {
-public:
+ public:
   bool use_overlays;  // capes@robots - default is true
 
   void init (vgui_rubberbander_client* client);
@@ -103,7 +100,7 @@ public:
   void draw_polygon(float x, float y);
   void draw_box(float x0,float y0, float x1,float y1);
 
-protected:
+ protected:
   ~vgui_rubberbander() { }
   bool handle_point(vgui_event const&, float, float);
   bool handle_line(vgui_event const&, float, float);
@@ -114,7 +111,7 @@ protected:
   bool handle_box(vgui_event const&, float, float);
   bool handle(vgui_event const&);
 
-private:
+ private:
   vgui_rubberbander_client *client_;
   enum object_type {none_enum, point_enum, line_enum, infinite_line_enum, circle_enum, polygon_enum, linestrip_enum,box_enum};
   bool active;
@@ -125,7 +122,8 @@ private:
 
 typedef vgui_tableau_sptr_t<vgui_rubberbander> vgui_rubberbander_sptr;
 
-struct vgui_rubberbander_new : public vgui_rubberbander_sptr {
+struct vgui_rubberbander_new : public vgui_rubberbander_sptr
+{
   vgui_rubberbander_new(vgui_rubberbander_client* client)
     : vgui_rubberbander_sptr(new vgui_rubberbander(client)) { }
   //vgui_rubberbander_new(vgui_easy2D_sptr const&e)   : vgui_rubberbander_sptr(new vgui_rubberbander(e)) { }

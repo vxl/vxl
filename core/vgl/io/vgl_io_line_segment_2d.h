@@ -1,11 +1,6 @@
+// This is vxl/vgl/io/vgl_io_line_segment_2d.h
 #ifndef vgl_io_line_segment_2d_h
 #define vgl_io_line_segment_2d_h
-#ifdef __GNUC__
-#pragma interface
-#endif
-
-// This is vxl/vgl/io/vgl_io_line_segment_2d.h
-
 //:
 // \file
 // \author Tim Cootes
@@ -25,6 +20,5 @@ void vsl_b_read(vsl_b_istream &is, vgl_line_segment_2d<T> & v);
 //: Print human readable summary of object to a stream
 template <class T>
 void vsl_print_summary(vcl_ostream& os,const vgl_line_segment_2d<T> & b);
-
 
 #endif // vgl_io_line_segment_2d_h

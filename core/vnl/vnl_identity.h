@@ -1,10 +1,9 @@
+// This is vxl/vnl/vnl_identity.h
 #ifndef vnl_identity_h_
 #define vnl_identity_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_identity.h
-
 //: \file
 //  \author Andrew W. Fitzgibbon, Oxford RRG
 //  \date   07 Dec 98
@@ -18,8 +17,9 @@
 #include <vnl/vnl_unary_function.h>
 
 template <class T>
-class vnl_identity : public vnl_unary_function<T,T> {
-public:
+class vnl_identity : public vnl_unary_function<T,T>
+{
+ public:
   vnl_unary_function<T,T>* Copy() const {
     vnl_identity<T>* copy = new vnl_identity<T>;
     *copy = *this;

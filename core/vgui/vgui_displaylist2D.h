@@ -1,7 +1,7 @@
 // This is oxl/vgui/vgui_displaylist2D.h
 #ifndef vgui_displaylist2D_h_
 #define vgui_displaylist2D_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -19,25 +19,27 @@
 #include <vgui/vgui_displaylist2D_sptr.h>
 
 //: Displaying two-dimensional geometric objects.
-class vgui_displaylist2D : public vgui_displaybase {
-public:
+class vgui_displaylist2D : public vgui_displaybase
+{
+ public:
   vgui_displaylist2D();
 
   virtual bool handle(const vgui_event& e);
   bool motion(int x, int y);
   bool mouse_down(int x, int y, vgui_button button, vgui_modifier modifier);
 
-protected:
+ protected:
  ~vgui_displaylist2D();
 
-private:
+ private:
   void get_hits(float x, float y, vcl_vector<unsigned>& my_hits);
   unsigned find_closest(float x, float y, vcl_vector<unsigned>& hits);
 
   bool posted_redraw_;
 };
 
-struct vgui_displaylist2D_new : public vgui_displaylist2D_sptr {
+struct vgui_displaylist2D_new : public vgui_displaylist2D_sptr
+{
   vgui_displaylist2D_new() :
     vgui_displaylist2D_sptr(new vgui_displaylist2D) { }
 };

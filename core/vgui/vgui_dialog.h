@@ -1,5 +1,9 @@
-// This is ./oxl/vgui/vgui_dialog.h
-
+// This is oxl/vgui/vgui_dialog.h
+#ifndef vgui_dialog_h_
+#define vgui_dialog_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -17,16 +21,9 @@
 //   26-APR-2002 K.Y.McGaul - Converted to doxygen style comments.
 // \endverbatim
 
-#ifndef vgui_dialog_h_
-#define vgui_dialog_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vgui/vgui_tableau.h>
-//class vgui_dialog_field;
 class vgui_dialog_impl;
 
 //: Abstract dialog class
@@ -51,7 +48,7 @@ class vgui_dialog_impl;
 // \endcode
 class vgui_dialog
 {
-public:
+ public:
 
   //: Constructor - takes the title of the dialog box.
   vgui_dialog(const char* name);
@@ -103,7 +100,7 @@ public:
 
   bool ask();
 
-protected:
+ protected:
   vgui_dialog_impl* impl;
 };
 

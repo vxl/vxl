@@ -1,10 +1,9 @@
-// This is ./vxl/vil/vil_save.h
+// This is vxl/vil/vil_save.h
 #ifndef vil_save_h_
 #define vil_save_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author    awf@robots.ox.ac.uk

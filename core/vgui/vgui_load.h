@@ -1,6 +1,7 @@
+// This is oxl/vgui/vgui_load.h
 #ifndef vgui_load_h_
 #define vgui_load_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 
@@ -28,8 +29,9 @@ template <class T> class vnl_matrix;
 #include <vgui/vgui_load_sptr.h>
 #include <vgui/vgui_wrapper_tableau.h>
 
-class vgui_load : public vgui_wrapper_tableau {
-public:
+class vgui_load : public vgui_wrapper_tableau
+{
+ public:
 
   vgui_load(vgui_tableau_sptr const& child);
 
@@ -60,7 +62,7 @@ public:
   // default for a w-by-h image :
   void set_image(unsigned w, unsigned h) { set_ortho(0, h, w, 0); }
 
-protected:
+ protected:
   ~vgui_load() { }
 
   bool handle( vgui_event const &e);
@@ -75,7 +77,8 @@ protected:
   double modelviewmatrixt[16];
 };
 
-struct vgui_load_new : public vgui_load_sptr {
+struct vgui_load_new : public vgui_load_sptr
+{
   typedef vgui_load_sptr base;
   vgui_load_new(vgui_tableau_sptr const& child) : base(new vgui_load(child)) { }
 };

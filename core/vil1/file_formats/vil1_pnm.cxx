@@ -1,5 +1,5 @@
-// This is ./vxl/vil/file_formats/vil_pnm.cxx
-#ifdef __GNUC__
+// This is vxl/vil/file_formats/vil_pnm.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
@@ -157,7 +157,7 @@ static void ConvertMSBToHost( void* buf, int num_words )
 {
 #if VXL_LITTLE_ENDIAN
   unsigned char* ptr = (unsigned char*)buf;
-  for( int i=0; i < num_words; ++i ) {
+  for ( int i=0; i < num_words; ++i ) {
     unsigned char t = *ptr;
     *ptr = *(ptr+1);
     *(ptr+1) = t;
@@ -171,7 +171,7 @@ static void ConvertHostToMSB( void* buf, int num_words )
 {
 #if VXL_LITTLE_ENDIAN
   unsigned char* ptr = (unsigned char*)buf;
-  for( int i=0; i < num_words; ++i ) {
+  for ( int i=0; i < num_words; ++i ) {
     unsigned char t = *ptr;
     *ptr = *(ptr+1);
     *(ptr+1) = t;
@@ -279,7 +279,7 @@ bool vil_pnm_generic_image::get_section(void* buf, int x0, int y0, int xs, int y
   //
   if (magic_ == 1) // ascii pbm
   {
-    vcl_cerr << __FILE__ << ": ascii bitmap not implemented" << vcl_endl;
+    vcl_cerr << __FILE__ << ": ascii bitmap not implemented\n";
     return false;
   } if (magic_ > 4) // pgm or ppm raw image
   {
@@ -289,14 +289,14 @@ bool vil_pnm_generic_image::get_section(void* buf, int x0, int y0, int xs, int y
     int byte_width = width_ * bytes_per_pixel;
     int byte_out_width = xs * bytes_per_pixel;
 
-    for(int y = 0; y < ys; ++y) {
+    for (int y = 0; y < ys; ++y) {
       vs_->seek(byte_start + y * byte_width);
       vs_->read(ib + y * byte_out_width, byte_out_width);
     }
-    if( bytes_per_sample==2 && VXL_LITTLE_ENDIAN ) {
+    if ( bytes_per_sample==2 && VXL_LITTLE_ENDIAN ) {
       ConvertMSBToHost( buf, xs*ys*components_ );
-    } else if( bytes_per_sample > 2 ) {
-      vcl_cerr << "ERROR: pnm: reading rawbits format with > 16bit samples" << vcl_endl;
+    } else if ( bytes_per_sample > 2 ) {
+      vcl_cerr << "ERROR: pnm: reading rawbits format with > 16bit samples\n";
       return false;
     } 
   }
@@ -327,22 +327,22 @@ bool vil_pnm_generic_image::get_section(void* buf, int x0, int y0, int xs, int y
     vs_->seek(start_of_data_);
     //0. Skip to the starting line
     //
-    for(int t = 0; t < y0*width_*components_; ++t) { int a; (*vs_) >> a; }
-    for(int y = 0; y < ys; ++y) {
+    for (int t = 0; t < y0*width_*components_; ++t) { int a; (*vs_) >> a; }
+    for (int y = 0; y < ys; ++y) {
       // 1. Skip to column x0
       //
-      for(int t = 0; t < x0*components_; ++t) { int a; (*vs_) >> a; }
+      for (int t = 0; t < x0*components_; ++t) { int a; (*vs_) >> a; }
       // 2. Read the data
       //
       if (bits_per_component_ <= 8)
-        for(int x = 0; x < xs*components_; ++x) { int a; (*vs_) >> a; *(ib++)=a; }
+        for (int x = 0; x < xs*components_; ++x) { int a; (*vs_) >> a; *(ib++)=a; }
       else if (bits_per_component_ <= 16)
-        for(int x = 0; x < xs*components_; ++x) { int a; (*vs_) >> a; *(jb++)=a; }
+        for (int x = 0; x < xs*components_; ++x) { int a; (*vs_) >> a; *(jb++)=a; }
       else
-        for(int x = 0; x < xs*components_; ++x) { int a; (*vs_) >> a; *(kb++)=a; }
+        for (int x = 0; x < xs*components_; ++x) { int a; (*vs_) >> a; *(kb++)=a; }
       // 3. Skip to the next line
       //
-      for(int t = 0; t < (width_-x0-xs)*components_; ++t) { int a; (*vs_) >> a; }
+      for (int t = 0; t < (width_-x0-xs)*components_; ++t) { int a; (*vs_) >> a; }
     }
   }
 
@@ -361,7 +361,7 @@ bool vil_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs,
 
   if (magic_ == 1) // ascii pbm
   {
-    vcl_cerr << __FILE__ << ": ascii bitmap not implemented" << vcl_endl;
+    vcl_cerr << __FILE__ << ": ascii bitmap not implemented\n";
     return false;
   } else if (magic_ > 4) // pgm or ppm raw image
   {
@@ -371,24 +371,24 @@ bool vil_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs,
     int byte_width = width_ * bytes_per_pixel;
     int byte_out_width = xs * bytes_per_pixel;
 
-    if( bytes_per_sample==1 || ( bytes_per_sample==2 && VXL_BIG_ENDIAN ) ) {
-      for(int y = 0; y < ys; ++y) {
+    if ( bytes_per_sample==1 || ( bytes_per_sample==2 && VXL_BIG_ENDIAN ) ) {
+      for (int y = 0; y < ys; ++y) {
         vs_->seek(byte_start + y * byte_width);
         vs_->write(ob + y * byte_out_width, byte_out_width);
       }
-    } else if( bytes_per_sample==2 ) {
+    } else if ( bytes_per_sample==2 ) {
       // Little endian host; must convert words to have MSB first.
       // Can't convert the input buffer, because it's not ours.
       // Convert line by line to avoid duplicating a potentially large image.
       vcl_vector<unsigned char> tempbuf( byte_out_width );
-      for(int y = 0; y < ys; ++y) {
+      for (int y = 0; y < ys; ++y) {
         vs_->seek(byte_start + y * byte_width);
         vcl_memcpy( &tempbuf[0], ob + y * byte_out_width, byte_out_width );
         ConvertHostToMSB( &tempbuf[0], xs*components_ );
         vs_->write(&tempbuf[0], byte_out_width);
       }
     } else {
-      vcl_cerr << "ERROR: pnm: writing rawbits format with > 16bit samples" << vcl_endl;
+      vcl_cerr << "ERROR: pnm: writing rawbits format with > 16bit samples\n";
       return false;
     } 
   }
@@ -397,7 +397,7 @@ bool vil_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs,
     int byte_width = (width_+7)/8;
     int byte_out_width = (xs+7)/8;
 
-    for(int y = 0; y < ys; ++y) {
+    for (int y = 0; y < ys; ++y) {
       vil_streampos byte_start = start_of_data_ + (y0+y) * byte_width + x0/8;
       vs_->seek(byte_start);
       int s = x0&7; // = x0%8;
@@ -408,7 +408,7 @@ bool vil_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs,
         vs_->seek(byte_start);
         a &= ((1<<s)-1)<<(8-s); // clear the last 8-s bits of a
       }
-      for(int x = 0; x < xs; ++x) {
+      for (int x = 0; x < xs; ++x) {
         if (b&(1<<(7-t))) a |= 1<<(7-s); // single bit; high bit = first
         if (t >= 7) { b = ob[y * byte_out_width + (x+1)/8]; t = 0; }
         else ++t;
@@ -432,13 +432,13 @@ bool vil_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs,
     if (x0 > 0 || y0 > 0 || xs < width_)
       return false; // can only write the full image in this mode
     vs_->seek(start_of_data_);
-    for(int y = 0; y < ys; ++y) {
+    for (int y = 0; y < ys; ++y) {
       if (bits_per_component_ <= 8)
-        for(int x = 0; x < xs*components_; ++x) { (*vs_) << ob[x]; }
+        for (int x = 0; x < xs*components_; ++x) { (*vs_) << ob[x]; }
       else if (bits_per_component_ <= 16)
-        for(int x = 0; x < xs*components_; ++x) { (*vs_) << pb[x]; }
+        for (int x = 0; x < xs*components_; ++x) { (*vs_) << pb[x]; }
       else
-        for(int x = 0; x < xs*components_; ++x) { (*vs_) << qb[x]; }
+        for (int x = 0; x < xs*components_; ++x) { (*vs_) << qb[x]; }
       ob += xs; pb += xs; qb += xs;
     }
   }

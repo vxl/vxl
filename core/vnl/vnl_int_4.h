@@ -1,10 +1,9 @@
+// This is vxl/vnl/vnl_int_4.h
 #ifndef vnl_int_4_h_
 #define vnl_int_4_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_int_4.h
-
 //: \file
 // \brief
 // \author Andrew W. Fitzgibbon, Oxford RRG

@@ -1,14 +1,12 @@
+// This is vxl/vnl/algo/vnl_fft.h
 #ifndef vnl_fft_h_
 #define vnl_fft_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
-
 //:
 // \file
+// \author fsm@robots.ox.ac.uk
 
 #include <vcl_compiler.h>
 
@@ -47,4 +45,4 @@ void vnl_fft_gpfa(double *a, double *b, double const *triggs,
                   int inc, int jump, int n,
                   int lot, int isign, int const pqr[3], int *info);
 
-#endif
+#endif // vnl_fft_h_

@@ -1,8 +1,7 @@
-#ifdef __GNUC__
+// This is vxl/vnl/vnl_double_2.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-// This is vxl/vnl/vnl_double_2.cxx
-
 //
 // vnl_double_2
 // Author: Andrew W. Fitzgibbon, Oxford RRG

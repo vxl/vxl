@@ -1,22 +1,19 @@
+// This is vil/io/vil_io_memory_image.h
 #ifndef vil_io_memory_image_h_
 #define vil_io_memory_image_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-// This is vil/io/vil_io_memory_image.h
-#include <vsl/vsl_binary_io.h>
-
-
-// Predeclare classes
-class vil_memory_image;
-
 //:
 // \file
 // \brief Perform serialised binary IO for vil_memory_image
 // \author Ian Scott (Manchester)
 // \date 23-Mar-2001
 
+#include <vsl/vsl_binary_io.h>
+
+// Predeclare classes
+class vil_memory_image;
 
 //: Binary save vgl_my_class to stream.
 void vsl_b_write(vsl_b_ostream &os, const vil_memory_image & b);

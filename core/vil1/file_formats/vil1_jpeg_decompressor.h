@@ -1,9 +1,9 @@
+// This is vxl/vil/file_formats/vil_jpeg_decompressor.h
 #ifndef vil_jpeg_decompressor_h_
 #define vil_jpeg_decompressor_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
@@ -11,8 +11,9 @@
 #include <vil/vil_jpeglib.h>
 class vil_stream;
 
-class vil_jpeg_decompressor {
-public:
+class vil_jpeg_decompressor
+{
+ public:
   struct jpeg_error_mgr         jerr;
   struct jpeg_decompress_struct jobj;
   vil_stream *stream;
@@ -27,7 +28,7 @@ public:
   // It should cost nothing to read the same scanline twice in succession.
   JSAMPLE const *read_scanline(unsigned line);
 
-private:
+ private:
   bool ready; // true if decompression has started but not finished.
   bool valid; // true if last scanline read was successful.
 

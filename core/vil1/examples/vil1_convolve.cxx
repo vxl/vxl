@@ -1,5 +1,5 @@
-// Example: convolution
-#ifdef __GNUC__
+// This is vxl/vil/examples/vil_convolve.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation "vul_arg.h"//otherwise "unresolved typeinfo vul_arg_base"
 #endif
 
@@ -84,21 +84,21 @@ int main(int argc, char ** argv)
   // Build kernel in "kernelimg"
   vil_memory_image_of<float> kernelimg(0,0);
   vcl_string kernel(a_kernel());
-  for(vil_kernel_info* kp = kernels; kp->name; ++kp)
+  for (vil_kernel_info* kp = kernels; kp->name; ++kp)
     if (kernel == kp->name) {
       kernelimg.resize(kp->w, kp->h);
       double* v = kp->mask;
       double power = 0;
-      for(int y = 0; y < kp->h; ++y)
-        for(int x = 0; x < kp->w; ++x) {
+      for (int y = 0; y < kp->h; ++y)
+        for (int x = 0; x < kp->w; ++x) {
           power += vcl_fabs(*v);
           kernelimg[y][x] = *v;
           ++v;
         }
       // Scale to unit power
       power = 1/power;
-      for(int y = 0; y < kp->h; ++y)
-        for(int x = 0; x < kp->w; ++x)
+      for (int y = 0; y < kp->h; ++y)
+        for (int x = 0; x < kp->w; ++x)
           kernelimg[y][x] *= power;
     }
   if (kernelimg.width() == 0) {

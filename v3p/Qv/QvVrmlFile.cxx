@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is v3p/Qv/QvVrmlFile.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 
@@ -78,7 +79,7 @@ char const* QvVrmlFile::get_filename()
 
 void QvVrmlFile::traverse(QvVisitor* visitor)
 {
-  for(vcl_vector<QvNode*>::iterator np = p->nodes.begin(); np != p->nodes.end(); ++np)
+  for (vcl_vector<QvNode*>::iterator np = p->nodes.begin(); np != p->nodes.end(); ++np)
     visitor->Visit(*np);
 }
 
@@ -134,7 +135,7 @@ struct VrmlCentroidVisitor : public QvVisitor {
   bool Visit(QvPointSet* ps) {
     int nn = (ps->numPoints.value == -1) ? ps->num_ : ps->numPoints.value;
     nn += ps->startIndex.value;
-    for(int i = ps->startIndex.value; i < nn; ++i)
+    for (int i = ps->startIndex.value; i < nn; ++i)
       inc(ps->points_[i]);
     return true; // ??
   }
@@ -145,7 +146,7 @@ struct VrmlCentroidVisitor : public QvVisitor {
     int numvertinds = node->numvertinds_;            // no. of vertex indices
     const int* vertindices = node->vertindices_;     // vertex index list
 
-    for(int j = 0; j < numvertinds-1; ++j) {
+    for (int j = 0; j < numvertinds-1; ++j) {
       int i1 = vertindices[j];
       if (i1 != -1) inc(vertexlist[i1]);
     }
@@ -153,7 +154,7 @@ struct VrmlCentroidVisitor : public QvVisitor {
   }
 
   bool Visit(QvIndexedFaceSet* node) {
-    for(int i = 0; i < node->numvertinds_; ++i) {
+    for (int i = 0; i < node->numvertinds_; ++i) {
       int vert_index = node->vertindices_[i];
       if (vert_index != -1) inc(node->vertexlist_[vert_index]);
     }

@@ -1,10 +1,9 @@
+// This is vxl/vul/vul_redirector.h
 #ifndef vul_redirector_h_
 #define vul_redirector_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vul/vul_redirector.h
-
 //:
 // \file
 // \brief Contains class for simplified redirection of iostreams
@@ -24,9 +23,9 @@ struct vul_redirector_data;
 //: Simplified redirection of iostreams
 // To implement your own, derive a class from vul_redirector,
 // and implement `putchunk'.
-class vul_redirector {
-public:
-
+class vul_redirector
+{
+ public:
   //: Attach redirector to vcl_ostream s, so that all future output to s goes through this->putchunk
    vul_redirector(vcl_ostream& s);
 
@@ -37,7 +36,7 @@ public:
   // Called with `n' characters in `buf', do with as you like.
    virtual int putchunk(char const* buf, int n);
 
-protected:
+ protected:
   //: Put characters to original stream.
   // Useful for derived classes which wish to filter a stream.
    int put_passthru(char const* buf, int n);
@@ -45,7 +44,7 @@ protected:
   //: Sync original stream.
    int sync_passthru();
 
-private:
+ private:
   vul_redirector_data* p;
 };
 

@@ -1,9 +1,9 @@
+// This is vxl/vcsl/vcsl_scale.h
 #ifndef vcsl_scale_h
 #define vcsl_scale_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author François BERTEL
@@ -23,7 +23,7 @@
 class vcsl_scale
   : public vcsl_spatial_transformation
 {
-public:
+ public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
@@ -73,7 +73,7 @@ public:
   virtual vnl_vector<double> inverse(const vnl_vector<double> &v,
                                      double time) const;
 
-protected:
+ protected:
 
   //: Compute the value of the parameter at time `time'
   virtual double scale_value(double time) const;

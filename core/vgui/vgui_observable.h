@@ -1,6 +1,7 @@
+// This is oxl/vgui/vgui_observable.h
 #ifndef vgui_observable_h_
 #define vgui_observable_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 // .NAME vgui_observable
@@ -12,8 +13,9 @@
 class vgui_observer;
 class vgui_message;
 
-class vgui_observable {
-public:
+class vgui_observable
+{
+ public:
   vgui_observable() { }
   virtual ~vgui_observable();
 
@@ -25,7 +27,7 @@ public:
   virtual void notify() const;
   virtual void notify(const vgui_message &) const;
 
-private:
+ private:
   vcl_vector<vgui_observer*> observers;
   // disallow assignment :
   vgui_observable(vgui_observable const&) { }

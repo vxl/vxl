@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is vxl/vil/file_formats/vil_gen.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 

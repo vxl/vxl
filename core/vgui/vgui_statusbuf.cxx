@@ -1,8 +1,7 @@
-// This is ./oxl/vgui/vgui_statusbuf.cxx
-#ifdef __GNUC__
+// This is oxl/vgui/vgui_statusbuf.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
@@ -33,15 +32,20 @@ int vgui_statusbuf::overflow(int ch)
   pbump (-n);  // Reset pptr().
   return 0; 
 }
- 
-//int vgui_statusbuf::xsputn(char* text, int n)
-// streamsize vgui_statusbuf::xsputn(char* text, streamsize n)
-// { 
-//   vcl_cerr << "xsputn " << text << " " << n << vcl_endl;
-//   return sync() == EOF ? 0 : status->write(text, n);
-// }
 
-// streamsize vgui_statusbuf::xsputn(const char* text, streamsize n) {
-//   vcl_cerr << "xsputn const " << text << " " << n << vcl_endl;
-//   return sync() == EOF ? 0 : status->write(text, n);
-// }
+#if 0
+int vgui_statusbuf::xsputn(char* text, int n)
+{
+}
+
+streamsize vgui_statusbuf::xsputn(char* text, streamsize n)
+{ 
+  vcl_cerr << "xsputn " << text << " " << n << vcl_endl;
+  return sync() == EOF ? 0 : status->write(text, n);
+}
+
+streamsize vgui_statusbuf::xsputn(const char* text, streamsize n) {
+  vcl_cerr << "xsputn const " << text << " " << n << vcl_endl;
+  return sync() == EOF ? 0 : status->write(text, n);
+}
+#endif

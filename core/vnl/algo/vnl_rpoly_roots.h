@@ -1,9 +1,9 @@
+// This is vxl/vnl/algo/vnl_rpoly_roots.h
 #ifndef vnl_rpoly_roots_h_
 #define vnl_rpoly_roots_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 //  \file
 //  \brief Finds roots of a real polynomial
@@ -33,8 +33,9 @@ class vnl_real_polynomial;
 //  This class is not very const-correct as it is intended as a compute object
 //  rather than a data object.
 
-class vnl_rpoly_roots {
-public:
+class vnl_rpoly_roots
+{
+ public:
 // Constructors/Destructors--------------------------------------------------
 
   //: The constructor calculates the roots.
@@ -86,7 +87,7 @@ public:
   //: Compute roots using Laguerre algorithm. [unimplemented]
   bool compute_laguerre();
 
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
   vnl_vector<double> coeffs_;
 

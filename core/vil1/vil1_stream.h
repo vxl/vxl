@@ -1,21 +1,22 @@
 // This is vxl/vil/vil_stream.h
 #ifndef vil_stream_h_
 #define vil_stream_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-typedef long int vil_streampos; // should be identical to vcl_istream::streampos
-
 //:
 // \file
 // \brief Stream interface for VIL image loaders
 // \author  awf@robots.ox.ac.uk
 // \date 16 Feb 00
 
+typedef long int vil_streampos; // should be identical to vcl_istream::streampos
+
 //: Stream interface for VIL image loaders
 // This allows the loaders to be used with any type of stream.
-class vil_stream {
-public:
+class vil_stream
+{
+ public:
   //: Return false if the stream is broken.
   virtual bool ok() const = 0;
 
@@ -37,11 +38,11 @@ public:
   void ref();
   void unref();
 
-protected:
+ protected:
   vil_stream();
   virtual ~vil_stream();
 
-private: // use the methods, Luke!
+ private: // use the methods, Luke!
   int refcount_;
 };
 

@@ -1,9 +1,9 @@
+// This is vxl/vnl/algo/vnl_svd.h
 #ifndef vnl_svd_h_
 #define vnl_svd_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 //  \file
 //  \brief Holds the singular value decomposition of a vnl_matrix.
@@ -59,8 +59,9 @@
 //  eigensystems, which cannot be members of just one matrix.
 
 export template <class T>
-class vnl_svd {
-public:
+class vnl_svd
+{
+ public:
   //: The singular values of a matrix of complex<T> are of type T, not complex<T>
   typedef typename vnl_numeric_traits<T>::abs_t singval_t;
 
@@ -93,7 +94,7 @@ public:
   int             rank () const { return rank_; }
   singval_t       well_condition () const { return sigma_min()/sigma_max(); }
 
-    //: Calculate determinant as product of diagonals in W.
+  //: Calculate determinant as product of diagonals in W.
   singval_t       determinant_magnitude () const;
   singval_t       norm() const;
 
@@ -176,7 +177,7 @@ public:
 
   bool valid() const { return valid_; }
 
-private:
+ private:
 
   int m_, n_;              // Size of M, local cache.
   vnl_matrix<T> U_;        // Columns Ui are basis for range of M for Wi != 0

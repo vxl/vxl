@@ -1,10 +1,9 @@
+// This is vxl/vil/vil_crop_image_impl.h
 #ifndef vil_crop_image_h_
 #define vil_crop_image_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vil/vil_crop_image_impl.h
-
 //:
 // \file
 // \brief A generic_image adaptor that behaves like a cropped version of its input
@@ -16,8 +15,9 @@
 #include <vcl_string.h>
 
 //: A generic_image adaptor that behaves like a cropped version of its input
-class vil_crop_image_impl : public vil_image_impl {
-public:
+class vil_crop_image_impl : public vil_image_impl
+{
+ public:
   vil_crop_image_impl(vil_image const&, int x0, int y0, int w, int h);
   ~vil_crop_image_impl();
 
@@ -48,7 +48,7 @@ public:
 
 /* END_MANCHESTER_BINARY_IO_CODE */
 
-protected:
+ protected:
   vil_image gi_;
   int x0_;
   int y0_;

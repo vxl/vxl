@@ -1,9 +1,8 @@
-//-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
+// This is oxl/vgui/vgui_observer.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //
-// .NAME vgui_observer
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 11 Sep 99
 //

@@ -1,10 +1,9 @@
-// This is ./vxl/vnl/vnl_real_npolynomial.h
+// This is vxl/vnl/vnl_real_npolynomial.h
 #ifndef vnl_real_npolynomial_h_
 #define vnl_real_npolynomial_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 //  \file
 //  \brief contains class for polynomials with N variables
@@ -45,10 +44,11 @@
 //    [1 2].
 //  \endverbatim
 
-class vnl_real_npolynomial {
+class vnl_real_npolynomial
+{
   friend class vnl_rnpoly_solve;
 
-public:
+ public:
 
   // Constructor-----------------------------------------------------------------
   vnl_real_npolynomial() { } // don't use this. only here for the STL vector class.
@@ -97,7 +97,7 @@ public:
   //: Return the vector of coefficients
   vnl_matrix<int>& polyn()       { return polyn_; }
 
-private:
+ private:
   void simplify();
   double eval(const vnl_matrix<double>& xn);
 

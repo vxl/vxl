@@ -1,6 +1,7 @@
+// This is vxl/vnl/algo/vnl_scatter_3x3.h
 #ifndef vnl_scatter_3x3_h_
 #define vnl_scatter_3x3_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -21,8 +22,9 @@
 #include <vnl/vnl_vector_fixed.h>
 
 template <class T>
-class vnl_scatter_3x3 : public vnl_matrix_fixed<T,3,3> {
-public:
+class vnl_scatter_3x3 : public vnl_matrix_fixed<T,3,3>
+{
+ public:
   typedef vnl_matrix_fixed<T,3,3> base;
   typedef vnl_vector_fixed<T,3> vect;
 
@@ -61,7 +63,7 @@ public:
     return V_;
   }
 
-protected:
+ protected:
   bool symmetricp;
   bool eigenvectors_currentp;
   vnl_matrix_fixed<T,3,3> V_;

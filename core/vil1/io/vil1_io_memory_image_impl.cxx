@@ -1,19 +1,16 @@
-#ifdef __GNUC__
+// This is vxl/vil/io/vil_io_memory_image_impl.txx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
-// This is vxl/vil/io/vil_io_memory_image_impl.txx
+//:
+// \file
+// \author Ian Scott and Nick Costen (Manchester)
 
 #include <vil/vil_memory_image_impl.h>
 #include <vil/io/vil_io_memory_image_format.h>
 #include <vil/io/vil_io_memory_image_impl.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_explicit_io.h>
-
-
-//:
-// \file
-// \author Ian Scott and Nick Costen (Manchester)
 
 //: Constructor
 vil_io_memory_image_impl::vil_io_memory_image_impl()
@@ -62,7 +59,7 @@ vcl_string vil_io_memory_image_impl::target_classname() const
 //: Return true if b is of class target_classname()
 bool vil_io_memory_image_impl::is_io_for(const vil_image_impl& b) const
 {
-  return (b.is_a()==target_classname());
+  return b.is_a()==target_classname();
 }
 
 
@@ -77,7 +74,7 @@ void vsl_b_write(vsl_b_ostream &os, const vil_memory_image_impl & p)
   vsl_b_write(os, p.width());
   vsl_b_write(os,p.components());
   vsl_b_write(os,p.bits_per_component());
-  vsl_b_write(os,p.component_format());
+  vsl_b_write(os,(int)(p.component_format()));
   int nelems = p.planes() * p.height() * p.width() * p.components();
   int size = nelems * p.bits_per_component() / CHAR_BIT;
   unsigned char* buf = new unsigned char[size];

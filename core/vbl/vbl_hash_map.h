@@ -1,12 +1,9 @@
 // This is vxl/vbl/vbl_hash_map.h
-
-// -*- c++ -*-
 #ifndef vbl_hash_map_h_
 #define vbl_hash_map_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Simpler hashtable
@@ -19,8 +16,7 @@
 //: Simpler hashtable
 
 template <class Key, class T>
-class vbl_hash_map :
-         public vcl_hash_map<Key, T, vcl_hash<Key>, vcl_equal_to<Key> >
+class vbl_hash_map : public vcl_hash_map<Key, T, vcl_hash<Key>, vcl_equal_to<Key> >
 {
  public:
   typedef vcl_hash_map<Key, T, vcl_hash<Key>, vcl_equal_to<Key> > base;
@@ -66,16 +62,19 @@ class vbl_hash_map :
   bool next() {
     ++pos;
     Position tmp = pos; ++tmp;
-    return (tmp == end());
+    return tmp == end();
   }
-private:
+ private:
   bool prev() {
-    //Position tmp = pos;
-    //--pos;
-    //return (tmp == begin());
+#if 0
+    Position tmp = pos;
+    --pos;
+    return tmp == begin();
+#else
     return false;
+#endif
   }
-public:
+ public:
   Position& current_position () {
     return pos;
   }

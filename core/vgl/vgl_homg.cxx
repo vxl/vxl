@@ -1,4 +1,5 @@
-#ifdef __GNUG__
+// This is vxl/vgl/vgl_homg.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 

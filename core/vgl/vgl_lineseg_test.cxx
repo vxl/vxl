@@ -1,11 +1,11 @@
 // This is vxl/vgl/vgl_lineseg_test.cxx
-
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vgl_polygon_test.h"
 #include <vgl/vgl_triangle_test.h>
 

@@ -1,10 +1,9 @@
-// This is ./oxl/xcv/xcv_multiview.h
+// This is oxl/xcv/xcv_multiview.h
 #ifndef xcv_multiview_h_
 #define xcv_multiview_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author   K.Y.McGaul
@@ -30,7 +29,7 @@ class HomgPoint2D;
 
 class xcv_multiview
 {
-public:
+ public:
   //: Compute an FMatrix for the two selected views.
   static void compute_f_matrix();
   //: Compute an HMatrix2D for the two selected views.
@@ -75,7 +74,7 @@ public:
   //  Note that this is implemented in xcv_multiview_create_multiview_menu.cxx
   static vgui_menu create_multiview_menu();
 
-protected:
+ protected:
   //: Gets a twoview_manager between the tableaux at the given positions.
   static xcv_twoview_manager* get_twoview_manager(vcl_vector<int>& cols, vcl_vector<int>& rows);
   static vcl_vector<vgui_rubberbander_sptr> twoview_rubber0, twoview_rubber1;

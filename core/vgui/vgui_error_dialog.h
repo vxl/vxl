@@ -1,10 +1,6 @@
-// This is ./oxl/vgui/vgui_error_dialog.h
+// This is oxl/vgui/vgui_error_dialog.h
 #ifndef vgui_error_dialog_h_
 #define vgui_error_dialog_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
 //:
 // \file
 // \author awf@robots.ox.ac.uk

@@ -1,9 +1,6 @@
+// This is vxl/vnl/algo/vnl_determinant.h
 #ifndef vnl_algo_determinant_h_
 #define vnl_algo_determinant_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
 //:
 // \file
 // \brief calculates the determinant of a matrix

@@ -1,9 +1,9 @@
+// This is vxl/vnl/algo/vnl_gaussian_kernel_1d.h
 #ifndef vnl_gaussian_kernel_1d_h_
 #define vnl_gaussian_kernel_1d_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Holds one half of a discretely sampled 1D gaussian distribution
@@ -22,8 +22,9 @@
 //  vnl_gaussian_kernel_1d is a class that holds one half of a discretely
 //  sampled 1D gaussian distribution.
 
-class vnl_gaussian_kernel_1d {
-public:
+class vnl_gaussian_kernel_1d
+{
+ public:
   // Constructors/Destructors--------------------------------------------------
   vnl_gaussian_kernel_1d(double sigma, double cutoff = 0.5/256.0);
 
@@ -32,7 +33,7 @@ public:
   int width() const { return vec_.size(); }
   double operator [] (int i) const { return vec_[i]; }
 
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
   vnl_vector<double> vec_;
   double inscale_;

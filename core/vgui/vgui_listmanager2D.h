@@ -1,6 +1,7 @@
+// This is oxl/vgui/vgui_listmanager2D.h
 #ifndef vgui_listmanager2D_h_
 #define vgui_listmanager2D_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -28,7 +29,7 @@ class vgui_soview2D;
 
 class vgui_listmanager2D : public vgui_tableau
 {
-public:
+ public:
   vgui_listmanager2D();
  ~vgui_listmanager2D();
 
@@ -53,7 +54,7 @@ public:
   bool mouse_down(int x, int y, vgui_button button, vgui_modifier modifier);
   bool motion(int x, int y);
 
-protected:
+ protected:
 
   // helper
   bool index_ok(int);
@@ -73,7 +74,8 @@ protected:
                     vgui_soview2D** closest_so, vgui_displaylist2D_sptr * closest_display);
 };
 
-struct vgui_listmanager2D_new : public vgui_listmanager2D_sptr {
+struct vgui_listmanager2D_new : public vgui_listmanager2D_sptr
+{
   vgui_listmanager2D_new() :
     vgui_listmanager2D_sptr(new vgui_listmanager2D) { }
 };

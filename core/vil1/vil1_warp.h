@@ -1,12 +1,9 @@
 // This is vxl/vil/vil_warp.h
-
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vil_warp_h_
 #define vil_warp_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author awf@robots.ox.ac.uk
@@ -16,8 +13,9 @@
 #include <vil/vil_memory_image_of.h>
 
 //: Class to encapsulate 2d-2d mapping.
-class vil_warp_mapping {
-public:
+class vil_warp_mapping
+{
+ public:
   virtual void forward_map(double x1, double y1, double* x2, double* y2) const = 0;
   virtual void inverse_map(double x2, double y2, double* x1, double* y1) const = 0;
 };

@@ -1,7 +1,7 @@
 // This is vxl/vil/vil_block_cache_image_impl.h
 #ifndef vil_block_cache_image_impl_h_
 #define vil_block_cache_image_impl_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -13,8 +13,9 @@
 #include <vcl_string.h>
 
 //: vil_block_cache_image_impl - adaptor which caches the given image in blocks of given size.
-class vil_block_cache_image_impl : public vil_image_impl {
-public:
+class vil_block_cache_image_impl : public vil_image_impl
+{
+ public:
 
  //: Constructor with image and x and y bock-size
   vil_block_cache_image_impl(vil_image , unsigned blocksizex, unsigned blocksizey);
@@ -63,7 +64,7 @@ public:
 
 /* END_MANCHESTER_BINARY_IO_CODE */
 
-private:
+ private:
   // the underlying, uncached image.
   vil_image base;
 

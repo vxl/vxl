@@ -1,5 +1,5 @@
-// This is ./vxl/vnl/vnl_conjugate_gradient.cxx
-#ifdef __GNUC__
+// This is vxl/vnl/vnl_conjugate_gradient.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:

@@ -1,9 +1,9 @@
+// This is vxl/vil/file_formats/vil_jpeg_compressor.h
 #ifndef vil_jpeg_compressor_h_
 #define vil_jpeg_compressor_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
@@ -11,8 +11,9 @@
 #include <vil/vil_jpeglib.h>
 class vil_stream;
 
-class vil_jpeg_compressor {
-public:
+class vil_jpeg_compressor
+{
+ public:
   struct jpeg_error_mgr         jerr;
   struct jpeg_compress_struct   jobj;
   vil_stream *stream;
@@ -24,7 +25,7 @@ public:
 
   bool write_scanline(unsigned line, JSAMPLE const *);
 
-private:
+ private:
   bool ready;
 };
 

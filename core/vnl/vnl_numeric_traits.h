@@ -1,10 +1,9 @@
+// This is vxl/vnl/vnl_numeric_traits.h
 #ifndef vnl_numeric_traits_h_
 #define vnl_numeric_traits_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_numeric_traits.h
-
 //: \file
 //  \brief Templated zero/one/precision
 //
@@ -54,8 +53,9 @@ class vnl_numeric_traits;
 
 #ifndef NO_STD_BOOL
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<bool> {
-public:
+class vnl_numeric_traits<bool>
+{
+ public:
   //: Additive identity
   static const bool zero VCL_STATIC_CONST_INIT_INT(0);
   //: Multiplicative identity
@@ -70,8 +70,9 @@ public:
 #endif
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<char> {
-public:
+class vnl_numeric_traits<char>
+{
+ public:
   //: Additive identity
   static const char zero VCL_STATIC_CONST_INIT_INT(0);
   //: Multiplicative identity
@@ -85,12 +86,12 @@ public:
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<char const> : public vnl_numeric_traits<char> {
-};
+class vnl_numeric_traits<char const> : public vnl_numeric_traits<char> {};
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<unsigned char> {
-public:
+class vnl_numeric_traits<unsigned char>
+{
+ public:
   //: Additive identity
   static const unsigned char zero VCL_STATIC_CONST_INIT_INT(0);
   //: Multiplicative identity
@@ -104,12 +105,12 @@ public:
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<unsigned char const> : public vnl_numeric_traits<unsigned char> {
-};
+class vnl_numeric_traits<unsigned char const> : public vnl_numeric_traits<unsigned char> {};
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<signed char> {
-public:
+class vnl_numeric_traits<signed char>
+{
+ public:
   //: Additive identity
   static const signed char zero VCL_STATIC_CONST_INIT_INT(0);
   //: Multiplicative identity
@@ -123,12 +124,12 @@ public:
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<signed char const> : public vnl_numeric_traits<signed char> {
-};
+class vnl_numeric_traits<signed char const> : public vnl_numeric_traits<signed char> {};
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<unsigned short> {
-public:
+class vnl_numeric_traits<unsigned short>
+{
+ public:
   //: Additive identity
   static const unsigned short zero VCL_STATIC_CONST_INIT_INT(0);
   //: Multiplicative identity
@@ -142,12 +143,12 @@ public:
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<unsigned short const> : public vnl_numeric_traits<unsigned short> {
-};
+class vnl_numeric_traits<unsigned short const> : public vnl_numeric_traits<unsigned short> {};
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<signed short> {
-public:
+class vnl_numeric_traits<signed short>
+{
+ public:
   //: Additive identity
   static const signed short zero VCL_STATIC_CONST_INIT_INT(0);
   //: Multiplicative identity
@@ -161,12 +162,12 @@ public:
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<signed short const> : public vnl_numeric_traits<signed short> {
-};
+class vnl_numeric_traits<signed short const> : public vnl_numeric_traits<signed short> {};
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<unsigned int> {
-public:
+class vnl_numeric_traits<unsigned int>
+{
+ public:
   //: Additive identity
   static const unsigned int zero VCL_STATIC_CONST_INIT_INT(0);
   //: Multiplicative identity
@@ -180,12 +181,12 @@ public:
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<unsigned int const> : public vnl_numeric_traits<unsigned int> {
-};
+class vnl_numeric_traits<unsigned int const> : public vnl_numeric_traits<unsigned int> {};
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<signed int> {
-public:
+class vnl_numeric_traits<signed int>
+{
+ public:
   //: Additive identity
   static const signed int zero VCL_STATIC_CONST_INIT_INT(0);
   //: Multiplicative identity
@@ -199,12 +200,12 @@ public:
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<signed int const> : public vnl_numeric_traits<signed int> {
-};
+class vnl_numeric_traits<signed int const> : public vnl_numeric_traits<signed int> {};
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<signed long> {
-public:
+class vnl_numeric_traits<signed long>
+{
+ public:
   //: Additive identity
   static const signed long zero VCL_STATIC_CONST_INIT_INT(0);
   //: Multiplicative identity
@@ -218,12 +219,12 @@ public:
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<signed long const> : public vnl_numeric_traits<signed long > {
-};
+class vnl_numeric_traits<signed long const> : public vnl_numeric_traits<signed long > {};
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<unsigned long> {
-public:
+class vnl_numeric_traits<unsigned long>
+{
+ public:
   //: Additive identity
   static const unsigned long zero VCL_STATIC_CONST_INIT_INT(0);
   //: Multiplicative identity
@@ -237,12 +238,12 @@ public:
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<unsigned long const> : public vnl_numeric_traits<unsigned long> {
-};
+class vnl_numeric_traits<unsigned long const> : public vnl_numeric_traits<unsigned long> {};
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<float> {
-public:
+class vnl_numeric_traits<float>
+{
+ public:
   //: Additive identity
   static const float zero VCL_STATIC_CONST_INIT_FLOAT(0.0F);
   //: Multiplicative identity
@@ -256,12 +257,12 @@ public:
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<float const> : public vnl_numeric_traits<float> {
-};
+class vnl_numeric_traits<float const> : public vnl_numeric_traits<float> {};
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<double> {
-public:
+class vnl_numeric_traits<double>
+{
+ public:
   //: Additive identity
   static const double zero VCL_STATIC_CONST_INIT_FLOAT(0.0);
   //: Multiplicative identity
@@ -275,12 +276,12 @@ public:
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<double const> : public vnl_numeric_traits<double> {
-};
+class vnl_numeric_traits<double const> : public vnl_numeric_traits<double> {};
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<long double> {
-public:
+class vnl_numeric_traits<long double>
+{
+ public:
   //: Additive identity
   static const long double zero VCL_STATIC_CONST_INIT_FLOAT(0.0);
   //: Multiplicative identity
@@ -294,12 +295,12 @@ public:
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<long double const> : public vnl_numeric_traits<long double> {
-};
+class vnl_numeric_traits<long double const> : public vnl_numeric_traits<long double> {};
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits< vcl_complex<float> > {
-public:
+class vnl_numeric_traits< vcl_complex<float> >
+{
+ public:
   //: Additive identity
   static const vcl_complex<float> zero;
   //: Multiplicative identity
@@ -313,12 +314,12 @@ public:
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<vcl_complex<float> const> : public vnl_numeric_traits<vcl_complex<float> > {
-};
+class vnl_numeric_traits<vcl_complex<float> const> : public vnl_numeric_traits<vcl_complex<float> > {};
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits< vcl_complex<double> > {
-public:
+class vnl_numeric_traits< vcl_complex<double> >
+{
+ public:
   //: Additive identity
   static const vcl_complex<double> zero;
   //: Multiplicative identity
@@ -332,12 +333,12 @@ public:
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<vcl_complex<double> const> : public vnl_numeric_traits<vcl_complex<double> > {
-};
+class vnl_numeric_traits<vcl_complex<double> const> : public vnl_numeric_traits<vcl_complex<double> > {};
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits< vcl_complex<long double> > {
-public:
+class vnl_numeric_traits< vcl_complex<long double> >
+{
+ public:
   //: Additive identity
   static const vcl_complex<long double> zero;
   //: Multiplicative identity
@@ -351,7 +352,6 @@ public:
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<vcl_complex<long double> const> : public vnl_numeric_traits<vcl_complex<long double> > {
-};
+class vnl_numeric_traits<vcl_complex<long double> const> : public vnl_numeric_traits<vcl_complex<long double> > {};
 
 #endif // vnl_numeric_traits_h_

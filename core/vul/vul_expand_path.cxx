@@ -1,11 +1,11 @@
 // This is vxl/vul/vul_expand_path.cxx
-
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vul_expand_path.h"
 
 #ifdef VCL_WIN32
@@ -27,7 +27,7 @@ vcl_string vul_expand_path_internal(vcl_string path)
 {
   if (path == "/")
     return path; // FIXME: without this something breaks; not sure why.
-  
+
   // expand ~/ or just ~
   if ((path.size()>=2 && path[0] == '~' && path[1] == '/') || path == "~") {
     char const *HOME = getenv("HOME");
@@ -185,5 +185,4 @@ vcl_string vul_expand_path_uncached(vcl_string path)
   return vul_expand_path_internal(path);
 }
 
-
-#endif
+#endif // VCL_WIN32

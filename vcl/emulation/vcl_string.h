@@ -1,7 +1,10 @@
-// Main header for the -*- C++ -*- vcl_string classes.
+// This is vcl/emulation/vcl_string.h
 #ifndef vcl_emulation_string_h_
 #define vcl_emulation_string_h_
-
+// Main header for the -*- C++ -*- vcl_string classes.
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file
 //
@@ -31,10 +34,6 @@
 
 // Written by Jason Merrill based upon the specification by Takanori Adachi
 // in ANSI X3J16/94-0013R2.
-
-#ifdef __GNUG__
-#pragma interface
-#endif
 
 #include <vcl_cstddef.h>   // For vcl_ptrdiff_t and vcl_size_t
 #include <vcl_iosfwd.h>
@@ -71,12 +70,12 @@ extern "C++" {
 template <class charT, VCL_DFL_TYPE_PARAM_STLDECL( traits, vcl_char_traits<charT> ) >
 class vcl_basic_string
 {
-private:
+ private:
   charT *data_;
   vcl_size_t strlen_;
   vcl_size_t current_size_;
 
-public:
+ public:
 // types:
   typedef traits traits_type;
   typedef charT value_type;
@@ -436,7 +435,7 @@ public:
   const_reverse_iterator rend() const { return const reverse_iterator (begin ()); }
 #endif
 
-private:
+ private:
   static size_type _find (const charT* ptr, charT c, size_type xpos, size_type len);
 
   void realloc(int new_capacity);
@@ -681,7 +680,8 @@ vcl_getline (vcl_istream&, vcl_basic_string <charT, traits>&, charT delim ='\n')
 
 #define VCL_STRING_IS_TYPEDEF 0
 // For short typenames:
-struct vcl_string : public vcl_basic_string <char, vcl_char_traits <char> > {
+struct vcl_string : public vcl_basic_string <char, vcl_char_traits <char> >
+{
   typedef vcl_basic_string <char, vcl_char_traits <char> > super;
 
   explicit vcl_string () { }

@@ -1,9 +1,10 @@
+// This is oxl/vgui/vgui_popup_params.h
 #ifndef vgui_popup_params_h_
 #define vgui_popup_params_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// 
+//
 // .NAME vgui_popup_params - Undocumented class FIXME
 // .LIBRARY vgui
 // .HEADER vxl Package
@@ -22,11 +23,11 @@
 //
 //-----------------------------------------------------------------------------
 
-class vgui_popup_params 
+class vgui_popup_params
 {
-public:
+ public:
   vgui_popup_params();
-  
+
   // viewport coordinates of mouse when used to activate popup menu
   int x,y;
   bool recurse;

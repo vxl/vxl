@@ -1,7 +1,7 @@
-// This is ./tbl/vipl/filter/vipl_filter_abs.h
+// This is tbl/vipl/filter/vipl_filter_abs.h
 #ifndef vipl_filter_abs_h_
 #define vipl_filter_abs_h_
-#ifdef __GNUG__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -27,7 +27,8 @@
 #define FILTER_KERNPTR_DEC_REFCOUNT(v) ((v)->dec_refcount())
 #endif
 
-class vipl_filter_abs {
+class vipl_filter_abs
+{
  public:
 
 #ifdef USE_COMPOSE_WITH

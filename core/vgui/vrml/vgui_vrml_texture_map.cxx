@@ -1,9 +1,8 @@
-//-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
+// This is oxl/vgui/vrml/vgui_vrml_texture_map.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //
-// .NAME vgui_vrml_texture_map
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 28 Sep 99
 //

@@ -1,10 +1,9 @@
+// This is vxl/vnl/vnl_double_3.h
 #ifndef vnl_double_3_h_
 #define vnl_double_3_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_double_3.h
-
 //: \file
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   31 Dec 96

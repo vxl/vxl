@@ -1,9 +1,11 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+// This is oxl/vgui/vgui_text_graph.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vgui_text_graph.h"
 
 #include <vcl_iostream.h>
@@ -32,7 +34,7 @@ void vgui_text_graph(vcl_ostream &s, vgui_tableau_sptr const &t)
 
 void vgui_text_graph(vcl_ostream &s)
 {
-  s << "All tableaux in the world:" << vcl_endl;
+  s << "All tableaux in the world:\n";
   vcl_vector<vgui_tableau_sptr> all;
   vgui_tableau::get_all(&all);
 

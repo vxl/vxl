@@ -1,10 +1,9 @@
-// This is ./vxl/vgl/vgl_point_3d.h
+// This is vxl/vgl/vgl_point_3d.h
 #ifndef vgl_point_3d_h
 #define vgl_point_3d_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief a point in 3D nonhomogeneous space
@@ -23,11 +22,9 @@
 
 //: Represents a cartesian 3D point
 template <class Type>
-class vgl_point_3d {
-
-  // PUBLIC INTERFACE--------------------------------------------------------
-
-public:
+class vgl_point_3d
+{
+ public:
 
   // Constructors/Initializers/Destructor------------------------------------
 
@@ -84,7 +81,7 @@ public:
 
   // INTERNALS---------------------------------------------------------------
 
-private:
+ private:
   // the data associated with this point
   Type x_;
   Type y_;

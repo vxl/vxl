@@ -1,11 +1,11 @@
 // This is vxl/vgl/vgl_distance.cxx
-
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vgl_distance.h"
 #include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_homg_line_2d.h>

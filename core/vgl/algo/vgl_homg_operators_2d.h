@@ -1,7 +1,7 @@
-// This is ./vxl/vgl/algo/vgl_homg_operators_2d.h
+// This is vxl/vgl/algo/vgl_homg_operators_2d.h
 #ifndef vgl_homg_operations_2d_h
 #define vgl_homg_operations_2d_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -24,8 +24,9 @@
 
 //: 2D homogeneous operations
 template <class T>
-class vgl_homg_operators_2d {
-public:
+class vgl_homg_operators_2d
+{
+ public:
   //: get a vnl_vector representation of a homogeneous object
   static vnl_vector<T> get_vector(vgl_homg_point_2d<T> const& p);
 
@@ -185,7 +186,7 @@ public:
   //: Compute the bounding box of an ellipse
   static vgl_box_2d<T> compute_bounding_box(vgl_conic<T> const& c);
 
-private:
+ private:
   // Helper functions for conic intersection
   static vcl_list<vgl_homg_point_2d<T> > do_intersect(vgl_conic<T> const& q, vgl_homg_line_2d<T> const& l);
   static vcl_list<vgl_homg_point_2d<T> > do_intersect(vgl_conic<T> const& c1, vgl_conic<T> const& c2);

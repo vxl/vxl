@@ -1,10 +1,9 @@
 // This is vxl/vnl/vnl_cost_function.h
 #ifndef vnl_cost_function_h_
 #define vnl_cost_function_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 //  \file
 //  \brief Vector->Real function
@@ -26,8 +25,9 @@
 //:   An object that represents a function from R^n -> R.
 //    It is commonly used to express the
 //    interface of a minimizer.
-class vnl_cost_function : public vnl_unary_function<double, vnl_vector<double> > {
-public:
+class vnl_cost_function : public vnl_unary_function<double, vnl_vector<double> >
+{
+ public:
   vnl_cost_function(int number_of_unknowns):dim(number_of_unknowns) {}
 
   virtual ~vnl_cost_function() {}
@@ -55,7 +55,7 @@ public:
   vnl_vector<double> gradf(vnl_vector<double> const& x);
   vnl_vector<double> fdgradf(vnl_vector<double> const& x);
 
-public:
+ public:
   int dim;
 };
 

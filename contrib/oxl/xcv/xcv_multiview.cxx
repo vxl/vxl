@@ -1,5 +1,5 @@
 // This is oxl/xcv/xcv_multiview.cxx
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:

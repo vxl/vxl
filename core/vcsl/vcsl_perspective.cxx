@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is vxl/vcsl/vcsl_perspective.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 #include "vcsl_perspective.h"

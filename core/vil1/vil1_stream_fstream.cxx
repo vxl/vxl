@@ -1,5 +1,5 @@
-// This is ./vxl/vil/vil_stream_fstream.cxx
-#ifdef __GNUC__
+// This is vxl/vil/vil_stream_fstream.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 
@@ -104,7 +104,7 @@ vil_streampos vil_stream_fstream::read(void* buf, vil_streampos n)
   vil_streampos b = tell();
 
   vil_streampos numread = b-a;
-  if (b < a) { xerr << "urgh!" << vcl_endl; return numread; }
+  if (b < a) { xerr << "urgh!\n"; return numread; }
   if (numread != n) xerr << "only read " << numread << vcl_endl;
   return numread;
 }

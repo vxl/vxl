@@ -1,5 +1,5 @@
-// This is ./vxl/vil/file_formats/vil_jpeg.cxx
-#ifdef __GNUC__
+// This is vxl/vil/file_formats/vil_jpeg.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
@@ -30,7 +30,7 @@ bool vil_jpeg_file_probe(vil_stream *vs) {
   int n = vs->read(magic, sizeof(magic));
 
   if (n != sizeof(magic)) {
-    vcl_cerr << __FILE__ << " : vil_stream::read() failed" << vcl_endl;
+    vcl_cerr << __FILE__ << " : vil_stream::read() failed\n";
     return false;
   }
 
@@ -103,7 +103,7 @@ vil_jpeg_generic_image::vil_jpeg_generic_image(vil_stream *s,
   stream->ref();
   // warn
   if (planes != 1)
-    vcl_cerr << __FILE__ " : prototype has != 1 planes. ignored" << vcl_endl;
+    vcl_cerr << __FILE__ " : prototype has != 1 planes. ignored\n";
 
   // use same number of components as prototype, obviously.
   jc->jobj.input_components = components;
@@ -135,7 +135,7 @@ vil_jpeg_generic_image::~vil_jpeg_generic_image() {
 //: decompressing from the vil_stream to a section buffer.
 bool vil_jpeg_generic_image::get_section(void *buf, int x0, int y0, int w, int h) const {
   if (!jd) {
-    vcl_cerr << "attempted put_section() failed -- no jpeg decompressor" << vcl_endl;
+    vcl_cerr << "attempted put_section() failed -- no jpeg decompressor\n";
     return false;
   }
   //vcl_cerr << "get_section " << buf << ' ' << x0 << ' ' << y0 << ' ' << w << ' ' << h << vcl_endl;
@@ -159,7 +159,7 @@ bool vil_jpeg_generic_image::get_section(void *buf, int x0, int y0, int w, int h
 //: compressing a section onto the vil_stream.
 bool vil_jpeg_generic_image::put_section(void const *buf, int x0, int y0, int w, int h) {
   if (!jc) {
-    vcl_cerr << "attempted get_section() failed -- no jpeg compressor" << vcl_endl;
+    vcl_cerr << "attempted get_section() failed -- no jpeg compressor\n";
     return false;
   }
 
@@ -167,11 +167,11 @@ bool vil_jpeg_generic_image::put_section(void const *buf, int x0, int y0, int w,
   // Relaxed slightly.. awf.
   // It will work if you send entire scan lines sequentially
   if (x0 != 0 || (unsigned int)w != jc->jobj.image_width) {
-    vcl_cerr << __FILE__ << " : Can only compress complete scanlines" << vcl_endl;
+    vcl_cerr << __FILE__ << " : Can only compress complete scanlines\n";
     return false;
   }
   if ((unsigned int)y0 != jc->jobj.next_scanline) {
-    vcl_cerr << __FILE__ << " : Scanlines must be sent sequentially " << vcl_endl;
+    vcl_cerr << __FILE__ << " : Scanlines must be sent sequentially \n";
     return false;
   }
 

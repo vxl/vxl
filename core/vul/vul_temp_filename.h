@@ -1,7 +1,7 @@
-// This is ./vxl/vul/vul_temp_filename.h
+// This is vxl/vul/vul_temp_filename.h
 #ifndef vul_temp_filename_h_
 #define vul_temp_filename_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -20,4 +20,4 @@
 // tests) it, and the time the calling program opens it.
 vcl_string vul_temp_filename( );
 
-#endif
+#endif // vul_temp_filename_h_

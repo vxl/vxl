@@ -1,10 +1,9 @@
 // This is vxl/vnl/vnl_vector.h
 #ifndef vnl_vector_h_
 #define vnl_vector_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author Andrew W. Fitzgibbon
@@ -70,8 +69,9 @@ template <class T> void   swap(v &, v &);
 //
 // NOTE: Vectors are indexed from zero!  Thus valid elements are [0,size()-1].
 template<class T>
-class vnl_vector {
-public:
+class vnl_vector
+{
+ public:
   friend class vnl_matrix<T>;
 
   //: Creates an empty vector. O(1).
@@ -373,7 +373,7 @@ public:
   static vnl_vector<T> read(vcl_istream& s);
 
 
-protected:
+ protected:
   unsigned num_elmts;           // Number of elements
   T* data;                      // Pointer to the vnl_vector
 

@@ -1,10 +1,9 @@
+// This is vxl/vul/vul_get_timestamp.h
 #ifndef vul_get_timestamp_h_
 #define vul_get_timestamp_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vul/vul_get_timestamp.h
-
 //:
 // \file
 // \brief Obtains time elapsed since 1 Jan 1970, in seconds and milliseconds

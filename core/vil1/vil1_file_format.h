@@ -1,11 +1,9 @@
+// This is vxl/vil/vil_file_format.h
 #ifndef vil_file_format_h_
 #define vil_file_format_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-// This is vxl/vil/vil_file_format.h
-
 //:
 // \file
 // \brief Base class for image formats
@@ -17,8 +15,9 @@
 //: Base class for image formats.
 //  There is one derived class for each handled file format in the
 // directory file_formats. E.g. vil/file_formats/vil_pnm.h etc
-class vil_file_format {
-public:
+class vil_file_format
+{
+ public:
   virtual ~vil_file_format();
 
   //: Return a character string which uniquely identifies this format.
@@ -44,7 +43,7 @@ public:
                                                int bits_per_component,
                                                enum vil_component_format) = 0;
 
-public:
+ public:
   static vil_file_format** all();
 };
 

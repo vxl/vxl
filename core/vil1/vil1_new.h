@@ -1,10 +1,9 @@
-// This is ./vxl/vil/vil_new.h
+// This is vxl/vil/vil_new.h
 #ifndef vil_new_h_
 #define vil_new_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Make a new image.

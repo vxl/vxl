@@ -1,9 +1,9 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
-#pragma implementation
-#endif
+// This is vcl/vcl_cmath.cxx
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vcl_cmath.h"
 
 #ifdef __GNUC__
@@ -34,7 +34,7 @@ namespace std {
   float acos(float x) { return float(std::acos(double(x))); }
 
   double abs(double x) { return x >= 0 ? x : -x; }
-  
+
   long double sqrt(long double x) { return std::sqrt(double(x)); } // ouch!
   double pow(double x, int n) { return std::pow(x, double(n)); }
 }

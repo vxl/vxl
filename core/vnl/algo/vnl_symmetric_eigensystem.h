@@ -1,7 +1,7 @@
-// This is ./vxl/vnl/algo/vnl_symmetric_eigensystem.h
+// This is vxl/vnl/algo/vnl_symmetric_eigensystem.h
 #ifndef vnl_symmetric_eigensystem_h_
 #define vnl_symmetric_eigensystem_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -67,17 +67,18 @@ bool vnl_symmetric_eigensystem_compute(vnl_matrix<double> const & A,
 //: Computes and stores the eigensystem decomposition of a symmetric matrix.
 
 export template <class T>
-class vnl_symmetric_eigensystem {
-public:
+class vnl_symmetric_eigensystem
+{
+ public:
   //: Solve real symmetric eigensystem $A x = \lambda x$
   vnl_symmetric_eigensystem(vnl_matrix<T> const & M);
 
-protected:
+ protected:
   // need this here to get inits in correct order, but still keep gentex
   // in the right order.
   int n_;
 
-public:
+ public:
   //: Public eigenvectors.
   //  After construction, the columns of V are the eigenvectors, sorted by
   // increasing eigenvalue, from most negative to most positive.

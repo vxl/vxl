@@ -1,11 +1,6 @@
+// This is vxl/vgl/io/vgl_homg_line_2d.h
 #ifndef vgl_io_homg_line_2d_h_
 #define vgl_io_homg_line_2d_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
-// This is vxl/vgl/io/vgl_homg_line_2d.h
-
 //:
 // \file
 // \date 21 Mar 2001

@@ -1,9 +1,10 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+// This is oxl/vgui/vgui_event_condition.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
 
 #include "vgui_event_condition.h"
 
@@ -56,12 +57,12 @@ vcl_string vgui_event_condition::as_string(int field_width) const
   if (button == vgui_LEFT) r += "left";
   if (button == vgui_MIDDLE) r += "middle";
   if (button == vgui_RIGHT) r += "right";
-  
+
   if (vgui_key/*egcs for i386 needs cast*/(key) != vgui_KEY_NULL) {
     vcl_ostringstream s;
     s << key;
     r += s.str();
   }
-  
+
   return r;
 }

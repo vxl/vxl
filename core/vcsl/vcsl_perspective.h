@@ -1,9 +1,9 @@
+// This is vxl/vcsl/vcsl_perspective.h
 #ifndef vcsl_perspective_h
 #define vcsl_perspective_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author François BERTEL
@@ -28,7 +28,7 @@
 class vcsl_perspective
   :public vcsl_spatial_transformation
 {
-public:
+ public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
@@ -80,7 +80,7 @@ public:
   virtual vnl_vector<double> inverse(const vnl_vector<double> &v,
                                      double time) const;
 
-protected:
+ protected:
 
   //: Compute the parameter at time `time'
   virtual double focal_value(double time) const;

@@ -1,11 +1,9 @@
+// This is vxl/vgl/vgl_triangle_scan_iterator.h
 #ifndef vgl_triangle_scan_iterator_h_
 #define vgl_triangle_scan_iterator_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-// This is vxl/vgl/vgl_triangle_scan_iterator.h
-
 //: \file
 // \brief Optimized polygon scan iterator for triangles
 // \author fsm@robots.ox.ac.uk
@@ -31,7 +29,7 @@ struct vgl_triangle_scan_iterator : public vgl_region_scan_iterator
   inline int  startx() const { return startx_; }
   inline int  endx() const { return endx_; }
 
-private:
+ private:
   int scany_;
   int startx_;
   int endx_;

@@ -1,42 +1,40 @@
+// This is vcl/emulation/vcl_straits.h
+#ifndef vcl_emulation_straits_h
+#define vcl_emulation_straits_h
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
+//:
+// \file
+//
 // Character traits template for the -*- C++ -*- vcl_string classes.
 // Copyright (C) 1994 Free Software Foundation
-
+//
 // This file is part of the GNU ANSI C++ Library.  This library is free
 // software; you can redistribute it and/or modify it under the
 // terms of the GNU General Public License as published by the
 // Free Software Foundation; either version 2, or (at your option)
 // any later version.
-
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-
+//
 // You should have received a copy of the GNU General Public License
 // along with this library; see the file COPYING.  If not, write to the Free
 // Software Foundation, 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-
+//
 // As a special exception, if you link this library with files
 // compiled with a GNU compiler to produce an executable, this does not cause
 // the resulting executable to be covered by the GNU General Public License.
 // This exception does not however invalidate any other reasons why
 // the executable file might be covered by the GNU General Public License.
-
+//
 // Written by Jason Merrill based upon the specification by Takanori Adachi
 // in ANSI X3J16/94-0013R2.
 
-#ifndef vcl_emulation_straits_h
-#define vcl_emulation_straits_h
-
-//:
-// \file
-
 #include "vcl_stlconf.h"
-
-#ifdef __GNUG__
-// For vcl_char_traits <char>
-#pragma interface
-#endif
 
 #include <vcl_cctype.h>
 #include <vcl_cstring.h>
@@ -51,7 +49,8 @@
 
 extern "C++" {
 template <class charT>
-struct vcl_char_traits {
+struct vcl_char_traits
+{
   typedef charT char_type; // for users to acquire the basic character type
 
   // constraints
@@ -59,11 +58,11 @@ struct vcl_char_traits {
   static void assign (char_type& c1, const char_type& c2)
     { c1 = c2; }
   static bool eq (const char_type& c1, const char_type& c2)
-    { return (c1 == c2); }
+    { return c1 == c2; }
   static bool ne (const char_type& c1, const char_type& c2)
     { return !(c1 == c2); }
   static bool lt (const char_type& c1, const char_type& c2)
-    { return (c1 < c2); }
+    { return c1 < c2; }
   static char_type eos () { return char_type(); } // the null character
   static bool is_del(char_type a) { return 0; }
   // characteristic function for delimiters of charT
@@ -116,17 +115,18 @@ struct vcl_char_traits {
     }
 };
 
-struct vcl_char_traits <char> {
+struct vcl_char_traits <char>
+{
   typedef char char_type;
 
   static void assign (char_type& c1, const char_type& c2)
     { c1 = c2; }
   static bool eq (const char_type & c1, const char_type& c2)
-    { return (c1 == c2); }
+    { return c1 == c2; }
   static bool ne (const char_type& c1, const char_type& c2)
-    { return (c1 != c2); }
+    { return c1 != c2; }
   static bool lt (const char_type& c1, const char_type& c2)
-    { return (c1 < c2); }
+    { return c1 < c2; }
   static char_type eos () { return 0; }
   static bool is_del(char_type a) { return vcl_isspace(a) != 0; } // awf cast for VC5
 

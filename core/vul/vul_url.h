@@ -1,7 +1,7 @@
-// This is ./vxl/vul/vul_url.h
+// This is vxl/vul/vul_url.h
 #ifndef vul_url_h_
 #define vul_url_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface 
 #endif
 //:
@@ -17,7 +17,7 @@
 // HTTP URL scheme, e.g. \c http://user4:mypassword@webserverthingy.fens-poly.ac.uk/file.txt
 class vul_url
 {
-public:
+ public:
 //: open an URL
 // If url is "file://..." open as a file with given mode.
 // If url is "http://..." open using vul_http_open
@@ -44,4 +44,5 @@ public:
 //: Decode a string of chars from base64 format
   static vcl_string decode_base64(const vcl_string& in);
 };
-#endif
+
+#endif // vul_url_h_

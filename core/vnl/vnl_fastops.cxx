@@ -1,8 +1,7 @@
-// This is ./vxl/vnl/vnl_fastops.cxx
-#ifdef __GNUC__
+// This is vxl/vnl/vnl_fastops.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG
@@ -32,18 +31,18 @@ void vnl_fastops::AtA(const vnl_matrix<double>& A, vnl_matrix<double>* AtA)
   double** ata = AtA->data_array();
 
   if (0) {
-    for(unsigned i = 0; i < n; ++i)
-      for(unsigned j = i; j < n; ++j) {
+    for (unsigned i = 0; i < n; ++i)
+      for (unsigned j = i; j < n; ++j) {
         double accum = 0;
-        for(int k = 0; k < m; ++k)
+        for (int k = 0; k < m; ++k)
           accum += a[k][i] * a[k][j];
         ata[i][j] = ata[j][i] = accum;
       }
   } else {
     // 5 times faster on 600 Mhz Pentium III for m = 10000, n = 50
     vcl_memset(ata[0], 0, n * n * sizeof ata[0][0]);
-    for(int k = 0; k < m; ++k)
-      for(unsigned i = 0; i < n; ++i) {
+    for (int k = 0; k < m; ++k)
+      for (unsigned i = 0; i < n; ++i) {
         double aki = a[k][i];
         double const* arow = a[k] + i;
         double* atarow = ata[i] + i;
@@ -51,8 +50,8 @@ void vnl_fastops::AtA(const vnl_matrix<double>& A, vnl_matrix<double>* AtA)
         while (arow != arowend)
           *atarow++ += aki * *arow++;
       }
-      for(unsigned i = 0; i < n; ++i)
-        for(unsigned j = i+1; j < n; ++j)
+      for (unsigned i = 0; i < n; ++i)
+        for (unsigned j = i+1; j < n; ++j)
           ata[j][i] = ata[i][j];
   }
 }
@@ -81,10 +80,10 @@ void vnl_fastops::AB(const vnl_matrix<double>& A, const vnl_matrix<double>& B, v
   double const* const* b = B.data_array();
   double** out = out_ptr->data_array();
 
-  for(unsigned i = 0; i < ma; ++i)
-    for(unsigned j = 0; j < nb; ++j) {
+  for (unsigned i = 0; i < ma; ++i)
+    for (unsigned j = 0; j < nb; ++j) {
       double accum = 0;
-      for(unsigned k = 0; k < na; ++k)
+      for (unsigned k = 0; k < na; ++k)
         accum += a[i][k] * b[k][j];
       out[i][j] = accum;
     }
@@ -114,10 +113,10 @@ void vnl_fastops::AtB(const vnl_matrix<double>& A, const vnl_matrix<double>& B, 
   double const* const* b = B.data_array();
   double** out = out_ptr->data_array();
 
-  for(unsigned i = 0; i < na; ++i)
-    for(unsigned j = 0; j < nb; ++j) {
+  for (unsigned i = 0; i < na; ++i)
+    for (unsigned j = 0; j < nb; ++j) {
       double accum = 0;
-      for(unsigned k = 0; k < ma; ++k)
+      for (unsigned k = 0; k < ma; ++k)
         accum += a[k][i] * b[k][j];
       out[i][j] = accum;
     }
@@ -146,9 +145,9 @@ void vnl_fastops::AtB(const vnl_matrix<double>& A, const vnl_vector<double>& B, 
   double const* b = B.data_block();
   double* out = out_ptr->data_block();
 
-  for(unsigned i = 0; i < n; ++i) {
+  for (unsigned i = 0; i < n; ++i) {
     double accum = 0;
-    for(unsigned k = 0; k < l; ++k)
+    for (unsigned k = 0; k < l; ++k)
       accum += a[k][i] * b[k];
    out[i] = accum;
   }
@@ -178,10 +177,10 @@ void vnl_fastops::ABt(const vnl_matrix<double>& A, const vnl_matrix<double>& B, 
   double const* const* b = B.data_array();
   double** out = out_ptr->data_array();
 
-  for(unsigned i = 0; i < ma; ++i)
-    for(unsigned j = 0; j < mb; ++j) {
+  for (unsigned i = 0; i < ma; ++i)
+    for (unsigned j = 0; j < mb; ++j) {
       double accum = 0;
-      for(unsigned k = 0; k < na; ++k)
+      for (unsigned k = 0; k < na; ++k)
         accum += a[i][k] * b[j][k];
       out[i][j] = accum;
     }
@@ -203,10 +202,10 @@ void vnl_fastops::inc_X_by_AtA(vnl_matrix<double>& X, const vnl_matrix<double>& 
   double** x = X.data_array();
 
   if (l == 2) {
-    for(unsigned i = 0; i < n; ++i) {
+    for (unsigned i = 0; i < n; ++i) {
       x[i][i] += (a[0][i] * a[0][i] +
         a[1][i] * a[1][i]);
-      for(unsigned j = i+1; j < n; ++j) {
+      for (unsigned j = i+1; j < n; ++j) {
         double accum = (a[0][i] * a[0][j] +
           a[1][i] * a[1][j]);
         x[i][j] += accum;
@@ -214,10 +213,10 @@ void vnl_fastops::inc_X_by_AtA(vnl_matrix<double>& X, const vnl_matrix<double>& 
       }
     }
   } else {
-    for(unsigned i = 0; i < n; ++i)
-      for(unsigned j = i; j < n; ++j) {
+    for (unsigned i = 0; i < n; ++i)
+      for (unsigned j = i; j < n; ++j) {
         double accum = 0;
-        for(unsigned k = 0; k < l; ++k)
+        for (unsigned k = 0; k < l; ++k)
           accum += a[k][i] * a[k][j];
         x[i][j] += accum;
         if (i != j)
@@ -252,10 +251,10 @@ void vnl_fastops::inc_X_by_AtB(vnl_matrix<double>& X, const vnl_matrix<double>& 
   double const* const* b = B.data_array();
   double** x = X.data_array();
 
-  for(unsigned i = 0; i < na; ++i)
-    for(unsigned j = 0; j < nb; ++j) {
+  for (unsigned i = 0; i < na; ++i)
+    for (unsigned j = 0; j < nb; ++j) {
       double accum = 0;
-      for(unsigned k = 0; k < ma; ++k)
+      for (unsigned k = 0; k < ma; ++k)
         accum += a[k][i] * b[k][j];
       x[i][j] += accum;
     }
@@ -285,9 +284,9 @@ void vnl_fastops::inc_X_by_AtB(vnl_vector<double>& X, const vnl_matrix<double>& 
   double const* b = B.data_block();
   double* x = X.data_block();
 
-  for(unsigned i = 0; i < na; ++i) {
+  for (unsigned i = 0; i < na; ++i) {
     double accum = 0;
-    for(unsigned k = 0; k < ma; ++k)
+    for (unsigned k = 0; k < ma; ++k)
       accum += a[k][i] * b[k];
     x[i] += accum;
   }
@@ -319,10 +318,10 @@ void vnl_fastops::dec_X_by_AtB(vnl_matrix<double>& X, const vnl_matrix<double>& 
   double const* const* b = B.data_array();
   double** x = X.data_array();
 
-  for(unsigned i = 0; i < na; ++i)
-    for(unsigned j = 0; j < nb; ++j) {
+  for (unsigned i = 0; i < na; ++i)
+    for (unsigned j = 0; j < nb; ++j) {
       double accum = 0;
-      for(unsigned k = 0; k < ma; ++k)
+      for (unsigned k = 0; k < ma; ++k)
         accum += a[k][i] * b[k][j];
       x[i][j] -= accum;
     }
@@ -340,11 +339,11 @@ double vnl_fastops::dot(const double* a, const double* b, int n)
     accum += *a++ * *b++;
 #endif
 #if method == 2
-  for(int k = 0; k < n; ++k)
+  for (int k = 0; k < n; ++k)
     accum += a[k] * b[k];
 #endif
 #if method == 3
-  while(n--)
+  while (n--)
     accum += a[n] * b[n];
 #endif
   return accum;
@@ -377,19 +376,19 @@ void vnl_fastops::dec_X_by_ABt(vnl_matrix<double>& X, const vnl_matrix<double>& 
   double** x = X.data_array();
 
   if (na == 3) {
-    for(unsigned i = 0; i < mb; ++i)
-      for(unsigned j = 0; j < ma; ++j)
+    for (unsigned i = 0; i < mb; ++i)
+      for (unsigned j = 0; j < ma; ++j)
         x[j][i] -= (a[j][0] * b[i][0] +
                     a[j][1] * b[i][1] +
                     a[j][2] * b[i][2]);
   } else if (na == 2) {
-    for(unsigned i = 0; i < mb; ++i)
-      for(unsigned j = 0; j < ma; ++j)
+    for (unsigned i = 0; i < mb; ++i)
+      for (unsigned j = 0; j < ma; ++j)
         x[j][i] -= (a[j][0] * b[i][0] +
                     a[j][1] * b[i][1]);
   } else {
-    for(unsigned i = 0; i < mb; ++i)
-      for(unsigned j = 0; j < ma; ++j)
+    for (unsigned i = 0; i < mb; ++i)
+      for (unsigned j = 0; j < ma; ++j)
         x[j][i] -= dot(a[j], b[i], na);
   }
 }

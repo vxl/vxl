@@ -1,11 +1,9 @@
+// This is vxl/vbl/vbl_array_3d.h
 #ifndef vbl_array_3dh
 #define vbl_array_3dh
-#ifdef __GNUG__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-// This is vxl/vbl/vbl_array_3d.h
-
 //:
 // \file
 // \brief Contains class for templated 3d array
@@ -34,8 +32,9 @@
 //: Templated 3-dimensional array
 
 export template <class T>
-class vbl_array_3d {
-public:
+class vbl_array_3d
+{
+ public:
   typedef T element_type;
   typedef T* iterator;
   typedef T const* const_iterator;
@@ -116,11 +115,11 @@ public:
   void get(T* array) const;
   void fill(T const& value);
 
-protected:
+ protected:
   void construct(int, int, int);
   void destruct ();
 
-private:
+ private:
   T ***element_;
   int row1_count_;
   int row2_count_;

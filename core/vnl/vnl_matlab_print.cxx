@@ -1,8 +1,7 @@
-// This is ./vxl/vnl/vnl_matlab_print.cxx
-#ifdef __GNUC__
+// This is vxl/vnl/vnl_matlab_print.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // \author fsm@robots.ox.ac.uk

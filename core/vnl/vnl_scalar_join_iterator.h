@@ -1,10 +1,9 @@
-// This is ./vxl/vnl/vnl_scalar_join_iterator.h
+// This is vxl/vnl/vnl_scalar_join_iterator.h
 #ifndef vnl_scalar_join_iterator_h_
 #define vnl_scalar_join_iterator_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 //  \file
 //  \brief  Database join on matrix columns
@@ -68,8 +67,9 @@ class vnl_scalar_join_iterator_indexed_pair;
 //  and it doesn't.  Contact awf if you need this to work.
 
 template <class T>
-class vnl_scalar_join_iterator {
-public:
+class vnl_scalar_join_iterator
+{
+ public:
 
 //: Initialize this iterator to the join of relation1(:,column1) and relation2(:,column2).
 // The algorithm sorts an array of pointers to each row and
@@ -95,7 +95,7 @@ public:
 //: Return the indices of the current rows in the first and second relations.
   unsigned row2();
 
-private:
+ private:
   // Postfix ++ is private as it would be costly to implement.
   vnl_scalar_join_iterator<T>& operator ++ (int);
 
@@ -104,7 +104,7 @@ private:
   T object2() { return *I2[index2].object; }
 #endif
 
-protected:
+ protected:
   unsigned n1;
   unsigned n2;
   vcl_list<vnl_scalar_join_iterator_indexed_pair<T> >* pI1;
@@ -117,8 +117,9 @@ protected:
 
 //: Helper class to hold the sorted arrays of indices.
 template <class T>
-class vnl_scalar_join_iterator_indexed_pair {
-public:
+class vnl_scalar_join_iterator_indexed_pair
+{
+ public:
   const T* object;
   int original_index;
 

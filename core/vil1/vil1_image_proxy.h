@@ -1,10 +1,9 @@
+// This is vxl/vil/vil_image_proxy.h
 #ifndef vil_image_proxy_h_
 #define vil_image_proxy_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vil/vil_image_proxy.h
-
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
@@ -16,8 +15,8 @@ struct vil_image_proxy : public vil_image
 {
   vil_image_proxy(char const *file);
   ~vil_image_proxy() { }
-  
-private:
+
+ private:
   vil_image_proxy(vil_image const &) { }
   vil_image_proxy(vil_image_proxy const &) { }
 };

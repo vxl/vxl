@@ -1,5 +1,7 @@
 // This is vgui_enhance.cxx
-
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma implementation
+#endif
 //:
 // \file
 // \author  Philip C. Pritchett, RRG, University of Oxford
@@ -10,10 +12,6 @@
 //  Modifications:
 //    17-NOV-1999 P.Pritchett - Initial version.
 // \endverbatim
-
-#ifdef __GNUC__
-#pragma implementation
-#endif
 
 #include "vgui_enhance.h"
 
@@ -36,7 +34,6 @@ vgui_enhance::vgui_enhance()
   , zoom_factor(1.5)
   , enable_key_bindings(false)
 {
-
 }
 
 vgui_enhance::vgui_enhance(vgui_tableau_sptr const&t)
@@ -47,7 +44,6 @@ vgui_enhance::vgui_enhance(vgui_tableau_sptr const&t)
   , zoom_factor(1.5)
   , enable_key_bindings(false)
 {
-
 }
 
 vgui_enhance::vgui_enhance(vgui_tableau_sptr const&t1, vgui_tableau_sptr const&t2)
@@ -73,8 +69,8 @@ vcl_string vgui_enhance::file_name() const {return slot1->file_name();}
 vcl_string vgui_enhance::type_name() const {return "vgui_enhance";}
 
 
-bool vgui_enhance::handle(const vgui_event& e) {
-
+bool vgui_enhance::handle(const vgui_event& e)
+{
   if (!enhancing_ && e.type == vgui_BUTTON_DOWN && e.button == vgui_LEFT) {
     enhancing_ = true;
     x = (int)e.wx;
@@ -145,8 +141,6 @@ bool vgui_enhance::handle(const vgui_event& e) {
       float ox = M(0,3);
       float oy = M(1,3);
 
-
-
       glEnable(GL_SCISSOR_TEST);
       int size_2 = size+size;
       glScissor(x-size, y-size, size_2, size_2);
@@ -176,10 +170,8 @@ bool vgui_enhance::handle(const vgui_event& e) {
       glMatrixMode(GL_MODELVIEW);
       glPopMatrix();
       glDisable(GL_SCISSOR_TEST);
-
     }
     return true;
-
   }
   bool retv = slot1->handle(e);
   if (!retv && slot2)

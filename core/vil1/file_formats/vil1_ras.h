@@ -1,7 +1,7 @@
-// This is ./vxl/vil/file_formats/vil_ras.h
+// This is vxl/vil/file_formats/vil_ras.h
 #ifndef vil_ras_file_format_h_
 #define vil_ras_file_format_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -15,8 +15,9 @@
 #include <vxl_config.h>
 
 //: Loader for Sun raster files
-class vil_ras_file_format : public vil_file_format {
-public:
+class vil_ras_file_format : public vil_file_format
+{
+ public:
   virtual char const* tag() const;
   virtual vil_image_impl* make_input_image(vil_stream* vs);
   virtual vil_image_impl* make_output_image(vil_stream* vs, int planes,
@@ -28,7 +29,8 @@ public:
 };
 
 //: Generic image implementation for Sun raster files
-class vil_ras_generic_image : public vil_image_impl {
+class vil_ras_generic_image : public vil_image_impl
+{
   vil_stream* vs_;
   vxl_uint_32 width_;
   vxl_uint_32 height_;
@@ -48,7 +50,7 @@ class vil_ras_generic_image : public vil_image_impl {
   bool write_header();
 
   friend class vil_ras_file_format;
-public:
+ public:
 
   vil_ras_generic_image(vil_stream* is);
   vil_ras_generic_image(vil_stream* is, int planes,

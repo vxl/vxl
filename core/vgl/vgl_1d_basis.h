@@ -1,7 +1,7 @@
 // This is vxl/vgl/vgl_1d_basis.h
 #ifndef vgl_1d_basis_h_
 #define vgl_1d_basis_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -83,7 +83,8 @@
 // taking its intersection with the line at infinity!)
 //
 template <class T>
-class vgl_1d_basis {
+class vgl_1d_basis
+{
   // Data members are private:
   T origin_;    //!< The point to be mapped to homogeneous (0,1)
   T unity_;     //!< The point to be mapped to homogeneous (1,1)
@@ -92,7 +93,7 @@ class vgl_1d_basis {
   // No usable default constructor:
   inline vgl_1d_basis() {}
 
-public:
+ public:
   inline T origin() const { return origin_; }
   inline T unity() const { return unity_; }
   inline T inf_pt() const { assert(!affine_); return inf_pt_; }

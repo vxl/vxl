@@ -1,10 +1,9 @@
-// This is ./vxl/vnl/vnl_quaternion.h
+// This is vxl/vnl/vnl_quaternion.h
 #ifndef vnl_quaternion_h_
 #define vnl_quaternion_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //: \file
 //  \brief Unit quaternion represents rotation in 3D.
 //  \author awf@robots.ox.ac.uk
@@ -56,9 +55,10 @@
 //
 
 export template <class T>
-class vnl_quaternion : public vnl_vector_fixed<T, 4> { // public for IS-A relation
+class vnl_quaternion : public vnl_vector_fixed<T, 4>
+{ // public for IS-A relation
   typedef vnl_vector_fixed<T, 4> Base;
-public:
+ public:
 
  //: Constructor for null quaternion
   vnl_quaternion () {}

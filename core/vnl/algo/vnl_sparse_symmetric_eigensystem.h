@@ -1,9 +1,9 @@
+// This is vxl/vnl/algo/vnl_sparse_symmetric_eigensystem.h
 #ifndef vnl_sparse_symmetric_eigensystem_h_
 #define vnl_sparse_symmetric_eigensystem_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Find the eigenvalues of a sparse symmetric matrix
@@ -26,8 +26,9 @@
 //
 //  Uses the dnlaso routine from the LASO package of netlib.
 
-class vnl_sparse_symmetric_eigensystem {
-public:
+class vnl_sparse_symmetric_eigensystem
+{
+ public:
   vnl_sparse_symmetric_eigensystem();
 
   // Find n eigenvalue/eigenvectors.  If smallest is true, will
@@ -45,7 +46,7 @@ public:
   int SaveVectors(int n, int m, const double* q, int base);
   int RestoreVectors(int n, int m, double* q, int base);
 
-protected:
+ protected:
   int nvalues;  // this is the size of the next two arrays.
   vnl_vector<double> * vectors; // eigenvectors
   double * values;              // eigenvalues

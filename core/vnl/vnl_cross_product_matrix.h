@@ -1,10 +1,9 @@
+// This is vxl/vnl/vnl_cross_product_matrix.h
 #ifndef vnl_cross_product_matrix_h_
 #define vnl_cross_product_matrix_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_cross_product_matrix.h
-
 //: \file
 //  \brief 3x3 cross-product matrix of vector
 //  \author Andrew W. Fitzgibbon, Oxford RRG
@@ -28,8 +27,9 @@
 //     e_3   0    -e_1
 //    -e_2   e_1   0
 // \endverbatim
-class vnl_cross_product_matrix : public vnl_double_3x3 {
-public:
+class vnl_cross_product_matrix : public vnl_double_3x3
+{
+ public:
   typedef vnl_double_3x3 base;
 
   vnl_cross_product_matrix(const vnl_vector<double>& v) { set(v.data_block()); }

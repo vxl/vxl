@@ -1,10 +1,9 @@
 // This is oxl/vgui/vgui_clear_tableau.h
 #ifndef vgui_clear_tableau_h_
 #define vgui_clear_tableau_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -28,8 +27,9 @@ class vgui_menu;
 //
 // vgui_clear_tableau is a tableau that performs OpenGL clearing upon
 // receipt of a vgui_DRAW event. It passes all events to its single child.
-class vgui_clear_tableau : public vgui_tableau {
-public:
+class vgui_clear_tableau : public vgui_tableau
+{
+ public:
   //: Constructor - don't use this, use vgui_clear_tableau_new.
   vgui_clear_tableau();
 
@@ -51,11 +51,11 @@ public:
   //: Display a dialog box to get data (colour, etc) for the clear tableau.
   void config_dialog();
 
-protected:
+ protected:
   virtual ~vgui_clear_tableau();
   virtual bool handle(const vgui_event&);
 
-private:
+ private:
   GLbitfield mask;
 
   float colour[4]; // rgba
@@ -67,7 +67,8 @@ private:
 };
 
 //: Create a smart-pointer to a vgui_clear_tableau.
-struct vgui_clear_tableau_new : public vgui_clear_tableau_sptr {
+struct vgui_clear_tableau_new : public vgui_clear_tableau_sptr
+{
   typedef vgui_clear_tableau_sptr base;
   vgui_clear_tableau_new() : base(new vgui_clear_tableau()) { }
 };

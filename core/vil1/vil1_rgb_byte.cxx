@@ -1,7 +1,5 @@
 // This is vxl/vil/vil_rgb_byte.cxx
-
-//-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //

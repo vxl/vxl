@@ -1,9 +1,11 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+// This is vxl/vil/file_formats/vil_jpeg_source_mgr.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vil_jpeg_source_mgr.h"
 #include <vcl_cassert.h>
 #include <vcl_cstddef.h> // for vcl_size_t
@@ -32,7 +34,7 @@ typedef vil_jpeg_stream_source_mgr *vil_jpeg_srcptr;
 STATIC
 void
 vil_jpeg_init_source (j_decompress_ptr cinfo) {
-  //vcl_cerr << "vil_jpeg_init_source()" << vcl_endl;
+  //vcl_cerr << "vil_jpeg_init_source()\n";
 
   vil_jpeg_srcptr src = ( vil_jpeg_srcptr )( cinfo->src );
 
@@ -152,7 +154,7 @@ vil_jpeg_stream_src_set (j_decompress_ptr cinfo, vil_stream *vs) {
 
   assert(! src); // this function must be called only once on each cinfo.
 
-  //vcl_cerr << "vil_jpeg_stream_src() : creating new data source" << vcl_endl;
+  //vcl_cerr << "vil_jpeg_stream_src() : creating new data source\n";
 
   src = (vil_jpeg_srcptr) // allocate
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo,

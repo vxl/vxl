@@ -1,10 +1,9 @@
+// This is vxl/vil/vil_scale_intensities.h
 #ifndef vil_scale_intensities_h_
 #define vil_scale_intensities_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vil/vil_scale_intensities.h
-
 //:
 // \file
 // \brief Templated functions to scale/shift image pixel values

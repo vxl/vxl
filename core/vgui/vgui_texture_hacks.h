@@ -1,16 +1,13 @@
-// This is ./oxl/vgui/vgui_texture_hacks.h
-
+// This is oxl/vgui/vgui_texture_hacks.h
+#ifndef vgui_texture_hacks_h_
+#define vgui_texture_hacks_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
 // \brief  Ask fsm@robots.ox.ac.uk about these hacks.
-
-
-#ifndef vgui_texture_hacks_h_
-#define vgui_texture_hacks_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 
 #include <vgui/vgui_gl.h>
 

@@ -1,8 +1,7 @@
-#ifdef __GNUC__
+// This is vxl/vil/vil_clamp_image.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
-// This is vxl/vil/vil_clamp_image.cxx
 
 #include "vil_clamp_image.h"
 #include <vil/vil_image.h>

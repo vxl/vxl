@@ -1,7 +1,7 @@
-// This is ./vxl/vil/file_formats/vil_iris.h
+// This is vxl/vil/file_formats/vil_iris.h
 #ifndef vil_iris_file_format_h_
 #define vil_iris_file_format_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -20,8 +20,9 @@
 #include <vil/vil_image_impl.h>
 
 //: Loader for RGB files (sgi iris)
-class vil_iris_file_format : public vil_file_format {
-public:
+class vil_iris_file_format : public vil_file_format
+{
+ public:
   virtual char const* tag() const;
   virtual vil_image_impl* make_input_image(vil_stream* vs);
   virtual vil_image_impl* make_output_image(vil_stream* vs, int planes,
@@ -33,7 +34,8 @@ public:
 };
 
 //: Generic image implementation for RGB files
-class vil_iris_generic_image : public vil_image_impl {
+class vil_iris_generic_image : public vil_image_impl
+{
   unsigned long *starttab_;
   unsigned long *lengthtab_;
 
@@ -41,7 +43,7 @@ class vil_iris_generic_image : public vil_image_impl {
   bool write_header();
 
   friend class vil_iris_file_format;
-public:
+ public:
 
   vil_iris_generic_image(vil_stream* is, char* imagename = "");
   vil_iris_generic_image(vil_stream* is, int planes,
@@ -58,7 +60,7 @@ public:
   virtual int height() const { return height_; }
   virtual int components() const { return components_; }
 
-  virtual int bits_per_component() const { return (bytes_per_component_ * 8); }
+  virtual int bits_per_component() const { return bytes_per_component_ * 8; }
   virtual int bytes_per_pixel() const { return bytes_per_component_ * planes_; };
 
   virtual enum vil_component_format component_format() const { return VIL_COMPONENT_FORMAT_UNSIGNED_INT; }

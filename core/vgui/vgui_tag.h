@@ -1,5 +1,9 @@
-// This is ./oxl/vgui/vgui_tag.h
-
+// This is oxl/vgui/vgui_tag.h
+#ifndef vgui_tag_h_
+#define vgui_tag_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
@@ -33,12 +37,6 @@
 //  Modifications:
 //    07-AUG-2002 K.Y.McGaul - Changed to Doxygen style comments.
 // \endverbatim
-
-#ifndef vgui_tag_h_
-#define vgui_tag_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 
 //: The type of a tag function.
 typedef int (*vgui_tag_function)(void);

@@ -1,8 +1,7 @@
-// This is ./vxl/vgl/io/vgl_io_polygon.cxx
-#ifdef __GNUC__
+// This is vxl/vgl/io/vgl_io_polygon.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 
@@ -63,7 +62,7 @@ void vsl_b_read(vsl_b_istream &is, vgl_polygon & p)
 //: Output a human readable summary to the stream
 void vsl_print_summary(vcl_ostream& os,const vgl_polygon & p)
 {
-  os<<"Polygon with points defined by sheets : "<<vcl_endl;
+  os<<"Polygon with points defined by sheets : \n";
   for (int i=0;i<p.num_sheets();i++)
   {
       for (unsigned int j=0;j<p[i].size();j++)

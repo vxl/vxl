@@ -1,9 +1,7 @@
-#ifdef __GNUC__
+// This is vxl/vnl/vnl_nonlinear_minimizer.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
-// This is vxl/vnl/vnl_nonlinear_minimizer.cxx
-
 //:
 // \file
 // \brief

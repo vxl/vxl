@@ -1,10 +1,9 @@
+// This is vxl/vnl/vnl_nonlinear_minimizer.h
 #ifndef vnl_nonlinear_minimizer_h_
 #define vnl_nonlinear_minimizer_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_nonlinear_minimizer.h
-
 //:
 //  \file
 //  \brief Base class for nonlinear optimization
@@ -29,8 +28,9 @@
 // -  vnl_conjugate_gradient
 // -  vnl_brent
 // -  vnl_powell
-class vnl_nonlinear_minimizer {
-public:
+class vnl_nonlinear_minimizer
+{
+ public:
   vnl_nonlinear_minimizer();
 
   virtual ~vnl_nonlinear_minimizer();
@@ -126,7 +126,7 @@ public:
   //:Return the failure code of the last minimization
   ReturnCodes get_failure_code() const { return failure_code_; }
 
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
   // Input variables
   double xtol;    //: Termination tolerance on X (solution vector)

@@ -1,10 +1,9 @@
-// This is ./oxl/vgui/vgui_tview.h
+// This is oxl/vgui/vgui_tview.h
 #ifndef vgui_tview_h_
 #define vgui_tview_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -25,7 +24,7 @@
 
 class vgui_tview : public vgui_wrapper_tableau
 {
-public:
+ public:
   //: Constructor - don't use this, use vgui_tview_new.
   vgui_tview(vgui_tableau_sptr const&);
 
@@ -39,7 +38,8 @@ public:
   void draw_tview_icon(float x, float y);
 
 
-  struct icon {
+  struct icon
+  {
     vgui_tableau_sptr tableau;
     float x;
     float y;
@@ -56,12 +56,13 @@ public:
   vgui_tableau_sptr active_icon;
   vgui_tableau_sptr closest_icon;
 
-protected:
+ protected:
  ~vgui_tview();
 };
 
 //: Create a smart-pointer to a vgui_tview tableau.
-struct vgui_tview_new : public vgui_tview_sptr {
+struct vgui_tview_new : public vgui_tview_sptr
+{
   typedef vgui_tview_sptr base;
   vgui_tview_new(vgui_tableau_sptr const& arg1000) : base(new vgui_tview(arg1000)) { }
 };

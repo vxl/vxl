@@ -1,14 +1,11 @@
-// This is ./vxl/vil/vil_flipud_impl.cxx
-#ifdef __GNUC__
+// This is vxl/vil/vil_flipud_impl.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
+// \author fsm@robots.ox.ac.uk
 
-/*
-  fsm@robots.ox.ac.uk
-*/
 #include "vil_flipud_impl.h"
 #include <vcl_climits.h>
 

@@ -1,5 +1,9 @@
-// This is ./oxl/vgui/vgui_easy2D.h
-
+// This is oxl/vgui/vgui_easy2D.h
+#ifndef vgui_easy2D_h_
+#define vgui_easy2D_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -14,12 +18,6 @@
 //    25-APR-2002  domi@vision.ee.ethz.ch - make print_psfile work without image tableau
 //    26-APR-2002  K.Y.McGaul - Added some doxygen-style documentation.
 // \endverbatim
-
-#ifndef vgui_easy2D_h_
-#define vgui_easy2D_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 
 #include <vgui/vgui_displaylist2D.h>
 #include <vgui/vgui_slot.h>
@@ -56,7 +54,7 @@ class vgui_soview2D_polygon;
 //  want to use vgui_utils::dump_colour_buffer instead).
 class vgui_easy2D : public vgui_displaylist2D
 {
-public:
+ public:
   vgui_easy2D(const char* n="unnamed");
   vgui_easy2D(vgui_image_tableau_sptr const&, const char* n="unnamed");
   vgui_easy2D(vgui_tableau_sptr const&, const char* n="unnamed");
@@ -116,7 +114,7 @@ public:
   void print_psfile(vcl_string filename, int reduction_factor,
                     bool print_geom_objs, int wd=-1, int ht=-1);
 
-protected:
+ protected:
   ~vgui_easy2D() { }
 
   vgui_slot image_slot;
@@ -128,7 +126,8 @@ protected:
   float point_size;
 };
 
-struct vgui_easy2D_new : public vgui_easy2D_sptr {
+struct vgui_easy2D_new : public vgui_easy2D_sptr
+{
   vgui_easy2D_new(char const *n="unnamed") :
     vgui_easy2D_sptr(new vgui_easy2D(n)) { }
 

@@ -1,10 +1,9 @@
-// This is ./vxl/vgl/algo/vgl_rtree.h
+// This is vxl/vgl/algo/vgl_rtree.h
 #ifndef vgl_rtree_h_
 #define vgl_rtree_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
@@ -22,8 +21,9 @@ template <class V, class B, class C> class vgl_rtree;
 
 //: Function predicate object for querying the tree.
 template <class V, class B, class C>
-class vgl_rtree_probe {
-public:
+class vgl_rtree_probe
+{
+ public:
   virtual ~vgl_rtree_probe() { }
   //: return true if the probe "meets" the given object.
   virtual bool meets(V const &v) const { B b; C::init(b, v); return meets(b); }
@@ -40,8 +40,9 @@ public:
 
 //: Represent a node in the rtree.
 template <class V, class B, class C>
-class vgl_rtree_node {
-public:
+class vgl_rtree_node
+{
+ public:
   typedef vgl_rtree_node<V, B, C> node;
 
   // contains bound on all Vs in this node and below.
@@ -94,7 +95,7 @@ public:
   // remove ith vertex from node.
   void erase(int i);
 
-private:
+ private:
   friend class vgl_rtree_iterator_base<V, B, C>;
 
   // the following methods are not used by the vgl_rtree.
@@ -110,8 +111,9 @@ private:
 
 //: Base class for both rtree iterators.
 template <class V, class B, class C>
-class vgl_rtree_iterator_base {
-public:
+class vgl_rtree_iterator_base
+{
+ public:
   typedef vgl_rtree_node<V, B, C> node;
   node *current;
   int i;
@@ -134,8 +136,9 @@ inline bool operator!=(vgl_rtree_iterator_base<V, B, C> const &a,
 
 //: Iterator for rtree.
 template <class V, class B, class C>
-class vgl_rtree_iterator : public vgl_rtree_iterator_base<V, B, C> {
-public:
+class vgl_rtree_iterator : public vgl_rtree_iterator_base<V, B, C>
+{
+ public:
   typedef vgl_rtree_iterator_base<V, B, C> base;
   typedef vgl_rtree_iterator<V, B, C> self;
   typedef vgl_rtree_node<V, B, C> node;
@@ -154,8 +157,9 @@ public:
 
 //: const_iterator for rtree.
 template <class V, class B, class C>
-class vgl_rtree_const_iterator : public vgl_rtree_iterator_base<V, B, C> {
-public:
+class vgl_rtree_const_iterator : public vgl_rtree_iterator_base<V, B, C>
+{
+ public:
   typedef vgl_rtree_iterator_base<V, B, C> base;
   typedef vgl_rtree_const_iterator<V, B, C> self;
   typedef vgl_rtree_node<V, B, C> node;
@@ -234,8 +238,9 @@ public:
 // The volume() method is used by the rtree to make decisions
 // about where to put new elements.
 template <class V, class B, class C>
-class vgl_rtree {
-public:
+class vgl_rtree
+{
+ public:
   vgl_rtree() : root(0) { }
   ~vgl_rtree() {
     if (root)
@@ -287,8 +292,10 @@ public:
     int i;
     return root ? root->find(v, &n, &i) : false;
   }
-  //iterator       find(V const &v);
-  //const_iterator find(V const &v) const;
+#if 0
+  iterator       find(V const &v);
+  const_iterator find(V const &v) const;
+#endif
 
   //: erase the element pointed to by the iterator.
   // may invalidate *all* iterators into the rtree.
@@ -337,7 +344,7 @@ public:
   typedef vgl_rtree_node<V, B, C> node;
   node *secret_get_root() const { return root; } // for debugging purposes.
 
-private:
+ private:
   node *root;
   // disallow assignment
   void operator=(vgl_rtree<V, B, C> const &) { }

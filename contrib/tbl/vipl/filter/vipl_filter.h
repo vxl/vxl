@@ -1,20 +1,9 @@
+// This is tbl/vipl/filter/vipl_filter.h
 #ifndef _vipl_filter_h_
 #define _vipl_filter_h_
-#ifdef __GNUG__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-#include "vipl_filter_abs.h"
-#include <vipl/filter/vipl_trivial_pixeliter.h>
-
-template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr = vipl_trivial_pixeliter >
- class vipl_filter ;
-
-#include <vipl/section/vipl_section_descriptor.h>
-#include <vipl/section/vipl_section_container.h>
-//#include <vipl/section/vipl_section_iterator.h>
-
-#include <vcl_stlfwd.h> // forward declaration for vcl_vector
-
 //:
 // \file
 // Here is how the get/set macros are used.
@@ -29,6 +18,18 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
 // For the named accessors the user can #define the names to use.
 // (And if they really want to, they can change the #defines for GET_PIXEL SET_PIXEL...
 //  but be careful as existing code uses the args in the given order.)
+
+#include "vipl_filter_abs.h"
+#include <vipl/filter/vipl_trivial_pixeliter.h>
+
+template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr = vipl_trivial_pixeliter >
+ class vipl_filter ;
+
+#include <vipl/section/vipl_section_descriptor.h>
+#include <vipl/section/vipl_section_container.h>
+//#include <vipl/section/vipl_section_iterator.h>
+
+#include <vcl_stlfwd.h> // forward declaration for vcl_vector
 
 #ifdef USE_NAMED_ACCESSORS // cannot have both set,
 #undef USE_OPERATOR_ACCESSORS // to be safe if we have named we undefine operator()
@@ -89,7 +90,8 @@ class vipl_trivial_pixeliter;
 extern const void * DAhelp(vipl_trivial_pixeliter const*,int level=0);
 
 template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, class PixelItr >
-class vipl_filter          : public vipl_filter_abs {
+class vipl_filter          : public vipl_filter_abs
+{
   // declare some static consts....
   static const VIPL_FILTER_STATE Not_Ready      VCL_STATIC_CONST_INIT_INT(0);
   static const VIPL_FILTER_STATE Ready          VCL_STATIC_CONST_INIT_INT(1);

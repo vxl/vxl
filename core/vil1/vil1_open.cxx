@@ -1,9 +1,11 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+// This is vxl/vil/vil_open.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vil_open.h"
 
 #include <vcl_cstdio.h>   // sprintf()
@@ -52,7 +54,7 @@ vil_stream *vil_open(char const* what, char const* how)
         is = cis;
       }
       else {
-        vcl_cerr << __FILE__ ": cannot open gen:* for writing" << vcl_endl;
+        vcl_cerr << __FILE__ ": cannot open gen:* for writing\n";
       }
     }
   }
@@ -71,7 +73,7 @@ vil_stream *vil_open(char const* what, char const* how)
         is = new vil_stream_url(what);
       }
       else
-        vcl_cerr << __FILE__ ": cannot open URL for writing (yet)" << vcl_endl;
+        vcl_cerr << __FILE__ ": cannot open URL for writing (yet)\n";
     }
   }
   if (is && !is->ok()) {

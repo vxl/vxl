@@ -1,8 +1,7 @@
-// This is ./vxl/vil/io/vil_io_image_impl.cxx
-#ifdef __GNUC__
+// This is vxl/vil/io/vil_io_image_impl.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 
@@ -51,7 +50,7 @@ vcl_string vil_io_image_impl::target_classname() const
 //: Return true if b is of class target_classname()
 bool vil_io_image_impl::is_io_for(const vil_image_impl& b) const
 {
-  return (b.is_a()==target_classname());
+  return b.is_a()==target_classname();
 }
 
 //=========================================================================

@@ -1,11 +1,11 @@
 // This is vxl/vul/vul_get_timestamp.cxx
-
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vul_get_timestamp.h"
 
 #include <vcl_compiler.h>

@@ -1,11 +1,11 @@
 // This is vxl/vgl/vgl_triangle_scan_iterator.cxx
-
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vgl_triangle_scan_iterator.h"
 
 #include <vcl_cmath.h>
@@ -113,15 +113,16 @@ void vgl_triangle_scan_iterator::reset()
     for (int j=0; j<3; ++j)
       data[i][j] *= f;
   }
-
-  //vcl_cerr << "data:" << vcl_endl;
-  //for (int i=0; i<3; ++i) {
-  //  for (int j=0; j<3; ++j)
-  //    vcl_cerr << ' ' << data[i][j];
-  //  vcl_cerr << vcl_endl;
-  //}
-  //vcl_cerr << vcl_endl;
+#if 0
+  vcl_cerr << "data:\n";
+  for (int i=0; i<3; ++i) {
+    for (int j=0; j<3; ++j)
+      vcl_cerr << ' ' << data[i][j];
+    vcl_cerr << vcl_endl;
+  }
+  vcl_cerr << vcl_endl;
 #endif
+#endif // use_polygon_scan_iterator
 }
 
 bool vgl_triangle_scan_iterator::next()

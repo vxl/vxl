@@ -1,7 +1,7 @@
 // This is vxl/vgl/vgl_polygon.h
 #ifndef vgl_polygon_h_
 #define vgl_polygon_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -29,8 +29,9 @@
 //   for (int p = 0; p < polygon[s].size(); ++p)
 //     do_something(polygon[s][p].x(), polygon[s][p].y());
 //
-class vgl_polygon {
-public:
+class vgl_polygon
+{
+ public:
   typedef vgl_point_2d<float> point_t;
 
   typedef vcl_vector<point_t> sheet_t;
@@ -98,14 +99,15 @@ public:
   //: Pretty print
   vcl_ostream& print(vcl_ostream&) const;
 
-protected:
+ protected:
 
   // Data Members--------------------------------------------------------------
   vcl_vector<sheet_t> sheets_;
 };
 
 //: A commonly required polygon representation.
-struct vgl_polygon_sheet_as_array {
+struct vgl_polygon_sheet_as_array
+{
   int n;
   float* x;
   float* y;

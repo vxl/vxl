@@ -1,10 +1,9 @@
+// This is vxl/vnl/vnl_double_2x3.h
 #ifndef vnl_double_2x3_h_
 #define vnl_double_2x3_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_double_2x3.h
-
 //: \file
 //  \brief 2x3 matrix of double
 //  \author Andrew W. Fitzgibbon, Oxford RRG
@@ -22,9 +21,10 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_double_3.h>
 
-class vnl_double_2x3 : public vnl_matrix_fixed<double, 2, 3> {
+class vnl_double_2x3 : public vnl_matrix_fixed<double, 2, 3>
+{
   typedef vnl_matrix_fixed<double, 2, 3> Base;
-public:
+ public:
 
   vnl_double_2x3() {}
   vnl_double_2x3(const vnl_double_3& row1, const vnl_double_3& row2) {

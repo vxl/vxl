@@ -1,10 +1,9 @@
+// This is vxl/vnl/vnl_error.h
 #ifndef vnl_error_h_
 #define vnl_error_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_error.h
-
 //: \file
 //  \brief
 //  \author fsm@robots.ox.ac.uk

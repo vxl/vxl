@@ -1,8 +1,7 @@
-#ifdef __GNUC__
+// This is vxl/vnl/vnl_int_4.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-// This is vxl/vnl/vnl_int_4.cxx
-
 //
 // vnl_int_4
 // Author: Andrew W. Fitzgibbon, Oxford RRG

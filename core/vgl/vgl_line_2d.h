@@ -1,10 +1,9 @@
-// This is ./vxl/vgl/vgl_line_2d.h
+// This is vxl/vgl/vgl_line_2d.h
 #ifndef vgl_line_2d_h_
 #define vgl_line_2d_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author Don Hamilton, Peter Tu, Peter Vanroose, François BERTEL, Franck Bettinger
@@ -31,11 +30,9 @@
 // An interface for the line coefficients, [a,b,c], is provided in terms of the
 // standard implicit line equation: a*x + b*y + c = 0
 template <class Type>
-class vgl_line_2d {
-
-// PUBLIC INTERFACE--------------------------------------------------------
-
-public:
+class vgl_line_2d
+{
+ public:
   //: Default constructor (Line 1.y==0, the X axis)
   inline vgl_line_2d() : a_(0), b_(1), c_(0) {}
 
@@ -89,7 +86,7 @@ public:
   inline vgl_vector_2d<double> normal() const
   { return normalized(vgl_vector_2d<double>(a_,b_)); }
 
-private: // \deprecated
+ private: // \deprecated
   //: \deprecated \a x component of unit vector describing direction of line
   inline double dir_x() const { return direction().x(); }
 
@@ -102,7 +99,7 @@ private: // \deprecated
   //: \deprecated \a y component of unit vector orthogonal to line
   inline double normal_y() const { return normal().y(); }
 
-public:
+ public:
   //: Set a b c.
   //  The values of a and b should not be both zero.
   //  Note that it does not make sense to set a, b or c separately
@@ -120,7 +117,7 @@ public:
 
   // INTERNALS---------------------------------------------------------------
 
-private:
+ private:
   // the data associated with this point
   Type a_;
   Type b_;

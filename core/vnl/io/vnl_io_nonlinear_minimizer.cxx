@@ -1,8 +1,7 @@
-// This is ./vxl/vnl/io/vnl_io_nonlinear_minimizer.cxx
-#ifdef __GNUC__
+// This is vxl/vnl/io/vnl_io_nonlinear_minimizer.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 
@@ -63,7 +62,7 @@ vcl_string vnl_io_nonlinear_minimizer::target_classname() const
 bool vnl_io_nonlinear_minimizer::is_io_for
     (const vnl_nonlinear_minimizer& b) const
 {
-  return (b.is_a()==target_classname());
+  return b.is_a()==target_classname();
 }
 
 //==============================================================================
@@ -134,9 +133,9 @@ void vsl_b_read(vsl_b_istream &is, vnl_nonlinear_minimizer & p)
 void vsl_print_summary(vcl_ostream & os,const vnl_nonlinear_minimizer & p)
 {
   os<<"Tolerance of {F, X, G}: {"<<p.get_f_tolerance() << ", "
-  << p.get_x_tolerance()<<", "<<p.get_g_tolerance() << "}" << vcl_endl;
+    << p.get_x_tolerance()<<", "<<p.get_g_tolerance() << "}\n";
   os<<"Max Function Evals:"<<p.get_max_function_evals()<<"    Epsilon function:"
-  <<p.get_epsilon_function()<<"       Trace:"<<p.get_trace()<<vcl_endl;
+    <<p.get_epsilon_function()<<"       Trace:"<<p.get_trace()<<vcl_endl;
   os<<"Verbose:"<<p.get_verbose()<<"     Check Derivatives:"<<
   p.get_check_derivatives()<<vcl_endl;
 }

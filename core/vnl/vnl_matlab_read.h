@@ -1,10 +1,9 @@
+// This is vxl/vnl/vnl_matlab_read.h
 #ifndef vnl_matlab_read_h_
 #define vnl_matlab_read_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_matlab_read.h
-
 //:
 // \file
 // \brief Read from MATLAB files
@@ -41,8 +40,9 @@ template <class T> bool vnl_matlab_read_or_die(vcl_istream &, vnl_matrix<T> &, c
 // pointed to by ptr. For real T, it is equivalent to s.read(ptr, sizeof(T)*n);
 template <class T> void vnl_matlab_read_data(vcl_istream &s, T *ptr, unsigned n);
 
-class vnl_matlab_readhdr {
-public:
+class vnl_matlab_readhdr
+{
+ public:
   vnl_matlab_readhdr(vcl_istream &);
   ~vnl_matlab_readhdr();
 
@@ -62,9 +62,9 @@ public:
   //template <class T> bool read_data(T *); // vector
   //template <class T> bool read_data(T * const *); // 2D array
 #define fsm_declare_methods(T) \
-private: \
+ private: \
   bool type_chck(T &); \
-public: \
+ public: \
   bool read_data(T &); \
   bool read_data(T *); \
   bool read_data(T * const *) // no ; here, please. SunPro 5.0 barfs.
@@ -74,7 +74,7 @@ fsm_declare_methods(vcl_complex<float>);
 fsm_declare_methods(vcl_complex<double>);
 #undef fsm_declare_methods
 
-private:
+ private:
   vcl_istream &s;
   vnl_matlab_header hdr;
   char *varname;

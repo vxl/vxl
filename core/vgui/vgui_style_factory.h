@@ -1,5 +1,9 @@
-// This is ./oxl/vgui/vgui_style_factory.h
-
+// This is oxl/vgui/vgui_style_factory.h
+#ifndef vgui_style_factory_h_
+#define vgui_style_factory_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -11,13 +15,6 @@
 //  Modifications:
 //    18-OCT-1999 P.Pritchett - Initial version.
 // \endverbatim
-
-#ifndef vgui_style_factory_h_
-#define vgui_style_factory_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
 
 #include <vcl_functional.h>
 #include <vcl_utility.h>
@@ -35,7 +32,7 @@ class vgui_soview;
 //  This is a singleton class - there should only be one style_factory.
 class vgui_style_factory
 {
-public:
+ public:
 
   //: Destructor - delete all styles held in the factory.
  ~vgui_style_factory();
@@ -55,11 +52,11 @@ public:
   //: Change the style of the given soview.
   static void change_style(vgui_soview* so, vgui_style* st_new, vgui_style* st_old);
 
-
   typedef vcl_multimap<vgui_style*, vgui_soview*, vcl_less<vgui_style*> > MultiMap_styles;
 
-  class so_equal {
-  public:
+  class so_equal
+  {
+   public:
     so_equal(vgui_soview* s1_) : s1(s1_) {}
 
     bool operator() (MultiMap_styles::value_type obj);
@@ -69,7 +66,7 @@ public:
 
   static vgui_DLLDATA bool use_factory;
 
-protected:
+ protected:
 
   vgui_style_factory();
   static vgui_DLLDATA vgui_style_factory* instance_;
@@ -79,12 +76,9 @@ protected:
   void get_soviews_impl(vgui_style*, vcl_vector<vgui_soview*>& soviews);
   void change_style_impl(vgui_soview* so, vgui_style* st_new, vgui_style* st_old);
 
-
-
   //vgui_style* default_style;
   vcl_vector<vgui_style*> styles;
   MultiMap_styles styles_map;
-
 };
 
 #endif // vgui_style_factory_h_

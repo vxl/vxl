@@ -1,8 +1,7 @@
-// This is ./oxl/vgui/vgui_event_server.cxx
-#ifdef __GNUC__
+// This is oxl/vgui/vgui_event_server.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
@@ -62,7 +61,7 @@ vgui_event_server::vgui_event_server(vgui_tableau_sptr const& t):
   grabber_reference_ = grabber_;
 
 //if (debug)
-//  vcl_cerr << "vgui_event_server::hooking up " << vcl_endl;
+//  vcl_cerr << "vgui_event_server::hooking up \n";
 
   // link up grabber
   vgui_slot::replace_child_everywhere(t, grabber_);
@@ -77,7 +76,7 @@ vgui_event_server::~vgui_event_server()
   vgui_slot::replace_child_everywhere(grabber_, grabber_->child);
 
 //if (debug)
-//  vcl_cerr << "vgui_event_server::unhooking" << vcl_endl;
+//  vcl_cerr << "vgui_event_server::unhooking\n";
 }
 
 void vgui_event_server::reset() {

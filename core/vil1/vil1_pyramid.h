@@ -1,10 +1,9 @@
+// This is vxl/vil/vil_pyramid.h
 #ifndef vil_pyramid_h_
 #define vil_pyramid_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vil/vil_pyramid.h
-
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
@@ -17,21 +16,21 @@
 // the 0th element as the given image and the ith element a subsampled
 // version of the (i-1)th element. The subsampled images are computed
 // on demand and cached for later use.
-struct vil_pyramid 
+struct vil_pyramid
 {
   enum cache_strategy {
     none = 0,
     memory = 1,
     blocked = 2 // not implemented. don't try to use it.
   };
-  
+
   vil_pyramid(vil_image const &, cache_strategy = memory);
   ~vil_pyramid();
-  
+
   unsigned size() const { return levels.size(); }
   vil_image operator[](unsigned i);
-  
-private:
+
+ private:
   cache_strategy cs;
   vcl_vector<vil_image> levels;
 };

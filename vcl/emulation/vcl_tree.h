@@ -1,3 +1,10 @@
+// This is vcl/emulation/vcl_tree.h
+#ifndef vcl_emulation_tree_h
+#define vcl_emulation_tree_h
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
+
 /*
  *
  * Copyright (c) 1996
@@ -48,14 +55,6 @@
  * purpose.  It is provided "as is" without express or implied warranty.
  *
  */
-
-
-#ifndef vcl_emulation_tree_h
-#define vcl_emulation_tree_h
-
-#ifdef __GNUC__
-#pragma interface
-#endif
 
 /*
 
@@ -182,9 +181,9 @@ struct __rb_tree_iterator : public __rb_tree_base_iterator
   typedef Value* pointer;
   typedef const Value& const_reference;
   typedef __rb_tree_node<Value>* link_type;
-private:
+ private:
   typedef __rb_tree_iterator<Value> self;
-public:
+ public:
   __rb_tree_iterator() {}
   __rb_tree_iterator(link_type x) { node = x; }
   reference operator*() const {
@@ -219,9 +218,8 @@ struct __rb_tree_const_iterator : public __rb_tree_base_iterator
   typedef Value* pointer;
   typedef Value const* const_pointer;
   typedef __rb_tree_node<Value>* link_type;
-private:
   typedef __rb_tree_const_iterator<Value> self;
-public:
+ public:
   __rb_tree_const_iterator() {}
   __rb_tree_const_iterator(link_type x) { node = x; }
   __rb_tree_const_iterator(const __rb_tree_iterator<Value>& it) { node = it.node; }
@@ -492,9 +490,10 @@ __rb_tree_rebalance_for_erase(__rb_tree_node_base* z,
 }
 
 template <class Value, class Alloc>
-class __rb_tree_base {
+class __rb_tree_base
+{
     typedef __rb_tree_base<Value,Alloc> self;
-public:
+ public:
     typedef Value value_type;
     typedef value_type* pointer;
     typedef const value_type* const_pointer;
@@ -502,7 +501,7 @@ public:
     typedef const value_type& const_reference;
     typedef vcl_size_t size_type;
     typedef vcl_ptrdiff_t difference_type;
-protected:
+ protected:
     typedef __rb_tree_node_base* base_ptr;
     typedef __rb_tree_node<Value> rb_tree_node;
     typedef __rb_tree_color_type color_type;
@@ -510,7 +509,7 @@ protected:
     typedef vcl_simple_alloc<rb_tree_node, Alloc> rb_tree_node_allocator;
     static link_type get_node() { return rb_tree_node_allocator::allocate(); }
     static void put_node(link_type p) { rb_tree_node_allocator::deallocate(p); }
-protected:
+ protected:
     link_type header;
 
     link_type& root() const { return (link_type&) header->parent; }
@@ -537,7 +536,7 @@ protected:
         return (link_type) __rb_tree_node_base::maximum(x);
     }
 
-public:
+ public:
     __rb_tree_base() : header( get_node() ), node_count(0) {
         color(header) = __rb_tree_red; // used to distinguish header from
         // root, in iterator.operator++
@@ -548,12 +547,12 @@ public:
         __stl_debug_do(iter_list.invalidate());
     }
 
-public:
+ public:
     bool empty() const { return node_count == 0; }
     size_type size() const { return node_count; }
     size_type max_size() const { return size_type(-1); }
 
-protected:
+ protected:
     static link_type __new_node(const value_type& v) {
         link_type z = get_node();
         IUEg__TRY {
@@ -573,7 +572,7 @@ protected:
     static inline void __erase(link_type x);
     static inline link_type __copy(link_type x, link_type p);
 
-public:
+ public:
     void clear() {
       if (node_count != 0) {
         __erase(root());
@@ -587,10 +586,11 @@ public:
 };
 
 template <class Key, class Value, class KeyOfValue, class Compare, VCL_DFL_TYPE_PARAM_STLDECL(Alloc,vcl_alloc) >
-class rb_tree : public __rb_tree_base<Value,Alloc> {
+class rb_tree : public __rb_tree_base<Value,Alloc>
+{
   typedef __rb_tree_base<Value,Alloc> super;
   typedef rb_tree<Key,Value,KeyOfValue,Compare,Alloc> self;
-public:
+ public:
   __IMPORT_CONTAINER_TYPEDEFS(super)
   typedef __rb_tree_node_base* base_ptr;
   typedef __rb_tree_node<Value> rb_tree_node;
@@ -604,18 +604,18 @@ public:
                                              const_reference, difference_type>
       const_reverse_iterator;
   typedef Key key_type;
-protected:
+ protected:
   Compare key_compare;
   static const Key& key(link_type x) { return KeyOfValue()(value(x)); }
   static const Key& key(base_ptr x) { return KeyOfValue()(value(link_type(x)));}
-private:
+ private:
   inline iterator __insert(base_ptr x, base_ptr y, const value_type& v);
   void init() {
       root() = 0;
       leftmost() = header;
       rightmost() = header;
   }
-public:
+ public:
   // allocation/deallocation
   rb_tree(): key_compare(Compare())  { init(); }
   rb_tree(const Compare& comp): key_compare(comp)  { init(); }
@@ -635,7 +635,7 @@ public:
   ~rb_tree() { clear();}
   inline self& operator=(const self& x);
 
-public:
+ public:
   // accessors:
   iterator make_iterator(link_type l) { return iterator(l); }
   const_iterator make_const_iterator(link_type l) const { return const_iterator(l); }
@@ -656,7 +656,7 @@ public:
       vcl_swap(key_compare, t.key_compare);
   }
 
-public:
+ public:
   // insert/erase
   vcl_pair<iterator,bool> insert_unique(const value_type& v){
     link_type y = header;
@@ -759,7 +759,7 @@ public:
   inline size_type erase(const key_type& x);
   inline void erase(const key_type* first, const key_type* last);
 
-public:
+ public:
                                 // vcl_set operations:
   inline iterator find(const key_type& x);
   inline const_iterator find(const key_type& x) const;
@@ -770,7 +770,7 @@ public:
   inline const_iterator upper_bound(const key_type& x) const;
   inline vcl_pair<iterator,iterator> equal_range(const key_type& x);
   inline vcl_pair<const_iterator, const_iterator> equal_range(const key_type& x) const;
-public:
+ public:
                                 // Debugging.
   inline bool __rb_verify() const;
 };

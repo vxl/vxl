@@ -1,10 +1,6 @@
 // This is vxl/vsl/vsl_string_io.h
 #ifndef vsl_string_io_h_
 #define vsl_string_io_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
 //:
 // \file 
 // \brief   binary IO functions for vcl_basic_string<T>

@@ -1,11 +1,11 @@
 // This is vxl/vgl/vgl_region_scan_iterator.cxx
-
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vgl_region_scan_iterator.h"
 
 // drop the inlines here

@@ -1,9 +1,11 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+// This is vxl/vil/file_formats/vil_jpeg_compressor.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vil_jpeg_compressor.h"
 #include "vil_jpeg_destination_mgr.h"
 #include <vil/vil_stream.h>
@@ -45,7 +47,7 @@ bool vil_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const *scanline)
       jobj.in_color_space = JCS_RGB;
       break;
     default:
-      vcl_cerr << __FILE__ " : urgh!" << vcl_endl;
+      vcl_cerr << __FILE__ " : urgh!\n";
       return false;
     }
 
@@ -61,7 +63,7 @@ bool vil_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const *scanline)
 
   //
   if (line != jobj.next_scanline) {
-    vcl_cerr << "scanlines must be written in order" << vcl_endl;
+    vcl_cerr << "scanlines must be written in order\n";
     return false;
   }
 

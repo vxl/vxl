@@ -1,9 +1,9 @@
+// This is vxl/vcsl/vcsl_coordinate_system.h
 #ifndef vcsl_coordinate_system_h
 #define vcsl_coordinate_system_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author François BERTEL
@@ -32,7 +32,7 @@ class vcsl_spatial;
 class vcsl_coordinate_system
   : public vbl_ref_count
 {
-public:
+ public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
@@ -78,7 +78,7 @@ public:
   vnl_vector<double>
   from_standard_units_to_cs(const vnl_vector<double> &v) const;
 
-protected:
+ protected:
   //***************************************************************************
   // Implementation
   //***************************************************************************

@@ -1,10 +1,9 @@
+// This is vxl/vil/vil_clamp_image_impl.h
 #ifndef vil_clamp_image_impl_h_
 #define vil_clamp_image_impl_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vil/vil_clamp_image_impl.h
-
 //:
 // \file
 
@@ -13,8 +12,9 @@
 #include <vcl_string.h>
 
 //: View of image clamped to a given range
-class vil_clamp_image_impl : public vil_image_impl {
-public:
+class vil_clamp_image_impl : public vil_image_impl
+{
+ public:
   vil_clamp_image_impl(vil_image const& src, double low, double high) :
     base(src), low_(low), high_(high) { }
 
@@ -41,7 +41,7 @@ public:
 
 /* END_MANCHESTER_BINARY_IO_CODE */
 
-private:
+ private:
   vil_image base;
   double low_;
   double high_;

@@ -1,5 +1,5 @@
 // This is vxl/vnl/vnl_complex_traits.cxx
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:

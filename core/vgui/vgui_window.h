@@ -1,5 +1,9 @@
-// This is ./oxl/vgui/vgui_window.h
-
+// This is oxl/vgui/vgui_window.h
+#ifndef vgui_window_h_
+#define vgui_window_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
@@ -10,12 +14,6 @@
 //  Modifications:
 //    07-AUG-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
 // \endverbatim
-
-#ifndef vgui_window_h_
-#define vgui_window_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 
 class vgui_menu;
 class vgui_adaptor;
@@ -33,8 +31,9 @@ class vgui_statusbar;
 //  menus, statusbars, scrollbars or titles, though there wouldn't be much 
 //  point in implementing this if you couldn't at least display an OpenGL 
 //  area (vgui_adaptor) in your window.
-class vgui_window {
-public:
+class vgui_window
+{
+ public:
   //: Default constructor.
   vgui_window();
 

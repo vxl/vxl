@@ -1,10 +1,9 @@
-// This is ./vxl/vul/vul_awk.h
+// This is vxl/vul/vul_awk.h
 #ifndef vul_awk_h_
 #define vul_awk_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG
@@ -29,12 +28,13 @@
 // usage is exemplified in this example, to print the second field in every
 // line:
 // \code
-//    for(vul_awk awk(cin); awk; ++awk)
+//    for (vul_awk awk=cin; awk; ++awk)
 //      vcl_cout << awk[2] << vcl_endl;
 // \endcode
 
-class vul_awk {
-public:
+class vul_awk
+{
+ public:
   // Constructors/Destructors--------------------------------------------------
   enum ModeFlags {
     none = 0x00,
@@ -81,7 +81,7 @@ public:
   void error(vcl_ostream&, char const* message, int field = -1,
              int char_within_field = 0);
 
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
   vcl_istream& fd_;
 

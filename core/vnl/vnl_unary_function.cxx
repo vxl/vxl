@@ -1,7 +1,5 @@
 // This is vxl/vnl/vnl_unary_function.cxx
-
-//-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //

@@ -1,5 +1,9 @@
-// This is ./oxl/vgui/vgui_style.h
-
+// This is oxl/vgui/vgui_style.h
+#ifndef vgui_style_h_
+#define vgui_style_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file
 // \author  Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -13,17 +17,10 @@
 //    07-AUG-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
 // \endverbatim
 
-
-#ifndef vgui_style_h_
-#define vgui_style_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
-
 //: Style (colour, line width, point radius) of a geometric object.
-class vgui_style {
-public:
+class vgui_style
+{
+ public:
   //: Constructor - creates a style with default values.
   vgui_style();
 
@@ -42,8 +39,9 @@ public:
 };
 
 //: Finds out whether two vgui_style's are equal.
-class vgui_style_equal {
-public:
+class vgui_style_equal
+{
+ public:
   //: Constructor - takes one of the styles to be compared.
   vgui_style_equal(vgui_style* s1_) : s1(s1_) {}
 

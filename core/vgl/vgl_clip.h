@@ -1,7 +1,7 @@
 // This is vxl/vgl/vgl_clip.h
 #ifndef vgl_clip_h_
 #define vgl_clip_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:

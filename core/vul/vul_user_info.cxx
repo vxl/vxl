@@ -1,8 +1,7 @@
-// This is ./vxl/vul/vul_user_info.cxx
-#ifdef __GNUC__
+// This is vxl/vul/vul_user_info.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG

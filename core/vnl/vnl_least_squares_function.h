@@ -1,11 +1,9 @@
+// This is vxl/vnl/vnl_least_squares_function.h
 #ifndef vnl_least_squares_function_h_
 #define vnl_least_squares_function_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_least_squares_function.h
-
-
 //:
 // \file
 // \brief Abstract base for minimising functions
@@ -35,8 +33,9 @@
 //    want to cache some information during the call, and if they're compute
 //    objects, will almost certainly be writing to members during the
 //    computation.  For the moment it's non-const, but we'll see...
-class vnl_least_squares_function {
-public:
+class vnl_least_squares_function
+{
+ public:
   enum  UseGradient {
     no_gradient,
     use_gradient
@@ -85,7 +84,7 @@ public:
   //: Return true if the derived class has indicated that gradf has been implemented
   bool has_gradient() const { return use_gradient_; }
 
-protected:
+ protected:
   int p_;
   int n_;
   bool use_gradient_;

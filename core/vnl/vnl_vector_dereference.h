@@ -1,10 +1,9 @@
+// This is vxl/vnl/vnl_vector_dereference.h
 #ifndef vnl_vector_dereference_h_
 #define vnl_vector_dereference_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_vector_dereference.h
-
 //:
 //  \file
 //  \author Andrew W. Fitzgibbon, Oxford RRG
@@ -15,9 +14,10 @@
 #include <vcl_vector.h>
 
 template <class T>
-class vnl_vector_dereference : public vnl_unary_function<T, int> {
+class vnl_vector_dereference : public vnl_unary_function<T, int>
+{
   vcl_vector<T> v_;
-public:
+ public:
 
   vnl_vector_dereference(const vcl_vector<T>& v):
     v_(v) {

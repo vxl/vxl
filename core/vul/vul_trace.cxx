@@ -4,7 +4,7 @@
 //  fsm@robots.ox.ac.uk
 //
 
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 #include "vul_trace.h"

@@ -1,10 +1,9 @@
+// This is vxl/vil/vil_flip_components.h
 #ifndef vil_flip_components_h_
 #define vil_flip_components_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vil/vil_flip_components.h
-
 //:
 // \file
 // \brief swap the "R" and "B" colour components of an image

@@ -1,7 +1,7 @@
-#ifdef __GNUC__
+// This is vxl/vil/file_formats/vil_png.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // http://www.mirror.ac.uk/sites/ftp.cdrom.com/pub/png/libpng.html
@@ -175,7 +175,7 @@ struct vil_png_structures {
   bool alloc_image() {
     rows = new png_byte* [info_ptr->height];
     if (rows == 0)
-      return (ok = problem("couldn't allocate space for image"));
+      return ok = problem("couldn't allocate space for image");
 
     unsigned long linesize;
     if (png_get_bit_depth( png_ptr, info_ptr ) == 16)
@@ -196,7 +196,7 @@ struct vil_png_structures {
     // Alloc the whole thing at once
     rows[0] = new png_byte[linesize * height];
     if (!rows[0])
-      return (ok = problem("couldn't allocate space for image"));
+      return ok = problem("couldn't allocate space for image");
 
     // Re-point rows.
     for (unsigned int y = 1; y < height; ++y)
@@ -331,7 +331,7 @@ bool vil_png_generic_image::read_header()
 
 #if VXL_LITTLE_ENDIAN
   // PNG stores data MSB
-  if( png_get_bit_depth( p->png_ptr, p->info_ptr ) > 8 )
+  if ( png_get_bit_depth( p->png_ptr, p->info_ptr ) > 8 )
     png_set_swap( p->png_ptr );
 #endif
 
@@ -371,7 +371,7 @@ bool vil_png_generic_image::write_header()
 
 #if VXL_LITTLE_ENDIAN
   // PNG stores data MSB
-  if( bits_per_component_ > 8 )
+  if ( bits_per_component_ > 8 )
     png_set_swap( p->png_ptr );
 #endif
 
@@ -401,7 +401,7 @@ bool vil_png_generic_image::get_section(void* buf, int x0, int y0, int xs, int y
   }
   else {
     png_byte* dst = (png_byte*)buf;
-    for(int y = 0; y < ys; ++y, dst += bytes_per_row_dst)
+    for (int y = 0; y < ys; ++y, dst += bytes_per_row_dst)
       vcl_memcpy(dst, &rows[y0+y][x0*bytes_per_pixel], xs*bytes_per_pixel);
   }
 
@@ -426,7 +426,7 @@ bool vil_png_generic_image::put_section(void const* buf, int x0, int y0, int xs,
   }
   else {
     const png_byte* dst = (const png_byte*)buf;
-    for(int y = 0; y < ys; ++y, dst += bytes_per_row_dst)
+    for (int y = 0; y < ys; ++y, dst += bytes_per_row_dst)
       vcl_memcpy(&rows[y0+y][x0*bytes_per_pixel], dst, xs*bytes_per_pixel);
   }
 

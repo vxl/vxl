@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is oxl/vgui/vgui_key.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 #include "vgui_key.h"

@@ -1,6 +1,7 @@
+// This is vxl/vnl/algo/vnl_cholesky.h
 #ifndef vnl_cholesky_h_
 #define vnl_cholesky_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -29,8 +30,9 @@
 //  equation it is wise to construct with mode==estimate_condition and
 //  check that rcond()>sqrt(machine precision).  If this is not the case
 //  it might be a good idea to use vnl_svd instead.
-class vnl_cholesky {
-public:
+class vnl_cholesky
+{
+ public:
   //: Modes of computation.  See constructor for details.
   enum Operation {
     quiet,
@@ -77,14 +79,14 @@ public:
   vnl_vector<double>      & nullvector()       { return nullvector_; }
   vnl_vector<double> const& nullvector() const { return nullvector_; }
 
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
   vnl_matrix<double> A_;
   double rcond_;
   int num_dims_rank_def_;
   vnl_vector<double> nullvector_;
 
-private:
+ private:
   //: Copy constructor - privatised to avoid it being used
   vnl_cholesky(vnl_cholesky const & that);
   //: Assignment operator - privatised to avoid it being used

@@ -1,11 +1,9 @@
+// This is vxl/vnl/vnl_sample.h
 #ifndef vnl_sample_h_
 #define vnl_sample_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-// This is vxl/vnl/vnl_sample.h
-
 //:
 //  \file
 //  \brief easy ways to sample from various probability distributions

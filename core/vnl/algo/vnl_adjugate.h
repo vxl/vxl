@@ -1,8 +1,6 @@
+// This is vxl/vnl/algo/vnl_adjugate.h
 #ifndef vnl_adjugate_h_
 #define vnl_adjugate_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 //:
 // \file
 // \author fsm@robots.ox.ac.uk

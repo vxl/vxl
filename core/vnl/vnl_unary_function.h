@@ -1,10 +1,9 @@
-// This is ./vxl/vnl/vnl_unary_function.h
+// This is vxl/vnl/vnl_unary_function.h
 #ifndef vnl_unary_function_h_
 #define vnl_unary_function_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 //  \file
 //  \brief Abstract 1D map
@@ -27,8 +26,9 @@
 
 //: Abstract 1D map between two types (read spaces)
 template <class Return, class Argument>
-class vnl_unary_function {
-public:
+class vnl_unary_function
+{
+ public:
   typedef vnl_numeric_limits<Return> limits;
 
   //: Apply the function.

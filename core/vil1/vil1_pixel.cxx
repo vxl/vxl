@@ -1,11 +1,11 @@
 // This is vxl/vil/vil_pixel.cxx
-
-/*
-  awf@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author awf@robots.ox.ac.uk
+
 #include "vil_pixel.h"
 #include <vil/vil_image.h>
 

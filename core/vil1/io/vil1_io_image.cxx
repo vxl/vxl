@@ -1,18 +1,17 @@
 // This is vil/io/vil_io_image.txx
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
-#include "vil_io_image.h"
-#include <vil/io/vil_io_image_impl.h>
-#include <vil/vil_image.h>
-#include <vil/vil_image_impl.h>
-
 //:
 // \file
 // \brief Perform serialised binary IO for vil_image
 // \author Ian Scott (Manchester)
 // \date 23-Mar-2001
+
+#include "vil_io_image.h"
+#include <vil/io/vil_io_image_impl.h>
+#include <vil/vil_image.h>
+#include <vil/vil_image_impl.h>
 
 //: Binary write to stream.
 void vsl_b_write(vsl_b_ostream &os, const vil_image & p)

@@ -1,7 +1,7 @@
 // This is vxl/vgl/vgl_box_3d.h
 #ifndef vgl_box_3d_h
 #define vgl_box_3d_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -47,11 +47,9 @@
 // \endverbatim
 
 template <class Type>
-class vgl_box_3d {
-
-   // PUBLIC INTERFACE----------------------------------------------------------
-
-public:
+class vgl_box_3d
+{
+ public:
 
   //: Default constructor (creates empty box)
   vgl_box_3d();
@@ -220,7 +218,7 @@ public:
   vcl_istream& read(vcl_istream&);
 
   // INTERNALS-----------------------------------------------------------------
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
   Type min_pos_[3];
   Type max_pos_[3];

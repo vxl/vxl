@@ -1,9 +1,9 @@
+// This is vxl/vnl/algo/vnl_generalized_eigensystem.h
 #ifndef vnl_generalized_eigensystem_h_
 #define vnl_generalized_eigensystem_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief  Solves the generalized eigenproblem Ax=La
@@ -23,8 +23,9 @@
 //  with $A$ symmetric and $B$ positive definite. \n
 //  See Golub and van Loan, Section 8.7.
 
-class vnl_generalized_eigensystem {
-public:
+class vnl_generalized_eigensystem
+{
+ public:
 // Public data members because they're unique.
   int n;
 

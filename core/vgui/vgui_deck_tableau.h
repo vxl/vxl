@@ -1,7 +1,7 @@
 // This is oxl/vgui/vgui_deck_tableau.h
 #ifndef vgui_deck_tableau_h_
 #define vgui_deck_tableau_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -27,8 +27,9 @@
 //  vgui_deck_tableau holds an ordered collection of child tableaux, only one of which is
 //  passed all events that the vgui_deck_tableau receives. The effect is a flick-book of
 //  tableaux where the currently active tableau can be changed using PageUp and PageDown
-class vgui_deck_tableau : public vgui_tableau {
-public:
+class vgui_deck_tableau : public vgui_tableau
+{
+ public:
   //: Make an empty deck
   vgui_deck_tableau();
 
@@ -86,7 +87,7 @@ public:
   //: conceptually, this is a list on which observers can put themselves.
   vgui_observable observers;
 
-protected:
+ protected:
   virtual ~vgui_deck_tableau();
   virtual bool handle(const vgui_event&);
 
@@ -101,7 +102,8 @@ protected:
   int index_;
 };
 
-struct vgui_deck_tableau_new : public vgui_deck_tableau_sptr {
+struct vgui_deck_tableau_new : public vgui_deck_tableau_sptr
+{
   typedef vgui_deck_tableau_sptr base;
   vgui_deck_tableau_new() : base(new vgui_deck_tableau()) { }
   vgui_deck_tableau_new(vgui_tableau_sptr const& child0,vgui_tableau_sptr const& child1)

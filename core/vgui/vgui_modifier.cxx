@@ -1,10 +1,9 @@
-// This is ./oxl/vgui/vgui_modifier.cxx
-#ifdef __GNUC__
+// This is oxl/vgui/vgui_modifier.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 #include "vgui_modifier.h"
 #include <vcl_iostream.h>
-
 //:
 // \file
 // \author VGG, Oxford University

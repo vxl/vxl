@@ -1,10 +1,9 @@
+// This is vxl/vbl/vbl_sparse_array_2d.h
 #ifndef vbl_sparse_array_2d_h_
 #define vbl_sparse_array_2d_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vbl/vbl_sparse_array_2d.h
-
 //:
 // \file
 // \brief a space efficient 2d array
@@ -32,7 +31,7 @@ template <class T>
 class vbl_sparse_array_2d : public vbl_sparse_array_base<T, vcl_pair<unsigned, unsigned> >
 {
   typedef typename vbl_sparse_array_base<T,vcl_pair<unsigned,unsigned> >::Index_type Index_type;
-public:
+ public:
   typedef typename vbl_sparse_array_base<T,vcl_pair<unsigned,unsigned> >::const_iterator const_iterator;
 
   //: Put a value into location (i,j).
@@ -75,7 +74,7 @@ public:
   //: Print the Array to a stream in "(i,j): value" format.
   vcl_ostream& print(vcl_ostream& out) const
   {
-    for(const_iterator p = storage_.begin(); p != storage_.end(); ++p)
+    for (const_iterator p = storage_.begin(); p != storage_.end(); ++p)
       out << "(" << (*p).first.first
           << "," << (*p).first.second
           << "): " << (*p).second << vcl_endl;

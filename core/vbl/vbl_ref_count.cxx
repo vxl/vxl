@@ -1,7 +1,7 @@
-#ifdef __GNUC__
+// This is vxl/vbl/vbl_ref_count.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-// This is vxl/vbl/vbl_ref_count.cxx
 
 #include <vbl/vbl_ref_count.h>
 

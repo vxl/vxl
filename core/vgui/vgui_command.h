@@ -1,5 +1,9 @@
-// This is ./oxl/vgui/vgui_command.h
-
+// This is oxl/vgui/vgui_command.h
+#ifndef vgui_command_h_
+#define vgui_command_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file
 // \author fsm@robots.ox.ac.uk and pcp@robots.ox.ac.uk
@@ -10,12 +14,6 @@
 //  awf renamed derived classes to be consistent with header-file naming convention.
 //  fsm fixed everything afterwards....
 // \endverbatim
-
-#ifndef vgui_command_h_
-#define vgui_command_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 
 #include <vbl/vbl_ref_count.h>
 

@@ -1,8 +1,7 @@
-// This is ./oxl/vgui/vgui_easy3D.cxx
-#ifdef __GNUC__
+// This is oxl/vgui/vgui_easy3D.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
@@ -62,12 +61,6 @@ vgui_lineseg3D* vgui_easy3D::add_line(float x0, float y0, float z0,
   add(obj);
   return obj;
 }
-
-
-
-
-
-
 
 
 void vgui_easy3D::set_foreground(float r, float g, float b)

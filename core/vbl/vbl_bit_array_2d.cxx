@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is vxl/vbl/vbl_bit_array_2d.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
@@ -15,7 +16,7 @@
 vbl_bit_array_2d::vbl_bit_array_2d(vbl_bit_array_2d const& that)
   : data_(0), num_rows_(0), num_cols_(0)
 {
-  if( that.data_)
+  if ( that.data_)
   {
     construct(that.num_rows_, that.num_cols_);
 
@@ -23,7 +24,7 @@ vbl_bit_array_2d::vbl_bit_array_2d(vbl_bit_array_2d const& that)
     unsigned int bitindex;
     index( num_rows_-1, num_cols_-1, byteindex, bitindex);
 
-    for( unsigned int i=0; i<= byteindex; i++)
+    for (unsigned int i=0; i<= byteindex; i++)
       data_[i] = that.data_[i];
   }
 }
@@ -57,9 +58,9 @@ void vbl_bit_array_2d::enlarge( int num_rows, int num_cols)
   construct( num_rows, num_cols);
   fill( false);
 
-  if( tempdata)
+  if (tempdata)
   {
-    for( int i=0; i< tempm; i++)
+    for (int i=0; i< tempm; i++)
     {
       // find start of new column
       unsigned long byteindex;
@@ -70,7 +71,7 @@ void vbl_bit_array_2d::enlarge( int num_rows, int num_cols)
       unsigned long index= i* tempn;
       unsigned long oldbyteindex= (unsigned long)(double(index)/CHAR_BIT);
 
-      for( int j=0; j< tempn/CHAR_BIT; j++)
+      for (int j=0; j< tempn/CHAR_BIT; j++)
         data_[byteindex+j] = tempdata[oldbyteindex+j];
     }
     delete[] tempdata;
@@ -86,7 +87,7 @@ void vbl_bit_array_2d::fill(bool value)
 
   register unsigned char v = 0;
 
-  for( int i=0; i< CHAR_BIT; i++)
+  for (int i=0; i< CHAR_BIT; i++)
   {
     v <<= 1;
     if (value) v |= 1;
@@ -167,9 +168,9 @@ bool vbl_bit_array_2d::get(int i, int j) const
 //
 vcl_ostream& operator<< (vcl_ostream &os, const vbl_bit_array_2d &array)
 {
-  for( int i=0; i< array.rows(); i++)
+  for (int i=0; i< array.rows(); i++)
   {
-    for( int j=0; j< array.columns(); j++)
+    for (int j=0; j< array.columns(); j++)
       os << array(i,j) << " ";
 
     os << vcl_endl;

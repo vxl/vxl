@@ -1,11 +1,6 @@
+// This is vxl/vsl/vsl_map_io.h
 #ifndef vsl_map_io_h_
 #define vsl_map_io_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
-// This is vxl/vsl/vsl_map_io.h
-
 //:
 // \file 
 // \brief binary IO functions for vcl_map<Key, T, Compare>

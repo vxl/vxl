@@ -1,10 +1,9 @@
 // This is vxl/vnl/vnl_transpose.h
 #ifndef vnl_transpose_h_
 #define vnl_transpose_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 //  \file
 //  \brief Efficient matrix transpose
@@ -33,9 +32,10 @@
 //    NOTE: This is a reference class, so should be shorter-lived than the
 //    matrix to which it refers.
 
-class vnl_transpose {
+class vnl_transpose
+{
   const vnl_matrix<double>& M_;
-public:
+ public:
 
 //: Make a vnl_transpose object referring to matrix M
   vnl_transpose(const vnl_matrix<double>& M): M_(M) {}

@@ -1,14 +1,12 @@
-// This is ./oxl/vgui/vgui_key.h
-
+// This is oxl/vgui/vgui_key.h
+#ifndef vgui_key_h_
+#define vgui_key_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file
 // \brief Enumeration of possible key strokes.
-
-#ifndef vgui_key_h_
-#define vgui_key_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 
 #include <vcl_iosfwd.h>
 

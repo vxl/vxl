@@ -1,9 +1,9 @@
+// This is vxl/vnl/algo/vnl_levenberg_marquardt.h
 #ifndef vnl_levenberg_marquardt_h_
 #define vnl_levenberg_marquardt_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Levenberg Marquardt nonlinear least squares
@@ -37,8 +37,9 @@ class vnl_least_squares_function;
 //  (See Hartley in ``Applications of Invariance in Computer Vision''
 //  for example).
 
-class vnl_levenberg_marquardt : public vnl_nonlinear_minimizer {
-public:
+class vnl_levenberg_marquardt : public vnl_nonlinear_minimizer
+{
+ public:
 
   //: Initialize with the function object that is to be minimized.
   vnl_levenberg_marquardt(vnl_least_squares_function& f) { init(&f); }
@@ -93,7 +94,7 @@ public:
   //: Return J'*J computed at last minimum.
   vnl_matrix<double> const& get_JtJ();
 
-protected:
+ protected:
 
   vnl_least_squares_function* f_;
   vnl_matrix<double>* fdjac_; // Computed during lmdif/lmder

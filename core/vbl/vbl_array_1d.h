@@ -1,10 +1,9 @@
+// This is vbl/vbl_array_1d.h
 #ifndef vbl_array_1d_h_
 #define vbl_array_1d_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vbl/vbl_array_1d.h
-
 //:
 // \file
 // \brief A simple container.
@@ -69,7 +68,7 @@ struct vbl_array_1d
     T* j = that.begin_;
     for ( ; i!=end_ && j!=that.end_; ++i, ++j)
       if (!(*i == *j)) return false;
-    return (i == end_ && j == that.end_);
+    return i == end_ && j == that.end_;
   }
 
   ~vbl_array_1d() {
@@ -150,7 +149,7 @@ struct vbl_array_1d
     return begin_[i];
   }
 
-private:
+ private:
   // begin_ <= end_ <= alloc_
   T *begin_, *end_, *alloc_;
 };

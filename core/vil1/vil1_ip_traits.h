@@ -1,10 +1,9 @@
+// This is vxl/vil/vil_ip_traits.h
 #ifndef vil_ip_traits_h_
 #define vil_ip_traits_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vil/vil_ip_traits.h
-
 //:
 // \file
 // \brief Describe image types
@@ -15,7 +14,8 @@ struct vil_ip_traits_null_type {};
 
 //: Describe image types (like char**)
 template <class T>
-struct vil_ip_traits {
+struct vil_ip_traits
+{
   //: The return type of operator[][]
   typedef vil_ip_traits pixel_type;
 
@@ -26,19 +26,22 @@ struct vil_ip_traits {
 #if VCL_CAN_DO_PARTIAL_SPECIALIZATION
 //: Traits for c-like arrays
 template <class T>
-struct vil_ip_traits<T * *> {
+struct vil_ip_traits<T * *>
+{
   typedef T pixel_type;
   typedef T* row_type;
 };
 
 template <class T>
-struct vil_ip_traits<T const* const*> {
+struct vil_ip_traits<T const* const*>
+{
   typedef T pixel_type;
   typedef T const* row_type;
 };
 
 template <class T>
-struct vil_ip_traits<T * const*> {
+struct vil_ip_traits<T * const*>
+{
   typedef T pixel_type;
   typedef T const* row_type;
 };

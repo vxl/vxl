@@ -1,22 +1,21 @@
+// This is vxl/vil/io/vil_io_image_impl.h
 #ifndef vil_io_image_impl_h
 #define vil_io_image_impl_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-#include <vsl/vsl_binary_io.h>
-#include <vil/vil_image_impl.h>
-
-// This is vxl/vil/io/vil_io_image_impl.h
-
 //:
 // \file
 // \author Ian Scott (Manchester)
 // \date 21-Mar-2001
 
+#include <vsl/vsl_binary_io.h>
+#include <vil/vil_image_impl.h>
+
 //: Base for objects which provide IO for classes derived from vil_image_impl
-class vil_io_image_impl {
-public:
+class vil_io_image_impl
+{
+ public:
   //: Constructor
   vil_io_image_impl();
 

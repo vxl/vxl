@@ -1,7 +1,7 @@
-#ifdef __GNUC__
+// This is vxl/vcsl/vcsl_cylindrical_to_cartesian_3d.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 

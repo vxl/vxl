@@ -1,9 +1,9 @@
+// This is vxl/vnl/vnl_diag_matrix.h
 #ifndef vnl_diag_matrix_h_
 #define vnl_diag_matrix_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 //  \file
 //  \brief Contains class for diagonal matrices
@@ -28,8 +28,9 @@
 
 export
 template <class T>
-class vnl_diag_matrix {
-public:
+class vnl_diag_matrix
+{
+ public:
   vnl_diag_matrix() {}
 
   //: Construct an empty diagonal matrix.
@@ -110,10 +111,10 @@ public:
   //: Set diagonal elements using vector
   void set(vnl_vector<T> const& v)  { diagonal_=v; }
 
-protected:
+ protected:
   vnl_vector<T> diagonal_;
 
-private:
+ private:
 #if 0
   // This is private because it's not really a matrix operation.
   T operator()(unsigned i) const {
@@ -138,12 +139,12 @@ inline vnl_matrix<T> vnl_diag_matrix<T>::asMatrix() const
 {
   unsigned len = diagonal_.size();
   vnl_matrix<T> ret(len, len);
-  for(unsigned i = 0; i < len; ++i)
+  for (unsigned i = 0; i < len; ++i)
   {
     unsigned j;
-    for(j = 0; j < i; ++j)
+    for (j = 0; j < i; ++j)
       ret(i,j) = T(0);
-    for(j = i+1; j < len; ++j)
+    for (j = i+1; j < len; ++j)
       ret(i,j) = T(0);
     ret(i,i) = diagonal_[i];
   }
@@ -158,7 +159,7 @@ inline void vnl_diag_matrix<T>::invert_in_place()
   unsigned len = diagonal_.size();
   T* d = data_block();
   T one = T(1);
-  for(unsigned i = 0; i < len; ++i)
+  for (unsigned i = 0; i < len; ++i)
     d[i] = one / d[i];
 }
 
@@ -169,7 +170,7 @@ inline T vnl_diag_matrix<T>::determinant() const
   T det = T(1);
   T const* d = data_block();
   unsigned len = diagonal_.size();
-  for(unsigned i = 0; i < len; ++i)
+  for (unsigned i = 0; i < len; ++i)
     det *= d[i];
   return det;
 }
@@ -179,8 +180,8 @@ template <class T>
 inline vnl_matrix<T> operator* (vnl_matrix<T> const& A, vnl_diag_matrix<T> const& D)
 {
   vnl_matrix<T> ret(A.rows(), A.columns());
-  for(unsigned i = 0; i < A.rows(); ++i)
-    for(unsigned j = 0; j < A.columns(); ++j)
+  for (unsigned i = 0; i < A.rows(); ++i)
+    for (unsigned j = 0; j < A.columns(); ++j)
       ret(i,j) = A(i,j) * D(j,j);
   return ret;
 }
@@ -191,8 +192,8 @@ inline vnl_matrix<T> operator* (vnl_diag_matrix<T> const& D, vnl_matrix<T> const
 {
   vnl_matrix<T> ret(A.rows(), A.columns());
   T const* d = D.data_block();
-  for(unsigned i = 0; i < A.rows(); ++i)
-    for(unsigned j = 0; j < A.columns(); ++j)
+  for (unsigned i = 0; i < A.rows(); ++i)
+    for (unsigned j = 0; j < A.columns(); ++j)
       ret(i,j) = A(i,j) * d[i];
   return ret;
 }
@@ -204,7 +205,7 @@ inline vnl_matrix<T> operator + (vnl_matrix<T> const& A, vnl_diag_matrix<T> cons
   const unsigned n = D.n();
   vnl_matrix<T> ret(A);
   T const* d = D.data_block();
-  for(unsigned j = 0; j < n; ++j)
+  for (unsigned j = 0; j < n; ++j)
     ret(j,j) += d[j];
   return ret;
 }
@@ -223,7 +224,7 @@ inline vnl_matrix<T> operator - (vnl_matrix<T> const& A, vnl_diag_matrix<T> cons
   const unsigned n = D.n();
   vnl_matrix<T> ret(A);
   T const* d = D.data_block();
-  for(unsigned j = 0; j < n; ++j)
+  for (unsigned j = 0; j < n; ++j)
     ret(j,j) -= d[j];
   return ret;
 }
@@ -235,11 +236,11 @@ inline vnl_matrix<T> operator - (vnl_diag_matrix<T> const& D, vnl_matrix<T> cons
   const unsigned n = D.n();
   vnl_matrix<T> ret(n, n);
   T const* d = D.data_block();
-  for(unsigned i = 0; i < n; ++i)
+  for (unsigned i = 0; i < n; ++i)
   {
-    for(unsigned j = 0; j < i; ++j)
+    for (unsigned j = 0; j < i; ++j)
       ret(i,j) = -A(i,j);
-    for(unsigned j = i+1; j < n; ++j)
+    for (unsigned j = i+1; j < n; ++j)
       ret(i,j) = -A(i,j);
     ret(i,i) = d[i] - A(i,i);
   }

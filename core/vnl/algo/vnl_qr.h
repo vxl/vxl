@@ -1,9 +1,9 @@
+// This is vxl/vnl/algo/vnl_qr.h
 #ifndef vnl_qr_h_
 #define vnl_qr_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 //  \file
 //  \brief Calculate inverse of a matrix using QR
@@ -30,8 +30,9 @@
 // "determinant" methods.
 
 export template <class T>
-class vnl_qr {
-public:
+class vnl_qr
+{
+ public:
   vnl_qr(vnl_matrix<T> const & M);
  ~vnl_qr();
 
@@ -49,7 +50,7 @@ public:
 
   void extract_q_and_r(vnl_matrix<T>* Q, vnl_matrix<T>* R);
 
-private:
+ private:
   vnl_matrix<T> qrdc_out_;
   vnl_vector<T> qraux_;
   vnl_vector<int> jpvt_;

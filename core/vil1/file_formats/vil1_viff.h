@@ -1,10 +1,9 @@
-// This is ./vxl/vil/file_formats/vil_viff.h
+// This is vxl/vil/file_formats/vil_viff.h
 #ifndef vil_viff_h_
 #define vil_viff_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Loader for 1-banded Khoros 1.0 images
@@ -25,8 +24,9 @@
 // This supports char, short, int, float and double pixel cell types.
 // No colour support right now.
 // Adapted from the version by Reinhard Koch, Nov. 19, 1996.
-class vil_viff_file_format : public vil_file_format {
-public:
+class vil_viff_file_format : public vil_file_format
+{
+ public:
   virtual char const* tag() const;
   virtual vil_image_impl* make_input_image(vil_stream* vs);
   virtual vil_image_impl* make_output_image(vil_stream* vs, int planes,
@@ -38,7 +38,8 @@ public:
 };
 
 //: Generic image implementation for VIFF (Khoros) files
-class vil_viff_generic_image : public vil_image_impl {
+class vil_viff_generic_image : public vil_image_impl
+{
   vil_stream* is_;
   int width_;
   int height_;
@@ -58,7 +59,7 @@ class vil_viff_generic_image : public vil_image_impl {
 
   friend class vil_viff_file_format;
 
-public:
+ public:
   vil_viff_generic_image(vil_stream* is);
   vil_viff_generic_image(vil_stream* is,
                          int planes,

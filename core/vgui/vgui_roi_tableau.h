@@ -1,7 +1,7 @@
 // This is oxl/vgui/vgui_roi_tableau.h
 #ifndef vgui_roi_tableau_h_
 #define vgui_roi_tableau_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -18,7 +18,8 @@ class vgui_image_tableau;
 
 #include "vgui_roi_tableau_sptr.h"
 
-class vgui_roi_tableau : public vgui_tableau {
+class vgui_roi_tableau : public vgui_tableau
+{
  public:
   typedef struct region_of_interest {
     float sx;
@@ -57,7 +58,8 @@ class vgui_roi_tableau : public vgui_tableau {
   vcl_string name_;
 };
 
-struct vgui_roi_tableau_new : public vgui_roi_tableau_sptr {
+struct vgui_roi_tableau_new : public vgui_roi_tableau_sptr
+{
   typedef vgui_roi_tableau_sptr base;
   vgui_roi_tableau_new() : base(new vgui_roi_tableau()) { }
 };

@@ -1,15 +1,13 @@
+// This is vxl/vnl/algo/vnl_fft_2d.h
 #ifndef vnl_fft_2d_h_
 #define vnl_fft_2d_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
-
 //:
 // \file
 // \brief In-place 2D fast fourier transform
+// \author fsm@robots.ox.ac.uk
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_fft_base.h>
@@ -44,4 +42,4 @@ struct vnl_fft_2d : public vnl_fft_base<2, T>
   unsigned cols() const { return base::factors_[1].number(); }
 };
 
-#endif
+#endif // vnl_fft_2d_h_

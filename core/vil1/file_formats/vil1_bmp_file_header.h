@@ -1,9 +1,9 @@
+// This is vxl/vil/file_formats/vil_bmp_file_header.h
 #ifndef vil_bmp_file_header_h_
 #define vil_bmp_file_header_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author fsm@robots.ox.ac.uk

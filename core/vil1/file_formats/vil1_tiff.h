@@ -1,9 +1,9 @@
+// This is vxl/vil/file_formats/vil_tiff.h
 #ifndef vil_tiff_file_format_h_
 #define vil_tiff_file_format_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author    awf@robots.ox.ac.uk
@@ -18,8 +18,9 @@
 #include <vil/vil_image_impl.h>
 
 //: Loader for tiff files
-class vil_tiff_file_format : public vil_file_format {
-public:
+class vil_tiff_file_format : public vil_file_format
+{
+ public:
   virtual char const* tag() const;
   virtual vil_image_impl* make_input_image(vil_stream* vs);
   virtual vil_image_impl* make_output_image(vil_stream* vs, int planes,
@@ -33,7 +34,8 @@ public:
 struct vil_tiff_structures;
 
 //: Generic image interface for TIFF files
-class vil_tiff_generic_image : public vil_image_impl {
+class vil_tiff_generic_image : public vil_image_impl
+{
   vil_tiff_structures* p;
 
   int width_;
@@ -46,7 +48,7 @@ class vil_tiff_generic_image : public vil_image_impl {
   bool write_header();
 
   friend class vil_tiff_file_format;
-public:
+ public:
 
   vil_tiff_generic_image(vil_stream* is);
   vil_tiff_generic_image(vil_stream* is, int planes,

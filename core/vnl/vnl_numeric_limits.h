@@ -1,10 +1,9 @@
-// This is ./vxl/vnl/vnl_numeric_limits.h
+// This is vxl/vnl/vnl_numeric_limits.h
 #ifndef vnl_numeric_limits_h_
 #define vnl_numeric_limits_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 //  \file
 //  \brief Standard limits for numeric datatypes
@@ -46,8 +45,9 @@ enum vnl_float_round_style {
 // the documentation below refers to section 18.2 of the DWP.
 //
 template<class T>
-class vnl_numeric_limits {
-public:
+class vnl_numeric_limits
+{
+ public:
 
   //: Distingishes between scalar types, which have specialisations, and non-scalar types, which don't.
   static const bool is_specialized;
@@ -206,8 +206,9 @@ public:
 #endif
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_limits<vnl_tmp_signed32> {
-public:
+class vnl_numeric_limits<vnl_tmp_signed32>
+{
+ public:
   static const bool is_specialized VCL_STATIC_CONST_INIT_INT(true);
   inline static int min() { return -0x7fffffff; }
   inline static int max() { return  0x7fffffff; }
@@ -243,8 +244,9 @@ public:
 
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_limits<long> {
-public:
+class vnl_numeric_limits<long>
+{
+ public:
   static const bool is_specialized VCL_STATIC_CONST_INIT_INT(true);
   inline static int min() { return -0x7fffffff; }
   inline static int max() { return  0x7fffffff; }
@@ -278,8 +280,9 @@ public:
 
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_limits<unsigned long> {
-public:
+class vnl_numeric_limits<unsigned long>
+{
+ public:
   static const bool is_specialized VCL_STATIC_CONST_INIT_INT(true);
   inline static unsigned int min() { return 0; }
   inline static unsigned int max() { return 0xffffffff; }
@@ -312,8 +315,9 @@ public:
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_limits<unsigned short > {
-public:
+class vnl_numeric_limits<unsigned short >
+{
+ public:
   static const bool is_specialized VCL_STATIC_CONST_INIT_INT(true);
   inline static unsigned int min() { return 0; }
   inline static unsigned int max() { return 0xffff; }
@@ -346,8 +350,9 @@ public:
 };
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_limits<short > {
-public:
+class vnl_numeric_limits<short >
+{
+ public:
   static const bool is_specialized VCL_STATIC_CONST_INIT_INT(true);
   inline static int min() { return -0x7fff; }
   inline static int max() { return  0x7fff; }
@@ -383,8 +388,9 @@ public:
 
 // IEEE 754 single precision
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_limits<float> {
-public:
+class vnl_numeric_limits<float>
+{
+ public:
   static const bool is_specialized VCL_STATIC_CONST_INIT_INT(true);
   inline static float min() { return 1.17549435E-38F; }
   inline static float max() { return 3.40282347E+38F; }
@@ -420,8 +426,9 @@ public:
 
 // IEEE 754 double precision with denorm
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_limits<double> {
-public:
+class vnl_numeric_limits<double>
+{
+ public:
   static const bool is_specialized VCL_STATIC_CONST_INIT_INT(true);
   inline static double min() { return 2.2250738585072014e-308; }
   inline static double max() { return 1.7976931348623157e+308; }

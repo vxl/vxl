@@ -1,9 +1,9 @@
+// This is vxl/vnl/algo/vnl_matrix_inverse.h
 #ifndef vnl_matrix_inverse_h_
 #define vnl_matrix_inverse_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Calculates inverse of a matrix (wrapper around vnl_svd<double>)
@@ -28,7 +28,8 @@
 //  class to be changed  to use vnl_qr, say.
 
 template <class T>
-struct vnl_matrix_inverse : public vnl_svd<T> {
+struct vnl_matrix_inverse : public vnl_svd<T>
+{
   vnl_matrix_inverse(vnl_matrix<T> const & M): vnl_svd<T>(M) { }
   ~vnl_matrix_inverse() {};
 

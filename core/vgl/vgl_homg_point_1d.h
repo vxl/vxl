@@ -1,10 +1,9 @@
-// This is ./vxl/vgl/vgl_homg_point_1d.h
+// This is vxl/vgl/vgl_homg_point_1d.h
 #ifndef vgl_homg_point_1d_h_
 #define vgl_homg_point_1d_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief a point in homogeneous 1-D space, i.e., a homogeneous pair \a (x,w)
@@ -23,7 +22,7 @@
 template <class T>
 class vgl_homg_point_1d
 {
-public:
+ public:
   //: Default constructor with (0,1)
   inline vgl_homg_point_1d() : x_(0), w_(T(1)) {}
 
@@ -68,7 +67,7 @@ public:
 #undef vgl_Abs
   }
 
-private:
+ private:
   T x_;
   T w_;
 };

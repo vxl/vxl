@@ -1,10 +1,9 @@
-// This is ./oxl/vgui/vgui_toolkit.h
+// This is oxl/vgui/vgui_toolkit.h
 #ifndef vgui_toolkit_h_
 #define vgui_toolkit_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
@@ -30,7 +29,7 @@ struct vgui_tableau_sptr;
 // An example derived class is vgui_mfc .
 class vgui_toolkit
 {
-public:
+ public:
   vgui_toolkit();
   virtual ~vgui_toolkit();
 

@@ -1,5 +1,9 @@
-// This is ./oxl/vgui/vgui_drag_mixin.h
-
+// This is oxl/vgui/vgui_drag_mixin.h
+#ifndef vgui_drag_mixin_h_
+#define vgui_drag_mixin_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file 
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -11,12 +15,6 @@
 //    11-SEP-1999 P.Pritchett - Initial version.
 //    26-APR-2002 K.Y.McGaul - Converted to doxygen style comments.
 // \endverbatim
-
-#ifndef vgui_drag_mixin_h_
-#define vgui_drag_mixin_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 
 #include "vgui_event.h"
 #include "vgui_tableau.h"
@@ -31,8 +29,9 @@
 // The drag_mixin also records the last mouse button to be pressed and will send
 // vgui_MOTION events to the function mouse_drag() if the mouse is being moved
 // with a button depressed.
-class vgui_drag_mixin {
-public:
+class vgui_drag_mixin
+{
+ public:
   vgui_drag_mixin(void);
   virtual ~vgui_drag_mixin(void);
 
@@ -40,7 +39,7 @@ public:
 
   virtual bool mouse_drag(int, int, vgui_button, vgui_modifier);
 
-private:
+ private:
   vgui_button last_down_button_;
 };
 

@@ -1,7 +1,7 @@
 // This is vxl/vgl/vgl_homg_line_3d_2_points.h
 #ifndef vgl_homg_line_3d_2_points_h_
 #define vgl_homg_line_3d_2_points_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -74,7 +74,7 @@ class vgl_homg_line_3d_2_points
   //: Return true iff line is at infinity
   inline bool ideal(Type tol = Type(0)) { return point_finite_.ideal(tol); }
 
-protected:
+ protected:
   //: force the point point_infinite_ to infinity, without changing the line
   // This is called by the constructors
   void force_point2_infinite(void) const; // mutable const

@@ -1,6 +1,7 @@
+// This is vxl/vgl/vgl_homg_1d.h
 #ifndef vgl_homg_1d_h_
 #define vgl_homg_1d_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -23,8 +24,9 @@
 #include <vgl/vgl_homg_point_1d.h>
 
 template <class T>
-class vgl_homg_1d : public vgl_homg<T> {
-public:
+class vgl_homg_1d : public vgl_homg<T>
+{
+ public:
   // Constructors/Destructors--------------------------------------------------
 
 //: Default constructor
@@ -52,7 +54,7 @@ public:
   T x() const { return x_; }
   T w() const { return w_; }
 
-protected:
+ protected:
   T x_;
   T w_;
 };

@@ -1,14 +1,12 @@
+// This is vxl/vnl/vnl_block.h
 #ifndef vnl_block_h_
 #define vnl_block_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
-
 //:
 // \file
+// \author fsm@robots.ox.ac.uk
 
 #include <vcl_compiler.h>
 

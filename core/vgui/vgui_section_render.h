@@ -1,14 +1,12 @@
+// This is oxl/vgui/vgui_section_render.h
 #ifndef vgui_section_render_h_
 #define vgui_section_render_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
-// .NAME vgui_section_render
-// .INCLUDE vgui/vgui_section_render.h
-// .FILE vgui_section_render.cxx
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
 
 #include <vgui/vgui_gl.h>
 

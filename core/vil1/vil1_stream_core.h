@@ -1,10 +1,9 @@
 // This is vxl/vil/vil_stream_core.h
 #ifndef vil_stream_core_h_
 #define vil_stream_core_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief An in-core vil_stream implementation
@@ -23,7 +22,7 @@ class vil_stream_core : public vil_stream
   vcl_vector<char*> block_;
   vil_streampos tailpos_; // size of file so far
 
-public:
+ public:
   vil_stream_core(unsigned block_size = 16384)
     : curpos_(0), blocksize_(block_size), tailpos_(0) {}
 
@@ -42,7 +41,7 @@ public:
   vil_streampos tell()              { return curpos_; }
   void seek(vil_streampos position) { curpos_ = position; }
 
-protected:
+ protected:
   ~vil_stream_core();
 };
 

@@ -1,19 +1,18 @@
 // This is vil/io/vil_io_memory_image.cxx
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \brief Perform serialised binary IO for vil_memory_image
+// \author Ian Scott (Manchester)
+// \date 26-Mar-2001
 
 #include <vil/io/vil_io_memory_image.h>
 #include <vil/io/vil_io_image.h>
 #include <vil/vil_memory_image.h>
 #include <vsl/vsl_clipon_binary_loader.txx>
 #include <vil/io/vil_io_image_impl.h>
-
-//:
-// \file
-// \brief Perform serialised binary IO for vil_memory_image
-// \author Ian Scott (Manchester)
-// \date 26-Mar-2001
 
 //: Binary write to stream.
 void vsl_b_write(vsl_b_ostream &os, const vil_memory_image & p)

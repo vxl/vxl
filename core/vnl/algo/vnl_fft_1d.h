@@ -1,15 +1,13 @@
+// This is vxl/vnl/algo/vnl_fft_1d.h
 #ifndef vnl_fft_1d_h_
 #define vnl_fft_1d_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
-
 //:
 // \file
 // \brief In-place 1D fast fourier transform
+// \author fsm@robots.ox.ac.uk
 
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_fft_base.h>
@@ -42,4 +40,4 @@ struct vnl_fft_1d : public vnl_fft_base<1, T>
   unsigned size() const { return base::factors_[0].number(); }
 };
 
-#endif
+#endif // vnl_fft_1d_h_

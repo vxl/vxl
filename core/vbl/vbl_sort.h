@@ -1,10 +1,9 @@
 // This is vxl/vbl/vbl_sort.h
 #ifndef vbl_sort_h_
 #define vbl_sort_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Collection of common predicates for sorting
@@ -26,7 +25,8 @@ int vbl_sort_int_descending(int const&, int const&);
 
 //: Collection of common predicates for sorting
 template <class T>
-struct vbl_sort_helper {
+struct vbl_sort_helper
+{
   static int ascend(const void* a, const void* b) {
     T const& ta = *((T const*)a);
     T const& tb = *((T const*)b);

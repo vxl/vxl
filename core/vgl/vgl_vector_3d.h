@@ -1,10 +1,9 @@
-// This is ./vxl/vgl/vgl_vector_3d.h
+// This is vxl/vgl/vgl_vector_3d.h
 #ifndef vgl_vector_3d_h_
 #define vgl_vector_3d_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief direction vector in Euclidean 3D space
@@ -27,8 +26,9 @@
 // Use this class to do arithmetic (adding and scaling) in 3d geometric space.
 //
 template <class T>
-class vgl_vector_3d {
-public:
+class vgl_vector_3d
+{
+ public:
   T x_; // Data is public
   T y_;
   T z_;

@@ -1,5 +1,9 @@
-// This is ./oxl/vgui/vgui_composite.h
-
+// This is oxl/vgui/vgui_composite.h
+#ifndef vgui_composite_h_
+#define vgui_composite_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -12,12 +16,6 @@
 //    9 Feb 01 awf@robots. Add Alt-C to re-enable key bindings.
 //   26-APR-2002 K.Y.McGaul - Converted to doxygen style comments.
 // \endverbatim
-
-#ifndef vgui_composite_h_
-#define vgui_composite_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 
 #include <vcl_vector.h>
 
@@ -39,8 +37,9 @@ class vgui_event;
 //  The exceptions to this rule are :
 //  [a] key presses '0'-'9', which toggle the activeness of the children and
 //  [b] the DRAW, DRAW_OVERLAY events which are sent to all children.
-class vgui_composite : public vgui_tableau {
-public:
+class vgui_composite : public vgui_tableau
+{
+ public:
   //: Constructor - default.
   vgui_composite();
   //: Constructor - takes two child tableaux.
@@ -75,7 +74,7 @@ public:
 
   vgui_event_condition c_enable_key_bindings;
 
-protected:
+ protected:
   virtual ~vgui_composite();
 
   bool get_bounding_box(float low[3], float high[3]) const;
@@ -93,7 +92,8 @@ protected:
   bool enable_key_bindings;
 };
 
-struct vgui_composite_new : public vgui_composite_sptr {
+struct vgui_composite_new : public vgui_composite_sptr
+{
   typedef vgui_composite_sptr base;
   vgui_composite_new() : base(new vgui_composite()) { }
   vgui_composite_new(vgui_tableau_sptr const& child0, vgui_tableau_sptr const& child1)

@@ -1,7 +1,7 @@
 // This is vxl/vnl/vnl_matlab_filewrite.h
 #ifndef vnl_matlab_filewrite_h_
 #define vnl_matlab_filewrite_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -26,8 +26,9 @@
 //    vnl_matlab_filewrite is a collection of I/O functions for reading/writing
 //    matrices in the compact MATLAB binary format (.mat)
 
-class vnl_matlab_filewrite {
-public:
+class vnl_matlab_filewrite
+{
+ public:
   vnl_matlab_filewrite (char const* file_name, char const *basename = 0);
 
   //: Add scalar/vector/matrix variable to the MAT file using specified variable name.
@@ -45,7 +46,7 @@ public:
 
   void write(double const * const *M, int rows, int cols, char const* variable_name = 0);
 
-protected:
+ protected:
   vcl_string basename_;
   int variable_int_;
   vcl_fstream out_;

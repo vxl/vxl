@@ -1,11 +1,11 @@
 // This is vxl/vil/vil_stream_section.cxx
-
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vil_stream_section.h"
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
@@ -106,7 +106,7 @@ void vil_stream_section::seek(vil_streampos position)
   assert(position >= 0); // I would want to be told about this.
 
   if (end_ != -1L  &&  begin_ + position > end_) {
-    vcl_cerr << __FILE__ << ": attempt to seek past given section (failed)." << vcl_endl;
+    vcl_cerr << __FILE__ << ": attempt to seek past given section (failed).\n";
     return;
   }
   else

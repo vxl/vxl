@@ -1,14 +1,12 @@
-// This is ./oxl/vgui/vgui_tag.cxx
-
+// This is oxl/vgui/vgui_tag.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma implementation
+#endif
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
 // \brief  See vgui_tag.h for a description of this file.
 
-
-#ifdef __GNUC__
-#pragma implementation
-#endif
 #include "vgui_tag.h"
 #include <vcl_cassert.h>
 

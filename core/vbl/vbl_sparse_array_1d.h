@@ -1,10 +1,9 @@
+// This is vxl/vbl/vbl_sparse_array_1d.h
 #ifndef vbl_sparse_array_1d_h_
 #define vbl_sparse_array_1d_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vbl/vbl_sparse_array_1d.h
-
 //:
 // \file
 // \brief Sparse array allowing space efficient access of the form s[3000]=2.
@@ -30,7 +29,7 @@ class vbl_sparse_array_1d: public vbl_sparse_array_base<T, unsigned>
   //: Print the Array to a stream in "(i,j): value" format.
   vcl_ostream& print(vcl_ostream& out) const
   {
-    for(const_iterator p = begin(); p != end(); ++p)
+    for (const_iterator p = begin(); p != end(); ++p)
       out << "(" << (*p).first << "): " << (*p).second << vcl_endl;
     return out;
   }

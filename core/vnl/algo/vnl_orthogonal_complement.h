@@ -1,9 +1,6 @@
+// This is vxl/vnl/algo/vnl_orthogonal_complement.h
 #ifndef vnl_orthogonal_complement_h_
 #define vnl_orthogonal_complement_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
 //:
 // \file
 // \brief For computing the orthogonal complement to a linear subspace.

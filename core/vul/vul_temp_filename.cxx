@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is vxl/vul/vul_temp_filename.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 
@@ -23,7 +24,7 @@
     {
       bool okay = true;
       int fd = open( name.c_str(), O_CREAT|O_EXCL );
-      if( fd == -1 ) {
+      if ( fd == -1 ) {
         okay = false;
       } else {
         unlink( name.c_str() );
@@ -65,7 +66,7 @@ vul_temp_filename( )
 #ifdef _MSC_VER
   char path[ _MAX_PATH ];
   char* file;
-  if( GetTempPath( _MAX_PATH, path ) == 0 )
+  if ( GetTempPath( _MAX_PATH, path ) == 0 )
     return "";
   // Can't use GetTempFileName, because the function actually creates the
   // temporary file! This would mean that every call to this function creates
@@ -73,7 +74,7 @@ vul_temp_filename( )
   // filename. And I don't trust the implementation enough to just unlink the file
   // before returning.
   file = _tempnam( path, "" );
-  if( file == 0 )
+  if ( file == 0 )
     return "";
   return file;
 
@@ -86,7 +87,7 @@ vul_temp_filename( )
   unsigned int count = 0;
   bool okay = false;
 
-  if( vcl_getenv( "TMP" ) ) {
+  if ( vcl_getenv( "TMP" ) ) {
     tempdir = vcl_getenv( "TMP" );
   } else {
     tempdir = P_tmpdir; // defined in stdio.h
@@ -95,10 +96,10 @@ vul_temp_filename( )
   if (lastchar != '/' && lastchar != '\\')
     tempdir += "/";
 
-  while( !okay && count < 10 ) {
+  while ( !okay && count < 10 ) {
     char buf[ num_char_in_filename+1 ];
     buf[0] = random_letter(); // make sure first char is a letter
-    for( unsigned int i=1; i < num_char_in_filename; ++i )
+    for ( unsigned int i=1; i < num_char_in_filename; ++i )
       buf[i] = random_char();
     buf[num_char_in_filename] = '\0';
     filename = tempdir + buf;
@@ -106,7 +107,7 @@ vul_temp_filename( )
     okay = is_okay( filename );
   };
 
-  if( okay )
+  if ( okay )
     return filename;
   else
     return "";

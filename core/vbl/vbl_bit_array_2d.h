@@ -1,10 +1,9 @@
+// This is vxl/vbl/vbl_bit_array_2d.h
 #ifndef vbl_bit_array_2d_h_
 #define vbl_bit_array_2d_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vbl/vbl_bit_array_2d.h
-
 //:
 // \file
 // \brief Contains class for a 2d bit array; interface as vbl_array_2d<T>
@@ -20,8 +19,9 @@
 
 //: simple 2D bit array
 // essentially identical to vbl_array_2d<bool> but more efficiently stored
-class vbl_bit_array_2d {
-public:
+class vbl_bit_array_2d
+{
+ public:
   // Default constructor
   vbl_bit_array_2d() : data_(0), num_rows_(0), num_cols_(0) {}
   //: Construct num_rows x num_cols array and leave data uninitialised
@@ -65,7 +65,7 @@ public:
   //: Number of bytes allocated by the data
   int size() const;
 
-private:
+ private:
   unsigned char *data_;
   int num_rows_;
   int num_cols_;

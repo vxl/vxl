@@ -1,6 +1,7 @@
+// This is vxl/vcsl/vcsl_matrix.h
 #ifndef vcsl_matrix_h
 #define vcsl_matrix_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -24,7 +25,7 @@
 class vcsl_matrix
   :public vcsl_spatial_transformation
 {
-public:
+ public:
 #if 0
   //: Direction vector variation along the time
   vcl_vector<vnl_vector<double> *> _vector;
@@ -69,7 +70,7 @@ public:
   virtual vnl_vector<double> inverse(const vnl_vector<double> &v,
                                      double time) const;
 
-protected:
+ protected:
 
   vnl_matrix<double> param_to_matrix( vcsl_matrix_param_sptr from,bool type ) const;
 

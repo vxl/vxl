@@ -1,7 +1,7 @@
-#ifdef __GNUC__
+// This is vxl/vnl/algo/vnl_sparse_symmetric_eigensystem.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 
@@ -132,60 +132,50 @@ int vnl_sparse_symmetric_eigensystem::CalculateNPairs(vnl_sparse_matrix<double>&
           &ierr);
   if (ierr > 0) {
     if (ierr & 0x1) {
-      vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: N < 6*NBLOCK"
-           << vcl_endl;
+      vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: N < 6*NBLOCK\n";
     }
     if (ierr & 0x2) {
-      vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: NFIG < 0"
-           << vcl_endl;
+      vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: NFIG < 0\n";
     }
     if (ierr & 0x4) {
-      vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: NMVEC < N"
-           << vcl_endl;
+      vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: NMVEC < N\n";
     }
     if (ierr & 0x8) {
-      vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: NPERM < 0"
-           << vcl_endl;
+      vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: NPERM < 0\n";
     }
     if (ierr & 0x10) {
-      vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: MAXJ < 6*NBLOCK"
-           << vcl_endl;
+      vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: MAXJ < 6*NBLOCK\n";
     }
     if (ierr & 0x20) {
-      vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: NVAL < max(1,NPERM)"
-           << vcl_endl;
+      vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: NVAL < max(1,NPERM)\n";
     }
     if (ierr & 0x40) {
-      vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: NVAL > NMVAL"
-           << vcl_endl;
+      vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: NVAL > NMVAL\n";
     }
     if (ierr & 0x80) {
-      vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: NVAL > MAXOP"
-           << vcl_endl;
+      vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: NVAL > MAXOP\n";
     }
     if (ierr & 0x100) {
-      vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: NVAL > MAXJ/2"
-           << vcl_endl;
+      vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: NVAL > MAXJ/2\n";
     }
     if (ierr & 0x200) {
-      vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: NBLOCK < 1"
-           << vcl_endl;
+      vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: NBLOCK < 1\n";
     }
   }
   else if (ierr < 0) {
     if (ierr == -1) {
-      vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem:" << vcl_endl
-           << "  poor initial vectors chosen" << vcl_endl;
+      vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem:\n"
+               << "  poor initial vectors chosen\n";
     }
     else if (ierr == -2) {
-      vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem:" << vcl_endl
-           << "  reached maximum operations " << maxop
-           << " without finding all eigenvalues," << vcl_endl
-           << "  found " << nperm << " eigenvalues" << vcl_endl;
+      vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem:\n"
+               << "  reached maximum operations " << maxop
+               << " without finding all eigenvalues,\n"
+               << "  found " << nperm << " eigenvalues\n";
     }
     else if (ierr == -8) {
-      vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem:" << vcl_endl
-           << "  disastrous loss of orthogonality - internal error" << vcl_endl;
+      vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem:\n"
+               << "  disastrous loss of orthogonality - internal error\n";
     }
   }
 
@@ -195,8 +185,10 @@ int vnl_sparse_symmetric_eigensystem::CalculateNPairs(vnl_sparse_matrix<double>&
   values = new double[n];
   for (int i=0; i<n; ++i) {
     values[i] = temp_vals[i];
-    // vcl_cout << "value " << temp_vals[i]
-    //   << " accuracy " << temp_vals[i+n*2] << vcl_endl;
+#if 0
+    vcl_cout << "value " << temp_vals[i]
+             << " accuracy " << temp_vals[i+n*2] << vcl_endl;
+#endif
     vnl_vector<double> vec(dim,0.0);
     for (int j=0; j<dim; ++j)
       vec[j] = temp_vecs[j + dim*i];

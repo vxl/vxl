@@ -1,10 +1,9 @@
+// This is vxl/vul/vul_sequence_filename_map.h
 #ifndef vul_sequence_filename_map_h_
 #define vul_sequence_filename_map_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vul/vul_sequence_filename_map.h
-
 //:
 // \file
 // \brief Contains class for mapping sequence frame indices to filenames
@@ -36,8 +35,9 @@
 // The vector of indices specifies the mapping from sequence frame-index to
 // filename-index.  If not specified, the image directory is probed to
 // determine the sequence start/end frames.
-class vul_sequence_filename_map {
-public:
+class vul_sequence_filename_map
+{
+ public:
   vul_sequence_filename_map ();
   vul_sequence_filename_map (vcl_string const & seq_template,
     vcl_vector<int> const & indices);
@@ -77,7 +77,7 @@ public:
   //: pretty print
   vcl_ostream& print(vcl_ostream& s) const;
 
-protected:
+ protected:
   bool filter_dirent(char const* name, vcl_string const& extension);
   int extract_index(char const* name);
 

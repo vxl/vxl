@@ -1,10 +1,9 @@
+// This is vxl/vil/vil_load.h
 #ifndef vil_load_h_
 #define vil_load_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vil/vil_load.h
-
 //:
 // \file
 // \brief read an image from a file

@@ -1,7 +1,7 @@
 // This is oxl/vgui/vgui_displaybase.h
 #ifndef vgui_displaybase_h_
 #define vgui_displaybase_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -32,7 +32,7 @@ struct vgui_displaybase_selection_callback
 //: General display list functionality; can use any type of soview as long as it's black.
 class vgui_displaybase : public vgui_tableau
 {
-public:
+ public:
 
   vgui_displaybase();
  ~vgui_displaybase();
@@ -77,7 +77,7 @@ public:
 
   unsigned get_id() {return id;}
 
-protected:
+ protected:
   vcl_vector<vgui_soview*> objects;
 
   vcl_vector<unsigned> groups;
@@ -88,7 +88,7 @@ protected:
 
   vgui_displaybase_selection_callback* cb_;
 
-private:
+ private:
   unsigned id;
 };
 

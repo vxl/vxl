@@ -1,5 +1,9 @@
-// This is ./oxl/vgui/vgui_function_tableau.h
-
+// This is oxl/vgui/vgui_function_tableau.h
+#ifndef vgui_function_tableau_h_
+#define vgui_function_tableau_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -12,12 +16,6 @@
 //    25-NOV-1999 P.Pritchett - Initial version.
 // \endverbatim
 
-#ifndef vgui_function_tableau_h_
-#define vgui_function_tableau_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
 #include <vgui/vgui_tableau.h>
 #include "dll.h"
 
@@ -25,8 +23,9 @@
 //
 //   For example, you can pass in my_draw_function() to draw() and
 //   it will be called every time a draw event occurs in this tableau.
-class vgui_function_tableau : public vgui_tableau {
-public:
+class vgui_function_tableau : public vgui_tableau
+{
+ public:
   typedef bool (*function)(const vgui_event&);
 
   vgui_function_tableau();
@@ -43,7 +42,7 @@ public:
 
   static vgui_DLLDATA bool redraw;
 
-protected:
+ protected:
  ~vgui_function_tableau();
   bool handle(const vgui_event&);
 

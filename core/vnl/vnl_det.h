@@ -1,10 +1,6 @@
-// This is ./vxl/vnl/vnl_det.h
+// This is vxl/vnl/vnl_det.h
 #ifndef vnl_det_h_
 #define vnl_det_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
 //: \file
 //  \brief Direct evaluation of 2x2, 3x3 and 4x4 determinants.
 //  \author fsm@robots.ox.ac.uk

@@ -1,9 +1,9 @@
+// This is vxl/vgl/vgl_ellipse_scan_iterator.h
 #ifndef vgl_ellipse_scan_iterator_h_
 #define vgl_ellipse_scan_iterator_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author Amitha Perera
@@ -23,7 +23,7 @@
 //
 class vgl_ellipse_scan_iterator : public vgl_region_scan_iterator
 {
-public:
+ public:
   //: Constructor
   //  The ellipse is parameterised by (\a xc, \a yc) (the centre), by \a
   //  rx and \a ry (the radii along the principle axes) and by \a theta,
@@ -52,7 +52,7 @@ public:
   //: Returns ending x-value of the current scan line.
   virtual int  endx() const { return end_x_; }
 
-private:
+ private:
   //: Parameters of the ellipse being scan converted.
   //  Centre, squared radii, and angle of rotation about the centre.
   double xc_, yc_, rx_, ry_, theta_;
@@ -67,7 +67,7 @@ private:
   int start_x_;
 
   //: End of current scan line
-  int end_x_;  
+  int end_x_;
 };
 
 #endif // vgl_ellipse_scan_iterator_h_

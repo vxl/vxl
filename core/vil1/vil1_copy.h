@@ -1,10 +1,9 @@
-// This is ./vxl/vil/vil_copy.h
+// This is vxl/vil/vil_copy.h
 #ifndef vil_copy_h_
 #define vil_copy_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Image copy function

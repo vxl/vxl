@@ -1,15 +1,13 @@
+// This is vxl/vil/vil_smooth.h
 #ifndef vil_smooth_h_
 #define vil_smooth_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vil/vil_smooth.h
-
 //:
 // \file
 // \brief Functions to convolve a vil_image with a smoothing kernel
 // \author fsm@robots.ox.ac.uk
-
 
 #include <vil/vil_image.h>
 

@@ -1,12 +1,6 @@
 // This is vxl/vil/vil_interpolate.h
-
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vil_interpolate_h_
 #define vil_interpolate_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
 //:
 // \file
 // \brief Interpolation methods

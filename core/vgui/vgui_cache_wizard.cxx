@@ -1,8 +1,7 @@
 // This is oxl/vgui/vgui_cache_wizard.cxx
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // \brief See vgui_cache_wizard.h for a description of this file.

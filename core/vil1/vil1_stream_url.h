@@ -1,10 +1,9 @@
 // This is vxl/vil/vil_stream_url.h
 #ifndef vil_stream_url_h_
 #define vil_stream_url_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief open an URL
@@ -19,7 +18,7 @@ class vil_stream_url : public vil_stream
   vil_stream *u_; // underlying stream
   vil_stream_url(vil_stream_url const &) { }
   void operator=(vil_stream_url const &) { }
-public:
+ public:
   vil_stream_url(char const *);
   ~vil_stream_url();
 
@@ -32,4 +31,4 @@ public:
   void seek(vil_streampos position) { if (u_) u_->seek(position); }
 };
 
-#endif
+#endif // vil_stream_url_h_

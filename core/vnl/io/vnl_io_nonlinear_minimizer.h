@@ -1,23 +1,22 @@
+// This is vxl/vnl/io/vnl_io_nonlinear_minimizer.h
 #ifndef vnl_io_nonlinear_minimizer_h
 #define vnl_io_nonlinear_minimizer_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-#include <vsl/vsl_binary_io.h>
-#include <vnl/vnl_nonlinear_minimizer.h>
-
-// This is vxl/vnl/io/vnl_io_nonlinear_minimizer.h
-
 //:
 // \file
 // \author dac
 // \date 21-Mar-2001
 
+#include <vsl/vsl_binary_io.h>
+#include <vnl/vnl_nonlinear_minimizer.h>
+
 //: Base for objects which provide IO
 //  for classes derived from vnl_nonlinear_minimizer
-class vnl_io_nonlinear_minimizer {
-public:
+class vnl_io_nonlinear_minimizer
+{
+ public:
   //: Constructor
   vnl_io_nonlinear_minimizer();
 

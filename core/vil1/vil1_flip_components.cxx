@@ -1,5 +1,5 @@
 // This is vxl/vil/vil_flip_components.cxx
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 #include "vil_flip_components.h"

@@ -1,10 +1,9 @@
+// This is vxl/vbl/vbl_sparse_array_3d.h
 #ifndef vbl_sparse_array_3d_h_
 #define vbl_sparse_array_3d_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vbl/vbl_sparse_array_3d.h
-
 //:
 // \file
 // \brief a space efficient 3d array
@@ -35,7 +34,7 @@
 template <class T>
 class vbl_sparse_array_3d : public vbl_sparse_array_base<T, vbl_triple<unsigned, unsigned, unsigned> >
 {
-public:
+ public:
 
   //: Put a value into location (i,j).
   bool put(unsigned i, unsigned j, unsigned k, const T& t)

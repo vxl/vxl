@@ -1,11 +1,9 @@
+// This is vxl/vgl/vgl_triangle_test.h
 #ifndef vgl_triangle_test_h_
 #define vgl_triangle_test_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-// This is vxl/vgl/vgl_triangle_test.h
-
 //: \file
 // \author fsm@robots.ox.ac.uk
 

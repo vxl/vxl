@@ -1,8 +1,7 @@
-// This is ./vxl/vil/vil_save.cxx
-#ifdef __GNUC__
+// This is vxl/vil/vil_save.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 
@@ -27,7 +26,7 @@ bool vil_save(vil_image i, char const* filename, char const* file_format)
 {
   vil_stream* os = vil_open(filename, "w");
   if (!os->ok()) {
-    vcl_cerr << __FILE__ ": Invalid stream for \"" << filename << "\"" << vcl_endl;
+    vcl_cerr << __FILE__ ": Invalid stream for \"" << filename << "\"\n";
     return false;
   }
   vil_image out = vil_new(os, i.width(), i.height(), i, file_format);
@@ -77,7 +76,7 @@ char const *guess_file_format(char const* filename)
   char const *dot = vcl_strrchr(filename, '.');
   if (!dot) {
     // filename doesn't end in ".anything"
-    vcl_cerr << __FILE__ ": assuming pnm format for \'" << filename << "\'" << vcl_endl;
+    vcl_cerr << __FILE__ ": assuming pnm format for \'" << filename << "\'\n";
     file_format = "pnm";
   }
   else {
@@ -97,7 +96,7 @@ char const *guess_file_format(char const* filename)
 #undef macro
     else {
       //file_format = dot+1; // hope it works.
-      vcl_cerr << __FILE__ ": assuming pnm format for \'" << filename << "\'" << vcl_endl;
+      vcl_cerr << __FILE__ ": assuming pnm format for \'" << filename << "\'\n";
       file_format = "pnm";
     }
   }

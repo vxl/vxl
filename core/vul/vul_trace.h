@@ -1,10 +1,9 @@
+// This is vxl/vul/vul_trace.h
 #ifndef vul_trace_h_
 #define vul_trace_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vul/vul_trace.h
-
 //:
 // \file
 // \brief writes out file, line to stderr.

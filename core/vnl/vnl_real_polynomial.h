@@ -1,11 +1,9 @@
+// This is vxl/vnl/vnl_real_polynomial.h
 #ifndef vnl_real_polynomial_h_
 #define vnl_real_polynomial_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-// This is vxl/vnl/vnl_real_polynomial.h
-
 //:
 // \file
 // \brief Evaluation of real polynomials
@@ -31,8 +29,9 @@
 //    or of its derivative $p'(x)$.
 //
 //    Roots may be extracted using the roots() method.
-class vnl_real_polynomial {
-public:
+class vnl_real_polynomial
+{
+ public:
   //: Initialize polynomial.
   // The polynomial is $ a[0] x^d + a[1] x^{d-1} + \cdots + a[d] = 0 $.
   vnl_real_polynomial(vnl_vector<double> const & a): coeffs_(a) {}
@@ -97,7 +96,7 @@ public:
   //: Print this polynomial to stream
   void print(vcl_ostream& os) const;
 
-protected:
+ protected:
   //: The coefficients of the polynomial.
   // coeffs_[0] is the const term.
   // coeffs_[n] is the coefficient of the x^n term.

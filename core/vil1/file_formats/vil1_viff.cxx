@@ -1,5 +1,5 @@
-// This is ./vxl/vil/file_formats/vil_viff.cxx
-#ifdef __GNUC__
+// This is vxl/vil/file_formats/vil_viff.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 
@@ -133,7 +133,7 @@ bool vil_viff_generic_image::read_header()
   float fspare1 = header_.fspare1;
   float fspare2 = header_.fspare2;
 
-  if(!endian_consistent_)
+  if (!endian_consistent_)
   {
     swap(&rs,sizeof(rs));
     swap(&cs,sizeof(cs));
@@ -185,7 +185,7 @@ bool vil_viff_generic_image::read_header()
       break;
     default:
       vcl_cout << "vil_viff: non supported data type: VFF_TYP "
-           <<   header_.data_storage_type << vcl_endl;
+               <<   header_.data_storage_type << vcl_endl;
       format_ = VIL_COMPONENT_FORMAT_UNKNOWN;
       return false;
   }
@@ -267,14 +267,14 @@ bool vil_viff_generic_image::get_section(void* buf, int x0, int y0, int xs, int 
   unsigned char* ib = (unsigned char*) buf;
   unsigned long rowsize = bits_per_component_*xs/8;
   unsigned long tbytes = rowsize*ys*planes_;
-  for(int p = 0; p<planes_; ++p) {
+  for (int p = 0; p<planes_; ++p) {
     for (int y = y0; y < y0+ys; ++y) {
       is_->seek(start_of_data_ + p*width_*height_*bits_per_component_/8 + bits_per_component_*(y*width_+x0)/8);
       is_->read(ib, rowsize);
       ib += rowsize;
     }
   }
-  if(!endian_consistent_) {
+  if (!endian_consistent_) {
     ib = (unsigned char*) buf;
     for (unsigned int i=0;i<tbytes;i+=bits_per_component_/8)
       swap(ib+i,bits_per_component_/8);
@@ -287,8 +287,8 @@ bool vil_viff_generic_image::put_section(void const* buf, int x0, int y0, int xs
 {
   unsigned char const* ob = (unsigned char const*) buf;
   unsigned long rowsize = bits_per_component_*xs/8;
-  if(endian_consistent_)
-    for(int p = 0; p<planes_; ++p)
+  if (endian_consistent_)
+    for (int p = 0; p<planes_; ++p)
       for (int y = y0; y < y0+ys; ++y) {
         is_->seek(start_of_data_ + p*width_*height_*bits_per_component_/8 + bits_per_component_*(y*width_+x0)/8);
         is_->write(ob, rowsize);
@@ -296,7 +296,7 @@ bool vil_viff_generic_image::put_section(void const* buf, int x0, int y0, int xs
       }
   else {
     unsigned char* tempbuf = new unsigned char[rowsize];
-    for(int p = 0; p<planes_; ++p)
+    for (int p = 0; p<planes_; ++p)
       for (int y = y0; y < y0+ys; ++y) {
         vcl_memcpy(tempbuf, ob, rowsize);
         for (unsigned int i=0; i<rowsize; i+=bits_per_component_/8)
@@ -321,9 +321,9 @@ bool vil_viff_generic_image::check_endian()
 
   endian_consistent_ = ((dst & 0xff) != 0);
   if (endian_consistent_)
-    vcl_cout << "Endian is Consistent" << vcl_endl;
+    vcl_cout << "Endian is Consistent\n";
   else
-    vcl_cout << "Endian is NOT Consistent" << vcl_endl;
+    vcl_cout << "Endian is NOT Consistent\n";
   return endian_consistent_;
 }
 

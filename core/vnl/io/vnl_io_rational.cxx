@@ -1,5 +1,5 @@
 // This is vxl/vnl/io/vnl_io_rational.cxx
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:

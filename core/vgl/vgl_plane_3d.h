@@ -1,10 +1,9 @@
-// This is ./vxl/vgl/vgl_plane_3d.h
+// This is vxl/vgl/vgl_plane_3d.h
 #ifndef vgl_plane_3d_h
 #define vgl_plane_3d_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 //  \file
 //  \brief a plane in 3D nonhomogeneous space
@@ -28,11 +27,9 @@
 //: Represents a Euclidian 3D plane
 //  the equation of the plane is (nx * x) + (ny * y) + (nz * z) + d = 0
 template <class Type>
-class vgl_plane_3d {
-
-  // PUBLIC INTERFACE--------------------------------------------------------
-
-public:
+class vgl_plane_3d
+{
+ public:
 
   // Constructors/Initializers/Destructor------------------------------------
 
@@ -104,7 +101,7 @@ public:
 
   // INTERNALS---------------------------------------------------------------
 
-private:
+ private:
   // the data associated with this plane
   Type a_;
   Type b_;

@@ -1,6 +1,7 @@
+// This is oxl/vgui/vgui_observer.h
 #ifndef vgui_observer_h_
 #define vgui_observer_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 // 
@@ -26,8 +27,9 @@
 class vgui_message;
 class vgui_observable;
 
-class vgui_observer {
-public:
+class vgui_observer
+{
+ public:
   vgui_observer();
   virtual ~vgui_observer();
 

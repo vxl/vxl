@@ -1,10 +1,9 @@
 // This is vxl/vgl/vgl_lineseg_test.h
 #ifndef vgl_lineseg_test_h_
 #define vgl_lineseg_test_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author fsm@robots.ox.ac.uk

@@ -1,9 +1,9 @@
+// This is vxl/vcsl/vcsl_rotation.h
 #ifndef vcsl_rotation_h
 #define vcsl_rotation_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author François BERTEL
@@ -29,7 +29,7 @@
 class vcsl_rotation
   : public vcsl_spatial_transformation
 {
-public:
+ public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
@@ -110,7 +110,7 @@ public:
   virtual vnl_vector<double> inverse(const vnl_vector<double> &v,
                                      double time) const;
 
-protected:
+ protected:
   //: Compute the value of the quaternion at time `time'
   vnl_quaternion<double> quaternion(double time) const;
 

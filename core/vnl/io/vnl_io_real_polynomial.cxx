@@ -1,8 +1,7 @@
-// This is ./vxl/vnl/io/vnl_io_real_polynomial.cxx
-#ifdef __GNUC__
+// This is vxl/vnl/io/vnl_io_real_polynomial.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 

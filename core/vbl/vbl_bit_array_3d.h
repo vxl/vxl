@@ -1,7 +1,7 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is vxl/vbl/vbl_bit_array_3d.h
 #ifndef vbl_bit_array_3d_h_
 #define vbl_bit_array_3d_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -20,7 +20,7 @@
 
 class vbl_bit_array_3d_base
 {
-public:
+ public:
   vbl_bit_array_3d_base(int a, int b, int c)
     : row1_count_(a),
       row2_count_(b),
@@ -31,7 +31,7 @@ public:
   int row2_count() const { return row2_count_; }
   int row3_count() const { return row3_count_; }
 
-protected:
+ protected:
   int row1_count_;
   int row2_count_;
   int row3_count_;
@@ -45,7 +45,7 @@ protected:
 
 class vbl_bit_array_3d : public vbl_bit_array_3d_base
 {
-public:
+ public:
   // Constructors/Destructor---------------------------------------------------
 
   //: Create a bitarray of the specified size, without initialising elements
@@ -68,7 +68,7 @@ public:
   //: Return the value of a cell
   bool operator() (unsigned int i1, unsigned int i2, unsigned int i3) const;
 
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
 
   unsigned char *data_;

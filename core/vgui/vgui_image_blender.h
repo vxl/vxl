@@ -1,10 +1,9 @@
-// This is ./oxl/vgui/vgui_image_blender.h
+// This is oxl/vgui/vgui_image_blender.h
 #ifndef vgui_image_blender_h_
 #define vgui_image_blender_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -17,8 +16,9 @@
 class vgui_image_renderer;
 class vil_image;
 
-class vgui_image_blender : public vgui_tableau {
-public:
+class vgui_image_blender : public vgui_tableau
+{
+ public:
   vgui_image_blender(char const* file, float a=1.0);
   vgui_image_blender(vil_image const& img, float a=1.0);
 
@@ -31,7 +31,7 @@ public:
   vgui_image_renderer *renderer;
   float alpha;
 
-protected:
+ protected:
  ~vgui_image_blender();
 };
 

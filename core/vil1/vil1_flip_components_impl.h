@@ -1,10 +1,9 @@
+// This is vxl/vil/vil_flip_components_impl.h
 #ifndef vil_flip_components_impl_h_
 #define vil_flip_components_impl_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vil/vil_flip_components_impl.h
-
 //:
 // \file
 // \author Peter.Vanroose@esat.kuleuven.ac.be
@@ -13,8 +12,9 @@
 #include <vcl_string.h>
 
 //: A view of a B,G,R image as if it were R,G,B (or the other way around)
-class vil_flip_components_impl : public vil_image_impl {
-public:
+class vil_flip_components_impl : public vil_image_impl
+{
+ public:
   vil_flip_components_impl(vil_image const &base_) : base(base_) { }
 
   int planes() const { return base.planes(); }
@@ -35,7 +35,7 @@ public:
   //: Return true if the name of the class matches the argument
   virtual bool is_class(vcl_string const&) const;
 
-private:
+ private:
   vil_image base;
 };
 

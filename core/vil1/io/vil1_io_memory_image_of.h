@@ -1,20 +1,14 @@
+// This is vil/io/vil_io_memory_image_of.h
 #ifndef vil_io_memory_image_of_h_
 #define vil_io_memory_image_of_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
-// This is vil/io/vil_io_memory_image_of.h
-#include <vil/vil_memory_image_of.h>
-#include <vsl/vsl_binary_io.h>
-
-
 //:
 // \file
 // \brief Perform serialised binary IO for vil_memory_image_of
 // \author Ian Scott (Manchester)
 // \date 23-Mar-2001
 
+#include <vil/vil_memory_image_of.h>
+#include <vsl/vsl_binary_io.h>
 
 //: Binary save vgl_my_class to stream.
 template <class T>

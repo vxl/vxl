@@ -1,7 +1,7 @@
 // This is vxl/vgl/vgl_homg.h
 #ifndef _vgl_homg_h
 #define _vgl_homg_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -25,8 +25,9 @@
 //-------------------------------------------------------------------------------
 
 template <class T>
-class vgl_homg {
-public:
+class vgl_homg
+{
+ public:
 
 //: Standard placeholder for methods that wish to return infinity.
   static T infinity;

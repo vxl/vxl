@@ -1,7 +1,7 @@
 // This is vxl/vsl/vsl_binary_loader.h
 #ifndef vsl_binary_loader_h_
 #define vsl_binary_loader_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -46,41 +46,39 @@
 //
 // All loader singletons can be deleted using vsl_delete_all_loaders()
 template<class BaseClass>
-class vsl_binary_loader : public vsl_binary_loader_base {
-
-private :
-
-    //: the singleton object
+class vsl_binary_loader : public vsl_binary_loader_base
+{
+  //: the singleton object
   static vsl_binary_loader<BaseClass>* instance_;
 
-    //: List of concrete classes that this loader can deal with
+  //: List of concrete classes that this loader can deal with
   vcl_vector<BaseClass*> object_;
 
-public :
-    //: Constructor
+ public :
+  //: Constructor
   vsl_binary_loader() {};
 
-    //: Destructor
+  //: Destructor
   ~vsl_binary_loader();
 
-    //: Returns the instance variable for the singleton.
+  //: Returns the instance variable for the singleton.
   static vsl_binary_loader<BaseClass>& instance();
 
-    //: Remove all example objects
+  //: Remove all example objects
   void make_empty();
 
-    //: Add example object to list of those that can be loaded
+  //: Add example object to list of those that can be loaded
   void add( const BaseClass& b) { object_.push_back(b.clone());};
 
-    //: Return current list of class objects which can be loaded
+  //: Return current list of class objects which can be loaded
   const vcl_vector<BaseClass*>& object() { return object_; }
 
-    //: Loads object and sets base class pointer
-    //  Determines which derived class object on is belongs
-    //  to, loads it and sets b to be a pointer to it.
-    //  (Class must be one given to Loader by the add method).
-    //  If is indicates a NULL pointer, b will be set to NULL.
-    //  If b not initially NULL, *b will be deleted.
+  //: Loads object and sets base class pointer
+  //  Determines which derived class object on is belongs
+  //  to, loads it and sets b to be a pointer to it.
+  //  (Class must be one given to Loader by the add method).
+  //  If is indicates a NULL pointer, b will be set to NULL.
+  //  If b not initially NULL, *b will be deleted.
   void load_object( vsl_b_istream& is, BaseClass*& b);
 };
 

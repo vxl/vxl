@@ -1,7 +1,7 @@
-// This is ./vxl/vsl/vsl_indent.h
+// This is vxl/vsl/vsl_indent.h
 #ifndef vsl_indent_h_
 #define vsl_indent_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -13,15 +13,15 @@
 //: Put indents into output streams, to produce more legible printed output
 //  Its use is best described by example:
 // \code
-// vcl_cout<<vsl_indent()<<"No Indent"<<vcl_endl;
+// vcl_cout<<vsl_indent()<<"No Indent\n";
 // vsl_indent_inc(vcl_cout);
-// vcl_cout<<vsl_indent()<<"1 Indent"<<vcl_endl;
+// vcl_cout<<vsl_indent()<<"1 Indent\n";
 // vsl_indent_inc(vcl_cout);
-// vcl_cout<<vsl_indent()<<"2 Indent"<<vcl_endl;
+// vcl_cout<<vsl_indent()<<"2 Indent\n";
 // vsl_indent_dec(vcl_cout);
-// vcl_cout<<vsl_indent()<<"1 Indent"<<vcl_endl;
+// vcl_cout<<vsl_indent()<<"1 Indent\n";
 // vsl_indent_dec(vcl_cout);
-// vcl_cout<<vsl_indent()<<"No Indent"<<vcl_endl;
+// vcl_cout<<vsl_indent()<<"No Indent\n";
 // \endcode
 //
 // This produces output of the form
@@ -43,7 +43,7 @@
 //
 // vcl_ostream& operator<<(vcl_ostream& os, const Fred& fred)
 // {
-//  os<<"Fred: "<<vcl_endl;
+//  os<<"Fred: \n";
 //  vsl_indent_inc(os);
 //  fred.print(os);
 //  vsl_indent_dec(os);
@@ -63,7 +63,7 @@
 //
 // vcl_ostream& operator<<(vcl_ostream& os, const Jim& jim)
 // {
-//  os<<"Jim: "<<vcl_endl;
+//  os<<"Jim: \n";
 //  vsl_indent_inc(os);
 //  jim.print(os);
 //  vsl_indent_dec(os);
@@ -83,7 +83,9 @@
 //    Fred's data
 //    Jim's other data
 // \endverbatim
-class vsl_indent {
+
+class vsl_indent
+{
 };
 
 //: Increments current indent for given stream

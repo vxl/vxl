@@ -1,8 +1,7 @@
-// This is ./vxl/vnl/vnl_error.cxx
-#ifdef __GNUC__
+// This is vxl/vnl/vnl_error.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 //

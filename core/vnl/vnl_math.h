@@ -1,11 +1,11 @@
-// This is ./vxl/vnl/vnl_math.h
+// This is vxl/vnl/vnl_math.h
 #ifndef vnl_math_h_
 #define vnl_math_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-//: \file
+//:
+//  \file
 //  \brief Namespace with standard math functions
 //
 //    The vnl_math namespace provides a standard set of the simple mathematical
@@ -46,8 +46,9 @@ short    vnl_huge_val(short);
 char     vnl_huge_val(char);
 
 //: real numerical constants
-class vnl_math {
-public:
+class vnl_math
+{
+ public:
   //: pi, e and all that
   static VNL_DLL_DATA const double e               VCL_STATIC_CONST_INIT_FLOAT(2.7182818284590452354);
   static VNL_DLL_DATA const double log2e           VCL_STATIC_CONST_INIT_FLOAT(1.4426950408889634074);

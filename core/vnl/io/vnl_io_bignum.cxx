@@ -1,7 +1,7 @@
-#ifdef __GNUC__
+// This is vxl/vnl/io/vnl_io_bignum.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 

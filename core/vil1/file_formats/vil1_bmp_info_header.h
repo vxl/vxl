@@ -1,9 +1,9 @@
+// This is vxl/vil/file_formats/vil_bmp_info_header.h
 #ifndef vil_bmp_info_header_h_
 #define vil_bmp_info_header_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
@@ -20,7 +20,7 @@ struct vil_bmp_info_header
   unsigned verti_res;   // 4
   unsigned colormapsize;// 4
   unsigned colorcount;  // 4
-  
+
   vil_bmp_info_header();
   void read(vil_stream *);
   void write(vil_stream *) const;

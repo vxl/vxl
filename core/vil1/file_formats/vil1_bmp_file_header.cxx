@@ -1,9 +1,11 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+// This is vxl/vil/file_formats/vil_bmp_file_header.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vil_bmp_file_header.h"
 #include <vcl_ios.h> // for vcl_hex, vcl_dec
 #include <vcl_iostream.h>
@@ -28,7 +30,7 @@ vil_bmp_file_header::vil_bmp_file_header()
 
 void vil_bmp_file_header::print(vcl_ostream &s) const
 {
-  s << "vil_bmp_file_header:" << vcl_endl
+  s << "vil_bmp_file_header:\n"
     << "  magic   : " << vcl_hex 
     << "0x" << unsigned(magic[0]) << ' '
     << "0x" << unsigned(magic[1]) << vcl_endl

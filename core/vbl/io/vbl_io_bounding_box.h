@@ -1,11 +1,6 @@
+// This is vxl/vbl/vbl_io_bounding_box_3d.h
 #ifndef vbl_io_bounding_box_h
 #define vbl_io_bounding_box_h
-#ifdef __GNUC__
-#pragma interface
-#endif
-
-// This is vxl/vbl/vbl_io_bounding_box_3d.h
-
 //:
 // \file
 // \author P D Allen
@@ -25,6 +20,5 @@ void vsl_b_read(vsl_b_istream &is, vbl_bounding_box_base<T, DIM_> & p);
 //: Print human readable summary of object to a stream
 template <class T, class DIM_>
 void vsl_print_summary(vcl_ostream& os,const vbl_bounding_box_base<T, DIM_> & p);
-
 
 #endif // vbl_io_bounding_box_h

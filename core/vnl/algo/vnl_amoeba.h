@@ -1,6 +1,7 @@
+// This is vxl/vnl/algo/vnl_amoeba.h
 #ifndef vnl_amoeba_h_
 #define vnl_amoeba_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -43,7 +44,7 @@ class vnl_least_squares_function;
 
 class vnl_amoeba
 {
-public:
+ public:
   int verbose;
   int maxiter;
   double X_tolerance;
@@ -80,7 +81,7 @@ public:
   //: Number of evaluations used in last call to minimize
   int get_num_evaluations() const { return num_evaluations_; }
 
-public:
+ public:
   //: Modify x so as to minimise f(x)
   static void minimize(vnl_cost_function& f, vnl_vector<double>& x);
 
@@ -100,14 +101,15 @@ public:
 
   static bool default_verbose;
 
-protected:
+ protected:
   vnl_cost_function* fptr;
   int num_evaluations_;
 };
 
 // Private struct needs to be declared in the header file
 // in order to instantiate STL container of it elsewhere.
-struct vnl_amoeba_SimplexCorner {
+struct vnl_amoeba_SimplexCorner
+{
   vnl_vector<double> v;
   double fv;
 

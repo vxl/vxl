@@ -1,8 +1,7 @@
-// This is ./vxl/vil/vil_image_impl.cxx
-#ifdef __GNUC__
+// This is vxl/vil/vil_image_impl.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG
@@ -25,7 +24,7 @@ vil_image_impl::~vil_image_impl() { }
 
 vil_image vil_image_impl::get_plane(int ) const
 {
-  vcl_cerr << __FILE__ ":" << __LINE__ << ": get_plane()" << vcl_endl; // probably remove this.
+  vcl_cerr << __FILE__ ":" << __LINE__ << ": get_plane()\n"; // probably remove this.
   return 0;
 }
 

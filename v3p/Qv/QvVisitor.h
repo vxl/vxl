@@ -1,6 +1,7 @@
+// This is v3p/Qv/QvVisitor.h
 #ifndef QvVisitor_h_
 #define QvVisitor_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //
@@ -63,8 +64,9 @@ class QvUnknownNode;
 class QvLabel;
 class QvLightModel;
 
-class QvVisitor {
-public:
+class QvVisitor
+{
+ public:
   QvVisitor();
   virtual ~QvVisitor();
 
@@ -110,7 +112,7 @@ public:
   virtual bool Visit(QvUnknownNode *);
   virtual bool Visit(QvLabel *);
   virtual bool Visit(QvLightModel *);
-private:
+ private:
   int indent;
 };
 

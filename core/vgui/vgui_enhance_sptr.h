@@ -1,8 +1,6 @@
+// This is oxl/vgui/vgui_enhance_sptr.h
 #ifndef vgui_enhance_sptr_h_
 #define vgui_enhance_sptr_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 // Author: awf@robots.ox.ac.uk
 // Created: 10 Sep 00
 

@@ -1,10 +1,9 @@
-// This is ./oxl/vgui/vgui_soview3D.h
+// This is oxl/vgui/vgui_soview3D.h
 #ifndef vgui_soview3D_h_
 #define vgui_soview3D_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -18,16 +17,18 @@
 #include "vgui_soview.h"
 
 //: 3-dimensional geometric objects.
-class vgui_soview3D : public vgui_soview {
-public:
+class vgui_soview3D : public vgui_soview
+{
+ public:
   vgui_soview3D();
   virtual ~vgui_soview3D() {}
 };
 
 
 //: 3-dimensional point.
-class vgui_point3D : public vgui_soview3D {
-public:
+class vgui_point3D : public vgui_soview3D
+{
+ public:
   vgui_point3D() {};
   vgui_point3D(float x_, float y_, float z_) : x(x_), y(y_), z(z_) {};
 
@@ -40,8 +41,9 @@ public:
 
 
 //: 3-dimensional line segment.
-class vgui_lineseg3D : public vgui_soview3D {
-public:
+class vgui_lineseg3D : public vgui_soview3D
+{
+ public:
   vgui_lineseg3D() {};
 
   virtual void draw();

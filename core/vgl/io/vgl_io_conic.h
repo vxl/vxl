@@ -1,11 +1,6 @@
+// This is vxl/vgl/io/vgl_io_conic.h
 #ifndef vgl_io_conic_h
 #define vgl_io_conic_h
-#ifdef __GNUC__
-#pragma interface
-#endif
-
-// This is vxl/vgl/io/vgl_io_conic.h
-
 //:
 // \file
 // \author Peter Vanroose

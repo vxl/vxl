@@ -1,5 +1,5 @@
-//-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
+// This is oxl/vgui/vgui_load.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 
@@ -46,13 +46,13 @@ void vgui_load::unset_modelview()
 
 bool vgui_load::handle( vgui_event const &e)
 {
-  if( projectionmatrixloaded)
+  if (projectionmatrixloaded)
     {
       glMatrixMode(GL_PROJECTION);
       glLoadMatrixd( projectionmatrixt );
     }
 
-  if( modelviewmatrixloaded)
+  if (modelviewmatrixloaded)
     {
       glMatrixMode(GL_MODELVIEW);
       glLoadMatrixd( modelviewmatrixt );
@@ -88,7 +88,7 @@ void vgui_load::set_identity()
 void vgui_load::set_ortho(float x1,float y1,float z1, float x2,float y2,float z2)
 {
   if (x1==x2 || y1==y2 || z1==z2)
-    vcl_cerr << __FILE__ " warning in set_ortho() : volume has no extent" << vcl_endl;
+    vcl_cerr << __FILE__ " warning in set_ortho() : volume has no extent\n";
 
   vnl_matrix<double> M(4,4);
 

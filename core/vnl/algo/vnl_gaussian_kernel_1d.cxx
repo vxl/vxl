@@ -1,8 +1,7 @@
-// This is ./vxl/vnl/algo/vnl_gaussian_kernel_1d.cxx
-#ifdef __GNUC__
+// This is vxl/vnl/algo/vnl_gaussian_kernel_1d.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG
@@ -32,7 +31,7 @@ vnl_gaussian_kernel_1d::vnl_gaussian_kernel_1d(double sigma, double cutoff):
   int width = vec_.size();
   inscale_ = 0.5/(sigma * sigma);
   double area = 0;
-  for(int i = 0; i < width; ++i) {
+  for (int i = 0; i < width; ++i) {
     double v = G(i);
     area += v;
     vec_[i] = v;

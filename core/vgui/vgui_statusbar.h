@@ -1,6 +1,7 @@
+// This is oxl/vgui/vgui_statusbar.h
 #ifndef vgui_statusbar_h_
 #define vgui_statusbar_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //
@@ -24,7 +25,7 @@
 
 class vgui_statusbar
 {
-public:
+ public:
 
   vgui_statusbar();
   virtual ~vgui_statusbar();

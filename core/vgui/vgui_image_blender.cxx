@@ -1,8 +1,7 @@
-// This is ./oxl/vgui/vgui_image_blender.cxx
-#ifdef __GNUC__
+// This is oxl/vgui/vgui_image_blender.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford

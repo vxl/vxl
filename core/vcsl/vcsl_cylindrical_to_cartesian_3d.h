@@ -1,9 +1,9 @@
+// This is vxl/vcsl/vcsl_cylindrical_to_cartesian_3d.h
 #ifndef vcsl_cylindrical_to_cartesian_3d_h
 #define vcsl_cylindrical_to_cartesian_3d_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author François BERTEL
@@ -25,7 +25,7 @@
 class vcsl_cylindrical_to_cartesian_3d
   : public vcsl_spatial_transformation
 {
-public:
+ public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
@@ -68,7 +68,7 @@ public:
   //: Return the reference to the unique vcsl_length object
   static vcsl_cylindrical_to_cartesian_3d_sptr instance(void);
 
-protected:
+ protected:
   //: Default constructor
   explicit vcsl_cylindrical_to_cartesian_3d(void) {}
 

@@ -1,6 +1,7 @@
+// This is tbl/vipl/section/vipl_section_descriptor_2d.h
 #ifndef vipl_section_descriptor_2d_h_
 #define vipl_section_descriptor_2d_h_
-#ifdef __GNUG__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -12,12 +13,13 @@ template < class DataType > class vipl_section_container_2d; //template forward 
 template < class DataType > class vipl_section_iterator; //template forward reference
 
 template < class DataType >
-class vipl_section_descriptor_2d : public vipl_section_descriptor< DataType > {
+class vipl_section_descriptor_2d : public vipl_section_descriptor< DataType >
+{
   friend class vipl_section_container< DataType > ; //declare a friend class
   friend class vipl_section_iterator< DataType > ; //declare a friend class
 
-    // since STL does things by values we play a few games so we can have subclasses
- private:
+  // since STL does things by values we play a few games so we can have subclasses
+
   vipl_section_descriptor< DataType >* hsreal_descriptor;
   vipl_section_container< DataType >* hsreal_container;
   // pointer to the real data
@@ -97,24 +99,24 @@ class vipl_section_descriptor_2d : public vipl_section_descriptor< DataType > {
   vipl_section_descriptor< DataType >* real_descriptor() const { return hsreal_descriptor; }
   vipl_section_descriptor< DataType >* & ref_real_descriptor() { return hsreal_descriptor; }
   void put_real_descriptor( vipl_section_descriptor< DataType >* v) { hsreal_descriptor = v; }
-  public: vipl_section_container< DataType >* real_container() const { return hsreal_container; }
-  public: vipl_section_container< DataType >* & ref_real_container() { return hsreal_container; }
-  public: void put_real_container( vipl_section_container< DataType >* v) { hsreal_container = v; }
-  public: DataType* i_data_ptr() const { return hsi_data_ptr; }
-  public: DataType* & ref_i_data_ptr() { return hsi_data_ptr; }
-  public: void put_i_data_ptr( DataType* v) { hsi_data_ptr = v; }
-  public: vcl_vector< int > const & i_data_offsets() const { return hsi_data_offsets; }
-  public: vcl_vector< int > & ref_i_data_offsets() { return hsi_data_offsets; }
-  public: void put_i_data_offsets( vcl_vector< int > const & v) { hsi_data_offsets = v; }
-  public: vcl_vector< int > const & i_curr_sec_start() const { return hsi_curr_sec_start; }
-  public: vcl_vector< int > & ref_i_curr_sec_start() { return hsi_curr_sec_start; }
-  public: void put_i_curr_sec_start( vcl_vector< int > const & v) { hsi_curr_sec_start = v; }
-  public: vcl_vector< int > const & i_curr_sec_end() const { return hsi_curr_sec_end; }
-  public: vcl_vector< int > & ref_i_curr_sec_end() { return hsi_curr_sec_end; }
-  public: void put_i_curr_sec_end( vcl_vector< int > const & v) { hsi_curr_sec_end = v; }
-  public: vcl_vector< int > const & i_curr_sec_size() const { return hsi_curr_sec_size; }
-  public: vcl_vector< int > & ref_i_curr_sec_size() { return hsi_curr_sec_size; }
-  public: void put_i_curr_sec_size( vcl_vector< int > const & v) { hsi_curr_sec_size = v; }
+ public: vipl_section_container< DataType >* real_container() const { return hsreal_container; }
+ public: vipl_section_container< DataType >* & ref_real_container() { return hsreal_container; }
+ public: void put_real_container( vipl_section_container< DataType >* v) { hsreal_container = v; }
+ public: DataType* i_data_ptr() const { return hsi_data_ptr; }
+ public: DataType* & ref_i_data_ptr() { return hsi_data_ptr; }
+ public: void put_i_data_ptr( DataType* v) { hsi_data_ptr = v; }
+ public: vcl_vector< int > const & i_data_offsets() const { return hsi_data_offsets; }
+ public: vcl_vector< int > & ref_i_data_offsets() { return hsi_data_offsets; }
+ public: void put_i_data_offsets( vcl_vector< int > const & v) { hsi_data_offsets = v; }
+ public: vcl_vector< int > const & i_curr_sec_start() const { return hsi_curr_sec_start; }
+ public: vcl_vector< int > & ref_i_curr_sec_start() { return hsi_curr_sec_start; }
+ public: void put_i_curr_sec_start( vcl_vector< int > const & v) { hsi_curr_sec_start = v; }
+ public: vcl_vector< int > const & i_curr_sec_end() const { return hsi_curr_sec_end; }
+ public: vcl_vector< int > & ref_i_curr_sec_end() { return hsi_curr_sec_end; }
+ public: void put_i_curr_sec_end( vcl_vector< int > const & v) { hsi_curr_sec_end = v; }
+ public: vcl_vector< int > const & i_curr_sec_size() const { return hsi_curr_sec_size; }
+ public: vcl_vector< int > & ref_i_curr_sec_size() { return hsi_curr_sec_size; }
+ public: void put_i_curr_sec_size( vcl_vector< int > const & v) { hsi_curr_sec_size = v; }
 }; // end of class definition
 
 #ifdef INSTANTIATE_TEMPLATES

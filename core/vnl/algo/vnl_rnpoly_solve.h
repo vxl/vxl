@@ -1,9 +1,9 @@
+// This is vxl/vnl/algo/vnl_rnpoly_solve.h
 #ifndef vnl_rnpoly_solve_h_
 #define vnl_rnpoly_solve_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Solves for roots of system of real polynomials
@@ -32,8 +32,9 @@
 //  Adapted from the  PARALLEL CONTINUATION algorithm , written by Darrell
 //  Stam, 1991, and further improved by  Kriegman and Ponce, 1992.
 
-class vnl_rnpoly_solve {
-public:
+class vnl_rnpoly_solve
+{
+ public:
 #ifndef VCL_WIN32
   static const unsigned int M = 11;   // Maximum dimension of problem
   static const unsigned int T = 2500; // Max. number of terms in a polynomial
@@ -63,7 +64,7 @@ public:
 
   // Computations--------------------------------------------------------------
 
-private:
+ private:
   //: Compute roots using continuation algorithm.
   bool compute();
 

@@ -1,8 +1,7 @@
-// This is ./vxl/vul/vul_file.cxx
-#ifdef __GNUC__
+// This is vxl/vul/vul_file.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 //
@@ -45,7 +44,7 @@ bool vul_file::make_directory(char const* name)
 bool vul_file::is_directory(char const* fn)
 {
   struct stat fs;
-  return (stat(fn, &fs) == 0) && ((fs.st_mode & S_IFMT) == S_IFDIR);
+  return stat(fn, &fs) == 0 && (fs.st_mode & S_IFMT) == S_IFDIR;
 }
 
 int vul_file::size(char const* fn)
@@ -60,7 +59,7 @@ int vul_file::size(char const* fn)
 bool vul_file::exists(char const* fn)
 {
   struct stat fs;
-  return (stat(fn, &fs) == 0);
+  return stat(fn, &fs) == 0;
 }
 
 vcl_string vul_file::dirname(char const* fn)

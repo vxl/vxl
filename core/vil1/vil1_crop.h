@@ -1,10 +1,9 @@
+// This is vxl/vil/vil_crop.h
 #ifndef vil_crop_h_
 #define vil_crop_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vil/vil_crop.h
-
 //:
 // \file
 // \author awf@robots.ox.ac.uk

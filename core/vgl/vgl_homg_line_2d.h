@@ -1,7 +1,7 @@
-// This is ./vxl/vgl/vgl_homg_line_2d.h
+// This is vxl/vgl/vgl_homg_line_2d.h
 #ifndef vgl_homg_line_2d_h
 #define  vgl_homg_line_2d_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:

@@ -1,7 +1,5 @@
 // This is vxl/vnl/vnl_sparse_matrix_linear_system.cxx
-
-//-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 
@@ -47,7 +45,6 @@ void vnl_sparse_matrix_linear_system<double>::multiply(vnl_vector<double> const&
 }
 
 
-
 VCL_DEFINE_SPECIALIZATION
 void vnl_sparse_matrix_linear_system<float>::multiply(vnl_vector<double> const& x, vnl_vector<double> & b) const
 {
@@ -75,7 +72,7 @@ void vnl_sparse_matrix_linear_system<T>::apply_preconditioner(vnl_vector<double>
     for (unsigned int i=0; i < tmp.size(); ++i)
       const_cast<vnl_vector<double> &>(jacobi_precond_)[i] = 1.0 / double(tmp[i]);
   }
-  
+
   px = dot_product(x,jacobi_precond_);
 }
 

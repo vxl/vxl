@@ -1,9 +1,11 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+// This is vxl/vil/file_formats/vil_bmp_info_header.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vil_bmp_info_header.h"
 
 #include <vcl_iostream.h>
@@ -43,12 +45,11 @@ void vil_bmp_info_header::write(vil_stream *s) const
 
 void vil_bmp_info_header::print(vcl_ostream &s) const
 {
-  s << "vil_bmp_info_header:" << vcl_endl
+  s << "vil_bmp_info_header:\n"
     << "  compression  : " << compression << vcl_endl
     << "  bitmap_size  : " << bitmap_size << vcl_endl
     << "  horiz_res    : " << horiz_res << vcl_endl
     << "  verti_res    : " << verti_res << vcl_endl
     << "  colormapsize : " << colormapsize << vcl_endl
-    << "  colorcount   : " << colorcount << vcl_endl
-    << vcl_endl;
+    << "  colorcount   : " << colorcount << vcl_endl << vcl_endl;
 }

@@ -1,11 +1,11 @@
 // This is vxl/vil/vil_pyramid.cxx
-
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vil_pyramid.h"
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>

@@ -1,9 +1,10 @@
+// This is oxl/vgui/vgui_tview_launcher.h
 #ifndef vgui_tview_launcher_h_
 #define vgui_tview_launcher_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// 
+//
 // .NAME vgui_tview_launcher - Pop up tableau tree (tview) on Shift-G
 // .LIBRARY vgui
 // .HEADER vxl Package
@@ -29,8 +30,9 @@
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_event_condition.h>
 
-class vgui_tview_launcher : public vgui_tableau {
-public:
+class vgui_tview_launcher : public vgui_tableau
+{
+ public:
   vgui_tview_launcher();
   bool handle(const vgui_event&);
 
@@ -39,14 +41,15 @@ public:
   void get_popup(const vgui_popup_params&, vgui_menu& menu);
 
   void go(vgui_adaptor*);
-  
+
   vgui_event_condition c_graph;
-  
-protected:
+
+ protected:
   ~vgui_tview_launcher() { }
 };
 
-struct vgui_tview_launcher_new : public vgui_tview_launcher_sptr {
+struct vgui_tview_launcher_new : public vgui_tview_launcher_sptr
+{
   typedef vgui_tview_launcher_sptr base;
   vgui_tview_launcher_new() : base(new vgui_tview_launcher) { }
 };

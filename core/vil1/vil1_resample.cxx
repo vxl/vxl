@@ -1,11 +1,11 @@
 // This is vxl/vil/vil_resample.cxx
-
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vil_resample.h"
 #include <vil/vil_resample_image_impl.h>
 

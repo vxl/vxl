@@ -1,10 +1,9 @@
-// This is ./vxl/vnl/vnl_double_4x3.h
+// This is vxl/vnl/vnl_double_4x3.h
 #ifndef vnl_double_4x3_h_
 #define vnl_double_4x3_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //: \file
 //  \brief 4x3 matrix of double
 //

@@ -1,10 +1,9 @@
-// This is ./vxl/vnl/vnl_c_vector.h
+// This is vxl/vnl/vnl_c_vector.h
 #ifndef vnl_c_vector_h_
 #define vnl_c_vector_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //: \file
 //  \brief Math on blocks of memory
 //
@@ -33,8 +32,9 @@ template <class T, class S> void vnl_c_vector_rms_norm(T const *p, unsigned n, S
 
 //: vnl_c_vector interfaces to lowlevel memory-block operations.
 export template <class T>
-class vnl_c_vector {
-public:
+class vnl_c_vector
+{
+ public:
   typedef typename vnl_numeric_traits<T>::abs_t abs_t;
 
   static T sum(T const* v, unsigned n);

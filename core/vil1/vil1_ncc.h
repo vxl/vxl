@@ -1,11 +1,6 @@
+// This is vxl/vil/vil_ncc.h
 #ifndef vil_ncc_h_
 #define vil_ncc_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
-// This is vxl/vil/vil_ncc.h
-
 //:
 // \file
 // \brief Routines to compute normalized cross-correlation between two images

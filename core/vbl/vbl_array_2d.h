@@ -1,10 +1,9 @@
+// This is vxl/vbl/vbl_array_2d.h
 #ifndef vbl_array_2d_h_
 #define vbl_array_2d_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vbl/vbl_array_2d.h
-
 //:
 // \file
 // \brief Contains class for a templated 2d array
@@ -22,8 +21,9 @@
 
 //: simple 2D array
 template <class T>
-class vbl_array_2d {
-public:
+class vbl_array_2d
+{
+ public:
 
   //: Default constructor
   vbl_array_2d() { construct(); }
@@ -39,7 +39,6 @@ public:
     construct(that.rows(), that.cols());
     operator=(that);
   }
-
 
   //: Destructor
   ~vbl_array_2d() { destruct(); }
@@ -126,7 +125,7 @@ public:
   const_iterator begin() const { return rows_[0]; }
   const_iterator end  () const { return rows_[0] + num_cols_ * num_rows_; }
 
-private:
+ private:
   T** rows_;
   int num_rows_;
   int num_cols_;

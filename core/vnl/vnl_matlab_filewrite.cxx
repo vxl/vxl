@@ -1,8 +1,7 @@
-// This is ./vxl/vnl/vnl_matlab_filewrite.cxx
-#ifdef __GNUC__
+// This is vxl/vnl/vnl_matlab_filewrite.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 
@@ -22,7 +21,7 @@ vnl_matlab_filewrite::vnl_matlab_filewrite(char const *file_name,
 {
   out_.open(file_name, vcl_ios_out | vcl_ios_binary);
   if (out_.bad())
-    vcl_cerr << __FILE__ ":" << __LINE__ << ", WARNING : output stream is bad" << vcl_endl;
+    vcl_cerr << __FILE__ ":" << __LINE__ << ", WARNING : output stream is bad\n";
 }
 
 vcl_string vnl_matlab_filewrite::make_var_name(char const* variable_name)

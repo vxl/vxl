@@ -1,14 +1,9 @@
-// This is ./vxl/vnl/vnl_binary.cxx
-#ifdef __GNUC__
-#pragma implementation
-#endif
+// This is vxl/vnl/vnl_binary.cxx
 
 //:
 // \file
+// \author fsm@robots.ox.ac.uk
 
-/*
-  fsm@robots.ox.ac.uk
-*/
 #include "vnl_binary.h"
 
 #include <vcl_iostream.h>
@@ -28,7 +23,7 @@ bool vnl_binary_save(vcl_ostream &f, vnl_vector<T> const &v)
 {
   int tmp = v.size();
   f.write(stream_cast &tmp, sizeof(tmp));
-  if(v.data_block())
+  if (v.data_block())
     f.write(stream_cast v.data_block(), v.size() * sizeof(T));
   else
     ; // FIXME: vector  has been default-constructed.

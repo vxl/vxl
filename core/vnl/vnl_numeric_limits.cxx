@@ -1,8 +1,7 @@
-#ifdef __GNUC__
+// This is vxl/vnl/vnl_numeric_limits.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-// This is vxl/vnl/vnl_numeric_limits.cxx
-
 //
 // numeric_limits
 // Author: Andrew W. Fitzgibbon, Oxford RRG
@@ -15,7 +14,7 @@
 union vnl_numeric_limits_double_nan {
   double nan;
   unsigned char x[8];
-  
+
   vnl_numeric_limits_double_nan() {
     x[0] = 0x7f;
     x[1] = 0xff;
@@ -32,7 +31,7 @@ static vnl_numeric_limits_double_nan dnan;
 union vnl_numeric_limits_double_inf {
   double inf;
   unsigned char x[8];
-  
+
   vnl_numeric_limits_double_inf() {
     x[0] = 0x7f;
     x[1] = 0xf0;
@@ -68,7 +67,7 @@ double vnl_numeric_limits<double>::signaling_NaN()
 union vnl_numeric_limits_float_nan {
   float nan;
   unsigned char x[4];
-  
+
   vnl_numeric_limits_float_nan() {
     x[0] = 0x7f;
     x[1] = 0xff;
@@ -81,7 +80,7 @@ static vnl_numeric_limits_float_nan fnan;
 union vnl_numeric_limits_float_inf {
   float inf;
   unsigned char x[4];
-  
+
   vnl_numeric_limits_float_inf() {
     x[0] = 0x7f;
     x[1] = 0x80;

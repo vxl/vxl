@@ -1,14 +1,11 @@
-// This is ./vxl/vil/vil_skip_image_impl.cxx
-#ifdef __GNUC__
+// This is vxl/vil/vil_skip_image_impl.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
+// \author fsm@robots.ox.ac.uk
 
-/*
-  fsm@robots.ox.ac.uk
-*/
 #include "vil_skip_image_impl.h"
 
 #include <vcl_climits.h> // CHAR_BIT
@@ -53,7 +50,7 @@ bool vil_skip_image_impl::get_property(char const *, void *) const
 bool vil_skip_image_impl::get_section(void * buf, int x0, int y0, int w, int h) const
 {
   if (base.bits_per_component() % CHAR_BIT) {
-    vcl_cerr << __FILE__ " : urgh!" << vcl_endl;
+    vcl_cerr << __FILE__ " : urgh!\n";
     return false; // FIXME
   }
 

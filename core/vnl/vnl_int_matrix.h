@@ -1,11 +1,9 @@
+// This is vxl/vnl/vnl_int_matrix.h
 #ifndef vnl_int_matrix_h_
 #define vnl_int_matrix_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-// This is vxl/vnl/vnl_int_matrix.h
-
 //: \file
 //  \brief Specializes vnl_matrix for integers
 //  \author Andrew W. Fitzgibbon, Oxford RRG
@@ -21,9 +19,10 @@
 #include <vnl/vnl_matrix.h>
 
 //: Specializes vnl_matrix for integers, adding a vnl_matrix<double> ctor.
-class vnl_int_matrix : public vnl_matrix<int> {
+class vnl_int_matrix : public vnl_matrix<int>
+{
   typedef vnl_matrix<int> Base;
-public:
+ public:
 
   vnl_int_matrix() {}
   vnl_int_matrix(char const* filename);

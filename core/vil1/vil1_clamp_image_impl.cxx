@@ -1,8 +1,7 @@
-// This is ./vxl/vil/vil_clamp_image_impl.cxx
-#ifdef __GNUC__
+// This is vxl/vil/vil_clamp_image_impl.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 
@@ -39,7 +38,7 @@ bool vil_clamp_image_impl::get_section(void * buf, int x0, int y0, int w, int h)
   case VIL_RGB_DOUBLE:
     return vil_clamp_image(base, low_, high_, (vil_rgb<double>*)buf, x0, y0, w, h);
   default:
-    vcl_cerr << __FILE__ ": not implemented for this pixel type" << vcl_endl;
+    vcl_cerr << __FILE__ ": not implemented for this pixel type\n";
     return false;
   }
 }

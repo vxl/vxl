@@ -1,9 +1,8 @@
-//-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
+// This is oxl/vgui/vgui_statusbar.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //
-// .NAME vgui_statusbar
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 21 Nov 99
 //

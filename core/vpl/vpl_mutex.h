@@ -1,9 +1,9 @@
+// This is vxl/vpl/vpl_mutex.h
 #ifndef vpl_mutex_h_
 #define vpl_mutex_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author F. Schaffalitzky, Oxford RRG
@@ -32,7 +32,7 @@ struct vpl_mutex
 
   ~vpl_mutex() { pthread_mutex_destroy(&mutex_); }
 
-private:
+ private:
   pthread_mutex_t mutex_;
 
   // disallow assignment.
@@ -44,4 +44,4 @@ private:
 # error "only works with pthreads for now"
 #endif
 
-#endif
+#endif // vpl_mutex_h_

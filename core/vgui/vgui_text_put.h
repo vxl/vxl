@@ -1,7 +1,7 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is oxl/vgui/vgui_text_put.h
 #ifndef vgui_text_put_h_
 #define vgui_text_put_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:

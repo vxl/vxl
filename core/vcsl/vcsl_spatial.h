@@ -1,9 +1,9 @@
+// This is vxl/vcsl/vcsl_spatial.h
 #ifndef vcsl_spatial_h
 #define vcsl_spatial_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author François BERTEL
@@ -40,7 +40,7 @@ class vcsl_spherical;
 class vcsl_spatial
   :public vcsl_coordinate_system
 {
-public:
+ public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
@@ -141,7 +141,7 @@ public:
   //***************************************************************************
   // Implementation
   //***************************************************************************
-protected:
+ protected:
   //: Does a path from `this' to `other' exist ?
   // Called only by path_to_cs_exists()
   virtual bool

@@ -1,6 +1,7 @@
+// This is tbl/vipl/section/vipl_section_iterator.h
 #ifndef vipl_section_iterator_h_
 #define vipl_section_iterator_h_
-#ifdef __GNUG__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 
@@ -8,7 +9,8 @@ template < class DataType > class vipl_section_descriptor; //template forward re
 template < class DataType > class vipl_section_container; //template forward reference
 
 template < class DataType >
-class vipl_section_iterator {
+class vipl_section_iterator
+{
   friend class vipl_section_container< DataType > ; //declare a friend class
   friend class vipl_section_descriptor< DataType > ; //declare a friend class
  protected:

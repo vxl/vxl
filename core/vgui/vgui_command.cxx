@@ -1,9 +1,11 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+// This is oxl/vgui/vgui_command.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vgui_command.h"
 #include <vcl_iostream.h>
 
@@ -46,7 +48,7 @@ void vgui_command_cfunc::execute()
   else if (fn)
     (*fn)();
   else
-    vcl_cerr << "vgui_command_cfunc : fn is null" << vcl_endl;
+    vcl_cerr << "vgui_command_cfunc : fn is null\n";
 }
 
 //--------------------------------------------------------------------------------

@@ -1,6 +1,7 @@
+// This is oxl/vgui/vgui_section_buffer.h
 #ifndef vgui_section_buffer_h_
 #define vgui_section_buffer_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -75,7 +76,7 @@ struct vgui_section_buffer
   int width () const { return w; }
   int height() const { return h; }
 
-public:
+ public:
   vgui_accelerate_cached_image* cache_;
 
   // fsm: I want these to be GLenums as gcc 2.95 will not implicitly
@@ -94,7 +95,7 @@ public:
   void *the_pixels;
   bool is_texture;
 
-private:
+ private:
   // Pointer to array of pointers to beginning of rasters.
   // Thus, the_rasters[0] equals the_pixels.
   void **the_rasters;

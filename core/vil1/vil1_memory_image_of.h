@@ -1,7 +1,7 @@
 // This is vxl/vil/vil_memory_image_of.h
 #ifndef vil_memory_image_of_h_
 #define vil_memory_image_of_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -45,7 +45,7 @@
 template <class T>
 class vil_memory_image_of : public vil_memory_image
 {
-public:
+ public:
   // The pixel type of this image
   typedef T pixel_type;
 
@@ -99,10 +99,10 @@ public:
 
   //: These override the methods in the base class.
   void resize(int width, int height);
-private:
+ private:
   // don't try to use this.
   void resize(int planes, int width, int height);
-public:
+ public:
 
   // Data Access---------------------------------------------------------------
 

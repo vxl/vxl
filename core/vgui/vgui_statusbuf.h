@@ -1,10 +1,9 @@
-// This is ./oxl/vgui/vgui_statusbuf.h
+// This is oxl/vgui/vgui_statusbuf.h
 #ifndef vgui_statusbuf_h_
 #define vgui_statusbuf_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -12,7 +11,7 @@
 // \brief  Statusbar buffer?
 //
 //  Contains classes: vgui_statusbuf
-//        
+//
 // \verbatim
 //  Modifications:
 //    21-Nov-1999 P.Pritchett - Initial version.
@@ -21,8 +20,9 @@
 #include <vcl_streambuf.h>
 class vgui_statusbar;
 
-class vgui_statusbuf : public vcl_streambuf {
-public:
+class vgui_statusbuf : public vcl_streambuf
+{
+ public:
   vgui_statusbuf (vgui_statusbar* s) { status = s; }
   int sync ();
   int overflow (int ch);
@@ -31,7 +31,7 @@ public:
   //streamsize xsputn(char* text, streamsize n);
   //streamsize xsputn(const char* text, streamsize n);
 
-private:
+ private:
   vgui_statusbar* status;
 };
 

@@ -1,15 +1,13 @@
+// This is vxl/vbl/vbl_shared_pointer.h
 #ifndef vbl_shared_pointer_h_
 #define vbl_shared_pointer_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
-
 //:
 // \file
 // \brief Non-intrusive smart pointers
+// \author fsm@robots.ox.ac.uk
 
 #include <vcl_compiler.h>
 
@@ -113,7 +111,7 @@ struct vbl_shared_pointer
     }
   }
 
-private:
+ private:
   data_t *data;
 };
 

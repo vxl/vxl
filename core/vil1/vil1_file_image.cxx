@@ -1,7 +1,7 @@
-#ifdef __GNUC__
+// This is vxl/vil/vil_file_image.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-// This is vxl/vil/vil_file_image.cxx
 
 #include "vil_file_image.h"
 #include <vcl_iostream.h>
@@ -36,7 +36,7 @@ bool vil_file_image::load(char const* filename, verbosity v)
   if (!i && v != silent) {
     vcl_cerr << "vil_file_image: Could not load [" << filename << "]\n";
   }
-  
+
   vil_image::operator= (i);
   return operator bool ();
 }

@@ -1,11 +1,9 @@
+// This is vxl/vnl/vnl_vector_fixed_ref.h
 #ifndef vnl_vector_fixed_ref_h_
 #define vnl_vector_fixed_ref_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-// This is vxl/vnl/vnl_vector_fixed_ref.h
-
 //:
 // \file
 // \brief Fixed size vnl_vector using user-supplied storage
@@ -21,7 +19,7 @@
 template <class T, int n>
 class vnl_vector_fixed_ref : public vnl_vector_ref<T>
 {
-public:
+ public:
   vnl_vector_fixed_ref(vnl_vector<T>& rhs, unsigned int offset)
     : vnl_vector_ref<T>(n, rhs.data_block() + offset)
   {
@@ -63,7 +61,7 @@ public:
     { return (vnl_vector_fixed_ref<T,n>&) vnl_vector<T>::normalize(); }
 
 
-public:
+ public:
   // void these methods on vnl_vector_fixed, since they deallocate the underlying
   // storage
   vnl_vector<T>& pre_multiply (vnl_matrix<T> const&); // v = m * v

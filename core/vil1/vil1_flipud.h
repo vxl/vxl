@@ -1,10 +1,9 @@
+// This is vxl/vil/vil_flipud.h
 #ifndef vil_flipud_h_
 #define vil_flipud_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vil/vil_flipud.h
-
 //:
 // \file
 // \brief Turn an image upside-down.

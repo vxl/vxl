@@ -1,11 +1,9 @@
+// This is oxl/vgui/vgui_test_sptr.h
 #ifndef vgui_test_sptr_h_
 #define vgui_test_sptr_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
 
 #include <vgui/vgui_tableau_sptr.h>
 

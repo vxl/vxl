@@ -1,7 +1,7 @@
-#ifdef __GNUC__
+// This is oxl/vgui/vgui_rubberbander.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 //  \file
 
@@ -25,25 +25,25 @@ vgui_rubberbander::object_type vgui_rubberbander::obj_type = none_enum;
 # define function_macro __FILE__ ":" << __LINE__
 #endif
 void vgui_rubberbander_client::add_point(float, float) {
-  vcl_cerr << function_macro << " not implemented!" << vcl_endl;
+  vcl_cerr << function_macro << " not implemented!\n";
 }
 void vgui_rubberbander_client::add_line(float,float,float,float) {
-  vcl_cerr << function_macro << " not implemented!" << vcl_endl;
+  vcl_cerr << function_macro << " not implemented!\n";
 }
 void vgui_rubberbander_client::add_infinite_line(float,float,float) {
-  vcl_cerr << function_macro << " not implemented!" << vcl_endl;
+  vcl_cerr << function_macro << " not implemented!\n";
 }
 void vgui_rubberbander_client::add_circle(float,float,float) {
-  vcl_cerr << function_macro << " not implemented!" << vcl_endl;
+  vcl_cerr << function_macro << " not implemented!\n";
 }
 void vgui_rubberbander_client::add_linestrip(int n,float const *,float const *) {
-  vcl_cerr << function_macro << " not implemented!" << vcl_endl;
+  vcl_cerr << function_macro << " not implemented!\n";
 }
 void vgui_rubberbander_client::add_polygon(int n,float const*,float const*) {
-  vcl_cerr << function_macro << " not implemented!" << vcl_endl;
+  vcl_cerr << function_macro << " not implemented!\n";
 }
 void vgui_rubberbander_client::add_box(float,float,float,float) {
-  vcl_cerr << function_macro << " not implemented!" << vcl_endl;
+  vcl_cerr << function_macro << " not implemented!\n";
 }
 #undef function_macro
 
@@ -192,7 +192,7 @@ void vgui_rubberbander::draw_circle(float x, float y, float r)
   glBegin(GL_LINE_LOOP);
 
 
-  for(int i=0;i<100;i++){
+  for (int i=0;i<100;i++) {
     double angle = (2*vnl_math::pi/100.0)*i;
     glVertex2d(vcl_cos(angle)*r + x, vcl_sin(angle)*r + y);
   }

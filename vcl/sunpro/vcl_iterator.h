@@ -1,11 +1,9 @@
+// This is vcl/sunpro/vcl_iterator.h
 #ifndef vcl_sunpro_iterator_h_
 #define vcl_sunpro_iterator_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-/*
-  fsm@robots.ox.ac.uk
-*/
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
 
 #include <iterator>
 

@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is vxl/vil/file_formats/vil_bmp.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 
@@ -260,9 +261,9 @@ bool vil_bmp_generic_image::read_header()
 bool vil_bmp_generic_image::write_header()
 {
 #ifdef DEBUG
-  vcl_cerr << "Writing BMP header\n";
-  vcl_cerr << width() << 'x' << height() << '@'
-       << components() << 'x' << bits_per_component() << vcl_endl;
+  vcl_cerr << "Writing BMP header\n"
+           << width() << 'x' << height() << '@'
+           << components() << 'x' << bits_per_component() << '\n';
 #endif
 
   int rowlen = width() * components() * bits_per_component() / 8;

@@ -1,10 +1,9 @@
+// This is vxl/vil/file_formats/vil_gif.h
 #ifndef vil_gif_h_
 #define vil_gif_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-
 //:
 // \file
 // \author  fsm@robots.ox.ac.uk
@@ -81,7 +80,7 @@ struct vil_gif_loader_saver : public vil_image_impl
   char const *file_format() const;
   bool get_property(char const *tag, void *prop = 0) const;
 
-private:
+ private:
   vil_stream *s;
   int screen_width_;
   int screen_height_;

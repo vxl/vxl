@@ -1,11 +1,11 @@
 // This is vxl/vgl/vgl_triangle_test.cxx
-
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vgl_triangle_test.h"
 
 template <class T>
@@ -30,7 +30,7 @@ bool vgl_triangle_test_inside(T x1, T y1,
   if (det123 > 0)
     return detA23>=0 && det1A3>=0 && det12A>=0;
 
-  else if(det123 < 0)
+  else if (det123 < 0)
     return detA23<=0 && det1A3<=0 && det12A<=0;
 
   else // det123 == 0 or NaN

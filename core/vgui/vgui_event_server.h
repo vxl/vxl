@@ -1,5 +1,9 @@
-// This is ./oxl/vgui/vgui_event_server.h
-
+// This is oxl/vgui/vgui_event_server.h
+#ifndef vgui_event_server_h_
+#define vgui_event_server_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -13,12 +17,6 @@
 //    11-SEP-1999 P.Pritchett - Initial version.
 //    26-APR-2002 K.Y.McGaul - Converted to and added doxygen style comments.
 // \endverbatim
-
-#ifndef vgui_event_server_h_
-#define vgui_event_server_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_menu.h>
@@ -39,8 +37,9 @@ class vgui_event_server_interpose_tableau;
 //   drawing into the wrong buffer. For a mouse event we may not be able to get 
 //   the position in the image using the projection_inspector (if e.g. the image
 //   was zoomed) since all the gl matrices would have been reset - kym.
-class vgui_event_server {
-public:
+class vgui_event_server
+{
+ public:
   vgui_event_server(vgui_tableau_sptr const&);
 
   void reset();
@@ -50,10 +49,10 @@ public:
 
   vgui_event last_event();
 
-protected:
+ protected:
  ~vgui_event_server();
 
-private:
+ private:
 
   friend class vgui_event_server_interpose_tableau;
   vgui_event_server_interpose_tableau* grabber_;

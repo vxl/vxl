@@ -1,14 +1,12 @@
 // This is vxl/vnl/vnl_complex.h
-
-//-*- c++ -*-------------------------------------------------------------------
 #ifndef vnl_complex_h_
 #define vnl_complex_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-//: \file
-//  \brief Complex additions to vnl_math.
+//:
+// \file
+// \brief Complex additions to vnl_math.
 //
 //     We don't want everyone to pay for complex when they don't need it, as
 //     its ratio of expense to frequency of use is high. So we define those

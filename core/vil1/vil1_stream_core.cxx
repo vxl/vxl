@@ -2,7 +2,7 @@
 
 // @author fsm@robots.ox.ac.uk
 
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 #include "vil_stream_core.h"

@@ -1,10 +1,9 @@
+// This is vxl/vil/vil_scale_intensities_image_impl.h
 #ifndef vil_scale_intensities_image_impl_h_
 #define vil_scale_intensities_image_impl_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vil/vil_scale_intensities_image_impl.h
-
 //:
 // \file
 
@@ -12,8 +11,9 @@
 #include <vil/vil_image.h>
 #include <vcl_string.h>
 
-class vil_scale_intensities_image_impl : public vil_image_impl {
-public:
+class vil_scale_intensities_image_impl : public vil_image_impl
+{
+ public:
   vil_scale_intensities_image_impl(vil_image const& src, double scale, double shift) :
     base(src), scale_(scale), shift_(shift) { }
 
@@ -40,7 +40,7 @@ public:
 
 /* END_MANCHESTER_BINARY_IO_CODE */
 
-private:
+ private:
   vil_image base;
   double scale_;
   double shift_;

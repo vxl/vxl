@@ -1,9 +1,8 @@
-//-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
+// This is oxl/vgui/vgui_tview_launcher.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //
-// .NAME vgui_tview_launcher
 // Author: Philip C. Pritchett, RRG, University of Oxford
 // Created: 21 Oct 99
 //
@@ -49,7 +48,7 @@ void vgui_tview_launcher::get_popup(const vgui_popup_params& /*params*/, vgui_me
 
 void vgui_tview_launcher::go(vgui_adaptor* a) {
   if (!a) {
-    vcl_cerr << __FILE__ ": a = 0" << vcl_endl;
+    vcl_cerr << __FILE__ ": a = 0\n";
     return;
   }
   vgui_tview_new tview(a->get_tableau());
@@ -61,6 +60,6 @@ void vgui_tview_launcher::go(vgui_adaptor* a) {
     popup->show();
   }
   else {
-    vcl_cerr << "vgui_tview_launcher::handle()  Could not popup another vgui window" << vcl_endl;
+    vcl_cerr << "vgui_tview_launcher::handle()  Could not popup another vgui window\n";
   }
 }

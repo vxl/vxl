@@ -1,11 +1,11 @@
-// This is ./vxl/vnl/vnl_matlab_print2.h
+// This is vxl/vnl/vnl_matlab_print2.h
 #ifndef vnl_matlab_print2_h_
 #define vnl_matlab_print2_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-//: \file
+//:
+// \file
 //
 // After including this header file, the client should be able to say :
 // \code

@@ -1,6 +1,7 @@
+// This is vxl/vnl/algo/vnl_conjugate_gradient.h
 #ifndef vnl_conjugate_gradient_h_
 #define vnl_conjugate_gradient_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -27,8 +28,9 @@ class vnl_cost_function;
 
 //: real function minimization
 
-class vnl_conjugate_gradient : public vnl_nonlinear_minimizer {
-public:
+class vnl_conjugate_gradient : public vnl_nonlinear_minimizer
+{
+ public:
   // Constructors/Destructors--------------------------------------------------
 
   //: Initialize with the function object that is to be minimized.
@@ -58,7 +60,7 @@ public:
   // Returns true for convergence, false for failure.
   bool minimize(vnl_vector<double>& x);
 
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
 
   vnl_cost_function *f_;
@@ -69,7 +71,7 @@ protected:
   friend class vnl_conjugate_gradient_Activate;
 
 #ifdef VCL_SUNPRO_CC
-public:
+ public:
 #endif
   static double valuecomputer_( double *x);
   static int gradientcomputer_( double *g, double *x);
@@ -77,7 +79,7 @@ public:
   static int preconditioner_( double *out, double *in);
 
 #if 0
-protected:
+ protected:
   void approximate_gradient( const vnl_vector<double> &x,
                              vnl_vector<double> &g, const double step);
   void approximate_hessian( const vnl_vector<double> &x,

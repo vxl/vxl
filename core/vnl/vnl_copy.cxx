@@ -1,11 +1,11 @@
 // This is vxl/vnl/vnl_copy.cxx
-
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vnl_copy.h"
 #include <vcl_cassert.h>
 #include <vcl_complex.h>

@@ -1,6 +1,7 @@
+// This is tbl/vipl/section/vipl_section_descriptor.h
 #ifndef vipl_section_descriptor_h_
 #define vipl_section_descriptor_h_
-#ifdef __GNUG__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -12,10 +13,11 @@ template < class DataType > class vipl_section_container; //template forward ref
 template < class DataType > class vipl_section_iterator; //template forward reference
 
 template < class DataType >
-class vipl_section_descriptor {
+class vipl_section_descriptor
+{
   friend class vipl_section_container< DataType > ; //declare a friend class
   friend class vipl_section_iterator< DataType > ; //declare a friend class
- private:
+
   vipl_section_descriptor< DataType >* hsreal_descriptor;
   vipl_section_container< DataType >* hsreal_container;
   DataType* hsi_data_ptr;
@@ -24,7 +26,7 @@ class vipl_section_descriptor {
   vcl_vector< int > hsi_curr_sec_end;
   vcl_vector< int > hsi_curr_sec_size;
 
-  protected:
+ protected:
   //: Assigns the pointers directly. Does not attempt to deep copy them.
   vipl_section_descriptor( vipl_section_descriptor< DataType >* desc ,
                           vipl_section_container< DataType >* container) ;
@@ -143,10 +145,10 @@ class vipl_section_descriptor {
   void put_i_curr_sec_size( vcl_vector< int > const & v){ hsi_curr_sec_size = v;}
 
   // refcounting:
-private: int refcount_;
-public:  int refcount() const { return refcount_; }
-public:  int inc_refcount() { return ++refcount_; }
-public:  int dec_refcount() { if (refcount_<=1) { delete this; return 0; } return --refcount_; }
+ private: int refcount_;
+ public:  int refcount() const { return refcount_; }
+ public:  int inc_refcount() { return ++refcount_; }
+ public:  int dec_refcount() { if (refcount_<=1) { delete this; return 0; } return --refcount_; }
 
 }; // end of class definition
 

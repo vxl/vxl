@@ -1,7 +1,7 @@
 // This is vxl/vnl/algo/vnl_lsqr.h
 #ifndef vnl_lsqr_h_
 #define vnl_lsqr_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -34,7 +34,7 @@
 
 class vnl_lsqr
 {
-public:
+ public:
   vnl_lsqr(vnl_linear_system& ls) :
     ls_(&ls), max_iter_(4*ls.get_number_of_unknowns()) {}
 
@@ -53,7 +53,7 @@ public:
 
   static void translate_return_code(vcl_ostream& os, int return_code);
 
-protected:
+ protected:
   vnl_linear_system* ls_;
   int max_iter_;
   int num_iter_;

@@ -1,9 +1,8 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
-#pragma implementation
-#endif
+// This is oxl/vgui/vgui_glut.cxx
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
 
 #include <vcl_cstdlib.h>
 

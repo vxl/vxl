@@ -1,15 +1,13 @@
+// This is vxl/vbl/vbl_triple.h
 #ifndef vbl_triple_h_
 #define vbl_triple_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
-
 //:
 // \file
 // \brief a templated 3-tuple
+// \author fsm@robots.ox.ac.uk
 
 #include <vcl_compiler.h>
 

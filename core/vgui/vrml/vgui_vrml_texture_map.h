@@ -1,6 +1,7 @@
+// This is oxl/vgui/vrml/vgui_vrml_texture_map.h
 #ifndef vgui_vrml_texture_map_h_
 #define vgui_vrml_texture_map_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 // 
@@ -22,7 +23,8 @@
 #include <vil/vil_memory_image_of.h>
 #include <vil/vil_rgb.h>
 
-struct vgui_vrml_texture_map {
+struct vgui_vrml_texture_map
+{
   vcl_string filename_;
   vil_memory_image_of<vil_rgb<unsigned char> > rgb;
 

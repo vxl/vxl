@@ -1,5 +1,9 @@
-// This is ./oxl/vgui/vgui_event.h
-
+// This is oxl/vgui/vgui_event.h
+#ifndef vgui_event_h_
+#define vgui_event_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -17,12 +21,6 @@
 // 28 Nov 1999  fsm@robots. added vcl_string event.
 // 22 Aug 2000  Marko Bacic. added support for scroll bar events
 // \endverbatim
-
-#ifndef vgui_event_h_
-#define vgui_event_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 
 #include <vcl_string.h>
 #include <vgui/vgui_key.h>
@@ -54,8 +52,9 @@ vcl_ostream& operator<<(vcl_ostream& s, vgui_event_type e);
 
 //: The vgui_event class encapsulates the events handled by the vgui system.
 
-class vgui_event {
-public:
+class vgui_event
+{
+ public:
   vgui_event();
   vgui_event(vgui_event_type);
 
@@ -100,7 +99,7 @@ public:
   double secs_since(vgui_event const &) const;
   long usecs_since(vgui_event const &) const;
 
-private:
+ private:
   void init();
 };
 bool operator==(vgui_event const& a, vgui_event const& b);

@@ -1,9 +1,9 @@
+// This is vxl/vgl/algo/vgl_homg_operators_3d.h
 #ifndef vgl_homg_operators_3d_h
 #define vgl_homg_operators_3d_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author Don Hamilton, Peter Tu
@@ -24,10 +24,11 @@ template <class Type> class vgl_homg_plane_3d;
 
 //: 3D homogeneous operations
 template <class Type>
-class vgl_homg_operators_3d {
+class vgl_homg_operators_3d
+{
   typedef vgl_homg_line_3d_2_points<Type > vgl_homg_line_3d;
 
-public:
+ public:
 
   // method to get a vnl_vector rep of a homogeneous object
 

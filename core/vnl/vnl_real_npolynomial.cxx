@@ -1,8 +1,7 @@
-// This is ./vxl/vnl/vnl_real_npolynomial.cxx
-#ifdef __GNUC__
+// This is vxl/vnl/vnl_real_npolynomial.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 //  \file
 //  \brief a degree n real polynomial
@@ -128,8 +127,8 @@ vnl_real_npolynomial vnl_real_npolynomial::operator+(vnl_real_npolynomial const&
   for (int j=0; j<P.nterms_; ++i,++j) coef(i) = P.coeffs_(j);
 
   vnl_matrix<int> poly(nterms_+P.nterms_,nvar_);
-  i = 0; for (; i<nterms_; ++i) for(int k=0; k<nvar_; ++k) poly(i,k) = polyn_(i,k);
-  for (int j=0; j<P.nterms_; ++i,++j) for(int k=0; k<nvar_; ++k) poly(i,k) = P.polyn_(j,k);
+  for (i=0; i<nterms_; ++i) for (int k=0; k<nvar_; ++k) poly(i,k) = polyn_(i,k);
+  for (int j=0; j<P.nterms_; ++i,++j) for (int k=0; k<nvar_; ++k) poly(i,k) = P.polyn_(j,k);
 
   return vnl_real_npolynomial(coef, poly);
 }
@@ -141,8 +140,8 @@ vnl_real_npolynomial vnl_real_npolynomial::operator+(double P) const
   coef(nterms_) = P;
 
   vnl_matrix<int> poly(nterms_+1,nvar_);
-  for (int i=0; i<nterms_; ++i) for(int k=0; k<nvar_; ++k) poly(i,k) = polyn_(i,k);
-  for(int k=0; k<nvar_; ++k) poly(nterms_,k) = 0;
+  for (int i=0; i<nterms_; ++i) for (int k=0; k<nvar_; ++k) poly(i,k) = polyn_(i,k);
+  for (int k=0; k<nvar_; ++k) poly(nterms_,k) = 0;
 
   return vnl_real_npolynomial(coef, poly);
 }
@@ -156,8 +155,8 @@ vnl_real_npolynomial vnl_real_npolynomial::operator-(vnl_real_npolynomial const&
   for (int j=0; j<P.nterms_; ++i,++j) coef(i) = - P.coeffs_(j);
 
   vnl_matrix<int> poly(nterms_+P.nterms_,nvar_);
-  i = 0; for (; i<nterms_; ++i) for(int k=0; k<nvar_; ++k) poly(i,k) = polyn_(i,k);
-  for (int j=0; j<P.nterms_; ++i,++j) for(int k=0; k<nvar_; ++k) poly(i,k) = P.polyn_(j,k);
+  for (i=0; i<nterms_; ++i) for (int k=0; k<nvar_; ++k) poly(i,k) = polyn_(i,k);
+  for (int j=0; j<P.nterms_; ++i,++j) for (int k=0; k<nvar_; ++k) poly(i,k) = P.polyn_(j,k);
 
   return vnl_real_npolynomial(coef, poly);
 }

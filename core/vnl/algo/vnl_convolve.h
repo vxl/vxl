@@ -1,12 +1,6 @@
+// This is vnl_convolve.h
 #ifndef vnl_convolve_h_
 #define vnl_convolve_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-// This is vnl_convolve.h
-
-#include <vnl/vnl_vector.h>
-
 //:
 // \file
 // \brief Templated 1D and 2D convolution
@@ -18,6 +12,7 @@
 // One can choose between straightforward `time-domain' implementations
 // or using FFT to do a `frequency-domain' calculation.
 
+#include <vnl/vnl_vector.h>
 
 //: Convolve two vnl_vector<T>'s, possibly with different base types T.
 //  $res[k] := \displaystyle\sum_{i=-\infty}^{+\infty} v1[k-i] \cdot v2[i]$.

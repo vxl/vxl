@@ -1,6 +1,7 @@
+// This is oxl/vgui/vgui_soview.h
 #ifndef vgui_soview_h_
 #define vgui_soview_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -25,8 +26,9 @@ class vgui_observer;
 class vgui_message;
 class vgui_style;
 
-class vgui_soview /*: public vgui_observable*/ {
-public:
+class vgui_soview /*: public vgui_observable*/
+{
+ public:
   vgui_soview();
   virtual ~vgui_soview() {}
 
@@ -65,12 +67,12 @@ public:
   bool get_selectable() const { return selectable; }
   void set_selectable( bool s) { selectable= s; }
 
-protected:
+ protected:
   unsigned id;
   bool selectable;
   vgui_style* style;
 
-private:
+ private:
   void add_id();
   static vgui_DLLDATA unsigned current_id;
 };

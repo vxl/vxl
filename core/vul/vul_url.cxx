@@ -1,7 +1,7 @@
-#ifdef __GNUC__
+// This is vxl/vul/vul_url.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // \author Ian Scott
@@ -92,9 +92,9 @@ vcl_istream * vul_http_open(char const *url)
 
   // so far so good.
 #ifdef DEBUG
-  vcl_cerr << "auth = \'" << auth << "\'" << vcl_endl
-           << "host = \'" << host << "\'" << vcl_endl
-           << "path = \'" << path << "\'" << vcl_endl
+  vcl_cerr << "auth = \'" << auth << "\'\n"
+           << "host = \'" << host << "\'\n"
+           << "path = \'" << path << "\'\n"
            << "port = " << port << vcl_endl;
 #endif
 
@@ -124,7 +124,7 @@ vcl_istream * vul_http_open(char const *url)
 #else
   if (tcp_socket < 0) {
 #endif
-    vcl_cerr << __FILE__ ": failed to create socket." << vcl_endl;
+    vcl_cerr << __FILE__ ": failed to create socket.\n";
     return 0;
   }
 
@@ -135,7 +135,7 @@ vcl_istream * vul_http_open(char const *url)
   // get network address of server.
   hostent *hp = gethostbyname(host.c_str());
   if (! hp) {
-    vcl_cerr << __FILE__ ": failed to lookup host" << vcl_endl;
+    vcl_cerr << __FILE__ ": failed to lookup host\n";
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
@@ -155,7 +155,7 @@ vcl_istream * vul_http_open(char const *url)
 
   // connect to server.
   if (connect(tcp_socket , (sockaddr *) &my_addr, sizeof my_addr) < 0) {
-    vcl_cerr << __FILE__ ": failed to connect to host" << vcl_endl;
+    vcl_cerr << __FILE__ ": failed to connect to host\n";
     //perror(__FILE__);
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
@@ -183,7 +183,7 @@ vcl_istream * vul_http_open(char const *url)
 #else
   if (::write(tcp_socket, buffer, vcl_strlen(buffer)) < 0) {
 #endif
-    vcl_cerr << __FILE__ ": error sending HTTP request" << vcl_endl;
+    vcl_cerr << __FILE__ ": error sending HTTP request\n";
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
@@ -210,7 +210,7 @@ vcl_istream * vul_http_open(char const *url)
     while ((n = ::read(tcp_socket, buffer, sizeof buffer)) > 0) {
 #endif
       contents.append(buffer, n);
-      //vcl_cerr << n << " bytes" << vcl_endl;
+      //vcl_cerr << n << " bytes\n";
     }
   }
 
@@ -286,9 +286,9 @@ bool vul_http_exists(char const *url)
 
   // so far so good.
 #ifdef DEBUG
-  vcl_cerr << "auth = \'" << auth << "\'" << vcl_endl
-           << "host = \'" << host << "\'" << vcl_endl
-           << "path = \'" << path << "\'" << vcl_endl
+  vcl_cerr << "auth = \'" << auth << "\'\n"
+           << "host = \'" << host << "\'\n"
+           << "path = \'" << path << "\'\n"
            << "port = " << port << vcl_endl;
 #endif
 
@@ -319,7 +319,7 @@ bool vul_http_exists(char const *url)
 #else
   if (tcp_socket < 0) {
 #endif
-    vcl_cerr << __FILE__ ": failed to create socket." << vcl_endl;
+    vcl_cerr << __FILE__ ": failed to create socket.\n";
     return false;
   }
 
@@ -330,7 +330,7 @@ bool vul_http_exists(char const *url)
   // get network address of server.
   hostent *hp = gethostbyname(host.c_str());
   if (! hp) {
-    vcl_cerr << __FILE__ ": failed to lookup host" << vcl_endl;
+    vcl_cerr << __FILE__ ": failed to lookup host\n";
     return false;
   }
 
@@ -344,7 +344,7 @@ bool vul_http_exists(char const *url)
   // connect to server.
   if (connect(tcp_socket , (sockaddr *) &my_addr, sizeof my_addr) < 0)
   {
-    vcl_cerr << __FILE__ ": failed to connect to host" << vcl_endl;
+    vcl_cerr << __FILE__ ": failed to connect to host\n";
     //perror(__FILE__);
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
@@ -370,7 +370,7 @@ bool vul_http_exists(char const *url)
 #else
   if (::write(tcp_socket, buffer, vcl_strlen(buffer)) < 0) {
 #endif
-    vcl_cerr << __FILE__ ": error sending HTTP request" << vcl_endl;
+    vcl_cerr << __FILE__ ": error sending HTTP request\n";
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
@@ -397,7 +397,7 @@ bool vul_http_exists(char const *url)
     if ((n = ::read(tcp_socket, buffer, sizeof buffer)) > 0) {
 #endif
       contents.append(buffer, n);
-      //vcl_cerr << n << " bytes" << vcl_endl;
+      //vcl_cerr << n << " bytes\n";
     }
     else
     {
@@ -417,12 +417,7 @@ bool vul_http_exists(char const *url)
   close(tcp_socket);
 #endif
 
-  if ( (contents.find("HTTP/1.1 200")) == contents.npos)
-  {
-    return false;
-  }
-
-  return true;
+  return contents.find("HTTP/1.1 200") != contents.npos;
 }
 
 
@@ -500,9 +495,7 @@ bool vul_url::is_url(const char * url)
 
   // maybe it's an ftp URL?
   if (l > 6 && vcl_strncmp(url, "ftp://", 6) == 0)
-  {
     return true;
-  }
 
   return false;
 }
@@ -564,9 +557,9 @@ vcl_string vul_url::encode_base64(const vcl_string& in)
   unsigned i = 0, line_octets = 0;
   const unsigned l = in.size();
   char data[3];
-  while(i <= l)
+  while (i <= l)
   {
-    if(i == l)
+    if (i == l)
     {
       out.append("=");
       return out;
@@ -575,7 +568,7 @@ vcl_string vul_url::encode_base64(const vcl_string& in)
     data[0] = in[i++];
     data[1] = data[2] = 0;
 
-    if(i == l)
+    if (i == l)
     {
       out.append(encode_triplet(data,1),4);
       return out;
@@ -583,7 +576,7 @@ vcl_string vul_url::encode_base64(const vcl_string& in)
 
     data[1] = in[i++];
 
-    if(i == l)
+    if (i == l)
     {
       out.append(encode_triplet(data,2),4);
       return out;
@@ -593,7 +586,7 @@ vcl_string vul_url::encode_base64(const vcl_string& in)
 
     out.append(encode_triplet(data,3),4);
 
-    if(line_octets >= 68/4) // print carriage return
+    if (line_octets >= 68/4) // print carriage return
     {
       out.append("\r\n",2);
       line_octets = 0;
@@ -609,28 +602,27 @@ vcl_string vul_url::encode_base64(const vcl_string& in)
 
 static int get_next_char(const vcl_string &in, unsigned int *i)
 {
-
   while (*i < in.size())
   {
     char c;
     c = in[(*i)++];
 
-    if(c == '+')
+    if (c == '+')
       return 62;
 
-    if(c == '/')
+    if (c == '/')
       return 63;
 
-    if(c >= 'A' && c <= 'Z')
+    if (c >= 'A' && c <= 'Z')
       return 0 + (int)c - (int)'A';
 
-    if(c >= 'a' && c <= 'z')
+    if (c >= 'a' && c <= 'z')
       return 26 + (int)c - (int)'a';
 
-    if(c >= '0' && c <= '9')
+    if (c >= '0' && c <= '9')
       return 52 + (int)c - (int)'0';
 
-    if(c == '=')
+    if (c == '=')
       return 64;
   }
   return -1;
@@ -646,7 +638,7 @@ vcl_string vul_url::decode_base64(const vcl_string& in)
   unsigned i=0;
   const unsigned l = in.size();
   vcl_string out;
-  while(i < l)
+  while (i < l)
   {
     data[0] = data[1] = data[2] = 0;
 
@@ -655,9 +647,9 @@ vcl_string vul_url::decode_base64(const vcl_string& in)
     c = get_next_char(in , &i);
 
     // treat '=' as end of message
-    if(c == 64)
+    if (c == 64)
       return out;
-    if(c==-1)
+    if (c==-1)
       return "";
 
     data[0] = ((c & 0x3f) << 2) | (0x3 & data[0]);
@@ -667,7 +659,7 @@ vcl_string vul_url::decode_base64(const vcl_string& in)
     c = get_next_char(in , &i);
 
       // Error! Second character in octet can't be '='
-    if(c == 64 || c==-1)
+    if (c == 64 || c==-1)
       return "";
 
     data[0] = ((c & 0x30) >> 4) | (0xfc & data[0]);
@@ -679,9 +671,9 @@ vcl_string vul_url::decode_base64(const vcl_string& in)
 
     c = get_next_char(in , &i);
 
-    if(c==-1)
+    if (c==-1)
       return "";
-    if(c == 64)
+    if (c == 64)
     {
       // should really read next char and check it is '='
       out.append(data,1);  // write 1 byte to output
@@ -696,10 +688,10 @@ vcl_string vul_url::decode_base64(const vcl_string& in)
     // Search next valid char...
     c = get_next_char(in , &i);
 
-    if(c==-1)
+    if (c==-1)
       return "";
 
-    if(c == 64)
+    if (c == 64)
     {
       out.append(data,2);  // write 2 bytes to output
       return out;

@@ -1,10 +1,9 @@
-// This is ./vxl/vnl/vnl_matrix.h
+// This is vxl/vnl/vnl_matrix.h
 #ifndef vnl_matrix_h_
 #define vnl_matrix_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief An ordinary mathematical matrix
@@ -76,8 +75,9 @@ enum vnl_matrix_type {
 // Note: Use a vnl_vector<T> with these matrices.
 
 template<class T>
-class vnl_matrix {
-public:
+class vnl_matrix
+{
+ public:
   //: Default constructor creates an empty matrix of size 0,0.
   vnl_matrix () :
     num_rows(0),
@@ -451,12 +451,12 @@ public:
 
   ////----------------------- Input/Output ----------------------------
 
-    // : Read a vnl_matrix from an ascii vcl_istream, automatically
-    // determining file size if the input matrix has zero size.
+  // : Read a vnl_matrix from an ascii vcl_istream, automatically
+  // determining file size if the input matrix has zero size.
   static vnl_matrix<T> read(vcl_istream& s);
 
-    // : Read a vnl_matrix from an ascii vcl_istream, automatically
-    // determining file size if the input matrix has zero size.
+  // : Read a vnl_matrix from an ascii vcl_istream, automatically
+  // determining file size if the input matrix has zero size.
   bool read_ascii(vcl_istream& s);
 
   //--------------------------------------------------------------------------------
@@ -516,7 +516,7 @@ public:
 //--------------------------------------------------------------------------------
 
 
-protected:
+ protected:
   unsigned num_rows;   // Number of rows
   unsigned num_cols;   // Number of columns
   T** data;            // Pointer to the vnl_matrix

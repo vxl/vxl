@@ -1,7 +1,7 @@
-// This is ./vxl/vbl/vbl_big_sparse_array_3d.h
+// This is vxl/vbl/vbl_big_sparse_array_3d.h
 #ifndef vbl_big_sparse_array_3d_h_
 #define vbl_big_sparse_array_3d_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -56,8 +56,9 @@ typedef unsigned long ulonglong;
 #include <vcl_iostream.h>
 
 template <class T>
-class vbl_big_sparse_array_3d {
-public:
+class vbl_big_sparse_array_3d
+{
+ public:
   // Constructors/Destructor---------------------------------------------------
 
   //: Construct a vbl_big_sparse_array_3d
@@ -84,7 +85,7 @@ public:
   // Data Control--------------------------------------------------------------
   vcl_ostream& print(vcl_ostream&) const;
 
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
   typedef vcl_map<ulonglong, T, vcl_less<ulonglong> > Map;
   Map storage_;

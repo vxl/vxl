@@ -1,10 +1,9 @@
+// This is vxl/vil/vil_skip.h
 #ifndef vil_skip_h_
 #define vil_skip_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vil/vil_skip.h
-
 //:
 // \file
 // \brief a function

@@ -1,19 +1,17 @@
 // This is vxl/vnl/io/vnl_io_rational.h
 #ifndef vnl_io_rational_h
 #define vnl_io_rational_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-#include <vnl/vnl_rational.h>
-
-class vsl_b_ostream;
-class vsl_b_istream;
-
 //:
 // \file 
 // \author Peter Vanroose
 // \date 10-Oct-2001
+
+#include <vnl/vnl_rational.h>
+class vsl_b_ostream;
+class vsl_b_istream;
 
 //: Binary save vnl_rational to stream.
 void vsl_b_write(vsl_b_ostream & os, vnl_rational const& v);

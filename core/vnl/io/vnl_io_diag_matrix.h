@@ -1,17 +1,13 @@
 // This is vxl/vnl/io/vnl_io_diag_matrix.h
 #ifndef vnl_io_diag_matrix_h
 #define vnl_io_diag_matrix_h
-#ifdef __GNUC__
-#pragma interface
-#endif
-
-#include <vsl/vsl_binary_io.h>
-#include <vnl/vnl_diag_matrix.h>
-
 //:
 // \file 
 // \author dac
 // \date 21-Mar-2001
+
+#include <vsl/vsl_binary_io.h>
+#include <vnl/vnl_diag_matrix.h>
 
 //: Binary save vnl_real_polynomial to stream.
 template <class T>
@@ -26,6 +22,3 @@ template <class T>
 void vsl_print_summary(vcl_ostream& os,const vnl_diag_matrix<T> & b);
 
 #endif // vnl_io_diag_matrix_h
-
-
-

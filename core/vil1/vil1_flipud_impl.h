@@ -1,10 +1,9 @@
+// This is vxl/vil/vil_flipud_impl.h
 #ifndef vil_flipud_impl_h_
 #define vil_flipud_impl_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vil/vil_flipud_impl.h
-
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
@@ -13,8 +12,9 @@
 #include <vcl_string.h>
 
 //: A view of an image which is flipped up/down (ie top row becomes bottom)
-class vil_flipud_impl : public vil_image_impl {
-public:
+class vil_flipud_impl : public vil_image_impl
+{
+ public:
   vil_flipud_impl(vil_image const &base_) : base(base_) { }
 
   int planes() const { return base.planes(); }
@@ -40,7 +40,7 @@ public:
 
 /* END_MANCHESTER_BINARY_IO_CODE */
 
-private:
+ private:
   vil_image base;
 };
 

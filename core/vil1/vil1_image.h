@@ -1,10 +1,9 @@
+// This is vxl/vil/vil_image.h
 #ifndef vil_image_h_
 #define vil_image_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vil/vil_image.h
-
 //:
 // \file
 // \brief A reference-counted image object.
@@ -26,8 +25,9 @@
 // You should not derive from vil_image to make a new image type.
 // Derive from vil_image_impl instead.
 
-class vil_image {
-public:
+class vil_image
+{
+ public:
 // use this delegation macro for consistency, not convenience.
 #define vil_image_delegate(m, args, default) { return ptr ? ptr->m args : default; }
 
@@ -147,7 +147,7 @@ public:
     return ptr;
   }
 
-protected:
+ protected:
   vil_image_impl *ptr;
 };
 

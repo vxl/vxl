@@ -1,14 +1,11 @@
-// This is ./vxl/vnl/vnl_sample.cxx
-#ifdef __GNUC__
+// This is vxl/vnl/vnl_sample.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
+// \author fsm@robots.ox.ac.uk
 
-/*
-  fsm@robots.ox.ac.uk
-*/
 #include "vnl_sample.h"
 #include <vnl/vnl_math.h>
 

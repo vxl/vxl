@@ -1,10 +1,9 @@
+// This is vxl/vil/vil_memory_image.h
 #ifndef vil_memory_image_h_
 #define vil_memory_image_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vil/vil_memory_image.h
-
 //:
 // \file
 // \brief vil_image, stored entirely in RAM
@@ -22,15 +21,17 @@
 #include <vil/vil_image.h>
 
 //: Description of image format in memory
-struct vil_memory_image_format {
+struct vil_memory_image_format
+{
   int components;
   int bits_per_component;
   vil_component_format component_format;
 };
 
 //: vil_image, stored entirely in memory
-class vil_memory_image : public vil_image {
-public:
+class vil_memory_image : public vil_image
+{
+ public:
   vil_memory_image();
   vil_memory_image(int planes, int w, int h, vil_memory_image_format const&);
   vil_memory_image(int planes, int w, int h, int components, int bits_per_component, vil_component_format);
@@ -63,7 +64,7 @@ public:
   //: Reset this class's member variables from the image implementation
   // This is is useful if the impl object has been modified outside the control of this object.
   void recache_from_impl();
-protected:
+ protected:
   // The following informations are cached from the vil_memory_image_impl :
   int width_;
   int height_;

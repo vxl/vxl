@@ -1,6 +1,7 @@
+// This is tbl/vipl/section/vipl_section_container.h
 #ifndef vipl_section_container_h_
 #define vipl_section_container_h_
-#ifdef __GNUG__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 
@@ -11,8 +12,8 @@ template <  class DataType > class vipl_section_descriptor; //template forward r
 template <  class DataType > class vipl_section_iterator; //template forward reference
 
 template < class DataType >
-class vipl_section_container {
-
+class vipl_section_container
+{
   friend class vipl_section_descriptor< DataType > ; //declare a friend class
   friend class vipl_section_iterator< DataType > ; //declare a friend class
    // STL container typedefs
@@ -56,72 +57,72 @@ class vipl_section_container {
   virtual const vipl_section_iterator< DataType > begin() const;
   virtual const vipl_section_iterator< DataType > end() const;
 
-    // True only if the internal filterable image associated with
-    // b is the same as for this.
+  // True only if the internal filterable image associated with
+  // b is the same as for this.
   virtual bool operator==( const vipl_section_container< DataType >& b) const;
 
-    // STL demands a few methods
+  // STL demands a few methods
   virtual bool operator!=( const vipl_section_container< DataType >& b) const;
 
-    // STL demands it
+  // STL demands it
   virtual bool operator=( const vipl_section_container< DataType >& b) ;
   virtual int size() const ;
   virtual int max_size() const ;
   virtual bool empty() ;
-    // None of the comparison operators are implemented yet. FIXME
+  // None of the comparison operators are implemented yet. FIXME
   virtual bool operator<( const vipl_section_container< DataType >& b) const ;
   virtual bool operator>( const vipl_section_container< DataType >& b) const ;
   virtual bool operator<=( const vipl_section_container< DataType >& b) const ;
   virtual bool operator>=( const vipl_section_container< DataType >& b) const ;
 
-    // not implemented
+  // not implemented
   virtual void swap( const vipl_section_container< DataType >& b) const ;
 
-    // Modifies the passed in descriptor to point to the next section.
-    // This is used by the default iterators for the operator++ method.
-    // Returns TRUE if successfully incremented the variable.
-    // Used so we don't have to copy descriptors a zillion times.
-    // Unfortunately STL usage implies we do copy more often than we'd like.
+  // Modifies the passed in descriptor to point to the next section.
+  // This is used by the default iterators for the operator++ method.
+  // Returns TRUE if successfully incremented the variable.
+  // Used so we don't have to copy descriptors a zillion times.
+  // Unfortunately STL usage implies we do copy more often than we'd like.
  protected:
   virtual bool next_section( vipl_section_descriptor< DataType >& in_out) const ;
 
-    // Given the axis, returns the starting coordinate of the related
-    // image in the specified axis. The values of \usearg {axis}
-    // increase from 0. Rationale for this is the span of the image
-    // in pixels in the first (i.e. 0) axis, the second (i.e. 1) axis
-    // etc... The Axes have const values in the class filter,
-    // e.g. vipl_filter::X_Axis
+  // Given the axis, returns the starting coordinate of the related
+  // image in the specified axis. The values of \usearg {axis}
+  // increase from 0. Rationale for this is the span of the image
+  // in pixels in the first (i.e. 0) axis, the second (i.e. 1) axis
+  // etc... The Axes have const values in the class filter,
+  // e.g. vipl_filter::X_Axis
  public:
   virtual int image_start( int axis) const ;
 
-    // Given the axis, returns the size of the related image in the
-    // specified axis. The values of \usearg {axis} increase from
-    // 0. Rationale for this is the span of the image in pixels in
-    // the first (i.e. 0) axis, the second (i.e. 1) axis etc...
+  // Given the axis, returns the size of the related image in the
+  // specified axis. The values of \usearg {axis} increase from
+  // 0. Rationale for this is the span of the image in pixels in
+  // the first (i.e. 0) axis, the second (i.e. 1) axis etc...
   virtual int image_size( int axis) const ;
 
-    // Given the axis, returns the end coordinate of the related
-    // image in the specified axis. The values of \usearg {axis}
-    // increase from 0. Rationale for this is the span of the image
-    // in pixels in the first (i.e. 0) axis, the second (i.e. 1) axis
-    // etc...
+  // Given the axis, returns the end coordinate of the related
+  // image in the specified axis. The values of \usearg {axis}
+  // increase from 0. Rationale for this is the span of the image
+  // in pixels in the first (i.e. 0) axis, the second (i.e. 1) axis
+  // etc...
   virtual int image_end( int axis) const ;
 
-    // Given the axis, returns the size of the related section size
-    // in the specified axis. The values of \usearg {axis} increase
-    // from 0. Rationale for this is the span of the image in pixels
-    // in the first (i.e. 0) axis, the second (i.e. 1) axis etc... If
-    // the section container does not use fixed sized sections then
-    // this should return -1
+  // Given the axis, returns the size of the related section size
+  // in the specified axis. The values of \usearg {axis} increase
+  // from 0. Rationale for this is the span of the image in pixels
+  // in the first (i.e. 0) axis, the second (i.e. 1) axis etc... If
+  // the section container does not use fixed sized sections then
+  // this should return -1
   virtual int section_size( int axis) const ;
 
-    // Returns true if the \useclass {section_descriptor}s will have
-    // valid pointer values. By default they are if and only if the
-    // raw_data_pointer is set.
+  // Returns true if the \useclass {section_descriptor}s will have
+  // valid pointer values. By default they are if and only if the
+  // raw_data_pointer is set.
   virtual bool is_pointer_safe() const ;
 
-    // Does the correct copy. Its a bit tricky due to the fact that
-    // an instance has a pointer to its ``real instance''
+  // Does the correct copy. Its a bit tricky due to the fact that
+  // an instance has a pointer to its ``real instance''
  protected:
   virtual vipl_section_container< DataType >* virtual_copy() const ;
  public:
@@ -148,10 +149,10 @@ class vipl_section_container {
   void put_imgptr( const void* v){ hsimgptr = v;}
 
   // refcounting:
-private: int refcount_;
-public:  int refcount() const { return refcount_; }
-public:  int inc_refcount() { return ++refcount_; }
-public:  int dec_refcount() { if (refcount_<=1) { delete this; return 0; } return --refcount_; }
+ private: int refcount_;
+ public:  int refcount() const { return refcount_; }
+ public:  int inc_refcount() { return ++refcount_; }
+ public:  int dec_refcount() { if (refcount_<=1) { delete this; return 0; } return --refcount_; }
 
 }; // end of class definition
 

@@ -1,10 +1,9 @@
+// This is vxl/vil/vil_32bit.h
 #ifndef vil_32bit_h_
 #define vil_32bit_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vil/vil_32bit.h
-
 //:
 // \file
 // \brief read/write integers to/from vil_stream

@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is vxl/vnl/algo/vnl_levenberg_marquardt.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //

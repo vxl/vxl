@@ -1,8 +1,7 @@
-// This is ./vxl/vbl/vbl_sort.cxx
-#ifdef __GNUC__
+// This is vxl/vbl/vbl_sort.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG

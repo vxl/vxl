@@ -1,10 +1,9 @@
+// This is vxl/vgl/vgl_region_scan_iterator.h
 #ifndef vgl_region_scan_iterator_h_
 #define vgl_region_scan_iterator_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vgl/vgl_region_scan_iterator.h
-
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
@@ -38,7 +37,7 @@ struct vgl_region_scan_iterator
   //: Number of image points (= integer grid points) inside the region
   inline int count() {
     int cnt = 0; reset();
-    while(next()) { int n = endx() - startx() + 1; if (n > 0) cnt += n; }
+    while (next()) { int n = endx() - startx() + 1; if (n > 0) cnt += n; }
     return cnt;
   }
 };

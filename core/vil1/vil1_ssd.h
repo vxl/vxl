@@ -1,11 +1,6 @@
+// This is vxl/vil/vil_ssd.h
 #ifndef vil_ssd_h_
 #define vil_ssd_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
-// This is vxl/vil/vil_ssd.h
-
 //:
 // \file
 // \brief Routines to compute sum of squared differences between two images

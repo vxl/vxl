@@ -1,11 +1,11 @@
 // This is vxl/vnl/vnl_matlab_header.cxx
-
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vnl_matlab_header.h"
 
 // The purpose of this file is to

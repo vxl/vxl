@@ -1,7 +1,7 @@
-// This is ./vxl/vgl/vgl_box_2d.h
+// This is vxl/vgl/vgl_box_2d.h
 #ifndef vgl_box_2d_h
 #define vgl_box_2d_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -64,10 +64,9 @@
 
 
 template <class Type>
-class vgl_box_2d {
-
-  // PUBLIC INTERFACE----------------------------------------------------------
-public:
+class vgl_box_2d
+{
+ public:
 
   // Constructors/Destructor---------------------------------------------------
 
@@ -109,8 +108,8 @@ public:
   inline bool operator==(vgl_box_2d<Type> const& that) const {
     // All empty boxes are equal:
     if (that.is_empty() ) return is_empty();
-    return (min_x() == that.min_x() && min_y() == that.min_y()
-         && max_x() == that.max_x() && max_y() == that.max_y());
+    return  min_x() == that.min_x() && min_y() == that.min_y()
+         && max_x() == that.max_x() && max_y() == that.max_y();
   }
 
   // Data Access---------------------------------------------------------------
@@ -185,7 +184,7 @@ public:
 
   //: Return true if this box is empty
   inline bool is_empty() const {
-    return (min_x() > max_x() || min_y() > max_y());
+    return min_x() > max_x() || min_y() > max_y();
   }
 
   //: Add a point to this box
@@ -214,7 +213,7 @@ public:
   vcl_istream& read(vcl_istream&);
 
   // INTERNALS-----------------------------------------------------------------
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
   Type min_pos_[2];
   Type max_pos_[2];

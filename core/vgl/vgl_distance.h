@@ -1,10 +1,9 @@
-// This is ./vxl/vgl/vgl_distance.h
+// This is vxl/vgl/vgl_distance.h
 #ifndef vgl_distance_h_
 #define vgl_distance_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Set of distance functions

@@ -1,6 +1,7 @@
+// This is oxl/vrml/vrml_out.h
 #ifndef vrml_io_h_
 #define vrml_io_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -20,8 +21,9 @@
 class vrml_out_vertex_to_texture;
 
 //: A class to write to a VRML 1.0 file.
-class vrml_out {
-public:
+class vrml_out
+{
+ public:
   // Constructors/Destructors--------------------------------------------------
 
   vrml_out();
@@ -83,24 +85,25 @@ public:
   void face_close();
   void end_faceset();
 
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
   vcl_ostream* s_;
   bool own_ostream_;
 
-private:
+ private:
   // private as don't want 2 people on same vcl_ostream
   vrml_out(const vrml_out& that);
   vrml_out& operator=(const vrml_out& that);
 };
 
-class vrml_out_vertex_to_texture {
-public:
+class vrml_out_vertex_to_texture
+{
+ public:
   // Store image size for conversion from image to texture coords.
   int image_xsize;
   int image_ysize;
 
-public:
+ public:
   vrml_out_vertex_to_texture(int xsize, int ysize): image_xsize(xsize), image_ysize(ysize) {}
   virtual ~vrml_out_vertex_to_texture() {}
 

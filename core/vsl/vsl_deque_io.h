@@ -1,11 +1,6 @@
+// This is vxl/vsl/vsl_deque_io.h
 #ifndef vsl_deque_io_h_
 #define vsl_deque_io_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
-// This is vxl/vsl/vsl_deque_io.h
-
 //:
 // \file 
 // \brief binary IO functions for vcl_deque<T>

@@ -1,10 +1,9 @@
 // This is vxl/vbl/vbl_ref_count.h
 #ifndef vbl_ref_count_h
 #define vbl_ref_count_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 //
@@ -15,8 +14,9 @@
 
 #include "dll.h"
 
-class vbl_ref_count {
-public:
+class vbl_ref_count
+{
+ public:
   vbl_ref_count() : ref_count(0) { }
   virtual ~vbl_ref_count();
 
@@ -28,11 +28,11 @@ public:
 
   bool is_referenced() const { return ref_count > 0; }
 
-protected:
+ protected:
   // this should be private.
   int ref_count;
 
-private:
+ private:
   static VBL_DLL_DATA int verbosity_;
 };
 

@@ -1,11 +1,11 @@
-// This is ./vxl/vnl/vnl_complex_traits.h
+// This is vxl/vnl/vnl_complex_traits.h
 #ifndef vnl_complex_traits_h_
 #define vnl_complex_traits_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-//: \file
+//:
+//  \file
 //  \brief To allow templated algorithms to determine appropriate actions of conjugation, complexification etc.
 //  \author F. Schaffalitzky, Oxford RRG, 26 Mar 1999
 //

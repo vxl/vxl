@@ -1,11 +1,11 @@
 // This is vxl/vil/vil_32bit.cxx
-
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 
 #include "vil_32bit.h"
 #include <vil/vil_stream.h>

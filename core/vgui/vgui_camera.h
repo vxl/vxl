@@ -1,10 +1,9 @@
-// This is ./oxl/vgui/vgui_camera.h
+// This is oxl/vgui/vgui_camera.h
 #ifndef vgui_camera_h_
 #define vgui_camera_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author Geoffrey Cross, Oxford RRG
@@ -30,8 +29,9 @@ class PMatrix;
 //  about such things.  Use the class in conjunction with a vgui_load (if
 //  you dare), or a vgui_mult to change the GL_PROJECTION_MATRIX
 //  appropriately.
-class vgui_camera {
-public:
+class vgui_camera
+{
+ public:
   //: Constructor - create a camera with a default projection matrix.
   vgui_camera();
 
@@ -48,7 +48,7 @@ public:
   //  the image plane.
   vnl_matrix<double> get_glprojmatrix( const int imagesizex= 720, const int imagesizey= 576) const;
 
-protected:
+ protected:
   vnl_matrix<double> pmatrix;
 };
 

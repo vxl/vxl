@@ -1,10 +1,9 @@
+// This is vxl/vnl/vnl_sparse_matrix.h
 #ifndef vnl_sparse_matrix_h_
 #define vnl_sparse_matrix_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_sparse_matrix.h
-
 //: \file
 //  \brief Simple sparse matrix
 //
@@ -50,8 +49,9 @@
 //  value.  All rows are stored, as vcl_vector< row >;
 //
 template <class T>
-class vnl_sparse_matrix_pair {
-public:
+class vnl_sparse_matrix_pair
+{
+ public:
   unsigned int first;
   T second;
 
@@ -71,7 +71,8 @@ public:
     return *this;
   }
 
-  struct less : public vcl_binary_function<vnl_sparse_matrix_pair, vnl_sparse_matrix_pair, bool> {
+  struct less : public vcl_binary_function<vnl_sparse_matrix_pair, vnl_sparse_matrix_pair, bool>
+  {
     bool operator() (vnl_sparse_matrix_pair const& p1, vnl_sparse_matrix_pair const& p2) {
       return p1.first < p2.first;
     }
@@ -82,8 +83,9 @@ public:
 //: Simple sparse matrix
 //  Stores non-zero elements as a sparse_matrix_pair
 template <class T>
-class vnl_sparse_matrix {
-public:
+class vnl_sparse_matrix
+{
+ public:
   typedef vnl_sparse_matrix_pair<T> pair_t;
 #if defined(VCL_SUNPRO_CC)
   // SunPro is the broken one.
@@ -185,7 +187,7 @@ public:
   T value();
 
 
-protected:
+ protected:
   vnl_sparse_matrix_elements elements;
   unsigned int rs_, cs_;
 

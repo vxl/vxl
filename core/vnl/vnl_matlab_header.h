@@ -1,10 +1,9 @@
+// This is vxl/vnl/vnl_matlab_header.h
 #ifndef vnl_matlab_header_h_
 #define vnl_matlab_header_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_matlab_header.h
-
 //: \file
 //  \brief MATLAB header structure
 //  \author fsm@robots.ox.ac.uk

@@ -1,9 +1,9 @@
+// This is vxl/vcsl/vcsl_graph.h
 #ifndef vcsl_graph_h
 #define vcsl_graph_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author François BERTEL
@@ -28,7 +28,7 @@
 class vcsl_graph
   :public vbl_ref_count
 {
-public:
+ public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
@@ -80,7 +80,7 @@ public:
   //  Used by the search path algorithm
   virtual void init_vertices(void) const;
 
-protected:
+ protected:
 
   //: Vertices of the graph: all the spatial coordinate systems
   vcl_vector<vcsl_spatial_sptr> vertices_;

@@ -1,11 +1,6 @@
+// This is vxl/vil/io/vil_rgba.h
 #ifndef vil_io_rgba_h_
 #define vil_io_rgba_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
-// This is vxl/vil/io/vil_rgba.h
-
 //:
 // \file 
 // \date 22 Mar 2001

@@ -1,7 +1,7 @@
-//This is vxl/vil/vil_bmp_core_header.h
+// This is vxl/vil/vil_bmp_core_header.h
 #ifndef vil_bmp_core_header_h_
 #define vil_bmp_core_header_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -11,7 +11,6 @@
 //  Modifications
 //   Nick Costen added Manchester IO 16/3/01
 // \endverbatim
-
 
 class vil_stream;
 #include <vcl_iosfwd.h>

@@ -1,11 +1,6 @@
+// This is vxl/vnl/vnl_operators.h
 #ifndef vnl_operators_h_
 #define vnl_operators_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
-
-
 //:
 // \file
 // \brief Various operators for templated vnl classes
@@ -58,7 +53,4 @@ bool operator<(vnl_matrix<T> const& lhs, vnl_matrix<T> const& rhs)
   return false;                                 // Else all same.
 }
 
-
-
-#endif
-// vnl_operators_h_
+#endif // vnl_operators_h_

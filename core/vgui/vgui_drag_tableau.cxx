@@ -1,5 +1,7 @@
-// This is ./oxl/vgui/vgui_drag_tableau.cxx
-
+// This is oxl/vgui/vgui_drag_tableau.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma implementation
+#endif
 //:
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG
@@ -10,11 +12,6 @@
 //  Modifications:
 //    11-JAN-2000 A.Fitzgibbon - Initial version
 // \endverbatim
-
-#ifdef __GNUC__
-#pragma implementation
-#endif
-
 
 #include "vgui_drag_tableau.h"
 

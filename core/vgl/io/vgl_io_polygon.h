@@ -1,11 +1,9 @@
+// This is vxl/vgl/vgl_io_polygon.h
 #ifndef vgl_io_polygon_h
 #define vgl_io_polygon_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-// This is vxl/vgl/vgl_io_polygon.h
-
 //:
 // \file
 // \author Nick Costen

@@ -1,9 +1,9 @@
+// This is vxl/vnl/algo/vnl_lbfgs.h
 #ifndef vnl_lbfgs_h_
 #define vnl_lbfgs_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Limited memory Broyden Fletcher Goldfarb Shannon minimization
@@ -38,8 +38,9 @@
 // version of BFGS only maintains a certain number of vector corrections
 // to a diagonal estimate of the inverse hessian estimate.
 
-class vnl_lbfgs : public vnl_nonlinear_minimizer {
-public:
+class vnl_lbfgs : public vnl_nonlinear_minimizer
+{
+ public:
   vnl_lbfgs();
   vnl_lbfgs(vnl_cost_function& f);
 
@@ -67,7 +68,7 @@ public:
   // single evaluation.
   double default_step_length;
 
-private:
+ private:
   void init_parameters();
   vnl_cost_function* f_;
   //  vnl_lbfgs() {} // default constructor makes no sense

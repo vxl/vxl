@@ -1,10 +1,9 @@
+// This is vxl/vil/vil_colour_space.h
 #ifndef vil_colour_space_h_
 #define vil_colour_space_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vil/vil_colour_space.h
-
 //:
 // \file
 // \brief Functions to convert between different colour spaces.
@@ -45,4 +44,4 @@ void vil_colour_space_RGB_to_HSV(T r, T g, T b, T *h, T *s, T *v);
 template <class T>
 void vil_colour_space_HSV_to_RGB(T h, T s, T v, T *r, T *g, T *b);
 
-#endif
+#endif // vil_colour_space_h_

@@ -1,11 +1,11 @@
-// This is ./vxl/vnl/vnl_linear_operators_3.h
+// This is vxl/vnl/vnl_linear_operators_3.h
 #ifndef vnl_linear_operators_3_h_
 #define vnl_linear_operators_3_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-//: \file
+//:
+//  \file
 //  \brief 3D linear algebra operations
 //
 //    Specialized linear operators for 3D vectors and matrices.

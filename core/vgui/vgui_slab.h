@@ -1,6 +1,7 @@
+// This is oxl/vgui/vgui_slab.h
 #ifndef vgui_slab_h_
 #define vgui_slab_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 // .NAME vgui_slab
@@ -32,21 +33,21 @@ struct vgui_slab
 
   virtual void swap_buffers() { }
   virtual void make_current() { }
-  
+
   // enter/test for/leave overlay drawing state
   virtual void overlay_enter () { }
   virtual bool overlay_active() const { return false; }
   virtual void overlay_leave () { }
-  
+
   // call these before and after drawing each frame.
   // toolkits which need special tricks to implement
   // acceleration or overlays should override these
   // methods as needed.
   virtual void draw_begin() { make_current(); }
   virtual void draw_end  () { swap_buffers(); }
-  
+
   // -------------------- event queue
-  
+
   virtual bool queue_empty() const =0;
   virtual bool queue_peek (vgui_event *, int =0) =0;
   virtual bool queue_pop  () =0;

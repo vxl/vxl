@@ -1,10 +1,9 @@
-// This is ./vxl/vnl/vnl_vector_fixed.h
+// This is vxl/vnl/vnl_vector_fixed.h
 #ifndef vnl_vector_fixed_h_
 #define vnl_vector_fixed_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Fixed length stack-stored vnl_vector
@@ -37,9 +36,10 @@
 // \see vnl_matrix_ref
 //
 export template <class T, int n>
-class vnl_vector_fixed : public vnl_vector_fixed_ref<T,n> {
+class vnl_vector_fixed : public vnl_vector_fixed_ref<T,n>
+{
   typedef vnl_vector_fixed_ref<T,n> Base;
-public:
+ public:
   //: Construct an uninitialized n-vector
   vnl_vector_fixed():Base(space) {}
 
@@ -61,7 +61,7 @@ public:
 
   //: Constructs n-vector with elements initialised to v
   vnl_vector_fixed (T const& v): Base(space) {
-    for(int i = 0; i < n; ++i)
+    for (int i = 0; i < n; ++i)
       data[i] = v;
   }
 
@@ -111,20 +111,20 @@ public:
   }
 
   vnl_vector_fixed<T,n> operator- () const
-    { return  (vnl_vector_fixed<T,n> (*this) *= -1); }
+    { return  vnl_vector_fixed<T,n> (*this) *= -1; }
   vnl_vector_fixed<T,n> operator+ (T const t) const
-    { return  (vnl_vector_fixed<T,n> (*this) += t); }
+    { return  vnl_vector_fixed<T,n> (*this) += t; }
   vnl_vector_fixed<T,n> operator- (T const t) const
-    { return  (vnl_vector_fixed<T,n> (*this) -= t); }
+    { return  vnl_vector_fixed<T,n> (*this) -= t; }
   vnl_vector_fixed<T,n> operator* (T const t) const
-    { return  (vnl_vector_fixed<T,n> (*this) *= t); }
+    { return  vnl_vector_fixed<T,n> (*this) *= t; }
   vnl_vector_fixed<T,n> operator/ (T const t) const
-    { return  (vnl_vector_fixed<T,n> (*this) /= t); }
+    { return  vnl_vector_fixed<T,n> (*this) /= t; }
 
   vnl_vector_fixed<T,n> operator+ (vnl_vector<T> const& rhs) const
-    { return  (vnl_vector_fixed<T,n> (*this) += rhs); }
+    { return  vnl_vector_fixed<T,n> (*this) += rhs; }
   vnl_vector_fixed<T,n> operator- (vnl_vector<T> const& rhs) const
-    { return  (vnl_vector_fixed<T,n> (*this) -= rhs); }
+    { return  vnl_vector_fixed<T,n> (*this) -= rhs; }
 
 #if 0 // no need to declare these as friend function
   friend vnl_vector_fixed<T,n> element_product VCL_NULL_TMPL_ARGS (vnl_vector_fixed_ref<T,n> const&,
@@ -133,7 +133,7 @@ public:
                                                                     vnl_vector_fixed_ref<T,n> const&);
 #endif
 
-private:
+ private:
   T space[n];
 };
 
@@ -141,15 +141,15 @@ private:
 // define inline friends.
 template <class T, int n>
 inline vnl_vector_fixed<T,n> operator+(T const t, vnl_vector_fixed<T,n> const & rhs)
-{ return  (vnl_vector_fixed<T,n> (rhs) += t); }
+{ return  vnl_vector_fixed<T,n> (rhs) += t; }
 
 template <class T, int n>
 inline vnl_vector_fixed<T,n> operator-(T const t, vnl_vector_fixed<T,n> const & rhs)
-{ return  (( - vnl_vector_fixed<T,n> (rhs)) += t); }
+{ return  ( - vnl_vector_fixed<T,n> (rhs)) += t; }
 
 template <class T, int n>
 inline vnl_vector_fixed<T,n> operator*(T const t, vnl_vector_fixed<T,n> const& rhs)
-{ return  (vnl_vector_fixed<T,n> (rhs) *= t); }
+{ return  vnl_vector_fixed<T,n> (rhs) *= t; }
 
 template <class T, int n>
 inline vnl_vector_fixed<T,n> element_product (vnl_vector_fixed_ref<T,n> const& a,

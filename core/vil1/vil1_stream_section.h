@@ -1,10 +1,9 @@
 // This is vxl/vil/vil_stream_section.h
 #ifndef vil_stream_section_h_
 #define vil_stream_section_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief make a section of a vil_stream behave like a vil_stream
@@ -38,10 +37,10 @@ struct vil_stream_section : public vil_stream
   vil_streampos  tell() { return current_; } // regardless of what the underlying stream is doing.
   void seek(vil_streampos position);
 
-protected:
+ protected:
   ~vil_stream_section();
 
-private:
+ private:
   vil_stream *underlying_;
   vil_streampos begin_;
   vil_streampos end_;

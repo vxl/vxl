@@ -1,7 +1,7 @@
-#ifdef __GNUC__
+// This is vxl/vcsl/vcsl_spatial_transformation.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 
@@ -48,10 +48,10 @@ int vcsl_spatial_transformation::matching_interval(double time) const
   // Dichotomic research of the index
   int inf=0;
   int sup=beat_.size()-1;
-  while(sup-inf > 1)
+  while (sup-inf > 1)
     {
       int mid=(inf+sup)/2;
-      if(beat_[mid]>time)
+      if (beat_[mid]>time)
         sup=mid;
       else
         inf=mid;
@@ -124,7 +124,7 @@ vcsl_spatial_transformation::lvi(const vnl_vector<double> &v0,
   double dt0=(time-t0)*denominator;
 
   vnl_vector<double> result(size);
-  for(int i=0;i<size;++i)
+  for (int i=0;i<size;++i)
     result.put(i,v0.get(i)*dt1+v1.get(i)*dt0);
 
   return result;
@@ -149,8 +149,8 @@ vcsl_spatial_transformation::lmi(const vnl_matrix<double> &m0,
   double dt0=(time-t0)*denominator;
 
   vnl_matrix<double> result(rows,cols);
-  for(int i=0;i<rows;++i)
-  for(int j=0;j<cols;++j)
+  for (int i=0;i<rows;++i)
+  for (int j=0;j<cols;++j)
     result.put(i,j,m0.get(i,j)*dt1+m1.get(i,j)*dt0);
 
   return result;

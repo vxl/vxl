@@ -1,10 +1,9 @@
+// This is vxl/vil/vil_rgba.h
 #ifndef vil_rgba_h_
 #define vil_rgba_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vil/vil_rgba.h
-
 //:
 // \file
 // \brief Templated four-value colour cell
@@ -25,8 +24,9 @@
 //    -#  arithmetic operations
 
 template <class T>
-struct vil_rgba {
-public:
+struct vil_rgba
+{
+ public:
   typedef T value_type;
 
   // The values.

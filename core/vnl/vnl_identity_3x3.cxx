@@ -1,7 +1,5 @@
 // This is vxl/vnl/vnl_identity_3x3.cxx
-
-//-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //

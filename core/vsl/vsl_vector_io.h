@@ -1,11 +1,6 @@
+// This is vxl/vsl/vsl_vector_io.h
 #ifndef vsl_vector_io_h_
 #define vsl_vector_io_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
-// This is vxl/vsl/vsl_vector_io.h
-
 //:
 // \file 
 // \brief binary IO functions for vcl_vector<T>

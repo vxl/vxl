@@ -1,5 +1,9 @@
-// This is ./oxl/vgui/vgui_tableau.h
-
+// This is oxl/vgui/vgui_tableau.h
+#ifndef vgui_tableau_h_
+#define vgui_tableau_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 //  \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -21,13 +25,6 @@
 //  07-Aug-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
 // \endverbatim
 
-#ifndef vgui_tableau_h_
-#define vgui_tableau_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
-
 #include <vcl_string.h>
 #include <vcl_vector.h>
 
@@ -43,45 +40,46 @@ struct vgui_tableau_sptr;
 //
 //  WHAT'S A TABLEAU?
 //  A tableau is a rectangular area of the screen on which OpenGL may be
-//  used to draw and from which events (mouse, key presses etc) are received.  
+//  used to draw and from which events (mouse, key presses etc) are received.
 //
 //  WHAT SORT OF THINGS CAN TABLEAUX DO?
-//  Currently VGUI provides several example tableaux derived from this 
-//  class, sufficient to construct complex user interfaces combining 2D and 
+//  Currently VGUI provides several example tableaux derived from this
+//  class, sufficient to construct complex user interfaces combining 2D and
 //  3D with manipulators and zoom. So for example an `image' tableau could
-//  display an image, a `zoomer' tableau could provide a function to zoom 
-//  an image in and out. We could also make a `deck' tableau to hold a deck 
-//  of images and display one image at a time (this would be useful for 
-//  playing a series of images as a movie). 
+//  display an image, a `zoomer' tableau could provide a function to zoom
+//  an image in and out. We could also make a `deck' tableau to hold a deck
+//  of images and display one image at a time (this would be useful for
+//  playing a series of images as a movie).
 //
 //  WHAT ARE PARENT AND CHILD TABLEAUX?
-//  One tableau can be included as a child of another (parent) tableau. This 
-//  creates a new tableau with the functionality of both tableaux making it 
-//  up. So the new tableau could, for example, display a deck of images and 
-//  provide zooming. 
+//  One tableau can be included as a child of another (parent) tableau. This
+//  creates a new tableau with the functionality of both tableaux making it
+//  up. So the new tableau could, for example, display a deck of images and
+//  provide zooming.
 //
-//  The order in which the inclusion is done will affect the functionality, 
-//  so if the `zoomer' tableau contains the `deck' tableau then all images 
-//  will change size together. If however the inclusion is done the other way 
-//  around and each child tableau of the `deck' contains its own `zoomer' 
-//  tableau then each image will change size independently. 
+//  The order in which the inclusion is done will affect the functionality,
+//  so if the `zoomer' tableau contains the `deck' tableau then all images
+//  will change size together. If however the inclusion is done the other way
+//  around and each child tableau of the `deck' contains its own `zoomer'
+//  tableau then each image will change size independently.
 //
 //  WHAT'S ALL THIS SPTR BUSINESS THEN?
 //  When you make a new tableau it is recommended that you don't create
 //  it from the constructor for that tableau (eg, vgui_wibble_tableau()),
-//  but instead call vgui_wibble_tableau_new().  This returns a smart 
-//  pointer to your tableau (vgui_wibble_tableau_sptr) and means that 
-//  you don't need to worry about deleting your tableau once you are 
+//  but instead call vgui_wibble_tableau_new().  This returns a smart
+//  pointer to your tableau (vgui_wibble_tableau_sptr) and means that
+//  you don't need to worry about deleting your tableau once you are
 //  finished using it.
 //
 //  SO HOW DO I USE A TABLEAU?
-//  Once-off adaptor code (see vgui_adaptor) is provided that plugs a 
-//  tableau into any supported GUI toolkit.  So to use a tableau you make 
-//  a window, add an adaptor and set the tableau in that adaptor to be 
+//  Once-off adaptor code (see vgui_adaptor) is provided that plugs a
+//  tableau into any supported GUI toolkit.  So to use a tableau you make
+//  a window, add an adaptor and set the tableau in that adaptor to be
 //  your top level (highest parent) tableau. See the examples on the VXL
 //  webpage to see this done.
-class vgui_tableau : public vgui_slot_data {
-public:
+class vgui_tableau : public vgui_slot_data
+{
+ public:
   vgui_tableau();
 
   //: Return the name of the tableau.
@@ -115,17 +113,17 @@ public:
   virtual void get_popup(vgui_popup_params const &, vgui_menu &);
 
   //: Post a message event.
-  //  The fact that this is virtual does not imply that you should 
+  //  The fact that this is virtual does not imply that you should
   //  go and override it.
   virtual void post_message(char const *, void const *);
 
   //: Post a draw event.
-  //  The fact that this is virtual does not imply that you should 
+  //  The fact that this is virtual does not imply that you should
   //  go and override it.
   virtual void post_redraw();
 
   //: Post a overlay-redraw event.
-  //  The fact that this is virtual does not imply that you should 
+  //  The fact that this is virtual does not imply that you should
   //  go and override it.
   virtual void post_overlay_redraw();
 
@@ -171,10 +169,10 @@ public:
   //: Not used?
   void disown(vgui_tableau_sptr const &) const;
 
-protected:
+ protected:
   virtual ~vgui_tableau();
 
-private:
+ private:
   friend struct vgui_slot;
   friend struct vgui_slot_impl;
   friend class vgui_adaptor;

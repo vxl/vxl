@@ -1,9 +1,9 @@
+// This is vxl/vnl/vnl_sym_matrix.h
 #ifndef vnl_sym_matrix_h_
 #define vnl_sym_matrix_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 //  \file
 //  \brief Contains class for symmetric matrices
@@ -21,9 +21,9 @@
 
 export
 template <class T>
-class vnl_sym_matrix {
-
-public:
+class vnl_sym_matrix
+{
+ public:
   //: Construct an empty symmetic matrix.
   vnl_sym_matrix(): data_(0), index_(0), nn_(0) {}
 
@@ -123,7 +123,7 @@ public:
   //: Swap contents of m with THIS
   void swap(vnl_sym_matrix &m);
 
-protected:
+ protected:
 //: Set up the index array
   inline void setup_index() {
     T * data = data_;

@@ -1,5 +1,5 @@
 // This is oxl/vgui/vgui_roi_tableau.cxx
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:

@@ -1,8 +1,7 @@
-// This is ./vxl/vnl/algo/vnl_lbfgs.cxx
-#ifdef __GNUC__
+// This is vxl/vnl/algo/vnl_lbfgs.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 //
@@ -96,8 +95,8 @@ bool vnl_lbfgs::minimize(vnl_vector<double>& x)
 
   if (verbose_)
     vcl_cerr << "vnl_lbfgs: n = "<< n <<", memory = "<< m <<", Workspace = "
-      << w.size() << "[ "<< ( w.size() / 128.0 / 1024.0) <<" MB], ErrorScale = "
-      << f_->reported_error(1) <<", xnorm = "<< x.magnitude() << vcl_endl;
+             << w.size() << "[ "<< ( w.size() / 128.0 / 1024.0) <<" MB], ErrorScale = "
+             << f_->reported_error(1) <<", xnorm = "<< x.magnitude() << vcl_endl;
 
   bool we_trace = (verbose_ && !trace);
 
@@ -111,7 +110,7 @@ bool vnl_lbfgs::minimize(vnl_vector<double>& x)
   this->num_evaluations_ = 0;
   this->num_iterations_ = 0;
   int iflag = 0;
-  for(;;) {
+  while (true) {
     // We do not wish to provide the diagonal matrices Hk0, and therefore set DIAGCO to FALSE.
     logical diagco = false;
 
@@ -150,11 +149,11 @@ bool vnl_lbfgs::minimize(vnl_vector<double>& x)
         }
         print_("i","x","g","fdg","dg");
         print_("-","-","-","---","--");
-        for(int i = 0; i < l; ++i)
+        for (int i = 0; i < l; ++i)
           print_(i, x[i], g[i], fdg[i], g[i]-fdg[i]);
         if (n > limit) {
           vcl_cerr << "   ...\n";
-          for(int i = n - limit_tail; i < n; ++i)
+          for (int i = n - limit_tail; i < n; ++i)
             print_(i, x[i], g[i], fdg[i], g[i]-fdg[i]);
         }
       }

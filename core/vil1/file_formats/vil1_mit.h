@@ -1,9 +1,9 @@
+// This is vxl/vil/file_formats/vil_mit.h
 #ifndef vil_mit_file_format_h_
 #define vil_mit_file_format_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Image in MIT format
@@ -35,8 +35,9 @@
 // -# float
 // -# edge
 
-class vil_mit_file_format : public vil_file_format {
-public:
+class vil_mit_file_format : public vil_file_format
+{
+ public:
   virtual char const* tag() const;
   virtual vil_image_impl* make_input_image(vil_stream* vs);
   virtual vil_image_impl* make_output_image(vil_stream* vs, int planes,
@@ -48,7 +49,8 @@ public:
 };
 
 //: Generic image implementation for MIT files
-class vil_mit_generic_image : public vil_image_impl {
+class vil_mit_generic_image : public vil_image_impl
+{
   vil_stream* is_;
   int magic_;
   int width_;
@@ -66,7 +68,7 @@ class vil_mit_generic_image : public vil_image_impl {
   bool write_header();
 
   friend class vil_mit_file_format;
-public:
+ public:
 
   vil_mit_generic_image(vil_stream* is);
   vil_mit_generic_image(vil_stream* is, int planes,

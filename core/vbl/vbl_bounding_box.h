@@ -1,10 +1,9 @@
-// This is ./vxl/vbl/vbl_bounding_box.h
+// This is vxl/vbl/vbl_bounding_box.h
 #ifndef vbl_bounding_box_h_
 #define vbl_bounding_box_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Contains a bounding box class
@@ -32,7 +31,7 @@ struct vbl_bounding_box_DIM { enum { value = DIM }; };
 template <class T, class DIM_>
 class vbl_bounding_box_base
 {
-public:
+ public:
   //: Construct an empty bounding box.
   inline vbl_bounding_box_base() : initialized_(false) { }
 
@@ -55,10 +54,10 @@ public:
   inline void update(T const* point) {
     if (!initialized_) {
       initialized_ = true;
-      for(int i = 0; i < dimension(); ++i)
+      for (int i = 0; i < dimension(); ++i)
         min_[i] = max_[i] = point[i];
     } else {
-      for(int i = 0; i < dimension(); ++i) {
+      for (int i = 0; i < dimension(); ++i) {
         if (point[i] < min_[i]) min_[i] = point[i];
         if (point[i] > max_[i]) max_[i] = point[i];
       }
@@ -93,8 +92,8 @@ public:
   //:  inside test for arbitrary dimension
   inline bool inside(T const* point) {
     if (!initialized_) return false;
-    for( int i=0; i<dimension(); ++i )
-      if( point[i] < min_[i] || max_[i] < point[i] )
+    for ( int i=0; i<dimension(); ++i )
+      if ( point[i] < min_[i] || max_[i] < point[i] )
         return false;
     return true;
   }
@@ -146,7 +145,7 @@ public:
   // I predict the response to this observation will be the removal of the two
   // non-const versions.
 
-private:
+ private:
   bool initialized_;
   T min_[DIM_::value];
   T max_[DIM_::value];
@@ -161,7 +160,7 @@ private:
 template <class T, int DIM>
 class vbl_bounding_box : public vbl_bounding_box_base<T, vbl_bounding_box_DIM<DIM> >
 {
-public:
+ public:
 };
 
 //------------------------------------------------------------

@@ -1,8 +1,7 @@
-// This is ./vxl/vnl/algo/vnl_rpoly_roots.cxx
-#ifdef __GNUC__
+// This is vxl/vnl/algo/vnl_rpoly_roots.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 //
@@ -47,7 +46,7 @@ vnl_rpoly_roots::vnl_rpoly_roots(const vnl_real_polynomial& poly)
 vnl_vector<vcl_complex<double> > vnl_rpoly_roots::roots() const
 {
   vnl_vector<vcl_complex<double> > ret(num_roots_found_);
-  for(int i = 0; i < num_roots_found_; ++i)
+  for (int i = 0; i < num_roots_found_; ++i)
     ret[i] = vcl_complex<double>(r_[i], i_[i]);
   return ret;
 }
@@ -58,13 +57,13 @@ vnl_vector<vcl_complex<double> > vnl_rpoly_roots::roots() const
 vnl_vector<double> vnl_rpoly_roots::realroots(double tol) const
 {
   int c = 0;
-  for(int i = 0; i < num_roots_found_; ++i)
+  for (int i = 0; i < num_roots_found_; ++i)
     if (vcl_fabs(i_[i]) < tol)
       ++c;
 
   vnl_vector<double> ret(c);
   c = 0;
-  {for(int i = 0; i < num_roots_found_; ++i)
+  {for (int i = 0; i < num_roots_found_; ++i)
     if (vcl_fabs(i_[i]) < tol)
       ret[c++] = r_[i];}
 

@@ -1,10 +1,9 @@
-// This is ./vxl/vnl/vnl_double_2x2.h
+// This is vxl/vnl/vnl_double_2x2.h
 #ifndef vnl_double_2x2_h_
 #define vnl_double_2x2_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //: \file
 //  \brief 2x2 matrix of double
 //
@@ -18,7 +17,6 @@
 // Modifications:
 // 4/4/01 Tidied documentation
 // \endverbatim
-//
 //
 //-----------------------------------------------------------------------------
 

@@ -1,10 +1,9 @@
+// This is vxl/vil/vil_skip_image_impl.h
 #ifndef vil_skip_image_h_
 #define vil_skip_image_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vil/vil_skip_image_impl.h
-
 //:
 // \file
 // \brief Adaptor which produces a new image by skipping rows and columns
@@ -15,8 +14,9 @@
 #include <vcl_string.h>
 
 //: Adaptor which produces a new image by skipping rows and columns
-class vil_skip_image_impl : public vil_image_impl {
-public:
+class vil_skip_image_impl : public vil_image_impl
+{
+ public:
   vil_skip_image_impl(vil_image const &underlying, unsigned sx, unsigned sy);
   ~vil_skip_image_impl();
 
@@ -46,7 +46,7 @@ public:
 
 /* END_MANCHESTER_BINARY_IO_CODE */
 
-private:
+ private:
   vil_image base;
   unsigned skipx, skipy;
 };

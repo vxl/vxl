@@ -1,12 +1,11 @@
 // This is vxl/vgl/vgl_clip.cxx
-
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma implementation
+#endif
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
 
-#ifdef __GNUC__
-#pragma implementation
-#endif
 #include "vgl_clip.h"
 #include <vcl_cmath.h> // for vcl_abs(double) and vcl_sqrt()
 #include <vcl_cstdlib.h> // for vcl_malloc() and vcl_free()

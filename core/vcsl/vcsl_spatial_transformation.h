@@ -1,9 +1,9 @@
+// This is vxl/vcsl/vcsl_spatial_transformation.h
 #ifndef vcsl_spatial_transformation_h
 #define vcsl_spatial_transformation_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author François BERTEL
@@ -38,7 +38,7 @@ enum vcsl_interpolator
 class vcsl_spatial_transformation
   : public vbl_ref_count
 {
-public:
+ public:
 
   //***************************************************************************
   // Constructors/Destructor
@@ -132,7 +132,7 @@ public:
                                      int index,
                                      double time) const;
 
-protected:
+ protected:
   //: List of time clocks
   vcl_vector<double> beat_;
   vcl_vector<vcsl_interpolator> interpolator_;

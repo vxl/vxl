@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is vxl/vil/file_formats/vil_iris.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //
@@ -275,7 +276,7 @@ bool vil_iris_generic_image::get_section(void* buf, int x0, int y0, int xs, int 
   assert((x0+xs)<=width_);
   assert((y0+ys)<=height_);
 
-  if(!buf) return false; // no storage location was given to us
+  if (!buf) return false; // no storage location was given to us
 
   if (storage_)
     return get_section_rle(buf,x0,height_-y0-ys,xs,ys);
@@ -448,7 +449,7 @@ char get_char(vil_stream* file, int location){
 
   unsigned char buff[1];
   file->read((void*)buff, 1L);
-  return (buff[0]);
+  return buff[0];
 }
 
 unsigned short get_ushort(vil_stream* file, int location){
@@ -505,19 +506,19 @@ void expandrow(unsigned char *optr, unsigned char *iptr, int z)
   unsigned char pixel, count;
 
   optr += z;
-  while(1) {
+  while (1) {
     pixel = *iptr++;
     if ( !(count = (pixel & 0x7f)) )
       return;
-    if(pixel & 0x80) {
-      while(count--) {
+    if (pixel & 0x80) {
+      while (count--) {
         *optr = *iptr++;
         //optr+=4;
         optr++;
       }
     } else {
       pixel = *iptr++;
-      while(count--) {
+      while (count--) {
         *optr = pixel;
         //optr+=4;
         optr++;

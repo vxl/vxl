@@ -1,10 +1,9 @@
+// This is vxl/vnl/vnl_matrix_fixed_ref.h
 #ifndef vnl_matrix_fixed_ref_h_
 #define vnl_matrix_fixed_ref_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_matrix_fixed_ref.h
-
 //:
 //  \file
 //  \brief Fixed size stack-stored vnl_matrix
@@ -59,10 +58,11 @@
 // such calls.
 //
 template <class T, int m, int n>
-class vnl_matrix_fixed_ref : public vnl_matrix<T> {
+class vnl_matrix_fixed_ref : public vnl_matrix<T>
+{
   typedef vnl_matrix<T> Base;
   T* rowspace[m];
-public:
+ public:
 
 //: Construct a fixed size matrix which points to the row-stored data space supplied.
 // The space must remain valid for the lifetime of the vnl_matrix_fixed_ref.
@@ -71,7 +71,7 @@ public:
   vnl_matrix_fixed_ref(T *space = (T*)0) {
     Base::data = rowspace;  // thf. can't derive this from matrixref
     if (!space) space = vnl_c_vector<T>::allocate_T(m*n);
-    for(int i = 0; i < m; ++i)
+    for (int i = 0; i < m; ++i)
       Base::data[i] = space + i * n;
     Base::num_rows = m;
     Base::num_cols = n;
@@ -95,7 +95,7 @@ public:
 //: Resizing a vnl_matrix_ref fails.
   bool resize (unsigned int, unsigned int) { return 0; }
 
-private:
+ private:
   // You can't assign one of these from a matrix, cos' you don't have any space
   vnl_matrix_fixed_ref(const vnl_matrix<T>&) {}
   vnl_matrix_fixed_ref(const vnl_matrix_fixed_ref<T,m,n>&) {}

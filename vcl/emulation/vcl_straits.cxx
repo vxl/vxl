@@ -1,4 +1,5 @@
-#ifdef __GNUG__
+// This is vcl/emulation/vcl_straits.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 

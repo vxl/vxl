@@ -1,6 +1,7 @@
+// This is vxl/vidl/vidl_yuv_2_rgb.h
 #ifndef vidl_yuv_2_rgb_h_
 #define vidl_yuv_2_rgb_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -72,4 +73,4 @@ void vidl_yuv_2_rgb(unsigned char y, unsigned char u, unsigned char v, vil_rgb_b
   vrgb = vil_rgb_byte(r,g,b);
 }
 
-#endif
+#endif // vidl_yuv_2_rgb_h_

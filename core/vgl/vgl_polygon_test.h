@@ -1,10 +1,9 @@
+// This is vxl/vgl/vgl_polygon_test.h
 #ifndef vgl_polygon_test_h_
 #define vgl_polygon_test_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vgl/vgl_polygon_test.h
-
 //:
 // \file
 // \author fsm@robots.ox.ac.uk

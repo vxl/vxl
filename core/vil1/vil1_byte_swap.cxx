@@ -1,11 +1,11 @@
 // This is vxl/vil/vil_byte_swap.cxx
-
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vil_byte_swap.h"
 #include <vcl_cassert.h>
 

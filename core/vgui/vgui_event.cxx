@@ -1,5 +1,7 @@
-// This is ./oxl/vgui/vgui_event.cxx
-
+// This is oxl/vgui/vgui_event.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma implementation
+#endif
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -10,11 +12,6 @@
 //  Modifications:
 //    11-SEP-1999 P.Pritchett - Initial version.
 // \endverbatim
-
-
-#ifdef __GNUC__
-#pragma implementation
-#endif
 
 #include "vgui_event.h"
 
@@ -121,7 +118,7 @@ static vcl_ostream& print_bitcodes(vcl_ostream& s, bitcode* codes, int val)
 {
   int val_in = val;
   char const *spc = "";
-  for(; codes->name; ++codes)
+  for (; codes->name; ++codes)
     if (val & codes->code) {
       s << spc << codes->name;
       spc = " ";
@@ -152,7 +149,7 @@ vcl_ostream& operator<<(vcl_ostream& s, vgui_event const& e)
 // updated when the fields are changed. fsm@robots.
 bool operator==(vgui_event const& a, vgui_event const& b)
 {
-  return (a.type    == b.type &&
+  return  a.type    == b.type &&
           a.button  == b.button &&
           a.key     == b.key &&
           a.modifier== b.modifier &&
@@ -162,6 +159,6 @@ bool operator==(vgui_event const& a, vgui_event const& b)
           a.timer_id== b.timer_id &&
           a.str     == b.str &&
           a.user    == b.user &&
-          a.data    == b.data);
+          a.data    == b.data;
 }
 

@@ -1,11 +1,6 @@
+// This is vxl/vbl/io/vbl_io_sparse_array_base.h
 #ifndef vbl_io_sparse_array_base_h
 #define vbl_io_sparse_array_base_h
-#ifdef __GNUC__
-#pragma interface
-#endif
-
-// This is vxl/vbl/io/vbl_io_sparse_array_base.h
-
 //:
 // \file
 // \author Ian Scott
@@ -25,6 +20,5 @@ void vsl_b_read(vsl_b_istream &is, vbl_sparse_array_base<T, Index> & v);
 //: Print human readable summary of object to a stream
 template <class T, class Index>
 void vsl_print_summary(vcl_ostream& os,const vbl_sparse_array_base<T, Index> & b);
-
 
 #endif // vbl_io_sparse_array_base_h

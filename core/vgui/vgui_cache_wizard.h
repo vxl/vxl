@@ -1,5 +1,9 @@
-// This is ./oxl/vgui/vgui_cache_wizard.h
-
+// This is oxl/vgui/vgui_cache_wizard.h
+#ifndef vgui_cache_wizard_h_
+#define vgui_cache_wizard_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file
 // \author Marko Bacic
@@ -14,12 +18,6 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
-#ifndef vgui_cache_wizard_h_
-#define vgui_cache_wizard_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
 #include <vcl_vector.h>
 #include <vcl_list.h>
 #include <vcl_utility.h>
@@ -28,14 +26,15 @@
 #include <vgui/vgui_gl.h>
 
 //: Provides support for caching of large images.
-class vgui_cache_wizard {
-public:
+class vgui_cache_wizard
+{
+ public:
   //: Each image consists of MxN quadrants. M,N is to be determined on runtime
   typedef vcl_vector <GLuint> image_cache_quadrants;
   typedef vcl_pair<vil_image,image_cache_quadrants *> wizard_image;
   typedef vcl_pair<int,int> dimension;
 
-public:
+ public:
   //: Loads an image into the memory
   int load_image(vil_image);
   //: Get the texture names for the current viewport
@@ -57,7 +56,7 @@ public:
   //: Destructor.
   ~vgui_cache_wizard();
 
-private:
+ private:
   //: Hold a vector of images that have been loaded
   vcl_vector <wizard_image *> images_;
   //: Dimensions of images in quadrants units

@@ -1,11 +1,11 @@
 // This is vxl/vil/vil_flipud.cxx
-
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vil_flipud.h"
 #include <vil/vil_flipud_impl.h>
 

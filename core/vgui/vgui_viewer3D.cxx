@@ -1,5 +1,7 @@
-// This is ./oxl/vgui/vgui_viewer3D.cxx
-
+// This is oxl/vgui/vgui_viewer3D.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma implementation
+#endif
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
@@ -10,10 +12,6 @@
 //  Modifications:
 //    14-SEP-1999 P.Pritchett - Initial version.
 // \endverbatim
-
-#ifdef __GNUC__
-#pragma implementation
-#endif
 
 #include "vgui_viewer3D.h"
 
@@ -140,7 +138,7 @@ void vgui_viewer3D::setup_gl_matrices() {
 
 void vgui_viewer3D::draw_before_child()
 {
-  if (debug) vcl_cerr << "vgui_viewer3D::draw_before_child" << vcl_endl;
+  if (debug) vcl_cerr << "vgui_viewer3D::draw_before_child\n";
 
   // Setup OpenGL for 3D
   glEnable(GL_CULL_FACE);
@@ -210,7 +208,7 @@ bool vgui_viewer3D::handle(const vgui_event& e)
 
     if (spin_data->viewer == this) {
 
-      //vcl_cerr << "spinning" << vcl_endl;
+      //vcl_cerr << "spinning\n";
       vcl_cerr << "-";
       if (debug) {
         vcl_cerr << vul_sprintf("spin_data->delta_r %f %f %f %f",
@@ -241,17 +239,17 @@ bool vgui_viewer3D::handle(const vgui_event& e)
 
 
   if (e.type == vgui_DRAW) {
-    if (debug) vcl_cerr << "vgui_viewer3D vgui_DRAW" << vcl_endl;
+    if (debug) vcl_cerr << "vgui_viewer3D vgui_DRAW\n";
     draw_before_child();
 #if 0
     vgui_event eprime = e;
 
     if (gl_mode == textured) {
-      if (debug) vcl_cerr << "vgui_viewer3D textured" << vcl_endl;
+      if (debug) vcl_cerr << "vgui_viewer3D textured\n";
       eprime.user = (void*) &vgui_3D::textured;
     }
     else if (gl_mode == wireframe) {
-      if (debug) vcl_cerr << "vgui_viewer3D wireframe" << vcl_endl;
+      if (debug) vcl_cerr << "vgui_viewer3D wireframe\n";
       eprime.user = (void*) &vgui_3D::wireframe;
     }
 
@@ -292,7 +290,7 @@ bool vgui_viewer3D::mouse_drag(int x, int y, vgui_button button, vgui_modifier m
 
   // SPINNING
   if (c_mouse_rotate(button, modifier)) {
-    if (debug) vcl_cerr << "vgui_trackball_handler::left " << vcl_endl;
+    if (debug) vcl_cerr << "vgui_trackball_handler::left \n";
 
     GLdouble vp[4];
     glGetDoublev(GL_VIEWPORT, vp); // ok
@@ -316,7 +314,7 @@ bool vgui_viewer3D::mouse_drag(int x, int y, vgui_button button, vgui_modifier m
 
   // ZOOMING
   if (c_mouse_zoom(button, modifier)) {
-    if (debug) vcl_cerr << "vgui_trackball_handler::middle" << vcl_endl;
+    if (debug) vcl_cerr << "vgui_trackball_handler::middle\n";
 
     GLdouble vp[4];
     glGetDoublev(GL_VIEWPORT, vp); // ok
@@ -342,7 +340,7 @@ bool vgui_viewer3D::mouse_drag(int x, int y, vgui_button button, vgui_modifier m
 
   // TRANSLATION
   if (c_mouse_translate(button, modifier)) {
-    if (debug) vcl_cerr << "vgui_trackball_handle::right" << vcl_endl;
+    if (debug) vcl_cerr << "vgui_trackball_handle::right\n";
 
   vcl_cerr << "handle! "<< button << "\n";
 
@@ -368,7 +366,7 @@ bool vgui_viewer3D::mouse_up(int x, int y, vgui_button button, vgui_modifier mod
 
   // SPINNING
   if (this->allow_spinning && c_mouse_rotate(button, modifier)) {
-    if (debug) vcl_cerr << "vgui_trackball_handler::left " << vcl_endl;
+    if (debug) vcl_cerr << "vgui_trackball_handler::left \n";
 
     GLdouble vp[4];
     glGetDoublev(GL_VIEWPORT, vp); // ok
@@ -406,23 +404,23 @@ bool vgui_viewer3D::mouse_up(int x, int y, vgui_button button, vgui_modifier mod
 bool vgui_viewer3D::help() {
   vcl_cerr << vcl_endl;
   // awfawf fixme
-  vcl_cerr << "-- vgui_viewer3D ---------" << vcl_endl;
-  vcl_cerr << "|     mouse              |"  << vcl_endl;
-  vcl_cerr << "| shift+left        zoom |"  << vcl_endl;
-  vcl_cerr << "| shift+middle    rotate |"  << vcl_endl;
-  vcl_cerr << "| shift+right  translate |"  << vcl_endl;
-  vcl_cerr << "|                        |" << vcl_endl;
-  vcl_cerr << "|     keys               |"  << vcl_endl;
-  vcl_cerr << "| `D'         lock dolly |"  << vcl_endl;
-  vcl_cerr << "| `Z'          lock zoom |"  << vcl_endl;
-  vcl_cerr << "| `l'           lighting |"  << vcl_endl;
-  vcl_cerr << "| `s'            shading |"  << vcl_endl;
-  vcl_cerr << "| `p'           spinning |"  << vcl_endl;
-  vcl_cerr << "| `n'           niceness |"  << vcl_endl;
-  vcl_cerr << "| `h'          headlight |"  << vcl_endl;
-  vcl_cerr << "| `>'          save home |"  << vcl_endl;
-  vcl_cerr << "| `<'       restore home |"  << vcl_endl;
-  vcl_cerr << "--------------------------" << vcl_endl;
+  vcl_cerr << "-- vgui_viewer3D ---------\n";
+  vcl_cerr << "|     mouse              |\n";
+  vcl_cerr << "| shift+left        zoom |\n";
+  vcl_cerr << "| shift+middle    rotate |\n";
+  vcl_cerr << "| shift+right  translate |\n";
+  vcl_cerr << "|                        |\n";
+  vcl_cerr << "|     keys               |\n";
+  vcl_cerr << "| `D'         lock dolly |\n";
+  vcl_cerr << "| `Z'          lock zoom |\n";
+  vcl_cerr << "| `l'           lighting |\n";
+  vcl_cerr << "| `s'            shading |\n";
+  vcl_cerr << "| `p'           spinning |\n";
+  vcl_cerr << "| `n'           niceness |\n";
+  vcl_cerr << "| `h'          headlight |\n";
+  vcl_cerr << "| `>'          save home |\n";
+  vcl_cerr << "| `<'       restore home |\n";
+  vcl_cerr << "--------------------------\n";
   vcl_cerr << vcl_endl;
 
   return false;
@@ -463,11 +461,11 @@ bool vgui_viewer3D::key_press(int, int, vgui_key key, vgui_modifier modifier) {
 
   if (c_render_mode(key, modifier)) {
     if (this->gl_mode == vgui_viewer3D::wireframe) {
-      vgui::out << "viewer3D : textured rendering" << vcl_endl;
+      vgui::out << "viewer3D : textured rendering\n";
       this->gl_mode = vgui_viewer3D::textured;
     }
     else if (this->gl_mode == vgui_viewer3D::textured) {
-      vgui::out << "viewer3D : wireframe rendering" << vcl_endl;
+      vgui::out << "viewer3D : wireframe rendering\n";
       this->gl_mode = vgui_viewer3D::wireframe;
     }
     this->post_redraw();
@@ -476,7 +474,7 @@ bool vgui_viewer3D::key_press(int, int, vgui_key key, vgui_modifier modifier) {
 
   if (c_niceness(key, modifier)) {
     this->high_quality = !this->high_quality;
-    vgui::out << "viewer3D : " << vbl_bool_ostream::high_low(this->high_quality) << " quality " << vcl_endl;
+    vgui::out << "viewer3D : " << vbl_bool_ostream::high_low(this->high_quality) << " quality \n";
     this->post_redraw();
     return true;
   }
@@ -490,12 +488,12 @@ bool vgui_viewer3D::key_press(int, int, vgui_key key, vgui_modifier modifier) {
 
   if (c_save_home(key, modifier)) {
     this->home = this->token;
-    vgui::out << "viewer3D : saving position to 'home'" << vcl_endl;
+    vgui::out << "viewer3D : saving position to 'home'\n";
     return true;
   }
 
   if (c_restore_home(key, modifier)) {
-    vgui::out << "viewer3D : restoring position 'home'" << vcl_endl;
+    vgui::out << "viewer3D : restoring position 'home'\n";
     this->token = this->home;
     this->post_redraw();
     return true;

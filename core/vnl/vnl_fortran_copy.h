@@ -1,10 +1,9 @@
+// This is vxl/vnl/vnl_fortran_copy.h
 #ifndef vnl_fortran_copy_h_
 #define vnl_fortran_copy_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_fortran_copy.h
-
 //: \file
 //  \brief Convert row-stored matrix to column-stored
 //
@@ -25,8 +24,9 @@
 //:  Convert row-stored matrix to column-stored.
 //  Convert C format (row-stored) matrix to fortran format (column-stored) matrix.
 template <class T>
-class vnl_fortran_copy {
-public:
+class vnl_fortran_copy
+{
+ public:
   // Constructors/Destructors--------------------------------------------------
 
   vnl_fortran_copy(vnl_matrix<T> const & M);
@@ -36,12 +36,12 @@ public:
   // Operations----------------------------------------------------------------
   operator T*() { return data; }
 
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
   int sz;
   T *data;
 
-private:
+ private:
   // Helpers-------------------------------------------------------------------
 };
 

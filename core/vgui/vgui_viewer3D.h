@@ -1,5 +1,9 @@
-// This is ./oxl/vgui/vgui_viewer3D.h
-
+// This is oxl/vgui/vgui_viewer3D.h
+#ifndef vgui_viewer3D_h_
+#define vgui_viewer3D_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -13,13 +17,6 @@
 //    07-AUG-2002 K.Y.McGaul - changed to and added Doxygen style comments.
 // \endverbatim
 
-
-#ifndef vgui_viewer3D_h_
-#define vgui_viewer3D_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-
 #include "vgui_viewer3D_sptr.h"
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_drag_mixin.h>
@@ -29,8 +26,9 @@
 struct vgui_viewer3D_spin;
 
 //:  Tableau with functions to view 3D objects (eg. rotate, zoom, etc).
-class vgui_viewer3D : public vgui_wrapper_tableau, public vgui_drag_mixin {
-public:
+class vgui_viewer3D : public vgui_wrapper_tableau, public vgui_drag_mixin
+{
+ public:
   //: Constructor - don't use this, use vgui_viewer3D_new.
   vgui_viewer3D(vgui_tableau_sptr const&);
 
@@ -64,7 +62,8 @@ public:
   // Implementation
   void setup_gl_matrices();
 
-  struct token_t {
+  struct token_t
+  {
     float quat[4];     // quaternion
     float scale;
     float trans[3];
@@ -113,10 +112,10 @@ public:
   bool high_quality;
   bool headlight;
 
-protected:
+ protected:
  ~vgui_viewer3D();
 
-private:
+ private:
   vgui_event event;
   vgui_event last;
 
@@ -131,11 +130,11 @@ private:
   bool lock_zoom;
 
   vgui_viewer3D_spin *spin_data;
-
 };
 
 //: Create a smart pointer to a vgui_viewer3D tableau.
-struct vgui_viewer3D_new : public vgui_viewer3D_sptr {
+struct vgui_viewer3D_new : public vgui_viewer3D_sptr
+{
   typedef vgui_viewer3D_sptr base;
   vgui_viewer3D_new(vgui_tableau_sptr const& a) : base(new vgui_viewer3D(a)) { }
 };

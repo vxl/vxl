@@ -1,9 +1,9 @@
+// This is vxl/vcsl/vcsl_displacement.h
 #ifndef vcsl_displacement_h
 #define vcsl_displacement_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author François BERTEL
@@ -25,7 +25,7 @@
 class vcsl_displacement
   :public vcsl_rotation
 {
-public:
+ public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
@@ -70,7 +70,7 @@ public:
   //  REQUIRE: is_invertible(time)
   virtual vnl_vector<double> inverse(const vnl_vector<double> &v,
                                      double time) const;
-protected:
+ protected:
 
   //: Compute the value of the vector at time `time'
   virtual vnl_vector<double> vector_value(double time) const;

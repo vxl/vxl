@@ -1,9 +1,11 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
-#ifdef __GNUC__
+// This is vxl/vil/vil_stream_url.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+
 #include "vil_stream_url.h"
 
 #include <vcl_cassert.h>
@@ -76,12 +78,12 @@ static vcl_string encode_base64(const vcl_string& in)
     unsigned i = 0, line_octets = 0;
   const unsigned l = in.size();
   char data[3];
-    while(i < l)
+    while (i < l)
     {
     data[0] = in[i++];
     data[1] = data[2] = 0;
 
-    if(i == l)
+    if (i == l)
     {
       out.append(encode_triplet(data,1),4);
       return out;
@@ -89,7 +91,7 @@ static vcl_string encode_base64(const vcl_string& in)
 
     data[1] = in[i++];
 
-    if(i == l)
+    if (i == l)
     {
       out.append(encode_triplet(data,2),4);
       return out;
@@ -99,7 +101,7 @@ static vcl_string encode_base64(const vcl_string& in)
 
     out.append(encode_triplet(data,3),4);
 
-    if(line_octets >= 68/4) // print carriage return
+    if (line_octets >= 68/4) // print carriage return
     {
       out.append("\r\n",2);
       line_octets = 0;
@@ -153,9 +155,9 @@ vil_stream_url::vil_stream_url(char const *url)
 
   // so far so good.
 #ifdef DEBUG
-  vcl_cerr << "auth = \'" << auth << "\'" << vcl_endl
-           << "host = \'" << host << "\'" << vcl_endl
-           << "path = \'" << path << "\'" << vcl_endl
+  vcl_cerr << "auth = \'" << auth << "\'\n"
+           << "host = \'" << host << "\'\n"
+           << "path = \'" << path << "\'\n"
            << "port = " << port << vcl_endl;
 #endif
 
@@ -180,7 +182,7 @@ vil_stream_url::vil_stream_url(char const *url)
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
   if (tcp_socket == INVALID_SOCKET) {
-    vcl_cerr << __FILE__ ": failed to create socket." << vcl_endl;
+    vcl_cerr << __FILE__ ": failed to create socket.\n";
 # ifndef NDEBUG
     vcl_cerr << "error code : " << WSAGetLastError() << vcl_endl;
 # endif
@@ -188,7 +190,7 @@ vil_stream_url::vil_stream_url(char const *url)
   }
 #else
   if (tcp_socket < 0)
-    vcl_cerr << __FILE__ ": failed to create socket." << vcl_endl;
+    vcl_cerr << __FILE__ ": failed to create socket.\n";
 #endif
 
 #ifdef DEBUG
@@ -198,7 +200,7 @@ vil_stream_url::vil_stream_url(char const *url)
   // get network address of server.
   hostent *hp = gethostbyname(host.c_str());
   if (! hp) {
-    vcl_cerr << __FILE__ ": failed to lookup host" << vcl_endl;
+    vcl_cerr << __FILE__ ": failed to lookup host\n";
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
 #else
@@ -215,7 +217,7 @@ vil_stream_url::vil_stream_url(char const *url)
 
   // connect to server.
   if (connect(tcp_socket , (sockaddr *) &my_addr, sizeof my_addr) < 0) {
-    vcl_cerr << __FILE__ ": failed to connect to host" << vcl_endl;
+    vcl_cerr << __FILE__ ": failed to connect to host\n";
     //perror(__FILE__);
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
@@ -240,7 +242,7 @@ vil_stream_url::vil_stream_url(char const *url)
   if (::write(tcp_socket, buffer, vcl_strlen(buffer)) < 0)
 #endif
   {
-    vcl_cerr << __FILE__ ": error sending HTTP request" << vcl_endl;
+    vcl_cerr << __FILE__ ": error sending HTTP request\n";
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
 #else
@@ -301,7 +303,7 @@ vil_stream_url::vil_stream_url(char const *url)
   char btest[4096];
   vcl_ofstream test("/test.jpg", vcl_ios_binary);
   u_->seek(0L);
-  while(vil_streampos bn = u_->read(btest, 4096L))
+  while (vil_streampos bn = u_->read(btest, 4096L))
     test.write(btest, bn);
   test.close();
 #endif 

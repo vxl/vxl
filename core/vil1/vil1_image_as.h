@@ -1,10 +1,9 @@
 // This is vxl/vil/vil_image_as.h
 #ifndef vil_image_as_h_
 #define vil_image_as_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Set of vil_image_as functions

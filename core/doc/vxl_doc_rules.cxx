@@ -1,8 +1,7 @@
-// This is ./vxl/doc/vxl_doc_rules.cxx
-#ifdef __GNUC__
+// This is vxl/doc/vxl_doc_rules.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 

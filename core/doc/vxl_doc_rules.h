@@ -1,10 +1,9 @@
-// This is ./vxl/doc/vxl_doc_rules.h
+// This is vxl/doc/vxl_doc_rules.h
 #ifndef vxl_doc_rules_h_
 #define vxl_doc_rules_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //            (This is an example of how to code document your    )
 //            ( file. Comments with brackets, like this one,      )
 //            ( should be read but not copied into your file.     )
@@ -49,6 +48,8 @@
 //   IMS (Manchester) 14/03/2001: Tidied up the documentation
 // \endverbatim
 
+#include <vcl_cmath.h> // includes go here
+
 //: Brief description of the class
 // The long description starts here
 // \verbatim
@@ -66,8 +67,9 @@
 // \endcode
 // The long description ends here
 
-class my_class {
-public:
+class my_class
+{
+ public:
 
   //: Brief description of the member variable.
   double my_value;

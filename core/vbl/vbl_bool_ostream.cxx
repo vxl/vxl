@@ -1,11 +1,9 @@
 // This is vxl/vbl/vbl_bool_ostream.cxx
-
-//-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-#include "vbl_bool_ostream.h"
 
+#include "vbl_bool_ostream.h"
 
 vcl_ostream& operator<<(vcl_ostream& s, const vbl_bool_ostream::on_off& proxy) {
   if (*(proxy.truth)) 

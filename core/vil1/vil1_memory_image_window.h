@@ -1,7 +1,7 @@
 // This is vxl/vil/vil_memory_image_window.h
 #ifndef vil_memory_image_window_h_
 #define vil_memory_image_window_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -16,8 +16,9 @@ const int vil_memory_image_window_maxint = 0x07ffffff;
 //: Operations on a small region of an image
 //    vil_memory_image_window centres a mask around a pixel in an vil_memory_image_of,
 //    and implements a few comparison operators: SSD, NSSD, NCC.
-class vil_memory_image_window {
-public:
+class vil_memory_image_window
+{
+ public:
   // Constructors/Destructors--------------------------------------------------
 
   vil_memory_image_window(const vil_memory_image_of<vil_byte>& image, int centre_x, int centre_y, int mask_size);
@@ -59,7 +60,7 @@ public:
 
   float mean_intensity();
 
-protected:
+ protected:
   // Data Members--------------------------------------------------------------
   const vil_memory_image_of<vil_byte>& image1_;
   int mask_size_;
@@ -70,7 +71,7 @@ protected:
 
   void init(int centre_x, int centre_y, int mask_size);
 
-private:
+ private:
   // Helpers-------------------------------------------------------------------
   vil_memory_image_window(const vil_memory_image_window& that);
   vil_memory_image_window& operator=(const vil_memory_image_window& that);

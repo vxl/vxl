@@ -1,10 +1,9 @@
+// This is vxl/vnl/vnl_fastops.h
 #ifndef vnl_fastops_h_
 #define vnl_fastops_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_fastops.h
-
 //:
 //  \file
 //  \brief Collection of C-style matrix functions
@@ -23,8 +22,9 @@
 //: Collection of C-style matrix functions for the most time-critical applications.
 // In general, however one should consider using the vnl_transpose envelope-letter
 // class to achieve the same results with about a 10% speed penalty.
-class vnl_fastops {
-public:
+class vnl_fastops
+{
+ public:
   static void AtA(const vnl_matrix<double>& A, vnl_matrix<double>* out);
 
   static void AB(const vnl_matrix<double>& A, const vnl_matrix<double>& B, vnl_matrix<double>* out);

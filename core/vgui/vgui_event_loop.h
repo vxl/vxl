@@ -1,15 +1,13 @@
-// This is ./oxl/vgui/vgui_event_loop.h
-
+// This is oxl/vgui/vgui_event_loop.h
+#ifndef vgui_event_loop_h_
+#define vgui_event_loop_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
 // \brief
-
-#ifndef vgui_event_loop_h_
-#define vgui_event_loop_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 
 struct vgui_slab;
 struct vgui_tableau_sptr;

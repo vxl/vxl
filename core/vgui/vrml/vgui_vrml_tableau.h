@@ -1,6 +1,7 @@
+// This is oxl/vgui/vrml/vgui_vrml_tableau.h
 #ifndef vgui_vrml_tableau_h_
 #define vgui_vrml_tableau_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //
@@ -31,7 +32,7 @@ class vgui_vrml_draw_visitor;
 
 class vgui_vrml_tableau : public vgui_tableau
 {
-public:
+ public:
   vgui_vrml_tableau(const char* file, bool scale);
   ~vgui_vrml_tableau();
 
@@ -49,17 +50,17 @@ public:
 
   void set_rescale( bool flag) { rescale_model= flag; }
 
-private:
+ private:
 
   bool rescale_model;
 };
 
 
-struct vgui_vrml_tableau_new : public vgui_vrml_tableau_sptr {
+struct vgui_vrml_tableau_new : public vgui_vrml_tableau_sptr
+{
   typedef vgui_vrml_tableau_sptr base;
   vgui_vrml_tableau_new(char const* file, bool scale = true) : base(new vgui_vrml_tableau(file, scale)) { }
 };
-
 
 
 #endif // vgui_vrml_tableau_h_

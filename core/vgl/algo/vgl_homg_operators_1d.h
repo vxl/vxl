@@ -1,6 +1,7 @@
+// This is vxl/vgl/algo/vgl_homg_operators_1d.h
 #ifndef vgl_homg_operators_1d_h_
 #define vgl_homg_operators_1d_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -17,8 +18,9 @@
 #include <vgl/vgl_homg_point_1d.h>
 
 template <class T>
-class vgl_homg_operators_1d {
-public:
+class vgl_homg_operators_1d
+{
+ public:
   static double cross_ratio(const vgl_homg_1d<T>& a, const vgl_homg_1d<T>& b,
                             const vgl_homg_1d<T>& c, const vgl_homg_1d<T>& d);
   static T conjugate(T x1, T x2, T x3, double cr = -1);

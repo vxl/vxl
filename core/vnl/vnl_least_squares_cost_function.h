@@ -1,10 +1,9 @@
+// This is vxl/vnl/vnl_least_squares_cost_function.h
 #ifndef vnl_least_squares_cost_function_h_
 #define vnl_least_squares_cost_function_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_least_squares_cost_function.h
-
 //: \file
 //  \brief vnl_least_squares_function -> vnl_cost_function adaptor
 //  \author Andrew W. Fitzgibbon, Oxford RRG
@@ -22,15 +21,16 @@
 #include <vnl/vnl_least_squares_function.h>
 
 //: An adaptor that converts a vnl_least_squares_function to a vnl_cost_function
-class vnl_least_squares_cost_function : public vnl_cost_function {
-public:
+class vnl_least_squares_cost_function : public vnl_cost_function
+{
+ public:
   vnl_least_squares_cost_function(vnl_least_squares_function* f);
 
   double f(const vnl_vector<double>& x);
 
   virtual void gradf(const vnl_vector<double>& x, vnl_vector<double>& gradient);
 
-protected:
+ protected:
   vnl_vector<double> storage_;
   vnl_matrix<double> jacobian_;
   vnl_least_squares_function* f_;

@@ -1,10 +1,9 @@
-// This is ./vxl/vnl/vnl_alloc.h
+// This is vxl/vnl/vnl_alloc.h
 #ifndef vnl_alloc_h_
 #define vnl_alloc_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author unknown
@@ -40,19 +39,17 @@ const int VNL_ALLOC_ALIGN = 8;
 const vcl_size_t VNL_ALLOC_MAX_BYTES = 256;
 const vcl_size_t VNL_ALLOC_NFREELISTS = VNL_ALLOC_MAX_BYTES/VNL_ALLOC_ALIGN;
 
-class vnl_alloc {
-private:
+class vnl_alloc
+{
   static vcl_size_t ROUND_UP(vcl_size_t bytes) {
     return (bytes + VNL_ALLOC_ALIGN-1) & ~(VNL_ALLOC_ALIGN - 1);
   }
-private:
   union obj;
   friend union obj;
   union obj {
     union obj * free_list_link;
     char client_data[1];    /* The client sees this.        */
   };
-private:
 # if defined ( __SUNPRO_CC ) || defined ( _AIX )
   static obj * free_list[];
   // Specifying a size results in duplicate def for 4.1
@@ -74,14 +71,15 @@ private:
   static char *end_free;
   static vcl_size_t heap_size;
 
-  class lock {
-  public:
-    lock() { }
-    ~lock() { }
+  class lock
+  {
+   public:
+    lock() {}
+    ~lock() {}
   };
   friend class lock;
 
-public:
+ public:
   // this one is needed for proper vcl_simple_alloc wrapping
   typedef char value_type;
 

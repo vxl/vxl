@@ -1,5 +1,7 @@
-// This is ./oxl/vgui/vgui_easy2D.cxx
-
+// This is oxl/vgui/vgui_easy2D.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma implementation
+#endif
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
@@ -10,10 +12,6 @@
 //  Modifications:
 //    24-SEP-1999 P.Pritchett - Initial version.
 // \endverbatim
-
-#ifdef __GNUC__
-#pragma implementation
-#endif
 
 #include "vgui_easy2D.h"
 
@@ -180,17 +178,16 @@ vgui_soview2D_circle* vgui_easy2D::add_circle(float x, float y, float r) {
 }
 
 vgui_soview2D_ellipse* vgui_easy2D::add_ellipse(float x, float y, float w, float h, float phi){
-  vgui_soview2D_ellipse *obj = new vgui_soview2D_ellipse; 
-  
+  vgui_soview2D_ellipse *obj = new vgui_soview2D_ellipse;
+
   obj->x = x;
   obj->y = y;
-  obj->w = w; 
-  obj->h = h; 
+  obj->w = w;
+  obj->h = h;
   obj->phi = phi;
 
   add(obj);
   return obj;
-
 }
 
 //: Add a point with the given projective coordinates.

@@ -1,5 +1,5 @@
 // This is vxl/vnl/vnl_matlab_read.cxx
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
@@ -45,14 +45,8 @@ void vnl_matlab_read_data(vcl_istream &s, vcl_complex<T > *ptr, unsigned n) { \
   vnl_c_vector<T >::deallocate(im, n); \
 }
 
-//#if VCL_CAN_DO_PARTIAL_SPECIALIZATION
-//template <class T> implement_read_complex_data(T)
-//template void vnl_matlab_read_data(vcl_istream &, vcl_complex<float > *, unsigned);
-//template void vnl_matlab_read_data(vcl_istream &, vcl_complex<double> *, unsigned);
-//#else
 implement_read_complex_data(float )
 implement_read_complex_data(double)
-//#endif
 
 #undef implement_read_complex_data
 
@@ -69,7 +63,7 @@ vnl_matlab_readhdr::~vnl_matlab_readhdr() {
 }
 
 vnl_matlab_readhdr::operator bool () const {
-  return s.good() && !s.eof(); // FIXME || s.good(); // FIXME
+  return s.good() && !s.eof(); // FIXME
 }
 
 bool vnl_matlab_readhdr::is_single() const {
@@ -92,12 +86,13 @@ void vnl_matlab_readhdr::read_hdr() {
   if (varname)
     delete [] varname;
   varname = new char[hdr.namlen+1];
-// vcl_cerr << "type:" << hdr.type << vcl_endl;
-// vcl_cerr << "rows:" << hdr.rows << vcl_endl;
-// vcl_cerr << "cols:" << hdr.cols << vcl_endl;
-// vcl_cerr << "imag:" << hdr.imag << vcl_endl;
-// vcl_cerr << "namlen:" << hdr.namlen << vcl_endl;
-
+#ifdef DEBUG
+  vcl_cerr << "type:" << hdr.type << vcl_endl;
+  vcl_cerr << "rows:" << hdr.rows << vcl_endl;
+  vcl_cerr << "cols:" << hdr.cols << vcl_endl;
+  vcl_cerr << "imag:" << hdr.imag << vcl_endl;
+  vcl_cerr << "namlen:" << hdr.namlen << vcl_endl;
+#endif
   ::vnl_read_bytes(s, varname, hdr.namlen);
   varname[hdr.namlen] = '\0';
 
@@ -182,7 +177,6 @@ bool vnl_matlab_read_or_die(vcl_istream &s,
   vnl_matlab_readhdr h(s);
   if (!s) // eof?
     return false;
-  //assert(s/*bad stream?*/);
   if (name && *name)
     assert(vcl_strcmp(name, h.name())==0/*wrong name?*/);
   if (v.size() != unsigned(h.rows()*h.cols()))
@@ -202,7 +196,6 @@ bool vnl_matlab_read_or_die(vcl_istream &s,
   vnl_matlab_readhdr h(s);
   if (!s) // eof?
     return false;
-  //assert(s/*bad stream?*/);
   if (name && *name)
     assert(vcl_strcmp(name, h.name())==0/*wrong name?*/);
   if (M.rows() != unsigned(h.rows()) || M.cols() != unsigned(h.cols()))

@@ -1,15 +1,15 @@
+// This is vxl/vil/vil_pixel.h
 #ifndef vil_pixel_h_
 #define vil_pixel_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vil/vil_pixel.h
-
 //:
 // \file
 // \brief Convenient descriptions of format combinations
 // \author awf@robots.ox.ac.uk
 
+class vil_image;
 
 //: Common combinations of component format, bits, planes and components.
 enum vil_pixel_format_t {
@@ -46,8 +46,6 @@ const char* vil_print(vil_pixel_format_t f)
     default: return "VIL_PIXEL_FORMAT_INVALID";
   }
 }
-
-class vil_image;
 
 //: Returns one of the `vil_pixel_format's.
 // A standard RGB RGB RGB image has pixel_type() == VIL_RGB_BYTE

@@ -1,11 +1,9 @@
+// This is vxl/vnl/vnl_matrix_ref.h
 #ifndef vnl_matrix_ref_h_
 #define vnl_matrix_ref_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-// This is vxl/vnl/vnl_matrix_ref.h
-
 //:
 // \file
 // \brief vnl_matrix reference to user-supplied storage.
@@ -42,14 +40,15 @@
 //    operator new, and are therefore unlikely to be the unwitting subject
 //    of an operator delete.
 template <class T>
-class vnl_matrix_ref : public vnl_matrix<T> {
+class vnl_matrix_ref : public vnl_matrix<T>
+{
   typedef vnl_matrix<T> Base;
 
-public:
+ public:
   // Constructors/Destructors--------------------------------------------------
   vnl_matrix_ref(int m, int n, T *datablck) {
     Base::data = vnl_c_vector<T>::allocate_Tptr(m);
-    for(int i = 0; i < m; ++i)
+    for (int i = 0; i < m; ++i)
       Base::data[i] = datablck + i * n;
     Base::num_rows = m;
     Base::num_cols = n;
@@ -58,7 +57,7 @@ public:
     Base::data[0] = 0; // Prevent base dtor from releasing our memory
   }
 
-private:
+ private:
   // Private operator new because deleting a pointer to
   // one of these through a baseclass pointer will attempt
   // to free this in-class memory.
@@ -72,7 +71,7 @@ private:
 //  void* operator new(size_t) { return 0; }
 //#endif
 
-private:
+ private:
   //: Resizing is disallowed
   bool resize (unsigned int, unsigned int) { return false; }
 

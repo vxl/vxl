@@ -1,10 +1,9 @@
-// This is ./vxl/vil/vil_memory_image_impl.h
+// This is vxl/vil/vil_memory_image_impl.h
 #ifndef vil_memory_image_impl_h_
 #define vil_memory_image_impl_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \author awf@robots.ox.ac.uk
@@ -23,8 +22,9 @@
 #include <vcl_string.h>
 
 //: Implementation class for vil_memory_image.
-class vil_memory_image_impl : public vil_image_impl {
-public:
+class vil_memory_image_impl : public vil_image_impl
+{
+ public:
   vil_memory_image_impl(int planes, int w, int h,
                         vil_memory_image_format const& format);
   vil_memory_image_impl(int planes, int w, int h, int components, int bits_per_component,
@@ -81,7 +81,7 @@ public:
   vil_memory_image_impl(void *buf, int w, int h,
                         vil_pixel_format_t pixel_format);
 
-protected:
+ protected:
   friend class vil_memory_image;
 
   void init(void *buf, int planes, int w, int h,

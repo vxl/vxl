@@ -1,8 +1,7 @@
-// This is ./vxl/vnl/vnl_cost_function.cxx
-#ifdef __GNUC__
+// This is vxl/vnl/vnl_cost_function.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG
@@ -51,7 +50,7 @@ void vnl_cost_function::fdgradf(vnl_vector<double> const& x,
 {
   vnl_vector<double> tx = x;
   double h = stepsize;
-  for(int i = 0; i < dim; ++i) {
+  for (int i = 0; i < dim; ++i) {
 
     double tplus = x[i] + h;
     tx[i] = tplus;

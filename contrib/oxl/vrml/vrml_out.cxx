@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is oxl/vrml/vrml_out.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
@@ -141,9 +142,8 @@ int VRML_IO_VertexRememberer::vertex_id(Vertex* v)
   if (p != vertex_ids.end())
     return (*p).second;
 
-  vcl_cerr <<
-  "VRML_IO_VertexRememberer::vertex_ids() WARNING! This can't happen -- vertex "
-       << v << " has no id.  Fnarrr.\n";
+  vcl_cerr << "VRML_IO_VertexRememberer::vertex_ids() WARNING! "
+           << "This can't happen -- vertex " << v << " has no id.  Fnarrr.\n";
 
   return -1;
 }

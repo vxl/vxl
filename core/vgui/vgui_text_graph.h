@@ -1,14 +1,12 @@
+// This is oxl/vgui/vgui_text_graph.h
 #ifndef vgui_text_graph_h_
 #define vgui_text_graph_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-/*
-  fsm@robots.ox.ac.uk
-*/
-// .NAME vgui_text_graph
-// .INCLUDE vgui/vgui_text_graph.h
-// .FILE vgui_text_graph.cxx
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
 
 #include <vcl_iosfwd.h>
 #include <vgui/vgui_tableau_sptr.h>

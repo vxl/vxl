@@ -1,10 +1,9 @@
-// This is ./vxl/vgl/vgl_homg_point_2d.h
+// This is vxl/vgl/vgl_homg_point_2d.h
 #ifndef vgl_homg_point_2d_h_
 #define vgl_homg_point_2d_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief point in projective 2D space
@@ -29,7 +28,7 @@ class vgl_homg_point_2d
 {
   // PUBLIC INTERFACE--------------------------------------------------------
 
-public:
+ public:
 
   // Constructors/Initializers/Destructor------------------------------------
 
@@ -100,7 +99,7 @@ public:
 
   // INTERNALS---------------------------------------------------------------
 
-private:
+ private:
   // the data associated with this point
   Type x_;
   Type y_;

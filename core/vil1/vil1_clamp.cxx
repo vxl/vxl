@@ -1,8 +1,7 @@
-#ifdef __GNUC__
+// This is vxl/vil/vil_clamp.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-// This is vxl/vil/vil_clamp.cxx
-
 //
 // vil_clamp
 // Author: David Capel, Oxford RRG

@@ -1,11 +1,8 @@
+// This is vxl/vnl/vnl_matrix_exp.h
 #ifndef vnl_matrix_exp_h_
 #define vnl_matrix_exp_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-// This is vxl/vnl/vnl_matrix_exp.h
-
-//: \file
+//:
+// \file
 // \brief Compute the exponential of a square matrix
 //
 // Compute the exponential of a square matrix, by summing its
@@ -18,12 +15,11 @@
 
 #include <vnl/vnl_matrix.h>
 
-//: Compute the exponential of a sqaure matrix - fiddly form
+//: Compute the exponential of a square matrix - fiddly form
 template <class T>
 bool vnl_matrix_exp(vnl_matrix<T> const &X, vnl_matrix<T> &expX, double max_err);
 
-
-//: Compute the exponential of a sqaure matrix - easy form.
+//: Compute the exponential of a square matrix - easy form.
 template <class T>
 vnl_matrix<T> vnl_matrix_exp(vnl_matrix<T> const &X);
 

@@ -1,8 +1,7 @@
-// This is ./vxl/vil/vil_crop_image_impl.cxx
-#ifdef __GNUC__
+// This is vxl/vil/vil_crop_image_impl.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 

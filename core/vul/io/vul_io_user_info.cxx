@@ -1,8 +1,7 @@
-// This is ./vxl/vul/io/vul_io_user_info.cxx
-#ifdef __GNUC__
+// This is vxl/vul/io/vul_io_user_info.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 

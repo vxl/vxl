@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is vxl/vnl/algo/vnl_symmetric_eigensystem.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //
@@ -116,7 +117,7 @@ vnl_matrix<T> vnl_symmetric_eigensystem<T>::pinverse() const
   vnl_diag_matrix<T> invD(n);
   for (unsigned i=0; i<n; ++i)
     if (D(i, i) == 0) {
-      vcl_cerr << __FILE__ ": pinverse(): eigenvalue " << i << " is zero." << vcl_endl;
+      vcl_cerr << __FILE__ ": pinverse(): eigenvalue " << i << " is zero.\n";
       invD(i, i) = 0;
     }
     else
@@ -131,7 +132,7 @@ vnl_matrix<T> vnl_symmetric_eigensystem<T>::square_root() const
   vnl_diag_matrix<T> sqrtD(n);
   for (unsigned i=0; i<n; ++i)
     if (D(i, i) < 0) {
-      vcl_cerr << __FILE__ ": square_root(): eigenvalue " << i << " is negative (" << D(i, i) << ")." << vcl_endl;
+      vcl_cerr << __FILE__ ": square_root(): eigenvalue " << i << " is negative (" << D(i, i) << ").\n";
       sqrtD(i, i) = vcl_sqrt((typename vnl_numeric_traits<T>::real_t)(-D(i, i)));
                     // gives square root of the absolute value of T.
     }
@@ -147,7 +148,7 @@ vnl_matrix<T> vnl_symmetric_eigensystem<T>::inverse_square_root() const
   vnl_diag_matrix<T> inv_sqrtD(n);
   for (unsigned i=0; i<n; ++i)
     if (D(i, i) <= 0) {
-      vcl_cerr << __FILE__ ": square_root(): eigenvalue " << i << " is non-positive (" << D(i, i) << ")." << vcl_endl;
+      vcl_cerr << __FILE__ ": square_root(): eigenvalue " << i << " is non-positive (" << D(i, i) << ").\n";
       inv_sqrtD(i, i) = vcl_sqrt(-1.0/(typename vnl_numeric_traits<T>::real_t)(D(i, i))); // ??
     }
     else

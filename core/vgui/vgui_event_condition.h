@@ -1,15 +1,13 @@
-// This is ./oxl/vgui/vgui_event_condition.h
-
+// This is oxl/vgui/vgui_event_condition.h
+#ifndef vgui_event_condition_h_
+#define vgui_event_condition_h_
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma interface
+#endif
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
 // \brief  Represent and recognise simple event conditions.
-
-#ifndef vgui_event_condition_h_
-#define vgui_event_condition_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 
 #include <vcl_string.h>
 #include <vgui/vgui_key.h>

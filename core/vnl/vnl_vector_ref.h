@@ -1,10 +1,9 @@
+// This is vxl/vnl/vnl_vector_ref.h
 #ifndef vnl_vector_ref_h_
 #define vnl_vector_ref_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_vector_ref.h
-
 //:
 //  \file
 //  \brief vnl_vector using user-supplied storage
@@ -23,8 +22,9 @@
 //   vnl_vector for which the data space has
 //   been supplied externally.
 export template <class T>
-class vnl_vector_ref : public vnl_vector<T> {
-public:
+class vnl_vector_ref : public vnl_vector<T>
+{
+ public:
   typedef vnl_vector<T> Base;
 
   //: Constructor
@@ -48,22 +48,23 @@ public:
     Base::data = 0;
   }
 
-private:
+ private:
 
   //: Copy constructor from vnl_vector<T> is disallowed:
   vnl_vector_ref(vnl_vector<T> const&) {}
  
+#if 0 // NOW COMMENTED OUT - PVR, may 97
   // Private operator new because deleting a pointer to
   // one of these through a baseclass pointer will attempt
   // to free the referenced memory.
   // Therefore disallow newing of these -- if you're paying for
   // one malloc, you can afford two.
-  // NOW COMMENTED OUT - PVR, may 97
-  //void* operator new(size_t) { return 0; }
+  void* operator new(vcl_size_t) { return 0; }
 
-  public:
+ public:
   // Privatizing other new means we must offer placement new for STL
-  //void* operator new(size_t, void* space) { return space; }
+  void* operator new(vcl_size_t, void* space) { return space; }
+#endif
 };
 
 #endif // vnl_vector_ref_h_

@@ -1,10 +1,9 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is vxl/vnl/algo/vnl_powell.h
 #ifndef vnl_powell_h_
 #define vnl_powell_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Powell minimizer.
@@ -18,8 +17,9 @@
 // Derivative-free method which may be faster if your
 // function is expensive to compute and many-dimensional.
 // Implemented from scratch from NR.
-class vnl_powell : public vnl_nonlinear_minimizer {
-public:
+class vnl_powell : public vnl_nonlinear_minimizer
+{
+ public:
 
   //: Initialize a powell with the given cost function
   vnl_powell(vnl_cost_function* functor);
@@ -27,7 +27,7 @@ public:
   //: Run minimization, place result in x.
   ReturnCodes minimize(vnl_vector<double>& x);
 
-protected:
+ protected:
   vnl_cost_function* functor_;
 
   friend class vnl_powell_1dfun;

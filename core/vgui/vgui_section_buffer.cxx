@@ -1,12 +1,12 @@
-#ifdef __GNUC__
+// This is oxl/vgui/vgui_section_buffer.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 //:
-//  \file
-
-/*
-  fsm@robots.ox.ac.uk
-*/
+// \file
+// \author fsm@robots.ox.ac.uk
+// \verbatim
+// Modifications
 //  16-AUG-2000  Marko Bacic, Oxford RRG -- Added support for multiple textures
 //               Many cheap graphics cards do not support texture
 //               maps bigger than 256x256. To support images greater then 256x256
@@ -17,6 +17,8 @@
 //  the_same_day F. Schaffalitzky
 //               Imposed my rigid ways on Marko's changes.
 //               Fixes for SolarisGL.
+// \endverbatim
+
 #include "vgui_section_buffer.h"
 
 #include <vcl_cassert.h>

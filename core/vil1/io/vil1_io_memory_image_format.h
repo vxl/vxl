@@ -1,11 +1,9 @@
+// This is vxl/vil/io/vil_memory_image_format.h
 #ifndef vil_io_memory_image_format_h_
 #define vil_io_memory_image_format_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-// This is vxl/vil/io/vil_memory_image_format.h
-
 //:
 // \file 
 // \date 22 Mar 2001

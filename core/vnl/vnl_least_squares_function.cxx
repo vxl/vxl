@@ -1,9 +1,7 @@
-#ifdef __GNUC__
+// This is vxl/vnl/vnl_least_squares_function.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
-// This is vxl/vnl/vnl_least_squares_function.cxx
-
 //:
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG
@@ -56,13 +54,13 @@ vnl_least_squares_function::~vnl_least_squares_function()
 
 void vnl_least_squares_function::throw_failure()
 {
-  //vcl_cerr << "throw_failure()" << vcl_endl;
+  //vcl_cerr << "throw_failure()\n";
   failure = true;
 }
 
 void vnl_least_squares_function::clear_failure()
 {
-  //vcl_cerr << "clear_failure()" << vcl_endl;
+  //vcl_cerr << "clear_failure()\n";
   failure = false;
 }
 
@@ -86,8 +84,8 @@ void vnl_least_squares_function::fdgradf(vnl_vector<double> const& x,
   vnl_vector<double> fplus(n);
   vnl_vector<double> fminus(n);
   double h = stepsize;
-  for(int i = 0; i < dim; ++i) {
-
+  for (int i = 0; i < dim; ++i)
+  {
     double tplus = x[i] + h;
     tx[i] = tplus;
     this->f(tx, fplus);
@@ -97,7 +95,7 @@ void vnl_least_squares_function::fdgradf(vnl_vector<double> const& x,
     this->f(tx, fminus);
 
     double h = (tplus - tminus);
-    for(int j = 0; j < n; ++j)
+    for (int j = 0; j < n; ++j)
       jacobian(j,i) = (fplus[j] - fminus[j]) / h;
 
     tx[i] = x[i];

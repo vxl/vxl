@@ -1,5 +1,5 @@
-// This is ./vxl/vil/vil_load.cxx
-#ifdef __GNUC__
+// This is vxl/vil/vil_load.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 
@@ -18,7 +18,7 @@ vil_image vil_load_raw(vil_stream *is)
 {
   for (vil_file_format** p = vil_file_format::all(); *p; ++p) {
 #if 0 // debugging
-    vcl_cerr << __FILE__ " : trying \'" << (*p)->tag() << "\'" << vcl_endl;
+    vcl_cerr << __FILE__ " : trying \'" << (*p)->tag() << "\'\n";
 #endif
     is->seek(0);
     vil_image i = (*p)->make_input_image(is);
@@ -43,7 +43,7 @@ vil_image vil_load_raw(char const* filename)
   if (is)
     return vil_load_raw(is);
   else {
-    vcl_cerr << __FILE__ ": Failed to load [" << filename << "]" << vcl_endl;
+    vcl_cerr << __FILE__ ": Failed to load [" << filename << "]\n";
     return vil_image();
   }
 }

@@ -1,10 +1,9 @@
-// This is ./vxl/vnl/vnl_matrix_fixed.h
+// This is vxl/vnl/vnl_matrix_fixed.h
 #ifndef vnl_matrix_fixed_h_
 #define vnl_matrix_fixed_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief fixed size matrix
@@ -32,9 +31,10 @@
 //  all storage is local and all vnl_matrix operations are valid.
 
 template <class T, int m, int n>
-class vnl_matrix_fixed : public vnl_matrix_fixed_ref<T,m,n> {
+class vnl_matrix_fixed : public vnl_matrix_fixed_ref<T,m,n>
+{
   T space[m*n]; // Local storage
-public:
+ public:
 
   //: Construct an empty m*n matrix
   vnl_matrix_fixed() : vnl_matrix_fixed_ref<T,m,n>(space) {}
@@ -90,10 +90,10 @@ template <class T, int M, int N, int O>
 vnl_matrix_fixed<T, M, O> operator*(const vnl_matrix_fixed<T, M, N>& a, const vnl_matrix_fixed<T, N, O>& b)
 {
   vnl_matrix_fixed<T, M, O> out;
-  for(int i = 0; i < M; ++i)
-    for(int j = 0; j < O; ++j) {
+  for (int i = 0; i < M; ++i)
+    for (int j = 0; j < O; ++j) {
       T accum = a(i,0) * b(0,j);
-      for(int k = 1; k < N; ++k)
+      for (int k = 1; k < N; ++k)
         accum += a(i,k) * b(k,j);
       out(i,j) = accum;
     }
@@ -105,9 +105,9 @@ template <class T, int M, int N>
 vnl_vector_fixed<T, M> operator*(const vnl_matrix_fixed<T, M, N>& a, const vnl_vector_fixed<T, N>& b)
 {
   vnl_vector_fixed<T, M> out;
-  for(int i = 0; i < M; ++i) {
+  for (int i = 0; i < M; ++i) {
     T accum = a(i,0) * b(0);
-    for(int k = 1; k < N; ++k)
+    for (int k = 1; k < N; ++k)
       accum += a(i,k) * b(k);
     out(i) = accum;
   }

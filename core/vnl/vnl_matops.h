@@ -1,10 +1,9 @@
+// This is vxl/vnl/vnl_matops.h
 #ifndef vnl_matops_h_
 #define vnl_matops_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_matops.h
-
 //: \file
 //  \brief A collection of Matrix operations
 //  \author Andrew W. Fitzgibbon, Oxford RRG
@@ -24,8 +23,9 @@
 //    mostly declared as static methods.
 //    Highlights include the in-place transpose, and type conversions.
 //    matlab_print has been moved to vnl_matlab_print.h.
-class vnl_matops {
-public:
+class vnl_matops
+{
+ public:
   static double homg_diff(vnl_matrix<double> const& A, vnl_matrix<double> const& B);
 
   //: Laminating

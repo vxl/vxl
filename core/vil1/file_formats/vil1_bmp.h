@@ -1,7 +1,7 @@
 // This is vxl/vil/file_formats/vil_bmp.h
 #ifndef vil_bmp_file_format_h_
 #define vil_bmp_file_format_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -37,8 +37,9 @@ class vil_stream;
 #include "vil_bmp_info_header.h"
 
 //: Loader for BMP files
-class vil_bmp_file_format : public vil_file_format {
-public:
+class vil_bmp_file_format : public vil_file_format
+{
+ public:
   virtual char const* tag() const;
   virtual vil_image_impl* make_input_image(vil_stream* vs);
   virtual vil_image_impl* make_output_image(vil_stream* vs, int planes,
@@ -50,8 +51,9 @@ public:
 };
 
 //: Generic image implementation for BMP files
-class vil_bmp_generic_image : public vil_image_impl {
-public:
+class vil_bmp_generic_image : public vil_image_impl
+{
+ public:
 
   vil_bmp_generic_image(vil_stream* is);
   vil_bmp_generic_image(vil_stream* is,
@@ -79,7 +81,7 @@ public:
   char const* file_format() const;
   bool get_property(char const *tag, void *prop = 0) const;
 
-private:
+ private:
   vil_stream* is_;
 
   bool read_header();
@@ -91,12 +93,14 @@ private:
   vil_bmp_core_header core_hdr;
   vil_bmp_info_header info_hdr;
   long bit_map_start; // position in file of bitmap raw data.
-  //uchar **freds_colormap;
+#if 0
+  uchar **freds_colormap;
 
-  //xBITMAPINFOHEADER header;
-  //xBITMAPFILEHEADER fbmp;
-  //int pixsize;
-  //int** local_color_map_;
+  xBITMAPINFOHEADER header;
+  xBITMAPFILEHEADER fbmp;
+  int pixsize;
+  int** local_color_map_;
+#endif
 };
 
 #endif // vil_bmp_file_format_h_

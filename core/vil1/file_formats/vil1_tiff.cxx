@@ -1,8 +1,7 @@
-// This is ./vxl/vil/file_formats/vil_tiff.cxx
-#ifdef __GNUC__
+// This is vxl/vil/file_formats/vil_tiff.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
 //:
 // \file
 // See vil_tiff.h for a description of this file.
@@ -83,7 +82,7 @@ bool vil_tiff_file_format_probe(vil_stream* is)
 
   else if ( ((hdr[0]==0x4D && hdr[1]==0x4D) || (hdr[1]==0x49 && hdr[1]==0x49)) &&
             ((hdr[2]==0x00 && hdr[3]==0x2A) || (hdr[2]==0x2A && hdr[3]==0x00)) ) {
-    vcl_cerr << __FILE__ ": suspicious TIFF header" << vcl_endl;
+    vcl_cerr << __FILE__ ": suspicious TIFF header\n";
     return true; // allow it.
   }
 
@@ -372,7 +371,7 @@ bool vil_tiff_generic_image::read_header()
   default:
     // vcl_cerr << "vil_tiff: Saw " << samplesperpixel << " samples @ " << bitspersample << "\n";
     TIFFError("TIFFImageRH: ", "Can only handle 1-channel gray scale or 3-channel color");
-    return(false);
+    return false;
   }
 
   unsigned long width;
@@ -403,7 +402,7 @@ bool vil_tiff_generic_image::read_header()
       if (!TIFFIsTiled(p->tif)) {
         // section_tiff_image = new ForeignImage(GetDescription(), 'r', GetSizeX(), GetSizeY(), GetBitsPixel(), 8);
 #ifdef RIH_DEBUG
-        vcl_cerr << "vil_tiff: Treating Tiff image as uncompressed ForeignImage" << vcl_endl;
+        vcl_cerr << "vil_tiff: Treating Tiff image as uncompressed ForeignImage\n";
 #endif
       }
     }
@@ -414,7 +413,7 @@ bool vil_tiff_generic_image::read_header()
         {
           // section_tiff_image = new ForeignImage(GetDescription(), 'r', GetSizeX(), GetSizeY(), GetBitsPixel(), 8);
 #ifdef RIH_DEBUG
-          vcl_cerr << "Treating Tiff image as uncompressed ForeignImage" << vcl_endl;
+          vcl_cerr << "Treating Tiff image as uncompressed ForeignImage\n";
 #endif
         }
 
@@ -553,7 +552,7 @@ bool vil_tiff_generic_image::write_header()
                 TIFFSetField(p->tif, TIFFTAG_ROWSPERSTRIP, GetSizeY());
         }
   vcl_cerr << "Warning I no longer know how to create a tiled TIFF Image\n"
-           << "but thats ok because I could never do it right anyway..." << vcl_endl;
+           << "but thats ok because I could never do it right anyway...\n";
 #endif
 
 

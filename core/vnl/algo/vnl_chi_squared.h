@@ -1,10 +1,11 @@
+// This is vxl/vnl/algo/vnl_chi_squared.h
 #ifndef vnl_chi_squared_h_
 #define vnl_chi_squared_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-//: \file
+//:
+// \file
 // \brief Name space for various chi-squared distribution functions.
 // \author Rupert Curwen, GE CRD
 // \date   August 18th, 1998

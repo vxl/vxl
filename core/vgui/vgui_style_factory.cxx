@@ -1,5 +1,7 @@
-// This is ./oxl/vgui/vgui_style_factory.cxx
-
+// This is oxl/vgui/vgui_style_factory.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
+#pragma implementation
+#endif
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
@@ -10,11 +12,6 @@
 //  Modifications:
 //    18-OCT-1999 P.Pritchett - Initial version.
 // \endverbatim
-
-#ifdef __GNUC__
-#pragma implementation
-#endif
-
 
 #include "vgui_style_factory.h"
 
@@ -47,9 +44,8 @@ vgui_style_factory::vgui_style_factory()
 vgui_style_factory::~vgui_style_factory()
 {
   for (vcl_vector<vgui_style*>::iterator s_iter = styles.begin();
-       s_iter != styles.end(); ++s_iter) {
+       s_iter != styles.end(); ++s_iter)
     delete *s_iter;
-  }
 
   styles.clear();
 }
@@ -61,7 +57,6 @@ vgui_style* vgui_style_factory::get_style(float r, float g, float b,
 
 vgui_style* vgui_style_factory::get_style_impl(float r, float g, float b,
                                                float point_size, float line_width) {
-
   vgui_style s;
   s.rgba[0] = r;
   s.rgba[1] = g;
@@ -79,18 +74,17 @@ vgui_style* vgui_style_factory::get_style_impl(float r, float g, float b,
 
   vgui_style *snew = new vgui_style(s);
   styles.push_back(snew);
-  if (debug) vcl_cerr << "creating new style" << vcl_endl;
+  if (debug) vcl_cerr << "creating new style\n";
   if (debug) vcl_cerr << "number of styles : " << styles.size() << vcl_endl;
   return snew;
-
 }
 
 void vgui_style_factory::get_styles(vcl_vector<vgui_style*>& styles_copy) {
   instance()->get_styles_impl(styles_copy);
 }
 
-void vgui_style_factory::get_styles_impl(vcl_vector<vgui_style*>& styles_copy) {
-
+void vgui_style_factory::get_styles_impl(vcl_vector<vgui_style*>& styles_copy)
+{
   if (debug) vcl_cerr << "number of styles : " << styles.size() << vcl_endl;
 
   for (vcl_vector<vgui_style*>::iterator s_iter = styles.begin();
@@ -103,18 +97,15 @@ void vgui_style_factory::get_soviews(vgui_style* style, vcl_vector<vgui_soview*>
   instance()->get_soviews_impl(style, soviews);
 }
 
-void vgui_style_factory::get_soviews_impl(vgui_style* style, vcl_vector<vgui_soview*>& soviews) {
-
+void vgui_style_factory::get_soviews_impl(vgui_style* style, vcl_vector<vgui_soview*>& soviews)
+{
   vcl_pair<MultiMap_styles::iterator, MultiMap_styles::iterator> matches =
     styles_map.equal_range(style);
 
   for (MultiMap_styles::iterator r_iter = matches.first; r_iter != matches.second; ++r_iter) {
     soviews.push_back((*r_iter).second);
   }
-
 }
-
-
 
 
 bool vgui_style_factory::so_equal::operator()(MultiMap_styles::value_type obj) {
@@ -138,16 +129,15 @@ void vgui_style_factory::change_style_impl(vgui_soview* so, vgui_style* st_new, 
     vcl_pair<MultiMap_styles::iterator, MultiMap_styles::iterator> matches =
       styles_map.equal_range(st_old);
 
-    if (debug) vcl_cerr << "found range" << vcl_endl;
+    if (debug) vcl_cerr << "found range\n";
 
     // find element with value == so
     so_equal seq(so);
     MultiMap_styles::iterator f_iter = vcl_find_if(matches.first, matches.second, seq);
 
-    if (debug) vcl_cerr << "found element" << vcl_endl;
+    if (debug) vcl_cerr << "found element\n";
 
     styles_map.erase(f_iter);
     styles_map.insert(MultiMap_styles::value_type(st_new, so));
   }
-
 }

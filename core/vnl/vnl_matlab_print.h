@@ -1,10 +1,9 @@
+// This is vxl/vnl/vnl_matlab_print.h
 #ifndef vnl_matlab_print_h_
 #define vnl_matlab_print_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vnl/vnl_matlab_print.h
-
 //: \file
 //  \brief Print matrices and vectors in nice MATLAB format.
 //  \author fsm@robots.ox.ac.uk, from awf's MatOps code.

@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is vxl/vcsl/vcsl_graph.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 #include <vcsl/vcsl_graph.h>
@@ -33,7 +34,7 @@ bool vcsl_graph::has(const vcsl_spatial_sptr &cs) const
   vcl_vector<vcsl_spatial_sptr>::const_iterator i;
 
   result=false;
-  for(i=vertices_.begin();i!=vertices_.end()&&!result;++i)
+  for (i=vertices_.begin();i!=vertices_.end()&&!result;++i)
     result=(*i)==cs;
 
   return result;
@@ -86,7 +87,7 @@ void vcsl_graph::remove(const vcsl_spatial_sptr &cs)
 
   vcl_vector<vcsl_spatial_sptr>::iterator i;
 
-  for(i=vertices_.begin(); i!=vertices_.end()&&((*i)!=cs); ++i)
+  for (i=vertices_.begin(); i!=vertices_.end()&&((*i)!=cs); ++i)
     ;
   vertices_.erase(i);
 }
@@ -101,6 +102,6 @@ void vcsl_graph::init_vertices(void) const
 {
   vcl_vector<vcsl_spatial_sptr>::const_iterator i;
 
-  for(i=vertices_.begin();i!=vertices_.end();++i)
+  for (i=vertices_.begin();i!=vertices_.end();++i)
     (*i)->set_reached(false);
 }

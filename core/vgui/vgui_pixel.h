@@ -1,6 +1,7 @@
+// This is oxl/vgui/vgui_pixel.h
 #ifndef vgui_pixel_h_
 #define vgui_pixel_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -20,7 +21,8 @@ template <int b, int g, int r, int a> struct vgui_pixel_bgra;
 struct vgui_pixel_rgbfloat;
 
 VCL_DEFINE_SPECIALIZATION
-struct vgui_pixel_rgb<8,8,8> {
+struct vgui_pixel_rgb<8,8,8>
+{
   GLubyte R;
   GLubyte G;
   GLubyte B;
@@ -33,7 +35,8 @@ typedef vgui_pixel_rgb<8,8,8> vgui_pixel_rgb888;
 // type. If one uses 'char' one gets a 3-byte structure. In one uses 'int'
 // the result is a 4-byte structure. So don't change 'short'!
 VCL_DEFINE_SPECIALIZATION
-struct vgui_pixel_rgb<5,6,5> {
+struct vgui_pixel_rgb<5,6,5>
+{
 #if VXL_LITTLE_ENDIAN
   GLushort B : 5;
   GLushort G : 6;
@@ -47,7 +50,8 @@ struct vgui_pixel_rgb<5,6,5> {
 typedef vgui_pixel_rgb<5,6,5> vgui_pixel_rgb565;
 
 VCL_DEFINE_SPECIALIZATION
-struct vgui_pixel_bgr<5,6,5> {
+struct vgui_pixel_bgr<5,6,5>
+{
 #if VXL_LITTLE_ENDIAN
   GLushort R : 5;
   GLushort G : 6;
@@ -61,7 +65,8 @@ struct vgui_pixel_bgr<5,6,5> {
 typedef vgui_pixel_bgr<5,6,5> vgui_pixel_bgr565;
 
 VCL_DEFINE_SPECIALIZATION
-struct vgui_pixel_bgr<8,8,8> {
+struct vgui_pixel_bgr<8,8,8>
+{
   GLubyte B;
   GLubyte G;
   GLubyte R;
@@ -69,7 +74,8 @@ struct vgui_pixel_bgr<8,8,8> {
 typedef vgui_pixel_bgr<8,8,8> vgui_pixel_bgr888;
 
 VCL_DEFINE_SPECIALIZATION
-struct vgui_pixel_rgba<5,5,5,1> {
+struct vgui_pixel_rgba<5,5,5,1>
+{
   GLushort B:5;
   GLushort G:5;
   GLushort R:5;
@@ -78,7 +84,8 @@ struct vgui_pixel_rgba<5,5,5,1> {
 typedef vgui_pixel_rgba<5,5,5,1> vgui_pixel_bgra5551;
 
 VCL_DEFINE_SPECIALIZATION
-struct vgui_pixel_rgba<8,8,8,8> {
+struct vgui_pixel_rgba<8,8,8,8>
+{
   GLubyte R;
   GLubyte G;
   GLubyte B;
@@ -87,7 +94,8 @@ struct vgui_pixel_rgba<8,8,8,8> {
 typedef vgui_pixel_rgba<8,8,8,8> vgui_pixel_rgba8888;
 
 VCL_DEFINE_SPECIALIZATION
-struct vgui_pixel_abgr<8,8,8,8> {
+struct vgui_pixel_abgr<8,8,8,8>
+{
   GLubyte A;
   GLubyte B;
   GLubyte G;
@@ -96,7 +104,8 @@ struct vgui_pixel_abgr<8,8,8,8> {
 typedef vgui_pixel_abgr<8,8,8,8> vgui_pixel_abgr8888;
 
 VCL_DEFINE_SPECIALIZATION
-struct vgui_pixel_bgra<8,8,8,8> {
+struct vgui_pixel_bgra<8,8,8,8>
+{
   GLubyte B;
   GLubyte G;
   GLubyte R;
@@ -105,7 +114,8 @@ struct vgui_pixel_bgra<8,8,8,8> {
 typedef vgui_pixel_bgra<8,8,8,8> vgui_pixel_bgra8888;
 
 
-struct vgui_pixel_rgbfloat {
+struct vgui_pixel_rgbfloat
+{
   float R;
   float G;
   float B;

@@ -1,7 +1,7 @@
-// This is ./vxl/vil/file_formats/vil_gen.h
+// This is vxl/vil/file_formats/vil_gen.h
 #ifndef vil_gen_file_format_h_
 #define vil_gen_file_format_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -21,8 +21,9 @@
 //: Loader for synthetically gend images
 // - vil_load("gen:640x480:gray,128");
 // - vil_load("gen:640x480:rgb,255,255,255");
-class vil_gen_file_format : public vil_file_format {
-public:
+class vil_gen_file_format : public vil_file_format
+{
+ public:
   virtual char const* tag() const;
   virtual vil_image_impl* make_input_image(vil_stream* vs);
   virtual vil_image_impl* make_output_image(vil_stream* /*vs*/, int /*planes*/,
@@ -41,7 +42,8 @@ enum vil_gen_type {
 };
 
 //: Generic image implementation for PNM files
-class vil_gen_generic_image : public vil_image_impl {
+class vil_gen_generic_image : public vil_image_impl
+{
   int width_;
   int height_;
   int components_;
@@ -51,7 +53,7 @@ class vil_gen_generic_image : public vil_image_impl {
 
   friend class vil_gen_file_format;
   void init(vcl_string const & s);
-public:
+ public:
 
   vil_gen_generic_image(vcl_string const & s);
   vil_gen_generic_image(vcl_string const & s,

@@ -1,8 +1,8 @@
-// This is ./oxl/vgui/vgui_viewer2D.h
+// This is oxl/vgui/vgui_viewer2D.h
 
 #ifndef vgui_viewer2D_h_
 #define vgui_viewer2D_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
@@ -25,8 +25,9 @@
 #include "dll.h"
 
 //: Tableau with functions to view 2D objects (eg, zoom, drag, centre).
-class vgui_viewer2D : public vgui_wrapper_tableau, public vgui_drag_mixin {
-public:
+class vgui_viewer2D : public vgui_wrapper_tableau, public vgui_drag_mixin
+{
+ public:
   //: Constructor - don't use this, use vgui_viewer2D_new.
   //  Takes a child tableau as parameter.
   vgui_viewer2D(vgui_tableau_sptr const&);
@@ -62,7 +63,8 @@ public:
   bool key_press(int x, int y, vgui_key key, vgui_modifier);
 
   // data
-  struct token_t {
+  struct token_t
+  {
     float scaleX;
     float scaleY;
     float offsetX;
@@ -88,12 +90,13 @@ public:
   float new_x,new_y;
   float zoom_factor;
 
-protected:
+ protected:
  ~vgui_viewer2D();
 };
 
 //: Create a smart-pointer to a vgui_viewer2D tableau.
-struct vgui_viewer2D_new : public vgui_viewer2D_sptr {
+struct vgui_viewer2D_new : public vgui_viewer2D_sptr
+{
   vgui_viewer2D_new(vgui_tableau_sptr const& that) :
     vgui_viewer2D_sptr(new vgui_viewer2D(that)) { }
 };

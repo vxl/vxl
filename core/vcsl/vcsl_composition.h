@@ -1,9 +1,9 @@
+// This is vxl/vcsl/vcsl_composition.h
 #ifndef vcsl_composition_h
 #define vcsl_composition_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief Composition of transformations
@@ -31,7 +31,7 @@
 class vcsl_composition
   :public vcsl_spatial_transformation
 {
-public:
+ public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
@@ -79,7 +79,7 @@ public:
   //  REQUIRE: is_invertible(time)
   virtual vnl_vector<double> inverse(const vnl_vector<double> &v,
                                      double time) const;
-protected:
+ protected:
   vcl_vector<vcsl_spatial_transformation_sptr> transformations_;
 };
 

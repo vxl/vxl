@@ -1,9 +1,10 @@
+// This is oxl/vgui/vrml/vgui_vrml_draw_visitor.h
 #ifndef vgui_vrml_draw_visitor_h_
 #define vgui_vrml_draw_visitor_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// 
+//
 // .NAME vgui_vrml_draw_visitor
 // .LIBRARY vgui-vrml
 // .HEADER vxl Package
@@ -30,10 +31,10 @@
 
 class vgui_vrml_draw_visitor : public QvVisitor
 {
-public:
-  
+ public:
+
   // Constructors/Destructors--------------------------------------------------
-  
+
   vgui_vrml_draw_visitor();
  ~vgui_vrml_draw_visitor();
 
@@ -55,19 +56,19 @@ public:
   bool Visit(QvTexture2* node);
   bool Visit(QvShapeHints* node);
 
-  
+
   enum mode_type {wireframe, textured, shaded};
-  
+
   mode_type get_gl_mode() {
     return gl_mode;
   }
-  
+
   void set_gl_mode(mode_type gl_new) {
     if (gl_new == textured) remake_texture = true;
     gl_mode = gl_new;
   }
 
-protected:
+ protected:
   GLUquadricObj *quadric;
   mode_type gl_mode;
   bool twosided;

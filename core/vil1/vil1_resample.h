@@ -1,10 +1,9 @@
+// This is vxl/vil/vil_resample.h
 #ifndef vil_resample_h_
 #define vil_resample_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-// This is vxl/vil/vil_resample.h
-
 //:
 // \file
 // \author fsm@robots.ox.ac.uk

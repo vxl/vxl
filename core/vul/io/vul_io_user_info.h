@@ -1,19 +1,17 @@
+// This is vxl/vul/io/vul_io_user_info.h
 #ifndef vul_io_user_info_h
 #define vul_io_user_info_h
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-#include <vsl/vsl_binary_io.h>
-#include <vul/vul_user_info.h>
-
-// This is vxl/vul/io/vul_io_user_info.h
-
 //:
 // \file
 // \brief binary io for vul_user_info.
 // \author Christine Beeston
 // \date 22-Mar-2001
+
+#include <vsl/vsl_binary_io.h>
+#include <vul/vul_user_info.h>
 
 //: Binary save vul_user_info to stream.
 void vsl_b_write(vsl_b_ostream &os, const vul_user_info & v);

@@ -1,11 +1,11 @@
 // This is vxl/vnl/vnl_linear_system.h
 #ifndef vnl_linear_system_h_
 #define vnl_linear_system_h_
-#ifdef __GNUC__
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-//: \file
+//:
+//  \file
 //  \brief Abstraction for a linear system of equations.
 //  \author David Capel, capes@robots
 //  \date   July 2000
@@ -26,8 +26,9 @@
 //    be inefficient to store in matrix form.
 //
 //    To solve the system, use an algorithm like vnl_lsqr.
-class vnl_linear_system {
-public:
+class vnl_linear_system
+{
+ public:
 
   vnl_linear_system(int number_of_unknowns, int number_of_residuals) :
     p_(number_of_unknowns), n_(number_of_residuals) {}
@@ -62,7 +63,7 @@ public:
   //: Compute relative residual (|Ax - b| / |b| )for parameter vector x
   double get_relative_residual(vnl_vector<double> const& x) const;
 
-protected:
+ protected:
   int p_;
   int n_;
 };

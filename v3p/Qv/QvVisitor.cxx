@@ -1,4 +1,5 @@
-#ifdef __GNUC__
+// This is v3p/Qv/QvVisitor.cxx
+#ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 
@@ -100,7 +101,7 @@ bool QvVisitor::Visit(QvNode* node)
     // Print fields
     QvFieldData * fields = node->getFieldData();
     int nfields = fields->getNumFields();
-    for(int f = 0; f < nfields; ++f)
+    for (int f = 0; f < nfields; ++f)
       vcl_cerr << is << "Field " << fields->getFieldName(f).getString() << vcl_endl;
   }
 
@@ -157,14 +158,14 @@ bool QvVisitor::Visit(QvNode* node)
 
 bool QvVisitor::Visit(QvGroup* node) {
   int n = node->getNumChildren();
-  for(int child_index = 0; child_index < n; ++child_index)
+  for (int child_index = 0; child_index < n; ++child_index)
     Visit(node->getChild(child_index));
   return true;
 }
 
 bool QvVisitor::Visit(QvSeparator* node) {
   int n = node->getNumChildren();
-  for(int child_index = 0; child_index < n; ++child_index)
+  for (int child_index = 0; child_index < n; ++child_index)
     Visit(node->getChild(child_index));
   return true;
 }
@@ -173,7 +174,7 @@ bool QvVisitor::Visit(QvSwitch* node) {
   int n = node->getNumChildren();
   int child_index = node->whichChild.value;
   if (child_index == QV_SWITCH_ALL)
-    for(int c = 0; c < n; ++c)
+    for (int c = 0; c < n; ++c)
       Visit(node->getChild(c));
   else if (child_index != QV_SWITCH_NONE) {
     if (child_index >= 0 && child_index < n)
@@ -188,7 +189,7 @@ bool QvVisitor::Visit(QvSwitch* node) {
 bool QvVisitor::Visit(QvTransformSeparator* node)
 {
   int n = node->getNumChildren();
-  for(int child_index = 0; child_index < n; ++child_index)
+  for (int child_index = 0; child_index < n; ++child_index)
     Visit(node->getChild(child_index));
   return true;
 }
