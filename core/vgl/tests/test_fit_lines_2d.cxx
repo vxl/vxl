@@ -17,9 +17,6 @@
 static void test_line_segment_methods()
 {
   vgl_point_2d<double> p0(0.0,0.0), p1(1.0,2.0);
-  vcl_vector<vgl_point_2d<double> > pts;
-  pts.push_back(p0);
-  vcl_cout << pts << "\n";
   vgl_line_2d<double> l(1.0,-1.0,0.0);
   vcl_cout << "line angle " << l.tangent_angle() << "\n";
   TEST_NEAR("line angle", l.tangent_angle(), 45, 1e-04);
