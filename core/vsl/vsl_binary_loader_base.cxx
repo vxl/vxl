@@ -51,5 +51,3 @@ void vsl_delete_all_loaders()
   loader_list_=0;
 }
 
-// Instantiate vector for list
-VCL_VECTOR_INSTANTIATE(vsl_binary_loader_base*);
