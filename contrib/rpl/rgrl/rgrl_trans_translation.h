@@ -15,7 +15,7 @@ class rgrl_trans_translation
  public:
   //: Initialize to the identity transformation.
   //
-  rgrl_trans_translation( unsigned int dimension );
+  rgrl_trans_translation(unsigned int dimension = 0);
 
   //: Construct translation standard transform
   //
@@ -58,7 +58,7 @@ class rgrl_trans_translation
 
   //: is this an invertible transformation?
   virtual bool is_invertible() const { return true; }
-  
+
   //: Return an inverse transformation
   //  This function only exist for certain transformations.
   virtual rgrl_transformation_sptr inverse_transform() const;
@@ -73,10 +73,10 @@ class rgrl_trans_translation
   rgrl_type_macro( rgrl_trans_translation, rgrl_transformation );
 
   // for output
-  void write(vcl_ostream& os ) const;
+  virtual void write(vcl_ostream& os ) const;
 
   // for input
-  void read(vcl_istream& is );
+  virtual void read(vcl_istream& is );
 
  protected:
   void map_loc( vnl_vector<double> const& from,

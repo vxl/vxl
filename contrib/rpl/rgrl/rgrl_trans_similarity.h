@@ -22,7 +22,7 @@ class rgrl_trans_similarity
  public:
   //: Initialize to the identity transformation.
   //
-  rgrl_trans_similarity( unsigned int dimension );
+  rgrl_trans_similarity( unsigned int dimension = 0);
 
   //: Constructor based on an initial transformation and covar estimate
   //
@@ -54,7 +54,7 @@ class rgrl_trans_similarity
   //
   //   for 2D, the covar matrix is for the vector [a b tx ty], where
   //   [a -b tx; b a ty] = [A_ trans]
-  // 
+  //
   // defined in base class
   // vnl_matrix<double> covar() const;
 
@@ -78,7 +78,7 @@ class rgrl_trans_similarity
 
   //: is this an invertible transformation?
   virtual bool is_invertible() const { return true; }
-  
+
   //: Return an inverse transformation
   //  This function only exist for certain transformations.
   virtual rgrl_transformation_sptr inverse_transform() const;
@@ -93,10 +93,10 @@ class rgrl_trans_similarity
   rgrl_type_macro( rgrl_trans_similarity, rgrl_transformation );
 
   // for output
-  void write(vcl_ostream& os ) const;
+  virtual void write(vcl_ostream& os ) const;
 
   // for input
-  void read(vcl_istream& is );
+  virtual void read(vcl_istream& is );
 
  protected:
   void map_loc( vnl_vector<double> const& from,

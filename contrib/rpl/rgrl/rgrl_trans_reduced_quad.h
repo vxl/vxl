@@ -20,7 +20,7 @@ class rgrl_trans_reduced_quad
  public:
   //: Initialize to the identity transformation.
   //
-  rgrl_trans_reduced_quad( unsigned int dimension );
+  rgrl_trans_reduced_quad( unsigned int dimension = 0);
 
   //: Construct uncentered quadratic standard transform
   //

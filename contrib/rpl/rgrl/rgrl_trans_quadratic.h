@@ -15,7 +15,7 @@ class rgrl_trans_quadratic
  public:
   //: Initialize to the identity transformation.
   //
-  rgrl_trans_quadratic( unsigned int dimension );
+  rgrl_trans_quadratic( unsigned int dimension = 0);
 
   //: Construct quadratic standard transform
   //

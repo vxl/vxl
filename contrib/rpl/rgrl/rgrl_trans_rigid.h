@@ -24,7 +24,7 @@ class rgrl_trans_rigid
  public:
   //: Initialize to the identity transformation.
   //
-  rgrl_trans_rigid( unsigned int dimension );
+  rgrl_trans_rigid( unsigned int dimension = 0);
 
   //: Constructor based on an initial transformation and covar estimate
   //
@@ -85,7 +85,7 @@ class rgrl_trans_rigid
 
   //: is this an invertible transformation?
   virtual bool is_invertible() const { return true; }
-  
+
   //: Return an inverse transformation
   //  This function only exist for certain transformations.
   virtual rgrl_transformation_sptr inverse_transform() const;

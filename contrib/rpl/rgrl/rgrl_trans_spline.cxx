@@ -11,7 +11,7 @@
 #include <vcl_cassert.h>
 
 rgrl_trans_spline::
-rgrl_trans_spline( int dim )
+rgrl_trans_spline( unsigned int dim )
   : x0_( dim, 0.0 ), delta_( dim, 0.0 )
 {
 }
@@ -143,7 +143,7 @@ rgrl_trans_spline::
 write( vcl_ostream& os ) const
 {
   // output tag
-  os << "BSPLINE" << vcl_endl;
+  os << "BSPLINE\n";
 
   // global xform
   if ( xform_ ) {

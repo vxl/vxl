@@ -17,7 +17,7 @@ class rgrl_trans_affine
  public:
   //: Initialize to the identity transformation.
   //
-  rgrl_trans_affine( unsigned int dimension );
+  rgrl_trans_affine( unsigned int dimension = 0);
 
   //: Construct affine standard transform
   //
@@ -80,7 +80,7 @@ class rgrl_trans_affine
 
   //: is this an invertible transformation?
   virtual bool is_invertible() const { return true; }
-  
+
   //: Return an inverse transformation
   //  This function only exist for certain transformations.
   virtual rgrl_transformation_sptr inverse_transform() const;

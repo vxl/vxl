@@ -21,7 +21,7 @@ class rgrl_trans_spline
   //: Constructor
   //  should not be used by anything other than reader
   //  use the following two constructors insead.
-  rgrl_trans_spline( int dim );
+  rgrl_trans_spline(unsigned int dim = 0);
 
   //: Constructor
   rgrl_trans_spline( vcl_vector<rgrl_spline_sptr> const& splines,
