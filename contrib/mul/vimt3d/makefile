@@ -11,6 +11,7 @@ MANPAGE_SOURCES += vimt3d_sample_grid_trilin.txx
 MANPAGE_SOURCES += vimt3d_sample_profile_trilin.h
 MANPAGE_SOURCES += vimt3d_trilin_interp.h
 MANPAGE_SOURCES += vimt3d_slice.h
+MANPAGE_SOURCES += vimt3d_crop.h
 SOURCES += vimt3d_load.cxx
 
 #######################################
