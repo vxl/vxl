@@ -1,6 +1,6 @@
-LINK_LIBRARIES( netlib )
+LINK_LIBRARIES(netlib)
 
-INCLUDE( ${MODULE_PATH}/FindNetlib.cmake )
+INCLUDE(${MODULE_PATH}/FindNetlib.cmake)
 
 IF(NETLIB_FOUND)
   INCLUDE_DIRECTORIES(${NETLIB_INCLUDE_DIR})
@@ -8,7 +8,8 @@ IF(NETLIB_FOUND)
   INCLUDE(${MODULE_PATH}/NewCMake/FindX11.cmake
 
   IF(X11_FOUND)
-    ADD_EXECUTABLE( netlib_showme showme.c -lX11 )
+    LINK_LIBRARIES(${X11_X11_LIBRARY})
+    ADD_EXECUTABLE(netlib_showme showme.c)
   ENDIF(X11_FOUND)
 
 ENDIF(NETLIB_FOUND)
