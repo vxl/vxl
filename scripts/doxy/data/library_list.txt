@@ -90,6 +90,7 @@ contrib/brl/bbas bxml   bxml_   build contrib/brl/bbas/bdgl core/vul
 contrib/brl/bmvl bcal   bcal_   build contrib/gel/vsol core/vcsl
 contrib/brl/bmvl brct   brct_   build contrib/brl/bbas/bdgl contrib/oxl/mvl
 contrib/brl/bmvl btom   btom_   build contrib/gel/gevd
+contrib/brl/bseg bmrf   bmrf_   build contrib/gel/vtol contrib/gel/gevd core/vnl core/vil core/vgl core/vsl core/vbl
 contrib/brl/bseg brip   brip_   build core/vil1 core/vbl core/vul
 contrib/brl/bseg sdet   sdet_   build contrib/brl/bseg/brip contrib/brl/bbas/btol contrib/brl/bbas/bsol contrib/brl/bbas/bdgl contrib/gel/gevd
 contrib/brl/bmvl bmvv   bmvv_   build contrib/brl/bmvl/btom contrib/brl/bseg/sdet contrib/brl/bbas/bgui contrib/brl/bbas/bxml contrib/oxl/mvl
