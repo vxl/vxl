@@ -1,7 +1,3 @@
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
 # standard C/C++
 SUBDIRS += vcl
 
@@ -44,13 +40,19 @@ SUBDIRS += vsl
 # coordinate systems
 SUBDIRS += vcsl
 
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
 ifeq (1,$(strip $(HAS_OPENGL)))
 # OpenGL ui library
 SUBDIRS += vgui
 
-#xcv must be compiled *after* mvox.
-# # new xcv
-# SUBDIRS += xcv
+# new xcv
+# (must be compiled *after* mvox)
+ifeq (,$(strip $(wildcard $(IUELOCALROOT)/oxl/mvox)))
+SUBDIRS += xcv
+endif
 endif
 
 # examples

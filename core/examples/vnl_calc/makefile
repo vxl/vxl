@@ -1,7 +1,4 @@
-############################################
-include $(IUELOCALROOT)/config/top-params.mk
-############################################
-USES = v3p vxl
+USES = vxl
 
 # Examples may use vbl....
 IULIBS = -lvbl -lvnl-algo -lvnl -lnetlib -lvcl
@@ -9,9 +6,9 @@ IULIBS = -lvbl -lvnl-algo -lvnl -lnetlib -lvcl
 MINI_PROG_SOURCES += vnl_calc.cxx
 #MINI_PROG_SOURCES += time_fastops.cxx
 
-###########################################
-include $(IUELOCALROOT)/config/top-rules.mk
-###########################################
+################################
+include $(IUEROOT)/config/top.mk
+################################
 
 speeds: $(RELOBJDIR)/time_fastops_O_M1
 

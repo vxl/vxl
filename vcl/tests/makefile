@@ -20,4 +20,6 @@ TESTS += $(wildcard test_vcl_rtti.cxx)
 
 IULIBS = -lvcl 
 
+#########################################
 include ${IUEROOT}/config/static-tests.mk
+#########################################

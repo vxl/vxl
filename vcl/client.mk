@@ -4,7 +4,6 @@ vcl_client_mk := 1
 # fsm@robots.ox.ac.uk
 #
 
-#FIXME: IUELOCALROOT?
-include $(IUEROOT)/vxl/vxl_client.mk
+include $(IUELOCALROOT)/vxl/vxl_client.mk
 
 endif
