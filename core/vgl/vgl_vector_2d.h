@@ -60,6 +60,10 @@ public:
 
   //: Return the length of this vector.
   double length() const; // return sqrt( x()*x()+y()*y() );
+
+   //: Return the squared length of this vector.
+  double sqr_length() const; // return  x()*x()+y()*y() ;
+
 };
 
 #define v vgl_vector_2d<T>

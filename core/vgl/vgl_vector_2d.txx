@@ -14,6 +14,12 @@ double vgl_vector_2d<T>::length() const
   return vcl_sqrt( 0.0+x()*x()+y()*y() );
 }
 
+template <class T>
+double vgl_vector_2d<T>::sqr_length() const
+{
+  return  0.0+x()*x()+y()*y() ;
+}
+
 template<class T>
 double angle(vgl_vector_2d<T> const& a, vgl_vector_2d<T> const& b)
 {
