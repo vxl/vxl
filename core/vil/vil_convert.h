@@ -490,6 +490,7 @@ inline vil_image_view_base_sptr vil_convert_cast(outP /*dummy*/,
 
   switch( vil_pixel_format_component_format(src->pixel_format()) )
   {
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define macro(F , T) \
    case F: \
      vil_convert_cast( vil_image_view<T >( *src ), dest_ref );\
@@ -505,6 +506,7 @@ inline vil_image_view_base_sptr vil_convert_cast(outP /*dummy*/,
     macro( VIL_PIXEL_FORMAT_DOUBLE, double );
     macro( VIL_PIXEL_FORMAT_BOOL, bool );
 #undef macro
+#endif // DOXYGEN_SHOULD_SKIP_THIS
     default:
       dest = 0;
   }
@@ -529,6 +531,7 @@ inline void vil_convert_cast(const vil_image_view_base_sptr& src,
     " vil_image_view<outP >&" );
 
   switch( src->pixel_format() ) {
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define macro(F , T) \
    case F: \
      vil_convert_cast( vil_image_view<T >( src ), dest );\
@@ -544,6 +547,7 @@ inline void vil_convert_cast(const vil_image_view_base_sptr& src,
     macro( VIL_PIXEL_FORMAT_DOUBLE, double )
     macro( VIL_PIXEL_FORMAT_BOOL, bool )
 #undef macro
+#endif // DOXYGEN_SHOULD_SKIP_THIS
 
     // Skip the RGB type conversions because the vil_convert_cast are
     // not complete. For example, a cast from vxl_uint_16 to
@@ -583,6 +587,7 @@ inline vil_image_view_base_sptr vil_convert_round(
 
   switch(vil_pixel_format_component_format(src->pixel_format()))
   {
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define macro( F , T ) \
   case F: { \
     vil_image_view<T > src1 = src; \
@@ -597,6 +602,7 @@ macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
 macro(VIL_PIXEL_FORMAT_FLOAT , float )
 macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
+#endif // DOXYGEN_SHOULD_SKIP_THIS
   default: dest=0;
   }
   return dest;
@@ -618,6 +624,7 @@ inline vil_image_view_base_sptr vil_convert_to_component_order(
 
   switch (vil_pixel_format_component_format(src->pixel_format()))
   {
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define macro( F , T )\
     case F: { \
       vil_image_view<T > src_ref(src); \
@@ -642,6 +649,7 @@ macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
 macro(VIL_PIXEL_FORMAT_FLOAT , float )
 macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
+#endif // DOXYGEN_SHOULD_SKIP_THIS
 
     default: dest=0;
   }
@@ -683,6 +691,7 @@ inline vil_image_view<outP> vil_convert_to_grey_using_average(
   // convert via vil_image_view<double>
   switch (vil_pixel_format_component_format(src->pixel_format()))
   {
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define macro( F , T ) \
   case F: { \
       vil_image_view<T > src1 = *src; \
@@ -697,6 +706,7 @@ macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
 macro(VIL_PIXEL_FORMAT_FLOAT , float )
 macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
+#endif // DOXYGEN_SHOULD_SKIP_THIS
   default:
     dest.clear();
   }
@@ -722,6 +732,7 @@ inline vil_image_view_base_sptr vil_convert_to_grey_using_average(
   // convert via vil_image_view<double>
   switch (vil_pixel_format_component_format(src->pixel_format()))
   {
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define macro( F , T ) \
   case F: { \
       /* try to do it quickly */ \
@@ -742,6 +753,7 @@ macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
 macro(VIL_PIXEL_FORMAT_FLOAT , float )
 macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
+#endif // DOXYGEN_SHOULD_SKIP_THIS
   default:
     return vil_image_view_base_sptr();
   }
@@ -763,6 +775,7 @@ inline vil_image_view_base_sptr vil_convert_to_grey_using_rgb_weighting(
   // convert via vil_image_view<double>
   switch (vil_pixel_format_component_format(src->pixel_format()))
   {
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define macro( F , T ) \
   case F: { \
     /* try to do it quickly */ \
@@ -784,6 +797,7 @@ macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
 macro(VIL_PIXEL_FORMAT_FLOAT , float )
 macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
+#endif // DOXYGEN_SHOULD_SKIP_THIS
   default:
     return vil_image_view_base_sptr();
   }
@@ -843,6 +857,7 @@ inline vil_image_view<outP> vil_convert_to_grey_using_rgb_weighting(
   // convert via vil_image_view<double>
   switch (vil_pixel_format_component_format(src->pixel_format()))
   {
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define macro( F , T ) \
   case F: { \
       vil_image_view<T > src1 = src; \
@@ -860,6 +875,7 @@ macro(VIL_PIXEL_FORMAT_FLOAT , float )
 macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 // Don't even want to think about rgb<complex<float> >
 #undef macro
+#endif // DOXYGEN_SHOULD_SKIP_THIS
   default:
     dest.clear();
   }
@@ -898,6 +914,7 @@ inline vil_image_view_base_sptr vil_convert_to_n_planes(
 
   switch (vil_pixel_format_component_format(src->pixel_format()))
   {
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
  #define macro( F, T ) \
     case F: { \
         vil_image_view<T > src_ref = src; \
@@ -929,6 +946,7 @@ macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
 macro(VIL_PIXEL_FORMAT_FLOAT , float )
 macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
+#endif // DOXYGEN_SHOULD_SKIP_THIS
 
 
   default:
@@ -974,6 +992,7 @@ inline vil_image_view_base_sptr vil_convert_stretch_range(
   vil_image_view<double> inter;
   switch (vil_pixel_format_component_format(src->pixel_format()))
   {
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define macro( F , T ) \
   case F: { \
       vil_image_view<T> src_ref = src; \
@@ -990,6 +1009,7 @@ macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
 macro(VIL_PIXEL_FORMAT_FLOAT , float )
 macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
+#endif // DOXYGEN_SHOULD_SKIP_THIS
     default:
       dest_ref.clear();
   }
