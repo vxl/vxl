@@ -2,6 +2,7 @@
 // \file
 
 #include "HMatrix2DComputeRobust.h"
+#include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <mvl/Probability.h>
 #include <mvl/AffineMetric.h>
