@@ -94,4 +94,16 @@ vgui_vil2_section_buffer_apply( vgui_vil2_section_buffer& sec_buf,
 #undef Code
 }
 
+// There are instantiation problems under MSVC7 because of the
+// specializations in the header file. The solution is a tickler
+// function. It should not be a static function because the VC7
+// optimizer will aggressively remove unused functions, and hence
+// will not instantiate.
+//
+#define INSTANTIATE_VGUI_VIL2_SECTION_BUFFER( T ) \
+  void vgui_vil2_section_buffer_tickler( vgui_vil2_section_buffer& sec_buf, vil2_image_view< T >& view ) \
+  { \
+	vgui_vil2_section_buffer_apply( sec_buf, view ); \
+  }
+
 #endif // vgui_vil2_section_buffer_apply_txx_
