@@ -102,13 +102,13 @@ void mil_sample_grid_2d_safe(vnl_vector<vecType>& vec,
     for (int i=0;i<nu;++i)
     {
       vgl_point_2d<double> p = p1;
-    // Sample each row (along v)
-    for (int j=0;j<nv;++j)
-    {
+      // Sample each row (along v)
+      for (int j=0;j<nv;++j)
+      {
         vgl_point_2d<double> im_p = image.world2im()(p);
         *vc = mil_safe_bilin_interp_2d(im_p.x(),im_p.y(),plane0,nx,ny,xstep,ystep);
-    vc++;
-    p+=v;
+        vc++;
+        p+=v;
       }
       p1+=u;
     }
@@ -116,17 +116,17 @@ void mil_sample_grid_2d_safe(vnl_vector<vecType>& vec,
   else
   {
     for (int i=0;i<nu;++i)
-  {
+    {
       vgl_point_2d<double> p = p1;
       for (int j=0;j<nv;++j)
       {
         vgl_point_2d<double> im_p = image.world2im()(p);
-    for (int k=0;k<np;++k)
-    {
+        for (int k=0;k<np;++k)
+        {
           *vc = mil_safe_bilin_interp_2d(im_p.x(),im_p.y(),image.plane(k),nx,ny,xstep,ystep);
           vc++;
         }
-    p+=v;
+         p+=v;
       }
       p1+=u;
     }
@@ -162,13 +162,13 @@ void mil_sample_grid_2d_no_checks(vnl_vector<vecType>& vec,
     for (int i=0;i<nu;++i)
     {
       vgl_point_2d<double> p = p1;
-    // Sample each row (along v)
-    for (int j=0;j<nv;++j)
-    {
+      // Sample each row (along v)
+      for (int j=0;j<nv;++j)
+      {
         vgl_point_2d<double> im_p = image.world2im()(p);
         *vc = mil_bilin_interp_2d(im_p.x(),im_p.y(),plane0,xstep,ystep);
-    vc++;
-    p+=v;
+        vc++;
+        p+=v;
       }
       p1+=u;
     }
@@ -176,17 +176,17 @@ void mil_sample_grid_2d_no_checks(vnl_vector<vecType>& vec,
   else
   {
     for (int i=0;i<nu;++i)
-  {
+    {
       vgl_point_2d<double> p = p1;
       for (int j=0;j<nv;++j)
       {
         vgl_point_2d<double> im_p = image.world2im()(p);
-    for (int k=0;k<np;++k)
-    {
-          *vc = mil_bilin_interp_2d(im_p.x(),im_p.y(),image.plane(j),xstep,ystep);
+        for (int k=0;k<np;++k)
+        {
+          *vc = mil_bilin_interp_2d(im_p.x(),im_p.y(),image.plane(k),xstep,ystep);
           vc++;
         }
-    p+=v;
+        p+=v;
       }
       p1+=u;
     }
@@ -224,12 +224,12 @@ void mil_sample_grid_2d_ic_safe(vnl_vector<vecType>& vec,
     for (int i=0;i<nu;++i)
     {
       vgl_point_2d<double> p = p1;
-    // Sample each row (along v)
-    for (int j=0;j<nv;++j)
-    {
+      // Sample each row (along v)
+      for (int j=0;j<nv;++j)
+      {
         *vc = mil_safe_bilin_interp_2d(p.x(),p.y(),plane0,nx,ny,xstep,ystep);
-    vc++;
-    p+=v;
+        vc++;
+        p+=v;
       }
       p1+=u;
     }
@@ -237,16 +237,16 @@ void mil_sample_grid_2d_ic_safe(vnl_vector<vecType>& vec,
   else
   {
     for (int i=0;i<nu;++i)
-  {
+    {
       vgl_point_2d<double> p = p1;
       for (int j=0;j<nv;++j)
       {
-    for (int k=0;k<np;++k)
-    {
+        for (int k=0;k<np;++k)
+        {
           *vc = mil_safe_bilin_interp_2d(p.x(),p.y(),image.plane(k),nx,ny,xstep,ystep);
           vc++;
         }
-    p+=v;
+        p+=v;
       }
       p1+=u;
     }
@@ -282,12 +282,12 @@ void mil_sample_grid_2d_ic_no_checks(vnl_vector<vecType>& vec,
     for (int i=0;i<nu;++i)
     {
       vgl_point_2d<double> p = p1;
-    // Sample each row (along v)
-    for (int j=0;j<nv;++j)
-    {
+      // Sample each row (along v)
+      for (int j=0;j<nv;++j)
+      {
         *vc = mil_bilin_interp_2d(p.x(),p.y(),plane0,xstep,ystep);
-    vc++;
-    p+=v;
+        vc++;
+        p+=v;
       }
       p1+=u;
     }
@@ -295,16 +295,16 @@ void mil_sample_grid_2d_ic_no_checks(vnl_vector<vecType>& vec,
   else
   {
     for (int i=0;i<nu;++i)
-  {
+    {
       vgl_point_2d<double> p = p1;
       for (int j=0;j<nv;++j)
       {
-    for (int k=0;k<np;++k)
-    {
-          *vc = mil_bilin_interp_2d(p.x(),p.y(),image.plane(j),xstep,ystep);
+        for (int k=0;k<np;++k)
+        {
+          *vc = mil_bilin_interp_2d(p.x(),p.y(),image.plane(k),xstep,ystep);
           vc++;
         }
-    p+=v;
+        p+=v;
       }
       p1+=u;
     }
@@ -312,31 +312,31 @@ void mil_sample_grid_2d_ic_no_checks(vnl_vector<vecType>& vec,
 }
 
 #define MIL_SAMPLE_GRID_2D_INSTANTIATE( imType, vecType ) \
-template void mil_sample_grid_2d(vnl_vector<vecType >& v, \
+template void mil_sample_grid_2d(vnl_vector<vecType >& vec, \
                            const mil_image_2d_of<imType >& image, \
                            const vgl_point_2d<double >& p, \
                            const vgl_vector_2d<double >& u, \
                            const vgl_vector_2d<double >& v, \
                            int nu, int nv); \
-template void mil_sample_grid_2d_safe(vnl_vector<vecType >& v, \
+template void mil_sample_grid_2d_safe(vnl_vector<vecType >& vec, \
                            const mil_image_2d_of<imType >& image, \
                            const vgl_point_2d<double >& p, \
                            const vgl_vector_2d<double >& u, \
                            const vgl_vector_2d<double >& v, \
                            int nu, int nv); \
-template void mil_sample_grid_2d_no_checks(vnl_vector<vecType >& v, \
+template void mil_sample_grid_2d_no_checks(vnl_vector<vecType >& vec, \
                            const mil_image_2d_of<imType >& image, \
                            const vgl_point_2d<double >& p, \
                            const vgl_vector_2d<double >& u, \
                            const vgl_vector_2d<double >& v, \
                            int nu, int nv); \
-template void mil_sample_grid_2d_ic_safe(vnl_vector<vecType >& v, \
+template void mil_sample_grid_2d_ic_safe(vnl_vector<vecType >& vec, \
                            const mil_image_2d_of<imType >& image, \
                            const vgl_point_2d<double >& p, \
                            const vgl_vector_2d<double >& u, \
                            const vgl_vector_2d<double >& v, \
                            int nu, int nv); \
-template void mil_sample_grid_2d_ic_no_checks(vnl_vector<vecType >& v, \
+template void mil_sample_grid_2d_ic_no_checks(vnl_vector<vecType >& vec, \
                            const mil_image_2d_of<imType >& image, \
                            const vgl_point_2d<double >& p0, \
                            const vgl_vector_2d<double >& u, \
