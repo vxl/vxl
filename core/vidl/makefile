@@ -9,7 +9,7 @@ LIBRARY := vidl
 VERSION := 1.0
 
 USES += vxl
-TRY_MPEG := 1
+TRY_MPEG2 := 1
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
@@ -23,7 +23,7 @@ SOURCES += vidl_frame_as_image.cxx
 SOURCES += vidl_image_list_codec.cxx
 SOURCES += vidl_io.cxx
 
-ifdef HAS_MPEG
+ifdef HAS_MPEG2
 SOURCES += vidl_mpegcodec.cxx
 SOURCES += vidl_mpegcodec_helper.cxx
 SOURCES += vidl_yuv_2_rgb.cxx
@@ -38,7 +38,7 @@ MANPAGE_SOURCES += vidl_frame_as_image_sptr.h
 MANPAGE_SOURCES += vidl_frame_sptr.h
 MANPAGE_SOURCES += vidl_image_list_codec_sptr.h
 MANPAGE_SOURCES += vidl_movie_sptr.h
-ifdef HAS_MPEG
+ifdef HAS_MPEG2
 MANPAGE_SOURCES += vidl_mpegcodec_sptr.h
 endif
 
