@@ -14,19 +14,17 @@
 
 //-----------------------------------------------------------------------------
 //
-//: @{ Compute a plane-plane projectivity using 4 point correspondences.
+//: Compute a plane-plane projectivity using 4 point correspondences.
 // Returns false if the calculation fails or there are fewer than four point
 // matches in the list.
 //
 // The algorithm determines the transformation $H_i$ from each pointset to the
-// canonical projective basis (see the {\bf ProjectiveBasis2D} class), and
+// canonical projective basis (see the \b ProjectiveBasis2D class), and
 // returns the combined transform $H = H_2^{-1} H_1$.
-//
-// @}
 
 bool
-HMatrix2DCompute4Point::compute_p(const vcl_vector<HomgPoint2D>& points1,
-                                  const vcl_vector<HomgPoint2D>& points2,
+HMatrix2DCompute4Point::compute_p(vcl_vector<HomgPoint2D> const& points1,
+                                  vcl_vector<HomgPoint2D> const& points2,
                                   HMatrix2D *H)
 {
   ProjectiveBasis2D basis1(points1);
