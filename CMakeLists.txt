@@ -12,6 +12,11 @@ ELSE(WIN32)
   OPTION(BUILD_TESTS "Should the tests be built?" YES)
   OPTION(BUILD_SHARED_LIBS "Should shared libraries be the default?" YES)
 ENDIF(WIN32)
+
+IF(BUILD_TESTS)
+  ENABLE_TESTING()
+ENDIF(BUILD_TESTS)
+
 OPTION(WARN_DEPRECATED "Enable runtime warnings for deprecated functions?" YES)
 OPTION(WARN_DEPRECATED_ONCE "Only warn once per function (if runtime warnings are enabled)?" YES)
 OPTION(WARN_DEPRECATED_ABORT "Abort on executing a deprecated function (if runtime warnings are enabled)?" NO)
