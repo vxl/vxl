@@ -23,12 +23,8 @@
 int vepl_test_threshold() {
   vil_image byte_img = CreateTest8bitImage(32,32),  byte_ori = CreateTest8bitImage(32,32);
   vil_image shrt_img = CreateTest16bitImage(32,32), shrt_ori = CreateTest16bitImage(32,32);
-  vil_image colr_img = CreateTest24bitImage(32,32), colr_ori = CreateTest24bitImage(32,32);
-  vil_image flot_img = CreateTestfloatImage(32,32), flot_ori = CreateTestfloatImage(32,32);
-  vil_memory_image_of<float> flot_out(32, 32);
-  vil_memory_image_of<unsigned char> byte_out(32, 32);
-  vil_memory_image_of<unsigned short> shrt_out(32, 32);
-  vil_memory_image_of<vil_rgb_byte> colr_out(32, 32);
+//vil_image colr_img = CreateTest24bitImage(32,32), colr_ori = CreateTest24bitImage(32,32);
+//vil_image flot_img = CreateTestfloatImage(32,32), flot_ori = CreateTestfloatImage(32,32);
 
   vcl_string m = "vepl_threshold";
   ALL_TESTS(vepl_threshold,0,m);

@@ -24,9 +24,6 @@ int vipl_test_gaussian_convolution() {
   mil_image_2d_of<ubyte> byte_img = Create_mil8bitImage(32,32),  byte_ori = Create_mil8bitImage(32,32);
   mil_image_2d_of<short> shrt_img = Create_mil16bitImage(32,32), shrt_ori = Create_mil16bitImage(32,32);
   mil_image_2d_of<float> flot_img = Create_milfloatImage(32,32), flot_ori = Create_milfloatImage(32,32);
-  mil_image_2d_of<ubyte> byte_out(32, 32);
-  mil_image_2d_of<short> shrt_out(32, 32);
-  mil_image_2d_of<float> flot_out(32, 32);
 
   vcl_string m = "vipl_gaussian_convolution";
   ALL_TESTS(vipl_gaussian_convolution,m,1.0);
