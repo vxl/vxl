@@ -43,12 +43,6 @@ MANPAGE_SOURCES += vtol_two_chain_sptr.h
 MANPAGE_SOURCES += vtol_vertex_2d_sptr.h
 MANPAGE_SOURCES += vtol_vertex_sptr.h
 MANPAGE_SOURCES += vtol_zero_chain_sptr.h
-MANPAGE_SOURCES += vtol_edge_3d.h
-MANPAGE_SOURCES += vtol_face_3d.h
-MANPAGE_SOURCES += vtol_topology_cache_3d.h
-MANPAGE_SOURCES += vtol_topology_object_3d.h
-MANPAGE_SOURCES += vtol_two_chain_3d.h
-MANPAGE_SOURCES += vtol_vertex_3d.h
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
