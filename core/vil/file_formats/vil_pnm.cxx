@@ -317,22 +317,22 @@ vil2_image_view_base_sptr vil2_pnm_image::get_copy_view(
 
   if (bits_per_component_ == 1)
   {
-    buf = new vil2_memory_chunk(nx_ * ny_* nplanes() * sizeof(bool));
+    buf = new vil2_memory_chunk(nx_ * ny_* nplanes() * sizeof(bool),VIL2_PIXEL_FORMAT_BOOL);
     bb = (bool *) buf->data();
   }
   else if (bits_per_component_ <= 8)
   {
-    buf = new vil2_memory_chunk(nx_ * ny_* nplanes() * sizeof(unsigned char));
+    buf = new vil2_memory_chunk(nx_ * ny_* nplanes() * sizeof(unsigned char),VIL2_PIXEL_FORMAT_BYTE);
     ib = (unsigned char *) buf->data();
   }
   else if (bits_per_component_ <= 16)
   {
-    buf = new vil2_memory_chunk(nx_ * ny_* nplanes() * sizeof(unsigned short));
+    buf = new vil2_memory_chunk(nx_ * ny_* nplanes() * sizeof(unsigned short),VIL2_PIXEL_FORMAT_UINT_16);
     jb = (unsigned short *) buf->data();
   }
   else
   {
-    buf = new vil2_memory_chunk(nx_ * ny_* nplanes() * sizeof(unsigned int));
+    buf = new vil2_memory_chunk(nx_ * ny_* nplanes() * sizeof(unsigned int),VIL2_PIXEL_FORMAT_UINT_32);
     kb = (unsigned int *) buf->data();
   }
 

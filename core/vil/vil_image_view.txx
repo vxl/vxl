@@ -481,7 +481,7 @@ void vil2_image_view<T>::resize(unsigned ni, unsigned nj, unsigned nplanes)
 
   release_memory();
 
-  ptr_ = new vil2_memory_chunk(sizeof(T)*nplanes*nj*ni);
+  ptr_ = new vil2_memory_chunk(sizeof(T)*nplanes*nj*ni,vil2_pixel_format_of(T()));
 
   ni_ = ni;
   nj_ = nj;

@@ -8,13 +8,13 @@
 
 //: Dflt ctor
 vil2_memory_chunk::vil2_memory_chunk()
-: data_(0), size_(0), ref_count_(0)
+: data_(0), size_(0), pixel_format_(VIL2_PIXEL_FORMAT_UNKNOWN), ref_count_(0)
 {
 }
 
 //: Allocate n bytes of memory
-vil2_memory_chunk::vil2_memory_chunk(unsigned long n)
-: data_(new char[n]), size_(n), ref_count_(0)
+vil2_memory_chunk::vil2_memory_chunk(unsigned long n, vil2_pixel_format pixel_form)
+: data_(new char[n]), size_(n), pixel_format_(pixel_form), ref_count_(0)
 {
 }
 
@@ -26,7 +26,7 @@ vil2_memory_chunk::~vil2_memory_chunk()
 
 //: Copy ctor
 vil2_memory_chunk::vil2_memory_chunk(const vil2_memory_chunk& d)
-: data_(new char[d.size()]), size_(d.size()), ref_count_(0)
+: data_(new char[d.size()]), size_(d.size()), pixel_format_(d.pixel_format_), ref_count_(0)
 {
   vcl_memcpy(data_,d.data_,size_);
 }
@@ -36,7 +36,7 @@ vil2_memory_chunk& vil2_memory_chunk::operator=(const vil2_memory_chunk& d)
 {
   if (this==&d) return *this;
 
-  resize(d.size());
+  resize(d.size(),d.pixel_format());
   vcl_memcpy(data_,d.data_,size_);
   return *this;
 }
@@ -55,7 +55,7 @@ void vil2_memory_chunk::unref()
 
 //: Create empty space for n elements.
 //  Leave existing data untouched if the size is already n.
-void vil2_memory_chunk::resize(unsigned long n)
+void vil2_memory_chunk::resize(unsigned long n, vil2_pixel_format pixel_form)
 {
   if (size_==n) return;
   delete [] (char*) data_;
@@ -63,6 +63,7 @@ void vil2_memory_chunk::resize(unsigned long n)
   if (n>0)
     data_ = new char[n];
   size_ = n;
+  pixel_format_ = pixel_form;
 }
 
 
