@@ -13,7 +13,7 @@ vil_pixel_format_t vil_pixel_format(vil_image const &I)
 {
   int c = I.components();
   int b = I.bits_per_component();
-  int f = I.component_format();
+  vil_component_format f = I.component_format();
 
   // assume 8 = CHAR_BIT
   if (c == 1 && b ==  8 && f == VIL_COMPONENT_FORMAT_UNSIGNED_INT) return VIL_BYTE;
