@@ -1,7 +1,7 @@
 #ifndef vcl_generic_iosfwd_h_
 #define vcl_generic_iosfwd_h_
 
-// THIS IS A GENERATED FILE. DO NOT EDIT! -- Edit the source .hhh and run make instead
+// THIS IS A GENERATED FILE. DO NOT EDIT! -- Instead, edit vcl_iosfwd.hhh and run make
 
 // streamoff
 #ifndef vcl_streamoff
