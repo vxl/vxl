@@ -13,7 +13,7 @@ SET(bcal_sources
  bcal_zhang_linear_calibrate.h   bcal_zhang_linear_calibrate.cxx
 )
 
-AUX_SOURCE_DIRECTORY(Templates cam_sources)
+AUX_SOURCE_DIRECTORY(Templates bcal_sources)
 
 ADD_LIBRARY(bcal ${bcal_sources})
 TARGET_LINK_LIBRARIES(bcal vsol vnl vgl vgl_algo vbl vcsl)
