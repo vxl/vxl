@@ -16,13 +16,13 @@ void vil2_gauss_reduce(const vil2_image_view<T>& src_im,
                             vil2_image_view<T>& dest_im,
                             vil2_image_view<T>& work_im)
 {
-  unsigned unsigned ni = src_im.ni();
-  unsigned unsigned nj = src_im.nj();
-  unsigned unsigned n_planes = src_im.nplanes();
+  unsigned ni = src_im.ni();
+  unsigned nj = src_im.nj();
+  unsigned n_planes = src_im.nplanes();
 
   // Output image size
-  unsigned unsigned ni2 = (ni+1)/2;
-  unsigned unsigned nj2 = (nj+1)/2;
+  unsigned ni2 = (ni+1)/2;
+  unsigned nj2 = (nj+1)/2;
 
   dest_im.resize(ni2,nj2,n_planes);
 
