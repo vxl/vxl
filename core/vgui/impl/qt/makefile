@@ -24,6 +24,11 @@ SOURCES += ${MOCSOURCES}
 include ${IUEROOT}/config/top.mk
 ################################
 
+ifeq ($(OS),OSF1V4)
+FLAGS_vgui_qt_adaptor_mocced.cxx := -O0
+# because of an "internal compile error" of gcc2.95 whenever optimisation is on, even -O1
+endif
+
 %_mocced.$(CPPEXT): %.$(HPPEXT)
 	@echo "--- Moccing $<"
 	$(MOC) $< -o $@
