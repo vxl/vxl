@@ -28,7 +28,7 @@ AUX_SOURCE_DIRECTORY(Templates bxml_sources)
 
 ADD_LIBRARY(bxml ${bxml_sources})
 
-TARGET_LINK_LIBRARIES(bxml bdgl vtol vdgl vsol vul vbl vcl)
+TARGET_LINK_LIBRARIES(bxml ${XERCES_LIBRARIES} bdgl vtol vdgl vsol vul vbl vcl)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)
