@@ -1,6 +1,7 @@
 // This is vxl/vbl/io/tests/test_array_1d_io.cxx
 #include <vcl_iostream.h>
 #include <vbl/io/vbl_io_array_1d.h>
+#include <vsl/vsl_binary_io.h>
 #include <testlib/testlib_test.h>
 #include <vpl/vpl.h>
 

@@ -1,6 +1,7 @@
 // This is vxl/vbl/io/tests/test_sparse_array_io.cxx
 #include <vcl_iostream.h>
 #include <vbl/io/vbl_io_sparse_array_2d.h>
+#include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_sparse_array_2d.h>
 #include <testlib/testlib_test.h>
 #include <vpl/vpl.h>
