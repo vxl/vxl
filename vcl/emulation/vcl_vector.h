@@ -52,7 +52,7 @@
 #ifndef vcl_emulation_vector_h
 #define vcl_emulation_vector_h
 
-#include <stddef.h>
+#include <vcl/vcl_cstddef.h>
 #include <vcl/emulation/vcl_algobase.h>
 #include <vcl/emulation/vcl_alloc.h>
 
@@ -486,5 +486,8 @@ template <class T, class Alloc>
 template <class T, class Alloc>
     inline void swap(__vector__<T,Alloc>& a, __vector__<T,Alloc>& b) { a.swap(b); }
 # endif
+
+#define VCL_VECTOR_INSTANTIATE \
+extern "please include vcl/emulation/vcl_vector.txx instead"
 
 #endif // vcl_emulation_vector_h

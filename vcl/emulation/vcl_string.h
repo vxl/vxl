@@ -33,7 +33,7 @@
 #pragma interface
 #endif
 
-#include <stddef.h>   // For ptrdiff_t
+#include <vcl/vcl_cstddef.h>   // For ptrdiff_t
 
 #include "vcl_stlconf.h"
 

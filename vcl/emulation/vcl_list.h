@@ -52,7 +52,7 @@
 #ifndef vcl_emulation_list_h
 #define vcl_emulation_list_h
 
-#include <stddef.h>
+#include <vcl/vcl_cstddef.h>
 #include <vcl/emulation/vcl_algobase.h>
 #include <vcl/emulation/vcl_iterator.h>
 #include <vcl/emulation/vcl_alloc.h>
@@ -645,5 +645,8 @@ inline bool operator<(const __list__<T, Alloc>& x, const __list__<T, Alloc>& y) 
 template <class T, class Alloc>
 inline void swap(__list__<T,Alloc>& a, __list__<T,Alloc>& b) { a.swap(b); }
 # endif
+
+#define VCL_LIST_INSTANTIATE \
+extern "please include vcl/emulation/vcl_list.txx instead"
 
 #endif // vcl_emulation_list_h

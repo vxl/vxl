@@ -40,7 +40,7 @@
 #ifndef vcl_emulation_iterator_h
 #define vcl_emulation_iterator_h
 
-#include <stddef.h>
+#include <vcl/vcl_cstddef.h>
 #include <vcl/vcl_iostream.h>
 #include "vcl_functional.h"
 

@@ -51,7 +51,7 @@
 #define vcl_emulation_tempbuf_h
 
 #include <vcl/vcl_climits.h>
-#include <stddef.h>
+#include <vcl/vcl_cstddef.h>
 #include <vcl/vcl_cstdlib.h>
 #include <vcl/emulation/vcl_pair.h>
 

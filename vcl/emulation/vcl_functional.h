@@ -40,7 +40,7 @@
 #define vcl_emulation_function_h
 #define FUNCTION_H
 
-#include <stddef.h>
+#include <vcl/vcl_cstddef.h>
 #include <vcl/emulation/vcl_bool.h>
 #include <vcl/vcl_compiler.h> // needed for VCL_DFL_TMPL_PARAM_STLDECL
 

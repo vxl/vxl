@@ -42,7 +42,7 @@
 #ifndef vcl_emulation_bvector_h
 #define vcl_emulation_bvector_h
 
-#include <stddef.h>
+#include <vcl/vcl_cstddef.h>
 #include <vcl/emulation/vcl_algobase.h>
 #include <vcl/emulation/vcl_alloc.h>
 

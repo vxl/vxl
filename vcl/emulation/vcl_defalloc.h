@@ -28,7 +28,7 @@
 #define vcl_emulation_defalloc_h
 
 #include <vcl/vcl_new.h>
-#include <stddef.h>
+#include <vcl/vcl_cstddef.h>
 #include <vcl/vcl_cstdlib.h>
 #include <vcl/vcl_climits.h>
 #include <vcl/emulation/vcl_alloc.h>
