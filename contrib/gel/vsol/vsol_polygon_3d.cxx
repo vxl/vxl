@@ -285,7 +285,7 @@ vsol_polygon_3d::normal_at_point(const vsol_point_3d_sptr &p) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-//: Default constructor. Do nothing. Just to enable inherance.
+//: Default constructor. Do nothing. Just to enable inheritance.
 //---------------------------------------------------------------------------
 vsol_polygon_3d::vsol_polygon_3d(void)
 {

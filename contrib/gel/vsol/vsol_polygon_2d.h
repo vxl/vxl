@@ -134,7 +134,7 @@ class vsol_polygon_2d : public vsol_region_2d
   //***************************************************************************
  protected:
   //---------------------------------------------------------------------------
-  //: Default constructor. Do nothing. Just to enable inherance.
+  //: Default constructor. Do nothing. Just to enable inheritance.
   //---------------------------------------------------------------------------
   vsol_polygon_2d(void);
 };

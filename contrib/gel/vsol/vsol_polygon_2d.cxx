@@ -199,7 +199,7 @@ bool vsol_polygon_2d::is_convex(void) const
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-//: Default constructor. Do nothing. Just to enable inherance.
+//: Default constructor. Do nothing. Just to enable inheritance.
 //---------------------------------------------------------------------------
 vsol_polygon_2d::vsol_polygon_2d(void)
 {

@@ -149,7 +149,7 @@ class vsol_polygon_3d : public vsol_region_3d
 
  protected:
   //---------------------------------------------------------------------------
-  //: Default constructor. Do nothing. Just to enable inherance.
+  //: Default constructor. Do nothing. Just to enable inheritance.
   //---------------------------------------------------------------------------
   vsol_polygon_3d(void);
 };

@@ -137,7 +137,7 @@ class vsol_polyhedron : public vsol_volume_3d
 
  protected:
   //---------------------------------------------------------------------------
-  //: Default constructor. Do nothing. Just to enable inherance.
+  //: Default constructor. Do nothing. Just to enable inheritance.
   //---------------------------------------------------------------------------
   vsol_polyhedron(void) {}
 };
