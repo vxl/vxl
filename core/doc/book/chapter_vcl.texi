@@ -366,5 +366,6 @@ stuff, there is an include file of forward declarations that will work.
 #include <vcl_iosfwd.h>
 @end example
 
-General rule: never forward declare vcl_something with "class vcl_something;"
-but either #include <vcl_something_fwd.h> or #include <vcl_something.h>
+General rule: never forward declare vcl_something with "class
+vcl_something;" but either @samp{#include <vcl_something_fwd.h>} or
+@samp{#include <vcl_something.h>}
