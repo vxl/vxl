@@ -391,31 +391,31 @@ class vil_dicom_header_format
   //: True if it is known DICOM format
   bool isDicomFormat(vil_stream &);
 
-//: Read the dicom header into a header struct
-//  Reads the header section of the dicom file and stores the
-//  result in a header struct, which it returns. When finished,
-// the file stream should be pointing at the start of the image
-// data
-// \param fs The file stream to read - on exit points to the start of the image data
-// \return A dicom header struct containing the info gained from the header
-// \sa lastHeader(), headerValid(), last_read_() and info_valid_()
+  //: Read the dicom header into a header struct
+  //  Reads the header section of the dicom file and stores the
+  //  result in a header struct, which it returns. When finished,
+  // the file stream should be pointing at the start of the image
+  // data
+  // \param fs The file stream to read - on exit points to the start of the image data
+  // \return A dicom header struct containing the info gained from the header
+  // \sa lastHeader(), headerValid(), last_read_() and info_valid_()
   vil_dicom_header_info readHeader(vil_stream &fs);
 
-//: Method to return the last struct of header info set
-//
-//  The class holds a dicom header info struct containing the
-//  info from the last dicom file read.
-//  \return A dicom header struct containing the info gained from the last header read
+  //: Method to return the last struct of header info set
+  //
+  //  The class holds a dicom header info struct containing the
+  //  info from the last dicom file read.
+  //  \return A dicom header struct containing the info gained from the last header read
   vil_dicom_header_info lastHeader(void);
 
-//: Method to indicate if the header info held is valid or not
-//
-//  \return TRUE if the header info is valid, otherwise false
+  //: Method to indicate if the header info held is valid or not
+  //
+  //  \return TRUE if the header info is valid, otherwise false
   bool headerValid(void);
 
-//: Return the current system endian
-//
-//  \return The system endian for the architecture running the application
+  //: Return the current system endian
+  //
+  //  \return The system endian for the architecture running the application
   vil_dicom_header_endian systemEndian(void);
 
   //: Return the endian of the header being read
@@ -425,7 +425,7 @@ class vil_dicom_header_format
 
   vil_dicom_header_endian fileEndian(void);
 
-  //: Return any encapsuated image type
+  //: Return any encapsulated image type
   //
   //  \return The encapsulated image type of the file currently being read.
   vil_dicom_header_image_type imageType(void);
@@ -441,7 +441,7 @@ class vil_dicom_header_format
   //: Method to read the elements from the header
   //
   //  This method fills the last_read_ header structure with
-  //  the necesary fields
+  //  the necessary fields
   //  \param fs The file stream to read from
   //  \sa readIdentifyingElements(), readPatientElements(),
   //      readAcquisitionElements(), readRelationshipElements(),
@@ -622,4 +622,4 @@ class vil_dicom_header_format
   vil_dicom_header_image_type image_type_;
 };
 
-#endif
+#endif // vil_dicom_header_h_
