@@ -33,18 +33,16 @@ int test_vector_main(int /*argc*/,char* /*argv*/[])
   }
   {
     vcl_vector<double> v;
-    for (unsigned i=0; i<10; ++i) {
-     
+    for (unsigned i=0; i<10; ++i)
+    {
       vcl_cout << "size : " << v.size() << delim
-	       << "capacity : " << v.capacity() << delim;
-      if(i>0) {
+               << "capacity : " << v.capacity() << delim;
+      if (i>0)
         vcl_cout << "begin : " << (void*) &* v.begin()
-		 << delim << "end - 1: " << (void*) &* (v.end() - 1) << vcl_endl;
-      }
-      else {
-	vcl_cout << vcl_endl;
-      }
-      
+                 << delim << "end - 1: " << (void*) &* (v.end() - 1) << vcl_endl;
+      else
+        vcl_cout << vcl_endl;
+
       v.push_back(13.141592653589793 * i);
     }
   }
