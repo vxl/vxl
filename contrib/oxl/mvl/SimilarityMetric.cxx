@@ -18,7 +18,9 @@
 #include <mvl/HomgOperator2D.h>
 
 //: Default constructor sets parameters for an identity transformation.
-SimilarityMetric::SimilarityMetric()
+SimilarityMetric::SimilarityMetric():
+  cond_matrix(3,3), 
+  inv_cond_matrix(3,3)
 {
   centre_x_ = 0;
   centre_y_ = 0;
@@ -29,7 +31,9 @@ SimilarityMetric::SimilarityMetric()
 }
 
 //: Create a SimilarityMetric that transforms according to (x,y) -> (x - cx, y - cy) * scale
-SimilarityMetric::SimilarityMetric(double cx, double cy, double scale)
+SimilarityMetric::SimilarityMetric(double cx, double cy, double scale):
+  cond_matrix(3,3), 
+  inv_cond_matrix(3,3)
 {
   centre_x_ = cx;
   centre_y_ = cy;
@@ -40,7 +44,9 @@ SimilarityMetric::SimilarityMetric(double cx, double cy, double scale)
 }
 
 //: Create a SimilarityMetric that transforms coordinates in the range (0..xsize, 0..ysize) to the square (-1..1, -1..1)
-SimilarityMetric::SimilarityMetric(int xsize, int ysize)
+SimilarityMetric::SimilarityMetric(int xsize, int ysize):
+  cond_matrix(3,3), 
+  inv_cond_matrix(3,3)
 {
   set_from_rectangle(xsize, ysize);
 }

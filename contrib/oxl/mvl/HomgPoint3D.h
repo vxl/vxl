@@ -17,6 +17,7 @@
 //
 
 #include <vnl/vnl_double_3.h>
+#include <vnl/vnl_double_4.h>
 #include <mvl/Homg3D.h>
 #include <vcl_iosfwd.h>
 

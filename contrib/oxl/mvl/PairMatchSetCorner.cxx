@@ -75,6 +75,10 @@ void PairMatchSetCorner::extract_matches(vcl_vector<HomgPoint2D>& points1,
     points1[i] = _corners1->get_homg(match.get_i1());
     points2[i] = _corners2->get_homg(match.get_i2());
     ++i;
+    if (i > n) {
+      vcl_cerr << "ERRRRRK!";
+      abort();
+    }
   }
   assert(i == n);
 }

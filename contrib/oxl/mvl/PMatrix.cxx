@@ -175,7 +175,7 @@ HomgPlane3D PMatrix::backproject (const HomgLine2D& l) const
 vcl_ostream& operator<<(vcl_ostream& s, const PMatrix& p)
 {
   if (HomgPrettyPrint::pretty)
-    return vnl_matlab_print(s, p.get_matrix(), "");
+    return vnl_matlab_print(s, p.get_matrix().as_ref(), "");
   else
     return s << p.get_matrix();
 }
@@ -370,9 +370,56 @@ PMatrix::get (vnl_matrix<double>* A, vnl_vector<double>* a) const
 
 //----------------------------------------------------------------
 //
+//: Return the 3x3 matrix and 3x1 column vector of P = [A a].
+void
+PMatrix::get (vnl_double_3x3* A, vnl_double_3* a) const
+{
+  A->put(0,0, p_matrix_(0,0));
+  A->put(1,0, p_matrix_(1,0));
+  A->put(2,0, p_matrix_(2,0));
+
+  A->put(0,1, p_matrix_(0,1));
+  A->put(1,1, p_matrix_(1,1));
+  A->put(2,1, p_matrix_(2,1));
+
+  A->put(0,2, p_matrix_(0,2));
+  A->put(1,2, p_matrix_(1,2));
+  A->put(2,2, p_matrix_(2,2));
+
+  a->put(0, p_matrix_(0,3));
+  a->put(1, p_matrix_(1,3));
+  a->put(2, p_matrix_(2,3));
+}
+
+//----------------------------------------------------------------
+//
 //: Return the rows of P = [a b c]'.
 void
-PMatrix::get (vnl_vector<double>* a, vnl_vector<double>* b, vnl_vector<double>* c) const
+PMatrix::get_rows (vnl_vector<double>* a, vnl_vector<double>* b, vnl_vector<double>* c) const
+{
+  a->put(0, p_matrix_(0, 0));
+  a->put(1, p_matrix_(0, 1));
+  a->put(2, p_matrix_(0, 2));
+  a->put(3, p_matrix_(0, 3));
+
+  b->put(0, p_matrix_(1, 0));
+  b->put(1, p_matrix_(1, 1));
+  b->put(2, p_matrix_(1, 2));
+  b->put(3, p_matrix_(1, 3));
+
+  c->put(0, p_matrix_(2, 0));
+  c->put(1, p_matrix_(2, 1));
+  c->put(2, p_matrix_(2, 2));
+  c->put(3, p_matrix_(2, 3));
+}
+
+//----------------------------------------------------------------
+//
+//: Return the rows of P = [a b c]'.
+void
+PMatrix::get_rows (vnl_vector_fixed<double,4>* a, 
+	      vnl_vector_fixed<double,4>* b, 
+	      vnl_vector_fixed<double,4>* c) const
 {
   a->put(0, p_matrix_(0, 0));
   a->put(1, p_matrix_(0, 1));

@@ -39,7 +39,7 @@ class Homg1D : public vnl_double_2 , public Homg
  ~Homg1D() {}
 
   //: Assignment
-  Homg1D& operator=(const Homg1D& that) {set(that.x(),that.w()); return *this;}
+  Homg1D& operator=(const Homg1D& that) { vnl_double_2::operator=(that); return *this; }
 
   // Operations----------------------------------------------------------------
 
@@ -60,7 +60,7 @@ class Homg1D : public vnl_double_2 , public Homg
   vnl_double_2 get_vector() const { return vnl_double_2(x(),w()); }
   vnl_double_2& asVector() { return *this; }
 
-  //: Set x,w.
+  //: Set to 1d quantity (px pw) representing Euclidean px/pw
   void set(double px, double pw)
   {
     (*this)[0] = px;
@@ -72,6 +72,7 @@ class Homg1D : public vnl_double_2 , public Homg
 
   //: Set from vector
   void set(const vnl_vector<double>& v) { set(v[0],v[1]); }
+
 
   //: Set element.
   void set(unsigned int index, double v) {assert(index<=1); (*this)[index]=v;}

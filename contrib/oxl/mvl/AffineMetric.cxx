@@ -16,7 +16,8 @@
 
 //: Construct and AffineMetric from the matrix A.
 // The last row of A should be (0,0,lambda).
-AffineMetric::AffineMetric()
+AffineMetric::AffineMetric():
+A_(3,3), A_inverse_(3,3)
 {
   A_.set_identity();
   A_inverse_.set_identity();
@@ -64,7 +65,7 @@ void AffineMetric::set(double a11, double a13,
 //: Transform p
 HomgPoint2D AffineMetric::homg_to_imagehomg(const HomgPoint2D& p) const
 {
-  return A_ * p.get_vector();
+   return A_ * p.get_vector();
 }
 
 //: Inverse-transform p
@@ -98,25 +99,21 @@ vnl_double_2 AffineMetric::homg_to_image(const HomgPoint2D& p) const
 }
 
 #if 0
-//: Return forward transformation matrix
 const vnl_matrix<double>& AffineMetric::get_C() const
 {
   return A_;
 }
 
-//: Return inverse transformation matrix
 const vnl_matrix<double>& AffineMetric::get_C_inverse() const
 {
   return A_inverse_;
 }
 
-//: Declare that this is a linear transformation
-bool AffineMetric::is_linear() const
+ bool AffineMetric::is_linear() const
 {
   return true;
 }
 
-//: Declare that this is not an isometry
 bool AffineMetric::can_invert_distance() const
 {
   return false;

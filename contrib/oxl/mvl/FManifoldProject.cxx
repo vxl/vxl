@@ -104,8 +104,7 @@ void FManifoldProject::set_F(const FMatrix& Fobj)
 //  Returns the minimum distance squared: ||x[1..4] - p[1..4]||^2.
 double FManifoldProject::correct(const HomgPoint2D& p1, const HomgPoint2D& p2, HomgPoint2D* out1, HomgPoint2D* out2) const
 {
-  // Make the query point
-  vnl_double_4 p;
+  double p[4];
   if (!p1.get_nonhomogeneous(p[0], p[1]) ||
       !p2.get_nonhomogeneous(p[2], p[3])) {
     vcl_cerr << "FManifoldProject: p1 or p2 at infinity\n";
@@ -113,6 +112,26 @@ double FManifoldProject::correct(const HomgPoint2D& p1, const HomgPoint2D& p2, H
     *out2 = p2;
     return 1e30;
   }
+  
+  double p_out[4];
+  double d = correct(p[0], p[1], p[2], p[3], &p_out[0], &p_out[1], &p_out[2], &p_out[3]);
+  
+  out1->set(p_out[0], p_out[1], 1.0);
+  out2->set(p_out[2], p_out[3], 1.0);
+  return d;
+}
+
+//: Find the points out1, out2 which minimize d(out1,p1) + d(out2,p2) subject to
+// out1'*F*out2 = 0.  Returns the minimum distance squared: ||x[1..4] - p[1..4]||^2.
+double FManifoldProject::correct(double   x1, double   y1, double   x2, double   y2,
+				 double *ox1, double *oy1, double *ox2, double *oy2) const
+{
+  // Make the query point
+  vnl_double_4 p;
+  p[0] = x1;
+  p[1] = y1;
+  p[2] = x2;
+  p[3] = y2;
 
   if (affine_F_) {
     // Easy case for affine F, F is a plane.
@@ -126,20 +145,22 @@ double FManifoldProject::correct(const HomgPoint2D& p1, const HomgPoint2D& p2, H
     p -= n * distance;
 
     /// p -= n * (dot_product(n, p) + d);
+    *ox1 = p[0];
+    *oy1 = p[1];
+    *ox2 = p[2];
+    *oy2 = p[3];
 
-    out1->set(p[0], p[1], 1.0);
-    out2->set(p[2], p[3], 1.0);
-
-    double EPIDIST = dot_product(out2->get_vector(), F_*out1->get_vector());
+    vnl_double_3 l = F_ * vnl_double_3(p[2], p[3], 1.0);
+    double EPIDIST = (l[0] * p[0] + l[1] * p[1] + l[2])/sqrt(l[0]*l[0]+l[1]*l[1]);
     if (EPIDIST > 1e-4) {
       vcl_cerr << "FManifoldProject: Affine F: EPIDIST = " << EPIDIST << vcl_endl;
       vcl_cerr << "FManifoldProject: Affine F: p = " << (dot_product(p,n) + d) << vcl_endl;
 
-      double EPI1 = dot_product(out2->get_vector(), F_*out1->get_vector());
-      double EPI2 = dot_product(p, n) + d;
-      vcl_cerr << "t = " << n << " " << d << vcl_endl;
-      vcl_cerr << "F_ = " << F_ << vcl_endl;
-      vcl_cerr << "FManifoldProject: Affine F: E = " << (EPI1 - EPI2) << vcl_endl;
+      //double EPI1 = dot_product(out2->get_vector(), F_*out1->get_vector());
+      //double EPI2 = dot_product(p, n) + d;
+      //vcl_cerr << "t = " << n << " " << d << vcl_endl;
+      //vcl_cerr << "F_ = " << F_ << vcl_endl;
+      //vcl_cerr << "FManifoldProject: Affine F: E = " << (EPI1 - EPI2) << vcl_endl;
       //abort();
     }
 
@@ -234,11 +255,15 @@ double FManifoldProject::correct(const HomgPoint2D& p1, const HomgPoint2D& p2, H
 
   if (!got_one) {
     vcl_cerr << "FManifoldProject: AROOGAH. Final epipolar distance =  " << dmin << ", errs = " << errs << vcl_endl;
-    *out1 = p1;
-    *out2 = p2;
+    *ox1 = x1;
+    *oy1 = y1;
+    *ox2 = x2;
+    *oy2 = y2;
   } else {
-    out1->set(Xmin[0], Xmin[1], 1);
-    out2->set(Xmin[2], Xmin[3], 1);
+    *ox1 = Xmin[0];
+    *oy1 = Xmin[1];
+    *ox2 = Xmin[2];
+    *oy2 = Xmin[3];
   }
 
   return dmin;

@@ -25,7 +25,9 @@
 #include <vnl/algo/vnl_algo_fwd.h> // for vnl_svd
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
+#include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3x4.h>
+#include <vnl/vnl_double_3.h>
 #include <vbl/vbl_ref_count.h>
 
 class HomgPoint2D;
@@ -90,20 +92,23 @@ class PMatrix : public vbl_ref_count
   bool operator==(PMatrix const& p) const { return p_matrix_ == p.get_matrix(); }
 
   void get(vnl_matrix<double>* A, vnl_vector<double>* a) const;
+  void get(vnl_double_3x3* A, vnl_double_3* a) const;
   void set(const vnl_matrix<double>& A, const vnl_vector<double>& a);
 
-  void get(vnl_vector<double>*, vnl_vector<double>*, vnl_vector<double>*) const;
-  void set(const vnl_vector<double>&, const vnl_vector<double>&, const vnl_vector<double>&);
+  void get_rows(vnl_vector<double>*, vnl_vector<double>*, vnl_vector<double>*) const;
+  void get_rows(vnl_vector_fixed<double, 4>*, vnl_vector_fixed<double, 4>*, vnl_vector_fixed<double, 4>*) const;
+  void set_rows(const vnl_vector<double>&, const vnl_vector<double>&, const vnl_vector<double>&);
 
   double get (unsigned int row_index, unsigned int col_index) const;
   void get (double *c_matrix) const;
   void get (vnl_matrix<double>* p_matrix) const;
+  void get (vnl_double_3x4* p_matrix) const;
 
   void set (const double* p_matrix);
   void set (const double p_matrix [3][4]);
   void set (const vnl_matrix<double>& p_matrix);
 
-  const vnl_matrix_ref<double> get_matrix() const { return p_matrix_; }
+  const vnl_double_3x4& get_matrix() const { return p_matrix_; }
   // Can't implement this as it will blow the svd cache.
   // vnl_matrix<double>& get_matrix() { return p_matrix_; }
 

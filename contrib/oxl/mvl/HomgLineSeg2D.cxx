@@ -95,7 +95,8 @@ double HomgLineSeg2D::picking_distance(const HomgPoint2D& hp) const
   double seg_length = dir.magnitude() / 2;
   dir.normalize();
 
-  vnl_double_2 mid = (l2 + l1) / 2.0;
+  vnl_double_2 mid = (l2 + l1);
+  mid /= 2;
 
   vnl_double_2 diff = p - mid;
 

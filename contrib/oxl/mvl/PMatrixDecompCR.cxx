@@ -75,6 +75,7 @@ void PMatrixDecompCR::compute(const vnl_matrix<double>& p, bool scale_C)
   for (int i = 0; i < 3; ++i)
     t[i] = p(i,3);
   UtSolve(C, t.as_ref().non_const());
+
   for (int i = 0; i < 3; ++i)
     Po(i,3) = t[i];
 

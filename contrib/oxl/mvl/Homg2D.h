@@ -42,10 +42,10 @@ class Homg2D : public vnl_double_3, public Homg
   Homg2D(double px, double py, double pw) { set(px,py,pw); }
 
   //: Construct from 3-vector.
-  Homg2D(const vnl_vector_fixed<double,3>& v) { set(v); }
+  Homg2D (const vnl_vector<double>& v) { set(v); }
 
   //: Construct from 3-vector.
-  Homg2D(const vnl_vector<double>& v) { set(v); }
+  Homg2D (const vnl_vector_fixed<double,3>& v) { set(v[0], v[1], v[2]); }
 
   //: Destructor
  ~Homg2D() {}

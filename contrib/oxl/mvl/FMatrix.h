@@ -79,7 +79,7 @@ class FMatrix
   void set(const FMatrix&);
 
   //: Return a const reference to the internal vnl_matrix.
-  const vnl_matrix_ref<double> get_matrix () const { return _f_matrix; }
+  const vnl_double_3x3& get_matrix () const { return _f_matrix; }
 
   // vnl_matrix<double>& get_matrix () { return _f_matrix; }
 
@@ -100,7 +100,7 @@ friend vcl_istream& operator>>(vcl_istream& s, FMatrix& F);
   // Fundamental matrix
   vnl_double_3x3 _f_matrix;
 
-  // vnl_transpose of Fundamental matrix
+  // transpose of Fundamental matrix
   vnl_double_3x3 _ft_matrix;
 
   // True if the Fundamental matrix is rank 2

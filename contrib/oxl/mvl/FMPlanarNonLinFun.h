@@ -23,9 +23,22 @@
 class FMatrixPlanar;
 class ImageMetric;
 
-class FMPlanarNonLinFun : public vnl_least_squares_function
-{
-  // Data Members--------------------------------------------------------------
+class FMPlanarNonLinFun : public vnl_least_squares_function {
+public:
+
+  //: Initialize object, will fit F to points1,2 using imagemetrics
+  //  rejecting points > outlier_distance_squared from epipolar lines
+  FMPlanarNonLinFun(const ImageMetric*, const ImageMetric*,
+                        double outlier_distance_squared,
+                        vcl_vector<HomgPoint2D>& points1,
+                        vcl_vector<HomgPoint2D>& points2);
+
+  bool compute(FMatrixPlanar* F);
+
+  //: The virtual function from vnl_levenberg_marquardt
+  void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
+
+private:
   int _data_size;
 
   vcl_vector<HomgPoint2D>& _points1;
@@ -43,22 +56,7 @@ class FMPlanarNonLinFun : public vnl_least_squares_function
   HomgMetric _image_metric1;
   HomgMetric _image_metric2;
 
- public:
 
-  // Constructors/Destructors--------------------------------------------------
-  FMPlanarNonLinFun(const ImageMetric*, const ImageMetric*,
-                    double outlier_distance_squared,
-                    vcl_vector<HomgPoint2D>& points1,
-                    vcl_vector<HomgPoint2D>& points2);
-
-  // Computations--------------------------------------------------------------
-
-  bool compute(FMatrixPlanar* F);
-
-  // The virtual function from vnl_levenberg_marquardt
-  void f(const vnl_vector<double>& x, vnl_vector<double>& fx);
-
- private:
   // Helpers-------------------------------------------------------------------
   void fmatrix_to_params(const FMatrixPlanar& F, vnl_vector<double>& params);
   FMatrixPlanar params_to_fmatrix(const vnl_vector<double>& params);

@@ -69,8 +69,8 @@ class ImageMetric
   virtual bool is_within_distance(const HomgPoint2D&, const HomgPoint2D&, double distance) const;
 
   // Data Access---------------------------------------------------------------
-  virtual const vnl_matrix_ref<double> get_C() const;
-  virtual const vnl_matrix_ref<double> get_C_inverse() const;
+  virtual vnl_matrix<double> get_C() const;
+  virtual vnl_matrix<double> get_C_inverse() const;
 
   virtual bool is_linear() const;
   virtual bool can_invert_distance() const;

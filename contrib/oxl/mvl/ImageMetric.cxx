@@ -83,7 +83,7 @@ HomgPoint2D ImageMetric::homg_to_imagehomg(const HomgPoint2D& x) const
 HomgLine2D ImageMetric::homg_to_image_line(const HomgLine2D& l) const
 {
   if (is_linear())
-    return HomgLine2D(get_C_inverse().transpose() * l.get_vector());
+    return HomgLine2D(get_C_inverse().transpose() * l.get_vector().as_ref());
 
   // get points, decondition, and rejoin
   HomgPoint2D p1, p2;
@@ -96,7 +96,7 @@ HomgLine2D ImageMetric::homg_to_image_line(const HomgLine2D& l) const
 HomgLine2D ImageMetric::image_to_homg_line(const HomgLine2D& l) const
 {
   if (is_linear())
-    return HomgLine2D(get_C().transpose() * l.get_vector());
+    return HomgLine2D(get_C().transpose() * l.get_vector().as_ref());
 
   // get points, condition, and rejoin
   HomgPoint2D p1, p2;
@@ -203,14 +203,14 @@ static vnl_identity_3x3 I;
 
 //: Return conditioning matrix C that converts homogeneous image points to homogeneous conditioned points.
 //  If the ImageMetric used is nonlinear, then we'll have to make other arrangements...
-const vnl_matrix_ref<double> ImageMetric::get_C() const
+vnl_matrix<double> ImageMetric::get_C() const
 {
   warning("ImageMetric::get_C()") << "returning identity\n";
   return I;
 }
 
 //: Return conditioning matrix C that converts homogeneous conditioned points to image coords.
-const vnl_matrix_ref<double> ImageMetric::get_C_inverse() const
+vnl_matrix<double> ImageMetric::get_C_inverse() const
 {
   warning("ImageMetric::get_C_inverse()") << "returning identity\n";
   return I;

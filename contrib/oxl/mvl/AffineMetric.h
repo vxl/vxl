@@ -17,16 +17,13 @@
 
 class AffineMetric : public ImageMetric
 {
-  // Data Members--------------------------------------------------------------
-  vnl_double_3x3 A_;
-  vnl_double_3x3 A_inverse_;
+  vnl_matrix<double> A_;
+  vnl_matrix<double> A_inverse_;
  public:
-  // Constructors/Destructors--------------------------------------------------
-
+  
   AffineMetric();
   AffineMetric(const vnl_matrix<double>& A);
 
-  // Operations----------------------------------------------------------------
   virtual vnl_double_2 homg_to_image(const HomgPoint2D& p) const;
   virtual HomgPoint2D image_to_homg(const vnl_double_2&) const;
   virtual HomgPoint2D image_to_homg(double x, double y) const;
@@ -35,16 +32,22 @@ class AffineMetric : public ImageMetric
   virtual HomgPoint2D imagehomg_to_homg(const HomgPoint2D& p) const;
 
   void set(vnl_matrix<double> const& A);
+
   void set(double a11, double a13, double a22, double a23, double a33);
 
-  // Data Access---------------------------------------------------------------
-  virtual const vnl_matrix_ref<double> get_C() const { return A_; }
-  virtual const vnl_matrix_ref<double> get_C_inverse() const { return A_inverse_; }
+  //: Return forward transformation matrix
+  virtual vnl_matrix<double> get_C() const { return A_; }
+  
+  //: Return inverse transformation matrix
+  virtual vnl_matrix<double> get_C_inverse() const { return A_inverse_; }
 
+  //: Declare that this is a linear transformation
   virtual bool is_linear() const { return true; }
+    
+  //: Declare that this is not an isometry
   virtual bool can_invert_distance() const { return false; }
 
-  // Computations--------------------------------------------------------------
+  //: Send a human-readable representation to ostream
   vcl_ostream& print(vcl_ostream& s) const;
 };
 

@@ -68,6 +68,7 @@ class HomgMetric
   // ** Measurements
   double perp_dist_squared(const HomgPoint2D&, const HomgLine2D&) const;
   HomgPoint2D perp_projection(const HomgLine2D& l, const HomgPoint2D& p) const;
+  double distance_squared(double x1, double y1, double x2, double y2) const;
   double distance_squared(const HomgPoint2D&, const HomgPoint2D&) const;
   double distance_squared(const HomgLineSeg2D& segment, const HomgLine2D& line) const;
 
@@ -75,8 +76,8 @@ class HomgMetric
 
   // ** Speedups available for certain systems.
   bool is_linear() const;
-  const vnl_matrix_ref<double> get_C() const;
-  const vnl_matrix_ref<double> get_C_inverse() const;
+  vnl_matrix<double> get_C() const;
+  vnl_matrix<double> get_C_inverse() const;
 
   bool can_invert_distance() const;
   double image_to_homg_distance(double image_distance) const;

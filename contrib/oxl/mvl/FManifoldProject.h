@@ -35,8 +35,19 @@
 class FMatrix;
 class HomgPoint2D;
 
-class FManifoldProject
-{
+class FManifoldProject {
+public:
+  FManifoldProject();
+  FManifoldProject(const FMatrix& F);
+
+  void set_F(const FMatrix& F);
+  double correct(const HomgPoint2D& point1, const HomgPoint2D& point2, HomgPoint2D *, HomgPoint2D *) const;
+  double correct(double   x1, double   y1, double   x2, double   y2,
+		 double *ox1, double *oy1, double *ox2, double *oy2) const;
+  
+  vnl_double_3x3 const& get_F() const { return F_; }
+  
+private:
   vnl_double_3x3 F_;
 
   // Information to be used for each point
@@ -47,12 +58,6 @@ class FManifoldProject
 
   bool affine_F_;
 
- public:
-  FManifoldProject();
-  FManifoldProject(const FMatrix& F);
-
-  void set_F(const FMatrix& F);
-  double correct(const HomgPoint2D& point1, const HomgPoint2D& point2, HomgPoint2D *, HomgPoint2D *) const;
 };
 
 #endif // FManifoldProject_h_
