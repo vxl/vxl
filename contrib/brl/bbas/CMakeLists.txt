@@ -18,3 +18,6 @@ SUBDIRS(bgui)
 
 # staged vgl development area
 SUBDIRS(bvgl)
+
+# uncertainty geometry library
+SUBDIRS(bugl)
