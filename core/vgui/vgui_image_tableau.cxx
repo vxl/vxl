@@ -147,7 +147,6 @@ bool vgui_image_tableau::handle(vgui_event const &e)
     if (blend_on)
       glEnable(GL_BLEND);
 
-    //renderer->outline();
     return true;
   }
 
