@@ -79,4 +79,8 @@ namespace std {
 #endif
 
 
+#if VCL_USE_IMPLICIT_TEMPLATES
+# include "vcl_functional.txx"
+#endif
+
 #endif // vcl_functional_h_

@@ -20,4 +20,8 @@
 #define VCL_SET_INSTANTIATE extern "you must include vcl_set.txx first"
 #define VCL_MULTISET_INSTANTIATE extern "you must include vcl_set.txx first"
 
+#if VCL_USE_IMPLICIT_TEMPLATES
+# include "vcl_set.txx"
+#endif
+
 #endif // vcl_set_h_

@@ -24,4 +24,8 @@
 #define VCL_MAP_INSTANTIATE(T1, T2, L) extern "please include vcl_map.txx"
 #define VCL_MULTIMAP_INSTANTIATE(T1, T2, L) extern "please include vcl_multimap.txx"
 
+#if VCL_USE_IMPLICIT_TEMPLATES
+# include "vcl_map.txx"
+#endif
+
 #endif // vcl_map_h_

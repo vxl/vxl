@@ -16,4 +16,10 @@
 # include "iso/vcl_vector.h"
 #endif
 
+#define VCL_VECTOR_INSTANTIATE extern "you must include vcl_vector.txx first"
+
+#if VCL_USE_IMPLICIT_TEMPLATES
+# include "vcl_vector.txx"
+#endif
+
 #endif // vcl_vector_h_

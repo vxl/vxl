@@ -30,4 +30,8 @@
 #define VCL_BASIC_STRING_INSTANTIATE \
 extern "include vcl_string.txx instead"
 
+#if VCL_USE_IMPLICIT_TEMPLATES
+# include "vcl_string.txx"
+#endif
+
 #endif // vcl_string_h_

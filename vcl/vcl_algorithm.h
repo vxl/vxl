@@ -30,4 +30,8 @@ inline T vcl_min(T const& a, T const& b)
 }
 #endif
 
+#if VCL_USE_IMPLICIT_TEMPLATES
+# include "vcl_algorithm.txx"
+#endif
+
 #endif // vcl_algorithm_h_
