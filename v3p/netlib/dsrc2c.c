@@ -3,6 +3,16 @@
 extern double log(double), sqrt(double); /* #include <math.h> */
 
 /***** BEGIN VXL ADDITIONS ****/
+
+/* Turn off warnings in f2c generated code */
+#if defined(_MSC_VER)
+# if defined(__ICL)
+#  pragma warning(disable: 239 264 1011 )
+# else
+#  pragma warning(disable: 4101 4244 4554 4756 4723)
+# endif
+#endif
+
 /* Define functions so we do not have to link -lf2c.  */
 integer i_sign(integer *a, integer *b)
 {
