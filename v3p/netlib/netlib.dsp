@@ -1237,6 +1237,171 @@ SOURCE=.\zunghr.c
 SOURCE=.\zungqr.c
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\i_dnnt.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dtrsv.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dtrmv.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dtrmm.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dtgsyl.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dtgsy2.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dtgsen.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dtgexc.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dtgex2.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\drscl.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dormqr.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dorgr2.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dorgqr.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dlatrs.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dlatdf.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dlaswp.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dlascl.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dlarft.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dlarfb.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dlanhs.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dlagv2.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dlag2.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dlacon.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dhgeqz.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dgghrd.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dgges.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dggbal.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dggbak.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dgetc2.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dgesc2.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dgeqrf.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dgemm.c
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dgecon.c
+
+# End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
