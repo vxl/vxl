@@ -222,6 +222,9 @@ SOURCE=.\test_histogram.cxx
 SOURCE=.\test_mutual_info.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_watershed.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

@@ -105,6 +105,24 @@ SOURCE=.\brip_vil1_float_ops.cxx
 SOURCE=.\brip_vil_float_ops.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\brip_para_cvrg.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\brip_para_cvrg_params.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\brip_region_pixel.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\brip_roi.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\brip_watershed.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\brip_watershed_params.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brip_histogram+double-.cxx
 # End Source File
 # Begin Source File
@@ -115,6 +133,18 @@ SOURCE=.\Templates/brip_mutual_info+double-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/brip_mutual_info+vxl_byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+brip_region_pixel-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+brip_roi-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vcl_priority_queue+brip_region_pixel_sptr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vcl_vector+brip_region_pixel_sptr-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -139,6 +169,30 @@ SOURCE=.\brip_vil1_float_ops.h
 # End Source File
 # Begin Source File
 SOURCE=.\brip_vil_float_ops.h
+# End Source File
+# Begin Source File
+SOURCE=.\brip_para_cvrg.h
+# End Source File
+# Begin Source File
+SOURCE=.\brip_para_cvrg_params.h
+# End Source File
+# Begin Source File
+SOURCE=.\brip_region_pixel.h
+# End Source File
+# Begin Source File
+SOURCE=.\brip_region_pixel_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\brip_roi.h
+# End Source File
+# Begin Source File
+SOURCE=.\brip_roi_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\brip_watershed.h
+# End Source File
+# Begin Source File
+SOURCE=.\brip_watershed_params.h
 # End Source File
 # End Group
 # End Target
