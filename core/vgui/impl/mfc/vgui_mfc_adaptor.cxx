@@ -1,22 +1,5 @@
-//
 // This is vgui/impl/mfc/vgui_mfc_adaptor.cxx
 // See vgui_mfc_adaptor.h for a description of this file
-//
-// \verbatim
-//  Modifications:
-//    13-08-2000  Marko Bacic, Oxford RRG - Fixed textures
-//    14-08-2000  FSM, Oxford RRG - Fixed double buffering/rubber banding issues
-//    14-08-2000  Marko Bacic, Oxford RRG - Added right popup menu
-//    30-08-2000  Marko Bacic, Oxford RRG - Support for Windows/MFC acceleration
-//    06-02-2001  AWF, Oxford RRG - Make acceleration work...
-//    02-03-2001  K.Y.McGaul - Add shift & ctrl modifiers to key press/release events.
-//                           - Edited and added Doxygen comments.
-//    14-09-2001  K.Y.McGaul - Moved stuff in OnDestroy to destructor.
-//    18-09-2001  K.Y.McGaul - Major changes to allow for multiple adaptors in an
-//                             application.  In particular using setup_adaptor we can 
-//                             now specify which window our adaptor is in.  If you 
-//                             don't call setup_adaptor it is assumed to be the main window.
-// \endverbatim
 //
 
 #include "vgui_mfc_adaptor.h"
@@ -66,7 +49,7 @@ vgui_mfc_adaptor::~vgui_mfc_adaptor()
   // This call makes the current RC not current
   if (FALSE == ::wglMakeCurrent(hOldDC, hOldRC))
     ::AfxMessageBox("wglMakeCurrent failed" );
-  
+
   // delete the RC
   if ( m_hRC && (FALSE == ::wglDeleteContext( m_hRC )) )
   {
@@ -75,7 +58,7 @@ vgui_mfc_adaptor::~vgui_mfc_adaptor()
 
   // Release the device context:
   HDC m_hgldc = ::GetDC(m_hWnd);
-	::ReleaseDC(m_hWnd, m_hgldc);	
+  ::ReleaseDC(m_hWnd, m_hgldc);
 
   // delete the DC
   if ( m_pDC )
@@ -91,7 +74,7 @@ BEGIN_MESSAGE_MAP(vgui_mfc_adaptor, CView)
   ON_WM_KEYUP()
   ON_WM_LBUTTONDOWN()
   ON_WM_LBUTTONUP()
-  ON_WM_MOUSEMOVE()  
+  ON_WM_MOUSEMOVE()
   ON_WM_RBUTTONDOWN()
   ON_WM_RBUTTONUP()
   ON_WM_MOUSEWHEEL()
@@ -113,7 +96,7 @@ void vgui_mfc_adaptor::post_overlay_redraw()
 //: MFC implementation of vgui_adaptor function - redraws rendering area.
 void vgui_mfc_adaptor::post_redraw()
 {
-  if (!redraw_posted) 
+  if (!redraw_posted)
   {
     //CWnd *wnd = AfxGetApp()->GetMainWnd();
     CWnd* wnd;
@@ -121,7 +104,7 @@ void vgui_mfc_adaptor::post_redraw()
       wnd = m_pCWnd;
     else
       wnd = AfxGetApp()->GetMainWnd();
-    if (wnd) 
+    if (wnd)
       wnd->Invalidate(FALSE);
   }
   redraw_posted = true;
@@ -303,7 +286,7 @@ BOOL vgui_mfc_adaptor::SetupPixelFormat()
       0,                      // reserved
       0, 0, 0                 // layer masks ignored
   };
-  
+
   if (vgui_accelerate::vgui_mfc_acceleration)
     pfd.dwFlags = PFD_DRAW_TO_BITMAP|PFD_SUPPORT_OPENGL;
 
@@ -347,7 +330,7 @@ BOOL vgui_mfc_adaptor::OnEraseBkgnd(CDC* pDC)
 //: Redraws the OpenGL area.
 void vgui_mfc_adaptor::service_redraws()
 {
-  if (redraw_posted) 
+  if (redraw_posted)
   {
     if(double_buffered)  // kym - changed from if(!double_buffered) - why change the buffer otherwise?
       glDrawBuffer(GL_BACK);
