@@ -60,7 +60,7 @@ book.html: $(SOURCEFILES) rosenbrock.png
 	$(MAKEINFO) $(MAKEINFOFLAGS) book.texi --html -o $@ --number-sections
 else
 book.html: $(SOURCEFILES) rosenbrock.png
-	$(TEXI2HTML) -expand info -menu -number -split chapter -nosec_nav -frames book.texi
+	$(TEXI2HTML) -menu -number -split chapter -nosec_nav -frames book.texi
 endif
 
 

@@ -1,6 +1,6 @@
 @section Basic structure
 
-The directory structure of @vxl{} is below
+The directory structure of @vxl{x} is below
 @example
   $VXLSRC/vcl
           vxl/vnl
@@ -21,11 +21,11 @@ The directory structure of @vxl{} is below
 is the C++ compatibility layer (@pxref{vcl}).
 
 @item  vxl
-contains the core @vxl{} libraries.
+contains the core @vxl{x} libraries.
 
 @item v3p
 (v-third-party) contains code that is available elsewhere and is used
-in implementing @vxl{}. @code{v3p/netlib} contains cleaned-up C
+in implementing @vxl{x}. @code{v3p/netlib} contains cleaned-up C
 versions of the high-quality Fortran code. @code{v3p/jpeg} and others
 contain image file format code used by vil. In theory, you don't need
 any of of the v3p libraries if you have locally installed versions. In
@@ -39,7 +39,7 @@ contains the configuration files used by the CMake build system
 
 @section Other modules
 
-On the repository and some @vxl{} distributions, you will find several other
+On the repository and some @vxl{x} distributions, you will find several other
 modules beside vcl and vxl.
 
 
@@ -70,15 +70,15 @@ A set of image processing libraries.
 @item oul
 Published libraries from Otago University
 @item conversions
-A set of routines for converting between various @vxl{} and non-@vxl{} types.
+A set of routines for converting between various @vxl{x} and non-@vxl{x} types.
 @end table
 
 These modules are presented as useful code, with even less guarantees
-than @vxl{} (which is not to suggest that we guarantee anything about
-@vxl{}).  In particular they may not work as advertised. They may not
+than @vxl{x} (which is not to suggest that we guarantee anything about
+@vxl{x}).  In particular they may not work as advertised. They may not
 be documented. If you find them useful, and think they deserve full
-@vxl{}-status please contact the library's author to see about having
-the code tidied up and promoted to @vxl{}.
+@vxl{x}-status please contact the library's author to see about having
+the code tidied up and promoted to @vxl{x}.
 
 You can find any overview documentation about these modules from the
 @uref{http://vxl.sourceforge.net/,vxl homepage} by following the
@@ -87,5 +87,5 @@ You can find any overview documentation about these modules from the
 @section CVS Repository
 
 The VXL repository is provided by SourceForge---Thanks guys! The
-instructions for downloading @vxl{} are documented at
+instructions for downloading @vxl{x} are documented at
 @url{http://vxl.sourceforge.net/#download}.

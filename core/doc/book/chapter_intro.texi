@@ -2,14 +2,14 @@
  VXL is efficient, simple, and fun to use.
 @endchapsummary
 
-This document describes @vxl{}, a collection of C++ libraries designed for
+This document describes @vxl{x}, a collection of C++ libraries designed for
 computer vision research.  Because it's for computer vision it needs to be
 @emph{efficient}, handling large quantities of numerical data with little
 overhead.  Because it's for research it must be @emph{portable}, so that
 one can write and run one's program on any machine available, for example
 in order to access a special camera or fast image processing hardware.
 
-The @vxl{} collection's portability and efficiency are traits which are due
+The @vxl{x} collection's portability and efficiency are traits which are due
 in large part to its parentage.  The package was built by extracting the
 core functionalities of two large systems: the ``Image Understanding
 Environment'' (IUE) and ``Target junior'' (TargetJr).  Although these
@@ -36,13 +36,13 @@ which offered many benefits, but was ultimately rejected by users.
 Despite these complaints, the quality of the software available in the
 environments, and the promise of a sustained, concerted software
 development effort has meant that the IUE/TargetJr has many users
-worldwide.  The job of @vxl{} is to make that many @emph{happy} users, by
+worldwide.  The job of @vxl{x} is to make that many @emph{happy} users, by
 creating a set of libraries which have the same useful code, but which are
 light, fast, and not weird.
 
 @section Core Libraries
 
-The core of @vxl{} was defined in February 2000, and comprises five
+The core of @vxl{x} was defined in February 2000, and comprises five
 libraries.
 
 @subsection vcl: The C++ compatibility layer.
@@ -83,7 +83,7 @@ A panoply of file formats is handled, and it is easy to add support for a
 new format.
 
 @subsection vgl: Geometry.
-It is in geometry that the spartan aesthetic of the core of @vxl{} becomes
+It is in geometry that the spartan aesthetic of the core of @vxl{x} becomes
 most apparent.  The library deals with the geometry of points, curves, and
 other objects in 2 or more dimensions, but may not call on the numerics
 library.  Therefore, it is  restricted to operations which it is reasonable
@@ -113,11 +113,11 @@ Load and save images from video files and sources.
 @section Documentation
 @cindex book
 @cindex documentation, monolithic
-The @vxl{} documentation comes in two main forms: this book, and structured
+The @vxl{x} documentation comes in two main forms: this book, and structured
 comments in the source code, which are automatically extracted.  The book
 is intended to be a single reference, where all the high-level
 documentation resides.   In TargetJr and the IUE there was always a problem
-finding documentation, as it was in too many places.  In @vxl{}, we are
+finding documentation, as it was in too many places.  In @vxl{x}, we are
 following the practice of some other successful systems such as vtk, and
 providing one monolithic document with, we hope, a good index.
 
@@ -127,7 +127,7 @@ providing one monolithic document with, we hope, a good index.
 
 The book (in subdirectory @code{vxl/doc/book}) is a human-written collection of VXL
 documentation, suitable for printing.  It is intended to be readable as an
-introduction to the various facilities provided by the @vxl{} libraries,
+introduction to the various facilities provided by the @vxl{x} libraries,
 and to be browsable as a first source of examples and tips.
 
 @subsubheading Why texinfo?
@@ -147,12 +147,12 @@ or @LaTeX{}, so we are keeping an eye on formats such as @emph{DocBook}.
 @cindex documentation, automatically generated
 @cindex Doxygen
 
-Although the human-written @vxl{} book is the first source, the definitive
+Although the human-written @vxl{x} book is the first source, the definitive
 authority on what a class or function does must be the source code
 comments.  The book will give a high-level description of the most
 important and commonly-used features of a class, but the source code
 contains the details.  In order to make these details easier to scan, the
-@vxl{} source files contain specially structured comments, which can be
+@vxl{x} source files contain specially structured comments, which can be
 scanned by the @emph{Doxygen} program and converted into an attractive
 hyperlinked reference.
 
@@ -170,7 +170,7 @@ class my_class @{
 @end smallexample
 
 
-@section The Design and Evolution of @vxl{}
+@section The Design and Evolution of @vxl{x}
 
 Design goals:
 
@@ -188,10 +188,10 @@ Design goals:
 
 @subsection Motivation
 In OpenGL, you guess the name of something, and you're generally
-right.  This is what we would like to achieve with @vxl{}.
+right.  This is what we would like to achieve with @vxl{x}.
 
 @cindex C, similarity to C libraries
-Simple and free of programming dogma.  For example, many @vxl{} routines
+Simple and free of programming dogma.  For example, many @vxl{x} routines
 exist as C-like functions.  For some tasks, C-like
 functions are more appropriate than a forced object-orientation, for others
 objects are clearly the more intuitive and compact representation.  This is
@@ -208,7 +208,7 @@ makes the code more readable.
 
 When building a large system, it is crucial to maintain consistent
 conventions for file-system structure, and identifier naming.  However, a
-crucial philosophy in the design of @vxl{} is that system conventions must
+crucial philosophy in the design of @vxl{x} is that system conventions must
 be pragmatic.  If programmers are ultimately constrained rather than helped
 by their environment, they will break the rules, and when they do so, they
 will break them in inconsistent ways.  Therefore it is crucial that
@@ -222,14 +222,14 @@ comfortable, but no more".
 
 Names are always the biggest issue in programming environments.  Uniform
 naming is one of the most important aspects of a library, and part of the
-design effort in @vxl{} lays in choosing a good, workable scheme for the
+design effort in @vxl{x} lays in choosing a good, workable scheme for the
 naming of classes, functions and files.  On the other hand, few issues
 cause as much debate as the choice of naming conventions.  However, we are
 lucky for two reasons: first, because we wish to run cross-platform, many
 options are restricted; second, as we can never please everybody, we can
 just choose a convention and pretend we all hate it.
 
-First things first.  The name @vxl{} itself refers to a collection of
+First things first.  The name @vxl{x} itself refers to a collection of
 libraries where the @emph{x} is replaced by a one or two-letter code
 describing the contents.
 
@@ -242,12 +242,12 @@ link.  For this reason, we chose the other ugly solution.
 @cindex file extensions
 @cindex cxx
 @cindex txx
-For related reasons, source files in @vxl{} all end in @code{.cxx}.
+For related reasons, source files in @vxl{x} all end in @code{.cxx}.
 Template definitions, which look like source files but are essentially
 header files (or actually #include files, as they are not separately
 compiled), are suffixed @code{.txx}.
 
-Each class or function in a @vxl{} library begins with the name of that
+Each class or function in a @vxl{x} library begins with the name of that
 library, followed by an underscore, for example @code{vnl_matrix}.
 This makes it easy to locate the source code for any class, and easy to
 see the list of libraries on which one's program depends.
@@ -316,10 +316,10 @@ half-answer: Koenig lookup means it's OK.
 @cindex levels, library layering
 @cindex layering
 @cindex library interdependencies
-Which brings us on to layering: core @vxl{} libraries may not depend on
+Which brings us on to layering: core @vxl{x} libraries may not depend on
 each other.  The numerics library cannot use the handy string manipulation
 in vul, the imaging library cannot use matrices, or smart pointers.  This
-restriction is central to the design of @vxl{}, because it intrinsically
+restriction is central to the design of @vxl{x}, because it intrinsically
 limits the size of the core libraries.
 It appears to contradict traditional software development practice because
 it implies that code will be duplicated rather than reused.  However,

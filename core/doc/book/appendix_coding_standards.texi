@@ -1,8 +1,8 @@
-The following @vxl{} coding standards were originally agreed at the Zurich
+The following @vxl{x} coding standards were originally agreed at the Zurich
 meeting in March
-2001. They are mandatory for libraries in the @vxl{} module. Even if you are
+2001. They are mandatory for libraries in the @vxl{x} module. Even if you are
 not writing code which
-you expect to enter @vxl{} proper, then it is still worth reading
+you expect to enter @vxl{x} proper, then it is still worth reading
 these coding standards, as they have been designed to minimise confusing
 and help avoid potential problems.
 

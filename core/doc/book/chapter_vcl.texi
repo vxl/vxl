@@ -17,7 +17,7 @@ On one compiler, @code{<iostream>} and @code{<iostream.h>} refer to
 entirely different stream libraries, which may not be linked together.
 Therefore every file in the program must use the same header.  For us, the
 @code{<iostream>} version is appropriate, but of course, not all of the
-unix compilers support its use.  The solution is for every @vxl{} program
+unix compilers support its use.  The solution is for every @vxl{x} program
 to include @code{<vcl_iostream.h>}.  In this way, we can maintain
 consistency between the many compilers, and if we ever do need to use
 another stream library, we can make the switch in one place.
@@ -38,7 +38,7 @@ considered good C++, and (b) it doesn't work anyway.
 
 The low-tech solution is simply to prefix each standard identifier with
 @code{vcl_}, so that @code{vcl_vector} works everywhere.  And this is
-what @vxl{} does, when you include @code{<vcl_vector.h>}.  Thus, safe
+what @vxl{x} does, when you include @code{<vcl_vector.h>}.  Thus, safe
 programmers prefix @emph{everything} in the standard library with
 @code{vcl_}.
 @quotation
@@ -47,7 +47,7 @@ write @code{vcl_foo} instead.
 @end quotation
 This may seem excessive, but one gets used to it very quickly, and it
 quickly indicates to novice C++ programmers which functions are from the
-standard library.  You might think that the designers of @vxl{} would have
+standard library.  You might think that the designers of @vxl{x} would have
 been clever enough to avoid the vcl_ prefix by using fancy compiler flags,
 and many #defines.  However, that way lies madness---trying to confuse a
 C++ compiler always rebounds on one.
@@ -298,7 +298,7 @@ assertions; invalid user input, file input failure; users are too
 good at messing these things up, and should be treated
 sympathetically.
 
-When putting an assertion in one of the @vxl{} libraries, you
+When putting an assertion in one of the @vxl{x} libraries, you
 should make sure that it can be turned off using @code{NDEBUG}.
 This is the intention of the NDEBUG macro, and is very useful for
 time-critical code.

@@ -16,6 +16,15 @@
   \gdef\endcaption{\Equotation}
   @end tex
 @end iftex
+@ifinfo
+@macro caption{figurenumber}
+  @quotation
+  @strong{Figure \figurenumber\:}
+@end macro
+@macro endcaption
+  @end quotation
+@end macro
+@end ifinfo
 @ifhtml
 @macro caption {figurenumber}
   @html
@@ -30,15 +39,6 @@
   @end html
 @end macro
 @end ifhtml
-@ifinfo
-@macro caption{figurenumber}
-  @quotation
-  @strong{Figure \figurenumber\:}
-@end macro
-@macro endcaption
-  @end quotation
-@end macro
-@end ifinfo
 
 @c Define a figure environment. It's hard to do a figure environment,
 @c so just do an inline placement for HTML and info, and use
@@ -50,19 +50,6 @@
   \gdef\endfigure{\endgroup\endinsert}
   @end tex
 @end iftex
-@ifhtml
-@macro figure
-  @html
-  <table border="1" cellpadding="10" align=center width=80%>
-  <tr><td>
-  @end html
-@end macro
-@macro endfigure
-  @html
-  </td></tr></table>
-  @end html
-@end macro
-@end ifhtml
 @ifinfo
 @macro figure
   @quotation
@@ -71,6 +58,20 @@
   @end quotation
 @end macro
 @end ifinfo
+@ifhtml
+@macro figure
+  @html
+  <p>
+  <table border="1" cellpadding="10" align=center width=80%>
+  <tr><td>
+  @end html
+@end macro
+@macro endfigure
+  @html
+  </td></tr></table></p>
+  @end html
+@end macro
+@end ifhtml
 
 @c Define the chapsummary macro
 @ifnottex
@@ -98,23 +99,26 @@
   @end tex
 @end iftex
 
-@c Define the @vxl{} macro.  v, slanted x, l
+@c Define the @vxl{x} macro.  v, slanted x, l
+@c Ideally, you would just use @vxl{}, but texi2html doesn't
+@c handle the empty argument. So, use @vxl{x}. The parameter
+@c will be ignored.
 @iftex
 @c use a TeX \def to enable using the macro within other commands
 @tex
-\gdef\vxl{v{@sl x}l}
+\gdef\vxl#1{v{@sl x}l}
 @end tex
 @end iftex
-@ifhtml
-@macro vxl
-v@emph{x}l
-@end macro
-@end ifhtml
 @ifinfo
-@macro vxl
+@macro vxl {arg}
 vxl
 @end macro
 @end ifinfo
+@ifhtml
+@macro vxl {arg}
+v@emph{x}l
+@end macro
+@end ifhtml
 
 @c Define the @LaTeX{} macro
 @iftex

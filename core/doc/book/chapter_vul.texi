@@ -297,7 +297,7 @@ in many UNIX commands and utilities, notably perl.  The perl code
    $filename =~ m"([a-z]+)\.h";
    print $1;
 @end example
-is written as follows in @vxl{}
+is written as follows in @vxl{x}
 @example
    vul_reg_exp re("([a-z]+)\\.h");
    re.find(filename);

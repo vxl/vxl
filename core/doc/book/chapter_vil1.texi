@@ -4,7 +4,7 @@ Load images using @code{vil_load}. Access them
 @endchapsummary
 
 
-The @vxl{} image library is an evolutionary rewrite of the TargetJr Image
+The @vxl{x} image library is an evolutionary rewrite of the TargetJr Image
 library.  As with its predecessor, its primary goal is to provide flexible
 and powerful access to all 2D images, including those too large to fit in
 the address space of a single program or process.  This goal must be
@@ -229,7 +229,7 @@ return value is assigned to @var{b}, there is an efficient pointer copy.
 
 @section Dealing with large images
 
-Most users of @vxl{} deal with small images, which it is sensible to copy
+Most users of @vxl{x} deal with small images, which it is sensible to copy
 into a @code{vil_memory_image} before operating on them.  If you are like
 most users, or if this is your first time through the book, you may skip
 the rest of this chapter.  If you are like many programmers, however, you
@@ -249,7 +249,7 @@ are handled, we look again at the @code{vil_image} class.
 
 The heart of the imaging library is the class @code{vil_image}, which
 contains a handle to an image, which may be in memory, or on disk.  Most
-image-handling code in @vxl{} operates on blocks of the image, so that
+image-handling code in @vxl{x} operates on blocks of the image, so that
 large images can be processed efficiently.  As in TargetJr, the key
 operations on a @code{vil_image} are the block read and write operations:
 @smallexample
