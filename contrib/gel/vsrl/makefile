@@ -4,19 +4,11 @@
 #
 #   DEPENDENCIES:  libvil libvnl
 
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
 USES += vxl gel
-IULIBS += -lvil -lvnl
+IMMEDIATE_LIBS := -lvil -lvnl
 
 LIBRARY := vsrl
 VERSION := 1.0
-
-ifndef NOTEST
-SUBDIRS += examples
-endif
 
 SOURCES += vsrl_token.cxx
 SOURCES += vsrl_null_token.cxx
@@ -37,6 +29,10 @@ SOURCES += vsrl_parameters.cxx
 
 DEFINES += -DBUILDING_VSRL_DLL
 
-######################################
-include ${IUEROOT}/config/top-rules.mk
-######################################
+################################
+include ${IUEROOT}/config/top.mk
+################################
+
+ifndef NOTEST
+SUBDIRS += examples
+endif

@@ -1,6 +1,7 @@
 USES += vxl
 include ${IUEROOT}/vxl/vul/config.mk
-IULIBS := -lvgl-io -lvgl -lvsl -lvul -ltestlib
+include ${IUEROOT}/vxl/vgl/io/config.mk
+include ${IUEROOT}/vxl/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 

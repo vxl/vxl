@@ -1,5 +1,7 @@
 USES := conversions vxl
-IULIBS := -lvnl -lvbl -ltestlib
+include ${IUEROOT}/vxl/vnl/config.mk
+include ${IUEROOT}/vxl/vbl/config.mk
+include ${IUEROOT}/vxl/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 

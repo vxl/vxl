@@ -1,6 +1,7 @@
 USES += vxl
+include ${IUEROOT}/vxl/vgl/algo/config.mk
 include ${IUEROOT}/vxl/vnl/algo/config.mk
-IULIBS := -lvgl-algo -lvgl -lvnl-algo -lvnl -ltestlib
+include ${IUEROOT}/vxl/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 

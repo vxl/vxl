@@ -1,9 +1,4 @@
-#######################################
-include ${IUEROOT}/config/top-params.mk
-#######################################
-
 USES := vxl gel
-
 IMMEDIATE_LIBS := -lvsol -lvgl -lvbl -lvnl -lvul
 
 LIBRARY := vdgl
@@ -31,10 +26,10 @@ MANPAGE_SOURCES += vdgl_edgel_chain_sptr.h
 MANPAGE_SOURCES += vdgl_interpolator_sptr.h
 MANPAGE_SOURCES += vdgl_digital_region_sptr.h
 
+################################
+include ${IUEROOT}/config/top.mk
+################################
+
 ifndef NOTEST
 SUBDIRS += tests examples
 endif
-
-######################################
-include ${IUEROOT}/config/top-rules.mk
-######################################

@@ -12,7 +12,11 @@
 #                  vil  (for image load/save and for group A)
 
 USES = vxl tbl
-include ${IUEROOT}/vxl/vil/config.mk
+include ${IUEROOT}/tbl/vipl/config.mk
+include ${IUEROOT}/vxl/vpl/config.mk # for all
+include ${IUEROOT}/vxl/vnl/config.mk # for B.
+include $(IUEROOT)/vxl/vbl/config.mk # for C.
+
 
 # Do not instantiate templates in the library but implicitly, on use:
 USE_IMPLICIT_TEMPLATES := 1
@@ -40,10 +44,6 @@ MINI_PROG_SOURCES += example2_threshold.cxx
 MINI_PROG_SOURCES += example_x_gradient.cxx
 MINI_PROG_SOURCES += example_histogram.cxx
 MINI_PROG_SOURCES += example_histogram2.cxx
-
-IULIBS += -lvnl                    # for B.
-IULIBS += -lvbl                    # for C.
-IULIBS += -lvipl -lvil -lvpl       # for all
 
 ################################
 include ${IUEROOT}/config/top.mk

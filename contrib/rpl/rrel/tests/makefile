@@ -1,6 +1,7 @@
 USES = vxl rpl mul
-include ${IUEROOT}/vxl/vnl/algo/config.mk
-include ${IUEROOT}/vxl/vul/config.mk
+IULIBS += -lrrel_tests
+include ${IUEROOT}/rpl/rrel/config.mk
+include $(IUEROOT)/vxl/testlib/config.mk
 
 LIBRARY := rrel_tests
 SOURCES := similarity_from_matches.cxx
@@ -17,8 +18,6 @@ TESTS += test_ran_sam_search.cxx
 TESTS += test_ransac_obj.cxx
 TESTS += test_robust_util.cxx
 TESTS += test_similarity_from_matches.cxx
-
-IULIBS += -lrrel_tests -lrrel -lmbl -lvbl -lvnl-io -lvnl-algo -lvnl -lvgl-io -lvsl -lvgl -lvul -ltestlib
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk

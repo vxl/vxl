@@ -8,8 +8,7 @@
 ###############################################################################
 
 USES := vxl
-
-IULIBS += -lvcsl -lvbl -lvnl
+include ${IUEROOT}/vxl/vcsl/config.mk
 
 TESTS += vcsl_test_all.cxx
 

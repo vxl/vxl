@@ -1,8 +1,5 @@
 USES += vxl gel
-include ${IUEROOT}/vxl/vnl/algo/config.mk
-include ${IUEROOT}/vxl/vul/config.mk
-
-IULIBS := -lvtol -lvdgl -lvsol -lvgl-algo -lvgl -lvnl-algo -lvnl -lvbl -lvul
+include $(IUEROOT)/gel/vtol/config.mk
 
 MINI_PROG_SOURCES += test_vdgl.cxx
 

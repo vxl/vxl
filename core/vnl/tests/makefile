@@ -1,6 +1,8 @@
 USES := vxl
 include ${IUEROOT}/vxl/vnl/algo/config.mk
-USE_SOCKETS := 1 # for libvul
+include ${IUEROOT}/vxl/vul/config.mk # vul_timer used
+include ${IUEROOT}/vxl/vpl/config.mk # vpl_unlink used in test_matlab
+include ${IUEROOT}/vxl/testlib/config.mk
 
 TESTS += vnl_test_all.cxx
 TESTS += test_fft.cxx
@@ -53,8 +55,6 @@ FLAGS_test_rational.cxx += -O1
 FLAGS_test_bignum.cxx += -O1
 FLAGS_test_finite.cxx += -O0
 endif
-
-IULIBS += -lvnl-algo -lvnl -lvpl -lvul -ltestlib # vpl_unlink used in test_matlab; vul_timer used
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk

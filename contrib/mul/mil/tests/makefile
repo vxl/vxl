@@ -1,8 +1,5 @@
 USES += vxl mul
-include ${IUEROOT}/vxl/vnl/algo/config.mk
-include ${IUEROOT}/vxl/vil/config.mk
-
-IULIBS := -lmil-algo -lmil -lvpdfl -lmbl -lvnl-io -lvnl-algo -lvgl-io -lvgl -lvnl -lvil -lvsl -lvpl
+include ${IUEROOT}/mul/mil/algo/config.mk
 
 TESTS += test_mil.cxx
 

@@ -1,6 +1,6 @@
 USES += vxl
-USE_NETLIB := 1
-IULIBS := -lvgl-algo -lvgl -lvnl-algo -lvnl
+include ${IUEROOT}/vxl/vgl/algo/config.mk
+include ${IUEROOT}/vxl/vnl/algo/config.mk
 
 MINI_PROG_SOURCES += vgl_conic_example.cxx
 

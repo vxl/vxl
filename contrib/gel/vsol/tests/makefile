@@ -8,10 +8,7 @@
 ###############################################################################
 
 USES := vxl gel
-include ${IUEROOT}/vxl/vnl/algo/config.mk
-include ${IUEROOT}/vxl/vul/config.mk
-
-IULIBS += -lvsol -lvgl-algo -lvgl -lvnl-algo -lvnl -lvbl -lvul
+include $(IUEROOT)/gel/vsol/config.mk
 
 TESTS += test_vsol_point_2d.cxx
 TESTS += test_vsol_group_2d.cxx

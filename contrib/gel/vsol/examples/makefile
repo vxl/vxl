@@ -8,10 +8,7 @@
 ###############################################################################
 
 USES := vxl gel
-include ${IUEROOT}/vxl/vnl/algo/config.mk
-include ${IUEROOT}/vxl/vul/config.mk
-
-IULIBS += -lvsol -lvgl-algo -lvgl -lvnl-algo -lvnl -lvbl -lvul
+include $(IUEROOT)/gel/vsol/config.mk
 
 MINI_PROG_SOURCES += vsol_spatial_object_example.cxx
 MINI_PROG_SOURCES += vsol_point_example.cxx

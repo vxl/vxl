@@ -1,6 +1,5 @@
 USES += vxl gel gel/mrc
-
-IULIBS += -lvpgl -lvcsl -lvnl -lvbl
+include ${IUEROOT}/gel/mrc/vpgl/config.mk
 
 MINI_PROG_SOURCES += main.cpp
 

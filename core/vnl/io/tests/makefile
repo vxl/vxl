@@ -1,5 +1,6 @@
 USES += vxl 
-IULIBS := -lvnl-io -lvnl -lvsl -ltestlib
+include ${IUEROOT}/vxl/vnl/io/config.mk
+include ${IUEROOT}/vxl/testlib/config.mk
 
 TESTS += vnl_io_test_all.cxx
 

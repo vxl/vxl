@@ -1,7 +1,7 @@
 USES := conversions vxl gel oxl
-USE_NETLIB := 1
-include ${IUEROOT}/vxl/vil/config.mk
-IULIBS := -lvdgl -lvsol -lvgl-algo -lvgl -lvnl-algo -lvnl -losl -lvil -lvbl -lvul -ltestlib
+include ${IUEROOT}/oxl/osl/config.mk
+include ${IUEROOT}/gel/vdgl/config.mk
+include ${IUEROOT}/vxl/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 

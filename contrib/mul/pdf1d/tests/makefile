@@ -1,7 +1,5 @@
 USES += vxl mul
-include ${IUEROOT}/vxl/vnl/algo/config.mk
-
-IULIBS := -lpdf1d -lmbl -lvgl-io -lvgl -lvnl-io -lvnl-algo -lvnl -lvsl
+include ${IUEROOT}/mul/pdf1d/config.mk
 
 TESTS += test_pdf1d.cxx
 

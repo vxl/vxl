@@ -1,6 +1,6 @@
 USES += vxl oxl gel
+include ${IUEROOT}/oxl/mvl/config.mk
 include ${IUEROOT}/vxl/vil/config.mk
-USE_NETLIB := 1
 
 PROGRAM = octree
 
@@ -12,8 +12,6 @@ SOURCES += OctreeLevel.cxx
 SOURCES += Cube.cxx
 SOURCES += ConvexHull.cxx
 SOURCES += BaseCube.cxx
-
-IULIBS += -lmvl -lvgl -lvbl -lvul -lvnl-algo -lvnl -lvil
 
 ################################
 include ${IUEROOT}/config/top.mk

@@ -2,7 +2,7 @@ USES = vxl
 include ${IUEROOT}/vxl/vnl/algo/config.mk
 
 # Examples may use vbl....
-IULIBS = -lvnl-algo -lvbl -lvnl
+include ${IUEROOT}/vxl/vbl/config.mk
 
 MINI_PROG_SOURCES += vnl_calc.cxx
 

@@ -1,9 +1,10 @@
 USES = vxl
 include ${IUEROOT}/vxl/vil/config.mk
+include ${IUEROOT}/vxl/vul/config.mk
+include ${IUEROOT}/vxl/vpl/config.mk
+include ${IUEROOT}/vxl/testlib/config.mk
 
 TESTMAIN = test_driver.cxx
-
-IULIBS = -lvil -lvpl -lvul -ltestlib
 
 # general reader/saver tester
 TESTS += test_save_load_image.cxx

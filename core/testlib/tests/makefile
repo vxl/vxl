@@ -1,4 +1,5 @@
 USES = vxl
+include ${IUEROOT}/vxl/testlib/config.mk
 
 TESTMAIN = test_driver.cxx
 TESTS += test_assert.cxx
@@ -8,8 +9,6 @@ TESTS += test_root_dir.cxx
 MINI_PROG_SOURCES += test_link.cxx
 
 PARAMS_test_args = one two
-
-IULIBS := -ltestlib
 
 #########################################
 include ${IUEROOT}/config/static-tests.mk

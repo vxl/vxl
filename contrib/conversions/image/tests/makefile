@@ -1,9 +1,11 @@
 USES := conversions vxl
 include ${IUEROOT}/vxl/vil/config.mk
+include ${IUEROOT}/vxl/vul/config.mk
+include ${IUEROOT}/vxl/vbl/config.mk
+include ${IUEROOT}/vxl/vpl/config.mk
+include ${IUEROOT}/vxl/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
-
-IULIBS := -lvil -lvbl -lvpl -lvul -ltestlib
 
 TESTS += test_vil_vbl_conversions.cxx
 

@@ -1,8 +1,8 @@
 USES := vxl
+IULIBS := -lvbl-examples
+include ${IUEROOT}/vxl/vbl/config.mk
 
 LIBRARY := vbl-examples
-IMMEDIATE_LIBS := -lvbl
-IULIBS := -lvbl-examples -lvbl
 
 MINI_PROG_SOURCES += vbl_smart_ptr_example.cxx
 
