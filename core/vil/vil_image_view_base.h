@@ -11,6 +11,7 @@
 
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
+#include <vcl_cassert.h>
 #include <vil2/vil2_pixel_format.h>
 #include <vil2/vil2_smart_ptr.h>
 
@@ -28,7 +29,7 @@ protected:
   ni_(ni), nj_(nj), nplanes_(nplanes), reference_count_(0) {}
 
   //: Default is an empty one plane image
-	//  Don't set nplanes_ to zero as it confuses resize(nx,ny) later
+  //  Don't set nplanes_ to zero as it confuses resize(nx,ny) later
   vil2_image_view_base(): ni_(0), nj_(0), nplanes_(1) {}
 
 public:
@@ -77,7 +78,6 @@ public:
     assert(reference_count_>0);
     if (--reference_count_<=0) delete this;}
   int reference_count_;
-
 };
 
 typedef vil2_smart_ptr<vil2_image_view_base> vil2_image_view_base_sptr;
