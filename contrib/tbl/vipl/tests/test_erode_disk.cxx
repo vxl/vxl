@@ -23,7 +23,7 @@
 /*ONE_TEST(x,p,flot_img,flot_ori,vil_image,float,0,m+"_float"); */ \
 /*ONE_TEST(x,p,colr_img,colr_ori,vil_image,vil_rgb_byte,0,m+"_colour") */
 
-int test_erode_disk() {
+int vepl_test_erode_disk() {
   vcl_cout << "Starting vipl_erode_disk tests\n";
   vcl_cout << "Creating test and output images ...";
   vil_image byte_img = CreateTest8bitImage(32,32),  byte_ori = CreateTest8bitImage(32,32);
@@ -46,4 +46,4 @@ int test_erode_disk() {
   return 0;
 }
 
-TESTMAIN(test_erode_disk);
+TESTMAIN(vepl_test_erode_disk);

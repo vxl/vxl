@@ -21,7 +21,7 @@ typedef unsigned char ubyte;
   ONE_TEST(x,p,shrt_img,shrt_ori,mil_image_2d_of<short>,short,1595,m+"_short"); \
   ONE_TEST(x,p,flot_img,flot_ori,mil_image_2d_of<float>,float,13.4489,m+"_float")
 
-int test_gaussian_convolution() {
+int vepl_test_gaussian_convolution() {
   mil_image_2d_of<ubyte> byte_img = Create_mil8bitImage(32,32),  byte_ori = Create_mil8bitImage(32,32);
   mil_image_2d_of<short> shrt_img = Create_mil16bitImage(32,32), shrt_ori = Create_mil16bitImage(32,32);
   mil_image_2d_of<float> flot_img = Create_milfloatImage(32,32), flot_ori = Create_milfloatImage(32,32);
@@ -35,4 +35,4 @@ int test_gaussian_convolution() {
 }
 
 
-TESTMAIN(test_gaussian_convolution);
+TESTMAIN(vepl_test_gaussian_convolution);
