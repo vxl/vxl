@@ -1,10 +1,6 @@
-#
-# ./mul/clsfy/tests/CMakeLists.txt
-#
-#   Ian Scott
-#
+# mul/clsfy/tests/CMakeLists.txt
 
-LINK_LIBRARIES( vul clsfy )
+LINK_LIBRARIES( vul clsfy testlib )
 
 ADD_EXECUTABLE (clsfy_test_binary_hyperplane test_binary_hyperplane.cxx)
 ADD_EXECUTABLE (clsfy_test_binary_pdf_classifier test_binary_pdf_classifier.cxx)

@@ -1,4 +1,4 @@
-LINK_LIBRARIES( rsdl mbl )
+LINK_LIBRARIES( rsdl mbl testlib )
 
 INCLUDE_DIRECTORIES( ${allvxl_SOURCE_DIR}/mul )
 

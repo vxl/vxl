@@ -1,4 +1,4 @@
-LINK_LIBRARIES( gevd vgl_algo vnl_algo vbl vul vcl )
+LINK_LIBRARIES( gevd vgl_algo vnl_algo vbl vul testlib vcl )
 
 ADD_EXECUTABLE( test_gevd_param_mixin test_gevd_param_mixin.cxx )
 ADD_EXECUTABLE( test_gevd_memory_mixin test_gevd_memory_mixin.cxx )
