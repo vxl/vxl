@@ -535,7 +535,7 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
   rgrl_converge_status_sptr current_status = 0;
   for ( unsigned ms=0; ms < match_sets.size(); ++ms ) {
     rgrl_match_set_sptr match_set = match_sets[ms];
-    if (match_set->from_size() > 0) {
+    if ( match_set && match_set->from_size() > 0) {
       match_set->remap_from_features( *estimate );
       weighters[ms]->compute_weights( *scales[ms], *match_set );
     }
@@ -555,7 +555,7 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
     //
     for ( unsigned ms=0; ms < match_sets.size(); ++ms ) {
       rgrl_match_set_sptr match_set = match_sets[ms];
-      if (match_set->from_size() > 0) {
+      if ( match_set && match_set->from_size() > 0) {
         match_set->remap_from_features( *new_estimate );
         weighters[ms]->compute_weights( *scales[ms], *match_set );
       }
