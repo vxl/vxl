@@ -14,6 +14,8 @@
 #pragma implementation
 #endif
 
+#include "vbl_arg.h"
+
 #include <vcl/vcl_cassert.h>
 #include <vcl/vcl_cstdio.h>
 #include <vcl/vcl_cmath.h>   // floor()
@@ -21,7 +23,6 @@
 #include <vcl/vcl_list.h>
 #include <vcl/vcl_iostream.h>
 
-#include <vbl/vbl_arg.h>
 #include <vbl/vbl_string.h>
 #include <vbl/vbl_reg_exp.h>
 #include <vbl/vbl_printf.h>
