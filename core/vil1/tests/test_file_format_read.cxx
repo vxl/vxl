@@ -126,7 +126,7 @@ main( int argc, char* argv[] )
 {
   if( argc >= 2 ) {
     image_base = argv[1];
-#if VCL_WIN32
+#ifdef VCL_WIN32
     image_base += "\\";
 #else
     image_base += "/";
