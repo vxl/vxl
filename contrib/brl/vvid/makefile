@@ -14,6 +14,7 @@ SOURCES += vvid_region_process.cxx
 SOURCES += vvid_capture_process.cxx
 SOURCES += vvid_frame_diff_process.cxx
 SOURCES += vvid_motion_process.cxx
+SOURCES += vvid_lucas_kanade_process.cxx
 SOURCES += vvid_epipolar_space_process.cxx
 SOURCES += vvid_edge_process.cxx
 SOURCES += vvid_file_manager.cxx
