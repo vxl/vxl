@@ -84,7 +84,7 @@ bool oxp_bunch_of_files::fix_sizes()
 {
   current_file_index = -1;
 
-  int n = filenames.size();
+  unsigned int n = filenames.size();
 
   // Fill in sizes if not done already
   if (filesizes.size() < n) {
@@ -104,7 +104,6 @@ bool oxp_bunch_of_files::fix_sizes()
   // Fill start_bytes
   start_byte.resize(n);
   start_byte[0] = 0;
-  for(int i = 1; i < filenames.size(); ++i)
   for (unsigned int i = 1; i < filenames.size(); ++i)
     start_byte[i] = (offset_t)start_byte[i-1] + (offset_t)filesizes[i-1];
 
