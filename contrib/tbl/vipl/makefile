@@ -19,12 +19,12 @@ SUBDIRS += vipl_with_section
 endif
 SUBDIRS += vipl_with_vnl_matrix
 SUBDIRS += vipl_with_vbl_array_2d
-SUBDIRS += examples
 ifndef NOTEST
+SUBDIRS += examples
 SUBDIRS += tests
 endif
 
-USES += vxl
+USES += vxl tbl
 
 LIBRARY := vipl
 VERSION := 1.0
