@@ -6,18 +6,13 @@
 // \author Peter Vanroose
 // \date 9 December 2002
 
-#include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_vertex_2d.h>
-#include <vtol/vtol_zero_chain_sptr.h>
 #include <vtol/vtol_zero_chain.h>
-#include <vtol/vtol_edge_2d_sptr.h>
 #include <vtol/vtol_edge_2d.h>
-#include <vtol/vtol_face_2d_sptr.h>
+#include <vtol/vtol_one_chain.h>
 #include <vtol/vtol_face_2d.h>
 #include <vtol/vtol_two_chain.h>
-#include <vtol/vtol_two_chain_sptr.h>
 #include <vtol/vtol_block.h>
-#include <vtol/vtol_block_sptr.h>
 
 static void vtol_test_refcounting()
 {
@@ -54,6 +49,7 @@ static void vtol_test_refcounting()
   // create a triangle (face) from 3 vertices
   vertex_list vl1; vl1.push_back(v1); vl1.push_back(v2); vl1.push_back(v3);
   vtol_face_2d* f1 = new vtol_face_2d(vl1); f1->set_id(1);
+  vtol_one_chain* oc1 = f1->get_one_chain();
   vl1.clear(); // remove vertices from list, to avoid "false" refcounts
   TEST("vertex on triangle has refcount 4", v1->get_references(), 4);
   TEST("vertex on triangle has refcount 4", v2->get_references(), 4);
@@ -61,10 +57,12 @@ static void vtol_test_refcounting()
   TEST("edge on triangle has refcount 1", e1->get_references(), 1);
   TEST("edge on triangle has refcount 1", e2->get_references(), 1);
   TEST("edge on triangle has refcount 1", e3->get_references(), 1);
+  TEST("1-chain of triangle has refcount 1", oc1->get_references(), 1);
   TEST("single face has refcount 0", f1->get_references(), 0);
 
   v1->describe(vcl_cout,8);
   e1->describe(vcl_cout,8);
+  oc1->describe(vcl_cout,8);
   f1->describe(vcl_cout,8);
 
   // create a rectangle (face) from 4 vertices
