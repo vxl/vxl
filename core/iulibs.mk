@@ -16,6 +16,7 @@ IUE_PACKAGE_LIBRARIES += -lvnl
 
 IUE_PACKAGE_LIBRARIES += -lvbl
 
-IUE_PACKAGE_LIBRARIES += -lval
+# There is currently nothing in libval
+#IUE_PACKAGE_LIBRARIES += -lval
 
 IUE_PACKAGE_LIBRARIES += -lvcl
