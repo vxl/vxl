@@ -440,6 +440,7 @@ foreach $f (@FILES)
     if ($f !~ m/\.c$/ && $f !~ m/\bv3p\/(netlib|[jm]peg|tiff|png|zlib)\// &&
         $f !~ m/\bvcl\/.*\bvcl_(ios|iosfwd|iomanip|[siof]+stream|strstream|streambuf)\.h/ &&
         ($f !~ m/\bvcl\/emulation\/vcl_string\.h$/ || $wd !~ m/end/ ) &&
+        ($f !~ m/\bvidl\/vidl_mpegcodec_helper\.cxx$/ || $wd !~ m/end/ ) &&
         ($f !~ m/\boxp\/oxp_mpeg_codec\.cxx$/ || $wd !~ m/end/ ) &&
         ($f !~ m/\b(rrel\/rrel_util|rsdl\/rsdl_borgefors)\.txx$/ || $wd !~ m/end/ ) &&
         $file_s =~ m/,\s*$wd\s*\)/) {
