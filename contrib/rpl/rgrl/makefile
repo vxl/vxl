@@ -129,6 +129,7 @@ MANPAGE_SOURCES += rgrl_matcher_pseudo_3d.txx
 MANPAGE_SOURCES += rgrl_matcher_pseudo_int_3d.h
 MANPAGE_SOURCES += rgrl_matcher_pseudo_int_3d.txx
 SOURCES += rgrl_feature_reader.cxx
+SOURCES += rgrl_initializer_reader.cxx
 
 #######################################
 include ${IUEROOT}/config/top-params.mk
