@@ -1,7 +1,4 @@
 //-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
-#pragma interface
-#endif
 //
 // .NAME vgui_mfc_doc - Defines a main application document
 // .LIBRARY vgui-mfc

@@ -1,6 +1,3 @@
-#ifdef __GNUC__
-#pragma interface
-#endif
 //
 // .NAME vgui_mfc_mainfrm - Defines main window of the application
 // .LIBRARY vgui-mfc
@@ -24,7 +21,6 @@ class vgui_mfc_statusbar;
 
 class vgui_mfc_mainfrm : public CFrameWnd
 {
-
 protected: // create from serialization only
   vgui_mfc_mainfrm();
   DECLARE_DYNCREATE(vgui_mfc_mainfrm)
@@ -48,7 +44,6 @@ protected:
   afx_msg void OnClose();
   // Manually added by kym
   BOOL PreTranslateMessage(MSG* pMsg);
-
 
   //: Called when the window is created
   afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);

@@ -1,7 +1,4 @@
 //-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
-#pragma interface
-#endif
 //
 // .NAME vgui_mfc_app
 // .LIBRARY vgui-mfc
