@@ -22,8 +22,3 @@ IF(HAS_SDL)
  ADD_EXECUTABLE( test_SDL ../impl/SDL/test-SDL.cxx )
 #ADD_TEST( test_SDL test_SDL )
 ENDIF(HAS_SDL)
-
-# Don't compile these by default.
-IF(EXTRA_TESTS)
-SUBDIRS( old-tests Fl gtk Xm )
-ENDIF(EXTRA_TESTS)
