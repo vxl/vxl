@@ -1,15 +1,16 @@
 #
 # Look for a directory containing STLPort.
 #
-# Notes:
-#   [1] Experimental version.
-#   [2] Inadequate and poorly tested.
-#   [3] Use at own risk.
-#
+# The following values are defined
+# STLPORT_INSTALL_DIR - STLPort's installation directory.
+# STLPORT_INCLUDE_DIR - where to find vector, etc.
+# STLPORT_LIBRARIES   - link against these to use STLPort
+# STLPORT_FOUND       - True if the X11 extensions are available.
+
 
 # Provide some common installation locations.
 # Otherwise, the user will have to specify it in the cache.
-FIND_PATH( STLPORT_INSTALL stlport/iostream
+FIND_PATH( STLPORT_INSTALL_DIR stlport/iostream
    /usr/local/STLPort-4.5.3
 )
 
@@ -19,7 +20,7 @@ FIND_PATH( STLPORT_INSTALL stlport/iostream
 
 
 FIND_PATH( STLPORT_INCLUDE_DIR iostream
-   ${STLPORT_INSTALL}/stlport
+   ${STLPORT_INSTALL_DIR}/stlport
 )
 
 
@@ -30,7 +31,7 @@ IF(CMAKE_BUILD_TYPE MATCHES "Debug")
           stlport_cygwin_stldebug
           stlport_gcc_debug
           stlport_gcc_stldebug
-    PATHS ${STLPORT_INSTALL}/lib
+    PATHS ${STLPORT_INSTALL_DIR}/lib
   )
 ELSE(CMAKE_BUILD_TYPE MATCHES "Debug")
   # if we only have debug libraries, use them.
@@ -42,7 +43,7 @@ ELSE(CMAKE_BUILD_TYPE MATCHES "Debug")
           stlport_gcc
           stlport_gcc_debug
           stlport_gcc_stldebug
-    PATHS ${STLPORT_INSTALL}/lib
+    PATHS ${STLPORT_INSTALL_DIR}/lib
   )
 ENDIF(CMAKE_BUILD_TYPE MATCHES "Debug")
 
@@ -67,3 +68,9 @@ IF( STLPORT_INCLUDE_DIR )
 
   ENDIF( STLPORT_LIBRARIES )
 ENDIF( STLPORT_INCLUDE_DIR )
+
+MARK_AS_ADVANCED(
+  STLPORT_INCLUDE_DIR
+  STLPORT_INSTALL_DIR
+  STLPORT_LIBRARIES
+)
