@@ -19,4 +19,24 @@
 //: Compute cumulative distribution function value for chi-squared distribution
 extern float vnl_chi_squared_cumulative(float chisq, int dof);
 
+//------------------------------------------------------------
+
+// *DO NOT* add scale factors to these functions or you will break 
+// the code written by those who read the documentation. fsm.
+
+//      (A[i] - B[i])^2
+// \sum ---------------
+//   i       A[i]
+double vnl_chi_squared_statistic_1 (int const *A, int const *B, int n);
+
+//      (A[i] - B[i])^2
+// \sum ---------------
+//   i       B[i]
+double vnl_chi_squared_statistic_2 (int const *A, int const *B, int n);
+
+//      (A[i] - B[i])^2
+// \sum ---------------
+//   i    A[i] + B[i]
+double vnl_chi_squared_statistic_12(int const *A, int const *B, int n);
+
 #endif // vnl_chi_squared_h_

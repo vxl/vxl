@@ -184,4 +184,13 @@ vnl_matrix<T> vnl_svd_inverse(vnl_matrix<T> const& m)
   return vnl_svd<T>(m).inverse();
 }
 
+#if 0
+#include <vcl/vcl_complex_fwd.h>
+VCL_DEFINE_SPECIALIZATION
+class vnl_svd<vcl_complex<float> > {
+  // This instance should be poisoned because the relevant netlib
+  // routine appears to be broken.
+};
+#endif
+
 #endif // vnl_svd_h_

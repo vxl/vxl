@@ -17,3 +17,32 @@ float vnl_chi_squared_cumulative(float chisq, int dof) {
   chscdf_(&chisq,&dof,&cdf);
   return cdf;
 }
+
+//------------------------------------------------------------
+
+double vnl_chi_squared_statistic_1 (int const *A, int const *B, int n)
+{
+  double sum = 0;
+  for (int i=0; i<n; ++i)
+    if (A[i]) {
+      double tmp = A[i] - B[i];
+      sum += tmp*tmp/A[i];
+    }
+  return sum;
+}
+
+double vnl_chi_squared_statistic_2 (int const *A, int const *B, int n)
+{
+  return vnl_chi_squared_statistic_1(B, A, n);
+}
+
+double vnl_chi_squared_statistic_12(int const *A, int const *B, int n)
+{
+  double sum = 0;
+  for (int i=0; i<n; ++i)
+    if (A[i] || B[i]) {
+      double tmp = A[i] - B[i];
+      sum += tmp*tmp/(A[i] + B[i]);
+    }
+  return sum;
+}
