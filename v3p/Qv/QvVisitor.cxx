@@ -194,7 +194,7 @@ bool QvVisitor::Visit(QvTransformSeparator* node)
   return true;
 }
 
-bool QvVisitor::Visit(QvWWWInline* node)
+bool QvVisitor::Visit(QvWWWInline* )
 {
   vcl_cerr << "QvVisitor: WARNING: Can't handle WWWInline nodes\n";
   return true;
