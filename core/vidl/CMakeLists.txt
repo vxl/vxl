@@ -15,6 +15,7 @@ SET(vidl_sources
 )
 
 IF( HAS_MPEG )
+  INCLUDE_DIRECTORIES(${MPEG_INCLUDE_PATH})
   SET(vidl_sources ${vidl_sources}
     vidl_mpegcodec.cxx vidl_mpegcodec.h vidl_mpegcodec_sptr.h
     vidl_mpegcodec_helper.cxx vidl_mpegcodec_helper.h
