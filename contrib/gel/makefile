@@ -45,9 +45,6 @@ SUBDIRS += vgel gkll
 # Dense matcher
 SUBDIRS += vmal
 
-# GUI
-SUBDIRS += vace
-
 ######################################
 include ${IUEROOT}/config/top-rules.mk
 ######################################
