@@ -16,6 +16,8 @@ rrel_util_vector_double_iterator_instantiation_tickler()
   Iter itr;
   double val;
 
+  rrel_util_median_abs_dev_scale( itr, itr, 1, &val );
+  rrel_util_median_abs_dev_scale( itr, itr, 1 );
   rrel_util_weighted_scale( itr, itr, itr, 1, &val );
   rrel_util_weighted_scale( itr, itr, itr, 1 );
   rrel_util_median_and_scale_copy( itr, itr, val, val, 1 );
