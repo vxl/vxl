@@ -62,6 +62,9 @@ SOURCE=.\example_interpolate.cxx
 # Begin Source File
 SOURCE=.\example_complex.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vil_resample_image.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
