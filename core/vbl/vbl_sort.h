@@ -17,31 +17,17 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_cstdlib.h>
-#include <vcl_vector.h>
+int vbl_sort_double_ascending(double const&, double const&);
+int vbl_sort_double_descending(double const&, double const&);
 
-//: Collection of common predicates for "C" library and COOL sort routines
-class vbl_sort {
-public:
-  // Constructors/Destructors--------------------------------------------------
-
-  static int double_ascending(double const&, double const&);
-  static int double_descending(double const&, double const&);
-
-  static int int_ascending(int const&, int const&);
-  static int int_descending(int const&, int const&);
-
-protected:
-  // Data Members--------------------------------------------------------------
-
-  // Helpers-------------------------------------------------------------------
-};
+int vbl_sort_int_ascending(int const&, int const&);
+int vbl_sort_int_descending(int const&, int const&);
 
 template <class T>
 struct vbl_sort_helper {
   static int ascend(const void* a, const void* b) {
-    const T& ta = *((const T*)a);
-    const T& tb = *((const T*)b);
+    T const& ta = *((T const*)a);
+    T const& tb = *((T const*)b);
     if (tb > ta)
       return -1;
     if (tb == ta)
@@ -49,44 +35,11 @@ struct vbl_sort_helper {
     return 1;
   }
   static int descend(const void* a, const void* b) {
-    return 1 - ascend(a,b);
+    return - ascend(a,b);
   }
 };
 
-// -- Sort a C array into ascending order, using the standard comparison
-// operations for T, namely operator> and operator==.
-template <class T>
-void vbl_qsort_ascending(T* base, int n)
-{
-  qsort(base, n, sizeof base[0], vbl_sort_helper<T>::ascend);
-}
-
-// -- Sort a C array into descending order, using the standard comparison
-// operations for T, namely "operator>" and "operator==".
-template <class T>
-void vbl_qsort_descending(T* base, int n)
-{
-  qsort(base, n, sizeof base[0], vbl_sort_helper<T>::ascend);
-}
-
-// -- Sort am STL vector into ascending order, using the standard comparison
-// operations for T, namely operator> and operator==.  I know STL has a sort,
-// but this is easier, and faster in the 20th century.
-template <class T>
-void vbl_qsort_ascending(vcl_vector<T>& v)
-{
-  qsort(v.begin(), v.size(), sizeof v[0], vbl_sort_helper<T>::ascend);
-}
-
-// -- Sort an STL vector into descending order, using the standard comparison
-// operations for T, namely "operator>" and "operator==".
-template <class T>
-void vbl_qsort_descending(vcl_vector<T>& v)
-{
-  qsort(v.begin(), v.size(), sizeof v[0], vbl_sort_helper<T>::descend);
-}
-
-#define VBL_SORT_INSTANTIATE(T) \
-extern "please include vbl/vbl_sort.txx instead"
+#define VBL_SORT_INSTANTIATE(T)\
+template struct vbl_sort_helper<T >
 
 #endif // vbl_sort_h_
