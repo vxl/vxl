@@ -170,6 +170,9 @@ SOURCE=.\Templates/vimt_scale_pyramid_builder_2d+float-.cxx
 # Begin Source File
 SOURCE=.\Templates/vimt_image_2d_of+int-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vimt_dog_pyramid_builder_2d+float-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "txx;h"
@@ -238,6 +241,12 @@ SOURCE=.\vimt_scale_pyramid_builder_2d.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vimt_add_all_binary_loaders.h
+# End Source File
+# Begin Source File
+SOURCE=.\vimt_dog_pyramid_builder_2d.h
+# End Source File
+# Begin Source File
+SOURCE=.\vimt_dog_pyramid_builder_2d.txx
 # End Source File
 # End Group
 # End Target
