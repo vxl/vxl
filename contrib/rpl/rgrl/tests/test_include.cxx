@@ -13,6 +13,7 @@
 #include <rgrl/rgrl_debug_util.h>
 #include <rgrl/rgrl_est_affine.h>
 #include <rgrl/rgrl_est_homography2d.h>
+#include <rgrl/rgrl_est_homo2d_lm.h>
 #include <rgrl/rgrl_est_quadratic.h>
 #include <rgrl/rgrl_est_reduced_quad2d.h>
 #include <rgrl/rgrl_est_rigid.h>
