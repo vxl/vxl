@@ -45,7 +45,6 @@ class vvid_live_video_tableau : public vgui_image_tableau
   bool start_live_video();
   void update_frame();
   void stop_live_video();
-  void reset_camera_link();
 
   //:live capture methods
   void start_capture(vcl_string const & video_file_name) { cam_.start_capture(video_file_name); }

@@ -218,20 +218,6 @@ void vvid_live_video_manager::stop_capture()
   vtab_->stop_capture();
 }
 
-void vvid_live_video_manager::reset_camera_link()
-{
-  this->stop_live_video();
-  if (vtab_)
-    vtab_->reset_camera_link();
-  if (!vtab_->attach_live_video())
-    {
-      vcl_cout <<"In vvid_live_video_manager::reset_camera_link() - reset failed\n";
-      init_successful_ = false;
-      return;
-    }
-  init_successful_ = true;
-}
-
 void vvid_live_video_manager::display_topology()
 {
   vt2D_->clear_all();

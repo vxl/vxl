@@ -135,12 +135,6 @@ void vvid_live_video_tableau::stop_live_video()
   live_=false;
 }
 
-void vvid_live_video_tableau::reset_camera_link()
-{
-  cam_.ResetLink(true);
-  cam_.m_cameraInitialized = false;
-}
-
 void vvid_live_video_tableau::
 get_camera_rgb_image(vil1_memory_image_of< vil1_rgb<unsigned char> >& im,
                      int pix_sample_interval)

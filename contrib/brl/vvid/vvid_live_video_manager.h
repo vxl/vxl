@@ -63,9 +63,6 @@ class vvid_live_video_manager : public vgui_wrapper_tableau
   void init_capture();
   void stop_capture();
 
-  //: reset the camera hardwareinterface
-  void reset_camera_link();
-
   //: quit the application
   void quit();
 
