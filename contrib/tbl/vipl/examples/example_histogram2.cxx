@@ -5,7 +5,7 @@
 //  it should be mappable to int: [[un]signed] char, [unsigned]short, int),
 //  and its histogram is calculated and written to stdout.
 //  Uses vipl_histogram<section<ubyte,2>,section<int,2>,ubyte,int>.
-//  The conversion between vil1_image and the in-memory section<ubyte,2>
+//  The conversion between vil_image_view<ubyte> and the in-memory section<ubyte,2>
 //  is done explicitly, pixel per pixel (because of possibly different types).
 //
 //  Note that it seems to be impossible with some compilers (notably
@@ -19,47 +19,44 @@
 // \verbatim
 // Modifications:
 //   Peter Vanroose, Aug.2000 - adapted to vxl
+//   Peter Vanroose, Feb.2004 - replaced vil1_load by vil2_load
 // \endverbatim
 //
 #include <section/section.h>
 #include <vipl/vipl_with_section/accessors/vipl_accessors_section.h>
 #include <vipl/accessors/vipl_accessors_vcl_vector.h>
-#include <vil1/vil1_pixel.h>
 #include <vipl/vipl_histogram.h>
 #include <vcl_vector.h>
 
 // for I/O:
-#include <vil1/vil1_load.h>
-#include <vil1/vil1_image.h>
+#include <vil/vil_load.h>
+#include <vil/vil_image_view.h>
 #include <vcl_iostream.h>
+#include <vcl_cstring.h> // for memcpy()
+#include <vxl_config.h> // for vxl_byte
 
-#ifndef VCL_VC50
-typedef unsigned char ubyte;
-#else
-typedef int ubyte; // this is a hack!!!  See the Description.
+#ifdef VCL_VC50
+#define vxl_byte int // this is a hack!!!  See the Description.
 #endif
 
 int
-main(int argc, char** argv) {
+main(int argc, char** argv)
+{
   if (argc < 2) { vcl_cerr << "Syntax: example_histogram file_in\n"; return 1; }
 
   // The input image:
-  vil1_image in = vil1_load(argv[1]);
-  vcl_vector<unsigned> out(256);
+  vil_image_view<vxl_byte> in = vil_load(argv[1]);
+  vcl_vector<unsigned int> out(256);
 
-  section<ubyte,2> src(in.width(),in.height()); // in-memory 2D image
+  section<vxl_byte,2> src(in.ni(),in.nj()); // in-memory 2D image
 
   // set the input image:
-  if (vil1_pixel_format(in) != VIL1_BYTE) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
-  in.get_section(src.buffer,0,0,in.width(),in.height());
+  if (!in) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
+  vcl_memcpy(src.buffer, in.memory_chunk()->const_data(), in.size_bytes());
 
   // The filter:
-  vipl_histogram<section<ubyte,2>, 
-    vcl_vector<unsigned>,
-    unsigned char,
-    unsigned VCL_DFL_TMPL_ARG(vipl_trivial_pixeliter)> op;
-  op.put_in_data_ptr(&src);
-  op.put_out_data_ptr(&out);
+  vipl_histogram<section<vxl_byte,2>, vcl_vector<unsigned int>, vxl_byte, unsigned int> op;
+  op.put_in_data_ptr(&src); op.put_out_data_ptr(&out);
   op.filter();
 
   // Write output:

@@ -1,13 +1,12 @@
 #ifndef vipl_x_gradient_h_
 #define vipl_x_gradient_h_
-
 //:
 // \file
 // \brief Convolve image with horizontal [-1 1] filter
 //
 //   This image processing class is implemented using the vipl filters,
 //   which means that it can be used with any image class (IUE or not,
-//   TargetJr or not, vil1 or not) of any pixel data type.
+//   TargetJr or not, vil or vil1 or not) of any pixel data type.
 //
 //   Note that the user has to make sure that the output values fall into
 //   the output pixel range, by specifying appropriate scale and shift;
@@ -31,17 +30,18 @@
 
 //: Convolve image with horizontal [-1 1] filter
 template <class ImgIn,class ImgOut,class DataIn,class DataOut, VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
-class vipl_x_gradient : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr> {
-// -+-+- data members: -+-+-
+class vipl_x_gradient : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
+{
+  // -+-+- data members: -+-+-
   // term to add to the gradient result:
-private: DataOut shift_;
-public: DataOut shift() const { return shift_; }
+ private: DataOut shift_;
+ public: DataOut shift() const { return shift_; }
   // scale factor to multiply the shifted gradient with:
-private: double scale_;
-public: double scale() const { return scale_; }
+ private: double scale_;
+ public: double scale() const { return scale_; }
 
-// -+-+- constructors/destructors: -+-+-
-public:
+  // -+-+- constructors/destructors: -+-+-
+ public:
   inline vipl_x_gradient(double s=1.0, DataOut h=DataOut())
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(),
              shift_(h), scale_(s) {}
@@ -50,7 +50,7 @@ public:
              shift_(A.shift()), scale_(A.scale()) {}
   inline ~vipl_x_gradient() {}
 
-// -+-+- required method for filters: -+-+-
+  // -+-+- required method for filters: -+-+-
   bool section_applyop();
 };
 

@@ -1,13 +1,12 @@
 #ifndef vipl_gaussian_convolution_h_
 #define vipl_gaussian_convolution_h_
-
 //:
 // \file
 // \brief gaussian smoothing
 //
 //   This image processing class is implemented using the vipl filters,
 //   which means that it can be used with any image class (IUE or not,
-//   TargetJr or not, vil1 or not) of any pixel data type.
+//   TargetJr or not, vil or vil1 or not) of any pixel data type.
 //
 //   Note that DataIn values must allow addition and multiplication with floats;
 //   and that the result be expressible as DataOut, possibly after rounding.
@@ -35,21 +34,21 @@
 //   (The window is cut when `cutoff' (default: 0.01) of the probability mass
 //   lies out of the window.)
 template <class ImgIn,class ImgOut,class DataIn,class DataOut, VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
-class vipl_gaussian_convolution : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr> {
-
+class vipl_gaussian_convolution : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
+{
   // -+-+- data members: -+-+-
-private:
+ private:
   double sigma_;
   double& ref_sigma(){return sigma_;}
   void put_sigma(double v){sigma_=v;}
   double cutoff_;
   double& ref_cutoff(){return cutoff_;}
   void put_cutoff(double v){cutoff_=v;}
-public:
+ public:
   double sigma() const {return sigma_;}
   double cutoff() const {return cutoff_;}
 
-private:
+ private:
   // attribute to store the "temporary mask"
   double* mask_;
   inline double*& ref_mask(){return mask_;}
@@ -61,7 +60,7 @@ private:
   inline int masksize() const{return masksize_;}
 
 // -+-+- constructors/destructors: -+-+-
-public:
+ public:
   inline vipl_gaussian_convolution(double s=1, double c=0.01)
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>()
            , sigma_(s)

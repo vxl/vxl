@@ -1,13 +1,12 @@
 #ifndef vipl_median_h_
 #define vipl_median_h_
-
 //:
 // \file
 // \brief median filter with circular element
 //
 //   This image processing class is implemented using the vipl filters,
 //   which means that it can be used with any image class (IUE or not,
-//   TargetJr or not, vil1 or not) of any pixel data type.
+//   TargetJr or not, vil or vil1 or not) of any pixel data type.
 //
 //   vipl_median filtering is an operation that replaces a pixel with the
 //   median value of its surrounding pixels, in a certain neighbourhood.
@@ -37,34 +36,34 @@
 
 //: median filter with circular element
 template <class ImgIn,class ImgOut,class DataIn,class DataOut, VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
-class vipl_median : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr> {
-
+class vipl_median : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
+{
   // -+-+- data members: -+-+-
-private:
+ private:
   float   radius_;
   float&  ref_radius()        { return radius_; }
   void    put_radius(float v) { radius_=v; }
-public:
+ public:
   float   radius() const      { return radius_; }
 
-private:
+ private:
   // attribute to store the "temporary mask"
   bool**  mask_;
   bool**& ref_mask()          { return mask_; }
   void    put_mask(bool** v)  { mask_=v; }
   bool**  mask() const        { return mask_; }
 
-// -+-+- constructors/destructors: -+-+-
-public:
+  // -+-+- constructors/destructors: -+-+-
+ public:
   inline vipl_median(float r=1)
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), radius_(r), mask_(0){}
   inline vipl_median(vipl_median const& A)
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A), radius_(A.radius()), mask_(0) {}
   inline ~vipl_median() {}
 
-// -+-+- required method for filters: -+-+-
+  // -+-+- required method for filters: -+-+-
   bool section_applyop();
-// -+-+- optional method for filters, compute mask only once in preop, free in postop: -+-+-
+  // -+-+- optional method for filters, compute mask only once in preop, free in postop: -+-+-
   bool preop();
   bool postop();
 };

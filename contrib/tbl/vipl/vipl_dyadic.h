@@ -1,13 +1,12 @@
 #ifndef vipl_dyadic_h_
 #define vipl_dyadic_h_
-
 //:
 // \file
 // \brief apply any (fixed) function to all (out,in) pixel pairs
 //
 //   This image processing class is implemented using the vipl filters,
 //   which means that it can be used with any image class (IUE or not,
-//   TargetJr or not, vil1 or not) of any pixel data type.
+//   TargetJr or not, vil or vil1 or not) of any pixel data type.
 //
 //   The only parameter to be passed to the constructor must be a (dyadic)
 //   function that takes two pixel values, one from the output image and
@@ -35,21 +34,21 @@
 template <class ImgIn,class ImgOut,class DataIn,class DataOut, VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
 class vipl_dyadic : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
 {
-public:
+ public:
   typedef void (*DyadicFunction)(DataOut&, DataIn const&);
-// -+-+- data members: -+-+-
-private: DyadicFunction func_;
-public: DyadicFunction func() const { return func_; }
+  // -+-+- data members: -+-+-
+ private: DyadicFunction func_;
+ public: DyadicFunction func() const { return func_; }
 
-// -+-+- constructors/destructors: -+-+-
-public:
+  // -+-+- constructors/destructors: -+-+-
+ public:
   inline vipl_dyadic(DyadicFunction f)
     : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), func_(f) {};
   inline vipl_dyadic(vipl_dyadic const& A)
     : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A), func_(A.func()) {}
   inline ~vipl_dyadic() {}
 
-// -+-+- required method for filters: -+-+-
+  // -+-+- required method for filters: -+-+-
   bool section_applyop();
 };
 

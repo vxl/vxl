@@ -7,7 +7,7 @@
 * by just starting from an existing one (e.g., \c vipl_threshold ).
 *
 * Every class is templated on five types:
-* - The input image (e.g. \c vil1_image , but it could as well be e.g.
+* - The input image (e.g. \c vil_image_view<T> , but it could as well be e.g.
 *   \c vnl_matrix<double> or your own array-type class).
 * - The output image (and indeed, it may be different from the input type,
 *   so a simple "copy pixels" IP algorithm could be used as an image type
@@ -16,7 +16,7 @@
 * - The data type of a single pixel of the input image.
 *   This has to be specified separately, since the input image type does not
 *   necessarily reveal its pixel type; actually, it could support many
-*   different pixel types, as is e.g. the case for \c vil1_image .
+*   different pixel types, as is e.g. the case for \c vil_image_view<T> .
 * - The data type of a pixel in the output image.
 * - Optionally, the pixel iterator to be used.  By default, a normal "left-
 *   right, top-bottom" iterator is being used: \c vipl_trivial_pixeliter .
@@ -31,6 +31,6 @@
 * implementation.
 *
 * For the most common case, viz. input and output image are of type
-* \c vil1_image, have a look at the \c vepl library.
-* The new \c vil image representation is interfaced in \c vepl2.
+* \c vil_image_view<T>, have a look at the \c vepl2 library.
+* The old \c vil1 image representation is interfaced in \c vepl2.
 */

@@ -6,7 +6,7 @@
 //
 //   This image processing class is implemented using the vipl filters,
 //   which means that it can be used with any image class (IUE or not,
-//   TargetJr or not, vil1 or not) of any pixel data type.
+//   TargetJr or not, vil or vil1 or not) of any pixel data type.
 //
 //   This class actually implements three random noise addition filters:
 //   uniform noise, Gaussian noise and exponential noise.
@@ -40,7 +40,7 @@ enum vipl_random_noise_type { UNIFORM_NOISE, GAUSSIAN_NOISE, EXPONENTIAL_NOISE }
 template <class ImgIn,class ImgOut,class DataIn,class DataOut, VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
 class vipl_add_random_noise : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
 {
-// -+-+- data members: -+-+-
+  // -+-+- data members: -+-+-
  private: vipl_random_noise_type type_;
  public: vipl_random_noise_type type() const { return type_; }
  private: double maxdev_;
@@ -48,8 +48,8 @@ class vipl_add_random_noise : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,
  private: bool clipping_;
  public: bool clipping() const { return clipping_; }
 
-// -+-+- constructors/destructors: -+-+-
-public:
+  // -+-+- constructors/destructors: -+-+-
+ public:
   inline vipl_add_random_noise(vipl_random_noise_type t = GAUSSIAN_NOISE, double m=5, int s=12345, bool clip=false)
     : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), type_(t), maxdev_(m), clipping_(clip)
   { if (s==12345) vnl_sample_reseed(); else vnl_sample_reseed(s); }
@@ -57,7 +57,7 @@ public:
   inline vipl_add_random_noise(vipl_add_random_noise const& A)
     : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A), type_(A.type()), maxdev_(A.maxdev()), clipping_(A.clipping()) {}
 
-// -+-+- required method for filters: -+-+-
+  // -+-+- required method for filters: -+-+-
   bool section_applyop();
 };
 

@@ -1,13 +1,12 @@
 #ifndef vipl_erode_disk_h_
 #define vipl_erode_disk_h_
-
 //:
 // \file
 // \brief morphological erosion with circular element
 //
 //   This image processing class is implemented using the vipl filters,
 //   which means that it can be used with any image class (IUE or not,
-//   TargetJr or not, vil1 or not) of any pixel data type.
+//   TargetJr or not, vil or vil1 or not) of any pixel data type.
 //
 //   Erosion is a morphological operation that replaces a pixel with the
 //   minimum value of its surrounding pixels, in a certain neighbourhood.
@@ -37,17 +36,17 @@
 
 //: morphological erosion with circular element
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
-class vipl_erode_disk : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr> {
-
+class vipl_erode_disk : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
+{
   // -+-+- data members: -+-+-
-private:
+ private:
   float   radius_;
   float&  ref_radius()        { return radius_; }
   void    put_radius(float v) { radius_=v; }
-public:
+ public:
   float   radius() const      { return radius_; }
 
-private:
+ private:
   // attribute to store the "temporary mask"
   bool**  mask_;
   bool**& ref_mask()          { return mask_; }
@@ -55,7 +54,7 @@ private:
   bool**  mask() const        { return mask_; }
 
   // -+-+- constructors/destructors: -+-+-
-public:
+ public:
   inline vipl_erode_disk(float r=1)
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), radius_(r), mask_(0){}
   inline vipl_erode_disk(vipl_erode_disk const& A)

@@ -5,35 +5,38 @@
 #
 # This should make it clear how to use the filter classes with any 2D storage
 # class of your choice.  Examples using those filter classes, templated on
-# either vil1_image, vnl_matrix<T>, section<T,2> or vbl_array_2d<T> are in this
-# directory.  - PVr.
+# either vil_image_view<T>, vil1_image, vnl_matrix<T>, section<T,2> or
+# vbl_array_2d<T> are in this directory.  - PVr.
 #
 #   DEPENDENCIES:  vipl
-#                  vil1  (for image load/save and for group A)
-#                  vipl_with_vnl_matrix vnl     (for group B)
-#                  vipl_with_vbl_array_2d vbl   (for group C)
-#                  vipl_with_section            (for group D)
+#                  vil  (for image load/save and for group A)
+#                  vil1                         (for group B)
+#                  vipl_with_vnl_matrix vnl     (for group C)
+#                  vipl_with_vbl_array_2d vbl   (for group D)
+#                  vipl_with_section            (for group E)
 
 ADD_DEFINITIONS(-DINSTANTIATE_TEMPLATES)
 
-# A. using vil1_image as 2D storage class:
+# A. using vil_image_view<T> as 2D storage class:
 ADD_EXECUTABLE(vipl_example_convert example_convert.cxx)
-TARGET_LINK_LIBRARIES( vipl_example_convert vipl vil1 )
+TARGET_LINK_LIBRARIES( vipl_example_convert vipl vil )
 
 ADD_EXECUTABLE(vipl_example_add_random_noise example_add_random_noise.cxx)
-TARGET_LINK_LIBRARIES( vipl_example_add_random_noise vipl vil1 )
+TARGET_LINK_LIBRARIES( vipl_example_add_random_noise vipl vil )
 
 ADD_EXECUTABLE(vipl_example_std_dev example_std_dev.cxx)
-TARGET_LINK_LIBRARIES( vipl_example_std_dev vipl vil1 )
+TARGET_LINK_LIBRARIES( vipl_example_std_dev vipl vil )
 
 ADD_EXECUTABLE(vipl_example1_threshold example1_threshold.cxx)
-TARGET_LINK_LIBRARIES( vipl_example1_threshold vipl vil1 )
+TARGET_LINK_LIBRARIES( vipl_example1_threshold vipl vil )
 
+
+# B. using vil1_image as 2D storage class:
 ADD_EXECUTABLE(vipl_example4_threshold example4_threshold.cxx)
 TARGET_LINK_LIBRARIES( vipl_example4_threshold vipl vil1 )
 
 
-# B. using vnl_matrix<T> as 2D storage class:
+# C. using vnl_matrix<T> as 2D storage class:
 ADD_EXECUTABLE(vipl_example3_threshold example3_threshold.cxx)
 TARGET_LINK_LIBRARIES( vipl_example3_threshold vipl vnl )
 
@@ -44,7 +47,7 @@ ADD_EXECUTABLE(vipl_example_gaussian_convolution example_gaussian_convolution.cx
 TARGET_LINK_LIBRARIES( vipl_example_gaussian_convolution vipl vnl )
 
 
-# C. using vbl_array_2d<T> as 2D storage class:
+# D. using vbl_array_2d<T> as 2D storage class:
 ADD_EXECUTABLE(vipl_example_gradient_mag example_gradient_mag.cxx)
 TARGET_LINK_LIBRARIES( vipl_example_gradient_mag vipl vbl )
 
@@ -52,7 +55,7 @@ ADD_EXECUTABLE(vipl_example_sobel example_sobel.cxx)
 TARGET_LINK_LIBRARIES( vipl_example_sobel vipl vbl )
 
 
-# D. using section<T,2> as 2D storage class:
+# E. using section<T,2> as 2D storage class:
 ADD_EXECUTABLE(vipl_example_dilate_disk example_dilate_disk.cxx)
 TARGET_LINK_LIBRARIES( vipl_example_dilate_disk vipl )
 

@@ -1,13 +1,12 @@
 #ifndef vipl_dilate_disk_h_
 #define vipl_dilate_disk_h_
-
 //:
 // \file
 // \brief morphological dilation with circular element
 //
 //   This image processing class is implemented using the vipl filters,
 //   which means that it can be used with any image class (IUE or not,
-//   TargetJr or not, vil1 or not) of any pixel data type.
+//   TargetJr or not, vil or vil1 or not) of any pixel data type.
 //
 //   Dilation is a morphological operation that replaces a pixel with the
 //   maximum value of its surrounding pixels, in a certain neighbourhood.

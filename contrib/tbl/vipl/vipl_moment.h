@@ -1,13 +1,12 @@
 #ifndef vipl_moment_h_
 #define vipl_moment_h_
-
 //:
 // \file
 // \brief computation of n-th order moment
 //
 //   This image processing class is implemented using the vipl filters,
 //   which means that it can be used with any image class (IUE or not,
-//   TargetJr or not, vil1 or not) of any pixel data type.
+//   TargetJr or not, vil or vil1 or not) of any pixel data type.
 //
 //   The n-th order moment operation replaces a pixel with the expected value
 //   of x^n of its surrounding pixels, in a certain neighbourhood. Here the
@@ -32,10 +31,10 @@
 
 //: computation of n-th order moment
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
-class vipl_moment : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr> {
-
+class vipl_moment : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
+{
   // -+-+- data members: -+-+-
-private:
+ private:
   int order_;
   int width_;
   int height_;
@@ -45,13 +44,13 @@ private:
   void put_order(int v){order_=v;}
   void put_width(int v){width_=v;}
   void put_height(int v){height_=v;}
-public:
+ public:
   int order() const {return order_;}
   int width() const {return width_;}
   int height() const {return height_;}
 
   // -+-+- constructors/destructors: -+-+-
-public:
+ public:
   inline vipl_moment(int n,int w=3,int h=3)
     : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), order_(n), width_(w), height_(h) {}
   inline vipl_moment(vipl_moment const& A)

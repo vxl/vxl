@@ -1,13 +1,12 @@
 #ifndef vipl_gradient_dir_h_
 #define vipl_gradient_dir_h_
-
 //:
 // \file
 // \brief atan2 of vipl_x_gradient and vipl_y_gradient
 //
 //   This image processing class is implemented using the vipl filters,
 //   which means that it can be used with any image class (IUE or not,
-//   TargetJr or not, vil1 or not) of any pixel data type.
+//   TargetJr or not, vil or vil1 or not) of any pixel data type.
 //
 //   Note that the pixel types must support conversion from/to double
 //   where the atan2 computation takes place.
@@ -25,17 +24,18 @@
 
 //: atan2 of vipl_x_gradient and vipl_y_gradient
 template <class ImgIn,class ImgOut,class DataIn,class DataOut, VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
-class vipl_gradient_dir : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr> {
-// -+-+- data members: -+-+-
+class vipl_gradient_dir : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
+{
+  // -+-+- data members: -+-+-
   // term to add to the atan2 result:
-private: double shift_;
-public: double shift() const { return shift_; }
+ private: double shift_;
+ public: double shift() const { return shift_; }
   // scale factor to multiply the shifted atan2 with:
-private: double scale_;
-public: double scale() const { return scale_; }
+ private: double scale_;
+ public: double scale() const { return scale_; }
 
-// -+-+- constructors/destructors: -+-+-
-public:
+  // -+-+- constructors/destructors: -+-+-
+ public:
   inline vipl_gradient_dir(double s=1, double h=0)
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(),
              shift_(h), scale_(s) {}
@@ -44,7 +44,7 @@ public:
              shift_(A.shift()), scale_(A.scale()) {}
   inline ~vipl_gradient_dir() {}
 
-// -+-+- required method for filters: -+-+-
+  // -+-+- required method for filters: -+-+-
   bool section_applyop();
 };
 
