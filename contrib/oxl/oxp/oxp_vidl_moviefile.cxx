@@ -17,7 +17,9 @@
 #include <vidl/vidl_movie.h>
 #include <vidl/vidl_io.h>
 
+#ifdef HAS_MPEG
 #include <oxp/oxp_vidl_mpeg_codec.h>
+#endif
 
 struct oxp_vidl_moviefile_privates {
   vidl_movie_sptr m;
@@ -35,7 +37,9 @@ void ensure_initialized()
 #ifdef VCL_WIN32
   vidl_io::register_codec(new vidl_avicodec);
 #endif
+#ifdef HAS_MPEG
   vidl_io::register_codec(new oxp_vidl_mpeg_codec);
+#endif
   init = true;
 }
 
