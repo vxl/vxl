@@ -15,6 +15,7 @@ SOURCE_FILES(mil_sources
   mil_transform_2d.cxx
   mil_byte_image_2d_io.cxx
   mil_convert_image_2d.cxx
+  mil_normalise_image_2d.cxx	
 )
 
 AUX_SOURCE_DIRECTORY(Templates mil_sources )

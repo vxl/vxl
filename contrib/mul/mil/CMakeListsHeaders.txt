@@ -16,6 +16,7 @@ SOURCE_FILES(mil_sources
   mil_sample_profile_2d.h
   mil_transform_2d.h
   mil_convert_vil.h
+  mil_normalise_image_2d.h	
 
   mil_gaussian_pyramid_builder_2d.txx
   mil_gaussian_pyramid_builder_2d_general.txx
