@@ -1,6 +1,6 @@
 #   DESCRIPTION:
 #
-#   This is the png directory of v3p.  Current version is 1.0.8.
+#   This is the png directory of v3p.  Current version is 1.2.5 of October 2002.
 
 USES := v3p/zlib
 USE_STDC++ := 0
@@ -26,6 +26,14 @@ SOURCES += pngmem.c
 SOURCES += pngerror.c
 SOURCES += pngpread.c
 
-################################
-include ${IUEROOT}/config/top.mk
-################################
+#######################################
+include ${IUEROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${IUEROOT}/config/top-rules.mk
+######################################
