@@ -45,4 +45,10 @@ void vil_histogram(const vil_image_view<T>& image,
 void vil_histogram_byte(const vil_image_view<vxl_byte>& image,
                         vcl_vector<double>& histo);
 
+//: Instantiation macro for other types
+#define VIL_HISTOGRAM_INSTANTIATE(T) \
+template void vil_histogram(const vil_image_view<T>& image, \
+                   vcl_vector<double>& histo, \
+                   double min, double max, unsigned n_bins)
+
 #endif // vil_histogram_h_
