@@ -1,12 +1,19 @@
 // This is oxl/vgui/vgui_style.cxx
-#ifdef __GNUC__
-#pragma implementation
-#endif
+
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   18 Oct 99
-//-----------------------------------------------------------------------------
+// \brief  See vgui_style.h for a description of this file.
+//
+// \verbatim
+//  Modifications:
+//    18-OCT-1999 P.Pritchett - Initial version.
+// \endverbatim
+
+#ifdef __GNUC__
+#pragma implementation
+#endif
 
 #include "vgui_style.h"
 

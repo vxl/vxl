@@ -1,13 +1,13 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./oxl/vgui/vgui_statusbuf.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui_statusbuf
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 21 Nov 99
-//
-//-----------------------------------------------------------------------------
+
+//:
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   21 Nov 99
+// \brief  See vgui_statusbuf.h for a description of this file.
 
 #include "vgui_statusbuf.h"
 #include <vgui/vgui_statusbar.h>

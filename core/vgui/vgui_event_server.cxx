@@ -1,11 +1,13 @@
+// This is ./oxl/vgui/vgui_event_server.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   29 Sep 99
-//-----------------------------------------------------------------------------
+// \brief  See vgui_event_server.cxx for a description of this file.
 
 #include "vgui_event_server.h"
 

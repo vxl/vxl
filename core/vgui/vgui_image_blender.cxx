@@ -1,11 +1,13 @@
+// This is ./oxl/vgui/vgui_image_blender.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   27 Oct 99
-//-----------------------------------------------------------------------------
+// \brief  See vgui_image_blender.h for a description of this file.
 
 #include "vgui_image_blender.h"
 

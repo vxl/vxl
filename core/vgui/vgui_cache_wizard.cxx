@@ -2,8 +2,10 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
 //:
-//  \file
+// \file
+// \brief See vgui_cache_wizard.h for a description of this file.
 
 #include <vil/vil_crop.h>
 #include <vil/vil_pixel.h>
@@ -28,8 +30,9 @@
 bool debug = false;
 vgui_cache_wizard *vgui_cache_wizard::instance_ = 0;
 //: Constructor.
-// Set the image quadrant width/height. Do use sensible values(i.e. powers of two).
-// Otherwise the cache wizard won't work.
+// Set the image quadrant width/height. 
+// Do use sensible values(i.e. powers of two) otherwise the cache 
+// wizard won't work.
 vgui_cache_wizard::vgui_cache_wizard(int quadrant_width,
                                      int quadrant_height)
 {

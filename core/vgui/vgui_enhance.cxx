@@ -1,13 +1,19 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is vgui_enhance.cxx
+
+//:
+// \file
+// \author  Philip C. Pritchett, RRG, University of Oxford
+// \date    17 Nov 99
+// \brief   See vgui_enhance.h for a description of this file.
+//
+// \verbatim
+//  Modifications:
+//    17-NOV-1999 P.Pritchett - Initial version.
+// \endverbatim
+
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui_enhance
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 17 Nov 99
-//
-//-----------------------------------------------------------------------------
 
 #include "vgui_enhance.h"
 

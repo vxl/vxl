@@ -5,6 +5,7 @@
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   24 Sep 1999
 // \brief  Tableau to display two-dimensional geometric objects.
+//         Contains classes: vgui_easy2D
 //
 // \verbatim
 // Modifications
@@ -36,12 +37,15 @@ class vgui_soview2D_polygon;
 
 //: Tableau to display two-dimensinal geometric objects.
 //
-//  Two dimensional geometric objects (see vgui_soview2D) such as lines, points, circles,
-//  etc can be added using add, or add_point, add_line, add_circle, etc.
-//  The constructor of this tableau can accept a child tableau such as an image or clear
-//  tableau on top of which the geometric objects will be displayed (so for example, lines
-//  can be drawn on an image).  To display objects on a non-black, plain coloured background
-//  use a clear_tableau and set its colour.
+//  Two dimensional geometric objects (see vgui_soview2D) such as lines, 
+//  points, circles, etc can be added using add, or add_point, add_line, 
+//  add_circle, etc.
+//
+//  The constructor of this tableau can accept a child tableau such as an 
+//  image or clear tableau on top of which the geometric objects will be 
+//  displayed (so for example, lines can be drawn on an image).  To display 
+//  objects on a non-black, plain coloured background use a clear_tableau 
+//  and set its colour.
 //
 //  To remove objects call remove(vgui_soview*).  The vgui_soview* is returned by add(), or
 //  you can get a list of all soviews using get_all().  To remove all objects use clear().

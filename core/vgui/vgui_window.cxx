@@ -1,6 +1,10 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
+// This is ./oxl/vgui/vgui_window.cxx
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+// \brief  See vgui_window.h for a description of this file.
+
 #ifdef __GNUC__
 #pragma implementation
 #endif

@@ -1,9 +1,11 @@
-//:
-//  \file
+// This is ./oxl/vgui/vgui_adaptor.cxx
 
-/*
-  fsm@robots.ox.ac.uk
-*/
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+// \brief  See vgui_adaptor.h for a description of this file.
+
+
 #include "vgui_adaptor.h"
 
 #include <vcl_cassert.h>

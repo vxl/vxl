@@ -1,6 +1,15 @@
+// This is ./oxl/vgui/vgui_grid_tableau.cxx
 
 //:
-//  \file
+// \file
+// \author  K.Y.McGaul
+// \date    20-JAN-2000
+// \brief   See vgui_grid_tableau.h for a description of this file.
+//
+// \verbatim
+//  Modifications:
+//    20-JAN-2000 K.Y.McGaul - Initial version.
+// \endverbatim
 
 #include "vgui_grid_tableau.h"
 #include <vcl_iostream.h>
@@ -197,20 +206,21 @@ void vgui_grid_tableau::add_next(vgui_tableau_sptr const& tab)
 }
 
 //------------------------------------------------------------------------------
-//:
-//   Add (or replace the tableau at the given position with) the given tableau
-//   and adds the given tableau to the end of the vcl_list of tableaux.
+//:  Add (or replace the tableau at the given position with) the given tableau.
+//   Adds the given tableau to the end of the vcl_list of tableaux.
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::add_at(vgui_tableau_sptr const& tab, unsigned col_pos, unsigned row_pos)
 {
   // This function leaks core because a tableau which is replaced by another
-  // is still referenced by the smart pointer in `tabs'. why do we need a separate
-  // array of tableaux? can't we just put them in the grid_data structure? -- fsm
+  // is still referenced by the smart pointer in `tabs'. why do we need a 
+  // separate array of tableaux? can't we just put them in the grid_data 
+  // structure? -- fsm
 
-  // kym - This isn't a core leak!! It is intentional that pointers to tableaux are 
-  // kept - this means that we can flip through the list of tableaux using page up 
-  // and down but not display all tableaux at the same time (see xcv for an example 
-  // of this).  Each grid position provides a view of the deck of tableaux kept in 'tabs'.
+  // kym - This isn't a core leak!! It is intentional that pointers to 
+  // tableaux are kept - this means that we can flip through the list of 
+  // tableaux using page up and down but not display all tableaux at the 
+  // same time (see xcv for an example of this).  Each grid position provides 
+  // a view of the deck of tableaux kept in 'tabs'.
   if (col_pos < nb_cols && row_pos < nb_rows)
   {
 //  if (debug)

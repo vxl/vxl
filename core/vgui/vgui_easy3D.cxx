@@ -1,13 +1,13 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./oxl/vgui/vgui_easy3D.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui_easy3D
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 24 Sep 99
-//
-//-----------------------------------------------------------------------------
+
+//:
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   24 Sep 99
+// \brief  See vgui_easy3D.h for a description of this file.
 
 #include "vgui_easy3D.h"
 

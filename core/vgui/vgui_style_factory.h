@@ -1,27 +1,23 @@
+// This is ./oxl/vgui/vgui_style_factory.h
+
+//:
+// \file
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date   18 Oct 1999
+// \brief  Factory to manufactures vgui_style objects.
+//         Contains classes: vgui_style_factory
+//
+// \endverbatim
+//  Modifications:
+//    18-OCT-1999 P.Pritchett - Initial version.
+// \endverbatim
+
 #ifndef vgui_style_factory_h_
 #define vgui_style_factory_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME vgui_style_factory - Undocumented class FIXME
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/vgui_style_factory.h
-// .FILE vgui_style_factory.cxx
-//
-// .SECTION Description:
-//
-// vgui_style_factory is a class that Phil hasnt documented properly. FIXME
-//
-// .SECTION Author:
-//              Philip C. Pritchett, 18 Oct 99
-//              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications:
-//     <none yet>
-//
-//-----------------------------------------------------------------------------
+
 
 #include <vcl_functional.h>
 #include <vcl_utility.h>
@@ -31,18 +27,33 @@
 class vgui_style;
 class vgui_soview;
 
+//: Factory to manufactures vgui_style objects.
+//
+//  If the style requested already exists then the vgui_style object for that
+//  style is return.  If not a new vgui_style is created for that style.
+//
+//  This is a singleton class - there should only be one style_factory.
 class vgui_style_factory
 {
 public:
+
+  //: Destructor - delete all styles held in the factory.
  ~vgui_style_factory();
 
+  //: Returns the singleton instance of the style_factory.
   static vgui_style_factory* instance();
 
+  //: Returns a pointer to the vgui_style corresponding to the given values.
   static vgui_style* get_style(float r, float g, float b, float point_size, float line_width);
-  static void get_styles(vcl_vector<vgui_style*>& styles_copy);
-  static void get_soviews(vgui_style*, vcl_vector<vgui_soview*>& soviews);
-  static void change_style(vgui_soview* so, vgui_style* st_new, vgui_style* st_old);
 
+  //: Gets a list of pointers to all styles held in the factory.
+  static void get_styles(vcl_vector<vgui_style*>& styles_copy);
+
+  //: Gets a list of soviews with the given style.
+  static void get_soviews(vgui_style*, vcl_vector<vgui_soview*>& soviews);
+
+  //: Change the style of the given soview.
+  static void change_style(vgui_soview* so, vgui_style* st_new, vgui_style* st_old);
 
 
   typedef vcl_multimap<vgui_style*, vgui_soview*, vcl_less<vgui_style*> > MultiMap_styles;

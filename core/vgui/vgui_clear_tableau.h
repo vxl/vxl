@@ -4,11 +4,14 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   11 Nov 99
 // \brief  Tableau performing OpenGL clearing.
+//
+//  Contains classes:  vgui_clear tableau   vgui_clear_tableau_new
 //
 // \verbatim
 //  Modifications:
@@ -27,17 +30,25 @@ class vgui_menu;
 // receipt of a vgui_DRAW event. It passes all events to its single child.
 class vgui_clear_tableau : public vgui_tableau {
 public:
+  //: Constructor - don't use this, use vgui_clear_tableau_new.
   vgui_clear_tableau();
 
+  //: Returns the type of this tableau ('vgui_clear_tableau').
   vcl_string type_name() const;
 
   //: Set colour of clear_tableau to the given red, green, blue values.
   void set_colour(float r, float g, float b, float a=1);
-  void set_mask(GLbitfield);
 
+  //: Set the given GLbitfield as the mask.
+  void set_mask(GLbitfield);
+ 
+  //: Toggle clearing on and off.
   void toggle_clearing();
 
+  //: Make the given menu the default pop-up menu.
   void add_popup(vgui_menu &menu);
+
+  //: Display a dialog box to get data (colour, etc) for the clear tableau.
   void config_dialog();
 
 protected:
@@ -55,6 +66,7 @@ private:
   bool clearing_;
 };
 
+//: Create a smart-pointer to a vgui_clear_tableau.
 struct vgui_clear_tableau_new : public vgui_clear_tableau_sptr {
   typedef vgui_clear_tableau_sptr base;
   vgui_clear_tableau_new() : base(new vgui_clear_tableau()) { }

@@ -1,6 +1,11 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
+// This is ./oxl/vgui/vgui_wrapper_tableau.cxx
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+// \brief  See vgui_wrapper_tableau.h for a description of this file.
+
+
 #include "vgui_wrapper_tableau.h"
 
 #include <vcl_iostream.h>

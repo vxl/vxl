@@ -1,9 +1,13 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
+// This is ./oxl/vgui/vgui_color.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
+//:
+// \file
+// \author  fsm@robots.ox.ac.uk
+// \brief   See vgui_color.h for a description of this file.
+
 #include "vgui_color.h"
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_macro.h>

@@ -1,13 +1,21 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./oxl/vgui/vgui_active_visable.cxx
+
+//:
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   25 Jan 00
+// \brief  See vgui_active_visable.h for a description of this file.
+//
+// \verbatim
+//  Modifications:
+//    25-JAN-2000 P.Pritchett - Initial version.
+// \endverbatim
+
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui_active_visible
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 25 Jan 00
-//
-//-----------------------------------------------------------------------------
+
+
 
 #include "vgui_active_visible.h"
 

@@ -1,9 +1,21 @@
 // This is oxl/vgui/vgui_tableau.cxx
+
+//:
+// \file
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date   11 Sep 99
+// \brief  See vgui_tableau.h for a description of this file.
+//
+// \verbatim
+//  Modifications:
+//    11-SEP-1999 P.Pritchett - Initial version.
+// \endverbatim
+
+
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//:
-//  \file
+
 
 #include "vgui_tableau.h"
 

@@ -1,27 +1,32 @@
+// This is ./oxl/vgui/vgui_tableau.h
+
+//:
+//  \file
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date   11 Sep 99
+// \brief  Base class for all tableaux in vgui.
+//         Contains classes: vgui_tableau.
+//
+// \verbatim
+// Modifications:
+//  21-Sep-1999  fsm@robots various changes.
+//  05-Oct-1999  fsm@robots
+//  11-Oct-1999  fsm@robots. removed old build_chain code.
+//  12-Oct-1999  fsm@robots. added type_name() method. various cleanup.
+//  13-Oct-1999  fsm@robots. deprecated draw_impl() and draw_overlay_impl().
+//  16-Oct-1999  fsm@robots. deprecated draw(), draw_overlay() + two minor
+//                     methods. added get_popup().
+//  11-Nov-1999  fsm@robots. added add_popup() now that get_popup() has a
+//                     different meaning. Added exists().
+//  07-Aug-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
+// \endverbatim
+
 #ifndef vgui_tableau_h_
 #define vgui_tableau_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-//:
-//  \file
-//
-// \author
-//              Philip C. Pritchett, 11 Sep 99
-//              Robotics Research Group, University of Oxford
-//
-// \verbatim
-// Modifications:
-//  21 September 1999  fsm@robots various changes.
-//   5 October   1999  fsm@robots
-//  11 October   1999  fsm@robots. removed old build_chain code.
-//  12 October   1999  fsm@robots. added type_name() method. various cleanup.
-//  13 October   1999  fsm@robots. deprecated draw_impl() and draw_overlay_impl().
-//  16 October   1999  fsm@robots. deprecated draw(), draw_overlay() + two minor
-//                     methods. added get_popup().
-//  11 November  1999  fsm@robots. added add_popup() now that get_popup() has a
-//                     different meaning. Added exists().
-// \endverbatim
+
 
 #include <vcl_string.h>
 #include <vcl_vector.h>
@@ -34,21 +39,64 @@ class vgui_menu;
 class vgui_popup_params;
 struct vgui_tableau_sptr;
 
+//: Base class for all tableaux in vgui.
+//
+//  WHAT'S A TABLEAU?
+//  A tableau is a rectangular area of the screen on which OpenGL may be
+//  used to draw and from which events (mouse, key presses etc) are received.  
+//
+//  WHAT SORT OF THINGS CAN TABLEAUX DO?
+//  Currently VGUI provides several example tableaux derived from this 
+//  class, sufficient to construct complex user interfaces combining 2D and 
+//  3D with manipulators and zoom. So for example an `image' tableau could
+//  display an image, a `zoomer' tableau could provide a function to zoom 
+//  an image in and out. We could also make a `deck' tableau to hold a deck 
+//  of images and display one image at a time (this would be useful for 
+//  playing a series of images as a movie). 
+//
+//  WHAT ARE PARENT AND CHILD TABLEAUX?
+//  One tableau can be included as a child of another (parent) tableau. This 
+//  creates a new tableau with the functionality of both tableaux making it 
+//  up. So the new tableau could, for example, display a deck of images and 
+//  provide zooming. 
+//
+//  The order in which the inclusion is done will affect the functionality, 
+//  so if the `zoomer' tableau contains the `deck' tableau then all images 
+//  will change size together. If however the inclusion is done the other way 
+//  around and each child tableau of the `deck' contains its own `zoomer' 
+//  tableau then each image will change size independently. 
+//
+//  WHAT'S ALL THIS SPTR BUSINESS THEN?
+//  When you make a new tableau it is recommended that you don't create
+//  it from the constructor for that tableau (eg, vgui_wibble_tableau()),
+//  but instead call vgui_wibble_tableau_new().  This returns a smart 
+//  pointer to your tableau (vgui_wibble_tableau_sptr) and means that 
+//  you don't need to worry about deleting your tableau once you are 
+//  finished using it.
+//
+//  SO HOW DO I USE A TABLEAU?
+//  Once-off adaptor code (see vgui_adaptor) is provided that plugs a 
+//  tableau into any supported GUI toolkit.  So to use a tableau you make 
+//  a window, add an adaptor and set the tableau in that adaptor to be 
+//  your top level (highest parent) tableau. See the examples on the VXL
+//  webpage to see this done.
 class vgui_tableau : public vgui_slot_data {
 public:
   vgui_tableau();
 
-  // name methods.
+  //: Return the name of the tableau.
   virtual vcl_string name() const;
-  //: get filename from descendant holding a file (if meaningful).
+  //: Get filename from descendant holding a file (if meaningful).
   virtual vcl_string file_name() const;
-  //: returns name suitable for debugging purposes.
+  //: Returns name suitable for debugging purposes.
   virtual vcl_string pretty_name() const;
-  //: return name of most derived class (for RTTI purposes).
+  //: Return name of most derived class (for RTTI purposes).
   virtual vcl_string type_name() const;
 
-  //: methods to get/set children and parents.
+  //: Get the parent tableaux for this tableau.
   void get_parents (vcl_vector<vgui_tableau_sptr> *out) const;
+
+  //: Get the child tableaux for this tableau.
   void get_children(vcl_vector<vgui_tableau_sptr> *out) const;
   vgui_tableau_sptr get_child(unsigned i) const;
   virtual bool add_child(vgui_tableau_sptr const &);
@@ -56,40 +104,71 @@ public:
   static void get_all(vcl_vector<vgui_tableau_sptr> *out);
   static bool exists(vgui_tableau_sptr const &);
 
-  // Called whenever a child of this tableau is about to be forcibly replaced
+  //: Called whenever a child of this tableau is about to be forcibly replaced
   virtual bool notify_replaced_child(vgui_tableau_sptr const & old_child,
                                      vgui_tableau_sptr const & new_child);
 
-  // methods related to popup menus.
+  //: Make the given menu the default popup menu for the tableau.
   virtual void add_popup(vgui_menu &);
+
+  //: Get the default popup menu for the tableau.
   virtual void get_popup(vgui_popup_params const &, vgui_menu &);
 
-  // redraw and other post() methods. the fact that these are virtual
-  // does not imply that you should go and override them.
+  //: Post a message event.
+  //  The fact that this is virtual does not imply that you should 
+  //  go and override it.
   virtual void post_message(char const *, void const *);
+
+  //: Post a draw event.
+  //  The fact that this is virtual does not imply that you should 
+  //  go and override it.
   virtual void post_redraw();
+
+  //: Post a overlay-redraw event.
+  //  The fact that this is virtual does not imply that you should 
+  //  go and override it.
   virtual void post_overlay_redraw();
 
-  // The handle method.
+  //: Handle all events sent to this tableau.
   virtual bool handle(vgui_event const &);
 
-  // const. if you need to cache, cast away const.
+  //: Get the bounding box of this tableau.
+  //  If infinite in extent, or nothing is drawn, or you can't be bothered to
+  //  implement it, return false.
+  //  const. if you need to cache, cast away const.
   virtual bool get_bounding_box(float low[3], float high[3]) const;
 
-  // Convenience handle methods. These are called by the default handle() method.
+  //: Called by default handle when it receives a draw event.
   virtual bool draw();
+
+  //: Called by default handle when it receives a mouse down event.
   virtual bool mouse_down(int x, int y, vgui_button, vgui_modifier);
+
+  //: Called by default handle when it receives a mouse up event.
   virtual bool mouse_up(int x, int y, vgui_button, vgui_modifier);
+
+  //: Called by handle when it receives a mouse motion event.
   virtual bool motion(int x, int y);
+
+  //: Called by default handle when it receives a key-press event.
   virtual bool key_press(int x, int y, vgui_key, vgui_modifier);
+
+  //: Called by default handle when it receives a '?' pressed event.
   virtual bool help(); // this is called if '?' is pressed
 
-  // "const" is for convenience. it is cast away internally.
+  //: Increase the reference count by one (for smart pointers).
+  //  "const" is for convenience, it is cast away internally.
   void ref() const;
+
+  //: Decrease the reference count by one (for smart pointers).
+  //  "const" is for convenience, it is cast away internally.
+  //  If the reference count reaches zero then delete the object.
   void unref() const;
 
-  //
+  //: Not used?
   void adopt (vgui_tableau_sptr const &) const;
+
+  //: Not used?
   void disown(vgui_tableau_sptr const &) const;
 
 protected:
@@ -103,7 +182,7 @@ private:
   int references; // reference count. starts at 0.
 };
 
-//: print some indication of what the tableau is.
+//: Print some indication of what the tableau is.
 vcl_ostream &operator<<(vcl_ostream &os, vgui_tableau_sptr const &t);
 
 #include <vgui/vgui_tableau_sptr.h>

@@ -4,9 +4,11 @@
 #ifdef __GNUC__
 #pragma interface
 #endif
+
 //:
 // \file
 // \author  fsm@robots.ox.ac.uk
+// \brief   Functions to search for tableaux in the tableau hierachy.
 
 #include <vcl_string.h>
 #include <vgui/vgui_tableau_sptr.h>

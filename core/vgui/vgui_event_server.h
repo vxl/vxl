@@ -6,6 +6,8 @@
 // \date   11 Sep 99
 // \brief  Procedural event grabbing from a tableau
 //
+//  Contains classes:  vgui_event_server
+//
 // \verbatim
 //  Modifications:
 //    11-SEP-1999 P.Pritchett - Initial version.
@@ -35,7 +37,7 @@ class vgui_event_server_interpose_tableau;
 //   using a vgui_event_server) then the gl state associated with those events 
 //   will have changed.  This means for a draw_overlay event we would end up 
 //   drawing into the wrong buffer. For a mouse event we may not be able to get 
-//   the position in the image using the projection_inspector (if e.g. the image 
+//   the position in the image using the projection_inspector (if e.g. the image
 //   was zoomed) since all the gl matrices would have been reset - kym.
 class vgui_event_server {
 public:

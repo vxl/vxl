@@ -5,6 +5,7 @@
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   25 Nov 99
 // \brief  Tableau where functions passed in are called for various events.
+//         Contains classes: vgui_function_tableau
 //
 // \verbatim
 //  Modifications:
@@ -21,6 +22,9 @@
 #include "dll.h"
 
 //:  Tableau where functions passed in are called for various events.
+//
+//   For example, you can pass in my_draw_function() to draw() and
+//   it will be called every time a draw event occurs in this tableau.
 class vgui_function_tableau : public vgui_tableau {
 public:
   typedef bool (*function)(const vgui_event&);

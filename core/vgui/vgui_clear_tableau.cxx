@@ -2,11 +2,12 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   11 Nov 99
-// See vgui_clear_tableau.h for a description of this class.
+// \brief  See vgui_clear_tableau.h for a description of this class.
 
 #include "vgui_clear_tableau.h"
 #include <vgui/vgui_event.h>

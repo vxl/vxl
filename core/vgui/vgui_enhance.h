@@ -5,6 +5,7 @@
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   16 Nov 99
 // \brief  Magnify or display another tableau in a region around the mouse pointer.
+//  Contains classes: vgui_enhance
 //
 // \verbatim
 //  Modifications:
@@ -25,7 +26,8 @@
 class vgui_event;
 
 //: Magnify or display another tableau in a region around the mouse pointer.
-//  This happens when the left mouse button is pressed down.
+//  This happens when the user presses the left mouse button inside the 
+//  rendering area.
 //  Use '[' and ']' to change size of region around the mouse pointer.
 //  Use '{' and '}' to change the magnification.
 class vgui_enhance : public vgui_tableau {

@@ -1,3 +1,8 @@
+// This is ./oxl/vgui/vgui_error_dialog.cxx
+
+//:
+// \file
+// \author VGG, Oxford University
 
 #include "vgui_error_dialog.h"
 

@@ -1,13 +1,10 @@
-#ifndef vgui_tag_h_
-#define vgui_tag_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
-// .NAME vgui_tag
-// .INCLUDE vgui/vgui_tag.h
-// .FILE vgui_tag.cxx
+// This is ./oxl/vgui/vgui_tag.h
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+// \brief  Allow clients to register 'tag functions' which are called later.
 //
-// .SECTION Description
 // Purpose: allow clients to register 'tag functions' which will be
 // called some time later.
 //
@@ -32,18 +29,27 @@
 // 'vgui_blah_tag_function' is registered. There is no instance of
 // vgui_blah created until that tag function is called by vgui::init().
 //
-// @author fsm@robots.ox.ac.uk
+// \verbatim
+//  Modifications:
+//    07-AUG-2002 K.Y.McGaul - Changed to Doxygen style comments.
+// \endverbatim
 
-// this is the type of a tag function.
+#ifndef vgui_tag_h_
+#define vgui_tag_h_
+#ifdef __GNUC__
+#pragma interface
+#endif
+
+//: The type of a tag function.
 typedef int (*vgui_tag_function)(void);
 
-// registers a tag function. returns 0.
-int                      vgui_tag_add(vgui_tag_function, char const *);
+//: Registers a tag function - returns 0.
+int vgui_tag_add(vgui_tag_function, char const *);
 
-// returns null-terminated list of tag functions.
+//: Returns null-terminated list of tag functions.
 vgui_tag_function const *vgui_tag_list();
 
-// call all registered tag functions and remove them from the list.
+//: Call all registered tag functions and remove them from the list.
 void                     vgui_tag_call();
 
 // Easy macro. It will provide two external symbols

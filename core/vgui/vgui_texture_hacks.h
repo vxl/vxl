@@ -1,13 +1,16 @@
+// This is ./oxl/vgui/vgui_texture_hacks.h
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+// \brief  Ask fsm@robots.ox.ac.uk about these hacks.
+
+
 #ifndef vgui_texture_hacks_h_
 #define vgui_texture_hacks_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// .NAME vgui_texture_hacks
-// .INCLUDE vgui/vgui_texture_hacks.h
-// .FILE vgui_texture_hacks.cxx
-//
-// @author fsm@robots.ox.ac.uk
 
 #include <vgui/vgui_gl.h>
 

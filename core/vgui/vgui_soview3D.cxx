@@ -2,11 +2,12 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   24 Mar 99
-//-----------------------------------------------------------------------------
+// \brief  See vgui_soview3D.h for a description of this file.
 
 #include "vgui_soview3D.h"
 #include <vcl_iostream.h>

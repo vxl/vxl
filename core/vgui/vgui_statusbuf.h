@@ -1,16 +1,22 @@
+// This is ./oxl/vgui/vgui_statusbuf.h
 #ifndef vgui_statusbuf_h_
 #define vgui_statusbuf_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
+
 //:
 // \file
-// \brief Undocumented class FIXME
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date   21 Nov 99
+// \brief  Statusbar buffer?
 //
-// \author
-//              Philip C. Pritchett, 21 Nov 99
-//              Robotics Research Group, University of Oxford
-//-----------------------------------------------------------------------------
+//  Contains classes: vgui_statusbuf
+//        
+// \verbatim
+//  Modifications:
+//    21-Nov-1999 P.Pritchett - Initial version.
+// \endverbatim
 
 #include <vcl_streambuf.h>
 class vgui_statusbar;

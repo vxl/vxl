@@ -1,13 +1,19 @@
 // This is oxl/vgui/vgui_text_tableau.cxx
-#ifdef __GNUC__
-#pragma implementation
-#endif
+
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
-// \date 19 Oct 99
-// See vgui_text_tableau.h for a description of this file.
-//-----------------------------------------------------------------------------
+// \date   19 Oct 99
+// \brief  See vgui_text_tableau.h for a description of this file.
+// 
+// \verbatim
+//  Modifications:
+//    19-OCT-1999 P.Pritchett - Initial version.
+// \endverbatim
+
+#ifdef __GNUC__
+#pragma implementation
+#endif
 
 #include "vgui_text_tableau.h"
 #include <vgui/vgui_text_put.h>
@@ -99,7 +105,7 @@ void vgui_text_tableau::remove(int handle) {
   assert((unsigned int)handle < size());
   xs[handle] = -1;
 
-  // KYM - don't do this because it changes handles of values remaining in list:
+  // kym - don't do this because it changes handles of values remaining in list:
   //xs.erase(xs.begin() + handle);
   //ys.erase(ys.begin() + handle);
   //ts.erase(ts.begin() + handle);

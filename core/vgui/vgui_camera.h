@@ -1,4 +1,9 @@
 // This is ./oxl/vgui/vgui_camera.h
+#ifndef vgui_camera_h_
+#define vgui_camera_h_
+#ifdef __GNUC__
+#pragma interface
+#endif
 
 //:
 // \file
@@ -6,17 +11,14 @@
 // \date   03 Nov 99
 // \brief  Allows 3D models to project into a GL context given a camera projection matrix.
 //
+// Contains classes: vgui_camera
+// 
 // \verbatim
 //  Modifications
 //    991103 Geoff Initial version.
 //    26-APR-2002  K.Y.McGaul - Converted to doxygen style comments.
 // \endverbatim
 //
-#ifndef vgui_camera_h_
-#define vgui_camera_h_
-#ifdef __GNUC__
-#pragma interface
-#endif
 
 class PMatrix;
 
@@ -30,7 +32,10 @@ class PMatrix;
 //  appropriately.
 class vgui_camera {
 public:
+  //: Constructor - create a camera with a default projection matrix.
   vgui_camera();
+
+  //: Constructor - create a camera with the given projection matrix.
   vgui_camera( const vnl_matrix<double> &P);
 
   //: Set the projection matrix to the given matrix.

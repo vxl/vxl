@@ -2,11 +2,12 @@
 #ifdef __GNUC__
 #pragma implementation
 #endif
+
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   12 Oct 99
-//-----------------------------------------------------------------------------
+// \brief  See vgui_tview.h for a description of this file.
 
 #include <vcl_string.h>
 #include "vgui_tview.h"

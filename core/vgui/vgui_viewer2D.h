@@ -1,27 +1,22 @@
+// This is ./oxl/vgui/vgui_viewer2D.h
+
 #ifndef vgui_viewer2D_h_
 #define vgui_viewer2D_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
+//:
+// \file
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date   14 Sep 99
+// \brief  Tableau with functions to view 2D objects (eg, zoom, drag, centre).
+//         Contains classes: vgui_viewer2D vgui_viewer2D_new
 //
-// .NAME vgui_viewer2D - Undocumented class FIXME
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/vgui_viewer2D.h
-// .FILE vgui_viewer2D.cxx
-//
-// .SECTION Description
-//
-// vgui_viewer2D is a class that Phil hasnt documented properly. FIXME
-//
-// .SECTION Author
-//              Philip C. Pritchett, 14 Sep 99
-//              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications
-//              23-AUG-2000 Marko Bacic, Oxford RRG -- Added support for scroll bars
-//
-//-----------------------------------------------------------------------------
+// \verbatim
+//  Modifications
+//    23-AUG-2000 Marko Bacic, Oxford RRG -- Added support for scroll bars
+//    07-Aug-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
+// \endverbatim
 
 #include <vgui/vgui_drag_mixin.h>
 #include <vgui/vgui_wrapper_tableau.h>
@@ -29,19 +24,34 @@
 
 #include "dll.h"
 
+//: Tableau with functions to view 2D objects (eg, zoom, drag, centre).
 class vgui_viewer2D : public vgui_wrapper_tableau, public vgui_drag_mixin {
 public:
+  //: Constructor - don't use this, use vgui_viewer2D_new.
+  //  Takes a child tableau as parameter.
   vgui_viewer2D(vgui_tableau_sptr const&);
 
-  // vgui_tableau methods
+  //: Handle all events sent to this tableau.
   virtual bool handle(const vgui_event& event);
+
+  //: Returns the type of this tableau ('vgui_viewer2D').
   virtual vcl_string type_name() const;
 
+  //: Set the correct projection matrix for GL (take account of zoom, drag etc).
   void setup_gl_matrices();
 
+  //: Modify the token to zoom in by the given factor, about the given (x,y).
+  //  (x, y) are in viewport coords.
   void zoomin(float zoom_factor, int x, int y);
+
+  //: Modify the token to zoom out by the given factor, about the given (x,y).
+  //  (x, y) are in viewport coords.
   void zoomout(float zoom_factor, int x, int y);
+
+  //: Centre the image with the given width and height inside the tableau.
   void center_image(int w, int h);
+
+  //: Find the image (if it exists) and center it inside the tableau.
   void center_event();
 
   // drag mixin methods
@@ -82,6 +92,7 @@ protected:
  ~vgui_viewer2D();
 };
 
+//: Create a smart-pointer to a vgui_viewer2D tableau.
 struct vgui_viewer2D_new : public vgui_viewer2D_sptr {
   vgui_viewer2D_new(vgui_tableau_sptr const& that) :
     vgui_viewer2D_sptr(new vgui_viewer2D(that)) { }

@@ -1,27 +1,17 @@
+// This is ./oxl/vgui/vgui_image_blender.h
 #ifndef vgui_image_blender_h_
 #define vgui_image_blender_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-// 
-// .NAME vgui_image_blender - Undocumented class FIXME
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/vgui_image_blender.h
-// .FILE vgui_image_blender.cxx
+
+//:
+// \file
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date   27 Oct 99
+// \brief  Tableau to blend two images.
 //
-// .SECTION Description:
-//
-// vgui_image_blender is a class that Phil hasnt documented properly. FIXME
-//
-// .SECTION Author:
-//              Philip C. Pritchett, 27 Oct 99
-//              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications:
-//     <none yet>
-//
-//-----------------------------------------------------------------------------
+//  Contains classes:  vgui_image_blender
 
 #include <vgui/vgui_tableau.h>
 class vgui_image_renderer;

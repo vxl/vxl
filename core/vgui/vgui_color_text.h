@@ -5,9 +5,12 @@
 // \author K.Y.McGaul
 // \brief  Converts a string naming a colour to the RGB values.
 //  e.g. "blue" is converted to "0.000 0.000 1.000".
+//
+// \verbatim
 //  Modifications:
 //    K.Y.McGaul     25-FEB-2000   Initial version
 //    26-APR-2002  K.Y.McGaul - Added doxygen style comments.
+// \endverbatim
 
 #ifndef vgui_color_text_h_
 #define vgui_color_text_h_

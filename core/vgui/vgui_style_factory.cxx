@@ -1,13 +1,20 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./oxl/vgui/vgui_style_factory.cxx
+
+//:
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   18 Oct 99
+// \brief  See vgui_style_factory.h for a description of this file.
+//
+// \verbatim
+//  Modifications:
+//    18-OCT-1999 P.Pritchett - Initial version.
+// \endverbatim
+
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui_style_factory
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 18 Oct 99
-//
-//-----------------------------------------------------------------------------
+
 
 #include "vgui_style_factory.h"
 

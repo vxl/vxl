@@ -5,6 +5,7 @@
 // \file
 // \author fsm@robots.ox.ac.uk
 // \brief  Provides an abstract interface to an OpenGL rendering state.
+//         Contains classes: vgui_adaptor.
 //
 // \verbatim
 // Modifications
@@ -34,8 +35,8 @@ class vgui_adaptor_tableau;
 
 //: Provides an abstract interface to an OpenGL rendering state.
 //
-// Class adaptor. Provides an abstract interface to an OpenGL rendering state
-// (context) producing events. Events from adaptor (eg. when someone presses a
+// Provides an abstract interface to an OpenGL rendering state (context)
+// producing events. Events from adaptor (eg. when someone presses a
 // mouse button over the window) will be dispatched to the associated
 // vgui_tableau in a vgui_event structure. Draw requests will be dispatched
 // to the tableau as vgui_DRAW and vgui_DRAW_OVERLAY events.

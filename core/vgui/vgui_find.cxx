@@ -1,11 +1,14 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
+// This is ./oxl/vgui/vgui_find.cxx
 #ifdef __GNUC__
 #pragma implementation
 #endif
-#include "vgui_find.h"
 
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+// \brief  See vgui_find.h for a description of this file.
+
+#include "vgui_find.h"
 #include <vgui/vgui_tableau.h>
 
 // Does a depth-first search for the first tableau whose type_name()

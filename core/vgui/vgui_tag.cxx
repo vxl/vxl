@@ -1,6 +1,11 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
+// This is ./oxl/vgui/vgui_tag.cxx
+
+//:
+// \file
+// \author fsm@robots.ox.ac.uk
+// \brief  See vgui_tag.h for a description of this file.
+
+
 #ifdef __GNUC__
 #pragma implementation
 #endif

@@ -1,26 +1,23 @@
+// This is ./oxl/vgui/vgui_tview.h
 #ifndef vgui_tview_h_
 #define vgui_tview_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
+
+//:
+// \file
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date   12 Oct 99
+// \brief  Tableau
+// 
+//  Contains classes:  vgui_tview  vgui_tview_new
 //
-// .NAME vgui_tview - Undocumented class FIXME
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/vgui_tview.h
-// .FILE vgui_tview.cxx
-//
-// .SECTION Description
-//
-// vgui_tview is a class that Phil hasnt documented properly. FIXME
-//
-// .SECTION Author
-//              Philip C. Pritchett, 12 Oct 99
-//              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications
-//
-//-----------------------------------------------------------------------------
+// \verbatim
+//  Modification:
+//    07-Aug-2002 K.Y.McGaul - Change to Doxygen style comments.
+// \endverbatim
+
 
 #include "vgui_tview_sptr.h"
 #include <vcl_vector.h>
@@ -29,6 +26,7 @@
 class vgui_tview : public vgui_wrapper_tableau
 {
 public:
+  //: Constructor - don't use this, use vgui_tview_new.
   vgui_tview(vgui_tableau_sptr const&);
 
   bool handle(const vgui_event &);
@@ -62,6 +60,7 @@ protected:
  ~vgui_tview();
 };
 
+//: Create a smart-pointer to a vgui_tview tableau.
 struct vgui_tview_new : public vgui_tview_sptr {
   typedef vgui_tview_sptr base;
   vgui_tview_new(vgui_tableau_sptr const& arg1000) : base(new vgui_tview(arg1000)) { }

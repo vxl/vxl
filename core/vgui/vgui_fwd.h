@@ -1,8 +1,11 @@
+// This is ./oxl/vgui/vgui_fwd.h
 #ifndef vgui_fwd_h_
 #define vgui_fwd_h_
-/*
-  fsm@robots.ox.ac.uk
-*/
+
+//:
+// \file
+// \author  fsm@robots.ox.ac.uk
+// \brief   Forward declaration of classes in vgui.
 
 class vgui_tableau;
 class vgui_event;

@@ -11,6 +11,8 @@
 // \date     08 Aug 2000
 // \brief    Status bar for the main window of the application.
 //
+//  Contains classes: vgui_mfc_statusbar
+//
 // \verbatim
 //  Modifications:
 //     08-AUG-2000 Marko Bacic - Initial version.

@@ -1,33 +1,23 @@
+// This is ./oxl/vgui/vgui_soview3D.h
 #ifndef vgui_soview3D_h_
 #define vgui_soview3D_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
+
+//:
+// \file
+// \author Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date   24 Mar 99
+// \brief  3-dimensional geometric objects.
 // 
-// .NAME vgui_soview3D - Undocumented class FIXME
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/vgui_soview3D.h
-// .FILE vgui_soview3D.cxx
+// Contains classes:  vgui_soview3D  vgui_point3D  vgui_linseg3D
+// Notes:  We use floats instead of doubles as size is a speed issue (sic.)
 //
-// .SECTION Description
-//
-// vgui_soview3D is a class that Phil hasnt documented properly. FIXME
-//
-//
-// Notes:
-//   We use floats instead of doubles as size is a speed issue (sic.)
-//
-// .SECTION Author
-//              Philip C. Pritchett, 24 Mar 99
-//              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications
-//
-//-----------------------------------------------------------------------------
 
 #include "vgui_soview.h"
 
+//: 3-dimensional geometric objects.
 class vgui_soview3D : public vgui_soview {
 public:
   vgui_soview3D();
@@ -35,6 +25,7 @@ public:
 };
 
 
+//: 3-dimensional point.
 class vgui_point3D : public vgui_soview3D {
 public:
   vgui_point3D() {};
@@ -48,7 +39,7 @@ public:
 };
 
 
-
+//: 3-dimensional line segment.
 class vgui_lineseg3D : public vgui_soview3D {
 public:
   vgui_lineseg3D() {};

@@ -1,11 +1,16 @@
+// This is ./oxl/vgui/vgui_toolkit.h
 #ifndef vgui_toolkit_h_
 #define vgui_toolkit_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
+
 //:
 // \file
 // \author fsm@robots.ox.ac.uk
+// \brief  Base class for toolkit implementations.
+//
+//  Contains classes:  vgui_toolkit
 
 #include "dll.h"
 #include <vcl_string.h>

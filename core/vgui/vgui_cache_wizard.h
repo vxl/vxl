@@ -6,6 +6,8 @@
 // \date   17 Aug 2000
 // \brief Provides support for caching of large images
 //
+//  Contains classes: vgui_cache_wizard
+//
 // \verbatim
 //  Modifications
 //   17-AUG-2000 Initial version. Marko Bacic,Oxford RRG
@@ -49,10 +51,12 @@ public:
     {return quadrant_height_;}
   //: Get the class instance
   static vgui_cache_wizard *Instance();
-  //: Constructor. Set the image quadrant size here.
+  //: Constructor - set the image quadrant size here.
   vgui_cache_wizard(int quadrant_width, //= DEFAULT_QUADRANT_WIDTH,
                     int quadrant_height); //= DEFAULT_QUADRANT_HEIGHT);
+  //: Destructor.
   ~vgui_cache_wizard();
+
 private:
   //: Hold a vector of images that have been loaded
   vcl_vector <wizard_image *> images_;

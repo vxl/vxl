@@ -1,11 +1,14 @@
-#ifdef __GNUC__
-#pragma implementation
-#endif
+// This is ./oxl/vgui/vgui.cxx
+
 //:
 //  \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   30 Sep 99
-//-----------------------------------------------------------------------------
+// \brief  See vgui.h for a description of this file.
+
+#ifdef __GNUC__
+#pragma implementation
+#endif
 
 #include "vgui.h"
 #include <vcl_cassert.h>

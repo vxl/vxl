@@ -1,19 +1,20 @@
 // This is ./oxl/vgui/impl/mfc/vgui_mfc_window.cxx
-#ifdef __GNUC__
-#pragma implementation
-#endif
 
 //:
-//  \file
-// See vgui_mfc_window.h for a description of this file.
-//
+// \file
 // \author  Marko Bacic, Oxford RRG
 // \date    24 July 2000
+// \brief   See vgui_mfc_window.h for a description of this file.
+//
 // \verbatim
 //  Modifications:
 //    20-JUL-2001  K.Y.McGaul  Added init_window function carry out common
 //                             functionality from all constructors.
 // \endverbatim
+
+#ifdef __GNUC__
+#pragma implementation
+#endif
 
 #include "vgui_mfc_window.h"
 #include "vgui_mfc_adaptor.h"

@@ -1,22 +1,29 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./oxl/vgui/vgui_drag_tableau.cxx
+
+//:
+// \file
+// \author Andrew W. Fitzgibbon, Oxford RRG
+// \date   11 Jan 00
+// \brief  See vgui_drag_tableau.h for a description of this file.
+//
+// \verbatim
+//  Modifications:
+//    11-JAN-2000 A.Fitzgibbon - Initial version
+// \endverbatim
+
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui_drag_tableau
-// Author: Andrew W. Fitzgibbon, Oxford RRG
-// Created: 11 Jan 00
-//
-//-----------------------------------------------------------------------------
+
 
 #include "vgui_drag_tableau.h"
 
-// Default ctor
+//: Default ctor
 vgui_drag_tableau::vgui_drag_tableau()
 {
 }
 
-// Destructor
+//: Destructor
 vgui_drag_tableau::~vgui_drag_tableau()
 {
 }

@@ -5,6 +5,8 @@
 // \author K.Y.McGaul
 // \brief  A tableau which renders its child tableaux as a rectangular grid.
 //
+//  Contains classes:  vgui_grid_tableau   vgui_grid_tableau_data
+//
 // \verbatim
 //  Modifications:
 //    K.Y.McGaul 20-JAN-2000 Initial version.
@@ -64,10 +66,11 @@ bool operator==(vgui_grid_tableau_data const &a,
 //  PageDown you can prevent users from changing the displayed tableau - this
 //  could also be useful if you want to show two vgui_deck tableau and so want
 //  the PageUp and PageDown events to pass through vgui_grid and be used by the
-//  child decks. Disabling plus and minus events gives a grid tableau of fixed size.
+//  child decks. Disabling plus and minus events gives a grid tableau of fixed 
+//  size.
 //
-//  This tableau was originally written for xcv, so look at this application to get
-//  a better idea what it does.
+//  This tableau was originally written for xcv, so look at this application 
+//  to get a better idea what it does.
 class vgui_grid_tableau : public vgui_polytab
 {
  public:
@@ -76,11 +79,14 @@ class vgui_grid_tableau : public vgui_polytab
   //: Returns the type name of the tableau (vgui_grid_tableau in this case).
   vcl_string type_name() const;
 
-  //: Constructor taking the initial number of columns and rows.
+  //: Constructor - don't use this, use vgui_grid_tableau_new.
+  //  Takes the initial number of columns and rows.
   vgui_grid_tableau(unsigned initial_columns = 1, unsigned initial_rows = 1);
-  //: Constructor for a bi-tab, taking the two tableaux as parameters.
+  //: Constructor - don't use this, use vgui_grid_tableau_new.
+  //  This creates a bi-tab, taking the two tableaux as parameters.
   vgui_grid_tableau(vgui_tableau_sptr const& l, vgui_tableau_sptr const& r);
-  //: Constructor for a tri-tab, taking the three tableau as parameters.
+  //: Constructor - don't use this, use vgui_grid_tableau_new.
+  //  This creates a tri-tab, taking the three tableau as parameters.
   vgui_grid_tableau(vgui_tableau_sptr const& l, vgui_tableau_sptr const& m, vgui_tableau_sptr const& r);
 
   //: Given the column number, returns the x coord for that column.
@@ -92,7 +98,7 @@ class vgui_grid_tableau : public vgui_polytab
   //: Get the height of each row.
   float get_h();
 
-  //: Adds a tableau to the next free space in the grid and to the end of the vcl_list of tableaux.
+  //: Adds a tableau to the next free space in the grid and the list of tableaux
   void add_next(vgui_tableau_sptr const& tab);
   //: Add (or replace the tableau at the given position with) the given tableau.
   void add_at(vgui_tableau_sptr const& tab, unsigned col_pos, unsigned row_pos);
@@ -144,9 +150,10 @@ class vgui_grid_tableau : public vgui_polytab
     set_frames_selectable(false);
   }
 
-  //: Redraw the grid of tableaux keeping each tableau in its current row and column.
+  //: Redraw the grid keeping each tableau in its current row and column.
   void layout_grid();
-  //: Redraw the grid of tableaux packing them in without gaps, filling each row from top left downwards.
+  //: Redraw the grid of tableaux packing them in without gaps. 
+  //  Fill each row from top left downwards.
   void layout_grid2();
   //: Add an empty column to the RHS of the grid.
   void add_column();
@@ -209,6 +216,7 @@ class vgui_grid_tableau : public vgui_polytab
   void deselect_current();
 };
 
+//: Create a smart pointer to a vgui_grid_tableau.
 struct vgui_grid_tableau_new : public vgui_grid_tableau_sptr {
   typedef vgui_grid_tableau_sptr base;
   vgui_grid_tableau_new(unsigned initial_columns = 1, unsigned initial_rows = 1)

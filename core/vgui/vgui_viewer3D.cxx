@@ -1,13 +1,19 @@
-//-*- c++ -*-------------------------------------------------------------------
+// This is ./oxl/vgui/vgui_viewer3D.cxx
+
+//:
+// \file
+// \author Philip C. Pritchett, RRG, University of Oxford
+// \date   14-SEP-1999
+// \brief  See vgui_viewer3D.h for a description of this file
+//
+// \verbatim
+//  Modifications:
+//    14-SEP-1999 P.Pritchett - Initial version.
+// \endverbatim
+
 #ifdef __GNUC__
 #pragma implementation
 #endif
-//
-// .NAME vgui_viewer3D
-// Author: Philip C. Pritchett, RRG, University of Oxford
-// Created: 14 Sep 99
-//
-//-----------------------------------------------------------------------------
 
 #include "vgui_viewer3D.h"
 
@@ -34,7 +40,7 @@ struct vgui_viewer3D_spin {
 
 const void * const vgui_viewer3D::SPIN_EVENT="x";
 
-
+//: Constructor - don't use this, use vgui_viewer3D_new.
 vgui_viewer3D::vgui_viewer3D(vgui_tableau_sptr const& s) :
   vgui_wrapper_tableau(s),
   c_mouse_rotate(vgui_LEFT),

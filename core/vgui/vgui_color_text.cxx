@@ -1,6 +1,14 @@
-//--------------------------------------------------------------------------------
-// .NAME           vgui_color_text
-//--------------------------------------------------------------------------------
+// This is ./oxl/vgui/vgui_color_text.cxx
+
+//:
+// \file
+// \author K.Y.McGaul
+// \date   25-FEB-2000
+//
+// \verbatim
+//  Modifications:
+//    25-FEB-2000 K.Y.McGaul - Initial version.
+// \endverbatim
 
 #include "vgui_color_text.h"
 #include <vcl_cstdio.h>
@@ -41,6 +49,7 @@ vcl_string colors[][2] =
 };
 #define NB_COLORS (sizeof(colors)/sizeof(colors[0]))
 
+//:
 vcl_string text_to_color(vcl_string txt)
 {
   vcl_string color = "";

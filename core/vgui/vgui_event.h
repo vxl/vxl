@@ -73,7 +73,7 @@ public:
   //: The adaptor from which the event came.
   vgui_adaptor *origin;
 
-  //:
+  //: If the event is a timer event, this holds the ID.
   // For an event of type vgui_TIMER, this field holds the name
   // that was given when the timer request was posted.
   int timer_id;

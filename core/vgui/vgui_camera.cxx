@@ -1,14 +1,14 @@
 // This is ./oxl/vgui/vgui_camera.cxx
+#ifdef __GNUC__
+#pragma implementation
+#endif
 
 //:
 // \file
 // \author Geoffrey Cross, Oxford RRG
 // \date   03 Nov 99
+// \brief  See vgui_camera.h for a description of this file.
 
-//-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
-#pragma implementation
-#endif
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>

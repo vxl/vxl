@@ -1,15 +1,19 @@
 // This is ./oxl/vgui/vgui_easy2D.cxx
 
-//-*- c++ -*-------------------------------------------------------------------
-#ifdef __GNUC__
-#pragma implementation
-#endif
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   24 Sep 99
+// \brief  See vgui_easy2D.h for a description of this file.
 //
-//-----------------------------------------------------------------------------
+// \verbatim
+//  Modifications:
+//    24-SEP-1999 P.Pritchett - Initial version.
+// \endverbatim
+
+#ifdef __GNUC__
+#pragma implementation
+#endif
 
 #include "vgui_easy2D.h"
 

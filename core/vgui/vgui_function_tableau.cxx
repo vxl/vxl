@@ -6,7 +6,7 @@
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   25 Nov 99
-//-----------------------------------------------------------------------------
+// \brief  See vgui_function_tableau.h for a description of this file.
 
 #include "vgui_function_tableau.h"
 #include <vgui/vgui_event.h>

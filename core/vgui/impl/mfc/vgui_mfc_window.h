@@ -5,6 +5,7 @@
 // \author  Marko Bacic, Oxford RRG
 // \date    24-JUL-2000
 // \brief   The mfc implementation of vgui_window
+//          Contains classes: vgui_mfc_window.
 //
 // \verbatim
 //  Modifications:

@@ -1,42 +1,53 @@
+// This is ./oxl/vgui/vgui_style.h
+
+//:
+// \file
+// \author  Philip C. Pritchett, Robotics Research Group, University of Oxford
+// \date    18 Oct 99
+// \brief   Style (colour, line width, point radius) of a geometric object.
+//          Contains classes: vgui_style, vgui_style_equal
+//
+// \verbatim
+//  Modifications:
+//    18-OCT-1999 P.Pritchett - Initial version.
+//    07-AUG-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
+// \endverbatim
+
+
 #ifndef vgui_style_h_
 #define vgui_style_h_
 #ifdef __GNUC__
 #pragma interface
 #endif
-//
-// .NAME vgui_style - Undocumented class FIXME
-// .LIBRARY vgui
-// .HEADER vxl Package
-// .INCLUDE vgui/vgui_style.h
-// .FILE vgui_style.cxx
-//
-// .SECTION Description
-//
-// vgui_style is a class that Phil hasnt documented properly. FIXME
-//
-// .SECTION Author
-//              Philip C. Pritchett, 18 Oct 99
-//              Robotics Research Group, University of Oxford
-//
-// .SECTION Modifications
-//
-//-----------------------------------------------------------------------------
 
+
+//: Style (colour, line width, point radius) of a geometric object.
 class vgui_style {
 public:
+  //: Constructor - creates a style with default values.
   vgui_style();
+
+  //: Constructor - creates a style identical to the given style.
   vgui_style(const vgui_style& that) { *this = that; }
+
+  //: Destructor.
   ~vgui_style() { }
 
+  //: Style colour.
   float rgba[4];
+  //: Style line width.
   float line_width;
+  //: Style point radius.
   float point_size;
 };
 
+//: Finds out whether two vgui_style's are equal.
 class vgui_style_equal {
 public:
+  //: Constructor - takes one of the styles to be compared.
   vgui_style_equal(vgui_style* s1_) : s1(s1_) {}
 
+  //: Returns true if the given style is identical to the stored style.
   bool operator() (vgui_style* s2) {
     if (s1->rgba[0] == s2->rgba[0] &&
         s1->rgba[1] == s2->rgba[1] &&
@@ -47,7 +58,7 @@ public:
     }
     return false;
   }
-
+ 
   vgui_style *s1;
 };
 

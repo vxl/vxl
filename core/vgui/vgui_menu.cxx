@@ -1,6 +1,10 @@
-/*
-  fsm@robots.ox.ac.uk
-*/
+// This is ./oxl/vgui/vgui_menu.cxx
+
+//: 
+// \file
+// \author fsm@robots.ox.ac.uk
+// \brief  See vgui_menu.h for a description of this file.
+
 #include "vgui_menu.h"
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
