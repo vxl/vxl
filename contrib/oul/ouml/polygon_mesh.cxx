@@ -217,19 +217,19 @@ bool PolygonMesh::read_file(char *filename)
 PolygonMesh::DVector3D PolygonMesh::get_face_normal
 (
   int face_index,
-  int vertex_index
+  int /*vertex_index*/
 )
 {
   assert(face_index>=0);
   assert((unsigned int)face_index<face_list.size());
-  // in this version, I'm just returning the same vector for all
-  // vertices. Therefore I need to find the cross-product of two
-  // vectors lying on the plane of the polygon.
+  // in this version, I'm just returning the same vector for all vertices - TODO
+  // Therefore I need to find the cross-product of two vectors lying
+  // on the plane of the polygon.
   Polygon face = get_face(face_index);
   DVector3D v1(face[0].x()-face[1].x(), face[0].y()-face[1].y(),
-         face[0].z()-face[1].z());
+               face[0].z()-face[1].z());
   DVector3D v2(face[0].x()-face[2].x(), face[0].y()-face[2].y(),
-         face[0].z()-face[2].z());
+               face[0].z()-face[2].z());
   DVector3D cross = vnl_cross_3d(v1, v2);
   cross.normalize();
   return cross;

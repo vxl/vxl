@@ -16,10 +16,10 @@
 // This is a "dummy" operator< for complex<T>.  This function is never
 // actually called, but declaring it makes it possible to use a single
 // template implementation for test_image_resource().  - PVr
-static inline bool operator< (vcl_complex<float> const& a, vcl_complex<float> const& b) { return false; }
-static inline bool operator< (vcl_complex<double> const& a, vcl_complex<double> const& b) { return false; }
-static inline bool operator> (vcl_complex<float> const& a, vcl_complex<float> const& b) { return false; }
-static inline bool operator> (vcl_complex<double> const& a, vcl_complex<double> const& b) { return false; }
+static inline bool operator< (vcl_complex<float> const&, vcl_complex<float> const&) { return false; }
+static inline bool operator< (vcl_complex<double>const&, vcl_complex<double>const&) { return false; }
+static inline bool operator> (vcl_complex<float> const&, vcl_complex<float> const&) { return false; }
+static inline bool operator> (vcl_complex<double>const&, vcl_complex<double>const&) { return false; }
 
 template <class T>
 void test_image_resource(vcl_string type, vil_pixel_format format, T /*dummy*/)
