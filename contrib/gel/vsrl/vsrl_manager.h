@@ -46,7 +46,8 @@ class vsrl_manager : public vgui_wrapper_tableau
   void draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions, bool verts);
   void set_params();
   void draw_north_arrow();
-  void test_func();
+  void test_left_func();
+  void test_right_func();
   void region_disparity();
   vgui_soview2D_lineseg* draw_vector_at(vgl_vector_2d<float>* vec, float x, float y, float theta);
   vil1_image scale_image(vil1_memory_image_of<unsigned char> img);
@@ -54,6 +55,8 @@ class vsrl_manager : public vgui_wrapper_tableau
   vil1_image show_gradient_mag(vil1_image* im_in);
   vil1_image show_gradient_dir(vil1_memory_image_of<double> im_in);
   vil1_memory_image_of<double> make_3d();
+  float* show_correlations(int x, int y);
+  void raw_correlation();
 
  private:
   vsrl_manager(); // default constructor is private: only one instance allowed

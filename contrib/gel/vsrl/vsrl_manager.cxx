@@ -34,6 +34,7 @@
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vtol/vtol_intensity_face.h>
 #include <vepl/vepl_gradient_mag.h>
+#include <vepl/vepl_gaussian_convolution.h>
 #include <vsrl/vsrl_menus.h>
 #include <vsrl/vsrl_manager.h>
 #include <vsrl/vsrl_point_picker.h>
@@ -675,7 +676,16 @@ vsrl_manager::show_gradient_dir(vil1_memory_image_of<double> im_in)
 
 // Generic function called by menu to make testing easier
 void
-vsrl_manager::test_func()
+vsrl_manager::test_left_func()
+{
+  vil1_memory_image_of<double> img = make_3d();
+  show_gradient_dir(img);
+  return;
+}
+
+// Generic function called by menu to make testing easier
+void
+vsrl_manager::test_right_func()
 {
   vil1_memory_image_of<double> img = make_3d();
   show_gradient_dir(img);
@@ -697,6 +707,115 @@ vsrl_manager::make_3d()
   itabR_->set_image(scaled_image);  // put the image in the viewer
   this->post_redraw();
   return output.range_image_;
+}
+// This routine is to display the results of the correlations used for dense matching
+//
+
+float* vsrl_manager::show_correlations(int x, int y)
+{
+  // Don't try anything funny.
+  if (!imgL_ || !imgR_) {
+    vcl_cerr << "vsrl_manager::show_correlations() -> 2 images not loaded. Abort."
+             << vcl_endl;
+    return NULL;
+  }
+
+  // Determine which grid pane was used...
+  unsigned r=0, c=0;
+  grid_->get_last_selected_position(&c,&r);
+
+  // Make 'em pick the point in the left pane...
+  if (c!=0) {
+    vcl_cerr << "vsrl_manager::show_correlations() -> "
+             << "Please pick point in left pane. "
+             << vcl_endl;
+    return NULL;
+  }
+
+  // Setup the correlation parameters...
+
+  vsrl_image_correlation corr(imgL_, imgR_);
+  corr.set_window_width(params_->correlation_window_width);
+  corr.set_window_height(params_->correlation_window_height);
+  corr.set_correlation_range(params_->correlation_range);
+
+  // Get the correlation value at the point(s) in question
+  vgl_point_2d<float> pos;
+  pos = vpicker0_->get_point();
+  int range = params_->correlation_range;
+  float* results = new float[(2*range)+1];
+  vcl_cout << "Correlation results about point: " << x << ", " << y << vcl_endl;
+  vcl_cout << "X: Y: R:" << vcl_endl;
+  for (int xo=-range; xo<=range; xo++) {
+    results[xo+range] = corr.get_correlation(x,y,(x+xo),y);
+    vcl_cout << (x+xo) << "  " << y << "  " << results[xo+range] << vcl_endl;
+  }
+
+  e2d0_->add_point(pos.x(),pos.y());
+  e2d1_->add_point(pos.x(),pos.y());
+  e2d1_->add_line(pos.x()-range,pos.y(),pos.x()+range,pos.y());
+
+  return results;
+}
+
+void vsrl_manager::raw_correlation()
+{
+  if (!imgL_ || !imgR_) return;
+  
+  // Gaussian Smoothing (if needed)...
+  static float sig = 1.0;
+  static float cutoff = 0.01;
+  static bool smoothing = false;
+  vgui_dialog gs_dialog("Gaussian Smoothing");
+  gs_dialog.field("Sigma:",sig);
+  gs_dialog.field("Cutoff:",cutoff);
+  gs_dialog.checkbox("Perform Gaussian Smoothing",smoothing);
+  //  if (!gs_dialog.ask()) return;
+  if (smoothing) {
+    vil1_image left = vepl_gaussian_convolution(imgL_,sig,cutoff);
+    vil1_image right = vepl_gaussian_convolution(imgR_,sig,cutoff);
+    imgL_=left;
+    imgR_=right;
+  }
+  itabL_->set_image(imgL_);
+  itabR_->set_image(imgR_);
+
+  // Set up for doing the correlations...
+  vsrl_image_correlation i_corr(imgL_,imgR_ );
+  i_corr.set_correlation_range(params_->correlation_range);
+  i_corr.set_window_width(params_->correlation_window_width);
+  i_corr.set_window_height(params_->correlation_window_height);
+
+  // Get an appropriately sized image buffer into which to write results...
+  vil1_memory_image_of<unsigned char> disp(imgL_.width(),imgL_.height());
+
+  int range = params_->correlation_range;
+  vcl_cout << vcl_endl;
+  for (int y=0; y<imgL_.rows(); y++) {
+    vcl_cout << "\rRow: " << y;
+    for (int x=0; x<imgL_.cols(); x++) {
+      float result=0;
+      float max=-1e10;
+      // when the disparities are written to the buffer, they are offset by "range"
+      // to keep them positive.
+      disp(x,y) = range; // default value (i.e. disparity=0+offset)
+      for (int i=-range; i<=range;i++) {
+        // get the values of the correlation of the pixel in the left
+        // image with several pixels in the right image.
+        result = i_corr.get_correlation(x,y,x+i,y);
+        if (result > max) {
+          max = result; // if we get a new peak, update the max value...
+          disp(x,y) = i+range; // ...and put the new disparity in the disparity buffer
+        }
+      }
+    }
+  }
+  vcl_cout << vcl_endl;
+  disp_img_ = disp;
+  vil1_image scaled_image = scale_image(disp);
+  dimg_tab_->set_image(scaled_image);
+  this->post_redraw();
+  return;
 }
 
 void vsrl_manager::region_disparity()

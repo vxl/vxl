@@ -22,7 +22,10 @@ class vsrl_menus
   static void find_regions_callback();
   static void set_params_callback();
   static void draw_north_callback();
-  static void test_func_callback();
+  static void test_left_func_callback();
+  static void test_right_func_callback();
+  static void make_3d_callback();
+  static void raw_correlation_callback();
   static vgui_menu get_menus();
  private:
   vsrl_menus(){};

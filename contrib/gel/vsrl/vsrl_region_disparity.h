@@ -40,12 +40,12 @@ class vsrl_region_disparity
   void SetDisparityImage(vil1_memory_image_of<unsigned char>* di) {d_img_ = di;}
   vcl_vector<vtol_intensity_face_sptr>* GetIFRegions() {return if_regions_;}
   vcl_vector<vdgl_digital_region*>* GetDigitalRegions() {return digi_regions_;}
-  void SetRegions(vcl_vector<vtol_intensity_face_sptr>* regs);
-  void SetRegions(vcl_vector<vdgl_digital_region*>* regs);
+  void* SetRegions(vcl_vector<vtol_intensity_face_sptr>* regs);
+  void* SetRegions(vcl_vector<vdgl_digital_region*>* regs);
   vil1_memory_image_of<double>* GetRegionDisparities() {return reg_disp_img_;}
 
  private:
-  void init();
+  void* init();
   vil1_image* l_img_; // Left image
   vil1_image* r_img_; // Right image
   vil1_memory_image_of<unsigned char>* d_img_; // Disparity image

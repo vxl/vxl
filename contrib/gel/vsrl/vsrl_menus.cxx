@@ -73,9 +73,26 @@ void vsrl_menus::draw_north_callback()
   vsrl_manager::instance()->draw_north_arrow();
 }
 
-void vsrl_menus::test_func_callback()
+void vsrl_menus::test_left_func_callback()
 {
-  vsrl_manager::instance()->test_func();
+  vsrl_manager::instance()->test_left_func();
+}
+
+void vsrl_menus::test_right_func_callback()
+{
+  vsrl_manager::instance()->test_right_func();
+}
+
+void vsrl_menus::make_3d_callback()
+{
+  vsrl_manager::instance()->make_3d();
+  return;
+}
+
+void vsrl_menus::raw_correlation_callback()
+{
+  vsrl_manager::instance()->raw_correlation();
+  return;
 }
 
 
@@ -99,9 +116,12 @@ vgui_menu vsrl_menus::get_menus()
   menuops.add("Clear all 2D objects", clear_all_callback, (vgui_key)'x', vgui_CTRL);
   menuops.add("Set Dense Matching Parameters...", set_params_callback);
   menuops.add("Perform Dense Matching", do_dense_matching_callback);
+  menuops.add("Make 3D from disparity map", make_3d_callback);
   menuops.add("Draw North Arrow", draw_north_callback);
-  menuops.add("Test Function", test_func_callback);
   menuops.add("Region Segmentation...", find_regions_callback);
+  menuops.add("Raw Correlation", raw_correlation_callback);
+  menuops.add("Test Function (Left)", test_left_func_callback);
+  menuops.add("Test Function (Right)", test_right_func_callback);
 
   // Main menu bar
   menubar.add("File", menufile);
