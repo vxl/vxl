@@ -1,4 +1,3 @@
-#include <vcl_iostream.h>
 #include <testlib/testlib_test.h>
 #include <vil/algo/vil_region_finder.h>
 #include <vil/vil_image_view.h>
@@ -44,7 +43,6 @@ test_algo_region_finder()
     find2.same_int_region( 3, 2, ri, rj );
     testlib_test_perform( ri.size() == 8 && rj.size() == 8 );
   }
-
 }
 
 TESTMAIN( test_algo_region_finder );
