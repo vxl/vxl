@@ -1,5 +1,6 @@
-#include <vtol/vtol_zero_chain_2d.h>
+#include "vtol_zero_chain_2d.h"
 
+#include <vcl/vcl_cassert.h>
 #include <vtol/vtol_macros_2d.h>
 #include <vtol/vtol_list_functions_2d.h>
 #include <vtol/vtol_edge_2d.h>

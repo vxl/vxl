@@ -1,8 +1,10 @@
-#include <vtol/vtol_one_chain_2d.h>
+#include "vtol_one_chain_2d.h"
+
+#include <vcl/vcl_cassert.h>
+#include <vcl/vcl_algorithm.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_macros_2d.h>
 #include <vtol/vtol_list_functions_2d.h>
-#include <vcl/vcl_algorithm.h>
 
 vtol_edge_2d *vtol_one_chain_2d::edge(int i) const
 {
