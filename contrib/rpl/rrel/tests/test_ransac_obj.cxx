@@ -1,4 +1,5 @@
 // This is rpl/rrel/tests/test_ransac_obj.cxx
+#include <vnl/vnl_fwd.h> // Leave this hack here to avoid a MSVC internal compiler error.
 #include <vcl_vector.h>
 #include <testlib/testlib_test.h>
 
