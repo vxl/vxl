@@ -61,7 +61,7 @@ void edgel_regions::cache_bad_verts(CoolArrayP<Vertex*>& bad_verts)
 }
 #endif
 
-//Print the region label array
+//: Print the region label array
 void sdet_edgel_regions::print_region_array()
 {
   vcl_cout << vcl_endl << vcl_endl;
@@ -82,7 +82,7 @@ void sdet_edgel_regions::print_region_array()
   vcl_cout << vcl_endl << vcl_endl;
 }
 
-//Print the contents of the forward eqivalence index
+//: Print the contents of the forward equivalence index
 void sdet_edgel_regions::print_region_equivalence()
 {
   vcl_cout << "\nLabel Equivalence:\n"
@@ -105,7 +105,7 @@ void sdet_edgel_regions::print_region_equivalence()
 }
 
 //
-//Print the contents of the reverse eqivalence index
+//: Print the contents of the reverse equivalence index
 void sdet_edgel_regions::print_reverse_region_equivalence()
 {
   vcl_cout << "\nReverse Label Equivalence:\n"
@@ -128,7 +128,7 @@ void sdet_edgel_regions::print_reverse_region_equivalence()
 }
 
 //
-//Print the reduced equivalence relation
+//: Print the reduced equivalence relation
 void sdet_edgel_regions::print_base_equivalence()
 {
   vcl_cout << "\nBase Label Equivalence:\n"
@@ -139,7 +139,7 @@ void sdet_edgel_regions::print_base_equivalence()
              << this->BaseLabel(i) << vcl_endl;
 }
 
-//Print the fitted intensity data for all faces
+//: Print the fitted intensity data for all faces
 void sdet_edgel_regions::print_intensity_data()
 {
   for (vcl_vector<vdgl_intensity_face_sptr>::iterator fit =faces_->begin();
@@ -153,8 +153,8 @@ void sdet_edgel_regions::print_intensity_data()
 
 //--------------------------------------------------------------
 //: The region array can be offset from the corner of the ROI.
-//    The following two methods transform from the ROI coordinate
-//    system to the region label array coordinate system
+//  The following two methods transform from the ROI coordinate
+//  system to the region label array coordinate system
 unsigned int sdet_edgel_regions::X(unsigned int x)
 {
   return x-xo_;
@@ -367,7 +367,7 @@ compute_edgel_regions(vcl_vector<vtol_edge_2d_sptr>& sgrp,
 
 
 //----------------------------------------------------------
-//: assign eqivalence of region label b to region label a
+//: assign equivalence of region label b to region label a
 //
 bool sdet_edgel_regions::InsertRegionEquivalence(unsigned int label_b,
                                                  unsigned int label_a)
@@ -489,7 +489,7 @@ merge_equivalence(vcl_map<unsigned int, vcl_vector<unsigned int>* >& tab,
         {
           if ((*array)[j] == l) found = true;
         }
-      //If lable l is not already there then add it
+      //If label l is not already there then add it
       if (!found)
         {
           array->push_back(l);
@@ -501,8 +501,8 @@ merge_equivalence(vcl_map<unsigned int, vcl_vector<unsigned int>* >& tab,
 
 //----------------------------------------------------------------
 //: Find the next label not accounted for in the current equivalence set.
-//    The set of labels is searched to find a label larger than label, but
-//    not in the set, labels.
+//  The set of labels is searched to find a label larger than label, but
+//  not in the set, labels.
 bool sdet_edgel_regions::get_next_label(vcl_vector<unsigned int>* labels,
                                         unsigned int& label)
 {
