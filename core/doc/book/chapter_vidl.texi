@@ -63,38 +63,17 @@ called the @emph{codec}, which stands for coder/decoder.  The key tasks of the
 codec are to load, save and probe a video file.  The probe detects if the format
 of a given file corresponds to any of the available codecs.
 
-In order to access a given file format it is necessary to register the
-corresponding codec.  The codecs are registered in the user's main program
-as in the following example:
-@example
-#ifdef HAS_MPEG
-# include <vidl/vidl_mpegcodec.h>
-#endif
+The codecs are automatically registered at compile time.  There is no need
+to explicitly register codecs as there was in the past.  All codecs that are
+compiled will be registered. 
 
-#ifdef VCL_WIN32
-#include <vidl/vidl_avicodec.h>
-#endif
-
-int main(int argc, char** argv)
-@{
-  // Register video codecs
-#ifdef VCL_WIN32
-  vidl_io::register_codec(new vidl_avicodec);
-#endif
-
-#ifdef HAS_MPEG
-  vidl_io::register_codec(new vidl_mpegcodec);
-#endif
-
-// rest of main program
-   ...
-@}
-@end example
-The ugly conditional compilation illustrates the current state of affairs in
-dealing with video across platforms.  It is difficult to find portable codecs
-that are open source code for the popular video formats. We are working on
-an MPEG codec (the current implementation doesn't read the header information)
-that will work on both unix and windows.
+It is difficult to find portable codecs that are open source code for the popular 
+video formats.  We are working on an MPEG codec (the current implementation 
+doesn't read the header information) that will work on both unix and windows.  
+Two AVI codecs are also available.  One uses native windows dlls for handling AVI 
+files and compiles in windows.  The other uses the open source avifile library
+and compiles in linux.  Unfortunately, the avifile library also uses the windows 
+dlls and therefore is only available on x86 machines.
 
 @section File I/O
 As we have already seen the @code{vidl} library supports reading and writing
