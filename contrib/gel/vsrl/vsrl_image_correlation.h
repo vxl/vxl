@@ -1,12 +1,8 @@
+// This is gel/vsrl/vsrl_image_correlation.h
 #ifndef vsrl_image_correlation_h
 #define vsrl_image_correlation_h
 //:
 // \file
-
-#include <vcl_cmath.h>
-#include <vcl_cstddef.h>
-#include <vcl_cstdio.h>
-#include <vcl_cstdlib.h>
 
 #include <vil/vil_byte.h>
 #include <vil/vil_memory_image_of.h>
