@@ -7,7 +7,7 @@
 # include <vcl/emulation/vcl_queue.h>
 
 #elif defined(VCL_GCC)
-# include_next <queue.h>
+# include <stack.h>
 # define vcl_queue queue
 
 #else
