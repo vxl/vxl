@@ -278,6 +278,9 @@ SOURCE=.\mil_scale_pyramid_builder_2d.cxx
 # Begin Source File
 SOURCE=.\mil_normalise_image_2d.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\mil_add_all_loaders.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -379,4 +382,3 @@ SOURCE=.\mil_wrappers.h
 # End Group
 # End Target
 # End Project
-

@@ -236,6 +236,9 @@ SOURCE=.\pdf1d_weighted_epanech_kernel_sampler.cxx
 # Begin Source File
 SOURCE=.\pdf1d_weighted_kernel_pdf.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\pdf1d_add_all_loaders.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
