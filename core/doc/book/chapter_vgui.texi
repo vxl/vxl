@@ -1599,12 +1599,14 @@ text unless you have compiled with GLUT.
 
 @end multitable
 @section Advanced Topic: Image Display Range
-Prior to Jan 2005, image display in @code{vgui_iamge_tableau} was
+Prior to Jan 2005, image display in @code{vgui_image_tableau} was
 limited to 256 (@code{vxl_byte}) levels per pixel component. Images
 with pixel data types having a larger dynamic range were clamped to
-the range of [0 255]. The @code{vgui_iamge_tableau} interface now has the method,
+the range of [0 255]. The @code{vgui_image_tableau} interface now has the method,
 @example
-@cartouche void set_mapping(vgui_range_map_params_sptr const& rmp)@end cartouche
+@cartouche 
+void set_mapping(vgui_range_map_params_sptr const& rmp)
+@end cartouche
 @end example
 which defines how images with a dynamic range larger than one byte are
 to be displayed. If the pointer @code{rmp} is null, then the previous vgui display process is carried out as the default, otherwise range mapping is invoked.
