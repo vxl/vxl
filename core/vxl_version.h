@@ -28,7 +28,7 @@
 // Formats are year=CCYY, month=MM, day=DD
 #define VXL_VERSION_DATE_YEAR 2004
 #define VXL_VERSION_DATE_MONTH 10
-#define VXL_VERSION_DATE_DAY 23
+#define VXL_VERSION_DATE_DAY 24
 
 //: This can either be "RELEASE" or "CVS"
 #define VXL_SOURCE "CVS"
