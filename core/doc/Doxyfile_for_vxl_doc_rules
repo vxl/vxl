@@ -108,7 +108,7 @@ FULL_PATH_NAMES      = YES
 STRIP_FROM_PATH      = "$IUEROOT/vcl/" "$IUEROOT/vxl/" \
                        "$IUEROOT/v3p/" "$IUEROOT/mul/" \
                        "$IUEROOT/tbl/" "$IUEROOT/oxl/" \
-                       "$IUEROOT/gel/"
+                       "$IUEROOT/gel/" "$IUEROOT/rpl/"
 
 # The INTERNAL_DOCS tag determines if documentation
 # that is typed after a \internal command is included. If the tag is set
@@ -181,7 +181,7 @@ TAB_SIZE             = 8
 
 INPUT                = "$IUEROOT/vxl" "$IUEROOT/mul" \
                        "$IUEROOT/tbl" "$IUEROOT/oxl" \
-                       "$IUEROOT/gel"
+                       "$IUEROOT/gel" "$IUEROOT/rpl"
 
 # If the value of the INPUT tag contains directories, you can use the
 # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp
@@ -390,7 +390,8 @@ SEARCH_INCLUDES      = YES
 
 INCLUDE_PATH         = "$IUEROOT/vxl" "$IUEROOT/v3p" \
                        "$IUEROOT/oxl" "$IUEROOT/gel" \
-                       "$IUEROOT/mul" # "$IUEROOT/vcl"
+                       "$IUEROOT/mul" "$IUEROOT/tbl" \
+                       "$IUEROOT/rpl" # "$IUEROOT/vcl"
 
 # The PREDEFINED tag can be used to specify one or more macro names that
 # are defined before the preprocessor is started (similar to the -D option of
