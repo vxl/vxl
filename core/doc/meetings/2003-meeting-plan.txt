@@ -33,6 +33,7 @@ will not send them to the mailing list.
 If you want to call in just for certain items, let me know and we'll
 work it out -Fred Wheeler (wheeler at crd.ge.com).
 
+Tim Cootes (Manchester), Tim.Cootes at man.ac.uk
 Geoff Cross (Visual Geometry Solutions), geoff at visualgeometrysolutions.com
 Andrew Fitzgibbon (Oxford), awf at robots.ox.ac.uk
 Brad King (Kitware), brad.king at kitware.com
