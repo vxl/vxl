@@ -1,10 +1,10 @@
-This package contains the Otago University public not-quite VXL library.
+This package contains the Otago University public VXL library.
 Current contents:
 
 ouel: Otago University Estimation Library - currently only has a
 linear Kalman filter.
-oufgl: Otago University Frame Grabber Library - currently only support
-for a pxc200 on a Linux system.
+oufgl: Otago University Frame Grabber Library - support for a pxc200 and 
+should work for all video-for-linux devices on linux.
 ouml: OU Misc Library - currently has an eigenfaces implementation,
 and a simple polygon mesh implementation.
 

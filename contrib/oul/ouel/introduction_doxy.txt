@@ -1,3 +1,5 @@
 // The following text is included in the main documentation page by doxygen
-/*! \mainpage ouel : Estimation/filtering library (Kalman filter).
+/*! \mainpage ouel : Estimation/filtering library.
+ * Provides:
+ * - kalman_filter : simple linear kalman filter.
 */

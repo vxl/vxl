@@ -1,3 +1,7 @@
 // The following text is included in the main documentation page by doxygen
 /*! \mainpage oufgl : Frame grabber library (for linux).
+ * Provides support for capturing images from cameras under linux.
+ * Currently supported devices are:
+ * - frame_grabber_pxc200 : class for grabbing frames from a pxc200 frame grabber
+ * - frame_grabber_v4l : should work with all video-for-linux cameras.
 */
