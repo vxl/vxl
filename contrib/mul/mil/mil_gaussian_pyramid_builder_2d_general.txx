@@ -213,7 +213,7 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(T* dest_im, int de
 		for (int xi=0; xi<dest_nx; xi++)
 		{
 
-			dest_row[xi] = mil_safe_extend_bilin_interp_2d(x, y,
+			dest_row[xi] = (T) mil_safe_extend_bilin_interp_2d(x, y,
 					workb_im,  src_nx, src_ny, work_ystep);
 			x += scale_step_;
 
