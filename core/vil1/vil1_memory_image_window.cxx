@@ -45,9 +45,9 @@ inline int labs(int x) { return (x > 0) ? x : -x; }
 // This is a useful check to have anyway as the default arg of MAXINT avoids
 // accumulator overflow which can easily happen on certain medical and range
 // images.
-int vil_memory_image_window::sum_squared_differences(const vil_memory_image_of<vil_byte>& image2,
-                                                     int centre2_x, int centre2_y,
-                                                     int early_exit_level)
+int vil_memory_image_window::sum_abs_diff(const vil_memory_image_of<vil_byte>& image2,
+					  int centre2_x, int centre2_y,
+					  int early_exit_level)
 {
   int mask2_col_index = centre2_x - mask_size_ / 2;
   int mask2_row_index = centre2_y - mask_size_ / 2;
@@ -71,8 +71,6 @@ int vil_memory_image_window::sum_squared_differences(const vil_memory_image_of<v
     for (int col_index = col_start; col_index < col_end; col_index++) {
       int p1 = image1_(mask1_col_index_ + col_index, mask1_row_index_ + row_index);
       int p2 =  image2( mask2_col_index + col_index,  mask2_row_index + row_index);
-      //      vcl_cout << "  int = " << mask1_col_index_ + col_index << " " << mask1_row_index_ + row_index << vcl_endl;
-      // vcl_cout << "  int = " << p1 << " " << p2 << vcl_endl;
 
       difference_total += p1>p2 ? p1-p2 : p2-p1; // avoid vnl dependency - PVr
 
@@ -85,11 +83,53 @@ int vil_memory_image_window::sum_squared_differences(const vil_memory_image_of<v
   return difference_total;
 }
 
+//:Return early if difference becomes greater than early_exit_level.
+// This is a useful check to have anyway as the default arg of MAXINT avoids
+// accumulator overflow which can easily happen on certain medical and range
+// images.
+int vil_memory_image_window::sum_sqr_diff(const vil_memory_image_of<vil_byte>& image2,
+					  int centre2_x, int centre2_y,
+					  int early_exit_level)
+{
+  int mask2_col_index = centre2_x - mask_size_ / 2;
+  int mask2_row_index = centre2_y - mask_size_ / 2;
 
-int vil_memory_image_window::ncc(const vil_memory_image_of<vil_byte>& image2,
-                                 int centre2_x, int centre2_y,
-                                 double normalise_ratio,
-                                 int early_exit_level)
+  // make sure that we don't ask for pixels outside the image - PVr, 1 dec. 1997
+  int row_start = 0;
+  if (row_start < -mask1_row_index_) row_start = -mask1_row_index_;
+  if (row_start < -mask2_row_index) row_start = -mask2_row_index;
+  int row_end = mask_size_;
+  if (row_end >= int(image1_.width())-mask1_row_index_) row_end = image1_.width()-mask1_row_index_-1;
+  if (row_end >= int(image2.width())-mask2_row_index) row_end = image2.width()-mask2_row_index-1;
+  int col_start = 0;
+  if (col_start < -mask1_col_index_) col_start = -mask1_col_index_;
+  if (col_start < -mask2_col_index) col_start = -mask2_col_index;
+  int col_end = mask_size_;
+  if (col_end >= int(image1_.width())-mask1_col_index_) col_end = image1_.width()-mask1_col_index_-1;
+  if (col_end >= int(image2.width())-mask2_col_index) col_end = image2.width()-mask2_col_index-1;
+
+  int difference_total = 0;
+  for (int row_index = row_start; row_index < row_end; row_index++) {
+    for (int col_index = col_start; col_index < col_end; col_index++) {
+      int p1 = image1_(mask1_col_index_ + col_index, mask1_row_index_ + row_index);
+      int p2 =  image2( mask2_col_index + col_index,  mask2_row_index + row_index);
+
+      difference_total += (p1-p2)*(p1-p2);
+
+      // Check to see if we can return early -- this is also useful as it implicitly
+      // avoids accumulator overflow.
+      if (difference_total > early_exit_level)
+        return difference_total;
+    }
+  }
+  return difference_total;
+}
+
+
+int vil_memory_image_window::normalised_sum_abs_diff(const vil_memory_image_of<vil_byte>& image2,
+					       int centre2_x, int centre2_y,
+					       double normalise_ratio,
+					       int early_exit_level)
 {
   int mask2_col_index = centre2_x - mask_size_ / 2;
   int mask2_row_index = centre2_y - mask_size_ / 2;
