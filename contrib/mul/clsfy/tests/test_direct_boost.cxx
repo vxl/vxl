@@ -1,20 +1,20 @@
-// This is mul/clsfy/tests/test_adaboost.cxx
-
 //:
 // \file
-// \brief Tests the clsfy_adaboost_trainer class
+// \brief Tests the clsfy_direct_boost and clsfy_direct_boost_builder classes
 // \author dac
 // Test construction, IO etc.
 
 #include <vcl_iostream.h>
+#include <vcl_iomanip.h>
+#include <vcl_ios.h>
 #include <vcl_string.h>
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
-#include <clsfy/clsfy_simple_adaboost.h>
-#include <clsfy/clsfy_binary_threshold_1d_builder.h>
-#include <clsfy/clsfy_binary_threshold_1d.h>
-#include <clsfy/clsfy_adaboost_trainer.h>
-#include <clsfy/clsfy_adaboost_sorted_builder.h>
+#include <clsfy/clsfy_direct_boost.h>
+#include <clsfy/clsfy_direct_boost_builder.h>
+#include <clsfy/clsfy_mean_square_1d_builder.h>
+#include <clsfy/clsfy_mean_square_1d.h>
+
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>
 #include <mbl/mbl_data_array_wrapper.h>
@@ -38,12 +38,12 @@ void get_1d_inputs(vnl_vector<double>& v,
 }
 
 
-//: Tests the clsfy_simple_adaboost and clsfy_adaboost_trainer classes
-void test_adaboost()
+//: Tests the clsfy_direct_boost and clsfy_direct_boost_builder classes
+void test_direct_boost()
 {
-  vcl_cout << "********************************\n"
-           << " Testing clsfy_adaboost_trainer\n"
-           << "********************************\n";
+  vcl_cout << "**********************************\n"
+           << " Testing clsfy_direct_boost\n"
+           << "**********************************\n";
 
   // Generate lots of examples for adaboost algorithm
   // Each vector represents a +ve or -ve example
@@ -53,7 +53,7 @@ void test_adaboost()
   vcl_vector<vnl_vector<double> > pos_samples(n_pos);
   vcl_vector<vnl_vector<double> > neg_samples(n_neg);
 
-  // Create +ve and -ve sets of data for 3 separate weak classifiers
+  // Create +ve and -ve sets of data for 4 separate weak classifiers
   int n_clfrs= 4;
   vcl_vector< vpdfl_axis_gaussian > pos_models(n_clfrs);
   vcl_vector< vpdfl_axis_gaussian > neg_models(n_clfrs);
@@ -123,48 +123,29 @@ void test_adaboost()
   }
   mbl_data_array_wrapper< vnl_vector<double> > inputs(&inputs_vec[0],n_pos+n_neg);
 
-  // build clsfy_simple_adaboost
+  // build clsfy_direct_boost
   vcl_cout<<"*************normal classifier************\n";
-  clsfy_simple_adaboost *pClassifier = new clsfy_simple_adaboost;
-  clsfy_binary_threshold_1d_builder b_thresh_builder;
-  clsfy_adaboost_trainer adab_trainer;
+  clsfy_direct_boost *pClassifier = new clsfy_direct_boost;
+  clsfy_direct_boost_builder builder;
   int n_rounds=5;
-  adab_trainer.build_strong_classifier(*pClassifier, n_rounds, b_thresh_builder,
-                                       egs0, egs1 );
+  builder.set_max_n_clfrs(n_rounds);
+  builder.set_calc_all_thresholds(true);
+  builder.set_prop(0.85);
+  builder.set_batch_size(100);
+  clsfy_mean_square_1d_builder weak_builder;
+  builder.set_weak_builder(weak_builder);
+  double t_error=builder.build( *pClassifier, inputs, 1, outputs);
 
+  vcl_cout<<"t_error= "<<t_error<<vcl_endl;
 
-
-   // build clsfy_simple_adaboost using sorted method 3
-  vcl_cout<<"*************sorted classifier4************\n";
-  clsfy_simple_adaboost *pClassifier4 = new clsfy_simple_adaboost;
-  clsfy_binary_threshold_1d_builder b_thresh_sorted_builder4;
-  clsfy_adaboost_sorted_builder adab_sorted_builder;
-  adab_sorted_builder.set_batch_size( 20 );
-  adab_sorted_builder.set_max_n_clfrs( n_rounds );
-  adab_sorted_builder.set_save_data_to_disk( false );
-  adab_sorted_builder.set_weak_builder( b_thresh_sorted_builder4 );
-  adab_sorted_builder.build( *pClassifier4, inputs, 1, outputs);
-
-  pClassifier4->print_summary(vcl_cout);
-  
-
-   // compare alpha values for classifier4 (with classifier1)
-  double diff=0;
-  unsigned na= vcl_min(pClassifier->alphas().size(), pClassifier4->alphas().size() );
-  na = 3; // rounding errors can cause major differences in the values of some of the later weightings.
-  for (unsigned k=0; k<na; ++k) {
-    TEST_NEAR( "sorted classifier4 == normal classifier", pClassifier->alphas()[k], pClassifier4->alphas()[k], 0.001);
-  }
-
-  vcl_cout<<"diff= "<<diff<<vcl_endl;
 
 
   // test positive examples from training set
-  // N.B. egs0 are the positive training examples
+  // nb egs0 are the positive training examples
   int tp=0, fp=0;
-  double tpr=0.0, fpr=1.0, adab_te=0.0, te; // initialise to make compiler happy
+  double tpr=0.0, fpr=1.0, adab_te=0.0; 
 
-  for (unsigned int k=1; k<=pClassifier->alphas().size(); ++k)
+  for (unsigned int k=1; k<=pClassifier->wts().size(); ++k)
   {
     tp=0;
     fp=0;
@@ -191,58 +172,13 @@ void test_adaboost()
   TEST( "fpr<0.2", fpr<0.2, true );
 
 
-  //Train individual classifiers on each of the 4 Gaussian data sets
-  for (int i=0; i<n_clfrs; ++i)
-  {
-    vnl_vector<double> pos_egs, neg_egs;
-    get_1d_inputs(pos_egs,egs1,i);
-    get_1d_inputs(neg_egs,egs0,i);
-    int n_pos=pos_egs.size();
-    int n_neg=neg_egs.size();
-    vnl_vector<double> pos_wts(n_pos, 0.5/n_pos), neg_wts(n_neg, 0.5/n_neg);
-
-#if 0
-    vcl_cout<<"pos_egs= "<<pos_egs<<vcl_endl;
-    vcl_cout<<"pos_wts= "<<pos_wts<<vcl_endl;
-    vcl_cout<<"neg_egs= "<<neg_egs<<vcl_endl;
-    vcl_cout<<"neg_wts= "<<neg_wts<<vcl_endl;
-#endif
-
-    clsfy_classifier_1d* c1d2 = b_thresh_builder.new_classifier();
-    double error=b_thresh_builder.build(*c1d2,neg_egs,neg_wts,pos_egs,pos_wts);
-
-    vcl_cout<<"error= "<<error<<vcl_endl;
-    c1d2->print_summary(vcl_cout);
-
-
-    tp=0;
-    fp=0;
-    for (int i=0; i<n_pos; ++i)
-      if ( c1d2->classify( pos_egs[i] ) == 1 ) tp++;
-
-    for (int i=0; i<n_neg; ++i)
-      if ( c1d2->classify( neg_egs[i] ) == 1 ) fp++;
-
-    tpr= (tp*1.0)/n_pos;
-    vcl_cout<<"tpr= "<<tpr<<vcl_endl;
-    fpr= (fp*1.0)/n_neg;
-    vcl_cout<<"fpr= "<<fpr<<vcl_endl;
-    te= ((n_pos-tp+fp)*1.0)/(n_pos+n_neg);
-    vcl_cout<<"total error rate= "<<te<<vcl_endl;
-
-    TEST( "Weak clfr te not less than strong clfr te", te<adab_te, false);
-
-    delete c1d2;
-  }
-
-
+  
 
   vcl_cout<<"======== TESTING I/O ===========\n";
 
-
    // add binary loaders
-  vsl_add_to_binary_loader(clsfy_binary_threshold_1d());
-  vcl_string test_path = "test_clsfy_simple_adaboost.bvl.tmp";
+  vsl_add_to_binary_loader(clsfy_mean_square_1d());
+  vcl_string test_path = "test_clsfy_direct_boost.bvl.tmp";
 
   vsl_b_ofstream bfs_out(test_path);
   TEST(("Opened " + test_path + " for writing").c_str(), (!bfs_out ), false);
@@ -250,7 +186,7 @@ void test_adaboost()
   bfs_out.close();
 
 
-  clsfy_simple_adaboost classifier_in;
+  clsfy_direct_boost classifier_in;
 
   vsl_b_ifstream bfs_in(test_path);
   TEST(("Opened " + test_path + " for writing").c_str(), (!bfs_out ), false);
@@ -265,10 +201,14 @@ void test_adaboost()
   vcl_cout<< classifier_in << vcl_endl;
 
 
+
   TEST("saved classifier == loaded classifier",
        *pClassifier==classifier_in, true);
 
   delete pClassifier;
+
+
+
 }
 
-TESTLIB_DEFINE_MAIN(test_adaboost);
+TESTLIB_DEFINE_MAIN(test_direct_boost);
