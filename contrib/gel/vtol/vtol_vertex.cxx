@@ -258,21 +258,20 @@ bool vtol_vertex::operator== (const vtol_vertex &other) const
 //-----------------------------------------------------------------------------
 //:
 // Determine which other vertices share edges with this. Add any of these which
-// are not in the list to it, and recursively call ExploreVertex on them. The
+// are not in the list to it, and recursively call explore_vertex on them. The
 // method is intended to recover all of the vertices in a single topological
 // structure which is composed of connected edges.
 //
 void vtol_vertex::explore_vertex(vertex_list &verts)
 {
-  edge_list *edges_;
-  edge_list::iterator i;
-  vtol_vertex_sptr vv;
-  vtol_edge_sptr e;
+  // Note that "this" is not first put on the list:
+  // it will be put as the second element, during the first recursive call.
 
-  edges_=edges();
-  for(i=edges_->begin();i!=edges_->end();++i)
+  edge_list *e_list=this->edges();
+  for (edge_list::iterator i=e_list->begin();i!=e_list->end();++i)
     {
-      e=*i;
+      vtol_edge_sptr e=*i;
+      vtol_vertex_sptr vv;
       if(e->v1()==this)
         vv=e->v2();
       else if(e->v2()==this)
@@ -280,6 +279,7 @@ void vtol_vertex::explore_vertex(vertex_list &verts)
       else
         {
           vcl_cerr << "Explore vtol_vertex: shouldn't get this\n";
+          assert(false);
           continue;
         }
 
@@ -289,7 +289,7 @@ void vtol_vertex::explore_vertex(vertex_list &verts)
           vv->explore_vertex(verts);
         }
     }
-  delete edges_;
+  delete e_list;
 }
 
 //#include <vcl_rel_ops.h> // gcc 2.7
