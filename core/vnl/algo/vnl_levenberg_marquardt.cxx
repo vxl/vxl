@@ -17,6 +17,7 @@
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
+#include <vnl/vnl_fastops.h>
 #include <vnl/vnl_vector_ref.h>
 #include <vnl/vnl_matrix_ref.h>
 #include <vnl/vnl_least_squares_function.h>
@@ -381,7 +382,7 @@ void vnl_levenberg_marquardt::diagnose_outcome(vcl_ostream& s) const
   int m = f_->get_number_of_residuals();
   s << whoami ": " << num_iterations_ << " iterations, "
     << num_evaluations_ << " evaluations, "<< m <<" residuals.  RMS error start/end "
-    << get_start_error() << "/" << get_end_error() << vcl_endl;
+    << get_start_error() << '/' << get_end_error() << vcl_endl;
 #undef whoami
 }
 
@@ -404,11 +405,12 @@ void vnl_levenberg_marquardt::diagnose_outcome(vcl_ostream& s) const
 // Code thanks to Joss Knight (joss@robots.ox.ac.uk)
 vnl_matrix<double> const& vnl_levenberg_marquardt::get_JtJ()
 {
-  if (!set_covariance_) {
+  if (!set_covariance_)
+  {
     vcl_cerr << __FILE__ ": get_covariance() not confirmed tested  yet\n";
     int n = fdjac_->rows ();
-    vnl_matrix<double> rtr = fdjac_->extract (n, n);
-    rtr = rtr.transpose () * rtr;
+    vnl_matrix<double> rtr;
+    vnl_fastops::AtA(rtr, fdjac_->extract(n,n));
     vnl_matrix<double> rtrpt (n, n);
 
     // Permute. First order columns.
