@@ -15,7 +15,7 @@
 //: An abstract base class of smart pointers to actual image data in memory.
 
 template <class T>
-class vil2_image_view : public vil_image_view_base
+class vil2_image_view : public vil2_image_view_base
 {
 protected:
   T * top_left_;
