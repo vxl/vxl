@@ -387,7 +387,7 @@ static void ShowStartMat(vcl_ostream& os, const vnl_matrix<double>& A)
   int m = 3, n= 3;
   if (m>A.rows()) m=A.rows();
   if (n>A.cols()) n=A.cols();
-  vsl_inc_indent(os);
+  vsl_indent_inc(os);
 
   for (int i=0;i<m;++i)
   {
@@ -400,7 +400,7 @@ static void ShowStartMat(vcl_ostream& os, const vnl_matrix<double>& A)
   }
   if (A.rows()>m) os <<vsl_indent()<<"(..." <<vcl_endl;
 
-  vsl_dec_indent(os);
+  vsl_indent_dec(os);
 }
 #endif // commented out
 

@@ -34,13 +34,13 @@ indent_data_type* indent_data(vcl_ostream& os)
 }
 
 //: Increments current indent for given stream
-void vsl_inc_indent(vcl_ostream& os)
+void vsl_indent_inc(vcl_ostream& os)
 {
   indent_data(os)->first++;
 }
 
 //: Decrements current indent for given stream
-void vsl_dec_indent(vcl_ostream& os)
+void vsl_indent_dec(vcl_ostream& os)
 {
   indent_data(os)->first--;
 }
@@ -58,7 +58,7 @@ int vsl_indent_tab(vcl_ostream& os)
 }
 
 //: Set indentation to zero
-void vsl_clear_indent(vcl_ostream& os)
+void vsl_indent_clear(vcl_ostream& os)
 {
   indent_data(os)->first =0;
 }

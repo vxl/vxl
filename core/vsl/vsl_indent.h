@@ -10,13 +10,13 @@
 //  Its use is best described by example:
 // \verbatim
 // vcl_cout<<vsl_indent()<<"No Indent"<<vcl_endl;
-// vsl_inc_indent(vcl_cout);
+// vsl_indent_inc(vcl_cout);
 // vcl_cout<<vsl_indent()<<"1 Indent"<<vcl_endl;
-// vsl_inc_indent(vcl_cout);
+// vsl_indent_inc(vcl_cout);
 // vcl_cout<<vsl_indent()<<"2 Indent"<<vcl_endl;
-// vsl_dec_indent(vcl_cout);
+// vsl_indent_dec(vcl_cout);
 // vcl_cout<<vsl_indent()<<"1 Indent"<<vcl_endl;
-// vsl_dec_indent(vcl_cout);
+// vsl_indent_dec(vcl_cout);
 // vcl_cout<<vsl_indent()<<"No Indent"<<vcl_endl;
 // \endverbatim
 //
@@ -34,15 +34,15 @@
 // class Fred
 // {
 // public:
-//  void print(vcl_ostream& os) const { os<<vsl_indent(os)<<"Fred's data"; }
+//  void print(vcl_ostream& os) const { os<<vsl_indent()<<"Fred's data"; }
 // };
 //
 // vcl_ostream& operator<<(vcl_ostream& os, const Fred& fred)
 // {
 //  os<<"Fred: "<<vcl_endl;
-//  vsl_inc_indent(os);
+//  vsl_indent_inc(os);
 //  fred.print(os);
-//  vsl_dec_indent(os);
+//  vsl_indent_dec(os);
 //  return os;
 // }
 //
@@ -61,9 +61,9 @@
 // vcl_ostream& operator<<(vcl_ostream& os, const Jim& jim)
 // {
 //  os<<"Jim: "<<vcl_endl;
-//  vsl_inc_indent(os);
+//  vsl_indent_inc(os);
 //  jim.print(os);
-//  vsl_dec_indent(os);
+//  vsl_indent_dec(os);
 //  return os;
 // }
 //
@@ -86,10 +86,10 @@ class vsl_indent {
 };
 
 //: Increments current indent for given stream
-void vsl_inc_indent(vcl_ostream& os);
+void vsl_indent_inc(vcl_ostream& os);
 
 //: Decrements current indent for given stream
-void vsl_dec_indent(vcl_ostream& os);
+void vsl_indent_dec(vcl_ostream& os);
 
 //: Set number of spaces per increment step
 void vsl_indent_set_tab(vcl_ostream& os,int);
@@ -98,7 +98,7 @@ void vsl_indent_set_tab(vcl_ostream& os,int);
 int vsl_indent_tab(vcl_ostream& os);
 
 //: Set indentation to zero
-void vsl_clear_indent(vcl_ostream& os);
+void vsl_indent_clear(vcl_ostream& os);
 
 //: Outputs current indent to os
 vcl_ostream& operator<<(vcl_ostream& os, const vsl_indent& indent);

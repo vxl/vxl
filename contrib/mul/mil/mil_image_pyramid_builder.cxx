@@ -104,9 +104,9 @@ void vsl_b_read(vsl_b_istream& bfs, mil_image_pyramid_builder& b)
 vcl_ostream& operator<<(vcl_ostream& os,const mil_image_pyramid_builder& b)
 {
     os << b.is_a() << ": ";
-    vsl_inc_indent(os);
+    vsl_indent_inc(os);
     b.print_summary(os);
-    vsl_dec_indent(os);
+    vsl_indent_dec(os);
     return os;
 }
 

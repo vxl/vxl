@@ -9,13 +9,13 @@ void test_indent1()
 {
   vcl_cout<<"Tab Size is "<<vsl_indent_tab(vcl_cout)<<vcl_endl;
   vcl_cout<<vsl_indent()<<"No Indent"<<vcl_endl;
-  vsl_inc_indent(vcl_cout);
+  vsl_indent_inc(vcl_cout);
   vcl_cout<<vsl_indent()<<"1 Indent"<<vcl_endl;
-  vsl_inc_indent(vcl_cout);
+  vsl_indent_inc(vcl_cout);
   vcl_cout<<vsl_indent()<<"2 Indent"<<vcl_endl;
-  vsl_dec_indent(vcl_cout);
+  vsl_indent_dec(vcl_cout);
   vcl_cout<<vsl_indent()<<"1 Indent"<<vcl_endl;
-  vsl_dec_indent(vcl_cout);
+  vsl_indent_dec(vcl_cout);
   vcl_cout<<vsl_indent()<<"No Indent"<<vcl_endl;
   vcl_cout<<vcl_endl;
 }
@@ -36,11 +36,11 @@ void test_indent()
   test_indent1();
 
   vcl_cout<<vsl_indent()<<"Indent 0"<<vcl_endl;
-  vsl_inc_indent(vcl_cout);
+  vsl_indent_inc(vcl_cout);
   vcl_cout<<vsl_indent()<<"Indent 1"<<vcl_endl;
-  vsl_inc_indent(vcl_cout);
+  vsl_indent_inc(vcl_cout);
   vcl_cout<<vsl_indent()<<"Indent 2"<<vcl_endl;
-  vsl_clear_indent(vcl_cout);
+  vsl_indent_clear(vcl_cout);
   vcl_cout<<vsl_indent()<<"Indent Cleared"<<vcl_endl;
 
 }

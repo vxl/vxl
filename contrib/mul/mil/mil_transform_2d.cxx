@@ -608,7 +608,7 @@ mil_transform_2d operator*(const mil_transform_2d& L, const mil_transform_2d& R)
 void mil_transform_2d::print_summary(vcl_ostream& o) const
 {
     o << vsl_indent()<< "Form: ";
-    vsl_inc_indent(o);
+    vsl_indent_inc(o);
     switch (form_)
     {
         case Identity:
@@ -660,15 +660,15 @@ void mil_transform_2d::print_summary(vcl_ostream& o) const
             o << vsl_indent()<< tx_ << " " << ty_ << " " << tt_;
             break;
     }
-    vsl_dec_indent(o);
+    vsl_indent_dec(o);
 }
 
 vcl_ostream& operator<<( vcl_ostream& os, const mil_transform_2d& t )
 {
     os << "mil_transform_2d:"<<vcl_endl;
-    vsl_inc_indent(os);
+    vsl_indent_inc(os);
     t.print_summary(os);
-    vsl_dec_indent(os);
+    vsl_indent_dec(os);
     return os;
 }
 

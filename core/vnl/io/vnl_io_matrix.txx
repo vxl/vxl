@@ -60,7 +60,7 @@ void vsl_print_summary(vcl_ostream & os,const vnl_matrix<T> & p)
   if (m>p.rows()) m=p.rows();
   if (n>p.cols()) n=p.cols();
 
-  vsl_inc_indent(os);
+  vsl_indent_inc(os);
   for (int i=0;i<m;i++)
   {
      os<<vsl_indent()<<" (";
@@ -71,7 +71,7 @@ void vsl_print_summary(vcl_ostream & os,const vnl_matrix<T> & p)
         os<<")"<<vcl_endl;
   }
   if (p.rows()>m) os <<vsl_indent()<<" (..." <<vcl_endl;
-  vsl_dec_indent(os);
+  vsl_indent_dec(os);
 }
 
 

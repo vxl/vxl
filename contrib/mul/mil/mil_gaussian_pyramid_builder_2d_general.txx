@@ -62,10 +62,10 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(mil_image_2d_of<T>
 		gauss_reduce(dest_im.plane(i),dest_im.ystep(),
 					src_im.plane(i),src_nx,src_ny,dest_nx,dest_ny,ystep);
 #if(0)
-  vsl_inc_indent(vcl_cout);
+  vsl_indent_inc(vcl_cout);
   vcl_cout << vsl_indent() << "Work image B" << vcl_endl;
   workb_.print_all(vcl_cout);
-  vsl_dec_indent(vcl_cout);
+  vsl_indent_dec(vcl_cout);
 #endif
 
 		// Sort out world to image transformation for destination image				
