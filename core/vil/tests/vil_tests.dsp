@@ -103,6 +103,9 @@ SOURCE=.\test_algo_grid_merge.cxx
 SOURCE=.\test_algo_find_4con_boundary.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_algo_fft.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_bicub_interp.cxx
 # End Source File
 # Begin Source File

@@ -16,6 +16,7 @@ SOURCE=.\vil2_correlate_grad_tool.cxx
 SOURCE=.\vil2_exp_grad_filter_tool.cxx
 SOURCE=.\vil2_image_copy.cxx
 SOURCE=.\example_interpolate.cxx
+SOURCE=.\example_complex.cxx
 # End Group
 # Begin Group "Header Files"
 # End Group

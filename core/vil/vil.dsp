@@ -135,6 +135,12 @@ SOURCE=.\Templates/vil2_image_view+float-.cxx
 SOURCE=.\Templates/vil2_image_view+vil2_rgb+float--.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil2_image_view+vcl_complex+double--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_image_view+vcl_complex+float--.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vil2_crop.cxx
 # End Source File
 # Begin Source File

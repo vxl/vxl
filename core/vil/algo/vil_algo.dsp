@@ -120,6 +120,12 @@ SOURCE=.\vil2_binary_dilate.cxx
 SOURCE=.\vil2_binary_erode.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil2_fft+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil2_fft+float-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil2_gauss_reduce+byte-.cxx
 # End Source File
 # Begin Source File
@@ -283,6 +289,12 @@ SOURCE=.\vil2_grid_merge.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil2_find_4con_boundary.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_fft.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil2_fft.txx
 # End Source File
 # End Group
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
