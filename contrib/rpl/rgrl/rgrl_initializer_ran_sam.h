@@ -1,6 +1,6 @@
 #ifndef rgrl_initializer_ran_sam_h_
 #define rgrl_initializer_ran_sam_h_
-
+//:
 // \file
 // \brief Generate the initial estimate using random sampling
 // \author Charlene Tsai
@@ -17,15 +17,15 @@
 
 class vnl_random;
 
-//: Generate the initial estimate using random sampling. This is the 
-//  re-implementation of rrel_ran_sam_search. Modifications include using
-//  unweighted scale estimator to perform selection of the best transformation. 
+//: Generate the initial estimate using random sampling.
+//  This is the re-implementation of rrel_ran_sam_search.
+//  Modifications include using unweighted scale estimator
+//  to perform selection of the best transformation.
 //
 class rgrl_initializer_ran_sam
   : public rgrl_initializer
 {
-public:
-  //:
+ public:
   //: Constructor using a non-deterministic random-sampling seed.
   rgrl_initializer_ran_sam( );
 
@@ -34,7 +34,7 @@ public:
 
   virtual
   ~rgrl_initializer_ran_sam();
-    
+
   //  Parameters to control the search technique.  The default set
   //  when the constructor is called is to sample as in generate
   //  samples as specified in least-median of squares.
@@ -48,29 +48,29 @@ public:
                             unsigned int max_populations_expected = 1,
                             unsigned int min_samples = 0 );
 
-  //: Initialize the data with a view, which contains the regions and the transformation estimator. 
+  //: Initialize the data with a view, which contains the regions and the transformation estimator.
   //
   // If \a should_estimate_global_region is true, the \a
   // from_image_roi will be re-estimated/updated based on the
   // transform estimate computed by the random sampling process.
   //
-  void set_data(rgrl_match_set_sptr                init_match_set, 
+  void set_data(rgrl_match_set_sptr                init_match_set,
                 rgrl_scale_estimator_unwgted_sptr  scale_est,
                 rgrl_view_sptr                     prior_view,
                 bool should_estimate_global_region = true);
 
   //: Initialize with a set of information without packing everything into a vie
-  void set_data(rgrl_match_set_sptr                init_match_set, 
+  void set_data(rgrl_match_set_sptr                init_match_set,
                 rgrl_scale_estimator_unwgted_sptr  scale_est,
                 rgrl_mask_box       const&         from_image_roi,
                 rgrl_mask_box       const&         to_image_roi,
-                rgrl_mask_box       const&         initial_from_image_roi, 
+                rgrl_mask_box       const&         initial_from_image_roi,
                 rgrl_estimator_sptr                xform_estimator,
                 unsigned                           initial_resolution = 0,
                 bool should_estimate_global_region = true);
 
   //: Initialize with a set of information, assuming that registration applies to \a from_image_roi always.
-  void set_data(rgrl_match_set_sptr                init_match_set, 
+  void set_data(rgrl_match_set_sptr                init_match_set,
                 rgrl_scale_estimator_unwgted_sptr  scale_est,
                 rgrl_mask_box       const&         from_image_roi,
                 rgrl_mask_box       const&         to_image_roi,
@@ -78,7 +78,7 @@ public:
                 unsigned                           initial_resolution = 0);
 
   //: Initialize with a set of information, assuming that registration applies to \a from_image_roi always, and \a from_image_roi and \a to_image_roi are the same
-  void set_data(rgrl_match_set_sptr                init_match_set, 
+  void set_data(rgrl_match_set_sptr                init_match_set,
                 rgrl_scale_estimator_unwgted_sptr  scale_est,
                 rgrl_mask_box       const&         from_image_roi,
                 rgrl_estimator_sptr                xform_estimator,
@@ -101,7 +101,7 @@ public:
   // Defines type-related functions
   rgrl_type_macro( rgrl_initializer_ran_sam, rgrl_initializer );
 
-private:
+ private:
   //: Estimate the best transform.
   bool estimate();
 
@@ -110,17 +110,17 @@ private:
   void calc_num_samples( unsigned int num_matches );
 
   //: Determine the next random sample, filling in the "sample" vector.
-  void next_sample( unsigned int taken, unsigned int num_points, 
+  void next_sample( unsigned int taken, unsigned int num_points,
                     vcl_vector<int>& sample,
                     unsigned int points_per_sample );
-  
+
   //: Extract the matches indexed by the point_indices
   rgrl_match_set_sptr get_matches(const vcl_vector<int>&  point_indices, unsigned int total_num_matches);
 
   //: For debugging
   void trace_sample( const vcl_vector<int>& point_indices ) const;
 
-protected:
+ protected:
   rgrl_match_set_sptr      match_set_;
   rgrl_estimator_sptr      transform_estiamtor_;
   rgrl_scale_estimator_unwgted_sptr  scale_estimator_;
@@ -129,7 +129,7 @@ protected:
   bool                     data_set_;
   //unsigned int num_unique_matches_;
 
-private:
+ private:
   // Parameters
   //
   double max_outlier_frac_;
@@ -153,7 +153,6 @@ private:
   // Sampling variables
   //
   unsigned int samples_to_take_;
-
 };
 
 #endif

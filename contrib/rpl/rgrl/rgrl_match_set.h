@@ -1,6 +1,5 @@
 #ifndef rgrl_match_set_h_
 #define rgrl_match_set_h_
-
 //:
 // \file
 // \brief  Represents a set of matches for a given feature type
@@ -42,12 +41,12 @@ class rgrl_match_set_const_from_to_iterator;
 class rgrl_match_set
   : public rgrl_object
 {
-public:
+ public:
   typedef unsigned int                        size_type;
   typedef rgrl_match_set_from_iterator        from_iterator;
   typedef rgrl_match_set_const_from_iterator  const_from_iterator;
 
-public:
+ public:
   //:  construct an empty match set, specifying the feature type
   rgrl_match_set( const vcl_type_info& feature_type );
 
@@ -73,15 +72,14 @@ public:
   //
   void add_feature_and_matches( rgrl_feature_sptr                      from_feature,
                                 rgrl_feature_sptr                      mapped_feature,
-				vcl_vector< rgrl_feature_sptr > const& matching_to );
+                                vcl_vector< rgrl_feature_sptr > const& matching_to );
 
-  //: Add from feature, the transformed feature, and its matching "to" features, and
-  //  the signature weight.
+  //: Add from feature, the transformed feature, and its matching "to" features, and the signature weight.
   //
   void add_feature_matches_and_weights( rgrl_feature_sptr                      from_feature,
-					rgrl_feature_sptr                      mapped_feature,
-					vcl_vector< rgrl_feature_sptr > const& matching_to,
-					vcl_vector< double > const&            signature_weights );
+                                        rgrl_feature_sptr                      mapped_feature,
+                                        vcl_vector< rgrl_feature_sptr > const& matching_to,
+                                        vcl_vector< double > const&            signature_weights );
 
   //: Add from feature and its matching "to" feature.
   //
@@ -103,14 +101,14 @@ public:
 
   //  CS (9/20/2003): I am not at all sure that the idea of a single
   //  feature type in a match set is really a good idea, especially
-  //  given the use of the error projector.  
+  //  given the use of the error projector.
 
   //: to access feature types
   //
   const vcl_type_info& from_feature_type() const {return *from_type_;}
   const vcl_type_info& to_feature_type() const {return *to_type_;}
 
-  unsigned int num_constraints_per_match() const; 
+  unsigned int num_constraints_per_match() const;
 
   //: reserve space for a number of matches
   //
@@ -119,11 +117,12 @@ public:
     xformed_from_features_.reserve(i);
     matches_and_weights_.reserve(i);
   }
-  
-private:
+
+ private:
   //: Holds the details of match.
-  class match_info {
-  public:
+  class match_info
+  {
+   public:
     //:
     // geometric and cumulative weights are set to -1 to allow
     //  a safety check on their usage.
@@ -133,15 +132,15 @@ private:
     //:
     // All the weights are initialized
     //
-    match_info( rgrl_feature_sptr to_feat, 
-                double geometric_wgt, 
+    match_info( rgrl_feature_sptr to_feat,
+                double geometric_wgt,
                 double signature_wgt,
                 double cumulative_wgt = 0);
 
     //:  Initialize the signature weight only
     //
-    match_info( rgrl_feature_sptr to_feat, 
-		double signature_wgt );
+    match_info( rgrl_feature_sptr to_feat,
+                double signature_wgt );
 
     rgrl_feature_sptr to_feature;
     double geometric_weight;
@@ -151,7 +150,7 @@ private:
 
   void set_num_constraints_per_match() const;
 
-private:
+ private:
   friend class rgrl_match_set_from_iterator;
   friend class rgrl_match_set_const_from_iterator;
   friend class rgrl_match_set_from_to_iterator;
@@ -169,13 +168,13 @@ private:
 
 class rgrl_match_set_from_iterator
 {
-private:
+ private:
   typedef rgrl_match_set::match_info                            match_info;
-public:
+ public:
   typedef rgrl_match_set_from_to_iterator                       to_iterator;
   typedef vcl_vector< vcl_vector< match_info > >::size_type     size_type;
 
-public:
+ public:
   //: Default constructor.
   // A default constructed iterator is, of course, invalid until it is
   // set to point into a rgrl_match_set.
@@ -183,7 +182,7 @@ public:
 
   rgrl_match_set_from_iterator& operator++();
   rgrl_match_set_from_iterator& operator+( int );
-  
+
   bool operator==( const rgrl_match_set_from_iterator& other ) const;
   bool operator!=( const rgrl_match_set_from_iterator& other ) const;
 
@@ -205,7 +204,7 @@ public:
   //:
   rgrl_feature_sptr mapped_from_feature() const;
 
-private:
+ private:
   friend class rgrl_match_set;
 
   // For use by rgrl_match_set
@@ -219,13 +218,13 @@ private:
 
 class rgrl_match_set_const_from_iterator
 {
-private:
+ private:
   typedef rgrl_match_set::match_info                            match_info;
-public:
+ public:
   typedef rgrl_match_set_const_from_to_iterator                 to_iterator;
   typedef vcl_vector< vcl_vector< match_info > >::size_type     size_type;
 
-public:
+ public:
   //: Default constructor.
   // A default constructed iterator is, of course, invalid until it is
   // set to point into a rgrl_match_set.
@@ -256,7 +255,7 @@ public:
   //:
   rgrl_feature_sptr mapped_from_feature() const;
 
-private:
+ private:
   friend class rgrl_match_set;
 
   // For use by rgrl_match_set
@@ -268,10 +267,9 @@ private:
 };
 
 
-
 class rgrl_match_set_from_to_iterator
 {
-public:
+ public:
   rgrl_match_set_from_to_iterator( );
 
   // default copy constructor and assignment operator does the correct
@@ -306,7 +304,7 @@ public:
   //:
   void set_cumulative_weight( double cum_wgt );
 
-protected:
+ protected:
 
   friend class rgrl_match_set_from_iterator;
   typedef rgrl_match_set::match_info match_info;
@@ -320,9 +318,9 @@ protected:
 
 class rgrl_match_set_const_from_to_iterator
 {
-public:
+ public:
   typedef rgrl_match_set_const_from_to_iterator self_type;
-public:
+ public:
   rgrl_match_set_const_from_to_iterator( );
 
   // default copy constructor and assignment operator does the correct
@@ -348,7 +346,7 @@ public:
   //:
   double cumulative_weight() const;
 
-protected:
+ protected:
 
   friend class rgrl_match_set_const_from_iterator;
   typedef rgrl_match_set::match_info match_info;

@@ -1,9 +1,8 @@
 #ifndef rgrl_scale_est_all_weights_h_
 #define rgrl_scale_est_all_weights_h_
-
 //:
 // \file
-// \brief  
+// \brief
 // \author Chuck Stewart
 // \date   6 Dec 2002
 
@@ -12,7 +11,8 @@
 #include <vnl/vnl_matrix.h>
 class rgrl_match_set;
 
-//: Weighted scale estimator that computes the scale as the sum of the
+//:
+// Weighted scale estimator that computes the scale as the sum of the
 // weighted residuals divided by the sum of weights. The weights can
 // come from either the geometric error, or signature error, or both.
 //
@@ -26,7 +26,7 @@ class rgrl_match_set;
 class rgrl_scale_est_all_weights
   : public rgrl_scale_estimator_wgted
 {
-public:
+ public:
   rgrl_scale_est_all_weights(  bool do_signature_scale = false );
 
   rgrl_scale_sptr
@@ -38,14 +38,14 @@ public:
   // Defines type-related functions
   rgrl_type_macro( rgrl_scale_est_all_weights, rgrl_scale_estimator_wgted );
 
-private: 
+ private:
   double
   compute_geometric_scale( rgrl_match_set const& match_set,bool use_signature_only, bool penalize_scaling ) const;
-	  			
+
   vnl_matrix<double>
   compute_signature_covar( rgrl_match_set const& match_set ) const;
 
-private:
+ private:
   bool do_signature_scale_;
 };
 

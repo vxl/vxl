@@ -1,7 +1,6 @@
-
 #ifndef rgrl_feature_trace_pt_h_
 #define rgrl_feature_trace_pt_h_
-
+//:
 // \file
 // \author Amitha Perera
 // \date   Feb 2003
@@ -17,19 +16,18 @@
 class rgrl_feature_trace_pt
   : public rgrl_feature
 {
-public:
+ public:
   typedef vcl_vector<rgrl_feature_sptr >  feature_vector;
 
-public:  
+ public:
   //:  Constructor to initialize feature_trace_pt location.
   rgrl_feature_trace_pt( vnl_vector<double> const& loc,
                          vnl_vector<double> const& tangent );
 
-  //:  Constructor to initialize feature_trace_pt location that has a length 
-  //   along the tangent and an normal.
+  //:  Constructor to initialize feature_trace_pt location that has a length along the tangent and an normal.
   rgrl_feature_trace_pt( vnl_vector<double> const& loc,
                          vnl_vector<double> const& tangent,
-                         double                    length, 
+                         double                    length,
                          double                    radius );
 
   virtual vnl_vector<double> const&
@@ -45,10 +43,13 @@ public:
   virtual rgrl_feature_sptr
   transform( rgrl_transformation const& xform ) const;
 
-  //: The result is a vector of boundary locations in the direction of the normal in the plane defined by the tangent and in_direction.
-  //  CAVEAT: This design is not good enough for 3D trace points, since it only 
-  //          produces 2 boundary constraints. This function should be revised 
-  //          later for 3D. 
+  //:
+  // The result is a vector of boundary locations in the direction of the normal
+  // in the plane defined by the tangent and in_direction.
+  //
+  //  CAVEAT: This design is not good enough for 3D trace points, since it only
+  //          produces 2 boundary constraints. This function should be revised
+  //          later for 3D.
   //
   //  Chuck's comment:  I'm not sure this should be here.  It can
   //  easily be extracted in an arbitrary set of dimensions from a
@@ -62,8 +63,7 @@ public:
   // Defines type-related functions
   rgrl_type_macro( rgrl_feature_trace_pt, rgrl_feature );
 
-  //: Return a matrix whose columns form the subspace normal to the
-  //  trace tangent.
+  //: Return a matrix whose columns form the subspace normal to the trace tangent.
   virtual vnl_matrix<double> const&
   normal_subspace();
 
@@ -74,7 +74,7 @@ public:
   //  too much here.  Perhaps we should be make a subclass for the
   //  region-based estimator.
 
-protected:
+ protected:
   //:
   // Create an uninitialized feature with enough space to store a dim
   // dimensional feature. The error projection matrix is initialized
@@ -85,12 +85,11 @@ protected:
   vnl_vector<double> location_;
   vnl_vector<double> tangent_;
   vnl_matrix<double> error_proj_;
-private:
+ private:
 
- //:  The basis for the subspace of vectors normal to the tangent
-  //  direction.  This is normal subspace.  It is computed once,
-  //  when first needed, and cached.  This is because the feature
-  //  location and normal are fixed.
+  //: The basis for the subspace of vectors normal to the tangent direction.
+  //  This is normal subspace.  It is computed once, when first needed, and cached.
+  //  This is because the feature location and normal are fixed.
   bool subspace_cached_;
   vnl_matrix< double > normal_subspace_;
 
@@ -102,7 +101,6 @@ private:
 
   double length_;
   double radius_;
-
 };
 
 #endif

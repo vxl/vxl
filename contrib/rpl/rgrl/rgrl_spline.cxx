@@ -1,9 +1,9 @@
+#include "rgrl_spline.h"
 //:
 // \file
 // \author Lee, Ying-Lin (Bess)
 // \date   Sept 2003
 
-#include "rgrl_spline.h"
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
@@ -783,39 +783,40 @@ refinement( vnl_vector< unsigned > const& m ) const
         }
       }
     }
+#if 0
+    for ( i=0; i<m_[0]+2; ++i ) {
+      for ( j=0; j<m_[1]+2; ++j ) {
+        for ( k=0; k<m_[2]+2; ++k ) {
+          // 2*k
+          w[2*i + 2*j*(2*m_[0]+3) + 2*k*(2*m_[0]+3)*(2*m_[1]+3)] =
+            refine_helper_f1( v11[i][j][k], v11[i][j][k+1] ) ;
+          if ( i!=m_[0]+1 )
+            w[2*i+1 + 2*j*(2*m_[0]+3) + 2*k*(2*m_[0]+3)*(2*m_[1]+3) ] =
+              refine_helper_f1( v21[i][j][k], v21[i][j][k+1] );
+          if ( j!=m_[1]+1 )
+            w[2*i + (2*j+1)*(2*m_[0]+3) + 2*k*(2*m_[0]+3)*(2*m_[1]+3)] =
+              refine_helper_f1( v12[i][j][k], v12[i][j][k+1] );
+          if ( i!=m_[0]+1 && j!=m_[1]+1 )
+          w[2*i+1 + (2*j+1)*(2*m_[0]+3) + 2*k*(2*m_[0]+3)*(2*m_[1]+3) ] =
+            refine_helper_f1( v22[i][j][k], v22[i][j][k+1] );
 
-//      for ( i=0; i<m_[0]+2; ++i ) {
-//        for ( j=0; j<m_[1]+2; ++j ) {
-//          for ( k=0; k<m_[2]+2; ++k ) {
-//            // 2*k
-//            w[2*i + 2*j*(2*m_[0]+3) + 2*k*(2*m_[0]+3)*(2*m_[1]+3)] =
-//              refine_helper_f1( v11[i][j][k], v11[i][j][k+1] ) ;
-//            if ( i!=m_[0]+1 )
-//              w[2*i+1 + 2*j*(2*m_[0]+3) + 2*k*(2*m_[0]+3)*(2*m_[1]+3) ] =
-//                refine_helper_f1( v21[i][j][k], v21[i][j][k+1] );
-//            if ( j!=m_[1]+1 )
-//              w[2*i + (2*j+1)*(2*m_[0]+3) + 2*k*(2*m_[0]+3)*(2*m_[1]+3)] =
-//                refine_helper_f1( v12[i][j][k], v12[i][j][k+1] );
-//            if ( i!=m_[0]+1 && j!=m_[1]+1 )
-//            w[2*i+1 + (2*j+1)*(2*m_[0]+3) + 2*k*(2*m_[0]+3)*(2*m_[1]+3) ] =
-//              refine_helper_f1( v22[i][j][k], v22[i][j][k+1] );
-
-//            // 2*k+1
-//            if ( k!=m_[2]+1 )
-//              w[2*i + 2*j*(2*m_[0]+3) + (2*k+1)*(2*m_[0]+3)*(2*m_[1]+3)] =
-//                refine_helper_f2( v11[i][j][k], v11[i][j][k+1], v11[i][j][k+2] );
-//            if ( i!=m_[0]+1 && k!=m_[2]+1 )
-//              w[2*i+1 + 2*j*(2*m_[0]+3) + (2*k+1)*(2*m_[0]+3)*(2*m_[1]+3) ] =
-//                refine_helper_f2( v21[i][j][k], v21[i][j][k+1], v21[i][j][k+2] );
-//            if ( j!=m_[1]+1 && k!=m_[2]+1 )
-//              w[2*i + (2*j+1)*(2*m_[0]+3) + (2*k+1)*(2*m_[0]+3)*(2*m_[1]+3)] =
-//                refine_helper_f2( v12[i][j][k], v12[i][j][k+1], v12[i][j][k+2] );
-//            if ( i!=m_[0]+1 && j!=m_[1]+1 && k!=m_[2]+1 )
-//              w[2*i+1 +(2*j+1)*(2*m_[0]+3) + (2*k+1)*(2*m_[0]+3)*(2*m_[1]+3) ] =
-//                refine_helper_f2( v22[i][j][k], v22[i][j][k+1], v22[i][j][k+2] );
-//          }
-//        }
-//      }
+          // 2*k+1
+          if ( k!=m_[2]+1 )
+            w[2*i + 2*j*(2*m_[0]+3) + (2*k+1)*(2*m_[0]+3)*(2*m_[1]+3)] =
+              refine_helper_f2( v11[i][j][k], v11[i][j][k+1], v11[i][j][k+2] );
+          if ( i!=m_[0]+1 && k!=m_[2]+1 )
+            w[2*i+1 + 2*j*(2*m_[0]+3) + (2*k+1)*(2*m_[0]+3)*(2*m_[1]+3) ] =
+              refine_helper_f2( v21[i][j][k], v21[i][j][k+1], v21[i][j][k+2] );
+          if ( j!=m_[1]+1 && k!=m_[2]+1 )
+            w[2*i + (2*j+1)*(2*m_[0]+3) + (2*k+1)*(2*m_[0]+3)*(2*m_[1]+3)] =
+              refine_helper_f2( v12[i][j][k], v12[i][j][k+1], v12[i][j][k+2] );
+          if ( i!=m_[0]+1 && j!=m_[1]+1 && k!=m_[2]+1 )
+            w[2*i+1 +(2*j+1)*(2*m_[0]+3) + (2*k+1)*(2*m_[0]+3)*(2*m_[1]+3) ] =
+              refine_helper_f2( v22[i][j][k], v22[i][j][k+1], v22[i][j][k+2] );
+        }
+      }
+    }
+#endif // 0
   }
 
   vcl_cout << "rgrl_spline.cxx: refinement set_control_points: " << w << vcl_endl;

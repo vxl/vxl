@@ -1,11 +1,8 @@
-
 #ifndef rgrl_feature_set_h_
 #define rgrl_feature_set_h_
-
 //:
 // \file
-// \brief Base class to represent and provide access in several ways to a set of
-//    registration features.
+// \brief Base class to represent and provide access in several ways to a set of registration features.
 // \author Chuck Stewart
 // \date 12 Nov 2002
 
@@ -20,19 +17,17 @@ class rgrl_mask_box;
 
 #include "rgrl_feature_set_sptr.h"
 
-//:
-// \brief Base class to represent and provide access in several ways to a set of
-//    registration features.
+//: Base class to represent and provide access in several ways to a set of registration features.
 //
 //  Each feature set represents features of one type and at one resolution.
 //
 class rgrl_feature_set
   : public rgrl_object
 {
-public:
+ public:
   typedef vcl_vector<rgrl_feature_sptr>  feature_vector;
 
-public:
+ public:
   rgrl_feature_set();
 
   virtual ~rgrl_feature_set();
@@ -49,7 +44,7 @@ public:
   // representation.
   //
   virtual
-  rgrl_feature_sptr 
+  rgrl_feature_sptr
   nearest_feature( rgrl_feature_sptr feature ) const = 0;
 
   //:  Return all features within a given distance, one per segment (if segmented)
@@ -71,17 +66,16 @@ public:
   //:  Return the type of feature
   //
   virtual
-  const vcl_type_info& 
+  const vcl_type_info&
   type() const = 0;
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_feature_set, rgrl_object );
 
-private:
+ private:
   //disabled
   rgrl_feature_set( rgrl_feature_set const& other );
   rgrl_feature_set& operator=( rgrl_feature_set const& other );
-
 };
 
 
@@ -94,7 +88,7 @@ private:
 //
 class rgrl_feature_set_label
 {
-public:
+ public:
   //:
   rgrl_feature_set_label( const vcl_string& name );
 
@@ -107,7 +101,7 @@ public:
   //:
   bool operator<( rgrl_feature_set_label const& other ) const;
 
-private:
+ private:
   vcl_string name_;
 };
 
