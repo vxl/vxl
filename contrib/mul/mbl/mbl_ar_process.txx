@@ -71,7 +71,7 @@ template<class T>
 vnl_vector<T> mbl_ar_process<T>::predict(vnl_vector<T>& Xm1,
                                          vnl_vector<T>& Xm2)
 {
-  vnl_vector<T> Xm0;
+  vnl_vector<T> Xm0; // uninitialised
   if (Xm1.size()!=Xm2.size() || Xm1.size()!=Xm.size()) return Xm0;
 
   vnl_vector<T> wk(Xm.size());
@@ -147,8 +147,7 @@ void mbl_ar_process<T>::learn_burg(vcl_vector<vnl_vector<T> >& data)
         Ef[k]=Efp[k]+km*Ebp[k];
         Eb[k]=Ebp[k]+km*Efp[k];
         }
-      vnl_vector<T> b(3);
-      b=a;
+      vnl_vector<T> b=a;
       for (unsigned int k=0;k<i+1;k++)
       {
         b[k+1]+=km*a[i-k];
@@ -172,15 +171,10 @@ void mbl_ar_process<T>::learn(vcl_vector<vnl_vector<T> >& data)
   if (data.size()==0) return;
   unsigned int dim=data[0].size();
 
-  vnl_matrix<T> C(dim,dim);
-  vnl_vector<T> D(dim);
-  vnl_matrix<T> t1A2(dim,dim);
-  vnl_vector<T> R0(dim),R1(dim),R2(dim);
-
-  vnl_matrix<T> R00(dim,dim),R01(dim,dim),R02(dim,dim),R10(dim,dim),
-                R11(dim,dim),R12(dim,dim),R20(dim,dim),R21(dim,dim),R22(dim,dim);
-  vnl_matrix<T> Rp01(dim,dim),Rp02(dim,dim),Rp11(dim,dim),Rp12(dim,dim),
-      Rp21(dim,dim),Rp22(dim,dim);
+  vnl_vector<T> R0(dim,T(0)),R1(dim,T(0)),R2(dim,T(0)); // initialise to 0
+  vnl_matrix<T> R00(dim,dim,T(0)), R01(dim,dim,T(0)), R02(dim,dim,T(0)),
+                R10(dim,dim,T(0)), R11(dim,dim,T(0)), R12(dim,dim,T(0)),
+                R20(dim,dim,T(0)), R21(dim,dim,T(0)), R22(dim,dim,T(0));
 
   Xm=data[0];
   for (unsigned int i=1;i<data.size();i++)
@@ -206,34 +200,25 @@ void mbl_ar_process<T>::learn(vcl_vector<vnl_vector<T> >& data)
     R22+=outer_product(data[i-2],data[i-2]);
   }
 
-  T coef;
+  T coef=(T)1.0/((T)data.size()-(T)2.0);
 
-  coef=(T)1.0/((T)data.size()-(T)2.0);
-
-  Rp01=R01-coef*outer_product(R0,R1);
-  Rp02=R02-coef*outer_product(R0,R2);
-  Rp11=R11-coef*outer_product(R1,R1);
-  Rp12=R12-coef*outer_product(R1,R2);
-  Rp21=R21-coef*outer_product(R2,R1);
-  Rp22=R22-coef*outer_product(R2,R2);
+  vnl_matrix<T> Rp01=R01-coef*outer_product(R0,R1);
+  vnl_matrix<T> Rp02=R02-coef*outer_product(R0,R2);
+  vnl_matrix<T> Rp11=R11-coef*outer_product(R1,R1);
+  vnl_matrix<T> Rp12=R12-coef*outer_product(R1,R2);
+  vnl_matrix<T> Rp21=R21-coef*outer_product(R2,R1);
+  vnl_matrix<T> Rp22=R22-coef*outer_product(R2,R2);
 
   vnl_matrix_inverse<double> ti1A2(Rp11);
-  t1A2=ti1A2*Rp12;
+  vnl_matrix<T> t1A2=ti1A2*Rp12;
   vnl_matrix_inverse<double> ti2A2(Rp22-Rp21*t1A2);
 
   A_2=(Rp02-Rp01*t1A2)*ti2A2;
   A_1=(Rp01-A_2*Rp21)*ti1A2;
 
-  D=coef*(R0-A_2*R2-A_1*R1);
-
-  vnl_matrix<T> I(dim,dim);
-
-  I.fill_diagonal((T)1.0);
-
-  C=coef*(R00-A_2*R20-A_1*R10-outer_product(D,R0));
-
+  vnl_vector<T> D=coef*(R0-A_2*R2-A_1*R1);
+  vnl_matrix<T> C=coef*(R00-A_2*R20-A_1*R10-outer_product(D,R0));
   vnl_symmetric_eigensystem<T> srB(C);
-
   B_0=srB.square_root();
 
   vnl_qr<double> qr_A_1(A_1);
