@@ -31,10 +31,11 @@ inline vil2_image_view<typename T::value_type> vil2_view_as_planes(const vil2_im
   // Image is RGBRGBRGB so i step = 3ncomponents*v.istep(), jstep=ncomponents*v.jstep()
 #if VCL_VC60 || !VCL_HAS_TYPENAME
   return vil2_image_view<T::value_type>(
+    v.memory_chunk(),(T::value_type const*) v.top_left_ptr(),
 #else
   return vil2_image_view<typename T::value_type>(
+    v.memory_chunk(),(typename T::value_type const*) v.top_left_ptr(),
 #endif
-    v.memory_chunk(),(T::value_type const*) v.top_left_ptr(),
     v.ni(),v.nj(),ncomponents,
     v.istep()*ncomponents,v.jstep()*ncomponents,1);
 }
