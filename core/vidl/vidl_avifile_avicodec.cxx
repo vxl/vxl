@@ -17,7 +17,6 @@
 #include <vul/vul_file.h>
 
 #include <vcl_iostream.h>
-#include <vcl_cstdio.h>
 
 
 //: Constructor
@@ -25,7 +24,6 @@ vidl_avicodec::vidl_avicodec()
 : current_frame_(0), moviefile_(NULL), moviestream_(NULL)
 {
 }
-
 
 
 //: Destructor
@@ -84,14 +82,14 @@ vidl_avicodec::load_avi(const char* fname, char mode )
   current_frame_=-1;
 
   moviefile_ = CreateIAviReadFile(fname);
-  if( !moviefile_ ) return false;
+  if ( !moviefile_ ) return false;
 
-  if( moviefile_->VideoStreamCount() == 0 ){
+  if ( moviefile_->VideoStreamCount() == 0 ){
     delete moviefile_;
     moviefile_ = NULL;
     return false;
   }
-  
+
   moviestream_ = moviefile_->GetStream(0,AviStream::Video);
   if ( !moviestream_ ){
     delete moviefile_;
@@ -108,11 +106,11 @@ vidl_avicodec::load_avi(const char* fname, char mode )
   this->set_image_class('C');
   this->set_name(vul_file::basename(fname).c_str());
   this->set_description(fname);
-  
+
   //frame_rate_=(double)moviestream_->GetLength()/moviestream_->GetLengthTime();
 
   moviestream_->StartStreaming();
-  
+
   return true;
 }
 
@@ -124,8 +122,8 @@ vidl_avicodec::get_view( int position,
 {
   if (!moviestream_) return NULL;
 
-  if( const_cast<vidl_avicodec *>(this)->seek(position) < 0) return NULL;
-  
+  if ( const_cast<vidl_avicodec *>(this)->seek(position) < 0) return NULL;
+
   CImage* cim;
 
   cim=moviestream_->GetFrame();
@@ -150,9 +148,9 @@ vidl_avicodec::get_view( int position,
   // Create a vil_image_view of this memory chunk
   vil_image_view_base_sptr image = new vil_image_view<vxl_byte>(chunk, reinterpret_cast<vxl_byte*>(chunk->data())+2,
                                                                 im24->Width(), im24->Height(), 3,
-                                                                3, im24->Width()*3, -1);                                                               
+                                                                3, im24->Width()*3, -1);
   if (cim->Depth()!=24) delete im24;
-  
+
   return image;
 }
 
@@ -172,22 +170,22 @@ vidl_avicodec::seek(int frame_number)
 {
   if (!moviestream_ || (unsigned int)frame_number > moviestream_->GetLength())
     return -1;
-    
+
   if (frame_number==current_frame_)
     return current_frame_;
-    
+
   if (frame_number==current_frame_+1){
     current_frame_ = next_frame();
     return current_frame_;
   }
-    
+
   if (frame_number==0){
     current_frame_=0;
     moviestream_->Seek(current_frame_);
     moviestream_->ReadFrame();
     return current_frame_;
   }
-  
+
   moviestream_->Seek(frame_number);
   moviestream_->SeekToPrevKeyFrame();
   int key_frame = moviestream_->GetPos();
