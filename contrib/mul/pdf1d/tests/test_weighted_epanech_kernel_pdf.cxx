@@ -24,18 +24,15 @@
 //=======================================================================
 
 
-//: Generate losts of samples using pdf, build new pdf with builder
-//  and compare the two
+//: Generate lots of samples using pdf, build new pdf with builder and compare the two
 void test_weighted_epanech_kernel_pdf()
 {
-
-
   vcl_cout << "\n\n*******************************************" << vcl_endl;
   vcl_cout <<     " Testing pdf1d_weighted_epanech_kernel_pdf " << vcl_endl;
   vcl_cout <<     "*******************************************" << vcl_endl;
 
 
-// Test Single kernel distribution
+  // Test Single kernel distribution
   {
     pdf1d_weighted_epanech_kernel_pdf p1(2,1.0,1.0);
     double d1 [] = {0.0, 1.0};
@@ -81,7 +78,6 @@ void test_weighted_epanech_kernel_pdf()
   }
 
 
-
   vsl_add_to_binary_loader(pdf1d_weighted_epanech_kernel_pdf());
   vsl_add_to_binary_loader(pdf1d_epanech_kernel_pdf_builder());
 
@@ -112,8 +108,6 @@ void test_weighted_epanech_kernel_pdf()
   vcl_cout<<vcl_endl;
 
 // Test the IO ================================================
-
-  pdf1d_builder* p_builder = & builder;
 
   TEST("Mean of built model",vcl_fabs(datagen.mean()-p_pdf_built->mean())<0.1,true);
   TEST("Variances",vcl_fabs(datagen.variance()-p_pdf_built->variance())<0.1,true);
@@ -151,10 +145,7 @@ void test_weighted_epanech_kernel_pdf()
   pdf1d_sampler *p_sampler2 = p_pdf_built->new_sampler();
   unsigned pass, fail;
   double thresh;
-  
 
-
-  pdf1d_weighted_epanech_kernel_pdf & kde = (*static_cast<pdf1d_weighted_epanech_kernel_pdf*>(p_pdf_built));
 
   pass=0; fail=0;
   thresh = p_pdf_built->inverse_cdf(0.9);
@@ -169,8 +160,7 @@ void test_weighted_epanech_kernel_pdf()
   TEST("880 < pass < 920", pass > 880 && pass < 920, true);
 
 
-
-  pass=0; fail=0; 
+  pass=0; fail=0;
   thresh = p_pdf_built->inverse_cdf(0.1);
   vcl_cout << "\nSample value threshold for passing 10%:                   " << thresh << vcl_endl;
   for (unsigned i=0; i < 1000; i++)
@@ -182,13 +172,7 @@ void test_weighted_epanech_kernel_pdf()
   vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed using normal method." << vcl_endl;
   TEST("80 < pass < 120", pass > 80 && pass < 120, true);
 
-
-
-
   delete p_sampler2;
-
-
-
   delete p_pdf_built;
   delete p_pdf_in;
   delete p_builder_in;

@@ -23,8 +23,7 @@
 #include <vsl/vsl_binary_loader.h>
 
 
-//: Generate losts of samples using pdf, build new pdf with builder
-//  and compare the two
+//: Generate lots of samples using pdf, build new pdf with builder and compare the two
 void test_mixture()
 {
   vcl_cout << "\n\n**************************" << vcl_endl;
@@ -50,13 +49,13 @@ void test_mixture()
   pdf1d_mixture pdf;
   pdf.init(a_gaussian, n_comp);
 
-  int n = 5;
+  //n_comp = 5;
   vcl_vector<double> mean(n_comp), var(n_comp);
 
   for (int j=0;j<n_comp;++j)
   {
     mean[j]=2*j;
-	var[j] =0.125*(j+1);
+    var[j] =0.125*(j+1);
     pdf1d_gaussian& gauss_j = (pdf1d_gaussian&) *(pdf.components()[j]);
     gauss_j.set(mean[j],var[j]);
   }
