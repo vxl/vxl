@@ -31,5 +31,5 @@ SUBDIRS( algo )
 SUBDIRS( io )
 
 IF( BUILD_TESTS )
-  SUBDIRS( tests )
+  SUBDIRS( tests examples )
 ENDIF( BUILD_TESTS )
