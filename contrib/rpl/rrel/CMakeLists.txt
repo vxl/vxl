@@ -25,6 +25,7 @@ SET(rrel_sources
 
  rrel_irls.cxx                  rrel_irls.h
  rrel_ran_sam_search.cxx        rrel_ran_sam_search.h
+ rrel_wgted_ran_sam_search.cxx  rrel_wgted_ran_sam_search.h
 
  rrel_util.txx                  rrel_util.h
 
