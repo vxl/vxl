@@ -105,7 +105,7 @@ easier to develop because large image support (entire image not in
 memory) will be changed.  This should not bother anyone because large
 image support is not as complete in vil as one might think.
 
-Slide "Problems with existing vil": Ian has done experiments
+Slide "Problems with existing vil": Tim has done experiments
 confirming that on modern computers arithmetic indexing is faster than
 pointer based indexing.  The multiplications are faster than the
 memory lookups.
@@ -150,7 +150,7 @@ rid of the "delete" in this example.
 It was agreed that get_view should be renamed new_view as Amitha
 suggests.  This helps to emphasize that what is returned must be
 deleted.  Also, a new function will be needed to replace get_view().
-[??? Ian or Amitha should check this paragraph]
+
 
 There was a call for a vote on the meaning of equality for vil2 views.
 The choices would be.
@@ -506,6 +506,8 @@ Goals:
 Question: Should the VXL Book be split into a users books and a
 developers book.  vsl has a lot of sections of developer interest
 only.  There are several other sections labeled "developer topic".
+Ian Scott will remove the developer topic sections in vsl and put them
+in an appendix.
 
 vbl_bounding_box_DIM and vbl_*tuple* should be removed.
 
