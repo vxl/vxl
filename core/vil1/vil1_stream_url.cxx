@@ -15,20 +15,25 @@
 
 #if defined(__unix__)
 
-#include <unistd.h>       // read(), write(), close()
-#include <netdb.h>        // gethostbyname(), sockaddr_in()
-#include <sys/socket.h>
-#include <netinet/in.h>   // htons()
-#ifdef __alpha
-#include <fp.h>           // htons() [ on e.g. DEC alpha, htons is in machine/endian.h]
+# include <unistd.h>       // read(), write(), close()
+# include <netdb.h>        // gethostbyname(), sockaddr_in()
+# include <sys/socket.h>
+# include <netinet/in.h>   // htons()
+# ifdef __alpha
+#  include <fp.h>           // htons() [ on e.g. DEC alpha, htons is in machine/endian.h]
+# endif
+# define SOCKET int
+#elif defined (VCL_WIN32)
+# include <winsock2.h>
 #endif
 
 vil_stream_url::vil_stream_url(char const *url)
   : underlying(0)
 {
-  // split URL into host, path and port number.
+  // split URL into auth, host, path and port number.
   vcl_string host;
   vcl_string path;
+  vcl_string auth;
   int port = 80; // default
   if (vcl_strncmp(url, "http://", 7) != 0)
     return; // doesn't look like a URL to me....
@@ -37,6 +42,9 @@ vil_stream_url::vil_stream_url(char const *url)
   while (*p && *p!='/')
     ++ p;
   host = vcl_string(url+7, p);
+
+
+
 
   if (*p)
     path = p+1;
@@ -51,21 +59,55 @@ vil_stream_url::vil_stream_url(char const *url)
       break;
     }
 
+  //authentification
+  for (unsigned int i=0; i<host.size(); ++i)
+    if (host[i] == '@') {
+      auth = vcl_string(host.c_str(), host.c_str()+i);
+      host = vcl_string(host.c_str()+i+1, host.c_str() + host.size());
+      break;
+    }
+
+
   // so far so good.
 #if 0
-  vcl_cerr << "host = \'" << host << "\'" << vcl_endl
+  vcl_cerr << "auth = \'" << auth << "\'" << vcl_endl
+           << "host = \'" << host << "\'" << vcl_endl
            << "path = \'" << path << "\'" << vcl_endl
            << "port = " << port << vcl_endl;
 #endif
 
+#ifdef VCL_WIN32
+  static int called_WSAStartup;
+  if (called_WSAStartup==0)
+  {
+    WORD wVersionRequested;
+    WSADATA wsaData;
+    int err;
+ 
+    wVersionRequested = MAKEWORD( 2, 2 );
+ 
+    err = WSAStartup( wVersionRequested, &wsaData );
+  }
+#endif
+
   // create socket endpoint.
-  int tcp_socket = socket(PF_INET,      // IPv4 protocols.
+  SOCKET tcp_socket = socket(PF_INET,      // IPv4 protocols.
                           SOCK_STREAM,  // two-way, reliable, connection-based stream socket.
                           PF_UNSPEC);   // protocol number.
-  if (tcp_socket < 0) {
+
+#ifdef VCL_WIN32
+  if (tcp_socket == INVALID_SOCKET) {
     vcl_cerr << __FILE__ ": failed to create socket." << vcl_endl;
+# ifndef NDEBUG
+    vcl_cerr << "error code : " << WSAGetLastError() << vcl_endl;
+# endif
     return;
   }
+#else
+  if (tcp_socket < 0) {
+    vcl_cerr << __FILE__ ": failed to create socket." << vcl_endl;
+#endif 
+
 #ifdef DEBUG
   vcl_cerr << __FILE__ ": tcp_sockect = " << tcp_socket << vcl_endl;
 #endif
@@ -95,8 +137,14 @@ vil_stream_url::vil_stream_url(char const *url)
 
   // send HTTP 1.0 request.
   vcl_sprintf(buffer, "GET http://%s/%s\n", host.c_str(), path.c_str());
+  if (auth != "")
+    vcl_sprintf(buffer+vcl_strlen(buffer), "Authorization:  user %s\n", auth.c_str());
 
+#ifdef VCL_WIN32
+  if (send(tcp_socket, buffer, vcl_strlen(buffer), 0) < 0) {
+#else
   if (::write(tcp_socket, buffer, vcl_strlen(buffer)) < 0) {
+#endif 
     vcl_cerr << __FILE__ ": error sending HTTP request" << vcl_endl;
     return;
   }
@@ -113,22 +161,31 @@ vil_stream_url::vil_stream_url(char const *url)
   underlying->ref();
   {
     int n;
+#ifdef VCL_WIN32
+    while ((n = recv(tcp_socket, buffer, sizeof buffer,0 )) > 0) {
+#else
     while ((n = ::read(tcp_socket, buffer, sizeof buffer)) > 0) {
+#endif 
       underlying->write(buffer, n);
       //vcl_cerr << n << " bytes" << vcl_endl;
     }
   }
 
   // close connection to server.
-  close(tcp_socket);
-}
+#ifdef VCL_WIN32
+  closesocket(tcp_socket);
 #else
+  close(tcp_socket);
+#endif 
+}
+
+/*#else
 vil_stream_url::vil_stream_url(char const *) : underlying(0)
 {
   vcl_cerr << __FILE__ ": only implemented for unix at the moment" << vcl_endl;
 }
 #endif
-
+*/
 vil_stream_url::~vil_stream_url()
 {
   if (underlying) {
