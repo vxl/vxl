@@ -100,9 +100,6 @@ public:
   // The array ordering corresponds to lagrangians()
   const vcl_vector<vnl_vector<double> > & support_vectors() const {return supports_;}
 
-  //: Get a particular support vector.
-  // The array ordering corresponds to lagrangians()
-  const vnl_vector<double> & support_vector(unsigned i) const {return supports_[i];}
 
   //: The number of possible output classes.
   unsigned virtual n_classes() const {return 1;}

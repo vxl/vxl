@@ -6,11 +6,11 @@
 // \author Ian Scott
 // \date Jan 2001
 
+#include "clsfy_rbf_svm.h"
 #include <vcl_limits.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
-#include <clsfy/clsfy_rbf_svm.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/vnl_math.h>
 #include <vsl/vsl_vector_io.h>
@@ -149,8 +149,7 @@ vcl_string clsfy_rbf_svm::is_a() const
 
 bool clsfy_rbf_svm::is_class(vcl_string const& s) const
 {
-  static const vcl_string s_ = "clsfy_rbf_svm";
-  return s == s_ || clsfy_classifier_base::is_class(s);
+  return s == is_a() || clsfy_classifier_base::is_class(s);
 }
 
 //=======================================================================
