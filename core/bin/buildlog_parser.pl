@@ -24,6 +24,29 @@ use Time::Local;
 # local module
 use FrostAPI;
 
+# see if we have compress
+#   if so, we output to a tmpfile first, then compress it, MIME it and then output it
+#   otherwise we just output it to STDOUT
+$tmpfilename1= "/tmp/buildlog_parser_$$1.tmp";
+$tmpfilename2= "/tmp/buildlog_parser_$$2.tmp";
+
+if ( -f "/bin/compress" )
+  {
+    $compress= "/bin/compress -c $tmpfilename1 > $tmpfilename2";
+  }
+
+if ( -f "/usr/local/bin/gzip" )
+  {
+    $compress= "/usr/local/bin/gzip -c $tmpfilename1 > $tmpfilename2";
+  }
+
+if ( -f "/tmp/iup_opt/bin/gzip" )
+  {
+    $compress= "/tmp/iup_opt/bin/gzip -c $tmpfilename1 > $tmpfilename2";
+  }
+
+
+# get current date and time
 $date= localtime;
 
 ############
@@ -179,8 +202,9 @@ while( $in=<INFO>)
     if( $index)
       {
         $buildlogs[$index].= $currentlineweb;
-        $fullbuildlog.= $fullbuildlog;
       }
+
+    $fullbuildlog.= $currentlineweb;
   }
 
 ##############################################
@@ -283,27 +307,37 @@ $tottime= int(($ae-$as)/60);
 ### OUTPUT THE XML
 
 #StartFrost( "icehouse", "vxl", "vxluser", "");
-SetMachine( $machine);
 
-StartRunTestGroup( "root", $date);
-StartRunTest( "BuildStats", $date);
-RunMeasurement( "Errors", $toterrors);
-RunMeasurement( "Warnings", $totwarnings);
-RunMeasurement( "FileCount", $totfiles);
-RunMeasurement( "TimeStarted", $totstarttime);
-RunMeasurement( "TimeElapsed", $tottime);
-#RunMeasurementBase64( "BuildLog", $fullbuildlog);
+
+if( $compress ne "")
+  {
+    FrostAPI::StartFrost( "FILE", $tmpfilename1);
+  }
+
+
+FrostAPI::SetMachine( $machine);
+
+FrostAPI::StartRunTestGroup( "root", $date);
+FrostAPI::StartRunTest( "BuildStats", $date);
+FrostAPI::RunMeasurement( "Errors", $toterrors);
+FrostAPI::RunMeasurement( "Warnings", $totwarnings);
+FrostAPI::RunMeasurement( "FileCount", $totfiles);
+FrostAPI::RunMeasurement( "TimeStarted", $totstarttime);
+FrostAPI::RunMeasurement( "TimeElapsed", $tottime);
+FrostAPI::RunMeasurementBase64( "BuildLog", $fullbuildlog);
 
 if( $toterrors>0)
   {
-    EndRunTest( "f");
+    FrostAPI::EndRunTest( "f");
   }
 else
   {
-    EndRunTest( "t");
+    FrostAPI::EndRunTest( "t");
   }
 
-EndRunTestGroup();
+
+
+FrostAPI::EndRunTestGroup();
 
 
 $headindex= $allbuilds{""};
@@ -314,7 +348,26 @@ for( $i=0; $i<= $#roots; $i++)
     XMLruntestgroup( $roots[$i]);
   }
 
-#EndFrost();
+if( $compress ne "")
+  {
+    FrostAPI::EndFrost();
+
+    system( $compress);
+
+    open( CP, $tmpfilename2);
+    
+    $buffer= "";
+
+    while( read( CP, $c, 1))
+      {
+	$buffer.= $c;
+      }
+
+    print MIME::Base64::encode( $buffer);
+
+    unlink( $tmpfilename1);
+    unlink( $tmpfilename2);
+  }
 
 #print webify_string("hello\nthis is \"a\" test")."\n";
 
@@ -441,28 +494,29 @@ sub XMLruntestgroup
     my @children;
     my $i;
 
-    StartRunTestGroup( $name, $date);
+    FrostAPI::StartRunTestGroup( $name, $date);
 
       {
         if( $name=~ /\//)
           {
-            StartRunTest( "BuildDirectory", $date);
+            FrostAPI::StartRunTest( "BuildDirectory", $date);
           }
         else
           {
-            StartRunTest( "BuildLibrary", $date);
+            FrostAPI::StartRunTest( "BuildLibrary", $date);
           }
 
         # errors
-        RunMeasurement( "Errors",($builderrors[$index]+0));
+        FrostAPI::RunMeasurement( "Errors",($builderrors[$index]+0));
 
         # warnings
-        RunMeasurement( "Warnings", ($buildwarnings[$index]+0));
+        FrostAPI::RunMeasurement( "Warnings", ($buildwarnings[$index]+0));
 
-        if ( $buildlogs[$index] ne "")
-          {
-            RunMeasurementBase64( "BuildLog", $buildlogs[$index]);
-          }
+	# build log
+#        if ( $buildlogs[$index] ne "")
+#          {
+#            FrostAPI::RunMeasurementBase64( "BuildLog", $buildlogs[$index]);
+#          }
 
         # file count
 #       RunMeasurement( "BuildFileNumber", ($buildfilenumber[$index]+0));
@@ -472,11 +526,11 @@ sub XMLruntestgroup
 
         if( $builderrors[$index]== 0)
           {
-            EndRunTest("t");
+            FrostAPI::EndRunTest("t");
           }
         else
           {
-            EndRunTest("f");
+            FrostAPI::EndRunTest("f");
           }
       }
 
@@ -487,6 +541,6 @@ sub XMLruntestgroup
         XMLruntestgroup( $children[$i]);
       }
 
-    EndRunTestGroup( $date);
+    FrostAPI::EndRunTestGroup( $date);
   }
 

@@ -2,10 +2,15 @@
 # crossge@crd.ge.com
 #
 
+package FrostAPI;
+
 use MIME::Base64;
 use IO::Socket;
 
+use vars qw( $frosttype $frostsocket );
+
 # globals
+$frosttype= "";
 $frostsocket= "STDOUT";
 
 
@@ -122,27 +127,43 @@ sub StartFrost
   {
     my ($host,$database,$username,$password)= @_;
 
-    $frostsocket = IO::Socket::INET->new( PeerAddr => $host, PeerPort => 4444, Proto => "tcp", Type => SOCK_STREAM, TimeOut => 10 )
-      or die $@;
+    if( $host eq "FILE")
+      {
+	$frostsocket= "";
+	open( $frostsocket, ">$database");
+	$frosttype= "FILE";
+      }
+    else
+      {
+	$frostsocket = IO::Socket::INET->new( PeerAddr => $host, PeerPort => 4444, Proto => "tcp", Type => SOCK_STREAM, TimeOut => 10 )
+	  or die $@;
     
-    print $frostsocket "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-    print $frostsocket "<!DOCTYPE FrostImmediate SYSTEM \"http://pragmatic.crd.ge.com/blezek/xml/FrostImmediate.dtd\">\n";
-    print $frostsocket "<FrostImmediate Database=\"$database\" Server=\"$host\" Username=\"$username\" Password=\"$password\">\n\n";
+	print $frostsocket "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+	print $frostsocket "<!DOCTYPE FrostImmediate SYSTEM \"http://pragmatic.crd.ge.com/blezek/xml/FrostImmediate.dtd\">\n";
+	print $frostsocket "<FrostImmediate Database=\"$database\" Server=\"$host\" Username=\"$username\" Password=\"$password\">\n\n";
 
-    StartSchema();
+	StartSchema();
+      }
   }
 
 sub EndFrost
   {
-    EndSchema();
-
-    print $frostsocket "</FrostImmediate>\n";
-
-    my $in= <$frostsocket>;
-
-    if ($in!~ /<Status>true<\/Status>/i)
+    if( $frosttype eq "FILE")
       {
-	print "Error from server: $in\n";
+	close( $frostsocket);
+      }
+    else
+      {
+	EndSchema();
+	
+	print $frostsocket "</FrostImmediate>\n";
+	
+	my $in= <$frostsocket>;
+	
+	if ($in!~ /<Status>true<\/Status>/i)
+	  {
+	    print "Error from server: $in\n";
+	  }
       }
   }
 
@@ -171,6 +192,7 @@ sub DefineTest
     shift;
     shift;
     my (@gauges)= @_;
+    my $i;
 
     print $frostsocket "<Test Name=\"$name\">\n";
     print $frostsocket "   <Description>$description</Description>\n";
