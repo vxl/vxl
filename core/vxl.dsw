@@ -45,9 +45,6 @@ Package=<4>
     Project_Dep_Name vidl
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name vcgl
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name vcsl
     End Project Dependency
     Begin Project Dependency
@@ -855,21 +852,6 @@ Package=<4>
 
 ###############################################################################
 
-Project: "vcgl"=.\vcgl\vcgl.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name vgl
-    End Project Dependency
-}}}
-
-###############################################################################
-
 Project: "vcl"=..\vcl\vcl.dsp - Package Owner=<4>
 
 Package=<5>
@@ -1524,9 +1506,6 @@ Package=<4>
     Project_Dep_Name vul_io
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name vcgl
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name vcsl
     End Project Dependency
 }}}
@@ -1573,9 +1552,6 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name osl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name vcgl
     End Project Dependency
 }}}
 
