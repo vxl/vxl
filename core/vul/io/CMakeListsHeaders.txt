@@ -1,3 +1,0 @@
-SOURCE_FILES(vul_io_sources
-  vul_io_user_info.h
-)
