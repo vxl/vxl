@@ -7,11 +7,12 @@
 // \author Ian Scott, Chris Wolstenholme - Manchester
 
 #include "vil3d_dicom.h"
-#include <vcl_cstdlib.h>
-#include <vil3d/vil3d_image_view.h>
-#include <vil/file_formats/vil_dicom_header.h>
 
 #if 0
+
+#include <vcl_cstdlib.h>
+#include <vil3d/vil3d_image_view.h>
+
 
 vil3d_dicom_format::vil3d_dicom_format() {}
 
@@ -51,4 +52,3 @@ vil3d_image_resource_sptr vil3d_dicom_format::make_output_image
 }
 
 #endif // 0
-
