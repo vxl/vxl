@@ -25,7 +25,7 @@
 //*****************************************************************************
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
-
+#include <vsl/vsl_binary_io.h>
 #include <vgl/vgl_fwd.h> // vgl_line_segment_2d, vgl_homg_line_2d, vgl_point_2d
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/vgl_line_segment_2d.h>
@@ -214,6 +214,36 @@ class vsol_line_2d : public vsol_curve_2d
   //  REQUIRE: in(p)
   //---------------------------------------------------------------------------
   virtual vgl_homg_line_2d<double>* tangent_at_point(const vsol_point_2d_sptr &p) const;
+
+  // ==== Binary IO methods ======
+
+  //: Binary save self to stream.
+  void b_write(vsl_b_ostream &os) const;
+
+  //: Binary load self from stream.
+  void b_read(vsl_b_istream &is);
+
+  //: Return IO version number;
+  short version() const;
+
+  //: Print an ascii summary to the stream
+  void print_summary(vcl_ostream &os) const;
+
+  //: Return a platform independent string identifying the class
+  vcl_string is_a() const;
+
+  //: Return true if the argument matches the string identifying the class or any parent class
+  bool is_class(const vcl_string& cls) const;
 };
+//: Stream operator
+
+vcl_ostream&  operator<<(vcl_ostream& s, vsol_line_2d const& p);
+
+#include "vsol_line_2d_sptr.h"
+//: Binary save vsol_line_2d* to stream.
+void vsl_b_write(vsl_b_ostream &os, vsol_line_2d_sptr const& p);
+
+//: Binary load vsol_line_2d* from stream.
+void vsl_b_read(vsl_b_istream &is, vsol_line_2d_sptr &p);
 
 #endif // vsol_line_2d_h_

@@ -305,3 +305,113 @@ vgl_line_segment_2d<double> vsol_line_2d::vgl_seg_2d() const
   vgl_line_segment_2d<double> l(vp0, vp1);
   return l;
 }
+
+
+//----------------------------------------------------------------
+// ================   Binary I/O Methods ========================
+//----------------------------------------------------------------
+
+//: Binary save self to stream.
+void vsol_line_2d::b_write(vsl_b_ostream &os) const
+{
+  vsl_b_write(os, version());
+  if (!p0_){
+    vsl_b_write(os, false); // Indicate null pointer stored
+  }
+  else{
+    vsl_b_write(os,true); // Indicate non-null pointer stored
+    p0_->b_write(os);
+  }
+  if (!p1_){
+    vsl_b_write(os, false); // Indicate null pointer stored
+  }
+  else{
+    vsl_b_write(os,true); // Indicate non-null pointer stored
+    p1_->b_write(os);
+  }
+}
+
+//: Binary load self from stream. (not typically used)
+void vsol_line_2d::b_read(vsl_b_istream &is)
+{
+  if(!is)
+    return;
+  short ver;
+  vsl_b_read(is, ver);
+  switch(ver)
+  {
+  case 1:
+    {
+      vsl_b_read(is, p0_);
+      vsl_b_read(is, p1_);
+    }
+  }
+}
+//: Return IO version number;
+short vsol_line_2d::version() const
+{
+  return 1;
+}
+
+//: Print an ascii summary to the stream
+void vsol_line_2d::print_summary(vcl_ostream &os) const
+{
+  os << *this;
+}
+
+  //: Return a platform independent string identifying the class
+vcl_string vsol_line_2d::is_a() const
+{
+  return vcl_string("vsol_line_2d");
+}
+
+  //: Return true if the argument matches the string identifying the class or any parent class
+bool vsol_line_2d::is_class(const vcl_string& cls) const
+{
+  return cls==vsol_line_2d::is_a();
+}
+
+//external functions
+vcl_ostream& operator<<(vcl_ostream& s, vsol_line_2d const& l)
+{
+  s << '[' << *(l.p0()) << ' ' << *(l.p1()) << ']';
+  return s;
+}
+
+//: Binary save vsol_line_2d_sptr to stream.
+void
+vsl_b_write(vsl_b_ostream &os, vsol_line_2d_sptr const& l)
+{
+  if (!l){
+    vsl_b_write(os, false); // Indicate null pointer stored
+  }
+  else{
+    vsl_b_write(os,true); // Indicate non-null pointer stored
+    l->b_write(os);
+  }
+}
+
+//: Binary load vsol_line_2d_sptr from stream.
+void
+vsl_b_read(vsl_b_istream &is, vsol_line_2d_sptr &l)
+{
+  bool not_null_ptr;
+  vsl_b_read(is, not_null_ptr);
+  if (not_null_ptr){
+    short ver;
+    vsl_b_read(is, ver);
+    switch(ver)
+      {
+      case 1:
+        {
+          vsol_point_2d_sptr p0, p1;
+          vsl_b_read(is, p0);
+          vsl_b_read(is, p1);
+          l = new vsol_line_2d(p0, p1);
+          break;
+       }
+      default:
+        l = 0;
+      }
+  }
+}
