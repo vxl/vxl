@@ -81,7 +81,7 @@ template <class srcT, class destT>
 inline void brip_gauss_filter( const vil_image_view<srcT>& src_im,
                                vil_image_view<destT>& dest_im,
                                double sigma,
-                               unsigned k_size,
+                               unsigned int k_size,
                                vil_convolve_boundary_option option )
 {
   unsigned ni = src_im.ni();
@@ -92,13 +92,13 @@ inline void brip_gauss_filter( const vil_image_view<srcT>& src_im,
 
   // compute the kernel
   double *kernel = new double[k_size];
-  for (int i=0; i<k_size; ++i){
+  for (unsigned int i=0; i<k_size; ++i){
     double val = ((double(i)+0.5)-double(k_size)/2.0);
     kernel[i] = vcl_exp(-(val*val)/(2.0*sigma*sigma));
   }
   double sum = 0.0;
-  for (int i=0; i<k_size; ++i) sum += kernel[i];
-  for (int i=0; i<k_size; ++i) kernel[i] /= sum;
+  for (unsigned int i=0; i<k_size; ++i) sum += kernel[i];
+  for (unsigned int i=0; i<k_size; ++i) kernel[i] /= sum;
 
   vil_image_view<destT> work(ni, nj, n_planes);
 
