@@ -76,7 +76,7 @@ vsol_spatial_object_3d_sptr vsol_group_3d::object(const int i) const
 //---------------------------------------------------------------------------
 //: Return the real type of a group. It is a SPATIALGROUP
 //---------------------------------------------------------------------------
-enum  vsol_spatial_object_3d::vsol_spatial_object_3d_type
+vsol_spatial_object_3d::vsol_spatial_object_3d_type
 vsol_group_3d::spatial_type(void) const
 {
   return vsol_spatial_object_3d::SPATIALGROUP;

@@ -8,7 +8,7 @@
 const float vsol_spatial_object_2d::eps=1.0e-3f;
 int vsol_spatial_object_2d::tagcount_=0;
 
-char *vsol_spatial_object_2d::SpatialTypes[]=
+char * vsol_spatial_object_2d::SpatialTypes[] =
 {
   "NO_TYPE             ",
   "TOPOLOGYOBJECT      ",
@@ -19,7 +19,7 @@ char *vsol_spatial_object_2d::SpatialTypes[]=
   "NUM_SPATIALOBJECT_TYPES"
 };
 
-const char *vsol_spatial_object_2d::get_name(void) const
+const char * vsol_spatial_object_2d::get_name() const
 {
   vsol_spatial_object_2d_type type =spatial_type();
   if (type > 0 && type < vsol_spatial_object_2d::NUM_SPATIALOBJECT_TYPES)
@@ -70,7 +70,7 @@ int vsol_spatial_object_2d::not_applicable(const vcl_string &message) const
   return 0;
 }
 
-void  iu_delete(vsol_spatial_object_2d* so)
+void iu_delete(vsol_spatial_object_2d* so)
 {
   if (so)
     so->protected_destroy();

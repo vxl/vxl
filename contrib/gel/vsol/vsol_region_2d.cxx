@@ -6,4 +6,3 @@
 vsol_region_2d::~vsol_region_2d()
 {
 }
-

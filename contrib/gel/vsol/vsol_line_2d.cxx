@@ -56,7 +56,7 @@ vsol_line_2d::vsol_line_2d(const vsol_line_2d &other)
 }
 
 //---------------------------------------------------------------------------
-//: Destructor
+// Destructor
 //---------------------------------------------------------------------------
 vsol_line_2d::~vsol_line_2d()
 {
@@ -64,7 +64,7 @@ vsol_line_2d::~vsol_line_2d()
 
 //---------------------------------------------------------------------------
 //: Clone `this': creation of a new object and initialization
-//       See Prototype pattern
+//  See Prototype pattern
 //---------------------------------------------------------------------------
 vsol_spatial_object_2d_sptr vsol_line_2d::clone(void) const
 {
@@ -132,7 +132,7 @@ bool vsol_line_2d::operator==(const vsol_spatial_object_2d& obj) const
   return
    obj.spatial_type() == vsol_spatial_object_2d::CURVE &&
    ((vsol_curve_2d const&)obj).curve_type() == vsol_curve_2d::LINE
-  ? *this == (vsol_line_2d const&) (vsol_curve_2d const&) obj
+  ? operator== ((vsol_line_2d const&)(vsol_curve_2d const&)obj)
   : false;
 }
 

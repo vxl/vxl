@@ -11,6 +11,7 @@ vsol_box_2d::vsol_box_2d()
 vsol_box_2d::vsol_box_2d(vsol_box_2d const &b){
   box_ = b.box_;
 }
+
 vsol_box_2d::~vsol_box_2d()
 {
   // vcl_cout << "deleting a boxology object\n";
@@ -93,7 +94,7 @@ bool vsol_box_2d::near_equal(vsol_box_2d& b, float tolerance)
 }
 void vsol_box_2d::reset_bounds()
 {
-  for(int i =0; i<2; i++)
+  for (int i =0; i<2; i++)
     {
       (box_.min())[i]=0;
       (box_.max())[i]=0;

@@ -46,7 +46,7 @@ bool vsol_point_3d::operator==(const vsol_spatial_object_3d& obj) const
 {
   return
    obj.spatial_type() == vsol_spatial_object_3d::POINT
-  ? *this == (vsol_point_3d const&)obj
+  ? operator==((vsol_point_3d const&)obj)
   : false;
 }
 
@@ -57,7 +57,7 @@ bool vsol_point_3d::operator==(const vsol_spatial_object_3d& obj) const
 //---------------------------------------------------------------------------
 //: Return the real type of a point. It is a POINT
 //---------------------------------------------------------------------------
-enum  vsol_spatial_object_3d::vsol_spatial_object_3d_type
+vsol_spatial_object_3d::vsol_spatial_object_3d_type
 vsol_point_3d::spatial_type(void) const
 {
   return POINT;
@@ -134,7 +134,7 @@ vsol_point_3d_sptr vsol_point_3d::middle(const vsol_point_3d &other) const
 //---------------------------------------------------------------------------
 //: Add `v' to `this'
 //---------------------------------------------------------------------------
-void vsol_point_3d::add_vector(const vgl_vector_3d<double> &v)
+void vsol_point_3d::add_vector(vgl_vector_3d<double> const& v)
 {
   p_ += v;
 }
@@ -143,7 +143,7 @@ void vsol_point_3d::add_vector(const vgl_vector_3d<double> &v)
 //: Add `v' and `this'
 //---------------------------------------------------------------------------
 vsol_point_3d_sptr
-vsol_point_3d::plus_vector(const vgl_vector_3d<double> &v) const
+vsol_point_3d::plus_vector(vgl_vector_3d<double> const& v) const
 {
   return new vsol_point_3d(p_ + v);
 }
@@ -154,5 +154,5 @@ vsol_point_3d::plus_vector(const vgl_vector_3d<double> &v) const
 vgl_vector_3d<double>
 vsol_point_3d::to_vector(const vsol_point_3d &other) const
 {
-  return vgl_vector_3d<double> (other.x() - x(),other.y() - y(),other.z() - z());
+  return vgl_vector_3d<double>(other.x() - x(),other.y() - y(),other.z() - z());
 }

@@ -1,7 +1,7 @@
-//:
-//  \file
-
+// This is gel/vsol/vsol_triangle_2d.cxx
 #include "vsol_triangle_2d.h"
+//:
+// \file
 
 //*****************************************************************************
 // External declarations for implementation
@@ -151,6 +151,3 @@ void vsol_triangle_2d::set_p2(const vsol_point_2d_sptr &new_p2)
 {
   (*storage_)[2]=new_p2;
 }
-
-//#include <vcl_rel_ops.h> // gcc 2.7
-//VCL_INSTANTIATE_INLINE(bool operator!=(vsol_triangle_2d const &, vsol_triangle_2d const &));

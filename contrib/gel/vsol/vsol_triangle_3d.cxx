@@ -1,7 +1,7 @@
 // This is gel/vsol/vsol_triangle_3d.cxx
 #include "vsol_triangle_3d.h"
 //:
-//  \file
+// \file
 
 //*****************************************************************************
 // External declarations for implementation
@@ -28,7 +28,7 @@ vsol_triangle_3d::vsol_triangle_3d(const vsol_point_3d_sptr &new_p0,
 }
 
 //---------------------------------------------------------------------------
-//: Copy constructor
+// Copy constructor
 //---------------------------------------------------------------------------
 vsol_triangle_3d::vsol_triangle_3d(const vsol_triangle_3d &other)
   : vsol_polygon_3d(other)
@@ -36,7 +36,7 @@ vsol_triangle_3d::vsol_triangle_3d(const vsol_triangle_3d &other)
 }
 
 //---------------------------------------------------------------------------
-//: Destructor
+// Destructor
 //---------------------------------------------------------------------------
 vsol_triangle_3d::~vsol_triangle_3d()
 {
