@@ -120,6 +120,126 @@ void vil_gauss_reduce(const int* src_im,
     }
 }
 
+//: Smooth and subsample single plane src_im in x, result is 2/3rd size
+//  Applies alternate 1-3-1, 1-1 filter in x, then samples
+//  every other pixel.  Fills [0,(2*ni+1)/3-1][0,nj-1] elements of dest
+//
+//  Note, 131 filter only an approximation
+void vil_gauss_reduce_2_3(const float* src_im,
+                       unsigned src_ni, unsigned src_nj,
+                       vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
+                       float* dest_im, vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
+{
+  float* d_row = dest_im;
+  const float* s_row = src_im;
+  vcl_ptrdiff_t sxs2 = s_x_step*2,sxs3 = s_x_step*3;
+  unsigned d_ni = (2*src_ni+1)/3;
+  unsigned d_ni2 = d_ni/2;
+  for (unsigned y=0;y<src_nj;++y)
+  {
+    // Set first elements of row
+    d_row[0]        = 0.75f*s_row[0] + 0.25f*s_row[s_x_step];
+    d_row[d_x_step] = 0.5f*s_row[s_x_step] + 0.5f*s_row[sxs2];
+    float * d = d_row + 2*d_x_step;
+    const float* s = s_row + sxs3;
+    for (unsigned x=1;x<d_ni2;++x)
+    {
+      *d = 0.2f*(s[-s_x_step] + s[s_x_step])+0.6f*s[0];
+      d += d_x_step;
+      *d = 0.5f*(s[s_x_step] + s[sxs2]);
+      d += d_x_step;
+      s += sxs3;
+    }
+    // Set last elements of row
+    if (src_ni%3==1) *d=0.75f*s[-s_x_step] + 0.25f*s[0];
+    else
+    if (src_ni%3==2) *d=0.2f*(s[-s_x_step] + s[s_x_step])+0.6f*s[0];
+
+    d_row += d_y_step;
+    s_row += s_y_step;
+  }
+}
+
+//: Smooth and subsample single plane src_im in x, result is 2/3rd size
+//  Applies alternate 1-3-1, 1-1 filter in x, then samples
+//  every other pixel.  Fills [0,(2*ni+1)/3-1][0,nj-1] elements of dest
+//
+//  Note, 131 filter only an approximation
+void vil_gauss_reduce_2_3(const vxl_byte* src_im,
+                       unsigned src_ni, unsigned src_nj,
+                       vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
+                       vxl_byte* dest_im, vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
+{
+  vxl_byte* d_row = dest_im;
+  const vxl_byte* s_row = src_im;
+  vcl_ptrdiff_t sxs2 = s_x_step*2,sxs3 = s_x_step*3;
+  unsigned d_ni = (2*src_ni+1)/3;
+  unsigned d_ni2 = d_ni/2;
+  for (unsigned y=0;y<src_nj;++y)
+  {
+    // Set first elements of row
+    d_row[0]        = vxl_byte(0.5f+0.75f*s_row[0] + 0.25f*s_row[s_x_step]);
+    d_row[d_x_step] = vxl_byte(0.5f+0.5f*s_row[s_x_step] + 0.5f*s_row[sxs2]);
+    vxl_byte * d = d_row + 2*d_x_step;
+    const vxl_byte* s = s_row + sxs3;
+    for (unsigned x=1;x<d_ni2;++x)
+    {
+      *d = vxl_byte(0.5f+0.2f*(s[-s_x_step] + s[s_x_step])+0.6f*s[0]);
+      d += d_x_step;
+      *d = vxl_byte(0.5f+0.5f*(s[s_x_step] + s[sxs2]));
+      d += d_x_step;
+      s += sxs3;
+    }
+    // Set last elements of row
+    if (src_ni%3==1) *d=vxl_byte(0.5f+0.75f*s[-s_x_step] + 0.25f*s[0]);
+    else
+    if (src_ni%3==2) *d=vxl_byte(0.5f+0.2f*(s[-s_x_step] + s[s_x_step])+0.6f*s[0]);
+
+    d_row += d_y_step;
+    s_row += s_y_step;
+  }
+}
+
+
+//: Smooth and subsample single plane src_im in x, result is 2/3rd size
+//  Applies alternate 1-3-1, 1-1 filter in x, then samples
+//  every other pixel.  Fills [0,(2*ni+1)/3-1][0,nj-1] elements of dest
+//
+//  Note, 131 filter only an approximation
+void vil_gauss_reduce_2_3(const int* src_im,
+                       unsigned src_ni, unsigned src_nj,
+                       vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
+                       int* dest_im, vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
+{
+  int* d_row = dest_im;
+  const int* s_row = src_im;
+  vcl_ptrdiff_t sxs2 = s_x_step*2,sxs3 = s_x_step*3;
+  unsigned d_ni = (2*src_ni+1)/3;
+  unsigned d_ni2 = d_ni/2;
+  for (unsigned y=0;y<src_nj;++y)
+  {
+    // Set first elements of row
+    d_row[0]        = int(0.5f+0.75f*s_row[0] + 0.25f*s_row[s_x_step]);
+    d_row[d_x_step] = int(0.5f+0.5f*s_row[s_x_step] + 0.5f*s_row[sxs2]);
+    int * d = d_row + 2*d_x_step;
+    const int* s = s_row + sxs3;
+    for (unsigned x=1;x<d_ni2;++x)
+    {
+      *d = int(0.5f+0.2f*(s[-s_x_step] + s[s_x_step])+0.6f*s[0]);
+      d += d_x_step;
+      *d = int(0.5f+0.5f*(s[s_x_step] + s[sxs2]));
+      d += d_x_step;
+      s += sxs3;
+    }
+    // Set last elements of row
+    if (src_ni%3==1) *d=int(0.5f+0.75f*s[-s_x_step] + 0.25f*s[0]);
+    else
+    if (src_ni%3==2) *d=int(0.5f+0.2f*(s[-s_x_step] + s[s_x_step])+0.6f*s[0]);
+
+    d_row += d_y_step;
+    s_row += s_y_step;
+  }
+}
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
 //  Smoothes with a 3x3 filter and subsamples

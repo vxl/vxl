@@ -21,6 +21,15 @@ void vil_gauss_reduce(const vil_image_view<T>& src,
                       vil_image_view<T>& dest,
                       vil_image_view<T>& work_im);
 
+//: Smooth and subsample src_im to produce dest_im (2/3 size)
+//  Applies filter in x and y, then samples every other pixel.
+//  work_im provides workspace
+// \relates vil_image_view
+template<class T>
+void vil_gauss_reduce_2_3(const vil_image_view<T>& src_im,
+                       vil_image_view<T>& dest_im,
+                       vil_image_view<T>& work_im);
+
 //: Smooth and subsample src_im to produce dest_im
 //  Applies 1-2-1 smoothing filter in x and y, then samples every other pixel.
 // \relates vil_image_view
@@ -175,5 +184,36 @@ void vil_gauss_reduce_121(const int* src_im,
                           vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
                           int* dest_im,
                           vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step);
+
+//: Smooth and subsample single plane src_im in x, result is 2/3rd size
+//  Applies alternate 1-3-1, 1-1 filter in x, then samples
+//  every other pixel.  Fills [0,(2*ni+1)/3-1][0,nj-1] elements of dest
+//
+//  Note, 131 filter only an approximation
+void vil_gauss_reduce_2_3(const vxl_byte* src_im,
+                       unsigned src_ni, unsigned src_nj,
+                       vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
+                       vxl_byte* dest_im, vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step);
+
+//: Smooth and subsample single plane src_im in x, result is 2/3rd size
+//  Applies alternate 1-3-1, 1-1 filter in x, then samples
+//  every other pixel.  Fills [0,(2*ni+1)/3-1][0,nj-1] elements of dest
+//
+//  Note, 131 filter only an approximation
+void vil_gauss_reduce_2_3(const int* src_im,
+                       unsigned src_ni, unsigned src_nj,
+                       vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
+                       int* dest_im, vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step);
+
+//: Smooth and subsample single plane src_im in x, result is 2/3rd size
+//  Applies alternate 1-3-1, 1-1 filter in x, then samples
+//  every other pixel.  Fills [0,(2*ni+1)/3-1][0,nj-1] elements of dest
+//
+//  Note, 131 filter only an approximation
+void vil_gauss_reduce_2_3(const float* src_im,
+                       unsigned src_ni, unsigned src_nj,
+                       vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
+                       float* dest_im, vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step);
+
 
 #endif // vil_gauss_reduce_h_

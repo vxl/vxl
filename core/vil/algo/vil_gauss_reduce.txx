@@ -49,6 +49,44 @@ void vil_gauss_reduce(const vil_image_view<T>& src_im,
   }
 }
 
+//: Smooth and subsample src_im to produce dest_im (2/3 size)
+//  Applies filter in x and y, then samples every other pixel.
+//  work_im provides workspace
+template<class T>
+void vil_gauss_reduce_2_3(const vil_image_view<T>& src_im,
+                       vil_image_view<T>& dest_im,
+                       vil_image_view<T>& work_im)
+{
+  unsigned ni = src_im.ni();
+  unsigned nj = src_im.nj();
+  unsigned n_planes = src_im.nplanes();
+
+  // Output image size
+  unsigned ni2 = (2*ni+1)/3;
+  unsigned nj2 = (2*nj+1)/3;
+
+  dest_im.set_size(ni2,nj2,n_planes);
+
+  if (work_im.ni()<ni2 || work_im.nj()<nj)
+    work_im.set_size(ni2,nj);
+
+  // Reduce plane-by-plane
+  for (unsigned int i=0;i<n_planes;++i)
+  {
+    // Smooth and subsample in x, result in work_im
+    vil_gauss_reduce_2_3(src_im.top_left_ptr()+i*src_im.planestep(),ni,nj,
+                      src_im.istep(),src_im.jstep(),
+                      work_im.top_left_ptr(),
+                      work_im.istep(),work_im.jstep());
+
+    // Smooth and subsample in y (by implicitly transposing work_im)
+    vil_gauss_reduce_2_3(work_im.top_left_ptr(),nj,ni2,
+                           work_im.jstep(),work_im.istep(),
+                           dest_im.top_left_ptr()+i*dest_im.planestep(),
+                           dest_im.jstep(),dest_im.istep());
+  }
+}
+
 //: Smooth and subsample src_im to produce dest_im
 //  Applies filter in x and y, then samples every other pixel.
 template<class T>
@@ -242,8 +280,11 @@ void vil_gauss_reduce_general(const vil_image_view<T>& src,
 #undef VIL_GAUSS_REDUCE_INSTANTIATE
 #define VIL_GAUSS_REDUCE_INSTANTIATE(T) \
 template void vil_gauss_reduce(const vil_image_view<T >& src, \
-                               vil_image_view<T >& dest, \
-                               vil_image_view<T >& work_im); \
+                                vil_image_view<T >& dest, \
+                                vil_image_view<T >& work_im); \
+template void vil_gauss_reduce_2_3(const vil_image_view<T >& src, \
+                                vil_image_view<T >& dest, \
+                                vil_image_view<T >& work_im); \
 template void vil_gauss_reduce_121(const vil_image_view<T >& src, \
                                    vil_image_view<T >& dest); \
 template void vil_gauss_reduce_general(const vil_image_view<T >& src_im, \
