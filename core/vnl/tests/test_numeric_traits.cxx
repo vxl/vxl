@@ -48,6 +48,8 @@ void test_static_const_definition()
 #undef ALL
 }
 
+extern "C" { long increment(long x) { return x+1; } }
+
 void test_numeric_traits()
 {
   // call it to avoid compiler warnings
@@ -152,11 +154,11 @@ void test_numeric_traits()
   if (sm > 0) vcl_cout << sm << " is larger\n";
   ++usm; TEST("vnl_numeric_traits<unsigned short>::maxval must be the largest possible", usm==0, true);
   if (usm > 0) vcl_cout << usm << " is larger\n";
-  ++im;  TEST("vnl_numeric_traits<int>::maxval must be the largest possible", im<0, true);
+  im = increment(im); TEST("vnl_numeric_traits<int>::maxval must be the largest possible", im<0, true);
   if (im > 0) vcl_cout << im << " is larger\n";
   ++uim; TEST("vnl_numeric_traits<unsigned int>::maxval must be the largest possible", uim==0, true);
   if (uim > 0) vcl_cout << uim << " is larger\n";
-  ++lm;  TEST("vnl_numeric_traits<long>::maxval must be the largest possible", lm<0, true);
+  lm=increment(lm);  TEST("vnl_numeric_traits<long>::maxval must be the largest possible", lm<0, true);
   if (lm > 0) vcl_cout << lm << " is larger\n";
   ++ulm; TEST("vnl_numeric_traits<unsigned long>::maxval must be the largest possible", ulm==0, true);
   if (ulm > 0) vcl_cout << ulm << " is larger\n";
