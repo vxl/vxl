@@ -1,6 +1,6 @@
-// This is vcl/gcc-295/vcl_limits.h
-#ifndef vcl_limits_h_
-#define vcl_limits_h_
+// This is vcl/emulation/vcl_limits.h
+#ifndef emulation_vcl_limits_h_
+#define emulation_vcl_limits_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -558,4 +558,4 @@ class vcl_numeric_limits<long double>
   static const vcl_float_round_style round_style VCL_STATIC_CONST_INIT_INT_DECL(vcl_round_to_nearest);
 };
 
-#endif // vcl_numeric_limits_h_
+#endif // emulation_vcl_numeric_limits_h_

@@ -1,4 +1,4 @@
-// This is vcl/gcc-295/vcl_limits.cxx
+// This is vcl/emulation/vcl_limits.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
