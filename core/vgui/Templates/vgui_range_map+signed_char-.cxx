@@ -1,2 +1,2 @@
 #include <vgui/vgui_range_map.txx>
-VGUI_RANGE_MAP_INSTANTIATE(signed char)
+VGUI_RANGE_MAP_INSTANTIATE(signed char);
