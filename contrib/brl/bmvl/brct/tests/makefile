@@ -1,4 +1,4 @@
-USES += contrib/brl contrib/brl/bbas contrib/gel contrib/oxl core
+USES += contrib/brl contrib/brl/bbas core
 include ../config.mk
 include ${IUEROOT}/contrib/brl/bbas/bgui/config.mk
 include ${IUEROOT}/core/vgui/config.mk

@@ -1,4 +1,4 @@
-USES += contrib/brl contrib/gel contrib/brl/bbas contrib/brl/bseg core
+USES += contrib/brl contrib/brl/bbas contrib/brl/bseg core
 include ../config.mk
 include ${IUEROOT}/core/testlib/config.mk
 

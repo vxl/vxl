@@ -1,4 +1,4 @@
-USES := contrib/brl contrib/brl/bbas contrib/brl/bmvl contrib/oxl contrib/gel core
+USES := contrib/brl contrib/brl/bbas contrib/brl/bmvl core
 include ../config.mk
 
 MINI_PROG_SOURCES += mviewer.cxx

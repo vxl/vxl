@@ -1,5 +1,5 @@
 # Brown basic geometry library
-USES += contrib/brl contrib/gel contrib/brl/bbas core
+USES += contrib/brl contrib/brl/bbas core
 
 LIBRARY := bvgl
 VERSION := 1.0
