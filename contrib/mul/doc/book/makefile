@@ -23,56 +23,54 @@ endif
 MAKEINFOFLAGS=-Dmakeinfo --no-validate
 
 SOURCEFILES=book.texi \
-		chapter_mbl.texi \
-		chapter_vil2.texi \
-		chapter_clsfy.texi \
-		chapter_mil.texi \
-		chapter_vpdfl.texi
+	chapter_mbl.texi \
+	chapter_vil2.texi \
+	chapter_clsfy.texi \
+	chapter_mil.texi \
+	chapter_vpdfl.texi
 
 all: book.html book.dvi
 
-thelot: book.info book.html book.dvi book.hpj 
+thelot: book.info book.html book.dvi book.hpj
 
 ifdef aaa
 book.html: $(SOURCEFILES)  mbl_mz_random_graph1.png mbl_mz_random_graph2.png mbl_mz_random_graph3.png
 	$(MAKEINFO) $(MAKEINFOFLAGS) book.texi --html -o $@ --number-sections
 else
-book.html: $(SOURCEFILES) 
-	$(TEXI2HTML) book.texi \
-              -expand info \
-              -number -split chapter -no-section_navigation -frames
+book.html: $(SOURCEFILES)
+	$(TEXI2HTML) book.texi -expand info -number -split chapter -no-section_navigation -frames
 endif
 
 
 # TeX for paper printing
-book.dvi: $(SOURCEFILES) 
+book.dvi: $(SOURCEFILES)
 	tex --c-style-errors --quiet book.texi || touch -t 010100001970 book.dvi
 
 
-# Windows help files. Process hpj the help compiler 
-book.hpj book.rtf: $(SOURCEFILES) 
+# Windows help files. Process hpj the help compiler
+book.hpj book.rtf: $(SOURCEFILES)
 	-mkinfrtf.exe $(MAKEINFOFLAGS) book --force -o book.rtf --hpj-output book.hpj
 
 # Emacs info file
-book.info: $(SOURCEFILES) 
+book.info: $(SOURCEFILES)
 	$(MAKEINFO) $(MAKEINFOFLAGS) book --force -o book.info
 
 
 # Generate figure for HTML
 mbl_mz_random_graph1.png: mbl_mz_random_graph1.eps
-        $(GS) -sDEVICE=png16m -sOutputFile=tmp.png -dQUIET -dNOPAUSE mbl_mz_random_graph1.eps -c showpage -c quit
-        $(PNGTOPNM) tmp.png | $(PNMCROP) | $(PNMTOPNG) > $@
-        rm tmp.png
+	$(GS) -sDEVICE=png16m -sOutputFile=tmp.png -dQUIET -dNOPAUSE mbl_mz_random_graph1.eps -c showpage -c quit
+	$(PNGTOPNM) tmp.png | $(PNMCROP) | $(PNMTOPNG) > $@
+	rm tmp.png
 
 mbl_mz_random_graph2.png: mbl_mz_random_graph2.eps
-        $(GS) -sDEVICE=png16m -sOutputFile=tmp.png -dQUIET -dNOPAUSE mbl_mz_random_graph2.eps -c showpage -c quit
-        $(PNGTOPNM) tmp.png | $(PNMCROP) | $(PNMTOPNG) > $@
-        rm tmp.png
+	$(GS) -sDEVICE=png16m -sOutputFile=tmp.png -dQUIET -dNOPAUSE mbl_mz_random_graph2.eps -c showpage -c quit
+	$(PNGTOPNM) tmp.png | $(PNMCROP) | $(PNMTOPNG) > $@
+	rm tmp.png
 
 mbl_mz_random_graph3.png: mbl_mz_random_graph3.eps
-        $(GS) -sDEVICE=png16m -sOutputFile=tmp.png -dQUIET -dNOPAUSE mbl_mz_random_graph3.eps -c showpage -c quit
-        $(PNGTOPNM) tmp.png | $(PNMCROP) | $(PNMTOPNG) > $@
-        rm tmp.png
+	$(GS) -sDEVICE=png16m -sOutputFile=tmp.png -dQUIET -dNOPAUSE mbl_mz_random_graph3.eps -c showpage -c quit
+	$(PNGTOPNM) tmp.png | $(PNMCROP) | $(PNMTOPNG) > $@
+	rm tmp.png
 
 ## for debugging makefile
 echo-%:
