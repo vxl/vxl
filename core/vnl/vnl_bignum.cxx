@@ -1,16 +1,15 @@
-// This is ./vxl/vnl/vnl_bignum.cxx
+// This is vxl/vnl/vnl_bignum.cxx
 #include "vnl_bignum.h"
-#include <vnl/vnl_math.h>
+//:
+// \file
+
 #include <vcl_cstdlib.h>   // Include standard c library support
 #include <vcl_cctype.h>    // Include character macros
-#include <vcl_cstring.h>   // Include standard strings
+#include <vcl_cstring.h>   // for vcl_strlen
 #include <vcl_cmath.h>     // for vcl_fmod
 #include <vcl_algorithm.h> // for vcl_copy
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
-
-//:
-// \file
 
 typedef unsigned short Counter;
 typedef unsigned short Data;
