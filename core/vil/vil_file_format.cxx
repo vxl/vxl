@@ -23,6 +23,7 @@ vil_file_format::~vil_file_format()
 #define HAS_RAS   1
 #define HAS_GEN   0
 #define HAS_DICOM 1
+#define HAS_NITF 1
 
 #if HAS_PNM
 #include <vil/file_formats/vil_pnm.h>
@@ -72,6 +73,10 @@ vil_file_format::~vil_file_format()
 #include <vil/file_formats/vil_dicom.h>
 #endif
 
+#if HAS_NITF
+#include <vil/file_formats/vil_nitf.h>
+#endif
+
 //: Local class to hold file format list
 // Clears list on deletion.
 struct vil_file_format_storage
@@ -118,6 +123,9 @@ struct vil_file_format_storage
 #endif
 #if HAS_DICOM
     l[c++] = new vil_dicom_file_format;
+#endif
+#if HAS_NITF
+    l[c++] = new vil_nitf_file_format;
 #endif
 
     l[c++] = 0;
