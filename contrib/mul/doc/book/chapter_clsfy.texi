@@ -21,14 +21,17 @@ of class probabilities. All classifiers are derived from
 Dimensionality of vector space of inputs.
 
 @item unsigned n_classes() const
-The number of possible output classes.
+The number of possible output classes. If n_classes() == 1, this indicates
+a binary classifier. In this case, most functions return values associated with
+just the positive (1st) class. As far as the interface is concerned a binary classifier
+is distinct from a multiclass classifier with n_classes() == 2.
 
 @item unsigned classify(x) const
 Most likely class of vector x
 
 @item void class_probabilities(vcl_vector<double> & outputs, x) const
 Estimate of a-posteriori class probabilities for vector x.
-If the classifier is binary (i.e. two class), only a single value
+If the classifier is binary (i.e. n_classes == 1), only a single value
 will be returned, and will be the probability of being in the class 1,
 also called the positive class.
 

@@ -116,7 +116,7 @@ inputclass \name\
 @node Top, Introduction, (dir), (dir)
 
 @ifinfo
-This documents the VXL collection of C++ libraries.
+This documents the MUL collection of C++ libraries.
 
 Copyright 2001 Victoria University of Manchester
 
@@ -131,7 +131,7 @@ original copyright notice.
 @titlepage
 @title V@emph{X}L
 @subtitle A collection of C++ libraries for model-based computer vision.
-@author The TargetJr Consortium
+@author Imaging science
 
 @c  The following two commands start the copyright page.
 @page

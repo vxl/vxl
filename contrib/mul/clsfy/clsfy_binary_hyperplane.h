@@ -19,9 +19,10 @@
 // The classifier could be considered as a single perceptron.
 class clsfy_binary_hyperplane : public clsfy_classifier_base {
 protected:
-  vnl_vector<double> weights_; //!< Hyperplane normal
-
-  double bias_; //!< Bias: ||weights_|| times distance from origin to hyperplane
+  //: Hyperplane normal
+  vnl_vector<double> weights_;
+  //: Bias: ||weights_|| * distance from origin to hyperplane
+  double bias_; 
 
 public:
 
