@@ -116,7 +116,7 @@
 # define VCL_KAI
 #endif
 
-#if defined(__ICC) // Intel compiler?
+#if defined(__ICC) ||defined(__ECC) // Intel compiler?
 # define VCL_ICC
 #endif
 
