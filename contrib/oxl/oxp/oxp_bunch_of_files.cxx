@@ -107,7 +107,7 @@ bool oxp_bunch_of_files::open(char const* fmt)
   // Summarize:
   vcl_fprintf(stderr, "files: sizeof offset_t = %d\n", (int)sizeof(offset_t));
   for (unsigned int i = 0; i < n; ++i)
-    vcl_fprintf(stderr, "   %s  %g\n", filenames[i].c_str(), (double)start_byte[i]);
+    vcl_fprintf(stderr, "   %s  %ld\n", filenames[i].c_str(), (long)start_byte[i]);
   vcl_fprintf(stderr, "\n");
 
   return true;
@@ -125,7 +125,7 @@ void oxp_bunch_of_files::seek(offset_t to)
   if (newindex == -1) {
     int i = filesizes.size() - 1;
     // Know start_byte[i] <= to
-    if (to < start_byte[i] + filesizes[i])
+    if (to < start_byte[i] + (offset_t)filesizes[i])
       newindex = i;
   }
 
@@ -139,7 +139,7 @@ void oxp_bunch_of_files::seek(offset_t to)
   offset_t file_ptr = to - start_byte[current_file_index];
   vcl_fprintf(stderr, " si = %20g to = %20g\n", (double)start_byte[current_file_index], (double) to);
   assert(file_ptr >= 0);
-  assert(file_ptr < filesizes[current_file_index]);
+  assert(file_ptr < (offset_t)filesizes[current_file_index]);
 
   vcl_fseek(fps[current_file_index], file_ptr, SEEK_SET);
 }
