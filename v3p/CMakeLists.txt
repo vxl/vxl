@@ -1,5 +1,5 @@
 
 
-SUBDIRS(netlib)
+SUBDIRS(netlib jpeg)
 
 
