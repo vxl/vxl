@@ -22,14 +22,15 @@ typedef int QvBool;
 #   define QV__CONCAT(str1, str2)       str1/**/str2
 #endif
 
-// Cygwin sys/types.h typedefs u_long, so include it before #defining u_long
-#if defined(__CYGWIN__)
-# include <sys/types.h>
-#endif
+// Many systems typedef u_long, so get this declaration before
+// defining a local one. Some may #define it, so the typedef below
+// needs to be checked to avoid an error. (Multiple typedefs are okay
+// as long as they all agree.)
+#include <sys/types.h>
 
 // changed by Gerbert Orasche 260695
 #ifndef u_long
-#define u_long unsigned long
+typedef unsigned long u_long;
 #endif
 #ifdef __PC__
 #define strdup _strdup
