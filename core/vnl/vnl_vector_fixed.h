@@ -95,30 +95,35 @@ class vnl_vector_fixed
   vnl_vector_fixed() {}
 
   //: Copy constructor
-  vnl_vector_fixed( const vnl_vector_fixed<T,n>& rhs ) {
+  //  The dimensions must match.
+  vnl_vector_fixed( const vnl_vector_fixed<T,n>& rhs )
+  {
     vcl_memcpy( data_, rhs.data_, sizeof data_ );
   }
 
-  //: Construct an fixed-n-vector copy of \a rhs.
+  //: Construct a fixed-n-vector copy of \a rhs.
   //  The dimensions must match.
-  vnl_vector_fixed( const vnl_vector<T>& rhs ) {
+  vnl_vector_fixed( const vnl_vector<T>& rhs )
+  {
     assert( n == rhs.size() );
     vcl_memcpy( data_, rhs.data_block(), sizeof data_ );
   }
 
-  //: Constructs n-vector with elements initialised to \a v
+  //: Constructs n-vector with all elements initialised to \a v
   explicit vnl_vector_fixed( const T& v ) { fill( v ); }
 
   //: Construct an fixed-n-vector initialized from \a datablck
   //  The data *must* have enough data. No checks performed.
-  explicit vnl_vector_fixed( const T* datablck ) {
+  explicit vnl_vector_fixed( const T* datablck )
+  {
     vcl_memcpy( data_, datablck, sizeof data_ );
   }
 
   //: Convenience constructor for 2-D vectors
   // While this constructor is sometimes useful, consider using
   // vnl_double_2 or vnl_float_2 instead.
-  vnl_vector_fixed( const T& x0, const T& x1 ) {
+  vnl_vector_fixed( const T& x0, const T& x1 )
+  {
     assert( n == 2 );
     data_[0] = x0; data_[1] = x1;
   }
@@ -126,11 +131,18 @@ class vnl_vector_fixed
   //: Convenience constructor for 3-D vectors
   // While this constructor is sometimes useful, consider using
   // vnl_double_3 or vnl_float_3 instead.
-  vnl_vector_fixed( const T& x0, const T& x1, const T& x2 ) {
+  vnl_vector_fixed( const T& x0, const T& x1, const T& x2 )
+  {
     assert( n == 3 );
     data_[0] = x0; data_[1] = x1; data_[2] = x2;
   }
 
+  //: Convenience constructor for 4-D vectors
+  vnl_vector_fixed( const T& x0, const T& x1, const T& x2, const T& x3 )
+  {
+    assert( n == 4 );
+    data_[0] = x0; data_[1] = x1; data_[2] = x2; data_[3] = x3;
+  }
 
   //: Copy operator
   vnl_vector_fixed<T,n>& operator=( const vnl_vector_fixed<T,n>& rhs ) {
@@ -157,26 +169,26 @@ class vnl_vector_fixed
   T get (unsigned int i) const { return data_[i]; }
 
   //: Set all values to v
-  void fill( T const& v ) {
-    for ( size_type i = 0; i < n; ++i ) {
+  void fill( T const& v )
+  {
+    for ( size_type i = 0; i < n; ++i )
       data_[i] = v;
-    }
   }
 
   //: Sets elements to ptr[i]
   //  Note: ptr[i] must be valid for i=0..size()-1
-  void copy_in( T const * ptr ) {
-    for ( size_type i = 0; i < n; ++i ) {
+  void copy_in( T const * ptr )
+  {
+    for ( size_type i = 0; i < n; ++i )
       data_[i] = ptr[i];
-    }
   }
 
   //: Copy elements to ptr[i]
   //  Note: ptr[i] must be valid for i=0..size()-1
-  void copy_out( T* ptr ) const {
-    for ( size_type i = 0; i < n; ++i ) {
+  void copy_out( T* ptr ) const
+  {
+    for ( size_type i = 0; i < n; ++i )
       ptr[i] = data_[i];
-    }
   }
 
   //: Sets elements to ptr[i]
@@ -310,49 +322,40 @@ class vnl_vector_fixed
   vnl_vector_fixed<T,n> apply(T (*f)(const T&));
 
   //:
-  vnl_vector_fixed<T,n>& operator+=( T s ) {
-    add( data_, s, data_ ); return *this;
-  }
+  vnl_vector_fixed<T,n>& operator+=( T s ) { add( data_, s, data_ ); return *this; }
 
   //:
-  vnl_vector_fixed<T,n>& operator-=( T s ) {
-    sub( data_, s, data_ ); return *this;
-  }
+  vnl_vector_fixed<T,n>& operator-=( T s ) { sub( data_, s, data_ ); return *this; }
 
   //:
-  vnl_vector_fixed<T,n>& operator*=( T s ) {
-    mul( data_, s, data_ ); return *this;
-  }
+  vnl_vector_fixed<T,n>& operator*=( T s ) { mul( data_, s, data_ ); return *this; }
 
   //:
-  vnl_vector_fixed<T,n>& operator/=( T s ) {
-    div( data_, s, data_ ); return *this;
-  }
+  vnl_vector_fixed<T,n>& operator/=( T s ) { div( data_, s, data_ ); return *this; }
 
   //:
-  vnl_vector_fixed<T,n>& operator+=( const vnl_vector_fixed<T,n>& v ) {
-    add( data_, v.data_block(), data_ ); return *this;
-  }
+  vnl_vector_fixed<T,n>& operator+=( const vnl_vector_fixed<T,n>& v ) { add( data_, v.data_block(), data_ ); return *this; }
 
   //:
-  vnl_vector_fixed<T,n>& operator-=( const vnl_vector_fixed<T,n>& v ) {
-    sub( data_, v.data_block(), data_ ); return *this;
-  }
+  vnl_vector_fixed<T,n>& operator-=( const vnl_vector_fixed<T,n>& v ) { sub( data_, v.data_block(), data_ ); return *this; }
 
   //:
-  vnl_vector_fixed<T,n>& operator+=( const vnl_vector<T>& v ) {
+  vnl_vector_fixed<T,n>& operator+=( const vnl_vector<T>& v )
+  {
     assert( v.size() == n );
     add( data_, v.data_block(), data_ ); return *this;
   }
 
   //:
-  vnl_vector_fixed<T,n>& operator-=( const vnl_vector<T>& v ) {
+  vnl_vector_fixed<T,n>& operator-=( const vnl_vector<T>& v )
+  {
     assert( v.size() == n );
     sub( data_, v.data_block(), data_ ); return *this;
   }
 
   //:
-  vnl_vector_fixed<T,n> operator-() const {
+  vnl_vector_fixed<T,n> operator-() const
+  {
     vnl_vector_fixed<T,n> result;
     sub( (T)0, data_, result.data_ );
     return result;
@@ -406,7 +409,6 @@ class vnl_vector_fixed
   //: Sum of values in a vector
   T sum() const { return vnl_c_vector<T>::sum(begin(), size()); }
 
-
   //: Reverse the order of the elements
   //  Element i swaps with element size()-1-i
   void flip();
@@ -417,7 +419,8 @@ class vnl_vector_fixed
 
   //: Check that this is finite if not, abort();
   // This function does or tests nothing if NDEBUG is defined
-  void assert_finite() const {
+  void assert_finite() const
+  {
 #ifndef NDEBUG
     assert_finite_internal();
 #endif
@@ -433,21 +436,21 @@ class vnl_vector_fixed
   bool empty() const { return n==0; }
 
   //: Return true if *this == v
-  bool operator_eq (vnl_vector_fixed<T,n> const& v) const {
-    for ( size_type i = 0; i < n; ++i ) {
+  bool operator_eq (vnl_vector_fixed<T,n> const& v) const
+  {
+    for ( size_type i = 0; i < n; ++i )
       if ( (*this)[i] != v[i] )
         return false;
-    }
     return true;
   }
 
   //: Return true if *this == v
-  bool operator_eq (vnl_vector<T> const& v) const {
+  bool operator_eq (vnl_vector<T> const& v) const
+  {
     assert( v.size() == n );
-    for ( size_type i = 0; i < n; ++i ) {
+    for ( size_type i = 0; i < n; ++i )
       if ( (*this)[i] != v[i] )
         return false;
-    }
     return true;
   }
 
@@ -463,67 +466,58 @@ class vnl_vector_fixed
   // Helper routines for arithmetic. n is the size, and is the
   // template parameter.
 
-  inline static void add( const T* a, const T* b, T* r ) {
-    for ( unsigned int i=0; i < n; ++i ) {
+  inline static void add( const T* a, const T* b, T* r )
+  {
+    for ( unsigned int i=0; i < n; ++i,++r,++a,++b )
       *r = *a + *b;
-      ++r; ++a; ++b;
-    }
   }
 
-  inline static void add( const T* a, T b, T* r ) {
-    for ( unsigned int i=0; i < n; ++i ) {
+  inline static void add( const T* a, T b, T* r )
+  {
+    for ( unsigned int i=0; i < n; ++i,++r,++a )
       *r = *a + b;
-      ++r; ++a;
-    }
   }
 
-  inline static void sub( const T* a, const T* b, T* r ) {
-    for ( unsigned int i=0; i < n; ++i ) {
+  inline static void sub( const T* a, const T* b, T* r )
+  {
+    for ( unsigned int i=0; i < n; ++i,++r,++a,++b )
       *r = *a - *b;
-      ++r; ++a; ++b;
-    }
   }
 
-  inline static void sub( const T* a, T b, T* r ) {
-    for ( unsigned int i=0; i < n; ++i ) {
+  inline static void sub( const T* a, T b, T* r )
+  {
+    for ( unsigned int i=0; i < n; ++i,++r,++a )
       *r = *a - b;
-      ++r; ++a;
-    }
   }
 
-  inline static void sub( T a, const T* b, T* r ) {
-    for ( unsigned int i=0; i < n; ++i ) {
+  inline static void sub( T a, const T* b, T* r )
+  {
+    for ( unsigned int i=0; i < n; ++i,++r,++b )
       *r = a - *b;
-      ++r; ++b;
-    }
   }
 
-  inline static void mul( const T* a, const T* b, T* r ) {
-    for ( unsigned int i=0; i < n; ++i ) {
+  inline static void mul( const T* a, const T* b, T* r )
+  {
+    for ( unsigned int i=0; i < n; ++i,++r,++a,++b )
       *r = *a * *b;
-      ++r; ++a; ++b;
-    }
   }
 
-  inline static void mul( const T* a, T b, T* r ) {
-    for ( unsigned int i=0; i < n; ++i ) {
+  inline static void mul( const T* a, T b, T* r )
+  {
+    for ( unsigned int i=0; i < n; ++i,++r,++a )
       *r = *a * b;
-      ++r; ++a;
-    }
   }
 
-  inline static void div( const T* a, const T* b, T* r ) {
-    for ( unsigned int i=0; i < n; ++i ) {
+  inline static void div( const T* a, const T* b, T* r )
+  {
+    for ( unsigned int i=0; i < n; ++i,++r,++a,++b )
       *r = *a / *b;
-      ++r; ++a; ++b;
-    }
   }
 
-  inline static void div( const T* a, T b, T* r ) {
-    for ( unsigned int i=0; i < n; ++i ) {
+  inline static void div( const T* a, T b, T* r )
+  {
+    for ( unsigned int i=0; i < n; ++i,++r,++a )
       *r = *a / b;
-      ++r; ++a;
-    }
   }
 
  private:
