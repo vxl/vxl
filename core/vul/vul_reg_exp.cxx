@@ -1,5 +1,5 @@
-// This is vxl/vul/vul_reg_exp.cxx
-
+// This is core/vul/vul_reg_exp.cxx
+#include "vul_reg_exp.h"
 //:
 // \file
 //
@@ -116,9 +116,7 @@
 //      beginning with d, and having  two characters  in between that are
 //      the same as the two characters before  the first p  encounterd in
 //      the line.  It would match "drepa qrepb" in "rep drepa qrepb".
-//
 
-#include "vul_reg_exp.h"
 #include <vcl_iostream.h>
 #include <vcl_cstring.h> // for strcspn()
 
@@ -849,8 +847,8 @@ static void regtail (char* p, const char* val) {
         offset = (const char*)scan - val;
     else
         offset = val - scan;
-    *(scan + 1) = (offset >> 8) & 0377;
-    *(scan + 2) = offset & 0377;
+    *(scan + 1) = (char)((offset >> 8) & 0377);
+    *(scan + 2) = (char)(offset & 0377);
 }
 
 
