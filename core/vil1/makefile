@@ -19,7 +19,6 @@ SOURCES += vil_32bit.cxx
 SOURCES += vil_test.cxx
 
 # various vil_stream classes
-#SOURCES += vil_stream_iso_stream.cxx  # from a C++ stream
 SOURCES += vil_stream_fstream.cxx     # from a file
 SOURCES += vil_stream_core.cxx        # in-core vil_stream
 SOURCES += vil_stream_section.cxx     # present a section of a vil_stream
@@ -29,6 +28,7 @@ SOURCES += vil_stream_url.cxx         # load image from URL
 SOURCES += vil_file_image.cxx
 SOURCES += vil_memory_image.cxx
 MANPAGE_SOURCES += vil_memory_image_of.txx
+MANPAGE_SOURCES += vil_memory_image_of_format.txx
 SOURCES += vil_image_proxy.cxx
 
 # image adaptors
@@ -54,7 +54,7 @@ SOURCES += file_formats/vil_bmp_file_header.cxx
 SOURCES += file_formats/vil_bmp_core_header.cxx
 SOURCES += file_formats/vil_bmp_info_header.cxx
 SOURCES += file_formats/vil_bmp.cxx
-#SOURCES += file_formats/vil_gif.cxx
+SOURCES += file_formats/vil_gif.cxx
 ifeq ($(HAS_PNG),1)
 USE_PNG := 1
 SOURCES += file_formats/vil_png.cxx
@@ -82,9 +82,13 @@ SOURCES += vil_crop.cxx
 SOURCES += vil_skip.cxx
 SOURCES += vil_resample.cxx
 SOURCES += vil_warp.cxx
+MANPAGE_SOURCES += vil_warp.txx
 SOURCES += vil_flipud.cxx
 MANPAGE_SOURCES += vil_convolve.txx
 MANPAGE_SOURCES += vil_convolve_simple.txx
+MANPAGE_SOURCES += vil_convolve_1d.txx
+MANPAGE_SOURCES += vil_convolve_1d_x.txx
+MANPAGE_SOURCES += vil_convolve_1d_y.txx
 SOURCES += vil_smooth.cxx
 SOURCES += vil_clamp.cxx
 SOURCES += vil_scale_intensities.cxx
