@@ -71,55 +71,70 @@ vil_file_format::~vil_file_format()
 #include <vil/file_formats/vil_dicom.h>
 #endif
 
-
-static vil_file_format** storage = 0;
-vil_file_format** vil_file_format::all()
+//: Local class to hold file format list
+// Clears list on deletion.
+struct vil_file_format_storage
 {
-  if (storage == 0) {
-    storage = new vil_file_format*[256];
-    int c = 0;
-
+  vil_file_format** l;  
+  vil_file_format_storage(): l(new vil_file_format*[256])
+  {
+    unsigned c=0;
 #if HAS_JPEG
-    storage[c++] = new vil_jpeg_file_format;
+    l[c++] = new vil_jpeg_file_format;
 #endif
 #if HAS_PNG
-    storage[c++] = new vil_png_file_format;
+    l[c++] = new vil_png_file_format;
 #endif
 #if HAS_TIFF
-    storage[c++] = new vil_tiff_file_format;
+    l[c++] = new vil_tiff_file_format;
 #endif
 #if HAS_PNM
-    storage[c++] = new vil_pnm_file_format;
-    storage[c++] = new vil_pbm_file_format;
-    storage[c++] = new vil_pgm_file_format;
-    storage[c++] = new vil_ppm_file_format;
+    l[c++] = new vil_pnm_file_format;
+    l[c++] = new vil_pbm_file_format;
+    l[c++] = new vil_pgm_file_format;
+    l[c++] = new vil_ppm_file_format;
 #endif
 #if HAS_IRIS
-    storage[c++] = new vil_iris_file_format;
+    l[c++] = new vil_iris_file_format;
 #endif
 #if HAS_MIT
-    storage[c++] = new vil_mit_file_format;
+    l[c++] = new vil_mit_file_format;
 #endif
 #if HAS_VIFF
-    storage[c++] = new vil_viff_file_format;
+    l[c++] = new vil_viff_file_format;
 #endif
 #if HAS_BMP
-    storage[c++] = new vil_bmp_file_format;
+    l[c++] = new vil_bmp_file_format;
 #endif
 #if HAS_GIF
-    storage[c++] = new vil_gif_file_format;
+    l[c++] = new vil_gif_file_format;
 #endif
 #if HAS_RAS
-    storage[c++] = new vil_ras_file_format;
+    l[c++] = new vil_ras_file_format;
 #endif
 #if HAS_GEN
-    storage[c++] = new vil_gen_file_format;
+    l[c++] = new vil_gen_file_format;
 #endif
 #if HAS_DICOM
-    storage[c++] = new vil_dicom_file_format;
+    l[c++] = new vil_dicom_file_format;
 #endif
 
-    storage[c++] = 0;
+    l[c++] = 0;
   }
-  return storage;
+
+  ~vil_file_format_storage()
+  {
+    unsigned c=0;
+    while (l[c]!=0)
+      delete l[c++];
+    delete l;
+    l=0;
+  }
+};
+
+
+vil_file_format** vil_file_format::all()
+{
+  static vil_file_format_storage storage;
+  return storage.l;
 }
