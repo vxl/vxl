@@ -8,8 +8,8 @@
 #include <vnl/vnl_math.h>
 
 template<class T>
-bugl_gaussian_point_2d<T>::bugl_gaussian_point_2d(T x, T y, vnl_matrix_fixed<T, 2, 2> & s)
-: bugl_uncertainty_point_2d<T>(x, y)
+bugl_gaussian_point_2d<T>::bugl_gaussian_point_2d(T vx, T vy, vnl_matrix_fixed<T, 2, 2> & s)
+: bugl_uncertainty_point_2d<T>(vx, vy)
 {
   set_covariant_matrix(s);
 }
