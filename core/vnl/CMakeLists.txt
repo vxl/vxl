@@ -109,6 +109,9 @@ SET( vnl_sources
   vnl_sample.cxx               vnl_sample.h
   vnl_unary_function.cxx       vnl_unary_function.h
   vnl_transpose.cxx            vnl_transpose.h
+
+  # Special functions
+  vnl_gamma.cxx                vnl_gamma.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vnl_sources)

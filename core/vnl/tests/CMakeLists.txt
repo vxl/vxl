@@ -52,6 +52,7 @@ IF(NETLIB_FOUND)
     test_symmetric_eigensystem.cxx
     test_transpose.cxx
     test_vector.cxx
+    test_gamma.cxx
   )
   TARGET_LINK_LIBRARIES( vnl_test_driver vnl_algo vnl vpl vul testlib )
 
@@ -95,5 +96,6 @@ IF(NETLIB_FOUND)
   ADD_TEST( vnl_test_symmetric_eigensystem    vnl_test_driver test_symmetric_eigensystem   )
   ADD_TEST( vnl_test_transpose                vnl_test_driver test_transpose               )
   ADD_TEST( vnl_test_vector                   vnl_test_driver test_vector                  )
+  ADD_TEST( vnl_test_gamma                    vnl_test_driver test_gamma                   )
 
 ENDIF(NETLIB_FOUND)
