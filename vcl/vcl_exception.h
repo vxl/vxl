@@ -25,13 +25,14 @@
 #else
 //
 
+#include "vcl_cstdlib.h"
 #include "vcl_iostream.h"
 struct vcl_throw_handler {
   vcl_throw_handler(int line, char const* file) {
-    cerr << file << ":" << line << ": EXCEPTION: ";
+    vcl_cerr << file << ":" << line << ": EXCEPTION: ";
   }
-  ~vcl_throw_handler() { abort (); }
-  ostream& s() { return cerr; }
+  ~vcl_throw_handler() { vcl_abort (); }
+  vcl_ostream& s() { return vcl_cerr; }
 };
 
 # define vcl_throw        vcl_throw_handler(__LINE__,__FILE__).s() << 
