@@ -8,7 +8,7 @@
 
 #include "gtrl_vertex.h"
 
-gtrl_vertex::gtrl_vertex( const double x, const double y)
+gtrl_vertex::gtrl_vertex( double x, double y)
   : x_(x), y_(y)
 {
 }

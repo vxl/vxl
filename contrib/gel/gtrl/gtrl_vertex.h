@@ -14,7 +14,7 @@
 class gtrl_vertex : public vbl_ref_count
 {
  public:
-  gtrl_vertex( const double x, const double y);
+  gtrl_vertex( double x, double y);
 
   double x() const { return x_;}
   double y() const { return y_;}
