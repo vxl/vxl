@@ -15,9 +15,9 @@
 
 // use C++ overloading to call the right linpack routine from the template code :
 #define macro(p, T) \
-static inline int vnl_linpack_qrdc(vnl_netlib_qrdc_proto(T)) \
+inline int vnl_qrdc(vnl_netlib_qrdc_proto(T)) \
 { return p##qrdc_(vnl_netlib_qrdc_params); } \
-static inline int vnl_linpack_qrsl(vnl_netlib_qrsl_proto(T)) \
+inline int vnl_qrsl(vnl_netlib_qrsl_proto(T)) \
 { return p##qrsl_(vnl_netlib_qrsl_params); }
 macro(s, vnl_netlib::real_t);
 macro(d, vnl_netlib::doublereal_t);
@@ -48,12 +48,12 @@ vnl_qr<T>::vnl_qr(vnl_matrix<T> const& M):
   jpvt_.fill(0); // Allow all columns to be pivoted if pivoting is enabled.
 
   vnl_vector<T> work(M.rows());
-  vnl_linpack_qrdc(qrdc_out_.data_block(), // On output, UT is R, below diag is mangled Q
-                   r, r, c,
-                   qraux_.data_block(), // Further information required to demangle Q
-                   jpvt_.data_block(),
-                   work.data_block(),
-                   do_pivot);
+  vnl_qrdc(qrdc_out_.data_block(), // On output, UT is R, below diag is mangled Q
+           r, r, c,
+           qraux_.data_block(), // Further information required to demangle Q
+           jpvt_.data_block(),
+           work.data_block(),
+           do_pivot);
 }
 
 template <class T>
@@ -185,15 +185,15 @@ vnl_vector<T> vnl_qr<T>::solve(const vnl_vector<T>& b) const
   int JOB = 100;
 
   int info = 0;
-  vnl_linpack_qrsl(qrdc_out_.data_block(),
-                   n, n, p,
-                   qraux_.data_block(),
-                   b_data, 0, QtB.data_block(),
-                   x.data_block(),
-                   0/*residual*/,
-                   0/*Ax*/,
-                   JOB,
-                   &info);
+  vnl_qrsl(qrdc_out_.data_block(),
+           n, n, p,
+           qraux_.data_block(),
+           b_data, 0, QtB.data_block(),
+           x.data_block(),
+           0/*residual*/,
+           0/*Ax*/,
+           JOB,
+           &info);
 
   if (info > 0)
     vcl_cerr << "vnl_qr<T>::solve() : A is rank-deficient by " << info << vcl_endl;
@@ -214,17 +214,17 @@ vnl_vector<T> vnl_qr<T>::QtB(const vnl_vector<T>& b) const
   int JOB = 1000;
 
   int info = 0;
-  vnl_linpack_qrsl(qrdc_out_.data_block(),
-                   n, n, p,
-                   qraux_.data_block(),
-                   b_data,
-                   0,                   // A: Qb
-                   QtB.data_block(),    // B: Q'b
-                   0,                   // C: x
-                   0,                   // D: residual
-                   0,                   // E: Ax
-                   JOB,
-                   &info);
+  vnl_qrsl(qrdc_out_.data_block(),
+           n, n, p,
+           qraux_.data_block(),
+           b_data,
+           0,                   // A: Qb
+           QtB.data_block(),    // B: Q'b
+           0,                   // C: x
+           0,                   // D: residual
+           0,                   // E: Ax
+           JOB,
+           &info);
 
   if (info > 0) {
     vcl_cerr << "vnl_qr<T>::QtB() -- A is rank-def by " << info << vcl_endl;
