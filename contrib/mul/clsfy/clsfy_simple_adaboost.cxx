@@ -44,6 +44,7 @@ clsfy_simple_adaboost& clsfy_simple_adaboost::operator=(const clsfy_simple_adabo
     classifier_1d_[i] = c.classifier_1d_[i]->clone();
 
   alphas_ = c.alphas_;
+  index_ = c.index_;
   return *this;
 }
 
@@ -166,6 +167,10 @@ void clsfy_simple_adaboost::class_probabilities(vcl_vector<double> &outputs,
 // Class probability = 1 / (1+exp(-log_l))
 double clsfy_simple_adaboost::log_l(const vnl_vector<double> &v) const
 {
+  assert ( n_clfrs_used_ != -1);
+  assert ( n_clfrs_used_ <= alphas_.size() );
+  //assert ( n_dims_ != -1);
+  //assert ( v.size() == n_dims_ );
   double sum1 = 0.0, sum2= 0.0;
   for (int i=0;i<n_clfrs_used_;++i)
   {
@@ -199,10 +204,12 @@ bool clsfy_simple_adaboost::is_class(vcl_string const& s) const
 void clsfy_simple_adaboost::print_summary(vcl_ostream& os) const
 {
   int n = alphas_.size();
+  assert( alphas_.size() == index_.size() );
   os<<vcl_endl;
   for (int i=0;i<n;++i)
   {
-    os<<" Alpha: "<<alphas_[i] << " Index: "<<index_[i]
+    os<<" Alpha: "<<alphas_[i] 
+      <<" Index: "<<index_[i]
       <<" Classifier: "<<classifier_1d_[i]<<vcl_endl;
   }
 }
@@ -240,6 +247,10 @@ void clsfy_simple_adaboost::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,classifier_1d_);
       vsl_b_read(bfs,alphas_);
       vsl_b_read(bfs,index_);
+
+      // set default number of classifiers used to be the maximimum number
+      n_clfrs_used_= index_.size();
+
       break;
     default:
       vcl_cerr << "I/O ERROR: clsfy_simple_adaboost::b_read(vsl_b_istream&)\n"

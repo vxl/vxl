@@ -66,7 +66,7 @@ public:
   void set_n_clfrs_used(int x) {if (x <= alphas_.size()) n_clfrs_used_ = x;}
 
   //: Access 
-  int n_clfrs_used() {return n_clfrs_used_; }
+  int n_clfrs_used() const {return n_clfrs_used_; }
 
   //: Find the posterior probability of the input being in the positive class.
   // The result is outputs(0)
