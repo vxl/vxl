@@ -12,6 +12,7 @@
 #include <vgui/vgui_utils.h>
 #include <vgui/vgui_easy2D.h>
 #include <vgui/vgui_rubberbander.h>
+#include <vgui/vgui_composite.h>
 #include <vgui/vgui_viewer2D.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_image_tableau.h>
@@ -51,8 +52,7 @@ vcl_vector<vgui_easy2D_sptr> get_easy2D_list()
   for (unsigned i=0; i<all_tabs.size(); i++)
   {
     vgui_easy2D_sptr easy;
-    easy.vertical_cast(vgui_utils::find_tableau_by_type_name(
-      all_tabs[i], vcl_string("vgui_easy2D")));
+    easy.vertical_cast(all_tabs[i]);
     easy_tabs.push_back(easy);
   }
   return easy_tabs;
@@ -71,10 +71,10 @@ void get_current(unsigned* col, unsigned* row)
 vgui_rubberbander_sptr get_rubberbander_at(unsigned col, unsigned row)
 {
   vgui_tableau_sptr top_tab = xcv_tab->get_tableau_at(col, row);
-  if (top_tab != NULL)
+  if (top_tab)
   {
     vgui_rubberbander_sptr tab;
-    tab.vertical_cast(vgui_utils::find_tableau_by_type_name(top_tab, vcl_string("vgui_rubberbander")));
+    tab.vertical_cast(top_tab);
     return tab;
   }
   else
@@ -92,9 +92,9 @@ vgui_easy2D_sptr get_easy2D_at(unsigned col, unsigned row)
 {
   vgui_easy2D_sptr ret;
   vgui_rubberbander_sptr rub = get_rubberbander_at(col, row);
-  if (rub != 0) {
-    ret.vertical_cast(vgui_utils::find_tableau_by_type_name(
-      rub, vcl_string("vgui_easy2D")));
+  if (rub) {
+    ret.vertical_cast(
+      rub);
     return ret;
   }
   vgui_macro_warning << "Unable to get easy2D at (" << col << ", " << row << ")\n";
@@ -108,10 +108,10 @@ vgui_image_tableau_sptr get_image_tableau_at(unsigned col, unsigned row)
 {
   vgui_image_tableau_sptr ret;
   vgui_easy2D_sptr tab = get_easy2D_at(col, row);
-  if (tab != 0)
+  if (tab)
   {
-    ret.vertical_cast(vgui_utils::find_tableau_by_type_name(
-      tab, vcl_string("vgui_image_tableau")));
+    ret.vertical_cast(
+      tab);
   }
   vgui_macro_warning << "Unable to get vgui_image_tableau at (" << col << ", "
     << row << ")\n";
@@ -159,8 +159,8 @@ int main(int argc, char** argv)
 
   vgui_image_tableau_new image;
   vgui_easy2D_new easy(image);
-  vgui_rubberbander_new rubber;
-  vgui_composite_new c(rubber, easy);
+  vgui_rubberbander_new rubber(new vgui_rubberbander_easy2D_client(easy));
+  vgui_composite_new c(easy, rubber);
   vgui_viewer2D_new view(c);
   xcv_tab->add_next(view);
   argcount++;

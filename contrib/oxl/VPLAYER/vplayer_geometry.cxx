@@ -26,7 +26,7 @@ void vplayer_geometry::create_point(const void*)
   unsigned col, row;
   get_current(&col, &row);
   vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
-  if (rubber != NULL)
+  if (rubber)
     rubber->rubberband_point();
 }
 
@@ -38,7 +38,7 @@ void vplayer_geometry::create_line(const void*)
   unsigned col, row;
   get_current(&col, &row);
   vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
-  if (rubber != NULL)
+  if (rubber)
     rubber->rubberband_line();
 }
 
@@ -50,7 +50,7 @@ void vplayer_geometry::create_circle(const void*)
   unsigned col, row;
   get_current(&col, &row);
   vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
-  if (rubber != NULL)
+  if (rubber)
     rubber->rubberband_circle();
 }
 
@@ -62,7 +62,7 @@ void vplayer_geometry::create_polygon(const void*)
   unsigned col, row;
   get_current(&col, &row);
   vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
-  if (rubber != NULL)
+  if (rubber)
     rubber->rubberband_polygon();
 }
 //-----------------------------------------------------------------------------
@@ -73,7 +73,7 @@ void vplayer_geometry::create_linestrip(const void*)
   unsigned col, row;
   get_current(&col, &row);
   vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
-  if (rubber != NULL)
+  if (rubber)
     rubber->rubberband_linestrip();
 }
 //-----------------------------------------------------------------------------
@@ -84,7 +84,7 @@ void vplayer_geometry::create_infinite_line(const void*)
   unsigned col, row;
   get_current(&col, &row);
   vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
-  if (rubber != NULL)
+  if (rubber)
     rubber->rubberband_infinite_line();
 }
 //-----------------------------------------------------------------------------
@@ -553,7 +553,7 @@ void vplayer_geometry::create_box(const void *)
 unsigned col, row;
   get_current(&col, &row);
   vgui_rubberbander_sptr rubber = get_rubberbander_at(col, row);
-  if (rubber != NULL)
+  if (rubber)
     rubber->rubberband_box();
 }
 vgui_menu vplayer_geometry::create_geometry_menu()

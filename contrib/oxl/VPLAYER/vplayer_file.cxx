@@ -94,7 +94,7 @@ void vplayer_file::load_video_file()
   tableaux_.push_back(vgui_easy2D_new(vgui_image_tableau_new(pframe->get_image())));
   pframe = my_movie->first();
   vgui_rubberbander_sptr r = get_rubberbander_at(col,row);
-  r->init(tableaux_.front(),new vgui_rubberbander_easy2D_client(tableaux_.front()));
+  r->init(new vgui_rubberbander_easy2D_client(tableaux_.front()));
   tableaux_.front()->post_redraw();
 }
 
