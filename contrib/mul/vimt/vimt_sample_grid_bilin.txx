@@ -1,0 +1,141 @@
+// This is mul/vimt/vimt_sample_grid_bilin.txx
+#ifndef vimt_sample_grid_bilin_txx_
+#define vimt_sample_grid_bilin_txx_
+//:
+//  \file
+//  \brief Profile sampling functions for 2D images
+//  \author Tim Cootes
+
+#include "vimt_sample_grid_bilin.h"
+#include <vil2/vil2_sample_grid_bilin.h>
+#include <vil2/vil2_bilin_interp.h>
+#include <vnl/vnl_vector.h>
+#include <vgl/vgl_vector_2d.h>
+
+inline bool vimt_grid_corner_in_image(const vgl_point_2d<double>& p,
+                                      const vil2_image_view_base& image)
+{
+  if (p.x()<1) return false;
+  if (p.x()<1) return false;
+  if (p.x()+2>image.ni()) return false;
+  if (p.y()+2>image.nj()) return false;
+  return true;
+}
+
+//: Sample along grid, using bilinear interpolation.
+//  Profile points are p+i*u, where i=[0..n-1].
+//  Vector v is resized to n*np elements, where np=image.n_planes().
+//  v[0]..v[np-1] are the values from point p
+template <class imType, class vecType>
+void vimt_sample_grid_bilin(vnl_vector<vecType>& vec,
+                               const vimt_image_2d_of<imType>& image,
+                               const vgl_point_2d<double>& p0,
+                               const vgl_vector_2d<double>& u,
+                               const vgl_vector_2d<double>& v,
+                               int n1, int n2)
+{
+  vgl_point_2d<double> im_p0 = image.world2im()(p0);
+  vgl_point_2d<double> im_p1 = image.world2im()(p0+(n1-1)*u);
+  vgl_point_2d<double> im_p2 = image.world2im()(p0+(n2-1)*v);
+  int np = image.image().nplanes();
+  vec.resize(n1*n2*np);
+  vecType *vec_data = vec.data_block();
+
+  if (image.world2im().form()!=vimt_transform_2d::Projective)
+  {
+    // Can do all work in image co-ordinates under an affine transformation
+		vgl_vector_2d<double> im_u(0,0);
+		if (n1>1) im_u = (im_p1-im_p0)/(n1-1);
+		vgl_vector_2d<double> im_v(0,0);
+		if (n2>1) im_v = (im_p2-im_p0)/(n2-1);
+
+    vil2_sample_grid_bilin(vec_data,image.image(),im_p0.x(),im_p0.y(),
+		                       im_u.x(),im_u.y(),im_v.x(),im_v.y(),n1,n2);
+    return;
+  }
+
+  // Otherwise do more fiddly projective calculations
+
+  // Check that all the grid points are within the image.
+  const vimt_transform_2d& w2i = image.world2im();
+	bool all_in_image =
+	    vimt_grid_corner_in_image(im_p0,image.image()) &&
+      vimt_grid_corner_in_image(im_p1,image.image()) &&
+      vimt_grid_corner_in_image(im_p2,image.image()) &&
+      vimt_grid_corner_in_image(w2i(p0+(n1-1)*u+(n2-1)*v),image.image());
+
+  vgl_point_2d<double> im_p, p, p1=p0;
+
+	const imType* plane0 = image.image().top_left_ptr();
+	unsigned ni = image.image().ni();
+	unsigned nj = image.image().nj();
+	int istep = image.image().istep();
+	int jstep = image.image().jstep();
+	int pstep = image.image().planestep();
+
+  if (all_in_image)
+  {
+    if (np==1)
+    {
+      for (int i=0;i<n1;++i,p1+=u)
+      {
+        p=p1;  // Start of j-th row
+        for (int j=0;j<n2;++j,p+=v,++vec_data)
+				{
+				  im_p = w2i(p);
+          *vec_data = vil2_bilin_interp_raw(p.x(),p.y(),plane0,istep,jstep);
+        }
+      }
+    }
+    else
+    {
+      for (int i=0;i<n1;++i,p1+=u)
+      {
+        p=p1;  // Start of j-th row
+        for (int j=0;j<n2;++j,p+=v)
+        {
+          for (int k=0;k<np;++k,++vec_data)
+            *vec_data = vil2_bilin_interp_raw(p.x(),p.y(),plane0+k*pstep,istep,jstep);
+        }
+      }
+    }
+  }
+  else
+  {
+    // Use safe interpolation
+    if (np==1)
+    {
+      for (int i=0;i<n1;++i,p1+=u)
+      {
+        p=p1;  // Start of j-th row
+        for (int j=0;j<n2;++j,p+=v,++vec_data)
+				{
+				  im_p = w2i(p);
+          *vec_data = vil2_bilin_interp_safe(p.x(),p.y(),plane0,ni,nj,istep,jstep);
+        }
+      }
+    }
+    else
+    {
+      for (int i=0;i<n1;++i,p1+=u)
+      {
+        p=p1;  // Start of j-th row
+        for (int j=0;j<n2;++j,p+=v)
+        {
+          for (int k=0;k<np;++k,++vec_data)
+            *vec_data = vil2_bilin_interp_safe(p.x(),p.y(),plane0+k*pstep,ni,nj,istep,jstep);
+        }
+      }
+    }
+  }
+}
+
+#define VIMT_SAMPLE_GRID_BILIN_INSTANTIATE( imType, vecType ) \
+template void vimt_sample_grid_bilin(vnl_vector<vecType >& v, \
+                                      const vimt_image_2d_of<imType >& image, \
+                                      const vgl_point_2d<double >& p, \
+                                      const vgl_vector_2d<double>& u, \
+                                      const vgl_vector_2d<double>& v, \
+                                      int n1, int n2)
+
+#endif // vimt_sample_grid_bilin_txx_

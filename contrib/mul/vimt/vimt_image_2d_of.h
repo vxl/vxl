@@ -66,8 +66,6 @@ class vimt_image_2d_of : public vimt_image_2d
   //  world2im(x,y) is valid for all points in range
   //  Specifically, resize(nx,ny);
   //  world2im() translates by (-xlo,-ylo)
-  //
-  //  WARNING - confusing choice of parameters? Not consistent with vil2_image_view
   void set_valid_region(int x0, unsigned nx, int y0, unsigned ny);
 
   //: Take a deep copy of image (copy data, not just pointers)

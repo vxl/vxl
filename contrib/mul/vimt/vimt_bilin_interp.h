@@ -1,0 +1,25 @@
+// This is mul/vimt/vimt_bilin_interp.h
+#ifndef vimt_bilin_interp_h_
+#define vimt_bilin_interp_h_
+//: \file
+//  \brief Bilinear interpolation functions for 2D images
+//  \author Tim Cootes
+
+#include <vil2/vil2_bilin_inter.h>
+#include <vimt/vimt_image_2d_of.h>
+
+//: Compute bilinear interpolation at (x,y) in world co-ords, no bound checks
+//  Interpolates given plane of image.image() at image.world2im(p)
+template<class T>
+inline double vimt_bilin_interp_safe(const vimt_image_2d_of<T>& image,
+                                     const vgl_point_2d<double>& p,
+                                     int plane=0)
+{
+  vgl_point_2d<double> im_p = image.world2im()(p);
+	const vil2_image_view& im = image.image();
+	return vil2_bilin_interp_safe(im_p.x(),im_p.y(),
+	                              im.top_left_ptr()+plane*im.planestep(),
+                                im.ni(),im.nj(),  im.istep(),im.jstep());
+}
+
+#endif // vimt_bilin_interp_h_

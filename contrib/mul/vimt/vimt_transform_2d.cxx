@@ -309,6 +309,20 @@ void vimt_transform_2d::set_affine(const vnl_matrix<double>& M23)  // 2x3 matrix
     inv_uptodate_=false;
 }
 
+//: Sets to be 2D affine transformation T(x,y)=p+x.u+y.v
+void vimt_transform_2d::set_affine(const vgl_point_2d<double> & p,
+		                const vgl_vector_2d<double> & u,
+		                const vgl_vector_2d<double> & v)
+{
+  xt_ = p.x();
+	yt_ = p.y();
+	xx_ = u.x();
+	yx_ = u.y();
+	xy_ = v.x();
+	yy_ = v.y();
+  form_=Affine;
+  inv_uptodate_=false;
+}
 
 void vimt_transform_2d::set_projective(const vnl_matrix<double>& M33)   // 3x3 matrix
 {

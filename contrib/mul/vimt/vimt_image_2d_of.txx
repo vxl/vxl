@@ -12,6 +12,7 @@
 #include <vil2/vil2_print.h>
 #include <vil2/vil2_crop.h>
 #include <vsl/vsl_vector_io.h>
+#include <vil2/io/vil2_io_image_view.h>
 
 //=======================================================================
 
@@ -130,8 +131,7 @@ template<class T>
 void vimt_image_2d_of<T>::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
-//  vsl_b_write(bfs,image_);
-vcl_cerr<<"vimt_image_2d_of<T>::b_write() Not yet implemented."<<vcl_endl;
+  vsl_b_write(bfs,image_);
   vsl_b_write(bfs,world2im_);
 }
 
@@ -140,7 +140,6 @@ vcl_cerr<<"vimt_image_2d_of<T>::b_write() Not yet implemented."<<vcl_endl;
 template<class T>
 void vimt_image_2d_of<T>::b_read(vsl_b_istream& bfs)
 {
-vcl_cerr<<"vimt_image_2d_of<T>::b_write() Not yet implemented."<<vcl_endl;
   if (!bfs) return;
 
   short version;
@@ -148,7 +147,7 @@ vcl_cerr<<"vimt_image_2d_of<T>::b_write() Not yet implemented."<<vcl_endl;
   switch (version)
   {
   case (1):
-//    vsl_b_read(bfs,image_);
+    vsl_b_read(bfs,image_);
     vsl_b_read(bfs,world2im_);
     break;
   default:

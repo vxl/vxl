@@ -119,8 +119,14 @@ class vimt_transform_2d
     //: reflect about a line though the points m1, and m2
     void set_reflection( const vgl_point_2d<double> & m1, const vgl_point_2d<double> & m2);
 
-    //: Sets to be 2D affine transformation
-    void set_affine(const vnl_matrix<double>&);   // 2x3 matrix
+    //: Sets to be 2D affine transformation using 2x3 matrix
+    void set_affine(const vnl_matrix<double>&);
+
+    //: Sets to be 2D affine transformation T(x,y)=p+x.u+y.v
+    void set_affine(const vgl_point_2d<double> & p,
+		                const vgl_vector_2d<double> & u,
+		                const vgl_vector_2d<double> & v);
+
     //: Sets to be 2D projective transformation
     void set_projective(const vnl_matrix<double>&);   // 3x3 matrix
 
