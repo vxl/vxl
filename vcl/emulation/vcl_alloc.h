@@ -28,6 +28,10 @@
 
 #include "vcl_stlconf.h"
 
+// .NAME vcl_alloc
+// .INCLUDE vcl/emulation/vcl_alloc.h
+// .FILE emulation/vcl_alloc.cxx
+//
 // .SECTION Description
 // This implements some standard node allocators.  These are
 // NOT the same as the allocators in the C++ draft standard or in
@@ -266,7 +270,7 @@ void * __malloc_alloc<inst>::oom_realloc(void *p, size_t n)
     return(result);
 }
 
-typedef __malloc_alloc<0> malloc_alloc;
+typedef __malloc_alloc<0> vcl_malloc_alloc;
 
 # if defined ( __STL_USE_NEWALLOC )
 #  if defined ( __STL_DEBUG_ALLOC )
@@ -279,12 +283,12 @@ typedef __malloc_alloc<0> malloc_alloc;
 # else /* ! __STL_USE_NEWALLOC */
 #  ifdef __STL_USE_MALLOC
 #   if defined ( __STL_DEBUG_ALLOC )
-     typedef debug_alloc<malloc_alloc> vcl_alloc;
+     typedef debug_alloc<vcl_malloc_alloc> vcl_alloc;
 #   else
-     typedef malloc_alloc vcl_alloc;
+     typedef vcl_malloc_alloc vcl_alloc;
 #   endif
-typedef malloc_alloc single_client_alloc;
-typedef malloc_alloc multithreaded_alloc;
+typedef vcl_malloc_alloc single_client_alloc;
+typedef vcl_malloc_alloc multithreaded_alloc;
 #  else /* ! __STL_USE_MALLOC */
 // global-level stuff
 
@@ -466,7 +470,7 @@ typedef malloc_alloc multithreaded_alloc;
     	obj * __RESTRICT result;
     
     	if (n > __MAX_BYTES) {
-    	    return(malloc_alloc::allocate(n));
+    	    return(vcl_malloc_alloc::allocate(n));
     	}
     	my_free_list = free_list + FREELIST_INDEX(n);
     	// Acquire the lock here with a constructor call.
@@ -492,7 +496,7 @@ typedef malloc_alloc multithreaded_alloc;
     	obj * __VOLATILE * my_free_list;
     
     	if (n > __MAX_BYTES) {
-    	    malloc_alloc::deallocate(p, n);
+    	    vcl_malloc_alloc::deallocate(p, n);
     	    return;
     	}
     	my_free_list = free_list + FREELIST_INDEX(n);
@@ -570,7 +574,7 @@ typedef malloc_alloc multithreaded_alloc;
     			// right free vcl_list.
     		    }
     		}
-    		start_free = (char *)malloc_alloc::allocate(bytes_to_get);
+    		start_free = (char *)vcl_malloc_alloc::allocate(bytes_to_get);
     		// This should either throw an
     		// exception or remedy the situation.  Thus we assume it
     		// succeeded.
