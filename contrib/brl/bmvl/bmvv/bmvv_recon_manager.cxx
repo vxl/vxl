@@ -1328,7 +1328,8 @@ void bmvv_recon_manager::show_world_homography()
   vcl_ofstream ostr(cam_filename.c_str());
   vcl_vector<vgl_point_2d<double> > image_points;
   vcl_vector<vgl_point_3d<double> > world_points;
-  if (!brct_algos::read_target_corrs(istr, image_points, world_points))
+  vcl_vector<bool> valid(image_points.size(), true);
+  if (!brct_algos::read_target_corrs(istr, valid, image_points, world_points))
   {
     vcl_cout << "Failed to read correspondences\n";
     return;
