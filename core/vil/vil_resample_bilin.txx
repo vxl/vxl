@@ -1,7 +1,8 @@
 // This is mul/vil2/vil2_resample_bilin.txx
 #ifndef vil2_resample_bilin_txx_
 #define vil2_resample_bilin_txx_
-//: \file
+//:
+//  \file
 //  \brief Sample grid of points in one image and place in another
 //  \author Tim Cootes
 
@@ -18,7 +19,7 @@ inline bool vil2_grid_corner_in_image(double x0, double y0,
   return true;
 }
 
-//: Sample grid of points in one image and place in another, using bilinear interpolation
+//: Sample grid of points in one image and place in another, using bilinear interpolation.
 //  dest_image(i,j,p) is sampled from the src_image at
 //  (x0+i.dx1+j.dx2,y0+i.dy1+j.dy2), where i=[0..n1-1], j=[0..n2-1]
 //  dest_image resized to (n1,n2,src_image.nplanes())
@@ -44,7 +45,7 @@ void vil2_resample_bilin(const vil2_image_view<sType>& src_image,
   const int pstep = src_image.planestep();
   const sType* plane0 = src_image.top_left_ptr();
 
-	dest_image.resize(n1,n2,np);
+  dest_image.resize(n1,n2,np);
   const int d_istep = dest_image.istep();
   const int d_jstep = dest_image.jstep();
   const int d_pstep = dest_image.planestep();
@@ -57,22 +58,22 @@ void vil2_resample_bilin(const vil2_image_view<sType>& src_image,
   {
     if (np==1)
     {
-		  dType *row = d_plane0;
+      dType *row = d_plane0;
       for (int j=0;j<n2;++j,x1+=dx2,y1+=dy2,row+=d_jstep)
       {
         double x=x1, y=y1;  // Start of j-th row
-		    dType *dpt = row;
+        dType *dpt = row;
         for (int i=0;i<n1;++i,x+=dx1,y+=dy1,dpt+=d_istep)
           *dpt = (dType) vil2_bilin_interp_raw(x,y,plane0,istep,jstep);
       }
     }
     else
     {
-		  dType *row = d_plane0;
+      dType *row = d_plane0;
       for (int j=0;j<n2;++j,x1+=dx2,y1+=dy2,row+=d_jstep)
       {
         double x=x1, y=y1; // Start of j-th row
-		    dType *dpt = row;
+        dType *dpt = row;
         for (int i=0;i<n1;++i,x+=dx1,y+=dy1,dpt+=d_istep)
         {
           for (int p=0;p<np;++p)
@@ -86,28 +87,28 @@ void vil2_resample_bilin(const vil2_image_view<sType>& src_image,
     // Use safe interpolation
     if (np==1)
     {
-		  dType *row = d_plane0;
+      dType *row = d_plane0;
       for (int j=0;j<n2;++j,x1+=dx2,y1+=dy2,row+=d_jstep)
       {
         double x=x1, y=y1;  // Start of j-th row
-		    dType *dpt = row;
+        dType *dpt = row;
         for (int i=0;i<n1;++i,x+=dx1,y+=dy1,dpt+=d_istep)
           *dpt = (dType) vil2_bilin_interp_safe(x,y,plane0,
-					                                      ni,nj,istep,jstep);
+                                                ni,nj,istep,jstep);
       }
     }
     else
     {
-		  dType *row = d_plane0;
+      dType *row = d_plane0;
       for (int j=0;j<n2;++j,x1+=dx2,y1+=dy2,row+=d_jstep)
       {
         double x=x1, y=y1; // Start of j-th row
-		    dType *dpt = row;
+        dType *dpt = row;
         for (int i=0;i<n1;++i,x+=dx1,y+=dy1,dpt+=d_istep)
         {
           for (int p=0;p<np;++p)
             dpt[p*d_pstep] = (dType) vil2_bilin_interp_safe(x,y,plane0+p*pstep,
-						                                                ni,nj,istep,jstep);
+                                                            ni,nj,istep,jstep);
         }
       }
     }

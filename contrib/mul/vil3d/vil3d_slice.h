@@ -13,7 +13,7 @@
 #include <vcl_cassert.h>
 
 
-//: Return a 2D view of slice k of 3D image aligned as (j,i)
+//: Return a 2D view of slice k of 3D image aligned as (j,i).
 //  result(x,y,p)=im(y,x,k,p)
 // \relates vil3d_image_view
 // \relates vil2_image_view
@@ -22,8 +22,8 @@ inline vil2_image_view<T> vil3d_slice_ji(const vil3d_image_view<T> &im, unsigned
 {
   assert(k<im.nk());
   return vil2_image_view<T>(im.memory_chunk(),
-	                          im.origin_ptr()+k*im.kstep(),
-														im.nj(),im.ni(),im.nplanes(),
+                            im.origin_ptr()+k*im.kstep(),
+                            im.nj(),im.ni(),im.nplanes(),
                             im.jstep(),im.istep(),im.planestep());
 }
 
@@ -36,8 +36,8 @@ inline vil2_image_view<T> vil3d_slice_ij(const vil3d_image_view<T> &im, unsigned
 {
   assert(k<im.nk());
   return vil2_image_view<T>(im.memory_chunk(),
-	                          im.origin_ptr()+k*im.kstep(),
-														im.ni(),im.nj(),im.nplanes(),
+                            im.origin_ptr()+k*im.kstep(),
+                            im.ni(),im.nj(),im.nplanes(),
                             im.istep(),im.jstep(),im.planestep());
 }
 
@@ -50,8 +50,8 @@ inline vil2_image_view<T> vil3d_slice_jk(const vil3d_image_view<T> &im, unsigned
 {
   assert(i<im.ni());
   return vil2_image_view<T>(im.memory_chunk(),
-	                          im.origin_ptr()+i*im.istep(),
-														im.nj(),im.nk(),im.nplanes(),
+                            im.origin_ptr()+i*im.istep(),
+                            im.nj(),im.nk(),im.nplanes(),
                             im.jstep(),im.kstep(),im.planestep());
 }
 
@@ -64,8 +64,8 @@ inline vil2_image_view<T> vil3d_slice_kj(const vil3d_image_view<T> &im, unsigned
 {
   assert(i<im.ni());
   return vil2_image_view<T>(im.memory_chunk(),
-	                          im.origin_ptr()+i*im.istep(),
-														im.nk(),im.nj(),im.nplanes(),
+                            im.origin_ptr()+i*im.istep(),
+                            im.nk(),im.nj(),im.nplanes(),
                             im.kstep(),im.jstep(),im.planestep());
 }
 
@@ -78,8 +78,8 @@ inline vil2_image_view<T> vil3d_slice_ki(const vil3d_image_view<T> &im, unsigned
 {
   assert(j<im.nj());
   return vil2_image_view<T>(im.memory_chunk(),
-	                          im.origin_ptr()+j*im.jstep(),
-														im.nk(),im.ni(),im.nplanes(),
+                            im.origin_ptr()+j*im.jstep(),
+                            im.nk(),im.ni(),im.nplanes(),
                             im.kstep(),im.istep(),im.planestep());
 }
 
@@ -92,8 +92,8 @@ inline vil2_image_view<T> vil3d_slice_ik(const vil3d_image_view<T> &im, unsigned
 {
   assert(j<im.nj());
   return vil2_image_view<T>(im.memory_chunk(),
-	                          im.origin_ptr()+j*im.jstep(),
-														im.ni(),im.nk(),im.nplanes(),
+                            im.origin_ptr()+j*im.jstep(),
+                            im.ni(),im.nk(),im.nplanes(),
                             im.istep(),im.kstep(),im.planestep());
 }
 
