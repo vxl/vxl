@@ -83,7 +83,7 @@ bool vidl_image_list_codec::init()
 //   set_format(first->get_format());
 //   set_image_class(first->get_image_class());
      set_bits_pixel(vil_pixel_format_sizeof_components(first->pixel_format()) *
-                    vil_pixel_format_num_components(first->pixel_format()) * 8);
+                    vil_pixel_format_num_components(first->pixel_format()) * first->nplanes() * 8);
      set_width(first->ni());
      set_height(first->nj());
 
