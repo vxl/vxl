@@ -24,8 +24,8 @@ int main(int, char **)
   vdgl_edgel_chain_sptr ec = new vdgl_edgel_chain();
   for (int i = 0; i< N; i++)
     ec->add_edgel(vdgl_edgel((double)i,(double)i));
-  int ic = bdgl_curve_algs::closest_point(ec, 7, 4);
-  vcl_cout << "Closest point index for (7, 4)  = " << ic << vcl_endl;
+  int ic = bdgl_curve_algs::closest_point(ec, 7, 3);
+  vcl_cout << "Closest point index for (7, 3)  = " << ic << vcl_endl;
   Assert(ic==5);
 
   //construct a straight curve vertically at x=1.0
