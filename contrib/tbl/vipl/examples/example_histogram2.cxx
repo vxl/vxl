@@ -23,10 +23,10 @@
 //
 #include <section/section.h>
 #include <vipl/vipl_with_section/accessors/vipl_accessors_section.h>
-#include <vipl/vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_vector.h>
+#include <vipl/accessors/vipl_accessors_vcl_vector.h>
 #include <vil/vil_pixel.h>
 #include <vipl/vipl_histogram.h>
-#include <vnl/vnl_vector.h>
+#include <vcl_vector.h>
 
 // for I/O:
 #include <vil/vil_load.h>
@@ -39,29 +39,26 @@ typedef unsigned char ubyte;
 typedef int ubyte; // this is a hack!!!  See the Description.
 #endif
 
-typedef section<int,2> img_type;
-
 int
 main(int argc, char** argv) {
   if (argc < 2) { vcl_cerr << "Syntax: example_histogram file_in\n"; return 1; }
 
   // The input image:
   vil_image in = vil_load(argv[1]);
-  vnl_vector<unsigned> out(256);
+  vcl_vector<unsigned> out(256);
 
   section<ubyte,2> src(in.width(),in.height()); // in-memory 2D image
-  section<int,2> dst(1,256);
 
   // set the input image:
   if (vil_pixel_format(in) != VIL_BYTE) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
   in.get_section(src.buffer,0,0,in.width(),in.height());
 
   // The filter:
-  vipl_histogram<vil_image, 
-    vnl_vector<unsigned>,
+  vipl_histogram<section<ubyte,2>, 
+    vcl_vector<unsigned>,
     unsigned char,
     unsigned VCL_DFL_TMPL_ARG(vipl_trivial_pixeliter)> op;
-  op.put_in_data_ptr(&in);
+  op.put_in_data_ptr(&src);
   op.put_out_data_ptr(&out);
   op.filter();
 
