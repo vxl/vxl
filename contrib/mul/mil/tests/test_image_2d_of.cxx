@@ -33,7 +33,7 @@ void test_image_2d_of_byte()
   TEST("N.Planes",image0.nPlanes()==1,true);
   TEST("resize",image0.nx()==10 && image0.ny()==8, true);
 
-  for (int y=0;y<image0.nx();++y)
+  for (int y=0;y<image0.ny();++y)
      for (int x=0;x<image0.nx();++x)
 	 {
 	   image0(x,y) = x+y;

@@ -14,6 +14,7 @@ SOURCES += mil_image.cxx
 SOURCES += mil_image_pyramid.cxx
 SOURCES += mil_image_pyramid_builder.cxx
 SOURCES += mil_image_io.cxx
+SOURCES += mil_gauss_reduce_2d.cxx
 
 ifndef NOTEST
  SUBDIRS += tests

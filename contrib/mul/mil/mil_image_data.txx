@@ -67,7 +67,9 @@ void mil_image_data<T>::resize(int n)
 {
     if (size_==n) return;
 	delete [] data_;
-	data_ = new T[n];
+	data_ = 0;
+	if (n>0)
+	  data_ = new T[n];
 	size_ = n;
 }
 
