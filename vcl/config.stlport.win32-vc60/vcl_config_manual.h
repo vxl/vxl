@@ -12,4 +12,4 @@
 // Use STL port stl libraries.
 #define VCL_USE_STLPORT 1
 
-#endif
+#endif // vcl_config_manual_h_config_stlport_win32_vc60_
