@@ -1,4 +1,3 @@
-
 //:
 // \file
 // \author Lee, Ying-Lin (Bess)
@@ -14,7 +13,6 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/vnl_least_squares_function.h>
-//  #include <vnl/vnl_least_squares_cost_function.h>
 #include <vnl/vnl_cost_function.h>
 #include <vnl/algo/vnl_conjugate_gradient.h>
 #include <vnl/algo/vnl_amoeba.h>
@@ -271,8 +269,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
           // see on which control points the point gives constraints
           for ( unsigned j=0; j<num_control; ++j ) {
-//            if ( !control_point_constraint[ j ] && gr[j]>1e-4 ) {
-            if ( !control_point_constraint[ j ] ) {
+            if ( !control_point_constraint[ j ] ) { // && gr[j]>1e-4
               score_constraint[ j ] += gr[j];
               if ( score_constraint[j] > 1e-3 )
                 control_point_constraint[ j ] = true;
@@ -283,18 +280,18 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
             if ( !global_xform_ ) {
               displacement.set_row( i, ti.to_feature()->location() - from_pt );
 
-              DebugMacro_abv(2, from_pt << " \t " << ti.to_feature()->location() << " \t " << displacement.get_row( i ) << "\n" );  
+              DebugMacro_abv(2, from_pt << " \t " << ti.to_feature()->location() << " \t " << displacement.get_row( i ) << "\n" );
             }
             else {
               displacement.set_row( i, ti.to_feature()->location() - global_xform_->map_location( from_pt ) );
 
-              DebugMacro_abv(2, global_xform_->map_location( from_pt ) << " \t "<<ti.to_feature()->location() << " \t "<<displacement.get_row( i ) << "\n" );
+              DebugMacro_abv(2, global_xform_->map_location( from_pt ) << " \t " << ti.to_feature()->location()
+                                                                       << " \t " << displacement.get_row( i ) << "\n" );
             }
             g.set_row( i, gr );
             wgt[i] = ti.cumulative_weight();
             ++i;
           }
-//          }
         }
       }
     }
@@ -321,7 +318,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       for ( unsigned i=0; i<displacement.rows(); ++i )
         vcl_cout << i << "    " << displacement.get_row( i ) << " \t " << wgt[i] << '\n';
     }
-    
+
     for ( unsigned i = 0; i < dim ; ++i ) {
       spline_least_squares_func f( splines[i], from_pts_in_knots, wgt, displacement.get_column( i ), free_control_pt_index );
       vnl_levenberg_marquardt minimizer( f );
@@ -333,7 +330,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       if (this->debug_flag() > 1 ) timer.mark();
       minimizer.minimize( x );
       minimizer.diagnose_outcome(vcl_cout);
-      if (this->debug_flag() > 1 ) { 
+      if (this->debug_flag() > 1 ) {
         timer.print( vcl_cout );
         vcl_cout << "computing covariance\n";
         timer.mark();
@@ -409,7 +406,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       splines[i]->set_control_points( c );
       DebugMacro( 1, "control points:\n" << c << "\n" );
     }
-    if (this->debug_flag()> 1) timer.print( vcl_cout ); 
+    if (this->debug_flag()> 1) timer.print( vcl_cout );
     return new rgrl_trans_spline( splines, vnl_vector<double>(dim,0.0), delta_, global_xform_ );
   }
   else {   //    // No approximation
