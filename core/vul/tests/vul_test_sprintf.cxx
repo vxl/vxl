@@ -10,13 +10,13 @@ extern "C"
 void test_vul_sprintf(void)
 {
   vul_sprintf buf0("[%d]", 123);
-  vcl_cerr << "buf0=" << buf0 << vcl_endl;
+  vcl_cout << "buf0=" << buf0 << vcl_endl;
   Assert("buf0 == 123", buf0 == vcl_string("[123]"));
   
   vcl_string string_fmt = "[%s]";
 
   vul_sprintf buf1(string_fmt.c_str(), "awf");
-  vcl_cerr << "buf1=" << buf1 << vcl_endl;
+  vcl_cout << "buf1=" << buf1 << vcl_endl;
   Assert("buf1 == [awf]", buf1 == "[awf]");
 }
 
