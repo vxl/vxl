@@ -49,10 +49,10 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 * vul::
 * vnl::
 * vil::
-* vgui::
-* vidl::
 * vgl::
 * vsl::
+* vgui::
+* vidl::
 * vcsl::
 * structure::
 * build::
@@ -127,15 +127,6 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 @include chapter_vil.texi
 
 @comment ------------------------------------------------------------------
-@node    vgui
-@comment node-name, next,    previous, up
-@chapter vgui: Graphical User Interface
-@cindex vgui
-@cindex Graphics
-
-@include chapter_vgui.texi
-
-@comment ------------------------------------------------------------------
 @node    vgl
 @comment node-name, next,  previous, up
 @chapter vgl: Geometry
@@ -143,16 +134,6 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 @cindex Geometry
 
 @include chapter_vgl.texi
-
-
-@comment ------------------------------------------------------------------
-@node    vidl
-@comment node-name, next,      previous, up
-@chapter vidl: Video Access
-@cindex video
-
-@include chapter_vidl.texi
-
 
 @comment ------------------------------------------------------------------
 @node    vsl
@@ -166,6 +147,25 @@ Copyright @copyright{} 2000 Andrew Fitzgibbon
 @cindex Restoring objects
 
 @include chapter_vsl.texi
+
+
+@comment ------------------------------------------------------------------
+@node    vgui
+@comment node-name, next,    previous, up
+@chapter vgui: Graphical User Interface
+@cindex vgui
+@cindex Graphics
+
+@include chapter_vgui.texi
+
+@comment ------------------------------------------------------------------
+@node    vidl
+@comment node-name, next,      previous, up
+@chapter vidl: Video Access
+@cindex video
+
+@include chapter_vidl.texi
+
 
 @comment ------------------------------------------------------------------
 @node    vcsl

@@ -3,8 +3,6 @@ Load images using @code{vil_load}. Access them
  using a @code{vil_image_view<T>}.
 @endchapsummary
 
-vil will replace parts of the existing vil1 image library in the near future.
-
 The @vxl{} image library has evolved from the TargetJr and Manchester Image
 libraries.
 As with its predecessors, its primary goals is to provide flexible
@@ -32,6 +30,9 @@ Automatic management is vital during program development, when the code is
 changing quickly.  On the other hand, release builds need the kind of
 optimisations that only a human can apply.
 @end itemize
+
+This vil library is the second VXL image library, and is sometimes refered
+to as vil2. The original  @vxl{} image library vil1 is deprecated.
 
 @section Loading and saving
 Let's look at an example of vil in use.  This program makes an image from a
@@ -358,7 +359,7 @@ which takes a multi-planar image and passes one plane at a time to your algorith
 can be done with virtually no loss in efficiency, and indeed is how some of the code in
 @code{vil/algo} is written.
 
-To help convert existing code there is a script (@code{core/vil/scripts/viltovil2.pl})
+To help convert existing code there is a script (@code{core/vil/scripts/vil1tovil.pl})
 It converts as much code as it can. However, it can really only deal with file and identifier
 name changes. There are large structural differences between vil1 and vil, with many of the
 equivalent functions taking different parameters. The output of the conversion script
