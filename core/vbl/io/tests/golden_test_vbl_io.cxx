@@ -47,7 +47,7 @@ void golden_test_vbl_io(bool save_file=false);
   }
 #else
   #include <vbl/vbl_test.h>
-#endif;
+#endif
 
 
 void golden_test_vbl_io(bool save_file)
