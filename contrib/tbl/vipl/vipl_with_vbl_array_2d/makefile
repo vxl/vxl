@@ -13,6 +13,7 @@ VERSION := 1.0
 # Do not instantiate templates in the library but implicitly, on use:
 USE_IMPLICIT_TEMPLATES := 1
 
+SOURCES += Templates/vipl_filter_2d+vbl_array_2d+uchar-.vbl_array_2d+uchar-.uchar.uchar-.cxx 
 MANPAGE_SOURCES += accessors/vipl_accessors_vbl_array_2d.txx
 
 #######################################
