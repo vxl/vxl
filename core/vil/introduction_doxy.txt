@@ -78,26 +78,22 @@ for (int i=0;i<nplanes;++i)
 *
 * Example of creating an image in memory, using fast pointer arithmetic
 * \verbatim
-int nx=256;
-int ny=256;
-int nplanes=3;
-vil2_image_view<vil2_byte> image(nx,ny,nplanes);
-vil2_byte* plane_data = image.top_left_ptr();
-for (int i=0;i<nplanes;++i)
-{
-  vil2_byte* row = plane_data;
-  for (int y=0;y<ny;++y)
+  int nx=256;
+  int ny=256;
+  int nplanes=3;
+  vil2_image_view<vil2_byte> image(nx,ny,nplanes);
+  vil2_byte* plane_data = image.top_left_ptr();
+  vil_byte* plane = image.top_left_ptr();
+  for (unsigned int p=0;p<nplanes;++p,plane += image.planestep())
   {
-    vil2_byte* p = row;
-    for (int x=0;x<nx;++x)
+    vil_byte* row = plane;
+    for (int y=0;y<ny;++y,row += image.ystep())
     {
-      *p = vil2_byte(x+y+i);
-      p+=image.xstep();
+      vil_byte* pixel = row;
+      for (int x=0;x<nx;++x,pixel+=image.xstep())
+        *pixel = vil_byte(x+10*y+100*p);
     }
-    row+=image.ystep();
   }
-  plane_data += image.planestep();
-}
 \endverbatim
 *
 * \subsection resize Resizing
