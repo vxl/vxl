@@ -7,7 +7,7 @@
 #include <vcl_iostream.h>
 
 template<class T>
-vcl_ostream& operator<< (vcl_ostream &os, const vbl_array_1d<T> &array)
+vcl_ostream& operator<< (vcl_ostream &os, vbl_array_1d<T> const& array)
 {
   for (typename vbl_array_1d<T>::const_iterator i=array.begin();
        i < array.end(); ++i)
@@ -19,6 +19,7 @@ vcl_ostream& operator<< (vcl_ostream &os, const vbl_array_1d<T> &array)
 
 #undef VBL_ARRAY_1D_INSTANTIATE
 #define VBL_ARRAY_1D_INSTANTIATE(T) \
-template struct vbl_array_1d<T >
+template struct vbl_array_1d<T >; \
+template vcl_ostream& operator<< (vcl_ostream& , vbl_array_1d<T > const& )
 
 #endif
