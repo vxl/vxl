@@ -11,6 +11,7 @@ DECLARE( test_interpolate );
 DECLARE( test_load );
 DECLARE( test_memory_image );
 DECLARE( test_memory_image_of );
+DECLARE( test_resample );
 DECLARE( test_save_load_image );
 DECLARE( test_write_endian );
 
@@ -28,6 +29,7 @@ register_tests()
   REGISTER( test_load );
   REGISTER( test_memory_image );
   REGISTER( test_memory_image_of );
+  REGISTER( test_resample );
   REGISTER( test_save_load_image );
   REGISTER( test_write_endian );
 }
