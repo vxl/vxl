@@ -1,16 +1,16 @@
+// This is vxl/vul/tests/test_file_iterator.cxx
 #include <vcl_iostream.h>
-#include <vcl_cstring.h>
+#include <vcl_fstream.h>
+#include <vcl_map.h>
 #include <vpl/vpl.h>
 #include <vul/vul_file.h>
 #include <vul/vul_timer.h>
 #include <vul/vul_temp_filename.h>
-#include <vcl_map.h>
 
 #include <testlib/testlib_test.h>
 
 // file iter
 #include <vul/vul_file_iterator.h>
-#include <vcl_fstream.h>
 
 static void touch(char const* fn)
 {
