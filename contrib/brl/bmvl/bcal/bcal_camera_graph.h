@@ -26,7 +26,8 @@ template<class S, class V, class E>
 class bcal_camera_graph
 {
  protected:
-  struct vertex_node{
+  struct vertex_node
+  {
    public:
     int id_;
     V *v_; // distinguish source with other node
@@ -41,23 +42,19 @@ class bcal_camera_graph
 
     ~vertex_node()
     {
-      if (v_)
-        delete v_;
-      v_ = 0;
-
-      if (s_)
-        delete s_;
-      s_ = 0;
+      delete v_; v_ = 0;
+      delete s_; s_ = 0;
     }
   };
 
 
-  struct edge_node{
+  struct edge_node
+  {
     vertex_node* v_; // recode which vertex attached with this edge
     E* e_;
    public:
     edge_node(vertex_node* v) { v_ = v; e_ = new E;}
-    virtual ~edge_node() {  if (e_) delete e_;   }
+    virtual ~edge_node() { delete e_; }
   };
 
  protected:
@@ -90,7 +87,8 @@ class bcal_camera_graph
 
  public:
 #if 0
-  class iterator {
+  class iterator
+  {
    public:
     iterator() : ptr_(0), pos_(0) {}
     iterator(vcl_vector<vertex_node*> *p, int pos = 0) : ptr_(p), pos_(pos) {}
@@ -107,41 +105,38 @@ class bcal_camera_graph
 
     iterator& operator++()
     {
-      inc();
+      increment();
       return *this;
     }
 
     iterator operator++(int)
     {
       iterator t = *this;
-      inc();
+      increment();
       return t;
     }
 
     iterator& operator--()
     {
-      dec();
+      decrement();
       return *this;
     }
 
     iterator operator--(int )
     {
       iterator t = *this;
-      dec();
+      decrement();
       return t;
     }
 
-    bool operator==(const iterator& x) const
-    { return ptr_ == x.ptr_ && pos_ = x.pos_; }
+    bool operator==(const iterator& x) const { return ptr_ == x.ptr_ && pos_ = x.pos_; }
 
-    bool operator!=(const iterator& x) const
-    { return !(*this == x); }
+    bool operator!=(const iterator& x) const { return !(*this == x); }
 
-    void dec() { if (pos_>=0)  pos_--; }
-    void inc() { pos_++; }
+    void decrement() { if (pos_>=0)  pos_--; }
+    void increment() { pos_++; }
 
-    vertex_node* node() const
-    { return (*ptr_)[pos]; }
+    vertex_node* node() const { return (*ptr_)[pos]; }
 
     int get_vertex_id() const { return (*ptr_)[pos_]->id_; }
 
@@ -153,15 +148,9 @@ class bcal_camera_graph
 
  public: // constructor and destructor
 
-  bcal_camera_graph()
-  {
-    init_graph();
-  }
+  bcal_camera_graph() { init_graph(); }
 
-  virtual ~bcal_camera_graph()
-  {
-    erase_graph();
-  }
+  virtual ~bcal_camera_graph() { erase_graph(); }
 
  public: // operations
   S* get_source() {  return source_;}
@@ -228,8 +217,7 @@ class bcal_camera_graph
 
 #if 0
   // return a iterator pointer to first vertex
-  iterator begin()
-  { return iterator(&vertice_, 1); }
+  iterator begin() { return iterator(&vertice_, 1); }
 #endif // 0
 
   // get edge from v1 to v2
@@ -281,12 +269,11 @@ class bcal_camera_graph
 
     for (int i=0; i<num_vertice_; i++){
       // delete each vertex
-      if (vertice_[i])
-        delete vertice_[i];
-      vertice_[i] = 0;
+      delete vertice_[i]; vertice_[i] = 0;
 
       // delete each edge node
-      if (edges_[i]){
+      if (edges_[i])
+      {
         int list_length = edges_[i]->size();
         for (int j=0; j<list_length; j++)
           delete (*(edges_[i]))[j];
