@@ -98,6 +98,7 @@ vipl_section_descriptor_2d< DataType > ::vipl_section_descriptor_2d(const vipl_s
       //knowing their form.
 }
 
+#if 0 // not implemented
 //:
 // This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
 // 1 means ``y'' axis etc...) and returns an integer which describes the start
@@ -171,5 +172,6 @@ template < class DataType >
 vipl_section_descriptor< DataType >* vipl_section_descriptor_2d< DataType > ::virtual_copy() const
 {
 }
+#endif
 
 #endif // vipl_section_descriptor_2d_txx_

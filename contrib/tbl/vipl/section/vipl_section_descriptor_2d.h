@@ -47,6 +47,7 @@ class vipl_section_descriptor_2d : public vipl_section_descriptor< DataType > {
   vipl_section_descriptor_2d(); //low_level c++ constructor
   //user accessed low_level c++ copy constructor
   vipl_section_descriptor_2d(const vipl_section_descriptor_2d< DataType > &);
+#if 0 // not implemented at this level
   //:
   // This method takes in an argument called axis (i.e. 0 means the ``x'' axis,
   // 1 means ``y'' axis) etc... and returns an integer which describes the start
@@ -91,6 +92,7 @@ class vipl_section_descriptor_2d : public vipl_section_descriptor< DataType > {
   // have pointers to its ``real instance.''
  protected:
   virtual vipl_section_descriptor< DataType >* virtual_copy() const;
+#endif
  public:
   vipl_section_descriptor< DataType >* real_descriptor() const { return hsreal_descriptor; }
   vipl_section_descriptor< DataType >* & ref_real_descriptor() { return hsreal_descriptor; }
