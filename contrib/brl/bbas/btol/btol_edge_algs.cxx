@@ -1,9 +1,9 @@
 //:
 // \file
+#include "btol_edge_algs.h"
 #include <vcl_algorithm.h> // vcl_find()
 #include <vcl_cmath.h>
 #include <vdgl/vdgl_digital_curve.h>
-#include <btol/btol_edge_algs.h>
 #include <vtol/vtol_topology_object_sptr.h>
 #include <vtol/vtol_topology_object.h>
 #include <vtol/vtol_edge_2d.h>
@@ -42,7 +42,7 @@ bool btol_edge_algs::unlink_all_inferiors_twoway(vtol_edge_2d_sptr const& e)
   vcl_vector<vtol_topology_object_sptr>* infs = toe->inferiors();
   //this will be the zero_chain for the edge
   //Can have an edge with no vertices
-  if(!infs->size())
+  if (!infs->size())
     return true;
   if (infs->size()>1)
     {
@@ -123,13 +123,11 @@ void btol_edge_algs::edge_2d_erase(vcl_vector<vtol_edge_2d_sptr>& edges,
 {
   vcl_vector<vtol_edge_2d_sptr>::iterator eit =
     vcl_find(edges.begin(), edges.end(), e);
-  if (eit == edges.end())
-    return;
-  edges.erase(eit);
+  if (eit != edges.end())
+    edges.erase(eit);
   return;
 }
-//: find the vertex closest to the given position
-//  and return it
+//: find the vertex closest to the given position and return it
 vtol_vertex_2d_sptr btol_edge_algs::closest_vertex(vtol_edge_2d_sptr const& e,
                                                    const double x,
                                                    const double y)
@@ -140,7 +138,8 @@ vtol_vertex_2d_sptr btol_edge_algs::closest_vertex(vtol_edge_2d_sptr const& e,
   double y2 = e->v2()->cast_to_vertex_2d()->y();
   double d1 = vcl_sqrt((x1-x)*(x1-x)+(y1-y)*(y1-y));
   double d2 = vcl_sqrt((x2-x)*(x2-x)+(y2-y)*(y2-y));
-  if(d1<d2)
+  if (d1<d2)
     return e->v1()->cast_to_vertex_2d();
-  return e->v2()->cast_to_vertex_2d();
+  else
+    return e->v2()->cast_to_vertex_2d();
 }
