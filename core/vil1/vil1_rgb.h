@@ -188,8 +188,8 @@ inline
 vil_rgb<T> max(vil_rgb<T> const& a, vil_rgb<T> const& b)
 {
   return vil_rgb<T>((a.r>b.r)?a.r:b.r,
-                (a.g>b.g)?a.g:b.g,
-                (a.b>b.b)?a.b:b.b);
+                    (a.g>b.g)?a.g:b.g,
+                    (a.b>b.b)?a.b:b.b);
 }
 
 template <class T>
@@ -197,8 +197,8 @@ inline
 vil_rgb<T> min(vil_rgb<T> const& a, vil_rgb<T> const& b)
 {
   return vil_rgb<T>((a.r<b.r)?a.r:b.r,
-                (a.g<b.g)?a.g:b.g,
-                (a.b<b.b)?a.b:b.b);
+                    (a.g<b.g)?a.g:b.g,
+                    (a.b<b.b)?a.b:b.b);
 }
 
 template <class T>
