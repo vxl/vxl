@@ -74,6 +74,9 @@ class bmrf_curve_3d_builder
   //: Simultaneously reconstruct all points in a 3d curve
   void reconstruct_curve(vcl_list<bmrf_curvel_3d_sptr>& curve, float sigma = 0.5) const;
 
+  //: Attempt to fill in missing correspondences
+  void fill_gaps(vcl_list<bmrf_curvel_3d_sptr>& curve);
+
   //: Match the \p curvels to the ends of the \p growing_curves
   void append_curvels(vcl_list<bmrf_curvel_3d_sptr> curvels,
                       vcl_list<vcl_list<bmrf_curvel_3d_sptr>*>& growing_curves);\

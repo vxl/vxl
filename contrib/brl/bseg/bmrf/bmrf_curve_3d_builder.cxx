@@ -126,6 +126,7 @@ bmrf_curve_3d_builder::build(int min_prj, int min_len, float sigma)
   {
     vcl_set<vcl_list<bmrf_curvel_3d_sptr> >::iterator next_itr = itr;
     ++next_itr;
+    this->fill_gaps(const_cast<vcl_list<bmrf_curvel_3d_sptr> &> (*itr));
     if ( itr->size() < (unsigned int)min_len )
       curves_.erase(itr);
     else
@@ -223,6 +224,7 @@ bmrf_curve_3d_builder::build_curvels(double alpha, int min)
     prev_curvels = curr_curvels;
   }
 
+#if 0
   // remove those with less than 'min' projections
   // triangulate 3D points for the rest
   for ( vcl_list<bmrf_curvel_3d_sptr>::iterator itr = all_curvels.begin();
@@ -234,13 +236,12 @@ bmrf_curve_3d_builder::build_curvels(double alpha, int min)
     if ((*itr)->num_projections() < min)
       all_curvels.erase(itr);
     else {
-#if 0
       this->reconstruct_point(*itr);
-#endif
     }
 
     itr = next_itr;
   }
+#endif
 
   return all_curvels;
 }
@@ -383,7 +384,7 @@ void
 bmrf_curve_3d_builder::reconstruct_point(bmrf_curvel_3d_sptr curvel) const
 {
   unsigned int num_frames = network_->num_frames();
-  unsigned int nviews = curvel->num_projections();
+  unsigned int nviews = curvel->num_projections(true);
 
   vcl_cout << "reconstructing from " << nviews << " views" << vcl_endl;
 
@@ -433,7 +434,7 @@ bmrf_curve_3d_builder::reconstruct_curve(vcl_list<bmrf_curvel_3d_sptr>& curve, f
   vcl_list<bmrf_curvel_3d_sptr>::iterator itr = curve.begin();
   for (unsigned int cnt=0; itr != curve.end(); ++itr, ++cnt)
   {
-    unsigned int num_views = (*itr)->num_projections();
+    unsigned int num_views = (*itr)->num_projections(true);
     vnl_matrix<double> C(2*num_views, 3, 0.0);
     vnl_vector<double> d(2*num_views, 0.0);
     unsigned int v=0;
@@ -493,6 +494,46 @@ bmrf_curve_3d_builder::reconstruct_curve(vcl_list<bmrf_curvel_3d_sptr>& curve, f
 }
 
 
+//: Attempt to fill in missing correspondences
+void 
+bmrf_curve_3d_builder::fill_gaps(vcl_list<bmrf_curvel_3d_sptr>& curve)
+{
+  unsigned int num_frames = network_->num_frames();
+  for (int f=0; f<num_frames; ++f){
+    vnl_double_2 last_point;
+    vcl_list<bmrf_curvel_3d_sptr>::iterator last_itr = curve.end();
+    int gap_size = 0;
+    for( vcl_list<bmrf_curvel_3d_sptr>::iterator itr = curve.begin();
+         itr != curve.end(); ++itr )
+    {
+      vnl_double_2 temp_pt;
+      if( (*itr)->pos_in_frame(f, temp_pt) ){
+        if( gap_size > 0 ){
+          int gap = 1;
+          vnl_double_2 step = temp_pt - last_point;
+          vcl_cout << temp_pt << vcl_endl;
+          for( vcl_list<bmrf_curvel_3d_sptr>::iterator fill_itr = ++last_itr;
+               fill_itr != itr;  ++fill_itr, ++gap)
+          {
+            double ratio = double(gap)/double(gap_size+1);
+            vnl_double_2 new_pt = last_point + step*ratio;
+            vcl_cout << new_pt << " - " << ratio <<vcl_endl;
+            (*fill_itr)->set_psuedo_point(f, new_pt );
+          }
+          vcl_cout << last_point <<"\n-----------"<< vcl_endl;
+        }
+        last_point = temp_pt;
+        last_itr = itr;
+        gap_size = 0;
+      }
+      else if (last_itr != curve.end()){
+        ++gap_size;
+      }
+    }
+  }
+}
+
+
 //: Match the \p curvels to the ends of the \p growing_curves
 void
 bmrf_curve_3d_builder::append_curvels(vcl_list<bmrf_curvel_3d_sptr> curvels,
@@ -502,22 +543,58 @@ bmrf_curve_3d_builder::append_curvels(vcl_list<bmrf_curvel_3d_sptr> curvels,
   for ( vcl_list<vcl_list<bmrf_curvel_3d_sptr>*>::iterator g_itr = growing_curves.begin();
         g_itr != growing_curves.end();  ++g_itr )
   {
+    typedef vcl_list<bmrf_curvel_3d_sptr>::iterator curvel_iterator;
     bmrf_curvel_3d_sptr end_curvel = (*g_itr)->back();
-    for ( vcl_list<bmrf_curvel_3d_sptr>::iterator c_itr = curvels.begin();
+    vcl_vector<curvel_iterator> possible_matches;
+    for ( curvel_iterator c_itr = curvels.begin();
           c_itr != curvels.end();  ++c_itr )
     {
       if ( this->append_correct((*c_itr), end_curvel) ) {
-        (*g_itr)->push_back((*c_itr));
-        grown_curves.push_back(*g_itr);
-        curvels.erase(c_itr);
-        break; // found match
+        possible_matches.push_back(c_itr);
       }
     }
+
+    // Merge matching curvels if possible
+    vcl_vector<curvel_iterator> unmerged_matches;
+    while( !possible_matches.empty() ){
+      curvel_iterator current = possible_matches.back();
+      possible_matches.pop_back();
+      bool merged = false;
+      for( unsigned int i=0; i<possible_matches.size(); ++i ){
+        if( (*possible_matches[i])->merge(*current) ){
+          curvels.erase(current);
+          merged = true;
+          break;
+        }
+      }
+      if(!merged  && (*current)->num_projections() > 2 ){
+        unmerged_matches.push_back(current);
+      }
+    }
+    
+    if(unmerged_matches.size() == 1 ){
+      if( (*unmerged_matches.front())->num_projections() > 2){
+        (*g_itr)->push_back(*possible_matches.front());
+        grown_curves.push_back(*g_itr);
+        curvels.erase(unmerged_matches.front());
+      }
+    }
+
+    if (unmerged_matches.size() > 1 ){
+      for( int i=0; i<unmerged_matches.size(); ++i ){
+        vcl_cout << "  match " << i << " has " 
+                 << (*unmerged_matches[i])->num_projections() << " projections" << vcl_endl;
+      }
+      vcl_cout << "----------" << vcl_endl;
+    }
+
   }
   // make new curves for the unmatched curvels
   for ( vcl_list<bmrf_curvel_3d_sptr>::iterator c_itr = curvels.begin();
         c_itr != curvels.end();  ++c_itr )
-  {
+  {      
+    if( (*c_itr)->num_projections() < 3)
+      continue;
     vcl_list<bmrf_curvel_3d_sptr> new_curve;
     new_curve.push_back(*c_itr);
     // This is a very sloppy way of keeping pointers to lists in curves_
@@ -547,8 +624,8 @@ bmrf_curve_3d_builder::append_correct( const bmrf_curvel_3d_sptr& new_c,
         ++total_equal;
     }
   }
-  double ratio = 0.0;
+  float ratio = 0.0;
   if ( total_overlap > 0 )
-    ratio = total_equal/total_overlap;
-  return  ratio > 0.5;
+    ratio = float(total_equal)/float(total_overlap);
+  return  ratio > 0.5f;
 }
