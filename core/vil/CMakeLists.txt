@@ -97,6 +97,9 @@ SET( vil2_sources ${vil2_sources}
 
   # Conversion to from vil1 images
   vil2_vil1.cxx vil2_vil1.h
+
+  # Plugin for image loading
+  vil2_image_resource_plugin.cxx vil2_image_resource_plugin.h
 )
 
 
