@@ -1,4 +1,4 @@
-LINK_LIBRARIES( vcl testlib )
+LINK_LIBRARIES( vnl testlib )
 
 IF(HAS_COOL)
   ADD_DEFINITIONS(-DHAS_COOL=1)
