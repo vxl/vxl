@@ -8,11 +8,10 @@
 
 #include <vcl_iostream.h>
 #include <vcl_cstring.h>  // strlen()
-#include <vnl/vnl_complex.h>
+#include <vcl_complex.h>
 #include <vnl/vnl_matlab_header.h>
 
 #include <vxl_config.h>
-
 #if VXL_LITTLE_ENDIAN // #ifdef i386
 # define native_BYTE_ORDER vnl_matlab_header::vnl_LITTLE_ENDIAN
 #else
@@ -31,28 +30,28 @@ void vnl_write_bytes(vcl_ostream &s, void const *p, unsigned bytes) {
 // template <class T> long scalar_precision(T const &);
 long vnl_scalar_precision(float  const &) { return vnl_matlab_header::vnl_SINGLE_PRECISION; }
 long vnl_scalar_precision(double const &) { return vnl_matlab_header::vnl_DOUBLE_PRECISION; }
-long vnl_scalar_precision(vnl_float_complex  const &) { return vnl_matlab_header::vnl_SINGLE_PRECISION; }
-long vnl_scalar_precision(vnl_double_complex const &) { return vnl_matlab_header::vnl_DOUBLE_PRECISION; }
+long vnl_scalar_precision(vcl_complex<float>  const &) { return vnl_matlab_header::vnl_SINGLE_PRECISION; }
+long vnl_scalar_precision(vcl_complex<double> const &) { return vnl_matlab_header::vnl_DOUBLE_PRECISION; }
 
 // template <class T> long is_complex(T const &);
 long vnl_is_complex(float  const &) { return 0; }
 long vnl_is_complex(double const &) { return 0; }
-long vnl_is_complex(vnl_float_complex  const &) { return 1; }
-long vnl_is_complex(vnl_double_complex const &) { return 1; }
+long vnl_is_complex(vcl_complex<float>  const &) { return 1; }
+long vnl_is_complex(vcl_complex<double> const &) { return 1; }
 
 // template <class T> void vnl_write_real(ostream &, T const *, unsigned );
 void vnl_write_real(vcl_ostream &s, float const *data, unsigned n)
 { ::vnl_write_bytes(s, data, n*sizeof(*data)); }
 void vnl_write_real(vcl_ostream &s, double const *data, unsigned n)
 { ::vnl_write_bytes(s, data, n*sizeof(*data)); }
-void vnl_write_real(vcl_ostream &s, vnl_float_complex const *data, unsigned n) {
+void vnl_write_real(vcl_ostream &s, vcl_complex<float> const *data, unsigned n) {
   float dummy;
   for (unsigned i=0; i<n; ++i) { // real block
     dummy = data[i].real();
     ::vnl_write_bytes(s, &dummy, sizeof(dummy));
   }
 }
-void vnl_write_real(vcl_ostream &s, vnl_double_complex const *data, unsigned n) {
+void vnl_write_real(vcl_ostream &s, vcl_complex<double> const *data, unsigned n) {
   double dummy;
   for (unsigned i=0; i<n; ++i) { // real block
     dummy = data[i].real();
@@ -63,14 +62,14 @@ void vnl_write_real(vcl_ostream &s, vnl_double_complex const *data, unsigned n) 
 // template <class T> void vnl_write_imag(ostream &, T const *, unsigned );
 void vnl_write_imag(vcl_ostream &, float const *, unsigned ) { }
 void vnl_write_imag(vcl_ostream &, double const *, unsigned ) { }
-void vnl_write_imag(vcl_ostream &s, vnl_float_complex const *data, unsigned n) {
+void vnl_write_imag(vcl_ostream &s, vcl_complex<float> const *data, unsigned n) {
   float dummy;
   for (unsigned i=0; i<n; ++i) { // imag block
     dummy = data[i].imag();
     ::vnl_write_bytes(s, &dummy, sizeof(dummy));
   }
 }
-void vnl_write_imag(vcl_ostream &s, vnl_double_complex const *data, unsigned n) {
+void vnl_write_imag(vcl_ostream &s, vcl_complex<double> const *data, unsigned n) {
   double dummy;
   for (unsigned i=0; i<n; ++i) { // imag block
     dummy = data[i].imag();
@@ -150,15 +149,15 @@ template bool vnl_matlab_write(vcl_ostream &, T const * const *, unsigned, unsig
 
 scalar_instantiate(float);
 scalar_instantiate(double);
-scalar_instantiate(vnl_float_complex);
-scalar_instantiate(vnl_double_complex);
+scalar_instantiate(vcl_complex<float>);
+scalar_instantiate(vcl_complex<double>);
 
 array1D_instantiate(float);
 array1D_instantiate(double);
-array1D_instantiate(vnl_float_complex);
-array1D_instantiate(vnl_double_complex);
+array1D_instantiate(vcl_complex<float>);
+array1D_instantiate(vcl_complex<double>);
 
 array2D_instantiate(float);
 array2D_instantiate(double);
-array2D_instantiate(vnl_float_complex);
-array2D_instantiate(vnl_double_complex);
+array2D_instantiate(vcl_complex<float>);
+array2D_instantiate(vcl_complex<double>);
