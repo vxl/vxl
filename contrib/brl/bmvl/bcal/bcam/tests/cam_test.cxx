@@ -3,6 +3,7 @@
 #include <bmvl/bcal/bcam/calibrate_plane.h>
 #include <bmvl/bcal/bcam/camera_graph.h>
 #include <bmvl/bcal/bcam/euclidean_transformation.h>
+#include <vcl_string.h>
 #include <vcl_cassert.h>
 
 void testing_graph()
@@ -19,14 +20,14 @@ void testing_graph()
   cg.print(vcl_cout);
 }
 
-void testing_linear_calibration()
+void testing_linear_calibration(vcl_string const& directory)
 {
   vcl_cout<<"\n--------------testing calibration -------------\n";
 
   camera_graph<calibrate_plane, zhang_camera_node, euclidean_transformation> cg;
 
   // initialize the template plane
-  cg.get_source()->readData("Model.txt");
+  cg.get_source()->readData((directory+"/Model.txt").c_str());
 
   // add a camera with 5 views into a graph
   int camID = cg.add_vertex();
@@ -51,11 +52,11 @@ void testing_linear_calibration()
   cg.print(vcl_cout);
 
   // read feature point for each view
-  cg.get_vertex(camID)->readData("data1.txt" , 0);
-  cg.get_vertex(camID)->readData("data2.txt" , 1);
-  cg.get_vertex(camID)->readData("data3.txt" , 2);
-  cg.get_vertex(camID)->readData("data4.txt" , 3);
-  cg.get_vertex(camID)->readData("data5.txt" , 4);
+  cg.get_vertex(camID)->readData((directory+"/data1.txt").c_str() , 0);
+  cg.get_vertex(camID)->readData((directory+"/data2.txt").c_str() , 1);
+  cg.get_vertex(camID)->readData((directory+"/data3.txt").c_str() , 2);
+  cg.get_vertex(camID)->readData((directory+"/data4.txt").c_str() , 3);
+  cg.get_vertex(camID)->readData((directory+"/data5.txt").c_str() , 4);
 
   // do the calibration
   vcl_cout<<"\n\nlinear calibration..............\n\n ";
@@ -66,10 +67,11 @@ void testing_linear_calibration()
   cg.print(vcl_cout);
 }
 
-int main()
+int main(int argc, char* argv[])
 {
+  vcl_string directory = argc>1 ? argv[1] : ".";
   testing_graph();
-  testing_linear_calibration();
+  testing_linear_calibration(directory);
 
   return 0;
 }
