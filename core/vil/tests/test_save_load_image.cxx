@@ -475,7 +475,7 @@ static void test_save_load_image()
 
   // VIFF image (Khoros 1.0)
 #if 1
-//vil_test_image_type("viff", image1);
+//vil_test_image_type("viff", image1); // boolean doesn't work (yet)
   vil_test_image_type("viff", image8);
   vil_test_image_type("viff", image16);
   vil_test_image_type("viff", image32);
@@ -489,8 +489,7 @@ static void test_save_load_image()
   vil_test_image_type("tiff", image8);
   vil_test_image_type("tiff", image3p);
   vil_test_image_type("tiff", image1); // boolean works now! - PVr, Dec. 2003
-#if 0
-  // Test that >1 byte pixels don't work yet:
+#if 0 // >1 byte pixels don't work (yet):
   vil_test_image_type("tiff", image16, true, true);
   vil_test_image_type("tiff", image32, true, true);
   vil_test_image_type("tiff", imagefloat, true, true);
@@ -516,11 +515,23 @@ static void test_save_load_image()
 
   // mit
 #if 1
-//vil_test_image_type("mit", image1); // Test that boolean doesn't work
+//vil_test_image_type("mit", image1); // boolean doesn't work (yet)
   vil_test_image_type("mit", image8);
   vil_test_image_type("mit", image16);
   vil_test_image_type("mit", image32);
   vil_test_image_type("mit", image3p);
+#endif
+
+
+  // NITF (read-only for the time being)
+#if 0
+  vil_test_image_type("NITF v2.0", image1);
+  vil_test_image_type("NITF v2.0", image8);
+  vil_test_image_type("NITF v2.0", image16);
+  vil_test_image_type("NITF v2.0", image32);
+  vil_test_image_type("NITF v2.0", image3p);
+  vil_test_image_type("NITF v2.0", imagefloat);
+  vil_test_image_type("NITF v2.0", imagedouble);
 #endif
 
 
