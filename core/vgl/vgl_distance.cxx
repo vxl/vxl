@@ -5,8 +5,8 @@
 #pragma implementation
 #endif
 #include "vgl_distance.h"
-#include <vcl/vcl_cmath.h>
 
+static inline float square(float x) { return x*x; }
 static inline double square(double x) { return x*x; }
 
 double vgl_distance2_to_linesegment(double x0, double y0,
@@ -77,3 +77,52 @@ double vgl_distance_to_closed_polygon(float const px[], float const py[], unsign
   return dd;
 }
 
+template <class Type>
+Type dist_origin(vgl_homg_line_2d<Type> const& l)
+{
+  return l.c() / sqrt( square(l.a())+square(l.b()) );
+}
+
+template <class Type>
+Type dist_origin(vgl_line_2d<Type> const& l)
+{
+  return l.c() / sqrt( square(l.a())+square(l.b()) );
+}
+
+template float dist_origin(vgl_line_2d<float> const&);
+template double dist_origin(vgl_line_2d<double> const&);
+template float dist_origin(vgl_homg_line_2d<float> const&);
+template double dist_origin(vgl_homg_line_2d<double> const&);
+
+template <class Type>
+Type vgl_distance(vgl_point_2d<Type>const& p1, vgl_point_2d<Type>const& p2)
+{	
+  return sqrt(square(p1.x()-p2.x())+square(p1.y()-p2.y()));
+}
+
+template <class Type>
+Type vgl_distance(vgl_point_3d<Type>const& p1, vgl_point_3d<Type>const& p2)
+{
+  return sqrt(square(p1.x()-p2.x())+square(p1.y()-p2.y())+square(p1.z()-p2.z()));
+}
+
+template <class Type>
+Type vgl_distance(vgl_homg_point_2d<Type>const& p1, vgl_homg_point_2d<Type>const& p2)
+{	
+  return sqrt(square(p1.x()/p1.w()-p2.x()/p2.w())+square(p1.y()/p1.w()-p2.y()/p2.w()));
+}
+
+template <class Type>
+Type vgl_distance(vgl_homg_point_3d<Type>const& p1, vgl_homg_point_3d<Type>const& p2)
+{
+  return sqrt(square(p1.x()/p1.w()-p2.x()/p2.w())+square(p1.y()/p1.w()-p2.y()/p2.w())+square(p1.z()/p1.w()-p2.z()/p2.w()));
+}
+
+template float vgl_distance(vgl_point_2d<float>const&, vgl_point_2d<float>const&);
+template double vgl_distance(vgl_point_2d<double>const&, vgl_point_2d<double>const&);
+template float vgl_distance(vgl_point_3d<float>const&, vgl_point_3d<float>const&);
+template double vgl_distance(vgl_point_3d<double>const&, vgl_point_3d<double>const&);
+template float vgl_distance(vgl_homg_point_2d<float>const&, vgl_homg_point_2d<float>const&);
+template double vgl_distance(vgl_homg_point_2d<double>const&, vgl_homg_point_2d<double>const&);
+template float vgl_distance(vgl_homg_point_3d<float>const&, vgl_homg_point_3d<float>const&);
+template double vgl_distance(vgl_homg_point_3d<double>const&, vgl_homg_point_3d<double>const&);
