@@ -17,6 +17,8 @@ DECLARE( test_image_resource );
 DECLARE( test_algo_normalised_correlation_3d );
 DECLARE( test_algo_convolve_1d );
 DECLARE( test_convert );
+DECLARE( test_algo_histogram_equalise );
+DECLARE( test_algo_histogram );
 
 void
 register_tests()
@@ -38,6 +40,8 @@ register_tests()
   REGISTER( test_algo_grad_1x3 );
   REGISTER( test_algo_normalised_correlation_3d );
   REGISTER( test_algo_convolve_1d );
+  REGISTER( test_algo_histogram_equalise );
+  REGISTER( test_algo_histogram );
 }
 
 DEFINE_MAIN;

@@ -22,6 +22,8 @@ void vil3d_zero_border_1plane(vil3d_image_view<float>& image)
   vil3d_slice_ik(image,nj-1).fill(0.0f);
 }
 
+
+
 //: Compute gradients of single plane of 2D data using 1x3 grad filters
 void vil3d_grad_1x3_1plane(const vil3d_image_view<vxl_byte>& src_im,
                            vil3d_image_view<float>& grad_i,
@@ -55,6 +57,11 @@ void vil3d_grad_1x3_1plane(const vil3d_image_view<vxl_byte>& src_im,
   const unsigned nj1 = nj-1;
   const unsigned nk1 = nk-1;
 
+  const vcl_ptrdiff_t src_istep = src_im.istep();
+  const vcl_ptrdiff_t gri_istep = grad_i.istep();
+  const vcl_ptrdiff_t grj_istep = grad_j.istep();
+  const vcl_ptrdiff_t grk_istep = grad_j.istep();
+  
   for (unsigned k=1;k<nk1;++k)
   {
     for (unsigned j=1;j<nj1;++j)
@@ -75,10 +82,10 @@ void vil3d_grad_1x3_1plane(const vil3d_image_view<vxl_byte>& src_im,
         // Compute gradient in k
         *pgk = 0.5f*s[dk1] - 0.5f*s[dk2];
 
-        s   += src_im.istep();
-        pgi += grad_i.istep();
-        pgj += grad_j.istep();
-        pgk += grad_k.istep();
+        s   += src_istep;
+        pgi += gri_istep;
+        pgj += grj_istep;
+        pgk += grk_istep;
       }
     }
   }

@@ -7,6 +7,8 @@ SET(vil3d_algo_sources
   vil3d_structuring_element.h vil3d_structuring_element.cxx
   vil3d_binary_dilate.h       vil3d_binary_dilate.cxx
   vil3d_binary_erode.h        vil3d_binary_erode.cxx
+  vil3d_histogram_equalise.h  vil3d_histogram_equalise.cxx
+  vil3d_histogram.h           vil3d_histogram.cxx
   vil3d_binary_opening.h
   vil3d_binary_closing.h
   vil3d_exp_filter.h
