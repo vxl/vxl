@@ -11,12 +11,11 @@
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vtol/vtol_edge_2d.h>
 
-void bxml_test_vector_vtol_edge_2d_input_conv(int argc, char * argv[])
+void bxml_test_vector_vtol_edge_2d_input_conv(int argc, char* argv[])
 {
   bxml_io::register_input_converters();
   vcl_string test_path = (argc < 2) ? "." : argv[1];
-  vcl_string test_file = "/xml_edge_test_2.xml";
-  vcl_string full_test_file_path = test_path + test_file;
+  vcl_string full_test_file_path = test_path + "/xml_edge_test_2.xml";
   vcl_vector<bxml_generic_ptr> edgs;
   vcl_vector<vtol_edge_2d_sptr> edges_2d;
   TEST("bxml_io::parse_xml(full_test_file_path, edgs)", bxml_io::parse_xml(full_test_file_path, edgs), true);
@@ -39,9 +38,9 @@ void bxml_test_vector_vtol_edge_2d_input_conv(int argc, char * argv[])
       vdgl_interpolator_sptr intrp = dc->get_interpolator();
       vdgl_edgel_chain_sptr ec = intrp->get_edgel_chain();
       vcl_cout << "edgel_chain size =" << ec->size() << vcl_endl;
-      for (int i = 0; i<ec->size(); i++)
+      for (unsigned int i = 0; i<ec->size(); ++i)
         vcl_cout << (*ec)[i] << vcl_endl;
-      vcl_cout << vcl_endl << vcl_endl << vcl_endl ;
+      vcl_cout << vcl_endl << vcl_endl << vcl_endl;
     }
   }
   bxml_input_converter::clear();
