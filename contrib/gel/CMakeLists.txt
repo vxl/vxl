@@ -41,6 +41,9 @@ SUBDIRS(vmal)
 # van-duc region finder (ported from TargetJr)
 SUBDIRS(gevd)
 
+# Experiments with the vidl library and vgui (JLM)
+SUBDIRS(jvid)
+
 # This should *not* be included here since it will cause all programs,
 # also the non-GUI ones, to link against libGL !
 # Place it only in those directories that really need it.
