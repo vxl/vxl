@@ -349,7 +349,7 @@ vil2_image_view_base_sptr vil2_bmp_image::get_copy_view(
   return new vil2_image_view<vxl_byte>(buf,
     reinterpret_cast<vxl_byte *>(buf->data())+(ny-1)*have_bytes_per_raster + nplanes()-1,
     nx, ny, nplanes(),
-    nplanes(), -have_bytes_per_raster, -1);
+    nplanes(), -(long)have_bytes_per_raster, -1);
 }
 
 
