@@ -1,0 +1,63 @@
+1. Get and install CMake
+
+CMake website is at http://public.kitware.com/CMake/. I recommend
+getting the sources via CVS: (see the section on "downloading" on the
+webpage)
+   cvs -d :pserver:anonymous@@public.kitware.com:/CMake/cvsroot login
+(respond with password cmake) 
+   cvs -d :pserver:anonymous@@public.kitware.com:/CMake/cvsroot co CMake
+
+Under Visual C++, load CMakeSetup.dsw and compile the projects in
+there. This will generate a program "CMakeSetup", which is what you
+will run whenever I talk about running CMake.
+
+Under Unix, do a standard
+  ./configure
+  make
+I suggest that you _not_ run "make install", because you will (should)
+be updating CMake relatively often. In the following, I will use
+$CMAKE to refer to the newly generated
+binary. (CMAKE_DIR/Source/cmake, if you don't perform the install
+step.)
+
+
+2. Compile with CMake
+
+Use $VXLSRC to refer to the vxl source tree. (This is $IUEROOT in the
+old make system.) Create a different directory $VXLBIN, and run CMake
+from within that directory.
+
+For Visual C++ users, run CMakeSetup and enter $VXLSRC and $VXLBIN
+appropriately. This will generate $VXLBIN/allvxl.dsw, and everything
+can be done from there.
+
+For Unix users:
+  cd $VXLBIN
+  $CMAKE $VXLSRC
+
+This will generate the makefiles within $VXLBIN. You can now do a
+"make" to build everything, or else go to a project of interest and
+run "make"--the dependent libraries should be automatically
+built. Although the generated makefiles will work with most make
+programs, it works best with GNU make.
+
+
+3. The CMakeCache.txt
+
+The build system is configured by setting "cache" values, which are
+specified in $VXLBIN/CMakeCache.txt. These values can be edited using
+a plain old editor or using the CMake GUI. (There is apparently a
+CMake GUI under Unix for those with FLTK.)
+
+
+4. Doing an in-place build
+
+If you don't make a new directory for $VXLBIN, but instead use
+$VXLBIN=$VXLSRC, you will get an in-place build. The major
+disadvantage is that you cannot have different build options, since
+the build options are given in the CMakeCache.txt and there is only
+one of those per build tree.
+
+(If you use emacs and like to run compile from within emacs, I have a
+small emacs library vxl-compile.el (mostly copied from compile.el)
+that will handle out-of-place builds.)
