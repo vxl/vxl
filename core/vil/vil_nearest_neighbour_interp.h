@@ -25,7 +25,7 @@ inline T vil_nearest_neighbour_interp_safe(
 {
   int ix = int(x + 0.5);
   int iy = int(y + 0.5);
-  if (ix >= 0 && ix < view.ni() && iy >= 0 && iy < view.nj())
+  if (ix >= 0 && ix < (int)view.ni() && iy >= 0 && iy < (int)view.nj())
     return view(ix, iy, p);
   else return 0;
 }
@@ -44,8 +44,8 @@ inline T vil_nearest_neighbour_interp(
   int iy = int(y + 0.5);
   assert (ix>=0);
   assert (iy>=0);
-  assert (ix<=view.ni()-1);
-  assert (iy<=view.nj()-1);
+  assert (ix<(int)view.ni());
+  assert (iy<(int)view.nj());
   return view(ix, iy, p);
 }
 
@@ -64,12 +64,12 @@ inline T vil_nearest_neighbour_interp_safe_extend(
   if (ix<0)
     ix= 0.0;
   else
-    if (ix>=view.ni()) ix=view.ni()-1;
+    if (ix>=(int)view.ni()) ix=view.ni()-1;
 
   if (iy<0)
     iy= 0.0;
   else
-    if (iy>=view.nj()) iy=view.nj()-1;
+    if (iy>=(int)view.nj()) iy=view.nj()-1;
 
   return view(ix, iy, p);
 }

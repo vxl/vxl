@@ -102,6 +102,9 @@ SET( vil_sources ${vil_sources}
   vil_sample_grid_bicub.txx             vil_sample_grid_bicub.h
   vil_resample_bicub.txx                vil_resample_bicub.h
 
+  # Nearest Neighbour Sampling Operations
+  vil_nearest_neighbour_interp.h
+
   # Stuff
   vil_smart_ptr.txx                     vil_smart_ptr.h
   vil_property.h
