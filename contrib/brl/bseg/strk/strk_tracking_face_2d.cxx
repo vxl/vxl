@@ -26,14 +26,14 @@ static void strk_1d_gaussian_kernel(const double sigma,
                                     vcl_vector<double>& kernel)
 {
   for (radius = 0; strk_gaussian(double(radius), sigma) > fuzz; radius++)
-    {;}                                         // find radius
+  {;}                                         // find radius
 
   kernel.resize(2*radius + 1);
-  if(!radius)
-    {
-      kernel[0]=1;
-      return;
-    }
+  if (!radius)
+  {
+    kernel[0]=1;
+    return;
+  }
   for (int i=0; i<=radius; ++i)
     kernel[radius+i] = kernel[radius-i] = strk_gaussian(double(i), sigma);
   double sum = 0;
@@ -51,47 +51,47 @@ static void strk_1d_gaussian(const double sigma,
                              vcl_vector<double>& out_buf)
 {
   int n = in_buf.size(), r = 0;
-  if(!n)
+  if (!n)
     return;
   out_buf.resize(n);
-  if(n==1)
-    {
-      out_buf[0]=in_buf[0];
-      return;
-    }
+  if (n==1)
+  {
+    out_buf[0]=in_buf[0];
+    return;
+  }
   //the general case
   vcl_vector<double> ker;
-  strk_1d_gaussian_kernel(sigma, 0.02, r, ker);  
-  for(int i = 0; i<n; i++)
+  strk_1d_gaussian_kernel(sigma, 0.02, r, ker);
+  for (int i = 0; i<n; i++)
+  {
+    double sum = 0;
+    //case a)
+    //the full kernel is applied
+    if (i>r&&((n-1)-i>=r))
     {
-      double sum = 0;
-      //case a)
-      //the full kernel is applied
-      if(i>r&&((n-1)-i>=r))
-        {
-          for(int k = -r; k<=r; k++)
-            sum += ker[k+r]*in_buf[i+k];
-          out_buf[i]=sum;
-          continue;
-        }
-      //case b) 
-      // full kernel can't be used
-      int r_minus = i;
-      if(r_minus>r)
-        r_minus=r;
-      int r_plus = (n-1)-i;
-      if(r_plus>r)
-        r_plus=r;
-      double ker_sum =0;
-      for(int k = -r_minus; k<=r_plus; k++)
-        {
-          ker_sum += ker[k+r];
-          sum += ker[k+r]*in_buf[i+k];
-        }
-      out_buf[i]=sum/ker_sum;
+      for (int k = -r; k<=r; k++)
+        sum += ker[k+r]*in_buf[i+k];
+      out_buf[i]=sum;
+      continue;
     }
+    //case b)
+    // full kernel can't be used
+    int r_minus = i;
+    if (r_minus>r)
+      r_minus=r;
+    int r_plus = (n-1)-i;
+    if (r_plus>r)
+      r_plus=r;
+    double ker_sum =0;
+    for (int k = -r_minus; k<=r_plus; k++)
+    {
+      ker_sum += ker[k+r];
+      sum += ker[k+r]*in_buf[i+k];
+    }
+    out_buf[i]=sum/ker_sum;
+  }
 }
-//convolve a 2-d array with a Gaussian kernel.  Since the Gaussian is 
+//convolve a 2-d array with a Gaussian kernel.  Since the Gaussian is
 //separable, first convolve along cols and then along rows
 static void strk_2d_gaussian(const double sigma,
                              vbl_array_2d<double> const& in_buf,
@@ -99,29 +99,29 @@ static void strk_2d_gaussian(const double sigma,
 {
   int n = in_buf.cols(), m = in_buf.rows();
   out_buf.resize(m, n);
-  
+
   //convolve columns
-  for(int row = 0; row<m; row++)
-    {    
-      vcl_vector<double> row_buf(n), temp;
-      for(int col = 0; col<n; col++)
-        row_buf[col]=in_buf[row][col];
-      strk_1d_gaussian(sigma, row_buf, temp);
-      for(int col = 0; col<n; col++)
-        out_buf[row][col]=temp[col];
-    }
+  for (int row = 0; row<m; row++)
+  {
+    vcl_vector<double> row_buf(n), temp;
+    for (int col = 0; col<n; col++)
+      row_buf[col]=in_buf[row][col];
+    strk_1d_gaussian(sigma, row_buf, temp);
+    for (int col = 0; col<n; col++)
+      out_buf[row][col]=temp[col];
+  }
   //convolve rows
-  for(int col = 0; col<n; col++)
-    {    
-      vcl_vector<double> col_buf(m), temp;
-      for(int row = 0; row<m; row++)
-        col_buf[row]=out_buf[row][col];
-      strk_1d_gaussian(sigma, col_buf, temp);
-      for(int row = 0; row<m; row++)
-        out_buf[row][col]=temp[row];
-    }
+  for (int col = 0; col<n; col++)
+  {
+    vcl_vector<double> col_buf(m), temp;
+    for (int row = 0; row<m; row++)
+      col_buf[row]=out_buf[row][col];
+    strk_1d_gaussian(sigma, col_buf, temp);
+    for (int row = 0; row<m; row++)
+      out_buf[row][col]=temp[row];
+  }
 }
-      
+
 //
 //======================== HISTOGRAM IMPLEMENTATION =================
 //
@@ -182,14 +182,14 @@ T strk_hist<T>::area() const
 template <class T>
 void strk_hist<T>::parzen(const T sigma)
 {
-  if(sigma<=0)
+  if (sigma<=0)
     return;
   double sd = (double)sigma;
   vcl_vector<double> in(nbins_), out(nbins_);
-  for(int i=0; i<nbins_; i++)
+  for (int i=0; i<nbins_; i++)
     in[i]=counts_[i];
-  strk_1d_gaussian(sd, in, out);  
-  for(int i=0; i<nbins_; i++)
+  strk_1d_gaussian(sd, in, out);
+  for (int i=0; i<nbins_; i++)
     counts_[i]=(T)out[i];
 }
 
@@ -202,8 +202,8 @@ void strk_hist<T>::print() const
 }
 
 template <class T>
-strk_joint_hist<T>::strk_joint_hist(const T range, 
-                                                    const unsigned int nbins)
+strk_joint_hist<T>::strk_joint_hist(const T range,
+                                    const unsigned int nbins)
   : volume_valid_(false), volume_(0), nbins_(nbins), delta_(0), range_(range)
 {
   if (nbins>0)
@@ -216,7 +216,7 @@ strk_joint_hist<T>::strk_joint_hist(const T range,
 
 template <class T>
 void strk_joint_hist<T>::upcount(T a, T mag_a,
-                                         T b, T mag_b)
+                                 T b, T mag_b)
 {
   if (a<0||a>360)
     return;
@@ -276,18 +276,18 @@ T strk_joint_hist<T>::volume() const
 template <class T>
 void strk_joint_hist<T>::parzen(const T sigma)
 {
-  if(sigma<=0)
+  if (sigma<=0)
     return;
   double sd = (double)sigma;
   vbl_array_2d<double> in(nbins_, nbins_), out;
-  for(int row = 0; row<nbins_; row++)
-    for(int col = 0; col<nbins_; col++)
+  for (int row = 0; row<nbins_; row++)
+    for (int col = 0; col<nbins_; col++)
       in[row][col] = (double)counts_[row][col];
-  
+
   strk_2d_gaussian(sd, in, out);
 
-  for(int row = 0; row<nbins_; row++)
-    for(int col = 0; col<nbins_; col++)
+  for (int row = 0; row<nbins_; row++)
+    for (int col = 0; col<nbins_; col++)
       counts_[row][col] = (T)out[row][col];
 }
 
@@ -349,10 +349,10 @@ strk_tracking_face_2d(vtol_face_2d_sptr const& face,
   color_info_ = hue&&sat;
   this->init_intensity_info(face, image);
   //cases
-  if(gradient_info_)
+  if (gradient_info_)
     this->init_gradient_info(Ix, Iy);
 
-  if(color_info_)
+  if (color_info_)
     this->init_color_info(hue, sat);
 }
 
@@ -477,7 +477,7 @@ void strk_tracking_face_2d::set_color(vil1_memory_image_of<float> const& hue,
 void strk_tracking_face_2d::
 init_intensity_info(vtol_face_2d_sptr const& face,
                     vil1_memory_image_of<float> const& image)
-                    
+
 {
   if (!face||!image)
     return;
@@ -522,12 +522,12 @@ init_intensity_info(vtol_face_2d_sptr const& face,
       intf_->InsertInPixelArrays(float(x), float(y), v);
     }
   //apply parzen window to histogram
-  vcl_cout << "\n\n Before Parzen(1d) - npix =" 
-           << model_intensity_hist.area()<<  "\n";
-  
+  vcl_cout << "\n\n Before Parzen(1d) - npix ="
+           << model_intensity_hist.area() << vcl_endl;
+
   model_intensity_hist.print();
   model_intensity_hist.parzen(parzen_sigma_);
-  vcl_cout << "After Parzen(1d) \n";
+  vcl_cout << "After Parzen(1d)\n";
   model_intensity_hist.print();
 
   //compute the model entropy
@@ -546,7 +546,7 @@ void strk_tracking_face_2d::
 init_gradient_info(vil1_memory_image_of<float> const& Ix,
                    vil1_memory_image_of<float> const& Iy)
 {
-  if(!intf_||!Ix||!Iy)
+  if (!intf_||!Ix||!Iy)
     return;
   int n = intf_->Npix();
   Ix_ = new float[n];
@@ -555,30 +555,30 @@ init_gradient_info(vil1_memory_image_of<float> const& Ix,
   gradient_dir_hist_bins_ = model_gradient_dir_hist.nbins();
   int i = 0;
   double deg_rad = 180.0/vnl_math::pi;
-  for(intf_->reset(); intf_->next();i++)
-    {
-      int x = intf_->X(), y = intf_->Y();
-      float Ixi = Ix(x,y), Iyi = Iy(x,y);
-      // set the gradient values
-      Ix_[i] = Ixi;  Iy_[i] = Iyi;
-      float ang = float(deg_rad*vcl_atan2(Iyi, Ixi))+180.f;
-      float mag = vcl_abs(Ixi)+vcl_abs(Iyi);
-      if(mag>min_gradient_)
-        model_gradient_dir_hist.upcount(ang, mag);
-    }
+  for (intf_->reset(); intf_->next(); i++)
+  {
+    int x = int(intf_->X()), y = int(intf_->Y());
+    float Ixi = Ix(x,y), Iyi = Iy(x,y);
+    // set the gradient values
+    Ix_[i] = Ixi;  Iy_[i] = Iyi;
+    float ang = float(deg_rad*vcl_atan2(Iyi, Ixi))+180.f;
+    float mag = vcl_abs(Ixi)+vcl_abs(Iyi);
+    if (mag>min_gradient_)
+      model_gradient_dir_hist.upcount(ang, mag);
+  }
 
   //apply parzen window to histogram
   model_gradient_dir_hist.parzen(parzen_sigma_);
-  
+
   //compute the gradient direction entropy
   float ent = 0;
   for (unsigned int m = 0; m<gradient_dir_hist_bins_; m++)
-    {
-      float pm = model_gradient_dir_hist.p(m);
-      if (!pm)
-        continue;
-      ent -= pm*vcl_log(pm);
-    }
+  {
+    float pm = model_gradient_dir_hist.p(m);
+    if (!pm)
+      continue;
+    ent -= pm*vcl_log(pm);
+  }
   model_gradient_dir_entropy_= ent/vcl_log(2.0);
 }
 
@@ -586,7 +586,7 @@ void strk_tracking_face_2d::
 init_color_info(vil1_memory_image_of<float> const& hue,
                 vil1_memory_image_of<float> const& sat)
 {
-  if(!intf_||!hue||!sat)
+  if (!intf_||!hue||!sat)
     return;
   int n = intf_->Npix();
   hue_ = new float[n];
@@ -594,15 +594,15 @@ init_color_info(vil1_memory_image_of<float> const& hue,
   strk_hist<float> model_color_hist;
   color_hist_bins_ = model_color_hist.nbins();
   int i = 0;
-  for(intf_->reset(); intf_->next();i++)
-    {
-      int x = intf_->X(), y = intf_->Y();
-      float hue_i = hue(x,y), sat_i = sat(x,y);
-      // set the gradient values
-      hue_[i] = hue_i;  sat_[i] = sat_i;
-      if(sat_i>0)
-        model_color_hist.upcount(hue_i, sat_i);
-    }
+  for (intf_->reset(); intf_->next(); i++)
+  {
+    int x = int(intf_->X()), y = int(intf_->Y());
+    float hue_i = hue(x,y), sat_i = sat(x,y);
+    // set the gradient values
+    hue_[i] = hue_i;  sat_[i] = sat_i;
+    if (sat_i>0)
+      model_color_hist.upcount(hue_i, sat_i);
+  }
 
   //apply parzen window to histogram
   model_color_hist.parzen(parzen_sigma_);
@@ -610,12 +610,12 @@ init_color_info(vil1_memory_image_of<float> const& hue,
   //compute the color entropy
   float ent = 0;
   for (unsigned int m = 0; m<color_hist_bins_; m++)
-    {
-      float pm = model_color_hist.p(m);
-      if (!pm)
-        continue;
-      ent -= pm*vcl_log(pm);
-    }
+  {
+    float pm = model_color_hist.p(m);
+    if (!pm)
+      continue;
+    ent -= pm*vcl_log(pm);
+  }
   model_color_entropy_= ent/vcl_log(2.0);
 }
 
@@ -691,9 +691,7 @@ compute_intensity_mutual_information(vil1_memory_image_of<float> const& image)
     joint_hist.upcount(Im, 1.0f, Ii, 1.0f); //JLM
     n++;
   }
-  float npixf = (float)npix, nf = (float)n;
-  float frac = nf/npixf;
-  if (frac<0.9)
+  if (n<0.9*npix)
     return 0;
 #ifdef DEBUG
   vcl_cout << "Image Hist\n";
@@ -763,15 +761,13 @@ compute_gradient_mutual_information(vil1_memory_image_of<float> const& Ix,
              << "Ixi, Iyi " << Ixi << ' ' << Iyi << '\n'
              << "angi, magi " << angi << ' ' << magi << '\n';
 #endif
-    if(mag0>min_gradient_&&magi>min_gradient_)
-      {
-        image_dir_hist.upcount(angi, magi);
-        joint_dir_hist.upcount(ang0,mag0,angi,magi);
-      }
+    if (mag0>min_gradient_&&magi>min_gradient_)
+    {
+      image_dir_hist.upcount(angi, magi);
+      joint_dir_hist.upcount(ang0,mag0,angi,magi);
+    }
   }
-  float npixf = (float)npix, nf = (float)n;
-  float frac = nf/npixf;
-  if (frac<0.9)
+  if (n<0.9*npix)
     return 0;
 #ifdef DEBUG
   vcl_cout << "Image Dir Hist\n";
@@ -832,14 +828,12 @@ compute_color_mutual_information(vil1_memory_image_of<float> const& hue,
       continue;
     float hue0 = this->hue(i), sat0 = this->sat(i);
     float hue_i = hue(x,y), sat_i = sat(x,y);
-    if(sat_i>0)
+    if (sat_i>0)
       color_hist.upcount(hue_i, sat_i);
-    if(sat0>0&&sat_i>0)
+    if (sat0>0&&sat_i>0)
       joint_color_hist.upcount(hue0, sat0, hue_i, sat_i);
   }
-  float npixf = (float)npix, nf = (float)n;
-  float frac = nf/npixf;
-  if (frac<0.9)
+  if (n<0.9*npix)
     return 0;
 
   //apply parzen windows
@@ -888,7 +882,7 @@ compute_mutual_information(vil1_memory_image_of<float> const& image,
 
   if (gradient_info_)
     this->set_grad_mutual_info(this->compute_gradient_mutual_information(Ix,Iy));
-  
+
   if (color_info_)
     this->set_color_mutual_info(this->compute_color_mutual_information(hue, sat));
 
