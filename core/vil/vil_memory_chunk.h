@@ -23,6 +23,9 @@ class vil2_memory_chunk
     //: Dflt ctor
     vil2_memory_chunk();
 
+    //: Allocate n bytes of memory
+    vil2_memory_chunk(unsigned n);
+
     //: Copy ctor
     vil2_memory_chunk(const vil2_memory_chunk&);
 

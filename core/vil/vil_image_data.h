@@ -1,4 +1,4 @@
-// This is mul/vil2/vil2_image_data.cxx
+// This is mul/vil2/vil2_image_data.h
 #ifndef vil2_image_data_h_
 #define vil2_image_data_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -10,6 +10,7 @@
 // \author Ian Scott - Manchester
 
 #include <vcl_iosfwd.h>
+#include <vcl_string.h>
 
 //: An abstract base class of smart pointers to actual image data in memory.
 // If you want an actual image, try instantiating vil_image_view<T>.
@@ -33,9 +34,6 @@ public:
   //: The number of pixels.
   unsigned size() const { return ny() * nx() * nplanes(); }
 
-
-
-
   //: resize current planes to width x height
   // If already correct size, this function returns quickly
   virtual void resize(unsigned width, unsigned height) =0;
@@ -45,14 +43,19 @@ public:
   virtual void resize(unsigned width, unsigned height, unsigned nplanes) =0;
   
   //: Print a 1-line summary of contents
-  vcl_ostream& print(vcl_ostream&) const;
+  virtual void print(vcl_ostream&) const =0;
 
+    //: Return class name
+  virtual vcl_string is_a() const;
+
+    //: True if this is (or is derived from) class s
+  virtual bool is_class(vcl_string const& s) const;
 };
 
 //: Print a 1-line summary of contents
 inline
 vcl_ostream& operator<<(vcl_ostream& s, vil2_image_view_base const& i) {
-  return i.print(s);
+  i.print(s); return s;
 }
 
 #endif // vil2_image_view_base_h_

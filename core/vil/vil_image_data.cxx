@@ -9,8 +9,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "vil2_image_data.h"
-
+#include <vil2/vil2_image_data.h>
 #include <vcl_climits.h> // CHAR_BIT
 #include <vcl_iostream.h>
 #include <vil2/vil2_image_view_base.h>

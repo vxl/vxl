@@ -46,6 +46,8 @@ Best names for image_view, image_data, base_image?
 
 Best name for height, width, rows, cols, nx, ny?
 
+Should resize allow definition of assumed format (eg RGBRGB or RRR BBB GGG etc)
+Should deep_copy allow similar definition and thus possible re-ordering?
 
 
 Notes:

@@ -2,7 +2,7 @@
 //  \brief Specialisations of is_a() function
 //  \author Ian Scott
 
-#include "vil2_image_view.h"
+#include <vil2/vil2_image_view.h>
 #include <vil/vil_byte.h>
 
 // Specialise the is_a() for vil_byte

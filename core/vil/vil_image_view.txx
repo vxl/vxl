@@ -20,24 +20,46 @@ vil2_image_view<T>::vil2_image_view()
 {}
 
 template<class T>
-vil2_image_view<T>::vil2_image_view(unsigned nx, unsigned ny, unsigned n_planes)
+vil2_image_view<T>::vil2_image_view(unsigned nx, unsigned ny, unsigned nplanes)
 : top_left_(0),xstep_(1),ystep_(0)
 {
   resize(nx,ny,nplanes);
 }
 
-//: Perform deep copy of this into image
+//: Perform deep copy of the src image, placing in this image
 template<class T>
 void vil2_image_view<T>::deep_copy(const vil2_image_view<T>& src)
 {
   resize(src.nx(),src.ny(),src.nplanes());
 
-  int xstep_ = src.xstep();
-  int ystep_ = src.ystep();
-  int planestep_ = src.planestep();
+  int s_planestep = src.planestep();
+  int s_xstep = src.xstep();
+  int s_ystep = src.ystep();
 
-  ptr_ = src.ptr_->clone();
-  top_left_ = ptr_->data();
+  // Do a deep copy
+  // This is potentially inefficient
+  const T* src_data = src.top_left_ptr();
+  T* data = top_left_;
+  for (unsigned int i=0;i<nplanes_;++i)
+  {
+    T* row = data;
+    const T* src_row = src_data;
+    for (int y=0;y<ny_;++y)
+    {
+      T* p = row;
+      const T* sp = src_row;
+      for (int x=0;x<nx_;++x)
+      {
+        *p = *sp;
+		p+=xstep_;
+        sp+=s_xstep;
+      }
+      row += ystep_;
+      src_row += s_ystep;
+    }
+	src_data += s_planestep;
+	data += planestep_;
+  }
 }
 
 //: Create a copy of the data viewed by this, and return a view of copy.
@@ -54,7 +76,7 @@ vil2_image_view<T> vil2_image_view<T>::deep_copy() const
 template<class T>
 void vil2_image_view<T>::release_data()
 {
-  data_=0;
+  ptr_=0;
 }
 
 template<class T> vil2_image_view<T>::~vil2_image_view()
@@ -71,12 +93,34 @@ void vil2_image_view<T>::resize(unsigned nx, unsigned ny)
   resize(nx,ny, nplanes_);
 }
 
+//: True if data all in one unbroken block
+template<class T>
+bool vil2_image_view<T>::is_contiguous() const
+{
+  // RRR GGG BBB
+  if (planestep_==nx_*ny_)
+  {
+    if (xstep_==1 && ystep_==nx_)  return true;
+    if (ystep_==1 && xstep_==ny_) return true;
+  }
+
+  // RGBRGBRGB
+  if (planestep_==1)
+  {
+    if (xstep_==nplanes_ && ystep_==nx_*nplanes_)  return true;
+    if (ystep_==nplanes_ && xstep_==ny_*nplanes_)  return true;
+  }
+
+  // Note that there may be other weird combinations
+  return false;
+}
+
 //=======================================================================
 
 template<class T>
-void vil2_image_view<T>::resize(unsigned nx, unsigned ny, unsigned n_planes)
+void vil2_image_view<T>::resize(unsigned nx, unsigned ny, unsigned nplanes)
 {
-  if (nx==nx_ && ny==ny_ && n_planes==nplanes_) return;
+  if (nx==nx_ && ny==ny_ && nplanes==nplanes_) return;
 
   release_data();
 
@@ -84,6 +128,7 @@ void vil2_image_view<T>::resize(unsigned nx, unsigned ny, unsigned n_planes)
 
   nx_ = nx;
   ny_ = ny;
+  nplanes_ = nplanes;
   xstep_ = 1;
   ystep_ = nx;
   planestep_ = nx*ny;
@@ -94,7 +139,7 @@ void vil2_image_view<T>::resize(unsigned nx, unsigned ny, unsigned n_planes)
 template<class T>
 void vil2_image_view<T>::set_to_memory(T* top_left,
                              unsigned nx, unsigned ny, unsigned nplanes,
-                             unsigned xstep, unsigned ystep, unsigned planestep
+                             unsigned xstep, unsigned ystep, unsigned planestep)
 {
   release_data();
   top_left_ = top_left;
@@ -111,13 +156,17 @@ void vil2_image_view<T>::set_to_memory(T* top_left,
 
 //=======================================================================
 //: Arrange that this is window on given image.
-//  I.e. plane(i) points to im.plane(i) + offset
+//  I.e. plane(i) points to im.plane(i+p0) + offset
 template<class T>
 void vil2_image_view<T>::set_to_window(const vil2_image_view& im,
                      unsigned x0, unsigned nx, unsigned y0,
-                     unsigned ny, unsigned p0=0, unsigned np=1)
+                     unsigned ny, unsigned p0, unsigned np)
 {
   assert(this!=&im);
+
+  assert(x0<im.nx()); assert(x0+nx<=im.nx());
+  assert(y0<im.ny()); assert(y0+ny<=im.ny());
+  assert(p0<im.nplanes()); assert(p0+np<=im.nplanes());
 
   release_data();
 
@@ -126,13 +175,22 @@ void vil2_image_view<T>::set_to_window(const vil2_image_view& im,
 
   nx_ = nx;
   ny_ = ny;
-  nplanes_ = nplanes;
+  nplanes_ = np;
   xstep_ = im.xstep();
   ystep_ = im.ystep();
   planestep_ = im.planestep();
-  top_left_ = im.top_left_ptr() + x0*xstep_ + y0*ystep_ + p0*pstep_;
+
+    // Have to force the cast to avoid compiler warnings about const
+  top_left_ = (T*) im.top_left_ptr() + x0*xstep_ + y0*ystep_ + p0*planestep_;
 }
 
+//: Arrange that this is window on all planes of given image.
+template<class T>
+void vil2_image_view<T>::set_to_window(const vil2_image_view& im,
+                     unsigned x0, unsigned nx, unsigned y0, unsigned ny)
+{
+  set_to_window(im,x0,ny,y0,ny,0,im.nplanes());
+}
 
 
 
@@ -149,8 +207,7 @@ bool vil2_image_view<T>::is_class(vcl_string const& s) const
 template<class T>
 void vil2_image_view<T>::print(vcl_ostream& os) const
 {
-  os<<planes_.size()<<" planes, each "<<nx_<<" x "<<ny_
-
+  os<<nplanes_<<" planes, each "<<nx_<<" x "<<ny_;
 }
 
 
@@ -163,14 +220,14 @@ void vil2_image_view<T>::print(vcl_ostream& os) const
 template<class T>
 bool vil2_image_view<T>::operator==(const vil2_image_view<T> &other) const
 {
-  return ptr_ == other.ptr_ &&
-    top_left) == other.top_left_ &&
-    nplanes_ == other.nplanes_ &&
-    nx_ == other.nx_ &&
-    ny_ == other.ny_ &&
+  return ptr_  == other.ptr_ &&
+    top_left_  == other.top_left_ &&
+    nplanes_   == other.nplanes_ &&
+    nx_        == other.nx_ &&
+    ny_        == other.ny_ &&
     planestep_ == other.planestep_ &&
-    xstep_ == other.xstep_ &&
-    ystep_ == other.ystep_;
+    xstep_     == other.xstep_ &&
+    ystep_     == other.ystep_;
 }
 
 

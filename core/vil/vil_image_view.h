@@ -13,7 +13,7 @@
 #include <vil2/vil2_smart_ptr.h>
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
-class vil2_memory_chunk;
+#include <vil2/vil2_memory_chunk.h>
 
 //: An abstract base class of smart pointers to actual image data in memory.
 
@@ -55,14 +55,17 @@ public:
   //: The pixel type of this image
   typedef T pixel_type;
 
+  //: True if data all in one unbroken block
+  bool is_contiguous() const;
+
   // iterators
   typedef T *iterator;
-  inline iterator begin() { return get_buffer(); }
-  inline iterator end  () { return get_buffer() + size(); }
+  inline iterator begin() { assert(is_contiguous()); return top_left_; }
+  inline iterator end  () { assert(is_contiguous()); return top_left_ + size(); }
 
   typedef T const *const_iterator;
-  inline const_iterator begin() const { return get_buffer(); }
-  inline const_iterator end  () const { return get_buffer() + size(); }
+  inline const_iterator begin() const { assert(is_contiguous()); return top_left_; }
+  inline const_iterator end  () const { assert(is_contiguous()); return top_left_ + size(); }
 
   // aritmetic indexing stuff
 
@@ -70,13 +73,16 @@ public:
   T * top_left_ptr() { return top_left_; }  // Make origin explicit
   //: Pointer to the first (top left in plane 0) pixel;
   const T * top_left_ptr() const { return top_left_; }
-  //: Add this to your pixel pointer to get
-  int xstep() { return xstep_; }
-  int ystep() { return ystep_; }
-  int planestep() { return planestep_; }
+
+  //: Add this to your pixel pointer to get next x pixel
+  int xstep() const { return xstep_; }
+  //: Add this to your pixel pointer to get next y pixel
+  int ystep() const { return ystep_; }
+  //: Add this to your pixel pointer to get pixel on next plane
+  int planestep() const { return planestep_; }
 
   //: The number of pixels.
-  inline unsigned size() const { return height() * width() * nplanes(); }
+  inline unsigned size() const { return nx() * ny() * nplanes(); }
 
   //: The number of bytes in the data
   inline unsigned size_bytes() const { return size() * sizeof(T); }
@@ -127,15 +133,31 @@ public:
   void set_to_memory(T* top_left, unsigned nx, unsigned ny, unsigned nplanes,
               unsigned xstep, unsigned ystep, unsigned planestep);
 
-  //: Arrange that this is window on given image.
+  //: Arrange that this is window on some planes of given image.
+  //  i.e. plane(i) points to im.plane(i+p0) + offset
   void set_to_window(const vil2_image_view& im,
                      unsigned x0, unsigned nx, unsigned y0,
-                     unsigned ny, unsigned p0=0, unsigned np=1);
+                     unsigned ny, unsigned p0, unsigned np);
+
+  //: Arrange that this is window on all planes of given image.
+  void set_to_window(const vil2_image_view& im,
+                     unsigned x0, unsigned nx, unsigned y0, unsigned ny);
 
   //: Print a 1-line summary of contents
-  vcl_ostream& print(vcl_ostream&) const;
+  virtual void print(vcl_ostream&) const;
 
-  vcl_string is_a() const;
+    //: Return class name
+  virtual vcl_string is_a() const;
+
+    //: True if this is (or is derived from) class s
+  virtual bool is_class(vcl_string const& s) const;
+
+    //: True if they share same view of same image data.
+    //  This does not do a deep equality on image data. If the images point
+    //  to different image data objects that contain identical images, then
+    //  the result will still be false.
+  bool operator==(const vil2_image_view<T> &other) const;
+
 };
 
 //: Print a 1-line summary of contents

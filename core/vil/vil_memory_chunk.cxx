@@ -11,6 +11,13 @@ vil2_memory_chunk::vil2_memory_chunk()
 {
 }
 
+//: Allocate n bytes of memory
+vil2_memory_chunk::vil2_memory_chunk(unsigned n)
+: data_(0), size_(0), ref_count_(0)
+{
+  resize(n);
+}
+
 //: Destructor
 vil2_memory_chunk::~vil2_memory_chunk()
 {
