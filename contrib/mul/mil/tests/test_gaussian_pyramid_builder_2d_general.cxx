@@ -101,6 +101,7 @@ void test_gaussian_pyramid_builder_2d_general()
   TEST("saved and loaded builder by base class ptr",
     ptr_in->is_a() == builder.is_a(), true);
 
+  delete ptr_in;
   vsl_delete_all_loaders();
 
 }

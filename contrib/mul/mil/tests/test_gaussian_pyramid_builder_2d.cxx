@@ -88,6 +88,7 @@ void test_gaussian_pyramid_builder_2d()
     builder.scale_step() == 2.0, true);
   TEST("saved and loaded builder by base class ptr",
     ptr_in->is_a() == builder.is_a(), true);
+  delete ptr_in;
 
   vsl_delete_all_loaders();
 
