@@ -6,6 +6,7 @@
 #include <vcl_algorithm.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
+#include <vcl_cassert.h>
 
 //: Find k cluster centres
 // Uses batch k-means clustering.
