@@ -10,7 +10,7 @@ struct X_s
   ~X_s() { delete [] p; }
 };
 
-int test_vcl_new_main()
+int test_new_main()
 {
   X_s my_x;
 

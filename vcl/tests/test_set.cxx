@@ -2,7 +2,7 @@
 #include <vcl_functional.h>
 #include <vcl_set.h>
 
-int test_vcl_set_main()
+int test_set_main()
 {
   typedef vcl_set<int, vcl_less<int> > myset;
   myset s;

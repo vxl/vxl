@@ -33,7 +33,7 @@ void f(vcl_map<int, vcl_string,vcl_less<int> >*,
 }
 
 
-int test_vcl_stlfwd_main()
+int test_stlfwd_main()
 {
   return 0;
 }

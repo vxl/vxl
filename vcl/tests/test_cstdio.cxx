@@ -2,7 +2,7 @@
 
 int close_stdin();
 
-int test_vcl_cstdio_main( const char* filename )
+int test_cstdio_main( const char* filename )
 {
   vcl_printf( "Hello. %d %f %03x.\n", 1, 2.0f, 3 );
 

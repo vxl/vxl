@@ -10,7 +10,7 @@ vcl_ostream &operator<<(vcl_ostream &s, mymap::value_type const &x)
   return s << '(' << x.first << ',' << x.second << ')';
 }
 
-int test_vcl_multimap_main()
+int test_multimap_main()
 {
   mymap m;
   m.insert(mymap::value_type(0, 2.718281828459045)); // e

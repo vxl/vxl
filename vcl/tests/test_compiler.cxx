@@ -41,16 +41,24 @@ struct A
 void vcl_test_implicit_instantiation(int n);
 
 
-int test_vcl_compiler_main()
+int test_compiler_main()
 {
-  for (int i = 0; i < 2; ++i)
-    vcl_cout << i << vcl_endl;
-  for (int i = 0; i < 2; ++i)
-    ;
+  int result = 0;
 
+  vcl_cout << "Testing static template member..." << vcl_flush;
+  if( X<int>::pl == 0 ) {
+    vcl_cout << "  PASSED" << vcl_endl;
+  } else {
+    vcl_cout << "**FAILED**" << vcl_endl;
+    result = 1;
+  }
+
+  // If it links, it passed!
+  vcl_cout << "Testing implicit instantation..." << vcl_flush;
   vcl_test_implicit_instantiation(100);
+  vcl_cout << "  PASSED" << vcl_endl;
 
-  return (int)(long) X<int>::pl;
+  return result;
 }
 
 #if defined(VCL_USE_IMPLICIT_TEMPLATES) && VCL_USE_IMPLICIT_TEMPLATES

@@ -18,7 +18,7 @@ struct flux : public vcl_fstream
 };
 #endif
 
-int test_vcl_iostream_main()
+int test_iostream_main()
 {
   vcl_cout << vcl_string("hello, vcl") << vcl_endl
            << vcl_oct <<  01000 << vcl_endl
