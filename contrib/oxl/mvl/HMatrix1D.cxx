@@ -9,6 +9,7 @@
 #include <mvl/HomgPoint1D.h>
 #include <vcl_fstream.h>
 #include <vnl/algo/vnl_svd.h>
+#include <vnl/vnl_double_2.h>
 
 //--------------------------------------------------------------
 //
@@ -89,12 +90,13 @@ HomgPoint1D HMatrix1D::transform_to_plane2(const HomgPoint1D& x1) const
 
 HomgPoint1D HMatrix1D::transform_to_plane1(const HomgPoint1D& x2) const
 {
-    return this->preimage(x2);
+  return this->preimage(x2);
 }
 
 HomgPoint1D HMatrix1D::operator()(const HomgPoint1D& x1) const
 {
-  return HomgPoint1D(t12_matrix_ * x1.get_vector() );
+  vnl_double_2 v = t12_matrix_ * vnl_double_2(x1.x(),x1.w());
+  return HomgPoint1D(v[0], v[1]);
 }
 
 //
@@ -102,7 +104,8 @@ HomgPoint1D HMatrix1D::operator()(const HomgPoint1D& x1) const
 
 HomgPoint1D HMatrix1D::preimage(const HomgPoint1D& x2) const
 {
-    return HomgPoint1D (t21_matrix_ * x2.get_vector());
+  vnl_double_2 v = t21_matrix_ * vnl_double_2(x2.x(),x2.w());
+  return HomgPoint1D(v[0], v[1]);
 }
 
 //-----------------------------------------------------------------------------

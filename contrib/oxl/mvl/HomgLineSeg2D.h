@@ -22,6 +22,8 @@
 
 class HomgLineSeg2D : public HomgLine2D
 {
+  HomgPoint2D _point1;
+  HomgPoint2D _point2;
  public:
 
   // Constructors/Initializers/Destructors-------------------------------------
@@ -41,10 +43,6 @@ class HomgLineSeg2D : public HomgLine2D
   void set (const HomgPoint2D& point1, const HomgPoint2D& point2);
 
   double picking_distance(const HomgPoint2D& point1) const;
-
- private:
-  HomgPoint2D _point1;
-  HomgPoint2D _point2;
 };
 
 vcl_ostream& operator<<(vcl_ostream& s, const HomgLineSeg2D& );

@@ -264,18 +264,18 @@ void FMPlanarNonLinFun::fmatrix_to_params_awf(const FMatrixPlanar& F, vnl_vector
     ls = f2;
 
   ls /= ls.magnitude();
-  vnl_double_3 e1n = e1.get_vector() / e1.get_vector().magnitude();
-  vnl_double_3 e2n = e2.get_vector() / e2.get_vector().magnitude();
+  double mag1 = e1.get_vector().magnitude();
+  double mag2 = e2.get_vector().magnitude();
 
   params[0] = ls[0];
   params[1] = ls[1];
   params[2] = ls[2];
-  params[3] = e1n[0];
-  params[4] = e1n[1];
-  params[5] = e1n[2];
-  params[6] = e2n[0];
-  params[7] = e2n[1];
-  params[8] = e2n[2];
+  params[3] = e1.x()/mag1;
+  params[4] = e1.y()/mag1;
+  params[5] = e1.w()/mag1;
+  params[6] = e2.x()/mag2;
+  params[7] = e2.y()/mag2;
+  params[8] = e2.w()/mag2;
 
   // Check parameterization
   {

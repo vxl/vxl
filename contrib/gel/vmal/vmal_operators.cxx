@@ -17,9 +17,9 @@ vmal_operators::~vmal_operators()
 //segment, it sets (x,y) to (-1,-1). The function returns the distance
 //between the point and its projected.
 double vmal_operators::project_point(double x0,double y0,
-                     double ax,double ay,
-                     double bx,double by,
-                     double *x,double *y)
+                                     double ax,double ay,
+                                     double bx,double by,
+                                     double *x,double *y)
 {
   *x=0;
   *y=0;
@@ -49,9 +49,9 @@ double vmal_operators::project_point(double x0,double y0,
 
 
 bool vmal_operators::project_point(vnl_double_3 &x,
-                   vnl_double_3 &a,
-                     vnl_double_3 &b,
-                     vnl_double_3 &px)
+                                   vnl_double_3 &a,
+                                   vnl_double_3 &b,
+                                   vnl_double_3 &px)
 {
   double ax=a[0]/a[2];
   double ay=a[1]/a[2];
@@ -75,7 +75,7 @@ bool vmal_operators::project_point(vnl_double_3 &x,
 
 //
 bool vmal_operators::cross_seg(double f1x,double f1y,double f2x,double f2y,//first segment
-                 double s1x,double s1y,double s2x,double s2y)//second segment
+                               double s1x,double s1y,double s2x,double s2y)//second segment
 {
   //compute the directors vectors
   double nsx=s2x-s1x;
@@ -103,10 +103,10 @@ bool vmal_operators::cross_seg(double f1x,double f1y,double f2x,double f2y,//fir
 
 
 bool vmal_operators::line_cross_seg(vnl_double_3 start_seg,
-                  vnl_double_3 end_seg,
-                            vnl_double_3 & line_equ,
-                  vnl_double_3 & inter,
-                  double &alpha)
+                                    vnl_double_3 end_seg,
+                                    vnl_double_3 & line_equ,
+                                    vnl_double_3 & inter,
+                                    double &alpha)
 {
   start_seg[0]=start_seg[0]/start_seg[2];
   start_seg[1]=start_seg[1]/start_seg[2];
@@ -132,6 +132,6 @@ bool vmal_operators::line_cross_seg(vnl_double_3 start_seg,
 
   alpha=angle(vect_line,vect_seg);
 
-  return (((start_seg[0]-inter[0])*(end_seg[0]-inter[0])+
-         (start_seg[1]-inter[1])*(end_seg[1]-inter[1])) < 0);
+  return ((start_seg[0]-inter[0])*(end_seg[0]-inter[0])+
+          (start_seg[1]-inter[1])*(end_seg[1]-inter[1])) < 0;
 }
