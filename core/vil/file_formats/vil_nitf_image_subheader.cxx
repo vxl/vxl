@@ -920,7 +920,7 @@ bool vil_nitf_image_subheader::get_rational_camera_data(
         NITF_index = NITF_index_RPC00B;
         if (debug_level > 1) {
           vcl_cout << "Switching to RPC00B mode\n";
-	}
+        }
         break;
       case UNDEFINED:
       default:
@@ -1187,9 +1187,9 @@ void vil_nitf_image_subheader::display_size_attributes (vcl_string caller) const
 
     vcl_cout << "NBPP (stored bits per pixel) = " << this->NBPP << vcl_endl
              << "ABPP (actual bits per pixel per band) = "
-             << this->ABPP << vcl_endl;
+             << this->ABPP << vcl_endl
 
-    vcl_cout << "PJUST (justification for ABPP) = " << this->PJUST << vcl_endl
+             << "PJUST (justification for ABPP) = " << this->PJUST << vcl_endl
              << "PVTYPE = " << this->PVTYPE_ << vcl_endl;
 
     unsigned int bytes_per_pixel = NBPP / 8;
@@ -1262,8 +1262,8 @@ void vil_nitf_image_subheader::display_attributes (vcl_string caller) const
              << "isCompressed = " << this->IsCompressed() << vcl_endl
              << "IC (compression code) = " << this->IC << vcl_endl
 
-             << "ICORDS = " << this->ICORDS << vcl_endl;
+             << "ICORDS = " << this->ICORDS << vcl_endl
 
-    vcl_cout << "##### exit " << method_name;
+             << "##### exit " << method_name;
 
 }  // end method display_attributes
