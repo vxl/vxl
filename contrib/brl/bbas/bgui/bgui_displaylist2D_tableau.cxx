@@ -1,4 +1,4 @@
-// This is core/vgui/bgui_displaylist2D_tableau.cxx
+// This is brl/bbas/bgui/bgui_displaylist2D_tableau.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -40,14 +40,15 @@ bool bgui_displaylist2D_tableau::handle(const vgui_event& e) {
 
   // if mouse leaves the context then unhighlight
   // the highlit object
-  if (e.type == vgui_LEAVE) {
-
-/*    vgui_utils::begin_sw_overlay();
+  if (e.type == vgui_LEAVE)
+  {
+#if 0 // commented out
+    vgui_utils::begin_sw_overlay();
 
     unsigned highlighted = this->get_highlighted();
 
-    if (highlighted) {
-
+    if (highlighted)
+    {
       //vcl_cerr << "unhighlighting : " << highlighted << vcl_endl;
       vgui_soview* so = vgui_soview::id_to_object(highlighted);
       vgui_style* style = so->get_style();
@@ -63,7 +64,7 @@ bool bgui_displaylist2D_tableau::handle(const vgui_event& e) {
     }
 
     vgui_utils::end_sw_overlay();
-*/
+#endif // 0
     this->highlight(0);
     this->post_redraw();
     posted_redraw_ = true;
@@ -140,11 +141,10 @@ bool bgui_displaylist2D_tableau::motion(int x, int y) {
   get_hits(x,y,hits);
   unsigned closest_id = find_closest(ix,iy,hits);
 
-
   if (closest_id == this->get_highlighted() && !posted_redraw_) {
     return false;
   }
-/*
+#if 0 // commented out
   posted_redraw_ = false;
 
   vgui_utils::begin_sw_overlay();
@@ -180,11 +180,9 @@ bool bgui_displaylist2D_tableau::motion(int x, int y) {
   //  else
   //    vgui::out<<vcl_endl;
   vgui_utils::end_sw_overlay();
+#endif // 0
 
-  */
-
-
-  if( highlighted != closest_id ) {
+  if ( highlighted != closest_id ) {
     this->highlight(closest_id);
     this->post_redraw();
     posted_redraw_ = true;
