@@ -40,8 +40,8 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::set_max_levels(int max_l)
 {
   if (max_l<1)
   {
-    vcl_cerr<<"vimt3d_gaussian_pyramid_builder_3d<T>::setMaxLevels() "
-            <<"Must be >=1, is " << max_l << '\n';
+    vcl_cerr<<"vimt3d_gaussian_pyramid_builder_3d<T>::setMaxLevels() param is "
+            <<max_l<<", must be >=1\n";
     vcl_abort();
   }
   max_levels_ = max_l;
@@ -144,8 +144,8 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::gauss_reduce(vimt3d_image_3d_of<T>& 
   // Assume filter width is 5 for the moment.
   if (filter_width_!=5)
   {
-    vcl_cerr<<"vimt3d_gaussian_pyramid_builder_3d<T>::gauss_reduce() "
-            <<"Cannot cope with filter width of "<<filter_width_<<'\n';
+    vcl_cerr<<"vimt3d_gaussian_pyramid_builder_3d<T>::gauss_reduce()\n"
+            <<" Cannot cope with filter width of "<<filter_width_<<'\n';
     vcl_abort();
   }
 
@@ -342,7 +342,7 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::extend(vimt_image_pyramid& image_pyr
 }
 //=======================================================================
 
-#if 0
+#if 0 // This is specialised in vimt3d_gaussian_pyramid_builder_3d.cxx
 template<class T>
 vcl_string vimt3d_gaussian_pyramid_builder_3d<T>::is_a() const
 {
@@ -410,7 +410,7 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::b_read(vsl_b_istream& bfs)
     break;
   default:
     vcl_cerr << "I/O ERROR: vimt3d_gaussian_pyramid_builder_3d<T>::b_read(vsl_b_istream&)\n"
-             << "           Unknown version number "<< version << "\n";
+             << "           Unknown version number "<< version << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

@@ -301,8 +301,8 @@ void mil_scale_pyramid_builder_2d<T>::setMaxLevels(int max_l)
 {
   if (max_l<1)
   {
-    vcl_cerr<<"mil_scale_pyramid_builder_2d<T>::setMaxLevels() "
-            <<"parameter must be >=1\n";
+    vcl_cerr<<"mil_scale_pyramid_builder_2d<T>::setMaxLevels() parameter is "
+            <<max_l<<", must be >=1\n";
     vcl_abort();
   }
   max_levels_ = max_l;
@@ -327,7 +327,7 @@ mil_image_pyramid* mil_scale_pyramid_builder_2d<T>::newImagePyramid() const
 
 
 //=======================================================================
-#if 0
+#if 0 // This is specialised in mil_scale_pyramid_builder_2d.cxx
 template <class T>
 vcl_string mil_scale_pyramid_builder_2d<T>::is_a() const
 {
@@ -395,7 +395,7 @@ void mil_scale_pyramid_builder_2d<T>::b_read(vsl_b_istream& bfs)
     break;
   default:
     vcl_cerr << "I/O ERROR: mil_scale_pyramid_builder_2d<T>::b_read(vsl_b_istream&)\n"
-             << "           Unknown version number "<< version << "\n";
+             << "           Unknown version number "<< version << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

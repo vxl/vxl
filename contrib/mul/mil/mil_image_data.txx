@@ -82,7 +82,7 @@ short mil_image_data<T>::version_no() const
   return 1;
 }
 
-#if 0
+#if 0 // This is specialised in mil_image_data.cxx
 //: Name of the class
 template<class T>
 vcl_string mil_image_data<T>::is_a() const
@@ -111,7 +111,7 @@ void mil_image_data<T>::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
   vsl_b_write(bfs,size_);
-  for(unsigned i=0; i<size_; ++i)
+  for (unsigned i=0; i<size_; ++i)
     vsl_b_write(bfs, data_[i]);
 }
 
@@ -129,12 +129,12 @@ void mil_image_data<T>::b_read(vsl_b_istream& bfs)
   case (1):
     vsl_b_read(bfs,n);
     resize(n);
-    for(unsigned i=0; i<n; ++i)
+    for (unsigned i=0; i<n; ++i)
       vsl_b_read(bfs, data_[i]);
     break;
   default:
-    vcl_cerr << "I/O ERROR: mil_image_data<T>::b_read(vsl_b_istream&) \n";
-    vcl_cerr << "           Unknown version number "<< v << "\n";
+    vcl_cerr << "I/O ERROR: mil_image_data<T>::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< v << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

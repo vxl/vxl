@@ -388,7 +388,7 @@ void mil_image_2d_of<T>::getRange(T& min_f, T& max_f) const
   }
 }
 
-#if 0
+#if 0 // This is specialised in mil_image_2d_of.cxx
 //=======================================================================
 template<class T>
 vcl_string mil_image_2d_of<T>::is_a() const
@@ -426,8 +426,7 @@ template<class T>
 void mil_image_2d_of<T>::print_summary(vcl_ostream& os) const
 {
   os<<"Format: "<<format_<<"  "
-    <<planes_.size()<<" planes, each "<<nx_<<" x "<<ny_
-    <<vcl_endl
+    <<planes_.size()<<" planes, each "<<nx_<<" x "<<ny_<<vcl_endl
     <<vsl_indent() << "Transform: "<<world2im_;
 }
 
@@ -442,7 +441,7 @@ void mil_image_2d_of<T>::print_all(vcl_ostream& os) const
 
   for (int i=0;i<n_planes();++i)
   {
-    if (n_planes()>1) os<<vsl_indent()<<"Plane "<<i<<":"<<vcl_endl;
+    if (n_planes()>1) os<<vsl_indent()<<"Plane "<<i<<":\n";
     const T* im_data = plane(i);
     for (int y=0;y<ny_;++y)
     {
@@ -450,9 +449,9 @@ void mil_image_2d_of<T>::print_all(vcl_ostream& os) const
       for (int x=0;x<nx_;++x)
       {
         int v = int(im_data[ystep_*y+x*xstep_]);
-        if (v<10)  os<<" ";
-        if (v<100) os<<" ";
-        os<<v<<" ";
+        if (v<10)  os<<' ';
+        if (v<100) os<<' ';
+        os<<v<<' ';
       }
       os<<vcl_endl;
     }
@@ -471,7 +470,7 @@ void mil_image_2d_of<T>::print_messy_all(vcl_ostream& os) const
 
   for (int i=0;i<n_planes();++i)
   {
-    if (n_planes()>1) os<<vsl_indent()<<"Plane "<<i<<":"<<vcl_endl;
+    if (n_planes()>1) os<<vsl_indent()<<"Plane "<<i<<":\n";
     const T* im_data = plane(i);
     for (int y=0;y<ny_;++y)
     {
@@ -479,7 +478,7 @@ void mil_image_2d_of<T>::print_messy_all(vcl_ostream& os) const
       for (int x=0;x<nx_;++x)
       {
         float v = float ( im_data[ystep_*y+x*xstep_] );
-        os<<v<<" ";
+        os<<v<<' ';
       }
       os<<vcl_endl;
     }
@@ -494,9 +493,9 @@ void mil_image_2d_of<T>::b_write(vsl_b_ostream& bfs) const
   vsl_b_write(bfs,version_no());
   if (!data_)
   {
-    vcl_cerr << "template<class T> mil_image_2d_of<T>::b_write() ";
-    vcl_cerr << "This image refers to external data and ";
-    vcl_cerr << "cannot be restored correctly if saved like this." << vcl_endl;
+    vcl_cerr << "template<class T> mil_image_2d_of<T>::b_write() "
+             << "This image refers to external data and "
+             << "cannot be restored correctly if saved like this.\n";
     vcl_abort();
   }
   vsl_b_write(bfs,data_);
@@ -541,8 +540,8 @@ void mil_image_2d_of<T>::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,plane_offsets);
     break;
   default:
-    vcl_cerr << "I/O ERROR: mil_image_2d_of<T>::b_read(vsl_b_istream&) \n";
-    vcl_cerr << "           Unknown version number "<< version << "\n";
+    vcl_cerr << "I/O ERROR: mil_image_2d_of<T>::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< version << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

@@ -134,7 +134,6 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
   // placing result in work_
 
 
-
   // First perform horizontal smoothing
   for (int y=0;y<src_ny;y++)
   {
@@ -148,11 +147,11 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
     int x;
     int nx2 = src_nx-2;
     for (x=2;x<nx2;x++)
-      worka_row[x] = l_round(  that->filt2_ * src_col1[x]
-                             + that->filt1_ * src_col2[x]
-                             + that->filt0_ * src_col3[x]
-                             + that->filt1_ * src_col4[x]
-                             + that->filt2_ * src_col5[x], (T)0);
+      worka_row[x] = l_round( that->filt2_ * src_col1[x]
+                            + that->filt1_ * src_col2[x]
+                            + that->filt0_ * src_col3[x]
+                            + that->filt1_ * src_col4[x]
+                            + that->filt2_ * src_col5[x], (T)0);
 
     // Now deal with edge effects :
     worka_row[0] = l_round( that->filt_edge0_ * src_col3[0]
@@ -188,11 +187,11 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
     const T* worka_row5  = worka_row3 + 2 * work_ystep;
 
     for (int x=0; x<src_nx; x++)
-      workb_row[x] = l_round(  that->filt2_ * worka_row1[x]
-                             + that->filt1_ * worka_row2[x]
-                             + that->filt0_ * worka_row3[x]
-                             + that->filt1_ * worka_row4[x]
-                             + that->filt2_ * worka_row5[x], (T)0);
+      workb_row[x] = l_round( that->filt2_ * worka_row1[x]
+                            + that->filt1_ * worka_row2[x]
+                            + that->filt0_ * worka_row3[x]
+                            + that->filt1_ * worka_row4[x]
+                            + that->filt2_ * worka_row5[x], (T)0);
   }
 
   // Now deal with edge effects :
@@ -214,23 +213,23 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
 
   for (int x=0;x<src_nx;x++)
   {
-    workb_row_top[x] = l_round(  that->filt_edge0_ * worka_row_top_5[x]
-                               + that->filt_edge1_ * worka_row_top_4[x]
-                               + that->filt_edge2_ * worka_row_top_3[x], (T)0);
+    workb_row_top[x] = l_round( that->filt_edge0_ * worka_row_top_5[x]
+                              + that->filt_edge1_ * worka_row_top_4[x]
+                              + that->filt_edge2_ * worka_row_top_3[x], (T)0);
 
     workb_row_next_top[x] = l_round( that->filt_pen_edge2_ * worka_row_top_2[x]
                                    + that->filt_pen_edge1_ * worka_row_top_3[x]
                                    + that->filt_pen_edge0_ * worka_row_top_4[x]
                                    + that->filt_pen_edge_n1_ * worka_row_top_5[x], (T)0);
 
-    workb_row_next_bottom[x] = l_round(  that->filt_pen_edge2_ * worka_row_bottom_4[x]
-                                       + that->filt_pen_edge1_ * worka_row_bottom_3[x]
-                                       + that->filt_pen_edge0_ * worka_row_bottom_2[x]
-                                       + that->filt_pen_edge_n1_ * worka_row_bottom_1[x], (T)0); 
+    workb_row_next_bottom[x] = l_round( that->filt_pen_edge2_ * worka_row_bottom_4[x]
+                                      + that->filt_pen_edge1_ * worka_row_bottom_3[x]
+                                      + that->filt_pen_edge0_ * worka_row_bottom_2[x]
+                                      + that->filt_pen_edge_n1_ * worka_row_bottom_1[x], (T)0); 
 
-    workb_row_bottom[x] = l_round(   that->filt_edge2_ * worka_row_bottom_3[x]
-                                   + that->filt_edge1_ * worka_row_bottom_2[x]
-                                   + that->filt_edge0_ * worka_row_bottom_1[x], (T)0);
+    workb_row_bottom[x] = l_round( that->filt_edge2_ * worka_row_bottom_3[x]
+                                 + that->filt_edge1_ * worka_row_bottom_2[x]
+                                 + that->filt_edge0_ * worka_row_bottom_1[x], (T)0);
   }
 
 //  workb_.print_all(vcl_cout);
@@ -247,7 +246,7 @@ void mil_gaussian_pyramid_builder_2d_general<T>::gauss_reduce(
     for (int xi=0; xi<dest_nx; xi++)
     {
       dest_row[xi] = l_round (mil_safe_extend_bilin_interp_2d(x, y,
-                                workb_im,  src_nx, src_ny, work_ystep), (T)0);
+                              workb_im,  src_nx, src_ny, work_ystep), (T)0);
       x += that->scale_step_;
     }
     y+= that->scale_step_;
@@ -414,7 +413,7 @@ void mil_gaussian_pyramid_builder_2d_general<T>::extend(mil_image_pyramid& image
 
 
 //=======================================================================
-#if 0
+#if 0 // This is specialised in mil_gaussian_pyramid_builder_2d_general.cxx
 template <class T>
 vcl_string mil_gaussian_pyramid_builder_2d_general<T>::is_a() const
 {
@@ -484,8 +483,8 @@ void mil_gaussian_pyramid_builder_2d_general<T>::b_read(vsl_b_istream& bfs)
     set_scale_step(scale);
     break;
   default:
-    vcl_cerr << "I/O ERROR: mil_gaussian_pyramid_builder_2d_general<T>::b_read(vsl_b_istream&)\n";
-    vcl_cerr << "           Unknown version number "<< version << "\n";
+    vcl_cerr << "I/O ERROR: mil_gaussian_pyramid_builder_2d_general<T>::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< version << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

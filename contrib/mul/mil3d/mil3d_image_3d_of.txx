@@ -230,7 +230,9 @@ void mil3d_image_3d_of<T>::set(vcl_vector<T*>& planes,
 //=======================================================================
 template<class T>
 void mil3d_image_3d_of<T>::setToWindow(const mil3d_image_3d_of& im,
-                     int xlo, int xhi, int ylo, int yhi, int zlo, int zhi)
+                                       int xlo, int xhi,
+                                       int ylo, int yhi,
+                                       int zlo, int zhi)
 {
     assert(this!=&im);
 
@@ -312,7 +314,7 @@ void mil3d_image_3d_of<T>::getRange(T& min_f, T& max_f) const
     }
 }
 
-#if 0
+#if 0 // This is specialised in mil3d_image_3d_of.cxx
 //=======================================================================
 // Method: is_a
 //=======================================================================
@@ -389,9 +391,9 @@ void mil3d_image_3d_of<T>::print_all(vcl_ostream& os) const
           for (int x=0;x<nx_;++x)
           {
             int v = int(im_data[ystep_*y+x*xstep_+z*zstep_]);
-            if (v<10)  os<<" ";
-            if (v<100) os<<" ";
-            os<<v<<" ";
+            if (v<10)  os<<' ';
+            if (v<100) os<<' ';
+            os<<v<<' ';
           }
           os<<'\n';
         }
@@ -410,9 +412,9 @@ void mil3d_image_3d_of<T>::b_write(vsl_b_ostream& bfs) const
     vsl_b_write(bfs,version_no());
     if (!data_)
     {
-      vcl_cerr << "template<class T> mil3d_image_3d_of<T>::b_write() "
-               << "This image refers to external data and "
-               << "cannot be restored correctly if saved like this.\n";
+      vcl_cerr << "template<class T> mil3d_image_3d_of<T>::b_write()\n"
+               << " This image refers to external data and"
+               << " cannot be restored correctly if saved like this.\n";
       vcl_abort();
     }
     vsl_b_write(bfs,data_);
@@ -461,8 +463,8 @@ void mil3d_image_3d_of<T>::b_read(vsl_b_istream& bfs)
             vsl_b_read(bfs,plane_offsets);
             break;
         default:
-            vcl_cerr << "template<class T> mil3d_image_3d_of<T>::b_read() "
-                     << "Unexpected version number " << version << '\n';
+            vcl_cerr << "template<class T> mil3d_image_3d_of<T>::b_read()\n"
+                     << " Unexpected version number " << version << '\n';
             vcl_abort();
     }
 

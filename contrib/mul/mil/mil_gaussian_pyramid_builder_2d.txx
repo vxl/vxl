@@ -40,8 +40,8 @@ void mil_gaussian_pyramid_builder_2d<T>::setMaxLevels(int max_l)
 {
   if (max_l<1)
   {
-    vcl_cerr<<"mil_gaussian_pyramid_builder_2d<T>::setMaxLevels() ";
-    vcl_cerr<<"Must be >=1\n";
+    vcl_cerr<<"mil_gaussian_pyramid_builder_2d<T>::setMaxLevels() param is "
+            <<max_l<<", must be >=1\n";
     vcl_abort();
   }
   max_levels_ = max_l;
@@ -141,13 +141,13 @@ void mil_gaussian_pyramid_builder_2d<T>::gauss_reduce_15851(mil_image_2d_of<T>& 
   {
     // Smooth and subsample in x, result in work_im
     mil_gauss_reduce_2d(work_im_.plane(0),work_im_.xstep(),work_im_.ystep(),
-      src_im.plane(i),nx,ny,
-      src_im.xstep(),src_im.ystep());
+                        src_im.plane(i),nx,ny,
+                        src_im.xstep(),src_im.ystep());
 
     // Smooth and subsample in y (by implicitly transposing)
     mil_gauss_reduce_2d(dest_im.plane(i),dest_im.ystep(),dest_im.xstep(),
-      work_im_.plane(0),ny,nx2,
-      work_im_.ystep(),work_im_.xstep());
+                        work_im_.plane(0),ny,nx2,
+                        work_im_.ystep(),work_im_.xstep());
   }
 
   // Sort out world to image transformation for destination image
@@ -173,8 +173,8 @@ void mil_gaussian_pyramid_builder_2d<T>::gauss_reduce(mil_image_2d_of<T>& dest_i
       gauss_reduce_15851(dest_im,src_im);
       break;
     default:
-      vcl_cerr<<"mil_gaussian_pyramid_builder_2d<T>::gauss_reduce() ";
-      vcl_cerr<<"Cannot cope with filter width of "<<filter_width_<<vcl_endl;
+      vcl_cerr<<"mil_gaussian_pyramid_builder_2d<T>::gauss_reduce()\n"
+              <<" Cannot cope with filter width of "<<filter_width_<<vcl_endl;
       vcl_abort();
   }
 }
@@ -323,7 +323,7 @@ void mil_gaussian_pyramid_builder_2d<T>::extend(mil_image_pyramid& image_pyr) co
 
 //=======================================================================
 
-#if 0
+#if 0 // This is specialised in mil_gaussian_pyramid_builder_2d.cxx
 template<class T>
 vcl_string mil_gaussian_pyramid_builder_2d<T>::is_a() const
 {
@@ -392,8 +392,8 @@ void mil_gaussian_pyramid_builder_2d<T>::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,filter_width_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: mil_gaussian_pyramid_builder_2d<T>::b_read(vsl_b_istream&)\n";
-    vcl_cerr << "           Unknown version number "<< version << "\n";
+    vcl_cerr << "I/O ERROR: mil_gaussian_pyramid_builder_2d<T>::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< version << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

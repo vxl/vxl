@@ -40,8 +40,8 @@ void mil3d_gaussian_pyramid_builder_3d<T>::setMaxLevels(int max_l)
 {
   if (max_l<1)
   {
-    vcl_cerr<<"mil3d_gaussian_pyramid_builder_3d<T>::setMaxLevels() "
-            <<"Must be >=1, is " << max_l << '\n';
+    vcl_cerr<<"mil3d_gaussian_pyramid_builder_3d<T>::setMaxLevels() param is "
+            << max_l<<", must be >=1\n";
     vcl_abort();
   }
   max_levels_ = max_l;
@@ -166,18 +166,18 @@ void mil3d_gaussian_pyramid_builder_3d<T>::gauss_reduce_15851(mil3d_image_3d_of<
   {
     // Smooth and subsample in x, result in work_im1_
     mil3d_gauss_reduce_3d(work_im1_.plane(0),work_im1_.xstep(),work_im1_.ystep(),work_im1_.zstep(),
-      src_im.plane(i),nx,ny,nz,
-      src_im.xstep(),src_im.ystep(),src_im.zstep());
+                          src_im.plane(i),nx,ny,nz,
+                          src_im.xstep(),src_im.ystep(),src_im.zstep());
 
     // Smooth and subsample in y (by implicitly transposing), result in work_im2_
     mil3d_gauss_reduce_3d(work_im2_.plane(0),work_im2_.ystep(),work_im2_.xstep(),work_im2_.zstep(),
-      work_im1_.plane(0),ny,nx2,nz,
-      work_im1_.ystep(),work_im1_.xstep(),work_im1_.zstep());
+                          work_im1_.plane(0),ny,nx2,nz,
+                          work_im1_.ystep(),work_im1_.xstep(),work_im1_.zstep());
 
     // Smooth and subsample in z (by implicitly transposing)
     mil3d_gauss_reduce_3d(dest_im.plane(i),dest_im.zstep(),dest_im.xstep(),dest_im.ystep(),
-      work_im2_.plane(0),nz,nx2,ny2,
-      work_im2_.zstep(),work_im2_.xstep(),work_im2_.ystep());
+                          work_im2_.plane(0),nz,nx2,ny2,
+                          work_im2_.zstep(),work_im2_.xstep(),work_im2_.ystep());
   }
 
   // Sort out world to image transformation for destination image
@@ -217,13 +217,13 @@ void mil3d_gaussian_pyramid_builder_3d<T>::gauss_reduce_xy_15851(mil3d_image_3d_
   {
     // Smooth and subsample in x, result in work_im1_
     mil3d_gauss_reduce_3d(work_im1_.plane(0),work_im1_.xstep(),work_im1_.ystep(),work_im1_.zstep(),
-      src_im.plane(i),nx,ny,nz,
-      src_im.xstep(),src_im.ystep(),src_im.zstep());
+                          src_im.plane(i),nx,ny,nz,
+                          src_im.xstep(),src_im.ystep(),src_im.zstep());
 
     // Smooth and subsample in y (by implicitly transposing)
     mil3d_gauss_reduce_3d(dest_im.plane(0),dest_im.ystep(),dest_im.xstep(),dest_im.zstep(),
-      work_im1_.plane(0),ny,nx2,nz,
-      work_im1_.ystep(),work_im1_.xstep(),work_im1_.zstep());
+                          work_im1_.plane(0),ny,nx2,nz,
+                          work_im1_.ystep(),work_im1_.xstep(),work_im1_.zstep());
   }
 
   // Sort out world to image transformation for destination image
@@ -263,13 +263,13 @@ void mil3d_gaussian_pyramid_builder_3d<T>::gauss_reduce_xz_15851(mil3d_image_3d_
   {
     // Smooth and subsample in x, result in work_im1_
     mil3d_gauss_reduce_3d(work_im1_.plane(0),work_im1_.xstep(),work_im1_.ystep(),work_im1_.zstep(),
-      src_im.plane(i),nx,ny,nz,
-      src_im.xstep(),src_im.ystep(),src_im.zstep());
+                          src_im.plane(i),nx,ny,nz,
+                          src_im.xstep(),src_im.ystep(),src_im.zstep());
 
     // Smooth and subsample in z (by implicitly transposing)
     mil3d_gauss_reduce_3d(dest_im.plane(0),dest_im.zstep(),dest_im.xstep(),dest_im.ystep(),
-      work_im1_.plane(0),nz,nx2,ny,
-      work_im1_.zstep(),work_im1_.xstep(),work_im1_.ystep());
+                          work_im1_.plane(0),nz,nx2,ny,
+                          work_im1_.zstep(),work_im1_.xstep(),work_im1_.ystep());
   }
 
   // Sort out world to image transformation for destination image
@@ -309,13 +309,13 @@ void mil3d_gaussian_pyramid_builder_3d<T>::gauss_reduce_yz_15851(mil3d_image_3d_
   {
     // Smooth and subsample in y, result in work_im1_
     mil3d_gauss_reduce_3d(work_im1_.plane(0),work_im1_.ystep(),work_im1_.xstep(),work_im1_.zstep(),
-      src_im.plane(i),ny,nx,nz,
-      src_im.ystep(),src_im.xstep(),src_im.zstep());
+                          src_im.plane(i),ny,nx,nz,
+                          src_im.ystep(),src_im.xstep(),src_im.zstep());
 
     // Smooth and subsample in z (by implicitly transposing)
     mil3d_gauss_reduce_3d(dest_im.plane(0),dest_im.zstep(),dest_im.xstep(),dest_im.ystep(),
-      work_im1_.plane(0),nz,nx,ny2,
-      work_im1_.zstep(),work_im1_.xstep(),work_im1_.ystep());
+                          work_im1_.plane(0),nz,nx,ny2,
+                          work_im1_.zstep(),work_im1_.xstep(),work_im1_.ystep());
   }
 
   // Sort out world to image transformation for destination image
@@ -335,8 +335,8 @@ void mil3d_gaussian_pyramid_builder_3d<T>::gauss_reduce(mil3d_image_3d_of<T>& de
   // Assume filter width is 5 for the moment.
   if (filter_width_!=5)
   {
-    vcl_cerr<<"mil3d_gaussian_pyramid_builder_3d<T>::gauss_reduce() "
-            <<"Cannot cope with filter width of "<<filter_width_<<'\n';
+    vcl_cerr<<"mil3d_gaussian_pyramid_builder_3d<T>::gauss_reduce()\n"
+            <<" Cannot cope with filter width of "<<filter_width_<<'\n';
     vcl_abort();
   }
 
@@ -450,7 +450,7 @@ void mil3d_gaussian_pyramid_builder_3d<T>::build(mil_image_pyramid& image_pyr,
 //: Compute real world size of pixel
 template<class T>
 void mil3d_gaussian_pyramid_builder_3d<T>::get_pixel_size(double &dx, double& dy, double& dz,
-         const mil3d_image_3d_of<T>& image) const
+                                                          const mil3d_image_3d_of<T>& image) const
 {
   // Estimate width of pixels in base image
   vgl_point_3d<double>  c0(0,0,0);
@@ -503,7 +503,7 @@ void mil3d_gaussian_pyramid_builder_3d<T>::extend(mil_image_pyramid& image_pyr) 
 }
 //=======================================================================
 
-#if 0
+#if 0 // This is specialised in mil3d_gaussian_pyramid_builder_3d.cxx
 template<class T>
 vcl_string mil3d_gaussian_pyramid_builder_3d<T>::is_a() const
 {
@@ -571,7 +571,7 @@ void mil3d_gaussian_pyramid_builder_3d<T>::b_read(vsl_b_istream& bfs)
     break;
   default:
     vcl_cerr << "I/O ERROR: mil3d_gaussian_pyramid_builder_3d<T>::b_read(vsl_b_istream&)\n"
-             << "           Unknown version number "<< version << "\n";
+             << "           Unknown version number "<< version << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
