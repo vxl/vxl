@@ -125,6 +125,10 @@ private:
 
 #define l vgl_line_2d<Type>
 
+//: Return true iff line is the line at infinity
+template <class Type>
+bool is_ideal(l const&, Type = Type(0)) { return false; }
+
 //: Are three lines concurrent, i.e., do they pass through a common point?
 template <class Type>
 inline bool concurrent(l const& l1, l const& l2, l const& l3) {

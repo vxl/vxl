@@ -76,6 +76,7 @@ public:
     return vgl_Abs(nx()) <= tol * vgl_Abs(d()) &&
            vgl_Abs(ny()) <= tol * vgl_Abs(d()) &&
            vgl_Abs(nz()) <= tol * vgl_Abs(d());
+#undef vgl_Abs
   }
 
   inline vgl_vector_3d<double> normal() const { return normalized(vgl_vector_3d<double>(a(),b(),c())); }
@@ -87,6 +88,10 @@ private:
   Type c_;
   Type d_;
 };
+
+//: Return true iff p is the plane at infinity
+template <class Type>
+bool is_ideal(vgl_homg_plane_3d<Type> const& p, Type tol = Type(0)) { return p.ideal(tol); }
 
 // stream operators
 

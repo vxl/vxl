@@ -111,6 +111,10 @@ private:
 };
 
 
+//: Return true iff p is the plane at infinity
+template <class Type>
+bool is_ideal(vgl_plane_3d<Type> const&, Type = Type(0)) { return false; }
+
 // stream operators
 
 template <class Type>

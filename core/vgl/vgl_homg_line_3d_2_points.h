@@ -67,6 +67,8 @@ public:
 
   // Utility methods
 
+  bool ideal(Type tol = Type(0)) { return point_finite_.ideal(tol); }
+
 protected:
   //: force the point point_infinite_ to infinity, without changing the line
   // This is called by the constructors
@@ -81,6 +83,10 @@ private:
   //: the (unique) point at infinity
   mutable vgl_homg_point_3d<Type> point_infinite_;
 };
+
+//: Return true iff line is at infinity
+template <class Type>
+bool is_ideal(vgl_homg_line_3d_2_points<Type> const& line, Type tol = Type(0)) { return line.ideal(tol); }
 
 //+****************************************************************************
 // stream operators

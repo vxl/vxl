@@ -106,6 +106,7 @@ public:
   bool ideal(Type tol = Type(0)) const {
 #define vgl_Abs(x) (x<0?-x:x) // avoid #include of vcl_cmath.h AND vcl_cstdlib.h
     return vgl_Abs(a()) <= tol*vgl_Abs(c()) && vgl_Abs(b()) <= tol*vgl_Abs(c());
+#undef vgl_Abs
   }
 
   //:get two points on the line
@@ -127,6 +128,10 @@ private:
 };
 
 #define l vgl_homg_line_2d<Type>
+
+//: Return true iff line is the line at infinity
+template <class Type>
+bool is_ideal(l const& line, Type tol = Type(0)) { return line.ideal(tol); }
 
 //: Are three lines concurrent, i.e., do they pass through a common point?
 template <class Type>
