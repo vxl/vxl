@@ -38,6 +38,7 @@ class vul_arg_base
 
   static void add_to_current(vul_arg_base* a);
   static void set_help_option( char const*str);
+  static void set_help_precis( char const*str);
   static void display_usage(char const* msg = 0);
   static void display_usage_and_exit(char const* msg = 0);
 
@@ -50,9 +51,8 @@ class vul_arg_base
 
  public://protected:
   bool set_;
-  char const* option_;
-  int optlen_;
-  char const* help_;
+  vcl_string option_;
+  vcl_string help_;
   char const *type_;
 
   vul_arg_base(vul_arg_info_list& l, char const* option_string,
@@ -173,11 +173,12 @@ class vul_arg_info_list
   void include(vul_arg_info_list& l);
   void verbose(bool on);
   void set_help_option(char const* str);
+  void set_help_precis( char const*str);
 
  public://protected:
-  vcl_vector<vul_arg_base*> args;
-  vcl_string help;
-
+  vcl_vector<vul_arg_base*> args_;
+  vcl_string help_;
+  vcl_string command_precis_;
   bool verbose_;
   autonomy autonomy_;
 
