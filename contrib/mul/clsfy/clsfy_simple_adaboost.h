@@ -13,9 +13,9 @@
 
 
 //: Classifier using adaboost on combinations of simple 1D classifiers
-
-class clsfy_simple_adaboost : public clsfy_classifier_base
-{
+//  Uses a weighted combination of 1D classifiers applied to the
+//  elements of the input vector.
+class clsfy_simple_adaboost : public clsfy_classifier_base {
 protected:
 
   //: The classifiers in order
