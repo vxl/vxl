@@ -75,11 +75,11 @@ compute_geometric_scale( rgrl_match_set const& match_set,
     } else {
       to_iter titr = fitr.begin();
 
-      rgrl_feature_sptr mapped_from = fitr.mapped_from_feature();
-      double min_distance = titr.to_feature()->geometric_error( *mapped_from );
+      // rgrl_feature_sptr mapped_from = fitr.mapped_from_feature();
+      double min_distance = titr.geometric_error();
 
       for ( ++titr; titr != fitr.end(); ++titr ) {
-        double distance = titr.to_feature()->geometric_error( *mapped_from );
+        double distance = titr.geometric_error();
         if ( distance < min_distance ) {
           min_distance = distance;
         }

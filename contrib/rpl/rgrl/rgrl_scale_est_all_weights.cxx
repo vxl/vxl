@@ -58,9 +58,10 @@ compute_geometric_scale( rgrl_match_set const& match_set, bool use_signature_wgt
   DebugMacro(2, '\n');
   DebugMacro_abv(2, "from\t to\t residuals\t signature_wgt\t cumulative_wgt\t weight :\n");
   for ( from_iter fitr = match_set.from_begin(); fitr != match_set.from_end(); ++fitr ) {
-    rgrl_feature_sptr mapped_from = fitr.mapped_from_feature();
+    // rgrl_feature_sptr mapped_from = fitr.mapped_from_feature();
     for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
-      double error = titr.to_feature()->geometric_error( *mapped_from );
+      // double error = titr.to_feature()->geometric_error( *mapped_from );
+      double error = titr.geometric_error();
       double weight;
       if ( use_signature_wgt )
         weight = titr.signature_weight();
