@@ -9,7 +9,7 @@ inline
 vnl_vector<T> vcl_vector_to_vnl_vector(vcl_vector<T> const& cl)
 {
   vnl_vector<T> l(cl.size());
-  vcl_vector<T>::const_iterator it = cl.begin();
+  typename vcl_vector<T>::const_iterator it = cl.begin();
   for (int i=0; !(it == cl.end()); ++it, ++i)
     l[i] = *it;
   return l;

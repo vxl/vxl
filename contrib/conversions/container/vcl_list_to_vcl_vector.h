@@ -9,7 +9,7 @@ inline
 vcl_vector<T> vcl_list_to_vcl_vector(vcl_list<T> const& cl)
 {
   vcl_vector<T> l;
-  vcl_list<T>::const_iterator it = cl.begin();
+  typename vcl_list<T>::const_iterator it = cl.begin();
   for (; !(it == cl.end()); ++it)
     l.push_back(*it);
   return l;
