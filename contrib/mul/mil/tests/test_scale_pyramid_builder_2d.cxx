@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <mil/mil_image_2d_of.h>
 #include <mil/mil_scale_pyramid_builder_2d.h>
 #include <mil/mil_image_pyramid.h>
@@ -110,4 +110,4 @@ void test_scale_pyramid_builder_2d()
 }
 
 
-TESTMAIN(test_scale_pyramid_builder_2d);
+TESTLIB_DEFINE_MAIN(test_scale_pyramid_builder_2d);

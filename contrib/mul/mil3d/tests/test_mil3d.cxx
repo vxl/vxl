@@ -1,8 +1,8 @@
 // First define testmain
 
-#include <vnl/vnl_test.h>
-#undef TESTMAIN
-#define TESTMAIN(x)
+#include <testlib/testlib_test.h>
+#undef TESTLIB_DEFINE_MAIN
+#define TESTLIB_DEFINE_MAIN(x)
 
 #include "test_image_3d_of.cxx"
 #include "test_transform_3d.cxx"
@@ -10,9 +10,9 @@
 #include "test_sample_profile_3d.cxx"
 #include "test_gaussian_pyramid_builder_3d.cxx"
 
-#undef TESTMAIN
-#define TESTMAIN(x) int main() \
-  { vnl_test_start(#x); x(); return vnl_test_summary(); }
+#undef TESTLIB_DEFINE_MAIN
+#define TESTLIB_DEFINE_MAIN(x) int main() \
+  { testlib_test_start(#x); x(); return testlib_test_summary(); }
 
 void run_test_mil()
 {
@@ -23,4 +23,4 @@ void run_test_mil()
   test_gaussian_pyramid_builder_3d();
 }
 
-TESTMAIN(run_test_mil);
+TESTLIB_DEFINE_MAIN(run_test_mil);

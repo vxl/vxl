@@ -3,7 +3,7 @@
 #include <vcl_utility.h>
 #include <vcl_cmath.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <mil/algo/mil_algo_line_filter.h>
 #include <mil/mil_image_2d_of.h>
 
@@ -247,4 +247,4 @@ void test_algo_line_filter()
   test_algo_line_filter_byte();
 }
 
-TESTMAIN(test_algo_line_filter);
+TESTLIB_DEFINE_MAIN(test_algo_line_filter);

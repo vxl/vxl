@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <pdf1d/pdf1d_exponential.h>
 #include <pdf1d/pdf1d_sampler.h>
 
@@ -27,4 +27,4 @@ void test_exponential()
   delete sampler;
 }
 
-TESTMAIN(test_exponential);
+TESTLIB_DEFINE_MAIN(test_exponential);

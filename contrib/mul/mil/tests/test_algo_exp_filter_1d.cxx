@@ -3,7 +3,7 @@
 #include <vcl_utility.h>
 #include <vcl_vector.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <mil/algo/mil_algo_exp_filter_1d.h>
 #include <vil/vil_byte.h>
 #include <vcl_cmath.h> // for fabs()
@@ -82,4 +82,4 @@ void test_algo_exp_filter_1d()
 }
 
 
-TESTMAIN(test_algo_exp_filter_1d);
+TESTLIB_DEFINE_MAIN(test_algo_exp_filter_1d);

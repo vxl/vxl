@@ -13,7 +13,7 @@
 #include <vcl_algorithm.h>
 #include <vcl_cmath.h> // for vcl_fabs()
 #include <vsl/vsl_binary_loader.h>
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vnl/vnl_math.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <pdf1d/pdf1d_gaussian.h>
@@ -177,4 +177,4 @@ void test_weighted_epanech_kernel_pdf()
   delete p_builder_in;
 }
 
-TESTMAIN(test_gaussian_kernel_pdf);
+TESTLIB_DEFINE_MAIN(test_gaussian_kernel_pdf);

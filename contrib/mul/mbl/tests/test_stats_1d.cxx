@@ -31,4 +31,4 @@ void test_stats_1d()
 
 }
 
-TESTMAIN(test_stats_1d);
+TESTLIB_DEFINE_MAIN(test_stats_1d);

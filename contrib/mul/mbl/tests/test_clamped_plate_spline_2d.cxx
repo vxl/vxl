@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 #include <vcl_cmath.h>
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <mbl/mbl_clamped_plate_spline_2d.h>
 #include <mbl/mbl_mz_random.h>
 #include <vgl/vgl_distance.h>
@@ -66,4 +66,4 @@ void test_clamped_plate_spline_2d()
     test_cps_at_fixed_points(i);
  }
 
-TESTMAIN(test_clamped_plate_spline_2d);
+TESTLIB_DEFINE_MAIN(test_clamped_plate_spline_2d);

@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <mil/mil_image_2d_of.h>
 #include <mil/mil_gaussian_pyramid_builder_2d_general.h>
 #include <mil/mil_image_pyramid.h>
@@ -119,4 +119,4 @@ void test_gaussian_pyramid_builder_2d_general()
 }
 
 
-TESTMAIN(test_gaussian_pyramid_builder_2d_general);
+TESTLIB_DEFINE_MAIN(test_gaussian_pyramid_builder_2d_general);

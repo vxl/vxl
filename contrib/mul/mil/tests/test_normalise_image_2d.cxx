@@ -3,7 +3,7 @@
 #include <vcl_utility.h>
 #include <vcl_cmath.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <mil/mil_normalise_image_2d.h>
 
 
@@ -71,4 +71,4 @@ void test_normalise_image_2d()
   TEST("test variance normalisation",diff2<1e-6,true);
 }
 
-TESTMAIN(test_normalise_image_2d);
+TESTLIB_DEFINE_MAIN(test_normalise_image_2d);

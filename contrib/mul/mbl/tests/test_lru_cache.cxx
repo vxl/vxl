@@ -1,6 +1,6 @@
 #include <vcl_iostream.h>
 #include <mbl/mbl_lru_cache.h>
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 
 void test_lru_cache()
 {
@@ -23,4 +23,4 @@ void test_lru_cache()
   TEST("Lookup 2 hits -2",*cache.lookup(2), -2);
 }
 
-TESTMAIN(test_lru_cache);
+TESTLIB_DEFINE_MAIN(test_lru_cache);

@@ -3,7 +3,7 @@
 #include <vcl_utility.h>
 
 #include "mbl/mbl_index_sort.h"
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 
 void test_index_sort()
 {
@@ -64,4 +64,4 @@ void test_index_sort()
   TEST("Order correct",order_ok,true);
 }
 
-TESTMAIN(test_index_sort);
+TESTLIB_DEFINE_MAIN(test_index_sort);

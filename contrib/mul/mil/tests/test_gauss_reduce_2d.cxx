@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <mil/mil_image_2d_of.h>
 #include <mil/mil_gauss_reduce_2d.h>
 #include <vil/vil_byte.h>
@@ -212,4 +212,4 @@ void test_gauss_reduce_2d()
 }
 
 
-TESTMAIN(test_gauss_reduce_2d);
+TESTLIB_DEFINE_MAIN(test_gauss_reduce_2d);

@@ -6,7 +6,7 @@
 #include <vcl_iostream.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <mbl/mbl_selected_data_wrapper.h>
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 
 //=======================================================================
 
@@ -49,4 +49,4 @@ void test_selected_data_wrapper()
 }
 
 
-TESTMAIN(test_selected_data_wrapper);
+TESTLIB_DEFINE_MAIN(test_selected_data_wrapper);

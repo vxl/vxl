@@ -21,7 +21,7 @@
 #include <vsl/vsl_vector_io.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vcl_cmath.h>
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 
 //: Tests the clsfy_binary_hyperplane and clsfy_binary_hyperplane_builder classes
 void test_binary_hyperplane()
@@ -215,4 +215,4 @@ void test_binary_hyperplane()
   delete pClassifier;
 }
 
-TESTMAIN(test_binary_hyperplane);
+TESTLIB_DEFINE_MAIN(test_binary_hyperplane);

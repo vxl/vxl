@@ -1,8 +1,8 @@
 // First define testmain
 
-#include <vnl/vnl_test.h>
-#undef TESTMAIN
-#define TESTMAIN(x)
+#include <testlib/testlib_test.h>
+#undef TESTLIB_DEFINE_MAIN
+#define TESTLIB_DEFINE_MAIN(x)
 
 #include "test_selected_data_wrapper.cxx"
 #include "test_stochastic_data_collector.cxx"
@@ -21,9 +21,9 @@
 #include "test_clamped_plate_spline_2d.cxx"
 #include "test_data_wrapper_mixer.cxx"
 
-#undef TESTMAIN
-#define TESTMAIN(x) int main() \
-  { vnl_test_start(#x); x(); return vnl_test_summary(); }
+#undef TESTLIB_DEFINE_MAIN
+#define TESTLIB_DEFINE_MAIN(x) int main() \
+  { testlib_test_start(#x); x(); return testlib_test_summary(); }
 
 void run_test_mbl()
 {
@@ -45,4 +45,4 @@ void run_test_mbl()
   test_data_wrapper_mixer();
 }
 
-TESTMAIN(run_test_mbl);
+TESTLIB_DEFINE_MAIN(run_test_mbl);

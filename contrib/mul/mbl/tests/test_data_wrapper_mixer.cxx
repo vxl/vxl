@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 #include <vcl_cmath.h>
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 
 #include <mbl/mbl_data_wrapper_mixer.h>
 #include <mbl/mbl_data_array_wrapper.h>
@@ -66,4 +66,4 @@ void test_data_wrapper_mixer()
   test_data_wrapper_pair_mixer(0,5);
 }
 
-TESTMAIN(test_data_wrapper_mixer);
+TESTLIB_DEFINE_MAIN(test_data_wrapper_mixer);

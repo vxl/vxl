@@ -6,7 +6,7 @@
 #include <vcl_deque.h>
 
 #include <mbl/mbl_priority_bounded_queue.h>
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 
 void test_priority_bounded_queue()
 {
@@ -32,4 +32,4 @@ void test_priority_bounded_queue()
 
 }
 
-TESTMAIN(test_priority_bounded_queue);
+TESTLIB_DEFINE_MAIN(test_priority_bounded_queue);

@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <mil3d/mil3d_image_3d_of.h>
 #include <vil/vil_byte.h>
 
@@ -107,4 +107,4 @@ void test_image_3d_of()
 }
 
 
-TESTMAIN(test_image_3d_of);
+TESTLIB_DEFINE_MAIN(test_image_3d_of);

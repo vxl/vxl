@@ -3,7 +3,7 @@
 #include <vcl_utility.h>
 #include <vcl_cmath.h> // for vcl_sqrt()
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <mbl/mbl_matrix_products.h>
@@ -52,4 +52,4 @@ void test_matrix_products()
   TEST("mbl_matrix_product_adb",dCWB.absolute_value_max()<1e-6,true);
 }
 
-TESTMAIN(test_matrix_products);
+TESTLIB_DEFINE_MAIN(test_matrix_products);

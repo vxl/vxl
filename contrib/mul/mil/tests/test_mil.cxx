@@ -1,8 +1,8 @@
 // First define testmain
 
-#include <vnl/vnl_test.h>
-#undef TESTMAIN
-#define TESTMAIN(x)
+#include <testlib/testlib_test.h>
+#undef TESTLIB_DEFINE_MAIN
+#define TESTLIB_DEFINE_MAIN(x)
 
 #include "test_normalise_image_2d.cxx"
 #include "test_convert_vil.cxx"
@@ -21,9 +21,9 @@
 #include "test_algo_grad_filter_2d.cxx"
 #include "test_algo_gaussian_filter.cxx"
 
-#undef TESTMAIN
-#define TESTMAIN(x) int main() \
-  { vnl_test_start(#x); x(); return vnl_test_summary(); }
+#undef TESTLIB_DEFINE_MAIN
+#define TESTLIB_DEFINE_MAIN(x) int main() \
+  { testlib_test_start(#x); x(); return testlib_test_summary(); }
 
 void run_test_mil()
 {
@@ -48,4 +48,4 @@ void run_test_mil()
 }
 
 
-TESTMAIN(run_test_mil);
+TESTLIB_DEFINE_MAIN(run_test_mil);

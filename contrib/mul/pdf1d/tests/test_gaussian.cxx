@@ -11,7 +11,7 @@
 #include <pdf1d/pdf1d_gaussian_sampler.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vsl/vsl_binary_loader.h>
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 
 //=======================================================================
 
@@ -147,4 +147,4 @@ void test_gaussian()
   delete p_builder_in;
 }
 
-TESTMAIN(test_gaussian);
+TESTLIB_DEFINE_MAIN(test_gaussian);

@@ -14,7 +14,7 @@
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <clsfy/clsfy_binary_pdf_classifier.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 
 //: Tests the clsfy_binary_pdf_classifier class
 void test_binary_pdf_classifier()
@@ -104,4 +104,4 @@ void test_binary_pdf_classifier()
   vcl_cout << vcl_setprecision(6) << vcl_resetiosflags(vcl_ios_floatfield);
 }
 
-TESTMAIN(test_binary_pdf_classifier);
+TESTLIB_DEFINE_MAIN(test_binary_pdf_classifier);

@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vgl/vgl_distance.h>
@@ -126,4 +126,4 @@ void test_transform_3d()
        (v0-v0_in).magnitude()<1e-6,true);
 }
 
-TESTMAIN(test_transform_3d);
+TESTLIB_DEFINE_MAIN(test_transform_3d);

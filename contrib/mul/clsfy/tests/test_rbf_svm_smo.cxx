@@ -21,7 +21,7 @@
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vcl_ios.h>
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vul/vul_timer.h>
 
 //=======================================================================
@@ -265,4 +265,4 @@ void test_rbf_svm()
   vcl_cout << vcl_setprecision(6) << vcl_resetiosflags(vcl_ios_floatfield);
 }
 
-TESTMAIN(test_rbf_svm);
+TESTLIB_DEFINE_MAIN(test_rbf_svm);

@@ -3,7 +3,7 @@
 #include <vcl_utility.h>
 #include <vcl_cmath.h> // for vcl_sqrt()
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <mbl/mbl_mz_random.h>
 #include <mbl/mbl_k_means.h>
 #include <mbl/mbl_data_array_wrapper.h>
@@ -186,4 +186,4 @@ void test_k_means()
   vcl_cout << "\n\n";
 }
 
-TESTMAIN(test_mz_random);
+TESTLIB_DEFINE_MAIN(test_mz_random);

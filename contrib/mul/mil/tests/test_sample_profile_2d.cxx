@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vnl/vnl_vector.h>
 #include <mil/mil_image_2d_of.h>
 #include <mil/mil_sample_profile_2d.h>
@@ -68,4 +68,4 @@ void test_sample_profile_2d()
 }
 
 
-TESTMAIN(test_sample_profile_2d);
+TESTLIB_DEFINE_MAIN(test_sample_profile_2d);

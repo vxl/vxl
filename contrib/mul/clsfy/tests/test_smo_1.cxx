@@ -16,7 +16,7 @@
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <mbl/mbl_data_array_wrapper.h>
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vnl/vnl_math.h>
 #include <vul/vul_timer.h>
 
@@ -196,4 +196,4 @@ void test_smo()
   vcl_cout << vcl_setprecision(6) << vcl_resetiosflags(vcl_ios_floatfield);
 }
 
-TESTMAIN(test_smo)
+TESTLIB_DEFINE_MAIN(test_smo)

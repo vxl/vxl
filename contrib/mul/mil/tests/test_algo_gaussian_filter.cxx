@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <mil/algo/mil_algo_gaussian_filter.h>
 #include <vil/vil_byte.h>
 #include <vcl_cstdlib.h> // for abs(int)
@@ -76,4 +76,4 @@ void test_algo_gaussian_filter()
 }
 
 
-TESTMAIN(test_algo_gaussian_filter);
+TESTLIB_DEFINE_MAIN(test_algo_gaussian_filter);

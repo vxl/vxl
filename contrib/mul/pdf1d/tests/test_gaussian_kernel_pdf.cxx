@@ -7,7 +7,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cmath.h> // for vcl_fabs()
 #include <vsl/vsl_binary_loader.h>
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <pdf1d/pdf1d_gaussian_kernel_pdf.h>
 #include <pdf1d/pdf1d_gaussian_kernel_pdf_builder.h>
@@ -202,4 +202,4 @@ void test_gaussian_kernel_pdf()
   delete p_builder_in;
 }
 
-TESTMAIN(test_gaussian_kernel_pdf);
+TESTLIB_DEFINE_MAIN(test_gaussian_kernel_pdf);

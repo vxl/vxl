@@ -20,4 +20,4 @@ void test_gamma()
   TEST("mbl_erf(-inf)==-1", vcl_fabs(mbl_erf(-1e9)+1)<1e-8, true);
 }
 
-TESTMAIN(test_gamma);
+TESTLIB_DEFINE_MAIN(test_gamma);

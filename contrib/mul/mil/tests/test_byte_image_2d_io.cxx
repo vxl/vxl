@@ -3,7 +3,7 @@
 #include <vcl_utility.h>
 #include <vcl_cmath.h>
 #include <vil/vil_byte.h>
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <mil/mil_byte_image_2d_io.h>
 
 
@@ -57,4 +57,4 @@ void test_byte_image_2d_io()
   TEST("loaded vs saved image",diff1<1e-6,true);
 }
 
-TESTMAIN(test_byte_image_2d_io);
+TESTLIB_DEFINE_MAIN(test_byte_image_2d_io);

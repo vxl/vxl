@@ -34,4 +34,4 @@ void test_sum_1d()
   TEST("Addition",stats4.nObs()==10 && vcl_fabs(stats4.mean()-4.5)<1e-6,true);
 }
 
-TESTMAIN(test_sum_1d);
+TESTLIB_DEFINE_MAIN(test_sum_1d);

@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <mil/algo/mil_algo_grad_filter_2d.h>
 #include <vcl_cmath.h> // for fabs()
 #define DEBUG 1
@@ -173,4 +173,4 @@ void test_algo_grad_filter_2d()
 }
 
 
-TESTMAIN(test_algo_grad_filter_2d);
+TESTLIB_DEFINE_MAIN(test_algo_grad_filter_2d);

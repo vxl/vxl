@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <mil3d/mil3d_image_3d_of.h>
 #include <mil3d/mil3d_gaussian_pyramid_builder_3d.h>
 #include <mil/mil_image_pyramid.h>
@@ -247,4 +247,4 @@ void test_gaussian_pyramid_builder_3d()
 }
 
 
-TESTMAIN(test_gaussian_pyramid_builder_3d);
+TESTLIB_DEFINE_MAIN(test_gaussian_pyramid_builder_3d);

@@ -10,7 +10,7 @@
 #include <pdf1d/pdf1d_gaussian.h>
 #include <pdf1d/pdf1d_sampler.h>
 #include <pdf1d/pdf1d_calc_mean_var.h>
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <pdf1d/pdf1d_prob_ks.h>
 
 //=======================================================================
@@ -53,4 +53,4 @@ void test_compare_to_pdf_ks()
   delete p_sampler;
 }
 
-TESTMAIN(test_compare_to_pdf_ks);
+TESTLIB_DEFINE_MAIN(test_compare_to_pdf_ks);

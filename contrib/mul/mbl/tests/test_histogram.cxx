@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 #include <vcl_cmath.h>
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 
 #include <mbl/mbl_histogram.h>
 
@@ -39,4 +39,4 @@ void test_histogram()
 
 }
 
-TESTMAIN(test_histogram);
+TESTLIB_DEFINE_MAIN(test_histogram);

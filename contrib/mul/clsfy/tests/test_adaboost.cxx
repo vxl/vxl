@@ -19,7 +19,7 @@
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>
 #include <mbl/mbl_data_array_wrapper.h>
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
 
@@ -264,4 +264,4 @@ void test_adaboost()
   delete pClassifier;
 }
 
-TESTMAIN(test_adaboost);
+TESTLIB_DEFINE_MAIN(test_adaboost);

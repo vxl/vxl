@@ -226,4 +226,4 @@ void test_pc_gaussian()
 }
 
 
-TESTMAIN(test_pc_gaussian);
+TESTLIB_DEFINE_MAIN(test_pc_gaussian);

@@ -4,7 +4,7 @@
 #include <vcl_cmath.h>
 #include <vil/vil_rgb_byte.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <mil/mil_convert_vil.h>
 #include <vil/vil_memory_image_of.h>
 
@@ -104,4 +104,4 @@ void test_convert_vil()
   //TEST("Diff colour temp/output",diff3<1e-6,true);
 }
 
-TESTMAIN(test_convert_vil);
+TESTLIB_DEFINE_MAIN(test_convert_vil);

@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vnl/vnl_vector.h>
 #include <mil3d/mil3d_image_3d_of.h>
 #include <mil3d/mil3d_sample_profile_3d.h>
@@ -74,4 +74,4 @@ void test_sample_profile_3d()
 }
 
 
-TESTMAIN(test_sample_profile_3d);
+TESTLIB_DEFINE_MAIN(test_sample_profile_3d);

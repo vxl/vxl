@@ -3,7 +3,7 @@
 #include <vcl_utility.h>
 #include <vcl_cmath.h> // for vcl_fabs()
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <vpdfl/vpdfl_axis_gaussian_builder.h>
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
@@ -141,4 +141,4 @@ void test_axis_gaussian()
   delete base_builder_ptr_in;
 }
 
-TESTMAIN(test_axis_gaussian);
+TESTLIB_DEFINE_MAIN(test_axis_gaussian);

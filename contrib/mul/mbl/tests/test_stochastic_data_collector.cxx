@@ -8,7 +8,7 @@
 #include <mbl/mbl_stochastic_data_collector.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vnl/io/vnl_io_vector.h>
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vul/vul_printf.h>
 
 //=======================================================================
@@ -112,4 +112,4 @@ void test_stochastic_data_collector()
 }
 
 
-TESTMAIN(test_stochastic_data_collector);
+TESTLIB_DEFINE_MAIN(test_stochastic_data_collector);

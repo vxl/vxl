@@ -11,7 +11,7 @@
 #include <vpdfl/vpdfl_gaussian_sampler.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vnl/io/vnl_io_matrix.h>
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 
 //=======================================================================
 
@@ -173,4 +173,4 @@ void test_gaussian()
   delete p_base_builder_in;
 }
 
-TESTMAIN(test_gaussian);
+TESTLIB_DEFINE_MAIN(test_gaussian);

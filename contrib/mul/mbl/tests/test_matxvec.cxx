@@ -3,7 +3,7 @@
 #include <vcl_utility.h>
 #include <vcl_cmath.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <mbl/mbl_matxvec.h>
@@ -40,4 +40,4 @@ void test_matxvec()
   TEST("mbl_matxvec_prod_vm x(3)",vcl_fabs(x(3)-175)<1e-8,true);
 }
 
-TESTMAIN(test_matxvec);
+TESTLIB_DEFINE_MAIN(test_matxvec);

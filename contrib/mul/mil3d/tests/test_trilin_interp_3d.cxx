@@ -2,7 +2,7 @@
 #include <vcl_fstream.h>
 #include <vcl_utility.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <mil3d/mil3d_image_3d_of.h>
 #include <mil3d/mil3d_trilin_interp_3d.h>
 #include <vcl_cmath.h> // for fabs()
@@ -63,4 +63,4 @@ void test_trilin_interp_3d()
 }
 
 
-TESTMAIN(test_trilin_interp_3d);
+TESTLIB_DEFINE_MAIN(test_trilin_interp_3d);

@@ -27,7 +27,7 @@
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 
 template <class T>
 inline static vcl_ostream& operator<< (vcl_ostream& os, vcl_vector<T> const& v)
@@ -351,4 +351,4 @@ void test_k_nearest_neighbour()
   vsl_delete_all_loaders();
 }
 
-TESTMAIN(test_k_nearest_neighbour);
+TESTLIB_DEFINE_MAIN(test_k_nearest_neighbour);

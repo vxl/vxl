@@ -3,7 +3,7 @@
 #include <vcl_utility.h>
 #include <vcl_cmath.h> // for vcl_sqrt()
 
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <mbl/mbl_mz_random.h>
 
 void test_mz_random()
@@ -57,4 +57,4 @@ void test_mz_random()
   vcl_cout<<"Mean: "<<mean<<" var: "<<var<<vcl_endl;
 }
 
-TESTMAIN(test_mz_random);
+TESTLIB_DEFINE_MAIN(test_mz_random);

@@ -14,7 +14,7 @@
 #include <clsfy/clsfy_binary_threshold_1d_sorted_builder.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>
-#include <vnl/vnl_test.h>
+#include <testlib/testlib_test.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
 
@@ -253,4 +253,4 @@ void test_adaboost()
   delete classifier_in;
 }
 
-TESTMAIN(test_adaboost);
+TESTLIB_DEFINE_MAIN(test_adaboost);
