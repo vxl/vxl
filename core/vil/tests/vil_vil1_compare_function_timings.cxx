@@ -31,7 +31,7 @@ double fill(vil2_image_view<T>& image, int n_loops, bool print)
 {
   if (print)
     vcl_cout << "Time to fill a " << image.ni() << "*" << image.nj()
-      << " vil2 image of " << vil2_pixel_format_of(T()) << vcl_endl;
+             << " vil2 image of " << vil2_pixel_format_of(T()) << vcl_endl;
   vcl_time_t t0=vcl_clock();
   for (int n=0;n<n_loops;++n)
   {
@@ -46,7 +46,7 @@ double fill(vil_memory_image_of<T>& image, int n_loops, bool print)
 {
   if (print)
     vcl_cout << "Time to fill a " << image.width() << "*" << image.height()
-      << " vil image of " << vil2_pixel_format_of(T()) << vcl_endl;
+             << " vil image of " << vil2_pixel_format_of(T()) << vcl_endl;
   vcl_time_t t0=vcl_clock();
   for (int n=0;n<n_loops;++n)
   {
@@ -243,41 +243,40 @@ int main(int argc, char** argv)
   vil2_image_view<vxl_byte> byte_2image(NI,NJ);
   vil2_image_view<float>    float_2image(NI,NJ);
   vil2_image_view<vil_rgb<vxl_byte> >    rgb_2image(NI,NJ);
-  int n_loops = 100;
   vcl_cout<<"Times to process a "<<NI<<" x "<<NJ
           <<" image (in microsecs) [Range= 0.5(max-min)]"<<vcl_endl;
 
-  compute_stats(1,byte_1image,25);
-  compute_stats(1,byte_2image,25);
-  compute_stats(1,float_1image,25);
-  compute_stats(1,float_2image,25);
-  compute_stats(1,rgb_1image,25);
-  compute_stats(1,rgb_2image,25);
-  vcl_cout << '\n' << vcl_endl;
+  int n_loops = 25;
+  compute_stats(1,byte_1image,n_loops);
+  compute_stats(1,byte_2image,n_loops);
+  compute_stats(1,float_1image,n_loops);
+  compute_stats(1,float_2image,n_loops);
+  compute_stats(1,rgb_1image,n_loops);
+  compute_stats(1,rgb_2image,n_loops);
+  vcl_cout << "\n\n";
 
-  compute_stats(2,byte_1image,25);
-  compute_stats(2,byte_2image,25);
-  compute_stats(2,float_1image,25);
-  compute_stats(2,float_2image,25);
-  compute_stats(2,rgb_1image,25);
-  compute_stats(2,rgb_2image,25);
-  vcl_cout << '\n' << vcl_endl;
+  compute_stats(2,byte_1image,n_loops);
+  compute_stats(2,byte_2image,n_loops);
+  compute_stats(2,float_1image,n_loops);
+  compute_stats(2,float_2image,n_loops);
+  compute_stats(2,rgb_1image,n_loops);
+  compute_stats(2,rgb_2image,n_loops);
+  vcl_cout << "\n\n";
 
-  compute_stats(3,byte_1image,5);
-  compute_stats(3,byte_2image,5);
-  compute_stats(3,float_1image,5);
-  compute_stats(3,float_2image,5);
-  vcl_cout << '\n' << vcl_endl;
+  n_loops = 5;
+  compute_stats(3,byte_1image,n_loops);
+  compute_stats(3,byte_2image,n_loops);
+  compute_stats(3,float_1image,n_loops);
+  compute_stats(3,float_2image,n_loops);
+  vcl_cout << "\n\n";
 
-  compute_stats(4,byte_1image,5);
-  compute_stats(4,byte_2image,5);
-  compute_stats(4,float_1image,5);
-  compute_stats(4,float_2image,5);
-  compute_stats(4,rgb_1image,5);
-  compute_stats(4,rgb_2image,5);
-   vcl_cout << '\n' << vcl_endl;
-
-
+  compute_stats(4,byte_1image,n_loops);
+  compute_stats(4,byte_2image,n_loops);
+  compute_stats(4,float_1image,n_loops);
+  compute_stats(4,float_2image,n_loops);
+  compute_stats(4,rgb_1image,n_loops);
+  compute_stats(4,rgb_2image,n_loops);
+  vcl_cout << "\n\n";
 
   return 0;
 }
