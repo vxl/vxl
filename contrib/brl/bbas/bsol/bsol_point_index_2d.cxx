@@ -38,10 +38,10 @@ bsol_point_index_2d::bsol_point_index_2d(int nrows, int ncols,
   b_box_ = bb;
   row_spacing_ = 1;
   col_spacing_ = 1;
-  if(!bb)
-	  return;
+  if (!bb)
+    return;
   double w = b_box_->width(), h = b_box_->height();
-  
+
   if (nrows)
     row_spacing_ = h/nrows;
   if (ncols)
